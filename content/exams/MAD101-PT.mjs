@@ -890,7 +890,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "The Venn diagram below describes which set operation? <img src=\"data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='170' viewBox='0 0 260 170'%3E%3Crect x='6' y='6' width='248' height='158' fill='none' stroke='%23888' stroke-width='2'/%3E%3Ctext x='14' y='24' font-size='16' fill='%23888'%3EU%3C/text%3E%3Ccircle cx='105' cy='90' r='55' fill='%232f6b3a' fill-opacity='0.85'/%3E%3Ccircle cx='160' cy='90' r='55' fill='none' stroke='%23333' stroke-width='2'/%3E%3Ctext x='70' y='95' font-size='18' fill='white'%3EA%3C/text%3E%3Ctext x='195' y='95' font-size='18' fill='%23333'%3EB%3C/text%3E%3C/svg%3E\" alt=\"Venn: circle A entirely shaded, circle B unshaded outline only\" style=\"max-width:260px\"/> (i) $A\\cup(A\\cap B)$ (ii) $(A\\cap B)\\cup(A\\cap \\bar B)$ (iii) $U\\setminus B$ (iv) $U\\setminus(B\\setminus A)$|||Sơ đồ Venn dưới đây mô tả phép toán tập hợp nào? (hình: toàn bộ hình tròn A được tô đậm, hình tròn B chỉ có viền, không tô) (i) $A\\cup(A\\cap B)$ (ii) $(A\\cap B)\\cup(A\\cap \\bar B)$ (iii) $U\\setminus B$ (iv) $U\\setminus(B\\setminus A)$",
+          "prompt": "The Venn diagram below describes which set operation? <img src=\"data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='170' viewBox='0 0 260 170'%3E%3Crect x='6' y='6' width='248' height='158' fill='none' stroke='%23888' stroke-width='2'/%3E%3Ctext x='14' y='24' font-size='16' fill='%23888'%3EU%3C/text%3E%3Ccircle cx='105' cy='90' r='55' fill='%232f6b3a' fill-opacity='0.85'/%3E%3Ccircle cx='160' cy='90' r='55' fill='none' stroke='%23333' stroke-width='2'/%3E%3Ctext x='70' y='95' font-size='18' fill='white'%3EA%3C/text%3E%3Ctext x='195' y='95' font-size='18' fill='%23333'%3EB%3C/text%3E%3C/svg%3E\" alt=\"Venn: circle A entirely shaded, circle B unshaded outline only\" style=\"max-width:260px\"/> (i) $A\\cup(A\\cap B)$ (ii) $(A\\cap B)\\cup(A\\cap \\bar B)$ (iii) $U\\setminus B$ (iv) $U\\setminus(B\\setminus A)$|||Sơ đồ Venn dưới đây mô tả phép toán tập hợp nào? <img src=\"data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='170' viewBox='0 0 260 170'%3E%3Crect x='6' y='6' width='248' height='158' fill='none' stroke='%23888' stroke-width='2'/%3E%3Ctext x='14' y='24' font-size='16' fill='%23888'%3EU%3C/text%3E%3Ccircle cx='105' cy='90' r='55' fill='%232f6b3a' fill-opacity='0.85'/%3E%3Ccircle cx='160' cy='90' r='55' fill='none' stroke='%23333' stroke-width='2'/%3E%3Ctext x='70' y='95' font-size='18' fill='white'%3EA%3C/text%3E%3Ctext x='195' y='95' font-size='18' fill='%23333'%3EB%3C/text%3E%3C/svg%3E\" alt=\"Venn: toàn bộ hình tròn A được tô đậm, hình tròn B chỉ có viền, không tô\" style=\"max-width:260px\"/> (i) $A\\cup(A\\cap B)$ (ii) $(A\\cap B)\\cup(A\\cap \\bar B)$ (iii) $U\\setminus B$ (iv) $U\\setminus(B\\setminus A)$",
           "options": [
             {
               "text": "Only (ii)|||Chỉ (ii)"
@@ -2004,7 +2004,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "<pre>procedure tt($a_1,a_2,\\dots,a_n$: integers)\nd := $a_1$\nfor i := 1 to n do\n  if d > $a_i$ then d := $a_i$\nk := n\nwhile (k>=1) and ($a_k$ > d)\n  k := k-1\nPrint(k)</pre> What is the output of the algorithm?|||Cho thuật toán tt (như trên). Kết quả xuất ra là gì?",
+          "prompt": "<pre>procedure tt($a_1,a_2,\\dots,a_n$: integers)\nd := $a_1$\nfor i := 1 to n do\n  if d > $a_i$ then d := $a_i$\nk := n\nwhile (k>=1) and ($a_k$ > d)\n  k := k-1\nPrint(k)</pre> What is the output of the algorithm?|||<pre>procedure tt($a_1,a_2,\\dots,a_n$: integers)\nd := $a_1$\nfor i := 1 to n do\n  if d > $a_i$ then d := $a_i$\nk := n\nwhile (k>=1) and ($a_k$ > d)\n  k := k-1\nPrint(k)</pre> Cho thuật toán tt (như trên). Kết quả xuất ra là gì?",
           "options": [
             {
               "text": "None of the other choices is correct|||Không đáp án nào đúng"
@@ -2056,7 +2056,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "<pre>procedure Binarysearch($a_1<a_2<\\dots<a_n$, x: integer)\ni:=1\nj:=n\nwhile (i<j)\n  m:=$\\lfloor(i+j)/2\\rfloor$\n  if $x>a_m$ then i:=m+1\n  else j:=m\nif $x=a_i$ then location:=i\nelse location:=0</pre> If input = 2, 4, 5, 7, 8, 9, 10, 13 and x = 11, after the second time of dividing into sublists, the sublist to be considered is ___|||Cho thuật toán Binarysearch (như trên). Với input 2,4,5,7,8,9,10,13 và x=11, sau lần chia thứ HAI, dãy con cần xét là gì?",
+          "prompt": "<pre>procedure Binarysearch($a_1<a_2<\\dots<a_n$, x: integer)\ni:=1\nj:=n\nwhile (i<j)\n  m:=$\\lfloor(i+j)/2\\rfloor$\n  if $x>a_m$ then i:=m+1\n  else j:=m\nif $x=a_i$ then location:=i\nelse location:=0</pre> If input = 2, 4, 5, 7, 8, 9, 10, 13 and x = 11, after the second time of dividing into sublists, the sublist to be considered is ___|||<pre>procedure Binarysearch($a_1<a_2<\\dots<a_n$, x: integer)\ni:=1\nj:=n\nwhile (i<j)\n  m:=$\\lfloor(i+j)/2\\rfloor$\n  if $x>a_m$ then i:=m+1\n  else j:=m\nif $x=a_i$ then location:=i\nelse location:=0</pre> Cho thuật toán Binarysearch (như trên). Với input 2,4,5,7,8,9,10,13 và x=11, sau lần chia thứ HAI, dãy con cần xét là gì?",
           "options": [
             {
               "text": "10, 13|||10, 13"
@@ -2105,7 +2105,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "<pre>Procedure Insertionsort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 2 to n do\n  j := 1\n  while $a_j<a_i$\n    j := j+1\n  temp := $a_i$\n  for k := i down to j+1\n    $a_k$:=$a_{k-1}$\n  $a_j$ := temp</pre> If input = 3, 2, 4, 7, 1, 6, 5, after running the outer loop with i = 5, the order of the elements in the list is ___|||Cho Insertionsort (như trên). Với input 3,2,4,7,1,6,5, sau khi chạy vòng ngoài i=5, thứ tự danh sách là gì?",
+          "prompt": "<pre>Procedure Insertionsort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 2 to n do\n  j := 1\n  while $a_j<a_i$\n    j := j+1\n  temp := $a_i$\n  for k := i down to j+1\n    $a_k$:=$a_{k-1}$\n  $a_j$ := temp</pre> If input = 3, 2, 4, 7, 1, 6, 5, after running the outer loop with i = 5, the order of the elements in the list is ___|||<pre>Procedure Insertionsort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 2 to n do\n  j := 1\n  while $a_j<a_i$\n    j := j+1\n  temp := $a_i$\n  for k := i down to j+1\n    $a_k$:=$a_{k-1}$\n  $a_j$ := temp</pre> Cho Insertionsort (như trên). Với input 3,2,4,7,1,6,5, sau khi chạy vòng ngoài i=5, thứ tự danh sách là gì?",
           "options": [
             {
               "text": "1, 2, 3, 4, 7, 6, 5|||1, 2, 3, 4, 7, 6, 5"
@@ -2128,7 +2128,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "<pre>procedure Binarysearch($a_1<a_2<\\dots<a_n$, x: integer)\ni:=1\nj:=n\nwhile (i<j)\n  m:=$\\lfloor(i+j)/2\\rfloor$\n  if $x>a_m$ then i:=m+1\n  else j:=m\nif $x=a_i$ then location:=i\nelse location:=0</pre> If input = 2, 4, 5, 7, 8, 9, 10, 13 and x = 11, after the third time of dividing into sublists, the sublist to be considered is ___|||Cho Binarysearch (như trên). Với input 2,4,5,7,8,9,10,13 và x=11, sau lần chia thứ BA, dãy con là gì?",
+          "prompt": "<pre>procedure Binarysearch($a_1<a_2<\\dots<a_n$, x: integer)\ni:=1\nj:=n\nwhile (i<j)\n  m:=$\\lfloor(i+j)/2\\rfloor$\n  if $x>a_m$ then i:=m+1\n  else j:=m\nif $x=a_i$ then location:=i\nelse location:=0</pre> If input = 2, 4, 5, 7, 8, 9, 10, 13 and x = 11, after the third time of dividing into sublists, the sublist to be considered is ___|||<pre>procedure Binarysearch($a_1<a_2<\\dots<a_n$, x: integer)\ni:=1\nj:=n\nwhile (i<j)\n  m:=$\\lfloor(i+j)/2\\rfloor$\n  if $x>a_m$ then i:=m+1\n  else j:=m\nif $x=a_i$ then location:=i\nelse location:=0</pre> Cho Binarysearch (như trên). Với input 2,4,5,7,8,9,10,13 và x=11, sau lần chia thứ BA, dãy con là gì?",
           "options": [
             {
               "text": "13|||13"
@@ -2151,7 +2151,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "<pre>Procedure Insertionsort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 2 to n do\n  j := 1\n  while $a_j<a_i$\n    j := j+1\n  temp := $a_i$\n  for k := i down to j+1\n    $a_k$:=$a_{k-1}$\n  $a_j$ := temp</pre> If input = 7, 2, 4, 3, 1, 6, 5, after running the outer loop with i = 5, the order of the elements in the list is ___|||Cho Insertionsort (như trên). Với input 7,2,4,3,1,6,5, sau khi chạy vòng ngoài i=5, thứ tự danh sách là gì?",
+          "prompt": "<pre>Procedure Insertionsort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 2 to n do\n  j := 1\n  while $a_j<a_i$\n    j := j+1\n  temp := $a_i$\n  for k := i down to j+1\n    $a_k$:=$a_{k-1}$\n  $a_j$ := temp</pre> If input = 7, 2, 4, 3, 1, 6, 5, after running the outer loop with i = 5, the order of the elements in the list is ___|||<pre>Procedure Insertionsort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 2 to n do\n  j := 1\n  while $a_j<a_i$\n    j := j+1\n  temp := $a_i$\n  for k := i down to j+1\n    $a_k$:=$a_{k-1}$\n  $a_j$ := temp</pre> Cho Insertionsort (như trên). Với input 7,2,4,3,1,6,5, sau khi chạy vòng ngoài i=5, thứ tự danh sách là gì?",
           "options": [
             {
               "text": "1, 2, 3, 4, 7, 6, 5|||1, 2, 3, 4, 7, 6, 5"
@@ -2393,7 +2393,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "<pre>procedure TT(n: integer)\nsum:=0\ni:=0\nj:=0\nwhile ($i<\\sqrt{n}$)\n  sum:=sum+1\n  i:=i+1\nwhile ($j<\\sqrt{n}/2$)\n  j:=j+1\n  sum:=sum+1\nPrint(sum)</pre> If n=9, how many additions are required?|||Cho TT (như trên). Nếu n=9, cần bao nhiêu phép cộng?",
+          "prompt": "<pre>procedure TT(n: integer)\nsum:=0\ni:=0\nj:=0\nwhile ($i<\\sqrt{n}$)\n  sum:=sum+1\n  i:=i+1\nwhile ($j<\\sqrt{n}/2$)\n  j:=j+1\n  sum:=sum+1\nPrint(sum)</pre> If n=9, how many additions are required?|||<pre>procedure TT(n: integer)\nsum:=0\ni:=0\nj:=0\nwhile ($i<\\sqrt{n}$)\n  sum:=sum+1\n  i:=i+1\nwhile ($j<\\sqrt{n}/2$)\n  j:=j+1\n  sum:=sum+1\nPrint(sum)</pre> Cho TT (như trên). Nếu n=9, cần bao nhiêu phép cộng?",
           "options": [
             {
               "text": "10|||10"
@@ -2419,7 +2419,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "<pre>procedure Ia(c, $a_0,a_1,\\dots,a_n$: integers)\np := 1\nm := $a_0$\nfor i := 1 to n\n  p := p*c\n  m := m + $a_i$*p</pre> If the input consists of c=4 and $[a_0,a_1,\\dots,a_n]=[3,6,7,8,3]$, how many multiplications (*) are used?|||Cho Ia (như trên). Với c=4 và $[a_0,\\dots,a_n]=[3,6,7,8,3]$, cần bao nhiêu phép nhân (*)?",
+          "prompt": "<pre>procedure Ia(c, $a_0,a_1,\\dots,a_n$: integers)\np := 1\nm := $a_0$\nfor i := 1 to n\n  p := p*c\n  m := m + $a_i$*p</pre> If the input consists of c=4 and $[a_0,a_1,\\dots,a_n]=[3,6,7,8,3]$, how many multiplications (*) are used?|||<pre>procedure Ia(c, $a_0,a_1,\\dots,a_n$: integers)\np := 1\nm := $a_0$\nfor i := 1 to n\n  p := p*c\n  m := m + $a_i$*p</pre> Cho Ia (như trên). Với c=4 và $[a_0,\\dots,a_n]=[3,6,7,8,3]$, cần bao nhiêu phép nhân (*)?",
           "options": [
             {
               "text": "6|||6"
@@ -2468,7 +2468,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "In the bubble sort algorithm: <pre>procedure bubblesort($a_1,a_2,\\dots,a_n$: integers)\nfor i=1 to n-1\n  for j=1 to n-i\n    if $a_j>a_{j+1}$ then swap($a_j,a_{j+1}$)</pre> If the input is $\\{4,2,3,1\\}$, how many swaps are used?|||Trong bubble sort (như trên). Với đầu vào $\\{4,2,3,1\\}$, cần bao nhiêu lần đổi chỗ?",
+          "prompt": "In the bubble sort algorithm: <pre>procedure bubblesort($a_1,a_2,\\dots,a_n$: integers)\nfor i=1 to n-1\n  for j=1 to n-i\n    if $a_j>a_{j+1}$ then swap($a_j,a_{j+1}$)</pre> If the input is $\\{4,2,3,1\\}$, how many swaps are used?|||<pre>procedure bubblesort($a_1,a_2,\\dots,a_n$: integers)\nfor i=1 to n-1\n  for j=1 to n-i\n    if $a_j>a_{j+1}$ then swap($a_j,a_{j+1}$)</pre> Trong bubble sort (như trên). Với đầu vào $\\{4,2,3,1\\}$, cần bao nhiêu lần đổi chỗ?",
           "options": [
             {
               "text": "3|||3"
@@ -2549,7 +2549,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "<pre>Procedure product(n: integer)\np:=0;\nfor i:=1 to n do\n  for j:=1 to (n+1) do\n    for k:=1 to (n+2) do\n      p:=i*j*k;\nPrint(p)</pre> How many multiplications are used if n=5?|||Cho product (như trên). Nếu n=5, cần bao nhiêu phép nhân?",
+          "prompt": "<pre>Procedure product(n: integer)\np:=0;\nfor i:=1 to n do\n  for j:=1 to (n+1) do\n    for k:=1 to (n+2) do\n      p:=i*j*k;\nPrint(p)</pre> How many multiplications are used if n=5?|||<pre>Procedure product(n: integer)\np:=0;\nfor i:=1 to n do\n  for j:=1 to (n+1) do\n    for k:=1 to (n+2) do\n      p:=i*j*k;\nPrint(p)</pre> Cho product (như trên). Nếu n=5, cần bao nhiêu phép nhân?",
           "options": [
             {
               "text": "420|||420"
@@ -2572,7 +2572,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "<pre>procedure Ia($a_1,a_2,\\dots,a_n$: integers)\nm := $a_1$\nt := 0\nfor i:=2 to n\n  if ($a_i>m$) then\n    m:=$a_i$\n    t:=t+1</pre> If the input is the list $[1,6,2,3,7,7,4,8,8,6]$, how many additions are used?|||Cho Ia (như trên). Với đầu vào $[1,6,2,3,7,7,4,8,8,6]$, cần bao nhiêu phép cộng?",
+          "prompt": "<pre>procedure Ia($a_1,a_2,\\dots,a_n$: integers)\nm := $a_1$\nt := 0\nfor i:=2 to n\n  if ($a_i>m$) then\n    m:=$a_i$\n    t:=t+1</pre> If the input is the list $[1,6,2,3,7,7,4,8,8,6]$, how many additions are used?|||<pre>procedure Ia($a_1,a_2,\\dots,a_n$: integers)\nm := $a_1$\nt := 0\nfor i:=2 to n\n  if ($a_i>m$) then\n    m:=$a_i$\n    t:=t+1</pre> Cho Ia (như trên). Với đầu vào $[1,6,2,3,7,7,4,8,8,6]$, cần bao nhiêu phép cộng?",
           "options": [
             {
               "text": "2|||2"
@@ -3641,7 +3641,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the recursive algorithm: <pre>Procedure function(n: positive integer)\nif (n=1) then function(n):=1\nelse if (n=2) then function(n):=1\nelse function(n):=function(n-1)+function(n-2)</pre> Find the value of function(n) when n=7.|||Cho thuật toán function (như trên). Tìm function(n) khi n=7.",
+          "prompt": "Given the recursive algorithm: <pre>Procedure function(n: positive integer)\nif (n=1) then function(n):=1\nelse if (n=2) then function(n):=1\nelse function(n):=function(n-1)+function(n-2)</pre> Find the value of function(n) when n=7.|||<pre>Procedure function(n: positive integer)\nif (n=1) then function(n):=1\nelse if (n=2) then function(n):=1\nelse function(n):=function(n-1)+function(n-2)</pre> Cho thuật toán function (như trên). Tìm function(n) khi n=7.",
           "options": [
             {
               "text": "5|||5"
@@ -3713,7 +3713,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the recursive algorithm: <pre>Procedure AL(n: integer)\nIf n=0 then AL(n):=1\nelse if n=1 then AL(n):=2\nelse if n=2 then AL(n):=3\nelse AL(n):=AL(n-1)*AL(n-2)*AL(n-3)</pre> Find the value of AL(5).|||Cho AL (như trên). Tìm AL(5).",
+          "prompt": "Given the recursive algorithm: <pre>Procedure AL(n: integer)\nIf n=0 then AL(n):=1\nelse if n=1 then AL(n):=2\nelse if n=2 then AL(n):=3\nelse AL(n):=AL(n-1)*AL(n-2)*AL(n-3)</pre> Find the value of AL(5).|||<pre>Procedure AL(n: integer)\nIf n=0 then AL(n):=1\nelse if n=1 then AL(n):=2\nelse if n=2 then AL(n):=3\nelse AL(n):=AL(n-1)*AL(n-2)*AL(n-3)</pre> Cho AL (như trên). Tìm AL(5).",
           "options": [
             {
               "text": "6|||6"
@@ -3762,7 +3762,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the recursive algorithm: <pre>procedure P(a: real number, n: positive integer)\nif n=1 then\n  return 1\nelse\n  return a + P(a, n-1)</pre> Find output if a=3, n=5.|||Cho P (như trên). Tìm kết quả nếu a=3, n=5.",
+          "prompt": "Given the recursive algorithm: <pre>procedure P(a: real number, n: positive integer)\nif n=1 then\n  return 1\nelse\n  return a + P(a, n-1)</pre> Find output if a=3, n=5.|||<pre>procedure P(a: real number, n: positive integer)\nif n=1 then\n  return 1\nelse\n  return a + P(a, n-1)</pre> Cho P (như trên). Tìm kết quả nếu a=3, n=5.",
           "options": [
             {
               "text": "13|||13"
@@ -3788,7 +3788,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the recursive algorithm: <pre>procedure T(a: real number, n: nonegative integer)\nif n=0 then\n  return 1\nelse\n  return a*T(a, n-1)</pre> Find output if a=2, n=3.|||Cho T (như trên). Tìm kết quả nếu a=2, n=3.",
+          "prompt": "Given the recursive algorithm: <pre>procedure T(a: real number, n: nonegative integer)\nif n=0 then\n  return 1\nelse\n  return a*T(a, n-1)</pre> Find output if a=2, n=3.|||<pre>procedure T(a: real number, n: nonegative integer)\nif n=0 then\n  return 1\nelse\n  return a*T(a, n-1)</pre> Cho T (như trên). Tìm kết quả nếu a=2, n=3.",
           "options": [
             {
               "text": "6|||6"
@@ -3814,7 +3814,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the recursive algorithm: <pre>procedure T(n: integer)\nif n<3 then\n  return 3\nelse if (n mod 2=0) then\n  return n\nelse\n  return 3*T(n-1)-2</pre> Find output if n=9.|||Cho T (như trên). Tìm kết quả nếu n=9.",
+          "prompt": "Given the recursive algorithm: <pre>procedure T(n: integer)\nif n<3 then\n  return 3\nelse if (n mod 2=0) then\n  return n\nelse\n  return 3*T(n-1)-2</pre> Find output if n=9.|||<pre>procedure T(n: integer)\nif n<3 then\n  return 3\nelse if (n mod 2=0) then\n  return n\nelse\n  return 3*T(n-1)-2</pre> Cho T (như trên). Tìm kết quả nếu n=9.",
           "options": [
             {
               "text": "22|||22"
@@ -4293,7 +4293,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Consider the following divide-and-conquer algorithm to find the maximal element in a sequence: <pre>procedure MXE(L=$a_1,\\dots,a_n$)\nif n=1 then MXE(L)=$a_1$\nelse begin\n  m:=$\\lfloor n/2\\rfloor$\n  $L_1=a_1,\\dots,a_m$\n  $L_2=a_{m+1},\\dots,a_n$\n  MXE(L)=max(MXE($L_1$), MXE($L_2$))\nend</pre> Let f(n) be the number of comparisons used. The recurrence relation of f(n) is $f(n)=a\\cdot f(n/2)+b$, with n even. Determine b.|||Cho thuật toán MXE (như trên). f(n) = số phép so sánh, $f(n)=a\\cdot f(n/2)+b$. Xác định b.",
+          "prompt": "Consider the following divide-and-conquer algorithm to find the maximal element in a sequence: <pre>procedure MXE(L=$a_1,\\dots,a_n$)\nif n=1 then MXE(L)=$a_1$\nelse begin\n  m:=$\\lfloor n/2\\rfloor$\n  $L_1=a_1,\\dots,a_m$\n  $L_2=a_{m+1},\\dots,a_n$\n  MXE(L)=max(MXE($L_1$), MXE($L_2$))\nend</pre> Let f(n) be the number of comparisons used. The recurrence relation of f(n) is $f(n)=a\\cdot f(n/2)+b$, with n even. Determine b.|||<pre>procedure MXE(L=$a_1,\\dots,a_n$)\nif n=1 then MXE(L)=$a_1$\nelse begin\n  m:=$\\lfloor n/2\\rfloor$\n  $L_1=a_1,\\dots,a_m$\n  $L_2=a_{m+1},\\dots,a_n$\n  MXE(L)=max(MXE($L_1$), MXE($L_2$))\nend</pre> Cho thuật toán MXE (như trên). f(n) = số phép so sánh, $f(n)=a\\cdot f(n/2)+b$. Xác định b.",
           "options": [
             {
               "text": "0|||0"
@@ -4483,7 +4483,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "When applying the recursive algorithm for computing gcd(4, 14), how many times is the function gcd called? <pre>procedure gcd(a, b: nonnegative integers with a &lt; b)\nif a = 0 then gcd(a,b):=b;\nelse gcd(a,b):=gcd(b mod a, a);</pre>|||Áp dụng thuật toán đệ quy tính gcd(4, 14) (như trên), hàm gcd được gọi bao nhiêu lần?",
+          "prompt": "When applying the recursive algorithm for computing gcd(4, 14), how many times is the function gcd called? <pre>procedure gcd(a, b: nonnegative integers with a &lt; b)\nif a = 0 then gcd(a,b):=b;\nelse gcd(a,b):=gcd(b mod a, a);</pre>|||<pre>procedure gcd(a, b: nonnegative integers with a &lt; b)\nif a = 0 then gcd(a,b):=b;\nelse gcd(a,b):=gcd(b mod a, a);</pre> Áp dụng thuật toán đệ quy tính gcd(4, 14) (như trên), hàm gcd được gọi bao nhiêu lần?",
           "options": [
             {
               "text": "3|||3"
@@ -4855,7 +4855,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the algorithm: <pre>Procedure LN(m, n: integers)\nwhile (m != n)\n  if m > n then m:=m-n\n  else n:=n-m;\nPrint(m)</pre> If m=36, n=44, what is the output of the algorithm?|||Cho LN (như trên). Nếu m=36, n=44, kết quả xuất ra là gì?",
+          "prompt": "Given the algorithm: <pre>Procedure LN(m, n: integers)\nwhile (m != n)\n  if m > n then m:=m-n\n  else n:=n-m;\nPrint(m)</pre> If m=36, n=44, what is the output of the algorithm?|||<pre>Procedure LN(m, n: integers)\nwhile (m != n)\n  if m > n then m:=m-n\n  else n:=n-m;\nPrint(m)</pre> Cho LN (như trên). Nếu m=36, n=44, kết quả xuất ra là gì?",
           "options": [
             {
               "text": "4|||4"
@@ -4881,7 +4881,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the Bubble sort algorithm: <pre>Procedure Bubblesort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 1 to (n-1) do\n  for j = 1 to (n-i) do\n    if $a_j > a_{j+1}$ then swap($a_j,a_{j+1}$)</pre> If input = 3, 2, 4, 7, 1, 6, 5, find the order of the elements after completing the first pass (i = 1).|||Cho Bubblesort (như trên). Với input 3,2,4,7,1,6,5, thứ tự sau khi hoàn tất vòng đầu (i=1) là gì?",
+          "prompt": "Given the Bubble sort algorithm: <pre>Procedure Bubblesort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 1 to (n-1) do\n  for j = 1 to (n-i) do\n    if $a_j > a_{j+1}$ then swap($a_j,a_{j+1}$)</pre> If input = 3, 2, 4, 7, 1, 6, 5, find the order of the elements after completing the first pass (i = 1).|||<pre>Procedure Bubblesort($a_1,a_2,\\dots,a_n$: integer)\nfor i = 1 to (n-1) do\n  for j = 1 to (n-i) do\n    if $a_j > a_{j+1}$ then swap($a_j,a_{j+1}$)</pre> Cho Bubblesort (như trên). Với input 3,2,4,7,1,6,5, thứ tự sau khi hoàn tất vòng đầu (i=1) là gì?",
           "options": [
             {
               "text": "2, 3, 4, 1, 6, 5, 7|||2, 3, 4, 1, 6, 5, 7"
@@ -4930,7 +4930,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given an algorithm: <pre>procedure SUM(n: int)\n  t:=0\n  for i:=1 to n do\n    for j:=1 to n-1 do\n      t:=t*i+j\n  return t</pre> How many additions and multiplications are used if n=11?|||Cho SUM (như trên). Cần bao nhiêu phép cộng và nhân nếu n=11?",
+          "prompt": "Given an algorithm: <pre>procedure SUM(n: int)\n  t:=0\n  for i:=1 to n do\n    for j:=1 to n-1 do\n      t:=t*i+j\n  return t</pre> How many additions and multiplications are used if n=11?|||<pre>procedure SUM(n: int)\n  t:=0\n  for i:=1 to n do\n    for j:=1 to n-1 do\n      t:=t*i+j\n  return t</pre> Cho SUM (như trên). Cần bao nhiêu phép cộng và nhân nếu n=11?",
           "options": [
             {
               "text": "220|||220"
@@ -4956,7 +4956,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Give a big-O estimate for the number of operations (an operation is an addition or a multiplication) used in this segment of an algorithm: <pre>k := 0\nfor i := 1 to n-1\n  for j := i to 2*i\n    k := k+i*j\n  end\nend</pre> (i) $O(n)$ (ii) $O(n\\log n)$ (iii) $O(n^2)$ (iv) $O(n^4)$|||Ước lượng big-O số phép toán trong đoạn mã (như trên). (i)-(iv) như trên.",
+          "prompt": "Give a big-O estimate for the number of operations (an operation is an addition or a multiplication) used in this segment of an algorithm: <pre>k := 0\nfor i := 1 to n-1\n  for j := i to 2*i\n    k := k+i*j\n  end\nend</pre> (i) $O(n)$ (ii) $O(n\\log n)$ (iii) $O(n^2)$ (iv) $O(n^4)$|||<pre>k := 0\nfor i := 1 to n-1\n  for j := i to 2*i\n    k := k+i*j\n  end\nend</pre> Ước lượng big-O số phép toán trong đoạn mã (như trên). (i)-(iv) như trên.",
           "options": [
             {
               "text": "(i)|||(i)"
@@ -4979,7 +4979,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "<pre>procedure Ia($a_1,a_2,\\dots,a_n$: integers)\nm := $a_1$\nt := 0\nfor i:=2 to n\n  if ($a_i\\ge m$) then\n    m:=$a_i$\n    t:=t+1</pre> If input is the list $[1,2,3,6,7,7,4,8,8,6]$, how many additions are used?|||Cho Ia (như trên, dùng $\\ge$). Với đầu vào $[1,2,3,6,7,7,4,8,8,6]$, cần bao nhiêu phép cộng?",
+          "prompt": "<pre>procedure Ia($a_1,a_2,\\dots,a_n$: integers)\nm := $a_1$\nt := 0\nfor i:=2 to n\n  if ($a_i\\ge m$) then\n    m:=$a_i$\n    t:=t+1</pre> If input is the list $[1,2,3,6,7,7,4,8,8,6]$, how many additions are used?|||<pre>procedure Ia($a_1,a_2,\\dots,a_n$: integers)\nm := $a_1$\nt := 0\nfor i:=2 to n\n  if ($a_i\\ge m$) then\n    m:=$a_i$\n    t:=t+1</pre> Cho Ia (như trên, dùng $\\ge$). Với đầu vào $[1,2,3,6,7,7,4,8,8,6]$, cần bao nhiêu phép cộng?",
           "options": [
             {
               "text": "10|||10"
@@ -5228,8 +5228,8 @@ export default {
       "code": "PT3-D1",
       "source": "REAL",
       "sortOrder": 131,
-      "title": "Progress Test 3 — Đề 1/7|||Kiểm tra tiến độ 3 — Đề 1/7",
-      "description": "MAD101 Progress Test 3 question bank, part 1 of 7 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 1/7 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
+      "title": "Progress Test 3 — Đề 1/8|||Kiểm tra tiến độ 3 — Đề 1/8",
+      "description": "MAD101 Progress Test 3 question bank, part 1 of 8 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 1/8 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
       "durationMinutes": 30,
       "totalPoints": 10,
       "passMark": 5,
@@ -5501,6 +5501,29 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
+          "prompt": "Given the graph below, with vertices a, b, c, d, e and edges $\\{a,b\\}, \\{a,e\\}, \\{a,d\\}, \\{b,d\\}, \\{b,c\\}, \\{d,e\\}$.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  a --- e((e))\n  a --- d((d))\n  b --- d\n  b --- c((c))\n  d --- e</pre>What is the sum of the numbers in the second row of the adjacency matrix, in the order a,b,c,d,e, of the given graph?|||Cho đồ thị dưới đây, đỉnh a,b,c,d,e và cạnh $\\{a,b\\},\\{a,e\\},\\{a,d\\},\\{b,d\\},\\{b,c\\},\\{d,e\\}$.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  a --- e((e))\n  a --- d((d))\n  b --- d\n  b --- c((c))\n  d --- e</pre>Tổng các số ở hàng thứ hai của ma trận kề, theo thứ tự a,b,c,d,e, là bao nhiêu?",
+          "options": [
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "4|||4"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">Row 2 = vertex b's row: b is adjacent to a, c, d (not e). In order (a,b,c,d,e): [1,0,1,1,0], sum $=3$.</div><div class=\"ml-vi\">Hàng 2 = hàng của đỉnh b: b kề với a, c, d (không kề e). Theo thứ tự (a,b,c,d,e): [1,0,1,1,0], tổng $=3$.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
           "prompt": "Fill in the blank: The adjacent matrix of .... has .... 1s<br>(i) $W_n$, $2n$<br>(ii) $Q_n$, $2^n$<br>(iii) $K_n$, $n(n-1)$<br>(iv) $C_n$, $n$|||Điền vào chỗ trống: Ma trận kề của .... có .... số 1<br>(i) $W_n$, $2n$<br>(ii) $Q_n$, $2^n$<br>(iii) $K_n$, $n(n-1)$<br>(iv) $C_n$, $n$",
           "options": [
             {
@@ -5573,7 +5596,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "How many 1s are there in the adjacency matrix of the following graph? (5 vertices arranged as a pentagon, edges drawn as a 5-pointed star/pentagram — i.e. each vertex connects to the two vertices two steps away, forming a single 5-cycle.)|||Ma trận kề của đồ thị sau có bao nhiêu số 1? (5 đỉnh dạng ngũ giác, cạnh vẽ theo hình ngôi sao 5 cánh — mỗi đỉnh nối với 2 đỉnh cách nó 2 bước, tạo thành một chu trình 5 cạnh duy nhất.)",
+          "prompt": "How many 1s are there in the adjacency matrix of the following graph? (5 vertices joined into one closed cycle; the original paper draws the same cycle with crossing chords, which does not change the edge set.)<pre class=\"mermaid\">graph LR\n  v1((1)) --- v2((2))\n  v2 --- v3((3))\n  v3 --- v4((4))\n  v4 --- v5((5))\n  v5 --- v1</pre>|||Ma trận kề của đồ thị sau có bao nhiêu số 1? (5 đỉnh nối thành một chu trình khép kín; đề gốc vẽ chính chu trình đó dưới dạng ngôi sao 5 cánh với các dây cung cắt nhau — không làm đổi tập cạnh.)<pre class=\"mermaid\">graph LR\n  v1((1)) --- v2((2))\n  v2 --- v3((3))\n  v3 --- v4((4))\n  v4 --- v5((5))\n  v5 --- v1</pre>",
           "options": [
             {
               "text": "5|||5"
@@ -5591,8 +5614,25 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The pentagram pattern is just a 5-cycle $C_5$ (5 edges) drawn with crossing chords. Number of 1s $=2\\times5=10$.</div><div class=\"ml-vi\">Hình ngôi sao 5 cánh chính là chu trình $C_5$ (5 cạnh) vẽ với các dây cung cắt nhau. Số số 1 $=2\\times5=10$.</div>"
-        },
+          "explanation": "<div class=\"ml-en\">The graph is a 5-cycle $C_5$ (5 edges). Each edge contributes two 1s to the adjacency matrix, so the number of 1s $=2\\times5=10$.</div><div class=\"ml-vi\">Đồ thị là chu trình $C_5$ (5 cạnh). Mỗi cạnh đóng góp hai số 1 vào ma trận kề nên số số 1 $=2\\times5=10$.</div>"
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "PT3-D2",
+      "source": "REAL",
+      "sortOrder": 132,
+      "title": "Progress Test 3 — Đề 2/8|||Kiểm tra tiến độ 3 — Đề 2/8",
+      "description": "MAD101 Progress Test 3 question bank, part 2 of 8 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 2/8 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
+      "durationMinutes": 30,
+      "totalPoints": 10,
+      "passMark": 5,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
         {
           "kind": "MCQ",
           "points": 1,
@@ -5618,28 +5658,11 @@ export default {
             2
           ],
           "explanation": "<div class=\"ml-en\">$(M^2)_{B,C}=M_{B,A}M_{A,C}+M_{B,B}M_{B,C}+M_{B,C}M_{C,C}=3\\times1+1\\times1+1\\times1=5$.</div><div class=\"ml-vi\">$(M^2)_{B,C}=M_{B,A}M_{A,C}+M_{B,B}M_{B,C}+M_{B,C}M_{C,C}=3\\times1+1\\times1+1\\times1=5$.</div>"
-        }
-      ]
-    },
-    {
-      "kind": "FE",
-      "code": "PT3-D2",
-      "source": "REAL",
-      "sortOrder": 132,
-      "title": "Progress Test 3 — Đề 2/7|||Kiểm tra tiến độ 3 — Đề 2/7",
-      "description": "MAD101 Progress Test 3 question bank, part 2 of 7 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 2/7 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
-      "durationMinutes": 30,
-      "totalPoints": 10,
-      "passMark": 5,
-      "shuffleQuestions": true,
-      "shuffleOptions": false,
-      "isPublished": true,
-      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
-      "questions": [
+        },
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a graph with vertices a, b, c, d arranged as a square (edges $\\{a,b\\},\\{b,c\\},\\{c,d\\},\\{d,a\\}$) plus a center vertex e where both diagonals cross, split into edges $\\{a,e\\},\\{b,e\\},\\{c,e\\},\\{d,e\\}$. How many paths of length 3 from a to d?|||Cho đồ thị đỉnh a,b,c,d xếp thành hình vuông (cạnh $\\{a,b\\},\\{b,c\\},\\{c,d\\},\\{d,a\\}$) cộng đỉnh tâm e nơi 2 đường chéo cắt nhau, tách thành các cạnh $\\{a,e\\},\\{b,e\\},\\{c,e\\},\\{d,e\\}$. Có bao nhiêu đường đi độ dài 3 từ a đến d?",
+          "prompt": "Given the graph below: vertices a, b, c, d form a 4-cycle (edges $\\{a,b\\},\\{b,c\\},\\{c,d\\},\\{d,a\\}$) and a fifth vertex e is joined to all four of them (edges $\\{a,e\\},\\{b,e\\},\\{c,e\\},\\{d,e\\}$) &mdash; i.e. the wheel $W_4$.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- c((c))\n  c --- d((d))\n  d --- a\n  e((e)) --- a\n  e --- b\n  e --- c\n  e --- d</pre>How many paths of length 3 from a to d?|||Cho đồ thị dưới đây: các đỉnh a, b, c, d tạo thành chu trình 4 cạnh ($\\{a,b\\},\\{b,c\\},\\{c,d\\},\\{d,a\\}$) và đỉnh thứ năm e nối với cả bốn đỉnh đó ($\\{a,e\\},\\{b,e\\},\\{c,e\\},\\{d,e\\}$) &mdash; tức đồ thị bánh xe $W_4$.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- c((c))\n  c --- d((d))\n  d --- a\n  e((e)) --- a\n  e --- b\n  e --- c\n  e --- d</pre>Có bao nhiêu đường đi độ dài 3 từ a đến d?",
           "options": [
             {
               "text": "5|||5"
@@ -5661,6 +5684,32 @@ export default {
             2
           ],
           "explanation": "<div class=\"ml-en\">Enumerate walks a&rarr;x&rarr;y&rarr;d. x=b: y&isin;{a,c,e} all adjacent to d &rArr; 3 walks. x=d: y&isin;{a,c,e} all adjacent to d &rArr; 3 walks. x=e: y&isin;{a,b,c,d}, only a,c adjacent to d (b is not, d-d not an edge) &rArr; 2 walks. Total $=3+3+2=8$. (Cross-checked via $M^3_{a,d}=8$.)</div><div class=\"ml-vi\">Liệt kê các bước đi a&rarr;x&rarr;y&rarr;d. x=b: y&isin;{a,c,e} đều kề d &rArr; 3 đường. x=d: y&isin;{a,c,e} đều kề d &rArr; 3 đường. x=e: y&isin;{a,b,c,d}, chỉ a,c kề d &rArr; 2 đường. Tổng $=3+3+2=8$. (Đối chiếu $M^3_{a,d}=8$.)</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "How many cut-edges (bridges) are there in this graph? It has 8 vertices: a triangle a-b-c, a path of 3 edges a-d-e-f attached at a, and a path of 2 edges b-g-h attached at b.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- c((c))\n  c --- a\n  a --- d((d))\n  d --- e((e))\n  e --- f((f))\n  b --- g((g))\n  g --- h((h))</pre>|||Đồ thị sau có bao nhiêu cạnh cầu (cut-edge)? Đồ thị có 8 đỉnh: tam giác a-b-c, một đường 3 cạnh a-d-e-f gắn tại a, và một đường 2 cạnh b-g-h gắn tại b.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- c((c))\n  c --- a\n  a --- d((d))\n  d --- e((e))\n  e --- f((f))\n  b --- g((g))\n  g --- h((h))</pre>",
+          "options": [
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "5|||5"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">The triangle a-b-c is a cycle, so its 3 edges (ab, bc, ca) are not bridges. Every edge of the two attached paths IS a bridge (removing it cuts off the tail): ad, de, ef in the first path and bg, gh in the second $=5$ cut-edges.</div><div class=\"ml-vi\">Tam giác a-b-c là chu trình nên 3 cạnh ab, bc, ca không phải cầu. Mọi cạnh của 2 đường gắn thêm ĐỀU là cạnh cầu (bỏ đi là cắt rời phần đuôi): ad, de, ef ở đường thứ nhất và bg, gh ở đường thứ hai $=5$ cạnh cầu.</div>"
         },
         {
           "kind": "MCQ",
@@ -5691,7 +5740,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Find the TOTAL number of cut-edges in the two graphs X and Y. (X: 5 vertices drawn as a 5-pointed star / pentagram, i.e. a single 5-cycle. Y: 4 vertices with both diagonals of a rectangle drawn, i.e. a single 4-cycle $K_{2,2}$.)|||Tìm TỔNG số cạnh cầu trong hai đồ thị X và Y. (X: 5 đỉnh vẽ hình ngôi sao 5 cánh, tức một chu trình 5 cạnh duy nhất. Y: 4 đỉnh vẽ đủ 2 đường chéo hình chữ nhật, tức một chu trình 4 cạnh duy nhất $K_{2,2}$.)",
+          "prompt": "Find the TOTAL number of cut-edges in the two graphs X and Y shown below. X is a single 5-cycle on 5 vertices and Y is a single 4-cycle on 4 vertices (the original paper draws both with crossing chords, which does not change either edge set).<pre class=\"mermaid\">graph LR\n  subgraph GX[\"Graph X\"]\n  x1((1)) --- x2((2))\n  x2 --- x3((3))\n  x3 --- x4((4))\n  x4 --- x5((5))\n  x5 --- x1\n  end\n  subgraph GY[\"Graph Y\"]\n  y1((1)) --- y2((2))\n  y2 --- y3((3))\n  y3 --- y4((4))\n  y4 --- y1\n  end</pre>|||Tìm TỔNG số cạnh cầu trong hai đồ thị X và Y dưới đây. X là một chu trình 5 cạnh trên 5 đỉnh, Y là một chu trình 4 cạnh trên 4 đỉnh (đề gốc vẽ cả hai với các dây cung cắt nhau — không làm đổi tập cạnh).<pre class=\"mermaid\">graph LR\n  subgraph GX[\"Graph X\"]\n  x1((1)) --- x2((2))\n  x2 --- x3((3))\n  x3 --- x4((4))\n  x4 --- x5((5))\n  x5 --- x1\n  end\n  subgraph GY[\"Graph Y\"]\n  y1((1)) --- y2((2))\n  y2 --- y3((3))\n  y3 --- y4((4))\n  y4 --- y1\n  end</pre>",
           "options": [
             {
               "text": "0|||0"
@@ -5913,7 +5962,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Choose the correct statement about the graph. (Two triangles, each with 3 vertices, joined by a single bridge edge between one vertex of each triangle — a 'bowtie' shape.)|||Chọn phát biểu đúng về đồ thị. (Hai tam giác, mỗi tam giác 3 đỉnh, nối nhau bằng một cạnh cầu duy nhất giữa một đỉnh của mỗi tam giác — hình 'nơ bướm'.)",
+          "prompt": "Choose the correct statement about the graph below: two vertex-disjoint triangles (a-b-c and d-e-f) joined by a single bridge edge c-d.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- c((c))\n  c --- a\n  c --- d((d))\n  d --- e((e))\n  e --- f((f))\n  f --- d</pre>|||Chọn phát biểu đúng về đồ thị dưới đây: hai tam giác rời nhau (a-b-c và d-e-f) nối với nhau bằng một cạnh cầu duy nhất c-d.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- c((c))\n  c --- a\n  c --- d((d))\n  d --- e((e))\n  e --- f((f))\n  f --- d</pre>",
           "options": [
             {
               "text": "It has a Hamilton circuit|||Có chu trình Hamilton"
@@ -5936,7 +5985,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a weighted graph with vertices A,B,C,D,E,F,G and edges A-B=8, A-C=8, B-C=6, B-D=7, B-E=5, C-E=6, C-F=5, D-E=4, D-F=6, D-G=8, E-F=3, F-G=7. What is the shortest path between G and A?|||Cho đồ thị có trọng số với đỉnh A,B,C,D,E,F,G và cạnh A-B=8, A-C=8, B-C=6, B-D=7, B-E=5, C-E=6, C-F=5, D-E=4, D-F=6, D-G=8, E-F=3, F-G=7. Đường đi ngắn nhất giữa G và A là gì?",
+          "prompt": "Given the weighted graph below (vertices A,B,C,D,E,F,G; edges A-B=8, A-C=8, B-C=6, B-D=7, B-E=5, C-E=6, C-F=5, D-E=4, D-F=6, D-G=8, E-F=3, F-G=7). What is the shortest path between G and A?<pre class=\"mermaid\">graph LR\n  A((A)) -- 8 --- B((B))\n  A -- 8 --- C((C))\n  B -- 6 --- C\n  B -- 7 --- D((D))\n  B -- 5 --- E((E))\n  C -- 6 --- E\n  C -- 5 --- F((F))\n  D -- 4 --- E\n  D -- 6 --- F\n  D -- 8 --- G((G))\n  E -- 3 --- F\n  F -- 7 --- G</pre>|||Cho đồ thị có trọng số dưới đây (đỉnh A,B,C,D,E,F,G; cạnh A-B=8, A-C=8, B-C=6, B-D=7, B-E=5, C-E=6, C-F=5, D-E=4, D-F=6, D-G=8, E-F=3, F-G=7). Đường đi ngắn nhất giữa G và A là gì?<pre class=\"mermaid\">graph LR\n  A((A)) -- 8 --- B((B))\n  A -- 8 --- C((C))\n  B -- 6 --- C\n  B -- 7 --- D((D))\n  B -- 5 --- E((E))\n  C -- 6 --- E\n  C -- 5 --- F((F))\n  D -- 4 --- E\n  D -- 6 --- F\n  D -- 8 --- G((G))\n  E -- 3 --- F\n  F -- 7 --- G</pre>",
           "options": [
             {
               "text": "G-D-B-A|||G-D-B-A"
@@ -5955,11 +6004,28 @@ export default {
             1
           ],
           "explanation": "<div class=\"ml-en\">Dijkstra from A: A-C=8, A-B=8, then A-C-F=8+5=13 (beats A-B-E=8+5=13 tie but continue), A-C-F-G=13+7=20. Checking alternatives: A-B-D-G=8+7+8=23, A-B-E-F-G=8+5+3+7=23 &mdash; all worse. Shortest is A-C-F-G $=20$, i.e. G-F-C-A reversed.</div><div class=\"ml-vi\">Dijkstra từ A: A-C=8, A-B=8, rồi A-C-F=8+5=13, A-C-F-G=13+7=20. Kiểm các đường khác: A-B-D-G=23, A-B-E-F-G=23 &mdash; đều tệ hơn. Ngắn nhất là A-C-F-G $=20$, tức G-F-C-A đảo ngược.</div>"
-        },
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "PT3-D3",
+      "source": "REAL",
+      "sortOrder": 133,
+      "title": "Progress Test 3 — Đề 3/8|||Kiểm tra tiến độ 3 — Đề 3/8",
+      "description": "MAD101 Progress Test 3 question bank, part 3 of 8 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 3/8 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
+      "durationMinutes": 30,
+      "totalPoints": 10,
+      "passMark": 5,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a weighted graph with vertices A,B,C,D,E,Z and edges A-B=2, A-C=7, B-D=7, B-C=8, B-E=3, C-E=3, D-E=2, D-Z=2, E-Z=3. Apply the Dijkstra algorithm to find the shortest path from A to Z. How many vertices are NOT chosen (i.e. not part of the shortest path)?|||Cho đồ thị có trọng số với đỉnh A,B,C,D,E,Z và cạnh A-B=2, A-C=7, B-D=7, B-C=8, B-E=3, C-E=3, D-E=2, D-Z=2, E-Z=3. Áp dụng Dijkstra tìm đường ngắn nhất từ A đến Z. Có bao nhiêu đỉnh KHÔNG được chọn (không nằm trên đường đi ngắn nhất)?",
+          "prompt": "Given the weighted graph below (vertices A,B,C,D,E,Z; edges A-B=2, A-C=7, B-D=7, B-C=8, B-E=3, C-E=3, D-E=2, D-Z=2, E-Z=3).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 7 --- C((C))\n  B -- 7 --- D((D))\n  B -- 8 --- C\n  B -- 3 --- E((E))\n  C -- 3 --- E\n  D -- 2 --- E\n  D -- 2 --- Z((Z))\n  E -- 3 --- Z</pre>Apply the Dijkstra algorithm to find the shortest path from A to Z. How many vertices are NOT chosen (i.e. not part of the shortest path)?|||Cho đồ thị có trọng số dưới đây (đỉnh A,B,C,D,E,Z; cạnh A-B=2, A-C=7, B-D=7, B-C=8, B-E=3, C-E=3, D-E=2, D-Z=2, E-Z=3).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 7 --- C((C))\n  B -- 7 --- D((D))\n  B -- 8 --- C\n  B -- 3 --- E((E))\n  C -- 3 --- E\n  D -- 2 --- E\n  D -- 2 --- Z((Z))\n  E -- 3 --- Z</pre>Áp dụng Dijkstra tìm đường ngắn nhất từ A đến Z. Có bao nhiêu đỉnh KHÔNG được chọn (không nằm trên đường đi ngắn nhất)?",
           "options": [
             {
               "text": "1|||1"
@@ -5985,7 +6051,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a weighted graph with vertices a,b,c,d,e,z and edges a-b=3, a-d=5, b-c=6, b-d=1, d-c=1, c-e=2, d-e=2, c-z=5, e-z=2. Apply the Dijkstra algorithm to find the shortest path from a to z. What are the first 4 vertices chosen?|||Cho đồ thị có trọng số với đỉnh a,b,c,d,e,z và cạnh a-b=3, a-d=5, b-c=6, b-d=1, d-c=1, c-e=2, d-e=2, c-z=5, e-z=2. Áp dụng Dijkstra tìm đường ngắn nhất từ a đến z. 4 đỉnh đầu tiên được chọn là gì?",
+          "prompt": "Given the weighted graph below (vertices a,b,c,d,e,z; edges a-b=3, a-d=5, b-c=6, b-d=1, d-c=1, c-e=2, d-e=2, c-z=5, e-z=2).<pre class=\"mermaid\">graph LR\n  a((a)) -- 3 --- b((b))\n  a -- 5 --- d((d))\n  b -- 6 --- c((c))\n  b -- 1 --- d\n  d -- 1 --- c\n  c -- 2 --- e((e))\n  d -- 2 --- e\n  c -- 5 --- z((z))\n  e -- 2 --- z</pre>Apply the Dijkstra algorithm to find the shortest path from a to z. What are the first 4 vertices chosen?|||Cho đồ thị có trọng số dưới đây (đỉnh a,b,c,d,e,z; cạnh a-b=3, a-d=5, b-c=6, b-d=1, d-c=1, c-e=2, d-e=2, c-z=5, e-z=2).<pre class=\"mermaid\">graph LR\n  a((a)) -- 3 --- b((b))\n  a -- 5 --- d((d))\n  b -- 6 --- c((c))\n  b -- 1 --- d\n  d -- 1 --- c\n  c -- 2 --- e((e))\n  d -- 2 --- e\n  c -- 5 --- z((z))\n  e -- 2 --- z</pre>Áp dụng Dijkstra tìm đường ngắn nhất từ a đến z. 4 đỉnh đầu tiên được chọn là gì?",
           "options": [
             {
               "text": "a, d, b, c|||a, d, b, c"
@@ -6007,28 +6073,11 @@ export default {
             2
           ],
           "explanation": "<div class=\"ml-en\">Extraction order: a(0) &rarr; b(3) &rarr; d(via b: 3+1=4) &rarr; c(via d: 4+1=5, beats via b: 3+6=9) &rarr; e(via d: 4+2=6) &rarr; z(via e: 6+2=8). First 4: a, b, d, c.</div><div class=\"ml-vi\">Thứ tự chọn: a(0) &rarr; b(3) &rarr; d(qua b: 3+1=4) &rarr; c(qua d: 4+1=5, tốt hơn qua b: 3+6=9) &rarr; e(qua d: 4+2=6) &rarr; z(qua e: 6+2=8). 4 đỉnh đầu: a, b, d, c.</div>"
-        }
-      ]
-    },
-    {
-      "kind": "FE",
-      "code": "PT3-D3",
-      "source": "REAL",
-      "sortOrder": 133,
-      "title": "Progress Test 3 — Đề 3/7|||Kiểm tra tiến độ 3 — Đề 3/7",
-      "description": "MAD101 Progress Test 3 question bank, part 3 of 7 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 3/7 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
-      "durationMinutes": 30,
-      "totalPoints": 10,
-      "passMark": 5,
-      "shuffleQuestions": true,
-      "shuffleOptions": false,
-      "isPublished": true,
-      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
-      "questions": [
+        },
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a weighted graph with vertices A,B,C,D,E,Z and edges A-B=2, A-C=9, B-D=7, B-C=8, B-E=3, D-E=4, D-Z=2, E-Z=3, C-E=3. Find the first 3 vertices when using Dijkstra's algorithm to find the shortest path from A to Z.|||Cho đồ thị có trọng số với đỉnh A,B,C,D,E,Z và cạnh A-B=2, A-C=9, B-D=7, B-C=8, B-E=3, D-E=4, D-Z=2, E-Z=3, C-E=3. Tìm 3 đỉnh đầu tiên khi dùng Dijkstra tìm đường ngắn nhất từ A đến Z.",
+          "prompt": "Given the weighted graph below (vertices A,B,C,D,E,Z; edges A-B=2, A-C=9, B-D=7, B-C=8, B-E=3, D-E=4, D-Z=2, E-Z=3, C-E=3).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 9 --- C((C))\n  B -- 7 --- D((D))\n  B -- 8 --- C\n  B -- 3 --- E((E))\n  D -- 4 --- E\n  D -- 2 --- Z((Z))\n  E -- 3 --- Z\n  C -- 3 --- E</pre>Find the first 3 vertices when using Dijkstra's algorithm to find the shortest path from A to Z.|||Cho đồ thị có trọng số dưới đây (đỉnh A,B,C,D,E,Z; cạnh A-B=2, A-C=9, B-D=7, B-C=8, B-E=3, D-E=4, D-Z=2, E-Z=3, C-E=3).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 9 --- C((C))\n  B -- 7 --- D((D))\n  B -- 8 --- C\n  B -- 3 --- E((E))\n  D -- 4 --- E\n  D -- 2 --- Z((Z))\n  E -- 3 --- Z\n  C -- 3 --- E</pre>Tìm 3 đỉnh đầu tiên khi dùng Dijkstra tìm đường ngắn nhất từ A đến Z.",
           "options": [
             {
               "text": "A-B-E|||A-B-E"
@@ -6054,7 +6103,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a weighted graph with vertices A,B,C,D,E,F and edges D-E=9, D-C=4, E-F=2, C-F=6, E-A=14, F-A=9, F-B=8, C-B=15, A-B=7. What is the fourth vertex chosen when using Dijkstra's algorithm to find the shortest path from A to D?|||Cho đồ thị có trọng số với đỉnh A,B,C,D,E,F và cạnh D-E=9, D-C=4, E-F=2, C-F=6, E-A=14, F-A=9, F-B=8, C-B=15, A-B=7. Đỉnh thứ tư được chọn khi dùng Dijkstra tìm đường ngắn nhất từ A đến D là gì?",
+          "prompt": "Given the weighted graph below (vertices A,B,C,D,E,F; edges D-E=9, D-C=4, E-F=2, C-F=6, E-A=14, F-A=9, F-B=8, C-B=15, A-B=7).<pre class=\"mermaid\">graph LR\n  D((D)) -- 9 --- E((E))\n  D -- 4 --- C((C))\n  E -- 2 --- F((F))\n  C -- 6 --- F\n  E -- 14 --- A((A))\n  F -- 9 --- A\n  F -- 8 --- B((B))\n  C -- 15 --- B\n  A -- 7 --- B</pre>What is the fourth vertex chosen when using Dijkstra's algorithm to find the shortest path from A to D?|||Cho đồ thị có trọng số dưới đây (đỉnh A,B,C,D,E,F; cạnh D-E=9, D-C=4, E-F=2, C-F=6, E-A=14, F-A=9, F-B=8, C-B=15, A-B=7).<pre class=\"mermaid\">graph LR\n  D((D)) -- 9 --- E((E))\n  D -- 4 --- C((C))\n  E -- 2 --- F((F))\n  C -- 6 --- F\n  E -- 14 --- A((A))\n  F -- 9 --- A\n  F -- 8 --- B((B))\n  C -- 15 --- B\n  A -- 7 --- B</pre>Đỉnh thứ tư được chọn khi dùng Dijkstra tìm đường ngắn nhất từ A đến D là gì?",
           "options": [
             {
               "text": "The vertex C|||Đỉnh C"
@@ -6077,7 +6126,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a weighted graph with vertices a,b,c,d,e,f,g and edges a-b=4, a-d=2, d-g=3, a-c=8, b-c=5, b-e=10, d-e=7, e-g=2, e-f=2, g-f=7, c-f=6. Apply the Dijkstra algorithm to find the shortest path from a to f. What are the first 3 vertices chosen?|||Cho đồ thị có trọng số với đỉnh a,b,c,d,e,f,g và cạnh a-b=4, a-d=2, d-g=3, a-c=8, b-c=5, b-e=10, d-e=7, e-g=2, e-f=2, g-f=7, c-f=6. Áp dụng Dijkstra tìm đường ngắn nhất từ a đến f. 3 đỉnh đầu tiên được chọn là gì?",
+          "prompt": "Given the weighted graph below (vertices a,b,c,d,e,f,g; edges a-b=4, a-d=2, d-g=3, a-c=8, b-c=5, b-e=10, d-e=7, e-g=2, e-f=2, g-f=7, c-f=6).<pre class=\"mermaid\">graph LR\n  a((a)) -- 4 --- b((b))\n  a -- 2 --- d((d))\n  d -- 3 --- g((g))\n  a -- 8 --- c((c))\n  b -- 5 --- c\n  b -- 10 --- e((e))\n  d -- 7 --- e\n  e -- 2 --- g\n  e -- 2 --- f((f))\n  g -- 7 --- f\n  c -- 6 --- f</pre>Apply the Dijkstra algorithm to find the shortest path from a to f. What are the first 3 vertices chosen?|||Cho đồ thị có trọng số dưới đây (đỉnh a,b,c,d,e,f,g; cạnh a-b=4, a-d=2, d-g=3, a-c=8, b-c=5, b-e=10, d-e=7, e-g=2, e-f=2, g-f=7, c-f=6).<pre class=\"mermaid\">graph LR\n  a((a)) -- 4 --- b((b))\n  a -- 2 --- d((d))\n  d -- 3 --- g((g))\n  a -- 8 --- c((c))\n  b -- 5 --- c\n  b -- 10 --- e((e))\n  d -- 7 --- e\n  e -- 2 --- g\n  e -- 2 --- f((f))\n  g -- 7 --- f\n  c -- 6 --- f</pre>Áp dụng Dijkstra tìm đường ngắn nhất từ a đến f. 3 đỉnh đầu tiên được chọn là gì?",
           "options": [
             {
               "text": "a, b, d|||a, b, d"
@@ -6103,7 +6152,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a weighted graph with vertices A,B,C,D,E,Z and edges A-B=2, A-C=9, B-D=5, B-C=8, B-E=3, D-E=4, C-E=3, D-Z=2, E-Z=3. Apply the Dijkstra algorithm to find the shortest path from A to Z. What is the next vertex chosen after E?|||Cho đồ thị có trọng số với đỉnh A,B,C,D,E,Z và cạnh A-B=2, A-C=9, B-D=5, B-C=8, B-E=3, D-E=4, C-E=3, D-Z=2, E-Z=3. Áp dụng Dijkstra tìm đường ngắn nhất từ A đến Z. Đỉnh tiếp theo được chọn sau E là gì?",
+          "prompt": "Given the weighted graph below (vertices A,B,C,D,E,Z; edges A-B=2, A-C=9, B-D=5, B-C=8, B-E=3, D-E=4, C-E=3, D-Z=2, E-Z=3).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 9 --- C((C))\n  B -- 5 --- D((D))\n  B -- 8 --- C\n  B -- 3 --- E((E))\n  D -- 4 --- E\n  C -- 3 --- E\n  D -- 2 --- Z((Z))\n  E -- 3 --- Z</pre>Apply the Dijkstra algorithm to find the shortest path from A to Z. What is the next vertex chosen after E?|||Cho đồ thị có trọng số dưới đây (đỉnh A,B,C,D,E,Z; cạnh A-B=2, A-C=9, B-D=5, B-C=8, B-E=3, D-E=4, C-E=3, D-Z=2, E-Z=3).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 9 --- C((C))\n  B -- 5 --- D((D))\n  B -- 8 --- C\n  B -- 3 --- E((E))\n  D -- 4 --- E\n  C -- 3 --- E\n  D -- 2 --- Z((Z))\n  E -- 3 --- Z</pre>Áp dụng Dijkstra tìm đường ngắn nhất từ A đến Z. Đỉnh tiếp theo được chọn sau E là gì?",
           "options": [
             {
               "text": "D|||D"
@@ -6126,7 +6175,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a weighted graph with vertices A,B,C,D,E,Z and edges A-B=2, A-C=3, B-C=3, B-D=4, B-E=3, D-E=2, C-E=3, D-Z=2, E-Z=3. Apply the Dijkstra algorithm to find the shortest path from A to Z. What are the first 4 vertices chosen?|||Cho đồ thị có trọng số với đỉnh A,B,C,D,E,Z và cạnh A-B=2, A-C=3, B-C=3, B-D=4, B-E=3, D-E=2, C-E=3, D-Z=2, E-Z=3. Áp dụng Dijkstra tìm đường ngắn nhất từ A đến Z. 4 đỉnh đầu tiên được chọn là gì?",
+          "prompt": "Given the weighted graph below (vertices A,B,C,D,E,Z; edges A-B=2, A-C=3, B-C=3, B-D=4, B-E=3, D-E=2, C-E=3, D-Z=2, E-Z=3).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 3 --- C((C))\n  B -- 3 --- C\n  B -- 4 --- D((D))\n  B -- 3 --- E((E))\n  D -- 2 --- E\n  C -- 3 --- E\n  D -- 2 --- Z((Z))\n  E -- 3 --- Z</pre>Apply the Dijkstra algorithm to find the shortest path from A to Z. What are the first 4 vertices chosen?|||Cho đồ thị có trọng số dưới đây (đỉnh A,B,C,D,E,Z; cạnh A-B=2, A-C=3, B-C=3, B-D=4, B-E=3, D-E=2, C-E=3, D-Z=2, E-Z=3).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 3 --- C((C))\n  B -- 3 --- C\n  B -- 4 --- D((D))\n  B -- 3 --- E((E))\n  D -- 2 --- E\n  C -- 3 --- E\n  D -- 2 --- Z((Z))\n  E -- 3 --- Z</pre>Áp dụng Dijkstra tìm đường ngắn nhất từ A đến Z. 4 đỉnh đầu tiên được chọn là gì?",
           "options": [
             {
               "text": "A-B-C-E|||A-B-C-E"
@@ -6152,7 +6201,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a weighted graph with vertices G,H,I,J,K,L,M and edges G-H=1, H-I=8, G-K=4, H-K=1, H-J=1, I-J=2, K-J=5, K-L=3, J-L=6, J-M=3, L-M=2, I-M=3. Find the length of the shortest path from G to M.|||Cho đồ thị có trọng số với đỉnh G,H,I,J,K,L,M và cạnh G-H=1, H-I=8, G-K=4, H-K=1, H-J=1, I-J=2, K-J=5, K-L=3, J-L=6, J-M=3, L-M=2, I-M=3. Tìm độ dài đường đi ngắn nhất từ G đến M.",
+          "prompt": "Given the weighted graph below (vertices G,H,I,J,K,L,M; edges G-H=1, H-I=8, G-K=4, H-K=1, H-J=1, I-J=2, K-J=5, K-L=3, J-L=6, J-M=3, L-M=2, I-M=3).<pre class=\"mermaid\">graph LR\n  G((G)) -- 1 --- H((H))\n  H -- 8 --- I((I))\n  G -- 4 --- K((K))\n  H -- 1 --- K\n  H -- 1 --- J((J))\n  I -- 2 --- J\n  K -- 5 --- J\n  K -- 3 --- L((L))\n  J -- 6 --- L\n  J -- 3 --- M((M))\n  L -- 2 --- M\n  I -- 3 --- M</pre>Find the length of the shortest path from G to M.|||Cho đồ thị có trọng số dưới đây (đỉnh G,H,I,J,K,L,M; cạnh G-H=1, H-I=8, G-K=4, H-K=1, H-J=1, I-J=2, K-J=5, K-L=3, J-L=6, J-M=3, L-M=2, I-M=3).<pre class=\"mermaid\">graph LR\n  G((G)) -- 1 --- H((H))\n  H -- 8 --- I((I))\n  G -- 4 --- K((K))\n  H -- 1 --- K\n  H -- 1 --- J((J))\n  I -- 2 --- J\n  K -- 5 --- J\n  K -- 3 --- L((L))\n  J -- 6 --- L\n  J -- 3 --- M((M))\n  L -- 2 --- M\n  I -- 3 --- M</pre>Tìm độ dài đường đi ngắn nhất từ G đến M.",
           "options": [
             {
               "text": "6|||6"
@@ -6178,7 +6227,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a weighted graph with vertices A,B,C,D,E,Z and edges A-B=2, A-C=9, B-D=7, B-C=8, B-E=3, D-E=4, C-E=3, D-Z=2, E-Z=3. Apply the Dijkstra algorithm to find the shortest path from A to Z. What are the first three vertices chosen?|||Cho đồ thị có trọng số với đỉnh A,B,C,D,E,Z và cạnh A-B=2, A-C=9, B-D=7, B-C=8, B-E=3, D-E=4, C-E=3, D-Z=2, E-Z=3. Áp dụng Dijkstra tìm đường ngắn nhất từ A đến Z. 3 đỉnh đầu tiên được chọn là gì?",
+          "prompt": "Given the weighted graph below (vertices A,B,C,D,E,Z; edges A-B=2, A-C=9, B-D=7, B-C=8, B-E=3, D-E=4, C-E=3, D-Z=2, E-Z=3).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 9 --- C((C))\n  B -- 7 --- D((D))\n  B -- 8 --- C\n  B -- 3 --- E((E))\n  D -- 4 --- E\n  C -- 3 --- E\n  D -- 2 --- Z((Z))\n  E -- 3 --- Z</pre>Apply the Dijkstra algorithm to find the shortest path from A to Z. What are the first three vertices chosen?|||Cho đồ thị có trọng số dưới đây (đỉnh A,B,C,D,E,Z; cạnh A-B=2, A-C=9, B-D=7, B-C=8, B-E=3, D-E=4, C-E=3, D-Z=2, E-Z=3).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 9 --- C((C))\n  B -- 7 --- D((D))\n  B -- 8 --- C\n  B -- 3 --- E((E))\n  D -- 4 --- E\n  C -- 3 --- E\n  D -- 2 --- Z((Z))\n  E -- 3 --- Z</pre>Áp dụng Dijkstra tìm đường ngắn nhất từ A đến Z. 3 đỉnh đầu tiên được chọn là gì?",
           "options": [
             {
               "text": "A, B, E|||A, B, E"
@@ -6256,7 +6305,33 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the rooted tree: a is the root with children b, d, c. b's children are e, h, g. e's children are i, n, k. c's children are f, l, m. How many ancestors does the vertex e have?|||Cho cây có gốc: a là gốc, con của a là b, d, c. Con của b là e, h, g. Con của e là i, n, k. Con của c là f, l, m. Đỉnh e có bao nhiêu tổ tiên (ancestor)?",
+          "prompt": "Which of the three graphs below are trees? Each has the 6 vertices a, b, c, d, e, f.<pre class=\"mermaid\">graph LR\n  subgraph S1[\"(i)\"]\n  p1((a)) --- p2((b))\n  p2 --- p3((c))\n  p3 --- p1\n  p3 --- p4((d))\n  p4 --- p5((e))\n  p4 --- p6((f))\n  end\n  subgraph S2[\"(ii)\"]\n  q1((a)) --- q2((b))\n  q1 --- q3((c))\n  q3 --- q4((d))\n  q3 --- q5((e))\n  q5 --- q6((f))\n  end\n  subgraph S3[\"(iii)\"]\n  r1((a)) --- r2((b))\n  r2 --- r3((c))\n  r3 --- r4((d))\n  r4 --- r1\n  r4 --- r5((e))\n  r5 --- r6((f))\n  end</pre>|||Trong ba đồ thị dưới đây, đồ thị nào là cây (tree)? Mỗi đồ thị đều có 6 đỉnh a, b, c, d, e, f.<pre class=\"mermaid\">graph LR\n  subgraph S1[\"(i)\"]\n  p1((a)) --- p2((b))\n  p2 --- p3((c))\n  p3 --- p1\n  p3 --- p4((d))\n  p4 --- p5((e))\n  p4 --- p6((f))\n  end\n  subgraph S2[\"(ii)\"]\n  q1((a)) --- q2((b))\n  q1 --- q3((c))\n  q3 --- q4((d))\n  q3 --- q5((e))\n  q5 --- q6((f))\n  end\n  subgraph S3[\"(iii)\"]\n  r1((a)) --- r2((b))\n  r2 --- r3((c))\n  r3 --- r4((d))\n  r4 --- r1\n  r4 --- r5((e))\n  r5 --- r6((f))\n  end</pre>",
+          "options": [
+            {
+              "text": "(i)|||(i)"
+            },
+            {
+              "text": "(ii)|||(ii)"
+            },
+            {
+              "text": "(iii)|||(iii)"
+            },
+            {
+              "text": "All of (i), (ii) and (iii)|||Cả (i), (ii) và (iii)"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">A tree needs connected + acyclic. (i) contains the triangle a-b-c (6 edges on 6 vertices) &rArr; not a tree. (iii) contains the 4-cycle a-b-c-d (6 edges on 6 vertices) &rArr; not a tree. (ii) is connected with exactly $6-1=5$ edges and no cycle &rArr; it IS a tree.</div><div class=\"ml-vi\">Cây cần liên thông + không chu trình. (i) chứa tam giác a-b-c (6 cạnh trên 6 đỉnh) &rArr; không phải cây. (iii) chứa chu trình 4 cạnh a-b-c-d (6 cạnh trên 6 đỉnh) &rArr; không phải cây. (ii) liên thông, đúng $6-1=5$ cạnh, không chu trình &rArr; ĐÚNG là cây.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Given the rooted tree below: a is the root with children b, d, c; b's children are e, h, g; e's children are i, n, k; c's children are f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> d((d))\n  a --> c((c))\n  b --> e((e))\n  b --> h((h))\n  b --> g((g))\n  e --> i((i))\n  e --> n((n))\n  e --> k((k))\n  c --> f((f))\n  c --> l((l))\n  c --> m((m))</pre>How many ancestors does the vertex e have?|||Cho cây có gốc dưới đây: a là gốc, con của a là b, d, c; con của b là e, h, g; con của e là i, n, k; con của c là f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> d((d))\n  a --> c((c))\n  b --> e((e))\n  b --> h((h))\n  b --> g((g))\n  e --> i((i))\n  e --> n((n))\n  e --> k((k))\n  c --> f((f))\n  c --> l((l))\n  c --> m((m))</pre>Đỉnh e có bao nhiêu tổ tiên (ancestor)?",
           "options": [
             {
               "text": "2|||2"
@@ -6308,6 +6383,49 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
+          "prompt": "Which of the rooted trees below are full 3-ary trees?<pre class=\"mermaid\">graph TD\n  subgraph T1[\"(i)\"]\n  t1((D)) --> t2((A))\n  t1 --> t3((C))\n  t1 --> t4((E))\n  t2 --> t5((x))\n  t3 --> t6((y))\n  t3 --> t7((z))\n  end\n  subgraph T2[\"(ii)\"]\n  u1((a)) --> u2((b))\n  u1 --> u3((c))\n  u1 --> u4((d))\n  u2 --> u5((e))\n  u2 --> u6((f))\n  u2 --> u7((g))\n  end\n  subgraph T3[\"(iii)\"]\n  w1((p)) --> w2((q))\n  w1 --> w3((r))\n  w1 --> w4((s))\n  w2 --> w5((t))\n  w2 --> w6((u))\n  end</pre>|||Trong các cây có gốc dưới đây, cây nào là cây 3-phân đầy đủ (full 3-ary)?<pre class=\"mermaid\">graph TD\n  subgraph T1[\"(i)\"]\n  t1((D)) --> t2((A))\n  t1 --> t3((C))\n  t1 --> t4((E))\n  t2 --> t5((x))\n  t3 --> t6((y))\n  t3 --> t7((z))\n  end\n  subgraph T2[\"(ii)\"]\n  u1((a)) --> u2((b))\n  u1 --> u3((c))\n  u1 --> u4((d))\n  u2 --> u5((e))\n  u2 --> u6((f))\n  u2 --> u7((g))\n  end\n  subgraph T3[\"(iii)\"]\n  w1((p)) --> w2((q))\n  w1 --> w3((r))\n  w1 --> w4((s))\n  w2 --> w5((t))\n  w2 --> w6((u))\n  end</pre>",
+          "options": [
+            {
+              "text": "(ii)|||(ii)"
+            },
+            {
+              "text": "(i) and (iii)|||(i) và (iii)"
+            },
+            {
+              "text": "(ii) and (iii)|||(ii) và (iii)"
+            },
+            {
+              "text": "(i), (ii) and (iii)|||(i), (ii) và (iii)"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Full 3-ary requires EVERY internal vertex to have exactly 3 children. (i) fails: A has only 1 child and C has only 2. (iii) fails: q has only 2 children. In (ii) the two internal vertices a and b each have exactly 3 children &rArr; only (ii) is full 3-ary.</div><div class=\"ml-vi\">3-phân đầy đủ yêu cầu MỌI đỉnh trong có đúng 3 con. (i) sai: A chỉ có 1 con, C chỉ có 2 con. (iii) sai: q chỉ có 2 con. Ở (ii) hai đỉnh trong a và b đều có đúng 3 con &rArr; chỉ (ii) là 3-phân đầy đủ.</div>"
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "PT3-D4",
+      "source": "REAL",
+      "sortOrder": 134,
+      "title": "Progress Test 3 — Đề 4/8|||Kiểm tra tiến độ 3 — Đề 4/8",
+      "description": "MAD101 Progress Test 3 question bank, part 4 of 8 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 4/8 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
+      "durationMinutes": 30,
+      "totalPoints": 10,
+      "passMark": 5,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
+        {
+          "kind": "MCQ",
+          "points": 1,
           "prompt": "Find the maximum number of vertices in a binary tree of height 5.|||Tìm số đỉnh tối đa trong cây nhị phân có chiều cao 5.",
           "options": [
             {
@@ -6331,7 +6449,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the rooted tree: a is the root with children b, d, c. b's children are e, h, g. e's children are i, n, k. c's children are f, l, m. How many ancestors does the vertex k have?|||Cho cây có gốc: a là gốc, con của a là b, d, c. Con của b là e, h, g. Con của e là i, n, k. Con của c là f, l, m. Đỉnh k có bao nhiêu tổ tiên?",
+          "prompt": "Given the rooted tree below: a is the root with children b, d, c; b's children are e, h, g; e's children are i, n, k; c's children are f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> d((d))\n  a --> c((c))\n  b --> e((e))\n  b --> h((h))\n  b --> g((g))\n  e --> i((i))\n  e --> n((n))\n  e --> k((k))\n  c --> f((f))\n  c --> l((l))\n  c --> m((m))</pre>How many ancestors does the vertex k have?|||Cho cây có gốc dưới đây: a là gốc, con của a là b, d, c; con của b là e, h, g; con của e là i, n, k; con của c là f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> d((d))\n  a --> c((c))\n  b --> e((e))\n  b --> h((h))\n  b --> g((g))\n  e --> i((i))\n  e --> n((n))\n  e --> k((k))\n  c --> f((f))\n  c --> l((l))\n  c --> m((m))</pre>Đỉnh k có bao nhiêu tổ tiên?",
           "options": [
             {
               "text": "3|||3"
@@ -6383,7 +6501,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the rooted tree: a is the root with children b, d, c. b's children are e, h, g. e's children are i, n, k. c's children are f, l, m. How many leaves in this tree?|||Cho cây có gốc: a là gốc, con của a là b, d, c. Con của b là e, h, g. Con của e là i, n, k. Con của c là f, l, m. Cây này có bao nhiêu lá?",
+          "prompt": "Given the rooted tree below: a is the root with children b, d, c; b's children are e, h, g; e's children are i, n, k; c's children are f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> d((d))\n  a --> c((c))\n  b --> e((e))\n  b --> h((h))\n  b --> g((g))\n  e --> i((i))\n  e --> n((n))\n  e --> k((k))\n  c --> f((f))\n  c --> l((l))\n  c --> m((m))</pre>How many leaves in this tree?|||Cho cây có gốc dưới đây: a là gốc, con của a là b, d, c; con của b là e, h, g; con của e là i, n, k; con của c là f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> d((d))\n  a --> c((c))\n  b --> e((e))\n  b --> h((h))\n  b --> g((g))\n  e --> i((i))\n  e --> n((n))\n  e --> k((k))\n  c --> f((f))\n  c --> l((l))\n  c --> m((m))</pre>Cây này có bao nhiêu lá?",
           "options": [
             {
               "text": "9|||9"
@@ -6405,24 +6523,7 @@ export default {
             0
           ],
           "explanation": "<div class=\"ml-en\">Leaves (no children): d, h, g, i, n, k, f, l, m &rArr; 9 leaves.</div><div class=\"ml-vi\">Lá (không có con): d, h, g, i, n, k, f, l, m &rArr; 9 lá.</div>"
-        }
-      ]
-    },
-    {
-      "kind": "FE",
-      "code": "PT3-D4",
-      "source": "REAL",
-      "sortOrder": 134,
-      "title": "Progress Test 3 — Đề 4/7|||Kiểm tra tiến độ 3 — Đề 4/7",
-      "description": "MAD101 Progress Test 3 question bank, part 4 of 7 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 4/7 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
-      "durationMinutes": 30,
-      "totalPoints": 10,
-      "passMark": 5,
-      "shuffleQuestions": true,
-      "shuffleOptions": false,
-      "isPublished": true,
-      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
-      "questions": [
+        },
         {
           "kind": "MCQ",
           "points": 1,
@@ -6699,11 +6800,28 @@ export default {
             3
           ],
           "explanation": "<div class=\"ml-en\">$\\uparrow(-\\ 3\\ 1,\\ 2)=\\uparrow(2,2)=2^2=4$. $*(3, +\\ 1\\ 5)=3\\times(1+5)=18$. Total $=+(4,18)=22$.</div><div class=\"ml-vi\">$\\uparrow(-\\ 3\\ 1,\\ 2)=\\uparrow(2,2)=2^2=4$. $*(3, +\\ 1\\ 5)=3\\times(1+5)=18$. Tổng $=+(4,18)=22$.</div>"
-        },
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "PT3-D5",
+      "source": "REAL",
+      "sortOrder": 135,
+      "title": "Progress Test 3 — Đề 5/8|||Kiểm tra tiến độ 3 — Đề 5/8",
+      "description": "MAD101 Progress Test 3 question bank, part 5 of 8 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 5/8 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
+      "durationMinutes": 30,
+      "totalPoints": 10,
+      "passMark": 5,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a rooted tree: a is the root with children b, c, d. b's children are e, f, g. e's children are k, l, m. g's child is n, whose children are r, s. c is a leaf. d's children are h, i, j; h's child is o, i's child is p, j's child is q. If using preorder traversal to visit the vertices of the given rooted tree, what is the position of vertex d?|||Cho cây có gốc: a là gốc, con của a là b, c, d. Con của b là e, f, g. Con của e là k, l, m. Con của g là n, con của n là r, s. c là lá. Con của d là h, i, j; con của h là o, con của i là p, con của j là q. Nếu duyệt tiền thứ tự (preorder) cây trên, đỉnh d ở vị trí thứ mấy?",
+          "prompt": "Given a rooted tree: a is the root with children b, c, d. b's children are e, f, g. e's children are k, l, m. g's child is n, whose children are r, s. c is a leaf. d's children are h, i, j; h's child is o, i's child is p, j's child is q.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> c((c))\n  a --> d((d))\n  b --> e((e))\n  b --> f((f))\n  b --> g((g))\n  e --> k((k))\n  e --> l((l))\n  e --> m((m))\n  g --> n((n))\n  n --> r((r))\n  n --> s((s))\n  d --> h((h))\n  d --> i((i))\n  d --> j((j))\n  h --> vo((o))\n  i --> p((p))\n  j --> q((q))</pre>If using preorder traversal to visit the vertices of the given rooted tree, what is the position of vertex d?|||Cho cây có gốc: a là gốc, con của a là b, c, d. Con của b là e, f, g. Con của e là k, l, m. Con của g là n, con của n là r, s. c là lá. Con của d là h, i, j; con của h là o, con của i là p, con của j là q.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> c((c))\n  a --> d((d))\n  b --> e((e))\n  b --> f((f))\n  b --> g((g))\n  e --> k((k))\n  e --> l((l))\n  e --> m((m))\n  g --> n((n))\n  n --> r((r))\n  n --> s((s))\n  d --> h((h))\n  d --> i((i))\n  d --> j((j))\n  h --> vo((o))\n  i --> p((p))\n  j --> q((q))</pre>Nếu duyệt tiền thứ tự (preorder) cây trên, đỉnh d ở vị trí thứ mấy?",
           "options": [
             {
               "text": "4th|||Thứ 4"
@@ -6803,24 +6921,7 @@ export default {
             2
           ],
           "explanation": "<div class=\"ml-en\">$+\\ 1\\ 1=2$; $\\uparrow(3,2)=9$; $+(3,9)=12$; $+(1,12)=13$; $*(13,6)=78$.</div><div class=\"ml-vi\">$+\\ 1\\ 1=2$; $\\uparrow(3,2)=9$; $+(3,9)=12$; $+(1,12)=13$; $*(13,6)=78$.</div>"
-        }
-      ]
-    },
-    {
-      "kind": "FE",
-      "code": "PT3-D5",
-      "source": "REAL",
-      "sortOrder": 135,
-      "title": "Progress Test 3 — Đề 5/7|||Kiểm tra tiến độ 3 — Đề 5/7",
-      "description": "MAD101 Progress Test 3 question bank, part 5 of 7 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 5/7 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
-      "durationMinutes": 30,
-      "totalPoints": 10,
-      "passMark": 5,
-      "shuffleQuestions": true,
-      "shuffleOptions": false,
-      "isPublished": true,
-      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
-      "questions": [
+        },
         {
           "kind": "MCQ",
           "points": 1,
@@ -7026,7 +7127,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a graph with vertices A,B,C,D,E,Z and edges A-B, A-C, B-D, B-E, C-E, D-E, D-Z, E-Z. Using depth-first search to produce a spanning tree, visiting neighbors in alphabetical order, choose vertex A as the root. Which spanning tree do we obtain? (i) A-B,B-D,D-E,E-C,E-Z (ii) A-B,B-D,D-Z,C-E (iii) branching variant with both D and E splitting (iv) A-B,B-D,C-E without the D-E link)|||Cho đồ thị đỉnh A,B,C,D,E,Z và cạnh A-B, A-C, B-D, B-E, C-E, D-E, D-Z, E-Z. Dùng DFS dựng cây khung, thăm hàng xóm theo thứ tự alphabet, chọn A làm gốc. Ta thu được cây khung nào? (i) A-B,B-D,D-E,E-C,E-Z (ii) A-B,B-D,D-Z,C-E (iii) biến thể phân nhánh cả D và E (iv) A-B,B-D,C-E không có nhánh D-E)",
+          "prompt": "Given the graph below (vertices A,B,C,D,E,Z; edges A-B, A-C, B-D, B-E, C-E, D-E, D-Z, E-Z).<pre class=\"mermaid\">graph LR\n  A((A)) --- B((B))\n  A --- C((C))\n  B --- D((D))\n  B --- E((E))\n  C --- E\n  D --- E\n  D --- Z((Z))\n  E --- Z</pre>Using depth-first search to produce a spanning tree, visiting neighbors in alphabetical order, choose vertex A as the root. Which spanning tree do we obtain? (i) A-B,B-D,D-E,E-C,E-Z (ii) A-B,B-D,D-Z,C-E (iii) branching variant with both D and E splitting (iv) A-B,B-D,C-E without the D-E link)|||Cho đồ thị dưới đây (đỉnh A,B,C,D,E,Z; cạnh A-B, A-C, B-D, B-E, C-E, D-E, D-Z, E-Z).<pre class=\"mermaid\">graph LR\n  A((A)) --- B((B))\n  A --- C((C))\n  B --- D((D))\n  B --- E((E))\n  C --- E\n  D --- E\n  D --- Z((Z))\n  E --- Z</pre>Dùng DFS dựng cây khung, thăm hàng xóm theo thứ tự alphabet, chọn A làm gốc. Ta thu được cây khung nào? (i) A-B,B-D,D-E,E-C,E-Z (ii) A-B,B-D,D-Z,C-E (iii) biến thể phân nhánh cả D và E (iv) A-B,B-D,C-E không có nhánh D-E)",
           "options": [
             {
               "text": "(i)|||(i)"
@@ -7052,7 +7153,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Find a spanning tree for $K_{1,6}$. (i) an 8-point zigzag chain (wrong vertex count for $K_{1,6}$'s 7 vertices). (ii) a 7-vertex tree a-b-c-d plus a separate g-f-e chain joined at c/e (branching, not matching a star). (iii) a clean star: one central vertex directly joined to 6 leaf vertices.|||Tìm một cây khung cho $K_{1,6}$. (i) chuỗi zigzag 8 điểm (sai số đỉnh so với 7 đỉnh của $K_{1,6}$). (ii) cây 7 đỉnh a-b-c-d cộng chuỗi riêng g-f-e nối vào c/e (có phân nhánh, không khớp dạng sao). (iii) hình sao sạch: 1 đỉnh trung tâm nối thẳng tới 6 đỉnh lá.",
+          "prompt": "Find a spanning tree for $K_{1,6}$ among the three trees drawn below.<pre class=\"mermaid\">graph LR\n  subgraph U1[\"(i)\"]\n  m1((1)) --- m2((2))\n  m2 --- m3((3))\n  m3 --- m4((4))\n  m4 --- m5((5))\n  m5 --- m6((6))\n  m6 --- m7((7))\n  m7 --- m8((8))\n  end\n  subgraph U2[\"(ii)\"]\n  na((a)) --- nb((b))\n  nb --- nc((c))\n  nc --- nd((d))\n  nc --- ne((e))\n  ne --- nf((f))\n  nf --- ng((g))\n  end\n  subgraph U3[\"(iii)\"]\n  z0((c)) --- z1((1))\n  z0 --- z2((2))\n  z0 --- z3((3))\n  z0 --- z4((4))\n  z0 --- z5((5))\n  z0 --- z6((6))\n  end</pre>|||Tìm một cây khung cho $K_{1,6}$ trong ba cây được vẽ dưới đây.<pre class=\"mermaid\">graph LR\n  subgraph U1[\"(i)\"]\n  m1((1)) --- m2((2))\n  m2 --- m3((3))\n  m3 --- m4((4))\n  m4 --- m5((5))\n  m5 --- m6((6))\n  m6 --- m7((7))\n  m7 --- m8((8))\n  end\n  subgraph U2[\"(ii)\"]\n  na((a)) --- nb((b))\n  nb --- nc((c))\n  nc --- nd((d))\n  nc --- ne((e))\n  ne --- nf((f))\n  nf --- ng((g))\n  end\n  subgraph U3[\"(iii)\"]\n  z0((c)) --- z1((1))\n  z0 --- z2((2))\n  z0 --- z3((3))\n  z0 --- z4((4))\n  z0 --- z5((5))\n  z0 --- z6((6))\n  end</pre>",
           "options": [
             {
               "text": "(i)|||(i)"
@@ -7070,12 +7171,12 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$K_{1,6}$ is already a tree (1 center + 6 leaves, 6 edges, connected, acyclic), so its only spanning tree is itself &mdash; the star shape in (iii). (i) has the wrong vertex count; (ii) has the wrong degree distribution (not a single center of degree 6).</div><div class=\"ml-vi\">$K_{1,6}$ vốn đã là cây (1 tâm + 6 lá, 6 cạnh, liên thông, không chu trình) nên cây khung duy nhất chính là nó &mdash; hình sao ở (iii). (i) sai số đỉnh; (ii) sai phân bố bậc (không phải 1 tâm bậc 6 duy nhất).</div>"
+          "explanation": "<div class=\"ml-en\">$K_{1,6}$ is already a tree (1 center + 6 leaves, 6 edges, connected, acyclic), so its only spanning tree is itself &mdash; the star in (iii). (i) has 8 vertices, but $K_{1,6}$ has only 7. (ii) has 7 vertices but its maximum degree is 3, not 6, so it is not a star.</div><div class=\"ml-vi\">$K_{1,6}$ vốn đã là cây (1 tâm + 6 lá, 6 cạnh, liên thông, không chu trình) nên cây khung duy nhất chính là nó &mdash; hình sao ở (iii). (i) có 8 đỉnh, trong khi $K_{1,6}$ chỉ có 7. (ii) có 7 đỉnh nhưng bậc lớn nhất là 3 chứ không phải 6, nên không phải hình sao.</div>"
         },
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a graph with vertices A,B,C,D,E,F and edges A-B, A-C, A-D, B-D, B-E, D-E, D-F. How many edges must be removed from the graph to get a spanning tree?|||Cho đồ thị đỉnh A,B,C,D,E,F và cạnh A-B, A-C, A-D, B-D, B-E, D-E, D-F. Cần bỏ bao nhiêu cạnh để được cây khung?",
+          "prompt": "Given the graph below (vertices A,B,C,D,E,F; edges A-B, A-C, A-D, B-D, B-E, D-E, D-F).<pre class=\"mermaid\">graph LR\n  A((A)) --- B((B))\n  A --- C((C))\n  A --- D((D))\n  B --- D\n  B --- E((E))\n  D --- E\n  D --- F((F))</pre>How many edges must be removed from the graph to get a spanning tree?|||Cho đồ thị dưới đây (đỉnh A,B,C,D,E,F; cạnh A-B, A-C, A-D, B-D, B-E, D-E, D-F).<pre class=\"mermaid\">graph LR\n  A((A)) --- B((B))\n  A --- C((C))\n  A --- D((D))\n  B --- D\n  B --- E((E))\n  D --- E\n  D --- F((F))</pre>Cần bỏ bao nhiêu cạnh để được cây khung?",
           "options": [
             {
               "text": "1|||1"
@@ -7097,11 +7198,28 @@ export default {
             1
           ],
           "explanation": "<div class=\"ml-en\">7 edges, 6 vertices. Spanning tree needs $6-1=5$ edges. Remove $7-5=2$.</div><div class=\"ml-vi\">7 cạnh, 6 đỉnh. Cây khung cần $6-1=5$ cạnh. Cần bỏ $7-5=2$ cạnh.</div>"
-        },
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "PT3-D6",
+      "source": "REAL",
+      "sortOrder": 136,
+      "title": "Progress Test 3 — Đề 6/8|||Kiểm tra tiến độ 3 — Đề 6/8",
+      "description": "MAD101 Progress Test 3 question bank, part 6 of 8 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 6/8 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
+      "durationMinutes": 30,
+      "totalPoints": 10,
+      "passMark": 5,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "How many non-isomorphic spanning trees does the following graph have? (Two 4-cycles a-b-d-c-a and f-g-h-e-f, joined by a single bridge edge d-e.)|||Đồ thị sau có bao nhiêu cây khung KHÔNG đẳng cấu? (Hai chu trình 4 cạnh a-b-d-c-a và f-g-h-e-f, nối nhau bằng một cạnh cầu duy nhất d-e.)",
+          "prompt": "How many non-isomorphic spanning trees does the graph below have? It is made of two 4-cycles a-b-d-c-a and f-g-h-e-f joined by a single bridge edge d-e.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- d((d))\n  d --- c((c))\n  c --- a\n  d --- e((e))\n  e --- f((f))\n  f --- g((g))\n  g --- h((h))\n  h --- e</pre>|||Đồ thị dưới đây có bao nhiêu cây khung KHÔNG đẳng cấu? Đồ thị gồm hai chu trình 4 cạnh a-b-d-c-a và f-g-h-e-f nối nhau bằng một cạnh cầu duy nhất d-e.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- d((d))\n  d --- c((c))\n  c --- a\n  d --- e((e))\n  e --- f((f))\n  f --- g((g))\n  g --- h((h))\n  h --- e</pre>",
           "options": [
             {
               "text": "2|||2"
@@ -7126,6 +7244,29 @@ export default {
             1
           ],
           "explanation": "<div class=\"ml-en\">The bridge d-e must stay. Each 4-cycle becomes a path when 1 of its 4 edges is removed, and d (resp. e) is either an ENDPOINT of that path or INTERNAL to it. Combinations: both endpoints (gives a straight $P_8$), one endpoint+one internal (gives a single-branch spider &mdash; the two such combos are mirror images, isomorphic), both internal (gives a two-branch tree). That is exactly 3 non-isomorphic shapes.</div><div class=\"ml-vi\">Cạnh cầu d-e phải giữ nguyên. Mỗi chu trình 4 cạnh thành đường đi khi bỏ 1/4 cạnh, và d (hay e) hoặc là ĐẦU MÚT của đường đó hoặc NẰM GIỮA. Tổ hợp: cả 2 đầu mút (cho đường thẳng $P_8$), 1 đầu mút+1 giữa (cho cây phân nhánh 1 chỗ &mdash; 2 tổ hợp này đối xứng gương, đẳng cấu nhau), cả 2 nằm giữa (cho cây phân nhánh 2 chỗ). Đúng 3 dạng không đẳng cấu.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Given the graph G below (vertices a,b,c,d,e,f,g,h; edges a-d, a-b, a-c, d-f, b-c, c-e, d-g, f-e, g-h).<pre class=\"mermaid\">graph LR\n  a((a)) --- d((d))\n  a --- b((b))\n  a --- c((c))\n  d --- f((f))\n  b --- c\n  c --- e((e))\n  d --- g((g))\n  f --- e\n  g --- h((h))</pre>What is the order of vertices traversed by Depth First Search algorithm from vertex a? (Assume that at each step, if there are more than one choice then the vertex is chosen in the alphabetical order.)|||Cho đồ thị G dưới đây (đỉnh a,b,c,d,e,f,g,h; cạnh a-d, a-b, a-c, d-f, b-c, c-e, d-g, f-e, g-h).<pre class=\"mermaid\">graph LR\n  a((a)) --- d((d))\n  a --- b((b))\n  a --- c((c))\n  d --- f((f))\n  b --- c\n  c --- e((e))\n  d --- g((g))\n  f --- e\n  g --- h((h))</pre>Thứ tự các đỉnh được duyệt bởi thuật toán tìm kiếm theo chiều sâu (DFS) từ đỉnh a là gì? (Khi có nhiều lựa chọn, chọn đỉnh theo thứ tự alphabet.)",
+          "options": [
+            {
+              "text": "a, b, c, e, g, h, d, f|||a, b, c, e, g, h, d, f"
+            },
+            {
+              "text": "a, b, c, e, f, d, g, h|||a, b, c, e, f, d, g, h"
+            },
+            {
+              "text": "a, b, c, d, e, f, g, h|||a, b, c, d, e, f, g, h"
+            },
+            {
+              "text": "a, b, c, d, e, g, f, h|||a, b, c, d, e, g, f, h"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">DFS(a): visit b(alphabetical). DFS(b): visit c. DFS(c): visit e (only remaining unvisited neighbor). DFS(e): visit f (its only neighbor besides c). DFS(f): visit d (its only remaining neighbor). DFS(d): visit g. DFS(g): visit h. Order: a,b,c,e,f,d,g,h.</div><div class=\"ml-vi\">DFS(a): thăm b (theo alphabet). DFS(b): thăm c. DFS(c): thăm e (đỉnh chưa thăm còn lại duy nhất). DFS(e): thăm f (hàng xóm còn lại ngoài c). DFS(f): thăm d (hàng xóm còn lại). DFS(d): thăm g. DFS(g): thăm h. Thứ tự: a,b,c,e,f,d,g,h.</div>"
         },
         {
           "kind": "MCQ",
@@ -7159,7 +7300,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a weighted graph with vertices A,B,C,D,E,F,G and edges A-D=2, D-F=1, A-B=2, A-C=1, D-C=2, F-G=2, B-C=2, C-G=3, B-E=1, E-C=3. Use Prim's algorithm to find the minimum spanning tree with the first edge {A,C}. Assume that the vertices are ordered alphabetically for tie-breaking. What is the sequence of edges chosen?|||Cho đồ thị có trọng số đỉnh A,B,C,D,E,F,G và cạnh A-D=2, D-F=1, A-B=2, A-C=1, D-C=2, F-G=2, B-C=2, C-G=3, B-E=1, E-C=3. Dùng Prim tìm cây khung nhỏ nhất với cạnh đầu {A,C}. Giả sử đỉnh xếp theo alphabet khi cần phá vỡ tie. Chuỗi cạnh được chọn là gì?",
+          "prompt": "Given the weighted graph below (vertices A,B,C,D,E,F,G; edges A-D=2, D-F=1, A-B=2, A-C=1, D-C=2, F-G=2, B-C=2, C-G=3, B-E=1, E-C=3).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- D((D))\n  D -- 1 --- F((F))\n  A -- 2 --- B((B))\n  A -- 1 --- C((C))\n  D -- 2 --- C\n  F -- 2 --- G((G))\n  B -- 2 --- C\n  C -- 3 --- G\n  B -- 1 --- E((E))\n  E -- 3 --- C</pre>Use Prim's algorithm to find the minimum spanning tree with the first edge {A,C}. Assume that the vertices are ordered alphabetically for tie-breaking. What is the sequence of edges chosen?|||Cho đồ thị có trọng số dưới đây (đỉnh A,B,C,D,E,F,G; cạnh A-D=2, D-F=1, A-B=2, A-C=1, D-C=2, F-G=2, B-C=2, C-G=3, B-E=1, E-C=3).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- D((D))\n  D -- 1 --- F((F))\n  A -- 2 --- B((B))\n  A -- 1 --- C((C))\n  D -- 2 --- C\n  F -- 2 --- G((G))\n  B -- 2 --- C\n  C -- 3 --- G\n  B -- 1 --- E((E))\n  E -- 3 --- C</pre>Dùng Prim tìm cây khung nhỏ nhất với cạnh đầu {A,C}. Giả sử đỉnh xếp theo alphabet khi cần phá vỡ tie. Chuỗi cạnh được chọn là gì?",
           "options": [
             {
               "text": "{A,C},{A,B},{B,E},{A,D},{D,F},{F,G}|||{A,C},{A,B},{B,E},{A,D},{D,F},{F,G}"
@@ -7182,7 +7323,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a weighted graph with vertices A,B,C,D,E,Z and edges A-B=2, A-C=6, B-C=2, B-D=4, B-E=3, C-D=4, C-E=1, D-Z=2, E-Z=3. Using Prim's algorithm starting at A to find a minimal spanning tree. What is the list of edges chosen?|||Cho đồ thị có trọng số đỉnh A,B,C,D,E,Z và cạnh A-B=2, A-C=6, B-C=2, B-D=4, B-E=3, C-D=4, C-E=1, D-Z=2, E-Z=3. Dùng Prim bắt đầu từ A tìm cây khung nhỏ nhất. Danh sách cạnh được chọn là gì?",
+          "prompt": "Given the weighted graph below (vertices A,B,C,D,E,Z; edges A-B=2, A-C=6, B-C=2, B-D=4, B-E=3, C-D=4, C-E=1, D-Z=2, E-Z=3).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 6 --- C((C))\n  B -- 2 --- C\n  B -- 4 --- D((D))\n  B -- 3 --- E((E))\n  C -- 4 --- D\n  C -- 1 --- E\n  D -- 2 --- Z((Z))\n  E -- 3 --- Z</pre>Using Prim's algorithm starting at A to find a minimal spanning tree. What is the list of edges chosen?|||Cho đồ thị có trọng số dưới đây (đỉnh A,B,C,D,E,Z; cạnh A-B=2, A-C=6, B-C=2, B-D=4, B-E=3, C-D=4, C-E=1, D-Z=2, E-Z=3).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 6 --- C((C))\n  B -- 2 --- C\n  B -- 4 --- D((D))\n  B -- 3 --- E((E))\n  C -- 4 --- D\n  C -- 1 --- E\n  D -- 2 --- Z((Z))\n  E -- 3 --- Z</pre>Dùng Prim bắt đầu từ A tìm cây khung nhỏ nhất. Danh sách cạnh được chọn là gì?",
           "options": [
             {
               "text": "CE, BC, AB, EZ, DZ|||CE, BC, AB, EZ, DZ"
@@ -7204,28 +7345,11 @@ export default {
             0
           ],
           "explanation": "<div class=\"ml-en\">From A: A-B(2) is cheapest. Then B-C(2). Then C-E(1). Then among B-D(4),C-D(4),E-Z(3): E-Z(3) is cheapest. Then D-Z(2) (now that D is reachable via Z). Edge set {AB,BC,CE,EZ,DZ} &mdash; matches option A's edge set (listed as CE,BC,AB,EZ,DZ).</div><div class=\"ml-vi\">Từ A: A-B(2) rẻ nhất. Rồi B-C(2). Rồi C-E(1). Rồi trong B-D(4),C-D(4),E-Z(3): E-Z(3) rẻ nhất. Rồi D-Z(2) (D giờ đến được qua Z). Tập cạnh {AB,BC,CE,EZ,DZ} &mdash; khớp tập cạnh của phương án A (liệt kê CE,BC,AB,EZ,DZ).</div>"
-        }
-      ]
-    },
-    {
-      "kind": "FE",
-      "code": "PT3-D6",
-      "source": "REAL",
-      "sortOrder": 136,
-      "title": "Progress Test 3 — Đề 6/7|||Kiểm tra tiến độ 3 — Đề 6/7",
-      "description": "MAD101 Progress Test 3 question bank, part 6 of 7 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 6/7 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
-      "durationMinutes": 30,
-      "totalPoints": 10,
-      "passMark": 5,
-      "shuffleQuestions": true,
-      "shuffleOptions": false,
-      "isPublished": true,
-      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
-      "questions": [
+        },
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a grid graph with vertices a,b,c,d (top row), e,f,g,h (middle row), i,j (bottom row) and edges a-b=2, b-c=3, c-d=1, a-e=3, b-f=1, c-g=2, d-h=5, e-f=4, f-g=3, g-h=3, e-i=4, i-j=3, f-j=2. What is the total weight of the minimum spanning tree produced by the graph?|||Cho đồ thị lưới với đỉnh a,b,c,d (hàng trên), e,f,g,h (hàng giữa), i,j (hàng dưới) và cạnh a-b=2, b-c=3, c-d=1, a-e=3, b-f=1, c-g=2, d-h=5, e-f=4, f-g=3, g-h=3, e-i=4, i-j=3, f-j=2. Tổng trọng số cây khung nhỏ nhất là bao nhiêu?",
+          "prompt": "Given the weighted graph below (vertices a,b,c,d,e,f,g,h,i,j; edges a-b=2, b-c=3, c-d=1, a-e=3, b-f=1, c-g=2, d-h=5, e-f=4, f-g=3, g-h=3, e-i=4, i-j=3, f-j=2).<pre class=\"mermaid\">graph LR\n  a((a)) -- 2 --- b((b))\n  b -- 3 --- c((c))\n  c -- 1 --- d((d))\n  a -- 3 --- e((e))\n  b -- 1 --- f((f))\n  c -- 2 --- g((g))\n  d -- 5 --- h((h))\n  e -- 4 --- f\n  f -- 3 --- g\n  g -- 3 --- h\n  e -- 4 --- i((i))\n  i -- 3 --- j((j))\n  f -- 2 --- j</pre>What is the total weight of the minimum spanning tree produced by the graph?|||Cho đồ thị có trọng số dưới đây (đỉnh a,b,c,d,e,f,g,h,i,j; cạnh a-b=2, b-c=3, c-d=1, a-e=3, b-f=1, c-g=2, d-h=5, e-f=4, f-g=3, g-h=3, e-i=4, i-j=3, f-j=2).<pre class=\"mermaid\">graph LR\n  a((a)) -- 2 --- b((b))\n  b -- 3 --- c((c))\n  c -- 1 --- d((d))\n  a -- 3 --- e((e))\n  b -- 1 --- f((f))\n  c -- 2 --- g((g))\n  d -- 5 --- h((h))\n  e -- 4 --- f\n  f -- 3 --- g\n  g -- 3 --- h\n  e -- 4 --- i((i))\n  i -- 3 --- j((j))\n  f -- 2 --- j</pre>Tổng trọng số cây khung nhỏ nhất là bao nhiêu?",
           "options": [
             {
               "text": "20|||20"
@@ -7251,7 +7375,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a weighted graph with vertices A,B,C,D,E,F and edges A-B=1, B-C=6, A-D=3, B-D=5, B-E=1, C-E=5, C-F=2, D-E=1, E-F=4. If using Kruskal's algorithm to find a minimum spanning tree T, which edge is added to T in the last step?|||Cho đồ thị có trọng số đỉnh A,B,C,D,E,F và cạnh A-B=1, B-C=6, A-D=3, B-D=5, B-E=1, C-E=5, C-F=2, D-E=1, E-F=4. Dùng Kruskal tìm cây khung nhỏ nhất T, cạnh nào được thêm vào T ở bước CUỐI CÙNG?",
+          "prompt": "Given the weighted graph below (vertices A,B,C,D,E,F; edges A-B=1, B-C=6, A-D=3, B-D=5, B-E=1, C-E=5, C-F=2, D-E=1, E-F=4).<pre class=\"mermaid\">graph LR\n  A((A)) -- 1 --- B((B))\n  B -- 6 --- C((C))\n  A -- 3 --- D((D))\n  B -- 5 --- D\n  B -- 1 --- E((E))\n  C -- 5 --- E\n  C -- 2 --- F((F))\n  D -- 1 --- E\n  E -- 4 --- F</pre>If using Kruskal's algorithm to find a minimum spanning tree T, which edge is added to T in the last step?|||Cho đồ thị có trọng số dưới đây (đỉnh A,B,C,D,E,F; cạnh A-B=1, B-C=6, A-D=3, B-D=5, B-E=1, C-E=5, C-F=2, D-E=1, E-F=4).<pre class=\"mermaid\">graph LR\n  A((A)) -- 1 --- B((B))\n  B -- 6 --- C((C))\n  A -- 3 --- D((D))\n  B -- 5 --- D\n  B -- 1 --- E((E))\n  C -- 5 --- E\n  C -- 2 --- F((F))\n  D -- 1 --- E\n  E -- 4 --- F</pre>Dùng Kruskal tìm cây khung nhỏ nhất T, cạnh nào được thêm vào T ở bước CUỐI CÙNG?",
           "options": [
             {
               "text": "AD|||AD"
@@ -7277,7 +7401,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Find the total weight of a minimum spanning tree in the following undirected weighted graph with vertices a,b,c,d,e,f,g,h and edges a-b=6, a-d=2, a-c=9, b-d=12, d-c=5, b-c=3, c-e=1, h-g=10, h-f=4, h-e=8, g-f=7, e-f=11.|||Tìm tổng trọng số cây khung nhỏ nhất trong đồ thị vô hướng có trọng số với đỉnh a,b,c,d,e,f,g,h và cạnh a-b=6, a-d=2, a-c=9, b-d=12, d-c=5, b-c=3, c-e=1, h-g=10, h-f=4, h-e=8, g-f=7, e-f=11.",
+          "prompt": "Find the total weight of a minimum spanning tree in the undirected weighted graph below (vertices a,b,c,d,e,f,g,h; edges a-b=6, a-d=2, a-c=9, b-d=12, d-c=5, b-c=3, c-e=1, h-g=10, h-f=4, h-e=8, g-f=7, e-f=11).<pre class=\"mermaid\">graph LR\n  a((a)) -- 6 --- b((b))\n  a -- 2 --- d((d))\n  a -- 9 --- c((c))\n  b -- 12 --- d\n  d -- 5 --- c\n  b -- 3 --- c\n  c -- 1 --- e((e))\n  h((h)) -- 10 --- g((g))\n  h -- 4 --- f((f))\n  h -- 8 --- e\n  g -- 7 --- f\n  e -- 11 --- f</pre>|||Tìm tổng trọng số cây khung nhỏ nhất trong đồ thị vô hướng có trọng số dưới đây (đỉnh a,b,c,d,e,f,g,h; cạnh a-b=6, a-d=2, a-c=9, b-d=12, d-c=5, b-c=3, c-e=1, h-g=10, h-f=4, h-e=8, g-f=7, e-f=11).<pre class=\"mermaid\">graph LR\n  a((a)) -- 6 --- b((b))\n  a -- 2 --- d((d))\n  a -- 9 --- c((c))\n  b -- 12 --- d\n  d -- 5 --- c\n  b -- 3 --- c\n  c -- 1 --- e((e))\n  h((h)) -- 10 --- g((g))\n  h -- 4 --- f((f))\n  h -- 8 --- e\n  g -- 7 --- f\n  e -- 11 --- f</pre>",
           "options": [
             {
               "text": "28|||28"
@@ -7303,7 +7427,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a weighted graph with vertices A,B,C,D,E,Z and edges A-B=2, A-C=6, B-D=3, B-C=2, D-Z=2, C-E=4, E-Z=3, and the two diagonals of square B-D-E-C valued 3 and 4 (one each). What is the total weight of a minimal spanning tree of the graph?|||Cho đồ thị có trọng số đỉnh A,B,C,D,E,Z và cạnh A-B=2, A-C=6, B-D=3, B-C=2, D-Z=2, C-E=4, E-Z=3, cùng 2 đường chéo của hình vuông B-D-E-C có giá trị 3 và 4 (mỗi đường 1 giá trị). Tổng trọng số cây khung nhỏ nhất là bao nhiêu?",
+          "prompt": "Given the weighted graph below (vertices A,B,C,D,E,Z; edges A-B=2, A-C=6, B-D=3, B-C=2, D-Z=2, C-E=4, E-Z=3, plus two further edges B-E and C-D whose weights are 3 and 4 in one order or the other &mdash; the answer is the same either way).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 6 --- C((C))\n  B -- 3 --- D((D))\n  B -- 2 --- C\n  D -- 2 --- Z((Z))\n  C -- 4 --- E((E))\n  E -- 3 --- Z\n  B -- 3 or 4 --- E\n  C -- 3 or 4 --- D</pre>What is the total weight of a minimal spanning tree of the graph?|||Cho đồ thị có trọng số dưới đây (đỉnh A,B,C,D,E,Z; cạnh A-B=2, A-C=6, B-D=3, B-C=2, D-Z=2, C-E=4, E-Z=3, cùng 2 cạnh nữa là B-E và C-D mang trọng số 3 và 4 theo thứ tự nào cũng được &mdash; kết quả không đổi).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 6 --- C((C))\n  B -- 3 --- D((D))\n  B -- 2 --- C\n  D -- 2 --- Z((Z))\n  C -- 4 --- E((E))\n  E -- 3 --- Z\n  B -- 3 or 4 --- E\n  C -- 3 or 4 --- D</pre>Tổng trọng số cây khung nhỏ nhất là bao nhiêu?",
           "options": [
             {
               "text": "14|||14"
@@ -7324,12 +7448,12 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Kruskal: AB(2),BC(2),DZ(2) all disjoint-safe, then the weight-3 diagonal/edge merges the remaining components into one connected tree of 6 vertices with 5 edges. Total $=2+2+2+3+3=12$ regardless of which diagonal is labeled 3 vs 4.</div><div class=\"ml-vi\">Kruskal: AB(2),BC(2),DZ(2) đều an toàn (không tạo chu trình), rồi cạnh/đường chéo trọng số 3 gộp các thành phần còn lại thành 1 cây liên thông 6 đỉnh 5 cạnh. Tổng $=2+2+2+3+3=12$ dù đường chéo nào mang giá trị 3 hay 4.</div>"
+          "explanation": "<div class=\"ml-en\">Kruskal: AB(2), BC(2), DZ(2) are all cycle-free, giving components $\\{A,B,C\\}$ and $\\{D,Z\\}$. Then B-D(3) merges them, and one more weight-3 edge (E-Z, or B-E if that is the one labelled 3) brings in E. Five edges for six vertices: total $=2+2+2+3+3=12$, whichever of B-E / C-D carries the 3.</div><div class=\"ml-vi\">Kruskal: AB(2), BC(2), DZ(2) đều không tạo chu trình, cho 2 thành phần $\\{A,B,C\\}$ và $\\{D,Z\\}$. Rồi B-D(3) gộp chúng lại, và thêm một cạnh trọng số 3 nữa (E-Z, hoặc B-E nếu cạnh đó mang giá trị 3) để nạp E. Năm cạnh cho sáu đỉnh: tổng $=2+2+2+3+3=12$, bất kể B-E hay C-D mang số 3.</div>"
         },
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a weighted graph with vertices A,B,C,D,E,F,G,H,I and edges F-A=1, A-G=2, G-B=3, B-C=1, G-I=1, G-H=3, I-H=4, C-H=2, F-I=2, I-E=3, H-D=2, E-D=4. What is the weight of a minimum spanning tree of the following graph?|||Cho đồ thị có trọng số đỉnh A,B,C,D,E,F,G,H,I và cạnh F-A=1, A-G=2, G-B=3, B-C=1, G-I=1, G-H=3, I-H=4, C-H=2, F-I=2, I-E=3, H-D=2, E-D=4. Trọng số cây khung nhỏ nhất của đồ thị là bao nhiêu?",
+          "prompt": "What is the weight of a minimum spanning tree of the graph below (vertices A,B,C,D,E,F,G,H,I; edges F-A=1, A-G=2, G-B=3, B-C=1, G-I=1, G-H=3, I-H=4, C-H=2, F-I=2, I-E=3, H-D=2, E-D=4)?<pre class=\"mermaid\">graph LR\n  F((F)) -- 1 --- A((A))\n  A -- 2 --- G((G))\n  G -- 3 --- B((B))\n  B -- 1 --- C((C))\n  G -- 1 --- I((I))\n  G -- 3 --- H((H))\n  I -- 4 --- H\n  C -- 2 --- H\n  F -- 2 --- I\n  I -- 3 --- E((E))\n  H -- 2 --- D((D))\n  E -- 4 --- D</pre>|||Trọng số cây khung nhỏ nhất của đồ thị dưới đây (đỉnh A,B,C,D,E,F,G,H,I; cạnh F-A=1, A-G=2, G-B=3, B-C=1, G-I=1, G-H=3, I-H=4, C-H=2, F-I=2, I-E=3, H-D=2, E-D=4) là bao nhiêu?<pre class=\"mermaid\">graph LR\n  F((F)) -- 1 --- A((A))\n  A -- 2 --- G((G))\n  G -- 3 --- B((B))\n  B -- 1 --- C((C))\n  G -- 1 --- I((I))\n  G -- 3 --- H((H))\n  I -- 4 --- H\n  C -- 2 --- H\n  F -- 2 --- I\n  I -- 3 --- E((E))\n  H -- 2 --- D((D))\n  E -- 4 --- D</pre>",
           "options": [
             {
               "text": "15|||15"
@@ -7352,7 +7476,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Consider a weighted graph with vertices A,B,C,D,E,F,G and edges A-B=1, A-D=1, A-G=3, B-G=2, B-C=3, D-G=2, D-C=2, G-C=1, D-E=3, E-C=1, C-F=2, E-F=2. Which one of the following is NOT the sequence of edges added to the minimum spanning tree using Kruskal's algorithm?|||Xét đồ thị có trọng số đỉnh A,B,C,D,E,F,G và cạnh A-B=1, A-D=1, A-G=3, B-G=2, B-C=3, D-G=2, D-C=2, G-C=1, D-E=3, E-C=1, C-F=2, E-F=2. Phương án nào sau đây KHÔNG PHẢI chuỗi cạnh Kruskal thêm vào cây khung nhỏ nhất?",
+          "prompt": "Consider the weighted graph below (vertices A,B,C,D,E,F,G; edges A-B=1, A-D=1, A-G=3, B-G=2, B-C=3, D-G=2, D-C=2, G-C=1, D-E=3, E-C=1, C-F=2, E-F=2).<pre class=\"mermaid\">graph LR\n  A((A)) -- 1 --- B((B))\n  A -- 1 --- D((D))\n  A -- 3 --- G((G))\n  B -- 2 --- G\n  B -- 3 --- C((C))\n  D -- 2 --- G\n  D -- 2 --- C\n  G -- 1 --- C\n  D -- 3 --- E((E))\n  E -- 1 --- C\n  C -- 2 --- F((F))\n  E -- 2 --- F</pre>Which one of the following is NOT the sequence of edges added to the minimum spanning tree using Kruskal's algorithm?|||Xét đồ thị có trọng số dưới đây (đỉnh A,B,C,D,E,F,G; cạnh A-B=1, A-D=1, A-G=3, B-G=2, B-C=3, D-G=2, D-C=2, G-C=1, D-E=3, E-C=1, C-F=2, E-F=2).<pre class=\"mermaid\">graph LR\n  A((A)) -- 1 --- B((B))\n  A -- 1 --- D((D))\n  A -- 3 --- G((G))\n  B -- 2 --- G\n  B -- 3 --- C((C))\n  D -- 2 --- G\n  D -- 2 --- C\n  G -- 1 --- C\n  D -- 3 --- E((E))\n  E -- 1 --- C\n  C -- 2 --- F((F))\n  E -- 2 --- F</pre>Phương án nào sau đây KHÔNG PHẢI chuỗi cạnh Kruskal thêm vào cây khung nhỏ nhất?",
           "options": [
             {
               "text": "{C,E},{C,G},{A,B},{A,D},{F,E},{D,G}|||{C,E},{C,G},{A,B},{A,D},{F,E},{D,G}"
@@ -7375,7 +7499,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a weighted graph with vertices A,B,C,D,E,Z and edges A-B=2, A-C=6, B-D=3, B-C=2, B-E=3, D-Z=2, C-E=1, E-Z=4. Using Prim's algorithm starting at A to find a minimal spanning tree. What is the list of edges chosen?|||Cho đồ thị có trọng số đỉnh A,B,C,D,E,Z và cạnh A-B=2, A-C=6, B-D=3, B-C=2, B-E=3, D-Z=2, C-E=1, E-Z=4. Dùng Prim bắt đầu từ A tìm cây khung nhỏ nhất. Danh sách cạnh được chọn là gì?",
+          "prompt": "Given the weighted graph below (vertices A,B,C,D,E,Z; edges A-B=2, A-C=6, B-D=3, B-C=2, B-E=3, D-Z=2, C-E=1, E-Z=4).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 6 --- C((C))\n  B -- 3 --- D((D))\n  B -- 2 --- C\n  B -- 3 --- E((E))\n  D -- 2 --- Z((Z))\n  C -- 1 --- E\n  E -- 4 --- Z</pre>Using Prim's algorithm starting at A to find a minimal spanning tree. What is the list of edges chosen?|||Cho đồ thị có trọng số dưới đây (đỉnh A,B,C,D,E,Z; cạnh A-B=2, A-C=6, B-D=3, B-C=2, B-E=3, D-Z=2, C-E=1, E-Z=4).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 6 --- C((C))\n  B -- 3 --- D((D))\n  B -- 2 --- C\n  B -- 3 --- E((E))\n  D -- 2 --- Z((Z))\n  C -- 1 --- E\n  E -- 4 --- Z</pre>Dùng Prim bắt đầu từ A tìm cây khung nhỏ nhất. Danh sách cạnh được chọn là gì?",
           "options": [
             {
               "text": "CE, BC, AB, BD, DZ|||CE, BC, AB, BD, DZ"
@@ -7401,7 +7525,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Which graph is bipartite? (Graph 1 is $C_6$, a 6-cycle. Graph 2 is a 4-vertex square with one diagonal drawn, creating a triangle. Graph 3 is a triangle-like crossing shape with an extra pendant vertex/edge.)|||Đồ thị nào là lưỡng phân (bipartite)? (Graph 1 là $C_6$, chu trình 6 cạnh. Graph 2 là hình vuông 4 đỉnh có thêm 1 đường chéo, tạo ra tam giác. Graph 3 là hình tam giác cắt nhau có thêm 1 đỉnh/cạnh phụ.)",
+          "prompt": "Which of the three graphs below is bipartite?<pre class=\"mermaid\">graph LR\n  subgraph B1[\"Graph 1\"]\n  c1((a)) --- c2((b))\n  c2 --- c3((c))\n  c3 --- c4((d))\n  c4 --- c5((e))\n  c5 --- c6((f))\n  c6 --- c1\n  end\n  subgraph B2[\"Graph 2\"]\n  d1((p)) --- d2((q))\n  d2 --- d3((r))\n  d3 --- d4((s))\n  d4 --- d1\n  d1 --- d3\n  end\n  subgraph B3[\"Graph 3\"]\n  e1((x)) --- e2((y))\n  e2 --- e3((z))\n  e3 --- e1\n  e1 --- e4((w))\n  end</pre>|||Trong ba đồ thị dưới đây, đồ thị nào là lưỡng phân (bipartite)?<pre class=\"mermaid\">graph LR\n  subgraph B1[\"Graph 1\"]\n  c1((a)) --- c2((b))\n  c2 --- c3((c))\n  c3 --- c4((d))\n  c4 --- c5((e))\n  c5 --- c6((f))\n  c6 --- c1\n  end\n  subgraph B2[\"Graph 2\"]\n  d1((p)) --- d2((q))\n  d2 --- d3((r))\n  d3 --- d4((s))\n  d4 --- d1\n  d1 --- d3\n  end\n  subgraph B3[\"Graph 3\"]\n  e1((x)) --- e2((y))\n  e2 --- e3((z))\n  e3 --- e1\n  e1 --- e4((w))\n  end</pre>",
           "options": [
             {
               "text": "Graph 2|||Graph 2"
@@ -7419,7 +7543,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$C_6$ is an even cycle, always bipartite (2-color alternating around the cycle). Graph 2's diagonal creates a 3-cycle (odd), not bipartite. Graph 3 has a triangle too, not bipartite.</div><div class=\"ml-vi\">$C_6$ là chu trình chẵn, luôn lưỡng phân (tô 2 màu xen kẽ quanh chu trình). Đường chéo của Graph 2 tạo chu trình 3 (lẻ), không lưỡng phân. Graph 3 cũng có tam giác, không lưỡng phân.</div>"
+          "explanation": "<div class=\"ml-en\">Graph 1 is the even cycle $C_6$, always bipartite (2-colour alternating around the cycle). Graph 2's diagonal p-r creates the triangle p-q-r, an odd cycle &rArr; not bipartite. Graph 3 contains the triangle x-y-z &rArr; not bipartite (the pendant vertex w changes nothing).</div><div class=\"ml-vi\">Graph 1 là chu trình chẵn $C_6$, luôn lưỡng phân (tô 2 màu xen kẽ quanh chu trình). Đường chéo p-r của Graph 2 tạo tam giác p-q-r, chu trình lẻ &rArr; không lưỡng phân. Graph 3 chứa tam giác x-y-z &rArr; không lưỡng phân (đỉnh treo w không đổi gì).</div>"
         },
         {
           "kind": "MCQ",
@@ -7472,11 +7596,28 @@ export default {
             3
           ],
           "explanation": "<div class=\"ml-en\">Sum of degrees $=2\\times3+10\\times4=6+40=46$. Edges $=46/2=23$.</div><div class=\"ml-vi\">Tổng bậc $=2\\times3+10\\times4=46$. Số cạnh $=46/2=23$.</div>"
-        },
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "PT3-D7",
+      "source": "REAL",
+      "sortOrder": 137,
+      "title": "Progress Test 3 — Đề 7/8|||Kiểm tra tiến độ 3 — Đề 7/8",
+      "description": "MAD101 Progress Test 3 question bank, part 7 of 8 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 7/8 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
+      "durationMinutes": 30,
+      "totalPoints": 10,
+      "passMark": 5,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given two directed graphs: $G_1$ is a hexagram (6-pointed star) formed by two disjoint triangles on alternating vertices (no edges between the two triangles). $G_2$ is a pentagram (5-pointed star) formed by connecting every vertex to the one two steps away around a pentagon, tracing a single 5-cycle. Which statement is correct?<br>(i) $G_1$ is strongly connected<br>(ii) $G_2$ is strongly connected|||Cho 2 đồ thị có hướng: $G_1$ là ngôi sao 6 cánh (lục giác) tạo bởi 2 tam giác RỜI NHAU trên các đỉnh xen kẽ (không có cạnh nối 2 tam giác). $G_2$ là ngôi sao 5 cánh tạo bởi nối mỗi đỉnh với đỉnh cách 2 bước quanh ngũ giác, tạo thành MỘT chu trình 5 cạnh duy nhất. Phát biểu nào đúng?<br>(i) $G_1$ liên thông mạnh<br>(ii) $G_2$ liên thông mạnh",
+          "prompt": "Given the two directed graphs below. $G_1$ is drawn as a 6-pointed star: joining every second vertex of a hexagon splits it into two vertex-disjoint directed triangles with no edge between them. $G_2$ is drawn as a 5-pointed star: joining every second vertex of a pentagon traces one single directed 5-cycle through all five vertices.<pre class=\"mermaid\">graph LR\n  subgraph H1[\"G1\"]\n  h1((1)) --> h3((3))\n  h3 --> h5((5))\n  h5 --> h1\n  h2((2)) --> h4((4))\n  h4 --> h6((6))\n  h6 --> h2\n  end\n  subgraph H2[\"G2\"]\n  g1((1)) --> g3((3))\n  g3 --> g5((5))\n  g5 --> g2((2))\n  g2 --> g4((4))\n  g4 --> g1\n  end</pre>Which statement is correct?<br>(i) $G_1$ is strongly connected<br>(ii) $G_2$ is strongly connected|||Cho 2 đồ thị có hướng dưới đây. $G_1$ vẽ dạng ngôi sao 6 cánh: nối các đỉnh cách nhau 2 bước trên lục giác thì tách thành 2 tam giác có hướng RỜI NHAU, không có cạnh nối giữa chúng. $G_2$ vẽ dạng ngôi sao 5 cánh: nối các đỉnh cách nhau 2 bước trên ngũ giác thì tạo thành MỘT chu trình có hướng 5 cạnh duy nhất đi qua cả 5 đỉnh.<pre class=\"mermaid\">graph LR\n  subgraph H1[\"G1\"]\n  h1((1)) --> h3((3))\n  h3 --> h5((5))\n  h5 --> h1\n  h2((2)) --> h4((4))\n  h4 --> h6((6))\n  h6 --> h2\n  end\n  subgraph H2[\"G2\"]\n  g1((1)) --> g3((3))\n  g3 --> g5((5))\n  g5 --> g2((2))\n  g2 --> g4((4))\n  g4 --> g1\n  end</pre>Phát biểu nào đúng?<br>(i) $G_1$ liên thông mạnh<br>(ii) $G_2$ liên thông mạnh",
           "options": [
             {
               "text": "(i) only|||Chỉ (i)"
@@ -7495,6 +7636,35 @@ export default {
             1
           ],
           "explanation": "<div class=\"ml-en\">A hexagram's 'every other vertex' construction splits into 2 disjoint triangles (disconnected as a graph) &mdash; $G_1$ can't be strongly connected. A pentagram's construction (gcd(2,5)=1) traces a SINGLE 5-cycle through all vertices; if consistently oriented, that directed cycle makes $G_2$ strongly connected.</div><div class=\"ml-vi\">Cách dựng ngôi sao 6 cánh 'mỗi đỉnh cách nhau' chia thành 2 tam giác RỜI NHAU (không liên thông ở dạng đồ thị) &mdash; $G_1$ không thể liên thông mạnh. Cách dựng ngôi sao 5 cánh (gcd(2,5)=1) tạo ra MỘT chu trình 5 cạnh duy nhất qua mọi đỉnh; nếu hướng nhất quán, chu trình có hướng đó khiến $G_2$ liên thông mạnh.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "How many connected components are in the graph below? It consists of a 4-cycle on a,b,c,d, a 6-cycle on e,f,g,h,i,j, and a single edge k-l &mdash; with no edge between the three pieces.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- c((c))\n  c --- d((d))\n  d --- a\n  e((e)) --- f((f))\n  f --- g((g))\n  g --- h((h))\n  h --- i((i))\n  i --- j((j))\n  j --- e\n  k((k)) --- l((l))</pre>|||Đồ thị dưới đây có bao nhiêu thành phần liên thông? Nó gồm một chu trình 4 cạnh trên a,b,c,d, một chu trình 6 cạnh trên e,f,g,h,i,j, và một cạnh đơn k-l &mdash; không có cạnh nào nối 3 mảnh với nhau.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- c((c))\n  c --- d((d))\n  d --- a\n  e((e)) --- f((f))\n  f --- g((g))\n  g --- h((h))\n  h --- i((i))\n  i --- j((j))\n  j --- e\n  k((k)) --- l((l))</pre>",
+          "options": [
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "13|||13"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The 4-cycle a-b-c-d, the 6-cycle e-f-g-h-i-j and the single edge k-l are three separate pieces with no edge connecting them &rArr; 3 connected components.</div><div class=\"ml-vi\">Chu trình 4 cạnh a-b-c-d, chu trình 6 cạnh e-f-g-h-i-j và cạnh đơn k-l là 3 mảnh riêng biệt không có cạnh nối &rArr; 3 thành phần liên thông.</div>"
         },
         {
           "kind": "MCQ",
@@ -7525,6 +7695,29 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
+          "prompt": "Find all the cut vertices of the graph below (vertices a,b,c,d,e,f,g,h,i,k; edges a-b, b-c, c-d, c-f, f-h, f-i, d-g, i-k; the vertex e is isolated).<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- c((c))\n  c --- d((d))\n  c --- f((f))\n  f --- h((h))\n  f --- i((i))\n  d --- g((g))\n  i --- k((k))\n  e((e))</pre>|||Tìm tất cả đỉnh cắt của đồ thị dưới đây (đỉnh a,b,c,d,e,f,g,h,i,k; cạnh a-b, b-c, c-d, c-f, f-h, f-i, d-g, i-k; đỉnh e cô lập).<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- c((c))\n  c --- d((d))\n  c --- f((f))\n  f --- h((h))\n  f --- i((i))\n  d --- g((g))\n  i --- k((k))\n  e((e))</pre>",
+          "options": [
+            {
+              "text": "b, c, d, f, i|||b, c, d, f, i"
+            },
+            {
+              "text": "b, c, d, f|||b, c, d, f"
+            },
+            {
+              "text": "b, c, f|||b, c, f"
+            },
+            {
+              "text": "b, c, d, f, i, e, k|||b, c, d, f, i, e, k"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Ignoring the isolated vertex e, the other 9 vertices and 8 edges form a tree, so the cut vertices are exactly its non-leaf vertices: b (degree 2), c (degree 3: b, d, f), d (degree 2: c, g), f (degree 3: c, h, i) and i (degree 2: f, k). The leaves a, g, h, k and the isolated e are not cut vertices &rArr; b, c, d, f, i.</div><div class=\"ml-vi\">Bỏ qua đỉnh cô lập e, 9 đỉnh và 8 cạnh còn lại tạo thành một cây, nên đỉnh cắt chính là các đỉnh không phải lá: b (bậc 2), c (bậc 3: b, d, f), d (bậc 2: c, g), f (bậc 3: c, h, i) và i (bậc 2: f, k). Các lá a, g, h, k và đỉnh cô lập e không phải đỉnh cắt &rArr; b, c, d, f, i.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
           "prompt": "Let G be a simple graph with degree sequence [2, 2, 3, 1, 0]. Which of the following is TRUE?|||Cho G là đơn đồ thị với dãy bậc [2, 2, 3, 1, 0]. Phát biểu nào sau đây ĐÚNG?",
           "options": [
             {
@@ -7548,7 +7741,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a weighted graph with vertices A,B,C,D,E,F and edges A-B=2, A-E=1, B-C=3, B-E=1, C-E=3, C-D=4, E-D=5, C-F=2, D-F=1. Find the length of the shortest path from A to F.|||Cho đồ thị có trọng số đỉnh A,B,C,D,E,F và cạnh A-B=2, A-E=1, B-C=3, B-E=1, C-E=3, C-D=4, E-D=5, C-F=2, D-F=1. Tìm độ dài đường ngắn nhất từ A đến F.",
+          "prompt": "Given the weighted graph below (vertices A,B,C,D,E,F; edges A-B=2, A-E=1, B-C=3, B-E=1, C-E=3, C-D=4, E-D=5, C-F=2, D-F=1).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 1 --- E((E))\n  B -- 3 --- C((C))\n  B -- 1 --- E\n  C -- 3 --- E\n  C -- 4 --- D((D))\n  E -- 5 --- D\n  C -- 2 --- F((F))\n  D -- 1 --- F</pre>Find the length of the shortest path from A to F.|||Cho đồ thị có trọng số dưới đây (đỉnh A,B,C,D,E,F; cạnh A-B=2, A-E=1, B-C=3, B-E=1, C-E=3, C-D=4, E-D=5, C-F=2, D-F=1).<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 1 --- E((E))\n  B -- 3 --- C((C))\n  B -- 1 --- E\n  C -- 3 --- E\n  C -- 4 --- D((D))\n  E -- 5 --- D\n  C -- 2 --- F((F))\n  D -- 1 --- F</pre>Tìm độ dài đường ngắn nhất từ A đến F.",
           "options": [
             {
               "text": "6|||6"
@@ -7574,7 +7767,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a weighted graph with vertices a,b,c,d,e,z and edges a-b=3, a-c=7, b-d=6, b-c=2, c-d=1, c-e=6, d-e=2, d-z=8, e-z=5. Find the length of the shortest path from a to z.|||Cho đồ thị có trọng số đỉnh a,b,c,d,e,z và cạnh a-b=3, a-c=7, b-d=6, b-c=2, c-d=1, c-e=6, d-e=2, d-z=8, e-z=5. Tìm độ dài đường ngắn nhất từ a đến z.",
+          "prompt": "Given the weighted graph below (vertices a,b,c,d,e,z; edges a-b=3, a-c=7, b-d=6, b-c=2, c-d=1, c-e=6, d-e=2, d-z=8, e-z=5).<pre class=\"mermaid\">graph LR\n  a((a)) -- 3 --- b((b))\n  a -- 7 --- c((c))\n  b -- 6 --- d((d))\n  b -- 2 --- c\n  c -- 1 --- d\n  c -- 6 --- e((e))\n  d -- 2 --- e\n  d -- 8 --- z((z))\n  e -- 5 --- z</pre>Find the length of the shortest path from a to z.|||Cho đồ thị có trọng số dưới đây (đỉnh a,b,c,d,e,z; cạnh a-b=3, a-c=7, b-d=6, b-c=2, c-d=1, c-e=6, d-e=2, d-z=8, e-z=5).<pre class=\"mermaid\">graph LR\n  a((a)) -- 3 --- b((b))\n  a -- 7 --- c((c))\n  b -- 6 --- d((d))\n  b -- 2 --- c\n  c -- 1 --- d\n  c -- 6 --- e((e))\n  d -- 2 --- e\n  d -- 8 --- z((z))\n  e -- 5 --- z</pre>Tìm độ dài đường ngắn nhất từ a đến z.",
           "options": [
             {
               "text": "None of the other choices is correct|||Không đáp án nào đúng"
@@ -7596,28 +7789,11 @@ export default {
             3
           ],
           "explanation": "<div class=\"ml-en\">Dijkstra: a-b=3, a-b-c=5 (beats a-c=7), a-b-c-d=6, a-b-c-d-e=8, a-b-c-d-e-z=13.</div><div class=\"ml-vi\">Dijkstra: a-b=3, a-b-c=5 (tốt hơn a-c=7), a-b-c-d=6, a-b-c-d-e=8, a-b-c-d-e-z=13.</div>"
-        }
-      ]
-    },
-    {
-      "kind": "FE",
-      "code": "PT3-D7",
-      "source": "REAL",
-      "sortOrder": 137,
-      "title": "Progress Test 3 — Đề 7/7|||Kiểm tra tiến độ 3 — Đề 7/7",
-      "description": "MAD101 Progress Test 3 question bank, part 7 of 7 (14 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 7/7 (14 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
-      "durationMinutes": 28,
-      "totalPoints": 10,
-      "passMark": 5,
-      "shuffleQuestions": true,
-      "shuffleOptions": false,
-      "isPublished": true,
-      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
-      "questions": [
+        },
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a weighted graph with vertices A,B,C,D,E,F,G and edges A-B=8, A-C=8, B-C=6, B-D=7, B-E=5, C-E=6, C-F=5, D-E=4, D-F=6, D-G=8, E-F=3, F-G=7. How many shortest paths are there from B to G?|||Cho đồ thị có trọng số đỉnh A,B,C,D,E,F,G và cạnh A-B=8, A-C=8, B-C=6, B-D=7, B-E=5, C-E=6, C-F=5, D-E=4, D-F=6, D-G=8, E-F=3, F-G=7. Có bao nhiêu đường đi ngắn nhất từ B đến G?",
+          "prompt": "Given the weighted graph below (vertices A,B,C,D,E,F,G; edges A-B=8, A-C=8, B-C=6, B-D=7, B-E=5, C-E=6, C-F=5, D-E=4, D-F=6, D-G=8, E-F=3, F-G=7).<pre class=\"mermaid\">graph LR\n  A((A)) -- 8 --- B((B))\n  A -- 8 --- C((C))\n  B -- 6 --- C\n  B -- 7 --- D((D))\n  B -- 5 --- E((E))\n  C -- 6 --- E\n  C -- 5 --- F((F))\n  D -- 4 --- E\n  D -- 6 --- F\n  D -- 8 --- G((G))\n  E -- 3 --- F\n  F -- 7 --- G</pre>How many shortest paths are there from B to G?|||Cho đồ thị có trọng số dưới đây (đỉnh A,B,C,D,E,F,G; cạnh A-B=8, A-C=8, B-C=6, B-D=7, B-E=5, C-E=6, C-F=5, D-E=4, D-F=6, D-G=8, E-F=3, F-G=7).<pre class=\"mermaid\">graph LR\n  A((A)) -- 8 --- B((B))\n  A -- 8 --- C((C))\n  B -- 6 --- C\n  B -- 7 --- D((D))\n  B -- 5 --- E((E))\n  C -- 6 --- E\n  C -- 5 --- F((F))\n  D -- 4 --- E\n  D -- 6 --- F\n  D -- 8 --- G((G))\n  E -- 3 --- F\n  F -- 7 --- G</pre>Có bao nhiêu đường đi ngắn nhất từ B đến G?",
           "options": [
             {
               "text": "1|||1"
@@ -7663,7 +7839,33 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the rooted tree: a is the root with children b, d, c. b's children are e, h, g. e's children are i, n, k. c's children are f, l, m. How many ancestors does the vertex d have?|||Cho cây có gốc: a là gốc, con của a là b, d, c. Con của b là e, h, g. Con của e là i, n, k. Con của c là f, l, m. Đỉnh d có bao nhiêu tổ tiên?",
+          "prompt": "Which of the three graphs below are trees? Each has the 6 vertices a, b, c, d, e, f.<pre class=\"mermaid\">graph LR\n  subgraph V1[\"(i)\"]\n  f1((a)) --- f2((b))\n  f2 --- f3((c))\n  f3 --- f4((d))\n  f3 --- f5((e))\n  f5 --- f6((f))\n  end\n  subgraph V2[\"(ii)\"]\n  g1((a)) --- g2((b))\n  g2 --- g3((c))\n  g3 --- g4((d))\n  g3 --- g5((e))\n  g5 --- g6((f))\n  g2 --- g5\n  end\n  subgraph V3[\"(iii)\"]\n  k1((a)) --- k2((b))\n  k2 --- k3((c))\n  k3 --- k4((d))\n  k5((e)) --- k6((f))\n  end</pre>|||Trong ba đồ thị dưới đây, đồ thị nào là cây (tree)? Mỗi đồ thị đều có 6 đỉnh a, b, c, d, e, f.<pre class=\"mermaid\">graph LR\n  subgraph V1[\"(i)\"]\n  f1((a)) --- f2((b))\n  f2 --- f3((c))\n  f3 --- f4((d))\n  f3 --- f5((e))\n  f5 --- f6((f))\n  end\n  subgraph V2[\"(ii)\"]\n  g1((a)) --- g2((b))\n  g2 --- g3((c))\n  g3 --- g4((d))\n  g3 --- g5((e))\n  g5 --- g6((f))\n  g2 --- g5\n  end\n  subgraph V3[\"(iii)\"]\n  k1((a)) --- k2((b))\n  k2 --- k3((c))\n  k3 --- k4((d))\n  k5((e)) --- k6((f))\n  end</pre>",
+          "options": [
+            {
+              "text": "(i)|||(i)"
+            },
+            {
+              "text": "(ii)|||(ii)"
+            },
+            {
+              "text": "(iii)|||(iii)"
+            },
+            {
+              "text": "All of (i), (ii) and (iii)|||Cả (i), (ii) và (iii)"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">A tree needs connected + acyclic. (ii) has the extra edge b-e, creating the cycle b-c-e-b &rArr; not a tree. (iii) splits into two pieces (a-b-c-d and e-f) &rArr; not a (single) tree. (i) is connected with exactly $6-1=5$ edges and no cycle &rArr; it IS a tree.</div><div class=\"ml-vi\">Cây cần liên thông + không chu trình. (ii) có thêm cạnh b-e tạo chu trình b-c-e-b &rArr; không phải cây. (iii) tách thành 2 mảnh (a-b-c-d và e-f) &rArr; không phải MỘT cây. (i) liên thông, đúng $6-1=5$ cạnh, không chu trình &rArr; ĐÚNG là cây.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Given the rooted tree below: a is the root with children b, d, c; b's children are e, h, g; e's children are i, n, k; c's children are f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> d((d))\n  a --> c((c))\n  b --> e((e))\n  b --> h((h))\n  b --> g((g))\n  e --> i((i))\n  e --> n((n))\n  e --> k((k))\n  c --> f((f))\n  c --> l((l))\n  c --> m((m))</pre>How many ancestors does the vertex d have?|||Cho cây có gốc dưới đây: a là gốc, con của a là b, d, c; con của b là e, h, g; con của e là i, n, k; con của c là f, l, m.<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> d((d))\n  a --> c((c))\n  b --> e((e))\n  b --> h((h))\n  b --> g((g))\n  e --> i((i))\n  e --> n((n))\n  e --> k((k))\n  c --> f((f))\n  c --> l((l))\n  c --> m((m))</pre>Đỉnh d có bao nhiêu tổ tiên?",
           "options": [
             {
               "text": "1|||1"
@@ -7789,7 +7991,24 @@ export default {
             2
           ],
           "explanation": "<div class=\"ml-en\">Frequencies: I=3, L=2, A=1. Merge A,L(1+2=3) &rarr; merge with I(3+3=6). Depths: I=1 bit, A=2 bits, L=2 bits. Total $=3\\times1+1\\times2+2\\times2=3+2+4=9$.</div><div class=\"ml-vi\">Tần suất: I=3, L=2, A=1. Gộp A,L(1+2=3) &rarr; gộp với I(3+3=6). Độ dài mã: I=1 bit, A=2 bit, L=2 bit. Tổng $=3\\times1+1\\times2+2\\times2=9$.</div>"
-        },
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "PT3-D8",
+      "source": "REAL",
+      "sortOrder": 138,
+      "title": "Progress Test 3 — Đề 8/8|||Kiểm tra tiến độ 3 — Đề 8/8",
+      "description": "MAD101 Progress Test 3 question bank, part 8 of 8 (9 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 8/8 (9 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
+      "durationMinutes": 20,
+      "totalPoints": 10,
+      "passMark": 5,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
         {
           "kind": "MCQ",
           "points": 1,
@@ -7842,7 +8061,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the binary tree: a is the root with left child c and right child m. c's children are e (left) and h (right). m's children are n (left) and t (right). t's children are s (left) and y (right). Find the inorder traversal of the tree.|||Cho cây nhị phân: a là gốc, con trái c, con phải m. Con của c: e (trái), h (phải). Con của m: n (trái), t (phải). Con của t: s (trái), y (phải). Tìm duyệt trung thứ tự (inorder) của cây.",
+          "prompt": "Given the binary tree: a is the root with left child c and right child m. c's children are e (left) and h (right). m's children are n (left) and t (right). t's children are s (left) and y (right).<pre class=\"mermaid\">graph TD\n  a((a)) --> c((c))\n  a --> m((m))\n  c --> e((e))\n  c --> h((h))\n  m --> n((n))\n  m --> t((t))\n  t --> s((s))\n  t --> y((y))</pre>Find the inorder traversal of the tree.|||Cho cây nhị phân: a là gốc, con trái c, con phải m. Con của c: e (trái), h (phải). Con của m: n (trái), t (phải). Con của t: s (trái), y (phải).<pre class=\"mermaid\">graph TD\n  a((a)) --> c((c))\n  a --> m((m))\n  c --> e((e))\n  c --> h((h))\n  m --> n((n))\n  m --> t((t))\n  t --> s((s))\n  t --> y((y))</pre>Tìm duyệt trung thứ tự (inorder) của cây.",
           "options": [
             {
               "text": "e - h - c - n - s - y - t - m - a|||e - h - c - n - s - y - t - m - a"
@@ -7965,6 +8184,55 @@ export default {
             3
           ],
           "explanation": "<div class=\"ml-en\">The 4 realizable degree sequences each have a unique realization: star $K_{1,3}$+isolated vertex, path $P_4$+isolated vertex, triangle $C_3$+2 isolated vertices, and a disjoint $P_3 \\cup K_2$ (a 2-edge path plus a separate edge, using all 5 vertices). That's 4 non-isomorphic graphs.</div><div class=\"ml-vi\">4 dãy bậc khả thi đều chỉ có 1 cách dựng duy nhất: sao $K_{1,3}$+1 đỉnh cô lập, đường đi $P_4$+1 đỉnh cô lập, tam giác $C_3$+2 đỉnh cô lập, và $P_3 \\cup K_2$ rời nhau (đường 2 cạnh cộng 1 cạnh riêng, dùng hết 5 đỉnh). Vậy có 4 đồ thị không đẳng cấu.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "How many strongly connected components does the directed graph G below have? Its vertices are a,b,c,d,e: a and e form a mutual 2-cycle, e has a self-loop, e and d form a mutual 2-cycle, and there are one-way edges a&rarr;b, b&rarr;c, d&rarr;c; c has no outgoing edges.<pre class=\"mermaid\">graph LR\n  a((a)) --> e((e))\n  e --> a\n  e --> e\n  e --> d((d))\n  d --> e\n  a --> b((b))\n  b --> c((c))\n  d --> c</pre>|||Đồ thị có hướng G dưới đây có bao nhiêu thành phần liên thông mạnh? Đỉnh gồm a,b,c,d,e: a và e tạo chu trình 2 chiều, e có khuyên, e và d tạo chu trình 2 chiều, và có các cạnh một chiều a&rarr;b, b&rarr;c, d&rarr;c; c không có cạnh ra.<pre class=\"mermaid\">graph LR\n  a((a)) --> e((e))\n  e --> a\n  e --> e\n  e --> d((d))\n  d --> e\n  a --> b((b))\n  b --> c((c))\n  d --> c</pre>",
+          "options": [
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "3|||3"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">$\\{a,e,d\\}$ are mutually reachable (a&harr;e&harr;d chain of 2-cycles) &rArr; one SCC. b is reachable from a but can't reach back (its only edge b&rarr;c is a dead end) &rArr; singleton SCC $\\{b\\}$. c is a pure sink &rArr; singleton SCC $\\{c\\}$. Total: 3 SCCs.</div><div class=\"ml-vi\">$\\{a,e,d\\}$ đến được nhau (chuỗi chu trình 2 chiều a&harr;e&harr;d) &rArr; 1 thành phần liên thông mạnh. b đến được từ a nhưng không quay lại được (cạnh duy nhất b&rarr;c là ngõ cụt) &rArr; thành phần đơn $\\{b\\}$. c là đỉnh hút thuần &rArr; thành phần đơn $\\{c\\}$. Tổng: 3 thành phần.</div>"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "How many cut-edges (bridges) are there in the graph below? It has 8 vertices: a 4-cycle a-b-c-d, a path of 3 edges a-e-f-g attached at a, and one further pendant edge b-h.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- c((c))\n  c --- d((d))\n  d --- a\n  a --- e((e))\n  e --- f((f))\n  f --- g((g))\n  b --- h((h))</pre>|||Đồ thị dưới đây có bao nhiêu cạnh cầu? Đồ thị có 8 đỉnh: chu trình 4 cạnh a-b-c-d, một đường 3 cạnh a-e-f-g gắn tại a, và thêm một cạnh treo b-h.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- c((c))\n  c --- d((d))\n  d --- a\n  a --- e((e))\n  e --- f((f))\n  f --- g((g))\n  b --- h((h))</pre>",
+          "options": [
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "5|||5"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">The 4 edges of the cycle a-b-c-d each lie on that cycle, so none of them is a bridge. Every edge of the attached path IS a bridge (ae, ef, fg) and so is the pendant edge bh: $3+1=4$ cut-edges.</div><div class=\"ml-vi\">4 cạnh của chu trình a-b-c-d đều nằm trên chu trình đó nên không cạnh nào là cầu. Mọi cạnh của đường gắn thêm ĐỀU là cầu (ae, ef, fg) và cạnh treo bh cũng vậy: $3+1=4$ cạnh cầu.</div>"
         }
       ]
     }

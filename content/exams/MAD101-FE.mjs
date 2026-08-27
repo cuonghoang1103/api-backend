@@ -1004,7 +1004,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Find the length of the shortest path from A to B in the given weighted graph (nodes A, T1, T2, B, M, D1, D2; edges A-T1=4, A-D1=5, T1-T2=5, T2-B=6, T1-D1=2, A-T2=8, T2-M=3, M-D2=1, M-B=2, D1-D2=6, D2-B=4).|||Tìm độ dài đường đi ngắn nhất từ A đến B trong đồ thị có trọng số cho trước (đỉnh A, T1, T2, B, M, D1, D2; cạnh A-T1=4, A-D1=5, T1-T2=5, T2-B=6, T1-D1=2, A-T2=8, T2-M=3, M-D2=1, M-B=2, D1-D2=6, D2-B=4).",
+          "prompt": "Find the length of the shortest path from A to B in the weighted graph below (vertices A, T1, T2, B, M, D1, D2; edges A-T1=4, A-D1=5, T1-T2=5, T2-B=6, T1-D1=2, A-T2=8, T2-M=3, M-D2=1, M-B=2, D1-D2=6, D2-B=4).\n<pre class=\"mermaid\">graph LR\n  A -- 4 --- T1\n  A -- 5 --- D1\n  A -- 8 --- T2\n  T1 -- 2 --- D1\n  T1 -- 5 --- T2\n  T2 -- 3 --- M\n  T2 -- 6 --- B\n  M -- 1 --- D2\n  M -- 2 --- B\n  D1 -- 6 --- D2\n  D2 -- 4 --- B</pre>|||Tìm độ dài đường đi ngắn nhất từ A đến B trong đồ thị có trọng số dưới đây (đỉnh A, T1, T2, B, M, D1, D2; cạnh A-T1=4, A-D1=5, T1-T2=5, T2-B=6, T1-D1=2, A-T2=8, T2-M=3, M-D2=1, M-B=2, D1-D2=6, D2-B=4).\n<pre class=\"mermaid\">graph LR\n  A -- 4 --- T1\n  A -- 5 --- D1\n  A -- 8 --- T2\n  T1 -- 2 --- D1\n  T1 -- 5 --- T2\n  T2 -- 3 --- M\n  T2 -- 6 --- B\n  M -- 1 --- D2\n  M -- 2 --- B\n  D1 -- 6 --- D2\n  D2 -- 4 --- B</pre>",
           "options": [
             {
               "text": "13|||13"
@@ -1200,7 +1200,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "If we use Prim's algorithm (starting at vertex a) to find a minimum spanning tree of the weighted graph (3x3 grid a,b,c/d,e,f/g,h,i; outer edges ab=5,bc=4,cf=3,fi=4,hi=2,gh=4,dg=6,ad=2; center-cross be=5,eh=3,de=7,ef=1; diamond diagonals bd=3,bf=6,dh=8,fh=4), what is the fourth edge added? (edges written in alphabetical order, ties broken in reverse dictionary order)|||Nếu dùng thuật toán Prim (bắt đầu từ đỉnh a) để tìm cây khung nhỏ nhất của đồ thị có trọng số (lưới 3x3 a,b,c/d,e,f/g,h,i; cạnh ngoài ab=5,bc=4,cf=3,fi=4,hi=2,gh=4,dg=6,ad=2; chữ thập qua tâm be=5,eh=3,de=7,ef=1; đường chéo hình thoi bd=3,bf=6,dh=8,fh=4), cạnh thứ TƯ được thêm vào là gì? (cạnh viết theo thứ tự alphabet, hoà thì chọn theo thứ tự từ điển ngược)",
+          "prompt": "If we use Prim's algorithm (starting at vertex a) to find a minimum spanning tree of the weighted graph below (vertices a,b,c,d,e,f,g,h,i; edges ab=5, ad=2, bc=4, bd=3, be=5, bf=6, cf=3, de=7, dg=6, dh=8, ef=1, eh=3, fh=4, fi=4, gh=4, hi=2), what is the fourth edge added? (edges written in alphabetical order, ties broken in reverse dictionary order)\n<pre class=\"mermaid\">graph TD\n  a -- 5 --- b\n  a -- 2 --- d\n  b -- 4 --- c\n  b -- 3 --- d\n  b -- 5 --- e\n  b -- 6 --- f\n  c -- 3 --- f\n  d -- 7 --- e\n  d -- 6 --- g\n  d -- 8 --- h\n  e -- 1 --- f\n  e -- 3 --- h\n  f -- 4 --- h\n  f -- 4 --- i\n  g -- 4 --- h\n  h -- 2 --- i</pre>|||Nếu dùng thuật toán Prim (bắt đầu từ đỉnh a) để tìm cây khung nhỏ nhất của đồ thị có trọng số dưới đây (đỉnh a,b,c,d,e,f,g,h,i; cạnh ab=5, ad=2, bc=4, bd=3, be=5, bf=6, cf=3, de=7, dg=6, dh=8, ef=1, eh=3, fh=4, fi=4, gh=4, hi=2), cạnh thứ TƯ được thêm vào là gì? (cạnh viết theo thứ tự alphabet, hoà thì chọn theo thứ tự từ điển ngược)\n<pre class=\"mermaid\">graph TD\n  a -- 5 --- b\n  a -- 2 --- d\n  b -- 4 --- c\n  b -- 3 --- d\n  b -- 5 --- e\n  b -- 6 --- f\n  c -- 3 --- f\n  d -- 7 --- e\n  d -- 6 --- g\n  d -- 8 --- h\n  e -- 1 --- f\n  e -- 3 --- h\n  f -- 4 --- h\n  f -- 4 --- i\n  g -- 4 --- h\n  h -- 2 --- i</pre>",
           "options": [
             {
               "text": "cf|||cf"
@@ -1295,7 +1295,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Which graphs are isomorphic to $K_{2,3}$? Graph X has 5 vertices (top, left, center, right, bottom) with edges top-left, top-right, left-center, center-right, left-bottom, right-bottom. Graph Y has 5 vertices (top-left, top-mid, top-right, bottom-left, bottom-right) with edges top-left--top-mid, top-mid--top-right, bottom-left--bottom-right, top-left--bottom-right, top-right--bottom-left, top-mid--bottom-left, top-mid--bottom-right.|||Đồ thị nào đẳng cấu với $K_{2,3}$? Đồ thị X có 5 đỉnh (trên, trái, giữa, phải, dưới) với các cạnh trên-trái, trên-phải, trái-giữa, giữa-phải, trái-dưới, phải-dưới. Đồ thị Y có 5 đỉnh (trên-trái, trên-giữa, trên-phải, dưới-trái, dưới-phải) với các cạnh trên-trái--trên-giữa, trên-giữa--trên-phải, dưới-trái--dưới-phải, trên-trái--dưới-phải, trên-phải--dưới-trái, trên-giữa--dưới-trái, trên-giữa--dưới-phải.",
+          "prompt": "Which graphs are isomorphic to $K_{2,3}$? Graph X has 5 vertices $v_1,v_2,v_3,v_4,v_5$ with edges $v_1v_2$, $v_1v_4$, $v_2v_3$, $v_3v_4$, $v_2v_5$, $v_4v_5$. Graph Y has 5 vertices $u_1,u_2,u_3,u_4,u_5$ with edges $u_1u_2$, $u_2u_3$, $u_4u_5$, $u_1u_5$, $u_3u_4$, $u_2u_4$, $u_2u_5$.\n<pre class=\"mermaid\">graph TD\n  subgraph GX[\"Graph X\"]\n    X1((v1)) --- X2((v2))\n    X1 --- X4((v4))\n    X2 --- X3((v3))\n    X3 --- X4\n    X2 --- X5((v5))\n    X4 --- X5\n  end\n  subgraph GY[\"Graph Y\"]\n    Y1((u1)) --- Y2((u2))\n    Y2 --- Y3((u3))\n    Y4((u4)) --- Y5((u5))\n    Y1 --- Y5\n    Y3 --- Y4\n    Y2 --- Y4\n    Y2 --- Y5\n  end</pre>|||Đồ thị nào đẳng cấu với $K_{2,3}$? Đồ thị X có 5 đỉnh $v_1,v_2,v_3,v_4,v_5$ với các cạnh $v_1v_2$, $v_1v_4$, $v_2v_3$, $v_3v_4$, $v_2v_5$, $v_4v_5$. Đồ thị Y có 5 đỉnh $u_1,u_2,u_3,u_4,u_5$ với các cạnh $u_1u_2$, $u_2u_3$, $u_4u_5$, $u_1u_5$, $u_3u_4$, $u_2u_4$, $u_2u_5$.\n<pre class=\"mermaid\">graph TD\n  subgraph GX[\"Đồ thị X\"]\n    X1((v1)) --- X2((v2))\n    X1 --- X4((v4))\n    X2 --- X3((v3))\n    X3 --- X4\n    X2 --- X5((v5))\n    X4 --- X5\n  end\n  subgraph GY[\"Đồ thị Y\"]\n    Y1((u1)) --- Y2((u2))\n    Y2 --- Y3((u3))\n    Y4((u4)) --- Y5((u5))\n    Y1 --- Y5\n    Y3 --- Y4\n    Y2 --- Y4\n    Y2 --- Y5\n  end</pre>",
           "options": [
             {
               "text": "X and Y|||X và Y"
@@ -1313,7 +1313,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">X has degree sequence (2,3,2,3,2): the two degree-3 vertices (left,right) are non-adjacent and each connects to all three degree-2 vertices (top,center,bottom), which are pairwise non-adjacent -- exactly matches $K_{2,3}$'s bipartite structure. Y has 7 edges (not 6) and a degree-4 vertex (top-mid), so it cannot be isomorphic to $K_{2,3}$ (which has exactly 6 edges, max degree 3).</div><div class=\"ml-vi\">X có dãy bậc (2,3,2,3,2): hai đỉnh bậc 3 (trái, phải) không kề nhau và mỗi đỉnh nối với cả ba đỉnh bậc 2 (trên, giữa, dưới), các đỉnh bậc 2 cũng không kề nhau -- đúng khớp cấu trúc lưỡng phân của $K_{2,3}$. Y có 7 cạnh (không phải 6) và một đỉnh bậc 4 (trên-giữa), nên không thể đẳng cấu với $K_{2,3}$ (chỉ có đúng 6 cạnh, bậc tối đa 3).</div>"
+          "explanation": "<div class=\"ml-en\">X has 6 edges and degree sequence (2,3,2,3,2): the two degree-3 vertices ($v_2,v_4$) are non-adjacent and each connects to all three degree-2 vertices ($v_1,v_3,v_5$), which are pairwise non-adjacent -- exactly matches $K_{2,3}$'s bipartite structure. Y has 7 edges (not 6) and a degree-4 vertex ($u_2$), so it cannot be isomorphic to $K_{2,3}$ (which has exactly 6 edges, max degree 3).</div><div class=\"ml-vi\">X có 6 cạnh và dãy bậc (2,3,2,3,2): hai đỉnh bậc 3 ($v_2,v_4$) không kề nhau và mỗi đỉnh nối với cả ba đỉnh bậc 2 ($v_1,v_3,v_5$), các đỉnh bậc 2 cũng không kề nhau -- đúng khớp cấu trúc lưỡng phân của $K_{2,3}$. Y có 7 cạnh (không phải 6) và một đỉnh bậc 4 ($u_2$), nên không thể đẳng cấu với $K_{2,3}$ (chỉ có đúng 6 cạnh, bậc tối đa 3).</div>"
         },
         {
           "kind": "MCQ",
@@ -1589,7 +1589,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "If inorder traversal is used, what is the position of the vertex \"d\" in the list? Rooted tree: root d has children b, h (in order). b has children a, c, e (in order). e has children f, g. h has children i, l. l has children j, m, o, p. m has children k, n.|||Nếu dùng duyệt trung tự (inorder traversal), vị trí của đỉnh \"d\" trong danh sách là bao nhiêu? Cây có gốc: gốc d có 2 con b, h (theo thứ tự). b có 3 con a, c, e. e có 2 con f, g. h có 2 con i, l. l có 4 con j, m, o, p. m có 2 con k, n.",
+          "prompt": "If inorder traversal is used, what is the position of the vertex \"d\" in the list? Rooted tree: root d has children b, h (in that order). b has children a, c, e (in that order). e has children f, g (in that order). h has children i, l (in that order). l has children j, m, o, p (in that order). m has children k, n (in that order).\n<pre class=\"mermaid\">graph TD\n  Td((d)) --> Tb((b))\n  Td --> Th((h))\n  Tb --> Ta((a))\n  Tb --> Tc((c))\n  Tb --> Te((e))\n  Te --> Tf((f))\n  Te --> Tg((g))\n  Th --> Ti((i))\n  Th --> Tl((l))\n  Tl --> Tj((j))\n  Tl --> Tm((m))\n  Tl --> To((o))\n  Tl --> Tp((p))\n  Tm --> Tk((k))\n  Tm --> Tn((n))</pre>|||Nếu dùng duyệt trung tự (inorder traversal), vị trí của đỉnh \"d\" trong danh sách là bao nhiêu? Cây có gốc: gốc d có 2 con b, h (theo thứ tự đó). b có 3 con a, c, e (theo thứ tự đó). e có 2 con f, g (theo thứ tự đó). h có 2 con i, l (theo thứ tự đó). l có 4 con j, m, o, p (theo thứ tự đó). m có 2 con k, n (theo thứ tự đó).\n<pre class=\"mermaid\">graph TD\n  Td((d)) --> Tb((b))\n  Td --> Th((h))\n  Tb --> Ta((a))\n  Tb --> Tc((c))\n  Tb --> Te((e))\n  Te --> Tf((f))\n  Te --> Tg((g))\n  Th --> Ti((i))\n  Th --> Tl((l))\n  Tl --> Tj((j))\n  Tl --> Tm((m))\n  Tl --> To((o))\n  Tl --> Tp((p))\n  Tm --> Tk((k))\n  Tm --> Tn((n))</pre>",
           "options": [
             {
               "text": "6|||6"
@@ -1641,7 +1641,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a graph G with vertices a,b,c,d,e,f,g,h and edges: a-d, d-f (top row), a-b (left vertical), a-c, c-b, c-e (diagonals from c), d-g, f-e (crossing diagonals), f-g (vertical), e-g, g-h (bottom row). What is the order of vertices traversed by Breadth First Search from vertex a? Assume that at each level, the vertices are ordered alphabetically.|||Cho đồ thị G với các đỉnh a,b,c,d,e,f,g,h và các cạnh: a-d, d-f (hàng trên), a-b (dọc trái), a-c, c-b, c-e (đường chéo từ c), d-g, f-e (đường chéo cắt nhau), f-g (dọc), e-g, g-h (hàng dưới). Thứ tự các đỉnh được duyệt bởi thuật toán BFS từ đỉnh a là gì? Giả sử ở mỗi mức, các đỉnh được sắp theo thứ tự bảng chữ cái.",
+          "prompt": "Given a graph G with vertices a,b,c,d,e,f,g,h and edges: a-b, a-c, a-d, b-c, c-e, d-f, d-g, e-f, e-g, f-g, g-h. What is the order of vertices traversed by Breadth First Search from vertex a? Assume that at each level, the vertices are ordered alphabetically.\n<pre class=\"mermaid\">graph TD\n  a((a)) --- b((b))\n  a --- c((c))\n  a --- d((d))\n  b --- c\n  c --- e((e))\n  d --- f((f))\n  d --- g((g))\n  e --- f\n  e --- g\n  f --- g\n  g --- h((h))</pre>|||Cho đồ thị G với các đỉnh a,b,c,d,e,f,g,h và các cạnh: a-b, a-c, a-d, b-c, c-e, d-f, d-g, e-f, e-g, f-g, g-h. Thứ tự các đỉnh được duyệt bởi thuật toán BFS từ đỉnh a là gì? Giả sử ở mỗi mức, các đỉnh được sắp theo thứ tự bảng chữ cái.\n<pre class=\"mermaid\">graph TD\n  a((a)) --- b((b))\n  a --- c((c))\n  a --- d((d))\n  b --- c\n  c --- e((e))\n  d --- f((f))\n  d --- g((g))\n  e --- f\n  e --- g\n  f --- g\n  g --- h((h))</pre>",
           "options": [
             {
               "text": "a, b, c, d, e, f, g, h|||a, b, c, d, e, f, g, h"
@@ -1958,7 +1958,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "How many cut vertices and cut edges are in this graph? The graph is a path of 7 vertices drawn in a zigzag: bottom-left -- top-left -- top-right -- middle-left -- middle-right -- bottom-right -- bottom-middle (6 edges, no cycles).|||Đồ thị này có bao nhiêu đỉnh cắt và cạnh cắt? Đồ thị là một đường đi 7 đỉnh vẽ theo hình zic-zac: dưới-trái -- trên-trái -- trên-phải -- giữa-trái -- giữa-phải -- dưới-phải -- dưới-giữa (6 cạnh, không có chu trình).",
+          "prompt": "How many cut vertices and cut edges are in this graph? The graph is a simple path on 7 vertices $v_1,\\dots,v_7$ with the 6 edges $v_1v_2$, $v_2v_3$, $v_3v_4$, $v_4v_5$, $v_5v_6$, $v_6v_7$ (no cycles).\n<pre class=\"mermaid\">graph LR\n  v1((v1)) --- v2((v2))\n  v2 --- v3((v3))\n  v3 --- v4((v4))\n  v4 --- v5((v5))\n  v5 --- v6((v6))\n  v6 --- v7((v7))</pre>|||Đồ thị này có bao nhiêu đỉnh cắt và cạnh cắt? Đồ thị là một đường đi đơn qua 7 đỉnh $v_1,\\dots,v_7$ với 6 cạnh $v_1v_2$, $v_2v_3$, $v_3v_4$, $v_4v_5$, $v_5v_6$, $v_6v_7$ (không có chu trình).\n<pre class=\"mermaid\">graph LR\n  v1((v1)) --- v2((v2))\n  v2 --- v3((v3))\n  v3 --- v4((v4))\n  v4 --- v5((v5))\n  v5 --- v6((v6))\n  v6 --- v7((v7))</pre>",
           "options": [
             {
               "text": "6 and 6|||6 và 6"
@@ -1976,7 +1976,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The graph is a tree (a simple path, no cycles): every one of its 6 edges is a bridge (cut edge). Of the 7 vertices, the 2 endpoints (leaves) are not cut vertices, so the other $7-2=5$ vertices are cut vertices.</div><div class=\"ml-vi\">Đồ thị này là một cây (đường đi đơn, không có chu trình): cả 6 cạnh đều là cầu (cạnh cắt). Trong 7 đỉnh, 2 đỉnh đầu mút (lá) không phải đỉnh cắt, nên $7-2=5$ đỉnh còn lại là đỉnh cắt.</div>"
+          "explanation": "<div class=\"ml-en\">The graph is a tree (a simple path, no cycles): every one of its 6 edges is a bridge (cut edge). Of the 7 vertices, the 2 endpoints of the path ($v_1$ and $v_7$, the degree-1 vertices) are not cut vertices, so the other $7-2=5$ vertices are cut vertices.</div><div class=\"ml-vi\">Đồ thị này là một cây (đường đi đơn, không có chu trình): cả 6 cạnh đều là cầu (cạnh cắt). Trong 7 đỉnh, 2 đỉnh đầu mút của đường đi ($v_1$ và $v_7$, các đỉnh bậc 1) không phải đỉnh cắt, nên $7-2=5$ đỉnh còn lại là đỉnh cắt.</div>"
         },
         {
           "kind": "MCQ",
@@ -2033,7 +2033,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Find a shortest path between c and z in the following weighted graph: edges a-b=4, a-c=3, b-c=2, b-d=5, c-d=3, c-e=6, d-e=1, d-f=5, e-g=5, f-g=2, f-z=7, g-z=4.|||Tìm đường đi ngắn nhất giữa c và z trong đồ thị có trọng số sau: cạnh a-b=4, a-c=3, b-c=2, b-d=5, c-d=3, c-e=6, d-e=1, d-f=5, e-g=5, f-g=2, f-z=7, g-z=4.",
+          "prompt": "Find a shortest path between c and z in the following weighted graph: edges a-b=4, a-c=3, b-c=2, b-d=5, c-d=3, c-e=6, d-e=1, d-f=5, e-g=5, f-g=2, f-z=7, g-z=4.\n<pre class=\"mermaid\">graph LR\n  a((a)) -- 4 --- b((b))\n  a -- 3 --- c((c))\n  b -- 2 --- c\n  b -- 5 --- d((d))\n  c -- 3 --- d\n  c -- 6 --- e((e))\n  d -- 1 --- e\n  d -- 5 --- f((f))\n  e -- 5 --- g((g))\n  f -- 2 --- g\n  f -- 7 --- z((z))\n  g -- 4 --- z</pre>|||Tìm đường đi ngắn nhất giữa c và z trong đồ thị có trọng số sau: cạnh a-b=4, a-c=3, b-c=2, b-d=5, c-d=3, c-e=6, d-e=1, d-f=5, e-g=5, f-g=2, f-z=7, g-z=4.\n<pre class=\"mermaid\">graph LR\n  a((a)) -- 4 --- b((b))\n  a -- 3 --- c((c))\n  b -- 2 --- c\n  b -- 5 --- d((d))\n  c -- 3 --- d\n  c -- 6 --- e((e))\n  d -- 1 --- e\n  d -- 5 --- f((f))\n  e -- 5 --- g((g))\n  f -- 2 --- g\n  f -- 7 --- z((z))\n  g -- 4 --- z</pre>",
           "options": [
             {
               "text": "c, b, d, e, g, z|||c, b, d, e, g, z"
@@ -2105,7 +2105,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "The graph (a square with 4 corner vertices plus a center vertex connected to all 4 corners by diagonals, plus the square's 4 outer edges -- 8 edges total, i.e. the wheel graph $W_4$) is isomorphic to which of the following graphs? Graph 1: a square plus an extra vertex outside connected by only 2 crossing lines to 2 of the corners (5 edges). Graph 2: a square plus an internal vertex connected by only 1-2 lines near one corner (6 edges). Graph 3: a pentagon-shaped drawing where the top vertex connects to all 4 other vertices (2 directly, 2 via crossing diagonals) and the other 4 vertices form an outer 4-cycle -- 8 edges, matching $W_4$.|||Đồ thị (hình vuông 4 đỉnh góc cộng 1 đỉnh trung tâm nối với cả 4 góc bằng đường chéo, cộng 4 cạnh ngoài của hình vuông -- tổng 8 cạnh, tức đồ thị bánh xe $W_4$) đẳng cấu với đồ thị nào sau đây? Đồ thị 1: hình vuông cộng 1 đỉnh bên ngoài chỉ nối bằng 2 đường chéo cắt nhau tới 2 góc (5 cạnh). Đồ thị 2: hình vuông cộng 1 đỉnh bên trong chỉ nối bằng 1-2 đường gần một góc (6 cạnh). Đồ thị 3: hình ngũ giác trong đó đỉnh trên cùng nối với cả 4 đỉnh còn lại (2 trực tiếp, 2 qua đường chéo cắt nhau) và 4 đỉnh còn lại tạo thành một chu trình 4 cạnh ngoài -- tổng 8 cạnh, khớp với $W_4$.",
+          "prompt": "The given graph is the wheel $W_4$: a hub vertex $h$ joined to each of 4 rim vertices $r_1,r_2,r_3,r_4$, which themselves form the 4-cycle $r_1r_2r_3r_4r_1$ -- 8 edges in total. It is isomorphic to which of the following graphs? Graph 1 has 5 vertices and only 5 edges. Graph 2 has 5 vertices and only 6 edges. Graph 3 has 5 vertices and 8 edges: one vertex $t$ is joined to each of the other four, and those four vertices form a 4-cycle $p_1p_2p_3p_4p_1$.\n<pre class=\"mermaid\">graph TD\n  subgraph GW[\"Given graph W4\"]\n    W1((r1)) --- W2((r2))\n    W2 --- W3((r3))\n    W3 --- W4((r4))\n    W4 --- W1\n    WH((h)) --- W1\n    WH --- W2\n    WH --- W3\n    WH --- W4\n  end\n  subgraph GP[\"Graph 3\"]\n    P1((p1)) --- P2((p2))\n    P2 --- P3((p3))\n    P3 --- P4((p4))\n    P4 --- P1\n    PT((t)) --- P1\n    PT --- P2\n    PT --- P3\n    PT --- P4\n  end</pre>|||Đồ thị đề bài là bánh xe $W_4$: một đỉnh trục $h$ nối với cả 4 đỉnh vành $r_1,r_2,r_3,r_4$, và 4 đỉnh vành này tạo thành chu trình $r_1r_2r_3r_4r_1$ -- tổng cộng 8 cạnh. Nó đẳng cấu với đồ thị nào sau đây? Đồ thị 1 có 5 đỉnh và chỉ 5 cạnh. Đồ thị 2 có 5 đỉnh và chỉ 6 cạnh. Đồ thị 3 có 5 đỉnh và 8 cạnh: một đỉnh $t$ nối với cả 4 đỉnh còn lại, và 4 đỉnh đó tạo thành chu trình $p_1p_2p_3p_4p_1$.\n<pre class=\"mermaid\">graph TD\n  subgraph GW[\"Đồ thị đề bài W4\"]\n    W1((r1)) --- W2((r2))\n    W2 --- W3((r3))\n    W3 --- W4((r4))\n    W4 --- W1\n    WH((h)) --- W1\n    WH --- W2\n    WH --- W3\n    WH --- W4\n  end\n  subgraph GP[\"Đồ thị 3\"]\n    P1((p1)) --- P2((p2))\n    P2 --- P3((p3))\n    P3 --- P4((p4))\n    P4 --- P1\n    PT((t)) --- P1\n    PT --- P2\n    PT --- P3\n    PT --- P4\n  end</pre>",
           "options": [
             {
               "text": "2|||2"
@@ -2123,7 +2123,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The target graph is the wheel $W_4$: degree sequence (4,3,3,3,3), 8 edges. Graph 1 has only 5 edges (degree sequence 3,3,2,2,1) and Graph 2 only 6 edges (degree sequence 4,3,2,2,1) -- neither matches. Graph 3's hub vertex has degree 4 (connects to all 4 rim vertices) and the rim forms a 4-cycle, giving exactly degree sequence (4,3,3,3,3) with 8 edges -- isomorphic to $W_4$.</div><div class=\"ml-vi\">Đồ thị đề bài là bánh xe $W_4$: dãy bậc (4,3,3,3,3), 8 cạnh. Đồ thị 1 chỉ có 5 cạnh (dãy bậc 3,3,2,2,1) và đồ thị 2 chỉ có 6 cạnh (dãy bậc 4,3,2,2,1) -- không khớp. Đỉnh trục của đồ thị 3 có bậc 4 (nối với cả 4 đỉnh vành) và vành tạo thành chu trình 4 cạnh, cho đúng dãy bậc (4,3,3,3,3) với 8 cạnh -- đẳng cấu với $W_4$.</div>"
+          "explanation": "<div class=\"ml-en\">The target graph is the wheel $W_4$: 5 vertices, 8 edges, degree sequence (4,3,3,3,3). Isomorphic graphs must have the same number of edges, so Graph 1 (5 edges) and Graph 2 (6 edges) are ruled out immediately. Graph 3 has a vertex $t$ of degree 4 joined to all the others while those four form a 4-cycle, giving exactly 8 edges and degree sequence (4,3,3,3,3) -- mapping $t\\mapsto h$ and $p_i\\mapsto r_i$ is an isomorphism with $W_4$.</div><div class=\"ml-vi\">Đồ thị đề bài là bánh xe $W_4$: 5 đỉnh, 8 cạnh, dãy bậc (4,3,3,3,3). Hai đồ thị đẳng cấu phải có cùng số cạnh, nên Đồ thị 1 (5 cạnh) và Đồ thị 2 (6 cạnh) bị loại ngay. Đồ thị 3 có đỉnh $t$ bậc 4 nối với tất cả các đỉnh còn lại, và 4 đỉnh đó tạo thành chu trình 4 cạnh, cho đúng 8 cạnh và dãy bậc (4,3,3,3,3) -- phép tương ứng $t\\mapsto h$, $p_i\\mapsto r_i$ là một đẳng cấu với $W_4$.</div>"
         },
         {
           "kind": "MCQ",
@@ -2200,7 +2200,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Choose the correct statement about the given graph: an outer square with 4 corner vertices connected by the square's 4 sides, containing an inner 5-vertex star/pentagon pattern, where exactly two opposite outer corners each have one extra diagonal edge into the interior (making those 2 corners degree 3, odd) while the other two corners and all interior vertices have even degree.|||Chọn phát biểu đúng về đồ thị sau: hình vuông ngoài 4 đỉnh góc nối bằng 4 cạnh hình vuông, chứa bên trong một hình sao/ngũ giác 5 đỉnh, trong đó đúng hai góc ngoài đối diện nhau mỗi góc có thêm một cạnh chéo vào bên trong (khiến 2 góc đó có bậc 3, lẻ) còn 2 góc kia và mọi đỉnh bên trong đều có bậc chẵn.",
+          "prompt": "Choose the correct statement about the given graph. It consists of a 4-cycle $A$-$B$-$C$-$D$-$A$, a 5-cycle $P$-$Q$-$R$-$S$-$T$-$P$, and two extra edges $A$-$P$ and $C$-$P$ joining the two non-adjacent vertices $A$ and $C$ of the 4-cycle to the vertex $P$ of the 5-cycle (11 edges in total).\n<pre class=\"mermaid\">graph TD\n  A((A)) --- B((B))\n  B --- C((C))\n  C --- D((D))\n  D --- A\n  P((P)) --- Q((Q))\n  Q --- R((R))\n  R --- S((S))\n  S --- T((T))\n  T --- P\n  A --- P\n  C --- P</pre>|||Chọn phát biểu đúng về đồ thị sau. Đồ thị gồm một chu trình 4 đỉnh $A$-$B$-$C$-$D$-$A$, một chu trình 5 đỉnh $P$-$Q$-$R$-$S$-$T$-$P$, và hai cạnh thêm $A$-$P$, $C$-$P$ nối hai đỉnh không kề nhau $A$ và $C$ của chu trình 4 đỉnh tới đỉnh $P$ của chu trình 5 đỉnh (tổng cộng 11 cạnh).\n<pre class=\"mermaid\">graph TD\n  A((A)) --- B((B))\n  B --- C((C))\n  C --- D((D))\n  D --- A\n  P((P)) --- Q((Q))\n  Q --- R((R))\n  R --- S((S))\n  S --- T((T))\n  T --- P\n  A --- P\n  C --- P</pre>",
           "options": [
             {
               "text": "The graph has Euler paths|||Đồ thị có đường đi Euler"
@@ -2218,7 +2218,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Exactly 2 vertices have odd degree (the two corners with an extra diagonal) and all others are even -- this is precisely the condition for an Euler path to exist without an Euler circuit.</div><div class=\"ml-vi\">Đúng 2 đỉnh có bậc lẻ (hai góc có thêm đường chéo) còn lại đều chẵn -- đây chính xác là điều kiện để có đường đi Euler mà không có chu trình Euler.</div>"
+          "explanation": "<div class=\"ml-en\">Degrees: $\\deg A=\\deg C=3$ (odd); $\\deg B=\\deg D=2$, $\\deg P=4$, $\\deg Q=\\deg R=\\deg S=\\deg T=2$ (all even). The graph is connected and has exactly 2 vertices of odd degree -- precisely the condition for an Euler path to exist without an Euler circuit (an Euler circuit would require 0 odd-degree vertices).</div><div class=\"ml-vi\">Bậc các đỉnh: $\\deg A=\\deg C=3$ (lẻ); $\\deg B=\\deg D=2$, $\\deg P=4$, $\\deg Q=\\deg R=\\deg S=\\deg T=2$ (đều chẵn). Đồ thị liên thông và có đúng 2 đỉnh bậc lẻ -- đây chính xác là điều kiện để có đường đi Euler mà không có chu trình Euler (chu trình Euler đòi hỏi 0 đỉnh bậc lẻ).</div>"
         },
         {
           "kind": "MCQ",
@@ -2246,7 +2246,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a graph with vertices A,B,C,D,E,F and edges: A-B, A-D, A-C, B-D, B-C, D-C (square ABDC with both diagonals), B-F, F-E, D-E (a kite B-F-E-D attached via diagonal B-D). Which of the following is NOT a circuit in this graph?|||Cho đồ thị với các đỉnh A,B,C,D,E,F và các cạnh: A-B, A-D, A-C, B-D, B-C, D-C (hình vuông ABDC với cả 2 đường chéo), B-F, F-E, D-E (hình diều B-F-E-D gắn qua đường chéo B-D). Dãy nào sau đây KHÔNG phải là chu trình trong đồ thị này?",
+          "prompt": "Given a graph with vertices A,B,C,D,E,F in which A,B,C,D form a complete graph $K_4$ (edges A-B, A-C, A-D, B-C, B-D, C-D), plus the three further edges B-F, F-E, D-E (9 edges in total). Which of the following is NOT a circuit in this graph?\n<pre class=\"mermaid\">graph TD\n  A((A)) --- B((B))\n  A --- C((C))\n  A --- D((D))\n  B --- C\n  B --- D\n  C --- D\n  B --- F((F))\n  F --- E((E))\n  D --- E</pre>|||Cho đồ thị với các đỉnh A,B,C,D,E,F trong đó A,B,C,D tạo thành đồ thị đầy đủ $K_4$ (các cạnh A-B, A-C, A-D, B-C, B-D, C-D), cộng thêm ba cạnh B-F, F-E, D-E (tổng cộng 9 cạnh). Dãy nào sau đây KHÔNG phải là chu trình trong đồ thị này?\n<pre class=\"mermaid\">graph TD\n  A((A)) --- B((B))\n  A --- C((C))\n  A --- D((D))\n  B --- C\n  B --- D\n  C --- D\n  B --- F((F))\n  F --- E((E))\n  D --- E</pre>",
           "options": [
             {
               "text": "C-D-E-F-B-A-C|||C-D-E-F-B-A-C"
@@ -2370,7 +2370,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "If using Prim's algorithm to find a minimum spanning tree T from the graph below (vertices A,B,C,D,E,F; edges A-B=1, A-D=4, A-E=3, B-D=4, B-E=2, D-E=4, C-E=4, C-F=5, E-F=7), which edge is added to T in the last step?|||Nếu dùng thuật toán Prim để tìm cây khung nhỏ nhất T của đồ thị sau (đỉnh A,B,C,D,E,F; cạnh A-B=1, A-D=4, A-E=3, B-D=4, B-E=2, D-E=4, C-E=4, C-F=5, E-F=7), cạnh nào được thêm vào T ở bước cuối cùng?",
+          "prompt": "If using Prim's algorithm to find a minimum spanning tree T from the graph below (vertices A,B,C,D,E,F; edges A-B=1, A-D=4, A-E=3, B-D=4, B-E=2, D-E=4, C-E=4, C-F=5, E-F=7), which edge is added to T in the last step?\n<pre class=\"mermaid\">graph LR\n  A((A)) -- 1 --- B((B))\n  A -- 4 --- D((D))\n  A -- 3 --- E((E))\n  B -- 4 --- D\n  B -- 2 --- E\n  D -- 4 --- E\n  C((C)) -- 4 --- E\n  C -- 5 --- F((F))\n  E -- 7 --- F</pre>|||Nếu dùng thuật toán Prim để tìm cây khung nhỏ nhất T của đồ thị sau (đỉnh A,B,C,D,E,F; cạnh A-B=1, A-D=4, A-E=3, B-D=4, B-E=2, D-E=4, C-E=4, C-F=5, E-F=7), cạnh nào được thêm vào T ở bước cuối cùng?\n<pre class=\"mermaid\">graph LR\n  A((A)) -- 1 --- B((B))\n  A -- 4 --- D((D))\n  A -- 3 --- E((E))\n  B -- 4 --- D\n  B -- 2 --- E\n  D -- 4 --- E\n  C((C)) -- 4 --- E\n  C -- 5 --- F((F))\n  E -- 7 --- F</pre>",
           "options": [
             {
               "text": "EC|||EC"
@@ -3408,7 +3408,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Graph X is a 5-vertex pentagram (a 5-cycle drawn with crossing straight edges: top, left, right, bottom-left, bottom-right, connected top-BL, top-BR, left-right, left-BR, right-BL). Graph Y is a bowtie: two triangles sharing a common center vertex C (top-left-C-bottom-left triangle, and top-right-C-bottom-right triangle, plus verticals top-left-bottom-left and top-right-bottom-right). Delete one edge from each graph to obtain 2 new graphs. How many cut-edges in total of the new graphs?|||Đồ thị X là ngôi sao 5 cánh (chu trình 5 đỉnh vẽ với các cạnh thẳng cắt nhau: trên, trái, phải, dưới-trái, dưới-phải, nối trên-dướiTrái, trên-dướiPhải, trái-phải, trái-dướiPhải, phải-dướiTrái). Đồ thị Y là hình nơ: hai tam giác chung đỉnh trung tâm C (tam giác trên-trái-C-dưới-trái, và tam giác trên-phải-C-dưới-phải, cộng hai cạnh dọc trên-trái-dưới-trái và trên-phải-dưới-phải). Xoá một cạnh khỏi mỗi đồ thị để được 2 đồ thị mới. Tổng số cạnh cắt (cut-edge) của 2 đồ thị mới là bao nhiêu?",
+          "prompt": "Graph X is a simple graph on the 5 vertices $A,B,C,D,E$ whose edges are $AB$, $BC$, $CD$, $DE$, $EA$ (in the original it is drawn as a pentagram -- five straight segments crossing one another -- but as a graph it is exactly a 5-cycle). Graph Y is a bowtie: two triangles $\\{P,Q,Z\\}$ and $\\{R,S,Z\\}$ sharing the single common vertex $Z$, i.e. the edges $PQ$, $PZ$, $QZ$, $RS$, $RZ$, $SZ$. Delete one edge from each graph to obtain 2 new graphs. How many cut-edges in total of the new graphs?\n<pre class=\"mermaid\">graph TD\n  subgraph GX[\"Graph X\"]\n    A --- B\n    B --- C\n    C --- D\n    D --- E\n    E --- A\n  end\n  subgraph GY[\"Graph Y\"]\n    P --- Q\n    P --- Z\n    Q --- Z\n    R --- S\n    R --- Z\n    S --- Z\n  end</pre>|||Đồ thị X là đồ thị đơn trên 5 đỉnh $A,B,C,D,E$ với các cạnh $AB$, $BC$, $CD$, $DE$, $EA$ (trong đề gốc nó được vẽ dạng ngôi sao 5 cánh -- năm đoạn thẳng cắt nhau -- nhưng xét như một đồ thị thì nó đúng là chu trình 5 đỉnh). Đồ thị Y là hình nơ: hai tam giác $\\{P,Q,Z\\}$ và $\\{R,S,Z\\}$ chung đúng một đỉnh $Z$, tức các cạnh $PQ$, $PZ$, $QZ$, $RS$, $RZ$, $SZ$. Xoá một cạnh khỏi mỗi đồ thị để được 2 đồ thị mới. Tổng số cạnh cắt (cut-edge) của 2 đồ thị mới là bao nhiêu?\n<pre class=\"mermaid\">graph TD\n  subgraph GX[\"Đồ thị X\"]\n    A --- B\n    B --- C\n    C --- D\n    D --- E\n    E --- A\n  end\n  subgraph GY[\"Đồ thị Y\"]\n    P --- Q\n    P --- Z\n    Q --- Z\n    R --- S\n    R --- Z\n    S --- Z\n  end</pre>",
           "options": [
             {
               "text": "6|||6"
@@ -3429,12 +3429,12 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">X (drawn as a pentagram) is actually a 5-cycle $C_5$ (each vertex has degree 2). Deleting any one edge turns a cycle into a path with 4 edges, and every edge of a path is a bridge -- 4 cut-edges. Y is two triangles sharing vertex C; deleting any one edge (which always belongs to exactly one triangle) breaks that triangle into a 2-edge path (both edges become bridges), while the other triangle stays 2-edge-connected (no bridges) -- 2 cut-edges. Total: $4+2=6$.</div><div class=\"ml-vi\">X (vẽ dạng ngôi sao) thực chất là chu trình 5 đỉnh $C_5$ (mỗi đỉnh bậc 2). Xoá một cạnh bất kỳ biến chu trình thành đường đi 4 cạnh, và mọi cạnh của đường đi đều là cầu -- 4 cạnh cắt. Y là hai tam giác chung đỉnh C; xoá một cạnh bất kỳ (luôn thuộc đúng một tam giác) làm tam giác đó vỡ thành đường đi 2 cạnh (cả hai thành cầu), tam giác còn lại vẫn liên thông cạnh-kép (không có cầu) -- 2 cạnh cắt. Tổng: $4+2=6$.</div>"
+          "explanation": "<div class=\"ml-en\">X (drawn as a pentagram) is actually a 5-cycle $C_5$ (each vertex has degree 2). Deleting any one edge turns a cycle into a path with 4 edges, and every edge of a path is a bridge -- 4 cut-edges. Y is two triangles sharing the vertex $Z$; deleting any one edge (which always belongs to exactly one triangle) breaks that triangle into a 2-edge path (both edges become bridges), while the other triangle stays 2-edge-connected (no bridges) -- 2 cut-edges. Total: $4+2=6$.</div><div class=\"ml-vi\">X (vẽ dạng ngôi sao) thực chất là chu trình 5 đỉnh $C_5$ (mỗi đỉnh bậc 2). Xoá một cạnh bất kỳ biến chu trình thành đường đi 4 cạnh, và mọi cạnh của đường đi đều là cầu -- 4 cạnh cắt. Y là hai tam giác chung đỉnh $Z$; xoá một cạnh bất kỳ (luôn thuộc đúng một tam giác) làm tam giác đó vỡ thành đường đi 2 cạnh (cả hai thành cầu), tam giác còn lại vẫn liên thông cạnh-kép (không có cầu) -- 2 cạnh cắt. Tổng: $4+2=6$.</div>"
         },
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "A graph has a pendant vertex $P_3$ attached to $P_1$; $P_1$-$P_2$ edge; $P_2$-$P_4$ edge; and $P_4,P_5,P_6,P_7$ forming a 4-cycle ($P_4$-$P_5$, $P_5$-$P_7$, $P_7$-$P_6$, $P_6$-$P_4$). How many cut-vertices and cut-edges in this graph?|||Một đồ thị có đỉnh treo $P_3$ nối với $P_1$; cạnh $P_1$-$P_2$; cạnh $P_2$-$P_4$; và $P_4,P_5,P_6,P_7$ tạo thành chu trình 4 đỉnh ($P_4$-$P_5$, $P_5$-$P_7$, $P_7$-$P_6$, $P_6$-$P_4$). Đồ thị này có bao nhiêu đỉnh cắt và cạnh cắt?",
+          "prompt": "A graph has a pendant vertex $P_3$ attached to $P_1$; $P_1$-$P_2$ edge; $P_2$-$P_4$ edge; and $P_4,P_5,P_6,P_7$ forming a 4-cycle ($P_4$-$P_5$, $P_5$-$P_7$, $P_7$-$P_6$, $P_6$-$P_4$), as shown below. How many cut-vertices and cut-edges in this graph?\n<pre class=\"mermaid\">graph TD\n  P3 --- P1\n  P1 --- P2\n  P2 --- P4\n  P4 --- P5\n  P5 --- P7\n  P7 --- P6\n  P6 --- P4</pre>|||Một đồ thị có đỉnh treo $P_3$ nối với $P_1$; cạnh $P_1$-$P_2$; cạnh $P_2$-$P_4$; và $P_4,P_5,P_6,P_7$ tạo thành chu trình 4 đỉnh ($P_4$-$P_5$, $P_5$-$P_7$, $P_7$-$P_6$, $P_6$-$P_4$), như hình dưới đây. Đồ thị này có bao nhiêu đỉnh cắt và cạnh cắt?\n<pre class=\"mermaid\">graph TD\n  P3 --- P1\n  P1 --- P2\n  P2 --- P4\n  P4 --- P5\n  P5 --- P7\n  P7 --- P6\n  P6 --- P4</pre>",
           "options": [
             {
               "text": "2 and 3|||2 và 3"
@@ -3506,7 +3506,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the weighted complete graph $K_4$ with vertices A, B, C, D and edge weights $AB=1$, $AC=4$, $AD=6$, $BC=2$, $BD=5$, $CD=3$, what is the average weight of all Hamilton circuits starting and ending at A?|||Cho đồ thị đầy đủ có trọng số $K_4$ với các đỉnh A, B, C, D và trọng số cạnh $AB=1$, $AC=4$, $AD=6$, $BC=2$, $BD=5$, $CD=3$, trọng số trung bình của tất cả chu trình Hamilton bắt đầu và kết thúc tại A là bao nhiêu?",
+          "prompt": "Given the weighted complete graph $K_4$ below, with vertices A, B, C, D and edge weights $AB=1$, $AC=4$, $AD=6$, $BC=2$, $BD=5$, $CD=3$, what is the average weight of all Hamilton circuits starting and ending at A?\n<pre class=\"mermaid\">graph TD\n  A -- 1 --- B\n  A -- 4 --- C\n  A -- 6 --- D\n  B -- 2 --- C\n  B -- 5 --- D\n  C -- 3 --- D</pre>|||Cho đồ thị đầy đủ có trọng số $K_4$ dưới đây, với các đỉnh A, B, C, D và trọng số cạnh $AB=1$, $AC=4$, $AD=6$, $BC=2$, $BD=5$, $CD=3$, trọng số trung bình của tất cả chu trình Hamilton bắt đầu và kết thúc tại A là bao nhiêu?\n<pre class=\"mermaid\">graph TD\n  A -- 1 --- B\n  A -- 4 --- C\n  A -- 6 --- D\n  B -- 2 --- C\n  B -- 5 --- D\n  C -- 3 --- D</pre>",
           "options": [
             {
               "text": "14|||14"
@@ -3705,7 +3705,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "If using Kruskal's algorithm to find a minimum spanning tree T from the graph with vertices A,B,C,D,E,F and edges AB=1, BC=6, AD=3, BD=5, BE=1, CE=5, CF=2, DE=1, EF=4, which edge is added to T in the last step?|||Nếu dùng thuật toán Kruskal để tìm cây khung nhỏ nhất T từ đồ thị có các đỉnh A,B,C,D,E,F và các cạnh AB=1, BC=6, AD=3, BD=5, BE=1, CE=5, CF=2, DE=1, EF=4, cạnh nào được thêm vào T ở bước cuối cùng?",
+          "prompt": "If using Kruskal's algorithm to find a minimum spanning tree T from the graph below, with vertices A,B,C,D,E,F and edges AB=1, BC=6, AD=3, BD=5, BE=1, CE=5, CF=2, DE=1, EF=4, which edge is added to T in the last step?\n<pre class=\"mermaid\">graph TD\n  A -- 1 --- B\n  A -- 3 --- D\n  B -- 6 --- C\n  B -- 5 --- D\n  B -- 1 --- E\n  C -- 5 --- E\n  C -- 2 --- F\n  D -- 1 --- E\n  E -- 4 --- F</pre>|||Nếu dùng thuật toán Kruskal để tìm cây khung nhỏ nhất T từ đồ thị dưới đây, có các đỉnh A,B,C,D,E,F và các cạnh AB=1, BC=6, AD=3, BD=5, BE=1, CE=5, CF=2, DE=1, EF=4, cạnh nào được thêm vào T ở bước cuối cùng?\n<pre class=\"mermaid\">graph TD\n  A -- 1 --- B\n  A -- 3 --- D\n  B -- 6 --- C\n  B -- 5 --- D\n  B -- 1 --- E\n  C -- 5 --- E\n  C -- 2 --- F\n  D -- 1 --- E\n  E -- 4 --- F</pre>",
           "options": [
             {
               "text": "AD|||AD"
@@ -4616,7 +4616,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Let $M$ be the incidence matrix of the given graph with the rows indexed by $v_1,v_2,v_3,v_4$ and the columns indexed by $e_1,e_2,e_3,e_4,e_5$. The graph has vertices $v_1$(top-left), $v_2$(top-right), $v_3$(bottom-right), $v_4$(bottom-left), with edges $e_1=v_1v_2$ (top), $e_2=v_1v_4$ (left), $e_3=v_4v_2$ (diagonal), $e_4=v_1v_3$ (diagonal), $e_5=v_4v_3$ (bottom). What is the sum of the entries in the fourth row of $M$ (row $v_4$)?|||Cho $M$ là ma trận liên thuộc của đồ thị với các hàng đánh số $v_1,v_2,v_3,v_4$ và các cột đánh số $e_1,e_2,e_3,e_4,e_5$. Đồ thị có đỉnh $v_1$(trên-trái), $v_2$(trên-phải), $v_3$(dưới-phải), $v_4$(dưới-trái), với cạnh $e_1=v_1v_2$ (trên), $e_2=v_1v_4$ (trái), $e_3=v_4v_2$ (chéo), $e_4=v_1v_3$ (chéo), $e_5=v_4v_3$ (dưới). Tổng các phần tử của hàng thứ tư trong $M$ (hàng $v_4$) là bao nhiêu?",
+          "prompt": "Let $M$ be the incidence matrix of the graph below, with the rows indexed by $v_1,v_2,v_3,v_4$ and the columns indexed by $e_1,e_2,e_3,e_4,e_5$. The graph has vertices $v_1,v_2,v_3,v_4$ and edges $e_1=v_1v_2$, $e_2=v_1v_4$, $e_3=v_4v_2$, $e_4=v_1v_3$, $e_5=v_4v_3$. What is the sum of the entries in the fourth row of $M$ (row $v_4$)?\n<pre class=\"mermaid\">graph TD\n  v1 -- e1 --- v2\n  v1 -- e2 --- v4\n  v4 -- e3 --- v2\n  v1 -- e4 --- v3\n  v4 -- e5 --- v3</pre>|||Cho $M$ là ma trận liên thuộc của đồ thị dưới đây, với các hàng đánh số $v_1,v_2,v_3,v_4$ và các cột đánh số $e_1,e_2,e_3,e_4,e_5$. Đồ thị có các đỉnh $v_1,v_2,v_3,v_4$ và các cạnh $e_1=v_1v_2$, $e_2=v_1v_4$, $e_3=v_4v_2$, $e_4=v_1v_3$, $e_5=v_4v_3$. Tổng các phần tử của hàng thứ tư trong $M$ (hàng $v_4$) là bao nhiêu?\n<pre class=\"mermaid\">graph TD\n  v1 -- e1 --- v2\n  v1 -- e2 --- v4\n  v4 -- e3 --- v2\n  v1 -- e4 --- v3\n  v4 -- e5 --- v3</pre>",
           "options": [
             {
               "text": "3|||3"
@@ -4639,7 +4639,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given two undirected simple graphs $G$ and $H$ with adjacency matrices $A_G$ (rows/cols $a,b,c,d$): $a$-row $[0,1,1,1]$, $b$-row $[1,0,1,0]$, $c$-row $[1,1,0,0]$, $d$-row $[1,0,0,0]$; and $A_H$ (rows/cols $x,y,z,t$): $x$-row $[0,1,1,0]$, $y$-row $[1,0,1,1]$, $z$-row $[1,1,0,0]$, $t$-row $[0,1,0,0]$. Which statements are correct? (i) $G$ and $H$ are not isomorphic because they have different adjacency matrices. (ii) The function $f:\\{a,b,c,d\\}\\to\\{x,y,z,t\\}$ with $f(a)=y,f(b)=x,f(c)=z,f(d)=t$ is an isomorphism.|||Cho hai đơn đồ thị vô hướng $G$ và $H$ với ma trận kề $A_G$ (hàng/cột $a,b,c,d$): hàng $a$ $[0,1,1,1]$, hàng $b$ $[1,0,1,0]$, hàng $c$ $[1,1,0,0]$, hàng $d$ $[1,0,0,0]$; và $A_H$ (hàng/cột $x,y,z,t$): hàng $x$ $[0,1,1,0]$, hàng $y$ $[1,0,1,1]$, hàng $z$ $[1,1,0,0]$, hàng $t$ $[0,1,0,0]$. Phát biểu nào đúng? (i) $G$ và $H$ không đẳng cấu vì có ma trận kề khác nhau. (ii) Hàm $f:\\{a,b,c,d\\}\\to\\{x,y,z,t\\}$ với $f(a)=y,f(b)=x,f(c)=z,f(d)=t$ là một phép đẳng cấu.",
+          "prompt": "Given two undirected simple graphs $G$ and $H$ with adjacency matrices $A_G$ (rows/cols $a,b,c,d$): $a$-row $[0,1,1,1]$, $b$-row $[1,0,1,0]$, $c$-row $[1,1,0,0]$, $d$-row $[1,0,0,0]$; and $A_H$ (rows/cols $x,y,z,t$): $x$-row $[0,1,1,0]$, $y$-row $[1,0,1,1]$, $z$-row $[1,1,0,0]$, $t$-row $[0,1,0,0]$. Which statements are correct? (i) $G$ and $H$ are not isomorphic because they have different adjacency matrices. (ii) The function $f:\\{a,b,c,d\\}\\to\\{x,y,z,t\\}$ with $f(a)=y,f(b)=x,f(c)=z,f(d)=t$ is an isomorphism. (The two matrices give $G$ the edges $ab,ac,ad,bc$ and $H$ the edges $xy,xz,yz,yt$, drawn below.)\n<pre class=\"mermaid\">graph TD\n  subgraph G[\"Graph G\"]\n    a --- b\n    a --- c\n    a --- d\n    b --- c\n  end\n  subgraph H[\"Graph H\"]\n    x --- y\n    x --- z\n    y --- z\n    y --- t\n  end</pre>|||Cho hai đơn đồ thị vô hướng $G$ và $H$ với ma trận kề $A_G$ (hàng/cột $a,b,c,d$): hàng $a$ $[0,1,1,1]$, hàng $b$ $[1,0,1,0]$, hàng $c$ $[1,1,0,0]$, hàng $d$ $[1,0,0,0]$; và $A_H$ (hàng/cột $x,y,z,t$): hàng $x$ $[0,1,1,0]$, hàng $y$ $[1,0,1,1]$, hàng $z$ $[1,1,0,0]$, hàng $t$ $[0,1,0,0]$. Phát biểu nào đúng? (i) $G$ và $H$ không đẳng cấu vì có ma trận kề khác nhau. (ii) Hàm $f:\\{a,b,c,d\\}\\to\\{x,y,z,t\\}$ với $f(a)=y,f(b)=x,f(c)=z,f(d)=t$ là một phép đẳng cấu. (Hai ma trận cho $G$ các cạnh $ab,ac,ad,bc$ và $H$ các cạnh $xy,xz,yz,yt$, vẽ dưới đây.)\n<pre class=\"mermaid\">graph TD\n  subgraph G[\"Đồ thị G\"]\n    a --- b\n    a --- c\n    a --- d\n    b --- c\n  end\n  subgraph H[\"Đồ thị H\"]\n    x --- y\n    x --- z\n    y --- z\n    y --- t\n  end</pre>",
           "options": [
             {
               "text": "Both (i) and (ii)|||Cả (i) và (ii)"
@@ -4662,7 +4662,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the graph $G$ with vertices $a,b,c,f,d,e,g$ and edges $ab,ac,bc,cf,cd,fd,fg,de$ (two triangles $abc$ and $cfd$ sharing vertex $c$, with pendant vertices $g$ attached to $f$ and $e$ attached to $d$). How many cut vertices does this graph have?|||Cho đồ thị $G$ với các đỉnh $a,b,c,f,d,e,g$ và các cạnh $ab,ac,bc,cf,cd,fd,fg,de$ (hai tam giác $abc$ và $cfd$ chung đỉnh $c$, với đỉnh treo $g$ nối vào $f$ và $e$ nối vào $d$). Đồ thị này có bao nhiêu đỉnh cắt?",
+          "prompt": "Given the graph $G$ with vertices $a,b,c,f,d,e,g$ and edges $ab,ac,bc,cf,cd,fd,fg,de$ (two triangles $abc$ and $cfd$ sharing vertex $c$, with pendant vertices $g$ attached to $f$ and $e$ attached to $d$). How many cut vertices does this graph have?\n<pre class=\"mermaid\">graph TD\n  a --- b\n  a --- c\n  b --- c\n  c --- f\n  c --- d\n  f --- d\n  f --- g\n  d --- e</pre>|||Cho đồ thị $G$ với các đỉnh $a,b,c,f,d,e,g$ và các cạnh $ab,ac,bc,cf,cd,fd,fg,de$ (hai tam giác $abc$ và $cfd$ chung đỉnh $c$, với đỉnh treo $g$ nối vào $f$ và $e$ nối vào $d$). Đồ thị này có bao nhiêu đỉnh cắt?\n<pre class=\"mermaid\">graph TD\n  a --- b\n  a --- c\n  b --- c\n  c --- f\n  c --- d\n  f --- d\n  f --- g\n  d --- e</pre>",
           "options": [
             {
               "text": "1|||1"
@@ -4760,7 +4760,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Use Dijkstra's algorithm to find the shortest path from $A$ to $Z$ in the weighted graph with edges $AB=2,AC=7,BD=5,BC=4,BE=3,DE=2,CE=3,DZ=2,EZ=3$. What is the next chosen vertex after $E$?|||Dùng thuật toán Dijkstra để tìm đường đi ngắn nhất từ $A$ đến $Z$ trong đồ thị có trọng số với các cạnh $AB=2,AC=7,BD=5,BC=4,BE=3,DE=2,CE=3,DZ=2,EZ=3$. Đỉnh được chọn tiếp theo sau $E$ là gì?",
+          "prompt": "Use Dijkstra's algorithm to find the shortest path from $A$ to $Z$ in the weighted graph with edges $AB=2,AC=7,BD=5,BC=4,BE=3,DE=2,CE=3,DZ=2,EZ=3$. What is the next chosen vertex after $E$?\n<pre class=\"mermaid\">graph TD\n  A -- 2 --- B\n  A -- 7 --- C\n  B -- 4 --- C\n  B -- 5 --- D\n  B -- 3 --- E\n  C -- 3 --- E\n  D -- 2 --- E\n  D -- 2 --- Z\n  E -- 3 --- Z</pre>|||Dùng thuật toán Dijkstra để tìm đường đi ngắn nhất từ $A$ đến $Z$ trong đồ thị có trọng số với các cạnh $AB=2,AC=7,BD=5,BC=4,BE=3,DE=2,CE=3,DZ=2,EZ=3$. Đỉnh được chọn tiếp theo sau $E$ là gì?\n<pre class=\"mermaid\">graph TD\n  A -- 2 --- B\n  A -- 7 --- C\n  B -- 4 --- C\n  B -- 5 --- D\n  B -- 3 --- E\n  C -- 3 --- E\n  D -- 2 --- E\n  D -- 2 --- Z\n  E -- 3 --- Z</pre>",
           "options": [
             {
               "text": "The vertex C|||Đỉnh C"
@@ -4884,7 +4884,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Find the inorder traversal of the tree with root $a$; $a$'s children $c$ (left) and $m$ (right); $c$'s children $e$ (left), $h$ (right); $m$'s children $n$ (left), $t$ (right); $t$'s children $s$ (left), $y$ (right).|||Tìm phép duyệt trung thứ (inorder) của cây với gốc $a$; con của $a$ là $c$ (trái) và $m$ (phải); con của $c$ là $e$ (trái), $h$ (phải); con của $m$ là $n$ (trái), $t$ (phải); con của $t$ là $s$ (trái), $y$ (phải).",
+          "prompt": "Find the inorder traversal of the tree with root $a$; $a$'s children $c$ (left) and $m$ (right); $c$'s children $e$ (left), $h$ (right); $m$'s children $n$ (left), $t$ (right); $t$'s children $s$ (left), $y$ (right). In the diagram below each parent points to its children, the left child declared first.\n<pre class=\"mermaid\">graph TD\n  a --> c\n  a --> m\n  c --> e\n  c --> h\n  m --> n\n  m --> t\n  t --> s\n  t --> y</pre>|||Tìm phép duyệt trung thứ (inorder) của cây với gốc $a$; con của $a$ là $c$ (trái) và $m$ (phải); con của $c$ là $e$ (trái), $h$ (phải); con của $m$ là $n$ (trái), $t$ (phải); con của $t$ là $s$ (trái), $y$ (phải). Trong sơ đồ dưới đây mỗi nút cha trỏ tới các con của nó, con trái được khai báo trước.\n<pre class=\"mermaid\">graph TD\n  a --> c\n  a --> m\n  c --> e\n  c --> h\n  m --> n\n  m --> t\n  t --> s\n  t --> y</pre>",
           "options": [
             {
               "text": "e-h-c-n-s-y-t-m-a|||e-h-c-n-s-y-t-m-a"
@@ -4910,7 +4910,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the tree: root $a$ with children $b,c$; $b$'s children $d,e$; $e$'s children $i,j$; $j$'s children $m,n,o$; $c$'s children $f,g,h$; $h$'s children $k,l$; $l$'s child $p$. What is the position of the letter $n$ when using the preorder traversal?|||Cho cây: gốc $a$ với con $b,c$; con của $b$ là $d,e$; con của $e$ là $i,j$; con của $j$ là $m,n,o$; con của $c$ là $f,g,h$; con của $h$ là $k,l$; con của $l$ là $p$. Vị trí của chữ $n$ khi dùng phép duyệt tiền thứ (preorder) là bao nhiêu?",
+          "prompt": "Given the tree: root $a$ with children $b,c$; $b$'s children $d,e$; $e$'s children $i,j$; $j$'s children $m,n,o$; $c$'s children $f,g,h$; $h$'s children $k,l$; $l$'s child $p$. The children of each node are listed in their traversal order (the order they are declared in the diagram below). What is the position of the letter $n$ when using the preorder traversal?\n<pre class=\"mermaid\">graph TD\n  a --> b\n  a --> c\n  b --> d\n  b --> e\n  e --> i\n  e --> j\n  j --> m\n  j --> n\n  j --> o\n  c --> f\n  c --> g\n  c --> h\n  h --> k\n  h --> l\n  l --> p</pre>|||Cho cây: gốc $a$ với con $b,c$; con của $b$ là $d,e$; con của $e$ là $i,j$; con của $j$ là $m,n,o$; con của $c$ là $f,g,h$; con của $h$ là $k,l$; con của $l$ là $p$. Các con của mỗi nút được liệt kê theo đúng thứ tự duyệt (thứ tự khai báo trong sơ đồ dưới đây). Vị trí của chữ $n$ khi dùng phép duyệt tiền thứ (preorder) là bao nhiêu?\n<pre class=\"mermaid\">graph TD\n  a --> b\n  a --> c\n  b --> d\n  b --> e\n  e --> i\n  e --> j\n  j --> m\n  j --> n\n  j --> o\n  c --> f\n  c --> g\n  c --> h\n  h --> k\n  h --> l\n  l --> p</pre>",
           "options": [
             {
               "text": "8|||8"
@@ -4939,7 +4939,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Find a spanning tree for $K_{1,6}$. (i) a zigzag chain of 8 vertices each with degree $\\le2$ (ii) a tree with two branches of 3 vertices meeting through an extra vertex $d$ off $c$ (iii) a star: one center vertex connected to 6 leaf vertices|||Tìm cây khung của $K_{1,6}$. (i) một chuỗi ngoằn ngoèo 8 đỉnh mỗi đỉnh bậc $\\le2$ (ii) một cây với hai nhánh 3 đỉnh nối qua một đỉnh phụ $d$ từ $c$ (iii) hình sao: một đỉnh trung tâm nối tới 6 đỉnh lá",
+          "prompt": "Find a spanning tree for $K_{1,6}$, the complete bipartite graph drawn below (one vertex $v$ joined to each of $u_1,\\ldots,u_6$). (i) a path (chain) on 8 vertices, every vertex of degree $\\le2$ (ii) a tree built from two branches of 3 vertices joined together, with an extra vertex $d$ attached to $c$ (iii) a star: one center vertex adjacent to 6 leaf vertices\n<pre class=\"mermaid\">graph TD\n  v --- u1\n  v --- u2\n  v --- u3\n  v --- u4\n  v --- u5\n  v --- u6</pre>|||Tìm cây khung của $K_{1,6}$, đồ thị lưỡng phân đầy đủ vẽ dưới đây (một đỉnh $v$ nối tới từng đỉnh $u_1,\\ldots,u_6$). (i) một đường đi (chuỗi) 8 đỉnh, mọi đỉnh bậc $\\le2$ (ii) một cây gồm hai nhánh 3 đỉnh nối lại, với một đỉnh phụ $d$ gắn vào $c$ (iii) hình sao: một đỉnh trung tâm kề với 6 đỉnh lá\n<pre class=\"mermaid\">graph TD\n  v --- u1\n  v --- u2\n  v --- u3\n  v --- u4\n  v --- u5\n  v --- u6</pre>",
           "options": [
             {
               "text": "(i)|||(i)"
@@ -4957,12 +4957,12 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$K_{1,6}$ is already a tree (a star with 1 center and 6 leaves, 6 edges, 7 vertices), so its only spanning tree is itself -- the star shape in (iii). (i) is a path-like zigzag (wrong shape/vertex count), (ii) is a different tree shape entirely.</div><div class=\"ml-vi\">$K_{1,6}$ vốn đã là một cây (hình sao 1 tâm và 6 lá, 6 cạnh, 7 đỉnh), nên cây khung duy nhất của nó chính là nó -- hình sao ở (iii). (i) là chuỗi ngoằn ngoèo giống đường đi (sai hình dạng/số đỉnh), (ii) là một hình cây hoàn toàn khác.</div>"
+          "explanation": "<div class=\"ml-en\">$K_{1,6}$ is already a tree (a star with 1 center and 6 leaves, 6 edges, 7 vertices), so its only spanning tree is itself -- the star shape in (iii). A spanning tree must keep all 7 vertices and have exactly 6 edges, and every vertex other than the center has degree 1. (i) is a path on 8 vertices (wrong vertex count, and the center of $K_{1,6}$ has degree 6, not $\\le2$), (ii) is a different tree shape entirely.</div><div class=\"ml-vi\">$K_{1,6}$ vốn đã là một cây (hình sao 1 tâm và 6 lá, 6 cạnh, 7 đỉnh), nên cây khung duy nhất của nó chính là nó -- hình sao ở (iii). Cây khung phải giữ đủ 7 đỉnh và có đúng 6 cạnh, và mọi đỉnh ngoài tâm đều bậc 1. (i) là đường đi 8 đỉnh (sai số đỉnh, và tâm của $K_{1,6}$ có bậc 6 chứ không phải $\\le2$), (ii) là một hình cây hoàn toàn khác.</div>"
         },
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Find the total weight of a minimum spanning tree in the following undirected weighted graph with vertices $a,b,c,d,e,f,g,h$ and edges $ab{=}6,ad{=}2,bd{=}9,bc{=}12,dc{=}5,ch{=}3,ce{=}1,he{=}8,hg{=}10,hf{=}4,gf{=}7,ef{=}11$.|||Tìm tổng trọng số của cây khung nhỏ nhất trong đồ thị vô hướng có trọng số với các đỉnh $a,b,c,d,e,f,g,h$ và các cạnh $ab{=}6,ad{=}2,bd{=}9,bc{=}12,dc{=}5,ch{=}3,ce{=}1,he{=}8,hg{=}10,hf{=}4,gf{=}7,ef{=}11$.",
+          "prompt": "Find the total weight of a minimum spanning tree in the following undirected weighted graph with vertices $a,b,c,d,e,f,g,h$ and edges $ab{=}6,ad{=}2,bd{=}9,bc{=}12,dc{=}5,ch{=}3,ce{=}1,he{=}8,hg{=}10,hf{=}4,gf{=}7,ef{=}11$.\n<pre class=\"mermaid\">graph TD\n  a -- 6 --- b\n  a -- 2 --- d\n  b -- 9 --- d\n  b -- 12 --- c\n  d -- 5 --- c\n  c -- 3 --- h\n  c -- 1 --- e\n  h -- 8 --- e\n  h -- 10 --- g\n  h -- 4 --- f\n  g -- 7 --- f\n  e -- 11 --- f</pre>|||Tìm tổng trọng số của cây khung nhỏ nhất trong đồ thị vô hướng có trọng số với các đỉnh $a,b,c,d,e,f,g,h$ và các cạnh $ab{=}6,ad{=}2,bd{=}9,bc{=}12,dc{=}5,ch{=}3,ce{=}1,he{=}8,hg{=}10,hf{=}4,gf{=}7,ef{=}11$.\n<pre class=\"mermaid\">graph TD\n  a -- 6 --- b\n  a -- 2 --- d\n  b -- 9 --- d\n  b -- 12 --- c\n  d -- 5 --- c\n  c -- 3 --- h\n  c -- 1 --- e\n  h -- 8 --- e\n  h -- 10 --- g\n  h -- 4 --- f\n  g -- 7 --- f\n  e -- 11 --- f</pre>",
           "options": [
             {
               "text": "28|||28"
@@ -5876,7 +5876,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a pseudograph with vertices $a,b,c,d$: straight edges $ab$ (top), $ad$ (left), $dc$ (bottom); a triple edge $ac$ (three parallel curved edges from $a$ to $c$); and self-loops at $b$, $c$, and $d$. What is the sum of the numbers in the third row of the adjacency matrix, in the order $a,b,c,d$, of the given graph?|||Cho một giả đồ thị (pseudograph) với các đỉnh $a,b,c,d$: cạnh thẳng $ab$ (trên), $ad$ (trái), $dc$ (dưới); cạnh bội ba $ac$ (ba cạnh cong song song từ $a$ đến $c$); và khuyên (self-loop) tại $b$, $c$, và $d$. Tổng các số trong hàng thứ ba của ma trận kề, theo thứ tự $a,b,c,d$, của đồ thị đã cho là bao nhiêu?",
+          "prompt": "Given a pseudograph with vertices $a,b,c,d$: single edges $ab$, $ad$, $dc$; a triple edge between $a$ and $c$ (three parallel edges); and one self-loop at each of $b$, $c$, $d$. What is the sum of the numbers in the third row of the adjacency matrix, in the order $a,b,c,d$, of the given graph?<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  a --- d((d))\n  d --- c((c))\n  a --- c\n  a --- c\n  a --- c\n  b --- b\n  c --- c\n  d --- d\n</pre>|||Cho một giả đồ thị (pseudograph) với các đỉnh $a,b,c,d$: các cạnh đơn $ab$, $ad$, $dc$; một cạnh bội ba giữa $a$ và $c$ (ba cạnh song song); và một khuyên (self-loop) tại mỗi đỉnh $b$, $c$, $d$. Tổng các số trong hàng thứ ba của ma trận kề, theo thứ tự $a,b,c,d$, của đồ thị đã cho là bao nhiêu?<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  a --- d((d))\n  d --- c((c))\n  a --- c\n  a --- c\n  a --- c\n  b --- b\n  c --- c\n  d --- d\n</pre>",
           "options": [
             {
               "text": "5|||5"
@@ -5922,7 +5922,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the graph with top row vertices $a,b,c,d,e$ connected in a chain, bottom row vertices $h,g,f$, edges $ah$, $ef$, $hg$, $gf$, $cg$, and diagonals $ag$, $eh$. Find the strongly connected components of the given graph (directed).|||Cho đồ thị với hàng trên các đỉnh $a,b,c,d,e$ nối thành chuỗi, hàng dưới các đỉnh $h,g,f$, các cạnh $ah$, $ef$, $hg$, $gf$, $cg$, và đường chéo $ag$, $eh$. Tìm các thành phần liên thông mạnh của đồ thị có hướng đã cho.",
+          "prompt": "Find the strongly connected components of the directed graph shown below. Its vertices are $a,b,c,d,e,f,g,h$; the chain $a,b,c,d,e$ and the edges $ah$, $ef$, $hg$, $gf$ are oriented so that they close up into the directed cycle $a\\to b\\to c\\to d\\to e\\to f\\to g\\to h\\to a$, and there are three further arcs $a\\to g$, $c\\to g$, $e\\to h$.<pre class=\"mermaid\">graph LR\n  a((a)) --> b((b))\n  b --> c((c))\n  c --> d((d))\n  d --> e((e))\n  e --> f((f))\n  f --> g((g))\n  g --> h((h))\n  h --> a\n  a --> g\n  c --> g\n  e --> h\n</pre>|||Tìm các thành phần liên thông mạnh của đồ thị có hướng dưới đây. Các đỉnh là $a,b,c,d,e,f,g,h$; chuỗi $a,b,c,d,e$ cùng các cạnh $ah$, $ef$, $hg$, $gf$ được định hướng khép lại thành chu trình có hướng $a\\to b\\to c\\to d\\to e\\to f\\to g\\to h\\to a$, và có thêm ba cung $a\\to g$, $c\\to g$, $e\\to h$.<pre class=\"mermaid\">graph LR\n  a((a)) --> b((b))\n  b --> c((c))\n  c --> d((d))\n  d --> e((e))\n  e --> f((f))\n  f --> g((g))\n  g --> h((h))\n  h --> a\n  a --> g\n  c --> g\n  e --> h\n</pre>",
           "options": [
             {
               "text": "{a, b, c, d, e}, {f, h}, {g}|||{a, b, c, d, e}, {f, h}, {g}"
@@ -5938,9 +5938,9 @@ export default {
             }
           ],
           "correctIndexes": [
-            0
+            3
           ],
-          "explanation": "<div class=\"ml-en\">Tracing the directed edges, the top chain $a\\to b\\to c\\to d\\to e$ together with the diagonals allows mutual reachability among $\\{a,b,c,d,e\\}$, forming one SCC. $f$ and $h$ can reach each other via $g$ but $g$ cannot be reached back from them under this edge orientation, so $\\{f,h\\}$ forms its own SCC and $\\{g\\}$ is a singleton SCC.</div><div class=\"ml-vi\">Theo dõi các cạnh có hướng, chuỗi trên $a\\to b\\to c\\to d\\to e$ cùng với các đường chéo cho phép liên thông qua lại giữa $\\{a,b,c,d,e\\}$, tạo thành một SCC. $f$ và $h$ có thể đến nhau qua $g$ nhưng $g$ không thể được quay lại từ chúng theo hướng cạnh này, nên $\\{f,h\\}$ tạo thành SCC riêng và $\\{g\\}$ là SCC đơn lẻ.</div>"
+          "explanation": "<div class=\"ml-en\">The eight arcs $a\\to b\\to c\\to d\\to e\\to f\\to g\\to h\\to a$ already form one directed cycle through every vertex, so every vertex reaches every other vertex: the whole graph is a single strongly connected component $\\{a,b,c,d,e,f,g,h\\}$. The extra arcs $a\\to g$, $c\\to g$, $e\\to h$ only add reachability; they can never split a component. The other three options are impossible for ANY orientation of this edge set, by counting: a strongly connected digraph on $k$ vertices needs at least $k$ arcs among those $k$ vertices. The set $\\{a,b,c,d,e\\}$ spans only the 4 edges $ab,bc,cd,de$; $\\{a,b,c,d,e,f\\}$ spans only 5 edges; and $\\{a,b,c,d,e,f,h\\}$ spans 7 edges on 7 vertices, which would force a Hamilton cycle, impossible because $f$ has only one neighbour ($e$) inside that set.</div><div class=\"ml-vi\">Tám cung $a\\to b\\to c\\to d\\to e\\to f\\to g\\to h\\to a$ đã tạo thành một chu trình có hướng đi qua mọi đỉnh, nên mọi đỉnh đều đến được mọi đỉnh khác: cả đồ thị là MỘT thành phần liên thông mạnh $\\{a,b,c,d,e,f,g,h\\}$. Ba cung thêm $a\\to g$, $c\\to g$, $e\\to h$ chỉ tăng khả năng đến được, không bao giờ chia nhỏ một thành phần. Ba đáp án còn lại là bất khả thi với MỌI cách định hướng tập cạnh này, bằng phép đếm: một đồ thị có hướng liên thông mạnh trên $k$ đỉnh cần ít nhất $k$ cung nằm trong $k$ đỉnh đó. Tập $\\{a,b,c,d,e\\}$ chỉ chứa 4 cạnh $ab,bc,cd,de$; $\\{a,b,c,d,e,f\\}$ chỉ chứa 5 cạnh; còn $\\{a,b,c,d,e,f,h\\}$ chứa 7 cạnh trên 7 đỉnh, tức buộc phải có chu trình Hamilton, điều không thể vì $f$ chỉ có một đỉnh kề ($e$) bên trong tập đó.</div>"
         },
         {
           "kind": "MCQ",
@@ -5991,7 +5991,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "What is the minimum total weight of a Hamilton path in this graph with vertices $A,B,C,D,E$ and edges $BD=6,BC=5,BA=2,DA=1,DC=8,AC=3,AE=4$ (E connects only to A)?|||Tổng trọng số nhỏ nhất của một đường đi Hamilton trong đồ thị với các đỉnh $A,B,C,D,E$ và các cạnh $BD=6,BC=5,BA=2,DA=1,DC=8,AC=3,AE=4$ (E chỉ nối với A) là bao nhiêu?",
+          "prompt": "What is the minimum total weight of a Hamilton path in this graph with vertices $A,B,C,D,E$ and edges $BD=6,BC=5,BA=2,DA=1,DC=8,AC=3,AE=4$ ($E$ connects only to $A$)?<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 1 --- D((D))\n  A -- 3 --- C((C))\n  A -- 4 --- E((E))\n  B -- 6 --- D\n  B -- 5 --- C\n  D -- 8 --- C\n</pre>|||Tổng trọng số nhỏ nhất của một đường đi Hamilton trong đồ thị với các đỉnh $A,B,C,D,E$ và các cạnh $BD=6,BC=5,BA=2,DA=1,DC=8,AC=3,AE=4$ ($E$ chỉ nối với $A$) là bao nhiêu?<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 1 --- D((D))\n  A -- 3 --- C((C))\n  A -- 4 --- E((E))\n  B -- 6 --- D\n  B -- 5 --- C\n  D -- 8 --- C\n</pre>",
           "options": [
             {
               "text": "16|||16"
@@ -6138,7 +6138,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the tree: root $a$ with children $b,c$; $b$'s children $d,e$; $e$'s children $i,j$; $j$'s children $m,n,o$; $c$'s children $f,g,h$; $h$'s children $k,l$; $l$'s child $p$. What is the position of the letter $f$ when using the postorder traversal?|||Cho cây: gốc $a$ với con $b,c$; con của $b$ là $d,e$; con của $e$ là $i,j$; con của $j$ là $m,n,o$; con của $c$ là $f,g,h$; con của $h$ là $k,l$; con của $l$ là $p$. Vị trí của chữ $f$ khi dùng phép duyệt hậu thứ (postorder) là bao nhiêu?",
+          "prompt": "Given the tree: root $a$ with children $b,c$ (in that order); $b$'s children $d,e$; $e$'s children $i,j$; $j$'s children $m,n,o$; $c$'s children $f,g,h$; $h$'s children $k,l$; $l$'s child $p$ (children of every node listed in their traversal order). What is the position of the letter $f$ when using the postorder traversal?<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> c((c))\n  b --> d((d))\n  b --> e((e))\n  e --> i((i))\n  e --> j((j))\n  j --> m((m))\n  j --> n((n))\n  j --> o((o))\n  c --> f((f))\n  c --> g((g))\n  c --> h((h))\n  h --> k((k))\n  h --> l((l))\n  l --> p((p))\n</pre>|||Cho cây: gốc $a$ với con $b,c$ (theo thứ tự đó); con của $b$ là $d,e$; con của $e$ là $i,j$; con của $j$ là $m,n,o$; con của $c$ là $f,g,h$; con của $h$ là $k,l$; con của $l$ là $p$ (các con của mỗi nút liệt kê theo đúng thứ tự duyệt). Vị trí của chữ $f$ khi dùng phép duyệt hậu thứ (postorder) là bao nhiêu?<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> c((c))\n  b --> d((d))\n  b --> e((e))\n  e --> i((i))\n  e --> j((j))\n  j --> m((m))\n  j --> n((n))\n  j --> o((o))\n  c --> f((f))\n  c --> g((g))\n  c --> h((h))\n  h --> k((k))\n  h --> l((l))\n  l --> p((p))\n</pre>",
           "options": [
             {
               "text": "9|||9"
@@ -6162,12 +6162,12 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Postorder visits children left-to-right then the node itself. $b$'s subtree postorder: $d,i,m,n,o,j,e,b$ (positions 1-8). $c$'s subtree postorder starts with its first child $f$ (leaf) at position 9.</div><div class=\"ml-vi\">Hậu thứ duyệt các con trái sang phải rồi đến chính nút đó. Hậu thứ cây con của $b$: $d,i,m,n,o,j,e,b$ (vị trí 1-8). Hậu thứ cây con của $c$ bắt đầu với con đầu tiên $f$ (lá) ở vị trí 9.</div>"
+          "explanation": "<div class=\"ml-en\">Postorder visits the children in their listed order, then the node itself. $b$'s subtree postorder: $d,i,m,n,o,j,e,b$ (positions 1-8). $c$'s subtree postorder starts with its first child $f$ (a leaf) at position 9.</div><div class=\"ml-vi\">Hậu thứ duyệt các con theo đúng thứ tự đã liệt kê, rồi đến chính nút đó. Hậu thứ cây con của $b$: $d,i,m,n,o,j,e,b$ (vị trí 1-8). Hậu thứ cây con của $c$ bắt đầu với con đầu tiên $f$ (lá) ở vị trí 9.</div>"
         },
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "What is the height of the spanning tree obtained from the complete bipartite graph $K_{4,3}$ by depth-first search, starting at a vertex of degree 4?|||Chiều cao của cây khung thu được từ đồ thị lưỡng phân đầy đủ $K_{4,3}$ bằng tìm kiếm theo chiều sâu, bắt đầu từ một đỉnh bậc 4, là bao nhiêu?",
+          "prompt": "What is the height of the spanning tree obtained from the complete bipartite graph $K_{4,3}$ by depth-first search, starting at a vertex of degree 4? (In $K_{4,3}$ below the two parts are $\\{x_1,x_2,x_3,x_4\\}$ and $\\{y_1,y_2,y_3\\}$, and every $x_i$ is joined to every $y_j$, so each $y_j$ has degree 4 and each $x_i$ has degree 3.)<pre class=\"mermaid\">graph LR\n  x1((x1)) --- y1((y1))\n  x1 --- y2((y2))\n  x1 --- y3((y3))\n  x2((x2)) --- y1\n  x2 --- y2\n  x2 --- y3\n  x3((x3)) --- y1\n  x3 --- y2\n  x3 --- y3\n  x4((x4)) --- y1\n  x4 --- y2\n  x4 --- y3\n</pre>|||Chiều cao của cây khung thu được từ đồ thị lưỡng phân đầy đủ $K_{4,3}$ bằng tìm kiếm theo chiều sâu, bắt đầu từ một đỉnh bậc 4, là bao nhiêu? (Trong $K_{4,3}$ dưới đây hai phần là $\\{x_1,x_2,x_3,x_4\\}$ và $\\{y_1,y_2,y_3\\}$, mỗi $x_i$ nối với mọi $y_j$, nên mỗi $y_j$ có bậc 4 và mỗi $x_i$ có bậc 3.)<pre class=\"mermaid\">graph LR\n  x1((x1)) --- y1((y1))\n  x1 --- y2((y2))\n  x1 --- y3((y3))\n  x2((x2)) --- y1\n  x2 --- y2\n  x2 --- y3\n  x3((x3)) --- y1\n  x3 --- y2\n  x3 --- y3\n  x4((x4)) --- y1\n  x4 --- y2\n  x4 --- y3\n</pre>",
           "options": [
             {
               "text": "4|||4"
@@ -6196,7 +6196,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Use Kruskal's algorithm to find a minimum spanning tree for the weighted graph with vertices $A,B,C,D,E,F,G$ and edges $AD{=}2,DF{=}1,AB{=}2,AC{=}1,DC{=}2,BC{=}2,CF{=}2,FG{=}2,BE{=}1,CE{=}3,CG{=}3$, with the first edge being $\\{A,C\\}$. Assume that the vertices are ordered alphabetically.|||Dùng thuật toán Kruskal để tìm cây khung nhỏ nhất cho đồ thị có trọng số với các đỉnh $A,B,C,D,E,F,G$ và các cạnh $AD{=}2,DF{=}1,AB{=}2,AC{=}1,DC{=}2,BC{=}2,CF{=}2,FG{=}2,BE{=}1,CE{=}3,CG{=}3$, với cạnh đầu tiên là $\\{A,C\\}$. Giả sử các đỉnh được sắp theo thứ tự chữ cái.",
+          "prompt": "Use Kruskal's algorithm to find a minimum spanning tree for the weighted graph with vertices $A,B,C,D,E,F,G$ and edges $AD{=}2,DF{=}1,AB{=}2,AC{=}1,DC{=}2,BC{=}2,CF{=}2,FG{=}2,BE{=}1,CE{=}3,CG{=}3$, with the first edge being $\\{A,C\\}$. Assume that the vertices are ordered alphabetically.<pre class=\"mermaid\">graph LR\n  A((A)) -- 1 --- C((C))\n  A -- 2 --- B((B))\n  A -- 2 --- D((D))\n  B -- 1 --- E((E))\n  B -- 2 --- C\n  C -- 2 --- D\n  C -- 2 --- F((F))\n  C -- 3 --- E\n  C -- 3 --- G((G))\n  D -- 1 --- F\n  F -- 2 --- G\n</pre>|||Dùng thuật toán Kruskal để tìm cây khung nhỏ nhất cho đồ thị có trọng số với các đỉnh $A,B,C,D,E,F,G$ và các cạnh $AD{=}2,DF{=}1,AB{=}2,AC{=}1,DC{=}2,BC{=}2,CF{=}2,FG{=}2,BE{=}1,CE{=}3,CG{=}3$, với cạnh đầu tiên là $\\{A,C\\}$. Giả sử các đỉnh được sắp theo thứ tự chữ cái.<pre class=\"mermaid\">graph LR\n  A((A)) -- 1 --- C((C))\n  A -- 2 --- B((B))\n  A -- 2 --- D((D))\n  B -- 1 --- E((E))\n  B -- 2 --- C\n  C -- 2 --- D\n  C -- 2 --- F((F))\n  C -- 3 --- E\n  C -- 3 --- G((G))\n  D -- 1 --- F\n  F -- 2 --- G\n</pre>",
           "options": [
             {
               "text": "{A,C},{B,E},{D,F},{A,D},{A,B},{F,G}|||{A,C},{B,E},{D,F},{A,D},{A,B},{F,G}"
@@ -7072,7 +7072,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Let $u,v$ be two vertices on different sides of the bipartite graph $K_{2,2}$. How many paths of length 3 from $u$ to $v$?|||Cho $u,v$ là hai đỉnh ở hai phía khác nhau của đồ thị lưỡng phân $K_{2,2}$. Có bao nhiêu đường đi độ dài 3 từ $u$ đến $v$?",
+          "prompt": "Let $u,v$ be two vertices on different sides of the bipartite graph $K_{2,2}$, whose two parts are $\\{u,x\\}$ and $\\{v,y\\}$. How many paths of length 3 from $u$ to $v$?\n<pre class=\"mermaid\">graph LR\n  u --- v\n  u --- y\n  x --- v\n  x --- y</pre>|||Cho $u,v$ là hai đỉnh ở hai phía khác nhau của đồ thị lưỡng phân $K_{2,2}$, với hai phía là $\\{u,x\\}$ và $\\{v,y\\}$. Có bao nhiêu đường đi độ dài 3 từ $u$ đến $v$?\n<pre class=\"mermaid\">graph LR\n  u --- v\n  u --- y\n  x --- v\n  x --- y</pre>",
           "options": [
             {
               "text": "4|||4"
@@ -7147,7 +7147,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "What is the next vertex chosen after choosing O, A, B, C when using Dijkstra's algorithm to find the shortest path from O to T? Edges: OA=2,OB=5,OC=4,AB=2,AD=7,AF=12,BD=4,BC=3,BE=1,DT=5,DE=1,CE=4,FT=3,ET=7.|||Đỉnh nào được chọn tiếp theo sau khi chọn O, A, B, C khi dùng thuật toán Dijkstra tìm đường đi ngắn nhất từ O đến T? Các cạnh: OA=2,OB=5,OC=4,AB=2,AD=7,AF=12,BD=4,BC=3,BE=1,DT=5,DE=1,CE=4,FT=3,ET=7.",
+          "prompt": "What is the next vertex chosen after choosing O, A, B, C when using Dijkstra's algorithm to find the shortest path from O to T? Edges: OA=2,OB=5,OC=4,AB=2,AD=7,AF=12,BD=4,BC=3,BE=1,DT=5,DE=1,CE=4,FT=3,ET=7.\n<pre class=\"mermaid\">graph LR\n  O -- 2 --- A\n  O -- 5 --- B\n  O -- 4 --- C\n  A -- 2 --- B\n  A -- 7 --- D\n  A -- 12 --- F\n  B -- 4 --- D\n  B -- 3 --- C\n  B -- 1 --- E\n  C -- 4 --- E\n  D -- 1 --- E\n  D -- 5 --- T\n  E -- 7 --- T\n  F -- 3 --- T</pre>|||Đỉnh nào được chọn tiếp theo sau khi chọn O, A, B, C khi dùng thuật toán Dijkstra tìm đường đi ngắn nhất từ O đến T? Các cạnh: OA=2,OB=5,OC=4,AB=2,AD=7,AF=12,BD=4,BC=3,BE=1,DT=5,DE=1,CE=4,FT=3,ET=7.\n<pre class=\"mermaid\">graph LR\n  O -- 2 --- A\n  O -- 5 --- B\n  O -- 4 --- C\n  A -- 2 --- B\n  A -- 7 --- D\n  A -- 12 --- F\n  B -- 4 --- D\n  B -- 3 --- C\n  B -- 1 --- E\n  C -- 4 --- E\n  D -- 1 --- E\n  D -- 5 --- T\n  E -- 7 --- T\n  F -- 3 --- T</pre>",
           "options": [
             {
               "text": "The vertex E|||Đỉnh E"
@@ -7196,7 +7196,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the tree: root $a$ with children $b,d,c$; $b$'s children $e,h,g$; $e$'s children $i,n,k$; $c$'s children $f,l,m$. How many ancestors of the vertex $d$ are there?|||Cho cây: gốc $a$ với con $b,d,c$; con của $b$ là $e,h,g$; con của $e$ là $i,n,k$; con của $c$ là $f,l,m$. Có bao nhiêu tổ tiên của đỉnh $d$?",
+          "prompt": "Given the tree: root $a$ with children $b,d,c$; $b$'s children $e,h,g$; $e$'s children $i,n,k$; $c$'s children $f,l,m$. How many ancestors of the vertex $d$ are there?\n<pre class=\"mermaid\">graph TD\n  a --- b\n  a --- d\n  a --- c\n  b --- e\n  b --- h\n  b --- g\n  e --- i\n  e --- n\n  e --- k\n  c --- f\n  c --- l\n  c --- m</pre>|||Cho cây: gốc $a$ với con $b,d,c$; con của $b$ là $e,h,g$; con của $e$ là $i,n,k$; con của $c$ là $f,l,m$. Có bao nhiêu tổ tiên của đỉnh $d$?\n<pre class=\"mermaid\">graph TD\n  a --- b\n  a --- d\n  a --- c\n  b --- e\n  b --- h\n  b --- g\n  e --- i\n  e --- n\n  e --- k\n  c --- f\n  c --- l\n  c --- m</pre>",
           "options": [
             {
               "text": "1|||1"
@@ -7297,7 +7297,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Determine the order in which a post-order traversal visits the vertices of the given rooted tree: root $a$ with children $b,c$; $b$'s children $d,e$; $e$'s children $f,g$; $c$ is a leaf.|||Xác định thứ tự phép duyệt hậu thứ (post-order) thăm các đỉnh của cây có gốc cho trước: gốc $a$ với con $b,c$; con của $b$ là $d,e$; con của $e$ là $f,g$; $c$ là lá.",
+          "prompt": "Determine the order in which a post-order traversal visits the vertices of the given rooted tree: root $a$ with children $b,c$ (in that order); $b$'s children $d,e$ (in that order); $e$'s children $f,g$ (in that order); $c$ is a leaf.\n<pre class=\"mermaid\">graph TD\n  a --- b\n  a --- c\n  b --- d\n  b --- e\n  e --- f\n  e --- g</pre>|||Xác định thứ tự phép duyệt hậu thứ (post-order) thăm các đỉnh của cây có gốc cho trước: gốc $a$ với con $b,c$ (theo thứ tự đó); con của $b$ là $d,e$ (theo thứ tự đó); con của $e$ là $f,g$ (theo thứ tự đó); $c$ là lá.\n<pre class=\"mermaid\">graph TD\n  a --- b\n  a --- c\n  b --- d\n  b --- e\n  e --- f\n  e --- g</pre>",
           "options": [
             {
               "text": "d,b,a,e,f,g,c|||d,b,a,e,f,g,c"
@@ -7326,7 +7326,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "How many spanning trees does the following graph have? A pentagon $a$-$b$-$c$-$d$-$e$-$a$ is connected to a diamond (4-cycle) $f$-$g$-$h$-$i$-$f$ by TWO parallel edges between $c$ and $f$ (one straight, one curved).|||Đồ thị sau có bao nhiêu cây khung? Một ngũ giác $a$-$b$-$c$-$d$-$e$-$a$ được nối với một hình thoi (chu trình 4) $f$-$g$-$h$-$i$-$f$ bằng HAI cạnh song song giữa $c$ và $f$ (một thẳng, một cong).",
+          "prompt": "How many spanning trees does the following graph have? A 5-cycle $a$-$b$-$c$-$d$-$e$-$a$ and a 4-cycle $f$-$g$-$h$-$i$-$f$ are joined by TWO parallel edges between $c$ and $f$ (a multi-edge: two distinct edges with the same pair of endpoints).\n<pre class=\"mermaid\">graph LR\n  a --- b\n  b --- c\n  c --- d\n  d --- e\n  e --- a\n  c --- f\n  c --- f\n  f --- g\n  g --- h\n  h --- i\n  i --- f</pre>|||Đồ thị sau có bao nhiêu cây khung? Một chu trình 5 đỉnh $a$-$b$-$c$-$d$-$e$-$a$ và một chu trình 4 đỉnh $f$-$g$-$h$-$i$-$f$ được nối với nhau bằng HAI cạnh song song giữa $c$ và $f$ (đa cạnh: hai cạnh phân biệt có cùng cặp đầu mút).\n<pre class=\"mermaid\">graph LR\n  a --- b\n  b --- c\n  c --- d\n  d --- e\n  e --- a\n  c --- f\n  c --- f\n  f --- g\n  g --- h\n  h --- i\n  i --- f</pre>",
           "options": [
             {
               "text": "30|||30"
@@ -7350,12 +7350,12 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">A cycle $C_n$ has $n$ spanning trees. The pentagon $C_5$ contributes 5, the diamond $C_4$ contributes 4. Since there are 2 parallel edges between $c$ and $f$ connecting the two cycles, exactly one of them must be chosen to keep the tree connected without a cycle, contributing a factor of 2. Total: $5\\times4\\times2=40$.</div><div class=\"ml-vi\">Chu trình $C_n$ có $n$ cây khung. Ngũ giác $C_5$ đóng góp 5, hình thoi $C_4$ đóng góp 4. Vì có 2 cạnh song song giữa $c$ và $f$ nối hai chu trình, đúng một trong chúng phải được chọn để giữ cây liên thông không tạo chu trình, đóng góp hệ số 2. Tổng: $5\\times4\\times2=40$.</div>"
+          "explanation": "<div class=\"ml-en\">A cycle $C_n$ has $n$ spanning trees. The 5-cycle contributes 5, the 4-cycle contributes 4. Since there are 2 parallel edges between $c$ and $f$ connecting the two cycles, exactly one of them must be chosen to keep the tree connected without a cycle, contributing a factor of 2. Total: $5\\times4\\times2=40$.</div><div class=\"ml-vi\">Chu trình $C_n$ có $n$ cây khung. Chu trình 5 đỉnh đóng góp 5, chu trình 4 đỉnh đóng góp 4. Vì có 2 cạnh song song giữa $c$ và $f$ nối hai chu trình, đúng một trong chúng phải được chọn để giữ cây liên thông không tạo chu trình, đóng góp hệ số 2. Tổng: $5\\times4\\times2=40$.</div>"
         },
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "What is the fourth edge added into the minimum spanning tree in the following undirected weighted graph by using Kruskal's algorithm? Vertices $a,b,c,d,e,f,g,h$ with edges $ab{=}6,ad{=}2,bd{=}9,bc{=}12,dc{=}5,ch{=}3,ce{=}1,he{=}8,hg{=}10,hf{=}4,gf{=}7,ef{=}11$.|||Cạnh thứ tư được thêm vào cây khung nhỏ nhất trong đồ thị vô hướng có trọng số sau bằng thuật toán Kruskal là gì? Các đỉnh $a,b,c,d,e,f,g,h$ với các cạnh $ab{=}6,ad{=}2,bd{=}9,bc{=}12,dc{=}5,ch{=}3,ce{=}1,he{=}8,hg{=}10,hf{=}4,gf{=}7,ef{=}11$.",
+          "prompt": "What is the fourth edge added into the minimum spanning tree in the following undirected weighted graph by using Kruskal's algorithm? Vertices $a,b,c,d,e,f,g,h$ with edges $ab{=}6,ad{=}2,bd{=}9,bc{=}12,dc{=}5,ch{=}3,ce{=}1,he{=}8,hg{=}10,hf{=}4,gf{=}7,ef{=}11$.\n<pre class=\"mermaid\">graph LR\n  a -- 6 --- b\n  a -- 2 --- d\n  b -- 9 --- d\n  b -- 12 --- c\n  d -- 5 --- c\n  c -- 3 --- h\n  c -- 1 --- e\n  h -- 8 --- e\n  h -- 10 --- g\n  h -- 4 --- f\n  g -- 7 --- f\n  e -- 11 --- f</pre>|||Cạnh thứ tư được thêm vào cây khung nhỏ nhất trong đồ thị vô hướng có trọng số sau bằng thuật toán Kruskal là gì? Các đỉnh $a,b,c,d,e,f,g,h$ với các cạnh $ab{=}6,ad{=}2,bd{=}9,bc{=}12,dc{=}5,ch{=}3,ce{=}1,he{=}8,hg{=}10,hf{=}4,gf{=}7,ef{=}11$.\n<pre class=\"mermaid\">graph LR\n  a -- 6 --- b\n  a -- 2 --- d\n  b -- 9 --- d\n  b -- 12 --- c\n  d -- 5 --- c\n  c -- 3 --- h\n  c -- 1 --- e\n  h -- 8 --- e\n  h -- 10 --- g\n  h -- 4 --- f\n  g -- 7 --- f\n  e -- 11 --- f</pre>",
           "options": [
             {
               "text": "ab|||ab"
@@ -8301,7 +8301,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Which of the following is NOT a circuit in this graph? Graph has vertices $A,B,C,D,E,F$ with edges $AB,AD,AC,BD,BC,DC,DE,CE,CF,EF,BF$ (square $A,B,C,D$ with both diagonals, plus $D,C$ both connecting to $E$, plus $C,E,B$ all connecting to $F$).|||Cái nào sau đây KHÔNG PHẢI là chu trình trong đồ thị này? Đồ thị có các đỉnh $A,B,C,D,E,F$ với các cạnh $AB,AD,AC,BD,BC,DC,DE,CE,CF,EF,BF$ (hình vuông $A,B,C,D$ với cả hai đường chéo, cộng $D,C$ đều nối với $E$, cộng $C,E,B$ đều nối với $F$).",
+          "prompt": "Which of the following is NOT a circuit in this graph? The graph has vertices $A,B,C,D,E,F$ with edges $AB,AD,AC,BD,BC,DC,DE,CE,CF,EF,BF$ (the four vertices $A,B,C,D$ induce a complete graph $K_4$; $E$ is adjacent to $D$ and $C$; $F$ is adjacent to $C$, $E$ and $B$).\n<pre class=\"mermaid\">graph TD\n  A --- B\n  A --- D\n  A --- C\n  B --- D\n  B --- C\n  D --- C\n  D --- E\n  C --- E\n  C --- F\n  E --- F\n  B --- F</pre>|||Cái nào sau đây KHÔNG PHẢI là chu trình trong đồ thị này? Đồ thị có các đỉnh $A,B,C,D,E,F$ với các cạnh $AB,AD,AC,BD,BC,DC,DE,CE,CF,EF,BF$ (bốn đỉnh $A,B,C,D$ tạo thành đồ thị đầy đủ $K_4$; $E$ kề với $D$ và $C$; $F$ kề với $C$, $E$ và $B$).\n<pre class=\"mermaid\">graph TD\n  A --- B\n  A --- D\n  A --- C\n  B --- D\n  B --- C\n  D --- C\n  D --- E\n  C --- E\n  C --- F\n  E --- F\n  B --- F</pre>",
           "options": [
             {
               "text": "A-B-C-D-F-B-A|||A-B-C-D-F-B-A"
@@ -8327,7 +8327,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Graph $X$ is a 5-vertex pentagram (pentagon plus all diagonals, i.e. $K_5$). Graph $Y$ is a bowtie: two triangles joined by a single shared connecting vertex. Which graph has more cut vertices?|||Đồ thị $X$ là ngũ giác sao 5 đỉnh (ngũ giác cộng mọi đường chéo, tức $K_5$). Đồ thị $Y$ là hình nơ: hai tam giác nối qua một đỉnh chung duy nhất. Đồ thị nào có nhiều đỉnh cắt hơn?",
+          "prompt": "Graph $X$ is a 5-vertex pentagram (pentagon plus all diagonals, i.e. $K_5$ on $x_1,\\ldots,x_5$). Graph $Y$ is a bowtie: two triangles $y_1y_2y_3$ and $y_3y_4y_5$ that share the single vertex $y_3$. Which graph has more cut vertices?\n<pre class=\"mermaid\">graph TD\n  subgraph GX[\"Graph X = K5\"]\n    X1((x1)) --- X2((x2))\n    X1 --- X3((x3))\n    X1 --- X4((x4))\n    X1 --- X5((x5))\n    X2 --- X3\n    X2 --- X4\n    X2 --- X5\n    X3 --- X4\n    X3 --- X5\n    X4 --- X5\n  end\n  subgraph GY[\"Graph Y = bowtie\"]\n    Y1((y1)) --- Y2((y2))\n    Y2 --- Y3((y3))\n    Y3 --- Y1\n    Y3 --- Y4((y4))\n    Y4 --- Y5((y5))\n    Y5 --- Y3\n  end</pre>|||Đồ thị $X$ là ngũ giác sao 5 đỉnh (ngũ giác cộng mọi đường chéo, tức $K_5$ trên $x_1,\\ldots,x_5$). Đồ thị $Y$ là hình nơ: hai tam giác $y_1y_2y_3$ và $y_3y_4y_5$ dùng chung đúng một đỉnh $y_3$. Đồ thị nào có nhiều đỉnh cắt hơn?\n<pre class=\"mermaid\">graph TD\n  subgraph GX[\"Do thi X = K5\"]\n    X1((x1)) --- X2((x2))\n    X1 --- X3((x3))\n    X1 --- X4((x4))\n    X1 --- X5((x5))\n    X2 --- X3\n    X2 --- X4\n    X2 --- X5\n    X3 --- X4\n    X3 --- X5\n    X4 --- X5\n  end\n  subgraph GY[\"Do thi Y = hinh no\"]\n    Y1((y1)) --- Y2((y2))\n    Y2 --- Y3((y3))\n    Y3 --- Y1\n    Y3 --- Y4((y4))\n    Y4 --- Y5((y5))\n    Y5 --- Y3\n  end</pre>",
           "options": [
             {
               "text": "Y|||Y"
@@ -8342,7 +8342,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$X=K_5$ is highly connected (every pair of vertices has multiple disjoint paths) -- it has 0 cut vertices. $Y$'s shared middle vertex is a cut vertex: removing it disconnects the two triangles. So $Y$ has more cut vertices.</div><div class=\"ml-vi\">$X=K_5$ liên thông cao (mọi cặp đỉnh có nhiều đường đi rời nhau) -- có 0 đỉnh cắt. Đỉnh giữa chung của $Y$ là đỉnh cắt: bỏ nó làm tách hai tam giác. Vậy $Y$ có nhiều đỉnh cắt hơn.</div>"
+          "explanation": "<div class=\"ml-en\">$X=K_5$ is highly connected (every pair of vertices has multiple disjoint paths) -- it has 0 cut vertices. In $Y$ the shared vertex $y_3$ is a cut vertex: removing it disconnects the two triangles, and no other vertex of $Y$ is a cut vertex. So $Y$ has 1 cut vertex and $X$ has 0 -- $Y$ has more.</div><div class=\"ml-vi\">$X=K_5$ liên thông cao (mọi cặp đỉnh có nhiều đường đi rời nhau) -- có 0 đỉnh cắt. Trong $Y$, đỉnh dùng chung $y_3$ là đỉnh cắt: bỏ nó làm tách hai tam giác, và không đỉnh nào khác của $Y$ là đỉnh cắt. Vậy $Y$ có 1 đỉnh cắt còn $X$ có 0 -- $Y$ nhiều hơn.</div>"
         },
         {
           "kind": "MCQ",
@@ -8370,7 +8370,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Choose the correct statement about the graph: a bowtie shape with two triangles joined by a single bridge edge connecting their two middle vertices (6 vertices total).|||Chọn phát biểu đúng về đồ thị: hình nơ với hai tam giác nối qua một cạnh cầu duy nhất nối hai đỉnh giữa của chúng (tổng 6 đỉnh).",
+          "prompt": "Choose the correct statement about the graph: two vertex-disjoint triangles $ABC$ and $DEF$ (6 vertices total) joined by a single bridge edge $CD$.\n<pre class=\"mermaid\">graph TD\n  A --- B\n  B --- C\n  C --- A\n  C --- D\n  D --- E\n  E --- F\n  F --- D</pre>|||Chọn phát biểu đúng về đồ thị: hai tam giác rời nhau $ABC$ và $DEF$ (tổng 6 đỉnh) nối với nhau bằng một cạnh cầu duy nhất $CD$.\n<pre class=\"mermaid\">graph TD\n  A --- B\n  B --- C\n  C --- A\n  C --- D\n  D --- E\n  E --- F\n  F --- D</pre>",
           "options": [
             {
               "text": "It has a Hamilton circuit|||Nó có chu trình Hamilton"
@@ -8388,12 +8388,12 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The single bridge edge between the two triangles can only be crossed once, so no circuit can return to its start after visiting both triangles -- no Hamilton circuit. But a Hamilton path exists: traverse one triangle, cross the bridge once, traverse the other triangle, ending there without needing to return.</div><div class=\"ml-vi\">Cạnh cầu duy nhất giữa hai tam giác chỉ có thể đi qua một lần, nên không chu trình nào có thể quay lại điểm xuất phát sau khi thăm cả hai tam giác -- không có chu trình Hamilton. Nhưng có đường đi Hamilton: đi qua một tam giác, qua cầu một lần, đi qua tam giác còn lại, kết thúc ở đó mà không cần quay lại.</div>"
+          "explanation": "<div class=\"ml-en\">$CD$ is a bridge (cut edge): any circuit through all 6 vertices would have to cross it twice, which a circuit cannot do -- so there is no Hamilton circuit. But a Hamilton path exists, e.g. $A$-$B$-$C$-$D$-$E$-$F$: it uses only existing edges and visits each vertex exactly once.</div><div class=\"ml-vi\">$CD$ là cạnh cầu: mọi chu trình đi qua cả 6 đỉnh đều phải băng qua nó hai lần, điều mà chu trình không làm được -- nên không có chu trình Hamilton. Nhưng có đường đi Hamilton, ví dụ $A$-$B$-$C$-$D$-$E$-$F$: chỉ dùng cạnh có thật và thăm mỗi đỉnh đúng một lần.</div>"
         },
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Apply Dijkstra's algorithm to find the shortest path from A to Z in the graph with edges $AB{=}2,AC{=}6,BD{=}5,BC{=}8,BE{=}3,DE{=}4,DZ{=}2,CE{=}3,EZ{=}3$. What is the next vertex chosen after E?|||Áp dụng thuật toán Dijkstra để tìm đường đi ngắn nhất từ A đến Z trong đồ thị với các cạnh $AB{=}2,AC{=}6,BD{=}5,BC{=}8,BE{=}3,DE{=}4,DZ{=}2,CE{=}3,EZ{=}3$. Đỉnh nào được chọn tiếp theo sau E?",
+          "prompt": "Apply Dijkstra's algorithm to find the shortest path from A to Z in the graph with edges $AB{=}2,AC{=}6,BD{=}5,BC{=}8,BE{=}3,DE{=}4,DZ{=}2,CE{=}3,EZ{=}3$. What is the next vertex chosen after E?\n<pre class=\"mermaid\">graph LR\n  A -- 2 --- B\n  A -- 6 --- C\n  B -- 5 --- D\n  B -- 8 --- C\n  B -- 3 --- E\n  D -- 4 --- E\n  D -- 2 --- Z\n  C -- 3 --- E\n  E -- 3 --- Z</pre>|||Áp dụng thuật toán Dijkstra để tìm đường đi ngắn nhất từ A đến Z trong đồ thị với các cạnh $AB{=}2,AC{=}6,BD{=}5,BC{=}8,BE{=}3,DE{=}4,DZ{=}2,CE{=}3,EZ{=}3$. Đỉnh nào được chọn tiếp theo sau E?\n<pre class=\"mermaid\">graph LR\n  A -- 2 --- B\n  A -- 6 --- C\n  B -- 5 --- D\n  B -- 8 --- C\n  B -- 3 --- E\n  D -- 4 --- E\n  D -- 2 --- Z\n  C -- 3 --- E\n  E -- 3 --- Z</pre>",
           "options": [
             {
               "text": "C|||C"
@@ -8416,7 +8416,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given the tree: root $a$ with children $b,d,c$; $b$'s children $e,h,g$; $e$'s children $i,n,k$; $c$'s children $f,l,m$; $d$ is a leaf. How many internal vertices in this tree?|||Cho cây: gốc $a$ với con $b,d,c$; con của $b$ là $e,h,g$; con của $e$ là $i,n,k$; con của $c$ là $f,l,m$; $d$ là lá. Có bao nhiêu đỉnh trong trong cây này?",
+          "prompt": "Given the tree: root $a$ with children $b,d,c$; $b$'s children $e,h,g$; $e$'s children $i,n,k$; $c$'s children $f,l,m$; $d$ is a leaf. How many internal vertices in this tree?\n<pre class=\"mermaid\">graph TD\n  a --- b\n  a --- d\n  a --- c\n  b --- e\n  b --- h\n  b --- g\n  e --- i\n  e --- n\n  e --- k\n  c --- f\n  c --- l\n  c --- m</pre>|||Cho cây: gốc $a$ với con $b,d,c$; con của $b$ là $e,h,g$; con của $e$ là $i,n,k$; con của $c$ là $f,l,m$; $d$ là lá. Có bao nhiêu đỉnh trong trong cây này?\n<pre class=\"mermaid\">graph TD\n  a --- b\n  a --- d\n  a --- c\n  b --- e\n  b --- h\n  b --- g\n  e --- i\n  e --- n\n  e --- k\n  c --- f\n  c --- l\n  c --- m</pre>",
           "options": [
             {
               "text": "4|||4"
@@ -8586,7 +8586,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "What is the total weight of a minimal spanning tree of the graph with vertices $A,B,C,D,E,Z$ and edges $AB{=}2,AC{=}6,BD{=}3,BC{=}2,BE{=}3,DE{=}4,DZ{=}2,CE{=}4,EZ{=}3$?|||Tổng trọng số của cây khung nhỏ nhất trong đồ thị với các đỉnh $A,B,C,D,E,Z$ và các cạnh $AB{=}2,AC{=}6,BD{=}3,BC{=}2,BE{=}3,DE{=}4,DZ{=}2,CE{=}4,EZ{=}3$ là bao nhiêu?",
+          "prompt": "What is the total weight of a minimal spanning tree of the graph with vertices $A,B,C,D,E,Z$ and edges $AB{=}2,AC{=}6,BD{=}3,BC{=}2,BE{=}3,DE{=}4,DZ{=}2,CE{=}4,EZ{=}3$?\n<pre class=\"mermaid\">graph LR\n  A -- 2 --- B\n  A -- 6 --- C\n  B -- 3 --- D\n  B -- 2 --- C\n  B -- 3 --- E\n  D -- 4 --- E\n  D -- 2 --- Z\n  C -- 4 --- E\n  E -- 3 --- Z</pre>|||Tổng trọng số của cây khung nhỏ nhất trong đồ thị với các đỉnh $A,B,C,D,E,Z$ và các cạnh $AB{=}2,AC{=}6,BD{=}3,BC{=}2,BE{=}3,DE{=}4,DZ{=}2,CE{=}4,EZ{=}3$ là bao nhiêu?\n<pre class=\"mermaid\">graph LR\n  A -- 2 --- B\n  A -- 6 --- C\n  B -- 3 --- D\n  B -- 2 --- C\n  B -- 3 --- E\n  D -- 4 --- E\n  D -- 2 --- Z\n  C -- 4 --- E\n  E -- 3 --- Z</pre>",
           "options": [
             {
               "text": "14|||14"
@@ -8920,7 +8920,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Let $u,v$ be two vertices on one side of the bipartite graph $K_{2,2}$. How many paths of length 4 from $u$ to $v$?|||Cho $u,v$ là hai đỉnh cùng một phía của đồ thị lưỡng phân $K_{2,2}$. Có bao nhiêu đường đi độ dài 4 từ $u$ đến $v$?",
+          "prompt": "Let $u,v$ be two vertices on one side of the bipartite graph $K_{2,2}$. How many paths of length 4 from $u$ to $v$?<pre class=\"mermaid\">graph LR\n  u --- a\n  u --- b\n  v --- a\n  v --- b</pre>|||Cho $u,v$ là hai đỉnh cùng một phía của đồ thị lưỡng phân $K_{2,2}$. Có bao nhiêu đường đi độ dài 4 từ $u$ đến $v$?<pre class=\"mermaid\">graph LR\n  u --- a\n  u --- b\n  v --- a\n  v --- b</pre>",
           "options": [
             {
               "text": "4|||4"
@@ -8941,7 +8941,7 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Label sides $\\{u,v\\}$ and $\\{a,b\\}$. Using the adjacency matrix (order $u,v,a,b$), $A^2$ has $(u,u)=(u,v)=2$ and $(u,a)=(u,b)=0$. Then $(A^4)_{u,v}=\\sum_k A^2_{u,k}A^2_{k,v}=A^2_{u,u}A^2_{u,v}+A^2_{u,v}A^2_{v,v}=2(2)+2(2)=8$.</div><div class=\"ml-vi\">Đặt hai phía $\\{u,v\\}$ và $\\{a,b\\}$. Dùng ma trận kề (thứ tự $u,v,a,b$), $A^2$ có $(u,u)=(u,v)=2$ và $(u,a)=(u,b)=0$. Rồi $(A^4)_{u,v}=\\sum_k A^2_{u,k}A^2_{k,v}=A^2_{u,u}A^2_{u,v}+A^2_{u,v}A^2_{v,v}=2(2)+2(2)=8$.</div>"
+          "explanation": "<div class=\"ml-en\">Here \"path of length $n$\" is counted in the textbook sense (a walk: vertices and edges may repeat), which is exactly what $(A^n)_{u,v}$ gives. Label the sides $\\{u,v\\}$ and $\\{a,b\\}$. Using the adjacency matrix (order $u,v,a,b$), $A^2$ has $(u,u)=(u,v)=2$ and $(u,a)=(u,b)=0$. Then $(A^4)_{u,v}=\\sum_k A^2_{u,k}A^2_{k,v}=A^2_{u,u}A^2_{u,v}+A^2_{u,v}A^2_{v,v}=2(2)+2(2)=8$.</div><div class=\"ml-vi\">Ở đây \"đường đi độ dài $n$\" được đếm theo nghĩa của giáo trình (dạo/walk: đỉnh và cạnh được phép lặp lại), đúng bằng $(A^n)_{u,v}$. Đặt hai phía $\\{u,v\\}$ và $\\{a,b\\}$. Dùng ma trận kề (thứ tự $u,v,a,b$), $A^2$ có $(u,u)=(u,v)=2$ và $(u,a)=(u,b)=0$. Rồi $(A^4)_{u,v}=\\sum_k A^2_{u,k}A^2_{k,v}=A^2_{u,u}A^2_{u,v}+A^2_{u,v}A^2_{v,v}=2(2)+2(2)=8$.</div>"
         },
         {
           "kind": "MCQ",
@@ -9027,7 +9027,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Which graphs have Hamilton circuits? Graph 1 is a 3x3 grid graph (9 vertices). Graph 2 is a house-shaped graph with a pendant (degree-1) vertex sticking out on the right. Graph 3 is $K_{2,3}$.|||Đồ thị nào có chu trình Hamilton? Đồ thị 1 là lưới 3x3 (9 đỉnh). Đồ thị 2 là hình dạng ngôi nhà với một đỉnh treo (bậc 1) nhô ra bên phải. Đồ thị 3 là $K_{2,3}$.",
+          "prompt": "Which graphs have Hamilton circuits? Graph 1 is the 3x3 grid graph (9 vertices $a,\\ldots,i$). Graph 2 is a house-shaped graph (the 4-cycle $p,q,r,s$ together with an apex $t$ joined to the two adjacent corners $p$ and $q$) with one extra pendant vertex $x$ of degree 1 attached to $q$. Graph 3 is $K_{2,3}$ with parts $\\{u,v\\}$ and $\\{m,n,o\\}$.<pre class=\"mermaid\">graph TD\n  subgraph GR1[\"Graph 1\"]\n    a --- b\n    b --- c\n    d --- e\n    e --- f\n    g --- h\n    h --- i\n    a --- d\n    d --- g\n    b --- e\n    e --- h\n    c --- f\n    f --- i\n  end\n  subgraph GR2[\"Graph 2\"]\n    t --- p\n    t --- q\n    p --- q\n    q --- r\n    r --- s\n    s --- p\n    q --- x\n  end\n  subgraph GR3[\"Graph 3\"]\n    u --- m\n    u --- n\n    u --- o\n    v --- m\n    v --- n\n    v --- o\n  end</pre>|||Đồ thị nào có chu trình Hamilton? Đồ thị 1 là đồ thị lưới 3x3 (9 đỉnh $a,\\ldots,i$). Đồ thị 2 là đồ thị hình ngôi nhà (chu trình 4 đỉnh $p,q,r,s$ cùng đỉnh chóp $t$ nối với hai đỉnh kề nhau $p$ và $q$) cộng thêm một đỉnh treo $x$ bậc 1 gắn vào $q$. Đồ thị 3 là $K_{2,3}$ với hai phía $\\{u,v\\}$ và $\\{m,n,o\\}$.<pre class=\"mermaid\">graph TD\n  subgraph GR1[\"Do thi 1\"]\n    a --- b\n    b --- c\n    d --- e\n    e --- f\n    g --- h\n    h --- i\n    a --- d\n    d --- g\n    b --- e\n    e --- h\n    c --- f\n    f --- i\n  end\n  subgraph GR2[\"Do thi 2\"]\n    t --- p\n    t --- q\n    p --- q\n    q --- r\n    r --- s\n    s --- p\n    q --- x\n  end\n  subgraph GR3[\"Do thi 3\"]\n    u --- m\n    u --- n\n    u --- o\n    v --- m\n    v --- n\n    v --- o\n  end</pre>",
           "options": [
             {
               "text": "None of the other choices is correct|||Không đáp án nào đúng"
@@ -9520,7 +9520,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Find the first 3 vertices when using Dijkstra's algorithm to find the shortest path from $A$ to $Z$. Edges: $AB{=}2,AC{=}9,BD{=}7,BC{=}8,BE{=}3,DE{=}4,DZ{=}2,CE{=}3,EZ{=}3$.|||Tìm 3 đỉnh đầu tiên khi dùng thuật toán Dijkstra tìm đường đi ngắn nhất từ $A$ đến $Z$. Các cạnh: $AB{=}2,AC{=}9,BD{=}7,BC{=}8,BE{=}3,DE{=}4,DZ{=}2,CE{=}3,EZ{=}3$.",
+          "prompt": "Find the first 3 vertices when using Dijkstra's algorithm to find the shortest path from $A$ to $Z$. Edges: $AB{=}2,AC{=}9,BD{=}7,BC{=}8,BE{=}3,DE{=}4,DZ{=}2,CE{=}3,EZ{=}3$.<pre class=\"mermaid\">graph LR\n  A -- 2 --- B\n  A -- 9 --- C\n  B -- 7 --- D\n  B -- 8 --- C\n  B -- 3 --- E\n  D -- 4 --- E\n  D -- 2 --- Z\n  C -- 3 --- E\n  E -- 3 --- Z</pre>|||Tìm 3 đỉnh đầu tiên khi dùng thuật toán Dijkstra tìm đường đi ngắn nhất từ $A$ đến $Z$. Các cạnh: $AB{=}2,AC{=}9,BD{=}7,BC{=}8,BE{=}3,DE{=}4,DZ{=}2,CE{=}3,EZ{=}3$.<pre class=\"mermaid\">graph LR\n  A -- 2 --- B\n  A -- 9 --- C\n  B -- 7 --- D\n  B -- 8 --- C\n  B -- 3 --- E\n  D -- 4 --- E\n  D -- 2 --- Z\n  C -- 3 --- E\n  E -- 3 --- Z</pre>",
           "options": [
             {
               "text": "None of the other choices is correct|||Không đáp án nào đúng"
@@ -9569,7 +9569,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "What is the weight of a minimum spanning tree of the graph with vertices $A,B,C,D,E,F,G,H,I$ and edges $AF{=}1,AG{=}2,GB{=}3,BC{=}1,GC{=}3,GH{=}4,GI{=}1,HC{=}2,HD{=}2,IF{=}2,IE{=}3,ED{=}4$?|||Trọng số của cây khung nhỏ nhất trong đồ thị với các đỉnh $A,B,C,D,E,F,G,H,I$ và các cạnh $AF{=}1,AG{=}2,GB{=}3,BC{=}1,GC{=}3,GH{=}4,GI{=}1,HC{=}2,HD{=}2,IF{=}2,IE{=}3,ED{=}4$ là bao nhiêu?",
+          "prompt": "What is the weight of a minimum spanning tree of the graph with vertices $A,B,C,D,E,F,G,H,I$ and edges $AF{=}1,AG{=}2,GB{=}3,BC{=}1,GC{=}3,GH{=}4,GI{=}1,HC{=}2,HD{=}2,IF{=}2,IE{=}3,ED{=}4$?<pre class=\"mermaid\">graph LR\n  A -- 1 --- F\n  A -- 2 --- G\n  G -- 3 --- B\n  B -- 1 --- C\n  G -- 3 --- C\n  G -- 4 --- H\n  G -- 1 --- I\n  H -- 2 --- C\n  H -- 2 --- D\n  I -- 2 --- F\n  I -- 3 --- E\n  E -- 4 --- D</pre>|||Trọng số của cây khung nhỏ nhất trong đồ thị với các đỉnh $A,B,C,D,E,F,G,H,I$ và các cạnh $AF{=}1,AG{=}2,GB{=}3,BC{=}1,GC{=}3,GH{=}4,GI{=}1,HC{=}2,HD{=}2,IF{=}2,IE{=}3,ED{=}4$ là bao nhiêu?<pre class=\"mermaid\">graph LR\n  A -- 1 --- F\n  A -- 2 --- G\n  G -- 3 --- B\n  B -- 1 --- C\n  G -- 3 --- C\n  G -- 4 --- H\n  G -- 1 --- I\n  H -- 2 --- C\n  H -- 2 --- D\n  I -- 2 --- F\n  I -- 3 --- E\n  E -- 4 --- D</pre>",
           "options": [
             {
               "text": "16|||16"
@@ -10630,7 +10630,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Which graph is bipartite? Graph 1 is $C_6$ (a 6-cycle). Graph 2 is a square with one diagonal drawn (creating two triangles). Graph 3 is a quadrilateral with an extra vertex connected by two crossing diagonal edges.|||Đồ thị nào lưỡng phân? Đồ thị 1 là $C_6$ (chu trình 6). Đồ thị 2 là hình vuông với một đường chéo (tạo hai tam giác). Đồ thị 3 là tứ giác với một đỉnh phụ nối bằng hai cạnh chéo cắt nhau.",
+          "prompt": "Which graph is bipartite? Graph 1 is $C_6$ (a 6-cycle $a$-$b$-$c$-$d$-$e$-$f$-$a$). Graph 2 is a 4-cycle $p$-$q$-$r$-$s$-$p$ plus the chord $pr$ (which splits it into two triangles). Graph 3 is a 4-cycle $u$-$v$-$w$-$x$-$u$ plus an extra vertex $y$ joined to the two adjacent vertices $u$ and $v$.<pre class=\"mermaid\">graph TD\n  subgraph G1[\"Graph 1\"]\n    a1((a)) --- a2((b))\n    a2 --- a3((c))\n    a3 --- a4((d))\n    a4 --- a5((e))\n    a5 --- a6((f))\n    a6 --- a1\n  end\n  subgraph G2[\"Graph 2\"]\n    b1((p)) --- b2((q))\n    b2 --- b3((r))\n    b3 --- b4((s))\n    b4 --- b1\n    b1 --- b3\n  end\n  subgraph G3[\"Graph 3\"]\n    c1((u)) --- c2((v))\n    c2 --- c3((w))\n    c3 --- c4((x))\n    c4 --- c1\n    c5((y)) --- c1\n    c5 --- c2\n  end</pre>|||Đồ thị nào lưỡng phân? Đồ thị 1 là $C_6$ (chu trình 6 đỉnh $a$-$b$-$c$-$d$-$e$-$f$-$a$). Đồ thị 2 là chu trình 4 đỉnh $p$-$q$-$r$-$s$-$p$ cộng thêm dây cung $pr$ (chia nó thành hai tam giác). Đồ thị 3 là chu trình 4 đỉnh $u$-$v$-$w$-$x$-$u$ cộng thêm đỉnh phụ $y$ nối với hai đỉnh kề nhau $u$ và $v$.<pre class=\"mermaid\">graph TD\n  subgraph G1[\"Đồ thị 1\"]\n    a1((a)) --- a2((b))\n    a2 --- a3((c))\n    a3 --- a4((d))\n    a4 --- a5((e))\n    a5 --- a6((f))\n    a6 --- a1\n  end\n  subgraph G2[\"Đồ thị 2\"]\n    b1((p)) --- b2((q))\n    b2 --- b3((r))\n    b3 --- b4((s))\n    b4 --- b1\n    b1 --- b3\n  end\n  subgraph G3[\"Đồ thị 3\"]\n    c1((u)) --- c2((v))\n    c2 --- c3((w))\n    c3 --- c4((x))\n    c4 --- c1\n    c5((y)) --- c1\n    c5 --- c2\n  end</pre>",
           "options": [
             {
               "text": "Graph 2|||Đồ thị 2"
@@ -10648,7 +10648,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$C_6$ is an even cycle -- always bipartite. Graph 2's diagonal creates a triangle (odd cycle) -- not bipartite. Graph 3's crossing diagonals to the extra vertex also create an odd cycle (triangle) -- not bipartite. Only Graph 1 is bipartite.</div><div class=\"ml-vi\">$C_6$ là chu trình chẵn -- luôn lưỡng phân. Đường chéo của đồ thị 2 tạo tam giác (chu trình lẻ) -- không lưỡng phân. Các đường chéo cắt nhau tới đỉnh phụ của đồ thị 3 cũng tạo chu trình lẻ (tam giác) -- không lưỡng phân. Chỉ đồ thị 1 lưỡng phân.</div>"
+          "explanation": "<div class=\"ml-en\">$C_6$ is an even cycle -- always bipartite (parts $\\{a,c,e\\}$ and $\\{b,d,f\\}$). Graph 2's chord $pr$ creates the triangle $p$-$q$-$r$ (odd cycle) -- not bipartite. Graph 3's extra vertex $y$ creates the triangle $u$-$v$-$y$ (odd cycle) -- not bipartite. Only Graph 1 is bipartite.</div><div class=\"ml-vi\">$C_6$ là chu trình chẵn -- luôn lưỡng phân (hai phía $\\{a,c,e\\}$ và $\\{b,d,f\\}$). Dây cung $pr$ của đồ thị 2 tạo tam giác $p$-$q$-$r$ (chu trình lẻ) -- không lưỡng phân. Đỉnh phụ $y$ của đồ thị 3 tạo tam giác $u$-$v$-$y$ (chu trình lẻ) -- không lưỡng phân. Chỉ đồ thị 1 lưỡng phân.</div>"
         },
         {
           "kind": "MCQ",
@@ -10679,7 +10679,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given two 7-pointed star graphs (heptagrams), each drawn by connecting 7 vertices with a fixed skip pattern (one uses step 2, the other step 3), forming a single 7-cycle each since $\\gcd(2,7)=\\gcd(3,7)=1$. Are these two graphs isomorphic? If not, what is the reason?|||Cho hai đồ thị ngôi sao 7 cánh (heptagram), mỗi cái vẽ bằng cách nối 7 đỉnh theo một mẫu bỏ-cách cố định (một dùng bước 2, cái kia bước 3), tạo thành một chu trình 7 đỉnh duy nhất vì $\\gcd(2,7)=\\gcd(3,7)=1$. Hai đồ thị này có đẳng cấu không? Nếu không, lý do là gì?",
+          "prompt": "Given two 7-pointed star graphs (heptagrams) on vertices $1,\\ldots,7$, each built by joining every vertex $i$ to $i+k \\pmod 7$ for a fixed step $k$ (one uses $k=2$, the other $k=3$); since $\\gcd(2,7)=\\gcd(3,7)=1$ each is a single 7-cycle. Are these two graphs isomorphic? If not, what is the reason?<pre class=\"mermaid\">graph TD\n  subgraph S2[\"Star, step k=2\"]\n    a1((1)) --- a3((3))\n    a3 --- a5((5))\n    a5 --- a7((7))\n    a7 --- a2((2))\n    a2 --- a4((4))\n    a4 --- a6((6))\n    a6 --- a1\n  end\n  subgraph S3[\"Star, step k=3\"]\n    b1((1)) --- b4((4))\n    b4 --- b7((7))\n    b7 --- b3((3))\n    b3 --- b6((6))\n    b6 --- b2((2))\n    b2 --- b5((5))\n    b5 --- b1\n  end</pre>|||Cho hai đồ thị ngôi sao 7 cánh (heptagram) trên các đỉnh $1,\\ldots,7$, mỗi cái tạo bằng cách nối mỗi đỉnh $i$ với $i+k \\pmod 7$ theo một bước $k$ cố định (một dùng $k=2$, cái kia $k=3$); vì $\\gcd(2,7)=\\gcd(3,7)=1$ nên mỗi cái là một chu trình 7 đỉnh duy nhất. Hai đồ thị này có đẳng cấu không? Nếu không, lý do là gì?<pre class=\"mermaid\">graph TD\n  subgraph S2[\"Ngôi sao, bước k=2\"]\n    a1((1)) --- a3((3))\n    a3 --- a5((5))\n    a5 --- a7((7))\n    a7 --- a2((2))\n    a2 --- a4((4))\n    a4 --- a6((6))\n    a6 --- a1\n  end\n  subgraph S3[\"Ngôi sao, bước k=3\"]\n    b1((1)) --- b4((4))\n    b4 --- b7((7))\n    b7 --- b3((3))\n    b3 --- b6((6))\n    b6 --- b2((2))\n    b2 --- b5((5))\n    b5 --- b1\n  end</pre>",
           "options": [
             {
               "text": "No, they are not isomorphic because they do not have the same number of connected components|||Không đẳng cấu vì không cùng số thành phần liên thông"
@@ -10700,7 +10700,7 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Both graphs are connected 2-regular graphs on 7 vertices (each is literally a 7-cycle $C_7$, just drawn with different visual crossing patterns). Any two connected 2-regular graphs on the same number of vertices are isomorphic to the cycle $C_n$, hence isomorphic to each other -- yes, they are isomorphic.</div><div class=\"ml-vi\">Cả hai đồ thị đều là đồ thị 2-đều liên thông trên 7 đỉnh (mỗi cái thực chất là chu trình 7 đỉnh $C_7$, chỉ vẽ với mẫu cắt nhau khác nhau về hình ảnh). Hai đồ thị 2-đều liên thông bất kỳ trên cùng số đỉnh đều đẳng cấu với chu trình $C_n$, do đó đẳng cấu với nhau -- có, chúng đẳng cấu.</div>"
+          "explanation": "<div class=\"ml-en\">Both graphs are connected 2-regular graphs on 7 vertices, each with 7 edges: step 2 gives the cycle $1$-$3$-$5$-$7$-$2$-$4$-$6$-$1$ and step 3 gives $1$-$4$-$7$-$3$-$6$-$2$-$5$-$1$. Any two connected 2-regular graphs on the same number of vertices are isomorphic to the cycle $C_n$, hence isomorphic to each other -- yes, they are isomorphic (an explicit isomorphism just relabels one cycle order onto the other).</div><div class=\"ml-vi\">Cả hai đồ thị đều là đồ thị 2-đều liên thông trên 7 đỉnh, mỗi cái 7 cạnh: bước 2 cho chu trình $1$-$3$-$5$-$7$-$2$-$4$-$6$-$1$ và bước 3 cho $1$-$4$-$7$-$3$-$6$-$2$-$5$-$1$. Hai đồ thị 2-đều liên thông bất kỳ trên cùng số đỉnh đều đẳng cấu với chu trình $C_n$, do đó đẳng cấu với nhau -- có, chúng đẳng cấu (một phép đẳng cấu cụ thể chỉ là đổi tên thứ tự chu trình này thành thứ tự chu trình kia).</div>"
         },
         {
           "kind": "MCQ",
@@ -10728,7 +10728,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given $X$ is a pentagram (a single 5-cycle $C_5$ drawn with crossing lines, 5 vertices/5 edges) and $Y$ is a bowtie (two triangles sharing one common center vertex, 5 vertices/6 edges). Delete one edge from each graph to obtain 2 new graphs. How many cut-edges in total do the new graphs have?|||Cho $X$ là ngôi sao 5 cánh (một chu trình 5 đỉnh $C_5$ duy nhất vẽ với các đường cắt nhau, 5 đỉnh/5 cạnh) và $Y$ là hình nơ (hai tam giác chung một đỉnh trung tâm, 5 đỉnh/6 cạnh). Xóa một cạnh khỏi mỗi đồ thị để được 2 đồ thị mới. Tổng số cạnh cắt (cut-edge) của các đồ thị mới là bao nhiêu?",
+          "prompt": "Given $X$ is a pentagram, i.e. a single 5-cycle $C_5$ on $x_1,\\ldots,x_5$ (5 vertices, 5 edges), and $Y$ is a bowtie: two triangles sharing exactly one common vertex $y_0$ (5 vertices, 6 edges). Delete one edge from each graph to obtain 2 new graphs. How many cut-edges in total do the new graphs have?<pre class=\"mermaid\">graph TD\n  subgraph GX[\"Graph X\"]\n    x1((x1)) --- x2((x2))\n    x2 --- x3((x3))\n    x3 --- x4((x4))\n    x4 --- x5((x5))\n    x5 --- x1\n  end\n  subgraph GY[\"Graph Y\"]\n    y1((y1)) --- y2((y2))\n    y2 --- y0((y0))\n    y0 --- y1\n    y0 --- y3((y3))\n    y3 --- y4((y4))\n    y4 --- y0\n  end</pre>|||Cho $X$ là ngôi sao 5 cánh, tức một chu trình 5 đỉnh $C_5$ duy nhất trên $x_1,\\ldots,x_5$ (5 đỉnh, 5 cạnh), và $Y$ là hình nơ: hai tam giác chung đúng một đỉnh $y_0$ (5 đỉnh, 6 cạnh). Xóa một cạnh khỏi mỗi đồ thị để được 2 đồ thị mới. Tổng số cạnh cắt (cut-edge) của các đồ thị mới là bao nhiêu?<pre class=\"mermaid\">graph TD\n  subgraph GX[\"Đồ thị X\"]\n    x1((x1)) --- x2((x2))\n    x2 --- x3((x3))\n    x3 --- x4((x4))\n    x4 --- x5((x5))\n    x5 --- x1\n  end\n  subgraph GY[\"Đồ thị Y\"]\n    y1((y1)) --- y2((y2))\n    y2 --- y0((y0))\n    y0 --- y1\n    y0 --- y3((y3))\n    y3 --- y4((y4))\n    y4 --- y0\n  end</pre>",
           "options": [
             {
               "text": "6|||6"
@@ -10749,7 +10749,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Deleting one edge from $C_5$ turns it into a path $P_5$ (4 edges) -- every edge of a path is a cut-edge, giving 4 cut-edges. Deleting one edge from one triangle of the bowtie turns that triangle into a 2-edge path, both of which become cut-edges (2), while the untouched triangle contributes 0 cut-edges (its 3 edges each still lie on a cycle). Total: $4+2=6$.</div><div class=\"ml-vi\">Xóa một cạnh khỏi $C_5$ biến nó thành đường đi $P_5$ (4 cạnh) -- mọi cạnh của đường đi đều là cạnh cắt, cho 4 cạnh cắt. Xóa một cạnh khỏi một tam giác của hình nơ biến tam giác đó thành đường đi 2 cạnh, cả hai đều thành cạnh cắt (2), còn tam giác không đụng tới đóng góp 0 cạnh cắt (3 cạnh của nó vẫn nằm trên một chu trình). Tổng: $4+2=6$.</div>"
+          "explanation": "<div class=\"ml-en\">Deleting one edge from $C_5$ turns it into a path on 5 vertices (4 edges) -- every edge of a path is a cut-edge, giving 4 cut-edges. In the bowtie all 6 edges are symmetric, so say $y_1y_2$ is deleted: that triangle becomes the path $y_1$-$y_0$-$y_2$ and both of its edges become cut-edges (2), while the untouched triangle $y_0y_3y_4$ contributes 0 cut-edges (its 3 edges each still lie on a cycle). Total: $4+2=6$.</div><div class=\"ml-vi\">Xóa một cạnh khỏi $C_5$ biến nó thành đường đi 5 đỉnh (4 cạnh) -- mọi cạnh của đường đi đều là cạnh cắt, cho 4 cạnh cắt. Trong hình nơ cả 6 cạnh đều đối xứng nhau, giả sử xóa $y_1y_2$: tam giác đó thành đường đi $y_1$-$y_0$-$y_2$ và cả hai cạnh của nó đều thành cạnh cắt (2), còn tam giác không đụng tới $y_0y_3y_4$ đóng góp 0 cạnh cắt (3 cạnh của nó vẫn nằm trên một chu trình). Tổng: $4+2=6$.</div>"
         },
         {
           "kind": "MCQ",
@@ -10774,7 +10774,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Which are the first 4 vertices chosen when using Dijkstra's algorithm to find the shortest path from $G$ to $M$? Edges: $GH{=}1,HI{=}8,GK{=}4,HK{=}1,IJ{=}2,KJ{=}5,KL{=}3,LJ{=}6,IM{=}3,LM{=}2$.|||Đâu là 4 đỉnh đầu tiên được chọn khi dùng thuật toán Dijkstra tìm đường đi ngắn nhất từ $G$ đến $M$? Các cạnh: $GH{=}1,HI{=}8,GK{=}4,HK{=}1,IJ{=}2,KJ{=}5,KL{=}3,LJ{=}6,IM{=}3,LM{=}2$.",
+          "prompt": "Which are the first 4 vertices chosen when using Dijkstra's algorithm to find the shortest path from $G$ to $M$? Edges: $GH{=}1,HI{=}8,GK{=}4,HK{=}1,IJ{=}2,KJ{=}5,KL{=}3,LJ{=}6,IM{=}3,LM{=}2$.<pre class=\"mermaid\">graph TD\n  G((G)) -- 1 --- H((H))\n  G -- 4 --- K((K))\n  H -- 8 --- I((I))\n  H -- 1 --- K\n  I -- 2 --- J((J))\n  I -- 3 --- M((M))\n  K -- 5 --- J\n  K -- 3 --- L((L))\n  L -- 6 --- J\n  L -- 2 --- M</pre>|||Đâu là 4 đỉnh đầu tiên được chọn khi dùng thuật toán Dijkstra tìm đường đi ngắn nhất từ $G$ đến $M$? Các cạnh: $GH{=}1,HI{=}8,GK{=}4,HK{=}1,IJ{=}2,KJ{=}5,KL{=}3,LJ{=}6,IM{=}3,LM{=}2$.<pre class=\"mermaid\">graph TD\n  G((G)) -- 1 --- H((H))\n  G -- 4 --- K((K))\n  H -- 8 --- I((I))\n  H -- 1 --- K\n  I -- 2 --- J((J))\n  I -- 3 --- M((M))\n  K -- 5 --- J\n  K -- 3 --- L((L))\n  L -- 6 --- J\n  L -- 2 --- M</pre>",
           "options": [
             {
               "text": "G-H-K-I|||G-H-K-I"
@@ -10826,7 +10826,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a prefix code represented by the binary tree: root splits 0(left)/1(right); left child splits into 0$\\to$\"e\"(leaf) and 1$\\to$(splits into 0$\\to$\"f\", 1$\\to$\"n\"); right child splits into 0$\\to$\"r\"(leaf) and 1$\\to$(splits into 0$\\to$\"s\", 1$\\to$\"u\"). This gives codes e=00,f=010,n=011,r=10,s=110,u=111. Decode the message 010111011.|||Cho một mã tiền tố biểu diễn bằng cây nhị phân: gốc tách 0(trái)/1(phải); con trái tách thành 0$\\to$\"e\"(lá) và 1$\\to$(tách thành 0$\\to$\"f\", 1$\\to$\"n\"); con phải tách thành 0$\\to$\"r\"(lá) và 1$\\to$(tách thành 0$\\to$\"s\", 1$\\to$\"u\"). Điều này cho các mã e=00,f=010,n=011,r=10,s=110,u=111. Giải mã thông điệp 010111011.",
+          "prompt": "Given a prefix code represented by the binary tree below, in which each edge is labelled with the bit it contributes (each internal node is labelled with the bit string that reaches it). The leaves give the codes e=00, f=010, n=011, r=10, s=110, u=111. Decode the message 010111011.<pre class=\"mermaid\">graph TD\n  R((root)) -- 0 --> N0((0))\n  R -- 1 --> N1((1))\n  N0 -- 0 --> LE((e))\n  N0 -- 1 --> N01((01))\n  N01 -- 0 --> LF((f))\n  N01 -- 1 --> LN((n))\n  N1 -- 0 --> LR((r))\n  N1 -- 1 --> N11((11))\n  N11 -- 0 --> LS((s))\n  N11 -- 1 --> LU((u))</pre>|||Cho một mã tiền tố biểu diễn bằng cây nhị phân dưới đây, trong đó mỗi cạnh được gán bit mà nó đóng góp (mỗi nút trong được gán chuỗi bit dẫn tới nó). Các lá cho các mã e=00, f=010, n=011, r=10, s=110, u=111. Giải mã thông điệp 010111011.<pre class=\"mermaid\">graph TD\n  R((gốc)) -- 0 --> N0((0))\n  R -- 1 --> N1((1))\n  N0 -- 0 --> LE((e))\n  N0 -- 1 --> N01((01))\n  N01 -- 0 --> LF((f))\n  N01 -- 1 --> LN((n))\n  N1 -- 0 --> LR((r))\n  N1 -- 1 --> N11((11))\n  N11 -- 0 --> LS((s))\n  N11 -- 1 --> LU((u))</pre>",
           "options": [
             {
               "text": "sure|||sure"
@@ -10901,7 +10901,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a graph $G$ with vertices $a,b,c,d,e,f,g,h$ and edges $ad,df,ac,ab,cb,ce,ce,df,ce,cf,de,eg,fg,gh$ (specifically: $a$ connects to $b,c,d$; $c$ connects to $b,e,f$; $d$ connects to $e,f$; $e,f$ both connect to $g$; $g$ connects to $h$). What is the order of vertices traversed by Breadth First Search algorithm from the vertex $a$? Assume that the vertices are added alphabetically.|||Cho đồ thị $G$ với các đỉnh $a,b,c,d,e,f,g,h$ và các cạnh $a$ nối $b,c,d$; $c$ nối $b,e,f$; $d$ nối $e,f$; $e,f$ đều nối $g$; $g$ nối $h$. Thứ tự các đỉnh được duyệt bằng thuật toán Tìm kiếm theo chiều rộng (BFS) từ đỉnh $a$ là gì? Giả sử các đỉnh được thêm theo thứ tự chữ cái.",
+          "prompt": "Given a graph $G$ with vertices $a,b,c,d,e,f,g,h$ and edges $ab,ac,ad,bc,ce,cf,de,df,eg,fg,gh$ (that is: $a$ is adjacent to $b,c,d$; $c$ is adjacent to $b,e,f$; $d$ is adjacent to $e,f$; $e$ and $f$ are both adjacent to $g$; $g$ is adjacent to $h$). What is the order of vertices traversed by Breadth First Search algorithm from the vertex $a$? Assume that the vertices are added alphabetically.<pre class=\"mermaid\">graph TD\n  a((a)) --- b((b))\n  a --- c((c))\n  a --- d((d))\n  c --- b\n  c --- e((e))\n  c --- f((f))\n  d --- e\n  d --- f\n  e --- g((g))\n  f --- g\n  g --- h((h))</pre>|||Cho đồ thị $G$ với các đỉnh $a,b,c,d,e,f,g,h$ và các cạnh $ab,ac,ad,bc,ce,cf,de,df,eg,fg,gh$ (tức là: $a$ kề $b,c,d$; $c$ kề $b,e,f$; $d$ kề $e,f$; $e$ và $f$ đều kề $g$; $g$ kề $h$). Thứ tự các đỉnh được duyệt bằng thuật toán Tìm kiếm theo chiều rộng (BFS) từ đỉnh $a$ là gì? Giả sử các đỉnh được thêm theo thứ tự chữ cái.<pre class=\"mermaid\">graph TD\n  a((a)) --- b((b))\n  a --- c((c))\n  a --- d((d))\n  c --- b\n  c --- e((e))\n  c --- f((f))\n  d --- e\n  d --- f\n  e --- g((g))\n  f --- g\n  g --- h((h))</pre>",
           "options": [
             {
               "text": "a, b, c, e, g, h, d, f|||a, b, c, e, g, h, d, f"
@@ -10924,7 +10924,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "If using Kruskal's algorithm to find a minimum spanning tree $T$ from the graph with vertices $A,B,C,D,E,F$ and edges $AB{=}1,AD{=}3,BD{=}5,BE{=}1,BC{=}6,DE{=}1,CE{=}5,CF{=}2,EF{=}4$, which edge is added to $T$ in the last step?|||Nếu dùng thuật toán Kruskal để tìm cây khung nhỏ nhất $T$ từ đồ thị có các đỉnh $A,B,C,D,E,F$ và các cạnh $AB{=}1,AD{=}3,BD{=}5,BE{=}1,BC{=}6,DE{=}1,CE{=}5,CF{=}2,EF{=}4$, cạnh nào được thêm vào $T$ ở bước cuối cùng?",
+          "prompt": "If using Kruskal's algorithm to find a minimum spanning tree $T$ from the graph with vertices $A,B,C,D,E,F$ and edges $AB{=}1,AD{=}3,BD{=}5,BE{=}1,BC{=}6,DE{=}1,CE{=}5,CF{=}2,EF{=}4$, which edge is added to $T$ in the last step?<pre class=\"mermaid\">graph TD\n  A((A)) -- 1 --- B((B))\n  A -- 3 --- D((D))\n  B -- 5 --- D\n  B -- 1 --- E((E))\n  B -- 6 --- C((C))\n  D -- 1 --- E\n  C -- 5 --- E\n  C -- 2 --- F((F))\n  E -- 4 --- F</pre>|||Nếu dùng thuật toán Kruskal để tìm cây khung nhỏ nhất $T$ từ đồ thị có các đỉnh $A,B,C,D,E,F$ và các cạnh $AB{=}1,AD{=}3,BD{=}5,BE{=}1,BC{=}6,DE{=}1,CE{=}5,CF{=}2,EF{=}4$, cạnh nào được thêm vào $T$ ở bước cuối cùng?<pre class=\"mermaid\">graph TD\n  A((A)) -- 1 --- B((B))\n  A -- 3 --- D((D))\n  B -- 5 --- D\n  B -- 1 --- E((E))\n  B -- 6 --- C((C))\n  D -- 1 --- E\n  C -- 5 --- E\n  C -- 2 --- F((F))\n  E -- 4 --- F</pre>",
           "options": [
             {
               "text": "AD|||AD"
@@ -11077,7 +11077,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Determine the order in which a post-order traversal visits the vertices of the given rooted tree: root $a$ with children $b$(left),$c$(right); $b$'s children $d$(left),$e$(right); $e$'s children $f$(left),$g$(right).|||Xác định thứ tự phép duyệt hậu thứ (post-order) thăm các đỉnh của cây có gốc cho trước: gốc $a$ với con $b$(trái),$c$(phải); con của $b$ là $d$(trái),$e$(phải); con của $e$ là $f$(trái),$g$(phải).",
+          "prompt": "Determine the order in which a post-order traversal visits the vertices of the given ordered rooted tree: root $a$ has children $b$ then $c$; $b$ has children $d$ then $e$; $e$ has children $f$ then $g$ (children listed in their traversal order).<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> c((c))\n  b --> d((d))\n  b --> e((e))\n  e --> f((f))\n  e --> g((g))</pre>|||Xác định thứ tự phép duyệt hậu thứ (post-order) thăm các đỉnh của cây có gốc có thứ tự cho trước: gốc $a$ có các con $b$ rồi $c$; $b$ có các con $d$ rồi $e$; $e$ có các con $f$ rồi $g$ (các con liệt kê theo đúng thứ tự duyệt).<pre class=\"mermaid\">graph TD\n  a((a)) --> b((b))\n  a --> c((c))\n  b --> d((d))\n  b --> e((e))\n  e --> f((f))\n  e --> g((g))</pre>",
           "options": [
             {
               "text": "d,b,a,e,f,g,c|||d,b,a,e,f,g,c"
@@ -11101,7 +11101,7 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">Postorder = children left-to-right then the node. Subtree $b$: $d$(leaf) then subtree $e$ ($f,g$ leaves then $e$) then $b$: gives $d,f,g,e,b$. Then leaf $c$. Then root $a$. Full order: $d,f,g,e,b,c,a$.</div><div class=\"ml-vi\">Hậu thứ = các con trái sang phải rồi đến nút đó. Cây con $b$: $d$(lá) rồi cây con $e$ ($f,g$ là lá rồi $e$) rồi $b$: cho $d,f,g,e,b$. Rồi lá $c$. Rồi gốc $a$. Thứ tự đầy đủ: $d,f,g,e,b,c,a$.</div>"
+          "explanation": "<div class=\"ml-en\">Postorder = visit each child subtree in order, then the node itself. Subtree $b$: $d$(leaf) then subtree $e$ ($f,g$ leaves then $e$) then $b$: gives $d,f,g,e,b$. Then leaf $c$. Then root $a$. Full order: $d,f,g,e,b,c,a$.</div><div class=\"ml-vi\">Hậu thứ = duyệt từng cây con theo thứ tự rồi mới đến chính nút đó. Cây con $b$: $d$(lá) rồi cây con $e$ ($f,g$ là lá rồi $e$) rồi $b$: cho $d,f,g,e,b$. Rồi lá $c$. Rồi gốc $a$. Thứ tự đầy đủ: $d,f,g,e,b,c,a$.</div>"
         }
       ]
     },
@@ -11111,8 +11111,8 @@ export default {
       "source": "REAL",
       "sortOrder": 210,
       "title": "Final Exam — Đề 10|||Thi cuối kỳ — Đề 10",
-      "description": "MAD101 Final Exam, Đề 10 (46 questions), transcribed from a fuoverflow practice simulator (answers independently solved and re-derived, not revealed by the source).|||Thi cuối kỳ MAD101, Đề 10 (46 câu), chép từ bộ mô phỏng luyện tập fuoverflow (đáp án tự giải và suy luận độc lập, nguồn không lộ đáp án).",
-      "durationMinutes": 92,
+      "description": "MAD101 Final Exam, Đề 10 (45 questions), transcribed from a fuoverflow practice simulator (answers independently solved and re-derived, not revealed by the source).|||Thi cuối kỳ MAD101, Đề 10 (45 câu), chép từ bộ mô phỏng luyện tập fuoverflow (đáp án tự giải và suy luận độc lập, nguồn không lộ đáp án).",
+      "durationMinutes": 90,
       "totalPoints": 10,
       "passMark": 5,
       "shuffleQuestions": true,
@@ -11916,30 +11916,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Given a pseudograph with vertices $a,b,c,d$: straight edges $ab$ (top), $ad$ (left), $dc$ (bottom); a triple edge $ac$ (three parallel curved edges from $a$ to $c$); and self-loops at $b$, $c$, and $d$. What is the sum of the numbers in the third row of the adjacency matrix, in the order $a,b,c,d$?|||Cho một giả đồ thị với các đỉnh $a,b,c,d$: cạnh thẳng $ab$ (trên), $ad$ (trái), $dc$ (dưới); cạnh bội ba $ac$ (ba cạnh cong song song từ $a$ đến $c$); và khuyên tại $b$, $c$, và $d$. Tổng các số trong hàng thứ ba của ma trận kề, theo thứ tự $a,b,c,d$, là bao nhiêu?",
-          "options": [
-            {
-              "text": "6|||6"
-            },
-            {
-              "text": "5|||5"
-            },
-            {
-              "text": "8|||8"
-            },
-            {
-              "text": "7|||7"
-            }
-          ],
-          "correctIndexes": [
-            0
-          ],
-          "explanation": "<div class=\"ml-en\">The third row (order $a,b,c,d$) corresponds to vertex $c$. Row sum of an adjacency matrix always equals the vertex's degree. $c$ is incident to: 3 parallel edges to $a$ (+3), 1 edge to $d$ (+1), and 1 loop (contributing 2 to degree) (+2). Total degree of $c$ $=3+1+2=6$.</div><div class=\"ml-vi\">Hàng thứ ba (thứ tự $a,b,c,d$) ứng với đỉnh $c$. Tổng hàng của ma trận kề luôn bằng bậc của đỉnh đó. $c$ liên thuộc với: 3 cạnh song song tới $a$ (+3), 1 cạnh tới $d$ (+1), và 1 khuyên (đóng góp 2 vào bậc) (+2). Tổng bậc của $c$ $=3+1+2=6$.</div>"
-        },
-        {
-          "kind": "MCQ",
-          "points": 1,
-          "prompt": "Let $u,v$ be two vertices on different sides of the bipartite graph $K_{2,2}$. How many paths of length 3 from $u$ to $v$?|||Cho $u,v$ là hai đỉnh ở hai phía khác nhau của đồ thị lưỡng phân $K_{2,2}$. Có bao nhiêu đường đi độ dài 3 từ $u$ đến $v$?",
+          "prompt": "Let $u,v$ be two vertices on different sides of the bipartite graph $K_{2,2}$ (parts $\\{u,x\\}$ and $\\{v,y\\}$, shown below). How many paths of length 3 from $u$ to $v$?\n<pre class=\"mermaid\">graph LR\n  u((u)) --- v((v))\n  u --- y((y))\n  x((x)) --- v\n  x --- y</pre>|||Cho $u,v$ là hai đỉnh ở hai phía khác nhau của đồ thị lưỡng phân $K_{2,2}$ (hai phía $\\{u,x\\}$ và $\\{v,y\\}$, xem hình dưới). Có bao nhiêu đường đi độ dài 3 từ $u$ đến $v$?\n<pre class=\"mermaid\">graph LR\n  u((u)) --- v((v))\n  u --- y((y))\n  x((x)) --- v\n  x --- y</pre>",
           "options": [
             {
               "text": "4|||4"
@@ -11988,7 +11965,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Apply the Dijkstra algorithm to find the shortest path from A to Z. Edges: $AB{=}2,AC{=}9,BD{=}5,BC{=}8,BE{=}3,DE{=}4,CE{=}3,DZ{=}2,EZ{=}3$. What is the next vertex chosen after E?|||Áp dụng thuật toán Dijkstra tìm đường đi ngắn nhất từ A đến Z. Các cạnh: $AB{=}2,AC{=}9,BD{=}5,BC{=}8,BE{=}3,DE{=}4,CE{=}3,DZ{=}2,EZ{=}3$. Đỉnh nào được chọn tiếp theo sau E?",
+          "prompt": "Apply the Dijkstra algorithm to the weighted graph below to find the shortest path from A to Z. Edges: $AB{=}2,AC{=}9,BD{=}5,BC{=}8,BE{=}3,DE{=}4,CE{=}3,DZ{=}2,EZ{=}3$. What is the next vertex chosen after E?\n<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 9 --- C((C))\n  B -- 5 --- D((D))\n  B -- 8 --- C\n  B -- 3 --- E((E))\n  D -- 4 --- E\n  C -- 3 --- E\n  D -- 2 --- Z((Z))\n  E -- 3 --- Z</pre>|||Áp dụng thuật toán Dijkstra cho đồ thị có trọng số dưới đây để tìm đường đi ngắn nhất từ A đến Z. Các cạnh: $AB{=}2,AC{=}9,BD{=}5,BC{=}8,BE{=}3,DE{=}4,CE{=}3,DZ{=}2,EZ{=}3$. Đỉnh nào được chọn tiếp theo sau E?\n<pre class=\"mermaid\">graph LR\n  A((A)) -- 2 --- B((B))\n  A -- 9 --- C((C))\n  B -- 5 --- D((D))\n  B -- 8 --- C\n  B -- 3 --- E((E))\n  D -- 4 --- E\n  C -- 3 --- E\n  D -- 2 --- Z((Z))\n  E -- 3 --- Z</pre>",
           "options": [
             {
               "text": "None of the other choices is correct|||Không đáp án nào đúng"
@@ -12089,7 +12066,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Find the postorder traversal of the tree: root $d$ with children $b,h$; $b$'s children $a,c,e$; $e$'s children $f,g$; $h$'s children $i,l$; $l$'s children $j,m,o,p$; $m$'s children $k,n$.|||Tìm phép duyệt hậu thứ của cây: gốc $d$ với con $b,h$; con của $b$ là $a,c,e$; con của $e$ là $f,g$; con của $h$ là $i,l$; con của $l$ là $j,m,o,p$; con của $m$ là $k,n$.",
+          "prompt": "Find the postorder traversal of the tree below: root $d$ with children $b,h$ (in that order); $b$'s children $a,c,e$; $e$'s children $f,g$; $h$'s children $i,l$; $l$'s children $j,m,o,p$; $m$'s children $k,n$ (each list in left-to-right order).\n<pre class=\"mermaid\">graph TD\n  d --- b\n  d --- h\n  b --- a\n  b --- c\n  b --- e\n  e --- f\n  e --- g\n  h --- i\n  h --- l\n  l --- j\n  l --- m\n  l --- o\n  l --- p\n  m --- k\n  m --- n</pre>|||Tìm phép duyệt hậu thứ của cây dưới đây: gốc $d$ với con $b,h$ (theo thứ tự đó); con của $b$ là $a,c,e$; con của $e$ là $f,g$; con của $h$ là $i,l$; con của $l$ là $j,m,o,p$; con của $m$ là $k,n$ (mỗi danh sách theo thứ tự từ trái sang phải).\n<pre class=\"mermaid\">graph TD\n  d --- b\n  d --- h\n  b --- a\n  b --- c\n  b --- e\n  e --- f\n  e --- g\n  h --- i\n  h --- l\n  l --- j\n  l --- m\n  l --- o\n  l --- p\n  m --- k\n  m --- n</pre>",
           "options": [
             {
               "text": "a-b-c-f-e-g-d-i-h-j-l-k-m-n-o-p|||a-b-c-f-e-g-d-i-h-j-l-k-m-n-o-p"
@@ -12112,7 +12089,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "Determine the order in which a preorder traversal visits the vertices of the given rooted tree: root $a$ with children $b,c$; $b$'s children $d,e$; $e$'s children $f,g$.|||Xác định thứ tự phép duyệt tiền thứ thăm các đỉnh của cây có gốc cho trước: gốc $a$ với con $b,c$; con của $b$ là $d,e$; con của $e$ là $f,g$.",
+          "prompt": "Determine the order in which a preorder traversal visits the vertices of the rooted tree below: root $a$ with children $b,c$; $b$'s children $d,e$; $e$'s children $f,g$ (each list in left-to-right order).\n<pre class=\"mermaid\">graph TD\n  a --- b\n  a --- c\n  b --- d\n  b --- e\n  e --- f\n  e --- g</pre>|||Xác định thứ tự phép duyệt tiền thứ thăm các đỉnh của cây có gốc dưới đây: gốc $a$ với con $b,c$; con của $b$ là $d,e$; con của $e$ là $f,g$ (mỗi danh sách theo thứ tự từ trái sang phải).\n<pre class=\"mermaid\">graph TD\n  a --- b\n  a --- c\n  b --- d\n  b --- e\n  e --- f\n  e --- g</pre>",
           "options": [
             {
               "text": "a,b,c,d,e,f,g|||a,b,c,d,e,f,g"
@@ -12164,7 +12141,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
-          "prompt": "What is the total weight of the minimum spanning tree produced by the graph with vertices $a,b,c,d,e,f,g,h,i,j$ (3x3-ish grid) and edges $ab{=}2,bc{=}3,cd{=}1,ae{=}3,bf{=}1,cg{=}2,dh{=}5,ef{=}4,fg{=}3,gh{=}3,ei{=}4,fj{=}2,ij{=}3$?|||Tổng trọng số của cây khung nhỏ nhất từ đồ thị với các đỉnh $a,b,c,d,e,f,g,h,i,j$ (dạng lưới 3x3) và các cạnh $ab{=}2,bc{=}3,cd{=}1,ae{=}3,bf{=}1,cg{=}2,dh{=}5,ef{=}4,fg{=}3,gh{=}3,ei{=}4,fj{=}2,ij{=}3$ là bao nhiêu?",
+          "prompt": "What is the total weight of the minimum spanning tree of the weighted graph below, with the 10 vertices $a,b,c,d,e,f,g,h,i,j$ and the 13 edges $ab{=}2,bc{=}3,cd{=}1,ae{=}3,bf{=}1,cg{=}2,dh{=}5,ef{=}4,fg{=}3,gh{=}3,ei{=}4,fj{=}2,ij{=}3$?\n<pre class=\"mermaid\">graph TD\n  a((a)) -- 2 --- b((b))\n  b -- 3 --- c((c))\n  c -- 1 --- d((d))\n  a -- 3 --- e((e))\n  b -- 1 --- f((f))\n  c -- 2 --- g((g))\n  d -- 5 --- h((h))\n  e -- 4 --- f\n  f -- 3 --- g\n  g -- 3 --- h\n  e -- 4 --- i((i))\n  f -- 2 --- j((j))\n  i -- 3 --- j</pre>|||Tổng trọng số của cây khung nhỏ nhất của đồ thị có trọng số dưới đây, với 10 đỉnh $a,b,c,d,e,f,g,h,i,j$ và 13 cạnh $ab{=}2,bc{=}3,cd{=}1,ae{=}3,bf{=}1,cg{=}2,dh{=}5,ef{=}4,fg{=}3,gh{=}3,ei{=}4,fj{=}2,ij{=}3$ là bao nhiêu?\n<pre class=\"mermaid\">graph TD\n  a((a)) -- 2 --- b((b))\n  b -- 3 --- c((c))\n  c -- 1 --- d((d))\n  a -- 3 --- e((e))\n  b -- 1 --- f((f))\n  c -- 2 --- g((g))\n  d -- 5 --- h((h))\n  e -- 4 --- f\n  f -- 3 --- g\n  g -- 3 --- h\n  e -- 4 --- i((i))\n  f -- 2 --- j((j))\n  i -- 3 --- j</pre>",
           "options": [
             {
               "text": "20|||20"

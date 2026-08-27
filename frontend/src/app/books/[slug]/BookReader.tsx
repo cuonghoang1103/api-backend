@@ -92,6 +92,20 @@ export default function BookReader({ slug, title, toc }: { slug: string; title: 
           margin-right: auto !important;
           width: auto !important;
         }
+        /* Nhãn "Chapter N · Part..." gốc chỉ 11px chữ trần — cuộn lướt qua dễ
+           không nhận ra vừa sang chương mới. Biến thành thẻ (badge) nổi bật:
+           nền wash + bo góc, dùng ĐÚNG cặp biến --accent/--accent-wash mà
+           chính sách đã định nghĩa (đã kiểm 25/25 cuốn) nên tự đổi màu đúng
+           theo theme sáng/tối của sách, không hard-code màu riêng. Sách dùng
+           2 tên class khác nhau tuỳ cuốn (chap-eyebrow hoặc .chap-open .eyebrow
+           — cùng style, khác tên) nên phủ cả hai. */
+        .chap-eyebrow, .chap-open .eyebrow {
+          font-size: 12.5px !important;
+          padding: 6px 14px !important;
+          background: var(--accent-wash) !important;
+          border-radius: 5px !important;
+          display: inline-block !important;
+        }
         /* Song ngữ: đoạn VI chèn ngay dưới đoạn EN gốc, chữ dịu + viền trái
            màu nhũ. Dùng cơ chế theme SẴN CÓ của chính cuốn sách
            (prefers-color-scheme / [data-theme]) — không đụng gì ngoài nó. */

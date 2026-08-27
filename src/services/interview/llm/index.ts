@@ -32,10 +32,14 @@ import {
   type LlmEndpoint,
   type LlmPurpose,
 } from '../../llm/gateway.js';
+import { toOpenAiContent, type ClaudeContentBlock } from '../../claudeChat.js';
 
 export interface LLMMessage {
   role: 'user' | 'assistant';
-  content: string;
+  /** Plain text, OR Claude-style content blocks (text + images) for a vision
+   *  turn — see `purpose: 'chat_vision'`/`'doc_ocr'` callers. Both providers
+   *  below accept this: Anthropic natively, openai_compat via `toOpenAiContent`. */
+  content: string | ClaudeContentBlock[];
 }
 export interface LLMResult {
   text: string;
@@ -183,7 +187,10 @@ const openAiCompatProvider: LLMProvider = {
         body: JSON.stringify({
           model,
           max_tokens: maxTokens,
-          messages: [{ role: 'system', content: system }, ...messages],
+          messages: [
+            { role: 'system', content: system },
+            ...messages.map((m) => ({ role: m.role, content: toOpenAiContent(m.content) })),
+          ],
           ...(useStream ? { stream: true, stream_options: { include_usage: true } } : {}),
         }),
         signal: ctrl.signal,

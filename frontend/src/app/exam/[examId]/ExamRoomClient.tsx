@@ -56,6 +56,10 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
   const [answers, setAnswers] = useState<Record<number, number[]>>({});
   const [flags, setFlags] = useState<Set<number>>(new Set());
   const [essays, setEssays] = useState<Record<number, string>>({});
+  // Diagram screenshot for SRS PE questions ("draw a Context/Use-Case/ERD
+  // diagram") — a text box alone can't answer those, so WriteRunner shows an
+  // extra upload slot when it detects that keyword in the question prompt.
+  const [diagramFiles, setDiagramFiles] = useState<Record<number, File>>({});
   // Code typed in-room for CODE questions that live inside an MCQ paper
   // (Progress Test = 30 MCQ + 1–2 coding questions). PE CODE still uploads a zip.
   const [codeAnswers, setCodeAnswers] = useState<Record<number, string>>({});
@@ -140,7 +144,7 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
       } else if (exam.peType === 'WRITE') {
         const payload: Record<string, string> = {};
         for (const [k, v] of Object.entries(essays)) payload[k] = v;
-        await examApi.submitWrite(attemptId, { essays: payload, timeSpentSeconds: ts });
+        await examApi.submitWrite(attemptId, { essays: payload, images: diagramFiles, timeSpentSeconds: ts });
       } else if (exam.peType === 'SPEAK') {
         const q = exam.questions.find((x) => x.kind === 'SPEAK');
         if (q) {
@@ -169,7 +173,7 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
           : msg,
       );
     }
-  }, [exam, attemptId, answers, codeAnswers, essays, zipFile, recordings, genPrompts, router, isVi]);
+  }, [exam, attemptId, answers, codeAnswers, essays, diagramFiles, zipFile, recordings, genPrompts, router, isVi]);
 
   // Auto-submit on timeout — CHỈ MỘT LẦN, kể cả khi lần đó hỏng.
   // Hỏng thì người học tự bấm "Nộp bài" (catch đã gỡ submittedRef nên nút
@@ -354,6 +358,12 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
               q={exam.questions[idx]} idx={idx} total={exam.questions.length} L={L} isVi={isVi}
               value={essays[exam.questions[idx].id] || ''}
               onChange={(v) => setEssays((e) => ({ ...e, [exam.questions[idx].id]: v }))}
+              imageFile={diagramFiles[exam.questions[idx].id]}
+              onImageChange={(f) => setDiagramFiles((d) => {
+                const next = { ...d };
+                if (f) next[exam.questions[idx].id] = f; else delete next[exam.questions[idx].id];
+                return next;
+              })}
             />
           )}
 
@@ -564,10 +574,28 @@ function InlineCodeQuestion({ q, idx, total, L, isVi, value, onChange, flagged, 
   );
 }
 
-function WriteRunner({ q, idx, total, L, isVi, value, onChange }: {
+// Draw-a-diagram questions ("Draw a Context Diagram…", "…Use Case Diagram…",
+// "…Conceptual ERD…") appear in SRS PE papers — a text box alone can't
+// answer those, so these get an extra image-upload slot. Detected from the
+// prompt text itself rather than a schema field: cheap, and every sampled
+// diagram question does contain one of these words (verified against all 22
+// SWR302 PE decks), while non-diagram questions (SRS template fill-in) don't.
+const DIAGRAM_QUESTION_RE = /\b(diagram|erd)\b/i;
+
+function WriteRunner({ q, idx, total, L, isVi, value, onChange, imageFile, onImageChange }: {
   q: ExamTakingQuestion; idx: number; total: number; L: 'en' | 'vi'; isVi: boolean; value: string; onChange: (v: string) => void;
+  imageFile?: File; onImageChange: (f: File | null) => void;
 }) {
   const words = value.trim() ? value.trim().split(/\s+/).length : 0;
+  const isDiagram = DIAGRAM_QUESTION_RE.test(q.prompt);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!imageFile) { setPreviewUrl(null); return; }
+    const u = URL.createObjectURL(imageFile);
+    setPreviewUrl(u);
+    return () => URL.revokeObjectURL(u);
+  }, [imageFile]);
+
   return (
     <div className="exam-card p-5 sm:p-6">
       <div className="flex items-center gap-2 mb-3">
@@ -576,8 +604,33 @@ function WriteRunner({ q, idx, total, L, isVi, value, onChange }: {
       </div>
       <div className="mb-4 text-[15px] leading-relaxed"><Prompt html={q.prompt} L={L} /></div>
       {q.imageUrl && <QuestionImageToggle url={q.imageUrl} isVi={isVi} resetKey={q.id} className="mb-4" />}
+      {isDiagram && (
+        <div className="mb-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4">
+          <div className="text-sm font-semibold text-text-secondary mb-2">
+            {isVi ? 'Tải ảnh sơ đồ đã vẽ (AI sẽ chấm theo ảnh này)' : 'Upload your drawn diagram (AI grades from this image)'}
+          </div>
+          {previewUrl ? (
+            <div className="space-y-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={previewUrl} alt="diagram preview" className="max-h-72 rounded-lg border border-[var(--border-color)]" />
+              <button onClick={() => onImageChange(null)} className="text-xs text-red-500 hover:underline">
+                {isVi ? 'Xoá ảnh' : 'Remove image'}
+              </button>
+            </div>
+          ) : (
+            <label className="flex items-center gap-2 px-4 py-2 rounded-lg border border-dashed border-[var(--border-color)] cursor-pointer text-sm text-text-secondary hover:border-[var(--exam-accent)] w-fit">
+              <ArrowUpTrayIcon className="w-4 h-4" />
+              {isVi ? 'Chọn ảnh sơ đồ (PNG/JPG)' : 'Choose diagram image (PNG/JPG)'}
+              <input type="file" accept="image/png,image/jpeg,image/webp" className="hidden"
+                onChange={(e) => onImageChange(e.target.files?.[0] ?? null)} />
+            </label>
+          )}
+        </div>
+      )}
       <textarea value={value} onChange={(e) => onChange(e.target.value)}
-        placeholder={isVi ? 'Viết bài của bạn bằng tiếng Anh tại đây…' : 'Write your answer in English here…'}
+        placeholder={isVi
+          ? (isDiagram ? 'Mô tả thêm sơ đồ (không bắt buộc)…' : 'Viết bài của bạn bằng tiếng Anh tại đây…')
+          : (isDiagram ? 'Optionally describe the diagram in words…' : 'Write your answer in English here…')}
         className="w-full min-h-[320px] rounded-xl border border-[var(--border-color)] bg-[var(--bg-surface)] p-4 text-[15px] leading-relaxed outline-none focus:border-[var(--exam-accent)] resize-y exam-scroll" />
       <div className="text-xs text-text-muted mt-2">{words} {isVi ? 'từ' : 'words'} · {isVi ? 'Viết bằng tiếng Anh' : 'Write in English'}</div>
     </div>

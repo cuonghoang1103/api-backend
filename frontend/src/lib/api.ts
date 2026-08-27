@@ -1586,8 +1586,18 @@ export const examApi = {
       headers: { 'Content-Type': 'multipart/form-data' }, timeout: 120000,
     });
   },
-  submitWrite: (attemptId: number, data: { essays: Record<string, string>; timeSpentSeconds?: number }) =>
-    api.post(`/exams/attempts/${attemptId}/submit-write`, data, { timeout: 120000 }),
+  // images: one optional diagram per WRITE question (SRS PE papers ask for a
+  // Context/Use-Case/ERD diagram) — keyed by questionId, sent as
+  // `image_<questionId>` so the backend can match each file to its question.
+  submitWrite: (attemptId: number, data: { essays: Record<string, string>; images?: Record<number, File>; timeSpentSeconds?: number }) => {
+    const fd = new FormData();
+    fd.append('essays', JSON.stringify(data.essays));
+    for (const [qId, file] of Object.entries(data.images ?? {})) fd.append(`image_${qId}`, file);
+    if (data.timeSpentSeconds != null) fd.append('timeSpentSeconds', String(data.timeSpentSeconds));
+    return api.post(`/exams/attempts/${attemptId}/submit-write`, fd, {
+      headers: { 'Content-Type': 'multipart/form-data' }, timeout: 120000,
+    });
+  },
   submitSpeak: (attemptId: number, questionId: number, audios: Blob[], timeSpentSeconds?: number) => {
     const fd = new FormData();
     audios.forEach((b, i) => fd.append('audio', b, `answer-${i + 1}.webm`));

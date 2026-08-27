@@ -109,6 +109,43 @@ async function callGrader(userId: number, system: string, user: string): Promise
   }
 }
 
+// Diagram (Context/Use-Case/ERD) grading needs a model that actually SEES the
+// image — per the site's own vision measurements (`VISION_PURPOSES` /
+// `visionModel()` in the gateway), most models in the group silently guess
+// instead. Passing `purpose: 'chat_vision'` to `llmComplete` (rather than
+// calling the chat module's raw HTTP helper directly) keeps this call inside
+// the SAME budget/quota/cost-log gate every other exam grade goes through —
+// a raw fetch here would silently skip `checkBudget()` and the per-call
+// `InterviewLLMCallLog` entry, both real chốt chặn chi phí for this project.
+// `chat_vision` is hard-excluded from ever routing to the local machine (see
+// `VISION_PURPOSES` in `llm/gateway.ts`) since Qwen there is text-only and
+// would hallucinate the diagram instead of erroring.
+async function callGraderVision(
+  userId: number, system: string, userText: string, image: { data: string; mediaType: string },
+): Promise<RawGrade> {
+  const imageBlock = { type: 'image' as const, source: { type: 'base64' as const, media_type: image.mediaType, data: image.data } };
+  const first = await llmComplete({
+    step: 'interview', purpose: 'chat_vision', feature: 'exam', system,
+    // images before text — Anthropic's (and this gateway's) recommended order
+    messages: [{ role: 'user', content: [imageBlock, { type: 'text', text: userText }] }],
+    maxTokens: 2200, userId, maxRetries: 1, timeoutMs: 60_000,
+  });
+  try {
+    return extractJson<RawGrade>(first.text);
+  } catch {
+    const retry = await llmComplete({
+      step: 'interview', purpose: 'chat_vision', feature: 'exam', system,
+      messages: [
+        { role: 'user', content: [imageBlock, { type: 'text', text: userText }] },
+        { role: 'assistant', content: first.text },
+        { role: 'user', content: 'Your previous output was not valid JSON. Return ONLY the JSON object — no prose, no code fences.' },
+      ],
+      maxTokens: 2200, userId, maxRetries: 0, timeoutMs: 45_000,
+    });
+    return extractJson<RawGrade>(retry.text);
+  }
+}
+
 // ── 1) CODE — unzip + grade ───────────────────────────────────────────
 /** Extract text source files from an uploaded zip (skips binaries, caps size). */
 export function extractCodeFromZip(buffer: Buffer): { files: Array<{ name: string; content: string }>; combined: string } {
@@ -175,23 +212,38 @@ export async function gradeCode(params: {
   return normalizeGrade(raw, params.points);
 }
 
-// ── 2) WRITE — English essay ──────────────────────────────────────────
+// ── 2) WRITE — English essay, optionally with a hand-drawn diagram ────
 export async function gradeWrite(params: {
   userId: number;
   points: number;
   prompt: string;
   rubric: unknown;
   essay: string;
+  /** Context/Use-Case/ERD diagram screenshot for SRS-style PE questions. */
+  image?: { data: string; mediaType: string };
 }): Promise<PeGradeResult> {
   ensureAi();
   if (!(await checkTokenQuota(params.userId))) throw new AppError('Bạn đã đạt giới hạn AI trong ngày. Thử lại vào ngày mai nhé.', 429);
-  if (params.essay.trim().length < 20) throw new AppError('Bài viết quá ngắn để chấm.', 400);
-  const system =
-    'You are an FPTU practical-exam (PE) writing grader for an English academic-writing task. Grade the student\'s English essay against the prompt for: task response/relevance, organization & coherence, grammar & mechanics, vocabulary & style, and (if applicable) academic conventions. Be encouraging but honest. ' +
-    GRADE_JSON_SPEC;
+  // A diagram answer can legitimately have little or no prose (the image IS
+  // the answer) — only enforce the length floor when there's no image.
+  if (!params.image && params.essay.trim().length < 20) throw new AppError('Bài viết quá ngắn để chấm.', 400);
   const rubricText = Array.isArray(params.rubric) && params.rubric.length
     ? `\n\nRUBRIC:\n${(params.rubric as Array<{ id?: string; criterion?: string; weight?: number }>).map((c) => `- ${c.id ?? ''} (weight ${c.weight ?? 1}): ${c.criterion ?? ''}`).join('\n')}`
     : '';
+  if (params.image) {
+    const system =
+      'You are an FPTU practical-exam (PE) grader for a Software Requirements diagram question (Context Diagram / Use Case Diagram / Conceptual ERD). ' +
+      'The student has UPLOADED AN IMAGE of their hand-drawn or tool-drawn diagram — look at it carefully and grade what it actually shows: correct notation, all required actors/entities/use-cases present, relationships and data flows labelled and consistent with the system description in the prompt. ' +
+      'Any text the student typed alongside the image is a supplementary description, not a substitute for the diagram itself. Be encouraging but honest. ' +
+      GRADE_JSON_SPEC;
+    const essayText = params.essay.trim() ? `\n\nSTUDENT'S WRITTEN DESCRIPTION (supplementary, the image is the real answer):\n${params.essay}` : '';
+    const user = [`PROMPT:\n${params.prompt}`, rubricText, essayText, 'Grade the uploaded diagram now.'].filter(Boolean).join('\n\n');
+    const raw = await callGraderVision(params.userId, system, user, params.image);
+    return normalizeGrade(raw, params.points);
+  }
+  const system =
+    'You are an FPTU practical-exam (PE) writing grader for an English academic-writing task. Grade the student\'s English essay against the prompt for: task response/relevance, organization & coherence, grammar & mechanics, vocabulary & style, and (if applicable) academic conventions. Be encouraging but honest. ' +
+    GRADE_JSON_SPEC;
   const user = [`PROMPT:\n${params.prompt}`, rubricText, `STUDENT ESSAY (English):\n${params.essay}`, 'Grade now.'].filter(Boolean).join('\n\n');
   const raw = await callGrader(params.userId, system, user);
   return normalizeGrade(raw, params.points);

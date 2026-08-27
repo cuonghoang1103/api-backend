@@ -274,7 +274,7 @@ export function hasDocument(messages: ClaudeMessage[]): boolean {
 }
 
 /** Dịch khối nội dung Anthropic sang khối của tuyến OpenAI (chữ + ảnh). */
-function toOpenAiContent(content: string | ClaudeContentBlock[]): unknown {
+export function toOpenAiContent(content: string | ClaudeContentBlock[]): unknown {
   if (typeof content === 'string') return content;
   return content
     .filter((b) => b.type !== 'document')

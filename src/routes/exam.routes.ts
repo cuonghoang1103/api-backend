@@ -23,6 +23,11 @@ import {
 const router = Router();
 const zipUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 30 * 1024 * 1024 } });
 const audioUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 20 * 1024 * 1024, files: 12 } });
+// One optional diagram image per WRITE question (field name `image_<questionId>`,
+// see WriteRunner in ExamRoomClient.tsx) — SRS PE papers ask students to draw a
+// Context/Use-Case/ERD diagram, which isn't something a text box can capture.
+const diagramUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 8 * 1024 * 1024, files: 10 } });
+const IMAGE_MIME = new Set(['image/png', 'image/jpeg', 'image/webp', 'image/gif']);
 
 const num = (v: unknown): number => (v == null ? 0 : Number(v));
 
@@ -187,25 +192,46 @@ router.post('/attempts/:attemptId/submit-code', authenticate, zipUpload.single('
   } catch (e) { next(e); }
 });
 
-// Submit PE (WRITE) — body { essays: { [questionId]: englishText }, timeSpentSeconds }.
-router.post('/attempts/:attemptId/submit-write', authenticate, async (req, res: Response<ApiResponse>, next) => {
+// Submit PE (WRITE) — multipart: field `essays` (JSON string, { [questionId]:
+// englishText }), field `timeSpentSeconds`, and optionally one image per
+// question under field `image_<questionId>` (SRS papers ask students to draw
+// a Context/Use-Case/ERD diagram — a text box alone can't answer that).
+router.post('/attempts/:attemptId/submit-write', authenticate, diagramUpload.any(), async (req, res: Response<ApiResponse>, next) => {
   try {
     const attemptId = Number(req.params.attemptId);
     const attempt = await examSvc.loadOwnedAttempt(attemptId, req.userId!);
     if (attempt.status !== 'IN_PROGRESS') throw new AppError('Bài thi đã nộp rồi', 409);
     if (attempt.exam.kind !== 'PE' || attempt.exam.peType !== 'WRITE') throw new AppError('Đề này không phải PE viết', 400);
-    const essays = (req.body?.essays ?? {}) as Record<string, string>;
+    let essays: Record<string, string> = {};
+    try { essays = JSON.parse(String(req.body?.essays ?? '{}')); } catch { /* malformed → treat as no essays, per-question empty-grade below */ }
+    const imageFiles = (req.files as Express.Multer.File[] | undefined) ?? [];
+    const imageByQuestionId = new Map(
+      imageFiles
+        .filter((f) => /^image_\d+$/.test(f.fieldname) && IMAGE_MIME.has(f.mimetype))
+        .map((f) => [f.fieldname.replace('image_', ''), f]),
+    );
 
     const writeQs = attempt.exam.questions.filter((q) => q.kind === 'WRITE');
     const perQuestion = [];
+    const diagramUrls: Record<string, string> = {};
     for (const q of writeQs) {
       const essay = String(essays[String(q.id)] ?? '').trim();
-      if (!essay) { perQuestion.push({ questionId: q.id, grade: emptyGrade(num(q.points)) }); continue; }
-      const grade = await gradeWrite({ userId: req.userId!, points: num(q.points), prompt: q.prompt, rubric: q.rubric, essay });
+      const imageFile = imageByQuestionId.get(String(q.id));
+      let image: { data: string; mediaType: string } | undefined;
+      if (imageFile) {
+        const ext = imageFile.mimetype.split('/')[1] || 'png';
+        const key = `documents/exam/${req.userId}/${attemptId}-q${q.id}-${Date.now()}.${ext}`;
+        const uploaded = await putObject(key, imageFile.buffer, imageFile.mimetype, 'private, max-age=0');
+        diagramUrls[String(q.id)] = uploaded.url;
+        image = { data: imageFile.buffer.toString('base64'), mediaType: imageFile.mimetype };
+      }
+      if (!essay && !image) { perQuestion.push({ questionId: q.id, grade: emptyGrade(num(q.points)) }); continue; }
+      const grade = await gradeWrite({ userId: req.userId!, points: num(q.points), prompt: q.prompt, rubric: q.rubric, essay, image });
       perQuestion.push({ questionId: q.id, grade });
     }
     const data = await finalizePe(attemptId, req.userId!, perQuestion, {
-      answers: { essays }, timeSpentSeconds: Number(req.body?.timeSpentSeconds) || 0, gradingMode: 'AI',
+      answers: { essays, ...(Object.keys(diagramUrls).length ? { diagramUrls } : {}) },
+      timeSpentSeconds: Number(req.body?.timeSpentSeconds) || 0, gradingMode: 'AI',
     });
     res.json({ success: true, data });
   } catch (e) { next(e); }

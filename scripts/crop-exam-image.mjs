@@ -310,13 +310,24 @@ async function cropRedDividerLayout(whited, meta) {
   // box is much TALLER than its text it left ~250px of empty box below the
   // options (all 60 pinned at the cap). A dark-text bbox ignores the gray box
   // chrome entirely and stays tight on both variants (caught 25/08/2026).
+  //
+  // NO height cap here (unlike the fallback path below) — darkTextBBox only
+  // measures actual dark-text pixels, so it can never latch onto a stray
+  // footer rule the way the plain trim() fallback can; capping it anyway
+  // silently amputated real content whenever a question was genuinely tall.
+  // Flagged but left unfixed after PRF192 (27/08/2026, ~10/875 questions —
+  // small enough to just flag conf:low and move on); PRO192's Java code
+  // questions (10-15 line snippets + 4-6 options routinely exceed 460px)
+  // made it common enough to actually lose whole answer OPTIONS, not just
+  // wrap text — caught 27/08/2026 on Đề 14 q28/q33, options C/D missing
+  // entirely from the crop despite being clearly present in the raw scan.
   const bbox = await darkTextBBox(rightBuf, rightW, meta.height);
   if (bbox) {
     const M = 10;
     const left = Math.max(0, bbox.minX - M);
     const top = Math.max(0, bbox.minY - M);
     const width = Math.min(rightW - left, bbox.maxX - bbox.minX + 2 * M);
-    const height = Math.min(meta.height - top, bbox.maxY - bbox.minY + 2 * M, RED_DIVIDER_MAX_CONTENT_H);
+    const height = Math.min(meta.height - top, bbox.maxY - bbox.minY + 2 * M);
     return sharp(rightBuf).extract({ left, top, width, height }).png().toBuffer();
   }
   // fallback: original trim path (shouldn't happen for a real question)

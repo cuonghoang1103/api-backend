@@ -164,12 +164,15 @@ export default {
             },
             {
               "text": "(ii) and (iv)|||(ii) và (iv)"
+            },
+            {
+              "text": "None of the other choices is correct|||Không có đáp án nào ở trên đúng"
             }
           ],
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>If An were CS major, An would study Discrete Math (contradiction), so An is Math major (ii). If Binh were Math major, Binh would study Calculus (contradiction), so Binh is CS major (iii). Answer: (ii) and (iii).</p></div><div class=\"ml-vi\"><p>Nếu An là ngành CNTT thì An phải học Toán rời rạc (mâu thuẫn), nên An là ngành Toán (ii). Nếu Bình là ngành Toán thì Bình phải học Giải tích (mâu thuẫn), nên Bình là ngành CNTT (iii). Vậy đáp án: (ii) và (iii).</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>If An were a Computer Science major, An would study Discrete Mathematics, contradicting the premise, so An must be a Math major — (ii). If Binh were a Math major, Binh would study Calculus, contradicting the premise, so Binh must be a Computer Science major — (iii). The conclusions that follow are (ii) and (iii), i.e. option B.</p></div><div class=\"ml-vi\"><p>Nếu An là sinh viên ngành Khoa học Máy tính thì An phải học Toán rời rạc, mâu thuẫn với tiền đề, nên An phải là sinh viên ngành Toán — (ii). Nếu Bình là sinh viên ngành Toán thì Bình phải học Giải tích, mâu thuẫn với tiền đề, nên Bình phải là sinh viên ngành Khoa học Máy tính — (iii). Vậy kết luận rút ra được là (ii) và (iii), tức phương án B.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -239,6 +242,9 @@ export default {
             },
             {
               "text": "(iv) $B = \\varnothing$|||(iv) $B = \\varnothing$"
+            },
+            {
+              "text": "None of the other choices is correct|||Không có đáp án nào ở trên đúng"
             }
           ],
           "correctIndexes": [
@@ -819,7 +825,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Are these two directed graphs isomorphic? (Both graphs are drawn on 4 vertices arranged as a tetrahedron/triangle-with-center layout, with directed edges shown by arrowheads on each edge; the left graph is labeled 1 (top), 2 (middle), 3 (bottom-left), 4 (bottom-right), the right graph has the same layout unlabeled.)</p></div><div class=\"ml-vi\"><p>Hai đồ thị có hướng sau đây có đẳng cấu (isomorphic) không? (Cả hai đồ thị được vẽ trên 4 đỉnh sắp xếp theo hình tam giác có tâm, với các cạnh có hướng thể hiện bằng mũi tên; đồ thị bên trái có nhãn 1 (trên), 2 (giữa), 3 (dưới-trái), 4 (dưới-phải), đồ thị bên phải có cùng cách bố trí nhưng không có nhãn.)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Are these two directed graphs isomorphic?<br/>(Left graph: 4 vertices drawn as a triangle with a centre vertex — 1 at the top, 2 in the middle, 3 at the bottom-left, 4 at the bottom-right — with directed edges $2\\to1$, $1\\to3$, $1\\to4$, $3\\to2$, $4\\to2$, $3\\to4$. Right graph: the same layout with unlabeled vertices $T$ (top), $M$ (middle), $L$ (bottom-left), $R$ (bottom-right) and directed edges $M\\to T$, $T\\to L$, $R\\to T$, $L\\to M$, $R\\to M$, $L\\to R$ — the right-hand slanted edge points UP into the top vertex, which is the one arrow that differs from the left drawing.)</p></div><div class=\"ml-vi\"><p>Hai đồ thị có hướng sau đây có đẳng cấu (isomorphic) không?<br/>(Đồ thị trái: 4 đỉnh vẽ thành tam giác có một đỉnh ở tâm — 1 ở trên, 2 ở giữa, 3 ở dưới-trái, 4 ở dưới-phải — với các cung có hướng $2\\to1$, $1\\to3$, $1\\to4$, $3\\to2$, $4\\to2$, $3\\to4$. Đồ thị phải: cùng cách bố trí nhưng không ghi nhãn, gọi $T$ (trên), $M$ (giữa), $L$ (dưới-trái), $R$ (dưới-phải), các cung có hướng $M\\to T$, $T\\to L$, $R\\to T$, $L\\to M$, $R\\to M$, $L\\to R$ — cung xiên bên phải chỉ LÊN vào đỉnh trên, đây chính là mũi tên duy nhất khác với hình bên trái.)</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D18/q32.png",
           "options": [
             {
@@ -832,7 +838,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Left graph directed edges (read from the higher-resolution image): 2→1, 1→3, 1→4, 3→2, 4→2, 3→4. The right graph is the identical drawing with vertices unlabeled, showing the exact same arrow pattern in the same positions: an edge into the top vertex from the middle vertex, edges out of the top vertex to both bottom vertices, edges from both bottom vertices into the middle vertex, and an edge from bottom-left to bottom-right. Mapping each right-graph vertex to the left-graph vertex occupying the same position (top↔1, middle↔2, bottom-left↔3, bottom-right↔4) preserves every edge and its direction exactly, so this correspondence is a valid isomorphism. Answer: Yes.</p></div><div class=\"ml-vi\"><p>Các cạnh có hướng của đồ thị trái (đọc từ ảnh độ phân giải cao hơn): 2→1, 1→3, 1→4, 3→2, 4→2, 3→4. Đồ thị phải là hình vẽ giống hệt nhưng không có nhãn đỉnh, thể hiện đúng cùng một kiểu mũi tên ở đúng các vị trí tương ứng: một cạnh đi vào đỉnh trên từ đỉnh giữa, các cạnh đi ra từ đỉnh trên tới cả hai đỉnh dưới, các cạnh từ hai đỉnh dưới đi vào đỉnh giữa, và một cạnh từ đỉnh dưới-trái sang đỉnh dưới-phải. Ánh xạ mỗi đỉnh của đồ thị phải sang đỉnh của đồ thị trái ở cùng vị trí (trên↔1, giữa↔2, dưới-trái↔3, dưới-phải↔4) giữ nguyên mọi cạnh và hướng của nó, nên đây là một phép đẳng cấu hợp lệ. Đáp án: Có.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Left graph: $2\\to1$, $1\\to3$, $1\\to4$, $3\\to2$, $4\\to2$, $3\\to4$. Right graph: $M\\to T$, $T\\to L$, $R\\to T$, $L\\to M$, $R\\to M$, $L\\to R$. Both have in/out-degree multiset $\\{(1,2),(1,2),(2,1),(2,1)\\}$. Take the bijection $1\\mapsto L$, $3\\mapsto R$, $4\\mapsto M$, $2\\mapsto T$: then $2\\to1\\mapsto T\\to L$, $1\\to3\\mapsto L\\to R$, $1\\to4\\mapsto L\\to M$, $3\\to2\\mapsto R\\to T$, $4\\to2\\mapsto M\\to T$, $3\\to4\\mapsto R\\to M$ — all six arcs map onto the six arcs of the right graph with directions preserved. So the graphs are isomorphic: Yes.</p></div><div class=\"ml-vi\"><p>Đồ thị trái: $2\\to1$, $1\\to3$, $1\\to4$, $3\\to2$, $4\\to2$, $3\\to4$. Đồ thị phải: $M\\to T$, $T\\to L$, $R\\to T$, $L\\to M$, $R\\to M$, $L\\to R$. Cả hai có cùng bộ bậc vào/ra $\\{(1,2),(1,2),(2,1),(2,1)\\}$. Lấy song ánh $1\\mapsto L$, $3\\mapsto R$, $4\\mapsto M$, $2\\mapsto T$: khi đó $2\\to1\\mapsto T\\to L$, $1\\to3\\mapsto L\\to R$, $1\\to4\\mapsto L\\to M$, $3\\to2\\mapsto R\\to T$, $4\\to2\\mapsto M\\to T$, $3\\to4\\mapsto R\\to M$ — cả sáu cung ánh xạ đúng sáu cung của đồ thị phải và giữ nguyên hướng. Vậy hai đồ thị đẳng cấu: Có.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1274,9 +1280,9 @@ export default {
             }
           ],
           "correctIndexes": [
-            3
+            4
           ],
-          "explanation": "<div class=\"ml-en\"><p>Dividing $m\\times n$ by $m$ gives $n=2^4\\cdot7^3\\cdot11^{14}$. Then $\\text{lcm}(m,n)$ takes the max exponent per prime: $2^{\\max(0,4)}\\cdot7^{\\max(5,3)}\\cdot11^{\\max(12,14)}\\cdot13^{\\max(90,0)} = 2^4\\cdot7^5\\cdot11^{14}\\cdot13^{90}$. This matches option (iv) in every prime except the exponent of 11 (computed 14 vs listed 20); (iv) is otherwise the only structurally correct option (right primes/exponents for 2, 7, 13), so it is selected as intended, likely reflecting a typo in the source exponent for 11 in $mn$.</p></div><div class=\"ml-vi\"><p>Chia $m\\times n$ cho $m$ được $n=2^4\\cdot7^3\\cdot11^{14}$. Khi đó $\\text{lcm}(m,n)$ lấy số mũ lớn nhất theo từng số nguyên tố: $2^{\\max(0,4)}\\cdot7^{\\max(5,3)}\\cdot11^{\\max(12,14)}\\cdot13^{\\max(90,0)} = 2^4\\cdot7^5\\cdot11^{14}\\cdot13^{90}$. Kết quả này khớp với phương án (iv) ở mọi thừa số trừ số mũ của 11 (tính ra 14 nhưng đề ghi 20); (iv) vẫn là phương án đúng cấu trúc duy nhất (đúng thừa số/mũ cho 2, 7, 13), nên được chọn, có thể do lỗi đánh máy số mũ của 11 trong đề gốc.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>From $mn = 2^4\\cdot7^8\\cdot11^{26}\\cdot13^{90}$ and $m = 7^5\\cdot11^{12}\\cdot13^{90}$ we get $n = mn/m = 2^4\\cdot7^3\\cdot11^{14}$. The lcm takes the larger exponent of each prime: $\\mathrm{lcm}(m,n) = 2^{\\max(0,4)}\\cdot7^{\\max(5,3)}\\cdot11^{\\max(12,14)}\\cdot13^{\\max(90,0)} = 2^4\\cdot7^5\\cdot11^{14}\\cdot13^{90}$. None of (i)-(iv) equals this: (i) has $7^8\\,11^{12}$, (ii) has no factor 2, (iii) is just $m$, and (iv) matches on 2, 7 and 13 but has $11^{20}$ instead of $11^{14}$. Since no listed expression is the lcm, the correct choice is E, &quot;None of the other choices is correct&quot;.</p></div><div class=\"ml-vi\"><p>Từ $mn = 2^4\\cdot7^8\\cdot11^{26}\\cdot13^{90}$ và $m = 7^5\\cdot11^{12}\\cdot13^{90}$ ta có $n = mn/m = 2^4\\cdot7^3\\cdot11^{14}$. BCNN lấy số mũ lớn hơn của từng thừa số nguyên tố: $\\mathrm{lcm}(m,n) = 2^{\\max(0,4)}\\cdot7^{\\max(5,3)}\\cdot11^{\\max(12,14)}\\cdot13^{\\max(90,0)} = 2^4\\cdot7^5\\cdot11^{14}\\cdot13^{90}$. Không phương án nào trong (i)-(iv) bằng giá trị này: (i) có $7^8\\,11^{12}$, (ii) thiếu thừa số 2, (iii) chính là $m$, còn (iv) khớp ở 2, 7, 13 nhưng có $11^{20}$ thay vì $11^{14}$. Vì không biểu thức nào đã liệt kê là BCNN, đáp án đúng là E, &quot;Không có đáp án nào ở trên đúng&quot;.</p></div>"
         },
         {
           "kind": "MCQ",

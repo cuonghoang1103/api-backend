@@ -1999,7 +1999,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$34=1\\times25+0\\times10+9\\times1$: 1 quarter, 0 dime, 9 pennies $\\Rightarrow 1+0+9=10$ coins.</div><div class=\"ml-vi\">$34=1\\times25+0\\times10+9\\times1$: 1 quarter, 0 dime, 9 penny $\\Rightarrow 1+0+9=10$ đồng xu.</div>"
+          "explanation": "<div class=\"ml-en\">$34=1\\times25+0\\times10+9\\times1$: 1 quarter, 0 dime, 9 pennies $\\Rightarrow 1+0+9=10$ coins.</div><div class=\"ml-vi\">$34=1\\times25+0\\times10+9\\times1$: 1 quarter, 0 dime, 9 penny $\\Rightarrow 1+0+9=10$ đồng xu.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q1.png"
         },
         {
           "kind": "MCQ",
@@ -2022,7 +2023,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">d ends up as the minimum value. k starts at n and decreases while $a_k>d$, stopping at the first (from the right) index where $a_k\\le d$ — i.e. the LAST index equal to the minimum.</div><div class=\"ml-vi\">d cuối cùng là giá trị nhỏ nhất. k bắt đầu từ n và giảm dần khi $a_k>d$, dừng ở chỉ số đầu tiên tính từ phải mà $a_k\\le d$ — tức vị trí CUỐI CÙNG bằng giá trị nhỏ nhất.</div>"
+          "explanation": "<div class=\"ml-en\">d ends up as the minimum value. k starts at n and decreases while $a_k>d$, stopping at the first (from the right) index where $a_k\\le d$ — i.e. the LAST index equal to the minimum.</div><div class=\"ml-vi\">d cuối cùng là giá trị nhỏ nhất. k bắt đầu từ n và giảm dần khi $a_k>d$, dừng ở chỉ số đầu tiên tính từ phải mà $a_k\\le d$ — tức vị trí CUỐI CÙNG bằng giá trị nhỏ nhất.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q2.png"
         },
         {
           "kind": "MCQ",
@@ -2051,7 +2053,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$87=3\\times25+1\\times10+0\\times5+2\\times1$ (75+10+0+2=87): 3 quarters, 1 dime, 0 nickels, 2 pennies $\\Rightarrow3+1+0+2=6$.</div><div class=\"ml-vi\">$87=3\\times25+1\\times10+0\\times5+2\\times1$: 3 quarter, 1 dime, 0 nickel, 2 penny $\\Rightarrow6$ đồng xu.</div>"
+          "explanation": "<div class=\"ml-en\">$87=3\\times25+1\\times10+0\\times5+2\\times1$ (75+10+0+2=87): 3 quarters, 1 dime, 0 nickels, 2 pennies $\\Rightarrow3+1+0+2=6$.</div><div class=\"ml-vi\">$87=3\\times25+1\\times10+0\\times5+2\\times1$: 3 quarter, 1 dime, 0 nickel, 2 penny $\\Rightarrow6$ đồng xu.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q3.png"
         },
         {
           "kind": "MCQ",
@@ -2074,7 +2077,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">1st split: i=1,j=8,m=4,$a_4$=7<11→i=5; sublist=[8,9,10,13]. 2nd split: i=5,j=8,m=6,$a_6$=9<11→i=7; sublist=$a_7,a_8$=[10,13].</div><div class=\"ml-vi\">Lần chia 1: i=1,j=8,m=4,$a_4$=7<11→i=5; dãy con=[8,9,10,13]. Lần chia 2: i=5,j=8,m=6,$a_6$=9<11→i=7; dãy con=[10,13].</div>"
+          "explanation": "<div class=\"ml-en\">1st split: i=1,j=8,m=4,$a_4$=7<11→i=5; sublist=[8,9,10,13]. 2nd split: i=5,j=8,m=6,$a_6$=9<11→i=7; sublist=$a_7,a_8$=[10,13].</div><div class=\"ml-vi\">Lần chia 1: i=1,j=8,m=4,$a_4$=7<11→i=5; dãy con=[8,9,10,13]. Lần chia 2: i=5,j=8,m=6,$a_6$=9<11→i=7; dãy con=[10,13].</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q4.png"
         },
         {
           "kind": "MCQ",
@@ -2100,7 +2104,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$96=3\\times25+2\\times10+0\\times5+1\\times1$ (75+20+0+1=96): $3+2+0+1=6$ coins.</div><div class=\"ml-vi\">$96=3\\times25+2\\times10+0\\times5+1\\times1$: $3+2+0+1=6$ đồng xu.</div>"
+          "explanation": "<div class=\"ml-en\">$96=3\\times25+2\\times10+0\\times5+1\\times1$ (75+20+0+1=96): $3+2+0+1=6$ coins.</div><div class=\"ml-vi\">$96=3\\times25+2\\times10+0\\times5+1\\times1$: $3+2+0+1=6$ đồng xu.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q5.png"
         },
         {
           "kind": "MCQ",
@@ -2123,7 +2128,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Insertion sort keeps $a_1..a_i$ sorted after each outer step, rest untouched. i=2:[2,3,4,7,1,6,5]. i=3:[2,3,4,7,1,6,5]. i=4:[2,3,4,7,1,6,5]. i=5: insert 1 to front:[1,2,3,4,7,6,5].</div><div class=\"ml-vi\">Insertion sort giữ $a_1..a_i$ đã sắp sau mỗi bước ngoài, phần còn lại giữ nguyên. Truy vết tới i=5: chèn 1 lên đầu → [1,2,3,4,7,6,5].</div>"
+          "explanation": "<div class=\"ml-en\">Insertion sort keeps $a_1..a_i$ sorted after each outer step, rest untouched. i=2:[2,3,4,7,1,6,5]. i=3:[2,3,4,7,1,6,5]. i=4:[2,3,4,7,1,6,5]. i=5: insert 1 to front:[1,2,3,4,7,6,5].</div><div class=\"ml-vi\">Insertion sort giữ $a_1..a_i$ đã sắp sau mỗi bước ngoài, phần còn lại giữ nguyên. Truy vết tới i=5: chèn 1 lên đầu → [1,2,3,4,7,6,5].</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q6.png"
         },
         {
           "kind": "MCQ",
@@ -2146,7 +2152,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">1st split: i=5,j=8 → [8,9,10,13]. 2nd: i=7,j=8 → [10,13]. 3rd: i=1,j=8,m=7,$a_7$=10<11→i=8; sublist is just $a_8$=[13].</div><div class=\"ml-vi\">Lần 1: i=5,j=8→[8,9,10,13]. Lần 2: i=7,j=8→[10,13]. Lần 3: m=7,$a_7$=10<11→i=8; dãy con chỉ còn $a_8$=[13].</div>"
+          "explanation": "<div class=\"ml-en\">1st split: i=5,j=8 → [8,9,10,13]. 2nd: i=7,j=8 → [10,13]. 3rd: i=1,j=8,m=7,$a_7$=10<11→i=8; sublist is just $a_8$=[13].</div><div class=\"ml-vi\">Lần 1: i=5,j=8→[8,9,10,13]. Lần 2: i=7,j=8→[10,13]. Lần 3: m=7,$a_7$=10<11→i=8; dãy con chỉ còn $a_8$=[13].</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q7.png"
         },
         {
           "kind": "MCQ",
@@ -2169,7 +2176,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">i=2:[2,7,4,3,1,6,5]. i=3: insert 4→[2,4,7,3,1,6,5]. i=4: insert 3→[2,3,4,7,1,6,5]. i=5: insert 1 to front→[1,2,3,4,7,6,5].</div><div class=\"ml-vi\">i=2:[2,7,4,3,1,6,5]. i=3: chèn 4→[2,4,7,3,1,6,5]. i=4: chèn 3→[2,3,4,7,1,6,5]. i=5: chèn 1 lên đầu→[1,2,3,4,7,6,5].</div>"
+          "explanation": "<div class=\"ml-en\">i=2:[2,7,4,3,1,6,5]. i=3: insert 4→[2,4,7,3,1,6,5]. i=4: insert 3→[2,3,4,7,1,6,5]. i=5: insert 1 to front→[1,2,3,4,7,6,5].</div><div class=\"ml-vi\">i=2:[2,7,4,3,1,6,5]. i=3: chèn 4→[2,4,7,3,1,6,5]. i=4: chèn 3→[2,3,4,7,1,6,5]. i=5: chèn 1 lên đầu→[1,2,3,4,7,6,5].</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q8.png"
         },
         {
           "kind": "MCQ",
@@ -2192,7 +2200,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$g(x)=2x\\log x$ grows slower than $f(x)=x^2\\log x$. So $g=O(f)$ true (ii); $f=O(g)$ false.</div><div class=\"ml-vi\">$g(x)=2x\\log x$ tăng chậm hơn $f(x)=x^2\\log x$. Nên $g=O(f)$ đúng (ii); $f=O(g)$ sai.</div>"
+          "explanation": "<div class=\"ml-en\">$g(x)=2x\\log x$ grows slower than $f(x)=x^2\\log x$. So $g=O(f)$ true (ii); $f=O(g)$ false.</div><div class=\"ml-vi\">$g(x)=2x\\log x$ tăng chậm hơn $f(x)=x^2\\log x$. Nên $g=O(f)$ đúng (ii); $f=O(g)$ sai.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q9.png"
         },
         {
           "kind": "MCQ",
@@ -2218,7 +2227,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$(f(n))^3=O((\\log n)^3)$, dominated by $(g(n)+2)h(n)=O(1)\\cdot O(n)=O(n)$. Sum is $O(n)$.</div><div class=\"ml-vi\">$(f(n))^3=O((\\log n)^3)$ bị lấn át bởi $(g(n)+2)h(n)=O(n)$. Tổng là $O(n)$.</div>"
+          "explanation": "<div class=\"ml-en\">$(f(n))^3=O((\\log n)^3)$, dominated by $(g(n)+2)h(n)=O(1)\\cdot O(n)=O(n)$. Sum is $O(n)$.</div><div class=\"ml-vi\">$(f(n))^3=O((\\log n)^3)$ bị lấn át bởi $(g(n)+2)h(n)=O(n)$. Tổng là $O(n)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q10.png"
         },
         {
           "kind": "MCQ",
@@ -2244,7 +2254,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$x\\log(x^2)=2x\\log x$ is $O(x\\log x)$. $x$ and $x+2$ grow slower, also $O(x\\log x)$. Only $x^2$ grows faster — NOT $O(x\\log x)$.</div><div class=\"ml-vi\">$x\\log(x^2)=2x\\log x$ là $O(x\\log x)$. $x$ và $x+2$ tăng chậm hơn, cũng $O(x\\log x)$. Chỉ $x^2$ tăng nhanh hơn — KHÔNG phải $O(x\\log x)$.</div>"
+          "explanation": "<div class=\"ml-en\">$x\\log(x^2)=2x\\log x$ is $O(x\\log x)$. $x$ and $x+2$ grow slower, also $O(x\\log x)$. Only $x^2$ grows faster — NOT $O(x\\log x)$.</div><div class=\"ml-vi\">$x\\log(x^2)=2x\\log x$ là $O(x\\log x)$. $x$ và $x+2$ tăng chậm hơn, cũng $O(x\\log x)$. Chỉ $x^2$ tăng nhanh hơn — KHÔNG phải $O(x\\log x)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q11.png"
         },
         {
           "kind": "MCQ",
@@ -2270,7 +2281,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$x\\log(x^3)=3x\\log x$ and $x(\\log x)^2$ both grow slower than $x^2\\log x$. Dominant term is $x^2\\log(x)$.</div><div class=\"ml-vi\">$x\\log(x^3)=3x\\log x$ và $x(\\log x)^2$ đều tăng chậm hơn $x^2\\log x$. Số hạng lấn át là $x^2\\log(x)$.</div>"
+          "explanation": "<div class=\"ml-en\">$x\\log(x^3)=3x\\log x$ and $x(\\log x)^2$ both grow slower than $x^2\\log x$. Dominant term is $x^2\\log(x)$.</div><div class=\"ml-vi\">$x\\log(x^3)=3x\\log x$ và $x(\\log x)^2$ đều tăng chậm hơn $x^2\\log x$. Số hạng lấn át là $x^2\\log(x)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q12.png"
         },
         {
           "kind": "MCQ",
@@ -2296,7 +2308,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Under the root, $x^8$ dominates, so $f(x)\\sim\\sqrt{x^8}=x^4$. Smallest n is 4.</div><div class=\"ml-vi\">Trong căn, $x^8$ lấn át, nên $f(x)\\sim\\sqrt{x^8}=x^4$. n nhỏ nhất là 4.</div>"
+          "explanation": "<div class=\"ml-en\">Under the root, $x^8$ dominates, so $f(x)\\sim\\sqrt{x^8}=x^4$. Smallest n is 4.</div><div class=\"ml-vi\">Trong căn, $x^8$ lấn át, nên $f(x)\\sim\\sqrt{x^8}=x^4$. n nhỏ nhất là 4.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q13.png"
         },
         {
           "kind": "MCQ",
@@ -2322,7 +2335,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$f(n)^{g(n)}$ with $g(n)=O(1)$ (bounded exponent) stays polylogarithmic. $h(n)/g(n)=O(n)/O(1)=O(n)$, which dominates. Sum is $O(n)$.</div><div class=\"ml-vi\">$f(n)^{g(n)}$ với $g(n)=O(1)$ (số mũ bị chặn) vẫn ở mức polylog. $h(n)/g(n)=O(n)/O(1)=O(n)$, lấn át. Tổng là $O(n)$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(n)^{g(n)}$ with $g(n)=O(1)$ (bounded exponent) stays polylogarithmic. $h(n)/g(n)=O(n)/O(1)=O(n)$, which dominates. Sum is $O(n)$.</div><div class=\"ml-vi\">$f(n)^{g(n)}$ với $g(n)=O(1)$ (số mũ bị chặn) vẫn ở mức polylog. $h(n)/g(n)=O(n)/O(1)=O(n)$, lấn át. Tổng là $O(n)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q14.png"
         },
         {
           "kind": "MCQ",
@@ -2348,7 +2362,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$(\\log x)^2$ and $\\log(\\log x)$ both grow slower than any positive power of x, including $x^0=1$. Smallest n is 0.</div><div class=\"ml-vi\">$(\\log x)^2$ và $\\log(\\log x)$ đều tăng chậm hơn bất kỳ lũy thừa dương nào của x, kể cả $x^0=1$. n nhỏ nhất là 0.</div>"
+          "explanation": "<div class=\"ml-en\">$(\\log x)^2$ and $\\log(\\log x)$ both grow slower than any positive power of x, including $x^0=1$. Smallest n is 0.</div><div class=\"ml-vi\">$(\\log x)^2$ và $\\log(\\log x)$ đều tăng chậm hơn bất kỳ lũy thừa dương nào của x, kể cả $x^0=1$. n nhỏ nhất là 0.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q15.png"
         }
       ]
     },
@@ -2388,7 +2403,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$g(x)=4x\\log x$ grows slower than $f(x)=x^2\\log x$. So $g=O(f)$ true (ii); $f=O(g)$ false.</div><div class=\"ml-vi\">$g(x)=4x\\log x$ tăng chậm hơn $f(x)=x^2\\log x$. Nên $g=O(f)$ đúng (ii); $f=O(g)$ sai.</div>"
+          "explanation": "<div class=\"ml-en\">$g(x)=4x\\log x$ grows slower than $f(x)=x^2\\log x$. So $g=O(f)$ true (ii); $f=O(g)$ false.</div><div class=\"ml-vi\">$g(x)=4x\\log x$ tăng chậm hơn $f(x)=x^2\\log x$. Nên $g=O(f)$ đúng (ii); $f=O(g)$ sai.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q16.png"
         },
         {
           "kind": "MCQ",
@@ -2414,7 +2430,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\sqrt9=3$: loop1 runs i=0,1,2 (3 times), each with 2 additions (sum+1, i+1) = 6. loop2: $\\sqrt9/2=1.5$, j=0,1 (2 times), each 2 additions (j+1, sum+1) = 4. Total $6+4=10$.</div><div class=\"ml-vi\">$\\sqrt9=3$: vòng 1 chạy 3 lần, mỗi lần 2 phép cộng (sum+1, i+1) = 6. Vòng 2 chạy 2 lần (j<1.5), mỗi lần 2 phép cộng = 4. Tổng $6+4=10$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\sqrt9=3$: loop1 runs i=0,1,2 (3 times), each with 2 additions (sum+1, i+1) = 6. loop2: $\\sqrt9/2=1.5$, j=0,1 (2 times), each 2 additions (j+1, sum+1) = 4. Total $6+4=10$.</div><div class=\"ml-vi\">$\\sqrt9=3$: vòng 1 chạy 3 lần, mỗi lần 2 phép cộng (sum+1, i+1) = 6. Vòng 2 chạy 2 lần (j<1.5), mỗi lần 2 phép cộng = 4. Tổng $6+4=10$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q17.png"
         },
         {
           "kind": "MCQ",
@@ -2440,7 +2457,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">n=4 (5 values $a_0..a_4$, loop runs i=1..4). Each iteration does 2 multiplications ($p:=p*c$ and $a_i*p$): $4\\times2=8$.</div><div class=\"ml-vi\">n=4 (5 giá trị $a_0..a_4$, vòng lặp i=1..4). Mỗi lần lặp 2 phép nhân: $4\\times2=8$.</div>"
+          "explanation": "<div class=\"ml-en\">n=4 (5 values $a_0..a_4$, loop runs i=1..4). Each iteration does 2 multiplications ($p:=p*c$ and $a_i*p$): $4\\times2=8$.</div><div class=\"ml-vi\">n=4 (5 giá trị $a_0..a_4$, vòng lặp i=1..4). Mỗi lần lặp 2 phép nhân: $4\\times2=8$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q18.png"
         },
         {
           "kind": "MCQ",
@@ -2463,7 +2481,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Need $2^n\\times10^{-9}\\le1\\Rightarrow2^n\\le10^9$. $2^{29}\\approx5.37\\times10^8$ (fits); $2^{30}\\approx1.07\\times10^9$ (exceeds). Largest n=29.</div><div class=\"ml-vi\">Cần $2^n\\le10^9$. $2^{29}\\approx5.37\\times10^8$ (vừa); $2^{30}\\approx1.07\\times10^9$ (vượt). n lớn nhất=29.</div>"
+          "explanation": "<div class=\"ml-en\">Need $2^n\\times10^{-9}\\le1\\Rightarrow2^n\\le10^9$. $2^{29}\\approx5.37\\times10^8$ (fits); $2^{30}\\approx1.07\\times10^9$ (exceeds). Largest n=29.</div><div class=\"ml-vi\">Cần $2^n\\le10^9$. $2^{29}\\approx5.37\\times10^8$ (vừa); $2^{30}\\approx1.07\\times10^9$ (vượt). n lớn nhất=29.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q19.png"
         },
         {
           "kind": "MCQ",
@@ -2489,7 +2508,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">i=1: [4,2,3,1]→swap(4,2)→[2,4,3,1]→swap(4,3)→[2,3,4,1]→swap(4,1)→[2,3,1,4] (3 swaps). i=2: [2,3,1,4]→2<3 no swap→swap(3,1)→[2,1,3,4] (1 swap). i=3: [2,1,3,4]→swap(2,1)→[1,2,3,4] (1 swap). Total=3+1+1=5.</div><div class=\"ml-vi\">Truy vết: i=1 có 3 lần đổi chỗ, i=2 có 1 lần, i=3 có 1 lần. Tổng=5.</div>"
+          "explanation": "<div class=\"ml-en\">i=1: [4,2,3,1]→swap(4,2)→[2,4,3,1]→swap(4,3)→[2,3,4,1]→swap(4,1)→[2,3,1,4] (3 swaps). i=2: [2,3,1,4]→2<3 no swap→swap(3,1)→[2,1,3,4] (1 swap). i=3: [2,1,3,4]→swap(2,1)→[1,2,3,4] (1 swap). Total=3+1+1=5.</div><div class=\"ml-vi\">Truy vết: i=1 có 3 lần đổi chỗ, i=2 có 1 lần, i=3 có 1 lần. Tổng=5.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q20.png"
         },
         {
           "kind": "MCQ",
@@ -2515,7 +2535,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Need $2^{n^2}\\le10^{12}\\Rightarrow n^2\\le12\\log_2(10)\\approx39.86\\Rightarrow n\\le6.31$. Largest integer n=6.</div><div class=\"ml-vi\">Cần $2^{n^2}\\le10^{12}\\Rightarrow n^2\\le12\\log_2(10)\\approx39.86\\Rightarrow n\\le6.31$. n nguyên lớn nhất=6.</div>"
+          "explanation": "<div class=\"ml-en\">Need $2^{n^2}\\le10^{12}\\Rightarrow n^2\\le12\\log_2(10)\\approx39.86\\Rightarrow n\\le6.31$. Largest integer n=6.</div><div class=\"ml-vi\">Cần $2^{n^2}\\le10^{12}\\Rightarrow n^2\\le12\\log_2(10)\\approx39.86\\Rightarrow n\\le6.31$. n nguyên lớn nhất=6.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q21.png"
         },
         {
           "kind": "MCQ",
@@ -2544,7 +2565,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Need $n^2\\times10^{-9}\\le1\\Rightarrow n^2\\le10^9\\Rightarrow n\\le\\sqrt{10^9}\\approx31622.78$. Largest integer n=31622.</div><div class=\"ml-vi\">Cần $n^2\\le10^9\\Rightarrow n\\le\\sqrt{10^9}\\approx31622.78$. n nguyên lớn nhất=31622.</div>"
+          "explanation": "<div class=\"ml-en\">Need $n^2\\times10^{-9}\\le1\\Rightarrow n^2\\le10^9\\Rightarrow n\\le\\sqrt{10^9}\\approx31622.78$. Largest integer n=31622.</div><div class=\"ml-vi\">Cần $n^2\\le10^9\\Rightarrow n\\le\\sqrt{10^9}\\approx31622.78$. n nguyên lớn nhất=31622.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q22.png"
         },
         {
           "kind": "MCQ",
@@ -2567,7 +2589,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Iterations: $5\\times6\\times7=210$; each computes $i*j*k$ using 2 multiplications: $210\\times2=420$.</div><div class=\"ml-vi\">Số lần lặp: $5\\times6\\times7=210$; mỗi lần 2 phép nhân ($i*j$ rồi $*k$): $210\\times2=420$.</div>"
+          "explanation": "<div class=\"ml-en\">Iterations: $5\\times6\\times7=210$; each computes $i*j*k$ using 2 multiplications: $210\\times2=420$.</div><div class=\"ml-vi\">Số lần lặp: $5\\times6\\times7=210$; mỗi lần 2 phép nhân ($i*j$ rồi $*k$): $210\\times2=420$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q23.png"
         },
         {
           "kind": "MCQ",
@@ -2593,7 +2616,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$a_1=1$. Strictly-greater updates: $a_2=6>1$; $a_5=7>6$; $a_8=8>7$ — 3 updates, so $t:=t+1$ runs 3 times.</div><div class=\"ml-vi\">$a_1=1$. Cập nhật (lớn hơn nghiêm ngặt): $a_2=6>1$; $a_5=7>6$; $a_8=8>7$ — 3 lần, nên $t:=t+1$ chạy 3 lần.</div>"
+          "explanation": "<div class=\"ml-en\">$a_1=1$. Strictly-greater updates: $a_2=6>1$; $a_5=7>6$; $a_8=8>7$ — 3 updates, so $t:=t+1$ runs 3 times.</div><div class=\"ml-vi\">$a_1=1$. Cập nhật (lớn hơn nghiêm ngặt): $a_2=6>1$; $a_5=7>6$; $a_8=8>7$ — 3 lần, nên $t:=t+1$ chạy 3 lần.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q24.png"
         },
         {
           "kind": "MCQ",
@@ -2619,7 +2643,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$-29+34=5$ ($34=2\\times17$), so $-29\\equiv5\\pmod{17}$. ($103\\bmod17=1$, $80\\bmod17=12$, $-122\\bmod17=14$.)</div><div class=\"ml-vi\">$-29+34=5$ ($34=2\\times17$), nên $-29\\equiv5\\pmod{17}$.</div>"
+          "explanation": "<div class=\"ml-en\">$-29+34=5$ ($34=2\\times17$), so $-29\\equiv5\\pmod{17}$. ($103\\bmod17=1$, $80\\bmod17=12$, $-122\\bmod17=14$.)</div><div class=\"ml-vi\">$-29+34=5$ ($34=2\\times17$), nên $-29\\equiv5\\pmod{17}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q25.png"
         },
         {
           "kind": "MCQ",
@@ -2645,7 +2670,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$137=4\\times31+13\\Rightarrow a=13$. $-137=-5\\times31+18\\Rightarrow b=18$. $b-a=18-13=5$.</div><div class=\"ml-vi\">$137=4\\times31+13\\Rightarrow a=13$. $-137=-5\\times31+18\\Rightarrow b=18$. $b-a=5$.</div>"
+          "explanation": "<div class=\"ml-en\">$137=4\\times31+13\\Rightarrow a=13$. $-137=-5\\times31+18\\Rightarrow b=18$. $b-a=18-13=5$.</div><div class=\"ml-vi\">$137=4\\times31+13\\Rightarrow a=13$. $-137=-5\\times31+18\\Rightarrow b=18$. $b-a=5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q26.png"
         },
         {
           "kind": "MCQ",
@@ -2671,7 +2697,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$x_1=(24+5)\\bmod13=3$. $x_2=(18+5)\\bmod13=10$. $x_3=(60+5)\\bmod13=0$. $x_4=(0+5)\\bmod13=5$.</div><div class=\"ml-vi\">$x_1=3,x_2=10,x_3=0,x_4=5$.</div>"
+          "explanation": "<div class=\"ml-en\">$x_1=(24+5)\\bmod13=3$. $x_2=(18+5)\\bmod13=10$. $x_3=(60+5)\\bmod13=0$. $x_4=(0+5)\\bmod13=5$.</div><div class=\"ml-vi\">$x_1=3,x_2=10,x_3=0,x_4=5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q27.png"
         },
         {
           "kind": "MCQ",
@@ -2697,7 +2724,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$131=3\\times37+20\\Rightarrow a=3$. $-131=-4\\times37+17\\Rightarrow b=-4$ (div rounds toward $-\\infty$). $a-b=3-(-4)=7$.</div><div class=\"ml-vi\">$131=3\\times37+20\\Rightarrow a=3$. $-131=-4\\times37+17\\Rightarrow b=-4$. $a-b=7$.</div>"
+          "explanation": "<div class=\"ml-en\">$131=3\\times37+20\\Rightarrow a=3$. $-131=-4\\times37+17\\Rightarrow b=-4$ (div rounds toward $-\\infty$). $a-b=3-(-4)=7$.</div><div class=\"ml-vi\">$131=3\\times37+20\\Rightarrow a=3$. $-131=-4\\times37+17\\Rightarrow b=-4$. $a-b=7$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q28.png"
         },
         {
           "kind": "MCQ",
@@ -2723,7 +2751,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$131=3\\times37+20\\Rightarrow a=20$. $-131=-4\\times37+17\\Rightarrow b=17$. $a-b=20-17=3$.</div><div class=\"ml-vi\">$131=3\\times37+20\\Rightarrow a=20$. $-131=-4\\times37+17\\Rightarrow b=17$. $a-b=3$.</div>"
+          "explanation": "<div class=\"ml-en\">$131=3\\times37+20\\Rightarrow a=20$. $-131=-4\\times37+17\\Rightarrow b=17$. $a-b=20-17=3$.</div><div class=\"ml-vi\">$131=3\\times37+20\\Rightarrow a=20$. $-131=-4\\times37+17\\Rightarrow b=17$. $a-b=3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q29.png"
         },
         {
           "kind": "MCQ",
@@ -2749,7 +2778,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Need $x_2$ with $3x_2\\bmod11=7$: $x_2=6$ gives $18\\bmod11=7$ ✓. $x_4=3\\times7\\bmod11=21\\bmod11=10$.</div><div class=\"ml-vi\">Cần $x_2$ với $3x_2\\bmod11=7$: $x_2=6$ cho $18\\bmod11=7$ ✓. $x_4=3\\times7\\bmod11=21\\bmod11=10$.</div>"
+          "explanation": "<div class=\"ml-en\">Need $x_2$ with $3x_2\\bmod11=7$: $x_2=6$ gives $18\\bmod11=7$ ✓. $x_4=3\\times7\\bmod11=21\\bmod11=10$.</div><div class=\"ml-vi\">Cần $x_2$ với $3x_2\\bmod11=7$: $x_2=6$ cho $18\\bmod11=7$ ✓. $x_4=3\\times7\\bmod11=21\\bmod11=10$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q30.png"
         }
       ]
     },
@@ -2789,7 +2819,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">(i): substitute $a\\equiv b$: $2a-b\\equiv2b-b=b\\pmod m$ ✓. (ii) is the standard product rule for congruences ✓. Both true.</div><div class=\"ml-vi\">(i) đúng (thay $a\\equiv b$: $2a-b\\equiv2b-b=b$). (ii) là quy tắc nhân đồng dư chuẩn, đúng. Cả hai đúng.</div>"
+          "explanation": "<div class=\"ml-en\">(i): substitute $a\\equiv b$: $2a-b\\equiv2b-b=b\\pmod m$ ✓. (ii) is the standard product rule for congruences ✓. Both true.</div><div class=\"ml-vi\">(i) đúng (thay $a\\equiv b$: $2a-b\\equiv2b-b=b$). (ii) là quy tắc nhân đồng dư chuẩn, đúng. Cả hai đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q31.png"
         },
         {
           "kind": "MCQ",
@@ -2815,7 +2846,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$137=4\\times31+13\\Rightarrow a=4$. $-137=-5\\times31+18\\Rightarrow b=-5$. $a+b=4+(-5)=-1$.</div><div class=\"ml-vi\">$137=4\\times31+13\\Rightarrow a=4$. $-137=-5\\times31+18\\Rightarrow b=-5$. $a+b=-1$.</div>"
+          "explanation": "<div class=\"ml-en\">$137=4\\times31+13\\Rightarrow a=4$. $-137=-5\\times31+18\\Rightarrow b=-5$. $a+b=4+(-5)=-1$.</div><div class=\"ml-vi\">$137=4\\times31+13\\Rightarrow a=4$. $-137=-5\\times31+18\\Rightarrow b=-5$. $a+b=-1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q32.png"
         },
         {
           "kind": "MCQ",
@@ -2838,7 +2870,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">GCD takes the minimum exponent of shared primes only: $2^{\\min(3,4)}\\cdot5^{\\min(1,2)}=2^3\\cdot5=40$ (3, 7, 11 aren't shared).</div><div class=\"ml-vi\">GCD lấy số mũ nhỏ hơn của các số nguyên tố CHUNG: $2^{\\min(3,4)}\\cdot5^{\\min(1,2)}=2^3\\cdot5=40$.</div>"
+          "explanation": "<div class=\"ml-en\">GCD takes the minimum exponent of shared primes only: $2^{\\min(3,4)}\\cdot5^{\\min(1,2)}=2^3\\cdot5=40$ (3, 7, 11 aren't shared).</div><div class=\"ml-vi\">GCD lấy số mũ nhỏ hơn của các số nguyên tố CHUNG: $2^{\\min(3,4)}\\cdot5^{\\min(1,2)}=2^3\\cdot5=40$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q33.png"
         },
         {
           "kind": "MCQ",
@@ -2861,7 +2894,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\varphi(18)=\\varphi(2\\cdot3^2)=18\\cdot\\frac12\\cdot\\frac23=6$.</div><div class=\"ml-vi\">$\\varphi(18)=\\varphi(2\\cdot3^2)=18\\cdot\\frac12\\cdot\\frac23=6$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\varphi(18)=\\varphi(2\\cdot3^2)=18\\cdot\\frac12\\cdot\\frac23=6$.</div><div class=\"ml-vi\">$\\varphi(18)=\\varphi(2\\cdot3^2)=18\\cdot\\frac12\\cdot\\frac23=6$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q34.png"
         },
         {
           "kind": "MCQ",
@@ -2890,7 +2924,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$\\varphi(15)=\\varphi(3\\cdot5)=15\\cdot\\frac23\\cdot\\frac45=8$.</div><div class=\"ml-vi\">$\\varphi(15)=\\varphi(3\\cdot5)=15\\cdot\\frac23\\cdot\\frac45=8$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\varphi(15)=\\varphi(3\\cdot5)=15\\cdot\\frac23\\cdot\\frac45=8$.</div><div class=\"ml-vi\">$\\varphi(15)=\\varphi(3\\cdot5)=15\\cdot\\frac23\\cdot\\frac45=8$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q35.png"
         },
         {
           "kind": "MCQ",
@@ -2913,7 +2948,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">13 is prime, so every one of 1..12 is coprime to it: $\\varphi(13)=12$.</div><div class=\"ml-vi\">13 là số nguyên tố, nên mọi số 1..12 đều nguyên tố cùng nhau với nó: $\\varphi(13)=12$.</div>"
+          "explanation": "<div class=\"ml-en\">13 is prime, so every one of 1..12 is coprime to it: $\\varphi(13)=12$.</div><div class=\"ml-vi\">13 là số nguyên tố, nên mọi số 1..12 đều nguyên tố cùng nhau với nó: $\\varphi(13)=12$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q36.png"
         },
         {
           "kind": "MCQ",
@@ -2939,7 +2975,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">89 is prime. $111=3\\times37$ not prime. 103 is prime. $205=5\\times41$ not prime. Total: 2 primes (89, 103).</div><div class=\"ml-vi\">89 là số nguyên tố. $111=3\\times37$ không phải. 103 là số nguyên tố. $205=5\\times41$ không phải. Tổng: 2 số nguyên tố.</div>"
+          "explanation": "<div class=\"ml-en\">89 is prime. $111=3\\times37$ not prime. 103 is prime. $205=5\\times41$ not prime. Total: 2 primes (89, 103).</div><div class=\"ml-vi\">89 là số nguyên tố. $111=3\\times37$ không phải. 103 là số nguyên tố. $205=5\\times41$ không phải. Tổng: 2 số nguyên tố.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q37.png"
         },
         {
           "kind": "MCQ",
@@ -2962,7 +2999,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Since $a\\times4200=\\text{LCM}\\times\\text{GCD}$: $a=\\dfrac{58800\\times280}{4200}=\\dfrac{16464000}{4200}=3920$.</div><div class=\"ml-vi\">Vì $a\\times4200=\\text{LCM}\\times\\text{GCD}$: $a=\\dfrac{58800\\times280}{4200}=3920$.</div>"
+          "explanation": "<div class=\"ml-en\">Since $a\\times4200=\\text{LCM}\\times\\text{GCD}$: $a=\\dfrac{58800\\times280}{4200}=\\dfrac{16464000}{4200}=3920$.</div><div class=\"ml-vi\">Vì $a\\times4200=\\text{LCM}\\times\\text{GCD}$: $a=\\dfrac{58800\\times280}{4200}=3920$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q38.png"
         },
         {
           "kind": "MCQ",
@@ -2988,7 +3026,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">GCD takes min exponent of shared primes 3,5: $3^{\\min(2,4)}5^{\\min(7,3)}=3^2\\cdot5^3=1125$.</div><div class=\"ml-vi\">GCD lấy số mũ nhỏ hơn của 3 và 5: $3^{\\min(2,4)}5^{\\min(7,3)}=3^2\\cdot5^3=1125$.</div>"
+          "explanation": "<div class=\"ml-en\">GCD takes min exponent of shared primes 3,5: $3^{\\min(2,4)}5^{\\min(7,3)}=3^2\\cdot5^3=1125$.</div><div class=\"ml-vi\">GCD lấy số mũ nhỏ hơn của 3 và 5: $3^{\\min(2,4)}5^{\\min(7,3)}=3^2\\cdot5^3=1125$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q39.png"
         },
         {
           "kind": "MCQ",
@@ -3014,7 +3053,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$26=2\\times13$, $55=5\\times11$. $6=2\\times3$ shares 2 with 26 — bad. $15=3\\times5$ shares 5 with 55 — bad. $39=3\\times13$ shares 13 with 26 — bad. $21=3\\times7$ shares nothing — good.</div><div class=\"ml-vi\">$26=2\\times13$, $55=5\\times11$. $6,15,39$ đều chung thừa số với 26 hoặc 55. $21=3\\times7$ không chung gì — đúng.</div>"
+          "explanation": "<div class=\"ml-en\">$26=2\\times13$, $55=5\\times11$. $6=2\\times3$ shares 2 with 26 — bad. $15=3\\times5$ shares 5 with 55 — bad. $39=3\\times13$ shares 13 with 26 — bad. $21=3\\times7$ shares nothing — good.</div><div class=\"ml-vi\">$26=2\\times13$, $55=5\\times11$. $6,15,39$ đều chung thừa số với 26 hoặc 55. $21=3\\times7$ không chung gì — đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q40.png"
         },
         {
           "kind": "MCQ",
@@ -3040,7 +3080,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$(BAD)_{16}=2989_{10}$, $(CAFE)_{16}=51966_{10}$. Sum$=54955_{10}$. Converting to hex: $54955=D\\times4096+6\\times256+A\\times16+B \\Rightarrow (D6AB)_{16}$.</div><div class=\"ml-vi\">$(BAD)_{16}=2989$, $(CAFE)_{16}=51966$. Tổng$=54955$. Đổi sang hex: $(D6AB)_{16}$.</div>"
+          "explanation": "<div class=\"ml-en\">$(BAD)_{16}=2989_{10}$, $(CAFE)_{16}=51966_{10}$. Sum$=54955_{10}$. Converting to hex: $54955=D\\times4096+6\\times256+A\\times16+B \\Rightarrow (D6AB)_{16}$.</div><div class=\"ml-vi\">$(BAD)_{16}=2989$, $(CAFE)_{16}=51966$. Tổng$=54955$. Đổi sang hex: $(D6AB)_{16}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q41.png"
         },
         {
           "kind": "MCQ",
@@ -3066,7 +3107,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Pad to 12 bits and group by 3 from the right: $011\\,011\\,111\\,011 = 3,3,7,3 \\Rightarrow (3373)_8$.</div><div class=\"ml-vi\">Đệm thành 12 bit, nhóm 3 bit từ phải: $011\\,011\\,111\\,011 = 3,3,7,3 \\Rightarrow (3373)_8$.</div>"
+          "explanation": "<div class=\"ml-en\">Pad to 12 bits and group by 3 from the right: $011\\,011\\,111\\,011 = 3,3,7,3 \\Rightarrow (3373)_8$.</div><div class=\"ml-vi\">Đệm thành 12 bit, nhóm 3 bit từ phải: $011\\,011\\,111\\,011 = 3,3,7,3 \\Rightarrow (3373)_8$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q42.png"
         },
         {
           "kind": "MCQ",
@@ -3089,7 +3131,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$(122)_3=1\\times9+2\\times3+2=17_{10}$. $17=2\\times7+3 \\Rightarrow (23)_7$.</div><div class=\"ml-vi\">$(122)_3=1\\times9+2\\times3+2=17_{10}$. $17=2\\times7+3 \\Rightarrow (23)_7$.</div>"
+          "explanation": "<div class=\"ml-en\">$(122)_3=1\\times9+2\\times3+2=17_{10}$. $17=2\\times7+3 \\Rightarrow (23)_7$.</div><div class=\"ml-vi\">$(122)_3=1\\times9+2\\times3+2=17_{10}$. $17=2\\times7+3 \\Rightarrow (23)_7$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q43.png"
         },
         {
           "kind": "MCQ",
@@ -3115,7 +3158,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$(204)_5=2\\times25+0\\times5+4=54_{10}$. $54=32+16+4+2 \\Rightarrow 110110_2$.</div><div class=\"ml-vi\">$(204)_5=2\\times25+0\\times5+4=54_{10}$. $54=32+16+4+2 \\Rightarrow 110110_2$.</div>"
+          "explanation": "<div class=\"ml-en\">$(204)_5=2\\times25+0\\times5+4=54_{10}$. $54=32+16+4+2 \\Rightarrow 110110_2$.</div><div class=\"ml-vi\">$(204)_5=2\\times25+0\\times5+4=54_{10}$. $54=32+16+4+2 \\Rightarrow 110110_2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q44.png"
         },
         {
           "kind": "MCQ",
@@ -3141,7 +3185,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$(1110)_2=14$, $(1011)_2=11$. $14\\times11=154$. $154=128+16+8+2 \\Rightarrow 10011010_2$.</div><div class=\"ml-vi\">$(1110)_2=14$, $(1011)_2=11$. $14\\times11=154$. $154=128+16+8+2 \\Rightarrow 10011010_2$.</div>"
+          "explanation": "<div class=\"ml-en\">$(1110)_2=14$, $(1011)_2=11$. $14\\times11=154$. $154=128+16+8+2 \\Rightarrow 10011010_2$.</div><div class=\"ml-vi\">$(1110)_2=14$, $(1011)_2=11$. $14\\times11=154$. $154=128+16+8+2 \\Rightarrow 10011010_2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q45.png"
         }
       ]
     },
@@ -3184,7 +3229,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$851=23\\times37$ and $931=7^2\\times19$ share no common prime factor, so $\\gcd(851,931)=1$ — none of the listed values.</div><div class=\"ml-vi\">$851=23\\times37$ và $931=7^2\\times19$ không có thừa số nguyên tố chung, nên $\\gcd(851,931)=1$ — không khớp giá trị nào đã cho.</div>"
+          "explanation": "<div class=\"ml-en\">$851=23\\times37$ and $931=7^2\\times19$ share no common prime factor, so $\\gcd(851,931)=1$ — none of the listed values.</div><div class=\"ml-vi\">$851=23\\times37$ và $931=7^2\\times19$ không có thừa số nguyên tố chung, nên $\\gcd(851,931)=1$ — không khớp giá trị nào đã cho.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q46.png"
         },
         {
           "kind": "MCQ",
@@ -3210,7 +3256,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$(434)_5=4\\times25+3\\times5+4=119_{10}$. Dividing by 3 repeatedly: $119,39r2,13r0,4r1,1r1,0r1$ → reading remainders bottom-up: $(11102)_3$.</div><div class=\"ml-vi\">$(434)_5=4\\times25+3\\times5+4=119_{10}$. Chia liên tiếp cho 3: $119,39r2,13r0,4r1,1r1,0r1$ → $(11102)_3$.</div>"
+          "explanation": "<div class=\"ml-en\">$(434)_5=4\\times25+3\\times5+4=119_{10}$. Dividing by 3 repeatedly: $119,39r2,13r0,4r1,1r1,0r1$ → reading remainders bottom-up: $(11102)_3$.</div><div class=\"ml-vi\">$(434)_5=4\\times25+3\\times5+4=119_{10}$. Chia liên tiếp cho 3: $119,39r2,13r0,4r1,1r1,0r1$ → $(11102)_3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q47.png"
         },
         {
           "kind": "MCQ",
@@ -3236,7 +3283,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$90=3\\times24+18$; $24=1\\times18+6$; $18=3\\times6+0$. That's 3 divisions.</div><div class=\"ml-vi\">$90=3\\times24+18$; $24=1\\times18+6$; $18=3\\times6+0$. Đó là 3 phép chia.</div>"
+          "explanation": "<div class=\"ml-en\">$90=3\\times24+18$; $24=1\\times18+6$; $18=3\\times6+0$. That's 3 divisions.</div><div class=\"ml-vi\">$90=3\\times24+18$; $24=1\\times18+6$; $18=3\\times6+0$. Đó là 3 phép chia.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q48.png"
         },
         {
           "kind": "MCQ",
@@ -3259,7 +3307,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Since the coefficient for a is 5, reduce by one unit of a: $k+1-5=k-4$, so $k+1=(k-4)+5$ — this needs $P(k-4)$, matching 5 base cases (n=24..28).</div><div class=\"ml-vi\">Vì hệ số của a là 5, giảm một đơn vị a: $k+1-5=k-4$, nên $k+1=(k-4)+5$ — cần $P(k-4)$, khớp 5 trường hợp cơ sở (n=24..28).</div>"
+          "explanation": "<div class=\"ml-en\">Since the coefficient for a is 5, reduce by one unit of a: $k+1-5=k-4$, so $k+1=(k-4)+5$ — this needs $P(k-4)$, matching 5 base cases (n=24..28).</div><div class=\"ml-vi\">Vì hệ số của a là 5, giảm một đơn vị a: $k+1-5=k-4$, nên $k+1=(k-4)+5$ — cần $P(k-4)$, khớp 5 trường hợp cơ sở (n=24..28).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q49.png"
         },
         {
           "kind": "MCQ",
@@ -3282,7 +3331,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The sum up to the k-th term is $k^2$ (given). Adding the next term $(2k+1)$ (the $(k{+}1)$-th term): $1+3+\\dots+(2k-1)+(2k+1)=k^2+(2k+1)$, matching (i).</div><div class=\"ml-vi\">Tổng tới số hạng thứ k là $k^2$ (đề cho). Cộng thêm số hạng kế $(2k+1)$: $k^2+(2k+1)$, khớp (i).</div>"
+          "explanation": "<div class=\"ml-en\">The sum up to the k-th term is $k^2$ (given). Adding the next term $(2k+1)$ (the $(k{+}1)$-th term): $1+3+\\dots+(2k-1)+(2k+1)=k^2+(2k+1)$, matching (i).</div><div class=\"ml-vi\">Tổng tới số hạng thứ k là $k^2$ (đề cho). Cộng thêm số hạng kế $(2k+1)$: $k^2+(2k+1)$, khớp (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q50.png"
         },
         {
           "kind": "MCQ",
@@ -3305,7 +3355,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The inductive hypothesis assumes P(k) holds for an arbitrary k in the domain — here nonnegative integers, so $k\\ge0$.</div><div class=\"ml-vi\">Giả thiết quy nạp giả sử P(k) đúng với k bất kỳ trong miền — ở đây là số nguyên không âm, nên $k\\ge0$.</div>"
+          "explanation": "<div class=\"ml-en\">The inductive hypothesis assumes P(k) holds for an arbitrary k in the domain — here nonnegative integers, so $k\\ge0$.</div><div class=\"ml-vi\">Giả thiết quy nạp giả sử P(k) đúng với k bất kỳ trong miền — ở đây là số nguyên không âm, nên $k\\ge0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q51.png"
         },
         {
           "kind": "MCQ",
@@ -3328,7 +3379,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The domain starts at the smallest nonnegative integer, 0, so the basic step proves P(0).</div><div class=\"ml-vi\">Miền bắt đầu từ số nguyên không âm nhỏ nhất là 0, nên bước cơ sở chứng minh P(0).</div>"
+          "explanation": "<div class=\"ml-en\">The domain starts at the smallest nonnegative integer, 0, so the basic step proves P(0).</div><div class=\"ml-vi\">Miền bắt đầu từ số nguyên không âm nhỏ nhất là 0, nên bước cơ sở chứng minh P(0).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q52.png"
         },
         {
           "kind": "MCQ",
@@ -3351,7 +3403,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Adding the next term $(k+1)^2$ to the sum up to k: $1^2+\\dots+(k+1)^2=k(k+1)(2k+1)/6+(k+1)^2$.</div><div class=\"ml-vi\">Cộng thêm số hạng kế $(k+1)^2$ vào tổng tới k: $=k(k+1)(2k+1)/6+(k+1)^2$.</div>"
+          "explanation": "<div class=\"ml-en\">Adding the next term $(k+1)^2$ to the sum up to k: $1^2+\\dots+(k+1)^2=k(k+1)(2k+1)/6+(k+1)^2$.</div><div class=\"ml-vi\">Cộng thêm số hạng kế $(k+1)^2$ vào tổng tới k: $=k(k+1)(2k+1)/6+(k+1)^2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q53.png"
         },
         {
           "kind": "MCQ",
@@ -3374,7 +3427,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Standard order: base cases first (Step 2), then state the inductive hypothesis (Step 1), then the inductive step computation (Step 4), then the conclusion (Step 3): 2,1,4,3.</div><div class=\"ml-vi\">Thứ tự chuẩn: cơ sở trước (Bước 2), rồi giả thiết quy nạp (Bước 1), rồi bước quy nạp (Bước 4), rồi kết luận (Bước 3): 2,1,4,3.</div>"
+          "explanation": "<div class=\"ml-en\">Standard order: base cases first (Step 2), then state the inductive hypothesis (Step 1), then the inductive step computation (Step 4), then the conclusion (Step 3): 2,1,4,3.</div><div class=\"ml-vi\">Thứ tự chuẩn: cơ sở trước (Bước 2), rồi giả thiết quy nạp (Bước 1), rồi bước quy nạp (Bước 4), rồi kết luận (Bước 3): 2,1,4,3.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q54.png"
         },
         {
           "kind": "MCQ",
@@ -3397,7 +3451,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Adding the next term $(k+1)^3$ to the sum up to k: $1^3+\\dots+(k+1)^3=(k(k+1)/2)^2+(k+1)^3$.</div><div class=\"ml-vi\">Cộng thêm số hạng kế $(k+1)^3$ vào tổng tới k: $=(k(k+1)/2)^2+(k+1)^3$.</div>"
+          "explanation": "<div class=\"ml-en\">Adding the next term $(k+1)^3$ to the sum up to k: $1^3+\\dots+(k+1)^3=(k(k+1)/2)^2+(k+1)^3$.</div><div class=\"ml-vi\">Cộng thêm số hạng kế $(k+1)^3$ vào tổng tới k: $=(k(k+1)/2)^2+(k+1)^3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q55.png"
         },
         {
           "kind": "MCQ",
@@ -3420,7 +3475,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Frobenius number for coprime 6,7 is $6\\times7-6-7=29$ (largest non-representable). So every $n\\ge30$ is representable; smallest a=30.</div><div class=\"ml-vi\">Số Frobenius cho 6,7 nguyên tố cùng nhau là $6\\times7-6-7=29$ (số lớn nhất không biểu diễn được). Vậy mọi $n\\ge30$ biểu diễn được; a nhỏ nhất=30.</div>"
+          "explanation": "<div class=\"ml-en\">Frobenius number for coprime 6,7 is $6\\times7-6-7=29$ (largest non-representable). So every $n\\ge30$ is representable; smallest a=30.</div><div class=\"ml-vi\">Số Frobenius cho 6,7 nguyên tố cùng nhau là $6\\times7-6-7=29$ (số lớn nhất không biểu diễn được). Vậy mọi $n\\ge30$ biểu diễn được; a nhỏ nhất=30.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q56.png"
         },
         {
           "kind": "MCQ",
@@ -3446,7 +3502,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$f(1)=2f(0)-8=0 \\Rightarrow f(0)=4$.</div><div class=\"ml-vi\">$f(1)=2f(0)-8=0 \\Rightarrow f(0)=4$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(1)=2f(0)-8=0 \\Rightarrow f(0)=4$.</div><div class=\"ml-vi\">$f(1)=2f(0)-8=0 \\Rightarrow f(0)=4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q57.png"
         },
         {
           "kind": "MCQ",
@@ -3472,7 +3529,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Starting from (1,1) (odd,odd), rules (ii) using only $\\pm2$ steps can only reach (odd,odd) pairs, missing (even,even) pairs like (2,2) — also valid (sum even). Rule (iii) adds $(a+1,b+1)$, which reaches those too, covering the whole set S.</div><div class=\"ml-vi\">Từ (1,1) (lẻ,lẻ), quy tắc (ii) chỉ dùng bước $\\pm2$ nên chỉ tới được cặp (lẻ,lẻ), bỏ sót cặp (chẵn,chẵn) như (2,2) (tổng vẫn chẵn). Quy tắc (iii) thêm $(a+1,b+1)$ mới phủ hết được tập S.</div>"
+          "explanation": "<div class=\"ml-en\">Starting from (1,1) (odd,odd), rules (ii) using only $\\pm2$ steps can only reach (odd,odd) pairs, missing (even,even) pairs like (2,2) — also valid (sum even). Rule (iii) adds $(a+1,b+1)$, which reaches those too, covering the whole set S.</div><div class=\"ml-vi\">Từ (1,1) (lẻ,lẻ), quy tắc (ii) chỉ dùng bước $\\pm2$ nên chỉ tới được cặp (lẻ,lẻ), bỏ sót cặp (chẵn,chẵn) như (2,2) (tổng vẫn chẵn). Quy tắc (iii) thêm $(a+1,b+1)$ mới phủ hết được tập S.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q58.png"
         },
         {
           "kind": "MCQ",
@@ -3495,7 +3553,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Starting at 2 and repeatedly doubling gives $2,4,8,16,\\dots=2^n$ for $n=1,2,\\dots$</div><div class=\"ml-vi\">Bắt đầu từ 2 và nhân đôi liên tục cho $2,4,8,16,\\dots=2^n$ với $n=1,2,\\dots$</div>"
+          "explanation": "<div class=\"ml-en\">Starting at 2 and repeatedly doubling gives $2,4,8,16,\\dots=2^n$ for $n=1,2,\\dots$</div><div class=\"ml-vi\">Bắt đầu từ 2 và nhân đôi liên tục cho $2,4,8,16,\\dots=2^n$ với $n=1,2,\\dots$</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q59.png"
         },
         {
           "kind": "MCQ",
@@ -3518,7 +3577,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Need $2m+3n=a$, $3m+2n=b$ with nonneg integers m,n. For (7,8): $m=2,n=1$ gives $2(2)+3(1)=7$ ✓ and $3(2)+2(1)=8$ ✓.</div><div class=\"ml-vi\">Cần $2m+3n=a$, $3m+2n=b$ với m,n nguyên không âm. Với (7,8): $m=2,n=1$ cho $2(2)+3(1)=7$ ✓ và $3(2)+2(1)=8$ ✓.</div>"
+          "explanation": "<div class=\"ml-en\">Need $2m+3n=a$, $3m+2n=b$ with nonneg integers m,n. For (7,8): $m=2,n=1$ gives $2(2)+3(1)=7$ ✓ and $3(2)+2(1)=8$ ✓.</div><div class=\"ml-vi\">Cần $2m+3n=a$, $3m+2n=b$ với m,n nguyên không âm. Với (7,8): $m=2,n=1$ cho $2(2)+3(1)=7$ ✓ và $3(2)+2(1)=8$ ✓.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q60.png"
         }
       ]
     },
@@ -3561,7 +3621,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f(1)=4+4-3=5$. $f(2)=25+10-3=32$. $f(3)=1024+64-3=1085$.</div><div class=\"ml-vi\">$f(1)=4+4-3=5$. $f(2)=25+10-3=32$. $f(3)=1024+64-3=1085$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(1)=4+4-3=5$. $f(2)=25+10-3=32$. $f(3)=1024+64-3=1085$.</div><div class=\"ml-vi\">$f(1)=4+4-3=5$. $f(2)=25+10-3=32$. $f(3)=1024+64-3=1085$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q61.png"
         },
         {
           "kind": "MCQ",
@@ -3584,7 +3645,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Need $2m+3n=a,3m+2n=b$ nonneg integers. (10,15): m=5,n=0 ✓. (10,10): m=2,n=2 ✓. (5,5): m=1,n=1 ✓. (10,5): solving gives $m=-1$ — no nonnegative solution, so NOT in S.</div><div class=\"ml-vi\">Cần $2m+3n=a,3m+2n=b$ nguyên không âm. (10,15),(10,10),(5,5) đều có nghiệm hợp lệ. (10,5) giải ra $m=-1$ — không có nghiệm không âm, nên KHÔNG thuộc S.</div>"
+          "explanation": "<div class=\"ml-en\">Need $2m+3n=a,3m+2n=b$ nonneg integers. (10,15): m=5,n=0 ✓. (10,10): m=2,n=2 ✓. (5,5): m=1,n=1 ✓. (10,5): solving gives $m=-1$ — no nonnegative solution, so NOT in S.</div><div class=\"ml-vi\">Cần $2m+3n=a,3m+2n=b$ nguyên không âm. (10,15),(10,10),(5,5) đều có nghiệm hợp lệ. (10,5) giải ra $m=-1$ — không có nghiệm không âm, nên KHÔNG thuộc S.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q62.png"
         },
         {
           "kind": "MCQ",
@@ -3610,7 +3672,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$a_1=4-1=3$. $a_2=9-1=8$. $a_3=64-1=63$. $a_4=63^2-1=3969-1=3968$.</div><div class=\"ml-vi\">$a_1=3,a_2=8,a_3=63,a_4=63^2-1=3968$.</div>"
+          "explanation": "<div class=\"ml-en\">$a_1=4-1=3$. $a_2=9-1=8$. $a_3=64-1=63$. $a_4=63^2-1=3969-1=3968$.</div><div class=\"ml-vi\">$a_1=3,a_2=8,a_3=63,a_4=63^2-1=3968$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q63.png"
         },
         {
           "kind": "MCQ",
@@ -3636,7 +3699,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Need $a_0=10^0=1$, then $a_n=10a_{n-1}$ for $n\\ge1$ gives $a_1=10,a_2=100,\\dots$ — matches (iv). (i) starts at 0 (wrong base), (ii)/(iii) never define $a_0$.</div><div class=\"ml-vi\">Cần $a_0=10^0=1$, rồi $a_n=10a_{n-1}$ cho $n\\ge1$ — khớp (iv). (i) bắt đầu từ 0 (sai cơ sở), (ii)/(iii) không định nghĩa $a_0$.</div>"
+          "explanation": "<div class=\"ml-en\">Need $a_0=10^0=1$, then $a_n=10a_{n-1}$ for $n\\ge1$ gives $a_1=10,a_2=100,\\dots$ — matches (iv). (i) starts at 0 (wrong base), (ii)/(iii) never define $a_0$.</div><div class=\"ml-vi\">Cần $a_0=10^0=1$, rồi $a_n=10a_{n-1}$ cho $n\\ge1$ — khớp (iv). (i) bắt đầu từ 0 (sai cơ sở), (ii)/(iii) không định nghĩa $a_0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q64.png"
         },
         {
           "kind": "MCQ",
@@ -3659,7 +3723,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Fibonacci-style with $f(1)=f(2)=1$: $f_3=2,f_4=3,f_5=5,f_6=8,f_7=13$.</div><div class=\"ml-vi\">Kiểu Fibonacci với $f(1)=f(2)=1$: $f_3=2,f_4=3,f_5=5,f_6=8,f_7=13$.</div>"
+          "explanation": "<div class=\"ml-en\">Fibonacci-style with $f(1)=f(2)=1$: $f_3=2,f_4=3,f_5=5,f_6=8,f_7=13$.</div><div class=\"ml-vi\">Kiểu Fibonacci với $f(1)=f(2)=1$: $f_3=2,f_4=3,f_5=5,f_6=8,f_7=13$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q65.png"
         },
         {
           "kind": "MCQ",
@@ -3685,7 +3750,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Simulating the merge: comparisons consume front elements until one list empties. Tracing gives 9 comparisons (list 2 empties after taking 9; remaining 10 appended with no comparison).</div><div class=\"ml-vi\">Mô phỏng trộn: so sánh tiêu thụ phần tử đầu tới khi một dãy hết. Truy vết ra 9 phép so sánh (dãy 2 hết sau khi lấy 9; còn lại 10 thêm vào không cần so sánh).</div>"
+          "explanation": "<div class=\"ml-en\">Simulating the merge: comparisons consume front elements until one list empties. Tracing gives 9 comparisons (list 2 empties after taking 9; remaining 10 appended with no comparison).</div><div class=\"ml-vi\">Mô phỏng trộn: so sánh tiêu thụ phần tử đầu tới khi một dãy hết. Truy vết ra 9 phép so sánh (dãy 2 hết sau khi lấy 9; còn lại 10 thêm vào không cần so sánh).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q66.png"
         },
         {
           "kind": "MCQ",
@@ -3708,7 +3774,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Simulating the merge: 8 comparisons before list 2 empties (after taking 12); remaining 15,20,24 appended with no comparison.</div><div class=\"ml-vi\">Mô phỏng trộn: 8 phép so sánh trước khi dãy 2 hết (sau khi lấy 12); còn lại 15,20,24 thêm vào không cần so sánh.</div>"
+          "explanation": "<div class=\"ml-en\">Simulating the merge: 8 comparisons before list 2 empties (after taking 12); remaining 15,20,24 appended with no comparison.</div><div class=\"ml-vi\">Mô phỏng trộn: 8 phép so sánh trước khi dãy 2 hết (sau khi lấy 12); còn lại 15,20,24 thêm vào không cần so sánh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q67.png"
         },
         {
           "kind": "MCQ",
@@ -3734,7 +3801,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$AL(3)=3\\times2\\times1=6$. $AL(4)=6\\times3\\times2=36$. $AL(5)=36\\times6\\times3=648$.</div><div class=\"ml-vi\">$AL(3)=6$. $AL(4)=6\\times3\\times2=36$. $AL(5)=36\\times6\\times3=648$.</div>"
+          "explanation": "<div class=\"ml-en\">$AL(3)=3\\times2\\times1=6$. $AL(4)=6\\times3\\times2=36$. $AL(5)=36\\times6\\times3=648$.</div><div class=\"ml-vi\">$AL(3)=6$. $AL(4)=6\\times3\\times2=36$. $AL(5)=36\\times6\\times3=648$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q68.png"
         },
         {
           "kind": "MCQ",
@@ -3757,7 +3825,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">(i) calls itself ($A(n-2)$) — recursive. (ii) uses an iterative for-loop with no self-call — not recursive, even though it computes the same result.</div><div class=\"ml-vi\">(i) tự gọi lại chính nó ($A(n-2)$) — đệ quy. (ii) dùng vòng lặp for lặp, không tự gọi — không phải đệ quy dù cùng kết quả.</div>"
+          "explanation": "<div class=\"ml-en\">(i) calls itself ($A(n-2)$) — recursive. (ii) uses an iterative for-loop with no self-call — not recursive, even though it computes the same result.</div><div class=\"ml-vi\">(i) tự gọi lại chính nó ($A(n-2)$) — đệ quy. (ii) dùng vòng lặp for lặp, không tự gọi — không phải đệ quy dù cùng kết quả.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q69.png"
         },
         {
           "kind": "MCQ",
@@ -3783,7 +3852,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$P(3,1)=1,P(3,2)=4,P(3,3)=7,P(3,4)=10,P(3,5)=13$.</div><div class=\"ml-vi\">$P(3,1)=1,P(3,2)=4,P(3,3)=7,P(3,4)=10,P(3,5)=13$.</div>"
+          "explanation": "<div class=\"ml-en\">$P(3,1)=1,P(3,2)=4,P(3,3)=7,P(3,4)=10,P(3,5)=13$.</div><div class=\"ml-vi\">$P(3,1)=1,P(3,2)=4,P(3,3)=7,P(3,4)=10,P(3,5)=13$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q70.png"
         },
         {
           "kind": "MCQ",
@@ -3809,7 +3879,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$T(2,0)=1,T(2,1)=2,T(2,2)=4,T(2,3)=8$.</div><div class=\"ml-vi\">$T(2,0)=1,T(2,1)=2,T(2,2)=4,T(2,3)=8$.</div>"
+          "explanation": "<div class=\"ml-en\">$T(2,0)=1,T(2,1)=2,T(2,2)=4,T(2,3)=8$.</div><div class=\"ml-vi\">$T(2,0)=1,T(2,1)=2,T(2,2)=4,T(2,3)=8$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q71.png"
         },
         {
           "kind": "MCQ",
@@ -3835,7 +3906,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">n=8 is even, $\\ge3$: $T(8)=8$. n=9 odd: $T(9)=3\\times T(8)-2=3\\times8-2=22$.</div><div class=\"ml-vi\">n=8 chẵn, $\\ge3$: $T(8)=8$. n=9 lẻ: $T(9)=3\\times8-2=22$.</div>"
+          "explanation": "<div class=\"ml-en\">n=8 is even, $\\ge3$: $T(8)=8$. n=9 odd: $T(9)=3\\times T(8)-2=3\\times8-2=22$.</div><div class=\"ml-vi\">n=8 chẵn, $\\ge3$: $T(8)=8$. n=9 lẻ: $T(9)=3\\times8-2=22$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q72.png"
         },
         {
           "kind": "MCQ",
@@ -3858,7 +3930,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Must include 5, exclude 6, and freely include/exclude each of $\\{1,2,3,4\\}$: $2^4=16$.</div><div class=\"ml-vi\">Phải chứa 5, không chứa 6, và chọn tự do mỗi phần tử trong $\\{1,2,3,4\\}$: $2^4=16$.</div>"
+          "explanation": "<div class=\"ml-en\">Must include 5, exclude 6, and freely include/exclude each of $\\{1,2,3,4\\}$: $2^4=16$.</div><div class=\"ml-vi\">Phải chứa 5, không chứa 6, và chọn tự do mỗi phần tử trong $\\{1,2,3,4\\}$: $2^4=16$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q73.png"
         },
         {
           "kind": "MCQ",
@@ -3884,7 +3957,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Total functions: $5^5=3125$. Functions with $f(1)=f(2)$: $5\\times5^3=625$ (choose the shared value, then f(3),f(4),f(5) freely). Difference: $3125-625=2500$.</div><div class=\"ml-vi\">Tổng hàm: $5^5=3125$. Hàm có $f(1)=f(2)$: $5\\times5^3=625$. Hiệu: $3125-625=2500$.</div>"
+          "explanation": "<div class=\"ml-en\">Total functions: $5^5=3125$. Functions with $f(1)=f(2)$: $5\\times5^3=625$ (choose the shared value, then f(3),f(4),f(5) freely). Difference: $3125-625=2500$.</div><div class=\"ml-vi\">Tổng hàm: $5^5=3125$. Hàm có $f(1)=f(2)$: $5\\times5^3=625$. Hiệu: $3125-625=2500$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q74.png"
         },
         {
           "kind": "MCQ",
@@ -3907,7 +3981,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Choose which of the 3 positions is NOT a 4 (3 ways); that position has 9 choices (any digit except 4). Total $3\\times9=27$.</div><div class=\"ml-vi\">Chọn vị trí nào trong 3 vị trí KHÔNG phải 4 (3 cách); vị trí đó có 9 lựa chọn (mọi chữ số trừ 4). Tổng $3\\times9=27$.</div>"
+          "explanation": "<div class=\"ml-en\">Choose which of the 3 positions is NOT a 4 (3 ways); that position has 9 choices (any digit except 4). Total $3\\times9=27$.</div><div class=\"ml-vi\">Chọn vị trí nào trong 3 vị trí KHÔNG phải 4 (3 cách); vị trí đó có 9 lựa chọn (mọi chữ số trừ 4). Tổng $3\\times9=27$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q75.png"
         }
       ]
     },
@@ -3950,7 +4025,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Injections from a 5-set to a 10-set: $P(10,5)=10\\times9\\times8\\times7\\times6=30240$.</div><div class=\"ml-vi\">Đơn ánh từ tập 5 tới tập 10: $P(10,5)=30240$.</div>"
+          "explanation": "<div class=\"ml-en\">Injections from a 5-set to a 10-set: $P(10,5)=10\\times9\\times8\\times7\\times6=30240$.</div><div class=\"ml-vi\">Đơn ánh từ tập 5 tới tập 10: $P(10,5)=30240$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q76.png"
         },
         {
           "kind": "MCQ",
@@ -3976,7 +4052,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">As a set, $Y=\\{x,\\{z,z\\},x\\}=\\{x,\\{z\\}\\}$ has only 2 distinct elements. $|X|=4$. Injections from a 2-set to a 4-set: $P(4,2)=12$.</div><div class=\"ml-vi\">Là tập hợp, $Y$ chỉ có 2 phần tử khác nhau. $|X|=4$. Đơn ánh từ tập 2 tới tập 4: $P(4,2)=12$.</div>"
+          "explanation": "<div class=\"ml-en\">As a set, $Y=\\{x,\\{z,z\\},x\\}=\\{x,\\{z\\}\\}$ has only 2 distinct elements. $|X|=4$. Injections from a 2-set to a 4-set: $P(4,2)=12$.</div><div class=\"ml-vi\">Là tập hợp, $Y$ chỉ có 2 phần tử khác nhau. $|X|=4$. Đơn ánh từ tập 2 tới tập 4: $P(4,2)=12$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q77.png"
         },
         {
           "kind": "MCQ",
@@ -4002,7 +4079,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$\\lfloor200/3\\rfloor+\\lfloor200/5\\rfloor-\\lfloor200/15\\rfloor=66+40-13=93$.</div><div class=\"ml-vi\">$\\lfloor200/3\\rfloor+\\lfloor200/5\\rfloor-\\lfloor200/15\\rfloor=66+40-13=93$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\lfloor200/3\\rfloor+\\lfloor200/5\\rfloor-\\lfloor200/15\\rfloor=66+40-13=93$.</div><div class=\"ml-vi\">$\\lfloor200/3\\rfloor+\\lfloor200/5\\rfloor-\\lfloor200/15\\rfloor=66+40-13=93$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q78.png"
         },
         {
           "kind": "MCQ",
@@ -4028,7 +4106,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">An increasing injection is determined by choosing a 4-element subset of the 8-element codomain: $\\binom{8}{4}=70$.</div><div class=\"ml-vi\">Hàm đơn ánh tăng được xác định bởi việc chọn tập con 4 phần tử của tập đích 8 phần tử: $\\binom{8}{4}=70$.</div>"
+          "explanation": "<div class=\"ml-en\">An increasing injection is determined by choosing a 4-element subset of the 8-element codomain: $\\binom{8}{4}=70$.</div><div class=\"ml-vi\">Hàm đơn ánh tăng được xác định bởi việc chọn tập con 4 phần tử của tập đích 8 phần tử: $\\binom{8}{4}=70$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q79.png"
         },
         {
           "kind": "MCQ",
@@ -4054,7 +4133,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Each of 5 domain elements picks 1 of 3 codomain values: $3^5=243$.</div><div class=\"ml-vi\">Mỗi phần tử trong 5 phần tử miền chọn độc lập 1 trong 3 giá trị: $3^5=243$.</div>"
+          "explanation": "<div class=\"ml-en\">Each of 5 domain elements picks 1 of 3 codomain values: $3^5=243$.</div><div class=\"ml-vi\">Mỗi phần tử trong 5 phần tử miền chọn độc lập 1 trong 3 giá trị: $3^5=243$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q80.png"
         },
         {
           "kind": "MCQ",
@@ -4080,7 +4160,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$a_5=-1+3+9+27+81+243=362$.</div><div class=\"ml-vi\">$a_5=-1+3+9+27+81+243=362$.</div>"
+          "explanation": "<div class=\"ml-en\">$a_5=-1+3+9+27+81+243=362$.</div><div class=\"ml-vi\">$a_5=-1+3+9+27+81+243=362$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q81.png"
         },
         {
           "kind": "MCQ",
@@ -4106,7 +4187,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$a_1=1,a_2=10,a_3=37,a_4=118$.</div><div class=\"ml-vi\">$a_1=1,a_2=10,a_3=37,a_4=118$.</div>"
+          "explanation": "<div class=\"ml-en\">$a_1=1,a_2=10,a_3=37,a_4=118$.</div><div class=\"ml-vi\">$a_1=1,a_2=10,a_3=37,a_4=118$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q82.png"
         },
         {
           "kind": "MCQ",
@@ -4132,7 +4214,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$a_0=5,a_2=4+36+2=42,a_4=16+324+4=344$.</div><div class=\"ml-vi\">$a_0=5,a_2=42,a_4=344$.</div>"
+          "explanation": "<div class=\"ml-en\">$a_0=5,a_2=4+36+2=42,a_4=16+324+4=344$.</div><div class=\"ml-vi\">$a_0=5,a_2=42,a_4=344$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q83.png"
         },
         {
           "kind": "MCQ",
@@ -4158,7 +4241,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">All three check out: constant $-12$: $-3(-12)+4(-12)=-12$✓; $(-4)^n$: $-3(-4)^{n-1}+4(-4)^{n-2}=(-4)^n$✓; constant $-1$: $-3(-1)+4(-1)=-1$✓.</div><div class=\"ml-vi\">Cả ba đều thỏa khi thay vào kiểm tra trực tiếp.</div>"
+          "explanation": "<div class=\"ml-en\">All three check out: constant $-12$: $-3(-12)+4(-12)=-12$✓; $(-4)^n$: $-3(-4)^{n-1}+4(-4)^{n-2}=(-4)^n$✓; constant $-1$: $-3(-1)+4(-1)=-1$✓.</div><div class=\"ml-vi\">Cả ba đều thỏa khi thay vào kiểm tra trực tiếp.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q84.png"
         },
         {
           "kind": "MCQ",
@@ -4187,7 +4271,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Total $2^5=32$. Strings with NO two consecutive 1s of length 5: 13. With at least one \"11\": $32-13=19$.</div><div class=\"ml-vi\">Tổng $2^5=32$. Chuỗi KHÔNG có hai bit 1 liên tiếp (độ dài 5): 13. Có ít nhất một \"11\": $32-13=19$.</div>"
+          "explanation": "<div class=\"ml-en\">Total $2^5=32$. Strings with NO two consecutive 1s of length 5: 13. With at least one \"11\": $32-13=19$.</div><div class=\"ml-vi\">Tổng $2^5=32$. Chuỗi KHÔNG có hai bit 1 liên tiếp (độ dài 5): 13. Có ít nhất một \"11\": $32-13=19$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q85.png"
         },
         {
           "kind": "MCQ",
@@ -4213,7 +4298,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f(3)=3f(2)+6=18\\Rightarrow f(2)=4$. $f(4)=3(18)+6=60$.</div><div class=\"ml-vi\">$f(3)=3f(2)+6=18\\Rightarrow f(2)=4$. $f(4)=3(18)+6=60$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(3)=3f(2)+6=18\\Rightarrow f(2)=4$. $f(4)=3(18)+6=60$.</div><div class=\"ml-vi\">$f(3)=3f(2)+6=18\\Rightarrow f(2)=4$. $f(4)=3(18)+6=60$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q86.png"
         },
         {
           "kind": "MCQ",
@@ -4236,7 +4322,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Recurrence $a_n=a_{n-1}+2a_{n-2}$ (each mature pair, present two months prior, contributes 2 new pairs), with $a_1=a_2=1$: $a_3=3,a_4=5,a_5=11,a_6=21$.</div><div class=\"ml-vi\">Hệ thức $a_n=a_{n-1}+2a_{n-2}$, với $a_1=a_2=1$: $a_3=3,a_4=5,a_5=11,a_6=21$.</div>"
+          "explanation": "<div class=\"ml-en\">Recurrence $a_n=a_{n-1}+2a_{n-2}$ (each mature pair, present two months prior, contributes 2 new pairs), with $a_1=a_2=1$: $a_3=3,a_4=5,a_5=11,a_6=21$.</div><div class=\"ml-vi\">Hệ thức $a_n=a_{n-1}+2a_{n-2}$, với $a_1=a_2=1$: $a_3=3,a_4=5,a_5=11,a_6=21$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q87.png"
         },
         {
           "kind": "MCQ",
@@ -4259,7 +4346,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$(-4)^n$: verified to satisfy. Constant $a_n=1$: $-3(1)+4(1)=1$ ✓ also satisfies (any constant trivially satisfies since $-3c+4c=c$). Both actually satisfy — neither fails.</div><div class=\"ml-vi\">$(-4)^n$ thỏa. Hằng $a_n=1$: $-3(1)+4(1)=1$ ✓ cũng thỏa (mọi hằng số đều thỏa vì $-3c+4c=c$). Cả hai đều thỏa — không cái nào KHÔNG thỏa.</div>"
+          "explanation": "<div class=\"ml-en\">$(-4)^n$: verified to satisfy. Constant $a_n=1$: $-3(1)+4(1)=1$ ✓ also satisfies (any constant trivially satisfies since $-3c+4c=c$). Both actually satisfy — neither fails.</div><div class=\"ml-vi\">$(-4)^n$ thỏa. Hằng $a_n=1$: $-3(1)+4(1)=1$ ✓ cũng thỏa (mọi hằng số đều thỏa vì $-3c+4c=c$). Cả hai đều thỏa — không cái nào KHÔNG thỏa.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q88.png"
         },
         {
           "kind": "MCQ",
@@ -4288,7 +4376,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$f(5)=f(1)+15=19$. $f(25)=f(5)+75=94$. $f(125)=f(25)+375=469$.</div><div class=\"ml-vi\">$f(5)=19,f(25)=94,f(125)=469$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(5)=f(1)+15=19$. $f(25)=f(5)+75=94$. $f(125)=f(25)+375=469$.</div><div class=\"ml-vi\">$f(5)=19,f(25)=94,f(125)=469$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q89.png"
         },
         {
           "kind": "MCQ",
@@ -4314,7 +4403,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Two recursive calls of size n/2 each, then ONE comparison (max) to combine their results: $f(n)=2f(n/2)+1$, so $b=1$.</div><div class=\"ml-vi\">Hai lệnh gọi đệ quy kích thước n/2, rồi MỘT phép so sánh (max) để kết hợp: $f(n)=2f(n/2)+1$, nên $b=1$.</div>"
+          "explanation": "<div class=\"ml-en\">Two recursive calls of size n/2 each, then ONE comparison (max) to combine their results: $f(n)=2f(n/2)+1$, so $b=1$.</div><div class=\"ml-vi\">Hai lệnh gọi đệ quy kích thước n/2, rồi MỘT phép so sánh (max) để kết hợp: $f(n)=2f(n/2)+1$, nên $b=1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q90.png"
         }
       ]
     },
@@ -4357,7 +4447,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f(4)=2f(2)+1=3$. $f(16)=2f(4)+1=7$. $f(256)=2f(16)+1=15$.</div><div class=\"ml-vi\">$f(4)=3,f(16)=7,f(256)=15$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(4)=2f(2)+1=3$. $f(16)=2f(4)+1=7$. $f(256)=2f(16)+1=15$.</div><div class=\"ml-vi\">$f(4)=3,f(16)=7,f(256)=15$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q91.png"
         },
         {
           "kind": "MCQ",
@@ -4380,7 +4471,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Master theorem: $a=2,b=2,f(n)=n^2$. Since $n^2$ grows polynomially faster than $n^{\\log_2 2}=n$, case 3 applies: $T(n)=\\Theta(n^2)$.</div><div class=\"ml-vi\">Định lý master: $a=2,b=2,f(n)=n^2$ tăng nhanh hơn $n^{\\log_2 2}=n$, rơi vào trường hợp 3: $T(n)=\\Theta(n^2)$.</div>"
+          "explanation": "<div class=\"ml-en\">Master theorem: $a=2,b=2,f(n)=n^2$. Since $n^2$ grows polynomially faster than $n^{\\log_2 2}=n$, case 3 applies: $T(n)=\\Theta(n^2)$.</div><div class=\"ml-vi\">Định lý master: $a=2,b=2,f(n)=n^2$ tăng nhanh hơn $n^{\\log_2 2}=n$, rơi vào trường hợp 3: $T(n)=\\Theta(n^2)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q92.png"
         },
         {
           "kind": "MCQ",
@@ -4403,7 +4495,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$f(9)=2f(3)+\\log_{10}9=2(1)+0.954=2.954$. $f(81)=2f(9)+\\log_{10}81=2(2.954)+1.908=7.82$.</div><div class=\"ml-vi\">$f(9)=2(1)+\\log_{10}9\\approx2.954$. $f(81)=2(2.954)+\\log_{10}81\\approx7.82$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(9)=2f(3)+\\log_{10}9=2(1)+0.954=2.954$. $f(81)=2f(9)+\\log_{10}81=2(2.954)+1.908=7.82$.</div><div class=\"ml-vi\">$f(9)=2(1)+\\log_{10}9\\approx2.954$. $f(81)=2(2.954)+\\log_{10}81\\approx7.82$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q93.png"
         },
         {
           "kind": "MCQ",
@@ -4426,7 +4519,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Master theorem: $a=2,b=2,f(n)=n^3$ grows polynomially faster than $n^{\\log_2 2}=n$, case 3: $T(n)=\\Theta(n^3)$.</div><div class=\"ml-vi\">Định lý master: $f(n)=n^3$ tăng nhanh hơn $n^{\\log_2 2}=n$, rơi vào trường hợp 3: $T(n)=\\Theta(n^3)$.</div>"
+          "explanation": "<div class=\"ml-en\">Master theorem: $a=2,b=2,f(n)=n^3$ grows polynomially faster than $n^{\\log_2 2}=n$, case 3: $T(n)=\\Theta(n^3)$.</div><div class=\"ml-vi\">Định lý master: $f(n)=n^3$ tăng nhanh hơn $n^{\\log_2 2}=n$, rơi vào trường hợp 3: $T(n)=\\Theta(n^3)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q94.png"
         },
         {
           "kind": "MCQ",
@@ -4452,7 +4546,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$f(5)=f(1)+25/3=3+25/3=34/3$. $f(25)=f(5)+625/3=34/3+625/3=659/3$.</div><div class=\"ml-vi\">$f(5)=34/3$. $f(25)=34/3+625/3=659/3$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(5)=f(1)+25/3=3+25/3=34/3$. $f(25)=f(5)+625/3=34/3+625/3=659/3$.</div><div class=\"ml-vi\">$f(5)=34/3$. $f(25)=34/3+625/3=659/3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q95.png"
         },
         {
           "kind": "MCQ",
@@ -4478,7 +4573,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f(9)=7-\\frac{81}{9}f(3)=7-9f(3)=25 \\Rightarrow f(3)=-2$.</div><div class=\"ml-vi\">$f(9)=7-9f(3)=25 \\Rightarrow f(3)=-2$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(9)=7-\\frac{81}{9}f(3)=7-9f(3)=25 \\Rightarrow f(3)=-2$.</div><div class=\"ml-vi\">$f(9)=7-9f(3)=25 \\Rightarrow f(3)=-2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q96.png"
         },
         {
           "kind": "MCQ",
@@ -4501,7 +4597,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">gcd(4,14) → calls gcd(14 mod 4, 4)=gcd(2,4) → calls gcd(4 mod 2, 2)=gcd(0,2) → base case returns 2. Total calls: gcd(4,14), gcd(2,4), gcd(0,2) = 3.</div><div class=\"ml-vi\">gcd(4,14) → gọi gcd(2,4) → gọi gcd(0,2) → cơ sở trả về 2. Tổng: 3 lần gọi.</div>"
+          "explanation": "<div class=\"ml-en\">gcd(4,14) → calls gcd(14 mod 4, 4)=gcd(2,4) → calls gcd(4 mod 2, 2)=gcd(0,2) → base case returns 2. Total calls: gcd(4,14), gcd(2,4), gcd(0,2) = 3.</div><div class=\"ml-vi\">gcd(4,14) → gọi gcd(2,4) → gọi gcd(0,2) → cơ sở trả về 2. Tổng: 3 lần gọi.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q97.png"
         },
         {
           "kind": "MCQ",
@@ -4524,7 +4621,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Simulating the merge: list 1 (1,4,6,9) empties after 7 comparisons; remaining 10,12,14 appended with no comparison.</div><div class=\"ml-vi\">Mô phỏng trộn: dãy 1 (1,4,6,9) hết sau 7 phép so sánh; còn lại 10,12,14 thêm vào không cần so sánh.</div>"
+          "explanation": "<div class=\"ml-en\">Simulating the merge: list 1 (1,4,6,9) empties after 7 comparisons; remaining 10,12,14 appended with no comparison.</div><div class=\"ml-vi\">Mô phỏng trộn: dãy 1 (1,4,6,9) hết sau 7 phép so sánh; còn lại 10,12,14 thêm vào không cần so sánh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q98.png"
         },
         {
           "kind": "MCQ",
@@ -4550,7 +4648,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\lfloor99/3\\rfloor+\\lfloor99/4\\rfloor-\\lfloor99/12\\rfloor=33+24-8=49$.</div><div class=\"ml-vi\">$\\lfloor99/3\\rfloor+\\lfloor99/4\\rfloor-\\lfloor99/12\\rfloor=33+24-8=49$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\lfloor99/3\\rfloor+\\lfloor99/4\\rfloor-\\lfloor99/12\\rfloor=33+24-8=49$.</div><div class=\"ml-vi\">$\\lfloor99/3\\rfloor+\\lfloor99/4\\rfloor-\\lfloor99/12\\rfloor=33+24-8=49$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q99.png"
         },
         {
           "kind": "MCQ",
@@ -4576,7 +4675,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$\\lfloor200/5\\rfloor+\\lfloor200/7\\rfloor-\\lfloor200/35\\rfloor=40+28-5=63$.</div><div class=\"ml-vi\">$\\lfloor200/5\\rfloor+\\lfloor200/7\\rfloor-\\lfloor200/35\\rfloor=40+28-5=63$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\lfloor200/5\\rfloor+\\lfloor200/7\\rfloor-\\lfloor200/35\\rfloor=40+28-5=63$.</div><div class=\"ml-vi\">$\\lfloor200/5\\rfloor+\\lfloor200/7\\rfloor-\\lfloor200/35\\rfloor=40+28-5=63$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q100.png"
         },
         {
           "kind": "MCQ",
@@ -4602,7 +4702,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$a_2=-3(1)-2(1)=-5$. $a_3=-3(-5)-2(1)=13$. $a_4=-3(13)-2(-5)=-39+10=-29$.</div><div class=\"ml-vi\">$a_2=-5,a_3=13,a_4=-3(13)-2(-5)=-29$.</div>"
+          "explanation": "<div class=\"ml-en\">$a_2=-3(1)-2(1)=-5$. $a_3=-3(-5)-2(1)=13$. $a_4=-3(13)-2(-5)=-39+10=-29$.</div><div class=\"ml-vi\">$a_2=-5,a_3=13,a_4=-3(13)-2(-5)=-29$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q101.png"
         },
         {
           "kind": "MCQ",
@@ -4628,7 +4729,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f_4=f_2+4f_1=2+4=6$. $f_5=f_3+5f_2=3+10=13$. $f_6=f_4+6f_3=6+18=24$.</div><div class=\"ml-vi\">$f_4=6,f_5=13,f_6=f_4+6f_3=6+18=24$.</div>"
+          "explanation": "<div class=\"ml-en\">$f_4=f_2+4f_1=2+4=6$. $f_5=f_3+5f_2=3+10=13$. $f_6=f_4+6f_3=6+18=24$.</div><div class=\"ml-vi\">$f_4=6,f_5=13,f_6=f_4+6f_3=6+18=24$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q102.png"
         },
         {
           "kind": "MCQ",
@@ -4654,7 +4756,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">The recurrence reaches back 4 steps (uses $f_{n-3}$ and $f_{n-4}$), so 4 initial terms are needed.</div><div class=\"ml-vi\">Hệ thức lùi lại 4 bước (dùng $f_{n-3}$ và $f_{n-4}$), nên cần 4 điều kiện ban đầu.</div>"
+          "explanation": "<div class=\"ml-en\">The recurrence reaches back 4 steps (uses $f_{n-3}$ and $f_{n-4}$), so 4 initial terms are needed.</div><div class=\"ml-vi\">Hệ thức lùi lại 4 bước (dùng $f_{n-3}$ và $f_{n-4}$), nên cần 4 điều kiện ban đầu.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q103.png"
         },
         {
           "kind": "MCQ",
@@ -4680,7 +4783,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Monthly compounding for 12 months: $10{,}000{,}000\\times(1.02)^{12}=12{,}682{,}417$.</div><div class=\"ml-vi\">Lãi kép hàng tháng qua 12 tháng: $10.000.000\\times(1.02)^{12}=12.682.417$.</div>"
+          "explanation": "<div class=\"ml-en\">Monthly compounding for 12 months: $10{,}000{,}000\\times(1.02)^{12}=12{,}682{,}417$.</div><div class=\"ml-vi\">Lãi kép hàng tháng qua 12 tháng: $10.000.000\\times(1.02)^{12}=12.682.417$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q104.png"
         },
         {
           "kind": "MCQ",
@@ -4703,7 +4807,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$20{,}000\\times(1.1)^{30}\\approx20{,}000\\times17.449=348{,}988$.</div><div class=\"ml-vi\">$20{,}000\\times(1.1)^{30}\\approx348{,}988$.</div>"
+          "explanation": "<div class=\"ml-en\">$20{,}000\\times(1.1)^{30}\\approx20{,}000\\times17.449=348{,}988$.</div><div class=\"ml-vi\">$20{,}000\\times(1.1)^{30}\\approx348{,}988$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q105.png"
         }
       ]
     },
@@ -4746,7 +4851,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Merge sort splits the sequence into 2 halves of size n/2: $a=2$.</div><div class=\"ml-vi\">Merge sort chia dãy thành 2 nửa kích thước n/2: $a=2$.</div>"
+          "explanation": "<div class=\"ml-en\">Merge sort splits the sequence into 2 halves of size n/2: $a=2$.</div><div class=\"ml-vi\">Merge sort chia dãy thành 2 nửa kích thước n/2: $a=2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q106.png"
         },
         {
           "kind": "MCQ",
@@ -4772,7 +4878,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f(4)=(f(1))^2=4$. $f(16)=(f(4))^2=16$.</div><div class=\"ml-vi\">$f(4)=4$. $f(16)=16$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(4)=(f(1))^2=4$. $f(16)=(f(4))^2=16$.</div><div class=\"ml-vi\">$f(4)=4$. $f(16)=16$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q107.png"
         },
         {
           "kind": "MCQ",
@@ -4801,7 +4908,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$f(125)=f(5)+125/5=1+25=26$. $f(3125)=f(125)+3125/5=26+625=651$.</div><div class=\"ml-vi\">$f(125)=26$. $f(3125)=26+625=651$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(125)=f(5)+125/5=1+25=26$. $f(3125)=f(125)+3125/5=26+625=651$.</div><div class=\"ml-vi\">$f(125)=26$. $f(3125)=26+625=651$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q108.png"
         },
         {
           "kind": "MCQ",
@@ -4827,7 +4935,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f(4)=(f(2))^2=25$. $f(16)=(f(4))^2=625$.</div><div class=\"ml-vi\">$f(4)=25$. $f(16)=625$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(4)=(f(2))^2=25$. $f(16)=(f(4))^2=625$.</div><div class=\"ml-vi\">$f(4)=25$. $f(16)=625$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q109.png"
         },
         {
           "kind": "MCQ",
@@ -4850,7 +4959,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Master theorem: $a=2,b=2,f(n)=n=n^{\\log_2 2}$ — case 2 applies: $T(n)=\\Theta(n\\log n)$.</div><div class=\"ml-vi\">Định lý master: $f(n)=n=n^{\\log_2 2}$ — trường hợp 2: $T(n)=\\Theta(n\\log n)$.</div>"
+          "explanation": "<div class=\"ml-en\">Master theorem: $a=2,b=2,f(n)=n=n^{\\log_2 2}$ — case 2 applies: $T(n)=\\Theta(n\\log n)$.</div><div class=\"ml-vi\">Định lý master: $f(n)=n=n^{\\log_2 2}$ — trường hợp 2: $T(n)=\\Theta(n\\log n)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q110.png"
         },
         {
           "kind": "MCQ",
@@ -4876,7 +4986,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Repeated subtraction gcd: $44,36\\to n=8$; $36,8\\to m=28\\to20\\to12\\to4$; $4,8\\to n=4$; $m=n=4$. Output=4 (this is $\\gcd(36,44)$).</div><div class=\"ml-vi\">Trừ liên tiếp kiểu Euclid: cuối cùng $m=n=4$. Đây là $\\gcd(36,44)=4$.</div>"
+          "explanation": "<div class=\"ml-en\">Repeated subtraction gcd: $44,36\\to n=8$; $36,8\\to m=28\\to20\\to12\\to4$; $4,8\\to n=4$; $m=n=4$. Output=4 (this is $\\gcd(36,44)$).</div><div class=\"ml-vi\">Trừ liên tiếp kiểu Euclid: cuối cùng $m=n=4$. Đây là $\\gcd(36,44)=4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q111.png"
         },
         {
           "kind": "MCQ",
@@ -4902,7 +5013,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Trace: swap(3,2)→[2,3,4,7,1,6,5]; 3<4 no; swap(7,1)→[2,3,4,1,7,6,5]; swap(7,6)→[2,3,4,1,6,7,5]; swap(7,5)→[2,3,4,1,6,5,7].</div><div class=\"ml-vi\">Truy vết: đổi(3,2),giữ,đổi(7,1),đổi(7,6),đổi(7,5) → [2,3,4,1,6,5,7].</div>"
+          "explanation": "<div class=\"ml-en\">Trace: swap(3,2)→[2,3,4,7,1,6,5]; 3<4 no; swap(7,1)→[2,3,4,1,7,6,5]; swap(7,6)→[2,3,4,1,6,7,5]; swap(7,5)→[2,3,4,1,6,5,7].</div><div class=\"ml-vi\">Truy vết: đổi(3,2),giữ,đổi(7,1),đổi(7,6),đổi(7,5) → [2,3,4,1,6,5,7].</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q112.png"
         },
         {
           "kind": "MCQ",
@@ -4925,7 +5037,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f(x)=2x^2\\log x$ but $g(x)=x^2(\\log x)^2$ — the extra factor of $\\log x$ makes g grow faster. So $f=O(g)$ true (i); $g=O(f)$ false.</div><div class=\"ml-vi\">$f(x)=2x^2\\log x$ nhưng $g(x)=x^2(\\log x)^2$ — thừa số $\\log x$ dư khiến g tăng nhanh hơn. Nên $f=O(g)$ đúng (i); $g=O(f)$ sai.</div>"
+          "explanation": "<div class=\"ml-en\">$f(x)=2x^2\\log x$ but $g(x)=x^2(\\log x)^2$ — the extra factor of $\\log x$ makes g grow faster. So $f=O(g)$ true (i); $g=O(f)$ false.</div><div class=\"ml-vi\">$f(x)=2x^2\\log x$ nhưng $g(x)=x^2(\\log x)^2$ — thừa số $\\log x$ dư khiến g tăng nhanh hơn. Nên $f=O(g)$ đúng (i); $g=O(f)$ sai.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q113.png"
         },
         {
           "kind": "MCQ",
@@ -4951,7 +5064,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Inner loop runs $n(n-1)=11\\times10=110$ times total, each doing 1 multiplication + 1 addition: $110\\times2=220$.</div><div class=\"ml-vi\">Vòng trong chạy tổng $11\\times10=110$ lần, mỗi lần 1 nhân+1 cộng: $110\\times2=220$.</div>"
+          "explanation": "<div class=\"ml-en\">Inner loop runs $n(n-1)=11\\times10=110$ times total, each doing 1 multiplication + 1 addition: $110\\times2=220$.</div><div class=\"ml-vi\">Vòng trong chạy tổng $11\\times10=110$ lần, mỗi lần 1 nhân+1 cộng: $110\\times2=220$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q114.png"
         },
         {
           "kind": "MCQ",
@@ -4974,7 +5088,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Inner loop runs about i times, outer loop up to n — total $\\sim\\sum i = O(n^2)$, each iteration 2 operations, still $O(n^2)$.</div><div class=\"ml-vi\">Vòng trong chạy khoảng i lần, vòng ngoài tới n — tổng $\\sim\\sum i=O(n^2)$.</div>"
+          "explanation": "<div class=\"ml-en\">Inner loop runs about i times, outer loop up to n — total $\\sim\\sum i = O(n^2)$, each iteration 2 operations, still $O(n^2)$.</div><div class=\"ml-vi\">Vòng trong chạy khoảng i lần, vòng ngoài tới n — tổng $\\sim\\sum i=O(n^2)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q115.png"
         },
         {
           "kind": "MCQ",
@@ -5000,7 +5115,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$a_1=1$. Updates (using $\\ge$, ties count too): 2,3,6,7,7(tie),8,8(tie) — 7 updates, so $t:=t+1$ runs 7 times.</div><div class=\"ml-vi\">$a_1=1$. Cập nhật (dùng $\\ge$, cả trường hợp bằng): 2,3,6,7,7,8,8 — 7 lần, nên $t:=t+1$ chạy 7 lần.</div>"
+          "explanation": "<div class=\"ml-en\">$a_1=1$. Updates (using $\\ge$, ties count too): 2,3,6,7,7(tie),8,8(tie) — 7 updates, so $t:=t+1$ runs 7 times.</div><div class=\"ml-vi\">$a_1=1$. Cập nhật (dùng $\\ge$, cả trường hợp bằng): 2,3,6,7,7,8,8 — 7 lần, nên $t:=t+1$ chạy 7 lần.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q116.png"
         },
         {
           "kind": "MCQ",
@@ -5026,7 +5142,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$-98=(-20)\\times5+2$ (remainder must satisfy $0\\le r<5$). $q=-20,r=2$.</div><div class=\"ml-vi\">$-98=(-20)\\times5+2$ (số dư phải thỏa $0\\le r<5$). $q=-20,r=2$.</div>"
+          "explanation": "<div class=\"ml-en\">$-98=(-20)\\times5+2$ (remainder must satisfy $0\\le r<5$). $q=-20,r=2$.</div><div class=\"ml-vi\">$-98=(-20)\\times5+2$ (số dư phải thỏa $0\\le r<5$). $q=-20,r=2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q117.png"
         },
         {
           "kind": "MCQ",
@@ -5052,7 +5169,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$x_1=(6+2)\\bmod11=8$. $x_2=(24+2)\\bmod11=4$. $x_3=(12+2)\\bmod11=3$.</div><div class=\"ml-vi\">$x_1=8,x_2=4,x_3=3$.</div>"
+          "explanation": "<div class=\"ml-en\">$x_1=(6+2)\\bmod11=8$. $x_2=(24+2)\\bmod11=4$. $x_3=(12+2)\\bmod11=3$.</div><div class=\"ml-vi\">$x_1=8,x_2=4,x_3=3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q118.png"
         },
         {
           "kind": "MCQ",
@@ -5078,7 +5196,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$x_1=(15+4)\\bmod7=5$. $x_2=(25+4)\\bmod7=1$. $x_3=(5+4)\\bmod7=2$. $x_4=(10+4)\\bmod7=0$.</div><div class=\"ml-vi\">$x_1=5,x_2=1,x_3=2,x_4=0$.</div>"
+          "explanation": "<div class=\"ml-en\">$x_1=(15+4)\\bmod7=5$. $x_2=(25+4)\\bmod7=1$. $x_3=(5+4)\\bmod7=2$. $x_4=(10+4)\\bmod7=0$.</div><div class=\"ml-vi\">$x_1=5,x_2=1,x_3=2,x_4=0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q119.png"
         },
         {
           "kind": "MCQ",
@@ -5104,7 +5223,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\text{GCD}=\\text{product}/\\text{LCM}=2^{7-4}3^{8-4}5^{2-1}7^{4-2}=2^3\\cdot3^4\\cdot5\\cdot7^2=158{,}760$.</div><div class=\"ml-vi\">$\\text{GCD}=\\text{tích}/\\text{LCM}=2^3\\cdot3^4\\cdot5\\cdot7^2=158.760$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\text{GCD}=\\text{product}/\\text{LCM}=2^{7-4}3^{8-4}5^{2-1}7^{4-2}=2^3\\cdot3^4\\cdot5\\cdot7^2=158{,}760$.</div><div class=\"ml-vi\">$\\text{GCD}=\\text{tích}/\\text{LCM}=2^3\\cdot3^4\\cdot5\\cdot7^2=158.760$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q120.png"
         }
       ]
     },
@@ -5144,7 +5264,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$1025=25\\times41=5^2\\times41$. $p=5,q=41$, $p+q=46$.</div><div class=\"ml-vi\">$1025=5^2\\times41$. $p=5,q=41$, $p+q=46$.</div>"
+          "explanation": "<div class=\"ml-en\">$1025=25\\times41=5^2\\times41$. $p=5,q=41$, $p+q=46$.</div><div class=\"ml-vi\">$1025=5^2\\times41$. $p=5,q=41$, $p+q=46$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q121.png"
         },
         {
           "kind": "MCQ",
@@ -5167,7 +5288,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$1025=5^2\\times41$. $p=5,q=41$, $q-p=36$.</div><div class=\"ml-vi\">$1025=5^2\\times41$. $p=5,q=41$, $q-p=36$.</div>"
+          "explanation": "<div class=\"ml-en\">$1025=5^2\\times41$. $p=5,q=41$, $q-p=36$.</div><div class=\"ml-vi\">$1025=5^2\\times41$. $p=5,q=41$, $q-p=36$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q122.png"
         },
         {
           "kind": "MCQ",
@@ -5193,7 +5315,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Legendre's formula: $\\lfloor10/3\\rfloor+\\lfloor10/9\\rfloor=3+1=4$.</div><div class=\"ml-vi\">Công thức Legendre: $\\lfloor10/3\\rfloor+\\lfloor10/9\\rfloor=3+1=4$.</div>"
+          "explanation": "<div class=\"ml-en\">Legendre's formula: $\\lfloor10/3\\rfloor+\\lfloor10/9\\rfloor=3+1=4$.</div><div class=\"ml-vi\">Công thức Legendre: $\\lfloor10/3\\rfloor+\\lfloor10/9\\rfloor=3+1=4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q123.png"
         },
         {
           "kind": "MCQ",
@@ -5219,7 +5342,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\text{GCD}=\\text{product}/\\text{LCM}=2^{8-4}3^{7-4}5^{2-1}7^{6-3}=2^4\\cdot3^3\\cdot5\\cdot7^3=740{,}880$.</div><div class=\"ml-vi\">$\\text{GCD}=\\text{tích}/\\text{LCM}=2^4\\cdot3^3\\cdot5\\cdot7^3=740.880$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\text{GCD}=\\text{product}/\\text{LCM}=2^{8-4}3^{7-4}5^{2-1}7^{6-3}=2^4\\cdot3^3\\cdot5\\cdot7^3=740{,}880$.</div><div class=\"ml-vi\">$\\text{GCD}=\\text{tích}/\\text{LCM}=2^4\\cdot3^3\\cdot5\\cdot7^3=740.880$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT2/q124.png"
         }
       ]
     },

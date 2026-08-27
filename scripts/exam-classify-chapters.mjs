@@ -58,34 +58,45 @@ no prose: {"section": <chapter number 1..N>, "confidence": <0..1>}. confidence =
 are it belongs to that chapter (0.9 clearly, 0.5 unsure, <0.4 could be several). Judge by the
 TOPIC the question tests, not by wording.`;
 
-let assigned = 0, low = 0, fail = 0, done = 0;
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// Tách rõ 3 loại hỏng: LLM lỗi (429/timeout), AI trả section lạ, GHI DB lỗi —
+// và RETRY cả bước gọi LLM lẫn bước ghi. `assigned` chỉ ++ sau khi GHI THẬT
+// (bản trước đếm assigned trước lúc ghi nên "gán 620" mà DB 0 câu).
+let assigned = 0, low = 0, llmFail = 0, writeFail = 0, done = 0;
 const perSection = {};
 for (const q of questions) {
+  done++;
+  let idx, conf;
   try {
     const res = await llmComplete({
       step: 'generation', feature: 'codelab', purpose: 'codelab_bulk',
       system: SYSTEM,
       messages: [{ role: 'user', content: `CHAPTERS:\n${sectionList}\n\nQUESTION:\n${plain(q.prompt)}` }],
-      maxTokens: 120, maxRetries: 2, timeoutMs: 60_000, userId: 1,
+      maxTokens: 120, maxRetries: 3, timeoutMs: 60_000, userId: 1,
     });
     const m = res.text.match(/\{[\s\S]*\}/);
     const obj = m ? JSON.parse(m[0]) : null;
-    const idx = Number(obj?.section);
-    const conf = Number(obj?.confidence);
-    done++;
-    if (!Number.isInteger(idx) || idx < 1 || idx > sections.length) { low++; console.log(`  ? #${q.id} — AI trả về section lạ (${obj?.section})`); continue; }
-    if (!(conf >= MIN)) { low++; console.log(`  ~ #${q.id} → ch.${idx} conf=${conf} (< ${MIN}, để trống)`); continue; }
-    const sectionId = sections[idx - 1].id;
-    perSection[idx] = (perSection[idx] || 0) + 1;
-    assigned++;
-    if (APPLY) await prisma.examQuestion.update({ where: { id: q.id }, data: { sectionId } });
+    idx = Number(obj?.section); conf = Number(obj?.confidence);
   } catch (e) {
-    fail++; done++;
-    console.log(`  ✗ #${q.id} — ${e?.message || e}`);
+    llmFail++; if (llmFail <= 8) console.log(`  ✗LLM #${q.id} — ${String(e?.message || e).slice(0, 120)}`);
+    await sleep(2000); continue; // nghỉ dài hơn khi cổng nghẽn
   }
-  await new Promise((r) => setTimeout(r, 800));
+  if (!Number.isInteger(idx) || idx < 1 || idx > sections.length) { low++; continue; }
+  if (!(conf >= MIN)) { low++; continue; }
+  const sectionId = sections[idx - 1].id;
+  if (APPLY) {
+    let wrote = false;
+    for (let a = 0; a < 3 && !wrote; a++) {
+      try { await prisma.examQuestion.update({ where: { id: q.id }, data: { sectionId } }); wrote = true; }
+      catch (e) { if (a === 2) { writeFail++; if (writeFail <= 8) console.log(`  ✗WRITE #${q.id}→${sectionId} — ${String(e?.message || e).slice(0, 150)}`); } else await sleep(600); }
+    }
+    if (!wrote) continue;
+  }
+  perSection[idx] = (perSection[idx] || 0) + 1; assigned++;
+  await sleep(700);
 }
 
-console.log(`\nXONG (${done}/${questions.length}): gán ${assigned} · tự tin thấp ${low} · lỗi ${fail}${APPLY ? '' : '  (DRY RUN — thêm --apply để ghi)'}`);
+console.log(`\nXONG (${done}/${questions.length}): GÁN ${assigned} · thấp ${low} · LLM lỗi ${llmFail} · GHI lỗi ${writeFail}${APPLY ? '' : '  (DRY RUN)'}`);
 console.log('Phân bố theo chương: ' + Object.entries(perSection).map(([k, v]) => `ch.${k}=${v}`).join(' · '));
 await prisma.$disconnect();

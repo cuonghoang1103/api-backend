@@ -8,6 +8,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { CheckCircle2, Circle, ChevronDown, ChevronRight, Map as MapIcon, Target, PenLine } from 'lucide-react';
 import type { CourseSection, LessonDto } from '@/types';
+import { ChapterQuiz } from './ChapterQuiz';
 
 type Goal = 'pass' | 'good';
 
@@ -185,13 +186,17 @@ export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallP
                     })}
                     {tCount === 0 && <li className="px-3 py-1.5 text-xs text-text-muted">Chưa có bài trong chương này.</li>}
                   </ul>
-                  {/* Luyện đúng câu hỏi Exam Room của chương này (nếu đã phân loại). */}
+                  {/* Đề luyện cuối chương — làm ngay trong bài, tự chấm (câu đề thật đã gán chương). */}
+                  {counts[section.id] > 0 && (
+                    <ChapterQuiz sectionId={section.id} sectionTitle={section.title} count={counts[section.id]} />
+                  )}
+                  {/* Mở nguyên Phòng Thi lọc đúng chương này (đề thực hành PE đầy đủ). */}
                   {courseCode && counts[section.id] > 0 && (
                     <a
                       href={`/exam?course=${encodeURIComponent(courseCode)}&section=${section.id}`}
                       className="ml-2 mt-1 inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-neon-indigo transition-colors hover:bg-neon-indigo/10"
                     >
-                      <PenLine className="w-3.5 h-3.5" /> Luyện {counts[section.id]} câu của chương này
+                      <PenLine className="w-3.5 h-3.5" /> Mở đề chương này trên Phòng Thi
                     </a>
                   )}
                   </>

@@ -91,27 +91,50 @@ router.get('/practice/section-counts/:courseId', async (req, res: Response<ApiRe
   } catch (e) { next(e); }
 });
 
-// Danh sách câu hỏi luyện tập của MỘT chương (chỉ câu MCQ có đáp án để tự chấm).
+// Câu hỏi luyện tập của MỘT chương (chỉ MCQ có đáp án để tự chấm), gộp từ ĐỀ
+// THẬT FE/PE/PT đã gán chương. Khử trùng lặp theo prompt (nhiều đề lặp cùng câu).
+//   ?random=1     trộn ngẫu nhiên
+//   ?limit=N      lấy tối đa N câu (mặc định 0 = tất cả, trần cứng 200)
 router.get('/practice/by-section/:sectionId', authenticate, async (req, res: Response<ApiResponse>, next) => {
   try {
     const sectionId = Number(req.params.sectionId);
     if (!Number.isInteger(sectionId)) return next(new AppError('sectionId không hợp lệ', 400));
+    const random = req.query.random === '1' || req.query.random === 'true';
+    const limit = Math.min(Math.max(Number(req.query.limit) || 0, 0), 200); // 0 = tất cả
+
     const qs = await prisma.examQuestion.findMany({
       where: { sectionId, kind: 'MCQ' },
       select: {
-        id: true, kind: true, points: true, prompt: true, imageUrl: true,
+        id: true, points: true, prompt: true, imageUrl: true,
         options: true, correctIndexes: true, explanation: true,
-        exam: { select: { id: true, kind: true, code: true, title: true } },
+        exam: { select: { kind: true } },
       },
       orderBy: [{ examId: 'asc' }, { sortOrder: 'asc' }],
-      take: 300,
     });
-    const data = qs.map((q) => ({
-      id: q.id, kind: q.kind, points: Number(q.points), prompt: q.prompt,
-      imageUrl: q.imageUrl, options: q.options, correctIndexes: q.correctIndexes,
-      explanation: q.explanation,
-      exam: q.exam ? { id: q.exam.id, kind: q.exam.kind, code: q.exam.code, title: q.exam.title } : null,
-    }));
+
+    // Khử trùng: gộp câu giống nhau (prompt chuẩn hoá) lặp qua nhiều đề.
+    const norm = (s: string | null) => String(s || '').replace(/\s+/g, ' ').trim().toLowerCase().slice(0, 300);
+    const seen = new Set<string>();
+    let data: Array<{
+      id: number; points: number; prompt: string; imageUrl: string | null;
+      options: unknown; correctIndexes: number[]; explanation: string | null; examKind: string | null;
+    }> = [];
+    for (const q of qs) {
+      const k = norm(q.prompt);
+      if (!k || seen.has(k)) continue;
+      seen.add(k);
+      data.push({
+        id: q.id, points: Number(q.points), prompt: q.prompt, imageUrl: q.imageUrl,
+        options: q.options, correctIndexes: q.correctIndexes, explanation: q.explanation,
+        examKind: q.exam?.kind ?? null,
+      });
+    }
+
+    if (random) {
+      for (let i = data.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [data[i], data[j]] = [data[j], data[i]]; }
+    }
+    if (limit > 0) data = data.slice(0, limit);
+
     res.json({ success: true, data });
   } catch (e) { next(e); }
 });

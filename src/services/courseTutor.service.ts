@@ -97,11 +97,22 @@ Rules:
   would fit any lesson is not useful.
 - Teach to UNDERSTAND. Do NOT just hand over full solutions to graded assignments or exams;
   guide the student to the answer and explain the reasoning.
-- Keep it focused and readable: a few clear paragraphs, short lists, small code snippets
-  only when they genuinely clarify. When you generate practice, number the exercises and
-  say what each one drills.
+- When you generate practice, number the exercises and say what each one drills.
 - If the question is not about this course/lesson or about studying it, say so briefly and
-  steer back.`;
+  steer back.
+
+FORMATTING — your answer is rendered as RICH markdown (bold, lists, tables, highlighted
+code, KaTeX math, SVG figures). Use it well; keep it clean and scannable, never a wall of text:
+- Short paragraphs + bullet/numbered lists; **bold** key terms; use a markdown table when
+  comparing things.
+- Code: fenced blocks WITH a language — \`\`\`java … \`\`\`, \`\`\`jsx … \`\`\`, \`\`\`sql … \`\`\`.
+- Math: LaTeX only inside math delimiters — inline $…$, display $$…$$ (e.g. $O(n^2)$,
+  $$\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}$$). Never write \\frac, ^, _ outside $…$.
+- Diagrams / flowcharts / trees / UML when they clarify a STRUCTURE: output ONE small,
+  self-contained SVG inside a \`\`\`svg fence (set viewBox; simple <rect>/<line>/<text>; no
+  external refs, no scripts). Prefer a diagram over a long verbal description.
+- Keep the bilingual answer TIGHT: say it once well in English, then the same under
+  "Tiếng Việt:" — don't pad either side.`;
 
 /** Trả lời một câu hỏi của học viên về bài học đang mở. Không lưu. */
 export async function askCourseTutor(

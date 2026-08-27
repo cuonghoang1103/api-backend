@@ -16,6 +16,8 @@ import { DocBlocksView } from '@/components/exp-hub/DocBlocksView';
 import { codeLabApi } from '@/lib/code-lab-api';
 import { useAuthStore } from '@/store/authStore';
 import { usePro } from '@/hooks/usePro';
+// Render câu trả lời AI như AI Chat chính: markdown + toán KaTeX + code + SVG.
+import ChatMarkdown from '@/components/chat/ChatMarkdown';
 
 interface Turn { role: 'user' | 'assistant'; content: string }
 
@@ -205,12 +207,14 @@ export function AiExplain({ exerciseId }: { exerciseId: number }) {
                           ? <User size={14} style={{ color: 'var(--text-muted)' }} />
                           : <Sparkles size={14} style={{ color: 'var(--accent-color, #8b5cf6)' }} />}
                       </span>
-                      <div className="min-w-0 flex-1 whitespace-pre-wrap rounded-lg px-3 py-2 text-sm"
+                      <div className="min-w-0 flex-1 rounded-lg px-3 py-2 text-sm"
                         style={{
                           background: t.role === 'user' ? 'var(--bg-surface)' : 'var(--bg-surface-active, var(--bg-surface))',
                           color: 'var(--text-primary)',
                         }}>
-                        {t.content}
+                        {t.role === 'user'
+                          ? <span className="whitespace-pre-wrap">{t.content}</span>
+                          : <ChatMarkdown content={t.content} />}
                       </div>
                     </div>
                   ))}

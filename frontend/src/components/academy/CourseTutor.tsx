@@ -12,6 +12,9 @@ import Link from 'next/link';
 import { api } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { usePro } from '@/hooks/usePro';
+// Render câu trả lời AI như AI Chat chính: markdown (đậm/danh sách/bảng) +
+// công thức toán KaTeX + code tô màu + sơ đồ SVG. KHÔNG để markdown thô (**).
+import ChatMarkdown from '@/components/chat/ChatMarkdown';
 
 interface Turn { role: 'user' | 'assistant'; content: string }
 
@@ -92,9 +95,11 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: 
                     ? <User size={14} style={{ color: 'var(--text-muted)' }} />
                     : <Sparkles size={14} style={{ color: 'var(--accent-color, #8b5cf6)' }} />}
                 </span>
-                <div className="min-w-0 flex-1 whitespace-pre-wrap rounded-lg px-3 py-2 text-sm"
+                <div className="ct-answer min-w-0 flex-1 rounded-lg px-3 py-2 text-sm"
                   style={{ background: t.role === 'user' ? 'var(--bg-surface)' : 'var(--bg-surface-active, var(--bg-surface))', color: 'var(--text-primary)' }}>
-                  {t.content}
+                  {t.role === 'user'
+                    ? <span className="whitespace-pre-wrap">{t.content}</span>
+                    : <ChatMarkdown content={t.content} />}
                 </div>
               </div>
             ))}

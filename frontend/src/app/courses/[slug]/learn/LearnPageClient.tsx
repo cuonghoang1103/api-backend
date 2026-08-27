@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { coursesApi, certificatesApi } from '@/lib/api';
 import { CourseTutor } from '@/components/academy/CourseTutor';
+import { CourseRoadmapPanel } from '@/components/academy/CourseRoadmap';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
 import { toast } from 'sonner';
@@ -1043,6 +1044,19 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                   {isCompleted(currentLesson.id) ? 'Completed' : 'Mark as Complete'}
                 </button>
               </div>
+
+              {/* Lộ trình học tương tác — gập/mở, sinh từ course.sections + tiến độ thật.
+                  Thay bản đồ HTML tĩnh cũ; bấm bài là nhảy tới bài đó. */}
+              {course.sections && course.sections.length > 0 && (
+                <CourseRoadmapPanel
+                  sections={course.sections}
+                  isCompleted={isCompleted}
+                  currentLessonId={currentLesson.id}
+                  overallProgress={overallProgress}
+                  courseId={course.id}
+                  onJump={selectLesson}
+                />
+              )}
 
               {/* Text content */}
               {currentLesson.content && (

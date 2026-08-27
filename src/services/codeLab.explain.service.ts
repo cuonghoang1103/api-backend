@@ -190,7 +190,10 @@ export async function explainExercise(
   const res = await llmComplete({
     step: 'generation',
     feature: 'codelab',
-    purpose: 'codelab_coach', // gia sư tương tác → Opus 4.8 (không phải codelab_bulk rẻ)
+    // Bản GIẢNG dài (16000 token) KHÔNG chạy Opus: cổng modelapi.vn rate-limit
+    // kênh Claude (đo 27/08: opus 12k→429, 16k→502), sinh lớn/hàng loạt là nghẽn.
+    // Giữ codelab_bulk (nhanh, kênh GPT/máy nhà) như trước — 54 bản cache hiện tại
+    // sinh kiểu này vẫn tốt. CHAT hỏi-tiếp + coach (nhỏ ≤8k) mới chạy Opus 4.8.
     system: EXPLAIN_SYSTEM,
     messages: [{ role: 'user', content: briefFor(ex) }],
     // 16-26 blocks, every one of them bilingual, plus a structure tree:

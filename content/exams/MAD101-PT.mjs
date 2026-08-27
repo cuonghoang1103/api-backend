@@ -5430,8 +5430,8 @@ export default {
       "code": "PT3-D1",
       "source": "REAL",
       "sortOrder": 131,
-      "title": "Progress Test 3 — Đề 1/8|||Kiểm tra tiến độ 3 — Đề 1/8",
-      "description": "MAD101 Progress Test 3 question bank, part 1 of 8 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 1/8 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
+      "title": "Progress Test 3 — Đề 1/9|||Kiểm tra tiến độ 3 — Đề 1/9",
+      "description": "MAD101 Progress Test 3 question bank, part 1 of 9 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 1/9 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
       "durationMinutes": 30,
       "totalPoints": 10,
       "passMark": 5,
@@ -5713,6 +5713,33 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
+          "prompt": "Are these two graphs isomorphic? If not, what is the reason? Both graphs have 6 vertices and 9 edges.<pre class=\"mermaid\">graph TD\n  subgraph GL[\"Left graph\"]\n  p1((1)) --- p2((2))\n  p1 --- p3((3))\n  p1 --- p4((4))\n  p1 --- p5((5))\n  p5 --- p3\n  p2 --- p4\n  p2 --- p6((6))\n  p6 --- p4\n  p3 --- p4\n  end\n  subgraph GR[\"Right graph\"]\n  q1((1)) --- q2((2))\n  q1 --- q4((4))\n  q1 --- q5((5))\n  q5 --- q3((3))\n  q2 --- q3\n  q2 --- q4\n  q2 --- q6((6))\n  q6 --- q4\n  q3 --- q4\n  end</pre>|||Hai đồ thị sau có đẳng cấu không? Nếu không, vì sao? Cả hai đồ thị đều có 6 đỉnh và 9 cạnh.<pre class=\"mermaid\">graph TD\n  subgraph GL[\"Đồ thị bên trái\"]\n  p1((1)) --- p2((2))\n  p1 --- p3((3))\n  p1 --- p4((4))\n  p1 --- p5((5))\n  p5 --- p3\n  p2 --- p4\n  p2 --- p6((6))\n  p6 --- p4\n  p3 --- p4\n  end\n  subgraph GR[\"Đồ thị bên phải\"]\n  q1((1)) --- q2((2))\n  q1 --- q4((4))\n  q1 --- q5((5))\n  q5 --- q3((3))\n  q2 --- q3\n  q2 --- q4\n  q2 --- q6((6))\n  q6 --- q4\n  q3 --- q4\n  end</pre>",
+          "options": [
+            {
+              "text": "No, they are not isomorphic because in the graph on the left, each vertex of degree 2 is adjacent to a vertex of degree 4, and the graph on the right does not have that property|||Không đẳng cấu vì ở đồ thị bên trái, mỗi đỉnh bậc 2 đều kề với một đỉnh bậc 4, còn đồ thị bên phải không có tính chất đó"
+            },
+            {
+              "text": "No, they are not isomorphic because they do not have the same number of vertices of degree 3|||Không đẳng cấu vì số đỉnh bậc 3 khác nhau"
+            },
+            {
+              "text": "No, they are not isomorphic because they do not have the same number of degree 4|||Không đẳng cấu vì số đỉnh bậc 4 khác nhau"
+            },
+            {
+              "text": "Yes, they are isomorphic|||Có, chúng đẳng cấu"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Both graphs have degree sequence 4,4,3,3,2,2 (nine edges each), so B (\"different number of degree-3 vertices\", both have 2) and C (\"different number of degree-4 vertices\", both have 2) are false. Left graph: the degree-4 vertices are 1 and 4; degree-2 vertex 5 is adjacent to 1 (degree 4) and vertex 6 is adjacent to 4 (degree 4), so EVERY degree-2 vertex touches a degree-4 vertex. Right graph: the degree-4 vertices are 2 and 4, but degree-2 vertex 5 is adjacent only to 1 and 3, both of degree 3 — the property fails. That single invariant proves they are not isomorphic, which is exactly what A says.</div><div class=\"ml-vi\">Cả hai đồ thị đều có dãy bậc 4,4,3,3,2,2 (mỗi đồ thị 9 cạnh) nên B (\"khác số đỉnh bậc 3\", cả hai đều có 2) và C (\"khác số đỉnh bậc 4\", cả hai đều có 2) đều sai. Đồ thị trái: hai đỉnh bậc 4 là 1 và 4; đỉnh bậc 2 số 5 kề với 1 (bậc 4), đỉnh bậc 2 số 6 kề với 4 (bậc 4) — MỌI đỉnh bậc 2 đều chạm một đỉnh bậc 4. Đồ thị phải: hai đỉnh bậc 4 là 2 và 4, nhưng đỉnh bậc 2 số 5 chỉ kề 1 và 3, cả hai đều bậc 3 — tính chất này hỏng. Bất biến đó chứng minh hai đồ thị không đẳng cấu, đúng như phương án A nói.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q12.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
           "prompt": "Given the graph below, with vertices a, b, c, d, e and edges $\\{a,b\\}, \\{a,e\\}, \\{a,d\\}, \\{b,d\\}, \\{b,c\\}, \\{d,e\\}$.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  a --- e((e))\n  a --- d((d))\n  b --- d\n  b --- c((c))\n  d --- e</pre>What is the sum of the numbers in the second row of the adjacency matrix, in the order a,b,c,d,e, of the given graph?|||Cho đồ thị dưới đây, đỉnh a,b,c,d,e và cạnh $\\{a,b\\},\\{a,e\\},\\{a,d\\},\\{b,d\\},\\{b,c\\},\\{d,e\\}$.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  a --- e((e))\n  a --- d((d))\n  b --- d\n  b --- c((c))\n  d --- e</pre>Tổng các số ở hàng thứ hai của ma trận kề, theo thứ tự a,b,c,d,e, là bao nhiêu?",
           "options": [
             {
@@ -5733,6 +5760,33 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">Row 2 = vertex b's row: b is adjacent to a, c, d (not e). In order (a,b,c,d,e): [1,0,1,1,0], sum $=3$.</div><div class=\"ml-vi\">Hàng 2 = hàng của đỉnh b: b kề với a, c, d (không kề e). Theo thứ tự (a,b,c,d,e): [1,0,1,1,0], tổng $=3$.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q13.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Are these two graphs isomorphic? If not, what is the reason? Both graphs have 5 vertices and 8 edges.<pre class=\"mermaid\">graph TD\n  subgraph GL[\"Left graph\"]\n  p1((1)) --- p2((2))\n  p1 --- p3((3))\n  p1 --- p5((5))\n  p2 --- p3\n  p2 --- p4((4))\n  p3 --- p4\n  p3 --- p5\n  p4 --- p5\n  end\n  subgraph GR[\"Right graph\"]\n  q1((1)) --- q2((2))\n  q2 --- q3((3))\n  q3 --- q4((4))\n  q4 --- q1\n  q5((5)) --- q1\n  q5 --- q2\n  q5 --- q3\n  q5 --- q4\n  end</pre>|||Hai đồ thị sau có đẳng cấu không? Nếu không, vì sao? Cả hai đồ thị đều có 5 đỉnh và 8 cạnh.<pre class=\"mermaid\">graph TD\n  subgraph GL[\"Đồ thị bên trái\"]\n  p1((1)) --- p2((2))\n  p1 --- p3((3))\n  p1 --- p5((5))\n  p2 --- p3\n  p2 --- p4((4))\n  p3 --- p4\n  p3 --- p5\n  p4 --- p5\n  end\n  subgraph GR[\"Đồ thị bên phải\"]\n  q1((1)) --- q2((2))\n  q2 --- q3((3))\n  q3 --- q4((4))\n  q4 --- q1\n  q5((5)) --- q1\n  q5 --- q2\n  q5 --- q3\n  q5 --- q4\n  end</pre>",
+          "options": [
+            {
+              "text": "Yes, they are isomorphic|||Có, chúng đẳng cấu"
+            },
+            {
+              "text": "No, they are not isomorphic because they do not have the same number of edges|||Không đẳng cấu vì số cạnh khác nhau"
+            },
+            {
+              "text": "No, they are not isomorphic because they do not have the same number of vertices of degree 4|||Không đẳng cấu vì số đỉnh bậc 4 khác nhau"
+            },
+            {
+              "text": "No, they are not isomorphic because they do not have the same number of simple circuits of length 3|||Không đẳng cấu vì số chu trình đơn độ dài 3 khác nhau"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Both graphs have 5 vertices, 8 edges and degree sequence 4,3,3,3,3, so B, C and D are all false. In fact BOTH are the wheel $W_4$. Right graph: vertex 5 is the hub joined to the 4-cycle 1-2-3-4-1. Left graph: vertex 3 has degree 4 (joined to 1,2,4,5) and the other four vertices form the 4-cycle 1-2-4-5-1 (edges 1-2, 2-4, 4-5, 5-1). The map $3\\mapsto5,\\;1\\mapsto1,\\;2\\mapsto2,\\;4\\mapsto3,\\;5\\mapsto4$ carries every edge to an edge, so they are isomorphic.</div><div class=\"ml-vi\">Cả hai đồ thị đều có 5 đỉnh, 8 cạnh và dãy bậc 4,3,3,3,3 nên B, C, D đều sai. Thực ra CẢ HAI đều là đồ thị bánh xe $W_4$. Đồ thị phải: đỉnh 5 là trung tâm nối với chu trình 4 cạnh 1-2-3-4-1. Đồ thị trái: đỉnh 3 có bậc 4 (nối 1,2,4,5) và 4 đỉnh còn lại tạo chu trình 4 cạnh 1-2-4-5-1 (các cạnh 1-2, 2-4, 4-5, 5-1). Phép tương ứng $3\\mapsto5,\\;1\\mapsto1,\\;2\\mapsto2,\\;4\\mapsto3,\\;5\\mapsto4$ đưa mọi cạnh thành cạnh, nên chúng đẳng cấu.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q14.png"
         },
         {
           "kind": "MCQ",
@@ -5784,7 +5838,24 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">Matrix has $(m+n)^2$ entries total. Number of 1s $=2\\times$edges$=2mn$. Number of 0s $=(m+n)^2-2mn=m^2+n^2$.</div><div class=\"ml-vi\">Ma trận có $(m+n)^2$ ô. Số số 1 $=2\\times$số cạnh$=2mn$. Số số 0 $=(m+n)^2-2mn=m^2+n^2$.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q16.png"
-        },
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "PT3-D2",
+      "source": "REAL",
+      "sortOrder": 132,
+      "title": "Progress Test 3 — Đề 2/9|||Kiểm tra tiến độ 3 — Đề 2/9",
+      "description": "MAD101 Progress Test 3 question bank, part 2 of 9 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 2/9 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
+      "durationMinutes": 30,
+      "totalPoints": 10,
+      "passMark": 5,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
         {
           "kind": "MCQ",
           "points": 1,
@@ -5812,6 +5883,33 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
+          "prompt": "Are these two graphs isomorphic? If not, what is the reason? Both graphs have 8 vertices and 9 edges.<pre class=\"mermaid\">graph TD\n  subgraph GL[\"Left graph\"]\n  a1((1)) --- a2((2))\n  a2 --- a3((3))\n  a3 --- a4((4))\n  a4 --- a1\n  b1((5)) --- b2((6))\n  b2 --- b3((7))\n  b3 --- b4((8))\n  b4 --- b1\n  a1 --- b1\n  end\n  subgraph GR[\"Right graph\"]\n  c1((1)) --- c2((2))\n  c2 --- c3((3))\n  c3 --- c4((4))\n  c4 --- c5((5))\n  c5 --- c6((6))\n  c6 --- c7((7))\n  c7 --- c8((8))\n  c8 --- c1\n  c1 --- c6\n  end</pre>|||Hai đồ thị sau có đẳng cấu không? Nếu không, vì sao? Cả hai đồ thị đều có 8 đỉnh và 9 cạnh.<pre class=\"mermaid\">graph TD\n  subgraph GL[\"Đồ thị bên trái\"]\n  a1((1)) --- a2((2))\n  a2 --- a3((3))\n  a3 --- a4((4))\n  a4 --- a1\n  b1((5)) --- b2((6))\n  b2 --- b3((7))\n  b3 --- b4((8))\n  b4 --- b1\n  a1 --- b1\n  end\n  subgraph GR[\"Đồ thị bên phải\"]\n  c1((1)) --- c2((2))\n  c2 --- c3((3))\n  c3 --- c4((4))\n  c4 --- c5((5))\n  c5 --- c6((6))\n  c6 --- c7((7))\n  c7 --- c8((8))\n  c8 --- c1\n  c1 --- c6\n  end</pre>",
+          "options": [
+            {
+              "text": "No, they are not isomorphic because the edge connecting the two vertices of degree 3 in the graph on the left is a cut edge, and the graph on the right does not have that property|||Không đẳng cấu vì cạnh nối 2 đỉnh bậc 3 ở đồ thị trái là cạnh cầu, đồ thị phải không có tính chất đó"
+            },
+            {
+              "text": "No, they are not isomorphic because the graph on the left is not connected, and the graph on the right is connected|||Không đẳng cấu vì đồ thị trái không liên thông, đồ thị phải liên thông"
+            },
+            {
+              "text": "No, they are not isomorphic because they do not have the same number of simple circuits of length 3|||Không đẳng cấu vì số chu trình đơn độ dài 3 khác nhau"
+            },
+            {
+              "text": "Yes, they are isomorphic|||Có, chúng đẳng cấu"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Both graphs are connected (so B is false) and neither contains a triangle (so C is false — both have zero circuits of length 3). In each graph exactly two vertices have degree 3 and they are joined by an edge. Left graph: that edge is 1-5, and deleting it splits the graph into the two separate 4-cycles 1-2-3-4 and 5-6-7-8 &rArr; it IS a cut edge. Right graph: that edge is 1-6, but the other 8 edges still form the closed cycle 1-2-3-4-5-6-7-8-1, so deleting 1-6 leaves the graph connected &rArr; NOT a cut edge. That difference is exactly answer A, and it also proves the two graphs are not isomorphic (so D is false).</div><div class=\"ml-vi\">Cả hai đồ thị đều liên thông (nên B sai) và đều không có tam giác (nên C sai — cả hai đều có 0 chu trình độ dài 3). Mỗi đồ thị có đúng 2 đỉnh bậc 3 và chúng nối với nhau bằng một cạnh. Đồ thị trái: cạnh đó là 1-5, bỏ nó đi thì đồ thị tách thành 2 chu trình 4 cạnh rời nhau 1-2-3-4 và 5-6-7-8 &rArr; nó LÀ cạnh cầu. Đồ thị phải: cạnh đó là 1-6, nhưng 8 cạnh còn lại vẫn tạo thành chu trình khép kín 1-2-3-4-5-6-7-8-1, bỏ 1-6 vẫn liên thông &rArr; KHÔNG phải cạnh cầu. Khác biệt này đúng bằng phương án A, đồng thời chứng minh hai đồ thị không đẳng cấu (nên D sai).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q18.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
           "prompt": "How many 1s are there in the adjacency matrix of the following graph? (5 vertices joined into one closed cycle; the original paper draws the same cycle with crossing chords, which does not change the edge set.)<pre class=\"mermaid\">graph LR\n  v1((1)) --- v2((2))\n  v2 --- v3((3))\n  v3 --- v4((4))\n  v4 --- v5((5))\n  v5 --- v1</pre>|||Ma trận kề của đồ thị sau có bao nhiêu số 1? (5 đỉnh nối thành một chu trình khép kín; đề gốc vẽ chính chu trình đó dưới dạng ngôi sao 5 cánh với các dây cung cắt nhau — không làm đổi tập cạnh.)<pre class=\"mermaid\">graph LR\n  v1((1)) --- v2((2))\n  v2 --- v3((3))\n  v3 --- v4((4))\n  v4 --- v5((5))\n  v5 --- v1</pre>",
           "options": [
             {
@@ -5832,24 +5930,34 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">The graph is a 5-cycle $C_5$ (5 edges). Each edge contributes two 1s to the adjacency matrix, so the number of 1s $=2\\times5=10$.</div><div class=\"ml-vi\">Đồ thị là chu trình $C_5$ (5 cạnh). Mỗi cạnh đóng góp hai số 1 vào ma trận kề nên số số 1 $=2\\times5=10$.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q19.png"
-        }
-      ]
-    },
-    {
-      "kind": "FE",
-      "code": "PT3-D2",
-      "source": "REAL",
-      "sortOrder": 132,
-      "title": "Progress Test 3 — Đề 2/8|||Kiểm tra tiến độ 3 — Đề 2/8",
-      "description": "MAD101 Progress Test 3 question bank, part 2 of 8 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 2/8 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
-      "durationMinutes": 30,
-      "totalPoints": 10,
-      "passMark": 5,
-      "shuffleQuestions": true,
-      "shuffleOptions": false,
-      "isPublished": true,
-      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
-      "questions": [
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Are these two graphs isomorphic? If not, what is the reason? Both graphs have 8 vertices, 16 edges and every vertex of degree 4.<pre class=\"mermaid\">graph TD\n  subgraph GL[\"Left graph\"]\n  a1((1)) --- a2((2))\n  a2 --- a3((3))\n  a3 --- a4((4))\n  a4 --- a5((5))\n  a5 --- a6((6))\n  a6 --- a7((7))\n  a7 --- a8((8))\n  a8 --- a1\n  a1 --- a3\n  a2 --- a4\n  a3 --- a5\n  a4 --- a6\n  a5 --- a7\n  a6 --- a8\n  a7 --- a1\n  a8 --- a2\n  end\n  subgraph GR[\"Right graph\"]\n  b1((1)) --- b5((5))\n  b1 --- b6((6))\n  b1 --- b7((7))\n  b1 --- b8((8))\n  b2((2)) --- b5\n  b2 --- b6\n  b2 --- b7\n  b2 --- b8\n  b3((3)) --- b5\n  b3 --- b6\n  b3 --- b7\n  b3 --- b8\n  b4((4)) --- b5\n  b4 --- b6\n  b4 --- b7\n  b4 --- b8\n  end</pre>|||Hai đồ thị sau có đẳng cấu không? Nếu không, vì sao? Cả hai đồ thị đều có 8 đỉnh, 16 cạnh và mọi đỉnh đều bậc 4.<pre class=\"mermaid\">graph TD\n  subgraph GL[\"Đồ thị bên trái\"]\n  a1((1)) --- a2((2))\n  a2 --- a3((3))\n  a3 --- a4((4))\n  a4 --- a5((5))\n  a5 --- a6((6))\n  a6 --- a7((7))\n  a7 --- a8((8))\n  a8 --- a1\n  a1 --- a3\n  a2 --- a4\n  a3 --- a5\n  a4 --- a6\n  a5 --- a7\n  a6 --- a8\n  a7 --- a1\n  a8 --- a2\n  end\n  subgraph GR[\"Đồ thị bên phải\"]\n  b1((1)) --- b5((5))\n  b1 --- b6((6))\n  b1 --- b7((7))\n  b1 --- b8((8))\n  b2((2)) --- b5\n  b2 --- b6\n  b2 --- b7\n  b2 --- b8\n  b3((3)) --- b5\n  b3 --- b6\n  b3 --- b7\n  b3 --- b8\n  b4((4)) --- b5\n  b4 --- b6\n  b4 --- b7\n  b4 --- b8\n  end</pre>",
+          "options": [
+            {
+              "text": "No, they are not isomorphic because they do not have the same number of simple circuits of length 3|||Không đẳng cấu vì số chu trình đơn độ dài 3 khác nhau"
+            },
+            {
+              "text": "No, they are not isomorphic because they do not have the same number of edges|||Không đẳng cấu vì số cạnh khác nhau"
+            },
+            {
+              "text": "No, they are not isomorphic because they do not have the same number of vertices of degree 4|||Không đẳng cấu vì số đỉnh bậc 4 khác nhau"
+            },
+            {
+              "text": "Yes, they are isomorphic|||Có, chúng đẳng cấu"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Both have 16 edges (so B is false) and all 8 vertices of degree 4 (so C is false). Left graph: it is the 8-cycle plus every \"skip-one\" chord, so 1-2, 2-3 and 1-3 are all edges &mdash; a triangle. Each vertex $i$ gives the triangle $i,i+1,i+2$, so there are 8 circuits of length 3. Right graph: it is the complete bipartite graph $K_{4,4}$ with parts $\\{1,2,3,4\\}$ and $\\{5,6,7,8\\}$; a bipartite graph contains no odd cycle at all, so it has 0 circuits of length 3. 8 &ne; 0, which is exactly answer A (and also proves D false).</div><div class=\"ml-vi\">Cả hai đều có 16 cạnh (nên B sai) và cả 8 đỉnh đều bậc 4 (nên C sai). Đồ thị trái: là chu trình 8 cạnh cộng mọi dây cung \"cách một đỉnh\", nên 1-2, 2-3 và 1-3 đều là cạnh &mdash; một tam giác. Mỗi đỉnh $i$ cho một tam giác $i,i+1,i+2$, tổng cộng 8 chu trình độ dài 3. Đồ thị phải: là đồ thị lưỡng phân đầy đủ $K_{4,4}$ với 2 phía $\\{1,2,3,4\\}$ và $\\{5,6,7,8\\}$; đồ thị lưỡng phân không có chu trình lẻ nào nên có 0 chu trình độ dài 3. 8 &ne; 0, đúng bằng phương án A (đồng thời chứng minh D sai).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q20.png"
+        },
         {
           "kind": "MCQ",
           "points": 1,
@@ -5907,6 +6015,60 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
+          "prompt": "Given the directed graph below with vertices A, B, C, D, E, F. How many vertices are in the strongly connected component containing A?<pre class=\"mermaid\">graph LR\n  c((C)) --> b((B))\n  e((E)) --> b\n  f((F)) --> b\n  b --> d((D))\n  e --> c\n  d --> f\n  e --> f\n  c --> a((A))\n  f --> a\n  a --> e\n  a --> d</pre>|||Cho đồ thị có hướng dưới đây với các đỉnh A, B, C, D, E, F. Có bao nhiêu đỉnh trong thành phần liên thông mạnh chứa A?<pre class=\"mermaid\">graph LR\n  c((C)) --> b((B))\n  e((E)) --> b\n  f((F)) --> b\n  b --> d((D))\n  e --> c\n  d --> f\n  e --> f\n  c --> a((A))\n  f --> a\n  a --> e\n  a --> d</pre>",
+          "options": [
+            {
+              "text": "6|||6"
+            },
+            {
+              "text": "5|||5"
+            },
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Two directed cycles already run through A: $A\\to E\\to C\\to A$ and $A\\to D\\to F\\to A$, which puts E, C, D and F in A's component. For B: $A\\to E\\to B$ reaches it, and $B\\to D\\to F\\to A$ returns, so B joins too. All 6 vertices are mutually reachable &rArr; the strongly connected component containing A has 6 vertices.</div><div class=\"ml-vi\">Có sẵn 2 chu trình có hướng đi qua A: $A\\to E\\to C\\to A$ và $A\\to D\\to F\\to A$, đưa E, C, D, F vào cùng thành phần với A. Với B: $A\\to E\\to B$ đến được B, và $B\\to D\\to F\\to A$ quay về được, nên B cũng vào. Cả 6 đỉnh đến được nhau &rArr; thành phần liên thông mạnh chứa A có 6 đỉnh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q23.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Given the directed graph below with vertices A, B, C, D, E, F. How many vertices are in the strongly connected component containing A?<pre class=\"mermaid\">graph LR\n  a((A)) --> b((B))\n  b --> c((C))\n  d((D)) --> a\n  e((E)) --> b\n  e --> d\n  e --> f((F))\n  f --> b\n  f --> c\n  a --> e</pre>|||Cho đồ thị có hướng dưới đây với các đỉnh A, B, C, D, E, F. Có bao nhiêu đỉnh trong thành phần liên thông mạnh chứa A?<pre class=\"mermaid\">graph LR\n  a((A)) --> b((B))\n  b --> c((C))\n  d((D)) --> a\n  e((E)) --> b\n  e --> d\n  e --> f((F))\n  f --> b\n  f --> c\n  a --> e</pre>",
+          "options": [
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">The only way back into A is the edge $D\\to A$, and the only way into D is $E\\to D$. Since $A\\to E$ exists, the directed cycle $A\\to E\\to D\\to A$ puts exactly A, E, D in one component. C is a sink (no outgoing edge) so it can never return; B only reaches C, so it cannot return either; F only reaches B and C, so it cannot return. The strongly connected component containing A is $\\{A,D,E\\}$ &rArr; 3 vertices.</div><div class=\"ml-vi\">Đường duy nhất quay lại A là cạnh $D\\to A$, và đường duy nhất vào D là $E\\to D$. Vì đã có $A\\to E$ nên chu trình có hướng $A\\to E\\to D\\to A$ gom đúng A, E, D vào một thành phần. C là đỉnh hút (không có cạnh ra) nên không bao giờ quay về được; B chỉ đi tới C nên cũng không quay về được; F chỉ đi tới B và C nên cũng không. Thành phần liên thông mạnh chứa A là $\\{A,D,E\\}$ &rArr; 3 đỉnh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q24.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
           "prompt": "How many cut-edges (bridges) are there in this graph? It has 8 vertices: a triangle a-b-c, a path of 3 edges a-d-e-f attached at a, and a path of 2 edges b-g-h attached at b.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- c((c))\n  c --- a\n  a --- d((d))\n  d --- e((e))\n  e --- f((f))\n  b --- g((g))\n  g --- h((h))</pre>|||Đồ thị sau có bao nhiêu cạnh cầu (cut-edge)? Đồ thị có 8 đỉnh: tam giác a-b-c, một đường 3 cạnh a-d-e-f gắn tại a, và một đường 2 cạnh b-g-h gắn tại b.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- c((c))\n  c --- a\n  a --- d((d))\n  d --- e((e))\n  e --- f((f))\n  b --- g((g))\n  g --- h((h))</pre>",
           "options": [
             {
@@ -5957,6 +6119,33 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">Label sides $\\{u,a\\}$ and $\\{v,b\\}$. Via the adjacency matrix (order u,a,v,b), $M^2$ row u $=[2,2,0,0]$, so $M^3_{u,v}=M^2_{u,u}\\cdot M_{u,v}+M^2_{u,a}\\cdot M_{a,v}=2\\times1+2\\times1=4$.</div><div class=\"ml-vi\">Gọi 2 phía là $\\{u,a\\}$ và $\\{v,b\\}$. Qua ma trận kề (thứ tự u,a,v,b), hàng u của $M^2=[2,2,0,0]$, nên $M^3_{u,v}=M^2_{u,u}\\cdot M_{u,v}+M^2_{u,a}\\cdot M_{a,v}=2\\times1+2\\times1=4$.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q26.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "How many cut vertices and cut edges are there in this graph?<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- h((h))\n  h --- f((f))\n  f --- e((e))\n  e --- g((g))\n  g --- a\n  b --- c((c))\n  c --- d((d))</pre>|||Đồ thị sau có bao nhiêu đỉnh cắt và cạnh cầu?<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- h((h))\n  h --- f((f))\n  f --- e((e))\n  e --- g((g))\n  g --- a\n  b --- c((c))\n  c --- d((d))</pre>",
+          "options": [
+            {
+              "text": "2 and 2|||2 và 2"
+            },
+            {
+              "text": "1 and 1|||1 và 1"
+            },
+            {
+              "text": "2 and 1|||2 và 1"
+            },
+            {
+              "text": "3 and 2|||3 và 2"
+            },
+            {
+              "text": "1 and 3|||1 và 3"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The graph is one 6-cycle a-b-h-f-e-g-a with the 2-edge tail b-c-d hanging off b. No edge of the cycle is a bridge. The two tail edges ARE bridges: removing b-c cuts off $\\{c,d\\}$ and removing c-d cuts off $d$ &rArr; 2 cut edges. Removing vertex b disconnects $\\{c,d\\}$ from the cycle and removing vertex c disconnects $d$ &rArr; 2 cut vertices (no other vertex works: every other vertex lies on the cycle only). Answer: 2 and 2.</div><div class=\"ml-vi\">Đồ thị là một chu trình 6 cạnh a-b-h-f-e-g-a cộng thêm đuôi 2 cạnh b-c-d gắn vào b. Không cạnh nào của chu trình là cầu. Hai cạnh đuôi ĐỀU là cầu: bỏ b-c thì cắt rời $\\{c,d\\}$, bỏ c-d thì cắt rời $d$ &rArr; 2 cạnh cầu. Bỏ đỉnh b thì $\\{c,d\\}$ rời khỏi chu trình, bỏ đỉnh c thì $d$ rời ra &rArr; 2 đỉnh cắt (không đỉnh nào khác thoả: mọi đỉnh còn lại chỉ nằm trên chu trình). Đáp án: 2 và 2.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q27.png"
         },
         {
           "kind": "MCQ",
@@ -6018,6 +6207,33 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
+          "prompt": "How many strongly connected components are there in this graph? It has 12 vertices: an outer ring $v_1..v_8$ and four inner vertices $w_1..w_4$.<pre class=\"mermaid\">graph LR\n  v1((v1)) --> v2((v2))\n  v2 --> v3((v3))\n  v3 --> v4((v4))\n  v4 --> v5((v5))\n  v5 --> v6((v6))\n  v6 --> v7((v7))\n  v7 --> v8((v8))\n  v8 --> v1\n  v1 --> w1((w1))\n  v8 --> w1\n  v2 --> w2((w2))\n  v3 --> w2\n  v6 --> w3((w3))\n  v7 --> w3\n  v5 --> w4((w4))\n  v4 --> w4\n  w4 --> w1\n  w2 --> w3</pre>|||Đồ thị sau có bao nhiêu thành phần liên thông mạnh? Đồ thị có 12 đỉnh: vành ngoài $v_1..v_8$ và 4 đỉnh trong $w_1..w_4$.<pre class=\"mermaid\">graph LR\n  v1((v1)) --> v2((v2))\n  v2 --> v3((v3))\n  v3 --> v4((v4))\n  v4 --> v5((v5))\n  v5 --> v6((v6))\n  v6 --> v7((v7))\n  v7 --> v8((v8))\n  v8 --> v1\n  v1 --> w1((w1))\n  v8 --> w1\n  v2 --> w2((w2))\n  v3 --> w2\n  v6 --> w3((w3))\n  v7 --> w3\n  v5 --> w4((w4))\n  v4 --> w4\n  w4 --> w1\n  w2 --> w3</pre>",
+          "options": [
+            {
+              "text": "5|||5"
+            },
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "1|||1"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The eight outer vertices form one directed cycle $v_1\\to v_2\\to\\dots\\to v_8\\to v_1$, so they are all mutually reachable &mdash; one component of size 8. No edge ever leaves the inner group back to the ring, so no $w$ can rejoin it. Among the inner vertices, $w_1$ and $w_3$ have no outgoing edge at all (pure sinks), and $w_4\\to w_1$, $w_2\\to w_3$ are one-way with no return path, so each $w$ is alone. Total $=1+4=5$.</div><div class=\"ml-vi\">Tám đỉnh vành ngoài tạo thành một chu trình có hướng $v_1\\to v_2\\to\\dots\\to v_8\\to v_1$ nên đến được nhau hết &mdash; một thành phần gồm 8 đỉnh. Không cạnh nào đi ngược từ nhóm trong ra vành nên không đỉnh $w$ nào nhập được vào đó. Trong nhóm trong, $w_1$ và $w_3$ hoàn toàn không có cạnh ra (đỉnh hút), còn $w_4\\to w_1$ và $w_2\\to w_3$ là một chiều không có đường về, nên mỗi $w$ tự thành một thành phần. Tổng $=1+4=5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q30.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
           "prompt": "Given a simple graph G with the adjacency matrix (vertices $v_1..v_5$ in order)<pre>0 1 0 0 1\n1 0 1 0 1\n0 1 0 1 0\n0 0 1 0 1\n1 1 0 1 0</pre>Choose the correct statement.|||Cho đơn đồ thị G với ma trận kề (đỉnh $v_1..v_5$ theo thứ tự)<pre>0 1 0 0 1\n1 0 1 0 1\n0 1 0 1 0\n0 0 1 0 1\n1 1 0 1 0</pre>Chọn phát biểu đúng.",
           "options": [
             {
@@ -6038,7 +6254,24 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">Degrees: $v_1$=2, $v_2$=3, $v_3$=2, $v_4$=2, $v_5$=3. Exactly 2 odd-degree vertices ($v_2,v_5$) and G is connected &rArr; G has an Euler path but not an Euler circuit (which needs 0 odd-degree vertices).</div><div class=\"ml-vi\">Bậc: $v_1$=2, $v_2$=3, $v_3$=2, $v_4$=2, $v_5$=3. Đúng 2 đỉnh bậc lẻ ($v_2,v_5$), G liên thông &rArr; G có đường đi Euler nhưng không có chu trình Euler (cần 0 đỉnh bậc lẻ).</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q31.png"
-        },
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "PT3-D3",
+      "source": "REAL",
+      "sortOrder": 133,
+      "title": "Progress Test 3 — Đề 3/9|||Kiểm tra tiến độ 3 — Đề 3/9",
+      "description": "MAD101 Progress Test 3 question bank, part 3 of 9 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 3/9 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
+      "durationMinutes": 30,
+      "totalPoints": 10,
+      "passMark": 5,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
         {
           "kind": "MCQ",
           "points": 1,
@@ -6089,6 +6322,30 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">Euler circuit needs every vertex to have even degree. $W_4$: hub degree 4 (even) but each of the 4 rim vertices has degree 3 (odd, from 2 cycle edges + 1 spoke) &rArr; has odd-degree vertices, NO Euler circuit. $Q_4$: 4-regular, all even &rArr; has one. $C_4$: all degree 2, even &rArr; has one. $K_5$: all degree 4, even &rArr; has one. Only (i) fails.</div><div class=\"ml-vi\">Chu trình Euler cần mọi đỉnh bậc chẵn. $W_4$: đỉnh trung tâm bậc 4 (chẵn) nhưng 4 đỉnh vành mỗi đỉnh bậc 3 (lẻ, từ 2 cạnh chu trình + 1 nan hoa) &rArr; có đỉnh bậc lẻ, KHÔNG có chu trình Euler. $Q_4$: đều bậc 4 &rArr; có. $C_4$: đều bậc 2 &rArr; có. $K_5$: đều bậc 4 &rArr; có. Chỉ (i) không thoả.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q33.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Choose the correct statement about the graph below (13 vertices, 15 edges).<pre class=\"mermaid\">graph LR\n  n1((1)) --- n2((2))\n  n2 --- n3((3))\n  n3 --- n4((4))\n  n4 --- n1\n  n2 --- n7((7))\n  n6((6)) --- n7\n  n6 --- n11((11))\n  n11 --- n12((12))\n  n7 --- n12\n  n5((5)) --- n8((8))\n  n5 --- n10((10))\n  n8 --- n9((9))\n  n9 --- n12\n  n8 --- n13((13))\n  n10 --- n13</pre>|||Chọn phát biểu đúng về đồ thị dưới đây (13 đỉnh, 15 cạnh).<pre class=\"mermaid\">graph LR\n  n1((1)) --- n2((2))\n  n2 --- n3((3))\n  n3 --- n4((4))\n  n4 --- n1\n  n2 --- n7((7))\n  n6((6)) --- n7\n  n6 --- n11((11))\n  n11 --- n12((12))\n  n7 --- n12\n  n5((5)) --- n8((8))\n  n5 --- n10((10))\n  n8 --- n9((9))\n  n9 --- n12\n  n8 --- n13((13))\n  n10 --- n13</pre>",
+          "options": [
+            {
+              "text": "The graph does not have Euler paths|||Đồ thị không có đường đi Euler"
+            },
+            {
+              "text": "The graph has Euler circuits|||Đồ thị có chu trình Euler"
+            },
+            {
+              "text": "The graph has Euler paths|||Đồ thị có đường đi Euler"
+            },
+            {
+              "text": "The graph has Euler paths but not Euler circuits|||Đồ thị có đường đi Euler nhưng không có chu trình Euler"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Count the degrees: vertices 2, 7, 8 and 12 each have degree 3 (odd); the other nine vertices all have degree 2 (even). Sum $=4\\times3+9\\times2=30=2\\times15$ edges &#10003;. An Euler circuit needs every degree even, and an Euler path needs exactly 0 or 2 odd-degree vertices. This graph has FOUR odd-degree vertices, so it has neither an Euler circuit nor an Euler path &mdash; answer A.</div><div class=\"ml-vi\">Đếm bậc: các đỉnh 2, 7, 8 và 12 đều bậc 3 (lẻ); chín đỉnh còn lại đều bậc 2 (chẵn). Tổng $=4\\times3+9\\times2=30=2\\times15$ cạnh &#10003;. Chu trình Euler cần mọi đỉnh bậc chẵn, còn đường đi Euler cần đúng 0 hoặc 2 đỉnh bậc lẻ. Đồ thị này có BỐN đỉnh bậc lẻ nên không có cả chu trình lẫn đường đi Euler &mdash; đáp án A.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q34.png"
         },
         {
           "kind": "MCQ",
@@ -6192,6 +6449,33 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
+          "prompt": "Choose an Euler circuit of the graph below (10 vertices, 14 edges).<pre class=\"mermaid\">graph LR\n  a((a)) --- c((c))\n  a --- d((d))\n  c --- d\n  d --- e((e))\n  e --- f((f))\n  b((b)) --- e\n  b --- f\n  c --- g((g))\n  d --- h((h))\n  e --- i((i))\n  f --- j((j))\n  g --- h\n  i --- j\n  c --- f</pre>|||Chọn một chu trình Euler của đồ thị dưới đây (10 đỉnh, 14 cạnh).<pre class=\"mermaid\">graph LR\n  a((a)) --- c((c))\n  a --- d((d))\n  c --- d\n  d --- e((e))\n  e --- f((f))\n  b((b)) --- e\n  b --- f\n  c --- g((g))\n  d --- h((h))\n  e --- i((i))\n  f --- j((j))\n  g --- h\n  i --- j\n  c --- f</pre>",
+          "options": [
+            {
+              "text": "The graph has no Euler circuits|||Đồ thị không có chu trình Euler"
+            },
+            {
+              "text": "d - e - f - b - e - i - j - f - c - a - d - h - g - c - a - d|||d - e - f - b - e - i - j - f - c - a - d - h - g - c - a - d"
+            },
+            {
+              "text": "a - d - e - b - f - e - d - c - f - j - i - e - d - h - g - c - a|||a - d - e - b - f - e - d - c - f - j - i - e - d - h - g - c - a"
+            },
+            {
+              "text": "a - d - e - b - f - j - i - e - f - c - d - h - g - c - a|||a - d - e - b - f - j - i - e - f - c - d - h - g - c - a"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">Every vertex has even degree (c, d, e, f have degree 4; a, b, g, h, i, j have degree 2) and the graph is connected, so an Euler circuit exists &mdash; A is false. Now count: 14 edges means a valid circuit must list 15 vertices. B lists 16 and repeats both ca and ad; C lists 17 (16 edges) and uses de three times; only D has the right length. Tracing D: a-d, d-e, e-b, b-f, f-j, j-i, i-e, e-f, f-c, c-d, d-h, h-g, g-c, c-a &mdash; all 14 edges, each exactly once, ending back at a.</div><div class=\"ml-vi\">Mọi đỉnh đều bậc chẵn (c, d, e, f bậc 4; a, b, g, h, i, j bậc 2) và đồ thị liên thông nên có chu trình Euler &mdash; A sai. Đếm tiếp: 14 cạnh nghĩa là một chu trình hợp lệ phải liệt kê 15 đỉnh. B liệt kê 16 đỉnh và lặp lại cả ca lẫn ad; C liệt kê 17 đỉnh (16 cạnh) và dùng de tới ba lần; chỉ D đúng độ dài. Truy vết D: a-d, d-e, e-b, b-f, f-j, j-i, i-e, e-f, f-c, c-d, d-h, h-g, g-c, c-a &mdash; đủ 14 cạnh, mỗi cạnh đúng một lần, và quay về a.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q39.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
           "prompt": "Choose the correct statement about the graph below: two vertex-disjoint triangles (a-b-c and d-e-f) joined by a single bridge edge c-d.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- c((c))\n  c --- a\n  c --- d((d))\n  d --- e((e))\n  e --- f((f))\n  f --- d</pre>|||Chọn phát biểu đúng về đồ thị dưới đây: hai tam giác rời nhau (a-b-c và d-e-f) nối với nhau bằng một cạnh cầu duy nhất c-d.<pre class=\"mermaid\">graph LR\n  a((a)) --- b((b))\n  b --- c((c))\n  c --- a\n  c --- d((d))\n  d --- e((e))\n  e --- f((f))\n  f --- d</pre>",
           "options": [
             {
@@ -6236,24 +6520,7 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">Dijkstra from A: A-C=8, A-B=8, then A-C-F=8+5=13 (beats A-B-E=8+5=13 tie but continue), A-C-F-G=13+7=20. Checking alternatives: A-B-D-G=8+7+8=23, A-B-E-F-G=8+5+3+7=23 &mdash; all worse. Shortest is A-C-F-G $=20$, i.e. G-F-C-A reversed.</div><div class=\"ml-vi\">Dijkstra từ A: A-C=8, A-B=8, rồi A-C-F=8+5=13, A-C-F-G=13+7=20. Kiểm các đường khác: A-B-D-G=23, A-B-E-F-G=23 &mdash; đều tệ hơn. Ngắn nhất là A-C-F-G $=20$, tức G-F-C-A đảo ngược.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q41.png"
-        }
-      ]
-    },
-    {
-      "kind": "FE",
-      "code": "PT3-D3",
-      "source": "REAL",
-      "sortOrder": 133,
-      "title": "Progress Test 3 — Đề 3/8|||Kiểm tra tiến độ 3 — Đề 3/8",
-      "description": "MAD101 Progress Test 3 question bank, part 3 of 8 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 3/8 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
-      "durationMinutes": 30,
-      "totalPoints": 10,
-      "passMark": 5,
-      "shuffleQuestions": true,
-      "shuffleOptions": false,
-      "isPublished": true,
-      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
-      "questions": [
+        },
         {
           "kind": "MCQ",
           "points": 1,
@@ -6385,7 +6652,24 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">Extraction order: a(0) &rarr; d(2, beats b=4) &rarr; b(4). First 3: a, d, b.</div><div class=\"ml-vi\">Thứ tự chọn: a(0) &rarr; d(2, tốt hơn b=4) &rarr; b(4). 3 đỉnh đầu: a, d, b.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q46.png"
-        },
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "PT3-D4",
+      "source": "REAL",
+      "sortOrder": 134,
+      "title": "Progress Test 3 — Đề 4/9|||Kiểm tra tiến độ 3 — Đề 4/9",
+      "description": "MAD101 Progress Test 3 question bank, part 4 of 9 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 4/9 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
+      "durationMinutes": 30,
+      "totalPoints": 10,
+      "passMark": 5,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
         {
           "kind": "MCQ",
           "points": 1,
@@ -6652,24 +6936,7 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">Full 3-ary requires EVERY internal vertex to have exactly 3 children. (i) fails: A has only 1 child and C has only 2. (iii) fails: q has only 2 children. In (ii) the two internal vertices a and b each have exactly 3 children &rArr; only (ii) is full 3-ary.</div><div class=\"ml-vi\">3-phân đầy đủ yêu cầu MỌI đỉnh trong có đúng 3 con. (i) sai: A chỉ có 1 con, C chỉ có 2 con. (iii) sai: q chỉ có 2 con. Ở (ii) hai đỉnh trong a và b đều có đúng 3 con &rArr; chỉ (ii) là 3-phân đầy đủ.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q56.png"
-        }
-      ]
-    },
-    {
-      "kind": "FE",
-      "code": "PT3-D4",
-      "source": "REAL",
-      "sortOrder": 134,
-      "title": "Progress Test 3 — Đề 4/8|||Kiểm tra tiến độ 3 — Đề 4/8",
-      "description": "MAD101 Progress Test 3 question bank, part 4 of 8 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 4/8 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
-      "durationMinutes": 30,
-      "totalPoints": 10,
-      "passMark": 5,
-      "shuffleQuestions": true,
-      "shuffleOptions": false,
-      "isPublished": true,
-      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
-      "questions": [
+        },
         {
           "kind": "MCQ",
           "points": 1,
@@ -6798,7 +7065,24 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">Frequencies in 'weekend': e=3, w=1, k=1, n=1, d=1. Huffman merges the four freq-1 letters into two freq-2 pairs, then those merge into a freq-4 node; finally e(3) merges with that freq-4 node at the root. Since e is a direct child of the root, its code is 1 bit.</div><div class=\"ml-vi\">Tần suất trong 'weekend': e=3, w=1, k=1, n=1, d=1. Huffman gộp 4 chữ tần suất 1 thành 2 cặp tần suất 2, rồi 2 cặp đó gộp thành nút tần suất 4; cuối cùng e(3) gộp với nút tần suất 4 đó ở gốc. Vì e là con trực tiếp của gốc nên mã của nó dài 1 bit.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q61.png"
-        },
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "PT3-D5",
+      "source": "REAL",
+      "sortOrder": 135,
+      "title": "Progress Test 3 — Đề 5/9|||Kiểm tra tiến độ 3 — Đề 5/9",
+      "description": "MAD101 Progress Test 3 question bank, part 5 of 9 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 5/9 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
+      "durationMinutes": 30,
+      "totalPoints": 10,
+      "passMark": 5,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
         {
           "kind": "MCQ",
           "points": 1,
@@ -7062,24 +7346,7 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">$\\uparrow(-\\ 3\\ 1,\\ 2)=\\uparrow(2,2)=2^2=4$. $*(3, +\\ 1\\ 5)=3\\times(1+5)=18$. Total $=+(4,18)=22$.</div><div class=\"ml-vi\">$\\uparrow(-\\ 3\\ 1,\\ 2)=\\uparrow(2,2)=2^2=4$. $*(3, +\\ 1\\ 5)=3\\times(1+5)=18$. Tổng $=+(4,18)=22$.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q71.png"
-        }
-      ]
-    },
-    {
-      "kind": "FE",
-      "code": "PT3-D5",
-      "source": "REAL",
-      "sortOrder": 135,
-      "title": "Progress Test 3 — Đề 5/8|||Kiểm tra tiến độ 3 — Đề 5/8",
-      "description": "MAD101 Progress Test 3 question bank, part 5 of 8 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 5/8 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
-      "durationMinutes": 30,
-      "totalPoints": 10,
-      "passMark": 5,
-      "shuffleQuestions": true,
-      "shuffleOptions": false,
-      "isPublished": true,
-      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
-      "questions": [
+        },
         {
           "kind": "MCQ",
           "points": 1,
@@ -7214,7 +7481,24 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">$3-1=2$; $2^2=4$; $1+5=6$; $3\\times6=18$; $4+18=22$.</div><div class=\"ml-vi\">$3-1=2$; $2^2=4$; $1+5=6$; $3\\times6=18$; $4+18=22$.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q76.png"
-        },
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "PT3-D6",
+      "source": "REAL",
+      "sortOrder": 136,
+      "title": "Progress Test 3 — Đề 6/9|||Kiểm tra tiến độ 3 — Đề 6/9",
+      "description": "MAD101 Progress Test 3 question bank, part 6 of 9 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 6/9 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
+      "durationMinutes": 30,
+      "totalPoints": 10,
+      "passMark": 5,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
         {
           "kind": "MCQ",
           "points": 1,
@@ -7428,6 +7712,36 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
+          "prompt": "If we do breadth-first search on the graph below to build a spanning tree starting from 'g', what are the last 3 edges we will add to the tree? (We suppose that at each stage, if we have many choices, we will visit the vertices in the <strong>reverse</strong> alphabet order &mdash; for example we visit 'b' before 'a' if there are two choices 'a' and 'b'.)<pre class=\"mermaid\">graph LR\n  a((a)) --- c((c))\n  a --- e((e))\n  a --- f((f))\n  a --- g((g))\n  b((b)) --- c\n  b --- e\n  b --- f\n  d((d)) --- c\n  d --- e\n  d --- f\n  d --- g</pre>|||Dùng BFS trên đồ thị dưới đây để dựng cây khung, bắt đầu từ 'g'. Ba cạnh CUỐI CÙNG được thêm vào cây là gì? (Giả sử ở mỗi bước, nếu có nhiều lựa chọn thì thăm các đỉnh theo thứ tự alphabet <strong>NGƯỢC</strong> &mdash; ví dụ thăm 'b' trước 'a' nếu có 2 lựa chọn 'a' và 'b'.)<pre class=\"mermaid\">graph LR\n  a((a)) --- c((c))\n  a --- e((e))\n  a --- f((f))\n  a --- g((g))\n  b((b)) --- c\n  b --- e\n  b --- f\n  d((d)) --- c\n  d --- e\n  d --- f\n  d --- g</pre>",
+          "options": [
+            {
+              "text": "af, bc, de|||af, bc, de"
+            },
+            {
+              "text": "de, cd, bf|||de, cd, bf"
+            },
+            {
+              "text": "af, bc, df|||af, bc, df"
+            },
+            {
+              "text": "cd, bc, de|||cd, bc, de"
+            },
+            {
+              "text": "cd, bc, af|||cd, bc, af"
+            },
+            {
+              "text": "cd, bc, de|||cd, bc, de"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">Start at g. Its neighbours are a and d; reverse alphabet order visits d first, then a &rArr; tree edges <strong>gd</strong>, <strong>ga</strong>; queue: d, a. Dequeue d: its unvisited neighbours are c, e, f, taken in reverse alphabet order f, e, c &rArr; tree edges <strong>df</strong>, <strong>de</strong>, <strong>dc</strong>; queue: a, f, e, c. Dequeue a: c, e, f are already visited, so nothing is added. Dequeue f: its only unvisited neighbour is b &rArr; tree edge <strong>bf</strong>. All 7 vertices are now in the tree (6 edges). The full order is gd, ga, df, de, dc, bf, so the last three are de, cd, bf &mdash; answer B.</div><div class=\"ml-vi\">Bắt đầu ở g. Các đỉnh kề g là a và d; theo alphabet NGƯỢC thì thăm d trước rồi a &rArr; cạnh cây <strong>gd</strong>, <strong>ga</strong>; hàng đợi: d, a. Lấy d ra: các đỉnh kề chưa thăm là c, e, f, lấy theo alphabet ngược f, e, c &rArr; cạnh cây <strong>df</strong>, <strong>de</strong>, <strong>dc</strong>; hàng đợi: a, f, e, c. Lấy a ra: c, e, f đều đã thăm nên không thêm cạnh nào. Lấy f ra: đỉnh kề chưa thăm duy nhất là b &rArr; cạnh cây <strong>bf</strong>. Đủ 7 đỉnh (6 cạnh). Thứ tự đầy đủ là gd, ga, df, de, dc, bf nên 3 cạnh cuối là de, cd, bf &mdash; đáp án B.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q85.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
           "prompt": "Find a spanning tree for $K_{1,6}$ among the three trees drawn below.<pre class=\"mermaid\">graph LR\n  subgraph U1[\"(i)\"]\n  m1((1)) --- m2((2))\n  m2 --- m3((3))\n  m3 --- m4((4))\n  m4 --- m5((5))\n  m5 --- m6((6))\n  m6 --- m7((7))\n  m7 --- m8((8))\n  end\n  subgraph U2[\"(ii)\"]\n  na((a)) --- nb((b))\n  nb --- nc((c))\n  nc --- nd((d))\n  nc --- ne((e))\n  ne --- nf((f))\n  nf --- ng((g))\n  end\n  subgraph U3[\"(iii)\"]\n  z0((c)) --- z1((1))\n  z0 --- z2((2))\n  z0 --- z3((3))\n  z0 --- z4((4))\n  z0 --- z5((5))\n  z0 --- z6((6))\n  end</pre>|||Tìm một cây khung cho $K_{1,6}$ trong ba cây được vẽ dưới đây.<pre class=\"mermaid\">graph LR\n  subgraph U1[\"(i)\"]\n  m1((1)) --- m2((2))\n  m2 --- m3((3))\n  m3 --- m4((4))\n  m4 --- m5((5))\n  m5 --- m6((6))\n  m6 --- m7((7))\n  m7 --- m8((8))\n  end\n  subgraph U2[\"(ii)\"]\n  na((a)) --- nb((b))\n  nb --- nc((c))\n  nc --- nd((d))\n  nc --- ne((e))\n  ne --- nf((f))\n  nf --- ng((g))\n  end\n  subgraph U3[\"(iii)\"]\n  z0((c)) --- z1((1))\n  z0 --- z2((2))\n  z0 --- z3((3))\n  z0 --- z4((4))\n  z0 --- z5((5))\n  z0 --- z6((6))\n  end</pre>",
           "options": [
             {
@@ -7475,24 +7789,7 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">7 edges, 6 vertices. Spanning tree needs $6-1=5$ edges. Remove $7-5=2$.</div><div class=\"ml-vi\">7 cạnh, 6 đỉnh. Cây khung cần $6-1=5$ cạnh. Cần bỏ $7-5=2$ cạnh.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q87.png"
-        }
-      ]
-    },
-    {
-      "kind": "FE",
-      "code": "PT3-D6",
-      "source": "REAL",
-      "sortOrder": 136,
-      "title": "Progress Test 3 — Đề 6/8|||Kiểm tra tiến độ 3 — Đề 6/8",
-      "description": "MAD101 Progress Test 3 question bank, part 6 of 8 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 6/8 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
-      "durationMinutes": 30,
-      "totalPoints": 10,
-      "passMark": 5,
-      "shuffleQuestions": true,
-      "shuffleOptions": false,
-      "isPublished": true,
-      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
-      "questions": [
+        },
         {
           "kind": "MCQ",
           "points": 1,
@@ -7600,7 +7897,24 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">Start {A,C}(1). Tie among A-D,A-B,C-D,C-B (all 2); alphabetically B&lt;D and A-B ties with C-B so pick A-B. Next min is B-E(1). Then tie A-D vs C-D(2), pick A-D (A&lt;C). Then D-F(1). Then F-G(2). Sequence: {A,C},{A,B},{B,E},{A,D},{D,F},{F,G}.</div><div class=\"ml-vi\">Bắt đầu {A,C}(1). Tie giữa A-D,A-B,C-D,C-B (đều 2); B&lt;D và A-B tie với C-B nên chọn A-B. Tiếp theo nhỏ nhất là B-E(1). Rồi tie A-D và C-D(2), chọn A-D (A&lt;C). Rồi D-F(1). Rồi F-G(2). Chuỗi: {A,C},{A,B},{B,E},{A,D},{D,F},{F,G}.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q91.png"
-        },
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "PT3-D7",
+      "source": "REAL",
+      "sortOrder": 137,
+      "title": "Progress Test 3 — Đề 7/9|||Kiểm tra tiến độ 3 — Đề 7/9",
+      "description": "MAD101 Progress Test 3 question bank, part 7 of 9 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 7/9 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
+      "durationMinutes": 30,
+      "totalPoints": 10,
+      "passMark": 5,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
         {
           "kind": "MCQ",
           "points": 1,
@@ -7763,6 +8077,36 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
+          "prompt": "If we use the Prim algorithm to find a minimum tree on the weighted graph below, what are the <strong>seventh</strong> and <strong>eighth</strong> edges added? (An edge is written with its two endpoints in alphabet order, so we write \"ad\" instead of \"da\". At each stage, if there are several edges of the same smallest weight, we choose in <strong>reverse</strong> dictionary order &mdash; e.g. between 'bc', 'de', 'az' we choose 'de' first.)<pre class=\"mermaid\">graph LR\n  a((a)) -- 5 --- b((b))\n  b -- 4 --- c((c))\n  a -- 2 --- d((d))\n  b -- 3 --- d\n  b -- 5 --- e((e))\n  b -- 6 --- f((f))\n  c -- 3 --- f\n  d -- 7 --- e\n  e -- 1 --- f\n  d -- 6 --- g((g))\n  d -- 8 --- h((h))\n  e -- 3 --- h\n  f -- 4 --- h\n  f -- 4 --- i((i))\n  g -- 4 --- h\n  h -- 2 --- i</pre>|||Dùng thuật toán Prim tìm cây nhỏ nhất trên đồ thị có trọng số dưới đây, cạnh <strong>thứ bảy</strong> và <strong>thứ tám</strong> được thêm vào là gì? (Cạnh viết với 2 đầu mút theo thứ tự alphabet, tức viết \"ad\" chứ không viết \"da\". Ở mỗi bước, nếu có nhiều cạnh cùng trọng số nhỏ nhất thì chọn theo thứ tự từ điển <strong>NGƯỢC</strong> &mdash; ví dụ giữa 'bc', 'de', 'az' thì chọn 'de' trước.)<pre class=\"mermaid\">graph LR\n  a((a)) -- 5 --- b((b))\n  b -- 4 --- c((c))\n  a -- 2 --- d((d))\n  b -- 3 --- d\n  b -- 5 --- e((e))\n  b -- 6 --- f((f))\n  c -- 3 --- f\n  d -- 7 --- e\n  e -- 1 --- f\n  d -- 6 --- g((g))\n  d -- 8 --- h((h))\n  e -- 3 --- h\n  f -- 4 --- h\n  f -- 4 --- i((i))\n  g -- 4 --- h\n  h -- 2 --- i</pre>",
+          "options": [
+            {
+              "text": "bd, ad|||bd, ad"
+            },
+            {
+              "text": "ad, hi|||ad, hi"
+            },
+            {
+              "text": "ad, cf|||ad, cf"
+            },
+            {
+              "text": "bd, cf|||bd, cf"
+            },
+            {
+              "text": "gh, ab|||gh, ab"
+            },
+            {
+              "text": "gh, be|||gh, be"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The minimum spanning tree is always the same 8 edges &mdash; ad(2), bd(3), bc(4), cf(3), ef(1), eh(3), gh(4), hi(2) &mdash; only the ORDER depends on where Prim starts, and the exam does not name a starting vertex. Growing from anywhere except a, b or d, the tree sweeps the cheap right/bottom side first and reaches a last. For example from c: cf(3), ef(1), eh(3), hi(2), then gh(4) beats bc(4) on the reverse-dictionary tie-break, then bc(4), then <strong>bd(3)</strong>, then <strong>ad(2)</strong>. So the 7th and 8th edges are bd and ad &mdash; answer A, which is the only listed pair any starting vertex can produce.</div><div class=\"ml-vi\">Cây khung nhỏ nhất luôn là cùng 8 cạnh &mdash; ad(2), bd(3), bc(4), cf(3), ef(1), eh(3), gh(4), hi(2) &mdash; chỉ THỨ TỰ mới phụ thuộc điểm xuất phát của Prim, mà đề không nói xuất phát từ đâu. Xuất phát từ bất kỳ đỉnh nào ngoài a, b, d thì cây quét hết phần cạnh rẻ ở phía phải/dưới trước và chạm tới a sau cùng. Ví dụ từ c: cf(3), ef(1), eh(3), hi(2), rồi gh(4) thắng bc(4) nhờ luật phá hoà theo từ điển ngược, rồi bc(4), rồi <strong>bd(3)</strong>, rồi <strong>ad(2)</strong>. Vậy cạnh thứ 7 và thứ 8 là bd và ad &mdash; đáp án A, cũng là cặp DUY NHẤT trong danh sách mà một điểm xuất phát bất kỳ có thể sinh ra.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q98.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
           "prompt": "Consider the weighted graph below (vertices A,B,C,D,E,F,G; edges A-B=1, A-D=1, A-G=3, B-G=2, B-C=3, D-G=2, D-C=2, G-C=1, D-E=3, E-C=1, C-F=2, E-F=2).<pre class=\"mermaid\">graph LR\n  A((A)) -- 1 --- B((B))\n  A -- 1 --- D((D))\n  A -- 3 --- G((G))\n  B -- 2 --- G\n  B -- 3 --- C((C))\n  D -- 2 --- G\n  D -- 2 --- C\n  G -- 1 --- C\n  D -- 3 --- E((E))\n  E -- 1 --- C\n  C -- 2 --- F((F))\n  E -- 2 --- F</pre>Which one of the following is NOT the sequence of edges added to the minimum spanning tree using Kruskal's algorithm?|||Xét đồ thị có trọng số dưới đây (đỉnh A,B,C,D,E,F,G; cạnh A-B=1, A-D=1, A-G=3, B-G=2, B-C=3, D-G=2, D-C=2, G-C=1, D-E=3, E-C=1, C-F=2, E-F=2).<pre class=\"mermaid\">graph LR\n  A((A)) -- 1 --- B((B))\n  A -- 1 --- D((D))\n  A -- 3 --- G((G))\n  B -- 2 --- G\n  B -- 3 --- C((C))\n  D -- 2 --- G\n  D -- 2 --- C\n  G -- 1 --- C\n  D -- 3 --- E((E))\n  E -- 1 --- C\n  C -- 2 --- F((F))\n  E -- 2 --- F</pre>Phương án nào sau đây KHÔNG PHẢI chuỗi cạnh Kruskal thêm vào cây khung nhỏ nhất?",
           "options": [
             {
@@ -7888,24 +8232,49 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">Sum of degrees $=2\\times3+10\\times4=6+40=46$. Edges $=46/2=23$.</div><div class=\"ml-vi\">Tổng bậc $=2\\times3+10\\times4=46$. Số cạnh $=46/2=23$.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q103.png"
-        }
-      ]
-    },
-    {
-      "kind": "FE",
-      "code": "PT3-D7",
-      "source": "REAL",
-      "sortOrder": 137,
-      "title": "Progress Test 3 — Đề 7/8|||Kiểm tra tiến độ 3 — Đề 7/8",
-      "description": "MAD101 Progress Test 3 question bank, part 7 of 8 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 7/8 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
-      "durationMinutes": 30,
-      "totalPoints": 10,
-      "passMark": 5,
-      "shuffleQuestions": true,
-      "shuffleOptions": false,
-      "isPublished": true,
-      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
-      "questions": [
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Are these two directed graphs isomorphic?<pre class=\"mermaid\">graph TD\n  subgraph GL[\"Left graph\"]\n  p2((2)) --> p1((1))\n  p1 --> p3((3))\n  p1 --> p4((4))\n  p3 --> p2\n  p3 --> p4\n  p4 --> p2\n  end\n  subgraph GR[\"Right graph\"]\n  q2((2)) --> q1((1))\n  q1 --> q3((3))\n  q4((4)) --> q1\n  q3 --> q2\n  q3 --> q4\n  q4 --> q2\n  end</pre>|||Hai đồ thị có hướng sau có đẳng cấu không?<pre class=\"mermaid\">graph TD\n  subgraph GL[\"Đồ thị bên trái\"]\n  p2((2)) --> p1((1))\n  p1 --> p3((3))\n  p1 --> p4((4))\n  p3 --> p2\n  p3 --> p4\n  p4 --> p2\n  end\n  subgraph GR[\"Đồ thị bên phải\"]\n  q2((2)) --> q1((1))\n  q1 --> q3((3))\n  q4((4)) --> q1\n  q3 --> q2\n  q3 --> q4\n  q4 --> q2\n  end</pre>",
+          "options": [
+            {
+              "text": "Yes|||Có"
+            },
+            {
+              "text": "No|||Không"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">The two drawings differ in exactly one arrow: the left has $1\\to4$ while the right has $4\\to1$. But that is not enough to break isomorphism &mdash; the vertices only have to be relabelled. Both digraphs have two vertices with (out,in) $=(2,1)$ and two with $(1,2)$. The relabelling $1\\mapsto3,\\;2\\mapsto1,\\;3\\mapsto4,\\;4\\mapsto2$ sends every left edge to a right edge: $1\\to3\\Rightarrow3\\to4$; $1\\to4\\Rightarrow3\\to2$; $2\\to1\\Rightarrow1\\to3$; $3\\to2\\Rightarrow4\\to1$; $3\\to4\\Rightarrow4\\to2$; $4\\to2\\Rightarrow2\\to1$. All 6 edges match, so the answer is Yes.</div><div class=\"ml-vi\">Hai hình chỉ khác nhau đúng MỘT mũi tên: bên trái có $1\\to4$ còn bên phải có $4\\to1$. Nhưng chừng đó chưa phá được đẳng cấu &mdash; chỉ cần đánh lại nhãn đỉnh. Cả hai đồ thị đều có 2 đỉnh với (bậc-ra, bậc-vào) $=(2,1)$ và 2 đỉnh $(1,2)$. Phép đánh lại nhãn $1\\mapsto3,\\;2\\mapsto1,\\;3\\mapsto4,\\;4\\mapsto2$ biến mọi cạnh bên trái thành cạnh bên phải: $1\\to3\\Rightarrow3\\to4$; $1\\to4\\Rightarrow3\\to2$; $2\\to1\\Rightarrow1\\to3$; $3\\to2\\Rightarrow4\\to1$; $3\\to4\\Rightarrow4\\to2$; $4\\to2\\Rightarrow2\\to1$. Khớp cả 6 cạnh nên đáp án là Có.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q104.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Are these two graphs isomorphic? Each is a 6-cycle 1-2-3-4-5-6 plus a seventh vertex 7 joined to four of them.<pre class=\"mermaid\">graph TD\n  subgraph GL[\"Left graph\"]\n  p1((1)) --- p2((2))\n  p2 --- p3((3))\n  p3 --- p4((4))\n  p4 --- p5((5))\n  p5 --- p6((6))\n  p6 --- p1\n  p7((7)) --- p1\n  p7 --- p4\n  p7 --- p5\n  p7 --- p6\n  end\n  subgraph GR[\"Right graph\"]\n  q1((1)) --- q2((2))\n  q2 --- q3((3))\n  q3 --- q4((4))\n  q4 --- q5((5))\n  q5 --- q6((6))\n  q6 --- q1\n  q7((7)) --- q1\n  q7 --- q3\n  q7 --- q4\n  q7 --- q6\n  end</pre>|||Hai đồ thị sau có đẳng cấu không? Mỗi đồ thị là một chu trình 6 cạnh 1-2-3-4-5-6 cộng đỉnh thứ bảy số 7 nối với bốn đỉnh trong đó.<pre class=\"mermaid\">graph TD\n  subgraph GL[\"Đồ thị bên trái\"]\n  p1((1)) --- p2((2))\n  p2 --- p3((3))\n  p3 --- p4((4))\n  p4 --- p5((5))\n  p5 --- p6((6))\n  p6 --- p1\n  p7((7)) --- p1\n  p7 --- p4\n  p7 --- p5\n  p7 --- p6\n  end\n  subgraph GR[\"Đồ thị bên phải\"]\n  q1((1)) --- q2((2))\n  q2 --- q3((3))\n  q3 --- q4((4))\n  q4 --- q5((5))\n  q5 --- q6((6))\n  q6 --- q1\n  q7((7)) --- q1\n  q7 --- q3\n  q7 --- q4\n  q7 --- q6\n  end</pre>",
+          "options": [
+            {
+              "text": "They are not isomorphic|||Không đẳng cấu"
+            },
+            {
+              "text": "They are isomorphic because they have the same number of edges|||Đẳng cấu vì cùng số cạnh"
+            },
+            {
+              "text": "They are isomorphic because they have the same number of vertices of degree 3|||Đẳng cấu vì cùng số đỉnh bậc 3"
+            },
+            {
+              "text": "They are isomorphic because they have the same number of circuits of length 3|||Đẳng cấu vì cùng số chu trình độ dài 3"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Both have 7 vertices, 10 edges and degree sequence 4,3,3,3,3,2,2, so B and C state true facts that are NOT enough to conclude anything &mdash; and in fact the graphs are NOT isomorphic. A triangle appears exactly when vertex 7 is joined to two CONSECUTIVE cycle vertices. Left: 7 is joined to 4,5,6,1 &mdash; four consecutive vertices &rArr; the consecutive pairs (4,5), (5,6), (6,1) give 3 triangles. Right: 7 is joined to 1,3,4,6 &rArr; only the pairs (3,4) and (6,1) are consecutive, giving 2 triangles. $3\\ne2$ &rArr; not isomorphic. (Equivalent check: the left graph's two degree-2 vertices, 2 and 3, are adjacent; the right graph's, 2 and 5, are not.)</div><div class=\"ml-vi\">Cả hai đều có 7 đỉnh, 10 cạnh và dãy bậc 4,3,3,3,3,2,2 nên B và C nêu những sự thật ĐÚNG nhưng KHÔNG đủ để kết luận gì &mdash; và thực tế hai đồ thị KHÔNG đẳng cấu. Một tam giác xuất hiện đúng khi đỉnh 7 nối với hai đỉnh LIÊN TIẾP trên chu trình. Bên trái: 7 nối 4,5,6,1 &mdash; bốn đỉnh liên tiếp &rArr; các cặp liên tiếp (4,5), (5,6), (6,1) cho 3 tam giác. Bên phải: 7 nối 1,3,4,6 &rArr; chỉ có cặp (3,4) và (6,1) liên tiếp, cho 2 tam giác. $3\\ne2$ &rArr; không đẳng cấu. (Cách kiểm tương đương: hai đỉnh bậc 2 của đồ thị trái là 2 và 3, kề nhau; của đồ thị phải là 2 và 5, không kề nhau.)</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q105.png"
+        },
         {
           "kind": "MCQ",
           "points": 1,
@@ -7929,7 +8298,24 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">A hexagram's 'every other vertex' construction splits into 2 disjoint triangles (disconnected as a graph) &mdash; $G_1$ can't be strongly connected. A pentagram's construction (gcd(2,5)=1) traces a SINGLE 5-cycle through all vertices; if consistently oriented, that directed cycle makes $G_2$ strongly connected.</div><div class=\"ml-vi\">Cách dựng ngôi sao 6 cánh 'mỗi đỉnh cách nhau' chia thành 2 tam giác RỜI NHAU (không liên thông ở dạng đồ thị) &mdash; $G_1$ không thể liên thông mạnh. Cách dựng ngôi sao 5 cánh (gcd(2,5)=1) tạo ra MỘT chu trình 5 cạnh duy nhất qua mọi đỉnh; nếu hướng nhất quán, chu trình có hướng đó khiến $G_2$ liên thông mạnh.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q106.png"
-        },
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "PT3-D8",
+      "source": "REAL",
+      "sortOrder": 138,
+      "title": "Progress Test 3 — Đề 8/9|||Kiểm tra tiến độ 3 — Đề 8/9",
+      "description": "MAD101 Progress Test 3 question bank, part 8 of 9 (15 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 8/9 (15 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
+      "durationMinutes": 30,
+      "totalPoints": 10,
+      "passMark": 5,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
         {
           "kind": "MCQ",
           "points": 1,
@@ -8298,24 +8684,7 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">Frequencies: I=3, L=2, A=1. Merge A,L(1+2=3) &rarr; merge with I(3+3=6). Depths: I=1 bit, A=2 bits, L=2 bits. Total $=3\\times1+1\\times2+2\\times2=3+2+4=9$.</div><div class=\"ml-vi\">Tần suất: I=3, L=2, A=1. Gộp A,L(1+2=3) &rarr; gộp với I(3+3=6). Độ dài mã: I=1 bit, A=2 bit, L=2 bit. Tổng $=3\\times1+1\\times2+2\\times2=9$.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q120.png"
-        }
-      ]
-    },
-    {
-      "kind": "FE",
-      "code": "PT3-D8",
-      "source": "REAL",
-      "sortOrder": 138,
-      "title": "Progress Test 3 — Đề 8/8|||Kiểm tra tiến độ 3 — Đề 8/8",
-      "description": "MAD101 Progress Test 3 question bank, part 8 of 8 (9 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 8/8 (9 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
-      "durationMinutes": 20,
-      "totalPoints": 10,
-      "passMark": 5,
-      "shuffleQuestions": true,
-      "shuffleOptions": false,
-      "isPublished": true,
-      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
-      "questions": [
+        },
         {
           "kind": "MCQ",
           "points": 1,
@@ -8339,7 +8708,24 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">All 8 possible 3-bit strings are already used as codes. Any code for i must start with SOME 3-bit prefix, which is necessarily one of the existing 8 codes &mdash; guaranteeing a prefix conflict no matter what string is chosen. Checking each option confirms it starts with an existing code (011=d, 110=g, 111=b respectively). No valid prefix-free code for i exists among the choices.</div><div class=\"ml-vi\">Cả 8 chuỗi 3-bit có thể có đều đã dùng làm mã. Bất kỳ mã nào cho i cũng phải bắt đầu bằng MỘT tiền tố 3-bit nào đó, và tiền tố đó chắc chắn trùng 1 trong 8 mã đã có &mdash; luôn xung đột tiền tố dù chọn chuỗi nào. Kiểm từng phương án xác nhận đều bắt đầu bằng mã đã tồn tại (011=d, 110=g, 111=b tương ứng). Không có mã tiền tố hợp lệ nào cho i trong các lựa chọn.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q121.png"
-        },
+        }
+      ]
+    },
+    {
+      "kind": "FE",
+      "code": "PT3-D9",
+      "source": "REAL",
+      "sortOrder": 139,
+      "title": "Progress Test 3 — Đề 9/9|||Kiểm tra tiến độ 3 — Đề 9/9",
+      "description": "MAD101 Progress Test 3 question bank, part 9 of 9 (9 questions). questions gathered from the PT3 source pool, each answer independently re-derived; a handful of the most visually complex diagram questions were excluded for accuracy.|||Ngân hàng câu hỏi Kiểm tra tiến độ 3 môn MAD101, phần 9/9 (9 câu). câu hỏi gom từ pool nguồn PT3, mỗi đáp án tự suy luận độc lập; một số câu hình vẽ quá phức tạp đã được loại để đảm bảo độ chính xác.",
+      "durationMinutes": 20,
+      "totalPoints": 10,
+      "passMark": 5,
+      "shuffleQuestions": true,
+      "shuffleOptions": false,
+      "isPublished": true,
+      "instructions": "<div class=\"ml-en\"><p>Choose the best answer for each question. A few questions ask you to choose 2 or 3 correct answers — read the instruction line above the options carefully. You can flag questions and come back. The timer auto-submits when it ends.</p></div><div class=\"ml-vi\"><p>Chọn đáp án đúng nhất cho mỗi câu. Một vài câu yêu cầu chọn 2 hoặc 3 đáp án đúng — đọc kỹ dòng hướng dẫn phía trên các lựa chọn. Bạn có thể đánh dấu câu để quay lại. Hết giờ hệ thống tự nộp.</p></div>",
+      "questions": [
         {
           "kind": "MCQ",
           "points": 1,
@@ -8447,6 +8833,30 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">Spanning tree needs $5-1=4$ edges. Remove $8-4=4$.</div><div class=\"ml-vi\">Cây khung cần $5-1=4$ cạnh. Cần bỏ $8-4=4$ cạnh.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q125.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Let G be an undirected graph of four vertices A,B,C,D with the incidence matrix<pre>1 0 1 1 0 0 0\n1 1 1 0 0 1 0\n0 1 0 1 0 0 1\n0 0 0 0 1 0 1</pre>Which of the following statements is true?|||Cho G là đồ thị vô hướng 4 đỉnh A,B,C,D với ma trận liên thuộc<pre>1 0 1 1 0 0 0\n1 1 1 0 0 1 0\n0 1 0 1 0 0 1\n0 0 0 0 1 0 1</pre>Phát biểu nào sau đây đúng?",
+          "options": [
+            {
+              "text": "G is a multigraph.|||G là đa đồ thị."
+            },
+            {
+              "text": "G is a simple graph.|||G là đơn đồ thị."
+            },
+            {
+              "text": "G has loops.|||G có khuyên."
+            },
+            {
+              "text": "G has no multiple edges.|||G không có cạnh song song."
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">Read the matrix column by column &mdash; each column is one edge and its 1s mark the endpoints. Col 1 = $\\{A,B\\}$, col 2 = $\\{B,C\\}$, col 3 = $\\{A,B\\}$, col 4 = $\\{A,C\\}$, col 5 = D only, col 6 = B only, col 7 = $\\{C,D\\}$. Columns 5 and 6 each have a SINGLE 1, which is how a loop is written &rArr; G has a loop at D and a loop at B, so C is TRUE. Columns 1 and 3 are identical, so G also has a multiple edge $\\{A,B\\}$ &rArr; D is false, and B (\"simple graph\") is false twice over. A is false too: a multigraph is allowed multiple edges but NOT loops &mdash; a graph with loops is a pseudograph.</div><div class=\"ml-vi\">Đọc ma trận theo TỪNG CỘT &mdash; mỗi cột là một cạnh và các số 1 chỉ ra hai đầu mút. Cột 1 = $\\{A,B\\}$, cột 2 = $\\{B,C\\}$, cột 3 = $\\{A,B\\}$, cột 4 = $\\{A,C\\}$, cột 5 = chỉ D, cột 6 = chỉ B, cột 7 = $\\{C,D\\}$. Cột 5 và cột 6 mỗi cột chỉ có DUY NHẤT một số 1 — đó chính là cách viết một khuyên &rArr; G có khuyên tại D và khuyên tại B, nên C ĐÚNG. Cột 1 và cột 3 giống hệt nhau nên G còn có cạnh song song $\\{A,B\\}$ &rArr; D sai, và B (\"đơn đồ thị\") sai vì cả hai lý do. A cũng sai: đa đồ thị (multigraph) được phép có cạnh song song nhưng KHÔNG được có khuyên &mdash; đồ thị có khuyên là giả đồ thị (pseudograph).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q126.png"
         },
         {
           "kind": "MCQ",

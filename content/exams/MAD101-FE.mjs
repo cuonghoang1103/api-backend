@@ -12,8 +12,8 @@ export default {
       "source": "REAL",
       "sortOrder": 201,
       "title": "Final Exam — Đề 1|||Thi cuối kỳ — Đề 1",
-      "description": "MAD101 Final Exam, Đề 1 (49 questions), transcribed from a fuoverflow practice simulator (answers independently solved and re-derived, not revealed by the source).|||Thi cuối kỳ MAD101, Đề 1 (49 câu), chép từ bộ mô phỏng luyện tập fuoverflow (đáp án tự giải và suy luận độc lập, nguồn không lộ đáp án).",
-      "durationMinutes": 98,
+      "description": "MAD101 Final Exam, Đề 1 (50 questions), transcribed from a fuoverflow practice simulator (answers independently solved and re-derived, not revealed by the source).|||Thi cuối kỳ MAD101, Đề 1 (50 câu), chép từ bộ mô phỏng luyện tập fuoverflow (đáp án tự giải và suy luận độc lập, nguồn không lộ đáp án).",
+      "durationMinutes": 100,
       "totalPoints": 10,
       "passMark": 5,
       "shuffleQuestions": true,
@@ -860,6 +860,30 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">Divide-and-conquer recurrences split the problem into subproblems of size $n/b$: $f(n)=af(n/b)+g(n)$.</div><div class=\"ml-vi\">Hệ thức chia-để-trị chia bài toán thành các bài toán con kích thước $n/b$: $f(n)=af(n/b)+g(n)$.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q33.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Find the in-degree and out-degree of vertex e in the directed graph below (vertices a,b,c,d,e,f; loops at a,c,e; bidirectional edge pairs a-e, e-d; single edges a->b, a->c, c->b, b->d, d->c; f isolated).\n<pre class=\"mermaid\">graph LR\n  a --> b\n  a --> c\n  c --> b\n  b --> d\n  d --> c\n  a --> e\n  e --> a\n  e --> d\n  d --> e\n  a --> a\n  c --> c\n  e --> e\n  f</pre>|||Tìm bậc vào và bậc ra của đỉnh e trong đồ thị có hướng dưới đây (đỉnh a,b,c,d,e,f; khuyên tại a,c,e; cặp cạnh hai chiều a-e, e-d; cạnh đơn a->b, a->c, c->b, b->d, d->c; f cô lập).\n<pre class=\"mermaid\">graph LR\n  a --> b\n  a --> c\n  c --> b\n  b --> d\n  d --> c\n  a --> e\n  e --> a\n  e --> d\n  d --> e\n  a --> a\n  c --> c\n  e --> e\n  f</pre>",
+          "options": [
+            {
+              "text": "2;2|||2;2"
+            },
+            {
+              "text": "3;2|||3;2"
+            },
+            {
+              "text": "2;3|||2;3"
+            },
+            {
+              "text": "3;3|||3;3"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">Edges into e: a->e, d->e and the loop e->e, so in-degree = 3. Edges out of e: e->a, e->d and the loop e->e, so out-degree = 3. (A loop adds 1 to both.)</div><div class=\"ml-vi\">Các cạnh đi vào e: a->e, d->e và khuyên e->e, nên bậc vào = 3. Các cạnh đi ra khỏi e: e->a, e->d và khuyên e->e, nên bậc ra = 3. (Khuyên cộng 1 cho cả hai bậc.)</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q34.png"
         },
         {
           "kind": "MCQ",
@@ -5192,8 +5216,8 @@ export default {
       "source": "REAL",
       "sortOrder": 205,
       "title": "Final Exam — Đề 5|||Thi cuối kỳ — Đề 5",
-      "description": "MAD101 Final Exam, Đề 5 (49 questions), transcribed from a fuoverflow practice simulator (answers independently solved and re-derived, not revealed by the source).|||Thi cuối kỳ MAD101, Đề 5 (49 câu), chép từ bộ mô phỏng luyện tập fuoverflow (đáp án tự giải và suy luận độc lập, nguồn không lộ đáp án).",
-      "durationMinutes": 98,
+      "description": "MAD101 Final Exam, Đề 5 (50 questions), transcribed from a fuoverflow practice simulator (answers independently solved and re-derived, not revealed by the source).|||Thi cuối kỳ MAD101, Đề 5 (50 câu), chép từ bộ mô phỏng luyện tập fuoverflow (đáp án tự giải và suy luận độc lập, nguồn không lộ đáp án).",
+      "durationMinutes": 100,
       "totalPoints": 10,
       "passMark": 5,
       "shuffleQuestions": true,
@@ -6182,6 +6206,33 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
+          "prompt": "Given the directed graph on the 6 vertices $A,B,C,D,E,F$ shown below, whose arcs are $C\\to B$, $E\\to B$, $F\\to B$, $B\\to D$, $E\\to C$, $C\\to A$, $F\\to A$, $A\\to D$, $A\\to E$, $D\\to F$, $E\\to F$. How many vertices are in the strongly connected component containing $A$?<pre class=\"mermaid\">graph TD\n  C((C)) --> B((B))\n  E((E)) --> B\n  F((F)) --> B\n  B --> D((D))\n  E --> C\n  C --> A((A))\n  F --> A\n  A --> D\n  A --> E\n  D --> F\n  E --> F\n</pre>|||Cho đồ thị có hướng trên 6 đỉnh $A,B,C,D,E,F$ dưới đây, với các cung $C\\to B$, $E\\to B$, $F\\to B$, $B\\to D$, $E\\to C$, $C\\to A$, $F\\to A$, $A\\to D$, $A\\to E$, $D\\to F$, $E\\to F$. Có bao nhiêu đỉnh trong thành phần liên thông mạnh chứa $A$?<pre class=\"mermaid\">graph TD\n  C((C)) --> B((B))\n  E((E)) --> B\n  F((F)) --> B\n  B --> D((D))\n  E --> C\n  C --> A((A))\n  F --> A\n  A --> D\n  A --> E\n  D --> F\n  E --> F\n</pre>",
+          "options": [
+            {
+              "text": "6|||6"
+            },
+            {
+              "text": "5|||5"
+            },
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Two directed cycles through $A$ already cover every vertex. First, $A\\to E\\to B\\to D\\to F\\to A$ is a directed cycle (arcs $A\\to E$, $E\\to B$, $B\\to D$, $D\\to F$, $F\\to A$), so $A,B,D,E,F$ all lie in one strongly connected component. Second, $A\\to E\\to C\\to A$ is a directed cycle (arcs $A\\to E$, $E\\to C$, $C\\to A$), which pulls $C$ into that same component. Every vertex is therefore reachable from $A$ and reaches $A$, so the strongly connected component containing $A$ is the whole graph: 6 vertices.</div><div class=\"ml-vi\">Hai chu trình có hướng đi qua $A$ đã phủ hết mọi đỉnh. Thứ nhất, $A\\to E\\to B\\to D\\to F\\to A$ là một chu trình có hướng (các cung $A\\to E$, $E\\to B$, $B\\to D$, $D\\to F$, $F\\to A$), nên $A,B,D,E,F$ cùng nằm trong một thành phần liên thông mạnh. Thứ hai, $A\\to E\\to C\\to A$ cũng là một chu trình có hướng (các cung $A\\to E$, $E\\to C$, $C\\to A$), kéo $C$ vào đúng thành phần đó. Vậy mọi đỉnh đều đến được từ $A$ và đều đến được $A$, nên thành phần liên thông mạnh chứa $A$ là cả đồ thị: 6 đỉnh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q39.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
           "prompt": "Let $S$ be the set of all directed graphs with the given (in-degree, out-degree) sequence: $[(3,2),(2,2),(2,2),(1,2)]$. Which of the following is TRUE: (i) $\\forall G\\in S$: $G$ has no Euler paths (ii) $\\exists G\\in S$: $G$ has an Euler circuit (iii) $\\exists G\\in S$: $G$ has an Euler path, but no Euler circuits|||Cho $S$ là tập mọi đồ thị có hướng với dãy (bậc vào, bậc ra) cho trước: $[(3,2),(2,2),(2,2),(1,2)]$. Điều nào sau đây ĐÚNG: (i) $\\forall G\\in S$: $G$ không có đường đi Euler (ii) $\\exists G\\in S$: $G$ có chu trình Euler (iii) $\\exists G\\in S$: $G$ có đường đi Euler, nhưng không có chu trình Euler",
           "options": [
             {
@@ -6472,8 +6523,8 @@ export default {
       "source": "REAL",
       "sortOrder": 206,
       "title": "Final Exam — Đề 6|||Thi cuối kỳ — Đề 6",
-      "description": "MAD101 Final Exam, Đề 6 (48 questions), transcribed from a fuoverflow practice simulator (answers independently solved and re-derived, not revealed by the source).|||Thi cuối kỳ MAD101, Đề 6 (48 câu), chép từ bộ mô phỏng luyện tập fuoverflow (đáp án tự giải và suy luận độc lập, nguồn không lộ đáp án).",
-      "durationMinutes": 96,
+      "description": "MAD101 Final Exam, Đề 6 (50 questions), transcribed from a fuoverflow practice simulator (answers independently solved and re-derived, not revealed by the source).|||Thi cuối kỳ MAD101, Đề 6 (50 câu), chép từ bộ mô phỏng luyện tập fuoverflow (đáp án tự giải và suy luận độc lập, nguồn không lộ đáp án).",
+      "durationMinutes": 100,
       "totalPoints": 10,
       "passMark": 5,
       "shuffleQuestions": true,
@@ -6855,6 +6906,30 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">$Max$ starts at 1. Then: $4>1\\to Max=4$; $5>4\\to Max=5$; $2\\not>5$ no change; $7>5\\to Max=7$; $9>7\\to Max=9$; $3\\not>9$ no change. All values $Max$ takes: $1,4,5,7,9$.</div><div class=\"ml-vi\">$Max$ bắt đầu là 1. Rồi: $4>1\\to Max=4$; $5>4\\to Max=5$; $2\\not>5$ không đổi; $7>5\\to Max=7$; $9>7\\to Max=9$; $3\\not>9$ không đổi. Tất cả giá trị $Max$ nhận: $1,4,5,7,9$.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q15.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Given the Bubble sort algorithm: procedure Bubblesort($a_1,a_2,\\ldots,a_n$: integer): for $i=1$ to $(n-1)$ do for $j=1$ to $(n-i)$ do if $a_j>a_{j+1}$ then swap($a_j,a_{j+1}$). If input $=3,2,6,4,5,1$, find the order of the elements in the list after the third pass ($i=3$).|||Cho thuật toán sắp xếp nổi bọt: procedure Bubblesort($a_1,a_2,\\ldots,a_n$: integer): for $i=1$ to $(n-1)$ do for $j=1$ to $(n-i)$ do if $a_j>a_{j+1}$ then swap($a_j,a_{j+1}$). Nếu đầu vào $=3,2,6,4,5,1$, tìm thứ tự các phần tử trong danh sách sau lượt thứ ba ($i=3$).",
+          "options": [
+            {
+              "text": "2, 3, 1, 4, 5, 6|||2, 3, 1, 4, 5, 6"
+            },
+            {
+              "text": "2, 1, 3, 4, 5, 6|||2, 1, 3, 4, 5, 6"
+            },
+            {
+              "text": "3, 2, 1, 4, 5, 6|||3, 2, 1, 4, 5, 6"
+            },
+            {
+              "text": "1, 2, 3, 4, 5, 6|||1, 2, 3, 4, 5, 6"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">Pass 1 ($j=1..5$): $3,2,6,4,5,1\\to2,3,6,4,5,1\\to2,3,6,4,5,1\\to2,3,4,6,5,1\\to2,3,4,5,6,1\\to2,3,4,5,1,6$. Pass 2 ($j=1..4$): $2,3,4,5,1,6\\to2,3,4,1,5,6$ (only the last swap fires). Pass 3 ($j=1..3$): $2,3,4,1,5,6\\to2,3,1,4,5,6$ (comparing $(4,1)$ swaps).</div><div class=\"ml-vi\">Lượt 1 ($j=1..5$): $3,2,6,4,5,1\\to2,3,6,4,5,1\\to2,3,6,4,5,1\\to2,3,4,6,5,1\\to2,3,4,5,6,1\\to2,3,4,5,1,6$. Lượt 2 ($j=1..4$): $2,3,4,5,1,6\\to2,3,4,1,5,6$ (chỉ đổi lần cuối). Lượt 3 ($j=1..3$): $2,3,4,1,5,6\\to2,3,1,4,5,6$ (so sánh $(4,1)$ đổi chỗ).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q16.png"
         },
         {
           "kind": "MCQ",
@@ -7377,6 +7452,36 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">Label sides $\\{u,x\\}$ and $\\{v,y\\}$. Using the adjacency matrix (order $u,x,v,y$) and computing $A^3$, the entry for walks of length 3 from $u$ to $v$ is $(A^3)_{u,v}=4$ (computed via $A^2$ then multiplying by $A$).</div><div class=\"ml-vi\">Đặt hai phía $\\{u,x\\}$ và $\\{v,y\\}$. Dùng ma trận kề (thứ tự $u,x,v,y$) và tính $A^3$, phần tử số đường đi độ dài 3 từ $u$ đến $v$ là $(A^3)_{u,v}=4$ (tính qua $A^2$ rồi nhân với $A$).</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q36.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "The graph below has 13 vertices. It consists of a 4-cycle $a_1a_2a_3a_4$; a second 4-cycle $b_1b_2b_3b_4$ joined to the first one by the single edge $a_2b_1$; a third 4-cycle $c_1c_2c_3c_4$; and one further vertex $d$ joined to $c_1$ by a single edge. (In the drawing the squares are superimposed, so many of their lines merely cross each other; a crossing is not a vertex.) How many connected components are in the graph?\n<pre class=\"mermaid\">graph TD\n  a1 --- a2\n  a2 --- a3\n  a3 --- a4\n  a4 --- a1\n  b1 --- b2\n  b2 --- b3\n  b3 --- b4\n  b4 --- b1\n  a2 --- b1\n  c1 --- c2\n  c2 --- c3\n  c3 --- c4\n  c4 --- c1\n  c1 --- d</pre>|||Đồ thị dưới đây có 13 đỉnh. Nó gồm một chu trình 4 đỉnh $a_1a_2a_3a_4$; một chu trình 4 đỉnh thứ hai $b_1b_2b_3b_4$ nối với chu trình thứ nhất bằng đúng một cạnh $a_2b_1$; một chu trình 4 đỉnh thứ ba $c_1c_2c_3c_4$; và một đỉnh nữa $d$ nối với $c_1$ bằng một cạnh. (Trong hình vẽ các hình vuông chồng lên nhau nên nhiều đường chỉ CẮT nhau; điểm cắt không phải là đỉnh.) Đồ thị này có bao nhiêu thành phần liên thông?\n<pre class=\"mermaid\">graph TD\n  a1 --- a2\n  a2 --- a3\n  a3 --- a4\n  a4 --- a1\n  b1 --- b2\n  b2 --- b3\n  b3 --- b4\n  b4 --- b1\n  a2 --- b1\n  c1 --- c2\n  c2 --- c3\n  c3 --- c4\n  c4 --- c1\n  c1 --- d</pre>",
+          "options": [
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "0|||0"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "13|||13"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">The many line crossings are not vertices, so follow only the real edges. The 4-cycle $a_1a_2a_3a_4$ and the 4-cycle $b_1b_2b_3b_4$ are tied together by the edge $a_2b_1$, giving one component of $4+4=8$ vertices. The 4-cycle $c_1c_2c_3c_4$ plus the pendant vertex $d$ attached to $c_1$ forms a second component of $4+1=5$ vertices, and no edge joins it to the first group. Total $8+5=13$ vertices in exactly 2 connected components (13 is the vertex count, not the component count).</div><div class=\"ml-vi\">Rất nhiều điểm giao nhau trong hình KHÔNG phải đỉnh, nên chỉ đi theo các cạnh thật. Chu trình 4 đỉnh $a_1a_2a_3a_4$ và chu trình 4 đỉnh $b_1b_2b_3b_4$ được nối với nhau bằng cạnh $a_2b_1$, tạo thành một thành phần gồm $4+4=8$ đỉnh. Chu trình 4 đỉnh $c_1c_2c_3c_4$ cùng đỉnh treo $d$ gắn vào $c_1$ tạo thành thành phần thứ hai gồm $4+1=5$ đỉnh, và không có cạnh nào nối nó với nhóm thứ nhất. Tổng cộng $8+5=13$ đỉnh nằm trong đúng 2 thành phần liên thông (13 là SỐ ĐỈNH, không phải số thành phần).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q37.png"
         },
         {
           "kind": "MCQ",
@@ -9038,8 +9143,8 @@ export default {
       "source": "REAL",
       "sortOrder": 208,
       "title": "Final Exam — Đề 8|||Thi cuối kỳ — Đề 8",
-      "description": "MAD101 Final Exam, Đề 8 (48 questions), transcribed from a fuoverflow practice simulator (answers independently solved and re-derived, not revealed by the source).|||Thi cuối kỳ MAD101, Đề 8 (48 câu), chép từ bộ mô phỏng luyện tập fuoverflow (đáp án tự giải và suy luận độc lập, nguồn không lộ đáp án).",
-      "durationMinutes": 96,
+      "description": "MAD101 Final Exam, Đề 8 (50 questions), transcribed from a fuoverflow practice simulator (answers independently solved and re-derived, not revealed by the source).|||Thi cuối kỳ MAD101, Đề 8 (50 câu), chép từ bộ mô phỏng luyện tập fuoverflow (đáp án tự giải và suy luận độc lập, nguồn không lộ đáp án).",
+      "durationMinutes": 100,
       "totalPoints": 10,
       "passMark": 5,
       "shuffleQuestions": true,
@@ -9172,6 +9277,30 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">Not one-to-one: $f(0)=f(1)=0$. Onto: for any $m\\in N$, $x=2m$ gives $f(2m)=m$, so every natural number is reached. So $f$ is onto but not one-to-one.</div><div class=\"ml-vi\">Không đơn ánh: $f(0)=f(1)=0$. Toàn ánh: với mọi $m\\in N$, $x=2m$ cho $f(2m)=m$, nên mọi số tự nhiên đều đạt được. Vậy $f$ toàn ánh nhưng không đơn ánh.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q5.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Consider four simple graphs. $G_1$ has vertices $t,p,q,r,s$ and edges $tp,\\ tq,\\ pq,\\ pr,\\ ps,\\ qs,\\ rs$. $G_2$ has vertices $t,p,q,r,s$ and edges $tp,\\ tq,\\ pr,\\ ps,\\ qr,\\ qs,\\ rs$. $H_1$ has vertices $a,b,c,d,e,f$ and edges $ab,\\ ac,\\ bd,\\ bf,\\ cd,\\ ce,\\ ef$. $H_2$ has vertices $a,b,c,d,e,f$ and edges $ac,\\ ae,\\ bd,\\ be,\\ bf,\\ cd,\\ cf$. Which statements are correct: (i) $G_1$ and $G_2$ are isomorphic (ii) $H_1$ and $H_2$ are isomorphic<pre class=\"mermaid\">graph TD\n  subgraph SG1[\"G1\"]\n    g1t((t)) --- g1p((p))\n    g1t --- g1q((q))\n    g1p --- g1q\n    g1p --- g1r((r))\n    g1p --- g1s((s))\n    g1q --- g1s\n    g1r --- g1s\n  end\n  subgraph SG2[\"G2\"]\n    g2t((t)) --- g2p((p))\n    g2t --- g2q((q))\n    g2p --- g2r((r))\n    g2p --- g2s((s))\n    g2q --- g2r\n    g2q --- g2s\n    g2r --- g2s\n  end\n  subgraph SH1[\"H1\"]\n    h1a((a)) --- h1b((b))\n    h1a --- h1c((c))\n    h1b --- h1d((d))\n    h1b --- h1f((f))\n    h1c --- h1d\n    h1c --- h1e((e))\n    h1e --- h1f\n  end\n  subgraph SH2[\"H2\"]\n    h2a((a)) --- h2c((c))\n    h2a --- h2e((e))\n    h2b((b)) --- h2d((d))\n    h2b --- h2e\n    h2b --- h2f((f))\n    h2c --- h2d\n    h2c --- h2f\n  end</pre>|||Cho bốn đơn đồ thị. $G_1$ có các đỉnh $t,p,q,r,s$ và các cạnh $tp,\\ tq,\\ pq,\\ pr,\\ ps,\\ qs,\\ rs$. $G_2$ có các đỉnh $t,p,q,r,s$ và các cạnh $tp,\\ tq,\\ pr,\\ ps,\\ qr,\\ qs,\\ rs$. $H_1$ có các đỉnh $a,b,c,d,e,f$ và các cạnh $ab,\\ ac,\\ bd,\\ bf,\\ cd,\\ ce,\\ ef$. $H_2$ có các đỉnh $a,b,c,d,e,f$ và các cạnh $ac,\\ ae,\\ bd,\\ be,\\ bf,\\ cd,\\ cf$. Phát biểu nào đúng: (i) $G_1$ và $G_2$ đẳng cấu (ii) $H_1$ và $H_2$ đẳng cấu<pre class=\"mermaid\">graph TD\n  subgraph SG1[\"G1\"]\n    g1t((t)) --- g1p((p))\n    g1t --- g1q((q))\n    g1p --- g1q\n    g1p --- g1r((r))\n    g1p --- g1s((s))\n    g1q --- g1s\n    g1r --- g1s\n  end\n  subgraph SG2[\"G2\"]\n    g2t((t)) --- g2p((p))\n    g2t --- g2q((q))\n    g2p --- g2r((r))\n    g2p --- g2s((s))\n    g2q --- g2r\n    g2q --- g2s\n    g2r --- g2s\n  end\n  subgraph SH1[\"H1\"]\n    h1a((a)) --- h1b((b))\n    h1a --- h1c((c))\n    h1b --- h1d((d))\n    h1b --- h1f((f))\n    h1c --- h1d\n    h1c --- h1e((e))\n    h1e --- h1f\n  end\n  subgraph SH2[\"H2\"]\n    h2a((a)) --- h2c((c))\n    h2a --- h2e((e))\n    h2b((b)) --- h2d((d))\n    h2b --- h2e\n    h2b --- h2f((f))\n    h2c --- h2d\n    h2c --- h2f\n  end</pre>",
+          "options": [
+            {
+              "text": "(i) and (ii)|||(i) và (ii)"
+            },
+            {
+              "text": "(ii)|||(ii)"
+            },
+            {
+              "text": "(i)|||(i)"
+            },
+            {
+              "text": "None of the statements is correct|||Không phát biểu nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">Both $G_1$ and $G_2$ have 5 vertices and 7 edges, but their degree sequences differ. In $G_1$: $\\deg t=2$, $\\deg p=4$ (adjacent to $t,q,r,s$), $\\deg q=3$, $\\deg r=2$, $\\deg s=3$, giving $(4,3,3,2,2)$. In $G_2$: $\\deg t=2$, $\\deg p=3$, $\\deg q=3$, $\\deg r=3$, $\\deg s=3$, giving $(3,3,3,3,2)$. The degree sequence is an isomorphism invariant, and $G_1$ has a vertex of degree 4 while $G_2$ has none, so $G_1$ and $G_2$ are NOT isomorphic -- (i) is false. $H_1$ and $H_2$ both have 6 vertices, 7 edges and degree sequence $(3,3,2,2,2,2)$. Each is a theta graph: its two degree-3 vertices are joined by three internally disjoint paths. In $H_1$ the degree-3 vertices are $b$ and $c$, joined by $b\\text{-}a\\text{-}c$, $b\\text{-}d\\text{-}c$ and $b\\text{-}f\\text{-}e\\text{-}c$, i.e. path lengths $2,2,3$. In $H_2$ the degree-3 vertices are $b$ and $c$, joined by $b\\text{-}d\\text{-}c$, $b\\text{-}f\\text{-}c$ and $b\\text{-}e\\text{-}a\\text{-}c$, again lengths $2,2,3$. So both are the theta graph $\\Theta(2,2,3)$. An explicit isomorphism $H_1\\to H_2$ is $a\\to d$, $b\\to b$, $c\\to c$, $d\\to f$, $e\\to a$, $f\\to e$: it sends $ab\\to db$, $ac\\to dc$, $bd\\to bf$, $bf\\to be$, $cd\\to cf$, $ce\\to ca$, $ef\\to ae$ -- all 7 edges of $H_1$ land on the 7 edges of $H_2$. So (ii) is true and only (ii) is correct.</div><div class=\"ml-vi\">Cả $G_1$ và $G_2$ đều có 5 đỉnh và 7 cạnh, nhưng dãy bậc khác nhau. Trong $G_1$: $\\deg t=2$, $\\deg p=4$ (kề với $t,q,r,s$), $\\deg q=3$, $\\deg r=2$, $\\deg s=3$, cho dãy $(4,3,3,2,2)$. Trong $G_2$: $\\deg t=2$, $\\deg p=3$, $\\deg q=3$, $\\deg r=3$, $\\deg s=3$, cho dãy $(3,3,3,3,2)$. Dãy bậc là bất biến đẳng cấu, mà $G_1$ có một đỉnh bậc 4 còn $G_2$ thì không, nên $G_1$ và $G_2$ KHÔNG đẳng cấu -- (i) sai. $H_1$ và $H_2$ đều có 6 đỉnh, 7 cạnh và dãy bậc $(3,3,2,2,2,2)$. Mỗi đồ thị là một đồ thị theta: hai đỉnh bậc 3 được nối bởi ba đường đi rời nhau phần trong. Trong $H_1$ hai đỉnh bậc 3 là $b$ và $c$, nối bởi $b\\text{-}a\\text{-}c$, $b\\text{-}d\\text{-}c$ và $b\\text{-}f\\text{-}e\\text{-}c$, tức độ dài $2,2,3$. Trong $H_2$ hai đỉnh bậc 3 là $b$ và $c$, nối bởi $b\\text{-}d\\text{-}c$, $b\\text{-}f\\text{-}c$ và $b\\text{-}e\\text{-}a\\text{-}c$, cũng là $2,2,3$. Vậy cả hai đều là đồ thị theta $\\Theta(2,2,3)$. Một đẳng cấu cụ thể $H_1\\to H_2$ là $a\\to d$, $b\\to b$, $c\\to c$, $d\\to f$, $e\\to a$, $f\\to e$: nó đưa $ab\\to db$, $ac\\to dc$, $bd\\to bf$, $bf\\to be$, $cd\\to cf$, $ce\\to ca$, $ef\\to ae$ -- đủ cả 7 cạnh của $H_1$ rơi vào 7 cạnh của $H_2$. Vậy (ii) đúng và chỉ (ii) đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q6.png"
         },
         {
           "kind": "MCQ",
@@ -9848,6 +9977,30 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
+          "prompt": "Given two directed graphs drawn as stars, with the edges directed consistently around each figure. $G_1$ is a hexagram: 6 vertices $A,B,C,D,E,F$, each joined to the vertex two steps away, giving the arcs $A\\to C\\to E\\to A$ and $B\\to D\\to F\\to B$. $G_2$ is a pentagram: 5 vertices $P,Q,R,S,T$, each joined to the vertex two steps away, giving the arcs $P\\to R\\to T\\to Q\\to S\\to P$. Which statement is correct? (i) $G_1$ is strongly connected (ii) $G_2$ is strongly connected<pre class=\"mermaid\">graph TD\n  subgraph SG1[\"G1 (hexagram)\"]\n    A --> C\n    C --> E\n    E --> A\n    B --> D\n    D --> F\n    F --> B\n  end\n  subgraph SG2[\"G2 (pentagram)\"]\n    P --> R\n    R --> T\n    T --> Q\n    Q --> S\n    S --> P\n  end</pre>|||Cho hai đồ thị có hướng vẽ dạng ngôi sao, các cạnh được định hướng nhất quán quanh mỗi hình. $G_1$ là ngôi sao 6 cánh: 6 đỉnh $A,B,C,D,E,F$, mỗi đỉnh nối với đỉnh cách nó hai bước, cho các cung $A\\to C\\to E\\to A$ và $B\\to D\\to F\\to B$. $G_2$ là ngôi sao 5 cánh: 5 đỉnh $P,Q,R,S,T$, mỗi đỉnh nối với đỉnh cách nó hai bước, cho các cung $P\\to R\\to T\\to Q\\to S\\to P$. Phát biểu nào đúng? (i) $G_1$ liên thông mạnh (ii) $G_2$ liên thông mạnh<pre class=\"mermaid\">graph TD\n  subgraph SG1[\"G1 (sao 6 canh)\"]\n    A --> C\n    C --> E\n    E --> A\n    B --> D\n    D --> F\n    F --> B\n  end\n  subgraph SG2[\"G2 (sao 5 canh)\"]\n    P --> R\n    R --> T\n    T --> Q\n    Q --> S\n    S --> P\n  end</pre>",
+          "options": [
+            {
+              "text": "(i) only|||Chỉ (i)"
+            },
+            {
+              "text": "(ii) only|||Chỉ (ii)"
+            },
+            {
+              "text": "None of the statements is correct|||Không phát biểu nào đúng"
+            },
+            {
+              "text": "Both (i) and (ii)|||Cả (i) và (ii)"
+            }
+          ],
+          "correctIndexes": [
+            1
+          ],
+          "explanation": "<div class=\"ml-en\">Connecting every 2nd point among 6 (hexagram) splits into 2 disjoint triangles since $\\gcd(2,6)=2$ -- there's no path between the two triangles at all, so $G_1$ is not even weakly connected, let alone strongly connected. Connecting every 2nd point among 5 (pentagram) forms a single cycle through all 5 vertices since $\\gcd(2,5)=1$ -- following the consistent direction around this one cycle lets you reach any vertex from any other, so $G_2$ IS strongly connected. Only (ii) is correct.</div><div class=\"ml-vi\">Nối mỗi đỉnh cách nhau 1 trong 6 điểm (sao 6 cánh) tách thành 2 tam giác rời nhau vì $\\gcd(2,6)=2$ -- không có đường đi nào giữa hai tam giác, nên $G_1$ thậm chí không liên thông yếu, chứ đừng nói liên thông mạnh. Nối mỗi đỉnh cách nhau 1 trong 5 điểm (sao 5 cánh) tạo một chu trình duy nhất qua cả 5 đỉnh vì $\\gcd(2,5)=1$ -- theo hướng nhất quán quanh chu trình này cho phép đến bất kỳ đỉnh nào từ bất kỳ đỉnh khác, nên $G_2$ liên thông mạnh. Chỉ (ii) đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q33.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
           "prompt": "Compute the value of the postfix notation $5\\ 6\\ 7\\ -\\ *$|||Tính giá trị của ký hiệu hậu tố $5\\ 6\\ 7\\ -\\ *$",
           "options": [
             {
@@ -10297,8 +10450,8 @@ export default {
       "source": "REAL",
       "sortOrder": 209,
       "title": "Final Exam — Đề 9|||Thi cuối kỳ — Đề 9",
-      "description": "MAD101 Final Exam, Đề 9 (48 questions), transcribed from a fuoverflow practice simulator (answers independently solved and re-derived, not revealed by the source).|||Thi cuối kỳ MAD101, Đề 9 (48 câu), chép từ bộ mô phỏng luyện tập fuoverflow (đáp án tự giải và suy luận độc lập, nguồn không lộ đáp án).",
-      "durationMinutes": 96,
+      "description": "MAD101 Final Exam, Đề 9 (50 questions), transcribed from a fuoverflow practice simulator (answers independently solved and re-derived, not revealed by the source).|||Thi cuối kỳ MAD101, Đề 9 (50 câu), chép từ bộ mô phỏng luyện tập fuoverflow (đáp án tự giải và suy luận độc lập, nguồn không lộ đáp án).",
+      "durationMinutes": 100,
       "totalPoints": 10,
       "passMark": 5,
       "shuffleQuestions": true,
@@ -11182,6 +11335,33 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
+          "prompt": "How many strongly connected components does this directed graph have? Vertices $v_1,v_2,v_3,v_4,v_5,v_6$ with directed edges $v_1\\to v_2$, $v_1\\to v_5$, $v_2\\to v_3$, $v_3\\to v_1$, $v_3\\to v_4$, $v_4\\to v_2$, $v_6\\to v_2$, $v_6\\to v_3$, $v_6\\to v_5$.<pre class=\"mermaid\">graph TD\n  v1((v1)) --> v2((v2))\n  v1 --> v5((v5))\n  v2 --> v3((v3))\n  v3 --> v1\n  v3 --> v4((v4))\n  v4 --> v2\n  v6((v6)) --> v2\n  v6 --> v3\n  v6 --> v5</pre>|||Đồ thị có hướng này có bao nhiêu thành phần liên thông mạnh? Các đỉnh $v_1,v_2,v_3,v_4,v_5,v_6$ với các cạnh có hướng $v_1\\to v_2$, $v_1\\to v_5$, $v_2\\to v_3$, $v_3\\to v_1$, $v_3\\to v_4$, $v_4\\to v_2$, $v_6\\to v_2$, $v_6\\to v_3$, $v_6\\to v_5$.<pre class=\"mermaid\">graph TD\n  v1((v1)) --> v2((v2))\n  v1 --> v5((v5))\n  v2 --> v3((v3))\n  v3 --> v1\n  v3 --> v4((v4))\n  v4 --> v2\n  v6((v6)) --> v2\n  v6 --> v3\n  v6 --> v5</pre>",
+          "options": [
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "1|||1"
+            },
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            }
+          ],
+          "correctIndexes": [
+            0
+          ],
+          "explanation": "<div class=\"ml-en\">$v_6$ has in-degree 0 (a pure source) and $v_5$ has out-degree 0 (a pure sink), so each is a component on its own. The remaining four are mutually reachable: $v_1\\to v_2\\to v_3\\to v_1$ is a cycle, and $v_3\\to v_4\\to v_2\\to v_3$ is another, so $\\{v_1,v_2,v_3,v_4\\}$ is one strongly connected component. Total: $\\{v_1,v_2,v_3,v_4\\},\\{v_5\\},\\{v_6\\}$ = 3.</div><div class=\"ml-vi\">$v_6$ có bậc vào 0 (nguồn thuần túy) và $v_5$ có bậc ra 0 (đích thuần túy), nên mỗi đỉnh là một thành phần riêng. Bốn đỉnh còn lại đến được lẫn nhau: $v_1\\to v_2\\to v_3\\to v_1$ là một chu trình, và $v_3\\to v_4\\to v_2\\to v_3$ là một chu trình nữa, nên $\\{v_1,v_2,v_3,v_4\\}$ là một thành phần liên thông mạnh. Tổng cộng: $\\{v_1,v_2,v_3,v_4\\},\\{v_5\\},\\{v_6\\}$ = 3.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q35.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
           "prompt": "Consider the graph $Q_4$ (hypercube of dimension 4). Choose the correct answer.|||Xét đồ thị $Q_4$ (siêu khối chiều 4). Chọn đáp án đúng.",
           "options": [
             {
@@ -11253,6 +11433,33 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">A tree with $n$ vertices always has $n-1$ edges: $10000-1=9999$.</div><div class=\"ml-vi\">Một cây có $n$ đỉnh luôn có $n-1$ cạnh: $10000-1=9999$.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q38.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Given the rooted tree below with root $r$. Find the height of this tree.<pre class=\"mermaid\">graph LR\n  r((r)) --> n1((n1))\n  r --> n2((n2))\n  r --> n3((n3))\n  r --> n4((n4))\n  n1 --> n5((n5))\n  n1 --> n6((n6))\n  n1 --> n7((n7))\n  n1 --> n8((n8))\n  n2 --> n9((n9))\n  n2 --> n10((n10))\n  n2 --> n11((n11))\n  n3 --> n12((n12))\n  n3 --> n13((n13))\n  n3 --> n14((n14))\n  n3 --> n15((n15))\n  n3 --> n16((n16))\n  n4 --> n17((n17))\n  n4 --> n18((n18))\n  n6 --> n19((n19))\n  n6 --> n20((n20))\n  n6 --> n21((n21))\n  n6 --> n22((n22))\n  n7 --> n23((n23))\n  n7 --> n24((n24))\n  n7 --> n25((n25))\n  n8 --> n26((n26))\n  n8 --> n27((n27))\n  n9 --> n28((n28))\n  n9 --> n29((n29))\n  n9 --> n30((n30))\n  n9 --> n31((n31))\n  n11 --> n32((n32))\n  n11 --> n33((n33))\n  n11 --> n34((n34))\n  n12 --> n35((n35))\n  n12 --> n36((n36))\n  n12 --> n37((n37))\n  n14 --> n38((n38))\n  n14 --> n39((n39))\n  n14 --> n40((n40))\n  n14 --> n41((n41))\n  n15 --> n42((n42))\n  n16 --> n43((n43))\n  n16 --> n44((n44))\n  n16 --> n45((n45))\n  n17 --> n46((n46))\n  n17 --> n47((n47))\n  n18 --> n48((n48))\n  n18 --> n49((n49))\n  n18 --> n50((n50))\n  n41 --> n51((n51))\n  n41 --> n52((n52))\n  n42 --> n53((n53))\n  n42 --> n54((n54))\n  n43 --> n55((n55))\n  n43 --> n56((n56))\n  n44 --> n57((n57))\n  n45 --> n58((n58))\n  n45 --> n59((n59))\n  n48 --> n60((n60))\n  n49 --> n61((n61))\n  n50 --> n62((n62))\n  n50 --> n63((n63))\n  n53 --> n64((n64))</pre>|||Cho cây có gốc dưới đây với gốc $r$. Tìm chiều cao của cây này.<pre class=\"mermaid\">graph LR\n  r((r)) --> n1((n1))\n  r --> n2((n2))\n  r --> n3((n3))\n  r --> n4((n4))\n  n1 --> n5((n5))\n  n1 --> n6((n6))\n  n1 --> n7((n7))\n  n1 --> n8((n8))\n  n2 --> n9((n9))\n  n2 --> n10((n10))\n  n2 --> n11((n11))\n  n3 --> n12((n12))\n  n3 --> n13((n13))\n  n3 --> n14((n14))\n  n3 --> n15((n15))\n  n3 --> n16((n16))\n  n4 --> n17((n17))\n  n4 --> n18((n18))\n  n6 --> n19((n19))\n  n6 --> n20((n20))\n  n6 --> n21((n21))\n  n6 --> n22((n22))\n  n7 --> n23((n23))\n  n7 --> n24((n24))\n  n7 --> n25((n25))\n  n8 --> n26((n26))\n  n8 --> n27((n27))\n  n9 --> n28((n28))\n  n9 --> n29((n29))\n  n9 --> n30((n30))\n  n9 --> n31((n31))\n  n11 --> n32((n32))\n  n11 --> n33((n33))\n  n11 --> n34((n34))\n  n12 --> n35((n35))\n  n12 --> n36((n36))\n  n12 --> n37((n37))\n  n14 --> n38((n38))\n  n14 --> n39((n39))\n  n14 --> n40((n40))\n  n14 --> n41((n41))\n  n15 --> n42((n42))\n  n16 --> n43((n43))\n  n16 --> n44((n44))\n  n16 --> n45((n45))\n  n17 --> n46((n46))\n  n17 --> n47((n47))\n  n18 --> n48((n48))\n  n18 --> n49((n49))\n  n18 --> n50((n50))\n  n41 --> n51((n51))\n  n41 --> n52((n52))\n  n42 --> n53((n53))\n  n42 --> n54((n54))\n  n43 --> n55((n55))\n  n43 --> n56((n56))\n  n44 --> n57((n57))\n  n45 --> n58((n58))\n  n45 --> n59((n59))\n  n48 --> n60((n60))\n  n49 --> n61((n61))\n  n50 --> n62((n62))\n  n50 --> n63((n63))\n  n53 --> n64((n64))</pre>",
+          "options": [
+            {
+              "text": "2|||2"
+            },
+            {
+              "text": "3|||3"
+            },
+            {
+              "text": "4|||4"
+            },
+            {
+              "text": "5|||5"
+            },
+            {
+              "text": "6|||6"
+            }
+          ],
+          "correctIndexes": [
+            3
+          ],
+          "explanation": "<div class=\"ml-en\">The height of a rooted tree is the length (number of edges) of the longest path from the root to a leaf. The tree has 65 vertices spread over levels of size $1,4,14,32,13,1$. The only vertex on the deepest level is $n_{64}$, reached by $r\\to n_3\\to n_{15}\\to n_{42}\\to n_{53}\\to n_{64}$, a path of 5 edges. Every other leaf sits at distance 4 or less, so the height is 5.</div><div class=\"ml-vi\">Chiều cao của cây có gốc là độ dài (số cạnh) của đường đi dài nhất từ gốc tới một lá. Cây có 65 đỉnh trải trên các mức có kích thước $1,4,14,32,13,1$. Đỉnh duy nhất ở mức sâu nhất là $n_{64}$, đến được qua $r\\to n_3\\to n_{15}\\to n_{42}\\to n_{53}\\to n_{64}$, đường đi gồm 5 cạnh. Mọi lá khác đều cách gốc không quá 4, nên chiều cao là 5.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q39.png"
         },
         {
           "kind": "MCQ",
@@ -11553,8 +11760,8 @@ export default {
       "source": "REAL",
       "sortOrder": 210,
       "title": "Final Exam — Đề 10|||Thi cuối kỳ — Đề 10",
-      "description": "MAD101 Final Exam, Đề 10 (45 questions), transcribed from a fuoverflow practice simulator (answers independently solved and re-derived, not revealed by the source).|||Thi cuối kỳ MAD101, Đề 10 (45 câu), chép từ bộ mô phỏng luyện tập fuoverflow (đáp án tự giải và suy luận độc lập, nguồn không lộ đáp án).",
-      "durationMinutes": 90,
+      "description": "MAD101 Final Exam, Đề 10 (48 questions), transcribed from a fuoverflow practice simulator (answers independently solved and re-derived, not revealed by the source).|||Thi cuối kỳ MAD101, Đề 10 (48 câu), chép từ bộ mô phỏng luyện tập fuoverflow (đáp án tự giải và suy luận độc lập, nguồn không lộ đáp án).",
+      "durationMinutes": 96,
       "totalPoints": 10,
       "passMark": 5,
       "shuffleQuestions": true,
@@ -12390,6 +12597,33 @@ export default {
         {
           "kind": "MCQ",
           "points": 1,
+          "prompt": "Are these two graphs isomorphic? If not, what is the reason? Graph 1 has 5 vertices $a,b,c,d,e$ and 8 edges: $ab$, $ac$, $ae$, $bc$, $bd$, $cd$, $ce$, $de$. Graph 2 has 5 vertices $p,q,r,s,t$ and 8 edges: the 4-cycle $p$-$q$-$r$-$s$-$p$, together with the vertex $t$ joined to each of $p,q,r,s$.\n<pre class=\"mermaid\">graph TD\n  subgraph G1[\"Graph 1: 5 vertices, 8 edges\"]\n    h1((a)) --- h2((b))\n    h1 --- h3((c))\n    h1 --- h5((e))\n    h2 --- h3\n    h2 --- h4((d))\n    h3 --- h4\n    h3 --- h5\n    h4 --- h5\n  end\n  subgraph G2[\"Graph 2: 5 vertices, 8 edges\"]\n    k1((p)) --- k2((q))\n    k2 --- k3((r))\n    k3 --- k4((s))\n    k4 --- k1\n    k5((t)) --- k1\n    k5 --- k2\n    k5 --- k3\n    k5 --- k4\n  end</pre>|||Hai đồ thị này có đẳng cấu không? Nếu không, lý do là gì? Đồ thị 1 có 5 đỉnh $a,b,c,d,e$ và 8 cạnh: $ab$, $ac$, $ae$, $bc$, $bd$, $cd$, $ce$, $de$. Đồ thị 2 có 5 đỉnh $p,q,r,s,t$ và 8 cạnh: chu trình 4 đỉnh $p$-$q$-$r$-$s$-$p$, cùng với đỉnh $t$ nối tới cả bốn đỉnh $p,q,r,s$.\n<pre class=\"mermaid\">graph TD\n  subgraph G1[\"Đồ thị 1: 5 đỉnh, 8 cạnh\"]\n    h1((a)) --- h2((b))\n    h1 --- h3((c))\n    h1 --- h5((e))\n    h2 --- h3\n    h2 --- h4((d))\n    h3 --- h4\n    h3 --- h5\n    h4 --- h5\n  end\n  subgraph G2[\"Đồ thị 2: 5 đỉnh, 8 cạnh\"]\n    k1((p)) --- k2((q))\n    k2 --- k3((r))\n    k3 --- k4((s))\n    k4 --- k1\n    k5((t)) --- k1\n    k5 --- k2\n    k5 --- k3\n    k5 --- k4\n  end</pre>",
+          "options": [
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            },
+            {
+              "text": "No, they are not isomorphic because they do not have the same number of simple circuits of length 3|||Không, chúng không đẳng cấu vì không có cùng số chu trình đơn độ dài 3"
+            },
+            {
+              "text": "No, they are not isomorphic because they do not have the same number of vertices of degree 4|||Không, chúng không đẳng cấu vì không có cùng số đỉnh bậc 4"
+            },
+            {
+              "text": "No, they are not isomorphic because they do not have the same number of edges|||Không, chúng không đẳng cấu vì không có cùng số cạnh"
+            },
+            {
+              "text": "Yes, they are isomorphic|||Có, chúng đẳng cấu"
+            }
+          ],
+          "correctIndexes": [
+            4
+          ],
+          "explanation": "<div class=\"ml-en\">Both graphs have 5 vertices, 8 edges and the same degree sequence $(4,3,3,3,3)$, so every reason offered by the other choices fails (they also each contain exactly 4 simple circuits of length 3). In Graph 1 the vertex of degree 4 is $c$; deleting it leaves the 4-cycle $a$-$b$-$d$-$e$-$a$. In Graph 2 the vertex of degree 4 is $t$; deleting it leaves the 4-cycle $p$-$q$-$r$-$s$-$p$. Both graphs are therefore the wheel $W_4$, and $c\\mapsto t,\\;a\\mapsto p,\\;b\\mapsto q,\\;d\\mapsto r,\\;e\\mapsto s$ is an explicit isomorphism (it maps each of the 8 edges to an edge). So yes, they are isomorphic.</div><div class=\"ml-vi\">Cả hai đồ thị đều có 5 đỉnh, 8 cạnh và cùng dãy bậc $(4,3,3,3,3)$, nên mọi lý do mà các lựa chọn khác đưa ra đều sai (mỗi đồ thị cũng có đúng 4 chu trình đơn độ dài 3). Ở Đồ thị 1, đỉnh bậc 4 là $c$; bỏ nó đi còn lại chu trình 4 đỉnh $a$-$b$-$d$-$e$-$a$. Ở Đồ thị 2, đỉnh bậc 4 là $t$; bỏ nó đi còn lại chu trình 4 đỉnh $p$-$q$-$r$-$s$-$p$. Vậy cả hai đều là đồ thị bánh xe $W_4$, và $c\\mapsto t,\\;a\\mapsto p,\\;b\\mapsto q,\\;d\\mapsto r,\\;e\\mapsto s$ là một đẳng cấu tường minh (nó đưa cả 8 cạnh thành cạnh). Vậy có, chúng đẳng cấu.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q35.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
           "prompt": "Let $u,v$ be two vertices on different sides of the bipartite graph $K_{2,2}$ (parts $\\{u,x\\}$ and $\\{v,y\\}$, shown below). How many paths of length 3 from $u$ to $v$?\n<pre class=\"mermaid\">graph LR\n  u((u)) --- v((v))\n  u --- y((y))\n  x((x)) --- v\n  x --- y</pre>|||Cho $u,v$ là hai đỉnh ở hai phía khác nhau của đồ thị lưỡng phân $K_{2,2}$ (hai phía $\\{u,x\\}$ và $\\{v,y\\}$, xem hình dưới). Có bao nhiêu đường đi độ dài 3 từ $u$ đến $v$?\n<pre class=\"mermaid\">graph LR\n  u((u)) --- v((v))\n  u --- y((y))\n  x((x)) --- v\n  x --- y</pre>",
           "options": [
             {
@@ -12461,6 +12695,33 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">$A$(0)$\\to B$(2) [smaller than $C$=9]. Relax $B$: $D=7,C=\\min(9,10)=9,E=2+3=5$. Next smallest is $E$(5). Relax $E$: $C=\\min(9,8)=8$, $Z=5+3=8$, $D=\\min(7,9)=7$(no change). Remaining unvisited: $D=7,C=8,Z=8$ -- smallest is $D$.</div><div class=\"ml-vi\">$A$(0)$\\to B$(2) [nhỏ hơn $C$=9]. Nới lỏng $B$: $D=7,C=\\min(9,10)=9,E=2+3=5$. Tiếp theo nhỏ nhất là $E$(5). Nới lỏng $E$: $C=\\min(9,8)=8$, $Z=5+3=8$, $D=\\min(7,9)=7$(không đổi). Còn lại chưa thăm: $D=7,C=8,Z=8$ -- nhỏ nhất là $D$.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q38.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "Which rooted trees are full 3-ary? (i) root $D$ with children $A,C,E$; $A$ has the single child $B$; $C$ is a leaf; $E$ has the two children $F,G$. (ii) a root with three children $u_1,u_2,u_3$, and each $u_k$ has exactly three children, all leaves. (iii) root $a$ with children $b,c,d$; $b$ has children $e,f,g$; $d$ has children $h,i$; $e$ has children $j,k$; $g$ has children $l,m$; $h$ has the single child $n$; $i$ has children $o,p$; $o$ has children $q,r,s$; the remaining vertices are leaves.\n<pre class=\"mermaid\">graph TD\n  subgraph T1[\"(i)\"]\n    iD((D)) --> iA((A))\n    iD --> iC((C))\n    iD --> iE((E))\n    iA --> iB((B))\n    iE --> iF((F))\n    iE --> iG((G))\n  end\n  subgraph T2[\"(ii)\"]\n    jr((root)) --> ju1((u1))\n    jr --> ju2((u2))\n    jr --> ju3((u3))\n    ju1 --> jw1((w1))\n    ju1 --> jw2((w2))\n    ju1 --> jw3((w3))\n    ju2 --> jw4((w4))\n    ju2 --> jw5((w5))\n    ju2 --> jw6((w6))\n    ju3 --> jw7((w7))\n    ju3 --> jw8((w8))\n    ju3 --> jw9((w9))\n  end\n  subgraph T3[\"(iii)\"]\n    ka((a)) --> kb((b))\n    ka --> kc((c))\n    ka --> kd((d))\n    kb --> ke((e))\n    kb --> kf((f))\n    kb --> kg((g))\n    kd --> kh((h))\n    kd --> ki((i))\n    ke --> kj((j))\n    ke --> kk((k))\n    kg --> kl((l))\n    kg --> km((m))\n    kh --> kn((n))\n    ki --> ko((o))\n    ki --> kp((p))\n    ko --> kq((q))\n    ko --> kr((r))\n    ko --> ks((s))\n  end</pre>|||Cây có gốc nào là 3-phân đầy đủ? (i) gốc $D$ có các con $A,C,E$; $A$ có đúng một con $B$; $C$ là lá; $E$ có hai con $F,G$. (ii) một gốc có ba con $u_1,u_2,u_3$, và mỗi $u_k$ có đúng ba con, đều là lá. (iii) gốc $a$ có các con $b,c,d$; $b$ có các con $e,f,g$; $d$ có hai con $h,i$; $e$ có hai con $j,k$; $g$ có hai con $l,m$; $h$ có đúng một con $n$; $i$ có hai con $o,p$; $o$ có ba con $q,r,s$; các đỉnh còn lại là lá.\n<pre class=\"mermaid\">graph TD\n  subgraph T1[\"(i)\"]\n    iD((D)) --> iA((A))\n    iD --> iC((C))\n    iD --> iE((E))\n    iA --> iB((B))\n    iE --> iF((F))\n    iE --> iG((G))\n  end\n  subgraph T2[\"(ii)\"]\n    jr((root)) --> ju1((u1))\n    jr --> ju2((u2))\n    jr --> ju3((u3))\n    ju1 --> jw1((w1))\n    ju1 --> jw2((w2))\n    ju1 --> jw3((w3))\n    ju2 --> jw4((w4))\n    ju2 --> jw5((w5))\n    ju2 --> jw6((w6))\n    ju3 --> jw7((w7))\n    ju3 --> jw8((w8))\n    ju3 --> jw9((w9))\n  end\n  subgraph T3[\"(iii)\"]\n    ka((a)) --> kb((b))\n    ka --> kc((c))\n    ka --> kd((d))\n    kb --> ke((e))\n    kb --> kf((f))\n    kb --> kg((g))\n    kd --> kh((h))\n    kd --> ki((i))\n    ke --> kj((j))\n    ke --> kk((k))\n    kg --> kl((l))\n    kg --> km((m))\n    kh --> kn((n))\n    ki --> ko((o))\n    ki --> kp((p))\n    ko --> kq((q))\n    ko --> kr((r))\n    ko --> ks((s))\n  end</pre>",
+          "options": [
+            {
+              "text": "(ii) and (iii)|||(ii) và (iii)"
+            },
+            {
+              "text": "(i), (ii) and (iii)|||(i), (ii) và (iii)"
+            },
+            {
+              "text": "(ii)|||(ii)"
+            },
+            {
+              "text": "None of the other choices is correct|||Không đáp án nào đúng"
+            },
+            {
+              "text": "(i) and (iii)|||(i) và (iii)"
+            }
+          ],
+          "correctIndexes": [
+            2
+          ],
+          "explanation": "<div class=\"ml-en\">A full 3-ary tree requires EVERY internal vertex to have exactly 3 children. (i) fails: $A$ has 1 child and $E$ has 2. (iii) fails at several vertices: $d$, $e$, $g$ and $i$ have 2 children each and $h$ has only 1. (ii) passes: the root has 3 children, each of $u_1,u_2,u_3$ has 3 children, and every other vertex is a leaf. So only (ii) is full 3-ary.</div><div class=\"ml-vi\">Cây 3-phân đầy đủ đòi hỏi MỌI đỉnh trong có đúng 3 con. (i) sai: $A$ có 1 con và $E$ có 2 con. (iii) sai ở nhiều đỉnh: $d$, $e$, $g$, $i$ mỗi đỉnh có 2 con và $h$ chỉ có 1 con. (ii) đúng: gốc có 3 con, mỗi đỉnh $u_1,u_2,u_3$ có 3 con, và mọi đỉnh còn lại đều là lá. Vậy chỉ (ii) là 3-phân đầy đủ.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q39.png"
         },
         {
           "kind": "MCQ",
@@ -12695,6 +12956,33 @@ export default {
           ],
           "explanation": "<div class=\"ml-en\">$6468=2(3135)+198$. $3135=15(198)+165$. $198=1(165)+33$. $165=5(33)+0$. That's 4 divisions.</div><div class=\"ml-vi\">$6468=2(3135)+198$. $3135=15(198)+165$. $198=1(165)+33$. $165=5(33)+0$. Đó là 4 phép chia.</div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q48.png"
+        },
+        {
+          "kind": "MCQ",
+          "points": 1,
+          "prompt": "How many cut vertices and cut edges are in the graph below? It has 8 vertices and 8 edges: $a,b,c,d,e,f$ form the 6-cycle $a$-$b$-$c$-$d$-$e$-$f$-$a$, and the path $b$-$g$-$h$ is attached to the cycle at $b$ (so $h$ is a pendant vertex).\n<pre class=\"mermaid\">graph TD\n  a((a)) --- b((b))\n  b --- c((c))\n  c --- d((d))\n  d --- e((e))\n  e --- f((f))\n  f --- a\n  b --- g((g))\n  g --- h((h))</pre>|||Đồ thị dưới đây có bao nhiêu đỉnh cắt và cạnh cắt? Nó có 8 đỉnh và 8 cạnh: $a,b,c,d,e,f$ tạo thành chu trình 6 đỉnh $a$-$b$-$c$-$d$-$e$-$f$-$a$, và đường đi $b$-$g$-$h$ gắn vào chu trình tại $b$ (nên $h$ là đỉnh treo).\n<pre class=\"mermaid\">graph TD\n  a((a)) --- b((b))\n  b --- c((c))\n  c --- d((d))\n  d --- e((e))\n  e --- f((f))\n  f --- a\n  b --- g((g))\n  g --- h((h))</pre>",
+          "options": [
+            {
+              "text": "1 and 3|||1 và 3"
+            },
+            {
+              "text": "1 and 1|||1 và 1"
+            },
+            {
+              "text": "3 and 2|||3 và 2"
+            },
+            {
+              "text": "2 and 1|||2 và 1"
+            },
+            {
+              "text": "2 and 2|||2 và 2"
+            }
+          ],
+          "correctIndexes": [
+            4
+          ],
+          "explanation": "<div class=\"ml-en\">Removing $b$ separates $\\{g,h\\}$ from the cycle, and removing $g$ isolates $h$, so $b$ and $g$ are cut vertices. No other vertex is one: deleting any of $a,c,d,e,f$ leaves the rest of the cycle as a path that still contains $b$, so the graph stays connected. That gives 2 cut vertices. The bridges are $bg$ and $gh$; the six cycle edges all lie on the cycle $a$-$b$-$c$-$d$-$e$-$f$-$a$, so none of them is a bridge. That gives 2 cut edges. Answer: 2 and 2.</div><div class=\"ml-vi\">Bỏ $b$ thì $\\{g,h\\}$ tách khỏi chu trình, bỏ $g$ thì $h$ bị cô lập, nên $b$ và $g$ là đỉnh cắt. Không đỉnh nào khác là đỉnh cắt: bỏ bất kỳ đỉnh nào trong $a,c,d,e,f$ thì phần còn lại của chu trình vẫn là một đường đi chứa $b$, nên đồ thị vẫn liên thông. Vậy có 2 đỉnh cắt. Các cầu là $bg$ và $gh$; sáu cạnh của chu trình đều nằm trên chu trình $a$-$b$-$c$-$d$-$e$-$f$-$a$ nên không cạnh nào trong đó là cầu. Vậy có 2 cạnh cắt. Đáp án: 2 và 2.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q49.png"
         },
         {
           "kind": "MCQ",

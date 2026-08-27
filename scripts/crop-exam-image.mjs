@@ -244,10 +244,26 @@ async function cropRedDividerLayout(whited, meta) {
   // border there is a lone wide row that would otherwise read as an option and
   // false-split the all-right variant (its only wide left row was that border).
   const wideLeftRows = await countWideTextRows(badgeWhited, meta.width, meta.height, { x0: 105, x1: redX - 5, y0: yTop + 12, y1: yBottom - 8 }, 250);
-  const isSplit = wideLeftRows >= 3;
+  // "Kizspy"-style variant (MAE101 gap-fill, 27/08/2026): the left panel below
+  // the 3-line boilerplate ("Kizspy | Question: N" / "(Choose 1 answer)" /
+  // "(See picture)") sometimes holds the REAL lettered options (A./B./C. …)
+  // in short lines, with only the bare stem/expression on the right — same
+  // shape as the SPLIT variant above but with much SHORTER option text, so
+  // the ≥250px-wide-row test above never fires and the right-only crop
+  // silently drops every option (caught 27/08/2026: ~half of every MAE101
+  // deck's questions came back "no options visible" to the transcribing
+  // agent — verified against the raw source, the options were real and just
+  // getting cropped away, not missing from the original paper). Any dark
+  // text at all below the boilerplate (y>140) is enough signal — false
+  // positives just fall back to a full-width crop (safe, only costs some
+  // blank margin); false negatives silently destroy real answer content, so
+  // this errs toward the former.
+  const hasShortLeftOptions = await countWideTextRows(badgeWhited, meta.width, meta.height, { x0: 15, x1: redX - 5, y0: 140, y1: yBottom - 8 }, 15) >= 1;
+  const isSplit = wideLeftRows >= 3 || hasShortLeftOptions;
   if (isSplit) {
+    const bandLeft = wideLeftRows >= 3 ? 105 : 15;
     const band = await sharp(badgeWhited)
-      .extract({ left: 105, top: Math.max(0, yTop - 4), width: meta.width - 105, height: Math.min(meta.height - yTop, yBottom - yTop + 8) })
+      .extract({ left: bandLeft, top: Math.max(0, yTop - 4), width: meta.width - bandLeft, height: Math.min(meta.height - yTop, yBottom - yTop + 8) })
       .png().toBuffer();
     const bmeta = await sharp(band).metadata();
     // Exclude the bottom ~35px of the band: the "< >" page-nav arrows and the

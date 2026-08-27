@@ -2825,6 +2825,7 @@ router.post('/lessons/:id(\\d+)/ai/ask', authenticate, async (req, res: Response
       history: Array.isArray(req.body?.history) ? req.body.history : [],
       english: req.body?.english === true,
       cacheKey: typeof req.body?.cacheKey === 'string' ? req.body.cacheKey.slice(0, 40) : undefined,
+      quizContext: Array.isArray(req.body?.quizContext) ? req.body.quizContext : undefined,
     });
     res.json({ success: true, data: out });
   } catch (e) { next(e); }
@@ -2855,6 +2856,7 @@ router.post('/lessons/:id(\\d+)/ai/ask-stream', authenticate, async (req, res) =
         history: Array.isArray(req.body?.history) ? req.body.history : [],
         english: req.body?.english === true,
         cacheKey: typeof req.body?.cacheKey === 'string' ? req.body.cacheKey.slice(0, 40) : undefined,
+        quizContext: Array.isArray(req.body?.quizContext) ? req.body.quizContext : undefined,
       },
       (delta) => send({ type: 'delta', text: delta }),
     );

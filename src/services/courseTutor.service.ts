@@ -159,6 +159,25 @@ export interface TutorAskOpts {
   /** Key của chip gợi ý cố định ('start','exercises'…) ⇒ câu trả lời được CACHE
    *  dùng chung. Không truyền (câu gõ tay) ⇒ không đụng cache, luôn sinh mới. */
   cacheKey?: string;
+  /** Các câu trong bài quiz cuối chương học viên đang làm. Có nó, học viên chỉ
+   *  cần gõ "câu 3 tôi chưa hiểu" — gia sư biết đề+đáp án câu đó, khỏi chép lại. */
+  quizContext?: { n: number; prompt: string; options: string[]; correctIndexes: number[]; explanation?: string }[];
+}
+
+// Dựng khối ngữ cảnh các câu quiz (đánh số) để "câu N" tra ra đúng câu.
+function buildQuizBlock(quizContext?: TutorAskOpts['quizContext']): string {
+  const quiz = (quizContext || []).slice(0, 25); // cắt bớt cho gọn token
+  if (!quiz.length) return '';
+  const letter = (i: number) => String.fromCharCode(65 + i); // 0→A
+  const lines = quiz.map((q) => {
+    const opts = (q.options || []).map((o, i) => `  ${letter(i)}. ${plain(o, 300)}`).join('\n');
+    const correct = (q.correctIndexes || []).map(letter).join(', ') || '?';
+    const expl = q.explanation ? `\n  Giải thích: ${plain(q.explanation, 400)}` : '';
+    return `Câu ${q.n}: ${plain(q.prompt, 600)}\n${opts}\n  Đáp án đúng: ${correct}${expl}`;
+  }).join('\n\n');
+  return 'CÁC CÂU QUIZ HỌC VIÊN ĐANG LÀM (câu hỏi ĐỀ THẬT FE/PE/PT). Khi họ nói "câu N" '
+    + 'nghĩa là Câu N dưới đây. Hãy giải thích VÌ SAO đáp án đúng là đúng và làm rõ kiến thức '
+    + '— dạy để HIỂU, đừng chỉ đọc chữ cái đáp án.\n\n' + lines;
 }
 
 const langOf = (english?: boolean): 'en' | 'vi' => (english ? 'en' : 'vi');
@@ -180,13 +199,15 @@ async function buildTutorCall(
   const heading = [course?.courseCode, course?.title].filter(Boolean).join(' — ') || 'Khoá học';
   const notes = lesson.details?.teachingNotes ? `\n\nGHI CHÚ GIẢNG DẠY\n${plain(lesson.details.teachingNotes, 3000)}` : '';
 
+  const quizBlock = buildQuizBlock(opts.quizContext);
   const messages: TutorMessage[] = [
     {
       role: 'user',
       content:
         `THE LESSON\n${heading}\nBài: ${lesson.title}\n\n` +
         `NỘI DUNG BÀI\n${plain(lesson.content, 8000) || '(bài này chủ yếu là video/không có nội dung chữ)'}` +
-        notes,
+        notes +
+        (quizBlock ? `\n\n${quizBlock}` : ''),
     },
     { role: 'assistant', content: 'Đã rõ. Tôi đang xem bài học này và sẵn sàng giúp.' },
     ...(opts.history || []).slice(-MAX_HISTORY),

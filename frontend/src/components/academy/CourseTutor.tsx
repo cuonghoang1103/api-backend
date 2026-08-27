@@ -44,16 +44,29 @@ function getToken(): string {
 
 const toMsg = (t: Turn) => ({ role: t.role, content: t.content });
 
-export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: {
+// Câu quiz truyền vào để gia sư biết "câu N" là gì (dùng ở Đề luyện cuối chương).
+export interface TutorQuizItem { n: number; prompt: string; options: string[]; correctIndexes: number[]; explanation?: string }
+
+export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, quizContext }: {
   lessonId: number; courseCode?: string; courseTitle?: string; lessonTitle?: string;
+  /** Có ⇒ chế độ hỏi trong quiz: gia sư biết đề+đáp án các câu, học viên chỉ gõ "câu N". */
+  quizContext?: TutorQuizItem[];
 }) {
   const isAuthed = useAuthStore((s) => s.isAuthenticated);
   const { isPro } = usePro();
+  const inQuiz = !!quizContext?.length;
 
   const [turns, setTurns] = useState<Turn[]>([]);
   const [question, setQuestion] = useState('');
   const [asking, setAsking] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
+  const taRef = useRef<HTMLTextAreaElement>(null);
+
+  // Bấm "Câu N" → điền sẵn vào ô để học viên trình bày chỗ chưa hiểu.
+  const pickCau = useCallback((n: number) => {
+    setQuestion(`Câu ${n}: mình chưa hiểu `);
+    setTimeout(() => taRef.current?.focus(), 0);
+  }, []);
 
   useEffect(() => { setTurns([]); setQuestion(''); }, [lessonId]);
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, [turns, asking]);
@@ -66,7 +79,7 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: 
     const res = await fetch(`/api/v1/courses/lessons/${lessonId}/ai/ask-stream`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}) },
-      body: JSON.stringify({ question: q, history: history.map(toMsg), english, cacheKey }),
+      body: JSON.stringify({ question: q, history: history.map(toMsg), english, cacheKey, ...(inQuiz ? { quizContext } : {}) }),
     });
     if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
 
@@ -102,7 +115,7 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: 
     }
     if (!acc.trim()) throw new Error('empty stream');
     patch(aIdx, { content: acc, streaming: false });
-  }, [lessonId]);
+  }, [lessonId, inQuiz, quizContext]);
 
   // Hỏi một câu. showUser=false + english=true là lúc bấm nút "Bản tiếng Anh".
   const ask = useCallback(async (text: string, opts?: { english?: boolean; showUser?: boolean; cacheKey?: string }) => {
@@ -133,7 +146,7 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: 
       try {
         const r = await api.post<{ success: boolean; data: { answer: string; cached?: boolean } }>(
           `/courses/lessons/${lessonId}/ai/ask`,
-          { question: q, history: history.map(toMsg), english, cacheKey },
+          { question: q, history: history.map(toMsg), english, cacheKey, ...(inQuiz ? { quizContext } : {}) },
           { timeout: 240_000 });
         patch(aIdx, { content: r.data.data.answer, streaming: false, cached: !!r.data.data.cached });
       } catch (e: unknown) {
@@ -175,12 +188,15 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: 
 
       <div className="rounded-xl border p-4" style={{ borderColor: 'var(--border-color)', background: 'var(--bg-card)' }}>
         <div className="mb-2 flex items-center gap-1.5 text-xs font-bold uppercase" style={{ color: 'var(--text-secondary)' }}>
-          <MessageCircle size={13} /> Gia sư riêng cho bài &ldquo;{lessonTitle || label}&rdquo;
+          <MessageCircle size={13} /> {inQuiz ? 'Hỏi gia sư về câu trong đề' : <>Gia sư riêng cho bài &ldquo;{lessonTitle || label}&rdquo;</>}
         </div>
         <p className="mb-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
-          Hỏi bất cứ điều gì về bài này — bắt đầu từ đâu, chỗ chưa hiểu, kiến thức nền còn thiếu,
-          xin bài tập luyện, hoặc dán bài của bạn nhờ chữa. Trả lời bằng tiếng Việt; cần tiếng Anh
-          thì bấm &ldquo;Bản tiếng Anh&rdquo; dưới mỗi câu trả lời.
+          {inQuiz
+            ? <>Chọn câu bạn thấy khó bên dưới (hoặc gõ thẳng &ldquo;câu 3 …&rdquo;) rồi trình bày chỗ chưa hiểu —
+              gia sư đã biết đề &amp; đáp án câu đó, sẽ giảng vì sao đúng, khỏi cần chép lại đề.</>
+            : <>Hỏi bất cứ điều gì về bài này — bắt đầu từ đâu, chỗ chưa hiểu, kiến thức nền còn thiếu,
+              xin bài tập luyện, hoặc dán bài của bạn nhờ chữa. Trả lời bằng tiếng Việt; cần tiếng Anh
+              thì bấm &ldquo;Bản tiếng Anh&rdquo; dưới mỗi câu trả lời.</>}
         </p>
 
         {turns.length > 0 && (
@@ -243,7 +259,20 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: 
           </Link>
         ) : (
           <>
-            {turns.length === 0 && (
+            {turns.length === 0 && (inQuiz ? (
+              <div className="mb-2">
+                <p className="mb-1.5 text-xs font-medium" style={{ color: 'var(--text-secondary)' }}>Bạn đang gặp khó ở câu nào?</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {quizContext!.map((c) => (
+                    <button key={c.n} type="button" onClick={() => pickCau(c.n)} disabled={asking}
+                      className="rounded-lg border px-2.5 py-1 text-xs font-medium disabled:opacity-40"
+                      style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)', color: 'var(--text-secondary)' }}>
+                      Câu {c.n}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : (
               <div className="mb-2 flex flex-wrap gap-1.5">
                 {QUICK.map((s) => (
                   <button key={s.key} type="button" onClick={() => void ask(s.q, { cacheKey: s.key })} disabled={asking}
@@ -253,14 +282,15 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle }: 
                   </button>
                 ))}
               </div>
-            )}
+            ))}
             <div className="flex items-end gap-2">
               <textarea
+                ref={taRef}
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void ask(question); } }}
                 rows={2}
-                placeholder="Hỏi bất cứ điều gì về bài này — hoặc dán code/bài làm của bạn nhờ chữa…"
+                placeholder={inQuiz ? 'VD: câu 3 mình chưa hiểu vì sao đáp án là B…' : 'Hỏi bất cứ điều gì về bài này — hoặc dán code/bài làm của bạn nhờ chữa…'}
                 className="flex-1 resize-none rounded-lg border px-3 py-2 text-sm outline-none"
                 style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)', color: 'var(--text-primary)' }}
               />

@@ -188,7 +188,7 @@ export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallP
                   </ul>
                   {/* Đề luyện cuối chương — làm ngay trong bài, tự chấm (câu đề thật đã gán chương). */}
                   {counts[section.id] > 0 && (
-                    <ChapterQuiz sectionId={section.id} sectionTitle={section.title} count={counts[section.id]} />
+                    <ChapterQuiz sectionId={section.id} sectionTitle={section.title} count={counts[section.id]} lessonId={lessons[0]?.id} />
                   )}
                   {/* Mở nguyên Phòng Thi lọc đúng chương này (đề thực hành PE đầy đủ). */}
                   {courseCode && counts[section.id] > 0 && (

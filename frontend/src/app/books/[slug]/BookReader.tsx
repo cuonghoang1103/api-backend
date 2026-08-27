@@ -10,6 +10,24 @@ import { collectBookBlockRefs, type BookBlockRef } from '@/lib/bookBlocks';
 type LangMode = 'en' | 'bi' | 'vi';
 const LANG_KEY = 'cts-books-lang';
 
+// Mọi liên kết trong sách phải mở TAB MỚI. Không có id/anchor nội bộ nào
+// dùng href="#..." (đã kiểm 25/25 cuốn) nên không mất điều hướng gì khi ép
+// hết ra ngoài. Lý do bắt buộc: điều hướng NGAY TRONG khung đọc (iframe) thì
+// (a) link ra ngoài domain thường bị X-Frame-Options/CSP của trang đích chặn
+// nhúng iframe → Chrome hiện "This content is blocked" + trắng trang, (b)
+// link nội bộ cuongthai.com thay hẳn nội dung trong khung đọc trong khi
+// thanh trên/mục lục vẫn hiện như đang đọc sách → rối, không "Back" được về
+// đúng chỗ. Gọi lại mỗi lần chèn bản dịch (không chỉ lúc nạp trang) vì bản
+// dịch giữ nguyên thẻ <a> gốc bên trong — đó là thẻ MỚI, chưa được xử lý.
+function openLinksInNewTab(doc: Document) {
+  doc.querySelectorAll<HTMLAnchorElement>('a[href]').forEach((a) => {
+    const href = a.getAttribute('href') || '';
+    if (!href || href.startsWith('javascript:')) return;
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener noreferrer');
+  });
+}
+
 export default function BookReader({ slug, title, toc }: { slug: string; title: string; toc: TocItem[] }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const chapsRef = useRef<HTMLElement[]>([]);
@@ -28,6 +46,10 @@ export default function BookReader({ slug, title, toc }: { slug: string; title: 
   const [ready, setReady] = useState(false);
   const [lang, setLang] = useState<LangMode>('en');
   const [viLoading, setViLoading] = useState(false);
+  // Tiêu đề chương đã dịch, cho mục lục — tra theo hash của CHÍNH thẻ <h2>
+  // đầu chương (đã có sẵn trong bản dịch nội dung), không so khớp chữ với
+  // toc-t gốc (hai chữ đôi khi không giống hệt nhau ở ~half số chương).
+  const [tocVi, setTocVi] = useState<(string | null)[] | null>(null);
 
   // Mặc định đóng mục lục trên màn hẹp (đọc trước, mở mục lục khi cần).
   // Đọc lựa chọn ngôn ngữ đã lưu (song ngữ là sở thích chung của người đọc,
@@ -96,11 +118,14 @@ export default function BookReader({ slug, title, toc }: { slug: string; title: 
       chaps.forEach((el, i) => { if (!el.id) el.id = `ct-chap-${i}`; });
       chapsRef.current = chaps;
 
+      openLinksInNewTab(doc);
+
       // Trích khối văn xuôi + hash NGAY LÚC NÀY (trước khi có bản dịch nào
       // được chèn) — cùng hàm dùng để dịch offline, nên hash luôn khớp.
       blocksRef.current = collectBookBlockRefs(doc);
       viMapRef.current = null;
       wrappedRef.current = new WeakSet();
+      setTocVi(null);
       doc.documentElement.dataset.bookLang = langRef.current;
       // Sách vừa nạp lại (đổi cuốn, hoặc lần đầu mở) — nếu người đọc đã chọn
       // song ngữ/VI từ trước, nạp/áp lại bản dịch cho ĐÚNG cuốn này ngay.
@@ -168,11 +193,31 @@ export default function BookReader({ slug, title, toc }: { slug: string; title: 
       el.appendChild(viWrap);
       wrappedRef.current.add(el);
     }
+    // Bản dịch giữ nguyên thẻ <a href> gốc bên trong — đó là link MỚI vừa
+    // chèn, chưa qua vòng xử lý target=_blank lúc nạp trang.
+    openLinksInNewTab(doc);
     if (blocksRef.current.length && matched < blocksRef.current.length) {
       console.warn(
         `[books/i18n] "${slug}": chỉ khớp ${matched}/${blocksRef.current.length} khối — phần còn lại giữ nguyên EN.`,
       );
     }
+
+    // Mục lục: mỗi chương trong chapsRef ứng ĐÚNG 1-1 (cùng thứ tự DOM) với
+    // toc prop — tra bản dịch tiêu đề qua hash của chính thẻ <h2> đầu
+    // chương đó, không so chữ với TOC gốc (đã kiểm 25/25 cuốn, ~50% số
+    // chương có chữ TOC hơi khác chữ <h2> thật). Dùng hash đã lưu SẴN trong
+    // blocksRef (tính lúc DOM còn nguyên, trước khi chèn bản dịch) — KHÔNG
+    // tính lại từ h2.textContent ở đây, vì nếu h2 đã được áp dụng bản dịch
+    // ở vòng lặp trên rồi thì textContent lúc này đã lẫn cả EN+VI (span ẩn
+    // vẫn tính vào textContent dù CSS display:none).
+    setTocVi(
+      chapsRef.current.map((chap) => {
+        const h2 = chap.querySelector('h2');
+        if (!h2) return null;
+        const ref = blocksRef.current.find((b) => b.el === h2);
+        return ref ? (map.get(ref.hash) ?? null) : null;
+      }),
+    );
   }, [slug]);
 
   // Nạp file dịch tĩnh (lười — chỉ gọi khi người đọc thật sự bật song ngữ/VI).
@@ -289,7 +334,11 @@ export default function BookReader({ slug, title, toc }: { slug: string; title: 
                   disabled={!ready}
                 >
                   <span className={styles.tocN}>{c.n}</span>
-                  <span className={styles.tocT}>{c.title}</span>
+                  {lang !== 'en' && tocVi?.[i] ? (
+                    <span className={styles.tocT} dangerouslySetInnerHTML={{ __html: tocVi[i]! }} />
+                  ) : (
+                    <span className={styles.tocT}>{c.title}</span>
+                  )}
                 </button>
               </li>
             ))}

@@ -5,18 +5,41 @@ import Link from 'next/link';
 import { ArrowLeft, List, X, ChevronUp } from 'lucide-react';
 import type { TocItem } from './page';
 import styles from './reader.module.css';
+import { collectBookBlockRefs, type BookBlockRef } from '@/lib/bookBlocks';
+
+type LangMode = 'en' | 'bi' | 'vi';
+const LANG_KEY = 'cts-books-lang';
 
 export default function BookReader({ slug, title, toc }: { slug: string; title: string; toc: TocItem[] }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const chapsRef = useRef<HTMLElement[]>([]);
+  const blocksRef = useRef<BookBlockRef[]>([]);
+  const viMapRef = useRef<Map<string, string> | null>(null);
+  const wrappedRef = useRef<WeakSet<HTMLElement>>(new WeakSet());
+  const langRef = useRef<LangMode>('en');
+  const loadingRef = useRef(false);
+  // wireIframe() là useCallback([]) ổn định — nó gọi qua ref này để luôn
+  // dùng bản mới nhất của ensureLangApplied (đóng gói đúng `slug` hiện tại)
+  // mà không phải liệt kê nó vào dependency của wireIframe.
+  const ensureLangAppliedRef = useRef<() => void>(() => {});
   const [active, setActive] = useState(0);
   const [progress, setProgress] = useState(0);
   const [tocOpen, setTocOpen] = useState(true);
   const [ready, setReady] = useState(false);
+  const [lang, setLang] = useState<LangMode>('en');
+  const [viLoading, setViLoading] = useState(false);
 
   // Mặc định đóng mục lục trên màn hẹp (đọc trước, mở mục lục khi cần).
+  // Đọc lựa chọn ngôn ngữ đã lưu (song ngữ là sở thích chung của người đọc,
+  // không phải riêng từng cuốn).
   useEffect(() => {
     if (typeof window !== 'undefined' && window.innerWidth < 900) setTocOpen(false);
+    try {
+      const saved = window.localStorage.getItem(LANG_KEY);
+      if (saved === 'en' || saved === 'bi' || saved === 'vi') setLang(saved);
+    } catch {
+      // localStorage có thể bị chặn (chế độ riêng tư) — cứ dùng mặc định EN.
+    }
   }, []);
 
   const wireIframe = useCallback(() => {
@@ -47,6 +70,24 @@ export default function BookReader({ slug, title, toc }: { slug: string; title: 
           margin-right: auto !important;
           width: auto !important;
         }
+        /* Song ngữ: đoạn VI chèn ngay dưới đoạn EN gốc, chữ dịu + viền trái
+           màu nhũ. Dùng cơ chế theme SẴN CÓ của chính cuốn sách
+           (prefers-color-scheme / [data-theme]) — không đụng gì ngoài nó. */
+        :root { --cts-gold: oklch(52% 0.13 82); }
+        @media (prefers-color-scheme: dark) {
+          :root:not([data-theme="light"]) { --cts-gold: oklch(80% 0.12 82); }
+        }
+        :root[data-theme="dark"] { --cts-gold: oklch(80% 0.12 82); }
+        .ctsVi {
+          display: none;
+          margin-top: 0.45em;
+          padding: 1px 0 1px 14px;
+          border-left: 2px solid var(--cts-gold);
+          color: var(--ink-soft, inherit);
+        }
+        html[data-book-lang="vi"] .ctsEn { display: none; }
+        html[data-book-lang="vi"] .ctsVi,
+        html[data-book-lang="bi"] .ctsVi { display: block; }
       `;
       doc.head.appendChild(st);
 
@@ -54,6 +95,16 @@ export default function BookReader({ slug, title, toc }: { slug: string; title: 
       const chaps = Array.from(doc.querySelectorAll<HTMLElement>('.chap-open'));
       chaps.forEach((el, i) => { if (!el.id) el.id = `ct-chap-${i}`; });
       chapsRef.current = chaps;
+
+      // Trích khối văn xuôi + hash NGAY LÚC NÀY (trước khi có bản dịch nào
+      // được chèn) — cùng hàm dùng để dịch offline, nên hash luôn khớp.
+      blocksRef.current = collectBookBlockRefs(doc);
+      viMapRef.current = null;
+      wrappedRef.current = new WeakSet();
+      doc.documentElement.dataset.bookLang = langRef.current;
+      // Sách vừa nạp lại (đổi cuốn, hoặc lần đầu mở) — nếu người đọc đã chọn
+      // song ngữ/VI từ trước, nạp/áp lại bản dịch cho ĐÚNG cuốn này ngay.
+      ensureLangAppliedRef.current();
 
       const scroller = (doc.scrollingElement || doc.documentElement) as HTMLElement;
       onScroll = () => {
@@ -93,6 +144,87 @@ export default function BookReader({ slug, title, toc }: { slug: string; title: 
     };
   }, [wireIframe, slug]);
 
+  // Chèn bản dịch vào các khối đã khớp hash (còn khối nào không khớp thì cứ
+  // để nguyên EN — thà thiếu một đoạn còn hơn lệch cả cuốn).
+  const applyTranslations = useCallback(() => {
+    const doc = iframeRef.current?.contentDocument;
+    const map = viMapRef.current;
+    if (!doc || !map) return;
+    let matched = 0;
+    for (const { el, hash } of blocksRef.current) {
+      const vi = map.get(hash);
+      if (!vi) continue;
+      matched++;
+      if (wrappedRef.current.has(el)) continue;
+      if (!el.querySelector(':scope > .ctsEn')) {
+        const enWrap = doc.createElement('span');
+        enWrap.className = 'ctsEn';
+        while (el.firstChild) enWrap.appendChild(el.firstChild);
+        el.appendChild(enWrap);
+      }
+      const viWrap = doc.createElement('span');
+      viWrap.className = 'ctsVi';
+      viWrap.innerHTML = vi;
+      el.appendChild(viWrap);
+      wrappedRef.current.add(el);
+    }
+    if (blocksRef.current.length && matched < blocksRef.current.length) {
+      console.warn(
+        `[books/i18n] "${slug}": chỉ khớp ${matched}/${blocksRef.current.length} khối — phần còn lại giữ nguyên EN.`,
+      );
+    }
+  }, [slug]);
+
+  // Nạp file dịch tĩnh (lười — chỉ gọi khi người đọc thật sự bật song ngữ/VI).
+  const loadTranslation = useCallback(() => {
+    if (viMapRef.current || loadingRef.current) return;
+    loadingRef.current = true;
+    setViLoading(true);
+    fetch(`/books/i18n/${slug}.vi.json`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+      .then((data: { blocks?: { h: string; vi: string }[] }) => {
+        const map = new Map<string, string>();
+        for (const b of data.blocks || []) map.set(b.h, b.vi);
+        viMapRef.current = map;
+        applyTranslations();
+      })
+      .catch((err) => {
+        console.warn(`[books/i18n] Không nạp được bản dịch cho "${slug}":`, err);
+        viMapRef.current = new Map(); // đừng thử lại liên tục trong phiên này
+      })
+      .finally(() => {
+        loadingRef.current = false;
+        setViLoading(false);
+      });
+  }, [slug, applyTranslations]);
+
+  const ensureLangApplied = useCallback(() => {
+    const doc = iframeRef.current?.contentDocument;
+    if (doc?.documentElement) doc.documentElement.dataset.bookLang = langRef.current;
+    if (langRef.current === 'en') return;
+    if (viMapRef.current) applyTranslations();
+    else loadTranslation();
+  }, [applyTranslations, loadTranslation]);
+
+  useEffect(() => {
+    ensureLangAppliedRef.current = ensureLangApplied;
+  }, [ensureLangApplied]);
+
+  // Người đọc bấm đổi chế độ (hoặc lựa chọn đã lưu vừa nạp lúc mount).
+  useEffect(() => {
+    langRef.current = lang;
+    ensureLangApplied();
+  }, [lang, ensureLangApplied]);
+
+  const setLangMode = (next: LangMode) => {
+    setLang(next);
+    try {
+      window.localStorage.setItem(LANG_KEY, next);
+    } catch {
+      // riêng tư/chặn storage — chỉ mất ghi nhớ, không chặn tính năng
+    }
+  };
+
   const jump = (i: number) => {
     const el = chapsRef.current[i];
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -123,6 +255,24 @@ export default function BookReader({ slug, title, toc }: { slug: string; title: 
         >
           {tocOpen ? <X size={17} /> : <List size={17} />}
         </button>
+        <div className={styles.langSeg} role="group" aria-label="Ngôn ngữ đọc">
+          {([
+            ['en', 'EN', 'Chỉ tiếng Anh'],
+            ['bi', 'EN+VI', 'Song ngữ Anh – Việt'],
+            ['vi', 'VI', 'Chỉ tiếng Việt'],
+          ] as const).map(([mode, label, ariaLabel]) => (
+            <button
+              key={mode}
+              className={`${styles.langBtn} ${lang === mode ? styles.langBtnActive : ''}`}
+              aria-pressed={lang === mode}
+              aria-label={ariaLabel}
+              onClick={() => setLangMode(mode)}
+            >
+              {label}
+              {mode !== 'en' && lang === mode && viLoading && <span className={styles.langLoading} aria-hidden />}
+            </button>
+          ))}
+        </div>
         <div className={styles.barTitle} title={title}>{title}</div>
         <div className={styles.barPct}>{Math.round(progress)}%</div>
       </header>

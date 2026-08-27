@@ -7,3 +7,9 @@ node_modules
 
 # Parallel/isolated build output (see `distDir` in next.config.js)
 .next-*/
+
+# Dữ liệu trung gian dịch sách /books — bản dịch CUỐI nằm ở public/books/i18n/,
+# staging chỉ là dữ liệu làm việc để tái dịch/tái gộp khi cần, không cần commit.
+scripts/i18n-staging/*.en.json
+scripts/i18n-staging/*.vi.json
+scripts/i18n-staging/_manifest.json

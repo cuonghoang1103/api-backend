@@ -14,6 +14,7 @@
   --ink-soft: oklch(78% 0.018 295);
   --ink-faint: oklch(66% 0.022 295);
   --accent: oklch(72% 0.18 300);
+  --gold: oklch(80% 0.12 82);
 
   position: fixed;
   inset: 0;
@@ -34,6 +35,7 @@
   --ink-soft: oklch(43% 0.024 300);
   --ink-faint: oklch(52% 0.025 300);
   --accent: oklch(55% 0.18 300);
+  --gold: oklch(52% 0.13 82);
 }
 
 /* Thanh tiến độ đọc — mảnh, sát mép trên. */
@@ -73,6 +75,52 @@
   cursor: pointer; transition: border-color 0.14s ease, color 0.14s ease;
 }
 .tocToggle:hover { border-color: var(--rule-firm); color: var(--ink); }
+
+/* Chuyển đổi EN / song ngữ / VI — 3 nút liền, cạnh nút mục lục. */
+.langSeg {
+  flex: none;
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--rule);
+  border-radius: 9px;
+  overflow: hidden;
+  background: var(--paper);
+}
+.langBtn {
+  border: 0;
+  background: transparent;
+  color: var(--ink-faint);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 0 11px;
+  height: 36px;
+  cursor: pointer;
+  transition: color 0.14s ease, background 0.14s ease;
+}
+.langBtn + .langBtn { border-left: 1px solid var(--rule); }
+.langBtn:hover { color: var(--ink); background: var(--leaf-2); }
+.langBtnActive,
+.langBtnActive:hover {
+  color: var(--paper);
+  background: var(--gold);
+}
+.langLoading {
+  display: inline-block;
+  width: 10px; height: 10px;
+  margin-left: 6px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  border-top-color: transparent;
+  animation: langSpin 0.7s linear infinite;
+  vertical-align: -1px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .langBtn { transition: none; }
+  .langLoading { animation-duration: 1.6s; }
+}
+@keyframes langSpin { to { transform: rotate(360deg); } }
+
 .barTitle {
   flex: 1; min-width: 0;
   font-family: "Source Serif 4", Georgia, serif;
@@ -169,4 +217,5 @@
   }
   .toc.tocClosed + .scrim { display: none; }
   .barTitle { font-size: 0.92rem; }
+  .langBtn { padding: 0 8px; font-size: 0.7rem; }
 }

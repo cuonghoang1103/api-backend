@@ -42,7 +42,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The result column equals q in every row (T,F,T,F). (i) ¬p∧q at row p=T,q=T gives F≠T, fails. (ii) q∨(¬p∧q) simplifies by absorption to q, which matches exactly.</div><div class=\"ml-vi\">Cột kết quả bằng q ở mọi dòng (T,F,T,F). (i) ¬p∧q tại p=T,q=T cho F≠T, sai. (ii) q∨(¬p∧q) rút gọn theo luật hấp thụ thành q, khớp hoàn toàn.</div>"
+          "explanation": "<div class=\"ml-en\">The result column equals q in every row (T,F,T,F). (i) ¬p∧q at row p=T,q=T gives F≠T, fails. (ii) q∨(¬p∧q) simplifies by absorption to q, which matches exactly.</div><div class=\"ml-vi\">Cột kết quả bằng q ở mọi dòng (T,F,T,F). (i) ¬p∧q tại p=T,q=T cho F≠T, sai. (ii) q∨(¬p∧q) rút gọn theo luật hấp thụ thành q, khớp hoàn toàn.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q1.png"
         },
         {
           "kind": "MCQ",
@@ -68,7 +69,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$101101 \\lor 110001 = 111101$. Then $111101 \\oplus 001101 = 110000$.</div><div class=\"ml-vi\">$101101 \\lor 110001 = 111101$. Sau đó $111101 \\oplus 001101 = 110000$.</div>"
+          "explanation": "<div class=\"ml-en\">$101101 \\lor 110001 = 111101$. Then $111101 \\oplus 001101 = 110000$.</div><div class=\"ml-vi\">$101101 \\lor 110001 = 111101$. Sau đó $111101 \\oplus 001101 = 110000$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q2.png"
         },
         {
           "kind": "MCQ",
@@ -91,7 +93,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Truth table check: at every row of p,q the expression evaluates to T (when p→q is F, ¬p→q is T since p must be T there... actually check all 4 rows: always T) — it is a tautology, equivalent to T.</div><div class=\"ml-vi\">Kiểm bảng chân trị: ở mọi dòng của p,q biểu thức đều cho T — đây là hằng đúng (tautology), tương đương với T.</div>"
+          "explanation": "<div class=\"ml-en\">Truth table check: at every row of p,q the expression evaluates to T (when p→q is F, ¬p→q is T since p must be T there... actually check all 4 rows: always T) — it is a tautology, equivalent to T.</div><div class=\"ml-vi\">Kiểm bảng chân trị: ở mọi dòng của p,q biểu thức đều cho T — đây là hằng đúng (tautology), tương đương với T.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q3.png"
         },
         {
           "kind": "MCQ",
@@ -114,7 +117,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">\"Either...but not both\" is exclusive or (XOR). The statement only constrains students (via C(x)), so it needs an implication, not a conjunction: $\\forall x(C(x)\\to(P(x)\\oplus J(x)))$.</div><div class=\"ml-vi\">\"Hoặc...nhưng không cả hai\" là XOR. Câu chỉ ràng buộc sinh viên (qua C(x)), nên cần dùng kéo theo, không phải hội: $\\forall x(C(x)\\to(P(x)\\oplus J(x)))$.</div>"
+          "explanation": "<div class=\"ml-en\">\"Either...but not both\" is exclusive or (XOR). The statement only constrains students (via C(x)), so it needs an implication, not a conjunction: $\\forall x(C(x)\\to(P(x)\\oplus J(x)))$.</div><div class=\"ml-vi\">\"Hoặc...nhưng không cả hai\" là XOR. Câu chỉ ràng buộc sinh viên (qua C(x)), nên cần dùng kéo theo, không phải hội: $\\forall x(C(x)\\to(P(x)\\oplus J(x)))$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q4.png"
         },
         {
           "kind": "MCQ",
@@ -137,7 +141,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">\"Every ... has visited\" is a universal implication: for all x, if born in Hanoi then visited the temple.</div><div class=\"ml-vi\">\"Mọi ... đều đã đến thăm\" là kéo theo phổ dụng: với mọi x, nếu sinh ở Hà Nội thì đã đến thăm Văn Miếu.</div>"
+          "explanation": "<div class=\"ml-en\">\"Every ... has visited\" is a universal implication: for all x, if born in Hanoi then visited the temple.</div><div class=\"ml-vi\">\"Mọi ... đều đã đến thăm\" là kéo theo phổ dụng: với mọi x, nếu sinh ở Hà Nội thì đã đến thăm Văn Miếu.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q5.png"
         },
         {
           "kind": "MCQ",
@@ -160,7 +165,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\exists y\\,P(2,y)$: needs $y=1.5$, not integer, false. $\\forall x\\exists y\\,P(x,y)$: needs $x$ odd, fails for even $x$. $\\forall y\\exists x\\,P(x,y)$: $x=5-2y$ is always an integer for any integer $y$ — true.</div><div class=\"ml-vi\">$\\exists y\\,P(2,y)$: cần $y=1.5$, không nguyên, sai. $\\forall x\\exists y\\,P(x,y)$: cần $x$ lẻ, sai với $x$ chẵn. $\\forall y\\exists x\\,P(x,y)$: $x=5-2y$ luôn là số nguyên với mọi $y$ nguyên — đúng.</div>"
+          "explanation": "<div class=\"ml-en\">$\\exists y\\,P(2,y)$: needs $y=1.5$, not integer, false. $\\forall x\\exists y\\,P(x,y)$: needs $x$ odd, fails for even $x$. $\\forall y\\exists x\\,P(x,y)$: $x=5-2y$ is always an integer for any integer $y$ — true.</div><div class=\"ml-vi\">$\\exists y\\,P(2,y)$: cần $y=1.5$, không nguyên, sai. $\\forall x\\exists y\\,P(x,y)$: cần $x$ lẻ, sai với $x$ chẵn. $\\forall y\\exists x\\,P(x,y)$: $x=5-2y$ luôn là số nguyên với mọi $y$ nguyên — đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q6.png"
         },
         {
           "kind": "MCQ",
@@ -183,7 +189,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Negating: $\\neg\\exists x\\exists y(F\\land\\forall zL) = \\forall x\\forall y\\neg(F\\land\\forall zL) = \\forall x\\forall y(\\neg F\\lor\\neg\\forall zL) = \\forall x\\forall y(\\neg F(x,y)\\lor\\exists z\\neg L(y,z))$.</div><div class=\"ml-vi\">Phủ định: $\\neg\\exists x\\exists y(F\\land\\forall zL) = \\forall x\\forall y\\neg(F\\land\\forall zL) = \\forall x\\forall y(\\neg F\\lor\\neg\\forall zL) = \\forall x\\forall y(\\neg F(x,y)\\lor\\exists z\\neg L(y,z))$.</div>"
+          "explanation": "<div class=\"ml-en\">Negating: $\\neg\\exists x\\exists y(F\\land\\forall zL) = \\forall x\\forall y\\neg(F\\land\\forall zL) = \\forall x\\forall y(\\neg F\\lor\\neg\\forall zL) = \\forall x\\forall y(\\neg F(x,y)\\lor\\exists z\\neg L(y,z))$.</div><div class=\"ml-vi\">Phủ định: $\\neg\\exists x\\exists y(F\\land\\forall zL) = \\forall x\\forall y\\neg(F\\land\\forall zL) = \\forall x\\forall y(\\neg F\\lor\\neg\\forall zL) = \\forall x\\forall y(\\neg F(x,y)\\lor\\exists z\\neg L(y,z))$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q7.png"
         },
         {
           "kind": "MCQ",
@@ -209,7 +216,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Let $S\\to\\neg G$. (i) affirms $\\neg G$ to conclude $S$ — invalid (converse error). (ii) denies antecedent $\\neg S$ to conclude $G$ — invalid. (iii) has $G$ (i.e. $\\neg\\neg G$) and concludes $\\neg S$ — this is modus tollens on the contrapositive, valid.</div><div class=\"ml-vi\">Đặt $S\\to\\neg G$. (i) khẳng định $\\neg G$ rồi kết luận $S$ — không hợp lệ (lỗi đảo đề). (ii) phủ định tiền đề $\\neg S$ rồi kết luận $G$ — không hợp lệ. (iii) có $G$ (tức $\\neg\\neg G$) và kết luận $\\neg S$ — đây là modus tollens, hợp lệ.</div>"
+          "explanation": "<div class=\"ml-en\">Let $S\\to\\neg G$. (i) affirms $\\neg G$ to conclude $S$ — invalid (converse error). (ii) denies antecedent $\\neg S$ to conclude $G$ — invalid. (iii) has $G$ (i.e. $\\neg\\neg G$) and concludes $\\neg S$ — this is modus tollens on the contrapositive, valid.</div><div class=\"ml-vi\">Đặt $S\\to\\neg G$. (i) khẳng định $\\neg G$ rồi kết luận $S$ — không hợp lệ (lỗi đảo đề). (ii) phủ định tiền đề $\\neg S$ rồi kết luận $G$ — không hợp lệ. (iii) có $G$ (tức $\\neg\\neg G$) và kết luận $\\neg S$ — đây là modus tollens, hợp lệ.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q8.png"
         },
         {
           "kind": "MCQ",
@@ -232,7 +240,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$|A|=2$ so $|P(A)|=4$: $\\{\\emptyset, \\{\\emptyset\\}, \\{a\\}, \\{\\emptyset,a\\}\\}$. Option (ii) lists exactly these 4 elements (order/notation aside). (i) is missing $\\{\\emptyset\\}$; (iii) has the wrong element $\\{a,\\{\\emptyset\\}\\}$; (iv) only has 2 elements.</div><div class=\"ml-vi\">$|A|=2$ nên $|P(A)|=4$: $\\{\\emptyset, \\{\\emptyset\\}, \\{a\\}, \\{\\emptyset,a\\}\\}$. Phương án (ii) liệt kê đúng 4 phần tử này. (i) thiếu $\\{\\emptyset\\}$; (iii) sai vì có $\\{a,\\{\\emptyset\\}\\}$; (iv) chỉ có 2 phần tử.</div>"
+          "explanation": "<div class=\"ml-en\">$|A|=2$ so $|P(A)|=4$: $\\{\\emptyset, \\{\\emptyset\\}, \\{a\\}, \\{\\emptyset,a\\}\\}$. Option (ii) lists exactly these 4 elements (order/notation aside). (i) is missing $\\{\\emptyset\\}$; (iii) has the wrong element $\\{a,\\{\\emptyset\\}\\}$; (iv) only has 2 elements.</div><div class=\"ml-vi\">$|A|=2$ nên $|P(A)|=4$: $\\{\\emptyset, \\{\\emptyset\\}, \\{a\\}, \\{\\emptyset,a\\}\\}$. Phương án (ii) liệt kê đúng 4 phần tử này. (i) thiếu $\\{\\emptyset\\}$; (iii) sai vì có $\\{a,\\{\\emptyset\\}\\}$; (iv) chỉ có 2 phần tử.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q9.png"
         },
         {
           "kind": "MCQ",
@@ -258,7 +267,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Position each element a..j to bit 1 if present: a=1,b=0,c=1,d=1,e=0,f=0,g=1,h=1,i=1,j=0 $\\Rightarrow$ 10 1100 1110.</div><div class=\"ml-vi\">Gán bit 1 cho mỗi phần tử a..j nếu có mặt: a=1,b=0,c=1,d=1,e=0,f=0,g=1,h=1,i=1,j=0 $\\Rightarrow$ 10 1100 1110.</div>"
+          "explanation": "<div class=\"ml-en\">Position each element a..j to bit 1 if present: a=1,b=0,c=1,d=1,e=0,f=0,g=1,h=1,i=1,j=0 $\\Rightarrow$ 10 1100 1110.</div><div class=\"ml-vi\">Gán bit 1 cho mỗi phần tử a..j nếu có mặt: a=1,b=0,c=1,d=1,e=0,f=0,g=1,h=1,i=1,j=0 $\\Rightarrow$ 10 1100 1110.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q10.png"
         },
         {
           "kind": "MCQ",
@@ -278,7 +288,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$X\\cap Y=\\{3\\}$ (size 1); $X-Y=\\{1,2,4,5\\}$ (size 4); $Y-X=\\{0,6,9\\}$ (size 3). Minimal is (i).</div><div class=\"ml-vi\">$X\\cap Y=\\{3\\}$ (cỡ 1); $X-Y=\\{1,2,4,5\\}$ (cỡ 4); $Y-X=\\{0,6,9\\}$ (cỡ 3). Nhỏ nhất là (i).</div>"
+          "explanation": "<div class=\"ml-en\">$X\\cap Y=\\{3\\}$ (size 1); $X-Y=\\{1,2,4,5\\}$ (size 4); $Y-X=\\{0,6,9\\}$ (size 3). Minimal is (i).</div><div class=\"ml-vi\">$X\\cap Y=\\{3\\}$ (cỡ 1); $X-Y=\\{1,2,4,5\\}$ (cỡ 4); $Y-X=\\{0,6,9\\}$ (cỡ 3). Nhỏ nhất là (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q11.png"
         },
         {
           "kind": "MCQ",
@@ -304,7 +315,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f$ is undefined at $0\\le x<1$ (denominator 0) and generally not integer-valued. $h$ is not integer-valued (e.g. $h(1)=\\sqrt2$). $g(x)=\\lceil x+\\pi\\rceil$ is defined everywhere and always an integer — only $g$ qualifies.</div><div class=\"ml-vi\">$f$ không xác định khi $0\\le x<1$ (mẫu bằng 0) và nói chung không cho giá trị nguyên. $h$ không cho giá trị nguyên (vd $h(1)=\\sqrt2$). $g(x)=\\lceil x+\\pi\\rceil$ xác định khắp nơi và luôn là số nguyên — chỉ $g$ thỏa.</div>"
+          "explanation": "<div class=\"ml-en\">$f$ is undefined at $0\\le x<1$ (denominator 0) and generally not integer-valued. $h$ is not integer-valued (e.g. $h(1)=\\sqrt2$). $g(x)=\\lceil x+\\pi\\rceil$ is defined everywhere and always an integer — only $g$ qualifies.</div><div class=\"ml-vi\">$f$ không xác định khi $0\\le x<1$ (mẫu bằng 0) và nói chung không cho giá trị nguyên. $h$ không cho giá trị nguyên (vd $h(1)=\\sqrt2$). $g(x)=\\lceil x+\\pi\\rceil$ xác định khắp nơi và luôn là số nguyên — chỉ $g$ thỏa.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q12.png"
         },
         {
           "kind": "MCQ",
@@ -327,7 +339,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">(i),(ii) always hold since ceiling/floor of an integer is itself. (iii) fails, e.g. $x=y=1.5$: $\\lfloor xy\\rfloor=\\lfloor2.25\\rfloor=2$ but $\\lfloor x\\rfloor\\lfloor y\\rfloor=1\\cdot1=1$.</div><div class=\"ml-vi\">(i),(ii) luôn đúng vì trần/sàn của số nguyên là chính nó. (iii) sai, vd $x=y=1.5$: $\\lfloor xy\\rfloor=\\lfloor2.25\\rfloor=2$ nhưng $\\lfloor x\\rfloor\\lfloor y\\rfloor=1\\cdot1=1$.</div>"
+          "explanation": "<div class=\"ml-en\">(i),(ii) always hold since ceiling/floor of an integer is itself. (iii) fails, e.g. $x=y=1.5$: $\\lfloor xy\\rfloor=\\lfloor2.25\\rfloor=2$ but $\\lfloor x\\rfloor\\lfloor y\\rfloor=1\\cdot1=1$.</div><div class=\"ml-vi\">(i),(ii) luôn đúng vì trần/sàn của số nguyên là chính nó. (iii) sai, vd $x=y=1.5$: $\\lfloor xy\\rfloor=\\lfloor2.25\\rfloor=2$ nhưng $\\lfloor x\\rfloor\\lfloor y\\rfloor=1\\cdot1=1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q13.png"
         },
         {
           "kind": "MCQ",
@@ -353,7 +366,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$n=0$: $1-1=0$. $n=1$: $2-1=1$. $n=2$: $4-2=2$. $n=3$: $8-6=2$. $n=4$: $16-24=-8$.</div><div class=\"ml-vi\">$n=0$: $1-1=0$. $n=1$: $2-1=1$. $n=2$: $4-2=2$. $n=3$: $8-6=2$. $n=4$: $16-24=-8$.</div>"
+          "explanation": "<div class=\"ml-en\">$n=0$: $1-1=0$. $n=1$: $2-1=1$. $n=2$: $4-2=2$. $n=3$: $8-6=2$. $n=4$: $16-24=-8$.</div><div class=\"ml-vi\">$n=0$: $1-1=0$. $n=1$: $2-1=1$. $n=2$: $4-2=2$. $n=3$: $8-6=2$. $n=4$: $16-24=-8$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q14.png"
         },
         {
           "kind": "MCQ",
@@ -379,7 +393,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">TT1, TT3 increase n each iteration -> never terminate if n>0. TT2 decrements n before dividing: when n=1 it becomes 0 then computes x/0 (division by zero, not well-defined). TT4 divides by n THEN decrements, so it always divides by the still-positive n and terminates cleanly at n=0 — valid algorithm.</div><div class=\"ml-vi\">TT1, TT3 tăng n mỗi vòng -> không bao giờ dừng nếu n>0. TT2 giảm n trước rồi mới chia: khi n=1 nó thành 0 rồi tính x/0 (chia cho 0, không xác định). TT4 chia cho n TRƯỚC rồi mới giảm, nên luôn chia cho n còn dương và dừng gọn ở n=0 — là thuật toán hợp lệ.</div>"
+          "explanation": "<div class=\"ml-en\">TT1, TT3 increase n each iteration -> never terminate if n>0. TT2 decrements n before dividing: when n=1 it becomes 0 then computes x/0 (division by zero, not well-defined). TT4 divides by n THEN decrements, so it always divides by the still-positive n and terminates cleanly at n=0 — valid algorithm.</div><div class=\"ml-vi\">TT1, TT3 tăng n mỗi vòng -> không bao giờ dừng nếu n>0. TT2 giảm n trước rồi mới chia: khi n=1 nó thành 0 rồi tính x/0 (chia cho 0, không xác định). TT4 chia cho n TRƯỚC rồi mới giảm, nên luôn chia cho n còn dương và dừng gọn ở n=0 — là thuật toán hợp lệ.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q15.png"
         },
         {
           "kind": "MCQ",
@@ -402,7 +417,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">i=2: insert 2 before 7 -> [2,7,4,3,1,6,5]. i=3: insert 4 between 2,7 -> [2,4,7,3,1,6,5]. i=4: insert 3 between 2,4 -> [2,3,4,7,1,6,5].</div><div class=\"ml-vi\">i=2: chèn 2 trước 7 -> [2,7,4,3,1,6,5]. i=3: chèn 4 giữa 2,7 -> [2,4,7,3,1,6,5]. i=4: chèn 3 giữa 2,4 -> [2,3,4,7,1,6,5].</div>"
+          "explanation": "<div class=\"ml-en\">i=2: insert 2 before 7 -> [2,7,4,3,1,6,5]. i=3: insert 4 between 2,7 -> [2,4,7,3,1,6,5]. i=4: insert 3 between 2,4 -> [2,3,4,7,1,6,5].</div><div class=\"ml-vi\">i=2: chèn 2 trước 7 -> [2,7,4,3,1,6,5]. i=3: chèn 4 giữa 2,7 -> [2,4,7,3,1,6,5]. i=4: chèn 3 giữa 2,4 -> [2,3,4,7,1,6,5].</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q16.png"
         },
         {
           "kind": "MCQ",
@@ -428,7 +444,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$(f(n))^3=O(\\log^3 n)$ and $(g(n)+2)h(n)=O(1)\\cdot O(n)=O(n)$. Since $n$ dominates $\\log^3 n$ asymptotically, the sum is $O(n)$.</div><div class=\"ml-vi\">$(f(n))^3=O(\\log^3 n)$ và $(g(n)+2)h(n)=O(1)\\cdot O(n)=O(n)$. Vì $n$ trội hơn $\\log^3 n$ khi $n$ lớn, tổng là $O(n)$.</div>"
+          "explanation": "<div class=\"ml-en\">$(f(n))^3=O(\\log^3 n)$ and $(g(n)+2)h(n)=O(1)\\cdot O(n)=O(n)$. Since $n$ dominates $\\log^3 n$ asymptotically, the sum is $O(n)$.</div><div class=\"ml-vi\">$(f(n))^3=O(\\log^3 n)$ và $(g(n)+2)h(n)=O(1)\\cdot O(n)=O(n)$. Vì $n$ trội hơn $\\log^3 n$ khi $n$ lớn, tổng là $O(n)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q17.png"
         },
         {
           "kind": "MCQ",
@@ -454,7 +471,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Need $2^{n^2}\\cdot10^{-12}\\le1 \\Rightarrow n^2\\le\\log_2(10^{12})\\approx39.86 \\Rightarrow n\\le6.31$. Largest integer $n=6$ (check: $n=7$ gives $2^{49}\\cdot10^{-12}\\approx563$s, too slow).</div><div class=\"ml-vi\">Cần $2^{n^2}\\cdot10^{-12}\\le1 \\Rightarrow n^2\\le\\log_2(10^{12})\\approx39.86 \\Rightarrow n\\le6.31$. Số nguyên lớn nhất $n=6$ (kiểm: $n=7$ cho $2^{49}\\cdot10^{-12}\\approx563$s, quá chậm).</div>"
+          "explanation": "<div class=\"ml-en\">Need $2^{n^2}\\cdot10^{-12}\\le1 \\Rightarrow n^2\\le\\log_2(10^{12})\\approx39.86 \\Rightarrow n\\le6.31$. Largest integer $n=6$ (check: $n=7$ gives $2^{49}\\cdot10^{-12}\\approx563$s, too slow).</div><div class=\"ml-vi\">Cần $2^{n^2}\\cdot10^{-12}\\le1 \\Rightarrow n^2\\le\\log_2(10^{12})\\approx39.86 \\Rightarrow n\\le6.31$. Số nguyên lớn nhất $n=6$ (kiểm: $n=7$ cho $2^{49}\\cdot10^{-12}\\approx563$s, quá chậm).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q18.png"
         },
         {
           "kind": "MCQ",
@@ -480,7 +498,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$x_1=(15+4)\\bmod7=19\\bmod7=5$. $x_2=(25+4)\\bmod7=29\\bmod7=1$. $x_3=(5+4)\\bmod7=9\\bmod7=2$. $x_4=(10+4)\\bmod7=14\\bmod7=0$.</div><div class=\"ml-vi\">$x_1=(15+4)\\bmod7=19\\bmod7=5$. $x_2=(25+4)\\bmod7=29\\bmod7=1$. $x_3=(5+4)\\bmod7=9\\bmod7=2$. $x_4=(10+4)\\bmod7=14\\bmod7=0$.</div>"
+          "explanation": "<div class=\"ml-en\">$x_1=(15+4)\\bmod7=19\\bmod7=5$. $x_2=(25+4)\\bmod7=29\\bmod7=1$. $x_3=(5+4)\\bmod7=9\\bmod7=2$. $x_4=(10+4)\\bmod7=14\\bmod7=0$.</div><div class=\"ml-vi\">$x_1=(15+4)\\bmod7=19\\bmod7=5$. $x_2=(25+4)\\bmod7=29\\bmod7=1$. $x_3=(5+4)\\bmod7=9\\bmod7=2$. $x_4=(10+4)\\bmod7=14\\bmod7=0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q19.png"
         },
         {
           "kind": "MCQ",
@@ -506,7 +525,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$x_1=(3+4)\\bmod7=0$. $x_2=(0+4)\\bmod7=4$. $x_3=(12+4)\\bmod7=16\\bmod7=2$.</div><div class=\"ml-vi\">$x_1=(3+4)\\bmod7=0$. $x_2=(0+4)\\bmod7=4$. $x_3=(12+4)\\bmod7=16\\bmod7=2$.</div>"
+          "explanation": "<div class=\"ml-en\">$x_1=(3+4)\\bmod7=0$. $x_2=(0+4)\\bmod7=4$. $x_3=(12+4)\\bmod7=16\\bmod7=2$.</div><div class=\"ml-vi\">$x_1=(3+4)\\bmod7=0$. $x_2=(0+4)\\bmod7=4$. $x_3=(12+4)\\bmod7=16\\bmod7=2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q20.png"
         },
         {
           "kind": "MCQ",
@@ -529,7 +549,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$1025=5^2\\cdot41$, so $p=5,q=41$, $q-p=36$.</div><div class=\"ml-vi\">$1025=5^2\\cdot41$, nên $p=5,q=41$, $q-p=36$.</div>"
+          "explanation": "<div class=\"ml-en\">$1025=5^2\\cdot41$, so $p=5,q=41$, $q-p=36$.</div><div class=\"ml-vi\">$1025=5^2\\cdot41$, nên $p=5,q=41$, $q-p=36$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q21.png"
         },
         {
           "kind": "MCQ",
@@ -552,7 +573,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Take min exponent per prime: $2^{\\min(3,4)}\\cdot3^{\\min(2,0)}\\cdot5^{\\min(1,2)}\\cdot7^{\\min(1,0)}\\cdot11^{\\min(0,3)}=2^3\\cdot5=40$.</div><div class=\"ml-vi\">Lấy số mũ nhỏ nhất mỗi số nguyên tố: $2^{\\min(3,4)}\\cdot3^{\\min(2,0)}\\cdot5^{\\min(1,2)}\\cdot7^{\\min(1,0)}\\cdot11^{\\min(0,3)}=2^3\\cdot5=40$.</div>"
+          "explanation": "<div class=\"ml-en\">Take min exponent per prime: $2^{\\min(3,4)}\\cdot3^{\\min(2,0)}\\cdot5^{\\min(1,2)}\\cdot7^{\\min(1,0)}\\cdot11^{\\min(0,3)}=2^3\\cdot5=40$.</div><div class=\"ml-vi\">Lấy số mũ nhỏ nhất mỗi số nguyên tố: $2^{\\min(3,4)}\\cdot3^{\\min(2,0)}\\cdot5^{\\min(1,2)}\\cdot7^{\\min(1,0)}\\cdot11^{\\min(0,3)}=2^3\\cdot5=40$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q22.png"
         },
         {
           "kind": "MCQ",
@@ -575,7 +597,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Substitute each hex digit by 4 bits: $2{=}0010, B{=}1011, E{=}1110, 0{=}0000 \\Rightarrow 0010101111100000$. This matches none of (i) 3BE0, (ii) 2AE0, (iii) 2BF0 — all are near-miss decoys.</div><div class=\"ml-vi\">Thay mỗi chữ số hex bằng 4 bit: $2{=}0010, B{=}1011, E{=}1110, 0{=}0000 \\Rightarrow 0010101111100000$. Kết quả này không khớp với (i) 3BE0, (ii) 2AE0, (iii) 2BF0 — đều là phương án gây nhiễu gần giống.</div>"
+          "explanation": "<div class=\"ml-en\">Substitute each hex digit by 4 bits: $2{=}0010, B{=}1011, E{=}1110, 0{=}0000 \\Rightarrow 0010101111100000$. This matches none of (i) 3BE0, (ii) 2AE0, (iii) 2BF0 — all are near-miss decoys.</div><div class=\"ml-vi\">Thay mỗi chữ số hex bằng 4 bit: $2{=}0010, B{=}1011, E{=}1110, 0{=}0000 \\Rightarrow 0010101111100000$. Kết quả này không khớp với (i) 3BE0, (ii) 2AE0, (iii) 2BF0 — đều là phương án gây nhiễu gần giống.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q23.png"
         },
         {
           "kind": "MCQ",
@@ -601,7 +624,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$899=29\\cdot31$ and 941 is prime (not divisible by any prime $\\le\\sqrt{941}\\approx30.7$), so $\\gcd(899,941)=1$, which matches none of A-D.</div><div class=\"ml-vi\">$899=29\\cdot31$ và 941 là số nguyên tố (không chia hết cho số nguyên tố nào $\\le\\sqrt{941}\\approx30.7$), nên $\\gcd(899,941)=1$, không khớp phương án A-D nào.</div>"
+          "explanation": "<div class=\"ml-en\">$899=29\\cdot31$ and 941 is prime (not divisible by any prime $\\le\\sqrt{941}\\approx30.7$), so $\\gcd(899,941)=1$, which matches none of A-D.</div><div class=\"ml-vi\">$899=29\\cdot31$ và 941 là số nguyên tố (không chia hết cho số nguyên tố nào $\\le\\sqrt{941}\\approx30.7$), nên $\\gcd(899,941)=1$, không khớp phương án A-D nào.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q24.png"
         },
         {
           "kind": "MCQ",
@@ -624,7 +648,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$2+4+\\dots+2n=2(1+2+\\dots+n)=2\\cdot\\frac{n(n+1)}{2}=n(n+1)$.</div><div class=\"ml-vi\">$2+4+\\dots+2n=2(1+2+\\dots+n)=2\\cdot\\frac{n(n+1)}{2}=n(n+1)$.</div>"
+          "explanation": "<div class=\"ml-en\">$2+4+\\dots+2n=2(1+2+\\dots+n)=2\\cdot\\frac{n(n+1)}{2}=n(n+1)$.</div><div class=\"ml-vi\">$2+4+\\dots+2n=2(1+2+\\dots+n)=2\\cdot\\frac{n(n+1)}{2}=n(n+1)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q25.png"
         },
         {
           "kind": "MCQ",
@@ -650,7 +675,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f(1)=4+4-3=5$. $f(2)=25+10-3=32$. $f(3)=32^2+2\\cdot32-3=1024+64-3=1085$.</div><div class=\"ml-vi\">$f(1)=4+4-3=5$. $f(2)=25+10-3=32$. $f(3)=32^2+2\\cdot32-3=1024+64-3=1085$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(1)=4+4-3=5$. $f(2)=25+10-3=32$. $f(3)=32^2+2\\cdot32-3=1024+64-3=1085$.</div><div class=\"ml-vi\">$f(1)=4+4-3=5$. $f(2)=25+10-3=32$. $f(3)=32^2+2\\cdot32-3=1024+64-3=1085$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q26.png"
         },
         {
           "kind": "MCQ",
@@ -673,7 +699,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Any $(a,b)\\in S$ has $a=2x+3y,b=3x+2y$ for nonneg integers $x,y$. For (7,8): solving gives $x=2,y=1$ (valid). (6,7) and (8,9) fail the invariant $a+b\\equiv0\\pmod5$; (5,10) needs $y=-1$ (invalid).</div><div class=\"ml-vi\">Mọi $(a,b)\\in S$ có dạng $a=2x+3y,b=3x+2y$ với $x,y$ nguyên không âm. Với (7,8): giải ra $x=2,y=1$ (hợp lệ). (6,7) và (8,9) vi phạm bất biến $a+b\\equiv0\\pmod5$; (5,10) cần $y=-1$ (không hợp lệ).</div>"
+          "explanation": "<div class=\"ml-en\">Any $(a,b)\\in S$ has $a=2x+3y,b=3x+2y$ for nonneg integers $x,y$. For (7,8): solving gives $x=2,y=1$ (valid). (6,7) and (8,9) fail the invariant $a+b\\equiv0\\pmod5$; (5,10) needs $y=-1$ (invalid).</div><div class=\"ml-vi\">Mọi $(a,b)\\in S$ có dạng $a=2x+3y,b=3x+2y$ với $x,y$ nguyên không âm. Với (7,8): giải ra $x=2,y=1$ (hợp lệ). (6,7) và (8,9) vi phạm bất biến $a+b\\equiv0\\pmod5$; (5,10) cần $y=-1$ (không hợp lệ).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q27.png"
         },
         {
           "kind": "MCQ",
@@ -699,7 +726,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$T(9)=3\\cdot T(8)-2$. $T(8)=8$ (even, $\\ge3$). $T(9)=3\\cdot8-2=22$.</div><div class=\"ml-vi\">$T(9)=3\\cdot T(8)-2$. $T(8)=8$ (chẵn, $\\ge3$). $T(9)=3\\cdot8-2=22$.</div>"
+          "explanation": "<div class=\"ml-en\">$T(9)=3\\cdot T(8)-2$. $T(8)=8$ (even, $\\ge3$). $T(9)=3\\cdot8-2=22$.</div><div class=\"ml-vi\">$T(9)=3\\cdot T(8)-2$. $T(8)=8$ (chẵn, $\\ge3$). $T(9)=3\\cdot8-2=22$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q28.png"
         },
         {
           "kind": "MCQ",
@@ -725,7 +753,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f(1)=4,f(2)=8,f(3)=24,f(4)=96,f(5)=480$.</div><div class=\"ml-vi\">$f(1)=4,f(2)=8,f(3)=24,f(4)=96,f(5)=480$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(1)=4,f(2)=8,f(3)=24,f(4)=96,f(5)=480$.</div><div class=\"ml-vi\">$f(1)=4,f(2)=8,f(3)=24,f(4)=96,f(5)=480$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q29.png"
         },
         {
           "kind": "MCQ",
@@ -751,7 +780,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">An injective function requires domain size $\\le$ codomain size. Since $5>4$, no injective function exists — 0.</div><div class=\"ml-vi\">Hàm đơn ánh yêu cầu kích thước miền xác định $\\le$ miền giá trị. Vì $5>4$, không có hàm đơn ánh nào — bằng 0.</div>"
+          "explanation": "<div class=\"ml-en\">An injective function requires domain size $\\le$ codomain size. Since $5>4$, no injective function exists — 0.</div><div class=\"ml-vi\">Hàm đơn ánh yêu cầu kích thước miền xác định $\\le$ miền giá trị. Vì $5>4$, không có hàm đơn ánh nào — bằng 0.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q30.png"
         },
         {
           "kind": "MCQ",
@@ -777,7 +807,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">By inclusion-exclusion: $\\lfloor200/5\\rfloor+\\lfloor200/7\\rfloor-\\lfloor200/35\\rfloor=40+28-5=63$.</div><div class=\"ml-vi\">Theo bao hàm-loại trừ: $\\lfloor200/5\\rfloor+\\lfloor200/7\\rfloor-\\lfloor200/35\\rfloor=40+28-5=63$.</div>"
+          "explanation": "<div class=\"ml-en\">By inclusion-exclusion: $\\lfloor200/5\\rfloor+\\lfloor200/7\\rfloor-\\lfloor200/35\\rfloor=40+28-5=63$.</div><div class=\"ml-vi\">Theo bao hàm-loại trừ: $\\lfloor200/5\\rfloor+\\lfloor200/7\\rfloor-\\lfloor200/35\\rfloor=40+28-5=63$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q31.png"
         },
         {
           "kind": "MCQ",
@@ -803,7 +834,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$A=16000\\times(1.12)^{20}\\approx16000\\times9.6463\\approx154{,}341$.</div><div class=\"ml-vi\">$A=16000\\times(1.12)^{20}\\approx16000\\times9.6463\\approx154{,}341$.</div>"
+          "explanation": "<div class=\"ml-en\">$A=16000\\times(1.12)^{20}\\approx16000\\times9.6463\\approx154{,}341$.</div><div class=\"ml-vi\">$A=16000\\times(1.12)^{20}\\approx16000\\times9.6463\\approx154{,}341$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q32.png"
         },
         {
           "kind": "MCQ",
@@ -826,7 +858,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Divide-and-conquer recurrences split the problem into subproblems of size $n/b$: $f(n)=af(n/b)+g(n)$.</div><div class=\"ml-vi\">Hệ thức chia-để-trị chia bài toán thành các bài toán con kích thước $n/b$: $f(n)=af(n/b)+g(n)$.</div>"
+          "explanation": "<div class=\"ml-en\">Divide-and-conquer recurrences split the problem into subproblems of size $n/b$: $f(n)=af(n/b)+g(n)$.</div><div class=\"ml-vi\">Hệ thức chia-để-trị chia bài toán thành các bài toán con kích thước $n/b$: $f(n)=af(n/b)+g(n)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q33.png"
         },
         {
           "kind": "MCQ",
@@ -849,7 +882,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">By the Erdős–Gallai theorem, (i) 3,3,3,3,2 satisfies all conditions (graphical). (ii) 4,4,3,2,1 fails at $k=2$: $4+4=8 > 2\\cdot1+\\min(3,2)+\\min(2,2)+\\min(1,2)=2+2+2+1=7$ — not graphical.</div><div class=\"ml-vi\">Theo định lý Erdős–Gallai, (i) 3,3,3,3,2 thỏa mọi điều kiện (là dãy bậc đồ thị). (ii) 4,4,3,2,1 vi phạm tại $k=2$: $4+4=8 > 2\\cdot1+\\min(3,2)+\\min(2,2)+\\min(1,2)=2+2+2+1=7$ — không phải dãy bậc đồ thị.</div>"
+          "explanation": "<div class=\"ml-en\">By the Erdős–Gallai theorem, (i) 3,3,3,3,2 satisfies all conditions (graphical). (ii) 4,4,3,2,1 fails at $k=2$: $4+4=8 > 2\\cdot1+\\min(3,2)+\\min(2,2)+\\min(1,2)=2+2+2+1=7$ — not graphical.</div><div class=\"ml-vi\">Theo định lý Erdős–Gallai, (i) 3,3,3,3,2 thỏa mọi điều kiện (là dãy bậc đồ thị). (ii) 4,4,3,2,1 vi phạm tại $k=2$: $4+4=8 > 2\\cdot1+\\min(3,2)+\\min(2,2)+\\min(1,2)=2+2+2+1=7$ — không phải dãy bậc đồ thị.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q35.png"
         },
         {
           "kind": "MCQ",
@@ -875,7 +909,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The wheel graph $W_5$ has 5 outer (cycle) vertices plus 1 hub = 6 vertices, so its adjacency matrix is $6\\times6$.</div><div class=\"ml-vi\">Đồ thị bánh xe $W_5$ có 5 đỉnh vòng ngoài cộng 1 đỉnh trung tâm = 6 đỉnh, nên ma trận kề là $6\\times6$.</div>"
+          "explanation": "<div class=\"ml-en\">The wheel graph $W_5$ has 5 outer (cycle) vertices plus 1 hub = 6 vertices, so its adjacency matrix is $6\\times6$.</div><div class=\"ml-vi\">Đồ thị bánh xe $W_5$ có 5 đỉnh vòng ngoài cộng 1 đỉnh trung tâm = 6 đỉnh, nên ma trận kề là $6\\times6$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q36.png"
         },
         {
           "kind": "MCQ",
@@ -898,7 +933,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Column 5 has a single 1 in row D and column 6 has a single 1 in row B — each represents a loop (an edge with only one incident vertex). So G has loops (columns 1 and 3 also duplicate edge A-B, but the loop property is the unambiguous true statement).</div><div class=\"ml-vi\">Cột 5 chỉ có một số 1 ở hàng D và cột 6 chỉ có một số 1 ở hàng B — mỗi cột đó biểu diễn một khuyên (cạnh chỉ liên thuộc một đỉnh). Vậy G có khuyên (cột 1 và 3 cũng lặp lại cạnh A-B, nhưng tính chất có khuyên là phát biểu đúng rõ ràng nhất).</div>"
+          "explanation": "<div class=\"ml-en\">Column 5 has a single 1 in row D and column 6 has a single 1 in row B — each represents a loop (an edge with only one incident vertex). So G has loops (columns 1 and 3 also duplicate edge A-B, but the loop property is the unambiguous true statement).</div><div class=\"ml-vi\">Cột 5 chỉ có một số 1 ở hàng D và cột 6 chỉ có một số 1 ở hàng B — mỗi cột đó biểu diễn một khuyên (cạnh chỉ liên thuộc một đỉnh). Vậy G có khuyên (cột 1 và 3 cũng lặp lại cạnh A-B, nhưng tính chất có khuyên là phát biểu đúng rõ ràng nhất).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q37.png"
         },
         {
           "kind": "MCQ",
@@ -924,7 +960,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Columns 1-3 are all edge A-B (3 parallel edges), column 4 is edge A-C. Every length-2 walk B to C must go through A: $3\\times1=3$ walks.</div><div class=\"ml-vi\">Cột 1-3 đều là cạnh A-B (3 cạnh song song), cột 4 là cạnh A-C. Mọi đường đi độ dài 2 từ B đến C phải qua A: $3\\times1=3$ đường.</div>"
+          "explanation": "<div class=\"ml-en\">Columns 1-3 are all edge A-B (3 parallel edges), column 4 is edge A-C. Every length-2 walk B to C must go through A: $3\\times1=3$ walks.</div><div class=\"ml-vi\">Cột 1-3 đều là cạnh A-B (3 cạnh song song), cột 4 là cạnh A-C. Mọi đường đi độ dài 2 từ B đến C phải qua A: $3\\times1=3$ đường.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q38.png"
         },
         {
           "kind": "MCQ",
@@ -950,7 +987,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Compute $M^3_{B,C}$: $M^2=\\begin{pmatrix}5&2&4\\\\2&8&4\\\\4&4&8\\end{pmatrix}$, then $M^3_{B,C}=M^2_{B,A}M_{A,C}+M^2_{B,B}M_{B,C}+M^2_{B,C}M_{C,C}=2\\cdot0+8\\cdot2+4\\cdot2=24$.</div><div class=\"ml-vi\">Tính $M^3_{B,C}$: $M^2=\\begin{pmatrix}5&2&4\\\\2&8&4\\\\4&4&8\\end{pmatrix}$, rồi $M^3_{B,C}=M^2_{B,A}M_{A,C}+M^2_{B,B}M_{B,C}+M^2_{B,C}M_{C,C}=2\\cdot0+8\\cdot2+4\\cdot2=24$.</div>"
+          "explanation": "<div class=\"ml-en\">Compute $M^3_{B,C}$: $M^2=\\begin{pmatrix}5&2&4\\\\2&8&4\\\\4&4&8\\end{pmatrix}$, then $M^3_{B,C}=M^2_{B,A}M_{A,C}+M^2_{B,B}M_{B,C}+M^2_{B,C}M_{C,C}=2\\cdot0+8\\cdot2+4\\cdot2=24$.</div><div class=\"ml-vi\">Tính $M^3_{B,C}$: $M^2=\\begin{pmatrix}5&2&4\\\\2&8&4\\\\4&4&8\\end{pmatrix}$, rồi $M^3_{B,C}=M^2_{B,A}M_{A,C}+M^2_{B,B}M_{B,C}+M^2_{B,C}M_{C,C}=2\\cdot0+8\\cdot2+4\\cdot2=24$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q39.png"
         },
         {
           "kind": "MCQ",
@@ -973,7 +1011,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Every vertex of $K_n$ has degree $n-1$. An Euler circuit requires all degrees even, so $n-1$ even $\\Rightarrow n$ odd has an Euler circuit; when $n$ is even, $n-1$ is odd, so no Euler circuit exists.</div><div class=\"ml-vi\">Mọi đỉnh của $K_n$ có bậc $n-1$. Chu trình Euler cần mọi bậc chẵn, nên $n-1$ chẵn $\\Rightarrow n$ lẻ thì có chu trình Euler; khi $n$ chẵn, $n-1$ lẻ, nên không có chu trình Euler.</div>"
+          "explanation": "<div class=\"ml-en\">Every vertex of $K_n$ has degree $n-1$. An Euler circuit requires all degrees even, so $n-1$ even $\\Rightarrow n$ odd has an Euler circuit; when $n$ is even, $n-1$ is odd, so no Euler circuit exists.</div><div class=\"ml-vi\">Mọi đỉnh của $K_n$ có bậc $n-1$. Chu trình Euler cần mọi bậc chẵn, nên $n-1$ chẵn $\\Rightarrow n$ lẻ thì có chu trình Euler; khi $n$ chẵn, $n-1$ lẻ, nên không có chu trình Euler.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q40.png"
         },
         {
           "kind": "MCQ",
@@ -999,7 +1038,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Number of distinct Hamilton circuits in $K_n$ up to rotation/reversal is $(n-1)!/2$. For $n=4$: $3!/2=3$.</div><div class=\"ml-vi\">Số chu trình Hamilton phân biệt trong $K_n$ (tính theo xoay/đảo chiều) là $(n-1)!/2$. Với $n=4$: $3!/2=3$.</div>"
+          "explanation": "<div class=\"ml-en\">Number of distinct Hamilton circuits in $K_n$ up to rotation/reversal is $(n-1)!/2$. For $n=4$: $3!/2=3$.</div><div class=\"ml-vi\">Số chu trình Hamilton phân biệt trong $K_n$ (tính theo xoay/đảo chiều) là $(n-1)!/2$. Với $n=4$: $3!/2=3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q41.png"
         },
         {
           "kind": "MCQ",
@@ -1025,7 +1065,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Dijkstra from A gives dist(T2)=8 (direct edge), dist(M)=8+3=11, dist(B)=min(8+6, 11+2)=13 via A-T2-M-B (8+3+2=13).</div><div class=\"ml-vi\">Chạy Dijkstra từ A: dist(T2)=8 (cạnh trực tiếp), dist(M)=8+3=11, dist(B)=min(8+6, 11+2)=13 qua đường A-T2-M-B (8+3+2=13).</div>"
+          "explanation": "<div class=\"ml-en\">Dijkstra from A gives dist(T2)=8 (direct edge), dist(M)=8+3=11, dist(B)=min(8+6, 11+2)=13 via A-T2-M-B (8+3+2=13).</div><div class=\"ml-vi\">Chạy Dijkstra từ A: dist(T2)=8 (cạnh trực tiếp), dist(M)=8+3=11, dist(B)=min(8+6, 11+2)=13 qua đường A-T2-M-B (8+3+2=13).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q42.png"
         },
         {
           "kind": "MCQ",
@@ -1048,7 +1089,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">For a full $m$-ary tree with $i$ internal vertices, leaves $l=(m-1)i+1$. Here $101=2i+1\\Rightarrow i=50$. Total vertices $=i+l=50+101=151$.</div><div class=\"ml-vi\">Với cây $m$-phân đầy đủ có $i$ đỉnh trong, số lá $l=(m-1)i+1$. Ở đây $101=2i+1\\Rightarrow i=50$. Tổng số đỉnh $=i+l=50+101=151$.</div>"
+          "explanation": "<div class=\"ml-en\">For a full $m$-ary tree with $i$ internal vertices, leaves $l=(m-1)i+1$. Here $101=2i+1\\Rightarrow i=50$. Total vertices $=i+l=50+101=151$.</div><div class=\"ml-vi\">Với cây $m$-phân đầy đủ có $i$ đỉnh trong, số lá $l=(m-1)i+1$. Ở đây $101=2i+1\\Rightarrow i=50$. Tổng số đỉnh $=i+l=50+101=151$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q43.png"
         },
         {
           "kind": "MCQ",
@@ -1074,7 +1116,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">For a full binary tree, $n=2i+1$ where $i$ is the number of internal vertices, leaves $l=i+1$. $61=2i+1\\Rightarrow i=30$, so $l=31$.</div><div class=\"ml-vi\">Với cây nhị phân đầy đủ, $n=2i+1$ với $i$ là số đỉnh trong, số lá $l=i+1$. $61=2i+1\\Rightarrow i=30$, nên $l=31$.</div>"
+          "explanation": "<div class=\"ml-en\">For a full binary tree, $n=2i+1$ where $i$ is the number of internal vertices, leaves $l=i+1$. $61=2i+1\\Rightarrow i=30$, so $l=31$.</div><div class=\"ml-vi\">Với cây nhị phân đầy đủ, $n=2i+1$ với $i$ là số đỉnh trong, số lá $l=i+1$. $61=2i+1\\Rightarrow i=30$, nên $l=31$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q44.png"
         },
         {
           "kind": "MCQ",
@@ -1100,7 +1143,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Frequencies: a=2,b=5,c=4,d=2 (total 13). Huffman merges: (a+d)=4, then (4+c)=8, then (8+b)=13. Resulting code lengths: b=1,c=2,a=3,d=3. Total bits $=5\\cdot1+4\\cdot2+2\\cdot3+2\\cdot3=5+8+6+6=25$.</div><div class=\"ml-vi\">Tần suất: a=2,b=5,c=4,d=2 (tổng 13). Huffman gộp: (a+d)=4, rồi (4+c)=8, rồi (8+b)=13. Độ dài mã: b=1,c=2,a=3,d=3. Tổng bit $=5\\cdot1+4\\cdot2+2\\cdot3+2\\cdot3=5+8+6+6=25$.</div>"
+          "explanation": "<div class=\"ml-en\">Frequencies: a=2,b=5,c=4,d=2 (total 13). Huffman merges: (a+d)=4, then (4+c)=8, then (8+b)=13. Resulting code lengths: b=1,c=2,a=3,d=3. Total bits $=5\\cdot1+4\\cdot2+2\\cdot3+2\\cdot3=5+8+6+6=25$.</div><div class=\"ml-vi\">Tần suất: a=2,b=5,c=4,d=2 (tổng 13). Huffman gộp: (a+d)=4, rồi (4+c)=8, rồi (8+b)=13. Độ dài mã: b=1,c=2,a=3,d=3. Tổng bit $=5\\cdot1+4\\cdot2+2\\cdot3+2\\cdot3=5+8+6+6=25$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q45.png"
         },
         {
           "kind": "MCQ",
@@ -1126,7 +1170,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Tree: SHE(root) -L-> SELLS -L-> SEA -L-> BY, -R-> SEASHORE; SHE -R-> SHELLS -R-> THE. Searching CONCH: vs SHE (left, C<S), vs SELLS (left), vs SEA (left), vs BY (right, C>B) — BY has no right child, not found after 4 comparisons.</div><div class=\"ml-vi\">Cây: SHE(gốc) -Trái-> SELLS -Trái-> SEA -Trái-> BY, -Phải-> SEASHORE; SHE -Phải-> SHELLS -Phải-> THE. Tìm CONCH: so với SHE (trái, C<S), so với SELLS (trái), so với SEA (trái), so với BY (phải, C>B) — BY không có con phải, không tìm thấy sau 4 phép so sánh.</div>"
+          "explanation": "<div class=\"ml-en\">Tree: SHE(root) -L-> SELLS -L-> SEA -L-> BY, -R-> SEASHORE; SHE -R-> SHELLS -R-> THE. Searching CONCH: vs SHE (left, C<S), vs SELLS (left), vs SEA (left), vs BY (right, C>B) — BY has no right child, not found after 4 comparisons.</div><div class=\"ml-vi\">Cây: SHE(gốc) -Trái-> SELLS -Trái-> SEA -Trái-> BY, -Phải-> SEASHORE; SHE -Phải-> SHELLS -Phải-> THE. Tìm CONCH: so với SHE (trái, C<S), so với SELLS (trái), so với SEA (trái), so với BY (phải, C>B) — BY không có con phải, không tìm thấy sau 4 phép so sánh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q46.png"
         },
         {
           "kind": "MCQ",
@@ -1149,7 +1194,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$(x-y)\\to$ \"x y -\"; $(x-y)^2\\to$ \"x y - 2 $\\uparrow$\"; $(y+5)\\to$ \"y 5 +\"; $x(y+5)\\to$ \"x y 5 + *\"; sum $\\to$ \"x y - 2 $\\uparrow$ x y 5 + * +\".</div><div class=\"ml-vi\">$(x-y)\\to$ \"x y -\"; $(x-y)^2\\to$ \"x y - 2 $\\uparrow$\"; $(y+5)\\to$ \"y 5 +\"; $x(y+5)\\to$ \"x y 5 + *\"; tổng $\\to$ \"x y - 2 $\\uparrow$ x y 5 + * +\".</div>"
+          "explanation": "<div class=\"ml-en\">$(x-y)\\to$ \"x y -\"; $(x-y)^2\\to$ \"x y - 2 $\\uparrow$\"; $(y+5)\\to$ \"y 5 +\"; $x(y+5)\\to$ \"x y 5 + *\"; sum $\\to$ \"x y - 2 $\\uparrow$ x y 5 + * +\".</div><div class=\"ml-vi\">$(x-y)\\to$ \"x y -\"; $(x-y)^2\\to$ \"x y - 2 $\\uparrow$\"; $(y+5)\\to$ \"y 5 +\"; $x(y+5)\\to$ \"x y 5 + *\"; tổng $\\to$ \"x y - 2 $\\uparrow$ x y 5 + * +\".</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q47.png"
         },
         {
           "kind": "MCQ",
@@ -1172,7 +1218,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$(x+y)\\to$ \"+ x y\"; $(x+y)^3\\to$ \"$\\uparrow$ + x y 3\"; subtract 2 $\\to$ \"- $\\uparrow$ + x y 3 2\".</div><div class=\"ml-vi\">$(x+y)\\to$ \"+ x y\"; $(x+y)^3\\to$ \"$\\uparrow$ + x y 3\"; trừ 2 $\\to$ \"- $\\uparrow$ + x y 3 2\".</div>"
+          "explanation": "<div class=\"ml-en\">$(x+y)\\to$ \"+ x y\"; $(x+y)^3\\to$ \"$\\uparrow$ + x y 3\"; subtract 2 $\\to$ \"- $\\uparrow$ + x y 3 2\".</div><div class=\"ml-vi\">$(x+y)\\to$ \"+ x y\"; $(x+y)^3\\to$ \"$\\uparrow$ + x y 3\"; trừ 2 $\\to$ \"- $\\uparrow$ + x y 3 2\".</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q48.png"
         },
         {
           "kind": "MCQ",
@@ -1195,7 +1242,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$K_{2,2}$ is the 4-cycle. By the formula for complete bipartite graphs, the number of spanning trees is $m^{n-1}n^{m-1}=2^1\\cdot2^1=4$ (equivalently: removing any 1 of its 4 edges gives a spanning tree).</div><div class=\"ml-vi\">$K_{2,2}$ chính là chu trình 4 đỉnh. Theo công thức đồ thị lưỡng phân đầy đủ, số cây khung là $m^{n-1}n^{m-1}=2^1\\cdot2^1=4$ (tương đương: bỏ bất kỳ 1 trong 4 cạnh sẽ được một cây khung).</div>"
+          "explanation": "<div class=\"ml-en\">$K_{2,2}$ is the 4-cycle. By the formula for complete bipartite graphs, the number of spanning trees is $m^{n-1}n^{m-1}=2^1\\cdot2^1=4$ (equivalently: removing any 1 of its 4 edges gives a spanning tree).</div><div class=\"ml-vi\">$K_{2,2}$ chính là chu trình 4 đỉnh. Theo công thức đồ thị lưỡng phân đầy đủ, số cây khung là $m^{n-1}n^{m-1}=2^1\\cdot2^1=4$ (tương đương: bỏ bất kỳ 1 trong 4 cạnh sẽ được một cây khung).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q49.png"
         },
         {
           "kind": "MCQ",
@@ -1221,7 +1269,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Prim from a: edge1=ad(2). Frontier {ab=5,bd=3,dg=6,de=7,dh=8}: min=bd(3), edge2=bd. Frontier now has bc=4 as min: edge3=bc. Frontier now has cf=3 as min (unique): edge4=cf.</div><div class=\"ml-vi\">Prim từ a: cạnh1=ad(2). Biên {ab=5,bd=3,dg=6,de=7,dh=8}: nhỏ nhất=bd(3), cạnh2=bd. Biên lúc này có bc=4 nhỏ nhất: cạnh3=bc. Biên lúc này có cf=3 nhỏ nhất (duy nhất): cạnh4=cf.</div>"
+          "explanation": "<div class=\"ml-en\">Prim from a: edge1=ad(2). Frontier {ab=5,bd=3,dg=6,de=7,dh=8}: min=bd(3), edge2=bd. Frontier now has bc=4 as min: edge3=bc. Frontier now has cf=3 as min (unique): edge4=cf.</div><div class=\"ml-vi\">Prim từ a: cạnh1=ad(2). Biên {ab=5,bd=3,dg=6,de=7,dh=8}: nhỏ nhất=bd(3), cạnh2=bd. Biên lúc này có bc=4 nhỏ nhất: cạnh3=bc. Biên lúc này có cf=3 nhỏ nhất (duy nhất): cạnh4=cf.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D1/q50.png"
         }
       ]
     },
@@ -1264,7 +1313,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">\"No student ... has ... but can not ...\" means there is no x with $P(x)\\land\\neg Q(x)$, i.e. $\\neg\\exists x(P(x)\\land\\neg Q(x))\\equiv\\forall x(\\neg P(x)\\lor Q(x))\\equiv\\forall x(P(x)\\to Q(x))$.</div><div class=\"ml-vi\">\"Không có sinh viên nào ... nhưng lại không...\" nghĩa là không tồn tại x sao cho $P(x)\\land\\neg Q(x)$, tức $\\neg\\exists x(P(x)\\land\\neg Q(x))\\equiv\\forall x(\\neg P(x)\\lor Q(x))\\equiv\\forall x(P(x)\\to Q(x))$.</div>"
+          "explanation": "<div class=\"ml-en\">\"No student ... has ... but can not ...\" means there is no x with $P(x)\\land\\neg Q(x)$, i.e. $\\neg\\exists x(P(x)\\land\\neg Q(x))\\equiv\\forall x(\\neg P(x)\\lor Q(x))\\equiv\\forall x(P(x)\\to Q(x))$.</div><div class=\"ml-vi\">\"Không có sinh viên nào ... nhưng lại không...\" nghĩa là không tồn tại x sao cho $P(x)\\land\\neg Q(x)$, tức $\\neg\\exists x(P(x)\\land\\neg Q(x))\\equiv\\forall x(\\neg P(x)\\lor Q(x))\\equiv\\forall x(P(x)\\to Q(x))$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q1.png"
         },
         {
           "kind": "MCQ",
@@ -1290,7 +1340,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The trie node '00' has child 'i'=001 and a free sibling branch '000' that can extend further. '0001' is not a prefix of, and has no existing code as its prefix — valid. '111' is a prefix of s='1111' — invalid. '100' has a='10' as its prefix — invalid. '1' is a prefix of a, n, s — invalid.</div><div class=\"ml-vi\">Nút '00' trong cây tiền tố có nhánh con i=001 và nhánh còn trống '000' có thể mở rộng thêm. '0001' không phải tiền tố của mã nào đã dùng và không mã nào đã dùng là tiền tố của nó — hợp lệ. '111' là tiền tố của s=1111 — không hợp lệ. '100' có a=10 là tiền tố — không hợp lệ. '1' là tiền tố của a, n, s — không hợp lệ.</div>"
+          "explanation": "<div class=\"ml-en\">The trie node '00' has child 'i'=001 and a free sibling branch '000' that can extend further. '0001' is not a prefix of, and has no existing code as its prefix — valid. '111' is a prefix of s='1111' — invalid. '100' has a='10' as its prefix — invalid. '1' is a prefix of a, n, s — invalid.</div><div class=\"ml-vi\">Nút '00' trong cây tiền tố có nhánh con i=001 và nhánh còn trống '000' có thể mở rộng thêm. '0001' không phải tiền tố của mã nào đã dùng và không mã nào đã dùng là tiền tố của nó — hợp lệ. '111' là tiền tố của s=1111 — không hợp lệ. '100' có a=10 là tiền tố — không hợp lệ. '1' là tiền tố của a, n, s — không hợp lệ.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q2.png"
         },
         {
           "kind": "MCQ",
@@ -1313,7 +1364,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">X has 6 edges and degree sequence (2,3,2,3,2): the two degree-3 vertices ($v_2,v_4$) are non-adjacent and each connects to all three degree-2 vertices ($v_1,v_3,v_5$), which are pairwise non-adjacent -- exactly matches $K_{2,3}$'s bipartite structure. Y has 7 edges (not 6) and a degree-4 vertex ($u_2$), so it cannot be isomorphic to $K_{2,3}$ (which has exactly 6 edges, max degree 3).</div><div class=\"ml-vi\">X có 6 cạnh và dãy bậc (2,3,2,3,2): hai đỉnh bậc 3 ($v_2,v_4$) không kề nhau và mỗi đỉnh nối với cả ba đỉnh bậc 2 ($v_1,v_3,v_5$), các đỉnh bậc 2 cũng không kề nhau -- đúng khớp cấu trúc lưỡng phân của $K_{2,3}$. Y có 7 cạnh (không phải 6) và một đỉnh bậc 4 ($u_2$), nên không thể đẳng cấu với $K_{2,3}$ (chỉ có đúng 6 cạnh, bậc tối đa 3).</div>"
+          "explanation": "<div class=\"ml-en\">X has 6 edges and degree sequence (2,3,2,3,2): the two degree-3 vertices ($v_2,v_4$) are non-adjacent and each connects to all three degree-2 vertices ($v_1,v_3,v_5$), which are pairwise non-adjacent -- exactly matches $K_{2,3}$'s bipartite structure. Y has 7 edges (not 6) and a degree-4 vertex ($u_2$), so it cannot be isomorphic to $K_{2,3}$ (which has exactly 6 edges, max degree 3).</div><div class=\"ml-vi\">X có 6 cạnh và dãy bậc (2,3,2,3,2): hai đỉnh bậc 3 ($v_2,v_4$) không kề nhau và mỗi đỉnh nối với cả ba đỉnh bậc 2 ($v_1,v_3,v_5$), các đỉnh bậc 2 cũng không kề nhau -- đúng khớp cấu trúc lưỡng phân của $K_{2,3}$. Y có 7 cạnh (không phải 6) và một đỉnh bậc 4 ($u_2$), nên không thể đẳng cấu với $K_{2,3}$ (chỉ có đúng 6 cạnh, bậc tối đa 3).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q3.png"
         },
         {
           "kind": "MCQ",
@@ -1339,7 +1391,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$-29=5-2\\cdot17$, so $-29\\equiv5\\pmod{17}$. Checking others: $80\\equiv12$; $-122\\equiv14$; $103\\equiv1\\pmod{17}$.</div><div class=\"ml-vi\">$-29=5-2\\cdot17$, nên $-29\\equiv5\\pmod{17}$. Kiểm các đáp án khác: $80\\equiv12$; $-122\\equiv14$; $103\\equiv1\\pmod{17}$.</div>"
+          "explanation": "<div class=\"ml-en\">$-29=5-2\\cdot17$, so $-29\\equiv5\\pmod{17}$. Checking others: $80\\equiv12$; $-122\\equiv14$; $103\\equiv1\\pmod{17}$.</div><div class=\"ml-vi\">$-29=5-2\\cdot17$, nên $-29\\equiv5\\pmod{17}$. Kiểm các đáp án khác: $80\\equiv12$; $-122\\equiv14$; $103\\equiv1\\pmod{17}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q4.png"
         },
         {
           "kind": "MCQ",
@@ -1365,7 +1418,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$9^2=3^4$. The LCM takes the max exponent of each prime across both numbers: $2^7$, $3^4$, $5^2$ (all only in the 2nd number), $11^{\\max(1,2)}=11^2$, $13^3$, $17^2$ (only in the 1st). So LCM $=2^7\\cdot5^2\\cdot9^2\\cdot11^2\\cdot13^3\\cdot17^2$.</div><div class=\"ml-vi\">$9^2=3^4$. BCNN lấy số mũ lớn nhất mỗi số nguyên tố: $2^7$, $3^4$, $5^2$ (chỉ có ở số thứ 2), $11^{\\max(1,2)}=11^2$, $13^3$, $17^2$ (chỉ có ở số thứ 1). Vậy BCNN $=2^7\\cdot5^2\\cdot9^2\\cdot11^2\\cdot13^3\\cdot17^2$.</div>"
+          "explanation": "<div class=\"ml-en\">$9^2=3^4$. The LCM takes the max exponent of each prime across both numbers: $2^7$, $3^4$, $5^2$ (all only in the 2nd number), $11^{\\max(1,2)}=11^2$, $13^3$, $17^2$ (only in the 1st). So LCM $=2^7\\cdot5^2\\cdot9^2\\cdot11^2\\cdot13^3\\cdot17^2$.</div><div class=\"ml-vi\">$9^2=3^4$. BCNN lấy số mũ lớn nhất mỗi số nguyên tố: $2^7$, $3^4$, $5^2$ (chỉ có ở số thứ 2), $11^{\\max(1,2)}=11^2$, $13^3$, $17^2$ (chỉ có ở số thứ 1). Vậy BCNN $=2^7\\cdot5^2\\cdot9^2\\cdot11^2\\cdot13^3\\cdot17^2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q5.png"
         },
         {
           "kind": "MCQ",
@@ -1388,7 +1442,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Cumulative length after block $k$ is $k(k+1)/2$. Position 100 falls in block 14 (positions 92-105, since $13\\cdot14/2=91$, $14\\cdot15/2=105$); block 14 is even so $a_{100}=0$. Position 201 falls in block 20 (positions 191-210, since $19\\cdot20/2=190$, $20\\cdot21/2=210$); block 20 is even so $a_{201}=0$.</div><div class=\"ml-vi\">Tổng độ dài sau khối $k$ là $k(k+1)/2$. Vị trí 100 rơi vào khối 14 (vị trí 92-105, vì $13\\cdot14/2=91$, $14\\cdot15/2=105$); khối 14 chẵn nên $a_{100}=0$. Vị trí 201 rơi vào khối 20 (vị trí 191-210, vì $19\\cdot20/2=190$, $20\\cdot21/2=210$); khối 20 chẵn nên $a_{201}=0$.</div>"
+          "explanation": "<div class=\"ml-en\">Cumulative length after block $k$ is $k(k+1)/2$. Position 100 falls in block 14 (positions 92-105, since $13\\cdot14/2=91$, $14\\cdot15/2=105$); block 14 is even so $a_{100}=0$. Position 201 falls in block 20 (positions 191-210, since $19\\cdot20/2=190$, $20\\cdot21/2=210$); block 20 is even so $a_{201}=0$.</div><div class=\"ml-vi\">Tổng độ dài sau khối $k$ là $k(k+1)/2$. Vị trí 100 rơi vào khối 14 (vị trí 92-105, vì $13\\cdot14/2=91$, $14\\cdot15/2=105$); khối 14 chẵn nên $a_{100}=0$. Vị trí 201 rơi vào khối 20 (vị trí 191-210, vì $19\\cdot20/2=190$, $20\\cdot21/2=210$); khối 20 chẵn nên $a_{201}=0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q6.png"
         },
         {
           "kind": "MCQ",
@@ -1411,7 +1466,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">An Euler path exists iff the graph is connected with exactly 0 or 2 odd-degree vertices. $K_{3,2}$: the 2-side vertices have degree 3 (odd), the 3-side vertices degree 2 (even) -- exactly 2 odd vertices, so it has an Euler path. $K_{3,3}$: all 6 vertices have degree 3 (odd) -- too many. $W_3$ (hub + 3-cycle, 4 vertices): every vertex has degree 3 (odd), 4 odd vertices. $Q_3$ (cube graph, 8 vertices, 3-regular): all 8 vertices odd. None of (ii),(iii),(iv) qualify.</div><div class=\"ml-vi\">Đường đi Euler tồn tại khi đồ thị liên thông và có đúng 0 hoặc 2 đỉnh bậc lẻ. $K_{3,2}$: các đỉnh phía 2 có bậc 3 (lẻ), các đỉnh phía 3 có bậc 2 (chẵn) -- đúng 2 đỉnh lẻ, nên có đường đi Euler. $K_{3,3}$: cả 6 đỉnh đều bậc 3 (lẻ) -- quá nhiều. $W_3$ (trục + chu trình 3 đỉnh, 4 đỉnh): mọi đỉnh đều bậc 3 (lẻ), 4 đỉnh lẻ. $Q_3$ (đồ thị lập phương, 8 đỉnh, 3-đều): cả 8 đỉnh đều lẻ. Không (ii),(iii),(iv) nào thỏa.</div>"
+          "explanation": "<div class=\"ml-en\">An Euler path exists iff the graph is connected with exactly 0 or 2 odd-degree vertices. $K_{3,2}$: the 2-side vertices have degree 3 (odd), the 3-side vertices degree 2 (even) -- exactly 2 odd vertices, so it has an Euler path. $K_{3,3}$: all 6 vertices have degree 3 (odd) -- too many. $W_3$ (hub + 3-cycle, 4 vertices): every vertex has degree 3 (odd), 4 odd vertices. $Q_3$ (cube graph, 8 vertices, 3-regular): all 8 vertices odd. None of (ii),(iii),(iv) qualify.</div><div class=\"ml-vi\">Đường đi Euler tồn tại khi đồ thị liên thông và có đúng 0 hoặc 2 đỉnh bậc lẻ. $K_{3,2}$: các đỉnh phía 2 có bậc 3 (lẻ), các đỉnh phía 3 có bậc 2 (chẵn) -- đúng 2 đỉnh lẻ, nên có đường đi Euler. $K_{3,3}$: cả 6 đỉnh đều bậc 3 (lẻ) -- quá nhiều. $W_3$ (trục + chu trình 3 đỉnh, 4 đỉnh): mọi đỉnh đều bậc 3 (lẻ), 4 đỉnh lẻ. $Q_3$ (đồ thị lập phương, 8 đỉnh, 3-đều): cả 8 đỉnh đều lẻ. Không (ii),(iii),(iv) nào thỏa.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q7.png"
         },
         {
           "kind": "MCQ",
@@ -1431,7 +1487,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">If $x>0$ and $y>0$ then $y\\neq0$ and dividing two positive numbers always gives a positive result, so $x/y>0$ always holds -- the implication is true for every $x,y$, making the whole statement True.</div><div class=\"ml-vi\">Nếu $x>0$ và $y>0$ thì $y\\neq0$ và chia hai số dương luôn cho kết quả dương, nên $x/y>0$ luôn đúng -- phép kéo theo đúng với mọi $x,y$, nên mệnh đề Đúng.</div>"
+          "explanation": "<div class=\"ml-en\">If $x>0$ and $y>0$ then $y\\neq0$ and dividing two positive numbers always gives a positive result, so $x/y>0$ always holds -- the implication is true for every $x,y$, making the whole statement True.</div><div class=\"ml-vi\">Nếu $x>0$ và $y>0$ thì $y\\neq0$ và chia hai số dương luôn cho kết quả dương, nên $x/y>0$ luôn đúng -- phép kéo theo đúng với mọi $x,y$, nên mệnh đề Đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q8.png"
         },
         {
           "kind": "MCQ",
@@ -1457,7 +1514,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(A) tổng=11 lẻ, không thể là dãy bậc đồ thị. (B) và (D) đều có bậc 5 trong đồ thị 5 đỉnh, nhưng bậc tối đa có thể là $n-1=4$ -- không thể. (C) 4,4,2,2,2 (tổng=14) khả thi: hai đỉnh bậc 4 nối với nhau và với cả ba đỉnh bậc 2.</div><div class=\"ml-vi\">(A) tổng=11 lẻ, không thể là dãy bậc đồ thị. (B) và (D) đều có bậc 5 trong đồ thị 5 đỉnh, nhưng bậc tối đa có thể là $n-1=4$ -- không thể. (C) 4,4,2,2,2 (tổng=14) khả thi: hai đỉnh bậc 4 nối với nhau và với cả ba đỉnh bậc 2.</div>"
+          "explanation": "<div class=\"ml-en\">(A) tổng=11 lẻ, không thể là dãy bậc đồ thị. (B) và (D) đều có bậc 5 trong đồ thị 5 đỉnh, nhưng bậc tối đa có thể là $n-1=4$ -- không thể. (C) 4,4,2,2,2 (tổng=14) khả thi: hai đỉnh bậc 4 nối với nhau và với cả ba đỉnh bậc 2.</div><div class=\"ml-vi\">(A) tổng=11 lẻ, không thể là dãy bậc đồ thị. (B) và (D) đều có bậc 5 trong đồ thị 5 đỉnh, nhưng bậc tối đa có thể là $n-1=4$ -- không thể. (C) 4,4,2,2,2 (tổng=14) khả thi: hai đỉnh bậc 4 nối với nhau và với cả ba đỉnh bậc 2.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q9.png"
         },
         {
           "kind": "MCQ",
@@ -1483,7 +1541,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">A tree with $n$ vertices always has exactly $n-1$ edges: $10000-1=9999$.</div><div class=\"ml-vi\">Một cây có $n$ đỉnh luôn có đúng $n-1$ cạnh: $10000-1=9999$.</div>"
+          "explanation": "<div class=\"ml-en\">A tree with $n$ vertices always has exactly $n-1$ edges: $10000-1=9999$.</div><div class=\"ml-vi\">Một cây có $n$ đỉnh luôn có đúng $n-1$ cạnh: $10000-1=9999$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q10.png"
         },
         {
           "kind": "MCQ",
@@ -1509,7 +1568,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Integers not divisible by 3 split into residue classes 1 and 2 mod 3, so both 1 and 2 must be basis elements. Adding or subtracting 3 preserves the residue class mod 3 and both directions are needed to reach every positive AND negative integer in each class. Only '1,2 $\\in$ S; a+3, a-3 $\\in$ S' generates the full set.</div><div class=\"ml-vi\">Các số nguyên không chia hết cho 3 chia thành 2 lớp dư 1 và 2 theo mod 3, nên cả 1 và 2 đều phải là phần tử cơ sở. Cộng/trừ 3 giữ nguyên lớp dư mod 3 và cần cả hai chiều để tới được mọi số nguyên dương LẪN âm trong mỗi lớp. Chỉ có '1,2 $\\in$ S; a+3, a-3 $\\in$ S' sinh ra đủ tập hợp.</div>"
+          "explanation": "<div class=\"ml-en\">Integers not divisible by 3 split into residue classes 1 and 2 mod 3, so both 1 and 2 must be basis elements. Adding or subtracting 3 preserves the residue class mod 3 and both directions are needed to reach every positive AND negative integer in each class. Only '1,2 $\\in$ S; a+3, a-3 $\\in$ S' generates the full set.</div><div class=\"ml-vi\">Các số nguyên không chia hết cho 3 chia thành 2 lớp dư 1 và 2 theo mod 3, nên cả 1 và 2 đều phải là phần tử cơ sở. Cộng/trừ 3 giữ nguyên lớp dư mod 3 và cần cả hai chiều để tới được mọi số nguyên dương LẪN âm trong mỗi lớp. Chỉ có '1,2 $\\in$ S; a+3, a-3 $\\in$ S' sinh ra đủ tập hợp.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q11.png"
         },
         {
           "kind": "MCQ",
@@ -1532,7 +1592,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$P(x,y)$ simplifies to $y=0$ (independent of x). $P(1,1)$: $y=1\\neq0$, false. $\\forall x\\exists y\\,P(x,y)$: for every x, choosing $y=0$ makes it true -- this is true. $\\forall y\\exists x\\,P(x,y)$: fails for any $y\\neq0$ since no x can fix it. $\\forall x\\forall y\\,P(x,y)$: fails whenever $y\\neq0$.</div><div class=\"ml-vi\">$P(x,y)$ rút gọn thành $y=0$ (không phụ thuộc x). $P(1,1)$: $y=1\\neq0$, sai. $\\forall x\\exists y\\,P(x,y)$: với mỗi x, chọn $y=0$ sẽ đúng -- mệnh đề này đúng. $\\forall y\\exists x\\,P(x,y)$: sai với mọi $y\\neq0$ vì không x nào sửa được. $\\forall x\\forall y\\,P(x,y)$: sai khi $y\\neq0$.</div>"
+          "explanation": "<div class=\"ml-en\">$P(x,y)$ simplifies to $y=0$ (independent of x). $P(1,1)$: $y=1\\neq0$, false. $\\forall x\\exists y\\,P(x,y)$: for every x, choosing $y=0$ makes it true -- this is true. $\\forall y\\exists x\\,P(x,y)$: fails for any $y\\neq0$ since no x can fix it. $\\forall x\\forall y\\,P(x,y)$: fails whenever $y\\neq0$.</div><div class=\"ml-vi\">$P(x,y)$ rút gọn thành $y=0$ (không phụ thuộc x). $P(1,1)$: $y=1\\neq0$, sai. $\\forall x\\exists y\\,P(x,y)$: với mỗi x, chọn $y=0$ sẽ đúng -- mệnh đề này đúng. $\\forall y\\exists x\\,P(x,y)$: sai với mọi $y\\neq0$ vì không x nào sửa được. $\\forall x\\forall y\\,P(x,y)$: sai khi $y\\neq0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q12.png"
         },
         {
           "kind": "MCQ",
@@ -1558,7 +1619,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Gán bit theo từng vị trí 1..10: 1,2,5,7,8,10 có mặt (bit 1), còn lại 0: positions 1-10 = 1,1,0,0,1,0,1,1,0,1 $\\Rightarrow$ 1100101101.</div><div class=\"ml-vi\">Gán bit theo từng vị trí 1..10: 1,2,5,7,8,10 có mặt (bit 1), còn lại 0: vị trí 1-10 = 1,1,0,0,1,0,1,1,0,1 $\\Rightarrow$ 1100101101.</div>"
+          "explanation": "<div class=\"ml-en\">Gán bit theo từng vị trí 1..10: 1,2,5,7,8,10 có mặt (bit 1), còn lại 0: positions 1-10 = 1,1,0,0,1,0,1,1,0,1 $\\Rightarrow$ 1100101101.</div><div class=\"ml-vi\">Gán bit theo từng vị trí 1..10: 1,2,5,7,8,10 có mặt (bit 1), còn lại 0: vị trí 1-10 = 1,1,0,0,1,0,1,1,0,1 $\\Rightarrow$ 1100101101.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q13.png"
         },
         {
           "kind": "MCQ",
@@ -1584,7 +1646,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$3\\,2\\,*=6$; $6\\,2\\uparrow=36$; $5\\,3\\,-=2$; $8\\,4\\,/=2$; then $2*2=4$; finally $36-4=32$.</div><div class=\"ml-vi\">$3\\,2\\,*=6$; $6\\,2\\uparrow=36$; $5\\,3\\,-=2$; $8\\,4\\,/=2$; rồi $2*2=4$; cuối cùng $36-4=32$.</div>"
+          "explanation": "<div class=\"ml-en\">$3\\,2\\,*=6$; $6\\,2\\uparrow=36$; $5\\,3\\,-=2$; $8\\,4\\,/=2$; then $2*2=4$; finally $36-4=32$.</div><div class=\"ml-vi\">$3\\,2\\,*=6$; $6\\,2\\uparrow=36$; $5\\,3\\,-=2$; $8\\,4\\,/=2$; rồi $2*2=4$; cuối cùng $36-4=32$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q14.png"
         },
         {
           "kind": "MCQ",
@@ -1610,7 +1673,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Generalized inorder (first subtree, then root, then remaining subtrees): traversal(b)=a,b,c,f,e,g; then d; then traversal(h)=i,h,j,l,k,m,n,o,p. Full order: a,b,c,f,e,g,d,... -- d is the 7th element.</div><div class=\"ml-vi\">Duyệt trung tự tổng quát (cây con đầu tiên, rồi gốc, rồi các cây con còn lại): traversal(b)=a,b,c,f,e,g; rồi d; rồi traversal(h)=i,h,j,l,k,m,n,o,p. Thứ tự đầy đủ: a,b,c,f,e,g,d,... -- d là phần tử thứ 7.</div>"
+          "explanation": "<div class=\"ml-en\">Generalized inorder (first subtree, then root, then remaining subtrees): traversal(b)=a,b,c,f,e,g; then d; then traversal(h)=i,h,j,l,k,m,n,o,p. Full order: a,b,c,f,e,g,d,... -- d is the 7th element.</div><div class=\"ml-vi\">Duyệt trung tự tổng quát (cây con đầu tiên, rồi gốc, rồi các cây con còn lại): traversal(b)=a,b,c,f,e,g; rồi d; rồi traversal(h)=i,h,j,l,k,m,n,o,p. Thứ tự đầy đủ: a,b,c,f,e,g,d,... -- d là phần tử thứ 7.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q15.png"
         },
         {
           "kind": "MCQ",
@@ -1636,7 +1700,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$X$ has 3 distinct elements ($|X|=3$). $Y=\\{y,\\{z,z\\},y\\}=\\{y,\\{z\\}\\}$ after removing set-duplicates ($\\{z,z\\}=\\{z\\}$, repeated $y$ counted once), so $|Y|=2$. Number of functions from $Y$ to $X$ is $|X|^{|Y|}=3^2=9$.</div><div class=\"ml-vi\">$X$ có 3 phần tử phân biệt ($|X|=3$). $Y=\\{y,\\{z,z\\},y\\}=\\{y,\\{z\\}\\}$ sau khi bỏ trùng lặp trong tập hợp ($\\{z,z\\}=\\{z\\}$, $y$ lặp chỉ tính 1 lần), nên $|Y|=2$. Số hàm từ $Y$ đến $X$ là $|X|^{|Y|}=3^2=9$.</div>"
+          "explanation": "<div class=\"ml-en\">$X$ has 3 distinct elements ($|X|=3$). $Y=\\{y,\\{z,z\\},y\\}=\\{y,\\{z\\}\\}$ after removing set-duplicates ($\\{z,z\\}=\\{z\\}$, repeated $y$ counted once), so $|Y|=2$. Number of functions from $Y$ to $X$ is $|X|^{|Y|}=3^2=9$.</div><div class=\"ml-vi\">$X$ có 3 phần tử phân biệt ($|X|=3$). $Y=\\{y,\\{z,z\\},y\\}=\\{y,\\{z\\}\\}$ sau khi bỏ trùng lặp trong tập hợp ($\\{z,z\\}=\\{z\\}$, $y$ lặp chỉ tính 1 lần), nên $|Y|=2$. Số hàm từ $Y$ đến $X$ là $|X|^{|Y|}=3^2=9$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q16.png"
         },
         {
           "kind": "MCQ",
@@ -1659,7 +1724,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Level0: a. Level1 (a's neighbors b,c,d, alphabetical): b,c,d. Level2 (new neighbors of b,c,d): c gives e, d gives f,g -- alphabetical: e,f,g. Level3 (new neighbor of g): h. Full order: a,b,c,d,e,f,g,h.</div><div class=\"ml-vi\">Mức0: a. Mức1 (láng giềng của a là b,c,d, theo abc): b,c,d. Mức2 (láng giềng mới của b,c,d): c cho e, d cho f,g -- theo abc: e,f,g. Mức3 (láng giềng mới của g): h. Thứ tự đầy đủ: a,b,c,d,e,f,g,h.</div>"
+          "explanation": "<div class=\"ml-en\">Level0: a. Level1 (a's neighbors b,c,d, alphabetical): b,c,d. Level2 (new neighbors of b,c,d): c gives e, d gives f,g -- alphabetical: e,f,g. Level3 (new neighbor of g): h. Full order: a,b,c,d,e,f,g,h.</div><div class=\"ml-vi\">Mức0: a. Mức1 (láng giềng của a là b,c,d, theo abc): b,c,d. Mức2 (láng giềng mới của b,c,d): c cho e, d cho f,g -- theo abc: e,f,g. Mức3 (láng giềng mới của g): h. Thứ tự đầy đủ: a,b,c,d,e,f,g,h.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q17.png"
         },
         {
           "kind": "MCQ",
@@ -1682,7 +1748,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">(i) $f(x)=2x^3+x^2+2x+1$ is a degree-3 polynomial, $\\Theta(x^3)\\subset O(x^3)$. (ii) $g(x)\\approx x^2\\log x$ grows slower than $x^3$, so it is also $O(x^3)$. (iii) $h(x)=x^4+2x$ grows like $x^4$, which is NOT $O(x^3)$. So exactly 2 functions qualify.</div><div class=\"ml-vi\">(i) $f(x)=2x^3+x^2+2x+1$ là đa thức bậc 3, $\\Theta(x^3)\\subset O(x^3)$. (ii) $g(x)\\approx x^2\\log x$ tăng chậm hơn $x^3$, nên cũng là $O(x^3)$. (iii) $h(x)=x^4+2x$ tăng như $x^4$, KHÔNG phải $O(x^3)$. Vậy đúng 2 hàm thỏa.</div>"
+          "explanation": "<div class=\"ml-en\">(i) $f(x)=2x^3+x^2+2x+1$ is a degree-3 polynomial, $\\Theta(x^3)\\subset O(x^3)$. (ii) $g(x)\\approx x^2\\log x$ grows slower than $x^3$, so it is also $O(x^3)$. (iii) $h(x)=x^4+2x$ grows like $x^4$, which is NOT $O(x^3)$. So exactly 2 functions qualify.</div><div class=\"ml-vi\">(i) $f(x)=2x^3+x^2+2x+1$ là đa thức bậc 3, $\\Theta(x^3)\\subset O(x^3)$. (ii) $g(x)\\approx x^2\\log x$ tăng chậm hơn $x^3$, nên cũng là $O(x^3)$. (iii) $h(x)=x^4+2x$ tăng như $x^4$, KHÔNG phải $O(x^3)$. Vậy đúng 2 hàm thỏa.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q18.png"
         },
         {
           "kind": "MCQ",
@@ -1708,7 +1775,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Number of unordered pairs of teams is $\\binom{20}{2}=190$, and each pair plays twice: $190\\times2=380$.</div><div class=\"ml-vi\">Số cặp đội không thứ tự là $\\binom{20}{2}=190$, mỗi cặp đấu 2 lần: $190\\times2=380$.</div>"
+          "explanation": "<div class=\"ml-en\">Number of unordered pairs of teams is $\\binom{20}{2}=190$, and each pair plays twice: $190\\times2=380$.</div><div class=\"ml-vi\">Số cặp đội không thứ tự là $\\binom{20}{2}=190$, mỗi cặp đấu 2 lần: $190\\times2=380$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q19.png"
         },
         {
           "kind": "MCQ",
@@ -1734,7 +1802,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">(M): if $x\\ge1$ then $x^2\\ge1$ always holds -- True. (N): requires $x\\ge1$ to hold for ALL x, false at e.g. $x=0$ -- False. (P): requires $x\\ge1$ or $x^2\\ge1$ for all x, but at $x=0$ both fail (0<1 and $0^2<1$) -- False. Only (M) is True.</div><div class=\"ml-vi\">(M): nếu $x\\ge1$ thì $x^2\\ge1$ luôn đúng -- Đúng. (N): yêu cầu $x\\ge1$ đúng với MỌI x, sai tại vd $x=0$ -- Sai. (P): yêu cầu $x\\ge1$ hoặc $x^2\\ge1$ với mọi x, nhưng tại $x=0$ cả hai đều sai (0<1 và $0^2<1$) -- Sai. Chỉ (M) đúng.</div>"
+          "explanation": "<div class=\"ml-en\">(M): if $x\\ge1$ then $x^2\\ge1$ always holds -- True. (N): requires $x\\ge1$ to hold for ALL x, false at e.g. $x=0$ -- False. (P): requires $x\\ge1$ or $x^2\\ge1$ for all x, but at $x=0$ both fail (0<1 and $0^2<1$) -- False. Only (M) is True.</div><div class=\"ml-vi\">(M): nếu $x\\ge1$ thì $x^2\\ge1$ luôn đúng -- Đúng. (N): yêu cầu $x\\ge1$ đúng với MỌI x, sai tại vd $x=0$ -- Sai. (P): yêu cầu $x\\ge1$ hoặc $x^2\\ge1$ với mọi x, nhưng tại $x=0$ cả hai đều sai (0<1 và $0^2<1$) -- Sai. Chỉ (M) đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q20.png"
         },
         {
           "kind": "MCQ",
@@ -1757,7 +1826,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Every $(a,b)\\in S$ has $a=2x+3y,b=3x+2y$ for nonnegative integers $x,y$. For (10,5): solving gives $x=-1$ (invalid) -- not in S. (10,10): $x=y=2$ (valid). (10,15): $x=5,y=0$ (valid). (5,5): $x=y=1$ (valid).</div><div class=\"ml-vi\">Mọi $(a,b)\\in S$ có dạng $a=2x+3y,b=3x+2y$ với $x,y$ nguyên không âm. Với (10,5): giải ra $x=-1$ (không hợp lệ) -- không thuộc S. (10,10): $x=y=2$ (hợp lệ). (10,15): $x=5,y=0$ (hợp lệ). (5,5): $x=y=1$ (hợp lệ).</div>"
+          "explanation": "<div class=\"ml-en\">Every $(a,b)\\in S$ has $a=2x+3y,b=3x+2y$ for nonnegative integers $x,y$. For (10,5): solving gives $x=-1$ (invalid) -- not in S. (10,10): $x=y=2$ (valid). (10,15): $x=5,y=0$ (valid). (5,5): $x=y=1$ (valid).</div><div class=\"ml-vi\">Mọi $(a,b)\\in S$ có dạng $a=2x+3y,b=3x+2y$ với $x,y$ nguyên không âm. Với (10,5): giải ra $x=-1$ (không hợp lệ) -- không thuộc S. (10,10): $x=y=2$ (hợp lệ). (10,15): $x=5,y=0$ (hợp lệ). (5,5): $x=y=1$ (hợp lệ).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q21.png"
         },
         {
           "kind": "MCQ",
@@ -1783,7 +1853,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$(204)_5=2\\cdot25+0\\cdot5+4=54$ in decimal. $54=32+16+4+2\\Rightarrow(110110)_2$.</div><div class=\"ml-vi\">$(204)_5=2\\cdot25+0\\cdot5+4=54$ ở hệ thập phân. $54=32+16+4+2\\Rightarrow(110110)_2$.</div>"
+          "explanation": "<div class=\"ml-en\">$(204)_5=2\\cdot25+0\\cdot5+4=54$ in decimal. $54=32+16+4+2\\Rightarrow(110110)_2$.</div><div class=\"ml-vi\">$(204)_5=2\\cdot25+0\\cdot5+4=54$ ở hệ thập phân. $54=32+16+4+2\\Rightarrow(110110)_2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q22.png"
         },
         {
           "kind": "MCQ",
@@ -1806,7 +1877,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$i=1,j=8$. Div.1: $m=4,a_4=7,x=6<7\\Rightarrow j=4$, sublist $[1,4]=\\{2,4,5,7\\}$. Div.2: $m=2,a_2=4,x=6>4\\Rightarrow i=3$, sublist $[3,4]=\\{5,7\\}$. Div.3: $m=3,a_3=5,x=6>5\\Rightarrow i=4$, sublist $[4,4]=\\{7\\}$.</div><div class=\"ml-vi\">$i=1,j=8$. Lần 1: $m=4,a_4=7,x=6<7\\Rightarrow j=4$, danh sách $[1,4]=\\{2,4,5,7\\}$. Lần 2: $m=2,a_2=4,x=6>4\\Rightarrow i=3$, danh sách $[3,4]=\\{5,7\\}$. Lần 3: $m=3,a_3=5,x=6>5\\Rightarrow i=4$, danh sách $[4,4]=\\{7\\}$.</div>"
+          "explanation": "<div class=\"ml-en\">$i=1,j=8$. Div.1: $m=4,a_4=7,x=6<7\\Rightarrow j=4$, sublist $[1,4]=\\{2,4,5,7\\}$. Div.2: $m=2,a_2=4,x=6>4\\Rightarrow i=3$, sublist $[3,4]=\\{5,7\\}$. Div.3: $m=3,a_3=5,x=6>5\\Rightarrow i=4$, sublist $[4,4]=\\{7\\}$.</div><div class=\"ml-vi\">$i=1,j=8$. Lần 1: $m=4,a_4=7,x=6<7\\Rightarrow j=4$, danh sách $[1,4]=\\{2,4,5,7\\}$. Lần 2: $m=2,a_2=4,x=6>4\\Rightarrow i=3$, danh sách $[3,4]=\\{5,7\\}$. Lần 3: $m=3,a_3=5,x=6>5\\Rightarrow i=4$, danh sách $[4,4]=\\{7\\}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q23.png"
         },
         {
           "kind": "MCQ",
@@ -1832,7 +1904,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Maximum possible edges among 10 vertices is $\\binom{10}{2}=45$. $G'$ has the edges $G$ doesn't: $45-20=25$.</div><div class=\"ml-vi\">Số cạnh tối đa có thể có giữa 10 đỉnh là $\\binom{10}{2}=45$. $G'$ có các cạnh mà $G$ không có: $45-20=25$.</div>"
+          "explanation": "<div class=\"ml-en\">Maximum possible edges among 10 vertices is $\\binom{10}{2}=45$. $G'$ has the edges $G$ doesn't: $45-20=25$.</div><div class=\"ml-vi\">Số cạnh tối đa có thể có giữa 10 đỉnh là $\\binom{10}{2}=45$. $G'$ có các cạnh mà $G$ không có: $45-20=25$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q24.png"
         },
         {
           "kind": "MCQ",
@@ -1858,7 +1931,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f(1)=0$, and every subsequent term multiplies by $n$: $f(2)=0\\cdot2=0$, $f(3)=0$, $f(4)=0$, $f(5)=0$. The zero propagates through every multiplication.</div><div class=\"ml-vi\">$f(1)=0$, và mọi số hạng sau đều nhân thêm $n$: $f(2)=0\\cdot2=0$, $f(3)=0$, $f(4)=0$, $f(5)=0$. Số 0 lan truyền qua mọi phép nhân.</div>"
+          "explanation": "<div class=\"ml-en\">$f(1)=0$, and every subsequent term multiplies by $n$: $f(2)=0\\cdot2=0$, $f(3)=0$, $f(4)=0$, $f(5)=0$. The zero propagates through every multiplication.</div><div class=\"ml-vi\">$f(1)=0$, và mọi số hạng sau đều nhân thêm $n$: $f(2)=0\\cdot2=0$, $f(3)=0$, $f(4)=0$, $f(5)=0$. Số 0 lan truyền qua mọi phép nhân.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q25.png"
         },
         {
           "kind": "MCQ",
@@ -1881,7 +1955,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$326700000=100000\\times3267=(2^5\\cdot5^5)\\times(3^3\\cdot11^2)$. Sum of exponents: $5+5+3+2=15$.</div><div class=\"ml-vi\">$326700000=100000\\times3267=(2^5\\cdot5^5)\\times(3^3\\cdot11^2)$. Tổng số mũ: $5+5+3+2=15$.</div>"
+          "explanation": "<div class=\"ml-en\">$326700000=100000\\times3267=(2^5\\cdot5^5)\\times(3^3\\cdot11^2)$. Sum of exponents: $5+5+3+2=15$.</div><div class=\"ml-vi\">$326700000=100000\\times3267=(2^5\\cdot5^5)\\times(3^3\\cdot11^2)$. Tổng số mũ: $5+5+3+2=15$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q26.png"
         },
         {
           "kind": "MCQ",
@@ -1904,7 +1979,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">\"...and Italy when I have...\" means: whenever r holds, both p and q happen -- $r\\to(p\\land q)$.</div><div class=\"ml-vi\">\"...và Ý khi tôi có...\" nghĩa là: khi nào r đúng thì cả p và q đều xảy ra -- $r\\to(p\\land q)$.</div>"
+          "explanation": "<div class=\"ml-en\">\"...and Italy when I have...\" means: whenever r holds, both p and q happen -- $r\\to(p\\land q)$.</div><div class=\"ml-vi\">\"...và Ý khi tôi có...\" nghĩa là: khi nào r đúng thì cả p và q đều xảy ra -- $r\\to(p\\land q)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q27.png"
         },
         {
           "kind": "MCQ",
@@ -1927,7 +2003,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Truth table: (i) is True only when $p=T,q=T$ -- not a tautology. (ii): $\\neg(p\\to q)$ is only True when $p=T,q=F$, and in that case $p=T$ too, so the implication holds; in every other case the antecedent is False so the implication is vacuously True. (ii) is always True -- a tautology.</div><div class=\"ml-vi\">Bảng chân trị: (i) chỉ đúng khi $p=T,q=T$ -- không phải hằng đúng. (ii): $\\neg(p\\to q)$ chỉ đúng khi $p=T,q=F$, và lúc đó $p=T$ nên kéo theo đúng; các trường hợp còn lại tiền đề sai nên kéo theo đúng hiển nhiên. (ii) luôn đúng -- là hằng đúng.</div>"
+          "explanation": "<div class=\"ml-en\">Truth table: (i) is True only when $p=T,q=T$ -- not a tautology. (ii): $\\neg(p\\to q)$ is only True when $p=T,q=F$, and in that case $p=T$ too, so the implication holds; in every other case the antecedent is False so the implication is vacuously True. (ii) is always True -- a tautology.</div><div class=\"ml-vi\">Bảng chân trị: (i) chỉ đúng khi $p=T,q=T$ -- không phải hằng đúng. (ii): $\\neg(p\\to q)$ chỉ đúng khi $p=T,q=F$, và lúc đó $p=T$ nên kéo theo đúng; các trường hợp còn lại tiền đề sai nên kéo theo đúng hiển nhiên. (ii) luôn đúng -- là hằng đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q28.png"
         },
         {
           "kind": "MCQ",
@@ -1953,7 +2030,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">\"Although X, Y\" is simply a conjunction with contrastive tone: $p\\land\\neg q$ (she is out of work AND she does not spend less on clothes).</div><div class=\"ml-vi\">\"Mặc dù X, Y\" chỉ đơn giản là phép hội mang sắc thái tương phản: $p\\land\\neg q$ (cô ấy thất nghiệp VÀ cô ấy không chi tiêu ít hơn cho quần áo).</div>"
+          "explanation": "<div class=\"ml-en\">\"Although X, Y\" is simply a conjunction with contrastive tone: $p\\land\\neg q$ (she is out of work AND she does not spend less on clothes).</div><div class=\"ml-vi\">\"Mặc dù X, Y\" chỉ đơn giản là phép hội mang sắc thái tương phản: $p\\land\\neg q$ (cô ấy thất nghiệp VÀ cô ấy không chi tiêu ít hơn cho quần áo).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q29.png"
         },
         {
           "kind": "MCQ",
@@ -1976,7 +2054,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The graph is a tree (a simple path, no cycles): every one of its 6 edges is a bridge (cut edge). Of the 7 vertices, the 2 endpoints of the path ($v_1$ and $v_7$, the degree-1 vertices) are not cut vertices, so the other $7-2=5$ vertices are cut vertices.</div><div class=\"ml-vi\">Đồ thị này là một cây (đường đi đơn, không có chu trình): cả 6 cạnh đều là cầu (cạnh cắt). Trong 7 đỉnh, 2 đỉnh đầu mút của đường đi ($v_1$ và $v_7$, các đỉnh bậc 1) không phải đỉnh cắt, nên $7-2=5$ đỉnh còn lại là đỉnh cắt.</div>"
+          "explanation": "<div class=\"ml-en\">The graph is a tree (a simple path, no cycles): every one of its 6 edges is a bridge (cut edge). Of the 7 vertices, the 2 endpoints of the path ($v_1$ and $v_7$, the degree-1 vertices) are not cut vertices, so the other $7-2=5$ vertices are cut vertices.</div><div class=\"ml-vi\">Đồ thị này là một cây (đường đi đơn, không có chu trình): cả 6 cạnh đều là cầu (cạnh cắt). Trong 7 đỉnh, 2 đỉnh đầu mút của đường đi ($v_1$ và $v_7$, các đỉnh bậc 1) không phải đỉnh cắt, nên $7-2=5$ đỉnh còn lại là đỉnh cắt.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q30.png"
         },
         {
           "kind": "MCQ",
@@ -2002,7 +2081,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$P(a,1)=1$. $P(a,2)=a+1$. $P(a,3)=a+(a+1)=2a+1$. $P(a,4)=a+(2a+1)=3a+1$. $P(a,5)=a+(3a+1)=4a+1$. With $a=3$: $4\\cdot3+1=13$.</div><div class=\"ml-vi\">$P(a,1)=1$. $P(a,2)=a+1$. $P(a,3)=a+(a+1)=2a+1$. $P(a,4)=a+(2a+1)=3a+1$. $P(a,5)=a+(3a+1)=4a+1$. Với $a=3$: $4\\cdot3+1=13$.</div>"
+          "explanation": "<div class=\"ml-en\">$P(a,1)=1$. $P(a,2)=a+1$. $P(a,3)=a+(a+1)=2a+1$. $P(a,4)=a+(2a+1)=3a+1$. $P(a,5)=a+(3a+1)=4a+1$. With $a=3$: $4\\cdot3+1=13$.</div><div class=\"ml-vi\">$P(a,1)=1$. $P(a,2)=a+1$. $P(a,3)=a+(a+1)=2a+1$. $P(a,4)=a+(2a+1)=3a+1$. $P(a,5)=a+(3a+1)=4a+1$. Với $a=3$: $4\\cdot3+1=13$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q31.png"
         },
         {
           "kind": "MCQ",
@@ -2028,7 +2108,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">To minimize leaves while reaching height 3, only one branch keeps expanding at each level (the other 2 children become leaves immediately), and the final level's 3 children must all be leaves: $2+2+3=7$.</div><div class=\"ml-vi\">Để tối thiểu số lá mà vẫn đạt chiều cao 3, ở mỗi mức chỉ một nhánh tiếp tục mở rộng (2 con còn lại thành lá ngay), và mức cuối cả 3 con đều phải là lá: $2+2+3=7$.</div>"
+          "explanation": "<div class=\"ml-en\">To minimize leaves while reaching height 3, only one branch keeps expanding at each level (the other 2 children become leaves immediately), and the final level's 3 children must all be leaves: $2+2+3=7$.</div><div class=\"ml-vi\">Để tối thiểu số lá mà vẫn đạt chiều cao 3, ở mỗi mức chỉ một nhánh tiếp tục mở rộng (2 con còn lại thành lá ngay), và mức cuối cả 3 con đều phải là lá: $2+2+3=7$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q32.png"
         },
         {
           "kind": "MCQ",
@@ -2051,7 +2132,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Dijkstra from c: dist(d)=3 (direct edge), dist(e)=3+1=4 (via d), dist(g)=4+5=9 (via e), dist(z)=9+4=13 (via g). Path c-d-e-g-z totals $3+1+5+4=13$, cheaper than c-d-f-g-z ($3+5+2+4=14$) or c-e-g-z ($6+5+4=15$).</div><div class=\"ml-vi\">Dijkstra từ c: dist(d)=3 (cạnh trực tiếp), dist(e)=3+1=4 (qua d), dist(g)=4+5=9 (qua e), dist(z)=9+4=13 (qua g). Đường c-d-e-g-z tổng $3+1+5+4=13$, rẻ hơn c-d-f-g-z ($3+5+2+4=14$) hay c-e-g-z ($6+5+4=15$).</div>"
+          "explanation": "<div class=\"ml-en\">Dijkstra from c: dist(d)=3 (direct edge), dist(e)=3+1=4 (via d), dist(g)=4+5=9 (via e), dist(z)=9+4=13 (via g). Path c-d-e-g-z totals $3+1+5+4=13$, cheaper than c-d-f-g-z ($3+5+2+4=14$) or c-e-g-z ($6+5+4=15$).</div><div class=\"ml-vi\">Dijkstra từ c: dist(d)=3 (cạnh trực tiếp), dist(e)=3+1=4 (qua d), dist(g)=4+5=9 (qua e), dist(z)=9+4=13 (qua g). Đường c-d-e-g-z tổng $3+1+5+4=13$, rẻ hơn c-d-f-g-z ($3+5+2+4=14$) hay c-e-g-z ($6+5+4=15$).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q33.png"
         },
         {
           "kind": "MCQ",
@@ -2074,7 +2156,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$B=\\{1,3,5,7,9,11,13\\}$ (15 is not less than 15, so excluded). Every element of $B$ is in $A$, so $B\\subseteq A$. But $A\\neq B$ since $15\\in A$ but $15\\notin B$, so $A\\not\\subseteq B$ and they are not disjoint either.</div><div class=\"ml-vi\">$B=\\{1,3,5,7,9,11,13\\}$ (15 không nhỏ hơn 15 nên bị loại). Mọi phần tử của $B$ đều thuộc $A$, nên $B\\subseteq A$. Nhưng $A\\neq B$ vì $15\\in A$ mà $15\\notin B$, nên $A\\not\\subseteq B$ và chúng cũng không rời nhau.</div>"
+          "explanation": "<div class=\"ml-en\">$B=\\{1,3,5,7,9,11,13\\}$ (15 is not less than 15, so excluded). Every element of $B$ is in $A$, so $B\\subseteq A$. But $A\\neq B$ since $15\\in A$ but $15\\notin B$, so $A\\not\\subseteq B$ and they are not disjoint either.</div><div class=\"ml-vi\">$B=\\{1,3,5,7,9,11,13\\}$ (15 không nhỏ hơn 15 nên bị loại). Mọi phần tử của $B$ đều thuộc $A$, nên $B\\subseteq A$. Nhưng $A\\neq B$ vì $15\\in A$ mà $15\\notin B$, nên $A\\not\\subseteq B$ và chúng cũng không rời nhau.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q34.png"
         },
         {
           "kind": "MCQ",
@@ -2100,7 +2183,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$7^2=49\\equiv8$; $7^4\\equiv8^2=64\\equiv23$; $7^7=7^4\\cdot7^2\\cdot7^1\\equiv23\\cdot8\\cdot7$. $23\\cdot8=184\\equiv184-164=20$; $20\\cdot7=140\\equiv140-123=17$.</div><div class=\"ml-vi\">$7^2=49\\equiv8$; $7^4\\equiv8^2=64\\equiv23$; $7^7=7^4\\cdot7^2\\cdot7^1\\equiv23\\cdot8\\cdot7$. $23\\cdot8=184\\equiv184-164=20$; $20\\cdot7=140\\equiv140-123=17$.</div>"
+          "explanation": "<div class=\"ml-en\">$7^2=49\\equiv8$; $7^4\\equiv8^2=64\\equiv23$; $7^7=7^4\\cdot7^2\\cdot7^1\\equiv23\\cdot8\\cdot7$. $23\\cdot8=184\\equiv184-164=20$; $20\\cdot7=140\\equiv140-123=17$.</div><div class=\"ml-vi\">$7^2=49\\equiv8$; $7^4\\equiv8^2=64\\equiv23$; $7^7=7^4\\cdot7^2\\cdot7^1\\equiv23\\cdot8\\cdot7$. $23\\cdot8=184\\equiv184-164=20$; $20\\cdot7=140\\equiv140-123=17$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q35.png"
         },
         {
           "kind": "MCQ",
@@ -2123,7 +2207,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The target graph is the wheel $W_4$: 5 vertices, 8 edges, degree sequence (4,3,3,3,3). Isomorphic graphs must have the same number of edges, so Graph 1 (5 edges) and Graph 2 (6 edges) are ruled out immediately. Graph 3 has a vertex $t$ of degree 4 joined to all the others while those four form a 4-cycle, giving exactly 8 edges and degree sequence (4,3,3,3,3) -- mapping $t\\mapsto h$ and $p_i\\mapsto r_i$ is an isomorphism with $W_4$.</div><div class=\"ml-vi\">Đồ thị đề bài là bánh xe $W_4$: 5 đỉnh, 8 cạnh, dãy bậc (4,3,3,3,3). Hai đồ thị đẳng cấu phải có cùng số cạnh, nên Đồ thị 1 (5 cạnh) và Đồ thị 2 (6 cạnh) bị loại ngay. Đồ thị 3 có đỉnh $t$ bậc 4 nối với tất cả các đỉnh còn lại, và 4 đỉnh đó tạo thành chu trình 4 cạnh, cho đúng 8 cạnh và dãy bậc (4,3,3,3,3) -- phép tương ứng $t\\mapsto h$, $p_i\\mapsto r_i$ là một đẳng cấu với $W_4$.</div>"
+          "explanation": "<div class=\"ml-en\">The target graph is the wheel $W_4$: 5 vertices, 8 edges, degree sequence (4,3,3,3,3). Isomorphic graphs must have the same number of edges, so Graph 1 (5 edges) and Graph 2 (6 edges) are ruled out immediately. Graph 3 has a vertex $t$ of degree 4 joined to all the others while those four form a 4-cycle, giving exactly 8 edges and degree sequence (4,3,3,3,3) -- mapping $t\\mapsto h$ and $p_i\\mapsto r_i$ is an isomorphism with $W_4$.</div><div class=\"ml-vi\">Đồ thị đề bài là bánh xe $W_4$: 5 đỉnh, 8 cạnh, dãy bậc (4,3,3,3,3). Hai đồ thị đẳng cấu phải có cùng số cạnh, nên Đồ thị 1 (5 cạnh) và Đồ thị 2 (6 cạnh) bị loại ngay. Đồ thị 3 có đỉnh $t$ bậc 4 nối với tất cả các đỉnh còn lại, và 4 đỉnh đó tạo thành chu trình 4 cạnh, cho đúng 8 cạnh và dãy bậc (4,3,3,3,3) -- phép tương ứng $t\\mapsto h$, $p_i\\mapsto r_i$ là một đẳng cấu với $W_4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q36.png"
         },
         {
           "kind": "MCQ",
@@ -2149,7 +2234,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Frequencies: Y=3, K=2, A=1. Huffman merges the two smallest (A=1,K=2) first into a node of weight 3, then merges that with Y=3. So Y gets code length 1, while A and K each get code length 2. Total bits $=3\\cdot1+2\\cdot2+1\\cdot2=3+4+2=9$.</div><div class=\"ml-vi\">Tần suất: Y=3, K=2, A=1. Huffman gộp 2 nhỏ nhất (A=1,K=2) trước thành nút trọng số 3, rồi gộp với Y=3. Vậy Y có độ dài mã 1, còn A và K mỗi cái có độ dài mã 2. Tổng bit $=3\\cdot1+2\\cdot2+1\\cdot2=3+4+2=9$.</div>"
+          "explanation": "<div class=\"ml-en\">Frequencies: Y=3, K=2, A=1. Huffman merges the two smallest (A=1,K=2) first into a node of weight 3, then merges that with Y=3. So Y gets code length 1, while A and K each get code length 2. Total bits $=3\\cdot1+2\\cdot2+1\\cdot2=3+4+2=9$.</div><div class=\"ml-vi\">Tần suất: Y=3, K=2, A=1. Huffman gộp 2 nhỏ nhất (A=1,K=2) trước thành nút trọng số 3, rồi gộp với Y=3. Vậy Y có độ dài mã 1, còn A và K mỗi cái có độ dài mã 2. Tổng bit $=3\\cdot1+2\\cdot2+1\\cdot2=3+4+2=9$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q37.png"
         },
         {
           "kind": "MCQ",
@@ -2172,7 +2258,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Let $S\\to\\neg G$ (\"snowing\"$\\to$\"not go out\"), and $G$ is given (go out today). Modus tollens on $S\\to\\neg G$ with $G$ true gives $\\neg S$. Then disjunctive syllogism on $C\\lor S$ with $\\neg S$ gives $C$. Combined: $C\\land\\neg S$.</div><div class=\"ml-vi\">Đặt $S\\to\\neg G$ (\"có tuyết\"$\\to$\"không ra ngoài\"), và $G$ cho trước (ra ngoài hôm nay). Modus tollens trên $S\\to\\neg G$ với $G$ đúng cho $\\neg S$. Rồi tam đoạn luận rời trên $C\\lor S$ với $\\neg S$ cho $C$. Kết hợp: $C\\land\\neg S$.</div>"
+          "explanation": "<div class=\"ml-en\">Let $S\\to\\neg G$ (\"snowing\"$\\to$\"not go out\"), and $G$ is given (go out today). Modus tollens on $S\\to\\neg G$ with $G$ true gives $\\neg S$. Then disjunctive syllogism on $C\\lor S$ with $\\neg S$ gives $C$. Combined: $C\\land\\neg S$.</div><div class=\"ml-vi\">Đặt $S\\to\\neg G$ (\"có tuyết\"$\\to$\"không ra ngoài\"), và $G$ cho trước (ra ngoài hôm nay). Modus tollens trên $S\\to\\neg G$ với $G$ đúng cho $\\neg S$. Rồi tam đoạn luận rời trên $C\\lor S$ với $\\neg S$ cho $C$. Kết hợp: $C\\land\\neg S$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q38.png"
         },
         {
           "kind": "MCQ",
@@ -2195,7 +2282,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f_1=2$: choose Banh My or Banh Bao (the only \\$1 items). $f_2=5$: either 1 direct \\$2 item (Com Rang or Pho -- 2 ways) or 2 combined \\$1 items (multiset of size 2 from {Banh My, Banh Bao} -- 3 ways): $2+3=5$.</div><div class=\"ml-vi\">$f_1=2$: chọn Bánh Mỳ hoặc Bánh Bao (2 món giá 1 đô duy nhất). $f_2=5$: hoặc 1 món giá 2 đô trực tiếp (Cơm Rang hoặc Phở -- 2 cách) hoặc 2 món giá 1 đô kết hợp (đa tập cỡ 2 từ {Bánh Mỳ, Bánh Bao} -- 3 cách): $2+3=5$.</div>"
+          "explanation": "<div class=\"ml-en\">$f_1=2$: choose Banh My or Banh Bao (the only \\$1 items). $f_2=5$: either 1 direct \\$2 item (Com Rang or Pho -- 2 ways) or 2 combined \\$1 items (multiset of size 2 from {Banh My, Banh Bao} -- 3 ways): $2+3=5$.</div><div class=\"ml-vi\">$f_1=2$: chọn Bánh Mỳ hoặc Bánh Bao (2 món giá 1 đô duy nhất). $f_2=5$: hoặc 1 món giá 2 đô trực tiếp (Cơm Rang hoặc Phở -- 2 cách) hoặc 2 món giá 1 đô kết hợp (đa tập cỡ 2 từ {Bánh Mỳ, Bánh Bao} -- 3 cách): $2+3=5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q39.png"
         },
         {
           "kind": "MCQ",
@@ -2218,7 +2306,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Degrees: $\\deg A=\\deg C=3$ (odd); $\\deg B=\\deg D=2$, $\\deg P=4$, $\\deg Q=\\deg R=\\deg S=\\deg T=2$ (all even). The graph is connected and has exactly 2 vertices of odd degree -- precisely the condition for an Euler path to exist without an Euler circuit (an Euler circuit would require 0 odd-degree vertices).</div><div class=\"ml-vi\">Bậc các đỉnh: $\\deg A=\\deg C=3$ (lẻ); $\\deg B=\\deg D=2$, $\\deg P=4$, $\\deg Q=\\deg R=\\deg S=\\deg T=2$ (đều chẵn). Đồ thị liên thông và có đúng 2 đỉnh bậc lẻ -- đây chính xác là điều kiện để có đường đi Euler mà không có chu trình Euler (chu trình Euler đòi hỏi 0 đỉnh bậc lẻ).</div>"
+          "explanation": "<div class=\"ml-en\">Degrees: $\\deg A=\\deg C=3$ (odd); $\\deg B=\\deg D=2$, $\\deg P=4$, $\\deg Q=\\deg R=\\deg S=\\deg T=2$ (all even). The graph is connected and has exactly 2 vertices of odd degree -- precisely the condition for an Euler path to exist without an Euler circuit (an Euler circuit would require 0 odd-degree vertices).</div><div class=\"ml-vi\">Bậc các đỉnh: $\\deg A=\\deg C=3$ (lẻ); $\\deg B=\\deg D=2$, $\\deg P=4$, $\\deg Q=\\deg R=\\deg S=\\deg T=2$ (đều chẵn). Đồ thị liên thông và có đúng 2 đỉnh bậc lẻ -- đây chính xác là điều kiện để có đường đi Euler mà không có chu trình Euler (chu trình Euler đòi hỏi 0 đỉnh bậc lẻ).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q40.png"
         },
         {
           "kind": "MCQ",
@@ -2241,7 +2330,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">i=2: insert 2 before 7 -> [2,7,4,3,1,6,5]. i=3: insert 4 between 2 and 7 -> [2,4,7,3,1,6,5].</div><div class=\"ml-vi\">i=2: chèn 2 trước 7 -> [2,7,4,3,1,6,5]. i=3: chèn 4 giữa 2 và 7 -> [2,4,7,3,1,6,5].</div>"
+          "explanation": "<div class=\"ml-en\">i=2: insert 2 before 7 -> [2,7,4,3,1,6,5]. i=3: insert 4 between 2 and 7 -> [2,4,7,3,1,6,5].</div><div class=\"ml-vi\">i=2: chèn 2 trước 7 -> [2,7,4,3,1,6,5]. i=3: chèn 4 giữa 2 và 7 -> [2,4,7,3,1,6,5].</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q41.png"
         },
         {
           "kind": "MCQ",
@@ -2267,7 +2357,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Edge D-F does not exist in this graph (F only connects to B and E, not D). Option B's path A-B-C-D-F-B-A requires the edge D-F, which is missing -- so it is NOT a valid circuit. All other options only use edges that actually exist (AB,AD,AC,BD,BC,DC,BF,FE,DE).</div><div class=\"ml-vi\">Cạnh D-F không tồn tại trong đồ thị này (F chỉ nối với B và E, không nối D). Đường đi B: A-B-C-D-F-B-A cần cạnh D-F, mà cạnh này không có -- nên KHÔNG phải chu trình hợp lệ. Mọi phương án khác chỉ dùng các cạnh thực sự tồn tại (AB,AD,AC,BD,BC,DC,BF,FE,DE).</div>"
+          "explanation": "<div class=\"ml-en\">Edge D-F does not exist in this graph (F only connects to B and E, not D). Option B's path A-B-C-D-F-B-A requires the edge D-F, which is missing -- so it is NOT a valid circuit. All other options only use edges that actually exist (AB,AD,AC,BD,BC,DC,BF,FE,DE).</div><div class=\"ml-vi\">Cạnh D-F không tồn tại trong đồ thị này (F chỉ nối với B và E, không nối D). Đường đi B: A-B-C-D-F-B-A cần cạnh D-F, mà cạnh này không có -- nên KHÔNG phải chu trình hợp lệ. Mọi phương án khác chỉ dùng các cạnh thực sự tồn tại (AB,AD,AC,BD,BC,DC,BF,FE,DE).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q42.png"
         },
         {
           "kind": "MCQ",
@@ -2290,7 +2381,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Since n ranges over positive integers (starting at 1), the basis step verifies the base case $P(1)$; the inductive step is showing $P(k)\\to P(k+1)$.</div><div class=\"ml-vi\">Vì n chạy trên các số nguyên dương (bắt đầu từ 1), bước cơ sở là kiểm tra trường hợp cơ sở $P(1)$; bước quy nạp là chỉ ra $P(k)\\to P(k+1)$.</div>"
+          "explanation": "<div class=\"ml-en\">Since n ranges over positive integers (starting at 1), the basis step verifies the base case $P(1)$; the inductive step is showing $P(k)\\to P(k+1)$.</div><div class=\"ml-vi\">Vì n chạy trên các số nguyên dương (bắt đầu từ 1), bước cơ sở là kiểm tra trường hợp cơ sở $P(1)$; bước quy nạp là chỉ ra $P(k)\\to P(k+1)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q43.png"
         },
         {
           "kind": "MCQ",
@@ -2313,7 +2405,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$(f\\circ g)(x)=f(g(x))=f(x^2)=2\\cdot x^2=2x^2$.</div><div class=\"ml-vi\">$(f\\circ g)(x)=f(g(x))=f(x^2)=2\\cdot x^2=2x^2$.</div>"
+          "explanation": "<div class=\"ml-en\">$(f\\circ g)(x)=f(g(x))=f(x^2)=2\\cdot x^2=2x^2$.</div><div class=\"ml-vi\">$(f\\circ g)(x)=f(g(x))=f(x^2)=2\\cdot x^2=2x^2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q44.png"
         },
         {
           "kind": "MCQ",
@@ -2339,7 +2432,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">The loop runs exactly $n$ times, each iteration doing 1 multiplication and 1 addition -- total $n$ multiplications and $n$ additions, both $O(n)$.</div><div class=\"ml-vi\">Vòng lặp chạy đúng $n$ lần, mỗi lần thực hiện 1 phép nhân và 1 phép cộng -- tổng cộng $n$ phép nhân và $n$ phép cộng, đều là $O(n)$.</div>"
+          "explanation": "<div class=\"ml-en\">The loop runs exactly $n$ times, each iteration doing 1 multiplication and 1 addition -- total $n$ multiplications and $n$ additions, both $O(n)$.</div><div class=\"ml-vi\">Vòng lặp chạy đúng $n$ lần, mỗi lần thực hiện 1 phép nhân và 1 phép cộng -- tổng cộng $n$ phép nhân và $n$ phép cộng, đều là $O(n)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q45.png"
         },
         {
           "kind": "MCQ",
@@ -2365,7 +2459,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$296=19\\cdot15+11\\Rightarrow a=15$. For div/mod, remainder must be nonnegative: $-125=19\\cdot(-7)+8\\Rightarrow b=-7$. $a-b=15-(-7)=22$.</div><div class=\"ml-vi\">$296=19\\cdot15+11\\Rightarrow a=15$. Với div/mod, số dư phải không âm: $-125=19\\cdot(-7)+8\\Rightarrow b=-7$. $a-b=15-(-7)=22$.</div>"
+          "explanation": "<div class=\"ml-en\">$296=19\\cdot15+11\\Rightarrow a=15$. For div/mod, remainder must be nonnegative: $-125=19\\cdot(-7)+8\\Rightarrow b=-7$. $a-b=15-(-7)=22$.</div><div class=\"ml-vi\">$296=19\\cdot15+11\\Rightarrow a=15$. Với div/mod, số dư phải không âm: $-125=19\\cdot(-7)+8\\Rightarrow b=-7$. $a-b=15-(-7)=22$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q46.png"
         },
         {
           "kind": "MCQ",
@@ -2391,7 +2486,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Prim from A: add A-B(1), then B-E(2), then a weight-4 edge connecting D (e.g. A-D or D-E), then C-E(4), then finally C-F(5) to include F -- the last edge added is CF.</div><div class=\"ml-vi\">Prim từ A: thêm A-B(1), rồi B-E(2), rồi một cạnh trọng số 4 nối D (vd A-D hoặc D-E), rồi C-E(4), cuối cùng C-F(5) để đưa F vào -- cạnh cuối cùng thêm vào là CF.</div>"
+          "explanation": "<div class=\"ml-en\">Prim from A: add A-B(1), then B-E(2), then a weight-4 edge connecting D (e.g. A-D or D-E), then C-E(4), then finally C-F(5) to include F -- the last edge added is CF.</div><div class=\"ml-vi\">Prim từ A: thêm A-B(1), rồi B-E(2), rồi một cạnh trọng số 4 nối D (vd A-D hoặc D-E), rồi C-E(4), cuối cùng C-F(5) để đưa F vào -- cạnh cuối cùng thêm vào là CF.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q47.png"
         },
         {
           "kind": "MCQ",
@@ -2414,7 +2510,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f(2)=3(1)+1=4$; $f(4)=3(4)+1=13$; $f(8)=3(13)+1=40$; $f(16)=3(40)+1=121$; $f(32)=3(121)+1=364$.</div><div class=\"ml-vi\">$f(2)=3(1)+1=4$; $f(4)=3(4)+1=13$; $f(8)=3(13)+1=40$; $f(16)=3(40)+1=121$; $f(32)=3(121)+1=364$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(2)=3(1)+1=4$; $f(4)=3(4)+1=13$; $f(8)=3(13)+1=40$; $f(16)=3(40)+1=121$; $f(32)=3(121)+1=364$.</div><div class=\"ml-vi\">$f(2)=3(1)+1=4$; $f(4)=3(4)+1=13$; $f(8)=3(13)+1=40$; $f(16)=3(40)+1=121$; $f(32)=3(121)+1=364$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q48.png"
         },
         {
           "kind": "MCQ",
@@ -2440,7 +2537,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f$: for any $k$, take $m=k,n=0$ -- onto. $h$: for any $k$, take $m=k,n=0$ -- onto. $g(m,n)=2(m+n)+1$ is always odd, so it never hits any even integer -- NOT onto.</div><div class=\"ml-vi\">$f$: với mọi $k$, chọn $m=k,n=0$ -- toàn ánh. $h$: với mọi $k$, chọn $m=k,n=0$ -- toàn ánh. $g(m,n)=2(m+n)+1$ luôn lẻ, nên không bao giờ đạt được số chẵn nào -- KHÔNG phải toàn ánh.</div>"
+          "explanation": "<div class=\"ml-en\">$f$: for any $k$, take $m=k,n=0$ -- onto. $h$: for any $k$, take $m=k,n=0$ -- onto. $g(m,n)=2(m+n)+1$ is always odd, so it never hits any even integer -- NOT onto.</div><div class=\"ml-vi\">$f$: với mọi $k$, chọn $m=k,n=0$ -- toàn ánh. $h$: với mọi $k$, chọn $m=k,n=0$ -- toàn ánh. $g(m,n)=2(m+n)+1$ luôn lẻ, nên không bao giờ đạt được số chẵn nào -- KHÔNG phải toàn ánh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q49.png"
         },
         {
           "kind": "MCQ",
@@ -2463,7 +2561,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$A\\cup B=\\{0,1,2,3,4,5,6,8,10\\}$. Intersecting with $C=\\{1,2,3,4,5,7,8,9\\}$: common elements are $1,2,3,4,5,8$ (0,6,10 are not in $C$).</div><div class=\"ml-vi\">$A\\cup B=\\{0,1,2,3,4,5,6,8,10\\}$. Giao với $C=\\{1,2,3,4,5,7,8,9\\}$: phần tử chung là $1,2,3,4,5,8$ (0,6,10 không thuộc $C$).</div>"
+          "explanation": "<div class=\"ml-en\">$A\\cup B=\\{0,1,2,3,4,5,6,8,10\\}$. Intersecting with $C=\\{1,2,3,4,5,7,8,9\\}$: common elements are $1,2,3,4,5,8$ (0,6,10 are not in $C$).</div><div class=\"ml-vi\">$A\\cup B=\\{0,1,2,3,4,5,6,8,10\\}$. Giao với $C=\\{1,2,3,4,5,7,8,9\\}$: phần tử chung là $1,2,3,4,5,8$ (0,6,10 không thuộc $C$).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D2/q50.png"
         }
       ]
     },
@@ -2503,7 +2602,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i) is wrong: $q=F$ makes $q\\to(p\\land r)=T$, not $F$. (ii) is wrong: $(p\\lor r)=T$, so $(p\\lor r)\\to q=T\\to F=F$, not $T$. (iii): $p\\oplus q=T\\oplus F=T$, then $T\\oplus r=T\\oplus T=F$ -- matches. $p\\to q=T\\to F=F$ -- matches. So (iii) is correct.</div><div class=\"ml-vi\">(i) sai: $q=F$ nên $q\\to(p\\land r)=T$, không phải $F$. (ii) sai: $(p\\lor r)=T$, nên $(p\\lor r)\\to q=T\\to F=F$, không phải $T$. (iii): $p\\oplus q=T\\oplus F=T$, rồi $T\\oplus r=T\\oplus T=F$ -- khớp. $p\\to q=T\\to F=F$ -- khớp. Vậy (iii) đúng.</div>"
+          "explanation": "<div class=\"ml-en\">(i) is wrong: $q=F$ makes $q\\to(p\\land r)=T$, not $F$. (ii) is wrong: $(p\\lor r)=T$, so $(p\\lor r)\\to q=T\\to F=F$, not $T$. (iii): $p\\oplus q=T\\oplus F=T$, then $T\\oplus r=T\\oplus T=F$ -- matches. $p\\to q=T\\to F=F$ -- matches. So (iii) is correct.</div><div class=\"ml-vi\">(i) sai: $q=F$ nên $q\\to(p\\land r)=T$, không phải $F$. (ii) sai: $(p\\lor r)=T$, nên $(p\\lor r)\\to q=T\\to F=F$, không phải $T$. (iii): $p\\oplus q=T\\oplus F=T$, rồi $T\\oplus r=T\\oplus T=F$ -- khớp. $p\\to q=T\\to F=F$ -- khớp. Vậy (iii) đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q1.png"
         },
         {
           "kind": "MCQ",
@@ -2526,7 +2626,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">\"don't miss final\" = $\\neg q$, \"don't have flu\" = $\\neg p$, \"did not pass\" = $\\neg r$, joined by \"and\"/\"but\" (both conjunctions): $\\neg p\\land\\neg q\\land\\neg r$, exactly option (iv).</div><div class=\"ml-vi\">\"không bỏ lỡ cuối kỳ\" = $\\neg q$, \"không bị cúm\" = $\\neg p$, \"vẫn không đậu\" = $\\neg r$, nối bằng \"và\"/\"nhưng\" (đều là hội): $\\neg p\\land\\neg q\\land\\neg r$, đúng là đáp án (iv).</div>"
+          "explanation": "<div class=\"ml-en\">\"don't miss final\" = $\\neg q$, \"don't have flu\" = $\\neg p$, \"did not pass\" = $\\neg r$, joined by \"and\"/\"but\" (both conjunctions): $\\neg p\\land\\neg q\\land\\neg r$, exactly option (iv).</div><div class=\"ml-vi\">\"không bỏ lỡ cuối kỳ\" = $\\neg q$, \"không bị cúm\" = $\\neg p$, \"vẫn không đậu\" = $\\neg r$, nối bằng \"và\"/\"nhưng\" (đều là hội): $\\neg p\\land\\neg q\\land\\neg r$, đúng là đáp án (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q2.png"
         },
         {
           "kind": "MCQ",
@@ -2549,7 +2650,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$(p\\to q)\\equiv\\neg p\\lor q$ and $(p\\to\\neg q)\\equiv\\neg p\\lor\\neg q$. Their disjunction: $\\neg p\\lor q\\lor\\neg p\\lor\\neg q=\\neg p\\lor(q\\lor\\neg q)=\\neg p\\lor T=T$, a tautology.</div><div class=\"ml-vi\">$(p\\to q)\\equiv\\neg p\\lor q$ và $(p\\to\\neg q)\\equiv\\neg p\\lor\\neg q$. Hội của chúng: $\\neg p\\lor q\\lor\\neg p\\lor\\neg q=\\neg p\\lor(q\\lor\\neg q)=\\neg p\\lor T=T$, một hằng đúng.</div>"
+          "explanation": "<div class=\"ml-en\">$(p\\to q)\\equiv\\neg p\\lor q$ and $(p\\to\\neg q)\\equiv\\neg p\\lor\\neg q$. Their disjunction: $\\neg p\\lor q\\lor\\neg p\\lor\\neg q=\\neg p\\lor(q\\lor\\neg q)=\\neg p\\lor T=T$, a tautology.</div><div class=\"ml-vi\">$(p\\to q)\\equiv\\neg p\\lor q$ và $(p\\to\\neg q)\\equiv\\neg p\\lor\\neg q$. Hội của chúng: $\\neg p\\lor q\\lor\\neg p\\lor\\neg q=\\neg p\\lor(q\\lor\\neg q)=\\neg p\\lor T=T$, một hằng đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q3.png"
         },
         {
           "kind": "MCQ",
@@ -2572,7 +2674,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">The correct translation is $\\forall x(C(x)\\to(P(x)\\lor J(x)))$ -- universal quantifier with implication to a disjunction. None of (i)-(iii) match this: (i) uses $\\exists$, (ii) uses $\\exists$ and $\\land$, (iii) uses $\\forall\\to$ but with $\\land$ instead of $\\lor$.</div><div class=\"ml-vi\">Diễn đạt đúng là $\\forall x(C(x)\\to(P(x)\\lor J(x)))$ -- lượng từ toàn thể với kéo theo tới một tuyển. Không đáp án (i)-(iii) nào khớp: (i) dùng $\\exists$, (ii) dùng $\\exists$ và $\\land$, (iii) dùng $\\forall\\to$ nhưng với $\\land$ thay vì $\\lor$.</div>"
+          "explanation": "<div class=\"ml-en\">The correct translation is $\\forall x(C(x)\\to(P(x)\\lor J(x)))$ -- universal quantifier with implication to a disjunction. None of (i)-(iii) match this: (i) uses $\\exists$, (ii) uses $\\exists$ and $\\land$, (iii) uses $\\forall\\to$ but with $\\land$ instead of $\\lor$.</div><div class=\"ml-vi\">Diễn đạt đúng là $\\forall x(C(x)\\to(P(x)\\lor J(x)))$ -- lượng từ toàn thể với kéo theo tới một tuyển. Không đáp án (i)-(iii) nào khớp: (i) dùng $\\exists$, (ii) dùng $\\exists$ và $\\land$, (iii) dùng $\\forall\\to$ nhưng với $\\land$ thay vì $\\lor$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q4.png"
         },
         {
           "kind": "MCQ",
@@ -2598,7 +2701,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$\\forall x[(x>-1)\\to P(x)]$ is vacuously true for $x=-2,-1$ (since $x>-1$ is false there) and requires $P(0)\\land P(1)\\land P(2)$ for the rest. With $P(0),P(1),P(2)$ all true, $\\exists x(\\neg P(x))$ reduces to $\\neg P(-2)\\lor\\neg P(-1)$ (the other disjuncts are false). Overall: $[\\neg P(-2)\\lor\\neg P(-1)]\\land P(0)\\land P(1)\\land P(2)$, exactly (iv).</div><div class=\"ml-vi\">$\\forall x[(x>-1)\\to P(x)]$ đúng hiển nhiên với $x=-2,-1$ (vì $x>-1$ sai ở đó) và đòi hỏi $P(0)\\land P(1)\\land P(2)$ cho phần còn lại. Với $P(0),P(1),P(2)$ đều đúng, $\\exists x(\\neg P(x))$ rút gọn còn $\\neg P(-2)\\lor\\neg P(-1)$ (các tuyển khác sai). Tổng thể: $[\\neg P(-2)\\lor\\neg P(-1)]\\land P(0)\\land P(1)\\land P(2)$, đúng là (iv).</div>"
+          "explanation": "<div class=\"ml-en\">$\\forall x[(x>-1)\\to P(x)]$ is vacuously true for $x=-2,-1$ (since $x>-1$ is false there) and requires $P(0)\\land P(1)\\land P(2)$ for the rest. With $P(0),P(1),P(2)$ all true, $\\exists x(\\neg P(x))$ reduces to $\\neg P(-2)\\lor\\neg P(-1)$ (the other disjuncts are false). Overall: $[\\neg P(-2)\\lor\\neg P(-1)]\\land P(0)\\land P(1)\\land P(2)$, exactly (iv).</div><div class=\"ml-vi\">$\\forall x[(x>-1)\\to P(x)]$ đúng hiển nhiên với $x=-2,-1$ (vì $x>-1$ sai ở đó) và đòi hỏi $P(0)\\land P(1)\\land P(2)$ cho phần còn lại. Với $P(0),P(1),P(2)$ đều đúng, $\\exists x(\\neg P(x))$ rút gọn còn $\\neg P(-2)\\lor\\neg P(-1)$ (các tuyển khác sai). Tổng thể: $[\\neg P(-2)\\lor\\neg P(-1)]\\land P(0)\\land P(1)\\land P(2)$, đúng là (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q5.png"
         },
         {
           "kind": "MCQ",
@@ -2621,7 +2725,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">(i): $y=1.5$ satisfies $2+2y=5$ -- true. (ii): for any $x$, $y=(5-x)/2$ works -- true. (iii): for any $y$, $x=5-2y$ works -- true. (iv) claims ALL pairs $(x,y)$ satisfy $x+2y=5$, which is false (e.g. $x=0,y=0$ fails).</div><div class=\"ml-vi\">(i): $y=1.5$ thoả $2+2y=5$ -- đúng. (ii): với mọi $x$, $y=(5-x)/2$ luôn có -- đúng. (iii): với mọi $y$, $x=5-2y$ luôn có -- đúng. (iv) khẳng định MỌI cặp $(x,y)$ đều thoả $x+2y=5$, sai (vd $x=0,y=0$ không thoả).</div>"
+          "explanation": "<div class=\"ml-en\">(i): $y=1.5$ satisfies $2+2y=5$ -- true. (ii): for any $x$, $y=(5-x)/2$ works -- true. (iii): for any $y$, $x=5-2y$ works -- true. (iv) claims ALL pairs $(x,y)$ satisfy $x+2y=5$, which is false (e.g. $x=0,y=0$ fails).</div><div class=\"ml-vi\">(i): $y=1.5$ thoả $2+2y=5$ -- đúng. (ii): với mọi $x$, $y=(5-x)/2$ luôn có -- đúng. (iii): với mọi $y$, $x=5-2y$ luôn có -- đúng. (iv) khẳng định MỌI cặp $(x,y)$ đều thoả $x+2y=5$, sai (vd $x=0,y=0$ không thoả).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q6.png"
         },
         {
           "kind": "MCQ",
@@ -2647,7 +2752,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\neg\\exists x\\forall y(P\\to Q)=\\forall x\\neg\\forall y(P\\to Q)=\\forall x\\exists y\\neg(P\\to Q)=\\forall x\\exists y(P\\land\\neg Q)$, exactly option (ii).</div><div class=\"ml-vi\">$\\neg\\exists x\\forall y(P\\to Q)=\\forall x\\neg\\forall y(P\\to Q)=\\forall x\\exists y\\neg(P\\to Q)=\\forall x\\exists y(P\\land\\neg Q)$, đúng là đáp án (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$\\neg\\exists x\\forall y(P\\to Q)=\\forall x\\neg\\forall y(P\\to Q)=\\forall x\\exists y\\neg(P\\to Q)=\\forall x\\exists y(P\\land\\neg Q)$, exactly option (ii).</div><div class=\"ml-vi\">$\\neg\\exists x\\forall y(P\\to Q)=\\forall x\\neg\\forall y(P\\to Q)=\\forall x\\exists y\\neg(P\\to Q)=\\forall x\\exists y(P\\land\\neg Q)$, đúng là đáp án (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q7.png"
         },
         {
           "kind": "MCQ",
@@ -2673,7 +2779,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">Let bed=\"go to bed early\", wake=\"wake up early\", walk=\"go for a walk\". Premises: bed$\\to$wake, wake$\\to$walk, $\\neg$bed (stayed up late = did not go to bed early). Denying the antecedent ($\\neg$bed) does NOT let us conclude anything about wake or walk (that would be the fallacy of denying the antecedent) -- no valid conclusion follows.</div><div class=\"ml-vi\">Đặt bed=\"đi ngủ sớm\", wake=\"thức dậy sớm\", walk=\"đi bộ\". Tiền đề: bed$\\to$wake, wake$\\to$walk, $\\neg$bed (thức khuya = không đi ngủ sớm). Phủ định tiền đề ($\\neg$bed) KHÔNG cho phép suy ra gì về wake hay walk (đó là ngụy biện phủ định tiền đề) -- không có kết luận hợp lệ nào.</div>"
+          "explanation": "<div class=\"ml-en\">Let bed=\"go to bed early\", wake=\"wake up early\", walk=\"go for a walk\". Premises: bed$\\to$wake, wake$\\to$walk, $\\neg$bed (stayed up late = did not go to bed early). Denying the antecedent ($\\neg$bed) does NOT let us conclude anything about wake or walk (that would be the fallacy of denying the antecedent) -- no valid conclusion follows.</div><div class=\"ml-vi\">Đặt bed=\"đi ngủ sớm\", wake=\"thức dậy sớm\", walk=\"đi bộ\". Tiền đề: bed$\\to$wake, wake$\\to$walk, $\\neg$bed (thức khuya = không đi ngủ sớm). Phủ định tiền đề ($\\neg$bed) KHÔNG cho phép suy ra gì về wake hay walk (đó là ngụy biện phủ định tiền đề) -- không có kết luận hợp lệ nào.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q8.png"
         },
         {
           "kind": "MCQ",
@@ -2699,7 +2806,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">(i) is false: $A\\times B$ contains pairs like $(a,x)$ while $B\\times A$ contains $(x,a)$ -- these sets of ordered pairs differ since $A\\neq B$. (ii) is false: $A$'s elements are $a,b,c$, none of which is $\\emptyset$. (iii) is true: this is the standard cardinality rule for Cartesian product, $|A\\times B|=3\\times4=12$.</div><div class=\"ml-vi\">(i) sai: $A\\times B$ chứa cặp như $(a,x)$ còn $B\\times A$ chứa $(x,a)$ -- hai tập cặp có thứ tự này khác nhau vì $A\\neq B$. (ii) sai: các phần tử của $A$ là $a,b,c$, không phần tử nào là $\\emptyset$. (iii) đúng: đây là quy tắc lực lượng chuẩn của tích Descartes, $|A\\times B|=3\\times4=12$.</div>"
+          "explanation": "<div class=\"ml-en\">(i) is false: $A\\times B$ contains pairs like $(a,x)$ while $B\\times A$ contains $(x,a)$ -- these sets of ordered pairs differ since $A\\neq B$. (ii) is false: $A$'s elements are $a,b,c$, none of which is $\\emptyset$. (iii) is true: this is the standard cardinality rule for Cartesian product, $|A\\times B|=3\\times4=12$.</div><div class=\"ml-vi\">(i) sai: $A\\times B$ chứa cặp như $(a,x)$ còn $B\\times A$ chứa $(x,a)$ -- hai tập cặp có thứ tự này khác nhau vì $A\\neq B$. (ii) sai: các phần tử của $A$ là $a,b,c$, không phần tử nào là $\\emptyset$. (iii) đúng: đây là quy tắc lực lượng chuẩn của tích Descartes, $|A\\times B|=3\\times4=12$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q9.png"
         },
         {
           "kind": "MCQ",
@@ -2725,7 +2833,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$A\\times B=\\emptyset$ if and only if $A=\\emptyset$ or $B=\\emptyset$ (if both were nonempty, picking one element from each would give a pair in $A\\times B$). This is exactly $(A=\\emptyset)\\lor(B=\\emptyset)$, option (iv). Note $A=\\emptyset$ alone (i) is too strong (B could be nonempty), and both being needed (ii) is also too strong (only one needs to be empty).</div><div class=\"ml-vi\">$A\\times B=\\emptyset$ khi và chỉ khi $A=\\emptyset$ hoặc $B=\\emptyset$ (nếu cả hai đều khác rỗng, lấy một phần tử từ mỗi tập sẽ cho một cặp thuộc $A\\times B$). Đây đúng là $(A=\\emptyset)\\lor(B=\\emptyset)$, đáp án (iv). Lưu ý chỉ $A=\\emptyset$ (i) là quá mạnh (B có thể khác rỗng), và cần cả hai (ii) cũng quá mạnh (chỉ cần một tập rỗng).</div>"
+          "explanation": "<div class=\"ml-en\">$A\\times B=\\emptyset$ if and only if $A=\\emptyset$ or $B=\\emptyset$ (if both were nonempty, picking one element from each would give a pair in $A\\times B$). This is exactly $(A=\\emptyset)\\lor(B=\\emptyset)$, option (iv). Note $A=\\emptyset$ alone (i) is too strong (B could be nonempty), and both being needed (ii) is also too strong (only one needs to be empty).</div><div class=\"ml-vi\">$A\\times B=\\emptyset$ khi và chỉ khi $A=\\emptyset$ hoặc $B=\\emptyset$ (nếu cả hai đều khác rỗng, lấy một phần tử từ mỗi tập sẽ cho một cặp thuộc $A\\times B$). Đây đúng là $(A=\\emptyset)\\lor(B=\\emptyset)$, đáp án (iv). Lưu ý chỉ $A=\\emptyset$ (i) là quá mạnh (B có thể khác rỗng), và cần cả hai (ii) cũng quá mạnh (chỉ cần một tập rỗng).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q10.png"
         },
         {
           "kind": "MCQ",
@@ -2751,7 +2860,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">If any element of $B$ were outside $A$, it would land in $A\\oplus B$ but not in $A$, contradiction -- so $B\\subseteq A$, making $A\\oplus B=A\\setminus B$. Requiring $A\\setminus B=A$ forces $A\\cap B=\\emptyset$. Combined with $B\\subseteq A$, this forces $B=\\emptyset$ (check: $A\\oplus\\emptyset=A$, always true). This is the exact necessary and sufficient condition, tighter than just $B\\subseteq A$.</div><div class=\"ml-vi\">Nếu có phần tử nào của $B$ nằm ngoài $A$, nó sẽ thuộc $A\\oplus B$ nhưng không thuộc $A$, mâu thuẫn -- vậy $B\\subseteq A$, khi đó $A\\oplus B=A\\setminus B$. Yêu cầu $A\\setminus B=A$ buộc $A\\cap B=\\emptyset$. Kết hợp với $B\\subseteq A$, điều này buộc $B=\\emptyset$ (kiểm: $A\\oplus\\emptyset=A$, luôn đúng). Đây là điều kiện cần và đủ chính xác, chặt hơn chỉ $B\\subseteq A$.</div>"
+          "explanation": "<div class=\"ml-en\">If any element of $B$ were outside $A$, it would land in $A\\oplus B$ but not in $A$, contradiction -- so $B\\subseteq A$, making $A\\oplus B=A\\setminus B$. Requiring $A\\setminus B=A$ forces $A\\cap B=\\emptyset$. Combined with $B\\subseteq A$, this forces $B=\\emptyset$ (check: $A\\oplus\\emptyset=A$, always true). This is the exact necessary and sufficient condition, tighter than just $B\\subseteq A$.</div><div class=\"ml-vi\">Nếu có phần tử nào của $B$ nằm ngoài $A$, nó sẽ thuộc $A\\oplus B$ nhưng không thuộc $A$, mâu thuẫn -- vậy $B\\subseteq A$, khi đó $A\\oplus B=A\\setminus B$. Yêu cầu $A\\setminus B=A$ buộc $A\\cap B=\\emptyset$. Kết hợp với $B\\subseteq A$, điều này buộc $B=\\emptyset$ (kiểm: $A\\oplus\\emptyset=A$, luôn đúng). Đây là điều kiện cần và đủ chính xác, chặt hơn chỉ $B\\subseteq A$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q11.png"
         },
         {
           "kind": "MCQ",
@@ -2774,7 +2884,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\lfloor5/2\\rfloor=2$, so $\\lfloor(1/2)\\cdot2\\rfloor=\\lfloor1\\rfloor=1$. Then $3/2+1=2.5$. Also $\\lfloor3-7/8\\rfloor=\\lfloor2.125\\rfloor=2$. Sum: $2.5+2=4.5$, and $\\lceil4.5\\rceil=5$.</div><div class=\"ml-vi\">$\\lfloor5/2\\rfloor=2$, nên $\\lfloor(1/2)\\cdot2\\rfloor=\\lfloor1\\rfloor=1$. Rồi $3/2+1=2.5$. Cũng $\\lfloor3-7/8\\rfloor=\\lfloor2.125\\rfloor=2$. Tổng: $2.5+2=4.5$, và $\\lceil4.5\\rceil=5$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\lfloor5/2\\rfloor=2$, so $\\lfloor(1/2)\\cdot2\\rfloor=\\lfloor1\\rfloor=1$. Then $3/2+1=2.5$. Also $\\lfloor3-7/8\\rfloor=\\lfloor2.125\\rfloor=2$. Sum: $2.5+2=4.5$, and $\\lceil4.5\\rceil=5$.</div><div class=\"ml-vi\">$\\lfloor5/2\\rfloor=2$, nên $\\lfloor(1/2)\\cdot2\\rfloor=\\lfloor1\\rfloor=1$. Rồi $3/2+1=2.5$. Cũng $\\lfloor3-7/8\\rfloor=\\lfloor2.125\\rfloor=2$. Tổng: $2.5+2=4.5$, và $\\lceil4.5\\rceil=5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q12.png"
         },
         {
           "kind": "MCQ",
@@ -2800,7 +2911,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f(1.75)=\\lfloor1.75/2\\rfloor=\\lfloor0.875\\rfloor=0$. Then $g(0)=2\\lceil0\\rceil=2\\cdot0=0$.</div><div class=\"ml-vi\">$f(1.75)=\\lfloor1.75/2\\rfloor=\\lfloor0.875\\rfloor=0$. Rồi $g(0)=2\\lceil0\\rceil=2\\cdot0=0$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(1.75)=\\lfloor1.75/2\\rfloor=\\lfloor0.875\\rfloor=0$. Then $g(0)=2\\lceil0\\rceil=2\\cdot0=0$.</div><div class=\"ml-vi\">$f(1.75)=\\lfloor1.75/2\\rfloor=\\lfloor0.875\\rfloor=0$. Rồi $g(0)=2\\lceil0\\rceil=2\\cdot0=0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q13.png"
         },
         {
           "kind": "MCQ",
@@ -2826,7 +2938,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$j=2$: 3; $j=4$: 7; $j=6$: 11; $j=8$: 15; $j=10$: 19. Sum $=3+7+11+15+19=55$.</div><div class=\"ml-vi\">$j=2$: 3; $j=4$: 7; $j=6$: 11; $j=8$: 15; $j=10$: 19. Tổng $=3+7+11+15+19=55$.</div>"
+          "explanation": "<div class=\"ml-en\">$j=2$: 3; $j=4$: 7; $j=6$: 11; $j=8$: 15; $j=10$: 19. Sum $=3+7+11+15+19=55$.</div><div class=\"ml-vi\">$j=2$: 3; $j=4$: 7; $j=6$: 11; $j=8$: 15; $j=10$: 19. Tổng $=3+7+11+15+19=55$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q14.png"
         },
         {
           "kind": "MCQ",
@@ -2849,7 +2962,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Max starts at 4. $a_2=1$: $4<1$? No. $a_3=5$: $4<5$? Yes, Max:=5. $a_4=2$, $a_5=3$: no updates ($5<2$, $5<3$ both false). $a_6=9$: $5<9$? Yes, Max:=9. $a_7=7$: $9<7$? No. So Max takes values 4, 5, 9 in that order.</div><div class=\"ml-vi\">Max bắt đầu là 4. $a_2=1$: $4<1$? Không. $a_3=5$: $4<5$? Có, Max:=5. $a_4=2$, $a_5=3$: không đổi ($5<2$, $5<3$ đều sai). $a_6=9$: $5<9$? Có, Max:=9. $a_7=7$: $9<7$? Không. Vậy Max nhận các giá trị 4, 5, 9 theo thứ tự đó.</div>"
+          "explanation": "<div class=\"ml-en\">Max starts at 4. $a_2=1$: $4<1$? No. $a_3=5$: $4<5$? Yes, Max:=5. $a_4=2$, $a_5=3$: no updates ($5<2$, $5<3$ both false). $a_6=9$: $5<9$? Yes, Max:=9. $a_7=7$: $9<7$? No. So Max takes values 4, 5, 9 in that order.</div><div class=\"ml-vi\">Max bắt đầu là 4. $a_2=1$: $4<1$? Không. $a_3=5$: $4<5$? Có, Max:=5. $a_4=2$, $a_5=3$: không đổi ($5<2$, $5<3$ đều sai). $a_6=9$: $5<9$? Có, Max:=9. $a_7=7$: $9<7$? Không. Vậy Max nhận các giá trị 4, 5, 9 theo thứ tự đó.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q15.png"
         },
         {
           "kind": "MCQ",
@@ -2875,7 +2989,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Greedy takes 1 quarter (25), leaving 9 cents. 9 < 10, so 0 dimes, then 9 pennies (9 cents). Total coins: $1+0+9=10$.</div><div class=\"ml-vi\">Tham lam lấy 1 quarter (25), còn lại 9 xu. 9 < 10, nên 0 dime, rồi 9 penny (9 xu). Tổng số đồng: $1+0+9=10$.</div>"
+          "explanation": "<div class=\"ml-en\">Greedy takes 1 quarter (25), leaving 9 cents. 9 < 10, so 0 dimes, then 9 pennies (9 cents). Total coins: $1+0+9=10$.</div><div class=\"ml-vi\">Tham lam lấy 1 quarter (25), còn lại 9 xu. 9 < 10, nên 0 dime, rồi 9 penny (9 xu). Tổng số đồng: $1+0+9=10$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q16.png"
         },
         {
           "kind": "MCQ",
@@ -2898,7 +3013,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i): sum of cubes up to $(n+2)$ is $\\approx((n+2)(n+3)/2)^2=O(n^4)$. (ii): the $n^5$ terms of $(n+4)^5$ and $(n-2)^5$ cancel, leaving a degree-4 leading term $30n^4+\\dots=O(n^4)$. (iii): $(n\\log n-1)^4\\approx n^4(\\log n)^4$, which grows faster than any constant multiple of $n^4$ -- NOT $O(n^4)$.</div><div class=\"ml-vi\">(i): tổng lập phương đến $(n+2)$ xấp xỉ $((n+2)(n+3)/2)^2=O(n^4)$. (ii): các số hạng $n^5$ của $(n+4)^5$ và $(n-2)^5$ triệt tiêu nhau, còn lại số hạng bậc 4 dẫn đầu $30n^4+\\dots=O(n^4)$. (iii): $(n\\log n-1)^4\\approx n^4(\\log n)^4$, tăng nhanh hơn mọi bội hằng số của $n^4$ -- KHÔNG là $O(n^4)$.</div>"
+          "explanation": "<div class=\"ml-en\">(i): sum of cubes up to $(n+2)$ is $\\approx((n+2)(n+3)/2)^2=O(n^4)$. (ii): the $n^5$ terms of $(n+4)^5$ and $(n-2)^5$ cancel, leaving a degree-4 leading term $30n^4+\\dots=O(n^4)$. (iii): $(n\\log n-1)^4\\approx n^4(\\log n)^4$, which grows faster than any constant multiple of $n^4$ -- NOT $O(n^4)$.</div><div class=\"ml-vi\">(i): tổng lập phương đến $(n+2)$ xấp xỉ $((n+2)(n+3)/2)^2=O(n^4)$. (ii): các số hạng $n^5$ của $(n+4)^5$ và $(n-2)^5$ triệt tiêu nhau, còn lại số hạng bậc 4 dẫn đầu $30n^4+\\dots=O(n^4)$. (iii): $(n\\log n-1)^4\\approx n^4(\\log n)^4$, tăng nhanh hơn mọi bội hằng số của $n^4$ -- KHÔNG là $O(n^4)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q17.png"
         },
         {
           "kind": "MCQ",
@@ -2921,7 +3037,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The inner while-loop doubles $k$ from 1 until it exceeds $n$, taking about $\\log_2 n$ multiplications. The outer for-loop runs this $n$ times, giving total $O(n\\log n)$ operations.</div><div class=\"ml-vi\">Vòng while bên trong nhân đôi $k$ từ 1 cho đến khi vượt quá $n$, mất khoảng $\\log_2 n$ phép nhân. Vòng for bên ngoài lặp lại $n$ lần, cho tổng $O(n\\log n)$ phép toán.</div>"
+          "explanation": "<div class=\"ml-en\">The inner while-loop doubles $k$ from 1 until it exceeds $n$, taking about $\\log_2 n$ multiplications. The outer for-loop runs this $n$ times, giving total $O(n\\log n)$ operations.</div><div class=\"ml-vi\">Vòng while bên trong nhân đôi $k$ từ 1 cho đến khi vượt quá $n$, mất khoảng $\\log_2 n$ phép nhân. Vòng for bên ngoài lặp lại $n$ lần, cho tổng $O(n\\log n)$ phép toán.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q18.png"
         },
         {
           "kind": "MCQ",
@@ -2947,7 +3064,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$x_4=3\\cdot7\\bmod11=21\\bmod11=10$. For $x_2$: solve $3x_2\\equiv7\\pmod{11}$; the inverse of 3 mod 11 is 4 (since $3\\cdot4=12\\equiv1$), so $x_2\\equiv4\\cdot7=28\\equiv6\\pmod{11}$. So $x_2=6$, $x_4=10$.</div><div class=\"ml-vi\">$x_4=3\\cdot7\\bmod11=21\\bmod11=10$. Với $x_2$: giải $3x_2\\equiv7\\pmod{11}$; nghịch đảo của 3 theo mod 11 là 4 (vì $3\\cdot4=12\\equiv1$), nên $x_2\\equiv4\\cdot7=28\\equiv6\\pmod{11}$. Vậy $x_2=6$, $x_4=10$.</div>"
+          "explanation": "<div class=\"ml-en\">$x_4=3\\cdot7\\bmod11=21\\bmod11=10$. For $x_2$: solve $3x_2\\equiv7\\pmod{11}$; the inverse of 3 mod 11 is 4 (since $3\\cdot4=12\\equiv1$), so $x_2\\equiv4\\cdot7=28\\equiv6\\pmod{11}$. So $x_2=6$, $x_4=10$.</div><div class=\"ml-vi\">$x_4=3\\cdot7\\bmod11=21\\bmod11=10$. Với $x_2$: giải $3x_2\\equiv7\\pmod{11}$; nghịch đảo của 3 theo mod 11 là 4 (vì $3\\cdot4=12\\equiv1$), nên $x_2\\equiv4\\cdot7=28\\equiv6\\pmod{11}$. Vậy $x_2=6$, $x_4=10$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q19.png"
         },
         {
           "kind": "MCQ",
@@ -2973,7 +3091,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$x_1=(3\\cdot2+2)\\bmod11=8$. $x_2=(3\\cdot8+2)\\bmod11=26\\bmod11=4$. $x_3=(3\\cdot4+2)\\bmod11=14\\bmod11=3$.</div><div class=\"ml-vi\">$x_1=(3\\cdot2+2)\\bmod11=8$. $x_2=(3\\cdot8+2)\\bmod11=26\\bmod11=4$. $x_3=(3\\cdot4+2)\\bmod11=14\\bmod11=3$.</div>"
+          "explanation": "<div class=\"ml-en\">$x_1=(3\\cdot2+2)\\bmod11=8$. $x_2=(3\\cdot8+2)\\bmod11=26\\bmod11=4$. $x_3=(3\\cdot4+2)\\bmod11=14\\bmod11=3$.</div><div class=\"ml-vi\">$x_1=(3\\cdot2+2)\\bmod11=8$. $x_2=(3\\cdot8+2)\\bmod11=26\\bmod11=4$. $x_3=(3\\cdot4+2)\\bmod11=14\\bmod11=3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q20.png"
         },
         {
           "kind": "MCQ",
@@ -3002,7 +3121,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">This is Euler's totient $\\varphi(15)=\\varphi(3)\\cdot\\varphi(5)=2\\cdot4=8$ (since $15=3\\cdot5$, distinct primes).</div><div class=\"ml-vi\">Đây là hàm Euler $\\varphi(15)=\\varphi(3)\\cdot\\varphi(5)=2\\cdot4=8$ (vì $15=3\\cdot5$, hai số nguyên tố khác nhau).</div>"
+          "explanation": "<div class=\"ml-en\">This is Euler's totient $\\varphi(15)=\\varphi(3)\\cdot\\varphi(5)=2\\cdot4=8$ (since $15=3\\cdot5$, distinct primes).</div><div class=\"ml-vi\">Đây là hàm Euler $\\varphi(15)=\\varphi(3)\\cdot\\varphi(5)=2\\cdot4=8$ (vì $15=3\\cdot5$, hai số nguyên tố khác nhau).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q21.png"
         },
         {
           "kind": "MCQ",
@@ -3028,7 +3148,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Legendre's formula: $\\lfloor20/2\\rfloor+\\lfloor20/4\\rfloor+\\lfloor20/8\\rfloor+\\lfloor20/16\\rfloor=10+5+2+1=18$.</div><div class=\"ml-vi\">Công thức Legendre: $\\lfloor20/2\\rfloor+\\lfloor20/4\\rfloor+\\lfloor20/8\\rfloor+\\lfloor20/16\\rfloor=10+5+2+1=18$.</div>"
+          "explanation": "<div class=\"ml-en\">Legendre's formula: $\\lfloor20/2\\rfloor+\\lfloor20/4\\rfloor+\\lfloor20/8\\rfloor+\\lfloor20/16\\rfloor=10+5+2+1=18$.</div><div class=\"ml-vi\">Công thức Legendre: $\\lfloor20/2\\rfloor+\\lfloor20/4\\rfloor+\\lfloor20/8\\rfloor+\\lfloor20/16\\rfloor=10+5+2+1=18$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q22.png"
         },
         {
           "kind": "MCQ",
@@ -3054,7 +3175,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Pad to 12 bits: $011\\,011\\,111\\,011$. Groups of 3: $011=3$, $011=3$, $111=7$, $011=3$, giving $(3373)_8$.</div><div class=\"ml-vi\">Đệm thành 12 bit: $011\\,011\\,111\\,011$. Nhóm 3 bit: $011=3$, $011=3$, $111=7$, $011=3$, cho $(3373)_8$.</div>"
+          "explanation": "<div class=\"ml-en\">Pad to 12 bits: $011\\,011\\,111\\,011$. Groups of 3: $011=3$, $011=3$, $111=7$, $011=3$, giving $(3373)_8$.</div><div class=\"ml-vi\">Đệm thành 12 bit: $011\\,011\\,111\\,011$. Nhóm 3 bit: $011=3$, $011=3$, $111=7$, $011=3$, cho $(3373)_8$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q23.png"
         },
         {
           "kind": "MCQ",
@@ -3080,7 +3202,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$11^2=121\\equiv20\\pmod{101}$. $11^4\\equiv20^2=400\\equiv400-303=97\\pmod{101}$. $11^5\\equiv97\\cdot11=1067\\equiv1067-1010=57\\pmod{101}$.</div><div class=\"ml-vi\">$11^2=121\\equiv20\\pmod{101}$. $11^4\\equiv20^2=400\\equiv400-303=97\\pmod{101}$. $11^5\\equiv97\\cdot11=1067\\equiv1067-1010=57\\pmod{101}$.</div>"
+          "explanation": "<div class=\"ml-en\">$11^2=121\\equiv20\\pmod{101}$. $11^4\\equiv20^2=400\\equiv400-303=97\\pmod{101}$. $11^5\\equiv97\\cdot11=1067\\equiv1067-1010=57\\pmod{101}$.</div><div class=\"ml-vi\">$11^2=121\\equiv20\\pmod{101}$. $11^4\\equiv20^2=400\\equiv400-303=97\\pmod{101}$. $11^5\\equiv97\\cdot11=1067\\equiv1067-1010=57\\pmod{101}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q24.png"
         },
         {
           "kind": "MCQ",
@@ -3106,7 +3229,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">Standard induction structure: basis step (2: $n=3$ case) $\\to$ state induction hypothesis (4: assume for $k$, will show for $k+1$) $\\to$ inductive proof (3: derive $2^{k+1}>k+4$) $\\to$ conclusion (1: therefore true for all $n>2$). Order: 2, 4, 3, 1.</div><div class=\"ml-vi\">Cấu trúc quy nạp chuẩn: bước cơ sở (2: trường hợp $n=3$) $\\to$ nêu giả thiết quy nạp (4: giả sử đúng với $k$, sẽ chỉ ra với $k+1$) $\\to$ chứng minh quy nạp (3: suy ra $2^{k+1}>k+4$) $\\to$ kết luận (1: vậy đúng với mọi $n>2$). Thứ tự: 2, 4, 3, 1.</div>"
+          "explanation": "<div class=\"ml-en\">Standard induction structure: basis step (2: $n=3$ case) $\\to$ state induction hypothesis (4: assume for $k$, will show for $k+1$) $\\to$ inductive proof (3: derive $2^{k+1}>k+4$) $\\to$ conclusion (1: therefore true for all $n>2$). Order: 2, 4, 3, 1.</div><div class=\"ml-vi\">Cấu trúc quy nạp chuẩn: bước cơ sở (2: trường hợp $n=3$) $\\to$ nêu giả thiết quy nạp (4: giả sử đúng với $k$, sẽ chỉ ra với $k+1$) $\\to$ chứng minh quy nạp (3: suy ra $2^{k+1}>k+4$) $\\to$ kết luận (1: vậy đúng với mọi $n>2$). Thứ tự: 2, 4, 3, 1.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q25.png"
         },
         {
           "kind": "MCQ",
@@ -3132,7 +3256,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">(i) and (iv) only produce powers of 3 times $\\pm3$ (e.g. 9, 27, ...), missing 6. (iii) only produces positive multiples of 3 (3, 6, 9, ...), missing negatives. (ii): starting from $\\{3\\}$ and closing under subtraction generates the full subgroup of multiples of 3 -- $3-3=0$, $0-3=-3$, $3-(-3)=6$, $-3-3=-6$, $6-3=3$... eventually all multiples of 3, both signs.</div><div class=\"ml-vi\">(i) và (iv) chỉ sinh ra lũy thừa của 3 nhân $\\pm3$ (vd 9, 27, ...), thiếu 6. (iii) chỉ sinh bội dương của 3 (3, 6, 9, ...), thiếu số âm. (ii): bắt đầu từ $\\{3\\}$ và đóng dưới phép trừ sinh ra toàn bộ nhóm con các bội của 3 -- $3-3=0$, $0-3=-3$, $3-(-3)=6$, $-3-3=-6$, $6-3=3$... cuối cùng ra mọi bội của 3, cả âm lẫn dương.</div>"
+          "explanation": "<div class=\"ml-en\">(i) and (iv) only produce powers of 3 times $\\pm3$ (e.g. 9, 27, ...), missing 6. (iii) only produces positive multiples of 3 (3, 6, 9, ...), missing negatives. (ii): starting from $\\{3\\}$ and closing under subtraction generates the full subgroup of multiples of 3 -- $3-3=0$, $0-3=-3$, $3-(-3)=6$, $-3-3=-6$, $6-3=3$... eventually all multiples of 3, both signs.</div><div class=\"ml-vi\">(i) và (iv) chỉ sinh ra lũy thừa của 3 nhân $\\pm3$ (vd 9, 27, ...), thiếu 6. (iii) chỉ sinh bội dương của 3 (3, 6, 9, ...), thiếu số âm. (ii): bắt đầu từ $\\{3\\}$ và đóng dưới phép trừ sinh ra toàn bộ nhóm con các bội của 3 -- $3-3=0$, $0-3=-3$, $3-(-3)=6$, $-3-3=-6$, $6-3=3$... cuối cùng ra mọi bội của 3, cả âm lẫn dương.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q26.png"
         },
         {
           "kind": "MCQ",
@@ -3155,7 +3280,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Each step adds either $(2,3)$ or $(3,2)$, so after $n$ steps $a+b=5n$ must hold and $2n\\le a,b\\le3n$. Only $(10,15)$ has $a+b=25$ divisible by 5 (n=5), reached by 5 consecutive $(2,3)$ steps: $(0,0)\\to(2,3)\\to(4,6)\\to(6,9)\\to(8,12)\\to(10,15)$.</div><div class=\"ml-vi\">Mỗi bước cộng thêm $(2,3)$ hoặc $(3,2)$, nên sau $n$ bước phải có $a+b=5n$ và $2n\\le a,b\\le3n$. Chỉ $(10,15)$ có $a+b=25$ chia hết cho 5 (n=5), đạt được bằng 5 bước $(2,3)$ liên tiếp: $(0,0)\\to(2,3)\\to(4,6)\\to(6,9)\\to(8,12)\\to(10,15)$.</div>"
+          "explanation": "<div class=\"ml-en\">Each step adds either $(2,3)$ or $(3,2)$, so after $n$ steps $a+b=5n$ must hold and $2n\\le a,b\\le3n$. Only $(10,15)$ has $a+b=25$ divisible by 5 (n=5), reached by 5 consecutive $(2,3)$ steps: $(0,0)\\to(2,3)\\to(4,6)\\to(6,9)\\to(8,12)\\to(10,15)$.</div><div class=\"ml-vi\">Mỗi bước cộng thêm $(2,3)$ hoặc $(3,2)$, nên sau $n$ bước phải có $a+b=5n$ và $2n\\le a,b\\le3n$. Chỉ $(10,15)$ có $a+b=25$ chia hết cho 5 (n=5), đạt được bằng 5 bước $(2,3)$ liên tiếp: $(0,0)\\to(2,3)\\to(4,6)\\to(6,9)\\to(8,12)\\to(10,15)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q27.png"
         },
         {
           "kind": "MCQ",
@@ -3178,7 +3304,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$ketqua(1)=98=2\\cdot7^2$. $ketqua(2)=7\\cdot98=2\\cdot7^3$. In general $ketqua(n)=98\\cdot7^{n-1}=2\\cdot7^2\\cdot7^{n-1}=2\\cdot7^{n+1}$, matching option (iv).</div><div class=\"ml-vi\">$ketqua(1)=98=2\\cdot7^2$. $ketqua(2)=7\\cdot98=2\\cdot7^3$. Tổng quát $ketqua(n)=98\\cdot7^{n-1}=2\\cdot7^2\\cdot7^{n-1}=2\\cdot7^{n+1}$, khớp đáp án (iv).</div>"
+          "explanation": "<div class=\"ml-en\">$ketqua(1)=98=2\\cdot7^2$. $ketqua(2)=7\\cdot98=2\\cdot7^3$. In general $ketqua(n)=98\\cdot7^{n-1}=2\\cdot7^2\\cdot7^{n-1}=2\\cdot7^{n+1}$, matching option (iv).</div><div class=\"ml-vi\">$ketqua(1)=98=2\\cdot7^2$. $ketqua(2)=7\\cdot98=2\\cdot7^3$. Tổng quát $ketqua(n)=98\\cdot7^{n-1}=2\\cdot7^2\\cdot7^{n-1}=2\\cdot7^{n+1}$, khớp đáp án (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q28.png"
         },
         {
           "kind": "MCQ",
@@ -3201,7 +3328,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$function(1)=1=1^2$, $function(2)=3+1=4=2^2$, $function(3)=5+4=9=3^2$. In general $2k-1$ is the $k$-th odd positive integer, so $function(n)=\\sum_{k=1}^n(2k-1)=n^2$, the sum of the first $n$ odd positive integers.</div><div class=\"ml-vi\">$function(1)=1=1^2$, $function(2)=3+1=4=2^2$, $function(3)=5+4=9=3^2$. Tổng quát $2k-1$ là số lẻ dương thứ $k$, nên $function(n)=\\sum_{k=1}^n(2k-1)=n^2$, tổng $n$ số nguyên dương lẻ đầu tiên.</div>"
+          "explanation": "<div class=\"ml-en\">$function(1)=1=1^2$, $function(2)=3+1=4=2^2$, $function(3)=5+4=9=3^2$. In general $2k-1$ is the $k$-th odd positive integer, so $function(n)=\\sum_{k=1}^n(2k-1)=n^2$, the sum of the first $n$ odd positive integers.</div><div class=\"ml-vi\">$function(1)=1=1^2$, $function(2)=3+1=4=2^2$, $function(3)=5+4=9=3^2$. Tổng quát $2k-1$ là số lẻ dương thứ $k$, nên $function(n)=\\sum_{k=1}^n(2k-1)=n^2$, tổng $n$ số nguyên dương lẻ đầu tiên.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q29.png"
         },
         {
           "kind": "MCQ",
@@ -3227,7 +3355,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">8-digit numbers range from $10{,}000{,}000$ to $99{,}999{,}999$. Those divisible by 10 (ending in 0) range from $10{,}000{,}000$ to $99{,}999{,}990$, giving $(99{,}999{,}990-10{,}000{,}000)/10+1=9{,}000{,}000$.</div><div class=\"ml-vi\">Số có 8 chữ số nằm từ $10.000.000$ đến $99.999.999$. Số chia hết cho 10 (tận cùng 0) nằm từ $10.000.000$ đến $99.999.990$, cho $(99.999.990-10.000.000)/10+1=9.000.000$.</div>"
+          "explanation": "<div class=\"ml-en\">8-digit numbers range from $10{,}000{,}000$ to $99{,}999{,}999$. Those divisible by 10 (ending in 0) range from $10{,}000{,}000$ to $99{,}999{,}990$, giving $(99{,}999{,}990-10{,}000{,}000)/10+1=9{,}000{,}000$.</div><div class=\"ml-vi\">Số có 8 chữ số nằm từ $10.000.000$ đến $99.999.999$. Số chia hết cho 10 (tận cùng 0) nằm từ $10.000.000$ đến $99.999.990$, cho $(99.999.990-10.000.000)/10+1=9.000.000$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q30.png"
         },
         {
           "kind": "MCQ",
@@ -3253,7 +3382,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Divisible by 6: $\\lfloor100/6\\rfloor=16$. Divisible by 9: $\\lfloor100/9\\rfloor=11$. Divisible by both ($\\mathrm{lcm}(6,9)=18$): $\\lfloor100/18\\rfloor=5$. Exactly one: $(16-5)+(11-5)=11+6=17$.</div><div class=\"ml-vi\">Chia hết cho 6: $\\lfloor100/6\\rfloor=16$. Chia hết cho 9: $\\lfloor100/9\\rfloor=11$. Chia hết cho cả hai ($\\mathrm{lcm}(6,9)=18$): $\\lfloor100/18\\rfloor=5$. Đúng một: $(16-5)+(11-5)=11+6=17$.</div>"
+          "explanation": "<div class=\"ml-en\">Divisible by 6: $\\lfloor100/6\\rfloor=16$. Divisible by 9: $\\lfloor100/9\\rfloor=11$. Divisible by both ($\\mathrm{lcm}(6,9)=18$): $\\lfloor100/18\\rfloor=5$. Exactly one: $(16-5)+(11-5)=11+6=17$.</div><div class=\"ml-vi\">Chia hết cho 6: $\\lfloor100/6\\rfloor=16$. Chia hết cho 9: $\\lfloor100/9\\rfloor=11$. Chia hết cho cả hai ($\\mathrm{lcm}(6,9)=18$): $\\lfloor100/18\\rfloor=5$. Đúng một: $(16-5)+(11-5)=11+6=17$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q31.png"
         },
         {
           "kind": "MCQ",
@@ -3279,7 +3409,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$a_0=1+4+0=5$. $a_2=4+4(9)+2=4+36+2=42$. $a_4=16+4(81)+4=16+324+4=344$.</div><div class=\"ml-vi\">$a_0=1+4+0=5$. $a_2=4+4(9)+2=4+36+2=42$. $a_4=16+4(81)+4=16+324+4=344$.</div>"
+          "explanation": "<div class=\"ml-en\">$a_0=1+4+0=5$. $a_2=4+4(9)+2=4+36+2=42$. $a_4=16+4(81)+4=16+324+4=344$.</div><div class=\"ml-vi\">$a_0=1+4+0=5$. $a_2=4+4(9)+2=4+36+2=42$. $a_4=16+4(81)+4=16+324+4=344$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q32.png"
         },
         {
           "kind": "MCQ",
@@ -3305,7 +3436,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f(9)=7-\\frac{81}{9}f(3)=7-9f(3)$. Setting this equal to 25: $7-9f(3)=25\\Rightarrow-9f(3)=18\\Rightarrow f(3)=-2$.</div><div class=\"ml-vi\">$f(9)=7-\\frac{81}{9}f(3)=7-9f(3)$. Cho bằng 25: $7-9f(3)=25\\Rightarrow-9f(3)=18\\Rightarrow f(3)=-2$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(9)=7-\\frac{81}{9}f(3)=7-9f(3)$. Setting this equal to 25: $7-9f(3)=25\\Rightarrow-9f(3)=18\\Rightarrow f(3)=-2$.</div><div class=\"ml-vi\">$f(9)=7-\\frac{81}{9}f(3)=7-9f(3)$. Cho bằng 25: $7-9f(3)=25\\Rightarrow-9f(3)=18\\Rightarrow f(3)=-2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q33.png"
         },
         {
           "kind": "MCQ",
@@ -3331,7 +3463,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">By the handshaking lemma, sum of degrees $=2\\times\\text{edges}=20$. With every vertex having degree 4, the number of vertices is $20/4=5$.</div><div class=\"ml-vi\">Theo bổ đề bắt tay, tổng bậc $=2\\times\\text{số cạnh}=20$. Với mọi đỉnh đều bậc 4, số đỉnh là $20/4=5$.</div>"
+          "explanation": "<div class=\"ml-en\">By the handshaking lemma, sum of degrees $=2\\times\\text{edges}=20$. With every vertex having degree 4, the number of vertices is $20/4=5$.</div><div class=\"ml-vi\">Theo bổ đề bắt tay, tổng bậc $=2\\times\\text{số cạnh}=20$. Với mọi đỉnh đều bậc 4, số đỉnh là $20/4=5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q34.png"
         },
         {
           "kind": "MCQ",
@@ -3354,7 +3487,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i) has 6 vertices but a degree of 7, exceeding the maximum possible degree $n-1=5$ -- impossible, also the sum $23$ is odd. (ii) has 7 vertices with two vertices of degree 5, but one vertex has degree 0 (isolated); a degree-5 vertex must connect to 5 of the other 6, yet the isolated vertex is unavailable, and applying the Erdos-Gallai check at $k=2$: $5+5=10>2(1)+\\min(4,2)+\\min(3,2)+\\min(2,2)+\\min(1,2)=2+2+2+2+1=9$ -- fails, so (ii) is not graphical either.</div><div class=\"ml-vi\">(i) có 6 đỉnh nhưng bậc 7, vượt quá bậc tối đa có thể $n-1=5$ -- không thể, tổng $23$ cũng lẻ. (ii) có 7 đỉnh với hai đỉnh bậc 5, nhưng một đỉnh bậc 0 (cô lập); đỉnh bậc 5 phải nối với 5 trong 6 đỉnh còn lại, nhưng đỉnh cô lập không khả dụng, kiểm tra Erdos-Gallai tại $k=2$: $5+5=10>2(1)+\\min(4,2)+\\min(3,2)+\\min(2,2)+\\min(1,2)=2+2+2+2+1=9$ -- thất bại, nên (ii) cũng không phải dãy bậc hợp lệ.</div>"
+          "explanation": "<div class=\"ml-en\">(i) has 6 vertices but a degree of 7, exceeding the maximum possible degree $n-1=5$ -- impossible, also the sum $23$ is odd. (ii) has 7 vertices with two vertices of degree 5, but one vertex has degree 0 (isolated); a degree-5 vertex must connect to 5 of the other 6, yet the isolated vertex is unavailable, and applying the Erdos-Gallai check at $k=2$: $5+5=10>2(1)+\\min(4,2)+\\min(3,2)+\\min(2,2)+\\min(1,2)=2+2+2+2+1=9$ -- fails, so (ii) is not graphical either.</div><div class=\"ml-vi\">(i) có 6 đỉnh nhưng bậc 7, vượt quá bậc tối đa có thể $n-1=5$ -- không thể, tổng $23$ cũng lẻ. (ii) có 7 đỉnh với hai đỉnh bậc 5, nhưng một đỉnh bậc 0 (cô lập); đỉnh bậc 5 phải nối với 5 trong 6 đỉnh còn lại, nhưng đỉnh cô lập không khả dụng, kiểm tra Erdos-Gallai tại $k=2$: $5+5=10>2(1)+\\min(4,2)+\\min(3,2)+\\min(2,2)+\\min(1,2)=2+2+2+2+1=9$ -- thất bại, nên (ii) cũng không phải dãy bậc hợp lệ.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q35.png"
         },
         {
           "kind": "MCQ",
@@ -3380,7 +3514,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">By number of edges (0 to 3), each edge-count class has exactly one graph up to isomorphism on 3 vertices: empty graph (0 edges), one edge, two edges (path $P_3$), triangle (3 edges) -- total 4.</div><div class=\"ml-vi\">Theo số cạnh (0 đến 3), mỗi lớp số cạnh chỉ có đúng một đồ thị (sai khác đẳng cấu) với 3 đỉnh: đồ thị rỗng (0 cạnh), một cạnh, hai cạnh (đường đi $P_3$), tam giác (3 cạnh) -- tổng cộng 4.</div>"
+          "explanation": "<div class=\"ml-en\">By number of edges (0 to 3), each edge-count class has exactly one graph up to isomorphism on 3 vertices: empty graph (0 edges), one edge, two edges (path $P_3$), triangle (3 edges) -- total 4.</div><div class=\"ml-vi\">Theo số cạnh (0 đến 3), mỗi lớp số cạnh chỉ có đúng một đồ thị (sai khác đẳng cấu) với 3 đỉnh: đồ thị rỗng (0 cạnh), một cạnh, hai cạnh (đường đi $P_3$), tam giác (3 cạnh) -- tổng cộng 4.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q36.png"
         },
         {
           "kind": "MCQ",
@@ -3403,7 +3538,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$W_n$ has $n+1$ vertices, so 10 vertices means $n=9$ -- (i) is correct. Isomorphic graphs need not have identical adjacency matrices (labeling can differ) -- (ii) is INCORRECT. Isomorphic graphs always have the same edge count -- (iii) is correct. For $n=3$, $W_3$ has 4 vertices (hub + 3-cycle), hub degree 3 and each rim vertex degree $2+1=3$ -- all 4 vertices have degree 3, so (iv) is correct. Only (ii) is incorrect.</div><div class=\"ml-vi\">$W_n$ có $n+1$ đỉnh, nên 10 đỉnh nghĩa là $n=9$ -- (i) đúng. Đồ thị đẳng cấu không nhất thiết có ma trận kề giống hệt (cách đánh nhãn có thể khác) -- (ii) SAI. Đồ thị đẳng cấu luôn có cùng số cạnh -- (iii) đúng. Với $n=3$, $W_3$ có 4 đỉnh (trục + chu trình 3), trục bậc 3 và mỗi đỉnh vành bậc $2+1=3$ -- cả 4 đỉnh đều bậc 3, nên (iv) đúng. Chỉ (ii) sai.</div>"
+          "explanation": "<div class=\"ml-en\">$W_n$ has $n+1$ vertices, so 10 vertices means $n=9$ -- (i) is correct. Isomorphic graphs need not have identical adjacency matrices (labeling can differ) -- (ii) is INCORRECT. Isomorphic graphs always have the same edge count -- (iii) is correct. For $n=3$, $W_3$ has 4 vertices (hub + 3-cycle), hub degree 3 and each rim vertex degree $2+1=3$ -- all 4 vertices have degree 3, so (iv) is correct. Only (ii) is incorrect.</div><div class=\"ml-vi\">$W_n$ có $n+1$ đỉnh, nên 10 đỉnh nghĩa là $n=9$ -- (i) đúng. Đồ thị đẳng cấu không nhất thiết có ma trận kề giống hệt (cách đánh nhãn có thể khác) -- (ii) SAI. Đồ thị đẳng cấu luôn có cùng số cạnh -- (iii) đúng. Với $n=3$, $W_3$ có 4 đỉnh (trục + chu trình 3), trục bậc 3 và mỗi đỉnh vành bậc $2+1=3$ -- cả 4 đỉnh đều bậc 3, nên (iv) đúng. Chỉ (ii) sai.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q37.png"
         },
         {
           "kind": "MCQ",
@@ -3429,7 +3565,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">X (drawn as a pentagram) is actually a 5-cycle $C_5$ (each vertex has degree 2). Deleting any one edge turns a cycle into a path with 4 edges, and every edge of a path is a bridge -- 4 cut-edges. Y is two triangles sharing the vertex $Z$; deleting any one edge (which always belongs to exactly one triangle) breaks that triangle into a 2-edge path (both edges become bridges), while the other triangle stays 2-edge-connected (no bridges) -- 2 cut-edges. Total: $4+2=6$.</div><div class=\"ml-vi\">X (vẽ dạng ngôi sao) thực chất là chu trình 5 đỉnh $C_5$ (mỗi đỉnh bậc 2). Xoá một cạnh bất kỳ biến chu trình thành đường đi 4 cạnh, và mọi cạnh của đường đi đều là cầu -- 4 cạnh cắt. Y là hai tam giác chung đỉnh $Z$; xoá một cạnh bất kỳ (luôn thuộc đúng một tam giác) làm tam giác đó vỡ thành đường đi 2 cạnh (cả hai thành cầu), tam giác còn lại vẫn liên thông cạnh-kép (không có cầu) -- 2 cạnh cắt. Tổng: $4+2=6$.</div>"
+          "explanation": "<div class=\"ml-en\">X (drawn as a pentagram) is actually a 5-cycle $C_5$ (each vertex has degree 2). Deleting any one edge turns a cycle into a path with 4 edges, and every edge of a path is a bridge -- 4 cut-edges. Y is two triangles sharing the vertex $Z$; deleting any one edge (which always belongs to exactly one triangle) breaks that triangle into a 2-edge path (both edges become bridges), while the other triangle stays 2-edge-connected (no bridges) -- 2 cut-edges. Total: $4+2=6$.</div><div class=\"ml-vi\">X (vẽ dạng ngôi sao) thực chất là chu trình 5 đỉnh $C_5$ (mỗi đỉnh bậc 2). Xoá một cạnh bất kỳ biến chu trình thành đường đi 4 cạnh, và mọi cạnh của đường đi đều là cầu -- 4 cạnh cắt. Y là hai tam giác chung đỉnh $Z$; xoá một cạnh bất kỳ (luôn thuộc đúng một tam giác) làm tam giác đó vỡ thành đường đi 2 cạnh (cả hai thành cầu), tam giác còn lại vẫn liên thông cạnh-kép (không có cầu) -- 2 cạnh cắt. Tổng: $4+2=6$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q38.png"
         },
         {
           "kind": "MCQ",
@@ -3452,7 +3589,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Cut-edges: $P_1$-$P_3$, $P_1$-$P_2$, $P_2$-$P_4$ are all bridges (each is the sole link between two parts of the graph) -- 3 cut-edges; none of the 4-cycle's edges are bridges. Cut-vertices: $P_1$ (separates $P_3$), $P_2$ (separates $\\{P_1,P_3\\}$ from the rest), $P_4$ (separates $\\{P_1,P_2,P_3\\}$ from $\\{P_5,P_6,P_7\\}$) -- 3 cut-vertices; $P_3,P_5,P_6,P_7$ are not cut-vertices (leaf or part of the 2-connected cycle). So 3 and 3.</div><div class=\"ml-vi\">Cạnh cắt: $P_1$-$P_3$, $P_1$-$P_2$, $P_2$-$P_4$ đều là cầu (mỗi cạnh là liên kết duy nhất giữa hai phần đồ thị) -- 3 cạnh cắt; không cạnh nào của chu trình 4 đỉnh là cầu. Đỉnh cắt: $P_1$ (tách $P_3$), $P_2$ (tách $\\{P_1,P_3\\}$ khỏi phần còn lại), $P_4$ (tách $\\{P_1,P_2,P_3\\}$ khỏi $\\{P_5,P_6,P_7\\}$) -- 3 đỉnh cắt; $P_3,P_5,P_6,P_7$ không phải đỉnh cắt (đỉnh treo hoặc thuộc chu trình liên thông-2). Vậy 3 và 3.</div>"
+          "explanation": "<div class=\"ml-en\">Cut-edges: $P_1$-$P_3$, $P_1$-$P_2$, $P_2$-$P_4$ are all bridges (each is the sole link between two parts of the graph) -- 3 cut-edges; none of the 4-cycle's edges are bridges. Cut-vertices: $P_1$ (separates $P_3$), $P_2$ (separates $\\{P_1,P_3\\}$ from the rest), $P_4$ (separates $\\{P_1,P_2,P_3\\}$ from $\\{P_5,P_6,P_7\\}$) -- 3 cut-vertices; $P_3,P_5,P_6,P_7$ are not cut-vertices (leaf or part of the 2-connected cycle). So 3 and 3.</div><div class=\"ml-vi\">Cạnh cắt: $P_1$-$P_3$, $P_1$-$P_2$, $P_2$-$P_4$ đều là cầu (mỗi cạnh là liên kết duy nhất giữa hai phần đồ thị) -- 3 cạnh cắt; không cạnh nào của chu trình 4 đỉnh là cầu. Đỉnh cắt: $P_1$ (tách $P_3$), $P_2$ (tách $\\{P_1,P_3\\}$ khỏi phần còn lại), $P_4$ (tách $\\{P_1,P_2,P_3\\}$ khỏi $\\{P_5,P_6,P_7\\}$) -- 3 đỉnh cắt; $P_3,P_5,P_6,P_7$ không phải đỉnh cắt (đỉnh treo hoặc thuộc chu trình liên thông-2). Vậy 3 và 3.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q39.png"
         },
         {
           "kind": "MCQ",
@@ -3478,7 +3616,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The wheel $W_n$ (hub + n-cycle rim, defined for $n\\ge3$) always has a Hamilton circuit: hub $\\to v_1\\to v_2\\to\\dots\\to v_n\\to$ hub, using two spokes and the full rim cycle. This works for every $n>2$.</div><div class=\"ml-vi\">Đồ thị bánh xe $W_n$ (trục + chu trình vành n đỉnh, định nghĩa với $n\\ge3$) luôn có chu trình Hamilton: trục $\\to v_1\\to v_2\\to\\dots\\to v_n\\to$ trục, dùng hai nan hoa và trọn chu trình vành. Điều này đúng với mọi $n>2$.</div>"
+          "explanation": "<div class=\"ml-en\">The wheel $W_n$ (hub + n-cycle rim, defined for $n\\ge3$) always has a Hamilton circuit: hub $\\to v_1\\to v_2\\to\\dots\\to v_n\\to$ hub, using two spokes and the full rim cycle. This works for every $n>2$.</div><div class=\"ml-vi\">Đồ thị bánh xe $W_n$ (trục + chu trình vành n đỉnh, định nghĩa với $n\\ge3$) luôn có chu trình Hamilton: trục $\\to v_1\\to v_2\\to\\dots\\to v_n\\to$ trục, dùng hai nan hoa và trọn chu trình vành. Điều này đúng với mọi $n>2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q40.png"
         },
         {
           "kind": "MCQ",
@@ -3501,7 +3640,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$Q_3$ (the 3-cube graph) has $2^3=8$ vertices. A Hamilton circuit visits every vertex exactly once and returns to the start, so its length equals the number of vertices: 8.</div><div class=\"ml-vi\">$Q_3$ (đồ thị khối lập phương 3 chiều) có $2^3=8$ đỉnh. Chu trình Hamilton đi qua mỗi đỉnh đúng một lần rồi quay về đỉnh đầu, nên độ dài bằng số đỉnh: 8.</div>"
+          "explanation": "<div class=\"ml-en\">$Q_3$ (the 3-cube graph) has $2^3=8$ vertices. A Hamilton circuit visits every vertex exactly once and returns to the start, so its length equals the number of vertices: 8.</div><div class=\"ml-vi\">$Q_3$ (đồ thị khối lập phương 3 chiều) có $2^3=8$ đỉnh. Chu trình Hamilton đi qua mỗi đỉnh đúng một lần rồi quay về đỉnh đầu, nên độ dài bằng số đỉnh: 8.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q41.png"
         },
         {
           "kind": "MCQ",
@@ -3524,7 +3664,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">There are 3 distinct Hamilton circuits from A: A-B-C-D-A ($1+2+3+6=12$), A-B-D-C-A ($1+5+3+4=13$), A-C-B-D-A ($4+2+5+6=17$). Average $=(12+13+17)/3=42/3=14$.</div><div class=\"ml-vi\">Có 3 chu trình Hamilton khác nhau từ A: A-B-C-D-A ($1+2+3+6=12$), A-B-D-C-A ($1+5+3+4=13$), A-C-B-D-A ($4+2+5+6=17$). Trung bình $=(12+13+17)/3=42/3=14$.</div>"
+          "explanation": "<div class=\"ml-en\">There are 3 distinct Hamilton circuits from A: A-B-C-D-A ($1+2+3+6=12$), A-B-D-C-A ($1+5+3+4=13$), A-C-B-D-A ($4+2+5+6=17$). Average $=(12+13+17)/3=42/3=14$.</div><div class=\"ml-vi\">Có 3 chu trình Hamilton khác nhau từ A: A-B-C-D-A ($1+2+3+6=12$), A-B-D-C-A ($1+5+3+4=13$), A-C-B-D-A ($4+2+5+6=17$). Trung bình $=(12+13+17)/3=42/3=14$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q42.png"
         },
         {
           "kind": "MCQ",
@@ -3550,7 +3691,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">For a full $m$-ary tree, edges $=m\\cdot i$ where $i$ is the number of internal vertices, so $i=66/6=11$. Total vertices $n=\\text{edges}+1=67$. Leaves $=n-i=67-11=56$.</div><div class=\"ml-vi\">Với cây đầy đủ $m$-phân, số cạnh $=m\\cdot i$ với $i$ là số đỉnh trong, nên $i=66/6=11$. Tổng số đỉnh $n=\\text{số cạnh}+1=67$. Số lá $=n-i=67-11=56$.</div>"
+          "explanation": "<div class=\"ml-en\">For a full $m$-ary tree, edges $=m\\cdot i$ where $i$ is the number of internal vertices, so $i=66/6=11$. Total vertices $n=\\text{edges}+1=67$. Leaves $=n-i=67-11=56$.</div><div class=\"ml-vi\">Với cây đầy đủ $m$-phân, số cạnh $=m\\cdot i$ với $i$ là số đỉnh trong, nên $i=66/6=11$. Tổng số đỉnh $n=\\text{số cạnh}+1=67$. Số lá $=n-i=67-11=56$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q43.png"
         },
         {
           "kind": "MCQ",
@@ -3576,7 +3718,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">For a full m-ary tree of height h with l leaves, $l\\le m^h$, so $m\\ge\\lceil l^{1/h}\\rceil$. Here $63^{1/4}\\approx2.82$, and since $2^4=16<63$ while $3^4=81\\ge63$, the smallest valid $m$ is 3.</div><div class=\"ml-vi\">Với cây đầy đủ m-phân chiều cao h có l lá, ta có $l\\le m^h$, nên $m\\ge\\lceil l^{1/h}\\rceil$. Ở đây $63^{1/4}\\approx2.82$, và vì $2^4=16<63$ trong khi $3^4=81\\ge63$, giá trị $m$ nhỏ nhất hợp lệ là 3.</div>"
+          "explanation": "<div class=\"ml-en\">For a full m-ary tree of height h with l leaves, $l\\le m^h$, so $m\\ge\\lceil l^{1/h}\\rceil$. Here $63^{1/4}\\approx2.82$, and since $2^4=16<63$ while $3^4=81\\ge63$, the smallest valid $m$ is 3.</div><div class=\"ml-vi\">Với cây đầy đủ m-phân chiều cao h có l lá, ta có $l\\le m^h$, nên $m\\ge\\lceil l^{1/h}\\rceil$. Ở đây $63^{1/4}\\approx2.82$, và vì $2^4=16<63$ trong khi $3^4=81\\ge63$, giá trị $m$ nhỏ nhất hợp lệ là 3.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q44.png"
         },
         {
           "kind": "MCQ",
@@ -3599,7 +3742,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">(i): checking all pairs, no code is a prefix of another (e.g. $01$ is not a prefix of $001$ since they differ at position 2) -- valid. (ii): $b=10$ is a prefix of $e=100$ -- INVALID. (iii): checking all pairs (three length-3 codes differ from each other, none is a prefix of $m=11111$ since none start with $11$) -- valid. So (i) and (iii) are prefix codes.</div><div class=\"ml-vi\">(i): kiểm mọi cặp, không mã nào là tiền tố của mã khác (vd $01$ không phải tiền tố của $001$ vì khác nhau ở vị trí 2) -- hợp lệ. (ii): $b=10$ là tiền tố của $e=100$ -- KHÔNG hợp lệ. (iii): kiểm mọi cặp (ba mã dài 3 khác nhau, không mã nào là tiền tố của $m=11111$ vì không mã nào bắt đầu bằng $11$) -- hợp lệ. Vậy (i) và (iii) là mã tiền tố.</div>"
+          "explanation": "<div class=\"ml-en\">(i): checking all pairs, no code is a prefix of another (e.g. $01$ is not a prefix of $001$ since they differ at position 2) -- valid. (ii): $b=10$ is a prefix of $e=100$ -- INVALID. (iii): checking all pairs (three length-3 codes differ from each other, none is a prefix of $m=11111$ since none start with $11$) -- valid. So (i) and (iii) are prefix codes.</div><div class=\"ml-vi\">(i): kiểm mọi cặp, không mã nào là tiền tố của mã khác (vd $01$ không phải tiền tố của $001$ vì khác nhau ở vị trí 2) -- hợp lệ. (ii): $b=10$ là tiền tố của $e=100$ -- KHÔNG hợp lệ. (iii): kiểm mọi cặp (ba mã dài 3 khác nhau, không mã nào là tiền tố của $m=11111$ vì không mã nào bắt đầu bằng $11$) -- hợp lệ. Vậy (i) và (iii) là mã tiền tố.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q45.png"
         },
         {
           "kind": "MCQ",
@@ -3625,7 +3769,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">(i): $E=010$ is a prefix of $D=0101$ -- INVALID. (ii): $B=11$ is a prefix of $D=1101$ -- INVALID. (iii): checking all pairs (lengths 2,3,3,3,4,4), no code is a prefix of another -- VALID. Only (iii) is a prefix code.</div><div class=\"ml-vi\">(i): $E=010$ là tiền tố của $D=0101$ -- KHÔNG hợp lệ. (ii): $B=11$ là tiền tố của $D=1101$ -- KHÔNG hợp lệ. (iii): kiểm mọi cặp (độ dài 2,3,3,3,4,4), không mã nào là tiền tố của mã khác -- HỢP LỆ. Chỉ (iii) là mã tiền tố.</div>"
+          "explanation": "<div class=\"ml-en\">(i): $E=010$ is a prefix of $D=0101$ -- INVALID. (ii): $B=11$ is a prefix of $D=1101$ -- INVALID. (iii): checking all pairs (lengths 2,3,3,3,4,4), no code is a prefix of another -- VALID. Only (iii) is a prefix code.</div><div class=\"ml-vi\">(i): $E=010$ là tiền tố của $D=0101$ -- KHÔNG hợp lệ. (ii): $B=11$ là tiền tố của $D=1101$ -- KHÔNG hợp lệ. (iii): kiểm mọi cặp (độ dài 2,3,3,3,4,4), không mã nào là tiền tố của mã khác -- HỢP LỆ. Chỉ (iii) là mã tiền tố.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q46.png"
         },
         {
           "kind": "MCQ",
@@ -3651,7 +3796,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Parse right-to-left recursively: inner $+\\,1\\,1=2$, then $-\\,7\\,2=5$, then $/\\,15\\,5=3$, then $*\\,3\\,3=9$ (using $3$ from the last token of that group). Second half: $+\\,1\\,1=2$, then $+\\,2\\,2=4$. Finally $-\\,9\\,4=5$.</div><div class=\"ml-vi\">Phân tích đệ quy: $+\\,1\\,1=2$, rồi $-\\,7\\,2=5$, rồi $/\\,15\\,5=3$, rồi $*\\,3\\,3=9$ (dùng $3$ ở token cuối nhóm đó). Nửa sau: $+\\,1\\,1=2$, rồi $+\\,2\\,2=4$. Cuối cùng $-\\,9\\,4=5$.</div>"
+          "explanation": "<div class=\"ml-en\">Parse right-to-left recursively: inner $+\\,1\\,1=2$, then $-\\,7\\,2=5$, then $/\\,15\\,5=3$, then $*\\,3\\,3=9$ (using $3$ from the last token of that group). Second half: $+\\,1\\,1=2$, then $+\\,2\\,2=4$. Finally $-\\,9\\,4=5$.</div><div class=\"ml-vi\">Phân tích đệ quy: $+\\,1\\,1=2$, rồi $-\\,7\\,2=5$, rồi $/\\,15\\,5=3$, rồi $*\\,3\\,3=9$ (dùng $3$ ở token cuối nhóm đó). Nửa sau: $+\\,1\\,1=2$, rồi $+\\,2\\,2=4$. Cuối cùng $-\\,9\\,4=5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q47.png"
         },
         {
           "kind": "MCQ",
@@ -3677,7 +3823,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$x*y\\to*xy$. $x+(x*y)\\to+x*xy$. $x/y\\to/xy$. Whole expression $\\to+(+x*xy)(/xy)=+\\ +\\ x\\ *\\ x\\ y\\ /\\ x\\ y$.</div><div class=\"ml-vi\">$x*y\\to*xy$. $x+(x*y)\\to+x*xy$. $x/y\\to/xy$. Toàn bộ biểu thức $\\to+(+x*xy)(/xy)=+\\ +\\ x\\ *\\ x\\ y\\ /\\ x\\ y$.</div>"
+          "explanation": "<div class=\"ml-en\">$x*y\\to*xy$. $x+(x*y)\\to+x*xy$. $x/y\\to/xy$. Whole expression $\\to+(+x*xy)(/xy)=+\\ +\\ x\\ *\\ x\\ y\\ /\\ x\\ y$.</div><div class=\"ml-vi\">$x*y\\to*xy$. $x+(x*y)\\to+x*xy$. $x/y\\to/xy$. Toàn bộ biểu thức $\\to+(+x*xy)(/xy)=+\\ +\\ x\\ *\\ x\\ y\\ /\\ x\\ y$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q48.png"
         },
         {
           "kind": "MCQ",
@@ -3700,7 +3847,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$C_n$ has $n$ vertices and $n$ edges. A spanning tree needs exactly $n-1$ edges, obtained by removing exactly one edge from the cycle. Removing each of the $n$ different edges gives a distinct spanning tree (a path), so there are $n$ spanning trees.</div><div class=\"ml-vi\">$C_n$ có $n$ đỉnh và $n$ cạnh. Cây khung cần đúng $n-1$ cạnh, đạt được bằng cách xoá đúng một cạnh khỏi chu trình. Xoá mỗi cạnh trong $n$ cạnh khác nhau cho một cây khung khác nhau (một đường đi), nên có $n$ cây khung.</div>"
+          "explanation": "<div class=\"ml-en\">$C_n$ has $n$ vertices and $n$ edges. A spanning tree needs exactly $n-1$ edges, obtained by removing exactly one edge from the cycle. Removing each of the $n$ different edges gives a distinct spanning tree (a path), so there are $n$ spanning trees.</div><div class=\"ml-vi\">$C_n$ có $n$ đỉnh và $n$ cạnh. Cây khung cần đúng $n-1$ cạnh, đạt được bằng cách xoá đúng một cạnh khỏi chu trình. Xoá mỗi cạnh trong $n$ cạnh khác nhau cho một cây khung khác nhau (một đường đi), nên có $n$ cây khung.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q49.png"
         },
         {
           "kind": "MCQ",
@@ -3726,7 +3874,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Sorted edges: AB=1, BE=1, DE=1, CF=2, AD=3, EF=4, BD=5, CE=5, BC=6. Adding in order (skipping cycles): AB (\\{A,B\\}), BE (\\{A,B,E\\}), DE (\\{A,B,D,E\\}), CF (\\{C,F\\}), AD skipped (cycle, A,D already connected), EF connects \\{A,B,D,E\\} with \\{C,F\\} -- 5th edge, completing the spanning tree of 6 vertices. Last edge added: EF.</div><div class=\"ml-vi\">Sắp cạnh tăng dần: AB=1, BE=1, DE=1, CF=2, AD=3, EF=4, BD=5, CE=5, BC=6. Thêm theo thứ tự (bỏ qua cạnh tạo chu trình): AB (\\{A,B\\}), BE (\\{A,B,E\\}), DE (\\{A,B,D,E\\}), CF (\\{C,F\\}), AD bỏ qua (tạo chu trình, A,D đã liên thông), EF nối \\{A,B,D,E\\} với \\{C,F\\} -- cạnh thứ 5, hoàn tất cây khung 6 đỉnh. Cạnh cuối cùng: EF.</div>"
+          "explanation": "<div class=\"ml-en\">Sorted edges: AB=1, BE=1, DE=1, CF=2, AD=3, EF=4, BD=5, CE=5, BC=6. Adding in order (skipping cycles): AB (\\{A,B\\}), BE (\\{A,B,E\\}), DE (\\{A,B,D,E\\}), CF (\\{C,F\\}), AD skipped (cycle, A,D already connected), EF connects \\{A,B,D,E\\} with \\{C,F\\} -- 5th edge, completing the spanning tree of 6 vertices. Last edge added: EF.</div><div class=\"ml-vi\">Sắp cạnh tăng dần: AB=1, BE=1, DE=1, CF=2, AD=3, EF=4, BD=5, CE=5, BC=6. Thêm theo thứ tự (bỏ qua cạnh tạo chu trình): AB (\\{A,B\\}), BE (\\{A,B,E\\}), DE (\\{A,B,D,E\\}), CF (\\{C,F\\}), AD bỏ qua (tạo chu trình, A,D đã liên thông), EF nối \\{A,B,D,E\\} với \\{C,F\\} -- cạnh thứ 5, hoàn tất cây khung 6 đỉnh. Cạnh cuối cùng: EF.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D3/q50.png"
         }
       ]
     },
@@ -3769,7 +3918,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Need $(p\\to q)=F$ and $r=F$. $p\\to q=F$ only when $p=T,q=F$. So $p=T,q=F,r=F$: $(T\\to F)\\lor F=F\\lor F=F$. Check others: A gives $F\\to T=T$, $T\\lor F=T$. B gives $T\\to T=T$, $T\\lor F=T$. D gives $F\\to F=T$, $T\\lor F=T$. Only option C works.</div><div class=\"ml-vi\">Cần $(p\\to q)=F$ và $r=F$. $p\\to q=F$ chỉ khi $p=T,q=F$. Vậy $p=T,q=F,r=F$: $(T\\to F)\\lor F=F\\lor F=F$. Kiểm các đáp án khác: A cho $F\\to T=T$, $T\\lor F=T$. B cho $T\\to T=T$, $T\\lor F=T$. D cho $F\\to F=T$, $T\\lor F=T$. Chỉ đáp án C đúng.</div>"
+          "explanation": "<div class=\"ml-en\">Need $(p\\to q)=F$ and $r=F$. $p\\to q=F$ only when $p=T,q=F$. So $p=T,q=F,r=F$: $(T\\to F)\\lor F=F\\lor F=F$. Check others: A gives $F\\to T=T$, $T\\lor F=T$. B gives $T\\to T=T$, $T\\lor F=T$. D gives $F\\to F=T$, $T\\lor F=T$. Only option C works.</div><div class=\"ml-vi\">Cần $(p\\to q)=F$ và $r=F$. $p\\to q=F$ chỉ khi $p=T,q=F$. Vậy $p=T,q=F,r=F$: $(T\\to F)\\lor F=F\\lor F=F$. Kiểm các đáp án khác: A cho $F\\to T=T$, $T\\lor F=T$. B cho $T\\to T=T$, $T\\lor F=T$. D cho $F\\to F=T$, $T\\lor F=T$. Chỉ đáp án C đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q1.png"
         },
         {
           "kind": "MCQ",
@@ -3792,7 +3942,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">\"Neither...nor...\" means $\\neg p\\land\\neg q$, which by De Morgan equals $\\neg(p\\lor q)$, exactly option (i).</div><div class=\"ml-vi\">\"Không...cũng không...\" nghĩa là $\\neg p\\land\\neg q$, theo De Morgan bằng $\\neg(p\\lor q)$, đúng là đáp án (i).</div>"
+          "explanation": "<div class=\"ml-en\">\"Neither...nor...\" means $\\neg p\\land\\neg q$, which by De Morgan equals $\\neg(p\\lor q)$, exactly option (i).</div><div class=\"ml-vi\">\"Không...cũng không...\" nghĩa là $\\neg p\\land\\neg q$, theo De Morgan bằng $\\neg(p\\lor q)$, đúng là đáp án (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q2.png"
         },
         {
           "kind": "MCQ",
@@ -3815,7 +3966,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\neg(p\\leftrightarrow q)$ is true exactly when $p,q$ differ (XOR). Truth-table check: $p\\leftrightarrow\\neg q$ matches this pattern for all 4 rows, and so does $\\neg p\\leftrightarrow q$. Both (i) and (ii) are equivalent to $p\\oplus q$.</div><div class=\"ml-vi\">$\\neg(p\\leftrightarrow q)$ đúng chính xác khi $p,q$ khác nhau (XOR). Kiểm bảng chân trị: $p\\leftrightarrow\\neg q$ khớp mẫu này ở cả 4 dòng, và $\\neg p\\leftrightarrow q$ cũng vậy. Cả (i) và (ii) đều tương đương $p\\oplus q$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\neg(p\\leftrightarrow q)$ is true exactly when $p,q$ differ (XOR). Truth-table check: $p\\leftrightarrow\\neg q$ matches this pattern for all 4 rows, and so does $\\neg p\\leftrightarrow q$. Both (i) and (ii) are equivalent to $p\\oplus q$.</div><div class=\"ml-vi\">$\\neg(p\\leftrightarrow q)$ đúng chính xác khi $p,q$ khác nhau (XOR). Kiểm bảng chân trị: $p\\leftrightarrow\\neg q$ khớp mẫu này ở cả 4 dòng, và $\\neg p\\leftrightarrow q$ cũng vậy. Cả (i) và (ii) đều tương đương $p\\oplus q$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q3.png"
         },
         {
           "kind": "MCQ",
@@ -3838,7 +3990,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">\"All students...have\" is a universal statement over the domain of students: for every student $x$, $C(x)\\lor D(x)\\lor F(x)$ holds. That is $\\forall x\\,C(x)\\lor D(x)\\lor F(x)$, option (iii).</div><div class=\"ml-vi\">\"Mọi sinh viên...có\" là phát biểu toàn thể trên miền sinh viên: với mọi sinh viên $x$, $C(x)\\lor D(x)\\lor F(x)$ đúng. Đó là $\\forall x\\,C(x)\\lor D(x)\\lor F(x)$, đáp án (iii).</div>"
+          "explanation": "<div class=\"ml-en\">\"All students...have\" is a universal statement over the domain of students: for every student $x$, $C(x)\\lor D(x)\\lor F(x)$ holds. That is $\\forall x\\,C(x)\\lor D(x)\\lor F(x)$, option (iii).</div><div class=\"ml-vi\">\"Mọi sinh viên...có\" là phát biểu toàn thể trên miền sinh viên: với mọi sinh viên $x$, $C(x)\\lor D(x)\\lor F(x)$ đúng. Đó là $\\forall x\\,C(x)\\lor D(x)\\lor F(x)$, đáp án (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q4.png"
         },
         {
           "kind": "MCQ",
@@ -3864,7 +4017,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">For $x=-2,-1,0$ the antecedent $x\\ge1$ is false, so the implication is vacuously true. For $x=1,2,3$ the antecedent is true, forcing $P(1),P(2),P(3)$ all true. So the whole statement reduces to $P(1)\\land P(2)\\land P(3)$, option (iii).</div><div class=\"ml-vi\">Với $x=-2,-1,0$ tiền đề $x\\ge1$ sai, nên phép kéo theo đúng một cách hiển nhiên. Với $x=1,2,3$ tiền đề đúng, buộc $P(1),P(2),P(3)$ đều đúng. Vậy toàn mệnh đề rút gọn thành $P(1)\\land P(2)\\land P(3)$, đáp án (iii).</div>"
+          "explanation": "<div class=\"ml-en\">For $x=-2,-1,0$ the antecedent $x\\ge1$ is false, so the implication is vacuously true. For $x=1,2,3$ the antecedent is true, forcing $P(1),P(2),P(3)$ all true. So the whole statement reduces to $P(1)\\land P(2)\\land P(3)$, option (iii).</div><div class=\"ml-vi\">Với $x=-2,-1,0$ tiền đề $x\\ge1$ sai, nên phép kéo theo đúng một cách hiển nhiên. Với $x=1,2,3$ tiền đề đúng, buộc $P(1),P(2),P(3)$ đều đúng. Vậy toàn mệnh đề rút gọn thành $P(1)\\land P(2)\\land P(3)$, đáp án (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q5.png"
         },
         {
           "kind": "MCQ",
@@ -3890,7 +4044,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">\"$x+y'\\le5$\" is $\\neg L(x,y')$. \"For any $x$, there are $y$ and $y'$\" gives $\\forall x(\\exists y\\ldots\\land\\exists y'\\ldots)$ with the two existence claims joined by \"and\". This matches exactly $\\forall x(\\exists y\\,L(x,y)\\land\\exists y'(\\neg L(x,y')))$, option (i).</div><div class=\"ml-vi\">\"$x+y'\\le5$\" là $\\neg L(x,y')$. \"Với mọi $x$, tồn tại $y$ và $y'$\" cho $\\forall x(\\exists y\\ldots\\land\\exists y'\\ldots)$ với hai khẳng định tồn tại nối bằng \"và\". Khớp chính xác $\\forall x(\\exists y\\,L(x,y)\\land\\exists y'(\\neg L(x,y')))$, đáp án (i).</div>"
+          "explanation": "<div class=\"ml-en\">\"$x+y'\\le5$\" is $\\neg L(x,y')$. \"For any $x$, there are $y$ and $y'$\" gives $\\forall x(\\exists y\\ldots\\land\\exists y'\\ldots)$ with the two existence claims joined by \"and\". This matches exactly $\\forall x(\\exists y\\,L(x,y)\\land\\exists y'(\\neg L(x,y')))$, option (i).</div><div class=\"ml-vi\">\"$x+y'\\le5$\" là $\\neg L(x,y')$. \"Với mọi $x$, tồn tại $y$ và $y'$\" cho $\\forall x(\\exists y\\ldots\\land\\exists y'\\ldots)$ với hai khẳng định tồn tại nối bằng \"và\". Khớp chính xác $\\forall x(\\exists y\\,L(x,y)\\land\\exists y'(\\neg L(x,y')))$, đáp án (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q6.png"
         },
         {
           "kind": "MCQ",
@@ -3916,7 +4071,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">\"Each integer\" is universal over $m$: $\\forall m$. \"Is either odd or even\" means there exists some $n$ making $m$ fit the odd form or the even form: $\\exists n[(m=2n+1)\\lor(m=2n)]$. Combined: $\\forall m\\exists n[(m=2n+1)\\lor(m=2n)]$, option (ii).</div><div class=\"ml-vi\">\"Mỗi số nguyên\" là toàn thể trên $m$: $\\forall m$. \"Là lẻ hoặc chẵn\" nghĩa là tồn tại $n$ nào đó khiến $m$ khớp dạng lẻ hoặc dạng chẵn: $\\exists n[(m=2n+1)\\lor(m=2n)]$. Kết hợp: $\\forall m\\exists n[(m=2n+1)\\lor(m=2n)]$, đáp án (ii).</div>"
+          "explanation": "<div class=\"ml-en\">\"Each integer\" is universal over $m$: $\\forall m$. \"Is either odd or even\" means there exists some $n$ making $m$ fit the odd form or the even form: $\\exists n[(m=2n+1)\\lor(m=2n)]$. Combined: $\\forall m\\exists n[(m=2n+1)\\lor(m=2n)]$, option (ii).</div><div class=\"ml-vi\">\"Mỗi số nguyên\" là toàn thể trên $m$: $\\forall m$. \"Là lẻ hoặc chẵn\" nghĩa là tồn tại $n$ nào đó khiến $m$ khớp dạng lẻ hoặc dạng chẵn: $\\exists n[(m=2n+1)\\lor(m=2n)]$. Kết hợp: $\\forall m\\exists n[(m=2n+1)\\lor(m=2n)]$, đáp án (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q7.png"
         },
         {
           "kind": "MCQ",
@@ -3942,7 +4098,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Let $p$=\"I wake up early\", $q$=\"I will read a book\". Premises: $p\\to q$ and $p$; conclusion $q$. This is exactly the pattern $p\\land(p\\to q)\\to q$: Modus ponens.</div><div class=\"ml-vi\">Cho $p$=\"tôi dậy sớm\", $q$=\"tôi sẽ đọc sách\". Tiền đề: $p\\to q$ và $p$; kết luận $q$. Đây chính xác là mẫu $p\\land(p\\to q)\\to q$: Modus ponens.</div>"
+          "explanation": "<div class=\"ml-en\">Let $p$=\"I wake up early\", $q$=\"I will read a book\". Premises: $p\\to q$ and $p$; conclusion $q$. This is exactly the pattern $p\\land(p\\to q)\\to q$: Modus ponens.</div><div class=\"ml-vi\">Cho $p$=\"tôi dậy sớm\", $q$=\"tôi sẽ đọc sách\". Tiền đề: $p\\to q$ và $p$; kết luận $q$. Đây chính xác là mẫu $p\\land(p\\to q)\\to q$: Modus ponens.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q8.png"
         },
         {
           "kind": "MCQ",
@@ -3965,7 +4122,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">The power set of a set with $n$ elements has $2^n$ elements. Here $n=5$, so $|P(S)|=2^5=32$.</div><div class=\"ml-vi\">Tập lũy thừa của một tập có $n$ phần tử có $2^n$ phần tử. Ở đây $n=5$, nên $|P(S)|=2^5=32$.</div>"
+          "explanation": "<div class=\"ml-en\">The power set of a set with $n$ elements has $2^n$ elements. Here $n=5$, so $|P(S)|=2^5=32$.</div><div class=\"ml-vi\">Tập lũy thừa của một tập có $n$ phần tử có $2^n$ phần tử. Ở đây $n=5$, nên $|P(S)|=2^5=32$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q9.png"
         },
         {
           "kind": "MCQ",
@@ -3988,7 +4146,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i) is true: $x$ is the sole element of $\\{x\\}$. (ii) is true: every set is a subset of itself. (iv) is true: $\\{\\{x\\}\\}$'s sole element is $\\{x\\}$. (iii) claims $\\{x\\}$ (a set) is a member of $\\{x\\}$, whose only element is $x$ itself, not the set $\\{x\\}$ -- false in general.</div><div class=\"ml-vi\">(i) đúng: $x$ là phần tử duy nhất của $\\{x\\}$. (ii) đúng: mọi tập hợp là tập con của chính nó. (iv) đúng: phần tử duy nhất của $\\{\\{x\\}\\}$ là $\\{x\\}$. (iii) khẳng định $\\{x\\}$ (một tập hợp) là phần tử của $\\{x\\}$, mà phần tử duy nhất của $\\{x\\}$ là $x$, không phải tập $\\{x\\}$ -- sai trong trường hợp tổng quát.</div>"
+          "explanation": "<div class=\"ml-en\">(i) is true: $x$ is the sole element of $\\{x\\}$. (ii) is true: every set is a subset of itself. (iv) is true: $\\{\\{x\\}\\}$'s sole element is $\\{x\\}$. (iii) claims $\\{x\\}$ (a set) is a member of $\\{x\\}$, whose only element is $x$ itself, not the set $\\{x\\}$ -- false in general.</div><div class=\"ml-vi\">(i) đúng: $x$ là phần tử duy nhất của $\\{x\\}$. (ii) đúng: mọi tập hợp là tập con của chính nó. (iv) đúng: phần tử duy nhất của $\\{\\{x\\}\\}$ là $\\{x\\}$. (iii) khẳng định $\\{x\\}$ (một tập hợp) là phần tử của $\\{x\\}$, mà phần tử duy nhất của $\\{x\\}$ là $x$, không phải tập $\\{x\\}$ -- sai trong trường hợp tổng quát.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q10.png"
         },
         {
           "kind": "MCQ",
@@ -4014,7 +4173,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$x^2-5x+6=0$ factors as $(x-2)(x-3)=0$, so $B=\\{2,3\\}$. Since $B\\subseteq A$, every element of $B$ is already in $A$, so $B-A=\\emptyset$.</div><div class=\"ml-vi\">$x^2-5x+6=0$ phân tích thành $(x-2)(x-3)=0$, nên $B=\\{2,3\\}$. Vì $B\\subseteq A$, mọi phần tử của $B$ đều đã thuộc $A$, nên $B-A=\\emptyset$.</div>"
+          "explanation": "<div class=\"ml-en\">$x^2-5x+6=0$ factors as $(x-2)(x-3)=0$, so $B=\\{2,3\\}$. Since $B\\subseteq A$, every element of $B$ is already in $A$, so $B-A=\\emptyset$.</div><div class=\"ml-vi\">$x^2-5x+6=0$ phân tích thành $(x-2)(x-3)=0$, nên $B=\\{2,3\\}$. Vì $B\\subseteq A$, mọi phần tử của $B$ đều đã thuộc $A$, nên $B-A=\\emptyset$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q11.png"
         },
         {
           "kind": "MCQ",
@@ -4040,7 +4200,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">A bijection requires the domain and codomain to have the same cardinality. Since $6\\neq7$, no bijective function can exist between them: the count is 0.</div><div class=\"ml-vi\">Một song ánh đòi hỏi miền xác định và miền giá trị có cùng lực lượng. Vì $6\\neq7$, không thể tồn tại hàm song ánh nào giữa chúng: số lượng là 0.</div>"
+          "explanation": "<div class=\"ml-en\">A bijection requires the domain and codomain to have the same cardinality. Since $6\\neq7$, no bijective function can exist between them: the count is 0.</div><div class=\"ml-vi\">Một song ánh đòi hỏi miền xác định và miền giá trị có cùng lực lượng. Vì $6\\neq7$, không thể tồn tại hàm song ánh nào giữa chúng: số lượng là 0.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q12.png"
         },
         {
           "kind": "MCQ",
@@ -4063,7 +4224,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$f(x)=x^2+1$ is not injective on $\\mathbb{R}$: $f(1)=f(-1)=2$, so $f$ is not a bijection. $g(x)=x+1$ is a linear function with slope 1, strictly increasing (injective) and surjective onto $\\mathbb{R}$ (for any $y$, $x=y-1$ maps to it) -- so $g$ is a bijection. Only $g$ works.</div><div class=\"ml-vi\">$f(x)=x^2+1$ không đơn ánh trên $\\mathbb{R}$: $f(1)=f(-1)=2$, nên $f$ không phải song ánh. $g(x)=x+1$ là hàm tuyến tính hệ số góc 1, đơn điệu tăng nghiêm ngặt (đơn ánh) và toàn ánh lên $\\mathbb{R}$ (với mọi $y$, $x=y-1$ ánh xạ tới nó) -- vậy $g$ là song ánh. Chỉ $g$ đúng.</div>"
+          "explanation": "<div class=\"ml-en\">$f(x)=x^2+1$ is not injective on $\\mathbb{R}$: $f(1)=f(-1)=2$, so $f$ is not a bijection. $g(x)=x+1$ is a linear function with slope 1, strictly increasing (injective) and surjective onto $\\mathbb{R}$ (for any $y$, $x=y-1$ maps to it) -- so $g$ is a bijection. Only $g$ works.</div><div class=\"ml-vi\">$f(x)=x^2+1$ không đơn ánh trên $\\mathbb{R}$: $f(1)=f(-1)=2$, nên $f$ không phải song ánh. $g(x)=x+1$ là hàm tuyến tính hệ số góc 1, đơn điệu tăng nghiêm ngặt (đơn ánh) và toàn ánh lên $\\mathbb{R}$ (với mọi $y$, $x=y-1$ ánh xạ tới nó) -- vậy $g$ là song ánh. Chỉ $g$ đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q13.png"
         },
         {
           "kind": "MCQ",
@@ -4086,7 +4248,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\sum i(i+3)=\\sum i^2+3\\sum i$. With $n=97$: $\\sum i=\\frac{97\\cdot98}{2}=4753$, $\\sum i^2=\\frac{97\\cdot98\\cdot195}{6}=308945$. Total $=308945+3(4753)=308945+14259=323204$.</div><div class=\"ml-vi\">$\\sum i(i+3)=\\sum i^2+3\\sum i$. Với $n=97$: $\\sum i=\\frac{97\\cdot98}{2}=4753$, $\\sum i^2=\\frac{97\\cdot98\\cdot195}{6}=308945$. Tổng $=308945+3(4753)=308945+14259=323204$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\sum i(i+3)=\\sum i^2+3\\sum i$. With $n=97$: $\\sum i=\\frac{97\\cdot98}{2}=4753$, $\\sum i^2=\\frac{97\\cdot98\\cdot195}{6}=308945$. Total $=308945+3(4753)=308945+14259=323204$.</div><div class=\"ml-vi\">$\\sum i(i+3)=\\sum i^2+3\\sum i$. Với $n=97$: $\\sum i=\\frac{97\\cdot98}{2}=4753$, $\\sum i^2=\\frac{97\\cdot98\\cdot195}{6}=308945$. Tổng $=308945+3(4753)=308945+14259=323204$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q14.png"
         },
         {
           "kind": "MCQ",
@@ -4109,7 +4272,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$n=8$: $i=1,j=8$. 1st division: $m=\\lfloor9/2\\rfloor=4$, $a_4=7<11$ so $i:=5$. 2nd division: $i=5,j=8$, $m=\\lfloor13/2\\rfloor=6$, $a_6=9<11$ so $i:=7$. Now $i=7,j=8$, the sublist under consideration is $a_7,a_8=10,13$.</div><div class=\"ml-vi\">$n=8$: $i=1,j=8$. Lần chia 1: $m=\\lfloor9/2\\rfloor=4$, $a_4=7<11$ nên $i:=5$. Lần chia 2: $i=5,j=8$, $m=\\lfloor13/2\\rfloor=6$, $a_6=9<11$ nên $i:=7$. Giờ $i=7,j=8$, dãy con đang xét là $a_7,a_8=10,13$.</div>"
+          "explanation": "<div class=\"ml-en\">$n=8$: $i=1,j=8$. 1st division: $m=\\lfloor9/2\\rfloor=4$, $a_4=7<11$ so $i:=5$. 2nd division: $i=5,j=8$, $m=\\lfloor13/2\\rfloor=6$, $a_6=9<11$ so $i:=7$. Now $i=7,j=8$, the sublist under consideration is $a_7,a_8=10,13$.</div><div class=\"ml-vi\">$n=8$: $i=1,j=8$. Lần chia 1: $m=\\lfloor9/2\\rfloor=4$, $a_4=7<11$ nên $i:=5$. Lần chia 2: $i=5,j=8$, $m=\\lfloor13/2\\rfloor=6$, $a_6=9<11$ nên $i:=7$. Giờ $i=7,j=8$, dãy con đang xét là $a_7,a_8=10,13$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q15.png"
         },
         {
           "kind": "MCQ",
@@ -4135,7 +4299,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Greedily take the largest coin first: $63=2(25)+13$ (2 quarters, remainder 13), $13=2(5)+3$ (2 nickels, remainder 3), $3=3(1)$ (3 pennies). Total coins $=2+2+3=7$.</div><div class=\"ml-vi\">Tham lam lấy đồng lớn nhất trước: $63=2(25)+13$ (2 quarter, dư 13), $13=2(5)+3$ (2 nickel, dư 3), $3=3(1)$ (3 penny). Tổng số đồng $=2+2+3=7$.</div>"
+          "explanation": "<div class=\"ml-en\">Greedily take the largest coin first: $63=2(25)+13$ (2 quarters, remainder 13), $13=2(5)+3$ (2 nickels, remainder 3), $3=3(1)$ (3 pennies). Total coins $=2+2+3=7$.</div><div class=\"ml-vi\">Tham lam lấy đồng lớn nhất trước: $63=2(25)+13$ (2 quarter, dư 13), $13=2(5)+3$ (2 nickel, dư 3), $3=3(1)$ (3 penny). Tổng số đồng $=2+2+3=7$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q16.png"
         },
         {
           "kind": "MCQ",
@@ -4158,7 +4323,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$g(x)=x\\log(x^4)=4x\\log(x)$. Compare $\\frac{f(x)}{g(x)}=\\frac{x^2\\log x}{4x\\log x}=\\frac{x}{4}\\to\\infty$, so $f$ grows strictly faster: $f\\neq O(g)$, but $g=O(f)$ since $\\frac{g(x)}{f(x)}=\\frac{4}{x}\\to0$ is bounded. Only (ii) holds.</div><div class=\"ml-vi\">$g(x)=x\\log(x^4)=4x\\log(x)$. So sánh $\\frac{f(x)}{g(x)}=\\frac{x^2\\log x}{4x\\log x}=\\frac{x}{4}\\to\\infty$, nên $f$ tăng nhanh hơn hẳn: $f\\neq O(g)$, nhưng $g=O(f)$ vì $\\frac{g(x)}{f(x)}=\\frac{4}{x}\\to0$ bị chặn. Chỉ (ii) đúng.</div>"
+          "explanation": "<div class=\"ml-en\">$g(x)=x\\log(x^4)=4x\\log(x)$. Compare $\\frac{f(x)}{g(x)}=\\frac{x^2\\log x}{4x\\log x}=\\frac{x}{4}\\to\\infty$, so $f$ grows strictly faster: $f\\neq O(g)$, but $g=O(f)$ since $\\frac{g(x)}{f(x)}=\\frac{4}{x}\\to0$ is bounded. Only (ii) holds.</div><div class=\"ml-vi\">$g(x)=x\\log(x^4)=4x\\log(x)$. So sánh $\\frac{f(x)}{g(x)}=\\frac{x^2\\log x}{4x\\log x}=\\frac{x}{4}\\to\\infty$, nên $f$ tăng nhanh hơn hẳn: $f\\neq O(g)$, nhưng $g=O(f)$ vì $\\frac{g(x)}{f(x)}=\\frac{4}{x}\\to0$ bị chặn. Chỉ (ii) đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q17.png"
         },
         {
           "kind": "MCQ",
@@ -4184,7 +4350,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Each while-check does 2 comparisons: $i\\le n$ then $x>a_i$ (short-circuit, so $x>a_i$ is only checked when $i\\le n$ holds). For $i=1..5$: $x=10>a_i\\in\\{1,3,5,7,9\\}$ all true, so $i$ advances to 6. At $i=6$: $6\\le6$ true, but $10>11$ false, loop stops. That is 6 checks of $i\\le n$ (all true) and 6 checks of $x>a_i$ (5 true, 1 false) $=6+6=12$ comparisons total.</div><div class=\"ml-vi\">Mỗi lần kiểm tra while thực hiện 2 phép so sánh: $i\\le n$ rồi $x>a_i$ (đoản mạch, chỉ kiểm $x>a_i$ khi $i\\le n$ đúng). Với $i=1..5$: $x=10>a_i\\in\\{1,3,5,7,9\\}$ đều đúng, nên $i$ tăng tới 6. Tại $i=6$: $6\\le6$ đúng, nhưng $10>11$ sai, dừng vòng lặp. Vậy có 6 lần kiểm $i\\le n$ (đều đúng) và 6 lần kiểm $x>a_i$ (5 đúng, 1 sai) $=6+6=12$ phép so sánh.</div>"
+          "explanation": "<div class=\"ml-en\">Each while-check does 2 comparisons: $i\\le n$ then $x>a_i$ (short-circuit, so $x>a_i$ is only checked when $i\\le n$ holds). For $i=1..5$: $x=10>a_i\\in\\{1,3,5,7,9\\}$ all true, so $i$ advances to 6. At $i=6$: $6\\le6$ true, but $10>11$ false, loop stops. That is 6 checks of $i\\le n$ (all true) and 6 checks of $x>a_i$ (5 true, 1 false) $=6+6=12$ comparisons total.</div><div class=\"ml-vi\">Mỗi lần kiểm tra while thực hiện 2 phép so sánh: $i\\le n$ rồi $x>a_i$ (đoản mạch, chỉ kiểm $x>a_i$ khi $i\\le n$ đúng). Với $i=1..5$: $x=10>a_i\\in\\{1,3,5,7,9\\}$ đều đúng, nên $i$ tăng tới 6. Tại $i=6$: $6\\le6$ đúng, nhưng $10>11$ sai, dừng vòng lặp. Vậy có 6 lần kiểm $i\\le n$ (đều đúng) và 6 lần kiểm $x>a_i$ (5 đúng, 1 sai) $=6+6=12$ phép so sánh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q18.png"
         },
         {
           "kind": "MCQ",
@@ -4210,7 +4377,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$x_4=(3\\cdot9+4)\\bmod16=31\\bmod16=15$. For $x_2$: need $3x_2+4\\equiv9\\pmod{16}\\Rightarrow3x_2\\equiv5\\pmod{16}$. Since $3\\cdot11=33\\equiv1\\pmod{16}$, the inverse of 3 is 11, so $x_2\\equiv11\\cdot5=55\\equiv55-48=7\\pmod{16}$. Check: $(3\\cdot7+4)\\bmod16=25\\bmod16=9$. So $x_2=7,x_4=15$.</div><div class=\"ml-vi\">$x_4=(3\\cdot9+4)\\bmod16=31\\bmod16=15$. Với $x_2$: cần $3x_2+4\\equiv9\\pmod{16}\\Rightarrow3x_2\\equiv5\\pmod{16}$. Vì $3\\cdot11=33\\equiv1\\pmod{16}$, nghịch đảo của 3 là 11, nên $x_2\\equiv11\\cdot5=55\\equiv55-48=7\\pmod{16}$. Kiểm: $(3\\cdot7+4)\\bmod16=25\\bmod16=9$. Vậy $x_2=7,x_4=15$.</div>"
+          "explanation": "<div class=\"ml-en\">$x_4=(3\\cdot9+4)\\bmod16=31\\bmod16=15$. For $x_2$: need $3x_2+4\\equiv9\\pmod{16}\\Rightarrow3x_2\\equiv5\\pmod{16}$. Since $3\\cdot11=33\\equiv1\\pmod{16}$, the inverse of 3 is 11, so $x_2\\equiv11\\cdot5=55\\equiv55-48=7\\pmod{16}$. Check: $(3\\cdot7+4)\\bmod16=25\\bmod16=9$. So $x_2=7,x_4=15$.</div><div class=\"ml-vi\">$x_4=(3\\cdot9+4)\\bmod16=31\\bmod16=15$. Với $x_2$: cần $3x_2+4\\equiv9\\pmod{16}\\Rightarrow3x_2\\equiv5\\pmod{16}$. Vì $3\\cdot11=33\\equiv1\\pmod{16}$, nghịch đảo của 3 là 11, nên $x_2\\equiv11\\cdot5=55\\equiv55-48=7\\pmod{16}$. Kiểm: $(3\\cdot7+4)\\bmod16=25\\bmod16=9$. Vậy $x_2=7,x_4=15$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q19.png"
         },
         {
           "kind": "MCQ",
@@ -4236,7 +4404,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$131=3(37)+20$, so $a=20$. $-131=-4(37)+17$ (since $-148+17=-131$), so $b=17$. $a-b=20-17=3$.</div><div class=\"ml-vi\">$131=3(37)+20$, nên $a=20$. $-131=-4(37)+17$ (vì $-148+17=-131$), nên $b=17$. $a-b=20-17=3$.</div>"
+          "explanation": "<div class=\"ml-en\">$131=3(37)+20$, so $a=20$. $-131=-4(37)+17$ (since $-148+17=-131$), so $b=17$. $a-b=20-17=3$.</div><div class=\"ml-vi\">$131=3(37)+20$, nên $a=20$. $-131=-4(37)+17$ (vì $-148+17=-131$), nên $b=17$. $a-b=20-17=3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q20.png"
         },
         {
           "kind": "MCQ",
@@ -4262,7 +4431,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The number of trailing zeros equals the number of factors of 5 in $24!$: $\\lfloor24/5\\rfloor+\\lfloor24/25\\rfloor=4+0=4$.</div><div class=\"ml-vi\">Số chữ số 0 cuối bằng số thừa số 5 trong $24!$: $\\lfloor24/5\\rfloor+\\lfloor24/25\\rfloor=4+0=4$.</div>"
+          "explanation": "<div class=\"ml-en\">The number of trailing zeros equals the number of factors of 5 in $24!$: $\\lfloor24/5\\rfloor+\\lfloor24/25\\rfloor=4+0=4$.</div><div class=\"ml-vi\">Số chữ số 0 cuối bằng số thừa số 5 trong $24!$: $\\lfloor24/5\\rfloor+\\lfloor24/25\\rfloor=4+0=4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q21.png"
         },
         {
           "kind": "MCQ",
@@ -4288,7 +4458,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$89$ is prime. $111=3\\times37$, not prime. $103$ is prime. $205=5\\times41$, not prime. So exactly 2 primes: 89 and 103.</div><div class=\"ml-vi\">$89$ là số nguyên tố. $111=3\\times37$, không nguyên tố. $103$ là số nguyên tố. $205=5\\times41$, không nguyên tố. Vậy đúng 2 số nguyên tố: 89 và 103.</div>"
+          "explanation": "<div class=\"ml-en\">$89$ is prime. $111=3\\times37$, not prime. $103$ is prime. $205=5\\times41$, not prime. So exactly 2 primes: 89 and 103.</div><div class=\"ml-vi\">$89$ là số nguyên tố. $111=3\\times37$, không nguyên tố. $103$ là số nguyên tố. $205=5\\times41$, không nguyên tố. Vậy đúng 2 số nguyên tố: 89 và 103.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q22.png"
         },
         {
           "kind": "MCQ",
@@ -4314,7 +4485,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$3^3=27\\equiv1\\pmod{26}$, so 3 has order 3 mod 26. $17=3\\times5+2$, so $3^{17}\\equiv3^2=9\\pmod{26}$.</div><div class=\"ml-vi\">$3^3=27\\equiv1\\pmod{26}$, nên 3 có bậc 3 theo mod 26. $17=3\\times5+2$, nên $3^{17}\\equiv3^2=9\\pmod{26}$.</div>"
+          "explanation": "<div class=\"ml-en\">$3^3=27\\equiv1\\pmod{26}$, so 3 has order 3 mod 26. $17=3\\times5+2$, so $3^{17}\\equiv3^2=9\\pmod{26}$.</div><div class=\"ml-vi\">$3^3=27\\equiv1\\pmod{26}$, nên 3 có bậc 3 theo mod 26. $17=3\\times5+2$, nên $3^{17}\\equiv3^2=9\\pmod{26}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q23.png"
         },
         {
           "kind": "MCQ",
@@ -4340,7 +4512,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$a=(1110)_2=14$, $b=(1011)_2=11$. $14\\times11=154$. Converting to binary: $154=128+16+8+2$, giving $(10011010)_2$.</div><div class=\"ml-vi\">$a=(1110)_2=14$, $b=(1011)_2=11$. $14\\times11=154$. Đổi sang nhị phân: $154=128+16+8+2$, cho $(10011010)_2$.</div>"
+          "explanation": "<div class=\"ml-en\">$a=(1110)_2=14$, $b=(1011)_2=11$. $14\\times11=154$. Converting to binary: $154=128+16+8+2$, giving $(10011010)_2$.</div><div class=\"ml-vi\">$a=(1110)_2=14$, $b=(1011)_2=11$. $14\\times11=154$. Đổi sang nhị phân: $154=128+16+8+2$, cho $(10011010)_2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q24.png"
         },
         {
           "kind": "MCQ",
@@ -4363,7 +4536,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$H(4)=1+\\frac12+\\frac13+\\frac14=\\frac{12+6+4+3}{12}=\\frac{25}{12}$, ruling out (i). By definition, $H(k+1)$ just extends $H_k$'s sum with one more term $\\frac1{k+1}$: $1+\\frac12+\\ldots+\\frac1k+\\frac1{k+1}$, exactly option (iv).</div><div class=\"ml-vi\">$H(4)=1+\\frac12+\\frac13+\\frac14=\\frac{12+6+4+3}{12}=\\frac{25}{12}$, loại (i). Theo định nghĩa, $H(k+1)$ chỉ mở rộng tổng của $H_k$ thêm một số hạng $\\frac1{k+1}$: $1+\\frac12+\\ldots+\\frac1k+\\frac1{k+1}$, đúng là đáp án (iv).</div>"
+          "explanation": "<div class=\"ml-en\">$H(4)=1+\\frac12+\\frac13+\\frac14=\\frac{12+6+4+3}{12}=\\frac{25}{12}$, ruling out (i). By definition, $H(k+1)$ just extends $H_k$'s sum with one more term $\\frac1{k+1}$: $1+\\frac12+\\ldots+\\frac1k+\\frac1{k+1}$, exactly option (iv).</div><div class=\"ml-vi\">$H(4)=1+\\frac12+\\frac13+\\frac14=\\frac{12+6+4+3}{12}=\\frac{25}{12}$, loại (i). Theo định nghĩa, $H(k+1)$ chỉ mở rộng tổng của $H_k$ thêm một số hạng $\\frac1{k+1}$: $1+\\frac12+\\ldots+\\frac1k+\\frac1{k+1}$, đúng là đáp án (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q25.png"
         },
         {
           "kind": "MCQ",
@@ -4386,7 +4560,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Starting from $2=2^1$, each step doubles the value: $2\\to4=2^2\\to8=2^3\\to16=2^4\\to\\ldots$. So $S=\\{2,4,8,16,\\ldots\\}=\\{2^n\\mid n=1,2,\\ldots\\}$, option (i).</div><div class=\"ml-vi\">Bắt đầu từ $2=2^1$, mỗi bước nhân đôi giá trị: $2\\to4=2^2\\to8=2^3\\to16=2^4\\to\\ldots$. Vậy $S=\\{2,4,8,16,\\ldots\\}=\\{2^n\\mid n=1,2,\\ldots\\}$, đáp án (i).</div>"
+          "explanation": "<div class=\"ml-en\">Starting from $2=2^1$, each step doubles the value: $2\\to4=2^2\\to8=2^3\\to16=2^4\\to\\ldots$. So $S=\\{2,4,8,16,\\ldots\\}=\\{2^n\\mid n=1,2,\\ldots\\}$, option (i).</div><div class=\"ml-vi\">Bắt đầu từ $2=2^1$, mỗi bước nhân đôi giá trị: $2\\to4=2^2\\to8=2^3\\to16=2^4\\to\\ldots$. Vậy $S=\\{2,4,8,16,\\ldots\\}=\\{2^n\\mid n=1,2,\\ldots\\}$, đáp án (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q26.png"
         },
         {
           "kind": "MCQ",
@@ -4409,7 +4584,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Adding 2 preserves parity, so from $(1,1)$ we reach all (odd,odd); from $(1,2)$ all (odd,even $\\ge2$); from $(2,1)$ all (even $\\ge2$,odd). No base pair has both coordinates even, so $S$ never contains a pair with both entries even -- ruling out (4,4),(2,6),(4,6). $(5,4)$ has $a=5$ odd, $b=4$ even: reachable from $(1,2)$ via $1\\to3\\to5$ and $2\\to4$.</div><div class=\"ml-vi\">Cộng 2 giữ nguyên tính chẵn lẻ, nên từ $(1,1)$ ta đến mọi (lẻ,lẻ); từ $(1,2)$ mọi (lẻ,chẵn $\\ge2$); từ $(2,1)$ mọi (chẵn $\\ge2$,lẻ). Không cặp gốc nào có cả hai tọa độ chẵn, nên $S$ không bao giờ chứa cặp có cả hai đều chẵn -- loại (4,4),(2,6),(4,6). $(5,4)$ có $a=5$ lẻ, $b=4$ chẵn: đến được từ $(1,2)$ qua $1\\to3\\to5$ và $2\\to4$.</div>"
+          "explanation": "<div class=\"ml-en\">Adding 2 preserves parity, so from $(1,1)$ we reach all (odd,odd); from $(1,2)$ all (odd,even $\\ge2$); from $(2,1)$ all (even $\\ge2$,odd). No base pair has both coordinates even, so $S$ never contains a pair with both entries even -- ruling out (4,4),(2,6),(4,6). $(5,4)$ has $a=5$ odd, $b=4$ even: reachable from $(1,2)$ via $1\\to3\\to5$ and $2\\to4$.</div><div class=\"ml-vi\">Cộng 2 giữ nguyên tính chẵn lẻ, nên từ $(1,1)$ ta đến mọi (lẻ,lẻ); từ $(1,2)$ mọi (lẻ,chẵn $\\ge2$); từ $(2,1)$ mọi (chẵn $\\ge2$,lẻ). Không cặp gốc nào có cả hai tọa độ chẵn, nên $S$ không bao giờ chứa cặp có cả hai đều chẵn -- loại (4,4),(2,6),(4,6). $(5,4)$ có $a=5$ lẻ, $b=4$ chẵn: đến được từ $(1,2)$ qua $1\\to3\\to5$ và $2\\to4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q27.png"
         },
         {
           "kind": "MCQ",
@@ -4435,7 +4611,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Simulating the merge algorithm: compare 1,2(take1); 3,2(take2); 3,4(take3); 5,4(take4); 5,6(take5); 7,6(take6); 7,9(take7); 8,9(take8); 10,9(take9) -- second list exhausted, append remaining 10 with no comparison. Total: 9 comparisons.</div><div class=\"ml-vi\">Mô phỏng thuật toán trộn: so sánh 1,2(lấy1); 3,2(lấy2); 3,4(lấy3); 5,4(lấy4); 5,6(lấy5); 7,6(lấy6); 7,9(lấy7); 8,9(lấy8); 10,9(lấy9) -- dãy 2 hết, thêm 10 còn lại không cần so sánh. Tổng: 9 phép so sánh.</div>"
+          "explanation": "<div class=\"ml-en\">Simulating the merge algorithm: compare 1,2(take1); 3,2(take2); 3,4(take3); 5,4(take4); 5,6(take5); 7,6(take6); 7,9(take7); 8,9(take8); 10,9(take9) -- second list exhausted, append remaining 10 with no comparison. Total: 9 comparisons.</div><div class=\"ml-vi\">Mô phỏng thuật toán trộn: so sánh 1,2(lấy1); 3,2(lấy2); 3,4(lấy3); 5,4(lấy4); 5,6(lấy5); 7,6(lấy6); 7,9(lấy7); 8,9(lấy8); 10,9(lấy9) -- dãy 2 hết, thêm 10 còn lại không cần so sánh. Tổng: 9 phép so sánh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q28.png"
         },
         {
           "kind": "MCQ",
@@ -4461,7 +4638,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Let $a(n)$ be the number of additions for $F(n)$: $a(0)=a(1)=0$, $a(n)=a(n-1)+a(n-2)+1$. Then $a(2)=1,a(3)=2,a(4)=4,a(5)=7,a(6)=a(5)+a(4)+1=7+4+1=12$.</div><div class=\"ml-vi\">Gọi $a(n)$ là số phép cộng để tính $F(n)$: $a(0)=a(1)=0$, $a(n)=a(n-1)+a(n-2)+1$. Khi đó $a(2)=1,a(3)=2,a(4)=4,a(5)=7,a(6)=a(5)+a(4)+1=7+4+1=12$.</div>"
+          "explanation": "<div class=\"ml-en\">Let $a(n)$ be the number of additions for $F(n)$: $a(0)=a(1)=0$, $a(n)=a(n-1)+a(n-2)+1$. Then $a(2)=1,a(3)=2,a(4)=4,a(5)=7,a(6)=a(5)+a(4)+1=7+4+1=12$.</div><div class=\"ml-vi\">Gọi $a(n)$ là số phép cộng để tính $F(n)$: $a(0)=a(1)=0$, $a(n)=a(n-1)+a(n-2)+1$. Khi đó $a(2)=1,a(3)=2,a(4)=4,a(5)=7,a(6)=a(5)+a(4)+1=7+4+1=12$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q29.png"
         },
         {
           "kind": "MCQ",
@@ -4484,7 +4662,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Choose 2 of the 4 positions to be 0: $\\binom{4}{2}=6$ ways. The remaining 2 positions must be nonzero digits (1-9): $9\\times9=81$ ways. Total: $6\\times81=486$.</div><div class=\"ml-vi\">Chọn 2 trong 4 vị trí để là 0: $\\binom{4}{2}=6$ cách. 2 vị trí còn lại phải là chữ số khác 0 (1-9): $9\\times9=81$ cách. Tổng: $6\\times81=486$.</div>"
+          "explanation": "<div class=\"ml-en\">Choose 2 of the 4 positions to be 0: $\\binom{4}{2}=6$ ways. The remaining 2 positions must be nonzero digits (1-9): $9\\times9=81$ ways. Total: $6\\times81=486$.</div><div class=\"ml-vi\">Chọn 2 trong 4 vị trí để là 0: $\\binom{4}{2}=6$ cách. 2 vị trí còn lại phải là chữ số khác 0 (1-9): $9\\times9=81$ cách. Tổng: $6\\times81=486$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q30.png"
         },
         {
           "kind": "MCQ",
@@ -4510,7 +4689,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The count of injections from a 5-set to a 10-set is $P(10,5)=10\\times9\\times8\\times7\\times6=30240$.</div><div class=\"ml-vi\">Số đơn ánh từ tập 5 phần tử đến tập 10 phần tử là $P(10,5)=10\\times9\\times8\\times7\\times6=30240$.</div>"
+          "explanation": "<div class=\"ml-en\">The count of injections from a 5-set to a 10-set is $P(10,5)=10\\times9\\times8\\times7\\times6=30240$.</div><div class=\"ml-vi\">Số đơn ánh từ tập 5 phần tử đến tập 10 phần tử là $P(10,5)=10\\times9\\times8\\times7\\times6=30240$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q31.png"
         },
         {
           "kind": "MCQ",
@@ -4533,7 +4713,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Let $f(n)$ be the number of pairs at month $n$. New pairs born each month come from pairs $\\ge2$ months old, i.e. those existing 2 months earlier, each producing 2 pairs: $f(n)=f(n-1)+2f(n-2)$, with $f(0)=f(1)=1$. Then $f(2)=1+2=3$, $f(3)=3+2=5$, $f(4)=5+6=11$, $f(5)=11+10=21$.</div><div class=\"ml-vi\">Gọi $f(n)$ là số cặp thỏ ở tháng $n$. Số cặp mới sinh mỗi tháng đến từ các cặp $\\ge2$ tháng tuổi, tức các cặp đã tồn tại 2 tháng trước, mỗi cặp sinh 2 cặp: $f(n)=f(n-1)+2f(n-2)$, với $f(0)=f(1)=1$. Vậy $f(2)=1+2=3$, $f(3)=3+2=5$, $f(4)=5+6=11$, $f(5)=11+10=21$.</div>"
+          "explanation": "<div class=\"ml-en\">Let $f(n)$ be the number of pairs at month $n$. New pairs born each month come from pairs $\\ge2$ months old, i.e. those existing 2 months earlier, each producing 2 pairs: $f(n)=f(n-1)+2f(n-2)$, with $f(0)=f(1)=1$. Then $f(2)=1+2=3$, $f(3)=3+2=5$, $f(4)=5+6=11$, $f(5)=11+10=21$.</div><div class=\"ml-vi\">Gọi $f(n)$ là số cặp thỏ ở tháng $n$. Số cặp mới sinh mỗi tháng đến từ các cặp $\\ge2$ tháng tuổi, tức các cặp đã tồn tại 2 tháng trước, mỗi cặp sinh 2 cặp: $f(n)=f(n-1)+2f(n-2)$, với $f(0)=f(1)=1$. Vậy $f(2)=1+2=3$, $f(3)=3+2=5$, $f(4)=5+6=11$, $f(5)=11+10=21$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q32.png"
         },
         {
           "kind": "MCQ",
@@ -4559,7 +4740,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">This is a divide-and-conquer recurrence with $a=7,b=2,g(n)=\\Theta(n^2)$. Since $\\log_2 7\\approx2.807>2$, the recursive term dominates (master theorem case where $g(n)=O(n^{\\log_b a-\\epsilon})$), giving $f(n)=\\Theta(n^{\\log_2 7})$, so the best big-O estimate is $O(n^{\\log_2 7})$, option (iv).</div><div class=\"ml-vi\">Đây là công thức truy hồi chia để trị với $a=7,b=2,g(n)=\\Theta(n^2)$. Vì $\\log_2 7\\approx2.807>2$, số hạng đệ quy chiếm ưu thế (định lý thợ với $g(n)=O(n^{\\log_b a-\\epsilon})$), cho $f(n)=\\Theta(n^{\\log_2 7})$, nên ước lượng big-O tốt nhất là $O(n^{\\log_2 7})$, đáp án (iv).</div>"
+          "explanation": "<div class=\"ml-en\">This is a divide-and-conquer recurrence with $a=7,b=2,g(n)=\\Theta(n^2)$. Since $\\log_2 7\\approx2.807>2$, the recursive term dominates (master theorem case where $g(n)=O(n^{\\log_b a-\\epsilon})$), giving $f(n)=\\Theta(n^{\\log_2 7})$, so the best big-O estimate is $O(n^{\\log_2 7})$, option (iv).</div><div class=\"ml-vi\">Đây là công thức truy hồi chia để trị với $a=7,b=2,g(n)=\\Theta(n^2)$. Vì $\\log_2 7\\approx2.807>2$, số hạng đệ quy chiếm ưu thế (định lý thợ với $g(n)=O(n^{\\log_b a-\\epsilon})$), cho $f(n)=\\Theta(n^{\\log_2 7})$, nên ước lượng big-O tốt nhất là $O(n^{\\log_2 7})$, đáp án (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q33.png"
         },
         {
           "kind": "MCQ",
@@ -4585,7 +4767,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">For a bipartite graph on $n$ vertices, the edge count is maximized by splitting the parts as evenly as possible: $3+3$, giving $K_{3,3}$ with $3\\times3=9$ edges.</div><div class=\"ml-vi\">Với đồ thị lưỡng phân trên $n$ đỉnh, số cạnh lớn nhất đạt được khi chia hai phần đều nhau nhất: $3+3$, cho $K_{3,3}$ với $3\\times3=9$ cạnh.</div>"
+          "explanation": "<div class=\"ml-en\">For a bipartite graph on $n$ vertices, the edge count is maximized by splitting the parts as evenly as possible: $3+3$, giving $K_{3,3}$ with $3\\times3=9$ edges.</div><div class=\"ml-vi\">Với đồ thị lưỡng phân trên $n$ đỉnh, số cạnh lớn nhất đạt được khi chia hai phần đều nhau nhất: $3+3$, cho $K_{3,3}$ với $3\\times3=9$ cạnh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q34.png"
         },
         {
           "kind": "MCQ",
@@ -4611,7 +4794,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$K_{m,n}$ has $mn$ edges. With $mn=15$ and $m,n>1$, the only factorization is $3\\times5$, so $\\{m,n\\}=\\{3,5\\}$ and the graph has $m+n=8$ vertices.</div><div class=\"ml-vi\">$K_{m,n}$ có $mn$ cạnh. Với $mn=15$ và $m,n>1$, cách phân tích duy nhất là $3\\times5$, nên $\\{m,n\\}=\\{3,5\\}$ và đồ thị có $m+n=8$ đỉnh.</div>"
+          "explanation": "<div class=\"ml-en\">$K_{m,n}$ has $mn$ edges. With $mn=15$ and $m,n>1$, the only factorization is $3\\times5$, so $\\{m,n\\}=\\{3,5\\}$ and the graph has $m+n=8$ vertices.</div><div class=\"ml-vi\">$K_{m,n}$ có $mn$ cạnh. Với $mn=15$ và $m,n>1$, cách phân tích duy nhất là $3\\times5$, nên $\\{m,n\\}=\\{3,5\\}$ và đồ thị có $m+n=8$ đỉnh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q35.png"
         },
         {
           "kind": "MCQ",
@@ -4634,7 +4818,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The sum of a vertex's row in the incidence matrix equals its degree. $v_4$ is incident to $e_2$ ($v_1v_4$), $e_3$ ($v_4v_2$), and $e_5$ ($v_4v_3$) -- degree 3, so the row sum is 3.</div><div class=\"ml-vi\">Tổng hàng của một đỉnh trong ma trận liên thuộc bằng bậc của đỉnh đó. $v_4$ liên thuộc với $e_2$ ($v_1v_4$), $e_3$ ($v_4v_2$), và $e_5$ ($v_4v_3$) -- bậc 3, nên tổng hàng là 3.</div>"
+          "explanation": "<div class=\"ml-en\">The sum of a vertex's row in the incidence matrix equals its degree. $v_4$ is incident to $e_2$ ($v_1v_4$), $e_3$ ($v_4v_2$), and $e_5$ ($v_4v_3$) -- degree 3, so the row sum is 3.</div><div class=\"ml-vi\">Tổng hàng của một đỉnh trong ma trận liên thuộc bằng bậc của đỉnh đó. $v_4$ liên thuộc với $e_2$ ($v_1v_4$), $e_3$ ($v_4v_2$), và $e_5$ ($v_4v_3$) -- bậc 3, nên tổng hàng là 3.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q36.png"
         },
         {
           "kind": "MCQ",
@@ -4657,7 +4842,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i) is false: adjacency matrices differ depending on vertex ordering/labeling, so different matrices alone never prove non-isomorphism. (ii): $G$'s edges are $ab,ac,ad,bc$. Under $f$: $ab\\to yx$ (edge in $H$), $ac\\to yz$ (edge), $ad\\to yt$ (edge), $bc\\to xz$ (edge) -- all 4 edges map to $H$'s 4 edges ($xy,xz,yz,yt$) bijectively, so $f$ is indeed an isomorphism. Only (ii) is correct.</div><div class=\"ml-vi\">(i) sai: ma trận kề khác nhau tùy thứ tự/nhãn đỉnh, nên chỉ riêng ma trận khác nhau không bao giờ chứng minh không đẳng cấu. (ii): cạnh của $G$ là $ab,ac,ad,bc$. Qua $f$: $ab\\to yx$ (cạnh của $H$), $ac\\to yz$ (cạnh), $ad\\to yt$ (cạnh), $bc\\to xz$ (cạnh) -- cả 4 cạnh ánh xạ song ánh tới 4 cạnh của $H$ ($xy,xz,yz,yt$), nên $f$ đúng là một phép đẳng cấu. Chỉ (ii) đúng.</div>"
+          "explanation": "<div class=\"ml-en\">(i) is false: adjacency matrices differ depending on vertex ordering/labeling, so different matrices alone never prove non-isomorphism. (ii): $G$'s edges are $ab,ac,ad,bc$. Under $f$: $ab\\to yx$ (edge in $H$), $ac\\to yz$ (edge), $ad\\to yt$ (edge), $bc\\to xz$ (edge) -- all 4 edges map to $H$'s 4 edges ($xy,xz,yz,yt$) bijectively, so $f$ is indeed an isomorphism. Only (ii) is correct.</div><div class=\"ml-vi\">(i) sai: ma trận kề khác nhau tùy thứ tự/nhãn đỉnh, nên chỉ riêng ma trận khác nhau không bao giờ chứng minh không đẳng cấu. (ii): cạnh của $G$ là $ab,ac,ad,bc$. Qua $f$: $ab\\to yx$ (cạnh của $H$), $ac\\to yz$ (cạnh), $ad\\to yt$ (cạnh), $bc\\to xz$ (cạnh) -- cả 4 cạnh ánh xạ song ánh tới 4 cạnh của $H$ ($xy,xz,yz,yt$), nên $f$ đúng là một phép đẳng cấu. Chỉ (ii) đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q37.png"
         },
         {
           "kind": "MCQ",
@@ -4680,7 +4866,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Removing $c$ disconnects $\\{a,b\\}$ from $\\{f,d,e,g\\}$ -- cut vertex. Removing $f$ isolates $g$ -- cut vertex. Removing $d$ isolates $e$ -- cut vertex. Removing $a$, $b$, $g$, or $e$ leaves the rest connected. Total: 3 cut vertices ($c,f,d$).</div><div class=\"ml-vi\">Bỏ $c$ làm tách $\\{a,b\\}$ khỏi $\\{f,d,e,g\\}$ -- đỉnh cắt. Bỏ $f$ làm cô lập $g$ -- đỉnh cắt. Bỏ $d$ làm cô lập $e$ -- đỉnh cắt. Bỏ $a$, $b$, $g$, hoặc $e$ vẫn giữ phần còn lại liên thông. Tổng: 3 đỉnh cắt ($c,f,d$).</div>"
+          "explanation": "<div class=\"ml-en\">Removing $c$ disconnects $\\{a,b\\}$ from $\\{f,d,e,g\\}$ -- cut vertex. Removing $f$ isolates $g$ -- cut vertex. Removing $d$ isolates $e$ -- cut vertex. Removing $a$, $b$, $g$, or $e$ leaves the rest connected. Total: 3 cut vertices ($c,f,d$).</div><div class=\"ml-vi\">Bỏ $c$ làm tách $\\{a,b\\}$ khỏi $\\{f,d,e,g\\}$ -- đỉnh cắt. Bỏ $f$ làm cô lập $g$ -- đỉnh cắt. Bỏ $d$ làm cô lập $e$ -- đỉnh cắt. Bỏ $a$, $b$, $g$, hoặc $e$ vẫn giữ phần còn lại liên thông. Tổng: 3 đỉnh cắt ($c,f,d$).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q38.png"
         },
         {
           "kind": "MCQ",
@@ -4703,7 +4890,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">The number of walks of length 3 from $A$ to $C$ is entry $(A,C)$ of $M^3$. Computing $M^2=\\begin{pmatrix}10&3&3\\\\3&10&2\\\\3&2&5\\end{pmatrix}$, then $(M^3)_{A,C}=M^2_{A,A}M_{A,C}+M^2_{A,B}M_{B,C}+M^2_{A,C}M_{C,C}=10(0)+3(1)+3(2)=0+3+6=9$.</div><div class=\"ml-vi\">Số đường đi độ dài 3 từ $A$ đến $C$ là phần tử $(A,C)$ của $M^3$. Tính $M^2=\\begin{pmatrix}10&3&3\\\\3&10&2\\\\3&2&5\\end{pmatrix}$, rồi $(M^3)_{A,C}=M^2_{A,A}M_{A,C}+M^2_{A,B}M_{B,C}+M^2_{A,C}M_{C,C}=10(0)+3(1)+3(2)=0+3+6=9$.</div>"
+          "explanation": "<div class=\"ml-en\">The number of walks of length 3 from $A$ to $C$ is entry $(A,C)$ of $M^3$. Computing $M^2=\\begin{pmatrix}10&3&3\\\\3&10&2\\\\3&2&5\\end{pmatrix}$, then $(M^3)_{A,C}=M^2_{A,A}M_{A,C}+M^2_{A,B}M_{B,C}+M^2_{A,C}M_{C,C}=10(0)+3(1)+3(2)=0+3+6=9$.</div><div class=\"ml-vi\">Số đường đi độ dài 3 từ $A$ đến $C$ là phần tử $(A,C)$ của $M^3$. Tính $M^2=\\begin{pmatrix}10&3&3\\\\3&10&2\\\\3&2&5\\end{pmatrix}$, rồi $(M^3)_{A,C}=M^2_{A,A}M_{A,C}+M^2_{A,B}M_{B,C}+M^2_{A,C}M_{C,C}=10(0)+3(1)+3(2)=0+3+6=9$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q39.png"
         },
         {
           "kind": "MCQ",
@@ -4732,7 +4920,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">A complete bipartite graph $K_{m,n}$ has a Hamilton circuit only when $m=n$ (a cycle must alternate between the two parts equally). Since $m>n$, $K_{m,n}$ has no Hamilton circuit. Cycles $C_n$, hypercubes $Q_n$, complete graphs $K_n$ ($n\\ge3$), and wheels $W_n$ are all always Hamiltonian.</div><div class=\"ml-vi\">Đồ thị lưỡng phân đầy đủ $K_{m,n}$ chỉ có chu trình Hamilton khi $m=n$ (chu trình phải luân phiên đều giữa hai phần). Vì $m>n$, $K_{m,n}$ không có chu trình Hamilton. Chu trình $C_n$, siêu khối $Q_n$, đồ thị đầy đủ $K_n$ ($n\\ge3$), và đồ thị bánh xe $W_n$ đều luôn có chu trình Hamilton.</div>"
+          "explanation": "<div class=\"ml-en\">A complete bipartite graph $K_{m,n}$ has a Hamilton circuit only when $m=n$ (a cycle must alternate between the two parts equally). Since $m>n$, $K_{m,n}$ has no Hamilton circuit. Cycles $C_n$, hypercubes $Q_n$, complete graphs $K_n$ ($n\\ge3$), and wheels $W_n$ are all always Hamiltonian.</div><div class=\"ml-vi\">Đồ thị lưỡng phân đầy đủ $K_{m,n}$ chỉ có chu trình Hamilton khi $m=n$ (chu trình phải luân phiên đều giữa hai phần). Vì $m>n$, $K_{m,n}$ không có chu trình Hamilton. Chu trình $C_n$, siêu khối $Q_n$, đồ thị đầy đủ $K_n$ ($n\\ge3$), và đồ thị bánh xe $W_n$ đều luôn có chu trình Hamilton.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q40.png"
         },
         {
           "kind": "MCQ",
@@ -4755,7 +4944,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">A connected graph has an Euler circuit iff every vertex has even degree. $K_4$: every vertex has degree 3 (odd) -- no. $C_4,C_5$: every vertex has degree 2 (even) -- yes for both. $Q_3$: every vertex has degree 3 (odd) -- no. So (ii) and (iii).</div><div class=\"ml-vi\">Đồ thị liên thông có chu trình Euler khi và chỉ khi mọi đỉnh có bậc chẵn. $K_4$: mọi đỉnh bậc 3 (lẻ) -- không. $C_4,C_5$: mọi đỉnh bậc 2 (chẵn) -- có cho cả hai. $Q_3$: mọi đỉnh bậc 3 (lẻ) -- không. Vậy (ii) và (iii).</div>"
+          "explanation": "<div class=\"ml-en\">A connected graph has an Euler circuit iff every vertex has even degree. $K_4$: every vertex has degree 3 (odd) -- no. $C_4,C_5$: every vertex has degree 2 (even) -- yes for both. $Q_3$: every vertex has degree 3 (odd) -- no. So (ii) and (iii).</div><div class=\"ml-vi\">Đồ thị liên thông có chu trình Euler khi và chỉ khi mọi đỉnh có bậc chẵn. $K_4$: mọi đỉnh bậc 3 (lẻ) -- không. $C_4,C_5$: mọi đỉnh bậc 2 (chẵn) -- có cho cả hai. $Q_3$: mọi đỉnh bậc 3 (lẻ) -- không. Vậy (ii) và (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q41.png"
         },
         {
           "kind": "MCQ",
@@ -4778,7 +4968,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Order of selection: $A$(0) first, then $B$(2). Relaxing from $B$: $C=\\min(7,2+4)=6$, $D=2+5=7$, $E=2+3=5$. Next smallest unvisited is $E$(5). Relaxing from $E$: $C=\\min(6,5+3)=6$ (no change), $D=\\min(7,5+2)=7$ (no change), $Z=5+3=8$. The next smallest unvisited distance is $C$ at 6 (less than $D$'s 7), so $C$ is chosen next.</div><div class=\"ml-vi\">Thứ tự chọn: $A$(0) trước, rồi $B$(2). Nới lỏng từ $B$: $C=\\min(7,2+4)=6$, $D=2+5=7$, $E=2+3=5$. Đỉnh chưa thăm nhỏ nhất tiếp theo là $E$(5). Nới lỏng từ $E$: $C=\\min(6,5+3)=6$ (không đổi), $D=\\min(7,5+2)=7$ (không đổi), $Z=5+3=8$. Khoảng cách nhỏ nhất tiếp theo chưa thăm là $C$ ở mức 6 (nhỏ hơn 7 của $D$), nên $C$ được chọn tiếp theo.</div>"
+          "explanation": "<div class=\"ml-en\">Order of selection: $A$(0) first, then $B$(2). Relaxing from $B$: $C=\\min(7,2+4)=6$, $D=2+5=7$, $E=2+3=5$. Next smallest unvisited is $E$(5). Relaxing from $E$: $C=\\min(6,5+3)=6$ (no change), $D=\\min(7,5+2)=7$ (no change), $Z=5+3=8$. The next smallest unvisited distance is $C$ at 6 (less than $D$'s 7), so $C$ is chosen next.</div><div class=\"ml-vi\">Thứ tự chọn: $A$(0) trước, rồi $B$(2). Nới lỏng từ $B$: $C=\\min(7,2+4)=6$, $D=2+5=7$, $E=2+3=5$. Đỉnh chưa thăm nhỏ nhất tiếp theo là $E$(5). Nới lỏng từ $E$: $C=\\min(6,5+3)=6$ (không đổi), $D=\\min(7,5+2)=7$ (không đổi), $Z=5+3=8$. Khoảng cách nhỏ nhất tiếp theo chưa thăm là $C$ ở mức 6 (nhỏ hơn 7 của $D$), nên $C$ được chọn tiếp theo.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q42.png"
         },
         {
           "kind": "MCQ",
@@ -4804,7 +4995,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">For a full $m$-ary tree with $i$ internal vertices, the total number of vertices is $n=mi+1$. Here $m=4,i=50$: $n=4(50)+1=201$.</div><div class=\"ml-vi\">Với cây $m$-phân đầy đủ có $i$ đỉnh trong, tổng số đỉnh là $n=mi+1$. Ở đây $m=4,i=50$: $n=4(50)+1=201$.</div>"
+          "explanation": "<div class=\"ml-en\">For a full $m$-ary tree with $i$ internal vertices, the total number of vertices is $n=mi+1$. Here $m=4,i=50$: $n=4(50)+1=201$.</div><div class=\"ml-vi\">Với cây $m$-phân đầy đủ có $i$ đỉnh trong, tổng số đỉnh là $n=mi+1$. Ở đây $m=4,i=50$: $n=4(50)+1=201$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q43.png"
         },
         {
           "kind": "MCQ",
@@ -4830,7 +5022,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">To minimize height, pack internal vertices as high as possible: with height $h$, the maximum internal vertices achievable is $1+3+9+\\ldots+3^{h-1}=\\frac{3^h-1}{2}$ (all levels $0..h-1$ full of internal nodes). For $h=3$: $\\frac{27-1}{2}=13<40$. For $h=4$: $\\frac{81-1}{2}=40$, exactly matching -- a perfect 3-ary tree of height 4 (levels 0-3 all internal: $1+3+9+27=40$) achieves exactly 40 internal vertices. So minimum height is 4.</div><div class=\"ml-vi\">Để tối thiểu chiều cao, dồn các đỉnh trong lên càng cao càng tốt: với chiều cao $h$, số đỉnh trong tối đa đạt được là $1+3+9+\\ldots+3^{h-1}=\\frac{3^h-1}{2}$ (mọi mức $0..h-1$ đều đầy đỉnh trong). Với $h=3$: $\\frac{27-1}{2}=13<40$. Với $h=4$: $\\frac{81-1}{2}=40$, khớp chính xác -- cây 3-phân hoàn hảo chiều cao 4 (mức 0-3 đều là đỉnh trong: $1+3+9+27=40$) đạt đúng 40 đỉnh trong. Vậy chiều cao nhỏ nhất là 4.</div>"
+          "explanation": "<div class=\"ml-en\">To minimize height, pack internal vertices as high as possible: with height $h$, the maximum internal vertices achievable is $1+3+9+\\ldots+3^{h-1}=\\frac{3^h-1}{2}$ (all levels $0..h-1$ full of internal nodes). For $h=3$: $\\frac{27-1}{2}=13<40$. For $h=4$: $\\frac{81-1}{2}=40$, exactly matching -- a perfect 3-ary tree of height 4 (levels 0-3 all internal: $1+3+9+27=40$) achieves exactly 40 internal vertices. So minimum height is 4.</div><div class=\"ml-vi\">Để tối thiểu chiều cao, dồn các đỉnh trong lên càng cao càng tốt: với chiều cao $h$, số đỉnh trong tối đa đạt được là $1+3+9+\\ldots+3^{h-1}=\\frac{3^h-1}{2}$ (mọi mức $0..h-1$ đều đầy đỉnh trong). Với $h=3$: $\\frac{27-1}{2}=13<40$. Với $h=4$: $\\frac{81-1}{2}=40$, khớp chính xác -- cây 3-phân hoàn hảo chiều cao 4 (mức 0-3 đều là đỉnh trong: $1+3+9+27=40$) đạt đúng 40 đỉnh trong. Vậy chiều cao nhỏ nhất là 4.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q44.png"
         },
         {
           "kind": "MCQ",
@@ -4853,7 +5046,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i): all four codewords have length 2 and are distinct, so none can be a prefix of another -- valid prefix code. (ii): codeword \"0\" (for $a$) is a prefix of \"01\" (for $t$), violating the prefix property -- not a prefix code. Only (i) qualifies.</div><div class=\"ml-vi\">(i): cả bốn từ mã đều dài 2 và khác nhau, nên không từ mã nào là tiền tố của từ khác -- là mã tiền tố hợp lệ. (ii): từ mã \"0\" (của $a$) là tiền tố của \"01\" (của $t$), vi phạm tính chất tiền tố -- không phải mã tiền tố. Chỉ (i) thỏa mãn.</div>"
+          "explanation": "<div class=\"ml-en\">(i): all four codewords have length 2 and are distinct, so none can be a prefix of another -- valid prefix code. (ii): codeword \"0\" (for $a$) is a prefix of \"01\" (for $t$), violating the prefix property -- not a prefix code. Only (i) qualifies.</div><div class=\"ml-vi\">(i): cả bốn từ mã đều dài 2 và khác nhau, nên không từ mã nào là tiền tố của từ khác -- là mã tiền tố hợp lệ. (ii): từ mã \"0\" (của $a$) là tiền tố của \"01\" (của $t$), vi phạm tính chất tiền tố -- không phải mã tiền tố. Chỉ (i) thỏa mãn.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q45.png"
         },
         {
           "kind": "MCQ",
@@ -4879,7 +5073,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Frequencies: $e{:}3,w{:}1,k{:}1,n{:}1,d{:}1$ (total 7 letters). Merge the four weight-1 leaves pairwise into two weight-2 nodes, then merge those into a weight-4 node, then merge with $e$(3) at the root. This gives codeword length 1 for $e$ and length 3 for each of $w,k,n,d$. Total bits $=3(1)+1(3)+1(3)+1(3)+1(3)=3+12=15$.</div><div class=\"ml-vi\">Tần suất: $e{:}3,w{:}1,k{:}1,n{:}1,d{:}1$ (tổng 7 chữ). Ghép bốn lá trọng số 1 theo cặp thành hai nút trọng số 2, rồi ghép chúng thành một nút trọng số 4, rồi ghép với $e$(3) ở gốc. Điều này cho độ dài từ mã 1 cho $e$ và độ dài 3 cho mỗi $w,k,n,d$. Tổng bit $=3(1)+1(3)+1(3)+1(3)+1(3)=3+12=15$.</div>"
+          "explanation": "<div class=\"ml-en\">Frequencies: $e{:}3,w{:}1,k{:}1,n{:}1,d{:}1$ (total 7 letters). Merge the four weight-1 leaves pairwise into two weight-2 nodes, then merge those into a weight-4 node, then merge with $e$(3) at the root. This gives codeword length 1 for $e$ and length 3 for each of $w,k,n,d$. Total bits $=3(1)+1(3)+1(3)+1(3)+1(3)=3+12=15$.</div><div class=\"ml-vi\">Tần suất: $e{:}3,w{:}1,k{:}1,n{:}1,d{:}1$ (tổng 7 chữ). Ghép bốn lá trọng số 1 theo cặp thành hai nút trọng số 2, rồi ghép chúng thành một nút trọng số 4, rồi ghép với $e$(3) ở gốc. Điều này cho độ dài từ mã 1 cho $e$ và độ dài 3 cho mỗi $w,k,n,d$. Tổng bit $=3(1)+1(3)+1(3)+1(3)+1(3)=3+12=15$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q46.png"
         },
         {
           "kind": "MCQ",
@@ -4905,7 +5100,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Inorder = left, root, right, recursively. Left subtree of $a$ (rooted at $c$) gives $e,c,h$. Then visit $a$. Right subtree of $a$ (rooted at $m$) gives: left leaf $n$, then $m$, then right subtree at $t$ gives $s,t,y$. Combined: $e,c,h,a,n,m,s,t,y$.</div><div class=\"ml-vi\">Trung thứ = trái, gốc, phải, đệ quy. Cây con trái của $a$ (gốc $c$) cho $e,c,h$. Rồi thăm $a$. Cây con phải của $a$ (gốc $m$) cho: lá trái $n$, rồi $m$, rồi cây con phải tại $t$ cho $s,t,y$. Kết hợp: $e,c,h,a,n,m,s,t,y$.</div>"
+          "explanation": "<div class=\"ml-en\">Inorder = left, root, right, recursively. Left subtree of $a$ (rooted at $c$) gives $e,c,h$. Then visit $a$. Right subtree of $a$ (rooted at $m$) gives: left leaf $n$, then $m$, then right subtree at $t$ gives $s,t,y$. Combined: $e,c,h,a,n,m,s,t,y$.</div><div class=\"ml-vi\">Trung thứ = trái, gốc, phải, đệ quy. Cây con trái của $a$ (gốc $c$) cho $e,c,h$. Rồi thăm $a$. Cây con phải của $a$ (gốc $m$) cho: lá trái $n$, rồi $m$, rồi cây con phải tại $t$ cho $s,t,y$. Kết hợp: $e,c,h,a,n,m,s,t,y$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q47.png"
         },
         {
           "kind": "MCQ",
@@ -4934,7 +5130,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Preorder = root then children left-to-right, recursively: $a,b,d,e,i,j,m,n,o,c,f,g,h,k,l,p$. Counting positions: $a$(1),$b$(2),$d$(3),$e$(4),$i$(5),$j$(6),$m$(7),$n$(8). So $n$ is at position 8.</div><div class=\"ml-vi\">Tiền thứ = gốc rồi các con trái sang phải, đệ quy: $a,b,d,e,i,j,m,n,o,c,f,g,h,k,l,p$. Đếm vị trí: $a$(1),$b$(2),$d$(3),$e$(4),$i$(5),$j$(6),$m$(7),$n$(8). Vậy $n$ ở vị trí 8.</div>"
+          "explanation": "<div class=\"ml-en\">Preorder = root then children left-to-right, recursively: $a,b,d,e,i,j,m,n,o,c,f,g,h,k,l,p$. Counting positions: $a$(1),$b$(2),$d$(3),$e$(4),$i$(5),$j$(6),$m$(7),$n$(8). So $n$ is at position 8.</div><div class=\"ml-vi\">Tiền thứ = gốc rồi các con trái sang phải, đệ quy: $a,b,d,e,i,j,m,n,o,c,f,g,h,k,l,p$. Đếm vị trí: $a$(1),$b$(2),$d$(3),$e$(4),$i$(5),$j$(6),$m$(7),$n$(8). Vậy $n$ ở vị trí 8.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q48.png"
         },
         {
           "kind": "MCQ",
@@ -4957,7 +5154,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$K_{1,6}$ is already a tree (a star with 1 center and 6 leaves, 6 edges, 7 vertices), so its only spanning tree is itself -- the star shape in (iii). A spanning tree must keep all 7 vertices and have exactly 6 edges, and every vertex other than the center has degree 1. (i) is a path on 8 vertices (wrong vertex count, and the center of $K_{1,6}$ has degree 6, not $\\le2$), (ii) is a different tree shape entirely.</div><div class=\"ml-vi\">$K_{1,6}$ vốn đã là một cây (hình sao 1 tâm và 6 lá, 6 cạnh, 7 đỉnh), nên cây khung duy nhất của nó chính là nó -- hình sao ở (iii). Cây khung phải giữ đủ 7 đỉnh và có đúng 6 cạnh, và mọi đỉnh ngoài tâm đều bậc 1. (i) là đường đi 8 đỉnh (sai số đỉnh, và tâm của $K_{1,6}$ có bậc 6 chứ không phải $\\le2$), (ii) là một hình cây hoàn toàn khác.</div>"
+          "explanation": "<div class=\"ml-en\">$K_{1,6}$ is already a tree (a star with 1 center and 6 leaves, 6 edges, 7 vertices), so its only spanning tree is itself -- the star shape in (iii). A spanning tree must keep all 7 vertices and have exactly 6 edges, and every vertex other than the center has degree 1. (i) is a path on 8 vertices (wrong vertex count, and the center of $K_{1,6}$ has degree 6, not $\\le2$), (ii) is a different tree shape entirely.</div><div class=\"ml-vi\">$K_{1,6}$ vốn đã là một cây (hình sao 1 tâm và 6 lá, 6 cạnh, 7 đỉnh), nên cây khung duy nhất của nó chính là nó -- hình sao ở (iii). Cây khung phải giữ đủ 7 đỉnh và có đúng 6 cạnh, và mọi đỉnh ngoài tâm đều bậc 1. (i) là đường đi 8 đỉnh (sai số đỉnh, và tâm của $K_{1,6}$ có bậc 6 chứ không phải $\\le2$), (ii) là một hình cây hoàn toàn khác.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q49.png"
         },
         {
           "kind": "MCQ",
@@ -4983,7 +5181,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Kruskal's algorithm in increasing weight order: $ce(1)$ add, $ad(2)$ add, $ch(3)$ add, $hf(4)$ add, $dc(5)$ add (connects the two components), $ab(6)$ add (connects $b$), $gf(7)$ add (connects $g$) -- now all 8 vertices connected with 7 edges, done. Total weight $=1+2+3+4+5+6+7=28$.</div><div class=\"ml-vi\">Thuật toán Kruskal theo thứ tự trọng số tăng dần: $ce(1)$ thêm, $ad(2)$ thêm, $ch(3)$ thêm, $hf(4)$ thêm, $dc(5)$ thêm (nối hai thành phần), $ab(6)$ thêm (nối $b$), $gf(7)$ thêm (nối $g$) -- giờ cả 8 đỉnh đã liên thông với 7 cạnh, xong. Tổng trọng số $=1+2+3+4+5+6+7=28$.</div>"
+          "explanation": "<div class=\"ml-en\">Kruskal's algorithm in increasing weight order: $ce(1)$ add, $ad(2)$ add, $ch(3)$ add, $hf(4)$ add, $dc(5)$ add (connects the two components), $ab(6)$ add (connects $b$), $gf(7)$ add (connects $g$) -- now all 8 vertices connected with 7 edges, done. Total weight $=1+2+3+4+5+6+7=28$.</div><div class=\"ml-vi\">Thuật toán Kruskal theo thứ tự trọng số tăng dần: $ce(1)$ thêm, $ad(2)$ thêm, $ch(3)$ thêm, $hf(4)$ thêm, $dc(5)$ thêm (nối hai thành phần), $ab(6)$ thêm (nối $b$), $gf(7)$ thêm (nối $g$) -- giờ cả 8 đỉnh đã liên thông với 7 cạnh, xong. Tổng trọng số $=1+2+3+4+5+6+7=28$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D4/q50.png"
         }
       ]
     },
@@ -5020,7 +5219,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The table is exactly $\\neg p$ (true whenever $p$ is false, regardless of $q$). $(i)=(\\neg p\\land q)\\lor(\\neg p\\land\\neg q)=\\neg p\\land(q\\lor\\neg q)=\\neg p\\land T=\\neg p$ -- matches. $(ii)$ fails at $p{=}F,q{=}F$: gives $F$, but table wants $T$. $(iii)$ fails at $p{=}T,q{=}T$: gives $T$, but table wants $F$.</div><div class=\"ml-vi\">Bảng chính là $\\neg p$ (đúng bất cứ khi nào $p$ sai, bất kể $q$). $(i)=(\\neg p\\land q)\\lor(\\neg p\\land\\neg q)=\\neg p\\land(q\\lor\\neg q)=\\neg p\\land T=\\neg p$ -- khớp. $(ii)$ sai tại $p{=}F,q{=}F$: cho $F$, nhưng bảng cần $T$. $(iii)$ sai tại $p{=}T,q{=}T$: cho $T$, nhưng bảng cần $F$.</div>"
+          "explanation": "<div class=\"ml-en\">The table is exactly $\\neg p$ (true whenever $p$ is false, regardless of $q$). $(i)=(\\neg p\\land q)\\lor(\\neg p\\land\\neg q)=\\neg p\\land(q\\lor\\neg q)=\\neg p\\land T=\\neg p$ -- matches. $(ii)$ fails at $p{=}F,q{=}F$: gives $F$, but table wants $T$. $(iii)$ fails at $p{=}T,q{=}T$: gives $T$, but table wants $F$.</div><div class=\"ml-vi\">Bảng chính là $\\neg p$ (đúng bất cứ khi nào $p$ sai, bất kể $q$). $(i)=(\\neg p\\land q)\\lor(\\neg p\\land\\neg q)=\\neg p\\land(q\\lor\\neg q)=\\neg p\\land T=\\neg p$ -- khớp. $(ii)$ sai tại $p{=}F,q{=}F$: cho $F$, nhưng bảng cần $T$. $(iii)$ sai tại $p{=}T,q{=}T$: cho $T$, nhưng bảng cần $F$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q1.png"
         },
         {
           "kind": "MCQ",
@@ -5046,7 +5246,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Need at least one implication false. With $p=T,s=T,q=F,r=F$: $p\\to q=T\\to F=F$, $r\\to s=F\\to T=T$. Whole $=F\\land T=F$. Checking others: A gives $T\\land T=T$; C gives $T\\land T=T$; D gives $T\\land T=T$. Only B works.</div><div class=\"ml-vi\">Cần ít nhất một phép kéo theo sai. Với $p=T,s=T,q=F,r=F$: $p\\to q=T\\to F=F$, $r\\to s=F\\to T=T$. Toàn bộ $=F\\land T=F$. Kiểm các đáp án khác: A cho $T\\land T=T$; C cho $T\\land T=T$; D cho $T\\land T=T$. Chỉ B đúng.</div>"
+          "explanation": "<div class=\"ml-en\">Need at least one implication false. With $p=T,s=T,q=F,r=F$: $p\\to q=T\\to F=F$, $r\\to s=F\\to T=T$. Whole $=F\\land T=F$. Checking others: A gives $T\\land T=T$; C gives $T\\land T=T$; D gives $T\\land T=T$. Only B works.</div><div class=\"ml-vi\">Cần ít nhất một phép kéo theo sai. Với $p=T,s=T,q=F,r=F$: $p\\to q=T\\to F=F$, $r\\to s=F\\to T=T$. Toàn bộ $=F\\land T=F$. Kiểm các đáp án khác: A cho $T\\land T=T$; C cho $T\\land T=T$; D cho $T\\land T=T$. Chỉ B đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q2.png"
         },
         {
           "kind": "MCQ",
@@ -5069,7 +5270,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">(i) fails at $p=T,q=F$: $p\\lor(p\\to q)=T\\lor F=T$, then $T\\to q=T\\to F=F$ -- not a tautology. (ii) is exactly Modus Ponens, $[p\\land(p\\to q)]\\to q$, which is always true (checking all 4 rows confirms this).</div><div class=\"ml-vi\">(i) sai tại $p=T,q=F$: $p\\lor(p\\to q)=T\\lor F=T$, rồi $T\\to q=T\\to F=F$ -- không phải hằng đúng. (ii) chính là Modus Ponens, $[p\\land(p\\to q)]\\to q$, luôn đúng (kiểm cả 4 dòng xác nhận điều này).</div>"
+          "explanation": "<div class=\"ml-en\">(i) fails at $p=T,q=F$: $p\\lor(p\\to q)=T\\lor F=T$, then $T\\to q=T\\to F=F$ -- not a tautology. (ii) is exactly Modus Ponens, $[p\\land(p\\to q)]\\to q$, which is always true (checking all 4 rows confirms this).</div><div class=\"ml-vi\">(i) sai tại $p=T,q=F$: $p\\lor(p\\to q)=T\\lor F=T$, rồi $T\\to q=T\\to F=F$ -- không phải hằng đúng. (ii) chính là Modus Ponens, $[p\\land(p\\to q)]\\to q$, luôn đúng (kiểm cả 4 dòng xác nhận điều này).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q3.png"
         },
         {
           "kind": "MCQ",
@@ -5095,7 +5297,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\neg\\exists x(P(x)\\to Q(x))=\\forall x\\neg(P(x)\\to Q(x))=\\forall x(P(x)\\land\\neg Q(x))$, which is the same as $\\forall x(\\neg Q(x)\\land P(x))$, option (iii).</div><div class=\"ml-vi\">$\\neg\\exists x(P(x)\\to Q(x))=\\forall x\\neg(P(x)\\to Q(x))=\\forall x(P(x)\\land\\neg Q(x))$, giống với $\\forall x(\\neg Q(x)\\land P(x))$, đáp án (iii).</div>"
+          "explanation": "<div class=\"ml-en\">$\\neg\\exists x(P(x)\\to Q(x))=\\forall x\\neg(P(x)\\to Q(x))=\\forall x(P(x)\\land\\neg Q(x))$, which is the same as $\\forall x(\\neg Q(x)\\land P(x))$, option (iii).</div><div class=\"ml-vi\">$\\neg\\exists x(P(x)\\to Q(x))=\\forall x\\neg(P(x)\\to Q(x))=\\forall x(P(x)\\land\\neg Q(x))$, giống với $\\forall x(\\neg Q(x)\\land P(x))$, đáp án (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q4.png"
         },
         {
           "kind": "MCQ",
@@ -5121,7 +5324,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$P(5)$ is false (5 is odd). $\\forall xP(x)$ is false (not all integers are even). $2x+1$ is always odd, so $\\exists xP(2x+1)$ is false. $2x$ is always even, so $P(2x)$ is true for every $x$ -- in particular $\\exists xP(2x)$ is true (e.g. $x=0$). $\\forall xP(x^2)$ fails at $x=1$ ($1$ is odd).</div><div class=\"ml-vi\">$P(5)$ sai (5 là số lẻ). $\\forall xP(x)$ sai (không phải mọi số nguyên đều chẵn). $2x+1$ luôn lẻ, nên $\\exists xP(2x+1)$ sai. $2x$ luôn chẵn, nên $P(2x)$ đúng với mọi $x$ -- đặc biệt $\\exists xP(2x)$ đúng (vd $x=0$). $\\forall xP(x^2)$ sai tại $x=1$ (1 là số lẻ).</div>"
+          "explanation": "<div class=\"ml-en\">$P(5)$ is false (5 is odd). $\\forall xP(x)$ is false (not all integers are even). $2x+1$ is always odd, so $\\exists xP(2x+1)$ is false. $2x$ is always even, so $P(2x)$ is true for every $x$ -- in particular $\\exists xP(2x)$ is true (e.g. $x=0$). $\\forall xP(x^2)$ fails at $x=1$ ($1$ is odd).</div><div class=\"ml-vi\">$P(5)$ sai (5 là số lẻ). $\\forall xP(x)$ sai (không phải mọi số nguyên đều chẵn). $2x+1$ luôn lẻ, nên $\\exists xP(2x+1)$ sai. $2x$ luôn chẵn, nên $P(2x)$ đúng với mọi $x$ -- đặc biệt $\\exists xP(2x)$ đúng (vd $x=0$). $\\forall xP(x^2)$ sai tại $x=1$ (1 là số lẻ).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q5.png"
         },
         {
           "kind": "MCQ",
@@ -5147,7 +5351,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\neg(T(x,y)\\land T(z,y))$ means NOT both $x$ and $z$ like cuisine $y$, i.e. at least one of them dislikes $y$. Combined with $\\forall x\\forall z\\exists y$: for every pair of different students, there is a cuisine that at least one of them does not like -- exactly option (iii)'s wording.</div><div class=\"ml-vi\">$\\neg(T(x,y)\\land T(z,y))$ nghĩa là KHÔNG PHẢI cả $x$ và $z$ đều thích ẩm thực $y$, tức ít nhất một trong hai không thích $y$. Kết hợp với $\\forall x\\forall z\\exists y$: với mọi cặp sinh viên khác nhau, có một món ẩm thực mà ít nhất một trong hai không thích -- đúng nghĩa của đáp án (iii).</div>"
+          "explanation": "<div class=\"ml-en\">$\\neg(T(x,y)\\land T(z,y))$ means NOT both $x$ and $z$ like cuisine $y$, i.e. at least one of them dislikes $y$. Combined with $\\forall x\\forall z\\exists y$: for every pair of different students, there is a cuisine that at least one of them does not like -- exactly option (iii)'s wording.</div><div class=\"ml-vi\">$\\neg(T(x,y)\\land T(z,y))$ nghĩa là KHÔNG PHẢI cả $x$ và $z$ đều thích ẩm thực $y$, tức ít nhất một trong hai không thích $y$. Kết hợp với $\\forall x\\forall z\\exists y$: với mọi cặp sinh viên khác nhau, có một món ẩm thực mà ít nhất một trong hai không thích -- đúng nghĩa của đáp án (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q6.png"
         },
         {
           "kind": "MCQ",
@@ -5170,7 +5375,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i) is true: for any $x$, choose $y=0,z=-x$, giving $y=(x+z)/2=0$. (ii) is false: not every integer is a perfect 2011th power of an integer, e.g. $x=2$ has no integer $y$ with $y^{2011}=2$. (iii) is true: choosing $x=0$ makes $x^2=0$, so for all $y\\neq0$, $y\\neq x^2$ trivially holds. So (ii) is the false one.</div><div class=\"ml-vi\">(i) đúng: với mọi $x$, chọn $y=0,z=-x$, cho $y=(x+z)/2=0$. (ii) sai: không phải mọi số nguyên đều là lũy thừa bậc 2011 hoàn hảo của một số nguyên, ví dụ $x=2$ không có số nguyên $y$ nào với $y^{2011}=2$. (iii) đúng: chọn $x=0$ làm $x^2=0$, nên với mọi $y\\neq0$, $y\\neq x^2$ luôn đúng. Vậy (ii) là mệnh đề sai.</div>"
+          "explanation": "<div class=\"ml-en\">(i) is true: for any $x$, choose $y=0,z=-x$, giving $y=(x+z)/2=0$. (ii) is false: not every integer is a perfect 2011th power of an integer, e.g. $x=2$ has no integer $y$ with $y^{2011}=2$. (iii) is true: choosing $x=0$ makes $x^2=0$, so for all $y\\neq0$, $y\\neq x^2$ trivially holds. So (ii) is the false one.</div><div class=\"ml-vi\">(i) đúng: với mọi $x$, chọn $y=0,z=-x$, cho $y=(x+z)/2=0$. (ii) sai: không phải mọi số nguyên đều là lũy thừa bậc 2011 hoàn hảo của một số nguyên, ví dụ $x=2$ không có số nguyên $y$ nào với $y^{2011}=2$. (iii) đúng: chọn $x=0$ làm $x^2=0$, nên với mọi $y\\neq0$, $y\\neq x^2$ luôn đúng. Vậy (ii) là mệnh đề sai.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q7.png"
         },
         {
           "kind": "MCQ",
@@ -5196,7 +5402,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Given two separate premises $p$ and $q$, concluding $p\\land q$ is exactly the Conjunction rule of inference.</div><div class=\"ml-vi\">Cho hai tiền đề riêng $p$ và $q$, kết luận $p\\land q$ chính xác là quy tắc suy luận Hội (Conjunction).</div>"
+          "explanation": "<div class=\"ml-en\">Given two separate premises $p$ and $q$, concluding $p\\land q$ is exactly the Conjunction rule of inference.</div><div class=\"ml-vi\">Cho hai tiền đề riêng $p$ và $q$, kết luận $p\\land q$ chính xác là quy tắc suy luận Hội (Conjunction).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q8.png"
         },
         {
           "kind": "MCQ",
@@ -5219,7 +5426,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">1) True: $a$ is the sole element of $\\{a\\}$. 2) False: the sole element of $\\{a\\}$ is $a$, not the set $\\{a\\}$. 3) False: $a$ is an element, not a subset (subset requires a set argument). 4) False: the elements of $\\{a,b,c,d\\}$ are $a,b,c,d$ individually, not the set $\\{a,b\\}$. 5) True: the empty set is a subset of every set. 6) True: the Cartesian product with the empty set is always empty. So true statements are 1,5,6.</div><div class=\"ml-vi\">1) Đúng: $a$ là phần tử duy nhất của $\\{a\\}$. 2) Sai: phần tử duy nhất của $\\{a\\}$ là $a$, không phải tập $\\{a\\}$. 3) Sai: $a$ là một phần tử, không phải tập con (tập con cần đối số là một tập hợp). 4) Sai: các phần tử của $\\{a,b,c,d\\}$ là $a,b,c,d$ riêng lẻ, không phải tập $\\{a,b\\}$. 5) Đúng: tập rỗng là tập con của mọi tập hợp. 6) Đúng: tích Descartes với tập rỗng luôn là tập rỗng. Vậy các phát biểu đúng là 1,5,6.</div>"
+          "explanation": "<div class=\"ml-en\">1) True: $a$ is the sole element of $\\{a\\}$. 2) False: the sole element of $\\{a\\}$ is $a$, not the set $\\{a\\}$. 3) False: $a$ is an element, not a subset (subset requires a set argument). 4) False: the elements of $\\{a,b,c,d\\}$ are $a,b,c,d$ individually, not the set $\\{a,b\\}$. 5) True: the empty set is a subset of every set. 6) True: the Cartesian product with the empty set is always empty. So true statements are 1,5,6.</div><div class=\"ml-vi\">1) Đúng: $a$ là phần tử duy nhất của $\\{a\\}$. 2) Sai: phần tử duy nhất của $\\{a\\}$ là $a$, không phải tập $\\{a\\}$. 3) Sai: $a$ là một phần tử, không phải tập con (tập con cần đối số là một tập hợp). 4) Sai: các phần tử của $\\{a,b,c,d\\}$ là $a,b,c,d$ riêng lẻ, không phải tập $\\{a,b\\}$. 5) Đúng: tập rỗng là tập con của mọi tập hợp. 6) Đúng: tích Descartes với tập rỗng luôn là tập rỗng. Vậy các phát biểu đúng là 1,5,6.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q9.png"
         },
         {
           "kind": "MCQ",
@@ -5245,7 +5453,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Let $n=|A|$. Then $|B|=n+1$ and $|A\\times B|=n(n+1)=90$. Solving $n^2+n-90=0$ gives $n=\\frac{-1+\\sqrt{1+360}}{2}=\\frac{-1+19}{2}=9$.</div><div class=\"ml-vi\">Đặt $n=|A|$. Khi đó $|B|=n+1$ và $|A\\times B|=n(n+1)=90$. Giải $n^2+n-90=0$ cho $n=\\frac{-1+\\sqrt{1+360}}{2}=\\frac{-1+19}{2}=9$.</div>"
+          "explanation": "<div class=\"ml-en\">Let $n=|A|$. Then $|B|=n+1$ and $|A\\times B|=n(n+1)=90$. Solving $n^2+n-90=0$ gives $n=\\frac{-1+\\sqrt{1+360}}{2}=\\frac{-1+19}{2}=9$.</div><div class=\"ml-vi\">Đặt $n=|A|$. Khi đó $|B|=n+1$ và $|A\\times B|=n(n+1)=90$. Giải $n^2+n-90=0$ cho $n=\\frac{-1+\\sqrt{1+360}}{2}=\\frac{-1+19}{2}=9$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q10.png"
         },
         {
           "kind": "MCQ",
@@ -5271,7 +5480,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">By inclusion-exclusion, $|M\\cup P|=20+30-10=40$. Neither $=50-40=10$.</div><div class=\"ml-vi\">Theo nguyên lý bù trừ, $|M\\cup P|=20+30-10=40$. Không giỏi cả hai $=50-40=10$.</div>"
+          "explanation": "<div class=\"ml-en\">By inclusion-exclusion, $|M\\cup P|=20+30-10=40$. Neither $=50-40=10$.</div><div class=\"ml-vi\">Theo nguyên lý bù trừ, $|M\\cup P|=20+30-10=40$. Không giỏi cả hai $=50-40=10$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q11.png"
         },
         {
           "kind": "MCQ",
@@ -5297,7 +5507,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f(2)=2(2)=4$. Then $g(f(2))=g(4)=3(4)-1=11$.</div><div class=\"ml-vi\">$f(2)=2(2)=4$. Rồi $g(f(2))=g(4)=3(4)-1=11$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(2)=2(2)=4$. Then $g(f(2))=g(4)=3(4)-1=11$.</div><div class=\"ml-vi\">$f(2)=2(2)=4$. Rồi $g(f(2))=g(4)=3(4)-1=11$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q12.png"
         },
         {
           "kind": "MCQ",
@@ -5320,7 +5531,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">(i) fails: $\\sqrt n$ isn't always a natural number (e.g. $\\sqrt2$), so the codomain $\\mathbb{N}$ is violated. (ii) works: $\\sqrt n$ is always a well-defined real number for every natural $n$, giving exactly one output -- a valid function. (iii) fails: $\\sqrt n$ is undefined for negative reals, and not always natural.</div><div class=\"ml-vi\">(i) sai: $\\sqrt n$ không phải luôn là số tự nhiên (vd $\\sqrt2$), nên vi phạm miền giá trị $\\mathbb{N}$. (ii) đúng: $\\sqrt n$ luôn là một số thực xác định rõ với mọi số tự nhiên $n$, cho đúng một giá trị ra -- một hàm hợp lệ. (iii) sai: $\\sqrt n$ không xác định với số thực âm, và không phải luôn là số tự nhiên.</div>"
+          "explanation": "<div class=\"ml-en\">(i) fails: $\\sqrt n$ isn't always a natural number (e.g. $\\sqrt2$), so the codomain $\\mathbb{N}$ is violated. (ii) works: $\\sqrt n$ is always a well-defined real number for every natural $n$, giving exactly one output -- a valid function. (iii) fails: $\\sqrt n$ is undefined for negative reals, and not always natural.</div><div class=\"ml-vi\">(i) sai: $\\sqrt n$ không phải luôn là số tự nhiên (vd $\\sqrt2$), nên vi phạm miền giá trị $\\mathbb{N}$. (ii) đúng: $\\sqrt n$ luôn là một số thực xác định rõ với mọi số tự nhiên $n$, cho đúng một giá trị ra -- một hàm hợp lệ. (iii) sai: $\\sqrt n$ không xác định với số thực âm, và không phải luôn là số tự nhiên.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q13.png"
         },
         {
           "kind": "MCQ",
@@ -5343,7 +5555,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\sum i(i+1)=\\sum i^2+\\sum i$. With $n=99$: $\\sum i=\\frac{99\\cdot100}{2}=4950$, $\\sum i^2=\\frac{99\\cdot100\\cdot199}{6}=328350$. Total $=328350+4950=333300$.</div><div class=\"ml-vi\">$\\sum i(i+1)=\\sum i^2+\\sum i$. Với $n=99$: $\\sum i=\\frac{99\\cdot100}{2}=4950$, $\\sum i^2=\\frac{99\\cdot100\\cdot199}{6}=328350$. Tổng $=328350+4950=333300$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\sum i(i+1)=\\sum i^2+\\sum i$. With $n=99$: $\\sum i=\\frac{99\\cdot100}{2}=4950$, $\\sum i^2=\\frac{99\\cdot100\\cdot199}{6}=328350$. Total $=328350+4950=333300$.</div><div class=\"ml-vi\">$\\sum i(i+1)=\\sum i^2+\\sum i$. Với $n=99$: $\\sum i=\\frac{99\\cdot100}{2}=4950$, $\\sum i^2=\\frac{99\\cdot100\\cdot199}{6}=328350$. Tổng $=328350+4950=333300$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q14.png"
         },
         {
           "kind": "MCQ",
@@ -5366,7 +5579,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$Max$ starts at 1. Then: $4>1\\to Max=4$; $5>4\\to Max=5$; $2\\not>5$ no change; $7>5\\to Max=7$; $9>7\\to Max=9$; $3\\not>9$ no change. All values $Max$ takes: $1,4,5,7,9$.</div><div class=\"ml-vi\">$Max$ bắt đầu là 1. Rồi: $4>1\\to Max=4$; $5>4\\to Max=5$; $2\\not>5$ không đổi; $7>5\\to Max=7$; $9>7\\to Max=9$; $3\\not>9$ không đổi. Tất cả giá trị $Max$ nhận: $1,4,5,7,9$.</div>"
+          "explanation": "<div class=\"ml-en\">$Max$ starts at 1. Then: $4>1\\to Max=4$; $5>4\\to Max=5$; $2\\not>5$ no change; $7>5\\to Max=7$; $9>7\\to Max=9$; $3\\not>9$ no change. All values $Max$ takes: $1,4,5,7,9$.</div><div class=\"ml-vi\">$Max$ bắt đầu là 1. Rồi: $4>1\\to Max=4$; $5>4\\to Max=5$; $2\\not>5$ không đổi; $7>5\\to Max=7$; $9>7\\to Max=9$; $3\\not>9$ không đổi. Tất cả giá trị $Max$ nhận: $1,4,5,7,9$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q15.png"
         },
         {
           "kind": "MCQ",
@@ -5392,7 +5606,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Pass 1 ($j=1..6$): compare(3,2) swap$\\to$2,3,4,7,1,6,5; compare(3,4) no; compare(4,7) no; compare(7,1) swap$\\to$2,3,4,1,7,6,5; compare(7,6) swap$\\to$2,3,4,1,6,7,5; compare(7,5) swap$\\to$2,3,4,1,6,5,7.</div><div class=\"ml-vi\">Lượt 1 ($j=1..6$): so sánh(3,2) đổi$\\to$2,3,4,7,1,6,5; so sánh(3,4) không; so sánh(4,7) không; so sánh(7,1) đổi$\\to$2,3,4,1,7,6,5; so sánh(7,6) đổi$\\to$2,3,4,1,6,7,5; so sánh(7,5) đổi$\\to$2,3,4,1,6,5,7.</div>"
+          "explanation": "<div class=\"ml-en\">Pass 1 ($j=1..6$): compare(3,2) swap$\\to$2,3,4,7,1,6,5; compare(3,4) no; compare(4,7) no; compare(7,1) swap$\\to$2,3,4,1,7,6,5; compare(7,6) swap$\\to$2,3,4,1,6,7,5; compare(7,5) swap$\\to$2,3,4,1,6,5,7.</div><div class=\"ml-vi\">Lượt 1 ($j=1..6$): so sánh(3,2) đổi$\\to$2,3,4,7,1,6,5; so sánh(3,4) không; so sánh(4,7) không; so sánh(7,1) đổi$\\to$2,3,4,1,7,6,5; so sánh(7,6) đổi$\\to$2,3,4,1,6,7,5; so sánh(7,5) đổi$\\to$2,3,4,1,6,5,7.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q16.png"
         },
         {
           "kind": "MCQ",
@@ -5418,7 +5633,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">(i): dominant term $8x^3$, and $x^2,x\\log x$ are both $o(x^3)$, so $f(x)=O(x^3)$. (ii): $(x^2+1)(x^2-1)\\approx x^4-1$ grows like $x^4$, NOT $O(x^3)$. (iii): $x^3\\log x$ grows strictly faster than any constant multiple of $x^3$ (since $\\log x\\to\\infty$), so NOT $O(x^3)$. Only (i) qualifies.</div><div class=\"ml-vi\">(i): số hạng chiếm ưu thế $8x^3$, và $x^2,x\\log x$ đều là $o(x^3)$, nên $f(x)=O(x^3)$. (ii): $(x^2+1)(x^2-1)\\approx x^4-1$ tăng như $x^4$, KHÔNG phải $O(x^3)$. (iii): $x^3\\log x$ tăng nhanh hơn hẳn bất kỳ hằng số nhân $x^3$ nào (vì $\\log x\\to\\infty$), nên KHÔNG phải $O(x^3)$. Chỉ (i) thỏa.</div>"
+          "explanation": "<div class=\"ml-en\">(i): dominant term $8x^3$, and $x^2,x\\log x$ are both $o(x^3)$, so $f(x)=O(x^3)$. (ii): $(x^2+1)(x^2-1)\\approx x^4-1$ grows like $x^4$, NOT $O(x^3)$. (iii): $x^3\\log x$ grows strictly faster than any constant multiple of $x^3$ (since $\\log x\\to\\infty$), so NOT $O(x^3)$. Only (i) qualifies.</div><div class=\"ml-vi\">(i): số hạng chiếm ưu thế $8x^3$, và $x^2,x\\log x$ đều là $o(x^3)$, nên $f(x)=O(x^3)$. (ii): $(x^2+1)(x^2-1)\\approx x^4-1$ tăng như $x^4$, KHÔNG phải $O(x^3)$. (iii): $x^3\\log x$ tăng nhanh hơn hẳn bất kỳ hằng số nhân $x^3$ nào (vì $\\log x\\to\\infty$), nên KHÔNG phải $O(x^3)$. Chỉ (i) thỏa.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q17.png"
         },
         {
           "kind": "MCQ",
@@ -5444,7 +5660,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The inner loop runs $i^2$ times for each $i$, and each iteration does one division. Total divisions $=\\sum_{i=1}^{6}i^2=1+4+9+16+25+36=91$.</div><div class=\"ml-vi\">Vòng lặp trong chạy $i^2$ lần với mỗi $i$, mỗi lần lặp thực hiện một phép chia. Tổng số phép chia $=\\sum_{i=1}^{6}i^2=1+4+9+16+25+36=91$.</div>"
+          "explanation": "<div class=\"ml-en\">The inner loop runs $i^2$ times for each $i$, and each iteration does one division. Total divisions $=\\sum_{i=1}^{6}i^2=1+4+9+16+25+36=91$.</div><div class=\"ml-vi\">Vòng lặp trong chạy $i^2$ lần với mỗi $i$, mỗi lần lặp thực hiện một phép chia. Tổng số phép chia $=\\sum_{i=1}^{6}i^2=1+4+9+16+25+36=91$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q18.png"
         },
         {
           "kind": "MCQ",
@@ -5467,7 +5684,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$x_1=(5\\cdot3+1)\\bmod9=16\\bmod9=7$. $x_2=(5\\cdot7+1)\\bmod9=36\\bmod9=0$. $x_3=(5\\cdot0+1)\\bmod9=1$. $x_4=(5\\cdot1+1)\\bmod9=6$. $x_5=(5\\cdot6+1)\\bmod9=31\\bmod9=4$.</div><div class=\"ml-vi\">$x_1=(5\\cdot3+1)\\bmod9=16\\bmod9=7$. $x_2=(5\\cdot7+1)\\bmod9=36\\bmod9=0$. $x_3=(5\\cdot0+1)\\bmod9=1$. $x_4=(5\\cdot1+1)\\bmod9=6$. $x_5=(5\\cdot6+1)\\bmod9=31\\bmod9=4$.</div>"
+          "explanation": "<div class=\"ml-en\">$x_1=(5\\cdot3+1)\\bmod9=16\\bmod9=7$. $x_2=(5\\cdot7+1)\\bmod9=36\\bmod9=0$. $x_3=(5\\cdot0+1)\\bmod9=1$. $x_4=(5\\cdot1+1)\\bmod9=6$. $x_5=(5\\cdot6+1)\\bmod9=31\\bmod9=4$.</div><div class=\"ml-vi\">$x_1=(5\\cdot3+1)\\bmod9=16\\bmod9=7$. $x_2=(5\\cdot7+1)\\bmod9=36\\bmod9=0$. $x_3=(5\\cdot0+1)\\bmod9=1$. $x_4=(5\\cdot1+1)\\bmod9=6$. $x_5=(5\\cdot6+1)\\bmod9=31\\bmod9=4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q19.png"
         },
         {
           "kind": "MCQ",
@@ -5490,7 +5708,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">By convention, $\\bmod$ result must satisfy $0\\le r<19$. $-112=19q+r$: try $q=-6$: $19(-6)=-114$, $r=-112-(-114)=2$, valid since $0\\le2<19$. So $-112\\text{ div }19=-6$ and $-112\\bmod19=2$.</div><div class=\"ml-vi\">Theo quy ước, kết quả $\\bmod$ phải thỏa $0\\le r<19$. $-112=19q+r$: thử $q=-6$: $19(-6)=-114$, $r=-112-(-114)=2$, hợp lệ vì $0\\le2<19$. Vậy $-112\\text{ div }19=-6$ và $-112\\bmod19=2$.</div>"
+          "explanation": "<div class=\"ml-en\">By convention, $\\bmod$ result must satisfy $0\\le r<19$. $-112=19q+r$: try $q=-6$: $19(-6)=-114$, $r=-112-(-114)=2$, valid since $0\\le2<19$. So $-112\\text{ div }19=-6$ and $-112\\bmod19=2$.</div><div class=\"ml-vi\">Theo quy ước, kết quả $\\bmod$ phải thỏa $0\\le r<19$. $-112=19q+r$: thử $q=-6$: $19(-6)=-114$, $r=-112-(-114)=2$, hợp lệ vì $0\\le2<19$. Vậy $-112\\text{ div }19=-6$ và $-112\\bmod19=2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q20.png"
         },
         {
           "kind": "MCQ",
@@ -5513,7 +5732,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$(143,22)$: $143=11\\times13$, $22=2\\times11$, $\\gcd=11\\neq1$. $(81,63)$: $81=3^4$, $63=3^2\\times7$, $\\gcd=9\\neq1$. $(21,93)$: $21=3\\times7$, $93=3\\times31$, $\\gcd=3\\neq1$. None of the given pairs is relatively prime.</div><div class=\"ml-vi\">$(143,22)$: $143=11\\times13$, $22=2\\times11$, $\\gcd=11\\neq1$. $(81,63)$: $81=3^4$, $63=3^2\\times7$, $\\gcd=9\\neq1$. $(21,93)$: $21=3\\times7$, $93=3\\times31$, $\\gcd=3\\neq1$. Không cặp nào trong các cặp trên nguyên tố cùng nhau.</div>"
+          "explanation": "<div class=\"ml-en\">$(143,22)$: $143=11\\times13$, $22=2\\times11$, $\\gcd=11\\neq1$. $(81,63)$: $81=3^4$, $63=3^2\\times7$, $\\gcd=9\\neq1$. $(21,93)$: $21=3\\times7$, $93=3\\times31$, $\\gcd=3\\neq1$. None of the given pairs is relatively prime.</div><div class=\"ml-vi\">$(143,22)$: $143=11\\times13$, $22=2\\times11$, $\\gcd=11\\neq1$. $(81,63)$: $81=3^4$, $63=3^2\\times7$, $\\gcd=9\\neq1$. $(21,93)$: $21=3\\times7$, $93=3\\times31$, $\\gcd=3\\neq1$. Không cặp nào trong các cặp trên nguyên tố cùng nhau.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q21.png"
         },
         {
           "kind": "MCQ",
@@ -5536,7 +5756,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$lcm(a,b)=2^{\\max(3,2)}3^{\\max(3,3)}5^{\\max(2,4)}7^{\\max(1,1)}=2^3 3^3 5^4 7^1$. $\\gcd(a,b)=2^{\\min(3,2)}3^{\\min(3,3)}5^{\\min(2,4)}7^{\\min(1,1)}=2^2 3^3 5^2 7^1$. Ratio $=2^{3-2}3^{3-3}5^{4-2}7^{1-1}=2^1 3^0 5^2 7^0=2^1 5^2$.</div><div class=\"ml-vi\">$lcm(a,b)=2^{\\max(3,2)}3^{\\max(3,3)}5^{\\max(2,4)}7^{\\max(1,1)}=2^3 3^3 5^4 7^1$. $\\gcd(a,b)=2^{\\min(3,2)}3^{\\min(3,3)}5^{\\min(2,4)}7^{\\min(1,1)}=2^2 3^3 5^2 7^1$. Tỉ số $=2^{3-2}3^{3-3}5^{4-2}7^{1-1}=2^1 3^0 5^2 7^0=2^1 5^2$.</div>"
+          "explanation": "<div class=\"ml-en\">$lcm(a,b)=2^{\\max(3,2)}3^{\\max(3,3)}5^{\\max(2,4)}7^{\\max(1,1)}=2^3 3^3 5^4 7^1$. $\\gcd(a,b)=2^{\\min(3,2)}3^{\\min(3,3)}5^{\\min(2,4)}7^{\\min(1,1)}=2^2 3^3 5^2 7^1$. Ratio $=2^{3-2}3^{3-3}5^{4-2}7^{1-1}=2^1 3^0 5^2 7^0=2^1 5^2$.</div><div class=\"ml-vi\">$lcm(a,b)=2^{\\max(3,2)}3^{\\max(3,3)}5^{\\max(2,4)}7^{\\max(1,1)}=2^3 3^3 5^4 7^1$. $\\gcd(a,b)=2^{\\min(3,2)}3^{\\min(3,3)}5^{\\min(2,4)}7^{\\min(1,1)}=2^2 3^3 5^2 7^1$. Tỉ số $=2^{3-2}3^{3-3}5^{4-2}7^{1-1}=2^1 3^0 5^2 7^0=2^1 5^2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q22.png"
         },
         {
           "kind": "MCQ",
@@ -5562,7 +5783,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$(123)_9=1(81)+2(9)+3=81+18+3=102$ in decimal. Converting 102 to base 3: $102=1(81)+0(27)+2(9)+1(3)+0(1)$, giving digits $1,0,2,1,0=(10210)_3$.</div><div class=\"ml-vi\">$(123)_9=1(81)+2(9)+3=81+18+3=102$ trong hệ thập phân. Đổi 102 sang cơ số 3: $102=1(81)+0(27)+2(9)+1(3)+0(1)$, cho các chữ số $1,0,2,1,0=(10210)_3$.</div>"
+          "explanation": "<div class=\"ml-en\">$(123)_9=1(81)+2(9)+3=81+18+3=102$ in decimal. Converting 102 to base 3: $102=1(81)+0(27)+2(9)+1(3)+0(1)$, giving digits $1,0,2,1,0=(10210)_3$.</div><div class=\"ml-vi\">$(123)_9=1(81)+2(9)+3=81+18+3=102$ trong hệ thập phân. Đổi 102 sang cơ số 3: $102=1(81)+0(27)+2(9)+1(3)+0(1)$, cho các chữ số $1,0,2,1,0=(10210)_3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q23.png"
         },
         {
           "kind": "MCQ",
@@ -5588,7 +5810,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$(434)_5=4(25)+3(5)+4=100+15+4=119$ in decimal. Converting 119 to base 3: $119=1(81)+1(27)+1(9)+0(3)+2(1)$, giving digits $1,1,1,0,2=(11102)_3$.</div><div class=\"ml-vi\">$(434)_5=4(25)+3(5)+4=100+15+4=119$ trong hệ thập phân. Đổi 119 sang cơ số 3: $119=1(81)+1(27)+1(9)+0(3)+2(1)$, cho các chữ số $1,1,1,0,2=(11102)_3$.</div>"
+          "explanation": "<div class=\"ml-en\">$(434)_5=4(25)+3(5)+4=100+15+4=119$ in decimal. Converting 119 to base 3: $119=1(81)+1(27)+1(9)+0(3)+2(1)$, giving digits $1,1,1,0,2=(11102)_3$.</div><div class=\"ml-vi\">$(434)_5=4(25)+3(5)+4=100+15+4=119$ trong hệ thập phân. Đổi 119 sang cơ số 3: $119=1(81)+1(27)+1(9)+0(3)+2(1)$, cho các chữ số $1,1,1,0,2=(11102)_3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q24.png"
         },
         {
           "kind": "MCQ",
@@ -5611,7 +5834,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">For coprime $5,6$, the Frobenius number (largest non-representable integer) is $5\\times6-5-6=19$. So every integer $n\\ge20$ is representable, and $19$ itself is not -- the smallest valid $a$ is 20.</div><div class=\"ml-vi\">Với $5,6$ nguyên tố cùng nhau, số Frobenius (số nguyên lớn nhất không biểu diễn được) là $5\\times6-5-6=19$. Vậy mọi số nguyên $n\\ge20$ đều biểu diễn được, còn $19$ thì không -- $a$ nhỏ nhất hợp lệ là 20.</div>"
+          "explanation": "<div class=\"ml-en\">For coprime $5,6$, the Frobenius number (largest non-representable integer) is $5\\times6-5-6=19$. So every integer $n\\ge20$ is representable, and $19$ itself is not -- the smallest valid $a$ is 20.</div><div class=\"ml-vi\">Với $5,6$ nguyên tố cùng nhau, số Frobenius (số nguyên lớn nhất không biểu diễn được) là $5\\times6-5-6=19$. Vậy mọi số nguyên $n\\ge20$ đều biểu diễn được, còn $19$ thì không -- $a$ nhỏ nhất hợp lệ là 20.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q25.png"
         },
         {
           "kind": "MCQ",
@@ -5637,7 +5861,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Odd positive integers are $1,3,5,7,\\ldots$. Basis $1\\in S$, recursive step $a\\in S\\to a+2\\in S$ generates exactly this set. (i) starts from 0 (generates evens). (ii)'s extra $a-2\\in S$ rule would generate non-positive integers too. (iii) includes 2, generating evens as well.</div><div class=\"ml-vi\">Số nguyên dương lẻ là $1,3,5,7,\\ldots$. Cơ sở $1\\in S$, bước đệ quy $a\\in S\\to a+2\\in S$ sinh đúng tập này. (i) bắt đầu từ 0 (sinh ra số chẵn). Quy tắc $a-2\\in S$ thêm ở (ii) sẽ sinh cả số không dương. (iii) bao gồm 2, cũng sinh ra số chẵn.</div>"
+          "explanation": "<div class=\"ml-en\">Odd positive integers are $1,3,5,7,\\ldots$. Basis $1\\in S$, recursive step $a\\in S\\to a+2\\in S$ generates exactly this set. (i) starts from 0 (generates evens). (ii)'s extra $a-2\\in S$ rule would generate non-positive integers too. (iii) includes 2, generating evens as well.</div><div class=\"ml-vi\">Số nguyên dương lẻ là $1,3,5,7,\\ldots$. Cơ sở $1\\in S$, bước đệ quy $a\\in S\\to a+2\\in S$ sinh đúng tập này. (i) bắt đầu từ 0 (sinh ra số chẵn). Quy tắc $a-2\\in S$ thêm ở (ii) sẽ sinh cả số không dương. (iii) bao gồm 2, cũng sinh ra số chẵn.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q26.png"
         },
         {
           "kind": "MCQ",
@@ -5660,7 +5885,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f(1)=3^2=9$. Also $f(n)=3^{n+1}=3\\cdot3^n=3f(n-1)$. So the recursive definition is $f(n)=3f(n-1)$ with $f(1)=9$.</div><div class=\"ml-vi\">$f(1)=3^2=9$. Ngoài ra $f(n)=3^{n+1}=3\\cdot3^n=3f(n-1)$. Vậy định nghĩa đệ quy là $f(n)=3f(n-1)$ với $f(1)=9$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(1)=3^2=9$. Also $f(n)=3^{n+1}=3\\cdot3^n=3f(n-1)$. So the recursive definition is $f(n)=3f(n-1)$ with $f(1)=9$.</div><div class=\"ml-vi\">$f(1)=3^2=9$. Ngoài ra $f(n)=3^{n+1}=3\\cdot3^n=3f(n-1)$. Vậy định nghĩa đệ quy là $f(n)=3f(n-1)$ với $f(1)=9$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q27.png"
         },
         {
           "kind": "MCQ",
@@ -5686,7 +5912,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">This computes the $n$-th triangular number $tt(n)=1+2+\\ldots+n=\\frac{n(n+1)}{2}$. For $n=7$: $\\frac{7\\times8}{2}=28$.</div><div class=\"ml-vi\">Đây tính số tam giác thứ $n$: $tt(n)=1+2+\\ldots+n=\\frac{n(n+1)}{2}$. Với $n=7$: $\\frac{7\\times8}{2}=28$.</div>"
+          "explanation": "<div class=\"ml-en\">This computes the $n$-th triangular number $tt(n)=1+2+\\ldots+n=\\frac{n(n+1)}{2}$. For $n=7$: $\\frac{7\\times8}{2}=28$.</div><div class=\"ml-vi\">Đây tính số tam giác thứ $n$: $tt(n)=1+2+\\ldots+n=\\frac{n(n+1)}{2}$. Với $n=7$: $\\frac{7\\times8}{2}=28$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q28.png"
         },
         {
           "kind": "MCQ",
@@ -5712,7 +5939,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f(1)=3$, $f(2)=3\\times2=6$, $f(3)=6\\times3=18$, $f(4)=18\\times4=72$, $f(5)=72\\times5=360$.</div><div class=\"ml-vi\">$f(1)=3$, $f(2)=3\\times2=6$, $f(3)=6\\times3=18$, $f(4)=18\\times4=72$, $f(5)=72\\times5=360$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(1)=3$, $f(2)=3\\times2=6$, $f(3)=6\\times3=18$, $f(4)=18\\times4=72$, $f(5)=72\\times5=360$.</div><div class=\"ml-vi\">$f(1)=3$, $f(2)=3\\times2=6$, $f(3)=6\\times3=18$, $f(4)=18\\times4=72$, $f(5)=72\\times5=360$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q29.png"
         },
         {
           "kind": "MCQ",
@@ -5738,7 +5966,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Divisible by 3: $\\lfloor99/3\\rfloor=33$. Divisible by 4: $\\lfloor99/4\\rfloor=24$. Divisible by $\\text{lcm}(3,4)=12$: $\\lfloor99/12\\rfloor=8$. By inclusion-exclusion: $33+24-8=49$.</div><div class=\"ml-vi\">Chia hết cho 3: $\\lfloor99/3\\rfloor=33$. Chia hết cho 4: $\\lfloor99/4\\rfloor=24$. Chia hết cho $\\text{lcm}(3,4)=12$: $\\lfloor99/12\\rfloor=8$. Theo nguyên lý bù trừ: $33+24-8=49$.</div>"
+          "explanation": "<div class=\"ml-en\">Divisible by 3: $\\lfloor99/3\\rfloor=33$. Divisible by 4: $\\lfloor99/4\\rfloor=24$. Divisible by $\\text{lcm}(3,4)=12$: $\\lfloor99/12\\rfloor=8$. By inclusion-exclusion: $33+24-8=49$.</div><div class=\"ml-vi\">Chia hết cho 3: $\\lfloor99/3\\rfloor=33$. Chia hết cho 4: $\\lfloor99/4\\rfloor=24$. Chia hết cho $\\text{lcm}(3,4)=12$: $\\lfloor99/12\\rfloor=8$. Theo nguyên lý bù trừ: $33+24-8=49$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q30.png"
         },
         {
           "kind": "MCQ",
@@ -5761,7 +5990,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Choose 3 of the 4 positions to be 9: $\\binom{4}{3}=4$ ways. The remaining position must be a non-9 digit: 9 choices. Total: $4\\times9=36$.</div><div class=\"ml-vi\">Chọn 3 trong 4 vị trí để là 9: $\\binom{4}{3}=4$ cách. Vị trí còn lại phải là chữ số khác 9: 9 lựa chọn. Tổng: $4\\times9=36$.</div>"
+          "explanation": "<div class=\"ml-en\">Choose 3 of the 4 positions to be 9: $\\binom{4}{3}=4$ ways. The remaining position must be a non-9 digit: 9 choices. Total: $4\\times9=36$.</div><div class=\"ml-vi\">Chọn 3 trong 4 vị trí để là 9: $\\binom{4}{3}=4$ cách. Vị trí còn lại phải là chữ số khác 9: 9 lựa chọn. Tổng: $4\\times9=36$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q31.png"
         },
         {
           "kind": "MCQ",
@@ -5790,7 +6020,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Total strings of length 5: $2^5=32$. Let $a(n)$ count strings of length $n$ with NO two consecutive 1s: $a(n)=a(n-1)+a(n-2)$, $a(0)=1,a(1)=2$, giving $a(2)=3,a(3)=5,a(4)=8,a(5)=13$. Strings WITH two consecutive 1s: $32-13=19$.</div><div class=\"ml-vi\">Tổng số chuỗi độ dài 5: $2^5=32$. Gọi $a(n)$ đếm chuỗi độ dài $n$ KHÔNG có hai bit 1 liên tiếp: $a(n)=a(n-1)+a(n-2)$, $a(0)=1,a(1)=2$, cho $a(2)=3,a(3)=5,a(4)=8,a(5)=13$. Chuỗi CÓ hai bit 1 liên tiếp: $32-13=19$.</div>"
+          "explanation": "<div class=\"ml-en\">Total strings of length 5: $2^5=32$. Let $a(n)$ count strings of length $n$ with NO two consecutive 1s: $a(n)=a(n-1)+a(n-2)$, $a(0)=1,a(1)=2$, giving $a(2)=3,a(3)=5,a(4)=8,a(5)=13$. Strings WITH two consecutive 1s: $32-13=19$.</div><div class=\"ml-vi\">Tổng số chuỗi độ dài 5: $2^5=32$. Gọi $a(n)$ đếm chuỗi độ dài $n$ KHÔNG có hai bit 1 liên tiếp: $a(n)=a(n-1)+a(n-2)$, $a(0)=1,a(1)=2$, cho $a(2)=3,a(3)=5,a(4)=8,a(5)=13$. Chuỗi CÓ hai bit 1 liên tiếp: $32-13=19$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q32.png"
         },
         {
           "kind": "MCQ",
@@ -5816,7 +6047,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f(3)=3f(1)+4(3)=3(3)+12=21$. $f(9)=3f(3)+4(9)=3(21)+36=99$. $f(27)=3f(9)+4(27)=3(99)+108=297+108=405$.</div><div class=\"ml-vi\">$f(3)=3f(1)+4(3)=3(3)+12=21$. $f(9)=3f(3)+4(9)=3(21)+36=99$. $f(27)=3f(9)+4(27)=3(99)+108=297+108=405$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(3)=3f(1)+4(3)=3(3)+12=21$. $f(9)=3f(3)+4(9)=3(21)+36=99$. $f(27)=3f(9)+4(27)=3(99)+108=297+108=405$.</div><div class=\"ml-vi\">$f(3)=3f(1)+4(3)=3(3)+12=21$. $f(9)=3f(3)+4(9)=3(21)+36=99$. $f(27)=3f(9)+4(27)=3(99)+108=297+108=405$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q33.png"
         },
         {
           "kind": "MCQ",
@@ -5842,7 +6074,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">The cycle graph $C_n$ has exactly $n$ vertices arranged in a ring, $n$ edges (each vertex connects to its two neighbors), and every vertex has degree exactly 2. All three statements are true.</div><div class=\"ml-vi\">Đồ thị chu trình $C_n$ có đúng $n$ đỉnh xếp thành vòng, $n$ cạnh (mỗi đỉnh nối với hai đỉnh lân cận), và mọi đỉnh đều có bậc đúng bằng 2. Cả ba phát biểu đều đúng.</div>"
+          "explanation": "<div class=\"ml-en\">The cycle graph $C_n$ has exactly $n$ vertices arranged in a ring, $n$ edges (each vertex connects to its two neighbors), and every vertex has degree exactly 2. All three statements are true.</div><div class=\"ml-vi\">Đồ thị chu trình $C_n$ có đúng $n$ đỉnh xếp thành vòng, $n$ cạnh (mỗi đỉnh nối với hai đỉnh lân cận), và mọi đỉnh đều có bậc đúng bằng 2. Cả ba phát biểu đều đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q34.png"
         },
         {
           "kind": "MCQ",
@@ -5871,7 +6104,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">The degree-4 vertex ($A$) must connect to all other 4 vertices. Removing $A$'s contribution, the remaining required degrees among the other 4 vertices (deg 1,3,3,$x$) become $0,2,2,x-1$. The vertex needing 0 is isolated in this sub-problem, forcing the two degree-2 vertices to connect to each other AND to the fifth vertex (only 2 available neighbors each), which forces the fifth vertex to get exactly 2 edges from them, so $x-1=2\\Rightarrow x=3$. $x=1$ is impossible (would require the two degree-2 vertices to gain degree 2 using only each other, i.e. a single edge giving only 1 each) and $x=5$ exceeds the max possible degree (4) in a 5-vertex simple graph.</div><div class=\"ml-vi\">Đỉnh bậc 4 ($A$) phải nối với cả 4 đỉnh còn lại. Loại bỏ đóng góp của $A$, bậc cần thiết còn lại trong 4 đỉnh kia (bậc 1,3,3,$x$) trở thành $0,2,2,x-1$. Đỉnh cần 0 bị cô lập trong bài toán con này, buộc hai đỉnh cần bậc 2 phải nối với nhau VÀ với đỉnh thứ năm (chỉ có 2 hàng xóm khả dĩ mỗi đỉnh), điều này buộc đỉnh thứ năm nhận đúng 2 cạnh từ chúng, nên $x-1=2\\Rightarrow x=3$. $x=1$ không thể (sẽ cần hai đỉnh bậc 2 đạt bậc 2 chỉ dùng lẫn nhau, tức một cạnh duy nhất chỉ cho mỗi bên 1) và $x=5$ vượt quá bậc tối đa có thể (4) trong đơn đồ thị 5 đỉnh.</div>"
+          "explanation": "<div class=\"ml-en\">The degree-4 vertex ($A$) must connect to all other 4 vertices. Removing $A$'s contribution, the remaining required degrees among the other 4 vertices (deg 1,3,3,$x$) become $0,2,2,x-1$. The vertex needing 0 is isolated in this sub-problem, forcing the two degree-2 vertices to connect to each other AND to the fifth vertex (only 2 available neighbors each), which forces the fifth vertex to get exactly 2 edges from them, so $x-1=2\\Rightarrow x=3$. $x=1$ is impossible (would require the two degree-2 vertices to gain degree 2 using only each other, i.e. a single edge giving only 1 each) and $x=5$ exceeds the max possible degree (4) in a 5-vertex simple graph.</div><div class=\"ml-vi\">Đỉnh bậc 4 ($A$) phải nối với cả 4 đỉnh còn lại. Loại bỏ đóng góp của $A$, bậc cần thiết còn lại trong 4 đỉnh kia (bậc 1,3,3,$x$) trở thành $0,2,2,x-1$. Đỉnh cần 0 bị cô lập trong bài toán con này, buộc hai đỉnh cần bậc 2 phải nối với nhau VÀ với đỉnh thứ năm (chỉ có 2 hàng xóm khả dĩ mỗi đỉnh), điều này buộc đỉnh thứ năm nhận đúng 2 cạnh từ chúng, nên $x-1=2\\Rightarrow x=3$. $x=1$ không thể (sẽ cần hai đỉnh bậc 2 đạt bậc 2 chỉ dùng lẫn nhau, tức một cạnh duy nhất chỉ cho mỗi bên 1) và $x=5$ vượt quá bậc tối đa có thể (4) trong đơn đồ thị 5 đỉnh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q35.png"
         },
         {
           "kind": "MCQ",
@@ -5894,7 +6128,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The third row (order $a,b,c,d$) corresponds to vertex $c$. Row sum of an adjacency matrix always equals the vertex's degree. $c$ is incident to: 3 parallel edges to $a$ (+3), 1 edge to $d$ (+1), and 1 loop (which contributes 2 to degree, per the standard convention that a loop is traversed twice) (+2). Total degree of $c$ $=3+1+2=6$.</div><div class=\"ml-vi\">Hàng thứ ba (thứ tự $a,b,c,d$) ứng với đỉnh $c$. Tổng hàng của ma trận kề luôn bằng bậc của đỉnh đó. $c$ liên thuộc với: 3 cạnh song song tới $a$ (+3), 1 cạnh tới $d$ (+1), và 1 khuyên (đóng góp 2 vào bậc, theo quy ước chuẩn rằng khuyên được duyệt hai lần) (+2). Tổng bậc của $c$ $=3+1+2=6$.</div>"
+          "explanation": "<div class=\"ml-en\">The third row (order $a,b,c,d$) corresponds to vertex $c$. Row sum of an adjacency matrix always equals the vertex's degree. $c$ is incident to: 3 parallel edges to $a$ (+3), 1 edge to $d$ (+1), and 1 loop (which contributes 2 to degree, per the standard convention that a loop is traversed twice) (+2). Total degree of $c$ $=3+1+2=6$.</div><div class=\"ml-vi\">Hàng thứ ba (thứ tự $a,b,c,d$) ứng với đỉnh $c$. Tổng hàng của ma trận kề luôn bằng bậc của đỉnh đó. $c$ liên thuộc với: 3 cạnh song song tới $a$ (+3), 1 cạnh tới $d$ (+1), và 1 khuyên (đóng góp 2 vào bậc, theo quy ước chuẩn rằng khuyên được duyệt hai lần) (+2). Tổng bậc của $c$ $=3+1+2=6$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q36.png"
         },
         {
           "kind": "MCQ",
@@ -5917,7 +6152,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">A, C, D are always true for any simple graph's adjacency matrix (entries are 0/1 natural numbers, diagonal is 0 since simple graphs have no loops). B is not guaranteed: if $G$ has no edges at all (the empty graph on $n$ vertices), every entry of $A$ is 0, so no entry equals 1. B is the incorrect (not always true) statement.</div><div class=\"ml-vi\">A, C, D luôn đúng với ma trận kề của bất kỳ đơn đồ thị nào (phần tử là số tự nhiên 0/1, đường chéo bằng 0 vì đơn đồ thị không có khuyên). B không được đảm bảo: nếu $G$ không có cạnh nào (đồ thị rỗng trên $n$ đỉnh), mọi phần tử của $A$ đều là 0, nên không phần tử nào bằng 1. B là phát biểu sai (không luôn đúng).</div>"
+          "explanation": "<div class=\"ml-en\">A, C, D are always true for any simple graph's adjacency matrix (entries are 0/1 natural numbers, diagonal is 0 since simple graphs have no loops). B is not guaranteed: if $G$ has no edges at all (the empty graph on $n$ vertices), every entry of $A$ is 0, so no entry equals 1. B is the incorrect (not always true) statement.</div><div class=\"ml-vi\">A, C, D luôn đúng với ma trận kề của bất kỳ đơn đồ thị nào (phần tử là số tự nhiên 0/1, đường chéo bằng 0 vì đơn đồ thị không có khuyên). B không được đảm bảo: nếu $G$ không có cạnh nào (đồ thị rỗng trên $n$ đỉnh), mọi phần tử của $A$ đều là 0, nên không phần tử nào bằng 1. B là phát biểu sai (không luôn đúng).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q37.png"
         },
         {
           "kind": "MCQ",
@@ -5940,7 +6176,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">The eight arcs $a\\to b\\to c\\to d\\to e\\to f\\to g\\to h\\to a$ already form one directed cycle through every vertex, so every vertex reaches every other vertex: the whole graph is a single strongly connected component $\\{a,b,c,d,e,f,g,h\\}$. The extra arcs $a\\to g$, $c\\to g$, $e\\to h$ only add reachability; they can never split a component. The other three options are impossible for ANY orientation of this edge set, by counting: a strongly connected digraph on $k$ vertices needs at least $k$ arcs among those $k$ vertices. The set $\\{a,b,c,d,e\\}$ spans only the 4 edges $ab,bc,cd,de$; $\\{a,b,c,d,e,f\\}$ spans only 5 edges; and $\\{a,b,c,d,e,f,h\\}$ spans 7 edges on 7 vertices, which would force a Hamilton cycle, impossible because $f$ has only one neighbour ($e$) inside that set.</div><div class=\"ml-vi\">Tám cung $a\\to b\\to c\\to d\\to e\\to f\\to g\\to h\\to a$ đã tạo thành một chu trình có hướng đi qua mọi đỉnh, nên mọi đỉnh đều đến được mọi đỉnh khác: cả đồ thị là MỘT thành phần liên thông mạnh $\\{a,b,c,d,e,f,g,h\\}$. Ba cung thêm $a\\to g$, $c\\to g$, $e\\to h$ chỉ tăng khả năng đến được, không bao giờ chia nhỏ một thành phần. Ba đáp án còn lại là bất khả thi với MỌI cách định hướng tập cạnh này, bằng phép đếm: một đồ thị có hướng liên thông mạnh trên $k$ đỉnh cần ít nhất $k$ cung nằm trong $k$ đỉnh đó. Tập $\\{a,b,c,d,e\\}$ chỉ chứa 4 cạnh $ab,bc,cd,de$; $\\{a,b,c,d,e,f\\}$ chỉ chứa 5 cạnh; còn $\\{a,b,c,d,e,f,h\\}$ chứa 7 cạnh trên 7 đỉnh, tức buộc phải có chu trình Hamilton, điều không thể vì $f$ chỉ có một đỉnh kề ($e$) bên trong tập đó.</div>"
+          "explanation": "<div class=\"ml-en\">The eight arcs $a\\to b\\to c\\to d\\to e\\to f\\to g\\to h\\to a$ already form one directed cycle through every vertex, so every vertex reaches every other vertex: the whole graph is a single strongly connected component $\\{a,b,c,d,e,f,g,h\\}$. The extra arcs $a\\to g$, $c\\to g$, $e\\to h$ only add reachability; they can never split a component. The other three options are impossible for ANY orientation of this edge set, by counting: a strongly connected digraph on $k$ vertices needs at least $k$ arcs among those $k$ vertices. The set $\\{a,b,c,d,e\\}$ spans only the 4 edges $ab,bc,cd,de$; $\\{a,b,c,d,e,f\\}$ spans only 5 edges; and $\\{a,b,c,d,e,f,h\\}$ spans 7 edges on 7 vertices, which would force a Hamilton cycle, impossible because $f$ has only one neighbour ($e$) inside that set.</div><div class=\"ml-vi\">Tám cung $a\\to b\\to c\\to d\\to e\\to f\\to g\\to h\\to a$ đã tạo thành một chu trình có hướng đi qua mọi đỉnh, nên mọi đỉnh đều đến được mọi đỉnh khác: cả đồ thị là MỘT thành phần liên thông mạnh $\\{a,b,c,d,e,f,g,h\\}$. Ba cung thêm $a\\to g$, $c\\to g$, $e\\to h$ chỉ tăng khả năng đến được, không bao giờ chia nhỏ một thành phần. Ba đáp án còn lại là bất khả thi với MỌI cách định hướng tập cạnh này, bằng phép đếm: một đồ thị có hướng liên thông mạnh trên $k$ đỉnh cần ít nhất $k$ cung nằm trong $k$ đỉnh đó. Tập $\\{a,b,c,d,e\\}$ chỉ chứa 4 cạnh $ab,bc,cd,de$; $\\{a,b,c,d,e,f\\}$ chỉ chứa 5 cạnh; còn $\\{a,b,c,d,e,f,h\\}$ chứa 7 cạnh trên 7 đỉnh, tức buộc phải có chu trình Hamilton, điều không thể vì $f$ chỉ có một đỉnh kề ($e$) bên trong tập đó.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q38.png"
         },
         {
           "kind": "MCQ",
@@ -5963,7 +6200,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">An Euler circuit requires in-degree=out-degree at EVERY vertex -- impossible here since vertex 1 has $(3,2)$ and vertex 4 has $(1,2)$, so (ii) is false for every $G\\in S$. An Euler path requires exactly one vertex with out-in=1 (start) and exactly one with in-out=1 (end), rest balanced: vertex 4 $(1,2)$ has out-in=1, vertex 1 $(3,2)$ has in-out=1, vertices 2,3 are balanced -- this matches exactly, so some connected $G\\in S$ has an Euler path from vertex 4 to vertex 1, but since it's not balanced everywhere it can't be a circuit. So (iii) is true and (i) is false.</div><div class=\"ml-vi\">Chu trình Euler đòi hỏi bậc vào=bậc ra tại MỌI đỉnh -- không thể ở đây vì đỉnh 1 có $(3,2)$ và đỉnh 4 có $(1,2)$, nên (ii) sai với mọi $G\\in S$. Đường đi Euler đòi hỏi đúng một đỉnh có bậc ra-bậc vào=1 (điểm đầu) và đúng một đỉnh có bậc vào-bậc ra=1 (điểm cuối), còn lại cân bằng: đỉnh 4 $(1,2)$ có bậc ra-vào=1, đỉnh 1 $(3,2)$ có bậc vào-ra=1, đỉnh 2,3 cân bằng -- khớp chính xác, nên một số $G\\in S$ liên thông có đường đi Euler từ đỉnh 4 đến đỉnh 1, nhưng vì không cân bằng khắp nơi nên không thể là chu trình. Vậy (iii) đúng và (i) sai.</div>"
+          "explanation": "<div class=\"ml-en\">An Euler circuit requires in-degree=out-degree at EVERY vertex -- impossible here since vertex 1 has $(3,2)$ and vertex 4 has $(1,2)$, so (ii) is false for every $G\\in S$. An Euler path requires exactly one vertex with out-in=1 (start) and exactly one with in-out=1 (end), rest balanced: vertex 4 $(1,2)$ has out-in=1, vertex 1 $(3,2)$ has in-out=1, vertices 2,3 are balanced -- this matches exactly, so some connected $G\\in S$ has an Euler path from vertex 4 to vertex 1, but since it's not balanced everywhere it can't be a circuit. So (iii) is true and (i) is false.</div><div class=\"ml-vi\">Chu trình Euler đòi hỏi bậc vào=bậc ra tại MỌI đỉnh -- không thể ở đây vì đỉnh 1 có $(3,2)$ và đỉnh 4 có $(1,2)$, nên (ii) sai với mọi $G\\in S$. Đường đi Euler đòi hỏi đúng một đỉnh có bậc ra-bậc vào=1 (điểm đầu) và đúng một đỉnh có bậc vào-bậc ra=1 (điểm cuối), còn lại cân bằng: đỉnh 4 $(1,2)$ có bậc ra-vào=1, đỉnh 1 $(3,2)$ có bậc vào-ra=1, đỉnh 2,3 cân bằng -- khớp chính xác, nên một số $G\\in S$ liên thông có đường đi Euler từ đỉnh 4 đến đỉnh 1, nhưng vì không cân bằng khắp nơi nên không thể là chu trình. Vậy (iii) đúng và (i) sai.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q40.png"
         },
         {
           "kind": "MCQ",
@@ -5986,7 +6224,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">A connected graph has an Euler circuit iff every vertex has even degree. $K_5$: every vertex has degree 4 (even) -- yes. $C_{20}$: every vertex has degree 2 (even) -- yes. $W_{10}$: the hub has degree 10 (even) but each of the 10 outer rim vertices has degree 3 (2 from the cycle + 1 to the hub, odd) -- no. So (i) and (ii).</div><div class=\"ml-vi\">Đồ thị liên thông có chu trình Euler khi và chỉ khi mọi đỉnh có bậc chẵn. $K_5$: mọi đỉnh bậc 4 (chẵn) -- có. $C_{20}$: mọi đỉnh bậc 2 (chẵn) -- có. $W_{10}$: đỉnh trung tâm bậc 10 (chẵn) nhưng mỗi đỉnh vành ngoài trong 10 đỉnh có bậc 3 (2 từ chu trình + 1 tới trung tâm, lẻ) -- không. Vậy (i) và (ii).</div>"
+          "explanation": "<div class=\"ml-en\">A connected graph has an Euler circuit iff every vertex has even degree. $K_5$: every vertex has degree 4 (even) -- yes. $C_{20}$: every vertex has degree 2 (even) -- yes. $W_{10}$: the hub has degree 10 (even) but each of the 10 outer rim vertices has degree 3 (2 from the cycle + 1 to the hub, odd) -- no. So (i) and (ii).</div><div class=\"ml-vi\">Đồ thị liên thông có chu trình Euler khi và chỉ khi mọi đỉnh có bậc chẵn. $K_5$: mọi đỉnh bậc 4 (chẵn) -- có. $C_{20}$: mọi đỉnh bậc 2 (chẵn) -- có. $W_{10}$: đỉnh trung tâm bậc 10 (chẵn) nhưng mỗi đỉnh vành ngoài trong 10 đỉnh có bậc 3 (2 từ chu trình + 1 tới trung tâm, lẻ) -- không. Vậy (i) và (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q41.png"
         },
         {
           "kind": "MCQ",
@@ -6009,7 +6248,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Since $E$ has degree 1 (only connects to $A$), $E$ must be a path endpoint via edge $EA=4$. From $A$, try all orderings of $B,C,D$: $A$-$D$(1)-$B$(6)-$C$(5)=12; $A$-$D$(1)-$C$(8)-$B$(5)=14; $A$-$B$(2)-$D$(6)-$C$(8)=16; $A$-$B$(2)-$C$(5)-$D$(8)=15; $A$-$C$(3)-$D$(8)-$B$(6)=17; $A$-$C$(3)-$B$(5)-$D$(6)=14. Minimum is $A$-$D$-$B$-$C$=12, plus $EA=4$ gives total 16.</div><div class=\"ml-vi\">Vì $E$ có bậc 1 (chỉ nối với $A$), $E$ phải là điểm đầu đường đi qua cạnh $EA=4$. Từ $A$, thử mọi thứ tự $B,C,D$: $A$-$D$(1)-$B$(6)-$C$(5)=12; $A$-$D$(1)-$C$(8)-$B$(5)=14; $A$-$B$(2)-$D$(6)-$C$(8)=16; $A$-$B$(2)-$C$(5)-$D$(8)=15; $A$-$C$(3)-$D$(8)-$B$(6)=17; $A$-$C$(3)-$B$(5)-$D$(6)=14. Nhỏ nhất là $A$-$D$-$B$-$C$=12, cộng $EA=4$ cho tổng 16.</div>"
+          "explanation": "<div class=\"ml-en\">Since $E$ has degree 1 (only connects to $A$), $E$ must be a path endpoint via edge $EA=4$. From $A$, try all orderings of $B,C,D$: $A$-$D$(1)-$B$(6)-$C$(5)=12; $A$-$D$(1)-$C$(8)-$B$(5)=14; $A$-$B$(2)-$D$(6)-$C$(8)=16; $A$-$B$(2)-$C$(5)-$D$(8)=15; $A$-$C$(3)-$D$(8)-$B$(6)=17; $A$-$C$(3)-$B$(5)-$D$(6)=14. Minimum is $A$-$D$-$B$-$C$=12, plus $EA=4$ gives total 16.</div><div class=\"ml-vi\">Vì $E$ có bậc 1 (chỉ nối với $A$), $E$ phải là điểm đầu đường đi qua cạnh $EA=4$. Từ $A$, thử mọi thứ tự $B,C,D$: $A$-$D$(1)-$B$(6)-$C$(5)=12; $A$-$D$(1)-$C$(8)-$B$(5)=14; $A$-$B$(2)-$D$(6)-$C$(8)=16; $A$-$B$(2)-$C$(5)-$D$(8)=15; $A$-$C$(3)-$D$(8)-$B$(6)=17; $A$-$C$(3)-$B$(5)-$D$(6)=14. Nhỏ nhất là $A$-$D$-$B$-$C$=12, cộng $EA=4$ cho tổng 16.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q42.png"
         },
         {
           "kind": "MCQ",
@@ -6035,7 +6275,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">For any full $m$-ary tree, leaves $\\ell$ and internal vertices $i$ satisfy $\\ell=i(m-1)+1$, so $m-1$ must divide $\\ell-1=31$ (prime). Divisors of 31 are 1 and 31, giving $m\\in\\{2,32\\}$. For $m=2$: max leaves at height 4 is $2^4=16<32$ -- impossible. For $m=32$: forces $i=1$ (just the root), giving height 1, not 4 -- impossible. So no value of $m$ works.</div><div class=\"ml-vi\">Với bất kỳ cây $m$-phân đầy đủ nào, số lá $\\ell$ và số đỉnh trong $i$ thỏa $\\ell=i(m-1)+1$, nên $m-1$ phải chia hết $\\ell-1=31$ (số nguyên tố). Ước của 31 là 1 và 31, cho $m\\in\\{2,32\\}$. Với $m=2$: số lá tối đa ở chiều cao 4 là $2^4=16<32$ -- không thể. Với $m=32$: buộc $i=1$ (chỉ gốc), cho chiều cao 1, không phải 4 -- không thể. Vậy không giá trị $m$ nào thỏa.</div>"
+          "explanation": "<div class=\"ml-en\">For any full $m$-ary tree, leaves $\\ell$ and internal vertices $i$ satisfy $\\ell=i(m-1)+1$, so $m-1$ must divide $\\ell-1=31$ (prime). Divisors of 31 are 1 and 31, giving $m\\in\\{2,32\\}$. For $m=2$: max leaves at height 4 is $2^4=16<32$ -- impossible. For $m=32$: forces $i=1$ (just the root), giving height 1, not 4 -- impossible. So no value of $m$ works.</div><div class=\"ml-vi\">Với bất kỳ cây $m$-phân đầy đủ nào, số lá $\\ell$ và số đỉnh trong $i$ thỏa $\\ell=i(m-1)+1$, nên $m-1$ phải chia hết $\\ell-1=31$ (số nguyên tố). Ước của 31 là 1 và 31, cho $m\\in\\{2,32\\}$. Với $m=2$: số lá tối đa ở chiều cao 4 là $2^4=16<32$ -- không thể. Với $m=32$: buộc $i=1$ (chỉ gốc), cho chiều cao 1, không phải 4 -- không thể. Vậy không giá trị $m$ nào thỏa.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q43.png"
         },
         {
           "kind": "MCQ",
@@ -6058,7 +6299,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">To maximize internal vertices, make every node at levels $0,1,2$ internal (leaves only at the deepest level 3): $1+3+9=13$.</div><div class=\"ml-vi\">Để tối đa số đỉnh trong, cho mọi nút ở mức $0,1,2$ đều là đỉnh trong (lá chỉ ở mức sâu nhất 3): $1+3+9=13$.</div>"
+          "explanation": "<div class=\"ml-en\">To maximize internal vertices, make every node at levels $0,1,2$ internal (leaves only at the deepest level 3): $1+3+9=13$.</div><div class=\"ml-vi\">Để tối đa số đỉnh trong, cho mọi nút ở mức $0,1,2$ đều là đỉnh trong (lá chỉ ở mức sâu nhất 3): $1+3+9=13$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q44.png"
         },
         {
           "kind": "MCQ",
@@ -6084,7 +6326,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Inserting in order builds: mango (root); banana < mango goes left; apple < banana goes left; pear > mango goes right; coconut < mango, > banana goes right of banana; strawberry > mango, > pear goes right of pear; lemon < mango (left), > banana (right), < coconut (left) -- found at depth 3. Locating it takes comparisons at mango, banana, coconut, then lemon itself: 4 comparisons.</div><div class=\"ml-vi\">Chèn theo thứ tự xây dựng: mango (gốc); banana < mango sang trái; apple < banana sang trái; pear > mango sang phải; coconut < mango, > banana sang phải của banana; strawberry > mango, > pear sang phải của pear; lemon < mango (trái), > banana (phải), < coconut (trái) -- tìm thấy ở độ sâu 3. Tìm nó cần so sánh tại mango, banana, coconut, rồi chính lemon: 4 phép so sánh.</div>"
+          "explanation": "<div class=\"ml-en\">Inserting in order builds: mango (root); banana < mango goes left; apple < banana goes left; pear > mango goes right; coconut < mango, > banana goes right of banana; strawberry > mango, > pear goes right of pear; lemon < mango (left), > banana (right), < coconut (left) -- found at depth 3. Locating it takes comparisons at mango, banana, coconut, then lemon itself: 4 comparisons.</div><div class=\"ml-vi\">Chèn theo thứ tự xây dựng: mango (gốc); banana < mango sang trái; apple < banana sang trái; pear > mango sang phải; coconut < mango, > banana sang phải của banana; strawberry > mango, > pear sang phải của pear; lemon < mango (trái), > banana (phải), < coconut (trái) -- tìm thấy ở độ sâu 3. Tìm nó cần so sánh tại mango, banana, coconut, rồi chính lemon: 4 phép so sánh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q45.png"
         },
         {
           "kind": "MCQ",
@@ -6107,7 +6350,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The comparison-sort lower bound is $\\lceil\\log_2(n!)\\rceil$. For $n=6$: $6!=720$, $\\log_2(720)\\approx9.49$, so $\\lceil9.49\\rceil=10$.</div><div class=\"ml-vi\">Cận dưới của sắp xếp bằng so sánh là $\\lceil\\log_2(n!)\\rceil$. Với $n=6$: $6!=720$, $\\log_2(720)\\approx9.49$, nên $\\lceil9.49\\rceil=10$.</div>"
+          "explanation": "<div class=\"ml-en\">The comparison-sort lower bound is $\\lceil\\log_2(n!)\\rceil$. For $n=6$: $6!=720$, $\\log_2(720)\\approx9.49$, so $\\lceil9.49\\rceil=10$.</div><div class=\"ml-vi\">Cận dưới của sắp xếp bằng so sánh là $\\lceil\\log_2(n!)\\rceil$. Với $n=6$: $6!=720$, $\\log_2(720)\\approx9.49$, nên $\\lceil9.49\\rceil=10$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q46.png"
         },
         {
           "kind": "MCQ",
@@ -6133,7 +6377,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Parsing recursively from the left: innermost $-\\,4\\,3=1$, then $*\\,1\\,2=2$, then $*\\,2\\,5=10$ (first operand of the root's left branch). Then $/\\,8\\,4=2$ (root's right branch). Finally $+\\,10\\,2=12$.</div><div class=\"ml-vi\">Phân tích đệ quy từ trái: trong cùng $-\\,4\\,3=1$, rồi $*\\,1\\,2=2$, rồi $*\\,2\\,5=10$ (toán hạng đầu của nhánh trái gốc). Rồi $/\\,8\\,4=2$ (nhánh phải gốc). Cuối cùng $+\\,10\\,2=12$.</div>"
+          "explanation": "<div class=\"ml-en\">Parsing recursively from the left: innermost $-\\,4\\,3=1$, then $*\\,1\\,2=2$, then $*\\,2\\,5=10$ (first operand of the root's left branch). Then $/\\,8\\,4=2$ (root's right branch). Finally $+\\,10\\,2=12$.</div><div class=\"ml-vi\">Phân tích đệ quy từ trái: trong cùng $-\\,4\\,3=1$, rồi $*\\,1\\,2=2$, rồi $*\\,2\\,5=10$ (toán hạng đầu của nhánh trái gốc). Rồi $/\\,8\\,4=2$ (nhánh phải gốc). Cuối cùng $+\\,10\\,2=12$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q47.png"
         },
         {
           "kind": "MCQ",
@@ -6162,7 +6407,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Postorder visits the children in their listed order, then the node itself. $b$'s subtree postorder: $d,i,m,n,o,j,e,b$ (positions 1-8). $c$'s subtree postorder starts with its first child $f$ (a leaf) at position 9.</div><div class=\"ml-vi\">Hậu thứ duyệt các con theo đúng thứ tự đã liệt kê, rồi đến chính nút đó. Hậu thứ cây con của $b$: $d,i,m,n,o,j,e,b$ (vị trí 1-8). Hậu thứ cây con của $c$ bắt đầu với con đầu tiên $f$ (lá) ở vị trí 9.</div>"
+          "explanation": "<div class=\"ml-en\">Postorder visits the children in their listed order, then the node itself. $b$'s subtree postorder: $d,i,m,n,o,j,e,b$ (positions 1-8). $c$'s subtree postorder starts with its first child $f$ (a leaf) at position 9.</div><div class=\"ml-vi\">Hậu thứ duyệt các con theo đúng thứ tự đã liệt kê, rồi đến chính nút đó. Hậu thứ cây con của $b$: $d,i,m,n,o,j,e,b$ (vị trí 1-8). Hậu thứ cây con của $c$ bắt đầu với con đầu tiên $f$ (lá) ở vị trí 9.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q48.png"
         },
         {
           "kind": "MCQ",
@@ -6191,7 +6437,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Starting at $y_1$ (in the 3-side, degree 4), DFS goes $y_1\\to x_1\\to y_2\\to x_2\\to y_3\\to x_3$ (depth 5), then backtracks to $y_3$ to visit the last unvisited vertex $x_4$ (also at depth 5). All 7 vertices are visited, and the deepest level reached is depth 5.</div><div class=\"ml-vi\">Bắt đầu tại $y_1$ (phía 3 đỉnh, bậc 4), DFS đi $y_1\\to x_1\\to y_2\\to x_2\\to y_3\\to x_3$ (độ sâu 5), rồi quay lui về $y_3$ để thăm đỉnh chưa thăm cuối cùng $x_4$ (cũng ở độ sâu 5). Cả 7 đỉnh đều được thăm, và mức sâu nhất đạt được là độ sâu 5.</div>"
+          "explanation": "<div class=\"ml-en\">Starting at $y_1$ (in the 3-side, degree 4), DFS goes $y_1\\to x_1\\to y_2\\to x_2\\to y_3\\to x_3$ (depth 5), then backtracks to $y_3$ to visit the last unvisited vertex $x_4$ (also at depth 5). All 7 vertices are visited, and the deepest level reached is depth 5.</div><div class=\"ml-vi\">Bắt đầu tại $y_1$ (phía 3 đỉnh, bậc 4), DFS đi $y_1\\to x_1\\to y_2\\to x_2\\to y_3\\to x_3$ (độ sâu 5), rồi quay lui về $y_3$ để thăm đỉnh chưa thăm cuối cùng $x_4$ (cũng ở độ sâu 5). Cả 7 đỉnh đều được thăm, và mức sâu nhất đạt được là độ sâu 5.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q49.png"
         },
         {
           "kind": "MCQ",
@@ -6214,7 +6461,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Weight-1 edges alphabetically: $AC,BE,DF$ -- all added (no cycles). Weight-2 edges alphabetically: $AB,AD,BC,CF,DC,FG$. $AB$ connects $\\{A,C\\}$+$\\{B,E\\}$ -- add. $AD$ connects that with $\\{D,F\\}$ -- add. $BC,CF,DC$ all create cycles -- skip. $FG$ connects the last vertex $G$ -- add. Final order: $AC,BE,DF,AB,AD,FG$.</div><div class=\"ml-vi\">Cạnh trọng số 1 theo thứ tự chữ cái: $AC,BE,DF$ -- tất cả được thêm (không tạo chu trình). Cạnh trọng số 2 theo thứ tự chữ cái: $AB,AD,BC,CF,DC,FG$. $AB$ nối $\\{A,C\\}$+$\\{B,E\\}$ -- thêm. $AD$ nối với $\\{D,F\\}$ -- thêm. $BC,CF,DC$ đều tạo chu trình -- bỏ qua. $FG$ nối đỉnh cuối $G$ -- thêm. Thứ tự cuối: $AC,BE,DF,AB,AD,FG$.</div>"
+          "explanation": "<div class=\"ml-en\">Weight-1 edges alphabetically: $AC,BE,DF$ -- all added (no cycles). Weight-2 edges alphabetically: $AB,AD,BC,CF,DC,FG$. $AB$ connects $\\{A,C\\}$+$\\{B,E\\}$ -- add. $AD$ connects that with $\\{D,F\\}$ -- add. $BC,CF,DC$ all create cycles -- skip. $FG$ connects the last vertex $G$ -- add. Final order: $AC,BE,DF,AB,AD,FG$.</div><div class=\"ml-vi\">Cạnh trọng số 1 theo thứ tự chữ cái: $AC,BE,DF$ -- tất cả được thêm (không tạo chu trình). Cạnh trọng số 2 theo thứ tự chữ cái: $AB,AD,BC,CF,DC,FG$. $AB$ nối $\\{A,C\\}$+$\\{B,E\\}$ -- thêm. $AD$ nối với $\\{D,F\\}$ -- thêm. $BC,CF,DC$ đều tạo chu trình -- bỏ qua. $FG$ nối đỉnh cuối $G$ -- thêm. Thứ tự cuối: $AC,BE,DF,AB,AD,FG$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D5/q50.png"
         }
       ]
     },
@@ -6257,7 +6505,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">\"It is necessary that $q$\" for $p$ means $q$ is a necessary condition for $p$, translating to $p\\to q$: if you pass, then your grade is above 5. This is option (iv).</div><div class=\"ml-vi\">\"Điều kiện cần là $q$\" cho $p$ nghĩa là $q$ là điều kiện cần cho $p$, diễn đạt thành $p\\to q$: nếu bạn đậu, thì điểm bạn trên 5. Đây là đáp án (iv).</div>"
+          "explanation": "<div class=\"ml-en\">\"It is necessary that $q$\" for $p$ means $q$ is a necessary condition for $p$, translating to $p\\to q$: if you pass, then your grade is above 5. This is option (iv).</div><div class=\"ml-vi\">\"Điều kiện cần là $q$\" cho $p$ nghĩa là $q$ là điều kiện cần cho $p$, diễn đạt thành $p\\to q$: nếu bạn đậu, thì điểm bạn trên 5. Đây là đáp án (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q1.png"
         },
         {
           "kind": "MCQ",
@@ -6280,7 +6529,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">A: both sides true, so iff is true. B: antecedent \"1+1=3\" is false, so the implication is vacuously true. D: antecedent \"1<0\" is false, so vacuously true. C: antecedent \"1+1=2\" is TRUE but consequent \"2+2=3\" is FALSE, so $T\\to F=$ False -- this is the false proposition.</div><div class=\"ml-vi\">A: cả hai vế đúng, nên iff đúng. B: tiền đề \"1+1=3\" sai, nên phép kéo theo đúng hiển nhiên. D: tiền đề \"1<0\" sai, nên đúng hiển nhiên. C: tiền đề \"1+1=2\" ĐÚNG nhưng hệ quả \"2+2=3\" SAI, nên $T\\to F=$ Sai -- đây là mệnh đề sai.</div>"
+          "explanation": "<div class=\"ml-en\">A: both sides true, so iff is true. B: antecedent \"1+1=3\" is false, so the implication is vacuously true. D: antecedent \"1<0\" is false, so vacuously true. C: antecedent \"1+1=2\" is TRUE but consequent \"2+2=3\" is FALSE, so $T\\to F=$ False -- this is the false proposition.</div><div class=\"ml-vi\">A: cả hai vế đúng, nên iff đúng. B: tiền đề \"1+1=3\" sai, nên phép kéo theo đúng hiển nhiên. D: tiền đề \"1<0\" sai, nên đúng hiển nhiên. C: tiền đề \"1+1=2\" ĐÚNG nhưng hệ quả \"2+2=3\" SAI, nên $T\\to F=$ Sai -- đây là mệnh đề sai.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q2.png"
         },
         {
           "kind": "MCQ",
@@ -6303,7 +6553,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">(i) $p\\land q$ is true when $p=q=T$, not always false. (ii) $p\\to q$ is true whenever $p$ is false, not always false. (iii) $(p\\to q)\\land(q\\to p)\\equiv p\\leftrightarrow q$ is true when $p=q$, not always false. None of (i)-(iii) is a contradiction.</div><div class=\"ml-vi\">(i) $p\\land q$ đúng khi $p=q=T$, không luôn sai. (ii) $p\\to q$ đúng bất cứ khi nào $p$ sai, không luôn sai. (iii) $(p\\to q)\\land(q\\to p)\\equiv p\\leftrightarrow q$ đúng khi $p=q$, không luôn sai. Không mệnh đề (i)-(iii) nào là hằng sai.</div>"
+          "explanation": "<div class=\"ml-en\">(i) $p\\land q$ is true when $p=q=T$, not always false. (ii) $p\\to q$ is true whenever $p$ is false, not always false. (iii) $(p\\to q)\\land(q\\to p)\\equiv p\\leftrightarrow q$ is true when $p=q$, not always false. None of (i)-(iii) is a contradiction.</div><div class=\"ml-vi\">(i) $p\\land q$ đúng khi $p=q=T$, không luôn sai. (ii) $p\\to q$ đúng bất cứ khi nào $p$ sai, không luôn sai. (iii) $(p\\to q)\\land(q\\to p)\\equiv p\\leftrightarrow q$ đúng khi $p=q$, không luôn sai. Không mệnh đề (i)-(iii) nào là hằng sai.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q3.png"
         },
         {
           "kind": "MCQ",
@@ -6326,7 +6577,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">\"Every student of class 1A has...\" is a universal implication: for every $x$, if $x$ is in class 1A then $x$ has visited Brazil or Columbia -- $\\forall x(A(x)\\to(B(x)\\lor C(x)))$, option (iii).</div><div class=\"ml-vi\">\"Mọi sinh viên lớp 1A đều...\" là phép kéo theo toàn thể: với mọi $x$, nếu $x$ thuộc lớp 1A thì $x$ đã đến Brazil hoặc Columbia -- $\\forall x(A(x)\\to(B(x)\\lor C(x)))$, đáp án (iii).</div>"
+          "explanation": "<div class=\"ml-en\">\"Every student of class 1A has...\" is a universal implication: for every $x$, if $x$ is in class 1A then $x$ has visited Brazil or Columbia -- $\\forall x(A(x)\\to(B(x)\\lor C(x)))$, option (iii).</div><div class=\"ml-vi\">\"Mọi sinh viên lớp 1A đều...\" là phép kéo theo toàn thể: với mọi $x$, nếu $x$ thuộc lớp 1A thì $x$ đã đến Brazil hoặc Columbia -- $\\forall x(A(x)\\to(B(x)\\lor C(x)))$, đáp án (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q4.png"
         },
         {
           "kind": "MCQ",
@@ -6352,7 +6604,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\forall x$ is universal (\"every student\"), and $P(x)\\lor Q(x)$ means \"can speak French or Japanese\". Combined: \"Every student in your class can speak French or Japanese.\"</div><div class=\"ml-vi\">$\\forall x$ là toàn thể (\"mọi sinh viên\"), và $P(x)\\lor Q(x)$ nghĩa là \"nói được tiếng Pháp hoặc tiếng Nhật\". Kết hợp: \"Mọi sinh viên trong lớp bạn đều nói được tiếng Pháp hoặc tiếng Nhật.\"</div>"
+          "explanation": "<div class=\"ml-en\">$\\forall x$ is universal (\"every student\"), and $P(x)\\lor Q(x)$ means \"can speak French or Japanese\". Combined: \"Every student in your class can speak French or Japanese.\"</div><div class=\"ml-vi\">$\\forall x$ là toàn thể (\"mọi sinh viên\"), và $P(x)\\lor Q(x)$ nghĩa là \"nói được tiếng Pháp hoặc tiếng Nhật\". Kết hợp: \"Mọi sinh viên trong lớp bạn đều nói được tiếng Pháp hoặc tiếng Nhật.\"</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q5.png"
         },
         {
           "kind": "MCQ",
@@ -6378,7 +6631,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">\"Each integer\" is universal over $m$: $\\forall m$. \"Is either odd or even\" means there exists some $n$ making $m$ fit the odd form or the even form: $\\exists n[(m=2n+1)\\lor(m=2n)]$. Combined: $\\forall m\\exists n[(m=2n+1)\\lor(m=2n)]$, option (ii).</div><div class=\"ml-vi\">\"Mỗi số nguyên\" là toàn thể trên $m$: $\\forall m$. \"Là lẻ hoặc chẵn\" nghĩa là tồn tại $n$ nào đó khiến $m$ khớp dạng lẻ hoặc dạng chẵn: $\\exists n[(m=2n+1)\\lor(m=2n)]$. Kết hợp: $\\forall m\\exists n[(m=2n+1)\\lor(m=2n)]$, đáp án (ii).</div>"
+          "explanation": "<div class=\"ml-en\">\"Each integer\" is universal over $m$: $\\forall m$. \"Is either odd or even\" means there exists some $n$ making $m$ fit the odd form or the even form: $\\exists n[(m=2n+1)\\lor(m=2n)]$. Combined: $\\forall m\\exists n[(m=2n+1)\\lor(m=2n)]$, option (ii).</div><div class=\"ml-vi\">\"Mỗi số nguyên\" là toàn thể trên $m$: $\\forall m$. \"Là lẻ hoặc chẵn\" nghĩa là tồn tại $n$ nào đó khiến $m$ khớp dạng lẻ hoặc dạng chẵn: $\\exists n[(m=2n+1)\\lor(m=2n)]$. Kết hợp: $\\forall m\\exists n[(m=2n+1)\\lor(m=2n)]$, đáp án (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q6.png"
         },
         {
           "kind": "MCQ",
@@ -6404,7 +6658,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">(i) is false: no single $x$ satisfies $x+y=0$ for all $y$. (ii) is true: for every $x$, choosing $y=-x$ satisfies $x+y=0$. (iii) is false: not all $x,y$ pairs sum to 0. (iv) is false: no single $y$ works for all $x$. Only (ii) is true.</div><div class=\"ml-vi\">(i) sai: không có $x$ đơn lẻ nào thỏa $x+y=0$ với mọi $y$. (ii) đúng: với mọi $x$, chọn $y=-x$ thỏa $x+y=0$. (iii) sai: không phải mọi cặp $x,y$ đều có tổng 0. (iv) sai: không có $y$ đơn lẻ nào thỏa mọi $x$. Chỉ (ii) đúng.</div>"
+          "explanation": "<div class=\"ml-en\">(i) is false: no single $x$ satisfies $x+y=0$ for all $y$. (ii) is true: for every $x$, choosing $y=-x$ satisfies $x+y=0$. (iii) is false: not all $x,y$ pairs sum to 0. (iv) is false: no single $y$ works for all $x$. Only (ii) is true.</div><div class=\"ml-vi\">(i) sai: không có $x$ đơn lẻ nào thỏa $x+y=0$ với mọi $y$. (ii) đúng: với mọi $x$, chọn $y=-x$ thỏa $x+y=0$. (iii) sai: không phải mọi cặp $x,y$ đều có tổng 0. (iv) sai: không có $y$ đơn lẻ nào thỏa mọi $x$. Chỉ (ii) đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q7.png"
         },
         {
           "kind": "MCQ",
@@ -6430,7 +6685,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">An doesn't study Discrete Math, so by contrapositive An is not a CS major, hence (since every student is CS or Math) An is a Math major -- (ii). Binh doesn't study Calculus, so by contrapositive Binh is not a Math major, hence Binh is a CS major -- (iii). So (ii) and (iii).</div><div class=\"ml-vi\">An không học Toán rời rạc, nên theo phản đảo An không phải sinh viên KHMT, do đó (vì mọi sinh viên đều KHMT hoặc Toán) An là sinh viên ngành Toán -- (ii). Binh không học Giải tích, nên theo phản đảo Binh không phải sinh viên ngành Toán, do đó Binh là sinh viên KHMT -- (iii). Vậy (ii) và (iii).</div>"
+          "explanation": "<div class=\"ml-en\">An doesn't study Discrete Math, so by contrapositive An is not a CS major, hence (since every student is CS or Math) An is a Math major -- (ii). Binh doesn't study Calculus, so by contrapositive Binh is not a Math major, hence Binh is a CS major -- (iii). So (ii) and (iii).</div><div class=\"ml-vi\">An không học Toán rời rạc, nên theo phản đảo An không phải sinh viên KHMT, do đó (vì mọi sinh viên đều KHMT hoặc Toán) An là sinh viên ngành Toán -- (ii). Binh không học Giải tích, nên theo phản đảo Binh không phải sinh viên ngành Toán, do đó Binh là sinh viên KHMT -- (iii). Vậy (ii) và (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q8.png"
         },
         {
           "kind": "MCQ",
@@ -6456,7 +6712,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$|A\\times B|=n(n+1)=72$. Solving $n^2+n-72=0$ gives $n=\\frac{-1+\\sqrt{1+288}}{2}=\\frac{-1+17}{2}=8$.</div><div class=\"ml-vi\">$|A\\times B|=n(n+1)=72$. Giải $n^2+n-72=0$ cho $n=\\frac{-1+\\sqrt{1+288}}{2}=\\frac{-1+17}{2}=8$.</div>"
+          "explanation": "<div class=\"ml-en\">$|A\\times B|=n(n+1)=72$. Solving $n^2+n-72=0$ gives $n=\\frac{-1+\\sqrt{1+288}}{2}=\\frac{-1+17}{2}=8$.</div><div class=\"ml-vi\">$|A\\times B|=n(n+1)=72$. Giải $n^2+n-72=0$ cho $n=\\frac{-1+\\sqrt{1+288}}{2}=\\frac{-1+17}{2}=8$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q9.png"
         },
         {
           "kind": "MCQ",
@@ -6479,7 +6736,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">The power set of a set with $n$ elements has $2^n$ elements. Here $n=5$, so $|P(S)|=2^5=32$.</div><div class=\"ml-vi\">Tập lũy thừa của một tập có $n$ phần tử có $2^n$ phần tử. Ở đây $n=5$, nên $|P(S)|=2^5=32$.</div>"
+          "explanation": "<div class=\"ml-en\">The power set of a set with $n$ elements has $2^n$ elements. Here $n=5$, so $|P(S)|=2^5=32$.</div><div class=\"ml-vi\">Tập lũy thừa của một tập có $n$ phần tử có $2^n$ phần tử. Ở đây $n=5$, nên $|P(S)|=2^5=32$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q10.png"
         },
         {
           "kind": "MCQ",
@@ -6499,7 +6757,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$X\\cap Y=\\{3\\}$, cardinality 1. $X-Y=\\{1,2,4,5\\}$, cardinality 4. $Y-X=\\{0,6,9\\}$, cardinality 3. The minimum is $X\\cap Y$, option (i).</div><div class=\"ml-vi\">$X\\cap Y=\\{3\\}$, lực lượng 1. $X-Y=\\{1,2,4,5\\}$, lực lượng 4. $Y-X=\\{0,6,9\\}$, lực lượng 3. Nhỏ nhất là $X\\cap Y$, đáp án (i).</div>"
+          "explanation": "<div class=\"ml-en\">$X\\cap Y=\\{3\\}$, cardinality 1. $X-Y=\\{1,2,4,5\\}$, cardinality 4. $Y-X=\\{0,6,9\\}$, cardinality 3. The minimum is $X\\cap Y$, option (i).</div><div class=\"ml-vi\">$X\\cap Y=\\{3\\}$, lực lượng 1. $X-Y=\\{1,2,4,5\\}$, lực lượng 4. $Y-X=\\{0,6,9\\}$, lực lượng 3. Nhỏ nhất là $X\\cap Y$, đáp án (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q11.png"
         },
         {
           "kind": "MCQ",
@@ -6522,7 +6781,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f(x)=(x-1)^2$ only produces perfect squares ($0,1,4,9,\\ldots$), missing values like 2 -- not onto. Also $f(0)=1$ and $f(2)=1$ -- not one-to-one. So $f$ is neither onto nor one-to-one.</div><div class=\"ml-vi\">$f(x)=(x-1)^2$ chỉ cho ra các số chính phương ($0,1,4,9,\\ldots$), thiếu các giá trị như 2 -- không toàn ánh. Ngoài ra $f(0)=1$ và $f(2)=1$ -- không đơn ánh. Vậy $f$ không toàn ánh cũng không đơn ánh.</div>"
+          "explanation": "<div class=\"ml-en\">$f(x)=(x-1)^2$ only produces perfect squares ($0,1,4,9,\\ldots$), missing values like 2 -- not onto. Also $f(0)=1$ and $f(2)=1$ -- not one-to-one. So $f$ is neither onto nor one-to-one.</div><div class=\"ml-vi\">$f(x)=(x-1)^2$ chỉ cho ra các số chính phương ($0,1,4,9,\\ldots$), thiếu các giá trị như 2 -- không toàn ánh. Ngoài ra $f(0)=1$ và $f(2)=1$ -- không đơn ánh. Vậy $f$ không toàn ánh cũng không đơn ánh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q12.png"
         },
         {
           "kind": "MCQ",
@@ -6545,7 +6805,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Onto: for any $m\\in N$, $n=m^2$ gives $f(n)=m$, so every natural number is reached -- onto. Not one-to-one: $f(1)=1$ and $f(2)=\\lfloor1.414\\rfloor=1$, a repeated value. So $f$ is onto but not one-to-one.</div><div class=\"ml-vi\">Toàn ánh: với mọi $m\\in N$, $n=m^2$ cho $f(n)=m$, nên mọi số tự nhiên đều đạt được -- toàn ánh. Không đơn ánh: $f(1)=1$ và $f(2)=\\lfloor1.414\\rfloor=1$, giá trị lặp lại. Vậy $f$ toàn ánh nhưng không đơn ánh.</div>"
+          "explanation": "<div class=\"ml-en\">Onto: for any $m\\in N$, $n=m^2$ gives $f(n)=m$, so every natural number is reached -- onto. Not one-to-one: $f(1)=1$ and $f(2)=\\lfloor1.414\\rfloor=1$, a repeated value. So $f$ is onto but not one-to-one.</div><div class=\"ml-vi\">Toàn ánh: với mọi $m\\in N$, $n=m^2$ cho $f(n)=m$, nên mọi số tự nhiên đều đạt được -- toàn ánh. Không đơn ánh: $f(1)=1$ và $f(2)=\\lfloor1.414\\rfloor=1$, giá trị lặp lại. Vậy $f$ toàn ánh nhưng không đơn ánh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q13.png"
         },
         {
           "kind": "MCQ",
@@ -6568,7 +6829,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Cumulative length after block $k$ is $\\frac{k(k+1)}{2}$. Block 13 ends at $\\frac{13\\cdot14}{2}=91$; block 14 spans positions 92-105 (even block $\\to$ 1s), so $a_{100}=1$. Block 14 ends at 105; block 15 spans 106-120 (odd block $\\to$ 0s), so $a_{110}=0$.</div><div class=\"ml-vi\">Tổng độ dài lũy kế sau khối $k$ là $\\frac{k(k+1)}{2}$. Khối 13 kết thúc ở $\\frac{13\\cdot14}{2}=91$; khối 14 trải từ vị trí 92-105 (khối chẵn $\\to$ số 1), nên $a_{100}=1$. Khối 14 kết thúc ở 105; khối 15 trải 106-120 (khối lẻ $\\to$ số 0), nên $a_{110}=0$.</div>"
+          "explanation": "<div class=\"ml-en\">Cumulative length after block $k$ is $\\frac{k(k+1)}{2}$. Block 13 ends at $\\frac{13\\cdot14}{2}=91$; block 14 spans positions 92-105 (even block $\\to$ 1s), so $a_{100}=1$. Block 14 ends at 105; block 15 spans 106-120 (odd block $\\to$ 0s), so $a_{110}=0$.</div><div class=\"ml-vi\">Tổng độ dài lũy kế sau khối $k$ là $\\frac{k(k+1)}{2}$. Khối 13 kết thúc ở $\\frac{13\\cdot14}{2}=91$; khối 14 trải từ vị trí 92-105 (khối chẵn $\\to$ số 1), nên $a_{100}=1$. Khối 14 kết thúc ở 105; khối 15 trải 106-120 (khối lẻ $\\to$ số 0), nên $a_{110}=0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q14.png"
         },
         {
           "kind": "MCQ",
@@ -6591,7 +6853,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$Max$ starts at 1. Then: $4>1\\to Max=4$; $5>4\\to Max=5$; $2\\not>5$ no change; $7>5\\to Max=7$; $9>7\\to Max=9$; $3\\not>9$ no change. All values $Max$ takes: $1,4,5,7,9$.</div><div class=\"ml-vi\">$Max$ bắt đầu là 1. Rồi: $4>1\\to Max=4$; $5>4\\to Max=5$; $2\\not>5$ không đổi; $7>5\\to Max=7$; $9>7\\to Max=9$; $3\\not>9$ không đổi. Tất cả giá trị $Max$ nhận: $1,4,5,7,9$.</div>"
+          "explanation": "<div class=\"ml-en\">$Max$ starts at 1. Then: $4>1\\to Max=4$; $5>4\\to Max=5$; $2\\not>5$ no change; $7>5\\to Max=7$; $9>7\\to Max=9$; $3\\not>9$ no change. All values $Max$ takes: $1,4,5,7,9$.</div><div class=\"ml-vi\">$Max$ bắt đầu là 1. Rồi: $4>1\\to Max=4$; $5>4\\to Max=5$; $2\\not>5$ không đổi; $7>5\\to Max=7$; $9>7\\to Max=9$; $3\\not>9$ không đổi. Tất cả giá trị $Max$ nhận: $1,4,5,7,9$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q15.png"
         },
         {
           "kind": "MCQ",
@@ -6617,7 +6880,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">(i): dominant term $8x^3$, and $x^2,x\\log x$ are both $o(x^3)$, so $f(x)=O(x^3)$. (ii): $(x^2+1)(x^2-1)\\approx x^4-1$ grows like $x^4$, NOT $O(x^3)$. (iii): $x^3\\log x$ grows strictly faster than any constant multiple of $x^3$, so NOT $O(x^3)$. Only (i) qualifies.</div><div class=\"ml-vi\">(i): số hạng chiếm ưu thế $8x^3$, và $x^2,x\\log x$ đều là $o(x^3)$, nên $f(x)=O(x^3)$. (ii): $(x^2+1)(x^2-1)\\approx x^4-1$ tăng như $x^4$, KHÔNG phải $O(x^3)$. (iii): $x^3\\log x$ tăng nhanh hơn hẳn bất kỳ hằng số nhân $x^3$ nào, nên KHÔNG phải $O(x^3)$. Chỉ (i) thỏa.</div>"
+          "explanation": "<div class=\"ml-en\">(i): dominant term $8x^3$, and $x^2,x\\log x$ are both $o(x^3)$, so $f(x)=O(x^3)$. (ii): $(x^2+1)(x^2-1)\\approx x^4-1$ grows like $x^4$, NOT $O(x^3)$. (iii): $x^3\\log x$ grows strictly faster than any constant multiple of $x^3$, so NOT $O(x^3)$. Only (i) qualifies.</div><div class=\"ml-vi\">(i): số hạng chiếm ưu thế $8x^3$, và $x^2,x\\log x$ đều là $o(x^3)$, nên $f(x)=O(x^3)$. (ii): $(x^2+1)(x^2-1)\\approx x^4-1$ tăng như $x^4$, KHÔNG phải $O(x^3)$. (iii): $x^3\\log x$ tăng nhanh hơn hẳn bất kỳ hằng số nhân $x^3$ nào, nên KHÔNG phải $O(x^3)$. Chỉ (i) thỏa.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q17.png"
         },
         {
           "kind": "MCQ",
@@ -6643,7 +6907,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\sqrt9=3$. First loop: $i=0,1,2$ satisfy $i<3$ (3 iterations), each doing 2 additions ($sum{+}{=}1$, $i{+}{=}1$) $=6$ additions. Second loop condition $j<1.5$: $j=0,1$ satisfy (2 iterations), each doing 2 additions ($j{+}{=}1$, $sum{+}{=}1$) $=4$ additions. Total $=6+4=10$.</div><div class=\"ml-vi\">$\\sqrt9=3$. Vòng lặp đầu: $i=0,1,2$ thỏa $i<3$ (3 lần lặp), mỗi lần thực hiện 2 phép cộng ($sum{+}{=}1$, $i{+}{=}1$) $=6$ phép cộng. Điều kiện vòng lặp hai $j<1.5$: $j=0,1$ thỏa (2 lần lặp), mỗi lần 2 phép cộng ($j{+}{=}1$, $sum{+}{=}1$) $=4$ phép cộng. Tổng $=6+4=10$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\sqrt9=3$. First loop: $i=0,1,2$ satisfy $i<3$ (3 iterations), each doing 2 additions ($sum{+}{=}1$, $i{+}{=}1$) $=6$ additions. Second loop condition $j<1.5$: $j=0,1$ satisfy (2 iterations), each doing 2 additions ($j{+}{=}1$, $sum{+}{=}1$) $=4$ additions. Total $=6+4=10$.</div><div class=\"ml-vi\">$\\sqrt9=3$. Vòng lặp đầu: $i=0,1,2$ thỏa $i<3$ (3 lần lặp), mỗi lần thực hiện 2 phép cộng ($sum{+}{=}1$, $i{+}{=}1$) $=6$ phép cộng. Điều kiện vòng lặp hai $j<1.5$: $j=0,1$ thỏa (2 lần lặp), mỗi lần 2 phép cộng ($j{+}{=}1$, $sum{+}{=}1$) $=4$ phép cộng. Tổng $=6+4=10$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q18.png"
         },
         {
           "kind": "MCQ",
@@ -6669,7 +6934,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">By convention $0\\le r<5$. $-98=5q+r$: try $q=-20$: $5(-20)=-100$, $r=-98-(-100)=2$, valid since $0\\le2<5$. So $q=-20,r=2$.</div><div class=\"ml-vi\">Theo quy ước $0\\le r<5$. $-98=5q+r$: thử $q=-20$: $5(-20)=-100$, $r=-98-(-100)=2$, hợp lệ vì $0\\le2<5$. Vậy $q=-20,r=2$.</div>"
+          "explanation": "<div class=\"ml-en\">By convention $0\\le r<5$. $-98=5q+r$: try $q=-20$: $5(-20)=-100$, $r=-98-(-100)=2$, valid since $0\\le2<5$. So $q=-20,r=2$.</div><div class=\"ml-vi\">Theo quy ước $0\\le r<5$. $-98=5q+r$: thử $q=-20$: $5(-20)=-100$, $r=-98-(-100)=2$, hợp lệ vì $0\\le2<5$. Vậy $q=-20,r=2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q19.png"
         },
         {
           "kind": "MCQ",
@@ -6692,7 +6958,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$130=6\\times21+4$, so $130\\equiv4\\pmod6$.</div><div class=\"ml-vi\">$130=6\\times21+4$, nên $130\\equiv4\\pmod6$.</div>"
+          "explanation": "<div class=\"ml-en\">$130=6\\times21+4$, so $130\\equiv4\\pmod6$.</div><div class=\"ml-vi\">$130=6\\times21+4$, nên $130\\equiv4\\pmod6$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q20.png"
         },
         {
           "kind": "MCQ",
@@ -6718,7 +6985,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">By Legendre's formula: $\\lfloor10/3\\rfloor+\\lfloor10/9\\rfloor+\\lfloor10/27\\rfloor=3+1+0=4$.</div><div class=\"ml-vi\">Theo công thức Legendre: $\\lfloor10/3\\rfloor+\\lfloor10/9\\rfloor+\\lfloor10/27\\rfloor=3+1+0=4$.</div>"
+          "explanation": "<div class=\"ml-en\">By Legendre's formula: $\\lfloor10/3\\rfloor+\\lfloor10/9\\rfloor+\\lfloor10/27\\rfloor=3+1+0=4$.</div><div class=\"ml-vi\">Theo công thức Legendre: $\\lfloor10/3\\rfloor+\\lfloor10/9\\rfloor+\\lfloor10/27\\rfloor=3+1+0=4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q21.png"
         },
         {
           "kind": "MCQ",
@@ -6741,7 +7009,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$lcm(a,b)=2^3 3^3 5^4 7^1$, $\\gcd(a,b)=2^2 3^3 5^2 7^1$. Ratio $=2^{3-2}3^{3-3}5^{4-2}7^{1-1}=2^1 3^0 5^2 7^0=2^1 5^2$.</div><div class=\"ml-vi\">$lcm(a,b)=2^3 3^3 5^4 7^1$, $\\gcd(a,b)=2^2 3^3 5^2 7^1$. Tỉ số $=2^{3-2}3^{3-3}5^{4-2}7^{1-1}=2^1 3^0 5^2 7^0=2^1 5^2$.</div>"
+          "explanation": "<div class=\"ml-en\">$lcm(a,b)=2^3 3^3 5^4 7^1$, $\\gcd(a,b)=2^2 3^3 5^2 7^1$. Ratio $=2^{3-2}3^{3-3}5^{4-2}7^{1-1}=2^1 3^0 5^2 7^0=2^1 5^2$.</div><div class=\"ml-vi\">$lcm(a,b)=2^3 3^3 5^4 7^1$, $\\gcd(a,b)=2^2 3^3 5^2 7^1$. Tỉ số $=2^{3-2}3^{3-3}5^{4-2}7^{1-1}=2^1 3^0 5^2 7^0=2^1 5^2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q22.png"
         },
         {
           "kind": "MCQ",
@@ -6764,7 +7033,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$7^1\\bmod19=7$. $7^2\\bmod19=49\\bmod19=11$. $7^4=(7^2)^2\\bmod19=11^2\\bmod19=121\\bmod19=7$. $7^8=(7^4)^2\\bmod19=7^2\\bmod19=11$. Sequence: $7,11,7,11$.</div><div class=\"ml-vi\">$7^1\\bmod19=7$. $7^2\\bmod19=49\\bmod19=11$. $7^4=(7^2)^2\\bmod19=11^2\\bmod19=121\\bmod19=7$. $7^8=(7^4)^2\\bmod19=7^2\\bmod19=11$. Dãy: $7,11,7,11$.</div>"
+          "explanation": "<div class=\"ml-en\">$7^1\\bmod19=7$. $7^2\\bmod19=49\\bmod19=11$. $7^4=(7^2)^2\\bmod19=11^2\\bmod19=121\\bmod19=7$. $7^8=(7^4)^2\\bmod19=7^2\\bmod19=11$. Sequence: $7,11,7,11$.</div><div class=\"ml-vi\">$7^1\\bmod19=7$. $7^2\\bmod19=49\\bmod19=11$. $7^4=(7^2)^2\\bmod19=11^2\\bmod19=121\\bmod19=7$. $7^8=(7^4)^2\\bmod19=7^2\\bmod19=11$. Dãy: $7,11,7,11$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q23.png"
         },
         {
           "kind": "MCQ",
@@ -6790,7 +7060,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$243=128+64+32+16+2+1=(11110011)_2$. Checking: $128+64+32+16+0+0+2+1=243$. Matches option (iv).</div><div class=\"ml-vi\">$243=128+64+32+16+2+1=(11110011)_2$. Kiểm: $128+64+32+16+0+0+2+1=243$. Khớp đáp án (iv).</div>"
+          "explanation": "<div class=\"ml-en\">$243=128+64+32+16+2+1=(11110011)_2$. Checking: $128+64+32+16+0+0+2+1=243$. Matches option (iv).</div><div class=\"ml-vi\">$243=128+64+32+16+2+1=(11110011)_2$. Kiểm: $128+64+32+16+0+0+2+1=243$. Khớp đáp án (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q24.png"
         },
         {
           "kind": "MCQ",
@@ -6816,7 +7087,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">The correct proof order is: basis case (2, $n=7$) first, then state the inductive hypothesis and goal (1), then prove the inductive step (4), then state the conclusion (3). Order: 2,1,4,3.</div><div class=\"ml-vi\">Thứ tự chứng minh đúng là: trường hợp cơ sở (2, $n=7$) trước, rồi phát biểu giả thiết quy nạp và mục tiêu (1), rồi chứng minh bước quy nạp (4), rồi phát biểu kết luận (3). Thứ tự: 2,1,4,3.</div>"
+          "explanation": "<div class=\"ml-en\">The correct proof order is: basis case (2, $n=7$) first, then state the inductive hypothesis and goal (1), then prove the inductive step (4), then state the conclusion (3). Order: 2,1,4,3.</div><div class=\"ml-vi\">Thứ tự chứng minh đúng là: trường hợp cơ sở (2, $n=7$) trước, rồi phát biểu giả thiết quy nạp và mục tiêu (1), rồi chứng minh bước quy nạp (4), rồi phát biểu kết luận (3). Thứ tự: 2,1,4,3.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q25.png"
         },
         {
           "kind": "MCQ",
@@ -6842,7 +7114,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Positive integers not divisible by 3 are those $\\equiv1$ or $\\equiv2\\pmod3$: $1,2,4,5,7,8,\\ldots$. Basis $1,2\\in S$ covers both residues, and $a+3\\in S$ preserves the residue while generating all larger members. This is option (iv); the extra $a-3\\in S$ rule in (iii) is unnecessary and could produce non-positive integers.</div><div class=\"ml-vi\">Số nguyên dương không chia hết cho 3 là những số $\\equiv1$ hoặc $\\equiv2\\pmod3$: $1,2,4,5,7,8,\\ldots$. Cơ sở $1,2\\in S$ bao phủ cả hai lớp dư, và $a+3\\in S$ giữ nguyên lớp dư trong khi sinh mọi thành viên lớn hơn. Đây là đáp án (iv); quy tắc $a-3\\in S$ thêm ở (iii) không cần thiết và có thể sinh số không dương.</div>"
+          "explanation": "<div class=\"ml-en\">Positive integers not divisible by 3 are those $\\equiv1$ or $\\equiv2\\pmod3$: $1,2,4,5,7,8,\\ldots$. Basis $1,2\\in S$ covers both residues, and $a+3\\in S$ preserves the residue while generating all larger members. This is option (iv); the extra $a-3\\in S$ rule in (iii) is unnecessary and could produce non-positive integers.</div><div class=\"ml-vi\">Số nguyên dương không chia hết cho 3 là những số $\\equiv1$ hoặc $\\equiv2\\pmod3$: $1,2,4,5,7,8,\\ldots$. Cơ sở $1,2\\in S$ bao phủ cả hai lớp dư, và $a+3\\in S$ giữ nguyên lớp dư trong khi sinh mọi thành viên lớn hơn. Đây là đáp án (iv); quy tắc $a-3\\in S$ thêm ở (iii) không cần thiết và có thể sinh số không dương.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q26.png"
         },
         {
           "kind": "MCQ",
@@ -6868,7 +7141,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">All three are standard true facts about recursion from the textbook: (i) is the definition of a recursive algorithm, (ii) follows directly from how recursively defined functions are evaluated, and (iii) restates the validity condition for constructing a recursive algorithm.</div><div class=\"ml-vi\">Cả ba đều là các sự kiện chuẩn đúng về đệ quy trong giáo trình: (i) là định nghĩa của thuật toán đệ quy, (ii) suy ra trực tiếp từ cách hàm định nghĩa đệ quy được tính giá trị, và (iii) diễn đạt lại điều kiện hợp lệ để xây dựng một thuật toán đệ quy.</div>"
+          "explanation": "<div class=\"ml-en\">All three are standard true facts about recursion from the textbook: (i) is the definition of a recursive algorithm, (ii) follows directly from how recursively defined functions are evaluated, and (iii) restates the validity condition for constructing a recursive algorithm.</div><div class=\"ml-vi\">Cả ba đều là các sự kiện chuẩn đúng về đệ quy trong giáo trình: (i) là định nghĩa của thuật toán đệ quy, (ii) suy ra trực tiếp từ cách hàm định nghĩa đệ quy được tính giá trị, và (iii) diễn đạt lại điều kiện hợp lệ để xây dựng một thuật toán đệ quy.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q27.png"
         },
         {
           "kind": "MCQ",
@@ -6894,7 +7168,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">(i) and (iii) both use a `for` loop to accumulate a result -- iterative. (ii) and (iv) both call themselves with a smaller argument ($tt2(x,n-1)$, $tt4(n-1)$) -- recursive, not iterative.</div><div class=\"ml-vi\">(i) và (iii) đều dùng vòng lặp `for` để tích lũy kết quả -- lặp. (ii) và (iv) đều tự gọi chính nó với đối số nhỏ hơn ($tt2(x,n-1)$, $tt4(n-1)$) -- đệ quy, không phải lặp.</div>"
+          "explanation": "<div class=\"ml-en\">(i) and (iii) both use a `for` loop to accumulate a result -- iterative. (ii) and (iv) both call themselves with a smaller argument ($tt2(x,n-1)$, $tt4(n-1)$) -- recursive, not iterative.</div><div class=\"ml-vi\">(i) và (iii) đều dùng vòng lặp `for` để tích lũy kết quả -- lặp. (ii) và (iv) đều tự gọi chính nó với đối số nhỏ hơn ($tt2(x,n-1)$, $tt4(n-1)$) -- đệ quy, không phải lặp.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q28.png"
         },
         {
           "kind": "MCQ",
@@ -6920,7 +7195,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">Divisible by 7: $\\lfloor2016/7\\rfloor=288$. Divisible by 9: $\\lfloor2016/9\\rfloor=224$. Divisible by $\\text{lcm}(7,9)=63$: $\\lfloor2016/63\\rfloor=32$. By inclusion-exclusion, divisible by 7 or 9: $288+224-32=480$. Neither: $2016-480=1536$.</div><div class=\"ml-vi\">Chia hết cho 7: $\\lfloor2016/7\\rfloor=288$. Chia hết cho 9: $\\lfloor2016/9\\rfloor=224$. Chia hết cho $\\text{lcm}(7,9)=63$: $\\lfloor2016/63\\rfloor=32$. Theo bù trừ, chia hết cho 7 hoặc 9: $288+224-32=480$. Không chia hết cho cả hai: $2016-480=1536$.</div>"
+          "explanation": "<div class=\"ml-en\">Divisible by 7: $\\lfloor2016/7\\rfloor=288$. Divisible by 9: $\\lfloor2016/9\\rfloor=224$. Divisible by $\\text{lcm}(7,9)=63$: $\\lfloor2016/63\\rfloor=32$. By inclusion-exclusion, divisible by 7 or 9: $288+224-32=480$. Neither: $2016-480=1536$.</div><div class=\"ml-vi\">Chia hết cho 7: $\\lfloor2016/7\\rfloor=288$. Chia hết cho 9: $\\lfloor2016/9\\rfloor=224$. Chia hết cho $\\text{lcm}(7,9)=63$: $\\lfloor2016/63\\rfloor=32$. Theo bù trừ, chia hết cho 7 hoặc 9: $288+224-32=480$. Không chia hết cho cả hai: $2016-480=1536$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q29.png"
         },
         {
           "kind": "MCQ",
@@ -6943,7 +7219,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Let $a(n)$ count such strings: $a(n)=a(n-1)+a(n-2)$, $a(0)=1,a(1)=2$, giving $a(2)=3,a(3)=5,a(4)=8,a(5)=13,a(6)=21$.</div><div class=\"ml-vi\">Gọi $a(n)$ đếm các chuỗi như vậy: $a(n)=a(n-1)+a(n-2)$, $a(0)=1,a(1)=2$, cho $a(2)=3,a(3)=5,a(4)=8,a(5)=13,a(6)=21$.</div>"
+          "explanation": "<div class=\"ml-en\">Let $a(n)$ count such strings: $a(n)=a(n-1)+a(n-2)$, $a(0)=1,a(1)=2$, giving $a(2)=3,a(3)=5,a(4)=8,a(5)=13,a(6)=21$.</div><div class=\"ml-vi\">Gọi $a(n)$ đếm các chuỗi như vậy: $a(n)=a(n-1)+a(n-2)$, $a(0)=1,a(1)=2$, cho $a(2)=3,a(3)=5,a(4)=8,a(5)=13,a(6)=21$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q30.png"
         },
         {
           "kind": "MCQ",
@@ -6969,7 +7246,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f(3)=2f(1)+3=2(2)+3=7$. $f(9)=2f(3)+9=2(7)+9=23$. $f(27)=2f(9)+27=2(23)+27=73$. $f(81)=2f(27)+81=2(73)+81=227$.</div><div class=\"ml-vi\">$f(3)=2f(1)+3=2(2)+3=7$. $f(9)=2f(3)+9=2(7)+9=23$. $f(27)=2f(9)+27=2(23)+27=73$. $f(81)=2f(27)+81=2(73)+81=227$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(3)=2f(1)+3=2(2)+3=7$. $f(9)=2f(3)+9=2(7)+9=23$. $f(27)=2f(9)+27=2(23)+27=73$. $f(81)=2f(27)+81=2(73)+81=227$.</div><div class=\"ml-vi\">$f(3)=2f(1)+3=2(2)+3=7$. $f(9)=2f(3)+9=2(7)+9=23$. $f(27)=2f(9)+27=2(23)+27=73$. $f(81)=2f(27)+81=2(73)+81=227$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q31.png"
         },
         {
           "kind": "MCQ",
@@ -6995,7 +7273,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">By the handshaking lemma, sum of degrees $=2\\times$edges$=2(6)=12$. With every vertex having degree 3, the number of vertices is $12/3=4$.</div><div class=\"ml-vi\">Theo bổ đề bắt tay, tổng bậc $=2\\times$số cạnh$=2(6)=12$. Với mọi đỉnh đều bậc 3, số đỉnh là $12/3=4$.</div>"
+          "explanation": "<div class=\"ml-en\">By the handshaking lemma, sum of degrees $=2\\times$edges$=2(6)=12$. With every vertex having degree 3, the number of vertices is $12/3=4$.</div><div class=\"ml-vi\">Theo bổ đề bắt tay, tổng bậc $=2\\times$số cạnh$=2(6)=12$. Với mọi đỉnh đều bậc 3, số đỉnh là $12/3=4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q32.png"
         },
         {
           "kind": "MCQ",
@@ -7018,7 +7297,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$K_4$ contains triangles (odd cycles) -- not bipartite. $W_4$ (wheel) has triangles between the hub and adjacent rim vertices -- not bipartite. $C_4$ is an even cycle -- bipartite. $K_{3,4}$ is complete bipartite by definition -- bipartite. So the bipartite ones are $C_4,K_{3,4}$, option (iii).</div><div class=\"ml-vi\">$K_4$ chứa tam giác (chu trình lẻ) -- không lưỡng phân. $W_4$ (bánh xe) có tam giác giữa trung tâm và các đỉnh vành kề nhau -- không lưỡng phân. $C_4$ là chu trình chẵn -- lưỡng phân. $K_{3,4}$ là lưỡng phân đầy đủ theo định nghĩa -- lưỡng phân. Vậy các đồ thị lưỡng phân là $C_4,K_{3,4}$, đáp án (iii).</div>"
+          "explanation": "<div class=\"ml-en\">$K_4$ contains triangles (odd cycles) -- not bipartite. $W_4$ (wheel) has triangles between the hub and adjacent rim vertices -- not bipartite. $C_4$ is an even cycle -- bipartite. $K_{3,4}$ is complete bipartite by definition -- bipartite. So the bipartite ones are $C_4,K_{3,4}$, option (iii).</div><div class=\"ml-vi\">$K_4$ chứa tam giác (chu trình lẻ) -- không lưỡng phân. $W_4$ (bánh xe) có tam giác giữa trung tâm và các đỉnh vành kề nhau -- không lưỡng phân. $C_4$ là chu trình chẵn -- lưỡng phân. $K_{3,4}$ là lưỡng phân đầy đủ theo định nghĩa -- lưỡng phân. Vậy các đồ thị lưỡng phân là $C_4,K_{3,4}$, đáp án (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q33.png"
         },
         {
           "kind": "MCQ",
@@ -7041,7 +7321,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The adjacency matrix has size $(m+n)\\times(m+n)$, so $(m+n)^2=m^2+2mn+n^2$ total entries. The number of 1s equals $2mn$ (each of the $mn$ edges contributes symmetrically to two entries). Zeros $=m^2+2mn+n^2-2mn=m^2+n^2$, option (iii).</div><div class=\"ml-vi\">Ma trận kề có kích thước $(m+n)\\times(m+n)$, nên $(m+n)^2=m^2+2mn+n^2$ tổng số phần tử. Số lượng số 1 bằng $2mn$ (mỗi cạnh trong $mn$ cạnh đóng góp đối xứng vào hai phần tử). Số 0 $=m^2+2mn+n^2-2mn=m^2+n^2$, đáp án (iii).</div>"
+          "explanation": "<div class=\"ml-en\">The adjacency matrix has size $(m+n)\\times(m+n)$, so $(m+n)^2=m^2+2mn+n^2$ total entries. The number of 1s equals $2mn$ (each of the $mn$ edges contributes symmetrically to two entries). Zeros $=m^2+2mn+n^2-2mn=m^2+n^2$, option (iii).</div><div class=\"ml-vi\">Ma trận kề có kích thước $(m+n)\\times(m+n)$, nên $(m+n)^2=m^2+2mn+n^2$ tổng số phần tử. Số lượng số 1 bằng $2mn$ (mỗi cạnh trong $mn$ cạnh đóng góp đối xứng vào hai phần tử). Số 0 $=m^2+2mn+n^2-2mn=m^2+n^2$, đáp án (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q34.png"
         },
         {
           "kind": "MCQ",
@@ -7067,7 +7348,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">A normal edge has exactly 2 ones in its column (one per endpoint); a loop has only 1 (touching just one vertex). Column sums: $e_1$=1 (loop at $v_2$), $e_2$=2 (edge $v_1v_3$), $e_3$=1 (loop at $v_3$), $e_4$=1 (loop at $v_1$), $e_5$=2 (edge $v_2v_3$). Three columns have sum 1, so $G$ has 3 loops.</div><div class=\"ml-vi\">Một cạnh thường có đúng 2 số 1 trong cột của nó (một cho mỗi đầu mút); một khuyên chỉ có 1 (chỉ chạm một đỉnh). Tổng cột: $e_1$=1 (khuyên tại $v_2$), $e_2$=2 (cạnh $v_1v_3$), $e_3$=1 (khuyên tại $v_3$), $e_4$=1 (khuyên tại $v_1$), $e_5$=2 (cạnh $v_2v_3$). Ba cột có tổng 1, nên $G$ có 3 khuyên.</div>"
+          "explanation": "<div class=\"ml-en\">A normal edge has exactly 2 ones in its column (one per endpoint); a loop has only 1 (touching just one vertex). Column sums: $e_1$=1 (loop at $v_2$), $e_2$=2 (edge $v_1v_3$), $e_3$=1 (loop at $v_3$), $e_4$=1 (loop at $v_1$), $e_5$=2 (edge $v_2v_3$). Three columns have sum 1, so $G$ has 3 loops.</div><div class=\"ml-vi\">Một cạnh thường có đúng 2 số 1 trong cột của nó (một cho mỗi đầu mút); một khuyên chỉ có 1 (chỉ chạm một đỉnh). Tổng cột: $e_1$=1 (khuyên tại $v_2$), $e_2$=2 (cạnh $v_1v_3$), $e_3$=1 (khuyên tại $v_3$), $e_4$=1 (khuyên tại $v_1$), $e_5$=2 (cạnh $v_2v_3$). Ba cột có tổng 1, nên $G$ có 3 khuyên.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q35.png"
         },
         {
           "kind": "MCQ",
@@ -7093,7 +7375,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Label sides $\\{u,x\\}$ and $\\{v,y\\}$. Using the adjacency matrix (order $u,x,v,y$) and computing $A^3$, the entry for walks of length 3 from $u$ to $v$ is $(A^3)_{u,v}=4$ (computed via $A^2$ then multiplying by $A$).</div><div class=\"ml-vi\">Đặt hai phía $\\{u,x\\}$ và $\\{v,y\\}$. Dùng ma trận kề (thứ tự $u,x,v,y$) và tính $A^3$, phần tử số đường đi độ dài 3 từ $u$ đến $v$ là $(A^3)_{u,v}=4$ (tính qua $A^2$ rồi nhân với $A$).</div>"
+          "explanation": "<div class=\"ml-en\">Label sides $\\{u,x\\}$ and $\\{v,y\\}$. Using the adjacency matrix (order $u,x,v,y$) and computing $A^3$, the entry for walks of length 3 from $u$ to $v$ is $(A^3)_{u,v}=4$ (computed via $A^2$ then multiplying by $A$).</div><div class=\"ml-vi\">Đặt hai phía $\\{u,x\\}$ và $\\{v,y\\}$. Dùng ma trận kề (thứ tự $u,x,v,y$) và tính $A^3$, phần tử số đường đi độ dài 3 từ $u$ đến $v$ là $(A^3)_{u,v}=4$ (tính qua $A^2$ rồi nhân với $A$).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q36.png"
         },
         {
           "kind": "MCQ",
@@ -7119,7 +7402,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">A Hamilton circuit in a bipartite graph must alternate between the two parts equally, requiring $m=n$. The smallest case that actually forms a cycle is $K_{2,2}=C_4$, so $m=n$ and $m\\ge2$.</div><div class=\"ml-vi\">Chu trình Hamilton trong đồ thị lưỡng phân phải luân phiên đều giữa hai phía, đòi hỏi $m=n$. Trường hợp nhỏ nhất thực sự tạo thành chu trình là $K_{2,2}=C_4$, nên $m=n$ và $m\\ge2$.</div>"
+          "explanation": "<div class=\"ml-en\">A Hamilton circuit in a bipartite graph must alternate between the two parts equally, requiring $m=n$. The smallest case that actually forms a cycle is $K_{2,2}=C_4$, so $m=n$ and $m\\ge2$.</div><div class=\"ml-vi\">Chu trình Hamilton trong đồ thị lưỡng phân phải luân phiên đều giữa hai phía, đòi hỏi $m=n$. Trường hợp nhỏ nhất thực sự tạo thành chu trình là $K_{2,2}=C_4$, nên $m=n$ và $m\\ge2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q38.png"
         },
         {
           "kind": "MCQ",
@@ -7142,7 +7426,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i): $Q_1$ (single edge) trivially has a Hamilton path -- antecedent TRUE. But $K_6$ has all 6 vertices of odd degree 5 (need exactly 0 or 2 odd-degree vertices for an Euler path) -- consequent FALSE. So (i) is FALSE. (ii): $K_{5,2}$ has exactly 2 odd-degree vertices (the size-2 side, degree 5 each) -- has an Euler path, antecedent TRUE. But $W_4$'s 4 rim vertices all have odd degree 3 -- more than 2 odd vertices, no Euler path -- consequent FALSE. So (ii) is also FALSE. Neither proposition is true.</div><div class=\"ml-vi\">(i): $Q_1$ (một cạnh đơn) hiển nhiên có đường đi Hamilton -- tiền đề ĐÚNG. Nhưng $K_6$ có cả 6 đỉnh bậc lẻ 5 (cần đúng 0 hoặc 2 đỉnh bậc lẻ để có đường đi Euler) -- hệ quả SAI. Vậy (i) SAI. (ii): $K_{5,2}$ có đúng 2 đỉnh bậc lẻ (phía 2 đỉnh, mỗi đỉnh bậc 5) -- có đường đi Euler, tiền đề ĐÚNG. Nhưng 4 đỉnh vành của $W_4$ đều bậc lẻ 3 -- hơn 2 đỉnh lẻ, không có đường đi Euler -- hệ quả SAI. Vậy (ii) cũng SAI. Không mệnh đề nào đúng.</div>"
+          "explanation": "<div class=\"ml-en\">(i): $Q_1$ (single edge) trivially has a Hamilton path -- antecedent TRUE. But $K_6$ has all 6 vertices of odd degree 5 (need exactly 0 or 2 odd-degree vertices for an Euler path) -- consequent FALSE. So (i) is FALSE. (ii): $K_{5,2}$ has exactly 2 odd-degree vertices (the size-2 side, degree 5 each) -- has an Euler path, antecedent TRUE. But $W_4$'s 4 rim vertices all have odd degree 3 -- more than 2 odd vertices, no Euler path -- consequent FALSE. So (ii) is also FALSE. Neither proposition is true.</div><div class=\"ml-vi\">(i): $Q_1$ (một cạnh đơn) hiển nhiên có đường đi Hamilton -- tiền đề ĐÚNG. Nhưng $K_6$ có cả 6 đỉnh bậc lẻ 5 (cần đúng 0 hoặc 2 đỉnh bậc lẻ để có đường đi Euler) -- hệ quả SAI. Vậy (i) SAI. (ii): $K_{5,2}$ có đúng 2 đỉnh bậc lẻ (phía 2 đỉnh, mỗi đỉnh bậc 5) -- có đường đi Euler, tiền đề ĐÚNG. Nhưng 4 đỉnh vành của $W_4$ đều bậc lẻ 3 -- hơn 2 đỉnh lẻ, không có đường đi Euler -- hệ quả SAI. Vậy (ii) cũng SAI. Không mệnh đề nào đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q39.png"
         },
         {
           "kind": "MCQ",
@@ -7165,7 +7450,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">After $O$(0),$A$(2): relax gives $B=\\min(5,4)=4$, $D=9$, $F=14$. After $B$(4): relax gives $D=\\min(9,8)=8$, $C=\\min(4,7)=4$, $E=5$. After $C$(4): relax gives $E=\\min(5,8)=5$ (no change). Remaining unvisited distances: $E=5,D=8,F=14$. The smallest is $E$.</div><div class=\"ml-vi\">Sau $O$(0),$A$(2): nới lỏng cho $B=\\min(5,4)=4$, $D=9$, $F=14$. Sau $B$(4): nới lỏng cho $D=\\min(9,8)=8$, $C=\\min(4,7)=4$, $E=5$. Sau $C$(4): nới lỏng cho $E=\\min(5,8)=5$ (không đổi). Khoảng cách chưa thăm còn lại: $E=5,D=8,F=14$. Nhỏ nhất là $E$.</div>"
+          "explanation": "<div class=\"ml-en\">After $O$(0),$A$(2): relax gives $B=\\min(5,4)=4$, $D=9$, $F=14$. After $B$(4): relax gives $D=\\min(9,8)=8$, $C=\\min(4,7)=4$, $E=5$. After $C$(4): relax gives $E=\\min(5,8)=5$ (no change). Remaining unvisited distances: $E=5,D=8,F=14$. The smallest is $E$.</div><div class=\"ml-vi\">Sau $O$(0),$A$(2): nới lỏng cho $B=\\min(5,4)=4$, $D=9$, $F=14$. Sau $B$(4): nới lỏng cho $D=\\min(9,8)=8$, $C=\\min(4,7)=4$, $E=5$. Sau $C$(4): nới lỏng cho $E=\\min(5,8)=5$ (không đổi). Khoảng cách chưa thăm còn lại: $E=5,D=8,F=14$. Nhỏ nhất là $E$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q40.png"
         },
         {
           "kind": "MCQ",
@@ -7191,7 +7477,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">For a full $m$-ary tree, leaves $\\ell=i(m-1)+1$ where $i$ is the internal vertex count. With $m=3,\\ell=101$: $i=(101-1)/2=50$.</div><div class=\"ml-vi\">Với cây $m$-phân đầy đủ, số lá $\\ell=i(m-1)+1$ với $i$ là số đỉnh trong. Với $m=3,\\ell=101$: $i=(101-1)/2=50$.</div>"
+          "explanation": "<div class=\"ml-en\">For a full $m$-ary tree, leaves $\\ell=i(m-1)+1$ where $i$ is the internal vertex count. With $m=3,\\ell=101$: $i=(101-1)/2=50$.</div><div class=\"ml-vi\">Với cây $m$-phân đầy đủ, số lá $\\ell=i(m-1)+1$ với $i$ là số đỉnh trong. Với $m=3,\\ell=101$: $i=(101-1)/2=50$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q41.png"
         },
         {
           "kind": "MCQ",
@@ -7214,7 +7501,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$d$ is a direct child of the root $a$. Its only ancestor is $a$ itself.</div><div class=\"ml-vi\">$d$ là con trực tiếp của gốc $a$. Tổ tiên duy nhất của nó là $a$.</div>"
+          "explanation": "<div class=\"ml-en\">$d$ is a direct child of the root $a$. Its only ancestor is $a$ itself.</div><div class=\"ml-vi\">$d$ là con trực tiếp của gốc $a$. Tổ tiên duy nhất của nó là $a$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q42.png"
         },
         {
           "kind": "MCQ",
@@ -7240,7 +7528,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">\"111\" is a prefix of $s$=1111 -- invalid. \"100\" starts with \"10\"=$a$ -- invalid ($a$ is a prefix of it). \"1\" is a prefix of $a$=10 -- invalid. \"0001\": checking against all existing codes (10,01,001,110,1111), none is a prefix of it and it is not a prefix of any of them -- valid.</div><div class=\"ml-vi\">\"111\" là tiền tố của $s$=1111 -- không hợp lệ. \"100\" bắt đầu bằng \"10\"=$a$ -- không hợp lệ ($a$ là tiền tố của nó). \"1\" là tiền tố của $a$=10 -- không hợp lệ. \"0001\": kiểm với mọi mã hiện có (10,01,001,110,1111), không mã nào là tiền tố của nó và nó cũng không là tiền tố của mã nào -- hợp lệ.</div>"
+          "explanation": "<div class=\"ml-en\">\"111\" is a prefix of $s$=1111 -- invalid. \"100\" starts with \"10\"=$a$ -- invalid ($a$ is a prefix of it). \"1\" is a prefix of $a$=10 -- invalid. \"0001\": checking against all existing codes (10,01,001,110,1111), none is a prefix of it and it is not a prefix of any of them -- valid.</div><div class=\"ml-vi\">\"111\" là tiền tố của $s$=1111 -- không hợp lệ. \"100\" bắt đầu bằng \"10\"=$a$ -- không hợp lệ ($a$ là tiền tố của nó). \"1\" là tiền tố của $a$=10 -- không hợp lệ. \"0001\": kiểm với mọi mã hiện có (10,01,001,110,1111), không mã nào là tiền tố của nó và nó cũng không là tiền tố của mã nào -- hợp lệ.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q43.png"
         },
         {
           "kind": "MCQ",
@@ -7266,7 +7555,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Inserting in order: \"do\" (root); \"not\">do right; \"count\"<do left; \"your\">do,>not right of not; \"chickens\"<do,<count left of count; \"before\"<chickens left; \"they\">do,>not,<your left of your; \"are\"<before left; \"hatched\">do (right, since h>d alphabetically), <not (left, since h<n) -- found at depth 2. Locating \"hatched\" takes comparisons at do, not, then hatched itself: 3 comparisons.</div><div class=\"ml-vi\">Chèn theo thứ tự: \"do\" (gốc); \"not\">do phải; \"count\"<do trái; \"your\">do,>not phải của not; \"chickens\"<do,<count trái của count; \"before\"<chickens trái; \"they\">do,>not,<your trái của your; \"are\"<before trái; \"hatched\">do (phải, vì h>d theo alphabet), <not (trái, vì h<n) -- tìm thấy ở độ sâu 2. Tìm \"hatched\" cần so sánh tại do, not, rồi chính hatched: 3 phép so sánh.</div>"
+          "explanation": "<div class=\"ml-en\">Inserting in order: \"do\" (root); \"not\">do right; \"count\"<do left; \"your\">do,>not right of not; \"chickens\"<do,<count left of count; \"before\"<chickens left; \"they\">do,>not,<your left of your; \"are\"<before left; \"hatched\">do (right, since h>d alphabetically), <not (left, since h<n) -- found at depth 2. Locating \"hatched\" takes comparisons at do, not, then hatched itself: 3 comparisons.</div><div class=\"ml-vi\">Chèn theo thứ tự: \"do\" (gốc); \"not\">do phải; \"count\"<do trái; \"your\">do,>not phải của not; \"chickens\"<do,<count trái của count; \"before\"<chickens trái; \"they\">do,>not,<your trái của your; \"are\"<before trái; \"hatched\">do (phải, vì h>d theo alphabet), <not (trái, vì h<n) -- tìm thấy ở độ sâu 2. Tìm \"hatched\" cần so sánh tại do, not, rồi chính hatched: 3 phép so sánh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q44.png"
         },
         {
           "kind": "MCQ",
@@ -7292,7 +7582,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Stack evaluation: $6,3\\to6/3=2$; $2,5\\to2+5=7$; $7,2\\to7-2=5$; finally $7*5=35$.</div><div class=\"ml-vi\">Tính bằng ngăn xếp: $6,3\\to6/3=2$; $2,5\\to2+5=7$; $7,2\\to7-2=5$; cuối cùng $7*5=35$.</div>"
+          "explanation": "<div class=\"ml-en\">Stack evaluation: $6,3\\to6/3=2$; $2,5\\to2+5=7$; $7,2\\to7-2=5$; finally $7*5=35$.</div><div class=\"ml-vi\">Tính bằng ngăn xếp: $6,3\\to6/3=2$; $2,5\\to2+5=7$; $7,2\\to7-2=5$; cuối cùng $7*5=35$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q45.png"
         },
         {
           "kind": "MCQ",
@@ -7321,7 +7612,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">Postorder = children left-to-right then the node. Subtree $b$: $d$ (leaf) then subtree $e$ ($f,g$ leaves then $e$) then $b$: gives $d,f,g,e,b$. Then leaf $c$. Then root $a$. Full order: $d,f,g,e,b,c,a$.</div><div class=\"ml-vi\">Hậu thứ = các con trái sang phải rồi đến nút đó. Cây con $b$: $d$ (lá) rồi cây con $e$ ($f,g$ là lá rồi $e$) rồi $b$: cho $d,f,g,e,b$. Rồi lá $c$. Rồi gốc $a$. Thứ tự đầy đủ: $d,f,g,e,b,c,a$.</div>"
+          "explanation": "<div class=\"ml-en\">Postorder = children left-to-right then the node. Subtree $b$: $d$ (leaf) then subtree $e$ ($f,g$ leaves then $e$) then $b$: gives $d,f,g,e,b$. Then leaf $c$. Then root $a$. Full order: $d,f,g,e,b,c,a$.</div><div class=\"ml-vi\">Hậu thứ = các con trái sang phải rồi đến nút đó. Cây con $b$: $d$ (lá) rồi cây con $e$ ($f,g$ là lá rồi $e$) rồi $b$: cho $d,f,g,e,b$. Rồi lá $c$. Rồi gốc $a$. Thứ tự đầy đủ: $d,f,g,e,b,c,a$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q46.png"
         },
         {
           "kind": "MCQ",
@@ -7350,7 +7642,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">A cycle $C_n$ has $n$ spanning trees. The 5-cycle contributes 5, the 4-cycle contributes 4. Since there are 2 parallel edges between $c$ and $f$ connecting the two cycles, exactly one of them must be chosen to keep the tree connected without a cycle, contributing a factor of 2. Total: $5\\times4\\times2=40$.</div><div class=\"ml-vi\">Chu trình $C_n$ có $n$ cây khung. Chu trình 5 đỉnh đóng góp 5, chu trình 4 đỉnh đóng góp 4. Vì có 2 cạnh song song giữa $c$ và $f$ nối hai chu trình, đúng một trong chúng phải được chọn để giữ cây liên thông không tạo chu trình, đóng góp hệ số 2. Tổng: $5\\times4\\times2=40$.</div>"
+          "explanation": "<div class=\"ml-en\">A cycle $C_n$ has $n$ spanning trees. The 5-cycle contributes 5, the 4-cycle contributes 4. Since there are 2 parallel edges between $c$ and $f$ connecting the two cycles, exactly one of them must be chosen to keep the tree connected without a cycle, contributing a factor of 2. Total: $5\\times4\\times2=40$.</div><div class=\"ml-vi\">Chu trình $C_n$ có $n$ cây khung. Chu trình 5 đỉnh đóng góp 5, chu trình 4 đỉnh đóng góp 4. Vì có 2 cạnh song song giữa $c$ và $f$ nối hai chu trình, đúng một trong chúng phải được chọn để giữ cây liên thông không tạo chu trình, đóng góp hệ số 2. Tổng: $5\\times4\\times2=40$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q47.png"
         },
         {
           "kind": "MCQ",
@@ -7376,7 +7669,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Sorted edges: $ce(1),ad(2),ch(3),hf(4),dc(5),ab(6),gf(7),he(8),bd(9),hg(10),ef(11),bc(12)$. Adding in order skipping cycles: 1st $ce$, 2nd $ad$, 3rd $ch$, 4th $hf$.</div><div class=\"ml-vi\">Cạnh sắp xếp: $ce(1),ad(2),ch(3),hf(4),dc(5),ab(6),gf(7),he(8),bd(9),hg(10),ef(11),bc(12)$. Thêm theo thứ tự bỏ qua chu trình: cạnh 1 $ce$, cạnh 2 $ad$, cạnh 3 $ch$, cạnh 4 $hf$.</div>"
+          "explanation": "<div class=\"ml-en\">Sorted edges: $ce(1),ad(2),ch(3),hf(4),dc(5),ab(6),gf(7),he(8),bd(9),hg(10),ef(11),bc(12)$. Adding in order skipping cycles: 1st $ce$, 2nd $ad$, 3rd $ch$, 4th $hf$.</div><div class=\"ml-vi\">Cạnh sắp xếp: $ce(1),ad(2),ch(3),hf(4),dc(5),ab(6),gf(7),he(8),bd(9),hg(10),ef(11),bc(12)$. Thêm theo thứ tự bỏ qua chu trình: cạnh 1 $ce$, cạnh 2 $ad$, cạnh 3 $ch$, cạnh 4 $hf$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q48.png"
         },
         {
           "kind": "MCQ",
@@ -7402,7 +7696,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f(1)=f(0)^2+2f(0)-3=4+4-3=5$. $f(2)=f(1)^2+2f(1)-3=25+10-3=32$. $f(3)=f(2)^2+2f(2)-3=1024+64-3=1085$.</div><div class=\"ml-vi\">$f(1)=f(0)^2+2f(0)-3=4+4-3=5$. $f(2)=f(1)^2+2f(1)-3=25+10-3=32$. $f(3)=f(2)^2+2f(2)-3=1024+64-3=1085$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(1)=f(0)^2+2f(0)-3=4+4-3=5$. $f(2)=f(1)^2+2f(1)-3=25+10-3=32$. $f(3)=f(2)^2+2f(2)-3=1024+64-3=1085$.</div><div class=\"ml-vi\">$f(1)=f(0)^2+2f(0)-3=4+4-3=5$. $f(2)=f(1)^2+2f(1)-3=25+10-3=32$. $f(3)=f(2)^2+2f(2)-3=1024+64-3=1085$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q49.png"
         },
         {
           "kind": "MCQ",
@@ -7428,7 +7723,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">An injection requires the domain size to be at most the codomain size. Since $5>4$, by the pigeonhole principle no injective function can exist: the count is 0.</div><div class=\"ml-vi\">Một đơn ánh đòi hỏi kích thước miền xác định không vượt quá miền giá trị. Vì $5>4$, theo nguyên lý chuồng bồ câu không thể tồn tại hàm đơn ánh nào: số lượng là 0.</div>"
+          "explanation": "<div class=\"ml-en\">An injection requires the domain size to be at most the codomain size. Since $5>4$, by the pigeonhole principle no injective function can exist: the count is 0.</div><div class=\"ml-vi\">Một đơn ánh đòi hỏi kích thước miền xác định không vượt quá miền giá trị. Vì $5>4$, theo nguyên lý chuồng bồ câu không thể tồn tại hàm đơn ánh nào: số lượng là 0.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D6/q50.png"
         }
       ]
     },
@@ -7471,7 +7767,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$101101\\lor110001=111101$ (bitwise OR). Then $111101\\oplus001101=110000$ (bitwise XOR).</div><div class=\"ml-vi\">$101101\\lor110001=111101$ (OR theo bit). Rồi $111101\\oplus001101=110000$ (XOR theo bit).</div>"
+          "explanation": "<div class=\"ml-en\">$101101\\lor110001=111101$ (bitwise OR). Then $111101\\oplus001101=110000$ (bitwise XOR).</div><div class=\"ml-vi\">$101101\\lor110001=111101$ (OR theo bit). Rồi $111101\\oplus001101=110000$ (XOR theo bit).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q1.png"
         },
         {
           "kind": "MCQ",
@@ -7497,7 +7794,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Need $(p\\to q)=F$ and $r=F$. $p\\to q=F$ only when $p=T,q=F$. So $p=T,q=F,r=F$: $(T\\to F)\\lor F=F\\lor F=F$.</div><div class=\"ml-vi\">Cần $(p\\to q)=F$ và $r=F$. $p\\to q=F$ chỉ khi $p=T,q=F$. Vậy $p=T,q=F,r=F$: $(T\\to F)\\lor F=F\\lor F=F$.</div>"
+          "explanation": "<div class=\"ml-en\">Need $(p\\to q)=F$ and $r=F$. $p\\to q=F$ only when $p=T,q=F$. So $p=T,q=F,r=F$: $(T\\to F)\\lor F=F\\lor F=F$.</div><div class=\"ml-vi\">Cần $(p\\to q)=F$ và $r=F$. $p\\to q=F$ chỉ khi $p=T,q=F$. Vậy $p=T,q=F,r=F$: $(T\\to F)\\lor F=F\\lor F=F$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q2.png"
         },
         {
           "kind": "MCQ",
@@ -7520,7 +7818,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">(i): if $p\\land q$ is true, $p$ is true, so $q\\to p$ is true; if $p\\land q$ is false, the implication is vacuously true. Always true -- tautology. (ii) fails at $p=T,q=F$: $p\\lor q=T$, $p\\land q=F$, $T\\to F=F$ -- not a tautology.</div><div class=\"ml-vi\">(i): nếu $p\\land q$ đúng, $p$ đúng, nên $q\\to p$ đúng; nếu $p\\land q$ sai, phép kéo theo đúng hiển nhiên. Luôn đúng -- hằng đúng. (ii) sai tại $p=T,q=F$: $p\\lor q=T$, $p\\land q=F$, $T\\to F=F$ -- không phải hằng đúng.</div>"
+          "explanation": "<div class=\"ml-en\">(i): if $p\\land q$ is true, $p$ is true, so $q\\to p$ is true; if $p\\land q$ is false, the implication is vacuously true. Always true -- tautology. (ii) fails at $p=T,q=F$: $p\\lor q=T$, $p\\land q=F$, $T\\to F=F$ -- not a tautology.</div><div class=\"ml-vi\">(i): nếu $p\\land q$ đúng, $p$ đúng, nên $q\\to p$ đúng; nếu $p\\land q$ sai, phép kéo theo đúng hiển nhiên. Luôn đúng -- hằng đúng. (ii) sai tại $p=T,q=F$: $p\\lor q=T$, $p\\land q=F$, $T\\to F=F$ -- không phải hằng đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q3.png"
         },
         {
           "kind": "MCQ",
@@ -7543,7 +7842,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">\"For each animal, there is a student who has it\" means three separate existence claims joined by \"and\" (not necessarily the same student): $\\exists xC(x)\\land\\exists xD(x)\\land\\exists xF(x)$, option (ii).</div><div class=\"ml-vi\">\"Với mỗi loài vật, có một sinh viên có nó\" nghĩa là ba khẳng định tồn tại riêng biệt nối bằng \"và\" (không nhất thiết cùng một sinh viên): $\\exists xC(x)\\land\\exists xD(x)\\land\\exists xF(x)$, đáp án (ii).</div>"
+          "explanation": "<div class=\"ml-en\">\"For each animal, there is a student who has it\" means three separate existence claims joined by \"and\" (not necessarily the same student): $\\exists xC(x)\\land\\exists xD(x)\\land\\exists xF(x)$, option (ii).</div><div class=\"ml-vi\">\"Với mỗi loài vật, có một sinh viên có nó\" nghĩa là ba khẳng định tồn tại riêng biệt nối bằng \"và\" (không nhất thiết cùng một sinh viên): $\\exists xC(x)\\land\\exists xD(x)\\land\\exists xF(x)$, đáp án (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q4.png"
         },
         {
           "kind": "MCQ",
@@ -7569,7 +7869,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$P(5)$ is false. $\\forall xP(x)$ is false. $2x+1$ is always odd, so $\\exists xP(2x+1)$ is false. $2x$ is always even, so $\\exists xP(2x)$ is true (e.g. $x=0$). $\\forall xP(x^2)$ fails at $x=1$.</div><div class=\"ml-vi\">$P(5)$ sai. $\\forall xP(x)$ sai. $2x+1$ luôn lẻ, nên $\\exists xP(2x+1)$ sai. $2x$ luôn chẵn, nên $\\exists xP(2x)$ đúng (vd $x=0$). $\\forall xP(x^2)$ sai tại $x=1$.</div>"
+          "explanation": "<div class=\"ml-en\">$P(5)$ is false. $\\forall xP(x)$ is false. $2x+1$ is always odd, so $\\exists xP(2x+1)$ is false. $2x$ is always even, so $\\exists xP(2x)$ is true (e.g. $x=0$). $\\forall xP(x^2)$ fails at $x=1$.</div><div class=\"ml-vi\">$P(5)$ sai. $\\forall xP(x)$ sai. $2x+1$ luôn lẻ, nên $\\exists xP(2x+1)$ sai. $2x$ luôn chẵn, nên $\\exists xP(2x)$ đúng (vd $x=0$). $\\forall xP(x^2)$ sai tại $x=1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q5.png"
         },
         {
           "kind": "MCQ",
@@ -7595,7 +7896,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">\"Every student in class CS150\" is universal: for every $x$, if $x$ is in class CS150 then $x$ has studied Calculus: $\\forall x(S(x,CS150)\\to Q(x,Calculus))$, option (ii).</div><div class=\"ml-vi\">\"Mọi sinh viên trong lớp CS150\" là toàn thể: với mọi $x$, nếu $x$ ở lớp CS150 thì $x$ đã học Giải tích: $\\forall x(S(x,CS150)\\to Q(x,Calculus))$, đáp án (ii).</div>"
+          "explanation": "<div class=\"ml-en\">\"Every student in class CS150\" is universal: for every $x$, if $x$ is in class CS150 then $x$ has studied Calculus: $\\forall x(S(x,CS150)\\to Q(x,Calculus))$, option (ii).</div><div class=\"ml-vi\">\"Mọi sinh viên trong lớp CS150\" là toàn thể: với mọi $x$, nếu $x$ ở lớp CS150 thì $x$ đã học Giải tích: $\\forall x(S(x,CS150)\\to Q(x,Calculus))$, đáp án (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q6.png"
         },
         {
           "kind": "MCQ",
@@ -7621,7 +7923,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">\"Exactly one\" requires existence (some $y$ everybody can fool: $\\forall xF(x,y)$) plus uniqueness (any $z$ with the same property must equal $y$: $\\forall z(\\forall xF(x,z)\\to y=z)$). This is option (iii); (i) only asserts existence without uniqueness, and (iv) incorrectly uses $\\exists z$ for the uniqueness clause.</div><div class=\"ml-vi\">\"Đúng một\" đòi hỏi tồn tại (có $y$ nào đó mà ai cũng lừa được: $\\forall xF(x,y)$) cộng với tính duy nhất (bất kỳ $z$ nào có cùng tính chất phải bằng $y$: $\\forall z(\\forall xF(x,z)\\to y=z)$). Đây là đáp án (iii); (i) chỉ khẳng định tồn tại mà không có tính duy nhất, và (iv) dùng sai $\\exists z$ cho mệnh đề duy nhất.</div>"
+          "explanation": "<div class=\"ml-en\">\"Exactly one\" requires existence (some $y$ everybody can fool: $\\forall xF(x,y)$) plus uniqueness (any $z$ with the same property must equal $y$: $\\forall z(\\forall xF(x,z)\\to y=z)$). This is option (iii); (i) only asserts existence without uniqueness, and (iv) incorrectly uses $\\exists z$ for the uniqueness clause.</div><div class=\"ml-vi\">\"Đúng một\" đòi hỏi tồn tại (có $y$ nào đó mà ai cũng lừa được: $\\forall xF(x,y)$) cộng với tính duy nhất (bất kỳ $z$ nào có cùng tính chất phải bằng $y$: $\\forall z(\\forall xF(x,z)\\to y=z)$). Đây là đáp án (iii); (i) chỉ khẳng định tồn tại mà không có tính duy nhất, và (iv) dùng sai $\\exists z$ cho mệnh đề duy nhất.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q7.png"
         },
         {
           "kind": "MCQ",
@@ -7644,7 +7947,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Since Lisa is a computer science major (from the first premise), the second premise (every CS major has a computer) directly implies Lisa has a computer. The third premise only says \"some\" math majors speak French -- it doesn't specifically apply to Lisa, so nothing about French can be concluded.</div><div class=\"ml-vi\">Vì Lisa là sinh viên ngành Khoa học Máy tính (từ tiền đề 1), tiền đề 2 (mọi sinh viên KHMT đều có máy tính) suy ra trực tiếp Lisa có máy tính. Tiền đề 3 chỉ nói \"một số\" sinh viên Toán nói tiếng Pháp -- không áp dụng riêng cho Lisa, nên không thể kết luận gì về tiếng Pháp.</div>"
+          "explanation": "<div class=\"ml-en\">Since Lisa is a computer science major (from the first premise), the second premise (every CS major has a computer) directly implies Lisa has a computer. The third premise only says \"some\" math majors speak French -- it doesn't specifically apply to Lisa, so nothing about French can be concluded.</div><div class=\"ml-vi\">Vì Lisa là sinh viên ngành Khoa học Máy tính (từ tiền đề 1), tiền đề 2 (mọi sinh viên KHMT đều có máy tính) suy ra trực tiếp Lisa có máy tính. Tiền đề 3 chỉ nói \"một số\" sinh viên Toán nói tiếng Pháp -- không áp dụng riêng cho Lisa, nên không thể kết luận gì về tiếng Pháp.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q8.png"
         },
         {
           "kind": "MCQ",
@@ -7670,7 +7974,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Sets don't count duplicate elements: the repeated \"1\" collapses, leaving distinct elements $1,\\{1\\},3,\\{1,3\\}$ -- 4 elements.</div><div class=\"ml-vi\">Tập hợp không đếm phần tử trùng lặp: \"1\" lặp lại bị gộp, còn lại các phần tử phân biệt $1,\\{1\\},3,\\{1,3\\}$ -- 4 phần tử.</div>"
+          "explanation": "<div class=\"ml-en\">Sets don't count duplicate elements: the repeated \"1\" collapses, leaving distinct elements $1,\\{1\\},3,\\{1,3\\}$ -- 4 elements.</div><div class=\"ml-vi\">Tập hợp không đếm phần tử trùng lặp: \"1\" lặp lại bị gộp, còn lại các phần tử phân biệt $1,\\{1\\},3,\\{1,3\\}$ -- 4 phần tử.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q9.png"
         },
         {
           "kind": "MCQ",
@@ -7696,7 +8001,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Position $i$ is 1 if $i$ is in the subset: positions $0,1,4,5,8,9$ get 1, positions $2,3,6,7,10$ get 0. Reading positions 0 to 10: $1,1,0,0,1,1,0,0,1,1,0=11001100110$.</div><div class=\"ml-vi\">Vị trí $i$ là 1 nếu $i$ thuộc tập con: vị trí $0,1,4,5,8,9$ là 1, vị trí $2,3,6,7,10$ là 0. Đọc vị trí 0 đến 10: $1,1,0,0,1,1,0,0,1,1,0=11001100110$.</div>"
+          "explanation": "<div class=\"ml-en\">Position $i$ is 1 if $i$ is in the subset: positions $0,1,4,5,8,9$ get 1, positions $2,3,6,7,10$ get 0. Reading positions 0 to 10: $1,1,0,0,1,1,0,0,1,1,0=11001100110$.</div><div class=\"ml-vi\">Vị trí $i$ là 1 nếu $i$ thuộc tập con: vị trí $0,1,4,5,8,9$ là 1, vị trí $2,3,6,7,10$ là 0. Đọc vị trí 0 đến 10: $1,1,0,0,1,1,0,0,1,1,0=11001100110$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q10.png"
         },
         {
           "kind": "MCQ",
@@ -7725,7 +8031,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">By inclusion-exclusion: $|Spotify\\cup iTunes|=650+450-150=950$.</div><div class=\"ml-vi\">Theo nguyên lý bù trừ: $|Spotify\\cup iTunes|=650+450-150=950$.</div>"
+          "explanation": "<div class=\"ml-en\">By inclusion-exclusion: $|Spotify\\cup iTunes|=650+450-150=950$.</div><div class=\"ml-vi\">Theo nguyên lý bù trừ: $|Spotify\\cup iTunes|=650+450-150=950$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q11.png"
         },
         {
           "kind": "MCQ",
@@ -7748,7 +8055,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Even $n$ gives non-positive values ($f(0)=0,f(2)=-1,f(4)=-2,\\ldots$, all distinct), odd $n$ gives positive values ($f(1)=1,f(3)=5,f(5)=13,\\ldots$, all distinct) -- the two branches never overlap, so $f$ is injective. But it's not onto: e.g. no $n$ gives $f(n)=2$ or $f(n)=3$ (odd branch skips over most positive integers).</div><div class=\"ml-vi\">$n$ chẵn cho giá trị không dương ($f(0)=0,f(2)=-1,f(4)=-2,\\ldots$, đều phân biệt), $n$ lẻ cho giá trị dương ($f(1)=1,f(3)=5,f(5)=13,\\ldots$, đều phân biệt) -- hai nhánh không bao giờ trùng nhau, nên $f$ đơn ánh. Nhưng không toàn ánh: vd không $n$ nào cho $f(n)=2$ hay $f(n)=3$ (nhánh lẻ bỏ qua hầu hết số dương).</div>"
+          "explanation": "<div class=\"ml-en\">Even $n$ gives non-positive values ($f(0)=0,f(2)=-1,f(4)=-2,\\ldots$, all distinct), odd $n$ gives positive values ($f(1)=1,f(3)=5,f(5)=13,\\ldots$, all distinct) -- the two branches never overlap, so $f$ is injective. But it's not onto: e.g. no $n$ gives $f(n)=2$ or $f(n)=3$ (odd branch skips over most positive integers).</div><div class=\"ml-vi\">$n$ chẵn cho giá trị không dương ($f(0)=0,f(2)=-1,f(4)=-2,\\ldots$, đều phân biệt), $n$ lẻ cho giá trị dương ($f(1)=1,f(3)=5,f(5)=13,\\ldots$, đều phân biệt) -- hai nhánh không bao giờ trùng nhau, nên $f$ đơn ánh. Nhưng không toàn ánh: vd không $n$ nào cho $f(n)=2$ hay $f(n)=3$ (nhánh lẻ bỏ qua hầu hết số dương).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q12.png"
         },
         {
           "kind": "MCQ",
@@ -7774,7 +8082,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$a_0=0+0=0$. $a_1$: $2/3\\approx0.667$, $\\lfloor\\rfloor=0,\\lceil\\rceil=1$, sum$=1$. $a_2$: $4/3\\approx1.333$, $1+2=3$. $a_3$: $6/3=2$, $2+2=4$. $a_4$: $8/3\\approx2.667$, $2+3=5$.</div><div class=\"ml-vi\">$a_0=0+0=0$. $a_1$: $2/3\\approx0.667$, $\\lfloor\\rfloor=0,\\lceil\\rceil=1$, tổng$=1$. $a_2$: $4/3\\approx1.333$, $1+2=3$. $a_3$: $6/3=2$, $2+2=4$. $a_4$: $8/3\\approx2.667$, $2+3=5$.</div>"
+          "explanation": "<div class=\"ml-en\">$a_0=0+0=0$. $a_1$: $2/3\\approx0.667$, $\\lfloor\\rfloor=0,\\lceil\\rceil=1$, sum$=1$. $a_2$: $4/3\\approx1.333$, $1+2=3$. $a_3$: $6/3=2$, $2+2=4$. $a_4$: $8/3\\approx2.667$, $2+3=5$.</div><div class=\"ml-vi\">$a_0=0+0=0$. $a_1$: $2/3\\approx0.667$, $\\lfloor\\rfloor=0,\\lceil\\rceil=1$, tổng$=1$. $a_2$: $4/3\\approx1.333$, $1+2=3$. $a_3$: $6/3=2$, $2+2=4$. $a_4$: $8/3\\approx2.667$, $2+3=5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q13.png"
         },
         {
           "kind": "MCQ",
@@ -7797,7 +8106,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$i=2$: insert 2 into [7] $\\to$ [2,7,4,3,1,6,5]. $i=3$: insert 4 into [2,7] $\\to$ [2,4,7,3,1,6,5]. $i=4$: insert 3 into [2,4,7] $\\to$ [2,3,4,7,1,6,5].</div><div class=\"ml-vi\">$i=2$: chèn 2 vào [7] $\\to$ [2,7,4,3,1,6,5]. $i=3$: chèn 4 vào [2,7] $\\to$ [2,4,7,3,1,6,5]. $i=4$: chèn 3 vào [2,4,7] $\\to$ [2,3,4,7,1,6,5].</div>"
+          "explanation": "<div class=\"ml-en\">$i=2$: insert 2 into [7] $\\to$ [2,7,4,3,1,6,5]. $i=3$: insert 4 into [2,7] $\\to$ [2,4,7,3,1,6,5]. $i=4$: insert 3 into [2,4,7] $\\to$ [2,3,4,7,1,6,5].</div><div class=\"ml-vi\">$i=2$: chèn 2 vào [7] $\\to$ [2,7,4,3,1,6,5]. $i=3$: chèn 4 vào [2,7] $\\to$ [2,4,7,3,1,6,5]. $i=4$: chèn 3 vào [2,4,7] $\\to$ [2,3,4,7,1,6,5].</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q14.png"
         },
         {
           "kind": "MCQ",
@@ -7823,7 +8133,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$i=1,j=7$. Iter1: $m=4$, $a_4=7<10$, $i:=5$. Iter2: $i=5,j=7$, $m=6$, $a_6=10$, $x>a_m$ false, $j:=6$. Iter3: $i=5,j=6$, $m=5$, $a_5=8<10$, $i:=6$. Now $i=j=6$, loop stops. Total: 3 iterations.</div><div class=\"ml-vi\">$i=1,j=7$. Lặp1: $m=4$, $a_4=7<10$, $i:=5$. Lặp2: $i=5,j=7$, $m=6$, $a_6=10$, $x>a_m$ sai, $j:=6$. Lặp3: $i=5,j=6$, $m=5$, $a_5=8<10$, $i:=6$. Giờ $i=j=6$, dừng vòng lặp. Tổng: 3 lần lặp.</div>"
+          "explanation": "<div class=\"ml-en\">$i=1,j=7$. Iter1: $m=4$, $a_4=7<10$, $i:=5$. Iter2: $i=5,j=7$, $m=6$, $a_6=10$, $x>a_m$ false, $j:=6$. Iter3: $i=5,j=6$, $m=5$, $a_5=8<10$, $i:=6$. Now $i=j=6$, loop stops. Total: 3 iterations.</div><div class=\"ml-vi\">$i=1,j=7$. Lặp1: $m=4$, $a_4=7<10$, $i:=5$. Lặp2: $i=5,j=7$, $m=6$, $a_6=10$, $x>a_m$ sai, $j:=6$. Lặp3: $i=5,j=6$, $m=5$, $a_5=8<10$, $i:=6$. Giờ $i=j=6$, dừng vòng lặp. Tổng: 3 lần lặp.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q15.png"
         },
         {
           "kind": "MCQ",
@@ -7849,7 +8160,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The dominant term $x^2\\log x$ is NOT $O(x^2)$ since $\\log x\\to\\infty$, but it IS $O(x^3)$ since $\\log x=O(x)$. So the smallest integer $n$ is 3.</div><div class=\"ml-vi\">Số hạng chiếm ưu thế $x^2\\log x$ KHÔNG phải $O(x^2)$ vì $\\log x\\to\\infty$, nhưng LÀ $O(x^3)$ vì $\\log x=O(x)$. Vậy số nguyên nhỏ nhất $n$ là 3.</div>"
+          "explanation": "<div class=\"ml-en\">The dominant term $x^2\\log x$ is NOT $O(x^2)$ since $\\log x\\to\\infty$, but it IS $O(x^3)$ since $\\log x=O(x)$. So the smallest integer $n$ is 3.</div><div class=\"ml-vi\">Số hạng chiếm ưu thế $x^2\\log x$ KHÔNG phải $O(x^2)$ vì $\\log x\\to\\infty$, nhưng LÀ $O(x^3)$ vì $\\log x=O(x)$. Vậy số nguyên nhỏ nhất $n$ là 3.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q16.png"
         },
         {
           "kind": "MCQ",
@@ -7875,7 +8187,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Pass 1: $(4,2)$swap$\\to2,4,3,1$; $(4,3)$swap$\\to2,3,4,1$; $(4,1)$swap$\\to2,3,1,4$ (3 swaps). Pass 2: $(2,3)$no; $(3,1)$swap$\\to2,1,3,4$ (1 swap). Pass 3: $(2,1)$swap$\\to1,2,3,4$ (1 swap). Total: $3+1+1=5$.</div><div class=\"ml-vi\">Lượt 1: $(4,2)$đổi$\\to2,4,3,1$; $(4,3)$đổi$\\to2,3,4,1$; $(4,1)$đổi$\\to2,3,1,4$ (3 lần đổi). Lượt 2: $(2,3)$không; $(3,1)$đổi$\\to2,1,3,4$ (1 lần đổi). Lượt 3: $(2,1)$đổi$\\to1,2,3,4$ (1 lần đổi). Tổng: $3+1+1=5$.</div>"
+          "explanation": "<div class=\"ml-en\">Pass 1: $(4,2)$swap$\\to2,4,3,1$; $(4,3)$swap$\\to2,3,4,1$; $(4,1)$swap$\\to2,3,1,4$ (3 swaps). Pass 2: $(2,3)$no; $(3,1)$swap$\\to2,1,3,4$ (1 swap). Pass 3: $(2,1)$swap$\\to1,2,3,4$ (1 swap). Total: $3+1+1=5$.</div><div class=\"ml-vi\">Lượt 1: $(4,2)$đổi$\\to2,4,3,1$; $(4,3)$đổi$\\to2,3,4,1$; $(4,1)$đổi$\\to2,3,1,4$ (3 lần đổi). Lượt 2: $(2,3)$không; $(3,1)$đổi$\\to2,1,3,4$ (1 lần đổi). Lượt 3: $(2,1)$đổi$\\to1,2,3,4$ (1 lần đổi). Tổng: $3+1+1=5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q17.png"
         },
         {
           "kind": "MCQ",
@@ -7901,7 +8214,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$x_1=(6\\cdot4+5)\\bmod13=29\\bmod13=3$. $x_2=(6\\cdot3+5)\\bmod13=23\\bmod13=10$. $x_3=(6\\cdot10+5)\\bmod13=65\\bmod13=0$. $x_4=(6\\cdot0+5)\\bmod13=5$.</div><div class=\"ml-vi\">$x_1=(6\\cdot4+5)\\bmod13=29\\bmod13=3$. $x_2=(6\\cdot3+5)\\bmod13=23\\bmod13=10$. $x_3=(6\\cdot10+5)\\bmod13=65\\bmod13=0$. $x_4=(6\\cdot0+5)\\bmod13=5$.</div>"
+          "explanation": "<div class=\"ml-en\">$x_1=(6\\cdot4+5)\\bmod13=29\\bmod13=3$. $x_2=(6\\cdot3+5)\\bmod13=23\\bmod13=10$. $x_3=(6\\cdot10+5)\\bmod13=65\\bmod13=0$. $x_4=(6\\cdot0+5)\\bmod13=5$.</div><div class=\"ml-vi\">$x_1=(6\\cdot4+5)\\bmod13=29\\bmod13=3$. $x_2=(6\\cdot3+5)\\bmod13=23\\bmod13=10$. $x_3=(6\\cdot10+5)\\bmod13=65\\bmod13=0$. $x_4=(6\\cdot0+5)\\bmod13=5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q18.png"
         },
         {
           "kind": "MCQ",
@@ -7927,7 +8241,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$L=11$: $f(11)=7(11)+3=80\\bmod26=2=C$. $N=13$: $f(13)=7(13)+3=94\\bmod26=16=Q$. Encrypted: \"CQ\".</div><div class=\"ml-vi\">$L=11$: $f(11)=7(11)+3=80\\bmod26=2=C$. $N=13$: $f(13)=7(13)+3=94\\bmod26=16=Q$. Mã hóa: \"CQ\".</div>"
+          "explanation": "<div class=\"ml-en\">$L=11$: $f(11)=7(11)+3=80\\bmod26=2=C$. $N=13$: $f(13)=7(13)+3=94\\bmod26=16=Q$. Encrypted: \"CQ\".</div><div class=\"ml-vi\">$L=11$: $f(11)=7(11)+3=80\\bmod26=2=C$. $N=13$: $f(13)=7(13)+3=94\\bmod26=16=Q$. Mã hóa: \"CQ\".</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q19.png"
         },
         {
           "kind": "MCQ",
@@ -7950,7 +8265,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$lcm(a,b)=2^3 3^4 5^4 7^1$, $\\gcd(a,b)=2^2 3^3 5^2 7^1$. Ratio $=2^{3-2}3^{4-3}5^{4-2}7^{1-1}=2^1 3^1 5^2 7^0=2^1 3^1 5^2$.</div><div class=\"ml-vi\">$lcm(a,b)=2^3 3^4 5^4 7^1$, $\\gcd(a,b)=2^2 3^3 5^2 7^1$. Tỉ số $=2^{3-2}3^{4-3}5^{4-2}7^{1-1}=2^1 3^1 5^2 7^0=2^1 3^1 5^2$.</div>"
+          "explanation": "<div class=\"ml-en\">$lcm(a,b)=2^3 3^4 5^4 7^1$, $\\gcd(a,b)=2^2 3^3 5^2 7^1$. Ratio $=2^{3-2}3^{4-3}5^{4-2}7^{1-1}=2^1 3^1 5^2 7^0=2^1 3^1 5^2$.</div><div class=\"ml-vi\">$lcm(a,b)=2^3 3^4 5^4 7^1$, $\\gcd(a,b)=2^2 3^3 5^2 7^1$. Tỉ số $=2^{3-2}3^{4-3}5^{4-2}7^{1-1}=2^1 3^1 5^2 7^0=2^1 3^1 5^2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q20.png"
         },
         {
           "kind": "MCQ",
@@ -7979,7 +8295,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">This is Euler's totient $\\phi(15)$. Since $15=3\\times5$: $\\phi(15)=15(1-1/3)(1-1/5)=15\\cdot\\frac23\\cdot\\frac45=8$.</div><div class=\"ml-vi\">Đây là hàm phi Euler $\\phi(15)$. Vì $15=3\\times5$: $\\phi(15)=15(1-1/3)(1-1/5)=15\\cdot\\frac23\\cdot\\frac45=8$.</div>"
+          "explanation": "<div class=\"ml-en\">This is Euler's totient $\\phi(15)$. Since $15=3\\times5$: $\\phi(15)=15(1-1/3)(1-1/5)=15\\cdot\\frac23\\cdot\\frac45=8$.</div><div class=\"ml-vi\">Đây là hàm phi Euler $\\phi(15)$. Vì $15=3\\times5$: $\\phi(15)=15(1-1/3)(1-1/5)=15\\cdot\\frac23\\cdot\\frac45=8$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q21.png"
         },
         {
           "kind": "MCQ",
@@ -8005,7 +8322,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Each hex digit maps to 4 binary digits: $D=1101$, $0=0000$, $A=1010$. Concatenating: $110100001010$, option (iii).</div><div class=\"ml-vi\">Mỗi chữ số hex ánh xạ thành 4 chữ số nhị phân: $D=1101$, $0=0000$, $A=1010$. Ghép lại: $110100001010$, đáp án (iii).</div>"
+          "explanation": "<div class=\"ml-en\">Each hex digit maps to 4 binary digits: $D=1101$, $0=0000$, $A=1010$. Concatenating: $110100001010$, option (iii).</div><div class=\"ml-vi\">Mỗi chữ số hex ánh xạ thành 4 chữ số nhị phân: $D=1101$, $0=0000$, $A=1010$. Ghép lại: $110100001010$, đáp án (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q22.png"
         },
         {
           "kind": "MCQ",
@@ -8028,7 +8346,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">This is the classic postage-stamp strong induction proof: establish base cases $n=24,\\ldots,28$ directly, then for $k\\ge28$, note $k+1=(k-4)+5$ and use the induction hypothesis on $k-4\\ge24$ to add one more 5-cent stamp.</div><div class=\"ml-vi\">Đây là chứng minh quy nạp mạnh kinh điển về tem bưu chính: thiết lập trực tiếp các trường hợp cơ sở $n=24,\\ldots,28$, rồi với $k\\ge28$, nhận thấy $k+1=(k-4)+5$ và dùng giả thiết quy nạp trên $k-4\\ge24$ để thêm một tem 5 xu nữa.</div>"
+          "explanation": "<div class=\"ml-en\">This is the classic postage-stamp strong induction proof: establish base cases $n=24,\\ldots,28$ directly, then for $k\\ge28$, note $k+1=(k-4)+5$ and use the induction hypothesis on $k-4\\ge24$ to add one more 5-cent stamp.</div><div class=\"ml-vi\">Đây là chứng minh quy nạp mạnh kinh điển về tem bưu chính: thiết lập trực tiếp các trường hợp cơ sở $n=24,\\ldots,28$, rồi với $k\\ge28$, nhận thấy $k+1=(k-4)+5$ và dùng giả thiết quy nạp trên $k-4\\ge24$ để thêm một tem 5 xu nữa.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q23.png"
         },
         {
           "kind": "MCQ",
@@ -8051,7 +8370,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Any element reachable is $(2x+3y,3x+2y)$ for non-negative integers $x,y$ (applying the first rule $x$ times, second rule $y$ times), so $a+b=5(x+y)$ must be divisible by 5. Only $(10,15)$ has $a+b=25$ divisible by 5; taking $x=5,y=0$: applying $(a+2,b+3)$ five times from $(0,0)$ gives $(10,15)$.</div><div class=\"ml-vi\">Bất kỳ phần tử nào đến được đều có dạng $(2x+3y,3x+2y)$ với $x,y$ nguyên không âm (áp dụng quy tắc 1 $x$ lần, quy tắc 2 $y$ lần), nên $a+b=5(x+y)$ phải chia hết cho 5. Chỉ $(10,15)$ có $a+b=25$ chia hết cho 5; lấy $x=5,y=0$: áp dụng $(a+2,b+3)$ năm lần từ $(0,0)$ cho $(10,15)$.</div>"
+          "explanation": "<div class=\"ml-en\">Any element reachable is $(2x+3y,3x+2y)$ for non-negative integers $x,y$ (applying the first rule $x$ times, second rule $y$ times), so $a+b=5(x+y)$ must be divisible by 5. Only $(10,15)$ has $a+b=25$ divisible by 5; taking $x=5,y=0$: applying $(a+2,b+3)$ five times from $(0,0)$ gives $(10,15)$.</div><div class=\"ml-vi\">Bất kỳ phần tử nào đến được đều có dạng $(2x+3y,3x+2y)$ với $x,y$ nguyên không âm (áp dụng quy tắc 1 $x$ lần, quy tắc 2 $y$ lần), nên $a+b=5(x+y)$ phải chia hết cho 5. Chỉ $(10,15)$ có $a+b=25$ chia hết cho 5; lấy $x=5,y=0$: áp dụng $(a+2,b+3)$ năm lần từ $(0,0)$ cho $(10,15)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q24.png"
         },
         {
           "kind": "MCQ",
@@ -8074,7 +8394,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Both (i) and (ii) use a simple `for` loop with no self-call to the procedure -- both are purely iterative, neither is recursive.</div><div class=\"ml-vi\">Cả (i) và (ii) đều dùng vòng lặp `for` đơn giản không có lời tự gọi thủ tục -- cả hai đều thuần lặp, không cái nào đệ quy.</div>"
+          "explanation": "<div class=\"ml-en\">Both (i) and (ii) use a simple `for` loop with no self-call to the procedure -- both are purely iterative, neither is recursive.</div><div class=\"ml-vi\">Cả (i) và (ii) đều dùng vòng lặp `for` đơn giản không có lời tự gọi thủ tục -- cả hai đều thuần lặp, không cái nào đệ quy.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q25.png"
         },
         {
           "kind": "MCQ",
@@ -8100,7 +8421,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Simulating the merge: compare 2,1(take1); 2,4(take2); 3,4(take3); 5,4(take4); 5,7(take5); 6,7(take6); 9,7(take7); 9,25(take9); 22,25(take22) -- list 1 exhausted, append remaining 25 with no comparison. Total: 9 comparisons.</div><div class=\"ml-vi\">Mô phỏng trộn: so sánh 2,1(lấy1); 2,4(lấy2); 3,4(lấy3); 5,4(lấy4); 5,7(lấy5); 6,7(lấy6); 9,7(lấy7); 9,25(lấy9); 22,25(lấy22) -- dãy 1 hết, thêm 25 còn lại không cần so sánh. Tổng: 9 phép so sánh.</div>"
+          "explanation": "<div class=\"ml-en\">Simulating the merge: compare 2,1(take1); 2,4(take2); 3,4(take3); 5,4(take4); 5,7(take5); 6,7(take6); 9,7(take7); 9,25(take9); 22,25(take22) -- list 1 exhausted, append remaining 25 with no comparison. Total: 9 comparisons.</div><div class=\"ml-vi\">Mô phỏng trộn: so sánh 2,1(lấy1); 2,4(lấy2); 3,4(lấy3); 5,4(lấy4); 5,7(lấy5); 6,7(lấy6); 9,7(lấy7); 9,25(lấy9); 22,25(lấy22) -- dãy 1 hết, thêm 25 còn lại không cần so sánh. Tổng: 9 phép so sánh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q26.png"
         },
         {
           "kind": "MCQ",
@@ -8126,7 +8448,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Divisible by 6: $\\lfloor100/6\\rfloor=16$. Divisible by 9: $\\lfloor100/9\\rfloor=11$. Divisible by both ($\\text{lcm}=18$): $\\lfloor100/18\\rfloor=5$. Exactly one: $(16-5)+(11-5)=11+6=17$.</div><div class=\"ml-vi\">Chia hết cho 6: $\\lfloor100/6\\rfloor=16$. Chia hết cho 9: $\\lfloor100/9\\rfloor=11$. Chia hết cho cả hai ($\\text{lcm}=18$): $\\lfloor100/18\\rfloor=5$. Đúng một: $(16-5)+(11-5)=11+6=17$.</div>"
+          "explanation": "<div class=\"ml-en\">Divisible by 6: $\\lfloor100/6\\rfloor=16$. Divisible by 9: $\\lfloor100/9\\rfloor=11$. Divisible by both ($\\text{lcm}=18$): $\\lfloor100/18\\rfloor=5$. Exactly one: $(16-5)+(11-5)=11+6=17$.</div><div class=\"ml-vi\">Chia hết cho 6: $\\lfloor100/6\\rfloor=16$. Chia hết cho 9: $\\lfloor100/9\\rfloor=11$. Chia hết cho cả hai ($\\text{lcm}=18$): $\\lfloor100/18\\rfloor=5$. Đúng một: $(16-5)+(11-5)=11+6=17$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q27.png"
         },
         {
           "kind": "MCQ",
@@ -8152,7 +8475,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">An 8-digit number divisible by 10 has last digit 0, first digit 1-9 (9 choices), and the middle 6 digits free (0-9 each): $9\\times10^6=9{,}000{,}000$.</div><div class=\"ml-vi\">Một số 8 chữ số chia hết cho 10 có chữ số cuối là 0, chữ số đầu 1-9 (9 lựa chọn), và 6 chữ số giữa tự do (0-9 mỗi chữ số): $9\\times10^6=9{,}000{,}000$.</div>"
+          "explanation": "<div class=\"ml-en\">An 8-digit number divisible by 10 has last digit 0, first digit 1-9 (9 choices), and the middle 6 digits free (0-9 each): $9\\times10^6=9{,}000{,}000$.</div><div class=\"ml-vi\">Một số 8 chữ số chia hết cho 10 có chữ số cuối là 0, chữ số đầu 1-9 (9 lựa chọn), và 6 chữ số giữa tự do (0-9 mỗi chữ số): $9\\times10^6=9{,}000{,}000$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q28.png"
         },
         {
           "kind": "MCQ",
@@ -8178,7 +8502,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$a_1=1-2=-1$, $b_1=3(1)+5(2)=13$. $a_2=-1-13=-14$, $b_2=3(-1)+5(13)=62$. $a_3=-14-62=-76$, $b_3=3(-14)+5(62)=-42+310=268$.</div><div class=\"ml-vi\">$a_1=1-2=-1$, $b_1=3(1)+5(2)=13$. $a_2=-1-13=-14$, $b_2=3(-1)+5(13)=62$. $a_3=-14-62=-76$, $b_3=3(-14)+5(62)=-42+310=268$.</div>"
+          "explanation": "<div class=\"ml-en\">$a_1=1-2=-1$, $b_1=3(1)+5(2)=13$. $a_2=-1-13=-14$, $b_2=3(-1)+5(13)=62$. $a_3=-14-62=-76$, $b_3=3(-14)+5(62)=-42+310=268$.</div><div class=\"ml-vi\">$a_1=1-2=-1$, $b_1=3(1)+5(2)=13$. $a_2=-1-13=-14$, $b_2=3(-1)+5(13)=62$. $a_3=-14-62=-76$, $b_3=3(-14)+5(62)=-42+310=268$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q29.png"
         },
         {
           "kind": "MCQ",
@@ -8201,7 +8526,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Master theorem with $a=2,b=2,f(n)=n^3$: since $\\log_b a=1$ and $f(n)=n^3$ grows far faster than $n^1$, case 3 applies (the non-recursive term dominates), giving $T(n)=\\Theta(n^3)$, so $T(n)=O(n^3)$.</div><div class=\"ml-vi\">Định lý thợ với $a=2,b=2,f(n)=n^3$: vì $\\log_b a=1$ và $f(n)=n^3$ tăng nhanh hơn hẳn $n^1$, trường hợp 3 áp dụng (số hạng không đệ quy chiếm ưu thế), cho $T(n)=\\Theta(n^3)$, nên $T(n)=O(n^3)$.</div>"
+          "explanation": "<div class=\"ml-en\">Master theorem with $a=2,b=2,f(n)=n^3$: since $\\log_b a=1$ and $f(n)=n^3$ grows far faster than $n^1$, case 3 applies (the non-recursive term dominates), giving $T(n)=\\Theta(n^3)$, so $T(n)=O(n^3)$.</div><div class=\"ml-vi\">Định lý thợ với $a=2,b=2,f(n)=n^3$: vì $\\log_b a=1$ và $f(n)=n^3$ tăng nhanh hơn hẳn $n^1$, trường hợp 3 áp dụng (số hạng không đệ quy chiếm ưu thế), cho $T(n)=\\Theta(n^3)$, nên $T(n)=O(n^3)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q30.png"
         },
         {
           "kind": "MCQ",
@@ -8224,7 +8550,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$Q_n$ has $2^n$ vertices, each of degree $n$. By the handshaking lemma, edges $=\\frac{n\\cdot2^n}{2}=n2^{n-1}$. So $x=2^n,y=n2^{n-1}$, option (ii).</div><div class=\"ml-vi\">$Q_n$ có $2^n$ đỉnh, mỗi đỉnh bậc $n$. Theo bổ đề bắt tay, số cạnh $=\\frac{n\\cdot2^n}{2}=n2^{n-1}$. Vậy $x=2^n,y=n2^{n-1}$, đáp án (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$Q_n$ has $2^n$ vertices, each of degree $n$. By the handshaking lemma, edges $=\\frac{n\\cdot2^n}{2}=n2^{n-1}$. So $x=2^n,y=n2^{n-1}$, option (ii).</div><div class=\"ml-vi\">$Q_n$ có $2^n$ đỉnh, mỗi đỉnh bậc $n$. Theo bổ đề bắt tay, số cạnh $=\\frac{n\\cdot2^n}{2}=n2^{n-1}$. Vậy $x=2^n,y=n2^{n-1}$, đáp án (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q31.png"
         },
         {
           "kind": "MCQ",
@@ -8250,7 +8577,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Sum of degrees $=2\\times15=30$. With every vertex degree 3, vertices $=30/3=10$.</div><div class=\"ml-vi\">Tổng bậc $=2\\times15=30$. Với mọi đỉnh bậc 3, số đỉnh $=30/3=10$.</div>"
+          "explanation": "<div class=\"ml-en\">Sum of degrees $=2\\times15=30$. With every vertex degree 3, vertices $=30/3=10$.</div><div class=\"ml-vi\">Tổng bậc $=2\\times15=30$. Với mọi đỉnh bậc 3, số đỉnh $=30/3=10$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q32.png"
         },
         {
           "kind": "MCQ",
@@ -8273,7 +8601,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$K_3$ (triangle) has 3 edges, each contributing exactly 2 ones (one per endpoint) to the incidence matrix. Total: $3\\times2=6$.</div><div class=\"ml-vi\">$K_3$ (tam giác) có 3 cạnh, mỗi cạnh đóng góp đúng 2 số 1 (một cho mỗi đầu mút) vào ma trận liên thuộc. Tổng: $3\\times2=6$.</div>"
+          "explanation": "<div class=\"ml-en\">$K_3$ (triangle) has 3 edges, each contributing exactly 2 ones (one per endpoint) to the incidence matrix. Total: $3\\times2=6$.</div><div class=\"ml-vi\">$K_3$ (tam giác) có 3 cạnh, mỗi cạnh đóng góp đúng 2 số 1 (một cho mỗi đầu mút) vào ma trận liên thuộc. Tổng: $3\\times2=6$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q33.png"
         },
         {
           "kind": "MCQ",
@@ -8296,7 +8625,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">A: false in general -- directed graphs' adjacency matrices aren't symmetric unless every edge is bidirectional. C: false -- multigraphs allow entries greater than 1. D: false -- a loop makes the diagonal entry NON-zero, not zero. B: true -- if every diagonal entry is non-zero, each of the $n$ vertices has at least one loop, giving at least $n$ loops total.</div><div class=\"ml-vi\">A: sai nói chung -- ma trận kề của đồ thị có hướng không đối xứng trừ khi mọi cạnh đều hai chiều. C: sai -- đa đồ thị cho phép phần tử lớn hơn 1. D: sai -- khuyên làm phần tử đường chéo KHÁC 0, không phải bằng 0. B: đúng -- nếu mọi phần tử đường chéo đều khác 0, mỗi đỉnh trong $n$ đỉnh có ít nhất một khuyên, cho tổng ít nhất $n$ khuyên.</div>"
+          "explanation": "<div class=\"ml-en\">A: false in general -- directed graphs' adjacency matrices aren't symmetric unless every edge is bidirectional. C: false -- multigraphs allow entries greater than 1. D: false -- a loop makes the diagonal entry NON-zero, not zero. B: true -- if every diagonal entry is non-zero, each of the $n$ vertices has at least one loop, giving at least $n$ loops total.</div><div class=\"ml-vi\">A: sai nói chung -- ma trận kề của đồ thị có hướng không đối xứng trừ khi mọi cạnh đều hai chiều. C: sai -- đa đồ thị cho phép phần tử lớn hơn 1. D: sai -- khuyên làm phần tử đường chéo KHÁC 0, không phải bằng 0. B: đúng -- nếu mọi phần tử đường chéo đều khác 0, mỗi đỉnh trong $n$ đỉnh có ít nhất một khuyên, cho tổng ít nhất $n$ khuyên.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q34.png"
         },
         {
           "kind": "MCQ",
@@ -8322,7 +8652,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Checking each sequence against the edge list $\\{AB,AD,AC,BD,BC,DC,DE,CE,CF,EF,BF\\}$: option A uses the edge $D$-$F$, which does NOT exist in the graph (D is not adjacent to F) -- so A-B-C-D-F-B-A is not a valid circuit. All other options use only existing edges and return to their starting vertex.</div><div class=\"ml-vi\">Kiểm từng dãy với danh sách cạnh $\\{AB,AD,AC,BD,BC,DC,DE,CE,CF,EF,BF\\}$: đáp án A dùng cạnh $D$-$F$, cạnh này KHÔNG tồn tại trong đồ thị (D không kề với F) -- nên A-B-C-D-F-B-A không phải chu trình hợp lệ. Mọi đáp án khác chỉ dùng cạnh có thật và quay lại đúng đỉnh xuất phát.</div>"
+          "explanation": "<div class=\"ml-en\">Checking each sequence against the edge list $\\{AB,AD,AC,BD,BC,DC,DE,CE,CF,EF,BF\\}$: option A uses the edge $D$-$F$, which does NOT exist in the graph (D is not adjacent to F) -- so A-B-C-D-F-B-A is not a valid circuit. All other options use only existing edges and return to their starting vertex.</div><div class=\"ml-vi\">Kiểm từng dãy với danh sách cạnh $\\{AB,AD,AC,BD,BC,DC,DE,CE,CF,EF,BF\\}$: đáp án A dùng cạnh $D$-$F$, cạnh này KHÔNG tồn tại trong đồ thị (D không kề với F) -- nên A-B-C-D-F-B-A không phải chu trình hợp lệ. Mọi đáp án khác chỉ dùng cạnh có thật và quay lại đúng đỉnh xuất phát.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q35.png"
         },
         {
           "kind": "MCQ",
@@ -8342,7 +8673,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$X=K_5$ is highly connected (every pair of vertices has multiple disjoint paths) -- it has 0 cut vertices. In $Y$ the shared vertex $y_3$ is a cut vertex: removing it disconnects the two triangles, and no other vertex of $Y$ is a cut vertex. So $Y$ has 1 cut vertex and $X$ has 0 -- $Y$ has more.</div><div class=\"ml-vi\">$X=K_5$ liên thông cao (mọi cặp đỉnh có nhiều đường đi rời nhau) -- có 0 đỉnh cắt. Trong $Y$, đỉnh dùng chung $y_3$ là đỉnh cắt: bỏ nó làm tách hai tam giác, và không đỉnh nào khác của $Y$ là đỉnh cắt. Vậy $Y$ có 1 đỉnh cắt còn $X$ có 0 -- $Y$ nhiều hơn.</div>"
+          "explanation": "<div class=\"ml-en\">$X=K_5$ is highly connected (every pair of vertices has multiple disjoint paths) -- it has 0 cut vertices. In $Y$ the shared vertex $y_3$ is a cut vertex: removing it disconnects the two triangles, and no other vertex of $Y$ is a cut vertex. So $Y$ has 1 cut vertex and $X$ has 0 -- $Y$ has more.</div><div class=\"ml-vi\">$X=K_5$ liên thông cao (mọi cặp đỉnh có nhiều đường đi rời nhau) -- có 0 đỉnh cắt. Trong $Y$, đỉnh dùng chung $y_3$ là đỉnh cắt: bỏ nó làm tách hai tam giác, và không đỉnh nào khác của $Y$ là đỉnh cắt. Vậy $Y$ có 1 đỉnh cắt còn $X$ có 0 -- $Y$ nhiều hơn.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q36.png"
         },
         {
           "kind": "MCQ",
@@ -8365,7 +8697,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i): $K_{1,2}$ (a path of 3 vertices) trivially has a Hamilton path -- antecedent TRUE. But $K_2$ (single edge) cannot have a Hamilton circuit (needs at least 3 vertices to form a cycle) -- consequent FALSE. So (i) is FALSE. (ii): $W_4$ is Hamiltonian -- antecedent TRUE. But $K_{4,3}$ has 4 odd-degree vertices (more than the 0 or 2 needed) -- no Euler path, consequent FALSE. So (ii) is FALSE. (iii): $K_{4,3}$ has NO Euler path (same reasoning) -- antecedent FALSE, making the implication vacuously TRUE regardless of $Q_3$.</div><div class=\"ml-vi\">(i): $K_{1,2}$ (đường đi 3 đỉnh) hiển nhiên có đường đi Hamilton -- tiền đề ĐÚNG. Nhưng $K_2$ (một cạnh đơn) không thể có chu trình Hamilton (cần ít nhất 3 đỉnh để tạo chu trình) -- hệ quả SAI. Vậy (i) SAI. (ii): $W_4$ có tính Hamilton -- tiền đề ĐÚNG. Nhưng $K_{4,3}$ có 4 đỉnh bậc lẻ (nhiều hơn 0 hoặc 2 cần thiết) -- không có đường đi Euler, hệ quả SAI. Vậy (ii) SAI. (iii): $K_{4,3}$ KHÔNG có đường đi Euler (cùng lý luận) -- tiền đề SAI, làm phép kéo theo ĐÚNG hiển nhiên bất kể $Q_3$.</div>"
+          "explanation": "<div class=\"ml-en\">(i): $K_{1,2}$ (a path of 3 vertices) trivially has a Hamilton path -- antecedent TRUE. But $K_2$ (single edge) cannot have a Hamilton circuit (needs at least 3 vertices to form a cycle) -- consequent FALSE. So (i) is FALSE. (ii): $W_4$ is Hamiltonian -- antecedent TRUE. But $K_{4,3}$ has 4 odd-degree vertices (more than the 0 or 2 needed) -- no Euler path, consequent FALSE. So (ii) is FALSE. (iii): $K_{4,3}$ has NO Euler path (same reasoning) -- antecedent FALSE, making the implication vacuously TRUE regardless of $Q_3$.</div><div class=\"ml-vi\">(i): $K_{1,2}$ (đường đi 3 đỉnh) hiển nhiên có đường đi Hamilton -- tiền đề ĐÚNG. Nhưng $K_2$ (một cạnh đơn) không thể có chu trình Hamilton (cần ít nhất 3 đỉnh để tạo chu trình) -- hệ quả SAI. Vậy (i) SAI. (ii): $W_4$ có tính Hamilton -- tiền đề ĐÚNG. Nhưng $K_{4,3}$ có 4 đỉnh bậc lẻ (nhiều hơn 0 hoặc 2 cần thiết) -- không có đường đi Euler, hệ quả SAI. Vậy (ii) SAI. (iii): $K_{4,3}$ KHÔNG có đường đi Euler (cùng lý luận) -- tiền đề SAI, làm phép kéo theo ĐÚNG hiển nhiên bất kể $Q_3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q37.png"
         },
         {
           "kind": "MCQ",
@@ -8388,7 +8721,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$CD$ is a bridge (cut edge): any circuit through all 6 vertices would have to cross it twice, which a circuit cannot do -- so there is no Hamilton circuit. But a Hamilton path exists, e.g. $A$-$B$-$C$-$D$-$E$-$F$: it uses only existing edges and visits each vertex exactly once.</div><div class=\"ml-vi\">$CD$ là cạnh cầu: mọi chu trình đi qua cả 6 đỉnh đều phải băng qua nó hai lần, điều mà chu trình không làm được -- nên không có chu trình Hamilton. Nhưng có đường đi Hamilton, ví dụ $A$-$B$-$C$-$D$-$E$-$F$: chỉ dùng cạnh có thật và thăm mỗi đỉnh đúng một lần.</div>"
+          "explanation": "<div class=\"ml-en\">$CD$ is a bridge (cut edge): any circuit through all 6 vertices would have to cross it twice, which a circuit cannot do -- so there is no Hamilton circuit. But a Hamilton path exists, e.g. $A$-$B$-$C$-$D$-$E$-$F$: it uses only existing edges and visits each vertex exactly once.</div><div class=\"ml-vi\">$CD$ là cạnh cầu: mọi chu trình đi qua cả 6 đỉnh đều phải băng qua nó hai lần, điều mà chu trình không làm được -- nên không có chu trình Hamilton. Nhưng có đường đi Hamilton, ví dụ $A$-$B$-$C$-$D$-$E$-$F$: chỉ dùng cạnh có thật và thăm mỗi đỉnh đúng một lần.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q38.png"
         },
         {
           "kind": "MCQ",
@@ -8411,7 +8745,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$A$(0)$\\to B$(2): relax gives $D=7,C=6,E=5$. Next smallest is $E$(5): relax gives $C=\\min(6,8)=6$(no change), $D=\\min(7,9)=7$(no change), $Z=8$. Remaining unvisited: $C=6,D=7,Z=8$ -- smallest is $C$.</div><div class=\"ml-vi\">$A$(0)$\\to B$(2): nới lỏng cho $D=7,C=6,E=5$. Tiếp theo nhỏ nhất là $E$(5): nới lỏng cho $C=\\min(6,8)=6$(không đổi), $D=\\min(7,9)=7$(không đổi), $Z=8$. Còn lại chưa thăm: $C=6,D=7,Z=8$ -- nhỏ nhất là $C$.</div>"
+          "explanation": "<div class=\"ml-en\">$A$(0)$\\to B$(2): relax gives $D=7,C=6,E=5$. Next smallest is $E$(5): relax gives $C=\\min(6,8)=6$(no change), $D=\\min(7,9)=7$(no change), $Z=8$. Remaining unvisited: $C=6,D=7,Z=8$ -- smallest is $C$.</div><div class=\"ml-vi\">$A$(0)$\\to B$(2): nới lỏng cho $D=7,C=6,E=5$. Tiếp theo nhỏ nhất là $E$(5): nới lỏng cho $C=\\min(6,8)=6$(không đổi), $D=\\min(7,9)=7$(không đổi), $Z=8$. Còn lại chưa thăm: $C=6,D=7,Z=8$ -- nhỏ nhất là $C$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q39.png"
         },
         {
           "kind": "MCQ",
@@ -8437,7 +8772,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Internal vertices (having at least one child): $a,b,e,c$. All others ($d,h,g,i,n,k,f,l,m$) are leaves. Total internal vertices: 4.</div><div class=\"ml-vi\">Đỉnh trong (có ít nhất một con): $a,b,e,c$. Mọi đỉnh khác ($d,h,g,i,n,k,f,l,m$) đều là lá. Tổng số đỉnh trong: 4.</div>"
+          "explanation": "<div class=\"ml-en\">Internal vertices (having at least one child): $a,b,e,c$. All others ($d,h,g,i,n,k,f,l,m$) are leaves. Total internal vertices: 4.</div><div class=\"ml-vi\">Đỉnh trong (có ít nhất một con): $a,b,e,c$. Mọi đỉnh khác ($d,h,g,i,n,k,f,l,m$) đều là lá. Tổng số đỉnh trong: 4.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q40.png"
         },
         {
           "kind": "MCQ",
@@ -8463,7 +8799,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">\"Balanced\" requires every leaf at depth 2 or 3, so all nodes at depths 0,1 must be internal (4 at depth 1, giving $4\\times4=16$ nodes at depth 2). To minimize leaves while keeping height exactly 3, only ONE depth-2 node needs to be internal (producing 4 leaves at depth 3); the other 15 depth-2 nodes are leaves. Total: $15+4=19$.</div><div class=\"ml-vi\">\"Cân bằng\" yêu cầu mọi lá ở độ sâu 2 hoặc 3, nên mọi nút ở độ sâu 0,1 phải là đỉnh trong (4 ở độ sâu 1, cho $4\\times4=16$ nút ở độ sâu 2). Để tối thiểu số lá mà vẫn giữ chiều cao đúng 3, chỉ cần MỘT nút độ sâu 2 là đỉnh trong (sinh 4 lá ở độ sâu 3); 15 nút độ sâu 2 còn lại là lá. Tổng: $15+4=19$.</div>"
+          "explanation": "<div class=\"ml-en\">\"Balanced\" requires every leaf at depth 2 or 3, so all nodes at depths 0,1 must be internal (4 at depth 1, giving $4\\times4=16$ nodes at depth 2). To minimize leaves while keeping height exactly 3, only ONE depth-2 node needs to be internal (producing 4 leaves at depth 3); the other 15 depth-2 nodes are leaves. Total: $15+4=19$.</div><div class=\"ml-vi\">\"Cân bằng\" yêu cầu mọi lá ở độ sâu 2 hoặc 3, nên mọi nút ở độ sâu 0,1 phải là đỉnh trong (4 ở độ sâu 1, cho $4\\times4=16$ nút ở độ sâu 2). Để tối thiểu số lá mà vẫn giữ chiều cao đúng 3, chỉ cần MỘT nút độ sâu 2 là đỉnh trong (sinh 4 lá ở độ sâu 3); 15 nút độ sâu 2 còn lại là lá. Tổng: $15+4=19$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q41.png"
         },
         {
           "kind": "MCQ",
@@ -8486,7 +8823,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i): all four codewords have length 2 and are distinct -- prefix-free, valid. (ii): codeword \"0\" (for $a$) is a prefix of \"01\" (for $t$) and of \"001\" (for $s$) -- violates the prefix property, invalid. Only (i) is a prefix code.</div><div class=\"ml-vi\">(i): cả bốn từ mã đều dài 2 và khác nhau -- không tiền tố lẫn nhau, hợp lệ. (ii): từ mã \"0\" (của $a$) là tiền tố của \"01\" (của $t$) và của \"001\" (của $s$) -- vi phạm tính chất tiền tố, không hợp lệ. Chỉ (i) là mã tiền tố.</div>"
+          "explanation": "<div class=\"ml-en\">(i): all four codewords have length 2 and are distinct -- prefix-free, valid. (ii): codeword \"0\" (for $a$) is a prefix of \"01\" (for $t$) and of \"001\" (for $s$) -- violates the prefix property, invalid. Only (i) is a prefix code.</div><div class=\"ml-vi\">(i): cả bốn từ mã đều dài 2 và khác nhau -- không tiền tố lẫn nhau, hợp lệ. (ii): từ mã \"0\" (của $a$) là tiền tố của \"01\" (của $t$) và của \"001\" (của $s$) -- vi phạm tính chất tiền tố, không hợp lệ. Chỉ (i) là mã tiền tố.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q42.png"
         },
         {
           "kind": "MCQ",
@@ -8509,7 +8847,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The comparison-sort lower bound is $\\lceil\\log_2(n!)\\rceil$. For $n=6$: $6!=720$, $\\log_2(720)\\approx9.49$, so $\\lceil9.49\\rceil=10$.</div><div class=\"ml-vi\">Cận dưới của sắp xếp bằng so sánh là $\\lceil\\log_2(n!)\\rceil$. Với $n=6$: $6!=720$, $\\log_2(720)\\approx9.49$, nên $\\lceil9.49\\rceil=10$.</div>"
+          "explanation": "<div class=\"ml-en\">The comparison-sort lower bound is $\\lceil\\log_2(n!)\\rceil$. For $n=6$: $6!=720$, $\\log_2(720)\\approx9.49$, so $\\lceil9.49\\rceil=10$.</div><div class=\"ml-vi\">Cận dưới của sắp xếp bằng so sánh là $\\lceil\\log_2(n!)\\rceil$. Với $n=6$: $6!=720$, $\\log_2(720)\\approx9.49$, nên $\\lceil9.49\\rceil=10$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q43.png"
         },
         {
           "kind": "MCQ",
@@ -8532,7 +8871,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Parsing prefix: root $+$ has left $*\\,3\\,(+\\,x\\,y)=3*(x+y)$ and right $\\uparrow\\,(-\\,x\\,y)\\,2=(x-y)^2$. Postfix of left: $3\\,x\\,y\\,+\\,*$. Postfix of right: $x\\,y\\,-\\,2\\,\\uparrow$. Combined with root: $3\\,x\\,y\\,+\\,*\\,x\\,y\\,-\\,2\\,\\uparrow\\,+$, exactly option (i).</div><div class=\"ml-vi\">Phân tích tiền tố: gốc $+$ có trái $*\\,3\\,(+\\,x\\,y)=3*(x+y)$ và phải $\\uparrow\\,(-\\,x\\,y)\\,2=(x-y)^2$. Hậu tố của trái: $3\\,x\\,y\\,+\\,*$. Hậu tố của phải: $x\\,y\\,-\\,2\\,\\uparrow$. Kết hợp với gốc: $3\\,x\\,y\\,+\\,*\\,x\\,y\\,-\\,2\\,\\uparrow\\,+$, đúng là đáp án (i).</div>"
+          "explanation": "<div class=\"ml-en\">Parsing prefix: root $+$ has left $*\\,3\\,(+\\,x\\,y)=3*(x+y)$ and right $\\uparrow\\,(-\\,x\\,y)\\,2=(x-y)^2$. Postfix of left: $3\\,x\\,y\\,+\\,*$. Postfix of right: $x\\,y\\,-\\,2\\,\\uparrow$. Combined with root: $3\\,x\\,y\\,+\\,*\\,x\\,y\\,-\\,2\\,\\uparrow\\,+$, exactly option (i).</div><div class=\"ml-vi\">Phân tích tiền tố: gốc $+$ có trái $*\\,3\\,(+\\,x\\,y)=3*(x+y)$ và phải $\\uparrow\\,(-\\,x\\,y)\\,2=(x-y)^2$. Hậu tố của trái: $3\\,x\\,y\\,+\\,*$. Hậu tố của phải: $x\\,y\\,-\\,2\\,\\uparrow$. Kết hợp với gốc: $3\\,x\\,y\\,+\\,*\\,x\\,y\\,-\\,2\\,\\uparrow\\,+$, đúng là đáp án (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q44.png"
         },
         {
           "kind": "MCQ",
@@ -8558,7 +8898,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$(x-y)^2\\to\\uparrow\\,(-\\,x\\,y)\\,2=\\uparrow-xy2$. $x*(y+5)\\to*\\,x\\,(+\\,y\\,5)=*x+y5$. Root $+$: combining gives $+\\uparrow-xy2*x+y5$, option (iii).</div><div class=\"ml-vi\">$(x-y)^2\\to\\uparrow\\,(-\\,x\\,y)\\,2=\\uparrow-xy2$. $x*(y+5)\\to*\\,x\\,(+\\,y\\,5)=*x+y5$. Gốc $+$: kết hợp cho $+\\uparrow-xy2*x+y5$, đáp án (iii).</div>"
+          "explanation": "<div class=\"ml-en\">$(x-y)^2\\to\\uparrow\\,(-\\,x\\,y)\\,2=\\uparrow-xy2$. $x*(y+5)\\to*\\,x\\,(+\\,y\\,5)=*x+y5$. Root $+$: combining gives $+\\uparrow-xy2*x+y5$, option (iii).</div><div class=\"ml-vi\">$(x-y)^2\\to\\uparrow\\,(-\\,x\\,y)\\,2=\\uparrow-xy2$. $x*(y+5)\\to*\\,x\\,(+\\,y\\,5)=*x+y5$. Gốc $+$: kết hợp cho $+\\uparrow-xy2*x+y5$, đáp án (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q45.png"
         },
         {
           "kind": "MCQ",
@@ -8581,7 +8922,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The hub connects directly to all $n$ rim vertices, so BFS starting at the hub visits every rim vertex at level 1 -- no vertex is farther than depth 1. Height $=1$.</div><div class=\"ml-vi\">Trung tâm nối trực tiếp với mọi $n$ đỉnh vành, nên BFS bắt đầu tại trung tâm thăm mọi đỉnh vành ở mức 1 -- không đỉnh nào xa hơn độ sâu 1. Chiều cao $=1$.</div>"
+          "explanation": "<div class=\"ml-en\">The hub connects directly to all $n$ rim vertices, so BFS starting at the hub visits every rim vertex at level 1 -- no vertex is farther than depth 1. Height $=1$.</div><div class=\"ml-vi\">Trung tâm nối trực tiếp với mọi $n$ đỉnh vành, nên BFS bắt đầu tại trung tâm thăm mọi đỉnh vành ở mức 1 -- không đỉnh nào xa hơn độ sâu 1. Chiều cao $=1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q46.png"
         },
         {
           "kind": "MCQ",
@@ -8607,7 +8949,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Kruskal's algorithm in increasing order: $AB(2)$ add, $BC(2)$ add, $DZ(2)$ add, $BD(3)$ add (connects $\\{A,B,C\\}$ with $\\{D,Z\\}$), $BE(3)$ add (connects $E$) -- 5 edges span all 6 vertices, done. Total: $2+2+2+3+3=12$.</div><div class=\"ml-vi\">Thuật toán Kruskal theo thứ tự tăng dần: $AB(2)$ thêm, $BC(2)$ thêm, $DZ(2)$ thêm, $BD(3)$ thêm (nối $\\{A,B,C\\}$ với $\\{D,Z\\}$), $BE(3)$ thêm (nối $E$) -- 5 cạnh trải khắp 6 đỉnh, xong. Tổng: $2+2+2+3+3=12$.</div>"
+          "explanation": "<div class=\"ml-en\">Kruskal's algorithm in increasing order: $AB(2)$ add, $BC(2)$ add, $DZ(2)$ add, $BD(3)$ add (connects $\\{A,B,C\\}$ with $\\{D,Z\\}$), $BE(3)$ add (connects $E$) -- 5 edges span all 6 vertices, done. Total: $2+2+2+3+3=12$.</div><div class=\"ml-vi\">Thuật toán Kruskal theo thứ tự tăng dần: $AB(2)$ thêm, $BC(2)$ thêm, $DZ(2)$ thêm, $BD(3)$ thêm (nối $\\{A,B,C\\}$ với $\\{D,Z\\}$), $BE(3)$ thêm (nối $E$) -- 5 cạnh trải khắp 6 đỉnh, xong. Tổng: $2+2+2+3+3=12$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q47.png"
         },
         {
           "kind": "MCQ",
@@ -8633,7 +8976,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f$: for any target $k$, take $n=0,m=k$: $f(k,0)=k$ -- onto. $h$: take $m=k,n=0$: $h(k,0)=k$ -- onto. $g$: $2m+2n$ is always even, so $g=2m+2n+1$ is always ODD -- can never equal an even integer, NOT onto.</div><div class=\"ml-vi\">$f$: với mọi mục tiêu $k$, lấy $n=0,m=k$: $f(k,0)=k$ -- toàn ánh. $h$: lấy $m=k,n=0$: $h(k,0)=k$ -- toàn ánh. $g$: $2m+2n$ luôn chẵn, nên $g=2m+2n+1$ luôn LẺ -- không bao giờ bằng một số chẵn, không toàn ánh.</div>"
+          "explanation": "<div class=\"ml-en\">$f$: for any target $k$, take $n=0,m=k$: $f(k,0)=k$ -- onto. $h$: take $m=k,n=0$: $h(k,0)=k$ -- onto. $g$: $2m+2n$ is always even, so $g=2m+2n+1$ is always ODD -- can never equal an even integer, NOT onto.</div><div class=\"ml-vi\">$f$: với mọi mục tiêu $k$, lấy $n=0,m=k$: $f(k,0)=k$ -- toàn ánh. $h$: lấy $m=k,n=0$: $h(k,0)=k$ -- toàn ánh. $g$: $2m+2n$ luôn chẵn, nên $g=2m+2n+1$ luôn LẺ -- không bao giờ bằng một số chẵn, không toàn ánh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q48.png"
         },
         {
           "kind": "MCQ",
@@ -8656,7 +9000,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$6468=2(3135)+198$. $3135=15(198)+165$. $198=1(165)+33$. $165=5(33)+0$. That's 4 divisions.</div><div class=\"ml-vi\">$6468=2(3135)+198$. $3135=15(198)+165$. $198=1(165)+33$. $165=5(33)+0$. Đó là 4 phép chia.</div>"
+          "explanation": "<div class=\"ml-en\">$6468=2(3135)+198$. $3135=15(198)+165$. $198=1(165)+33$. $165=5(33)+0$. That's 4 divisions.</div><div class=\"ml-vi\">$6468=2(3135)+198$. $3135=15(198)+165$. $198=1(165)+33$. $165=5(33)+0$. Đó là 4 phép chia.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q49.png"
         },
         {
           "kind": "MCQ",
@@ -8682,7 +9027,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f(3)=3(3)+2=11$. $f(4)=3(11)+3=36$. $f(5)=3(36)+11=119$. $f(6)=3(119)+36=393$.</div><div class=\"ml-vi\">$f(3)=3(3)+2=11$. $f(4)=3(11)+3=36$. $f(5)=3(36)+11=119$. $f(6)=3(119)+36=393$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(3)=3(3)+2=11$. $f(4)=3(11)+3=36$. $f(5)=3(36)+11=119$. $f(6)=3(119)+36=393$.</div><div class=\"ml-vi\">$f(3)=3(3)+2=11$. $f(4)=3(11)+3=36$. $f(5)=3(36)+11=119$. $f(6)=3(119)+36=393$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D7/q50.png"
         }
       ]
     },
@@ -8722,7 +9068,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Begin with 000: remaining 7 bits free, $2^7=128$. End with 00: remaining 8 bits free, $2^8=256$. Both (begin 000 AND end 00): remaining 5 middle bits free, $2^5=32$. By inclusion-exclusion: $128+256-32=352$.</div><div class=\"ml-vi\">Bắt đầu bằng 000: 7 bit còn lại tự do, $2^7=128$. Kết thúc bằng 00: 8 bit còn lại tự do, $2^8=256$. Cả hai (bắt đầu 000 VÀ kết thúc 00): 5 bit giữa tự do, $2^5=32$. Theo bù trừ: $128+256-32=352$.</div>"
+          "explanation": "<div class=\"ml-en\">Begin with 000: remaining 7 bits free, $2^7=128$. End with 00: remaining 8 bits free, $2^8=256$. Both (begin 000 AND end 00): remaining 5 middle bits free, $2^5=32$. By inclusion-exclusion: $128+256-32=352$.</div><div class=\"ml-vi\">Bắt đầu bằng 000: 7 bit còn lại tự do, $2^7=128$. Kết thúc bằng 00: 8 bit còn lại tự do, $2^8=256$. Cả hai (bắt đầu 000 VÀ kết thúc 00): 5 bit giữa tự do, $2^5=32$. Theo bù trừ: $128+256-32=352$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q1.png"
         },
         {
           "kind": "MCQ",
@@ -8745,7 +9092,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">(i),(iii),(iv) are all true (isomorphic graphs preserve vertex/edge counts and degree sequences; $W_3$ has all 4 vertices of degree 3). (ii) is FALSE: isomorphic graphs need not have identical adjacency matrices -- only matrices that are equal after some permutation of rows/columns (relabeling).</div><div class=\"ml-vi\">(i),(iii),(iv) đều đúng (đồ thị đẳng cấu giữ nguyên số đỉnh/cạnh và dãy bậc; $W_3$ có cả 4 đỉnh bậc 3). (ii) SAI: đồ thị đẳng cấu không nhất thiết có ma trận kề giống hệt nhau -- chỉ cần ma trận bằng nhau sau khi hoán vị hàng/cột (đổi nhãn).</div>"
+          "explanation": "<div class=\"ml-en\">(i),(iii),(iv) are all true (isomorphic graphs preserve vertex/edge counts and degree sequences; $W_3$ has all 4 vertices of degree 3). (ii) is FALSE: isomorphic graphs need not have identical adjacency matrices -- only matrices that are equal after some permutation of rows/columns (relabeling).</div><div class=\"ml-vi\">(i),(iii),(iv) đều đúng (đồ thị đẳng cấu giữ nguyên số đỉnh/cạnh và dãy bậc; $W_3$ có cả 4 đỉnh bậc 3). (ii) SAI: đồ thị đẳng cấu không nhất thiết có ma trận kề giống hệt nhau -- chỉ cần ma trận bằng nhau sau khi hoán vị hàng/cột (đổi nhãn).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q2.png"
         },
         {
           "kind": "MCQ",
@@ -8771,7 +9119,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$80\\bmod17=12$ (no). $90\\bmod17=5$ (yes, since $17\\times5=85$). $-80\\bmod17$: $-80+85=5$ (yes). $-90\\bmod17$: $-90+102=12$ (no). So 2 numbers (90 and -80) match.</div><div class=\"ml-vi\">$80\\bmod17=12$ (không). $90\\bmod17=5$ (có, vì $17\\times5=85$). $-80\\bmod17$: $-80+85=5$ (có). $-90\\bmod17$: $-90+102=12$ (không). Vậy 2 số (90 và -80) khớp.</div>"
+          "explanation": "<div class=\"ml-en\">$80\\bmod17=12$ (no). $90\\bmod17=5$ (yes, since $17\\times5=85$). $-80\\bmod17$: $-80+85=5$ (yes). $-90\\bmod17$: $-90+102=12$ (no). So 2 numbers (90 and -80) match.</div><div class=\"ml-vi\">$80\\bmod17=12$ (không). $90\\bmod17=5$ (có, vì $17\\times5=85$). $-80\\bmod17$: $-80+85=5$ (có). $-90\\bmod17$: $-90+102=12$ (không). Vậy 2 số (90 và -80) khớp.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q3.png"
         },
         {
           "kind": "MCQ",
@@ -8797,7 +9146,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$f(1)=-2$. $f(2)=-2\\times2=-4$. $f(3)=-4\\times3=-12$. $f(4)=-12\\times4=-48$. $f(5)=-48\\times5=-240$.</div><div class=\"ml-vi\">$f(1)=-2$. $f(2)=-2\\times2=-4$. $f(3)=-4\\times3=-12$. $f(4)=-12\\times4=-48$. $f(5)=-48\\times5=-240$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(1)=-2$. $f(2)=-2\\times2=-4$. $f(3)=-4\\times3=-12$. $f(4)=-12\\times4=-48$. $f(5)=-48\\times5=-240$.</div><div class=\"ml-vi\">$f(1)=-2$. $f(2)=-2\\times2=-4$. $f(3)=-4\\times3=-12$. $f(4)=-12\\times4=-48$. $f(5)=-48\\times5=-240$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q4.png"
         },
         {
           "kind": "MCQ",
@@ -8820,7 +9170,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Not one-to-one: $f(0)=f(1)=0$. Onto: for any $m\\in N$, $x=2m$ gives $f(2m)=m$, so every natural number is reached. So $f$ is onto but not one-to-one.</div><div class=\"ml-vi\">Không đơn ánh: $f(0)=f(1)=0$. Toàn ánh: với mọi $m\\in N$, $x=2m$ cho $f(2m)=m$, nên mọi số tự nhiên đều đạt được. Vậy $f$ toàn ánh nhưng không đơn ánh.</div>"
+          "explanation": "<div class=\"ml-en\">Not one-to-one: $f(0)=f(1)=0$. Onto: for any $m\\in N$, $x=2m$ gives $f(2m)=m$, so every natural number is reached. So $f$ is onto but not one-to-one.</div><div class=\"ml-vi\">Không đơn ánh: $f(0)=f(1)=0$. Toàn ánh: với mọi $m\\in N$, $x=2m$ cho $f(2m)=m$, nên mọi số tự nhiên đều đạt được. Vậy $f$ toàn ánh nhưng không đơn ánh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q5.png"
         },
         {
           "kind": "MCQ",
@@ -8843,7 +9194,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The table is exactly $p\\lor q$. Checking $\\neg p\\to q$: $p{=}T,q{=}T$: $\\neg p=F$, $F\\to T=T$ (matches). $p{=}T,q{=}F$: $F\\to F=T$ (matches). $p{=}F,q{=}T$: $\\neg p=T$, $T\\to T=T$ (matches). $p{=}F,q{=}F$: $T\\to F=F$ (matches). All four rows match -- option (iv).</div><div class=\"ml-vi\">Bảng chính là $p\\lor q$. Kiểm $\\neg p\\to q$: $p{=}T,q{=}T$: $\\neg p=F$, $F\\to T=T$ (khớp). $p{=}T,q{=}F$: $F\\to F=T$ (khớp). $p{=}F,q{=}T$: $\\neg p=T$, $T\\to T=T$ (khớp). $p{=}F,q{=}F$: $T\\to F=F$ (khớp). Cả 4 dòng khớp -- đáp án (iv).</div>"
+          "explanation": "<div class=\"ml-en\">The table is exactly $p\\lor q$. Checking $\\neg p\\to q$: $p{=}T,q{=}T$: $\\neg p=F$, $F\\to T=T$ (matches). $p{=}T,q{=}F$: $F\\to F=T$ (matches). $p{=}F,q{=}T$: $\\neg p=T$, $T\\to T=T$ (matches). $p{=}F,q{=}F$: $T\\to F=F$ (matches). All four rows match -- option (iv).</div><div class=\"ml-vi\">Bảng chính là $p\\lor q$. Kiểm $\\neg p\\to q$: $p{=}T,q{=}T$: $\\neg p=F$, $F\\to T=T$ (khớp). $p{=}T,q{=}F$: $F\\to F=T$ (khớp). $p{=}F,q{=}T$: $\\neg p=T$, $T\\to T=T$ (khớp). $p{=}F,q{=}F$: $T\\to F=F$ (khớp). Cả 4 dòng khớp -- đáp án (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q7.png"
         },
         {
           "kind": "MCQ",
@@ -8869,7 +9221,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Differences increase by 1 each time: $+2,+3,+4,+5,\\ldots$. $a_4=17$, $a_5=17+6=23$, $a_6=23+7=30$, $a_7=30+8=38$.</div><div class=\"ml-vi\">Hiệu tăng thêm 1 mỗi lần: $+2,+3,+4,+5,\\ldots$. $a_4=17$, $a_5=17+6=23$, $a_6=23+7=30$, $a_7=30+8=38$.</div>"
+          "explanation": "<div class=\"ml-en\">Differences increase by 1 each time: $+2,+3,+4,+5,\\ldots$. $a_4=17$, $a_5=17+6=23$, $a_6=23+7=30$, $a_7=30+8=38$.</div><div class=\"ml-vi\">Hiệu tăng thêm 1 mỗi lần: $+2,+3,+4,+5,\\ldots$. $a_4=17$, $a_5=17+6=23$, $a_6=23+7=30$, $a_7=30+8=38$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q8.png"
         },
         {
           "kind": "MCQ",
@@ -8892,7 +9245,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">An Euler circuit requires in-degree=out-degree at every vertex -- vertices 3 $(2,1)$ and 4 $(2,3)$ are unbalanced, so (ii) is false for every $G\\in S$. An Euler path requires exactly one vertex with out-in=1 (start) and one with in-out=1 (end): vertex 3 has out-in=1, vertex 4 has in-out=1, vertices 1,2 are balanced -- this matches exactly, so some connected $G\\in S$ has an Euler path from vertex 3 to vertex 4, but since it's not balanced everywhere it can't be a circuit. So (iii) is true and (i) is false.</div><div class=\"ml-vi\">Chu trình Euler đòi hỏi bậc vào=bậc ra tại mọi đỉnh -- đỉnh 3 $(2,1)$ và đỉnh 4 $(2,3)$ không cân bằng, nên (ii) sai với mọi $G\\in S$. Đường đi Euler đòi hỏi đúng một đỉnh có bậc ra-vào=1 (điểm đầu) và một đỉnh có bậc vào-ra=1 (điểm cuối): đỉnh 3 có bậc ra-vào=1, đỉnh 4 có bậc vào-ra=1, đỉnh 1,2 cân bằng -- khớp chính xác, nên một số $G\\in S$ liên thông có đường đi Euler từ đỉnh 3 đến đỉnh 4, nhưng vì không cân bằng khắp nơi nên không thể là chu trình. Vậy (iii) đúng và (i) sai.</div>"
+          "explanation": "<div class=\"ml-en\">An Euler circuit requires in-degree=out-degree at every vertex -- vertices 3 $(2,1)$ and 4 $(2,3)$ are unbalanced, so (ii) is false for every $G\\in S$. An Euler path requires exactly one vertex with out-in=1 (start) and one with in-out=1 (end): vertex 3 has out-in=1, vertex 4 has in-out=1, vertices 1,2 are balanced -- this matches exactly, so some connected $G\\in S$ has an Euler path from vertex 3 to vertex 4, but since it's not balanced everywhere it can't be a circuit. So (iii) is true and (i) is false.</div><div class=\"ml-vi\">Chu trình Euler đòi hỏi bậc vào=bậc ra tại mọi đỉnh -- đỉnh 3 $(2,1)$ và đỉnh 4 $(2,3)$ không cân bằng, nên (ii) sai với mọi $G\\in S$. Đường đi Euler đòi hỏi đúng một đỉnh có bậc ra-vào=1 (điểm đầu) và một đỉnh có bậc vào-ra=1 (điểm cuối): đỉnh 3 có bậc ra-vào=1, đỉnh 4 có bậc vào-ra=1, đỉnh 1,2 cân bằng -- khớp chính xác, nên một số $G\\in S$ liên thông có đường đi Euler từ đỉnh 3 đến đỉnh 4, nhưng vì không cân bằng khắp nơi nên không thể là chu trình. Vậy (iii) đúng và (i) sai.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q9.png"
         },
         {
           "kind": "MCQ",
@@ -8915,7 +9269,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">On the domain $N$ (non-negative integers only, unlike $\\mathbb{Z}$), $x^2$ is strictly increasing for $x\\ge0$, so $f$ is injective (no collision like $f(1)=f(-1)$ since negative inputs aren't in the domain). $g$ is linear and strictly increasing, also injective. Both $f$ and $g$ are one-to-one.</div><div class=\"ml-vi\">Trên miền $N$ (chỉ số nguyên không âm, khác $\\mathbb{Z}$), $x^2$ tăng nghiêm ngặt với $x\\ge0$, nên $f$ đơn ánh (không có va chạm như $f(1)=f(-1)$ vì đầu vào âm không thuộc miền). $g$ tuyến tính và tăng nghiêm ngặt, cũng đơn ánh. Cả $f$ và $g$ đều đơn ánh.</div>"
+          "explanation": "<div class=\"ml-en\">On the domain $N$ (non-negative integers only, unlike $\\mathbb{Z}$), $x^2$ is strictly increasing for $x\\ge0$, so $f$ is injective (no collision like $f(1)=f(-1)$ since negative inputs aren't in the domain). $g$ is linear and strictly increasing, also injective. Both $f$ and $g$ are one-to-one.</div><div class=\"ml-vi\">Trên miền $N$ (chỉ số nguyên không âm, khác $\\mathbb{Z}$), $x^2$ tăng nghiêm ngặt với $x\\ge0$, nên $f$ đơn ánh (không có va chạm như $f(1)=f(-1)$ vì đầu vào âm không thuộc miền). $g$ tuyến tính và tăng nghiêm ngặt, cũng đơn ánh. Cả $f$ và $g$ đều đơn ánh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q10.png"
         },
         {
           "kind": "MCQ",
@@ -8941,7 +9296,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Here \"path of length $n$\" is counted in the textbook sense (a walk: vertices and edges may repeat), which is exactly what $(A^n)_{u,v}$ gives. Label the sides $\\{u,v\\}$ and $\\{a,b\\}$. Using the adjacency matrix (order $u,v,a,b$), $A^2$ has $(u,u)=(u,v)=2$ and $(u,a)=(u,b)=0$. Then $(A^4)_{u,v}=\\sum_k A^2_{u,k}A^2_{k,v}=A^2_{u,u}A^2_{u,v}+A^2_{u,v}A^2_{v,v}=2(2)+2(2)=8$.</div><div class=\"ml-vi\">Ở đây \"đường đi độ dài $n$\" được đếm theo nghĩa của giáo trình (dạo/walk: đỉnh và cạnh được phép lặp lại), đúng bằng $(A^n)_{u,v}$. Đặt hai phía $\\{u,v\\}$ và $\\{a,b\\}$. Dùng ma trận kề (thứ tự $u,v,a,b$), $A^2$ có $(u,u)=(u,v)=2$ và $(u,a)=(u,b)=0$. Rồi $(A^4)_{u,v}=\\sum_k A^2_{u,k}A^2_{k,v}=A^2_{u,u}A^2_{u,v}+A^2_{u,v}A^2_{v,v}=2(2)+2(2)=8$.</div>"
+          "explanation": "<div class=\"ml-en\">Here \"path of length $n$\" is counted in the textbook sense (a walk: vertices and edges may repeat), which is exactly what $(A^n)_{u,v}$ gives. Label the sides $\\{u,v\\}$ and $\\{a,b\\}$. Using the adjacency matrix (order $u,v,a,b$), $A^2$ has $(u,u)=(u,v)=2$ and $(u,a)=(u,b)=0$. Then $(A^4)_{u,v}=\\sum_k A^2_{u,k}A^2_{k,v}=A^2_{u,u}A^2_{u,v}+A^2_{u,v}A^2_{v,v}=2(2)+2(2)=8$.</div><div class=\"ml-vi\">Ở đây \"đường đi độ dài $n$\" được đếm theo nghĩa của giáo trình (dạo/walk: đỉnh và cạnh được phép lặp lại), đúng bằng $(A^n)_{u,v}$. Đặt hai phía $\\{u,v\\}$ và $\\{a,b\\}$. Dùng ma trận kề (thứ tự $u,v,a,b$), $A^2$ có $(u,u)=(u,v)=2$ và $(u,a)=(u,b)=0$. Rồi $(A^4)_{u,v}=\\sum_k A^2_{u,k}A^2_{k,v}=A^2_{u,u}A^2_{u,v}+A^2_{u,v}A^2_{v,v}=2(2)+2(2)=8$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q11.png"
         },
         {
           "kind": "MCQ",
@@ -8970,7 +9326,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Parsing: left of root $+$ is $-\\,(\\uparrow32)\\,(\\uparrow23)=-(9)(8)=1$. Right of root is $/\\,6\\,(-42)=/\\,6\\,2=3$. Final: $1+3=4$, which matches none of the listed numeric options.</div><div class=\"ml-vi\">Phân tích: nhánh trái của gốc $+$ là $-\\,(\\uparrow32)\\,(\\uparrow23)=-(9)(8)=1$. Nhánh phải của gốc là $/\\,6\\,(-42)=/\\,6\\,2=3$. Kết quả: $1+3=4$, không khớp bất kỳ đáp án số nào được liệt kê.</div>"
+          "explanation": "<div class=\"ml-en\">Parsing: left of root $+$ is $-\\,(\\uparrow32)\\,(\\uparrow23)=-(9)(8)=1$. Right of root is $/\\,6\\,(-42)=/\\,6\\,2=3$. Final: $1+3=4$, which matches none of the listed numeric options.</div><div class=\"ml-vi\">Phân tích: nhánh trái của gốc $+$ là $-\\,(\\uparrow32)\\,(\\uparrow23)=-(9)(8)=1$. Nhánh phải của gốc là $/\\,6\\,(-42)=/\\,6\\,2=3$. Kết quả: $1+3=4$, không khớp bất kỳ đáp án số nào được liệt kê.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q12.png"
         },
         {
           "kind": "MCQ",
@@ -8996,7 +9353,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">(i) is false: take $x=2$ (even), $y=3$ (odd): $P(x)\\land Q(y)$ true, but $xy=6$ is even, not odd, so $Q(xy)$ false -- implication fails. (ii) is true: even times anything is always even, so whenever $P(x)\\land Q(y)$ holds, $P(xy)$ holds too. (iii) is trivially true: pick $x=1$ (odd, so $P(x)$ false), making the implication vacuously true for that existential witness. So (ii) and (iii) are true.</div><div class=\"ml-vi\">(i) sai: lấy $x=2$ (chẵn), $y=3$ (lẻ): $P(x)\\land Q(y)$ đúng, nhưng $xy=6$ là chẵn, không lẻ, nên $Q(xy)$ sai -- phép kéo theo thất bại. (ii) đúng: chẵn nhân bất kỳ số nào luôn ra chẵn, nên bất cứ khi nào $P(x)\\land Q(y)$ đúng, $P(xy)$ cũng đúng. (iii) đúng hiển nhiên: chọn $x=1$ (lẻ, nên $P(x)$ sai), làm phép kéo theo đúng hiển nhiên cho chứng cứ tồn tại đó. Vậy (ii) và (iii) đúng.</div>"
+          "explanation": "<div class=\"ml-en\">(i) is false: take $x=2$ (even), $y=3$ (odd): $P(x)\\land Q(y)$ true, but $xy=6$ is even, not odd, so $Q(xy)$ false -- implication fails. (ii) is true: even times anything is always even, so whenever $P(x)\\land Q(y)$ holds, $P(xy)$ holds too. (iii) is trivially true: pick $x=1$ (odd, so $P(x)$ false), making the implication vacuously true for that existential witness. So (ii) and (iii) are true.</div><div class=\"ml-vi\">(i) sai: lấy $x=2$ (chẵn), $y=3$ (lẻ): $P(x)\\land Q(y)$ đúng, nhưng $xy=6$ là chẵn, không lẻ, nên $Q(xy)$ sai -- phép kéo theo thất bại. (ii) đúng: chẵn nhân bất kỳ số nào luôn ra chẵn, nên bất cứ khi nào $P(x)\\land Q(y)$ đúng, $P(xy)$ cũng đúng. (iii) đúng hiển nhiên: chọn $x=1$ (lẻ, nên $P(x)$ sai), làm phép kéo theo đúng hiển nhiên cho chứng cứ tồn tại đó. Vậy (ii) và (iii) đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q13.png"
         },
         {
           "kind": "MCQ",
@@ -9022,7 +9380,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Working backwards: $f(16)=2f(8)+3=125\\Rightarrow f(8)=61$. $f(8)=2f(4)+3=61\\Rightarrow f(4)=29$. $f(4)=2f(2)+3=29\\Rightarrow f(2)=13$. $f(2)=2f(1)+3=13\\Rightarrow f(1)=5$.</div><div class=\"ml-vi\">Tính ngược: $f(16)=2f(8)+3=125\\Rightarrow f(8)=61$. $f(8)=2f(4)+3=61\\Rightarrow f(4)=29$. $f(4)=2f(2)+3=29\\Rightarrow f(2)=13$. $f(2)=2f(1)+3=13\\Rightarrow f(1)=5$.</div>"
+          "explanation": "<div class=\"ml-en\">Working backwards: $f(16)=2f(8)+3=125\\Rightarrow f(8)=61$. $f(8)=2f(4)+3=61\\Rightarrow f(4)=29$. $f(4)=2f(2)+3=29\\Rightarrow f(2)=13$. $f(2)=2f(1)+3=13\\Rightarrow f(1)=5$.</div><div class=\"ml-vi\">Tính ngược: $f(16)=2f(8)+3=125\\Rightarrow f(8)=61$. $f(8)=2f(4)+3=61\\Rightarrow f(4)=29$. $f(4)=2f(2)+3=29\\Rightarrow f(2)=13$. $f(2)=2f(1)+3=13\\Rightarrow f(1)=5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q14.png"
         },
         {
           "kind": "MCQ",
@@ -9045,7 +9404,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Graph 1: the 3x3 grid is bipartite with unequal color classes (5 and 4, since 9 vertices is odd) -- a Hamilton cycle in a bipartite graph needs equal-sized parts, so impossible. Graph 2: has a pendant vertex (degree 1), which can never be part of any cycle -- no Hamilton circuit. Graph 3: $K_{2,3}$ is bipartite with unequal parts (2 and 3) -- same reasoning, impossible. None of the three graphs has a Hamilton circuit.</div><div class=\"ml-vi\">Đồ thị 1: lưới 3x3 là lưỡng phân với các lớp màu không bằng nhau (5 và 4, vì 9 đỉnh là số lẻ) -- chu trình Hamilton trong đồ thị lưỡng phân cần hai phía bằng nhau, nên không thể. Đồ thị 2: có đỉnh treo (bậc 1), không bao giờ có thể thuộc bất kỳ chu trình nào -- không có chu trình Hamilton. Đồ thị 3: $K_{2,3}$ lưỡng phân với hai phía không bằng nhau (2 và 3) -- cùng lý luận, không thể. Không đồ thị nào trong ba đồ thị có chu trình Hamilton.</div>"
+          "explanation": "<div class=\"ml-en\">Graph 1: the 3x3 grid is bipartite with unequal color classes (5 and 4, since 9 vertices is odd) -- a Hamilton cycle in a bipartite graph needs equal-sized parts, so impossible. Graph 2: has a pendant vertex (degree 1), which can never be part of any cycle -- no Hamilton circuit. Graph 3: $K_{2,3}$ is bipartite with unequal parts (2 and 3) -- same reasoning, impossible. None of the three graphs has a Hamilton circuit.</div><div class=\"ml-vi\">Đồ thị 1: lưới 3x3 là lưỡng phân với các lớp màu không bằng nhau (5 và 4, vì 9 đỉnh là số lẻ) -- chu trình Hamilton trong đồ thị lưỡng phân cần hai phía bằng nhau, nên không thể. Đồ thị 2: có đỉnh treo (bậc 1), không bao giờ có thể thuộc bất kỳ chu trình nào -- không có chu trình Hamilton. Đồ thị 3: $K_{2,3}$ lưỡng phân với hai phía không bằng nhau (2 và 3) -- cùng lý luận, không thể. Không đồ thị nào trong ba đồ thị có chu trình Hamilton.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q15.png"
         },
         {
           "kind": "MCQ",
@@ -9068,7 +9428,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i) is false: $W_n$ has $n+1$ vertices (hub plus $n$ rim vertices), not $n$. (ii) is true: $n$ rim edges (cycle) plus $n$ spokes $=2n$ edges. (iii) is false in general: only rim vertices have degree 3; the hub has degree $n$. (iv) is false in general: only the hub has degree $n$; rim vertices have degree 3. So (i), (iii), (iv) are incorrect.</div><div class=\"ml-vi\">(i) sai: $W_n$ có $n+1$ đỉnh (trung tâm cộng $n$ đỉnh vành), không phải $n$. (ii) đúng: $n$ cạnh vành (chu trình) cộng $n$ nan hoa $=2n$ cạnh. (iii) sai nói chung: chỉ đỉnh vành có bậc 3; trung tâm có bậc $n$. (iv) sai nói chung: chỉ trung tâm có bậc $n$; đỉnh vành có bậc 3. Vậy (i), (iii), (iv) sai.</div>"
+          "explanation": "<div class=\"ml-en\">(i) is false: $W_n$ has $n+1$ vertices (hub plus $n$ rim vertices), not $n$. (ii) is true: $n$ rim edges (cycle) plus $n$ spokes $=2n$ edges. (iii) is false in general: only rim vertices have degree 3; the hub has degree $n$. (iv) is false in general: only the hub has degree $n$; rim vertices have degree 3. So (i), (iii), (iv) are incorrect.</div><div class=\"ml-vi\">(i) sai: $W_n$ có $n+1$ đỉnh (trung tâm cộng $n$ đỉnh vành), không phải $n$. (ii) đúng: $n$ cạnh vành (chu trình) cộng $n$ nan hoa $=2n$ cạnh. (iii) sai nói chung: chỉ đỉnh vành có bậc 3; trung tâm có bậc $n$. (iv) sai nói chung: chỉ trung tâm có bậc $n$; đỉnh vành có bậc 3. Vậy (i), (iii), (iv) sai.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q16.png"
         },
         {
           "kind": "MCQ",
@@ -9094,7 +9455,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f(3)=3f(2)+6=18\\Rightarrow f(2)=4$. $f(4)=3f(3)+6=3(18)+6=60$.</div><div class=\"ml-vi\">$f(3)=3f(2)+6=18\\Rightarrow f(2)=4$. $f(4)=3f(3)+6=3(18)+6=60$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(3)=3f(2)+6=18\\Rightarrow f(2)=4$. $f(4)=3f(3)+6=3(18)+6=60$.</div><div class=\"ml-vi\">$f(3)=3f(2)+6=18\\Rightarrow f(2)=4$. $f(4)=3f(3)+6=3(18)+6=60$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q17.png"
         },
         {
           "kind": "MCQ",
@@ -9120,7 +9482,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i) and (iii) use simple `for` loops -- iterative, not recursive. (ii) and (iv) both call themselves with a smaller argument ($tt2(x,n-1)$, $tt4(n-1)$) -- recursive.</div><div class=\"ml-vi\">(i) và (iii) dùng vòng lặp `for` đơn giản -- lặp, không đệ quy. (ii) và (iv) đều tự gọi chính nó với đối số nhỏ hơn ($tt2(x,n-1)$, $tt4(n-1)$) -- đệ quy.</div>"
+          "explanation": "<div class=\"ml-en\">(i) and (iii) use simple `for` loops -- iterative, not recursive. (ii) and (iv) both call themselves with a smaller argument ($tt2(x,n-1)$, $tt4(n-1)$) -- recursive.</div><div class=\"ml-vi\">(i) và (iii) dùng vòng lặp `for` đơn giản -- lặp, không đệ quy. (ii) và (iv) đều tự gọi chính nó với đối số nhỏ hơn ($tt2(x,n-1)$, $tt4(n-1)$) -- đệ quy.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q18.png"
         },
         {
           "kind": "MCQ",
@@ -9146,7 +9509,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">By the handshaking lemma, sum of degrees $=2\\times10=20$. With every vertex having degree 4, vertices $=20/4=5$.</div><div class=\"ml-vi\">Theo bổ đề bắt tay, tổng bậc $=2\\times10=20$. Với mọi đỉnh bậc 4, số đỉnh $=20/4=5$.</div>"
+          "explanation": "<div class=\"ml-en\">By the handshaking lemma, sum of degrees $=2\\times10=20$. With every vertex having degree 4, vertices $=20/4=5$.</div><div class=\"ml-vi\">Theo bổ đề bắt tay, tổng bậc $=2\\times10=20$. Với mọi đỉnh bậc 4, số đỉnh $=20/4=5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q19.png"
         },
         {
           "kind": "MCQ",
@@ -9169,7 +9533,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$n=8$: $i=1,j=8$. 1st division: $m=4$, $a_4=7<11$ so $i:=5$. 2nd division: $i=5,j=8$, $m=6$, $a_6=9<11$ so $i:=7$. Now $i=7,j=8$, sublist under consideration is $a_7,a_8=10,13$.</div><div class=\"ml-vi\">$n=8$: $i=1,j=8$. Lần chia 1: $m=4$, $a_4=7<11$ nên $i:=5$. Lần chia 2: $i=5,j=8$, $m=6$, $a_6=9<11$ nên $i:=7$. Giờ $i=7,j=8$, dãy con đang xét là $a_7,a_8=10,13$.</div>"
+          "explanation": "<div class=\"ml-en\">$n=8$: $i=1,j=8$. 1st division: $m=4$, $a_4=7<11$ so $i:=5$. 2nd division: $i=5,j=8$, $m=6$, $a_6=9<11$ so $i:=7$. Now $i=7,j=8$, sublist under consideration is $a_7,a_8=10,13$.</div><div class=\"ml-vi\">$n=8$: $i=1,j=8$. Lần chia 1: $m=4$, $a_4=7<11$ nên $i:=5$. Lần chia 2: $i=5,j=8$, $m=6$, $a_6=9<11$ nên $i:=7$. Giờ $i=7,j=8$, dãy con đang xét là $a_7,a_8=10,13$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q20.png"
         },
         {
           "kind": "MCQ",
@@ -9198,7 +9563,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">A proposition is a statement with a definite truth value and no free variables. $P(c)$ is a specific instance (no free variable) -- a proposition. $\\forall xP(x)$ is fully quantified -- a proposition. $\\neg P(a)\\lor P(b)$ combines specific instances -- a proposition. All three qualify.</div><div class=\"ml-vi\">Một mệnh đề là phát biểu có giá trị chân lý xác định và không biến tự do. $P(c)$ là một thực thể cụ thể (không biến tự do) -- một mệnh đề. $\\forall xP(x)$ được lượng hóa đầy đủ -- một mệnh đề. $\\neg P(a)\\lor P(b)$ kết hợp các thực thể cụ thể -- một mệnh đề. Cả ba đều thỏa.</div>"
+          "explanation": "<div class=\"ml-en\">A proposition is a statement with a definite truth value and no free variables. $P(c)$ is a specific instance (no free variable) -- a proposition. $\\forall xP(x)$ is fully quantified -- a proposition. $\\neg P(a)\\lor P(b)$ combines specific instances -- a proposition. All three qualify.</div><div class=\"ml-vi\">Một mệnh đề là phát biểu có giá trị chân lý xác định và không biến tự do. $P(c)$ là một thực thể cụ thể (không biến tự do) -- một mệnh đề. $\\forall xP(x)$ được lượng hóa đầy đủ -- một mệnh đề. $\\neg P(a)\\lor P(b)$ kết hợp các thực thể cụ thể -- một mệnh đề. Cả ba đều thỏa.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q21.png"
         },
         {
           "kind": "MCQ",
@@ -9221,7 +9587,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">(i) $(\\log x)^{2010}$ grows slower than any positive power of $x$, so it IS $O(x^3)$. (iii) $2x^2+x-1$ is $O(x^2)\\subset O(x^3)$. (ii) behaves like $\\frac{x^5}{x\\log x}=\\frac{x^4}{\\log x}$, which grows faster than $x^3$ (their ratio $\\frac{x}{\\log x}\\to\\infty$) -- NOT $O(x^3)$.</div><div class=\"ml-vi\">(i) $(\\log x)^{2010}$ tăng chậm hơn bất kỳ lũy thừa dương nào của $x$, nên LÀ $O(x^3)$. (iii) $2x^2+x-1$ là $O(x^2)\\subset O(x^3)$. (ii) hoạt động như $\\frac{x^5}{x\\log x}=\\frac{x^4}{\\log x}$, tăng nhanh hơn $x^3$ (tỉ số $\\frac{x}{\\log x}\\to\\infty$) -- KHÔNG phải $O(x^3)$.</div>"
+          "explanation": "<div class=\"ml-en\">(i) $(\\log x)^{2010}$ grows slower than any positive power of $x$, so it IS $O(x^3)$. (iii) $2x^2+x-1$ is $O(x^2)\\subset O(x^3)$. (ii) behaves like $\\frac{x^5}{x\\log x}=\\frac{x^4}{\\log x}$, which grows faster than $x^3$ (their ratio $\\frac{x}{\\log x}\\to\\infty$) -- NOT $O(x^3)$.</div><div class=\"ml-vi\">(i) $(\\log x)^{2010}$ tăng chậm hơn bất kỳ lũy thừa dương nào của $x$, nên LÀ $O(x^3)$. (iii) $2x^2+x-1$ là $O(x^2)\\subset O(x^3)$. (ii) hoạt động như $\\frac{x^5}{x\\log x}=\\frac{x^4}{\\log x}$, tăng nhanh hơn $x^3$ (tỉ số $\\frac{x}{\\log x}\\to\\infty$) -- KHÔNG phải $O(x^3)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q22.png"
         },
         {
           "kind": "MCQ",
@@ -9247,7 +9614,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$A\\cup C=\\{0,1,2,3,4,5,6,7,8,9,10\\}$. Every element of $B=\\{1,2,3,4,5,6\\}$ is in $A\\cup C$, so $B-(A\\cup C)=\\emptyset$, cardinality 0.</div><div class=\"ml-vi\">$A\\cup C=\\{0,1,2,3,4,5,6,7,8,9,10\\}$. Mọi phần tử của $B=\\{1,2,3,4,5,6\\}$ đều thuộc $A\\cup C$, nên $B-(A\\cup C)=\\emptyset$, lực lượng 0.</div>"
+          "explanation": "<div class=\"ml-en\">$A\\cup C=\\{0,1,2,3,4,5,6,7,8,9,10\\}$. Every element of $B=\\{1,2,3,4,5,6\\}$ is in $A\\cup C$, so $B-(A\\cup C)=\\emptyset$, cardinality 0.</div><div class=\"ml-vi\">$A\\cup C=\\{0,1,2,3,4,5,6,7,8,9,10\\}$. Mọi phần tử của $B=\\{1,2,3,4,5,6\\}$ đều thuộc $A\\cup C$, nên $B-(A\\cup C)=\\emptyset$, lực lượng 0.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q23.png"
         },
         {
           "kind": "MCQ",
@@ -9273,7 +9641,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">As a set, $\\{a,a,b\\}=\\{a,b\\}$ (duplicates don't count), which has 2 elements. So $|P(\\{a,b\\})|=2^2=4$.</div><div class=\"ml-vi\">Là một tập hợp, $\\{a,a,b\\}=\\{a,b\\}$ (phần tử trùng không tính thêm), có 2 phần tử. Nên $|P(\\{a,b\\})|=2^2=4$.</div>"
+          "explanation": "<div class=\"ml-en\">As a set, $\\{a,a,b\\}=\\{a,b\\}$ (duplicates don't count), which has 2 elements. So $|P(\\{a,b\\})|=2^2=4$.</div><div class=\"ml-vi\">Là một tập hợp, $\\{a,a,b\\}=\\{a,b\\}$ (phần tử trùng không tính thêm), có 2 phần tử. Nên $|P(\\{a,b\\})|=2^2=4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q24.png"
         },
         {
           "kind": "MCQ",
@@ -9299,7 +9668,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">\"Although X, Y\" logically means both X and Y hold (the \"although\" just signals contrast, not a conditional): \"she is out of work\" ($p$, true) AND \"she doesn't spend less on clothes\" ($\\neg q$, true). This is $p\\land\\neg q$, option (ii).</div><div class=\"ml-vi\">\"Mặc dù X, Y\" về mặt logic nghĩa là cả X và Y đều đúng (\"mặc dù\" chỉ báo hiệu sự tương phản, không phải điều kiện): \"cô ấy thất nghiệp\" ($p$, đúng) VÀ \"cô ấy không chi tiêu ít hơn\" ($\\neg q$, đúng). Đây là $p\\land\\neg q$, đáp án (ii).</div>"
+          "explanation": "<div class=\"ml-en\">\"Although X, Y\" logically means both X and Y hold (the \"although\" just signals contrast, not a conditional): \"she is out of work\" ($p$, true) AND \"she doesn't spend less on clothes\" ($\\neg q$, true). This is $p\\land\\neg q$, option (ii).</div><div class=\"ml-vi\">\"Mặc dù X, Y\" về mặt logic nghĩa là cả X và Y đều đúng (\"mặc dù\" chỉ báo hiệu sự tương phản, không phải điều kiện): \"cô ấy thất nghiệp\" ($p$, đúng) VÀ \"cô ấy không chi tiêu ít hơn\" ($\\neg q$, đúng). Đây là $p\\land\\neg q$, đáp án (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q25.png"
         },
         {
           "kind": "MCQ",
@@ -9322,7 +9692,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">(i): checking $\\{11,101,01,001\\}$, no code is a prefix of another -- valid. (ii): $b$=\"10\" is a prefix of $e$=\"100\" -- violates the prefix property, invalid. (iii): checking $\\{101,011,100,001,11111\\}$, no code is a prefix of another -- valid. So (i) and (iii) are prefix codes.</div><div class=\"ml-vi\">(i): kiểm $\\{11,101,01,001\\}$, không mã nào là tiền tố của mã khác -- hợp lệ. (ii): $b$=\"10\" là tiền tố của $e$=\"100\" -- vi phạm tính chất tiền tố, không hợp lệ. (iii): kiểm $\\{101,011,100,001,11111\\}$, không mã nào là tiền tố của mã khác -- hợp lệ. Vậy (i) và (iii) là mã tiền tố.</div>"
+          "explanation": "<div class=\"ml-en\">(i): checking $\\{11,101,01,001\\}$, no code is a prefix of another -- valid. (ii): $b$=\"10\" is a prefix of $e$=\"100\" -- violates the prefix property, invalid. (iii): checking $\\{101,011,100,001,11111\\}$, no code is a prefix of another -- valid. So (i) and (iii) are prefix codes.</div><div class=\"ml-vi\">(i): kiểm $\\{11,101,01,001\\}$, không mã nào là tiền tố của mã khác -- hợp lệ. (ii): $b$=\"10\" là tiền tố của $e$=\"100\" -- vi phạm tính chất tiền tố, không hợp lệ. (iii): kiểm $\\{101,011,100,001,11111\\}$, không mã nào là tiền tố của mã khác -- hợp lệ. Vậy (i) và (iii) là mã tiền tố.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q26.png"
         },
         {
           "kind": "MCQ",
@@ -9345,7 +9716,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Each hex digit maps to 4 binary digits: $B=1011$, $C=1100$, $1=0001$. Concatenating: $101111000001$.</div><div class=\"ml-vi\">Mỗi chữ số hex ánh xạ thành 4 chữ số nhị phân: $B=1011$, $C=1100$, $1=0001$. Ghép lại: $101111000001$.</div>"
+          "explanation": "<div class=\"ml-en\">Each hex digit maps to 4 binary digits: $B=1011$, $C=1100$, $1=0001$. Concatenating: $101111000001$.</div><div class=\"ml-vi\">Mỗi chữ số hex ánh xạ thành 4 chữ số nhị phân: $B=1011$, $C=1100$, $1=0001$. Ghép lại: $101111000001$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q27.png"
         },
         {
           "kind": "MCQ",
@@ -9368,7 +9740,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">To minimize vertices while keeping full (every internal node has exactly 3 children) and height exactly 3, only ONE child at each level continues branching (the others are immediate leaves): level 0 = 1 (root), level 1 = 3 (2 leaves + 1 internal), level 2 = 3 (2 leaves + 1 internal), level 3 = 3 (leaves). Total $=1+3+3+3=10$.</div><div class=\"ml-vi\">Để tối thiểu số đỉnh mà vẫn giữ đầy đủ (mỗi đỉnh trong có đúng 3 con) và chiều cao đúng 3, chỉ MỘT con ở mỗi mức tiếp tục phân nhánh (các con còn lại là lá ngay): mức 0 = 1 (gốc), mức 1 = 3 (2 lá + 1 đỉnh trong), mức 2 = 3 (2 lá + 1 đỉnh trong), mức 3 = 3 (lá). Tổng $=1+3+3+3=10$.</div>"
+          "explanation": "<div class=\"ml-en\">To minimize vertices while keeping full (every internal node has exactly 3 children) and height exactly 3, only ONE child at each level continues branching (the others are immediate leaves): level 0 = 1 (root), level 1 = 3 (2 leaves + 1 internal), level 2 = 3 (2 leaves + 1 internal), level 3 = 3 (leaves). Total $=1+3+3+3=10$.</div><div class=\"ml-vi\">Để tối thiểu số đỉnh mà vẫn giữ đầy đủ (mỗi đỉnh trong có đúng 3 con) và chiều cao đúng 3, chỉ MỘT con ở mỗi mức tiếp tục phân nhánh (các con còn lại là lá ngay): mức 0 = 1 (gốc), mức 1 = 3 (2 lá + 1 đỉnh trong), mức 2 = 3 (2 lá + 1 đỉnh trong), mức 3 = 3 (lá). Tổng $=1+3+3+3=10$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q28.png"
         },
         {
           "kind": "MCQ",
@@ -9394,7 +9767,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Let $S$=\"project succeeds\", $H$=\"I will be happy\", $M$=\"you change the method\". Premises: $S\\to H$ and $S\\to M$ (\"only if\" gives $S\\to M$, not $M\\to S$). The conclusion $M\\to H$ would require $M\\to S$ (the converse), which is NOT given. This confuses a necessary condition with a sufficient one -- the argument is invalid.</div><div class=\"ml-vi\">Cho $S$=\"dự án thành công\", $H$=\"tôi sẽ vui\", $M$=\"bạn thay đổi phương pháp\". Tiền đề: $S\\to H$ và $S\\to M$ (\"chỉ khi\" cho $S\\to M$, không phải $M\\to S$). Kết luận $M\\to H$ sẽ cần $M\\to S$ (chiều ngược), điều này KHÔNG được cho. Đây là sự nhầm lẫn giữa điều kiện cần và điều kiện đủ -- lập luận không hợp lệ.</div>"
+          "explanation": "<div class=\"ml-en\">Let $S$=\"project succeeds\", $H$=\"I will be happy\", $M$=\"you change the method\". Premises: $S\\to H$ and $S\\to M$ (\"only if\" gives $S\\to M$, not $M\\to S$). The conclusion $M\\to H$ would require $M\\to S$ (the converse), which is NOT given. This confuses a necessary condition with a sufficient one -- the argument is invalid.</div><div class=\"ml-vi\">Cho $S$=\"dự án thành công\", $H$=\"tôi sẽ vui\", $M$=\"bạn thay đổi phương pháp\". Tiền đề: $S\\to H$ và $S\\to M$ (\"chỉ khi\" cho $S\\to M$, không phải $M\\to S$). Kết luận $M\\to H$ sẽ cần $M\\to S$ (chiều ngược), điều này KHÔNG được cho. Đây là sự nhầm lẫn giữa điều kiện cần và điều kiện đủ -- lập luận không hợp lệ.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q29.png"
         },
         {
           "kind": "MCQ",
@@ -9420,7 +9794,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">Let $i$ be internal vertices, $l$ leaves: $l=i(m-1)+1$ and $v=i+l$, so $i=v-l$. Substituting: $l=(v-l)(m-1)+1\\Rightarrow lm=(m-1)v+1\\Rightarrow l=\\frac{(m-1)v+1}{m}$.</div><div class=\"ml-vi\">Gọi $i$ là đỉnh trong, $l$ là lá: $l=i(m-1)+1$ và $v=i+l$, nên $i=v-l$. Thay vào: $l=(v-l)(m-1)+1\\Rightarrow lm=(m-1)v+1\\Rightarrow l=\\frac{(m-1)v+1}{m}$.</div>"
+          "explanation": "<div class=\"ml-en\">Let $i$ be internal vertices, $l$ leaves: $l=i(m-1)+1$ and $v=i+l$, so $i=v-l$. Substituting: $l=(v-l)(m-1)+1\\Rightarrow lm=(m-1)v+1\\Rightarrow l=\\frac{(m-1)v+1}{m}$.</div><div class=\"ml-vi\">Gọi $i$ là đỉnh trong, $l$ là lá: $l=i(m-1)+1$ và $v=i+l$, nên $i=v-l$. Thay vào: $l=(v-l)(m-1)+1\\Rightarrow lm=(m-1)v+1\\Rightarrow l=\\frac{(m-1)v+1}{m}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q30.png"
         },
         {
           "kind": "MCQ",
@@ -9443,7 +9818,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Step (iii) invokes $P(k-1)$ (i.e. $3^{k-1}=1$) to complete the algebra, but this requires $k-1\\ge0$, i.e. $k\\ge1$. When $k=0$ (the very first application, going from the base case to $P(1)$), $k-1=-1$ is NOT a valid non-negative integer and $P(-1)$ was never established -- the algebraic step silently breaks exactly at this transition, making the whole proof invalid despite each individual line looking plausible.</div><div class=\"ml-vi\">Bước (iii) viện dẫn $P(k-1)$ (tức $3^{k-1}=1$) để hoàn tất đại số, nhưng điều này đòi hỏi $k-1\\ge0$, tức $k\\ge1$. Khi $k=0$ (lần áp dụng đầu tiên, từ trường hợp cơ sở sang $P(1)$), $k-1=-1$ KHÔNG phải số nguyên không âm hợp lệ và $P(-1)$ chưa từng được thiết lập -- bước đại số âm thầm gãy đúng tại chuyển tiếp này, làm toàn bộ chứng minh không hợp lệ dù mỗi dòng riêng lẻ trông có vẻ hợp lý.</div>"
+          "explanation": "<div class=\"ml-en\">Step (iii) invokes $P(k-1)$ (i.e. $3^{k-1}=1$) to complete the algebra, but this requires $k-1\\ge0$, i.e. $k\\ge1$. When $k=0$ (the very first application, going from the base case to $P(1)$), $k-1=-1$ is NOT a valid non-negative integer and $P(-1)$ was never established -- the algebraic step silently breaks exactly at this transition, making the whole proof invalid despite each individual line looking plausible.</div><div class=\"ml-vi\">Bước (iii) viện dẫn $P(k-1)$ (tức $3^{k-1}=1$) để hoàn tất đại số, nhưng điều này đòi hỏi $k-1\\ge0$, tức $k\\ge1$. Khi $k=0$ (lần áp dụng đầu tiên, từ trường hợp cơ sở sang $P(1)$), $k-1=-1$ KHÔNG phải số nguyên không âm hợp lệ và $P(-1)$ chưa từng được thiết lập -- bước đại số âm thầm gãy đúng tại chuyển tiếp này, làm toàn bộ chứng minh không hợp lệ dù mỗi dòng riêng lẻ trông có vẻ hợp lý.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q31.png"
         },
         {
           "kind": "MCQ",
@@ -9466,7 +9842,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Decoding greedily: \"011\"=$t$, remaining \"110101011\"; \"11\"=$e$, remaining \"0101011\"; \"0101\"=$x$, remaining \"011\"; \"011\"=$t$. Result: $t,e,x,t$=\"text\".</div><div class=\"ml-vi\">Giải mã tham lam: \"011\"=$t$, còn lại \"110101011\"; \"11\"=$e$, còn lại \"0101011\"; \"0101\"=$x$, còn lại \"011\"; \"011\"=$t$. Kết quả: $t,e,x,t$=\"text\".</div>"
+          "explanation": "<div class=\"ml-en\">Decoding greedily: \"011\"=$t$, remaining \"110101011\"; \"11\"=$e$, remaining \"0101011\"; \"0101\"=$x$, remaining \"011\"; \"011\"=$t$. Result: $t,e,x,t$=\"text\".</div><div class=\"ml-vi\">Giải mã tham lam: \"011\"=$t$, còn lại \"110101011\"; \"11\"=$e$, còn lại \"0101011\"; \"0101\"=$x$, còn lại \"011\"; \"011\"=$t$. Kết quả: $t,e,x,t$=\"text\".</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q32.png"
         },
         {
           "kind": "MCQ",
@@ -9492,7 +9869,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$6-7=-1$. Then $5\\times(-1)=-5$.</div><div class=\"ml-vi\">$6-7=-1$. Rồi $5\\times(-1)=-5$.</div>"
+          "explanation": "<div class=\"ml-en\">$6-7=-1$. Then $5\\times(-1)=-5$.</div><div class=\"ml-vi\">$6-7=-1$. Rồi $5\\times(-1)=-5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q34.png"
         },
         {
           "kind": "MCQ",
@@ -9515,7 +9893,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$n=3267\\times10^5$. $3267=3^3\\times11^2$. $10^5=2^5\\times5^5$. So $n=2^5\\times3^3\\times5^5\\times11^2$, giving exponents $5,3,5,2$, sum $=5+3+5+2=15$.</div><div class=\"ml-vi\">$n=3267\\times10^5$. $3267=3^3\\times11^2$. $10^5=2^5\\times5^5$. Vậy $n=2^5\\times3^3\\times5^5\\times11^2$, cho các số mũ $5,3,5,2$, tổng $=5+3+5+2=15$.</div>"
+          "explanation": "<div class=\"ml-en\">$n=3267\\times10^5$. $3267=3^3\\times11^2$. $10^5=2^5\\times5^5$. So $n=2^5\\times3^3\\times5^5\\times11^2$, giving exponents $5,3,5,2$, sum $=5+3+5+2=15$.</div><div class=\"ml-vi\">$n=3267\\times10^5$. $3267=3^3\\times11^2$. $10^5=2^5\\times5^5$. Vậy $n=2^5\\times3^3\\times5^5\\times11^2$, cho các số mũ $5,3,5,2$, tổng $=5+3+5+2=15$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q35.png"
         },
         {
           "kind": "MCQ",
@@ -9541,7 +9920,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$A$(0) first. Relax from $A$: $B=2,C=9$. Next smallest unvisited: $B$(2). Relax from $B$: $D=2+7=9$, $C=\\min(9,10)=9$, $E=2+3=5$. Next smallest unvisited: $E$(5). Order: $A,B,E$.</div><div class=\"ml-vi\">$A$(0) trước. Nới lỏng từ $A$: $B=2,C=9$. Tiếp theo nhỏ nhất chưa thăm: $B$(2). Nới lỏng từ $B$: $D=2+7=9$, $C=\\min(9,10)=9$, $E=2+3=5$. Tiếp theo nhỏ nhất chưa thăm: $E$(5). Thứ tự: $A,B,E$.</div>"
+          "explanation": "<div class=\"ml-en\">$A$(0) first. Relax from $A$: $B=2,C=9$. Next smallest unvisited: $B$(2). Relax from $B$: $D=2+7=9$, $C=\\min(9,10)=9$, $E=2+3=5$. Next smallest unvisited: $E$(5). Order: $A,B,E$.</div><div class=\"ml-vi\">$A$(0) trước. Nới lỏng từ $A$: $B=2,C=9$. Tiếp theo nhỏ nhất chưa thăm: $B$(2). Nới lỏng từ $B$: $D=2+7=9$, $C=\\min(9,10)=9$, $E=2+3=5$. Tiếp theo nhỏ nhất chưa thăm: $E$(5). Thứ tự: $A,B,E$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q36.png"
         },
         {
           "kind": "MCQ",
@@ -9564,7 +9944,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The statement is $p\\to(q\\land r)$. Its negation is $\\neg(p\\to(q\\land r))=p\\land\\neg(q\\land r)=p\\land(\\neg q\\lor\\neg r)$: \"You want to pass this course, AND you should not study hard OR you should not go to class regularly.\"</div><div class=\"ml-vi\">Mệnh đề là $p\\to(q\\land r)$. Phủ định là $\\neg(p\\to(q\\land r))=p\\land\\neg(q\\land r)=p\\land(\\neg q\\lor\\neg r)$: \"Bạn muốn đậu môn này, VÀ bạn không nên học chăm chỉ HOẶC bạn không nên đi học đều đặn.\"</div>"
+          "explanation": "<div class=\"ml-en\">The statement is $p\\to(q\\land r)$. Its negation is $\\neg(p\\to(q\\land r))=p\\land\\neg(q\\land r)=p\\land(\\neg q\\lor\\neg r)$: \"You want to pass this course, AND you should not study hard OR you should not go to class regularly.\"</div><div class=\"ml-vi\">Mệnh đề là $p\\to(q\\land r)$. Phủ định là $\\neg(p\\to(q\\land r))=p\\land\\neg(q\\land r)=p\\land(\\neg q\\lor\\neg r)$: \"Bạn muốn đậu môn này, VÀ bạn không nên học chăm chỉ HOẶC bạn không nên đi học đều đặn.\"</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q37.png"
         },
         {
           "kind": "MCQ",
@@ -9587,7 +9968,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Kruskal's algorithm, increasing order: $AF(1)$ add, $BC(1)$ add, $GI(1)$ add, $AG(2)$ add (connects $\\{A,F\\}$+$\\{G,I\\}$), $HC(2)$ add (connects $H$ with $\\{B,C\\}$), $HD(2)$ add (connects $D$), $IF(2)$ skip (cycle), $GB(3)$ add (connects the two big components), $GC(3)$ skip, $IE(3)$ add (connects $E$) -- 8 edges span all 9 vertices. Total: $1+1+1+2+2+2+3+3=15$.</div><div class=\"ml-vi\">Thuật toán Kruskal, thứ tự tăng dần: $AF(1)$ thêm, $BC(1)$ thêm, $GI(1)$ thêm, $AG(2)$ thêm (nối $\\{A,F\\}$+$\\{G,I\\}$), $HC(2)$ thêm (nối $H$ với $\\{B,C\\}$), $HD(2)$ thêm (nối $D$), $IF(2)$ bỏ qua (chu trình), $GB(3)$ thêm (nối hai thành phần lớn), $GC(3)$ bỏ qua, $IE(3)$ thêm (nối $E$) -- 8 cạnh trải khắp 9 đỉnh. Tổng: $1+1+1+2+2+2+3+3=15$.</div>"
+          "explanation": "<div class=\"ml-en\">Kruskal's algorithm, increasing order: $AF(1)$ add, $BC(1)$ add, $GI(1)$ add, $AG(2)$ add (connects $\\{A,F\\}$+$\\{G,I\\}$), $HC(2)$ add (connects $H$ with $\\{B,C\\}$), $HD(2)$ add (connects $D$), $IF(2)$ skip (cycle), $GB(3)$ add (connects the two big components), $GC(3)$ skip, $IE(3)$ add (connects $E$) -- 8 edges span all 9 vertices. Total: $1+1+1+2+2+2+3+3=15$.</div><div class=\"ml-vi\">Thuật toán Kruskal, thứ tự tăng dần: $AF(1)$ thêm, $BC(1)$ thêm, $GI(1)$ thêm, $AG(2)$ thêm (nối $\\{A,F\\}$+$\\{G,I\\}$), $HC(2)$ thêm (nối $H$ với $\\{B,C\\}$), $HD(2)$ thêm (nối $D$), $IF(2)$ bỏ qua (chu trình), $GB(3)$ thêm (nối hai thành phần lớn), $GC(3)$ bỏ qua, $IE(3)$ thêm (nối $E$) -- 8 cạnh trải khắp 9 đỉnh. Tổng: $1+1+1+2+2+2+3+3=15$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q38.png"
         },
         {
           "kind": "MCQ",
@@ -9613,7 +9995,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$x=16,y=573$. Iter1: $r=16\\bmod573=16$, $x:=573,y:=16$. Iter2: $r=573\\bmod16$: $16\\times35=560$, $r=13$; $x:=16,y:=13$.</div><div class=\"ml-vi\">$x=16,y=573$. Lặp1: $r=16\\bmod573=16$, $x:=573,y:=16$. Lặp2: $r=573\\bmod16$: $16\\times35=560$, $r=13$; $x:=16,y:=13$.</div>"
+          "explanation": "<div class=\"ml-en\">$x=16,y=573$. Iter1: $r=16\\bmod573=16$, $x:=573,y:=16$. Iter2: $r=573\\bmod16$: $16\\times35=560$, $r=13$; $x:=16,y:=13$.</div><div class=\"ml-vi\">$x=16,y=573$. Lặp1: $r=16\\bmod573=16$, $x:=573,y:=16$. Lặp2: $r=573\\bmod16$: $16\\times35=560$, $r=13$; $x:=16,y:=13$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q39.png"
         },
         {
           "kind": "MCQ",
@@ -9639,7 +10022,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Trace with $m=1,t=0$: $2\\ge1\\to t{=}1$; $3\\ge2\\to t{=}2$; $6\\ge3\\to t{=}3$; $7\\ge6\\to t{=}4$; $7\\ge7\\to t{=}5$; $4\\ge7$ no; $8\\ge7\\to t{=}6$; $8\\ge8\\to t{=}7$; $6\\ge8$ no. Each $t:=t+1$ is one addition, total 7.</div><div class=\"ml-vi\">Theo dõi với $m=1,t=0$: $2\\ge1\\to t{=}1$; $3\\ge2\\to t{=}2$; $6\\ge3\\to t{=}3$; $7\\ge6\\to t{=}4$; $7\\ge7\\to t{=}5$; $4\\ge7$ không; $8\\ge7\\to t{=}6$; $8\\ge8\\to t{=}7$; $6\\ge8$ không. Mỗi $t:=t+1$ là một phép cộng, tổng 7.</div>"
+          "explanation": "<div class=\"ml-en\">Trace with $m=1,t=0$: $2\\ge1\\to t{=}1$; $3\\ge2\\to t{=}2$; $6\\ge3\\to t{=}3$; $7\\ge6\\to t{=}4$; $7\\ge7\\to t{=}5$; $4\\ge7$ no; $8\\ge7\\to t{=}6$; $8\\ge8\\to t{=}7$; $6\\ge8$ no. Each $t:=t+1$ is one addition, total 7.</div><div class=\"ml-vi\">Theo dõi với $m=1,t=0$: $2\\ge1\\to t{=}1$; $3\\ge2\\to t{=}2$; $6\\ge3\\to t{=}3$; $7\\ge6\\to t{=}4$; $7\\ge7\\to t{=}5$; $4\\ge7$ không; $8\\ge7\\to t{=}6$; $8\\ge8\\to t{=}7$; $6\\ge8$ không. Mỗi $t:=t+1$ là một phép cộng, tổng 7.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q40.png"
         },
         {
           "kind": "MCQ",
@@ -9665,7 +10049,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$A\\cup B=\\{a,c,d,e,f,g,h,i,j\\}$ -- every element except $b$. Reading positions $a,b,c,d,e,f,g,h,i,j$: $1,0,1,1,1,1,1,1,1,1=$ \"10 1111 1111\".</div><div class=\"ml-vi\">$A\\cup B=\\{a,c,d,e,f,g,h,i,j\\}$ -- mọi phần tử trừ $b$. Đọc vị trí $a,b,c,d,e,f,g,h,i,j$: $1,0,1,1,1,1,1,1,1,1=$ \"10 1111 1111\".</div>"
+          "explanation": "<div class=\"ml-en\">$A\\cup B=\\{a,c,d,e,f,g,h,i,j\\}$ -- every element except $b$. Reading positions $a,b,c,d,e,f,g,h,i,j$: $1,0,1,1,1,1,1,1,1,1=$ \"10 1111 1111\".</div><div class=\"ml-vi\">$A\\cup B=\\{a,c,d,e,f,g,h,i,j\\}$ -- mọi phần tử trừ $b$. Đọc vị trí $a,b,c,d,e,f,g,h,i,j$: $1,0,1,1,1,1,1,1,1,1=$ \"10 1111 1111\".</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q41.png"
         },
         {
           "kind": "MCQ",
@@ -9691,7 +10076,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The natural translation is $\\forall x(P(x)\\to\\exists yQ(x,y))$. Since $P(x)$ doesn't involve $y$, this is logically equivalent to $\\forall x\\exists y(P(x)\\to Q(x,y))$ (moving $\\exists y$ inward past an antecedent not containing $y$ preserves truth value), option (ii).</div><div class=\"ml-vi\">Diễn đạt tự nhiên là $\\forall x(P(x)\\to\\exists yQ(x,y))$. Vì $P(x)$ không chứa $y$, điều này tương đương logic với $\\forall x\\exists y(P(x)\\to Q(x,y))$ (đưa $\\exists y$ vào trong qua một tiền đề không chứa $y$ giữ nguyên giá trị chân lý), đáp án (ii).</div>"
+          "explanation": "<div class=\"ml-en\">The natural translation is $\\forall x(P(x)\\to\\exists yQ(x,y))$. Since $P(x)$ doesn't involve $y$, this is logically equivalent to $\\forall x\\exists y(P(x)\\to Q(x,y))$ (moving $\\exists y$ inward past an antecedent not containing $y$ preserves truth value), option (ii).</div><div class=\"ml-vi\">Diễn đạt tự nhiên là $\\forall x(P(x)\\to\\exists yQ(x,y))$. Vì $P(x)$ không chứa $y$, điều này tương đương logic với $\\forall x\\exists y(P(x)\\to Q(x,y))$ (đưa $\\exists y$ vào trong qua một tiền đề không chứa $y$ giữ nguyên giá trị chân lý), đáp án (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q42.png"
         },
         {
           "kind": "MCQ",
@@ -9720,7 +10106,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Starting at the hub (degree 100, connected to all 100 rim vertices), DFS goes to a first rim vertex, then follows the rim cycle to an unvisited neighbor each time (since each rim vertex connects to 2 cycle-neighbors plus the hub), traversing the entire 100-vertex cycle as one deep path before backtracking. This reaches depth 100 at the last rim vertex visited.</div><div class=\"ml-vi\">Bắt đầu tại trung tâm (bậc 100, nối với cả 100 đỉnh vành), DFS đi đến đỉnh vành đầu tiên, rồi theo chu trình vành đến hàng xóm chưa thăm mỗi lần (vì mỗi đỉnh vành nối với 2 hàng xóm chu trình cộng trung tâm), đi qua toàn bộ chu trình 100 đỉnh như một đường sâu duy nhất trước khi quay lui. Điều này đạt độ sâu 100 tại đỉnh vành cuối cùng được thăm.</div>"
+          "explanation": "<div class=\"ml-en\">Starting at the hub (degree 100, connected to all 100 rim vertices), DFS goes to a first rim vertex, then follows the rim cycle to an unvisited neighbor each time (since each rim vertex connects to 2 cycle-neighbors plus the hub), traversing the entire 100-vertex cycle as one deep path before backtracking. This reaches depth 100 at the last rim vertex visited.</div><div class=\"ml-vi\">Bắt đầu tại trung tâm (bậc 100, nối với cả 100 đỉnh vành), DFS đi đến đỉnh vành đầu tiên, rồi theo chu trình vành đến hàng xóm chưa thăm mỗi lần (vì mỗi đỉnh vành nối với 2 hàng xóm chu trình cộng trung tâm), đi qua toàn bộ chu trình 100 đỉnh như một đường sâu duy nhất trước khi quay lui. Điều này đạt độ sâu 100 tại đỉnh vành cuối cùng được thăm.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q43.png"
         },
         {
           "kind": "MCQ",
@@ -9746,7 +10133,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">LCM takes the max exponent of each prime across both numbers: $2^{\\max(0,7)}5^{\\max(0,2)}9^{\\max(0,2)}11^{\\max(1,2)}13^{\\max(3,0)}17^{\\max(2,0)}=2^7\\cdot5^2\\cdot9^2\\cdot11^2\\cdot13^3\\cdot17^2$, option (i).</div><div class=\"ml-vi\">BCNN lấy số mũ lớn nhất của mỗi số nguyên tố ở cả hai số: $2^{\\max(0,7)}5^{\\max(0,2)}9^{\\max(0,2)}11^{\\max(1,2)}13^{\\max(3,0)}17^{\\max(2,0)}=2^7\\cdot5^2\\cdot9^2\\cdot11^2\\cdot13^3\\cdot17^2$, đáp án (i).</div>"
+          "explanation": "<div class=\"ml-en\">LCM takes the max exponent of each prime across both numbers: $2^{\\max(0,7)}5^{\\max(0,2)}9^{\\max(0,2)}11^{\\max(1,2)}13^{\\max(3,0)}17^{\\max(2,0)}=2^7\\cdot5^2\\cdot9^2\\cdot11^2\\cdot13^3\\cdot17^2$, option (i).</div><div class=\"ml-vi\">BCNN lấy số mũ lớn nhất của mỗi số nguyên tố ở cả hai số: $2^{\\max(0,7)}5^{\\max(0,2)}9^{\\max(0,2)}11^{\\max(1,2)}13^{\\max(3,0)}17^{\\max(2,0)}=2^7\\cdot5^2\\cdot9^2\\cdot11^2\\cdot13^3\\cdot17^2$, đáp án (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q44.png"
         },
         {
           "kind": "MCQ",
@@ -9769,7 +10157,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$i=2$: insert 2 into [3] $\\to$ [2,3,4,7,1,6,5]. $i=3$: insert 4, already in place $\\to$ unchanged. $i=4$: insert 7, already in place $\\to$ unchanged. $i=5$: insert 1 into [2,3,4,7] $\\to$ shifts all, giving [1,2,3,4,7,6,5].</div><div class=\"ml-vi\">$i=2$: chèn 2 vào [3] $\\to$ [2,3,4,7,1,6,5]. $i=3$: chèn 4, đã đúng chỗ $\\to$ không đổi. $i=4$: chèn 7, đã đúng chỗ $\\to$ không đổi. $i=5$: chèn 1 vào [2,3,4,7] $\\to$ đẩy hết, cho [1,2,3,4,7,6,5].</div>"
+          "explanation": "<div class=\"ml-en\">$i=2$: insert 2 into [3] $\\to$ [2,3,4,7,1,6,5]. $i=3$: insert 4, already in place $\\to$ unchanged. $i=4$: insert 7, already in place $\\to$ unchanged. $i=5$: insert 1 into [2,3,4,7] $\\to$ shifts all, giving [1,2,3,4,7,6,5].</div><div class=\"ml-vi\">$i=2$: chèn 2 vào [3] $\\to$ [2,3,4,7,1,6,5]. $i=3$: chèn 4, đã đúng chỗ $\\to$ không đổi. $i=4$: chèn 7, đã đúng chỗ $\\to$ không đổi. $i=5$: chèn 1 vào [2,3,4,7] $\\to$ đẩy hết, cho [1,2,3,4,7,6,5].</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q45.png"
         },
         {
           "kind": "MCQ",
@@ -9795,7 +10184,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$131=37(3)+20$, so $a=3$. $-131\\text{ div }37=\\lfloor-131/37\\rfloor=\\lfloor-3.54\\rfloor=-4$, so $b=-4$. $a-b=3-(-4)=7$.</div><div class=\"ml-vi\">$131=37(3)+20$, nên $a=3$. $-131\\text{ div }37=\\lfloor-131/37\\rfloor=\\lfloor-3.54\\rfloor=-4$, nên $b=-4$. $a-b=3-(-4)=7$.</div>"
+          "explanation": "<div class=\"ml-en\">$131=37(3)+20$, so $a=3$. $-131\\text{ div }37=\\lfloor-131/37\\rfloor=\\lfloor-3.54\\rfloor=-4$, so $b=-4$. $a-b=3-(-4)=7$.</div><div class=\"ml-vi\">$131=37(3)+20$, nên $a=3$. $-131\\text{ div }37=\\lfloor-131/37\\rfloor=\\lfloor-3.54\\rfloor=-4$, nên $b=-4$. $a-b=3-(-4)=7$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q46.png"
         },
         {
           "kind": "MCQ",
@@ -9821,7 +10211,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">As sets, $X=\\{\\emptyset,\\{\\emptyset\\},\\{a,c\\}\\}$ has 3 distinct elements, and $Y=\\{y,\\{z\\},y\\}=\\{y,\\{z\\}\\}$ (duplicates removed) has 2 distinct elements. Number of functions from $Y$ to $X$: $|X|^{|Y|}=3^2=9$.</div><div class=\"ml-vi\">Là tập hợp, $X=\\{\\emptyset,\\{\\emptyset\\},\\{a,c\\}\\}$ có 3 phần tử phân biệt, và $Y=\\{y,\\{z\\},y\\}=\\{y,\\{z\\}\\}$ (bỏ trùng lặp) có 2 phần tử phân biệt. Số hàm từ $Y$ đến $X$: $|X|^{|Y|}=3^2=9$.</div>"
+          "explanation": "<div class=\"ml-en\">As sets, $X=\\{\\emptyset,\\{\\emptyset\\},\\{a,c\\}\\}$ has 3 distinct elements, and $Y=\\{y,\\{z\\},y\\}=\\{y,\\{z\\}\\}$ (duplicates removed) has 2 distinct elements. Number of functions from $Y$ to $X$: $|X|^{|Y|}=3^2=9$.</div><div class=\"ml-vi\">Là tập hợp, $X=\\{\\emptyset,\\{\\emptyset\\},\\{a,c\\}\\}$ có 3 phần tử phân biệt, và $Y=\\{y,\\{z\\},y\\}=\\{y,\\{z\\}\\}$ (bỏ trùng lặp) có 2 phần tử phân biệt. Số hàm từ $Y$ đến $X$: $|X|^{|Y|}=3^2=9$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q47.png"
         },
         {
           "kind": "MCQ",
@@ -9844,7 +10235,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Testing (iii): if $a_n=1/n$, then $a_n/(a_n+1)=(1/n)/((n+1)/n)=1/(n+1)=a_{n+1}$ -- matches for all $n$. (i) fails at $n=1$: $a_2=1+1/2=1.5\\neq1/2$. (ii) fails at $n=2$: $a_3=1/(0.5+1)=2/3\\neq1/3$.</div><div class=\"ml-vi\">Kiểm (iii): nếu $a_n=1/n$, thì $a_n/(a_n+1)=(1/n)/((n+1)/n)=1/(n+1)=a_{n+1}$ -- khớp với mọi $n$. (i) sai tại $n=1$: $a_2=1+1/2=1.5\\neq1/2$. (ii) sai tại $n=2$: $a_3=1/(0.5+1)=2/3\\neq1/3$.</div>"
+          "explanation": "<div class=\"ml-en\">Testing (iii): if $a_n=1/n$, then $a_n/(a_n+1)=(1/n)/((n+1)/n)=1/(n+1)=a_{n+1}$ -- matches for all $n$. (i) fails at $n=1$: $a_2=1+1/2=1.5\\neq1/2$. (ii) fails at $n=2$: $a_3=1/(0.5+1)=2/3\\neq1/3$.</div><div class=\"ml-vi\">Kiểm (iii): nếu $a_n=1/n$, thì $a_n/(a_n+1)=(1/n)/((n+1)/n)=1/(n+1)=a_{n+1}$ -- khớp với mọi $n$. (i) sai tại $n=1$: $a_2=1+1/2=1.5\\neq1/2$. (ii) sai tại $n=2$: $a_3=1/(0.5+1)=2/3\\neq1/3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q48.png"
         },
         {
           "kind": "MCQ",
@@ -9870,7 +10262,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f(3)=3(3)+2=11$. $f(4)=3(11)+3=36$. $f(5)=3(36)+11=119$. $f(6)=3(119)+36=393$.</div><div class=\"ml-vi\">$f(3)=3(3)+2=11$. $f(4)=3(11)+3=36$. $f(5)=3(36)+11=119$. $f(6)=3(119)+36=393$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(3)=3(3)+2=11$. $f(4)=3(11)+3=36$. $f(5)=3(36)+11=119$. $f(6)=3(119)+36=393$.</div><div class=\"ml-vi\">$f(3)=3(3)+2=11$. $f(4)=3(11)+3=36$. $f(5)=3(36)+11=119$. $f(6)=3(119)+36=393$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q49.png"
         },
         {
           "kind": "MCQ",
@@ -9893,7 +10286,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">(i) true: $x=\\sqrt2$. (iii) true: $x=0$ or $x=1$. (iv) true: $x=0.5$ gives $0.25<0.5$. (ii) is FALSE: no real number squared equals $-1$ (would require an imaginary number).</div><div class=\"ml-vi\">(i) đúng: $x=\\sqrt2$. (iii) đúng: $x=0$ hoặc $x=1$. (iv) đúng: $x=0.5$ cho $0.25<0.5$. (ii) SAI: không số thực nào bình phương bằng $-1$ (cần số ảo).</div>"
+          "explanation": "<div class=\"ml-en\">(i) true: $x=\\sqrt2$. (iii) true: $x=0$ or $x=1$. (iv) true: $x=0.5$ gives $0.25<0.5$. (ii) is FALSE: no real number squared equals $-1$ (would require an imaginary number).</div><div class=\"ml-vi\">(i) đúng: $x=\\sqrt2$. (iii) đúng: $x=0$ hoặc $x=1$. (iv) đúng: $x=0.5$ cho $0.25<0.5$. (ii) SAI: không số thực nào bình phương bằng $-1$ (cần số ảo).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D8/q50.png"
         }
       ]
     },
@@ -9930,7 +10324,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The table is exactly $\\neg p$. $(\\neg p\\land q)\\lor(\\neg p\\land\\neg q)=\\neg p\\land(q\\lor\\neg q)=\\neg p\\land T=\\neg p$ -- matches. (ii) fails at $p{=}F,q{=}F$: gives $F$, table wants $T$. (iii) fails at $p{=}T,q{=}T$: gives $T$, table wants $F$.</div><div class=\"ml-vi\">Bảng chính là $\\neg p$. $(\\neg p\\land q)\\lor(\\neg p\\land\\neg q)=\\neg p\\land(q\\lor\\neg q)=\\neg p\\land T=\\neg p$ -- khớp. (ii) sai tại $p{=}F,q{=}F$: cho $F$, bảng cần $T$. (iii) sai tại $p{=}T,q{=}T$: cho $T$, bảng cần $F$.</div>"
+          "explanation": "<div class=\"ml-en\">The table is exactly $\\neg p$. $(\\neg p\\land q)\\lor(\\neg p\\land\\neg q)=\\neg p\\land(q\\lor\\neg q)=\\neg p\\land T=\\neg p$ -- matches. (ii) fails at $p{=}F,q{=}F$: gives $F$, table wants $T$. (iii) fails at $p{=}T,q{=}T$: gives $T$, table wants $F$.</div><div class=\"ml-vi\">Bảng chính là $\\neg p$. $(\\neg p\\land q)\\lor(\\neg p\\land\\neg q)=\\neg p\\land(q\\lor\\neg q)=\\neg p\\land T=\\neg p$ -- khớp. (ii) sai tại $p{=}F,q{=}F$: cho $F$, bảng cần $T$. (iii) sai tại $p{=}T,q{=}T$: cho $T$, bảng cần $F$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q1.png"
         },
         {
           "kind": "MCQ",
@@ -9953,7 +10348,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">\"$p$ only if $q$\" translates to $p\\to q$. Its negation is $\\neg(p\\to q)=p\\land\\neg q$: \"I remember to send the address AND you do not send me an e-mail\" -- same as \"You do not send me an e-mail message but I remember to send you the address.\"</div><div class=\"ml-vi\">\"$p$ chỉ khi $q$\" diễn đạt thành $p\\to q$. Phủ định của nó là $\\neg(p\\to q)=p\\land\\neg q$: \"Tôi nhớ gửi địa chỉ VÀ bạn không gửi email\" -- giống với \"Bạn không gửi tôi email nhưng tôi nhớ gửi bạn địa chỉ.\"</div>"
+          "explanation": "<div class=\"ml-en\">\"$p$ only if $q$\" translates to $p\\to q$. Its negation is $\\neg(p\\to q)=p\\land\\neg q$: \"I remember to send the address AND you do not send me an e-mail\" -- same as \"You do not send me an e-mail message but I remember to send you the address.\"</div><div class=\"ml-vi\">\"$p$ chỉ khi $q$\" diễn đạt thành $p\\to q$. Phủ định của nó là $\\neg(p\\to q)=p\\land\\neg q$: \"Tôi nhớ gửi địa chỉ VÀ bạn không gửi email\" -- giống với \"Bạn không gửi tôi email nhưng tôi nhớ gửi bạn địa chỉ.\"</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q2.png"
         },
         {
           "kind": "MCQ",
@@ -9979,7 +10375,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\forall x\\neg P(x)$ over the finite domain $\\{1,2,3\\}$ expands directly to $\\neg P(1)\\land\\neg P(2)\\land\\neg P(3)$, option (ii). Note this question's negation ($\\forall x\\neg P(x)$ is itself equivalent to $\\neg\\exists xP(x)$, but the question here asks for the direct expansion, not a negation.</div><div class=\"ml-vi\">$\\forall x\\neg P(x)$ trên miền hữu hạn $\\{1,2,3\\}$ khai triển trực tiếp thành $\\neg P(1)\\land\\neg P(2)\\land\\neg P(3)$, đáp án (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$\\forall x\\neg P(x)$ over the finite domain $\\{1,2,3\\}$ expands directly to $\\neg P(1)\\land\\neg P(2)\\land\\neg P(3)$, option (ii). Note this question's negation ($\\forall x\\neg P(x)$ is itself equivalent to $\\neg\\exists xP(x)$, but the question here asks for the direct expansion, not a negation.</div><div class=\"ml-vi\">$\\forall x\\neg P(x)$ trên miền hữu hạn $\\{1,2,3\\}$ khai triển trực tiếp thành $\\neg P(1)\\land\\neg P(2)\\land\\neg P(3)$, đáp án (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q3.png"
         },
         {
           "kind": "MCQ",
@@ -10005,7 +10402,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\neg\\exists x(P(x)\\to Q(x))=\\forall x\\neg(P(x)\\to Q(x))=\\forall x(P(x)\\land\\neg Q(x))$, which equals $\\forall x(\\neg Q(x)\\land P(x))$, option (iii).</div><div class=\"ml-vi\">$\\neg\\exists x(P(x)\\to Q(x))=\\forall x\\neg(P(x)\\to Q(x))=\\forall x(P(x)\\land\\neg Q(x))$, bằng $\\forall x(\\neg Q(x)\\land P(x))$, đáp án (iii).</div>"
+          "explanation": "<div class=\"ml-en\">$\\neg\\exists x(P(x)\\to Q(x))=\\forall x\\neg(P(x)\\to Q(x))=\\forall x(P(x)\\land\\neg Q(x))$, which equals $\\forall x(\\neg Q(x)\\land P(x))$, option (iii).</div><div class=\"ml-vi\">$\\neg\\exists x(P(x)\\to Q(x))=\\forall x\\neg(P(x)\\to Q(x))=\\forall x(P(x)\\land\\neg Q(x))$, bằng $\\forall x(\\neg Q(x)\\land P(x))$, đáp án (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q4.png"
         },
         {
           "kind": "MCQ",
@@ -10031,7 +10429,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">\"Each student ... received from SOME other student\" needs $\\forall x\\exists y$, joined with \"and\" since we need $y$ to be different from $x$ AND to have emailed or called: $\\forall x\\exists y[(x\\neq y)\\land(M(x,y)\\lor T(x,y))]$, option (ii). Note the direction is reversed from sender to receiver but the structure matches.</div><div class=\"ml-vi\">\"Mỗi sinh viên ... nhận được từ MỘT sinh viên khác\" cần $\\forall x\\exists y$, nối bằng \"và\" vì cần $y$ khác $x$ VÀ đã gửi email hoặc gọi: $\\forall x\\exists y[(x\\neq y)\\land(M(x,y)\\lor T(x,y))]$, đáp án (ii).</div>"
+          "explanation": "<div class=\"ml-en\">\"Each student ... received from SOME other student\" needs $\\forall x\\exists y$, joined with \"and\" since we need $y$ to be different from $x$ AND to have emailed or called: $\\forall x\\exists y[(x\\neq y)\\land(M(x,y)\\lor T(x,y))]$, option (ii). Note the direction is reversed from sender to receiver but the structure matches.</div><div class=\"ml-vi\">\"Mỗi sinh viên ... nhận được từ MỘT sinh viên khác\" cần $\\forall x\\exists y$, nối bằng \"và\" vì cần $y$ khác $x$ VÀ đã gửi email hoặc gọi: $\\forall x\\exists y[(x\\neq y)\\land(M(x,y)\\lor T(x,y))]$, đáp án (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q5.png"
         },
         {
           "kind": "MCQ",
@@ -10057,7 +10456,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">(i),(iii),(iv) are all false (no single $x$ or $y$ works for all counterparts, and not all pairs sum to 0). (ii) is true: for every $x$, choosing $y=-x$ satisfies $x+y=0$.</div><div class=\"ml-vi\">(i),(iii),(iv) đều sai (không có $x$ hay $y$ đơn lẻ nào thỏa mọi trường hợp còn lại, và không phải mọi cặp đều có tổng 0). (ii) đúng: với mọi $x$, chọn $y=-x$ thỏa $x+y=0$.</div>"
+          "explanation": "<div class=\"ml-en\">(i),(iii),(iv) are all false (no single $x$ or $y$ works for all counterparts, and not all pairs sum to 0). (ii) is true: for every $x$, choosing $y=-x$ satisfies $x+y=0$.</div><div class=\"ml-vi\">(i),(iii),(iv) đều sai (không có $x$ hay $y$ đơn lẻ nào thỏa mọi trường hợp còn lại, và không phải mọi cặp đều có tổng 0). (ii) đúng: với mọi $x$, chọn $y=-x$ thỏa $x+y=0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q6.png"
         },
         {
           "kind": "MCQ",
@@ -10080,7 +10480,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">(i) affirms the consequent ($p\\to q$, $q$, therefore $p$) -- invalid (e.g. $x=-3$: $x^2>4$ true but $x>2$ false). (iii) denies the antecedent ($p\\to q$, $\\neg p$, therefore $\\neg q$) -- invalid (same counterexample $x=-3$: $x\\le2$ true but $x^2>4$). (ii) is exactly modus tollens ($p\\to q$, $\\neg q$, therefore $\\neg p$, with $p$=\"$x<-2$\", $q$=\"$x^2>4$\") -- valid.</div><div class=\"ml-vi\">(i) khẳng định hệ quả ($p\\to q$, $q$, vậy $p$) -- không hợp lệ (vd $x=-3$: $x^2>4$ đúng nhưng $x>2$ sai). (iii) phủ định tiền đề ($p\\to q$, $\\neg p$, vậy $\\neg q$) -- không hợp lệ (cùng phản ví dụ $x=-3$: $x\\le2$ đúng nhưng $x^2>4$). (ii) chính xác là modus tollens ($p\\to q$, $\\neg q$, vậy $\\neg p$, với $p$=\"$x<-2$\", $q$=\"$x^2>4$\") -- hợp lệ.</div>"
+          "explanation": "<div class=\"ml-en\">(i) affirms the consequent ($p\\to q$, $q$, therefore $p$) -- invalid (e.g. $x=-3$: $x^2>4$ true but $x>2$ false). (iii) denies the antecedent ($p\\to q$, $\\neg p$, therefore $\\neg q$) -- invalid (same counterexample $x=-3$: $x\\le2$ true but $x^2>4$). (ii) is exactly modus tollens ($p\\to q$, $\\neg q$, therefore $\\neg p$, with $p$=\"$x<-2$\", $q$=\"$x^2>4$\") -- valid.</div><div class=\"ml-vi\">(i) khẳng định hệ quả ($p\\to q$, $q$, vậy $p$) -- không hợp lệ (vd $x=-3$: $x^2>4$ đúng nhưng $x>2$ sai). (iii) phủ định tiền đề ($p\\to q$, $\\neg p$, vậy $\\neg q$) -- không hợp lệ (cùng phản ví dụ $x=-3$: $x\\le2$ đúng nhưng $x^2>4$). (ii) chính xác là modus tollens ($p\\to q$, $\\neg q$, vậy $\\neg p$, với $p$=\"$x<-2$\", $q$=\"$x^2>4$\") -- hợp lệ.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q7.png"
         },
         {
           "kind": "MCQ",
@@ -10106,7 +10507,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$A\\cap B=\\{a,g\\}$. Reading positions $a,b,c,d,e,f,g,h,i,j$: $1,0,0,0,0,0,1,0,0,0=$\"10 0000 1000\".</div><div class=\"ml-vi\">$A\\cap B=\\{a,g\\}$. Đọc vị trí $a,b,c,d,e,f,g,h,i,j$: $1,0,0,0,0,0,1,0,0,0=$\"10 0000 1000\".</div>"
+          "explanation": "<div class=\"ml-en\">$A\\cap B=\\{a,g\\}$. Reading positions $a,b,c,d,e,f,g,h,i,j$: $1,0,0,0,0,0,1,0,0,0=$\"10 0000 1000\".</div><div class=\"ml-vi\">$A\\cap B=\\{a,g\\}$. Đọc vị trí $a,b,c,d,e,f,g,h,i,j$: $1,0,0,0,0,0,1,0,0,0=$\"10 0000 1000\".</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q8.png"
         },
         {
           "kind": "MCQ",
@@ -10129,7 +10531,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">(i) is unbounded on both sides ($x\\to-\\infty$ or $x\\to\\infty$) -- infinite. (ii) has no integer solutions (empty). (iii) is $\\{3,4,5,6\\}$ -- finite. (iv) is 26 letters -- finite.</div><div class=\"ml-vi\">(i) không bị chặn cả hai phía ($x\\to-\\infty$ hoặc $x\\to\\infty$) -- vô hạn. (ii) không có nghiệm nguyên nào (rỗng). (iii) là $\\{3,4,5,6\\}$ -- hữu hạn. (iv) là 26 chữ cái -- hữu hạn.</div>"
+          "explanation": "<div class=\"ml-en\">(i) is unbounded on both sides ($x\\to-\\infty$ or $x\\to\\infty$) -- infinite. (ii) has no integer solutions (empty). (iii) is $\\{3,4,5,6\\}$ -- finite. (iv) is 26 letters -- finite.</div><div class=\"ml-vi\">(i) không bị chặn cả hai phía ($x\\to-\\infty$ hoặc $x\\to\\infty$) -- vô hạn. (ii) không có nghiệm nguyên nào (rỗng). (iii) là $\\{3,4,5,6\\}$ -- hữu hạn. (iv) là 26 chữ cái -- hữu hạn.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q9.png"
         },
         {
           "kind": "MCQ",
@@ -10152,7 +10555,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">For any $a\\in A,b\\in B$, $(a,b)\\in A\\times B\\subseteq B\\times C$ means $a\\in B$ and $b\\in C$. Since this holds for all $a\\in A$, $A\\subseteq B$. Since it holds for all $b\\in B$, $B\\subseteq C$. So $A\\subseteq B\\subseteq C$.</div><div class=\"ml-vi\">Với mọi $a\\in A,b\\in B$, $(a,b)\\in A\\times B\\subseteq B\\times C$ nghĩa là $a\\in B$ và $b\\in C$. Vì điều này đúng với mọi $a\\in A$, $A\\subseteq B$. Vì đúng với mọi $b\\in B$, $B\\subseteq C$. Vậy $A\\subseteq B\\subseteq C$.</div>"
+          "explanation": "<div class=\"ml-en\">For any $a\\in A,b\\in B$, $(a,b)\\in A\\times B\\subseteq B\\times C$ means $a\\in B$ and $b\\in C$. Since this holds for all $a\\in A$, $A\\subseteq B$. Since it holds for all $b\\in B$, $B\\subseteq C$. So $A\\subseteq B\\subseteq C$.</div><div class=\"ml-vi\">Với mọi $a\\in A,b\\in B$, $(a,b)\\in A\\times B\\subseteq B\\times C$ nghĩa là $a\\in B$ và $b\\in C$. Vì điều này đúng với mọi $a\\in A$, $A\\subseteq B$. Vì đúng với mọi $b\\in B$, $B\\subseteq C$. Vậy $A\\subseteq B\\subseteq C$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q10.png"
         },
         {
           "kind": "MCQ",
@@ -10175,7 +10579,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(ii) fails: codomain $Z$ but output like $f(0)=-1/5$ isn't an integer. (iii),(iv) fail: undefined at $x=\\pm2$ (division by zero). (i): $x^2=5$ never happens for integer $x$ (5 isn't a perfect square), so it's defined everywhere, and the codomain $R$ accommodates any real output -- a valid function.</div><div class=\"ml-vi\">(ii) sai: miền giá trị $Z$ nhưng đầu ra như $f(0)=-1/5$ không phải số nguyên. (iii),(iv) sai: không xác định tại $x=\\pm2$ (chia cho 0). (i): $x^2=5$ không bao giờ xảy ra với $x$ nguyên (5 không phải số chính phương), nên xác định khắp nơi, và miền giá trị $R$ chứa được mọi đầu ra thực -- một hàm hợp lệ.</div>"
+          "explanation": "<div class=\"ml-en\">(ii) fails: codomain $Z$ but output like $f(0)=-1/5$ isn't an integer. (iii),(iv) fail: undefined at $x=\\pm2$ (division by zero). (i): $x^2=5$ never happens for integer $x$ (5 isn't a perfect square), so it's defined everywhere, and the codomain $R$ accommodates any real output -- a valid function.</div><div class=\"ml-vi\">(ii) sai: miền giá trị $Z$ nhưng đầu ra như $f(0)=-1/5$ không phải số nguyên. (iii),(iv) sai: không xác định tại $x=\\pm2$ (chia cho 0). (i): $x^2=5$ không bao giờ xảy ra với $x$ nguyên (5 không phải số chính phương), nên xác định khắp nơi, và miền giá trị $R$ chứa được mọi đầu ra thực -- một hàm hợp lệ.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q11.png"
         },
         {
           "kind": "MCQ",
@@ -10201,7 +10606,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$(f\\circ g)(x)=f(g(x))=f(x^2)=2x^2$.</div><div class=\"ml-vi\">$(f\\circ g)(x)=f(g(x))=f(x^2)=2x^2$.</div>"
+          "explanation": "<div class=\"ml-en\">$(f\\circ g)(x)=f(g(x))=f(x^2)=2x^2$.</div><div class=\"ml-vi\">$(f\\circ g)(x)=f(g(x))=f(x^2)=2x^2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q12.png"
         },
         {
           "kind": "MCQ",
@@ -10224,7 +10630,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$a_n=5\\times(-2)^n$: $a_0=5$, $a_1=5(-2)=-10$, $a_2=5(4)=20$, $a_3=5(-8)=-40$.</div><div class=\"ml-vi\">$a_n=5\\times(-2)^n$: $a_0=5$, $a_1=5(-2)=-10$, $a_2=5(4)=20$, $a_3=5(-8)=-40$.</div>"
+          "explanation": "<div class=\"ml-en\">$a_n=5\\times(-2)^n$: $a_0=5$, $a_1=5(-2)=-10$, $a_2=5(4)=20$, $a_3=5(-8)=-40$.</div><div class=\"ml-vi\">$a_n=5\\times(-2)^n$: $a_0=5$, $a_1=5(-2)=-10$, $a_2=5(4)=20$, $a_3=5(-8)=-40$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q13.png"
         },
         {
           "kind": "MCQ",
@@ -10247,7 +10654,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$n=8$: $i=1,j=8$. 1st: $m=4$, $a_4=7<11$, $i:=5$. 2nd: $i=5,j=8$, $m=6$, $a_6=9<11$, $i:=7$. 3rd: $i=7,j=8$, $m=7$, $a_7=10<11$, $i:=8$. Now $i=j=8$, sublist is just $a_8=13$.</div><div class=\"ml-vi\">$n=8$: $i=1,j=8$. Lần 1: $m=4$, $a_4=7<11$, $i:=5$. Lần 2: $i=5,j=8$, $m=6$, $a_6=9<11$, $i:=7$. Lần 3: $i=7,j=8$, $m=7$, $a_7=10<11$, $i:=8$. Giờ $i=j=8$, dãy con chỉ còn $a_8=13$.</div>"
+          "explanation": "<div class=\"ml-en\">$n=8$: $i=1,j=8$. 1st: $m=4$, $a_4=7<11$, $i:=5$. 2nd: $i=5,j=8$, $m=6$, $a_6=9<11$, $i:=7$. 3rd: $i=7,j=8$, $m=7$, $a_7=10<11$, $i:=8$. Now $i=j=8$, sublist is just $a_8=13$.</div><div class=\"ml-vi\">$n=8$: $i=1,j=8$. Lần 1: $m=4$, $a_4=7<11$, $i:=5$. Lần 2: $i=5,j=8$, $m=6$, $a_6=9<11$, $i:=7$. Lần 3: $i=7,j=8$, $m=7$, $a_7=10<11$, $i:=8$. Giờ $i=j=8$, dãy con chỉ còn $a_8=13$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q14.png"
         },
         {
           "kind": "MCQ",
@@ -10273,7 +10681,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$63=2(25)+13$ (2 quarters, remainder 13), $13=2(5)+3$ (2 nickels, remainder 3), $3=3(1)$ (3 pennies). Total: $2+2+3=7$.</div><div class=\"ml-vi\">$63=2(25)+13$ (2 quarter, dư 13), $13=2(5)+3$ (2 nickel, dư 3), $3=3(1)$ (3 penny). Tổng: $2+2+3=7$.</div>"
+          "explanation": "<div class=\"ml-en\">$63=2(25)+13$ (2 quarters, remainder 13), $13=2(5)+3$ (2 nickels, remainder 3), $3=3(1)$ (3 pennies). Total: $2+2+3=7$.</div><div class=\"ml-vi\">$63=2(25)+13$ (2 quarter, dư 13), $13=2(5)+3$ (2 nickel, dư 3), $3=3(1)$ (3 penny). Tổng: $2+2+3=7$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q15.png"
         },
         {
           "kind": "MCQ",
@@ -10299,7 +10708,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">For large $x$, $f(x)\\approx\\frac{\\log(x)x^3}{x}=\\log(x)x^2$, which is NOT $O(x^2)$ (since $\\log x\\to\\infty$) but IS $O(x^3)$ (since $\\log x=O(x)$). Smallest integer $n=3$.</div><div class=\"ml-vi\">Với $x$ lớn, $f(x)\\approx\\frac{\\log(x)x^3}{x}=\\log(x)x^2$, KHÔNG phải $O(x^2)$ (vì $\\log x\\to\\infty$) nhưng LÀ $O(x^3)$ (vì $\\log x=O(x)$). Số nguyên nhỏ nhất $n=3$.</div>"
+          "explanation": "<div class=\"ml-en\">For large $x$, $f(x)\\approx\\frac{\\log(x)x^3}{x}=\\log(x)x^2$, which is NOT $O(x^2)$ (since $\\log x\\to\\infty$) but IS $O(x^3)$ (since $\\log x=O(x)$). Smallest integer $n=3$.</div><div class=\"ml-vi\">Với $x$ lớn, $f(x)\\approx\\frac{\\log(x)x^3}{x}=\\log(x)x^2$, KHÔNG phải $O(x^2)$ (vì $\\log x\\to\\infty$) nhưng LÀ $O(x^3)$ (vì $\\log x=O(x)$). Số nguyên nhỏ nhất $n=3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q16.png"
         },
         {
           "kind": "MCQ",
@@ -10325,7 +10735,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The inner loop runs $i^2$ times for each $i$, each iteration doing one division. Total divisions $=\\sum_{i=1}^{6}i^2=1+4+9+16+25+36=91$.</div><div class=\"ml-vi\">Vòng lặp trong chạy $i^2$ lần với mỗi $i$, mỗi lần lặp thực hiện một phép chia. Tổng số phép chia $=\\sum_{i=1}^{6}i^2=1+4+9+16+25+36=91$.</div>"
+          "explanation": "<div class=\"ml-en\">The inner loop runs $i^2$ times for each $i$, each iteration doing one division. Total divisions $=\\sum_{i=1}^{6}i^2=1+4+9+16+25+36=91$.</div><div class=\"ml-vi\">Vòng lặp trong chạy $i^2$ lần với mỗi $i$, mỗi lần lặp thực hiện một phép chia. Tổng số phép chia $=\\sum_{i=1}^{6}i^2=1+4+9+16+25+36=91$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q17.png"
         },
         {
           "kind": "MCQ",
@@ -10351,7 +10762,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$80\\bmod17=12$ (no). $90\\bmod17=5$ (yes, $17\\times5=85$). $-80\\bmod17$: $-80+85=5$ (yes). $-90\\bmod17$: $-90+102=12$ (no). 2 numbers match.</div><div class=\"ml-vi\">$80\\bmod17=12$ (không). $90\\bmod17=5$ (có, $17\\times5=85$). $-80\\bmod17$: $-80+85=5$ (có). $-90\\bmod17$: $-90+102=12$ (không). 2 số khớp.</div>"
+          "explanation": "<div class=\"ml-en\">$80\\bmod17=12$ (no). $90\\bmod17=5$ (yes, $17\\times5=85$). $-80\\bmod17$: $-80+85=5$ (yes). $-90\\bmod17$: $-90+102=12$ (no). 2 numbers match.</div><div class=\"ml-vi\">$80\\bmod17=12$ (không). $90\\bmod17=5$ (có, $17\\times5=85$). $-80\\bmod17$: $-80+85=5$ (có). $-90\\bmod17$: $-90+102=12$ (không). 2 số khớp.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q18.png"
         },
         {
           "kind": "MCQ",
@@ -10374,7 +10786,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\gcd=2^{\\min(3,4)}3^{\\min(2,0)}5^{\\min(1,2)}7^{\\min(1,0)}11^{\\min(0,3)}=2^3\\cdot5=8\\times5=40$.</div><div class=\"ml-vi\">$\\gcd=2^{\\min(3,4)}3^{\\min(2,0)}5^{\\min(1,2)}7^{\\min(1,0)}11^{\\min(0,3)}=2^3\\cdot5=8\\times5=40$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\gcd=2^{\\min(3,4)}3^{\\min(2,0)}5^{\\min(1,2)}7^{\\min(1,0)}11^{\\min(0,3)}=2^3\\cdot5=8\\times5=40$.</div><div class=\"ml-vi\">$\\gcd=2^{\\min(3,4)}3^{\\min(2,0)}5^{\\min(1,2)}7^{\\min(1,0)}11^{\\min(0,3)}=2^3\\cdot5=8\\times5=40$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q19.png"
         },
         {
           "kind": "MCQ",
@@ -10397,7 +10810,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$101110=46$, $110111=55$. $46+55=101$. Converting 101 to binary: $64+32+4+1=101$, giving $1100101$.</div><div class=\"ml-vi\">$101110=46$, $110111=55$. $46+55=101$. Đổi 101 sang nhị phân: $64+32+4+1=101$, cho $1100101$.</div>"
+          "explanation": "<div class=\"ml-en\">$101110=46$, $110111=55$. $46+55=101$. Converting 101 to binary: $64+32+4+1=101$, giving $1100101$.</div><div class=\"ml-vi\">$101110=46$, $110111=55$. $46+55=101$. Đổi 101 sang nhị phân: $64+32+4+1=101$, cho $1100101$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q20.png"
         },
         {
           "kind": "MCQ",
@@ -10423,7 +10837,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">Euclidean algorithm: $941=1(899)+42$; $899=21(42)+17$; $42=2(17)+8$; $17=2(8)+1$; $8=8(1)+0$. So $\\gcd=1$. (Indeed $899=29\\times31$ and $941$ is prime, sharing no common factor.) This doesn't match A-D, so the answer is E.</div><div class=\"ml-vi\">Thuật toán Euclid: $941=1(899)+42$; $899=21(42)+17$; $42=2(17)+8$; $17=2(8)+1$; $8=8(1)+0$. Vậy $\\gcd=1$. (Thật vậy $899=29\\times31$ và $941$ là số nguyên tố, không chia sẻ thừa số chung nào.) Điều này không khớp A-D, nên đáp án là E.</div>"
+          "explanation": "<div class=\"ml-en\">Euclidean algorithm: $941=1(899)+42$; $899=21(42)+17$; $42=2(17)+8$; $17=2(8)+1$; $8=8(1)+0$. So $\\gcd=1$. (Indeed $899=29\\times31$ and $941$ is prime, sharing no common factor.) This doesn't match A-D, so the answer is E.</div><div class=\"ml-vi\">Thuật toán Euclid: $941=1(899)+42$; $899=21(42)+17$; $42=2(17)+8$; $17=2(8)+1$; $8=8(1)+0$. Vậy $\\gcd=1$. (Thật vậy $899=29\\times31$ và $941$ là số nguyên tố, không chia sẻ thừa số chung nào.) Điều này không khớp A-D, nên đáp án là E.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q21.png"
         },
         {
           "kind": "MCQ",
@@ -10446,7 +10861,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">For coprime $6,7$, the Frobenius number (largest non-representable integer) is $6\\times7-6-7=29$. So every integer $n\\ge30$ is representable, and $29$ itself is not -- the smallest valid $a$ is 30.</div><div class=\"ml-vi\">Với $6,7$ nguyên tố cùng nhau, số Frobenius (số nguyên lớn nhất không biểu diễn được) là $6\\times7-6-7=29$. Vậy mọi số nguyên $n\\ge30$ đều biểu diễn được, còn $29$ thì không -- $a$ nhỏ nhất hợp lệ là 30.</div>"
+          "explanation": "<div class=\"ml-en\">For coprime $6,7$, the Frobenius number (largest non-representable integer) is $6\\times7-6-7=29$. So every integer $n\\ge30$ is representable, and $29$ itself is not -- the smallest valid $a$ is 30.</div><div class=\"ml-vi\">Với $6,7$ nguyên tố cùng nhau, số Frobenius (số nguyên lớn nhất không biểu diễn được) là $6\\times7-6-7=29$. Vậy mọi số nguyên $n\\ge30$ đều biểu diễn được, còn $29$ thì không -- $a$ nhỏ nhất hợp lệ là 30.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q22.png"
         },
         {
           "kind": "MCQ",
@@ -10469,7 +10885,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Any element is $(2x+3y,3x+2y)$ for non-negative integers $x,y$. $(10,15)$: $x=5,y=0$ works. $(10,10)$: $x=y=2$ works. $(5,5)$: $x=y=1$ works. $(10,5)$: solving $2x+3y=10,3x+2y=5$ gives $y=4,x=-1$ -- negative, no valid non-negative solution, so $(10,5)$ is NOT in $S$.</div><div class=\"ml-vi\">Bất kỳ phần tử nào cũng có dạng $(2x+3y,3x+2y)$ với $x,y$ nguyên không âm. $(10,15)$: $x=5,y=0$ được. $(10,10)$: $x=y=2$ được. $(5,5)$: $x=y=1$ được. $(10,5)$: giải $2x+3y=10,3x+2y=5$ cho $y=4,x=-1$ -- âm, không có nghiệm không âm hợp lệ, nên $(10,5)$ KHÔNG thuộc $S$.</div>"
+          "explanation": "<div class=\"ml-en\">Any element is $(2x+3y,3x+2y)$ for non-negative integers $x,y$. $(10,15)$: $x=5,y=0$ works. $(10,10)$: $x=y=2$ works. $(5,5)$: $x=y=1$ works. $(10,5)$: solving $2x+3y=10,3x+2y=5$ gives $y=4,x=-1$ -- negative, no valid non-negative solution, so $(10,5)$ is NOT in $S$.</div><div class=\"ml-vi\">Bất kỳ phần tử nào cũng có dạng $(2x+3y,3x+2y)$ với $x,y$ nguyên không âm. $(10,15)$: $x=5,y=0$ được. $(10,10)$: $x=y=2$ được. $(5,5)$: $x=y=1$ được. $(10,5)$: giải $2x+3y=10,3x+2y=5$ cho $y=4,x=-1$ -- âm, không có nghiệm không âm hợp lệ, nên $(10,5)$ KHÔNG thuộc $S$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q23.png"
         },
         {
           "kind": "MCQ",
@@ -10495,7 +10912,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">This computes $n\\times x$ (adding $x$ a total of $n$ times). $AL(3,6)=6\\times3=18$.</div><div class=\"ml-vi\">Đây tính $n\\times x$ (cộng $x$ tổng cộng $n$ lần). $AL(3,6)=6\\times3=18$.</div>"
+          "explanation": "<div class=\"ml-en\">This computes $n\\times x$ (adding $x$ a total of $n$ times). $AL(3,6)=6\\times3=18$.</div><div class=\"ml-vi\">Đây tính $n\\times x$ (cộng $x$ tổng cộng $n$ lần). $AL(3,6)=6\\times3=18$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q24.png"
         },
         {
           "kind": "MCQ",
@@ -10521,7 +10939,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f(1)=0$. Since anything multiplied by 0 is 0: $f(2)=0\\times2=0$, $f(3)=0$, $f(4)=0$, $f(5)=0$.</div><div class=\"ml-vi\">$f(1)=0$. Vì bất cứ gì nhân với 0 đều bằng 0: $f(2)=0\\times2=0$, $f(3)=0$, $f(4)=0$, $f(5)=0$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(1)=0$. Since anything multiplied by 0 is 0: $f(2)=0\\times2=0$, $f(3)=0$, $f(4)=0$, $f(5)=0$.</div><div class=\"ml-vi\">$f(1)=0$. Vì bất cứ gì nhân với 0 đều bằng 0: $f(2)=0\\times2=0$, $f(3)=0$, $f(4)=0$, $f(5)=0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q25.png"
         },
         {
           "kind": "MCQ",
@@ -10547,7 +10966,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Divisible by 3: $\\lfloor999/3\\rfloor=333$. Divisible by 4: $\\lfloor999/4\\rfloor=249$. Divisible by 12: $\\lfloor999/12\\rfloor=83$. By inclusion-exclusion, divisible by 3 or 4: $333+249-83=499$. Neither: $999-499=500$.</div><div class=\"ml-vi\">Chia hết cho 3: $\\lfloor999/3\\rfloor=333$. Chia hết cho 4: $\\lfloor999/4\\rfloor=249$. Chia hết cho 12: $\\lfloor999/12\\rfloor=83$. Theo bù trừ, chia hết cho 3 hoặc 4: $333+249-83=499$. Không chia hết cho cả hai: $999-499=500$.</div>"
+          "explanation": "<div class=\"ml-en\">Divisible by 3: $\\lfloor999/3\\rfloor=333$. Divisible by 4: $\\lfloor999/4\\rfloor=249$. Divisible by 12: $\\lfloor999/12\\rfloor=83$. By inclusion-exclusion, divisible by 3 or 4: $333+249-83=499$. Neither: $999-499=500$.</div><div class=\"ml-vi\">Chia hết cho 3: $\\lfloor999/3\\rfloor=333$. Chia hết cho 4: $\\lfloor999/4\\rfloor=249$. Chia hết cho 12: $\\lfloor999/12\\rfloor=83$. Theo bù trừ, chia hết cho 3 hoặc 4: $333+249-83=499$. Không chia hết cho cả hai: $999-499=500$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q26.png"
         },
         {
           "kind": "MCQ",
@@ -10573,7 +10993,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">3-digit numbers range 100-999. Divisible by 2: $\\lfloor999/2\\rfloor-\\lfloor99/2\\rfloor=499-49=450$. Divisible by 3: $333-33=300$. Divisible by 6: $166-16=150$. Union: $450+300-150=600$.</div><div class=\"ml-vi\">Số 3 chữ số trong khoảng 100-999. Chia hết cho 2: $\\lfloor999/2\\rfloor-\\lfloor99/2\\rfloor=499-49=450$. Chia hết cho 3: $333-33=300$. Chia hết cho 6: $166-16=150$. Hợp: $450+300-150=600$.</div>"
+          "explanation": "<div class=\"ml-en\">3-digit numbers range 100-999. Divisible by 2: $\\lfloor999/2\\rfloor-\\lfloor99/2\\rfloor=499-49=450$. Divisible by 3: $333-33=300$. Divisible by 6: $166-16=150$. Union: $450+300-150=600$.</div><div class=\"ml-vi\">Số 3 chữ số trong khoảng 100-999. Chia hết cho 2: $\\lfloor999/2\\rfloor-\\lfloor99/2\\rfloor=499-49=450$. Chia hết cho 3: $333-33=300$. Chia hết cho 6: $166-16=150$. Hợp: $450+300-150=600$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q27.png"
         },
         {
           "kind": "MCQ",
@@ -10599,7 +11020,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$a_1=-1+2=1$. $a_2=1+4=5$. $a_3=5+8=13$. $a_4=13+16=29$. $a_5=29+32=61$. $a_6=61+64=125$.</div><div class=\"ml-vi\">$a_1=-1+2=1$. $a_2=1+4=5$. $a_3=5+8=13$. $a_4=13+16=29$. $a_5=29+32=61$. $a_6=61+64=125$.</div>"
+          "explanation": "<div class=\"ml-en\">$a_1=-1+2=1$. $a_2=1+4=5$. $a_3=5+8=13$. $a_4=13+16=29$. $a_5=29+32=61$. $a_6=61+64=125$.</div><div class=\"ml-vi\">$a_1=-1+2=1$. $a_2=1+4=5$. $a_3=5+8=13$. $a_4=13+16=29$. $a_5=29+32=61$. $a_6=61+64=125$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q28.png"
         },
         {
           "kind": "MCQ",
@@ -10625,7 +11047,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$256=2^8$. $f(4)=2f(2)+1=2(1)+1=3$. $f(16)=2f(4)+1=2(3)+1=7$. $f(256)=2f(16)+1=2(7)+1=15$.</div><div class=\"ml-vi\">$256=2^8$. $f(4)=2f(2)+1=2(1)+1=3$. $f(16)=2f(4)+1=2(3)+1=7$. $f(256)=2f(16)+1=2(7)+1=15$.</div>"
+          "explanation": "<div class=\"ml-en\">$256=2^8$. $f(4)=2f(2)+1=2(1)+1=3$. $f(16)=2f(4)+1=2(3)+1=7$. $f(256)=2f(16)+1=2(7)+1=15$.</div><div class=\"ml-vi\">$256=2^8$. $f(4)=2f(2)+1=2(1)+1=3$. $f(16)=2f(4)+1=2(3)+1=7$. $f(256)=2f(16)+1=2(7)+1=15$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q29.png"
         },
         {
           "kind": "MCQ",
@@ -10648,7 +11071,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$C_6$ is an even cycle -- always bipartite (parts $\\{a,c,e\\}$ and $\\{b,d,f\\}$). Graph 2's chord $pr$ creates the triangle $p$-$q$-$r$ (odd cycle) -- not bipartite. Graph 3's extra vertex $y$ creates the triangle $u$-$v$-$y$ (odd cycle) -- not bipartite. Only Graph 1 is bipartite.</div><div class=\"ml-vi\">$C_6$ là chu trình chẵn -- luôn lưỡng phân (hai phía $\\{a,c,e\\}$ và $\\{b,d,f\\}$). Dây cung $pr$ của đồ thị 2 tạo tam giác $p$-$q$-$r$ (chu trình lẻ) -- không lưỡng phân. Đỉnh phụ $y$ của đồ thị 3 tạo tam giác $u$-$v$-$y$ (chu trình lẻ) -- không lưỡng phân. Chỉ đồ thị 1 lưỡng phân.</div>"
+          "explanation": "<div class=\"ml-en\">$C_6$ is an even cycle -- always bipartite (parts $\\{a,c,e\\}$ and $\\{b,d,f\\}$). Graph 2's chord $pr$ creates the triangle $p$-$q$-$r$ (odd cycle) -- not bipartite. Graph 3's extra vertex $y$ creates the triangle $u$-$v$-$y$ (odd cycle) -- not bipartite. Only Graph 1 is bipartite.</div><div class=\"ml-vi\">$C_6$ là chu trình chẵn -- luôn lưỡng phân (hai phía $\\{a,c,e\\}$ và $\\{b,d,f\\}$). Dây cung $pr$ của đồ thị 2 tạo tam giác $p$-$q$-$r$ (chu trình lẻ) -- không lưỡng phân. Đỉnh phụ $y$ của đồ thị 3 tạo tam giác $u$-$v$-$y$ (chu trình lẻ) -- không lưỡng phân. Chỉ đồ thị 1 lưỡng phân.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q30.png"
         },
         {
           "kind": "MCQ",
@@ -10674,7 +11098,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Sum of degrees $=2(4)+4(2)=8+8=16$. Edges $=16/2=8$.</div><div class=\"ml-vi\">Tổng bậc $=2(4)+4(2)=8+8=16$. Số cạnh $=16/2=8$.</div>"
+          "explanation": "<div class=\"ml-en\">Sum of degrees $=2(4)+4(2)=8+8=16$. Edges $=16/2=8$.</div><div class=\"ml-vi\">Tổng bậc $=2(4)+4(2)=8+8=16$. Số cạnh $=16/2=8$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q31.png"
         },
         {
           "kind": "MCQ",
@@ -10700,7 +11125,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Both graphs are connected 2-regular graphs on 7 vertices, each with 7 edges: step 2 gives the cycle $1$-$3$-$5$-$7$-$2$-$4$-$6$-$1$ and step 3 gives $1$-$4$-$7$-$3$-$6$-$2$-$5$-$1$. Any two connected 2-regular graphs on the same number of vertices are isomorphic to the cycle $C_n$, hence isomorphic to each other -- yes, they are isomorphic (an explicit isomorphism just relabels one cycle order onto the other).</div><div class=\"ml-vi\">Cả hai đồ thị đều là đồ thị 2-đều liên thông trên 7 đỉnh, mỗi cái 7 cạnh: bước 2 cho chu trình $1$-$3$-$5$-$7$-$2$-$4$-$6$-$1$ và bước 3 cho $1$-$4$-$7$-$3$-$6$-$2$-$5$-$1$. Hai đồ thị 2-đều liên thông bất kỳ trên cùng số đỉnh đều đẳng cấu với chu trình $C_n$, do đó đẳng cấu với nhau -- có, chúng đẳng cấu (một phép đẳng cấu cụ thể chỉ là đổi tên thứ tự chu trình này thành thứ tự chu trình kia).</div>"
+          "explanation": "<div class=\"ml-en\">Both graphs are connected 2-regular graphs on 7 vertices, each with 7 edges: step 2 gives the cycle $1$-$3$-$5$-$7$-$2$-$4$-$6$-$1$ and step 3 gives $1$-$4$-$7$-$3$-$6$-$2$-$5$-$1$. Any two connected 2-regular graphs on the same number of vertices are isomorphic to the cycle $C_n$, hence isomorphic to each other -- yes, they are isomorphic (an explicit isomorphism just relabels one cycle order onto the other).</div><div class=\"ml-vi\">Cả hai đồ thị đều là đồ thị 2-đều liên thông trên 7 đỉnh, mỗi cái 7 cạnh: bước 2 cho chu trình $1$-$3$-$5$-$7$-$2$-$4$-$6$-$1$ và bước 3 cho $1$-$4$-$7$-$3$-$6$-$2$-$5$-$1$. Hai đồ thị 2-đều liên thông bất kỳ trên cùng số đỉnh đều đẳng cấu với chu trình $C_n$, do đó đẳng cấu với nhau -- có, chúng đẳng cấu (một phép đẳng cấu cụ thể chỉ là đổi tên thứ tự chu trình này thành thứ tự chu trình kia).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q32.png"
         },
         {
           "kind": "MCQ",
@@ -10723,7 +11149,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$X$ has vertices $\\{1,2,3\\}$ forming a triangle (1-2,1-3,2-3 all connected) -- an odd cycle, so $X$ is NOT bipartite. $Y$'s edges (1-2,2-3,3-4,4-1) form a 4-cycle $C_4$ -- an even cycle, bipartite with parts $\\{1,3\\},\\{2,4\\}$. Only $Y$ is bipartite.</div><div class=\"ml-vi\">$X$ có các đỉnh $\\{1,2,3\\}$ tạo tam giác (1-2,1-3,2-3 đều nối) -- chu trình lẻ, nên $X$ KHÔNG lưỡng phân. Các cạnh của $Y$ (1-2,2-3,3-4,4-1) tạo chu trình 4 $C_4$ -- chu trình chẵn, lưỡng phân với hai phía $\\{1,3\\},\\{2,4\\}$. Chỉ $Y$ lưỡng phân.</div>"
+          "explanation": "<div class=\"ml-en\">$X$ has vertices $\\{1,2,3\\}$ forming a triangle (1-2,1-3,2-3 all connected) -- an odd cycle, so $X$ is NOT bipartite. $Y$'s edges (1-2,2-3,3-4,4-1) form a 4-cycle $C_4$ -- an even cycle, bipartite with parts $\\{1,3\\},\\{2,4\\}$. Only $Y$ is bipartite.</div><div class=\"ml-vi\">$X$ có các đỉnh $\\{1,2,3\\}$ tạo tam giác (1-2,1-3,2-3 đều nối) -- chu trình lẻ, nên $X$ KHÔNG lưỡng phân. Các cạnh của $Y$ (1-2,2-3,3-4,4-1) tạo chu trình 4 $C_4$ -- chu trình chẵn, lưỡng phân với hai phía $\\{1,3\\},\\{2,4\\}$. Chỉ $Y$ lưỡng phân.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q33.png"
         },
         {
           "kind": "MCQ",
@@ -10749,7 +11176,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Deleting one edge from $C_5$ turns it into a path on 5 vertices (4 edges) -- every edge of a path is a cut-edge, giving 4 cut-edges. In the bowtie all 6 edges are symmetric, so say $y_1y_2$ is deleted: that triangle becomes the path $y_1$-$y_0$-$y_2$ and both of its edges become cut-edges (2), while the untouched triangle $y_0y_3y_4$ contributes 0 cut-edges (its 3 edges each still lie on a cycle). Total: $4+2=6$.</div><div class=\"ml-vi\">Xóa một cạnh khỏi $C_5$ biến nó thành đường đi 5 đỉnh (4 cạnh) -- mọi cạnh của đường đi đều là cạnh cắt, cho 4 cạnh cắt. Trong hình nơ cả 6 cạnh đều đối xứng nhau, giả sử xóa $y_1y_2$: tam giác đó thành đường đi $y_1$-$y_0$-$y_2$ và cả hai cạnh của nó đều thành cạnh cắt (2), còn tam giác không đụng tới $y_0y_3y_4$ đóng góp 0 cạnh cắt (3 cạnh của nó vẫn nằm trên một chu trình). Tổng: $4+2=6$.</div>"
+          "explanation": "<div class=\"ml-en\">Deleting one edge from $C_5$ turns it into a path on 5 vertices (4 edges) -- every edge of a path is a cut-edge, giving 4 cut-edges. In the bowtie all 6 edges are symmetric, so say $y_1y_2$ is deleted: that triangle becomes the path $y_1$-$y_0$-$y_2$ and both of its edges become cut-edges (2), while the untouched triangle $y_0y_3y_4$ contributes 0 cut-edges (its 3 edges each still lie on a cycle). Total: $4+2=6$.</div><div class=\"ml-vi\">Xóa một cạnh khỏi $C_5$ biến nó thành đường đi 5 đỉnh (4 cạnh) -- mọi cạnh của đường đi đều là cạnh cắt, cho 4 cạnh cắt. Trong hình nơ cả 6 cạnh đều đối xứng nhau, giả sử xóa $y_1y_2$: tam giác đó thành đường đi $y_1$-$y_0$-$y_2$ và cả hai cạnh của nó đều thành cạnh cắt (2), còn tam giác không đụng tới $y_0y_3y_4$ đóng góp 0 cạnh cắt (3 cạnh của nó vẫn nằm trên một chu trình). Tổng: $4+2=6$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q34.png"
         },
         {
           "kind": "MCQ",
@@ -10769,7 +11197,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Every vertex of $Q_4$ has degree 4 (even), and $Q_4$ is connected -- an Euler circuit exists.</div><div class=\"ml-vi\">Mọi đỉnh của $Q_4$ đều có bậc 4 (chẵn), và $Q_4$ liên thông -- tồn tại chu trình Euler.</div>"
+          "explanation": "<div class=\"ml-en\">Every vertex of $Q_4$ has degree 4 (even), and $Q_4$ is connected -- an Euler circuit exists.</div><div class=\"ml-vi\">Mọi đỉnh của $Q_4$ đều có bậc 4 (chẵn), và $Q_4$ liên thông -- tồn tại chu trình Euler.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q36.png"
         },
         {
           "kind": "MCQ",
@@ -10795,7 +11224,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$G$(0)$\\to H$(1) [smaller than $K$=4]. Relax $H$: $I=9,K=\\min(4,2)=2$. Next smallest unvisited is $K$(2). Relax $K$: $J=2+5=7$, $L=2+3=5$. Remaining unvisited: $I=9,J=7,L=5,M=\\infty$ -- smallest is $L$(5). Order: $G,H,K,L$.</div><div class=\"ml-vi\">$G$(0)$\\to H$(1) [nhỏ hơn $K$=4]. Nới lỏng $H$: $I=9,K=\\min(4,2)=2$. Tiếp theo nhỏ nhất chưa thăm là $K$(2). Nới lỏng $K$: $J=2+5=7$, $L=2+3=5$. Còn lại chưa thăm: $I=9,J=7,L=5,M=\\infty$ -- nhỏ nhất là $L$(5). Thứ tự: $G,H,K,L$.</div>"
+          "explanation": "<div class=\"ml-en\">$G$(0)$\\to H$(1) [smaller than $K$=4]. Relax $H$: $I=9,K=\\min(4,2)=2$. Next smallest unvisited is $K$(2). Relax $K$: $J=2+5=7$, $L=2+3=5$. Remaining unvisited: $I=9,J=7,L=5,M=\\infty$ -- smallest is $L$(5). Order: $G,H,K,L$.</div><div class=\"ml-vi\">$G$(0)$\\to H$(1) [nhỏ hơn $K$=4]. Nới lỏng $H$: $I=9,K=\\min(4,2)=2$. Tiếp theo nhỏ nhất chưa thăm là $K$(2). Nới lỏng $K$: $J=2+5=7$, $L=2+3=5$. Còn lại chưa thăm: $I=9,J=7,L=5,M=\\infty$ -- nhỏ nhất là $L$(5). Thứ tự: $G,H,K,L$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q37.png"
         },
         {
           "kind": "MCQ",
@@ -10821,7 +11251,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">A tree with $n$ vertices always has $n-1$ edges: $10000-1=9999$.</div><div class=\"ml-vi\">Một cây có $n$ đỉnh luôn có $n-1$ cạnh: $10000-1=9999$.</div>"
+          "explanation": "<div class=\"ml-en\">A tree with $n$ vertices always has $n-1$ edges: $10000-1=9999$.</div><div class=\"ml-vi\">Một cây có $n$ đỉnh luôn có $n-1$ cạnh: $10000-1=9999$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q38.png"
         },
         {
           "kind": "MCQ",
@@ -10847,7 +11278,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Reading greedily: \"010\"=f, remaining \"111011\"; \"111\"=u, remaining \"011\"; \"011\"=n. Decoded: f,u,n = \"fun\".</div><div class=\"ml-vi\">Đọc tham lam: \"010\"=f, còn lại \"111011\"; \"111\"=u, còn lại \"011\"; \"011\"=n. Giải mã: f,u,n = \"fun\".</div>"
+          "explanation": "<div class=\"ml-en\">Reading greedily: \"010\"=f, remaining \"111011\"; \"111\"=u, remaining \"011\"; \"011\"=n. Decoded: f,u,n = \"fun\".</div><div class=\"ml-vi\">Đọc tham lam: \"010\"=f, còn lại \"111011\"; \"111\"=u, còn lại \"011\"; \"011\"=n. Giải mã: f,u,n = \"fun\".</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q40.png"
         },
         {
           "kind": "MCQ",
@@ -10870,7 +11302,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">G=$a$,0,1,$b$,0,1 (length 6). If $a=0$, G starts with \"001\"=A -- conflict, so $a=1$. With $a=1$, if $b=1$, G starts with \"1011\"=B -- conflict, so $b=0$. Checking other codes (11,0000,0100,011) against G's fixed pattern shows no possible conflict regardless of $a,b$ (positions 2-3 of G are fixed 0,1 which rule those out structurally). So $a=1,b=0$.</div><div class=\"ml-vi\">G=$a$,0,1,$b$,0,1 (dài 6). Nếu $a=0$, G bắt đầu bằng \"001\"=A -- xung đột, nên $a=1$. Với $a=1$, nếu $b=1$, G bắt đầu bằng \"1011\"=B -- xung đột, nên $b=0$. Kiểm các mã khác (11,0000,0100,011) với mẫu cố định của G cho thấy không thể xung đột dù $a,b$ là gì (vị trí 2-3 của G cố định 0,1 loại trừ chúng về cấu trúc). Vậy $a=1,b=0$.</div>"
+          "explanation": "<div class=\"ml-en\">G=$a$,0,1,$b$,0,1 (length 6). If $a=0$, G starts with \"001\"=A -- conflict, so $a=1$. With $a=1$, if $b=1$, G starts with \"1011\"=B -- conflict, so $b=0$. Checking other codes (11,0000,0100,011) against G's fixed pattern shows no possible conflict regardless of $a,b$ (positions 2-3 of G are fixed 0,1 which rule those out structurally). So $a=1,b=0$.</div><div class=\"ml-vi\">G=$a$,0,1,$b$,0,1 (dài 6). Nếu $a=0$, G bắt đầu bằng \"001\"=A -- xung đột, nên $a=1$. Với $a=1$, nếu $b=1$, G bắt đầu bằng \"1011\"=B -- xung đột, nên $b=0$. Kiểm các mã khác (11,0000,0100,011) với mẫu cố định của G cho thấy không thể xung đột dù $a,b$ là gì (vị trí 2-3 của G cố định 0,1 loại trừ chúng về cấu trúc). Vậy $a=1,b=0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q41.png"
         },
         {
           "kind": "MCQ",
@@ -10896,7 +11329,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$2^1=2$; $2+3=5$; $4-5=-1$; $5-(-1)=6$; $7+8=15$; $6+15=21$; $6-21=-15$.</div><div class=\"ml-vi\">$2^1=2$; $2+3=5$; $4-5=-1$; $5-(-1)=6$; $7+8=15$; $6+15=21$; $6-21=-15$.</div>"
+          "explanation": "<div class=\"ml-en\">$2^1=2$; $2+3=5$; $4-5=-1$; $5-(-1)=6$; $7+8=15$; $6+15=21$; $6-21=-15$.</div><div class=\"ml-vi\">$2^1=2$; $2+3=5$; $4-5=-1$; $5-(-1)=6$; $7+8=15$; $6+15=21$; $6-21=-15$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q42.png"
         },
         {
           "kind": "MCQ",
@@ -10919,7 +11353,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Level 0: $a$. Level 1 (neighbors of $a$, alphabetical): $b,c,d$. Level 2 (new neighbors of $b,c,d$, alphabetical): $e,f$ (both reachable via $c$ and $d$). Level 3: $g$ (via $e$ or $f$). Level 4: $h$ (via $g$). Full order: $a,b,c,d,e,f,g,h$.</div><div class=\"ml-vi\">Mức 0: $a$. Mức 1 (hàng xóm của $a$, thứ tự chữ cái): $b,c,d$. Mức 2 (hàng xóm mới của $b,c,d$, thứ tự chữ cái): $e,f$ (đều đến được qua $c$ và $d$). Mức 3: $g$ (qua $e$ hoặc $f$). Mức 4: $h$ (qua $g$). Thứ tự đầy đủ: $a,b,c,d,e,f,g,h$.</div>"
+          "explanation": "<div class=\"ml-en\">Level 0: $a$. Level 1 (neighbors of $a$, alphabetical): $b,c,d$. Level 2 (new neighbors of $b,c,d$, alphabetical): $e,f$ (both reachable via $c$ and $d$). Level 3: $g$ (via $e$ or $f$). Level 4: $h$ (via $g$). Full order: $a,b,c,d,e,f,g,h$.</div><div class=\"ml-vi\">Mức 0: $a$. Mức 1 (hàng xóm của $a$, thứ tự chữ cái): $b,c,d$. Mức 2 (hàng xóm mới của $b,c,d$, thứ tự chữ cái): $e,f$ (đều đến được qua $c$ và $d$). Mức 3: $g$ (qua $e$ hoặc $f$). Mức 4: $h$ (qua $g$). Thứ tự đầy đủ: $a,b,c,d,e,f,g,h$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q43.png"
         },
         {
           "kind": "MCQ",
@@ -10945,7 +11380,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Sorted edges: $AB(1),BE(1),DE(1),CF(2),AD(3),EF(4),BD(5),CE(5),BC(6)$. Adding in order (skipping cycles): $AB$ (\\{A,B\\}), $BE$ (\\{A,B,E\\}), $DE$ (\\{A,B,D,E\\}), $CF$ (\\{C,F\\}), $AD$ skipped (cycle), $EF$ connects \\{A,B,D,E\\} with \\{C,F\\} -- 5th edge, completing the spanning tree of 6 vertices. Last edge added: $EF$.</div><div class=\"ml-vi\">Cạnh sắp xếp: $AB(1),BE(1),DE(1),CF(2),AD(3),EF(4),BD(5),CE(5),BC(6)$. Thêm theo thứ tự (bỏ qua chu trình): $AB$ (\\{A,B\\}), $BE$ (\\{A,B,E\\}), $DE$ (\\{A,B,D,E\\}), $CF$ (\\{C,F\\}), $AD$ bỏ qua (chu trình), $EF$ nối \\{A,B,D,E\\} với \\{C,F\\} -- cạnh thứ 5, hoàn tất cây khung 6 đỉnh. Cạnh cuối cùng: $EF$.</div>"
+          "explanation": "<div class=\"ml-en\">Sorted edges: $AB(1),BE(1),DE(1),CF(2),AD(3),EF(4),BD(5),CE(5),BC(6)$. Adding in order (skipping cycles): $AB$ (\\{A,B\\}), $BE$ (\\{A,B,E\\}), $DE$ (\\{A,B,D,E\\}), $CF$ (\\{C,F\\}), $AD$ skipped (cycle), $EF$ connects \\{A,B,D,E\\} with \\{C,F\\} -- 5th edge, completing the spanning tree of 6 vertices. Last edge added: $EF$.</div><div class=\"ml-vi\">Cạnh sắp xếp: $AB(1),BE(1),DE(1),CF(2),AD(3),EF(4),BD(5),CE(5),BC(6)$. Thêm theo thứ tự (bỏ qua chu trình): $AB$ (\\{A,B\\}), $BE$ (\\{A,B,E\\}), $DE$ (\\{A,B,D,E\\}), $CF$ (\\{C,F\\}), $AD$ bỏ qua (chu trình), $EF$ nối \\{A,B,D,E\\} với \\{C,F\\} -- cạnh thứ 5, hoàn tất cây khung 6 đỉnh. Cạnh cuối cùng: $EF$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q44.png"
         },
         {
           "kind": "MCQ",
@@ -10971,7 +11407,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$101101\\lor110001=111101$ (bitwise OR). Then $111101\\oplus001101=110000$ (bitwise XOR).</div><div class=\"ml-vi\">$101101\\lor110001=111101$ (OR theo bit). Rồi $111101\\oplus001101=110000$ (XOR theo bit).</div>"
+          "explanation": "<div class=\"ml-en\">$101101\\lor110001=111101$ (bitwise OR). Then $111101\\oplus001101=110000$ (bitwise XOR).</div><div class=\"ml-vi\">$101101\\lor110001=111101$ (OR theo bit). Rồi $111101\\oplus001101=110000$ (XOR theo bit).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q45.png"
         },
         {
           "kind": "MCQ",
@@ -10997,7 +11434,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$x_1=(5\\cdot3+4)\\bmod7=19\\bmod7=5$. $x_2=(5\\cdot5+4)\\bmod7=29\\bmod7=1$. $x_3=(5\\cdot1+4)\\bmod7=9\\bmod7=2$. $x_4=(5\\cdot2+4)\\bmod7=14\\bmod7=0$.</div><div class=\"ml-vi\">$x_1=(5\\cdot3+4)\\bmod7=19\\bmod7=5$. $x_2=(5\\cdot5+4)\\bmod7=29\\bmod7=1$. $x_3=(5\\cdot1+4)\\bmod7=9\\bmod7=2$. $x_4=(5\\cdot2+4)\\bmod7=14\\bmod7=0$.</div>"
+          "explanation": "<div class=\"ml-en\">$x_1=(5\\cdot3+4)\\bmod7=19\\bmod7=5$. $x_2=(5\\cdot5+4)\\bmod7=29\\bmod7=1$. $x_3=(5\\cdot1+4)\\bmod7=9\\bmod7=2$. $x_4=(5\\cdot2+4)\\bmod7=14\\bmod7=0$.</div><div class=\"ml-vi\">$x_1=(5\\cdot3+4)\\bmod7=19\\bmod7=5$. $x_2=(5\\cdot5+4)\\bmod7=29\\bmod7=1$. $x_3=(5\\cdot1+4)\\bmod7=9\\bmod7=2$. $x_4=(5\\cdot2+4)\\bmod7=14\\bmod7=0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q46.png"
         },
         {
           "kind": "MCQ",
@@ -11023,7 +11461,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$n=\\frac{mn}{m}=2^4\\cdot7^{8-5}\\cdot11^{26-12}\\cdot13^{90-90}=2^4\\cdot7^3\\cdot11^{14}$. $lcm(m,n)=2^{\\max(0,4)}7^{\\max(5,3)}11^{\\max(12,14)}13^{\\max(90,0)}=2^4\\cdot7^5\\cdot11^{14}\\cdot13^{90}$, which matches none of (i)-(iv) exactly (all differ in the exponent of 11 or other primes).</div><div class=\"ml-vi\">$n=\\frac{mn}{m}=2^4\\cdot7^{8-5}\\cdot11^{26-12}\\cdot13^{90-90}=2^4\\cdot7^3\\cdot11^{14}$. $lcm(m,n)=2^{\\max(0,4)}7^{\\max(5,3)}11^{\\max(12,14)}13^{\\max(90,0)}=2^4\\cdot7^5\\cdot11^{14}\\cdot13^{90}$, không khớp chính xác đáp án (i)-(iv) nào (đều khác ở số mũ của 11 hoặc các số nguyên tố khác).</div>"
+          "explanation": "<div class=\"ml-en\">$n=\\frac{mn}{m}=2^4\\cdot7^{8-5}\\cdot11^{26-12}\\cdot13^{90-90}=2^4\\cdot7^3\\cdot11^{14}$. $lcm(m,n)=2^{\\max(0,4)}7^{\\max(5,3)}11^{\\max(12,14)}13^{\\max(90,0)}=2^4\\cdot7^5\\cdot11^{14}\\cdot13^{90}$, which matches none of (i)-(iv) exactly (all differ in the exponent of 11 or other primes).</div><div class=\"ml-vi\">$n=\\frac{mn}{m}=2^4\\cdot7^{8-5}\\cdot11^{26-12}\\cdot13^{90-90}=2^4\\cdot7^3\\cdot11^{14}$. $lcm(m,n)=2^{\\max(0,4)}7^{\\max(5,3)}11^{\\max(12,14)}13^{\\max(90,0)}=2^4\\cdot7^5\\cdot11^{14}\\cdot13^{90}$, không khớp chính xác đáp án (i)-(iv) nào (đều khác ở số mũ của 11 hoặc các số nguyên tố khác).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q47.png"
         },
         {
           "kind": "MCQ",
@@ -11046,7 +11485,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f(1)=3f(0)=3(1)=3$. $f(2)=3f(1)=3(3)=9$. $f(3)=3f(2)=3(9)=27$.</div><div class=\"ml-vi\">$f(1)=3f(0)=3(1)=3$. $f(2)=3f(1)=3(3)=9$. $f(3)=3f(2)=3(9)=27$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(1)=3f(0)=3(1)=3$. $f(2)=3f(1)=3(3)=9$. $f(3)=3f(2)=3(9)=27$.</div><div class=\"ml-vi\">$f(1)=3f(0)=3(1)=3$. $f(2)=3f(1)=3(3)=9$. $f(3)=3f(2)=3(9)=27$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q48.png"
         },
         {
           "kind": "MCQ",
@@ -11072,7 +11512,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">A Hamilton circuit in a bipartite graph must alternate between the two parts equally, requiring $m=n$. The smallest case forming an actual cycle is $K_{2,2}=C_4$, so $m=n$ and $m\\ge2$.</div><div class=\"ml-vi\">Chu trình Hamilton trong đồ thị lưỡng phân phải luân phiên đều giữa hai phía, đòi hỏi $m=n$. Trường hợp nhỏ nhất thực sự tạo chu trình là $K_{2,2}=C_4$, nên $m=n$ và $m\\ge2$.</div>"
+          "explanation": "<div class=\"ml-en\">A Hamilton circuit in a bipartite graph must alternate between the two parts equally, requiring $m=n$. The smallest case forming an actual cycle is $K_{2,2}=C_4$, so $m=n$ and $m\\ge2$.</div><div class=\"ml-vi\">Chu trình Hamilton trong đồ thị lưỡng phân phải luân phiên đều giữa hai phía, đòi hỏi $m=n$. Trường hợp nhỏ nhất thực sự tạo chu trình là $K_{2,2}=C_4$, nên $m=n$ và $m\\ge2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q49.png"
         },
         {
           "kind": "MCQ",
@@ -11101,7 +11542,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">Postorder = visit each child subtree in order, then the node itself. Subtree $b$: $d$(leaf) then subtree $e$ ($f,g$ leaves then $e$) then $b$: gives $d,f,g,e,b$. Then leaf $c$. Then root $a$. Full order: $d,f,g,e,b,c,a$.</div><div class=\"ml-vi\">Hậu thứ = duyệt từng cây con theo thứ tự rồi mới đến chính nút đó. Cây con $b$: $d$(lá) rồi cây con $e$ ($f,g$ là lá rồi $e$) rồi $b$: cho $d,f,g,e,b$. Rồi lá $c$. Rồi gốc $a$. Thứ tự đầy đủ: $d,f,g,e,b,c,a$.</div>"
+          "explanation": "<div class=\"ml-en\">Postorder = visit each child subtree in order, then the node itself. Subtree $b$: $d$(leaf) then subtree $e$ ($f,g$ leaves then $e$) then $b$: gives $d,f,g,e,b$. Then leaf $c$. Then root $a$. Full order: $d,f,g,e,b,c,a$.</div><div class=\"ml-vi\">Hậu thứ = duyệt từng cây con theo thứ tự rồi mới đến chính nút đó. Cây con $b$: $d$(lá) rồi cây con $e$ ($f,g$ là lá rồi $e$) rồi $b$: cho $d,f,g,e,b$. Rồi lá $c$. Rồi gốc $a$. Thứ tự đầy đủ: $d,f,g,e,b,c,a$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D9/q50.png"
         }
       ]
     },
@@ -11144,7 +11586,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">\"It is cold\" = $q$, \"An is not absent\" = $\\neg p$, joined by \"but\" (a conjunction): $q\\land\\neg p$, same as $\\neg p\\land q$, option (i).</div><div class=\"ml-vi\">\"Trời lạnh\" = $q$, \"An không vắng mặt\" = $\\neg p$, nối bằng \"nhưng\" (một phép hội): $q\\land\\neg p$, giống $\\neg p\\land q$, đáp án (i).</div>"
+          "explanation": "<div class=\"ml-en\">\"It is cold\" = $q$, \"An is not absent\" = $\\neg p$, joined by \"but\" (a conjunction): $q\\land\\neg p$, same as $\\neg p\\land q$, option (i).</div><div class=\"ml-vi\">\"Trời lạnh\" = $q$, \"An không vắng mặt\" = $\\neg p$, nối bằng \"nhưng\" (một phép hội): $q\\land\\neg p$, giống $\\neg p\\land q$, đáp án (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q1.png"
         },
         {
           "kind": "MCQ",
@@ -11167,7 +11610,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">If $p\\land q$ is true, both $p,q$ are true, so $p\\lor q$ is true -- $T\\to T=T$. If $p\\land q$ is false, the implication is vacuously true. Always true -- a tautology.</div><div class=\"ml-vi\">Nếu $p\\land q$ đúng, cả $p,q$ đều đúng, nên $p\\lor q$ đúng -- $T\\to T=T$. Nếu $p\\land q$ sai, phép kéo theo đúng hiển nhiên. Luôn đúng -- hằng đúng.</div>"
+          "explanation": "<div class=\"ml-en\">If $p\\land q$ is true, both $p,q$ are true, so $p\\lor q$ is true -- $T\\to T=T$. If $p\\land q$ is false, the implication is vacuously true. Always true -- a tautology.</div><div class=\"ml-vi\">Nếu $p\\land q$ đúng, cả $p,q$ đều đúng, nên $p\\lor q$ đúng -- $T\\to T=T$. Nếu $p\\land q$ sai, phép kéo theo đúng hiển nhiên. Luôn đúng -- hằng đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q2.png"
         },
         {
           "kind": "MCQ",
@@ -11193,7 +11637,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">\"There is a student\" is existential ($\\exists x$). \"of the Business department\" = $F(x)$, \"can speak Russian\" = $R(x)$, \"doesn't know Java\" = $\\neg J(x)$, all joined by \"and\": $\\exists x(F(x)\\land\\neg J(x)\\land R(x))$, option (iii).</div><div class=\"ml-vi\">\"Có một sinh viên\" là tồn tại ($\\exists x$). \"khoa Kinh doanh\" = $F(x)$, \"nói được tiếng Nga\" = $R(x)$, \"không biết Java\" = $\\neg J(x)$, tất cả nối bằng \"và\": $\\exists x(F(x)\\land\\neg J(x)\\land R(x))$, đáp án (iii).</div>"
+          "explanation": "<div class=\"ml-en\">\"There is a student\" is existential ($\\exists x$). \"of the Business department\" = $F(x)$, \"can speak Russian\" = $R(x)$, \"doesn't know Java\" = $\\neg J(x)$, all joined by \"and\": $\\exists x(F(x)\\land\\neg J(x)\\land R(x))$, option (iii).</div><div class=\"ml-vi\">\"Có một sinh viên\" là tồn tại ($\\exists x$). \"khoa Kinh doanh\" = $F(x)$, \"nói được tiếng Nga\" = $R(x)$, \"không biết Java\" = $\\neg J(x)$, tất cả nối bằng \"và\": $\\exists x(F(x)\\land\\neg J(x)\\land R(x))$, đáp án (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q3.png"
         },
         {
           "kind": "MCQ",
@@ -11219,7 +11664,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$\\neg\\exists x\\forall y(\\ldots)=\\forall x\\exists y\\neg(P(x,y)\\leftrightarrow\\neg Q(x,y))$. Since $\\neg(A\\leftrightarrow B)\\equiv A\\oplus B$, this becomes $\\forall x\\exists y(P(x,y)\\oplus\\neg Q(x,y))$, option (iii).</div><div class=\"ml-vi\">$\\neg\\exists x\\forall y(\\ldots)=\\forall x\\exists y\\neg(P(x,y)\\leftrightarrow\\neg Q(x,y))$. Vì $\\neg(A\\leftrightarrow B)\\equiv A\\oplus B$, điều này thành $\\forall x\\exists y(P(x,y)\\oplus\\neg Q(x,y))$, đáp án (iii).</div>"
+          "explanation": "<div class=\"ml-en\">$\\neg\\exists x\\forall y(\\ldots)=\\forall x\\exists y\\neg(P(x,y)\\leftrightarrow\\neg Q(x,y))$. Since $\\neg(A\\leftrightarrow B)\\equiv A\\oplus B$, this becomes $\\forall x\\exists y(P(x,y)\\oplus\\neg Q(x,y))$, option (iii).</div><div class=\"ml-vi\">$\\neg\\exists x\\forall y(\\ldots)=\\forall x\\exists y\\neg(P(x,y)\\leftrightarrow\\neg Q(x,y))$. Vì $\\neg(A\\leftrightarrow B)\\equiv A\\oplus B$, điều này thành $\\forall x\\exists y(P(x,y)\\oplus\\neg Q(x,y))$, đáp án (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q5.png"
         },
         {
           "kind": "MCQ",
@@ -11245,7 +11691,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$x$ is in class CS120 ($S(x,CS120)$), $x$ and $x'$ are friends, and $x'$ has studied Physics ($Q(x',Physics)$). So: a student ($x$) in CS120 has a friend ($x'$) who has studied Physics -- equivalently, a friend of a CS120 student has studied Physics.</div><div class=\"ml-vi\">$x$ ở lớp CS120 ($S(x,CS120)$), $x$ và $x'$ là bạn bè, và $x'$ đã học Vật lý ($Q(x',Physics)$). Vậy: một sinh viên ($x$) lớp CS120 có một người bạn ($x'$) đã học Vật lý -- tương đương, một người bạn của một sinh viên CS120 đã học Vật lý.</div>"
+          "explanation": "<div class=\"ml-en\">$x$ is in class CS120 ($S(x,CS120)$), $x$ and $x'$ are friends, and $x'$ has studied Physics ($Q(x',Physics)$). So: a student ($x$) in CS120 has a friend ($x'$) who has studied Physics -- equivalently, a friend of a CS120 student has studied Physics.</div><div class=\"ml-vi\">$x$ ở lớp CS120 ($S(x,CS120)$), $x$ và $x'$ là bạn bè, và $x'$ đã học Vật lý ($Q(x',Physics)$). Vậy: một sinh viên ($x$) lớp CS120 có một người bạn ($x'$) đã học Vật lý -- tương đương, một người bạn của một sinh viên CS120 đã học Vật lý.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q6.png"
         },
         {
           "kind": "MCQ",
@@ -11271,7 +11718,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Given $p$ and $p\\to q$, concluding $q$ is exactly the Modus ponens rule of inference.</div><div class=\"ml-vi\">Cho $p$ và $p\\to q$, kết luận $q$ chính xác là quy tắc suy luận Modus ponens.</div>"
+          "explanation": "<div class=\"ml-en\">Given $p$ and $p\\to q$, concluding $q$ is exactly the Modus ponens rule of inference.</div><div class=\"ml-vi\">Cho $p$ và $p\\to q$, kết luận $q$ chính xác là quy tắc suy luận Modus ponens.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q7.png"
         },
         {
           "kind": "MCQ",
@@ -11294,7 +11742,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">(i) is false in general: $\\{x\\}$'s only element is $x$, not $\\emptyset$. (iii) is false: $\\{x\\}$'s only element is $x$, not the set $\\{x\\}$. (iv) is false: proper subset requires strict containment, and no set is a proper subset of itself. (ii) is true: every set is a subset of itself.</div><div class=\"ml-vi\">(i) sai nói chung: phần tử duy nhất của $\\{x\\}$ là $x$, không phải $\\emptyset$. (iii) sai: phần tử duy nhất của $\\{x\\}$ là $x$, không phải tập $\\{x\\}$. (iv) sai: tập con thực sự đòi hỏi chứa nghiêm ngặt, và không tập nào là tập con thực sự của chính nó. (ii) đúng: mọi tập hợp là tập con của chính nó.</div>"
+          "explanation": "<div class=\"ml-en\">(i) is false in general: $\\{x\\}$'s only element is $x$, not $\\emptyset$. (iii) is false: $\\{x\\}$'s only element is $x$, not the set $\\{x\\}$. (iv) is false: proper subset requires strict containment, and no set is a proper subset of itself. (ii) is true: every set is a subset of itself.</div><div class=\"ml-vi\">(i) sai nói chung: phần tử duy nhất của $\\{x\\}$ là $x$, không phải $\\emptyset$. (iii) sai: phần tử duy nhất của $\\{x\\}$ là $x$, không phải tập $\\{x\\}$. (iv) sai: tập con thực sự đòi hỏi chứa nghiêm ngặt, và không tập nào là tập con thực sự của chính nó. (ii) đúng: mọi tập hợp là tập con của chính nó.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q8.png"
         },
         {
           "kind": "MCQ",
@@ -11320,7 +11769,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$A-B=\\{c,d,e,i\\}$ ($a$ is removed since it's also in $B$). Reading positions $a,b,c,d,e,f,g,h,i,j$: $0,0,1,1,1,0,0,0,1,0=$\"00 1110 0010\".</div><div class=\"ml-vi\">$A-B=\\{c,d,e,i\\}$ ($a$ bị loại vì cũng thuộc $B$). Đọc vị trí $a,b,c,d,e,f,g,h,i,j$: $0,0,1,1,1,0,0,0,1,0=$\"00 1110 0010\".</div>"
+          "explanation": "<div class=\"ml-en\">$A-B=\\{c,d,e,i\\}$ ($a$ is removed since it's also in $B$). Reading positions $a,b,c,d,e,f,g,h,i,j$: $0,0,1,1,1,0,0,0,1,0=$\"00 1110 0010\".</div><div class=\"ml-vi\">$A-B=\\{c,d,e,i\\}$ ($a$ bị loại vì cũng thuộc $B$). Đọc vị trí $a,b,c,d,e,f,g,h,i,j$: $0,0,1,1,1,0,0,0,1,0=$\"00 1110 0010\".</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q9.png"
         },
         {
           "kind": "MCQ",
@@ -11346,7 +11796,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$A=(A-B)\\cup(A\\cap B)=\\{1,4,5,8\\}\\cup\\{3,9\\}=\\{1,3,4,5,8,9\\}$. $B=(B-A)\\cup(A\\cap B)=\\{2,7,10\\}\\cup\\{3,9\\}=\\{2,3,7,9,10\\}$.</div><div class=\"ml-vi\">$A=(A-B)\\cup(A\\cap B)=\\{1,4,5,8\\}\\cup\\{3,9\\}=\\{1,3,4,5,8,9\\}$. $B=(B-A)\\cup(A\\cap B)=\\{2,7,10\\}\\cup\\{3,9\\}=\\{2,3,7,9,10\\}$.</div>"
+          "explanation": "<div class=\"ml-en\">$A=(A-B)\\cup(A\\cap B)=\\{1,4,5,8\\}\\cup\\{3,9\\}=\\{1,3,4,5,8,9\\}$. $B=(B-A)\\cup(A\\cap B)=\\{2,7,10\\}\\cup\\{3,9\\}=\\{2,3,7,9,10\\}$.</div><div class=\"ml-vi\">$A=(A-B)\\cup(A\\cap B)=\\{1,4,5,8\\}\\cup\\{3,9\\}=\\{1,3,4,5,8,9\\}$. $B=(B-A)\\cup(A\\cap B)=\\{2,7,10\\}\\cup\\{3,9\\}=\\{2,3,7,9,10\\}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q10.png"
         },
         {
           "kind": "MCQ",
@@ -11369,7 +11820,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">(i) and (iv) fail: undefined when $m+n<0$ or $m,n<0$ respectively (square root of a negative number). (ii) fails: $m/2$ isn't an integer for odd $m$, violating the codomain $Z$. (iii) works: $\\lfloor(m+n)/2\\rfloor$ is always a well-defined integer for any $m,n\\in Z$ -- a valid function.</div><div class=\"ml-vi\">(i) và (iv) sai: không xác định khi $m+n<0$ hoặc $m,n<0$ tương ứng (căn bậc hai của số âm). (ii) sai: $m/2$ không phải số nguyên với $m$ lẻ, vi phạm miền giá trị $Z$. (iii) đúng: $\\lfloor(m+n)/2\\rfloor$ luôn là số nguyên xác định rõ với mọi $m,n\\in Z$ -- một hàm hợp lệ.</div>"
+          "explanation": "<div class=\"ml-en\">(i) and (iv) fail: undefined when $m+n<0$ or $m,n<0$ respectively (square root of a negative number). (ii) fails: $m/2$ isn't an integer for odd $m$, violating the codomain $Z$. (iii) works: $\\lfloor(m+n)/2\\rfloor$ is always a well-defined integer for any $m,n\\in Z$ -- a valid function.</div><div class=\"ml-vi\">(i) và (iv) sai: không xác định khi $m+n<0$ hoặc $m,n<0$ tương ứng (căn bậc hai của số âm). (ii) sai: $m/2$ không phải số nguyên với $m$ lẻ, vi phạm miền giá trị $Z$. (iii) đúng: $\\lfloor(m+n)/2\\rfloor$ luôn là số nguyên xác định rõ với mọi $m,n\\in Z$ -- một hàm hợp lệ.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q11.png"
         },
         {
           "kind": "MCQ",
@@ -11395,7 +11847,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">A bijection requires the domain and codomain to have the same cardinality. Since $6\\neq7$, no bijective function can exist: the count is 0.</div><div class=\"ml-vi\">Một song ánh đòi hỏi miền xác định và miền giá trị có cùng lực lượng. Vì $6\\neq7$, không thể tồn tại hàm song ánh nào: số lượng là 0.</div>"
+          "explanation": "<div class=\"ml-en\">A bijection requires the domain and codomain to have the same cardinality. Since $6\\neq7$, no bijective function can exist: the count is 0.</div><div class=\"ml-vi\">Một song ánh đòi hỏi miền xác định và miền giá trị có cùng lực lượng. Vì $6\\neq7$, không thể tồn tại hàm song ánh nào: số lượng là 0.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q12.png"
         },
         {
           "kind": "MCQ",
@@ -11421,7 +11874,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">For each $i$, the inner sum over $j=-1,0,1,2$ (4 terms) is $4(3i)+(-1+0+1+2)=12i+2$. Summing over $i=1,2,3$: $12(1+2+3)+2(3)=72+6=78$.</div><div class=\"ml-vi\">Với mỗi $i$, tổng trong theo $j=-1,0,1,2$ (4 số hạng) là $4(3i)+(-1+0+1+2)=12i+2$. Tổng theo $i=1,2,3$: $12(1+2+3)+2(3)=72+6=78$.</div>"
+          "explanation": "<div class=\"ml-en\">For each $i$, the inner sum over $j=-1,0,1,2$ (4 terms) is $4(3i)+(-1+0+1+2)=12i+2$. Summing over $i=1,2,3$: $12(1+2+3)+2(3)=72+6=78$.</div><div class=\"ml-vi\">Với mỗi $i$, tổng trong theo $j=-1,0,1,2$ (4 số hạng) là $4(3i)+(-1+0+1+2)=12i+2$. Tổng theo $i=1,2,3$: $12(1+2+3)+2(3)=72+6=78$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q13.png"
         },
         {
           "kind": "MCQ",
@@ -11444,7 +11898,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$j=1$ (odd): $P=1*1=1$. $j=2$ (even): $P=1+2=3$. $j=3$ (odd): $P=3*3=9$. $j=4$ (even): $P=9+4=13$.</div><div class=\"ml-vi\">$j=1$ (lẻ): $P=1*1=1$. $j=2$ (chẵn): $P=1+2=3$. $j=3$ (lẻ): $P=3*3=9$. $j=4$ (chẵn): $P=9+4=13$.</div>"
+          "explanation": "<div class=\"ml-en\">$j=1$ (odd): $P=1*1=1$. $j=2$ (even): $P=1+2=3$. $j=3$ (odd): $P=3*3=9$. $j=4$ (even): $P=9+4=13$.</div><div class=\"ml-vi\">$j=1$ (lẻ): $P=1*1=1$. $j=2$ (chẵn): $P=1+2=3$. $j=3$ (lẻ): $P=3*3=9$. $j=4$ (chẵn): $P=9+4=13$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q14.png"
         },
         {
           "kind": "MCQ",
@@ -11470,7 +11925,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$i=1,j=7$. Iter1: $m=4$, $a_4=7<10$, $i:=5$. Iter2: $i=5,j=7$, $m=6$, $a_6=10$, $x>a_m$ false, $j:=6$. Iter3: $i=5,j=6$, $m=5$, $a_5=8<10$, $i:=6$. Now $i=j=6$, loop stops. Total: 3 iterations.</div><div class=\"ml-vi\">$i=1,j=7$. Lặp1: $m=4$, $a_4=7<10$, $i:=5$. Lặp2: $i=5,j=7$, $m=6$, $a_6=10$, $x>a_m$ sai, $j:=6$. Lặp3: $i=5,j=6$, $m=5$, $a_5=8<10$, $i:=6$. Giờ $i=j=6$, dừng vòng lặp. Tổng: 3 lần lặp.</div>"
+          "explanation": "<div class=\"ml-en\">$i=1,j=7$. Iter1: $m=4$, $a_4=7<10$, $i:=5$. Iter2: $i=5,j=7$, $m=6$, $a_6=10$, $x>a_m$ false, $j:=6$. Iter3: $i=5,j=6$, $m=5$, $a_5=8<10$, $i:=6$. Now $i=j=6$, loop stops. Total: 3 iterations.</div><div class=\"ml-vi\">$i=1,j=7$. Lặp1: $m=4$, $a_4=7<10$, $i:=5$. Lặp2: $i=5,j=7$, $m=6$, $a_6=10$, $x>a_m$ sai, $j:=6$. Lặp3: $i=5,j=6$, $m=5$, $a_5=8<10$, $i:=6$. Giờ $i=j=6$, dừng vòng lặp. Tổng: 3 lần lặp.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q15.png"
         },
         {
           "kind": "MCQ",
@@ -11493,7 +11949,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$g(x)=x\\log(x^4)=4x\\log(x)$. $\\frac{f(x)}{g(x)}=\\frac{x^2\\log x}{4x\\log x}=\\frac{x}{4}\\to\\infty$, so $f$ grows strictly faster: $f\\neq O(g)$. But $\\frac{g(x)}{f(x)}=\\frac{4}{x}\\to0$ is bounded, so $g=O(f)$. Only (ii) holds.</div><div class=\"ml-vi\">$g(x)=x\\log(x^4)=4x\\log(x)$. $\\frac{f(x)}{g(x)}=\\frac{x^2\\log x}{4x\\log x}=\\frac{x}{4}\\to\\infty$, nên $f$ tăng nhanh hơn hẳn: $f\\neq O(g)$. Nhưng $\\frac{g(x)}{f(x)}=\\frac{4}{x}\\to0$ bị chặn, nên $g=O(f)$. Chỉ (ii) đúng.</div>"
+          "explanation": "<div class=\"ml-en\">$g(x)=x\\log(x^4)=4x\\log(x)$. $\\frac{f(x)}{g(x)}=\\frac{x^2\\log x}{4x\\log x}=\\frac{x}{4}\\to\\infty$, so $f$ grows strictly faster: $f\\neq O(g)$. But $\\frac{g(x)}{f(x)}=\\frac{4}{x}\\to0$ is bounded, so $g=O(f)$. Only (ii) holds.</div><div class=\"ml-vi\">$g(x)=x\\log(x^4)=4x\\log(x)$. $\\frac{f(x)}{g(x)}=\\frac{x^2\\log x}{4x\\log x}=\\frac{x}{4}\\to\\infty$, nên $f$ tăng nhanh hơn hẳn: $f\\neq O(g)$. Nhưng $\\frac{g(x)}{f(x)}=\\frac{4}{x}\\to0$ bị chặn, nên $g=O(f)$. Chỉ (ii) đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q16.png"
         },
         {
           "kind": "MCQ",
@@ -11519,7 +11976,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Trace with $m=1,t=0$: $6>1\\to t{=}1$; $2>6$ no; $3>6$ no; $7>6\\to t{=}2$; $7>7$ no; $4>7$ no; $8>7\\to t{=}3$; $8>8$ no; $6>8$ no. Each $t:=t+1$ is one addition, total 3.</div><div class=\"ml-vi\">Theo dõi với $m=1,t=0$: $6>1\\to t{=}1$; $2>6$ không; $3>6$ không; $7>6\\to t{=}2$; $7>7$ không; $4>7$ không; $8>7\\to t{=}3$; $8>8$ không; $6>8$ không. Mỗi $t:=t+1$ là một phép cộng, tổng 3.</div>"
+          "explanation": "<div class=\"ml-en\">Trace with $m=1,t=0$: $6>1\\to t{=}1$; $2>6$ no; $3>6$ no; $7>6\\to t{=}2$; $7>7$ no; $4>7$ no; $8>7\\to t{=}3$; $8>8$ no; $6>8$ no. Each $t:=t+1$ is one addition, total 3.</div><div class=\"ml-vi\">Theo dõi với $m=1,t=0$: $6>1\\to t{=}1$; $2>6$ không; $3>6$ không; $7>6\\to t{=}2$; $7>7$ không; $4>7$ không; $8>7\\to t{=}3$; $8>8$ không; $6>8$ không. Mỗi $t:=t+1$ là một phép cộng, tổng 3.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q17.png"
         },
         {
           "kind": "MCQ",
@@ -11542,7 +12000,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$130=6\\times21+4$, so $130\\equiv4\\pmod6$.</div><div class=\"ml-vi\">$130=6\\times21+4$, nên $130\\equiv4\\pmod6$.</div>"
+          "explanation": "<div class=\"ml-en\">$130=6\\times21+4$, so $130\\equiv4\\pmod6$.</div><div class=\"ml-vi\">$130=6\\times21+4$, nên $130\\equiv4\\pmod6$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q18.png"
         },
         {
           "kind": "MCQ",
@@ -11568,7 +12027,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$134=9(14)+8$, so $a=8$. $-121=9(-14)+5$ (since $9(-14)=-126$, $-121-(-126)=5$), so $b=5$. $a-b=8-5=3$.</div><div class=\"ml-vi\">$134=9(14)+8$, nên $a=8$. $-121=9(-14)+5$ (vì $9(-14)=-126$, $-121-(-126)=5$), nên $b=5$. $a-b=8-5=3$.</div>"
+          "explanation": "<div class=\"ml-en\">$134=9(14)+8$, so $a=8$. $-121=9(-14)+5$ (since $9(-14)=-126$, $-121-(-126)=5$), so $b=5$. $a-b=8-5=3$.</div><div class=\"ml-vi\">$134=9(14)+8$, nên $a=8$. $-121=9(-14)+5$ (vì $9(-14)=-126$, $-121-(-126)=5$), nên $b=5$. $a-b=8-5=3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q19.png"
         },
         {
           "kind": "MCQ",
@@ -11591,7 +12051,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$n=3267\\times10^5$. $3267=3^3\\times11^2$. $10^5=2^5\\times5^5$. So $n=2^5\\times3^3\\times5^5\\times11^2$, giving primes $2,3,5,11$. Sum: $2+3+5+11=21$.</div><div class=\"ml-vi\">$n=3267\\times10^5$. $3267=3^3\\times11^2$. $10^5=2^5\\times5^5$. Vậy $n=2^5\\times3^3\\times5^5\\times11^2$, cho các số nguyên tố $2,3,5,11$. Tổng: $2+3+5+11=21$.</div>"
+          "explanation": "<div class=\"ml-en\">$n=3267\\times10^5$. $3267=3^3\\times11^2$. $10^5=2^5\\times5^5$. So $n=2^5\\times3^3\\times5^5\\times11^2$, giving primes $2,3,5,11$. Sum: $2+3+5+11=21$.</div><div class=\"ml-vi\">$n=3267\\times10^5$. $3267=3^3\\times11^2$. $10^5=2^5\\times5^5$. Vậy $n=2^5\\times3^3\\times5^5\\times11^2$, cho các số nguyên tố $2,3,5,11$. Tổng: $2+3+5+11=21$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q20.png"
         },
         {
           "kind": "MCQ",
@@ -11617,7 +12078,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\gcd=2^{\\min(3,0)}3^{\\min(2,4)}5^{\\min(7,3)}7^{\\min(0,2)}=2^0\\cdot3^2\\cdot5^3\\cdot7^0=1\\times9\\times125=1125$.</div><div class=\"ml-vi\">$\\gcd=2^{\\min(3,0)}3^{\\min(2,4)}5^{\\min(7,3)}7^{\\min(0,2)}=2^0\\cdot3^2\\cdot5^3\\cdot7^0=1\\times9\\times125=1125$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\gcd=2^{\\min(3,0)}3^{\\min(2,4)}5^{\\min(7,3)}7^{\\min(0,2)}=2^0\\cdot3^2\\cdot5^3\\cdot7^0=1\\times9\\times125=1125$.</div><div class=\"ml-vi\">$\\gcd=2^{\\min(3,0)}3^{\\min(2,4)}5^{\\min(7,3)}7^{\\min(0,2)}=2^0\\cdot3^2\\cdot5^3\\cdot7^0=1\\times9\\times125=1125$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q21.png"
         },
         {
           "kind": "MCQ",
@@ -11643,7 +12105,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$(434)_5=4(25)+3(5)+4=100+15+4=119$ in decimal. Converting 119 to base 3: $119=1(81)+1(27)+1(9)+0(3)+2(1)$, giving digits $1,1,1,0,2=(11102)_3$.</div><div class=\"ml-vi\">$(434)_5=4(25)+3(5)+4=100+15+4=119$ trong hệ thập phân. Đổi 119 sang cơ số 3: $119=1(81)+1(27)+1(9)+0(3)+2(1)$, cho các chữ số $1,1,1,0,2=(11102)_3$.</div>"
+          "explanation": "<div class=\"ml-en\">$(434)_5=4(25)+3(5)+4=100+15+4=119$ in decimal. Converting 119 to base 3: $119=1(81)+1(27)+1(9)+0(3)+2(1)$, giving digits $1,1,1,0,2=(11102)_3$.</div><div class=\"ml-vi\">$(434)_5=4(25)+3(5)+4=100+15+4=119$ trong hệ thập phân. Đổi 119 sang cơ số 3: $119=1(81)+1(27)+1(9)+0(3)+2(1)$, cho các chữ số $1,1,1,0,2=(11102)_3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q22.png"
         },
         {
           "kind": "MCQ",
@@ -11666,7 +12129,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Since the domain is integers greater than 1, the smallest value to check is $n=2$. The basic step must show $P(2)$ is true.</div><div class=\"ml-vi\">Vì miền là số nguyên lớn hơn 1, giá trị nhỏ nhất cần kiểm là $n=2$. Bước cơ sở phải chứng minh $P(2)$ đúng.</div>"
+          "explanation": "<div class=\"ml-en\">Since the domain is integers greater than 1, the smallest value to check is $n=2$. The basic step must show $P(2)$ is true.</div><div class=\"ml-vi\">Vì miền là số nguyên lớn hơn 1, giá trị nhỏ nhất cần kiểm là $n=2$. Bước cơ sở phải chứng minh $P(2)$ đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q23.png"
         },
         {
           "kind": "MCQ",
@@ -11689,7 +12153,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Since $\\gcd(4,6)=2$, and $S$ is closed under addition and negation, $S$ consists exactly of all even integers (the subgroup of $\\mathbb{Z}$ generated by 4 and 6 is $2\\mathbb{Z}$). Among the options, only 22 is even.</div><div class=\"ml-vi\">Vì $\\gcd(4,6)=2$, và $S$ đóng dưới phép cộng và phủ định, $S$ gồm chính xác mọi số nguyên chẵn (nhóm con của $\\mathbb{Z}$ sinh bởi 4 và 6 là $2\\mathbb{Z}$). Trong các đáp án, chỉ 22 là số chẵn.</div>"
+          "explanation": "<div class=\"ml-en\">Since $\\gcd(4,6)=2$, and $S$ is closed under addition and negation, $S$ consists exactly of all even integers (the subgroup of $\\mathbb{Z}$ generated by 4 and 6 is $2\\mathbb{Z}$). Among the options, only 22 is even.</div><div class=\"ml-vi\">Vì $\\gcd(4,6)=2$, và $S$ đóng dưới phép cộng và phủ định, $S$ gồm chính xác mọi số nguyên chẵn (nhóm con của $\\mathbb{Z}$ sinh bởi 4 và 6 là $2\\mathbb{Z}$). Trong các đáp án, chỉ 22 là số chẵn.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q24.png"
         },
         {
           "kind": "MCQ",
@@ -11715,7 +12180,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$f(3)=1+f(2)f(1)-2f(2)=1+(-1)(1)-2(-1)=1-1+2=2$. $f(4)=1+f(3)f(2)-2f(3)=1+(2)(-1)-2(2)=1-2-4=-5$. $f(5)=1+f(4)f(3)-2f(4)=1+(-5)(2)-2(-5)=1-10+10=1$.</div><div class=\"ml-vi\">$f(3)=1+f(2)f(1)-2f(2)=1+(-1)(1)-2(-1)=1-1+2=2$. $f(4)=1+f(3)f(2)-2f(3)=1+(2)(-1)-2(2)=1-2-4=-5$. $f(5)=1+f(4)f(3)-2f(4)=1+(-5)(2)-2(-5)=1-10+10=1$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(3)=1+f(2)f(1)-2f(2)=1+(-1)(1)-2(-1)=1-1+2=2$. $f(4)=1+f(3)f(2)-2f(3)=1+(2)(-1)-2(2)=1-2-4=-5$. $f(5)=1+f(4)f(3)-2f(4)=1+(-5)(2)-2(-5)=1-10+10=1$.</div><div class=\"ml-vi\">$f(3)=1+f(2)f(1)-2f(2)=1+(-1)(1)-2(-1)=1-1+2=2$. $f(4)=1+f(3)f(2)-2f(3)=1+(2)(-1)-2(2)=1-2-4=-5$. $f(5)=1+f(4)f(3)-2f(4)=1+(-5)(2)-2(-5)=1-10+10=1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q25.png"
         },
         {
           "kind": "MCQ",
@@ -11738,7 +12204,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Simulating: compare 2,1(take1); 2,5(take2); 8,5(take5); 8,6(take6); 8,7(take7); 8,12(take8); 11,12(take11); 15,12(take12) -- second list exhausted, append remaining 15,20,24 with no comparison. Total: 8 comparisons.</div><div class=\"ml-vi\">Mô phỏng: so sánh 2,1(lấy1); 2,5(lấy2); 8,5(lấy5); 8,6(lấy6); 8,7(lấy7); 8,12(lấy8); 11,12(lấy11); 15,12(lấy12) -- dãy 2 hết, thêm 15,20,24 còn lại không cần so sánh. Tổng: 8 phép so sánh.</div>"
+          "explanation": "<div class=\"ml-en\">Simulating: compare 2,1(take1); 2,5(take2); 8,5(take5); 8,6(take6); 8,7(take7); 8,12(take8); 11,12(take11); 15,12(take12) -- second list exhausted, append remaining 15,20,24 with no comparison. Total: 8 comparisons.</div><div class=\"ml-vi\">Mô phỏng: so sánh 2,1(lấy1); 2,5(lấy2); 8,5(lấy5); 8,6(lấy6); 8,7(lấy7); 8,12(lấy8); 11,12(lấy11); 15,12(lấy12) -- dãy 2 hết, thêm 15,20,24 còn lại không cần so sánh. Tổng: 8 phép so sánh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q26.png"
         },
         {
           "kind": "MCQ",
@@ -11764,7 +12231,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">All three are standard true facts about recursion: (i) is the definition of a recursive algorithm, (ii) follows directly from how recursively defined functions are evaluated, and (iii) restates the validity condition for constructing a recursive algorithm.</div><div class=\"ml-vi\">Cả ba đều là các sự kiện chuẩn đúng về đệ quy: (i) là định nghĩa của thuật toán đệ quy, (ii) suy ra trực tiếp từ cách hàm định nghĩa đệ quy được tính giá trị, và (iii) diễn đạt lại điều kiện hợp lệ để xây dựng một thuật toán đệ quy.</div>"
+          "explanation": "<div class=\"ml-en\">All three are standard true facts about recursion: (i) is the definition of a recursive algorithm, (ii) follows directly from how recursively defined functions are evaluated, and (iii) restates the validity condition for constructing a recursive algorithm.</div><div class=\"ml-vi\">Cả ba đều là các sự kiện chuẩn đúng về đệ quy: (i) là định nghĩa của thuật toán đệ quy, (ii) suy ra trực tiếp từ cách hàm định nghĩa đệ quy được tính giá trị, và (iii) diễn đạt lại điều kiện hợp lệ để xây dựng một thuật toán đệ quy.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q27.png"
         },
         {
           "kind": "MCQ",
@@ -11787,7 +12255,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Positions 1-2 fixed as \"10\", positions 9-10 fixed as \"01\", leaving 6 middle bits free: $2^6=64$.</div><div class=\"ml-vi\">Vị trí 1-2 cố định là \"10\", vị trí 9-10 cố định là \"01\", còn lại 6 bit giữa tự do: $2^6=64$.</div>"
+          "explanation": "<div class=\"ml-en\">Positions 1-2 fixed as \"10\", positions 9-10 fixed as \"01\", leaving 6 middle bits free: $2^6=64$.</div><div class=\"ml-vi\">Vị trí 1-2 cố định là \"10\", vị trí 9-10 cố định là \"01\", còn lại 6 bit giữa tự do: $2^6=64$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q28.png"
         },
         {
           "kind": "MCQ",
@@ -11813,7 +12282,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Total arrangements of 5 people: $5!=120$. By symmetry, exactly half have the bride to the right of the groom: $120/2=60$.</div><div class=\"ml-vi\">Tổng số cách xếp 5 người: $5!=120$. Theo đối xứng, đúng một nửa có cô dâu bên phải chú rể: $120/2=60$.</div>"
+          "explanation": "<div class=\"ml-en\">Total arrangements of 5 people: $5!=120$. By symmetry, exactly half have the bride to the right of the groom: $120/2=60$.</div><div class=\"ml-vi\">Tổng số cách xếp 5 người: $5!=120$. Theo đối xứng, đúng một nửa có cô dâu bên phải chú rể: $120/2=60$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q29.png"
         },
         {
           "kind": "MCQ",
@@ -11839,7 +12309,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f(n)=f(n-1)+3f(n-2)$, $f(0)=f(1)=1$. $f(2)=1+3=4$. $f(3)=4+3=7$. $f(4)=7+12=19$. $f(5)=19+21=40$. $f(6)=40+57=97$.</div><div class=\"ml-vi\">$f(n)=f(n-1)+3f(n-2)$, $f(0)=f(1)=1$. $f(2)=1+3=4$. $f(3)=4+3=7$. $f(4)=7+12=19$. $f(5)=19+21=40$. $f(6)=40+57=97$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(n)=f(n-1)+3f(n-2)$, $f(0)=f(1)=1$. $f(2)=1+3=4$. $f(3)=4+3=7$. $f(4)=7+12=19$. $f(5)=19+21=40$. $f(6)=40+57=97$.</div><div class=\"ml-vi\">$f(n)=f(n-1)+3f(n-2)$, $f(0)=f(1)=1$. $f(2)=1+3=4$. $f(3)=4+3=7$. $f(4)=7+12=19$. $f(5)=19+21=40$. $f(6)=40+57=97$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q30.png"
         },
         {
           "kind": "MCQ",
@@ -11862,7 +12333,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Master theorem with $a=4,b=2,f(n)=n$: $\\log_b a=\\log_2 4=2$. Since $f(n)=n=n^1$ and $1<2$, case 1 applies (recursive term dominates): $f(n)=\\Theta(n^{\\log_b a})=\\Theta(n^2)$, so $O(n^2)$.</div><div class=\"ml-vi\">Định lý thợ với $a=4,b=2,f(n)=n$: $\\log_b a=\\log_2 4=2$. Vì $f(n)=n=n^1$ và $1<2$, trường hợp 1 áp dụng (số hạng đệ quy chiếm ưu thế): $f(n)=\\Theta(n^{\\log_b a})=\\Theta(n^2)$, nên $O(n^2)$.</div>"
+          "explanation": "<div class=\"ml-en\">Master theorem with $a=4,b=2,f(n)=n$: $\\log_b a=\\log_2 4=2$. Since $f(n)=n=n^1$ and $1<2$, case 1 applies (recursive term dominates): $f(n)=\\Theta(n^{\\log_b a})=\\Theta(n^2)$, so $O(n^2)$.</div><div class=\"ml-vi\">Định lý thợ với $a=4,b=2,f(n)=n$: $\\log_b a=\\log_2 4=2$. Vì $f(n)=n=n^1$ và $1<2$, trường hợp 1 áp dụng (số hạng đệ quy chiếm ưu thế): $f(n)=\\Theta(n^{\\log_b a})=\\Theta(n^2)$, nên $O(n^2)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q31.png"
         },
         {
           "kind": "MCQ",
@@ -11888,7 +12360,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$C_n$ has $n$ edges, not $2n$ -- (i) wrong. $W_n$ has $2n$ edges (n rim + n spokes), not $2n+1$ -- (iii) wrong. $K_n$ has $n(n-1)/2$ edges, not $n^2$ -- (iv) wrong. $K_{m,n}$ (complete bipartite) has exactly $mn$ edges -- (ii) correct.</div><div class=\"ml-vi\">$C_n$ có $n$ cạnh, không phải $2n$ -- (i) sai. $W_n$ có $2n$ cạnh (n vành + n nan hoa), không phải $2n+1$ -- (iii) sai. $K_n$ có $n(n-1)/2$ cạnh, không phải $n^2$ -- (iv) sai. $K_{m,n}$ (lưỡng phân đầy đủ) có đúng $mn$ cạnh -- (ii) đúng.</div>"
+          "explanation": "<div class=\"ml-en\">$C_n$ has $n$ edges, not $2n$ -- (i) wrong. $W_n$ has $2n$ edges (n rim + n spokes), not $2n+1$ -- (iii) wrong. $K_n$ has $n(n-1)/2$ edges, not $n^2$ -- (iv) wrong. $K_{m,n}$ (complete bipartite) has exactly $mn$ edges -- (ii) correct.</div><div class=\"ml-vi\">$C_n$ có $n$ cạnh, không phải $2n$ -- (i) sai. $W_n$ có $2n$ cạnh (n vành + n nan hoa), không phải $2n+1$ -- (iii) sai. $K_n$ có $n(n-1)/2$ cạnh, không phải $n^2$ -- (iv) sai. $K_{m,n}$ (lưỡng phân đầy đủ) có đúng $mn$ cạnh -- (ii) đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q32.png"
         },
         {
           "kind": "MCQ",
@@ -11911,7 +12384,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$K_4$ contains triangles (odd cycles) -- not bipartite. $W_4$ (wheel) has triangles between the hub and adjacent rim vertices -- not bipartite. $C_4$ is an even cycle -- bipartite. $K_{3,4}$ is complete bipartite by definition -- bipartite. So the bipartite ones are $C_4,K_{3,4}$, option (iii).</div><div class=\"ml-vi\">$K_4$ chứa tam giác (chu trình lẻ) -- không lưỡng phân. $W_4$ (bánh xe) có tam giác giữa trung tâm và các đỉnh vành kề nhau -- không lưỡng phân. $C_4$ là chu trình chẵn -- lưỡng phân. $K_{3,4}$ là lưỡng phân đầy đủ theo định nghĩa -- lưỡng phân. Vậy các đồ thị lưỡng phân là $C_4,K_{3,4}$, đáp án (iii).</div>"
+          "explanation": "<div class=\"ml-en\">$K_4$ contains triangles (odd cycles) -- not bipartite. $W_4$ (wheel) has triangles between the hub and adjacent rim vertices -- not bipartite. $C_4$ is an even cycle -- bipartite. $K_{3,4}$ is complete bipartite by definition -- bipartite. So the bipartite ones are $C_4,K_{3,4}$, option (iii).</div><div class=\"ml-vi\">$K_4$ chứa tam giác (chu trình lẻ) -- không lưỡng phân. $W_4$ (bánh xe) có tam giác giữa trung tâm và các đỉnh vành kề nhau -- không lưỡng phân. $C_4$ là chu trình chẵn -- lưỡng phân. $K_{3,4}$ là lưỡng phân đầy đủ theo định nghĩa -- lưỡng phân. Vậy các đồ thị lưỡng phân là $C_4,K_{3,4}$, đáp án (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q33.png"
         },
         {
           "kind": "MCQ",
@@ -11937,7 +12411,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Label sides $\\{u,x\\}$ and $\\{v,y\\}$. Using the adjacency matrix (order $u,x,v,y$) and computing $A^3$, the number of walks of length 3 from $u$ to $v$ is $(A^3)_{u,v}=4$.</div><div class=\"ml-vi\">Đặt hai phía $\\{u,x\\}$ và $\\{v,y\\}$. Dùng ma trận kề (thứ tự $u,x,v,y$) và tính $A^3$, số đường đi độ dài 3 từ $u$ đến $v$ là $(A^3)_{u,v}=4$.</div>"
+          "explanation": "<div class=\"ml-en\">Label sides $\\{u,x\\}$ and $\\{v,y\\}$. Using the adjacency matrix (order $u,x,v,y$) and computing $A^3$, the number of walks of length 3 from $u$ to $v$ is $(A^3)_{u,v}=4$.</div><div class=\"ml-vi\">Đặt hai phía $\\{u,x\\}$ và $\\{v,y\\}$. Dùng ma trận kề (thứ tự $u,x,v,y$) và tính $A^3$, số đường đi độ dài 3 từ $u$ đến $v$ là $(A^3)_{u,v}=4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q36.png"
         },
         {
           "kind": "MCQ",
@@ -11960,7 +12435,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">A connected graph has an Euler circuit iff every vertex has even degree. $K_4$: every vertex degree 3 (odd) -- no. $C_4,C_5$: every vertex degree 2 (even) -- yes for both. $Q_5$: every vertex degree 5 (odd) -- no. So (ii) and (iii).</div><div class=\"ml-vi\">Đồ thị liên thông có chu trình Euler khi và chỉ khi mọi đỉnh có bậc chẵn. $K_4$: mọi đỉnh bậc 3 (lẻ) -- không. $C_4,C_5$: mọi đỉnh bậc 2 (chẵn) -- có cho cả hai. $Q_5$: mọi đỉnh bậc 5 (lẻ) -- không. Vậy (ii) và (iii).</div>"
+          "explanation": "<div class=\"ml-en\">A connected graph has an Euler circuit iff every vertex has even degree. $K_4$: every vertex degree 3 (odd) -- no. $C_4,C_5$: every vertex degree 2 (even) -- yes for both. $Q_5$: every vertex degree 5 (odd) -- no. So (ii) and (iii).</div><div class=\"ml-vi\">Đồ thị liên thông có chu trình Euler khi và chỉ khi mọi đỉnh có bậc chẵn. $K_4$: mọi đỉnh bậc 3 (lẻ) -- không. $C_4,C_5$: mọi đỉnh bậc 2 (chẵn) -- có cho cả hai. $Q_5$: mọi đỉnh bậc 5 (lẻ) -- không. Vậy (ii) và (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q37.png"
         },
         {
           "kind": "MCQ",
@@ -11983,7 +12459,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$A$(0)$\\to B$(2) [smaller than $C$=9]. Relax $B$: $D=7,C=\\min(9,10)=9,E=2+3=5$. Next smallest is $E$(5). Relax $E$: $C=\\min(9,8)=8$, $Z=5+3=8$, $D=\\min(7,9)=7$(no change). Remaining unvisited: $D=7,C=8,Z=8$ -- smallest is $D$.</div><div class=\"ml-vi\">$A$(0)$\\to B$(2) [nhỏ hơn $C$=9]. Nới lỏng $B$: $D=7,C=\\min(9,10)=9,E=2+3=5$. Tiếp theo nhỏ nhất là $E$(5). Nới lỏng $E$: $C=\\min(9,8)=8$, $Z=5+3=8$, $D=\\min(7,9)=7$(không đổi). Còn lại chưa thăm: $D=7,C=8,Z=8$ -- nhỏ nhất là $D$.</div>"
+          "explanation": "<div class=\"ml-en\">$A$(0)$\\to B$(2) [smaller than $C$=9]. Relax $B$: $D=7,C=\\min(9,10)=9,E=2+3=5$. Next smallest is $E$(5). Relax $E$: $C=\\min(9,8)=8$, $Z=5+3=8$, $D=\\min(7,9)=7$(no change). Remaining unvisited: $D=7,C=8,Z=8$ -- smallest is $D$.</div><div class=\"ml-vi\">$A$(0)$\\to B$(2) [nhỏ hơn $C$=9]. Nới lỏng $B$: $D=7,C=\\min(9,10)=9,E=2+3=5$. Tiếp theo nhỏ nhất là $E$(5). Nới lỏng $E$: $C=\\min(9,8)=8$, $Z=5+3=8$, $D=\\min(7,9)=7$(không đổi). Còn lại chưa thăm: $D=7,C=8,Z=8$ -- nhỏ nhất là $D$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q38.png"
         },
         {
           "kind": "MCQ",
@@ -12009,7 +12486,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">For a full binary tree, $n=2i+1$ where $i$ is the internal vertex count: $i=(101-1)/2=50$. To maximize height, arrange the tree as a skewed chain (each internal node except the last has one leaf child and one internal child) -- this gives height equal to the number of internal nodes, $50$.</div><div class=\"ml-vi\">Với cây nhị phân đầy đủ, $n=2i+1$ với $i$ là số đỉnh trong: $i=(101-1)/2=50$. Để tối đa chiều cao, xếp cây thành chuỗi lệch (mỗi đỉnh trong trừ đỉnh cuối có một con lá và một con đỉnh trong) -- điều này cho chiều cao bằng số đỉnh trong, $50$.</div>"
+          "explanation": "<div class=\"ml-en\">For a full binary tree, $n=2i+1$ where $i$ is the internal vertex count: $i=(101-1)/2=50$. To maximize height, arrange the tree as a skewed chain (each internal node except the last has one leaf child and one internal child) -- this gives height equal to the number of internal nodes, $50$.</div><div class=\"ml-vi\">Với cây nhị phân đầy đủ, $n=2i+1$ với $i$ là số đỉnh trong: $i=(101-1)/2=50$. Để tối đa chiều cao, xếp cây thành chuỗi lệch (mỗi đỉnh trong trừ đỉnh cuối có một con lá và một con đỉnh trong) -- điều này cho chiều cao bằng số đỉnh trong, $50$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q40.png"
         },
         {
           "kind": "MCQ",
@@ -12035,7 +12513,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Inserting in order builds: SHE (root); SELLS<SHE left; SEA<SELLS left of SELLS; SHELLS>SHE right of SHE; BY<SEA left of SEA; THE>SHELLS right of SHELLS; SEASHORE>SEA right of SEA. Searching \"SHARK\": compare with SHE (\"SHA\"<\"SHE\", go left) -- 1 comparison; compare with SELLS (\"SH\">\"SE\", go right, but SELLS has no right child) -- 2nd comparison, insertion point found. Total: 2 comparisons.</div><div class=\"ml-vi\">Chèn theo thứ tự xây dựng: SHE (gốc); SELLS<SHE trái; SEA<SELLS trái của SELLS; SHELLS>SHE phải của SHE; BY<SEA trái của SEA; THE>SHELLS phải của SHELLS; SEASHORE>SEA phải của SEA. Tìm \"SHARK\": so sánh với SHE (\"SHA\"<\"SHE\", sang trái) -- so sánh 1; so sánh với SELLS (\"SH\">\"SE\", sang phải, nhưng SELLS không có con phải) -- so sánh 2, tìm thấy điểm chèn. Tổng: 2 phép so sánh.</div>"
+          "explanation": "<div class=\"ml-en\">Inserting in order builds: SHE (root); SELLS<SHE left; SEA<SELLS left of SELLS; SHELLS>SHE right of SHE; BY<SEA left of SEA; THE>SHELLS right of SHELLS; SEASHORE>SEA right of SEA. Searching \"SHARK\": compare with SHE (\"SHA\"<\"SHE\", go left) -- 1 comparison; compare with SELLS (\"SH\">\"SE\", go right, but SELLS has no right child) -- 2nd comparison, insertion point found. Total: 2 comparisons.</div><div class=\"ml-vi\">Chèn theo thứ tự xây dựng: SHE (gốc); SELLS<SHE trái; SEA<SELLS trái của SELLS; SHELLS>SHE phải của SHE; BY<SEA trái của SEA; THE>SHELLS phải của SHELLS; SEASHORE>SEA phải của SEA. Tìm \"SHARK\": so sánh với SHE (\"SHA\"<\"SHE\", sang trái) -- so sánh 1; so sánh với SELLS (\"SH\">\"SE\", sang phải, nhưng SELLS không có con phải) -- so sánh 2, tìm thấy điểm chèn. Tổng: 2 phép so sánh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q41.png"
         },
         {
           "kind": "MCQ",
@@ -12061,7 +12540,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">With unknown direction (heavier or lighter), $k$ weighings can distinguish among up to $\\frac{3^k-1}{2}$ coins in the worst case that still identifies the culprit; for 4 coins, $k=2$ weighings suffice (dividing into groups and comparing).</div><div class=\"ml-vi\">Với hướng không biết (nặng hơn hay nhẹ hơn), $k$ lần cân có thể phân biệt tối đa $\\frac{3^k-1}{2}$ đồng xu trong trường hợp xấu nhất mà vẫn xác định được thủ phạm; với 4 đồng xu, $k=2$ lần cân là đủ (chia nhóm và so sánh).</div>"
+          "explanation": "<div class=\"ml-en\">With unknown direction (heavier or lighter), $k$ weighings can distinguish among up to $\\frac{3^k-1}{2}$ coins in the worst case that still identifies the culprit; for 4 coins, $k=2$ weighings suffice (dividing into groups and comparing).</div><div class=\"ml-vi\">Với hướng không biết (nặng hơn hay nhẹ hơn), $k$ lần cân có thể phân biệt tối đa $\\frac{3^k-1}{2}$ đồng xu trong trường hợp xấu nhất mà vẫn xác định được thủ phạm; với 4 đồng xu, $k=2$ lần cân là đủ (chia nhóm và so sánh).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q42.png"
         },
         {
           "kind": "MCQ",
@@ -12084,7 +12564,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Postorder = children left-to-right then the node. $b$'s subtree: $a,c$, then $e$'s subtree ($f,g,e$), then $b$: gives $a,c,f,g,e,b$. $h$'s subtree: $i$, then $l$'s subtree ($j$, then $m$'s subtree $k,n,m$, then $o,p$, then $l$): gives $i,j,k,n,m,o,p,l$, then $h$. Full: $a,c,f,g,e,b,i,j,k,n,m,o,p,l,h,d$.</div><div class=\"ml-vi\">Hậu thứ = các con trái sang phải rồi đến nút đó. Cây con $b$: $a,c$, rồi cây con $e$ ($f,g,e$), rồi $b$: cho $a,c,f,g,e,b$. Cây con $h$: $i$, rồi cây con $l$ ($j$, rồi cây con $m$: $k,n,m$, rồi $o,p$, rồi $l$): cho $i,j,k,n,m,o,p,l$, rồi $h$. Đầy đủ: $a,c,f,g,e,b,i,j,k,n,m,o,p,l,h,d$.</div>"
+          "explanation": "<div class=\"ml-en\">Postorder = children left-to-right then the node. $b$'s subtree: $a,c$, then $e$'s subtree ($f,g,e$), then $b$: gives $a,c,f,g,e,b$. $h$'s subtree: $i$, then $l$'s subtree ($j$, then $m$'s subtree $k,n,m$, then $o,p$, then $l$): gives $i,j,k,n,m,o,p,l$, then $h$. Full: $a,c,f,g,e,b,i,j,k,n,m,o,p,l,h,d$.</div><div class=\"ml-vi\">Hậu thứ = các con trái sang phải rồi đến nút đó. Cây con $b$: $a,c$, rồi cây con $e$ ($f,g,e$), rồi $b$: cho $a,c,f,g,e,b$. Cây con $h$: $i$, rồi cây con $l$ ($j$, rồi cây con $m$: $k,n,m$, rồi $o,p$, rồi $l$): cho $i,j,k,n,m,o,p,l$, rồi $h$. Đầy đủ: $a,c,f,g,e,b,i,j,k,n,m,o,p,l,h,d$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q43.png"
         },
         {
           "kind": "MCQ",
@@ -12110,7 +12591,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Preorder = node, then children left-to-right recursively. $a$, then $b$'s subtree ($b,d$, then $e$'s subtree $e,f,g$), then $c$. Full order: $a,b,d,e,f,g,c$.</div><div class=\"ml-vi\">Tiền thứ = nút, rồi các con trái sang phải đệ quy. $a$, rồi cây con $b$ ($b,d$, rồi cây con $e$: $e,f,g$), rồi $c$. Thứ tự đầy đủ: $a,b,d,e,f,g,c$.</div>"
+          "explanation": "<div class=\"ml-en\">Preorder = node, then children left-to-right recursively. $a$, then $b$'s subtree ($b,d$, then $e$'s subtree $e,f,g$), then $c$. Full order: $a,b,d,e,f,g,c$.</div><div class=\"ml-vi\">Tiền thứ = nút, rồi các con trái sang phải đệ quy. $a$, rồi cây con $b$ ($b,d$, rồi cây con $e$: $e,f,g$), rồi $c$. Thứ tự đầy đủ: $a,b,d,e,f,g,c$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q44.png"
         },
         {
           "kind": "MCQ",
@@ -12136,7 +12618,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">(i) is the fundamental theorem: every connected graph has a spanning tree. (ii) is true: a disconnected graph cannot have a single tree spanning all its vertices. (iii) is exactly the logical contrapositive of (i), hence equally true. All three are correct.</div><div class=\"ml-vi\">(i) là định lý cơ bản: mọi đồ thị liên thông đều có cây khung. (ii) đúng: đồ thị không liên thông không thể có một cây khung duy nhất trải khắp mọi đỉnh. (iii) chính là phản đảo logic của (i), nên cũng đúng. Cả ba đều đúng.</div>"
+          "explanation": "<div class=\"ml-en\">(i) is the fundamental theorem: every connected graph has a spanning tree. (ii) is true: a disconnected graph cannot have a single tree spanning all its vertices. (iii) is exactly the logical contrapositive of (i), hence equally true. All three are correct.</div><div class=\"ml-vi\">(i) là định lý cơ bản: mọi đồ thị liên thông đều có cây khung. (ii) đúng: đồ thị không liên thông không thể có một cây khung duy nhất trải khắp mọi đỉnh. (iii) chính là phản đảo logic của (i), nên cũng đúng. Cả ba đều đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q45.png"
         },
         {
           "kind": "MCQ",
@@ -12162,7 +12645,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Kruskal's algorithm, increasing order: $cd(1)$ add, $bf(1)$ add, $ab(2)$ add, $cg(2)$ add, $fj(2)$ add, $bc(3)$ add (joins the two groups), $ae(3)$ add, $fg(3)$ skip (cycle), $gh(3)$ add, $ij(3)$ add -- 9 edges span all 10 vertices. Total: $1+1+2+2+2+3+3+3+3=20$.</div><div class=\"ml-vi\">Thuật toán Kruskal, thứ tự tăng dần: $cd(1)$ thêm, $bf(1)$ thêm, $ab(2)$ thêm, $cg(2)$ thêm, $fj(2)$ thêm, $bc(3)$ thêm (nối hai nhóm), $ae(3)$ thêm, $fg(3)$ bỏ qua (chu trình), $gh(3)$ thêm, $ij(3)$ thêm -- 9 cạnh trải khắp 10 đỉnh. Tổng: $1+1+2+2+2+3+3+3+3=20$.</div>"
+          "explanation": "<div class=\"ml-en\">Kruskal's algorithm, increasing order: $cd(1)$ add, $bf(1)$ add, $ab(2)$ add, $cg(2)$ add, $fj(2)$ add, $bc(3)$ add (joins the two groups), $ae(3)$ add, $fg(3)$ skip (cycle), $gh(3)$ add, $ij(3)$ add -- 9 edges span all 10 vertices. Total: $1+1+2+2+2+3+3+3+3=20$.</div><div class=\"ml-vi\">Thuật toán Kruskal, thứ tự tăng dần: $cd(1)$ thêm, $bf(1)$ thêm, $ab(2)$ thêm, $cg(2)$ thêm, $fj(2)$ thêm, $bc(3)$ thêm (nối hai nhóm), $ae(3)$ thêm, $fg(3)$ bỏ qua (chu trình), $gh(3)$ thêm, $ij(3)$ thêm -- 9 cạnh trải khắp 10 đỉnh. Tổng: $1+1+2+2+2+3+3+3+3=20$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q46.png"
         },
         {
           "kind": "MCQ",
@@ -12185,7 +12669,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The statement is $p\\to q$. Its negation is $\\neg(p\\to q)=p\\land\\neg q$: \"I have one million dollars but I will not buy a villa\", option (ii).</div><div class=\"ml-vi\">Mệnh đề là $p\\to q$. Phủ định của nó là $\\neg(p\\to q)=p\\land\\neg q$: \"Tôi có một triệu đô la nhưng tôi sẽ không mua biệt thự\", đáp án (ii).</div>"
+          "explanation": "<div class=\"ml-en\">The statement is $p\\to q$. Its negation is $\\neg(p\\to q)=p\\land\\neg q$: \"I have one million dollars but I will not buy a villa\", option (ii).</div><div class=\"ml-vi\">Mệnh đề là $p\\to q$. Phủ định của nó là $\\neg(p\\to q)=p\\land\\neg q$: \"Tôi có một triệu đô la nhưng tôi sẽ không mua biệt thự\", đáp án (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q47.png"
         },
         {
           "kind": "MCQ",
@@ -12208,7 +12693,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$6468=2(3135)+198$. $3135=15(198)+165$. $198=1(165)+33$. $165=5(33)+0$. That's 4 divisions.</div><div class=\"ml-vi\">$6468=2(3135)+198$. $3135=15(198)+165$. $198=1(165)+33$. $165=5(33)+0$. Đó là 4 phép chia.</div>"
+          "explanation": "<div class=\"ml-en\">$6468=2(3135)+198$. $3135=15(198)+165$. $198=1(165)+33$. $165=5(33)+0$. That's 4 divisions.</div><div class=\"ml-vi\">$6468=2(3135)+198$. $3135=15(198)+165$. $198=1(165)+33$. $165=5(33)+0$. Đó là 4 phép chia.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q48.png"
         },
         {
           "kind": "MCQ",
@@ -12234,7 +12720,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">A Hamilton circuit in a bipartite graph must alternate between the two parts equally, requiring $m=n$. The smallest case forming an actual cycle is $K_{2,2}=C_4$, so $m=n$ and $m\\ge2$.</div><div class=\"ml-vi\">Chu trình Hamilton trong đồ thị lưỡng phân phải luân phiên đều giữa hai phía, đòi hỏi $m=n$. Trường hợp nhỏ nhất thực sự tạo chu trình là $K_{2,2}=C_4$, nên $m=n$ và $m\\ge2$.</div>"
+          "explanation": "<div class=\"ml-en\">A Hamilton circuit in a bipartite graph must alternate between the two parts equally, requiring $m=n$. The smallest case forming an actual cycle is $K_{2,2}=C_4$, so $m=n$ and $m\\ge2$.</div><div class=\"ml-vi\">Chu trình Hamilton trong đồ thị lưỡng phân phải luân phiên đều giữa hai phía, đòi hỏi $m=n$. Trường hợp nhỏ nhất thực sự tạo chu trình là $K_{2,2}=C_4$, nên $m=n$ và $m\\ge2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D10/q50.png"
         }
       ]
     }

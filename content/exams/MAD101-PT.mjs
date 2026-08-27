@@ -5265,7 +5265,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Sum of degrees must be even, so the 5th degree x must be odd (1 or 3) and $\\le4$ (max degree in a 5-vertex simple graph). Check x=1: sequence 4,3,3,1,1 fails Erdős–Gallai at k=2 ($7>6$) — NOT graphical. Check x=3: sequence 4,3,3,3,3 satisfies Erdős–Gallai (constructible: one vertex joined to all others, remaining 4 vertices form a 4-cycle) — graphical. So only x=3 works.</div><div class=\"ml-vi\">Tổng bậc phải chẵn nên bậc thứ 5 (x) phải lẻ (1 hoặc 3) và $\\le4$. Xét x=1: dãy 4,3,3,1,1 không thoả Erdős–Gallai tại k=2 ($7>6$) — KHÔNG dựng được đồ thị. Xét x=3: dãy 4,3,3,3,3 thoả (dựng được: 1 đỉnh nối cả 4 đỉnh còn lại, 4 đỉnh còn lại tạo chu trình độ dài 4) — dựng được. Vậy chỉ x=3 đúng.</div>"
+          "explanation": "<div class=\"ml-en\">Sum of degrees must be even, so the 5th degree x must be odd (1 or 3) and $\\le4$ (max degree in a 5-vertex simple graph). Check x=1: sequence 4,3,3,1,1 fails Erdős–Gallai at k=2 ($7>6$) — NOT graphical. Check x=3: sequence 4,3,3,3,3 satisfies Erdős–Gallai (constructible: one vertex joined to all others, remaining 4 vertices form a 4-cycle) — graphical. So only x=3 works.</div><div class=\"ml-vi\">Tổng bậc phải chẵn nên bậc thứ 5 (x) phải lẻ (1 hoặc 3) và $\\le4$. Xét x=1: dãy 4,3,3,1,1 không thoả Erdős–Gallai tại k=2 ($7>6$) — KHÔNG dựng được đồ thị. Xét x=3: dãy 4,3,3,3,3 thoả (dựng được: 1 đỉnh nối cả 4 đỉnh còn lại, 4 đỉnh còn lại tạo chu trình độ dài 4) — dựng được. Vậy chỉ x=3 đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q1.png"
         },
         {
           "kind": "MCQ",
@@ -5291,7 +5292,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">n=6 so max possible degree is 5. (ii) has a 6 &rArr; impossible. (iii) has both 0 and 5 (a vertex adjacent to all 5 others) &rArr; contradiction (the degree-0 vertex can't be adjacent to anything). (i) all-3's: sum=18 even, realizable directly as $K_{3,3}$ (3-regular on 6 vertices). Only (i) works.</div><div class=\"ml-vi\">n=6 nên bậc tối đa là 5. (ii) có số 6 &rArr; vô lý. (iii) có cả 0 và 5 (đỉnh bậc 5 phải nối với cả 5 đỉnh còn lại) &rArr; mâu thuẫn với đỉnh bậc 0. (i) toàn số 3: tổng=18 chẵn, dựng được bằng $K_{3,3}$ (3-đều trên 6 đỉnh). Chỉ (i) đúng.</div>"
+          "explanation": "<div class=\"ml-en\">n=6 so max possible degree is 5. (ii) has a 6 &rArr; impossible. (iii) has both 0 and 5 (a vertex adjacent to all 5 others) &rArr; contradiction (the degree-0 vertex can't be adjacent to anything). (i) all-3's: sum=18 even, realizable directly as $K_{3,3}$ (3-regular on 6 vertices). Only (i) works.</div><div class=\"ml-vi\">n=6 nên bậc tối đa là 5. (ii) có số 6 &rArr; vô lý. (iii) có cả 0 và 5 (đỉnh bậc 5 phải nối với cả 5 đỉnh còn lại) &rArr; mâu thuẫn với đỉnh bậc 0. (i) toàn số 3: tổng=18 chẵn, dựng được bằng $K_{3,3}$ (3-đều trên 6 đỉnh). Chỉ (i) đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q2.png"
         },
         {
           "kind": "MCQ",
@@ -5317,7 +5319,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Sum of degrees $=2\\times4+1\\times2+4\\times1=8+2+4=14$. Edges $=14/2=7$.</div><div class=\"ml-vi\">Tổng bậc $=2\\times4+1\\times2+4\\times1=14$. Số cạnh $=14/2=7$.</div>"
+          "explanation": "<div class=\"ml-en\">Sum of degrees $=2\\times4+1\\times2+4\\times1=8+2+4=14$. Edges $=14/2=7$.</div><div class=\"ml-vi\">Tổng bậc $=2\\times4+1\\times2+4\\times1=14$. Số cạnh $=14/2=7$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q3.png"
         },
         {
           "kind": "MCQ",
@@ -5343,7 +5346,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Total possible edges on 10 vertices $=\\binom{10}{2}=45$. $G'$ edges $=45-20=25$.</div><div class=\"ml-vi\">Tổng số cạnh tối đa trên 10 đỉnh $=\\binom{10}{2}=45$. Số cạnh $G'=45-20=25$.</div>"
+          "explanation": "<div class=\"ml-en\">Total possible edges on 10 vertices $=\\binom{10}{2}=45$. $G'$ edges $=45-20=25$.</div><div class=\"ml-vi\">Tổng số cạnh tối đa trên 10 đỉnh $=\\binom{10}{2}=45$. Số cạnh $G'=45-20=25$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q4.png"
         },
         {
           "kind": "MCQ",
@@ -5369,7 +5373,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">A: sum=9 odd &rArr; invalid. B: sum=9 odd &rArr; invalid. C: sum=17 odd &rArr; invalid. D: n=4 so max degree is 3, but 4 appears &rArr; invalid. All fail, so the answer is E.</div><div class=\"ml-vi\">A: tổng=9 lẻ &rArr; sai. B: tổng=9 lẻ &rArr; sai. C: tổng=17 lẻ &rArr; sai. D: n=4 nên bậc tối đa là 3, nhưng có số 4 &rArr; sai. Tất cả đều sai nên đáp án là E.</div>"
+          "explanation": "<div class=\"ml-en\">A: sum=9 odd &rArr; invalid. B: sum=9 odd &rArr; invalid. C: sum=17 odd &rArr; invalid. D: n=4 so max degree is 3, but 4 appears &rArr; invalid. All fail, so the answer is E.</div><div class=\"ml-vi\">A: tổng=9 lẻ &rArr; sai. B: tổng=9 lẻ &rArr; sai. C: tổng=17 lẻ &rArr; sai. D: n=4 nên bậc tối đa là 3, nhưng có số 4 &rArr; sai. Tất cả đều sai nên đáp án là E.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q5.png"
         },
         {
           "kind": "MCQ",
@@ -5395,7 +5400,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Handshake lemma: $3n/2=30 \\Rightarrow n=20$.</div><div class=\"ml-vi\">Bổ đề bắt tay: $3n/2=30 \\Rightarrow n=20$.</div>"
+          "explanation": "<div class=\"ml-en\">Handshake lemma: $3n/2=30 \\Rightarrow n=20$.</div><div class=\"ml-vi\">Bổ đề bắt tay: $3n/2=30 \\Rightarrow n=20$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q6.png"
         },
         {
           "kind": "MCQ",
@@ -5421,7 +5427,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Total possible edges on v vertices is $v(v-1)/2$; $G'$ has the edges $G$ does NOT have: $v(v-1)/2-e$.</div><div class=\"ml-vi\">Tổng số cạnh tối đa trên v đỉnh là $v(v-1)/2$; $G'$ có các cạnh mà G KHÔNG có: $v(v-1)/2-e$.</div>"
+          "explanation": "<div class=\"ml-en\">Total possible edges on v vertices is $v(v-1)/2$; $G'$ has the edges $G$ does NOT have: $v(v-1)/2-e$.</div><div class=\"ml-vi\">Tổng số cạnh tối đa trên v đỉnh là $v(v-1)/2$; $G'$ có các cạnh mà G KHÔNG có: $v(v-1)/2-e$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q7.png"
         },
         {
           "kind": "MCQ",
@@ -5447,7 +5454,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The n-cube $Q_n$ is bipartite for ANY n (partition by parity of number of 1-bits), regardless of n being odd. $K_n$ (n&gt;2) has triangles, $C_n$ with odd n is an odd cycle, $W_n$ has triangles via the hub &mdash; none of these are bipartite.</div><div class=\"ml-vi\">Siêu khối $Q_n$ luôn lưỡng phân với MỌI n (chia theo tính chẵn/lẻ số bit 1), không phụ thuộc n lẻ hay chẵn. $K_n$ (n&gt;2) có tam giác, $C_n$ với n lẻ là chu trình lẻ, $W_n$ có tam giác qua đỉnh trung tâm &mdash; đều không lưỡng phân.</div>"
+          "explanation": "<div class=\"ml-en\">The n-cube $Q_n$ is bipartite for ANY n (partition by parity of number of 1-bits), regardless of n being odd. $K_n$ (n&gt;2) has triangles, $C_n$ with odd n is an odd cycle, $W_n$ has triangles via the hub &mdash; none of these are bipartite.</div><div class=\"ml-vi\">Siêu khối $Q_n$ luôn lưỡng phân với MỌI n (chia theo tính chẵn/lẻ số bit 1), không phụ thuộc n lẻ hay chẵn. $K_n$ (n&gt;2) có tam giác, $C_n$ với n lẻ là chu trình lẻ, $W_n$ có tam giác qua đỉnh trung tâm &mdash; đều không lưỡng phân.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q8.png"
         },
         {
           "kind": "MCQ",
@@ -5470,7 +5478,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$K_4$ has triangles (not bipartite). $W_4$ has triangles via the hub (not bipartite). $C_4$ is an even cycle (bipartite). $K_{3,4}$ is complete bipartite by definition (bipartite). So the pair that is ALL bipartite is (iii) $C_4, K_{3,4}$.</div><div class=\"ml-vi\">$K_4$ có tam giác (không lưỡng phân). $W_4$ có tam giác qua đỉnh trung tâm (không lưỡng phân). $C_4$ là chu trình chẵn (lưỡng phân). $K_{3,4}$ lưỡng phân theo định nghĩa. Vậy cặp lưỡng phân toàn bộ là (iii) $C_4, K_{3,4}$.</div>"
+          "explanation": "<div class=\"ml-en\">$K_4$ has triangles (not bipartite). $W_4$ has triangles via the hub (not bipartite). $C_4$ is an even cycle (bipartite). $K_{3,4}$ is complete bipartite by definition (bipartite). So the pair that is ALL bipartite is (iii) $C_4, K_{3,4}$.</div><div class=\"ml-vi\">$K_4$ có tam giác (không lưỡng phân). $W_4$ có tam giác qua đỉnh trung tâm (không lưỡng phân). $C_4$ là chu trình chẵn (lưỡng phân). $K_{3,4}$ lưỡng phân theo định nghĩa. Vậy cặp lưỡng phân toàn bộ là (iii) $C_4, K_{3,4}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q9.png"
         },
         {
           "kind": "MCQ",
@@ -5496,7 +5505,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Handshake lemma: $3n/2=6 \\Rightarrow n=4$.</div><div class=\"ml-vi\">Bổ đề bắt tay: $3n/2=6 \\Rightarrow n=4$.</div>"
+          "explanation": "<div class=\"ml-en\">Handshake lemma: $3n/2=6 \\Rightarrow n=4$.</div><div class=\"ml-vi\">Bổ đề bắt tay: $3n/2=6 \\Rightarrow n=4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q10.png"
         },
         {
           "kind": "MCQ",
@@ -5519,7 +5529,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Row 2 = vertex b's row: b is adjacent to a, c, d (not e). In order (a,b,c,d,e): [1,0,1,1,0], sum $=3$.</div><div class=\"ml-vi\">Hàng 2 = hàng của đỉnh b: b kề với a, c, d (không kề e). Theo thứ tự (a,b,c,d,e): [1,0,1,1,0], tổng $=3$.</div>"
+          "explanation": "<div class=\"ml-en\">Row 2 = vertex b's row: b is adjacent to a, c, d (not e). In order (a,b,c,d,e): [1,0,1,1,0], sum $=3$.</div><div class=\"ml-vi\">Hàng 2 = hàng của đỉnh b: b kề với a, c, d (không kề e). Theo thứ tự (a,b,c,d,e): [1,0,1,1,0], tổng $=3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q13.png"
         },
         {
           "kind": "MCQ",
@@ -5545,7 +5556,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">1s count $=2\\times$edges. $W_n$ has $2n$ edges &rArr; $4n$ ones (not $2n$, (i) wrong). $Q_n$ has $n2^{n-1}$ edges &rArr; $n2^n$ ones (not $2^n$, (ii) wrong). $K_n$ has $n(n-1)/2$ edges &rArr; $n(n-1)$ ones &mdash; matches (iii) exactly. $C_n$ has $n$ edges &rArr; $2n$ ones (not $n$, (iv) wrong). Only (iii) is correct.</div><div class=\"ml-vi\">Số số 1 $=2\\times$số cạnh. $W_n$ có $2n$ cạnh &rArr; $4n$ số 1 (không phải $2n$, (i) sai). $Q_n$ có $n2^{n-1}$ cạnh &rArr; $n2^n$ số 1 (không phải $2^n$, (ii) sai). $K_n$ có $n(n-1)/2$ cạnh &rArr; $n(n-1)$ số 1 &mdash; khớp đúng (iii). $C_n$ có $n$ cạnh &rArr; $2n$ số 1 (không phải $n$, (iv) sai). Chỉ (iii) đúng.</div>"
+          "explanation": "<div class=\"ml-en\">1s count $=2\\times$edges. $W_n$ has $2n$ edges &rArr; $4n$ ones (not $2n$, (i) wrong). $Q_n$ has $n2^{n-1}$ edges &rArr; $n2^n$ ones (not $2^n$, (ii) wrong). $K_n$ has $n(n-1)/2$ edges &rArr; $n(n-1)$ ones &mdash; matches (iii) exactly. $C_n$ has $n$ edges &rArr; $2n$ ones (not $n$, (iv) wrong). Only (iii) is correct.</div><div class=\"ml-vi\">Số số 1 $=2\\times$số cạnh. $W_n$ có $2n$ cạnh &rArr; $4n$ số 1 (không phải $2n$, (i) sai). $Q_n$ có $n2^{n-1}$ cạnh &rArr; $n2^n$ số 1 (không phải $2^n$, (ii) sai). $K_n$ có $n(n-1)/2$ cạnh &rArr; $n(n-1)$ số 1 &mdash; khớp đúng (iii). $C_n$ có $n$ cạnh &rArr; $2n$ số 1 (không phải $n$, (iv) sai). Chỉ (iii) đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q15.png"
         },
         {
           "kind": "MCQ",
@@ -5568,7 +5580,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Matrix has $(m+n)^2$ entries total. Number of 1s $=2\\times$edges$=2mn$. Number of 0s $=(m+n)^2-2mn=m^2+n^2$.</div><div class=\"ml-vi\">Ma trận có $(m+n)^2$ ô. Số số 1 $=2\\times$số cạnh$=2mn$. Số số 0 $=(m+n)^2-2mn=m^2+n^2$.</div>"
+          "explanation": "<div class=\"ml-en\">Matrix has $(m+n)^2$ entries total. Number of 1s $=2\\times$edges$=2mn$. Number of 0s $=(m+n)^2-2mn=m^2+n^2$.</div><div class=\"ml-vi\">Ma trận có $(m+n)^2$ ô. Số số 1 $=2\\times$số cạnh$=2mn$. Số số 0 $=(m+n)^2-2mn=m^2+n^2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q16.png"
         },
         {
           "kind": "MCQ",
@@ -5591,7 +5604,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$K_3$ has 3 edges; each edge column has exactly 2 ones (each edge is incident to 2 vertices). Total $=2\\times3=6$.</div><div class=\"ml-vi\">$K_3$ có 3 cạnh; mỗi cột (cạnh) có đúng 2 số 1 (mỗi cạnh liên thuộc 2 đỉnh). Tổng $=2\\times3=6$.</div>"
+          "explanation": "<div class=\"ml-en\">$K_3$ has 3 edges; each edge column has exactly 2 ones (each edge is incident to 2 vertices). Total $=2\\times3=6$.</div><div class=\"ml-vi\">$K_3$ có 3 cạnh; mỗi cột (cạnh) có đúng 2 số 1 (mỗi cạnh liên thuộc 2 đỉnh). Tổng $=2\\times3=6$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q17.png"
         },
         {
           "kind": "MCQ",
@@ -5614,7 +5628,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The graph is a 5-cycle $C_5$ (5 edges). Each edge contributes two 1s to the adjacency matrix, so the number of 1s $=2\\times5=10$.</div><div class=\"ml-vi\">Đồ thị là chu trình $C_5$ (5 cạnh). Mỗi cạnh đóng góp hai số 1 vào ma trận kề nên số số 1 $=2\\times5=10$.</div>"
+          "explanation": "<div class=\"ml-en\">The graph is a 5-cycle $C_5$ (5 edges). Each edge contributes two 1s to the adjacency matrix, so the number of 1s $=2\\times5=10$.</div><div class=\"ml-vi\">Đồ thị là chu trình $C_5$ (5 cạnh). Mỗi cạnh đóng góp hai số 1 vào ma trận kề nên số số 1 $=2\\times5=10$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q19.png"
         }
       ]
     },
@@ -5657,7 +5672,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$(M^2)_{B,C}=M_{B,A}M_{A,C}+M_{B,B}M_{B,C}+M_{B,C}M_{C,C}=3\\times1+1\\times1+1\\times1=5$.</div><div class=\"ml-vi\">$(M^2)_{B,C}=M_{B,A}M_{A,C}+M_{B,B}M_{B,C}+M_{B,C}M_{C,C}=3\\times1+1\\times1+1\\times1=5$.</div>"
+          "explanation": "<div class=\"ml-en\">$(M^2)_{B,C}=M_{B,A}M_{A,C}+M_{B,B}M_{B,C}+M_{B,C}M_{C,C}=3\\times1+1\\times1+1\\times1=5$.</div><div class=\"ml-vi\">$(M^2)_{B,C}=M_{B,A}M_{A,C}+M_{B,B}M_{B,C}+M_{B,C}M_{C,C}=3\\times1+1\\times1+1\\times1=5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q21.png"
         },
         {
           "kind": "MCQ",
@@ -5683,7 +5699,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Enumerate walks a&rarr;x&rarr;y&rarr;d. x=b: y&isin;{a,c,e} all adjacent to d &rArr; 3 walks. x=d: y&isin;{a,c,e} all adjacent to d &rArr; 3 walks. x=e: y&isin;{a,b,c,d}, only a,c adjacent to d (b is not, d-d not an edge) &rArr; 2 walks. Total $=3+3+2=8$. (Cross-checked via $M^3_{a,d}=8$.)</div><div class=\"ml-vi\">Liệt kê các bước đi a&rarr;x&rarr;y&rarr;d. x=b: y&isin;{a,c,e} đều kề d &rArr; 3 đường. x=d: y&isin;{a,c,e} đều kề d &rArr; 3 đường. x=e: y&isin;{a,b,c,d}, chỉ a,c kề d &rArr; 2 đường. Tổng $=3+3+2=8$. (Đối chiếu $M^3_{a,d}=8$.)</div>"
+          "explanation": "<div class=\"ml-en\">Enumerate walks a&rarr;x&rarr;y&rarr;d. x=b: y&isin;{a,c,e} all adjacent to d &rArr; 3 walks. x=d: y&isin;{a,c,e} all adjacent to d &rArr; 3 walks. x=e: y&isin;{a,b,c,d}, only a,c adjacent to d (b is not, d-d not an edge) &rArr; 2 walks. Total $=3+3+2=8$. (Cross-checked via $M^3_{a,d}=8$.)</div><div class=\"ml-vi\">Liệt kê các bước đi a&rarr;x&rarr;y&rarr;d. x=b: y&isin;{a,c,e} đều kề d &rArr; 3 đường. x=d: y&isin;{a,c,e} đều kề d &rArr; 3 đường. x=e: y&isin;{a,b,c,d}, chỉ a,c kề d &rArr; 2 đường. Tổng $=3+3+2=8$. (Đối chiếu $M^3_{a,d}=8$.)</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q22.png"
         },
         {
           "kind": "MCQ",
@@ -5709,7 +5726,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The triangle a-b-c is a cycle, so its 3 edges (ab, bc, ca) are not bridges. Every edge of the two attached paths IS a bridge (removing it cuts off the tail): ad, de, ef in the first path and bg, gh in the second $=5$ cut-edges.</div><div class=\"ml-vi\">Tam giác a-b-c là chu trình nên 3 cạnh ab, bc, ca không phải cầu. Mọi cạnh của 2 đường gắn thêm ĐỀU là cạnh cầu (bỏ đi là cắt rời phần đuôi): ad, de, ef ở đường thứ nhất và bg, gh ở đường thứ hai $=5$ cạnh cầu.</div>"
+          "explanation": "<div class=\"ml-en\">The triangle a-b-c is a cycle, so its 3 edges (ab, bc, ca) are not bridges. Every edge of the two attached paths IS a bridge (removing it cuts off the tail): ad, de, ef in the first path and bg, gh in the second $=5$ cut-edges.</div><div class=\"ml-vi\">Tam giác a-b-c là chu trình nên 3 cạnh ab, bc, ca không phải cầu. Mọi cạnh của 2 đường gắn thêm ĐỀU là cạnh cầu (bỏ đi là cắt rời phần đuôi): ad, de, ef ở đường thứ nhất và bg, gh ở đường thứ hai $=5$ cạnh cầu.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q25.png"
         },
         {
           "kind": "MCQ",
@@ -5735,7 +5753,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Label sides $\\{u,a\\}$ and $\\{v,b\\}$. Via the adjacency matrix (order u,a,v,b), $M^2$ row u $=[2,2,0,0]$, so $M^3_{u,v}=M^2_{u,u}\\cdot M_{u,v}+M^2_{u,a}\\cdot M_{a,v}=2\\times1+2\\times1=4$.</div><div class=\"ml-vi\">Gọi 2 phía là $\\{u,a\\}$ và $\\{v,b\\}$. Qua ma trận kề (thứ tự u,a,v,b), hàng u của $M^2=[2,2,0,0]$, nên $M^3_{u,v}=M^2_{u,u}\\cdot M_{u,v}+M^2_{u,a}\\cdot M_{a,v}=2\\times1+2\\times1=4$.</div>"
+          "explanation": "<div class=\"ml-en\">Label sides $\\{u,a\\}$ and $\\{v,b\\}$. Via the adjacency matrix (order u,a,v,b), $M^2$ row u $=[2,2,0,0]$, so $M^3_{u,v}=M^2_{u,u}\\cdot M_{u,v}+M^2_{u,a}\\cdot M_{a,v}=2\\times1+2\\times1=4$.</div><div class=\"ml-vi\">Gọi 2 phía là $\\{u,a\\}$ và $\\{v,b\\}$. Qua ma trận kề (thứ tự u,a,v,b), hàng u của $M^2=[2,2,0,0]$, nên $M^3_{u,v}=M^2_{u,u}\\cdot M_{u,v}+M^2_{u,a}\\cdot M_{a,v}=2\\times1+2\\times1=4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q26.png"
         },
         {
           "kind": "MCQ",
@@ -5764,7 +5783,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Both X (a 5-cycle) and Y (a 4-cycle) are single cycles with no chords — every edge of a cycle lies on that cycle, so removing any one edge still leaves the rest connected (no bridges) in either graph. Total cut-edges $=0+0=0$.</div><div class=\"ml-vi\">Cả X (chu trình 5 cạnh) và Y (chu trình 4 cạnh) đều là một chu trình đơn không có dây cung thừa — mọi cạnh của chu trình đều nằm trên chu trình đó nên bỏ 1 cạnh bất kỳ vẫn còn liên thông (không có cạnh cầu) ở cả 2 đồ thị. Tổng cạnh cầu $=0+0=0$.</div>"
+          "explanation": "<div class=\"ml-en\">Both X (a 5-cycle) and Y (a 4-cycle) are single cycles with no chords — every edge of a cycle lies on that cycle, so removing any one edge still leaves the rest connected (no bridges) in either graph. Total cut-edges $=0+0=0$.</div><div class=\"ml-vi\">Cả X (chu trình 5 cạnh) và Y (chu trình 4 cạnh) đều là một chu trình đơn không có dây cung thừa — mọi cạnh của chu trình đều nằm trên chu trình đó nên bỏ 1 cạnh bất kỳ vẫn còn liên thông (không có cạnh cầu) ở cả 2 đồ thị. Tổng cạnh cầu $=0+0=0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q28.png"
         },
         {
           "kind": "MCQ",
@@ -5790,7 +5810,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">In a bipartite graph, a walk of even length always ends on the SAME side it started from. Since u and v are on different sides, no walk of length 4 (even) can go from u to v. So the count is 0 (confirmed via $M^4_{u,v}=0$ using the adjacency matrix).</div><div class=\"ml-vi\">Trong đồ thị lưỡng phân, một bước đi độ dài chẵn luôn kết thúc ở CÙNG phía xuất phát. Vì u, v khác phía, không có bước đi độ dài 4 (chẵn) nào từ u đến v được. Vậy kết quả là 0 (đối chiếu $M^4_{u,v}=0$ qua ma trận kề).</div>"
+          "explanation": "<div class=\"ml-en\">In a bipartite graph, a walk of even length always ends on the SAME side it started from. Since u and v are on different sides, no walk of length 4 (even) can go from u to v. So the count is 0 (confirmed via $M^4_{u,v}=0$ using the adjacency matrix).</div><div class=\"ml-vi\">Trong đồ thị lưỡng phân, một bước đi độ dài chẵn luôn kết thúc ở CÙNG phía xuất phát. Vì u, v khác phía, không có bước đi độ dài 4 (chẵn) nào từ u đến v được. Vậy kết quả là 0 (đối chiếu $M^4_{u,v}=0$ qua ma trận kề).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q29.png"
         },
         {
           "kind": "MCQ",
@@ -5813,7 +5834,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Degrees: $v_1$=2, $v_2$=3, $v_3$=2, $v_4$=2, $v_5$=3. Exactly 2 odd-degree vertices ($v_2,v_5$) and G is connected &rArr; G has an Euler path but not an Euler circuit (which needs 0 odd-degree vertices).</div><div class=\"ml-vi\">Bậc: $v_1$=2, $v_2$=3, $v_3$=2, $v_4$=2, $v_5$=3. Đúng 2 đỉnh bậc lẻ ($v_2,v_5$), G liên thông &rArr; G có đường đi Euler nhưng không có chu trình Euler (cần 0 đỉnh bậc lẻ).</div>"
+          "explanation": "<div class=\"ml-en\">Degrees: $v_1$=2, $v_2$=3, $v_3$=2, $v_4$=2, $v_5$=3. Exactly 2 odd-degree vertices ($v_2,v_5$) and G is connected &rArr; G has an Euler path but not an Euler circuit (which needs 0 odd-degree vertices).</div><div class=\"ml-vi\">Bậc: $v_1$=2, $v_2$=3, $v_3$=2, $v_4$=2, $v_5$=3. Đúng 2 đỉnh bậc lẻ ($v_2,v_5$), G liên thông &rArr; G có đường đi Euler nhưng không có chu trình Euler (cần 0 đỉnh bậc lẻ).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q31.png"
         },
         {
           "kind": "MCQ",
@@ -5839,7 +5861,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Standard theorem: $K_{m,n}$ has a Hamilton circuit if and only if $m=n$ and $m \\ge 2$ (both parts must be equal size to alternate all the way around, and at least 2 per side to form a genuine cycle).</div><div class=\"ml-vi\">Định lý chuẩn: $K_{m,n}$ có chu trình Hamilton khi và chỉ khi $m=n$ và $m \\ge 2$ (2 phía phải bằng nhau để luân phiên trọn vòng, và cần ít nhất 2 mỗi phía để tạo chu trình thật sự).</div>"
+          "explanation": "<div class=\"ml-en\">Standard theorem: $K_{m,n}$ has a Hamilton circuit if and only if $m=n$ and $m \\ge 2$ (both parts must be equal size to alternate all the way around, and at least 2 per side to form a genuine cycle).</div><div class=\"ml-vi\">Định lý chuẩn: $K_{m,n}$ có chu trình Hamilton khi và chỉ khi $m=n$ và $m \\ge 2$ (2 phía phải bằng nhau để luân phiên trọn vòng, và cần ít nhất 2 mỗi phía để tạo chu trình thật sự).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q32.png"
         },
         {
           "kind": "MCQ",
@@ -5862,7 +5885,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Euler circuit needs every vertex to have even degree. $W_4$: hub degree 4 (even) but each of the 4 rim vertices has degree 3 (odd, from 2 cycle edges + 1 spoke) &rArr; has odd-degree vertices, NO Euler circuit. $Q_4$: 4-regular, all even &rArr; has one. $C_4$: all degree 2, even &rArr; has one. $K_5$: all degree 4, even &rArr; has one. Only (i) fails.</div><div class=\"ml-vi\">Chu trình Euler cần mọi đỉnh bậc chẵn. $W_4$: đỉnh trung tâm bậc 4 (chẵn) nhưng 4 đỉnh vành mỗi đỉnh bậc 3 (lẻ, từ 2 cạnh chu trình + 1 nan hoa) &rArr; có đỉnh bậc lẻ, KHÔNG có chu trình Euler. $Q_4$: đều bậc 4 &rArr; có. $C_4$: đều bậc 2 &rArr; có. $K_5$: đều bậc 4 &rArr; có. Chỉ (i) không thoả.</div>"
+          "explanation": "<div class=\"ml-en\">Euler circuit needs every vertex to have even degree. $W_4$: hub degree 4 (even) but each of the 4 rim vertices has degree 3 (odd, from 2 cycle edges + 1 spoke) &rArr; has odd-degree vertices, NO Euler circuit. $Q_4$: 4-regular, all even &rArr; has one. $C_4$: all degree 2, even &rArr; has one. $K_5$: all degree 4, even &rArr; has one. Only (i) fails.</div><div class=\"ml-vi\">Chu trình Euler cần mọi đỉnh bậc chẵn. $W_4$: đỉnh trung tâm bậc 4 (chẵn) nhưng 4 đỉnh vành mỗi đỉnh bậc 3 (lẻ, từ 2 cạnh chu trình + 1 nan hoa) &rArr; có đỉnh bậc lẻ, KHÔNG có chu trình Euler. $Q_4$: đều bậc 4 &rArr; có. $C_4$: đều bậc 2 &rArr; có. $K_5$: đều bậc 4 &rArr; có. Chỉ (i) không thoả.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q33.png"
         },
         {
           "kind": "MCQ",
@@ -5885,7 +5909,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">All degrees are even, so any connected member of S (e.g. the single 6-cycle $C_6$) automatically has an Euler circuit &rArr; (i) TRUE. Since every degree is even, a member is either connected (giving a circuit, never just a path) or disconnected (giving neither) &rArr; (ii) is never possible, FALSE. (iii) is false since $C_6 \\in S$ has an Euler path (its circuit). Only (i) holds.</div><div class=\"ml-vi\">Mọi bậc đều chẵn nên bất kỳ thành viên liên thông nào của S (vd chu trình đơn $C_6$) tự động có chu trình Euler &rArr; (i) ĐÚNG. Vì mọi bậc chẵn, một thành viên hoặc liên thông (có chu trình, không bao giờ chỉ có đường đi) hoặc không liên thông (không có gì cả) &rArr; (ii) không bao giờ xảy ra, SAI. (iii) sai vì $C_6 \\in S$ có đường đi Euler (chính là chu trình của nó). Chỉ (i) đúng.</div>"
+          "explanation": "<div class=\"ml-en\">All degrees are even, so any connected member of S (e.g. the single 6-cycle $C_6$) automatically has an Euler circuit &rArr; (i) TRUE. Since every degree is even, a member is either connected (giving a circuit, never just a path) or disconnected (giving neither) &rArr; (ii) is never possible, FALSE. (iii) is false since $C_6 \\in S$ has an Euler path (its circuit). Only (i) holds.</div><div class=\"ml-vi\">Mọi bậc đều chẵn nên bất kỳ thành viên liên thông nào của S (vd chu trình đơn $C_6$) tự động có chu trình Euler &rArr; (i) ĐÚNG. Vì mọi bậc chẵn, một thành viên hoặc liên thông (có chu trình, không bao giờ chỉ có đường đi) hoặc không liên thông (không có gì cả) &rArr; (ii) không bao giờ xảy ra, SAI. (iii) sai vì $C_6 \\in S$ có đường đi Euler (chính là chu trình của nó). Chỉ (i) đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q35.png"
         },
         {
           "kind": "MCQ",
@@ -5908,7 +5933,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">A directed Euler circuit needs in=out at every vertex &mdash; vertices 3,4 always mismatch (2,1) and (2,3), so (ii) is impossible for ANY member, FALSE. A directed Euler path needs exactly one vertex with out&minus;in=+1 (vertex 3 here) and one with in&minus;out=+1 (vertex 4), rest balanced &mdash; exactly the case here, so a suitably connected member of S DOES have an Euler path but no circuit &rArr; (iii) TRUE, which also makes (i) FALSE.</div><div class=\"ml-vi\">Chu trình Euler có hướng cần bậc vào=bậc ra ở MỌI đỉnh &mdash; đỉnh 3,4 luôn lệch (2,1) và (2,3), nên (ii) không thể xảy ra với bất kỳ thành viên nào, SAI. Đường đi Euler có hướng cần đúng 1 đỉnh có bậc ra&minus;vào=+1 (đỉnh 3) và 1 đỉnh có bậc vào&minus;ra=+1 (đỉnh 4), còn lại cân bằng &mdash; đúng khớp trường hợp này, nên một đồ thị liên thông phù hợp trong S CÓ đường đi Euler nhưng không có chu trình &rArr; (iii) ĐÚNG, kéo theo (i) SAI.</div>"
+          "explanation": "<div class=\"ml-en\">A directed Euler circuit needs in=out at every vertex &mdash; vertices 3,4 always mismatch (2,1) and (2,3), so (ii) is impossible for ANY member, FALSE. A directed Euler path needs exactly one vertex with out&minus;in=+1 (vertex 3 here) and one with in&minus;out=+1 (vertex 4), rest balanced &mdash; exactly the case here, so a suitably connected member of S DOES have an Euler path but no circuit &rArr; (iii) TRUE, which also makes (i) FALSE.</div><div class=\"ml-vi\">Chu trình Euler có hướng cần bậc vào=bậc ra ở MỌI đỉnh &mdash; đỉnh 3,4 luôn lệch (2,1) và (2,3), nên (ii) không thể xảy ra với bất kỳ thành viên nào, SAI. Đường đi Euler có hướng cần đúng 1 đỉnh có bậc ra&minus;vào=+1 (đỉnh 3) và 1 đỉnh có bậc vào&minus;ra=+1 (đỉnh 4), còn lại cân bằng &mdash; đúng khớp trường hợp này, nên một đồ thị liên thông phù hợp trong S CÓ đường đi Euler nhưng không có chu trình &rArr; (iii) ĐÚNG, kéo theo (i) SAI.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q36.png"
         },
         {
           "kind": "MCQ",
@@ -5931,7 +5957,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i): $K_{1,2}$ has a Hamilton path (leaf-center-leaf) TRUE, but $K_2$ (2 vertices, 1 edge) can't form a cycle (min length 3) &rArr; consequent FALSE &rArr; implication FALSE. (ii): $W_4$ has a Hamilton path TRUE, but $K_{4,3}$ has 4 odd-degree vertices (the side of 4, each degree 3) &rArr; no Euler path, consequent FALSE &rArr; implication FALSE. (iii): $K_{4,5}$ has 4 odd-degree vertices (the side of 4, each degree 5) &rArr; antecedent (has Euler path) is FALSE &rArr; the implication is vacuously TRUE regardless of $Q_3$.</div><div class=\"ml-vi\">(i): $K_{1,2}$ có đường đi Hamilton (lá-tâm-lá) ĐÚNG, nhưng $K_2$ (2 đỉnh, 1 cạnh) không thể tạo chu trình (tối thiểu độ dài 3) &rArr; hệ quả SAI &rArr; mệnh đề kéo theo SAI. (ii): $W_4$ có đường đi Hamilton ĐÚNG, nhưng $K_{4,3}$ có 4 đỉnh bậc lẻ (phía 4 đỉnh, mỗi đỉnh bậc 3) &rArr; không có đường đi Euler, hệ quả SAI &rArr; SAI. (iii): $K_{4,5}$ có 4 đỉnh bậc lẻ (phía 4 đỉnh, bậc 5) &rArr; tiền đề (có đường đi Euler) SAI &rArr; mệnh đề kéo theo ĐÚNG một cách hiển nhiên (vacuously), không cần xét $Q_3$.</div>"
+          "explanation": "<div class=\"ml-en\">(i): $K_{1,2}$ has a Hamilton path (leaf-center-leaf) TRUE, but $K_2$ (2 vertices, 1 edge) can't form a cycle (min length 3) &rArr; consequent FALSE &rArr; implication FALSE. (ii): $W_4$ has a Hamilton path TRUE, but $K_{4,3}$ has 4 odd-degree vertices (the side of 4, each degree 3) &rArr; no Euler path, consequent FALSE &rArr; implication FALSE. (iii): $K_{4,5}$ has 4 odd-degree vertices (the side of 4, each degree 5) &rArr; antecedent (has Euler path) is FALSE &rArr; the implication is vacuously TRUE regardless of $Q_3$.</div><div class=\"ml-vi\">(i): $K_{1,2}$ có đường đi Hamilton (lá-tâm-lá) ĐÚNG, nhưng $K_2$ (2 đỉnh, 1 cạnh) không thể tạo chu trình (tối thiểu độ dài 3) &rArr; hệ quả SAI &rArr; mệnh đề kéo theo SAI. (ii): $W_4$ có đường đi Hamilton ĐÚNG, nhưng $K_{4,3}$ có 4 đỉnh bậc lẻ (phía 4 đỉnh, mỗi đỉnh bậc 3) &rArr; không có đường đi Euler, hệ quả SAI &rArr; SAI. (iii): $K_{4,5}$ có 4 đỉnh bậc lẻ (phía 4 đỉnh, bậc 5) &rArr; tiền đề (có đường đi Euler) SAI &rArr; mệnh đề kéo theo ĐÚNG một cách hiển nhiên (vacuously), không cần xét $Q_3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q37.png"
         },
         {
           "kind": "MCQ",
@@ -5957,7 +5984,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">The n-cube $Q_n$ has a Hamilton circuit (the classic reflected-Gray-code cycle) for every $n \\ge 2$; $Q_1$ (2 vertices, 1 edge) is too small for any cycle. So the condition is exactly $n&gt;1$.</div><div class=\"ml-vi\">Siêu khối $Q_n$ có chu trình Hamilton (chu trình mã Gray phản xạ kinh điển) với mọi $n \\ge 2$; $Q_1$ (2 đỉnh, 1 cạnh) quá nhỏ để có chu trình. Vậy điều kiện chính xác là $n&gt;1$.</div>"
+          "explanation": "<div class=\"ml-en\">The n-cube $Q_n$ has a Hamilton circuit (the classic reflected-Gray-code cycle) for every $n \\ge 2$; $Q_1$ (2 vertices, 1 edge) is too small for any cycle. So the condition is exactly $n&gt;1$.</div><div class=\"ml-vi\">Siêu khối $Q_n$ có chu trình Hamilton (chu trình mã Gray phản xạ kinh điển) với mọi $n \\ge 2$; $Q_1$ (2 đỉnh, 1 cạnh) quá nhỏ để có chu trình. Vậy điều kiện chính xác là $n&gt;1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q38.png"
         },
         {
           "kind": "MCQ",
@@ -5980,7 +6008,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The bridge between the two triangles can only be crossed once in a simple path/circuit. A Hamilton path exists (traverse one triangle, cross the bridge once, traverse the other), but a Hamilton circuit would need to cross the bridge twice to return to the start &mdash; impossible.</div><div class=\"ml-vi\">Cạnh cầu nối 2 tam giác chỉ có thể đi qua 1 lần trong đường đi/chu trình đơn. Đường đi Hamilton tồn tại (đi hết 1 tam giác, qua cầu 1 lần, đi hết tam giác kia), nhưng chu trình Hamilton cần qua cầu 2 lần để quay lại điểm xuất phát &mdash; không thể.</div>"
+          "explanation": "<div class=\"ml-en\">The bridge between the two triangles can only be crossed once in a simple path/circuit. A Hamilton path exists (traverse one triangle, cross the bridge once, traverse the other), but a Hamilton circuit would need to cross the bridge twice to return to the start &mdash; impossible.</div><div class=\"ml-vi\">Cạnh cầu nối 2 tam giác chỉ có thể đi qua 1 lần trong đường đi/chu trình đơn. Đường đi Hamilton tồn tại (đi hết 1 tam giác, qua cầu 1 lần, đi hết tam giác kia), nhưng chu trình Hamilton cần qua cầu 2 lần để quay lại điểm xuất phát &mdash; không thể.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q40.png"
         },
         {
           "kind": "MCQ",
@@ -6003,7 +6032,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Dijkstra from A: A-C=8, A-B=8, then A-C-F=8+5=13 (beats A-B-E=8+5=13 tie but continue), A-C-F-G=13+7=20. Checking alternatives: A-B-D-G=8+7+8=23, A-B-E-F-G=8+5+3+7=23 &mdash; all worse. Shortest is A-C-F-G $=20$, i.e. G-F-C-A reversed.</div><div class=\"ml-vi\">Dijkstra từ A: A-C=8, A-B=8, rồi A-C-F=8+5=13, A-C-F-G=13+7=20. Kiểm các đường khác: A-B-D-G=23, A-B-E-F-G=23 &mdash; đều tệ hơn. Ngắn nhất là A-C-F-G $=20$, tức G-F-C-A đảo ngược.</div>"
+          "explanation": "<div class=\"ml-en\">Dijkstra from A: A-C=8, A-B=8, then A-C-F=8+5=13 (beats A-B-E=8+5=13 tie but continue), A-C-F-G=13+7=20. Checking alternatives: A-B-D-G=8+7+8=23, A-B-E-F-G=8+5+3+7=23 &mdash; all worse. Shortest is A-C-F-G $=20$, i.e. G-F-C-A reversed.</div><div class=\"ml-vi\">Dijkstra từ A: A-C=8, A-B=8, rồi A-C-F=8+5=13, A-C-F-G=13+7=20. Kiểm các đường khác: A-B-D-G=23, A-B-E-F-G=23 &mdash; đều tệ hơn. Ngắn nhất là A-C-F-G $=20$, tức G-F-C-A đảo ngược.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q41.png"
         }
       ]
     },
@@ -6046,7 +6076,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Shortest path: A-B-E-Z $=2+3+3=8$ (checked against A-C-E-Z=13, A-B-D-Z=11, all worse). Path uses 4 of the 6 vertices (A,B,E,Z); C and D are not chosen $\\Rightarrow 2$.</div><div class=\"ml-vi\">Đường ngắn nhất: A-B-E-Z $=2+3+3=8$ (so với A-C-E-Z=13, A-B-D-Z=11, đều tệ hơn). Đường dùng 4/6 đỉnh (A,B,E,Z); C và D không được chọn $\\Rightarrow 2$.</div>"
+          "explanation": "<div class=\"ml-en\">Shortest path: A-B-E-Z $=2+3+3=8$ (checked against A-C-E-Z=13, A-B-D-Z=11, all worse). Path uses 4 of the 6 vertices (A,B,E,Z); C and D are not chosen $\\Rightarrow 2$.</div><div class=\"ml-vi\">Đường ngắn nhất: A-B-E-Z $=2+3+3=8$ (so với A-C-E-Z=13, A-B-D-Z=11, đều tệ hơn). Đường dùng 4/6 đỉnh (A,B,E,Z); C và D không được chọn $\\Rightarrow 2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q42.png"
         },
         {
           "kind": "MCQ",
@@ -6072,7 +6103,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Extraction order: a(0) &rarr; b(3) &rarr; d(via b: 3+1=4) &rarr; c(via d: 4+1=5, beats via b: 3+6=9) &rarr; e(via d: 4+2=6) &rarr; z(via e: 6+2=8). First 4: a, b, d, c.</div><div class=\"ml-vi\">Thứ tự chọn: a(0) &rarr; b(3) &rarr; d(qua b: 3+1=4) &rarr; c(qua d: 4+1=5, tốt hơn qua b: 3+6=9) &rarr; e(qua d: 4+2=6) &rarr; z(qua e: 6+2=8). 4 đỉnh đầu: a, b, d, c.</div>"
+          "explanation": "<div class=\"ml-en\">Extraction order: a(0) &rarr; b(3) &rarr; d(via b: 3+1=4) &rarr; c(via d: 4+1=5, beats via b: 3+6=9) &rarr; e(via d: 4+2=6) &rarr; z(via e: 6+2=8). First 4: a, b, d, c.</div><div class=\"ml-vi\">Thứ tự chọn: a(0) &rarr; b(3) &rarr; d(qua b: 3+1=4) &rarr; c(qua d: 4+1=5, tốt hơn qua b: 3+6=9) &rarr; e(qua d: 4+2=6) &rarr; z(qua e: 6+2=8). 4 đỉnh đầu: a, b, d, c.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q43.png"
         },
         {
           "kind": "MCQ",
@@ -6098,7 +6130,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Extraction order: A(0) &rarr; B(2) &rarr; E(via B: 2+3=5, beats D at 9 and C at 9). First 3: A, B, E.</div><div class=\"ml-vi\">Thứ tự chọn: A(0) &rarr; B(2) &rarr; E(qua B: 2+3=5, tốt hơn D=9 và C=9). 3 đỉnh đầu: A, B, E.</div>"
+          "explanation": "<div class=\"ml-en\">Extraction order: A(0) &rarr; B(2) &rarr; E(via B: 2+3=5, beats D at 9 and C at 9). First 3: A, B, E.</div><div class=\"ml-vi\">Thứ tự chọn: A(0) &rarr; B(2) &rarr; E(qua B: 2+3=5, tốt hơn D=9 và C=9). 3 đỉnh đầu: A, B, E.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q44.png"
         },
         {
           "kind": "MCQ",
@@ -6121,7 +6154,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Extraction order: A(0) &rarr; B(7) &rarr; F(via A: 9, beats via B: 7+8=15) &rarr; E(via F: 9+2=11, beats direct 14) &rarr; C(via F: 9+6=15) &rarr; D(via C: 15+4=19). Fourth chosen: E.</div><div class=\"ml-vi\">Thứ tự chọn: A(0) &rarr; B(7) &rarr; F(qua A: 9, tốt hơn qua B: 15) &rarr; E(qua F: 9+2=11, tốt hơn trực tiếp 14) &rarr; C(qua F: 9+6=15) &rarr; D(qua C: 15+4=19). Đỉnh thứ tư: E.</div>"
+          "explanation": "<div class=\"ml-en\">Extraction order: A(0) &rarr; B(7) &rarr; F(via A: 9, beats via B: 7+8=15) &rarr; E(via F: 9+2=11, beats direct 14) &rarr; C(via F: 9+6=15) &rarr; D(via C: 15+4=19). Fourth chosen: E.</div><div class=\"ml-vi\">Thứ tự chọn: A(0) &rarr; B(7) &rarr; F(qua A: 9, tốt hơn qua B: 15) &rarr; E(qua F: 9+2=11, tốt hơn trực tiếp 14) &rarr; C(qua F: 9+6=15) &rarr; D(qua C: 15+4=19). Đỉnh thứ tư: E.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q45.png"
         },
         {
           "kind": "MCQ",
@@ -6147,7 +6181,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Extraction order: a(0) &rarr; d(2, beats b=4) &rarr; b(4). First 3: a, d, b.</div><div class=\"ml-vi\">Thứ tự chọn: a(0) &rarr; d(2, tốt hơn b=4) &rarr; b(4). 3 đỉnh đầu: a, d, b.</div>"
+          "explanation": "<div class=\"ml-en\">Extraction order: a(0) &rarr; d(2, beats b=4) &rarr; b(4). First 3: a, d, b.</div><div class=\"ml-vi\">Thứ tự chọn: a(0) &rarr; d(2, tốt hơn b=4) &rarr; b(4). 3 đỉnh đầu: a, d, b.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q46.png"
         },
         {
           "kind": "MCQ",
@@ -6170,7 +6205,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Order: A(0) &rarr; B(2) &rarr; E(via B: 2+3=5) &rarr; next smallest tentative is D (via B: 2+5=7), beating C(9,updated to 8 via E) and Z(8 via E). So D is chosen right after E.</div><div class=\"ml-vi\">Thứ tự: A(0) &rarr; B(2) &rarr; E(qua B: 2+3=5) &rarr; tiếp theo nhỏ nhất là D (qua B: 2+5=7), tốt hơn C(9, cập nhật còn 8 qua E) và Z(8 qua E). Vậy D được chọn ngay sau E.</div>"
+          "explanation": "<div class=\"ml-en\">Order: A(0) &rarr; B(2) &rarr; E(via B: 2+3=5) &rarr; next smallest tentative is D (via B: 2+5=7), beating C(9,updated to 8 via E) and Z(8 via E). So D is chosen right after E.</div><div class=\"ml-vi\">Thứ tự: A(0) &rarr; B(2) &rarr; E(qua B: 2+3=5) &rarr; tiếp theo nhỏ nhất là D (qua B: 2+5=7), tốt hơn C(9, cập nhật còn 8 qua E) và Z(8 qua E). Vậy D được chọn ngay sau E.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q47.png"
         },
         {
           "kind": "MCQ",
@@ -6196,7 +6232,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Order: A(0) &rarr; B(2) &rarr; C(3, direct from A) &rarr; E(via B: 2+3=5, beats via C: 3+3=6). First 4: A, B, C, E.</div><div class=\"ml-vi\">Thứ tự: A(0) &rarr; B(2) &rarr; C(3, trực tiếp từ A) &rarr; E(qua B: 2+3=5, tốt hơn qua C: 3+3=6). 4 đỉnh đầu: A, B, C, E.</div>"
+          "explanation": "<div class=\"ml-en\">Order: A(0) &rarr; B(2) &rarr; C(3, direct from A) &rarr; E(via B: 2+3=5, beats via C: 3+3=6). First 4: A, B, C, E.</div><div class=\"ml-vi\">Thứ tự: A(0) &rarr; B(2) &rarr; C(3, trực tiếp từ A) &rarr; E(qua B: 2+3=5, tốt hơn qua C: 3+3=6). 4 đỉnh đầu: A, B, C, E.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q48.png"
         },
         {
           "kind": "MCQ",
@@ -6222,7 +6259,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">Dijkstra from G: G-H=1, H-J=1+1=2 (beats other routes), J-M=2+3=5. Path G-H-J-M $=1+1+3=5$, shortest.</div><div class=\"ml-vi\">Dijkstra từ G: G-H=1, H-J=1+1=2 (tốt hơn các đường khác), J-M=2+3=5. Đường G-H-J-M $=1+1+3=5$, ngắn nhất.</div>"
+          "explanation": "<div class=\"ml-en\">Dijkstra from G: G-H=1, H-J=1+1=2 (beats other routes), J-M=2+3=5. Path G-H-J-M $=1+1+3=5$, shortest.</div><div class=\"ml-vi\">Dijkstra từ G: G-H=1, H-J=1+1=2 (tốt hơn các đường khác), J-M=2+3=5. Đường G-H-J-M $=1+1+3=5$, ngắn nhất.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q49.png"
         },
         {
           "kind": "MCQ",
@@ -6248,7 +6286,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Order: A(0) &rarr; B(2) &rarr; E(via B: 2+3=5, beats C=9 and D=9). First 3: A, B, E.</div><div class=\"ml-vi\">Thứ tự: A(0) &rarr; B(2) &rarr; E(qua B: 2+3=5, tốt hơn C=9 và D=9). 3 đỉnh đầu: A, B, E.</div>"
+          "explanation": "<div class=\"ml-en\">Order: A(0) &rarr; B(2) &rarr; E(via B: 2+3=5, beats C=9 and D=9). First 3: A, B, E.</div><div class=\"ml-vi\">Thứ tự: A(0) &rarr; B(2) &rarr; E(qua B: 2+3=5, tốt hơn C=9 và D=9). 3 đỉnh đầu: A, B, E.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q50.png"
         },
         {
           "kind": "MCQ",
@@ -6274,7 +6313,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">There are exactly 2: the path $P_4$ (a-b-c-d) and the star $K_{1,3}$ (one center joined to 3 leaves).</div><div class=\"ml-vi\">Có đúng 2 loại: đường đi $P_4$ (a-b-c-d) và ngôi sao $K_{1,3}$ (1 tâm nối 3 lá).</div>"
+          "explanation": "<div class=\"ml-en\">There are exactly 2: the path $P_4$ (a-b-c-d) and the star $K_{1,3}$ (one center joined to 3 leaves).</div><div class=\"ml-vi\">Có đúng 2 loại: đường đi $P_4$ (a-b-c-d) và ngôi sao $K_{1,3}$ (1 tâm nối 3 lá).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q51.png"
         },
         {
           "kind": "MCQ",
@@ -6300,7 +6340,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">For a full m-ary tree with $i$ internal vertices, edges $=mi$. So $6i=66 \\Rightarrow i=11$. Total vertices $=mi+1=67$. Leaves $=67-11=56$.</div><div class=\"ml-vi\">Với cây m-phân đầy đủ có $i$ đỉnh trong, số cạnh $=mi$. Vậy $6i=66 \\Rightarrow i=11$. Tổng đỉnh $=mi+1=67$. Số lá $=67-11=56$.</div>"
+          "explanation": "<div class=\"ml-en\">For a full m-ary tree with $i$ internal vertices, edges $=mi$. So $6i=66 \\Rightarrow i=11$. Total vertices $=mi+1=67$. Leaves $=67-11=56$.</div><div class=\"ml-vi\">Với cây m-phân đầy đủ có $i$ đỉnh trong, số cạnh $=mi$. Vậy $6i=66 \\Rightarrow i=11$. Tổng đỉnh $=mi+1=67$. Số lá $=67-11=56$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q52.png"
         },
         {
           "kind": "MCQ",
@@ -6326,7 +6367,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">A tree needs connected + acyclic. (i) contains the triangle a-b-c (6 edges on 6 vertices) &rArr; not a tree. (iii) contains the 4-cycle a-b-c-d (6 edges on 6 vertices) &rArr; not a tree. (ii) is connected with exactly $6-1=5$ edges and no cycle &rArr; it IS a tree.</div><div class=\"ml-vi\">Cây cần liên thông + không chu trình. (i) chứa tam giác a-b-c (6 cạnh trên 6 đỉnh) &rArr; không phải cây. (iii) chứa chu trình 4 cạnh a-b-c-d (6 cạnh trên 6 đỉnh) &rArr; không phải cây. (ii) liên thông, đúng $6-1=5$ cạnh, không chu trình &rArr; ĐÚNG là cây.</div>"
+          "explanation": "<div class=\"ml-en\">A tree needs connected + acyclic. (i) contains the triangle a-b-c (6 edges on 6 vertices) &rArr; not a tree. (iii) contains the 4-cycle a-b-c-d (6 edges on 6 vertices) &rArr; not a tree. (ii) is connected with exactly $6-1=5$ edges and no cycle &rArr; it IS a tree.</div><div class=\"ml-vi\">Cây cần liên thông + không chu trình. (i) chứa tam giác a-b-c (6 cạnh trên 6 đỉnh) &rArr; không phải cây. (iii) chứa chu trình 4 cạnh a-b-c-d (6 cạnh trên 6 đỉnh) &rArr; không phải cây. (ii) liên thông, đúng $6-1=5$ cạnh, không chu trình &rArr; ĐÚNG là cây.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q53.png"
         },
         {
           "kind": "MCQ",
@@ -6352,7 +6394,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Ancestors of e = every vertex on the path from the root to e, excluding e itself: a, b. That's 2.</div><div class=\"ml-vi\">Tổ tiên của e = mọi đỉnh trên đường từ gốc đến e, không tính e: a, b. Vậy là 2.</div>"
+          "explanation": "<div class=\"ml-en\">Ancestors of e = every vertex on the path from the root to e, excluding e itself: a, b. That's 2.</div><div class=\"ml-vi\">Tổ tiên của e = mọi đỉnh trên đường từ gốc đến e, không tính e: a, b. Vậy là 2.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q54.png"
         },
         {
           "kind": "MCQ",
@@ -6378,7 +6421,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Full binary tree: $n=2i+1$ where $i$ = internal vertices. $61=2i+1 \\Rightarrow i=30$. Leaves $=n-i=61-30=31$.</div><div class=\"ml-vi\">Cây nhị phân đầy đủ: $n=2i+1$ với $i$ = số đỉnh trong. $61=2i+1 \\Rightarrow i=30$. Số lá $=n-i=61-30=31$.</div>"
+          "explanation": "<div class=\"ml-en\">Full binary tree: $n=2i+1$ where $i$ = internal vertices. $61=2i+1 \\Rightarrow i=30$. Leaves $=n-i=61-30=31$.</div><div class=\"ml-vi\">Cây nhị phân đầy đủ: $n=2i+1$ với $i$ = số đỉnh trong. $61=2i+1 \\Rightarrow i=30$. Số lá $=n-i=61-30=31$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q55.png"
         },
         {
           "kind": "MCQ",
@@ -6404,7 +6448,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Full 3-ary requires EVERY internal vertex to have exactly 3 children. (i) fails: A has only 1 child and C has only 2. (iii) fails: q has only 2 children. In (ii) the two internal vertices a and b each have exactly 3 children &rArr; only (ii) is full 3-ary.</div><div class=\"ml-vi\">3-phân đầy đủ yêu cầu MỌI đỉnh trong có đúng 3 con. (i) sai: A chỉ có 1 con, C chỉ có 2 con. (iii) sai: q chỉ có 2 con. Ở (ii) hai đỉnh trong a và b đều có đúng 3 con &rArr; chỉ (ii) là 3-phân đầy đủ.</div>"
+          "explanation": "<div class=\"ml-en\">Full 3-ary requires EVERY internal vertex to have exactly 3 children. (i) fails: A has only 1 child and C has only 2. (iii) fails: q has only 2 children. In (ii) the two internal vertices a and b each have exactly 3 children &rArr; only (ii) is full 3-ary.</div><div class=\"ml-vi\">3-phân đầy đủ yêu cầu MỌI đỉnh trong có đúng 3 con. (i) sai: A chỉ có 1 con, C chỉ có 2 con. (iii) sai: q chỉ có 2 con. Ở (ii) hai đỉnh trong a và b đều có đúng 3 con &rArr; chỉ (ii) là 3-phân đầy đủ.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q56.png"
         }
       ]
     },
@@ -6444,7 +6489,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Max vertices at height $h$ for a binary tree $=2^{h+1}-1=2^6-1=63$.</div><div class=\"ml-vi\">Số đỉnh tối đa ở chiều cao $h$ của cây nhị phân $=2^{h+1}-1=2^6-1=63$.</div>"
+          "explanation": "<div class=\"ml-en\">Max vertices at height $h$ for a binary tree $=2^{h+1}-1=2^6-1=63$.</div><div class=\"ml-vi\">Số đỉnh tối đa ở chiều cao $h$ của cây nhị phân $=2^{h+1}-1=2^6-1=63$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q57.png"
         },
         {
           "kind": "MCQ",
@@ -6470,7 +6516,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Ancestors of k = every vertex on the path from the root to k, excluding k itself: a, b, e. That's 3.</div><div class=\"ml-vi\">Tổ tiên của k = mọi đỉnh trên đường từ gốc đến k, không tính k: a, b, e. Vậy là 3.</div>"
+          "explanation": "<div class=\"ml-en\">Ancestors of k = every vertex on the path from the root to k, excluding k itself: a, b, e. That's 3.</div><div class=\"ml-vi\">Tổ tiên của k = mọi đỉnh trên đường từ gốc đến k, không tính k: a, b, e. Vậy là 3.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q58.png"
         },
         {
           "kind": "MCQ",
@@ -6496,7 +6543,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Minimum leaves for a balanced full binary tree of height $h$ is $2^{h-1}+1$: start from a complete tree of height $h-1$ (all $2^{h-1}$ leaves at depth $h-1$), then split just ONE of those leaves into two children at depth $h$ to reach height exactly $h$ while staying balanced. For $h=10$: $2^9+1=513$.</div><div class=\"ml-vi\">Số lá ít nhất của cây nhị phân đầy đủ cân bằng chiều cao $h$ là $2^{h-1}+1$: bắt đầu từ cây đầy đủ chiều cao $h-1$ (toàn bộ $2^{h-1}$ lá ở độ sâu $h-1$), rồi tách đúng MỘT lá đó thành 2 con ở độ sâu $h$ để đạt đúng chiều cao $h$ mà vẫn cân bằng. Với $h=10$: $2^9+1=513$.</div>"
+          "explanation": "<div class=\"ml-en\">Minimum leaves for a balanced full binary tree of height $h$ is $2^{h-1}+1$: start from a complete tree of height $h-1$ (all $2^{h-1}$ leaves at depth $h-1$), then split just ONE of those leaves into two children at depth $h$ to reach height exactly $h$ while staying balanced. For $h=10$: $2^9+1=513$.</div><div class=\"ml-vi\">Số lá ít nhất của cây nhị phân đầy đủ cân bằng chiều cao $h$ là $2^{h-1}+1$: bắt đầu từ cây đầy đủ chiều cao $h-1$ (toàn bộ $2^{h-1}$ lá ở độ sâu $h-1$), rồi tách đúng MỘT lá đó thành 2 con ở độ sâu $h$ để đạt đúng chiều cao $h$ mà vẫn cân bằng. Với $h=10$: $2^9+1=513$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q59.png"
         },
         {
           "kind": "MCQ",
@@ -6522,7 +6570,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Leaves (no children): d, h, g, i, n, k, f, l, m &rArr; 9 leaves.</div><div class=\"ml-vi\">Lá (không có con): d, h, g, i, n, k, f, l, m &rArr; 9 lá.</div>"
+          "explanation": "<div class=\"ml-en\">Leaves (no children): d, h, g, i, n, k, f, l, m &rArr; 9 leaves.</div><div class=\"ml-vi\">Lá (không có con): d, h, g, i, n, k, f, l, m &rArr; 9 lá.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q60.png"
         },
         {
           "kind": "MCQ",
@@ -6545,7 +6594,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Frequencies in 'weekend': e=3, w=1, k=1, n=1, d=1. Huffman merges the four freq-1 letters into two freq-2 pairs, then those merge into a freq-4 node; finally e(3) merges with that freq-4 node at the root. Since e is a direct child of the root, its code is 1 bit.</div><div class=\"ml-vi\">Tần suất trong 'weekend': e=3, w=1, k=1, n=1, d=1. Huffman gộp 4 chữ tần suất 1 thành 2 cặp tần suất 2, rồi 2 cặp đó gộp thành nút tần suất 4; cuối cùng e(3) gộp với nút tần suất 4 đó ở gốc. Vì e là con trực tiếp của gốc nên mã của nó dài 1 bit.</div>"
+          "explanation": "<div class=\"ml-en\">Frequencies in 'weekend': e=3, w=1, k=1, n=1, d=1. Huffman merges the four freq-1 letters into two freq-2 pairs, then those merge into a freq-4 node; finally e(3) merges with that freq-4 node at the root. Since e is a direct child of the root, its code is 1 bit.</div><div class=\"ml-vi\">Tần suất trong 'weekend': e=3, w=1, k=1, n=1, d=1. Huffman gộp 4 chữ tần suất 1 thành 2 cặp tần suất 2, rồi 2 cặp đó gộp thành nút tần suất 4; cuối cùng e(3) gộp với nút tần suất 4 đó ở gốc. Vì e là con trực tiếp của gốc nên mã của nó dài 1 bit.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q61.png"
         },
         {
           "kind": "MCQ",
@@ -6571,7 +6621,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Greedily match prefix codes: \"110\"=p, remaining \"111010\"; \"1110\"=t, remaining \"10\"; \"10\"=f. Decoded: p-t-f.</div><div class=\"ml-vi\">Khớp mã tiền tố tuần tự: \"110\"=p, còn lại \"111010\"; \"1110\"=t, còn lại \"10\"; \"10\"=f. Giải mã: p-t-f.</div>"
+          "explanation": "<div class=\"ml-en\">Greedily match prefix codes: \"110\"=p, remaining \"111010\"; \"1110\"=t, remaining \"10\"; \"10\"=f. Decoded: p-t-f.</div><div class=\"ml-vi\">Khớp mã tiền tố tuần tự: \"110\"=p, còn lại \"111010\"; \"1110\"=t, còn lại \"10\"; \"10\"=f. Giải mã: p-t-f.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q62.png"
         },
         {
           "kind": "MCQ",
@@ -6594,7 +6645,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Greedily match: \"011\"=t, remaining \"110101011\"; \"11\"=e, remaining \"0101011\"; \"0101\"=x, remaining \"011\"; \"011\"=t. Decoded: t-e-x-t = \"text\".</div><div class=\"ml-vi\">Khớp tuần tự: \"011\"=t, còn \"110101011\"; \"11\"=e, còn \"0101011\"; \"0101\"=x, còn \"011\"; \"011\"=t. Giải mã: t-e-x-t = \"text\".</div>"
+          "explanation": "<div class=\"ml-en\">Greedily match: \"011\"=t, remaining \"110101011\"; \"11\"=e, remaining \"0101011\"; \"0101\"=x, remaining \"011\"; \"011\"=t. Decoded: t-e-x-t = \"text\".</div><div class=\"ml-vi\">Khớp tuần tự: \"011\"=t, còn \"110101011\"; \"11\"=e, còn \"0101011\"; \"0101\"=x, còn \"011\"; \"011\"=t. Giải mã: t-e-x-t = \"text\".</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q63.png"
         },
         {
           "kind": "MCQ",
@@ -6620,7 +6672,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Frequencies: Y=3, K=2, A=1. Huffman merges A(1) and K(2) into a node of weight 3, then merges that with Y(3) at the root. Code lengths: Y=1 bit, K=2 bits, A=2 bits. Total $=3\\times1+2\\times2+1\\times2=3+4+2=9$.</div><div class=\"ml-vi\">Tần suất: Y=3, K=2, A=1. Huffman gộp A(1) và K(2) thành nút trọng số 3, rồi gộp với Y(3) ở gốc. Độ dài mã: Y=1 bit, K=2 bit, A=2 bit. Tổng $=3\\times1+2\\times2+1\\times2=9$.</div>"
+          "explanation": "<div class=\"ml-en\">Frequencies: Y=3, K=2, A=1. Huffman merges A(1) and K(2) into a node of weight 3, then merges that with Y(3) at the root. Code lengths: Y=1 bit, K=2 bits, A=2 bits. Total $=3\\times1+2\\times2+1\\times2=3+4+2=9$.</div><div class=\"ml-vi\">Tần suất: Y=3, K=2, A=1. Huffman gộp A(1) và K(2) thành nút trọng số 3, rồi gộp với Y(3) ở gốc. Độ dài mã: Y=1 bit, K=2 bit, A=2 bit. Tổng $=3\\times1+2\\times2+1\\times2=9$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q64.png"
         },
         {
           "kind": "MCQ",
@@ -6646,7 +6699,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Inserting in order builds a chain: the &rarr; quick &rarr; brown &rarr; fox &rarr; jumps &rarr; over &rarr; lazy (each new word alphabetically less than 'the'/'quick' but greater than the previous, always branching the same way). Path length to 'lazy' $=7$ comparisons.</div><div class=\"ml-vi\">Chèn theo thứ tự tạo thành 1 chuỗi: the &rarr; quick &rarr; brown &rarr; fox &rarr; jumps &rarr; over &rarr; lazy (mỗi từ mới luôn nhỏ hơn 'the'/'quick' nhưng lớn hơn từ trước, rẽ nhánh cùng hướng). Độ dài đường đến 'lazy' $=7$ phép so sánh.</div>"
+          "explanation": "<div class=\"ml-en\">Inserting in order builds a chain: the &rarr; quick &rarr; brown &rarr; fox &rarr; jumps &rarr; over &rarr; lazy (each new word alphabetically less than 'the'/'quick' but greater than the previous, always branching the same way). Path length to 'lazy' $=7$ comparisons.</div><div class=\"ml-vi\">Chèn theo thứ tự tạo thành 1 chuỗi: the &rarr; quick &rarr; brown &rarr; fox &rarr; jumps &rarr; over &rarr; lazy (mỗi từ mới luôn nhỏ hơn 'the'/'quick' nhưng lớn hơn từ trước, rẽ nhánh cùng hướng). Độ dài đường đến 'lazy' $=7$ phép so sánh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q65.png"
         },
         {
           "kind": "MCQ",
@@ -6672,7 +6726,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">A: \"10\"(c) is a prefix of \"101\"(a) &rArr; fails. B: same issue, \"10\"(c) prefixes \"101\"(a) &rArr; fails. C: \"11\"(d) is a prefix of \"110\"(c) &rArr; fails. D: \"11\"(c) is a prefix of \"111\"(d) &rArr; fails. E: 101,100,01,111 &mdash; checking every pair, none is a prefix of another &rArr; valid prefix code.</div><div class=\"ml-vi\">A: \"10\"(c) là tiền tố của \"101\"(a) &rArr; sai. B: cùng lỗi, \"10\"(c) là tiền tố của \"101\"(a) &rArr; sai. C: \"11\"(d) là tiền tố của \"110\"(c) &rArr; sai. D: \"11\"(c) là tiền tố của \"111\"(d) &rArr; sai. E: 101,100,01,111 &mdash; kiểm mọi cặp, không mã nào là tiền tố của mã khác &rArr; đúng là mã tiền tố.</div>"
+          "explanation": "<div class=\"ml-en\">A: \"10\"(c) is a prefix of \"101\"(a) &rArr; fails. B: same issue, \"10\"(c) prefixes \"101\"(a) &rArr; fails. C: \"11\"(d) is a prefix of \"110\"(c) &rArr; fails. D: \"11\"(c) is a prefix of \"111\"(d) &rArr; fails. E: 101,100,01,111 &mdash; checking every pair, none is a prefix of another &rArr; valid prefix code.</div><div class=\"ml-vi\">A: \"10\"(c) là tiền tố của \"101\"(a) &rArr; sai. B: cùng lỗi, \"10\"(c) là tiền tố của \"101\"(a) &rArr; sai. C: \"11\"(d) là tiền tố của \"110\"(c) &rArr; sai. D: \"11\"(c) là tiền tố của \"111\"(d) &rArr; sai. E: 101,100,01,111 &mdash; kiểm mọi cặp, không mã nào là tiền tố của mã khác &rArr; đúng là mã tiền tố.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q66.png"
         },
         {
           "kind": "MCQ",
@@ -6695,7 +6750,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Merge B,E(0.1+0.1=0.2) &rarr; merge with D(0.15+0.2=0.35) &rarr; merge with A(0.2+0.35=0.55) &rarr; merge with C(0.45+0.55=1.0). Depths: C=1,A=2,D=3,B=4,E=4. Average $=0.45(1)+0.2(2)+0.15(3)+0.1(4)+0.1(4)=0.45+0.4+0.45+0.4+0.4=2.10$.</div><div class=\"ml-vi\">Gộp B,E(0.1+0.1=0.2) &rarr; gộp với D(0.15+0.2=0.35) &rarr; gộp với A(0.2+0.35=0.55) &rarr; gộp với C(0.45+0.55=1.0). Độ sâu: C=1,A=2,D=3,B=4,E=4. Trung bình $=0.45(1)+0.2(2)+0.15(3)+0.1(4)+0.1(4)=2.10$.</div>"
+          "explanation": "<div class=\"ml-en\">Merge B,E(0.1+0.1=0.2) &rarr; merge with D(0.15+0.2=0.35) &rarr; merge with A(0.2+0.35=0.55) &rarr; merge with C(0.45+0.55=1.0). Depths: C=1,A=2,D=3,B=4,E=4. Average $=0.45(1)+0.2(2)+0.15(3)+0.1(4)+0.1(4)=0.45+0.4+0.45+0.4+0.4=2.10$.</div><div class=\"ml-vi\">Gộp B,E(0.1+0.1=0.2) &rarr; gộp với D(0.15+0.2=0.35) &rarr; gộp với A(0.2+0.35=0.55) &rarr; gộp với C(0.45+0.55=1.0). Độ sâu: C=1,A=2,D=3,B=4,E=4. Trung bình $=0.45(1)+0.2(2)+0.15(3)+0.1(4)+0.1(4)=2.10$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q67.png"
         },
         {
           "kind": "MCQ",
@@ -6721,7 +6777,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Merge a,n(0.1+0.1=0.2) &rarr; merge c,e(0.2+0.2=0.4) &rarr; merge (an) with b(0.2+0.4=0.6) &rarr; merge (ce) with (anb)(0.4+0.6=1.0). Depths: c=2,e=2,b=2,a=3,n=3. Average $=0.2(2)+0.2(2)+0.4(2)+0.1(3)+0.1(3)=0.4+0.4+0.8+0.3+0.3=2.2$.</div><div class=\"ml-vi\">Gộp a,n(0.1+0.1=0.2) &rarr; gộp c,e(0.2+0.2=0.4) &rarr; gộp (an) với b(0.2+0.4=0.6) &rarr; gộp (ce) với (anb)(0.4+0.6=1.0). Độ sâu: c=2,e=2,b=2,a=3,n=3. Trung bình $=0.2(2)+0.2(2)+0.4(2)+0.1(3)+0.1(3)=2.2$.</div>"
+          "explanation": "<div class=\"ml-en\">Merge a,n(0.1+0.1=0.2) &rarr; merge c,e(0.2+0.2=0.4) &rarr; merge (an) with b(0.2+0.4=0.6) &rarr; merge (ce) with (anb)(0.4+0.6=1.0). Depths: c=2,e=2,b=2,a=3,n=3. Average $=0.2(2)+0.2(2)+0.4(2)+0.1(3)+0.1(3)=0.4+0.4+0.8+0.3+0.3=2.2$.</div><div class=\"ml-vi\">Gộp a,n(0.1+0.1=0.2) &rarr; gộp c,e(0.2+0.2=0.4) &rarr; gộp (an) với b(0.2+0.4=0.6) &rarr; gộp (ce) với (anb)(0.4+0.6=1.0). Độ sâu: c=2,e=2,b=2,a=3,n=3. Trung bình $=0.2(2)+0.2(2)+0.4(2)+0.1(3)+0.1(3)=2.2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q68.png"
         },
         {
           "kind": "MCQ",
@@ -6747,7 +6804,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">Building the BST: Canh(root) &rarr; le(right, l&gt;c) &rarr; trang(right of le) &rarr; diem(left of le) &rarr; mot(left of trang, since m&gt;l but m&lt;t) &rarr; vai(right of trang) &rarr; bong(left of Canh) &rarr; hoa(right of diem, since h&gt;c,h&lt;l,h&gt;d). Path to hoa: Canh &rarr; le &rarr; diem &rarr; hoa $=4$ comparisons.</div><div class=\"ml-vi\">Dựng BST: Canh(gốc) &rarr; le(phải, l&gt;c) &rarr; trang(phải của le) &rarr; diem(trái của le) &rarr; mot(trái của trang, vì m&gt;l nhưng m&lt;t) &rarr; vai(phải của trang) &rarr; bong(trái của Canh) &rarr; hoa(phải của diem, vì h&gt;c,h&lt;l,h&gt;d). Đường đến hoa: Canh &rarr; le &rarr; diem &rarr; hoa $=4$ phép so sánh.</div>"
+          "explanation": "<div class=\"ml-en\">Building the BST: Canh(root) &rarr; le(right, l&gt;c) &rarr; trang(right of le) &rarr; diem(left of le) &rarr; mot(left of trang, since m&gt;l but m&lt;t) &rarr; vai(right of trang) &rarr; bong(left of Canh) &rarr; hoa(right of diem, since h&gt;c,h&lt;l,h&gt;d). Path to hoa: Canh &rarr; le &rarr; diem &rarr; hoa $=4$ comparisons.</div><div class=\"ml-vi\">Dựng BST: Canh(gốc) &rarr; le(phải, l&gt;c) &rarr; trang(phải của le) &rarr; diem(trái của le) &rarr; mot(trái của trang, vì m&gt;l nhưng m&lt;t) &rarr; vai(phải của trang) &rarr; bong(trái của Canh) &rarr; hoa(phải của diem, vì h&gt;c,h&lt;l,h&gt;d). Đường đến hoa: Canh &rarr; le &rarr; diem &rarr; hoa $=4$ phép so sánh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q69.png"
         },
         {
           "kind": "MCQ",
@@ -6773,7 +6831,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">BST: banana(root) &rarr; peach(right) &rarr; apple(left) &rarr; pear(right of peach, since \"pear\">\"peach\") &rarr; coconut(left of peach) &rarr; mango(right of coconut) &rarr; papaya(right of mango). Searching \"pear\": banana &rarr; peach &rarr; pear $=3$ comparisons.</div><div class=\"ml-vi\">BST: banana(gốc) &rarr; peach(phải) &rarr; apple(trái) &rarr; pear(phải của peach, vì \"pear\">\"peach\") &rarr; coconut(trái của peach) &rarr; mango(phải của coconut) &rarr; papaya(phải của mango). Tìm \"pear\": banana &rarr; peach &rarr; pear $=3$ phép so sánh.</div>"
+          "explanation": "<div class=\"ml-en\">BST: banana(root) &rarr; peach(right) &rarr; apple(left) &rarr; pear(right of peach, since \"pear\">\"peach\") &rarr; coconut(left of peach) &rarr; mango(right of coconut) &rarr; papaya(right of mango). Searching \"pear\": banana &rarr; peach &rarr; pear $=3$ comparisons.</div><div class=\"ml-vi\">BST: banana(gốc) &rarr; peach(phải) &rarr; apple(trái) &rarr; pear(phải của peach, vì \"pear\">\"peach\") &rarr; coconut(trái của peach) &rarr; mango(phải của coconut) &rarr; papaya(phải của mango). Tìm \"pear\": banana &rarr; peach &rarr; pear $=3$ phép so sánh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q70.png"
         },
         {
           "kind": "MCQ",
@@ -6799,7 +6858,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$\\uparrow(-\\ 3\\ 1,\\ 2)=\\uparrow(2,2)=2^2=4$. $*(3, +\\ 1\\ 5)=3\\times(1+5)=18$. Total $=+(4,18)=22$.</div><div class=\"ml-vi\">$\\uparrow(-\\ 3\\ 1,\\ 2)=\\uparrow(2,2)=2^2=4$. $*(3, +\\ 1\\ 5)=3\\times(1+5)=18$. Tổng $=+(4,18)=22$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\uparrow(-\\ 3\\ 1,\\ 2)=\\uparrow(2,2)=2^2=4$. $*(3, +\\ 1\\ 5)=3\\times(1+5)=18$. Total $=+(4,18)=22$.</div><div class=\"ml-vi\">$\\uparrow(-\\ 3\\ 1,\\ 2)=\\uparrow(2,2)=2^2=4$. $*(3, +\\ 1\\ 5)=3\\times(1+5)=18$. Tổng $=+(4,18)=22$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q71.png"
         }
       ]
     },
@@ -6842,7 +6902,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Preorder: a,b,e,k,l,m,f,g,n,r,s,c,d,... &mdash; counting: a(1) b(2) e(3) k(4) l(5) m(6) f(7) g(8) n(9) r(10) s(11) c(12) d(13).</div><div class=\"ml-vi\">Preorder: a,b,e,k,l,m,f,g,n,r,s,c,d,... &mdash; đếm: a(1) b(2) e(3) k(4) l(5) m(6) f(7) g(8) n(9) r(10) s(11) c(12) d(13).</div>"
+          "explanation": "<div class=\"ml-en\">Preorder: a,b,e,k,l,m,f,g,n,r,s,c,d,... &mdash; counting: a(1) b(2) e(3) k(4) l(5) m(6) f(7) g(8) n(9) r(10) s(11) c(12) d(13).</div><div class=\"ml-vi\">Preorder: a,b,e,k,l,m,f,g,n,r,s,c,d,... &mdash; đếm: a(1) b(2) e(3) k(4) l(5) m(6) f(7) g(8) n(9) r(10) s(11) c(12) d(13).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q72.png"
         },
         {
           "kind": "MCQ",
@@ -6868,7 +6929,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$(x-y)^2$ postfix $=$ x y - 2 &uarr;. $x(y+5)$ postfix $=$ x y 5 + *. Combine with $+$: x y - 2 &uarr; x y 5 + * + &mdash; matches (i) exactly.</div><div class=\"ml-vi\">$(x-y)^2$ dạng hậu tố $=$ x y - 2 &uarr;. $x(y+5)$ dạng hậu tố $=$ x y 5 + *. Ghép với $+$: x y - 2 &uarr; x y 5 + * + &mdash; khớp đúng (i).</div>"
+          "explanation": "<div class=\"ml-en\">$(x-y)^2$ postfix $=$ x y - 2 &uarr;. $x(y+5)$ postfix $=$ x y 5 + *. Combine with $+$: x y - 2 &uarr; x y 5 + * + &mdash; matches (i) exactly.</div><div class=\"ml-vi\">$(x-y)^2$ dạng hậu tố $=$ x y - 2 &uarr;. $x(y+5)$ dạng hậu tố $=$ x y 5 + *. Ghép với $+$: x y - 2 &uarr; x y 5 + * + &mdash; khớp đúng (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q73.png"
         },
         {
           "kind": "MCQ",
@@ -6894,7 +6956,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$3\\times2=6$; $6^2=36$; $5-3=2$; $8/4=2$; $2\\times2=4$; $36-4=32$.</div><div class=\"ml-vi\">$3\\times2=6$; $6^2=36$; $5-3=2$; $8/4=2$; $2\\times2=4$; $36-4=32$.</div>"
+          "explanation": "<div class=\"ml-en\">$3\\times2=6$; $6^2=36$; $5-3=2$; $8/4=2$; $2\\times2=4$; $36-4=32$.</div><div class=\"ml-vi\">$3\\times2=6$; $6^2=36$; $5-3=2$; $8/4=2$; $2\\times2=4$; $36-4=32$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q74.png"
         },
         {
           "kind": "MCQ",
@@ -6920,7 +6983,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$+\\ 1\\ 1=2$; $\\uparrow(3,2)=9$; $+(3,9)=12$; $+(1,12)=13$; $*(13,6)=78$.</div><div class=\"ml-vi\">$+\\ 1\\ 1=2$; $\\uparrow(3,2)=9$; $+(3,9)=12$; $+(1,12)=13$; $*(13,6)=78$.</div>"
+          "explanation": "<div class=\"ml-en\">$+\\ 1\\ 1=2$; $\\uparrow(3,2)=9$; $+(3,9)=12$; $+(1,12)=13$; $*(13,6)=78$.</div><div class=\"ml-vi\">$+\\ 1\\ 1=2$; $\\uparrow(3,2)=9$; $+(3,9)=12$; $+(1,12)=13$; $*(13,6)=78$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q75.png"
         },
         {
           "kind": "MCQ",
@@ -6946,7 +7010,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$3-1=2$; $2^2=4$; $1+5=6$; $3\\times6=18$; $4+18=22$.</div><div class=\"ml-vi\">$3-1=2$; $2^2=4$; $1+5=6$; $3\\times6=18$; $4+18=22$.</div>"
+          "explanation": "<div class=\"ml-en\">$3-1=2$; $2^2=4$; $1+5=6$; $3\\times6=18$; $4+18=22$.</div><div class=\"ml-vi\">$3-1=2$; $2^2=4$; $1+5=6$; $3\\times6=18$; $4+18=22$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q76.png"
         },
         {
           "kind": "MCQ",
@@ -6969,7 +7034,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$a/b$ prefix $=$ / a b. $(c-d)*e$ prefix $=$ * - c d e. Combine with $+$: + / a b * - c d e.</div><div class=\"ml-vi\">$a/b$ dạng tiền tố $=$ / a b. $(c-d)*e$ dạng tiền tố $=$ * - c d e. Ghép với $+$: + / a b * - c d e.</div>"
+          "explanation": "<div class=\"ml-en\">$a/b$ prefix $=$ / a b. $(c-d)*e$ prefix $=$ * - c d e. Combine with $+$: + / a b * - c d e.</div><div class=\"ml-vi\">$a/b$ dạng tiền tố $=$ / a b. $(c-d)*e$ dạng tiền tố $=$ * - c d e. Ghép với $+$: + / a b * - c d e.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q77.png"
         },
         {
           "kind": "MCQ",
@@ -6992,7 +7058,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Left side * 2 (- x a) &rarr; inorder \"2 * x - a\". Right side + 4 y &rarr; inorder \"4 + y\". Combine with the outer -: \"2 * x - a - 4 + y\".</div><div class=\"ml-vi\">Vế trái * 2 (- x a) &rarr; duyệt giữa \"2 * x - a\". Vế phải + 4 y &rarr; duyệt giữa \"4 + y\". Ghép với dấu - ngoài cùng: \"2 * x - a - 4 + y\".</div>"
+          "explanation": "<div class=\"ml-en\">Left side * 2 (- x a) &rarr; inorder \"2 * x - a\". Right side + 4 y &rarr; inorder \"4 + y\". Combine with the outer -: \"2 * x - a - 4 + y\".</div><div class=\"ml-vi\">Vế trái * 2 (- x a) &rarr; duyệt giữa \"2 * x - a\". Vế phải + 4 y &rarr; duyệt giữa \"4 + y\". Ghép với dấu - ngoài cùng: \"2 * x - a - 4 + y\".</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q78.png"
         },
         {
           "kind": "MCQ",
@@ -7018,7 +7085,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$-(\\uparrow 3\\ 2, \\uparrow 2\\ 3)=3^2-2^3=9-8=1$. $/(6, -4\\ 2)=6/(4-2)=3$. Total $=1+3=4$.</div><div class=\"ml-vi\">$-(\\uparrow 3\\ 2, \\uparrow 2\\ 3)=3^2-2^3=9-8=1$. $/(6, -4\\ 2)=6/(4-2)=3$. Tổng $=1+3=4$.</div>"
+          "explanation": "<div class=\"ml-en\">$-(\\uparrow 3\\ 2, \\uparrow 2\\ 3)=3^2-2^3=9-8=1$. $/(6, -4\\ 2)=6/(4-2)=3$. Total $=1+3=4$.</div><div class=\"ml-vi\">$-(\\uparrow 3\\ 2, \\uparrow 2\\ 3)=3^2-2^3=9-8=1$. $/(6, -4\\ 2)=6/(4-2)=3$. Tổng $=1+3=4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q79.png"
         },
         {
           "kind": "MCQ",
@@ -7044,7 +7112,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$3^2=9$; $9+6=15$; $5-4=1$; $15-1=14$; $2+1=3$; $3+3=6$; $14-6=8$.</div><div class=\"ml-vi\">$3^2=9$; $9+6=15$; $5-4=1$; $15-1=14$; $2+1=3$; $3+3=6$; $14-6=8$.</div>"
+          "explanation": "<div class=\"ml-en\">$3^2=9$; $9+6=15$; $5-4=1$; $15-1=14$; $2+1=3$; $3+3=6$; $14-6=8$.</div><div class=\"ml-vi\">$3^2=9$; $9+6=15$; $5-4=1$; $15-1=14$; $2+1=3$; $3+3=6$; $14-6=8$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q80.png"
         },
         {
           "kind": "MCQ",
@@ -7073,7 +7142,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$Q_3$ has $2^3=8$ vertices, each of degree 3, so $8\\times3/2=12$ edges. A spanning tree needs $8-1=7$ edges. Remove $12-7=5$.</div><div class=\"ml-vi\">$Q_3$ có $2^3=8$ đỉnh, mỗi đỉnh bậc 3, nên có $8\\times3/2=12$ cạnh. Cây khung cần $8-1=7$ cạnh. Cần bỏ $12-7=5$ cạnh.</div>"
+          "explanation": "<div class=\"ml-en\">$Q_3$ has $2^3=8$ vertices, each of degree 3, so $8\\times3/2=12$ edges. A spanning tree needs $8-1=7$ edges. Remove $12-7=5$.</div><div class=\"ml-vi\">$Q_3$ có $2^3=8$ đỉnh, mỗi đỉnh bậc 3, nên có $8\\times3/2=12$ cạnh. Cây khung cần $8-1=7$ cạnh. Cần bỏ $12-7=5$ cạnh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q81.png"
         },
         {
           "kind": "MCQ",
@@ -7099,7 +7169,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">A degree-4 vertex is on the 3-side (call it $b_1$); the 4-side vertices have degree 3. DFS alternates sides: $b_1{\\to}a_1{\\to}b_2{\\to}a_2{\\to}b_3{\\to}a_3$ (6 vertices, using up all of side B before backtracking), then backtracks to attach the last leaf $a_4$ off $b_3$. Longest root-to-leaf path has 5 edges &rArr; height 5.</div><div class=\"ml-vi\">Đỉnh bậc 4 nằm ở phía 3 đỉnh (gọi $b_1$); phía 4 đỉnh có bậc 3. DFS luân phiên 2 phía: $b_1{\\to}a_1{\\to}b_2{\\to}a_2{\\to}b_3{\\to}a_3$ (6 đỉnh, dùng hết phía B rồi mới quay lui), sau đó quay lui gắn lá cuối $a_4$ vào $b_3$. Đường dài nhất từ gốc đến lá có 5 cạnh &rArr; chiều cao 5.</div>"
+          "explanation": "<div class=\"ml-en\">A degree-4 vertex is on the 3-side (call it $b_1$); the 4-side vertices have degree 3. DFS alternates sides: $b_1{\\to}a_1{\\to}b_2{\\to}a_2{\\to}b_3{\\to}a_3$ (6 vertices, using up all of side B before backtracking), then backtracks to attach the last leaf $a_4$ off $b_3$. Longest root-to-leaf path has 5 edges &rArr; height 5.</div><div class=\"ml-vi\">Đỉnh bậc 4 nằm ở phía 3 đỉnh (gọi $b_1$); phía 4 đỉnh có bậc 3. DFS luân phiên 2 phía: $b_1{\\to}a_1{\\to}b_2{\\to}a_2{\\to}b_3{\\to}a_3$ (6 đỉnh, dùng hết phía B rồi mới quay lui), sau đó quay lui gắn lá cuối $a_4$ vào $b_3$. Đường dài nhất từ gốc đến lá có 5 cạnh &rArr; chiều cao 5.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q82.png"
         },
         {
           "kind": "MCQ",
@@ -7122,7 +7193,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$C_n$ has $n$ edges; a spanning tree removes exactly 1 edge, and each of the $n$ edges gives a distinct spanning tree (a different path) &rArr; $n$ spanning trees.</div><div class=\"ml-vi\">$C_n$ có $n$ cạnh; cây khung bỏ đúng 1 cạnh, mỗi cạnh trong $n$ cạnh cho ra 1 cây khung khác nhau (đường đi khác nhau) &rArr; $n$ cây khung.</div>"
+          "explanation": "<div class=\"ml-en\">$C_n$ has $n$ edges; a spanning tree removes exactly 1 edge, and each of the $n$ edges gives a distinct spanning tree (a different path) &rArr; $n$ spanning trees.</div><div class=\"ml-vi\">$C_n$ có $n$ cạnh; cây khung bỏ đúng 1 cạnh, mỗi cạnh trong $n$ cạnh cho ra 1 cây khung khác nhau (đường đi khác nhau) &rArr; $n$ cây khung.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q83.png"
         },
         {
           "kind": "MCQ",
@@ -7148,7 +7220,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">DFS(A): visit B first(alphabetical). DFS(B): visit D first. DFS(D): visit E first. DFS(E): visit C first (leaf, backtrack), then visit Z (leaf). Back at A, C is already visited via E, so edge A-C is unused. Tree edges: A-B, B-D, D-E, E-C, E-Z &mdash; matches (i).</div><div class=\"ml-vi\">DFS(A): thăm B trước (theo alphabet). DFS(B): thăm D trước. DFS(D): thăm E trước. DFS(E): thăm C trước (lá, quay lui), rồi thăm Z (lá). Về A, C đã thăm qua E nên cạnh A-C không dùng. Cạnh cây: A-B, B-D, D-E, E-C, E-Z &mdash; khớp (i).</div>"
+          "explanation": "<div class=\"ml-en\">DFS(A): visit B first(alphabetical). DFS(B): visit D first. DFS(D): visit E first. DFS(E): visit C first (leaf, backtrack), then visit Z (leaf). Back at A, C is already visited via E, so edge A-C is unused. Tree edges: A-B, B-D, D-E, E-C, E-Z &mdash; matches (i).</div><div class=\"ml-vi\">DFS(A): thăm B trước (theo alphabet). DFS(B): thăm D trước. DFS(D): thăm E trước. DFS(E): thăm C trước (lá, quay lui), rồi thăm Z (lá). Về A, C đã thăm qua E nên cạnh A-C không dùng. Cạnh cây: A-B, B-D, D-E, E-C, E-Z &mdash; khớp (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q84.png"
         },
         {
           "kind": "MCQ",
@@ -7171,7 +7244,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$K_{1,6}$ is already a tree (1 center + 6 leaves, 6 edges, connected, acyclic), so its only spanning tree is itself &mdash; the star in (iii). (i) has 8 vertices, but $K_{1,6}$ has only 7. (ii) has 7 vertices but its maximum degree is 3, not 6, so it is not a star.</div><div class=\"ml-vi\">$K_{1,6}$ vốn đã là cây (1 tâm + 6 lá, 6 cạnh, liên thông, không chu trình) nên cây khung duy nhất chính là nó &mdash; hình sao ở (iii). (i) có 8 đỉnh, trong khi $K_{1,6}$ chỉ có 7. (ii) có 7 đỉnh nhưng bậc lớn nhất là 3 chứ không phải 6, nên không phải hình sao.</div>"
+          "explanation": "<div class=\"ml-en\">$K_{1,6}$ is already a tree (1 center + 6 leaves, 6 edges, connected, acyclic), so its only spanning tree is itself &mdash; the star in (iii). (i) has 8 vertices, but $K_{1,6}$ has only 7. (ii) has 7 vertices but its maximum degree is 3, not 6, so it is not a star.</div><div class=\"ml-vi\">$K_{1,6}$ vốn đã là cây (1 tâm + 6 lá, 6 cạnh, liên thông, không chu trình) nên cây khung duy nhất chính là nó &mdash; hình sao ở (iii). (i) có 8 đỉnh, trong khi $K_{1,6}$ chỉ có 7. (ii) có 7 đỉnh nhưng bậc lớn nhất là 3 chứ không phải 6, nên không phải hình sao.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q86.png"
         },
         {
           "kind": "MCQ",
@@ -7197,7 +7271,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">7 edges, 6 vertices. Spanning tree needs $6-1=5$ edges. Remove $7-5=2$.</div><div class=\"ml-vi\">7 cạnh, 6 đỉnh. Cây khung cần $6-1=5$ cạnh. Cần bỏ $7-5=2$ cạnh.</div>"
+          "explanation": "<div class=\"ml-en\">7 edges, 6 vertices. Spanning tree needs $6-1=5$ edges. Remove $7-5=2$.</div><div class=\"ml-vi\">7 cạnh, 6 đỉnh. Cây khung cần $6-1=5$ cạnh. Cần bỏ $7-5=2$ cạnh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q87.png"
         }
       ]
     },
@@ -7243,7 +7318,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The bridge d-e must stay. Each 4-cycle becomes a path when 1 of its 4 edges is removed, and d (resp. e) is either an ENDPOINT of that path or INTERNAL to it. Combinations: both endpoints (gives a straight $P_8$), one endpoint+one internal (gives a single-branch spider &mdash; the two such combos are mirror images, isomorphic), both internal (gives a two-branch tree). That is exactly 3 non-isomorphic shapes.</div><div class=\"ml-vi\">Cạnh cầu d-e phải giữ nguyên. Mỗi chu trình 4 cạnh thành đường đi khi bỏ 1/4 cạnh, và d (hay e) hoặc là ĐẦU MÚT của đường đó hoặc NẰM GIỮA. Tổ hợp: cả 2 đầu mút (cho đường thẳng $P_8$), 1 đầu mút+1 giữa (cho cây phân nhánh 1 chỗ &mdash; 2 tổ hợp này đối xứng gương, đẳng cấu nhau), cả 2 nằm giữa (cho cây phân nhánh 2 chỗ). Đúng 3 dạng không đẳng cấu.</div>"
+          "explanation": "<div class=\"ml-en\">The bridge d-e must stay. Each 4-cycle becomes a path when 1 of its 4 edges is removed, and d (resp. e) is either an ENDPOINT of that path or INTERNAL to it. Combinations: both endpoints (gives a straight $P_8$), one endpoint+one internal (gives a single-branch spider &mdash; the two such combos are mirror images, isomorphic), both internal (gives a two-branch tree). That is exactly 3 non-isomorphic shapes.</div><div class=\"ml-vi\">Cạnh cầu d-e phải giữ nguyên. Mỗi chu trình 4 cạnh thành đường đi khi bỏ 1/4 cạnh, và d (hay e) hoặc là ĐẦU MÚT của đường đó hoặc NẰM GIỮA. Tổ hợp: cả 2 đầu mút (cho đường thẳng $P_8$), 1 đầu mút+1 giữa (cho cây phân nhánh 1 chỗ &mdash; 2 tổ hợp này đối xứng gương, đẳng cấu nhau), cả 2 nằm giữa (cho cây phân nhánh 2 chỗ). Đúng 3 dạng không đẳng cấu.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q88.png"
         },
         {
           "kind": "MCQ",
@@ -7266,7 +7342,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">DFS(a): visit b(alphabetical). DFS(b): visit c. DFS(c): visit e (only remaining unvisited neighbor). DFS(e): visit f (its only neighbor besides c). DFS(f): visit d (its only remaining neighbor). DFS(d): visit g. DFS(g): visit h. Order: a,b,c,e,f,d,g,h.</div><div class=\"ml-vi\">DFS(a): thăm b (theo alphabet). DFS(b): thăm c. DFS(c): thăm e (đỉnh chưa thăm còn lại duy nhất). DFS(e): thăm f (hàng xóm còn lại ngoài c). DFS(f): thăm d (hàng xóm còn lại). DFS(d): thăm g. DFS(g): thăm h. Thứ tự: a,b,c,e,f,d,g,h.</div>"
+          "explanation": "<div class=\"ml-en\">DFS(a): visit b(alphabetical). DFS(b): visit c. DFS(c): visit e (only remaining unvisited neighbor). DFS(e): visit f (its only neighbor besides c). DFS(f): visit d (its only remaining neighbor). DFS(d): visit g. DFS(g): visit h. Order: a,b,c,e,f,d,g,h.</div><div class=\"ml-vi\">DFS(a): thăm b (theo alphabet). DFS(b): thăm c. DFS(c): thăm e (đỉnh chưa thăm còn lại duy nhất). DFS(e): thăm f (hàng xóm còn lại ngoài c). DFS(f): thăm d (hàng xóm còn lại). DFS(d): thăm g. DFS(g): thăm h. Thứ tự: a,b,c,e,f,d,g,h.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q89.png"
         },
         {
           "kind": "MCQ",
@@ -7295,7 +7372,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The degree-100 vertex is the hub. DFS from the hub follows the rim cycle all the way around (hub&rarr;rim1&rarr;rim2&rarr;...&rarr;rim100) before backtracking, since each rim vertex's only unvisited neighbor is the next one on the cycle. This makes a single path of all 101 vertices &rArr; height $=100$ edges.</div><div class=\"ml-vi\">Đỉnh bậc 100 là trục (hub). DFS từ hub đi theo chu trình vành đi hết vòng (hub&rarr;vành1&rarr;vành2&rarr;...&rarr;vành100) rồi mới quay lui, vì mỗi đỉnh vành chỉ còn 1 hàng xóm chưa thăm là đỉnh kế tiếp trên chu trình. Tạo thành 1 đường thẳng gồm cả 101 đỉnh &rArr; chiều cao $=100$ cạnh.</div>"
+          "explanation": "<div class=\"ml-en\">The degree-100 vertex is the hub. DFS from the hub follows the rim cycle all the way around (hub&rarr;rim1&rarr;rim2&rarr;...&rarr;rim100) before backtracking, since each rim vertex's only unvisited neighbor is the next one on the cycle. This makes a single path of all 101 vertices &rArr; height $=100$ edges.</div><div class=\"ml-vi\">Đỉnh bậc 100 là trục (hub). DFS từ hub đi theo chu trình vành đi hết vòng (hub&rarr;vành1&rarr;vành2&rarr;...&rarr;vành100) rồi mới quay lui, vì mỗi đỉnh vành chỉ còn 1 hàng xóm chưa thăm là đỉnh kế tiếp trên chu trình. Tạo thành 1 đường thẳng gồm cả 101 đỉnh &rArr; chiều cao $=100$ cạnh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q90.png"
         },
         {
           "kind": "MCQ",
@@ -7318,7 +7396,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Start {A,C}(1). Tie among A-D,A-B,C-D,C-B (all 2); alphabetically B&lt;D and A-B ties with C-B so pick A-B. Next min is B-E(1). Then tie A-D vs C-D(2), pick A-D (A&lt;C). Then D-F(1). Then F-G(2). Sequence: {A,C},{A,B},{B,E},{A,D},{D,F},{F,G}.</div><div class=\"ml-vi\">Bắt đầu {A,C}(1). Tie giữa A-D,A-B,C-D,C-B (đều 2); B&lt;D và A-B tie với C-B nên chọn A-B. Tiếp theo nhỏ nhất là B-E(1). Rồi tie A-D và C-D(2), chọn A-D (A&lt;C). Rồi D-F(1). Rồi F-G(2). Chuỗi: {A,C},{A,B},{B,E},{A,D},{D,F},{F,G}.</div>"
+          "explanation": "<div class=\"ml-en\">Start {A,C}(1). Tie among A-D,A-B,C-D,C-B (all 2); alphabetically B&lt;D and A-B ties with C-B so pick A-B. Next min is B-E(1). Then tie A-D vs C-D(2), pick A-D (A&lt;C). Then D-F(1). Then F-G(2). Sequence: {A,C},{A,B},{B,E},{A,D},{D,F},{F,G}.</div><div class=\"ml-vi\">Bắt đầu {A,C}(1). Tie giữa A-D,A-B,C-D,C-B (đều 2); B&lt;D và A-B tie với C-B nên chọn A-B. Tiếp theo nhỏ nhất là B-E(1). Rồi tie A-D và C-D(2), chọn A-D (A&lt;C). Rồi D-F(1). Rồi F-G(2). Chuỗi: {A,C},{A,B},{B,E},{A,D},{D,F},{F,G}.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q91.png"
         },
         {
           "kind": "MCQ",
@@ -7344,7 +7423,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">From A: A-B(2) is cheapest. Then B-C(2). Then C-E(1). Then among B-D(4),C-D(4),E-Z(3): E-Z(3) is cheapest. Then D-Z(2) (now that D is reachable via Z). Edge set {AB,BC,CE,EZ,DZ} &mdash; matches option A's edge set (listed as CE,BC,AB,EZ,DZ).</div><div class=\"ml-vi\">Từ A: A-B(2) rẻ nhất. Rồi B-C(2). Rồi C-E(1). Rồi trong B-D(4),C-D(4),E-Z(3): E-Z(3) rẻ nhất. Rồi D-Z(2) (D giờ đến được qua Z). Tập cạnh {AB,BC,CE,EZ,DZ} &mdash; khớp tập cạnh của phương án A (liệt kê CE,BC,AB,EZ,DZ).</div>"
+          "explanation": "<div class=\"ml-en\">From A: A-B(2) is cheapest. Then B-C(2). Then C-E(1). Then among B-D(4),C-D(4),E-Z(3): E-Z(3) is cheapest. Then D-Z(2) (now that D is reachable via Z). Edge set {AB,BC,CE,EZ,DZ} &mdash; matches option A's edge set (listed as CE,BC,AB,EZ,DZ).</div><div class=\"ml-vi\">Từ A: A-B(2) rẻ nhất. Rồi B-C(2). Rồi C-E(1). Rồi trong B-D(4),C-D(4),E-Z(3): E-Z(3) rẻ nhất. Rồi D-Z(2) (D giờ đến được qua Z). Tập cạnh {AB,BC,CE,EZ,DZ} &mdash; khớp tập cạnh của phương án A (liệt kê CE,BC,AB,EZ,DZ).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q92.png"
         },
         {
           "kind": "MCQ",
@@ -7370,7 +7450,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Kruskal: cd(1),fb(1),ab(2),gc(2),jf(2),ij(3),bc(3),gh(3),ae(3) &mdash; 9 edges cover all 10 vertices. Total $=1+1+2+2+2+3+3+3+3=20$.</div><div class=\"ml-vi\">Kruskal: cd(1),fb(1),ab(2),gc(2),jf(2),ij(3),bc(3),gh(3),ae(3) &mdash; 9 cạnh phủ đủ 10 đỉnh. Tổng $=1+1+2+2+2+3+3+3+3=20$.</div>"
+          "explanation": "<div class=\"ml-en\">Kruskal: cd(1),fb(1),ab(2),gc(2),jf(2),ij(3),bc(3),gh(3),ae(3) &mdash; 9 edges cover all 10 vertices. Total $=1+1+2+2+2+3+3+3+3=20$.</div><div class=\"ml-vi\">Kruskal: cd(1),fb(1),ab(2),gc(2),jf(2),ij(3),bc(3),gh(3),ae(3) &mdash; 9 cạnh phủ đủ 10 đỉnh. Tổng $=1+1+2+2+2+3+3+3+3=20$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q93.png"
         },
         {
           "kind": "MCQ",
@@ -7396,7 +7477,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Sorted: AB(1),BE(1),DE(1),CF(2),AD(3),EF(4)... Add AB,BE,DE (connects A,B,D,E), then CF (connects C,F separately). AD(3) would cycle, skip. EF(4) merges the two components {A,B,D,E} and {C,F} &mdash; completing the spanning tree (5 edges, 6 vertices). Last edge: EF.</div><div class=\"ml-vi\">Sắp xếp: AB(1),BE(1),DE(1),CF(2),AD(3),EF(4)... Thêm AB,BE,DE (nối A,B,D,E), rồi CF (nối C,F riêng). AD(3) tạo chu trình, bỏ qua. EF(4) gộp 2 thành phần {A,B,D,E} và {C,F} &mdash; hoàn tất cây khung (5 cạnh, 6 đỉnh). Cạnh cuối: EF.</div>"
+          "explanation": "<div class=\"ml-en\">Sorted: AB(1),BE(1),DE(1),CF(2),AD(3),EF(4)... Add AB,BE,DE (connects A,B,D,E), then CF (connects C,F separately). AD(3) would cycle, skip. EF(4) merges the two components {A,B,D,E} and {C,F} &mdash; completing the spanning tree (5 edges, 6 vertices). Last edge: EF.</div><div class=\"ml-vi\">Sắp xếp: AB(1),BE(1),DE(1),CF(2),AD(3),EF(4)... Thêm AB,BE,DE (nối A,B,D,E), rồi CF (nối C,F riêng). AD(3) tạo chu trình, bỏ qua. EF(4) gộp 2 thành phần {A,B,D,E} và {C,F} &mdash; hoàn tất cây khung (5 cạnh, 6 đỉnh). Cạnh cuối: EF.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q94.png"
         },
         {
           "kind": "MCQ",
@@ -7422,7 +7504,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Kruskal: ce(1),ad(2),bc(3),hf(4),dc(5),gf(7),he(8) &mdash; 7 edges cover all 8 vertices. Total $=1+2+3+4+5+7+8=30$.</div><div class=\"ml-vi\">Kruskal: ce(1),ad(2),bc(3),hf(4),dc(5),gf(7),he(8) &mdash; 7 cạnh phủ đủ 8 đỉnh. Tổng $=1+2+3+4+5+7+8=30$.</div>"
+          "explanation": "<div class=\"ml-en\">Kruskal: ce(1),ad(2),bc(3),hf(4),dc(5),gf(7),he(8) &mdash; 7 edges cover all 8 vertices. Total $=1+2+3+4+5+7+8=30$.</div><div class=\"ml-vi\">Kruskal: ce(1),ad(2),bc(3),hf(4),dc(5),gf(7),he(8) &mdash; 7 cạnh phủ đủ 8 đỉnh. Tổng $=1+2+3+4+5+7+8=30$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q95.png"
         },
         {
           "kind": "MCQ",
@@ -7448,7 +7531,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Kruskal: AB(2), BC(2), DZ(2) are all cycle-free, giving components $\\{A,B,C\\}$ and $\\{D,Z\\}$. Then B-D(3) merges them, and one more weight-3 edge (E-Z, or B-E if that is the one labelled 3) brings in E. Five edges for six vertices: total $=2+2+2+3+3=12$, whichever of B-E / C-D carries the 3.</div><div class=\"ml-vi\">Kruskal: AB(2), BC(2), DZ(2) đều không tạo chu trình, cho 2 thành phần $\\{A,B,C\\}$ và $\\{D,Z\\}$. Rồi B-D(3) gộp chúng lại, và thêm một cạnh trọng số 3 nữa (E-Z, hoặc B-E nếu cạnh đó mang giá trị 3) để nạp E. Năm cạnh cho sáu đỉnh: tổng $=2+2+2+3+3=12$, bất kể B-E hay C-D mang số 3.</div>"
+          "explanation": "<div class=\"ml-en\">Kruskal: AB(2), BC(2), DZ(2) are all cycle-free, giving components $\\{A,B,C\\}$ and $\\{D,Z\\}$. Then B-D(3) merges them, and one more weight-3 edge (E-Z, or B-E if that is the one labelled 3) brings in E. Five edges for six vertices: total $=2+2+2+3+3=12$, whichever of B-E / C-D carries the 3.</div><div class=\"ml-vi\">Kruskal: AB(2), BC(2), DZ(2) đều không tạo chu trình, cho 2 thành phần $\\{A,B,C\\}$ và $\\{D,Z\\}$. Rồi B-D(3) gộp chúng lại, và thêm một cạnh trọng số 3 nữa (E-Z, hoặc B-E nếu cạnh đó mang giá trị 3) để nạp E. Năm cạnh cho sáu đỉnh: tổng $=2+2+2+3+3=12$, bất kể B-E hay C-D mang số 3.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q96.png"
         },
         {
           "kind": "MCQ",
@@ -7471,7 +7555,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Kruskal: FA(1),BC(1),GI(1),AG(2),CH(2),HD(2),GB(3) [merges all but E], IE(3). Total $=1+1+1+2+2+2+3+3=15$.</div><div class=\"ml-vi\">Kruskal: FA(1),BC(1),GI(1),AG(2),CH(2),HD(2),GB(3) [gộp hết trừ E], IE(3). Tổng $=1+1+1+2+2+2+3+3=15$.</div>"
+          "explanation": "<div class=\"ml-en\">Kruskal: FA(1),BC(1),GI(1),AG(2),CH(2),HD(2),GB(3) [merges all but E], IE(3). Total $=1+1+1+2+2+2+3+3=15$.</div><div class=\"ml-vi\">Kruskal: FA(1),BC(1),GI(1),AG(2),CH(2),HD(2),GB(3) [gộp hết trừ E], IE(3). Tổng $=1+1+1+2+2+2+3+3=15$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q97.png"
         },
         {
           "kind": "MCQ",
@@ -7494,7 +7579,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Option D uses D-E (weight 3) BEFORE C-F (weight 2), violating Kruskal's non-decreasing weight order (C-F=2 is available and doesn't create a cycle at that point, so it must be tried first). The other three options are valid same-total-weight (=8) spanning trees with edges in non-decreasing order.</div><div class=\"ml-vi\">Phương án D dùng D-E (trọng số 3) TRƯỚC C-F (trọng số 2), vi phạm thứ tự trọng số không giảm của Kruskal (C-F=2 sẵn sàng và không tạo chu trình lúc đó nên phải thử trước). Ba phương án còn lại đều là cây khung hợp lệ cùng tổng trọng số (=8) với cạnh theo đúng thứ tự không giảm.</div>"
+          "explanation": "<div class=\"ml-en\">Option D uses D-E (weight 3) BEFORE C-F (weight 2), violating Kruskal's non-decreasing weight order (C-F=2 is available and doesn't create a cycle at that point, so it must be tried first). The other three options are valid same-total-weight (=8) spanning trees with edges in non-decreasing order.</div><div class=\"ml-vi\">Phương án D dùng D-E (trọng số 3) TRƯỚC C-F (trọng số 2), vi phạm thứ tự trọng số không giảm của Kruskal (C-F=2 sẵn sàng và không tạo chu trình lúc đó nên phải thử trước). Ba phương án còn lại đều là cây khung hợp lệ cùng tổng trọng số (=8) với cạnh theo đúng thứ tự không giảm.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q99.png"
         },
         {
           "kind": "MCQ",
@@ -7520,7 +7606,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">From A: AB(2) cheapest. Then BC(2). Then CE(1). Then BD(3) (beats EZ=4). Then DZ(2). Exact order: AB, BC, CE, BD, DZ.</div><div class=\"ml-vi\">Từ A: AB(2) rẻ nhất. Rồi BC(2). Rồi CE(1). Rồi BD(3) (tốt hơn EZ=4). Rồi DZ(2). Thứ tự chính xác: AB, BC, CE, BD, DZ.</div>"
+          "explanation": "<div class=\"ml-en\">From A: AB(2) cheapest. Then BC(2). Then CE(1). Then BD(3) (beats EZ=4). Then DZ(2). Exact order: AB, BC, CE, BD, DZ.</div><div class=\"ml-vi\">Từ A: AB(2) rẻ nhất. Rồi BC(2). Rồi CE(1). Rồi BD(3) (tốt hơn EZ=4). Rồi DZ(2). Thứ tự chính xác: AB, BC, CE, BD, DZ.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q100.png"
         },
         {
           "kind": "MCQ",
@@ -7543,7 +7630,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Graph 1 is the even cycle $C_6$, always bipartite (2-colour alternating around the cycle). Graph 2's diagonal p-r creates the triangle p-q-r, an odd cycle &rArr; not bipartite. Graph 3 contains the triangle x-y-z &rArr; not bipartite (the pendant vertex w changes nothing).</div><div class=\"ml-vi\">Graph 1 là chu trình chẵn $C_6$, luôn lưỡng phân (tô 2 màu xen kẽ quanh chu trình). Đường chéo p-r của Graph 2 tạo tam giác p-q-r, chu trình lẻ &rArr; không lưỡng phân. Graph 3 chứa tam giác x-y-z &rArr; không lưỡng phân (đỉnh treo w không đổi gì).</div>"
+          "explanation": "<div class=\"ml-en\">Graph 1 is the even cycle $C_6$, always bipartite (2-colour alternating around the cycle). Graph 2's diagonal p-r creates the triangle p-q-r, an odd cycle &rArr; not bipartite. Graph 3 contains the triangle x-y-z &rArr; not bipartite (the pendant vertex w changes nothing).</div><div class=\"ml-vi\">Graph 1 là chu trình chẵn $C_6$, luôn lưỡng phân (tô 2 màu xen kẽ quanh chu trình). Đường chéo p-r của Graph 2 tạo tam giác p-q-r, chu trình lẻ &rArr; không lưỡng phân. Graph 3 chứa tam giác x-y-z &rArr; không lưỡng phân (đỉnh treo w không đổi gì).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q101.png"
         },
         {
           "kind": "MCQ",
@@ -7569,7 +7657,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$K_{m,n}$ has $mn$ edges. $15=3\\times5$, so $m=3,n=5$, giving $m+n=8$ vertices.</div><div class=\"ml-vi\">$K_{m,n}$ có $mn$ cạnh. $15=3\\times5$, nên $m=3,n=5$, tổng $m+n=8$ đỉnh.</div>"
+          "explanation": "<div class=\"ml-en\">$K_{m,n}$ has $mn$ edges. $15=3\\times5$, so $m=3,n=5$, giving $m+n=8$ vertices.</div><div class=\"ml-vi\">$K_{m,n}$ có $mn$ cạnh. $15=3\\times5$, nên $m=3,n=5$, tổng $m+n=8$ đỉnh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q102.png"
         },
         {
           "kind": "MCQ",
@@ -7595,7 +7684,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Sum of degrees $=2\\times3+10\\times4=6+40=46$. Edges $=46/2=23$.</div><div class=\"ml-vi\">Tổng bậc $=2\\times3+10\\times4=46$. Số cạnh $=46/2=23$.</div>"
+          "explanation": "<div class=\"ml-en\">Sum of degrees $=2\\times3+10\\times4=6+40=46$. Edges $=46/2=23$.</div><div class=\"ml-vi\">Tổng bậc $=2\\times3+10\\times4=46$. Số cạnh $=46/2=23$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q103.png"
         }
       ]
     },
@@ -7635,7 +7725,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">A hexagram's 'every other vertex' construction splits into 2 disjoint triangles (disconnected as a graph) &mdash; $G_1$ can't be strongly connected. A pentagram's construction (gcd(2,5)=1) traces a SINGLE 5-cycle through all vertices; if consistently oriented, that directed cycle makes $G_2$ strongly connected.</div><div class=\"ml-vi\">Cách dựng ngôi sao 6 cánh 'mỗi đỉnh cách nhau' chia thành 2 tam giác RỜI NHAU (không liên thông ở dạng đồ thị) &mdash; $G_1$ không thể liên thông mạnh. Cách dựng ngôi sao 5 cánh (gcd(2,5)=1) tạo ra MỘT chu trình 5 cạnh duy nhất qua mọi đỉnh; nếu hướng nhất quán, chu trình có hướng đó khiến $G_2$ liên thông mạnh.</div>"
+          "explanation": "<div class=\"ml-en\">A hexagram's 'every other vertex' construction splits into 2 disjoint triangles (disconnected as a graph) &mdash; $G_1$ can't be strongly connected. A pentagram's construction (gcd(2,5)=1) traces a SINGLE 5-cycle through all vertices; if consistently oriented, that directed cycle makes $G_2$ strongly connected.</div><div class=\"ml-vi\">Cách dựng ngôi sao 6 cánh 'mỗi đỉnh cách nhau' chia thành 2 tam giác RỜI NHAU (không liên thông ở dạng đồ thị) &mdash; $G_1$ không thể liên thông mạnh. Cách dựng ngôi sao 5 cánh (gcd(2,5)=1) tạo ra MỘT chu trình 5 cạnh duy nhất qua mọi đỉnh; nếu hướng nhất quán, chu trình có hướng đó khiến $G_2$ liên thông mạnh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q106.png"
         },
         {
           "kind": "MCQ",
@@ -7664,7 +7755,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The 4-cycle a-b-c-d, the 6-cycle e-f-g-h-i-j and the single edge k-l are three separate pieces with no edge connecting them &rArr; 3 connected components.</div><div class=\"ml-vi\">Chu trình 4 cạnh a-b-c-d, chu trình 6 cạnh e-f-g-h-i-j và cạnh đơn k-l là 3 mảnh riêng biệt không có cạnh nối &rArr; 3 thành phần liên thông.</div>"
+          "explanation": "<div class=\"ml-en\">The 4-cycle a-b-c-d, the 6-cycle e-f-g-h-i-j and the single edge k-l are three separate pieces with no edge connecting them &rArr; 3 connected components.</div><div class=\"ml-vi\">Chu trình 4 cạnh a-b-c-d, chu trình 6 cạnh e-f-g-h-i-j và cạnh đơn k-l là 3 mảnh riêng biệt không có cạnh nối &rArr; 3 thành phần liên thông.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q107.png"
         },
         {
           "kind": "MCQ",
@@ -7690,7 +7782,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Using the walk-counting recurrence for $K_4$ ($a_k$=same-vertex, $b_k$=different-vertex walks): $a_1=0,b_1=1$; $a_2=3,b_2=2$; $a_3=3b_2=6$, $b_3=a_2+2b_2=3+4=7$. So there are 7 walks of length 3 between distinct vertices.</div><div class=\"ml-vi\">Dùng công thức truy hồi đếm bước đi cho $K_4$ ($a_k$=về cùng đỉnh, $b_k$=khác đỉnh): $a_1=0,b_1=1$; $a_2=3,b_2=2$; $a_3=3b_2=6$, $b_3=a_2+2b_2=3+4=7$. Vậy có 7 đường đi độ dài 3 giữa 2 đỉnh khác nhau.</div>"
+          "explanation": "<div class=\"ml-en\">Using the walk-counting recurrence for $K_4$ ($a_k$=same-vertex, $b_k$=different-vertex walks): $a_1=0,b_1=1$; $a_2=3,b_2=2$; $a_3=3b_2=6$, $b_3=a_2+2b_2=3+4=7$. So there are 7 walks of length 3 between distinct vertices.</div><div class=\"ml-vi\">Dùng công thức truy hồi đếm bước đi cho $K_4$ ($a_k$=về cùng đỉnh, $b_k$=khác đỉnh): $a_1=0,b_1=1$; $a_2=3,b_2=2$; $a_3=3b_2=6$, $b_3=a_2+2b_2=3+4=7$. Vậy có 7 đường đi độ dài 3 giữa 2 đỉnh khác nhau.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q108.png"
         },
         {
           "kind": "MCQ",
@@ -7713,7 +7806,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Ignoring the isolated vertex e, the other 9 vertices and 8 edges form a tree, so the cut vertices are exactly its non-leaf vertices: b (degree 2), c (degree 3: b, d, f), d (degree 2: c, g), f (degree 3: c, h, i) and i (degree 2: f, k). The leaves a, g, h, k and the isolated e are not cut vertices &rArr; b, c, d, f, i.</div><div class=\"ml-vi\">Bỏ qua đỉnh cô lập e, 9 đỉnh và 8 cạnh còn lại tạo thành một cây, nên đỉnh cắt chính là các đỉnh không phải lá: b (bậc 2), c (bậc 3: b, d, f), d (bậc 2: c, g), f (bậc 3: c, h, i) và i (bậc 2: f, k). Các lá a, g, h, k và đỉnh cô lập e không phải đỉnh cắt &rArr; b, c, d, f, i.</div>"
+          "explanation": "<div class=\"ml-en\">Ignoring the isolated vertex e, the other 9 vertices and 8 edges form a tree, so the cut vertices are exactly its non-leaf vertices: b (degree 2), c (degree 3: b, d, f), d (degree 2: c, g), f (degree 3: c, h, i) and i (degree 2: f, k). The leaves a, g, h, k and the isolated e are not cut vertices &rArr; b, c, d, f, i.</div><div class=\"ml-vi\">Bỏ qua đỉnh cô lập e, 9 đỉnh và 8 cạnh còn lại tạo thành một cây, nên đỉnh cắt chính là các đỉnh không phải lá: b (bậc 2), c (bậc 3: b, d, f), d (bậc 2: c, g), f (bậc 3: c, h, i) và i (bậc 2: f, k). Các lá a, g, h, k và đỉnh cô lập e không phải đỉnh cắt &rArr; b, c, d, f, i.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q109.png"
         },
         {
           "kind": "MCQ",
@@ -7736,7 +7830,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The degree-0 vertex is isolated (irrelevant to Euler paths on the rest). Among the remaining vertices, exactly 2 have odd degree (3 and 1) &mdash; the exact condition for an Euler path (not circuit) to exist on the connected non-trivial part.</div><div class=\"ml-vi\">Đỉnh bậc 0 là đỉnh cô lập (không ảnh hưởng đường đi Euler trên phần còn lại). Trong các đỉnh còn lại, đúng 2 đỉnh bậc lẻ (3 và 1) &mdash; đúng điều kiện để có đường đi Euler (không phải chu trình) trên phần liên thông không tầm thường.</div>"
+          "explanation": "<div class=\"ml-en\">The degree-0 vertex is isolated (irrelevant to Euler paths on the rest). Among the remaining vertices, exactly 2 have odd degree (3 and 1) &mdash; the exact condition for an Euler path (not circuit) to exist on the connected non-trivial part.</div><div class=\"ml-vi\">Đỉnh bậc 0 là đỉnh cô lập (không ảnh hưởng đường đi Euler trên phần còn lại). Trong các đỉnh còn lại, đúng 2 đỉnh bậc lẻ (3 và 1) &mdash; đúng điều kiện để có đường đi Euler (không phải chu trình) trên phần liên thông không tầm thường.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q110.png"
         },
         {
           "kind": "MCQ",
@@ -7762,7 +7857,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Dijkstra from A: A-E=1, B via E or direct=2, C via E=4, F via C=6 (path A-E-C-F $=1+3+2=6$).</div><div class=\"ml-vi\">Dijkstra từ A: A-E=1, B qua E hoặc trực tiếp=2, C qua E=4, F qua C=6 (đường A-E-C-F $=1+3+2=6$).</div>"
+          "explanation": "<div class=\"ml-en\">Dijkstra from A: A-E=1, B via E or direct=2, C via E=4, F via C=6 (path A-E-C-F $=1+3+2=6$).</div><div class=\"ml-vi\">Dijkstra từ A: A-E=1, B qua E hoặc trực tiếp=2, C qua E=4, F qua C=6 (đường A-E-C-F $=1+3+2=6$).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q111.png"
         },
         {
           "kind": "MCQ",
@@ -7788,7 +7884,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Dijkstra: a-b=3, a-b-c=5 (beats a-c=7), a-b-c-d=6, a-b-c-d-e=8, a-b-c-d-e-z=13.</div><div class=\"ml-vi\">Dijkstra: a-b=3, a-b-c=5 (tốt hơn a-c=7), a-b-c-d=6, a-b-c-d-e=8, a-b-c-d-e-z=13.</div>"
+          "explanation": "<div class=\"ml-en\">Dijkstra: a-b=3, a-b-c=5 (beats a-c=7), a-b-c-d=6, a-b-c-d-e=8, a-b-c-d-e-z=13.</div><div class=\"ml-vi\">Dijkstra: a-b=3, a-b-c=5 (tốt hơn a-c=7), a-b-c-d=6, a-b-c-d-e=8, a-b-c-d-e-z=13.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q112.png"
         },
         {
           "kind": "MCQ",
@@ -7811,7 +7908,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">B-D-G $=7+8=15$ and B-E-F-G $=5+3+7=15$ &mdash; both reach the minimum distance 15, and no other route matches it (B-C-F-G=18, B-E-D-G=17). So there are 2 shortest paths.</div><div class=\"ml-vi\">B-D-G $=7+8=15$ và B-E-F-G $=5+3+7=15$ &mdash; cả 2 đều đạt khoảng cách tối thiểu 15, không đường nào khác bằng (B-C-F-G=18, B-E-D-G=17). Vậy có 2 đường ngắn nhất.</div>"
+          "explanation": "<div class=\"ml-en\">B-D-G $=7+8=15$ and B-E-F-G $=5+3+7=15$ &mdash; both reach the minimum distance 15, and no other route matches it (B-C-F-G=18, B-E-D-G=17). So there are 2 shortest paths.</div><div class=\"ml-vi\">B-D-G $=7+8=15$ và B-E-F-G $=5+3+7=15$ &mdash; cả 2 đều đạt khoảng cách tối thiểu 15, không đường nào khác bằng (B-C-F-G=18, B-E-D-G=17). Vậy có 2 đường ngắn nhất.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q113.png"
         },
         {
           "kind": "MCQ",
@@ -7834,7 +7932,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Maximum internal vertices happens for the complete 3-ary tree of height 3: levels 0,1,2 are entirely internal (all their nodes have 3 children), giving $1+3+9=13$ internal vertices (with 27 leaves at level 3).</div><div class=\"ml-vi\">Số đỉnh trong tối đa xảy ra khi cây 3-phân đầy đủ chiều cao 3 là cây HOÀN CHỈNH: các mức 0,1,2 đều là đỉnh trong (mỗi đỉnh có đúng 3 con), cho $1+3+9=13$ đỉnh trong (27 lá ở mức 3).</div>"
+          "explanation": "<div class=\"ml-en\">Maximum internal vertices happens for the complete 3-ary tree of height 3: levels 0,1,2 are entirely internal (all their nodes have 3 children), giving $1+3+9=13$ internal vertices (with 27 leaves at level 3).</div><div class=\"ml-vi\">Số đỉnh trong tối đa xảy ra khi cây 3-phân đầy đủ chiều cao 3 là cây HOÀN CHỈNH: các mức 0,1,2 đều là đỉnh trong (mỗi đỉnh có đúng 3 con), cho $1+3+9=13$ đỉnh trong (27 lá ở mức 3).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q114.png"
         },
         {
           "kind": "MCQ",
@@ -7860,7 +7959,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">A tree needs connected + acyclic. (ii) has the extra edge b-e, creating the cycle b-c-e-b &rArr; not a tree. (iii) splits into two pieces (a-b-c-d and e-f) &rArr; not a (single) tree. (i) is connected with exactly $6-1=5$ edges and no cycle &rArr; it IS a tree.</div><div class=\"ml-vi\">Cây cần liên thông + không chu trình. (ii) có thêm cạnh b-e tạo chu trình b-c-e-b &rArr; không phải cây. (iii) tách thành 2 mảnh (a-b-c-d và e-f) &rArr; không phải MỘT cây. (i) liên thông, đúng $6-1=5$ cạnh, không chu trình &rArr; ĐÚNG là cây.</div>"
+          "explanation": "<div class=\"ml-en\">A tree needs connected + acyclic. (ii) has the extra edge b-e, creating the cycle b-c-e-b &rArr; not a tree. (iii) splits into two pieces (a-b-c-d and e-f) &rArr; not a (single) tree. (i) is connected with exactly $6-1=5$ edges and no cycle &rArr; it IS a tree.</div><div class=\"ml-vi\">Cây cần liên thông + không chu trình. (ii) có thêm cạnh b-e tạo chu trình b-c-e-b &rArr; không phải cây. (iii) tách thành 2 mảnh (a-b-c-d và e-f) &rArr; không phải MỘT cây. (i) liên thông, đúng $6-1=5$ cạnh, không chu trình &rArr; ĐÚNG là cây.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q115.png"
         },
         {
           "kind": "MCQ",
@@ -7886,7 +7986,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">d is a direct child of the root a, so its only ancestor is a itself. That's 1.</div><div class=\"ml-vi\">d là con trực tiếp của gốc a, nên tổ tiên duy nhất là a. Vậy là 1.</div>"
+          "explanation": "<div class=\"ml-en\">d is a direct child of the root a, so its only ancestor is a itself. That's 1.</div><div class=\"ml-vi\">d là con trực tiếp của gốc a, nên tổ tiên duy nhất là a. Vậy là 1.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q116.png"
         },
         {
           "kind": "MCQ",
@@ -7912,7 +8013,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Start from a complete 4-ary tree of height 2 ($4^2=16$ leaves at depth 2), then split just ONE of those leaves into 4 children at depth 3: leaves $=(16-1)+4=19$.</div><div class=\"ml-vi\">Bắt đầu từ cây 4-phân đầy đủ chiều cao 2 ($4^2=16$ lá ở độ sâu 2), rồi tách đúng MỘT lá đó thành 4 con ở độ sâu 3: số lá $=(16-1)+4=19$.</div>"
+          "explanation": "<div class=\"ml-en\">Start from a complete 4-ary tree of height 2 ($4^2=16$ leaves at depth 2), then split just ONE of those leaves into 4 children at depth 3: leaves $=(16-1)+4=19$.</div><div class=\"ml-vi\">Bắt đầu từ cây 4-phân đầy đủ chiều cao 2 ($4^2=16$ lá ở độ sâu 2), rồi tách đúng MỘT lá đó thành 4 con ở độ sâu 3: số lá $=(16-1)+4=19$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q117.png"
         },
         {
           "kind": "MCQ",
@@ -7938,7 +8040,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Greedily match: \"010\"=f, remaining \"111011\"; \"111\"=u, remaining \"011\"; \"011\"=n. Decoded: f-u-n = \"fun\".</div><div class=\"ml-vi\">Khớp tuần tự: \"010\"=f, còn \"111011\"; \"111\"=u, còn \"011\"; \"011\"=n. Giải mã: f-u-n = \"fun\".</div>"
+          "explanation": "<div class=\"ml-en\">Greedily match: \"010\"=f, remaining \"111011\"; \"111\"=u, remaining \"011\"; \"011\"=n. Decoded: f-u-n = \"fun\".</div><div class=\"ml-vi\">Khớp tuần tự: \"010\"=f, còn \"111011\"; \"111\"=u, còn \"011\"; \"011\"=n. Giải mã: f-u-n = \"fun\".</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q118.png"
         },
         {
           "kind": "MCQ",
@@ -7964,7 +8067,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">\"111\" fails (prefix of s=1111). \"100\" fails (a=10 is a prefix of it). \"0001\" doesn't conflict with any existing code as prefix or extension &mdash; valid choice.</div><div class=\"ml-vi\">\"111\" sai (là tiền tố của s=1111). \"100\" sai (a=10 là tiền tố của nó). \"0001\" không xung đột tiền tố/mở rộng với mã nào &mdash; lựa chọn hợp lệ.</div>"
+          "explanation": "<div class=\"ml-en\">\"111\" fails (prefix of s=1111). \"100\" fails (a=10 is a prefix of it). \"0001\" doesn't conflict with any existing code as prefix or extension &mdash; valid choice.</div><div class=\"ml-vi\">\"111\" sai (là tiền tố của s=1111). \"100\" sai (a=10 là tiền tố của nó). \"0001\" không xung đột tiền tố/mở rộng với mã nào &mdash; lựa chọn hợp lệ.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q119.png"
         },
         {
           "kind": "MCQ",
@@ -7990,7 +8094,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Frequencies: I=3, L=2, A=1. Merge A,L(1+2=3) &rarr; merge with I(3+3=6). Depths: I=1 bit, A=2 bits, L=2 bits. Total $=3\\times1+1\\times2+2\\times2=3+2+4=9$.</div><div class=\"ml-vi\">Tần suất: I=3, L=2, A=1. Gộp A,L(1+2=3) &rarr; gộp với I(3+3=6). Độ dài mã: I=1 bit, A=2 bit, L=2 bit. Tổng $=3\\times1+1\\times2+2\\times2=9$.</div>"
+          "explanation": "<div class=\"ml-en\">Frequencies: I=3, L=2, A=1. Merge A,L(1+2=3) &rarr; merge with I(3+3=6). Depths: I=1 bit, A=2 bits, L=2 bits. Total $=3\\times1+1\\times2+2\\times2=3+2+4=9$.</div><div class=\"ml-vi\">Tần suất: I=3, L=2, A=1. Gộp A,L(1+2=3) &rarr; gộp với I(3+3=6). Độ dài mã: I=1 bit, A=2 bit, L=2 bit. Tổng $=3\\times1+1\\times2+2\\times2=9$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q120.png"
         }
       ]
     },
@@ -8030,7 +8135,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">All 8 possible 3-bit strings are already used as codes. Any code for i must start with SOME 3-bit prefix, which is necessarily one of the existing 8 codes &mdash; guaranteeing a prefix conflict no matter what string is chosen. Checking each option confirms it starts with an existing code (011=d, 110=g, 111=b respectively). No valid prefix-free code for i exists among the choices.</div><div class=\"ml-vi\">Cả 8 chuỗi 3-bit có thể có đều đã dùng làm mã. Bất kỳ mã nào cho i cũng phải bắt đầu bằng MỘT tiền tố 3-bit nào đó, và tiền tố đó chắc chắn trùng 1 trong 8 mã đã có &mdash; luôn xung đột tiền tố dù chọn chuỗi nào. Kiểm từng phương án xác nhận đều bắt đầu bằng mã đã tồn tại (011=d, 110=g, 111=b tương ứng). Không có mã tiền tố hợp lệ nào cho i trong các lựa chọn.</div>"
+          "explanation": "<div class=\"ml-en\">All 8 possible 3-bit strings are already used as codes. Any code for i must start with SOME 3-bit prefix, which is necessarily one of the existing 8 codes &mdash; guaranteeing a prefix conflict no matter what string is chosen. Checking each option confirms it starts with an existing code (011=d, 110=g, 111=b respectively). No valid prefix-free code for i exists among the choices.</div><div class=\"ml-vi\">Cả 8 chuỗi 3-bit có thể có đều đã dùng làm mã. Bất kỳ mã nào cho i cũng phải bắt đầu bằng MỘT tiền tố 3-bit nào đó, và tiền tố đó chắc chắn trùng 1 trong 8 mã đã có &mdash; luôn xung đột tiền tố dù chọn chuỗi nào. Kiểm từng phương án xác nhận đều bắt đầu bằng mã đã tồn tại (011=d, 110=g, 111=b tương ứng). Không có mã tiền tố hợp lệ nào cho i trong các lựa chọn.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q121.png"
         },
         {
           "kind": "MCQ",
@@ -8056,7 +8162,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$x+x*y$ prefix $=$ + x * x y. $x/y$ prefix $=$ / x y. Combine with outer $+$: + + x * x y / x y.</div><div class=\"ml-vi\">$x+x*y$ dạng tiền tố $=$ + x * x y. $x/y$ dạng tiền tố $=$ / x y. Ghép với dấu $+$ ngoài: + + x * x y / x y.</div>"
+          "explanation": "<div class=\"ml-en\">$x+x*y$ prefix $=$ + x * x y. $x/y$ prefix $=$ / x y. Combine with outer $+$: + + x * x y / x y.</div><div class=\"ml-vi\">$x+x*y$ dạng tiền tố $=$ + x * x y. $x/y$ dạng tiền tố $=$ / x y. Ghép với dấu $+$ ngoài: + + x * x y / x y.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q122.png"
         },
         {
           "kind": "MCQ",
@@ -8082,7 +8189,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Inorder(c)=e,c,h. Inorder(t)=s,t,y. Inorder(m)=n,m,s,t,y. Full inorder(a)=Inorder(c),a,Inorder(m)=e,c,h,a,n,m,s,t,y.</div><div class=\"ml-vi\">Inorder(c)=e,c,h. Inorder(t)=s,t,y. Inorder(m)=n,m,s,t,y. Inorder đầy đủ(a)=Inorder(c),a,Inorder(m)=e,c,h,a,n,m,s,t,y.</div>"
+          "explanation": "<div class=\"ml-en\">Inorder(c)=e,c,h. Inorder(t)=s,t,y. Inorder(m)=n,m,s,t,y. Full inorder(a)=Inorder(c),a,Inorder(m)=e,c,h,a,n,m,s,t,y.</div><div class=\"ml-vi\">Inorder(c)=e,c,h. Inorder(t)=s,t,y. Inorder(m)=n,m,s,t,y. Inorder đầy đủ(a)=Inorder(c),a,Inorder(m)=e,c,h,a,n,m,s,t,y.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q123.png"
         },
         {
           "kind": "MCQ",
@@ -8111,7 +8219,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The degree-100 vertex (hub) is directly adjacent to all 100 rim vertices. BFS visits all of them at level 1 immediately, so the tree has height 1 (hub to any rim vertex is 1 edge).</div><div class=\"ml-vi\">Đỉnh bậc 100 (trục hub) kề trực tiếp với cả 100 đỉnh vành. BFS thăm hết chúng ngay ở mức 1, nên cây có chiều cao 1 (từ hub đến bất kỳ đỉnh vành nào chỉ 1 cạnh).</div>"
+          "explanation": "<div class=\"ml-en\">The degree-100 vertex (hub) is directly adjacent to all 100 rim vertices. BFS visits all of them at level 1 immediately, so the tree has height 1 (hub to any rim vertex is 1 edge).</div><div class=\"ml-vi\">Đỉnh bậc 100 (trục hub) kề trực tiếp với cả 100 đỉnh vành. BFS thăm hết chúng ngay ở mức 1, nên cây có chiều cao 1 (từ hub đến bất kỳ đỉnh vành nào chỉ 1 cạnh).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q124.png"
         },
         {
           "kind": "MCQ",
@@ -8134,7 +8243,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Spanning tree needs $5-1=4$ edges. Remove $8-4=4$.</div><div class=\"ml-vi\">Cây khung cần $5-1=4$ cạnh. Cần bỏ $8-4=4$ cạnh.</div>"
+          "explanation": "<div class=\"ml-en\">Spanning tree needs $5-1=4$ edges. Remove $8-4=4$.</div><div class=\"ml-vi\">Cây khung cần $5-1=4$ cạnh. Cần bỏ $8-4=4$ cạnh.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q125.png"
         },
         {
           "kind": "MCQ",
@@ -8157,7 +8267,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">(i): $Q_3$ has a Hamilton path (TRUE, hypercubes always do), but $K_6$ has 6 vertices all of odd degree 5 (more than 2 odd-degree vertices) &rArr; no Euler path, consequent FALSE &rArr; implication FALSE. (ii): $K_{4,2}$ has all-even degrees (side of 4 has degree 2, side of 2 has degree 4) so it has an Euler circuit/path (TRUE), but $W_4$'s 4 rim vertices each have odd degree 3 &rArr; no Euler path, consequent FALSE &rArr; implication FALSE. Both fail, so neither (i) nor (ii) holds.</div><div class=\"ml-vi\">(i): $Q_3$ có đường đi Hamilton (ĐÚNG, siêu khối luôn có), nhưng $K_6$ có 6 đỉnh đều bậc lẻ 5 (nhiều hơn 2 đỉnh bậc lẻ) &rArr; không có đường đi Euler, hệ quả SAI &rArr; mệnh đề SAI. (ii): $K_{4,2}$ có mọi bậc chẵn (phía 4 bậc 2, phía 2 bậc 4) nên có chu trình/đường đi Euler (ĐÚNG), nhưng 4 đỉnh vành của $W_4$ đều bậc lẻ 3 &rArr; không có đường đi Euler, hệ quả SAI &rArr; mệnh đề SAI. Cả 2 đều sai, nên không (i) lẫn (ii) đúng.</div>"
+          "explanation": "<div class=\"ml-en\">(i): $Q_3$ has a Hamilton path (TRUE, hypercubes always do), but $K_6$ has 6 vertices all of odd degree 5 (more than 2 odd-degree vertices) &rArr; no Euler path, consequent FALSE &rArr; implication FALSE. (ii): $K_{4,2}$ has all-even degrees (side of 4 has degree 2, side of 2 has degree 4) so it has an Euler circuit/path (TRUE), but $W_4$'s 4 rim vertices each have odd degree 3 &rArr; no Euler path, consequent FALSE &rArr; implication FALSE. Both fail, so neither (i) nor (ii) holds.</div><div class=\"ml-vi\">(i): $Q_3$ có đường đi Hamilton (ĐÚNG, siêu khối luôn có), nhưng $K_6$ có 6 đỉnh đều bậc lẻ 5 (nhiều hơn 2 đỉnh bậc lẻ) &rArr; không có đường đi Euler, hệ quả SAI &rArr; mệnh đề SAI. (ii): $K_{4,2}$ có mọi bậc chẵn (phía 4 bậc 2, phía 2 bậc 4) nên có chu trình/đường đi Euler (ĐÚNG), nhưng 4 đỉnh vành của $W_4$ đều bậc lẻ 3 &rArr; không có đường đi Euler, hệ quả SAI &rArr; mệnh đề SAI. Cả 2 đều sai, nên không (i) lẫn (ii) đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q127.png"
         },
         {
           "kind": "MCQ",
@@ -8183,7 +8294,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">The 4 realizable degree sequences each have a unique realization: star $K_{1,3}$+isolated vertex, path $P_4$+isolated vertex, triangle $C_3$+2 isolated vertices, and a disjoint $P_3 \\cup K_2$ (a 2-edge path plus a separate edge, using all 5 vertices). That's 4 non-isomorphic graphs.</div><div class=\"ml-vi\">4 dãy bậc khả thi đều chỉ có 1 cách dựng duy nhất: sao $K_{1,3}$+1 đỉnh cô lập, đường đi $P_4$+1 đỉnh cô lập, tam giác $C_3$+2 đỉnh cô lập, và $P_3 \\cup K_2$ rời nhau (đường 2 cạnh cộng 1 cạnh riêng, dùng hết 5 đỉnh). Vậy có 4 đồ thị không đẳng cấu.</div>"
+          "explanation": "<div class=\"ml-en\">The 4 realizable degree sequences each have a unique realization: star $K_{1,3}$+isolated vertex, path $P_4$+isolated vertex, triangle $C_3$+2 isolated vertices, and a disjoint $P_3 \\cup K_2$ (a 2-edge path plus a separate edge, using all 5 vertices). That's 4 non-isomorphic graphs.</div><div class=\"ml-vi\">4 dãy bậc khả thi đều chỉ có 1 cách dựng duy nhất: sao $K_{1,3}$+1 đỉnh cô lập, đường đi $P_4$+1 đỉnh cô lập, tam giác $C_3$+2 đỉnh cô lập, và $P_3 \\cup K_2$ rời nhau (đường 2 cạnh cộng 1 cạnh riêng, dùng hết 5 đỉnh). Vậy có 4 đồ thị không đẳng cấu.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q128.png"
         },
         {
           "kind": "MCQ",
@@ -8206,7 +8318,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$\\{a,e,d\\}$ are mutually reachable (a&harr;e&harr;d chain of 2-cycles) &rArr; one SCC. b is reachable from a but can't reach back (its only edge b&rarr;c is a dead end) &rArr; singleton SCC $\\{b\\}$. c is a pure sink &rArr; singleton SCC $\\{c\\}$. Total: 3 SCCs.</div><div class=\"ml-vi\">$\\{a,e,d\\}$ đến được nhau (chuỗi chu trình 2 chiều a&harr;e&harr;d) &rArr; 1 thành phần liên thông mạnh. b đến được từ a nhưng không quay lại được (cạnh duy nhất b&rarr;c là ngõ cụt) &rArr; thành phần đơn $\\{b\\}$. c là đỉnh hút thuần &rArr; thành phần đơn $\\{c\\}$. Tổng: 3 thành phần.</div>"
+          "explanation": "<div class=\"ml-en\">$\\{a,e,d\\}$ are mutually reachable (a&harr;e&harr;d chain of 2-cycles) &rArr; one SCC. b is reachable from a but can't reach back (its only edge b&rarr;c is a dead end) &rArr; singleton SCC $\\{b\\}$. c is a pure sink &rArr; singleton SCC $\\{c\\}$. Total: 3 SCCs.</div><div class=\"ml-vi\">$\\{a,e,d\\}$ đến được nhau (chuỗi chu trình 2 chiều a&harr;e&harr;d) &rArr; 1 thành phần liên thông mạnh. b đến được từ a nhưng không quay lại được (cạnh duy nhất b&rarr;c là ngõ cụt) &rArr; thành phần đơn $\\{b\\}$. c là đỉnh hút thuần &rArr; thành phần đơn $\\{c\\}$. Tổng: 3 thành phần.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q129.png"
         },
         {
           "kind": "MCQ",
@@ -8232,7 +8345,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The 4 edges of the cycle a-b-c-d each lie on that cycle, so none of them is a bridge. Every edge of the attached path IS a bridge (ae, ef, fg) and so is the pendant edge bh: $3+1=4$ cut-edges.</div><div class=\"ml-vi\">4 cạnh của chu trình a-b-c-d đều nằm trên chu trình đó nên không cạnh nào là cầu. Mọi cạnh của đường gắn thêm ĐỀU là cầu (ae, ef, fg) và cạnh treo bh cũng vậy: $3+1=4$ cạnh cầu.</div>"
+          "explanation": "<div class=\"ml-en\">The 4 edges of the cycle a-b-c-d each lie on that cycle, so none of them is a bridge. Every edge of the attached path IS a bridge (ae, ef, fg) and so is the pendant edge bh: $3+1=4$ cut-edges.</div><div class=\"ml-vi\">4 cạnh của chu trình a-b-c-d đều nằm trên chu trình đó nên không cạnh nào là cầu. Mọi cạnh của đường gắn thêm ĐỀU là cầu (ae, ef, fg) và cạnh treo bh cũng vậy: $3+1=4$ cạnh cầu.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/PT3/q130.png"
         }
       ]
     }

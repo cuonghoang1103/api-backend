@@ -42,7 +42,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">As $x\\to\\pm\\infty$, $\\sin(x^2)$ is bounded and $\\dfrac{\\sin(x^2)}{x}\\to0$, so $f(x)\\to0-1=-1$. Horizontal asymptote $y=-1$.</div><div class=\"ml-vi\">Khi $x\\to\\pm\\infty$, $\\sin(x^2)$ bị chặn nên $\\dfrac{\\sin(x^2)}{x}\\to0$, do đó $f(x)\\to0-1=-1$. Tiệm cận ngang $y=-1$.</div>"
+          "explanation": "<div class=\"ml-en\">As $x\\to\\pm\\infty$, $\\sin(x^2)$ is bounded and $\\dfrac{\\sin(x^2)}{x}\\to0$, so $f(x)\\to0-1=-1$. Horizontal asymptote $y=-1$.</div><div class=\"ml-vi\">Khi $x\\to\\pm\\infty$, $\\sin(x^2)$ bị chặn nên $\\dfrac{\\sin(x^2)}{x}\\to0$, do đó $f(x)\\to0-1=-1$. Tiệm cận ngang $y=-1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q1.png"
         },
         {
           "kind": "MCQ",
@@ -65,7 +66,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">(i) The determinant of the three vectors is $1\\ne0$, so they span $\\mathbb{R}^3$ — TRUE. (ii) Solving $a(1,1,1)+b(0,1,-1)=(3,4,1)$ gives $a=3,b=1$ but then $a-b=2\\ne1$ — contradiction, FALSE. Only (i).</div><div class=\"ml-vi\">(i) Định thức của ba vector bằng $1\\ne0$ nên chúng sinh ra $\\mathbb{R}^3$ — ĐÚNG. (ii) Giải $a(1,1,1)+b(0,1,-1)=(3,4,1)$ được $a=3,b=1$ nhưng khi đó $a-b=2\\ne1$ — mâu thuẫn, SAI. Chỉ (i).</div>"
+          "explanation": "<div class=\"ml-en\">(i) The determinant of the three vectors is $1\\ne0$, so they span $\\mathbb{R}^3$ — TRUE. (ii) Solving $a(1,1,1)+b(0,1,-1)=(3,4,1)$ gives $a=3,b=1$ but then $a-b=2\\ne1$ — contradiction, FALSE. Only (i).</div><div class=\"ml-vi\">(i) Định thức của ba vector bằng $1\\ne0$ nên chúng sinh ra $\\mathbb{R}^3$ — ĐÚNG. (ii) Giải $a(1,1,1)+b(0,1,-1)=(3,4,1)$ được $a=3,b=1$ nhưng khi đó $a-b=2\\ne1$ — mâu thuẫn, SAI. Chỉ (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q2.png"
         },
         {
           "kind": "MCQ",
@@ -91,7 +93,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$\\det(2A^{-1})=2^3\\det(A^{-1})=\\dfrac{8}{\\det A}=-4$, so $\\det A=\\dfrac{8}{-4}=-2$.</div><div class=\"ml-vi\">$\\det(2A^{-1})=2^3\\det(A^{-1})=\\dfrac{8}{\\det A}=-4$, suy ra $\\det A=\\dfrac{8}{-4}=-2$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\det(2A^{-1})=2^3\\det(A^{-1})=\\dfrac{8}{\\det A}=-4$, so $\\det A=\\dfrac{8}{-4}=-2$.</div><div class=\"ml-vi\">$\\det(2A^{-1})=2^3\\det(A^{-1})=\\dfrac{8}{\\det A}=-4$, suy ra $\\det A=\\dfrac{8}{-4}=-2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q3.png"
         },
         {
           "kind": "MCQ",
@@ -117,7 +120,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">By parts with $u=4x,\\ dv=\\sin(2x)dx$: $=-2x\\cos(2x)+2\\int\\cos(2x)dx=-2x\\cos(2x)+\\sin(2x)+C$.</div><div class=\"ml-vi\">Tích phân từng phần $u=4x,\\ dv=\\sin(2x)dx$: $=-2x\\cos(2x)+2\\int\\cos(2x)dx=-2x\\cos(2x)+\\sin(2x)+C$.</div>"
+          "explanation": "<div class=\"ml-en\">By parts with $u=4x,\\ dv=\\sin(2x)dx$: $=-2x\\cos(2x)+2\\int\\cos(2x)dx=-2x\\cos(2x)+\\sin(2x)+C$.</div><div class=\"ml-vi\">Tích phân từng phần $u=4x,\\ dv=\\sin(2x)dx$: $=-2x\\cos(2x)+2\\int\\cos(2x)dx=-2x\\cos(2x)+\\sin(2x)+C$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q4.png"
         },
         {
           "kind": "MCQ",
@@ -140,7 +144,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$(5,-1,2)=2(1,1,1)-3(-1,1,0)$, so $T(5,-1,2)=2(5,1)-3(2,0)=(4,2)$ — answer (i).</div><div class=\"ml-vi\">$(5,-1,2)=2(1,1,1)-3(-1,1,0)$ nên $T(5,-1,2)=2(5,1)-3(2,0)=(4,2)$ — đáp án (i).</div>"
+          "explanation": "<div class=\"ml-en\">$(5,-1,2)=2(1,1,1)-3(-1,1,0)$, so $T(5,-1,2)=2(5,1)-3(2,0)=(4,2)$ — answer (i).</div><div class=\"ml-vi\">$(5,-1,2)=2(1,1,1)-3(-1,1,0)$ nên $T(5,-1,2)=2(5,1)-3(2,0)=(4,2)$ — đáp án (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q5.png"
         },
         {
           "kind": "MCQ",
@@ -166,7 +171,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\det(A-xI)=(3-x)(-x)-(-2)(1)=x^2-3x+2$ — answer (ii).</div><div class=\"ml-vi\">$\\det(A-xI)=(3-x)(-x)-(-2)(1)=x^2-3x+2$ — đáp án (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$\\det(A-xI)=(3-x)(-x)-(-2)(1)=x^2-3x+2$ — answer (ii).</div><div class=\"ml-vi\">$\\det(A-xI)=(3-x)(-x)-(-2)(1)=x^2-3x+2$ — đáp án (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q6.png"
         },
         {
           "kind": "MCQ",
@@ -189,7 +195,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Direction $(-1,3,2)$, so $L:(1-t,2+3t,1+2t)$. For $P$: $1-t=3\\Rightarrow t=-2\\Rightarrow(3,-4,-3)$ ✓. For $Q$: $t=-2$ gives $y=-4\\ne6$ ✗. Only $P$.</div><div class=\"ml-vi\">Vector chỉ phương $(-1,3,2)$ nên $L:(1-t,2+3t,1+2t)$. Với $P$: $1-t=3\\Rightarrow t=-2\\Rightarrow(3,-4,-3)$ ✓. Với $Q$: $t=-2$ cho $y=-4\\ne6$ ✗. Chỉ $P$.</div>"
+          "explanation": "<div class=\"ml-en\">Direction $(-1,3,2)$, so $L:(1-t,2+3t,1+2t)$. For $P$: $1-t=3\\Rightarrow t=-2\\Rightarrow(3,-4,-3)$ ✓. For $Q$: $t=-2$ gives $y=-4\\ne6$ ✗. Only $P$.</div><div class=\"ml-vi\">Vector chỉ phương $(-1,3,2)$ nên $L:(1-t,2+3t,1+2t)$. Với $P$: $1-t=3\\Rightarrow t=-2\\Rightarrow(3,-4,-3)$ ✓. Với $Q$: $t=-2$ cho $y=-4\\ne6$ ✗. Chỉ $P$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q7.png"
         },
         {
           "kind": "MCQ",
@@ -215,7 +222,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Slope $=\\dfrac{-8-2}{3-1}=\\dfrac{-10}{2}=-5$.</div><div class=\"ml-vi\">Hệ số góc $=\\dfrac{-8-2}{3-1}=\\dfrac{-10}{2}=-5$.</div>"
+          "explanation": "<div class=\"ml-en\">Slope $=\\dfrac{-8-2}{3-1}=\\dfrac{-10}{2}=-5$.</div><div class=\"ml-vi\">Hệ số góc $=\\dfrac{-8-2}{3-1}=\\dfrac{-10}{2}=-5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q8.png"
         },
         {
           "kind": "MCQ",
@@ -244,7 +252,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Distance $D=t\\sqrt{28^2+70^2}=t\\sqrt{5684}$, so $\\dfrac{dD}{dt}=\\sqrt{5684}\\approx75.39$ mi/h (constant).</div><div class=\"ml-vi\">Khoảng cách $D=t\\sqrt{28^2+70^2}=t\\sqrt{5684}$ nên $\\dfrac{dD}{dt}=\\sqrt{5684}\\approx75.39$ mi/h (không đổi).</div>"
+          "explanation": "<div class=\"ml-en\">Distance $D=t\\sqrt{28^2+70^2}=t\\sqrt{5684}$, so $\\dfrac{dD}{dt}=\\sqrt{5684}\\approx75.39$ mi/h (constant).</div><div class=\"ml-vi\">Khoảng cách $D=t\\sqrt{28^2+70^2}=t\\sqrt{5684}$ nên $\\dfrac{dD}{dt}=\\sqrt{5684}\\approx75.39$ mi/h (không đổi).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q9.png"
         },
         {
           "kind": "MCQ",
@@ -270,7 +279,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Row 3 $=$ Row1 $+2\\cdot$Row2 requires the third column: $5+2(-2)=1$, so $a=1$ makes rank $2$; otherwise rank $3$.</div><div class=\"ml-vi\">Hàng 3 $=$ Hàng1 $+2\\cdot$Hàng2 đòi hỏi cột thứ ba: $5+2(-2)=1$, nên $a=1$ cho hạng $2$; ngược lại hạng $3$.</div>"
+          "explanation": "<div class=\"ml-en\">Row 3 $=$ Row1 $+2\\cdot$Row2 requires the third column: $5+2(-2)=1$, so $a=1$ makes rank $2$; otherwise rank $3$.</div><div class=\"ml-vi\">Hàng 3 $=$ Hàng1 $+2\\cdot$Hàng2 đòi hỏi cột thứ ba: $5+2(-2)=1$, nên $a=1$ cho hạng $2$; ngược lại hạng $3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q11.png"
         },
         {
           "kind": "MCQ",
@@ -296,7 +306,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$w=(1,2,-1),\\ d=(2,1,1)$. $w\\times d=(3,-3,-3)$, $|w\\times d|=3\\sqrt3$, $|d|=\\sqrt6$. Distance $=\\dfrac{3\\sqrt3}{\\sqrt6}=\\dfrac{3\\sqrt2}{2}$ — (ii).</div><div class=\"ml-vi\">$w=(1,2,-1),\\ d=(2,1,1)$. $w\\times d=(3,-3,-3)$, $|w\\times d|=3\\sqrt3$, $|d|=\\sqrt6$. Khoảng cách $=\\dfrac{3\\sqrt3}{\\sqrt6}=\\dfrac{3\\sqrt2}{2}$ — (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$w=(1,2,-1),\\ d=(2,1,1)$. $w\\times d=(3,-3,-3)$, $|w\\times d|=3\\sqrt3$, $|d|=\\sqrt6$. Distance $=\\dfrac{3\\sqrt3}{\\sqrt6}=\\dfrac{3\\sqrt2}{2}$ — (ii).</div><div class=\"ml-vi\">$w=(1,2,-1),\\ d=(2,1,1)$. $w\\times d=(3,-3,-3)$, $|w\\times d|=3\\sqrt3$, $|d|=\\sqrt6$. Khoảng cách $=\\dfrac{3\\sqrt3}{\\sqrt6}=\\dfrac{3\\sqrt2}{2}$ — (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q12.png"
         },
         {
           "kind": "MCQ",
@@ -322,7 +333,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Let $u=7+3x^3,\\ du=9x^2dx$. $\\int2x^2u^{1/4}dx=\\dfrac29\\int u^{1/4}du=\\dfrac{8}{45}u^{5/4}+C$ — (ii).</div><div class=\"ml-vi\">Đặt $u=7+3x^3,\\ du=9x^2dx$. $\\int2x^2u^{1/4}dx=\\dfrac29\\int u^{1/4}du=\\dfrac{8}{45}u^{5/4}+C$ — (ii).</div>"
+          "explanation": "<div class=\"ml-en\">Let $u=7+3x^3,\\ du=9x^2dx$. $\\int2x^2u^{1/4}dx=\\dfrac29\\int u^{1/4}du=\\dfrac{8}{45}u^{5/4}+C$ — (ii).</div><div class=\"ml-vi\">Đặt $u=7+3x^3,\\ du=9x^2dx$. $\\int2x^2u^{1/4}dx=\\dfrac29\\int u^{1/4}du=\\dfrac{8}{45}u^{5/4}+C$ — (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q13.png"
         },
         {
           "kind": "MCQ",
@@ -348,7 +360,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$\\dfrac{1}{h}\\!\\left(\\dfrac{1}{x+h}-\\dfrac1x\\right)=\\dfrac{1}{h}\\cdot\\dfrac{-h}{(x+h)x}=\\dfrac{-1}{(x+h)x}$ — (iii).</div><div class=\"ml-vi\">$\\dfrac{1}{h}\\!\\left(\\dfrac{1}{x+h}-\\dfrac1x\\right)=\\dfrac{1}{h}\\cdot\\dfrac{-h}{(x+h)x}=\\dfrac{-1}{(x+h)x}$ — (iii).</div>"
+          "explanation": "<div class=\"ml-en\">$\\dfrac{1}{h}\\!\\left(\\dfrac{1}{x+h}-\\dfrac1x\\right)=\\dfrac{1}{h}\\cdot\\dfrac{-h}{(x+h)x}=\\dfrac{-1}{(x+h)x}$ — (iii).</div><div class=\"ml-vi\">$\\dfrac{1}{h}\\!\\left(\\dfrac{1}{x+h}-\\dfrac1x\\right)=\\dfrac{1}{h}\\cdot\\dfrac{-h}{(x+h)x}=\\dfrac{-1}{(x+h)x}$ — (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q14.png"
         },
         {
           "kind": "MCQ",
@@ -371,7 +384,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">For $\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$, $A^n=\\begin{pmatrix}1&n\\\\0&1\\end{pmatrix}$, so $A^7=\\begin{pmatrix}1&7\\\\0&1\\end{pmatrix}$ — (ii).</div><div class=\"ml-vi\">Với $\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ thì $A^n=\\begin{pmatrix}1&n\\\\0&1\\end{pmatrix}$, nên $A^7=\\begin{pmatrix}1&7\\\\0&1\\end{pmatrix}$ — (ii).</div>"
+          "explanation": "<div class=\"ml-en\">For $\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$, $A^n=\\begin{pmatrix}1&n\\\\0&1\\end{pmatrix}$, so $A^7=\\begin{pmatrix}1&7\\\\0&1\\end{pmatrix}$ — (ii).</div><div class=\"ml-vi\">Với $\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ thì $A^n=\\begin{pmatrix}1&n\\\\0&1\\end{pmatrix}$, nên $A^7=\\begin{pmatrix}1&7\\\\0&1\\end{pmatrix}$ — (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q16.png"
         },
         {
           "kind": "MCQ",
@@ -397,7 +411,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Eliminate $x$: $R2-3R1$ and $R3-10R1$ give $-50y+41z=26$ and $-150y+123z=161$. But $3(-50y+41z)=-150y+123z=78\\ne161$ — contradiction, so the system is inconsistent.</div><div class=\"ml-vi\">Khử $x$: $R2-3R1$ và $R3-10R1$ cho $-50y+41z=26$ và $-150y+123z=161$. Nhưng $3(-50y+41z)=-150y+123z=78\\ne161$ — mâu thuẫn, hệ vô nghiệm.</div>"
+          "explanation": "<div class=\"ml-en\">Eliminate $x$: $R2-3R1$ and $R3-10R1$ give $-50y+41z=26$ and $-150y+123z=161$. But $3(-50y+41z)=-150y+123z=78\\ne161$ — contradiction, so the system is inconsistent.</div><div class=\"ml-vi\">Khử $x$: $R2-3R1$ và $R3-10R1$ cho $-50y+41z=26$ và $-150y+123z=161$. Nhưng $3(-50y+41z)=-150y+123z=78\\ne161$ — mâu thuẫn, hệ vô nghiệm.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q17.png"
         },
         {
           "kind": "MCQ",
@@ -423,7 +438,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$V=\\dfrac16\\left|\\det\\begin{bmatrix}1&2&3\\\\2&1&3\\\\3&1&2\\end{bmatrix}\\right|=\\dfrac16|6|=1$.</div><div class=\"ml-vi\">$V=\\dfrac16\\left|\\det\\begin{bmatrix}1&2&3\\\\2&1&3\\\\3&1&2\\end{bmatrix}\\right|=\\dfrac16|6|=1$.</div>"
+          "explanation": "<div class=\"ml-en\">$V=\\dfrac16\\left|\\det\\begin{bmatrix}1&2&3\\\\2&1&3\\\\3&1&2\\end{bmatrix}\\right|=\\dfrac16|6|=1$.</div><div class=\"ml-vi\">$V=\\dfrac16\\left|\\det\\begin{bmatrix}1&2&3\\\\2&1&3\\\\3&1&2\\end{bmatrix}\\right|=\\dfrac16|6|=1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q18.png"
         },
         {
           "kind": "MCQ",
@@ -452,7 +468,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$g'(x)=\\dfrac{2x-1}{3(x^2-x)^{2/3}}$. Zero at $x=\\tfrac12$; undefined (but $g$ defined) at $x=0,1$. Critical numbers $0,1,\\tfrac12$.</div><div class=\"ml-vi\">$g'(x)=\\dfrac{2x-1}{3(x^2-x)^{2/3}}$. Bằng $0$ tại $x=\\tfrac12$; không xác định (nhưng $g$ xác định) tại $x=0,1$. Các số tới hạn $0,1,\\tfrac12$.</div>"
+          "explanation": "<div class=\"ml-en\">$g'(x)=\\dfrac{2x-1}{3(x^2-x)^{2/3}}$. Zero at $x=\\tfrac12$; undefined (but $g$ defined) at $x=0,1$. Critical numbers $0,1,\\tfrac12$.</div><div class=\"ml-vi\">$g'(x)=\\dfrac{2x-1}{3(x^2-x)^{2/3}}$. Bằng $0$ tại $x=\\tfrac12$; không xác định (nhưng $g$ xác định) tại $x=0,1$. Các số tới hạn $0,1,\\tfrac12$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q19.png"
         },
         {
           "kind": "MCQ",
@@ -478,7 +495,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$\\det=6b-24=0\\Rightarrow b=4$. At $b=4$ substitution gives $3=3$ (always true), so infinitely many solutions. Answer $b=4$.</div><div class=\"ml-vi\">$\\det=6b-24=0\\Rightarrow b=4$. Với $b=4$, thế vào được $3=3$ (luôn đúng) nên hệ có vô số nghiệm. Đáp án $b=4$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\det=6b-24=0\\Rightarrow b=4$. At $b=4$ substitution gives $3=3$ (always true), so infinitely many solutions. Answer $b=4$.</div><div class=\"ml-vi\">$\\det=6b-24=0\\Rightarrow b=4$. Với $b=4$, thế vào được $3=3$ (luôn đúng) nên hệ có vô số nghiệm. Đáp án $b=4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q20.png"
         },
         {
           "kind": "MCQ",
@@ -504,7 +522,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\Delta x=0.5$; right endpoints $3.5,4,4.5,5$ give $f=3.25,7,11.25,16$. Sum $\\times0.5=37.5\\times0.5=18.75$.</div><div class=\"ml-vi\">$\\Delta x=0.5$; mút phải $3.5,4,4.5,5$ cho $f=3.25,7,11.25,16$. Tổng $\\times0.5=37.5\\times0.5=18.75$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\Delta x=0.5$; right endpoints $3.5,4,4.5,5$ give $f=3.25,7,11.25,16$. Sum $\\times0.5=37.5\\times0.5=18.75$.</div><div class=\"ml-vi\">$\\Delta x=0.5$; mút phải $3.5,4,4.5,5$ cho $f=3.25,7,11.25,16$. Tổng $\\times0.5=37.5\\times0.5=18.75$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q21.png"
         },
         {
           "kind": "MCQ",
@@ -527,7 +546,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Improper at $x=3$. With $u=3-x$: $\\int_0^3(3-x)^{-1/2}dx=\\big[-2\\sqrt{3-x}\\big]_0^3=0+2\\sqrt3=2\\sqrt3$ — converges to (ii).</div><div class=\"ml-vi\">Suy rộng tại $x=3$. Với $u=3-x$: $\\int_0^3(3-x)^{-1/2}dx=\\big[-2\\sqrt{3-x}\\big]_0^3=0+2\\sqrt3=2\\sqrt3$ — hội tụ, (ii).</div>"
+          "explanation": "<div class=\"ml-en\">Improper at $x=3$. With $u=3-x$: $\\int_0^3(3-x)^{-1/2}dx=\\big[-2\\sqrt{3-x}\\big]_0^3=0+2\\sqrt3=2\\sqrt3$ — converges to (ii).</div><div class=\"ml-vi\">Suy rộng tại $x=3$. Với $u=3-x$: $\\int_0^3(3-x)^{-1/2}dx=\\big[-2\\sqrt{3-x}\\big]_0^3=0+2\\sqrt3=2\\sqrt3$ — hội tụ, (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q22.png"
         },
         {
           "kind": "MCQ",
@@ -553,7 +573,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$e^{x+y}(1+y')+y'=0\\Rightarrow y'(e^{x+y}+1)=-e^{x+y}\\Rightarrow y'=\\dfrac{-e^{x+y}}{1+e^{x+y}}$ — (ii).</div><div class=\"ml-vi\">$e^{x+y}(1+y')+y'=0\\Rightarrow y'(e^{x+y}+1)=-e^{x+y}\\Rightarrow y'=\\dfrac{-e^{x+y}}{1+e^{x+y}}$ — (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$e^{x+y}(1+y')+y'=0\\Rightarrow y'(e^{x+y}+1)=-e^{x+y}\\Rightarrow y'=\\dfrac{-e^{x+y}}{1+e^{x+y}}$ — (ii).</div><div class=\"ml-vi\">$e^{x+y}(1+y')+y'=0\\Rightarrow y'(e^{x+y}+1)=-e^{x+y}\\Rightarrow y'=\\dfrac{-e^{x+y}}{1+e^{x+y}}$ — (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q23.png"
         },
         {
           "kind": "MCQ",
@@ -579,7 +600,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Rotation $\\pi=\\begin{bmatrix}-1&0\\\\0&-1\\end{bmatrix}$; reflection in X $=\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$. Product $=\\begin{bmatrix}-1&0\\\\0&1\\end{bmatrix}$ = reflection in the y-axis.</div><div class=\"ml-vi\">Quay $\\pi=\\begin{bmatrix}-1&0\\\\0&-1\\end{bmatrix}$; phản chiếu qua X $=\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$. Tích $=\\begin{bmatrix}-1&0\\\\0&1\\end{bmatrix}$ = phản chiếu qua trục y.</div>"
+          "explanation": "<div class=\"ml-en\">Rotation $\\pi=\\begin{bmatrix}-1&0\\\\0&-1\\end{bmatrix}$; reflection in X $=\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$. Product $=\\begin{bmatrix}-1&0\\\\0&1\\end{bmatrix}$ = reflection in the y-axis.</div><div class=\"ml-vi\">Quay $\\pi=\\begin{bmatrix}-1&0\\\\0&-1\\end{bmatrix}$; phản chiếu qua X $=\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$. Tích $=\\begin{bmatrix}-1&0\\\\0&1\\end{bmatrix}$ = phản chiếu qua trục y.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q24.png"
         },
         {
           "kind": "MCQ",
@@ -605,7 +627,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\int_1^4(t^2-t^{-2})dt=\\Big[\\dfrac{t^3}{3}+\\dfrac1t\\Big]_1^4=\\big(\\tfrac{64}{3}+\\tfrac14\\big)-\\big(\\tfrac13+1\\big)=21-\\tfrac34=\\dfrac{81}{4}$.</div><div class=\"ml-vi\">$\\int_1^4(t^2-t^{-2})dt=\\Big[\\dfrac{t^3}{3}+\\dfrac1t\\Big]_1^4=\\big(\\tfrac{64}{3}+\\tfrac14\\big)-\\big(\\tfrac13+1\\big)=21-\\tfrac34=\\dfrac{81}{4}$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\int_1^4(t^2-t^{-2})dt=\\Big[\\dfrac{t^3}{3}+\\dfrac1t\\Big]_1^4=\\big(\\tfrac{64}{3}+\\tfrac14\\big)-\\big(\\tfrac13+1\\big)=21-\\tfrac34=\\dfrac{81}{4}$.</div><div class=\"ml-vi\">$\\int_1^4(t^2-t^{-2})dt=\\Big[\\dfrac{t^3}{3}+\\dfrac1t\\Big]_1^4=\\big(\\tfrac{64}{3}+\\tfrac14\\big)-\\big(\\tfrac13+1\\big)=21-\\tfrac34=\\dfrac{81}{4}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q25.png"
         },
         {
           "kind": "MCQ",
@@ -628,7 +651,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">(i) coefficient determinant $=0$ → dependent. (ii) determinant $=9\\ne0$ → independent. Only (ii).</div><div class=\"ml-vi\">(i) định thức hệ số $=0$ → phụ thuộc. (ii) định thức $=9\\ne0$ → độc lập. Chỉ (ii).</div>"
+          "explanation": "<div class=\"ml-en\">(i) coefficient determinant $=0$ → dependent. (ii) determinant $=9\\ne0$ → independent. Only (ii).</div><div class=\"ml-vi\">(i) định thức hệ số $=0$ → phụ thuộc. (ii) định thức $=9\\ne0$ → độc lập. Chỉ (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q26.png"
         },
         {
           "kind": "MCQ",
@@ -657,7 +681,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$x-4y=8\\Rightarrow x=8+4y$. $P=xy=4y^2+8y$, $P'=8y+8=0\\Rightarrow y=-1,x=4$, $P=-4$ (minimum).</div><div class=\"ml-vi\">$x-4y=8\\Rightarrow x=8+4y$. $P=xy=4y^2+8y$, $P'=8y+8=0\\Rightarrow y=-1,x=4$, $P=-4$ (cực tiểu).</div>"
+          "explanation": "<div class=\"ml-en\">$x-4y=8\\Rightarrow x=8+4y$. $P=xy=4y^2+8y$, $P'=8y+8=0\\Rightarrow y=-1,x=4$, $P=-4$ (minimum).</div><div class=\"ml-vi\">$x-4y=8\\Rightarrow x=8+4y$. $P=xy=4y^2+8y$, $P'=8y+8=0\\Rightarrow y=-1,x=4$, $P=-4$ (cực tiểu).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q27.png"
         },
         {
           "kind": "MCQ",
@@ -683,7 +708,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f(2)=3$, $f'(x)=\\dfrac{3x^2}{2\\sqrt{x^3+1}}$, $f'(2)=2$. $L(x)=3+2(x-2)=2x-1$.</div><div class=\"ml-vi\">$f(2)=3$, $f'(x)=\\dfrac{3x^2}{2\\sqrt{x^3+1}}$, $f'(2)=2$. $L(x)=3+2(x-2)=2x-1$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(2)=3$, $f'(x)=\\dfrac{3x^2}{2\\sqrt{x^3+1}}$, $f'(2)=2$. $L(x)=3+2(x-2)=2x-1$.</div><div class=\"ml-vi\">$f(2)=3$, $f'(x)=\\dfrac{3x^2}{2\\sqrt{x^3+1}}$, $f'(2)=2$. $L(x)=3+2(x-2)=2x-1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q29.png"
         },
         {
           "kind": "MCQ",
@@ -706,7 +732,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">(i) determinant $=0$ → not a basis. (ii) three vectors cannot be a basis of $\\mathbb{R}^2$ (needs exactly 2). Neither.</div><div class=\"ml-vi\">(i) định thức $=0$ → không là cơ sở. (ii) ba vector không thể là cơ sở của $\\mathbb{R}^2$ (cần đúng 2). Không câu nào.</div>"
+          "explanation": "<div class=\"ml-en\">(i) determinant $=0$ → not a basis. (ii) three vectors cannot be a basis of $\\mathbb{R}^2$ (needs exactly 2). Neither.</div><div class=\"ml-vi\">(i) định thức $=0$ → không là cơ sở. (ii) ba vector không thể là cơ sở của $\\mathbb{R}^2$ (cần đúng 2). Không câu nào.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q30.png"
         },
         {
           "kind": "MCQ",
@@ -729,7 +756,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Rationalize: $\\dfrac{3(x-1)}{\\sqrt{x+3}-2}=3(\\sqrt{x+3}+2)\\to12$ as $x\\to1^-$, so (i) TRUE. But $f(1)=9$ and $\\lim_{x\\to1^+}=9$, so (ii),(iii) FALSE. Only (i).</div><div class=\"ml-vi\">Nhân liên hợp: $\\dfrac{3(x-1)}{\\sqrt{x+3}-2}=3(\\sqrt{x+3}+2)\\to12$ khi $x\\to1^-$ nên (i) ĐÚNG. Nhưng $f(1)=9$ và $\\lim_{x\\to1^+}=9$ nên (ii),(iii) SAI. Chỉ (i).</div>"
+          "explanation": "<div class=\"ml-en\">Rationalize: $\\dfrac{3(x-1)}{\\sqrt{x+3}-2}=3(\\sqrt{x+3}+2)\\to12$ as $x\\to1^-$, so (i) TRUE. But $f(1)=9$ and $\\lim_{x\\to1^+}=9$, so (ii),(iii) FALSE. Only (i).</div><div class=\"ml-vi\">Nhân liên hợp: $\\dfrac{3(x-1)}{\\sqrt{x+3}-2}=3(\\sqrt{x+3}+2)\\to12$ khi $x\\to1^-$ nên (i) ĐÚNG. Nhưng $f(1)=9$ và $\\lim_{x\\to1^+}=9$ nên (ii),(iii) SAI. Chỉ (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q31.png"
         },
         {
           "kind": "MCQ",
@@ -755,7 +783,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Orthonormal $\\Rightarrow |X|=3,\\ |Y|=2,\\ X\\cdot Y=0$. $(X-2Y)\\cdot(2X+Y)=2|X|^2-3X\\cdot Y-2|Y|^2=18-0-8=10$.</div><div class=\"ml-vi\">Trực chuẩn $\\Rightarrow |X|=3,\\ |Y|=2,\\ X\\cdot Y=0$. $(X-2Y)\\cdot(2X+Y)=2|X|^2-3X\\cdot Y-2|Y|^2=18-0-8=10$.</div>"
+          "explanation": "<div class=\"ml-en\">Orthonormal $\\Rightarrow |X|=3,\\ |Y|=2,\\ X\\cdot Y=0$. $(X-2Y)\\cdot(2X+Y)=2|X|^2-3X\\cdot Y-2|Y|^2=18-0-8=10$.</div><div class=\"ml-vi\">Trực chuẩn $\\Rightarrow |X|=3,\\ |Y|=2,\\ X\\cdot Y=0$. $(X-2Y)\\cdot(2X+Y)=2|X|^2-3X\\cdot Y-2|Y|^2=18-0-8=10$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q32.png"
         },
         {
           "kind": "MCQ",
@@ -778,7 +807,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i) $-2\\begin{bmatrix}1\\\\0\\end{bmatrix}+3\\begin{bmatrix}0\\\\1\\end{bmatrix}=\\begin{bmatrix}-2\\\\3\\end{bmatrix}$ — TRUE. (ii) $A(x_1-x_2)=b-b=0$ — TRUE. Both.</div><div class=\"ml-vi\">(i) $-2\\begin{bmatrix}1\\\\0\\end{bmatrix}+3\\begin{bmatrix}0\\\\1\\end{bmatrix}=\\begin{bmatrix}-2\\\\3\\end{bmatrix}$ — ĐÚNG. (ii) $A(x_1-x_2)=b-b=0$ — ĐÚNG. Cả hai.</div>"
+          "explanation": "<div class=\"ml-en\">(i) $-2\\begin{bmatrix}1\\\\0\\end{bmatrix}+3\\begin{bmatrix}0\\\\1\\end{bmatrix}=\\begin{bmatrix}-2\\\\3\\end{bmatrix}$ — TRUE. (ii) $A(x_1-x_2)=b-b=0$ — TRUE. Both.</div><div class=\"ml-vi\">(i) $-2\\begin{bmatrix}1\\\\0\\end{bmatrix}+3\\begin{bmatrix}0\\\\1\\end{bmatrix}=\\begin{bmatrix}-2\\\\3\\end{bmatrix}$ — ĐÚNG. (ii) $A(x_1-x_2)=b-b=0$ — ĐÚNG. Cả hai.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q33.png"
         },
         {
           "kind": "MCQ",
@@ -804,7 +834,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$A^2=\\begin{bmatrix}1&1+m\\\\0&m^2\\end{bmatrix}=I_2$ requires $1+m=0$ and $m^2=1$, both give $m=-1$.</div><div class=\"ml-vi\">$A^2=\\begin{bmatrix}1&1+m\\\\0&m^2\\end{bmatrix}=I_2$ đòi hỏi $1+m=0$ và $m^2=1$, cả hai cho $m=-1$.</div>"
+          "explanation": "<div class=\"ml-en\">$A^2=\\begin{bmatrix}1&1+m\\\\0&m^2\\end{bmatrix}=I_2$ requires $1+m=0$ and $m^2=1$, both give $m=-1$.</div><div class=\"ml-vi\">$A^2=\\begin{bmatrix}1&1+m\\\\0&m^2\\end{bmatrix}=I_2$ đòi hỏi $1+m=0$ và $m^2=1$, cả hai cho $m=-1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q34.png"
         },
         {
           "kind": "MCQ",
@@ -833,7 +864,8 @@ export default {
           "correctIndexes": [
             5
           ],
-          "explanation": "<div class=\"ml-en\">Rows: $R_1{+}2R_3,\\ 3R_1{-}R_2,\\ R_1$. Subtract $R_3$-row: reduces to $\\det[2R_3;-R_2;R_1]=2(-1)\\det[R_3;R_2;R_1]=-2(-3)=6$.</div><div class=\"ml-vi\">Các hàng: $R_1{+}2R_3,\\ 3R_1{-}R_2,\\ R_1$. Trừ hàng $R_1$: đưa về $\\det[2R_3;-R_2;R_1]=2(-1)\\det[R_3;R_2;R_1]=-2(-3)=6$.</div>"
+          "explanation": "<div class=\"ml-en\">Rows: $R_1{+}2R_3,\\ 3R_1{-}R_2,\\ R_1$. Subtract $R_3$-row: reduces to $\\det[2R_3;-R_2;R_1]=2(-1)\\det[R_3;R_2;R_1]=-2(-3)=6$.</div><div class=\"ml-vi\">Các hàng: $R_1{+}2R_3,\\ 3R_1{-}R_2,\\ R_1$. Trừ hàng $R_1$: đưa về $\\det[2R_3;-R_2;R_1]=2(-1)\\det[R_3;R_2;R_1]=-2(-3)=6$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q35.png"
         },
         {
           "kind": "MCQ",
@@ -859,7 +891,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Rank $\\le5<6=$ number of unknowns, so there is always a free variable → infinitely many solutions (always).</div><div class=\"ml-vi\">Hạng $\\le5<6=$ số ẩn nên luôn có biến tự do → vô số nghiệm (luôn luôn).</div>"
+          "explanation": "<div class=\"ml-en\">Rank $\\le5<6=$ number of unknowns, so there is always a free variable → infinitely many solutions (always).</div><div class=\"ml-vi\">Hạng $\\le5<6=$ số ẩn nên luôn có biến tự do → vô số nghiệm (luôn luôn).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q36.png"
         },
         {
           "kind": "MCQ",
@@ -882,7 +915,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Point-normal form with normal $(2,1,-1)$ through $P(1,3,-1)$: $2(x-1)+(y-3)-(z+1)=0$.</div><div class=\"ml-vi\">Dạng điểm-pháp với vector pháp $(2,1,-1)$ qua $P(1,3,-1)$: $2(x-1)+(y-3)-(z+1)=0$.</div>"
+          "explanation": "<div class=\"ml-en\">Point-normal form with normal $(2,1,-1)$ through $P(1,3,-1)$: $2(x-1)+(y-3)-(z+1)=0$.</div><div class=\"ml-vi\">Dạng điểm-pháp với vector pháp $(2,1,-1)$ qua $P(1,3,-1)$: $2(x-1)+(y-3)-(z+1)=0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q37.png"
         },
         {
           "kind": "MCQ",
@@ -908,7 +942,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f'(x)=3x^2-6x=3x(x-2)=0\\Rightarrow x=0$ or $x=2$.</div><div class=\"ml-vi\">$f'(x)=3x^2-6x=3x(x-2)=0\\Rightarrow x=0$ hoặc $x=2$.</div>"
+          "explanation": "<div class=\"ml-en\">$f'(x)=3x^2-6x=3x(x-2)=0\\Rightarrow x=0$ or $x=2$.</div><div class=\"ml-vi\">$f'(x)=3x^2-6x=3x(x-2)=0\\Rightarrow x=0$ hoặc $x=2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q38.png"
         },
         {
           "kind": "MCQ",
@@ -934,7 +969,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$(A^{-1})_{23}=\\dfrac{C_{32}}{\\det A}$. $C_{32}=-\\det\\begin{bmatrix}1&-1\\\\3&1\\end{bmatrix}=-4$, $\\det A=-51$, so $=\\dfrac{-4}{-51}=\\dfrac{4}{51}$.</div><div class=\"ml-vi\">$(A^{-1})_{23}=\\dfrac{C_{32}}{\\det A}$. $C_{32}=-\\det\\begin{bmatrix}1&-1\\\\3&1\\end{bmatrix}=-4$, $\\det A=-51$, nên $=\\dfrac{-4}{-51}=\\dfrac{4}{51}$.</div>"
+          "explanation": "<div class=\"ml-en\">$(A^{-1})_{23}=\\dfrac{C_{32}}{\\det A}$. $C_{32}=-\\det\\begin{bmatrix}1&-1\\\\3&1\\end{bmatrix}=-4$, $\\det A=-51$, so $=\\dfrac{-4}{-51}=\\dfrac{4}{51}$.</div><div class=\"ml-vi\">$(A^{-1})_{23}=\\dfrac{C_{32}}{\\det A}$. $C_{32}=-\\det\\begin{bmatrix}1&-1\\\\3&1\\end{bmatrix}=-4$, $\\det A=-51$, nên $=\\dfrac{-4}{-51}=\\dfrac{4}{51}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q39.png"
         },
         {
           "kind": "MCQ",
@@ -963,7 +999,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\dfrac{x^2-3x+2}{x-1}=\\dfrac{(x-1)(x-2)}{x-1}=x-2\\to1-2=-1$.</div><div class=\"ml-vi\">$\\dfrac{x^2-3x+2}{x-1}=\\dfrac{(x-1)(x-2)}{x-1}=x-2\\to1-2=-1$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\dfrac{x^2-3x+2}{x-1}=\\dfrac{(x-1)(x-2)}{x-1}=x-2\\to1-2=-1$.</div><div class=\"ml-vi\">$\\dfrac{x^2-3x+2}{x-1}=\\dfrac{(x-1)(x-2)}{x-1}=x-2\\to1-2=-1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q40.png"
         },
         {
           "kind": "MCQ",
@@ -989,7 +1026,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$h'(x)=f'(g(x))\\,g'(x)$, so $h'(1)=f'(g(1))\\,g'(1)=f'(2)\\cdot(-1)=5\\cdot(-1)=-5$.</div><div class=\"ml-vi\">$h'(x)=f'(g(x))\\,g'(x)$ nên $h'(1)=f'(g(1))\\,g'(1)=f'(2)\\cdot(-1)=5\\cdot(-1)=-5$.</div>"
+          "explanation": "<div class=\"ml-en\">$h'(x)=f'(g(x))\\,g'(x)$, so $h'(1)=f'(g(1))\\,g'(1)=f'(2)\\cdot(-1)=5\\cdot(-1)=-5$.</div><div class=\"ml-vi\">$h'(x)=f'(g(x))\\,g'(x)$ nên $h'(1)=f'(g(1))\\,g'(1)=f'(2)\\cdot(-1)=5\\cdot(-1)=-5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q41.png"
         },
         {
           "kind": "MCQ",
@@ -1015,7 +1053,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Matrix $M=\\begin{bmatrix}2&1&0\\\\2&-1&0\\\\1&0&1\\end{bmatrix}$, $\\det M=-4$. $\\det[u\\,v\\,w]=2$. Volume $=|\\det M|\\cdot|\\det[u\\,v\\,w]|=4\\cdot2=8$.</div><div class=\"ml-vi\">Ma trận $M=\\begin{bmatrix}2&1&0\\\\2&-1&0\\\\1&0&1\\end{bmatrix}$, $\\det M=-4$. $\\det[u\\,v\\,w]=2$. Thể tích $=|\\det M|\\cdot|\\det[u\\,v\\,w]|=4\\cdot2=8$.</div>"
+          "explanation": "<div class=\"ml-en\">Matrix $M=\\begin{bmatrix}2&1&0\\\\2&-1&0\\\\1&0&1\\end{bmatrix}$, $\\det M=-4$. $\\det[u\\,v\\,w]=2$. Volume $=|\\det M|\\cdot|\\det[u\\,v\\,w]|=4\\cdot2=8$.</div><div class=\"ml-vi\">Ma trận $M=\\begin{bmatrix}2&1&0\\\\2&-1&0\\\\1&0&1\\end{bmatrix}$, $\\det M=-4$. $\\det[u\\,v\\,w]=2$. Thể tích $=|\\det M|\\cdot|\\det[u\\,v\\,w]|=4\\cdot2=8$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q42.png"
         },
         {
           "kind": "MCQ",
@@ -1041,7 +1080,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$x_{n+1}=x_n-\\dfrac{x_n^5+2}{5x_n^4}$. $x_1=-1\\Rightarrow x_2=-1.2\\Rightarrow x_3\\approx-1.1529$.</div><div class=\"ml-vi\">$x_{n+1}=x_n-\\dfrac{x_n^5+2}{5x_n^4}$. $x_1=-1\\Rightarrow x_2=-1.2\\Rightarrow x_3\\approx-1.1529$.</div>"
+          "explanation": "<div class=\"ml-en\">$x_{n+1}=x_n-\\dfrac{x_n^5+2}{5x_n^4}$. $x_1=-1\\Rightarrow x_2=-1.2\\Rightarrow x_3\\approx-1.1529$.</div><div class=\"ml-vi\">$x_{n+1}=x_n-\\dfrac{x_n^5+2}{5x_n^4}$. $x_1=-1\\Rightarrow x_2=-1.2\\Rightarrow x_3\\approx-1.1529$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q43.png"
         },
         {
           "kind": "MCQ",
@@ -1067,7 +1107,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f''(x)=12x+18=0\\Rightarrow x=-\\tfrac32$. $f''\\lt0$ (concave down) for $x\\lt-\\tfrac32$, $f''\\gt0$ (concave up) for $x\\gt-\\tfrac32$ — (ii).</div><div class=\"ml-vi\">$f''(x)=12x+18=0\\Rightarrow x=-\\tfrac32$. $f''\\lt0$ (lồi) khi $x\\lt-\\tfrac32$, $f''\\gt0$ (lõm) khi $x\\gt-\\tfrac32$ — (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$f''(x)=12x+18=0\\Rightarrow x=-\\tfrac32$. $f''\\lt0$ (concave down) for $x\\lt-\\tfrac32$, $f''\\gt0$ (concave up) for $x\\gt-\\tfrac32$ — (ii).</div><div class=\"ml-vi\">$f''(x)=12x+18=0\\Rightarrow x=-\\tfrac32$. $f''\\lt0$ (lồi) khi $x\\lt-\\tfrac32$, $f''\\gt0$ (lõm) khi $x\\gt-\\tfrac32$ — (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q45.png"
         },
         {
           "kind": "MCQ",
@@ -1093,7 +1134,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">By the FTC and chain rule: $\\dfrac{d}{dx}\\int_{29}^{x^3}\\sin t\\,dt=\\sin(x^3)\\cdot 3x^2=3x^2\\sin x^3$ — (iv).</div><div class=\"ml-vi\">Theo định lý cơ bản và quy tắc dây chuyền: $\\dfrac{d}{dx}\\int_{29}^{x^3}\\sin t\\,dt=\\sin(x^3)\\cdot 3x^2=3x^2\\sin x^3$ — (iv).</div>"
+          "explanation": "<div class=\"ml-en\">By the FTC and chain rule: $\\dfrac{d}{dx}\\int_{29}^{x^3}\\sin t\\,dt=\\sin(x^3)\\cdot 3x^2=3x^2\\sin x^3$ — (iv).</div><div class=\"ml-vi\">Theo định lý cơ bản và quy tắc dây chuyền: $\\dfrac{d}{dx}\\int_{29}^{x^3}\\sin t\\,dt=\\sin(x^3)\\cdot 3x^2=3x^2\\sin x^3$ — (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q46.png"
         },
         {
           "kind": "MCQ",
@@ -1119,7 +1161,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$(2,1)$: $3-2(2)+3(12)=3-4+36=35$.</div><div class=\"ml-vi\">$(2,1)$: $3-2(2)+3(12)=3-4+36=35$.</div>"
+          "explanation": "<div class=\"ml-en\">$(2,1)$: $3-2(2)+3(12)=3-4+36=35$.</div><div class=\"ml-vi\">$(2,1)$: $3-2(2)+3(12)=3-4+36=35$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q47.png"
         },
         {
           "kind": "MCQ",
@@ -1142,7 +1185,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$Av=[16,4]^T=4v$ → $v$ is an eigenvector (eigenvalue 4). $Au=[9,1]^T$ is not a multiple of $u$. Only $v$.</div><div class=\"ml-vi\">$Av=[16,4]^T=4v$ → $v$ là vector riêng (giá trị riêng 4). $Au=[9,1]^T$ không là bội của $u$. Chỉ $v$.</div>"
+          "explanation": "<div class=\"ml-en\">$Av=[16,4]^T=4v$ → $v$ is an eigenvector (eigenvalue 4). $Au=[9,1]^T$ is not a multiple of $u$. Only $v$.</div><div class=\"ml-vi\">$Av=[16,4]^T=4v$ → $v$ là vector riêng (giá trị riêng 4). $Au=[9,1]^T$ không là bội của $u$. Chỉ $v$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q48.png"
         },
         {
           "kind": "MCQ",
@@ -1168,7 +1212,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\operatorname{rank}(A)\\le\\min(3,5)=3$.</div><div class=\"ml-vi\">$\\operatorname{rank}(A)\\le\\min(3,5)=3$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\operatorname{rank}(A)\\le\\min(3,5)=3$.</div><div class=\"ml-vi\">$\\operatorname{rank}(A)\\le\\min(3,5)=3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q49.png"
         },
         {
           "kind": "MCQ",
@@ -1194,7 +1239,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Need $x-3\\ge0\\Rightarrow x\\ge3$; $\\sin x$ is defined everywhere. Domain $[3,\\infty)$ — (ii).</div><div class=\"ml-vi\">Cần $x-3\\ge0\\Rightarrow x\\ge3$; $\\sin x$ xác định khắp nơi. Tập xác định $[3,\\infty)$ — (ii).</div>"
+          "explanation": "<div class=\"ml-en\">Need $x-3\\ge0\\Rightarrow x\\ge3$; $\\sin x$ is defined everywhere. Domain $[3,\\infty)$ — (ii).</div><div class=\"ml-vi\">Cần $x-3\\ge0\\Rightarrow x\\ge3$; $\\sin x$ xác định khắp nơi. Tập xác định $[3,\\infty)$ — (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D1/q50.png"
         },
         {
           "kind": "MCQ",
@@ -1341,7 +1387,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$h(x)=2x+1$, $g(h(x))=\\sin(5(2x+1))=\\sin(10x+5)$, $f(g(h))=\\sqrt{\\sin^2(10x+5)+1}$ — the $+1$ is INSIDE the radical, argument $10x+5$: (ii).</div><div class=\"ml-vi\">$h(x)=2x+1$, $g(h(x))=\\sin(5(2x+1))=\\sin(10x+5)$, $f(g(h))=\\sqrt{\\sin^2(10x+5)+1}$ — số $+1$ nằm TRONG căn, đối số $10x+5$: (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$h(x)=2x+1$, $g(h(x))=\\sin(5(2x+1))=\\sin(10x+5)$, $f(g(h))=\\sqrt{\\sin^2(10x+5)+1}$ — the $+1$ is INSIDE the radical, argument $10x+5$: (ii).</div><div class=\"ml-vi\">$h(x)=2x+1$, $g(h(x))=\\sin(5(2x+1))=\\sin(10x+5)$, $f(g(h))=\\sqrt{\\sin^2(10x+5)+1}$ — số $+1$ nằm TRONG căn, đối số $10x+5$: (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q1.png"
         },
         {
           "kind": "MCQ",
@@ -1367,7 +1414,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$(L): y=\\tfrac12(x-2)-1=\\tfrac{x}{2}-2$. At $x=-2$: $y=-3$, so $(-2,-3)$ lies on $(L)$.</div><div class=\"ml-vi\">$(L): y=\\tfrac12(x-2)-1=\\tfrac{x}{2}-2$. Tại $x=-2$: $y=-3$, nên $(-2,-3)$ nằm trên $(L)$.</div>"
+          "explanation": "<div class=\"ml-en\">$(L): y=\\tfrac12(x-2)-1=\\tfrac{x}{2}-2$. At $x=-2$: $y=-3$, so $(-2,-3)$ lies on $(L)$.</div><div class=\"ml-vi\">$(L): y=\\tfrac12(x-2)-1=\\tfrac{x}{2}-2$. Tại $x=-2$: $y=-3$, nên $(-2,-3)$ nằm trên $(L)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q2.png"
         },
         {
           "kind": "MCQ",
@@ -1396,7 +1444,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Rationalize: $\\dfrac{x^2+3x-4}{(x-1)(\\sqrt{x^2+3x}+2)}=\\dfrac{(x+4)(x-1)}{(x-1)(\\sqrt{x^2+3x}+2)}=\\dfrac{x+4}{\\sqrt{x^2+3x}+2}\\to\\dfrac{5}{4}$.</div><div class=\"ml-vi\">Nhân liên hợp: $\\dfrac{x^2+3x-4}{(x-1)(\\sqrt{x^2+3x}+2)}=\\dfrac{(x+4)(x-1)}{(x-1)(\\sqrt{x^2+3x}+2)}=\\dfrac{x+4}{\\sqrt{x^2+3x}+2}\\to\\dfrac{5}{4}$.</div>"
+          "explanation": "<div class=\"ml-en\">Rationalize: $\\dfrac{x^2+3x-4}{(x-1)(\\sqrt{x^2+3x}+2)}=\\dfrac{(x+4)(x-1)}{(x-1)(\\sqrt{x^2+3x}+2)}=\\dfrac{x+4}{\\sqrt{x^2+3x}+2}\\to\\dfrac{5}{4}$.</div><div class=\"ml-vi\">Nhân liên hợp: $\\dfrac{x^2+3x-4}{(x-1)(\\sqrt{x^2+3x}+2)}=\\dfrac{(x+4)(x-1)}{(x-1)(\\sqrt{x^2+3x}+2)}=\\dfrac{x+4}{\\sqrt{x^2+3x}+2}\\to\\dfrac{5}{4}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q3.png"
         },
         {
           "kind": "MCQ",
@@ -1422,7 +1471,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$x^2-3x+2=(x-1)(x-2)$; the rational function is continuous everywhere except $x=1,2$: $(-\\infty,1),(1,2),(2,+\\infty)$ — (iii).</div><div class=\"ml-vi\">$x^2-3x+2=(x-1)(x-2)$; hàm hữu tỉ liên tục ở mọi nơi trừ $x=1,2$: $(-\\infty,1),(1,2),(2,+\\infty)$ — (iii).</div>"
+          "explanation": "<div class=\"ml-en\">$x^2-3x+2=(x-1)(x-2)$; the rational function is continuous everywhere except $x=1,2$: $(-\\infty,1),(1,2),(2,+\\infty)$ — (iii).</div><div class=\"ml-vi\">$x^2-3x+2=(x-1)(x-2)$; hàm hữu tỉ liên tục ở mọi nơi trừ $x=1,2$: $(-\\infty,1),(1,2),(2,+\\infty)$ — (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q4.png"
         },
         {
           "kind": "MCQ",
@@ -1448,7 +1498,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\dfrac{(x+h)^2/2-x^2/2}{h}=\\dfrac{2xh+h^2}{2h}=\\dfrac{2x+h}{2}$.</div><div class=\"ml-vi\">$\\dfrac{(x+h)^2/2-x^2/2}{h}=\\dfrac{2xh+h^2}{2h}=\\dfrac{2x+h}{2}$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\dfrac{(x+h)^2/2-x^2/2}{h}=\\dfrac{2xh+h^2}{2h}=\\dfrac{2x+h}{2}$.</div><div class=\"ml-vi\">$\\dfrac{(x+h)^2/2-x^2/2}{h}=\\dfrac{2xh+h^2}{2h}=\\dfrac{2x+h}{2}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q5.png"
         },
         {
           "kind": "MCQ",
@@ -1474,7 +1525,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$y'=3x^{1/2}-3x^{-1/2}$, $y''=\\tfrac32 x^{-1/2}+\\tfrac32 x^{-3/2}$; at $x=1$: $\\tfrac32+\\tfrac32=3$.</div><div class=\"ml-vi\">$y'=3x^{1/2}-3x^{-1/2}$, $y''=\\tfrac32 x^{-1/2}+\\tfrac32 x^{-3/2}$; tại $x=1$: $\\tfrac32+\\tfrac32=3$.</div>"
+          "explanation": "<div class=\"ml-en\">$y'=3x^{1/2}-3x^{-1/2}$, $y''=\\tfrac32 x^{-1/2}+\\tfrac32 x^{-3/2}$; at $x=1$: $\\tfrac32+\\tfrac32=3$.</div><div class=\"ml-vi\">$y'=3x^{1/2}-3x^{-1/2}$, $y''=\\tfrac32 x^{-1/2}+\\tfrac32 x^{-3/2}$; tại $x=1$: $\\tfrac32+\\tfrac32=3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q6.png"
         },
         {
           "kind": "MCQ",
@@ -1500,7 +1552,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$v=s'=2t\\cos t-t^2\\sin t+8t$; at $t=\\pi$: $2\\pi(-1)-\\pi^2(0)+8\\pi=6\\pi$ — (iii).</div><div class=\"ml-vi\">$v=s'=2t\\cos t-t^2\\sin t+8t$; tại $t=\\pi$: $2\\pi(-1)-\\pi^2(0)+8\\pi=6\\pi$ — (iii).</div>"
+          "explanation": "<div class=\"ml-en\">$v=s'=2t\\cos t-t^2\\sin t+8t$; at $t=\\pi$: $2\\pi(-1)-\\pi^2(0)+8\\pi=6\\pi$ — (iii).</div><div class=\"ml-vi\">$v=s'=2t\\cos t-t^2\\sin t+8t$; tại $t=\\pi$: $2\\pi(-1)-\\pi^2(0)+8\\pi=6\\pi$ — (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q7.png"
         },
         {
           "kind": "MCQ",
@@ -1526,7 +1579,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\dfrac{dy}{dx}=5(4x^2+3)^4(8x)-5(1+4x^3)^4(12x^2)=40x(4x^2+3)^4-60x^2(1+4x^3)^4$ — (ii).</div><div class=\"ml-vi\">$\\dfrac{dy}{dx}=5(4x^2+3)^4(8x)-5(1+4x^3)^4(12x^2)=40x(4x^2+3)^4-60x^2(1+4x^3)^4$ — (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$\\dfrac{dy}{dx}=5(4x^2+3)^4(8x)-5(1+4x^3)^4(12x^2)=40x(4x^2+3)^4-60x^2(1+4x^3)^4$ — (ii).</div><div class=\"ml-vi\">$\\dfrac{dy}{dx}=5(4x^2+3)^4(8x)-5(1+4x^3)^4(12x^2)=40x(4x^2+3)^4-60x^2(1+4x^3)^4$ — (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q8.png"
         },
         {
           "kind": "MCQ",
@@ -1552,7 +1606,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Differentiating: $y^3+3xy^2y'+5x^4y+x^5y'=2+4y'$, so $y'=\\dfrac{y^3+5x^4y-2}{4-x^5-3xy^2}$ — (i).</div><div class=\"ml-vi\">Đạo hàm hai vế: $y^3+3xy^2y'+5x^4y+x^5y'=2+4y'$, suy ra $y'=\\dfrac{y^3+5x^4y-2}{4-x^5-3xy^2}$ — (i).</div>"
+          "explanation": "<div class=\"ml-en\">Differentiating: $y^3+3xy^2y'+5x^4y+x^5y'=2+4y'$, so $y'=\\dfrac{y^3+5x^4y-2}{4-x^5-3xy^2}$ — (i).</div><div class=\"ml-vi\">Đạo hàm hai vế: $y^3+3xy^2y'+5x^4y+x^5y'=2+4y'$, suy ra $y'=\\dfrac{y^3+5x^4y-2}{4-x^5-3xy^2}$ — (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q9.png"
         },
         {
           "kind": "MCQ",
@@ -1578,7 +1633,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$a=s''=-4\\pi^2\\sin(2\\pi t)$; at $t=4.5$: $\\sin(9\\pi)=0$, so $a=0$ — (iii).</div><div class=\"ml-vi\">$a=s''=-4\\pi^2\\sin(2\\pi t)$; tại $t=4.5$: $\\sin(9\\pi)=0$ nên $a=0$ — (iii).</div>"
+          "explanation": "<div class=\"ml-en\">$a=s''=-4\\pi^2\\sin(2\\pi t)$; at $t=4.5$: $\\sin(9\\pi)=0$, so $a=0$ — (iii).</div><div class=\"ml-vi\">$a=s''=-4\\pi^2\\sin(2\\pi t)$; tại $t=4.5$: $\\sin(9\\pi)=0$ nên $a=0$ — (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q10.png"
         },
         {
           "kind": "MCQ",
@@ -1604,7 +1660,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f(1)=1$, $f'(x)=\\dfrac{-2}{(2x-1)^2}$, $f'(1)=-2$. $L(x)=1-2(x-1)=-2x+3$.</div><div class=\"ml-vi\">$f(1)=1$, $f'(x)=\\dfrac{-2}{(2x-1)^2}$, $f'(1)=-2$. $L(x)=1-2(x-1)=-2x+3$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(1)=1$, $f'(x)=\\dfrac{-2}{(2x-1)^2}$, $f'(1)=-2$. $L(x)=1-2(x-1)=-2x+3$.</div><div class=\"ml-vi\">$f(1)=1$, $f'(x)=\\dfrac{-2}{(2x-1)^2}$, $f'(1)=-2$. $L(x)=1-2(x-1)=-2x+3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q11.png"
         },
         {
           "kind": "MCQ",
@@ -1630,7 +1687,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$y'=e^{x-1}(x^2+2x)=e^{x-1}x(x+2)=0\\Rightarrow x=0$ or $x=-2$.</div><div class=\"ml-vi\">$y'=e^{x-1}(x^2+2x)=e^{x-1}x(x+2)=0\\Rightarrow x=0$ hoặc $x=-2$.</div>"
+          "explanation": "<div class=\"ml-en\">$y'=e^{x-1}(x^2+2x)=e^{x-1}x(x+2)=0\\Rightarrow x=0$ or $x=-2$.</div><div class=\"ml-vi\">$y'=e^{x-1}(x^2+2x)=e^{x-1}x(x+2)=0\\Rightarrow x=0$ hoặc $x=-2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q12.png"
         },
         {
           "kind": "MCQ",
@@ -1656,7 +1714,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f''(x)=-4x+12=0\\Rightarrow x=3$; $f(3)=-18+54-3=33$. Inflection $(3,33)$.</div><div class=\"ml-vi\">$f''(x)=-4x+12=0\\Rightarrow x=3$; $f(3)=-18+54-3=33$. Điểm uốn $(3,33)$.</div>"
+          "explanation": "<div class=\"ml-en\">$f''(x)=-4x+12=0\\Rightarrow x=3$; $f(3)=-18+54-3=33$. Inflection $(3,33)$.</div><div class=\"ml-vi\">$f''(x)=-4x+12=0\\Rightarrow x=3$; $f(3)=-18+54-3=33$. Điểm uốn $(3,33)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q13.png"
         },
         {
           "kind": "MCQ",
@@ -1679,7 +1738,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$x^2+1$ never $0$ → no vertical asymptote. As $x\\to\\pm\\infty$, $\\dfrac{2x}{x^2+1}\\to0$ and $\\cos x$ is bounded, so $f\\to0$: horizontal asymptote $y=0$.</div><div class=\"ml-vi\">$x^2+1$ không bao giờ $=0$ → không có tiệm cận đứng. Khi $x\\to\\pm\\infty$, $\\dfrac{2x}{x^2+1}\\to0$ và $\\cos x$ bị chặn nên $f\\to0$: tiệm cận ngang $y=0$.</div>"
+          "explanation": "<div class=\"ml-en\">$x^2+1$ never $0$ → no vertical asymptote. As $x\\to\\pm\\infty$, $\\dfrac{2x}{x^2+1}\\to0$ and $\\cos x$ is bounded, so $f\\to0$: horizontal asymptote $y=0$.</div><div class=\"ml-vi\">$x^2+1$ không bao giờ $=0$ → không có tiệm cận đứng. Khi $x\\to\\pm\\infty$, $\\dfrac{2x}{x^2+1}\\to0$ và $\\cos x$ bị chặn nên $f\\to0$: tiệm cận ngang $y=0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q14.png"
         },
         {
           "kind": "MCQ",
@@ -1702,7 +1762,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$g(x)=4-\\tfrac{x}{2}-\\tfrac1x$ on $(0,8]$. $g'=-\\tfrac12+\\tfrac1{x^2}=0\\Rightarrow x=\\sqrt2$, a max $g(\\sqrt2)=4-\\sqrt2$. As $x\\to0^+$, $g\\to-\\infty$, so no minimum — (ii).</div><div class=\"ml-vi\">$g(x)=4-\\tfrac{x}{2}-\\tfrac1x$ trên $(0,8]$. $g'=-\\tfrac12+\\tfrac1{x^2}=0\\Rightarrow x=\\sqrt2$, cực đại $g(\\sqrt2)=4-\\sqrt2$. Khi $x\\to0^+$, $g\\to-\\infty$ nên không có min — (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$g(x)=4-\\tfrac{x}{2}-\\tfrac1x$ on $(0,8]$. $g'=-\\tfrac12+\\tfrac1{x^2}=0\\Rightarrow x=\\sqrt2$, a max $g(\\sqrt2)=4-\\sqrt2$. As $x\\to0^+$, $g\\to-\\infty$, so no minimum — (ii).</div><div class=\"ml-vi\">$g(x)=4-\\tfrac{x}{2}-\\tfrac1x$ trên $(0,8]$. $g'=-\\tfrac12+\\tfrac1{x^2}=0\\Rightarrow x=\\sqrt2$, cực đại $g(\\sqrt2)=4-\\sqrt2$. Khi $x\\to0^+$, $g\\to-\\infty$ nên không có min — (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q15.png"
         },
         {
           "kind": "MCQ",
@@ -1728,7 +1789,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$x_{n+1}=x_n-\\dfrac{x_n^3+2x_n-4}{3x_n^2+2}$: $x_1=1\\to x_2=1.2\\to x_3\\approx1.17975\\to x_4\\approx1.1795$.</div><div class=\"ml-vi\">$x_{n+1}=x_n-\\dfrac{x_n^3+2x_n-4}{3x_n^2+2}$: $x_1=1\\to x_2=1.2\\to x_3\\approx1.17975\\to x_4\\approx1.1795$.</div>"
+          "explanation": "<div class=\"ml-en\">$x_{n+1}=x_n-\\dfrac{x_n^3+2x_n-4}{3x_n^2+2}$: $x_1=1\\to x_2=1.2\\to x_3\\approx1.17975\\to x_4\\approx1.1795$.</div><div class=\"ml-vi\">$x_{n+1}=x_n-\\dfrac{x_n^3+2x_n-4}{3x_n^2+2}$: $x_1=1\\to x_2=1.2\\to x_3\\approx1.17975\\to x_4\\approx1.1795$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q16.png"
         },
         {
           "kind": "MCQ",
@@ -1754,7 +1816,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\Delta x=0.5$; right endpoints $0.5,1,1.5,2$ give $f=0,0.25,1,2.25$. Sum $\\times0.5=3.5\\times0.5=1.75$.</div><div class=\"ml-vi\">$\\Delta x=0.5$; mút phải $0.5,1,1.5,2$ cho $f=0,0.25,1,2.25$. Tổng $\\times0.5=3.5\\times0.5=1.75$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\Delta x=0.5$; right endpoints $0.5,1,1.5,2$ give $f=0,0.25,1,2.25$. Sum $\\times0.5=3.5\\times0.5=1.75$.</div><div class=\"ml-vi\">$\\Delta x=0.5$; mút phải $0.5,1,1.5,2$ cho $f=0,0.25,1,2.25$. Tổng $\\times0.5=3.5\\times0.5=1.75$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q17.png"
         },
         {
           "kind": "MCQ",
@@ -1783,7 +1846,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Average $=\\dfrac1b\\int_0^b(3x^2+2x)dx=\\dfrac1b(b^3+b^2)=b^2+b=72\\Rightarrow b=8$.</div><div class=\"ml-vi\">Trung bình $=\\dfrac1b\\int_0^b(3x^2+2x)dx=\\dfrac1b(b^3+b^2)=b^2+b=72\\Rightarrow b=8$.</div>"
+          "explanation": "<div class=\"ml-en\">Average $=\\dfrac1b\\int_0^b(3x^2+2x)dx=\\dfrac1b(b^3+b^2)=b^2+b=72\\Rightarrow b=8$.</div><div class=\"ml-vi\">Trung bình $=\\dfrac1b\\int_0^b(3x^2+2x)dx=\\dfrac1b(b^3+b^2)=b^2+b=72\\Rightarrow b=8$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q18.png"
         },
         {
           "kind": "MCQ",
@@ -1809,7 +1873,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Average $=\\tfrac12\\int_{-1}^1(2x^2-2x+1)dx=\\tfrac53$. Solve $2c^2-2c+1=\\tfrac53\\Rightarrow 3c^2-3c-1=0\\Rightarrow c=\\dfrac{3\\pm\\sqrt{21}}{6}$; the value in $[-1,1]$ is $\\dfrac{3-\\sqrt{21}}{6}$ — (iii).</div><div class=\"ml-vi\">Trung bình $=\\tfrac12\\int_{-1}^1(2x^2-2x+1)dx=\\tfrac53$. Giải $2c^2-2c+1=\\tfrac53\\Rightarrow 3c^2-3c-1=0\\Rightarrow c=\\dfrac{3\\pm\\sqrt{21}}{6}$; giá trị trong $[-1,1]$ là $\\dfrac{3-\\sqrt{21}}{6}$ — (iii).</div>"
+          "explanation": "<div class=\"ml-en\">Average $=\\tfrac12\\int_{-1}^1(2x^2-2x+1)dx=\\tfrac53$. Solve $2c^2-2c+1=\\tfrac53\\Rightarrow 3c^2-3c-1=0\\Rightarrow c=\\dfrac{3\\pm\\sqrt{21}}{6}$; the value in $[-1,1]$ is $\\dfrac{3-\\sqrt{21}}{6}$ — (iii).</div><div class=\"ml-vi\">Trung bình $=\\tfrac12\\int_{-1}^1(2x^2-2x+1)dx=\\tfrac53$. Giải $2c^2-2c+1=\\tfrac53\\Rightarrow 3c^2-3c-1=0\\Rightarrow c=\\dfrac{3\\pm\\sqrt{21}}{6}$; giá trị trong $[-1,1]$ là $\\dfrac{3-\\sqrt{21}}{6}$ — (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q19.png"
         },
         {
           "kind": "MCQ",
@@ -1835,7 +1900,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$[10y+3y^2-\\tfrac{y^3}{3}]_0^9=90+243-243=90$.</div><div class=\"ml-vi\">$[10y+3y^2-\\tfrac{y^3}{3}]_0^9=90+243-243=90$.</div>"
+          "explanation": "<div class=\"ml-en\">$[10y+3y^2-\\tfrac{y^3}{3}]_0^9=90+243-243=90$.</div><div class=\"ml-vi\">$[10y+3y^2-\\tfrac{y^3}{3}]_0^9=90+243-243=90$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q20.png"
         },
         {
           "kind": "MCQ",
@@ -1861,7 +1927,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\int 5e^{3x}dx=\\tfrac53 e^{3x}+C$ — (i).</div><div class=\"ml-vi\">$\\int 5e^{3x}dx=\\tfrac53 e^{3x}+C$ — (i).</div>"
+          "explanation": "<div class=\"ml-en\">$\\int 5e^{3x}dx=\\tfrac53 e^{3x}+C$ — (i).</div><div class=\"ml-vi\">$\\int 5e^{3x}dx=\\tfrac53 e^{3x}+C$ — (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q21.png"
         },
         {
           "kind": "MCQ",
@@ -1884,7 +1951,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\int(x^2+1)e^{-x}dx=-(x^2+2x+3)e^{-x}$; from $0$ to $1$: $-6/e-(-3)=3-6/e=(3e-6)/e$.</div><div class=\"ml-vi\">$\\int(x^2+1)e^{-x}dx=-(x^2+2x+3)e^{-x}$; từ $0$ đến $1$: $-6/e-(-3)=3-6/e=(3e-6)/e$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\int(x^2+1)e^{-x}dx=-(x^2+2x+3)e^{-x}$; from $0$ to $1$: $-6/e-(-3)=3-6/e=(3e-6)/e$.</div><div class=\"ml-vi\">$\\int(x^2+1)e^{-x}dx=-(x^2+2x+3)e^{-x}$; từ $0$ đến $1$: $-6/e-(-3)=3-6/e=(3e-6)/e$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q22.png"
         },
         {
           "kind": "MCQ",
@@ -1913,7 +1981,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\Delta x=1$; subintervals $[1,2],[2,3],[3,4]$ with midpoints $1.5,2.5,3.5$: $f=6,8,5$. Sum $=1\\cdot(6+8+5)=19$.</div><div class=\"ml-vi\">$\\Delta x=1$; các đoạn $[1,2],[2,3],[3,4]$ có trung điểm $1.5,2.5,3.5$: $f=6,8,5$. Tổng $=1\\cdot(6+8+5)=19$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\Delta x=1$; subintervals $[1,2],[2,3],[3,4]$ with midpoints $1.5,2.5,3.5$: $f=6,8,5$. Sum $=1\\cdot(6+8+5)=19$.</div><div class=\"ml-vi\">$\\Delta x=1$; các đoạn $[1,2],[2,3],[3,4]$ có trung điểm $1.5,2.5,3.5$: $f=6,8,5$. Tổng $=1\\cdot(6+8+5)=19$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q23.png"
         },
         {
           "kind": "MCQ",
@@ -1936,7 +2005,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\int_1^\\infty x^{-3/2}dx=[-2x^{-1/2}]_1^\\infty=0-(-2)=2$.</div><div class=\"ml-vi\">$\\int_1^\\infty x^{-3/2}dx=[-2x^{-1/2}]_1^\\infty=0-(-2)=2$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\int_1^\\infty x^{-3/2}dx=[-2x^{-1/2}]_1^\\infty=0-(-2)=2$.</div><div class=\"ml-vi\">$\\int_1^\\infty x^{-3/2}dx=[-2x^{-1/2}]_1^\\infty=0-(-2)=2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q24.png"
         },
         {
           "kind": "MCQ",
@@ -1962,7 +2032,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">(i) leading 1s out of order (col 3 before col 2) — no. (iv) column of the row-2 leading 1 has a nonzero above it — no. (ii) and (iii) are RREF.</div><div class=\"ml-vi\">(i) các số 1 dẫn đầu sai thứ tự (cột 3 trước cột 2) — không. (iv) cột của số 1 dẫn đầu ở dòng 2 còn phần tử khác 0 phía trên — không. (ii) và (iii) là RREF.</div>"
+          "explanation": "<div class=\"ml-en\">(i) leading 1s out of order (col 3 before col 2) — no. (iv) column of the row-2 leading 1 has a nonzero above it — no. (ii) and (iii) are RREF.</div><div class=\"ml-vi\">(i) các số 1 dẫn đầu sai thứ tự (cột 3 trước cột 2) — không. (iv) cột của số 1 dẫn đầu ở dòng 2 còn phần tử khác 0 phía trên — không. (ii) và (iii) là RREF.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q25.png"
         },
         {
           "kind": "MCQ",
@@ -1988,7 +2059,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$2j+3e=39.5,\\ 3j+2e=38$. Solving: $5e=42.5\\Rightarrow e=8.5$.</div><div class=\"ml-vi\">$2j+3e=39.5,\\ 3j+2e=38$. Giải: $5e=42.5\\Rightarrow e=8.5$.</div>"
+          "explanation": "<div class=\"ml-en\">$2j+3e=39.5,\\ 3j+2e=38$. Solving: $5e=42.5\\Rightarrow e=8.5$.</div><div class=\"ml-vi\">$2j+3e=39.5,\\ 3j+2e=38$. Giải: $5e=42.5\\Rightarrow e=8.5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q26.png"
         },
         {
           "kind": "MCQ",
@@ -2014,7 +2086,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Add eq1+eq3: $2x=-6\\Rightarrow x=-3$; then $y+z=5$ and $3y-z=14\\Rightarrow y=19/4,\\ z=1/4$.</div><div class=\"ml-vi\">Cộng pt1+pt3: $2x=-6\\Rightarrow x=-3$; rồi $y+z=5$ và $3y-z=14\\Rightarrow y=19/4,\\ z=1/4$.</div>"
+          "explanation": "<div class=\"ml-en\">Add eq1+eq3: $2x=-6\\Rightarrow x=-3$; then $y+z=5$ and $3y-z=14\\Rightarrow y=19/4,\\ z=1/4$.</div><div class=\"ml-vi\">Cộng pt1+pt3: $2x=-6\\Rightarrow x=-3$; rồi $y+z=5$ và $3y-z=14\\Rightarrow y=19/4,\\ z=1/4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q27.png"
         },
         {
           "kind": "MCQ",
@@ -2040,7 +2113,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">A row of zeros means rank $<5$, so there is a free variable; a homogeneous system is always consistent → infinitely many solutions.</div><div class=\"ml-vi\">Một dòng toàn 0 nghĩa là hạng $<5$ nên có biến tự do; hệ thuần nhất luôn tương thích → vô số nghiệm.</div>"
+          "explanation": "<div class=\"ml-en\">A row of zeros means rank $<5$, so there is a free variable; a homogeneous system is always consistent → infinitely many solutions.</div><div class=\"ml-vi\">Một dòng toàn 0 nghĩa là hạng $<5$ nên có biến tự do; hệ thuần nhất luôn tương thích → vô số nghiệm.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q28.png"
         },
         {
           "kind": "MCQ",
@@ -2066,7 +2140,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">(i) TRUE ($B=C$). (ii) TRUE (if $k\\ne0$ then $B=0$). (iii) FALSE (e.g. $A=\\begin{bmatrix}0&1\\\\0&0\\end{bmatrix},B=\\begin{bmatrix}0&0\\\\1&0\\end{bmatrix}$). Only (i) and (ii).</div><div class=\"ml-vi\">(i) ĐÚNG ($B=C$). (ii) ĐÚNG (nếu $k\\ne0$ thì $B=0$). (iii) SAI (ví dụ $A=\\begin{bmatrix}0&1\\\\0&0\\end{bmatrix},B=\\begin{bmatrix}0&0\\\\1&0\\end{bmatrix}$). Chỉ (i) và (ii).</div>"
+          "explanation": "<div class=\"ml-en\">(i) TRUE ($B=C$). (ii) TRUE (if $k\\ne0$ then $B=0$). (iii) FALSE (e.g. $A=\\begin{bmatrix}0&1\\\\0&0\\end{bmatrix},B=\\begin{bmatrix}0&0\\\\1&0\\end{bmatrix}$). Only (i) and (ii).</div><div class=\"ml-vi\">(i) ĐÚNG ($B=C$). (ii) ĐÚNG (nếu $k\\ne0$ thì $B=0$). (iii) SAI (ví dụ $A=\\begin{bmatrix}0&1\\\\0&0\\end{bmatrix},B=\\begin{bmatrix}0&0\\\\1&0\\end{bmatrix}$). Chỉ (i) và (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q29.png"
         },
         {
           "kind": "MCQ",
@@ -2089,7 +2164,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The coefficient rows are $(2,1,1),(3,-1,-1),(1,0,1)$ (last row: $x+z=-1$) — matrix (iii).</div><div class=\"ml-vi\">Các dòng hệ số là $(2,1,1),(3,-1,-1),(1,0,1)$ (dòng cuối: $x+z=-1$) — ma trận (iii).</div>"
+          "explanation": "<div class=\"ml-en\">The coefficient rows are $(2,1,1),(3,-1,-1),(1,0,1)$ (last row: $x+z=-1$) — matrix (iii).</div><div class=\"ml-vi\">Các dòng hệ số là $(2,1,1),(3,-1,-1),(1,0,1)$ (dòng cuối: $x+z=-1$) — ma trận (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q30.png"
         },
         {
           "kind": "MCQ",
@@ -2115,7 +2191,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">For $ABC$ defined, $B$ must be $2\\times4$. $A^2$ is $2\\times2$, so $A^2B$ is $2\\times4$.</div><div class=\"ml-vi\">Để $ABC$ xác định, $B$ phải là $2\\times4$. $A^2$ là $2\\times2$ nên $A^2B$ là $2\\times4$.</div>"
+          "explanation": "<div class=\"ml-en\">For $ABC$ defined, $B$ must be $2\\times4$. $A^2$ is $2\\times2$, so $A^2B$ is $2\\times4$.</div><div class=\"ml-vi\">Để $ABC$ xác định, $B$ phải là $2\\times4$. $A^2$ là $2\\times2$ nên $A^2B$ là $2\\times4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q31.png"
         },
         {
           "kind": "MCQ",
@@ -2138,7 +2215,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$I+A^T=\\begin{bmatrix}1&2\\\\3&5\\end{bmatrix}^{-1}=\\begin{bmatrix}-5&2\\\\3&-1\\end{bmatrix}$, so $A^T=\\begin{bmatrix}-6&2\\\\3&-2\\end{bmatrix}$ and $A=\\begin{bmatrix}-6&3\\\\2&-2\\end{bmatrix}$ — (i).</div><div class=\"ml-vi\">$I+A^T=\\begin{bmatrix}1&2\\\\3&5\\end{bmatrix}^{-1}=\\begin{bmatrix}-5&2\\\\3&-1\\end{bmatrix}$ nên $A^T=\\begin{bmatrix}-6&2\\\\3&-2\\end{bmatrix}$ và $A=\\begin{bmatrix}-6&3\\\\2&-2\\end{bmatrix}$ — (i).</div>"
+          "explanation": "<div class=\"ml-en\">$I+A^T=\\begin{bmatrix}1&2\\\\3&5\\end{bmatrix}^{-1}=\\begin{bmatrix}-5&2\\\\3&-1\\end{bmatrix}$, so $A^T=\\begin{bmatrix}-6&2\\\\3&-2\\end{bmatrix}$ and $A=\\begin{bmatrix}-6&3\\\\2&-2\\end{bmatrix}$ — (i).</div><div class=\"ml-vi\">$I+A^T=\\begin{bmatrix}1&2\\\\3&5\\end{bmatrix}^{-1}=\\begin{bmatrix}-5&2\\\\3&-1\\end{bmatrix}$ nên $A^T=\\begin{bmatrix}-6&2\\\\3&-2\\end{bmatrix}$ và $A=\\begin{bmatrix}-6&3\\\\2&-2\\end{bmatrix}$ — (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q32.png"
         },
         {
           "kind": "MCQ",
@@ -2164,7 +2242,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Column 1 $=T(e_1)=[1,2]^T$. $T(e_2)=T([1,1])-T([1,0])=[2,3]-[1,2]=[1,1]^T$. Matrix $\\begin{bmatrix}1&1\\\\2&1\\end{bmatrix}$ — (ii).</div><div class=\"ml-vi\">Cột 1 $=T(e_1)=[1,2]^T$. $T(e_2)=T([1,1])-T([1,0])=[2,3]-[1,2]=[1,1]^T$. Ma trận $\\begin{bmatrix}1&1\\\\2&1\\end{bmatrix}$ — (ii).</div>"
+          "explanation": "<div class=\"ml-en\">Column 1 $=T(e_1)=[1,2]^T$. $T(e_2)=T([1,1])-T([1,0])=[2,3]-[1,2]=[1,1]^T$. Matrix $\\begin{bmatrix}1&1\\\\2&1\\end{bmatrix}$ — (ii).</div><div class=\"ml-vi\">Cột 1 $=T(e_1)=[1,2]^T$. $T(e_2)=T([1,1])-T([1,0])=[2,3]-[1,2]=[1,1]^T$. Ma trận $\\begin{bmatrix}1&1\\\\2&1\\end{bmatrix}$ — (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q33.png"
         },
         {
           "kind": "MCQ",
@@ -2190,7 +2269,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Rotation matrix $\\begin{bmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{bmatrix}$; $a_{22}=\\cos(\\pi/6)=\\dfrac{\\sqrt3}{2}$ — (iii).</div><div class=\"ml-vi\">Ma trận quay $\\begin{bmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{bmatrix}$; $a_{22}=\\cos(\\pi/6)=\\dfrac{\\sqrt3}{2}$ — (iii).</div>"
+          "explanation": "<div class=\"ml-en\">Rotation matrix $\\begin{bmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{bmatrix}$; $a_{22}=\\cos(\\pi/6)=\\dfrac{\\sqrt3}{2}$ — (iii).</div><div class=\"ml-vi\">Ma trận quay $\\begin{bmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{bmatrix}$; $a_{22}=\\cos(\\pi/6)=\\dfrac{\\sqrt3}{2}$ — (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q34.png"
         },
         {
           "kind": "MCQ",
@@ -2216,7 +2296,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$C_{12}=(-1)^{1+2}\\det\\begin{bmatrix}4&5\\\\0&6\\end{bmatrix}=-(24)=-24$.</div><div class=\"ml-vi\">$C_{12}=(-1)^{1+2}\\det\\begin{bmatrix}4&5\\\\0&6\\end{bmatrix}=-(24)=-24$.</div>"
+          "explanation": "<div class=\"ml-en\">$C_{12}=(-1)^{1+2}\\det\\begin{bmatrix}4&5\\\\0&6\\end{bmatrix}=-(24)=-24$.</div><div class=\"ml-vi\">$C_{12}=(-1)^{1+2}\\det\\begin{bmatrix}4&5\\\\0&6\\end{bmatrix}=-(24)=-24$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q35.png"
         },
         {
           "kind": "MCQ",
@@ -2242,7 +2323,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$|3A^{-1}B^{T}|=3^3\\cdot\\dfrac{1}{|A|}\\cdot|B|=27\\cdot\\dfrac13\\cdot(-2)=-18$.</div><div class=\"ml-vi\">$|3A^{-1}B^{T}|=3^3\\cdot\\dfrac{1}{|A|}\\cdot|B|=27\\cdot\\dfrac13\\cdot(-2)=-18$.</div>"
+          "explanation": "<div class=\"ml-en\">$|3A^{-1}B^{T}|=3^3\\cdot\\dfrac{1}{|A|}\\cdot|B|=27\\cdot\\dfrac13\\cdot(-2)=-18$.</div><div class=\"ml-vi\">$|3A^{-1}B^{T}|=3^3\\cdot\\dfrac{1}{|A|}\\cdot|B|=27\\cdot\\dfrac13\\cdot(-2)=-18$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q36.png"
         },
         {
           "kind": "MCQ",
@@ -2265,7 +2347,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The second column of $\\operatorname{adj}(A)$ consists of the row-2 cofactors $C_{21},C_{22},C_{23}$. Each minor deletes row 2, leaving rows $(a,a,a),(b,b,b)$ whose $2\\times2$ dets are all $0$, so the column is $[0,0,0]^T$ — (iii).</div><div class=\"ml-vi\">Cột thứ hai của $\\operatorname{adj}(A)$ gồm các cofactor dòng 2: $C_{21},C_{22},C_{23}$. Mỗi minor bỏ dòng 2, còn lại các dòng $(a,a,a),(b,b,b)$ có mọi định thức $2\\times2$ bằng $0$, nên cột là $[0,0,0]^T$ — (iii).</div>"
+          "explanation": "<div class=\"ml-en\">The second column of $\\operatorname{adj}(A)$ consists of the row-2 cofactors $C_{21},C_{22},C_{23}$. Each minor deletes row 2, leaving rows $(a,a,a),(b,b,b)$ whose $2\\times2$ dets are all $0$, so the column is $[0,0,0]^T$ — (iii).</div><div class=\"ml-vi\">Cột thứ hai của $\\operatorname{adj}(A)$ gồm các cofactor dòng 2: $C_{21},C_{22},C_{23}$. Mỗi minor bỏ dòng 2, còn lại các dòng $(a,a,a),(b,b,b)$ có mọi định thức $2\\times2$ bằng $0$, nên cột là $[0,0,0]^T$ — (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q37.png"
         },
         {
           "kind": "MCQ",
@@ -2291,7 +2374,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\det(A-xI)=(1-x)(2-x)=x^2-3x+2$ — (ii).</div><div class=\"ml-vi\">$\\det(A-xI)=(1-x)(2-x)=x^2-3x+2$ — (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$\\det(A-xI)=(1-x)(2-x)=x^2-3x+2$ — (ii).</div><div class=\"ml-vi\">$\\det(A-xI)=(1-x)(2-x)=x^2-3x+2$ — (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q38.png"
         },
         {
           "kind": "MCQ",
@@ -2314,7 +2398,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\det(A-xI)=x^2-4x-5=(x-5)(x+1)$, eigenvalues $5,-1$; so $5$ is an eigenvalue.</div><div class=\"ml-vi\">$\\det(A-xI)=x^2-4x-5=(x-5)(x+1)$, giá trị riêng $5,-1$; nên $5$ là giá trị riêng.</div>"
+          "explanation": "<div class=\"ml-en\">$\\det(A-xI)=x^2-4x-5=(x-5)(x+1)$, eigenvalues $5,-1$; so $5$ is an eigenvalue.</div><div class=\"ml-vi\">$\\det(A-xI)=x^2-4x-5=(x-5)(x+1)$, giá trị riêng $5,-1$; nên $5$ là giá trị riêng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q39.png"
         },
         {
           "kind": "MCQ",
@@ -2337,7 +2422,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Direction $(-1,3,2)$, $L:(1-t,2+3t,1+2t)$. $P$: $t=-2$ gives $(3,-4,-3)$ ✓; $Q$ fails. Only $P$.</div><div class=\"ml-vi\">Vector chỉ phương $(-1,3,2)$, $L:(1-t,2+3t,1+2t)$. $P$: $t=-2$ cho $(3,-4,-3)$ ✓; $Q$ không. Chỉ $P$.</div>"
+          "explanation": "<div class=\"ml-en\">Direction $(-1,3,2)$, $L:(1-t,2+3t,1+2t)$. $P$: $t=-2$ gives $(3,-4,-3)$ ✓; $Q$ fails. Only $P$.</div><div class=\"ml-vi\">Vector chỉ phương $(-1,3,2)$, $L:(1-t,2+3t,1+2t)$. $P$: $t=-2$ cho $(3,-4,-3)$ ✓; $Q$ không. Chỉ $P$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q40.png"
         },
         {
           "kind": "MCQ",
@@ -2363,7 +2449,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Line direction $=n_1\\times n_2=(1,1,-2)\\times(3,-2,1)=(-3,-7,-5)$. Plane with normal $(3,7,5)$ through $(6,0,2)$: $3x+7y+5z=28$.</div><div class=\"ml-vi\">Vector chỉ phương giao tuyến $=n_1\\times n_2=(1,1,-2)\\times(3,-2,1)=(-3,-7,-5)$. Mặt phẳng pháp $(3,7,5)$ qua $(6,0,2)$: $3x+7y+5z=28$.</div>"
+          "explanation": "<div class=\"ml-en\">Line direction $=n_1\\times n_2=(1,1,-2)\\times(3,-2,1)=(-3,-7,-5)$. Plane with normal $(3,7,5)$ through $(6,0,2)$: $3x+7y+5z=28$.</div><div class=\"ml-vi\">Vector chỉ phương giao tuyến $=n_1\\times n_2=(1,1,-2)\\times(3,-2,1)=(-3,-7,-5)$. Mặt phẳng pháp $(3,7,5)$ qua $(6,0,2)$: $3x+7y+5z=28$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q41.png"
         },
         {
           "kind": "MCQ",
@@ -2389,7 +2476,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$d=\\dfrac{|2(1)-(-2)-3-6|}{\\sqrt{4+1+1}}=\\dfrac{5}{\\sqrt6}=\\dfrac{5\\sqrt6}{6}$ — (ii).</div><div class=\"ml-vi\">$d=\\dfrac{|2(1)-(-2)-3-6|}{\\sqrt{4+1+1}}=\\dfrac{5}{\\sqrt6}=\\dfrac{5\\sqrt6}{6}$ — (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$d=\\dfrac{|2(1)-(-2)-3-6|}{\\sqrt{4+1+1}}=\\dfrac{5}{\\sqrt6}=\\dfrac{5\\sqrt6}{6}$ — (ii).</div><div class=\"ml-vi\">$d=\\dfrac{|2(1)-(-2)-3-6|}{\\sqrt{4+1+1}}=\\dfrac{5}{\\sqrt6}=\\dfrac{5\\sqrt6}{6}$ — (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q42.png"
         },
         {
           "kind": "MCQ",
@@ -2418,7 +2506,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\vec{AB}=(-1,0,2),\\ \\vec{BC}=(-6,6,11)$; $\\vec{AB}\\times\\vec{BC}=(-12,-1,-6)$, area $=\\sqrt{144+1+36}=\\sqrt{181}$ — (ii).</div><div class=\"ml-vi\">$\\vec{AB}=(-1,0,2),\\ \\vec{BC}=(-6,6,11)$; $\\vec{AB}\\times\\vec{BC}=(-12,-1,-6)$, diện tích $=\\sqrt{144+1+36}=\\sqrt{181}$ — (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$\\vec{AB}=(-1,0,2),\\ \\vec{BC}=(-6,6,11)$; $\\vec{AB}\\times\\vec{BC}=(-12,-1,-6)$, area $=\\sqrt{144+1+36}=\\sqrt{181}$ — (ii).</div><div class=\"ml-vi\">$\\vec{AB}=(-1,0,2),\\ \\vec{BC}=(-6,6,11)$; $\\vec{AB}\\times\\vec{BC}=(-12,-1,-6)$, diện tích $=\\sqrt{144+1+36}=\\sqrt{181}$ — (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q43.png"
         },
         {
           "kind": "MCQ",
@@ -2441,7 +2530,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Matrix $\\begin{bmatrix}1/2&-\\sqrt3/2\\\\\\sqrt3/2&1/2\\end{bmatrix}=\\begin{bmatrix}\\cos60^\\circ&-\\sin60^\\circ\\\\\\sin60^\\circ&\\cos60^\\circ\\end{bmatrix}$, $\\det=1$: a rotation.</div><div class=\"ml-vi\">Ma trận $\\begin{bmatrix}1/2&-\\sqrt3/2\\\\\\sqrt3/2&1/2\\end{bmatrix}=\\begin{bmatrix}\\cos60^\\circ&-\\sin60^\\circ\\\\\\sin60^\\circ&\\cos60^\\circ\\end{bmatrix}$, $\\det=1$: phép quay.</div>"
+          "explanation": "<div class=\"ml-en\">Matrix $\\begin{bmatrix}1/2&-\\sqrt3/2\\\\\\sqrt3/2&1/2\\end{bmatrix}=\\begin{bmatrix}\\cos60^\\circ&-\\sin60^\\circ\\\\\\sin60^\\circ&\\cos60^\\circ\\end{bmatrix}$, $\\det=1$: a rotation.</div><div class=\"ml-vi\">Ma trận $\\begin{bmatrix}1/2&-\\sqrt3/2\\\\\\sqrt3/2&1/2\\end{bmatrix}=\\begin{bmatrix}\\cos60^\\circ&-\\sin60^\\circ\\\\\\sin60^\\circ&\\cos60^\\circ\\end{bmatrix}$, $\\det=1$: phép quay.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q44.png"
         },
         {
           "kind": "MCQ",
@@ -2464,7 +2554,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$au+bv=(b,a+b,a-b)$. For $x$: $b=1,a=2$ but $a-b=1\\ne-1$. For $y$: $b=0,a=2$ but $a-b=2\\ne3$. Neither belongs.</div><div class=\"ml-vi\">$au+bv=(b,a+b,a-b)$. Với $x$: $b=1,a=2$ nhưng $a-b=1\\ne-1$. Với $y$: $b=0,a=2$ nhưng $a-b=2\\ne3$. Không vector nào thuộc.</div>"
+          "explanation": "<div class=\"ml-en\">$au+bv=(b,a+b,a-b)$. For $x$: $b=1,a=2$ but $a-b=1\\ne-1$. For $y$: $b=0,a=2$ but $a-b=2\\ne3$. Neither belongs.</div><div class=\"ml-vi\">$au+bv=(b,a+b,a-b)$. Với $x$: $b=1,a=2$ nhưng $a-b=1\\ne-1$. Với $y$: $b=0,a=2$ nhưng $a-b=2\\ne3$. Không vector nào thuộc.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q45.png"
         },
         {
           "kind": "MCQ",
@@ -2487,7 +2578,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i) $(3,4,2)=3(1,1,1)+1(0,1,-1)$ — TRUE. (ii) scaling by nonzero scalars preserves span — TRUE. Both.</div><div class=\"ml-vi\">(i) $(3,4,2)=3(1,1,1)+1(0,1,-1)$ — ĐÚNG. (ii) nhân với vô hướng khác 0 giữ nguyên span — ĐÚNG. Cả hai.</div>"
+          "explanation": "<div class=\"ml-en\">(i) $(3,4,2)=3(1,1,1)+1(0,1,-1)$ — TRUE. (ii) scaling by nonzero scalars preserves span — TRUE. Both.</div><div class=\"ml-vi\">(i) $(3,4,2)=3(1,1,1)+1(0,1,-1)$ — ĐÚNG. (ii) nhân với vô hướng khác 0 giữ nguyên span — ĐÚNG. Cả hai.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q46.png"
         },
         {
           "kind": "MCQ",
@@ -2510,7 +2602,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">All three generators lie in $U=\\operatorname{span}\\{X,Y\\}$, and from $Y$ and $3X+Y$ we recover $X$, so $V=U$, $\\dim V=2$.</div><div class=\"ml-vi\">Cả ba vector sinh đều nằm trong $U=\\operatorname{span}\\{X,Y\\}$, và từ $Y$ và $3X+Y$ ta suy ra $X$, nên $V=U$, $\\dim V=2$.</div>"
+          "explanation": "<div class=\"ml-en\">All three generators lie in $U=\\operatorname{span}\\{X,Y\\}$, and from $Y$ and $3X+Y$ we recover $X$, so $V=U$, $\\dim V=2$.</div><div class=\"ml-vi\">Cả ba vector sinh đều nằm trong $U=\\operatorname{span}\\{X,Y\\}$, và từ $Y$ và $3X+Y$ ta suy ra $X$, nên $V=U$, $\\dim V=2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q47.png"
         },
         {
           "kind": "MCQ",
@@ -2533,7 +2626,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The coefficient matrix has rank 2 (row 3 $=$ row 2 $-$ row 1), so nullity $=3-2=1$.</div><div class=\"ml-vi\">Ma trận hệ số có hạng 2 (dòng 3 $=$ dòng 2 $-$ dòng 1) nên số chiều nghiệm $=3-2=1$.</div>"
+          "explanation": "<div class=\"ml-en\">The coefficient matrix has rank 2 (row 3 $=$ row 2 $-$ row 1), so nullity $=3-2=1$.</div><div class=\"ml-vi\">Ma trận hệ số có hạng 2 (dòng 3 $=$ dòng 2 $-$ dòng 1) nên số chiều nghiệm $=3-2=1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q48.png"
         },
         {
           "kind": "MCQ",
@@ -2556,7 +2650,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$\\|2X-3Y\\|^2=4\\|X\\|^2-12(X\\cdot Y)+9\\|Y\\|^2=64+24+81=169$, so $\\|2X-3Y\\|=13$.</div><div class=\"ml-vi\">$\\|2X-3Y\\|^2=4\\|X\\|^2-12(X\\cdot Y)+9\\|Y\\|^2=64+24+81=169$ nên $\\|2X-3Y\\|=13$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\|2X-3Y\\|^2=4\\|X\\|^2-12(X\\cdot Y)+9\\|Y\\|^2=64+24+81=169$, so $\\|2X-3Y\\|=13$.</div><div class=\"ml-vi\">$\\|2X-3Y\\|^2=4\\|X\\|^2-12(X\\cdot Y)+9\\|Y\\|^2=64+24+81=169$ nên $\\|2X-3Y\\|=13$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q49.png"
         },
         {
           "kind": "MCQ",
@@ -2579,7 +2674,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$\\dim\\operatorname{Col}=\\dim\\operatorname{Row}=\\operatorname{rank}=20$; $\\dim\\operatorname{Null}=70-20=50$. So $(20,20,50)$, which is none of the listed options.</div><div class=\"ml-vi\">$\\dim\\operatorname{Col}=\\dim\\operatorname{Row}=\\operatorname{rank}=20$; $\\dim\\operatorname{Null}=70-20=50$. Vậy $(20,20,50)$, không trùng lựa chọn nào được liệt kê.</div>"
+          "explanation": "<div class=\"ml-en\">$\\dim\\operatorname{Col}=\\dim\\operatorname{Row}=\\operatorname{rank}=20$; $\\dim\\operatorname{Null}=70-20=50$. So $(20,20,50)$, which is none of the listed options.</div><div class=\"ml-vi\">$\\dim\\operatorname{Col}=\\dim\\operatorname{Row}=\\operatorname{rank}=20$; $\\dim\\operatorname{Null}=70-20=50$. Vậy $(20,20,50)$, không trùng lựa chọn nào được liệt kê.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D2/q50.png"
         }
       ]
     },
@@ -2622,7 +2718,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$f(g(x))=\\dfrac{1}{(e^{x})^2+1}=\\dfrac{1}{e^{2x}+1}$ — that is (i).</div><div class=\"ml-vi\">$f(g(x))=\\dfrac{1}{(e^{x})^2+1}=\\dfrac{1}{e^{2x}+1}$ — chính là (i).</div>"
+          "explanation": "<div class=\"ml-en\">$f(g(x))=\\dfrac{1}{(e^{x})^2+1}=\\dfrac{1}{e^{2x}+1}$ — that is (i).</div><div class=\"ml-vi\">$f(g(x))=\\dfrac{1}{(e^{x})^2+1}=\\dfrac{1}{e^{2x}+1}$ — chính là (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q1.png"
         },
         {
           "kind": "MCQ",
@@ -2648,7 +2745,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$-f(x)$ flips the graph vertically (reflection in the $x$-axis); adding $+3$ then shifts it 3 units up.</div><div class=\"ml-vi\">$-f(x)$ lật đồ thị theo phương đứng (đối xứng qua trục $Ox$); cộng thêm $+3$ tịnh tiến lên trên 3 đơn vị.</div>"
+          "explanation": "<div class=\"ml-en\">$-f(x)$ flips the graph vertically (reflection in the $x$-axis); adding $+3$ then shifts it 3 units up.</div><div class=\"ml-vi\">$-f(x)$ lật đồ thị theo phương đứng (đối xứng qua trục $Ox$); cộng thêm $+3$ tịnh tiến lên trên 3 đơn vị.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q2.png"
         },
         {
           "kind": "MCQ",
@@ -2677,7 +2775,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$x^2-4x+3=(x-1)(x-3)$. For $x\\to1^{+}$: $x-1\\gt0$ and $x-3\\lt0$, so the product is negative and $|x^2-4x+3|=(x-1)(3-x)$. The quotient is $3-x\\to2$.</div><div class=\"ml-vi\">$x^2-4x+3=(x-1)(x-3)$. Khi $x\\to1^{+}$: $x-1\\gt0$ và $x-3\\lt0$ nên tích âm, do đó $|x^2-4x+3|=(x-1)(3-x)$. Thương bằng $3-x\\to2$.</div>"
+          "explanation": "<div class=\"ml-en\">$x^2-4x+3=(x-1)(x-3)$. For $x\\to1^{+}$: $x-1\\gt0$ and $x-3\\lt0$, so the product is negative and $|x^2-4x+3|=(x-1)(3-x)$. The quotient is $3-x\\to2$.</div><div class=\"ml-vi\">$x^2-4x+3=(x-1)(x-3)$. Khi $x\\to1^{+}$: $x-1\\gt0$ và $x-3\\lt0$ nên tích âm, do đó $|x^2-4x+3|=(x-1)(3-x)$. Thương bằng $3-x\\to2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q3.png"
         },
         {
           "kind": "MCQ",
@@ -2706,7 +2805,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Continuity at $x=0$ needs $\\lim_{x\\to0^{-}}f=f(0)=c$ and $\\lim_{x\\to0^{+}}f=1$, so $c=1$.</div><div class=\"ml-vi\">Liên tục tại $x=0$ đòi hỏi $\\lim_{x\\to0^{-}}f=f(0)=c$ và $\\lim_{x\\to0^{+}}f=1$, suy ra $c=1$.</div>"
+          "explanation": "<div class=\"ml-en\">Continuity at $x=0$ needs $\\lim_{x\\to0^{-}}f=f(0)=c$ and $\\lim_{x\\to0^{+}}f=1$, so $c=1$.</div><div class=\"ml-vi\">Liên tục tại $x=0$ đòi hỏi $\\lim_{x\\to0^{-}}f=f(0)=c$ và $\\lim_{x\\to0^{+}}f=1$, suy ra $c=1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q4.png"
         },
         {
           "kind": "MCQ",
@@ -2729,7 +2829,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f'(2)=\\lim_{x\\to2}\\dfrac{f(x)-f(2)}{x-2}$ with $f(2)=5$: $f(x)-5=3x^2-4x-4=(x-2)(3x+2)$ — that is (i) (its value is $8$).</div><div class=\"ml-vi\">$f'(2)=\\lim_{x\\to2}\\dfrac{f(x)-f(2)}{x-2}$ với $f(2)=5$: $f(x)-5=3x^2-4x-4=(x-2)(3x+2)$ — chính là (i) (giá trị bằng $8$).</div>"
+          "explanation": "<div class=\"ml-en\">$f'(2)=\\lim_{x\\to2}\\dfrac{f(x)-f(2)}{x-2}$ with $f(2)=5$: $f(x)-5=3x^2-4x-4=(x-2)(3x+2)$ — that is (i) (its value is $8$).</div><div class=\"ml-vi\">$f'(2)=\\lim_{x\\to2}\\dfrac{f(x)-f(2)}{x-2}$ với $f(2)=5$: $f(x)-5=3x^2-4x-4=(x-2)(3x+2)$ — chính là (i) (giá trị bằng $8$).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q5.png"
         },
         {
           "kind": "MCQ",
@@ -2755,7 +2856,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f'(x)=2x+\\dfrac{1}{2\\sqrt{x}}$ on the domain $x\\gt0$; both terms are positive there, so $f'(x)\\gt0$ always and never vanishes (at $x=0$ the derivative is undefined). No such $x$ exists.</div><div class=\"ml-vi\">$f'(x)=2x+\\dfrac{1}{2\\sqrt{x}}$ trên miền $x\\gt0$; cả hai hạng tử đều dương nên $f'(x)\\gt0$ luôn, không bao giờ bằng 0 (tại $x=0$ đạo hàm không xác định). Không có $x$ nào thoả.</div>"
+          "explanation": "<div class=\"ml-en\">$f'(x)=2x+\\dfrac{1}{2\\sqrt{x}}$ on the domain $x\\gt0$; both terms are positive there, so $f'(x)\\gt0$ always and never vanishes (at $x=0$ the derivative is undefined). No such $x$ exists.</div><div class=\"ml-vi\">$f'(x)=2x+\\dfrac{1}{2\\sqrt{x}}$ trên miền $x\\gt0$; cả hai hạng tử đều dương nên $f'(x)\\gt0$ luôn, không bao giờ bằng 0 (tại $x=0$ đạo hàm không xác định). Không có $x$ nào thoả.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q6.png"
         },
         {
           "kind": "MCQ",
@@ -2781,7 +2883,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$v(t)=s'(t)=-8t$, so $v(2)=-16$ m/s (negative = falling).</div><div class=\"ml-vi\">$v(t)=s'(t)=-8t$, nên $v(2)=-16$ m/s (dấu âm = đang rơi xuống).</div>"
+          "explanation": "<div class=\"ml-en\">$v(t)=s'(t)=-8t$, so $v(2)=-16$ m/s (negative = falling).</div><div class=\"ml-vi\">$v(t)=s'(t)=-8t$, nên $v(2)=-16$ m/s (dấu âm = đang rơi xuống).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q7.png"
         },
         {
           "kind": "MCQ",
@@ -2807,7 +2910,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f^{(n)}(x)=6^{n}\\sin\\!\\left(6x+\\dfrac{n\\pi}{2}\\right)$. Since $2023=4\\cdot505+3$, the phase is $\\dfrac{3\\pi}{2}$ and $\\sin\\!\\left(6x+\\dfrac{3\\pi}{2}\\right)=-\\cos 6x$, giving $-6^{2023}\\cos(6x)$ — (iii).</div><div class=\"ml-vi\">$f^{(n)}(x)=6^{n}\\sin\\!\\left(6x+\\dfrac{n\\pi}{2}\\right)$. Vì $2023=4\\cdot505+3$ nên pha là $\\dfrac{3\\pi}{2}$ và $\\sin\\!\\left(6x+\\dfrac{3\\pi}{2}\\right)=-\\cos 6x$, được $-6^{2023}\\cos(6x)$ — (iii).</div>"
+          "explanation": "<div class=\"ml-en\">$f^{(n)}(x)=6^{n}\\sin\\!\\left(6x+\\dfrac{n\\pi}{2}\\right)$. Since $2023=4\\cdot505+3$, the phase is $\\dfrac{3\\pi}{2}$ and $\\sin\\!\\left(6x+\\dfrac{3\\pi}{2}\\right)=-\\cos 6x$, giving $-6^{2023}\\cos(6x)$ — (iii).</div><div class=\"ml-vi\">$f^{(n)}(x)=6^{n}\\sin\\!\\left(6x+\\dfrac{n\\pi}{2}\\right)$. Vì $2023=4\\cdot505+3$ nên pha là $\\dfrac{3\\pi}{2}$ và $\\sin\\!\\left(6x+\\dfrac{3\\pi}{2}\\right)=-\\cos 6x$, được $-6^{2023}\\cos(6x)$ — (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q8.png"
         },
         {
           "kind": "MCQ",
@@ -2833,7 +2937,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">Differentiate: $2yy'-(y+xy')+2x=0\\Rightarrow y'(2y-x)=y-2x\\Rightarrow y'=\\dfrac{y-2x}{2y-x}=\\dfrac{2x-y}{x-2y}$.</div><div class=\"ml-vi\">Đạo hàm hai vế: $2yy'-(y+xy')+2x=0\\Rightarrow y'(2y-x)=y-2x\\Rightarrow y'=\\dfrac{y-2x}{2y-x}=\\dfrac{2x-y}{x-2y}$.</div>"
+          "explanation": "<div class=\"ml-en\">Differentiate: $2yy'-(y+xy')+2x=0\\Rightarrow y'(2y-x)=y-2x\\Rightarrow y'=\\dfrac{y-2x}{2y-x}=\\dfrac{2x-y}{x-2y}$.</div><div class=\"ml-vi\">Đạo hàm hai vế: $2yy'-(y+xy')+2x=0\\Rightarrow y'(2y-x)=y-2x\\Rightarrow y'=\\dfrac{y-2x}{2y-x}=\\dfrac{2x-y}{x-2y}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q9.png"
         },
         {
           "kind": "MCQ",
@@ -2859,7 +2964,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Differentiate with respect to $t$: $2y\\dfrac{dy}{dt}=3x^2\\dfrac{dx}{dt}$. At $(2,3)$: $2(3)(4)=3(4)\\dfrac{dx}{dt}\\Rightarrow 24=12\\dfrac{dx}{dt}\\Rightarrow \\dfrac{dx}{dt}=2$ cm/s.</div><div class=\"ml-vi\">Đạo hàm theo $t$: $2y\\dfrac{dy}{dt}=3x^2\\dfrac{dx}{dt}$. Tại $(2,3)$: $2(3)(4)=3(4)\\dfrac{dx}{dt}\\Rightarrow 24=12\\dfrac{dx}{dt}\\Rightarrow \\dfrac{dx}{dt}=2$ cm/s.</div>"
+          "explanation": "<div class=\"ml-en\">Differentiate with respect to $t$: $2y\\dfrac{dy}{dt}=3x^2\\dfrac{dx}{dt}$. At $(2,3)$: $2(3)(4)=3(4)\\dfrac{dx}{dt}\\Rightarrow 24=12\\dfrac{dx}{dt}\\Rightarrow \\dfrac{dx}{dt}=2$ cm/s.</div><div class=\"ml-vi\">Đạo hàm theo $t$: $2y\\dfrac{dy}{dt}=3x^2\\dfrac{dx}{dt}$. Tại $(2,3)$: $2(3)(4)=3(4)\\dfrac{dx}{dt}\\Rightarrow 24=12\\dfrac{dx}{dt}\\Rightarrow \\dfrac{dx}{dt}=2$ cm/s.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q10.png"
         },
         {
           "kind": "MCQ",
@@ -2885,7 +2991,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f(1)=e^{2}$, $f'(x)=2e^{2x}$ so $f'(1)=2e^{2}$. Then $L(x)=e^{2}+2e^{2}(x-1)=2e^{2}x-e^{2}$ — (i).</div><div class=\"ml-vi\">$f(1)=e^{2}$, $f'(x)=2e^{2x}$ nên $f'(1)=2e^{2}$. Vậy $L(x)=e^{2}+2e^{2}(x-1)=2e^{2}x-e^{2}$ — (i).</div>"
+          "explanation": "<div class=\"ml-en\">$f(1)=e^{2}$, $f'(x)=2e^{2x}$ so $f'(1)=2e^{2}$. Then $L(x)=e^{2}+2e^{2}(x-1)=2e^{2}x-e^{2}$ — (i).</div><div class=\"ml-vi\">$f(1)=e^{2}$, $f'(x)=2e^{2x}$ nên $f'(1)=2e^{2}$. Vậy $L(x)=e^{2}+2e^{2}(x-1)=2e^{2}x-e^{2}$ — (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q11.png"
         },
         {
           "kind": "MCQ",
@@ -2911,7 +3018,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f$ is continuous and increasing on $[0,8]$, so the extremes occur at the endpoints: $f(0)=0$ (min) and $f(8)=2$ (max).</div><div class=\"ml-vi\">$f$ liên tục và đồng biến trên $[0,8]$ nên cực trị nằm ở hai đầu mút: $f(0)=0$ (nhỏ nhất) và $f(8)=2$ (lớn nhất).</div>"
+          "explanation": "<div class=\"ml-en\">$f$ is continuous and increasing on $[0,8]$, so the extremes occur at the endpoints: $f(0)=0$ (min) and $f(8)=2$ (max).</div><div class=\"ml-vi\">$f$ liên tục và đồng biến trên $[0,8]$ nên cực trị nằm ở hai đầu mút: $f(0)=0$ (nhỏ nhất) và $f(8)=2$ (lớn nhất).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q12.png"
         },
         {
           "kind": "MCQ",
@@ -2937,7 +3045,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f'(x)=\\dfrac{-8x}{(x^2-1)^2}$, which is $0$ only at $x=0$ (the points $x=\\pm1$ are outside the domain). $f'\\gt0$ for $x\\lt0$ and $f'\\lt0$ for $x\\gt0$, so $x=0$ gives a relative maximum with $f(0)=-4$.</div><div class=\"ml-vi\">$f'(x)=\\dfrac{-8x}{(x^2-1)^2}$, chỉ bằng $0$ tại $x=0$ (các điểm $x=\\pm1$ không thuộc miền xác định). $f'\\gt0$ khi $x\\lt0$ và $f'\\lt0$ khi $x\\gt0$, nên $x=0$ là điểm cực đại với $f(0)=-4$.</div>"
+          "explanation": "<div class=\"ml-en\">$f'(x)=\\dfrac{-8x}{(x^2-1)^2}$, which is $0$ only at $x=0$ (the points $x=\\pm1$ are outside the domain). $f'\\gt0$ for $x\\lt0$ and $f'\\lt0$ for $x\\gt0$, so $x=0$ gives a relative maximum with $f(0)=-4$.</div><div class=\"ml-vi\">$f'(x)=\\dfrac{-8x}{(x^2-1)^2}$, chỉ bằng $0$ tại $x=0$ (các điểm $x=\\pm1$ không thuộc miền xác định). $f'\\gt0$ khi $x\\lt0$ và $f'\\lt0$ khi $x\\gt0$, nên $x=0$ là điểm cực đại với $f(0)=-4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q13.png"
         },
         {
           "kind": "MCQ",
@@ -2960,7 +3069,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$x=3$ is a vertical asymptote and the curve goes down without bound on <b>both</b> sides, so the two-sided limit is $-\\infty$ — (ii). (A finite value such as $\\pm4$ would require the graph to approach a height, which it does not.)</div><div class=\"ml-vi\">$x=3$ là tiệm cận đứng và đường cong đi xuống vô hạn ở <b>cả hai</b> phía, nên giới hạn hai phía là $-\\infty$ — (ii). (Giá trị hữu hạn như $\\pm4$ đòi hỏi đồ thị tiến tới một độ cao xác định, điều không xảy ra ở đây.)</div>"
+          "explanation": "<div class=\"ml-en\">$x=3$ is a vertical asymptote and the curve goes down without bound on <b>both</b> sides, so the two-sided limit is $-\\infty$ — (ii). (A finite value such as $\\pm4$ would require the graph to approach a height, which it does not.)</div><div class=\"ml-vi\">$x=3$ là tiệm cận đứng và đường cong đi xuống vô hạn ở <b>cả hai</b> phía, nên giới hạn hai phía là $-\\infty$ — (ii). (Giá trị hữu hạn như $\\pm4$ đòi hỏi đồ thị tiến tới một độ cao xác định, điều không xảy ra ở đây.)</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q14.png"
         },
         {
           "kind": "MCQ",
@@ -2986,7 +3096,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Minimize $D=x^2+(5x+2)^2$: $D'=2x+10(5x+2)=52x+20=0\\Rightarrow x=-\\dfrac{5}{13}$, then $y=5\\!\\left(-\\dfrac{5}{13}\\right)+2=\\dfrac{1}{13}$.</div><div class=\"ml-vi\">Cực tiểu hoá $D=x^2+(5x+2)^2$: $D'=2x+10(5x+2)=52x+20=0\\Rightarrow x=-\\dfrac{5}{13}$, suy ra $y=5\\!\\left(-\\dfrac{5}{13}\\right)+2=\\dfrac{1}{13}$.</div>"
+          "explanation": "<div class=\"ml-en\">Minimize $D=x^2+(5x+2)^2$: $D'=2x+10(5x+2)=52x+20=0\\Rightarrow x=-\\dfrac{5}{13}$, then $y=5\\!\\left(-\\dfrac{5}{13}\\right)+2=\\dfrac{1}{13}$.</div><div class=\"ml-vi\">Cực tiểu hoá $D=x^2+(5x+2)^2$: $D'=2x+10(5x+2)=52x+20=0\\Rightarrow x=-\\dfrac{5}{13}$, suy ra $y=5\\!\\left(-\\dfrac{5}{13}\\right)+2=\\dfrac{1}{13}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q15.png"
         },
         {
           "kind": "MCQ",
@@ -3012,7 +3123,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Let $f(x)=x^3-1-\\sin x$, $f'(x)=3x^2-\\cos x$. $f(1)=-0.8415$, $f'(1)=2.4597\\Rightarrow x_2=1+0.3421=1.3421$. Then $f(x_2)=0.4435$, $f'(x_2)=5.1770\\Rightarrow x_3=1.3421-0.0857\\approx1.256$.</div><div class=\"ml-vi\">Đặt $f(x)=x^3-1-\\sin x$, $f'(x)=3x^2-\\cos x$. $f(1)=-0.8415$, $f'(1)=2.4597\\Rightarrow x_2=1+0.3421=1.3421$. Tiếp: $f(x_2)=0.4435$, $f'(x_2)=5.1770\\Rightarrow x_3=1.3421-0.0857\\approx1.256$.</div>"
+          "explanation": "<div class=\"ml-en\">Let $f(x)=x^3-1-\\sin x$, $f'(x)=3x^2-\\cos x$. $f(1)=-0.8415$, $f'(1)=2.4597\\Rightarrow x_2=1+0.3421=1.3421$. Then $f(x_2)=0.4435$, $f'(x_2)=5.1770\\Rightarrow x_3=1.3421-0.0857\\approx1.256$.</div><div class=\"ml-vi\">Đặt $f(x)=x^3-1-\\sin x$, $f'(x)=3x^2-\\cos x$. $f(1)=-0.8415$, $f'(1)=2.4597\\Rightarrow x_2=1+0.3421=1.3421$. Tiếp: $f(x_2)=0.4435$, $f'(x_2)=5.1770\\Rightarrow x_3=1.3421-0.0857\\approx1.256$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q16.png"
         },
         {
           "kind": "MCQ",
@@ -3038,7 +3150,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\Delta x=\\dfrac{2-0}{4}=0.5$ and the right endpoints are $0.5,1,1.5,2$, so the sum is $0.5[f(0.5)+f(1)+f(1.5)+f(2)]$ — (i). ((ii) is the left-endpoint rule, (iii) is Simpson's rule.)</div><div class=\"ml-vi\">$\\Delta x=\\dfrac{2-0}{4}=0.5$ và các điểm mút phải là $0.5,1,1.5,2$, nên tổng là $0.5[f(0.5)+f(1)+f(1.5)+f(2)]$ — (i). ((ii) là quy tắc mút trái, (iii) là quy tắc Simpson.)</div>"
+          "explanation": "<div class=\"ml-en\">$\\Delta x=\\dfrac{2-0}{4}=0.5$ and the right endpoints are $0.5,1,1.5,2$, so the sum is $0.5[f(0.5)+f(1)+f(1.5)+f(2)]$ — (i). ((ii) is the left-endpoint rule, (iii) is Simpson's rule.)</div><div class=\"ml-vi\">$\\Delta x=\\dfrac{2-0}{4}=0.5$ và các điểm mút phải là $0.5,1,1.5,2$, nên tổng là $0.5[f(0.5)+f(1)+f(1.5)+f(2)]$ — (i). ((ii) là quy tắc mút trái, (iii) là quy tắc Simpson.)</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q17.png"
         },
         {
           "kind": "MCQ",
@@ -3061,7 +3174,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The Riemann sum evaluates the whole integrand at the sample point: $f(x_i)=\\dfrac{x_i}{x_i^2+2}$ — (ii). ((iii) is wrong because a free $x$ cannot sit outside the sum.)</div><div class=\"ml-vi\">Tổng Riemann phải lấy TOÀN BỘ hàm dưới dấu tích phân tại điểm mẫu: $f(x_i)=\\dfrac{x_i}{x_i^2+2}$ — (ii). ((iii) sai vì không thể để $x$ tự do ngoài dấu tổng.)</div>"
+          "explanation": "<div class=\"ml-en\">The Riemann sum evaluates the whole integrand at the sample point: $f(x_i)=\\dfrac{x_i}{x_i^2+2}$ — (ii). ((iii) is wrong because a free $x$ cannot sit outside the sum.)</div><div class=\"ml-vi\">Tổng Riemann phải lấy TOÀN BỘ hàm dưới dấu tích phân tại điểm mẫu: $f(x_i)=\\dfrac{x_i}{x_i^2+2}$ — (ii). ((iii) sai vì không thể để $x$ tự do ngoài dấu tổng.)</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q18.png"
         },
         {
           "kind": "MCQ",
@@ -3087,7 +3201,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">By the Fundamental Theorem with the chain rule, $f'(x)=g(3-x)\\cdot(-1)-g(1-x)\\cdot(-1)$ where $g(t)=t^2+3t+1$. Since $g(3-x)=x^2-9x+19$ and $g(1-x)=x^2-5x+5$, $f'(x)=-(x^2-9x+19)+(x^2-5x+5)=4x-14$.</div><div class=\"ml-vi\">Theo định lý cơ bản kết hợp quy tắc dây chuyền: $f'(x)=g(3-x)\\cdot(-1)-g(1-x)\\cdot(-1)$ với $g(t)=t^2+3t+1$. Vì $g(3-x)=x^2-9x+19$ và $g(1-x)=x^2-5x+5$ nên $f'(x)=-(x^2-9x+19)+(x^2-5x+5)=4x-14$.</div>"
+          "explanation": "<div class=\"ml-en\">By the Fundamental Theorem with the chain rule, $f'(x)=g(3-x)\\cdot(-1)-g(1-x)\\cdot(-1)$ where $g(t)=t^2+3t+1$. Since $g(3-x)=x^2-9x+19$ and $g(1-x)=x^2-5x+5$, $f'(x)=-(x^2-9x+19)+(x^2-5x+5)=4x-14$.</div><div class=\"ml-vi\">Theo định lý cơ bản kết hợp quy tắc dây chuyền: $f'(x)=g(3-x)\\cdot(-1)-g(1-x)\\cdot(-1)$ với $g(t)=t^2+3t+1$. Vì $g(3-x)=x^2-9x+19$ và $g(1-x)=x^2-5x+5$ nên $f'(x)=-(x^2-9x+19)+(x^2-5x+5)=4x-14$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q19.png"
         },
         {
           "kind": "MCQ",
@@ -3116,7 +3231,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$f_{avg}=\\dfrac{1}{3}\\displaystyle\\int_1^4(7x+5)\\,dx=\\dfrac{1}{3}\\left[\\dfrac{7x^2}{2}+5x\\right]_1^4=\\dfrac{1}{3}(76-8.5)=22.5$. (Shortcut: for a linear function the average is the midpoint value $f(2.5)=22.5$.)</div><div class=\"ml-vi\">$f_{tb}=\\dfrac{1}{3}\\displaystyle\\int_1^4(7x+5)\\,dx=\\dfrac{1}{3}\\left[\\dfrac{7x^2}{2}+5x\\right]_1^4=\\dfrac{1}{3}(76-8.5)=22.5$. (Mẹo: với hàm bậc nhất, trung bình bằng giá trị tại trung điểm $f(2.5)=22.5$.)</div>"
+          "explanation": "<div class=\"ml-en\">$f_{avg}=\\dfrac{1}{3}\\displaystyle\\int_1^4(7x+5)\\,dx=\\dfrac{1}{3}\\left[\\dfrac{7x^2}{2}+5x\\right]_1^4=\\dfrac{1}{3}(76-8.5)=22.5$. (Shortcut: for a linear function the average is the midpoint value $f(2.5)=22.5$.)</div><div class=\"ml-vi\">$f_{tb}=\\dfrac{1}{3}\\displaystyle\\int_1^4(7x+5)\\,dx=\\dfrac{1}{3}\\left[\\dfrac{7x^2}{2}+5x\\right]_1^4=\\dfrac{1}{3}(76-8.5)=22.5$. (Mẹo: với hàm bậc nhất, trung bình bằng giá trị tại trung điểm $f(2.5)=22.5$.)</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q20.png"
         },
         {
           "kind": "MCQ",
@@ -3142,7 +3258,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Substitute $u=e^{7x}+1$, $du=7e^{7x}dx$: the integral is $\\dfrac{15}{7}\\displaystyle\\int\\dfrac{du}{u}=\\dfrac{15}{7}\\ln(e^{7x}+1)+C$ — (iv).</div><div class=\"ml-vi\">Đặt $u=e^{7x}+1$, $du=7e^{7x}dx$: tích phân bằng $\\dfrac{15}{7}\\displaystyle\\int\\dfrac{du}{u}=\\dfrac{15}{7}\\ln(e^{7x}+1)+C$ — (iv).</div>"
+          "explanation": "<div class=\"ml-en\">Substitute $u=e^{7x}+1$, $du=7e^{7x}dx$: the integral is $\\dfrac{15}{7}\\displaystyle\\int\\dfrac{du}{u}=\\dfrac{15}{7}\\ln(e^{7x}+1)+C$ — (iv).</div><div class=\"ml-vi\">Đặt $u=e^{7x}+1$, $du=7e^{7x}dx$: tích phân bằng $\\dfrac{15}{7}\\displaystyle\\int\\dfrac{du}{u}=\\dfrac{15}{7}\\ln(e^{7x}+1)+C$ — (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q21.png"
         },
         {
           "kind": "MCQ",
@@ -3165,7 +3282,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\displaystyle\\int\\ln x\\,dx=x\\ln x-x$ (integration by parts), so $\\displaystyle\\int(\\ln x+1)dx=x\\ln x-x+x+C=x\\ln x+C$ — (i). Check: $(x\\ln x)'=\\ln x+1$.</div><div class=\"ml-vi\">$\\displaystyle\\int\\ln x\\,dx=x\\ln x-x$ (tích phân từng phần), nên $\\displaystyle\\int(\\ln x+1)dx=x\\ln x-x+x+C=x\\ln x+C$ — (i). Kiểm tra: $(x\\ln x)'=\\ln x+1$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\displaystyle\\int\\ln x\\,dx=x\\ln x-x$ (integration by parts), so $\\displaystyle\\int(\\ln x+1)dx=x\\ln x-x+x+C=x\\ln x+C$ — (i). Check: $(x\\ln x)'=\\ln x+1$.</div><div class=\"ml-vi\">$\\displaystyle\\int\\ln x\\,dx=x\\ln x-x$ (tích phân từng phần), nên $\\displaystyle\\int(\\ln x+1)dx=x\\ln x-x+x+C=x\\ln x+C$ — (i). Kiểm tra: $(x\\ln x)'=\\ln x+1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q22.png"
         },
         {
           "kind": "MCQ",
@@ -3194,7 +3312,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\Delta x=\\dfrac{4-1}{6}=0.5$; left endpoints $1,1.5,2,2.5,3,3.5$ give $f$-values $2,6,4,8,2,5$ summing to $27$. Estimate $=0.5\\times27=13.5$.</div><div class=\"ml-vi\">$\\Delta x=\\dfrac{4-1}{6}=0.5$; các điểm mút trái $1,1.5,2,2.5,3,3.5$ cho giá trị $f$ là $2,6,4,8,2,5$, tổng $=27$. Xấp xỉ $=0.5\\times27=13.5$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\Delta x=\\dfrac{4-1}{6}=0.5$; left endpoints $1,1.5,2,2.5,3,3.5$ give $f$-values $2,6,4,8,2,5$ summing to $27$. Estimate $=0.5\\times27=13.5$.</div><div class=\"ml-vi\">$\\Delta x=\\dfrac{4-1}{6}=0.5$; các điểm mút trái $1,1.5,2,2.5,3,3.5$ cho giá trị $f$ là $2,6,4,8,2,5$, tổng $=27$. Xấp xỉ $=0.5\\times27=13.5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q23.png"
         },
         {
           "kind": "MCQ",
@@ -3217,7 +3336,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">(i) has an infinite discontinuity at $x=-1$ inside $[-3,3]$ and $\\displaystyle\\int\\dfrac{dx}{(x+1)^2}$ blows up there ($p=2\\geq1$), so it diverges. (ii) $\\displaystyle\\int_0^{b}\\cos x\\,dx=\\sin b$ oscillates and has no limit as $b\\to\\infty$, so it also diverges.</div><div class=\"ml-vi\">(i) có điểm gián đoạn vô cực tại $x=-1$ nằm trong $[-3,3]$ và $\\displaystyle\\int\\dfrac{dx}{(x+1)^2}$ phân kỳ tại đó ($p=2\\geq1$). (ii) $\\displaystyle\\int_0^{b}\\cos x\\,dx=\\sin b$ dao động, không có giới hạn khi $b\\to\\infty$ nên cũng phân kỳ.</div>"
+          "explanation": "<div class=\"ml-en\">(i) has an infinite discontinuity at $x=-1$ inside $[-3,3]$ and $\\displaystyle\\int\\dfrac{dx}{(x+1)^2}$ blows up there ($p=2\\geq1$), so it diverges. (ii) $\\displaystyle\\int_0^{b}\\cos x\\,dx=\\sin b$ oscillates and has no limit as $b\\to\\infty$, so it also diverges.</div><div class=\"ml-vi\">(i) có điểm gián đoạn vô cực tại $x=-1$ nằm trong $[-3,3]$ và $\\displaystyle\\int\\dfrac{dx}{(x+1)^2}$ phân kỳ tại đó ($p=2\\geq1$). (ii) $\\displaystyle\\int_0^{b}\\cos x\\,dx=\\sin b$ dao động, không có giới hạn khi $b\\to\\infty$ nên cũng phân kỳ.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q24.png"
         },
         {
           "kind": "MCQ",
@@ -3243,7 +3363,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Rank $\\lt3$ requires $\\det=0$: $\\det=1(3m-16)-2(2m-12)+3(8-9)=-m+5=0\\Rightarrow m=5$. With $m=5$ the first two rows are still independent, so the rank is exactly 2.</div><div class=\"ml-vi\">Hạng $\\lt3$ đòi hỏi $\\det=0$: $\\det=1(3m-16)-2(2m-12)+3(8-9)=-m+5=0\\Rightarrow m=5$. Với $m=5$ hai hàng đầu vẫn độc lập nên hạng đúng bằng 2.</div>"
+          "explanation": "<div class=\"ml-en\">Rank $\\lt3$ requires $\\det=0$: $\\det=1(3m-16)-2(2m-12)+3(8-9)=-m+5=0\\Rightarrow m=5$. With $m=5$ the first two rows are still independent, so the rank is exactly 2.</div><div class=\"ml-vi\">Hạng $\\lt3$ đòi hỏi $\\det=0$: $\\det=1(3m-16)-2(2m-12)+3(8-9)=-m+5=0\\Rightarrow m=5$. Với $m=5$ hai hàng đầu vẫn độc lập nên hạng đúng bằng 2.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q25.png"
         },
         {
           "kind": "MCQ",
@@ -3269,7 +3390,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">From $(0,5)$: $a=5$. From $(-1,-7)$: $-b+c=-12$. From $(2,11)$: $2b+4c=6\\Rightarrow b+2c=3$. Adding the last two: $3c=-9\\Rightarrow c=-3$.</div><div class=\"ml-vi\">Từ $(0,5)$: $a=5$. Từ $(-1,-7)$: $-b+c=-12$. Từ $(2,11)$: $2b+4c=6\\Rightarrow b+2c=3$. Cộng hai phương trình sau: $3c=-9\\Rightarrow c=-3$.</div>"
+          "explanation": "<div class=\"ml-en\">From $(0,5)$: $a=5$. From $(-1,-7)$: $-b+c=-12$. From $(2,11)$: $2b+4c=6\\Rightarrow b+2c=3$. Adding the last two: $3c=-9\\Rightarrow c=-3$.</div><div class=\"ml-vi\">Từ $(0,5)$: $a=5$. Từ $(-1,-7)$: $-b+c=-12$. Từ $(2,11)$: $2b+4c=6\\Rightarrow b+2c=3$. Cộng hai phương trình sau: $3c=-9\\Rightarrow c=-3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q26.png"
         },
         {
           "kind": "MCQ",
@@ -3292,7 +3414,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">There are 5 unknowns and 4 pivots (columns 1, 2, 4, 5); column 3 has no pivot, so it is a free variable. No row of the form $[0\\ 0\\ 0\\ 0\\ 0\\,|\\,\\text{nonzero}]$ appears, so the system is consistent → infinitely many solutions.</div><div class=\"ml-vi\">Có 5 ẩn và 4 phần tử trụ (cột 1, 2, 4, 5); cột 3 không có trụ nên là ẩn tự do. Không có hàng dạng $[0\\ 0\\ 0\\ 0\\ 0\\,|\\,\\text{khác }0]$ nên hệ tương thích → vô số nghiệm.</div>"
+          "explanation": "<div class=\"ml-en\">There are 5 unknowns and 4 pivots (columns 1, 2, 4, 5); column 3 has no pivot, so it is a free variable. No row of the form $[0\\ 0\\ 0\\ 0\\ 0\\,|\\,\\text{nonzero}]$ appears, so the system is consistent → infinitely many solutions.</div><div class=\"ml-vi\">Có 5 ẩn và 4 phần tử trụ (cột 1, 2, 4, 5); cột 3 không có trụ nên là ẩn tự do. Không có hàng dạng $[0\\ 0\\ 0\\ 0\\ 0\\,|\\,\\text{khác }0]$ nên hệ tương thích → vô số nghiệm.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q27.png"
         },
         {
           "kind": "MCQ",
@@ -3318,7 +3441,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">A homogeneous system is always consistent ($x=0$ works). The rank is at most 5, so with 6 unknowns there is at least $6-5=1$ free variable → infinitely many solutions, always.</div><div class=\"ml-vi\">Hệ thuần nhất luôn tương thích (nghiệm $x=0$). Hạng nhiều nhất bằng 5, mà có 6 ẩn nên còn ít nhất $6-5=1$ ẩn tự do → luôn có vô số nghiệm.</div>"
+          "explanation": "<div class=\"ml-en\">A homogeneous system is always consistent ($x=0$ works). The rank is at most 5, so with 6 unknowns there is at least $6-5=1$ free variable → infinitely many solutions, always.</div><div class=\"ml-vi\">Hệ thuần nhất luôn tương thích (nghiệm $x=0$). Hạng nhiều nhất bằng 5, mà có 6 ẩn nên còn ít nhất $6-5=1$ ẩn tự do → luôn có vô số nghiệm.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q28.png"
         },
         {
           "kind": "MCQ",
@@ -3341,7 +3465,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$-3A=\\begin{pmatrix}-3&0&-6\\\\-9&-6&3\\end{pmatrix}$ and $B^{T}=\\begin{pmatrix}1&2&3\\\\1&-1&0\\end{pmatrix}$; adding entrywise gives $\\begin{pmatrix}-2&2&-3\\\\-8&-7&3\\end{pmatrix}$ — (iii).</div><div class=\"ml-vi\">$-3A=\\begin{pmatrix}-3&0&-6\\\\-9&-6&3\\end{pmatrix}$ và $B^{T}=\\begin{pmatrix}1&2&3\\\\1&-1&0\\end{pmatrix}$; cộng từng phần tử được $\\begin{pmatrix}-2&2&-3\\\\-8&-7&3\\end{pmatrix}$ — (iii).</div>"
+          "explanation": "<div class=\"ml-en\">$-3A=\\begin{pmatrix}-3&0&-6\\\\-9&-6&3\\end{pmatrix}$ and $B^{T}=\\begin{pmatrix}1&2&3\\\\1&-1&0\\end{pmatrix}$; adding entrywise gives $\\begin{pmatrix}-2&2&-3\\\\-8&-7&3\\end{pmatrix}$ — (iii).</div><div class=\"ml-vi\">$-3A=\\begin{pmatrix}-3&0&-6\\\\-9&-6&3\\end{pmatrix}$ và $B^{T}=\\begin{pmatrix}1&2&3\\\\1&-1&0\\end{pmatrix}$; cộng từng phần tử được $\\begin{pmatrix}-2&2&-3\\\\-8&-7&3\\end{pmatrix}$ — (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q29.png"
         },
         {
           "kind": "MCQ",
@@ -3364,7 +3489,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">A rotation matrix is $\\begin{bmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{bmatrix}$, so $\\cos\\theta=-\\dfrac{1}{\\sqrt2}$ and $\\sin\\theta=\\dfrac{1}{\\sqrt2}$ — second quadrant, $\\theta=\\dfrac{3\\pi}{4}$.</div><div class=\"ml-vi\">Ma trận quay có dạng $\\begin{bmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{bmatrix}$, nên $\\cos\\theta=-\\dfrac{1}{\\sqrt2}$ và $\\sin\\theta=\\dfrac{1}{\\sqrt2}$ — góc phần tư thứ hai, $\\theta=\\dfrac{3\\pi}{4}$.</div>"
+          "explanation": "<div class=\"ml-en\">A rotation matrix is $\\begin{bmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{bmatrix}$, so $\\cos\\theta=-\\dfrac{1}{\\sqrt2}$ and $\\sin\\theta=\\dfrac{1}{\\sqrt2}$ — second quadrant, $\\theta=\\dfrac{3\\pi}{4}$.</div><div class=\"ml-vi\">Ma trận quay có dạng $\\begin{bmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{bmatrix}$, nên $\\cos\\theta=-\\dfrac{1}{\\sqrt2}$ và $\\sin\\theta=\\dfrac{1}{\\sqrt2}$ — góc phần tư thứ hai, $\\theta=\\dfrac{3\\pi}{4}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q30.png"
         },
         {
           "kind": "MCQ",
@@ -3387,7 +3513,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$A^2=\\begin{bmatrix}1&a\\\\0&0\\end{bmatrix}\\begin{bmatrix}1&a\\\\0&0\\end{bmatrix}=\\begin{bmatrix}1&a\\\\0&0\\end{bmatrix}=A$: $A$ is idempotent, so $A^{100}=A$ — (iii).</div><div class=\"ml-vi\">$A^2=\\begin{bmatrix}1&a\\\\0&0\\end{bmatrix}\\begin{bmatrix}1&a\\\\0&0\\end{bmatrix}=\\begin{bmatrix}1&a\\\\0&0\\end{bmatrix}=A$: $A$ luỹ đẳng, nên $A^{100}=A$ — (iii).</div>"
+          "explanation": "<div class=\"ml-en\">$A^2=\\begin{bmatrix}1&a\\\\0&0\\end{bmatrix}\\begin{bmatrix}1&a\\\\0&0\\end{bmatrix}=\\begin{bmatrix}1&a\\\\0&0\\end{bmatrix}=A$: $A$ is idempotent, so $A^{100}=A$ — (iii).</div><div class=\"ml-vi\">$A^2=\\begin{bmatrix}1&a\\\\0&0\\end{bmatrix}\\begin{bmatrix}1&a\\\\0&0\\end{bmatrix}=\\begin{bmatrix}1&a\\\\0&0\\end{bmatrix}=A$: $A$ luỹ đẳng, nên $A^{100}=A$ — (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q31.png"
         },
         {
           "kind": "MCQ",
@@ -3410,7 +3537,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$A\\cdot A^4=A^5=I$, so $A^{-1}=A^4$: (i) is true. (ii) is false because $A^5=I$, and $A^{-1}=I$ would force $A=I$.</div><div class=\"ml-vi\">$A\\cdot A^4=A^5=I$ nên $A^{-1}=A^4$: (i) đúng. (ii) sai vì $A^5=I$, mà $A^{-1}=I$ sẽ kéo theo $A=I$.</div>"
+          "explanation": "<div class=\"ml-en\">$A\\cdot A^4=A^5=I$, so $A^{-1}=A^4$: (i) is true. (ii) is false because $A^5=I$, and $A^{-1}=I$ would force $A=I$.</div><div class=\"ml-vi\">$A\\cdot A^4=A^5=I$ nên $A^{-1}=A^4$: (i) đúng. (ii) sai vì $A^5=I$, mà $A^{-1}=I$ sẽ kéo theo $A=I$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q32.png"
         },
         {
           "kind": "MCQ",
@@ -3433,7 +3561,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Write $(5,-1,2)=a(1,1,1)+b(-1,1,0)$: the third coordinate gives $a=2$, then $a+b=-1\\Rightarrow b=-3$ (check: $a-b=5$ ✓). By linearity $T=2\\begin{bmatrix}5\\\\1\\end{bmatrix}-3\\begin{bmatrix}2\\\\0\\end{bmatrix}=\\begin{bmatrix}4\\\\2\\end{bmatrix}$ — (i).</div><div class=\"ml-vi\">Viết $(5,-1,2)=a(1,1,1)+b(-1,1,0)$: toạ độ thứ ba cho $a=2$, rồi $a+b=-1\\Rightarrow b=-3$ (kiểm tra: $a-b=5$ ✓). Theo tính tuyến tính, $T=2\\begin{bmatrix}5\\\\1\\end{bmatrix}-3\\begin{bmatrix}2\\\\0\\end{bmatrix}=\\begin{bmatrix}4\\\\2\\end{bmatrix}$ — (i).</div>"
+          "explanation": "<div class=\"ml-en\">Write $(5,-1,2)=a(1,1,1)+b(-1,1,0)$: the third coordinate gives $a=2$, then $a+b=-1\\Rightarrow b=-3$ (check: $a-b=5$ ✓). By linearity $T=2\\begin{bmatrix}5\\\\1\\end{bmatrix}-3\\begin{bmatrix}2\\\\0\\end{bmatrix}=\\begin{bmatrix}4\\\\2\\end{bmatrix}$ — (i).</div><div class=\"ml-vi\">Viết $(5,-1,2)=a(1,1,1)+b(-1,1,0)$: toạ độ thứ ba cho $a=2$, rồi $a+b=-1\\Rightarrow b=-3$ (kiểm tra: $a-b=5$ ✓). Theo tính tuyến tính, $T=2\\begin{bmatrix}5\\\\1\\end{bmatrix}-3\\begin{bmatrix}2\\\\0\\end{bmatrix}=\\begin{bmatrix}4\\\\2\\end{bmatrix}$ — (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q33.png"
         },
         {
           "kind": "MCQ",
@@ -3459,7 +3588,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$T(x,y)=(-x,0)$. Reflections are $\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$ and $\\begin{bmatrix}-1&0\\\\0&1\\end{bmatrix}$; the projection onto the $x$-axis is $\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix}$. Our map is a projection onto the $x$-axis <i>followed by</i> a sign flip, so none of (i)–(iv) is correct.</div><div class=\"ml-vi\">$T(x,y)=(-x,0)$. Các phép đối xứng là $\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$ và $\\begin{bmatrix}-1&0\\\\0&1\\end{bmatrix}$; phép chiếu lên trục $Ox$ là $\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix}$. Ánh xạ này là phép chiếu lên trục $Ox$ <i>rồi</i> đổi dấu, nên không phương án (i)–(iv) nào đúng.</div>"
+          "explanation": "<div class=\"ml-en\">$T(x,y)=(-x,0)$. Reflections are $\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$ and $\\begin{bmatrix}-1&0\\\\0&1\\end{bmatrix}$; the projection onto the $x$-axis is $\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix}$. Our map is a projection onto the $x$-axis <i>followed by</i> a sign flip, so none of (i)–(iv) is correct.</div><div class=\"ml-vi\">$T(x,y)=(-x,0)$. Các phép đối xứng là $\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$ và $\\begin{bmatrix}-1&0\\\\0&1\\end{bmatrix}$; phép chiếu lên trục $Ox$ là $\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix}$. Ánh xạ này là phép chiếu lên trục $Ox$ <i>rồi</i> đổi dấu, nên không phương án (i)–(iv) nào đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q34.png"
         },
         {
           "kind": "MCQ",
@@ -3482,7 +3612,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">(i) is false in general (e.g. $A=B=I_2$: $\\det(2I)=4\\neq1+1$). (ii) is true: $\\det(kA)=k^{n}\\det A$ with $n=2$, $k=5$ gives $25\\det A$.</div><div class=\"ml-vi\">(i) sai trong trường hợp tổng quát (ví dụ $A=B=I_2$: $\\det(2I)=4\\neq1+1$). (ii) đúng: $\\det(kA)=k^{n}\\det A$ với $n=2$, $k=5$ cho $25\\det A$.</div>"
+          "explanation": "<div class=\"ml-en\">(i) is false in general (e.g. $A=B=I_2$: $\\det(2I)=4\\neq1+1$). (ii) is true: $\\det(kA)=k^{n}\\det A$ with $n=2$, $k=5$ gives $25\\det A$.</div><div class=\"ml-vi\">(i) sai trong trường hợp tổng quát (ví dụ $A=B=I_2$: $\\det(2I)=4\\neq1+1$). (ii) đúng: $\\det(kA)=k^{n}\\det A$ với $n=2$, $k=5$ cho $25\\det A$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q35.png"
         },
         {
           "kind": "MCQ",
@@ -3508,7 +3639,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">No inverse $\\iff\\det A=0$: $\\det A=1(5-3)-2(-15-5)+k(9+5)=2+40+14k=42+14k=0\\Rightarrow k=-3$.</div><div class=\"ml-vi\">Không khả nghịch $\\iff\\det A=0$: $\\det A=1(5-3)-2(-15-5)+k(9+5)=2+40+14k=42+14k=0\\Rightarrow k=-3$.</div>"
+          "explanation": "<div class=\"ml-en\">No inverse $\\iff\\det A=0$: $\\det A=1(5-3)-2(-15-5)+k(9+5)=2+40+14k=42+14k=0\\Rightarrow k=-3$.</div><div class=\"ml-vi\">Không khả nghịch $\\iff\\det A=0$: $\\det A=1(5-3)-2(-15-5)+k(9+5)=2+40+14k=42+14k=0\\Rightarrow k=-3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q36.png"
         },
         {
           "kind": "MCQ",
@@ -3534,7 +3666,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\det(A^{-1})=\\dfrac13$, $\\det(B^{T})=\\det B=2$, $\\det(C^{-1})=-1$. Product: $\\dfrac13\\cdot2\\cdot(-1)=-\\dfrac23$.</div><div class=\"ml-vi\">$\\det(A^{-1})=\\dfrac13$, $\\det(B^{T})=\\det B=2$, $\\det(C^{-1})=-1$. Nhân lại: $\\dfrac13\\cdot2\\cdot(-1)=-\\dfrac23$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\det(A^{-1})=\\dfrac13$, $\\det(B^{T})=\\det B=2$, $\\det(C^{-1})=-1$. Product: $\\dfrac13\\cdot2\\cdot(-1)=-\\dfrac23$.</div><div class=\"ml-vi\">$\\det(A^{-1})=\\dfrac13$, $\\det(B^{T})=\\det B=2$, $\\det(C^{-1})=-1$. Nhân lại: $\\dfrac13\\cdot2\\cdot(-1)=-\\dfrac23$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q37.png"
         },
         {
           "kind": "MCQ",
@@ -3557,7 +3690,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The determinant equals the product of the eigenvalues (with multiplicity): $2\\cdot(-3)\\cdot4=-24$.</div><div class=\"ml-vi\">Định thức bằng tích các trị riêng (kể cả bội): $2\\cdot(-3)\\cdot4=-24$.</div>"
+          "explanation": "<div class=\"ml-en\">The determinant equals the product of the eigenvalues (with multiplicity): $2\\cdot(-3)\\cdot4=-24$.</div><div class=\"ml-vi\">Định thức bằng tích các trị riêng (kể cả bội): $2\\cdot(-3)\\cdot4=-24$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q38.png"
         },
         {
           "kind": "MCQ",
@@ -3580,7 +3714,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$(A-2I)x=0$ with $A-2I=\\begin{bmatrix}0&3&4\\\\0&3&1\\\\0&6&5\\end{bmatrix}$: rows 1 and 2 give $3y+4z=0$ and $3y+z=0\\Rightarrow z=0,\\ y=0$, while $x$ is free. So $[1,0,0]$ works (check directly: $A[1,0,0]^{T}=[2,0,0]^{T}=2[1,0,0]^{T}$).</div><div class=\"ml-vi\">Giải $(A-2I)x=0$ với $A-2I=\\begin{bmatrix}0&3&4\\\\0&3&1\\\\0&6&5\\end{bmatrix}$: hai hàng đầu cho $3y+4z=0$ và $3y+z=0\\Rightarrow z=0,\\ y=0$, còn $x$ tự do. Vậy $[1,0,0]$ thoả (kiểm tra trực tiếp: $A[1,0,0]^{T}=[2,0,0]^{T}=2[1,0,0]^{T}$).</div>"
+          "explanation": "<div class=\"ml-en\">$(A-2I)x=0$ with $A-2I=\\begin{bmatrix}0&3&4\\\\0&3&1\\\\0&6&5\\end{bmatrix}$: rows 1 and 2 give $3y+4z=0$ and $3y+z=0\\Rightarrow z=0,\\ y=0$, while $x$ is free. So $[1,0,0]$ works (check directly: $A[1,0,0]^{T}=[2,0,0]^{T}=2[1,0,0]^{T}$).</div><div class=\"ml-vi\">Giải $(A-2I)x=0$ với $A-2I=\\begin{bmatrix}0&3&4\\\\0&3&1\\\\0&6&5\\end{bmatrix}$: hai hàng đầu cho $3y+4z=0$ và $3y+z=0\\Rightarrow z=0,\\ y=0$, còn $x$ tự do. Vậy $[1,0,0]$ thoả (kiểm tra trực tiếp: $A[1,0,0]^{T}=[2,0,0]^{T}=2[1,0,0]^{T}$).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q39.png"
         },
         {
           "kind": "MCQ",
@@ -3606,7 +3741,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">A norm is zero only for the zero vector, so $\\|u-v\\|=0\\Rightarrow u-v=0\\Rightarrow u=v$. The others fail: equal lengths need not mean equal vectors; the triangle inequality is $\\leq$ (equality only for parallel same-direction vectors); and $\\|-3u\\|=3\\|u\\|\\geq0$.</div><div class=\"ml-vi\">Chuẩn chỉ bằng 0 với vectơ không, nên $\\|u-v\\|=0\\Rightarrow u-v=0\\Rightarrow u=v$. Các phương án còn lại sai: độ dài bằng nhau không suy ra vectơ bằng nhau; bất đẳng thức tam giác là $\\leq$ (dấu bằng chỉ khi cùng phương cùng hướng); và $\\|-3u\\|=3\\|u\\|\\geq0$.</div>"
+          "explanation": "<div class=\"ml-en\">A norm is zero only for the zero vector, so $\\|u-v\\|=0\\Rightarrow u-v=0\\Rightarrow u=v$. The others fail: equal lengths need not mean equal vectors; the triangle inequality is $\\leq$ (equality only for parallel same-direction vectors); and $\\|-3u\\|=3\\|u\\|\\geq0$.</div><div class=\"ml-vi\">Chuẩn chỉ bằng 0 với vectơ không, nên $\\|u-v\\|=0\\Rightarrow u-v=0\\Rightarrow u=v$. Các phương án còn lại sai: độ dài bằng nhau không suy ra vectơ bằng nhau; bất đẳng thức tam giác là $\\leq$ (dấu bằng chỉ khi cùng phương cùng hướng); và $\\|-3u\\|=3\\|u\\|\\geq0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q40.png"
         },
         {
           "kind": "MCQ",
@@ -3632,7 +3768,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">With $w=(3,1,5)$: $w\\cdot v=10$, $\\|v\\|^2=6$, $\\|w\\|^2=35$. Then $d^2=\\|w\\|^2-\\dfrac{(w\\cdot v)^2}{\\|v\\|^2}=35-\\dfrac{100}{6}=\\dfrac{55}{3}$, so $d=\\sqrt{55/3}$ — (i).</div><div class=\"ml-vi\">Với $w=(3,1,5)$: $w\\cdot v=10$, $\\|v\\|^2=6$, $\\|w\\|^2=35$. Khi đó $d^2=\\|w\\|^2-\\dfrac{(w\\cdot v)^2}{\\|v\\|^2}=35-\\dfrac{100}{6}=\\dfrac{55}{3}$, nên $d=\\sqrt{55/3}$ — (i).</div>"
+          "explanation": "<div class=\"ml-en\">With $w=(3,1,5)$: $w\\cdot v=10$, $\\|v\\|^2=6$, $\\|w\\|^2=35$. Then $d^2=\\|w\\|^2-\\dfrac{(w\\cdot v)^2}{\\|v\\|^2}=35-\\dfrac{100}{6}=\\dfrac{55}{3}$, so $d=\\sqrt{55/3}$ — (i).</div><div class=\"ml-vi\">Với $w=(3,1,5)$: $w\\cdot v=10$, $\\|v\\|^2=6$, $\\|w\\|^2=35$. Khi đó $d^2=\\|w\\|^2-\\dfrac{(w\\cdot v)^2}{\\|v\\|^2}=35-\\dfrac{100}{6}=\\dfrac{55}{3}$, nên $d=\\sqrt{55/3}$ — (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q41.png"
         },
         {
           "kind": "MCQ",
@@ -3658,7 +3795,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Direction $d=B-A=(3,1,1)$, $P=A+td$. Closest to $O$ means $\\overrightarrow{OP}\\cdot d=0$: $A\\cdot d+t\\|d\\|^2=0$ with $A\\cdot d=-2$, $\\|d\\|^2=11\\Rightarrow t=\\dfrac{2}{11}$. Then $a=-2+3\\cdot\\dfrac{2}{11}=-\\dfrac{16}{11}$.</div><div class=\"ml-vi\">Vectơ chỉ phương $d=B-A=(3,1,1)$, $P=A+td$. Gần $O$ nhất nghĩa là $\\overrightarrow{OP}\\cdot d=0$: $A\\cdot d+t\\|d\\|^2=0$ với $A\\cdot d=-2$, $\\|d\\|^2=11\\Rightarrow t=\\dfrac{2}{11}$. Vậy $a=-2+3\\cdot\\dfrac{2}{11}=-\\dfrac{16}{11}$.</div>"
+          "explanation": "<div class=\"ml-en\">Direction $d=B-A=(3,1,1)$, $P=A+td$. Closest to $O$ means $\\overrightarrow{OP}\\cdot d=0$: $A\\cdot d+t\\|d\\|^2=0$ with $A\\cdot d=-2$, $\\|d\\|^2=11\\Rightarrow t=\\dfrac{2}{11}$. Then $a=-2+3\\cdot\\dfrac{2}{11}=-\\dfrac{16}{11}$.</div><div class=\"ml-vi\">Vectơ chỉ phương $d=B-A=(3,1,1)$, $P=A+td$. Gần $O$ nhất nghĩa là $\\overrightarrow{OP}\\cdot d=0$: $A\\cdot d+t\\|d\\|^2=0$ với $A\\cdot d=-2$, $\\|d\\|^2=11\\Rightarrow t=\\dfrac{2}{11}$. Vậy $a=-2+3\\cdot\\dfrac{2}{11}=-\\dfrac{16}{11}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q42.png"
         },
         {
           "kind": "MCQ",
@@ -3681,7 +3819,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\|u\\times v\\|=\\|u\\|\\|v\\|\\sin\\theta$; for nonzero vectors this vanishes exactly when $\\sin\\theta=0$, i.e. the vectors are parallel. ((i) is impossible since a norm is never negative.)</div><div class=\"ml-vi\">$\\|u\\times v\\|=\\|u\\|\\|v\\|\\sin\\theta$; với các vectơ khác không, biểu thức này bằng 0 đúng khi $\\sin\\theta=0$, tức hai vectơ song song. ((i) vô lý vì chuẩn không bao giờ âm.)</div>"
+          "explanation": "<div class=\"ml-en\">$\\|u\\times v\\|=\\|u\\|\\|v\\|\\sin\\theta$; for nonzero vectors this vanishes exactly when $\\sin\\theta=0$, i.e. the vectors are parallel. ((i) is impossible since a norm is never negative.)</div><div class=\"ml-vi\">$\\|u\\times v\\|=\\|u\\|\\|v\\|\\sin\\theta$; với các vectơ khác không, biểu thức này bằng 0 đúng khi $\\sin\\theta=0$, tức hai vectơ song song. ((i) vô lý vì chuẩn không bao giờ âm.)</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q43.png"
         },
         {
           "kind": "MCQ",
@@ -3707,7 +3846,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$(1,3)$ already lies on $y=3x$, so the projection leaves it unchanged. Reflection in $y=-x$ sends $(x,y)\\mapsto(-y,-x)$, giving $(-3,-1)$ — (iii).</div><div class=\"ml-vi\">Điểm $(1,3)$ đã nằm trên $y=3x$ nên phép chiếu giữ nguyên. Phép đối xứng qua $y=-x$ biến $(x,y)\\mapsto(-y,-x)$, cho $(-3,-1)$ — (iii).</div>"
+          "explanation": "<div class=\"ml-en\">$(1,3)$ already lies on $y=3x$, so the projection leaves it unchanged. Reflection in $y=-x$ sends $(x,y)\\mapsto(-y,-x)$, giving $(-3,-1)$ — (iii).</div><div class=\"ml-vi\">Điểm $(1,3)$ đã nằm trên $y=3x$ nên phép chiếu giữ nguyên. Phép đối xứng qua $y=-x$ biến $(x,y)\\mapsto(-y,-x)$, cho $(-3,-1)$ — (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q44.png"
         },
         {
           "kind": "MCQ",
@@ -3733,7 +3873,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Componentwise: $a+2c=0$, $a+b=0$, $a+2b+3c=1$. From the first two, $a=-2c$ and $b=-a=2c$; substituting into the third: $-2c+4c+3c=5c=1\\Rightarrow c=\\dfrac15$, hence $a=-\\dfrac25$.</div><div class=\"ml-vi\">Theo từng thành phần: $a+2c=0$, $a+b=0$, $a+2b+3c=1$. Từ hai phương trình đầu, $a=-2c$ và $b=-a=2c$; thế vào phương trình thứ ba: $-2c+4c+3c=5c=1\\Rightarrow c=\\dfrac15$, suy ra $a=-\\dfrac25$.</div>"
+          "explanation": "<div class=\"ml-en\">Componentwise: $a+2c=0$, $a+b=0$, $a+2b+3c=1$. From the first two, $a=-2c$ and $b=-a=2c$; substituting into the third: $-2c+4c+3c=5c=1\\Rightarrow c=\\dfrac15$, hence $a=-\\dfrac25$.</div><div class=\"ml-vi\">Theo từng thành phần: $a+2c=0$, $a+b=0$, $a+2b+3c=1$. Từ hai phương trình đầu, $a=-2c$ và $b=-a=2c$; thế vào phương trình thứ ba: $-2c+4c+3c=5c=1\\Rightarrow c=\\dfrac15$, suy ra $a=-\\dfrac25$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q45.png"
         },
         {
           "kind": "MCQ",
@@ -3756,7 +3897,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">(i) is the span of $(4,3,2)$ and $(-1,-7,1)$ — a span is always a subspace. (ii) fails: the equation $a-b+c=1$ is not homogeneous, so the zero vector is not in the set.</div><div class=\"ml-vi\">(i) là span của $(4,3,2)$ và $(-1,-7,1)$ — span luôn là không gian con. (ii) không phải: phương trình $a-b+c=1$ không thuần nhất nên vectơ không không thuộc tập.</div>"
+          "explanation": "<div class=\"ml-en\">(i) is the span of $(4,3,2)$ and $(-1,-7,1)$ — a span is always a subspace. (ii) fails: the equation $a-b+c=1$ is not homogeneous, so the zero vector is not in the set.</div><div class=\"ml-vi\">(i) là span của $(4,3,2)$ và $(-1,-7,1)$ — span luôn là không gian con. (ii) không phải: phương trình $a-b+c=1$ không thuần nhất nên vectơ không không thuộc tập.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q46.png"
         },
         {
           "kind": "MCQ",
@@ -3779,7 +3921,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">(i) The determinant of the three columns is $0$ (indeed the third vector equals the sum of the first two: $(1,2,3)+(1,-1,0)\\cdot3=(4,-1,3)$), so they are dependent — not a basis. (ii) Three vectors in $\\mathbb{R}^2$ are always dependent — not a basis either.</div><div class=\"ml-vi\">(i) Định thức của ba cột bằng $0$ (thực tế vectơ thứ ba là tổ hợp của hai vectơ đầu: $(1,2,3)+3(1,-1,0)=(4,-1,3)$) nên chúng phụ thuộc — không phải cơ sở. (ii) Ba vectơ trong $\\mathbb{R}^2$ luôn phụ thuộc tuyến tính — cũng không phải cơ sở.</div>"
+          "explanation": "<div class=\"ml-en\">(i) The determinant of the three columns is $0$ (indeed the third vector equals the sum of the first two: $(1,2,3)+(1,-1,0)\\cdot3=(4,-1,3)$), so they are dependent — not a basis. (ii) Three vectors in $\\mathbb{R}^2$ are always dependent — not a basis either.</div><div class=\"ml-vi\">(i) Định thức của ba cột bằng $0$ (thực tế vectơ thứ ba là tổ hợp của hai vectơ đầu: $(1,2,3)+3(1,-1,0)=(4,-1,3)$) nên chúng phụ thuộc — không phải cơ sở. (ii) Ba vectơ trong $\\mathbb{R}^2$ luôn phụ thuộc tuyến tính — cũng không phải cơ sở.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q47.png"
         },
         {
           "kind": "MCQ",
@@ -3802,7 +3945,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The two constraints are independent, so $\\dim U=4-2=2$. Explicitly, taking $c$ and $d$ free: $a=\\dfrac{5d}{3}$, $b=-c-d$, a 2-parameter family.</div><div class=\"ml-vi\">Hai ràng buộc độc lập nên $\\dim U=4-2=2$. Cụ thể, chọn $c$ và $d$ tự do: $a=\\dfrac{5d}{3}$, $b=-c-d$, tức họ nghiệm 2 tham số.</div>"
+          "explanation": "<div class=\"ml-en\">The two constraints are independent, so $\\dim U=4-2=2$. Explicitly, taking $c$ and $d$ free: $a=\\dfrac{5d}{3}$, $b=-c-d$, a 2-parameter family.</div><div class=\"ml-vi\">Hai ràng buộc độc lập nên $\\dim U=4-2=2$. Cụ thể, chọn $c$ và $d$ tự do: $a=\\dfrac{5d}{3}$, $b=-c-d$, tức họ nghiệm 2 tham số.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q48.png"
         },
         {
           "kind": "MCQ",
@@ -3828,7 +3972,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The first two vectors are already orthogonal ($2+2-1-3=0$). Requiring the third to be orthogonal to both, with $c=s$: $a+2b+s+3=0$ and $2a+b-s-9=0$. Solving gives $b=-s-5$ and $a=s+7$.</div><div class=\"ml-vi\">Hai vectơ đầu đã trực giao ($2+2-1-3=0$). Yêu cầu vectơ thứ ba trực giao với cả hai, đặt $c=s$: $a+2b+s+3=0$ và $2a+b-s-9=0$. Giải ra $b=-s-5$ và $a=s+7$.</div>"
+          "explanation": "<div class=\"ml-en\">The first two vectors are already orthogonal ($2+2-1-3=0$). Requiring the third to be orthogonal to both, with $c=s$: $a+2b+s+3=0$ and $2a+b-s-9=0$. Solving gives $b=-s-5$ and $a=s+7$.</div><div class=\"ml-vi\">Hai vectơ đầu đã trực giao ($2+2-1-3=0$). Yêu cầu vectơ thứ ba trực giao với cả hai, đặt $c=s$: $a+2b+s+3=0$ và $2a+b-s-9=0$. Giải ra $b=-s-5$ và $a=s+7$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q49.png"
         },
         {
           "kind": "MCQ",
@@ -3854,7 +3999,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">Row-reduce: $R_1+R_2=[0,6,0,2,0]$; combining with $R_3$ gives $[0,0,0,0,-1]$; $R_4$ still contributes a pivot in column 3. Four independent rows remain, so the rank — and therefore $\\dim\\operatorname{Col}$ — is 4 (the maximum possible for a $4\\times5$ matrix).</div><div class=\"ml-vi\">Khử hàng: $R_1+R_2=[0,6,0,2,0]$; kết hợp với $R_3$ được $[0,0,0,0,-1]$; $R_4$ vẫn cho một trụ ở cột 3. Còn lại 4 hàng độc lập nên hạng — và do đó $\\dim\\operatorname{Col}$ — bằng 4 (tối đa với ma trận $4\\times5$).</div>"
+          "explanation": "<div class=\"ml-en\">Row-reduce: $R_1+R_2=[0,6,0,2,0]$; combining with $R_3$ gives $[0,0,0,0,-1]$; $R_4$ still contributes a pivot in column 3. Four independent rows remain, so the rank — and therefore $\\dim\\operatorname{Col}$ — is 4 (the maximum possible for a $4\\times5$ matrix).</div><div class=\"ml-vi\">Khử hàng: $R_1+R_2=[0,6,0,2,0]$; kết hợp với $R_3$ được $[0,0,0,0,-1]$; $R_4$ vẫn cho một trụ ở cột 3. Còn lại 4 hàng độc lập nên hạng — và do đó $\\dim\\operatorname{Col}$ — bằng 4 (tối đa với ma trận $4\\times5$).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D3/q50.png"
         }
       ]
     },
@@ -3894,7 +4040,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$x\\mapsto x^3$ is onto $\\mathbb{R}$ (it is continuous, increasing, and unbounded in both directions); shifting by $+5$ keeps the range $(-\\infty,\\infty)$.</div><div class=\"ml-vi\">$x\\mapsto x^3$ nhận mọi giá trị thực (liên tục, đồng biến, không bị chặn hai phía); cộng thêm $5$ nên tập giá trị vẫn là $(-\\infty,\\infty)$.</div>"
+          "explanation": "<div class=\"ml-en\">$x\\mapsto x^3$ is onto $\\mathbb{R}$ (it is continuous, increasing, and unbounded in both directions); shifting by $+5$ keeps the range $(-\\infty,\\infty)$.</div><div class=\"ml-vi\">$x\\mapsto x^3$ nhận mọi giá trị thực (liên tục, đồng biến, không bị chặn hai phía); cộng thêm $5$ nên tập giá trị vẫn là $(-\\infty,\\infty)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q1.png"
         },
         {
           "kind": "MCQ",
@@ -3920,7 +4067,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Initial value $20000$ at $t=0$ and a constant loss of $1500$ per year gives slope $-1500$: $V(t)=20000-1500t$.</div><div class=\"ml-vi\">Giá trị ban đầu $20000$ tại $t=0$ và mỗi năm mất $1500$ nên hệ số góc là $-1500$: $V(t)=20000-1500t$.</div>"
+          "explanation": "<div class=\"ml-en\">Initial value $20000$ at $t=0$ and a constant loss of $1500$ per year gives slope $-1500$: $V(t)=20000-1500t$.</div><div class=\"ml-vi\">Giá trị ban đầu $20000$ tại $t=0$ và mỗi năm mất $1500$ nên hệ số góc là $-1500$: $V(t)=20000-1500t$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q2.png"
         },
         {
           "kind": "MCQ",
@@ -3949,7 +4097,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$x^2-4x+3=(x-1)(x-3)$. For $x\\to1^{-}$ both factors are negative, so the product is positive and $|x^2-4x+3|=(x-1)(x-3)$. The quotient is $x-3\\to-2$.</div><div class=\"ml-vi\">$x^2-4x+3=(x-1)(x-3)$. Khi $x\\to1^{-}$ cả hai thừa số đều âm nên tích dương và $|x^2-4x+3|=(x-1)(x-3)$. Thương bằng $x-3\\to-2$.</div>"
+          "explanation": "<div class=\"ml-en\">$x^2-4x+3=(x-1)(x-3)$. For $x\\to1^{-}$ both factors are negative, so the product is positive and $|x^2-4x+3|=(x-1)(x-3)$. The quotient is $x-3\\to-2$.</div><div class=\"ml-vi\">$x^2-4x+3=(x-1)(x-3)$. Khi $x\\to1^{-}$ cả hai thừa số đều âm nên tích dương và $|x^2-4x+3|=(x-1)(x-3)$. Thương bằng $x-3\\to-2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q3.png"
         },
         {
           "kind": "MCQ",
@@ -3978,7 +4127,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">Rationalize: $\\dfrac{\\sqrt{x+7}-3}{x-2}=\\dfrac{x-2}{(x-2)(\\sqrt{x+7}+3)}=\\dfrac{1}{\\sqrt{x+7}+3}\\to\\dfrac{1}{6}$ as $x\\to2$, so $a=\\dfrac16$.</div><div class=\"ml-vi\">Nhân liên hợp: $\\dfrac{\\sqrt{x+7}-3}{x-2}=\\dfrac{x-2}{(x-2)(\\sqrt{x+7}+3)}=\\dfrac{1}{\\sqrt{x+7}+3}\\to\\dfrac{1}{6}$ khi $x\\to2$, nên $a=\\dfrac16$.</div>"
+          "explanation": "<div class=\"ml-en\">Rationalize: $\\dfrac{\\sqrt{x+7}-3}{x-2}=\\dfrac{x-2}{(x-2)(\\sqrt{x+7}+3)}=\\dfrac{1}{\\sqrt{x+7}+3}\\to\\dfrac{1}{6}$ as $x\\to2$, so $a=\\dfrac16$.</div><div class=\"ml-vi\">Nhân liên hợp: $\\dfrac{\\sqrt{x+7}-3}{x-2}=\\dfrac{x-2}{(x-2)(\\sqrt{x+7}+3)}=\\dfrac{1}{\\sqrt{x+7}+3}\\to\\dfrac{1}{6}$ khi $x\\to2$, nên $a=\\dfrac16$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q4.png"
         },
         {
           "kind": "MCQ",
@@ -4004,7 +4154,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\dfrac{-(x+h)^3+x^3}{h}=\\dfrac{-(3x^2h+3xh^2+h^3)}{h}=-3x^2-3xh-h^2$ — that is (ii).</div><div class=\"ml-vi\">$\\dfrac{-(x+h)^3+x^3}{h}=\\dfrac{-(3x^2h+3xh^2+h^3)}{h}=-3x^2-3xh-h^2$ — chính là (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$\\dfrac{-(x+h)^3+x^3}{h}=\\dfrac{-(3x^2h+3xh^2+h^3)}{h}=-3x^2-3xh-h^2$ — that is (ii).</div><div class=\"ml-vi\">$\\dfrac{-(x+h)^3+x^3}{h}=\\dfrac{-(3x^2h+3xh^2+h^3)}{h}=-3x^2-3xh-h^2$ — chính là (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q5.png"
         },
         {
           "kind": "MCQ",
@@ -4030,7 +4181,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$y=x^{1/3}$: $y'=\\tfrac13x^{-2/3}$, $y''=-\\tfrac29x^{-5/3}$, $y'''=\\tfrac{10}{27}x^{-8/3}$, $y^{(4)}=-\\tfrac{80}{81}x^{-11/3}=-\\dfrac{80}{81x^{11/3}}$ — (iv).</div><div class=\"ml-vi\">$y=x^{1/3}$: $y'=\\tfrac13x^{-2/3}$, $y''=-\\tfrac29x^{-5/3}$, $y'''=\\tfrac{10}{27}x^{-8/3}$, $y^{(4)}=-\\tfrac{80}{81}x^{-11/3}=-\\dfrac{80}{81x^{11/3}}$ — (iv).</div>"
+          "explanation": "<div class=\"ml-en\">$y=x^{1/3}$: $y'=\\tfrac13x^{-2/3}$, $y''=-\\tfrac29x^{-5/3}$, $y'''=\\tfrac{10}{27}x^{-8/3}$, $y^{(4)}=-\\tfrac{80}{81}x^{-11/3}=-\\dfrac{80}{81x^{11/3}}$ — (iv).</div><div class=\"ml-vi\">$y=x^{1/3}$: $y'=\\tfrac13x^{-2/3}$, $y''=-\\tfrac29x^{-5/3}$, $y'''=\\tfrac{10}{27}x^{-8/3}$, $y^{(4)}=-\\tfrac{80}{81}x^{-11/3}=-\\dfrac{80}{81x^{11/3}}$ — (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q6.png"
         },
         {
           "kind": "MCQ",
@@ -4056,7 +4208,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$v(t)=s'(t)=2t-8$, so $v(4)=8-8=0$ (the particle turns around at $t=4$).</div><div class=\"ml-vi\">$v(t)=s'(t)=2t-8$, nên $v(4)=8-8=0$ (chất điểm đổi chiều tại $t=4$).</div>"
+          "explanation": "<div class=\"ml-en\">$v(t)=s'(t)=2t-8$, so $v(4)=8-8=0$ (the particle turns around at $t=4$).</div><div class=\"ml-vi\">$v(t)=s'(t)=2t-8$, nên $v(4)=8-8=0$ (chất điểm đổi chiều tại $t=4$).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q7.png"
         },
         {
           "kind": "MCQ",
@@ -4082,7 +4235,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Chain rule: $(f\\circ g)'(x)=3g(x)^2g'(x)$. Here $g(3)=7$ and $g'(x)=\\dfrac{-6}{(x-2)^2}\\Rightarrow g'(3)=-6$, so the value is $3\\cdot49\\cdot(-6)=-882$.</div><div class=\"ml-vi\">Quy tắc dây chuyền: $(f\\circ g)'(x)=3g(x)^2g'(x)$. Ở đây $g(3)=7$ và $g'(x)=\\dfrac{-6}{(x-2)^2}\\Rightarrow g'(3)=-6$, nên giá trị là $3\\cdot49\\cdot(-6)=-882$.</div>"
+          "explanation": "<div class=\"ml-en\">Chain rule: $(f\\circ g)'(x)=3g(x)^2g'(x)$. Here $g(3)=7$ and $g'(x)=\\dfrac{-6}{(x-2)^2}\\Rightarrow g'(3)=-6$, so the value is $3\\cdot49\\cdot(-6)=-882$.</div><div class=\"ml-vi\">Quy tắc dây chuyền: $(f\\circ g)'(x)=3g(x)^2g'(x)$. Ở đây $g(3)=7$ và $g'(x)=\\dfrac{-6}{(x-2)^2}\\Rightarrow g'(3)=-6$, nên giá trị là $3\\cdot49\\cdot(-6)=-882$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q8.png"
         },
         {
           "kind": "MCQ",
@@ -4108,7 +4262,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Differentiating: $3y^2y'+(y'x^2+2xy)+2x-6yy'=0$. At $(-1,1)$: $3y'+y'-2-2-6y'=0\\Rightarrow-2y'=4\\Rightarrow y'=-2$.</div><div class=\"ml-vi\">Đạo hàm hai vế: $3y^2y'+(y'x^2+2xy)+2x-6yy'=0$. Tại $(-1,1)$: $3y'+y'-2-2-6y'=0\\Rightarrow-2y'=4\\Rightarrow y'=-2$.</div>"
+          "explanation": "<div class=\"ml-en\">Differentiating: $3y^2y'+(y'x^2+2xy)+2x-6yy'=0$. At $(-1,1)$: $3y'+y'-2-2-6y'=0\\Rightarrow-2y'=4\\Rightarrow y'=-2$.</div><div class=\"ml-vi\">Đạo hàm hai vế: $3y^2y'+(y'x^2+2xy)+2x-6yy'=0$. Tại $(-1,1)$: $3y'+y'-2-2-6y'=0\\Rightarrow-2y'=4\\Rightarrow y'=-2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q9.png"
         },
         {
           "kind": "MCQ",
@@ -4137,7 +4292,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$A=s^2\\Rightarrow\\dfrac{dA}{dt}=2s\\dfrac{ds}{dt}$. With $A=625$, $s=25$ and $\\dfrac{dA}{dt}=-30$: $-30=50\\dfrac{ds}{dt}\\Rightarrow\\dfrac{ds}{dt}=-0.6$ cm/s.</div><div class=\"ml-vi\">$A=s^2\\Rightarrow\\dfrac{dA}{dt}=2s\\dfrac{ds}{dt}$. Với $A=625$, $s=25$ và $\\dfrac{dA}{dt}=-30$: $-30=50\\dfrac{ds}{dt}\\Rightarrow\\dfrac{ds}{dt}=-0.6$ cm/s.</div>"
+          "explanation": "<div class=\"ml-en\">$A=s^2\\Rightarrow\\dfrac{dA}{dt}=2s\\dfrac{ds}{dt}$. With $A=625$, $s=25$ and $\\dfrac{dA}{dt}=-30$: $-30=50\\dfrac{ds}{dt}\\Rightarrow\\dfrac{ds}{dt}=-0.6$ cm/s.</div><div class=\"ml-vi\">$A=s^2\\Rightarrow\\dfrac{dA}{dt}=2s\\dfrac{ds}{dt}$. Với $A=625$, $s=25$ và $\\dfrac{dA}{dt}=-30$: $-30=50\\dfrac{ds}{dt}\\Rightarrow\\dfrac{ds}{dt}=-0.6$ cm/s.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q10.png"
         },
         {
           "kind": "MCQ",
@@ -4163,7 +4319,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$S=6x^2\\Rightarrow dS=12x\\,dx=12(20)(0.1)=24\\ \\text{cm}^2$.</div><div class=\"ml-vi\">$S=6x^2\\Rightarrow dS=12x\\,dx=12(20)(0.1)=24\\ \\text{cm}^2$.</div>"
+          "explanation": "<div class=\"ml-en\">$S=6x^2\\Rightarrow dS=12x\\,dx=12(20)(0.1)=24\\ \\text{cm}^2$.</div><div class=\"ml-vi\">$S=6x^2\\Rightarrow dS=12x\\,dx=12(20)(0.1)=24\\ \\text{cm}^2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q11.png"
         },
         {
           "kind": "MCQ",
@@ -4189,7 +4346,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$f'(x)=3x^2-6x+3=3(x-1)^2\\geq0$, so $f$ is increasing on $[0,2]$: minimum $f(0)=1$, maximum $f(2)=3$.</div><div class=\"ml-vi\">$f'(x)=3x^2-6x+3=3(x-1)^2\\geq0$ nên $f$ đồng biến trên $[0,2]$: nhỏ nhất $f(0)=1$, lớn nhất $f(2)=3$.</div>"
+          "explanation": "<div class=\"ml-en\">$f'(x)=3x^2-6x+3=3(x-1)^2\\geq0$, so $f$ is increasing on $[0,2]$: minimum $f(0)=1$, maximum $f(2)=3$.</div><div class=\"ml-vi\">$f'(x)=3x^2-6x+3=3(x-1)^2\\geq0$ nên $f$ đồng biến trên $[0,2]$: nhỏ nhất $f(0)=1$, lớn nhất $f(2)=3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q12.png"
         },
         {
           "kind": "MCQ",
@@ -4215,7 +4373,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f''(x)=6x-6=0\\Rightarrow x=1$, and $f''$ changes sign there. $f(1)=1-3+2+15=15$, so the inflection point is $(1,15)$.</div><div class=\"ml-vi\">$f''(x)=6x-6=0\\Rightarrow x=1$, và $f''$ đổi dấu tại đó. $f(1)=1-3+2+15=15$, nên điểm uốn là $(1,15)$.</div>"
+          "explanation": "<div class=\"ml-en\">$f''(x)=6x-6=0\\Rightarrow x=1$, and $f''$ changes sign there. $f(1)=1-3+2+15=15$, so the inflection point is $(1,15)$.</div><div class=\"ml-vi\">$f''(x)=6x-6=0\\Rightarrow x=1$, và $f''$ đổi dấu tại đó. $f(1)=1-3+2+15=15$, nên điểm uốn là $(1,15)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q13.png"
         },
         {
           "kind": "MCQ",
@@ -4241,7 +4400,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The numerator grows like $x$ while the denominator grows like $x^{3/2}$, so the quotient behaves like $x^{-1/2}\\to0$.</div><div class=\"ml-vi\">Tử tăng cỡ $x$ còn mẫu tăng cỡ $x^{3/2}$ nên thương hành xử như $x^{-1/2}\\to0$.</div>"
+          "explanation": "<div class=\"ml-en\">The numerator grows like $x$ while the denominator grows like $x^{3/2}$, so the quotient behaves like $x^{-1/2}\\to0$.</div><div class=\"ml-vi\">Tử tăng cỡ $x$ còn mẫu tăng cỡ $x^{3/2}$ nên thương hành xử như $x^{-1/2}\\to0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q14.png"
         },
         {
           "kind": "MCQ",
@@ -4267,7 +4427,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">With $x+3y=60$, maximize $P=xy=(60-3y)y$. Then $P'=60-6y=0\\Rightarrow y=10$ and $x=30$; the product is $300$.</div><div class=\"ml-vi\">Với $x+3y=60$, cực đại hoá $P=xy=(60-3y)y$. Khi đó $P'=60-6y=0\\Rightarrow y=10$ và $x=30$; tích bằng $300$.</div>"
+          "explanation": "<div class=\"ml-en\">With $x+3y=60$, maximize $P=xy=(60-3y)y$. Then $P'=60-6y=0\\Rightarrow y=10$ and $x=30$; the product is $300$.</div><div class=\"ml-vi\">Với $x+3y=60$, cực đại hoá $P=xy=(60-3y)y$. Khi đó $P'=60-6y=0\\Rightarrow y=10$ và $x=30$; tích bằng $300$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q15.png"
         },
         {
           "kind": "MCQ",
@@ -4293,7 +4454,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f(x)=x^5-10$, $f'(x)=5x^4$. $x_2=1-\\dfrac{1-10}{5}=2.8$. Then $x_3=2.8-\\dfrac{2.8^5-10}{5\\cdot2.8^4}=2.8-\\dfrac{162.1037}{307.328}\\approx2.2725$.</div><div class=\"ml-vi\">$f(x)=x^5-10$, $f'(x)=5x^4$. $x_2=1-\\dfrac{1-10}{5}=2.8$. Tiếp: $x_3=2.8-\\dfrac{2.8^5-10}{5\\cdot2.8^4}=2.8-\\dfrac{162.1037}{307.328}\\approx2.2725$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(x)=x^5-10$, $f'(x)=5x^4$. $x_2=1-\\dfrac{1-10}{5}=2.8$. Then $x_3=2.8-\\dfrac{2.8^5-10}{5\\cdot2.8^4}=2.8-\\dfrac{162.1037}{307.328}\\approx2.2725$.</div><div class=\"ml-vi\">$f(x)=x^5-10$, $f'(x)=5x^4$. $x_2=1-\\dfrac{1-10}{5}=2.8$. Tiếp: $x_3=2.8-\\dfrac{2.8^5-10}{5\\cdot2.8^4}=2.8-\\dfrac{162.1037}{307.328}\\approx2.2725$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q16.png"
         },
         {
           "kind": "MCQ",
@@ -4319,7 +4481,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\Delta x=1$ and left endpoints $0,1,2$ give $L_3=\\ln1+\\ln2+\\ln3=1.7918$. Exactly, $I=\\left[(1+x)\\ln(1+x)-(1+x)\\right]_0^3=4\\ln4-3=2.5452$. Error $=|1.7918-2.5452|\\approx0.753$.</div><div class=\"ml-vi\">$\\Delta x=1$ và các điểm mút trái $0,1,2$ cho $L_3=\\ln1+\\ln2+\\ln3=1.7918$. Chính xác, $I=\\left[(1+x)\\ln(1+x)-(1+x)\\right]_0^3=4\\ln4-3=2.5452$. Sai số $=|1.7918-2.5452|\\approx0.753$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\Delta x=1$ and left endpoints $0,1,2$ give $L_3=\\ln1+\\ln2+\\ln3=1.7918$. Exactly, $I=\\left[(1+x)\\ln(1+x)-(1+x)\\right]_0^3=4\\ln4-3=2.5452$. Error $=|1.7918-2.5452|\\approx0.753$.</div><div class=\"ml-vi\">$\\Delta x=1$ và các điểm mút trái $0,1,2$ cho $L_3=\\ln1+\\ln2+\\ln3=1.7918$. Chính xác, $I=\\left[(1+x)\\ln(1+x)-(1+x)\\right]_0^3=4\\ln4-3=2.5452$. Sai số $=|1.7918-2.5452|\\approx0.753$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q17.png"
         },
         {
           "kind": "MCQ",
@@ -4345,7 +4508,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">This is a right-endpoint Riemann sum for $f(x)=\\sin x$ on $[0,1]$ with $\\Delta x=\\dfrac1n$ and $x_i=\\dfrac{i}{n}$, hence $\\displaystyle\\int_0^1\\sin x\\,dx$ — (iv).</div><div class=\"ml-vi\">Đây là tổng Riemann điểm mút phải của $f(x)=\\sin x$ trên $[0,1]$ với $\\Delta x=\\dfrac1n$ và $x_i=\\dfrac{i}{n}$, nên bằng $\\displaystyle\\int_0^1\\sin x\\,dx$ — (iv).</div>"
+          "explanation": "<div class=\"ml-en\">This is a right-endpoint Riemann sum for $f(x)=\\sin x$ on $[0,1]$ with $\\Delta x=\\dfrac1n$ and $x_i=\\dfrac{i}{n}$, hence $\\displaystyle\\int_0^1\\sin x\\,dx$ — (iv).</div><div class=\"ml-vi\">Đây là tổng Riemann điểm mút phải của $f(x)=\\sin x$ trên $[0,1]$ với $\\Delta x=\\dfrac1n$ và $x_i=\\dfrac{i}{n}$, nên bằng $\\displaystyle\\int_0^1\\sin x\\,dx$ — (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q18.png"
         },
         {
           "kind": "MCQ",
@@ -4374,7 +4538,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">By the Fundamental Theorem of Calculus (Part 1), the derivative is the integrand evaluated at the upper limit: $e^{-x^2}$ — (v).</div><div class=\"ml-vi\">Theo định lý cơ bản của giải tích (phần 1), đạo hàm bằng hàm dưới dấu tích phân tại cận trên: $e^{-x^2}$ — (v).</div>"
+          "explanation": "<div class=\"ml-en\">By the Fundamental Theorem of Calculus (Part 1), the derivative is the integrand evaluated at the upper limit: $e^{-x^2}$ — (v).</div><div class=\"ml-vi\">Theo định lý cơ bản của giải tích (phần 1), đạo hàm bằng hàm dưới dấu tích phân tại cận trên: $e^{-x^2}$ — (v).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q19.png"
         },
         {
           "kind": "MCQ",
@@ -4403,7 +4568,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">By the Net Change Theorem, $\\displaystyle\\int_2^7w'(t)\\,dt=w(7)-w(2)$: the total change (increase) in weight between ages 2 and 7.</div><div class=\"ml-vi\">Theo định lý biến thiên toàn phần, $\\displaystyle\\int_2^7w'(t)\\,dt=w(7)-w(2)$: tổng mức thay đổi (tăng) cân nặng từ 2 đến 7 tuổi.</div>"
+          "explanation": "<div class=\"ml-en\">By the Net Change Theorem, $\\displaystyle\\int_2^7w'(t)\\,dt=w(7)-w(2)$: the total change (increase) in weight between ages 2 and 7.</div><div class=\"ml-vi\">Theo định lý biến thiên toàn phần, $\\displaystyle\\int_2^7w'(t)\\,dt=w(7)-w(2)$: tổng mức thay đổi (tăng) cân nặng từ 2 đến 7 tuổi.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q20.png"
         },
         {
           "kind": "MCQ",
@@ -4429,7 +4595,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">An antiderivative is $-\\sqrt{9-x^2}$, so the value is $\\left[-\\sqrt{9-x^2}\\right]_0^2=-\\sqrt5+3=3-\\sqrt5$ — (i).</div><div class=\"ml-vi\">Một nguyên hàm là $-\\sqrt{9-x^2}$, nên giá trị bằng $\\left[-\\sqrt{9-x^2}\\right]_0^2=-\\sqrt5+3=3-\\sqrt5$ — (i).</div>"
+          "explanation": "<div class=\"ml-en\">An antiderivative is $-\\sqrt{9-x^2}$, so the value is $\\left[-\\sqrt{9-x^2}\\right]_0^2=-\\sqrt5+3=3-\\sqrt5$ — (i).</div><div class=\"ml-vi\">Một nguyên hàm là $-\\sqrt{9-x^2}$, nên giá trị bằng $\\left[-\\sqrt{9-x^2}\\right]_0^2=-\\sqrt5+3=3-\\sqrt5$ — (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q21.png"
         },
         {
           "kind": "MCQ",
@@ -4455,7 +4622,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Integrating by parts twice: $\\displaystyle\\int x^2\\sin2x\\,dx=-\\dfrac{x^2\\cos2x}{2}+\\displaystyle\\int x\\cos2x\\,dx=-\\dfrac{x^2\\cos2x}{2}+\\dfrac{x\\sin2x}{2}+\\dfrac{\\cos2x}{4}+C$ — (i).</div><div class=\"ml-vi\">Tích phân từng phần hai lần: $\\displaystyle\\int x^2\\sin2x\\,dx=-\\dfrac{x^2\\cos2x}{2}+\\displaystyle\\int x\\cos2x\\,dx=-\\dfrac{x^2\\cos2x}{2}+\\dfrac{x\\sin2x}{2}+\\dfrac{\\cos2x}{4}+C$ — (i).</div>"
+          "explanation": "<div class=\"ml-en\">Integrating by parts twice: $\\displaystyle\\int x^2\\sin2x\\,dx=-\\dfrac{x^2\\cos2x}{2}+\\displaystyle\\int x\\cos2x\\,dx=-\\dfrac{x^2\\cos2x}{2}+\\dfrac{x\\sin2x}{2}+\\dfrac{\\cos2x}{4}+C$ — (i).</div><div class=\"ml-vi\">Tích phân từng phần hai lần: $\\displaystyle\\int x^2\\sin2x\\,dx=-\\dfrac{x^2\\cos2x}{2}+\\displaystyle\\int x\\cos2x\\,dx=-\\dfrac{x^2\\cos2x}{2}+\\dfrac{x\\sin2x}{2}+\\dfrac{\\cos2x}{4}+C$ — (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q22.png"
         },
         {
           "kind": "MCQ",
@@ -4481,7 +4649,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\Delta x=\\dfrac{4-2}{4}=0.5$; the midpoints are $2.25,\\ 2.75,\\ 3.25,\\ 3.75$ with $f$-values $1.57,\\ 1.71,\\ 1.84,\\ 1.97$ summing to $7.09$. Estimate $=0.5\\times7.09=3.545$.</div><div class=\"ml-vi\">$\\Delta x=\\dfrac{4-2}{4}=0.5$; các trung điểm là $2.25,\\ 2.75,\\ 3.25,\\ 3.75$ với giá trị $f$ là $1.57,\\ 1.71,\\ 1.84,\\ 1.97$, tổng $=7.09$. Ước lượng $=0.5\\times7.09=3.545$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\Delta x=\\dfrac{4-2}{4}=0.5$; the midpoints are $2.25,\\ 2.75,\\ 3.25,\\ 3.75$ with $f$-values $1.57,\\ 1.71,\\ 1.84,\\ 1.97$ summing to $7.09$. Estimate $=0.5\\times7.09=3.545$.</div><div class=\"ml-vi\">$\\Delta x=\\dfrac{4-2}{4}=0.5$; các trung điểm là $2.25,\\ 2.75,\\ 3.25,\\ 3.75$ với giá trị $f$ là $1.57,\\ 1.71,\\ 1.84,\\ 1.97$, tổng $=7.09$. Ước lượng $=0.5\\times7.09=3.545$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q23.png"
         },
         {
           "kind": "MCQ",
@@ -4507,7 +4676,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\displaystyle\\int_0^1x\\ln(4x)dx=\\ln4\\displaystyle\\int_0^1x\\,dx+\\displaystyle\\int_0^1x\\ln x\\,dx=\\dfrac{\\ln4}{2}-\\dfrac14=\\ln2-\\dfrac14$ (the integrand stays integrable at $0$ since $x\\ln x\\to0$).</div><div class=\"ml-vi\">$\\displaystyle\\int_0^1x\\ln(4x)dx=\\ln4\\displaystyle\\int_0^1x\\,dx+\\displaystyle\\int_0^1x\\ln x\\,dx=\\dfrac{\\ln4}{2}-\\dfrac14=\\ln2-\\dfrac14$ (hàm vẫn khả tích tại $0$ vì $x\\ln x\\to0$).</div>"
+          "explanation": "<div class=\"ml-en\">$\\displaystyle\\int_0^1x\\ln(4x)dx=\\ln4\\displaystyle\\int_0^1x\\,dx+\\displaystyle\\int_0^1x\\ln x\\,dx=\\dfrac{\\ln4}{2}-\\dfrac14=\\ln2-\\dfrac14$ (the integrand stays integrable at $0$ since $x\\ln x\\to0$).</div><div class=\"ml-vi\">$\\displaystyle\\int_0^1x\\ln(4x)dx=\\ln4\\displaystyle\\int_0^1x\\,dx+\\displaystyle\\int_0^1x\\ln x\\,dx=\\dfrac{\\ln4}{2}-\\dfrac14=\\ln2-\\dfrac14$ (hàm vẫn khả tích tại $0$ vì $x\\ln x\\to0$).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q24.png"
         },
         {
           "kind": "MCQ",
@@ -4533,7 +4703,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">If $x=-1$ the matrix is $\\begin{bmatrix}1&0&-2\\\\0&1&-1\\end{bmatrix}$ — a valid RREF. If $x=0$ it is $\\begin{bmatrix}0&1&-1\\\\0&0&0\\end{bmatrix}$ — also a valid RREF (leading 1 in column 2, zero row at the bottom). No other $x$ works, so $x=0$ or $x=-1$.</div><div class=\"ml-vi\">Nếu $x=-1$ ma trận là $\\begin{bmatrix}1&0&-2\\\\0&1&-1\\end{bmatrix}$ — đúng dạng RREF. Nếu $x=0$ ma trận là $\\begin{bmatrix}0&1&-1\\\\0&0&0\\end{bmatrix}$ — cũng là RREF hợp lệ (số 1 dẫn đầu ở cột 2, hàng không ở dưới cùng). Không có $x$ nào khác thoả, nên $x=0$ hoặc $x=-1$.</div>"
+          "explanation": "<div class=\"ml-en\">If $x=-1$ the matrix is $\\begin{bmatrix}1&0&-2\\\\0&1&-1\\end{bmatrix}$ — a valid RREF. If $x=0$ it is $\\begin{bmatrix}0&1&-1\\\\0&0&0\\end{bmatrix}$ — also a valid RREF (leading 1 in column 2, zero row at the bottom). No other $x$ works, so $x=0$ or $x=-1$.</div><div class=\"ml-vi\">Nếu $x=-1$ ma trận là $\\begin{bmatrix}1&0&-2\\\\0&1&-1\\end{bmatrix}$ — đúng dạng RREF. Nếu $x=0$ ma trận là $\\begin{bmatrix}0&1&-1\\\\0&0&0\\end{bmatrix}$ — cũng là RREF hợp lệ (số 1 dẫn đầu ở cột 2, hàng không ở dưới cùng). Không có $x$ nào khác thoả, nên $x=0$ hoặc $x=-1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q25.png"
         },
         {
           "kind": "MCQ",
@@ -4559,7 +4730,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Eliminate $x$ using the first equation: from equations 2 and 1, $5y+z=3$; from equations 3 and 1, $15y+4z=4$. Substituting $z=3-5y$: $15y+12-20y=4\\Rightarrow-5y=-8\\Rightarrow y=\\dfrac85$.</div><div class=\"ml-vi\">Khử $x$ nhờ phương trình đầu: từ (2) và (1) được $5y+z=3$; từ (3) và (1) được $15y+4z=4$. Thế $z=3-5y$: $15y+12-20y=4\\Rightarrow-5y=-8\\Rightarrow y=\\dfrac85$.</div>"
+          "explanation": "<div class=\"ml-en\">Eliminate $x$ using the first equation: from equations 2 and 1, $5y+z=3$; from equations 3 and 1, $15y+4z=4$. Substituting $z=3-5y$: $15y+12-20y=4\\Rightarrow-5y=-8\\Rightarrow y=\\dfrac85$.</div><div class=\"ml-vi\">Khử $x$ nhờ phương trình đầu: từ (2) và (1) được $5y+z=3$; từ (3) và (1) được $15y+4z=4$. Thế $z=3-5y$: $15y+12-20y=4\\Rightarrow-5y=-8\\Rightarrow y=\\dfrac85$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q26.png"
         },
         {
           "kind": "MCQ",
@@ -4585,7 +4757,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">There are 5 unknowns and pivots in columns 1, 3, 4 (three pivots). The last row is all zeros, so the system is consistent, and the number of free variables is $5-3=2$.</div><div class=\"ml-vi\">Có 5 ẩn và các trụ ở cột 1, 3, 4 (ba trụ). Hàng cuối toàn số 0 nên hệ tương thích, và số ẩn tự do là $5-3=2$.</div>"
+          "explanation": "<div class=\"ml-en\">There are 5 unknowns and pivots in columns 1, 3, 4 (three pivots). The last row is all zeros, so the system is consistent, and the number of free variables is $5-3=2$.</div><div class=\"ml-vi\">Có 5 ẩn và các trụ ở cột 1, 3, 4 (ba trụ). Hàng cuối toàn số 0 nên hệ tương thích, và số ẩn tự do là $5-3=2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q27.png"
         },
         {
           "kind": "MCQ",
@@ -4611,7 +4784,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">A homogeneous square system has nontrivial solutions exactly when the determinant vanishes: $\\det=-3m^2-5m+22=0\\Rightarrow3m^2+5m-22=0\\Rightarrow m=2$ or $m=-\\dfrac{11}{3}$.</div><div class=\"ml-vi\">Hệ thuần nhất vuông có nghiệm không tầm thường đúng khi định thức bằng 0: $\\det=-3m^2-5m+22=0\\Rightarrow3m^2+5m-22=0\\Rightarrow m=2$ hoặc $m=-\\dfrac{11}{3}$.</div>"
+          "explanation": "<div class=\"ml-en\">A homogeneous square system has nontrivial solutions exactly when the determinant vanishes: $\\det=-3m^2-5m+22=0\\Rightarrow3m^2+5m-22=0\\Rightarrow m=2$ or $m=-\\dfrac{11}{3}$.</div><div class=\"ml-vi\">Hệ thuần nhất vuông có nghiệm không tầm thường đúng khi định thức bằng 0: $\\det=-3m^2-5m+22=0\\Rightarrow3m^2+5m-22=0\\Rightarrow m=2$ hoặc $m=-\\dfrac{11}{3}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q28.png"
         },
         {
           "kind": "MCQ",
@@ -4637,7 +4811,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Symmetry requires the $(1,2)$- and $(2,1)$-entries to agree: $t=t+1$, which is impossible. Hence no such $s,t$ exist.</div><div class=\"ml-vi\">Tính đối xứng đòi hỏi phần tử $(1,2)$ và $(2,1)$ bằng nhau: $t=t+1$, điều này vô lý. Vậy không tồn tại $s,t$.</div>"
+          "explanation": "<div class=\"ml-en\">Symmetry requires the $(1,2)$- and $(2,1)$-entries to agree: $t=t+1$, which is impossible. Hence no such $s,t$ exist.</div><div class=\"ml-vi\">Tính đối xứng đòi hỏi phần tử $(1,2)$ và $(2,1)$ bằng nhau: $t=t+1$, điều này vô lý. Vậy không tồn tại $s,t$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q29.png"
         },
         {
           "kind": "MCQ",
@@ -4663,7 +4838,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$T(x,y)=(x,\\ 6x+y)$: the $x$-coordinate is unchanged while each point is pushed vertically by an amount proportional to $x$ — a vertical shear.</div><div class=\"ml-vi\">$T(x,y)=(x,\\ 6x+y)$: hoành độ giữ nguyên còn mỗi điểm bị đẩy theo phương đứng một lượng tỉ lệ với $x$ — đó là phép trượt đứng.</div>"
+          "explanation": "<div class=\"ml-en\">$T(x,y)=(x,\\ 6x+y)$: the $x$-coordinate is unchanged while each point is pushed vertically by an amount proportional to $x$ — a vertical shear.</div><div class=\"ml-vi\">$T(x,y)=(x,\\ 6x+y)$: hoành độ giữ nguyên còn mỗi điểm bị đẩy theo phương đứng một lượng tỉ lệ với $x$ — đó là phép trượt đứng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q30.png"
         },
         {
           "kind": "MCQ",
@@ -4689,7 +4865,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$AB$: $(2\\times1)(1\\times1)$ — inner dimensions match, result $2\\times1$. $BA$: $(1\\times1)(2\\times1)$ — inner dimensions $1\\neq2$, so it is undefined.</div><div class=\"ml-vi\">$AB$: $(2\\times1)(1\\times1)$ — kích thước trong khớp nhau, kết quả cỡ $2\\times1$. $BA$: $(1\\times1)(2\\times1)$ — kích thước trong $1\\neq2$ nên không xác định.</div>"
+          "explanation": "<div class=\"ml-en\">$AB$: $(2\\times1)(1\\times1)$ — inner dimensions match, result $2\\times1$. $BA$: $(1\\times1)(2\\times1)$ — inner dimensions $1\\neq2$, so it is undefined.</div><div class=\"ml-vi\">$AB$: $(2\\times1)(1\\times1)$ — kích thước trong khớp nhau, kết quả cỡ $2\\times1$. $BA$: $(1\\times1)(2\\times1)$ — kích thước trong $1\\neq2$ nên không xác định.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q31.png"
         },
         {
           "kind": "MCQ",
@@ -4712,7 +4889,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">For square matrices, $AB=cI$ with $c\\neq0$ forces $\\det A\\det B\\neq0$, so both are invertible — (i) is true. In (ii), $A^{T}B=3I$ makes $A^{T}$ and $B$ invertible, and $\\det A=\\det A^{T}\\neq0$, so $A$ is invertible too — (ii) is true.</div><div class=\"ml-vi\">Với ma trận vuông, $AB=cI$ với $c\\neq0$ kéo theo $\\det A\\det B\\neq0$ nên cả hai khả nghịch — (i) đúng. Ở (ii), $A^{T}B=3I$ khiến $A^{T}$ và $B$ khả nghịch, mà $\\det A=\\det A^{T}\\neq0$ nên $A$ cũng khả nghịch — (ii) đúng.</div>"
+          "explanation": "<div class=\"ml-en\">For square matrices, $AB=cI$ with $c\\neq0$ forces $\\det A\\det B\\neq0$, so both are invertible — (i) is true. In (ii), $A^{T}B=3I$ makes $A^{T}$ and $B$ invertible, and $\\det A=\\det A^{T}\\neq0$, so $A$ is invertible too — (ii) is true.</div><div class=\"ml-vi\">Với ma trận vuông, $AB=cI$ với $c\\neq0$ kéo theo $\\det A\\det B\\neq0$ nên cả hai khả nghịch — (i) đúng. Ở (ii), $A^{T}B=3I$ khiến $A^{T}$ và $B$ khả nghịch, mà $\\det A=\\det A^{T}\\neq0$ nên $A$ cũng khả nghịch — (ii) đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q32.png"
         },
         {
           "kind": "MCQ",
@@ -4738,7 +4916,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">The rotation matrix is $\\begin{bmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{bmatrix}$, so $a_{12}=-\\sin\\dfrac{\\pi}{3}=-\\dfrac{\\sqrt3}{2}$ — (iv).</div><div class=\"ml-vi\">Ma trận quay là $\\begin{bmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{bmatrix}$ nên $a_{12}=-\\sin\\dfrac{\\pi}{3}=-\\dfrac{\\sqrt3}{2}$ — (iv).</div>"
+          "explanation": "<div class=\"ml-en\">The rotation matrix is $\\begin{bmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{bmatrix}$, so $a_{12}=-\\sin\\dfrac{\\pi}{3}=-\\dfrac{\\sqrt3}{2}$ — (iv).</div><div class=\"ml-vi\">Ma trận quay là $\\begin{bmatrix}\\cos\\theta&-\\sin\\theta\\\\\\sin\\theta&\\cos\\theta\\end{bmatrix}$ nên $a_{12}=-\\sin\\dfrac{\\pi}{3}=-\\dfrac{\\sqrt3}{2}$ — (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q33.png"
         },
         {
           "kind": "MCQ",
@@ -4764,7 +4943,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">By linearity, $L(1,-2,3)=1\\begin{bmatrix}1\\\\-2\\end{bmatrix}-2\\begin{bmatrix}2\\\\-3\\end{bmatrix}+3\\begin{bmatrix}5\\\\1\\end{bmatrix}=\\begin{bmatrix}1-4+15\\\\-2+6+3\\end{bmatrix}=\\begin{bmatrix}12\\\\7\\end{bmatrix}$ — (i).</div><div class=\"ml-vi\">Theo tính tuyến tính, $L(1,-2,3)=1\\begin{bmatrix}1\\\\-2\\end{bmatrix}-2\\begin{bmatrix}2\\\\-3\\end{bmatrix}+3\\begin{bmatrix}5\\\\1\\end{bmatrix}=\\begin{bmatrix}1-4+15\\\\-2+6+3\\end{bmatrix}=\\begin{bmatrix}12\\\\7\\end{bmatrix}$ — (i).</div>"
+          "explanation": "<div class=\"ml-en\">By linearity, $L(1,-2,3)=1\\begin{bmatrix}1\\\\-2\\end{bmatrix}-2\\begin{bmatrix}2\\\\-3\\end{bmatrix}+3\\begin{bmatrix}5\\\\1\\end{bmatrix}=\\begin{bmatrix}1-4+15\\\\-2+6+3\\end{bmatrix}=\\begin{bmatrix}12\\\\7\\end{bmatrix}$ — (i).</div><div class=\"ml-vi\">Theo tính tuyến tính, $L(1,-2,3)=1\\begin{bmatrix}1\\\\-2\\end{bmatrix}-2\\begin{bmatrix}2\\\\-3\\end{bmatrix}+3\\begin{bmatrix}5\\\\1\\end{bmatrix}=\\begin{bmatrix}1-4+15\\\\-2+6+3\\end{bmatrix}=\\begin{bmatrix}12\\\\7\\end{bmatrix}$ — (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q34.png"
         },
         {
           "kind": "MCQ",
@@ -4793,7 +4973,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\det(kA)=k^{n}\\det A$ for an $n\\times n$ matrix, so $\\det(2A)=2^4\\cdot2=32$.</div><div class=\"ml-vi\">$\\det(kA)=k^{n}\\det A$ với ma trận $n\\times n$, nên $\\det(2A)=2^4\\cdot2=32$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\det(kA)=k^{n}\\det A$ for an $n\\times n$ matrix, so $\\det(2A)=2^4\\cdot2=32$.</div><div class=\"ml-vi\">$\\det(kA)=k^{n}\\det A$ với ma trận $n\\times n$, nên $\\det(2A)=2^4\\cdot2=32$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q35.png"
         },
         {
           "kind": "MCQ",
@@ -4816,7 +4997,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$A^{-1}=\\dfrac{1}{\\det A}\\operatorname{adj}(A)=\\dfrac{1}{3}C^{T}$ where $C$ is the cofactor matrix. Hence the $(2,3)$-entry equals $\\dfrac{C_{32}}{3}=\\dfrac{2}{3}$.</div><div class=\"ml-vi\">$A^{-1}=\\dfrac{1}{\\det A}\\operatorname{adj}(A)=\\dfrac{1}{3}C^{T}$ với $C$ là ma trận phần bù đại số. Do đó phần tử $(2,3)$ bằng $\\dfrac{C_{32}}{3}=\\dfrac{2}{3}$.</div>"
+          "explanation": "<div class=\"ml-en\">$A^{-1}=\\dfrac{1}{\\det A}\\operatorname{adj}(A)=\\dfrac{1}{3}C^{T}$ where $C$ is the cofactor matrix. Hence the $(2,3)$-entry equals $\\dfrac{C_{32}}{3}=\\dfrac{2}{3}$.</div><div class=\"ml-vi\">$A^{-1}=\\dfrac{1}{\\det A}\\operatorname{adj}(A)=\\dfrac{1}{3}C^{T}$ với $C$ là ma trận phần bù đại số. Do đó phần tử $(2,3)$ bằng $\\dfrac{C_{32}}{3}=\\dfrac{2}{3}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q36.png"
         },
         {
           "kind": "MCQ",
@@ -4839,7 +5021,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">(i) $A\\cdot A=I$ exhibits $A^{-1}=A$, so $A$ is invertible. (ii) is false: $A=O$ satisfies $A^2=-A$ but is not invertible (in general $A^2=-A$ only gives $A(A+I)=O$).</div><div class=\"ml-vi\">(i) $A\\cdot A=I$ cho thấy $A^{-1}=A$ nên $A$ khả nghịch. (ii) sai: $A=O$ thoả $A^2=-A$ nhưng không khả nghịch (nói chung $A^2=-A$ chỉ cho $A(A+I)=O$).</div>"
+          "explanation": "<div class=\"ml-en\">(i) $A\\cdot A=I$ exhibits $A^{-1}=A$, so $A$ is invertible. (ii) is false: $A=O$ satisfies $A^2=-A$ but is not invertible (in general $A^2=-A$ only gives $A(A+I)=O$).</div><div class=\"ml-vi\">(i) $A\\cdot A=I$ cho thấy $A^{-1}=A$ nên $A$ khả nghịch. (ii) sai: $A=O$ thoả $A^2=-A$ nhưng không khả nghịch (nói chung $A^2=-A$ chỉ cho $A(A+I)=O$).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q37.png"
         },
         {
           "kind": "MCQ",
@@ -4862,7 +5045,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$Av=(35,-10,-5)=-5v$, so $v$ is an eigenvector (eigenvalue $-5$). But $Au=(-13,1,7)$ is not a multiple of $u=(3,-1,2)$, so $u$ is not.</div><div class=\"ml-vi\">$Av=(35,-10,-5)=-5v$ nên $v$ là vectơ riêng (trị riêng $-5$). Còn $Au=(-13,1,7)$ không phải bội của $u=(3,-1,2)$ nên $u$ không phải.</div>"
+          "explanation": "<div class=\"ml-en\">$Av=(35,-10,-5)=-5v$, so $v$ is an eigenvector (eigenvalue $-5$). But $Au=(-13,1,7)$ is not a multiple of $u=(3,-1,2)$, so $u$ is not.</div><div class=\"ml-vi\">$Av=(35,-10,-5)=-5v$ nên $v$ là vectơ riêng (trị riêng $-5$). Còn $Au=(-13,1,7)$ không phải bội của $u=(3,-1,2)$ nên $u$ không phải.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q38.png"
         },
         {
           "kind": "MCQ",
@@ -4888,7 +5072,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Characteristic equation: $(2-\\lambda)^2-9=0\\Rightarrow\\lambda=5$ or $\\lambda=-1$. For $\\lambda=5$: $-3x+3y=0\\Rightarrow[1;1]$. For $\\lambda=-1$: $3x+3y=0\\Rightarrow[1;-1]$.</div><div class=\"ml-vi\">Phương trình đặc trưng: $(2-\\lambda)^2-9=0\\Rightarrow\\lambda=5$ hoặc $\\lambda=-1$. Với $\\lambda=5$: $-3x+3y=0\\Rightarrow[1;1]$. Với $\\lambda=-1$: $3x+3y=0\\Rightarrow[1;-1]$.</div>"
+          "explanation": "<div class=\"ml-en\">Characteristic equation: $(2-\\lambda)^2-9=0\\Rightarrow\\lambda=5$ or $\\lambda=-1$. For $\\lambda=5$: $-3x+3y=0\\Rightarrow[1;1]$. For $\\lambda=-1$: $3x+3y=0\\Rightarrow[1;-1]$.</div><div class=\"ml-vi\">Phương trình đặc trưng: $(2-\\lambda)^2-9=0\\Rightarrow\\lambda=5$ hoặc $\\lambda=-1$. Với $\\lambda=5$: $-3x+3y=0\\Rightarrow[1;1]$. Với $\\lambda=-1$: $3x+3y=0\\Rightarrow[1;-1]$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q39.png"
         },
         {
           "kind": "MCQ",
@@ -4911,7 +5096,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Write $C=A+t(B-A)$ with $B-A=(2,1,4)$. Then $\\|\\overrightarrow{AC}\\|=|t|\\,\\|B-A\\|$ and $\\|\\overrightarrow{BC}\\|=|t-1|\\,\\|B-A\\|$, so $|t|=3|t-1|\\Rightarrow t=\\dfrac32$ or $t=\\dfrac34$, giving $C(4,\\tfrac12,7)$ and $C(\\tfrac52,-\\tfrac14,4)$.</div><div class=\"ml-vi\">Viết $C=A+t(B-A)$ với $B-A=(2,1,4)$. Khi đó $\\|\\overrightarrow{AC}\\|=|t|\\,\\|B-A\\|$ và $\\|\\overrightarrow{BC}\\|=|t-1|\\,\\|B-A\\|$, nên $|t|=3|t-1|\\Rightarrow t=\\dfrac32$ hoặc $t=\\dfrac34$, cho $C(4,\\tfrac12,7)$ và $C(\\tfrac52,-\\tfrac14,4)$.</div>"
+          "explanation": "<div class=\"ml-en\">Write $C=A+t(B-A)$ with $B-A=(2,1,4)$. Then $\\|\\overrightarrow{AC}\\|=|t|\\,\\|B-A\\|$ and $\\|\\overrightarrow{BC}\\|=|t-1|\\,\\|B-A\\|$, so $|t|=3|t-1|\\Rightarrow t=\\dfrac32$ or $t=\\dfrac34$, giving $C(4,\\tfrac12,7)$ and $C(\\tfrac52,-\\tfrac14,4)$.</div><div class=\"ml-vi\">Viết $C=A+t(B-A)$ với $B-A=(2,1,4)$. Khi đó $\\|\\overrightarrow{AC}\\|=|t|\\,\\|B-A\\|$ và $\\|\\overrightarrow{BC}\\|=|t-1|\\,\\|B-A\\|$, nên $|t|=3|t-1|\\Rightarrow t=\\dfrac32$ hoặc $t=\\dfrac34$, cho $C(4,\\tfrac12,7)$ và $C(\\tfrac52,-\\tfrac14,4)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q40.png"
         },
         {
           "kind": "MCQ",
@@ -4937,7 +5123,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$\\overrightarrow{AB}=(0,-1,1)$, $\\overrightarrow{AC}=(-1,-2,2)$, and $\\overrightarrow{AB}\\times\\overrightarrow{AC}=(0,-1,-1)$.</div><div class=\"ml-vi\">$\\overrightarrow{AB}=(0,-1,1)$, $\\overrightarrow{AC}=(-1,-2,2)$, và $\\overrightarrow{AB}\\times\\overrightarrow{AC}=(0,-1,-1)$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\overrightarrow{AB}=(0,-1,1)$, $\\overrightarrow{AC}=(-1,-2,2)$, and $\\overrightarrow{AB}\\times\\overrightarrow{AC}=(0,-1,-1)$.</div><div class=\"ml-vi\">$\\overrightarrow{AB}=(0,-1,1)$, $\\overrightarrow{AC}=(-1,-2,2)$, và $\\overrightarrow{AB}\\times\\overrightarrow{AC}=(0,-1,-1)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q41.png"
         },
         {
           "kind": "MCQ",
@@ -4966,7 +5153,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$\\operatorname{proj}_{\\vec u}\\vec v=\\dfrac{\\vec v\\cdot\\vec u}{\\|\\vec u\\|^2}\\vec u=\\dfrac{9}{18}(3,0,3)=\\left(\\dfrac32,0,\\dfrac32\\right)$.</div><div class=\"ml-vi\">$\\operatorname{proj}_{\\vec u}\\vec v=\\dfrac{\\vec v\\cdot\\vec u}{\\|\\vec u\\|^2}\\vec u=\\dfrac{9}{18}(3,0,3)=\\left(\\dfrac32,0,\\dfrac32\\right)$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\operatorname{proj}_{\\vec u}\\vec v=\\dfrac{\\vec v\\cdot\\vec u}{\\|\\vec u\\|^2}\\vec u=\\dfrac{9}{18}(3,0,3)=\\left(\\dfrac32,0,\\dfrac32\\right)$.</div><div class=\"ml-vi\">$\\operatorname{proj}_{\\vec u}\\vec v=\\dfrac{\\vec v\\cdot\\vec u}{\\|\\vec u\\|^2}\\vec u=\\dfrac{9}{18}(3,0,3)=\\left(\\dfrac32,0,\\dfrac32\\right)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q42.png"
         },
         {
           "kind": "MCQ",
@@ -4992,7 +5180,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$u\\cdot v=-2+1-2=-3$ and $\\|u\\|=\\|v\\|=\\sqrt6$, so $\\cos\\theta=\\dfrac{-3}{6}=-\\dfrac12\\Rightarrow\\theta=\\dfrac{2\\pi}{3}$ — (iv).</div><div class=\"ml-vi\">$u\\cdot v=-2+1-2=-3$ và $\\|u\\|=\\|v\\|=\\sqrt6$, nên $\\cos\\theta=\\dfrac{-3}{6}=-\\dfrac12\\Rightarrow\\theta=\\dfrac{2\\pi}{3}$ — (iv).</div>"
+          "explanation": "<div class=\"ml-en\">$u\\cdot v=-2+1-2=-3$ and $\\|u\\|=\\|v\\|=\\sqrt6$, so $\\cos\\theta=\\dfrac{-3}{6}=-\\dfrac12\\Rightarrow\\theta=\\dfrac{2\\pi}{3}$ — (iv).</div><div class=\"ml-vi\">$u\\cdot v=-2+1-2=-3$ và $\\|u\\|=\\|v\\|=\\sqrt6$, nên $\\cos\\theta=\\dfrac{-3}{6}=-\\dfrac12\\Rightarrow\\theta=\\dfrac{2\\pi}{3}$ — (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q43.png"
         },
         {
           "kind": "MCQ",
@@ -5015,7 +5204,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Projection onto $y=3x$: $P_1=\\dfrac{1}{10}\\begin{bmatrix}1&3\\\\3&9\\end{bmatrix}$; onto $y=-x$: $P_2=\\dfrac12\\begin{bmatrix}1&-1\\\\-1&1\\end{bmatrix}$. Then $T=P_2P_1=\\dfrac{1}{20}\\begin{bmatrix}-2&-6\\\\2&6\\end{bmatrix}$, whose $(2,1)$-entry is $\\dfrac{2}{20}=\\dfrac{1}{10}$.</div><div class=\"ml-vi\">Phép chiếu lên $y=3x$: $P_1=\\dfrac{1}{10}\\begin{bmatrix}1&3\\\\3&9\\end{bmatrix}$; lên $y=-x$: $P_2=\\dfrac12\\begin{bmatrix}1&-1\\\\-1&1\\end{bmatrix}$. Khi đó $T=P_2P_1=\\dfrac{1}{20}\\begin{bmatrix}-2&-6\\\\2&6\\end{bmatrix}$, phần tử $(2,1)$ bằng $\\dfrac{2}{20}=\\dfrac{1}{10}$.</div>"
+          "explanation": "<div class=\"ml-en\">Projection onto $y=3x$: $P_1=\\dfrac{1}{10}\\begin{bmatrix}1&3\\\\3&9\\end{bmatrix}$; onto $y=-x$: $P_2=\\dfrac12\\begin{bmatrix}1&-1\\\\-1&1\\end{bmatrix}$. Then $T=P_2P_1=\\dfrac{1}{20}\\begin{bmatrix}-2&-6\\\\2&6\\end{bmatrix}$, whose $(2,1)$-entry is $\\dfrac{2}{20}=\\dfrac{1}{10}$.</div><div class=\"ml-vi\">Phép chiếu lên $y=3x$: $P_1=\\dfrac{1}{10}\\begin{bmatrix}1&3\\\\3&9\\end{bmatrix}$; lên $y=-x$: $P_2=\\dfrac12\\begin{bmatrix}1&-1\\\\-1&1\\end{bmatrix}$. Khi đó $T=P_2P_1=\\dfrac{1}{20}\\begin{bmatrix}-2&-6\\\\2&6\\end{bmatrix}$, phần tử $(2,1)$ bằng $\\dfrac{2}{20}=\\dfrac{1}{10}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q44.png"
         },
         {
           "kind": "MCQ",
@@ -5038,7 +5228,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$U$ is a plane through the origin, so $\\dim U=2$. Both $(1,0,-2)$ and $(0,1,1)$ satisfy the equation and are independent, so (i) is exactly $U$. In (ii) the single vector $(1,2,0)$ lies in $U$ but spans only a line — too small.</div><div class=\"ml-vi\">$U$ là mặt phẳng qua gốc nên $\\dim U=2$. Cả $(1,0,-2)$ và $(0,1,1)$ đều thoả phương trình và độc lập nên (i) đúng bằng $U$. Ở (ii), vectơ $(1,2,0)$ thuộc $U$ nhưng chỉ sinh ra một đường thẳng — quá nhỏ.</div>"
+          "explanation": "<div class=\"ml-en\">$U$ is a plane through the origin, so $\\dim U=2$. Both $(1,0,-2)$ and $(0,1,1)$ satisfy the equation and are independent, so (i) is exactly $U$. In (ii) the single vector $(1,2,0)$ lies in $U$ but spans only a line — too small.</div><div class=\"ml-vi\">$U$ là mặt phẳng qua gốc nên $\\dim U=2$. Cả $(1,0,-2)$ và $(0,1,1)$ đều thoả phương trình và độc lập nên (i) đúng bằng $U$. Ở (ii), vectơ $(1,2,0)$ thuộc $U$ nhưng chỉ sinh ra một đường thẳng — quá nhỏ.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q45.png"
         },
         {
           "kind": "MCQ",
@@ -5061,7 +5252,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">(i) is $\\operatorname{span}\\{(5,1,-1)\\}$ — a subspace. (ii) fails: taking $a=b=0$ gives $(-3,0,0)$, and no choice of $a,b$ gives the zero vector (it would need $a=b=0$ and $a+b=3$).</div><div class=\"ml-vi\">(i) chính là $\\operatorname{span}\\{(5,1,-1)\\}$ — là không gian con. (ii) không phải: với $a=b=0$ ta được $(-3,0,0)$, và không có $a,b$ nào cho vectơ không (phải có $a=b=0$ đồng thời $a+b=3$).</div>"
+          "explanation": "<div class=\"ml-en\">(i) is $\\operatorname{span}\\{(5,1,-1)\\}$ — a subspace. (ii) fails: taking $a=b=0$ gives $(-3,0,0)$, and no choice of $a,b$ gives the zero vector (it would need $a=b=0$ and $a+b=3$).</div><div class=\"ml-vi\">(i) chính là $\\operatorname{span}\\{(5,1,-1)\\}$ — là không gian con. (ii) không phải: với $a=b=0$ ta được $(-3,0,0)$, và không có $a,b$ nào cho vectơ không (phải có $a=b=0$ đồng thời $a+b=3$).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q46.png"
         },
         {
           "kind": "MCQ",
@@ -5087,7 +5279,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Dependence for three vectors in $\\mathbb{R}^3$ means zero determinant: $\\det\\begin{bmatrix}1&-1&0\\\\2&0&1\\\\0&1&a\\end{bmatrix}=-1+2a=0\\Rightarrow a=\\dfrac12$.</div><div class=\"ml-vi\">Ba vectơ trong $\\mathbb{R}^3$ phụ thuộc khi định thức bằng 0: $\\det\\begin{bmatrix}1&-1&0\\\\2&0&1\\\\0&1&a\\end{bmatrix}=-1+2a=0\\Rightarrow a=\\dfrac12$.</div>"
+          "explanation": "<div class=\"ml-en\">Dependence for three vectors in $\\mathbb{R}^3$ means zero determinant: $\\det\\begin{bmatrix}1&-1&0\\\\2&0&1\\\\0&1&a\\end{bmatrix}=-1+2a=0\\Rightarrow a=\\dfrac12$.</div><div class=\"ml-vi\">Ba vectơ trong $\\mathbb{R}^3$ phụ thuộc khi định thức bằng 0: $\\det\\begin{bmatrix}1&-1&0\\\\2&0&1\\\\0&1&a\\end{bmatrix}=-1+2a=0\\Rightarrow a=\\dfrac12$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q47.png"
         },
         {
           "kind": "MCQ",
@@ -5110,7 +5303,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">(i) The determinant of the three vectors is $4\\neq0$, so they are independent and form a basis. (ii) contains 4 vectors in $\\mathbb{R}^3$ — always dependent, so it is not a basis.</div><div class=\"ml-vi\">(i) Định thức của ba vectơ bằng $4\\neq0$ nên chúng độc lập và tạo thành cơ sở. (ii) gồm 4 vectơ trong $\\mathbb{R}^3$ — luôn phụ thuộc nên không phải cơ sở.</div>"
+          "explanation": "<div class=\"ml-en\">(i) The determinant of the three vectors is $4\\neq0$, so they are independent and form a basis. (ii) contains 4 vectors in $\\mathbb{R}^3$ — always dependent, so it is not a basis.</div><div class=\"ml-vi\">(i) Định thức của ba vectơ bằng $4\\neq0$ nên chúng độc lập và tạo thành cơ sở. (ii) gồm 4 vectơ trong $\\mathbb{R}^3$ — luôn phụ thuộc nên không phải cơ sở.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q48.png"
         },
         {
           "kind": "MCQ",
@@ -5133,7 +5327,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Orthogonality means the dot product vanishes: $\\dfrac12\\cdot\\dfrac1t+(-t)(2)=0\\Rightarrow\\dfrac{1}{2t}=2t\\Rightarrow4t^2=1\\Rightarrow t=\\pm\\dfrac12$.</div><div class=\"ml-vi\">Trực giao nghĩa là tích vô hướng bằng 0: $\\dfrac12\\cdot\\dfrac1t+(-t)(2)=0\\Rightarrow\\dfrac{1}{2t}=2t\\Rightarrow4t^2=1\\Rightarrow t=\\pm\\dfrac12$.</div>"
+          "explanation": "<div class=\"ml-en\">Orthogonality means the dot product vanishes: $\\dfrac12\\cdot\\dfrac1t+(-t)(2)=0\\Rightarrow\\dfrac{1}{2t}=2t\\Rightarrow4t^2=1\\Rightarrow t=\\pm\\dfrac12$.</div><div class=\"ml-vi\">Trực giao nghĩa là tích vô hướng bằng 0: $\\dfrac12\\cdot\\dfrac1t+(-t)(2)=0\\Rightarrow\\dfrac{1}{2t}=2t\\Rightarrow4t^2=1\\Rightarrow t=\\pm\\dfrac12$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q49.png"
         },
         {
           "kind": "MCQ",
@@ -5156,7 +5351,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$AB$ is $4\\times4$, so by the rank–nullity theorem $\\dim\\operatorname{Null}(AB)=4-\\operatorname{rank}(AB)=4-3=1$.</div><div class=\"ml-vi\">$AB$ cỡ $4\\times4$ nên theo định lý hạng–số khuyết, $\\dim\\operatorname{Null}(AB)=4-\\operatorname{rank}(AB)=4-3=1$.</div>"
+          "explanation": "<div class=\"ml-en\">$AB$ is $4\\times4$, so by the rank–nullity theorem $\\dim\\operatorname{Null}(AB)=4-\\operatorname{rank}(AB)=4-3=1$.</div><div class=\"ml-vi\">$AB$ cỡ $4\\times4$ nên theo định lý hạng–số khuyết, $\\dim\\operatorname{Null}(AB)=4-\\operatorname{rank}(AB)=4-3=1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D4/q50.png"
         }
       ]
     },
@@ -5202,7 +5398,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\ln$ requires a strictly positive argument: $3x+6\\gt0\\Rightarrow x\\gt-2$, i.e. $(-2,\\infty)$ — (iii). (The endpoint $-2$ is excluded because $\\ln0$ is undefined.)</div><div class=\"ml-vi\">Hàm $\\ln$ đòi hỏi biểu thức bên trong dương thực sự: $3x+6\\gt0\\Rightarrow x\\gt-2$, tức $(-2,\\infty)$ — (iii). (Loại điểm $-2$ vì $\\ln0$ không xác định.)</div>"
+          "explanation": "<div class=\"ml-en\">$\\ln$ requires a strictly positive argument: $3x+6\\gt0\\Rightarrow x\\gt-2$, i.e. $(-2,\\infty)$ — (iii). (The endpoint $-2$ is excluded because $\\ln0$ is undefined.)</div><div class=\"ml-vi\">Hàm $\\ln$ đòi hỏi biểu thức bên trong dương thực sự: $3x+6\\gt0\\Rightarrow x\\gt-2$, tức $(-2,\\infty)$ — (iii). (Loại điểm $-2$ vì $\\ln0$ không xác định.)</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q1.png"
         },
         {
           "kind": "MCQ",
@@ -5228,7 +5425,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Both points have the same $y$-coordinate, so the line is horizontal: $y=4$ (slope $0$).</div><div class=\"ml-vi\">Hai điểm có cùng tung độ nên đường thẳng nằm ngang: $y=4$ (hệ số góc bằng $0$).</div>"
+          "explanation": "<div class=\"ml-en\">Both points have the same $y$-coordinate, so the line is horizontal: $y=4$ (slope $0$).</div><div class=\"ml-vi\">Hai điểm có cùng tung độ nên đường thẳng nằm ngang: $y=4$ (hệ số góc bằng $0$).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q2.png"
         },
         {
           "kind": "MCQ",
@@ -5257,7 +5455,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Both functions are continuous at $x=\\pi$: $5\\cos2\\pi+16\\tan\\pi=5(1)+16(0)=5$.</div><div class=\"ml-vi\">Cả hai hàm đều liên tục tại $x=\\pi$: $5\\cos2\\pi+16\\tan\\pi=5(1)+16(0)=5$.</div>"
+          "explanation": "<div class=\"ml-en\">Both functions are continuous at $x=\\pi$: $5\\cos2\\pi+16\\tan\\pi=5(1)+16(0)=5$.</div><div class=\"ml-vi\">Cả hai hàm đều liên tục tại $x=\\pi$: $5\\cos2\\pi+16\\tan\\pi=5(1)+16(0)=5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q3.png"
         },
         {
           "kind": "MCQ",
@@ -5286,7 +5485,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">At $x=0$: the left limit is $\\sqrt{0}=0$ but $f(0)=3$ — a jump. At $x=3$: both one-sided limits are $0$, yet $f(3)$ is not defined by any branch — a removable discontinuity. So $f$ is discontinuous at $0$ and $3$.</div><div class=\"ml-vi\">Tại $x=0$: giới hạn trái là $\\sqrt{0}=0$ nhưng $f(0)=3$ — bước nhảy. Tại $x=3$: cả hai giới hạn một phía đều bằng $0$, nhưng $f(3)$ không được định nghĩa ở nhánh nào — gián đoạn khử được. Vậy $f$ gián đoạn tại $0$ và $3$.</div>"
+          "explanation": "<div class=\"ml-en\">At $x=0$: the left limit is $\\sqrt{0}=0$ but $f(0)=3$ — a jump. At $x=3$: both one-sided limits are $0$, yet $f(3)$ is not defined by any branch — a removable discontinuity. So $f$ is discontinuous at $0$ and $3$.</div><div class=\"ml-vi\">Tại $x=0$: giới hạn trái là $\\sqrt{0}=0$ nhưng $f(0)=3$ — bước nhảy. Tại $x=3$: cả hai giới hạn một phía đều bằng $0$, nhưng $f(3)$ không được định nghĩa ở nhánh nào — gián đoạn khử được. Vậy $f$ gián đoạn tại $0$ và $3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q4.png"
         },
         {
           "kind": "MCQ",
@@ -5312,7 +5512,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f(x+h)-f(x)=-(2xh+h^2)+3h$, so dividing by $h$ gives $-2x-h+3$.</div><div class=\"ml-vi\">$f(x+h)-f(x)=-(2xh+h^2)+3h$, chia cho $h$ được $-2x-h+3$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(x+h)-f(x)=-(2xh+h^2)+3h$, so dividing by $h$ gives $-2x-h+3$.</div><div class=\"ml-vi\">$f(x+h)-f(x)=-(2xh+h^2)+3h$, chia cho $h$ được $-2x-h+3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q5.png"
         },
         {
           "kind": "MCQ",
@@ -5338,7 +5539,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Quotient rule: $y'=\\dfrac{5(9x-2)-9(5x+7)}{(9x-2)^2}=\\dfrac{-73}{(9x-2)^2}$. At $x=1$ the denominator is $49$, so $y'(1)=-\\dfrac{73}{49}$.</div><div class=\"ml-vi\">Quy tắc thương: $y'=\\dfrac{5(9x-2)-9(5x+7)}{(9x-2)^2}=\\dfrac{-73}{(9x-2)^2}$. Tại $x=1$ mẫu bằng $49$, nên $y'(1)=-\\dfrac{73}{49}$.</div>"
+          "explanation": "<div class=\"ml-en\">Quotient rule: $y'=\\dfrac{5(9x-2)-9(5x+7)}{(9x-2)^2}=\\dfrac{-73}{(9x-2)^2}$. At $x=1$ the denominator is $49$, so $y'(1)=-\\dfrac{73}{49}$.</div><div class=\"ml-vi\">Quy tắc thương: $y'=\\dfrac{5(9x-2)-9(5x+7)}{(9x-2)^2}=\\dfrac{-73}{(9x-2)^2}$. Tại $x=1$ mẫu bằng $49$, nên $y'(1)=-\\dfrac{73}{49}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q6.png"
         },
         {
           "kind": "MCQ",
@@ -5364,7 +5566,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Ground: $576-16t^2=0\\Rightarrow t^2=36\\Rightarrow t=6$ s. Velocity $v(t)=s'(t)=-32t$, so $v(6)=-192$ m/s (negative because the ball moves downward).</div><div class=\"ml-vi\">Chạm đất: $576-16t^2=0\\Rightarrow t^2=36\\Rightarrow t=6$ giây. Vận tốc $v(t)=s'(t)=-32t$, nên $v(6)=-192$ m/s (âm vì bóng đi xuống).</div>"
+          "explanation": "<div class=\"ml-en\">Ground: $576-16t^2=0\\Rightarrow t^2=36\\Rightarrow t=6$ s. Velocity $v(t)=s'(t)=-32t$, so $v(6)=-192$ m/s (negative because the ball moves downward).</div><div class=\"ml-vi\">Chạm đất: $576-16t^2=0\\Rightarrow t^2=36\\Rightarrow t=6$ giây. Vận tốc $v(t)=s'(t)=-32t$, nên $v(6)=-192$ m/s (âm vì bóng đi xuống).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q7.png"
         },
         {
           "kind": "MCQ",
@@ -5390,7 +5593,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$y'=-2x(x^2-1)^{-2}$ and $y''=-2(x^2-1)^{-2}+8x^2(x^2-1)^{-3}$. At $x=2$ ($x^2-1=3$): $-\\dfrac{2}{9}+\\dfrac{32}{27}=\\dfrac{-6+32}{27}=\\dfrac{26}{27}$.</div><div class=\"ml-vi\">$y'=-2x(x^2-1)^{-2}$ và $y''=-2(x^2-1)^{-2}+8x^2(x^2-1)^{-3}$. Tại $x=2$ ($x^2-1=3$): $-\\dfrac{2}{9}+\\dfrac{32}{27}=\\dfrac{-6+32}{27}=\\dfrac{26}{27}$.</div>"
+          "explanation": "<div class=\"ml-en\">$y'=-2x(x^2-1)^{-2}$ and $y''=-2(x^2-1)^{-2}+8x^2(x^2-1)^{-3}$. At $x=2$ ($x^2-1=3$): $-\\dfrac{2}{9}+\\dfrac{32}{27}=\\dfrac{-6+32}{27}=\\dfrac{26}{27}$.</div><div class=\"ml-vi\">$y'=-2x(x^2-1)^{-2}$ và $y''=-2(x^2-1)^{-2}+8x^2(x^2-1)^{-3}$. Tại $x=2$ ($x^2-1=3$): $-\\dfrac{2}{9}+\\dfrac{32}{27}=\\dfrac{-6+32}{27}=\\dfrac{26}{27}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q8.png"
         },
         {
           "kind": "MCQ",
@@ -5416,7 +5620,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$4x^3y^4+4x^4y^3y'=0\\Rightarrow y'=-\\dfrac{y}{x}$. At $(2,1)$: $y'=-\\dfrac12$.</div><div class=\"ml-vi\">$4x^3y^4+4x^4y^3y'=0\\Rightarrow y'=-\\dfrac{y}{x}$. Tại $(2,1)$: $y'=-\\dfrac12$.</div>"
+          "explanation": "<div class=\"ml-en\">$4x^3y^4+4x^4y^3y'=0\\Rightarrow y'=-\\dfrac{y}{x}$. At $(2,1)$: $y'=-\\dfrac12$.</div><div class=\"ml-vi\">$4x^3y^4+4x^4y^3y'=0\\Rightarrow y'=-\\dfrac{y}{x}$. Tại $(2,1)$: $y'=-\\dfrac12$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q9.png"
         },
         {
           "kind": "MCQ",
@@ -5442,7 +5647,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">At $z=\\sqrt2$: $4y^2=36-18=18\\Rightarrow y=\\pm\\dfrac{3}{\\sqrt2}$. Differentiating, $8y\\dfrac{dy}{dt}+18z\\dfrac{dz}{dt}=0\\Rightarrow\\dfrac{dy}{dt}=-\\dfrac{18\\sqrt2\\cdot4}{8y}=\\mp6$ — magnitude $\\pm6$, i.e. (iv).</div><div class=\"ml-vi\">Tại $z=\\sqrt2$: $4y^2=36-18=18\\Rightarrow y=\\pm\\dfrac{3}{\\sqrt2}$. Đạo hàm: $8y\\dfrac{dy}{dt}+18z\\dfrac{dz}{dt}=0\\Rightarrow\\dfrac{dy}{dt}=-\\dfrac{18\\sqrt2\\cdot4}{8y}=\\mp6$ — độ lớn $\\pm6$, tức (iv).</div>"
+          "explanation": "<div class=\"ml-en\">At $z=\\sqrt2$: $4y^2=36-18=18\\Rightarrow y=\\pm\\dfrac{3}{\\sqrt2}$. Differentiating, $8y\\dfrac{dy}{dt}+18z\\dfrac{dz}{dt}=0\\Rightarrow\\dfrac{dy}{dt}=-\\dfrac{18\\sqrt2\\cdot4}{8y}=\\mp6$ — magnitude $\\pm6$, i.e. (iv).</div><div class=\"ml-vi\">Tại $z=\\sqrt2$: $4y^2=36-18=18\\Rightarrow y=\\pm\\dfrac{3}{\\sqrt2}$. Đạo hàm: $8y\\dfrac{dy}{dt}+18z\\dfrac{dz}{dt}=0\\Rightarrow\\dfrac{dy}{dt}=-\\dfrac{18\\sqrt2\\cdot4}{8y}=\\mp6$ — độ lớn $\\pm6$, tức (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q10.png"
         },
         {
           "kind": "MCQ",
@@ -5465,7 +5671,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Split at $x=\\pi$ where $\\sin x$ changes sign. $\\displaystyle\\int_{\\pi/2}^{\\pi}\\sin x\\,dx=1$ and $\\left|\\displaystyle\\int_{\\pi}^{4\\pi/3}\\sin x\\,dx\\right|=\\left|-\\cos\\dfrac{4\\pi}{3}+\\cos\\pi\\right|=0.5$. Total area $=1+0.5=1.5$.</div><div class=\"ml-vi\">Chia tại $x=\\pi$ nơi $\\sin x$ đổi dấu. $\\displaystyle\\int_{\\pi/2}^{\\pi}\\sin x\\,dx=1$ và $\\left|\\displaystyle\\int_{\\pi}^{4\\pi/3}\\sin x\\,dx\\right|=\\left|-\\cos\\dfrac{4\\pi}{3}+\\cos\\pi\\right|=0.5$. Tổng diện tích $=1+0.5=1.5$.</div>"
+          "explanation": "<div class=\"ml-en\">Split at $x=\\pi$ where $\\sin x$ changes sign. $\\displaystyle\\int_{\\pi/2}^{\\pi}\\sin x\\,dx=1$ and $\\left|\\displaystyle\\int_{\\pi}^{4\\pi/3}\\sin x\\,dx\\right|=\\left|-\\cos\\dfrac{4\\pi}{3}+\\cos\\pi\\right|=0.5$. Total area $=1+0.5=1.5$.</div><div class=\"ml-vi\">Chia tại $x=\\pi$ nơi $\\sin x$ đổi dấu. $\\displaystyle\\int_{\\pi/2}^{\\pi}\\sin x\\,dx=1$ và $\\left|\\displaystyle\\int_{\\pi}^{4\\pi/3}\\sin x\\,dx\\right|=\\left|-\\cos\\dfrac{4\\pi}{3}+\\cos\\pi\\right|=0.5$. Tổng diện tích $=1+0.5=1.5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q11.png"
         },
         {
           "kind": "MCQ",
@@ -5491,7 +5698,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f'(x)=3x^2-6x=3x(x-2)$, critical points $x=0,2$. Values: $f(-1)=-3$, $f(0)=1$, $f(2)=-3$, $f(3)=1$. So the maximum is $1$ and the minimum is $-3$.</div><div class=\"ml-vi\">$f'(x)=3x^2-6x=3x(x-2)$, điểm tới hạn $x=0,2$. Giá trị: $f(-1)=-3$, $f(0)=1$, $f(2)=-3$, $f(3)=1$. Vậy GTLN là $1$ và GTNN là $-3$.</div>"
+          "explanation": "<div class=\"ml-en\">$f'(x)=3x^2-6x=3x(x-2)$, critical points $x=0,2$. Values: $f(-1)=-3$, $f(0)=1$, $f(2)=-3$, $f(3)=1$. So the maximum is $1$ and the minimum is $-3$.</div><div class=\"ml-vi\">$f'(x)=3x^2-6x=3x(x-2)$, điểm tới hạn $x=0,2$. Giá trị: $f(-1)=-3$, $f(0)=1$, $f(2)=-3$, $f(3)=1$. Vậy GTLN là $1$ và GTNN là $-3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q12.png"
         },
         {
           "kind": "MCQ",
@@ -5517,7 +5725,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f'(x)=6x^2-6x-12=6(x-2)(x+1)\\gt0$ exactly when $x\\lt-1$ or $x\\gt2$.</div><div class=\"ml-vi\">$f'(x)=6x^2-6x-12=6(x-2)(x+1)\\gt0$ đúng khi $x\\lt-1$ hoặc $x\\gt2$.</div>"
+          "explanation": "<div class=\"ml-en\">$f'(x)=6x^2-6x-12=6(x-2)(x+1)\\gt0$ exactly when $x\\lt-1$ or $x\\gt2$.</div><div class=\"ml-vi\">$f'(x)=6x^2-6x-12=6(x-2)(x+1)\\gt0$ đúng khi $x\\lt-1$ hoặc $x\\gt2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q13.png"
         },
         {
           "kind": "MCQ",
@@ -5543,7 +5752,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">Divide numerator and denominator by $x\\gt0$: $\\dfrac{\\sqrt{4+1/x^2}}{3-5/x}\\to\\dfrac{2}{3}$.</div><div class=\"ml-vi\">Chia tử và mẫu cho $x\\gt0$: $\\dfrac{\\sqrt{4+1/x^2}}{3-5/x}\\to\\dfrac{2}{3}$.</div>"
+          "explanation": "<div class=\"ml-en\">Divide numerator and denominator by $x\\gt0$: $\\dfrac{\\sqrt{4+1/x^2}}{3-5/x}\\to\\dfrac{2}{3}$.</div><div class=\"ml-vi\">Chia tử và mẫu cho $x\\gt0$: $\\dfrac{\\sqrt{4+1/x^2}}{3-5/x}\\to\\dfrac{2}{3}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q14.png"
         },
         {
           "kind": "MCQ",
@@ -5569,7 +5779,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">With base $x$ and height $h=\\dfrac{8}{x^2}$, the surface area is $S=x^2+4xh=x^2+\\dfrac{32}{x}$. Then $S'=2x-\\dfrac{32}{x^2}=0\\Rightarrow x^3=16\\Rightarrow x=\\sqrt[3]{16}=2\\sqrt[3]{2}$ — (iii).</div><div class=\"ml-vi\">Với cạnh đáy $x$ và chiều cao $h=\\dfrac{8}{x^2}$, diện tích bề mặt là $S=x^2+4xh=x^2+\\dfrac{32}{x}$. Khi đó $S'=2x-\\dfrac{32}{x^2}=0\\Rightarrow x^3=16\\Rightarrow x=\\sqrt[3]{16}=2\\sqrt[3]{2}$ — (iii).</div>"
+          "explanation": "<div class=\"ml-en\">With base $x$ and height $h=\\dfrac{8}{x^2}$, the surface area is $S=x^2+4xh=x^2+\\dfrac{32}{x}$. Then $S'=2x-\\dfrac{32}{x^2}=0\\Rightarrow x^3=16\\Rightarrow x=\\sqrt[3]{16}=2\\sqrt[3]{2}$ — (iii).</div><div class=\"ml-vi\">Với cạnh đáy $x$ và chiều cao $h=\\dfrac{8}{x^2}$, diện tích bề mặt là $S=x^2+4xh=x^2+\\dfrac{32}{x}$. Khi đó $S'=2x-\\dfrac{32}{x^2}=0\\Rightarrow x^3=16\\Rightarrow x=\\sqrt[3]{16}=2\\sqrt[3]{2}$ — (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q15.png"
         },
         {
           "kind": "MCQ",
@@ -5595,7 +5806,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f(x)=\\ln(x^2+4)-2x$, $f'(x)=\\dfrac{2x}{x^2+4}-2$. $f(2)=\\ln8-4=-1.92056$, $f'(2)=-1.5\\Rightarrow x_2=0.71963$. Then $f(x_2)=0.06878$, $f'(x_2)=-1.68143\\Rightarrow x_3\\approx0.76054$.</div><div class=\"ml-vi\">$f(x)=\\ln(x^2+4)-2x$, $f'(x)=\\dfrac{2x}{x^2+4}-2$. $f(2)=\\ln8-4=-1.92056$, $f'(2)=-1.5\\Rightarrow x_2=0.71963$. Tiếp: $f(x_2)=0.06878$, $f'(x_2)=-1.68143\\Rightarrow x_3\\approx0.76054$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(x)=\\ln(x^2+4)-2x$, $f'(x)=\\dfrac{2x}{x^2+4}-2$. $f(2)=\\ln8-4=-1.92056$, $f'(2)=-1.5\\Rightarrow x_2=0.71963$. Then $f(x_2)=0.06878$, $f'(x_2)=-1.68143\\Rightarrow x_3\\approx0.76054$.</div><div class=\"ml-vi\">$f(x)=\\ln(x^2+4)-2x$, $f'(x)=\\dfrac{2x}{x^2+4}-2$. $f(2)=\\ln8-4=-1.92056$, $f'(2)=-1.5\\Rightarrow x_2=0.71963$. Tiếp: $f(x_2)=0.06878$, $f'(x_2)=-1.68143\\Rightarrow x_3\\approx0.76054$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q16.png"
         },
         {
           "kind": "MCQ",
@@ -5624,7 +5836,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\Delta x=0.5$ and the left endpoints are $0,\\,0.5,\\,1,\\,1.5$: $0.5\\left(1+\\sqrt2+2+2\\sqrt2\\right)=0.5(7.2426)\\approx3.62$.</div><div class=\"ml-vi\">$\\Delta x=0.5$ và các điểm mút trái là $0,\\,0.5,\\,1,\\,1.5$: $0.5\\left(1+\\sqrt2+2+2\\sqrt2\\right)=0.5(7.2426)\\approx3.62$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\Delta x=0.5$ and the left endpoints are $0,\\,0.5,\\,1,\\,1.5$: $0.5\\left(1+\\sqrt2+2+2\\sqrt2\\right)=0.5(7.2426)\\approx3.62$.</div><div class=\"ml-vi\">$\\Delta x=0.5$ và các điểm mút trái là $0,\\,0.5,\\,1,\\,1.5$: $0.5\\left(1+\\sqrt2+2+2\\sqrt2\\right)=0.5(7.2426)\\approx3.62$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q17.png"
         },
         {
           "kind": "MCQ",
@@ -5650,7 +5863,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Swapping the limits changes the sign: $\\displaystyle\\int_6^4 f=-\\displaystyle\\int_4^6 f=-\\dfrac{6}{57}$.</div><div class=\"ml-vi\">Đổi cận thì đổi dấu: $\\displaystyle\\int_6^4 f=-\\displaystyle\\int_4^6 f=-\\dfrac{6}{57}$.</div>"
+          "explanation": "<div class=\"ml-en\">Swapping the limits changes the sign: $\\displaystyle\\int_6^4 f=-\\displaystyle\\int_4^6 f=-\\dfrac{6}{57}$.</div><div class=\"ml-vi\">Đổi cận thì đổi dấu: $\\displaystyle\\int_6^4 f=-\\displaystyle\\int_4^6 f=-\\dfrac{6}{57}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q18.png"
         },
         {
           "kind": "MCQ",
@@ -5676,7 +5890,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">By the Fundamental Theorem plus the chain rule: $g'(x)=f(\\sin x)\\cdot(\\sin x)'=\\dfrac{\\sin^5x+4\\sin x}{e^{5\\sin x}}\\cos x$ — (iii).</div><div class=\"ml-vi\">Theo định lý cơ bản kết hợp quy tắc dây chuyền: $g'(x)=f(\\sin x)\\cdot(\\sin x)'=\\dfrac{\\sin^5x+4\\sin x}{e^{5\\sin x}}\\cos x$ — (iii).</div>"
+          "explanation": "<div class=\"ml-en\">By the Fundamental Theorem plus the chain rule: $g'(x)=f(\\sin x)\\cdot(\\sin x)'=\\dfrac{\\sin^5x+4\\sin x}{e^{5\\sin x}}\\cos x$ — (iii).</div><div class=\"ml-vi\">Theo định lý cơ bản kết hợp quy tắc dây chuyền: $g'(x)=f(\\sin x)\\cdot(\\sin x)'=\\dfrac{\\sin^5x+4\\sin x}{e^{5\\sin x}}\\cos x$ — (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q19.png"
         },
         {
           "kind": "MCQ",
@@ -5705,7 +5920,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f_{avg}=\\dfrac{1}{3}\\displaystyle\\int_0^3(x^2-1)dx=\\dfrac13\\left[\\dfrac{x^3}{3}-x\\right]_0^3=\\dfrac13(9-3)=2$.</div><div class=\"ml-vi\">$f_{tb}=\\dfrac{1}{3}\\displaystyle\\int_0^3(x^2-1)dx=\\dfrac13\\left[\\dfrac{x^3}{3}-x\\right]_0^3=\\dfrac13(9-3)=2$.</div>"
+          "explanation": "<div class=\"ml-en\">$f_{avg}=\\dfrac{1}{3}\\displaystyle\\int_0^3(x^2-1)dx=\\dfrac13\\left[\\dfrac{x^3}{3}-x\\right]_0^3=\\dfrac13(9-3)=2$.</div><div class=\"ml-vi\">$f_{tb}=\\dfrac{1}{3}\\displaystyle\\int_0^3(x^2-1)dx=\\dfrac13\\left[\\dfrac{x^3}{3}-x\\right]_0^3=\\dfrac13(9-3)=2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q20.png"
         },
         {
           "kind": "MCQ",
@@ -5731,7 +5947,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\displaystyle\\int8(y-9)^{-3}dy=8\\cdot\\dfrac{(y-9)^{-2}}{-2}+C=-\\dfrac{4}{(y-9)^2}+C$ — (i).</div><div class=\"ml-vi\">$\\displaystyle\\int8(y-9)^{-3}dy=8\\cdot\\dfrac{(y-9)^{-2}}{-2}+C=-\\dfrac{4}{(y-9)^2}+C$ — (i).</div>"
+          "explanation": "<div class=\"ml-en\">$\\displaystyle\\int8(y-9)^{-3}dy=8\\cdot\\dfrac{(y-9)^{-2}}{-2}+C=-\\dfrac{4}{(y-9)^2}+C$ — (i).</div><div class=\"ml-vi\">$\\displaystyle\\int8(y-9)^{-3}dy=8\\cdot\\dfrac{(y-9)^{-2}}{-2}+C=-\\dfrac{4}{(y-9)^2}+C$ — (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q21.png"
         },
         {
           "kind": "MCQ",
@@ -5757,7 +5974,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Two integrations by parts give $\\displaystyle\\int x^2e^{-2x}dx=e^{-2x}\\!\\left(-\\dfrac{x^2}{2}-\\dfrac{x}{2}-\\dfrac14\\right)+C$; multiplying by 4: $-e^{-2x}(2x^2+2x+1)+C$ — (iv). (Check by differentiating.)</div><div class=\"ml-vi\">Tích phân từng phần hai lần cho $\\displaystyle\\int x^2e^{-2x}dx=e^{-2x}\\!\\left(-\\dfrac{x^2}{2}-\\dfrac{x}{2}-\\dfrac14\\right)+C$; nhân 4: $-e^{-2x}(2x^2+2x+1)+C$ — (iv). (Kiểm tra bằng cách đạo hàm.)</div>"
+          "explanation": "<div class=\"ml-en\">Two integrations by parts give $\\displaystyle\\int x^2e^{-2x}dx=e^{-2x}\\!\\left(-\\dfrac{x^2}{2}-\\dfrac{x}{2}-\\dfrac14\\right)+C$; multiplying by 4: $-e^{-2x}(2x^2+2x+1)+C$ — (iv). (Check by differentiating.)</div><div class=\"ml-vi\">Tích phân từng phần hai lần cho $\\displaystyle\\int x^2e^{-2x}dx=e^{-2x}\\!\\left(-\\dfrac{x^2}{2}-\\dfrac{x}{2}-\\dfrac14\\right)+C$; nhân 4: $-e^{-2x}(2x^2+2x+1)+C$ — (iv). (Kiểm tra bằng cách đạo hàm.)</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q22.png"
         },
         {
           "kind": "MCQ",
@@ -5780,7 +5998,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Simpson's rule pairs consecutive subintervals into parabolic arcs, so $n$ must be even.</div><div class=\"ml-vi\">Quy tắc Simpson ghép từng cặp khoảng liên tiếp thành cung parabol, nên $n$ phải chẵn.</div>"
+          "explanation": "<div class=\"ml-en\">Simpson's rule pairs consecutive subintervals into parabolic arcs, so $n$ must be even.</div><div class=\"ml-vi\">Quy tắc Simpson ghép từng cặp khoảng liên tiếp thành cung parabol, nên $n$ phải chẵn.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q23.png"
         },
         {
           "kind": "MCQ",
@@ -5803,7 +6022,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i) and (ii) are $p$-integrals with $p=2$ and $p=\\dfrac32$, both $\\gt1$, hence convergent. (iii) splits as $\\displaystyle\\int_1^\\infty\\dfrac{dx}{x}+\\displaystyle\\int_1^\\infty e^{-2x}dx$; the first piece is the harmonic ($p=1$) integral, which diverges.</div><div class=\"ml-vi\">(i) và (ii) là tích phân dạng $p$ với $p=2$ và $p=\\dfrac32$, đều $\\gt1$ nên hội tụ. (iii) tách thành $\\displaystyle\\int_1^\\infty\\dfrac{dx}{x}+\\displaystyle\\int_1^\\infty e^{-2x}dx$; phần đầu là tích phân điều hoà ($p=1$) nên phân kỳ.</div>"
+          "explanation": "<div class=\"ml-en\">(i) and (ii) are $p$-integrals with $p=2$ and $p=\\dfrac32$, both $\\gt1$, hence convergent. (iii) splits as $\\displaystyle\\int_1^\\infty\\dfrac{dx}{x}+\\displaystyle\\int_1^\\infty e^{-2x}dx$; the first piece is the harmonic ($p=1$) integral, which diverges.</div><div class=\"ml-vi\">(i) và (ii) là tích phân dạng $p$ với $p=2$ và $p=\\dfrac32$, đều $\\gt1$ nên hội tụ. (iii) tách thành $\\displaystyle\\int_1^\\infty\\dfrac{dx}{x}+\\displaystyle\\int_1^\\infty e^{-2x}dx$; phần đầu là tích phân điều hoà ($p=1$) nên phân kỳ.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q24.png"
         },
         {
           "kind": "MCQ",
@@ -5829,7 +6049,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">In reduced form every pivot must be the only nonzero entry in its column. Only (ii) satisfies this; (i), (iii) and (iv) still have nonzero entries above a pivot.</div><div class=\"ml-vi\">Ở dạng rút gọn, mỗi phần tử trụ phải là phần tử khác 0 duy nhất trong cột của nó. Chỉ (ii) thoả; (i), (iii) và (iv) vẫn còn số khác 0 phía trên một trụ.</div>"
+          "explanation": "<div class=\"ml-en\">In reduced form every pivot must be the only nonzero entry in its column. Only (ii) satisfies this; (i), (iii) and (iv) still have nonzero entries above a pivot.</div><div class=\"ml-vi\">Ở dạng rút gọn, mỗi phần tử trụ phải là phần tử khác 0 duy nhất trong cột của nó. Chỉ (ii) thoả; (i), (iii) và (iv) vẫn còn số khác 0 phía trên một trụ.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q25.png"
         },
         {
           "kind": "MCQ",
@@ -5858,7 +6079,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Subtracting the first equation from the second gives $y=\\dfrac12$, hence $x-z=\\dfrac32$. The third equation reads $-(x-z)+3y=m$, i.e. $-\\dfrac32+\\dfrac32=m\\Rightarrow m=0$. So the system is consistent only for $m=0$ and has no solution for every other $m$.</div><div class=\"ml-vi\">Lấy phương trình thứ hai trừ phương trình đầu được $y=\\dfrac12$, suy ra $x-z=\\dfrac32$. Phương trình thứ ba là $-(x-z)+3y=m$, tức $-\\dfrac32+\\dfrac32=m\\Rightarrow m=0$. Vậy hệ chỉ tương thích khi $m=0$, và vô nghiệm với mọi $m$ khác.</div>"
+          "explanation": "<div class=\"ml-en\">Subtracting the first equation from the second gives $y=\\dfrac12$, hence $x-z=\\dfrac32$. The third equation reads $-(x-z)+3y=m$, i.e. $-\\dfrac32+\\dfrac32=m\\Rightarrow m=0$. So the system is consistent only for $m=0$ and has no solution for every other $m$.</div><div class=\"ml-vi\">Lấy phương trình thứ hai trừ phương trình đầu được $y=\\dfrac12$, suy ra $x-z=\\dfrac32$. Phương trình thứ ba là $-(x-z)+3y=m$, tức $-\\dfrac32+\\dfrac32=m\\Rightarrow m=0$. Vậy hệ chỉ tương thích khi $m=0$, và vô nghiệm với mọi $m$ khác.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q26.png"
         },
         {
           "kind": "MCQ",
@@ -5887,7 +6109,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Equation 2 minus equation 1 gives $y-z=1$. Equation 3 minus twice equation 1 gives $-y+4z=-1$. Adding: $3z=0\\Rightarrow z=0$.</div><div class=\"ml-vi\">Phương trình 2 trừ phương trình 1 được $y-z=1$. Phương trình 3 trừ 2 lần phương trình 1 được $-y+4z=-1$. Cộng lại: $3z=0\\Rightarrow z=0$.</div>"
+          "explanation": "<div class=\"ml-en\">Equation 2 minus equation 1 gives $y-z=1$. Equation 3 minus twice equation 1 gives $-y+4z=-1$. Adding: $3z=0\\Rightarrow z=0$.</div><div class=\"ml-vi\">Phương trình 2 trừ phương trình 1 được $y-z=1$. Phương trình 3 trừ 2 lần phương trình 1 được $-y+4z=-1$. Cộng lại: $3z=0\\Rightarrow z=0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q27.png"
         },
         {
           "kind": "MCQ",
@@ -5913,7 +6136,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Note $z=2x$, so $\\operatorname{span}\\{x,y,z\\}=\\operatorname{span}\\{x,y\\}$. Solving $ax+by=v$: the third coordinate gives $2a=6\\Rightarrow a=3$, the first gives $b=-2$, but then the second is $3+6(-2)=-9\\neq9$. No combination exists.</div><div class=\"ml-vi\">Chú ý $z=2x$ nên $\\operatorname{span}\\{x,y,z\\}=\\operatorname{span}\\{x,y\\}$. Giải $ax+by=v$: toạ độ thứ ba cho $2a=6\\Rightarrow a=3$, toạ độ đầu cho $b=-2$, nhưng khi đó toạ độ thứ hai là $3+6(-2)=-9\\neq9$. Vậy không tồn tại tổ hợp.</div>"
+          "explanation": "<div class=\"ml-en\">Note $z=2x$, so $\\operatorname{span}\\{x,y,z\\}=\\operatorname{span}\\{x,y\\}$. Solving $ax+by=v$: the third coordinate gives $2a=6\\Rightarrow a=3$, the first gives $b=-2$, but then the second is $3+6(-2)=-9\\neq9$. No combination exists.</div><div class=\"ml-vi\">Chú ý $z=2x$ nên $\\operatorname{span}\\{x,y,z\\}=\\operatorname{span}\\{x,y\\}$. Giải $ax+by=v$: toạ độ thứ ba cho $2a=6\\Rightarrow a=3$, toạ độ đầu cho $b=-2$, nhưng khi đó toạ độ thứ hai là $3+6(-2)=-9\\neq9$. Vậy không tồn tại tổ hợp.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q28.png"
         },
         {
           "kind": "MCQ",
@@ -5936,7 +6160,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Write $A=\\begin{bmatrix}a&b\\\\c&d\\end{bmatrix}$; then $3A-2A^{T}=\\begin{bmatrix}a&3b-2c\\\\3c-2b&d\\end{bmatrix}$. Matching: $a=2$, $d=0$, $3b-2c=4$, $3c-2b=-1\\Rightarrow b=2,\\ c=1$ — (ii).</div><div class=\"ml-vi\">Viết $A=\\begin{bmatrix}a&b\\\\c&d\\end{bmatrix}$; khi đó $3A-2A^{T}=\\begin{bmatrix}a&3b-2c\\\\3c-2b&d\\end{bmatrix}$. Đồng nhất: $a=2$, $d=0$, $3b-2c=4$, $3c-2b=-1\\Rightarrow b=2,\\ c=1$ — (ii).</div>"
+          "explanation": "<div class=\"ml-en\">Write $A=\\begin{bmatrix}a&b\\\\c&d\\end{bmatrix}$; then $3A-2A^{T}=\\begin{bmatrix}a&3b-2c\\\\3c-2b&d\\end{bmatrix}$. Matching: $a=2$, $d=0$, $3b-2c=4$, $3c-2b=-1\\Rightarrow b=2,\\ c=1$ — (ii).</div><div class=\"ml-vi\">Viết $A=\\begin{bmatrix}a&b\\\\c&d\\end{bmatrix}$; khi đó $3A-2A^{T}=\\begin{bmatrix}a&3b-2c\\\\3c-2b&d\\end{bmatrix}$. Đồng nhất: $a=2$, $d=0$, $3b-2c=4$, $3c-2b=-1\\Rightarrow b=2,\\ c=1$ — (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q29.png"
         },
         {
           "kind": "MCQ",
@@ -5959,7 +6184,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">(i) is false — a singular $A\\neq0$ has nonzero null vectors, e.g. $A=\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix}$, $x=(0,1)$. (ii) is true by linearity: $Ax_1-Ax_2=b-b=0$.</div><div class=\"ml-vi\">(i) sai — ma trận suy biến $A\\neq0$ vẫn có vectơ khác 0 trong hạt nhân, ví dụ $A=\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix}$, $x=(0,1)$. (ii) đúng theo tính tuyến tính: $Ax_1-Ax_2=b-b=0$.</div>"
+          "explanation": "<div class=\"ml-en\">(i) is false — a singular $A\\neq0$ has nonzero null vectors, e.g. $A=\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix}$, $x=(0,1)$. (ii) is true by linearity: $Ax_1-Ax_2=b-b=0$.</div><div class=\"ml-vi\">(i) sai — ma trận suy biến $A\\neq0$ vẫn có vectơ khác 0 trong hạt nhân, ví dụ $A=\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix}$, $x=(0,1)$. (ii) đúng theo tính tuyến tính: $Ax_1-Ax_2=b-b=0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q30.png"
         },
         {
           "kind": "MCQ",
@@ -5982,7 +6208,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">By induction $A^{n}=\\begin{bmatrix}1&n\\\\0&1\\end{bmatrix}$ (a shear composes additively), so $A^{10}=\\begin{bmatrix}1&10\\\\0&1\\end{bmatrix}$ — (i).</div><div class=\"ml-vi\">Bằng quy nạp, $A^{n}=\\begin{bmatrix}1&n\\\\0&1\\end{bmatrix}$ (phép trượt cộng dồn), nên $A^{10}=\\begin{bmatrix}1&10\\\\0&1\\end{bmatrix}$ — (i).</div>"
+          "explanation": "<div class=\"ml-en\">By induction $A^{n}=\\begin{bmatrix}1&n\\\\0&1\\end{bmatrix}$ (a shear composes additively), so $A^{10}=\\begin{bmatrix}1&10\\\\0&1\\end{bmatrix}$ — (i).</div><div class=\"ml-vi\">Bằng quy nạp, $A^{n}=\\begin{bmatrix}1&n\\\\0&1\\end{bmatrix}$ (phép trượt cộng dồn), nên $A^{10}=\\begin{bmatrix}1&10\\\\0&1\\end{bmatrix}$ — (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q31.png"
         },
         {
           "kind": "MCQ",
@@ -6008,7 +6235,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The coefficient matrix has $\\det=15-16=-1$, so its inverse is $-\\begin{bmatrix}5&-4\\\\-4&3\\end{bmatrix}=\\begin{bmatrix}-5&4\\\\4&-3\\end{bmatrix}$, giving $x=-5a+4b$, $y=4a-3b$ — (ii).</div><div class=\"ml-vi\">Ma trận hệ số có $\\det=15-16=-1$ nên nghịch đảo là $-\\begin{bmatrix}5&-4\\\\-4&3\\end{bmatrix}=\\begin{bmatrix}-5&4\\\\4&-3\\end{bmatrix}$, cho $x=-5a+4b$, $y=4a-3b$ — (ii).</div>"
+          "explanation": "<div class=\"ml-en\">The coefficient matrix has $\\det=15-16=-1$, so its inverse is $-\\begin{bmatrix}5&-4\\\\-4&3\\end{bmatrix}=\\begin{bmatrix}-5&4\\\\4&-3\\end{bmatrix}$, giving $x=-5a+4b$, $y=4a-3b$ — (ii).</div><div class=\"ml-vi\">Ma trận hệ số có $\\det=15-16=-1$ nên nghịch đảo là $-\\begin{bmatrix}5&-4\\\\-4&3\\end{bmatrix}=\\begin{bmatrix}-5&4\\\\4&-3\\end{bmatrix}$, cho $x=-5a+4b$, $y=4a-3b$ — (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q32.png"
         },
         {
           "kind": "MCQ",
@@ -6034,7 +6262,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$(1,0)=(2,1)-(1,1)$, so by linearity $T(1,0)=(4,3)-(2,3)=(2,0)$.</div><div class=\"ml-vi\">$(1,0)=(2,1)-(1,1)$ nên theo tính tuyến tính $T(1,0)=(4,3)-(2,3)=(2,0)$.</div>"
+          "explanation": "<div class=\"ml-en\">$(1,0)=(2,1)-(1,1)$, so by linearity $T(1,0)=(4,3)-(2,3)=(2,0)$.</div><div class=\"ml-vi\">$(1,0)=(2,1)-(1,1)$ nên theo tính tuyến tính $T(1,0)=(4,3)-(2,3)=(2,0)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q33.png"
         },
         {
           "kind": "MCQ",
@@ -6060,7 +6289,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Rotation by $\\pi/2$ sends $(x,y)\\mapsto(-y,x)$; reflecting in $y=x$ swaps coordinates: $(-y,x)\\mapsto(x,-y)$. That is exactly reflection in the $x$-axis.</div><div class=\"ml-vi\">Phép quay $\\pi/2$ biến $(x,y)\\mapsto(-y,x)$; đối xứng qua $y=x$ hoán vị hai toạ độ: $(-y,x)\\mapsto(x,-y)$. Đó chính là phép đối xứng qua trục $Ox$.</div>"
+          "explanation": "<div class=\"ml-en\">Rotation by $\\pi/2$ sends $(x,y)\\mapsto(-y,x)$; reflecting in $y=x$ swaps coordinates: $(-y,x)\\mapsto(x,-y)$. That is exactly reflection in the $x$-axis.</div><div class=\"ml-vi\">Phép quay $\\pi/2$ biến $(x,y)\\mapsto(-y,x)$; đối xứng qua $y=x$ hoán vị hai toạ độ: $(-y,x)\\mapsto(x,-y)$. Đó chính là phép đối xứng qua trục $Ox$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q34.png"
         },
         {
           "kind": "MCQ",
@@ -6086,7 +6316,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i) $\\det(-A)=(-1)^3\\det A=-\\det A$ for $n=3$ — true. (ii) Two equal rows always force $\\det=0$ — true. (iii) is false: e.g. $\\begin{bmatrix}1&2&3\\\\2&4&6\\\\0&0&1\\end{bmatrix}$ has $\\det=0$ with no two equal rows.</div><div class=\"ml-vi\">(i) $\\det(-A)=(-1)^3\\det A=-\\det A$ với $n=3$ — đúng. (ii) Hai hàng bằng nhau luôn khiến $\\det=0$ — đúng. (iii) sai: ví dụ $\\begin{bmatrix}1&2&3\\\\2&4&6\\\\0&0&1\\end{bmatrix}$ có $\\det=0$ nhưng không có hai hàng bằng nhau.</div>"
+          "explanation": "<div class=\"ml-en\">(i) $\\det(-A)=(-1)^3\\det A=-\\det A$ for $n=3$ — true. (ii) Two equal rows always force $\\det=0$ — true. (iii) is false: e.g. $\\begin{bmatrix}1&2&3\\\\2&4&6\\\\0&0&1\\end{bmatrix}$ has $\\det=0$ with no two equal rows.</div><div class=\"ml-vi\">(i) $\\det(-A)=(-1)^3\\det A=-\\det A$ với $n=3$ — đúng. (ii) Hai hàng bằng nhau luôn khiến $\\det=0$ — đúng. (iii) sai: ví dụ $\\begin{bmatrix}1&2&3\\\\2&4&6\\\\0&0&1\\end{bmatrix}$ có $\\det=0$ nhưng không có hai hàng bằng nhau.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q35.png"
         },
         {
           "kind": "MCQ",
@@ -6112,7 +6343,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The second factor has identical first and third columns, so its determinant is $0$. Then $\\det A=\\det(\\text{first})\\cdot0=0$ for every $m$, and $A$ is never invertible.</div><div class=\"ml-vi\">Thừa số thứ hai có cột 1 và cột 3 giống hệt nhau nên định thức bằng $0$. Do đó $\\det A=\\det(\\text{thừa số đầu})\\cdot0=0$ với mọi $m$, và $A$ không bao giờ khả nghịch.</div>"
+          "explanation": "<div class=\"ml-en\">The second factor has identical first and third columns, so its determinant is $0$. Then $\\det A=\\det(\\text{first})\\cdot0=0$ for every $m$, and $A$ is never invertible.</div><div class=\"ml-vi\">Thừa số thứ hai có cột 1 và cột 3 giống hệt nhau nên định thức bằng $0$. Do đó $\\det A=\\det(\\text{thừa số đầu})\\cdot0=0$ với mọi $m$, và $A$ không bao giờ khả nghịch.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q36.png"
         },
         {
           "kind": "MCQ",
@@ -6135,7 +6367,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\det(AA^{T})=(\\det A)^2$ and $\\det(3I)=3^3=27$, so $(\\det A)^2=27\\Rightarrow\\det A=\\pm3\\sqrt3$ — (iii).</div><div class=\"ml-vi\">$\\det(AA^{T})=(\\det A)^2$ và $\\det(3I)=3^3=27$, nên $(\\det A)^2=27\\Rightarrow\\det A=\\pm3\\sqrt3$ — (iii).</div>"
+          "explanation": "<div class=\"ml-en\">$\\det(AA^{T})=(\\det A)^2$ and $\\det(3I)=3^3=27$, so $(\\det A)^2=27\\Rightarrow\\det A=\\pm3\\sqrt3$ — (iii).</div><div class=\"ml-vi\">$\\det(AA^{T})=(\\det A)^2$ và $\\det(3I)=3^3=27$, nên $(\\det A)^2=27\\Rightarrow\\det A=\\pm3\\sqrt3$ — (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q37.png"
         },
         {
           "kind": "MCQ",
@@ -6158,7 +6391,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$\\det(A-4I)=13\\neq0$ and $\\det(A-5I)=26\\neq0$, so neither 4 nor 5 is an eigenvalue. (The characteristic polynomial is $-\\lambda^3+12\\lambda^2-34\\lambda+21$, whose roots are $3$ and $\\dfrac{9\\pm\\sqrt{53}}{2}$.)</div><div class=\"ml-vi\">$\\det(A-4I)=13\\neq0$ và $\\det(A-5I)=26\\neq0$ nên cả 4 lẫn 5 đều không phải trị riêng. (Đa thức đặc trưng là $-\\lambda^3+12\\lambda^2-34\\lambda+21$, nghiệm là $3$ và $\\dfrac{9\\pm\\sqrt{53}}{2}$.)</div>"
+          "explanation": "<div class=\"ml-en\">$\\det(A-4I)=13\\neq0$ and $\\det(A-5I)=26\\neq0$, so neither 4 nor 5 is an eigenvalue. (The characteristic polynomial is $-\\lambda^3+12\\lambda^2-34\\lambda+21$, whose roots are $3$ and $\\dfrac{9\\pm\\sqrt{53}}{2}$.)</div><div class=\"ml-vi\">$\\det(A-4I)=13\\neq0$ và $\\det(A-5I)=26\\neq0$ nên cả 4 lẫn 5 đều không phải trị riêng. (Đa thức đặc trưng là $-\\lambda^3+12\\lambda^2-34\\lambda+21$, nghiệm là $3$ và $\\dfrac{9\\pm\\sqrt{53}}{2}$.)</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q38.png"
         },
         {
           "kind": "MCQ",
@@ -6181,7 +6415,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Expanding along the first column, $c(x)=(x-1)\\left[(x-2)(x-1)+1\\right]=(x-1)(x^2-3x+3)$ — (iii).</div><div class=\"ml-vi\">Khai triển theo cột đầu: $c(x)=(x-1)\\left[(x-2)(x-1)+1\\right]=(x-1)(x^2-3x+3)$ — (iii).</div>"
+          "explanation": "<div class=\"ml-en\">Expanding along the first column, $c(x)=(x-1)\\left[(x-2)(x-1)+1\\right]=(x-1)(x^2-3x+3)$ — (iii).</div><div class=\"ml-vi\">Khai triển theo cột đầu: $c(x)=(x-1)\\left[(x-2)(x-1)+1\\right]=(x-1)(x^2-3x+3)$ — (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q39.png"
         },
         {
           "kind": "MCQ",
@@ -6204,7 +6439,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">For $Q$: $x=3\\Rightarrow t=1$, and then $y=-1+2=1$ ✓, $z=1+3=4$ ✓. For $P$: $t=-1$ gives $y=-3\\neq2$. For $R$: $t=0$ gives $y=-1\\neq1$. Only $Q$ lies on the line.</div><div class=\"ml-vi\">Với $Q$: $x=3\\Rightarrow t=1$, khi đó $y=-1+2=1$ ✓, $z=1+3=4$ ✓. Với $P$: $t=-1$ cho $y=-3\\neq2$. Với $R$: $t=0$ cho $y=-1\\neq1$. Chỉ $Q$ nằm trên đường thẳng.</div>"
+          "explanation": "<div class=\"ml-en\">For $Q$: $x=3\\Rightarrow t=1$, and then $y=-1+2=1$ ✓, $z=1+3=4$ ✓. For $P$: $t=-1$ gives $y=-3\\neq2$. For $R$: $t=0$ gives $y=-1\\neq1$. Only $Q$ lies on the line.</div><div class=\"ml-vi\">Với $Q$: $x=3\\Rightarrow t=1$, khi đó $y=-1+2=1$ ✓, $z=1+3=4$ ✓. Với $P$: $t=-1$ cho $y=-3\\neq2$. Với $R$: $t=0$ cho $y=-1\\neq1$. Chỉ $Q$ nằm trên đường thẳng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q40.png"
         },
         {
           "kind": "MCQ",
@@ -6227,7 +6463,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\operatorname{proj}_{\\vec v}\\vec u=\\dfrac{\\vec u\\cdot\\vec v}{\\|\\vec v\\|^2}\\vec v=\\dfrac{3}{5}(0,2,1)=\\left(0,\\dfrac65,\\dfrac35\\right)$; the second coordinate is $\\dfrac65$.</div><div class=\"ml-vi\">$\\operatorname{proj}_{\\vec v}\\vec u=\\dfrac{\\vec u\\cdot\\vec v}{\\|\\vec v\\|^2}\\vec v=\\dfrac{3}{5}(0,2,1)=\\left(0,\\dfrac65,\\dfrac35\\right)$; toạ độ thứ hai là $\\dfrac65$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\operatorname{proj}_{\\vec v}\\vec u=\\dfrac{\\vec u\\cdot\\vec v}{\\|\\vec v\\|^2}\\vec v=\\dfrac{3}{5}(0,2,1)=\\left(0,\\dfrac65,\\dfrac35\\right)$; the second coordinate is $\\dfrac65$.</div><div class=\"ml-vi\">$\\operatorname{proj}_{\\vec v}\\vec u=\\dfrac{\\vec u\\cdot\\vec v}{\\|\\vec v\\|^2}\\vec v=\\dfrac{3}{5}(0,2,1)=\\left(0,\\dfrac65,\\dfrac35\\right)$; toạ độ thứ hai là $\\dfrac65$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q41.png"
         },
         {
           "kind": "MCQ",
@@ -6250,7 +6487,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">A point of the given line is $P=(1+2t,2-3t,t)$ with direction $d=(2,-3,1)$. Perpendicularity means $\\overrightarrow{OP}\\cdot d=0$: $2(1+2t)-3(2-3t)+t=14t-4=0\\Rightarrow t=\\dfrac27$, giving $\\overrightarrow{OP}=\\left(\\dfrac{11}{7},\\dfrac87,\\dfrac27\\right)\\parallel(11,8,2)$.</div><div class=\"ml-vi\">Một điểm trên đường thẳng đã cho là $P=(1+2t,2-3t,t)$ với vectơ chỉ phương $d=(2,-3,1)$. Điều kiện vuông góc: $\\overrightarrow{OP}\\cdot d=0$: $2(1+2t)-3(2-3t)+t=14t-4=0\\Rightarrow t=\\dfrac27$, cho $\\overrightarrow{OP}=\\left(\\dfrac{11}{7},\\dfrac87,\\dfrac27\\right)\\parallel(11,8,2)$.</div>"
+          "explanation": "<div class=\"ml-en\">A point of the given line is $P=(1+2t,2-3t,t)$ with direction $d=(2,-3,1)$. Perpendicularity means $\\overrightarrow{OP}\\cdot d=0$: $2(1+2t)-3(2-3t)+t=14t-4=0\\Rightarrow t=\\dfrac27$, giving $\\overrightarrow{OP}=\\left(\\dfrac{11}{7},\\dfrac87,\\dfrac27\\right)\\parallel(11,8,2)$.</div><div class=\"ml-vi\">Một điểm trên đường thẳng đã cho là $P=(1+2t,2-3t,t)$ với vectơ chỉ phương $d=(2,-3,1)$. Điều kiện vuông góc: $\\overrightarrow{OP}\\cdot d=0$: $2(1+2t)-3(2-3t)+t=14t-4=0\\Rightarrow t=\\dfrac27$, cho $\\overrightarrow{OP}=\\left(\\dfrac{11}{7},\\dfrac87,\\dfrac27\\right)\\parallel(11,8,2)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q42.png"
         },
         {
           "kind": "MCQ",
@@ -6276,7 +6514,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The matrix of $T$ is $M=\\begin{bmatrix}2&1&0\\\\2&-1&0\\\\1&0&1\\end{bmatrix}$ with $\\det M=-4$. The original parallelepiped has volume $\\left|\\det[u\\ v\\ w]\\right|=2$, and a linear map scales volume by $|\\det M|$: $4\\times2=8$.</div><div class=\"ml-vi\">Ma trận của $T$ là $M=\\begin{bmatrix}2&1&0\\\\2&-1&0\\\\1&0&1\\end{bmatrix}$ với $\\det M=-4$. Khối hộp ban đầu có thể tích $\\left|\\det[u\\ v\\ w]\\right|=2$, và ánh xạ tuyến tính nhân thể tích với $|\\det M|$: $4\\times2=8$.</div>"
+          "explanation": "<div class=\"ml-en\">The matrix of $T$ is $M=\\begin{bmatrix}2&1&0\\\\2&-1&0\\\\1&0&1\\end{bmatrix}$ with $\\det M=-4$. The original parallelepiped has volume $\\left|\\det[u\\ v\\ w]\\right|=2$, and a linear map scales volume by $|\\det M|$: $4\\times2=8$.</div><div class=\"ml-vi\">Ma trận của $T$ là $M=\\begin{bmatrix}2&1&0\\\\2&-1&0\\\\1&0&1\\end{bmatrix}$ với $\\det M=-4$. Khối hộp ban đầu có thể tích $\\left|\\det[u\\ v\\ w]\\right|=2$, và ánh xạ tuyến tính nhân thể tích với $|\\det M|$: $4\\times2=8$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q43.png"
         },
         {
           "kind": "MCQ",
@@ -6302,7 +6541,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The matrix is $\\dfrac{1}{34}\\begin{bmatrix}25&15\\\\15&9\\end{bmatrix}$ with trace $1$ and determinant $0$ — the signature of a projection (a reflection would have trace $0$, determinant $-1$). Its image is spanned by $(5,3)$, the line $y=\\dfrac{3}{5}x$, i.e. $3x-5y=0$.</div><div class=\"ml-vi\">Ma trận là $\\dfrac{1}{34}\\begin{bmatrix}25&15\\\\15&9\\end{bmatrix}$ với vết bằng $1$ và định thức bằng $0$ — đặc trưng của phép chiếu (phép đối xứng sẽ có vết $0$, định thức $-1$). Ảnh của nó sinh bởi $(5,3)$, tức đường thẳng $y=\\dfrac{3}{5}x$, hay $3x-5y=0$.</div>"
+          "explanation": "<div class=\"ml-en\">The matrix is $\\dfrac{1}{34}\\begin{bmatrix}25&15\\\\15&9\\end{bmatrix}$ with trace $1$ and determinant $0$ — the signature of a projection (a reflection would have trace $0$, determinant $-1$). Its image is spanned by $(5,3)$, the line $y=\\dfrac{3}{5}x$, i.e. $3x-5y=0$.</div><div class=\"ml-vi\">Ma trận là $\\dfrac{1}{34}\\begin{bmatrix}25&15\\\\15&9\\end{bmatrix}$ với vết bằng $1$ và định thức bằng $0$ — đặc trưng của phép chiếu (phép đối xứng sẽ có vết $0$, định thức $-1$). Ảnh của nó sinh bởi $(5,3)$, tức đường thẳng $y=\\dfrac{3}{5}x$, hay $3x-5y=0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q44.png"
         },
         {
           "kind": "MCQ",
@@ -6328,7 +6568,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Write $(1,2,t)=a(1,3,4)+b(0,2,2)$. The first coordinate gives $a=1$; the second gives $3+2b=2\\Rightarrow b=-\\dfrac12$; then $t=4+2\\!\\left(-\\dfrac12\\right)=3$.</div><div class=\"ml-vi\">Viết $(1,2,t)=a(1,3,4)+b(0,2,2)$. Toạ độ đầu cho $a=1$; toạ độ thứ hai cho $3+2b=2\\Rightarrow b=-\\dfrac12$; suy ra $t=4+2\\!\\left(-\\dfrac12\\right)=3$.</div>"
+          "explanation": "<div class=\"ml-en\">Write $(1,2,t)=a(1,3,4)+b(0,2,2)$. The first coordinate gives $a=1$; the second gives $3+2b=2\\Rightarrow b=-\\dfrac12$; then $t=4+2\\!\\left(-\\dfrac12\\right)=3$.</div><div class=\"ml-vi\">Viết $(1,2,t)=a(1,3,4)+b(0,2,2)$. Toạ độ đầu cho $a=1$; toạ độ thứ hai cho $3+2b=2\\Rightarrow b=-\\dfrac12$; suy ra $t=4+2\\!\\left(-\\dfrac12\\right)=3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q45.png"
         },
         {
           "kind": "MCQ",
@@ -6354,7 +6595,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">From the first coordinate $a=1$; the third gives $2+b=3\\Rightarrow b=1$. But then the fourth coordinate is $1-2=-1\\neq4$, so no combination works for any $t$.</div><div class=\"ml-vi\">Từ toạ độ đầu, $a=1$; toạ độ thứ ba cho $2+b=3\\Rightarrow b=1$. Nhưng khi đó toạ độ thứ tư là $1-2=-1\\neq4$, nên không có $t$ nào thoả.</div>"
+          "explanation": "<div class=\"ml-en\">From the first coordinate $a=1$; the third gives $2+b=3\\Rightarrow b=1$. But then the fourth coordinate is $1-2=-1\\neq4$, so no combination works for any $t$.</div><div class=\"ml-vi\">Từ toạ độ đầu, $a=1$; toạ độ thứ ba cho $2+b=3\\Rightarrow b=1$. Nhưng khi đó toạ độ thứ tư là $1-2=-1\\neq4$, nên không có $t$ nào thoả.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q46.png"
         },
         {
           "kind": "MCQ",
@@ -6377,7 +6619,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$[a,b,a-b]=a[1,0,1]+b[0,1,-1]$, and those two vectors are independent, so (i) is a basis ($\\dim U=2$). (ii) is too small; (iii) is dependent (its second vector is $-1$ times the first).</div><div class=\"ml-vi\">$[a,b,a-b]=a[1,0,1]+b[0,1,-1]$, và hai vectơ này độc lập nên (i) là cơ sở ($\\dim U=2$). (ii) quá ít; (iii) phụ thuộc (vectơ thứ hai bằng $-1$ lần vectơ đầu).</div>"
+          "explanation": "<div class=\"ml-en\">$[a,b,a-b]=a[1,0,1]+b[0,1,-1]$, and those two vectors are independent, so (i) is a basis ($\\dim U=2$). (ii) is too small; (iii) is dependent (its second vector is $-1$ times the first).</div><div class=\"ml-vi\">$[a,b,a-b]=a[1,0,1]+b[0,1,-1]$, và hai vectơ này độc lập nên (i) là cơ sở ($\\dim U=2$). (ii) quá ít; (iii) phụ thuộc (vectơ thứ hai bằng $-1$ lần vectơ đầu).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q47.png"
         },
         {
           "kind": "MCQ",
@@ -6400,7 +6643,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">(i) is obtained from $\\{u,v,w\\}$ by an elementary operation ($v\\mapsto v-w$), which preserves independence. (ii) is dependent: $(u-v)+(u+v)=2u$, so the four vectors satisfy a nontrivial relation.</div><div class=\"ml-vi\">(i) nhận được từ $\\{u,v,w\\}$ bằng một phép biến đổi sơ cấp ($v\\mapsto v-w$), bảo toàn tính độc lập. (ii) phụ thuộc: $(u-v)+(u+v)=2u$, nên bốn vectơ có một hệ thức không tầm thường.</div>"
+          "explanation": "<div class=\"ml-en\">(i) is obtained from $\\{u,v,w\\}$ by an elementary operation ($v\\mapsto v-w$), which preserves independence. (ii) is dependent: $(u-v)+(u+v)=2u$, so the four vectors satisfy a nontrivial relation.</div><div class=\"ml-vi\">(i) nhận được từ $\\{u,v,w\\}$ bằng một phép biến đổi sơ cấp ($v\\mapsto v-w$), bảo toàn tính độc lập. (ii) phụ thuộc: $(u-v)+(u+v)=2u$, nên bốn vectơ có một hệ thức không tầm thường.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q48.png"
         },
         {
           "kind": "MCQ",
@@ -6423,7 +6667,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Orthogonality with $[-2,1,0]$ gives $-2+a=0\\Rightarrow a=2$; with $[1,2,3]$: $1+2a+3b=0\\Rightarrow b=-\\dfrac53$. Hence $a-b=2+\\dfrac53=\\dfrac{11}{3}$.</div><div class=\"ml-vi\">Trực giao với $[-2,1,0]$ cho $-2+a=0\\Rightarrow a=2$; với $[1,2,3]$: $1+2a+3b=0\\Rightarrow b=-\\dfrac53$. Vậy $a-b=2+\\dfrac53=\\dfrac{11}{3}$.</div>"
+          "explanation": "<div class=\"ml-en\">Orthogonality with $[-2,1,0]$ gives $-2+a=0\\Rightarrow a=2$; with $[1,2,3]$: $1+2a+3b=0\\Rightarrow b=-\\dfrac53$. Hence $a-b=2+\\dfrac53=\\dfrac{11}{3}$.</div><div class=\"ml-vi\">Trực giao với $[-2,1,0]$ cho $-2+a=0\\Rightarrow a=2$; với $[1,2,3]$: $1+2a+3b=0\\Rightarrow b=-\\dfrac53$. Vậy $a-b=2+\\dfrac53=\\dfrac{11}{3}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q49.png"
         },
         {
           "kind": "MCQ",
@@ -6449,7 +6694,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Rank–nullity for a matrix with 5 columns: $\\operatorname{rank}+\\dim\\operatorname{Null}=5\\Rightarrow\\operatorname{rank}=5-4=1$.</div><div class=\"ml-vi\">Định lý hạng–số khuyết với ma trận 5 cột: $\\operatorname{rank}+\\dim\\operatorname{Null}=5\\Rightarrow\\operatorname{rank}=5-4=1$.</div>"
+          "explanation": "<div class=\"ml-en\">Rank–nullity for a matrix with 5 columns: $\\operatorname{rank}+\\dim\\operatorname{Null}=5\\Rightarrow\\operatorname{rank}=5-4=1$.</div><div class=\"ml-vi\">Định lý hạng–số khuyết với ma trận 5 cột: $\\operatorname{rank}+\\dim\\operatorname{Null}=5\\Rightarrow\\operatorname{rank}=5-4=1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D5/q50.png"
         }
       ]
     },
@@ -6492,7 +6738,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$h(x)=f(x-5)=2(x-5)-4=2x-14$.</div><div class=\"ml-vi\">$h(x)=f(x-5)=2(x-5)-4=2x-14$.</div>"
+          "explanation": "<div class=\"ml-en\">$h(x)=f(x-5)=2(x-5)-4=2x-14$.</div><div class=\"ml-vi\">$h(x)=f(x-5)=2(x-5)-4=2x-14$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q1.png"
         },
         {
           "kind": "MCQ",
@@ -6518,7 +6765,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$m=\\dfrac{-8-2}{3-1}=\\dfrac{-10}{2}=-5$.</div><div class=\"ml-vi\">$m=\\dfrac{-8-2}{3-1}=\\dfrac{-10}{2}=-5$.</div>"
+          "explanation": "<div class=\"ml-en\">$m=\\dfrac{-8-2}{3-1}=\\dfrac{-10}{2}=-5$.</div><div class=\"ml-vi\">$m=\\dfrac{-8-2}{3-1}=\\dfrac{-10}{2}=-5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q2.png"
         },
         {
           "kind": "MCQ",
@@ -6547,7 +6795,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Multiply by the conjugate: $\\dfrac{x^2+3x-4}{(x-1)(\\sqrt{x^2+3x}+2)}=\\dfrac{(x+4)(x-1)}{(x-1)(\\sqrt{x^2+3x}+2)}=\\dfrac{x+4}{\\sqrt{x^2+3x}+2}\\to\\dfrac54$.</div><div class=\"ml-vi\">Nhân liên hợp: $\\dfrac{x^2+3x-4}{(x-1)(\\sqrt{x^2+3x}+2)}=\\dfrac{(x+4)(x-1)}{(x-1)(\\sqrt{x^2+3x}+2)}=\\dfrac{x+4}{\\sqrt{x^2+3x}+2}\\to\\dfrac54$.</div>"
+          "explanation": "<div class=\"ml-en\">Multiply by the conjugate: $\\dfrac{x^2+3x-4}{(x-1)(\\sqrt{x^2+3x}+2)}=\\dfrac{(x+4)(x-1)}{(x-1)(\\sqrt{x^2+3x}+2)}=\\dfrac{x+4}{\\sqrt{x^2+3x}+2}\\to\\dfrac54$.</div><div class=\"ml-vi\">Nhân liên hợp: $\\dfrac{x^2+3x-4}{(x-1)(\\sqrt{x^2+3x}+2)}=\\dfrac{(x+4)(x-1)}{(x-1)(\\sqrt{x^2+3x}+2)}=\\dfrac{x+4}{\\sqrt{x^2+3x}+2}\\to\\dfrac54$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q3.png"
         },
         {
           "kind": "MCQ",
@@ -6570,7 +6819,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">For $x\\to1^{-}$, rationalize: $\\dfrac{3(x-1)(\\sqrt{x+3}+2)}{x-1}=3(\\sqrt{x+3}+2)\\to12$, so (i) is true. But $f(1)=3+6=9$ and $\\lim_{x\\to1^{+}}f(x)=9$, so (ii) and (iii) are false.</div><div class=\"ml-vi\">Khi $x\\to1^{-}$, nhân liên hợp: $\\dfrac{3(x-1)(\\sqrt{x+3}+2)}{x-1}=3(\\sqrt{x+3}+2)\\to12$, nên (i) đúng. Nhưng $f(1)=3+6=9$ và $\\lim_{x\\to1^{+}}f(x)=9$ nên (ii), (iii) sai.</div>"
+          "explanation": "<div class=\"ml-en\">For $x\\to1^{-}$, rationalize: $\\dfrac{3(x-1)(\\sqrt{x+3}+2)}{x-1}=3(\\sqrt{x+3}+2)\\to12$, so (i) is true. But $f(1)=3+6=9$ and $\\lim_{x\\to1^{+}}f(x)=9$, so (ii) and (iii) are false.</div><div class=\"ml-vi\">Khi $x\\to1^{-}$, nhân liên hợp: $\\dfrac{3(x-1)(\\sqrt{x+3}+2)}{x-1}=3(\\sqrt{x+3}+2)\\to12$, nên (i) đúng. Nhưng $f(1)=3+6=9$ và $\\lim_{x\\to1^{+}}f(x)=9$ nên (ii), (iii) sai.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q4.png"
         },
         {
           "kind": "MCQ",
@@ -6596,7 +6846,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\dfrac{(x+h)^2+5(x+h)-x^2-5x}{h}=\\dfrac{2xh+h^2+5h}{h}=2x+h+5$.</div><div class=\"ml-vi\">$\\dfrac{(x+h)^2+5(x+h)-x^2-5x}{h}=\\dfrac{2xh+h^2+5h}{h}=2x+h+5$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\dfrac{(x+h)^2+5(x+h)-x^2-5x}{h}=\\dfrac{2xh+h^2+5h}{h}=2x+h+5$.</div><div class=\"ml-vi\">$\\dfrac{(x+h)^2+5(x+h)-x^2-5x}{h}=\\dfrac{2xh+h^2+5h}{h}=2x+h+5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q5.png"
         },
         {
           "kind": "MCQ",
@@ -6622,7 +6873,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$f'(x)=\\dfrac{45}{2}x^{3/2}-\\dfrac{21}{2}x^{1/2}$. At $x=4$: $x^{3/2}=8$, $x^{1/2}=2$, so $f'(4)=\\dfrac{45}{2}(8)-\\dfrac{21}{2}(2)=180-21=159$.</div><div class=\"ml-vi\">$f'(x)=\\dfrac{45}{2}x^{3/2}-\\dfrac{21}{2}x^{1/2}$. Tại $x=4$: $x^{3/2}=8$, $x^{1/2}=2$, nên $f'(4)=\\dfrac{45}{2}(8)-\\dfrac{21}{2}(2)=180-21=159$.</div>"
+          "explanation": "<div class=\"ml-en\">$f'(x)=\\dfrac{45}{2}x^{3/2}-\\dfrac{21}{2}x^{1/2}$. At $x=4$: $x^{3/2}=8$, $x^{1/2}=2$, so $f'(4)=\\dfrac{45}{2}(8)-\\dfrac{21}{2}(2)=180-21=159$.</div><div class=\"ml-vi\">$f'(x)=\\dfrac{45}{2}x^{3/2}-\\dfrac{21}{2}x^{1/2}$. Tại $x=4$: $x^{3/2}=8$, $x^{1/2}=2$, nên $f'(4)=\\dfrac{45}{2}(8)-\\dfrac{21}{2}(2)=180-21=159$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q6.png"
         },
         {
           "kind": "MCQ",
@@ -6648,7 +6900,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$C'(x)=0.000009x^2-0.08x+200$. At $x=3000$: $0.000009(9\\,000\\,000)-0.08(3000)+200=81-240+200=41$.</div><div class=\"ml-vi\">$C'(x)=0.000009x^2-0.08x+200$. Tại $x=3000$: $0.000009(9\\,000\\,000)-0.08(3000)+200=81-240+200=41$.</div>"
+          "explanation": "<div class=\"ml-en\">$C'(x)=0.000009x^2-0.08x+200$. At $x=3000$: $0.000009(9\\,000\\,000)-0.08(3000)+200=81-240+200=41$.</div><div class=\"ml-vi\">$C'(x)=0.000009x^2-0.08x+200$. Tại $x=3000$: $0.000009(9\\,000\\,000)-0.08(3000)+200=81-240+200=41$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q7.png"
         },
         {
           "kind": "MCQ",
@@ -6674,7 +6927,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Chain rule on $y=(x^7+9x)^{1/5}$: $y'=\\dfrac15(x^7+9x)^{-4/5}\\cdot(7x^6+9)$ — (iii).</div><div class=\"ml-vi\">Quy tắc dây chuyền với $y=(x^7+9x)^{1/5}$: $y'=\\dfrac15(x^7+9x)^{-4/5}\\cdot(7x^6+9)$ — (iii).</div>"
+          "explanation": "<div class=\"ml-en\">Chain rule on $y=(x^7+9x)^{1/5}$: $y'=\\dfrac15(x^7+9x)^{-4/5}\\cdot(7x^6+9)$ — (iii).</div><div class=\"ml-vi\">Quy tắc dây chuyền với $y=(x^7+9x)^{1/5}$: $y'=\\dfrac15(x^7+9x)^{-4/5}\\cdot(7x^6+9)$ — (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q8.png"
         },
         {
           "kind": "MCQ",
@@ -6700,7 +6954,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Differentiating: $x^2-18y\\,y'=0\\Rightarrow y'=\\dfrac{x^2}{18y}$ — (ii).</div><div class=\"ml-vi\">Đạo hàm hai vế: $x^2-18y\\,y'=0\\Rightarrow y'=\\dfrac{x^2}{18y}$ — (ii).</div>"
+          "explanation": "<div class=\"ml-en\">Differentiating: $x^2-18y\\,y'=0\\Rightarrow y'=\\dfrac{x^2}{18y}$ — (ii).</div><div class=\"ml-vi\">Đạo hàm hai vế: $x^2-18y\\,y'=0\\Rightarrow y'=\\dfrac{x^2}{18y}$ — (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q9.png"
         },
         {
           "kind": "MCQ",
@@ -6726,7 +6981,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">In terms of the diameter, $V=\\dfrac{\\pi}{6}d^3$, so $\\dfrac{dV}{dt}=\\dfrac{\\pi}{2}d^2\\dfrac{dd}{dt}$. From $V=6$: $d=\\sqrt[3]{36/\\pi}\\approx2.2547$, $d^2\\approx5.0837$. Then $\\left|\\dfrac{dd}{dt}\\right|=\\dfrac{9}{(\\pi/2)(5.0837)}\\approx1.127$ cm/s.</div><div class=\"ml-vi\">Theo đường kính, $V=\\dfrac{\\pi}{6}d^3$ nên $\\dfrac{dV}{dt}=\\dfrac{\\pi}{2}d^2\\dfrac{dd}{dt}$. Từ $V=6$: $d=\\sqrt[3]{36/\\pi}\\approx2.2547$, $d^2\\approx5.0837$. Vậy $\\left|\\dfrac{dd}{dt}\\right|=\\dfrac{9}{(\\pi/2)(5.0837)}\\approx1.127$ cm/s.</div>"
+          "explanation": "<div class=\"ml-en\">In terms of the diameter, $V=\\dfrac{\\pi}{6}d^3$, so $\\dfrac{dV}{dt}=\\dfrac{\\pi}{2}d^2\\dfrac{dd}{dt}$. From $V=6$: $d=\\sqrt[3]{36/\\pi}\\approx2.2547$, $d^2\\approx5.0837$. Then $\\left|\\dfrac{dd}{dt}\\right|=\\dfrac{9}{(\\pi/2)(5.0837)}\\approx1.127$ cm/s.</div><div class=\"ml-vi\">Theo đường kính, $V=\\dfrac{\\pi}{6}d^3$ nên $\\dfrac{dV}{dt}=\\dfrac{\\pi}{2}d^2\\dfrac{dd}{dt}$. Từ $V=6$: $d=\\sqrt[3]{36/\\pi}\\approx2.2547$, $d^2\\approx5.0837$. Vậy $\\left|\\dfrac{dd}{dt}\\right|=\\dfrac{9}{(\\pi/2)(5.0837)}\\approx1.127$ cm/s.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q10.png"
         },
         {
           "kind": "MCQ",
@@ -6755,7 +7011,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f(8)=4$ and $f'(x)=\\dfrac23x^{-1/3}\\Rightarrow f'(8)=\\dfrac13$. So $L(x)=4+\\dfrac13(x-8)=\\dfrac{x}{3}+\\dfrac43$.</div><div class=\"ml-vi\">$f(8)=4$ và $f'(x)=\\dfrac23x^{-1/3}\\Rightarrow f'(8)=\\dfrac13$. Vậy $L(x)=4+\\dfrac13(x-8)=\\dfrac{x}{3}+\\dfrac43$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(8)=4$ and $f'(x)=\\dfrac23x^{-1/3}\\Rightarrow f'(8)=\\dfrac13$. So $L(x)=4+\\dfrac13(x-8)=\\dfrac{x}{3}+\\dfrac43$.</div><div class=\"ml-vi\">$f(8)=4$ và $f'(x)=\\dfrac23x^{-1/3}\\Rightarrow f'(8)=\\dfrac13$. Vậy $L(x)=4+\\dfrac13(x-8)=\\dfrac{x}{3}+\\dfrac43$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q11.png"
         },
         {
           "kind": "MCQ",
@@ -6781,7 +7038,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$y'=2xe^{x-1}+x^2e^{x-1}=xe^{x-1}(x+2)$. Since $e^{x-1}\\gt0$, $y'=0\\iff x=0$ or $x=-2$.</div><div class=\"ml-vi\">$y'=2xe^{x-1}+x^2e^{x-1}=xe^{x-1}(x+2)$. Vì $e^{x-1}\\gt0$ nên $y'=0\\iff x=0$ hoặc $x=-2$.</div>"
+          "explanation": "<div class=\"ml-en\">$y'=2xe^{x-1}+x^2e^{x-1}=xe^{x-1}(x+2)$. Since $e^{x-1}\\gt0$, $y'=0\\iff x=0$ or $x=-2$.</div><div class=\"ml-vi\">$y'=2xe^{x-1}+x^2e^{x-1}=xe^{x-1}(x+2)$. Vì $e^{x-1}\\gt0$ nên $y'=0\\iff x=0$ hoặc $x=-2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q12.png"
         },
         {
           "kind": "MCQ",
@@ -6807,7 +7065,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$f'(x)=\\dfrac23(x+3)^{-1/3}$ and $f''(x)=-\\dfrac29(x+3)^{-4/3}$. Since $(x+3)^{-4/3}\\gt0$ for $x\\neq-3$, $f''\\lt0$ everywhere on both sides: concave down on $(-\\infty,-3)$ and $(-3,\\infty)$ — (ii).</div><div class=\"ml-vi\">$f'(x)=\\dfrac23(x+3)^{-1/3}$ và $f''(x)=-\\dfrac29(x+3)^{-4/3}$. Vì $(x+3)^{-4/3}\\gt0$ với mọi $x\\neq-3$ nên $f''\\lt0$ ở cả hai phía: lõm xuống trên $(-\\infty,-3)$ và $(-3,\\infty)$ — (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$f'(x)=\\dfrac23(x+3)^{-1/3}$ and $f''(x)=-\\dfrac29(x+3)^{-4/3}$. Since $(x+3)^{-4/3}\\gt0$ for $x\\neq-3$, $f''\\lt0$ everywhere on both sides: concave down on $(-\\infty,-3)$ and $(-3,\\infty)$ — (ii).</div><div class=\"ml-vi\">$f'(x)=\\dfrac23(x+3)^{-1/3}$ và $f''(x)=-\\dfrac29(x+3)^{-4/3}$. Vì $(x+3)^{-4/3}\\gt0$ với mọi $x\\neq-3$ nên $f''\\lt0$ ở cả hai phía: lõm xuống trên $(-\\infty,-3)$ và $(-3,\\infty)$ — (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q13.png"
         },
         {
           "kind": "MCQ",
@@ -6830,7 +7089,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\left|\\dfrac{\\sin(x^2)}{x}\\right|\\leq\\dfrac{1}{|x|}\\to0$ as $x\\to\\pm\\infty$ (squeeze theorem), so $f(x)\\to-1$: the horizontal asymptote is $y=-1$.</div><div class=\"ml-vi\">$\\left|\\dfrac{\\sin(x^2)}{x}\\right|\\leq\\dfrac{1}{|x|}\\to0$ khi $x\\to\\pm\\infty$ (định lý kẹp) nên $f(x)\\to-1$: tiệm cận ngang là $y=-1$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\left|\\dfrac{\\sin(x^2)}{x}\\right|\\leq\\dfrac{1}{|x|}\\to0$ as $x\\to\\pm\\infty$ (squeeze theorem), so $f(x)\\to-1$: the horizontal asymptote is $y=-1$.</div><div class=\"ml-vi\">$\\left|\\dfrac{\\sin(x^2)}{x}\\right|\\leq\\dfrac{1}{|x|}\\to0$ khi $x\\to\\pm\\infty$ (định lý kẹp) nên $f(x)\\to-1$: tiệm cận ngang là $y=-1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q14.png"
         },
         {
           "kind": "MCQ",
@@ -6856,7 +7116,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">With $a-2b=10$, minimize $S=a^2+b^2=(10+2b)^2+b^2$. Then $S'=4(10+2b)+2b=40+10b=0\\Rightarrow b=-4$ and $a=2$.</div><div class=\"ml-vi\">Với $a-2b=10$, cực tiểu hoá $S=a^2+b^2=(10+2b)^2+b^2$. Khi đó $S'=4(10+2b)+2b=40+10b=0\\Rightarrow b=-4$ và $a=2$.</div>"
+          "explanation": "<div class=\"ml-en\">With $a-2b=10$, minimize $S=a^2+b^2=(10+2b)^2+b^2$. Then $S'=4(10+2b)+2b=40+10b=0\\Rightarrow b=-4$ and $a=2$.</div><div class=\"ml-vi\">Với $a-2b=10$, cực tiểu hoá $S=a^2+b^2=(10+2b)^2+b^2$. Khi đó $S'=4(10+2b)+2b=40+10b=0\\Rightarrow b=-4$ và $a=2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q15.png"
         },
         {
           "kind": "MCQ",
@@ -6885,7 +7146,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f'(x)=3x^2-6x$. $f(3)=1$, $f'(3)=9\\Rightarrow x_2=3-\\dfrac19=2.8889$. Then $f(x_2)=0.0727$, $f'(x_2)=7.7037\\Rightarrow x_3\\approx2.8794$.</div><div class=\"ml-vi\">$f'(x)=3x^2-6x$. $f(3)=1$, $f'(3)=9\\Rightarrow x_2=3-\\dfrac19=2.8889$. Tiếp: $f(x_2)=0.0727$, $f'(x_2)=7.7037\\Rightarrow x_3\\approx2.8794$.</div>"
+          "explanation": "<div class=\"ml-en\">$f'(x)=3x^2-6x$. $f(3)=1$, $f'(3)=9\\Rightarrow x_2=3-\\dfrac19=2.8889$. Then $f(x_2)=0.0727$, $f'(x_2)=7.7037\\Rightarrow x_3\\approx2.8794$.</div><div class=\"ml-vi\">$f'(x)=3x^2-6x$. $f(3)=1$, $f'(3)=9\\Rightarrow x_2=3-\\dfrac19=2.8889$. Tiếp: $f(x_2)=0.0727$, $f'(x_2)=7.7037\\Rightarrow x_3\\approx2.8794$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q16.png"
         },
         {
           "kind": "MCQ",
@@ -6914,7 +7176,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\displaystyle\\sum_{n=1}^{10}(2n+1)=2\\cdot\\dfrac{10\\cdot11}{2}+10=110+10=120$.</div><div class=\"ml-vi\">$\\displaystyle\\sum_{n=1}^{10}(2n+1)=2\\cdot\\dfrac{10\\cdot11}{2}+10=110+10=120$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\displaystyle\\sum_{n=1}^{10}(2n+1)=2\\cdot\\dfrac{10\\cdot11}{2}+10=110+10=120$.</div><div class=\"ml-vi\">$\\displaystyle\\sum_{n=1}^{10}(2n+1)=2\\cdot\\dfrac{10\\cdot11}{2}+10=110+10=120$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q17.png"
         },
         {
           "kind": "MCQ",
@@ -6937,7 +7200,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Here $\\Delta x=\\dfrac{\\pi}{4n}$ and the sample points are $x_i=\\dfrac{(i+n)\\pi}{4n}=\\dfrac{\\pi}{4}+i\\Delta x$, which run from $\\dfrac{\\pi}{4}$ to $\\dfrac{\\pi}{4}+\\dfrac{\\pi}{4}=\\dfrac{\\pi}{2}$ with $f(x)=\\sin x$ — (iii).</div><div class=\"ml-vi\">Ở đây $\\Delta x=\\dfrac{\\pi}{4n}$ và các điểm mẫu là $x_i=\\dfrac{(i+n)\\pi}{4n}=\\dfrac{\\pi}{4}+i\\Delta x$, chạy từ $\\dfrac{\\pi}{4}$ đến $\\dfrac{\\pi}{4}+\\dfrac{\\pi}{4}=\\dfrac{\\pi}{2}$ với $f(x)=\\sin x$ — (iii).</div>"
+          "explanation": "<div class=\"ml-en\">Here $\\Delta x=\\dfrac{\\pi}{4n}$ and the sample points are $x_i=\\dfrac{(i+n)\\pi}{4n}=\\dfrac{\\pi}{4}+i\\Delta x$, which run from $\\dfrac{\\pi}{4}$ to $\\dfrac{\\pi}{4}+\\dfrac{\\pi}{4}=\\dfrac{\\pi}{2}$ with $f(x)=\\sin x$ — (iii).</div><div class=\"ml-vi\">Ở đây $\\Delta x=\\dfrac{\\pi}{4n}$ và các điểm mẫu là $x_i=\\dfrac{(i+n)\\pi}{4n}=\\dfrac{\\pi}{4}+i\\Delta x$, chạy từ $\\dfrac{\\pi}{4}$ đến $\\dfrac{\\pi}{4}+\\dfrac{\\pi}{4}=\\dfrac{\\pi}{2}$ với $f(x)=\\sin x$ — (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q18.png"
         },
         {
           "kind": "MCQ",
@@ -6963,7 +7227,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">By the Fundamental Theorem with the chain rule: $g'(x)=(1+\\sin x)\\cdot(\\sin x)'=(1+\\sin x)\\cos x$.</div><div class=\"ml-vi\">Theo định lý cơ bản kết hợp quy tắc dây chuyền: $g'(x)=(1+\\sin x)\\cdot(\\sin x)'=(1+\\sin x)\\cos x$.</div>"
+          "explanation": "<div class=\"ml-en\">By the Fundamental Theorem with the chain rule: $g'(x)=(1+\\sin x)\\cdot(\\sin x)'=(1+\\sin x)\\cos x$.</div><div class=\"ml-vi\">Theo định lý cơ bản kết hợp quy tắc dây chuyền: $g'(x)=(1+\\sin x)\\cdot(\\sin x)'=(1+\\sin x)\\cos x$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q19.png"
         },
         {
           "kind": "MCQ",
@@ -6989,7 +7254,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Distance $=\\displaystyle\\int_0^3|v|\\,dt$. Since $v\\lt0$ on $(0,2)$ and $v\\gt0$ on $(2,3)$: $\\displaystyle\\int_0^2(2t-t^2)dt=\\dfrac43$ and $\\displaystyle\\int_2^3(t^2-2t)dt=\\dfrac43$, total $\\dfrac83$ m.</div><div class=\"ml-vi\">Quãng đường $=\\displaystyle\\int_0^3|v|\\,dt$. Vì $v\\lt0$ trên $(0,2)$ và $v\\gt0$ trên $(2,3)$: $\\displaystyle\\int_0^2(2t-t^2)dt=\\dfrac43$ và $\\displaystyle\\int_2^3(t^2-2t)dt=\\dfrac43$, tổng $\\dfrac83$ m.</div>"
+          "explanation": "<div class=\"ml-en\">Distance $=\\displaystyle\\int_0^3|v|\\,dt$. Since $v\\lt0$ on $(0,2)$ and $v\\gt0$ on $(2,3)$: $\\displaystyle\\int_0^2(2t-t^2)dt=\\dfrac43$ and $\\displaystyle\\int_2^3(t^2-2t)dt=\\dfrac43$, total $\\dfrac83$ m.</div><div class=\"ml-vi\">Quãng đường $=\\displaystyle\\int_0^3|v|\\,dt$. Vì $v\\lt0$ trên $(0,2)$ và $v\\gt0$ trên $(2,3)$: $\\displaystyle\\int_0^2(2t-t^2)dt=\\dfrac43$ và $\\displaystyle\\int_2^3(t^2-2t)dt=\\dfrac43$, tổng $\\dfrac83$ m.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q20.png"
         },
         {
           "kind": "MCQ",
@@ -7015,7 +7281,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Substitute $u=\\ln x$, $du=\\dfrac{dx}{x}$: $\\displaystyle\\int u^{-6}du=\\dfrac{u^{-5}}{-5}+C=\\dfrac{-1}{5(\\ln x)^5}+C$ — (ii).</div><div class=\"ml-vi\">Đặt $u=\\ln x$, $du=\\dfrac{dx}{x}$: $\\displaystyle\\int u^{-6}du=\\dfrac{u^{-5}}{-5}+C=\\dfrac{-1}{5(\\ln x)^5}+C$ — (ii).</div>"
+          "explanation": "<div class=\"ml-en\">Substitute $u=\\ln x$, $du=\\dfrac{dx}{x}$: $\\displaystyle\\int u^{-6}du=\\dfrac{u^{-5}}{-5}+C=\\dfrac{-1}{5(\\ln x)^5}+C$ — (ii).</div><div class=\"ml-vi\">Đặt $u=\\ln x$, $du=\\dfrac{dx}{x}$: $\\displaystyle\\int u^{-6}du=\\dfrac{u^{-5}}{-5}+C=\\dfrac{-1}{5(\\ln x)^5}+C$ — (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q21.png"
         },
         {
           "kind": "MCQ",
@@ -7041,7 +7308,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">By parts with $u=\\ln(2x)$, $dv=4x\\,dx$: $2x^2\\ln(2x)-\\displaystyle\\int2x^2\\cdot\\dfrac1x dx=2x^2\\ln(2x)-x^2=x^2(2\\ln(2x)-1)+C$ — (i).</div><div class=\"ml-vi\">Tích phân từng phần với $u=\\ln(2x)$, $dv=4x\\,dx$: $2x^2\\ln(2x)-\\displaystyle\\int2x^2\\cdot\\dfrac1x dx=2x^2\\ln(2x)-x^2=x^2(2\\ln(2x)-1)+C$ — (i).</div>"
+          "explanation": "<div class=\"ml-en\">By parts with $u=\\ln(2x)$, $dv=4x\\,dx$: $2x^2\\ln(2x)-\\displaystyle\\int2x^2\\cdot\\dfrac1x dx=2x^2\\ln(2x)-x^2=x^2(2\\ln(2x)-1)+C$ — (i).</div><div class=\"ml-vi\">Tích phân từng phần với $u=\\ln(2x)$, $dv=4x\\,dx$: $2x^2\\ln(2x)-\\displaystyle\\int2x^2\\cdot\\dfrac1x dx=2x^2\\ln(2x)-x^2=x^2(2\\ln(2x)-1)+C$ — (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q22.png"
         },
         {
           "kind": "MCQ",
@@ -7067,7 +7335,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$h=1$ and the nodes are $1,2,3,4,5$ with $f$-values $0.5403,\\ -0.8323,\\ -2.9700,\\ -2.6146,\\ 1.4183$. Simpson: $\\dfrac13\\left[0.5403+4(-0.8323)+2(-2.9700)+4(-2.6146)+1.4183\\right]\\approx-5.92$.</div><div class=\"ml-vi\">$h=1$ và các nút là $1,2,3,4,5$ với giá trị $f$ lần lượt $0.5403,\\ -0.8323,\\ -2.9700,\\ -2.6146,\\ 1.4183$. Simpson: $\\dfrac13\\left[0.5403+4(-0.8323)+2(-2.9700)+4(-2.6146)+1.4183\\right]\\approx-5.92$.</div>"
+          "explanation": "<div class=\"ml-en\">$h=1$ and the nodes are $1,2,3,4,5$ with $f$-values $0.5403,\\ -0.8323,\\ -2.9700,\\ -2.6146,\\ 1.4183$. Simpson: $\\dfrac13\\left[0.5403+4(-0.8323)+2(-2.9700)+4(-2.6146)+1.4183\\right]\\approx-5.92$.</div><div class=\"ml-vi\">$h=1$ và các nút là $1,2,3,4,5$ với giá trị $f$ lần lượt $0.5403,\\ -0.8323,\\ -2.9700,\\ -2.6146,\\ 1.4183$. Simpson: $\\dfrac13\\left[0.5403+4(-0.8323)+2(-2.9700)+4(-2.6146)+1.4183\\right]\\approx-5.92$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q23.png"
         },
         {
           "kind": "MCQ",
@@ -7090,7 +7359,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">(i) contains $\\displaystyle\\int_1^\\infty\\dfrac{dx}{x}$, which diverges ($p=1$). (ii) is a $p$-integral with $p=2\\gt1$, hence convergent (its value is 1).</div><div class=\"ml-vi\">(i) chứa $\\displaystyle\\int_1^\\infty\\dfrac{dx}{x}$, phân kỳ ($p=1$). (ii) là tích phân dạng $p$ với $p=2\\gt1$ nên hội tụ (giá trị bằng 1).</div>"
+          "explanation": "<div class=\"ml-en\">(i) contains $\\displaystyle\\int_1^\\infty\\dfrac{dx}{x}$, which diverges ($p=1$). (ii) is a $p$-integral with $p=2\\gt1$, hence convergent (its value is 1).</div><div class=\"ml-vi\">(i) chứa $\\displaystyle\\int_1^\\infty\\dfrac{dx}{x}$, phân kỳ ($p=1$). (ii) là tích phân dạng $p$ với $p=2\\gt1$ nên hội tụ (giá trị bằng 1).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q24.png"
         },
         {
           "kind": "MCQ",
@@ -7119,7 +7389,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">Rank $\\lt3$ requires $\\det=0$: $-1(3a+20)-4(2a+6)+5(20-9)=-11a+11=0\\Rightarrow a=1$. The first two rows stay independent, so the rank is exactly 2.</div><div class=\"ml-vi\">Hạng $\\lt3$ đòi hỏi $\\det=0$: $-1(3a+20)-4(2a+6)+5(20-9)=-11a+11=0\\Rightarrow a=1$. Hai hàng đầu vẫn độc lập nên hạng đúng bằng 2.</div>"
+          "explanation": "<div class=\"ml-en\">Rank $\\lt3$ requires $\\det=0$: $-1(3a+20)-4(2a+6)+5(20-9)=-11a+11=0\\Rightarrow a=1$. The first two rows stay independent, so the rank is exactly 2.</div><div class=\"ml-vi\">Hạng $\\lt3$ đòi hỏi $\\det=0$: $-1(3a+20)-4(2a+6)+5(20-9)=-11a+11=0\\Rightarrow a=1$. Hai hàng đầu vẫn độc lập nên hạng đúng bằng 2.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q25.png"
         },
         {
           "kind": "MCQ",
@@ -7145,7 +7416,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Adding the equations: $4x+2z=12\\Rightarrow x=3-\\dfrac{z}{2}$. Substituting into the second: $y=x+z-3=\\dfrac{z}{2}$. So the solution set is $\\left(3-\\dfrac z2,\\ \\dfrac z2,\\ z\\right)$.</div><div class=\"ml-vi\">Cộng hai phương trình: $4x+2z=12\\Rightarrow x=3-\\dfrac{z}{2}$. Thế vào phương trình thứ hai: $y=x+z-3=\\dfrac{z}{2}$. Vậy nghiệm là $\\left(3-\\dfrac z2,\\ \\dfrac z2,\\ z\\right)$.</div>"
+          "explanation": "<div class=\"ml-en\">Adding the equations: $4x+2z=12\\Rightarrow x=3-\\dfrac{z}{2}$. Substituting into the second: $y=x+z-3=\\dfrac{z}{2}$. So the solution set is $\\left(3-\\dfrac z2,\\ \\dfrac z2,\\ z\\right)$.</div><div class=\"ml-vi\">Cộng hai phương trình: $4x+2z=12\\Rightarrow x=3-\\dfrac{z}{2}$. Thế vào phương trình thứ hai: $y=x+z-3=\\dfrac{z}{2}$. Vậy nghiệm là $\\left(3-\\dfrac z2,\\ \\dfrac z2,\\ z\\right)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q26.png"
         },
         {
           "kind": "MCQ",
@@ -7171,7 +7443,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">From the second equation $x=5-5z$; the first gives $y=-3+4z$. Substituting into the third: $2(5-5z)-4(-3+4z)+5z=22-21z=1\\Rightarrow z=1$, hence $x=0$, $y=1$.</div><div class=\"ml-vi\">Từ phương trình thứ hai $x=5-5z$; phương trình đầu cho $y=-3+4z$. Thế vào phương trình thứ ba: $2(5-5z)-4(-3+4z)+5z=22-21z=1\\Rightarrow z=1$, suy ra $x=0$, $y=1$.</div>"
+          "explanation": "<div class=\"ml-en\">From the second equation $x=5-5z$; the first gives $y=-3+4z$. Substituting into the third: $2(5-5z)-4(-3+4z)+5z=22-21z=1\\Rightarrow z=1$, hence $x=0$, $y=1$.</div><div class=\"ml-vi\">Từ phương trình thứ hai $x=5-5z$; phương trình đầu cho $y=-3+4z$. Thế vào phương trình thứ ba: $2(5-5z)-4(-3+4z)+5z=22-21z=1\\Rightarrow z=1$, suy ra $x=0$, $y=1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q27.png"
         },
         {
           "kind": "MCQ",
@@ -7197,7 +7470,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">A homogeneous system is always consistent, and here the rank is at most 4 while there are 8 unknowns, leaving at least 4 free variables → infinitely many solutions.</div><div class=\"ml-vi\">Hệ thuần nhất luôn tương thích, và ở đây hạng nhiều nhất bằng 4 trong khi có 8 ẩn nên còn ít nhất 4 ẩn tự do → vô số nghiệm.</div>"
+          "explanation": "<div class=\"ml-en\">A homogeneous system is always consistent, and here the rank is at most 4 while there are 8 unknowns, leaving at least 4 free variables → infinitely many solutions.</div><div class=\"ml-vi\">Hệ thuần nhất luôn tương thích, và ở đây hạng nhiều nhất bằng 4 trong khi có 8 ẩn nên còn ít nhất 4 ẩn tự do → vô số nghiệm.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q28.png"
         },
         {
           "kind": "MCQ",
@@ -7223,7 +7497,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$z=5y-2x=\\begin{bmatrix}20\\\\15\\end{bmatrix}-\\begin{bmatrix}4\\\\2\\end{bmatrix}=\\begin{bmatrix}16\\\\13\\end{bmatrix}$ — (iv).</div><div class=\"ml-vi\">$z=5y-2x=\\begin{bmatrix}20\\\\15\\end{bmatrix}-\\begin{bmatrix}4\\\\2\\end{bmatrix}=\\begin{bmatrix}16\\\\13\\end{bmatrix}$ — (iv).</div>"
+          "explanation": "<div class=\"ml-en\">$z=5y-2x=\\begin{bmatrix}20\\\\15\\end{bmatrix}-\\begin{bmatrix}4\\\\2\\end{bmatrix}=\\begin{bmatrix}16\\\\13\\end{bmatrix}$ — (iv).</div><div class=\"ml-vi\">$z=5y-2x=\\begin{bmatrix}20\\\\15\\end{bmatrix}-\\begin{bmatrix}4\\\\2\\end{bmatrix}=\\begin{bmatrix}16\\\\13\\end{bmatrix}$ — (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q29.png"
         },
         {
           "kind": "MCQ",
@@ -7246,7 +7521,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Row by row: first entry $1\\cdot x_1+(-1)x_2=x_1-x_2$, second entry $0\\cdot x_1+1\\cdot x_2=x_2$ — (i).</div><div class=\"ml-vi\">Nhân theo hàng: phần tử đầu $1\\cdot x_1+(-1)x_2=x_1-x_2$, phần tử sau $0\\cdot x_1+1\\cdot x_2=x_2$ — (i).</div>"
+          "explanation": "<div class=\"ml-en\">Row by row: first entry $1\\cdot x_1+(-1)x_2=x_1-x_2$, second entry $0\\cdot x_1+1\\cdot x_2=x_2$ — (i).</div><div class=\"ml-vi\">Nhân theo hàng: phần tử đầu $1\\cdot x_1+(-1)x_2=x_1-x_2$, phần tử sau $0\\cdot x_1+1\\cdot x_2=x_2$ — (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q30.png"
         },
         {
           "kind": "MCQ",
@@ -7272,7 +7548,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$A^{T}=\\begin{bmatrix}1&-1\\\\1&1\\end{bmatrix}$, so $2A^{T}-I=\\begin{bmatrix}1&-2\\\\2&1\\end{bmatrix}$ and $A(2A^{T}-I)=\\begin{bmatrix}3&-1\\\\1&3\\end{bmatrix}$. The $(1,2)$-entry is $-1$.</div><div class=\"ml-vi\">$A^{T}=\\begin{bmatrix}1&-1\\\\1&1\\end{bmatrix}$ nên $2A^{T}-I=\\begin{bmatrix}1&-2\\\\2&1\\end{bmatrix}$ và $A(2A^{T}-I)=\\begin{bmatrix}3&-1\\\\1&3\\end{bmatrix}$. Phần tử $(1,2)$ bằng $-1$.</div>"
+          "explanation": "<div class=\"ml-en\">$A^{T}=\\begin{bmatrix}1&-1\\\\1&1\\end{bmatrix}$, so $2A^{T}-I=\\begin{bmatrix}1&-2\\\\2&1\\end{bmatrix}$ and $A(2A^{T}-I)=\\begin{bmatrix}3&-1\\\\1&3\\end{bmatrix}$. The $(1,2)$-entry is $-1$.</div><div class=\"ml-vi\">$A^{T}=\\begin{bmatrix}1&-1\\\\1&1\\end{bmatrix}$ nên $2A^{T}-I=\\begin{bmatrix}1&-2\\\\2&1\\end{bmatrix}$ và $A(2A^{T}-I)=\\begin{bmatrix}3&-1\\\\1&3\\end{bmatrix}$. Phần tử $(1,2)$ bằng $-1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q31.png"
         },
         {
           "kind": "MCQ",
@@ -7298,7 +7575,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$(3A^{T})^{-1}=\\dfrac13(A^{T})^{-1}=\\dfrac13(A^{-1})^{T}$. The $(2,3)$-entry of $(A^{-1})^{T}$ is the $(3,2)$-entry of $A^{-1}$, which is $0$; hence the answer is $0$.</div><div class=\"ml-vi\">$(3A^{T})^{-1}=\\dfrac13(A^{T})^{-1}=\\dfrac13(A^{-1})^{T}$. Phần tử $(2,3)$ của $(A^{-1})^{T}$ chính là phần tử $(3,2)$ của $A^{-1}$, bằng $0$; nên đáp án là $0$.</div>"
+          "explanation": "<div class=\"ml-en\">$(3A^{T})^{-1}=\\dfrac13(A^{T})^{-1}=\\dfrac13(A^{-1})^{T}$. The $(2,3)$-entry of $(A^{-1})^{T}$ is the $(3,2)$-entry of $A^{-1}$, which is $0$; hence the answer is $0$.</div><div class=\"ml-vi\">$(3A^{T})^{-1}=\\dfrac13(A^{T})^{-1}=\\dfrac13(A^{-1})^{T}$. Phần tử $(2,3)$ của $(A^{-1})^{T}$ chính là phần tử $(3,2)$ của $A^{-1}$, bằng $0$; nên đáp án là $0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q32.png"
         },
         {
           "kind": "MCQ",
@@ -7324,7 +7602,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">With $\\cos\\dfrac{2\\pi}{3}=-\\dfrac12$, $\\sin\\dfrac{2\\pi}{3}=\\dfrac{\\sqrt3}{2}$: $x'=-\\dfrac12(2)-\\dfrac{\\sqrt3}{2}(-6)=3\\sqrt3-1$ and $y'=\\dfrac{\\sqrt3}{2}(2)-\\dfrac12(-6)=\\sqrt3+3$ — (i).</div><div class=\"ml-vi\">Với $\\cos\\dfrac{2\\pi}{3}=-\\dfrac12$, $\\sin\\dfrac{2\\pi}{3}=\\dfrac{\\sqrt3}{2}$: $x'=-\\dfrac12(2)-\\dfrac{\\sqrt3}{2}(-6)=3\\sqrt3-1$ và $y'=\\dfrac{\\sqrt3}{2}(2)-\\dfrac12(-6)=\\sqrt3+3$ — (i).</div>"
+          "explanation": "<div class=\"ml-en\">With $\\cos\\dfrac{2\\pi}{3}=-\\dfrac12$, $\\sin\\dfrac{2\\pi}{3}=\\dfrac{\\sqrt3}{2}$: $x'=-\\dfrac12(2)-\\dfrac{\\sqrt3}{2}(-6)=3\\sqrt3-1$ and $y'=\\dfrac{\\sqrt3}{2}(2)-\\dfrac12(-6)=\\sqrt3+3$ — (i).</div><div class=\"ml-vi\">Với $\\cos\\dfrac{2\\pi}{3}=-\\dfrac12$, $\\sin\\dfrac{2\\pi}{3}=\\dfrac{\\sqrt3}{2}$: $x'=-\\dfrac12(2)-\\dfrac{\\sqrt3}{2}(-6)=3\\sqrt3-1$ và $y'=\\dfrac{\\sqrt3}{2}(2)-\\dfrac12(-6)=\\sqrt3+3$ — (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q33.png"
         },
         {
           "kind": "MCQ",
@@ -7350,7 +7629,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Rotation by $\\pi$ maps $(x,y)\\mapsto(-x,-y)$; reflecting in the $x$-axis then gives $(-x,y)$ — that is reflection in the $y$-axis.</div><div class=\"ml-vi\">Phép quay góc $\\pi$ biến $(x,y)\\mapsto(-x,-y)$; sau đó đối xứng qua trục $Ox$ cho $(-x,y)$ — chính là phép đối xứng qua trục $Oy$.</div>"
+          "explanation": "<div class=\"ml-en\">Rotation by $\\pi$ maps $(x,y)\\mapsto(-x,-y)$; reflecting in the $x$-axis then gives $(-x,y)$ — that is reflection in the $y$-axis.</div><div class=\"ml-vi\">Phép quay góc $\\pi$ biến $(x,y)\\mapsto(-x,-y)$; sau đó đối xứng qua trục $Ox$ cho $(-x,y)$ — chính là phép đối xứng qua trục $Oy$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q34.png"
         },
         {
           "kind": "MCQ",
@@ -7376,7 +7656,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The matrix is $I+uv^{T}$ with $u=(a,b,c)^{T}$ and $v=(1,1,1)^{T}$, so $\\det=1+v^{T}u=1+a+b+c$. (Directly: add columns 2 and 3 to column 1 and factor.)</div><div class=\"ml-vi\">Ma trận có dạng $I+uv^{T}$ với $u=(a,b,c)^{T}$ và $v=(1,1,1)^{T}$ nên $\\det=1+v^{T}u=1+a+b+c$. (Cách khác: cộng cột 2 và 3 vào cột 1 rồi đặt nhân tử chung.)</div>"
+          "explanation": "<div class=\"ml-en\">The matrix is $I+uv^{T}$ with $u=(a,b,c)^{T}$ and $v=(1,1,1)^{T}$, so $\\det=1+v^{T}u=1+a+b+c$. (Directly: add columns 2 and 3 to column 1 and factor.)</div><div class=\"ml-vi\">Ma trận có dạng $I+uv^{T}$ với $u=(a,b,c)^{T}$ và $v=(1,1,1)^{T}$ nên $\\det=1+v^{T}u=1+a+b+c$. (Cách khác: cộng cột 2 và 3 vào cột 1 rồi đặt nhân tử chung.)</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q35.png"
         },
         {
           "kind": "MCQ",
@@ -7402,7 +7683,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\operatorname{adj}(A)=C^{T}$, so its first row consists of $C_{11},C_{21},C_{31}$: $C_{11}=\\det\\begin{bmatrix}-1&2\\\\4&-2\\end{bmatrix}=-6$, $C_{21}=-\\det\\begin{bmatrix}3&1\\\\4&-2\\end{bmatrix}=10$, $C_{31}=\\det\\begin{bmatrix}3&1\\\\-1&2\\end{bmatrix}=7$.</div><div class=\"ml-vi\">$\\operatorname{adj}(A)=C^{T}$ nên hàng đầu gồm $C_{11},C_{21},C_{31}$: $C_{11}=\\det\\begin{bmatrix}-1&2\\\\4&-2\\end{bmatrix}=-6$, $C_{21}=-\\det\\begin{bmatrix}3&1\\\\4&-2\\end{bmatrix}=10$, $C_{31}=\\det\\begin{bmatrix}3&1\\\\-1&2\\end{bmatrix}=7$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\operatorname{adj}(A)=C^{T}$, so its first row consists of $C_{11},C_{21},C_{31}$: $C_{11}=\\det\\begin{bmatrix}-1&2\\\\4&-2\\end{bmatrix}=-6$, $C_{21}=-\\det\\begin{bmatrix}3&1\\\\4&-2\\end{bmatrix}=10$, $C_{31}=\\det\\begin{bmatrix}3&1\\\\-1&2\\end{bmatrix}=7$.</div><div class=\"ml-vi\">$\\operatorname{adj}(A)=C^{T}$ nên hàng đầu gồm $C_{11},C_{21},C_{31}$: $C_{11}=\\det\\begin{bmatrix}-1&2\\\\4&-2\\end{bmatrix}=-6$, $C_{21}=-\\det\\begin{bmatrix}3&1\\\\4&-2\\end{bmatrix}=10$, $C_{31}=\\det\\begin{bmatrix}3&1\\\\-1&2\\end{bmatrix}=7$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q36.png"
         },
         {
           "kind": "MCQ",
@@ -7425,7 +7707,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The first column of $\\operatorname{adj}(A)=C^{T}$ is $(C_{11},C_{12},C_{13})$, all computed from rows 2 and 3 only: $C_{11}=\\det\\begin{bmatrix}-1&2\\\\4&-2\\end{bmatrix}=-6$, $C_{12}=-\\det\\begin{bmatrix}2&2\\\\3&-2\\end{bmatrix}=10$, $C_{13}=\\det\\begin{bmatrix}2&-1\\\\3&4\\end{bmatrix}=11$ — independent of $a,b,c$.</div><div class=\"ml-vi\">Cột đầu của $\\operatorname{adj}(A)=C^{T}$ là $(C_{11},C_{12},C_{13})$, đều chỉ tính từ hàng 2 và 3: $C_{11}=\\det\\begin{bmatrix}-1&2\\\\4&-2\\end{bmatrix}=-6$, $C_{12}=-\\det\\begin{bmatrix}2&2\\\\3&-2\\end{bmatrix}=10$, $C_{13}=\\det\\begin{bmatrix}2&-1\\\\3&4\\end{bmatrix}=11$ — không phụ thuộc $a,b,c$.</div>"
+          "explanation": "<div class=\"ml-en\">The first column of $\\operatorname{adj}(A)=C^{T}$ is $(C_{11},C_{12},C_{13})$, all computed from rows 2 and 3 only: $C_{11}=\\det\\begin{bmatrix}-1&2\\\\4&-2\\end{bmatrix}=-6$, $C_{12}=-\\det\\begin{bmatrix}2&2\\\\3&-2\\end{bmatrix}=10$, $C_{13}=\\det\\begin{bmatrix}2&-1\\\\3&4\\end{bmatrix}=11$ — independent of $a,b,c$.</div><div class=\"ml-vi\">Cột đầu của $\\operatorname{adj}(A)=C^{T}$ là $(C_{11},C_{12},C_{13})$, đều chỉ tính từ hàng 2 và 3: $C_{11}=\\det\\begin{bmatrix}-1&2\\\\4&-2\\end{bmatrix}=-6$, $C_{12}=-\\det\\begin{bmatrix}2&2\\\\3&-2\\end{bmatrix}=10$, $C_{13}=\\det\\begin{bmatrix}2&-1\\\\3&4\\end{bmatrix}=11$ — không phụ thuộc $a,b,c$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q37.png"
         },
         {
           "kind": "MCQ",
@@ -7451,7 +7734,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$A+5I=\\begin{bmatrix}8&-6\\\\8&-6\\end{bmatrix}$, so $8x=6y\\Rightarrow\\dfrac{x}{y}=\\dfrac34$: the eigenvectors are $t[3,4]$, $t\\neq0$.</div><div class=\"ml-vi\">$A+5I=\\begin{bmatrix}8&-6\\\\8&-6\\end{bmatrix}$ nên $8x=6y\\Rightarrow\\dfrac{x}{y}=\\dfrac34$: các vectơ riêng là $t[3,4]$, $t\\neq0$.</div>"
+          "explanation": "<div class=\"ml-en\">$A+5I=\\begin{bmatrix}8&-6\\\\8&-6\\end{bmatrix}$, so $8x=6y\\Rightarrow\\dfrac{x}{y}=\\dfrac34$: the eigenvectors are $t[3,4]$, $t\\neq0$.</div><div class=\"ml-vi\">$A+5I=\\begin{bmatrix}8&-6\\\\8&-6\\end{bmatrix}$ nên $8x=6y\\Rightarrow\\dfrac{x}{y}=\\dfrac34$: các vectơ riêng là $t[3,4]$, $t\\neq0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q38.png"
         },
         {
           "kind": "MCQ",
@@ -7474,7 +7758,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Characteristic equation: $(2-\\lambda)(-1-\\lambda)-4=\\lambda^2-\\lambda-6=0\\Rightarrow\\lambda=3,\\ -2$. The diagonal form therefore has entries $-2$ and $3$ — (iii).</div><div class=\"ml-vi\">Phương trình đặc trưng: $(2-\\lambda)(-1-\\lambda)-4=\\lambda^2-\\lambda-6=0\\Rightarrow\\lambda=3,\\ -2$. Vậy dạng chéo gồm $-2$ và $3$ — (iii).</div>"
+          "explanation": "<div class=\"ml-en\">Characteristic equation: $(2-\\lambda)(-1-\\lambda)-4=\\lambda^2-\\lambda-6=0\\Rightarrow\\lambda=3,\\ -2$. The diagonal form therefore has entries $-2$ and $3$ — (iii).</div><div class=\"ml-vi\">Phương trình đặc trưng: $(2-\\lambda)(-1-\\lambda)-4=\\lambda^2-\\lambda-6=0\\Rightarrow\\lambda=3,\\ -2$. Vậy dạng chéo gồm $-2$ và $3$ — (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q39.png"
         },
         {
           "kind": "MCQ",
@@ -7500,7 +7785,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">With $AB$ and $AC$ adjacent, the fourth vertex is $D=B+C-A=(1+1-3,\\ -2-1+1,\\ 0+2+1)=(-1,-2,3)$.</div><div class=\"ml-vi\">Vì $AB$ và $AC$ là hai cạnh kề nên đỉnh thứ tư là $D=B+C-A=(1+1-3,\\ -2-1+1,\\ 0+2+1)=(-1,-2,3)$.</div>"
+          "explanation": "<div class=\"ml-en\">With $AB$ and $AC$ adjacent, the fourth vertex is $D=B+C-A=(1+1-3,\\ -2-1+1,\\ 0+2+1)=(-1,-2,3)$.</div><div class=\"ml-vi\">Vì $AB$ và $AC$ là hai cạnh kề nên đỉnh thứ tư là $D=B+C-A=(1+1-3,\\ -2-1+1,\\ 0+2+1)=(-1,-2,3)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q40.png"
         },
         {
           "kind": "MCQ",
@@ -7529,7 +7815,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The normal is $n=(1,1,1)$ with $\\|n\\|^2=3$. Since $P\\cdot n-1=4-1=3$, the parameter is $t=\\dfrac{3}{3}=1$ and $Q=P-tn=(0,-1,2)$, so $b=-1$.</div><div class=\"ml-vi\">Vectơ pháp tuyến $n=(1,1,1)$ với $\\|n\\|^2=3$. Vì $P\\cdot n-1=4-1=3$ nên $t=\\dfrac{3}{3}=1$ và $Q=P-tn=(0,-1,2)$, suy ra $b=-1$.</div>"
+          "explanation": "<div class=\"ml-en\">The normal is $n=(1,1,1)$ with $\\|n\\|^2=3$. Since $P\\cdot n-1=4-1=3$, the parameter is $t=\\dfrac{3}{3}=1$ and $Q=P-tn=(0,-1,2)$, so $b=-1$.</div><div class=\"ml-vi\">Vectơ pháp tuyến $n=(1,1,1)$ với $\\|n\\|^2=3$. Vì $P\\cdot n-1=4-1=3$ nên $t=\\dfrac{3}{3}=1$ và $Q=P-tn=(0,-1,2)$, suy ra $b=-1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q41.png"
         },
         {
           "kind": "MCQ",
@@ -7552,7 +7839,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Direction of $(m)$: $C-B=(6,-3,7)$; direction of $(n)$: $F-E=(9,0,3)$. They are not proportional (not parallel) and their dot product is $54+0+21=75\\neq0$ (not orthogonal), so none of the listed relations holds.</div><div class=\"ml-vi\">Vectơ chỉ phương của $(m)$: $C-B=(6,-3,7)$; của $(n)$: $F-E=(9,0,3)$. Hai vectơ không tỉ lệ (không song song) và tích vô hướng bằng $54+0+21=75\\neq0$ (không vuông góc), nên không quan hệ nào được liệt kê là đúng.</div>"
+          "explanation": "<div class=\"ml-en\">Direction of $(m)$: $C-B=(6,-3,7)$; direction of $(n)$: $F-E=(9,0,3)$. They are not proportional (not parallel) and their dot product is $54+0+21=75\\neq0$ (not orthogonal), so none of the listed relations holds.</div><div class=\"ml-vi\">Vectơ chỉ phương của $(m)$: $C-B=(6,-3,7)$; của $(n)$: $F-E=(9,0,3)$. Hai vectơ không tỉ lệ (không song song) và tích vô hướng bằng $54+0+21=75\\neq0$ (không vuông góc), nên không quan hệ nào được liệt kê là đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q42.png"
         },
         {
           "kind": "MCQ",
@@ -7578,7 +7866,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$u=(9,1,2)$, $v=(-2,1,-2)$ and $u\\times v=(-4,14,11)$ with $\\|u\\times v\\|^2=16+196+121=333$. Area $=\\dfrac12\\sqrt{333}$ — (i).</div><div class=\"ml-vi\">$u=(9,1,2)$, $v=(-2,1,-2)$ và $u\\times v=(-4,14,11)$ với $\\|u\\times v\\|^2=16+196+121=333$. Diện tích $=\\dfrac12\\sqrt{333}$ — (i).</div>"
+          "explanation": "<div class=\"ml-en\">$u=(9,1,2)$, $v=(-2,1,-2)$ and $u\\times v=(-4,14,11)$ with $\\|u\\times v\\|^2=16+196+121=333$. Area $=\\dfrac12\\sqrt{333}$ — (i).</div><div class=\"ml-vi\">$u=(9,1,2)$, $v=(-2,1,-2)$ và $u\\times v=(-4,14,11)$ với $\\|u\\times v\\|^2=16+196+121=333$. Diện tích $=\\dfrac12\\sqrt{333}$ — (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q43.png"
         },
         {
           "kind": "MCQ",
@@ -7604,7 +7893,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">With $n=(1,-1,4)$, $\\|n\\|^2=18$ and $v\\cdot n=-13$: $\\operatorname{proj}_n v=-\\dfrac{13}{18}(1,-1,4)$. The projection onto the plane is $v-\\operatorname{proj}_n v=\\left(\\dfrac{13}{18},\\ \\dfrac{5}{18},\\ -\\dfrac19\\right)$.</div><div class=\"ml-vi\">Với $n=(1,-1,4)$, $\\|n\\|^2=18$ và $v\\cdot n=-13$: $\\operatorname{proj}_n v=-\\dfrac{13}{18}(1,-1,4)$. Hình chiếu lên mặt phẳng là $v-\\operatorname{proj}_n v=\\left(\\dfrac{13}{18},\\ \\dfrac{5}{18},\\ -\\dfrac19\\right)$.</div>"
+          "explanation": "<div class=\"ml-en\">With $n=(1,-1,4)$, $\\|n\\|^2=18$ and $v\\cdot n=-13$: $\\operatorname{proj}_n v=-\\dfrac{13}{18}(1,-1,4)$. The projection onto the plane is $v-\\operatorname{proj}_n v=\\left(\\dfrac{13}{18},\\ \\dfrac{5}{18},\\ -\\dfrac19\\right)$.</div><div class=\"ml-vi\">Với $n=(1,-1,4)$, $\\|n\\|^2=18$ và $v\\cdot n=-13$: $\\operatorname{proj}_n v=-\\dfrac{13}{18}(1,-1,4)$. Hình chiếu lên mặt phẳng là $v-\\operatorname{proj}_n v=\\left(\\dfrac{13}{18},\\ \\dfrac{5}{18},\\ -\\dfrac19\\right)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q44.png"
         },
         {
           "kind": "MCQ",
@@ -7633,7 +7923,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">Solve $a(1,3,1)+b(2,8,-1)=(4,6,t)$: $a+2b=4$ and $3a+8b=6$ give $a=10$, $b=-3$; then $t=a-b=13$.</div><div class=\"ml-vi\">Giải $a(1,3,1)+b(2,8,-1)=(4,6,t)$: từ $a+2b=4$ và $3a+8b=6$ được $a=10$, $b=-3$; suy ra $t=a-b=13$.</div>"
+          "explanation": "<div class=\"ml-en\">Solve $a(1,3,1)+b(2,8,-1)=(4,6,t)$: $a+2b=4$ and $3a+8b=6$ give $a=10$, $b=-3$; then $t=a-b=13$.</div><div class=\"ml-vi\">Giải $a(1,3,1)+b(2,8,-1)=(4,6,t)$: từ $a+2b=4$ và $3a+8b=6$ được $a=10$, $b=-3$; suy ra $t=a-b=13$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q45.png"
         },
         {
           "kind": "MCQ",
@@ -7656,7 +7947,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$c(1,0,2)+d(-1,1,0)=(c-d,\\ d,\\ 2c)$. Matching: $d=2$ and $c-d=1\\Rightarrow c=3$, hence $a=2c=6$.</div><div class=\"ml-vi\">$c(1,0,2)+d(-1,1,0)=(c-d,\\ d,\\ 2c)$. Đồng nhất: $d=2$ và $c-d=1\\Rightarrow c=3$, suy ra $a=2c=6$.</div>"
+          "explanation": "<div class=\"ml-en\">$c(1,0,2)+d(-1,1,0)=(c-d,\\ d,\\ 2c)$. Matching: $d=2$ and $c-d=1\\Rightarrow c=3$, hence $a=2c=6$.</div><div class=\"ml-vi\">$c(1,0,2)+d(-1,1,0)=(c-d,\\ d,\\ 2c)$. Đồng nhất: $d=2$ và $c-d=1\\Rightarrow c=3$, suy ra $a=2c=6$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q46.png"
         },
         {
           "kind": "MCQ",
@@ -7679,7 +7971,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">In (ii) the third vector is the sum of the first two, so that set is dependent. In (i) solving $\\alpha v_1+\\beta v_2+\\gamma v_3=0$ forces $\\alpha=\\beta=\\gamma=0$, so it is independent.</div><div class=\"ml-vi\">Ở (ii), vectơ thứ ba bằng tổng hai vectơ đầu nên tập này phụ thuộc. Ở (i), giải $\\alpha v_1+\\beta v_2+\\gamma v_3=0$ chỉ cho $\\alpha=\\beta=\\gamma=0$ nên tập độc lập.</div>"
+          "explanation": "<div class=\"ml-en\">In (ii) the third vector is the sum of the first two, so that set is dependent. In (i) solving $\\alpha v_1+\\beta v_2+\\gamma v_3=0$ forces $\\alpha=\\beta=\\gamma=0$, so it is independent.</div><div class=\"ml-vi\">Ở (ii), vectơ thứ ba bằng tổng hai vectơ đầu nên tập này phụ thuộc. Ở (i), giải $\\alpha v_1+\\beta v_2+\\gamma v_3=0$ chỉ cho $\\alpha=\\beta=\\gamma=0$ nên tập độc lập.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q47.png"
         },
         {
           "kind": "MCQ",
@@ -7702,7 +7995,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">From the first equation $z=x+y$; substituting into the second gives $5(x+y)=0\\Rightarrow x+y=0$, hence $z=0$ and $y=-x$ (the third equation is then automatic). The solution set is $\\{t(1,-1,0)\\}$, so $\\dim W=1$.</div><div class=\"ml-vi\">Từ phương trình đầu $z=x+y$; thế vào phương trình thứ hai được $5(x+y)=0\\Rightarrow x+y=0$, suy ra $z=0$ và $y=-x$ (phương trình thứ ba khi đó tự thoả). Tập nghiệm là $\\{t(1,-1,0)\\}$ nên $\\dim W=1$.</div>"
+          "explanation": "<div class=\"ml-en\">From the first equation $z=x+y$; substituting into the second gives $5(x+y)=0\\Rightarrow x+y=0$, hence $z=0$ and $y=-x$ (the third equation is then automatic). The solution set is $\\{t(1,-1,0)\\}$, so $\\dim W=1$.</div><div class=\"ml-vi\">Từ phương trình đầu $z=x+y$; thế vào phương trình thứ hai được $5(x+y)=0\\Rightarrow x+y=0$, suy ra $z=0$ và $y=-x$ (phương trình thứ ba khi đó tự thoả). Tập nghiệm là $\\{t(1,-1,0)\\}$ nên $\\dim W=1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q48.png"
         },
         {
           "kind": "MCQ",
@@ -7728,7 +8022,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">The three conditions are $a-c+d=0$, $2a+b+c-d=0$, $a-3b+c=0$. From the first two, $b=-3a$; the third then gives $c=-10a$ and $d=c-a=-11a$. So $(a,b,c,d)=a(1,-3,-10,-11)=t(-1,3,10,11)$.</div><div class=\"ml-vi\">Ba điều kiện là $a-c+d=0$, $2a+b+c-d=0$, $a-3b+c=0$. Từ hai phương trình đầu, $b=-3a$; phương trình thứ ba cho $c=-10a$ và $d=c-a=-11a$. Vậy $(a,b,c,d)=a(1,-3,-10,-11)=t(-1,3,10,11)$.</div>"
+          "explanation": "<div class=\"ml-en\">The three conditions are $a-c+d=0$, $2a+b+c-d=0$, $a-3b+c=0$. From the first two, $b=-3a$; the third then gives $c=-10a$ and $d=c-a=-11a$. So $(a,b,c,d)=a(1,-3,-10,-11)=t(-1,3,10,11)$.</div><div class=\"ml-vi\">Ba điều kiện là $a-c+d=0$, $2a+b+c-d=0$, $a-3b+c=0$. Từ hai phương trình đầu, $b=-3a$; phương trình thứ ba cho $c=-10a$ và $d=c-a=-11a$. Vậy $(a,b,c,d)=a(1,-3,-10,-11)=t(-1,3,10,11)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q49.png"
         },
         {
           "kind": "MCQ",
@@ -7751,7 +8046,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The third vector is the sum of the first two, so the spanning set reduces to two independent vectors: $\\dim U=2$.</div><div class=\"ml-vi\">Vectơ thứ ba bằng tổng hai vectơ đầu nên hệ sinh rút gọn còn hai vectơ độc lập: $\\dim U=2$.</div>"
+          "explanation": "<div class=\"ml-en\">The third vector is the sum of the first two, so the spanning set reduces to two independent vectors: $\\dim U=2$.</div><div class=\"ml-vi\">Vectơ thứ ba bằng tổng hai vectơ đầu nên hệ sinh rút gọn còn hai vectơ độc lập: $\\dim U=2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D6/q50.png"
         }
       ]
     },
@@ -7794,7 +8090,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f(x)=(x^2+1)^2\\geq1$ and equals $1$ at $x=0$; as $x\\to\\pm\\infty$, $f\\to\\infty$. Hence the range is $[1,\\infty)$, i.e. (iv).</div><div class=\"ml-vi\">$f(x)=(x^2+1)^2\\geq1$, dấu bằng tại $x=0$; khi $x\\to\\pm\\infty$ thì $f\\to\\infty$. Vậy tập giá trị là $[1,\\infty)$, tức (iv).</div>"
+          "explanation": "<div class=\"ml-en\">$f(x)=(x^2+1)^2\\geq1$ and equals $1$ at $x=0$; as $x\\to\\pm\\infty$, $f\\to\\infty$. Hence the range is $[1,\\infty)$, i.e. (iv).</div><div class=\"ml-vi\">$f(x)=(x^2+1)^2\\geq1$, dấu bằng tại $x=0$; khi $x\\to\\pm\\infty$ thì $f\\to\\infty$. Vậy tập giá trị là $[1,\\infty)$, tức (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q1.png"
         },
         {
           "kind": "MCQ",
@@ -7820,7 +8117,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Replacing $x$ by $x-2$ shifts the graph 2 units to the right; adding $3$ shifts it 3 units up.</div><div class=\"ml-vi\">Thay $x$ bởi $x-2$ làm đồ thị dịch sang PHẢI 2 đơn vị; cộng thêm $3$ làm đồ thị dịch LÊN 3 đơn vị.</div>"
+          "explanation": "<div class=\"ml-en\">Replacing $x$ by $x-2$ shifts the graph 2 units to the right; adding $3$ shifts it 3 units up.</div><div class=\"ml-vi\">Thay $x$ bởi $x-2$ làm đồ thị dịch sang PHẢI 2 đơn vị; cộng thêm $3$ làm đồ thị dịch LÊN 3 đơn vị.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q2.png"
         },
         {
           "kind": "MCQ",
@@ -7849,7 +8147,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">At $x=1$ the upper bound equals $1+6-6=1$, the lower bound is $1$. By the Squeeze Theorem $\\lim_{x\\to1}f(x)=1$.</div><div class=\"ml-vi\">Tại $x=1$, cận trên bằng $1+6-6=1$, cận dưới bằng $1$. Theo định lý kẹp, $\\lim_{x\\to1}f(x)=1$.</div>"
+          "explanation": "<div class=\"ml-en\">At $x=1$ the upper bound equals $1+6-6=1$, the lower bound is $1$. By the Squeeze Theorem $\\lim_{x\\to1}f(x)=1$.</div><div class=\"ml-vi\">Tại $x=1$, cận trên bằng $1+6-6=1$, cận dưới bằng $1$. Theo định lý kẹp, $\\lim_{x\\to1}f(x)=1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q3.png"
         },
         {
           "kind": "MCQ",
@@ -7875,7 +8174,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">At $x=0$: $\\lim_{x\\to0^-}f=0^2=0$ but $f(0)=1=\\lim_{x\\to0^+}f$, so $f$ is discontinuous at $0$. At $x=1$: $\\lim_{x\\to1^-}f=1$, $f(1)=1^2=1$, $\\lim_{x\\to1^+}f=1$, so $f$ is continuous at $1$.</div><div class=\"ml-vi\">Tại $x=0$: $\\lim_{x\\to0^-}f=0^2=0$ nhưng $f(0)=1=\\lim_{x\\to0^+}f$ nên $f$ GIÁN ĐOẠN tại $0$. Tại $x=1$: $\\lim_{x\\to1^-}f=1$, $f(1)=1^2=1$, $\\lim_{x\\to1^+}f=1$ nên $f$ LIÊN TỤC tại $1$.</div>"
+          "explanation": "<div class=\"ml-en\">At $x=0$: $\\lim_{x\\to0^-}f=0^2=0$ but $f(0)=1=\\lim_{x\\to0^+}f$, so $f$ is discontinuous at $0$. At $x=1$: $\\lim_{x\\to1^-}f=1$, $f(1)=1^2=1$, $\\lim_{x\\to1^+}f=1$, so $f$ is continuous at $1$.</div><div class=\"ml-vi\">Tại $x=0$: $\\lim_{x\\to0^-}f=0^2=0$ nhưng $f(0)=1=\\lim_{x\\to0^+}f$ nên $f$ GIÁN ĐOẠN tại $0$. Tại $x=1$: $\\lim_{x\\to1^-}f=1$, $f(1)=1^2=1$, $\\lim_{x\\to1^+}f=1$ nên $f$ LIÊN TỤC tại $1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q4.png"
         },
         {
           "kind": "MCQ",
@@ -7901,7 +8201,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">A function is not differentiable where it is not continuous (the vertical asymptote at $x=0$) and where the graph has a sharp corner (the peak at $x=3$). Hence $x=0$ and $x=3$.</div><div class=\"ml-vi\">Hàm không khả vi tại nơi không liên tục (tiệm cận đứng $x=0$) và tại điểm gãy nhọn (đỉnh nhọn $x=3$). Vậy $x=0$ và $x=3$.</div>"
+          "explanation": "<div class=\"ml-en\">A function is not differentiable where it is not continuous (the vertical asymptote at $x=0$) and where the graph has a sharp corner (the peak at $x=3$). Hence $x=0$ and $x=3$.</div><div class=\"ml-vi\">Hàm không khả vi tại nơi không liên tục (tiệm cận đứng $x=0$) và tại điểm gãy nhọn (đỉnh nhọn $x=3$). Vậy $x=0$ và $x=3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q5.png"
         },
         {
           "kind": "MCQ",
@@ -7927,7 +8228,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$f'(x)=\\dfrac{1}{2\\sqrt{x}}$, which requires $x\\gt0$ (at $x=0$ the one-sided derivative is infinite). Domain: $(0,\\infty)$, i.e. (iv).</div><div class=\"ml-vi\">$f'(x)=\\dfrac{1}{2\\sqrt{x}}$, đòi hỏi $x\\gt0$ (tại $x=0$ đạo hàm một phía vô hạn). Tập xác định: $(0,\\infty)$, tức (iv).</div>"
+          "explanation": "<div class=\"ml-en\">$f'(x)=\\dfrac{1}{2\\sqrt{x}}$, which requires $x\\gt0$ (at $x=0$ the one-sided derivative is infinite). Domain: $(0,\\infty)$, i.e. (iv).</div><div class=\"ml-vi\">$f'(x)=\\dfrac{1}{2\\sqrt{x}}$, đòi hỏi $x\\gt0$ (tại $x=0$ đạo hàm một phía vô hạn). Tập xác định: $(0,\\infty)$, tức (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q6.png"
         },
         {
           "kind": "MCQ",
@@ -7953,7 +8255,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$v(t)=h'(t)=25+2at$. From $v(2)=25+4a=5$ we get $4a=-20$, so $a=-5$.</div><div class=\"ml-vi\">$v(t)=h'(t)=25+2at$. Từ $v(2)=25+4a=5$ suy ra $4a=-20$, vậy $a=-5$.</div>"
+          "explanation": "<div class=\"ml-en\">$v(t)=h'(t)=25+2at$. From $v(2)=25+4a=5$ we get $4a=-20$, so $a=-5$.</div><div class=\"ml-vi\">$v(t)=h'(t)=25+2at$. Từ $v(2)=25+4a=5$ suy ra $4a=-20$, vậy $a=-5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q7.png"
         },
         {
           "kind": "MCQ",
@@ -7979,7 +8282,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$y=(x+2)^{1/2}$, $y'=\\tfrac12(x+2)^{-1/2}$, $y''=-\\tfrac14(x+2)^{-3/2}$, $y'''=\\tfrac38(x+2)^{-5/2}$, $y^{(4)}=-\\tfrac{15}{16}(x+2)^{-7/2}=\\dfrac{-15}{16(x+2)^{7/2}}$, i.e. (ii).</div><div class=\"ml-vi\">$y=(x+2)^{1/2}$, $y'=\\tfrac12(x+2)^{-1/2}$, $y''=-\\tfrac14(x+2)^{-3/2}$, $y'''=\\tfrac38(x+2)^{-5/2}$, $y^{(4)}=-\\tfrac{15}{16}(x+2)^{-7/2}=\\dfrac{-15}{16(x+2)^{7/2}}$, tức (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$y=(x+2)^{1/2}$, $y'=\\tfrac12(x+2)^{-1/2}$, $y''=-\\tfrac14(x+2)^{-3/2}$, $y'''=\\tfrac38(x+2)^{-5/2}$, $y^{(4)}=-\\tfrac{15}{16}(x+2)^{-7/2}=\\dfrac{-15}{16(x+2)^{7/2}}$, i.e. (ii).</div><div class=\"ml-vi\">$y=(x+2)^{1/2}$, $y'=\\tfrac12(x+2)^{-1/2}$, $y''=-\\tfrac14(x+2)^{-3/2}$, $y'''=\\tfrac38(x+2)^{-5/2}$, $y^{(4)}=-\\tfrac{15}{16}(x+2)^{-7/2}=\\dfrac{-15}{16(x+2)^{7/2}}$, tức (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q8.png"
         },
         {
           "kind": "MCQ",
@@ -8005,7 +8309,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Differentiate: $9y+9xy'+2y'=0\\Rightarrow y'(9x+2)=-9y\\Rightarrow y'=\\dfrac{-9y}{9x+2}$, i.e. (iv).</div><div class=\"ml-vi\">Lấy đạo hàm hai vế: $9y+9xy'+2y'=0\\Rightarrow y'(9x+2)=-9y\\Rightarrow y'=\\dfrac{-9y}{9x+2}$, tức (iv).</div>"
+          "explanation": "<div class=\"ml-en\">Differentiate: $9y+9xy'+2y'=0\\Rightarrow y'(9x+2)=-9y\\Rightarrow y'=\\dfrac{-9y}{9x+2}$, i.e. (iv).</div><div class=\"ml-vi\">Lấy đạo hàm hai vế: $9y+9xy'+2y'=0\\Rightarrow y'(9x+2)=-9y\\Rightarrow y'=\\dfrac{-9y}{9x+2}$, tức (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q9.png"
         },
         {
           "kind": "MCQ",
@@ -8031,7 +8336,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Differentiate with respect to $t$: $2x\\,x'+2y\\,y'=4x'\\Rightarrow x'(2x-4)=-2y\\,y'$. At $(1,\\sqrt3)$: $x'(2-4)=-2\\sqrt3(6)=-12\\sqrt3$, so $x'=6\\sqrt3$, i.e. (i).</div><div class=\"ml-vi\">Đạo hàm theo $t$: $2x\\,x'+2y\\,y'=4x'\\Rightarrow x'(2x-4)=-2y\\,y'$. Tại $(1,\\sqrt3)$: $x'(2-4)=-2\\sqrt3(6)=-12\\sqrt3$, suy ra $x'=6\\sqrt3$, tức (i).</div>"
+          "explanation": "<div class=\"ml-en\">Differentiate with respect to $t$: $2x\\,x'+2y\\,y'=4x'\\Rightarrow x'(2x-4)=-2y\\,y'$. At $(1,\\sqrt3)$: $x'(2-4)=-2\\sqrt3(6)=-12\\sqrt3$, so $x'=6\\sqrt3$, i.e. (i).</div><div class=\"ml-vi\">Đạo hàm theo $t$: $2x\\,x'+2y\\,y'=4x'\\Rightarrow x'(2x-4)=-2y\\,y'$. Tại $(1,\\sqrt3)$: $x'(2-4)=-2\\sqrt3(6)=-12\\sqrt3$, suy ra $x'=6\\sqrt3$, tức (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q10.png"
         },
         {
           "kind": "MCQ",
@@ -8054,7 +8360,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\dfrac{1}{a-1}\\int_1^a(x+1)dx=\\dfrac{1}{a-1}\\left[\\dfrac{x^2}{2}+x\\right]_1^a=3$. This gives $a^2+2a-3=6a-6\\Rightarrow a^2-4a+3=0\\Rightarrow a=1$ or $a=3$; since $a\\gt1$, $a=3$.</div><div class=\"ml-vi\">$\\dfrac{1}{a-1}\\int_1^a(x+1)dx=\\dfrac{1}{a-1}\\left[\\dfrac{x^2}{2}+x\\right]_1^a=3$. Ta được $a^2+2a-3=6a-6\\Rightarrow a^2-4a+3=0\\Rightarrow a=1$ hoặc $a=3$; vì $a\\gt1$ nên $a=3$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\dfrac{1}{a-1}\\int_1^a(x+1)dx=\\dfrac{1}{a-1}\\left[\\dfrac{x^2}{2}+x\\right]_1^a=3$. This gives $a^2+2a-3=6a-6\\Rightarrow a^2-4a+3=0\\Rightarrow a=1$ or $a=3$; since $a\\gt1$, $a=3$.</div><div class=\"ml-vi\">$\\dfrac{1}{a-1}\\int_1^a(x+1)dx=\\dfrac{1}{a-1}\\left[\\dfrac{x^2}{2}+x\\right]_1^a=3$. Ta được $a^2+2a-3=6a-6\\Rightarrow a^2-4a+3=0\\Rightarrow a=1$ hoặc $a=3$; vì $a\\gt1$ nên $a=3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q11.png"
         },
         {
           "kind": "MCQ",
@@ -8083,7 +8390,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Candidates: $f(-2)=|4-1|=3$, $f(-1)=0$, $f(0)=1$, $f(1)=0$. Maximum $=3$, minimum $=0$.</div><div class=\"ml-vi\">Các điểm cần xét: $f(-2)=|4-1|=3$, $f(-1)=0$, $f(0)=1$, $f(1)=0$. Lớn nhất $=3$, nhỏ nhất $=0$.</div>"
+          "explanation": "<div class=\"ml-en\">Candidates: $f(-2)=|4-1|=3$, $f(-1)=0$, $f(0)=1$, $f(1)=0$. Maximum $=3$, minimum $=0$.</div><div class=\"ml-vi\">Các điểm cần xét: $f(-2)=|4-1|=3$, $f(-1)=0$, $f(0)=1$, $f(1)=0$. Lớn nhất $=3$, nhỏ nhất $=0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q12.png"
         },
         {
           "kind": "MCQ",
@@ -8109,7 +8417,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f''(x)=-6x$. So $f''\\gt0$ (concave up) when $x\\lt0$ and $f''\\lt0$ (concave down) when $x\\gt0$, i.e. (iv).</div><div class=\"ml-vi\">$f''(x)=-6x$. Vậy $f''\\gt0$ (lõm lên) khi $x\\lt0$ và $f''\\lt0$ (lõm xuống) khi $x\\gt0$, tức (iv).</div>"
+          "explanation": "<div class=\"ml-en\">$f''(x)=-6x$. So $f''\\gt0$ (concave up) when $x\\lt0$ and $f''\\lt0$ (concave down) when $x\\gt0$, i.e. (iv).</div><div class=\"ml-vi\">$f''(x)=-6x$. Vậy $f''\\gt0$ (lõm lên) khi $x\\lt0$ và $f''\\lt0$ (lõm xuống) khi $x\\gt0$, tức (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q13.png"
         },
         {
           "kind": "MCQ",
@@ -8132,7 +8441,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">As $x\\to1$, $f\\to\\pm\\infty$, so $x=1$ is a vertical asymptote. As $x\\to\\pm\\infty$, $f(x)\\approx x\\to\\pm\\infty$, so there is no horizontal asymptote (there is a slant asymptote $y=x$).</div><div class=\"ml-vi\">Khi $x\\to1$ thì $f\\to\\pm\\infty$ nên $x=1$ là tiệm cận đứng. Khi $x\\to\\pm\\infty$ thì $f(x)\\approx x\\to\\pm\\infty$ nên KHÔNG có tiệm cận ngang (chỉ có tiệm cận xiên $y=x$).</div>"
+          "explanation": "<div class=\"ml-en\">As $x\\to1$, $f\\to\\pm\\infty$, so $x=1$ is a vertical asymptote. As $x\\to\\pm\\infty$, $f(x)\\approx x\\to\\pm\\infty$, so there is no horizontal asymptote (there is a slant asymptote $y=x$).</div><div class=\"ml-vi\">Khi $x\\to1$ thì $f\\to\\pm\\infty$ nên $x=1$ là tiệm cận đứng. Khi $x\\to\\pm\\infty$ thì $f(x)\\approx x\\to\\pm\\infty$ nên KHÔNG có tiệm cận ngang (chỉ có tiệm cận xiên $y=x$).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q14.png"
         },
         {
           "kind": "MCQ",
@@ -8158,7 +8468,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">With $xy=196$, $S=x+\\dfrac{196}{x}$; $S'=1-\\dfrac{196}{x^2}=0\\Rightarrow x=14$, so $S_{\\min}=14+14=28$ (equivalently AM-GM: $S\\geq2\\sqrt{196}=28$).</div><div class=\"ml-vi\">Với $xy=196$, $S=x+\\dfrac{196}{x}$; $S'=1-\\dfrac{196}{x^2}=0\\Rightarrow x=14$, nên $S_{\\min}=14+14=28$ (hoặc dùng AM-GM: $S\\geq2\\sqrt{196}=28$).</div>"
+          "explanation": "<div class=\"ml-en\">With $xy=196$, $S=x+\\dfrac{196}{x}$; $S'=1-\\dfrac{196}{x^2}=0\\Rightarrow x=14$, so $S_{\\min}=14+14=28$ (equivalently AM-GM: $S\\geq2\\sqrt{196}=28$).</div><div class=\"ml-vi\">Với $xy=196$, $S=x+\\dfrac{196}{x}$; $S'=1-\\dfrac{196}{x^2}=0\\Rightarrow x=14$, nên $S_{\\min}=14+14=28$ (hoặc dùng AM-GM: $S\\geq2\\sqrt{196}=28$).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q15.png"
         },
         {
           "kind": "MCQ",
@@ -8184,7 +8495,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f(x)=x^3+x+3$, $f'(x)=3x^2+1$. $x_2=-1-\\dfrac{f(-1)}{f'(-1)}=-1-\\dfrac{1}{4}=-1.25$. Then $f(-1.25)=-0.203125$, $f'(-1.25)=5.6875$, so $x_3=-1.25+0.035714\\approx-1.2143$.</div><div class=\"ml-vi\">$f(x)=x^3+x+3$, $f'(x)=3x^2+1$. $x_2=-1-\\dfrac{f(-1)}{f'(-1)}=-1-\\dfrac{1}{4}=-1.25$. Tiếp theo $f(-1.25)=-0.203125$, $f'(-1.25)=5.6875$, nên $x_3=-1.25+0.035714\\approx-1.2143$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(x)=x^3+x+3$, $f'(x)=3x^2+1$. $x_2=-1-\\dfrac{f(-1)}{f'(-1)}=-1-\\dfrac{1}{4}=-1.25$. Then $f(-1.25)=-0.203125$, $f'(-1.25)=5.6875$, so $x_3=-1.25+0.035714\\approx-1.2143$.</div><div class=\"ml-vi\">$f(x)=x^3+x+3$, $f'(x)=3x^2+1$. $x_2=-1-\\dfrac{f(-1)}{f'(-1)}=-1-\\dfrac{1}{4}=-1.25$. Tiếp theo $f(-1.25)=-0.203125$, $f'(-1.25)=5.6875$, nên $x_3=-1.25+0.035714\\approx-1.2143$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q16.png"
         },
         {
           "kind": "MCQ",
@@ -8210,7 +8522,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\Delta x=1$, left endpoints $1,2,3,4$: $L_4=1+\\dfrac14+\\dfrac19+\\dfrac1{16}=1+0.25+0.1111+0.0625=1.4236$.</div><div class=\"ml-vi\">$\\Delta x=1$, các mút trái $1,2,3,4$: $L_4=1+\\dfrac14+\\dfrac19+\\dfrac1{16}=1+0.25+0.1111+0.0625=1.4236$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\Delta x=1$, left endpoints $1,2,3,4$: $L_4=1+\\dfrac14+\\dfrac19+\\dfrac1{16}=1+0.25+0.1111+0.0625=1.4236$.</div><div class=\"ml-vi\">$\\Delta x=1$, các mút trái $1,2,3,4$: $L_4=1+\\dfrac14+\\dfrac19+\\dfrac1{16}=1+0.25+0.1111+0.0625=1.4236$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q17.png"
         },
         {
           "kind": "MCQ",
@@ -8236,7 +8549,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\int_0^2(1-3x^2)dx=[x-x^3]_0^2=2-8=-6$ and $\\int_2^3 4x\\,dx=[2x^2]_2^3=18-8=10$. Total: $-6+10=4$.</div><div class=\"ml-vi\">$\\int_0^2(1-3x^2)dx=[x-x^3]_0^2=2-8=-6$ và $\\int_2^3 4x\\,dx=[2x^2]_2^3=18-8=10$. Tổng: $-6+10=4$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\int_0^2(1-3x^2)dx=[x-x^3]_0^2=2-8=-6$ and $\\int_2^3 4x\\,dx=[2x^2]_2^3=18-8=10$. Total: $-6+10=4$.</div><div class=\"ml-vi\">$\\int_0^2(1-3x^2)dx=[x-x^3]_0^2=2-8=-6$ và $\\int_2^3 4x\\,dx=[2x^2]_2^3=18-8=10$. Tổng: $-6+10=4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q18.png"
         },
         {
           "kind": "MCQ",
@@ -8265,7 +8579,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">By the Fundamental Theorem of Calculus with the chain rule: $g'(x)=\\sqrt{1+e^{2x^2}}\\cdot(x^2)'=2x\\sqrt{1+e^{2x^2}}$, i.e. (iv).</div><div class=\"ml-vi\">Dùng định lý cơ bản của giải tích kết hợp quy tắc dây chuyền: $g'(x)=\\sqrt{1+e^{2x^2}}\\cdot(x^2)'=2x\\sqrt{1+e^{2x^2}}$, tức (iv).</div>"
+          "explanation": "<div class=\"ml-en\">By the Fundamental Theorem of Calculus with the chain rule: $g'(x)=\\sqrt{1+e^{2x^2}}\\cdot(x^2)'=2x\\sqrt{1+e^{2x^2}}$, i.e. (iv).</div><div class=\"ml-vi\">Dùng định lý cơ bản của giải tích kết hợp quy tắc dây chuyền: $g'(x)=\\sqrt{1+e^{2x^2}}\\cdot(x^2)'=2x\\sqrt{1+e^{2x^2}}$, tức (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q19.png"
         },
         {
           "kind": "MCQ",
@@ -8291,7 +8606,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\dfrac{1}{2}\\int_0^2(x^2-6x+4)dx=\\dfrac{1}{2}\\left[\\dfrac{x^3}{3}-3x^2+4x\\right]_0^2=\\dfrac{1}{2}\\left(\\dfrac83-12+8\\right)=\\dfrac{1}{2}\\cdot\\left(-\\dfrac43\\right)=-\\dfrac23$.</div><div class=\"ml-vi\">$\\dfrac{1}{2}\\int_0^2(x^2-6x+4)dx=\\dfrac{1}{2}\\left[\\dfrac{x^3}{3}-3x^2+4x\\right]_0^2=\\dfrac{1}{2}\\left(\\dfrac83-12+8\\right)=\\dfrac{1}{2}\\cdot\\left(-\\dfrac43\\right)=-\\dfrac23$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\dfrac{1}{2}\\int_0^2(x^2-6x+4)dx=\\dfrac{1}{2}\\left[\\dfrac{x^3}{3}-3x^2+4x\\right]_0^2=\\dfrac{1}{2}\\left(\\dfrac83-12+8\\right)=\\dfrac{1}{2}\\cdot\\left(-\\dfrac43\\right)=-\\dfrac23$.</div><div class=\"ml-vi\">$\\dfrac{1}{2}\\int_0^2(x^2-6x+4)dx=\\dfrac{1}{2}\\left[\\dfrac{x^3}{3}-3x^2+4x\\right]_0^2=\\dfrac{1}{2}\\left(\\dfrac83-12+8\\right)=\\dfrac{1}{2}\\cdot\\left(-\\dfrac43\\right)=-\\dfrac23$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q20.png"
         },
         {
           "kind": "MCQ",
@@ -8317,7 +8633,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Let $u=3+t^4$, $du=4t^3dt$: $\\dfrac14\\int u^{-1/4}du=\\dfrac14\\cdot\\dfrac{u^{3/4}}{3/4}=\\dfrac13(3+t^4)^{3/4}+C$, i.e. (iii).</div><div class=\"ml-vi\">Đặt $u=3+t^4$, $du=4t^3dt$: $\\dfrac14\\int u^{-1/4}du=\\dfrac14\\cdot\\dfrac{u^{3/4}}{3/4}=\\dfrac13(3+t^4)^{3/4}+C$, tức (iii).</div>"
+          "explanation": "<div class=\"ml-en\">Let $u=3+t^4$, $du=4t^3dt$: $\\dfrac14\\int u^{-1/4}du=\\dfrac14\\cdot\\dfrac{u^{3/4}}{3/4}=\\dfrac13(3+t^4)^{3/4}+C$, i.e. (iii).</div><div class=\"ml-vi\">Đặt $u=3+t^4$, $du=4t^3dt$: $\\dfrac14\\int u^{-1/4}du=\\dfrac14\\cdot\\dfrac{u^{3/4}}{3/4}=\\dfrac13(3+t^4)^{3/4}+C$, tức (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q21.png"
         },
         {
           "kind": "MCQ",
@@ -8346,7 +8663,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Integration by parts: $\\int_0^1 xf'(x)dx=[xf(x)]_0^1-\\int_0^1 f(x)dx=f(1)-4=5-4=1$.</div><div class=\"ml-vi\">Tích phân từng phần: $\\int_0^1 xf'(x)dx=[xf(x)]_0^1-\\int_0^1 f(x)dx=f(1)-4=5-4=1$.</div>"
+          "explanation": "<div class=\"ml-en\">Integration by parts: $\\int_0^1 xf'(x)dx=[xf(x)]_0^1-\\int_0^1 f(x)dx=f(1)-4=5-4=1$.</div><div class=\"ml-vi\">Tích phân từng phần: $\\int_0^1 xf'(x)dx=[xf(x)]_0^1-\\int_0^1 f(x)dx=f(1)-4=5-4=1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q22.png"
         },
         {
           "kind": "MCQ",
@@ -8372,7 +8690,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$h=1$, $T=\\dfrac{h}{2}\\left[f(1)+2(f(2)+f(3)+f(4)+f(5))+f(6)\\right]=\\dfrac12[3.2+2(1.6+2.4+3.8+4.4)+1.3]=\\dfrac12[4.5+24.4]=14.45$.</div><div class=\"ml-vi\">$h=1$, $T=\\dfrac{h}{2}\\left[f(1)+2(f(2)+f(3)+f(4)+f(5))+f(6)\\right]=\\dfrac12[3.2+2(1.6+2.4+3.8+4.4)+1.3]=\\dfrac12[4.5+24.4]=14.45$.</div>"
+          "explanation": "<div class=\"ml-en\">$h=1$, $T=\\dfrac{h}{2}\\left[f(1)+2(f(2)+f(3)+f(4)+f(5))+f(6)\\right]=\\dfrac12[3.2+2(1.6+2.4+3.8+4.4)+1.3]=\\dfrac12[4.5+24.4]=14.45$.</div><div class=\"ml-vi\">$h=1$, $T=\\dfrac{h}{2}\\left[f(1)+2(f(2)+f(3)+f(4)+f(5))+f(6)\\right]=\\dfrac12[3.2+2(1.6+2.4+3.8+4.4)+1.3]=\\dfrac12[4.5+24.4]=14.45$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q23.png"
         },
         {
           "kind": "MCQ",
@@ -8395,7 +8714,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">This is the $p$-integral: $\\int_1^{\\infty}x^{-n}dx=\\left[\\dfrac{x^{1-n}}{1-n}\\right]_1^{\\infty}$ converges iff $n\\gt1$ (and for $n=1$ it gives $\\ln x\\to\\infty$).</div><div class=\"ml-vi\">Đây là tích phân dạng $p$: $\\int_1^{\\infty}x^{-n}dx=\\left[\\dfrac{x^{1-n}}{1-n}\\right]_1^{\\infty}$ hội tụ khi và chỉ khi $n\\gt1$ (với $n=1$ ta có $\\ln x\\to\\infty$).</div>"
+          "explanation": "<div class=\"ml-en\">This is the $p$-integral: $\\int_1^{\\infty}x^{-n}dx=\\left[\\dfrac{x^{1-n}}{1-n}\\right]_1^{\\infty}$ converges iff $n\\gt1$ (and for $n=1$ it gives $\\ln x\\to\\infty$).</div><div class=\"ml-vi\">Đây là tích phân dạng $p$: $\\int_1^{\\infty}x^{-n}dx=\\left[\\dfrac{x^{1-n}}{1-n}\\right]_1^{\\infty}$ hội tụ khi và chỉ khi $n\\gt1$ (với $n=1$ ta có $\\ln x\\to\\infty$).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q24.png"
         },
         {
           "kind": "MCQ",
@@ -8418,7 +8738,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">In (i) the entry $-1$ below the first pivot violates the echelon condition. In (ii) each leading entry lies strictly to the right of the one above it and the zero row is at the bottom, so only (ii) is in row-echelon form.</div><div class=\"ml-vi\">Ở (i), phần tử $-1$ nằm dưới phần tử dẫn đầu của hàng 1 nên vi phạm điều kiện bậc thang. Ở (ii), mỗi phần tử dẫn đầu nằm bên phải phần tử dẫn đầu hàng trên và hàng không nằm cuối, nên chỉ (ii) ở dạng bậc thang.</div>"
+          "explanation": "<div class=\"ml-en\">In (i) the entry $-1$ below the first pivot violates the echelon condition. In (ii) each leading entry lies strictly to the right of the one above it and the zero row is at the bottom, so only (ii) is in row-echelon form.</div><div class=\"ml-vi\">Ở (i), phần tử $-1$ nằm dưới phần tử dẫn đầu của hàng 1 nên vi phạm điều kiện bậc thang. Ở (ii), mỗi phần tử dẫn đầu nằm bên phải phần tử dẫn đầu hàng trên và hàng không nằm cuối, nên chỉ (ii) ở dạng bậc thang.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q25.png"
         },
         {
           "kind": "MCQ",
@@ -8444,7 +8765,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Subtracting the first equation from the second gives $(t-1)x=t-1$. If $t\\neq1$ then $x=1,y=0$; substituting into the third equation: $1+t=3\\Rightarrow t=2$. If $t=1$ the third equation becomes $x+y=1.5$, contradicting $x+y=1$. Hence $t=2$.</div><div class=\"ml-vi\">Trừ phương trình 1 khỏi phương trình 2: $(t-1)x=t-1$. Nếu $t\\neq1$ thì $x=1,y=0$; thay vào phương trình 3: $1+t=3\\Rightarrow t=2$. Nếu $t=1$, phương trình 3 thành $x+y=1.5$ mâu thuẫn với $x+y=1$. Vậy $t=2$.</div>"
+          "explanation": "<div class=\"ml-en\">Subtracting the first equation from the second gives $(t-1)x=t-1$. If $t\\neq1$ then $x=1,y=0$; substituting into the third equation: $1+t=3\\Rightarrow t=2$. If $t=1$ the third equation becomes $x+y=1.5$, contradicting $x+y=1$. Hence $t=2$.</div><div class=\"ml-vi\">Trừ phương trình 1 khỏi phương trình 2: $(t-1)x=t-1$. Nếu $t\\neq1$ thì $x=1,y=0$; thay vào phương trình 3: $1+t=3\\Rightarrow t=2$. Nếu $t=1$, phương trình 3 thành $x+y=1.5$ mâu thuẫn với $x+y=1$. Vậy $t=2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q26.png"
         },
         {
           "kind": "MCQ",
@@ -8470,7 +8792,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Let $x,y$ be the rates: $2x+3y=24.60$, $3x+2y=23.90$. Adding: $5(x+y)=48.5\\Rightarrow x+y=9.7$; subtracting: $y-x=0.7$. Hence $y=5.20$, $x=4.50$.</div><div class=\"ml-vi\">Gọi $x,y$ là tiền công mỗi giờ: $2x+3y=24.60$, $3x+2y=23.90$. Cộng lại: $5(x+y)=48.5\\Rightarrow x+y=9.7$; trừ nhau: $y-x=0.7$. Vậy $y=5.20$, $x=4.50$.</div>"
+          "explanation": "<div class=\"ml-en\">Let $x,y$ be the rates: $2x+3y=24.60$, $3x+2y=23.90$. Adding: $5(x+y)=48.5\\Rightarrow x+y=9.7$; subtracting: $y-x=0.7$. Hence $y=5.20$, $x=4.50$.</div><div class=\"ml-vi\">Gọi $x,y$ là tiền công mỗi giờ: $2x+3y=24.60$, $3x+2y=23.90$. Cộng lại: $5(x+y)=48.5\\Rightarrow x+y=9.7$; trừ nhau: $y-x=0.7$. Vậy $y=5.20$, $x=4.50$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q27.png"
         },
         {
           "kind": "MCQ",
@@ -8496,7 +8819,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The system is homogeneous, so it always has at least the trivial solution $x=y=z=0$. A homogeneous system can never be inconsistent, so the described situation is impossible.</div><div class=\"ml-vi\">Hệ này là hệ THUẦN NHẤT nên luôn có ít nhất nghiệm tầm thường $x=y=z=0$. Hệ thuần nhất không bao giờ vô nghiệm, nên tình huống đề nêu là bất khả thi.</div>"
+          "explanation": "<div class=\"ml-en\">The system is homogeneous, so it always has at least the trivial solution $x=y=z=0$. A homogeneous system can never be inconsistent, so the described situation is impossible.</div><div class=\"ml-vi\">Hệ này là hệ THUẦN NHẤT nên luôn có ít nhất nghiệm tầm thường $x=y=z=0$. Hệ thuần nhất không bao giờ vô nghiệm, nên tình huống đề nêu là bất khả thi.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q28.png"
         },
         {
           "kind": "MCQ",
@@ -8519,7 +8843,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Compare entries: $a=1$; $3b=3\\Rightarrow b=1$; $2c=2\\Rightarrow c=1$; $d=4$.</div><div class=\"ml-vi\">So sánh từng phần tử: $a=1$; $3b=3\\Rightarrow b=1$; $2c=2\\Rightarrow c=1$; $d=4$.</div>"
+          "explanation": "<div class=\"ml-en\">Compare entries: $a=1$; $3b=3\\Rightarrow b=1$; $2c=2\\Rightarrow c=1$; $d=4$.</div><div class=\"ml-vi\">So sánh từng phần tử: $a=1$; $3b=3\\Rightarrow b=1$; $2c=2\\Rightarrow c=1$; $d=4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q29.png"
         },
         {
           "kind": "MCQ",
@@ -8545,7 +8870,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Row by row: $1(-2)+2(1)+3(0)=0$; $4(-2)+5=-3$; $7(-2)+8=-6$; $10(-2)+11=-9$. So $A\\mathbf{x}=[0\\ -3\\ -6\\ -9]^T$, i.e. (iii).</div><div class=\"ml-vi\">Tính theo từng hàng: $1(-2)+2(1)+3(0)=0$; $4(-2)+5=-3$; $7(-2)+8=-6$; $10(-2)+11=-9$. Vậy $A\\mathbf{x}=[0\\ -3\\ -6\\ -9]^T$, tức (iii).</div>"
+          "explanation": "<div class=\"ml-en\">Row by row: $1(-2)+2(1)+3(0)=0$; $4(-2)+5=-3$; $7(-2)+8=-6$; $10(-2)+11=-9$. So $A\\mathbf{x}=[0\\ -3\\ -6\\ -9]^T$, i.e. (iii).</div><div class=\"ml-vi\">Tính theo từng hàng: $1(-2)+2(1)+3(0)=0$; $4(-2)+5=-3$; $7(-2)+8=-6$; $10(-2)+11=-9$. Vậy $A\\mathbf{x}=[0\\ -3\\ -6\\ -9]^T$, tức (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q30.png"
         },
         {
           "kind": "MCQ",
@@ -8571,7 +8897,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The $(2,3)$-entry is (2nd entry of the column)$\\times$(3rd entry of the row) $=(-2)(-4)=8$.</div><div class=\"ml-vi\">Phần tử $(2,3)$ bằng (phần tử thứ 2 của cột)$\\times$(phần tử thứ 3 của hàng) $=(-2)(-4)=8$.</div>"
+          "explanation": "<div class=\"ml-en\">The $(2,3)$-entry is (2nd entry of the column)$\\times$(3rd entry of the row) $=(-2)(-4)=8$.</div><div class=\"ml-vi\">Phần tử $(2,3)$ bằng (phần tử thứ 2 của cột)$\\times$(phần tử thứ 3 của hàng) $=(-2)(-4)=8$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q31.png"
         },
         {
           "kind": "MCQ",
@@ -8597,7 +8924,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\det A=1(2-k^2)-0+1(k^2-3)=-1$. The $(2,1)$-entry of $A^{-1}$ equals $\\dfrac{C_{12}}{\\det A}$ where $C_{12}=-\\det\\begin{bmatrix}k&k\\\\3&2\\end{bmatrix}=-(2k-3k)=k$. So the entry is $\\dfrac{k}{-1}=-k$.</div><div class=\"ml-vi\">$\\det A=1(2-k^2)-0+1(k^2-3)=-1$. Phần tử $(2,1)$ của $A^{-1}$ bằng $\\dfrac{C_{12}}{\\det A}$ với $C_{12}=-\\det\\begin{bmatrix}k&k\\\\3&2\\end{bmatrix}=-(2k-3k)=k$. Vậy phần tử đó là $\\dfrac{k}{-1}=-k$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\det A=1(2-k^2)-0+1(k^2-3)=-1$. The $(2,1)$-entry of $A^{-1}$ equals $\\dfrac{C_{12}}{\\det A}$ where $C_{12}=-\\det\\begin{bmatrix}k&k\\\\3&2\\end{bmatrix}=-(2k-3k)=k$. So the entry is $\\dfrac{k}{-1}=-k$.</div><div class=\"ml-vi\">$\\det A=1(2-k^2)-0+1(k^2-3)=-1$. Phần tử $(2,1)$ của $A^{-1}$ bằng $\\dfrac{C_{12}}{\\det A}$ với $C_{12}=-\\det\\begin{bmatrix}k&k\\\\3&2\\end{bmatrix}=-(2k-3k)=k$. Vậy phần tử đó là $\\dfrac{k}{-1}=-k$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q32.png"
         },
         {
           "kind": "MCQ",
@@ -8623,7 +8951,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Write $\\begin{bmatrix}5\\\\2\\end{bmatrix}=1\\cdot\\begin{bmatrix}1\\\\0\\end{bmatrix}+2\\cdot\\begin{bmatrix}2\\\\1\\end{bmatrix}$. By linearity $T\\begin{bmatrix}5\\\\2\\end{bmatrix}=(2,3,0)+2(1,-1,3)=(4,1,6)$, so $a=4$.</div><div class=\"ml-vi\">Viết $\\begin{bmatrix}5\\\\2\\end{bmatrix}=1\\cdot\\begin{bmatrix}1\\\\0\\end{bmatrix}+2\\cdot\\begin{bmatrix}2\\\\1\\end{bmatrix}$. Theo tính tuyến tính: $T\\begin{bmatrix}5\\\\2\\end{bmatrix}=(2,3,0)+2(1,-1,3)=(4,1,6)$, vậy $a=4$.</div>"
+          "explanation": "<div class=\"ml-en\">Write $\\begin{bmatrix}5\\\\2\\end{bmatrix}=1\\cdot\\begin{bmatrix}1\\\\0\\end{bmatrix}+2\\cdot\\begin{bmatrix}2\\\\1\\end{bmatrix}$. By linearity $T\\begin{bmatrix}5\\\\2\\end{bmatrix}=(2,3,0)+2(1,-1,3)=(4,1,6)$, so $a=4$.</div><div class=\"ml-vi\">Viết $\\begin{bmatrix}5\\\\2\\end{bmatrix}=1\\cdot\\begin{bmatrix}1\\\\0\\end{bmatrix}+2\\cdot\\begin{bmatrix}2\\\\1\\end{bmatrix}$. Theo tính tuyến tính: $T\\begin{bmatrix}5\\\\2\\end{bmatrix}=(2,3,0)+2(1,-1,3)=(4,1,6)$, vậy $a=4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q33.png"
         },
         {
           "kind": "MCQ",
@@ -8646,7 +8975,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">A matrix transformation must have every component a linear combination of $x,y$. (i),(ii) contain squares; (iii) has the constant 1 (so $T(0,0)\\neq0$). Only (iv) is linear, with matrix $\\begin{bmatrix}5&6\\\\0&0\\end{bmatrix}$.</div><div class=\"ml-vi\">Phép biến đổi ma trận đòi hỏi mọi thành phần là tổ hợp tuyến tính của $x,y$. (i),(ii) chứa bình phương; (iii) có hằng số 1 (nên $T(0,0)\\neq0$). Chỉ (iv) tuyến tính, với ma trận $\\begin{bmatrix}5&6\\\\0&0\\end{bmatrix}$.</div>"
+          "explanation": "<div class=\"ml-en\">A matrix transformation must have every component a linear combination of $x,y$. (i),(ii) contain squares; (iii) has the constant 1 (so $T(0,0)\\neq0$). Only (iv) is linear, with matrix $\\begin{bmatrix}5&6\\\\0&0\\end{bmatrix}$.</div><div class=\"ml-vi\">Phép biến đổi ma trận đòi hỏi mọi thành phần là tổ hợp tuyến tính của $x,y$. (i),(ii) chứa bình phương; (iii) có hằng số 1 (nên $T(0,0)\\neq0$). Chỉ (iv) tuyến tính, với ma trận $\\begin{bmatrix}5&6\\\\0&0\\end{bmatrix}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q34.png"
         },
         {
           "kind": "MCQ",
@@ -8675,7 +9005,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Write the rows as $A=(a,b,c)$, $B=(p,q,r)$, $C=(x,y,z)$. The determinant is $\\det(A+2C,\\,3A-B,\\,A)$. Any term containing $A$ twice vanishes, leaving $2\\det(C,-B,A)=-2\\det(C,B,A)$. Swapping rows 1 and 3 gives $\\det(C,B,A)=-\\det(A,B,C)=-3$, so the answer is $-2(-3)=6$.</div><div class=\"ml-vi\">Ký hiệu các hàng $A=(a,b,c)$, $B=(p,q,r)$, $C=(x,y,z)$. Định thức cần tính là $\\det(A+2C,\\,3A-B,\\,A)$. Mọi số hạng chứa $A$ hai lần đều bằng 0, còn lại $2\\det(C,-B,A)=-2\\det(C,B,A)$. Đổi chỗ hàng 1 và 3: $\\det(C,B,A)=-\\det(A,B,C)=-3$, nên kết quả là $-2(-3)=6$.</div>"
+          "explanation": "<div class=\"ml-en\">Write the rows as $A=(a,b,c)$, $B=(p,q,r)$, $C=(x,y,z)$. The determinant is $\\det(A+2C,\\,3A-B,\\,A)$. Any term containing $A$ twice vanishes, leaving $2\\det(C,-B,A)=-2\\det(C,B,A)$. Swapping rows 1 and 3 gives $\\det(C,B,A)=-\\det(A,B,C)=-3$, so the answer is $-2(-3)=6$.</div><div class=\"ml-vi\">Ký hiệu các hàng $A=(a,b,c)$, $B=(p,q,r)$, $C=(x,y,z)$. Định thức cần tính là $\\det(A+2C,\\,3A-B,\\,A)$. Mọi số hạng chứa $A$ hai lần đều bằng 0, còn lại $2\\det(C,-B,A)=-2\\det(C,B,A)$. Đổi chỗ hàng 1 và 3: $\\det(C,B,A)=-\\det(A,B,C)=-3$, nên kết quả là $-2(-3)=6$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q35.png"
         },
         {
           "kind": "MCQ",
@@ -8701,7 +9032,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Expanding along the third row: $\\det A=c\\det\\begin{bmatrix}1&2\\\\2&c\\end{bmatrix}=c(c-4)$. The matrix is invertible iff $c\\neq0$ and $c\\neq4$.</div><div class=\"ml-vi\">Khai triển theo hàng 3: $\\det A=c\\det\\begin{bmatrix}1&2\\\\2&c\\end{bmatrix}=c(c-4)$. Ma trận khả nghịch khi và chỉ khi $c\\neq0$ và $c\\neq4$.</div>"
+          "explanation": "<div class=\"ml-en\">Expanding along the third row: $\\det A=c\\det\\begin{bmatrix}1&2\\\\2&c\\end{bmatrix}=c(c-4)$. The matrix is invertible iff $c\\neq0$ and $c\\neq4$.</div><div class=\"ml-vi\">Khai triển theo hàng 3: $\\det A=c\\det\\begin{bmatrix}1&2\\\\2&c\\end{bmatrix}=c(c-4)$. Ma trận khả nghịch khi và chỉ khi $c\\neq0$ và $c\\neq4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q36.png"
         },
         {
           "kind": "MCQ",
@@ -8727,7 +9059,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\det A=1(0\\cdot2-1\\cdot2)-2(3\\cdot2-1\\cdot(-1))+0=-2-14=-16$. Then $\\det(2A^{-1})=2^3\\cdot\\dfrac{1}{\\det A}=\\dfrac{8}{-16}=-\\dfrac12$.</div><div class=\"ml-vi\">$\\det A=1(0\\cdot2-1\\cdot2)-2(3\\cdot2-1\\cdot(-1))+0=-2-14=-16$. Do đó $\\det(2A^{-1})=2^3\\cdot\\dfrac{1}{\\det A}=\\dfrac{8}{-16}=-\\dfrac12$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\det A=1(0\\cdot2-1\\cdot2)-2(3\\cdot2-1\\cdot(-1))+0=-2-14=-16$. Then $\\det(2A^{-1})=2^3\\cdot\\dfrac{1}{\\det A}=\\dfrac{8}{-16}=-\\dfrac12$.</div><div class=\"ml-vi\">$\\det A=1(0\\cdot2-1\\cdot2)-2(3\\cdot2-1\\cdot(-1))+0=-2-14=-16$. Do đó $\\det(2A^{-1})=2^3\\cdot\\dfrac{1}{\\det A}=\\dfrac{8}{-16}=-\\dfrac12$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q37.png"
         },
         {
           "kind": "MCQ",
@@ -8753,7 +9086,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$A$ is lower triangular, so its eigenvalues are the diagonal entries: $4$ and $3$. (Check: $\\det(A-\\lambda I)=(4-\\lambda)(3-\\lambda)=0$.)</div><div class=\"ml-vi\">$A$ là ma trận tam giác dưới nên các giá trị riêng chính là các phần tử trên đường chéo: $4$ và $3$. (Kiểm tra: $\\det(A-\\lambda I)=(4-\\lambda)(3-\\lambda)=0$.)</div>"
+          "explanation": "<div class=\"ml-en\">$A$ is lower triangular, so its eigenvalues are the diagonal entries: $4$ and $3$. (Check: $\\det(A-\\lambda I)=(4-\\lambda)(3-\\lambda)=0$.)</div><div class=\"ml-vi\">$A$ là ma trận tam giác dưới nên các giá trị riêng chính là các phần tử trên đường chéo: $4$ và $3$. (Kiểm tra: $\\det(A-\\lambda I)=(4-\\lambda)(3-\\lambda)=0$.)</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q38.png"
         },
         {
           "kind": "MCQ",
@@ -8779,7 +9113,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Solve $Ax=0$: row 1 gives $x+y=0$; row 2 gives $x+y+2z=0\\Rightarrow z=0$; row 3 is the same as row 2. So $x=-y$, $z=0$, and a basic eigenvector is $[1\\ -1\\ 0]^T$, i.e. (ii).</div><div class=\"ml-vi\">Giải $Ax=0$: hàng 1 cho $x+y=0$; hàng 2 cho $x+y+2z=0\\Rightarrow z=0$; hàng 3 trùng hàng 2. Vậy $x=-y$, $z=0$, vectơ riêng cơ bản là $[1\\ -1\\ 0]^T$, tức (ii).</div>"
+          "explanation": "<div class=\"ml-en\">Solve $Ax=0$: row 1 gives $x+y=0$; row 2 gives $x+y+2z=0\\Rightarrow z=0$; row 3 is the same as row 2. So $x=-y$, $z=0$, and a basic eigenvector is $[1\\ -1\\ 0]^T$, i.e. (ii).</div><div class=\"ml-vi\">Giải $Ax=0$: hàng 1 cho $x+y=0$; hàng 2 cho $x+y+2z=0\\Rightarrow z=0$; hàng 3 trùng hàng 2. Vậy $x=-y$, $z=0$, vectơ riêng cơ bản là $[1\\ -1\\ 0]^T$, tức (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q39.png"
         },
         {
           "kind": "MCQ",
@@ -8805,7 +9140,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$B=2M-A=(-1,0,1)$. In parallelogram ABCD the diagonals share a midpoint, so $D=A+C-B=(5,2,3)$. Then $\\overrightarrow{BD}=D-B=(6,2,2)$.</div><div class=\"ml-vi\">$B=2M-A=(-1,0,1)$. Trong hình bình hành ABCD hai đường chéo cắt nhau tại trung điểm mỗi đường nên $D=A+C-B=(5,2,3)$. Suy ra $\\overrightarrow{BD}=D-B=(6,2,2)$.</div>"
+          "explanation": "<div class=\"ml-en\">$B=2M-A=(-1,0,1)$. In parallelogram ABCD the diagonals share a midpoint, so $D=A+C-B=(5,2,3)$. Then $\\overrightarrow{BD}=D-B=(6,2,2)$.</div><div class=\"ml-vi\">$B=2M-A=(-1,0,1)$. Trong hình bình hành ABCD hai đường chéo cắt nhau tại trung điểm mỗi đường nên $D=A+C-B=(5,2,3)$. Suy ra $\\overrightarrow{BD}=D-B=(6,2,2)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q40.png"
         },
         {
           "kind": "MCQ",
@@ -8831,7 +9167,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The direction of the line is $\\mathbf{n}_1\\times\\mathbf{n}_2=(1,1,-2)\\times(3,-2,1)=(-3,-7,-5)$. This is the normal of the required plane: $-3(x-6)-7y-5(z-2)=0\\Rightarrow3x+7y+5z=28$.</div><div class=\"ml-vi\">Vectơ chỉ phương của giao tuyến là $\\mathbf{n}_1\\times\\mathbf{n}_2=(1,1,-2)\\times(3,-2,1)=(-3,-7,-5)$. Đây chính là vectơ pháp tuyến của mặt phẳng cần tìm: $-3(x-6)-7y-5(z-2)=0\\Rightarrow3x+7y+5z=28$.</div>"
+          "explanation": "<div class=\"ml-en\">The direction of the line is $\\mathbf{n}_1\\times\\mathbf{n}_2=(1,1,-2)\\times(3,-2,1)=(-3,-7,-5)$. This is the normal of the required plane: $-3(x-6)-7y-5(z-2)=0\\Rightarrow3x+7y+5z=28$.</div><div class=\"ml-vi\">Vectơ chỉ phương của giao tuyến là $\\mathbf{n}_1\\times\\mathbf{n}_2=(1,1,-2)\\times(3,-2,1)=(-3,-7,-5)$. Đây chính là vectơ pháp tuyến của mặt phẳng cần tìm: $-3(x-6)-7y-5(z-2)=0\\Rightarrow3x+7y+5z=28$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q41.png"
         },
         {
           "kind": "MCQ",
@@ -8857,7 +9194,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\overrightarrow{PQ}=(-1,-2,-2)$, $\\overrightarrow{PR}=(2,-2,-3)$; $\\mathbf{n}=\\overrightarrow{PQ}\\times\\overrightarrow{PR}=(2,-7,6)$. Plane: $2x-7y+6z=2(2)-7(1)+6(4)=21$.</div><div class=\"ml-vi\">$\\overrightarrow{PQ}=(-1,-2,-2)$, $\\overrightarrow{PR}=(2,-2,-3)$; $\\mathbf{n}=\\overrightarrow{PQ}\\times\\overrightarrow{PR}=(2,-7,6)$. Mặt phẳng: $2x-7y+6z=2(2)-7(1)+6(4)=21$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\overrightarrow{PQ}=(-1,-2,-2)$, $\\overrightarrow{PR}=(2,-2,-3)$; $\\mathbf{n}=\\overrightarrow{PQ}\\times\\overrightarrow{PR}=(2,-7,6)$. Plane: $2x-7y+6z=2(2)-7(1)+6(4)=21$.</div><div class=\"ml-vi\">$\\overrightarrow{PQ}=(-1,-2,-2)$, $\\overrightarrow{PR}=(2,-2,-3)$; $\\mathbf{n}=\\overrightarrow{PQ}\\times\\overrightarrow{PR}=(2,-7,6)$. Mặt phẳng: $2x-7y+6z=2(2)-7(1)+6(4)=21$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q42.png"
         },
         {
           "kind": "MCQ",
@@ -8883,7 +9221,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$\\|\\mathbf{u}\\times(2\\mathbf{u}+3\\mathbf{v})\\|=\\|2(\\mathbf{u}\\times\\mathbf{u})+3(\\mathbf{u}\\times\\mathbf{v})\\|=3\\|\\mathbf{u}\\times\\mathbf{v}\\|=3(100)=300$.</div><div class=\"ml-vi\">$\\|\\mathbf{u}\\times(2\\mathbf{u}+3\\mathbf{v})\\|=\\|2(\\mathbf{u}\\times\\mathbf{u})+3(\\mathbf{u}\\times\\mathbf{v})\\|=3\\|\\mathbf{u}\\times\\mathbf{v}\\|=3(100)=300$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\|\\mathbf{u}\\times(2\\mathbf{u}+3\\mathbf{v})\\|=\\|2(\\mathbf{u}\\times\\mathbf{u})+3(\\mathbf{u}\\times\\mathbf{v})\\|=3\\|\\mathbf{u}\\times\\mathbf{v}\\|=3(100)=300$.</div><div class=\"ml-vi\">$\\|\\mathbf{u}\\times(2\\mathbf{u}+3\\mathbf{v})\\|=\\|2(\\mathbf{u}\\times\\mathbf{u})+3(\\mathbf{u}\\times\\mathbf{v})\\|=3\\|\\mathbf{u}\\times\\mathbf{v}\\|=3(100)=300$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q43.png"
         },
         {
           "kind": "MCQ",
@@ -8906,7 +9245,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Project on $y=3x$ (direction $(1,3)$): $\\dfrac{(-2,1)\\cdot(1,3)}{10}(1,3)=\\dfrac{1}{10}(1,3)=(0.1,0.3)$. Project that on $y=-x$ (direction $(1,-1)$): $\\dfrac{(0.1,0.3)\\cdot(1,-1)}{2}(1,-1)=-0.1(1,-1)=(-1/10,\\ 1/10)$, i.e. (iii).</div><div class=\"ml-vi\">Chiếu lên $y=3x$ (phương $(1,3)$): $\\dfrac{(-2,1)\\cdot(1,3)}{10}(1,3)=\\dfrac{1}{10}(1,3)=(0.1,0.3)$. Chiếu kết quả lên $y=-x$ (phương $(1,-1)$): $\\dfrac{(0.1,0.3)\\cdot(1,-1)}{2}(1,-1)=-0.1(1,-1)=(-1/10,\\ 1/10)$, tức (iii).</div>"
+          "explanation": "<div class=\"ml-en\">Project on $y=3x$ (direction $(1,3)$): $\\dfrac{(-2,1)\\cdot(1,3)}{10}(1,3)=\\dfrac{1}{10}(1,3)=(0.1,0.3)$. Project that on $y=-x$ (direction $(1,-1)$): $\\dfrac{(0.1,0.3)\\cdot(1,-1)}{2}(1,-1)=-0.1(1,-1)=(-1/10,\\ 1/10)$, i.e. (iii).</div><div class=\"ml-vi\">Chiếu lên $y=3x$ (phương $(1,3)$): $\\dfrac{(-2,1)\\cdot(1,3)}{10}(1,3)=\\dfrac{1}{10}(1,3)=(0.1,0.3)$. Chiếu kết quả lên $y=-x$ (phương $(1,-1)$): $\\dfrac{(0.1,0.3)\\cdot(1,-1)}{2}(1,-1)=-0.1(1,-1)=(-1/10,\\ 1/10)$, tức (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q44.png"
         },
         {
           "kind": "MCQ",
@@ -8929,7 +9269,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">(i) is the span of $(1,1,0)$, hence a subspace. (ii) does not contain the zero vector: $a=b=0$ gives $(-3,0,0)\\neq\\mathbf{0}$, so it is not a subspace.</div><div class=\"ml-vi\">(i) là span của $(1,1,0)$ nên là không gian con. (ii) không chứa vectơ 0: với $a=b=0$ ta được $(-3,0,0)\\neq\\mathbf{0}$, nên không phải không gian con.</div>"
+          "explanation": "<div class=\"ml-en\">(i) is the span of $(1,1,0)$, hence a subspace. (ii) does not contain the zero vector: $a=b=0$ gives $(-3,0,0)\\neq\\mathbf{0}$, so it is not a subspace.</div><div class=\"ml-vi\">(i) là span của $(1,1,0)$ nên là không gian con. (ii) không chứa vectơ 0: với $a=b=0$ ta được $(-3,0,0)\\neq\\mathbf{0}$, nên không phải không gian con.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q45.png"
         },
         {
           "kind": "MCQ",
@@ -8952,7 +9293,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">(i) equals $\\mathrm{span}\\{(1,3,2),(1,-1,1)\\}$, hence a subspace. (ii) is not closed under addition: $(1,0,1)$ and $(0,1,1)$ satisfy the condition but their sum $(1,1,2)$ gives $1+1-4\\neq0$.</div><div class=\"ml-vi\">(i) chính là $\\mathrm{span}\\{(1,3,2),(1,-1,1)\\}$ nên là không gian con. (ii) không đóng với phép cộng: $(1,0,1)$ và $(0,1,1)$ thoả điều kiện nhưng tổng $(1,1,2)$ cho $1+1-4\\neq0$.</div>"
+          "explanation": "<div class=\"ml-en\">(i) equals $\\mathrm{span}\\{(1,3,2),(1,-1,1)\\}$, hence a subspace. (ii) is not closed under addition: $(1,0,1)$ and $(0,1,1)$ satisfy the condition but their sum $(1,1,2)$ gives $1+1-4\\neq0$.</div><div class=\"ml-vi\">(i) chính là $\\mathrm{span}\\{(1,3,2),(1,-1,1)\\}$ nên là không gian con. (ii) không đóng với phép cộng: $(1,0,1)$ và $(0,1,1)$ thoả điều kiện nhưng tổng $(1,1,2)$ cho $1+1-4\\neq0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q46.png"
         },
         {
           "kind": "MCQ",
@@ -8978,7 +9320,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">The set is the solution space of ONE non-trivial linear equation in $\\mathbb{R}^4$, so $\\dim U=4-1=3$.</div><div class=\"ml-vi\">Tập này là không gian nghiệm của MỘT phương trình tuyến tính không tầm thường trong $\\mathbb{R}^4$, nên $\\dim U=4-1=3$.</div>"
+          "explanation": "<div class=\"ml-en\">The set is the solution space of ONE non-trivial linear equation in $\\mathbb{R}^4$, so $\\dim U=4-1=3$.</div><div class=\"ml-vi\">Tập này là không gian nghiệm của MỘT phương trình tuyến tính không tầm thường trong $\\mathbb{R}^4$, nên $\\dim U=4-1=3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q47.png"
         },
         {
           "kind": "MCQ",
@@ -9004,7 +9347,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Two independent linear constraints in $\\mathbb{R}^4$: choosing $c,d$ freely determines $b=2c+d$ and $a=b+c=3c+d$. Hence $\\dim U=4-2=2$.</div><div class=\"ml-vi\">Hai ràng buộc tuyến tính độc lập trong $\\mathbb{R}^4$: chọn tự do $c,d$ thì $b=2c+d$ và $a=b+c=3c+d$. Vậy $\\dim U=4-2=2$.</div>"
+          "explanation": "<div class=\"ml-en\">Two independent linear constraints in $\\mathbb{R}^4$: choosing $c,d$ freely determines $b=2c+d$ and $a=b+c=3c+d$. Hence $\\dim U=4-2=2$.</div><div class=\"ml-vi\">Hai ràng buộc tuyến tính độc lập trong $\\mathbb{R}^4$: chọn tự do $c,d$ thì $b=2c+d$ và $a=b+c=3c+d$. Vậy $\\dim U=4-2=2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q48.png"
         },
         {
           "kind": "MCQ",
@@ -9030,7 +9374,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">For an orthogonal basis the coefficient is $\\dfrac{u\\cdot v_1}{v_1\\cdot v_1}=\\dfrac{(1)(2)+(2)(1)+0}{4+1+0}=\\dfrac{4}{5}$.</div><div class=\"ml-vi\">Với cơ sở trực giao, hệ số bằng $\\dfrac{u\\cdot v_1}{v_1\\cdot v_1}=\\dfrac{(1)(2)+(2)(1)+0}{4+1+0}=\\dfrac{4}{5}$.</div>"
+          "explanation": "<div class=\"ml-en\">For an orthogonal basis the coefficient is $\\dfrac{u\\cdot v_1}{v_1\\cdot v_1}=\\dfrac{(1)(2)+(2)(1)+0}{4+1+0}=\\dfrac{4}{5}$.</div><div class=\"ml-vi\">Với cơ sở trực giao, hệ số bằng $\\dfrac{u\\cdot v_1}{v_1\\cdot v_1}=\\dfrac{(1)(2)+(2)(1)+0}{4+1+0}=\\dfrac{4}{5}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q49.png"
         },
         {
           "kind": "MCQ",
@@ -9053,7 +9398,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">The rank equals the number of linearly independent rows. $A$ has 7 rows and they are independent, so rank $A=7$.</div><div class=\"ml-vi\">Hạng bằng số hàng độc lập tuyến tính. $A$ có 7 hàng và chúng độc lập nên hạng $A=7$.</div>"
+          "explanation": "<div class=\"ml-en\">The rank equals the number of linearly independent rows. $A$ has 7 rows and they are independent, so rank $A=7$.</div><div class=\"ml-vi\">Hạng bằng số hàng độc lập tuyến tính. $A$ có 7 hàng và chúng độc lập nên hạng $A=7$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D7/q50.png"
         }
       ]
     },
@@ -9099,7 +9445,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Only (ii): $\\sin(2(-x)^4)=\\sin(2x^4)$ since $x^4$ is even. (i) and (iv) are neither; (iii) and (v) are odd ($\\sin x\\cos x=\\tfrac12\\sin2x$).</div><div class=\"ml-vi\">Chỉ (ii): $\\sin(2(-x)^4)=\\sin(2x^4)$ vì $x^4$ chẵn. (i) và (iv) không chẵn không lẻ; (iii) và (v) là hàm lẻ ($\\sin x\\cos x=\\tfrac12\\sin2x$).</div>"
+          "explanation": "<div class=\"ml-en\">Only (ii): $\\sin(2(-x)^4)=\\sin(2x^4)$ since $x^4$ is even. (i) and (iv) are neither; (iii) and (v) are odd ($\\sin x\\cos x=\\tfrac12\\sin2x$).</div><div class=\"ml-vi\">Chỉ (ii): $\\sin(2(-x)^4)=\\sin(2x^4)$ vì $x^4$ chẵn. (i) và (iv) không chẵn không lẻ; (iii) và (v) là hàm lẻ ($\\sin x\\cos x=\\tfrac12\\sin2x$).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q1.png"
         },
         {
           "kind": "MCQ",
@@ -9125,7 +9472,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$(L): y+1=-\\tfrac12(x-1)\\Rightarrow y=-\\tfrac{x}{2}-\\tfrac12$. At $x=-2$: $y=1-\\tfrac12=\\tfrac12$, so $(-2,1/2)$ lies on the line.</div><div class=\"ml-vi\">$(L): y+1=-\\tfrac12(x-1)\\Rightarrow y=-\\tfrac{x}{2}-\\tfrac12$. Tại $x=-2$: $y=1-\\tfrac12=\\tfrac12$, nên $(-2,1/2)$ nằm trên đường thẳng.</div>"
+          "explanation": "<div class=\"ml-en\">$(L): y+1=-\\tfrac12(x-1)\\Rightarrow y=-\\tfrac{x}{2}-\\tfrac12$. At $x=-2$: $y=1-\\tfrac12=\\tfrac12$, so $(-2,1/2)$ lies on the line.</div><div class=\"ml-vi\">$(L): y+1=-\\tfrac12(x-1)\\Rightarrow y=-\\tfrac{x}{2}-\\tfrac12$. Tại $x=-2$: $y=1-\\tfrac12=\\tfrac12$, nên $(-2,1/2)$ nằm trên đường thẳng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q2.png"
         },
         {
           "kind": "MCQ",
@@ -9154,7 +9502,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$x^2-4x+3=(x-1)(x-3)$. For $x\\to1^{+}$ we have $x-1\\gt0$ and $x-3\\lt0$, so $|(x-1)(x-3)|=-(x-1)(x-3)$ and the quotient is $-(x-3)\\to-(1-3)=2$.</div><div class=\"ml-vi\">$x^2-4x+3=(x-1)(x-3)$. Khi $x\\to1^{+}$ thì $x-1\\gt0$ và $x-3\\lt0$ nên $|(x-1)(x-3)|=-(x-1)(x-3)$, thương bằng $-(x-3)\\to-(1-3)=2$.</div>"
+          "explanation": "<div class=\"ml-en\">$x^2-4x+3=(x-1)(x-3)$. For $x\\to1^{+}$ we have $x-1\\gt0$ and $x-3\\lt0$, so $|(x-1)(x-3)|=-(x-1)(x-3)$ and the quotient is $-(x-3)\\to-(1-3)=2$.</div><div class=\"ml-vi\">$x^2-4x+3=(x-1)(x-3)$. Khi $x\\to1^{+}$ thì $x-1\\gt0$ và $x-3\\lt0$ nên $|(x-1)(x-3)|=-(x-1)(x-3)$, thương bằng $-(x-3)\\to-(1-3)=2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q3.png"
         },
         {
           "kind": "MCQ",
@@ -9177,7 +9526,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">At $x=1$: left value $1+6=7$ but right limit $2(1)=2$ — discontinuous. At $x=3$: left value $2(3)=6$ but right limit $3-3=0$ — discontinuous. So $x=1$ and $x=3$.</div><div class=\"ml-vi\">Tại $x=1$: giá trị trái $1+6=7$ nhưng giới hạn phải $2(1)=2$ — gián đoạn. Tại $x=3$: giá trị trái $2(3)=6$ nhưng giới hạn phải $3-3=0$ — gián đoạn. Vậy $x=1$ và $x=3$.</div>"
+          "explanation": "<div class=\"ml-en\">At $x=1$: left value $1+6=7$ but right limit $2(1)=2$ — discontinuous. At $x=3$: left value $2(3)=6$ but right limit $3-3=0$ — discontinuous. So $x=1$ and $x=3$.</div><div class=\"ml-vi\">Tại $x=1$: giá trị trái $1+6=7$ nhưng giới hạn phải $2(1)=2$ — gián đoạn. Tại $x=3$: giá trị trái $2(3)=6$ nhưng giới hạn phải $3-3=0$ — gián đoạn. Vậy $x=1$ và $x=3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q4.png"
         },
         {
           "kind": "MCQ",
@@ -9203,7 +9553,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\dfrac{2(x+h)^2+(x+h)-2x^2-x}{h}=\\dfrac{4xh+2h^2+h}{h}=4x+2h+1$.</div><div class=\"ml-vi\">$\\dfrac{2(x+h)^2+(x+h)-2x^2-x}{h}=\\dfrac{4xh+2h^2+h}{h}=4x+2h+1$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\dfrac{2(x+h)^2+(x+h)-2x^2-x}{h}=\\dfrac{4xh+2h^2+h}{h}=4x+2h+1$.</div><div class=\"ml-vi\">$\\dfrac{2(x+h)^2+(x+h)-2x^2-x}{h}=\\dfrac{4xh+2h^2+h}{h}=4x+2h+1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q5.png"
         },
         {
           "kind": "MCQ",
@@ -9232,7 +9583,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$y'=\\dfrac{\\frac{1}{2\\sqrt{x}}(x+1)-\\sqrt{x}}{(x+1)^2}$. At $x=4$: $\\dfrac{0.25(5)-2}{25}=\\dfrac{-0.75}{25}=-0.03$. Tangent: $y=0.4-0.03(x-4)=-0.03x+0.52$.</div><div class=\"ml-vi\">$y'=\\dfrac{\\frac{1}{2\\sqrt{x}}(x+1)-\\sqrt{x}}{(x+1)^2}$. Tại $x=4$: $\\dfrac{0.25(5)-2}{25}=\\dfrac{-0.75}{25}=-0.03$. Tiếp tuyến: $y=0.4-0.03(x-4)=-0.03x+0.52$.</div>"
+          "explanation": "<div class=\"ml-en\">$y'=\\dfrac{\\frac{1}{2\\sqrt{x}}(x+1)-\\sqrt{x}}{(x+1)^2}$. At $x=4$: $\\dfrac{0.25(5)-2}{25}=\\dfrac{-0.75}{25}=-0.03$. Tangent: $y=0.4-0.03(x-4)=-0.03x+0.52$.</div><div class=\"ml-vi\">$y'=\\dfrac{\\frac{1}{2\\sqrt{x}}(x+1)-\\sqrt{x}}{(x+1)^2}$. Tại $x=4$: $\\dfrac{0.25(5)-2}{25}=\\dfrac{-0.75}{25}=-0.03$. Tiếp tuyến: $y=0.4-0.03(x-4)=-0.03x+0.52$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q6.png"
         },
         {
           "kind": "MCQ",
@@ -9258,7 +9610,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$v(t)=s'(t)=-32t+560$, $a(t)=s''(t)=-32$ — constant, so $a(2)=-32$.</div><div class=\"ml-vi\">$v(t)=s'(t)=-32t+560$, $a(t)=s''(t)=-32$ — hằng số, nên $a(2)=-32$.</div>"
+          "explanation": "<div class=\"ml-en\">$v(t)=s'(t)=-32t+560$, $a(t)=s''(t)=-32$ — constant, so $a(2)=-32$.</div><div class=\"ml-vi\">$v(t)=s'(t)=-32t+560$, $a(t)=s''(t)=-32$ — hằng số, nên $a(2)=-32$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q7.png"
         },
         {
           "kind": "MCQ",
@@ -9284,7 +9637,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f'(x)=-\\sin(x^3+3x+4)\\cdot(3x^2+3)$. At $x=0$: $-\\sin(4)\\cdot3=-3\\sin(4)$.</div><div class=\"ml-vi\">$f'(x)=-\\sin(x^3+3x+4)\\cdot(3x^2+3)$. Tại $x=0$: $-\\sin(4)\\cdot3=-3\\sin(4)$.</div>"
+          "explanation": "<div class=\"ml-en\">$f'(x)=-\\sin(x^3+3x+4)\\cdot(3x^2+3)$. At $x=0$: $-\\sin(4)\\cdot3=-3\\sin(4)$.</div><div class=\"ml-vi\">$f'(x)=-\\sin(x^3+3x+4)\\cdot(3x^2+3)$. Tại $x=0$: $-\\sin(4)\\cdot3=-3\\sin(4)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q8.png"
         },
         {
           "kind": "MCQ",
@@ -9310,7 +9664,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Differentiate: $9y+9xy'+2y'=0\\Rightarrow y'(9x+2)=-9y\\Rightarrow y'=\\dfrac{-9y}{9x+2}$, i.e. (iv).</div><div class=\"ml-vi\">Lấy đạo hàm hai vế: $9y+9xy'+2y'=0\\Rightarrow y'(9x+2)=-9y\\Rightarrow y'=\\dfrac{-9y}{9x+2}$, tức (iv).</div>"
+          "explanation": "<div class=\"ml-en\">Differentiate: $9y+9xy'+2y'=0\\Rightarrow y'(9x+2)=-9y\\Rightarrow y'=\\dfrac{-9y}{9x+2}$, i.e. (iv).</div><div class=\"ml-vi\">Lấy đạo hàm hai vế: $9y+9xy'+2y'=0\\Rightarrow y'(9x+2)=-9y\\Rightarrow y'=\\dfrac{-9y}{9x+2}$, tức (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q9.png"
         },
         {
           "kind": "MCQ",
@@ -9336,7 +9691,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Differentiate: $2y\\,y'=3x^2x'$. At $(2,3)$: $2(3)(4)=3(4)x'\\Rightarrow24=12x'\\Rightarrow x'=2$ cm/s.</div><div class=\"ml-vi\">Lấy đạo hàm: $2y\\,y'=3x^2x'$. Tại $(2,3)$: $2(3)(4)=3(4)x'\\Rightarrow24=12x'\\Rightarrow x'=2$ cm/s.</div>"
+          "explanation": "<div class=\"ml-en\">Differentiate: $2y\\,y'=3x^2x'$. At $(2,3)$: $2(3)(4)=3(4)x'\\Rightarrow24=12x'\\Rightarrow x'=2$ cm/s.</div><div class=\"ml-vi\">Lấy đạo hàm: $2y\\,y'=3x^2x'$. Tại $(2,3)$: $2(3)(4)=3(4)x'\\Rightarrow24=12x'\\Rightarrow x'=2$ cm/s.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q10.png"
         },
         {
           "kind": "MCQ",
@@ -9362,7 +9718,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f(x)=(1+2x)^{-1/2}$, $f(0)=1$; $f'(x)=-(1+2x)^{-3/2}$, $f'(0)=-1$. So $L(x)=1-x$.</div><div class=\"ml-vi\">$f(x)=(1+2x)^{-1/2}$, $f(0)=1$; $f'(x)=-(1+2x)^{-3/2}$, $f'(0)=-1$. Vậy $L(x)=1-x$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(x)=(1+2x)^{-1/2}$, $f(0)=1$; $f'(x)=-(1+2x)^{-3/2}$, $f'(0)=-1$. So $L(x)=1-x$.</div><div class=\"ml-vi\">$f(x)=(1+2x)^{-1/2}$, $f(0)=1$; $f'(x)=-(1+2x)^{-3/2}$, $f'(0)=-1$. Vậy $L(x)=1-x$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q11.png"
         },
         {
           "kind": "MCQ",
@@ -9388,7 +9745,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f'(x)=\\dfrac{2}{x^3}\\gt0$ on $(0,\\infty)$, so $f$ increases: minimum at $x=1/2$ giving $-4$, maximum at $x=2$ giving $-1/4$.</div><div class=\"ml-vi\">$f'(x)=\\dfrac{2}{x^3}\\gt0$ trên $(0,\\infty)$ nên $f$ đồng biến: nhỏ nhất tại $x=1/2$ bằng $-4$, lớn nhất tại $x=2$ bằng $-1/4$.</div>"
+          "explanation": "<div class=\"ml-en\">$f'(x)=\\dfrac{2}{x^3}\\gt0$ on $(0,\\infty)$, so $f$ increases: minimum at $x=1/2$ giving $-4$, maximum at $x=2$ giving $-1/4$.</div><div class=\"ml-vi\">$f'(x)=\\dfrac{2}{x^3}\\gt0$ trên $(0,\\infty)$ nên $f$ đồng biến: nhỏ nhất tại $x=1/2$ bằng $-4$, lớn nhất tại $x=2$ bằng $-1/4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q12.png"
         },
         {
           "kind": "MCQ",
@@ -9414,7 +9772,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$f''(x)=12x^2-48=12(x^2-4)$, positive when $|x|\\gt2$ and negative when $|x|\\lt2$: concave up on $(-\\infty,-2)$ and $(2,\\infty)$, concave down on $(-2,2)$, i.e. (iv).</div><div class=\"ml-vi\">$f''(x)=12x^2-48=12(x^2-4)$, dương khi $|x|\\gt2$ và âm khi $|x|\\lt2$: lõm lên trên $(-\\infty,-2)$ và $(2,\\infty)$, lõm xuống trên $(-2,2)$, tức (iv).</div>"
+          "explanation": "<div class=\"ml-en\">$f''(x)=12x^2-48=12(x^2-4)$, positive when $|x|\\gt2$ and negative when $|x|\\lt2$: concave up on $(-\\infty,-2)$ and $(2,\\infty)$, concave down on $(-2,2)$, i.e. (iv).</div><div class=\"ml-vi\">$f''(x)=12x^2-48=12(x^2-4)$, dương khi $|x|\\gt2$ và âm khi $|x|\\lt2$: lõm lên trên $(-\\infty,-2)$ và $(2,\\infty)$, lõm xuống trên $(-2,2)$, tức (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q13.png"
         },
         {
           "kind": "MCQ",
@@ -9437,7 +9796,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">As $x\\to1$, $f\\to\\pm\\infty$, so $x=1$ is a vertical asymptote. As $x\\to\\pm\\infty$, $f(x)\\approx x\\to\\pm\\infty$, so there is no horizontal asymptote (there is a slant asymptote $y=x$).</div><div class=\"ml-vi\">Khi $x\\to1$ thì $f\\to\\pm\\infty$ nên $x=1$ là tiệm cận đứng. Khi $x\\to\\pm\\infty$ thì $f(x)\\approx x\\to\\pm\\infty$ nên KHÔNG có tiệm cận ngang (chỉ có tiệm cận xiên $y=x$).</div>"
+          "explanation": "<div class=\"ml-en\">As $x\\to1$, $f\\to\\pm\\infty$, so $x=1$ is a vertical asymptote. As $x\\to\\pm\\infty$, $f(x)\\approx x\\to\\pm\\infty$, so there is no horizontal asymptote (there is a slant asymptote $y=x$).</div><div class=\"ml-vi\">Khi $x\\to1$ thì $f\\to\\pm\\infty$ nên $x=1$ là tiệm cận đứng. Khi $x\\to\\pm\\infty$ thì $f(x)\\approx x\\to\\pm\\infty$ nên KHÔNG có tiệm cận ngang (chỉ có tiệm cận xiên $y=x$).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q14.png"
         },
         {
           "kind": "MCQ",
@@ -9463,7 +9823,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">By AM-GM, $x+y\\geq2\\sqrt{xy}=2\\sqrt{324}=2(18)=36$, with equality when $x=y=18$.</div><div class=\"ml-vi\">Theo bất đẳng thức AM-GM, $x+y\\geq2\\sqrt{xy}=2\\sqrt{324}=2(18)=36$, dấu bằng khi $x=y=18$.</div>"
+          "explanation": "<div class=\"ml-en\">By AM-GM, $x+y\\geq2\\sqrt{xy}=2\\sqrt{324}=2(18)=36$, with equality when $x=y=18$.</div><div class=\"ml-vi\">Theo bất đẳng thức AM-GM, $x+y\\geq2\\sqrt{xy}=2\\sqrt{324}=2(18)=36$, dấu bằng khi $x=y=18$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q15.png"
         },
         {
           "kind": "MCQ",
@@ -9492,7 +9853,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f(x)=x^4-13$, $f'(x)=4x^3$. $x_2=2-\\dfrac{3}{32}=1.90625$. Then $f(1.90625)\\approx0.20443$, $f'(1.90625)\\approx27.7076$, so $x_3\\approx1.90625-0.00738=1.8989$.</div><div class=\"ml-vi\">$f(x)=x^4-13$, $f'(x)=4x^3$. $x_2=2-\\dfrac{3}{32}=1.90625$. Tiếp theo $f(1.90625)\\approx0.20443$, $f'(1.90625)\\approx27.7076$, nên $x_3\\approx1.90625-0.00738=1.8989$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(x)=x^4-13$, $f'(x)=4x^3$. $x_2=2-\\dfrac{3}{32}=1.90625$. Then $f(1.90625)\\approx0.20443$, $f'(1.90625)\\approx27.7076$, so $x_3\\approx1.90625-0.00738=1.8989$.</div><div class=\"ml-vi\">$f(x)=x^4-13$, $f'(x)=4x^3$. $x_2=2-\\dfrac{3}{32}=1.90625$. Tiếp theo $f(1.90625)\\approx0.20443$, $f'(1.90625)\\approx27.7076$, nên $x_3\\approx1.90625-0.00738=1.8989$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q16.png"
         },
         {
           "kind": "MCQ",
@@ -9518,7 +9880,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\Delta x=1$, left endpoints $0,1,2,3,4$: $L_5=2+3+6+11+18=40$.</div><div class=\"ml-vi\">$\\Delta x=1$, các mút trái $0,1,2,3,4$: $L_5=2+3+6+11+18=40$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\Delta x=1$, left endpoints $0,1,2,3,4$: $L_5=2+3+6+11+18=40$.</div><div class=\"ml-vi\">$\\Delta x=1$, các mút trái $0,1,2,3,4$: $L_5=2+3+6+11+18=40$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q17.png"
         },
         {
           "kind": "MCQ",
@@ -9544,7 +9907,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$2(7)+3(8)+\\int_1^5 1\\,dx=14+24+4=42$.</div><div class=\"ml-vi\">$2(7)+3(8)+\\int_1^5 1\\,dx=14+24+4=42$.</div>"
+          "explanation": "<div class=\"ml-en\">$2(7)+3(8)+\\int_1^5 1\\,dx=14+24+4=42$.</div><div class=\"ml-vi\">$2(7)+3(8)+\\int_1^5 1\\,dx=14+24+4=42$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q18.png"
         },
         {
           "kind": "MCQ",
@@ -9573,7 +9937,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\dfrac13\\int_0^3(5x-2)dx=\\dfrac13\\left[\\dfrac{5x^2}{2}-2x\\right]_0^3=\\dfrac13(22.5-6)=\\dfrac{16.5}{3}=5.5$.</div><div class=\"ml-vi\">$\\dfrac13\\int_0^3(5x-2)dx=\\dfrac13\\left[\\dfrac{5x^2}{2}-2x\\right]_0^3=\\dfrac13(22.5-6)=\\dfrac{16.5}{3}=5.5$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\dfrac13\\int_0^3(5x-2)dx=\\dfrac13\\left[\\dfrac{5x^2}{2}-2x\\right]_0^3=\\dfrac13(22.5-6)=\\dfrac{16.5}{3}=5.5$.</div><div class=\"ml-vi\">$\\dfrac13\\int_0^3(5x-2)dx=\\dfrac13\\left[\\dfrac{5x^2}{2}-2x\\right]_0^3=\\dfrac13(22.5-6)=\\dfrac{16.5}{3}=5.5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q19.png"
         },
         {
           "kind": "MCQ",
@@ -9599,7 +9964,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$(t+\\sqrt3)(t-\\sqrt3)=t^2-3$, so the integral is $\\left[\\dfrac{t^3}{3}-3t\\right]_3^4=\\left(\\dfrac{64}{3}-12\\right)-(9-9)=\\dfrac{28}{3}$.</div><div class=\"ml-vi\">$(t+\\sqrt3)(t-\\sqrt3)=t^2-3$, nên tích phân bằng $\\left[\\dfrac{t^3}{3}-3t\\right]_3^4=\\left(\\dfrac{64}{3}-12\\right)-(9-9)=\\dfrac{28}{3}$.</div>"
+          "explanation": "<div class=\"ml-en\">$(t+\\sqrt3)(t-\\sqrt3)=t^2-3$, so the integral is $\\left[\\dfrac{t^3}{3}-3t\\right]_3^4=\\left(\\dfrac{64}{3}-12\\right)-(9-9)=\\dfrac{28}{3}$.</div><div class=\"ml-vi\">$(t+\\sqrt3)(t-\\sqrt3)=t^2-3$, nên tích phân bằng $\\left[\\dfrac{t^3}{3}-3t\\right]_3^4=\\left(\\dfrac{64}{3}-12\\right)-(9-9)=\\dfrac{28}{3}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q20.png"
         },
         {
           "kind": "MCQ",
@@ -9625,7 +9991,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Let $u=4x^4+3$, $du=16x^3dx$: $\\dfrac{1}{16}\\int\\dfrac{du}{u}=\\dfrac{1}{16}\\ln|4x^4+3|+C$, i.e. (iii).</div><div class=\"ml-vi\">Đặt $u=4x^4+3$, $du=16x^3dx$: $\\dfrac{1}{16}\\int\\dfrac{du}{u}=\\dfrac{1}{16}\\ln|4x^4+3|+C$, tức (iii).</div>"
+          "explanation": "<div class=\"ml-en\">Let $u=4x^4+3$, $du=16x^3dx$: $\\dfrac{1}{16}\\int\\dfrac{du}{u}=\\dfrac{1}{16}\\ln|4x^4+3|+C$, i.e. (iii).</div><div class=\"ml-vi\">Đặt $u=4x^4+3$, $du=16x^3dx$: $\\dfrac{1}{16}\\int\\dfrac{du}{u}=\\dfrac{1}{16}\\ln|4x^4+3|+C$, tức (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q21.png"
         },
         {
           "kind": "MCQ",
@@ -9651,7 +10018,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Check by differentiating (iii): $\\dfrac{d}{dx}\\left[-e^{-x}(x^2+2x+3)\\right]=e^{-x}(x^2+2x+3)-e^{-x}(2x+2)=e^{-x}(x^2+1)$ ✓.</div><div class=\"ml-vi\">Kiểm bằng cách đạo hàm (iii): $\\dfrac{d}{dx}\\left[-e^{-x}(x^2+2x+3)\\right]=e^{-x}(x^2+2x+3)-e^{-x}(2x+2)=e^{-x}(x^2+1)$ ✓.</div>"
+          "explanation": "<div class=\"ml-en\">Check by differentiating (iii): $\\dfrac{d}{dx}\\left[-e^{-x}(x^2+2x+3)\\right]=e^{-x}(x^2+2x+3)-e^{-x}(2x+2)=e^{-x}(x^2+1)$ ✓.</div><div class=\"ml-vi\">Kiểm bằng cách đạo hàm (iii): $\\dfrac{d}{dx}\\left[-e^{-x}(x^2+2x+3)\\right]=e^{-x}(x^2+2x+3)-e^{-x}(2x+2)=e^{-x}(x^2+1)$ ✓.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q22.png"
         },
         {
           "kind": "MCQ",
@@ -9680,7 +10048,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$h=1$: $S=\\dfrac{h}{3}[f_0+4f_1+2f_2+4f_3+2f_4+4f_5+2f_6+4f_7+f_8]=\\dfrac13[3+4+4+20+6+32+14+24+2]=\\dfrac{109}{3}\\approx36.3$.</div><div class=\"ml-vi\">$h=1$: $S=\\dfrac{h}{3}[f_0+4f_1+2f_2+4f_3+2f_4+4f_5+2f_6+4f_7+f_8]=\\dfrac13[3+4+4+20+6+32+14+24+2]=\\dfrac{109}{3}\\approx36.3$.</div>"
+          "explanation": "<div class=\"ml-en\">$h=1$: $S=\\dfrac{h}{3}[f_0+4f_1+2f_2+4f_3+2f_4+4f_5+2f_6+4f_7+f_8]=\\dfrac13[3+4+4+20+6+32+14+24+2]=\\dfrac{109}{3}\\approx36.3$.</div><div class=\"ml-vi\">$h=1$: $S=\\dfrac{h}{3}[f_0+4f_1+2f_2+4f_3+2f_4+4f_5+2f_6+4f_7+f_8]=\\dfrac13[3+4+4+20+6+32+14+24+2]=\\dfrac{109}{3}\\approx36.3$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q23.png"
         },
         {
           "kind": "MCQ",
@@ -9703,7 +10072,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i) has an infinite limit of integration; (ii) has an infinite discontinuity at $x=2$ inside $[0,5]$. Both are improper.</div><div class=\"ml-vi\">(i) có cận vô hạn; (ii) có điểm gián đoạn vô cực tại $x=2$ nằm trong $[0,5]$. Cả hai đều là tích phân suy rộng.</div>"
+          "explanation": "<div class=\"ml-en\">(i) has an infinite limit of integration; (ii) has an infinite discontinuity at $x=2$ inside $[0,5]$. Both are improper.</div><div class=\"ml-vi\">(i) có cận vô hạn; (ii) có điểm gián đoạn vô cực tại $x=2$ nằm trong $[0,5]$. Cả hai đều là tích phân suy rộng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q24.png"
         },
         {
           "kind": "MCQ",
@@ -9729,7 +10099,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$R_1\\to R_1-2R_2$ gives $[1,0,-6,-3]$; then clear column 4 with $R_3$: $R_1\\to R_1+3R_3=[1,0,-6,0]$, $R_2\\to R_2-2R_3=[0,1,3,0]$. Result is (i).</div><div class=\"ml-vi\">$R_1\\to R_1-2R_2$ cho $[1,0,-6,-3]$; sau đó khử cột 4 bằng $R_3$: $R_1\\to R_1+3R_3=[1,0,-6,0]$, $R_2\\to R_2-2R_3=[0,1,3,0]$. Kết quả là (i).</div>"
+          "explanation": "<div class=\"ml-en\">$R_1\\to R_1-2R_2$ gives $[1,0,-6,-3]$; then clear column 4 with $R_3$: $R_1\\to R_1+3R_3=[1,0,-6,0]$, $R_2\\to R_2-2R_3=[0,1,3,0]$. Result is (i).</div><div class=\"ml-vi\">$R_1\\to R_1-2R_2$ cho $[1,0,-6,-3]$; sau đó khử cột 4 bằng $R_3$: $R_1\\to R_1+3R_3=[1,0,-6,0]$, $R_2\\to R_2-2R_3=[0,1,3,0]$. Kết quả là (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q25.png"
         },
         {
           "kind": "MCQ",
@@ -9758,7 +10129,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Adding equations 1 and 2: $2y-4z=4\\Rightarrow y=2+2z$. From equation 1: $x=1+2y-3z=5+z$. Substituting into equation 3: $2(5+z)+(2+2z)+2z=12\\Rightarrow12+6z=12\\Rightarrow z=0$.</div><div class=\"ml-vi\">Cộng phương trình 1 và 2: $2y-4z=4\\Rightarrow y=2+2z$. Từ phương trình 1: $x=1+2y-3z=5+z$. Thay vào phương trình 3: $2(5+z)+(2+2z)+2z=12\\Rightarrow12+6z=12\\Rightarrow z=0$.</div>"
+          "explanation": "<div class=\"ml-en\">Adding equations 1 and 2: $2y-4z=4\\Rightarrow y=2+2z$. From equation 1: $x=1+2y-3z=5+z$. Substituting into equation 3: $2(5+z)+(2+2z)+2z=12\\Rightarrow12+6z=12\\Rightarrow z=0$.</div><div class=\"ml-vi\">Cộng phương trình 1 và 2: $2y-4z=4\\Rightarrow y=2+2z$. Từ phương trình 1: $x=1+2y-3z=5+z$. Thay vào phương trình 3: $2(5+z)+(2+2z)+2z=12\\Rightarrow12+6z=12\\Rightarrow z=0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q26.png"
         },
         {
           "kind": "MCQ",
@@ -9781,7 +10153,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Row 3 of the coefficient matrix equals $-R_1+2R_2$ (check: $-1+6=5$, $1+2=3$, $-2-2=-4$). Consistency with infinitely many solutions therefore requires $c=-a+2b$, i.e. $a-2b+c=0$.</div><div class=\"ml-vi\">Hàng 3 của ma trận hệ số bằng $-R_1+2R_2$ (kiểm: $-1+6=5$, $1+2=3$, $-2-2=-4$). Do đó để hệ tương thích và có vô số nghiệm cần $c=-a+2b$, tức $a-2b+c=0$.</div>"
+          "explanation": "<div class=\"ml-en\">Row 3 of the coefficient matrix equals $-R_1+2R_2$ (check: $-1+6=5$, $1+2=3$, $-2-2=-4$). Consistency with infinitely many solutions therefore requires $c=-a+2b$, i.e. $a-2b+c=0$.</div><div class=\"ml-vi\">Hàng 3 của ma trận hệ số bằng $-R_1+2R_2$ (kiểm: $-1+6=5$, $1+2=3$, $-2-2=-4$). Do đó để hệ tương thích và có vô số nghiệm cần $c=-a+2b$, tức $a-2b+c=0$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q27.png"
         },
         {
           "kind": "MCQ",
@@ -9807,7 +10180,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$A_{32}=0$ and $(B^T)_{32}=B_{23}=-2$. So the entry is $2(0)-3(-2)=6$.</div><div class=\"ml-vi\">$A_{32}=0$ và $(B^T)_{32}=B_{23}=-2$. Vậy phần tử đó là $2(0)-3(-2)=6$.</div>"
+          "explanation": "<div class=\"ml-en\">$A_{32}=0$ and $(B^T)_{32}=B_{23}=-2$. So the entry is $2(0)-3(-2)=6$.</div><div class=\"ml-vi\">$A_{32}=0$ và $(B^T)_{32}=B_{23}=-2$. Vậy phần tử đó là $2(0)-3(-2)=6$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q28.png"
         },
         {
           "kind": "MCQ",
@@ -9833,7 +10207,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Row 1 gives $2x+3y=4$; row 2 gives $-3x-2y=5$.</div><div class=\"ml-vi\">Hàng 1 cho $2x+3y=4$; hàng 2 cho $-3x-2y=5$.</div>"
+          "explanation": "<div class=\"ml-en\">Row 1 gives $2x+3y=4$; row 2 gives $-3x-2y=5$.</div><div class=\"ml-vi\">Hàng 1 cho $2x+3y=4$; hàng 2 cho $-3x-2y=5$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q29.png"
         },
         {
           "kind": "MCQ",
@@ -9856,7 +10231,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$A=\\begin{bmatrix}0&-1&-2\\\\1&0&-1\\\\2&1&0\\end{bmatrix}$. The $(2,3)$-entry of $A^2$ is row 2 of $A$ times column 3 of $A$: $(1,0,-1)\\cdot(-2,-1,0)=-2$.</div><div class=\"ml-vi\">$A=\\begin{bmatrix}0&-1&-2\\\\1&0&-1\\\\2&1&0\\end{bmatrix}$. Phần tử $(2,3)$ của $A^2$ là hàng 2 nhân cột 3: $(1,0,-1)\\cdot(-2,-1,0)=-2$.</div>"
+          "explanation": "<div class=\"ml-en\">$A=\\begin{bmatrix}0&-1&-2\\\\1&0&-1\\\\2&1&0\\end{bmatrix}$. The $(2,3)$-entry of $A^2$ is row 2 of $A$ times column 3 of $A$: $(1,0,-1)\\cdot(-2,-1,0)=-2$.</div><div class=\"ml-vi\">$A=\\begin{bmatrix}0&-1&-2\\\\1&0&-1\\\\2&1&0\\end{bmatrix}$. Phần tử $(2,3)$ của $A^2$ là hàng 2 nhân cột 3: $(1,0,-1)\\cdot(-2,-1,0)=-2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q30.png"
         },
         {
           "kind": "MCQ",
@@ -9879,7 +10255,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">(i) $\\det A\\det B=\\det(-3I)\\neq0$, so both determinants are nonzero. (ii) $\\det(A^T)\\det B=\\det(3I)\\neq0$ and $\\det A^T=\\det A$, so again both are invertible. Both statements are true.</div><div class=\"ml-vi\">(i) $\\det A\\det B=\\det(-3I)\\neq0$ nên cả hai định thức đều khác 0. (ii) $\\det(A^T)\\det B=\\det(3I)\\neq0$ và $\\det A^T=\\det A$ nên cả hai đều khả nghịch. Cả hai phát biểu đều đúng.</div>"
+          "explanation": "<div class=\"ml-en\">(i) $\\det A\\det B=\\det(-3I)\\neq0$, so both determinants are nonzero. (ii) $\\det(A^T)\\det B=\\det(3I)\\neq0$ and $\\det A^T=\\det A$, so again both are invertible. Both statements are true.</div><div class=\"ml-vi\">(i) $\\det A\\det B=\\det(-3I)\\neq0$ nên cả hai định thức đều khác 0. (ii) $\\det(A^T)\\det B=\\det(3I)\\neq0$ và $\\det A^T=\\det A$ nên cả hai đều khả nghịch. Cả hai phát biểu đều đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q31.png"
         },
         {
           "kind": "MCQ",
@@ -9905,7 +10282,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">The standard matrices are: reflection in $x$-axis $\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$, reflection in $y$-axis $\\begin{bmatrix}-1&0\\\\0&1\\end{bmatrix}$, projection onto $x$-axis $\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix}$, projection onto $y$-axis $\\begin{bmatrix}0&0\\\\0&1\\end{bmatrix}$. The given matrix matches none of them (it is a projection followed by a reflection), so the answer is 'none'.</div><div class=\"ml-vi\">Các ma trận chuẩn là: đối xứng qua trục $x$ $\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$, đối xứng qua trục $y$ $\\begin{bmatrix}-1&0\\\\0&1\\end{bmatrix}$, chiếu lên trục $x$ $\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix}$, chiếu lên trục $y$ $\\begin{bmatrix}0&0\\\\0&1\\end{bmatrix}$. Ma trận đề cho không khớp cái nào (nó là phép chiếu rồi lấy đối xứng), nên chọn 'không đáp án nào'.</div>"
+          "explanation": "<div class=\"ml-en\">The standard matrices are: reflection in $x$-axis $\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$, reflection in $y$-axis $\\begin{bmatrix}-1&0\\\\0&1\\end{bmatrix}$, projection onto $x$-axis $\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix}$, projection onto $y$-axis $\\begin{bmatrix}0&0\\\\0&1\\end{bmatrix}$. The given matrix matches none of them (it is a projection followed by a reflection), so the answer is 'none'.</div><div class=\"ml-vi\">Các ma trận chuẩn là: đối xứng qua trục $x$ $\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$, đối xứng qua trục $y$ $\\begin{bmatrix}-1&0\\\\0&1\\end{bmatrix}$, chiếu lên trục $x$ $\\begin{bmatrix}1&0\\\\0&0\\end{bmatrix}$, chiếu lên trục $y$ $\\begin{bmatrix}0&0\\\\0&1\\end{bmatrix}$. Ma trận đề cho không khớp cái nào (nó là phép chiếu rồi lấy đối xứng), nên chọn 'không đáp án nào'.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q32.png"
         },
         {
           "kind": "MCQ",
@@ -9928,7 +10306,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$C_{23}=(-1)^{2+3}\\det\\begin{bmatrix}1&3\\\\8&15\\end{bmatrix}=-(15-24)=9$.</div><div class=\"ml-vi\">$C_{23}=(-1)^{2+3}\\det\\begin{bmatrix}1&3\\\\8&15\\end{bmatrix}=-(15-24)=9$.</div>"
+          "explanation": "<div class=\"ml-en\">$C_{23}=(-1)^{2+3}\\det\\begin{bmatrix}1&3\\\\8&15\\end{bmatrix}=-(15-24)=9$.</div><div class=\"ml-vi\">$C_{23}=(-1)^{2+3}\\det\\begin{bmatrix}1&3\\\\8&15\\end{bmatrix}=-(15-24)=9$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q33.png"
         },
         {
           "kind": "MCQ",
@@ -9954,7 +10333,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\det A=1(-3-8)-0+(-2)(6-5)=-11-2=-13$. Then $\\det(2A^{-1})=\\dfrac{2^3}{\\det A}=\\dfrac{8}{-13}=-\\dfrac{8}{13}$.</div><div class=\"ml-vi\">$\\det A=1(-3-8)-0+(-2)(6-5)=-11-2=-13$. Do đó $\\det(2A^{-1})=\\dfrac{2^3}{\\det A}=\\dfrac{8}{-13}=-\\dfrac{8}{13}$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\det A=1(-3-8)-0+(-2)(6-5)=-11-2=-13$. Then $\\det(2A^{-1})=\\dfrac{2^3}{\\det A}=\\dfrac{8}{-13}=-\\dfrac{8}{13}$.</div><div class=\"ml-vi\">$\\det A=1(-3-8)-0+(-2)(6-5)=-11-2=-13$. Do đó $\\det(2A^{-1})=\\dfrac{2^3}{\\det A}=\\dfrac{8}{-13}=-\\dfrac{8}{13}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q34.png"
         },
         {
           "kind": "MCQ",
@@ -9980,7 +10360,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\det(2AB^{-1})=2^3\\cdot\\dfrac{\\det A}{\\det B}=8\\cdot\\dfrac{1}{3}=\\dfrac{8}{3}$.</div><div class=\"ml-vi\">$\\det(2AB^{-1})=2^3\\cdot\\dfrac{\\det A}{\\det B}=8\\cdot\\dfrac{1}{3}=\\dfrac{8}{3}$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\det(2AB^{-1})=2^3\\cdot\\dfrac{\\det A}{\\det B}=8\\cdot\\dfrac{1}{3}=\\dfrac{8}{3}$.</div><div class=\"ml-vi\">$\\det(2AB^{-1})=2^3\\cdot\\dfrac{\\det A}{\\det B}=8\\cdot\\dfrac{1}{3}=\\dfrac{8}{3}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q35.png"
         },
         {
           "kind": "MCQ",
@@ -10003,7 +10384,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$Ax=(-2(-1)-2(2),\\ 2(-1)+3(2))=(-2,4)=2x$ ✓. $Ay=(-6,7)$ is not a multiple of $(2,1)$; $Az=(-4,3)$ is not a multiple of $(3,-1)$. Only $x$ is an eigenvector.</div><div class=\"ml-vi\">$Ax=(-2(-1)-2(2),\\ 2(-1)+3(2))=(-2,4)=2x$ ✓. $Ay=(-6,7)$ không tỉ lệ với $(2,1)$; $Az=(-4,3)$ không tỉ lệ với $(3,-1)$. Chỉ $x$ là vectơ riêng.</div>"
+          "explanation": "<div class=\"ml-en\">$Ax=(-2(-1)-2(2),\\ 2(-1)+3(2))=(-2,4)=2x$ ✓. $Ay=(-6,7)$ is not a multiple of $(2,1)$; $Az=(-4,3)$ is not a multiple of $(3,-1)$. Only $x$ is an eigenvector.</div><div class=\"ml-vi\">$Ax=(-2(-1)-2(2),\\ 2(-1)+3(2))=(-2,4)=2x$ ✓. $Ay=(-6,7)$ không tỉ lệ với $(2,1)$; $Az=(-4,3)$ không tỉ lệ với $(3,-1)$. Chỉ $x$ là vectơ riêng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q36.png"
         },
         {
           "kind": "MCQ",
@@ -10026,7 +10408,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\vec{u}-\\vec{v}=(2,2,1)$ with length $3$. Taking norms: $\\|\\|\\vec{x}\\|\\vec{x}\\|=\\|\\vec{x}\\|^2=3$, so $\\|\\vec{x}\\|=\\sqrt3$, which is not among the numeric choices.</div><div class=\"ml-vi\">$\\vec{u}-\\vec{v}=(2,2,1)$ có độ dài $3$. Lấy chuẩn hai vế: $\\|\\|\\vec{x}\\|\\vec{x}\\|=\\|\\vec{x}\\|^2=3$, nên $\\|\\vec{x}\\|=\\sqrt3$ — không nằm trong các lựa chọn số, do đó chọn 'không đáp án nào đúng'.</div>"
+          "explanation": "<div class=\"ml-en\">$\\vec{u}-\\vec{v}=(2,2,1)$ with length $3$. Taking norms: $\\|\\|\\vec{x}\\|\\vec{x}\\|=\\|\\vec{x}\\|^2=3$, so $\\|\\vec{x}\\|=\\sqrt3$, which is not among the numeric choices.</div><div class=\"ml-vi\">$\\vec{u}-\\vec{v}=(2,2,1)$ có độ dài $3$. Lấy chuẩn hai vế: $\\|\\|\\vec{x}\\|\\vec{x}\\|=\\|\\vec{x}\\|^2=3$, nên $\\|\\vec{x}\\|=\\sqrt3$ — không nằm trong các lựa chọn số, do đó chọn 'không đáp án nào đúng'.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q37.png"
         },
         {
           "kind": "MCQ",
@@ -10052,7 +10435,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\overrightarrow{CP}=(t,2t,3+t)$ must be perpendicular to the direction $(1,2,1)$: $t+4t+3+t=0\\Rightarrow6t=-3\\Rightarrow t=-\\tfrac12$. Hence $a=1+t=\\tfrac12$.</div><div class=\"ml-vi\">$\\overrightarrow{CP}=(t,2t,3+t)$ phải vuông góc với vectơ chỉ phương $(1,2,1)$: $t+4t+3+t=0\\Rightarrow6t=-3\\Rightarrow t=-\\tfrac12$. Vậy $a=1+t=\\tfrac12$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\overrightarrow{CP}=(t,2t,3+t)$ must be perpendicular to the direction $(1,2,1)$: $t+4t+3+t=0\\Rightarrow6t=-3\\Rightarrow t=-\\tfrac12$. Hence $a=1+t=\\tfrac12$.</div><div class=\"ml-vi\">$\\overrightarrow{CP}=(t,2t,3+t)$ phải vuông góc với vectơ chỉ phương $(1,2,1)$: $t+4t+3+t=0\\Rightarrow6t=-3\\Rightarrow t=-\\tfrac12$. Vậy $a=1+t=\\tfrac12$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q38.png"
         },
         {
           "kind": "MCQ",
@@ -10075,7 +10459,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\mathrm{proj}_{\\vec v}\\vec u=\\dfrac{\\vec u\\cdot\\vec v}{\\vec v\\cdot\\vec v}\\vec v=\\dfrac{0+4-1}{0+4+1}(0,2,1)=\\dfrac35(0,2,1)=(0,\\tfrac65,\\tfrac35)$. The second coordinate is $\\dfrac65$.</div><div class=\"ml-vi\">$\\mathrm{proj}_{\\vec v}\\vec u=\\dfrac{\\vec u\\cdot\\vec v}{\\vec v\\cdot\\vec v}\\vec v=\\dfrac{0+4-1}{0+4+1}(0,2,1)=\\dfrac35(0,2,1)=(0,\\tfrac65,\\tfrac35)$. Toạ độ thứ hai là $\\dfrac65$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\mathrm{proj}_{\\vec v}\\vec u=\\dfrac{\\vec u\\cdot\\vec v}{\\vec v\\cdot\\vec v}\\vec v=\\dfrac{0+4-1}{0+4+1}(0,2,1)=\\dfrac35(0,2,1)=(0,\\tfrac65,\\tfrac35)$. The second coordinate is $\\dfrac65$.</div><div class=\"ml-vi\">$\\mathrm{proj}_{\\vec v}\\vec u=\\dfrac{\\vec u\\cdot\\vec v}{\\vec v\\cdot\\vec v}\\vec v=\\dfrac{0+4-1}{0+4+1}(0,2,1)=\\dfrac35(0,2,1)=(0,\\tfrac65,\\tfrac35)$. Toạ độ thứ hai là $\\dfrac65$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q39.png"
         },
         {
           "kind": "MCQ",
@@ -10101,7 +10486,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$\\|\\mathbf{u}\\times(2\\mathbf{u}+3\\mathbf{v})\\|=3\\|\\mathbf{u}\\times\\mathbf{v}\\|=3(100)=300$ since $\\mathbf{u}\\times\\mathbf{u}=\\mathbf{0}$.</div><div class=\"ml-vi\">$\\|\\mathbf{u}\\times(2\\mathbf{u}+3\\mathbf{v})\\|=3\\|\\mathbf{u}\\times\\mathbf{v}\\|=3(100)=300$ vì $\\mathbf{u}\\times\\mathbf{u}=\\mathbf{0}$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\|\\mathbf{u}\\times(2\\mathbf{u}+3\\mathbf{v})\\|=3\\|\\mathbf{u}\\times\\mathbf{v}\\|=3(100)=300$ since $\\mathbf{u}\\times\\mathbf{u}=\\mathbf{0}$.</div><div class=\"ml-vi\">$\\|\\mathbf{u}\\times(2\\mathbf{u}+3\\mathbf{v})\\|=3\\|\\mathbf{u}\\times\\mathbf{v}\\|=3(100)=300$ vì $\\mathbf{u}\\times\\mathbf{u}=\\mathbf{0}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q40.png"
         },
         {
           "kind": "MCQ",
@@ -10127,7 +10513,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Projection on $y=x$: $P=\\tfrac12\\begin{bmatrix}1&1\\\\1&1\\end{bmatrix}$; reflection in $x$-axis: $R=\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$. Then $T=RP=\\tfrac12\\begin{bmatrix}1&1\\\\-1&-1\\end{bmatrix}$, and the first row sums to $\\tfrac12+\\tfrac12=1$.</div><div class=\"ml-vi\">Phép chiếu lên $y=x$: $P=\\tfrac12\\begin{bmatrix}1&1\\\\1&1\\end{bmatrix}$; đối xứng qua trục $x$: $R=\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$. Khi đó $T=RP=\\tfrac12\\begin{bmatrix}1&1\\\\-1&-1\\end{bmatrix}$, tổng hàng đầu bằng $\\tfrac12+\\tfrac12=1$.</div>"
+          "explanation": "<div class=\"ml-en\">Projection on $y=x$: $P=\\tfrac12\\begin{bmatrix}1&1\\\\1&1\\end{bmatrix}$; reflection in $x$-axis: $R=\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$. Then $T=RP=\\tfrac12\\begin{bmatrix}1&1\\\\-1&-1\\end{bmatrix}$, and the first row sums to $\\tfrac12+\\tfrac12=1$.</div><div class=\"ml-vi\">Phép chiếu lên $y=x$: $P=\\tfrac12\\begin{bmatrix}1&1\\\\1&1\\end{bmatrix}$; đối xứng qua trục $x$: $R=\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$. Khi đó $T=RP=\\tfrac12\\begin{bmatrix}1&1\\\\-1&-1\\end{bmatrix}$, tổng hàng đầu bằng $\\tfrac12+\\tfrac12=1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q41.png"
         },
         {
           "kind": "MCQ",
@@ -10150,7 +10537,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$U=\\mathrm{span}\\{(1,0,1),(0,1,-1)\\}$ is a subspace. $V$ is not closed under scalar multiplication: $2(1,1,1)=(2,2,2)$ but $2\\cdot2=4\\neq2$.</div><div class=\"ml-vi\">$U=\\mathrm{span}\\{(1,0,1),(0,1,-1)\\}$ là không gian con. $V$ không đóng với phép nhân vô hướng: $2(1,1,1)=(2,2,2)$ nhưng $2\\cdot2=4\\neq2$.</div>"
+          "explanation": "<div class=\"ml-en\">$U=\\mathrm{span}\\{(1,0,1),(0,1,-1)\\}$ is a subspace. $V$ is not closed under scalar multiplication: $2(1,1,1)=(2,2,2)$ but $2\\cdot2=4\\neq2$.</div><div class=\"ml-vi\">$U=\\mathrm{span}\\{(1,0,1),(0,1,-1)\\}$ là không gian con. $V$ không đóng với phép nhân vô hướng: $2(1,1,1)=(2,2,2)$ nhưng $2\\cdot2=4\\neq2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q42.png"
         },
         {
           "kind": "MCQ",
@@ -10173,7 +10561,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">For (i) the coefficient matrix $\\begin{bmatrix}1&1&0\\\\0&1&1\\\\1&0&1\\end{bmatrix}$ has determinant $2\\neq0$ — independent. For (ii) the three vectors sum to $\\mathbf{0}$ — dependent.</div><div class=\"ml-vi\">Với (i), ma trận hệ số $\\begin{bmatrix}1&1&0\\\\0&1&1\\\\1&0&1\\end{bmatrix}$ có định thức $2\\neq0$ — độc lập. Với (ii), tổng ba vectơ bằng $\\mathbf{0}$ — phụ thuộc.</div>"
+          "explanation": "<div class=\"ml-en\">For (i) the coefficient matrix $\\begin{bmatrix}1&1&0\\\\0&1&1\\\\1&0&1\\end{bmatrix}$ has determinant $2\\neq0$ — independent. For (ii) the three vectors sum to $\\mathbf{0}$ — dependent.</div><div class=\"ml-vi\">Với (i), ma trận hệ số $\\begin{bmatrix}1&1&0\\\\0&1&1\\\\1&0&1\\end{bmatrix}$ có định thức $2\\neq0$ — độc lập. Với (ii), tổng ba vectơ bằng $\\mathbf{0}$ — phụ thuộc.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q43.png"
         },
         {
           "kind": "MCQ",
@@ -10196,7 +10585,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">(i): $\\det\\begin{bmatrix}1&1&1\\\\1&8&9\\\\0&3&4\\end{bmatrix}=5-4+3=4\\neq0$, so it is a basis. (ii) has 4 vectors in $\\mathbb{R}^3$, so they are dependent and cannot form a basis.</div><div class=\"ml-vi\">(i): $\\det\\begin{bmatrix}1&1&1\\\\1&8&9\\\\0&3&4\\end{bmatrix}=5-4+3=4\\neq0$ nên là cơ sở. (ii) có 4 vectơ trong $\\mathbb{R}^3$ nên phụ thuộc tuyến tính, không thể là cơ sở.</div>"
+          "explanation": "<div class=\"ml-en\">(i): $\\det\\begin{bmatrix}1&1&1\\\\1&8&9\\\\0&3&4\\end{bmatrix}=5-4+3=4\\neq0$, so it is a basis. (ii) has 4 vectors in $\\mathbb{R}^3$, so they are dependent and cannot form a basis.</div><div class=\"ml-vi\">(i): $\\det\\begin{bmatrix}1&1&1\\\\1&8&9\\\\0&3&4\\end{bmatrix}=5-4+3=4\\neq0$ nên là cơ sở. (ii) có 4 vectơ trong $\\mathbb{R}^3$ nên phụ thuộc tuyến tính, không thể là cơ sở.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q44.png"
         },
         {
           "kind": "MCQ",
@@ -10222,7 +10612,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">(i) and (iii) keep all pairwise dot products zero. In (ii), $(v_2+v_3)\\cdot(v_3+v_4)=v_3\\cdot v_3=\\|v_3\\|^2\\neq0$, so it is not orthogonal.</div><div class=\"ml-vi\">(i) và (iii) giữ mọi tích vô hướng từng cặp bằng 0. Ở (ii), $(v_2+v_3)\\cdot(v_3+v_4)=v_3\\cdot v_3=\\|v_3\\|^2\\neq0$ nên không trực giao.</div>"
+          "explanation": "<div class=\"ml-en\">(i) and (iii) keep all pairwise dot products zero. In (ii), $(v_2+v_3)\\cdot(v_3+v_4)=v_3\\cdot v_3=\\|v_3\\|^2\\neq0$, so it is not orthogonal.</div><div class=\"ml-vi\">(i) và (iii) giữ mọi tích vô hướng từng cặp bằng 0. Ở (ii), $(v_2+v_3)\\cdot(v_3+v_4)=v_3\\cdot v_3=\\|v_3\\|^2\\neq0$ nên không trực giao.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q45.png"
         },
         {
           "kind": "MCQ",
@@ -10245,7 +10636,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$\\dim(\\mathrm{im}A)=\\mathrm{rank}(A)=6\\neq10$, and by rank–nullity $\\dim(\\mathrm{Null}A)=7-6=1\\neq0$. Both statements are false.</div><div class=\"ml-vi\">$\\dim(\\mathrm{im}A)=\\mathrm{rank}(A)=6\\neq10$, và theo định lý hạng–số khuyết $\\dim(\\mathrm{Null}A)=7-6=1\\neq0$. Cả hai phát biểu đều sai.</div>"
+          "explanation": "<div class=\"ml-en\">$\\dim(\\mathrm{im}A)=\\mathrm{rank}(A)=6\\neq10$, and by rank–nullity $\\dim(\\mathrm{Null}A)=7-6=1\\neq0$. Both statements are false.</div><div class=\"ml-vi\">$\\dim(\\mathrm{im}A)=\\mathrm{rank}(A)=6\\neq10$, và theo định lý hạng–số khuyết $\\dim(\\mathrm{Null}A)=7-6=1\\neq0$. Cả hai phát biểu đều sai.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q46.png"
         },
         {
           "kind": "MCQ",
@@ -10268,7 +10660,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">A homogeneous system always has the trivial solution, and with more variables (6) than equations (4) there is at least one free variable, so there are infinitely many solutions.</div><div class=\"ml-vi\">Hệ thuần nhất luôn có nghiệm tầm thường, và vì số ẩn (6) nhiều hơn số phương trình (4) nên có ít nhất một ẩn tự do — hệ có vô số nghiệm.</div>"
+          "explanation": "<div class=\"ml-en\">A homogeneous system always has the trivial solution, and with more variables (6) than equations (4) there is at least one free variable, so there are infinitely many solutions.</div><div class=\"ml-vi\">Hệ thuần nhất luôn có nghiệm tầm thường, và vì số ẩn (6) nhiều hơn số phương trình (4) nên có ít nhất một ẩn tự do — hệ có vô số nghiệm.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q47.png"
         },
         {
           "kind": "MCQ",
@@ -10291,7 +10684,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$(5,-1,2)=2(1,1,1)-3(-1,1,0)$ (check: $(2,2,2)+(3,-3,0)=(5,-1,2)$ ✓). By linearity $T=2(5,1)-3(2,0)=(10,2)-(6,0)=(4,2)$, i.e. (i).</div><div class=\"ml-vi\">$(5,-1,2)=2(1,1,1)-3(-1,1,0)$ (kiểm: $(2,2,2)+(3,-3,0)=(5,-1,2)$ ✓). Theo tính tuyến tính: $T=2(5,1)-3(2,0)=(10,2)-(6,0)=(4,2)$, tức (i).</div>"
+          "explanation": "<div class=\"ml-en\">$(5,-1,2)=2(1,1,1)-3(-1,1,0)$ (check: $(2,2,2)+(3,-3,0)=(5,-1,2)$ ✓). By linearity $T=2(5,1)-3(2,0)=(10,2)-(6,0)=(4,2)$, i.e. (i).</div><div class=\"ml-vi\">$(5,-1,2)=2(1,1,1)-3(-1,1,0)$ (kiểm: $(2,2,2)+(3,-3,0)=(5,-1,2)$ ✓). Theo tính tuyến tính: $T=2(5,1)-3(2,0)=(10,2)-(6,0)=(4,2)$, tức (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q48.png"
         },
         {
           "kind": "MCQ",
@@ -10317,7 +10711,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$\\det(xI-A)=\\det\\begin{bmatrix}x-1&-1\\\\0&x-2\\end{bmatrix}=(x-1)(x-2)=x^2-3x+2$, i.e. (ii).</div><div class=\"ml-vi\">$\\det(xI-A)=\\det\\begin{bmatrix}x-1&-1\\\\0&x-2\\end{bmatrix}=(x-1)(x-2)=x^2-3x+2$, tức (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$\\det(xI-A)=\\det\\begin{bmatrix}x-1&-1\\\\0&x-2\\end{bmatrix}=(x-1)(x-2)=x^2-3x+2$, i.e. (ii).</div><div class=\"ml-vi\">$\\det(xI-A)=\\det\\begin{bmatrix}x-1&-1\\\\0&x-2\\end{bmatrix}=(x-1)(x-2)=x^2-3x+2$, tức (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q49.png"
         },
         {
           "kind": "MCQ",
@@ -10340,7 +10735,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Write $(4m,3,10)=a(-1,0,1)+b(2,1,4)$. The second coordinate gives $b=3$; the third gives $a+12=10\\Rightarrow a=-2$; the first gives $4m=-a+2b=2+6=8\\Rightarrow m=2$.</div><div class=\"ml-vi\">Viết $(4m,3,10)=a(-1,0,1)+b(2,1,4)$. Toạ độ thứ hai cho $b=3$; toạ độ thứ ba cho $a+12=10\\Rightarrow a=-2$; toạ độ thứ nhất cho $4m=-a+2b=2+6=8\\Rightarrow m=2$.</div>"
+          "explanation": "<div class=\"ml-en\">Write $(4m,3,10)=a(-1,0,1)+b(2,1,4)$. The second coordinate gives $b=3$; the third gives $a+12=10\\Rightarrow a=-2$; the first gives $4m=-a+2b=2+6=8\\Rightarrow m=2$.</div><div class=\"ml-vi\">Viết $(4m,3,10)=a(-1,0,1)+b(2,1,4)$. Toạ độ thứ hai cho $b=3$; toạ độ thứ ba cho $a+12=10\\Rightarrow a=-2$; toạ độ thứ nhất cho $4m=-a+2b=2+6=8\\Rightarrow m=2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D8/q50.png"
         }
       ]
     },
@@ -10383,7 +10779,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$V=\\dfrac43\\pi r^3\\Rightarrow \\dfrac{dV}{dt}=4\\pi r^2\\dfrac{dr}{dt}$. With $r=5$ and $\\dfrac{dV}{dt}=-1$: $\\dfrac{dr}{dt}=\\dfrac{-1}{100\\pi}$, so the radius decreases at $\\dfrac{1}{100\\pi}$ cm/min, i.e. (iii).</div><div class=\"ml-vi\">$V=\\dfrac43\\pi r^3\\Rightarrow \\dfrac{dV}{dt}=4\\pi r^2\\dfrac{dr}{dt}$. Với $r=5$ và $\\dfrac{dV}{dt}=-1$: $\\dfrac{dr}{dt}=\\dfrac{-1}{100\\pi}$, tức bán kính giảm với tốc độ $\\dfrac{1}{100\\pi}$ cm/phút, tức (iii).</div>"
+          "explanation": "<div class=\"ml-en\">$V=\\dfrac43\\pi r^3\\Rightarrow \\dfrac{dV}{dt}=4\\pi r^2\\dfrac{dr}{dt}$. With $r=5$ and $\\dfrac{dV}{dt}=-1$: $\\dfrac{dr}{dt}=\\dfrac{-1}{100\\pi}$, so the radius decreases at $\\dfrac{1}{100\\pi}$ cm/min, i.e. (iii).</div><div class=\"ml-vi\">$V=\\dfrac43\\pi r^3\\Rightarrow \\dfrac{dV}{dt}=4\\pi r^2\\dfrac{dr}{dt}$. Với $r=5$ và $\\dfrac{dV}{dt}=-1$: $\\dfrac{dr}{dt}=\\dfrac{-1}{100\\pi}$, tức bán kính giảm với tốc độ $\\dfrac{1}{100\\pi}$ cm/phút, tức (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q1.png"
         },
         {
           "kind": "MCQ",
@@ -10409,7 +10806,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f'(x)=4x^3-12x^2+8x=4x(x-1)(x-2)$, so the critical points in $[0,2]$ are $0,1,2$. Values: $f(0)=1$, $f(1)=2$, $f(2)=1$. Maximum $=2$, minimum $=1$.</div><div class=\"ml-vi\">$f'(x)=4x^3-12x^2+8x=4x(x-1)(x-2)$ nên các điểm tới hạn trong $[0,2]$ là $0,1,2$. Giá trị: $f(0)=1$, $f(1)=2$, $f(2)=1$. Lớn nhất $=2$, nhỏ nhất $=1$.</div>"
+          "explanation": "<div class=\"ml-en\">$f'(x)=4x^3-12x^2+8x=4x(x-1)(x-2)$, so the critical points in $[0,2]$ are $0,1,2$. Values: $f(0)=1$, $f(1)=2$, $f(2)=1$. Maximum $=2$, minimum $=1$.</div><div class=\"ml-vi\">$f'(x)=4x^3-12x^2+8x=4x(x-1)(x-2)$ nên các điểm tới hạn trong $[0,2]$ là $0,1,2$. Giá trị: $f(0)=1$, $f(1)=2$, $f(2)=1$. Lớn nhất $=2$, nhỏ nhất $=1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q2.png"
         },
         {
           "kind": "MCQ",
@@ -10432,7 +10830,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$A^2+A=I\\Rightarrow A(A+I)=I$, so $A$ is invertible with $A^{-1}=A+I$, i.e. (ii).</div><div class=\"ml-vi\">$A^2+A=I\\Rightarrow A(A+I)=I$ nên $A$ khả nghịch và $A^{-1}=A+I$, tức (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$A^2+A=I\\Rightarrow A(A+I)=I$, so $A$ is invertible with $A^{-1}=A+I$, i.e. (ii).</div><div class=\"ml-vi\">$A^2+A=I\\Rightarrow A(A+I)=I$ nên $A$ khả nghịch và $A^{-1}=A+I$, tức (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q3.png"
         },
         {
           "kind": "MCQ",
@@ -10461,7 +10860,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">Write $y=x^{3/2}+8x^{1/2}+3x^{-1/2}$, so $y'=\\dfrac32x^{1/2}+4x^{-1/2}-\\dfrac32x^{-3/2}$. At $x=1$: $\\dfrac32+4-\\dfrac32=4$.</div><div class=\"ml-vi\">Viết $y=x^{3/2}+8x^{1/2}+3x^{-1/2}$, suy ra $y'=\\dfrac32x^{1/2}+4x^{-1/2}-\\dfrac32x^{-3/2}$. Tại $x=1$: $\\dfrac32+4-\\dfrac32=4$.</div>"
+          "explanation": "<div class=\"ml-en\">Write $y=x^{3/2}+8x^{1/2}+3x^{-1/2}$, so $y'=\\dfrac32x^{1/2}+4x^{-1/2}-\\dfrac32x^{-3/2}$. At $x=1$: $\\dfrac32+4-\\dfrac32=4$.</div><div class=\"ml-vi\">Viết $y=x^{3/2}+8x^{1/2}+3x^{-1/2}$, suy ra $y'=\\dfrac32x^{1/2}+4x^{-1/2}-\\dfrac32x^{-3/2}$. Tại $x=1$: $\\dfrac32+4-\\dfrac32=4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q4.png"
         },
         {
           "kind": "MCQ",
@@ -10487,7 +10887,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Both numerator and denominator have degree 4; the leading coefficients are $2$ and $3\\cdot5=15$, so the limit is $\\dfrac{2}{15}$.</div><div class=\"ml-vi\">Tử và mẫu đều bậc 4; hệ số bậc cao nhất là $2$ và $3\\cdot5=15$ nên giới hạn bằng $\\dfrac{2}{15}$.</div>"
+          "explanation": "<div class=\"ml-en\">Both numerator and denominator have degree 4; the leading coefficients are $2$ and $3\\cdot5=15$, so the limit is $\\dfrac{2}{15}$.</div><div class=\"ml-vi\">Tử và mẫu đều bậc 4; hệ số bậc cao nhất là $2$ và $3\\cdot5=15$ nên giới hạn bằng $\\dfrac{2}{15}$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q5.png"
         },
         {
           "kind": "MCQ",
@@ -10513,7 +10914,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Let $J,j$ be the rates: $2J+3j=34$, $3J+2j=33.5$. Adding: $5(J+j)=67.5\\Rightarrow J+j=13.5$; subtracting: $J-j=-0.5$. Hence $J=6.5$ and $j=7$.</div><div class=\"ml-vi\">Gọi $J,j$ là tiền công mỗi giờ: $2J+3j=34$, $3J+2j=33.5$. Cộng lại: $5(J+j)=67.5\\Rightarrow J+j=13.5$; trừ nhau: $J-j=-0.5$. Vậy $J=6.5$ và $j=7$.</div>"
+          "explanation": "<div class=\"ml-en\">Let $J,j$ be the rates: $2J+3j=34$, $3J+2j=33.5$. Adding: $5(J+j)=67.5\\Rightarrow J+j=13.5$; subtracting: $J-j=-0.5$. Hence $J=6.5$ and $j=7$.</div><div class=\"ml-vi\">Gọi $J,j$ là tiền công mỗi giờ: $2J+3j=34$, $3J+2j=33.5$. Cộng lại: $5(J+j)=67.5\\Rightarrow J+j=13.5$; trừ nhau: $J-j=-0.5$. Vậy $J=6.5$ và $j=7$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q6.png"
         },
         {
           "kind": "MCQ",
@@ -10539,7 +10941,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$\\det A=1(0\\cdot2-1\\cdot2)-2(3\\cdot2-1\\cdot(-1))+0=-2-14=-16$, so $\\det(2A^{-1})=\\dfrac{2^3}{-16}=-\\dfrac12$.</div><div class=\"ml-vi\">$\\det A=1(0\\cdot2-1\\cdot2)-2(3\\cdot2-1\\cdot(-1))+0=-2-14=-16$, nên $\\det(2A^{-1})=\\dfrac{2^3}{-16}=-\\dfrac12$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\det A=1(0\\cdot2-1\\cdot2)-2(3\\cdot2-1\\cdot(-1))+0=-2-14=-16$, so $\\det(2A^{-1})=\\dfrac{2^3}{-16}=-\\dfrac12$.</div><div class=\"ml-vi\">$\\det A=1(0\\cdot2-1\\cdot2)-2(3\\cdot2-1\\cdot(-1))+0=-2-14=-16$, nên $\\det(2A^{-1})=\\dfrac{2^3}{-16}=-\\dfrac12$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q8.png"
         },
         {
           "kind": "MCQ",
@@ -10565,7 +10968,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$\\left[10y+3y^2-\\dfrac{y^3}{3}\\right]_0^9=90+243-243=90$.</div><div class=\"ml-vi\">$\\left[10y+3y^2-\\dfrac{y^3}{3}\\right]_0^9=90+243-243=90$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\left[10y+3y^2-\\dfrac{y^3}{3}\\right]_0^9=90+243-243=90$.</div><div class=\"ml-vi\">$\\left[10y+3y^2-\\dfrac{y^3}{3}\\right]_0^9=90+243-243=90$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q9.png"
         },
         {
           "kind": "MCQ",
@@ -10591,7 +10995,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Projection on $y=x$: $P=\\tfrac12\\begin{bmatrix}1&1\\\\1&1\\end{bmatrix}$; reflection in the $x$-axis: $R=\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$. So $T=RP=\\tfrac12\\begin{bmatrix}1&1\\\\-1&-1\\end{bmatrix}$ and the first row sums to $1$.</div><div class=\"ml-vi\">Phép chiếu lên $y=x$: $P=\\tfrac12\\begin{bmatrix}1&1\\\\1&1\\end{bmatrix}$; đối xứng qua trục $x$: $R=\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$. Vậy $T=RP=\\tfrac12\\begin{bmatrix}1&1\\\\-1&-1\\end{bmatrix}$ và tổng hàng đầu bằng $1$.</div>"
+          "explanation": "<div class=\"ml-en\">Projection on $y=x$: $P=\\tfrac12\\begin{bmatrix}1&1\\\\1&1\\end{bmatrix}$; reflection in the $x$-axis: $R=\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$. So $T=RP=\\tfrac12\\begin{bmatrix}1&1\\\\-1&-1\\end{bmatrix}$ and the first row sums to $1$.</div><div class=\"ml-vi\">Phép chiếu lên $y=x$: $P=\\tfrac12\\begin{bmatrix}1&1\\\\1&1\\end{bmatrix}$; đối xứng qua trục $x$: $R=\\begin{bmatrix}1&0\\\\0&-1\\end{bmatrix}$. Vậy $T=RP=\\tfrac12\\begin{bmatrix}1&1\\\\-1&-1\\end{bmatrix}$ và tổng hàng đầu bằng $1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q10.png"
         },
         {
           "kind": "MCQ",
@@ -10614,7 +11019,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">For $Q(3,1,4)$: $x=3\\Rightarrow t=1$, then $y=-1+2=1$ ✓ and $z=1+3=4$ ✓. For $P$: $t=-1$ gives $y=-3\\neq2$. For $R$: $t=0$ gives $y=-1\\neq1$. Only $Q$ lies on the line.</div><div class=\"ml-vi\">Với $Q(3,1,4)$: $x=3\\Rightarrow t=1$, khi đó $y=-1+2=1$ ✓ và $z=1+3=4$ ✓. Với $P$: $t=-1$ cho $y=-3\\neq2$. Với $R$: $t=0$ cho $y=-1\\neq1$. Chỉ $Q$ nằm trên đường thẳng.</div>"
+          "explanation": "<div class=\"ml-en\">For $Q(3,1,4)$: $x=3\\Rightarrow t=1$, then $y=-1+2=1$ ✓ and $z=1+3=4$ ✓. For $P$: $t=-1$ gives $y=-3\\neq2$. For $R$: $t=0$ gives $y=-1\\neq1$. Only $Q$ lies on the line.</div><div class=\"ml-vi\">Với $Q(3,1,4)$: $x=3\\Rightarrow t=1$, khi đó $y=-1+2=1$ ✓ và $z=1+3=4$ ✓. Với $P$: $t=-1$ cho $y=-3\\neq2$. Với $R$: $t=0$ cho $y=-1\\neq1$. Chỉ $Q$ nằm trên đường thẳng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q11.png"
         },
         {
           "kind": "MCQ",
@@ -10640,7 +11046,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">A homogeneous system always has the trivial solution, and since there are more unknowns (7) than equations (6) there is at least one free variable — infinitely many solutions.</div><div class=\"ml-vi\">Hệ thuần nhất luôn có nghiệm tầm thường, và vì số ẩn (7) nhiều hơn số phương trình (6) nên có ít nhất một ẩn tự do — vô số nghiệm.</div>"
+          "explanation": "<div class=\"ml-en\">A homogeneous system always has the trivial solution, and since there are more unknowns (7) than equations (6) there is at least one free variable — infinitely many solutions.</div><div class=\"ml-vi\">Hệ thuần nhất luôn có nghiệm tầm thường, và vì số ẩn (7) nhiều hơn số phương trình (6) nên có ít nhất một ẩn tự do — vô số nghiệm.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q12.png"
         },
         {
           "kind": "MCQ",
@@ -10663,7 +11070,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i) $3(1,1,1)+1(0,1,-1)=(3,4,2)$ ✓. (ii) multiplying spanning vectors by nonzero scalars does not change their span ✓. Both are true.</div><div class=\"ml-vi\">(i) $3(1,1,1)+1(0,1,-1)=(3,4,2)$ ✓. (ii) nhân các vectơ sinh với vô hướng khác 0 không làm đổi span ✓. Cả hai đều đúng.</div>"
+          "explanation": "<div class=\"ml-en\">(i) $3(1,1,1)+1(0,1,-1)=(3,4,2)$ ✓. (ii) multiplying spanning vectors by nonzero scalars does not change their span ✓. Both are true.</div><div class=\"ml-vi\">(i) $3(1,1,1)+1(0,1,-1)=(3,4,2)$ ✓. (ii) nhân các vectơ sinh với vô hướng khác 0 không làm đổi span ✓. Cả hai đều đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q13.png"
         },
         {
           "kind": "MCQ",
@@ -10689,7 +11097,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">Let $u=5p^2$, $du=10p\\,dp$: $\\dfrac{7}{10}\\int e^u du=\\dfrac{7}{10}e^{5p^2}+C$, i.e. (iii).</div><div class=\"ml-vi\">Đặt $u=5p^2$, $du=10p\\,dp$: $\\dfrac{7}{10}\\int e^u du=\\dfrac{7}{10}e^{5p^2}+C$, tức (iii).</div>"
+          "explanation": "<div class=\"ml-en\">Let $u=5p^2$, $du=10p\\,dp$: $\\dfrac{7}{10}\\int e^u du=\\dfrac{7}{10}e^{5p^2}+C$, i.e. (iii).</div><div class=\"ml-vi\">Đặt $u=5p^2$, $du=10p\\,dp$: $\\dfrac{7}{10}\\int e^u du=\\dfrac{7}{10}e^{5p^2}+C$, tức (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q14.png"
         },
         {
           "kind": "MCQ",
@@ -10715,7 +11124,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$\\sqrt{x^2+2x+1}=|x+1|=-(x+1)$ for $x\\lt-1$, so the first branch is $\\dfrac{(x-1)(x+1)}{-(x+1)}=1-x\\to2$ as $x\\to-1^-$. At $x=-1$ the second branch gives $c-2$. Continuity requires $c-2=2$, so $c=4$.</div><div class=\"ml-vi\">$\\sqrt{x^2+2x+1}=|x+1|=-(x+1)$ khi $x\\lt-1$, nên nhánh đầu bằng $\\dfrac{(x-1)(x+1)}{-(x+1)}=1-x\\to2$ khi $x\\to-1^-$. Tại $x=-1$ nhánh sau cho $c-2$. Để liên tục cần $c-2=2$, vậy $c=4$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\sqrt{x^2+2x+1}=|x+1|=-(x+1)$ for $x\\lt-1$, so the first branch is $\\dfrac{(x-1)(x+1)}{-(x+1)}=1-x\\to2$ as $x\\to-1^-$. At $x=-1$ the second branch gives $c-2$. Continuity requires $c-2=2$, so $c=4$.</div><div class=\"ml-vi\">$\\sqrt{x^2+2x+1}=|x+1|=-(x+1)$ khi $x\\lt-1$, nên nhánh đầu bằng $\\dfrac{(x-1)(x+1)}{-(x+1)}=1-x\\to2$ khi $x\\to-1^-$. Tại $x=-1$ nhánh sau cho $c-2$. Để liên tục cần $c-2=2$, vậy $c=4$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q15.png"
         },
         {
           "kind": "MCQ",
@@ -10741,7 +11151,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f(1)=6$ and $f'(x)=9x^2+4x+1\\Rightarrow f'(1)=14$. So $L(x)=6+14(x-1)=14x-8$.</div><div class=\"ml-vi\">$f(1)=6$ và $f'(x)=9x^2+4x+1\\Rightarrow f'(1)=14$. Vậy $L(x)=6+14(x-1)=14x-8$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(1)=6$ and $f'(x)=9x^2+4x+1\\Rightarrow f'(1)=14$. So $L(x)=6+14(x-1)=14x-8$.</div><div class=\"ml-vi\">$f(1)=6$ và $f'(x)=9x^2+4x+1\\Rightarrow f'(1)=14$. Vậy $L(x)=6+14(x-1)=14x-8$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q16.png"
         },
         {
           "kind": "MCQ",
@@ -10767,7 +11178,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$\\Delta x=2$; left endpoints $-6,-4,-2$ give $f=0.76,\\ 3.04,\\ 3.88$. Sum $=7.68$, so the area $\\approx2(7.68)=15.36$.</div><div class=\"ml-vi\">$\\Delta x=2$; các mút trái $-6,-4,-2$ cho $f=0.76,\\ 3.04,\\ 3.88$. Tổng $=7.68$, nên diện tích $\\approx2(7.68)=15.36$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\Delta x=2$; left endpoints $-6,-4,-2$ give $f=0.76,\\ 3.04,\\ 3.88$. Sum $=7.68$, so the area $\\approx2(7.68)=15.36$.</div><div class=\"ml-vi\">$\\Delta x=2$; các mút trái $-6,-4,-2$ cho $f=0.76,\\ 3.04,\\ 3.88$. Tổng $=7.68$, nên diện tích $\\approx2(7.68)=15.36$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q17.png"
         },
         {
           "kind": "MCQ",
@@ -10793,7 +11205,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$\\overrightarrow{PQ}=(11,-9,6)$, $\\overrightarrow{PR}=(9,-11,3)$; $\\overrightarrow{PQ}\\times\\overrightarrow{PR}=(-27+66,\\ -(33-54),\\ -121+81)=(39,21,-40)$.</div><div class=\"ml-vi\">$\\overrightarrow{PQ}=(11,-9,6)$, $\\overrightarrow{PR}=(9,-11,3)$; $\\overrightarrow{PQ}\\times\\overrightarrow{PR}=(-27+66,\\ -(33-54),\\ -121+81)=(39,21,-40)$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\overrightarrow{PQ}=(11,-9,6)$, $\\overrightarrow{PR}=(9,-11,3)$; $\\overrightarrow{PQ}\\times\\overrightarrow{PR}=(-27+66,\\ -(33-54),\\ -121+81)=(39,21,-40)$.</div><div class=\"ml-vi\">$\\overrightarrow{PQ}=(11,-9,6)$, $\\overrightarrow{PR}=(9,-11,3)$; $\\overrightarrow{PQ}\\times\\overrightarrow{PR}=(-27+66,\\ -(33-54),\\ -121+81)=(39,21,-40)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q18.png"
         },
         {
           "kind": "MCQ",
@@ -10819,7 +11232,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Adding the two equations: $4x+2z=12\\Rightarrow x=3-\\dfrac{z}{2}$. Then $y=x+z-3=\\dfrac{z}{2}$. The solution set is $\\left(3-\\dfrac{z}{2},\\ \\dfrac{z}{2},\\ z\\right)$.</div><div class=\"ml-vi\">Cộng hai phương trình: $4x+2z=12\\Rightarrow x=3-\\dfrac{z}{2}$. Khi đó $y=x+z-3=\\dfrac{z}{2}$. Tập nghiệm là $\\left(3-\\dfrac{z}{2},\\ \\dfrac{z}{2},\\ z\\right)$.</div>"
+          "explanation": "<div class=\"ml-en\">Adding the two equations: $4x+2z=12\\Rightarrow x=3-\\dfrac{z}{2}$. Then $y=x+z-3=\\dfrac{z}{2}$. The solution set is $\\left(3-\\dfrac{z}{2},\\ \\dfrac{z}{2},\\ z\\right)$.</div><div class=\"ml-vi\">Cộng hai phương trình: $4x+2z=12\\Rightarrow x=3-\\dfrac{z}{2}$. Khi đó $y=x+z-3=\\dfrac{z}{2}$. Tập nghiệm là $\\left(3-\\dfrac{z}{2},\\ \\dfrac{z}{2},\\ z\\right)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q19.png"
         },
         {
           "kind": "MCQ",
@@ -10842,7 +11256,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$R_2\\to R_2-2R_1=[0,1,10,-12]$, then $R_1\\to R_1-2R_2=[1,0,-22,30]$. The result is (ii).</div><div class=\"ml-vi\">$R_2\\to R_2-2R_1=[0,1,10,-12]$, sau đó $R_1\\to R_1-2R_2=[1,0,-22,30]$. Kết quả là (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$R_2\\to R_2-2R_1=[0,1,10,-12]$, then $R_1\\to R_1-2R_2=[1,0,-22,30]$. The result is (ii).</div><div class=\"ml-vi\">$R_2\\to R_2-2R_1=[0,1,10,-12]$, sau đó $R_1\\to R_1-2R_2=[1,0,-22,30]$. Kết quả là (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q20.png"
         },
         {
           "kind": "MCQ",
@@ -10865,7 +11280,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\det[u,v,w]=1(2a-16)-2(0-4)+(-1)(0-2)=2a-6=2(a-3)$. Scaling the three vectors multiplies the volume by $|2\\cdot(-3)\\cdot5|=30$, so $V=30\\cdot|2(a-3)|=60|a-3|$.</div><div class=\"ml-vi\">$\\det[u,v,w]=1(2a-16)-2(0-4)+(-1)(0-2)=2a-6=2(a-3)$. Nhân ba vectơ với các hệ số làm thể tích nhân $|2\\cdot(-3)\\cdot5|=30$, nên $V=30\\cdot|2(a-3)|=60|a-3|$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\det[u,v,w]=1(2a-16)-2(0-4)+(-1)(0-2)=2a-6=2(a-3)$. Scaling the three vectors multiplies the volume by $|2\\cdot(-3)\\cdot5|=30$, so $V=30\\cdot|2(a-3)|=60|a-3|$.</div><div class=\"ml-vi\">$\\det[u,v,w]=1(2a-16)-2(0-4)+(-1)(0-2)=2a-6=2(a-3)$. Nhân ba vectơ với các hệ số làm thể tích nhân $|2\\cdot(-3)\\cdot5|=30$, nên $V=30\\cdot|2(a-3)|=60|a-3|$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q21.png"
         },
         {
           "kind": "MCQ",
@@ -10891,7 +11307,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">(i) $\\det=1(0-4)-1(0-3)+1(8-9)=-2\\neq0$ ✓. (ii) $\\det=2-2=0$. (iii) column 3 equals twice column 1, so $\\det=0$. Only (i) is invertible.</div><div class=\"ml-vi\">(i) $\\det=1(0-4)-1(0-3)+1(8-9)=-2\\neq0$ ✓. (ii) $\\det=2-2=0$. (iii) cột 3 bằng 2 lần cột 1 nên $\\det=0$. Chỉ (i) khả nghịch.</div>"
+          "explanation": "<div class=\"ml-en\">(i) $\\det=1(0-4)-1(0-3)+1(8-9)=-2\\neq0$ ✓. (ii) $\\det=2-2=0$. (iii) column 3 equals twice column 1, so $\\det=0$. Only (i) is invertible.</div><div class=\"ml-vi\">(i) $\\det=1(0-4)-1(0-3)+1(8-9)=-2\\neq0$ ✓. (ii) $\\det=2-2=0$. (iii) cột 3 bằng 2 lần cột 1 nên $\\det=0$. Chỉ (i) khả nghịch.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q22.png"
         },
         {
           "kind": "MCQ",
@@ -10917,7 +11334,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\dfrac{d}{dx}\\dfrac{3x+3}{x-5}=\\dfrac{3(x-5)-(3x+3)}{(x-5)^2}=\\dfrac{-18}{(x-5)^2}$. By the chain rule $y'=5\\left(\\dfrac{3x+3}{x-5}\\right)^4\\cdot\\dfrac{-18}{(x-5)^2}=\\left(\\dfrac{3x+3}{x-5}\\right)^4\\cdot\\dfrac{-90}{(x-5)^2}$, i.e. (ii).</div><div class=\"ml-vi\">$\\dfrac{d}{dx}\\dfrac{3x+3}{x-5}=\\dfrac{3(x-5)-(3x+3)}{(x-5)^2}=\\dfrac{-18}{(x-5)^2}$. Theo quy tắc dây chuyền: $y'=5\\left(\\dfrac{3x+3}{x-5}\\right)^4\\cdot\\dfrac{-18}{(x-5)^2}=\\left(\\dfrac{3x+3}{x-5}\\right)^4\\cdot\\dfrac{-90}{(x-5)^2}$, tức (ii).</div>"
+          "explanation": "<div class=\"ml-en\">$\\dfrac{d}{dx}\\dfrac{3x+3}{x-5}=\\dfrac{3(x-5)-(3x+3)}{(x-5)^2}=\\dfrac{-18}{(x-5)^2}$. By the chain rule $y'=5\\left(\\dfrac{3x+3}{x-5}\\right)^4\\cdot\\dfrac{-18}{(x-5)^2}=\\left(\\dfrac{3x+3}{x-5}\\right)^4\\cdot\\dfrac{-90}{(x-5)^2}$, i.e. (ii).</div><div class=\"ml-vi\">$\\dfrac{d}{dx}\\dfrac{3x+3}{x-5}=\\dfrac{3(x-5)-(3x+3)}{(x-5)^2}=\\dfrac{-18}{(x-5)^2}$. Theo quy tắc dây chuyền: $y'=5\\left(\\dfrac{3x+3}{x-5}\\right)^4\\cdot\\dfrac{-18}{(x-5)^2}=\\left(\\dfrac{3x+3}{x-5}\\right)^4\\cdot\\dfrac{-90}{(x-5)^2}$, tức (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q23.png"
         },
         {
           "kind": "MCQ",
@@ -10943,7 +11361,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$\\Delta x=0.5$ and the midpoints are $0.25,0.75,1.25,1.75$ with $f=0.61,\\ 0.42,\\ 0.33,\\ 0.27$. Sum $=1.63$, so the estimate is $0.5(1.63)=0.815$.</div><div class=\"ml-vi\">$\\Delta x=0.5$ và các trung điểm là $0.25,0.75,1.25,1.75$ với $f=0.61,\\ 0.42,\\ 0.33,\\ 0.27$. Tổng $=1.63$, nên ước lượng là $0.5(1.63)=0.815$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\Delta x=0.5$ and the midpoints are $0.25,0.75,1.25,1.75$ with $f=0.61,\\ 0.42,\\ 0.33,\\ 0.27$. Sum $=1.63$, so the estimate is $0.5(1.63)=0.815$.</div><div class=\"ml-vi\">$\\Delta x=0.5$ và các trung điểm là $0.25,0.75,1.25,1.75$ với $f=0.61,\\ 0.42,\\ 0.33,\\ 0.27$. Tổng $=1.63$, nên ước lượng là $0.5(1.63)=0.815$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q24.png"
         },
         {
           "kind": "MCQ",
@@ -10966,7 +11385,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$A=PDP^{-1}$ with $P=\\begin{bmatrix}1&-1\\\\-1&2\\end{bmatrix}$, $D=\\mathrm{diag}(2,3)$ and $P^{-1}=\\begin{bmatrix}2&1\\\\1&1\\end{bmatrix}$: $A=\\begin{bmatrix}2&-3\\\\-2&6\\end{bmatrix}\\begin{bmatrix}2&1\\\\1&1\\end{bmatrix}=\\begin{bmatrix}1&-1\\\\2&4\\end{bmatrix}$, i.e. (i).</div><div class=\"ml-vi\">$A=PDP^{-1}$ với $P=\\begin{bmatrix}1&-1\\\\-1&2\\end{bmatrix}$, $D=\\mathrm{diag}(2,3)$ và $P^{-1}=\\begin{bmatrix}2&1\\\\1&1\\end{bmatrix}$: $A=\\begin{bmatrix}2&-3\\\\-2&6\\end{bmatrix}\\begin{bmatrix}2&1\\\\1&1\\end{bmatrix}=\\begin{bmatrix}1&-1\\\\2&4\\end{bmatrix}$, tức (i).</div>"
+          "explanation": "<div class=\"ml-en\">$A=PDP^{-1}$ with $P=\\begin{bmatrix}1&-1\\\\-1&2\\end{bmatrix}$, $D=\\mathrm{diag}(2,3)$ and $P^{-1}=\\begin{bmatrix}2&1\\\\1&1\\end{bmatrix}$: $A=\\begin{bmatrix}2&-3\\\\-2&6\\end{bmatrix}\\begin{bmatrix}2&1\\\\1&1\\end{bmatrix}=\\begin{bmatrix}1&-1\\\\2&4\\end{bmatrix}$, i.e. (i).</div><div class=\"ml-vi\">$A=PDP^{-1}$ với $P=\\begin{bmatrix}1&-1\\\\-1&2\\end{bmatrix}$, $D=\\mathrm{diag}(2,3)$ và $P^{-1}=\\begin{bmatrix}2&1\\\\1&1\\end{bmatrix}$: $A=\\begin{bmatrix}2&-3\\\\-2&6\\end{bmatrix}\\begin{bmatrix}2&1\\\\1&1\\end{bmatrix}=\\begin{bmatrix}1&-1\\\\2&4\\end{bmatrix}$, tức (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q25.png"
         },
         {
           "kind": "MCQ",
@@ -10992,7 +11412,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$R_2\\to R_2-2R_1=[0,1,-4,1,-1]$ and $R_3\\to R_3+R_1=[0,-1,4,-1,1]=-R_2$, so the third row is dependent. The rank (dimension of the row space) is $2$.</div><div class=\"ml-vi\">$R_2\\to R_2-2R_1=[0,1,-4,1,-1]$ và $R_3\\to R_3+R_1=[0,-1,4,-1,1]=-R_2$ nên hàng thứ ba phụ thuộc. Hạng (số chiều không gian hàng) bằng $2$.</div>"
+          "explanation": "<div class=\"ml-en\">$R_2\\to R_2-2R_1=[0,1,-4,1,-1]$ and $R_3\\to R_3+R_1=[0,-1,4,-1,1]=-R_2$, so the third row is dependent. The rank (dimension of the row space) is $2$.</div><div class=\"ml-vi\">$R_2\\to R_2-2R_1=[0,1,-4,1,-1]$ và $R_3\\to R_3+R_1=[0,-1,4,-1,1]=-R_2$ nên hàng thứ ba phụ thuộc. Hạng (số chiều không gian hàng) bằng $2$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q26.png"
         },
         {
           "kind": "MCQ",
@@ -11018,7 +11439,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$B^T=\\begin{bmatrix}0&5\\\\6&1\\end{bmatrix}$, so $A+B^T=\\begin{bmatrix}1&8\\\\8&5\\end{bmatrix}$ and the first row is $[1\\ \\ 8]$.</div><div class=\"ml-vi\">$B^T=\\begin{bmatrix}0&5\\\\6&1\\end{bmatrix}$ nên $A+B^T=\\begin{bmatrix}1&8\\\\8&5\\end{bmatrix}$ và hàng đầu là $[1\\ \\ 8]$.</div>"
+          "explanation": "<div class=\"ml-en\">$B^T=\\begin{bmatrix}0&5\\\\6&1\\end{bmatrix}$, so $A+B^T=\\begin{bmatrix}1&8\\\\8&5\\end{bmatrix}$ and the first row is $[1\\ \\ 8]$.</div><div class=\"ml-vi\">$B^T=\\begin{bmatrix}0&5\\\\6&1\\end{bmatrix}$ nên $A+B^T=\\begin{bmatrix}1&8\\\\8&5\\end{bmatrix}$ và hàng đầu là $[1\\ \\ 8]$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q27.png"
         },
         {
           "kind": "MCQ",
@@ -11041,7 +11463,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">Rotating by $\\pi$ sends $(x,y)$ to $(-x,-y)$; rotating by $2\\pi$ is the identity. Both statements are true.</div><div class=\"ml-vi\">Quay góc $\\pi$ biến $(x,y)$ thành $(-x,-y)$; quay góc $2\\pi$ là ánh xạ đồng nhất. Cả hai phát biểu đều đúng.</div>"
+          "explanation": "<div class=\"ml-en\">Rotating by $\\pi$ sends $(x,y)$ to $(-x,-y)$; rotating by $2\\pi$ is the identity. Both statements are true.</div><div class=\"ml-vi\">Quay góc $\\pi$ biến $(x,y)$ thành $(-x,-y)$; quay góc $2\\pi$ là ánh xạ đồng nhất. Cả hai phát biểu đều đúng.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q28.png"
         },
         {
           "kind": "MCQ",
@@ -11064,7 +11487,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">Row 1: $(1,0,2)\\cdot(1,2,3)=7$ and $(1,0,2)\\cdot(1,-1,0)=1$. Row 2: $(3,2,-1)\\cdot(1,2,3)=4$ and $(3,2,-1)\\cdot(1,-1,0)=1$. So $AB=\\begin{pmatrix}7&1\\\\4&1\\end{pmatrix}$, i.e. (i).</div><div class=\"ml-vi\">Hàng 1: $(1,0,2)\\cdot(1,2,3)=7$ và $(1,0,2)\\cdot(1,-1,0)=1$. Hàng 2: $(3,2,-1)\\cdot(1,2,3)=4$ và $(3,2,-1)\\cdot(1,-1,0)=1$. Vậy $AB=\\begin{pmatrix}7&1\\\\4&1\\end{pmatrix}$, tức (i).</div>"
+          "explanation": "<div class=\"ml-en\">Row 1: $(1,0,2)\\cdot(1,2,3)=7$ and $(1,0,2)\\cdot(1,-1,0)=1$. Row 2: $(3,2,-1)\\cdot(1,2,3)=4$ and $(3,2,-1)\\cdot(1,-1,0)=1$. So $AB=\\begin{pmatrix}7&1\\\\4&1\\end{pmatrix}$, i.e. (i).</div><div class=\"ml-vi\">Hàng 1: $(1,0,2)\\cdot(1,2,3)=7$ và $(1,0,2)\\cdot(1,-1,0)=1$. Hàng 2: $(3,2,-1)\\cdot(1,2,3)=4$ và $(3,2,-1)\\cdot(1,-1,0)=1$. Vậy $AB=\\begin{pmatrix}7&1\\\\4&1\\end{pmatrix}$, tức (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q29.png"
         },
         {
           "kind": "MCQ",
@@ -11087,7 +11511,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">This is an improper integral with a singularity at $x=3$: $\\int_0^3(3-x)^{-1/2}dx=\\left[-2\\sqrt{3-x}\\right]_0^3=0+2\\sqrt3=2\\sqrt3$ — it converges, so (ii).</div><div class=\"ml-vi\">Đây là tích phân suy rộng có điểm kỳ dị tại $x=3$: $\\int_0^3(3-x)^{-1/2}dx=\\left[-2\\sqrt{3-x}\\right]_0^3=0+2\\sqrt3=2\\sqrt3$ — hội tụ, nên chọn (ii).</div>"
+          "explanation": "<div class=\"ml-en\">This is an improper integral with a singularity at $x=3$: $\\int_0^3(3-x)^{-1/2}dx=\\left[-2\\sqrt{3-x}\\right]_0^3=0+2\\sqrt3=2\\sqrt3$ — it converges, so (ii).</div><div class=\"ml-vi\">Đây là tích phân suy rộng có điểm kỳ dị tại $x=3$: $\\int_0^3(3-x)^{-1/2}dx=\\left[-2\\sqrt{3-x}\\right]_0^3=0+2\\sqrt3=2\\sqrt3$ — hội tụ, nên chọn (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q30.png"
         },
         {
           "kind": "MCQ",
@@ -11113,7 +11538,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$v=3(t-1)(t-3)$ and $a=6(t-2)$. The object speeds up when $v$ and $a$ have the same sign: on $(1,2)$ both are negative, on $(3,\\infty)$ both are positive. Hence (iii).</div><div class=\"ml-vi\">$v=3(t-1)(t-3)$ và $a=6(t-2)$. Vật nhanh dần khi $v$ và $a$ CÙNG DẤU: trên $(1,2)$ cả hai âm, trên $(3,\\infty)$ cả hai dương. Vậy chọn (iii).</div>"
+          "explanation": "<div class=\"ml-en\">$v=3(t-1)(t-3)$ and $a=6(t-2)$. The object speeds up when $v$ and $a$ have the same sign: on $(1,2)$ both are negative, on $(3,\\infty)$ both are positive. Hence (iii).</div><div class=\"ml-vi\">$v=3(t-1)(t-3)$ và $a=6(t-2)$. Vật nhanh dần khi $v$ và $a$ CÙNG DẤU: trên $(1,2)$ cả hai âm, trên $(3,\\infty)$ cả hai dương. Vậy chọn (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q31.png"
         },
         {
           "kind": "MCQ",
@@ -11139,7 +11565,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$f''(x)=-\\dfrac{2}{9}(x-3)^{-5/3}$ changes sign at $x=3$ (where $f''$ is undefined but $f$ is continuous), giving the inflection point $(3,8)$.</div><div class=\"ml-vi\">$f''(x)=-\\dfrac{2}{9}(x-3)^{-5/3}$ đổi dấu tại $x=3$ (nơi $f''$ không xác định nhưng $f$ liên tục), cho điểm uốn $(3,8)$.</div>"
+          "explanation": "<div class=\"ml-en\">$f''(x)=-\\dfrac{2}{9}(x-3)^{-5/3}$ changes sign at $x=3$ (where $f''$ is undefined but $f$ is continuous), giving the inflection point $(3,8)$.</div><div class=\"ml-vi\">$f''(x)=-\\dfrac{2}{9}(x-3)^{-5/3}$ đổi dấu tại $x=3$ (nơi $f''$ không xác định nhưng $f$ liên tục), cho điểm uốn $(3,8)$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q32.png"
         },
         {
           "kind": "MCQ",
@@ -11162,7 +11589,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">(i): $\\det\\begin{bmatrix}1&-1&1\\\\1&1&0\\\\2&0&1\\end{bmatrix}=0$, so the set is dependent (indeed $(X-Y+Z)+(X+Y)=2X+Z$). (ii): $\\det\\begin{bmatrix}1&2&0\\\\0&1&2\\\\2&0&1\\end{bmatrix}=9\\neq0$ — independent.</div><div class=\"ml-vi\">(i): $\\det\\begin{bmatrix}1&-1&1\\\\1&1&0\\\\2&0&1\\end{bmatrix}=0$ nên hệ phụ thuộc (thật vậy $(X-Y+Z)+(X+Y)=2X+Z$). (ii): $\\det\\begin{bmatrix}1&2&0\\\\0&1&2\\\\2&0&1\\end{bmatrix}=9\\neq0$ — độc lập.</div>"
+          "explanation": "<div class=\"ml-en\">(i): $\\det\\begin{bmatrix}1&-1&1\\\\1&1&0\\\\2&0&1\\end{bmatrix}=0$, so the set is dependent (indeed $(X-Y+Z)+(X+Y)=2X+Z$). (ii): $\\det\\begin{bmatrix}1&2&0\\\\0&1&2\\\\2&0&1\\end{bmatrix}=9\\neq0$ — independent.</div><div class=\"ml-vi\">(i): $\\det\\begin{bmatrix}1&-1&1\\\\1&1&0\\\\2&0&1\\end{bmatrix}=0$ nên hệ phụ thuộc (thật vậy $(X-Y+Z)+(X+Y)=2X+Z$). (ii): $\\det\\begin{bmatrix}1&2&0\\\\0&1&2\\\\2&0&1\\end{bmatrix}=9\\neq0$ — độc lập.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q33.png"
         },
         {
           "kind": "MCQ",
@@ -11188,7 +11616,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$f(x)=(x^2+1)^2\\geq1$ with equality at $x=0$, and $f\\to\\infty$ as $x\\to\\pm\\infty$. The range is $[1,\\infty)$, i.e. (iv).</div><div class=\"ml-vi\">$f(x)=(x^2+1)^2\\geq1$, dấu bằng tại $x=0$, và $f\\to\\infty$ khi $x\\to\\pm\\infty$. Tập giá trị là $[1,\\infty)$, tức (iv).</div>"
+          "explanation": "<div class=\"ml-en\">$f(x)=(x^2+1)^2\\geq1$ with equality at $x=0$, and $f\\to\\infty$ as $x\\to\\pm\\infty$. The range is $[1,\\infty)$, i.e. (iv).</div><div class=\"ml-vi\">$f(x)=(x^2+1)^2\\geq1$, dấu bằng tại $x=0$, và $f\\to\\infty$ khi $x\\to\\pm\\infty$. Tập giá trị là $[1,\\infty)$, tức (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q34.png"
         },
         {
           "kind": "MCQ",
@@ -11214,7 +11643,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">$9y+9xy'+2y'=0\\Rightarrow y'(9x+2)=-9y\\Rightarrow y'=\\dfrac{-9y}{9x+2}$, i.e. (iv).</div><div class=\"ml-vi\">$9y+9xy'+2y'=0\\Rightarrow y'(9x+2)=-9y\\Rightarrow y'=\\dfrac{-9y}{9x+2}$, tức (iv).</div>"
+          "explanation": "<div class=\"ml-en\">$9y+9xy'+2y'=0\\Rightarrow y'(9x+2)=-9y\\Rightarrow y'=\\dfrac{-9y}{9x+2}$, i.e. (iv).</div><div class=\"ml-vi\">$9y+9xy'+2y'=0\\Rightarrow y'(9x+2)=-9y\\Rightarrow y'=\\dfrac{-9y}{9x+2}$, tức (iv).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q35.png"
         },
         {
           "kind": "MCQ",
@@ -11240,7 +11670,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">With $x+3y=60$, $P=xy=y(60-3y)$; $P'=60-6y=0\\Rightarrow y=10$ and $x=30$. Maximum product $=300$.</div><div class=\"ml-vi\">Với $x+3y=60$, $P=xy=y(60-3y)$; $P'=60-6y=0\\Rightarrow y=10$ và $x=30$. Tích lớn nhất $=300$.</div>"
+          "explanation": "<div class=\"ml-en\">With $x+3y=60$, $P=xy=y(60-3y)$; $P'=60-6y=0\\Rightarrow y=10$ and $x=30$. Maximum product $=300$.</div><div class=\"ml-vi\">Với $x+3y=60$, $P=xy=y(60-3y)$; $P'=60-6y=0\\Rightarrow y=10$ và $x=30$. Tích lớn nhất $=300$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q36.png"
         },
         {
           "kind": "MCQ",
@@ -11263,7 +11694,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">The coefficient rows are $(2,1,1)$, $(3,0,-1)$ and $(1,0,1)$, with right-hand side $[1,0,-1]^T$ — matrix (ii).</div><div class=\"ml-vi\">Các hàng hệ số là $(2,1,1)$, $(3,0,-1)$ và $(1,0,1)$, vế phải $[1,0,-1]^T$ — ma trận (ii).</div>"
+          "explanation": "<div class=\"ml-en\">The coefficient rows are $(2,1,1)$, $(3,0,-1)$ and $(1,0,1)$, with right-hand side $[1,0,-1]^T$ — matrix (ii).</div><div class=\"ml-vi\">Các hàng hệ số là $(2,1,1)$, $(3,0,-1)$ và $(1,0,1)$, vế phải $[1,0,-1]^T$ — ma trận (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q37.png"
         },
         {
           "kind": "MCQ",
@@ -11289,7 +11721,8 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\">A Riemann sum of $f(x)=5x^2-3x^3$ over $[0,2]$ converges to $\\int_0^2(5x^2-3x^3)dx$, i.e. (ii).</div><div class=\"ml-vi\">Tổng Riemann của $f(x)=5x^2-3x^3$ trên $[0,2]$ hội tụ về $\\int_0^2(5x^2-3x^3)dx$, tức (ii).</div>"
+          "explanation": "<div class=\"ml-en\">A Riemann sum of $f(x)=5x^2-3x^3$ over $[0,2]$ converges to $\\int_0^2(5x^2-3x^3)dx$, i.e. (ii).</div><div class=\"ml-vi\">Tổng Riemann của $f(x)=5x^2-3x^3$ trên $[0,2]$ hội tụ về $\\int_0^2(5x^2-3x^3)dx$, tức (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q38.png"
         },
         {
           "kind": "MCQ",
@@ -11312,7 +11745,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$2y-z=(2,0,0,2)-(0,1,0,1)=(2,-1,0,1)=x$, so the three vectors are dependent with $x=2y-z$.</div><div class=\"ml-vi\">$2y-z=(2,0,0,2)-(0,1,0,1)=(2,-1,0,1)=x$ nên ba vectơ phụ thuộc tuyến tính với $x=2y-z$.</div>"
+          "explanation": "<div class=\"ml-en\">$2y-z=(2,0,0,2)-(0,1,0,1)=(2,-1,0,1)=x$, so the three vectors are dependent with $x=2y-z$.</div><div class=\"ml-vi\">$2y-z=(2,0,0,2)-(0,1,0,1)=(2,-1,0,1)=x$ nên ba vectơ phụ thuộc tuyến tính với $x=2y-z$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q39.png"
         },
         {
           "kind": "MCQ",
@@ -11338,7 +11772,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">The second coordinate gives $b=-3$; the first gives $a+b=-1\\Rightarrow a=2$; check the third: $3(2)+(-3)=3$ ✓. Hence $a+b=-1$.</div><div class=\"ml-vi\">Toạ độ thứ hai cho $b=-3$; toạ độ thứ nhất cho $a+b=-1\\Rightarrow a=2$; kiểm toạ độ thứ ba: $3(2)+(-3)=3$ ✓. Vậy $a+b=-1$.</div>"
+          "explanation": "<div class=\"ml-en\">The second coordinate gives $b=-3$; the first gives $a+b=-1\\Rightarrow a=2$; check the third: $3(2)+(-3)=3$ ✓. Hence $a+b=-1$.</div><div class=\"ml-vi\">Toạ độ thứ hai cho $b=-3$; toạ độ thứ nhất cho $a+b=-1\\Rightarrow a=2$; kiểm toạ độ thứ ba: $3(2)+(-3)=3$ ✓. Vậy $a+b=-1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q40.png"
         },
         {
           "kind": "MCQ",
@@ -11364,7 +11799,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$L[1,-2,3]^T=(1,-2)-2(2,-3)+3(5,1)=(1-4+15,\\ -2+6+3)=(12,7)$, i.e. (i).</div><div class=\"ml-vi\">$L[1,-2,3]^T=(1,-2)-2(2,-3)+3(5,1)=(1-4+15,\\ -2+6+3)=(12,7)$, tức (i).</div>"
+          "explanation": "<div class=\"ml-en\">$L[1,-2,3]^T=(1,-2)-2(2,-3)+3(5,1)=(1-4+15,\\ -2+6+3)=(12,7)$, i.e. (i).</div><div class=\"ml-vi\">$L[1,-2,3]^T=(1,-2)-2(2,-3)+3(5,1)=(1-4+15,\\ -2+6+3)=(12,7)$, tức (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q41.png"
         },
         {
           "kind": "MCQ",
@@ -11390,7 +11826,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">$(L): y=-\\dfrac{x}{2}-\\dfrac12$. At $x=-2$: $y=1-\\dfrac12=\\dfrac12$.</div><div class=\"ml-vi\">$(L): y=-\\dfrac{x}{2}-\\dfrac12$. Tại $x=-2$: $y=1-\\dfrac12=\\dfrac12$.</div>"
+          "explanation": "<div class=\"ml-en\">$(L): y=-\\dfrac{x}{2}-\\dfrac12$. At $x=-2$: $y=1-\\dfrac12=\\dfrac12$.</div><div class=\"ml-vi\">$(L): y=-\\dfrac{x}{2}-\\dfrac12$. Tại $x=-2$: $y=1-\\dfrac12=\\dfrac12$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q42.png"
         },
         {
           "kind": "MCQ",
@@ -11416,7 +11853,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">$F(x)=-\\int_{10}^{x}\\tan\\theta\\,d\\theta$, so by the Fundamental Theorem of Calculus $F'(x)=-\\tan(x)$, i.e. (iii).</div><div class=\"ml-vi\">$F(x)=-\\int_{10}^{x}\\tan\\theta\\,d\\theta$ nên theo định lý cơ bản của giải tích $F'(x)=-\\tan(x)$, tức (iii).</div>"
+          "explanation": "<div class=\"ml-en\">$F(x)=-\\int_{10}^{x}\\tan\\theta\\,d\\theta$, so by the Fundamental Theorem of Calculus $F'(x)=-\\tan(x)$, i.e. (iii).</div><div class=\"ml-vi\">$F(x)=-\\int_{10}^{x}\\tan\\theta\\,d\\theta$ nên theo định lý cơ bản của giải tích $F'(x)=-\\tan(x)$, tức (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q43.png"
         },
         {
           "kind": "MCQ",
@@ -11445,7 +11883,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\dfrac{(x-1)(x-2)}{x-1}=x-2\\to1-2=-1$.</div><div class=\"ml-vi\">$\\dfrac{(x-1)(x-2)}{x-1}=x-2\\to1-2=-1$.</div>"
+          "explanation": "<div class=\"ml-en\">$\\dfrac{(x-1)(x-2)}{x-1}=x-2\\to1-2=-1$.</div><div class=\"ml-vi\">$\\dfrac{(x-1)(x-2)}{x-1}=x-2\\to1-2=-1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q44.png"
         },
         {
           "kind": "MCQ",
@@ -11474,7 +11913,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">$f(2)=3$, $f'(2)=9\\Rightarrow x_2=2-\\dfrac13=1.66667$. Then $f(1.66667)\\approx0.62963$, $f'(1.66667)\\approx5.33333$, so $x_3\\approx1.66667-0.11806=1.5486$.</div><div class=\"ml-vi\">$f(2)=3$, $f'(2)=9\\Rightarrow x_2=2-\\dfrac13=1.66667$. Tiếp theo $f(1.66667)\\approx0.62963$, $f'(1.66667)\\approx5.33333$, nên $x_3\\approx1.66667-0.11806=1.5486$.</div>"
+          "explanation": "<div class=\"ml-en\">$f(2)=3$, $f'(2)=9\\Rightarrow x_2=2-\\dfrac13=1.66667$. Then $f(1.66667)\\approx0.62963$, $f'(1.66667)\\approx5.33333$, so $x_3\\approx1.66667-0.11806=1.5486$.</div><div class=\"ml-vi\">$f(2)=3$, $f'(2)=9\\Rightarrow x_2=2-\\dfrac13=1.66667$. Tiếp theo $f(1.66667)\\approx0.62963$, $f'(1.66667)\\approx5.33333$, nên $x_3\\approx1.66667-0.11806=1.5486$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q45.png"
         },
         {
           "kind": "MCQ",
@@ -11500,7 +11940,8 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\">$\\overrightarrow{OP}\\times v=(3,1,5)\\times(2,-1,1)=(6,7,-5)$ with length $\\sqrt{110}$, and $\\|v\\|=\\sqrt6$. So $d=\\dfrac{\\sqrt{110}}{\\sqrt6}=\\sqrt{\\dfrac{55}{3}}$, i.e. (i).</div><div class=\"ml-vi\">$\\overrightarrow{OP}\\times v=(3,1,5)\\times(2,-1,1)=(6,7,-5)$ có độ dài $\\sqrt{110}$, và $\\|v\\|=\\sqrt6$. Vậy $d=\\dfrac{\\sqrt{110}}{\\sqrt6}=\\sqrt{\\dfrac{55}{3}}$, tức (i).</div>"
+          "explanation": "<div class=\"ml-en\">$\\overrightarrow{OP}\\times v=(3,1,5)\\times(2,-1,1)=(6,7,-5)$ with length $\\sqrt{110}$, and $\\|v\\|=\\sqrt6$. So $d=\\dfrac{\\sqrt{110}}{\\sqrt6}=\\sqrt{\\dfrac{55}{3}}$, i.e. (i).</div><div class=\"ml-vi\">$\\overrightarrow{OP}\\times v=(3,1,5)\\times(2,-1,1)=(6,7,-5)$ có độ dài $\\sqrt{110}$, và $\\|v\\|=\\sqrt6$. Vậy $d=\\dfrac{\\sqrt{110}}{\\sqrt6}=\\sqrt{\\dfrac{55}{3}}$, tức (i).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q46.png"
         },
         {
           "kind": "MCQ",
@@ -11526,7 +11967,8 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\">Subtract $3R_3$ from $R_1$: the first row becomes $(x+2,2,0)$. Expanding along the third column: $\\det=1\\cdot\\begin{vmatrix}x+2&2\\\\x-1&x-1\\end{vmatrix}=(x-1)(x+2-2)=x(x-1)$. Setting this to $0$ gives $x=0$ or $x=1$.</div><div class=\"ml-vi\">Trừ $3R_3$ khỏi $R_1$: hàng đầu thành $(x+2,2,0)$. Khai triển theo cột 3: $\\det=1\\cdot\\begin{vmatrix}x+2&2\\\\x-1&x-1\\end{vmatrix}=(x-1)(x+2-2)=x(x-1)$. Cho bằng $0$ ta được $x=0$ hoặc $x=1$.</div>"
+          "explanation": "<div class=\"ml-en\">Subtract $3R_3$ from $R_1$: the first row becomes $(x+2,2,0)$. Expanding along the third column: $\\det=1\\cdot\\begin{vmatrix}x+2&2\\\\x-1&x-1\\end{vmatrix}=(x-1)(x+2-2)=x(x-1)$. Setting this to $0$ gives $x=0$ or $x=1$.</div><div class=\"ml-vi\">Trừ $3R_3$ khỏi $R_1$: hàng đầu thành $(x+2,2,0)$. Khai triển theo cột 3: $\\det=1\\cdot\\begin{vmatrix}x+2&2\\\\x-1&x-1\\end{vmatrix}=(x-1)(x+2-2)=x(x-1)$. Cho bằng $0$ ta được $x=0$ hoặc $x=1$.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q47.png"
         },
         {
           "kind": "MCQ",
@@ -11555,7 +11997,8 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\">Let $u=x^2$, $du=2x\\,dx$: $\\dfrac12\\int ue^u du=\\dfrac12(u-1)e^u+C=\\dfrac{e^{x^2}(x^2-1)}{2}+C$, i.e. (ii).</div><div class=\"ml-vi\">Đặt $u=x^2$, $du=2x\\,dx$: $\\dfrac12\\int ue^u du=\\dfrac12(u-1)e^u+C=\\dfrac{e^{x^2}(x^2-1)}{2}+C$, tức (ii).</div>"
+          "explanation": "<div class=\"ml-en\">Let $u=x^2$, $du=2x\\,dx$: $\\dfrac12\\int ue^u du=\\dfrac12(u-1)e^u+C=\\dfrac{e^{x^2}(x^2-1)}{2}+C$, i.e. (ii).</div><div class=\"ml-vi\">Đặt $u=x^2$, $du=2x\\,dx$: $\\dfrac12\\int ue^u du=\\dfrac12(u-1)e^u+C=\\dfrac{e^{x^2}(x^2-1)}{2}+C$, tức (ii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q48.png"
         },
         {
           "kind": "MCQ",
@@ -11581,7 +12024,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Solve $(A-I)x=0$ with $A-I=\\begin{bmatrix}0&1&1\\\\0&0&1\\\\0&0&-1\\end{bmatrix}$: rows 2–3 give $z=0$, row 1 gives $y=0$, and $x$ is free. A basic eigenvector is $[1,0,0]^T$, i.e. (iii).</div><div class=\"ml-vi\">Giải $(A-I)x=0$ với $A-I=\\begin{bmatrix}0&1&1\\\\0&0&1\\\\0&0&-1\\end{bmatrix}$: hàng 2–3 cho $z=0$, hàng 1 cho $y=0$, còn $x$ tự do. Vectơ riêng cơ bản là $[1,0,0]^T$, tức (iii).</div>"
+          "explanation": "<div class=\"ml-en\">Solve $(A-I)x=0$ with $A-I=\\begin{bmatrix}0&1&1\\\\0&0&1\\\\0&0&-1\\end{bmatrix}$: rows 2–3 give $z=0$, row 1 gives $y=0$, and $x$ is free. A basic eigenvector is $[1,0,0]^T$, i.e. (iii).</div><div class=\"ml-vi\">Giải $(A-I)x=0$ với $A-I=\\begin{bmatrix}0&1&1\\\\0&0&1\\\\0&0&-1\\end{bmatrix}$: hàng 2–3 cho $z=0$, hàng 1 cho $y=0$, còn $x$ tự do. Vectơ riêng cơ bản là $[1,0,0]^T$, tức (iii).</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q49.png"
         },
         {
           "kind": "MCQ",
@@ -11604,7 +12048,8 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\">Both sets are orthogonal, but $\\|v_2+v_3\\|=\\sqrt2\\neq1$, so (i) is not orthonormal. In (ii) the norm is $\\sqrt{\\tfrac12+\\tfrac12}=1$, so only (ii) is orthonormal.</div><div class=\"ml-vi\">Cả hai hệ đều trực giao, nhưng $\\|v_2+v_3\\|=\\sqrt2\\neq1$ nên (i) không trực chuẩn. Ở (ii) chuẩn bằng $\\sqrt{\\tfrac12+\\tfrac12}=1$, nên chỉ (ii) trực chuẩn.</div>"
+          "explanation": "<div class=\"ml-en\">Both sets are orthogonal, but $\\|v_2+v_3\\|=\\sqrt2\\neq1$, so (i) is not orthonormal. In (ii) the norm is $\\sqrt{\\tfrac12+\\tfrac12}=1$, so only (ii) is orthonormal.</div><div class=\"ml-vi\">Cả hai hệ đều trực giao, nhưng $\\|v_2+v_3\\|=\\sqrt2\\neq1$ nên (i) không trực chuẩn. Ở (ii) chuẩn bằng $\\sqrt{\\tfrac12+\\tfrac12}=1$, nên chỉ (ii) trực chuẩn.</div>",
+          "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D9/q50.png"
         },
         {
           "kind": "MCQ",

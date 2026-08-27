@@ -1054,6 +1054,7 @@ export default function LearnPageClient({ slug }: LearnPageClientProps) {
                   currentLessonId={currentLesson.id}
                   overallProgress={overallProgress}
                   courseId={course.id}
+                  courseCode={course.courseCode ?? undefined}
                   onJump={selectLesson}
                 />
               )}

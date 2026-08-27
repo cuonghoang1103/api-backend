@@ -1003,8 +1003,10 @@ model CourseSection {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  course  Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  lessons Lesson[]
+  course        Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons       Lesson[]
+  // Câu hỏi Exam Room được gán về chương này (xem ExamQuestion.sectionId).
+  examQuestions ExamQuestion[]
 
   @@index([courseId], name: "idx_sections_course")
   @@map("course_sections")
@@ -1191,13 +1193,19 @@ model ExamQuestion {
   rubric          Json?    @db.JsonB
   // SPEAK: derived sub-questions [{ text: "EN|||VI" }].
   speakingPrompts Json?    @map("speaking_prompts") @db.JsonB
+  // Chương (CourseSection) mà câu hỏi này thuộc về — để "học chương nào luyện câu
+  // chương đó" trong Academy. Nullable + additive: câu cũ chưa gán vẫn chạy bình
+  // thường; được điền dần bằng scripts/exam-classify-chapters.mjs (AI phân loại).
+  sectionId       Int?     @map("section_id")
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
   exam      Exam                   @relation(fields: [examId], references: [id], onDelete: Cascade)
+  section   CourseSection?         @relation(fields: [sectionId], references: [id], onDelete: SetNull)
   bookmarks ExamQuestionBookmark[]
 
   @@index([examId], name: "idx_exam_questions_exam")
+  @@index([sectionId], name: "idx_exam_questions_section")
   @@map("exam_questions")
 }
 

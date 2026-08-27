@@ -68,6 +68,54 @@ router.get('/', async (_req, res: Response<ApiResponse>, next) => {
   } catch (e) { next(e); }
 });
 
+// ── Luyện theo CHƯƠNG (Academy) ──────────────────────────────────────────
+// Câu hỏi Exam Room được gán về CourseSection (ExamQuestion.sectionId, điền dần
+// bằng scripts/exam-classify-chapters.mjs). Hai route dưới để trang học bài
+// "học chương nào luyện câu chương đó".
+
+// Số câu ĐÃ GÁN theo từng chương của một khoá → { [sectionId]: count }.
+// Roadmap gọi 1 lần/khoá để hiện "N câu" và ẩn link khi 0.
+router.get('/practice/section-counts/:courseId', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const courseId = Number(req.params.courseId);
+    if (!Number.isInteger(courseId)) return next(new AppError('courseId không hợp lệ', 400));
+    const rows = await prisma.examQuestion.groupBy({
+      by: ['sectionId'],
+      where: { sectionId: { not: null }, exam: { courseId } },
+      _count: { _all: true },
+    });
+    const data: Record<number, number> = {};
+    for (const r of rows) if (r.sectionId != null) data[r.sectionId] = r._count._all;
+    res.set('Cache-Control', 'public, max-age=120, stale-while-revalidate=300');
+    res.json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
+// Danh sách câu hỏi luyện tập của MỘT chương (chỉ câu MCQ có đáp án để tự chấm).
+router.get('/practice/by-section/:sectionId', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const sectionId = Number(req.params.sectionId);
+    if (!Number.isInteger(sectionId)) return next(new AppError('sectionId không hợp lệ', 400));
+    const qs = await prisma.examQuestion.findMany({
+      where: { sectionId, kind: 'MCQ' },
+      select: {
+        id: true, kind: true, points: true, prompt: true, imageUrl: true,
+        options: true, correctIndexes: true, explanation: true,
+        exam: { select: { id: true, kind: true, code: true, title: true } },
+      },
+      orderBy: [{ examId: 'asc' }, { sortOrder: 'asc' }],
+      take: 300,
+    });
+    const data = qs.map((q) => ({
+      id: q.id, kind: q.kind, points: Number(q.points), prompt: q.prompt,
+      imageUrl: q.imageUrl, options: q.options, correctIndexes: q.correctIndexes,
+      explanation: q.explanation,
+      exam: q.exam ? { id: q.exam.id, kind: q.exam.kind, code: q.exam.code, title: q.exam.title } : null,
+    }));
+    res.json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
 // Exams for a course (by slug or id) + the caller's attempt summary.
 router.get('/course/:courseIdOrSlug', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {

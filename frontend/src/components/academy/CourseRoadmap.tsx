@@ -6,7 +6,7 @@
 // truyền vào. Bấm một bài → nhảy tới bài đó (dùng lại selectLesson của trang).
 
 import { useEffect, useMemo, useState } from 'react';
-import { CheckCircle2, Circle, ChevronDown, ChevronRight, Map as MapIcon, Target } from 'lucide-react';
+import { CheckCircle2, Circle, ChevronDown, ChevronRight, Map as MapIcon, Target, PenLine } from 'lucide-react';
 import type { CourseSection, LessonDto } from '@/types';
 
 type Goal = 'pass' | 'good';
@@ -17,10 +17,22 @@ interface Props {
   currentLessonId?: number;
   overallProgress: number;
   courseId: number;
+  courseCode?: string;
   onJump: (lesson: LessonDto) => void;
 }
 
-export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallProgress, courseId, onJump }: Props) {
+export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallProgress, courseId, courseCode, onJump }: Props) {
+  // Số câu Exam Room ĐÃ gán theo từng chương (điền dần bằng script phân loại).
+  // Fetch 1 lần/khoá; chương nào có câu thì hiện link "luyện chương này".
+  const [counts, setCounts] = useState<Record<number, number>>({});
+  useEffect(() => {
+    let alive = true;
+    fetch(`/api/v1/exams/practice/section-counts/${courseId}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => { if (alive && j?.success && j.data) setCounts(j.data as Record<number, number>); })
+      .catch(() => { /* im lặng — chỉ là gợi ý luyện đề */ });
+    return () => { alive = false; };
+  }, [courseId]);
   // Chương xếp theo thứ tự; bài trong chương cũng vậy.
   const ordered = useMemo(
     () => [...sections].sort((a, b) => a.sortOrder - b.sortOrder)
@@ -89,6 +101,16 @@ export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallP
           </div>
         </div>
         <p className="mt-2 text-xs text-text-muted italic">{goalNote}</p>
+
+        {/* Luyện đề cả môn — mở Phòng Thi lọc đúng khoá này. */}
+        {courseCode && (
+          <a
+            href={`/exam?course=${encodeURIComponent(courseCode)}`}
+            className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-neon-indigo/15 px-3 py-1.5 text-xs font-semibold text-neon-indigo transition-colors hover:bg-neon-indigo/25"
+          >
+            <PenLine className="w-3.5 h-3.5" /> Luyện đề {courseCode} trên Phòng Thi
+          </a>
+        )}
       </div>
 
       {/* Lộ trình theo chương */}
@@ -139,6 +161,7 @@ export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallP
 
                 {/* Bài trong chương */}
                 {isOpen && (
+                  <>
                   <ul className="mt-1 space-y-0.5 pl-2">
                     {lessons.map((lesson) => {
                       const ldone = isCompleted(lesson.id);
@@ -162,6 +185,16 @@ export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallP
                     })}
                     {tCount === 0 && <li className="px-3 py-1.5 text-xs text-text-muted">Chưa có bài trong chương này.</li>}
                   </ul>
+                  {/* Luyện đúng câu hỏi Exam Room của chương này (nếu đã phân loại). */}
+                  {courseCode && counts[section.id] > 0 && (
+                    <a
+                      href={`/exam?course=${encodeURIComponent(courseCode)}&section=${section.id}`}
+                      className="ml-2 mt-1 inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-neon-indigo transition-colors hover:bg-neon-indigo/10"
+                    >
+                      <PenLine className="w-3.5 h-3.5" /> Luyện {counts[section.id]} câu của chương này
+                    </a>
+                  )}
+                  </>
                 )}
               </div>
             </li>

@@ -28,7 +28,17 @@ function openLinksInNewTab(doc: Document) {
   });
 }
 
-export default function BookReader({ slug, title, toc }: { slug: string; title: string; toc: TocItem[] }) {
+export default function BookReader({
+  slug,
+  title,
+  toc,
+  nativeLanguage = 'en',
+}: {
+  slug: string;
+  title: string;
+  toc: TocItem[];
+  nativeLanguage?: 'en' | 'vi';
+}) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const chapsRef = useRef<HTMLElement[]>([]);
   const blocksRef = useRef<BookBlockRef[]>([]);
@@ -56,13 +66,14 @@ export default function BookReader({ slug, title, toc }: { slug: string; title: 
   // không phải riêng từng cuốn).
   useEffect(() => {
     if (typeof window !== 'undefined' && window.innerWidth < 900) setTocOpen(false);
+    if (nativeLanguage === 'vi') return;
     try {
       const saved = window.localStorage.getItem(LANG_KEY);
       if (saved === 'en' || saved === 'bi' || saved === 'vi') setLang(saved);
     } catch {
       // localStorage có thể bị chặn (chế độ riêng tư) — cứ dùng mặc định EN.
     }
-  }, []);
+  }, [nativeLanguage]);
 
   const wireIframe = useCallback(() => {
     const iframe = iframeRef.current;
@@ -314,7 +325,7 @@ export default function BookReader({ slug, title, toc }: { slug: string; title: 
         >
           {tocOpen ? <X size={17} /> : <List size={17} />}
         </button>
-        <div className={styles.langSeg} role="group" aria-label="Ngôn ngữ đọc">
+        {nativeLanguage === 'en' && <div className={styles.langSeg} role="group" aria-label="Ngôn ngữ đọc">
           {([
             ['en', 'EN', 'Chỉ tiếng Anh'],
             ['bi', 'EN+VI', 'Song ngữ Anh – Việt'],
@@ -331,14 +342,14 @@ export default function BookReader({ slug, title, toc }: { slug: string; title: 
               {mode !== 'en' && lang === mode && viLoading && <span className={styles.langLoading} aria-hidden />}
             </button>
           ))}
-        </div>
+        </div>}
         <div className={styles.barTitle} title={title}>{title}</div>
         <div className={styles.barPct}>{Math.round(progress)}%</div>
       </header>
 
       <div className={styles.body}>
         <nav className={`${styles.toc} ${tocOpen ? '' : styles.tocClosed}`} aria-label="Mục lục chương">
-          <div className={styles.tocHead}>Contents · {toc.length} chapters</div>
+          <div className={styles.tocHead}>{nativeLanguage === 'vi' ? 'Mục lục' : 'Contents'} · {toc.length} {nativeLanguage === 'vi' ? 'chương' : 'chapters'}</div>
           <ol className={styles.tocList}>
             {toc.map((c, i) => (
               <li key={i}>

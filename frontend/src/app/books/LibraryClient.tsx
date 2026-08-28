@@ -2,14 +2,19 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { BOOK_GROUPS, BOOK_LOGOS, SERIES_STATS, type Book } from './booksData';
+import {
+  BOOK_GROUPS,
+  BOOK_LOGOS,
+  SERIES_STATS,
+  SKILL_BOOKS,
+  type Book,
+} from './booksData';
 import styles from './books.module.css';
 
 const STAT_ORDER: Array<[keyof typeof SERIES_STATS, string]> = [
   ['volumes', 'Volumes'], ['chapters', 'Chapters'], ['practice', 'Exercises'],
   ['listings', 'Listings'], ['tables', 'Tables'], ['words', 'Words'],
 ];
-const UPCOMING = ['Business', 'Product & Design', 'Mindset', 'Languages'];
 const slugOf = (file: string) => file.replace(/\.html$/, '');
 const shelfId = (title: string) => 'shelf-' + title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
@@ -81,11 +86,11 @@ export default function LibraryClient() {
     <div className={styles.library} ref={rootRef}>
       <div className={styles.wrap}>
         <div className={`${styles.eyebrow} ${styles.reveal}`}>The CuongThai Library</div>
-        <h1 className={`${styles.h1} ${styles.reveal}`}>A technical library, written from scratch</h1>
+        <h1 className={`${styles.h1} ${styles.reveal}`}>A practical library, written from scratch</h1>
         <p className={`${styles.lede} ${styles.reveal}`}>
-          Written from zero by Cuong Hoang on one rule: nothing is printed that was not run first.
-          Every volume is a single self-contained page — read it here, or open it offline in any
-          browser. It follows your system&rsquo;s light or dark setting.
+          Technology, thinking and human skills in one shelf. Every volume is a single
+          self-contained page with examples, exercises and checkpoints — read it here, or open it
+          offline in any browser. It follows your system&rsquo;s light or dark setting.
         </p>
 
         <dl className={`${styles.stats} ${styles.reveal}`}>
@@ -107,6 +112,12 @@ export default function LibraryClient() {
               {g.title}
             </a>
           ))}
+          <a
+            href="#shelf-ky-nang-toan-dien"
+            className={`${styles.catChip} ${activeShelf === 'Kỹ năng toàn diện' ? styles.catActive : ''}`}
+          >
+            Kỹ năng toàn diện
+          </a>
         </div>
       </div>
 
@@ -146,16 +157,35 @@ export default function LibraryClient() {
           ))}
         </section>
 
+        <section className={styles.collection} id="shelf-ky-nang-toan-dien">
+          <div className={styles.collHead}>
+            <h2 className={styles.collName}>Kỹ năng toàn diện</h2>
+            <span className={styles.collCount}>3/16 quyển · 237 chương</span>
+          </div>
+          <p className={`${styles.collLede} ${styles.reveal}`}>
+            Từ làm chủ bản thân và tư duy đến giao tiếp, lãnh đạo, sản phẩm, kinh doanh và đời sống.
+          </p>
+          <section className={styles.grp} data-shelf="Kỹ năng toàn diện">
+            <h3 className={`${styles.grpHead} ${styles.reveal}`}>Đã xuất bản — trọn bộ 16 quyển</h3>
+            <p className={`${styles.grpDesc} ${styles.reveal}`}>Từ làm chủ bản thân đến hệ thống thực hành tổng hợp — đủ 237 chương.</p>
+            <div className={styles.shelf}>
+              <div className={styles.shelfRow}>
+                {SKILL_BOOKS.map((book) => <Book3D key={book.file} book={book} />)}
+              </div>
+              <div className={styles.shelfPlank} aria-hidden />
+            </div>
+          </section>
+        </section>
+
         <section className={`${styles.upcoming} ${styles.reveal}`}>
           <div className={styles.collHead}>
             <h2 className={styles.collName}>More collections</h2>
             <span className={styles.collCount}>in the works</span>
           </div>
           <div className={styles.upList}>
-            {UPCOMING.map((name) => (
+            {['Languages', 'Design references', 'Field notes'].map((name) => (
               <div className={styles.upItem} key={name}>
-                <span className={styles.upName}>{name}</span>
-                <span className={styles.upSoon}>Coming soon</span>
+                <span className={styles.upName}>{name}</span><span className={styles.upSoon}>Coming soon</span>
               </div>
             ))}
           </div>
@@ -168,7 +198,7 @@ export default function LibraryClient() {
         </div>
 
         <footer className={styles.foot}>
-          Cuong Hoang · cuongthai.com · First edition, Aug 2026 · 887 linked primary sources across the series.
+          Cuong Hoang · cuongthai.com · First edition, Aug 2026 · 28 published volumes.
         </footer>
       </div>
     </div>

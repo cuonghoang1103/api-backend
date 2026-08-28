@@ -2,6 +2,7 @@
 // Mỗi tập mở ở /books/<file> (HTML tự chứa). Cập nhật: tái sinh từ nguồn.
 export type Book = { vol: string; file: string; color: string; title: string; chapters: string; practice: string; words: string; icon: string };
 export type BookGroup = { title: string; desc: string; books: Book[] };
+export type PlannedBook = { vol: string; title: string; chapters: string };
 
 // Logo thương hiệu THẬT (Simple Icons, đơn sắc) cho từng tập — phủ lên bìa bằng
 // CSS mask nên ăn theo màu "foil" của bìa, đóng vai ép nhũ như bìa cứng thật.
@@ -18,13 +19,99 @@ export const BOOK_LOGOS: Record<string, string> = {
 };
 
 export const SERIES_STATS = {
-  "volumes": "25",
-  "chapters": "412",
-  "practice": "3,607",
-  "listings": "2,479",
-  "tables": "745",
-  "words": "809,780"
+  "volumes": "41",
+  "chapters": "649",
+  "practice": "5,503",
+  "listings": "2,425",
+  "tables": "1,468",
+  "words": "1,469,374"
 } as const;
+
+// Bộ Kỹ năng toàn diện: đúng 16 quyển / 237 chương (No. 26–41), TRỌN BỘ.
+export const SKILL_BOOKS: Book[] = [
+  {
+    vol: '26', file: '26-lam-chu-ban-than.html', color: '#6B3A6E',
+    title: 'Làm chủ bản thân', chapters: '14', practice: '112', words: '35,826',
+    icon: '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="50" r="36"/><path d="M50 20v60M28 36c9 4 15 3 22-3M72 36c-9 4-15 3-22-3M30 66c8-5 14-5 20 0M70 66c-8-5-14-5-20 0"/></g><circle cx="50" cy="50" r="5" fill="currentColor"/></svg>',
+  },
+  {
+    vol: '27', file: '27-tu-duy-phan-bien-va-giai-quyet-van-de.html', color: '#8E3B2A',
+    title: 'Tư duy phản biện và giải quyết vấn đề', chapters: '17', practice: '136', words: '44,022',
+    icon: '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 78l22-22 14 12 28-34"/><path d="M64 34h18v18"/><circle cx="36" cy="34" r="18"/><path d="M31 34h10M36 29v10"/></g></svg>',
+  },
+  {
+    vol: '28', file: '28-hoc-cach-hoc-va-quan-ly-tri-thuc.html', color: '#256B4F',
+    title: 'Học cách học và quản lý tri thức', chapters: '13', practice: '104', words: '26,774',
+    icon: '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 28c14-6 26-4 38 5v48c-12-9-24-11-38-5zM88 28c-14-6-26-4-38 5v48c12-9 24-11 38-5z"/><path d="M25 43h13M25 53h17M75 43H62M75 53H58"/></g></svg>',
+  },
+  {
+    vol: '29', file: '29-quan-ly-thoi-gian-va-hieu-suat.html', color: '#2B4C86',
+    title: 'Quản lý thời gian và hiệu suất', chapters: '13', practice: '104', words: '37,363',
+    icon: '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="52" r="34"/><path d="M50 32v20l14 10"/><path d="M40 12h20"/></g></svg>',
+  },
+  {
+    vol: '30', file: '30-giao-tiep-chuyen-nghiep.html', color: '#0E6E6B',
+    title: 'Giao tiếp chuyên nghiệp', chapters: '15', practice: '120', words: '42,561',
+    icon: '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 24h72v46H46l-14 14v-14H14z"/><path d="M28 40h44M28 52h30"/></g></svg>',
+  },
+  {
+    vol: '31', file: '31-lam-viec-nhom-va-xu-ly-mau-thuan.html', color: '#8A5A14',
+    title: 'Làm việc nhóm và xử lý mâu thuẫn', chapters: '12', practice: '96', words: '30,480',
+    icon: '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="36" cy="34" r="14"/><circle cx="70" cy="40" r="11"/><path d="M12 82c2-18 14-28 24-28s22 10 24 28"/><path d="M60 82c2-14 10-22 18-22s15 8 17 22"/></g></svg>',
+  },
+  {
+    vol: '32', file: '32-lap-ke-hoach-va-quan-ly-du-an.html', color: '#3B3E8C',
+    title: 'Lập kế hoạch và quản lý dự án', chapters: '15', practice: '120', words: '40,292',
+    icon: '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="16" width="80" height="68" rx="6"/><path d="M10 34h80"/><path d="M36 16v68M63 16v68"/></g></svg>',
+  },
+  {
+    vol: '33', file: '33-lanh-dao-va-quan-ly-con-nguoi.html', color: '#6B3A6E',
+    title: 'Lãnh đạo và quản lý con người', chapters: '17', practice: '136', words: '49,163',
+    icon: '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 70l-4-34 20 14 18-24 18 24 20-14-4 34z"/><path d="M16 70h68"/></g></svg>',
+  },
+  {
+    vol: '34', file: '34-lap-trinh-va-nang-luc-cong-nghe.html', color: '#3D5567',
+    title: 'Lập trình và năng lực công nghệ', chapters: '20', practice: '160', words: '61,592',
+    icon: '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="20" width="80" height="60" rx="8"/><path d="M26 42l12 10-12 10"/><path d="M48 62h20"/></g></svg>',
+  },
+  {
+    vol: '35', file: '35-xay-dung-san-pham.html', color: '#256B4F',
+    title: 'Xây dựng sản phẩm', chapters: '14', practice: '112', words: '38,917',
+    icon: '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="16" y="50" width="26" height="26" rx="4"/><rect x="58" y="50" width="26" height="26" rx="4"/><rect x="37" y="16" width="26" height="26" rx="4"/></g></svg>',
+  },
+  {
+    vol: '36', file: '36-marketing-ban-hang-va-go-to-market.html', color: '#8E3B2A',
+    title: 'Marketing, bán hàng và đưa sản phẩm ra thị trường', chapters: '22', practice: '176', words: '65,821',
+    icon: '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 42v16h12l30 20V22L26 42z"/><path d="M56 38a14 14 0 0 1 0 24"/><path d="M70 30a26 26 0 0 1 0 40"/></g></svg>',
+  },
+  {
+    vol: '37', file: '37-su-nghiep-phong-van-va-freelance.html', color: '#2B4C86',
+    title: 'Sự nghiệp, phỏng vấn và freelance', chapters: '20', practice: '160', words: '64,614',
+    icon: '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="34" width="72" height="48" rx="6"/><path d="M36 34v-8a6 6 0 0 1 6-6h16a6 6 0 0 1 6 6v8"/><path d="M14 54h72"/></g></svg>',
+  },
+  {
+    vol: '38', file: '38-khoi-nghiep-va-van-hanh-doanh-nghiep.html', color: '#8A5A14',
+    title: 'Khởi nghiệp và vận hành doanh nghiệp', chapters: '16', practice: '128', words: '53,929',
+    icon: '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M50 14c14 10 18 30 14 48l-14 10-14-10c-4-18 0-38 14-48z"/><circle cx="50" cy="40" r="6"/><path d="M36 62l-10 18M64 62l10 18"/></g></svg>',
+  },
+  {
+    vol: '39', file: '39-ai-du-lieu-va-nang-luc-so.html', color: '#3B3E8C',
+    title: 'AI, dữ liệu và năng lực số', chapters: '10', practice: '80', words: '26,326',
+    icon: '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="30" y="30" width="40" height="40" rx="4"/><path d="M50 12v18M50 70v18M12 50h18M70 50h18M22 22l13 13M65 65l13 13M78 22l-13 13M35 65l-13 13"/></g></svg>',
+  },
+  {
+    vol: '40', file: '40-tai-chinh-ca-nhan-va-ky-nang-doi-song.html', color: '#0E6E6B',
+    title: 'Tài chính cá nhân và kỹ năng đời sống', chapters: '12', practice: '96', words: '38,530',
+    icon: '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="28" width="72" height="50" rx="8"/><path d="M14 44h72"/><circle cx="68" cy="60" r="6"/></g></svg>',
+  },
+  {
+    vol: '41', file: '41-he-thong-thuc-hanh-tong-hop.html', color: '#3D5567',
+    title: 'Hệ thống thực hành tổng hợp', chapters: '7', practice: '56', words: '23,038',
+    icon: '<svg viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="50" r="34"/><circle cx="50" cy="50" r="20"/><circle cx="50" cy="50" r="6" fill="currentColor"/></g></svg>',
+  },
+];
+
+export const SKILL_BOOKS_UPCOMING: PlannedBook[] = [];
 
 export const BOOK_GROUPS: BookGroup[] = [
   {

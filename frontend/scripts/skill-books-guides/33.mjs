@@ -1,0 +1,1260 @@
+import { guide } from '../skill-guide-builder.mjs';
+
+export default [
+  // ─────────────────────────────────────────────────────────────────────────
+  // Chương 1 — Phân biệt Leader và Manager
+  // ─────────────────────────────────────────────────────────────────────────
+  guide({
+    thesis:
+      'Leadership và management là hai loại CÔNG VIỆC khác nhau, không phải hai loại NGƯỜI khác nhau. Công việc quản lý giữ cho những gì đã cam kết chạy đúng: phân bổ nguồn lực, đo tiến độ, gỡ tắc, xử lý ngoại lệ. Công việc lãnh đạo thay đổi thứ đang chạy: đặt hướng mới, thuyết phục người ta bỏ cách làm cũ, chịu trách nhiệm cho khoảng thời gian mọi thứ tệ đi trước khi tốt lên. Cách nhận ra ai đang làm gì không nằm ở chức danh mà ở lịch làm việc: mở lịch tuần vừa rồi ra, đếm số giờ dành cho việc giữ hệ thống chạy và số giờ dành cho việc đổi hệ thống.',
+    why: {
+      work: 'Rất nhiều người được thăng chức lên "quản lý" rồi vẫn làm đúng công việc chuyên môn cũ với nhiều họp hơn. Phân biệt được hai loại việc này cho bạn một câu hỏi kiểm tra mỗi tuần: tuần này tôi có làm việc gì mà nếu tôi không làm thì không ai làm thay được không? Nếu câu trả lời là không, bạn đang là một nhân viên giỏi có quyền ký duyệt, chưa phải người dẫn.',
+      interview:
+        'Phỏng vấn vị trí quản lý gần như luôn có câu "theo bạn lãnh đạo khác quản lý ở điểm nào". Trả lời bằng khẩu hiệu ("manager quản việc, leader truyền cảm hứng") là câu trả lời của người chưa từng làm. Trả lời bằng một tuần cụ thể của bạn — việc nào là quản lý, việc nào là lãnh đạo, tỷ lệ bao nhiêu và bạn đã điều chỉnh tỷ lệ đó thế nào — là câu trả lời của người đã sống trong vai đó.',
+      study:
+        'Khi học về tổ chức, phần lớn tài liệu trình bày hai khái niệm này ở mức tính từ. Đọc theo hướng "đây là hai giỏ công việc quan sát được" giúp bạn xếp mọi mô hình gặp sau này (situational leadership, servant leadership, OKR) vào đúng giỏ, thay vì nhớ rời rạc từng cái tên.',
+      life: 'Trong một gia đình, một nhóm bạn tổ chức chuyến đi, hay ban đại diện chung cư — luôn có người lo lịch và tiền (quản lý) và người dám nói "năm nay ta làm khác đi" (lãnh đạo). Nhóm thiếu vế đầu thì hỗn loạn, thiếu vế sau thì năm nào cũng y hệt năm trước kể cả khi ai cũng chán.',
+    },
+    framework: [
+      { name: 'Đổ lịch ra hai cột', detail: 'Lấy lịch 2 tuần gần nhất, gán mỗi khối thời gian vào một trong hai cột: GIỮ (duyệt, họp trạng thái, gỡ tắc, xử lý sự cố, phân việc) và ĐỔI (định hướng, thuyết phục cấp trên hoặc phòng khác, phát triển người, thiết kế lại cách làm). Việc nào không xếp được thì ghi cột thứ ba "chuyên môn cũ" — đây thường là cột lớn nhất ở người mới lên.' },
+      { name: 'Tính tỷ lệ và so với vai trò', detail: 'Một trưởng nhóm 5-8 người thường lành mạnh ở khoảng 70% GIỮ / 30% ĐỔI; một giám đốc bộ phận thì ngược lại. Không có con số đúng phổ quát, nhưng có con số SAI rõ ràng: 0% ĐỔI trong bốn tuần liền nghĩa là bộ phận của bạn sẽ y nguyên sau một năm.' },
+      { name: 'Chuyển một việc GIỮ thành hệ thống', detail: 'Chọn việc GIỮ tốn thời gian nhất và biến nó thành quy tắc người khác chạy được: một checklist, một ngưỡng tự quyết, một người luân phiên trực. Mỗi việc GIỮ được hệ thống hoá là một khoảng trống cho việc ĐỔI — đây là cách duy nhất tăng phần lãnh đạo mà không tăng giờ làm.' },
+      { name: 'Kiểm bằng câu hỏi ngược từ đội', detail: 'Hỏi ba người trong nhóm hai câu: "Ba tháng tới nhóm mình đang đi về đâu?" và "Nếu em vướng lúc 5 giờ chiều thứ Sáu, em làm gì?". Câu một đo phần lãnh đạo của bạn, câu hai đo phần quản lý. Nhiều người ngạc nhiên khi phát hiện đội trả lời tốt câu hai và ngắc ngứ câu một.' },
+    ],
+    scenario:
+      'Một người phụ trách ba quán cà phê của cùng chủ được cất nhắc lên "quản lý vùng". Ba tháng đầu, ngày nào cô cũng chạy giữa ba quán để duyệt ca, đếm hàng tồn và đứng máy giúp lúc đông khách; doanh thu ổn định nhưng không tăng, và cả ba quản lý quán đều gọi điện hỏi cô mọi quyết định nhỏ. Cô đổ lịch hai tuần ra giấy: 46 giờ cột GIỮ, 3 giờ cột ĐỔI, phần còn lại là đứng quầy. Cô làm hai việc: viết ngưỡng tự quyết cho quản lý quán (dưới 2 triệu đồng và không ảnh hưởng công thức thì tự quyết, chỉ báo lại cuối tuần) và dành cố định sáng thứ Ba không tới quán để đi khảo sát hai khu vực mở điểm mới. Sau hai tháng, số cuộc gọi hỏi ý giảm còn khoảng một phần ba, và cô có bản đề xuất điểm bán thứ tư — thứ mà ba tháng trước cô không có thời gian nghĩ tới.',
+    comparison: [
+      { weak: 'Đo giá trị của mình bằng việc đội hỏi mình nhiều đến mức nào — càng nhiều càng thấy quan trọng.', mature: 'Đo bằng số quyết định đội tự xử lý đúng mà không cần hỏi, và ghi lại loại nào còn phải hỏi để viết thành quy tắc.' },
+      { weak: 'Nói về tầm nhìn trong buổi họp toàn công ty nhưng mọi cuộc trao đổi hằng ngày chỉ xoay quanh việc trễ hạn.', mature: 'Nhắc lại hướng đi ở nơi nó thay đổi hành vi: trong lúc từ chối một yêu cầu, trong lúc chọn giữa hai việc cùng gấp, trong lúc giải thích vì sao ưu tiên A trước B.' },
+      { weak: 'Coi công việc quản lý là thứ tầm thường phải thoát khỏi để "được làm lãnh đạo".', mature: 'Coi quản lý tốt là điều kiện để lãnh đạo được tin: không ai đi theo hướng mới của người mà lịch giao hàng tuần này còn đang loạn.' },
+    ],
+    mistakes: [
+      'Nhầm chức danh với công việc: nghĩ rằng vì đã có chữ "Trưởng phòng" nên mọi việc mình làm đều là lãnh đạo, kể cả tám tiếng ngồi sửa file của nhân viên.',
+      'Chê công việc quản lý là "hành chính" rồi bỏ bê nó, khiến đội mất tin vào những cam kết cơ bản — và khi đó mọi lời kêu gọi thay đổi đều bị nghe như lời nói suông.',
+      'Cố làm 100% lãnh đạo ngay khi mới lên, bỏ hẳn phần vận hành cho người chưa sẵn sàng, rồi phải quay lại ôm hết khi mọi thứ hỏng — vòng lặp này làm đội mất niềm tin nhanh hơn cả việc không giao gì.',
+    ],
+    worksheet: [
+      'Mở lịch hai tuần gần nhất, cộng tổng số giờ cho từng cột GIỮ / ĐỔI / chuyên môn cũ. Ghi ba con số.',
+      'Việc nào trong cột GIỮ tốn nhiều giờ nhất mà bản chất chỉ là bạn đang làm bộ nhớ hoặc làm cổng phê duyệt cho người khác?',
+      'Viết một ngưỡng tự quyết cụ thể bạn có thể trao cho đội tuần này (giới hạn tiền, giới hạn loại quyết định, thời hạn báo lại).',
+      'Nếu tuần này bạn nghỉ ốm, việc gì trong nhóm sẽ dừng hẳn? Việc nào chỉ chậm lại? Danh sách dừng hẳn chính là danh sách bạn chưa hệ thống hoá.',
+      'Hỏi hai người trong nhóm "ba tháng tới nhóm mình đi về đâu" và chép nguyên văn câu trả lời của họ. So với câu bạn tự viết ra trước khi hỏi.',
+    ],
+    exercises: [
+      { label: 'Bảng hai cột', text: 'Xuất lịch tuần vừa rồi ra bảng tính, thêm một cột phân loại GIỮ/ĐỔI/chuyên môn. Tính tỷ lệ phần trăm và viết một câu nhận xét về con số bạn thấy bất ngờ nhất.', level: 'e' },
+      { label: 'Đọc mô tả công việc thật', text: 'Tìm ba tin tuyển dụng cho vị trí cao hơn bạn một bậc. Gạch chân những dòng thuộc nhóm việc ĐỔI. Đối chiếu với công việc thực tế của bạn và ghi khoảng cách lớn nhất.', level: 'e' },
+      { label: 'Một quy tắc thay một cuộc gọi', text: 'Ghi lại năm câu hỏi nhân viên hỏi bạn trong tuần. Với mỗi câu, viết quy tắc một dòng để lần sau họ tự trả lời được. Gửi năm quy tắc đó cho nhóm.', level: 'e' },
+      { label: 'Chặn giờ lãnh đạo', text: 'Đặt hai khối 90 phút cố định trong tuần, ghi rõ chủ đề (khảo sát khách hàng, thiết kế lại một quy trình, nói chuyện với một phòng khác) và bảo vệ chúng như một cuộc họp với sếp. Sau bốn tuần, ghi lại số khối bị huỷ và lý do.', level: 'm' },
+      { label: 'Thử nghỉ hai ngày', text: 'Báo trước và tắt liên lạc hai ngày làm việc. Khi quay lại, ghi lại chính xác việc gì đã kẹt, ai đã tự quyết được, và ai đã chờ. Viết một cải tiến cho từng chỗ kẹt.', level: 'm' },
+      { label: 'Phỏng vấn hai cấp trên', text: 'Hỏi hai người quản lý bạn tôn trọng: tuần vừa rồi họ làm việc gì mà không ai khác trong tổ chức làm được. Ghi lại và tìm điểm chung giữa hai câu trả lời.', level: 'm' },
+      { label: 'Bản đồ quyết định', text: 'Liệt kê 15 loại quyết định thường xảy ra trong nhóm, chia thành ba nhóm: nhân viên tự quyết, quyết rồi báo, phải hỏi trước. Trình bày với nhóm, để họ tranh luận và chuyển ít nhất ba loại lên nhóm tự quyết cao hơn.', level: 'h' },
+      { label: 'Thử thách 7 ngày: một việc ĐỔI mỗi ngày', text: 'Bảy ngày liền, trước khi mở email, dành 45 phút đầu ngày cho đúng một việc thuộc cột ĐỔI và ghi lại nó vào một trang giấy. Ngày thứ bảy đọc lại bảy dòng đó và tự trả lời: nếu chỉ có bảy dòng này, người ngoài có nhìn ra hướng đi của nhóm không?', level: 'h' },
+    ],
+    checkpoints: [
+      {
+        q: 'Một người có chức danh Trưởng phòng nhưng cả tuần chỉ đi duyệt và gỡ tắc. Họ đang làm sai điều gì, và điều gì thì không sai?',
+        a: 'Không sai ở chỗ duyệt và gỡ tắc — đó là công việc quản lý thật, cần có, và nếu bỏ thì đội mất chỗ dựa. Sai ở chỗ tỷ lệ: nếu bốn tuần liền không có giờ nào cho việc đặt hướng, phát triển người hay thiết kế lại cách làm, thì phòng đó sẽ vận hành y nguyên trong khi bối cảnh bên ngoài đổi. Cách sửa không phải là bỏ việc quản lý mà là hệ thống hoá bớt nó để giải phóng thời gian.',
+      },
+      {
+        q: 'Vì sao "lãnh đạo giỏi thì không cần quản lý giỏi" là một mệnh đề nguy hiểm?',
+        a: 'Vì uy tín để dẫn người khác đi hướng mới được xây bằng những cam kết nhỏ đã giữ đúng: lương đúng hạn, lịch không đổi lung tung, việc đã hứa thì có người theo tới cùng. Khi phần vận hành lỏng lẻo, đội học được rằng lời của bạn không nhất thiết thành hiện thực — và họ áp đúng bài học đó lên tầm nhìn bạn công bố.',
+      },
+      {
+        q: 'Bạn muốn tăng phần việc lãnh đạo nhưng không được tăng giờ làm. Bước đầu tiên nên là gì và vì sao không phải là "sắp xếp thời gian tốt hơn"?',
+        a: 'Bước đầu là chọn một việc GIỮ lặp lại nhiều nhất và chuyển nó thành quy tắc hoặc người khác chạy được. "Sắp xếp thời gian tốt hơn" thất bại vì khối lượng việc GIỮ không cố định — nó nở ra đúng bằng thời gian bạn có, do nó đến từ người khác chứ không từ lịch của bạn. Chỉ khi nguồn phát sinh bị chặn bằng một quy tắc thì thời gian mới thực sự trống ra.',
+      },
+    ],
+    plan7:
+      'Ngày 1: đổ lịch hai tuần ra ba cột và tính tỷ lệ. Ngày 2: chọn việc GIỮ tốn giờ nhất và viết quy tắc thay thế. Ngày 3: gửi quy tắc đó cho nhóm, nghe phản đối và sửa. Ngày 4: đặt hai khối 90 phút "giờ lãnh đạo" cho hai tuần tới. Ngày 5: hỏi hai thành viên câu "ba tháng tới nhóm mình đi về đâu" và chép nguyên văn. Ngày 6: viết bản đồ quyết định nháp cho 10 tình huống hay gặp. Ngày 7: so tỷ lệ lịch tuần này với ngày 1 và ghi một điều bạn sẽ giữ lâu dài.',
+    evidence:
+      'Hiện vật mạnh nhất cho kỹ năng này là bản đồ quyết định của nhóm bạn (loại nào tự quyết, loại nào báo sau, loại nào hỏi trước) kèm ngày ban hành và một dòng ghi kết quả đo được — ví dụ số lần nhóm phải chờ bạn duyệt giảm từ bao nhiêu xuống bao nhiêu mỗi tuần. Trong CV, đừng viết "kỹ năng lãnh đạo tốt"; viết việc bạn đã bỏ đi: "Chuyển 6 loại quyết định vận hành xuống cấp cửa hàng qua ngưỡng tự quyết bằng văn bản, giải phóng khoảng 8 giờ/tuần cho công việc mở điểm bán mới". Trong phỏng vấn, mang theo con số tỷ lệ lịch trước và sau — nó chứng minh bạn hiểu vai trò mình chứ không chỉ thuộc định nghĩa.',
+    references: [
+      { label: 'Harvard Business Review — chủ đề Leadership', url: 'https://hbr.org/topic/subject/leadership', type: 'article' },
+    ],
+  }),
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Chương 2 — Lãnh đạo bản thân
+  // ─────────────────────────────────────────────────────────────────────────
+  guide({
+    thesis:
+      'Lãnh đạo bản thân (self-leadership) là năng lực điều hành chính mình khi không có ai giao việc, không có ai kiểm tra và không có ai vỗ vai. Nó gồm ba việc quan sát được: tự đặt tiêu chuẩn cao hơn mức người khác đòi hỏi, tự thu phản hồi về mình từ nguồn khó nghe, và giữ được lời hứa với chính mình ở mức tương đương lời hứa với sếp. Người quản lý không có phần này sẽ vô tình dạy cả đội rằng cam kết là thứ có thể thương lượng khi bận.',
+    why: {
+      work: 'Càng lên cao, việc của bạn càng ít người kiểm và hậu quả càng đến muộn — một quyết định tuyển sai chỉ lộ ra sau sáu tháng. Trong khoảng trống đó, thứ duy nhất giữ chất lượng là tiêu chuẩn tự đặt. Đội cũng đọc được điều này: họ sao chép mức độ nghiêm túc của bạn với chính bạn, không phải bài phát biểu của bạn về sự nghiêm túc.',
+      interview:
+        'Người phỏng vấn cấp quản lý thường hỏi "điều gì bạn đang cố cải thiện ở bản thân và bạn đo bằng gì". Câu trả lời tốt phải có một hành vi cụ thể, một cách đo, và một kết quả chưa hoàn hảo. Người nói "tôi hơi cầu toàn" đang né câu hỏi; người nói "tôi hay chốt quyết định thay vì để đội chốt, tôi đếm số lần trong biên bản họp, tháng đầu 11 lần, tháng thứ ba còn 4" đang trả lời thật.',
+      study:
+        'Khi học thứ không ai chấm điểm — một ngôn ngữ mới, một mảng chuyên môn ngoài công việc — không còn deadline bên ngoài nào giữ bạn. Lãnh đạo bản thân là bộ khung thay thế: chu kỳ cố định, bằng chứng tiến bộ nhìn thấy được, và một người biết bạn đang làm gì để hỏi lại.',
+      life: 'Sức khoẻ, tiền bạc, quan hệ gia đình đều là những khu vực không ai gửi email nhắc hạn. Chúng xấu đi rất chậm và không có cảnh báo, nên chúng là phép thử thật của kỹ năng này — thứ bạn làm trong tuần bận nhất mới cho biết bạn thực sự ưu tiên gì.',
+    },
+    framework: [
+      { name: 'Viết ra tiêu chuẩn của riêng bạn', detail: 'Chọn ba đến năm hành vi bạn cam kết giữ bất kể ai nhìn: ví dụ "không hứa ngày giao khi chưa hỏi người thực hiện", "trả lời tin nhắn của nhân viên trong 24 giờ kể cả khi câu trả lời là chưa quyết được". Tiêu chuẩn phải là hành vi đếm được, không phải giá trị trừu tượng.' },
+      { name: 'Dựng vòng phản hồi không dễ chịu', detail: 'Định kỳ hỏi hai đến ba người có động cơ nói thật với bạn — một người ngang cấp, một người dưới quyền, một người ngoài công ty — đúng một câu: "Có điều gì tôi làm khiến việc của bạn khó hơn không?". Ghi nguyên văn, không giải thích lại trong lúc nghe.' },
+      { name: 'Quản lý năng lượng theo tuần, không theo ngày', detail: 'Xác định khung giờ bạn tỉnh táo nhất và đặt vào đó loại việc khó nhất về mặt phán đoán (quyết định nhân sự, phản hồi khó, viết định hướng). Việc phản xạ và duyệt thường xếp vào khung thấp. Đo bằng một dòng ghi cuối ngày, sau hai tuần sẽ thấy khuôn mẫu.' },
+      { name: 'Rà soát 30 phút mỗi tuần', detail: 'Cùng một khung giờ, trả lời bốn câu: tuần này tôi giữ được tiêu chuẩn nào, phá tiêu chuẩn nào và trong hoàn cảnh gì, tôi đã né cuộc trò chuyện nào, tuần tới tôi bỏ việc gì. Việc "bỏ" là câu quan trọng nhất và cũng là câu hay bị để trống nhất.' },
+    ],
+    scenario:
+      'Một người vừa lên trưởng nhóm kinh doanh ở công ty phân phối vật liệu xây dựng, quản lý bảy nhân viên trong đó có hai người từng là đồng nghiệp ngang hàng. Trong ba tháng, anh nhận ra mình đang tránh nói chuyện với đúng hai người đó về chỉ tiêu, và bù lại bằng cách tự đi gặp khách hộ họ. Anh viết ba tiêu chuẩn cho mình, trong đó có "mọi cuộc trò chuyện khó phải diễn ra trong vòng 5 ngày kể từ khi tôi nghĩ tới nó". Anh đặt một ô đếm trên bảng tính cá nhân. Tháng đầu có bốn cuộc bị trễ hạn; anh ghi lý do và thấy cả bốn đều rơi vào chiều thứ Sáu, khi anh mệt. Anh chuyển toàn bộ loại cuộc này sang sáng thứ Tư. Đến tháng thứ ba không còn cuộc nào trễ, và doanh số của một trong hai người kia bắt đầu nhích lên sau khi vấn đề thật — họ không biết cách chào giá cho khách công trình — được nói ra.',
+    comparison: [
+      { weak: 'Đặt mục tiêu cá nhân dạng "năm nay tôi sẽ lắng nghe nhiều hơn" rồi cuối năm không có cách nào biết mình có làm hay không.', mature: 'Chuyển thành số đếm được trong một cuộc họp cụ thể: "trong họp tuần, tôi nói dưới 30% thời lượng và ghi lại phần trăm sau mỗi buổi".' },
+      { weak: 'Chỉ nhận phản hồi từ cấp trên vì đó là người đánh giá lương.', mature: 'Chủ động lấy phản hồi từ người dưới quyền và từ phòng ban bị ảnh hưởng bởi quyết định của bạn — đây là nơi chi phí thật của cách bạn làm việc rơi xuống.' },
+      { weak: 'Coi ngày làm việc 12 tiếng là bằng chứng của trách nhiệm và kể lại điều đó trước đội.', mature: 'Coi số giờ dài là triệu chứng cần chẩn đoán, và không kể nó như thành tích vì đội sẽ hiểu đó là kỳ vọng ngầm dành cho họ.' },
+    ],
+    mistakes: [
+      'Đặt cùng lúc tám tiêu chuẩn mới sau một cuốn sách hay, giữ được mười ngày rồi bỏ hết — và lần sau khó tin chính mình hơn vì đã có tiền lệ tự thất hứa.',
+      'Lấy phản hồi bằng câu hỏi đóng "anh thấy em làm ổn chứ?" — câu này gần như luôn nhận về "ổn", nên nó tạo cảm giác đã đi hỏi mà không thu được thông tin nào.',
+      'Nhầm tự trách với tự rà soát: dành 40 phút cảm thấy tệ về một sai lầm nhưng không viết ra được hành vi cụ thể nào sẽ khác đi trong tình huống tương tự.',
+    ],
+    worksheet: [
+      'Viết ba tiêu chuẩn hành vi bạn cam kết giữ trong 90 ngày tới, mỗi cái phải có cách đếm bằng con số hoặc bằng sự kiện.',
+      'Cuộc trò chuyện khó nào bạn đang trì hoãn ngay lúc này? Ghi tên người, chủ đề và số ngày bạn đã hoãn.',
+      'Ba người bạn sẽ hỏi câu "có điều gì tôi làm khiến việc của bạn khó hơn không" là ai? Vì sao mỗi người sẽ nói thật với bạn?',
+      'Trong tuần vừa rồi, quyết định quan trọng nhất bạn đưa ra vào khung giờ nào? Bạn có tỉnh táo vào khung giờ đó không?',
+      'Nếu tuần tới bạn phải bỏ hẳn một việc đang làm mà không được giao cho ai, bạn bỏ việc nào và hậu quả thật sự là gì?',
+    ],
+    exercises: [
+      { label: 'Ba tiêu chuẩn viết tay', text: 'Viết ba tiêu chuẩn hành vi lên một tờ giấy để ở chỗ bạn nhìn thấy hằng ngày. Mỗi tối đánh dấu giữ hay không giữ. Sau 14 ngày, đếm và ghi hoàn cảnh của những lần không giữ.', level: 'e' },
+      { label: 'Sổ năng lượng hai tuần', text: 'Cuối mỗi ngày ghi một dòng: giờ nào bạn làm việc sắc nhất, giờ nào bạn ra quyết định mà sau đó thấy tiếc. Sau hai tuần, xếp lại lịch tuần theo dữ liệu đó.', level: 'e' },
+      { label: 'Một câu hỏi mở', text: 'Hỏi một đồng nghiệp câu "có điều gì tôi làm khiến việc của bạn khó hơn không". Không giải thích, không biện minh, chỉ ghi lại và cảm ơn. Ghi cảm giác của bạn khi nghe.', level: 'e' },
+      { label: 'Đóng vòng phản hồi', text: 'Sau khi nhận một phản hồi khó nghe, chọn một thay đổi cụ thể, thực hiện trong ba tuần, rồi quay lại hỏi chính người đó xem họ có thấy khác không. Ghi lại câu trả lời.', level: 'm' },
+      { label: 'Rà soát tuần cố định', text: 'Đặt 30 phút cùng giờ mỗi tuần trong sáu tuần cho bốn câu hỏi rà soát. Lưu vào cùng một file. Cuối chu kỳ, đọc liền sáu bản và tìm câu trả lời nào lặp lại — đó là vấn đề thật của bạn, không phải vấn đề của tuần đó.', level: 'm' },
+      { label: 'Cuộc trò chuyện bị hoãn', text: 'Lấy cuộc trò chuyện khó bạn đang hoãn lâu nhất, đặt lịch trong vòng 5 ngày, chuẩn bị đúng ba câu mở đầu, và thực hiện. Sau đó ghi lại: điều tệ nhất bạn tưởng tượng có xảy ra không?', level: 'm' },
+      { label: 'Tự đánh giá 360 rút gọn', text: 'Soạn bốn câu hỏi giống nhau, gửi cho một cấp trên, hai người ngang cấp và hai người dưới quyền, xin trả lời ẩn danh qua biểu mẫu. Tổng hợp và viết một trang: điểm bạn tự đánh giá lệch nhất so với người khác nằm ở đâu.', level: 'h' },
+      { label: 'Thử thách 7 ngày: giữ đúng một lời hứa với chính mình', text: 'Chọn một cam kết nhỏ nhưng bạn thường bỏ (đi ngủ trước 23h, không mở email trước 9h, viết 10 dòng rà soát cuối ngày). Bảy ngày liền giữ đúng và ghi lại mỗi lần bạn suýt phá vỡ nó cùng lý do. Ngày thứ bảy, đọc danh sách lý do — đó là bản đồ những thứ đang thực sự điều khiển lịch của bạn.', level: 'h' },
+    ],
+    checkpoints: [
+      {
+        q: 'Vì sao lấy phản hồi từ người dưới quyền khó hơn từ cấp trên, và làm cách nào để nó bớt méo?',
+        a: 'Vì có chênh lệch quyền lực: người dưới quyền chịu rủi ro khi nói thật, nên phản ứng an toàn nhất là khen. Cách giảm méo gồm: hỏi qua kênh ẩn danh khi nhóm đủ đông, hỏi về hành vi cụ thể thay vì hỏi tổng thể ("cách tôi giao việc tuần trước có chỗ nào thiếu rõ ràng?"), và quan trọng nhất là làm cho người ta thấy phản hồi trước đó đã dẫn tới thay đổi thật — nếu không, lần sau họ sẽ không tốn công nữa.',
+      },
+      {
+        q: 'Tiêu chuẩn tự đặt và tiêu chuẩn công ty đặt khác nhau chỗ nào về mặt tác dụng?',
+        a: 'Tiêu chuẩn công ty đặt hoạt động khi có người kiểm và có hậu quả; nó bảo đảm mức sàn. Tiêu chuẩn tự đặt hoạt động ở những chỗ không ai kiểm được — chất lượng một quyết định tuyển dụng, mức độ trung thực trong báo cáo xấu, việc bạn có nói ra rủi ro mình phát hiện hay không. Vì phần lớn công việc quản lý nằm ở vùng không ai kiểm được, tiêu chuẩn tự đặt mới là thứ quyết định kết quả dài hạn.',
+      },
+      {
+        q: 'Một quản lý nói "tôi bận quá nên không có thời gian rà soát bản thân". Vấn đề thật nằm ở đâu?',
+        a: 'Thường không phải ở tổng thời gian mà ở chỗ mọi khối thời gian của họ đều do người khác đặt vào. Khi lịch được lấp đầy bằng yêu cầu đến từ bên ngoài, việc không có ai đòi — rà soát, phát triển người, suy nghĩ dài hạn — luôn thua. Cách xử lý không phải cố gắng hơn mà là đặt trước một khối cố định và đối xử với nó như cuộc hẹn với người khác, cộng với việc trả lời câu "tuần tới tôi bỏ việc gì".',
+      },
+    ],
+    plan7:
+      'Ngày 1: viết ba tiêu chuẩn hành vi kèm cách đếm. Ngày 2: liệt kê mọi cuộc trò chuyện bạn đang hoãn và xếp theo mức thiệt hại nếu tiếp tục hoãn. Ngày 3: thực hiện cuộc trò chuyện đứng đầu danh sách. Ngày 4: hỏi một người dưới quyền câu hỏi mở về việc bạn làm khó họ. Ngày 5: bắt đầu sổ năng lượng, ghi một dòng cuối ngày. Ngày 6: đặt cố định khối rà soát 30 phút hằng tuần cho ba tháng tới. Ngày 7: viết ra một việc bạn sẽ bỏ hẳn và thông báo cho người liên quan.',
+    evidence:
+      'Bằng chứng ở đây là một tài liệu tự phát triển có dấu vết thời gian: bản tự đánh giá 360 rút gọn (câu hỏi, tổng hợp trả lời ẩn danh, và hành động bạn chọn), kèm bản rà soát sau ba tháng cho thấy chính những người đó nhận xét gì về thay đổi. Trong phỏng vấn quản lý, kể một hành vi cụ thể bạn đã đổi ở chính mình cùng cách bạn đo — ví dụ tỷ lệ thời gian bạn nói trong họp nhóm giảm từ 60% xuống 25% qua ghi chép mười buổi liên tiếp. Loại câu chuyện này khó bịa và người phỏng vấn có kinh nghiệm nhận ra ngay sự khác biệt giữa nó và một tính từ.',
+    references: [
+      { label: 'Gallup Workplace — dữ liệu về vai trò của người quản lý tại nơi làm việc', url: 'https://www.gallup.com/workplace/', type: 'article' },
+    ],
+    diagram: 'cycle',
+  }),
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Chương 3 — Xây dựng tầm nhìn
+  // ─────────────────────────────────────────────────────────────────────────
+  guide({
+    thesis:
+      'Tầm nhìn là một mô tả cụ thể về trạng thái tương lai đủ rõ để người nghe tự biết hôm nay nên làm gì khác đi. Nó không phải khẩu hiệu treo tường và cũng không phải mục tiêu doanh số. Phép thử đơn giản: đưa tầm nhìn cho một người mới vào và hỏi họ "theo bản này, việc nào chúng ta nên NGỪNG làm?" — nếu họ không trả lời được, thứ bạn viết là lời chúc chứ chưa phải tầm nhìn, vì một tầm nhìn thật luôn loại trừ một số lựa chọn.',
+    why: {
+      work: 'Khi không có bức tranh chung, mọi tranh luận ưu tiên biến thành tranh luận quyền lực: ai nói to hơn, ai thân với sếp hơn. Có tầm nhìn viết ra, tranh luận chuyển sang "cái nào đưa ta gần trạng thái đó hơn" — vẫn khó nhưng có thể giải bằng lý lẽ và dữ liệu.',
+      interview:
+        'Với vị trí quản lý cấp trung trở lên, người phỏng vấn thường hỏi bạn hình dung bộ phận này ra sao sau 18 tháng. Đây không phải câu hỏi tưởng tượng mà là câu hỏi kiểm tra bạn có khung suy nghĩ dài hơn một quý hay không, và bạn có dám nói ra thứ mình sẽ không làm hay không.',
+      study:
+        'Học một mảng lớn mà không có hình dung đích đến sẽ biến thành đọc rải rác. Viết ra "sau 12 tháng tôi làm được gì mà hôm nay chưa làm được, và người khác nhìn vào đâu để biết" cho phép bạn cắt bỏ tài liệu không phục vụ đích đó — vốn chiếm phần lớn thứ bạn sẽ gặp.',
+      life: 'Các quyết định lớn của đời — đổi nghề, chuyển thành phố, mua nhà — đều là các đánh đổi không có đáp án đúng phổ quát. Một mô tả rõ về cuộc sống bạn muốn trong năm năm tới không làm quyết định dễ đi, nhưng nó biến câu hỏi từ "cái nào tốt hơn" thành "cái nào hợp với hướng đã chọn", vốn trả lời được.',
+    },
+    framework: [
+      { name: 'Chụp ảnh hiện trạng bằng dữ kiện', detail: 'Viết một trang mô tả thực tế hôm nay bằng con số và sự việc, không bằng đánh giá: bao nhiêu người, phục vụ ai, tuần vừa rồi hỏng ở đâu, khách phàn nàn điều gì nhiều nhất. Tầm nhìn viết trên hiện trạng mơ hồ sẽ trôi ngay khi gặp thực tế.' },
+      { name: 'Viết "một ngày trong tương lai"', detail: 'Mô tả một ngày làm việc bình thường ở thời điểm 18-24 tháng tới, cụ thể đến mức có tên vai trò, có việc gì đã biến mất, có việc gì mới xuất hiện. Cách viết theo cảnh cụ thể khiến người đọc hình dung được, còn câu tổng quát kiểu "trở thành đơn vị dẫn đầu" thì không ai hình dung nổi.' },
+      { name: 'Nói rõ ba điều KHÔNG làm', detail: 'Liệt kê ba cơ hội hấp dẫn mà tầm nhìn này loại trừ, kèm lý do. Đây là phần khó nhất và cũng là phần khiến tầm nhìn có sức nặng — nếu không loại trừ gì thì nó không định hướng được gì.' },
+      { name: 'Gắn ba dấu hiệu đo được', detail: 'Chọn ba chỉ dấu người ngoài quan sát được để biết ta đang tiến gần hay xa: một chỉ dấu về khách hàng, một về nội bộ, một về năng lực. Ghi giá trị hôm nay và giá trị mong muốn, kèm ngày sẽ nhìn lại.' },
+      { name: 'Kiểm bằng người thật', detail: 'Đưa bản nháp cho ba người: một người trong đội, một người ở phòng ban chịu ảnh hưởng, một người ngoài công ty. Hỏi mỗi người "theo bản này, tuần tới bạn làm gì khác đi?". Sửa cho tới khi cả ba trả lời được mà không cần bạn giải thích thêm.' },
+    ],
+    scenario:
+      'Chủ một xưởng may gia công 30 công nhân nhận thấy đơn hàng ngày càng bị ép giá và biên lợi nhuận mỏng dần. Thay vì hô "phải nâng cao chất lượng", chị viết hai trang: hiện trạng (85% doanh thu từ ba khách gia công, thời gian đổi mã hàng trung bình 2 ngày, tỷ lệ hàng lỗi 4,2%) và một ngày của xưởng sau 18 tháng (nhận đơn nhỏ 300-800 chiếc cho các thương hiệu nội địa, đổi mã trong nửa ngày, có một người chuyên làm mẫu). Chị ghi rõ ba điều không làm: không nhận đơn dưới giá sàn dù trống chuyền, không mở rộng số công nhân quá 40, không nhận hàng cần công đoạn thêu vì xưởng không có máy. Ba dấu hiệu: tỷ trọng doanh thu từ khách mới, thời gian đổi mã, tỷ lệ lỗi. Sáu tháng sau, tỷ trọng khách mới mới đạt 18% chứ chưa như kỳ vọng, nhưng thời gian đổi mã đã xuống còn 0,8 ngày và điều đó khiến chị biết nút thắt thật nằm ở khâu bán hàng chứ không phải sản xuất — một điều chị không nhìn ra khi chưa có ba con số để so.',
+    comparison: [
+      { weak: 'Công bố tầm nhìn trong một buổi họp lớn rồi không nhắc lại trong sáu tháng.', mature: 'Nhắc lại tầm nhìn ở nơi nó tạo ra khác biệt: khi từ chối một đơn hàng, khi giải thích lý do đầu tư vào một thiết bị, khi quyết định ai được đi đào tạo.' },
+      { weak: 'Viết tầm nhìn bằng những từ mà không ai có thể phản đối ("chuyên nghiệp", "khách hàng là trung tâm").', mature: 'Viết bằng những câu mà một người thông minh có thể phản đối được — nếu không ai phản đối được thì nó cũng không hướng dẫn được ai.' },
+      { weak: 'Để tầm nhìn là sản phẩm riêng của người đứng đầu, đội chỉ được thông báo.', mature: 'Viết bản nháp trước rồi mở cho đội chất vấn thật, đặc biệt là phần "không làm" — người tham gia tranh luận sẽ nhớ và dùng nó, người chỉ nghe thì không.' },
+    ],
+    mistakes: [
+      'Trộn tầm nhìn với chỉ tiêu tài chính: "đạt 100 tỷ doanh thu năm 2028" không cho ai biết nên làm gì khác đi sáng thứ Hai, vì có vô số cách đạt con số đó và một số cách sẽ phá hỏng công ty.',
+      'Viết tầm nhìn quá xa (10 năm) trong một ngành mà 18 tháng nữa đã đổi luật chơi, khiến cả đội ngầm hiểu đây là văn bản trang trí và không ai dùng nó để quyết định.',
+      'Bỏ qua bước nói rõ điều không làm, khiến tầm nhìn tương thích với mọi lựa chọn — và một định hướng tương thích với mọi thứ thì không loại bỏ được gì, tức là không có tác dụng.',
+    ],
+    worksheet: [
+      'Viết năm dòng dữ kiện về hiện trạng bộ phận bạn, mỗi dòng phải có ít nhất một con số đo được tuần này.',
+      'Mô tả một buổi sáng làm việc bình thường của nhóm bạn sau 18 tháng, dài đúng một đoạn, có tên vai trò cụ thể và ít nhất một việc hôm nay đang làm mà lúc đó đã biến mất.',
+      'Ba cơ hội hấp dẫn mà hướng đi này buộc bạn từ chối là gì? Viết kèm lý do cho từng cái.',
+      'Ba chỉ dấu bạn sẽ theo dõi là gì? Ghi giá trị hôm nay, giá trị mong muốn và ngày sẽ nhìn lại lần đầu.',
+      'Đưa bản nháp cho một người trong nhóm và chép nguyên văn câu trả lời của họ cho câu hỏi "theo bản này, tuần tới em làm gì khác đi?".',
+    ],
+    exercises: [
+      { label: 'Một trang hiện trạng', text: 'Viết một trang mô tả bộ phận bạn hôm nay chỉ bằng dữ kiện và con số, cấm mọi tính từ đánh giá. Đọc lại và gạch chân chỗ bạn không có số thật mà phải đoán.', level: 'e' },
+      { label: 'Đọc ba tầm nhìn có thật', text: 'Tìm ba tuyên bố tầm nhìn của doanh nghiệp bạn biết rõ. Với mỗi cái, tự trả lời "theo bản này, họ nên từ chối loại cơ hội nào?". Xếp hạng ba bản theo mức độ hướng dẫn được hành động.', level: 'e' },
+      { label: 'Bản nháp cảnh tương lai', text: 'Viết đoạn "một ngày sau 18 tháng" cho nhóm bạn, tối đa 200 chữ, đọc to lên và cắt mọi câu mà người nghe không hình dung ra được hình ảnh cụ thể.', level: 'e' },
+      { label: 'Danh sách không làm', text: 'Liệt kê năm việc nhóm bạn đang làm và loại bỏ hai việc theo tiêu chí "không đưa ta gần trạng thái mong muốn". Trình bày lý do cho người trên bạn một bậc và ghi lại phản ứng.', level: 'm' },
+      { label: 'Ba chỉ dấu và đường cơ sở', text: 'Chọn ba chỉ dấu, đo giá trị hiện tại thật (không ước lượng), lập bảng theo dõi hằng tháng và chia sẻ bảng đó công khai với nhóm trong ba tháng.', level: 'm' },
+      { label: 'Vòng chất vấn', text: 'Tổ chức một buổi 60 phút, đưa bản nháp trước hai ngày, và yêu cầu mỗi người mang tới một câu phản đối cụ thể. Ghi lại phản đối nào khiến bạn thực sự sửa bản nháp.', level: 'm' },
+      { label: 'Kiểm chéo với khách hàng', text: 'Nói chuyện với ba khách hàng hoặc ba người dùng nội bộ về trạng thái tương lai bạn mô tả. Hỏi họ điều đó có giải quyết vấn đề nào của họ không. Viết lại tầm nhìn dựa trên chỗ họ tỏ ra thờ ơ nhất.', level: 'h' },
+      { label: 'Thử thách 7 ngày: dùng tầm nhìn để quyết', text: 'Bảy ngày liền, mỗi khi phải chọn giữa hai việc, viết một dòng giải thích lựa chọn bằng chính ngôn ngữ trong tầm nhìn. Ngày thứ bảy đọc lại bảy dòng: chỗ nào bạn phải bẻ cong câu chữ để hợp lý hoá chính là chỗ tầm nhìn còn mơ hồ hoặc bạn đang đi lệch.', level: 'h' },
+    ],
+    checkpoints: [
+      {
+        q: 'Phân biệt tầm nhìn, mục tiêu và kế hoạch bằng ví dụ trong một chuỗi bán lẻ nhỏ.',
+        a: 'Tầm nhìn: "trở thành nơi khách quanh khu vực ghé mỗi tuần vì biết chắc có hàng tươi và đổi trả không hỏi lý do" — mô tả trạng thái và loại trừ mô hình bán giá rẻ tồn kho lâu. Mục tiêu: "tỷ lệ khách quay lại trong 30 ngày đạt 45% vào quý 4". Kế hoạch: các việc cụ thể như đổi nhà cung cấp rau, huấn luyện quy trình đổi trả, đặt lại lịch nhập hàng. Ba tầng này khác nhau về thời gian và về việc chúng trả lời câu hỏi gì: vì sao, bao nhiêu, và làm thế nào.',
+      },
+      {
+        q: 'Vì sao phần "ba điều không làm" lại quan trọng hơn phần mô tả tương lai đẹp đẽ?',
+        a: 'Vì nguồn lực luôn hữu hạn và cơ hội thì luôn nhiều hơn khả năng theo đuổi. Một tầm nhìn chỉ nói ta muốn gì sẽ được mọi người diễn giải theo hướng có lợi cho việc họ đang làm, nên nó không đổi hành vi. Phần loại trừ tạo ra chi phí thật cho người viết ra nó, và chính chi phí đó khiến đội tin rằng lần này là thật. Nó cũng cho nhân viên căn cứ để từ chối yêu cầu ngoài luồng mà không cần xin phép.',
+      },
+      {
+        q: 'Đội của bạn nghe tầm nhìn xong gật đầu nhưng ba tháng sau không ai nhắc tới. Bạn kiểm tra điều gì đầu tiên?',
+        a: 'Kiểm xem trong ba tháng đó có quyết định nào được giải thích bằng tầm nhìn không, và quan trọng hơn: có quyết định nào của chính bạn đi ngược lại nó mà không giải thích không. Nhân viên học từ những gì được thưởng và được cho qua, không từ văn bản. Nếu bạn vẫn nhận đúng loại đơn hàng mình đã tuyên bố sẽ từ chối, thì thông điệp thật họ nhận được là tầm nhìn không áp dụng khi có tiền.',
+      },
+    ],
+    plan7:
+      'Ngày 1: viết một trang hiện trạng chỉ bằng dữ kiện. Ngày 2: viết đoạn "một ngày sau 18 tháng". Ngày 3: viết ba điều không làm kèm lý do. Ngày 4: chọn ba chỉ dấu và đo giá trị hôm nay. Ngày 5: đưa bản nháp cho một người trong đội và một người ngoài phòng, ghi câu hỏi họ đặt. Ngày 6: sửa bản nháp theo hai phản đối mạnh nhất. Ngày 7: dùng bản đã sửa để giải thích một quyết định có thật trong tuần và ghi lại phản ứng.',
+    evidence:
+      'Hiện vật là bản tài liệu định hướng hai trang có ghi ngày, gồm hiện trạng bằng số, cảnh tương lai, danh sách không làm và ba chỉ dấu kèm đường cơ sở — cộng với bản cập nhật sau 6 tháng cho thấy chỉ dấu nào đi đúng và bạn đã sửa gì. Bộ đôi "bản gốc + bản rà lại" mạnh hơn bản gốc rất nhiều vì nó chứng minh bạn dùng tài liệu chứ không chỉ viết ra. Trong phỏng vấn, kể lại một cơ hội cụ thể bạn đã từ chối vì nó trái hướng, kèm doanh thu bạn đã bỏ qua và lý do — đây là loại chi tiết mà người chưa từng làm không nghĩ ra được.',
+    references: [
+      { label: 'Harvard Business Review — chủ đề Strategy', url: 'https://hbr.org/topic/subject/strategy', type: 'article' },
+      { label: 'TED — Simon Sinek: How great leaders inspire action', url: 'https://www.ted.com/talks/simon_sinek_how_great_leaders_inspire_action', type: 'video' },
+    ],
+  }),
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Chương 4 — Truyền đạt mục tiêu
+  // ─────────────────────────────────────────────────────────────────────────
+  guide({
+    thesis:
+      'Truyền đạt mục tiêu là quá trình biến một ý định trong đầu người quản lý thành một hình dung giống nhau trong đầu từng người thực hiện. Nó chỉ hoàn tất khi người nghe diễn đạt lại được bằng lời của họ và nói đúng việc họ sẽ làm khác đi. Một thông báo được gửi đi không phải là một thông điệp được nhận; khoảng cách giữa hai thứ đó là nơi phần lớn công sức của tổ chức bị đốt.',
+    why: {
+      work: 'Đa số trường hợp "nhân viên làm sai ý" hoá ra là "nhân viên làm đúng ý họ đã hiểu". Kiểm tra lại cách truyền đạt rẻ hơn nhiều so với làm lại sản phẩm, và nó còn tránh được việc quy kết nhầm cho thái độ trong khi lỗi nằm ở khâu truyền tin.',
+      interview:
+        'Khi được hỏi "làm sao bạn bảo đảm cả nhóm hiểu đúng mục tiêu", câu trả lời đáng tin luôn có cơ chế kiểm chứng chứ không chỉ có kênh phát: gửi văn bản, hỏi lại bằng câu hỏi mở, xem sản phẩm đầu tiên sớm, sửa cách nói khi phát hiện lệch.',
+      study:
+        'Học nhóm hay làm đồ án thất bại phần lớn ở khâu thống nhất "xong nghĩa là gì". Tập thói quen viết định nghĩa hoàn thành trước khi bắt tay làm sẽ tiết kiệm nhiều đêm cuối kỳ hơn bất kỳ mẹo học nào.',
+      life: 'Nhờ người nhà làm giúp một việc, thuê thợ sửa nhà, thống nhất với bạn đời về chi tiêu — mọi bất mãn kéo dài thường bắt nguồn từ một kỳ vọng chưa từng được nói thành lời cụ thể, và cả hai bên đều tin rằng điều đó là hiển nhiên.',
+    },
+    framework: [
+      { name: 'Tách Vì sao — Cái gì — Đến đâu là xong', detail: 'Ba phần này phải nói riêng và nói đủ. Vì sao cho phép người ta xử lý tình huống bạn chưa lường trước; Cái gì giới hạn phạm vi; Đến đâu là xong là tiêu chí nghiệm thu bằng quan sát được, không phải bằng cảm nhận "ổn rồi".' },
+      { name: 'Nói ràng buộc và mức ưu tiên', detail: 'Nêu rõ cái gì cố định và cái gì thương lượng được: thời hạn cứng nhưng phạm vi mềm, hay ngược lại. Khi thiếu phần này, người thực hiện sẽ tự chọn — và họ thường chọn giữ phạm vi rồi trễ hạn, đúng ngược điều bạn muốn.' },
+      { name: 'Yêu cầu diễn đạt lại', detail: 'Hỏi "để chắc là tôi nói rõ, bạn tóm lại giúp mình bạn sẽ làm gì trước tiên và ta biết xong dựa vào đâu?". Câu này đặt trách nhiệm rõ ràng lên người nói chứ không phải người nghe, nên nó không làm ai mất mặt và vẫn lộ ra chỗ lệch.' },
+      { name: 'Đặt mốc kiểm sớm', detail: 'Hẹn xem sản phẩm đầu tiên khi mới hoàn thành khoảng 20% chứ không phải khi gần xong. Ở mốc đó, chi phí sửa hướng còn nhỏ, và bạn phát hiện được cách hiểu lệch mà mọi lời diễn đạt lại đều không lộ ra.' },
+      { name: 'Lặp lại qua nhiều kênh và nhiều dịp', detail: 'Cùng một mục tiêu nên xuất hiện trong họp nhóm, trong văn bản viết, trong 1-on-1 và trong lúc bạn ra một quyết định liên quan. Người nghe cần gặp lại thông điệp trong các bối cảnh khác nhau mới chuyển được nó thành hành vi.' },
+    ],
+    scenario:
+      'Giám đốc một chi nhánh công ty giao nhận đặt mục tiêu quý: "giảm tỷ lệ giao hàng trễ". Sau ba tuần, tổ điều phối tối ưu tuyến để giảm trễ và bắt đầu từ chối các đơn xa vào cuối ngày; tỷ lệ trễ giảm từ 9% xuống 6%, nhưng số đơn nhận giảm 12% và hai khách lớn phàn nàn. Anh họp lại và viết lại mục tiêu thành ba phần: vì sao (hai khách lớn dọa chuyển nhà cung cấp vì hàng trễ nhiều lần vào ngày cao điểm), cái gì (giảm trễ riêng ở nhóm đơn của bốn khách hợp đồng, không phải toàn bộ), đến đâu là xong (tỷ lệ trễ nhóm này dưới 3% trong 6 tuần liên tiếp mà tổng số đơn nhận không giảm quá 2%). Anh nói rõ ràng buộc: không được từ chối đơn để làm đẹp số. Sau đó anh hỏi từng tổ trưởng diễn đạt lại. Một tổ trưởng tóm sai — vẫn hiểu là giảm trễ toàn bộ — và đó là lúc anh biết bản viết của mình còn mơ hồ ở đoạn nào.',
+    comparison: [
+      { weak: 'Gửi mục tiêu qua một tin nhắn dài trong nhóm chat và coi như đã truyền đạt xong.', mature: 'Gửi văn bản để tra cứu, nói trực tiếp để giải thích vì sao, rồi kiểm bằng câu hỏi diễn đạt lại trong 1-on-1 với từng người chịu trách nhiệm chính.' },
+      { weak: 'Đặt mục tiêu bằng một con số duy nhất và để mọi người tự suy ra cách đạt.', mature: 'Đi kèm con số là ràng buộc và điều không được đánh đổi, vì mọi chỉ số đơn lẻ đều có cách đạt nhanh bằng việc phá hỏng thứ khác.' },
+      { weak: 'Khi phát hiện làm sai hướng, quy cho nhân viên không chú ý và nhắc lại y nguyên cách nói cũ.', mature: 'Coi lệch hướng là dữ liệu về cách truyền đạt: sửa cách diễn đạt, thêm ví dụ đối lập, và kiểm lại bằng người khác trước khi kết luận về thái độ.' },
+    ],
+    mistakes: [
+      'Nói mục tiêu bằng ngôn ngữ của cấp trên mình mà không dịch sang việc hằng ngày của người thực hiện, khiến nhân viên nghe xong không biết sáng mai phải làm gì khác.',
+      'Hỏi "mọi người rõ chưa?" thay vì hỏi câu mở — câu hỏi đóng trong một nhóm đông gần như luôn nhận được sự im lặng, và im lặng bị hiểu nhầm thành đồng thuận.',
+      'Đổi mục tiêu giữa chừng mà không nói rõ mục tiêu cũ đã bị bỏ, khiến đội chạy song song hai hướng và tự trách mình vì không làm nổi cả hai.',
+    ],
+    worksheet: [
+      'Viết mục tiêu quan trọng nhất của nhóm bạn thành ba khối riêng: vì sao, cái gì, đến đâu là xong. Khối nào bạn viết chậm nhất là khối bạn chưa rõ.',
+      'Trong mục tiêu đó, cái gì là cố định và cái gì thương lượng được? Ghi rõ ràng buộc bằng một câu.',
+      'Nếu người thực hiện đạt được con số bằng một cách bạn không muốn, cách đó là gì? Viết ra và thêm nó vào phần ràng buộc.',
+      'Mốc kiểm sớm của bạn là ngày nào và bạn sẽ xem thứ gì cụ thể tại mốc đó?',
+      'Chép lại nguyên văn cách một thành viên trong nhóm diễn đạt lại mục tiêu này. Gạch chân chỗ khác với ý bạn.',
+    ],
+    exercises: [
+      { label: 'Ba khối trên một trang', text: 'Lấy một việc bạn đang giao và viết lại thành ba khối vì sao / cái gì / đến đâu là xong, tối đa nửa trang. Đưa cho người thực hiện đọc và hỏi phần nào họ thấy còn mơ hồ.', level: 'e' },
+      { label: 'Săn từ mơ hồ', text: 'Đọc lại năm tin nhắn giao việc gần nhất của bạn, gạch chân các từ như "sớm", "gọn", "chỉn chu", "ổn". Viết lại từng từ đó thành mô tả quan sát được hoặc một con số.', level: 'e' },
+      { label: 'Câu hỏi diễn đạt lại', text: 'Trong ba lần giao việc tới, kết thúc bằng câu hỏi mở yêu cầu người nghe tóm lại. Ghi lại có bao nhiêu lần bản tóm khác với ý bạn và khác ở đâu.', level: 'e' },
+      { label: 'Dịch mục tiêu xuống hai tầng', text: 'Lấy một mục tiêu cấp công ty và viết bản dịch cho nhóm bạn, rồi bản dịch cho một cá nhân cụ thể trong nhóm. Kiểm xem mỗi bản có nói được "việc gì sẽ thay đổi từ thứ Hai" không.', level: 'm' },
+      { label: 'Tìm cách đạt số bằng đường tắt', text: 'Với mỗi chỉ số nhóm bạn đang theo, viết hai cách đạt được nó mà thực chất gây hại. Đưa danh sách này ra họp nhóm và biến chúng thành ràng buộc chính thức.', level: 'm' },
+      { label: 'Mốc 20%', text: 'Với một việc dài hơn hai tuần, hẹn xem sản phẩm khi mới xong khoảng một phần năm. Ghi lại điều bạn phát hiện tại mốc đó và ước tính số ngày công đã tiết kiệm.', level: 'm' },
+      { label: 'Kiểm tra hiểu chéo', text: 'Hỏi riêng năm người trong nhóm câu "mục tiêu quan trọng nhất của nhóm quý này là gì và vì sao". Ghi năm câu trả lời cạnh nhau, đếm số phiên bản khác nhau và viết lại thông điệp dựa trên chỗ lệch nhiều nhất.', level: 'h' },
+      { label: 'Thử thách 7 ngày: một lần dịch mỗi ngày', text: 'Bảy ngày, mỗi ngày chọn một thông tin từ cấp trên hoặc từ khách hàng và viết bản dịch hai câu cho nhóm bạn: điều này nghĩa là gì với chúng ta, và việc gì thay đổi. Ngày thứ bảy hỏi nhóm bản dịch nào họ nhớ và vì sao.', level: 'h' },
+    ],
+    checkpoints: [
+      {
+        q: 'Vì sao "mọi người rõ chưa?" là câu hỏi kiểm tra kém, và thay bằng gì?',
+        a: 'Vì nó là câu hỏi đóng, đặt người nghe vào thế phải thừa nhận mình chậm hiểu trước mặt người khác, nên chi phí xã hội của việc trả lời "chưa" cao hơn lợi ích. Thay bằng câu mở đặt gánh nặng lên người nói: "để chắc là mình đã nói rõ, bạn tóm lại giúp mình việc bạn làm đầu tiên và ta biết xong dựa vào đâu?". Ngoài ra nên hỏi riêng từng người thay vì hỏi cả nhóm, vì trong nhóm mỗi người đều giả định người khác đã hiểu.',
+      },
+      {
+        q: 'Bạn đặt một chỉ số duy nhất cho nhóm và họ đạt được nó nhưng kết quả tổng thể tệ đi. Lỗi ở đâu và sửa thế nào?',
+        a: 'Lỗi ở khâu thiết kế thông điệp chứ thường không ở người thực hiện: mọi chỉ số đơn lẻ đều có cách tối ưu bằng việc hy sinh thứ không được đo. Cách sửa là đi kèm chỉ số chính một chỉ số bảo vệ (guardrail) không được xấu đi, nói rõ những đường tắt bị cấm, và giải thích vì sao — vì phần "vì sao" là thứ giúp người ta tự nhận ra một cách làm đi ngược tinh thần dù không vi phạm chữ nghĩa.',
+      },
+      {
+        q: 'Một mục tiêu đã được truyền đạt tốt nhưng ba tuần sau nhóm vẫn đi lệch. Ba khả năng cần kiểm là gì?',
+        a: 'Một, mục tiêu bị mâu thuẫn với thứ khác đang được thưởng — ví dụ bạn nói ưu tiên chất lượng nhưng vẫn khen người giao nhanh. Hai, người thực hiện gặp trở ngại thật mà không dám báo, nên họ âm thầm chọn hướng khả thi hơn. Ba, mục tiêu không được nhắc lại ở nơi ra quyết định hằng ngày nên nó bị các việc gấp đè. Kiểm bằng cách hỏi trực tiếp từng người "điều gì đang khiến việc này khó hơn bạn nghĩ", trước khi kết luận về ý thức kỷ luật.',
+      },
+    ],
+    plan7:
+      'Ngày 1: viết lại mục tiêu quan trọng nhất thành ba khối vì sao / cái gì / đến đâu là xong. Ngày 2: bổ sung ràng buộc và hai đường tắt bị cấm. Ngày 3: hỏi riêng ba người diễn đạt lại và ghi nguyên văn. Ngày 4: sửa bản viết dựa trên chỗ lệch nhiều nhất. Ngày 5: đặt mốc kiểm 20% cho một việc đang chạy. Ngày 6: đưa mục tiêu vào một quyết định thật và giải thích công khai bằng chính ngôn ngữ đó. Ngày 7: hỏi lại năm người mục tiêu quý này là gì, đếm số phiên bản khác nhau so với ngày 3.',
+    evidence:
+      'Giữ lại bản viết mục tiêu một trang của bạn ở hai phiên bản: bản đầu và bản sau khi sửa dựa trên phản hồi diễn đạt lại, kèm ghi chú chỗ nào bị hiểu lệch. Đây là hiện vật hiếm và rất thuyết phục vì nó cho thấy bạn coi việc truyền đạt là kỹ thuật có thể đo và cải tiến, không phải năng khiếu. Trong phỏng vấn, kể một trường hợp bạn phát hiện lệch ở mốc kiểm sớm và tiết kiệm được bao nhiêu ngày công; trong CV, ghi kết quả kèm cơ chế: "Thiết lập mốc nghiệm thu sớm và chỉ số bảo vệ cho mục tiêu giảm trễ giao hàng, đưa tỷ lệ trễ nhóm khách hợp đồng từ 9% xuống 3% mà không giảm sản lượng nhận".',
+    references: [
+      { label: 'Harvard Business Review — chủ đề Managing People', url: 'https://hbr.org/topic/subject/managing-people', type: 'article' },
+      { label: 'Atlassian Team Playbook — các bài tập làm rõ mục tiêu và vai trò trong nhóm', url: 'https://www.atlassian.com/team-playbook', type: 'article' },
+    ],
+  }),
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Chương 5 — Lãnh đạo theo tình huống — Situational Leadership
+  // ─────────────────────────────────────────────────────────────────────────
+  guide({
+    thesis:
+      'Lãnh đạo theo tình huống là ý tưởng rằng phong cách quản lý đúng không phụ thuộc vào tính cách người quản lý mà vào mức độ sẵn sàng của người thực hiện ĐỐI VỚI MỘT NHIỆM VỤ CỤ THỂ. Mô hình Situational Leadership do Paul Hersey và Ken Blanchard phát triển từ cuối những năm 1960 mô tả bốn kiểu can thiệp — chỉ dẫn, kèm cặp, hỗ trợ, uỷ thác — và điểm quan trọng nhất thường bị bỏ qua: cùng một người có thể ở mức sẵn sàng cao với việc này và thấp với việc khác, nên chẩn đoán phải làm theo từng đầu việc, không theo con người.',
+    why: {
+      work: 'Phần lớn quản lý có một chế độ mặc định: hoặc buông hết, hoặc bám sát mọi thứ. Chế độ đó đúng với khoảng một phần tư số tình huống và sai với phần còn lại. Chẩn đoán theo nhiệm vụ giúp bạn dừng việc "kèm quá" một người giỏi (khiến họ chán và nghỉ) và dừng việc "buông quá" một người mới (khiến họ chìm rồi bị đánh giá là kém).',
+      interview:
+        'Câu hỏi tình huống hay gặp: "hai nhân viên cùng làm sai một việc, bạn xử lý khác nhau thế nào?". Người trả lời tốt sẽ hỏi ngược lại về kinh nghiệm và mức tự tin của từng người với đúng nhiệm vụ đó, rồi mô tả hai cách can thiệp khác nhau — thay vì mô tả một quy trình kỷ luật chung.',
+      study:
+        'Khi tự học hoặc hướng dẫn người khác học, cùng một cách dạy không hợp cho mọi giai đoạn: người mới cần ví dụ mẫu và bước cụ thể, người đã quen cần câu hỏi và không gian tự thử. Nhận ra mình đang ở giai đoạn nào giúp bạn chọn đúng loại tài liệu thay vì cứ đọc cái nào nổi tiếng nhất.',
+      life: 'Dạy con, hướng dẫn người nhà dùng một thiết bị mới, kèm em học nghề — sự bực bội thường đến từ việc dùng sai chế độ: chỉ dẫn chi tiết cho người đã biết thì bị coi là coi thường, còn hỏi "em nghĩ nên làm sao" với người chưa biết gì thì chỉ tạo thêm lo lắng.',
+    },
+    framework: [
+      { name: 'Chẻ việc thành nhiệm vụ cụ thể', detail: 'Không chẩn đoán "bạn A nói chung", mà chẩn đoán "bạn A với việc xử lý khiếu nại mức 2", "bạn A với việc viết báo cáo tháng". Ghi từng nhiệm vụ ra một dòng riêng — chỉ thao tác này đã làm lộ ra rằng bạn đang đối xử với một người bằng một chế độ duy nhất.' },
+      { name: 'Chấm hai trục: năng lực và mức tự tin', detail: 'Với mỗi nhiệm vụ, hỏi hai câu tách biệt: người này đã làm việc này thành công mấy lần rồi, và họ tự đánh giá mình chắc chắn tới đâu. Hai trục này không đi cùng nhau: người mới hào hứng thường tự tin cao nhưng năng lực thấp, còn người đã bị chê một lần thường năng lực khá nhưng tự tin thấp.' },
+      { name: 'Chọn chế độ can thiệp tương ứng', detail: 'Năng lực thấp — tự tin cao: chỉ dẫn cụ thể từng bước và kiểm chặt vì họ chưa biết mình chưa biết. Năng lực thấp — tự tin thấp: kèm cặp, làm mẫu rồi làm cùng. Năng lực khá — tự tin thấp: hỗ trợ, hỏi nhiều hơn bảo và công nhận kết quả đã có. Năng lực cao — tự tin cao: uỷ thác, chỉ thống nhất kết quả và điểm báo cáo.' },
+      { name: 'Nói rõ chế độ đang dùng và lý do', detail: 'Nói thẳng với người kia: "việc này mình sẽ đi cùng bạn hai lần đầu vì nó ảnh hưởng tới hợp đồng, sau đó bạn tự chạy". Khi chế độ được nói ra, việc kiểm sát không bị hiểu là thiếu tin tưởng, và việc buông không bị hiểu là bỏ mặc.' },
+      { name: 'Chẩn đoán lại theo chu kỳ', detail: 'Mức sẵn sàng thay đổi, và nó có thể đi lùi khi nhiệm vụ đổi bối cảnh hoặc sau một lần thất bại. Đặt lịch xem lại bảng chẩn đoán mỗi quý và sau mỗi sự cố lớn, nếu không bạn sẽ tiếp tục dùng chế độ của sáu tháng trước.' },
+    ],
+    scenario:
+      'Trưởng phòng chăm sóc khách hàng của một công ty viễn thông có 14 nhân viên tổng đài. Chị nhận thấy mình đang duyệt từng thư xin lỗi khách của cả 14 người, mất 6-7 tiếng mỗi tuần. Chị lập bảng ba cột cho bốn nhiệm vụ chính. Kết quả: với việc trả lời thắc mắc cước phí, 11 người đã ở mức uỷ thác được; với việc xử lý khách đòi bồi thường, chỉ 3 người đủ; với việc gọi lại khách đã khiếu nại lên mạng xã hội thì không ai từng làm quá hai lần. Chị bỏ hẳn khâu duyệt ở nhóm nhiệm vụ thứ nhất và thay bằng mẫu câu cùng một buổi rà ngẫu nhiên mỗi tuần; giữ kèm cặp sát ở nhóm thứ ba và đích thân làm mẫu ba cuộc gọi có ghi âm cho cả phòng nghe. Sau sáu tuần, thời gian duyệt của chị còn khoảng 1,5 giờ/tuần, còn hai người trong nhóm thứ ba đã tự xử lý được và chị chuyển họ sang chế độ hỗ trợ.',
+    comparison: [
+      { weak: 'Áp một phong cách cho cả phòng vì "phải công bằng", ai cũng được kiểm như nhau.', mature: 'Giải thích công khai rằng mức tự chủ gắn với từng nhiệm vụ và có tiêu chí rõ để tăng dần — công bằng nằm ở tiêu chí giống nhau, không phải ở chế độ giống nhau.' },
+      { weak: 'Đánh giá một người là "chưa đủ chín" rồi giữ nguyên đánh giá đó suốt năm.', mature: 'Ghi ngày chẩn đoán và điều kiện để chuyển chế độ ("sau ba lần xử lý đạt không cần sửa thì tự chạy"), rồi thực sự chuyển khi điều kiện đủ.' },
+      { weak: 'Chuyển sang uỷ thác vì bản thân quá bận, không phải vì người kia đã sẵn sàng.', mature: 'Tách hai lý do ra: nếu buông vì bận, phải nói rõ rủi ro và thêm điểm kiểm, chứ không gọi đó là trao quyền.' },
+    ],
+    mistakes: [
+      'Chẩn đoán theo con người thay vì theo nhiệm vụ, dẫn tới việc gán nhãn cố định cho nhân viên — người bị gắn nhãn "cần kèm" sẽ không bao giờ được giao việc để chứng minh ngược lại.',
+      'Nhầm sự nhiệt tình với năng lực: người mới nhận việc hào hứng thường tự tin cao khi chưa biết đủ để lo, và nếu buông ở đúng lúc đó thì thất bại gần như chắc chắn.',
+      'Đổi chế độ đột ngột mà không báo, ví dụ đang uỷ thác bỗng quay lại kiểm từng bước sau một sự cố — người kia sẽ đọc đó là mất tin tưởng vĩnh viễn thay vì là điều chỉnh tạm thời cho một nhiệm vụ.',
+    ],
+    worksheet: [
+      'Liệt kê bốn nhiệm vụ chính trong nhóm bạn và ba người thực hiện chúng, tạo thành một bảng 4×3 ô trống.',
+      'Với mỗi ô, ghi số lần người đó đã làm việc ấy thành công và một chữ đánh giá mức tự tin của họ (cao/thấp) theo quan sát của bạn.',
+      'Ô nào bạn đang can thiệp nhiều hơn mức cần thiết? Ghi số giờ mỗi tuần bạn đang tiêu cho nó.',
+      'Ô nào bạn đang buông trong khi người thực hiện chưa đủ? Điều gì đang che giấu rủi ro đó khỏi mắt bạn?',
+      'Viết một câu bạn sẽ nói với một người để nêu rõ chế độ đang dùng và điều kiện cụ thể để chuyển sang chế độ tự chủ hơn.',
+    ],
+    exercises: [
+      { label: 'Bảng chẩn đoán đầu tiên', text: 'Lập bảng nhiệm vụ × người cho toàn nhóm, điền mức năng lực và mức tự tin theo quan sát. Không cho ai xem, chỉ để đối chiếu với thực tế trong bốn tuần tới.', level: 'e' },
+      { label: 'Hỏi chính người đó', text: 'Với ba nhiệm vụ, hỏi nhân viên tự chấm mức tự tin của họ từ 1 đến 5. So với ô bạn đã điền và ghi lại chỗ lệch lớn nhất.', level: 'e' },
+      { label: 'Nói ra chế độ', text: 'Trong ba lần giao việc tới, nói thẳng chế độ bạn sẽ dùng và lý do. Ghi lại phản ứng của người nghe, đặc biệt là người bạn sẽ kiểm sát hơn.', level: 'e' },
+      { label: 'Gỡ một ô kiểm thừa', text: 'Chọn ô bạn đang can thiệp thừa nhất, bỏ khâu duyệt và thay bằng một cơ chế nhẹ hơn (mẫu chuẩn, rà ngẫu nhiên, báo cáo tổng hợp). Đo lại thời gian bạn tiết kiệm sau bốn tuần và chất lượng có tụt không.', level: 'm' },
+      { label: 'Làm mẫu có ghi lại', text: 'Với nhiệm vụ khó nhất mà chưa ai làm được, tự làm một lần và ghi lại (ghi âm, quay màn hình hoặc viết nhật ký thao tác). Cho cả nhóm xem và chỉ ra ba điểm quyết định trong đó.', level: 'm' },
+      { label: 'Tiêu chí lên cấp tự chủ', text: 'Viết cho từng nhiệm vụ một tiêu chí rõ ràng để chuyển sang tự chạy. Công bố với nhóm và áp dụng đúng khi ai đó đạt, kể cả khi bạn còn lo.', level: 'm' },
+      { label: 'Rà lại sau sự cố', text: 'Sau một sự cố, thay vì siết toàn bộ, chẩn đoán lại đúng ô liên quan và giữ nguyên các ô khác. Viết ra cho nhóm biết bạn siết ở đâu, không siết ở đâu và vì sao.', level: 'h' },
+      { label: 'Thử thách 7 ngày: một chẩn đoán mỗi ngày', text: 'Bảy ngày, mỗi ngày trước khi giao một việc, dừng 60 giây và tự trả lời hai câu: người này đã làm việc này mấy lần, và họ đang tự tin ở mức nào. Ghi chế độ bạn chọn. Ngày thứ bảy đọc lại: bạn có bao nhiêu chế độ khác nhau, hay tất cả đều giống nhau?', level: 'h' },
+    ],
+    checkpoints: [
+      {
+        q: 'Vì sao phải chẩn đoán theo nhiệm vụ chứ không theo con người?',
+        a: 'Vì mức sẵn sàng là kết quả của kinh nghiệm với một loại việc cụ thể, mà kinh nghiệm thì phân bố không đều. Một nhân viên bán hàng kỳ cựu có thể ở mức uỷ thác được với việc chăm khách cũ nhưng ở mức cần chỉ dẫn với việc lập báo giá cho khách doanh nghiệp. Chẩn đoán theo con người dẫn tới hai lỗi cùng lúc: buông ở chỗ họ chưa biết và kèm thừa ở chỗ họ đã giỏi — và cả hai đều làm hỏng quan hệ.',
+      },
+      {
+        q: 'Một nhân viên mới rất hào hứng, tự nhận có thể tự làm. Bạn nên uỷ thác không?',
+        a: 'Thông thường là không, ít nhất cho lần đầu. Nhiệt tình cao đi cùng năng lực chưa được kiểm chứng là tổ hợp rủi ro nhất, vì người đó chưa đủ kinh nghiệm để biết mình chưa biết gì. Cách xử lý giữ được cả động lực lẫn an toàn: giao trọn việc nhưng thoả thuận một điểm kiểm sớm, nói rõ đây là quy trình chuẩn cho lần đầu chứ không phải đánh giá về họ, và cam kết bỏ điểm kiểm đó khi họ làm đạt hai lần.',
+      },
+      {
+        q: 'Chế độ hỗ trợ khác chế độ kèm cặp ở điểm nào về mặt hành vi cụ thể của người quản lý?',
+        a: 'Kèm cặp là bạn vẫn nói nhiều về cách làm: làm mẫu, giải thích từng bước, sửa trực tiếp — dùng khi năng lực còn thấp. Hỗ trợ là bạn nói ít về cách làm và hỏi nhiều hơn: "bạn định làm thế nào", "cái gì đang cản" — dùng khi năng lực đã khá nhưng người ta còn ngần ngại, thường sau một lần thất bại hoặc khi họ mới nhận trách nhiệm lớn hơn. Nhầm hai chế độ này là lỗi phổ biến: đưa hướng dẫn chi tiết cho người đã biết làm chỉ củng cố thêm cảm giác họ chưa được tin.',
+      },
+    ],
+    plan7:
+      'Ngày 1: liệt kê nhiệm vụ chính của nhóm và lập bảng chẩn đoán trống. Ngày 2: điền bảng theo quan sát của riêng bạn. Ngày 3: hỏi ba nhân viên tự chấm mức tự tin và đối chiếu. Ngày 4: chọn một ô kiểm thừa và gỡ bỏ khâu duyệt. Ngày 5: chọn một ô đang buông quá sớm và thêm một điểm kiểm, nói rõ lý do với người liên quan. Ngày 6: viết tiêu chí lên cấp tự chủ cho hai nhiệm vụ và công bố. Ngày 7: đặt lịch rà lại bảng chẩn đoán sau ba tháng.',
+    evidence:
+      'Bằng chứng cụ thể là bảng chẩn đoán nhiệm vụ × người có ghi ngày, cùng bản cập nhật ba tháng sau cho thấy ai đã chuyển chế độ và nhờ tiêu chí nào. Kèm theo là con số bạn tiết kiệm được: số giờ duyệt mỗi tuần giảm bao nhiêu và chất lượng có giữ nguyên không. Trong phỏng vấn vị trí quản lý, dùng bảng này để trả lời câu "bạn phát triển nhân viên thế nào" — nó cho thấy bạn có phương pháp lặp lại được, khác hẳn với câu trả lời cảm tính. Trong CV: "Xây bảng chẩn đoán mức tự chủ theo từng nhiệm vụ cho nhóm 14 người, chuyển 11 đầu việc sang chế độ tự chạy có tiêu chí, giảm thời gian phê duyệt của quản lý khoảng 70%".',
+    references: [
+      { label: 'The Center for Leadership Studies — nguồn gốc mô hình Situational Leadership (Hersey & Blanchard)', url: 'https://situational.com/', type: 'article' },
+      { label: 'Blanchard — tài liệu về SLII và phát triển nhân viên', url: 'https://www.blanchard.com/', type: 'article' },
+    ],
+    diagram: 'cycle',
+  }),
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Chương 6 — Giao việc — Delegation
+  // ─────────────────────────────────────────────────────────────────────────
+  guide({
+    thesis:
+      'Giao việc là chuyển cả nhiệm vụ, thẩm quyền quyết định VÀ quyền được làm khác cách bạn — trong khi trách nhiệm cuối cùng vẫn ở bạn. Nếu chỉ chuyển thao tác mà giữ lại quyền quyết định, đó là nhờ làm hộ chứ không phải giao việc, và nó không giải phóng thời gian của bạn vì mọi ngã rẽ đều quay về bàn bạn. Dấu hiệu giao việc thật: người nhận có thể chọn một cách làm bạn không nghĩ tới mà vẫn được coi là làm đúng, miễn kết quả đạt tiêu chí đã thống nhất.',
+    why: {
+      work: 'Không giao việc là nguyên nhân số một khiến một quản lý giỏi chuyên môn trở thành nút thắt của cả bộ phận: mọi thứ chạy nhanh tới bàn bạn rồi xếp hàng. Ngoài ra, người không bao giờ được giao việc khó sẽ không lớn lên, nên bạn còn tự tạo ra lý do để tiếp tục không giao được.',
+      interview:
+        'Nhà tuyển dụng thường hỏi "kể về lần bạn giao một việc quan trọng cho người chưa từng làm". Điểm họ tìm là bạn có nói được cách bạn giảm rủi ro (điểm kiểm, phạm vi thử, thoả thuận sai thì sao) hay không, và bạn có nhận trách nhiệm khi nó hỏng hay không — chứ không phải câu chuyện mọi thứ suôn sẻ.',
+      study:
+        'Trong nhóm học hoặc đồ án, người giỏi nhất thường ôm hết phần khó rồi kiệt sức, và cả nhóm học được ít hơn. Tập giao phần khó kèm hướng dẫn ngắn và một buổi rà giữa kỳ là cách duy nhất để nhóm mạnh lên chứ không chỉ nộp được bài.',
+      life: 'Trong gia đình hoặc trong một hội nhóm tình nguyện, câu "thôi để tôi làm cho nhanh" lặp lại vài chục lần sẽ tạo ra đúng cái tình trạng mà người nói than phiền: không ai khác biết làm, và họ không được nghỉ.',
+    },
+    framework: [
+      { name: 'Chọn việc theo hai trục: rủi ro và giá trị học', detail: 'Xếp việc vào bốn ô theo mức thiệt hại nếu sai và mức người nhận học được. Bắt đầu giao từ ô rủi ro thấp - giá trị học cao, và chỉ giao ô rủi ro cao khi đã có ít nhất một lần thành công ở ô thấp. Việc rủi ro thấp - học ít thì nên tự động hoá hoặc bỏ, đừng giao.' },
+      { name: 'Thoả thuận kết quả, không thoả thuận thao tác', detail: 'Viết ra: kết quả trông như thế nào, ai là người dùng kết quả đó, hạn chót, ngân sách hoặc giới hạn, và ba tiêu chí nghiệm thu. Không mô tả từng bước trừ khi có yêu cầu tuân thủ bắt buộc — mô tả từng bước là cách chắc chắn nhất để nhận lại đúng chất lượng của bạn mà không tiết kiệm được thời gian nào.' },
+      { name: 'Nói rõ mức thẩm quyền', detail: 'Chọn và nói ra một trong bốn mức: tự làm và không cần báo; tự làm rồi báo lại; đề xuất rồi chờ duyệt; chỉ thu thập thông tin cho tôi quyết. Phần lớn xung đột khi giao việc đến từ hai bên hiểu khác nhau về mức này chứ không phải từ chất lượng công việc.' },
+      { name: 'Cài điểm kiểm thay vì kiểm liên tục', detail: 'Thống nhất trước hai hoặc ba thời điểm xem tiến độ và nội dung sẽ xem tại mỗi điểm. Giữa các điểm đó thì không hỏi. Điều này cho người nhận không gian thật để tự xử lý, đồng thời cho bạn cơ hội can thiệp trước khi quá muộn.' },
+      { name: 'Rút kinh nghiệm hai chiều sau khi xong', detail: 'Dành 20 phút hỏi: chỗ nào tôi mô tả chưa rõ, chỗ nào bạn ước có thêm quyền, việc gì lần sau bạn tự làm được mà không cần tôi. Việc này biến một lần giao việc thành một bậc thang, thay vì một sự kiện đơn lẻ.' },
+    ],
+    scenario:
+      'Kế toán trưởng một công ty xây dựng 60 người tự làm toàn bộ báo cáo dòng tiền tuần và quyết toán công trình vì "sai một số là chết". Mỗi tháng chị mất khoảng 40 giờ cho hai việc này và chưa từng nghỉ phép trọn tuần trong ba năm. Chị xếp việc theo rủi ro: đối chiếu công nợ nhà cung cấp là rủi ro thấp và học được nhiều, quyết toán công trình là rủi ro cao. Chị giao đối chiếu công nợ cho một nhân viên hai năm kinh nghiệm ở mức "tự làm rồi báo lại", kèm ba tiêu chí nghiệm thu và hai điểm kiểm vào thứ Ba và thứ Năm. Tháng đầu có hai lỗi ở khoản tạm ứng, chị không lấy lại việc mà bổ sung một dòng vào tiêu chí nghiệm thu. Tháng thứ ba nhân viên đó làm sạch, chị chuyển mức thẩm quyền lên "tự làm không cần báo, chỉ báo ngoại lệ trên 50 triệu" và bắt đầu giao phần đối chiếu khối lượng của quyết toán. Đến quý sau chị nghỉ phép sáu ngày liên tục lần đầu.',
+    comparison: [
+      { weak: 'Giao việc rồi sửa lại toàn bộ sản phẩm theo ý mình trước khi gửi đi, không nói với người làm.', mature: 'Nếu phải sửa, gửi lại kèm ghi chú chỗ sửa và lý do, và hỏi họ muốn tự sửa hay để bạn sửa lần này — im lặng sửa hộ dạy người ta rằng cố gắng không tạo khác biệt.' },
+      { weak: 'Chỉ giao những việc bạn ghét làm.', mature: 'Giao cả việc thú vị và có tính nhìn thấy được, vì cơ hội được nhìn thấy mới là thứ khiến người ta lớn lên và ở lại.' },
+      { weak: 'Khi việc được giao hỏng, lập tức thu hồi và tự làm lại từ đầu.', mature: 'Phân biệt hỏng do thiếu năng lực, do bạn mô tả không rõ, hay do hoàn cảnh — rồi chỉ điều chỉnh đúng nguyên nhân; thu hồi toàn bộ chỉ đúng khi có rủi ro pháp lý hoặc mất khách ngay.' },
+    ],
+    mistakes: [
+      'Giao nhiệm vụ nhưng giữ lại thẩm quyền: người nhận phải xin ý kiến ở mọi ngã rẽ nên tổng thời gian của bạn không giảm, còn họ thì mất động lực vì không được quyết gì.',
+      'Giao cho người rảnh nhất thay vì người sẽ học được nhiều nhất, biến việc giao thành phân bổ khối lượng và bỏ lỡ toàn bộ tác dụng phát triển đội ngũ.',
+      'Đo kết quả bằng "họ có làm giống cách tôi làm không" thay vì bằng tiêu chí nghiệm thu đã thoả thuận — đây là lý do phổ biến khiến người nhận cảm thấy làm gì cũng sai.',
+    ],
+    worksheet: [
+      'Liệt kê mọi việc bạn làm trong tuần vừa rồi và đánh dấu việc nào chỉ mình bạn làm được thật sự (không phải quen tay).',
+      'Với ba việc không thuộc nhóm đó, chấm mức thiệt hại nếu sai từ 1 đến 5 và mức người nhận học được từ 1 đến 5.',
+      'Chọn một việc để giao trong tuần này. Viết ba tiêu chí nghiệm thu bằng câu quan sát được.',
+      'Mức thẩm quyền bạn trao là mức nào trong bốn mức? Viết đúng câu bạn sẽ nói để nêu mức đó.',
+      'Hai điểm kiểm của bạn rơi vào ngày nào, và tại mỗi điểm bạn sẽ xem cụ thể thứ gì?',
+    ],
+    exercises: [
+      { label: 'Danh sách chỉ-mình-tôi', text: 'Viết ra mọi việc bạn tin rằng chỉ mình bạn làm được. Với mỗi việc, hỏi "nếu tôi nghỉ ba tháng thì ai sẽ làm và cần gì để họ làm được". Đánh dấu việc nào chỉ cần một tài liệu hướng dẫn là chuyển được.', level: 'e' },
+      { label: 'Ba tiêu chí nghiệm thu', text: 'Với một việc bạn hay giao, viết ba tiêu chí nghiệm thu quan sát được thay cho câu "làm cho ổn". Đưa cho người nhận đọc và hỏi họ có tiêu chí nào khó hiểu không.', level: 'e' },
+      { label: 'Gọi tên mức thẩm quyền', text: 'Trong năm lần giao việc tới, luôn nói rõ một trong bốn mức thẩm quyền. Ghi lại lần nào bạn thấy khó nói ra mức cao và lý do thật đằng sau.', level: 'e' },
+      { label: 'Giao một việc ô rủi ro thấp - học cao', text: 'Chọn đúng một việc thuộc ô này, giao trọn gói với hai điểm kiểm, và tuyệt đối không hỏi thăm giữa hai điểm đó. Ghi lại cảm giác của bạn trong khoảng lặng đó.', level: 'm' },
+      { label: 'Không sửa hộ', text: 'Trong một tháng, mỗi khi định tự sửa sản phẩm của người khác, thay bằng ghi chú ba dòng và trả lại cho họ sửa. Đo thời gian bạn tiết kiệm và chất lượng bản thứ hai.', level: 'm' },
+      { label: 'Rút kinh nghiệm hai chiều', text: 'Sau khi một việc được giao hoàn tất, dành 20 phút hỏi ba câu về chỗ bạn mô tả chưa rõ và quyền họ còn thiếu. Viết lại bản giao việc mẫu dựa trên câu trả lời.', level: 'm' },
+      { label: 'Lịch giao việc quý', text: 'Lập bảng: mỗi thành viên trong nhóm sẽ nhận một việc mới có tính thử thách trong quý, ghi rõ việc, mức thẩm quyền và tiêu chí. Rà lại cuối quý xem bao nhiêu việc thực sự được giao và lý do những việc bị giữ lại.', level: 'h' },
+      { label: 'Thử thách 7 ngày: mỗi ngày một câu trả lại', text: 'Bảy ngày, mỗi khi ai đó hỏi bạn một quyết định thuộc phạm vi họ, trả lời bằng "bạn nghĩ nên thế nào, và cần gì để tự quyết lần sau?" thay vì đưa đáp án. Ghi lại số lần và những trường hợp bạn buộc phải phá luật vì rủi ro thật.', level: 'h' },
+    ],
+    checkpoints: [
+      {
+        q: 'Bốn mức thẩm quyền là gì, và vì sao phải nói ra thay vì để ngầm hiểu?',
+        a: 'Bốn mức: tự làm không cần báo; tự làm rồi báo lại; đề xuất rồi chờ duyệt; chỉ thu thập thông tin để người quản lý quyết. Phải nói ra vì hai bên gần như luôn giả định khác nhau: người quản lý nghĩ mình đã trao mức hai, người nhận nghĩ mình chỉ được mức ba nên chờ, rồi cả hai cùng bực. Nói rõ mức mất 15 giây và loại bỏ phần lớn xung đột về sau, đồng thời cho phép nâng mức một cách có chủ đích thay vì tuỳ hứng.',
+      },
+      {
+        q: 'Việc được giao hỏng. Ba nguyên nhân cần phân biệt trước khi phản ứng là gì?',
+        a: 'Một, mô tả của bạn không rõ — tiêu chí nghiệm thu mơ hồ hoặc thiếu ràng buộc; đây là lỗi của người giao và cách sửa là viết lại bản giao việc. Hai, người nhận thiếu năng lực cho phần cụ thể nào đó; cách sửa là bổ sung kèm cặp đúng phần đó, không thu hồi toàn bộ. Ba, hoàn cảnh đổi ngoài dự kiến; cách sửa là thêm điểm kiểm sớm hơn cho loại việc này. Phản ứng mặc định là thu hồi việc sẽ dạy cả nhóm rằng nhận việc khó là rủi ro cá nhân, và lần sau sẽ không ai nhận.',
+      },
+      {
+        q: 'Phân biệt giao việc với đùn việc bằng một tiêu chí kiểm được.',
+        a: 'Tiêu chí: sau khi giao, người quản lý còn giữ trách nhiệm về kết quả trước bên ngoài không, và người nhận có thêm quyền quyết định gì không. Giao việc thật thì bạn vẫn là người trả lời trước cấp trên nếu hỏng, và người nhận có thêm một khoảng tự quyết cụ thể. Đùn việc thì trách nhiệm được đẩy đi cùng nhiệm vụ nhưng quyền thì không được trao, nên người nhận chịu rủi ro mà không có công cụ để tránh nó.',
+      },
+    ],
+    plan7:
+      'Ngày 1: liệt kê việc trong tuần và đánh dấu việc chỉ-mình-tôi. Ngày 2: chấm ba việc theo trục rủi ro và giá trị học. Ngày 3: viết bản giao việc một trang cho việc đã chọn, gồm tiêu chí nghiệm thu và mức thẩm quyền. Ngày 4: giao việc trực tiếp, yêu cầu người nhận tóm lại và thống nhất hai điểm kiểm. Ngày 5: kiềm chế không hỏi thăm; thay vào đó viết ra ba lo lắng của bạn để đối chiếu sau. Ngày 6: dự điểm kiểm đầu tiên và chỉ nhận xét theo đúng ba tiêu chí. Ngày 7: viết lại bản giao việc mẫu để dùng cho lần sau.',
+    evidence:
+      'Hiện vật là bản giao việc một trang có thật (kết quả mong muốn, tiêu chí nghiệm thu, mức thẩm quyền, điểm kiểm) kèm ghi chú rút kinh nghiệm sau khi hoàn thành. Bên cạnh đó, giữ một danh sách "việc đã chuyển giao trong 12 tháng" với tên người nhận và trạng thái hiện tại — đây là bằng chứng thuyết phục nhất rằng bạn không phải là nút thắt. Trong phỏng vấn, câu chuyện đắt giá là lần bạn giao một việc rồi nó hỏng, bạn đứng ra nhận trước cấp trên, giữ nguyên việc cho người đó và họ làm được ở lần sau. Trong CV nên ghi hệ quả đo được: "Chuyển giao 4 quy trình tài chính định kỳ cho hai nhân viên kèm tiêu chí nghiệm thu bằng văn bản, giảm khoảng 40 giờ/tháng công việc tồn đọng ở cấp trưởng phòng".',
+    references: [
+      { label: 'Harvard Business Review — chủ đề Delegating', url: 'https://hbr.org/topic/subject/delegating', type: 'article', needsReview: true },
+    ],
+  }),
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Chương 7 — Trao quyền — Empowerment
+  // ─────────────────────────────────────────────────────────────────────────
+  guide({
+    thesis:
+      'Trao quyền là thiết kế điều kiện để người khác ra quyết định tốt mà không cần hỏi bạn — gồm bốn thứ phải có đủ: thông tin, ranh giới, năng lực và sự an toàn khi quyết định hoá ra sai. Thiếu bất kỳ thứ nào thì "trao quyền" chỉ là lời nói: thiếu thông tin thì họ quyết mù, thiếu ranh giới thì họ quyết rồi bị mắng, thiếu năng lực thì hỏng thật, thiếu an toàn thì họ vẫn sẽ hỏi bạn cho chắc dù bạn đã bảo cứ tự quyết.',
+    why: {
+      work: 'Tốc độ của một tổ chức bằng tốc độ ra quyết định ở nơi gần vấn đề nhất. Khi mọi thứ phải leo lên cấp trên rồi quay xuống, khách hàng chịu độ trễ và nhân viên học cách ngừng suy nghĩ. Trao quyền đúng cách là cách duy nhất để tổ chức lớn lên mà không tăng số tầng phê duyệt.',
+      interview:
+        'Ứng viên quản lý hay nói "tôi trao quyền cho nhân viên". Người phỏng vấn có kinh nghiệm sẽ hỏi tiếp: ranh giới bằng con số cụ thể là gì, nhân viên được xem những thông tin nào mà trước đây chỉ quản lý xem, và lần gần nhất một quyết định của họ sai thì chuyện gì đã xảy ra với người đó. Ba câu này lộ ngay ai đang nói thật.',
+      study:
+        'Trong một nhóm học, người điều phối trao quyền là người nói rõ phạm vi tự quyết của từng thành viên và chia sẻ toàn bộ tài liệu chung, thay vì giữ thông tin để duy trì vai trò trung tâm. Nhóm được trao quyền học nhanh hơn vì mỗi người phải tự đối diện với quyết định.',
+      life: 'Giao cho con lớn tự quản một khoản chi tiêu nhỏ, để người nhà tự quyết việc trong phạm vi họ phụ trách — nguyên tắc y hệt: phải có ngân sách rõ, thông tin đủ, và người lớn không được lật lại quyết định chỉ vì thấy chưa ưng ý.',
+    },
+    framework: [
+      { name: 'Mở thông tin trước khi mở quyền', detail: 'Liệt kê những dữ liệu người thực hiện cần để quyết đúng — giá vốn, tồn kho, chi phí đổi trả, mức hài lòng khách — và mở quyền xem cho họ. Trao quyền quyết định trên nền thông tin thiếu chỉ tạo ra quyết định tệ rồi dẫn tới việc thu hồi quyền, làm mọi thứ tệ hơn ban đầu.' },
+      { name: 'Vẽ ranh giới bằng con số và ví dụ', detail: 'Ranh giới phải cụ thể tới mức người ta tự phân loại được: "tự quyết đổi trả dưới 2 triệu và trong 30 ngày; từ 2 đến 10 triệu thì quyết rồi báo trong ngày; trên 10 triệu hoặc có khiếu nại công khai thì hỏi trước". Kèm ba ví dụ thật đã xảy ra để minh hoạ ranh giới, vì con số trần trụi luôn có vùng xám.' },
+      { name: 'Bơm năng lực cho đúng loại quyết định', detail: 'Trước khi mở quyền, huấn luyện đúng thứ họ sẽ phải cân nhắc: cách tính thiệt hại, cách nói với khách hàng đang giận, cách ghi lại lý do quyết định. Một buổi tập tình huống ngắn có giá trị hơn một văn bản chính sách dài.' },
+      { name: 'Bảo đảm an toàn khi quyết sai trong ranh giới', detail: 'Tuyên bố và thực hiện: quyết định nằm trong ranh giới, có ghi lý do, mà hoá ra sai thì không ai bị phạt; chỉ có việc rút kinh nghiệm chung. Cái bị xử lý là giấu quyết định hoặc quyết ngoài ranh giới mà không báo. Quy tắc này chỉ có tác dụng sau lần đầu tiên nó được áp dụng công khai.' },
+      { name: 'Rà ranh giới định kỳ và nới dần', detail: 'Mỗi quý, xem lại các quyết định đã xảy ra: bao nhiêu phần trăm nằm sát trần, bao nhiêu bị đẩy lên vì vượt ranh giới. Nếu gần như không có quyết định nào chạm trần, ranh giới đang quá rộng để có ý nghĩa; nếu quá nhiều việc bị đẩy lên, ranh giới đang quá hẹp và bạn vẫn là nút thắt.' },
+    ],
+    scenario:
+      'Một chuỗi năm cửa hàng đồ gia dụng có quy định mọi trường hợp đổi trả đều phải gọi cho quản lý vùng. Trung bình mỗi ngày có 8-12 cuộc gọi, khách phải chờ 10-20 phút, và nhân viên bán hàng nói với khách bằng giọng của người không có quyền gì. Quản lý vùng rà 300 trường hợp gần nhất và thấy 84% có giá trị dưới 2 triệu đồng và anh duyệt gần như tất cả. Anh làm bốn việc: mở quyền xem giá vốn và tỷ lệ đổi trả theo mã hàng cho trưởng ca; viết ranh giới ba mức kèm sáu ví dụ có thật; tổ chức hai buổi tập tình huống 90 phút cho trưởng ca các cửa hàng; và tuyên bố rõ rằng quyết định trong ranh giới có ghi lý do thì không bị quy trách nhiệm. Tháng đầu có một trường hợp trưởng ca đổi cho khách một sản phẩm đã dùng 40 ngày, tức là ngoài chính sách; anh giữ đúng cam kết, không phạt, và đưa ca đó ra làm ví dụ để thêm một dòng vào ranh giới. Sau ba tháng, số cuộc gọi hỏi ý giảm còn 1-2 mỗi ngày, thời gian xử lý đổi trả trung bình giảm rõ rệt, và không có tháng nào chi phí đổi trả vượt mức trước đó.',
+    comparison: [
+      { weak: 'Tuyên bố "các bạn cứ tự quyết đi" trong một cuộc họp mà không đưa ra con số hay ví dụ nào.', mature: 'Đưa ranh giới viết thành văn bản có ngưỡng tiền, ngưỡng thời gian và danh sách trường hợp phải hỏi, kèm ví dụ thật hai bên đã gặp.' },
+      { weak: 'Lật ngược một quyết định của nhân viên trước mặt khách hàng để giữ lòng khách.', mature: 'Ủng hộ quyết định tại chỗ nếu nó nằm trong ranh giới, xử lý phần chưa ổn sau lưng khách, và nếu buộc phải đổi thì tự đứng ra giải thích với khách chứ không để nhân viên mất uy tín.' },
+      { weak: 'Giữ báo cáo chi phí và số liệu khách hàng ở cấp quản lý vì sợ lộ hoặc sợ nhân viên hiểu sai.', mature: 'Mở đúng những chỉ số cần cho quyết định họ được giao, kèm 20 phút giải thích cách đọc, và chấp nhận rằng vài câu hỏi ngây thơ ban đầu là chi phí rẻ so với việc quyết định mù.' },
+    ],
+    mistakes: [
+      'Trao quyền nhưng giữ nguyên hệ thống thưởng phạt cũ: người quyết đúng không được ghi nhận còn người quyết sai bị nhắc trong họp, nên sau vài tuần mọi người tự nguyện quay lại xin ý kiến cho an toàn.',
+      'Mở quyền cho toàn bộ mọi loại quyết định cùng lúc thay vì theo nhóm việc, khiến nhân viên không biết bắt đầu từ đâu và một sự cố nhỏ đủ để cả chương trình bị thu hồi.',
+      'Nhầm trao quyền với bỏ mặc: không mở thông tin, không huấn luyện, không rà lại, rồi kết luận "nhân viên chưa đủ trình để trao quyền" trong khi chưa từng cung cấp điều kiện để họ đủ.',
+    ],
+    worksheet: [
+      'Liệt kê năm loại quyết định nhân viên phải hỏi bạn nhiều nhất trong tháng qua, kèm số lần ước tính.',
+      'Với loại đứng đầu, bạn đã đồng ý với đề xuất của họ bao nhiêu phần trăm số lần? Nếu trên 80%, vì sao khâu hỏi vẫn tồn tại?',
+      'Thông tin nào họ đang không được xem nhưng cần để quyết đúng loại việc đó? Ghi cụ thể tên báo cáo hoặc chỉ số.',
+      'Viết ranh giới ba mức cho loại quyết định đó bằng con số, kèm hai ví dụ thật đã từng xảy ra.',
+      'Nếu tuần sau có người quyết trong ranh giới mà kết quả xấu, bạn sẽ nói gì trong cuộc họp tiếp theo? Viết trước câu đó.',
+    ],
+    exercises: [
+      { label: 'Đếm tỷ lệ duyệt', text: 'Rà 30 lần gần nhất nhân viên xin ý kiến bạn. Đếm bao nhiêu lần bạn trả lời đúng như họ đề xuất. Con số đó là ước lượng phần quyền bạn đang giữ mà không tạo giá trị nào.', level: 'e' },
+      { label: 'Danh sách thông tin bị khoá', text: 'Viết ra ba báo cáo hoặc số liệu chỉ cấp quản lý được xem. Với mỗi cái, trả lời "nếu mở cho nhân viên, quyết định nào của họ sẽ tốt hơn?" và "rủi ro thật nếu mở là gì?".', level: 'e' },
+      { label: 'Ranh giới bằng ví dụ', text: 'Viết ranh giới ba mức cho một loại quyết định, rồi lấy sáu tình huống có thật trong quá khứ và xếp chúng vào ba mức đó. Ví dụ nào khó xếp là chỗ ranh giới còn mơ hồ.', level: 'e' },
+      { label: 'Buổi tập tình huống', text: 'Tổ chức 90 phút với nhóm: đưa năm tình huống thật, mỗi người tự quyết trong 5 phút, rồi so đáp án và tranh luận. Ghi lại chỗ cả nhóm quyết khác bạn — có thể họ đúng.', level: 'm' },
+      { label: 'Tuyên bố an toàn và giữ đúng', text: 'Công bố nguyên tắc "quyết trong ranh giới có ghi lý do thì không bị quy trách nhiệm". Chờ tới trường hợp đầu tiên áp dụng và xử lý đúng cam kết trước cả nhóm. Ghi lại phản ứng của mọi người.', level: 'm' },
+      { label: 'Sổ quyết định', text: 'Yêu cầu ghi mỗi quyết định trong ranh giới thành ba dòng: tình huống, lựa chọn, lý do. Sau một tháng, đọc toàn bộ sổ và tìm loại tình huống lặp lại để bổ sung vào hướng dẫn.', level: 'm' },
+      { label: 'Nới ranh giới có kiểm chứng', text: 'Sau một quý, phân tích phân bố các quyết định theo ngưỡng. Nới trần lên cho nhóm đã chứng minh, giữ nguyên cho nhóm chưa đủ, và giải thích công khai căn cứ để không ai thấy tuỳ tiện.', level: 'h' },
+      { label: 'Thử thách 7 ngày: không trả lời thay', text: 'Bảy ngày, mỗi khi bị hỏi một quyết định nằm trong phạm vi người khác, không đưa đáp án mà hỏi lại "bạn định làm gì và dựa vào thông tin nào". Ghi lại số lần và ba trường hợp bạn buộc phải can thiệp thật cùng lý do.', level: 'h' },
+    ],
+    checkpoints: [
+      {
+        q: 'Bạn đã tuyên bố trao quyền nhưng nhân viên vẫn hỏi ý kiến trước mọi việc. Ba nguyên nhân có thể là gì?',
+        a: 'Một, họ không có thông tin để tự tin quyết — hỏi là cách bù đắp. Hai, ranh giới chưa rõ nên hỏi là cách tránh rủi ro bị trách. Ba, đã từng có người quyết rồi bị phê bình công khai, nên cả nhóm học được rằng lời tuyên bố không đáng tin bằng thứ đã thấy. Kiểm bằng cách hỏi thẳng một người bạn tin: "nếu tự quyết việc này, điều tệ nhất bạn nghĩ sẽ xảy ra với mình là gì?" — câu trả lời thường chỉ đúng nguyên nhân.',
+      },
+      {
+        q: 'Vì sao mở thông tin phải đi trước mở quyền, chứ không đồng thời?',
+        a: 'Vì quyết định là hàm của thông tin. Trao quyền cho người không thấy giá vốn, tồn kho hay lịch sử khách hàng thì họ sẽ quyết theo cảm tính hoặc theo mong muốn của người đứng trước mặt, rồi kết quả xấu sẽ được diễn giải thành "họ chưa đủ khả năng". Mở thông tin trước còn có tác dụng khác: nó cho bạn thời gian quan sát cách họ đọc số và tự nhận ra họ cần huấn luyện chỗ nào trước khi rủi ro thật xuất hiện.',
+      },
+      {
+        q: 'Ranh giới quá rộng và ranh giới quá hẹp gây hại khác nhau ra sao?',
+        a: 'Quá hẹp thì mọi việc vẫn bị đẩy lên, tổ chức chậm, nhân viên mất dần khả năng phán đoán vì không được luyện, và bạn tiếp tục là nút thắt. Quá rộng thì rủi ro tích tụ ở nơi chưa có năng lực, và một sự cố lớn thường dẫn tới phản ứng thu hồi toàn bộ quyền — tổn hại hơn cả việc chưa từng trao. Dấu hiệu để chỉnh: nếu trong một quý gần như không có quyết định nào chạm ngưỡng trên thì ranh giới rộng vô nghĩa; nếu hơn một phần ba số việc bị đẩy lên thì đang quá hẹp.',
+      },
+    ],
+    plan7:
+      'Ngày 1: đếm 30 lần xin ý kiến gần nhất và tính tỷ lệ bạn duyệt y nguyên. Ngày 2: liệt kê thông tin đang bị khoá và chọn một thứ để mở. Ngày 3: mở quyền xem và dành 20 phút giải thích cách đọc số đó. Ngày 4: viết ranh giới ba mức cho một loại quyết định kèm ví dụ thật. Ngày 5: chạy buổi tập tình huống ngắn với nhóm. Ngày 6: công bố nguyên tắc an toàn khi quyết sai trong ranh giới. Ngày 7: lập sổ quyết định và hướng dẫn cách ghi ba dòng.',
+    evidence:
+      'Hiện vật tốt nhất là văn bản ranh giới quyết định của nhóm bạn (ba mức, có ngưỡng số và ví dụ) cùng sổ quyết định thật trong ba tháng, kèm biểu đồ số lần leo cấp trước và sau. Thêm một dòng khó bịa: một trường hợp cụ thể nhân viên quyết sai trong ranh giới và cách bạn xử lý — đây là chi tiết mà người phỏng vấn dùng để phân biệt trao quyền thật với khẩu hiệu. Trong CV: "Ban hành khung ranh giới quyết định ba mức cho 5 cửa hàng, giảm số ca phải xin ý kiến quản lý vùng từ khoảng 10 xuống 1-2 mỗi ngày mà không làm tăng chi phí đổi trả".',
+    references: [
+      { label: 'Gallup Workplace — nghiên cứu về quyền tự chủ và gắn kết của nhân viên', url: 'https://www.gallup.com/workplace/', type: 'article' },
+      { label: 'Harvard Business Review — chủ đề Leading Teams', url: 'https://hbr.org/topic/subject/leading-teams', type: 'article' },
+    ],
+  }),
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Chương 8 — Coaching và Mentoring
+  // ─────────────────────────────────────────────────────────────────────────
+  guide({
+    thesis:
+      'Coaching và mentoring là hai việc khác nhau thường bị gộp làm một. Coaching là dùng câu hỏi để giúp người kia tự tìm ra hướng đi trong vấn đề CỦA HỌ — người coach không cần giỏi hơn về chuyên môn đó. Mentoring là chia sẻ kinh nghiệm và đường đi của chính mình — người mentor bắt buộc phải đã đi qua con đường đó. Chọn nhầm chế độ là nguyên nhân phổ biến khiến các buổi kèm cặp trở nên vô ích: người cần lời khuyên cụ thể thì bị hỏi vòng vo, còn người cần tự nghĩ thì bị nhồi kinh nghiệm không hợp bối cảnh.',
+    why: {
+      work: 'Một quản lý chỉ biết đưa đáp án sẽ tạo ra một đội chỉ biết chờ đáp án, và khối lượng câu hỏi đổ về bạn tăng theo quy mô đội. Coaching là cách duy nhất mở rộng năng lực suy nghĩ của nhóm mà không mở rộng số giờ của bạn.',
+      interview:
+        'Ứng viên quản lý thường được hỏi "bạn phát triển người khác bằng cách nào". Câu trả lời nhạt là "tôi luôn sẵn sàng hướng dẫn". Câu trả lời có sức nặng nêu được một khung buổi trò chuyện cụ thể, một trường hợp người đó tiến bộ ra sao trong sáu tháng, và một trường hợp bạn thất bại cùng lý do bạn rút ra.',
+      study:
+        'Khi học một kỹ năng khó, một người mentor đã đi trước giúp bạn tránh những ngõ cụt tốn tháng trời, còn một người coach giúp bạn nhìn ra thói quen học sai của chính mình. Biết mình đang cần loại nào ở giai đoạn nào tiết kiệm rất nhiều thời gian.',
+      life: 'Khi người thân kể một khó khăn, phản xạ thường là đưa giải pháp ngay. Nhiều tình huống trong đời sống cần chế độ coaching hơn: hỏi để họ tự nói ra điều họ đã biết nhưng chưa dám kết luận, thay vì nhận thêm một lời khuyên nữa từ người không sống trong hoàn cảnh của họ.',
+    },
+    framework: [
+      { name: 'Chọn chế độ trước khi mở miệng', detail: 'Hỏi thẳng ở đầu buổi: "bạn muốn mình cùng nghĩ với bạn, hay bạn muốn nghe mình đã làm gì trong tình huống tương tự?". Câu hỏi 10 giây này quyết định toàn bộ chất lượng 45 phút còn lại và tránh việc bạn áp kinh nghiệm lên vấn đề khác bối cảnh.' },
+      { name: 'Chạy khung GROW cho phần coaching', detail: 'Khung GROW (Goal — Reality — Options — Way forward), được phổ biến rộng trong giới coaching doanh nghiệp qua công trình của John Whitmore và cộng sự, đi theo bốn nhịp: người kia muốn đạt gì ở buổi này; thực tế hiện nay ra sao bằng dữ kiện; có những lựa chọn nào, ép ra ít nhất bốn; và họ sẽ làm gì, khi nào, cần gì. Sức mạnh của khung nằm ở nhịp thứ ba: hầu hết người ta dừng ở hai lựa chọn đầu.' },
+      { name: 'Giữ tỷ lệ nói dưới 30%', detail: 'Đo bằng cảm nhận sau mỗi buổi hoặc ghi âm một buổi để đếm thật. Người coach nói nhiều là dấu hiệu đã trượt sang chế độ khuyên. Công cụ thay thế lời khuyên: im lặng đếm đến năm sau khi hỏi, và câu "còn gì nữa không?" lặp lại hai lần.' },
+      { name: 'Chốt hành động do họ tự phát biểu', detail: 'Kết thúc buổi bằng việc người kia nói ra việc họ sẽ làm, ngày cụ thể, và trở ngại lớn nhất họ dự đoán. Bạn ghi lại nguyên văn. Nếu bạn là người phát biểu hành động đó thay họ, khả năng nó được thực hiện giảm mạnh vì nó không còn là quyết định của họ.' },
+      { name: 'Theo dõi qua chu kỳ, không theo buổi lẻ', detail: 'Mở buổi tiếp theo bằng đúng cam kết lần trước: đã làm được gì, gặp gì. Không phán xét khi chưa làm — hỏi cái gì đã cản. Chính chuỗi liên tục này tạo ra thay đổi; các buổi rời rạc cách nhau ba tháng gần như không để lại gì.' },
+    ],
+    scenario:
+      'Trưởng nhóm thiết kế ở một agency 25 người có một designer ba năm kinh nghiệm liên tục bị khách sửa nhiều vòng. Phản xạ đầu tiên của anh là ngồi sửa cùng và chỉ ra chỗ nên đổi — làm suốt hai tháng, số vòng sửa vẫn không giảm. Anh đổi cách: hỏi bạn kia muốn cùng nghĩ hay muốn nghe kinh nghiệm; bạn chọn cùng nghĩ. Qua bốn buổi 40 phút theo GROW, bạn tự nói ra thực tế mà anh chưa từng biết: bạn không tham dự buổi họp brief với khách, chỉ nhận lại tóm tắt qua tin nhắn của account. Ở nhịp lựa chọn, bạn liệt kê được năm cách, chọn hai: xin dự brief và gửi một bản moodboard xác nhận hướng trước khi làm chi tiết. Sau sáu tuần, số vòng sửa trung bình của bạn giảm từ khoảng bốn xuống hai, và điều quan trọng hơn với người trưởng nhóm là bạn tự đề xuất áp dụng cách đó cho cả nhóm — điều không xảy ra trong hai tháng anh ngồi sửa hộ.',
+    comparison: [
+      { weak: 'Bắt đầu buổi kèm bằng "theo anh thì em nên..." trong ba phút đầu.', mature: 'Bắt đầu bằng câu hỏi về điều người kia muốn đạt được sau 40 phút này, và không đưa ý kiến trước khi nghe đủ thực tế.' },
+      { weak: 'Hỏi những câu có đáp án cài sẵn ("em không nghĩ nên làm theo cách kia à?").', mature: 'Hỏi câu mở thật sự mà bạn chưa biết trước câu trả lời ("cái gì khiến cách kia khó thực hiện trong tình huống của em?").' },
+      { weak: 'Coi mentoring là kể lại thành công của mình theo trình tự thời gian.', mature: 'Kể kinh nghiệm ở dạng có thể dùng lại: bối cảnh lúc đó khác gì bối cảnh của họ, mình đã cân nhắc gì, và nếu làm lại thì đổi chỗ nào.' },
+    ],
+    mistakes: [
+      'Dùng câu hỏi coaching như một cách nói khéo để dẫn người ta tới đáp án bạn đã chọn sẵn — người nghe nhận ra ngay và buổi trò chuyện biến thành trò đoán ý sếp.',
+      'Coaching cho vấn đề thực chất là thiếu kiến thức nền: hỏi một người chưa biết gì về hợp đồng rằng "em nghĩ nên xử lý điều khoản này thế nào" chỉ tạo ra lo lắng; trường hợp này cần dạy trước, coach sau.',
+      'Không có nhịp lặp: coach một buổi rất hay rồi ba tháng sau mới gặp lại, khiến toàn bộ cam kết trôi đi và cả hai bên kết luận rằng coaching không hiệu quả.',
+    ],
+    worksheet: [
+      'Trong buổi kèm gần nhất, ước tính bạn nói bao nhiêu phần trăm thời lượng. Nếu trên 50%, ghi lại ba câu bạn đã nói mà lẽ ra nên là câu hỏi.',
+      'Người bạn đang kèm cần chế độ nào cho vấn đề hiện tại: cùng nghĩ hay nghe kinh nghiệm? Vì sao bạn kết luận vậy?',
+      'Viết bốn câu hỏi mở cho nhịp "thực tế" mà bạn thật sự chưa biết câu trả lời.',
+      'Buổi gần nhất kết thúc bằng cam kết gì, do ai phát biểu, và có ngày cụ thể không?',
+      'Nếu người kia không làm được điều đã cam kết, câu đầu tiên bạn sẽ hỏi ở buổi sau là gì? Viết trước để tránh phản xạ trách móc.',
+    ],
+    exercises: [
+      { label: 'Câu hỏi chọn chế độ', text: 'Trong ba cuộc trò chuyện tới, mở đầu bằng câu hỏi người kia muốn cùng nghĩ hay muốn nghe kinh nghiệm. Ghi lại họ chọn gì và điều đó có khác dự đoán của bạn không.', level: 'e' },
+      { label: 'Ngân hàng câu hỏi', text: 'Viết 12 câu hỏi mở dùng được cho bốn nhịp của GROW, ba câu mỗi nhịp. Loại bỏ mọi câu bắt đầu bằng "em có nghĩ là nên...".', level: 'e' },
+      { label: 'Đếm tỷ lệ nói', text: 'Xin phép ghi âm một buổi kèm và nghe lại, đếm thời lượng mỗi bên. So với ước tính của bạn trước khi nghe.', level: 'e' },
+      { label: 'Ép ra bốn lựa chọn', text: 'Trong một buổi, không cho phép dừng ở hai phương án: hỏi "còn cách nào nữa" tối thiểu ba lần, kể cả khi im lặng kéo dài. Ghi lại phương án thứ tư và thứ năm có gì đáng chú ý.', level: 'm' },
+      { label: 'Chuỗi bốn buổi', text: 'Chạy bốn buổi 40 phút cách nhau hai tuần với cùng một người và cùng một chủ đề. Mở mỗi buổi bằng cam kết lần trước. Cuối chuỗi, hỏi họ điều gì thay đổi được và điều gì không.', level: 'm' },
+      { label: 'Mentoring có cấu trúc', text: 'Chọn một kinh nghiệm của bạn và viết lại theo ba phần: bối cảnh lúc đó, các phương án bạn đã cân nhắc, và điều bạn sẽ làm khác nếu quay lại. Chia sẻ bản viết này thay vì kể ngẫu hứng.', level: 'm' },
+      { label: 'Coach một người ngoài chuyên môn', text: 'Nhận coach cho một người làm việc bạn không rành. Điều này ép bạn chỉ dùng câu hỏi vì không có kinh nghiệm để áp đặt. Ghi lại điều bạn học được về chính cách bạn hay dẫn dắt.', level: 'h' },
+      { label: 'Thử thách 7 ngày: hỏi trước khi khuyên', text: 'Bảy ngày, mỗi khi có người mang vấn đề tới, đặt tối thiểu ba câu hỏi trước khi đưa bất kỳ gợi ý nào. Ghi lại trường hợp nào người kia tự tìm ra hướng trước khi bạn kịp khuyên — và tần suất của việc đó qua từng ngày.', level: 'h' },
+    ],
+    checkpoints: [
+      {
+        q: 'Khi nào coaching là lựa chọn sai và bạn nên chuyển sang dạy hoặc chỉ dẫn?',
+        a: 'Khi vấn đề nằm ở kiến thức nền hoặc kỹ năng chưa có, không ở phán đoán. Hỏi một người chưa biết cách đọc báo cáo tài chính rằng họ nghĩ nên cắt khoản nào chỉ tạo áp lực và câu trả lời ngẫu nhiên. Cũng nên chuyển chế độ khi có ràng buộc an toàn, pháp lý hoặc thời hạn gấp — lúc đó cần một chỉ dẫn rõ ràng, và có thể quay lại coaching sau khi tình huống đã ổn để rút kinh nghiệm.',
+      },
+      {
+        q: 'Nhịp "Options" trong GROW hay bị làm hỏng thế nào?',
+        a: 'Hỏng khi dừng ở hai phương án đầu tiên, vốn thường là hai phương án hiển nhiên mà người kia đã nghĩ tới trước khi vào buổi — nên buổi trò chuyện không thêm giá trị gì. Hỏng lần thứ hai khi người coach tự bổ sung phương án của mình rồi vô tình nhấn mạnh nó bằng giọng điệu, khiến các phương án khác chết yểu. Cách làm đúng: yêu cầu tối thiểu bốn phương án, kể cả phương án rõ ràng tệ, và chỉ đánh giá sau khi đã liệt kê xong.',
+      },
+      {
+        q: 'Vì sao cam kết cuối buổi phải do người được coach tự phát biểu?',
+        a: 'Vì mức độ thực hiện phụ thuộc vào việc người đó có coi hành động là lựa chọn của mình hay không. Khi người quản lý phát biểu hộ, hành động trở thành một chỉ đạo, và nó cạnh tranh với mọi chỉ đạo khác trong tuần theo thứ tự áp lực. Khi chính họ nói ra kèm ngày và trở ngại dự đoán, họ đã tự chạy trước tình huống trong đầu một lần — điều này còn giúp bạn phát hiện ngay cam kết nào là nói cho xong.',
+      },
+    ],
+    plan7:
+      'Ngày 1: viết ngân hàng 12 câu hỏi mở theo bốn nhịp GROW. Ngày 2: chọn một người và một chủ đề, đặt lịch chuỗi bốn buổi. Ngày 3: chạy buổi đầu, mở bằng câu hỏi chọn chế độ. Ngày 4: nghe lại ghi âm hoặc viết lại buổi đó, đếm tỷ lệ bạn nói. Ngày 5: viết một kinh nghiệm của bạn theo cấu trúc ba phần để dùng cho chế độ mentoring. Ngày 6: hỏi người được kèm phản hồi về buổi đầu, cụ thể là câu hỏi nào khiến họ phải dừng lại suy nghĩ. Ngày 7: điều chỉnh ngân hàng câu hỏi và đặt lịch buổi hai.',
+    evidence:
+      'Bằng chứng là một chuỗi coaching có ghi chép: chủ đề, ngày các buổi, cam kết mỗi buổi và trạng thái thực hiện, cộng với một dòng kết quả đo được của người được kèm (số vòng sửa, thời gian xử lý, chỉ tiêu đạt được). Nếu có thể, xin một đoạn phản hồi viết của chính người đó về điều gì đã thay đổi. Trong phỏng vấn quản lý, đây là câu trả lời cho "bạn phát triển người khác thế nào": nêu khung bạn dùng, một trường hợp thành công có số, và một trường hợp không hiệu quả cùng lý do bạn nhận ra sau đó. Trong CV nên nêu vai trò và quy mô: "Thiết lập chương trình kèm cặp theo khung GROW cho 6 designer, chu kỳ hai tuần một buổi trong 6 tháng".',
+    references: [
+      { label: 'International Coaching Federation — năng lực và chuẩn mực nghề coaching', url: 'https://coachingfederation.org/', type: 'article', needsReview: true },
+      { label: 'Harvard Business Review — chủ đề Coaching', url: 'https://hbr.org/topic/subject/coaching', type: 'article', needsReview: true },
+    ],
+    diagram: 'cycle',
+  }),
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Chương 9 — Tổ chức 1-on-1
+  // ─────────────────────────────────────────────────────────────────────────
+  guide({
+    thesis:
+      'Buổi 1-on-1 là cuộc gặp định kỳ thuộc về NHÂN VIÊN, không thuộc về người quản lý — nghĩa là chương trình do họ đặt và phần lớn thời lượng dành cho thứ họ mang tới. Nó không phải buổi báo cáo tiến độ (thứ đó nên nằm ở kênh khác) và cũng không phải buổi đánh giá. Giá trị thật của nó là phát hiện sớm: một người sắp nghỉ việc, một mâu thuẫn đang lớn dần, một khó khăn chưa ai nói ra — những thứ không bao giờ xuất hiện trong họp nhóm.',
+    why: {
+      work: 'Phần lớn tin xấu trong tổ chức đi lên rất chậm hoặc không đi lên. 1-on-1 đều đặn tạo một đường ống có băng thông thấp nhưng chạy liên tục để tin xấu đến sớm, lúc còn sửa được. Không có nó, bạn thường biết tin cùng lúc với đơn xin nghỉ việc.',
+      interview:
+        'Khi ứng tuyển vị trí quản lý, mô tả được nhịp và cấu trúc 1-on-1 của bạn — tần suất, ai đặt chương trình, cách bạn ghi và theo dõi cam kết — cho thấy bạn đã vận hành một đội thật. Ngược lại, khi bạn đi phỏng vấn với tư cách ứng viên, hỏi nhà tuyển dụng về nhịp 1-on-1 của họ là một trong những câu lộ ra nhiều nhất về văn hoá quản lý nơi đó.',
+      study:
+        'Với người hướng dẫn luận văn hoặc người kèm bạn học nghề, một buổi gặp cố định 30 phút hai tuần một lần có cấu trúc rõ sẽ đưa bạn đi xa hơn nhiều so với việc nhắn tin hỏi mỗi khi bí. Cấu trúc quan trọng vì nó buộc bạn phải chuẩn bị.',
+      life: 'Nguyên tắc tương tự áp dụng cho các mối quan hệ quan trọng: một khoảng thời gian định kỳ, không có việc gấp xen vào, nơi bên kia được đặt chủ đề. Rất nhiều rạn nứt lớn hình thành từ những điều nhỏ chưa bao giờ có chỗ để nói.',
+    },
+    framework: [
+      { name: 'Cố định nhịp và bảo vệ nó', detail: 'Chọn tần suất theo thâm niên và mức thay đổi công việc: người mới hoặc đang gặp khó thì hằng tuần, người ổn định thì hai tuần một lần, 30-45 phút. Điều quan trọng hơn tần suất là không huỷ — mỗi lần bạn huỷ vì việc gấp, thông điệp nhận được là buổi này xếp cuối danh sách ưu tiên của bạn.' },
+      { name: 'Chương trình do nhân viên đặt trước', detail: 'Dùng một tài liệu chung, nhân viên ghi chủ đề trước buổi ít nhất một ngày, bạn thêm mục của mình xuống dưới. Việc này chuyển quyền sở hữu buổi gặp và đồng thời cho bạn thời gian chuẩn bị cho chủ đề khó thay vì phản ứng tại chỗ.' },
+      { name: 'Ba lớp câu hỏi theo chu kỳ', detail: 'Lớp gần: tuần này cái gì đang cản bạn. Lớp giữa: kỹ năng bạn muốn mạnh lên trong quý này và ta đang làm gì cho nó. Lớp xa: bạn muốn công việc của mình khác đi thế nào trong 12-18 tháng. Đừng hỏi cả ba mỗi tuần; xoay vòng, và bảo đảm lớp xa được chạm tới ít nhất mỗi quý một lần.' },
+      { name: 'Ghi lại cam kết hai chiều', detail: 'Cuối buổi ghi rõ việc bạn nhận và việc họ nhận, kèm hạn. Mở buổi sau bằng danh sách đó. Nếu người quản lý liên tục không làm phần của mình, buổi 1-on-1 sẽ nhanh chóng trở thành nơi nhân viên chỉ báo cáo cho xong.' },
+      { name: 'Định kỳ hỏi câu khó', detail: 'Mỗi vài tháng, dành trọn một buổi cho một trong các câu: điều gì tôi làm khiến việc của bạn khó hơn; nếu có công ty khác mời, điều gì ở đây sẽ khiến bạn cân nhắc ở lại; bạn thấy mình được đối xử công bằng trong nhóm này chứ. Chuẩn bị tinh thần nghe câu trả lời không dễ chịu và tuyệt đối không phản biện tại chỗ.' },
+    ],
+    scenario:
+      'Quản lý một kho hàng thương mại điện tử 22 nhân sự chỉ họp toàn kho mỗi sáng 10 phút và chưa từng có 1-on-1. Trong một quý, ba nhân viên đóng gói giỏi lần lượt nghỉ, và cả ba đều nói cùng một lý do trong buổi phỏng vấn thôi việc: ca đêm bị xếp thất thường và họ đã nói với tổ trưởng nhiều lần. Anh bắt đầu chạy 1-on-1 30 phút, hai tuần một lần, với 6 tổ trưởng và luân phiên mỗi tháng gặp bốn nhân viên trực tiếp. Anh dùng một tài liệu chung để họ ghi chủ đề trước. Trong sáu tuần đầu, ba vấn đề nổi lên mà anh chưa từng nghe: máy in tem ở khu B hỏng gần như mỗi ca nên mọi người tự bù bằng cách chép tay, lịch ca đêm được xếp theo thứ tự bảng chữ cái thay vì theo đăng ký, và một tổ trưởng đang giữ hết việc kiểm hàng vì không tin nhân viên mới. Anh sửa được hai việc đầu trong ba tuần. Điều đáng nói là không việc nào trong ba việc đó từng xuất hiện trong 60 buổi họp sáng trước đó.',
+    comparison: [
+      { weak: 'Biến 1-on-1 thành buổi hỏi tiến độ từng đầu việc, nhân viên đọc danh sách và bạn gật đầu.', mature: 'Đưa phần tiến độ sang một bảng theo dõi chung xem trước buổi, dành thời gian gặp cho trở ngại, quan hệ và phát triển.' },
+      { weak: 'Huỷ buổi khi bận và hẹn "tuần sau bù", lặp lại nhiều lần.', mature: 'Rút ngắn còn 15 phút thay vì huỷ; nếu buộc phải dời thì đặt lịch mới ngay trong lúc dời chứ không nói chung chung.' },
+      { weak: 'Nói hết phần lớn thời lượng vì cho rằng đây là cơ hội truyền đạt định hướng.', mature: 'Dành ít nhất hai phần ba cho chủ đề của họ; định hướng có nhiều kênh khác, còn kênh nghe thì chỉ có kênh này.' },
+    ],
+    mistakes: [
+      'Chỉ tổ chức 1-on-1 khi có vấn đề, khiến lời mời gặp riêng trở thành tín hiệu xấu và nhân viên căng thẳng ngay từ lúc nhận lịch.',
+      'Ghi chép mọi điều nhân viên nói rồi dùng lại trong đánh giá cuối năm mà không báo trước, làm hỏng vĩnh viễn sự cởi mở của kênh này.',
+      'Hỏi những câu lớn kiểu "em có hài lòng không" nhưng chưa bao giờ giải quyết một việc nhỏ nào họ đã nêu, khiến người ta kết luận rằng nói ra không dẫn tới gì.',
+    ],
+    worksheet: [
+      'Liệt kê những người báo cáo trực tiếp cho bạn và tần suất 1-on-1 hiện tại với từng người. Ai đang không có buổi nào?',
+      'Trong ba tháng qua, bạn đã huỷ bao nhiêu buổi và vì lý do gì? Có ai bị huỷ nhiều hơn hẳn người khác không?',
+      'Viết ba chủ đề bạn nghĩ nhân viên đang muốn nói nhưng chưa nói. Sau buổi tới, đối chiếu với thực tế.',
+      'Cam kết gần nhất bạn nhận trong một buổi 1-on-1 là gì và bạn đã hoàn thành chưa?',
+      'Câu hỏi khó nào bạn sẽ đặt trong buổi tới, và bạn sợ nghe câu trả lời nào nhất?',
+    ],
+    exercises: [
+      { label: 'Lập lịch nền', text: 'Đặt lịch định kỳ cho tất cả người báo cáo trực tiếp trong ba tháng tới, đánh dấu là không được huỷ. Gửi kèm một đoạn giải thích mục đích buổi gặp và nói rõ đây không phải buổi báo cáo tiến độ.', level: 'e' },
+      { label: 'Tài liệu chung', text: 'Tạo một tài liệu dùng chung cho mỗi người, chia hai phần: chủ đề của bạn ấy và chủ đề của bạn. Yêu cầu ghi trước buổi một ngày và tự bạn cũng ghi phần mình.', level: 'e' },
+      { label: 'Ba lớp câu hỏi', text: 'Viết sẵn 9 câu hỏi chia ba lớp gần - giữa - xa. Trong bốn buổi tới, mỗi buổi dùng một câu lớp giữa hoặc lớp xa. Ghi lại câu nào tạo ra cuộc trò chuyện dài nhất.', level: 'e' },
+      { label: 'Đo tỷ lệ chủ đề', text: 'Trong sáu buổi liên tiếp, ghi lại phần trăm thời lượng dành cho chủ đề do nhân viên đưa ra. Nếu dưới 60%, tìm nguyên nhân và điều chỉnh.', level: 'm' },
+      { label: 'Đóng vòng cam kết', text: 'Lập một bảng theo dõi mọi việc bạn nhận trong các buổi 1-on-1 quý này. Cuối quý, tính tỷ lệ bạn hoàn thành và chia sẻ con số đó với nhóm.', level: 'm' },
+      { label: 'Buổi câu hỏi khó', text: 'Dành trọn một buổi cho câu "điều gì tôi làm khiến việc của bạn khó hơn". Chỉ nghe và ghi, không giải thích. Ba ngày sau quay lại nói bạn sẽ đổi gì.', level: 'm' },
+      { label: 'Rà lại sau người nghỉ việc', text: 'Với người gần nhất rời nhóm bạn, đọc lại ghi chép các buổi 1-on-1 trong sáu tháng cuối. Tìm dấu hiệu sớm bạn đã bỏ qua và viết ra câu hỏi lẽ ra nên đặt.', level: 'h' },
+      { label: 'Thử thách 7 ngày: nghe mà không sửa', text: 'Bảy ngày, trong mọi cuộc trò chuyện riêng, khi nghe một lời phàn nàn hoặc khó khăn, không đưa giải pháp trong ba phút đầu — chỉ hỏi thêm và tóm lại điều bạn nghe được. Ghi lại thông tin mới bạn thu được nhờ khoảng lặng đó.', level: 'h' },
+    ],
+    checkpoints: [
+      {
+        q: 'Vì sao 1-on-1 không nên là buổi báo cáo tiến độ?',
+        a: 'Vì tiến độ là thông tin có cấu trúc, ai cũng đọc được từ bảng theo dõi hoặc công cụ quản lý việc, nên dùng thời gian gặp mặt cho nó là lãng phí kênh đắt nhất bạn có. Kênh gặp riêng là kênh duy nhất chuyển được thứ không viết ra bảng: sự khó chịu đang tích tụ, mâu thuẫn với đồng nghiệp, mong muốn nghề nghiệp, cảm giác bị đối xử không công bằng. Nếu buổi này bị lấp bởi tiến độ, những thông tin kia sẽ không có đường nào khác để lên tới bạn.',
+      },
+      {
+        q: 'Nhân viên nói "em không có gì để nói" ở mỗi buổi. Bạn nên làm gì?',
+        a: 'Trước hết đừng kết luận là họ ổn. Ba khả năng: họ chưa biết buổi này dùng để làm gì, họ chưa tin rằng nói ra sẽ dẫn tới hành động, hoặc họ chưa quen chuẩn bị. Cách xử lý: gửi trước ba câu hỏi cụ thể thay vì để trống chương trình, tự bạn mang một chủ đề thật và có ích cho họ trong vài buổi đầu để chứng minh giá trị, và quan trọng nhất là giải quyết trọn vẹn một việc nhỏ họ nêu ra rồi báo lại kết quả — bằng chứng đó hiệu quả hơn mọi lời mời gọi cởi mở.',
+      },
+      {
+        q: 'Bạn quản lý 15 người trực tiếp và không đủ thời gian gặp riêng tất cả hằng tuần. Xử lý thế nào mà không bỏ ai?',
+        a: 'Trước hết, 15 người báo cáo trực tiếp thường là dấu hiệu cấu trúc cần xem lại. Trong lúc chưa đổi được, phân tầng theo nhu cầu: người mới, người đang gặp khó và người đang chuyển vai trò gặp hằng tuần; người ổn định gặp hai đến ba tuần một lần với thời lượng ngắn hơn; và công khai cách phân tầng này để không ai hiểu là bị bỏ rơi. Quan trọng là giữ đúng nhịp đã hứa cho từng nhóm, vì thất hứa về nhịp gây tổn hại hơn là nhịp thưa nhưng đều.',
+      },
+    ],
+    plan7:
+      'Ngày 1: liệt kê người báo cáo trực tiếp và tần suất gặp riêng hiện tại. Ngày 2: đặt lịch định kỳ ba tháng và gửi kèm giải thích mục đích. Ngày 3: tạo tài liệu chung cho từng người và hướng dẫn cách ghi chủ đề. Ngày 4: viết 9 câu hỏi ba lớp. Ngày 5: chạy buổi đầu tiên theo cấu trúc mới và ghi cam kết hai chiều. Ngày 6: hoàn thành ngay một việc bạn đã nhận trong buổi đó và báo lại. Ngày 7: đặt lịch buổi câu hỏi khó cho tháng tới.',
+    evidence:
+      'Bằng chứng là hệ thống, không phải trí nhớ: bộ tài liệu 1-on-1 theo từng người với lịch sử chủ đề và cam kết trong ít nhất hai quý, cộng với tỷ lệ bạn hoàn thành phần việc mình nhận. Nếu nhóm bạn có khảo sát nội bộ hoặc tỷ lệ nghỉ việc theo dõi được, hãy ghép hai con số trước và sau khi bạn thiết lập nhịp gặp riêng — cẩn thận trình bày như một quan sát chứ không phải quan hệ nhân quả đã chứng minh. Trong phỏng vấn, kể một trường hợp cụ thể bạn phát hiện vấn đề sớm nhờ kênh này và điều gì đã tránh được. Trong CV: "Thiết lập nhịp 1-on-1 hai tuần/lần cho 6 tổ trưởng và luân phiên với nhân viên trực tiếp, xử lý 3 vấn đề vận hành tồn đọng chưa từng được nêu trong họp nhóm".',
+    references: [
+      { label: 'Gallup Workplace — vai trò của quản lý trực tiếp trong gắn kết nhân viên', url: 'https://www.gallup.com/workplace/', type: 'article' },
+    ],
+    diagram: 'cycle',
+  }),
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Chương 10 — Tạo động lực
+  // ─────────────────────────────────────────────────────────────────────────
+  guide({
+    thesis:
+      'Không ai "tạo động lực" cho người khác được theo nghĩa bơm năng lượng vào họ. Việc thực tế của người quản lý là gỡ bỏ những thứ đang bào mòn động lực sẵn có và bổ sung ba điều kiện mà lý thuyết tự quyết (Self-Determination Theory, Deci và Ryan) mô tả: quyền tự chủ trong cách làm, cảm giác mình đang giỏi lên, và sự gắn kết với người khác. Bên cạnh đó, tiền lương và điều kiện làm việc thuộc nhóm yếu tố mà nếu thiếu hoặc bất công thì gây bất mãn mạnh, nhưng có đủ cũng không tự sinh ra hứng thú — một phân biệt Frederick Herzberg nêu ra từ giữa thế kỷ trước và vẫn hữu ích để tránh sai lầm phổ biến là chỉ tăng thưởng.',
+    why: {
+      work: 'Khi một nhóm mất động lực, phản ứng thường thấy là tổ chức team building hoặc thêm thưởng — cả hai đều rẻ tiền về mặt suy nghĩ và thường không chạm tới nguyên nhân. Chẩn đoán theo ba điều kiện cho bạn danh sách việc cụ thể để sửa, phần lớn không tốn tiền: bỏ một khâu duyệt vô nghĩa, cho người ta thấy kết quả công việc của họ đến tay ai, đổi cách phân việc.',
+      interview:
+        'Câu hỏi "bạn tạo động lực cho nhân viên thế nào" là bẫy dễ trả lời sáo rỗng. Câu trả lời đáng tin bắt đầu bằng chẩn đoán ("tôi hỏi từng người điều gì đang làm họ mất hứng nhất") và có ví dụ về một thứ bạn đã BỎ ĐI, không chỉ thứ bạn đã thêm vào.',
+      study:
+        'Học một mình thất bại phần lớn vì không thấy mình tiến bộ, chứ không phải vì lười. Thiết kế cách nhìn thấy tiến bộ — nhật ký, sản phẩm nhỏ hoàn chỉnh, người cùng học — là can thiệp trúng đích hơn mọi lời tự nhủ quyết tâm.',
+      life: 'Trong gia đình hoặc nhóm tình nguyện, người ta bỏ cuộc thường vì cảm thấy công sức của mình không có ai thấy hoặc không tạo khác biệt gì. Cho người ta thấy hệ quả cụ thể của việc họ làm là hành động rẻ nhất và có tác dụng lâu nhất.',
+    },
+    framework: [
+      { name: 'Chẩn đoán trước bằng câu hỏi trừ', detail: 'Hỏi từng người hai câu: phần nào của công việc khiến bạn thấy mất thời gian vô ích nhất, và tuần vừa rồi có lúc nào bạn thấy công việc đáng làm không, lúc đó bạn đang làm gì. Danh sách trừ thường cho hành động rõ hơn danh sách mong muốn.' },
+      { name: 'Dọn yếu tố gây bất mãn trước', detail: 'Lương bất công so với nội bộ, công cụ hỏng, quy trình thừa, quản lý thiên vị — những thứ này không tạo hứng thú khi được sửa, nhưng chúng chặn mọi nỗ lực khác khi còn tồn tại. Đừng nói chuyện ý nghĩa công việc với người đang phải chép tay vì máy in hỏng suốt hai tháng.' },
+      { name: 'Tăng quyền tự chủ ở cách làm', detail: 'Giữ nguyên kết quả cần đạt nhưng mở rộng quyền chọn cách, chọn thứ tự, chọn công cụ, chọn giờ nếu công việc cho phép. Đây là đòn bẩy rẻ nhất và thường bị bỏ qua vì người quản lý quen kiểm soát cả cách làm.' },
+      { name: 'Làm cho tiến bộ nhìn thấy được', detail: 'Người ta có động lực khi thấy mình giỏi lên. Thiết lập cách nhìn thấy: bảng kỹ năng cập nhật theo quý, việc khó hơn được giao theo bậc, phản hồi cụ thể về cái đã tiến bộ chứ không chỉ cái còn thiếu. Nói "em làm tốt lắm" không tạo cảm giác này; nói "ba tháng trước việc này em cần hai lần sửa, giờ không cần lần nào" thì có.' },
+      { name: 'Nối công việc với người thụ hưởng', detail: 'Cho nhân viên gặp hoặc nghe trực tiếp người dùng kết quả của họ — khách hàng, phòng ban kế tiếp, người bệnh, học viên. Một lời cảm ơn từ người thật có sức nặng khác hẳn lời khen từ cấp trên, vì nó là bằng chứng công việc có hệ quả.' },
+    ],
+    scenario:
+      'Một trung tâm tiếng Anh có nhóm 9 nhân viên tư vấn tuyển sinh, doanh số tụt hai quý liền. Giám đốc trung tâm định tăng hoa hồng thêm 2%. Trước khi làm, chị hỏi từng người hai câu chẩn đoán. Kết quả: 7/9 người nêu cùng một thứ mất thời gian vô ích — họ phải nhập lại thông tin học viên vào ba nơi khác nhau và mỗi buổi tối mất khoảng một tiếng cho việc đó; 5 người nói họ không bao giờ biết học viên mình tư vấn có học tiếp sau khoá đầu hay không. Chị làm ba việc: gộp ba biểu mẫu thành một, gửi cho nhóm bản báo cáo hằng tháng về tỷ lệ học viên do từng người tư vấn tiếp tục học khoá hai, và mời hai học viên đã học ba khoá tới chia sẻ 30 phút trong buổi họp nhóm. Hoa hồng giữ nguyên. Sau một quý, doanh số phục hồi phần lớn về mức cũ và điều bất ngờ với chị là hai người từng định nghỉ đã ở lại — cả hai đều nhắc tới bản báo cáo tỷ lệ học tiếp như lý do.',
+    comparison: [
+      { weak: 'Phản ứng với tình trạng uể oải bằng một buổi team building ở resort.', mature: 'Hỏi từng người điều gì bào mòn họ nhất rồi sửa hai thứ cụ thể trong vòng ba tuần; hoạt động gắn kết vẫn nên có nhưng không thay thế được việc sửa nguyên nhân.' },
+      { weak: 'Khen chung chung trước cả nhóm để động viên.', mature: 'Khen cụ thể một hành vi và nêu hệ quả của nó ("bản kiểm hàng em làm lại đã giúp khâu giao không bị trả về ba lần trong tuần"), vì lời khen chỉ có tác dụng khi người nghe tin rằng bạn thật sự nhìn thấy.' },
+      { weak: 'Dùng thưởng theo chỉ tiêu làm công cụ chính cho mọi loại công việc.', mature: 'Dùng thưởng cho công việc có đầu ra đơn giản đo được, và cẩn trọng với công việc cần phán đoán hoặc hợp tác, vì phần thưởng gắn với chỉ số đơn lẻ dễ đẩy người ta tối ưu chỉ số và bỏ phần không được đo.' },
+    ],
+    mistakes: [
+      'Coi mất động lực là vấn đề thái độ cá nhân, trong khi phần lớn trường hợp nó là phản ứng hợp lý với một môi trường có quá nhiều việc vô nghĩa hoặc bất công rõ ràng.',
+      'Tăng thưởng khi nguyên nhân thật là bất công nội bộ về lương: người được tăng vẫn so sánh với đồng nghiệp, nên vấn đề công bằng không được giải quyết mà chi phí thì tăng thật.',
+      'Áp một loại động lực cho tất cả — có người cần được nhìn thấy, có người cần được yên, có người cần việc khó hơn; hỏi từng người tốn 15 phút và tránh được cả năm đoán sai.',
+    ],
+    worksheet: [
+      'Hỏi ba người trong nhóm phần nào của công việc họ thấy mất thời gian vô ích nhất và chép nguyên văn ba câu trả lời.',
+      'Trong ba thứ đó, thứ nào bạn có thể xoá bỏ hoặc rút gọn trong vòng ba tuần mà không cần xin phép ai?',
+      'Với mỗi người trong nhóm, viết một câu cụ thể mô tả họ đã tiến bộ ở đâu trong sáu tháng qua. Người nào bạn không viết được câu nào?',
+      'Ai là người thụ hưởng cuối cùng của công việc nhóm bạn, và lần cuối nhóm nghe trực tiếp từ họ là khi nào?',
+      'Trong nhóm bạn, có chênh lệch nào về lương hoặc cơ hội mà bạn biết là khó giải thích công bằng không? Ghi ra, kể cả khi bạn chưa xử lý được ngay.',
+    ],
+    exercises: [
+      { label: 'Hai câu hỏi chẩn đoán', text: 'Hỏi toàn bộ nhóm hai câu chẩn đoán trong tuần này, ghi lại và đếm chủ đề lặp lại. Chọn chủ đề xuất hiện nhiều nhất làm việc cần sửa đầu tiên.', level: 'e' },
+      { label: 'Danh sách việc vô nghĩa', text: 'Lập danh sách mọi báo cáo, biểu mẫu, cuộc họp mà nhóm phải làm. Với mỗi cái hỏi "ai đọc, dùng để quyết định gì". Đánh dấu những cái không có câu trả lời.', level: 'e' },
+      { label: 'Khen cụ thể năm lần', text: 'Trong một tuần, đưa năm lời ghi nhận có cấu trúc: hành vi cụ thể + hệ quả cụ thể. Cấm dùng các từ chung chung. Ghi lại phản ứng khác nhau giữa người này với người kia.', level: 'e' },
+      { label: 'Xoá một khâu', text: 'Chọn một khâu vô nghĩa trong danh sách và bỏ hẳn trong bốn tuần thử nghiệm. Đo xem có hậu quả thật nào không và hỏi nhóm cảm nhận.', level: 'm' },
+      { label: 'Mở quyền chọn cách làm', text: 'Với một loại công việc, chỉ nêu kết quả cần đạt và để nhóm tự chọn cách trong một tháng. Ghi lại cách làm mới nào xuất hiện mà bạn không nghĩ tới.', level: 'm' },
+      { label: 'Nối với người thụ hưởng', text: 'Tổ chức một buổi 30 phút để nhóm nghe trực tiếp từ khách hàng hoặc phòng ban dùng kết quả của họ. Sau đó hỏi mỗi người một điều họ sẽ làm khác đi.', level: 'm' },
+      { label: 'Bản đồ động lực cá nhân', text: 'Với từng thành viên, viết một trang: điều gì làm họ hứng thú theo quan sát của bạn, điều gì bào mòn họ, và một thay đổi bạn sẽ thử trong quý. Kiểm chứng bản viết đó bằng cách hỏi thẳng họ và sửa lại.', level: 'h' },
+      { label: 'Thử thách 7 ngày: mỗi ngày gỡ một thứ', text: 'Bảy ngày, mỗi ngày gỡ bỏ đúng một trở ngại nhỏ cho người khác — một quyền truy cập bị thiếu, một khâu duyệt thừa, một cuộc họp không cần thiết, một câu trả lời họ đang chờ. Ngày thứ bảy hỏi nhóm họ có thấy khác không, và đối chiếu với danh sách bảy việc bạn đã làm.', level: 'h' },
+    ],
+    checkpoints: [
+      {
+        q: 'Vì sao tăng lương thường không giải quyết được vấn đề động lực, dù nhân viên nói lý do là lương?',
+        a: 'Vì lương thuộc nhóm yếu tố mà sự thiếu hụt hoặc bất công gây bất mãn mạnh, nhưng sự đầy đủ không tự sinh ra hứng thú với công việc — Herzberg gọi đó là hai nhóm yếu tố khác nhau. Ngoài ra, khi người ta khó nói ra lý do thật (quan hệ với quản lý, công việc nhàm chán, cảm giác không được coi trọng), lương là lý do dễ nói và không gây xung đột. Điều này không có nghĩa lương không quan trọng: nếu trả dưới thị trường hoặc bất công nội bộ thì phải sửa trước, nhưng sửa xong đừng kỳ vọng nó tạo ra động lực mới.',
+      },
+      {
+        q: 'Ba điều kiện theo lý thuyết tự quyết là gì, và mỗi điều kiện dịch thành hành động quản lý nào?',
+        a: 'Tự chủ (autonomy): mở quyền chọn cách làm, thứ tự, công cụ trong khi giữ nguyên kết quả cần đạt. Năng lực (competence): thiết kế để tiến bộ nhìn thấy được — việc khó dần theo bậc, phản hồi cụ thể về cái đã cải thiện, cơ hội học có mục đích. Gắn kết (relatedness): làm cho công việc có người thụ hưởng cụ thể và làm cho các thành viên biết việc của nhau. Ba thứ này rẻ hơn tiền thưởng và tác dụng lâu hơn, nhưng chúng đòi hỏi người quản lý bỏ bớt kiểm soát, nên hay bị né.',
+      },
+      {
+        q: 'Khi nào thưởng theo chỉ tiêu là công cụ phù hợp và khi nào nó gây hại?',
+        a: 'Phù hợp khi công việc có đầu ra đơn giản, đo được đầy đủ, ít phụ thuộc vào hợp tác và ít cần phán đoán — ví dụ số lượt giao hàng đúng hạn trong điều kiện tuyến ổn định. Gây hại khi phần quan trọng của công việc không nằm trong chỉ số: chất lượng tư vấn, việc giúp đồng nghiệp, việc báo cáo rủi ro. Lúc đó thưởng theo chỉ số sẽ hút mọi nỗ lực về phần được đo và làm hỏng phần còn lại, đồng thời tạo động cơ giấu tin xấu. Nếu vẫn dùng, phải kèm chỉ số bảo vệ và một phần đánh giá định tính.',
+      },
+    ],
+    plan7:
+      'Ngày 1: hỏi hai câu chẩn đoán với toàn nhóm và ghi nguyên văn. Ngày 2: lập danh sách việc vô nghĩa và đánh dấu cái bỏ được. Ngày 3: bỏ hoặc rút gọn một khâu và thông báo. Ngày 4: viết cho từng người một câu cụ thể về tiến bộ của họ trong sáu tháng. Ngày 5: đưa năm lời ghi nhận có cấu trúc hành vi cộng hệ quả. Ngày 6: sắp xếp một dịp để nhóm nghe từ người thụ hưởng. Ngày 7: rà lại chênh lệch lương hoặc cơ hội khó giải thích trong nhóm và lên kế hoạch xử lý.',
+    evidence:
+      'Hiện vật là bản chẩn đoán động lực của nhóm bạn: câu trả lời tổng hợp từ hai câu hỏi, danh sách việc đã bỏ đi kèm ngày, và một chỉ số theo dõi được trước sau (tỷ lệ nghỉ việc, sản lượng, kết quả khảo sát nội bộ). Điểm mạnh khi kể lại là bạn nêu được thứ mình đã BỎ chứ không chỉ thứ đã thêm — người phỏng vấn nghe rất nhiều câu chuyện thêm thưởng và rất ít câu chuyện xoá một quy trình. Trong CV: "Chẩn đoán nguyên nhân giảm hiệu suất của nhóm 9 người bằng phỏng vấn từng cá nhân, gộp 3 biểu mẫu trùng lặp và thiết lập báo cáo kết quả cuối chuỗi, giữ nguyên cơ chế hoa hồng".',
+    references: [
+      { label: 'Self-Determination Theory — trang chính thức của Deci và Ryan', url: 'https://selfdeterminationtheory.org/', type: 'article' },
+      { label: 'Gallup Workplace — chỉ số gắn kết nhân viên và yếu tố tác động', url: 'https://www.gallup.com/workplace/', type: 'article' },
+    ],
+  }),
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Chương 11 — Quản lý hiệu suất
+  // ─────────────────────────────────────────────────────────────────────────
+  guide({
+    thesis:
+      'Quản lý hiệu suất là một chu kỳ liên tục gồm bốn phần: thống nhất kỳ vọng đo được, quan sát và ghi nhận bằng chứng, phản hồi thường xuyên, và đánh giá tổng kết không có bất ngờ. Phần cuối là phép thử của toàn bộ hệ thống: nếu buổi đánh giá cuối kỳ khiến nhân viên bất ngờ, hệ thống đã hỏng ở ba phần trước. Đánh giá không phải để xếp hạng con người mà để hai bên có cùng một bức tranh về công việc và cùng quyết định bước tiếp theo.',
+    why: {
+      work: 'Không có kỳ vọng viết ra, mỗi người tự đặt tiêu chuẩn của mình, và tới cuối năm hai bên tranh cãi bằng ký ức chọn lọc. Có hệ thống thì tranh luận chuyển sang bằng chứng cụ thể, và quan trọng hơn, người làm biết mình đang đứng đâu trong suốt năm chứ không chỉ vào tháng cuối.',
+      interview:
+        'Với vị trí quản lý, câu hỏi thường là "bạn đánh giá nhân viên dựa trên gì". Câu trả lời yếu nói về thái độ và sự chăm chỉ. Câu trả lời mạnh mô tả tiêu chí viết trước, cách bạn thu bằng chứng dọc kỳ, và cách bạn xử lý khi đánh giá của bạn khác đánh giá của chính nhân viên đó.',
+      study:
+        'Áp dụng cho việc học của chính mình: đặt tiêu chí thành công trước khi bắt đầu một khoá, ghi bằng chứng dọc đường (bài đã làm, lỗi lặp lại), và tổng kết định kỳ. Đây là lý do người tự học có hệ thống tiến nhanh hơn người học chăm nhưng không đo.',
+      life: 'Trong các cam kết cá nhân — tập luyện, tiết kiệm, học một môn — cùng một cấu trúc giúp bạn phân biệt giữa "tôi cảm thấy mình lười" và "tôi đã hoàn thành 11 trên 16 buổi", vốn dẫn tới hai hành động rất khác nhau.',
+    },
+    framework: [
+      { name: 'Thống nhất kỳ vọng ở hai tầng', detail: 'Tầng kết quả (đạt cái gì, đo bằng gì, tới ngày nào) và tầng cách làm (những hành vi bắt buộc như báo rủi ro sớm, tuân thủ an toàn, hỗ trợ đồng nghiệp). Đánh giá chỉ theo tầng kết quả sẽ vô tình thưởng cho người đạt số bằng cách phá hỏng thứ khác.' },
+      { name: 'Thu bằng chứng dọc kỳ', detail: 'Giữ một sổ ghi ngắn cho mỗi người, mỗi tháng vài dòng: sự việc cụ thể, ngày, kết quả. Ghi cả việc tốt và việc chưa đạt. Không có sổ này, đánh giá cuối kỳ sẽ bị chi phối bởi hai ba sự kiện gần nhất và bởi ấn tượng chung, đây là sai lệch có hệ thống chứ không phải do thiếu công tâm.' },
+      { name: 'Phản hồi trong vòng một tuần', detail: 'Phản hồi về một sự việc phải đến gần thời điểm nó xảy ra để còn nhớ chi tiết và còn sửa được. Dùng cấu trúc: sự việc quan sát được, tác động, và câu hỏi mở về góc nhìn của họ trước khi bạn kết luận.' },
+      { name: 'Buổi tổng kết không có bất ngờ', detail: 'Trước buổi tổng kết, gửi trước phần đánh giá của bạn và yêu cầu họ gửi phần tự đánh giá. Dành phần lớn thời lượng cho những chỗ hai bản khác nhau — đó là nơi có thông tin. Nếu bạn nêu ra một vấn đề nghiêm trọng mà họ chưa từng nghe, hãy nói thẳng rằng đó là thiếu sót của bạn.' },
+      { name: 'Chốt bước tiếp theo cụ thể', detail: 'Kết thúc chu kỳ bằng ba thứ: một hoặc hai điểm cần cải thiện với cách đo, một cơ hội phát triển được giao thật, và ngày rà lại. Đánh giá không dẫn tới thay đổi nào trong công việc thực tế sẽ dạy cả nhóm rằng đây là thủ tục hành chính.' },
+    ],
+    scenario:
+      'Trưởng phòng sản xuất một nhà máy cơ khí 80 công nhân dùng bảng đánh giá cuối năm gồm sáu tiêu chí kiểu "tinh thần trách nhiệm", chấm điểm 1-5. Năm nào cũng có tranh cãi và hai năm liền có người xin nghỉ ngay sau kỳ đánh giá. Anh làm lại theo hai tầng: tầng kết quả gồm sản lượng đạt chuẩn, tỷ lệ phế phẩm của tổ, thời gian dừng máy do lỗi thao tác; tầng cách làm gồm ba hành vi cụ thể trong đó có việc báo bất thường của máy ngay trong ca thay vì cuối ca. Anh phát cho từng tổ trưởng một sổ nhỏ và yêu cầu mỗi tháng ghi ba đến năm sự việc có thật cho mỗi người. Giữa năm, một công nhân có sản lượng cao nhất xưởng nhưng có bốn lần bỏ qua việc báo tiếng kêu bất thường của máy; nhờ có sổ, anh nêu được từng ngày cụ thể trong buổi phản hồi tháng 7 thay vì để tới tháng 12. Cuối năm, kỳ đánh giá không có ai bất ngờ, và số ca dừng máy đột xuất trong quý 4 thấp hơn ba quý trước.',
+    comparison: [
+      { weak: 'Đánh giá bằng tính từ ("chủ động", "có tinh thần") mà mỗi người chấm hiểu một kiểu.', mature: 'Đánh giá bằng hành vi quan sát được và sự việc có ngày tháng, để hai người chấm khác nhau vẫn ra kết quả gần nhau.' },
+      { weak: 'Dồn toàn bộ phản hồi vào buổi tổng kết cuối kỳ.', mature: 'Phản hồi trong vòng một tuần kể từ sự việc, và coi buổi tổng kết là nơi tổng hợp lại chứ không phải nơi công bố tin mới.' },
+      { weak: 'Chấm cao cho người mình quý và giải thích bằng cảm nhận chung.', mature: 'Bắt buộc mỗi mức điểm phải kèm ít nhất hai sự việc trong sổ; không có bằng chứng thì không được chấm mức đó, kể cả điểm cao.' },
+    ],
+    mistakes: [
+      'Chỉ đánh giá kết quả và bỏ qua cách đạt được, dẫn tới việc vô tình đề bạt người đạt chỉ tiêu bằng cách đẩy rủi ro sang bộ phận khác hoặc đốt cháy đồng đội.',
+      'Áp phân bố bắt buộc cứng nhắc (buộc phải có bao nhiêu phần trăm loại kém) cho một nhóm nhỏ, biến đánh giá thành trò chơi tổng bằng không và phá hỏng hợp tác trong nhóm.',
+      'Ghi sổ chỉ những lần nhân viên làm chưa tốt, khiến sổ trở thành hồ sơ buộc tội và người quản lý mất khả năng nhìn thấy tiến bộ thật.',
+    ],
+    worksheet: [
+      'Với một người trong nhóm, viết ba kỳ vọng ở tầng kết quả kèm cách đo, và hai hành vi bắt buộc ở tầng cách làm.',
+      'Bạn có sổ ghi bằng chứng cho người đó không? Nếu có, tháng gần nhất bạn ghi được mấy dòng?',
+      'Kể ra ba sự việc cụ thể có ngày tháng làm căn cứ cho đánh giá gần nhất của bạn về người đó. Nếu không kể được ba, bạn đang đánh giá bằng gì?',
+      'Trong 12 tháng qua, phản hồi khó nhất bạn đã đưa cho người đó là gì và cách nó đã đến muộn bao nhiêu ngày so với sự việc?',
+      'Nếu buổi tổng kết diễn ra tuần sau, điều gì trong bản đánh giá của bạn sẽ khiến họ bất ngờ? Viết ra và xử lý trước buổi đó.',
+    ],
+    exercises: [
+      { label: 'Viết lại tiêu chí', text: 'Lấy bảng đánh giá đang dùng và viết lại mọi tiêu chí dạng tính từ thành hành vi quan sát được. So hai bản và hỏi một đồng nghiệp bản nào họ chấm được nhất quán hơn.', level: 'e' },
+      { label: 'Bắt đầu sổ bằng chứng', text: 'Lập sổ ghi cho từng người, mỗi tuần ghi tối thiểu hai dòng gồm ngày, sự việc, kết quả. Bắt buộc ghi cả việc tốt và việc chưa đạt.', level: 'e' },
+      { label: 'Phản hồi trong tuần', text: 'Trong bốn tuần, mỗi tuần đưa ít nhất một phản hồi về sự việc xảy ra trong vòng bảy ngày. Ghi lại phản ứng khác nhau so với phản hồi muộn trước đây.', level: 'e' },
+      { label: 'Kiểm tra thiên lệch gần', text: 'Trước một kỳ đánh giá, che phần ba tháng cuối trong sổ và tự chấm dựa trên chín tháng đầu, rồi mở ra chấm lại. So hai kết quả và ghi độ lệch.', level: 'm' },
+      { label: 'Tự đánh giá song song', text: 'Yêu cầu nhân viên gửi bản tự đánh giá theo cùng tiêu chí trước buổi tổng kết. Đánh dấu ba chỗ lệch lớn nhất và dành phần lớn buổi cho ba chỗ đó.', level: 'm' },
+      { label: 'Chấm chéo với quản lý khác', text: 'Đổi hai hồ sơ ẩn danh với một quản lý cùng cấp, mỗi người tự chấm theo cùng tiêu chí rồi so. Chỗ hai người lệch nhiều là chỗ tiêu chí còn mơ hồ.', level: 'm' },
+      { label: 'Thiết kế lại chu kỳ', text: 'Viết đề xuất một trang cho chu kỳ quản lý hiệu suất của bộ phận: tiêu chí hai tầng, nhịp phản hồi, cách thu bằng chứng, quy tắc không bất ngờ. Trình bày với cấp trên hoặc bộ phận nhân sự và ghi lại phản đối.', level: 'h' },
+      { label: 'Thử thách 7 ngày: mỗi ngày một dòng bằng chứng', text: 'Bảy ngày, mỗi ngày ghi đúng một dòng bằng chứng có thật về một người khác nhau trong nhóm, gồm ngày, việc, hệ quả. Ngày thứ bảy đọc lại: bạn thấy được ai và không thấy được ai — người không xuất hiện trong sổ thường là người bạn đang đánh giá bằng cảm giác.', level: 'h' },
+    ],
+    checkpoints: [
+      {
+        q: 'Vì sao "buổi đánh giá không có bất ngờ" là tiêu chuẩn của một hệ thống tốt?',
+        a: 'Vì mục đích của quản lý hiệu suất là giúp người ta điều chỉnh kịp, không phải để tuyên án. Một vấn đề chỉ được nêu vào cuối kỳ nghĩa là người đó đã mất cả kỳ để sửa mà không biết cần sửa, và tổn thất đó là do người quản lý không phản hồi chứ không do họ. Ngoài ra, tin xấu đến muộn còn phá vỡ lòng tin: nhân viên sẽ suy ra rằng những lời khen trong năm cũng không đáng tin.',
+      },
+      {
+        q: 'Một nhân viên đạt chỉ tiêu cao nhất nhóm nhưng đồng nghiệp ngại làm việc cùng. Đánh giá thế nào?',
+        a: 'Đây chính là lý do cần tầng cách làm bên cạnh tầng kết quả. Nếu tiêu chí về cách làm đã được thống nhất từ đầu kỳ và có bằng chứng cụ thể về hành vi gây hại, thì đánh giá phải phản ánh cả hai tầng, và cần nói rất rõ đâu là bằng chứng chứ không phải cảm nhận tập thể. Nếu tầng cách làm chưa từng được nêu ra, thì công bằng nhất là ghi nhận kết quả kỳ này, nêu rõ kỳ vọng hành vi cho kỳ tới bằng văn bản và đo từ đó — không nên phạt hồi tố theo một tiêu chuẩn chưa ai nói ra.',
+      },
+      {
+        q: 'Vì sao ghi sổ bằng chứng lại quan trọng hơn việc cố gắng công tâm?',
+        a: 'Vì trí nhớ có sai lệch hệ thống: sự kiện gần nhất nặng hơn, sự kiện gây cảm xúc mạnh nặng hơn, và ấn tượng tổng thể về một người có xu hướng nhuộm màu mọi đánh giá chi tiết. Những sai lệch này hoạt động ngoài ý thức, nên quyết tâm công tâm không chặn được chúng. Sổ ghi rải đều theo thời gian là cơ chế chống lại chúng bằng dữ liệu, và nó còn có tác dụng phụ quan trọng: nó buộc bạn phải thật sự quan sát công việc của từng người thay vì chỉ nhớ những ai hay xuất hiện trước mặt bạn.',
+      },
+    ],
+    plan7:
+      'Ngày 1: viết lại tiêu chí đánh giá thành hai tầng kết quả và cách làm cho một vị trí. Ngày 2: lập sổ bằng chứng cho từng người trong nhóm. Ngày 3: ghi bằng chứng hồi cứu cho tháng vừa rồi, ghi được bao nhiêu thì ghi và ghi nhận chỗ trống. Ngày 4: đưa một phản hồi về sự việc trong vòng bảy ngày. Ngày 5: gửi tiêu chí mới cho nhóm và nghe phản đối. Ngày 6: yêu cầu một người làm bản tự đánh giá thử theo tiêu chí mới. Ngày 7: so hai bản và ghi ba chỗ lệch để bàn.',
+    evidence:
+      'Hiện vật là bộ tiêu chí đánh giá hai tầng do bạn thiết kế (bản trước và bản sau khi viết lại thành hành vi quan sát được), cộng với mẫu sổ bằng chứng đã dùng thật trong một kỳ và biên bản một buổi tổng kết có phần tự đánh giá song song. Khi kể trong phỏng vấn, nêu con số về tính nhất quán nếu có — ví dụ khi chấm chéo với một quản lý khác, độ lệch giữa hai người giảm sau khi đổi tiêu chí. Trong CV: "Thiết kế lại chu kỳ đánh giá hiệu suất cho phân xưởng 80 người theo tiêu chí hành vi quan sát được và sổ bằng chứng hằng tháng, chấm dứt tình trạng khiếu nại sau kỳ đánh giá trong hai năm liên tiếp".',
+    references: [
+      { label: 'SHRM — tài nguyên về quản lý hiệu suất và quan hệ lao động', url: 'https://www.shrm.org/', type: 'article' },
+      { label: 'Harvard Business Review — chủ đề Managing people', url: 'https://hbr.org/topic/subject/managing-people', type: 'article' },
+    ],
+    diagram: 'cycle',
+  }),
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Chương 12 — Xử lý nhân viên có hiệu suất thấp
+  // ─────────────────────────────────────────────────────────────────────────
+  guide({
+    thesis:
+      'Trước khi kết luận một người "kém", phải phân biệt bốn nguyên nhân khác nhau vì mỗi nguyên nhân có cách xử lý khác nhau: họ không biết kỳ vọng là gì, họ không có kỹ năng hoặc công cụ, có trở ngại ngoài tầm kiểm soát của họ, hay họ biết và có đủ điều kiện nhưng không làm. Chỉ trường hợp cuối mới là vấn đề ý thức, và nó thường là trường hợp hiếm nhất trong thực tế. Chương này bàn về kỹ thuật quản lý; mọi thủ tục kỷ luật, xử lý vi phạm hay chấm dứt hợp đồng phải do bộ phận nhân sự chủ trì và tuân thủ pháp luật lao động hiện hành — nội dung ở đây không thay thế tư vấn pháp lý.',
+    why: {
+      work: 'Một người dưới chuẩn kéo dài không chỉ ảnh hưởng phần việc của họ: đồng nghiệp gánh thay, người giỏi thấy bất công và cân nhắc ra đi, còn uy tín của bạn với tư cách quản lý giảm vì cả nhóm biết bạn đang né. Xử lý sớm và đúng cách bảo vệ cả người đó lẫn phần còn lại.',
+      interview:
+        'Đây là câu hỏi tình huống gần như chắc chắn xuất hiện trong phỏng vấn quản lý. Nhà tuyển dụng muốn nghe bạn chẩn đoán trước khi hành động, nói chuyện trực tiếp thay vì né, ghi chép đầy đủ, và phối hợp với nhân sự — chứ không muốn nghe câu chuyện bạn tự quyết cho ai đó nghỉ việc.',
+      study:
+        'Cùng khung chẩn đoán dùng được khi bạn kèm một người học chậm hơn: kiểm xem họ có biết tiêu chuẩn không, có thiếu nền tảng nào không, có trở ngại bên ngoài không, trước khi kết luận là thiếu cố gắng. Kết luận sai ở bước này làm hỏng cả quan hệ lẫn việc học.',
+      life: 'Trong gia đình hay nhóm cộng đồng, phản xạ quy cho thái độ ("nó không quan tâm") thường sai và luôn đắt. Hỏi bốn câu chẩn đoán trước khi trách móc là kỹ năng giữ được quan hệ trong lúc vẫn nói ra vấn đề.',
+    },
+    framework: [
+      { name: 'Chẩn đoán bốn nguyên nhân', detail: 'Hỏi lần lượt: kỳ vọng đã được nói rõ và họ diễn đạt lại đúng chưa; họ đã từng làm được việc này trước đây chưa và thiếu kỹ năng hay công cụ nào; có trở ngại nào ngoài tầm họ không (phụ thuộc phòng khác, thiết bị, khối lượng); và nếu ba câu trên đều ổn thì mới xét tới động cơ. Trả lời bốn câu này bằng bằng chứng, không bằng ấn tượng.' },
+      { name: 'Nói chuyện thẳng và sớm', detail: 'Cuộc trò chuyện đầu tiên nên diễn ra khi khoảng cách còn nhỏ, riêng tư, và bắt đầu bằng sự việc cụ thể có ngày tháng cùng tác động của nó, rồi im lặng để nghe. Mục tiêu của buổi này là hiểu nguyên nhân, không phải cảnh cáo. Né tránh vài tháng rồi bùng nổ một lần là cách gây tổn thương lớn nhất và cũng khó bảo vệ nhất về sau.' },
+      { name: 'Thoả thuận kế hoạch cải thiện có thời hạn', detail: 'Viết ra: hai hoặc ba kết quả cụ thể cần đạt, cách đo, thời hạn hợp lý theo tính chất công việc, hỗ trợ bạn cam kết cung cấp (đào tạo, kèm cặp, giảm bớt đầu việc khác), và lịch rà theo tuần. Cả hai bên cùng ký nhận bản này. Nếu tổ chức có quy trình chính thức cho việc này, phải làm theo quy trình đó và có nhân sự tham gia ngay từ đầu.' },
+      { name: 'Rà theo nhịp ngắn và ghi chép', detail: 'Gặp hằng tuần trong suốt thời hạn, mỗi lần ghi lại tiến triển thực tế so với từng chỉ tiêu và những hỗ trợ đã cung cấp. Ghi chép trung thực bảo vệ cả hai phía: nó cho người kia thấy tiến bộ được ghi nhận, và nó là căn cứ khách quan nếu sau này phải ra quyết định khó.' },
+      { name: 'Chốt kết quả và phối hợp với nhân sự', detail: 'Kết thúc thời hạn có ba khả năng: đạt và quay lại bình thường; tiến bộ rõ nhưng chưa đủ, cân nhắc gia hạn có lý do; hoặc không đạt, khi đó chuyển sang phương án khác như đổi vị trí phù hợp hơn hoặc bắt đầu quy trình chính thức do nhân sự chủ trì. Người quản lý trực tiếp không nên tự mình quyết định hay tiến hành các thủ tục chấm dứt hợp đồng — đó là việc phải theo đúng quy định pháp luật và quy chế công ty.' },
+    ],
+    scenario:
+      'Trưởng nhóm hỗ trợ kỹ thuật của một công ty phần mềm doanh nghiệp có một nhân viên vào làm tám tháng, thời gian phản hồi trung bình gấp đôi cả nhóm và ba khách hàng đã phàn nàn. Phản xạ ban đầu của anh là kết luận người này không hợp việc. Anh chạy chẩn đoán bốn nguyên nhân và phát hiện: kỳ vọng về thời gian phản hồi chưa từng được nói bằng con số cho người này, người đó chưa được cấp quyền truy cập vào hệ thống nhật ký lỗi nên mỗi ca phải nhờ đồng nghiệp lấy hộ, và họ đang được giao thêm việc dịch tài liệu chiếm khoảng một phần ba thời gian mà không ai biết. Anh xử lý ba việc đó trong hai tuần, đồng thời viết kế hoạch cải thiện sáu tuần với hai chỉ tiêu đo được và lịch gặp hằng tuần, có thông báo với bộ phận nhân sự ngay từ đầu để làm đúng quy trình nội bộ. Sau sáu tuần, thời gian phản hồi của người này về gần mức trung bình nhóm. Bài học anh ghi lại: ba trong bốn nguyên nhân thật nằm ở phía quản lý, và nếu anh hành động theo phản xạ ban đầu thì công ty vừa mất người vừa giữ nguyên nguyên nhân gốc.',
+    comparison: [
+      { weak: 'Nói bóng gió trong họp nhóm với hy vọng người đó tự hiểu.', mature: 'Nói riêng, cụ thể, sớm, bằng sự việc có ngày tháng và hỏi nguyên nhân trước khi kết luận.' },
+      { weak: 'Âm thầm chuyển bớt việc quan trọng sang người khác và không nói gì.', mature: 'Nếu phải giảm tải, nói rõ đây là bước tạm thời để tập trung cải thiện một mảng, kèm thời hạn và điều kiện quay lại.' },
+      { weak: 'Đặt kế hoạch cải thiện với các chỉ tiêu gần như không thể đạt, thực chất để hợp thức hoá một quyết định đã có sẵn.', mature: 'Đặt chỉ tiêu mà một người có năng lực trung bình trong nhóm đạt được, kèm hỗ trợ thật, và sẵn sàng chấp nhận kết quả nếu họ đạt.' },
+    ],
+    mistakes: [
+      'Kết luận ngay là vấn đề thái độ mà chưa kiểm ba nguyên nhân còn lại, dẫn tới xử lý sai hướng và thường làm mất một người vốn có thể cứu được.',
+      'Trì hoãn cuộc trò chuyện đầu tiên nhiều tháng vì ngại, khiến khi nói ra thì khoảng cách đã quá lớn và người kia có lý do chính đáng để cảm thấy bị đối xử bất ngờ.',
+      'Xử lý riêng theo cảm tính mà không thông qua bộ phận nhân sự và không ghi chép, tạo rủi ro pháp lý cho công ty và rủi ro bất công cho người lao động — đây là chỗ mà một quản lý thiện chí vẫn có thể gây hậu quả nghiêm trọng.',
+    ],
+    worksheet: [
+      'Với trường hợp bạn đang lo ngại, viết ra ba sự việc cụ thể có ngày tháng cho thấy kết quả dưới chuẩn. Nếu không viết được ba, bạn chưa đủ căn cứ để nói chuyện.',
+      'Kỳ vọng cho vị trí đó đã được nói bằng con số chưa, vào lúc nào, và người đó đã từng diễn đạt lại chưa?',
+      'Người đó đang thiếu công cụ, quyền truy cập, đào tạo hoặc thông tin nào mà bạn có thể cấp trong hai tuần?',
+      'Có trở ngại nào ngoài tầm kiểm soát của họ đang tồn tại không (khối lượng, phụ thuộc phòng khác, thay đổi cá nhân)? Bạn đã hỏi trực tiếp chưa?',
+      'Nếu phải viết kế hoạch cải thiện, hai chỉ tiêu đo được và thời hạn hợp lý là gì, và bạn cam kết hỗ trợ cụ thể điều gì?',
+    ],
+    exercises: [
+      { label: 'Bảng bốn nguyên nhân', text: 'Lấy một trường hợp có thật và điền bằng chứng cho từng nguyên nhân trong bốn nguyên nhân. Đánh dấu ô nào bạn đang suy đoán chứ chưa hỏi.', level: 'e' },
+      { label: 'Viết ba sự việc', text: 'Tập viết ba sự việc quan sát được kèm tác động, không dùng bất kỳ tính từ đánh giá nào về con người. Đọc to lên và cắt mọi câu suy diễn về động cơ.', level: 'e' },
+      { label: 'Kịch bản mở đầu', text: 'Viết ra ba câu đầu tiên bạn sẽ nói trong cuộc trò chuyện, sao cho nêu được sự việc và mở đường cho họ giải thích. Nhờ một đồng nghiệp đóng vai nghe và phản hồi cảm giác.', level: 'e' },
+      { label: 'Hỏi trước khi kết luận', text: 'Trong cuộc gặp đầu tiên, dành ít nhất một nửa thời lượng để hỏi và nghe. Ghi lại thông tin bạn chưa từng biết trước buổi đó.', level: 'm' },
+      { label: 'Soạn kế hoạch cải thiện', text: 'Viết bản kế hoạch gồm chỉ tiêu, cách đo, thời hạn, hỗ trợ từ phía bạn và lịch rà. Trao đổi với bộ phận nhân sự để bảo đảm đúng quy trình nội bộ và quy định pháp luật trước khi trình bày với nhân viên.', level: 'm' },
+      { label: 'Kiểm tra công bằng', text: 'Đối chiếu tiêu chuẩn bạn đang áp cho người này với tiêu chuẩn thực tế bạn áp cho những người khác trong nhóm. Ghi lại mọi chỗ chênh và lý do.', level: 'm' },
+      { label: 'Rà lại vai trò của chính bạn', text: 'Với trường hợp gần nhất kết thúc bằng việc một người rời nhóm, viết một trang trung thực: dấu hiệu sớm nào bạn đã thấy, bạn đã chậm bao lâu, và bạn sẽ đổi gì trong hệ thống của mình.', level: 'h' },
+      { label: 'Thử thách 7 ngày: hỏi thay vì suy diễn', text: 'Bảy ngày, mỗi khi bạn thấy mình đang giải thích hành vi của người khác bằng động cơ của họ, viết ra suy diễn đó rồi đi hỏi một câu để kiểm chứng. Ngày thứ bảy đếm tỷ lệ suy diễn của bạn hoá ra sai — con số này thường cao hơn nhiều so với bạn nghĩ.', level: 'h' },
+    ],
+    checkpoints: [
+      {
+        q: 'Vì sao phải chẩn đoán bốn nguyên nhân trước khi kết luận là vấn đề ý thức?',
+        a: 'Vì ba nguyên nhân đầu — kỳ vọng chưa rõ, thiếu kỹ năng hoặc công cụ, trở ngại ngoài tầm kiểm soát — đều thuộc trách nhiệm hệ thống và người quản lý, và chúng phổ biến hơn nhiều so với vấn đề động cơ. Nếu xử lý bằng biện pháp dành cho vấn đề ý thức (cảnh cáo, gây áp lực) trong khi nguyên nhân là thiếu quyền truy cập hoặc khối lượng việc ẩn, bạn vừa không sửa được gì vừa phá hỏng quan hệ. Ngoài ra, việc chẩn đoán được ghi lại còn là căn cứ cho thấy tổ chức đã hành động công bằng nếu về sau phải ra quyết định khó.',
+      },
+      {
+        q: 'Kế hoạch cải thiện được coi là công bằng khi nào?',
+        a: 'Khi bốn điều kiện cùng có: chỉ tiêu ở mức một người có năng lực trung bình trong nhóm đạt được và được đo bằng dữ liệu chứ không bằng cảm nhận; thời hạn đủ để một thay đổi thật kịp thể hiện; hỗ trợ được cam kết cụ thể và thực sự cung cấp; và kết quả đạt thì thực sự được công nhận. Nếu kế hoạch được lập khi quyết định đã có sẵn trong đầu, người trong cuộc thường nhận ra và toàn bộ nhóm cũng nhận ra, khiến niềm tin vào mọi quy trình sau đó bị hỏng.',
+      },
+      {
+        q: 'Ranh giới giữa việc của người quản lý trực tiếp và việc của bộ phận nhân sự nằm ở đâu trong tình huống này?',
+        a: 'Người quản lý trực tiếp chịu trách nhiệm về phần chuyên môn và quản lý: làm rõ kỳ vọng, chẩn đoán nguyên nhân, phản hồi, thiết kế và theo dõi kế hoạch cải thiện, ghi chép trung thực. Bộ phận nhân sự chịu trách nhiệm về quy trình chính thức: xử lý kỷ luật, các quyết định liên quan tới hợp đồng lao động, hồ sơ pháp lý và bảo đảm tuân thủ quy định hiện hành. Pháp luật lao động Việt Nam có quy định cụ thể về trình tự và thay đổi theo thời gian, nên người quản lý không nên tự tiến hành các bước chính thức hoặc hứa hẹn về hệ quả pháp lý; việc cần làm là báo sớm cho nhân sự và làm đúng phần chuyên môn của mình.',
+      },
+    ],
+    plan7:
+      'Ngày 1: viết ba sự việc quan sát được có ngày tháng cho trường hợp đang lo ngại. Ngày 2: điền bảng bốn nguyên nhân và đánh dấu ô còn suy đoán. Ngày 3: liên hệ bộ phận nhân sự để nắm quy trình nội bộ áp dụng cho tình huống này. Ngày 4: chuẩn bị ba câu mở đầu và tổ chức cuộc trò chuyện riêng, dành nửa thời lượng để nghe. Ngày 5: xử lý ngay những trở ngại thuộc phía bạn phát hiện được. Ngày 6: soạn bản kế hoạch cải thiện nháp và rà với nhân sự. Ngày 7: thống nhất kế hoạch với nhân viên, đặt lịch rà hằng tuần và bắt đầu ghi chép.',
+    evidence:
+      'Bằng chứng ở đây phải trình bày một cách tôn trọng quyền riêng tư: đừng mang hồ sơ nhân sự đi phỏng vấn. Thứ dùng được là mô tả ẩn danh về quy trình bạn đã xây — bảng chẩn đoán bốn nguyên nhân, mẫu kế hoạch cải thiện, nhịp rà và cách phối hợp với nhân sự — cộng với kết quả tổng hợp: trong bao nhiêu trường hợp thì nguyên nhân hoá ra thuộc hệ thống, bao nhiêu trường hợp cải thiện thành công. Trong phỏng vấn, câu chuyện có giá trị nhất thường là lần bạn định kết luận là thái độ và hoá ra sai, vì nó cho thấy bạn có kỷ luật chẩn đoán. Trong CV nên nói về hệ thống chứ không về cá nhân: "Chuẩn hoá quy trình xử lý hiệu suất dưới chuẩn theo chẩn đoán bốn nguyên nhân, phối hợp nhân sự, áp dụng cho nhóm 12 người".',
+    references: [
+      { label: 'SHRM — tài nguyên về kỷ luật lao động và xử lý tình huống nhân sự', url: 'https://www.shrm.org/', type: 'article' },
+      { label: 'Thư viện pháp luật — tra cứu Bộ luật Lao động và văn bản hướng dẫn hiện hành', url: 'https://thuvienphapluat.vn/', type: 'article', needsReview: true },
+    ],
+  }),
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Chương 13 — Tuyển dụng và xây dựng đội ngũ
+  // ─────────────────────────────────────────────────────────────────────────
+  guide({
+    thesis:
+      'Tuyển dụng là một bài toán dự đoán trong điều kiện rất ít dữ liệu: bạn có vài giờ tiếp xúc để đoán hai năm làm việc. Cách duy nhất làm nó bớt ngẫu nhiên là thay ấn tượng bằng bằng chứng — xác định trước những việc người này sẽ thực sự làm trong 90 ngày đầu, thiết kế bài tập mô phỏng đúng những việc đó, hỏi cùng bộ câu hỏi cho mọi ứng viên, và chấm theo thang có mô tả từng mức trước khi thảo luận với nhau. Xây dựng đội ngũ thì bắt đầu từ trước lúc tuyển: biết mình đang thiếu năng lực gì chứ không phải thiếu người.',
+    why: {
+      work: 'Một lần tuyển sai tốn kém hơn nhiều so với vài tuần tuyển chậm: chi phí đào tạo, thời gian quản lý, ảnh hưởng tới đồng nghiệp, và cả cái giá khó nói của việc phải xử lý sau đó. Quy trình có cấu trúc không bảo đảm luôn đúng, nhưng nó giảm số lần bạn bị đánh lừa bởi sự tự tin và khả năng ăn nói.',
+      interview:
+        'Hiểu quy trình từ phía người tuyển giúp bạn khi ở phía ứng viên: bạn biết vì sao họ hỏi hành vi quá khứ, biết chuẩn bị bằng chứng thay vì tính từ, và biết đặt câu hỏi ngược đúng chỗ. Với vị trí quản lý, bạn còn phải trả lời được "bạn xây đội ngũ thế nào" bằng một quy trình cụ thể.',
+      study:
+        'Kỹ thuật cốt lõi ở đây — định nghĩa tiêu chí trước, thu bằng chứng, chấm độc lập rồi mới thảo luận — là kỹ thuật đánh giá dùng được cho mọi quyết định có nhiều lựa chọn: chọn nhà cung cấp, chọn công cụ, chọn đề tài.',
+      life: 'Chọn người cùng làm ăn, chọn đối tác, thậm chí chọn thợ sửa nhà — nguyên tắc giống nhau: xem việc họ đã làm thật, hỏi người từng làm việc với họ, và thử một việc nhỏ có trả tiền trước khi giao việc lớn.',
+    },
+    framework: [
+      { name: 'Viết mô tả 90 ngày đầu, không viết mô tả chức danh', detail: 'Liệt kê 5-7 việc cụ thể người này sẽ làm và kết quả cần có sau ba tháng. Từ đó suy ra năng lực bắt buộc và năng lực học được sau. Phần lớn tin tuyển dụng liệt kê yêu cầu theo thói quen ngành, khiến bạn loại nhầm người phù hợp và tuyển nhầm người có đủ từ khoá.' },
+      { name: 'Thiết kế bài mô phỏng công việc thật', detail: 'Cho ứng viên làm một phần việc thật, có giới hạn thời gian hợp lý và có trả công nếu bài đủ lớn: xử lý một tình huống khách hàng có thật đã ẩn danh, lập một báo giá, chuẩn bị một buổi họp. Cách người ta làm việc thật cho nhiều thông tin hơn cách họ kể về việc mình từng làm.' },
+      { name: 'Phỏng vấn có cấu trúc và cùng bộ câu hỏi', detail: 'Chuẩn bị trước danh sách câu hỏi hành vi bám vào năng lực đã xác định, hỏi mọi ứng viên cùng bộ câu hỏi đó, và đào sâu bằng câu hỏi tiếp theo về tình huống cụ thể, hành động cá nhân của họ và kết quả đo được. Cùng bộ câu hỏi là điều kiện để so sánh được với nhau, và nó cũng làm giảm khả năng cuộc phỏng vấn trôi theo cảm tình.' },
+      { name: 'Chấm độc lập trước khi họp', detail: 'Mỗi người phỏng vấn chấm theo thang có mô tả từng mức và gửi trước khi cả nhóm bàn. Nếu bàn trước rồi chấm, người có tiếng nói mạnh sẽ kéo cả nhóm và bạn mất đi thông tin từ nhiều góc nhìn — vốn là lý do duy nhất để có nhiều người phỏng vấn.' },
+      { name: 'Kiểm chứng bên ngoài và thiết kế 30 ngày đầu', detail: 'Nói chuyện với người từng làm việc trực tiếp với ứng viên nếu họ đồng ý, hỏi về tình huống cụ thể chứ không hỏi chung. Sau khi nhận, chuẩn bị sẵn kế hoạch 30 ngày đầu: người kèm, ba việc có kết quả thấy được, và mốc kiểm cuối tháng — quá trình hội nhập kém phá hỏng nhiều lần tuyển đúng.' },
+    ],
+    scenario:
+      'Chủ một công ty thiết kế và thi công nội thất 12 người cần tuyển một người phụ trách giám sát công trình. Hai lần trước, anh tuyển theo cảm tình sau một buổi trò chuyện 45 phút và cả hai người đều nghỉ trong vòng bốn tháng. Lần này anh viết mô tả 90 ngày: theo ba công trình song song, làm biên bản nghiệm thu từng hạng mục, xử lý phát sinh với thợ, báo cáo tiến độ cho khách mỗi tuần. Anh thiết kế một bài mô phỏng có trả 500 nghìn đồng: đưa ảnh và hồ sơ một công trình đã hoàn thành có ba lỗi thi công thật, yêu cầu ứng viên chỉ ra lỗi và viết đoạn thông báo cho khách. Kết quả gây bất ngờ: ứng viên có hồ sơ mạnh nhất chỉ tìm ra một lỗi và viết đoạn thông báo đổ lỗi cho thợ; một ứng viên ít kinh nghiệm hơn tìm ra cả ba và viết được đoạn văn khách sẽ chấp nhận được. Anh phỏng vấn cả hai bằng cùng bộ sáu câu hỏi hành vi, chấm độc lập với người quản lý sản xuất, rồi chọn người thứ hai. Sau chín tháng người đó vẫn làm và đã tự chạy bốn công trình.',
+    comparison: [
+      { weak: 'Mỗi người phỏng vấn hỏi ngẫu hứng theo hứng thú riêng rồi cả nhóm ngồi bàn cảm nhận chung.', mature: 'Phân công mỗi người phỏng vấn phụ trách hai năng lực cụ thể với bộ câu hỏi định sẵn, chấm độc lập theo thang, rồi mới họp để giải thích chỗ lệch.' },
+      { weak: 'Tuyển người "giống mình" vì thấy dễ nói chuyện và nhanh hợp.', mature: 'Xác định trước năng lực đội đang thiếu và ưu tiên bổ sung nó, đồng thời phân biệt rõ giữa sự khác biệt về phong cách và sự không phù hợp về nguyên tắc làm việc.' },
+      { weak: 'Ra quyết định vì áp lực thời gian: "cần người ngay, cứ thử xem".', mature: 'Xử lý áp lực bằng giải pháp tạm (thuê ngoài, chia lại việc, giảm phạm vi) thay vì hạ tiêu chuẩn, vì chi phí gỡ một lần tuyển sai lớn hơn chi phí trống chỗ vài tuần.' },
+    ],
+    mistakes: [
+      'Đặt câu hỏi giả định ("nếu gặp khách khó thì bạn sẽ làm gì") thay vì hỏi hành vi đã xảy ra — câu giả định đo khả năng tưởng tượng và khả năng nói, không đo cách họ thật sự hành xử.',
+      'Để buổi phỏng vấn trôi thành cuộc trò chuyện dễ chịu vì hợp gu, rồi kết luận bằng cụm từ "hợp văn hoá" mà không định nghĩa được văn hoá đó gồm hành vi nào.',
+      'Bỏ qua hoàn toàn khâu hội nhập sau khi nhận việc, coi tuyển xong là hết trách nhiệm, trong khi phần lớn trường hợp nghỉ sớm bắt nguồn từ 30 ngày đầu chứ không từ khâu chọn người.',
+    ],
+    worksheet: [
+      'Viết 5 việc cụ thể người mới sẽ làm trong 90 ngày đầu và kết quả cần có cho từng việc.',
+      'Trong các yêu cầu bạn định đăng tuyển, cái nào thật sự bắt buộc phải có sẵn và cái nào có thể học trong ba tháng? Gạch bỏ nhóm thứ hai khỏi tiêu chí sàng lọc.',
+      'Bài mô phỏng công việc của bạn là gì, mất bao lâu để làm, và bạn sẽ chấm nó theo mấy tiêu chí?',
+      'Viết 6 câu hỏi hành vi bám vào năng lực đã xác định, mỗi câu kèm hai câu hỏi đào sâu.',
+      'Năng lực nào đội bạn đang thiếu mà không ai trong nhóm hiện tại có? Lần tuyển này có bổ sung nó không?',
+    ],
+    exercises: [
+      { label: 'Viết mô tả 90 ngày', text: 'Lấy một vị trí bạn đang hoặc sẽ tuyển và viết mô tả 90 ngày thay cho mô tả chức danh. So với tin tuyển dụng cũ và ghi những yêu cầu bạn từng đưa vào chỉ vì thói quen ngành.', level: 'e' },
+      { label: 'Chuyển câu hỏi giả định thành hành vi', text: 'Lấy năm câu hỏi phỏng vấn bạn hay dùng, chuyển từng câu sang dạng hỏi về một tình huống đã xảy ra, kèm hai câu đào sâu về hành động cá nhân và kết quả.', level: 'e' },
+      { label: 'Thang chấm có mô tả', text: 'Với ba năng lực quan trọng nhất, viết mô tả cụ thể cho từng mức từ 1 đến 4, sao cho hai người chấm khác nhau đọc cùng một câu trả lời sẽ cho điểm gần nhau.', level: 'e' },
+      { label: 'Thiết kế bài mô phỏng', text: 'Lấy một phần việc thật của vị trí đó, ẩn danh dữ liệu, giới hạn thời gian và viết tiêu chí chấm. Thử cho một nhân viên hiện tại làm để hiệu chỉnh độ khó.', level: 'm' },
+      { label: 'Chấm độc lập', text: 'Trong vòng tuyển tới, yêu cầu tất cả người phỏng vấn nộp điểm trước khi họp. Ghi lại độ lệch giữa các bảng điểm và bàn xem chỗ lệch phản ánh điều gì.', level: 'm' },
+      { label: 'Kiểm chứng bằng câu hỏi tình huống', text: 'Khi nói chuyện với người tham chiếu, thay câu "bạn ấy làm việc thế nào" bằng câu hỏi về một tình huống cụ thể có áp lực và cách ứng viên xử lý. Ghi lại chất lượng thông tin thu được so với cách hỏi cũ.', level: 'm' },
+      { label: 'Rà lại ba lần tuyển gần nhất', text: 'Với ba người gần nhất bạn tuyển, đối chiếu điều bạn dự đoán lúc phỏng vấn với thực tế sau sáu tháng. Tìm loại tín hiệu nào trong phỏng vấn đã dự đoán đúng và loại nào đánh lừa bạn.', level: 'h' },
+      { label: 'Thử thách 7 ngày: dựng bộ công cụ tuyển', text: 'Bảy ngày, mỗi ngày hoàn thành một phần: mô tả 90 ngày, danh sách năng lực, bộ câu hỏi hành vi, thang chấm, bài mô phỏng, kế hoạch 30 ngày đầu, và một bản hướng dẫn ngắn cho người cùng phỏng vấn. Cuối tuần bạn có một bộ dùng lại được cho mọi vị trí sau này.', level: 'h' },
+    ],
+    checkpoints: [
+      {
+        q: 'Vì sao phỏng vấn có cấu trúc lại tốt hơn phỏng vấn tự do, dù phỏng vấn tự do cho cảm giác hiểu người hơn?',
+        a: 'Vì cảm giác hiểu người phần lớn đến từ mức độ dễ chịu của cuộc trò chuyện, mà điều đó tương quan với sự tương đồng về phong cách hơn là với năng lực làm việc. Phỏng vấn tự do còn khiến các ứng viên được hỏi những câu khác nhau nên không thể so sánh, và tạo không gian cho ấn tượng ban đầu định hướng toàn bộ phần còn lại của buổi. Cấu trúc không loại bỏ hoàn toàn sai lệch, nhưng nó tạo ra dữ liệu so sánh được và buộc mọi kết luận phải gắn với một câu trả lời cụ thể.',
+      },
+      {
+        q: 'Bài mô phỏng công việc nên thiết kế thế nào để vừa hữu ích vừa công bằng?',
+        a: 'Nó phải là một phần việc thật sự có trong công việc, đủ nhỏ để làm trong thời gian hợp lý, có dữ liệu đã ẩn danh, có tiêu chí chấm viết trước, và nếu chiếm nhiều giờ thì nên trả công. Cần tránh hai lỗi: bài quá lớn khiến chỉ người đang rảnh mới tham gia được — điều này loại bỏ chính những người đang có việc tốt; và bài thực chất là công việc miễn phí cho doanh nghiệp, điều này vừa không công bằng vừa làm hỏng danh tiếng tuyển dụng của bạn.',
+      },
+      {
+        q: '"Phù hợp văn hoá" dễ trở thành cái cớ cho thiên vị như thế nào, và thay bằng gì?',
+        a: 'Vì cụm từ này thường không được định nghĩa, nên trên thực tế nó hay có nghĩa là "giống chúng ta" — cùng trường lớp, cùng cách nói chuyện, cùng sở thích. Điều đó dẫn tới một đội đồng nhất, cùng điểm mù và cùng bỏ sót một loại rủi ro. Cách thay thế là định nghĩa trước ba đến năm hành vi cụ thể mà tổ chức thật sự đòi hỏi — ví dụ báo tin xấu sớm, ghi lại quyết định, tôn trọng cam kết thời gian — rồi hỏi bằng chứng về từng hành vi đó. Sự khác biệt về phong cách nên được coi là giá trị bổ sung, chỉ sự xung đột về những hành vi nền tảng mới là lý do từ chối.',
+      },
+    ],
+    plan7:
+      'Ngày 1: viết mô tả 90 ngày đầu cho vị trí đang cần. Ngày 2: rút ra danh sách năng lực bắt buộc và năng lực học được sau. Ngày 3: viết 6 câu hỏi hành vi kèm câu đào sâu. Ngày 4: viết thang chấm có mô tả cho ba năng lực chính. Ngày 5: thiết kế bài mô phỏng và nhờ một nhân viên hiện tại làm thử. Ngày 6: viết kế hoạch 30 ngày đầu cho người sẽ nhận việc. Ngày 7: gửi toàn bộ cho người cùng phỏng vấn và thống nhất cách chấm độc lập.',
+    evidence:
+      'Hiện vật là bộ công cụ tuyển dụng bạn tự xây: mô tả 90 ngày, bộ câu hỏi hành vi, thang chấm có mô tả từng mức, bài mô phỏng và kế hoạch hội nhập 30 ngày. Đây là thứ đưa thẳng vào portfolio quản lý được vì nó là sản phẩm chứ không phải lời kể. Kèm theo một con số nếu có: tỷ lệ người ở lại sau 12 tháng trước và sau khi áp dụng, hoặc thời gian trung bình để người mới tự chạy việc. Trong phỏng vấn, kể lại một lần bộ công cụ khiến bạn đổi ý so với ấn tượng ban đầu — ví dụ ứng viên nói hay nhất lại làm bài mô phỏng kém nhất — vì đó là bằng chứng quy trình có tác dụng thật chứ không phải hình thức.',
+    references: [
+      { label: 'SHRM — tài nguyên về tuyển dụng và phỏng vấn có cấu trúc', url: 'https://www.shrm.org/', type: 'article' },
+      { label: 'Harvard Business Review — chủ đề Hiring and Recruitment', url: 'https://hbr.org/topic/subject/hiring-and-recruitment', type: 'article', needsReview: true },
+    ],
+  }),
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Chương 14 — Xây dựng văn hóa doanh nghiệp
+  // ─────────────────────────────────────────────────────────────────────────
+  guide({
+    thesis:
+      'Văn hoá là tập hợp những hành vi thực sự được thưởng, được cho qua và bị phạt trong tổ chức — không phải bộ giá trị in trên tường. Nhân viên học văn hoá bằng cách quan sát ba thứ: ai được thăng chức, chuyện gì xảy ra khi có người mắc lỗi, và điều gì bị bỏ qua khi tình hình căng thẳng. Muốn đổi văn hoá thì phải đổi ba thứ đó; sửa lại bộ giá trị trên tường mà không đổi chúng chỉ tạo thêm sự hoài nghi.',
+    why: {
+      work: 'Văn hoá quyết định những gì xảy ra khi không có quy trình nào áp dụng được — và đó là phần lớn các tình huống thật. Một đội có văn hoá báo tin xấu sớm sẽ phát hiện vấn đề trước khách hàng; một đội che giấu sẽ biết tin cùng lúc với báo chí.',
+      interview:
+        'Khi phỏng vấn ứng viên, câu hỏi về văn hoá dễ trở thành sáo rỗng. Khi bạn là ứng viên, cách kiểm tra văn hoá thật của một nơi là hỏi những câu cụ thể: lần gần nhất ai đó nói ngược với sếp trong họp là khi nào, chuyện gì xảy ra sau đó, người được thăng chức gần nhất được chọn vì điều gì.',
+      study:
+        'Trong một lớp học hay một cộng đồng học tập, văn hoá quyết định người ta có dám hỏi câu ngớ ngẩn không — mà đó chính là câu học được nhiều nhất. Người dẫn dắt tạo ra điều này bằng cách tự hỏi những câu như vậy trước.',
+      life: 'Gia đình và các nhóm bạn cũng có văn hoá: điều gì được nói ra, điều gì tránh, ai được nhường. Nhận ra các quy tắc ngầm này cho bạn khả năng thay đổi chúng một cách có chủ đích thay vì lặp lại chúng vô thức.',
+    },
+    framework: [
+      { name: 'Đọc văn hoá hiện tại qua ba nguồn bằng chứng', detail: 'Xem lại: năm người được thăng chức hoặc khen thưởng gần nhất được chọn vì gì; ba sự cố gần nhất đã xử lý ra sao với người liên quan; và trong ba tháng căng thẳng nhất, quy tắc nào bị bỏ qua đầu tiên. Ba nguồn này mô tả văn hoá thật, thường khác khá xa văn bản chính thức.' },
+      { name: 'Chọn ba hành vi, không chọn giá trị trừu tượng', detail: 'Thay vì "chính trực" hay "đổi mới", hãy nêu hành vi quan sát được: báo tin xấu trong vòng 24 giờ; mọi quyết định trên một ngưỡng phải ghi lại lý do; người mới được hỏi ý trong hai tuần đầu. Ba hành vi cụ thể có sức đổi thực tế hơn mười giá trị đẹp.' },
+      { name: 'Gắn hành vi vào bốn cơ chế thật', detail: 'Hành vi chỉ sống nếu nó xuất hiện trong: tiêu chí tuyển dụng, tiêu chí đánh giá và thăng tiến, cách xử lý khi có người vi phạm, và những câu chuyện được kể lại. Nếu một hành vi không nằm trong bốn chỗ này thì nó chỉ là khẩu hiệu.' },
+      { name: 'Người đứng đầu làm mẫu ở chỗ tốn kém', detail: 'Văn hoá được xác lập ở khoảnh khắc bạn phải trả giá cho chính nguyên tắc mình tuyên bố: từ chối một hợp đồng có lợi vì cách làm sai, thừa nhận sai lầm của mình trước nhóm, giữ nguyên tắc khi người vi phạm là nhân viên xuất sắc nhất. Một hành động như vậy nói nhiều hơn cả năm truyền thông nội bộ.' },
+      { name: 'Đo và rà lại định kỳ', detail: 'Chọn cách đo thô nhưng đều: tỷ lệ nghỉ việc theo nhóm, số vấn đề được nêu sớm, kết quả một khảo sát ngắn ẩn danh với ba câu cố định. Rà mỗi sáu tháng và công bố kết quả kể cả khi xấu — việc công bố trung thực bản thân nó cũng là một hành động văn hoá.' },
+    ],
+    scenario:
+      'Một trung tâm dạy nghề phi lợi nhuận với 18 nhân sự treo bảng giá trị gồm "minh bạch, tận tâm, học hỏi". Khi giám đốc mới về, chị làm bài đọc văn hoá: ba người được thăng chức gần nhất đều là người ít gây tranh cãi nhất trong họp; hai sự cố học viên bỏ học hàng loạt đã được xử lý bằng cách nhắc nhở giáo viên phụ trách; và trong đợt căng thẳng vì thiếu tài trợ, việc đầu tiên bị bỏ là buổi rà chất lượng bài giảng. Chị kết luận văn hoá thật là "đừng gây rắc rối và đừng để lộ vấn đề". Chị chọn ba hành vi cụ thể, trong đó có "ai phát hiện một lớp đang có vấn đề thì báo trong 48 giờ, và người báo không bao giờ là người bị quy trách nhiệm". Chị đưa hành vi này vào tiêu chí đánh giá, và ở lần đầu tiên một giáo viên báo lớp của chính mình đang có sáu học viên muốn bỏ, chị nêu trường hợp đó trong họp toàn trung tâm như một ví dụ tốt và cùng người đó tìm cách xử lý thay vì hỏi tại sao để xảy ra. Sáu tháng sau, số vấn đề được nêu trong tháng tăng rõ rệt — điều mà chị chủ động giải thích với hội đồng quản trị là dấu hiệu tốt chứ không phải chất lượng đang xấu đi.',
+    comparison: [
+      { weak: 'Tổ chức một chiến dịch truyền thông nội bộ về giá trị mới với poster và áo đồng phục.', mature: 'Đổi tiêu chí thăng tiến và cách xử lý sự cố trước, rồi kể lại những trường hợp thật đã diễn ra theo cách mới.' },
+      { weak: 'Xử lý nhẹ tay khi người vi phạm nguyên tắc là nhân viên mang lại nhiều doanh thu.', mature: 'Áp dụng nguyên tắc đồng nhất bất kể đóng góp, vì mọi ngoại lệ đều được cả tổ chức ghi nhận và diễn giải thành quy tắc thật.' },
+      { weak: 'Coi khảo sát văn hoá là hoạt động hình thức, không công bố kết quả xấu.', mature: 'Công bố cả kết quả xấu kèm ba việc sẽ làm và người chịu trách nhiệm, rồi báo lại tiến độ ở kỳ sau.' },
+    ],
+    mistakes: [
+      'Sao chép bộ giá trị của một công ty nổi tiếng mà không xét bối cảnh, quy mô và ngành của mình, tạo ra những cam kết không ai trong tổ chức thực hiện được.',
+      'Nói về an toàn tâm lý nhưng phản ứng phòng thủ ngay lần đầu có người nêu vấn đề trong họp — một lần như vậy đủ để tắt kênh trong nhiều tháng.',
+      'Đổi văn hoá bằng cách thay người hàng loạt mà không đổi các cơ chế thưởng phạt, khiến người mới nhanh chóng học lại đúng hành vi cũ trong vòng vài tháng.',
+    ],
+    worksheet: [
+      'Liệt kê năm người được thăng chức hoặc khen thưởng gần nhất trong tổ chức bạn và ghi lý do thật đằng sau từng trường hợp.',
+      'Trong ba tháng căng thẳng nhất năm ngoái, quy tắc hoặc hoạt động nào bị bỏ đầu tiên? Điều đó nói gì về thứ tự ưu tiên thật?',
+      'Viết ba hành vi cụ thể bạn muốn thấy trong nhóm mình, mỗi hành vi phải quan sát được bởi người ngoài.',
+      'Với mỗi hành vi, ghi nó đang xuất hiện ở bao nhiêu trong bốn cơ chế: tuyển dụng, đánh giá, xử lý vi phạm, câu chuyện được kể.',
+      'Lần gần nhất bạn phải trả giá cho một nguyên tắc bạn tuyên bố là khi nào? Nếu chưa từng, nguyên tắc đó chưa được kiểm chứng.',
+    ],
+    exercises: [
+      { label: 'Bài đọc văn hoá', text: 'Thu thập ba nguồn bằng chứng về văn hoá thật của nhóm bạn và viết một trang mô tả nó bằng hành vi, không dùng từ tích cực hay tiêu cực nào.', level: 'e' },
+      { label: 'Dịch giá trị thành hành vi', text: 'Lấy bộ giá trị chính thức của tổ chức và với mỗi giá trị, viết hai hành vi quan sát được thể hiện nó và một hành vi vi phạm nó. Hỏi ba đồng nghiệp xem họ có đồng ý không.', level: 'e' },
+      { label: 'Hỏi người mới', text: 'Với người vào làm dưới ba tháng, hỏi họ đã học được quy tắc ngầm nào mà không ai nói ra. Người mới nhìn thấy văn hoá rõ nhất trước khi họ quen với nó.', level: 'e' },
+      { label: 'Kiểm bốn cơ chế', text: 'Chọn một hành vi bạn muốn xây, rà xem nó có trong tiêu chí tuyển, tiêu chí đánh giá, cách xử lý vi phạm và câu chuyện được kể không. Bổ sung vào ít nhất hai cơ chế còn thiếu.', level: 'm' },
+      { label: 'Kể lại một trường hợp thật', text: 'Tìm một trường hợp có thật trong nhóm thể hiện đúng hành vi bạn muốn xây, xin phép người liên quan và kể lại trong họp nhóm với đủ chi tiết. Quan sát xem câu chuyện đó có được nhắc lại không.', level: 'm' },
+      { label: 'Ba câu khảo sát cố định', text: 'Chạy một khảo sát ẩn danh ba câu mỗi quý về sự an toàn khi nêu vấn đề, sự rõ ràng của kỳ vọng và cảm nhận công bằng. Công bố kết quả và ba việc sẽ làm.', level: 'm' },
+      { label: 'Xử lý một ngoại lệ khó', text: 'Tìm một trường hợp bạn đang áp dụng nguyên tắc thiếu nhất quán vì người liên quan quan trọng. Lập kế hoạch xử lý đồng nhất và ghi lại hệ quả thật sau khi làm.', level: 'h' },
+      { label: 'Thử thách 7 ngày: mỗi ngày một tín hiệu', text: 'Bảy ngày, mỗi ngày ghi lại một tín hiệu văn hoá bạn phát ra mà không chủ đích — bạn khen ai vì việc gì, bạn im lặng trước điều gì, bạn phản ứng ra sao với tin xấu. Ngày thứ bảy đọc bảy dòng và tự hỏi: nếu chỉ dựa vào đây, nhân viên sẽ suy ra tổ chức này coi trọng điều gì?', level: 'h' },
+    ],
+    checkpoints: [
+      {
+        q: 'Vì sao bộ giá trị treo tường thường không đổi được hành vi?',
+        a: 'Vì con người suy ra quy tắc thật từ hệ quả họ quan sát được, không từ văn bản. Khi văn bản nói coi trọng chất lượng nhưng người được thăng chức là người giao nhanh nhất bất kể lỗi, thì bài học được rút ra là chất lượng chỉ quan trọng khi không xung đột với tốc độ. Tệ hơn, khoảng cách giữa lời nói và thực tế còn tạo ra sự hoài nghi có hệ thống, khiến những thông điệp thật sau này cũng bị nghe với thái độ nghi ngờ.',
+      },
+      {
+        q: 'Ba nguồn bằng chứng đáng tin nhất để đọc văn hoá của một tổ chức là gì?',
+        a: 'Một, ai được thăng chức và khen thưởng, cùng lý do thật — đây là tuyên bố mạnh nhất về điều gì được coi trọng. Hai, chuyện gì xảy ra sau một sai lầm hoặc một sự cố: người báo được đối xử ra sao, có tìm nguyên nhân hệ thống hay tìm người chịu trách nhiệm. Ba, thứ bị bỏ đầu tiên khi thiếu thời gian hoặc thiếu tiền, vì thứ tự bỏ mới cho thấy thứ tự ưu tiên thật. Cả ba đều là dữ liệu quan sát được và khó nguỵ tạo, khác với câu trả lời trong khảo sát.',
+      },
+      {
+        q: 'Một nhóm nhỏ có thể xây văn hoá riêng khác với công ty lớn xung quanh không?',
+        a: 'Có, ở mức đáng kể, vì trải nghiệm hằng ngày của một nhân viên chủ yếu do quản lý trực tiếp và các đồng nghiệp gần nhất định hình. Bạn kiểm soát được cách phản hồi, cách xử lý sai lầm trong phạm vi nhóm, cách chia việc và cách kể chuyện. Giới hạn là những cơ chế nằm ngoài tầm bạn — thang lương, tiêu chí thăng tiến toàn công ty, cách xử lý ở cấp cao hơn. Vì vậy nên nói rõ với nhóm đâu là thứ bạn cam kết được và đâu là thứ bạn chỉ có thể phản ánh lên, thay vì hứa những điều bạn không kiểm soát.',
+      },
+    ],
+    plan7:
+      'Ngày 1: thu thập bằng chứng về năm lần thăng chức hoặc khen thưởng gần nhất. Ngày 2: rà lại ba sự cố gần nhất và cách chúng được xử lý. Ngày 3: viết một trang mô tả văn hoá thật bằng hành vi. Ngày 4: chọn ba hành vi mục tiêu và viết định nghĩa quan sát được. Ngày 5: rà bốn cơ chế và bổ sung hành vi vào ít nhất hai chỗ. Ngày 6: hỏi hai người mới về quy tắc ngầm họ đã học được. Ngày 7: kể lại một trường hợp thật thể hiện hành vi mong muốn trong họp nhóm.',
+    evidence:
+      'Hiện vật là bản đọc văn hoá của bạn (ba nguồn bằng chứng, kết luận bằng hành vi) cộng với danh sách thay đổi cơ chế bạn đã thực hiện và ngày thực hiện — ví dụ tiêu chí đánh giá đã bổ sung dòng nào, quy trình xử lý sự cố đã đổi ra sao. Nếu có khảo sát ba câu chạy nhiều kỳ, đưa cả chuỗi số kể cả kỳ xấu. Trong phỏng vấn, câu chuyện có sức nặng nhất là một lần bạn phải trả giá thật để giữ nguyên tắc: hợp đồng bị từ chối, người giỏi phải xử lý nghiêm, hoặc bạn thừa nhận sai trước nhóm. Trong CV nên mô tả cơ chế: "Đưa nguyên tắc báo vấn đề sớm không quy trách nhiệm vào tiêu chí đánh giá và quy trình xử lý sự cố cho 18 nhân sự, số vấn đề được nêu chủ động tăng rõ trong hai quý".',
+    references: [
+      { label: 'Harvard Business Review — chủ đề Organizational Culture', url: 'https://hbr.org/topic/subject/organizational-culture', type: 'article', needsReview: true },
+      { label: 'Gallup Workplace — nghiên cứu và tài nguyên về văn hoá nơi làm việc', url: 'https://www.gallup.com/workplace/', type: 'article' },
+    ],
+  }),
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Chương 15 — Quản lý thay đổi tổ chức
+  // ─────────────────────────────────────────────────────────────────────────
+  guide({
+    thesis:
+      'Thay đổi tổ chức thất bại hiếm khi vì giải pháp kỹ thuật sai; nó thất bại vì phần con người bị coi là chuyện sẽ tự xảy ra. Người ta không chống lại sự thay đổi nói chung — họ chống lại việc bị mất thứ họ đang có: sự thành thạo, quan hệ, vị thế, sự an toàn. Công việc của người dẫn thay đổi là làm rõ mất gì và được gì cho từng nhóm, cung cấp năng lực mới trước khi đòi hỏi hành vi mới, và kiên nhẫn với khoảng thời gian hiệu suất tụt xuống trước khi hồi lên. Khi thay đổi liên quan tới cắt giảm nhân sự, tái cơ cấu hay sửa đổi hợp đồng lao động, mọi thủ tục phải do bộ phận nhân sự chủ trì theo đúng quy định pháp luật hiện hành — phần dưới đây chỉ bàn về kỹ thuật quản lý.',
+    why: {
+      work: 'Hầu như mọi dự án đáng kể đều là một thay đổi tổ chức đội lốt dự án kỹ thuật: đổi phần mềm, gộp phòng ban, đổi quy trình. Ai chỉ quản phần công cụ mà bỏ phần con người sẽ thấy hệ thống mới được cài xong nhưng mọi người vẫn dùng bảng tính cũ song song.',
+      interview:
+        'Câu hỏi "kể về một thay đổi bạn dẫn dắt" là chỗ phân biệt rõ người đã làm thật. Người có kinh nghiệm sẽ nói về nhóm phản đối mạnh nhất, về việc họ mất gì, và về khoảng thời gian mọi thứ tệ đi — chứ không kể một câu chuyện triển khai suôn sẻ.',
+      study:
+        'Đổi phương pháp học hoặc đổi ngành cũng đi qua đúng đường cong đó: giai đoạn đầu bạn kém hơn lúc chưa đổi, vì kỹ năng cũ không dùng được còn kỹ năng mới chưa thành thạo. Biết trước điều này giúp bạn không bỏ cuộc ở đúng chỗ ai cũng bỏ cuộc.',
+      life: 'Thay đổi lớn trong gia đình — chuyển nhà, đổi lịch sinh hoạt, chăm sóc người bệnh — thất bại vì cùng lý do: người ta được thông báo kết quả mà không được tham gia vào cách làm, và không ai nói ra họ sẽ mất gì.',
+    },
+    framework: [
+      { name: 'Xác định ai mất gì', detail: 'Lập bảng theo nhóm người bị ảnh hưởng: họ mất gì cụ thể (kỹ năng đang thành thạo, quyền quyết định, quan hệ quen, sự thuận tiện), được gì, và điều gì họ lo nhất. Bảng này phải xây bằng cách đi hỏi, không bằng suy đoán từ phòng họp.' },
+      { name: 'Nói rõ lý do bằng dữ kiện, không bằng khẩu hiệu', detail: 'Trình bày điều gì sẽ xảy ra nếu không đổi, bằng con số và mốc thời gian thật. Người trưởng thành chấp nhận khó khăn khi hiểu vì sao; họ phản ứng mạnh nhất với cảm giác bị dắt đi mà không được cho biết bản đồ.' },
+      { name: 'Cung cấp năng lực trước khi đòi hành vi', detail: 'Đào tạo, tài liệu, người hỗ trợ tại chỗ, thời gian tập trong điều kiện thật — phải có trước ngày chuyển đổi. Đòi hành vi mới khi người ta chưa biết làm sẽ tạo ra sự né tránh, và sự né tránh đó sau này bị gọi nhầm là chống đối.' },
+      { name: 'Làm thí điểm và để người dùng đầu đi kể lại', detail: 'Chọn một nhóm nhỏ có thiện chí làm trước, sửa theo phản hồi thật, rồi để chính họ trình bày cho các nhóm sau. Lời của đồng nghiệp cùng cấp có sức thuyết phục khác hẳn lời của ban lãnh đạo, và nhóm thí điểm cũng lộ ra những vấn đề mà không kế hoạch nào lường trước.' },
+      { name: 'Dự trù đường cong hiệu suất và mốc rà', detail: 'Nói trước với mọi người rằng năng suất sẽ tụt trong khoảng thời gian nào và bao lâu, đặt mốc rà cụ thể để đánh giá, đồng thời thống nhất trước tiêu chí để dừng hoặc điều chỉnh. Không dự trù thì mỗi lần số liệu xấu đi sẽ bị dùng làm bằng chứng rằng thay đổi là sai lầm.' },
+    ],
+    scenario:
+      'Một chuỗi bảy siêu thị mini chuyển từ hệ thống bán hàng cũ sang hệ thống mới có quản lý tồn kho. Lần triển khai đầu tiên thất bại: sau ba tuần, năm cửa hàng vẫn ghi tay rồi nhập lại vào cuối ngày, và số liệu tồn kho không dùng được. Quản lý chuỗi rà lại và phát hiện những gì đã bỏ sót: thu ngân lâu năm mất lợi thế thành thạo và sợ bị đánh giá chậm trước mặt khách; ca trưởng mất quyền tự điều chỉnh giá khuyến mãi tại chỗ; và không ai được tập trên máy thật trước ngày chuyển, chỉ được xem một video 20 phút. Lần triển khai lại, anh làm bốn việc: đi hỏi từng nhóm để lập bảng mất - được; mở máy tập tại kho trong hai tuần trước ngày chuyển với dữ liệu giả; chọn cửa hàng số 3 làm thí điểm và để hai thu ngân ở đó đi hướng dẫn các cửa hàng còn lại; và thông báo trước rằng tốc độ tính tiền sẽ chậm hơn trong khoảng ba tuần, kèm việc tăng thêm một người mỗi ca vào giờ cao điểm trong giai đoạn đó. Đợt hai hoàn tất trong năm tuần và đến tuần thứ tám thì số liệu tồn kho đủ tin cậy để dùng cho đặt hàng.',
+    comparison: [
+      { weak: 'Công bố thay đổi qua một email dài vào chiều thứ Sáu và bắt đầu áp dụng từ thứ Hai.', mature: 'Thông báo sớm theo lộ trình, gặp trực tiếp các nhóm bị ảnh hưởng nặng nhất trước, và để khoảng thời gian đủ cho việc chuẩn bị năng lực.' },
+      { weak: 'Gọi mọi phản đối là bảo thủ và tìm cách vượt qua nó bằng áp lực từ cấp trên.', mature: 'Xem phản đối là nguồn thông tin: hỏi cụ thể họ lo mất gì, phân loại phần nào là thông tin đúng cần sửa kế hoạch và phần nào là nỗi lo cần được xử lý bằng hỗ trợ.' },
+      { weak: 'Tuyên bố thay đổi đã hoàn tất khi hệ thống mới được cài xong.', mature: 'Coi thay đổi hoàn tất khi cách làm cũ đã ngừng hẳn và các chỉ số vận hành trở lại mức trước hoặc tốt hơn, và kiểm điều đó bằng quan sát tại chỗ chứ không bằng báo cáo.' },
+    ],
+    mistakes: [
+      'Chỉ truyền thông một lần ở đầu dự án rồi im lặng suốt quá trình, khiến khoảng trống thông tin bị lấp bằng tin đồn — và tin đồn luôn nghiêng về kịch bản xấu nhất.',
+      'Bỏ qua nhóm quản lý cấp trung: họ là người phải trả lời câu hỏi hằng ngày của nhân viên, nên nếu họ không được chuẩn bị trước và không được giải thích lý do, họ sẽ vô tình trở thành nơi thay đổi bị chặn lại.',
+      'Không định nghĩa trước tiêu chí thành công và mốc dừng, nên khi hiệu suất tụt theo đúng dự kiến thì không có căn cứ nào để phân biệt giữa khó khăn tạm thời và dấu hiệu phải điều chỉnh.',
+    ],
+    worksheet: [
+      'Liệt kê các nhóm bị ảnh hưởng bởi thay đổi bạn đang dẫn, và với mỗi nhóm ghi một câu về thứ cụ thể họ sẽ mất.',
+      'Bạn đã hỏi trực tiếp bao nhiêu người trong nhóm bị ảnh hưởng nặng nhất? Nếu chưa ai, đó là việc đầu tiên.',
+      'Viết ba câu giải thích điều gì sẽ xảy ra nếu không thay đổi, bằng con số và mốc thời gian.',
+      'Năng lực mới nào cần có trước ngày chuyển đổi, và kế hoạch cung cấp nó là gì kèm ngày cụ thể?',
+      'Bạn dự đoán hiệu suất tụt bao nhiêu và trong bao lâu? Mốc rà và tiêu chí điều chỉnh của bạn là gì?',
+    ],
+    exercises: [
+      { label: 'Bảng mất - được', text: 'Lập bảng cho từng nhóm bị ảnh hưởng với ba cột: mất gì, được gì, lo nhất điều gì. Điền bằng suy đoán trước, rồi đi hỏi và sửa lại bằng mực khác để thấy mình đã đoán sai chỗ nào.', level: 'e' },
+      { label: 'Ba câu vì sao', text: 'Viết ba câu giải thích lý do thay đổi bằng dữ kiện, đọc cho một người không thuộc dự án nghe và hỏi họ có thấy thuyết phục không, phần nào còn khó tin.', level: 'e' },
+      { label: 'Bản đồ người ảnh hưởng', text: 'Vẽ sơ đồ ai nghe ai trong tổ chức của bạn, đánh dấu những người có ảnh hưởng phi chính thức lớn. Lên kế hoạch nói chuyện riêng với ba người trong số đó trước khi công bố rộng.', level: 'e' },
+      { label: 'Phỏng vấn người phản đối', text: 'Tìm người phản đối mạnh nhất và dành 45 phút chỉ để nghe. Ghi lại ít nhất một điểm họ đúng và đưa nó vào kế hoạch.', level: 'm' },
+      { label: 'Thiết kế thí điểm', text: 'Chọn một nhóm nhỏ làm thí điểm, thống nhất trước điều gì được coi là thành công và cách thu phản hồi. Sau thí điểm, liệt kê những thay đổi bạn đã thực hiện nhờ nó.', level: 'm' },
+      { label: 'Kế hoạch năng lực', text: 'Lập lịch đào tạo và hỗ trợ tại chỗ hoàn tất trước ngày chuyển đổi, kèm cách kiểm chứng người ta thật sự làm được (không phải chỉ đã tham dự).', level: 'm' },
+      { label: 'Nhịp truyền thông', text: 'Lập lịch cập nhật đều đặn trong suốt quá trình, mỗi lần gồm ba phần: tiến độ thật, vấn đề đang gặp, việc sắp tới. Duy trì đủ chu kỳ kể cả tuần không có tin tốt và ghi lại phản ứng khi bạn nói ra vấn đề.', level: 'h' },
+      { label: 'Thử thách 7 ngày: mỗi ngày một cuộc nói chuyện', text: 'Bảy ngày, mỗi ngày nói chuyện riêng với một người bị ảnh hưởng và chỉ hỏi hai câu: điều gì trong thay đổi này khiến bạn lo nhất, và điều gì sẽ giúp bạn dễ hơn. Ngày thứ bảy tổng hợp bảy câu trả lời và đưa ít nhất hai điều chỉnh vào kế hoạch.', level: 'h' },
+    ],
+    checkpoints: [
+      {
+        q: 'Vì sao nói "người ta không chống thay đổi, họ chống mất mát" lại hữu ích về mặt hành động?',
+        a: 'Vì nó chuyển câu hỏi từ "làm sao thuyết phục họ chấp nhận" sang "họ đang mất gì cụ thể và tôi bù đắp hoặc giảm nhẹ được phần nào". Câu hỏi thứ hai có câu trả lời hành động được: nếu người ta mất sự thành thạo thì cung cấp thời gian tập và người hỗ trợ; nếu mất quyền quyết định thì xem có trao lại phần nào trong cấu trúc mới không; nếu lo mất việc thì phải trả lời thẳng thắn trong phạm vi được phép nói. Cách tiếp cận thuyết phục thuần tuý không chạm tới nguyên nhân nên hiệu lực rất ngắn.',
+      },
+      {
+        q: 'Vai trò của quản lý cấp trung trong một thay đổi là gì, và vì sao họ hay bị bỏ quên?',
+        a: 'Họ là người phải trả lời câu hỏi của nhân viên hằng ngày, phải phân xử các trường hợp cụ thể mà kế hoạch không lường trước, và họ cũng là nhóm chịu áp lực hai chiều nặng nhất. Họ hay bị bỏ quên vì ban lãnh đạo thường tập trung vào việc truyền thông tới toàn thể nhân viên và cho rằng cấp trung đương nhiên đồng thuận. Hệ quả là họ phải giải thích một quyết định mà chính họ chưa được giải thích, nên họ hoặc trả lời cho qua hoặc vô tình truyền đi sự hoài nghi. Cách xử lý là cho họ biết trước, cho họ hỏi hết, và trang bị cho họ câu trả lời cho các câu hỏi khó nhất.',
+      },
+      {
+        q: 'Khi nào thì việc hiệu suất giảm sau thay đổi là bình thường, và khi nào là dấu hiệu phải điều chỉnh?',
+        a: 'Bình thường khi mức giảm nằm trong dự trù đã công bố trước, khi nguyên nhân là sự chưa thành thạo và có dấu hiệu cải thiện theo tuần, và khi các vấn đề gặp phải là loại đã lường trước. Cần điều chỉnh khi mức giảm vượt xa dự trù, khi không có xu hướng cải thiện sau khoảng thời gian đủ để học, khi xuất hiện các vấn đề thuộc loại chưa từng nghĩ tới, hoặc khi mọi người bắt đầu duy trì song song cách làm cũ — dấu hiệu cuối cùng này thường có nghĩa là cách làm mới thật sự thiếu một chức năng nào đó, chứ không phải nhân viên bảo thủ.',
+      },
+    ],
+    plan7:
+      'Ngày 1: liệt kê các nhóm bị ảnh hưởng và điền bảng mất - được bằng suy đoán. Ngày 2: hỏi ba người thuộc nhóm chịu ảnh hưởng nặng nhất và sửa bảng. Ngày 3: viết ba câu lý do bằng dữ kiện và thử với người ngoài dự án. Ngày 4: gặp riêng nhóm quản lý cấp trung, để họ hỏi hết và ghi lại câu chưa trả lời được. Ngày 5: lập kế hoạch cung cấp năng lực với ngày cụ thể. Ngày 6: chọn nhóm thí điểm và thống nhất tiêu chí thành công. Ngày 7: công bố lộ trình kèm dự trù về giai đoạn hiệu suất giảm và mốc rà.',
+    evidence:
+      'Hiện vật là bộ tài liệu dẫn dắt thay đổi: bảng mất - được theo từng nhóm có ghi nguồn (bạn đã hỏi ai), lộ trình truyền thông, kế hoạch năng lực với ngày, kết quả thí điểm và những điều chỉnh do thí điểm tạo ra. Thêm biểu đồ chỉ số vận hành qua giai đoạn chuyển đổi, bao gồm cả phần tụt xuống — cố tình giữ phần xấu vì nó cho thấy bạn đo thật. Trong phỏng vấn, phần đắt giá là kể về người phản đối mạnh nhất, điều họ nói đúng và điều bạn đã sửa nhờ họ. Trong CV: "Dẫn dắt chuyển đổi hệ thống bán hàng cho 7 cửa hàng sau một lần triển khai thất bại: khảo sát tác động theo nhóm, thí điểm một điểm bán, hoàn tất trong 5 tuần và đưa dữ liệu tồn kho vào sử dụng cho đặt hàng từ tuần thứ 8".',
+    references: [
+      { label: 'Harvard Business Review — chủ đề Change Management', url: 'https://hbr.org/topic/subject/change-management', type: 'article', needsReview: true },
+      { label: 'Prosci — phương pháp quản lý thay đổi tập trung vào con người (ADKAR)', url: 'https://www.prosci.com/', type: 'article' },
+    ],
+  }),
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Chương 16 — Lãnh đạo đạo đức
+  // ─────────────────────────────────────────────────────────────────────────
+  guide({
+    thesis:
+      'Lãnh đạo đạo đức không phải là trạng thái trong sạch của một cá nhân mà là năng lực nhận ra tình huống có xung đột lợi ích hoặc áp lực làm sai TRƯỚC KHI đứng trong đó, và có sẵn cơ chế để không phải quyết định bằng ý chí ở phút cuối. Phần lớn sai phạm trong tổ chức không đến từ người xấu mà từ những người bình thường trong một chuỗi bước nhỏ, mỗi bước chỉ hơi vượt ranh giới, dưới áp lực chỉ tiêu và trong môi trường không ai được thưởng vì nói ra vấn đề.',
+    why: {
+      work: 'Chi phí của một sai phạm không dừng ở khoản tiền: nó là niềm tin của khách hàng, là những người giỏi lặng lẽ rời đi, và là việc mọi quy tắc sau đó trở nên vô nghĩa. Một quản lý xây được cơ chế phòng ngừa sẽ bảo vệ cả tổ chức lẫn chính mình khỏi những tình huống không có lối thoát tốt.',
+      interview:
+        'Câu "kể về một lần bạn phải chọn giữa kết quả và nguyên tắc" xuất hiện thường xuyên ở phỏng vấn cấp quản lý. Câu trả lời có sức nặng phải có một chi phí thật mà bạn đã trả, chứ không phải một tình huống mà làm đúng cũng chẳng mất gì.',
+      study:
+        'Trong học thuật, các quy tắc về trích dẫn, về trung thực dữ liệu và về ghi công tồn tại vì cùng một lý do: chúng bảo vệ giá trị của toàn bộ hệ thống tri thức. Hiểu lý do đằng sau giúp bạn tuân thủ đúng tinh thần chứ không chỉ đúng hình thức.',
+      life: 'Những ranh giới nhỏ trong đời sống — nhận một món quà từ đối tác, dùng nguồn lực công ty cho việc riêng, im lặng trước một điều sai không liên quan tới mình — thường không có ai kiểm tra. Chúng đáng để có quy tắc riêng viết sẵn, vì quyết định tại chỗ luôn nghiêng về hướng thuận tiện.',
+    },
+    framework: [
+      { name: 'Vẽ trước bản đồ vùng rủi ro của vị trí bạn', detail: 'Liệt kê những chỗ vai trò của bạn có thể tạo xung đột lợi ích hoặc cám dỗ: quyền chọn nhà cung cấp, quyền tuyển người quen, quyền duyệt chi, quyền tiếp cận thông tin nội bộ. Viết ra khi đầu óc tỉnh táo, không phải khi đã có một phong bì trên bàn.' },
+      { name: 'Đặt quy tắc cá nhân trước tình huống', detail: 'Viết ngưỡng cụ thể cho từng vùng: quà trên một giá trị nhất định thì từ chối hoặc nộp về công ty; người thân dự thầu thì tự rút khỏi hội đồng và ghi vào biên bản; không quyết định lớn trong bữa ăn có rượu. Quy tắc định trước loại bỏ nhu cầu phải cân nhắc lại trong lúc chịu áp lực xã hội.' },
+      { name: 'Dùng ba phép thử nhanh', detail: 'Phép thử công khai: tôi có sẵn sàng để việc này được đăng lên nội bộ toàn công ty không. Phép thử vai trò đổi chiều: nếu tôi là bên kia hoặc là khách hàng, tôi thấy việc này thế nào. Phép thử người thân: tôi có kể việc này cho con hoặc cho người tôi tôn trọng không. Không phép thử nào hoàn hảo, nhưng ba cái cùng lúc thường đủ để nhận ra vùng xám.' },
+      { name: 'Tạo đường nói ra an toàn trong nhóm', detail: 'Nói rõ với đội rằng ai nêu nghi ngờ về một việc không đúng sẽ không bị bất lợi, chỉ định một kênh cụ thể để nêu, và quan trọng nhất là xử lý nghiêm túc trường hợp đầu tiên. Nếu tổ chức có kênh tố giác chính thức thì hướng dẫn rõ cách dùng nó.' },
+      { name: 'Xem lại áp lực hệ thống bạn tạo ra', detail: 'Rà xem chỉ tiêu và cách thưởng phạt của bạn có đang đẩy người ta vào chỗ khó không: chỉ tiêu bất khả thi, thưởng chỉ theo số, phạt nặng khi báo tin xấu. Rất nhiều sai phạm bắt nguồn từ một hệ thống động cơ hợp lý về mặt giấy tờ nhưng chỉ có thể đạt bằng cách đi tắt.' },
+    ],
+    scenario:
+      'Trưởng phòng mua hàng của một công ty sản xuất bao bì phụ trách chọn nhà cung cấp giấy với giá trị hợp đồng năm khoảng vài chục tỷ đồng. Anh viết bản đồ rủi ro cho vị trí mình gồm bốn vùng và đặt quy tắc: mọi quà trên một mức nhỏ đều báo và nộp về công ty; không nhận chuyến tham quan nhà máy do nhà cung cấp đài thọ hoàn toàn; mọi so sánh báo giá phải có ít nhất ba bên và bảng chấm theo tiêu chí viết trước. Sáu tháng sau, một nhà cung cấp lâu năm đề nghị chi hoa hồng riêng 2% để giữ hợp đồng, kèm lời nhắc rằng công ty đang cần giữ giá thấp. Anh từ chối, ghi lại nội dung cuộc gặp bằng văn bản trong ngày và báo cáo lên ban giám đốc cùng bộ phận kiểm soát nội bộ. Việc này khiến quá trình đấu thầu kéo dài thêm ba tuần và anh phải giải thích nhiều lần vì sao chi phí quý đó cao hơn dự toán. Điều đáng chú ý là sau vụ đó, hai nhân viên trong phòng chủ động báo lại những đề nghị tương tự mà trước đây họ tự xử lý im lặng — cơ chế nói ra chỉ thành thật sau khi có một trường hợp cho thấy nó hoạt động.',
+    comparison: [
+      { weak: 'Tin rằng mình sẽ đủ tỉnh táo để quyết định đúng khi tình huống xảy ra.', mature: 'Viết quy tắc và ngưỡng trước, vì trong tình huống thật luôn có áp lực quan hệ, áp lực thời gian và một lời giải thích nghe rất hợp lý.' },
+      { weak: 'Xử lý một vi phạm nhỏ bằng cách nhắc miệng rồi bỏ qua vì người đó đang làm tốt.', mature: 'Xử lý nhất quán theo mức độ và ghi lại, vì mỗi ngoại lệ đều được cả nhóm quan sát và ghi nhận là ranh giới thật ở đâu.' },
+      { weak: 'Đặt chỉ tiêu rất cao rồi tuyên bố "tôi không quan tâm cách làm, chỉ quan tâm kết quả".', mature: 'Nêu rõ những cách đạt kết quả không được chấp nhận, và định kỳ kiểm xem chỉ tiêu có đang chỉ đạt được bằng cách đi tắt hay không.' },
+    ],
+    mistakes: [
+      'Nghĩ rằng đạo đức là vấn đề của người khác và của các vụ việc lớn, trong khi rủi ro thật nằm ở chuỗi các bước nhỏ mà mỗi bước đều có lời biện minh nghe được.',
+      'Tạo kênh báo cáo nội bộ nhưng để người nêu vấn đề chịu hậu quả ngầm, khiến kênh đó chết sau trường hợp đầu tiên và tổ chức mất luôn khả năng biết sớm.',
+      'Nhầm sự trung thành với tổ chức thành việc che giấu sai phạm cho tổ chức, trong khi che giấu chỉ làm tổn thất lớn hơn khi sự việc lộ ra và thường kéo theo trách nhiệm của chính người che.',
+    ],
+    worksheet: [
+      'Liệt kê bốn vùng trong công việc của bạn có thể phát sinh xung đột lợi ích hoặc cám dỗ. Ghi cụ thể quyền hạn nào tạo ra vùng đó.',
+      'Với vùng rủi ro lớn nhất, viết một ngưỡng hoặc quy tắc cụ thể bạn cam kết áp dụng, đủ rõ để người khác kiểm được.',
+      'Có quyết định nào gần đây bạn ngại kể lại đầy đủ cho cả phòng không? Ghi ra và tự phân tích vì sao.',
+      'Nếu một nhân viên phát hiện điều gì đó không đúng trong nhóm bạn, họ sẽ nói với ai và điều gì sẽ xảy ra với họ sau đó?',
+      'Chỉ tiêu nào bạn đang giao mà chỉ có thể đạt bằng cách bỏ qua một quy tắc nào đó? Nếu có, đó là rủi ro bạn đang tạo ra.',
+    ],
+    exercises: [
+      { label: 'Bản đồ vùng rủi ro', text: 'Viết bản đồ vùng rủi ro cho chính vị trí của bạn, mỗi vùng kèm một ví dụ cụ thể có thể xảy ra trong sáu tháng tới.', level: 'e' },
+      { label: 'Ba phép thử', text: 'Lấy ba quyết định bạn đã đưa ra trong tháng qua và chạy chúng qua ba phép thử công khai, đổi vai và người thân. Ghi lại quyết định nào khiến bạn ngập ngừng.', level: 'e' },
+      { label: 'Viết quy tắc cá nhân', text: 'Viết năm quy tắc có ngưỡng cụ thể cho những tình huống bạn dự đoán sẽ gặp. Chia sẻ với một người bạn tin để họ có thể nhắc bạn.', level: 'e' },
+      { label: 'Tuyên bố kênh nói ra', text: 'Nói rõ với nhóm về kênh nêu vấn đề và cam kết bảo vệ người nêu. Chuẩn bị sẵn cách bạn sẽ xử lý trường hợp đầu tiên và ghi lại kế hoạch đó.', level: 'm' },
+      { label: 'Rà chỉ tiêu tạo áp lực', text: 'Với mỗi chỉ tiêu bạn đang giao, hỏi "cách nhanh nhất để đạt nó mà tôi không muốn xảy ra là gì". Bổ sung ràng buộc hoặc chỉ số bảo vệ tương ứng.', level: 'm' },
+      { label: 'Ghi chép quyết định nhạy cảm', text: 'Với các quyết định thuộc vùng rủi ro, tạo thói quen ghi lại lý do và các phương án đã cân nhắc trong ngày. Rà lại sau ba tháng xem cách ghi có đủ rõ cho người ngoài đọc không.', level: 'm' },
+      { label: 'Phân tích một vụ việc công khai', text: 'Chọn một vụ việc doanh nghiệp đã được đưa tin rộng rãi, dựng lại chuỗi các bước nhỏ dẫn tới hậu quả, và xác định điểm nào một cơ chế đơn giản có thể đã chặn được. Đối chiếu xem tổ chức bạn có cơ chế đó không.', level: 'h' },
+      { label: 'Thử thách 7 ngày: nói ra một điều khó', text: 'Bảy ngày, mỗi ngày nói ra một điều đúng nhưng khó nói ở mức nhỏ — một sai sót của chính bạn, một con số không đẹp trong báo cáo, một lời từ chối. Ngày thứ bảy nhìn lại: điều gì thật sự xảy ra so với điều bạn đã lo, và việc nào bạn vẫn né được tới cùng.', level: 'h' },
+    ],
+    checkpoints: [
+      {
+        q: 'Vì sao quy tắc định trước lại đáng tin hơn quyết định tại chỗ?',
+        a: 'Vì tại thời điểm xảy ra, bạn chịu ba áp lực mà lúc bình thường không có: quan hệ với người đang đề nghị, thời gian gấp, và một lời biện minh được trình bày sẵn nghe rất hợp lý. Trong điều kiện đó, xu hướng tự nhiên là tìm lý do để nói có. Quy tắc viết sẵn với ngưỡng cụ thể chuyển câu hỏi từ "việc này có thật sự sai không" — vốn luôn tranh cãi được — sang "việc này có vượt ngưỡng tôi đã đặt không", vốn là câu hỏi có đáp án rõ ràng. Nó cũng cho bạn một câu từ chối không mang tính công kích cá nhân.',
+      },
+      {
+        q: 'Vì sao nhiều sai phạm lớn lại do những người bình thường thực hiện?',
+        a: 'Vì chúng hiếm khi bắt đầu bằng một quyết định lớn. Thường là một chuỗi bước nhỏ: làm tròn một con số cho kịp báo cáo, hoãn ghi nhận một khoản lỗ sang quý sau, chấp nhận một ngoại lệ cho khách lớn. Mỗi bước đều nhỏ hơn bước trước một chút về mặt cảm nhận, và bước sau được biện minh bằng bước trước đã làm. Cộng thêm áp lực chỉ tiêu và môi trường không ai được thưởng vì báo tin xấu, thì chuỗi đó tiếp diễn cho tới khi không còn lối lùi. Đây là lý do can thiệp hiệu quả phải nhắm vào bước đầu tiên và vào hệ thống động cơ, không nhắm vào việc chọn người tốt.',
+      },
+      {
+        q: 'Người quản lý có thể làm gì để kênh nêu vấn đề thật sự hoạt động?',
+        a: 'Ba việc theo thứ tự quan trọng. Thứ nhất, xử lý trường hợp đầu tiên một cách nghiêm túc và cho mọi người thấy kết quả trong phạm vi được phép công bố — không có bằng chứng này thì mọi cam kết chỉ là lời nói. Thứ hai, bảo vệ người nêu khỏi cả hậu quả chính thức lẫn hậu quả ngầm như bị cô lập hay bị loại khỏi các cơ hội. Thứ ba, chính người quản lý phải là người thường xuyên nói ra tin xấu của mình lên trên, vì đội quan sát hành vi của bạn kỹ hơn nhiều so với lời tuyên bố của bạn.',
+      },
+    ],
+    plan7:
+      'Ngày 1: viết bản đồ vùng rủi ro cho vị trí của bạn. Ngày 2: viết năm quy tắc có ngưỡng cụ thể. Ngày 3: chạy ba phép thử với ba quyết định gần đây. Ngày 4: rà từng chỉ tiêu bạn đang giao và tìm cách đạt bằng đường tắt. Ngày 5: bổ sung ràng buộc cho chỉ tiêu rủi ro nhất. Ngày 6: nói rõ với nhóm về kênh nêu vấn đề và cam kết bảo vệ. Ngày 7: chia sẻ quy tắc cá nhân của bạn với một người bạn tin và nhờ họ nhắc khi thấy bạn đi chệch.',
+    evidence:
+      'Bằng chứng ở đây phải cẩn trọng vì nó chạm tới thông tin nội bộ. Thứ dùng được là mô tả cơ chế bạn xây: bản quy tắc xung đột lợi ích cho bộ phận, bảng chấm nhà cung cấp theo tiêu chí viết trước, quy trình ghi chép quyết định nhạy cảm, và cách kênh nêu vấn đề được vận hành. Trong phỏng vấn, câu chuyện có sức nặng là lần bạn trả một giá thật — mất hợp đồng, chậm tiến độ, phải giải trình nhiều lần — và bạn nói được cả phần khó chịu chứ không chỉ phần kết đẹp. Trong CV nên nói ở mức cơ chế: "Ban hành quy tắc xung đột lợi ích và bảng chấm nhà cung cấp ba báo giá theo tiêu chí công khai cho phòng mua hàng".',
+    references: [
+      { label: 'Harvard Business Review — chủ đề Business Ethics', url: 'https://hbr.org/topic/subject/business-ethics', type: 'article' },
+    ],
+  }),
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Chương 17 — Kế nhiệm và phát triển lãnh đạo
+  // ─────────────────────────────────────────────────────────────────────────
+  guide({
+    thesis:
+      'Kế nhiệm là việc bảo đảm rằng mỗi vị trí quan trọng đều có người có thể đảm nhận trong một khoảng thời gian xác định, và điều đó được xây dựng bằng cách giao việc thật chứ không bằng danh sách trong ngăn kéo. Phép thử của một người lãnh đạo không phải là bộ phận chạy tốt khi họ có mặt, mà là nó chạy được bao lâu khi họ vắng và ai đã sẵn sàng thay. Kế nhiệm không chỉ dành cho vị trí cao nhất: mọi vị trí mà sự vắng mặt gây tê liệt đều cần một người kế cận.',
+    why: {
+      work: 'Tổ chức không có người kế cận thì mọi cơ hội thăng tiến của chính bạn đều bị chặn: không ai thay được bạn nghĩa là bạn không đi đâu được. Ở chiều ngược lại, những nơi phụ thuộc vào một người thường trả giá rất đắt khi người đó nghỉ đột ngột, và cái giá đó thường không được tính vào bất kỳ báo cáo nào cho tới lúc xảy ra.',
+      interview:
+        'Với vị trí quản lý cấp cao, câu hỏi "bạn đã phát triển được ai" đáng giá hơn câu hỏi về thành tích cá nhân. Kể tên được những người từng ở nhóm bạn và giờ đang giữ vai trò gì là bằng chứng khó nguỵ tạo nhất về năng lực lãnh đạo.',
+      study:
+        'Người học giỏi nhất một môn thường là người phải dạy lại nó. Xây dựng người kế cận trong bất kỳ nhóm học tập hay câu lạc bộ nào là cách vừa giữ tổ chức sống sau khi bạn rời đi, vừa buộc bạn phải hệ thống hoá thứ mình đang làm theo bản năng.',
+      life: 'Trong gia đình hay việc kinh doanh gia đình, câu hỏi ai sẽ tiếp quản và họ đã được chuẩn bị chưa thường bị né tránh tới lúc quá muộn. Bàn sớm và chuẩn bị từng bước là cách giảm tổn thất cho tất cả các bên.',
+    },
+    framework: [
+      { name: 'Xác định vị trí trọng yếu, không chỉ vị trí cao', detail: 'Liệt kê những vai trò mà nếu người giữ nghỉ đột ngột thì công việc tê liệt hoặc rủi ro tăng vọt — có thể là một kỹ thuật viên duy nhất biết vận hành máy chính, hoặc người duy nhất giữ quan hệ với khách hàng lớn nhất. Đánh giá theo mức thiệt hại và thời gian cần để thay thế.' },
+      { name: 'Đánh giá độ sẵn sàng theo mốc thời gian', detail: 'Với mỗi vị trí trọng yếu, ghi ai có thể thay ngay, ai sau 6-12 tháng chuẩn bị, ai sau 2 năm. Nếu một ô trống hoàn toàn thì đó là rủi ro cần đưa vào kế hoạch, không phải chuyện để tính sau.' },
+      { name: 'Phát triển bằng việc thật, không bằng khoá học', detail: 'Người kế cận lớn lên qua việc được giao trách nhiệm có hậu quả thật: chủ trì một dự án liên phòng ban, đại diện đi gặp khách hàng lớn, điều hành khi bạn vắng. Khoá học bổ trợ được, nhưng không thay được trải nghiệm phải chịu trách nhiệm cho một quyết định khó.' },
+      { name: 'Tạo cơ hội tập dượt có kiểm soát', detail: 'Cho người kế cận điều hành trọn vẹn trong hai tuần bạn nghỉ, chủ trì cuộc họp quan trọng, hoặc phụ trách một mảng nhỏ nhưng độc lập. Sau mỗi lần, ngồi lại rút kinh nghiệm cụ thể. Đây là cách duy nhất biết được ai thật sự sẵn sàng, khác hẳn với việc đánh giá dựa trên tiềm năng cảm nhận.' },
+      { name: 'Rà lại định kỳ và nói chuyện thẳng thắn', detail: 'Xem lại bản đồ kế nhiệm mỗi sáu tháng, cập nhật theo thực tế đã xảy ra. Đồng thời trao đổi rõ với người kế cận về việc họ đang được chuẩn bị cho vai trò nào và điều kiện là gì — nhưng tránh hứa chắc chắn về một vị trí cụ thể, vì hoàn cảnh tổ chức thay đổi và lời hứa không giữ được gây tổn hại lớn hơn việc không hứa.' },
+    ],
+    scenario:
+      'Một doanh nghiệp gia đình sản xuất thực phẩm khô có 45 nhân sự, người sáng lập 62 tuổi vẫn trực tiếp quyết mọi việc về công thức, nhà cung cấp nguyên liệu và giá bán cho đại lý. Con gái ông làm phó giám đốc ba năm nhưng chưa từng tự quyết một hợp đồng nguyên liệu nào. Sau một đợt ông phải nằm viện hai tuần và công ty gần như dừng ký hợp đồng mới, gia đình lập bản đồ vị trí trọng yếu và phát hiện ba ô trống hoàn toàn: quan hệ với ba nhà cung cấp lớn, công thức của hai dòng sản phẩm chủ lực chỉ nằm trong trí nhớ ông, và quyết định giá cho kênh đại lý. Kế hoạch 18 tháng gồm: ghi lại toàn bộ công thức và thông số thành tài liệu có kiểm chứng bằng ba mẻ sản xuất thử; chuyển dần quan hệ nhà cung cấp bằng cách để con gái đi cùng rồi đi một mình từ tháng thứ tư; và trao quyền quyết giá trong một biên độ cho cô từ tháng thứ sáu, nới dần sau mỗi quý. Đến tháng thứ mười một, ông nghỉ ba tuần liên tục và công ty vận hành bình thường — nhưng bản rà cũng cho thấy một ô mới vẫn trống: chưa ai ngoài ông đánh giá được chất lượng nguyên liệu đầu vào bằng cảm quan, và việc đó được đưa vào kế hoạch giai đoạn tiếp theo.',
+    comparison: [
+      { weak: 'Giữ lại thông tin và quan hệ then chốt để bảo đảm vị trí của mình không thể thay thế.', mature: 'Hiểu rằng người không thể thay thế là người không thể được thăng chức, và chủ động xây người kế cận như một phần công việc của mình.' },
+      { weak: 'Lập danh sách kế nhiệm trên giấy rồi cất đi, không ai trong danh sách được giao thêm việc gì.', mature: 'Gắn mỗi tên trong danh sách với một trách nhiệm thật trong sáu tháng tới và rà kết quả, vì danh sách không kèm việc thật chỉ là ảo tưởng an toàn.' },
+      { weak: 'Chọn người kế cận vì họ giống mình nhất về phong cách.', mature: 'Chọn theo năng lực cần cho giai đoạn sắp tới của tổ chức, chấp nhận rằng người kế nhiệm tốt có thể làm khác cách bạn ở nhiều điểm.' },
+    ],
+    mistakes: [
+      'Coi kế nhiệm là việc chỉ dành cho vị trí lãnh đạo cao nhất, trong khi rủi ro lớn nhất thường nằm ở những vai trò chuyên môn mà chỉ một người biết làm.',
+      'Hứa vị trí cụ thể cho người kế cận rồi không thực hiện được vì hoàn cảnh đổi, làm mất một người giỏi và làm mọi lời hứa sau này của bạn mất giá trị.',
+      'Chuẩn bị người kế cận bằng cách cho họ ngồi cạnh quan sát trong nhiều năm mà không bao giờ để họ chịu trách nhiệm thật, khiến tới lúc bàn giao họ vẫn chưa từng ra một quyết định khó nào.',
+    ],
+    worksheet: [
+      'Liệt kê các vị trí trong phạm vi bạn quản lý mà sự vắng mặt đột ngột sẽ gây tê liệt. Ghi rõ việc gì sẽ dừng.',
+      'Với từng vị trí đó, ai thay được ngay, ai cần 6-12 tháng, ai cần hai năm? Ô nào đang trống hoàn toàn?',
+      'Kiến thức nào trong đầu bạn hoặc trong đầu một người duy nhất mà chưa được ghi lại ở đâu? Liệt kê ba thứ.',
+      'Trong sáu tháng tới, bạn sẽ giao trách nhiệm thật nào cho người kế cận, và cách đo kết quả là gì?',
+      'Lần gần nhất bạn vắng mặt trọn một tuần là khi nào, và điều gì đã kẹt lại? Nếu chưa từng, hãy đặt lịch cho một tuần như vậy.',
+    ],
+    exercises: [
+      { label: 'Bản đồ vị trí trọng yếu', text: 'Lập bảng liệt kê vị trí trọng yếu, mức thiệt hại nếu trống và thời gian ước tính để thay thế. Đánh dấu ô trống hoàn toàn bằng màu khác.', level: 'e' },
+      { label: 'Kiểm kê tri thức trong đầu', text: 'Viết ra năm thứ chỉ có bạn biết cách làm. Với mỗi thứ, ghi cần bao lâu để viết thành tài liệu hoặc dạy lại cho một người.', level: 'e' },
+      { label: 'Một buổi họp do người khác chủ trì', text: 'Để một thành viên chủ trì trọn vẹn một cuộc họp quan trọng, bạn ngồi im. Sau đó rút kinh nghiệm riêng với họ trong 20 phút.', level: 'e' },
+      { label: 'Bàn giao một mảng', text: 'Chuyển hẳn một mảng công việc có hậu quả thật cho người kế cận trong ba tháng, gồm cả quan hệ bên ngoài. Ghi lại việc gì họ làm khác bạn và kết quả ra sao.', level: 'm' },
+      { label: 'Tuần vắng mặt có kế hoạch', text: 'Nghỉ trọn một tuần và không nhận liên lạc, sau khi giao quyền rõ ràng. Khi quay lại, ghi lại việc gì kẹt và bổ sung đúng chỗ đó vào kế hoạch chuẩn bị.', level: 'm' },
+      { label: 'Ghi lại tri thức ngầm', text: 'Chọn một quy trình chỉ bạn nắm và viết thành tài liệu, sau đó nhờ một người khác làm theo tài liệu đó mà không hỏi bạn. Sửa tài liệu theo chỗ họ vướng.', level: 'm' },
+      { label: 'Kế hoạch 18 tháng', text: 'Viết kế hoạch chuẩn bị người kế cận cho vị trí trọng yếu nhất, gồm các trách nhiệm được giao theo mốc, cách đo, và cuộc trò chuyện thẳng thắn với người đó về kỳ vọng cũng như những điều bạn không thể hứa.', level: 'h' },
+      { label: 'Thử thách 7 ngày: mỗi ngày trao đi một thứ', text: 'Bảy ngày, mỗi ngày trao cho người khác một thứ mà trước đây chỉ bạn nắm — một mối quan hệ, một quyền truy cập, một cách làm, một quyết định. Ngày thứ bảy nhìn lại danh sách và tự trả lời: nếu ngày mai bạn không tới, phần nào của công việc vẫn chạy được?', level: 'h' },
+    ],
+    checkpoints: [
+      {
+        q: 'Vì sao "không ai thay được tôi" là một vấn đề của chính người quản lý, chứ không phải một thành tích?',
+        a: 'Vì nó khoá chính họ lại: tổ chức không thể thăng chức cho người mà việc hiện tại sẽ sụp nếu họ rời đi, nên sự không thể thay thế biến thành trần sự nghiệp. Nó cũng tạo rủi ro thật cho tổ chức và áp lực thật cho cá nhân — không nghỉ được, không ốm được, không học được thứ mới vì luôn bị việc cũ kéo lại. Ngoài ra, nó thường là dấu hiệu của việc chưa hệ thống hoá công việc chứ không phải dấu hiệu tài năng đặc biệt.',
+      },
+      {
+        q: 'Vì sao phát triển người kế cận bằng việc thật lại hiệu quả hơn bằng đào tạo?',
+        a: 'Vì năng lực lãnh đạo phần lớn nằm ở việc phán đoán trong điều kiện thiếu thông tin và chịu trách nhiệm cho hậu quả — hai thứ không tồn tại trong lớp học. Người chỉ được đào tạo và quan sát sẽ biết nói về các khái niệm nhưng chưa từng trải nghiệm cảm giác phải quyết khi cả hai phương án đều có rủi ro, hay phải nói với đội một tin xấu do chính mình gây ra. Đào tạo vẫn hữu ích để đặt tên cho kinh nghiệm và bổ sung kỹ thuật, nhưng nó nên đi sau hoặc song song với trách nhiệm thật, không thay thế.',
+      },
+      {
+        q: 'Nên nói gì với một người bạn đang chuẩn bị làm kế cận, và không nên nói gì?',
+        a: 'Nên nói rõ: họ đang được chuẩn bị cho loại vai trò nào, những năng lực cụ thể cần xây, các trách nhiệm sẽ được giao theo mốc, và cách đánh giá tiến bộ. Nên nói cả phần khó: vai trò đó đòi hỏi gì mà công việc hiện tại không đòi hỏi. Không nên hứa chắc chắn một chức danh cụ thể vào một thời điểm cụ thể, vì hoàn cảnh tổ chức có thể đổi vì lý do ngoài tầm bạn, và một lời hứa không giữ được sẽ khiến bạn mất chính người đó cùng với niềm tin của những người khác đang quan sát.',
+      },
+    ],
+    plan7:
+      'Ngày 1: lập bản đồ vị trí trọng yếu và đánh dấu ô trống. Ngày 2: kiểm kê năm thứ chỉ bạn biết cách làm. Ngày 3: chọn một thứ và bắt đầu viết thành tài liệu. Ngày 4: chọn người kế cận cho vị trí rủi ro nhất và liệt kê năng lực còn thiếu. Ngày 5: giao một trách nhiệm thật có hậu quả cho người đó với mốc và cách đo. Ngày 6: nói chuyện thẳng thắn về việc họ đang được chuẩn bị cho gì và bạn không hứa được điều gì. Ngày 7: đặt lịch một tuần bạn vắng mặt hoàn toàn trong ba tháng tới và thông báo cho các bên liên quan.',
+    evidence:
+      'Bằng chứng mạnh nhất cho toàn bộ quyển sách này nằm ở đây và nó rất khó nguỵ tạo: danh sách những người từng làm việc dưới sự dẫn dắt của bạn và vai trò họ đang giữ hiện nay, kèm mô tả ngắn phần bạn đã đóng góp vào quá trình đó. Bổ sung bằng hiện vật: bản đồ kế nhiệm có ghi ngày và bản cập nhật sau 12 tháng cho thấy ô nào đã được lấp, cùng tài liệu hoá tri thức mà bạn đã chuyển từ đầu mình sang hệ thống. Một chi tiết nhỏ nhưng thuyết phục trong phỏng vấn: kể về khoảng thời gian bạn vắng mặt hoàn toàn và bộ phận vẫn vận hành, kèm việc gì đã kẹt và bạn sửa ra sao sau đó. Trong CV: "Xây kế hoạch kế nhiệm 18 tháng cho ba vai trò trọng yếu, tài liệu hoá quy trình sản xuất trước đây chỉ tồn tại dưới dạng kinh nghiệm cá nhân, đưa doanh nghiệp tới trạng thái vận hành bình thường khi người sáng lập vắng mặt ba tuần".',
+    references: [
+      { label: 'Harvard Business Review — chủ đề Leadership Development', url: 'https://hbr.org/topic/subject/leadership-development', type: 'article', needsReview: true },
+      { label: 'SHRM — tài nguyên về hoạch định kế nhiệm và phát triển nhân tài', url: 'https://www.shrm.org/', type: 'article' },
+    ],
+    diagram: 'cycle',
+  }),
+];

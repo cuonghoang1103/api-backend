@@ -240,14 +240,32 @@
   margin-top: 20px;
 }
 .upItem {
-  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px;
   padding: 16px 18px;
   border: 1px dashed var(--rule-firm); border-radius: 10px;
   background: var(--leaf-2);
 }
+.upVol {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.68rem; font-weight: 700; color: var(--gold); white-space: nowrap;
+}
 .upName {
   font-family: "Source Serif 4", Georgia, serif;
   font-size: 1.02rem; font-weight: 600; color: var(--ink-soft);
+}
+.plannedHead {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
+  margin-bottom: 6px;
+}
+.plannedHead span {
+  font-family: "Source Sans 3", system-ui, sans-serif;
+  font-size: 0.7rem; color: var(--ink-faint); text-transform: uppercase;
+  letter-spacing: 0.1em; font-weight: 700;
+}
+@media (max-width: 560px) {
+  .upItem { grid-template-columns: auto minmax(0, 1fr); }
+  .upSoon { grid-column: 2; }
+  .plannedHead { align-items: flex-start; flex-direction: column; }
 }
 .upSoon {
   font-family: "Source Sans 3", system-ui, sans-serif;

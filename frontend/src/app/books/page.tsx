@@ -10,10 +10,10 @@ const FONTS_HREF =
 export const metadata: Metadata = {
   title: 'The Library · CuongThai Books',
   description:
-    'A technical library written from scratch by Cuong Hoang — 25 volumes, 412 chapters, 800,000+ words, on one rule: nothing is printed that was not run first. Read every volume in the browser.',
+    'A practical library by Cuong Hoang — 28 published volumes on technology, thinking and human skills, with examples, exercises and checkpoints.',
   openGraph: {
     title: 'The CuongThai Library',
-    description: '25 volumes · 412 chapters · 809,780 words · 887 primary sources. Read online, chapter by chapter.',
+    description: '28 volumes · 456 chapters · 862,052 words. Read online, chapter by chapter.',
     type: 'website',
   },
 };

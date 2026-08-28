@@ -1035,7 +1035,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The mean pull-off force of a connector depends on cure time. State the null and alternative hypotheses used to demonstrate that the mean pull-off force is below 25 newtons. The candidates are: (i) $H_0:\\mu = 25$ / $H_1:\\mu < 25$; (ii) $H_0:\\mu = 25$ / $H_1:\\mu > 25$; (iii) $H_0:\\mu = 25$ / $H_1:\\mu \\neq 25$; (iv) $H_0:\\mu < 25$ / $H_1:\\mu > 25$.</p></div><div class=\"ml-vi\"><p>Lực kéo rời trung bình của một đầu nối phụ thuộc vào thời gian đóng rắn. Hãy nêu giả thuyết không và giả thuyết đối dùng để chứng minh rằng lực kéo rời trung bình NHỎ HƠN 25 newton. Các phương án: (i) $H_0:\\mu = 25$ / $H_1:\\mu < 25$; (ii) $H_0:\\mu = 25$ / $H_1:\\mu > 25$; (iii) $H_0:\\mu = 25$ / $H_1:\\mu \\neq 25$; (iv) $H_0:\\mu < 25$ / $H_1:\\mu > 25$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The mean pull-off force of a connector depends on cure time. State the null and alternative hypotheses used to demonstrate that the mean pull-off force is below 25 newtons. The candidates are: (i) $H_0:\\mu = 25$ / $H_1:\\mu < 25$; (ii) $H_0:\\mu = 25$ / $H_1:\\mu > 25$; (iii) $H_0:\\mu = 25$ / $H_1:\\mu <br/>eq 25$; (iv) $H_0:\\mu < 25$ / $H_1:\\mu > 25$.</p></div><div class=\"ml-vi\"><p>Lực kéo rời trung bình của một đầu nối phụ thuộc vào thời gian đóng rắn. Hãy nêu giả thuyết không và giả thuyết đối dùng để chứng minh rằng lực kéo rời trung bình NHỎ HƠN 25 newton. Các phương án: (i) $H_0:\\mu = 25$ / $H_1:\\mu < 25$; (ii) $H_0:\\mu = 25$ / $H_1:\\mu > 25$; (iii) $H_0:\\mu = 25$ / $H_1:\\mu <br/>eq 25$; (iv) $H_0:\\mu < 25$ / $H_1:\\mu > 25$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D15/q40.png",
           "options": [
             {
@@ -1084,7 +1084,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>&quot;Equal to $17,000\" makes this a TWO-tailed test ($H_0:\\mu=17000$ vs $H_1:\\mu\\neq 17000$), and $\\sigma$ is known so the statistic is $z$. With $\\alpha=0.05$ each tail carries 0.025, so the critical values are $\\pm z_{0.025} = \\pm 1.96$.</p></div><div class=\"ml-vi\"><p>&quot;Bằng 17.000&quot; nên đây là kiểm định HAI phía ($H_0:\\mu=17000$ so với $H_1:\\mu\\neq 17000$), và đã biết $\\sigma$ nên dùng thống kê $z$. Với $\\alpha=0{,}05$, mỗi đuôi mang 0,025, nên các giá trị tới hạn là $\\pm z_{0,025} = \\pm 1{,}96$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>&quot;Equal to $17,000\" makes this a TWO-tailed test ($H_0:\\mu=17000$ vs $H_1:\\mu<br/>eq 17000$), and $\\sigma$ is known so the statistic is $z$. With $\\alpha=0.05$ each tail carries 0.025, so the critical values are $\\pm z_{0.025} = \\pm 1.96$.</p></div><div class=\"ml-vi\"><p>&quot;Bằng 17.000&quot; nên đây là kiểm định HAI phía ($H_0:\\mu=17000$ so với $H_1:\\mu<br/>eq 17000$), và đã biết $\\sigma$ nên dùng thống kê $z$. Với $\\alpha=0{,}05$, mỗi đuôi mang 0,025, nên các giá trị tới hạn là $\\pm z_{0,025} = \\pm 1{,}96$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1275,7 +1275,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A random sample of 20 observations was made on the diameter of spot welds and the corresponding weld shear strength. Given that $r=0.75$, what are the critical values if we want to test the hypothesis that $H_0:\\rho=0$ versus $H_1:\\rho\\neq 0$, use $\\alpha=0.02$? Let $t_{0.01,19}=2.539$, $t_{0.01,18}=2.552$, $t_{0.02,19}=2.205$, $t_{0.02,18}=2.214$.</p></div><div class=\"ml-vi\"><p>Một mẫu ngẫu nhiên gồm 20 quan sát được thực hiện trên đường kính mối hàn điểm và độ bền cắt tương ứng của mối hàn. Cho $r=0{,}75$, hãy tìm các giá trị tới hạn nếu muốn kiểm định giả thuyết $H_0:\\rho=0$ so với $H_1:\\rho\\neq 0$, với $\\alpha=0{,}02$. Cho $t_{0,01;19}=2{,}539$; $t_{0,01;18}=2{,}552$; $t_{0,02;19}=2{,}205$; $t_{0,02;18}=2{,}214$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A random sample of 20 observations was made on the diameter of spot welds and the corresponding weld shear strength. Given that $r=0.75$, what are the critical values if we want to test the hypothesis that $H_0:\\rho=0$ versus $H_1:\\rho<br/>eq 0$, use $\\alpha=0.02$? Let $t_{0.01,19}=2.539$, $t_{0.01,18}=2.552$, $t_{0.02,19}=2.205$, $t_{0.02,18}=2.214$.</p></div><div class=\"ml-vi\"><p>Một mẫu ngẫu nhiên gồm 20 quan sát được thực hiện trên đường kính mối hàn điểm và độ bền cắt tương ứng của mối hàn. Cho $r=0{,}75$, hãy tìm các giá trị tới hạn nếu muốn kiểm định giả thuyết $H_0:\\rho=0$ so với $H_1:\\rho<br/>eq 0$, với $\\alpha=0{,}02$. Cho $t_{0,01;19}=2{,}539$; $t_{0,01;18}=2{,}552$; $t_{0,02;19}=2{,}205$; $t_{0,02;18}=2{,}214$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D15/q49.png",
           "options": [
             {

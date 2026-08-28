@@ -42,7 +42,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>In an attempt to study the health effects of air pollution, a group of researchers selected 6 cities in very different environments: some from an urban setting (e.g. greater Boston), some from a heavy industrial setting (e.g. eastern Ohio), some from a rural setting (e.g. Wisconsin). Altogether they selected 8000 subjects from the 6 cities, and followed their health for the next 20 years.</p><p>This represents what type of study?</p></div><div class=\"ml-vi\"><p>Để nghiên cứu ảnh hưởng của ô nhiễm không khí tới sức khoẻ, một nhóm nhà nghiên cứu chọn 6 thành phố ở các môi trường rất khác nhau: một số ở đô thị (ví dụ vùng Boston), một số ở khu công nghiệp nặng (ví dụ đông Ohio), một số ở nông thôn (ví dụ Wisconsin). Tổng cộng họ chọn 8000 đối tượng từ 6 thành phố này và theo dõi sức khoẻ của họ trong 20 năm tiếp theo.</p><p>Đây là loại nghiên cứu nào?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>In an attempt to study the health effects of air pollution, a group of researchers selected 6 cities in very different environments: some from an urban setting (e.g. greater Boston), some from a heavy industrial setting (e.g. eastern Ohio), some from a rural setting (e.g. Wisconsin). Altogether they selected 8000 subjects from the 6 cities, and followed their health for the next 20 years.<br/><br/>This represents what type of study?</p></div><div class=\"ml-vi\"><p>Để nghiên cứu ảnh hưởng của ô nhiễm không khí tới sức khoẻ, một nhóm nhà nghiên cứu chọn 6 thành phố ở các môi trường rất khác nhau: một số ở đô thị (ví dụ vùng Boston), một số ở khu công nghiệp nặng (ví dụ đông Ohio), một số ở nông thôn (ví dụ Wisconsin). Tổng cộng họ chọn 8000 đối tượng từ 6 thành phố này và theo dõi sức khoẻ của họ trong 20 năm tiếp theo.<br/><br/>Đây là loại nghiên cứu nào?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q2.png",
           "options": [
             {
@@ -169,7 +169,7 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>Let $M$ = male, $J$ = has an off-campus job. The two events are NOT mutually exclusive ($P(M \\cap J) = 0.15 \\neq 0$), so use the general addition rule:<br/>$$P(M \\cup J) = P(M) + P(J) - P(M \\cap J) = 0.45 + 0.33 - 0.15 = 0.63.$$<br/>Simply adding $0.45 + 0.33 = 0.78$ would double-count the overlap.</p></div><div class=\"ml-vi\"><p>Đặt $M$ = nam, $J$ = có việc ngoài trường. Hai biến cố KHÔNG xung khắc ($P(M \\cap J) = 0{,}15 \\neq 0$) nên dùng công thức cộng tổng quát:<br/>$$P(M \\cup J) = P(M) + P(J) - P(M \\cap J) = 0{,}45 + 0{,}33 - 0{,}15 = 0{,}63.$$<br/>Nếu chỉ cộng $0{,}45 + 0{,}33 = 0{,}78$ thì phần giao bị đếm hai lần.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Let $M$ = male, $J$ = has an off-campus job. The two events are NOT mutually exclusive ($P(M \\cap J) = 0.15 <br/>eq 0$), so use the general addition rule:<br/>$$P(M \\cup J) = P(M) + P(J) - P(M \\cap J) = 0.45 + 0.33 - 0.15 = 0.63.$$<br/>Simply adding $0.45 + 0.33 = 0.78$ would double-count the overlap.</p></div><div class=\"ml-vi\"><p>Đặt $M$ = nam, $J$ = có việc ngoài trường. Hai biến cố KHÔNG xung khắc ($P(M \\cap J) = 0{,}15 <br/>eq 0$) nên dùng công thức cộng tổng quát:<br/>$$P(M \\cup J) = P(M) + P(J) - P(M \\cap J) = 0{,}45 + 0{,}33 - 0{,}15 = 0{,}63.$$<br/>Nếu chỉ cộng $0{,}45 + 0{,}33 = 0{,}78$ thì phần giao bị đếm hai lần.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -228,7 +228,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Let $P(A \\cup B) = 0.75$, $P(A \\cap B) = 0.25$.</p><p>What is $P(B)$ and $P(A)$ if $A$ and $B$ are independent?</p></div><div class=\"ml-vi\"><p>Cho $P(A \\cup B) = 0{,}75$, $P(A \\cap B) = 0{,}25$.</p><p>Tính $P(B)$ và $P(A)$ nếu $A$ và $B$ độc lập.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Let $P(A \\cup B) = 0.75$, $P(A \\cap B) = 0.25$.<br/><br/>What is $P(B)$ and $P(A)$ if $A$ and $B$ are independent?</p></div><div class=\"ml-vi\"><p>Cho $P(A \\cup B) = 0{,}75$, $P(A \\cap B) = 0{,}25$.<br/><br/>Tính $P(B)$ và $P(A)$ nếu $A$ và $B$ độc lập.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q9.png",
           "options": [
             {
@@ -250,7 +250,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>From the addition rule, $P(A) + P(B) = P(A \\cup B) + P(A \\cap B) = 0.75 + 0.25 = 1$. Independence gives $P(A)P(B) = P(A \\cap B) = 0.25$. So $P(A)$ and $P(B)$ are the roots of $t^2 - t + 0.25 = 0$, i.e. $(t - 0.5)^2 = 0$, giving the double root $t = 0.5$. Hence $P(A) = P(B) = 1/2$. (Check the other options: B gives sum $13/12 \\neq 1$; C gives product $1/4$ but sum $61/60 \\neq 1$; D gives sum $1.05 \\neq 1$.)</p></div><div class=\"ml-vi\"><p>Từ công thức cộng: $P(A) + P(B) = P(A \\cup B) + P(A \\cap B) = 0{,}75 + 0{,}25 = 1$. Tính độc lập cho $P(A)P(B) = P(A \\cap B) = 0{,}25$. Vậy $P(A)$, $P(B)$ là nghiệm của $t^2 - t + 0{,}25 = 0$, tức $(t - 0{,}5)^2 = 0$, nghiệm kép $t = 0{,}5$. Do đó $P(A) = P(B) = 1/2$. (Kiểm các đáp án khác: B có tổng $13/12 \\neq 1$; C có tích $1/4$ nhưng tổng $61/60 \\neq 1$; D có tổng $1{,}05 \\neq 1$.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>From the addition rule, $P(A) + P(B) = P(A \\cup B) + P(A \\cap B) = 0.75 + 0.25 = 1$. Independence gives $P(A)P(B) = P(A \\cap B) = 0.25$. So $P(A)$ and $P(B)$ are the roots of $t^2 - t + 0.25 = 0$, i.e. $(t - 0.5)^2 = 0$, giving the double root $t = 0.5$. Hence $P(A) = P(B) = 1/2$. (Check the other options: B gives sum $13/12 <br/>eq 1$; C gives product $1/4$ but sum $61/60 <br/>eq 1$; D gives sum $1.05 <br/>eq 1$.)</p></div><div class=\"ml-vi\"><p>Từ công thức cộng: $P(A) + P(B) = P(A \\cup B) + P(A \\cap B) = 0{,}75 + 0{,}25 = 1$. Tính độc lập cho $P(A)P(B) = P(A \\cap B) = 0{,}25$. Vậy $P(A)$, $P(B)$ là nghiệm của $t^2 - t + 0{,}25 = 0$, tức $(t - 0{,}5)^2 = 0$, nghiệm kép $t = 0{,}5$. Do đó $P(A) = P(B) = 1/2$. (Kiểm các đáp án khác: B có tổng $13/12 <br/>eq 1$; C có tích $1/4$ nhưng tổng $61/60 <br/>eq 1$; D có tổng $1{,}05 <br/>eq 1$.)</p></div>"
         },
         {
           "kind": "MCQ",
@@ -375,7 +375,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Find the variance for the given probability distribution:</p><p>| X | 0 | 1 | 2 | 3 | 4 |<br/>|---|---|---|---|---|---|<br/>| P(x) | 0.10 | 0.37 | 0.16 | 0.26 | 0.11 |</p></div><div class=\"ml-vi\"><p>Tìm phương sai của phân phối xác suất cho sau đây:</p><p>| X | 0 | 1 | 2 | 3 | 4 |<br/>|---|---|---|---|---|---|<br/>| P(x) | 0,10 | 0,37 | 0,16 | 0,26 | 0,11 |</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find the variance for the given probability distribution:<br/><br/><table class=\"exam-table\"><thead><tr><th>X</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead><tbody><tr><td>P(x)</td><td>0.10</td><td>0.37</td><td>0.16</td><td>0.26</td><td>0.11</td></tr></tbody></table></p></div><div class=\"ml-vi\"><p>Tìm phương sai của phân phối xác suất cho sau đây:<br/><br/><table class=\"exam-table\"><thead><tr><th>X</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead><tbody><tr><td>P(x)</td><td>0,10</td><td>0,37</td><td>0,16</td><td>0,26</td><td>0,11</td></tr></tbody></table></p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q15.png",
           "options": [
             {
@@ -564,7 +564,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The continuous random variable X has probability density function $f(x) = e^{-x}$, $x > 0$. Find $P(X = 2010)$.</p><p>(i) 0<br/>(ii) 1<br/>(iii) $1/e^{-2010}$</p></div><div class=\"ml-vi\"><p>Biến ngẫu nhiên liên tục X có hàm mật độ xác suất $f(x) = e^{-x}$, $x > 0$. Tìm $P(X = 2010)$.</p><p>(i) 0<br/>(ii) 1<br/>(iii) $1/e^{-2010}$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The continuous random variable X has probability density function $f(x) = e^{-x}$, $x > 0$. Find $P(X = 2010)$.<br/><br/>(i) 0<br/>(ii) 1<br/>(iii) $1/e^{-2010}$</p></div><div class=\"ml-vi\"><p>Biến ngẫu nhiên liên tục X có hàm mật độ xác suất $f(x) = e^{-x}$, $x > 0$. Tìm $P(X = 2010)$.<br/><br/>(i) 0<br/>(ii) 1<br/>(iii) $1/e^{-2010}$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q22.png",
           "options": [
             {
@@ -663,7 +663,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>If a random variable has the normal distribution with $\\mu = 30$ and $\\sigma = 5$, find the probability that it will take on the value between 24 and 28.</p><p>Let P(Z &lt; -1.2) = 0.1151, P(Z &lt; -0.4) = 0.3446 and P(Z &lt; 0) = 0.5.</p></div><div class=\"ml-vi\"><p>Nếu một biến ngẫu nhiên có phân phối chuẩn với $\\mu = 30$ và $\\sigma = 5$, hãy tìm xác suất nó nhận giá trị trong khoảng từ 24 đến 28.</p><p>Cho P(Z &lt; -1,2) = 0,1151, P(Z &lt; -0,4) = 0,3446 và P(Z &lt; 0) = 0,5.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>If a random variable has the normal distribution with $\\mu = 30$ and $\\sigma = 5$, find the probability that it will take on the value between 24 and 28.<br/><br/>Let P(Z &lt; -1.2) = 0.1151, P(Z &lt; -0.4) = 0.3446 and P(Z &lt; 0) = 0.5.</p></div><div class=\"ml-vi\"><p>Nếu một biến ngẫu nhiên có phân phối chuẩn với $\\mu = 30$ và $\\sigma = 5$, hãy tìm xác suất nó nhận giá trị trong khoảng từ 24 đến 28.<br/><br/>Cho P(Z &lt; -1,2) = 0,1151, P(Z &lt; -0,4) = 0,3446 và P(Z &lt; 0) = 0,5.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q26.png",
           "options": [
             {
@@ -690,7 +690,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Assume that X has a normal distribution with the mean is 15.2 and the standard deviation is 0.9. Find the probability that X is greater than 15.2.</p><p>Let P(Z &lt; 0) = 0.5000, P(Z &lt; -2.9) = 0.0003, P(Z &lt; 3.2) = 0.9998 and P(Z &lt; 4) = 1.000.</p></div><div class=\"ml-vi\"><p>Giả sử X có phân phối chuẩn với trung bình 15,2 và độ lệch chuẩn 0,9. Tìm xác suất X lớn hơn 15,2.</p><p>Cho P(Z &lt; 0) = 0,5000, P(Z &lt; -2,9) = 0,0003, P(Z &lt; 3,2) = 0,9998 và P(Z &lt; 4) = 1,000.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Assume that X has a normal distribution with the mean is 15.2 and the standard deviation is 0.9. Find the probability that X is greater than 15.2.<br/><br/>Let P(Z &lt; 0) = 0.5000, P(Z &lt; -2.9) = 0.0003, P(Z &lt; 3.2) = 0.9998 and P(Z &lt; 4) = 1.000.</p></div><div class=\"ml-vi\"><p>Giả sử X có phân phối chuẩn với trung bình 15,2 và độ lệch chuẩn 0,9. Tìm xác suất X lớn hơn 15,2.<br/><br/>Cho P(Z &lt; 0) = 0,5000, P(Z &lt; -2,9) = 0,0003, P(Z &lt; 3,2) = 0,9998 và P(Z &lt; 4) = 1,000.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q27.png",
           "options": [
             {
@@ -717,7 +717,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Cars arrive at Kenny&#39;s Car Wash at a rate of 16 per hour. Use the normal formula for Poisson distributions to approximate the probability that in any given one-hour period, at least ten cars arriving.</p><p>Let P(Z &lt; -1.12) = 0.1313; P(Z &lt; -1.75) = 0.0400. Let P(Z &lt; -1.625) = 0.0521; P(Z &lt; -1.750) = 0.0401.</p></div><div class=\"ml-vi\"><p>Ô tô đến tiệm rửa xe của Kenny với tốc độ 16 xe mỗi giờ. Dùng xấp xỉ chuẩn cho phân phối Poisson để tính gần đúng xác suất trong một giờ bất kỳ có ít nhất mười xe đến.</p><p>Cho P(Z &lt; -1,12) = 0,1313; P(Z &lt; -1,75) = 0,0400. Cho P(Z &lt; -1,625) = 0,0521; P(Z &lt; -1,750) = 0,0401.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Cars arrive at Kenny&#39;s Car Wash at a rate of 16 per hour. Use the normal formula for Poisson distributions to approximate the probability that in any given one-hour period, at least ten cars arriving.<br/><br/>Let P(Z &lt; -1.12) = 0.1313; P(Z &lt; -1.75) = 0.0400. Let P(Z &lt; -1.625) = 0.0521; P(Z &lt; -1.750) = 0.0401.</p></div><div class=\"ml-vi\"><p>Ô tô đến tiệm rửa xe của Kenny với tốc độ 16 xe mỗi giờ. Dùng xấp xỉ chuẩn cho phân phối Poisson để tính gần đúng xác suất trong một giờ bất kỳ có ít nhất mười xe đến.<br/><br/>Cho P(Z &lt; -1,12) = 0,1313; P(Z &lt; -1,75) = 0,0400. Cho P(Z &lt; -1,625) = 0,0521; P(Z &lt; -1,750) = 0,0401.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q28.png",
           "options": [
             {
@@ -744,7 +744,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The following data reflect the number of customers who test drove new cars each day for a sample of 20 days at the Redfield Ford Dealership:</p><p>5, 7, 2, 9, 4, 9, 7, 10, 4, 7, 5, 6, 4, 0, 7, 6, 3, 4, 14, 6</p><p>What is the sample range?</p></div><div class=\"ml-vi\"><p>Dữ liệu sau ghi số khách hàng lái thử xe mới mỗi ngày trong mẫu 20 ngày tại đại lý Redfield Ford:</p><p>5, 7, 2, 9, 4, 9, 7, 10, 4, 7, 5, 6, 4, 0, 7, 6, 3, 4, 14, 6</p><p>Khoảng biến thiên (range) của mẫu là bao nhiêu?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The following data reflect the number of customers who test drove new cars each day for a sample of 20 days at the Redfield Ford Dealership:<br/><br/>5, 7, 2, 9, 4, 9, 7, 10, 4, 7, 5, 6, 4, 0, 7, 6, 3, 4, 14, 6<br/><br/>What is the sample range?</p></div><div class=\"ml-vi\"><p>Dữ liệu sau ghi số khách hàng lái thử xe mới mỗi ngày trong mẫu 20 ngày tại đại lý Redfield Ford:<br/><br/>5, 7, 2, 9, 4, 9, 7, 10, 4, 7, 5, 6, 4, 0, 7, 6, 3, 4, 14, 6<br/><br/>Khoảng biến thiên (range) của mẫu là bao nhiêu?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q29.png",
           "options": [
             {
@@ -798,7 +798,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Find the range of the given data (stem-and-leaf plot):</p><p>| stem | leaf |<br/>|---|---|<br/>| 23 | 4 6 7 0 |<br/>| 24 | 9 3 7 |<br/>| 29 | 1 9 2 |</p></div><div class=\"ml-vi\"><p>Tìm khoảng biến thiên của dữ liệu cho bởi biểu đồ thân-lá sau:</p><p>| thân | lá |<br/>|---|---|<br/>| 23 | 4 6 7 0 |<br/>| 24 | 9 3 7 |<br/>| 29 | 1 9 2 |</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find the range of the given data (stem-and-leaf plot):<br/><br/><table class=\"exam-table\"><thead><tr><th>stem</th><th>leaf</th></tr></thead><tbody><tr><td>23</td><td>4 6 7 0</td></tr><tr><td>24</td><td>9 3 7</td></tr><tr><td>29</td><td>1 9 2</td></tr></tbody></table></p></div><div class=\"ml-vi\"><p>Tìm khoảng biến thiên của dữ liệu cho bởi biểu đồ thân-lá sau:<br/><br/><table class=\"exam-table\"><thead><tr><th>thân</th><th>lá</th></tr></thead><tbody><tr><td>23</td><td>4 6 7 0</td></tr><tr><td>24</td><td>9 3 7</td></tr><tr><td>29</td><td>1 9 2</td></tr></tbody></table></p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q31.png",
           "options": [
             {
@@ -825,7 +825,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Given a table of data (50 values, read row by row):</p><p>44, 63, 84, 98, 56, 32, 26, 75, 35, 97<br/>53, 39, 96, 36, 97, 44, 74, 26, 85, 84<br/>13, 46, 64, 38, 96, 45, 89, 86, 43, 71<br/>60, 12, 46, 84, 15, 75, 37, 80, 37, 27<br/>97, 46, 36, 38, 37, 58, 85, 44, 57, 72</p><p>Compare the frequency of interval $10 \\le x < 20$ to that of interval $60 \\le x < 70$.</p><p>(i) Both have the same frequency.<br/>(ii) Interval $10 \\le x < 20$ has higher frequency.<br/>(iii) Interval $60 \\le x < 70$ has higher frequency.</p></div><div class=\"ml-vi\"><p>Cho bảng dữ liệu (50 giá trị, đọc theo từng hàng):</p><p>44, 63, 84, 98, 56, 32, 26, 75, 35, 97<br/>53, 39, 96, 36, 97, 44, 74, 26, 85, 84<br/>13, 46, 64, 38, 96, 45, 89, 86, 43, 71<br/>60, 12, 46, 84, 15, 75, 37, 80, 37, 27<br/>97, 46, 36, 38, 37, 58, 85, 44, 57, 72</p><p>So sánh tần số của khoảng $10 \\le x < 20$ với tần số của khoảng $60 \\le x < 70$.</p><p>(i) Cả hai có cùng tần số.<br/>(ii) Khoảng $10 \\le x < 20$ có tần số cao hơn.<br/>(iii) Khoảng $60 \\le x < 70$ có tần số cao hơn.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given a table of data (50 values, read row by row):<br/><br/>44, 63, 84, 98, 56, 32, 26, 75, 35, 97<br/>53, 39, 96, 36, 97, 44, 74, 26, 85, 84<br/>13, 46, 64, 38, 96, 45, 89, 86, 43, 71<br/>60, 12, 46, 84, 15, 75, 37, 80, 37, 27<br/>97, 46, 36, 38, 37, 58, 85, 44, 57, 72<br/><br/>Compare the frequency of interval $10 \\le x < 20$ to that of interval $60 \\le x < 70$.<br/><br/>(i) Both have the same frequency.<br/>(ii) Interval $10 \\le x < 20$ has higher frequency.<br/>(iii) Interval $60 \\le x < 70$ has higher frequency.</p></div><div class=\"ml-vi\"><p>Cho bảng dữ liệu (50 giá trị, đọc theo từng hàng):<br/><br/>44, 63, 84, 98, 56, 32, 26, 75, 35, 97<br/>53, 39, 96, 36, 97, 44, 74, 26, 85, 84<br/>13, 46, 64, 38, 96, 45, 89, 86, 43, 71<br/>60, 12, 46, 84, 15, 75, 37, 80, 37, 27<br/>97, 46, 36, 38, 37, 58, 85, 44, 57, 72<br/><br/>So sánh tần số của khoảng $10 \\le x < 20$ với tần số của khoảng $60 \\le x < 70$.<br/><br/>(i) Cả hai có cùng tần số.<br/>(ii) Khoảng $10 \\le x < 20$ có tần số cao hơn.<br/>(iii) Khoảng $60 \\le x < 70$ có tần số cao hơn.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q32.png",
           "options": [
             {
@@ -846,7 +846,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The following data reflect the number of customers who test drove new cars each day for a sample of 20 days at the Redfield Ford Dealership:</p><p>5, 7, 2, 9, 4, 9, 7, 10, 4, 7, 5, 6, 4, 0, 7, 6, 3, 4, 14, 6</p><p>Given these data, what is the interquartile range? Choose the best answer.</p></div><div class=\"ml-vi\"><p>Dữ liệu sau ghi số khách hàng lái thử xe mới mỗi ngày trong mẫu 20 ngày tại đại lý Redfield Ford:</p><p>5, 7, 2, 9, 4, 9, 7, 10, 4, 7, 5, 6, 4, 0, 7, 6, 3, 4, 14, 6</p><p>Với dữ liệu này, khoảng tứ phân vị (IQR) bằng bao nhiêu? Chọn đáp án tốt nhất.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The following data reflect the number of customers who test drove new cars each day for a sample of 20 days at the Redfield Ford Dealership:<br/><br/>5, 7, 2, 9, 4, 9, 7, 10, 4, 7, 5, 6, 4, 0, 7, 6, 3, 4, 14, 6<br/><br/>Given these data, what is the interquartile range? Choose the best answer.</p></div><div class=\"ml-vi\"><p>Dữ liệu sau ghi số khách hàng lái thử xe mới mỗi ngày trong mẫu 20 ngày tại đại lý Redfield Ford:<br/><br/>5, 7, 2, 9, 4, 9, 7, 10, 4, 7, 5, 6, 4, 0, 7, 6, 3, 4, 14, 6<br/><br/>Với dữ liệu này, khoảng tứ phân vị (IQR) bằng bao nhiêu? Chọn đáp án tốt nhất.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q33.png",
           "options": [
             {
@@ -924,7 +924,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The owner of a fish market has an assistant who has determined that the weights of catfish are normally distributed, with mean of 3.2 pounds and standard deviation of 0.8 pound. If a sample of 64 fish yields a mean of 3.4 pounds, what is probability of obtaining a sample mean this large or larger?</p><p>Let P(Z &lt; 2) = 0.9772; P(Z &lt; 3.72) = 0.9999.</p></div><div class=\"ml-vi\"><p>Chủ một chợ cá có người phụ tá xác định rằng khối lượng cá trê phân phối chuẩn với trung bình 3,2 pound và độ lệch chuẩn 0,8 pound. Nếu một mẫu 64 con cá cho trung bình 3,4 pound, xác suất thu được trung bình mẫu lớn bằng hoặc lớn hơn mức này là bao nhiêu?</p><p>Cho P(Z &lt; 2) = 0,9772; P(Z &lt; 3,72) = 0,9999.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The owner of a fish market has an assistant who has determined that the weights of catfish are normally distributed, with mean of 3.2 pounds and standard deviation of 0.8 pound. If a sample of 64 fish yields a mean of 3.4 pounds, what is probability of obtaining a sample mean this large or larger?<br/><br/>Let P(Z &lt; 2) = 0.9772; P(Z &lt; 3.72) = 0.9999.</p></div><div class=\"ml-vi\"><p>Chủ một chợ cá có người phụ tá xác định rằng khối lượng cá trê phân phối chuẩn với trung bình 3,2 pound và độ lệch chuẩn 0,8 pound. Nếu một mẫu 64 con cá cho trung bình 3,4 pound, xác suất thu được trung bình mẫu lớn bằng hoặc lớn hơn mức này là bao nhiêu?<br/><br/>Cho P(Z &lt; 2) = 0,9772; P(Z &lt; 3,72) = 0,9999.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q36.png",
           "options": [
             {
@@ -951,7 +951,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>In a recent study of 42 eighth graders, the mean number of hours per week that they watched television was 19.6. Assume the population standard deviation is 5.8 hours. Find the 98% confidence interval for the population mean.</p><p>Let $z_{0.01} = 2.33$, $z_{0.02} = 2.05$, $t_{0.01,41} = 2.42$, $t_{0.02,41} = 2.12$.</p></div><div class=\"ml-vi\"><p>Trong một nghiên cứu gần đây trên 42 học sinh lớp 8, số giờ xem tivi trung bình mỗi tuần là 19,6. Giả sử độ lệch chuẩn tổng thể là 5,8 giờ. Hãy tìm khoảng tin cậy 98% cho trung bình tổng thể.</p><p>Cho $z_{0,01} = 2{,}33$, $z_{0,02} = 2{,}05$, $t_{0,01;41} = 2{,}42$, $t_{0,02;41} = 2{,}12$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>In a recent study of 42 eighth graders, the mean number of hours per week that they watched television was 19.6. Assume the population standard deviation is 5.8 hours. Find the 98% confidence interval for the population mean.<br/><br/>Let $z_{0.01} = 2.33$, $z_{0.02} = 2.05$, $t_{0.01,41} = 2.42$, $t_{0.02,41} = 2.12$.</p></div><div class=\"ml-vi\"><p>Trong một nghiên cứu gần đây trên 42 học sinh lớp 8, số giờ xem tivi trung bình mỗi tuần là 19,6. Giả sử độ lệch chuẩn tổng thể là 5,8 giờ. Hãy tìm khoảng tin cậy 98% cho trung bình tổng thể.<br/><br/>Cho $z_{0,01} = 2{,}33$, $z_{0,02} = 2{,}05$, $t_{0,01;41} = 2{,}42$, $t_{0,02;41} = 2{,}12$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q37.png",
           "options": [
             {
@@ -1002,7 +1002,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A local men&#39;s clothing store is being sold. The buyers are trying to estimate the percentage of items that are outdated. They will randomly sample among its 100000 items in order to determine the proportion of merchandise that is outdated. The current owners have never determined their outdated percentage and can not help the buyers. Approximately how large a sample do the buyers need in order to insure that they are 99% confident that the sample proportion will not differ from the population proportion by more than 3%?</p><p>Let $z_{0.01} = 2.326$, $z_{0.005} = 2.575$.</p></div><div class=\"ml-vi\"><p>Một cửa hàng quần áo nam đang được bán lại. Bên mua muốn ước lượng tỉ lệ phần trăm mặt hàng đã lỗi thời. Họ sẽ lấy mẫu ngẫu nhiên trong số 100000 mặt hàng để xác định tỉ lệ hàng lỗi thời. Chủ hiện tại chưa từng xác định tỉ lệ này và không giúp được bên mua. Cần cỡ mẫu khoảng bao nhiêu để bên mua tin cậy 99% rằng tỉ lệ mẫu sai lệch so với tỉ lệ tổng thể không quá 3%?</p><p>Cho $z_{0,01} = 2{,}326$, $z_{0,005} = 2{,}575$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A local men&#39;s clothing store is being sold. The buyers are trying to estimate the percentage of items that are outdated. They will randomly sample among its 100000 items in order to determine the proportion of merchandise that is outdated. The current owners have never determined their outdated percentage and can not help the buyers. Approximately how large a sample do the buyers need in order to insure that they are 99% confident that the sample proportion will not differ from the population proportion by more than 3%?<br/><br/>Let $z_{0.01} = 2.326$, $z_{0.005} = 2.575$.</p></div><div class=\"ml-vi\"><p>Một cửa hàng quần áo nam đang được bán lại. Bên mua muốn ước lượng tỉ lệ phần trăm mặt hàng đã lỗi thời. Họ sẽ lấy mẫu ngẫu nhiên trong số 100000 mặt hàng để xác định tỉ lệ hàng lỗi thời. Chủ hiện tại chưa từng xác định tỉ lệ này và không giúp được bên mua. Cần cỡ mẫu khoảng bao nhiêu để bên mua tin cậy 99% rằng tỉ lệ mẫu sai lệch so với tỉ lệ tổng thể không quá 3%?<br/><br/>Cho $z_{0,01} = 2{,}326$, $z_{0,005} = 2{,}575$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q39.png",
           "options": [
             {
@@ -1029,7 +1029,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The mean pull-off force of a connector depends on cure time. State the null and alternative hypotheses used to demonstrate that the pull-off force is below 25 newtons.</p><p>(i) $H_0: \\mu > 25$, $H_1: \\mu = 25$<br/>(ii) $H_0: \\mu = 25$, $H_1: \\mu > 25$<br/>(iii) $H_0: \\mu = 25$, $H_1: \\mu < 25$<br/>(iv) $H_0: \\mu < 25$, $H_1: \\mu = 25$</p></div><div class=\"ml-vi\"><p>Lực kéo tuột trung bình của một đầu nối phụ thuộc vào thời gian đóng rắn. Hãy nêu giả thuyết không và giả thuyết đối dùng để chứng tỏ rằng lực kéo tuột nhỏ hơn 25 newton.</p><p>(i) $H_0: \\mu > 25$, $H_1: \\mu = 25$<br/>(ii) $H_0: \\mu = 25$, $H_1: \\mu > 25$<br/>(iii) $H_0: \\mu = 25$, $H_1: \\mu < 25$<br/>(iv) $H_0: \\mu < 25$, $H_1: \\mu = 25$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The mean pull-off force of a connector depends on cure time. State the null and alternative hypotheses used to demonstrate that the pull-off force is below 25 newtons.<br/><br/>(i) $H_0: \\mu > 25$, $H_1: \\mu = 25$<br/>(ii) $H_0: \\mu = 25$, $H_1: \\mu > 25$<br/>(iii) $H_0: \\mu = 25$, $H_1: \\mu < 25$<br/>(iv) $H_0: \\mu < 25$, $H_1: \\mu = 25$</p></div><div class=\"ml-vi\"><p>Lực kéo tuột trung bình của một đầu nối phụ thuộc vào thời gian đóng rắn. Hãy nêu giả thuyết không và giả thuyết đối dùng để chứng tỏ rằng lực kéo tuột nhỏ hơn 25 newton.<br/><br/>(i) $H_0: \\mu > 25$, $H_1: \\mu = 25$<br/>(ii) $H_0: \\mu = 25$, $H_1: \\mu > 25$<br/>(iii) $H_0: \\mu = 25$, $H_1: \\mu < 25$<br/>(iv) $H_0: \\mu < 25$, $H_1: \\mu = 25$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q40.png",
           "options": [
             {
@@ -1053,7 +1053,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A researcher wants to test whether the average weight of a specific breed of goat is greater than 12 kg. The population standard deviation is $\\sigma = 2$ kg. The researcher wants to ensure the test has a power of at least 0.80 (80%) with a significance level of $\\alpha = 0.05$. The researcher expects the true mean weight to be $\\mu = 12.5$ kg. What is the minimum sample size needed to achieve this power?</p><p>Let $z_{0.05} = 1.645$, $z_{0.2} = 0.84$.</p></div><div class=\"ml-vi\"><p>Một nhà nghiên cứu muốn kiểm định xem khối lượng trung bình của một giống dê có lớn hơn 12 kg hay không. Độ lệch chuẩn tổng thể là $\\sigma = 2$ kg. Nhà nghiên cứu muốn đảm bảo phép kiểm có lực ít nhất 0,80 (80%) với mức ý nghĩa $\\alpha = 0{,}05$. Ông kỳ vọng trung bình thật là $\\mu = 12{,}5$ kg. Cỡ mẫu tối thiểu cần thiết để đạt lực này là bao nhiêu?</p><p>Cho $z_{0,05} = 1{,}645$, $z_{0,2} = 0{,}84$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A researcher wants to test whether the average weight of a specific breed of goat is greater than 12 kg. The population standard deviation is $\\sigma = 2$ kg. The researcher wants to ensure the test has a power of at least 0.80 (80%) with a significance level of $\\alpha = 0.05$. The researcher expects the true mean weight to be $\\mu = 12.5$ kg. What is the minimum sample size needed to achieve this power?<br/><br/>Let $z_{0.05} = 1.645$, $z_{0.2} = 0.84$.</p></div><div class=\"ml-vi\"><p>Một nhà nghiên cứu muốn kiểm định xem khối lượng trung bình của một giống dê có lớn hơn 12 kg hay không. Độ lệch chuẩn tổng thể là $\\sigma = 2$ kg. Nhà nghiên cứu muốn đảm bảo phép kiểm có lực ít nhất 0,80 (80%) với mức ý nghĩa $\\alpha = 0{,}05$. Ông kỳ vọng trung bình thật là $\\mu = 12{,}5$ kg. Cỡ mẫu tối thiểu cần thiết để đạt lực này là bao nhiêu?<br/><br/>Cho $z_{0,05} = 1{,}645$, $z_{0,2} = 0{,}84$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q41.png",
           "options": [
             {
@@ -1077,7 +1077,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>What is the critical value for an upper-tailed hypothesis test of the population mean, i.e., $H_1: \\mu > 29$, when the population variance is unknown, and a null hypothesis is tested at the 0.05 significance level based on a sample size of 18? Assume that the population is normally distributed.</p><p>Let $t_{0.05,17} = 1.740$, $t_{0.25,17} = 2.110$.</p></div><div class=\"ml-vi\"><p>Giá trị tới hạn của một kiểm định giả thuyết một phía bên phải về trung bình tổng thể, tức $H_1: \\mu > 29$, khi phương sai tổng thể chưa biết và giả thuyết không được kiểm ở mức ý nghĩa 0,05 dựa trên cỡ mẫu 18, là bao nhiêu? Giả sử tổng thể phân phối chuẩn.</p><p>Cho $t_{0,05;17} = 1{,}740$, $t_{0,25;17} = 2{,}110$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>What is the critical value for an upper-tailed hypothesis test of the population mean, i.e., $H_1: \\mu > 29$, when the population variance is unknown, and a null hypothesis is tested at the 0.05 significance level based on a sample size of 18? Assume that the population is normally distributed.<br/><br/>Let $t_{0.05,17} = 1.740$, $t_{0.25,17} = 2.110$.</p></div><div class=\"ml-vi\"><p>Giá trị tới hạn của một kiểm định giả thuyết một phía bên phải về trung bình tổng thể, tức $H_1: \\mu > 29$, khi phương sai tổng thể chưa biết và giả thuyết không được kiểm ở mức ý nghĩa 0,05 dựa trên cỡ mẫu 18, là bao nhiêu? Giả sử tổng thể phân phối chuẩn.<br/><br/>Cho $t_{0,05;17} = 1{,}740$, $t_{0,25;17} = 2{,}110$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q42.png",
           "options": [
             {
@@ -1101,7 +1101,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Suppose a random sample of 250 observations from a binomial population gives a value $\\hat p = 0.63$, and you wish to test the null hypothesis that the population parameter $p$ is equal to 0.70 against the alternative hypothesis that $p$ is less than 0.70.</p><p>Find the observed value of the test statistic.</p></div><div class=\"ml-vi\"><p>Giả sử một mẫu ngẫu nhiên 250 quan sát từ một tổng thể nhị thức cho giá trị $\\hat p = 0{,}63$, và bạn muốn kiểm định giả thuyết không rằng tham số tổng thể $p$ bằng 0,70 đối với giả thuyết đối rằng $p$ nhỏ hơn 0,70.</p><p>Tìm giá trị quan sát của thống kê kiểm định.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose a random sample of 250 observations from a binomial population gives a value $\\hat p = 0.63$, and you wish to test the null hypothesis that the population parameter $p$ is equal to 0.70 against the alternative hypothesis that $p$ is less than 0.70.<br/><br/>Find the observed value of the test statistic.</p></div><div class=\"ml-vi\"><p>Giả sử một mẫu ngẫu nhiên 250 quan sát từ một tổng thể nhị thức cho giá trị $\\hat p = 0{,}63$, và bạn muốn kiểm định giả thuyết không rằng tham số tổng thể $p$ bằng 0,70 đối với giả thuyết đối rằng $p$ nhỏ hơn 0,70.<br/><br/>Tìm giá trị quan sát của thống kê kiểm định.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q43.png",
           "options": [
             {
@@ -1128,7 +1128,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A retail store executive wants to know whether the store&#39;s average Internet sales exceed its average mail-order sales. Let $\\mu_1$ be the true mean Internet sale amount and $\\mu_2$ be the true mean mail-order sale amount. State the null and alternative hypotheses for the hypothesis test.</p><p>(i) $H_0: \\mu_1 = \\mu_2$; $H_1: \\mu_1 \\ge \\mu_2$<br/>(ii) $H_0: \\mu_1 < \\mu_2$; $H_1: \\mu_1 \\ge \\mu_2$<br/>(iii) $H_0: \\mu_1 = \\mu_2$; $H_1: \\mu_1 > \\mu_2$<br/>(iv) $H_0: \\mu_1 > \\mu_2$; $H_1: \\mu_1 \\le \\mu_2$</p></div><div class=\"ml-vi\"><p>Một giám đốc chuỗi bán lẻ muốn biết doanh số trung bình bán qua Internet của cửa hàng có vượt doanh số trung bình bán qua thư đặt hàng hay không. Gọi $\\mu_1$ là doanh số trung bình thật qua Internet và $\\mu_2$ là doanh số trung bình thật qua thư đặt hàng. Hãy nêu giả thuyết không và giả thuyết đối cho phép kiểm định.</p><p>(i) $H_0: \\mu_1 = \\mu_2$; $H_1: \\mu_1 \\ge \\mu_2$<br/>(ii) $H_0: \\mu_1 < \\mu_2$; $H_1: \\mu_1 \\ge \\mu_2$<br/>(iii) $H_0: \\mu_1 = \\mu_2$; $H_1: \\mu_1 > \\mu_2$<br/>(iv) $H_0: \\mu_1 > \\mu_2$; $H_1: \\mu_1 \\le \\mu_2$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A retail store executive wants to know whether the store&#39;s average Internet sales exceed its average mail-order sales. Let $\\mu_1$ be the true mean Internet sale amount and $\\mu_2$ be the true mean mail-order sale amount. State the null and alternative hypotheses for the hypothesis test.<br/><br/>(i) $H_0: \\mu_1 = \\mu_2$; $H_1: \\mu_1 \\ge \\mu_2$<br/>(ii) $H_0: \\mu_1 < \\mu_2$; $H_1: \\mu_1 \\ge \\mu_2$<br/>(iii) $H_0: \\mu_1 = \\mu_2$; $H_1: \\mu_1 > \\mu_2$<br/>(iv) $H_0: \\mu_1 > \\mu_2$; $H_1: \\mu_1 \\le \\mu_2$</p></div><div class=\"ml-vi\"><p>Một giám đốc chuỗi bán lẻ muốn biết doanh số trung bình bán qua Internet của cửa hàng có vượt doanh số trung bình bán qua thư đặt hàng hay không. Gọi $\\mu_1$ là doanh số trung bình thật qua Internet và $\\mu_2$ là doanh số trung bình thật qua thư đặt hàng. Hãy nêu giả thuyết không và giả thuyết đối cho phép kiểm định.<br/><br/>(i) $H_0: \\mu_1 = \\mu_2$; $H_1: \\mu_1 \\ge \\mu_2$<br/>(ii) $H_0: \\mu_1 < \\mu_2$; $H_1: \\mu_1 \\ge \\mu_2$<br/>(iii) $H_0: \\mu_1 = \\mu_2$; $H_1: \\mu_1 > \\mu_2$<br/>(iv) $H_0: \\mu_1 > \\mu_2$; $H_1: \\mu_1 \\le \\mu_2$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q44.png",
           "options": [
             {
@@ -1152,7 +1152,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>College students majoring in computer science and interested in pursuing careers in computer security were randomly put into either Python or PowerShell classes. In a standard security certification exam, 230 students who took Python scored an average of 76.5 with a sample standard deviation of 7.4, while 185 students who took PowerShell averaged 78.8 with a sample standard deviation of 5.6. Suppose that the two population standard deviations are equal.</p><p>We want to ask whether there is sufficient evidence of a difference in the test results. What is the pooled variance?</p></div><div class=\"ml-vi\"><p>Sinh viên ngành khoa học máy tính quan tâm đến nghề an ninh máy tính được xếp ngẫu nhiên vào lớp Python hoặc lớp PowerShell. Trong một kỳ thi chứng chỉ an ninh chuẩn, 230 sinh viên học Python đạt trung bình 76,5 với độ lệch chuẩn mẫu 7,4; trong khi 185 sinh viên học PowerShell đạt trung bình 78,8 với độ lệch chuẩn mẫu 5,6. Giả sử hai độ lệch chuẩn tổng thể bằng nhau.</p><p>Ta muốn hỏi liệu có đủ bằng chứng về sự khác biệt trong kết quả thi hay không. Phương sai gộp bằng bao nhiêu?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>College students majoring in computer science and interested in pursuing careers in computer security were randomly put into either Python or PowerShell classes. In a standard security certification exam, 230 students who took Python scored an average of 76.5 with a sample standard deviation of 7.4, while 185 students who took PowerShell averaged 78.8 with a sample standard deviation of 5.6. Suppose that the two population standard deviations are equal.<br/><br/>We want to ask whether there is sufficient evidence of a difference in the test results. What is the pooled variance?</p></div><div class=\"ml-vi\"><p>Sinh viên ngành khoa học máy tính quan tâm đến nghề an ninh máy tính được xếp ngẫu nhiên vào lớp Python hoặc lớp PowerShell. Trong một kỳ thi chứng chỉ an ninh chuẩn, 230 sinh viên học Python đạt trung bình 76,5 với độ lệch chuẩn mẫu 7,4; trong khi 185 sinh viên học PowerShell đạt trung bình 78,8 với độ lệch chuẩn mẫu 5,6. Giả sử hai độ lệch chuẩn tổng thể bằng nhau.<br/><br/>Ta muốn hỏi liệu có đủ bằng chứng về sự khác biệt trong kết quả thi hay không. Phương sai gộp bằng bao nhiêu?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q45.png",
           "options": [
             {
@@ -1176,7 +1176,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Using below data, compute the test statistic used to test the null hypothesis that $p_1 = p_2$.</p><p>$n_1 = 431$, $x_1 = 121$; $n_2 = 335$, $x_2 = 97$.</p></div><div class=\"ml-vi\"><p>Dùng dữ liệu dưới đây, hãy tính thống kê kiểm định dùng để kiểm định giả thuyết không $p_1 = p_2$.</p><p>$n_1 = 431$, $x_1 = 121$; $n_2 = 335$, $x_2 = 97$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Using below data, compute the test statistic used to test the null hypothesis that $p_1 = p_2$.<br/><br/>$n_1 = 431$, $x_1 = 121$; $n_2 = 335$, $x_2 = 97$.</p></div><div class=\"ml-vi\"><p>Dùng dữ liệu dưới đây, hãy tính thống kê kiểm định dùng để kiểm định giả thuyết không $p_1 = p_2$.<br/><br/>$n_1 = 431$, $x_1 = 121$; $n_2 = 335$, $x_2 = 97$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q46.png",
           "options": [
             {
@@ -1203,7 +1203,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>For the data in the table below, find the equation of the regression line $\\hat y = a + bx$ of y on x.</p><p>| x | 0 | 1 | 2 | 1 |<br/>|---|---|---|---|---|<br/>| y | 0 | 0 | 2 | 2 |</p></div><div class=\"ml-vi\"><p>Với dữ liệu trong bảng dưới đây, hãy tìm phương trình đường hồi quy $\\hat y = a + bx$ của y theo x.</p><p>| x | 0 | 1 | 2 | 1 |<br/>|---|---|---|---|---|<br/>| y | 0 | 0 | 2 | 2 |</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>For the data in the table below, find the equation of the regression line $\\hat y = a + bx$ of y on x.<br/><br/><table class=\"exam-table\"><thead><tr><th>x</th><th>0</th><th>1</th><th>2</th><th>1</th></tr></thead><tbody><tr><td>y</td><td>0</td><td>0</td><td>2</td><td>2</td></tr></tbody></table></p></div><div class=\"ml-vi\"><p>Với dữ liệu trong bảng dưới đây, hãy tìm phương trình đường hồi quy $\\hat y = a + bx$ của y theo x.<br/><br/><table class=\"exam-table\"><thead><tr><th>x</th><th>0</th><th>1</th><th>2</th><th>1</th></tr></thead><tbody><tr><td>y</td><td>0</td><td>0</td><td>2</td><td>2</td></tr></tbody></table></p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q47.png",
           "options": [
             {
@@ -1251,7 +1251,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Mathematics and Physics grades of 5 students are as below:</p><p>| Student | Mathematics grade (X) | Physics grade (Y) |<br/>|---|---|---|<br/>| 1 | 7.5 | 6 |<br/>| 2 | 6.5 | 8.5 |<br/>| 3 | 6 | 5.5 |<br/>| 4 | 4.5 | 6 |<br/>| 5 | 9.5 | 9 |</p><p>We want to do linear regression analysis on X and Y. Given the standard error of the regression $\\hat\\sigma = 1.43$, the estimated slope $\\hat\\beta_1 = 0.56$.</p><p>Calculate the test statistic for the hypotheses $H_0: \\beta_1 = 0$ versus $H_1: \\beta_1 > 0$, given $T_0 = \\dfrac{\\hat\\beta_1 - \\beta_{1,0}}{\\sqrt{\\hat\\sigma^2 / S_{xx}}}$.</p></div><div class=\"ml-vi\"><p>Điểm Toán và Vật lý của 5 sinh viên như sau:</p><p>| Sinh viên | Điểm Toán (X) | Điểm Lý (Y) |<br/>|---|---|---|<br/>| 1 | 7,5 | 6 |<br/>| 2 | 6,5 | 8,5 |<br/>| 3 | 6 | 5,5 |<br/>| 4 | 4,5 | 6 |<br/>| 5 | 9,5 | 9 |</p><p>Ta muốn phân tích hồi quy tuyến tính giữa X và Y. Cho sai số chuẩn của hồi quy $\\hat\\sigma = 1{,}43$, hệ số góc ước lượng $\\hat\\beta_1 = 0{,}56$.</p><p>Hãy tính thống kê kiểm định cho giả thuyết $H_0: \\beta_1 = 0$ đối với $H_1: \\beta_1 > 0$, với $T_0 = \\dfrac{\\hat\\beta_1 - \\beta_{1,0}}{\\sqrt{\\hat\\sigma^2 / S_{xx}}}$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Mathematics and Physics grades of 5 students are as below:<br/><br/><table class=\"exam-table\"><thead><tr><th>Student</th><th>Mathematics grade (X)</th><th>Physics grade (Y)</th></tr></thead><tbody><tr><td>1</td><td>7.5</td><td>6</td></tr><tr><td>2</td><td>6.5</td><td>8.5</td></tr><tr><td>3</td><td>6</td><td>5.5</td></tr><tr><td>4</td><td>4.5</td><td>6</td></tr><tr><td>5</td><td>9.5</td><td>9</td></tr></tbody></table><br/>We want to do linear regression analysis on X and Y. Given the standard error of the regression $\\hat\\sigma = 1.43$, the estimated slope $\\hat\\beta_1 = 0.56$.<br/><br/>Calculate the test statistic for the hypotheses $H_0: \\beta_1 = 0$ versus $H_1: \\beta_1 > 0$, given $T_0 = \\dfrac{\\hat\\beta_1 - \\beta_{1,0}}{\\sqrt{\\hat\\sigma^2 / S_{xx}}}$.</p></div><div class=\"ml-vi\"><p>Điểm Toán và Vật lý của 5 sinh viên như sau:<br/><br/><table class=\"exam-table\"><thead><tr><th>Sinh viên</th><th>Điểm Toán (X)</th><th>Điểm Lý (Y)</th></tr></thead><tbody><tr><td>1</td><td>7,5</td><td>6</td></tr><tr><td>2</td><td>6,5</td><td>8,5</td></tr><tr><td>3</td><td>6</td><td>5,5</td></tr><tr><td>4</td><td>4,5</td><td>6</td></tr><tr><td>5</td><td>9,5</td><td>9</td></tr></tbody></table><br/>Ta muốn phân tích hồi quy tuyến tính giữa X và Y. Cho sai số chuẩn của hồi quy $\\hat\\sigma = 1{,}43$, hệ số góc ước lượng $\\hat\\beta_1 = 0{,}56$.<br/><br/>Hãy tính thống kê kiểm định cho giả thuyết $H_0: \\beta_1 = 0$ đối với $H_1: \\beta_1 > 0$, với $T_0 = \\dfrac{\\hat\\beta_1 - \\beta_{1,0}}{\\sqrt{\\hat\\sigma^2 / S_{xx}}}$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D3/q49.png",
           "options": [
             {

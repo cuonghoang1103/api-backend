@@ -1068,7 +1068,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The mean pull-off force of a connector depends on cure time. State the null and alternative hypotheses used to demonstrate that the pull-off force is below 24 newtons.<br/>i. $H_0:\\mu=24;\\ H_1:\\mu<24$<br/>ii. $H_0:\\mu=24;\\ H_1:\\mu>24$<br/>iii. $H_0:\\mu=24;\\ H_1:\\mu\\ne 24$<br/>iv. $H_0:\\mu<24;\\ H_1:\\mu\\ge 24$</p></div><div class=\"ml-vi\"><p>Lực kéo rời trung bình của một đầu nối phụ thuộc vào thời gian đông kết. Hãy nêu giả thuyết không và giả thuyết đối dùng để chứng minh rằng lực kéo rời nhỏ hơn 24 newton.<br/>i. $H_0:\\mu=24;\\ H_1:\\mu<24$<br/>ii. $H_0:\\mu=24;\\ H_1:\\mu>24$<br/>iii. $H_0:\\mu=24;\\ H_1:\\mu\\ne 24$<br/>iv. $H_0:\\mu<24;\\ H_1:\\mu\\ge 24$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The mean pull-off force of a connector depends on cure time. State the null and alternative hypotheses used to demonstrate that the pull-off force is below 24 newtons.<br/>i. $H_0:\\mu=24;\\ H_1:\\mu<24$<br/>ii. $H_0:\\mu=24;\\ H_1:\\mu>24$<br/>iii. $H_0:\\mu=24;\\ H_1:\\mu<br/>e 24$<br/>iv. $H_0:\\mu<24;\\ H_1:\\mu\\ge 24$</p></div><div class=\"ml-vi\"><p>Lực kéo rời trung bình của một đầu nối phụ thuộc vào thời gian đông kết. Hãy nêu giả thuyết không và giả thuyết đối dùng để chứng minh rằng lực kéo rời nhỏ hơn 24 newton.<br/>i. $H_0:\\mu=24;\\ H_1:\\mu<24$<br/>ii. $H_0:\\mu=24;\\ H_1:\\mu>24$<br/>iii. $H_0:\\mu=24;\\ H_1:\\mu<br/>e 24$<br/>iv. $H_0:\\mu<24;\\ H_1:\\mu\\ge 24$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D9/q41.png",
           "options": [
             {

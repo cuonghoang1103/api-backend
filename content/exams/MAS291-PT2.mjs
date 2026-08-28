@@ -15,7 +15,7 @@ export default {
       "source": "REAL",
       "shuffleQuestions": false,
       "shuffleOptions": false,
-      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Progress Test</b> paper for <b>Probability &amp; Statistics</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>bài kiểm tra tiến độ (Progress Test)</b> thật của FPTU môn <b>Probability &amp; Statistics</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
+      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Final Exam</b> paper for <b>Probability &amp; Statistics</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>Probability &amp; Statistics</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
       "isPublished": true,
       "questions": [
         {
@@ -45,7 +45,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.5,
-          "prompt": "<div class=\"ml-en\"><p>Suppose that a continuous random variable has a pdf of the following form:</p><p>$$f(x)=\\begin{cases}\\dfrac{x^3}{10}-\\dfrac{x}{20}+\\dfrac{7}{20}, & 0\\le x\\le 2\\\\ 0, & \\text{otherwise}\\end{cases}$$</p><p>Find $E(X^2)$.</p></div><div class=\"ml-vi\"><p>Giả sử một biến ngẫu nhiên liên tục có hàm mật độ xác suất dạng sau:</p><p>$$f(x)=\\begin{cases}\\dfrac{x^3}{10}-\\dfrac{x}{20}+\\dfrac{7}{20}, & 0\\le x\\le 2\\\\ 0, & \\text{trường hợp khác}\\end{cases}$$</p><p>Tìm $E(X^2)$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose that a continuous random variable has a pdf of the following form:<br/><br/>$$f(x)=\\begin{cases}\\dfrac{x^3}{10}-\\dfrac{x}{20}+\\dfrac{7}{20}, & 0\\le x\\le 2\\\\ 0, & \\text{otherwise}\\end{cases}$$<br/><br/>Find $E(X^2)$.</p></div><div class=\"ml-vi\"><p>Giả sử một biến ngẫu nhiên liên tục có hàm mật độ xác suất dạng sau:<br/><br/>$$f(x)=\\begin{cases}\\dfrac{x^3}{10}-\\dfrac{x}{20}+\\dfrac{7}{20}, & 0\\le x\\le 2\\\\ 0, & \\text{trường hợp khác}\\end{cases}$$<br/><br/>Tìm $E(X^2)$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/PT2/q2.png",
           "options": [
             {
@@ -69,7 +69,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.5,
-          "prompt": "<div class=\"ml-en\"><p>Given the cumulative distribution function of the random variable X:</p><p>$$F(x)=\\begin{cases}0, & x<-2\\\\ 0.25x+0.5, & -2\\le x<2\\\\ 1, & 2\\le x\\end{cases}$$</p><p>Find $P(X>1)$.</p></div><div class=\"ml-vi\"><p>Cho hàm phân phối tích lũy của biến ngẫu nhiên X:</p><p>$$F(x)=\\begin{cases}0, & x<-2\\\\ 0.25x+0.5, & -2\\le x<2\\\\ 1, & 2\\le x\\end{cases}$$</p><p>Tìm $P(X>1)$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given the cumulative distribution function of the random variable X:<br/><br/>$$F(x)=\\begin{cases}0, & x<-2\\\\ 0.25x+0.5, & -2\\le x<2\\\\ 1, & 2\\le x\\end{cases}$$<br/><br/>Find $P(X>1)$.</p></div><div class=\"ml-vi\"><p>Cho hàm phân phối tích lũy của biến ngẫu nhiên X:<br/><br/>$$F(x)=\\begin{cases}0, & x<-2\\\\ 0.25x+0.5, & -2\\le x<2\\\\ 1, & 2\\le x\\end{cases}$$<br/><br/>Tìm $P(X>1)$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/PT2/q3.png",
           "options": [
             {
@@ -174,7 +174,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.5,
-          "prompt": "<div class=\"ml-en\"><p>Suppose that X has a discrete uniform distribution on the integers 10 to 99. Which of the followings are true?</p><p>(i) $P(X>49)=5/9$<br/>(ii) $E(2X)=109$.</p></div><div class=\"ml-vi\"><p>Giả sử X có phân phối đều rời rạc trên các số nguyên từ 10 đến 99. Phát biểu nào sau đây đúng?</p><p>(i) $P(X>49)=5/9$<br/>(ii) $E(2X)=109$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose that X has a discrete uniform distribution on the integers 10 to 99. Which of the followings are true?<br/><br/>(i) $P(X>49)=5/9$<br/>(ii) $E(2X)=109$.</p></div><div class=\"ml-vi\"><p>Giả sử X có phân phối đều rời rạc trên các số nguyên từ 10 đến 99. Phát biểu nào sau đây đúng?<br/><br/>(i) $P(X>49)=5/9$<br/>(ii) $E(2X)=109$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/PT2/q7.png",
           "options": [
             {
@@ -225,7 +225,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.5,
-          "prompt": "<div class=\"ml-en\"><p>Entry to a certain University is determined by a national test. The scores on this test are normally distributed with a mean of 510 and a standard deviation of 100. Tom wants to be admitted to this university and he knows that he must score better than at least 70% of the students who took the test. Tom takes the test and scores 587. Will he be admitted to this university?</p><p>Let $P(Z\\le 0.77)=0.7794$, $P(Z\\le 0.87)=0.8079$, $P(Z\\le 0.85)=0.8023$.</p></div><div class=\"ml-vi\"><p>Việc tuyển sinh vào một trường đại học được quyết định bởi một kỳ thi quốc gia. Điểm của kỳ thi này tuân theo phân phối chuẩn với trung bình 510 và độ lệch chuẩn 100. Tom muốn được nhận vào trường và biết rằng anh phải đạt điểm cao hơn ít nhất 70% số thí sinh dự thi. Tom thi và được 587 điểm. Anh có được nhận vào trường không?</p><p>Cho $P(Z\\le 0.77)=0.7794$, $P(Z\\le 0.87)=0.8079$, $P(Z\\le 0.85)=0.8023$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Entry to a certain University is determined by a national test. The scores on this test are normally distributed with a mean of 510 and a standard deviation of 100. Tom wants to be admitted to this university and he knows that he must score better than at least 70% of the students who took the test. Tom takes the test and scores 587. Will he be admitted to this university?<br/><br/>Let $P(Z\\le 0.77)=0.7794$, $P(Z\\le 0.87)=0.8079$, $P(Z\\le 0.85)=0.8023$.</p></div><div class=\"ml-vi\"><p>Việc tuyển sinh vào một trường đại học được quyết định bởi một kỳ thi quốc gia. Điểm của kỳ thi này tuân theo phân phối chuẩn với trung bình 510 và độ lệch chuẩn 100. Tom muốn được nhận vào trường và biết rằng anh phải đạt điểm cao hơn ít nhất 70% số thí sinh dự thi. Tom thi và được 587 điểm. Anh có được nhận vào trường không?<br/><br/>Cho $P(Z\\le 0.77)=0.7794$, $P(Z\\le 0.87)=0.8079$, $P(Z\\le 0.85)=0.8023$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/PT2/q9.png",
           "options": [
             {
@@ -249,7 +249,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.5,
-          "prompt": "<div class=\"ml-en\"><p>Based on extensive data from an urban freeway near Toronto, Canada, &quot;it is assumed that free speeds can best be represented by a normal distribution&quot; (&quot;Impact of Driver Compliance on the Safety and Operational Impacts of Freeway Variable Speed Limit Systems,&quot; J. of Transp. Engr., 2011: 260-268). The mean and standard deviation reported in the article were 119 km/h and 13.1 km/h, respectively.</p><p>What is the probability that the speed of a randomly selected vehicle exceeds 120 km/h?</p><p>$P(Z\\le -1.45)=0.074$, $P(Z\\le 0.08)=0.532$.</p></div><div class=\"ml-vi\"><p>Dựa trên dữ liệu phong phú từ một đường cao tốc đô thị gần Toronto, Canada, &quot;người ta giả định rằng tốc độ tự do được mô tả tốt nhất bằng phân phối chuẩn&quot; (&quot;Impact of Driver Compliance on the Safety and Operational Impacts of Freeway Variable Speed Limit Systems,&quot; J. of Transp. Engr., 2011: 260-268). Trung bình và độ lệch chuẩn nêu trong bài báo lần lượt là 119 km/h và 13,1 km/h.</p><p>Xác suất để tốc độ của một xe được chọn ngẫu nhiên vượt quá 120 km/h là bao nhiêu?</p><p>$P(Z\\le -1.45)=0.074$, $P(Z\\le 0.08)=0.532$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Based on extensive data from an urban freeway near Toronto, Canada, &quot;it is assumed that free speeds can best be represented by a normal distribution&quot; (&quot;Impact of Driver Compliance on the Safety and Operational Impacts of Freeway Variable Speed Limit Systems,&quot; J. of Transp. Engr., 2011: 260-268). The mean and standard deviation reported in the article were 119 km/h and 13.1 km/h, respectively.<br/><br/>What is the probability that the speed of a randomly selected vehicle exceeds 120 km/h?<br/><br/>$P(Z\\le -1.45)=0.074$, $P(Z\\le 0.08)=0.532$.</p></div><div class=\"ml-vi\"><p>Dựa trên dữ liệu phong phú từ một đường cao tốc đô thị gần Toronto, Canada, &quot;người ta giả định rằng tốc độ tự do được mô tả tốt nhất bằng phân phối chuẩn&quot; (&quot;Impact of Driver Compliance on the Safety and Operational Impacts of Freeway Variable Speed Limit Systems,&quot; J. of Transp. Engr., 2011: 260-268). Trung bình và độ lệch chuẩn nêu trong bài báo lần lượt là 119 km/h và 13,1 km/h.<br/><br/>Xác suất để tốc độ của một xe được chọn ngẫu nhiên vượt quá 120 km/h là bao nhiêu?<br/><br/>$P(Z\\le -1.45)=0.074$, $P(Z\\le 0.08)=0.532$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/PT2/q10.png",
           "options": [
             {
@@ -351,7 +351,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.5,
-          "prompt": "<div class=\"ml-en\"><p>The distance (in hundreds of miles) driven by a trucker in one day is a continuous random variable X whose cumulative distribution function is given by:</p><p>$$F(x)=\\begin{cases}0, & x<0\\\\ \\dfrac{x^3}{216}, & 0\\le x<6\\\\ 1, & 6\\le x\\end{cases}$$</p><p>Find $P(X>4)$.</p></div><div class=\"ml-vi\"><p>Quãng đường (tính bằng trăm dặm) mà một tài xế xe tải lái trong một ngày là biến ngẫu nhiên liên tục X có hàm phân phối tích lũy:</p><p>$$F(x)=\\begin{cases}0, & x<0\\\\ \\dfrac{x^3}{216}, & 0\\le x<6\\\\ 1, & 6\\le x\\end{cases}$$</p><p>Tìm $P(X>4)$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The distance (in hundreds of miles) driven by a trucker in one day is a continuous random variable X whose cumulative distribution function is given by:<br/><br/>$$F(x)=\\begin{cases}0, & x<0\\\\ \\dfrac{x^3}{216}, & 0\\le x<6\\\\ 1, & 6\\le x\\end{cases}$$<br/><br/>Find $P(X>4)$.</p></div><div class=\"ml-vi\"><p>Quãng đường (tính bằng trăm dặm) mà một tài xế xe tải lái trong một ngày là biến ngẫu nhiên liên tục X có hàm phân phối tích lũy:<br/><br/>$$F(x)=\\begin{cases}0, & x<0\\\\ \\dfrac{x^3}{216}, & 0\\le x<6\\\\ 1, & 6\\le x\\end{cases}$$<br/><br/>Tìm $P(X>4)$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/PT2/q14.png",
           "options": [
             {
@@ -429,7 +429,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.5,
-          "prompt": "<div class=\"ml-en\"><p>Given that X is a discrete random variable with the cumulative distribution function</p><p>$$F(x)=\\begin{cases}0, & x<0\\\\ 0.15, & 0\\le x<5\\\\ 0.4, & 5\\le x<20\\\\ 0.7, & 20\\le x<30\\\\ 1, & 30\\le x\\end{cases}$$</p><p>Determine $P(X=1)$ and $P(2<X\\le 25)$.</p></div><div class=\"ml-vi\"><p>Cho X là biến ngẫu nhiên rời rạc với hàm phân phối tích lũy</p><p>$$F(x)=\\begin{cases}0, & x<0\\\\ 0.15, & 0\\le x<5\\\\ 0.4, & 5\\le x<20\\\\ 0.7, & 20\\le x<30\\\\ 1, & 30\\le x\\end{cases}$$</p><p>Hãy xác định $P(X=1)$ và $P(2<X\\le 25)$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given that X is a discrete random variable with the cumulative distribution function<br/><br/>$$F(x)=\\begin{cases}0, & x<0\\\\ 0.15, & 0\\le x<5\\\\ 0.4, & 5\\le x<20\\\\ 0.7, & 20\\le x<30\\\\ 1, & 30\\le x\\end{cases}$$<br/><br/>Determine $P(X=1)$ and $P(2<X\\le 25)$.</p></div><div class=\"ml-vi\"><p>Cho X là biến ngẫu nhiên rời rạc với hàm phân phối tích lũy<br/><br/>$$F(x)=\\begin{cases}0, & x<0\\\\ 0.15, & 0\\le x<5\\\\ 0.4, & 5\\le x<20\\\\ 0.7, & 20\\le x<30\\\\ 1, & 30\\le x\\end{cases}$$<br/><br/>Hãy xác định $P(X=1)$ và $P(2<X\\le 25)$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/PT2/q17.png",
           "options": [
             {
@@ -483,7 +483,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.5,
-          "prompt": "<div class=\"ml-en\"><p>Use the binomial probability formula to find the probability of x successes in n trials given the probability p of success on a single trial.</p><p>$n=12$, $x=5$, $p=0.25$</p></div><div class=\"ml-vi\"><p>Dùng công thức xác suất nhị thức để tìm xác suất có x lần thành công trong n phép thử, biết xác suất thành công của một phép thử là p.</p><p>$n=12$, $x=5$, $p=0.25$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Use the binomial probability formula to find the probability of x successes in n trials given the probability p of success on a single trial.<br/><br/>$n=12$, $x=5$, $p=0.25$</p></div><div class=\"ml-vi\"><p>Dùng công thức xác suất nhị thức để tìm xác suất có x lần thành công trong n phép thử, biết xác suất thành công của một phép thử là p.<br/><br/>$n=12$, $x=5$, $p=0.25$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/PT2/q19.png",
           "options": [
             {

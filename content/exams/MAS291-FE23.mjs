@@ -123,7 +123,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>If a random variable has the normal distribution with $\\mu = 30$ and $\\sigma = 5$, find the probability that it will take on the value between 24 and 28.\\nLet $P(Z < -1.2) = 0.1151$, $P(Z < -0.4) = 0.3446$ and $P(Z < 0) = 0.5$.</p></div><div class=\"ml-vi\"><p>Nếu một biến ngẫu nhiên có phân phối chuẩn với $\\mu = 30$ và $\\sigma = 5$, hãy tìm xác suất nó nhận giá trị trong khoảng từ 24 đến 28.\\nCho $P(Z < -1{,}2) = 0{,}1151$, $P(Z < -0{,}4) = 0{,}3446$ và $P(Z < 0) = 0{,}5$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>If a random variable has the normal distribution with $\\mu = 30$ and $\\sigma = 5$, find the probability that it will take on the value between 24 and 28.<br/>Let $P(Z < -1.2) = 0.1151$, $P(Z < -0.4) = 0.3446$ and $P(Z < 0) = 0.5$.</p></div><div class=\"ml-vi\"><p>Nếu một biến ngẫu nhiên có phân phối chuẩn với $\\mu = 30$ và $\\sigma = 5$, hãy tìm xác suất nó nhận giá trị trong khoảng từ 24 đến 28.<br/>Cho $P(Z < -1{,}2) = 0{,}1151$, $P(Z < -0{,}4) = 0{,}3446$ và $P(Z < 0) = 0{,}5$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q5.png",
           "options": [
             {
@@ -145,7 +145,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\"><p>Standardise: $z_1=\\frac{24-30}{5}=-1.2$ and $z_2=\\frac{28-30}{5}=-0.4$. Then\\n$$P(24<X<28)=P(-1.2<Z<-0.4)=0.3446-0.1151=0.2295.$$</p></div><div class=\"ml-vi\"><p>Chuẩn hoá: $z_1=\\frac{24-30}{5}=-1{,}2$ và $z_2=\\frac{28-30}{5}=-0{,}4$. Khi đó\\n$$P(24<X<28)=P(-1{,}2<Z<-0{,}4)=0{,}3446-0{,}1151=0{,}2295.$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Standardise: $z_1=\\frac{24-30}{5}=-1.2$ and $z_2=\\frac{28-30}{5}=-0.4$. Then<br/>$$P(24<X<28)=P(-1.2<Z<-0.4)=0.3446-0.1151=0.2295.$$</p></div><div class=\"ml-vi\"><p>Chuẩn hoá: $z_1=\\frac{24-30}{5}=-1{,}2$ và $z_2=\\frac{28-30}{5}=-0{,}4$. Khi đó<br/>$$P(24<X<28)=P(-1{,}2<Z<-0{,}4)=0{,}3446-0{,}1151=0{,}2295.$$</p></div>"
         },
         {
           "kind": "MCQ",
@@ -172,7 +172,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\"><p>This is binomial with $n=8$, $p=0.55$:\\n$$P(X=4)=\\binom{8}{4}(0.55)^4(0.45)^4=70\\times0.09150625\\times0.04100625\\approx0.2627.$$</p></div><div class=\"ml-vi\"><p>Đây là phân phối nhị thức với $n=8$, $p=0{,}55$:\\n$$P(X=4)=\\binom{8}{4}(0{,}55)^4(0{,}45)^4=70\\times0{,}09150625\\times0{,}04100625\\approx0{,}2627.$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>This is binomial with $n=8$, $p=0.55$:<br/>$$P(X=4)=\\binom{8}{4}(0.55)^4(0.45)^4=70\\times0.09150625\\times0.04100625\\approx0.2627.$$</p></div><div class=\"ml-vi\"><p>Đây là phân phối nhị thức với $n=8$, $p=0{,}55$:<br/>$$P(X=4)=\\binom{8}{4}(0{,}55)^4(0{,}45)^4=70\\times0{,}09150625\\times0{,}04100625\\approx0{,}2627.$$</p></div>"
         },
         {
           "kind": "MCQ",
@@ -247,12 +247,12 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>Poisson pmf with $\\lambda=4.3$:\\n$$P(X=3)=\\frac{e^{-4.3}\\,4.3^{3}}{3!}=\\frac{0.0135686\\times79.507}{6}\\approx0.1798.$$</p></div><div class=\"ml-vi\"><p>Hàm khối xác suất Poisson với $\\lambda=4{,}3$:\\n$$P(X=3)=\\frac{e^{-4{,}3}\\,4{,}3^{3}}{3!}=\\frac{0{,}0135686\\times79{,}507}{6}\\approx0{,}1798.$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Poisson pmf with $\\lambda=4.3$:<br/>$$P(X=3)=\\frac{e^{-4.3}\\,4.3^{3}}{3!}=\\frac{0.0135686\\times79.507}{6}\\approx0.1798.$$</p></div><div class=\"ml-vi\"><p>Hàm khối xác suất Poisson với $\\lambda=4{,}3$:<br/>$$P(X=3)=\\frac{e^{-4{,}3}\\,4{,}3^{3}}{3!}=\\frac{0{,}0135686\\times79{,}507}{6}\\approx0{,}1798.$$</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Find the mean of the following probability distribution.\\n$P(X=0)=0.19$, $P(X=1)=0.37$, $P(X=2)=0.16$, $P(X=3)=0.26$, $P(X=4)=0.02$.</p></div><div class=\"ml-vi\"><p>Tìm kỳ vọng của phân phối xác suất sau.\\n$P(X=0)=0{,}19$, $P(X=1)=0{,}37$, $P(X=2)=0{,}16$, $P(X=3)=0{,}26$, $P(X=4)=0{,}02$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find the mean of the following probability distribution.<br/>$P(X=0)=0.19$, $P(X=1)=0.37$, $P(X=2)=0.16$, $P(X=3)=0.26$, $P(X=4)=0.02$.</p></div><div class=\"ml-vi\"><p>Tìm kỳ vọng của phân phối xác suất sau.<br/>$P(X=0)=0{,}19$, $P(X=1)=0{,}37$, $P(X=2)=0{,}16$, $P(X=3)=0{,}26$, $P(X=4)=0{,}02$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q10.png",
           "options": [
             {
@@ -306,7 +306,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>An article described a study investigating the relationship between the age $x$ and length $y$ of 5 captured dugongs:\\n$x$: 1.0, 1.5, 1.5, 2.5, 4.0\\n$y$: 1.80, 1.85, 1.87, 2.02, 2.27\\nFind the best point estimate of the $y$-intercept of the regression line between $x$ and $y$.</p></div><div class=\"ml-vi\"><p>Một bài báo mô tả nghiên cứu quan hệ giữa tuổi $x$ và chiều dài $y$ của 5 con cá cúi bắt được:\\n$x$: 1,0; 1,5; 1,5; 2,5; 4,0\\n$y$: 1,80; 1,85; 1,87; 2,02; 2,27\\nTìm ước lượng điểm tốt nhất cho hệ số chặn (y-intercept) của đường hồi quy giữa $x$ và $y$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>An article described a study investigating the relationship between the age $x$ and length $y$ of 5 captured dugongs:<br/>$x$: 1.0, 1.5, 1.5, 2.5, 4.0<br/>$y$: 1.80, 1.85, 1.87, 2.02, 2.27<br/>Find the best point estimate of the $y$-intercept of the regression line between $x$ and $y$.</p></div><div class=\"ml-vi\"><p>Một bài báo mô tả nghiên cứu quan hệ giữa tuổi $x$ và chiều dài $y$ của 5 con cá cúi bắt được:<br/>$x$: 1,0; 1,5; 1,5; 2,5; 4,0<br/>$y$: 1,80; 1,85; 1,87; 2,02; 2,27<br/>Tìm ước lượng điểm tốt nhất cho hệ số chặn (y-intercept) của đường hồi quy giữa $x$ và $y$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q12.png",
           "options": [
             {
@@ -328,12 +328,12 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\"><p>$\\sum x=10.5,\\ \\bar x=2.1$; $\\sum y=9.81,\\ \\bar y=1.962$; $\\sum xy=21.51$; $\\sum x^2=27.75$.\\n$$S_{xy}=21.51-\\frac{(10.5)(9.81)}{5}=21.51-20.601=0.909,\\qquad S_{xx}=27.75-\\frac{10.5^{2}}{5}=27.75-22.05=5.7.$$\\nSlope $\\hat\\beta_1=\\frac{0.909}{5.7}=0.15947$ (that is choice 0.1595 — the trap), and the intercept is\\n$$\\hat\\beta_0=\\bar y-\\hat\\beta_1\\bar x=1.962-0.15947(2.1)=1.6271.$$</p></div><div class=\"ml-vi\"><p>$\\sum x=10{,}5,\\ \\bar x=2{,}1$; $\\sum y=9{,}81,\\ \\bar y=1{,}962$; $\\sum xy=21{,}51$; $\\sum x^2=27{,}75$.\\n$$S_{xy}=21{,}51-\\frac{(10{,}5)(9{,}81)}{5}=0{,}909,\\qquad S_{xx}=27{,}75-\\frac{10{,}5^{2}}{5}=5{,}7.$$\\nHệ số góc $\\hat\\beta_1=\\frac{0{,}909}{5{,}7}=0{,}15947$ (chính là phương án 0,1595 — bẫy), còn hệ số chặn là\\n$$\\hat\\beta_0=\\bar y-\\hat\\beta_1\\bar x=1{,}962-0{,}15947(2{,}1)=1{,}6271.$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$\\sum x=10.5,\\ \\bar x=2.1$; $\\sum y=9.81,\\ \\bar y=1.962$; $\\sum xy=21.51$; $\\sum x^2=27.75$.<br/>$$S_{xy}=21.51-\\frac{(10.5)(9.81)}{5}=21.51-20.601=0.909,\\qquad S_{xx}=27.75-\\frac{10.5^{2}}{5}=27.75-22.05=5.7.$$<br/>Slope $\\hat\\beta_1=\\frac{0.909}{5.7}=0.15947$ (that is choice 0.1595 — the trap), and the intercept is<br/>$$\\hat\\beta_0=\\bar y-\\hat\\beta_1\\bar x=1.962-0.15947(2.1)=1.6271.$$</p></div><div class=\"ml-vi\"><p>$\\sum x=10{,}5,\\ \\bar x=2{,}1$; $\\sum y=9{,}81,\\ \\bar y=1{,}962$; $\\sum xy=21{,}51$; $\\sum x^2=27{,}75$.<br/>$$S_{xy}=21{,}51-\\frac{(10{,}5)(9{,}81)}{5}=0{,}909,\\qquad S_{xx}=27{,}75-\\frac{10{,}5^{2}}{5}=5{,}7.$$<br/>Hệ số góc $\\hat\\beta_1=\\frac{0{,}909}{5{,}7}=0{,}15947$ (chính là phương án 0,1595 — bẫy), còn hệ số chặn là<br/>$$\\hat\\beta_0=\\bar y-\\hat\\beta_1\\bar x=1{,}962-0{,}15947(2{,}1)=1{,}6271.$$</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A supermarket manager has determined that the amount of time customers spend in the supermarket is approximately normally distributed with a mean of 45 minutes and a standard deviation of 6 minutes. Find the number of minutes, $m$, for which the probability that a customer spends less than $m$ minutes in the supermarket is 0.10.\\nLet $P(Z < -1.28) = 0.1$, $P(Z < 0) = 0.5$ and $P(Z < 1) = 0.8$.</p></div><div class=\"ml-vi\"><p>Quản lý siêu thị xác định rằng thời gian khách hàng ở trong siêu thị xấp xỉ phân phối chuẩn với trung bình 45 phút và độ lệch chuẩn 6 phút. Tìm số phút $m$ sao cho xác suất một khách hàng ở lại ít hơn $m$ phút bằng 0,10.\\nCho $P(Z < -1{,}28) = 0{,}1$, $P(Z < 0) = 0{,}5$ và $P(Z < 1) = 0{,}8$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A supermarket manager has determined that the amount of time customers spend in the supermarket is approximately normally distributed with a mean of 45 minutes and a standard deviation of 6 minutes. Find the number of minutes, $m$, for which the probability that a customer spends less than $m$ minutes in the supermarket is 0.10.<br/>Let $P(Z < -1.28) = 0.1$, $P(Z < 0) = 0.5$ and $P(Z < 1) = 0.8$.</p></div><div class=\"ml-vi\"><p>Quản lý siêu thị xác định rằng thời gian khách hàng ở trong siêu thị xấp xỉ phân phối chuẩn với trung bình 45 phút và độ lệch chuẩn 6 phút. Tìm số phút $m$ sao cho xác suất một khách hàng ở lại ít hơn $m$ phút bằng 0,10.<br/>Cho $P(Z < -1{,}28) = 0{,}1$, $P(Z < 0) = 0{,}5$ và $P(Z < 1) = 0{,}8$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q13.png",
           "options": [
             {
@@ -355,12 +355,12 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\"><p>We need the 10th percentile. $P(Z<z)=0.10\\Rightarrow z=-1.28$. Then\\n$$m=\\mu+z\\sigma=45+(-1.28)(6)=45-7.68=37.32\\approx37.3\\text{ minutes}.$$</p></div><div class=\"ml-vi\"><p>Ta cần phân vị thứ 10. $P(Z<z)=0{,}10\\Rightarrow z=-1{,}28$. Khi đó\\n$$m=\\mu+z\\sigma=45+(-1{,}28)(6)=45-7{,}68=37{,}32\\approx37{,}3\\text{ phút}.$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>We need the 10th percentile. $P(Z<z)=0.10\\Rightarrow z=-1.28$. Then<br/>$$m=\\mu+z\\sigma=45+(-1.28)(6)=45-7.68=37.32\\approx37.3\\text{ minutes}.$$</p></div><div class=\"ml-vi\"><p>Ta cần phân vị thứ 10. $P(Z<z)=0{,}10\\Rightarrow z=-1{,}28$. Khi đó<br/>$$m=\\mu+z\\sigma=45+(-1{,}28)(6)=45-7{,}68=37{,}32\\approx37{,}3\\text{ phút}.$$</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The owner of a fish market has an assistant who has determined that the weights of catfish are normally distributed, with mean of 3.2 pounds and standard deviation of 0.8 pound. What percentage of samples of 4 fish will have sample means between 3.0 and 4.0 pounds?\\nLet $P(Z < 2) = 0.98$, $P(Z < -0.5) = 0.31$.</p></div><div class=\"ml-vi\"><p>Chủ một chợ cá có người phụ việc xác định rằng khối lượng cá trê phân phối chuẩn với trung bình 3,2 pound và độ lệch chuẩn 0,8 pound. Bao nhiêu phần trăm các mẫu gồm 4 con cá sẽ có trung bình mẫu nằm giữa 3,0 và 4,0 pound?\\nCho $P(Z < 2) = 0{,}98$, $P(Z < -0{,}5) = 0{,}31$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The owner of a fish market has an assistant who has determined that the weights of catfish are normally distributed, with mean of 3.2 pounds and standard deviation of 0.8 pound. What percentage of samples of 4 fish will have sample means between 3.0 and 4.0 pounds?<br/>Let $P(Z < 2) = 0.98$, $P(Z < -0.5) = 0.31$.</p></div><div class=\"ml-vi\"><p>Chủ một chợ cá có người phụ việc xác định rằng khối lượng cá trê phân phối chuẩn với trung bình 3,2 pound và độ lệch chuẩn 0,8 pound. Bao nhiêu phần trăm các mẫu gồm 4 con cá sẽ có trung bình mẫu nằm giữa 3,0 và 4,0 pound?<br/>Cho $P(Z < 2) = 0{,}98$, $P(Z < -0{,}5) = 0{,}31$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q14.png",
           "options": [
             {
@@ -382,7 +382,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>The sampling distribution of $\\bar X$ has standard error $\\sigma_{\\bar X}=\\frac{\\sigma}{\\sqrt n}=\\frac{0.8}{\\sqrt4}=0.4$. Then $z_1=\\frac{3.0-3.2}{0.4}=-0.5$ and $z_2=\\frac{4.0-3.2}{0.4}=2$, so\\n$$P(3.0<\\bar X<4.0)=0.98-0.31=0.67=67\\%.$$</p></div><div class=\"ml-vi\"><p>Phân phối mẫu của $\\bar X$ có sai số chuẩn $\\sigma_{\\bar X}=\\frac{\\sigma}{\\sqrt n}=\\frac{0{,}8}{\\sqrt4}=0{,}4$. Khi đó $z_1=\\frac{3{,}0-3{,}2}{0{,}4}=-0{,}5$ và $z_2=\\frac{4{,}0-3{,}2}{0{,}4}=2$, nên\\n$$P(3{,}0<\\bar X<4{,}0)=0{,}98-0{,}31=0{,}67=67\\%.$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The sampling distribution of $\\bar X$ has standard error $\\sigma_{\\bar X}=\\frac{\\sigma}{\\sqrt n}=\\frac{0.8}{\\sqrt4}=0.4$. Then $z_1=\\frac{3.0-3.2}{0.4}=-0.5$ and $z_2=\\frac{4.0-3.2}{0.4}=2$, so<br/>$$P(3.0<\\bar X<4.0)=0.98-0.31=0.67=67\\%.$$</p></div><div class=\"ml-vi\"><p>Phân phối mẫu của $\\bar X$ có sai số chuẩn $\\sigma_{\\bar X}=\\frac{\\sigma}{\\sqrt n}=\\frac{0{,}8}{\\sqrt4}=0{,}4$. Khi đó $z_1=\\frac{3{,}0-3{,}2}{0{,}4}=-0{,}5$ và $z_2=\\frac{4{,}0-3{,}2}{0{,}4}=2$, nên<br/>$$P(3{,}0<\\bar X<4{,}0)=0{,}98-0{,}31=0{,}67=67\\%.$$</p></div>"
         },
         {
           "kind": "MCQ",
@@ -457,12 +457,12 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\"><p>Each bag holds 25 balls and is equally likely to be chosen: $P(A)=P(B)=0.5$, $P(W\\mid A)=\\frac{15}{25}=0.6$, $P(W\\mid B)=\\frac{10}{25}=0.4$. Bayes:\\n$$P(A\\mid W)=\\frac{0.5(0.6)}{0.5(0.6)+0.5(0.4)}=\\frac{0.30}{0.50}=0.6.$$</p></div><div class=\"ml-vi\"><p>Mỗi túi có 25 viên và được chọn với xác suất bằng nhau: $P(A)=P(B)=0{,}5$, $P(W\\mid A)=\\frac{15}{25}=0{,}6$, $P(W\\mid B)=\\frac{10}{25}=0{,}4$. Công thức Bayes:\\n$$P(A\\mid W)=\\frac{0{,}5(0{,}6)}{0{,}5(0{,}6)+0{,}5(0{,}4)}=\\frac{0{,}30}{0{,}50}=0{,}6.$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Each bag holds 25 balls and is equally likely to be chosen: $P(A)=P(B)=0.5$, $P(W\\mid A)=\\frac{15}{25}=0.6$, $P(W\\mid B)=\\frac{10}{25}=0.4$. Bayes:<br/>$$P(A\\mid W)=\\frac{0.5(0.6)}{0.5(0.6)+0.5(0.4)}=\\frac{0.30}{0.50}=0.6.$$</p></div><div class=\"ml-vi\"><p>Mỗi túi có 25 viên và được chọn với xác suất bằng nhau: $P(A)=P(B)=0{,}5$, $P(W\\mid A)=\\frac{15}{25}=0{,}6$, $P(W\\mid B)=\\frac{10}{25}=0{,}4$. Công thức Bayes:<br/>$$P(A\\mid W)=\\frac{0{,}5(0{,}6)}{0{,}5(0{,}6)+0{,}5(0{,}4)}=\\frac{0{,}30}{0{,}50}=0{,}6.$$</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Use the following regression output to find the value of $S_{xy}$.\\nRegression Statistics — Multiple R = 0.756604788; R Square = 0.572450805; Adjusted R Square = 0.429934407; Standard Error = 1.565657067; Observations = 5.\\nANOVA — Regression: df = 1, SS = 9.846153846, MS = 9.846153846; Residual: df = 3, SS = 7.353846154, MS = 2.451282051; Total: df = 4, SS = 17.2.\\nCoefficients — Intercept: 1.138461538 (SE 1.413767192, t 0.805268042); X Variable 1: 0.615384615 (SE 0.307050613, t 2.004179733).</p></div><div class=\"ml-vi\"><p>Dùng bảng kết quả hồi quy sau để tìm giá trị của $S_{xy}$.\\nRegression Statistics — Multiple R = 0,756604788; R Square = 0,572450805; Adjusted R Square = 0,429934407; Standard Error = 1,565657067; Observations = 5.\\nANOVA — Regression: df = 1, SS = 9,846153846, MS = 9,846153846; Residual: df = 3, SS = 7,353846154, MS = 2,451282051; Total: df = 4, SS = 17,2.\\nCoefficients — Intercept: 1,138461538 (SE 1,413767192, t 0,805268042); X Variable 1: 0,615384615 (SE 0,307050613, t 2,004179733).</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Use the following regression output to find the value of $S_{xy}$.<br/>Regression Statistics — Multiple R = 0.756604788; R Square = 0.572450805; Adjusted R Square = 0.429934407; Standard Error = 1.565657067; Observations = 5.<br/>ANOVA — Regression: df = 1, SS = 9.846153846, MS = 9.846153846; Residual: df = 3, SS = 7.353846154, MS = 2.451282051; Total: df = 4, SS = 17.2.<br/>Coefficients — Intercept: 1.138461538 (SE 1.413767192, t 0.805268042); X Variable 1: 0.615384615 (SE 0.307050613, t 2.004179733).</p></div><div class=\"ml-vi\"><p>Dùng bảng kết quả hồi quy sau để tìm giá trị của $S_{xy}$.<br/>Regression Statistics — Multiple R = 0,756604788; R Square = 0,572450805; Adjusted R Square = 0,429934407; Standard Error = 1,565657067; Observations = 5.<br/>ANOVA — Regression: df = 1, SS = 9,846153846, MS = 9,846153846; Residual: df = 3, SS = 7,353846154, MS = 2,451282051; Total: df = 4, SS = 17,2.<br/>Coefficients — Intercept: 1,138461538 (SE 1,413767192, t 0,805268042); X Variable 1: 0,615384615 (SE 0,307050613, t 2,004179733).</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q18.png",
           "options": [
             {
@@ -484,12 +484,12 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\"><p>For simple linear regression $SSR=\\hat\\beta_1 S_{xy}$ and $\\hat\\beta_1=S_{xy}/S_{xx}$. From the output $SSR=9.846153846$ and $\\hat\\beta_1=0.615384615$, so\\n$$S_{xy}=\\frac{SSR}{\\hat\\beta_1}=\\frac{9.846153846}{0.615384615}=16.$$\\nCross-check: $S_{xx}=S_{xy}/\\hat\\beta_1=16/0.615384615=26$ and $SSR=\\hat\\beta_1^{2}S_{xx}=0.37870\\times26=9.846$ ✓.</p></div><div class=\"ml-vi\"><p>Với hồi quy tuyến tính đơn, $SSR=\\hat\\beta_1 S_{xy}$ và $\\hat\\beta_1=S_{xy}/S_{xx}$. Từ bảng, $SSR=9{,}846153846$ và $\\hat\\beta_1=0{,}615384615$, nên\\n$$S_{xy}=\\frac{SSR}{\\hat\\beta_1}=\\frac{9{,}846153846}{0{,}615384615}=16.$$\\nKiểm chéo: $S_{xx}=16/0{,}615384615=26$ và $SSR=\\hat\\beta_1^{2}S_{xx}=0{,}37870\\times26=9{,}846$ ✓.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>For simple linear regression $SSR=\\hat\\beta_1 S_{xy}$ and $\\hat\\beta_1=S_{xy}/S_{xx}$. From the output $SSR=9.846153846$ and $\\hat\\beta_1=0.615384615$, so<br/>$$S_{xy}=\\frac{SSR}{\\hat\\beta_1}=\\frac{9.846153846}{0.615384615}=16.$$<br/>Cross-check: $S_{xx}=S_{xy}/\\hat\\beta_1=16/0.615384615=26$ and $SSR=\\hat\\beta_1^{2}S_{xx}=0.37870\\times26=9.846$ ✓.</p></div><div class=\"ml-vi\"><p>Với hồi quy tuyến tính đơn, $SSR=\\hat\\beta_1 S_{xy}$ và $\\hat\\beta_1=S_{xy}/S_{xx}$. Từ bảng, $SSR=9{,}846153846$ và $\\hat\\beta_1=0{,}615384615$, nên<br/>$$S_{xy}=\\frac{SSR}{\\hat\\beta_1}=\\frac{9{,}846153846}{0{,}615384615}=16.$$<br/>Kiểm chéo: $S_{xx}=16/0{,}615384615=26$ và $SSR=\\hat\\beta_1^{2}S_{xx}=0{,}37870\\times26=9{,}846$ ✓.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>An electrical firm manufactures light bulbs that have a length of life that is approximately normally distributed with a standard deviation of 40 hours. If a sample of 30 bulbs has an average life of 780 hours, find a 96% confidence interval for the population mean of all bulbs produced by this firm.\\nLet $z_{0.04}=1.751$, $z_{0.02}=2.054$, $t_{0.02,29}=2.15$, $t_{0.04,29}=1.814$.</p></div><div class=\"ml-vi\"><p>Một công ty điện sản xuất bóng đèn có tuổi thọ xấp xỉ phân phối chuẩn với độ lệch chuẩn 40 giờ. Nếu một mẫu 30 bóng có tuổi thọ trung bình 780 giờ, hãy tìm khoảng tin cậy 96% cho trung bình tổng thể của tất cả bóng đèn do công ty này sản xuất.\\nCho $z_{0,04}=1{,}751$, $z_{0,02}=2{,}054$, $t_{0,02;29}=2{,}15$, $t_{0,04;29}=1{,}814$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>An electrical firm manufactures light bulbs that have a length of life that is approximately normally distributed with a standard deviation of 40 hours. If a sample of 30 bulbs has an average life of 780 hours, find a 96% confidence interval for the population mean of all bulbs produced by this firm.<br/>Let $z_{0.04}=1.751$, $z_{0.02}=2.054$, $t_{0.02,29}=2.15$, $t_{0.04,29}=1.814$.</p></div><div class=\"ml-vi\"><p>Một công ty điện sản xuất bóng đèn có tuổi thọ xấp xỉ phân phối chuẩn với độ lệch chuẩn 40 giờ. Nếu một mẫu 30 bóng có tuổi thọ trung bình 780 giờ, hãy tìm khoảng tin cậy 96% cho trung bình tổng thể của tất cả bóng đèn do công ty này sản xuất.<br/>Cho $z_{0,04}=1{,}751$, $z_{0,02}=2{,}054$, $t_{0,02;29}=2{,}15$, $t_{0,04;29}=1{,}814$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q19.png",
           "options": [
             {
@@ -511,7 +511,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\"><p>$\\sigma$ is KNOWN, so use $z$ (not $t$). For 96% confidence, $\\alpha=0.04$ and $\\alpha/2=0.02$, giving $z_{0.02}=2.054$. Margin of error:\\n$$E=z_{\\alpha/2}\\frac{\\sigma}{\\sqrt n}=2.054\\times\\frac{40}{\\sqrt{30}}=2.054\\times7.303=15.0.$$\\nSo the CI is $780\\pm15=[765,\\ 795]$.</p></div><div class=\"ml-vi\"><p>$\\sigma$ đã BIẾT nên dùng $z$ (không dùng $t$). Với độ tin cậy 96%, $\\alpha=0{,}04$ và $\\alpha/2=0{,}02$, nên $z_{0,02}=2{,}054$. Sai số biên:\\n$$E=z_{\\alpha/2}\\frac{\\sigma}{\\sqrt n}=2{,}054\\times\\frac{40}{\\sqrt{30}}=2{,}054\\times7{,}303=15{,}0.$$\\nVậy khoảng tin cậy là $780\\pm15=[765;\\ 795]$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$\\sigma$ is KNOWN, so use $z$ (not $t$). For 96% confidence, $\\alpha=0.04$ and $\\alpha/2=0.02$, giving $z_{0.02}=2.054$. Margin of error:<br/>$$E=z_{\\alpha/2}\\frac{\\sigma}{\\sqrt n}=2.054\\times\\frac{40}{\\sqrt{30}}=2.054\\times7.303=15.0.$$<br/>So the CI is $780\\pm15=[765,\\ 795]$.</p></div><div class=\"ml-vi\"><p>$\\sigma$ đã BIẾT nên dùng $z$ (không dùng $t$). Với độ tin cậy 96%, $\\alpha=0{,}04$ và $\\alpha/2=0{,}02$, nên $z_{0,02}=2{,}054$. Sai số biên:<br/>$$E=z_{\\alpha/2}\\frac{\\sigma}{\\sqrt n}=2{,}054\\times\\frac{40}{\\sqrt{30}}=2{,}054\\times7{,}303=15{,}0.$$<br/>Vậy khoảng tin cậy là $780\\pm15=[765;\\ 795]$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -538,7 +538,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>$$F(2)=P(X\\le2)=f(0)+f(1)+f(2)=\\frac{1}{25}+\\frac{3}{25}+\\frac{5}{25}=\\frac{9}{25}=0.36.$$\\n(Check the pmf is valid: $\\frac{1+3+5+7+9}{25}=\\frac{25}{25}=1$.)</p></div><div class=\"ml-vi\"><p>$$F(2)=P(X\\le2)=f(0)+f(1)+f(2)=\\frac{1}{25}+\\frac{3}{25}+\\frac{5}{25}=\\frac{9}{25}=0{,}36.$$\\n(Kiểm hàm khối hợp lệ: $\\frac{1+3+5+7+9}{25}=\\frac{25}{25}=1$.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$$F(2)=P(X\\le2)=f(0)+f(1)+f(2)=\\frac{1}{25}+\\frac{3}{25}+\\frac{5}{25}=\\frac{9}{25}=0.36.$$<br/>(Check the pmf is valid: $\\frac{1+3+5+7+9}{25}=\\frac{25}{25}=1$.)</p></div><div class=\"ml-vi\"><p>$$F(2)=P(X\\le2)=f(0)+f(1)+f(2)=\\frac{1}{25}+\\frac{3}{25}+\\frac{5}{25}=\\frac{9}{25}=0{,}36.$$<br/>(Kiểm hàm khối hợp lệ: $\\frac{1+3+5+7+9}{25}=\\frac{25}{25}=1$.)</p></div>"
         },
         {
           "kind": "MCQ",
@@ -567,7 +567,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>If a certain machine makes electrical resistors having a mean resistance of 40 ohms and a standard deviation of 2 ohms, what is the probability that a random sample of 36 of these resistors will have a combined resistance of more than 1458 ohms?\\nLet $P(Z<1.30)=0.903$, $P(Z<1.42)=0.922$, $P(Z<1.5)=0.933$, $P(Z<1.69)=0.955$.</p></div><div class=\"ml-vi\"><p>Nếu một máy sản xuất điện trở có điện trở trung bình 40 ohm và độ lệch chuẩn 2 ohm, xác suất để một mẫu ngẫu nhiên 36 điện trở có tổng điện trở lớn hơn 1458 ohm là bao nhiêu?\\nCho $P(Z<1{,}30)=0{,}903$, $P(Z<1{,}42)=0{,}922$, $P(Z<1{,}5)=0{,}933$, $P(Z<1{,}69)=0{,}955$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>If a certain machine makes electrical resistors having a mean resistance of 40 ohms and a standard deviation of 2 ohms, what is the probability that a random sample of 36 of these resistors will have a combined resistance of more than 1458 ohms?<br/>Let $P(Z<1.30)=0.903$, $P(Z<1.42)=0.922$, $P(Z<1.5)=0.933$, $P(Z<1.69)=0.955$.</p></div><div class=\"ml-vi\"><p>Nếu một máy sản xuất điện trở có điện trở trung bình 40 ohm và độ lệch chuẩn 2 ohm, xác suất để một mẫu ngẫu nhiên 36 điện trở có tổng điện trở lớn hơn 1458 ohm là bao nhiêu?<br/>Cho $P(Z<1{,}30)=0{,}903$, $P(Z<1{,}42)=0{,}922$, $P(Z<1{,}5)=0{,}933$, $P(Z<1{,}69)=0{,}955$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q22.png",
           "options": [
             {
@@ -589,7 +589,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Total $>1458$ is the same as mean $\\bar X>\\frac{1458}{36}=40.5$. By the CLT $\\bar X\\sim N\\left(40,\\ \\left(\\frac{2}{\\sqrt{36}}\\right)^2\\right)$, i.e. $\\sigma_{\\bar X}=\\frac{2}{6}=0.3333$. Then\\n$$z=\\frac{40.5-40}{0.3333}=1.5,\\qquad P(\\bar X>40.5)=1-0.933=0.067.$$</p></div><div class=\"ml-vi\"><p>Tổng $>1458$ tương đương trung bình $\\bar X>\\frac{1458}{36}=40{,}5$. Theo định lý giới hạn trung tâm, $\\bar X\\sim N\\left(40,\\ \\left(\\frac{2}{\\sqrt{36}}\\right)^2\\right)$, tức $\\sigma_{\\bar X}=\\frac{2}{6}=0{,}3333$. Khi đó\\n$$z=\\frac{40{,}5-40}{0{,}3333}=1{,}5,\\qquad P(\\bar X>40{,}5)=1-0{,}933=0{,}067.$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Total $>1458$ is the same as mean $\\bar X>\\frac{1458}{36}=40.5$. By the CLT $\\bar X\\sim N\\left(40,\\ \\left(\\frac{2}{\\sqrt{36}}\\right)^2\\right)$, i.e. $\\sigma_{\\bar X}=\\frac{2}{6}=0.3333$. Then<br/>$$z=\\frac{40.5-40}{0.3333}=1.5,\\qquad P(\\bar X>40.5)=1-0.933=0.067.$$</p></div><div class=\"ml-vi\"><p>Tổng $>1458$ tương đương trung bình $\\bar X>\\frac{1458}{36}=40{,}5$. Theo định lý giới hạn trung tâm, $\\bar X\\sim N\\left(40,\\ \\left(\\frac{2}{\\sqrt{36}}\\right)^2\\right)$, tức $\\sigma_{\\bar X}=\\frac{2}{6}=0{,}3333$. Khi đó<br/>$$z=\\frac{40{,}5-40}{0{,}3333}=1{,}5,\\qquad P(\\bar X>40{,}5)=1-0{,}933=0{,}067.$$</p></div>"
         },
         {
           "kind": "MCQ",
@@ -616,7 +616,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>The strict inequalities $1<X<10$ give the support $\\{2,3,4,5,6,7,8,9\\}$ — 8 equally likely integers, each with probability $\\frac18$. $P(X<7)$ counts $\\{2,3,4,5,6\\}$, i.e. 5 values:\\n$$P(X<7)=\\frac{5}{8}=0.625.$$</p></div><div class=\"ml-vi\"><p>Bất đẳng thức chặt $1<X<10$ cho tập giá trị $\\{2,3,4,5,6,7,8,9\\}$ — 8 số nguyên đồng khả năng, mỗi số xác suất $\\frac18$. $P(X<7)$ đếm $\\{2,3,4,5,6\\}$, tức 5 giá trị:\\n$$P(X<7)=\\frac{5}{8}=0{,}625.$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The strict inequalities $1<X<10$ give the support $\\{2,3,4,5,6,7,8,9\\}$ — 8 equally likely integers, each with probability $\\frac18$. $P(X<7)$ counts $\\{2,3,4,5,6\\}$, i.e. 5 values:<br/>$$P(X<7)=\\frac{5}{8}=0.625.$$</p></div><div class=\"ml-vi\"><p>Bất đẳng thức chặt $1<X<10$ cho tập giá trị $\\{2,3,4,5,6,7,8,9\\}$ — 8 số nguyên đồng khả năng, mỗi số xác suất $\\frac18$. $P(X<7)$ đếm $\\{2,3,4,5,6\\}$, tức 5 giá trị:<br/>$$P(X<7)=\\frac{5}{8}=0{,}625.$$</p></div>"
         },
         {
           "kind": "MCQ",
@@ -643,7 +643,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Total is $100+200=300$. Without replacement:\\n$$P=\\frac{100}{300}\\times\\frac{99}{299}=\\frac{1}{3}\\times0.33110=0.1104\\approx0.11.$$\\n(Equivalently $\\binom{100}{2}/\\binom{300}{2}=4950/44850=0.1104$.)</p></div><div class=\"ml-vi\"><p>Tổng là $100+200=300$. Lấy không hoàn lại:\\n$$P=\\frac{100}{300}\\times\\frac{99}{299}=\\frac{1}{3}\\times0{,}33110=0{,}1104\\approx0{,}11.$$\\n(Tương đương $\\binom{100}{2}/\\binom{300}{2}=4950/44850=0{,}1104$.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Total is $100+200=300$. Without replacement:<br/>$$P=\\frac{100}{300}\\times\\frac{99}{299}=\\frac{1}{3}\\times0.33110=0.1104\\approx0.11.$$<br/>(Equivalently $\\binom{100}{2}/\\binom{300}{2}=4950/44850=0.1104$.)</p></div><div class=\"ml-vi\"><p>Tổng là $100+200=300$. Lấy không hoàn lại:<br/>$$P=\\frac{100}{300}\\times\\frac{99}{299}=\\frac{1}{3}\\times0{,}33110=0{,}1104\\approx0{,}11.$$<br/>(Tương đương $\\binom{100}{2}/\\binom{300}{2}=4950/44850=0{,}1104$.)</p></div>"
         },
         {
           "kind": "MCQ",
@@ -670,7 +670,7 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\"><p>Exponential with mean 3 has rate $\\lambda=\\frac13$ and survival function $P(X>t)=e^{-t/3}$. Solve $e^{-t/3}=0.10$:\\n$$-\\frac{t}{3}=\\ln(0.10)=-2.3026\\ \\Rightarrow\\ t=3(2.3026)=6.908\\approx6.9\\text{ minutes}.$$\\n(2.3 minutes is $\\ln 10$ alone — the trap of forgetting the factor 3.)</p></div><div class=\"ml-vi\"><p>Phân phối mũ trung bình 3 có tham số $\\lambda=\\frac13$ và hàm sống sót $P(X>t)=e^{-t/3}$. Giải $e^{-t/3}=0{,}10$:\\n$$-\\frac{t}{3}=\\ln(0{,}10)=-2{,}3026\\ \\Rightarrow\\ t=3(2{,}3026)=6{,}908\\approx6{,}9\\text{ phút}.$$\\n(2,3 phút chỉ là $\\ln 10$ — bẫy quên nhân với 3.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Exponential with mean 3 has rate $\\lambda=\\frac13$ and survival function $P(X>t)=e^{-t/3}$. Solve $e^{-t/3}=0.10$:<br/>$$-\\frac{t}{3}=\\ln(0.10)=-2.3026\\ \\Rightarrow\\ t=3(2.3026)=6.908\\approx6.9\\text{ minutes}.$$<br/>(2.3 minutes is $\\ln 10$ alone — the trap of forgetting the factor 3.)</p></div><div class=\"ml-vi\"><p>Phân phối mũ trung bình 3 có tham số $\\lambda=\\frac13$ và hàm sống sót $P(X>t)=e^{-t/3}$. Giải $e^{-t/3}=0{,}10$:<br/>$$-\\frac{t}{3}=\\ln(0{,}10)=-2{,}3026\\ \\Rightarrow\\ t=3(2{,}3026)=6{,}908\\approx6{,}9\\text{ phút}.$$<br/>(2,3 phút chỉ là $\\ln 10$ — bẫy quên nhân với 3.)</p></div>"
         },
         {
           "kind": "MCQ",
@@ -697,7 +697,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>There are $n=8$ observations. $\\sum x = 1.75+1.92+2.62+2.35+3.09+3.15+2.53+1.91 = 19.32$, so\\n$$\\bar x=\\frac{19.32}{8}=2.415.$$\\n(0.543 is roughly the sample standard deviation, not the mean.)</p></div><div class=\"ml-vi\"><p>Có $n=8$ quan sát. $\\sum x = 1{,}75+1{,}92+2{,}62+2{,}35+3{,}09+3{,}15+2{,}53+1{,}91 = 19{,}32$, nên\\n$$\\bar x=\\frac{19{,}32}{8}=2{,}415.$$\\n(0,543 xấp xỉ độ lệch chuẩn mẫu, không phải trung bình.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>There are $n=8$ observations. $\\sum x = 1.75+1.92+2.62+2.35+3.09+3.15+2.53+1.91 = 19.32$, so<br/>$$\\bar x=\\frac{19.32}{8}=2.415.$$<br/>(0.543 is roughly the sample standard deviation, not the mean.)</p></div><div class=\"ml-vi\"><p>Có $n=8$ quan sát. $\\sum x = 1{,}75+1{,}92+2{,}62+2{,}35+3{,}09+3{,}15+2{,}53+1{,}91 = 19{,}32$, nên<br/>$$\\bar x=\\frac{19{,}32}{8}=2{,}415.$$<br/>(0,543 xấp xỉ độ lệch chuẩn mẫu, không phải trung bình.)</p></div>"
         },
         {
           "kind": "MCQ",
@@ -724,12 +724,12 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Testing $H_0:\\beta_0=6.5$ uses the INTERCEPT row only:\\n$$t=\\frac{\\hat\\beta_0-\\beta_{0,\\text{null}}}{SE(\\hat\\beta_0)}=\\frac{7.895-6.5}{3.66}=\\frac{1.395}{3.66}=0.3811\\approx0.38.$$\\n(2.13 comes from using the slope row by mistake; $\\frac{7.895}{3.66}=2.16$ would be the test of $\\beta_0=0$.)</p></div><div class=\"ml-vi\"><p>Kiểm định $H_0:\\beta_0=6{,}5$ chỉ dùng dòng INTERCEPT:\\n$$t=\\frac{\\hat\\beta_0-\\beta_{0,\\text{null}}}{SE(\\hat\\beta_0)}=\\frac{7{,}895-6{,}5}{3{,}66}=\\frac{1{,}395}{3{,}66}=0{,}3811\\approx0{,}38.$$\\n(2,13 là do nhầm sang dòng hệ số góc; còn $\\frac{7{,}895}{3{,}66}=2{,}16$ là kiểm định $\\beta_0=0$.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Testing $H_0:\\beta_0=6.5$ uses the INTERCEPT row only:<br/>$$t=\\frac{\\hat\\beta_0-\\beta_{0,\\text{null}}}{SE(\\hat\\beta_0)}=\\frac{7.895-6.5}{3.66}=\\frac{1.395}{3.66}=0.3811\\approx0.38.$$<br/>(2.13 comes from using the slope row by mistake; $\\frac{7.895}{3.66}=2.16$ would be the test of $\\beta_0=0$.)</p></div><div class=\"ml-vi\"><p>Kiểm định $H_0:\\beta_0=6{,}5$ chỉ dùng dòng INTERCEPT:<br/>$$t=\\frac{\\hat\\beta_0-\\beta_{0,\\text{null}}}{SE(\\hat\\beta_0)}=\\frac{7{,}895-6{,}5}{3{,}66}=\\frac{1{,}395}{3{,}66}=0{,}3811\\approx0{,}38.$$<br/>(2,13 là do nhầm sang dòng hệ số góc; còn $\\frac{7{,}895}{3{,}66}=2{,}16$ là kiểm định $\\beta_0=0$.)</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The heat evolved in calories per gram of a cement mixture is approximately normally distributed. The mean is thought to be 100 and the standard deviation is 2. We wish to test $H_0:\\mu=100$ versus $H_1:\\mu\\ne100$ with a sample of $n=16$. If the acceptance region is defined as $98.5\\le\\bar x\\le101.5$, find the type I error probability $\\alpha$.\\nLet $P(Z\\le-3)=0.00135$; $P(Z\\le3)=0.99865$.</p></div><div class=\"ml-vi\"><p>Nhiệt lượng toả ra (calo/gam) của một hỗn hợp xi măng xấp xỉ phân phối chuẩn. Trung bình được cho là 100 và độ lệch chuẩn là 2. Ta muốn kiểm định $H_0:\\mu=100$ với $H_1:\\mu\\ne100$ bằng một mẫu $n=16$. Nếu miền chấp nhận được định nghĩa là $98{,}5\\le\\bar x\\le101{,}5$, hãy tìm xác suất sai lầm loại I $\\alpha$.\\nCho $P(Z\\le-3)=0{,}00135$; $P(Z\\le3)=0{,}99865$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The heat evolved in calories per gram of a cement mixture is approximately normally distributed. The mean is thought to be 100 and the standard deviation is 2. We wish to test $H_0:\\mu=100$ versus $H_1:\\mu<br/>e100$ with a sample of $n=16$. If the acceptance region is defined as $98.5\\le\\bar x\\le101.5$, find the type I error probability $\\alpha$.<br/>Let $P(Z\\le-3)=0.00135$; $P(Z\\le3)=0.99865$.</p></div><div class=\"ml-vi\"><p>Nhiệt lượng toả ra (calo/gam) của một hỗn hợp xi măng xấp xỉ phân phối chuẩn. Trung bình được cho là 100 và độ lệch chuẩn là 2. Ta muốn kiểm định $H_0:\\mu=100$ với $H_1:\\mu<br/>e100$ bằng một mẫu $n=16$. Nếu miền chấp nhận được định nghĩa là $98{,}5\\le\\bar x\\le101{,}5$, hãy tìm xác suất sai lầm loại I $\\alpha$.<br/>Cho $P(Z\\le-3)=0{,}00135$; $P(Z\\le3)=0{,}99865$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q28.png",
           "options": [
             {
@@ -748,12 +748,12 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\"><p>Under $H_0$, $\\bar X\\sim N(100,\\ \\sigma_{\\bar X}^2)$ with $\\sigma_{\\bar X}=\\frac{2}{\\sqrt{16}}=0.5$. The rejection region is $\\bar x<98.5$ or $\\bar x>101.5$, i.e. $z<\\frac{98.5-100}{0.5}=-3$ or $z>\\frac{101.5-100}{0.5}=3$. Hence\\n$$\\alpha=P(Z<-3)+P(Z>3)=0.00135+0.00135=0.0027.$$</p></div><div class=\"ml-vi\"><p>Dưới $H_0$, $\\bar X\\sim N(100,\\ \\sigma_{\\bar X}^2)$ với $\\sigma_{\\bar X}=\\frac{2}{\\sqrt{16}}=0{,}5$. Miền bác bỏ là $\\bar x<98{,}5$ hoặc $\\bar x>101{,}5$, tức $z<\\frac{98{,}5-100}{0{,}5}=-3$ hoặc $z>\\frac{101{,}5-100}{0{,}5}=3$. Vậy\\n$$\\alpha=P(Z<-3)+P(Z>3)=0{,}00135+0{,}00135=0{,}0027.$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Under $H_0$, $\\bar X\\sim N(100,\\ \\sigma_{\\bar X}^2)$ with $\\sigma_{\\bar X}=\\frac{2}{\\sqrt{16}}=0.5$. The rejection region is $\\bar x<98.5$ or $\\bar x>101.5$, i.e. $z<\\frac{98.5-100}{0.5}=-3$ or $z>\\frac{101.5-100}{0.5}=3$. Hence<br/>$$\\alpha=P(Z<-3)+P(Z>3)=0.00135+0.00135=0.0027.$$</p></div><div class=\"ml-vi\"><p>Dưới $H_0$, $\\bar X\\sim N(100,\\ \\sigma_{\\bar X}^2)$ với $\\sigma_{\\bar X}=\\frac{2}{\\sqrt{16}}=0{,}5$. Miền bác bỏ là $\\bar x<98{,}5$ hoặc $\\bar x>101{,}5$, tức $z<\\frac{98{,}5-100}{0{,}5}=-3$ hoặc $z>\\frac{101{,}5-100}{0{,}5}=3$. Vậy<br/>$$\\alpha=P(Z<-3)+P(Z>3)=0{,}00135+0{,}00135=0{,}0027.$$</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The grade point averages for 10 randomly selected students in a statistics class with 125 students are listed below.\\n2.0  3.2  1.8  2.9  0.9  4.0  3.3  2.9  3.6  0.8\\nWhat is the effect on the width of the confidence interval if the sample size is increased to 20?</p></div><div class=\"ml-vi\"><p>Điểm trung bình tích luỹ của 10 sinh viên được chọn ngẫu nhiên trong một lớp thống kê có 125 sinh viên như sau:\\n2,0  3,2  1,8  2,9  0,9  4,0  3,3  2,9  3,6  0,8\\nBề rộng của khoảng tin cậy thay đổi thế nào nếu cỡ mẫu tăng lên 20?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The grade point averages for 10 randomly selected students in a statistics class with 125 students are listed below.<br/>2.0  3.2  1.8  2.9  0.9  4.0  3.3  2.9  3.6  0.8<br/>What is the effect on the width of the confidence interval if the sample size is increased to 20?</p></div><div class=\"ml-vi\"><p>Điểm trung bình tích luỹ của 10 sinh viên được chọn ngẫu nhiên trong một lớp thống kê có 125 sinh viên như sau:<br/>2,0  3,2  1,8  2,9  0,9  4,0  3,3  2,9  3,6  0,8<br/>Bề rộng của khoảng tin cậy thay đổi thế nào nếu cỡ mẫu tăng lên 20?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q29.png",
           "options": [
             {
@@ -796,7 +796,7 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>&quot;Exactly one&quot; $=(A\\cap \\bar B)\\cup(\\bar A\\cap B)$, and independence gives\\n$$P=\\frac13\\cdot\\frac35+\\frac23\\cdot\\frac25=\\frac{3}{15}+\\frac{4}{15}=\\frac{7}{15}.$$</p></div><div class=\"ml-vi\"><p>&quot;Đúng một người&quot; $=(A\\cap \\bar B)\\cup(\\bar A\\cap B)$, và do độc lập:\\n$$P=\\frac13\\cdot\\frac35+\\frac23\\cdot\\frac25=\\frac{3}{15}+\\frac{4}{15}=\\frac{7}{15}.$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>&quot;Exactly one&quot; $=(A\\cap \\bar B)\\cup(\\bar A\\cap B)$, and independence gives<br/>$$P=\\frac13\\cdot\\frac35+\\frac23\\cdot\\frac25=\\frac{3}{15}+\\frac{4}{15}=\\frac{7}{15}.$$</p></div><div class=\"ml-vi\"><p>&quot;Đúng một người&quot; $=(A\\cap \\bar B)\\cup(\\bar A\\cap B)$, và do độc lập:<br/>$$P=\\frac13\\cdot\\frac35+\\frac23\\cdot\\frac25=\\frac{3}{15}+\\frac{4}{15}=\\frac{7}{15}.$$</p></div>"
         },
         {
           "kind": "MCQ",
@@ -823,7 +823,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>$\\sigma$ is unknown and $n=12$ is small, so use the one-sample $t$ statistic:\\n$$t=\\frac{\\bar x-\\mu_0}{s/\\sqrt n}=\\frac{3690-3300}{530/\\sqrt{12}}=\\frac{390}{530/3.4641}=\\frac{390}{153.00}=2.549\\approx2.55.$$</p></div><div class=\"ml-vi\"><p>$\\sigma$ chưa biết và $n=12$ nhỏ nên dùng thống kê $t$ một mẫu:\\n$$t=\\frac{\\bar x-\\mu_0}{s/\\sqrt n}=\\frac{3690-3300}{530/\\sqrt{12}}=\\frac{390}{530/3{,}4641}=\\frac{390}{153{,}00}=2{,}549\\approx2{,}55.$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$\\sigma$ is unknown and $n=12$ is small, so use the one-sample $t$ statistic:<br/>$$t=\\frac{\\bar x-\\mu_0}{s/\\sqrt n}=\\frac{3690-3300}{530/\\sqrt{12}}=\\frac{390}{530/3.4641}=\\frac{390}{153.00}=2.549\\approx2.55.$$</p></div><div class=\"ml-vi\"><p>$\\sigma$ chưa biết và $n=12$ nhỏ nên dùng thống kê $t$ một mẫu:<br/>$$t=\\frac{\\bar x-\\mu_0}{s/\\sqrt n}=\\frac{3690-3300}{530/\\sqrt{12}}=\\frac{390}{530/3{,}4641}=\\frac{390}{153{,}00}=2{,}549\\approx2{,}55.$$</p></div>"
         },
         {
           "kind": "MCQ",
@@ -850,12 +850,12 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>For $X\\sim U(a,b)$ with $a=8.5,\\ b=10.5$ the density is $\\frac{1}{b-a}=\\frac12$, so\\n$$P(X>9.2)=\\frac{10.5-9.2}{10.5-8.5}=\\frac{1.3}{2}=0.65.$$</p></div><div class=\"ml-vi\"><p>Với $X\\sim U(a,b)$, $a=8{,}5$, $b=10{,}5$, mật độ là $\\frac{1}{b-a}=\\frac12$, nên\\n$$P(X>9{,}2)=\\frac{10{,}5-9{,}2}{10{,}5-8{,}5}=\\frac{1{,}3}{2}=0{,}65.$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>For $X\\sim U(a,b)$ with $a=8.5,\\ b=10.5$ the density is $\\frac{1}{b-a}=\\frac12$, so<br/>$$P(X>9.2)=\\frac{10.5-9.2}{10.5-8.5}=\\frac{1.3}{2}=0.65.$$</p></div><div class=\"ml-vi\"><p>Với $X\\sim U(a,b)$, $a=8{,}5$, $b=10{,}5$, mật độ là $\\frac{1}{b-a}=\\frac12$, nên<br/>$$P(X>9{,}2)=\\frac{10{,}5-9{,}2}{10{,}5-8{,}5}=\\frac{1{,}3}{2}=0{,}65.$$</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Which of the following is true about the sampling distribution of the sample mean?\\n(i) The mean of the sampling distribution is always $\\mu$.\\n(ii) The standard deviation of the sampling distribution is always $\\sigma$.\\n(iii) The shape of the sampling distribution is always approximately normal.</p></div><div class=\"ml-vi\"><p>Phát biểu nào sau đây đúng về phân phối mẫu của trung bình mẫu?\\n(i) Trung bình của phân phối mẫu luôn bằng $\\mu$.\\n(ii) Độ lệch chuẩn của phân phối mẫu luôn bằng $\\sigma$.\\n(iii) Hình dạng của phân phối mẫu luôn xấp xỉ chuẩn.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Which of the following is true about the sampling distribution of the sample mean?<br/>(i) The mean of the sampling distribution is always $\\mu$.<br/>(ii) The standard deviation of the sampling distribution is always $\\sigma$.<br/>(iii) The shape of the sampling distribution is always approximately normal.</p></div><div class=\"ml-vi\"><p>Phát biểu nào sau đây đúng về phân phối mẫu của trung bình mẫu?<br/>(i) Trung bình của phân phối mẫu luôn bằng $\\mu$.<br/>(ii) Độ lệch chuẩn của phân phối mẫu luôn bằng $\\sigma$.<br/>(iii) Hình dạng của phân phối mẫu luôn xấp xỉ chuẩn.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q33.png",
           "options": [
             {
@@ -879,7 +879,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Two machines are used to fill plastic bottles with dishwashing detergent. The fill volume can be assumed normal, with standard deviation $\\sigma_1=0.15$ fluid ounces and $\\sigma_2=0.20$ fluid ounces for machine 1 and machine 2, respectively. Two random samples of $n_1=20$ bottles from machine 1 and $n_2=25$ bottles from machine 2 are selected, and the sample means are $\\bar x_1=30.85$ fluid ounces and $\\bar x_2=30.62$ fluid ounces. Construct a 95% two-sided confidence interval for the difference in mean fill volumes of the two machines.\\nLet $z_{0.025}=1.96$, $z_{0.05}=1.645$, $t_{0.025,43}=2.017$, $t_{0.05,43}=1.681$.</p></div><div class=\"ml-vi\"><p>Hai máy được dùng để rót nước rửa chén vào chai nhựa. Thể tích rót giả sử phân phối chuẩn với độ lệch chuẩn $\\sigma_1=0{,}15$ fluid ounce (máy 1) và $\\sigma_2=0{,}20$ fluid ounce (máy 2). Chọn hai mẫu ngẫu nhiên $n_1=20$ chai từ máy 1 và $n_2=25$ chai từ máy 2, trung bình mẫu là $\\bar x_1=30{,}85$ và $\\bar x_2=30{,}62$ fluid ounce. Hãy xây dựng khoảng tin cậy hai phía 95% cho hiệu hai trung bình thể tích rót.\\nCho $z_{0,025}=1{,}96$, $z_{0,05}=1{,}645$, $t_{0,025;43}=2{,}017$, $t_{0,05;43}=1{,}681$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Two machines are used to fill plastic bottles with dishwashing detergent. The fill volume can be assumed normal, with standard deviation $\\sigma_1=0.15$ fluid ounces and $\\sigma_2=0.20$ fluid ounces for machine 1 and machine 2, respectively. Two random samples of $n_1=20$ bottles from machine 1 and $n_2=25$ bottles from machine 2 are selected, and the sample means are $\\bar x_1=30.85$ fluid ounces and $\\bar x_2=30.62$ fluid ounces. Construct a 95% two-sided confidence interval for the difference in mean fill volumes of the two machines.<br/>Let $z_{0.025}=1.96$, $z_{0.05}=1.645$, $t_{0.025,43}=2.017$, $t_{0.05,43}=1.681$.</p></div><div class=\"ml-vi\"><p>Hai máy được dùng để rót nước rửa chén vào chai nhựa. Thể tích rót giả sử phân phối chuẩn với độ lệch chuẩn $\\sigma_1=0{,}15$ fluid ounce (máy 1) và $\\sigma_2=0{,}20$ fluid ounce (máy 2). Chọn hai mẫu ngẫu nhiên $n_1=20$ chai từ máy 1 và $n_2=25$ chai từ máy 2, trung bình mẫu là $\\bar x_1=30{,}85$ và $\\bar x_2=30{,}62$ fluid ounce. Hãy xây dựng khoảng tin cậy hai phía 95% cho hiệu hai trung bình thể tích rót.<br/>Cho $z_{0,025}=1{,}96$, $z_{0,05}=1{,}645$, $t_{0,025;43}=2{,}017$, $t_{0,05;43}=1{,}681$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q34.png",
           "options": [
             {
@@ -901,12 +901,12 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Both $\\sigma$&#39;s are KNOWN, so it is a two-sample $z$ interval:\\n$$SE=\\sqrt{\\frac{\\sigma_1^2}{n_1}+\\frac{\\sigma_2^2}{n_2}}=\\sqrt{\\frac{0.0225}{20}+\\frac{0.04}{25}}=\\sqrt{0.001125+0.0016}=\\sqrt{0.002725}=0.05220.$$\\nWith $\\bar x_1-\\bar x_2=0.23$ and $z_{0.025}=1.96$, the margin is $1.96(0.05220)=0.1023$, so the CI is $0.23\\pm0.1023=(0.128,\\ 0.332)$.</p></div><div class=\"ml-vi\"><p>Cả hai $\\sigma$ đều ĐÃ BIẾT nên dùng khoảng $z$ hai mẫu:\\n$$SE=\\sqrt{\\frac{\\sigma_1^2}{n_1}+\\frac{\\sigma_2^2}{n_2}}=\\sqrt{\\frac{0{,}0225}{20}+\\frac{0{,}04}{25}}=\\sqrt{0{,}002725}=0{,}05220.$$\\nVới $\\bar x_1-\\bar x_2=0{,}23$ và $z_{0,025}=1{,}96$, sai số biên là $1{,}96(0{,}05220)=0{,}1023$, nên khoảng tin cậy là $0{,}23\\pm0{,}1023=(0{,}128;\\ 0{,}332)$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Both $\\sigma$&#39;s are KNOWN, so it is a two-sample $z$ interval:<br/>$$SE=\\sqrt{\\frac{\\sigma_1^2}{n_1}+\\frac{\\sigma_2^2}{n_2}}=\\sqrt{\\frac{0.0225}{20}+\\frac{0.04}{25}}=\\sqrt{0.001125+0.0016}=\\sqrt{0.002725}=0.05220.$$<br/>With $\\bar x_1-\\bar x_2=0.23$ and $z_{0.025}=1.96$, the margin is $1.96(0.05220)=0.1023$, so the CI is $0.23\\pm0.1023=(0.128,\\ 0.332)$.</p></div><div class=\"ml-vi\"><p>Cả hai $\\sigma$ đều ĐÃ BIẾT nên dùng khoảng $z$ hai mẫu:<br/>$$SE=\\sqrt{\\frac{\\sigma_1^2}{n_1}+\\frac{\\sigma_2^2}{n_2}}=\\sqrt{\\frac{0{,}0225}{20}+\\frac{0{,}04}{25}}=\\sqrt{0{,}002725}=0{,}05220.$$<br/>Với $\\bar x_1-\\bar x_2=0{,}23$ và $z_{0,025}=1{,}96$, sai số biên là $1{,}96(0{,}05220)=0{,}1023$, nên khoảng tin cậy là $0{,}23\\pm0{,}1023=(0{,}128;\\ 0{,}332)$.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The highest temperatures ever recorded (in °F) in 32 different U.S. states are shown below. Draw a boxplot for the data set.\\n100, 100, 105, 105, 106, 106, 107, 107, 109, 110, 110, 112, 112, 112, 114, 114, 114, 115, 116, 117, 118, 118, 118, 118, 118, 119, 120, 121, 122, 125, 128, 134.\\nThe four candidate boxplots have five-number summaries (minimum, $Q_1$, median, $Q_3$, maximum):\\n(i) 100, 107, 114, 119, 134\\n(ii) 100, 108, 115, 118, 128\\n(iii) 100, 108, 114, 118, 134\\n(iv) 100, 106, 114, 118, 128</p></div><div class=\"ml-vi\"><p>Nhiệt độ cao nhất từng ghi nhận (°F) tại 32 bang khác nhau của Hoa Kỳ được cho dưới đây. Hãy vẽ biểu đồ hộp (boxplot) cho tập dữ liệu.\\n100, 100, 105, 105, 106, 106, 107, 107, 109, 110, 110, 112, 112, 112, 114, 114, 114, 115, 116, 117, 118, 118, 118, 118, 118, 119, 120, 121, 122, 125, 128, 134.\\nBốn biểu đồ hộp ứng viên có tóm tắt năm số (nhỏ nhất, $Q_1$, trung vị, $Q_3$, lớn nhất):\\n(i) 100, 107, 114, 119, 134\\n(ii) 100, 108, 115, 118, 128\\n(iii) 100, 108, 114, 118, 134\\n(iv) 100, 106, 114, 118, 128</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The highest temperatures ever recorded (in °F) in 32 different U.S. states are shown below. Draw a boxplot for the data set.<br/>100, 100, 105, 105, 106, 106, 107, 107, 109, 110, 110, 112, 112, 112, 114, 114, 114, 115, 116, 117, 118, 118, 118, 118, 118, 119, 120, 121, 122, 125, 128, 134.<br/>The four candidate boxplots have five-number summaries (minimum, $Q_1$, median, $Q_3$, maximum):<br/>(i) 100, 107, 114, 119, 134<br/>(ii) 100, 108, 115, 118, 128<br/>(iii) 100, 108, 114, 118, 134<br/>(iv) 100, 106, 114, 118, 128</p></div><div class=\"ml-vi\"><p>Nhiệt độ cao nhất từng ghi nhận (°F) tại 32 bang khác nhau của Hoa Kỳ được cho dưới đây. Hãy vẽ biểu đồ hộp (boxplot) cho tập dữ liệu.<br/>100, 100, 105, 105, 106, 106, 107, 107, 109, 110, 110, 112, 112, 112, 114, 114, 114, 115, 116, 117, 118, 118, 118, 118, 118, 119, 120, 121, 122, 125, 128, 134.<br/>Bốn biểu đồ hộp ứng viên có tóm tắt năm số (nhỏ nhất, $Q_1$, trung vị, $Q_3$, lớn nhất):<br/>(i) 100, 107, 114, 119, 134<br/>(ii) 100, 108, 115, 118, 128<br/>(iii) 100, 108, 114, 118, 134<br/>(iv) 100, 106, 114, 118, 128</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q35.png",
           "options": [
             {
@@ -933,7 +933,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Suppose that 1000 customers are surveyed and 910 are satisfied or very satisfied with a corporation&#39;s products and services. Compute the p-value when testing the hypothesis $H_0: p = 0.90$ against $H_1: p \\ne 0.90$ at $\\alpha = 0.01$.\\nLet $P(Z < 1.05) = 0.85$ and $P(Z < -1.05) = 0.15$.</p></div><div class=\"ml-vi\"><p>Giả sử khảo sát 1000 khách hàng và 910 người hài lòng hoặc rất hài lòng với sản phẩm và dịch vụ của một công ty. Hãy tính giá trị p khi kiểm định giả thuyết $H_0: p = 0{,}90$ với $H_1: p \\ne 0{,}90$ ở mức $\\alpha = 0{,}01$.\\nCho $P(Z < 1{,}05) = 0{,}85$ và $P(Z < -1{,}05) = 0{,}15$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose that 1000 customers are surveyed and 910 are satisfied or very satisfied with a corporation&#39;s products and services. Compute the p-value when testing the hypothesis $H_0: p = 0.90$ against $H_1: p <br/>e 0.90$ at $\\alpha = 0.01$.<br/>Let $P(Z < 1.05) = 0.85$ and $P(Z < -1.05) = 0.15$.</p></div><div class=\"ml-vi\"><p>Giả sử khảo sát 1000 khách hàng và 910 người hài lòng hoặc rất hài lòng với sản phẩm và dịch vụ của một công ty. Hãy tính giá trị p khi kiểm định giả thuyết $H_0: p = 0{,}90$ với $H_1: p <br/>e 0{,}90$ ở mức $\\alpha = 0{,}01$.<br/>Cho $P(Z < 1{,}05) = 0{,}85$ và $P(Z < -1{,}05) = 0{,}15$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q36.png",
           "options": [
             {
@@ -955,12 +955,12 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>$\\hat p=\\frac{910}{1000}=0.91$. Under $H_0$ the standard error is $\\sqrt{\\frac{p_0(1-p_0)}{n}}=\\sqrt{\\frac{0.9\\times0.1}{1000}}=0.009487$, so\\n$$z_0=\\frac{0.91-0.90}{0.009487}=1.054\\approx1.05.$$\\nThe test is TWO-sided, so\\n$$p\\text{-value}=2\\,P(Z>1.05)=2(1-0.85)=0.30.$$\\nSince $0.30>0.01$ we would not reject $H_0$.</p></div><div class=\"ml-vi\"><p>$\\hat p=\\frac{910}{1000}=0{,}91$. Dưới $H_0$, sai số chuẩn là $\\sqrt{\\frac{p_0(1-p_0)}{n}}=\\sqrt{\\frac{0{,}9\\times0{,}1}{1000}}=0{,}009487$, nên\\n$$z_0=\\frac{0{,}91-0{,}90}{0{,}009487}=1{,}054\\approx1{,}05.$$\\nKiểm định HAI phía nên\\n$$p\\text{-value}=2\\,P(Z>1{,}05)=2(1-0{,}85)=0{,}30.$$\\nVì $0{,}30>0{,}01$ nên không bác bỏ $H_0$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$\\hat p=\\frac{910}{1000}=0.91$. Under $H_0$ the standard error is $\\sqrt{\\frac{p_0(1-p_0)}{n}}=\\sqrt{\\frac{0.9\\times0.1}{1000}}=0.009487$, so<br/>$$z_0=\\frac{0.91-0.90}{0.009487}=1.054\\approx1.05.$$<br/>The test is TWO-sided, so<br/>$$p\\text{-value}=2\\,P(Z>1.05)=2(1-0.85)=0.30.$$<br/>Since $0.30>0.01$ we would not reject $H_0$.</p></div><div class=\"ml-vi\"><p>$\\hat p=\\frac{910}{1000}=0{,}91$. Dưới $H_0$, sai số chuẩn là $\\sqrt{\\frac{p_0(1-p_0)}{n}}=\\sqrt{\\frac{0{,}9\\times0{,}1}{1000}}=0{,}009487$, nên<br/>$$z_0=\\frac{0{,}91-0{,}90}{0{,}009487}=1{,}054\\approx1{,}05.$$<br/>Kiểm định HAI phía nên<br/>$$p\\text{-value}=2\\,P(Z>1{,}05)=2(1-0{,}85)=0{,}30.$$<br/>Vì $0{,}30>0{,}01$ nên không bác bỏ $H_0$.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The nine measurements that follow are furnace temperatures recorded on successive batches in a semiconductor manufacturing process:\\n920, 918, 922, 930, 915, 921, 925, 931, 927.\\nFind the sample range and mean.</p></div><div class=\"ml-vi\"><p>Chín số đo sau là nhiệt độ lò ghi nhận trên các mẻ liên tiếp trong quy trình sản xuất bán dẫn:\\n920, 918, 922, 930, 915, 921, 925, 931, 927.\\nHãy tìm khoảng biến thiên (range) và trung bình mẫu.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The nine measurements that follow are furnace temperatures recorded on successive batches in a semiconductor manufacturing process:<br/>920, 918, 922, 930, 915, 921, 925, 931, 927.<br/>Find the sample range and mean.</p></div><div class=\"ml-vi\"><p>Chín số đo sau là nhiệt độ lò ghi nhận trên các mẻ liên tiếp trong quy trình sản xuất bán dẫn:<br/>920, 918, 922, 930, 915, 921, 925, 931, 927.<br/>Hãy tìm khoảng biến thiên (range) và trung bình mẫu.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q37.png",
           "options": [
             {
@@ -979,12 +979,12 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\"><p>Range $=\\max-\\min=931-915=16$. Sum $=920+918+922+930+915+921+925+931+927=8309$, so\\n$$\\bar x=\\frac{8309}{9}=923.22\\approx923.2.$$</p></div><div class=\"ml-vi\"><p>Khoảng biến thiên $=\\max-\\min=931-915=16$. Tổng $=920+918+922+930+915+921+925+931+927=8309$, nên\\n$$\\bar x=\\frac{8309}{9}=923{,}22\\approx923{,}2.$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Range $=\\max-\\min=931-915=16$. Sum $=920+918+922+930+915+921+925+931+927=8309$, so<br/>$$\\bar x=\\frac{8309}{9}=923.22\\approx923.2.$$</p></div><div class=\"ml-vi\"><p>Khoảng biến thiên $=\\max-\\min=931-915=16$. Tổng $=920+918+922+930+915+921+925+931+927=8309$, nên<br/>$$\\bar x=\\frac{8309}{9}=923{,}22\\approx923{,}2.$$</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Cars arrive at Kenny&#39;s Car Wash at a rate of 16 per hour. Use the normal formula for Poisson distributions to approximate the probability that in any given one-hour period, at least ten cars arrive.\\nLet $P(Z<-1.12)=0.1313$; $P(Z<-1.75)=0.0400$; $P(Z<-1.625)=0.0521$; $P(Z<-1.750)=0.0401$.</p></div><div class=\"ml-vi\"><p>Xe đến tiệm rửa xe của Kenny với tốc độ 16 xe/giờ. Dùng xấp xỉ chuẩn cho phân phối Poisson để tính gần đúng xác suất trong một giờ bất kỳ có ít nhất mười xe đến.\\nCho $P(Z<-1{,}12)=0{,}1313$; $P(Z<-1{,}75)=0{,}0400$; $P(Z<-1{,}625)=0{,}0521$; $P(Z<-1{,}750)=0{,}0401$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Cars arrive at Kenny&#39;s Car Wash at a rate of 16 per hour. Use the normal formula for Poisson distributions to approximate the probability that in any given one-hour period, at least ten cars arrive.<br/>Let $P(Z<-1.12)=0.1313$; $P(Z<-1.75)=0.0400$; $P(Z<-1.625)=0.0521$; $P(Z<-1.750)=0.0401$.</p></div><div class=\"ml-vi\"><p>Xe đến tiệm rửa xe của Kenny với tốc độ 16 xe/giờ. Dùng xấp xỉ chuẩn cho phân phối Poisson để tính gần đúng xác suất trong một giờ bất kỳ có ít nhất mười xe đến.<br/>Cho $P(Z<-1{,}12)=0{,}1313$; $P(Z<-1{,}75)=0{,}0400$; $P(Z<-1{,}625)=0{,}0521$; $P(Z<-1{,}750)=0{,}0401$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q38.png",
           "options": [
             {
@@ -1006,7 +1006,7 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\"><p>For a Poisson with $\\lambda=16$ the normal approximation uses $\\mu=\\lambda=16$ and $\\sigma=\\sqrt\\lambda=4$. &quot;At least ten&quot; is $P(X\\ge10)$; with the continuity correction this becomes $P(X>9.5)$:\\n$$z=\\frac{9.5-16}{4}=-1.625,\\qquad P(X\\ge10)\\approx1-P(Z<-1.625)=1-0.0521=0.9479.$$</p></div><div class=\"ml-vi\"><p>Với Poisson $\\lambda=16$, xấp xỉ chuẩn dùng $\\mu=\\lambda=16$ và $\\sigma=\\sqrt\\lambda=4$. &quot;Ít nhất mười&quot; là $P(X\\ge10)$; hiệu chỉnh liên tục cho $P(X>9{,}5)$:\\n$$z=\\frac{9{,}5-16}{4}=-1{,}625,\\qquad P(X\\ge10)\\approx1-P(Z<-1{,}625)=1-0{,}0521=0{,}9479.$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>For a Poisson with $\\lambda=16$ the normal approximation uses $\\mu=\\lambda=16$ and $\\sigma=\\sqrt\\lambda=4$. &quot;At least ten&quot; is $P(X\\ge10)$; with the continuity correction this becomes $P(X>9.5)$:<br/>$$z=\\frac{9.5-16}{4}=-1.625,\\qquad P(X\\ge10)\\approx1-P(Z<-1.625)=1-0.0521=0.9479.$$</p></div><div class=\"ml-vi\"><p>Với Poisson $\\lambda=16$, xấp xỉ chuẩn dùng $\\mu=\\lambda=16$ và $\\sigma=\\sqrt\\lambda=4$. &quot;Ít nhất mười&quot; là $P(X\\ge10)$; hiệu chỉnh liên tục cho $P(X>9{,}5)$:<br/>$$z=\\frac{9{,}5-16}{4}=-1{,}625,\\qquad P(X\\ge10)\\approx1-P(Z<-1{,}625)=1-0{,}0521=0{,}9479.$$</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1033,7 +1033,7 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>The addition rule (the events are NOT mutually exclusive, since $P(M\\cap J)=0.15\\ne0$):\\n$$P(M\\cup J)=P(M)+P(J)-P(M\\cap J)=0.45+0.33-0.15=0.63.$$\\n(0.93 is the trap of forgetting to subtract the overlap: note it would exceed the correct value by exactly $2\\times0.15$.)</p></div><div class=\"ml-vi\"><p>Quy tắc cộng (hai biến cố KHÔNG xung khắc vì $P(M\\cap J)=0{,}15\\ne0$):\\n$$P(M\\cup J)=P(M)+P(J)-P(M\\cap J)=0{,}45+0{,}33-0{,}15=0{,}63.$$\\n(0,93 là bẫy quên trừ phần giao — nó vượt giá trị đúng đúng bằng $2\\times0{,}15$.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The addition rule (the events are NOT mutually exclusive, since $P(M\\cap J)=0.15<br/>e0$):<br/>$$P(M\\cup J)=P(M)+P(J)-P(M\\cap J)=0.45+0.33-0.15=0.63.$$<br/>(0.93 is the trap of forgetting to subtract the overlap: note it would exceed the correct value by exactly $2\\times0.15$.)</p></div><div class=\"ml-vi\"><p>Quy tắc cộng (hai biến cố KHÔNG xung khắc vì $P(M\\cap J)=0{,}15<br/>e0$):<br/>$$P(M\\cup J)=P(M)+P(J)-P(M\\cap J)=0{,}45+0{,}33-0{,}15=0{,}63.$$<br/>(0,93 là bẫy quên trừ phần giao — nó vượt giá trị đúng đúng bằng $2\\times0{,}15$.)</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1060,12 +1060,12 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Law of total probability over the partition {male, female}:\\n$$P(C)=P(M)P(C\\mid M)+P(F)P(C\\mid F)=0.51(0.09)+0.49(0.02)=0.0459+0.0098=0.0557.$$</p></div><div class=\"ml-vi\"><p>Công thức xác suất toàn phần theo phân hoạch {nam, nữ}:\\n$$P(C)=P(M)P(C\\mid M)+P(F)P(C\\mid F)=0{,}51(0{,}09)+0{,}49(0{,}02)=0{,}0459+0{,}0098=0{,}0557.$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Law of total probability over the partition {male, female}:<br/>$$P(C)=P(M)P(C\\mid M)+P(F)P(C\\mid F)=0.51(0.09)+0.49(0.02)=0.0459+0.0098=0.0557.$$</p></div><div class=\"ml-vi\"><p>Công thức xác suất toàn phần theo phân hoạch {nam, nữ}:<br/>$$P(C)=P(M)P(C\\mid M)+P(F)P(C\\mid F)=0{,}51(0{,}09)+0{,}49(0{,}02)=0{,}0459+0{,}0098=0{,}0557.$$</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Consider the hypothesis test $H_0: p_1 = p_2$ against $H_1: p_1 \\ne p_2$. Suppose that sample sizes $n_1 = 1000$ and $n_2 = 900$, and that $X_1 = 900$ and $X_2 = 720$. Compute the value of the test statistic.</p></div><div class=\"ml-vi\"><p>Xét kiểm định giả thuyết $H_0: p_1 = p_2$ với $H_1: p_1 \\ne p_2$. Giả sử cỡ mẫu $n_1 = 1000$ và $n_2 = 900$, với $X_1 = 900$ và $X_2 = 720$. Hãy tính giá trị của thống kê kiểm định.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Consider the hypothesis test $H_0: p_1 = p_2$ against $H_1: p_1 <br/>e p_2$. Suppose that sample sizes $n_1 = 1000$ and $n_2 = 900$, and that $X_1 = 900$ and $X_2 = 720$. Compute the value of the test statistic.</p></div><div class=\"ml-vi\"><p>Xét kiểm định giả thuyết $H_0: p_1 = p_2$ với $H_1: p_1 <br/>e p_2$. Giả sử cỡ mẫu $n_1 = 1000$ và $n_2 = 900$, với $X_1 = 900$ và $X_2 = 720$. Hãy tính giá trị của thống kê kiểm định.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q41.png",
           "options": [
             {
@@ -1087,7 +1087,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\"><p>$\\hat p_1=\\frac{900}{1000}=0.90$, $\\hat p_2=\\frac{720}{900}=0.80$, pooled $\\hat p=\\frac{900+720}{1000+900}=\\frac{1620}{1900}=0.85263$. Then\\n$$SE=\\sqrt{\\hat p(1-\\hat p)\\left(\\frac{1}{n_1}+\\frac{1}{n_2}\\right)}=\\sqrt{0.85263(0.14737)(0.001+0.0011111)}=0.016287,$$\\n$$z_0=\\frac{0.90-0.80}{0.016287}=6.14.$$\\nThe sign is POSITIVE because $\\hat p_1>\\hat p_2$.</p></div><div class=\"ml-vi\"><p>$\\hat p_1=\\frac{900}{1000}=0{,}90$, $\\hat p_2=\\frac{720}{900}=0{,}80$, tỉ lệ gộp $\\hat p=\\frac{1620}{1900}=0{,}85263$. Khi đó\\n$$SE=\\sqrt{\\hat p(1-\\hat p)\\left(\\frac{1}{n_1}+\\frac{1}{n_2}\\right)}=\\sqrt{0{,}85263(0{,}14737)(0{,}001+0{,}0011111)}=0{,}016287,$$\\n$$z_0=\\frac{0{,}90-0{,}80}{0{,}016287}=6{,}14.$$\\nDấu DƯƠNG vì $\\hat p_1>\\hat p_2$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$\\hat p_1=\\frac{900}{1000}=0.90$, $\\hat p_2=\\frac{720}{900}=0.80$, pooled $\\hat p=\\frac{900+720}{1000+900}=\\frac{1620}{1900}=0.85263$. Then<br/>$$SE=\\sqrt{\\hat p(1-\\hat p)\\left(\\frac{1}{n_1}+\\frac{1}{n_2}\\right)}=\\sqrt{0.85263(0.14737)(0.001+0.0011111)}=0.016287,$$<br/>$$z_0=\\frac{0.90-0.80}{0.016287}=6.14.$$<br/>The sign is POSITIVE because $\\hat p_1>\\hat p_2$.</p></div><div class=\"ml-vi\"><p>$\\hat p_1=\\frac{900}{1000}=0{,}90$, $\\hat p_2=\\frac{720}{900}=0{,}80$, tỉ lệ gộp $\\hat p=\\frac{1620}{1900}=0{,}85263$. Khi đó<br/>$$SE=\\sqrt{\\hat p(1-\\hat p)\\left(\\frac{1}{n_1}+\\frac{1}{n_2}\\right)}=\\sqrt{0{,}85263(0{,}14737)(0{,}001+0{,}0011111)}=0{,}016287,$$<br/>$$z_0=\\frac{0{,}90-0{,}80}{0{,}016287}=6{,}14.$$<br/>Dấu DƯƠNG vì $\\hat p_1>\\hat p_2$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1111,12 +1111,12 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>This is a geometric random variable with $p=0.02$: the first 9 calls must all fail and the 10th must connect.\\n$$P(X=10)=(1-p)^{9}p=(0.98)^{9}(0.02)=0.83375\\times0.02=0.016675\\approx0.0167.$$\\n(0.8320 is $1-(0.98)^9$&#39;s complement-style trap; 0.1670 is off by a factor of 10.)</p></div><div class=\"ml-vi\"><p>Đây là biến ngẫu nhiên hình học với $p=0{,}02$: 9 cuộc gọi đầu đều thất bại và cuộc thứ 10 kết nối được.\\n$$P(X=10)=(1-p)^{9}p=(0{,}98)^{9}(0{,}02)=0{,}83375\\times0{,}02=0{,}016675\\approx0{,}0167.$$\\n(0,8320 là bẫy liên quan tới $(0{,}98)^9$; 0,1670 lệch một hệ số 10.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>This is a geometric random variable with $p=0.02$: the first 9 calls must all fail and the 10th must connect.<br/>$$P(X=10)=(1-p)^{9}p=(0.98)^{9}(0.02)=0.83375\\times0.02=0.016675\\approx0.0167.$$<br/>(0.8320 is $1-(0.98)^9$&#39;s complement-style trap; 0.1670 is off by a factor of 10.)</p></div><div class=\"ml-vi\"><p>Đây là biến ngẫu nhiên hình học với $p=0{,}02$: 9 cuộc gọi đầu đều thất bại và cuộc thứ 10 kết nối được.<br/>$$P(X=10)=(1-p)^{9}p=(0{,}98)^{9}(0{,}02)=0{,}83375\\times0{,}02=0{,}016675\\approx0{,}0167.$$<br/>(0,8320 là bẫy liên quan tới $(0{,}98)^9$; 0,1670 lệch một hệ số 10.)</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Consider the following stem and leaf display.\\n3 | 1 1 1 4 5\\n4 | 4 6 7\\n5 | 0 0 4 5 6 6 8 9\\n6 | 1 3 3 6\\nWhich data value occurs most often?</p></div><div class=\"ml-vi\"><p>Xét biểu đồ thân–lá sau.\\n3 | 1 1 1 4 5\\n4 | 4 6 7\\n5 | 0 0 4 5 6 6 8 9\\n6 | 1 3 3 6\\nGiá trị dữ liệu nào xuất hiện nhiều nhất?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Consider the following stem and leaf display.<br/>3 | 1 1 1 4 5<br/>4 | 4 6 7<br/>5 | 0 0 4 5 6 6 8 9<br/>6 | 1 3 3 6<br/>Which data value occurs most often?</p></div><div class=\"ml-vi\"><p>Xét biểu đồ thân–lá sau.<br/>3 | 1 1 1 4 5<br/>4 | 4 6 7<br/>5 | 0 0 4 5 6 6 8 9<br/>6 | 1 3 3 6<br/>Giá trị dữ liệu nào xuất hiện nhiều nhất?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q43.png",
           "options": [
             {
@@ -1143,7 +1143,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Suppose the cumulative distribution function of a continuous random variable $X$ is given by\\n$$F(x)=\\begin{cases}0 & x<0\\\\ 0.25x & 0\\le x<4\\\\ 1 & x\\ge4\\end{cases}$$\\nDetermine $P(X>5)+P(X<1)$.</p></div><div class=\"ml-vi\"><p>Giả sử hàm phân phối tích luỹ của biến ngẫu nhiên liên tục $X$ được cho bởi\\n$$F(x)=\\begin{cases}0 & x<0\\\\ 0{,}25x & 0\\le x<4\\\\ 1 & x\\ge4\\end{cases}$$\\nHãy xác định $P(X>5)+P(X<1)$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose the cumulative distribution function of a continuous random variable $X$ is given by<br/>$$F(x)=\\begin{cases}0 & x<0\\\\ 0.25x & 0\\le x<4\\\\ 1 & x\\ge4\\end{cases}$$<br/>Determine $P(X>5)+P(X<1)$.</p></div><div class=\"ml-vi\"><p>Giả sử hàm phân phối tích luỹ của biến ngẫu nhiên liên tục $X$ được cho bởi<br/>$$F(x)=\\begin{cases}0 & x<0\\\\ 0{,}25x & 0\\le x<4\\\\ 1 & x\\ge4\\end{cases}$$<br/>Hãy xác định $P(X>5)+P(X<1)$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q44.png",
           "options": [
             {
@@ -1167,7 +1167,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A machine is producing metal pieces that are cylindrical in shape. A sample of pieces is taken and the diameters are\\n1.01, 0.97, 1.03, 1.04, 0.99, 0.98, 0.99, 1.01, 1.03 (centimeters).\\nFrom this sample, one can compute a mean of 1.005 and a standard deviation of 0.025. Find a 99% confidence interval for the mean diameter of pieces from this machine, assuming an approximate normal distribution.\\nLet $t_{0.005,8}=3.355$, $t_{0.01,8}=2.896$.</p></div><div class=\"ml-vi\"><p>Một máy sản xuất các chi tiết kim loại hình trụ. Lấy một mẫu và đo đường kính được\\n1,01; 0,97; 1,03; 1,04; 0,99; 0,98; 0,99; 1,01; 1,03 (cm).\\nTừ mẫu này tính được trung bình 1,005 và độ lệch chuẩn 0,025. Hãy tìm khoảng tin cậy 99% cho đường kính trung bình các chi tiết do máy này sản xuất, giả sử phân phối xấp xỉ chuẩn.\\nCho $t_{0,005;8}=3{,}355$, $t_{0,01;8}=2{,}896$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A machine is producing metal pieces that are cylindrical in shape. A sample of pieces is taken and the diameters are<br/>1.01, 0.97, 1.03, 1.04, 0.99, 0.98, 0.99, 1.01, 1.03 (centimeters).<br/>From this sample, one can compute a mean of 1.005 and a standard deviation of 0.025. Find a 99% confidence interval for the mean diameter of pieces from this machine, assuming an approximate normal distribution.<br/>Let $t_{0.005,8}=3.355$, $t_{0.01,8}=2.896$.</p></div><div class=\"ml-vi\"><p>Một máy sản xuất các chi tiết kim loại hình trụ. Lấy một mẫu và đo đường kính được<br/>1,01; 0,97; 1,03; 1,04; 0,99; 0,98; 0,99; 1,01; 1,03 (cm).<br/>Từ mẫu này tính được trung bình 1,005 và độ lệch chuẩn 0,025. Hãy tìm khoảng tin cậy 99% cho đường kính trung bình các chi tiết do máy này sản xuất, giả sử phân phối xấp xỉ chuẩn.<br/>Cho $t_{0,005;8}=3{,}355$, $t_{0,01;8}=2{,}896$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q45.png",
           "options": [
             {
@@ -1189,7 +1189,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>$n=9$, so $df=8$; $\\sigma$ is unknown so use $t$. For 99% confidence $\\alpha/2=0.005$, giving $t_{0.005,8}=3.355$:\\n$$E=t\\frac{s}{\\sqrt n}=3.355\\times\\frac{0.025}{3}=3.355\\times0.008333=0.02796.$$\\nCI $=1.005\\pm0.02796=(0.977,\\ 1.033)$.</p></div><div class=\"ml-vi\"><p>$n=9$ nên $df=8$; $\\sigma$ chưa biết nên dùng $t$. Với độ tin cậy 99%, $\\alpha/2=0{,}005$, cho $t_{0,005;8}=3{,}355$:\\n$$E=t\\frac{s}{\\sqrt n}=3{,}355\\times\\frac{0{,}025}{3}=3{,}355\\times0{,}008333=0{,}02796.$$\\nKhoảng tin cậy $=1{,}005\\pm0{,}02796=(0{,}977;\\ 1{,}033)$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$n=9$, so $df=8$; $\\sigma$ is unknown so use $t$. For 99% confidence $\\alpha/2=0.005$, giving $t_{0.005,8}=3.355$:<br/>$$E=t\\frac{s}{\\sqrt n}=3.355\\times\\frac{0.025}{3}=3.355\\times0.008333=0.02796.$$<br/>CI $=1.005\\pm0.02796=(0.977,\\ 1.033)$.</p></div><div class=\"ml-vi\"><p>$n=9$ nên $df=8$; $\\sigma$ chưa biết nên dùng $t$. Với độ tin cậy 99%, $\\alpha/2=0{,}005$, cho $t_{0,005;8}=3{,}355$:<br/>$$E=t\\frac{s}{\\sqrt n}=3{,}355\\times\\frac{0{,}025}{3}=3{,}355\\times0{,}008333=0{,}02796.$$<br/>Khoảng tin cậy $=1{,}005\\pm0{,}02796=(0{,}977;\\ 1{,}033)$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1216,12 +1216,12 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>Let $I$ = income over \\$25,000 and $C$ = owns 4 cars. Given $P(I)=0.60$ and $P(C\\mid I)=0.80$, so $P(\\bar C\\mid I)=1-0.80=0.20$. Then\\n$$P(\\bar C\\cap I)=P(I)\\,P(\\bar C\\mid I)=0.60\\times0.20=0.12.$$\\n(The 70% figure is not needed here; $P(C\\cap I)=0.48$ is the complementary piece, choice 0.48.)</p></div><div class=\"ml-vi\"><p>Gọi $I$ = thu nhập trên 25.000 \\$ và $C$ = có 4 xe. Đã cho $P(I)=0{,}60$ và $P(C\\mid I)=0{,}80$, nên $P(\\bar C\\mid I)=1-0{,}80=0{,}20$. Khi đó\\n$$P(\\bar C\\cap I)=P(I)\\,P(\\bar C\\mid I)=0{,}60\\times0{,}20=0{,}12.$$\\n(Con số 70% không cần dùng ở đây; $P(C\\cap I)=0{,}48$ là phần bù, chính là phương án 0,48.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Let $I$ = income over \\$25,000 and $C$ = owns 4 cars. Given $P(I)=0.60$ and $P(C\\mid I)=0.80$, so $P(\\bar C\\mid I)=1-0.80=0.20$. Then<br/>$$P(\\bar C\\cap I)=P(I)\\,P(\\bar C\\mid I)=0.60\\times0.20=0.12.$$<br/>(The 70% figure is not needed here; $P(C\\cap I)=0.48$ is the complementary piece, choice 0.48.)</p></div><div class=\"ml-vi\"><p>Gọi $I$ = thu nhập trên 25.000 \\$ và $C$ = có 4 xe. Đã cho $P(I)=0{,}60$ và $P(C\\mid I)=0{,}80$, nên $P(\\bar C\\mid I)=1-0{,}80=0{,}20$. Khi đó<br/>$$P(\\bar C\\cap I)=P(I)\\,P(\\bar C\\mid I)=0{,}60\\times0{,}20=0{,}12.$$<br/>(Con số 70% không cần dùng ở đây; $P(C\\cap I)=0{,}48$ là phần bù, chính là phương án 0,48.)</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The cumulative distribution function of the random variable $X$ is defined by\\n$$F(x)=\\begin{cases}0 & x<0\\\\ 1-e^{-4x/5} & x\\ge0\\end{cases}$$\\nWhat is the mean value of $X$?</p></div><div class=\"ml-vi\"><p>Hàm phân phối tích luỹ của biến ngẫu nhiên $X$ được định nghĩa bởi\\n$$F(x)=\\begin{cases}0 & x<0\\\\ 1-e^{-4x/5} & x\\ge0\\end{cases}$$\\nGiá trị trung bình của $X$ là bao nhiêu?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The cumulative distribution function of the random variable $X$ is defined by<br/>$$F(x)=\\begin{cases}0 & x<0\\\\ 1-e^{-4x/5} & x\\ge0\\end{cases}$$<br/>What is the mean value of $X$?</p></div><div class=\"ml-vi\"><p>Hàm phân phối tích luỹ của biến ngẫu nhiên $X$ được định nghĩa bởi<br/>$$F(x)=\\begin{cases}0 & x<0\\\\ 1-e^{-4x/5} & x\\ge0\\end{cases}$$<br/>Giá trị trung bình của $X$ là bao nhiêu?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q47.png",
           "options": [
             {
@@ -1243,12 +1243,12 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\"><p>$F(x)=1-e^{-\\lambda x}$ is the exponential CDF, so here $\\lambda=\\frac{4}{5}=0.8$. The mean of an exponential is the reciprocal of the rate:\\n$$E(X)=\\frac{1}{\\lambda}=\\frac{5}{4}=1.25.$$\\n(Equivalently $f(x)=F'(x)=0.8e^{-0.8x}$ and $\\int_0^\\infty x(0.8)e^{-0.8x}dx=1.25$.)</p></div><div class=\"ml-vi\"><p>$F(x)=1-e^{-\\lambda x}$ là hàm phân phối của phân phối mũ, nên ở đây $\\lambda=\\frac{4}{5}=0{,}8$. Trung bình của phân phối mũ là nghịch đảo tham số:\\n$$E(X)=\\frac{1}{\\lambda}=\\frac{5}{4}=1{,}25.$$\\n(Tương đương: $f(x)=F'(x)=0{,}8e^{-0{,}8x}$ và $\\int_0^\\infty x(0{,}8)e^{-0{,}8x}dx=1{,}25$.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$F(x)=1-e^{-\\lambda x}$ is the exponential CDF, so here $\\lambda=\\frac{4}{5}=0.8$. The mean of an exponential is the reciprocal of the rate:<br/>$$E(X)=\\frac{1}{\\lambda}=\\frac{5}{4}=1.25.$$<br/>(Equivalently $f(x)=F'(x)=0.8e^{-0.8x}$ and $\\int_0^\\infty x(0.8)e^{-0.8x}dx=1.25$.)</p></div><div class=\"ml-vi\"><p>$F(x)=1-e^{-\\lambda x}$ là hàm phân phối của phân phối mũ, nên ở đây $\\lambda=\\frac{4}{5}=0{,}8$. Trung bình của phân phối mũ là nghịch đảo tham số:<br/>$$E(X)=\\frac{1}{\\lambda}=\\frac{5}{4}=1{,}25.$$<br/>(Tương đương: $f(x)=F'(x)=0{,}8e^{-0{,}8x}$ và $\\int_0^\\infty x(0{,}8)e^{-0{,}8x}dx=1{,}25$.)</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Let the discrete random variable $X$ have probability mass function $f(x)=(2x+1)/25$, $x = 0, 1, 2, 3, 4$. Which of the following statements are TRUE?\\n(i) $P(X = 4) = 9/25$\\n(ii) $P(2 \\le X < 4) = 12/25$\\n(iii) $P(X \\le 1) = 4/25$</p></div><div class=\"ml-vi\"><p>Cho biến ngẫu nhiên rời rạc $X$ có hàm khối xác suất $f(x)=(2x+1)/25$, $x = 0, 1, 2, 3, 4$. Phát biểu nào sau đây ĐÚNG?\\n(i) $P(X = 4) = 9/25$\\n(ii) $P(2 \\le X < 4) = 12/25$\\n(iii) $P(X \\le 1) = 4/25$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Let the discrete random variable $X$ have probability mass function $f(x)=(2x+1)/25$, $x = 0, 1, 2, 3, 4$. Which of the following statements are TRUE?<br/>(i) $P(X = 4) = 9/25$<br/>(ii) $P(2 \\le X < 4) = 12/25$<br/>(iii) $P(X \\le 1) = 4/25$</p></div><div class=\"ml-vi\"><p>Cho biến ngẫu nhiên rời rạc $X$ có hàm khối xác suất $f(x)=(2x+1)/25$, $x = 0, 1, 2, 3, 4$. Phát biểu nào sau đây ĐÚNG?<br/>(i) $P(X = 4) = 9/25$<br/>(ii) $P(2 \\le X < 4) = 12/25$<br/>(iii) $P(X \\le 1) = 4/25$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q48.png",
           "options": [
             {
@@ -1267,7 +1267,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>The pmf values are $f(0)=\\frac1{25}$, $f(1)=\\frac3{25}$, $f(2)=\\frac5{25}$, $f(3)=\\frac7{25}$, $f(4)=\\frac9{25}$ (they sum to 1).\\n(i) $P(X=4)=\\frac{9}{25}$ ✓\\n(ii) $P(2\\le X<4)=f(2)+f(3)=\\frac{5+7}{25}=\\frac{12}{25}$ ✓ (note the STRICT upper bound excludes $x=4$)\\n(iii) $P(X\\le1)=f(0)+f(1)=\\frac{1+3}{25}=\\frac{4}{25}$ ✓\\nAll three are true.</p></div><div class=\"ml-vi\"><p>Các giá trị hàm khối là $f(0)=\\frac1{25}$, $f(1)=\\frac3{25}$, $f(2)=\\frac5{25}$, $f(3)=\\frac7{25}$, $f(4)=\\frac9{25}$ (tổng bằng 1).\\n(i) $P(X=4)=\\frac{9}{25}$ ✓\\n(ii) $P(2\\le X<4)=f(2)+f(3)=\\frac{5+7}{25}=\\frac{12}{25}$ ✓ (lưu ý cận trên NGHIÊM NGẶT nên loại $x=4$)\\n(iii) $P(X\\le1)=f(0)+f(1)=\\frac{1+3}{25}=\\frac{4}{25}$ ✓\\nCả ba đều đúng.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The pmf values are $f(0)=\\frac1{25}$, $f(1)=\\frac3{25}$, $f(2)=\\frac5{25}$, $f(3)=\\frac7{25}$, $f(4)=\\frac9{25}$ (they sum to 1).<br/>(i) $P(X=4)=\\frac{9}{25}$ ✓<br/>(ii) $P(2\\le X<4)=f(2)+f(3)=\\frac{5+7}{25}=\\frac{12}{25}$ ✓ (note the STRICT upper bound excludes $x=4$)<br/>(iii) $P(X\\le1)=f(0)+f(1)=\\frac{1+3}{25}=\\frac{4}{25}$ ✓<br/>All three are true.</p></div><div class=\"ml-vi\"><p>Các giá trị hàm khối là $f(0)=\\frac1{25}$, $f(1)=\\frac3{25}$, $f(2)=\\frac5{25}$, $f(3)=\\frac7{25}$, $f(4)=\\frac9{25}$ (tổng bằng 1).<br/>(i) $P(X=4)=\\frac{9}{25}$ ✓<br/>(ii) $P(2\\le X<4)=f(2)+f(3)=\\frac{5+7}{25}=\\frac{12}{25}$ ✓ (lưu ý cận trên NGHIÊM NGẶT nên loại $x=4$)<br/>(iii) $P(X\\le1)=f(0)+f(1)=\\frac{1+3}{25}=\\frac{4}{25}$ ✓<br/>Cả ba đều đúng.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1294,12 +1294,12 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>$\\sigma=2$ is known, so use the $z$ statistic with $H_0:\\mu=100$:\\n$$z_0=\\frac{\\bar x-\\mu_0}{\\sigma/\\sqrt n}=\\frac{98-100}{2/\\sqrt9}=\\frac{-2}{2/3}=-3.$$\\n(The trap $-2$ comes from dividing by $\\sigma$ instead of the standard error $\\sigma/\\sqrt n$.)</p></div><div class=\"ml-vi\"><p>$\\sigma=2$ đã biết nên dùng thống kê $z$ với $H_0:\\mu=100$:\\n$$z_0=\\frac{\\bar x-\\mu_0}{\\sigma/\\sqrt n}=\\frac{98-100}{2/\\sqrt9}=\\frac{-2}{2/3}=-3.$$\\n(Bẫy $-2$ là do chia cho $\\sigma$ thay vì sai số chuẩn $\\sigma/\\sqrt n$.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$\\sigma=2$ is known, so use the $z$ statistic with $H_0:\\mu=100$:<br/>$$z_0=\\frac{\\bar x-\\mu_0}{\\sigma/\\sqrt n}=\\frac{98-100}{2/\\sqrt9}=\\frac{-2}{2/3}=-3.$$<br/>(The trap $-2$ comes from dividing by $\\sigma$ instead of the standard error $\\sigma/\\sqrt n$.)</p></div><div class=\"ml-vi\"><p>$\\sigma=2$ đã biết nên dùng thống kê $z$ với $H_0:\\mu=100$:<br/>$$z_0=\\frac{\\bar x-\\mu_0}{\\sigma/\\sqrt n}=\\frac{98-100}{2/\\sqrt9}=\\frac{-2}{2/3}=-3.$$<br/>(Bẫy $-2$ là do chia cho $\\sigma$ thay vì sai số chuẩn $\\sigma/\\sqrt n$.)</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Given the following information, calculate $s_p^2$, the pooled sample variance that should be used in the pooled-variance $t$ test.\\n$s_1 = 4$, $n_1 = 16$; $s_2 = 6$, $n_2 = 25$.</p></div><div class=\"ml-vi\"><p>Cho thông tin sau, hãy tính $s_p^2$, phương sai mẫu gộp dùng trong kiểm định $t$ phương sai gộp.\\n$s_1 = 4$, $n_1 = 16$; $s_2 = 6$, $n_2 = 25$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given the following information, calculate $s_p^2$, the pooled sample variance that should be used in the pooled-variance $t$ test.<br/>$s_1 = 4$, $n_1 = 16$; $s_2 = 6$, $n_2 = 25$.</p></div><div class=\"ml-vi\"><p>Cho thông tin sau, hãy tính $s_p^2$, phương sai mẫu gộp dùng trong kiểm định $t$ phương sai gộp.<br/>$s_1 = 4$, $n_1 = 16$; $s_2 = 6$, $n_2 = 25$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q50.png",
           "options": [
             {
@@ -1321,7 +1321,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>$$s_p^{2}=\\frac{(n_1-1)s_1^{2}+(n_2-1)s_2^{2}}{n_1+n_2-2}=\\frac{15(16)+24(36)}{16+25-2}=\\frac{240+864}{39}=\\frac{1104}{39}=28.31.$$\\n(Note the question asks for the VARIANCE $s_p^2$; $\\sqrt{28.31}=5.32$ would be the pooled standard deviation.)</p></div><div class=\"ml-vi\"><p>$$s_p^{2}=\\frac{(n_1-1)s_1^{2}+(n_2-1)s_2^{2}}{n_1+n_2-2}=\\frac{15(16)+24(36)}{16+25-2}=\\frac{240+864}{39}=\\frac{1104}{39}=28{,}31.$$\\n(Lưu ý đề hỏi PHƯƠNG SAI $s_p^2$; $\\sqrt{28{,}31}=5{,}32$ mới là độ lệch chuẩn gộp.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$$s_p^{2}=\\frac{(n_1-1)s_1^{2}+(n_2-1)s_2^{2}}{n_1+n_2-2}=\\frac{15(16)+24(36)}{16+25-2}=\\frac{240+864}{39}=\\frac{1104}{39}=28.31.$$<br/>(Note the question asks for the VARIANCE $s_p^2$; $\\sqrt{28.31}=5.32$ would be the pooled standard deviation.)</p></div><div class=\"ml-vi\"><p>$$s_p^{2}=\\frac{(n_1-1)s_1^{2}+(n_2-1)s_2^{2}}{n_1+n_2-2}=\\frac{15(16)+24(36)}{16+25-2}=\\frac{240+864}{39}=\\frac{1104}{39}=28{,}31.$$<br/>(Lưu ý đề hỏi PHƯƠNG SAI $s_p^2$; $\\sqrt{28{,}31}=5{,}32$ mới là độ lệch chuẩn gộp.)</p></div>"
         }
       ]
     }

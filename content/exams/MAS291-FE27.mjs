@@ -21,7 +21,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2439,
-          "prompt": "<div class=\"ml-en\"><p>Suppose that you interview job applicants in succession until you find a person that satisfies the job description. Suppose that, at each interview, the probability of finding the right person is 0.3.</p><p>What is the probability that you appoint the third person that you interview?</p></div><div class=\"ml-vi\"><p>Giả sử bạn phỏng vấn lần lượt các ứng viên cho đến khi tìm được người thoả mãn mô tả công việc. Giả sử ở mỗi lần phỏng vấn, xác suất tìm được đúng người là 0,3.</p><p>Xác suất bạn tuyển đúng người thứ ba mà bạn phỏng vấn là bao nhiêu?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose that you interview job applicants in succession until you find a person that satisfies the job description. Suppose that, at each interview, the probability of finding the right person is 0.3.<br/><br/>What is the probability that you appoint the third person that you interview?</p></div><div class=\"ml-vi\"><p>Giả sử bạn phỏng vấn lần lượt các ứng viên cho đến khi tìm được người thoả mãn mô tả công việc. Giả sử ở mỗi lần phỏng vấn, xác suất tìm được đúng người là 0,3.<br/><br/>Xác suất bạn tuyển đúng người thứ ba mà bạn phỏng vấn là bao nhiêu?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D27/q1.png",
           "options": [
             {
@@ -99,7 +99,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2439,
-          "prompt": "<div class=\"ml-en\"><p>A random sample of 150 students has a grade point average with a mean of 2.86. Assume the population standard deviation is 0.78. Construct the confidence interval for the population mean. Use a 98% confidence level.</p><p>Let $z_{0.01}=2.33$, $z_{0.02}=2.05$.</p></div><div class=\"ml-vi\"><p>Một mẫu ngẫu nhiên gồm 150 sinh viên có điểm trung bình tích luỹ (GPA) là 2,86. Giả sử độ lệch chuẩn của tổng thể là 0,78. Hãy xây dựng khoảng tin cậy cho trung bình tổng thể với độ tin cậy 98%.</p><p>Cho $z_{0,01}=2,33$, $z_{0,02}=2,05$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A random sample of 150 students has a grade point average with a mean of 2.86. Assume the population standard deviation is 0.78. Construct the confidence interval for the population mean. Use a 98% confidence level.<br/><br/>Let $z_{0.01}=2.33$, $z_{0.02}=2.05$.</p></div><div class=\"ml-vi\"><p>Một mẫu ngẫu nhiên gồm 150 sinh viên có điểm trung bình tích luỹ (GPA) là 2,86. Giả sử độ lệch chuẩn của tổng thể là 0,78. Hãy xây dựng khoảng tin cậy cho trung bình tổng thể với độ tin cậy 98%.<br/><br/>Cho $z_{0,01}=2,33$, $z_{0,02}=2,05$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D27/q4.png",
           "options": [
             {
@@ -150,7 +150,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2439,
-          "prompt": "<div class=\"ml-en\"><p>A basketball player is asked to shoot free throws in sets of four. The player shoots 100 sets of 4 free throws. The probability distribution for making a particular number of free throws is given below. Determine the standard deviation for this discrete probability distribution.</p><p>$X$: 0, 1, 2, 3, 4 with $P(X)$: 0.02, 0.07, 0.22, 0.27, 0.42 respectively.</p></div><div class=\"ml-vi\"><p>Một cầu thủ bóng rổ được yêu cầu ném phạt theo từng loạt 4 quả. Cầu thủ ném 100 loạt, mỗi loạt 4 quả. Phân phối xác suất của số quả ném trúng được cho dưới đây. Hãy xác định độ lệch chuẩn của phân phối xác suất rời rạc này.</p><p>$X$: 0, 1, 2, 3, 4 với $P(X)$ lần lượt là: 0,02; 0,07; 0,22; 0,27; 0,42.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A basketball player is asked to shoot free throws in sets of four. The player shoots 100 sets of 4 free throws. The probability distribution for making a particular number of free throws is given below. Determine the standard deviation for this discrete probability distribution.<br/><br/>$X$: 0, 1, 2, 3, 4 with $P(X)$: 0.02, 0.07, 0.22, 0.27, 0.42 respectively.</p></div><div class=\"ml-vi\"><p>Một cầu thủ bóng rổ được yêu cầu ném phạt theo từng loạt 4 quả. Cầu thủ ném 100 loạt, mỗi loạt 4 quả. Phân phối xác suất của số quả ném trúng được cho dưới đây. Hãy xác định độ lệch chuẩn của phân phối xác suất rời rạc này.<br/><br/>$X$: 0, 1, 2, 3, 4 với $P(X)$ lần lượt là: 0,02; 0,07; 0,22; 0,27; 0,42.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D27/q6.png",
           "options": [
             {
@@ -177,7 +177,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2439,
-          "prompt": "<div class=\"ml-en\"><p>The random variable $X$ has the cumulative distribution function</p><p>$$F(x)=\\begin{cases}0 & x<1/8\\\\ 0.2 & 1/8\\le x<1/4\\\\ 0.9 & 1/4\\le x<3/8\\\\ 1 & 3/8\\le x\\end{cases}$$</p><p>Find the probability mass function at $x=1$.</p></div><div class=\"ml-vi\"><p>Biến ngẫu nhiên $X$ có hàm phân phối tích luỹ</p><p>$$F(x)=\\begin{cases}0 & x<1/8\\\\ 0{,}2 & 1/8\\le x<1/4\\\\ 0{,}9 & 1/4\\le x<3/8\\\\ 1 & 3/8\\le x\\end{cases}$$</p><p>Hãy tìm giá trị của hàm khối xác suất tại $x=1$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The random variable $X$ has the cumulative distribution function<br/><br/>$$F(x)=\\begin{cases}0 & x<1/8\\\\ 0.2 & 1/8\\le x<1/4\\\\ 0.9 & 1/4\\le x<3/8\\\\ 1 & 3/8\\le x\\end{cases}$$<br/><br/>Find the probability mass function at $x=1$.</p></div><div class=\"ml-vi\"><p>Biến ngẫu nhiên $X$ có hàm phân phối tích luỹ<br/><br/>$$F(x)=\\begin{cases}0 & x<1/8\\\\ 0{,}2 & 1/8\\le x<1/4\\\\ 0{,}9 & 1/4\\le x<3/8\\\\ 1 & 3/8\\le x\\end{cases}$$<br/><br/>Hãy tìm giá trị của hàm khối xác suất tại $x=1$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D27/q7.png",
           "options": [
             {
@@ -285,7 +285,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2439,
-          "prompt": "<div class=\"ml-en\"><p>The owner of a fish market has an assistant who has determined that the weights of catfish are normally distributed, with mean of 3.2 pounds and standard deviation of 0.8 pound. What percentage of samples of 4 fish will have sample means between 3.0 and 4.0 pounds?</p><p>Let $P(Z<2)=0.98$, $P(Z<-0.5)=0.31$.</p></div><div class=\"ml-vi\"><p>Chủ một chợ cá có người trợ lý xác định rằng cân nặng của cá trê tuân theo phân phối chuẩn với trung bình 3,2 pound và độ lệch chuẩn 0,8 pound. Bao nhiêu phần trăm các mẫu gồm 4 con cá sẽ có trung bình mẫu nằm giữa 3,0 và 4,0 pound?</p><p>Cho $P(Z<2)=0,98$, $P(Z<-0,5)=0,31$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The owner of a fish market has an assistant who has determined that the weights of catfish are normally distributed, with mean of 3.2 pounds and standard deviation of 0.8 pound. What percentage of samples of 4 fish will have sample means between 3.0 and 4.0 pounds?<br/><br/>Let $P(Z<2)=0.98$, $P(Z<-0.5)=0.31$.</p></div><div class=\"ml-vi\"><p>Chủ một chợ cá có người trợ lý xác định rằng cân nặng của cá trê tuân theo phân phối chuẩn với trung bình 3,2 pound và độ lệch chuẩn 0,8 pound. Bao nhiêu phần trăm các mẫu gồm 4 con cá sẽ có trung bình mẫu nằm giữa 3,0 và 4,0 pound?<br/><br/>Cho $P(Z<2)=0,98$, $P(Z<-0,5)=0,31$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D27/q11.png",
           "options": [
             {
@@ -366,7 +366,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2439,
-          "prompt": "<div class=\"ml-en\"><p>Find the critical value for a two-tailed test $H_1: \\mu \\ne 10$, $\\alpha = 0.01$, $n = 30$. Assume that the data are normally distributed (population standard deviation unknown).</p><p>Let $z_{0.05}=1.645$, $z_{0.025}=1.96$, $z_{0.01}=2.33$, $t_{0.005,29}=2.756$.</p></div><div class=\"ml-vi\"><p>Tìm giá trị tới hạn cho kiểm định hai phía $H_1: \\mu \\ne 10$, $\\alpha = 0{,}01$, $n = 30$. Giả thiết dữ liệu có phân phối chuẩn (độ lệch chuẩn tổng thể chưa biết).</p><p>Cho $z_{0,05}=1,645$, $z_{0,025}=1,96$, $z_{0,01}=2,33$, $t_{0,005;29}=2,756$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find the critical value for a two-tailed test $H_1: \\mu <br/>e 10$, $\\alpha = 0.01$, $n = 30$. Assume that the data are normally distributed (population standard deviation unknown).<br/><br/>Let $z_{0.05}=1.645$, $z_{0.025}=1.96$, $z_{0.01}=2.33$, $t_{0.005,29}=2.756$.</p></div><div class=\"ml-vi\"><p>Tìm giá trị tới hạn cho kiểm định hai phía $H_1: \\mu <br/>e 10$, $\\alpha = 0{,}01$, $n = 30$. Giả thiết dữ liệu có phân phối chuẩn (độ lệch chuẩn tổng thể chưa biết).<br/><br/>Cho $z_{0,05}=1,645$, $z_{0,025}=1,96$, $z_{0,01}=2,33$, $t_{0,005;29}=2,756$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D27/q14.png",
           "options": [
             {
@@ -471,7 +471,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2439,
-          "prompt": "<div class=\"ml-en\"><p>A salesperson knows that 20% of her presentations result in sales. Use the normal approximation formula for the Binomial distribution to find the probability that in the next 60 presentations at least 9 result in sales.</p><p>Let $P(Z<-1.13)=0.1268$ and $P(Z<-0.81)=0.2089$.</p></div><div class=\"ml-vi\"><p>Một nhân viên bán hàng biết rằng 20% các buổi thuyết trình của cô dẫn đến giao dịch. Dùng công thức xấp xỉ chuẩn cho phân phối nhị thức, hãy tìm xác suất trong 60 buổi thuyết trình tiếp theo có ít nhất 9 buổi dẫn đến giao dịch.</p><p>Cho $P(Z<-1,13)=0,1268$ và $P(Z<-0,81)=0,2089$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A salesperson knows that 20% of her presentations result in sales. Use the normal approximation formula for the Binomial distribution to find the probability that in the next 60 presentations at least 9 result in sales.<br/><br/>Let $P(Z<-1.13)=0.1268$ and $P(Z<-0.81)=0.2089$.</p></div><div class=\"ml-vi\"><p>Một nhân viên bán hàng biết rằng 20% các buổi thuyết trình của cô dẫn đến giao dịch. Dùng công thức xấp xỉ chuẩn cho phân phối nhị thức, hãy tìm xác suất trong 60 buổi thuyết trình tiếp theo có ít nhất 9 buổi dẫn đến giao dịch.<br/><br/>Cho $P(Z<-1,13)=0,1268$ và $P(Z<-0,81)=0,2089$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D27/q19.png",
           "options": [
             {
@@ -498,7 +498,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2439,
-          "prompt": "<div class=\"ml-en\"><p>Let $X$ be a continuous random variable with probability density function defined by</p><p>$$f(x)=1.5x^{2}\\quad\\text{for }-1<x<1.$$</p><p>Determine the probability $P(X<0 \\text{ or } X>0.5)$.</p></div><div class=\"ml-vi\"><p>Cho $X$ là biến ngẫu nhiên liên tục với hàm mật độ xác suất</p><p>$$f(x)=1{,}5x^{2}\\quad\\text{với }-1<x<1.$$</p><p>Hãy tính xác suất $P(X<0 \\text{ hoặc } X>0{,}5)$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Let $X$ be a continuous random variable with probability density function defined by<br/><br/>$$f(x)=1.5x^{2}\\quad\\text{for }-1<x<1.$$<br/><br/>Determine the probability $P(X<0 \\text{ or } X>0.5)$.</p></div><div class=\"ml-vi\"><p>Cho $X$ là biến ngẫu nhiên liên tục với hàm mật độ xác suất<br/><br/>$$f(x)=1{,}5x^{2}\\quad\\text{với }-1<x<1.$$<br/><br/>Hãy tính xác suất $P(X<0 \\text{ hoặc } X>0{,}5)$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D27/q20.png",
           "options": [
             {
@@ -522,7 +522,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2439,
-          "prompt": "<div class=\"ml-en\"><p>The burning rates of two different solid-fuel propellants used in aircrew escape systems are being studied. Assume that both populations are normally distributed, with standard deviation $\\sigma_1=3.5$ centimeters per second and $\\sigma_2=4.2$ centimeters per second for propellant 1 and propellant 2, respectively. Two random samples of $n_1=25$ and $n_2=18$ specimens are tested, the sample mean burning rates are $\\bar{x}_1=28.1$ centimeters per second and $\\bar{x}_2=27.5$ centimeters per second. A researcher would like to test the hypothesis that both propellants have the same mean burning rate, at the 5% significance level. State the null and alternative hypotheses and find the value of the test statistic $z_0$.</p><p>(i) $H_0: \\mu_1-\\mu_2=0$, $H_1: \\mu_1-\\mu_2\\ne0$, $z_0=0.982$<br/>(ii) $H_0: \\mu_1-\\mu_2=0$, $H_1: \\mu_1-\\mu_2\\ne0$, $z_0=0.474$<br/>(iii) $H_0: \\mu_1-\\mu_2\\ne0$, $H_1: \\mu_1-\\mu_2=0$, $z_0=0.474$<br/>(iv) $H_0: \\mu_1-\\mu_2=0$, $H_1: \\mu_1-\\mu_2>0$, $z_0=0.982$<br/>(v) $H_0: \\mu_1-\\mu_2=0$, $H_1: \\mu_1-\\mu_2\\ne0$, $z_0=0.495$</p></div><div class=\"ml-vi\"><p>Người ta nghiên cứu tốc độ cháy của hai loại nhiên liệu rắn dùng trong hệ thống thoát hiểm của tổ bay. Giả sử cả hai tổng thể đều có phân phối chuẩn với độ lệch chuẩn $\\sigma_1=3{,}5$ cm/giây và $\\sigma_2=4{,}2$ cm/giây tương ứng cho nhiên liệu 1 và nhiên liệu 2. Hai mẫu ngẫu nhiên cỡ $n_1=25$ và $n_2=18$ được thử nghiệm, trung bình mẫu của tốc độ cháy là $\\bar{x}_1=28{,}1$ cm/giây và $\\bar{x}_2=27{,}5$ cm/giây. Một nhà nghiên cứu muốn kiểm định giả thuyết rằng hai loại nhiên liệu có tốc độ cháy trung bình như nhau, ở mức ý nghĩa 5%. Hãy nêu giả thuyết không và giả thuyết đối, và tìm giá trị thống kê kiểm định $z_0$.</p><p>(i) $H_0: \\mu_1-\\mu_2=0$, $H_1: \\mu_1-\\mu_2\\ne0$, $z_0=0{,}982$<br/>(ii) $H_0: \\mu_1-\\mu_2=0$, $H_1: \\mu_1-\\mu_2\\ne0$, $z_0=0{,}474$<br/>(iii) $H_0: \\mu_1-\\mu_2\\ne0$, $H_1: \\mu_1-\\mu_2=0$, $z_0=0{,}474$<br/>(iv) $H_0: \\mu_1-\\mu_2=0$, $H_1: \\mu_1-\\mu_2>0$, $z_0=0{,}982$<br/>(v) $H_0: \\mu_1-\\mu_2=0$, $H_1: \\mu_1-\\mu_2\\ne0$, $z_0=0{,}495$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The burning rates of two different solid-fuel propellants used in aircrew escape systems are being studied. Assume that both populations are normally distributed, with standard deviation $\\sigma_1=3.5$ centimeters per second and $\\sigma_2=4.2$ centimeters per second for propellant 1 and propellant 2, respectively. Two random samples of $n_1=25$ and $n_2=18$ specimens are tested, the sample mean burning rates are $\\bar{x}_1=28.1$ centimeters per second and $\\bar{x}_2=27.5$ centimeters per second. A researcher would like to test the hypothesis that both propellants have the same mean burning rate, at the 5% significance level. State the null and alternative hypotheses and find the value of the test statistic $z_0$.<br/><br/>(i) $H_0: \\mu_1-\\mu_2=0$, $H_1: \\mu_1-\\mu_2<br/>e0$, $z_0=0.982$<br/>(ii) $H_0: \\mu_1-\\mu_2=0$, $H_1: \\mu_1-\\mu_2<br/>e0$, $z_0=0.474$<br/>(iii) $H_0: \\mu_1-\\mu_2<br/>e0$, $H_1: \\mu_1-\\mu_2=0$, $z_0=0.474$<br/>(iv) $H_0: \\mu_1-\\mu_2=0$, $H_1: \\mu_1-\\mu_2>0$, $z_0=0.982$<br/>(v) $H_0: \\mu_1-\\mu_2=0$, $H_1: \\mu_1-\\mu_2<br/>e0$, $z_0=0.495$</p></div><div class=\"ml-vi\"><p>Người ta nghiên cứu tốc độ cháy của hai loại nhiên liệu rắn dùng trong hệ thống thoát hiểm của tổ bay. Giả sử cả hai tổng thể đều có phân phối chuẩn với độ lệch chuẩn $\\sigma_1=3{,}5$ cm/giây và $\\sigma_2=4{,}2$ cm/giây tương ứng cho nhiên liệu 1 và nhiên liệu 2. Hai mẫu ngẫu nhiên cỡ $n_1=25$ và $n_2=18$ được thử nghiệm, trung bình mẫu của tốc độ cháy là $\\bar{x}_1=28{,}1$ cm/giây và $\\bar{x}_2=27{,}5$ cm/giây. Một nhà nghiên cứu muốn kiểm định giả thuyết rằng hai loại nhiên liệu có tốc độ cháy trung bình như nhau, ở mức ý nghĩa 5%. Hãy nêu giả thuyết không và giả thuyết đối, và tìm giá trị thống kê kiểm định $z_0$.<br/><br/>(i) $H_0: \\mu_1-\\mu_2=0$, $H_1: \\mu_1-\\mu_2<br/>e0$, $z_0=0{,}982$<br/>(ii) $H_0: \\mu_1-\\mu_2=0$, $H_1: \\mu_1-\\mu_2<br/>e0$, $z_0=0{,}474$<br/>(iii) $H_0: \\mu_1-\\mu_2<br/>e0$, $H_1: \\mu_1-\\mu_2=0$, $z_0=0{,}474$<br/>(iv) $H_0: \\mu_1-\\mu_2=0$, $H_1: \\mu_1-\\mu_2>0$, $z_0=0{,}982$<br/>(v) $H_0: \\mu_1-\\mu_2=0$, $H_1: \\mu_1-\\mu_2<br/>e0$, $z_0=0{,}495$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D27/q21.png",
           "options": [
             {
@@ -544,7 +544,7 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>&quot;Same mean burning rate&quot; is a two-sided test, so $H_0:\\mu_1-\\mu_2=0$ versus $H_1:\\mu_1-\\mu_2\\ne0$ (this already eliminates (iii), which puts the inequality in $H_0$, and (iv), which is one-sided). With both $\\sigma$ known, use the two-sample $z$: $z_0=\\dfrac{\\bar{x}_1-\\bar{x}_2}{\\sqrt{\\sigma_1^2/n_1+\\sigma_2^2/n_2}}=\\dfrac{28.1-27.5}{\\sqrt{\\frac{12.25}{25}+\\frac{17.64}{18}}}=\\dfrac{0.6}{\\sqrt{0.49+0.98}}=\\dfrac{0.6}{\\sqrt{1.47}}=\\dfrac{0.6}{1.2124}=0.4949\\approx0.495$. That is statement (v).</p></div><div class=\"ml-vi\"><p>&quot;Tốc độ cháy trung bình như nhau&quot; là kiểm định hai phía nên $H_0:\\mu_1-\\mu_2=0$ và $H_1:\\mu_1-\\mu_2\\ne0$ (loại ngay (iii) vì đặt bất đẳng thức vào $H_0$, và (iv) vì một phía). Biết cả hai $\\sigma$ nên dùng thống kê $z$ hai mẫu: $z_0=\\dfrac{28{,}1-27{,}5}{\\sqrt{\\frac{12{,}25}{25}+\\frac{17{,}64}{18}}}=\\dfrac{0{,}6}{\\sqrt{1{,}47}}=\\dfrac{0{,}6}{1{,}2124}=0{,}4949\\approx0{,}495$. Đó là mệnh đề (v).</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>&quot;Same mean burning rate&quot; is a two-sided test, so $H_0:\\mu_1-\\mu_2=0$ versus $H_1:\\mu_1-\\mu_2<br/>e0$ (this already eliminates (iii), which puts the inequality in $H_0$, and (iv), which is one-sided). With both $\\sigma$ known, use the two-sample $z$: $z_0=\\dfrac{\\bar{x}_1-\\bar{x}_2}{\\sqrt{\\sigma_1^2/n_1+\\sigma_2^2/n_2}}=\\dfrac{28.1-27.5}{\\sqrt{\\frac{12.25}{25}+\\frac{17.64}{18}}}=\\dfrac{0.6}{\\sqrt{0.49+0.98}}=\\dfrac{0.6}{\\sqrt{1.47}}=\\dfrac{0.6}{1.2124}=0.4949\\approx0.495$. That is statement (v).</p></div><div class=\"ml-vi\"><p>&quot;Tốc độ cháy trung bình như nhau&quot; là kiểm định hai phía nên $H_0:\\mu_1-\\mu_2=0$ và $H_1:\\mu_1-\\mu_2<br/>e0$ (loại ngay (iii) vì đặt bất đẳng thức vào $H_0$, và (iv) vì một phía). Biết cả hai $\\sigma$ nên dùng thống kê $z$ hai mẫu: $z_0=\\dfrac{28{,}1-27{,}5}{\\sqrt{\\frac{12{,}25}{25}+\\frac{17{,}64}{18}}}=\\dfrac{0{,}6}{\\sqrt{1{,}47}}=\\dfrac{0{,}6}{1{,}2124}=0{,}4949\\approx0{,}495$. Đó là mệnh đề (v).</p></div>"
         },
         {
           "kind": "MCQ",
@@ -570,7 +570,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2439,
-          "prompt": "<div class=\"ml-en\"><p>Let $X$ be a continuous random variable with probability density function</p><p>$$f(x)=0.5\\quad\\text{for }5<x<7.$$</p><p>Find $E(2X+3)$.</p></div><div class=\"ml-vi\"><p>Cho $X$ là biến ngẫu nhiên liên tục với hàm mật độ xác suất</p><p>$$f(x)=0{,}5\\quad\\text{với }5<x<7.$$</p><p>Hãy tìm $E(2X+3)$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Let $X$ be a continuous random variable with probability density function<br/><br/>$$f(x)=0.5\\quad\\text{for }5<x<7.$$<br/><br/>Find $E(2X+3)$.</p></div><div class=\"ml-vi\"><p>Cho $X$ là biến ngẫu nhiên liên tục với hàm mật độ xác suất<br/><br/>$$f(x)=0{,}5\\quad\\text{với }5<x<7.$$<br/><br/>Hãy tìm $E(2X+3)$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D27/q23.png",
           "options": [
             {
@@ -600,7 +600,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2439,
-          "prompt": "<div class=\"ml-en\"><p>Anna collected the scores of a random sample of 50 students on the first exam in a certain class and their corresponding scores on the second exam in that class. Here is computer output on the sample data:</p><p>Intercept — Coefficient 7.895, Standard Error 3.66<br/>X-Variable 1 — Coefficient 0.957, Standard Error 0.21</p><p>Assume that all conditions for inference have been met. Find the test statistic for testing the null hypothesis that the population slope is 0.5.</p></div><div class=\"ml-vi\"><p>Anna thu thập điểm bài thi thứ nhất của một mẫu ngẫu nhiên 50 sinh viên trong một lớp và điểm bài thi thứ hai tương ứng của họ. Kết quả xuất ra từ máy tính trên dữ liệu mẫu như sau:</p><p>Hệ số chặn (Intercept) — Hệ số 7,895; Sai số chuẩn 3,66<br/>Biến X 1 (X-Variable 1) — Hệ số 0,957; Sai số chuẩn 0,21</p><p>Giả sử mọi điều kiện suy diễn đã được thoả mãn. Hãy tìm thống kê kiểm định cho giả thuyết không rằng hệ số góc của tổng thể bằng 0,5.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Anna collected the scores of a random sample of 50 students on the first exam in a certain class and their corresponding scores on the second exam in that class. Here is computer output on the sample data:<br/><br/>Intercept — Coefficient 7.895, Standard Error 3.66<br/>X-Variable 1 — Coefficient 0.957, Standard Error 0.21<br/><br/>Assume that all conditions for inference have been met. Find the test statistic for testing the null hypothesis that the population slope is 0.5.</p></div><div class=\"ml-vi\"><p>Anna thu thập điểm bài thi thứ nhất của một mẫu ngẫu nhiên 50 sinh viên trong một lớp và điểm bài thi thứ hai tương ứng của họ. Kết quả xuất ra từ máy tính trên dữ liệu mẫu như sau:<br/><br/>Hệ số chặn (Intercept) — Hệ số 7,895; Sai số chuẩn 3,66<br/>Biến X 1 (X-Variable 1) — Hệ số 0,957; Sai số chuẩn 0,21<br/><br/>Giả sử mọi điều kiện suy diễn đã được thoả mãn. Hãy tìm thống kê kiểm định cho giả thuyết không rằng hệ số góc của tổng thể bằng 0,5.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D27/q24.png",
           "options": [
             {
@@ -627,7 +627,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2439,
-          "prompt": "<div class=\"ml-en\"><p>An article stated that students in FPT university system take an average of 4.5 years to finish their undergraduate degrees. Suppose you believe that the average time is longer. You conduct a survey of 49 students and obtain a sample mean of 5.1 with a sample standard deviation of 1.2. Assume that time to finish their undergraduate degrees is normally distributed. Calculate the value of the test statistic and the critical values for this test statistic. Use a significance level of 0.05.</p><p>Let $z_{0.05}=1.645$, $z_{0.025}=1.96$, $t_{0.05,48}=1.677$, $t_{0.025,48}=2.011$.</p></div><div class=\"ml-vi\"><p>Một bài báo cho rằng sinh viên hệ đại học FPT mất trung bình 4,5 năm để hoàn thành chương trình. Giả sử bạn tin rằng thời gian trung bình dài hơn thế. Bạn khảo sát 49 sinh viên và thu được trung bình mẫu 5,1 với độ lệch chuẩn mẫu 1,2. Giả thiết thời gian hoàn thành chương trình có phân phối chuẩn. Hãy tính giá trị thống kê kiểm định và giá trị tới hạn cho thống kê này, với mức ý nghĩa 0,05.</p><p>Cho $z_{0,05}=1,645$, $z_{0,025}=1,96$, $t_{0,05;48}=1,677$, $t_{0,025;48}=2,011$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>An article stated that students in FPT university system take an average of 4.5 years to finish their undergraduate degrees. Suppose you believe that the average time is longer. You conduct a survey of 49 students and obtain a sample mean of 5.1 with a sample standard deviation of 1.2. Assume that time to finish their undergraduate degrees is normally distributed. Calculate the value of the test statistic and the critical values for this test statistic. Use a significance level of 0.05.<br/><br/>Let $z_{0.05}=1.645$, $z_{0.025}=1.96$, $t_{0.05,48}=1.677$, $t_{0.025,48}=2.011$.</p></div><div class=\"ml-vi\"><p>Một bài báo cho rằng sinh viên hệ đại học FPT mất trung bình 4,5 năm để hoàn thành chương trình. Giả sử bạn tin rằng thời gian trung bình dài hơn thế. Bạn khảo sát 49 sinh viên và thu được trung bình mẫu 5,1 với độ lệch chuẩn mẫu 1,2. Giả thiết thời gian hoàn thành chương trình có phân phối chuẩn. Hãy tính giá trị thống kê kiểm định và giá trị tới hạn cho thống kê này, với mức ý nghĩa 0,05.<br/><br/>Cho $z_{0,05}=1,645$, $z_{0,025}=1,96$, $t_{0,05;48}=1,677$, $t_{0,025;48}=2,011$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D27/q25.png",
           "options": [
             {
@@ -747,7 +747,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2439,
-          "prompt": "<div class=\"ml-en\"><p>Given the stem-and-leaf plot below (stem = hundreds and tens, leaf = units):</p><p>Stem 58 | Leaf 4 4 9<br/>Stem 59 | Leaf 0 0 2 3 8<br/>Stem 60 | Leaf 0 2 4 5 7 8 9<br/>Stem 61 | Leaf 1 2 4 4 5 6 7 9 9<br/>Stem 62 | Leaf 1 2 3 7</p><p>Find the origin data between 595 and 606.</p></div><div class=\"ml-vi\"><p>Cho biểu đồ thân-lá sau (thân = hàng trăm và hàng chục, lá = hàng đơn vị):</p><p>Thân 58 | Lá 4 4 9<br/>Thân 59 | Lá 0 0 2 3 8<br/>Thân 60 | Lá 0 2 4 5 7 8 9<br/>Thân 61 | Lá 1 2 4 4 5 6 7 9 9<br/>Thân 62 | Lá 1 2 3 7</p><p>Hãy tìm các giá trị gốc nằm giữa 595 và 606.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given the stem-and-leaf plot below (stem = hundreds and tens, leaf = units):<br/><br/>Stem 58 | Leaf 4 4 9<br/>Stem 59 | Leaf 0 0 2 3 8<br/>Stem 60 | Leaf 0 2 4 5 7 8 9<br/>Stem 61 | Leaf 1 2 4 4 5 6 7 9 9<br/>Stem 62 | Leaf 1 2 3 7<br/><br/>Find the origin data between 595 and 606.</p></div><div class=\"ml-vi\"><p>Cho biểu đồ thân-lá sau (thân = hàng trăm và hàng chục, lá = hàng đơn vị):<br/><br/>Thân 58 | Lá 4 4 9<br/>Thân 59 | Lá 0 0 2 3 8<br/>Thân 60 | Lá 0 2 4 5 7 8 9<br/>Thân 61 | Lá 1 2 4 4 5 6 7 9 9<br/>Thân 62 | Lá 1 2 3 7<br/><br/>Hãy tìm các giá trị gốc nằm giữa 595 và 606.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D27/q34.png",
           "options": [
             {
@@ -822,7 +822,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2439,
-          "prompt": "<div class=\"ml-en\"><p>Suppose a study of houses that have sold recently in your community showed the following frequency distribution for the number of bedrooms:</p><p>Bedrooms 1 — Frequency 1<br/>Bedrooms 2 — Frequency 18<br/>Bedrooms 3 — Frequency 140<br/>Bedrooms 4 — Frequency 57<br/>Bedrooms 5 — Frequency 11</p><p>Based on this information, what is the mode for the data?</p></div><div class=\"ml-vi\"><p>Giả sử một nghiên cứu về các căn nhà vừa bán trong khu vực của bạn cho bảng phân phối tần số theo số phòng ngủ như sau:</p><p>1 phòng ngủ — Tần số 1<br/>2 phòng ngủ — Tần số 18<br/>3 phòng ngủ — Tần số 140<br/>4 phòng ngủ — Tần số 57<br/>5 phòng ngủ — Tần số 11</p><p>Dựa vào thông tin này, mốt (mode) của dữ liệu là bao nhiêu?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose a study of houses that have sold recently in your community showed the following frequency distribution for the number of bedrooms:<br/><br/>Bedrooms 1 — Frequency 1<br/>Bedrooms 2 — Frequency 18<br/>Bedrooms 3 — Frequency 140<br/>Bedrooms 4 — Frequency 57<br/>Bedrooms 5 — Frequency 11<br/><br/>Based on this information, what is the mode for the data?</p></div><div class=\"ml-vi\"><p>Giả sử một nghiên cứu về các căn nhà vừa bán trong khu vực của bạn cho bảng phân phối tần số theo số phòng ngủ như sau:<br/><br/>1 phòng ngủ — Tần số 1<br/>2 phòng ngủ — Tần số 18<br/>3 phòng ngủ — Tần số 140<br/>4 phòng ngủ — Tần số 57<br/>5 phòng ngủ — Tần số 11<br/><br/>Dựa vào thông tin này, mốt (mode) của dữ liệu là bao nhiêu?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D27/q38.png",
           "options": [
             {
@@ -876,7 +876,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2439,
-          "prompt": "<div class=\"ml-en\"><p>A computer system uses passwords that are six characters and each character is one of the 26 letters (a-z) or 10 integers (0-9). Uppercase letters are not used. Let A denote the event that a password begins with a vowel (a, e, i, o, u), and let B denote the event that a password ends with an even number (0, 2, 4, 6, 8).</p><p>Suppose a hacker selects a password at random. Determine $P(A\\cup B)$.</p></div><div class=\"ml-vi\"><p>Một hệ thống máy tính dùng mật khẩu gồm sáu ký tự, mỗi ký tự là một trong 26 chữ cái (a-z) hoặc 10 chữ số (0-9). Không dùng chữ in hoa. Gọi A là biến cố mật khẩu bắt đầu bằng một nguyên âm (a, e, i, o, u), và B là biến cố mật khẩu kết thúc bằng một chữ số chẵn (0, 2, 4, 6, 8).</p><p>Giả sử một hacker chọn ngẫu nhiên một mật khẩu. Hãy tính $P(A\\cup B)$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A computer system uses passwords that are six characters and each character is one of the 26 letters (a-z) or 10 integers (0-9). Uppercase letters are not used. Let A denote the event that a password begins with a vowel (a, e, i, o, u), and let B denote the event that a password ends with an even number (0, 2, 4, 6, 8).<br/><br/>Suppose a hacker selects a password at random. Determine $P(A\\cup B)$.</p></div><div class=\"ml-vi\"><p>Một hệ thống máy tính dùng mật khẩu gồm sáu ký tự, mỗi ký tự là một trong 26 chữ cái (a-z) hoặc 10 chữ số (0-9). Không dùng chữ in hoa. Gọi A là biến cố mật khẩu bắt đầu bằng một nguyên âm (a, e, i, o, u), và B là biến cố mật khẩu kết thúc bằng một chữ số chẵn (0, 2, 4, 6, 8).<br/><br/>Giả sử một hacker chọn ngẫu nhiên một mật khẩu. Hãy tính $P(A\\cup B)$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D27/q42.png",
           "options": [
             {
@@ -927,7 +927,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2439,
-          "prompt": "<div class=\"ml-en\"><p>A sample of 25 randomly selected students has a mean test score of 81.5 with a standard deviation of 10.2. Construct a 95% confidence interval for the population mean. Assume the population has a normal distribution.</p><p>Let $t_{0.025,24}=2.06$.</p></div><div class=\"ml-vi\"><p>Một mẫu gồm 25 sinh viên được chọn ngẫu nhiên có điểm kiểm tra trung bình 81,5 với độ lệch chuẩn 10,2. Hãy xây dựng khoảng tin cậy 95% cho trung bình tổng thể. Giả sử tổng thể có phân phối chuẩn.</p><p>Cho $t_{0,025;24}=2,06$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A sample of 25 randomly selected students has a mean test score of 81.5 with a standard deviation of 10.2. Construct a 95% confidence interval for the population mean. Assume the population has a normal distribution.<br/><br/>Let $t_{0.025,24}=2.06$.</p></div><div class=\"ml-vi\"><p>Một mẫu gồm 25 sinh viên được chọn ngẫu nhiên có điểm kiểm tra trung bình 81,5 với độ lệch chuẩn 10,2. Hãy xây dựng khoảng tin cậy 95% cho trung bình tổng thể. Giả sử tổng thể có phân phối chuẩn.<br/><br/>Cho $t_{0,025;24}=2,06$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D27/q45.png",
           "options": [
             {
@@ -954,7 +954,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2439,
-          "prompt": "<div class=\"ml-en\"><p>Suppose the cumulative distribution function of the random variable $X$ is</p><p>$$F(x)=\\begin{cases}0 & x<0\\\\ 0.2x & 0\\le x<5\\\\ 1 & 5\\le x\\end{cases}$$</p><p>Compute $E(X)$.</p></div><div class=\"ml-vi\"><p>Giả sử hàm phân phối tích luỹ của biến ngẫu nhiên $X$ là</p><p>$$F(x)=\\begin{cases}0 & x<0\\\\ 0{,}2x & 0\\le x<5\\\\ 1 & 5\\le x\\end{cases}$$</p><p>Hãy tính $E(X)$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose the cumulative distribution function of the random variable $X$ is<br/><br/>$$F(x)=\\begin{cases}0 & x<0\\\\ 0.2x & 0\\le x<5\\\\ 1 & 5\\le x\\end{cases}$$<br/><br/>Compute $E(X)$.</p></div><div class=\"ml-vi\"><p>Giả sử hàm phân phối tích luỹ của biến ngẫu nhiên $X$ là<br/><br/>$$F(x)=\\begin{cases}0 & x<0\\\\ 0{,}2x & 0\\le x<5\\\\ 1 & 5\\le x\\end{cases}$$<br/><br/>Hãy tính $E(X)$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D27/q46.png",
           "options": [
             {
@@ -1032,7 +1032,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2439,
-          "prompt": "<div class=\"ml-en\"><p>A soft drink manufacturer claims that the average volume of soft drink in its bottle is at least 2000 ml. Express the null hypothesis and the alternative hypothesis in symbolic form.</p><p>(i) $H_0: \\mu = 2000$; $H_1: \\mu > 2000$<br/>(ii) $H_0: \\mu = 2000$; $H_1: \\mu < 2000$<br/>(iii) $H_0: \\mu < 2000$; $H_1: \\mu \\ge 2000$<br/>(iv) $H_0: \\mu > 2000$; $H_1: \\mu \\le 2000$</p></div><div class=\"ml-vi\"><p>Một nhà sản xuất nước giải khát khẳng định rằng thể tích trung bình nước trong mỗi chai của họ ít nhất là 2000 ml. Hãy biểu diễn giả thuyết không và giả thuyết đối dưới dạng ký hiệu.</p><p>(i) $H_0: \\mu = 2000$; $H_1: \\mu > 2000$<br/>(ii) $H_0: \\mu = 2000$; $H_1: \\mu < 2000$<br/>(iii) $H_0: \\mu < 2000$; $H_1: \\mu \\ge 2000$<br/>(iv) $H_0: \\mu > 2000$; $H_1: \\mu \\le 2000$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A soft drink manufacturer claims that the average volume of soft drink in its bottle is at least 2000 ml. Express the null hypothesis and the alternative hypothesis in symbolic form.<br/><br/>(i) $H_0: \\mu = 2000$; $H_1: \\mu > 2000$<br/>(ii) $H_0: \\mu = 2000$; $H_1: \\mu < 2000$<br/>(iii) $H_0: \\mu < 2000$; $H_1: \\mu \\ge 2000$<br/>(iv) $H_0: \\mu > 2000$; $H_1: \\mu \\le 2000$</p></div><div class=\"ml-vi\"><p>Một nhà sản xuất nước giải khát khẳng định rằng thể tích trung bình nước trong mỗi chai của họ ít nhất là 2000 ml. Hãy biểu diễn giả thuyết không và giả thuyết đối dưới dạng ký hiệu.<br/><br/>(i) $H_0: \\mu = 2000$; $H_1: \\mu > 2000$<br/>(ii) $H_0: \\mu = 2000$; $H_1: \\mu < 2000$<br/>(iii) $H_0: \\mu < 2000$; $H_1: \\mu \\ge 2000$<br/>(iv) $H_0: \\mu > 2000$; $H_1: \\mu \\le 2000$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D27/q49.png",
           "options": [
             {

@@ -613,7 +613,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>$P(A\\cap B)=P(A)+P(B)-P(A\\cup B)=0.2+0.3-0.44=0.06$. Since $P(A)P(B)=0.2(0.3)=0.06=P(A\\cap B)$, the events are independent. Since $P(A\\cap B)=0.06\\neq 0$, they are NOT mutually exclusive.</p></div><div class=\"ml-vi\"><p>$P(A\\cap B)=P(A)+P(B)-P(A\\cup B)=0.2+0.3-0.44=0.06$. Vì $P(A)P(B)=0.2(0.3)=0.06=P(A\\cap B)$ nên hai biến cố độc lập. Vì $P(A\\cap B)=0.06\\neq 0$ nên chúng KHÔNG xung khắc.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$P(A\\cap B)=P(A)+P(B)-P(A\\cup B)=0.2+0.3-0.44=0.06$. Since $P(A)P(B)=0.2(0.3)=0.06=P(A\\cap B)$, the events are independent. Since $P(A\\cap B)=0.06<br/>eq 0$, they are NOT mutually exclusive.</p></div><div class=\"ml-vi\"><p>$P(A\\cap B)=P(A)+P(B)-P(A\\cup B)=0.2+0.3-0.44=0.06$. Vì $P(A)P(B)=0.2(0.3)=0.06=P(A\\cap B)$ nên hai biến cố độc lập. Vì $P(A\\cap B)=0.06<br/>eq 0$ nên chúng KHÔNG xung khắc.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -778,12 +778,12 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\"><p>A valid pmf needs every $P(x)\\ge 0$ and $\\sum P(x)=1$. (i) has $P=-0.25<0$ (and sums to 1.00 only by accident) - invalid. (ii) sums to $0.325+0.406+0.164=0.895\\neq 1$ - invalid. (iii) sums to $0.13+0.27+0.28+0.18+0.14=1.00$ - valid. (iv) sums to $0.15+0.15+0.20+0.40+0.10=1.00$ - valid. So $2$ of them are valid.</p></div><div class=\"ml-vi\"><p>Một pmf hợp lệ cần mọi $P(x)\\ge 0$ và $\\sum P(x)=1$. (i) có $P=-0.25<0$ - không hợp lệ. (ii) tổng $0.325+0.406+0.164=0.895\\neq 1$ - không hợp lệ. (iii) tổng $0.13+0.27+0.28+0.18+0.14=1.00$ - hợp lệ. (iv) tổng $0.15+0.15+0.20+0.40+0.10=1.00$ - hợp lệ. Vậy có $2$ bảng hợp lệ.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>A valid pmf needs every $P(x)\\ge 0$ and $\\sum P(x)=1$. (i) has $P=-0.25<0$ (and sums to 1.00 only by accident) - invalid. (ii) sums to $0.325+0.406+0.164=0.895<br/>eq 1$ - invalid. (iii) sums to $0.13+0.27+0.28+0.18+0.14=1.00$ - valid. (iv) sums to $0.15+0.15+0.20+0.40+0.10=1.00$ - valid. So $2$ of them are valid.</p></div><div class=\"ml-vi\"><p>Một pmf hợp lệ cần mọi $P(x)\\ge 0$ và $\\sum P(x)=1$. (i) có $P=-0.25<0$ - không hợp lệ. (ii) tổng $0.325+0.406+0.164=0.895<br/>eq 1$ - không hợp lệ. (iii) tổng $0.13+0.27+0.28+0.18+0.14=1.00$ - hợp lệ. (iv) tổng $0.15+0.15+0.20+0.40+0.10=1.00$ - hợp lệ. Vậy có $2$ bảng hợp lệ.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Consider the hypothesis test $H_0: p_1=p_2$ against $H_1: p_1\\neq p_2$. Suppose that sample sizes $n_1=1000$ and $n_2=900$, and that $X_1=900$ and $X_2=720$. Compute the value of the test statistic.</p></div><div class=\"ml-vi\"><p>Xét bài toán kiểm định $H_0: p_1=p_2$ đối với $H_1: p_1\\neq p_2$. Giả sử cỡ mẫu $n_1=1000$ và $n_2=900$, với $X_1=900$ và $X_2=720$. Tính giá trị thống kê kiểm định.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Consider the hypothesis test $H_0: p_1=p_2$ against $H_1: p_1<br/>eq p_2$. Suppose that sample sizes $n_1=1000$ and $n_2=900$, and that $X_1=900$ and $X_2=720$. Compute the value of the test statistic.</p></div><div class=\"ml-vi\"><p>Xét bài toán kiểm định $H_0: p_1=p_2$ đối với $H_1: p_1<br/>eq p_2$. Giả sử cỡ mẫu $n_1=1000$ và $n_2=900$, với $X_1=900$ và $X_2=720$. Tính giá trị thống kê kiểm định.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D28/q30.png",
           "options": [
             {
@@ -933,7 +933,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Consider the hypothesis test $H_0: \\mu_1=\\mu_2$ against $H_1: \\mu_1\\neq\\mu_2$. The sample statistics are given below: $n_1=11$, $\\bar x_1=9.8$, $s_1^2=3$; $n_2=16$, $\\bar x_2=8.2$, $s_2^2=4$. Assume that $\\sigma_1^2=\\sigma_2^2$ and that the data are drawn from normal distributions. Compute the value of the test statistic.</p></div><div class=\"ml-vi\"><p>Xét bài toán kiểm định $H_0: \\mu_1=\\mu_2$ đối với $H_1: \\mu_1\\neq\\mu_2$. Thống kê mẫu: $n_1=11$, $\\bar x_1=9.8$, $s_1^2=3$; $n_2=16$, $\\bar x_2=8.2$, $s_2^2=4$. Giả sử $\\sigma_1^2=\\sigma_2^2$ và dữ liệu lấy từ các phân phối chuẩn. Tính giá trị thống kê kiểm định.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Consider the hypothesis test $H_0: \\mu_1=\\mu_2$ against $H_1: \\mu_1<br/>eq\\mu_2$. The sample statistics are given below: $n_1=11$, $\\bar x_1=9.8$, $s_1^2=3$; $n_2=16$, $\\bar x_2=8.2$, $s_2^2=4$. Assume that $\\sigma_1^2=\\sigma_2^2$ and that the data are drawn from normal distributions. Compute the value of the test statistic.</p></div><div class=\"ml-vi\"><p>Xét bài toán kiểm định $H_0: \\mu_1=\\mu_2$ đối với $H_1: \\mu_1<br/>eq\\mu_2$. Thống kê mẫu: $n_1=11$, $\\bar x_1=9.8$, $s_1^2=3$; $n_2=16$, $\\bar x_2=8.2$, $s_2^2=4$. Giả sử $\\sigma_1^2=\\sigma_2^2$ và dữ liệu lấy từ các phân phối chuẩn. Tính giá trị thống kê kiểm định.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D28/q36.png",
           "options": [
             {
@@ -1005,7 +1005,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Suppose that $1000$ customers are surveyed and $960$ are satisfied or very satisfied with a corporation&#39;s products and services. Compute the test statistic when testing the hypothesis $H_0: p=0.95$ against $H_1: p\\neq 0.95$ at $\\alpha=0.01$.</p></div><div class=\"ml-vi\"><p>Giả sử khảo sát $1000$ khách hàng thì có $960$ người hài lòng hoặc rất hài lòng với sản phẩm và dịch vụ của công ty. Tính thống kê kiểm định khi kiểm định $H_0: p=0.95$ đối với $H_1: p\\neq 0.95$ ở mức $\\alpha=0.01$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose that $1000$ customers are surveyed and $960$ are satisfied or very satisfied with a corporation&#39;s products and services. Compute the test statistic when testing the hypothesis $H_0: p=0.95$ against $H_1: p<br/>eq 0.95$ at $\\alpha=0.01$.</p></div><div class=\"ml-vi\"><p>Giả sử khảo sát $1000$ khách hàng thì có $960$ người hài lòng hoặc rất hài lòng với sản phẩm và dịch vụ của công ty. Tính thống kê kiểm định khi kiểm định $H_0: p=0.95$ đối với $H_1: p<br/>eq 0.95$ ở mức $\\alpha=0.01$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D28/q39.png",
           "options": [
             {
@@ -1113,7 +1113,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Find the critical value for a two-tailed test $H_1: \\mu\\neq 10$, $\\alpha=0.01$, $n=30$. Assume that the data are normally distributed. Let $z_{0.05}=1.645$, $z_{0.025}=1.96$, $z_{0.01}=2.33$, $t_{0.005,29}=2.756$.</p></div><div class=\"ml-vi\"><p>Tìm giá trị tới hạn cho kiểm định hai phía $H_1: \\mu\\neq 10$, $\\alpha=0.01$, $n=30$. Giả sử dữ liệu tuân theo phân phối chuẩn. Cho $z_{0.05}=1.645$, $z_{0.025}=1.96$, $z_{0.01}=2.33$, $t_{0.005,29}=2.756$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find the critical value for a two-tailed test $H_1: \\mu<br/>eq 10$, $\\alpha=0.01$, $n=30$. Assume that the data are normally distributed. Let $z_{0.05}=1.645$, $z_{0.025}=1.96$, $z_{0.01}=2.33$, $t_{0.005,29}=2.756$.</p></div><div class=\"ml-vi\"><p>Tìm giá trị tới hạn cho kiểm định hai phía $H_1: \\mu<br/>eq 10$, $\\alpha=0.01$, $n=30$. Giả sử dữ liệu tuân theo phân phối chuẩn. Cho $z_{0.05}=1.645$, $z_{0.025}=1.96$, $z_{0.01}=2.33$, $t_{0.005,29}=2.756$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D28/q43.png",
           "options": [
             {
@@ -1272,7 +1272,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>A soft drink company has a filling machine that can be set at different levels to produce different average fill amounts. The company sets the machine to provide a mean fill of $12$ ounces. The standard deviation on the machine is known to be $0.20$ ounces. Assuming that the hypothesis test is to be performed using a random sample of $n=100$ cans, which of the following would be the correct formulation of the null and alternative? (i) $H_0: \\mu\\neq 12$ ounces, $H_1: \\mu=12$ ounces. (ii) $H_0: \\mu=12$ ounces, $H_1: \\mu\\neq 12$ ounces. (iii) $H_0: \\bar x\\le 12$ ounces, $H_1: \\bar x>12$ ounces.</p></div><div class=\"ml-vi\"><p>Một công ty nước giải khát có máy chiết rót có thể đặt ở nhiều mức để cho ra các lượng rót trung bình khác nhau. Công ty đặt máy ở mức trung bình $12$ ounce. Độ lệch chuẩn của máy đã biết là $0.20$ ounce. Giả sử kiểm định giả thuyết được thực hiện với mẫu ngẫu nhiên $n=100$ lon, cách phát biểu giả thuyết không và đối thuyết nào sau đây là đúng? (i) $H_0: \\mu\\neq 12$ ounce, $H_1: \\mu=12$ ounce. (ii) $H_0: \\mu=12$ ounce, $H_1: \\mu\\neq 12$ ounce. (iii) $H_0: \\bar x\\le 12$ ounce, $H_1: \\bar x>12$ ounce.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A soft drink company has a filling machine that can be set at different levels to produce different average fill amounts. The company sets the machine to provide a mean fill of $12$ ounces. The standard deviation on the machine is known to be $0.20$ ounces. Assuming that the hypothesis test is to be performed using a random sample of $n=100$ cans, which of the following would be the correct formulation of the null and alternative? (i) $H_0: \\mu<br/>eq 12$ ounces, $H_1: \\mu=12$ ounces. (ii) $H_0: \\mu=12$ ounces, $H_1: \\mu<br/>eq 12$ ounces. (iii) $H_0: \\bar x\\le 12$ ounces, $H_1: \\bar x>12$ ounces.</p></div><div class=\"ml-vi\"><p>Một công ty nước giải khát có máy chiết rót có thể đặt ở nhiều mức để cho ra các lượng rót trung bình khác nhau. Công ty đặt máy ở mức trung bình $12$ ounce. Độ lệch chuẩn của máy đã biết là $0.20$ ounce. Giả sử kiểm định giả thuyết được thực hiện với mẫu ngẫu nhiên $n=100$ lon, cách phát biểu giả thuyết không và đối thuyết nào sau đây là đúng? (i) $H_0: \\mu<br/>eq 12$ ounce, $H_1: \\mu=12$ ounce. (ii) $H_0: \\mu=12$ ounce, $H_1: \\mu<br/>eq 12$ ounce. (iii) $H_0: \\bar x\\le 12$ ounce, $H_1: \\bar x>12$ ounce.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D28/q49.png",
           "options": [
             {
@@ -1291,7 +1291,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Two rules settle it: the null hypothesis must contain the equality, and hypotheses are written about the POPULATION parameter $\\mu$, never about the sample statistic $\\bar x$. That rules out (i) (equality in $H_1$) and (iii) (written about $\\bar x$), leaving (ii): $H_0:\\mu=12$ vs $H_1:\\mu\\neq 12$.</p></div><div class=\"ml-vi\"><p>Hai quy tắc quyết định: giả thuyết không phải chứa dấu bằng, và giả thuyết luôn viết cho tham số TỔNG THỂ $\\mu$, không bao giờ cho thống kê mẫu $\\bar x$. Điều đó loại (i) (dấu bằng nằm ở $H_1$) và (iii) (viết theo $\\bar x$), còn lại (ii): $H_0:\\mu=12$ đối với $H_1:\\mu\\neq 12$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Two rules settle it: the null hypothesis must contain the equality, and hypotheses are written about the POPULATION parameter $\\mu$, never about the sample statistic $\\bar x$. That rules out (i) (equality in $H_1$) and (iii) (written about $\\bar x$), leaving (ii): $H_0:\\mu=12$ vs $H_1:\\mu<br/>eq 12$.</p></div><div class=\"ml-vi\"><p>Hai quy tắc quyết định: giả thuyết không phải chứa dấu bằng, và giả thuyết luôn viết cho tham số TỔNG THỂ $\\mu$, không bao giờ cho thống kê mẫu $\\bar x$. Điều đó loại (i) (dấu bằng nằm ở $H_1$) và (iii) (viết theo $\\bar x$), còn lại (ii): $H_0:\\mu=12$ đối với $H_1:\\mu<br/>eq 12$.</p></div>"
         }
       ]
     }

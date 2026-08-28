@@ -76,12 +76,16 @@ function esc(s) {
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
-// Escape HTML but KEEP $…$ / $$…$$ math segments verbatim so KaTeX can render
-// them (escaping < > inside math would corrupt e.g. \lt, and escaping is not
-// needed there anyway — KaTeX reads raw text).
-const MATH_SEG = /(\$\$[\s\S]*?\$\$|\$[^$\n]*?\$)/g;
+// Escape HTML but KEEP $…$ / $$…$$ math segments AND a small allow-listed set
+// of HTML constructs (produced by a bank's own markdown-to-HTML normalization
+// — <br/>, <strong>…</strong>, <table>…</table>, <ul>…</ul>) verbatim, so
+// KaTeX can render math and these tags aren't double-escaped into literal
+// "&lt;br/&gt;" text. Escaping < > inside math would also corrupt e.g. \lt.
+const MATH_SEG = /\$\$[\s\S]*?\$\$|\$[^$\n]*?\$/;
+const SAFE_HTML_SEG = /<br\/>|<strong>[\s\S]*?<\/strong>|<table[^>]*>[\s\S]*?<\/table>|<ul>[\s\S]*?<\/ul>/;
+const PROTECTED_SEG = new RegExp(`(${MATH_SEG.source}|${SAFE_HTML_SEG.source})`, 'g');
 function escKeepMath(s) {
-  return String(s).split(MATH_SEG).map((part, i) => (i % 2 ? part : esc(part))).join('');
+  return String(s).split(PROTECTED_SEG).map((part, i) => (i % 2 ? part : esc(part))).join('');
 }
 
 function textToHtml(s) {

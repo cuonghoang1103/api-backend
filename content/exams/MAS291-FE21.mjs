@@ -180,7 +180,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Use the data from the bar graph to complete the frequency distribution. The bar graph shows these counts: $x=1$ has height 1, $x=2$ has height 1, $x=3$ has height 8, $x=4$ has height 5, $x=5$ has height 7, $x=6$ has height 2, $x=7$ has height 3, $x=8$ has height 1.&lt;br/&gt;Candidate tables:&lt;br/&gt;(i) $x$: 1, 2, 3, 4, 5, 6, 7, 8 — Frequency: 1, 1, 8, 5, 7, 2, 3, 1.&lt;br/&gt;(ii) $x$: $\\le 1$, $\\le 2$, $\\le 3$, $\\le 4$, $\\le 5$, $\\le 6$, $\\le 7$, $\\le 8$ — Frequency: 1, 2, 10, 15, 22, 24, 27, 28.&lt;br/&gt;(iii) $x$: $\\le 1$, $\\le 2$, $\\le 3$, $\\le 4$, $\\le 5$, $\\le 6$, $\\le 7$, $\\le 8$ — Frequency: 1, 1, 8, 5, 7, 2, 3, 1.</p></div><div class=\"ml-vi\"><p>Dùng dữ liệu từ biểu đồ cột để hoàn thành bảng phân phối tần số. Biểu đồ cột cho các số đếm: $x=1$ cao 1, $x=2$ cao 1, $x=3$ cao 8, $x=4$ cao 5, $x=5$ cao 7, $x=6$ cao 2, $x=7$ cao 3, $x=8$ cao 1.&lt;br/&gt;Các bảng ứng viên:&lt;br/&gt;(i) $x$: 1, 2, 3, 4, 5, 6, 7, 8 — Tần số: 1, 1, 8, 5, 7, 2, 3, 1.&lt;br/&gt;(ii) $x$: $\\le 1$, $\\le 2$, $\\le 3$, $\\le 4$, $\\le 5$, $\\le 6$, $\\le 7$, $\\le 8$ — Tần số: 1, 2, 10, 15, 22, 24, 27, 28.&lt;br/&gt;(iii) $x$: $\\le 1$, $\\le 2$, $\\le 3$, $\\le 4$, $\\le 5$, $\\le 6$, $\\le 7$, $\\le 8$ — Tần số: 1, 1, 8, 5, 7, 2, 3, 1.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Use the data from the bar graph to complete the frequency distribution. The bar graph shows these counts: $x=1$ has height 1, $x=2$ has height 1, $x=3$ has height 8, $x=4$ has height 5, $x=5$ has height 7, $x=6$ has height 2, $x=7$ has height 3, $x=8$ has height 1.<br/>Candidate tables:<br/>(i) $x$: 1, 2, 3, 4, 5, 6, 7, 8 — Frequency: 1, 1, 8, 5, 7, 2, 3, 1.<br/>(ii) $x$: $\\le 1$, $\\le 2$, $\\le 3$, $\\le 4$, $\\le 5$, $\\le 6$, $\\le 7$, $\\le 8$ — Frequency: 1, 2, 10, 15, 22, 24, 27, 28.<br/>(iii) $x$: $\\le 1$, $\\le 2$, $\\le 3$, $\\le 4$, $\\le 5$, $\\le 6$, $\\le 7$, $\\le 8$ — Frequency: 1, 1, 8, 5, 7, 2, 3, 1.</p></div><div class=\"ml-vi\"><p>Dùng dữ liệu từ biểu đồ cột để hoàn thành bảng phân phối tần số. Biểu đồ cột cho các số đếm: $x=1$ cao 1, $x=2$ cao 1, $x=3$ cao 8, $x=4$ cao 5, $x=5$ cao 7, $x=6$ cao 2, $x=7$ cao 3, $x=8$ cao 1.<br/>Các bảng ứng viên:<br/>(i) $x$: 1, 2, 3, 4, 5, 6, 7, 8 — Tần số: 1, 1, 8, 5, 7, 2, 3, 1.<br/>(ii) $x$: $\\le 1$, $\\le 2$, $\\le 3$, $\\le 4$, $\\le 5$, $\\le 6$, $\\le 7$, $\\le 8$ — Tần số: 1, 2, 10, 15, 22, 24, 27, 28.<br/>(iii) $x$: $\\le 1$, $\\le 2$, $\\le 3$, $\\le 4$, $\\le 5$, $\\le 6$, $\\le 7$, $\\le 8$ — Tần số: 1, 1, 8, 5, 7, 2, 3, 1.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D21/q7.png",
           "options": [
             {
@@ -258,7 +258,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A large retail company gives an employment screening test to all prospective employees. If a prospective employee receives a report saying that she scored at the 2nd quartile, then which of the following statements are correct?&lt;br/&gt;(i) she scored at the 50th percentile.&lt;br/&gt;(ii) she scored at the median.</p></div><div class=\"ml-vi\"><p>Một công ty bán lẻ lớn cho mọi ứng viên làm bài kiểm tra sàng lọc tuyển dụng. Nếu một ứng viên nhận được báo cáo nói rằng cô ấy đạt mức tứ phân vị thứ 2, thì phát biểu nào sau đây là đúng?&lt;br/&gt;(i) cô ấy đạt phân vị thứ 50.&lt;br/&gt;(ii) cô ấy đạt mức trung vị.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A large retail company gives an employment screening test to all prospective employees. If a prospective employee receives a report saying that she scored at the 2nd quartile, then which of the following statements are correct?<br/>(i) she scored at the 50th percentile.<br/>(ii) she scored at the median.</p></div><div class=\"ml-vi\"><p>Một công ty bán lẻ lớn cho mọi ứng viên làm bài kiểm tra sàng lọc tuyển dụng. Nếu một ứng viên nhận được báo cáo nói rằng cô ấy đạt mức tứ phân vị thứ 2, thì phát biểu nào sau đây là đúng?<br/>(i) cô ấy đạt phân vị thứ 50.<br/>(ii) cô ấy đạt mức trung vị.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D21/q10.png",
           "options": [
             {
@@ -358,7 +358,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>$H_0: p=0.5$ vs $H_1: p\\ne 0.5$. With $\\hat p = 530/1000 = 0.53$, $z=\\dfrac{\\hat p - p_0}{\\sqrt{p_0(1-p_0)/n}}=\\dfrac{0.53-0.50}{\\sqrt{0.25/1000}}=\\dfrac{0.03}{0.015811}=1.897$.</p></div><div class=\"ml-vi\"><p>$H_0: p=0.5$ và $H_1: p\\ne 0.5$. Với $\\hat p = 530/1000 = 0.53$, $z=\\dfrac{\\hat p - p_0}{\\sqrt{p_0(1-p_0)/n}}=\\dfrac{0.53-0.50}{\\sqrt{0.25/1000}}=\\dfrac{0.03}{0.015811}=1.897$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$H_0: p=0.5$ vs $H_1: p<br/>e 0.5$. With $\\hat p = 530/1000 = 0.53$, $z=\\dfrac{\\hat p - p_0}{\\sqrt{p_0(1-p_0)/n}}=\\dfrac{0.53-0.50}{\\sqrt{0.25/1000}}=\\dfrac{0.03}{0.015811}=1.897$.</p></div><div class=\"ml-vi\"><p>$H_0: p=0.5$ và $H_1: p<br/>e 0.5$. Với $\\hat p = 530/1000 = 0.53$, $z=\\dfrac{\\hat p - p_0}{\\sqrt{p_0(1-p_0)/n}}=\\dfrac{0.53-0.50}{\\sqrt{0.25/1000}}=\\dfrac{0.03}{0.015811}=1.897$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -484,7 +484,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>$E(X)=0(0.4521)+1(0.3970)+2(0.1307)+3(0.0191)+4(0.0011)=0.3970+0.2614+0.0573+0.0044=0.7201$.&lt;br/&gt;$E(X^2)=0+1(0.3970)+4(0.1307)+9(0.0191)+16(0.0011)=0.3970+0.5228+0.1719+0.0176=1.1093$.&lt;br/&gt;$\\mathrm{Var}(X)=E(X^2)-[E(X)]^2=1.1093-0.7201^2=1.1093-0.5185=0.5908\\approx0.59$.</p></div><div class=\"ml-vi\"><p>$E(X)=0(0.4521)+1(0.3970)+2(0.1307)+3(0.0191)+4(0.0011)=0.3970+0.2614+0.0573+0.0044=0.7201$.&lt;br/&gt;$E(X^2)=0+1(0.3970)+4(0.1307)+9(0.0191)+16(0.0011)=0.3970+0.5228+0.1719+0.0176=1.1093$.&lt;br/&gt;$\\mathrm{Var}(X)=E(X^2)-[E(X)]^2=1.1093-0.7201^2=1.1093-0.5185=0.5908\\approx0.59$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$E(X)=0(0.4521)+1(0.3970)+2(0.1307)+3(0.0191)+4(0.0011)=0.3970+0.2614+0.0573+0.0044=0.7201$.<br/>$E(X^2)=0+1(0.3970)+4(0.1307)+9(0.0191)+16(0.0011)=0.3970+0.5228+0.1719+0.0176=1.1093$.<br/>$\\mathrm{Var}(X)=E(X^2)-[E(X)]^2=1.1093-0.7201^2=1.1093-0.5185=0.5908\\approx0.59$.</p></div><div class=\"ml-vi\"><p>$E(X)=0(0.4521)+1(0.3970)+2(0.1307)+3(0.0191)+4(0.0011)=0.3970+0.2614+0.0573+0.0044=0.7201$.<br/>$E(X^2)=0+1(0.3970)+4(0.1307)+9(0.0191)+16(0.0011)=0.3970+0.5228+0.1719+0.0176=1.1093$.<br/>$\\mathrm{Var}(X)=E(X^2)-[E(X)]^2=1.1093-0.7201^2=1.1093-0.5185=0.5908\\approx0.59$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -681,7 +681,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Consider the following stem and leaf display.&lt;br/&gt;3 | 1 1 1 4 5&lt;br/&gt;4 | 4 6 7&lt;br/&gt;5 | 0 0 4 5 6 6 8 9&lt;br/&gt;6 | 1 3 3 6&lt;br/&gt;Which of the following statements is correct?</p></div><div class=\"ml-vi\"><p>Xét biểu đồ thân-lá sau.&lt;br/&gt;3 | 1 1 1 4 5&lt;br/&gt;4 | 4 6 7&lt;br/&gt;5 | 0 0 4 5 6 6 8 9&lt;br/&gt;6 | 1 3 3 6&lt;br/&gt;Phát biểu nào sau đây là đúng?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Consider the following stem and leaf display.<br/>3 | 1 1 1 4 5<br/>4 | 4 6 7<br/>5 | 0 0 4 5 6 6 8 9<br/>6 | 1 3 3 6<br/>Which of the following statements is correct?</p></div><div class=\"ml-vi\"><p>Xét biểu đồ thân-lá sau.<br/>3 | 1 1 1 4 5<br/>4 | 4 6 7<br/>5 | 0 0 4 5 6 6 8 9<br/>6 | 1 3 3 6<br/>Phát biểu nào sau đây là đúng?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D21/q27.png",
           "options": [
             {
@@ -708,7 +708,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Suppose data is obtained from 27 pairs of $(x,y)$ and the sample correlation coefficient is 0.85. Test the hypothesis that $H_0:\\rho=0$ against $H_1:\\rho\\ne 0$ with $\\alpha=0.05$. Let $t_{0.025,25}=2.060$.</p></div><div class=\"ml-vi\"><p>Giả sử dữ liệu thu được từ 27 cặp $(x,y)$ và hệ số tương quan mẫu là 0.85. Hãy kiểm định giả thuyết $H_0:\\rho=0$ đối lập $H_1:\\rho\\ne 0$ với $\\alpha=0.05$. Cho $t_{0.025,25}=2.060$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose data is obtained from 27 pairs of $(x,y)$ and the sample correlation coefficient is 0.85. Test the hypothesis that $H_0:\\rho=0$ against $H_1:\\rho<br/>e 0$ with $\\alpha=0.05$. Let $t_{0.025,25}=2.060$.</p></div><div class=\"ml-vi\"><p>Giả sử dữ liệu thu được từ 27 cặp $(x,y)$ và hệ số tương quan mẫu là 0.85. Hãy kiểm định giả thuyết $H_0:\\rho=0$ đối lập $H_1:\\rho<br/>e 0$ với $\\alpha=0.05$. Cho $t_{0.025,25}=2.060$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D21/q28.png",
           "options": [
             {
@@ -726,7 +726,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>An article described a study of investigating the relationship between the age ($x$) and length ($y$) of 5 captured dugongs:&lt;br/&gt;$x$: 1.0, 1.5, 1.5, 2.5, 4.0&lt;br/&gt;$y$: 1.80, 1.85, 1.87, 2.02, 2.27&lt;br/&gt;Find the best point estimate of the slope of regression line between $x$ and $y$.</p></div><div class=\"ml-vi\"><p>Một bài báo mô tả nghiên cứu về mối quan hệ giữa tuổi ($x$) và chiều dài ($y$) của 5 con bò biển bắt được:&lt;br/&gt;$x$: 1.0, 1.5, 1.5, 2.5, 4.0&lt;br/&gt;$y$: 1.80, 1.85, 1.87, 2.02, 2.27&lt;br/&gt;Hãy tìm ước lượng điểm tốt nhất cho hệ số góc của đường hồi quy giữa $x$ và $y$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>An article described a study of investigating the relationship between the age ($x$) and length ($y$) of 5 captured dugongs:<br/>$x$: 1.0, 1.5, 1.5, 2.5, 4.0<br/>$y$: 1.80, 1.85, 1.87, 2.02, 2.27<br/>Find the best point estimate of the slope of regression line between $x$ and $y$.</p></div><div class=\"ml-vi\"><p>Một bài báo mô tả nghiên cứu về mối quan hệ giữa tuổi ($x$) và chiều dài ($y$) của 5 con bò biển bắt được:<br/>$x$: 1.0, 1.5, 1.5, 2.5, 4.0<br/>$y$: 1.80, 1.85, 1.87, 2.02, 2.27<br/>Hãy tìm ước lượng điểm tốt nhất cho hệ số góc của đường hồi quy giữa $x$ và $y$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D21/q29.png",
           "options": [
             {
@@ -748,12 +748,12 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\"><p>$\\bar x = 10.5/5 = 2.1$, $\\bar y = 9.81/5 = 1.962$.&lt;br/&gt;$S_{xy}=\\sum(x-\\bar x)(y-\\bar y) = (-1.1)(-0.162)+(-0.6)(-0.112)+(-0.6)(-0.092)+(0.4)(0.058)+(1.9)(0.308) = 0.1782+0.0672+0.0552+0.0232+0.5852 = 0.909$.&lt;br/&gt;$S_{xx}=\\sum(x-\\bar x)^2 = 1.21+0.36+0.36+0.16+3.61 = 5.70$.&lt;br/&gt;$\\hat\\beta_1 = S_{xy}/S_{xx} = 0.909/5.70 = 0.1595$.</p></div><div class=\"ml-vi\"><p>$\\bar x = 10.5/5 = 2.1$, $\\bar y = 9.81/5 = 1.962$.&lt;br/&gt;$S_{xy}=\\sum(x-\\bar x)(y-\\bar y) = (-1.1)(-0.162)+(-0.6)(-0.112)+(-0.6)(-0.092)+(0.4)(0.058)+(1.9)(0.308) = 0.1782+0.0672+0.0552+0.0232+0.5852 = 0.909$.&lt;br/&gt;$S_{xx}=\\sum(x-\\bar x)^2 = 1.21+0.36+0.36+0.16+3.61 = 5.70$.&lt;br/&gt;$\\hat\\beta_1 = S_{xy}/S_{xx} = 0.909/5.70 = 0.1595$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$\\bar x = 10.5/5 = 2.1$, $\\bar y = 9.81/5 = 1.962$.<br/>$S_{xy}=\\sum(x-\\bar x)(y-\\bar y) = (-1.1)(-0.162)+(-0.6)(-0.112)+(-0.6)(-0.092)+(0.4)(0.058)+(1.9)(0.308) = 0.1782+0.0672+0.0552+0.0232+0.5852 = 0.909$.<br/>$S_{xx}=\\sum(x-\\bar x)^2 = 1.21+0.36+0.36+0.16+3.61 = 5.70$.<br/>$\\hat\\beta_1 = S_{xy}/S_{xx} = 0.909/5.70 = 0.1595$.</p></div><div class=\"ml-vi\"><p>$\\bar x = 10.5/5 = 2.1$, $\\bar y = 9.81/5 = 1.962$.<br/>$S_{xy}=\\sum(x-\\bar x)(y-\\bar y) = (-1.1)(-0.162)+(-0.6)(-0.112)+(-0.6)(-0.092)+(0.4)(0.058)+(1.9)(0.308) = 0.1782+0.0672+0.0552+0.0232+0.5852 = 0.909$.<br/>$S_{xx}=\\sum(x-\\bar x)^2 = 1.21+0.36+0.36+0.16+3.61 = 5.70$.<br/>$\\hat\\beta_1 = S_{xy}/S_{xx} = 0.909/5.70 = 0.1595$.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A bearing used in an automotive application is supposed to have a nominal inside diameter of 1.5 inches. A random sample of 36 bearings is selected and the average inside diameter of these bearings is 1.4895 inches. Bearing diameter is known to be normally distributed with standard deviation $\\sigma = 0.02$ inch. Test the hypotheses $H_0:\\mu=1.5$ versus $H_1:\\mu\\ne 1.5$ using $\\alpha=0.01$. Let $z_{0.01}=2.326$, $z_{0.005}=2.576$.</p></div><div class=\"ml-vi\"><p>Một loại vòng bi dùng trong ô tô được cho là có đường kính trong danh nghĩa 1.5 inch. Lấy mẫu ngẫu nhiên 36 vòng bi thì đường kính trong trung bình là 1.4895 inch. Đường kính vòng bi phân phối chuẩn với độ lệch chuẩn $\\sigma = 0.02$ inch. Hãy kiểm định $H_0:\\mu=1.5$ đối lập $H_1:\\mu\\ne 1.5$ với $\\alpha=0.01$. Cho $z_{0.01}=2.326$, $z_{0.005}=2.576$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A bearing used in an automotive application is supposed to have a nominal inside diameter of 1.5 inches. A random sample of 36 bearings is selected and the average inside diameter of these bearings is 1.4895 inches. Bearing diameter is known to be normally distributed with standard deviation $\\sigma = 0.02$ inch. Test the hypotheses $H_0:\\mu=1.5$ versus $H_1:\\mu<br/>e 1.5$ using $\\alpha=0.01$. Let $z_{0.01}=2.326$, $z_{0.005}=2.576$.</p></div><div class=\"ml-vi\"><p>Một loại vòng bi dùng trong ô tô được cho là có đường kính trong danh nghĩa 1.5 inch. Lấy mẫu ngẫu nhiên 36 vòng bi thì đường kính trong trung bình là 1.4895 inch. Đường kính vòng bi phân phối chuẩn với độ lệch chuẩn $\\sigma = 0.02$ inch. Hãy kiểm định $H_0:\\mu=1.5$ đối lập $H_1:\\mu<br/>e 1.5$ với $\\alpha=0.01$. Cho $z_{0.01}=2.326$, $z_{0.005}=2.576$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D21/q30.png",
           "options": [
             {
@@ -876,7 +876,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>English and Chinese grades of 5 students are as below:&lt;br/&gt;Student 1: English grade $X=5$, Chinese grade $Y=6$&lt;br/&gt;Student 2: $X=6$, $Y=8$&lt;br/&gt;Student 3: $X=7$, $Y=5$&lt;br/&gt;Student 4: $X=4$, $Y=6$&lt;br/&gt;Student 5: $X=9$, $Y=9$&lt;br/&gt;We want to do linear regression analysis on $X$ and $Y$. Given the standard error estimate $\\hat\\sigma = 1.56$, calculate the standard error of the intercept $\\hat\\beta_0$.</p></div><div class=\"ml-vi\"><p>Điểm tiếng Anh và tiếng Trung của 5 sinh viên như sau:&lt;br/&gt;Sinh viên 1: điểm Anh $X=5$, điểm Trung $Y=6$&lt;br/&gt;Sinh viên 2: $X=6$, $Y=8$&lt;br/&gt;Sinh viên 3: $X=7$, $Y=5$&lt;br/&gt;Sinh viên 4: $X=4$, $Y=6$&lt;br/&gt;Sinh viên 5: $X=9$, $Y=9$&lt;br/&gt;Ta muốn phân tích hồi quy tuyến tính giữa $X$ và $Y$. Cho ước lượng sai số chuẩn $\\hat\\sigma = 1.56$, hãy tính sai số chuẩn của hệ số chặn $\\hat\\beta_0$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>English and Chinese grades of 5 students are as below:<br/>Student 1: English grade $X=5$, Chinese grade $Y=6$<br/>Student 2: $X=6$, $Y=8$<br/>Student 3: $X=7$, $Y=5$<br/>Student 4: $X=4$, $Y=6$<br/>Student 5: $X=9$, $Y=9$<br/>We want to do linear regression analysis on $X$ and $Y$. Given the standard error estimate $\\hat\\sigma = 1.56$, calculate the standard error of the intercept $\\hat\\beta_0$.</p></div><div class=\"ml-vi\"><p>Điểm tiếng Anh và tiếng Trung của 5 sinh viên như sau:<br/>Sinh viên 1: điểm Anh $X=5$, điểm Trung $Y=6$<br/>Sinh viên 2: $X=6$, $Y=8$<br/>Sinh viên 3: $X=7$, $Y=5$<br/>Sinh viên 4: $X=4$, $Y=6$<br/>Sinh viên 5: $X=9$, $Y=9$<br/>Ta muốn phân tích hồi quy tuyến tính giữa $X$ và $Y$. Cho ước lượng sai số chuẩn $\\hat\\sigma = 1.56$, hãy tính sai số chuẩn của hệ số chặn $\\hat\\beta_0$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D21/q35.png",
           "options": [
             {
@@ -1098,7 +1098,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The cumulative distribution function of the random variable $X$ is defined by<br/>$$F(x)=\\begin{cases}0 & , x<0\\\\ 1-e^{-x/3} & , x\\ge 0.\\end{cases}$$<br/>Determine the probability density function of $X$.&lt;br/&gt;(i) $f(x)=\\dfrac{e^{-x/3}}{3}$ when $x\\ge 0$ and $f(x)=0$ when $x<0$.&lt;br/&gt;(ii) $f(x)=\\dfrac{e^{-x/3}}{3}$ for all $x\\in\\mathbb{R}$.&lt;br/&gt;(iii) $f(x)=e^{-x/3}$ when $x\\ge 0$ and $f(x)=0$ when $x<0$.&lt;br/&gt;(iv) $f(x)=e^{-x/3}$ for all $x\\in\\mathbb{R}$.</p></div><div class=\"ml-vi\"><p>Hàm phân phối tích luỹ của biến ngẫu nhiên $X$ được cho bởi<br/>$$F(x)=\\begin{cases}0 & , x<0\\\\ 1-e^{-x/3} & , x\\ge 0.\\end{cases}$$<br/>Hãy xác định hàm mật độ xác suất của $X$.&lt;br/&gt;(i) $f(x)=\\dfrac{e^{-x/3}}{3}$ khi $x\\ge 0$ và $f(x)=0$ khi $x<0$.&lt;br/&gt;(ii) $f(x)=\\dfrac{e^{-x/3}}{3}$ với mọi $x\\in\\mathbb{R}$.&lt;br/&gt;(iii) $f(x)=e^{-x/3}$ khi $x\\ge 0$ và $f(x)=0$ khi $x<0$.&lt;br/&gt;(iv) $f(x)=e^{-x/3}$ với mọi $x\\in\\mathbb{R}$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The cumulative distribution function of the random variable $X$ is defined by<br/>$$F(x)=\\begin{cases}0 & , x<0\\\\ 1-e^{-x/3} & , x\\ge 0.\\end{cases}$$<br/>Determine the probability density function of $X$.<br/>(i) $f(x)=\\dfrac{e^{-x/3}}{3}$ when $x\\ge 0$ and $f(x)=0$ when $x<0$.<br/>(ii) $f(x)=\\dfrac{e^{-x/3}}{3}$ for all $x\\in\\mathbb{R}$.<br/>(iii) $f(x)=e^{-x/3}$ when $x\\ge 0$ and $f(x)=0$ when $x<0$.<br/>(iv) $f(x)=e^{-x/3}$ for all $x\\in\\mathbb{R}$.</p></div><div class=\"ml-vi\"><p>Hàm phân phối tích luỹ của biến ngẫu nhiên $X$ được cho bởi<br/>$$F(x)=\\begin{cases}0 & , x<0\\\\ 1-e^{-x/3} & , x\\ge 0.\\end{cases}$$<br/>Hãy xác định hàm mật độ xác suất của $X$.<br/>(i) $f(x)=\\dfrac{e^{-x/3}}{3}$ khi $x\\ge 0$ và $f(x)=0$ khi $x<0$.<br/>(ii) $f(x)=\\dfrac{e^{-x/3}}{3}$ với mọi $x\\in\\mathbb{R}$.<br/>(iii) $f(x)=e^{-x/3}$ khi $x\\ge 0$ và $f(x)=0$ khi $x<0$.<br/>(iv) $f(x)=e^{-x/3}$ với mọi $x\\in\\mathbb{R}$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D21/q44.png",
           "options": [
             {

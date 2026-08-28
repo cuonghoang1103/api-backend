@@ -48,7 +48,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2083,
-          "prompt": "<div class=\"ml-en\"><p>The following circuit operates only if there is a path of functional devices from left to right. The probability that each device functions is shown on the graph. Assume that devices fail independently. What is the probability that the circuit operates?&lt;br/&gt;The circuit consists of exactly two devices wired in PARALLEL between the input and the output: one with reliability 0.9 and one with reliability 0.95.</p><pre class=\"mermaid\">graph TD\n    IN((Input)) --- A((Device 0.9))\n    IN --- B((Device 0.95))\n    A --- OUT((Output))\n    B --- OUT</pre></div><div class=\"ml-vi\"><p>Mạch sau chỉ hoạt động nếu có một đường gồm các thiết bị còn hoạt động nối từ trái sang phải. Xác suất mỗi thiết bị hoạt động được ghi trên hình. Giả sử các thiết bị hỏng độc lập nhau. Xác suất để mạch hoạt động là bao nhiêu?&lt;br/&gt;Mạch gồm đúng hai thiết bị mắc SONG SONG giữa đầu vào và đầu ra: một thiết bị có độ tin cậy 0,9 và một thiết bị có độ tin cậy 0,95.</p><pre class=\"mermaid\">graph TD\n    IN((Input)) --- A((Device 0.9))\n    IN --- B((Device 0.95))\n    A --- OUT((Output))\n    B --- OUT</pre></div>",
+          "prompt": "<div class=\"ml-en\"><p>The following circuit operates only if there is a path of functional devices from left to right. The probability that each device functions is shown on the graph. Assume that devices fail independently. What is the probability that the circuit operates?<br/>The circuit consists of exactly two devices wired in PARALLEL between the input and the output: one with reliability 0.9 and one with reliability 0.95.</p><pre class=\"mermaid\">graph TD\n    IN((Input)) --- A((Device 0.9))\n    IN --- B((Device 0.95))\n    A --- OUT((Output))\n    B --- OUT</pre></div><div class=\"ml-vi\"><p>Mạch sau chỉ hoạt động nếu có một đường gồm các thiết bị còn hoạt động nối từ trái sang phải. Xác suất mỗi thiết bị hoạt động được ghi trên hình. Giả sử các thiết bị hỏng độc lập nhau. Xác suất để mạch hoạt động là bao nhiêu?<br/>Mạch gồm đúng hai thiết bị mắc SONG SONG giữa đầu vào và đầu ra: một thiết bị có độ tin cậy 0,9 và một thiết bị có độ tin cậy 0,95.</p><pre class=\"mermaid\">graph TD\n    IN((Input)) --- A((Device 0.9))\n    IN --- B((Device 0.95))\n    A --- OUT((Output))\n    B --- OUT</pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D17/q2.png",
           "options": [
             {
@@ -72,7 +72,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2083,
-          "prompt": "<div class=\"ml-en\"><p>Compute the test statistic used to test the null hypothesis that $p_{1}=p_{2}$.&lt;br/&gt;A report on the nightly news broadcast stated that 13 out of 111 households with pet dogs were burglarized and 23 out of 190 without pet dogs were burglarized.</p></div><div class=\"ml-vi\"><p>Tính thống kê kiểm định dùng để kiểm định giả thuyết không $p_{1}=p_{2}$.&lt;br/&gt;Một bản tin thời sự buổi tối cho biết có 13 trong 111 hộ gia đình nuôi chó bị trộm và 23 trong 190 hộ không nuôi chó bị trộm.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Compute the test statistic used to test the null hypothesis that $p_{1}=p_{2}$.<br/>A report on the nightly news broadcast stated that 13 out of 111 households with pet dogs were burglarized and 23 out of 190 without pet dogs were burglarized.</p></div><div class=\"ml-vi\"><p>Tính thống kê kiểm định dùng để kiểm định giả thuyết không $p_{1}=p_{2}$.<br/>Một bản tin thời sự buổi tối cho biết có 13 trong 111 hộ gia đình nuôi chó bị trộm và 23 trong 190 hộ không nuôi chó bị trộm.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D17/q3.png",
           "options": [
             {
@@ -99,7 +99,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2083,
-          "prompt": "<div class=\"ml-en\"><p>The owner of a fish market has an assistant who has determined that the weights of catfish are normally distributed, with mean of 3.2 pounds and standard deviation of 0.8 pound. What percentage of samples of 4 fish will have sample means between 3.0 and 4.0 pounds?&lt;br/&gt;Let $P(Z<2)=0.98$, $P(Z<-0.5)=0.31$.</p></div><div class=\"ml-vi\"><p>Chủ một chợ cá có người phụ việc xác định rằng trọng lượng cá trê tuân theo phân phối chuẩn với trung bình 3,2 pound và độ lệch chuẩn 0,8 pound. Bao nhiêu phần trăm các mẫu gồm 4 con cá sẽ có trung bình mẫu nằm giữa 3,0 và 4,0 pound?&lt;br/&gt;Cho $P(Z<2)=0,98$; $P(Z<-0,5)=0,31$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The owner of a fish market has an assistant who has determined that the weights of catfish are normally distributed, with mean of 3.2 pounds and standard deviation of 0.8 pound. What percentage of samples of 4 fish will have sample means between 3.0 and 4.0 pounds?<br/>Let $P(Z<2)=0.98$, $P(Z<-0.5)=0.31$.</p></div><div class=\"ml-vi\"><p>Chủ một chợ cá có người phụ việc xác định rằng trọng lượng cá trê tuân theo phân phối chuẩn với trung bình 3,2 pound và độ lệch chuẩn 0,8 pound. Bao nhiêu phần trăm các mẫu gồm 4 con cá sẽ có trung bình mẫu nằm giữa 3,0 và 4,0 pound?<br/>Cho $P(Z<2)=0,98$; $P(Z<-0,5)=0,31$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D17/q4.png",
           "options": [
             {
@@ -252,7 +252,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2083,
-          "prompt": "<div class=\"ml-en\"><p>The systolic blood pressure of 18-year-old women is normally distributed with a mean of 120 mmHg and a standard deviation of 12 mmHg. What percentage of 18-year-old women have a systolic blood pressure between 96 mmHg and 144 mmHg?&lt;br/&gt;Let $P(Z<-2)=0.025$ and $P(Z<0)=0.5$.</p></div><div class=\"ml-vi\"><p>Huyết áp tâm thu của phụ nữ 18 tuổi tuân theo phân phối chuẩn với trung bình 120 mmHg và độ lệch chuẩn 12 mmHg. Bao nhiêu phần trăm phụ nữ 18 tuổi có huyết áp tâm thu nằm giữa 96 mmHg và 144 mmHg?&lt;br/&gt;Cho $P(Z<-2)=0,025$ và $P(Z<0)=0,5$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The systolic blood pressure of 18-year-old women is normally distributed with a mean of 120 mmHg and a standard deviation of 12 mmHg. What percentage of 18-year-old women have a systolic blood pressure between 96 mmHg and 144 mmHg?<br/>Let $P(Z<-2)=0.025$ and $P(Z<0)=0.5$.</p></div><div class=\"ml-vi\"><p>Huyết áp tâm thu của phụ nữ 18 tuổi tuân theo phân phối chuẩn với trung bình 120 mmHg và độ lệch chuẩn 12 mmHg. Bao nhiêu phần trăm phụ nữ 18 tuổi có huyết áp tâm thu nằm giữa 96 mmHg và 144 mmHg?<br/>Cho $P(Z<-2)=0,025$ và $P(Z<0)=0,5$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D17/q10.png",
           "options": [
             {
@@ -297,7 +297,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2083,
-          "prompt": "<div class=\"ml-en\"><p>Using the estimated regression equation $\\hat y = 1.6 + 1.1x$ corresponding to the data below, find the error sum of squares $SS_{E}$.&lt;br/&gt;$x$: 0, 1, 2, 4, 5&lt;br/&gt;$y$: 1, 3, 4, 7, 6</p></div><div class=\"ml-vi\"><p>Dùng phương trình hồi quy ước lượng $\\hat y = 1{,}6 + 1{,}1x$ ứng với bộ dữ liệu dưới đây, tìm tổng bình phương sai số $SS_{E}$.&lt;br/&gt;$x$: 0, 1, 2, 4, 5&lt;br/&gt;$y$: 1, 3, 4, 7, 6</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Using the estimated regression equation $\\hat y = 1.6 + 1.1x$ corresponding to the data below, find the error sum of squares $SS_{E}$.<br/>$x$: 0, 1, 2, 4, 5<br/>$y$: 1, 3, 4, 7, 6</p></div><div class=\"ml-vi\"><p>Dùng phương trình hồi quy ước lượng $\\hat y = 1{,}6 + 1{,}1x$ ứng với bộ dữ liệu dưới đây, tìm tổng bình phương sai số $SS_{E}$.<br/>$x$: 0, 1, 2, 4, 5<br/>$y$: 1, 3, 4, 7, 6</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D17/q12.png",
           "options": [
             {
@@ -319,7 +319,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\"><p>Fitted values and residuals $e_i=y_i-\\hat y_i$:&lt;br/&gt;$x=0$: $\\hat y=1.6$, $e=-0.6$, $e^{2}=0.36$&lt;br/&gt;$x=1$: $\\hat y=2.7$, $e=0.3$, $e^{2}=0.09$&lt;br/&gt;$x=2$: $\\hat y=3.8$, $e=0.2$, $e^{2}=0.04$&lt;br/&gt;$x=4$: $\\hat y=6.0$, $e=1.0$, $e^{2}=1.00$&lt;br/&gt;$x=5$: $\\hat y=7.1$, $e=-1.1$, $e^{2}=1.21$&lt;br/&gt;$SS_{E}=\\sum e_i^{2}=0.36+0.09+0.04+1.00+1.21=2.700$.</p></div><div class=\"ml-vi\"><p>Giá trị dự báo và phần dư $e_i=y_i-\\hat y_i$:&lt;br/&gt;$x=0$: $\\hat y=1{,}6$; $e=-0{,}6$; $e^{2}=0{,}36$&lt;br/&gt;$x=1$: $\\hat y=2{,}7$; $e=0{,}3$; $e^{2}=0{,}09$&lt;br/&gt;$x=2$: $\\hat y=3{,}8$; $e=0{,}2$; $e^{2}=0{,}04$&lt;br/&gt;$x=4$: $\\hat y=6{,}0$; $e=1{,}0$; $e^{2}=1{,}00$&lt;br/&gt;$x=5$: $\\hat y=7{,}1$; $e=-1{,}1$; $e^{2}=1{,}21$&lt;br/&gt;$SS_{E}=\\sum e_i^{2}=0{,}36+0{,}09+0{,}04+1{,}00+1{,}21=2{,}700$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Fitted values and residuals $e_i=y_i-\\hat y_i$:<br/>$x=0$: $\\hat y=1.6$, $e=-0.6$, $e^{2}=0.36$<br/>$x=1$: $\\hat y=2.7$, $e=0.3$, $e^{2}=0.09$<br/>$x=2$: $\\hat y=3.8$, $e=0.2$, $e^{2}=0.04$<br/>$x=4$: $\\hat y=6.0$, $e=1.0$, $e^{2}=1.00$<br/>$x=5$: $\\hat y=7.1$, $e=-1.1$, $e^{2}=1.21$<br/>$SS_{E}=\\sum e_i^{2}=0.36+0.09+0.04+1.00+1.21=2.700$.</p></div><div class=\"ml-vi\"><p>Giá trị dự báo và phần dư $e_i=y_i-\\hat y_i$:<br/>$x=0$: $\\hat y=1{,}6$; $e=-0{,}6$; $e^{2}=0{,}36$<br/>$x=1$: $\\hat y=2{,}7$; $e=0{,}3$; $e^{2}=0{,}09$<br/>$x=2$: $\\hat y=3{,}8$; $e=0{,}2$; $e^{2}=0{,}04$<br/>$x=4$: $\\hat y=6{,}0$; $e=1{,}0$; $e^{2}=1{,}00$<br/>$x=5$: $\\hat y=7{,}1$; $e=-1{,}1$; $e^{2}=1{,}21$<br/>$SS_{E}=\\sum e_i^{2}=0{,}36+0{,}09+0{,}04+1{,}00+1{,}21=2{,}700$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -375,7 +375,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2083,
-          "prompt": "<div class=\"ml-en\"><p>Suppose that $X$ has a Poisson distribution with a mean of 64. Use the normal distribution to approximate the probability $P(X>72)$.&lt;br/&gt;Let $P(Z<1.06)=0.8554$; $P(Z<1.19)=0.8830$.</p></div><div class=\"ml-vi\"><p>Giả sử $X$ có phân phối Poisson với trung bình 64. Dùng phân phối chuẩn để xấp xỉ xác suất $P(X>72)$.&lt;br/&gt;Cho $P(Z<1,06)=0,8554$; $P(Z<1,19)=0,8830$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose that $X$ has a Poisson distribution with a mean of 64. Use the normal distribution to approximate the probability $P(X>72)$.<br/>Let $P(Z<1.06)=0.8554$; $P(Z<1.19)=0.8830$.</p></div><div class=\"ml-vi\"><p>Giả sử $X$ có phân phối Poisson với trung bình 64. Dùng phân phối chuẩn để xấp xỉ xác suất $P(X>72)$.<br/>Cho $P(Z<1,06)=0,8554$; $P(Z<1,19)=0,8830$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D17/q15.png",
           "options": [
             {
@@ -399,7 +399,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2083,
-          "prompt": "<div class=\"ml-en\"><p>Suppose the cumulative distribution function of the random variable $X$ is&lt;br/&gt;$$F(x)=\\begin{cases}0 & x<-2\\\\ 0.25x+0.5 & -2\\le x<1\\\\ 0.5x+0.25 & 1\\le x<1.5\\\\ 1 & 1.5\\le x\\end{cases}$$&lt;br/&gt;Calculate $f(0)$, the value of the density function at $x=0$.</p></div><div class=\"ml-vi\"><p>Giả sử hàm phân phối tích luỹ của biến ngẫu nhiên $X$ là&lt;br/&gt;$$F(x)=\\begin{cases}0 & x<-2\\\\ 0{,}25x+0{,}5 & -2\\le x<1\\\\ 0{,}5x+0{,}25 & 1\\le x<1{,}5\\\\ 1 & 1{,}5\\le x\\end{cases}$$&lt;br/&gt;Tính $f(0)$, giá trị của hàm mật độ tại $x=0$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose the cumulative distribution function of the random variable $X$ is<br/>$$F(x)=\\begin{cases}0 & x<-2\\\\ 0.25x+0.5 & -2\\le x<1\\\\ 0.5x+0.25 & 1\\le x<1.5\\\\ 1 & 1.5\\le x\\end{cases}$$<br/>Calculate $f(0)$, the value of the density function at $x=0$.</p></div><div class=\"ml-vi\"><p>Giả sử hàm phân phối tích luỹ của biến ngẫu nhiên $X$ là<br/>$$F(x)=\\begin{cases}0 & x<-2\\\\ 0{,}25x+0{,}5 & -2\\le x<1\\\\ 0{,}5x+0{,}25 & 1\\le x<1{,}5\\\\ 1 & 1{,}5\\le x\\end{cases}$$<br/>Tính $f(0)$, giá trị của hàm mật độ tại $x=0$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D17/q16.png",
           "options": [
             {
@@ -453,7 +453,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2083,
-          "prompt": "<div class=\"ml-en\"><p>The following function is a cumulative distribution function of the random variable $X$. Find $P(X>2)$.&lt;br/&gt;$$F(x)=\\begin{cases}0 & \\text{if } x<0\\\\ 1/3 & \\text{if } 0\\le x<1\\\\ 5/6 & \\text{if } 1\\le x<3\\\\ 1 & \\text{if } 3\\le x\\end{cases}$$</p></div><div class=\"ml-vi\"><p>Hàm sau là hàm phân phối tích luỹ của biến ngẫu nhiên $X$. Tìm $P(X>2)$.&lt;br/&gt;$$F(x)=\\begin{cases}0 & \\text{nếu } x<0\\\\ 1/3 & \\text{nếu } 0\\le x<1\\\\ 5/6 & \\text{nếu } 1\\le x<3\\\\ 1 & \\text{nếu } 3\\le x\\end{cases}$$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The following function is a cumulative distribution function of the random variable $X$. Find $P(X>2)$.<br/>$$F(x)=\\begin{cases}0 & \\text{if } x<0\\\\ 1/3 & \\text{if } 0\\le x<1\\\\ 5/6 & \\text{if } 1\\le x<3\\\\ 1 & \\text{if } 3\\le x\\end{cases}$$</p></div><div class=\"ml-vi\"><p>Hàm sau là hàm phân phối tích luỹ của biến ngẫu nhiên $X$. Tìm $P(X>2)$.<br/>$$F(x)=\\begin{cases}0 & \\text{nếu } x<0\\\\ 1/3 & \\text{nếu } 0\\le x<1\\\\ 5/6 & \\text{nếu } 1\\le x<3\\\\ 1 & \\text{nếu } 3\\le x\\end{cases}$$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D17/q18.png",
           "options": [
             {
@@ -477,7 +477,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2083,
-          "prompt": "<div class=\"ml-en\"><p>A basketball player is asked to shoot free throws in sets of 4 free throws. The probability distribution for the number of made free throws is given below. Determine the standard deviation of this probability distribution.&lt;br/&gt;$X$: 0, 1, 2, 3, 4&lt;br/&gt;$P(X)$: 0.02, 0.07, 0.22, 0.14, 0.55</p></div><div class=\"ml-vi\"><p>Một cầu thủ bóng rổ được yêu cầu ném phạt theo từng loạt 4 quả. Phân phối xác suất của số quả ném phạt thành công được cho dưới đây. Xác định độ lệch chuẩn của phân phối xác suất này.&lt;br/&gt;$X$: 0, 1, 2, 3, 4&lt;br/&gt;$P(X)$: 0,02; 0,07; 0,22; 0,14; 0,55</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A basketball player is asked to shoot free throws in sets of 4 free throws. The probability distribution for the number of made free throws is given below. Determine the standard deviation of this probability distribution.<br/>$X$: 0, 1, 2, 3, 4<br/>$P(X)$: 0.02, 0.07, 0.22, 0.14, 0.55</p></div><div class=\"ml-vi\"><p>Một cầu thủ bóng rổ được yêu cầu ném phạt theo từng loạt 4 quả. Phân phối xác suất của số quả ném phạt thành công được cho dưới đây. Xác định độ lệch chuẩn của phân phối xác suất này.<br/>$X$: 0, 1, 2, 3, 4<br/>$P(X)$: 0,02; 0,07; 0,22; 0,14; 0,55</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D17/q19.png",
           "options": [
             {
@@ -499,7 +499,7 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>$\\mu=E(X)=0(0.02)+1(0.07)+2(0.22)+3(0.14)+4(0.55)=3.13$. $E(X^{2})=0+1(0.07)+4(0.22)+9(0.14)+16(0.55)=11.01$. $\\sigma^{2}=11.01-3.13^{2}=11.01-9.7969=1.2131$, so $\\sigma=\\sqrt{1.2131}=1.10$. Note that 1.21 is the VARIANCE — the classic distractor for a standard-deviation question.&lt;br/&gt;&lt;em&gt;Transcription note: the two right-hand columns of the source table ($X=3$ and $X=4$) were cut off by the exam window. They are reconstructed as 0.14 and 0.55 because those are the only values that make the probabilities sum to 1 while reproducing BOTH offered numbers exactly to two decimals ($\\sigma=1.10$, $\\sigma^{2}=1.21$).&lt;/em&gt;</p></div><div class=\"ml-vi\"><p>$\\mu=E(X)=0(0{,}02)+1(0{,}07)+2(0{,}22)+3(0{,}14)+4(0{,}55)=3{,}13$. $E(X^{2})=0+1(0{,}07)+4(0{,}22)+9(0{,}14)+16(0{,}55)=11{,}01$. $\\sigma^{2}=11{,}01-3{,}13^{2}=11{,}01-9{,}7969=1{,}2131$, nên $\\sigma=\\sqrt{1{,}2131}=1{,}10$. Chú ý 1,21 chính là PHƯƠNG SAI — bẫy kinh điển của câu hỏi về độ lệch chuẩn.&lt;br/&gt;&lt;em&gt;Ghi chú khi chép đề: hai cột bên phải của bảng gốc ($X=3$ và $X=4$) bị cửa sổ thi cắt mất. Chúng được khôi phục là 0,14 và 0,55 vì đó là bộ giá trị duy nhất vừa làm tổng xác suất bằng 1 vừa tái tạo CHÍNH XÁC tới hai chữ số thập phân cả hai con số có trong đáp án ($\\sigma=1{,}10$; $\\sigma^{2}=1{,}21$).&lt;/em&gt;</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$\\mu=E(X)=0(0.02)+1(0.07)+2(0.22)+3(0.14)+4(0.55)=3.13$. $E(X^{2})=0+1(0.07)+4(0.22)+9(0.14)+16(0.55)=11.01$. $\\sigma^{2}=11.01-3.13^{2}=11.01-9.7969=1.2131$, so $\\sigma=\\sqrt{1.2131}=1.10$. Note that 1.21 is the VARIANCE — the classic distractor for a standard-deviation question.<br/>&lt;em&gt;Transcription note: the two right-hand columns of the source table ($X=3$ and $X=4$) were cut off by the exam window. They are reconstructed as 0.14 and 0.55 because those are the only values that make the probabilities sum to 1 while reproducing BOTH offered numbers exactly to two decimals ($\\sigma=1.10$, $\\sigma^{2}=1.21$).&lt;/em&gt;</p></div><div class=\"ml-vi\"><p>$\\mu=E(X)=0(0{,}02)+1(0{,}07)+2(0{,}22)+3(0{,}14)+4(0{,}55)=3{,}13$. $E(X^{2})=0+1(0{,}07)+4(0{,}22)+9(0{,}14)+16(0{,}55)=11{,}01$. $\\sigma^{2}=11{,}01-3{,}13^{2}=11{,}01-9{,}7969=1{,}2131$, nên $\\sigma=\\sqrt{1{,}2131}=1{,}10$. Chú ý 1,21 chính là PHƯƠNG SAI — bẫy kinh điển của câu hỏi về độ lệch chuẩn.<br/>&lt;em&gt;Ghi chú khi chép đề: hai cột bên phải của bảng gốc ($X=3$ và $X=4$) bị cửa sổ thi cắt mất. Chúng được khôi phục là 0,14 và 0,55 vì đó là bộ giá trị duy nhất vừa làm tổng xác suất bằng 1 vừa tái tạo CHÍNH XÁC tới hai chữ số thập phân cả hai con số có trong đáp án ($\\sigma=1{,}10$; $\\sigma^{2}=1{,}21$).&lt;/em&gt;</p></div>"
         },
         {
           "kind": "MCQ",
@@ -541,7 +541,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>TRUE. The null hypothesis always states equality ($=$, or $\\le$ / $\\ge$ whose boundary case is equality) because the whole test is computed AT that boundary value $\\theta_{0}$: the sampling distribution of the test statistic can only be derived from a single specified parameter value. The strict inequality ($<$, $>$, $\\ne$) belongs to the alternative hypothesis.</p></div><div class=\"ml-vi\"><p>ĐÚNG. Giả thuyết không luôn phát biểu dạng đẳng thức ($=$, hoặc $\\le$ / $\\ge$ mà trường hợp biên là đẳng thức), bởi toàn bộ phép kiểm định được tính TẠI giá trị biên $\\theta_{0}$ đó: phân phối mẫu của thống kê kiểm định chỉ dựng được từ một giá trị tham số cụ thể. Bất đẳng thức nghiêm ngặt ($<$, $>$, $\\ne$) thuộc về giả thuyết đối.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>TRUE. The null hypothesis always states equality ($=$, or $\\le$ / $\\ge$ whose boundary case is equality) because the whole test is computed AT that boundary value $\\theta_{0}$: the sampling distribution of the test statistic can only be derived from a single specified parameter value. The strict inequality ($<$, $>$, $<br/>e$) belongs to the alternative hypothesis.</p></div><div class=\"ml-vi\"><p>ĐÚNG. Giả thuyết không luôn phát biểu dạng đẳng thức ($=$, hoặc $\\le$ / $\\ge$ mà trường hợp biên là đẳng thức), bởi toàn bộ phép kiểm định được tính TẠI giá trị biên $\\theta_{0}$ đó: phân phối mẫu của thống kê kiểm định chỉ dựng được từ một giá trị tham số cụ thể. Bất đẳng thức nghiêm ngặt ($<$, $>$, $<br/>e$) thuộc về giả thuyết đối.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -576,7 +576,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2083,
-          "prompt": "<div class=\"ml-en\"><p>Mathematics and Physics grades of 5 students are as below:&lt;br/&gt;Student 1: Mathematics grade $X=5$, Physics grade $Y=6$&lt;br/&gt;Student 2: $X=6.5$, $Y=8.5$&lt;br/&gt;Student 3: $X=8$, $Y=5.5$&lt;br/&gt;Student 4: $X=4$, $Y=6$&lt;br/&gt;Student 5: $X=8.5$, $Y=9$&lt;br/&gt;We want to do linear regression analysis on $X$ and $Y$. Given the standard error of the regression $\\hat\\sigma=1.66$, the estimated slope $\\hat\\beta_{1}=0.39$. Calculate the test statistic for the hypotheses $H_{0}:\\beta_{1}=0$.</p></div><div class=\"ml-vi\"><p>Điểm Toán và Lý của 5 sinh viên như sau:&lt;br/&gt;Sinh viên 1: điểm Toán $X=5$, điểm Lý $Y=6$&lt;br/&gt;Sinh viên 2: $X=6{,}5$; $Y=8{,}5$&lt;br/&gt;Sinh viên 3: $X=8$; $Y=5{,}5$&lt;br/&gt;Sinh viên 4: $X=4$; $Y=6$&lt;br/&gt;Sinh viên 5: $X=8{,}5$; $Y=9$&lt;br/&gt;Ta muốn phân tích hồi quy tuyến tính giữa $X$ và $Y$. Cho sai số chuẩn của hồi quy $\\hat\\sigma=1{,}66$, hệ số góc ước lượng $\\hat\\beta_{1}=0{,}39$. Tính thống kê kiểm định cho giả thuyết $H_{0}:\\beta_{1}=0$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Mathematics and Physics grades of 5 students are as below:<br/>Student 1: Mathematics grade $X=5$, Physics grade $Y=6$<br/>Student 2: $X=6.5$, $Y=8.5$<br/>Student 3: $X=8$, $Y=5.5$<br/>Student 4: $X=4$, $Y=6$<br/>Student 5: $X=8.5$, $Y=9$<br/>We want to do linear regression analysis on $X$ and $Y$. Given the standard error of the regression $\\hat\\sigma=1.66$, the estimated slope $\\hat\\beta_{1}=0.39$. Calculate the test statistic for the hypotheses $H_{0}:\\beta_{1}=0$.</p></div><div class=\"ml-vi\"><p>Điểm Toán và Lý của 5 sinh viên như sau:<br/>Sinh viên 1: điểm Toán $X=5$, điểm Lý $Y=6$<br/>Sinh viên 2: $X=6{,}5$; $Y=8{,}5$<br/>Sinh viên 3: $X=8$; $Y=5{,}5$<br/>Sinh viên 4: $X=4$; $Y=6$<br/>Sinh viên 5: $X=8{,}5$; $Y=9$<br/>Ta muốn phân tích hồi quy tuyến tính giữa $X$ và $Y$. Cho sai số chuẩn của hồi quy $\\hat\\sigma=1{,}66$, hệ số góc ước lượng $\\hat\\beta_{1}=0{,}39$. Tính thống kê kiểm định cho giả thuyết $H_{0}:\\beta_{1}=0$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D17/q23.png",
           "options": [
             {
@@ -654,7 +654,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2083,
-          "prompt": "<div class=\"ml-en\"><p>Compute the critical value $z_{\\alpha/2}$ that corresponds to a 94% level of confidence.&lt;br/&gt;Let $z_{0.06}=1.55$, $z_{0.05}=1.645$, $z_{0.03}=1.88$, $z_{0.025}=1.96$.</p></div><div class=\"ml-vi\"><p>Tính giá trị tới hạn $z_{\\alpha/2}$ ứng với mức tin cậy 94%.&lt;br/&gt;Cho $z_{0,06}=1{,}55$; $z_{0,05}=1{,}645$; $z_{0,03}=1{,}88$; $z_{0,025}=1{,}96$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Compute the critical value $z_{\\alpha/2}$ that corresponds to a 94% level of confidence.<br/>Let $z_{0.06}=1.55$, $z_{0.05}=1.645$, $z_{0.03}=1.88$, $z_{0.025}=1.96$.</p></div><div class=\"ml-vi\"><p>Tính giá trị tới hạn $z_{\\alpha/2}$ ứng với mức tin cậy 94%.<br/>Cho $z_{0,06}=1{,}55$; $z_{0,05}=1{,}645$; $z_{0,03}=1{,}88$; $z_{0,025}=1{,}96$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D17/q26.png",
           "options": [
             {
@@ -708,7 +708,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2083,
-          "prompt": "<div class=\"ml-en\"><p>A box plot is constructed from a given data set with the five-number summary: minimum $=10$, first quartile $Q_{1}=15$, median $=18$, third quartile $Q_{3}=20$, maximum $=22$. How many of the following statements are correct?&lt;br/&gt;i) About 25% of the data lies above 15.&lt;br/&gt;ii) The number 18 must be in the data set.&lt;br/&gt;iii) The number 20 must be in the data set.</p></div><div class=\"ml-vi\"><p>Một biểu đồ hộp được dựng từ một bộ dữ liệu với tóm tắt năm số: giá trị nhỏ nhất $=10$; tứ phân vị thứ nhất $Q_{1}=15$; trung vị $=18$; tứ phân vị thứ ba $Q_{3}=20$; giá trị lớn nhất $=22$. Có bao nhiêu phát biểu sau đây là đúng?&lt;br/&gt;i) Khoảng 25% dữ liệu nằm trên 15.&lt;br/&gt;ii) Số 18 chắc chắn phải có trong bộ dữ liệu.&lt;br/&gt;iii) Số 20 chắc chắn phải có trong bộ dữ liệu.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A box plot is constructed from a given data set with the five-number summary: minimum $=10$, first quartile $Q_{1}=15$, median $=18$, third quartile $Q_{3}=20$, maximum $=22$. How many of the following statements are correct?<br/>i) About 25% of the data lies above 15.<br/>ii) The number 18 must be in the data set.<br/>iii) The number 20 must be in the data set.</p></div><div class=\"ml-vi\"><p>Một biểu đồ hộp được dựng từ một bộ dữ liệu với tóm tắt năm số: giá trị nhỏ nhất $=10$; tứ phân vị thứ nhất $Q_{1}=15$; trung vị $=18$; tứ phân vị thứ ba $Q_{3}=20$; giá trị lớn nhất $=22$. Có bao nhiêu phát biểu sau đây là đúng?<br/>i) Khoảng 25% dữ liệu nằm trên 15.<br/>ii) Số 18 chắc chắn phải có trong bộ dữ liệu.<br/>iii) Số 20 chắc chắn phải có trong bộ dữ liệu.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D17/q28.png",
           "options": [
             {
@@ -727,12 +727,12 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>i) FALSE — $Q_{1}=15$ means about 25% of the data lies BELOW 15, so about 75% lies above it.&lt;br/&gt;ii) FALSE — the median need not be an observed value. For an even sample size it is the average of the two middle values, e.g. data $\\{\\dots,17,19,\\dots\\}$ gives median 18 with no 18 present.&lt;br/&gt;iii) FALSE — same argument for the quartile $Q_{3}=20$; a quartile is a position in the ordered data, not necessarily an element of it.&lt;br/&gt;So 0 statements are correct.</p></div><div class=\"ml-vi\"><p>i) SAI — $Q_{1}=15$ nghĩa là khoảng 25% dữ liệu nằm DƯỚI 15, nên khoảng 75% nằm trên nó.&lt;br/&gt;ii) SAI — trung vị không nhất thiết là một giá trị quan sát được. Với cỡ mẫu chẵn, trung vị là trung bình của hai giá trị giữa, ví dụ dữ liệu $\\{\\dots;17;19;\\dots\\}$ cho trung vị 18 mà không hề có số 18.&lt;br/&gt;iii) SAI — lập luận tương tự cho tứ phân vị $Q_{3}=20$; tứ phân vị là một VỊ TRÍ trong dãy đã sắp xếp, không nhất thiết là phần tử của dữ liệu.&lt;br/&gt;Vậy có 0 phát biểu đúng.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>i) FALSE — $Q_{1}=15$ means about 25% of the data lies BELOW 15, so about 75% lies above it.<br/>ii) FALSE — the median need not be an observed value. For an even sample size it is the average of the two middle values, e.g. data $\\{\\dots,17,19,\\dots\\}$ gives median 18 with no 18 present.<br/>iii) FALSE — same argument for the quartile $Q_{3}=20$; a quartile is a position in the ordered data, not necessarily an element of it.<br/>So 0 statements are correct.</p></div><div class=\"ml-vi\"><p>i) SAI — $Q_{1}=15$ nghĩa là khoảng 25% dữ liệu nằm DƯỚI 15, nên khoảng 75% nằm trên nó.<br/>ii) SAI — trung vị không nhất thiết là một giá trị quan sát được. Với cỡ mẫu chẵn, trung vị là trung bình của hai giá trị giữa, ví dụ dữ liệu $\\{\\dots;17;19;\\dots\\}$ cho trung vị 18 mà không hề có số 18.<br/>iii) SAI — lập luận tương tự cho tứ phân vị $Q_{3}=20$; tứ phân vị là một VỊ TRÍ trong dãy đã sắp xếp, không nhất thiết là phần tử của dữ liệu.<br/>Vậy có 0 phát biểu đúng.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2083,
-          "prompt": "<div class=\"ml-en\"><p>Assume that from the following data we obtain the equation of the regression line $\\hat y = 1.6047 + 1.0814x$.&lt;br/&gt;$x$: 0, 1, 2, 4, 5&lt;br/&gt;$y$: 1, 3, 4, 7, 6&lt;br/&gt;Find the residual corresponding to the point $(2;4)$.</p></div><div class=\"ml-vi\"><p>Giả sử từ bộ dữ liệu sau ta thu được phương trình đường hồi quy $\\hat y = 1{,}6047 + 1{,}0814x$.&lt;br/&gt;$x$: 0, 1, 2, 4, 5&lt;br/&gt;$y$: 1, 3, 4, 7, 6&lt;br/&gt;Tìm phần dư ứng với điểm $(2;4)$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Assume that from the following data we obtain the equation of the regression line $\\hat y = 1.6047 + 1.0814x$.<br/>$x$: 0, 1, 2, 4, 5<br/>$y$: 1, 3, 4, 7, 6<br/>Find the residual corresponding to the point $(2;4)$.</p></div><div class=\"ml-vi\"><p>Giả sử từ bộ dữ liệu sau ta thu được phương trình đường hồi quy $\\hat y = 1{,}6047 + 1{,}0814x$.<br/>$x$: 0, 1, 2, 4, 5<br/>$y$: 1, 3, 4, 7, 6<br/>Tìm phần dư ứng với điểm $(2;4)$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D17/q29.png",
           "options": [
             {
@@ -759,7 +759,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2083,
-          "prompt": "<div class=\"ml-en\"><p>A machine is producing metal pieces that are cylindrical in shape. A sample of pieces is taken and the diameters are 1.01, 0.97, 1.03, 1.04, 0.99, 0.98, 0.99, 1.01, 1.03 (centimeters). From this sample, one can compute a mean of 1.005 and a standard deviation of 0.025. Find a 99% confidence interval for the mean diameter of pieces from this machine, assuming an approximate normal distribution.&lt;br/&gt;Let $t_{0.005,8}=3.355$, $t_{0.01,8}=2.896$.</p></div><div class=\"ml-vi\"><p>Một máy sản xuất các chi tiết kim loại hình trụ. Lấy một mẫu các chi tiết và đo đường kính được 1,01; 0,97; 1,03; 1,04; 0,99; 0,98; 0,99; 1,01; 1,03 (cm). Từ mẫu này tính được trung bình 1,005 và độ lệch chuẩn 0,025. Tìm khoảng tin cậy 99% cho đường kính trung bình của các chi tiết do máy này sản xuất, giả sử phân phối xấp xỉ chuẩn.&lt;br/&gt;Cho $t_{0,005;8}=3{,}355$; $t_{0,01;8}=2{,}896$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A machine is producing metal pieces that are cylindrical in shape. A sample of pieces is taken and the diameters are 1.01, 0.97, 1.03, 1.04, 0.99, 0.98, 0.99, 1.01, 1.03 (centimeters). From this sample, one can compute a mean of 1.005 and a standard deviation of 0.025. Find a 99% confidence interval for the mean diameter of pieces from this machine, assuming an approximate normal distribution.<br/>Let $t_{0.005,8}=3.355$, $t_{0.01,8}=2.896$.</p></div><div class=\"ml-vi\"><p>Một máy sản xuất các chi tiết kim loại hình trụ. Lấy một mẫu các chi tiết và đo đường kính được 1,01; 0,97; 1,03; 1,04; 0,99; 0,98; 0,99; 1,01; 1,03 (cm). Từ mẫu này tính được trung bình 1,005 và độ lệch chuẩn 0,025. Tìm khoảng tin cậy 99% cho đường kính trung bình của các chi tiết do máy này sản xuất, giả sử phân phối xấp xỉ chuẩn.<br/>Cho $t_{0,005;8}=3{,}355$; $t_{0,01;8}=2{,}896$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D17/q30.png",
           "options": [
             {
@@ -786,7 +786,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2083,
-          "prompt": "<div class=\"ml-en\"><p>The number of books read in a year by 11 students are shown in a stem and leaf diagram:&lt;br/&gt;Stem 0 | Leaf 5 5 6&lt;br/&gt;Stem 1 | Leaf 1 4 6 2 3&lt;br/&gt;Stem 2 | Leaf 0 2 1&lt;br/&gt;What is the range for this data?</p></div><div class=\"ml-vi\"><p>Số sách đọc trong một năm của 11 sinh viên được cho bằng biểu đồ thân–lá:&lt;br/&gt;Thân 0 | Lá 5 5 6&lt;br/&gt;Thân 1 | Lá 1 4 6 2 3&lt;br/&gt;Thân 2 | Lá 0 2 1&lt;br/&gt;Khoảng biến thiên (range) của bộ dữ liệu này là bao nhiêu?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The number of books read in a year by 11 students are shown in a stem and leaf diagram:<br/>Stem 0 | Leaf 5 5 6<br/>Stem 1 | Leaf 1 4 6 2 3<br/>Stem 2 | Leaf 0 2 1<br/>What is the range for this data?</p></div><div class=\"ml-vi\"><p>Số sách đọc trong một năm của 11 sinh viên được cho bằng biểu đồ thân–lá:<br/>Thân 0 | Lá 5 5 6<br/>Thân 1 | Lá 1 4 6 2 3<br/>Thân 2 | Lá 0 2 1<br/>Khoảng biến thiên (range) của bộ dữ liệu này là bao nhiêu?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D17/q31.png",
           "options": [
             {
@@ -892,7 +892,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Bayes&#39; theorem. $P(\\text{Paper})=P(\\text{Plastic})=\\frac12$; $P(R\\mid\\text{Paper})=\\frac{2}{3}$, $P(R\\mid\\text{Plastic})=\\frac{1}{4}$.&lt;br/&gt;Total: $P(R)=\\frac12\\cdot\\frac23+\\frac12\\cdot\\frac14=\\frac13+\\frac18=\\frac{11}{24}$.&lt;br/&gt;Therefore $P(\\text{Paper}\\mid R)=\\dfrac{1/3}{11/24}=\\dfrac{8/24}{11/24}=\\dfrac{8}{11}=0.727$.</p></div><div class=\"ml-vi\"><p>Định lý Bayes. $P(\\text{túi giấy})=P(\\text{túi nhựa})=\\frac12$; $P(R\\mid\\text{túi giấy})=\\frac{2}{3}$; $P(R\\mid\\text{túi nhựa})=\\frac{1}{4}$.&lt;br/&gt;Toàn phần: $P(R)=\\frac12\\cdot\\frac23+\\frac12\\cdot\\frac14=\\frac13+\\frac18=\\frac{11}{24}$.&lt;br/&gt;Vậy $P(\\text{túi giấy}\\mid R)=\\dfrac{1/3}{11/24}=\\dfrac{8/24}{11/24}=\\dfrac{8}{11}=0{,}727$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Bayes&#39; theorem. $P(\\text{Paper})=P(\\text{Plastic})=\\frac12$; $P(R\\mid\\text{Paper})=\\frac{2}{3}$, $P(R\\mid\\text{Plastic})=\\frac{1}{4}$.<br/>Total: $P(R)=\\frac12\\cdot\\frac23+\\frac12\\cdot\\frac14=\\frac13+\\frac18=\\frac{11}{24}$.<br/>Therefore $P(\\text{Paper}\\mid R)=\\dfrac{1/3}{11/24}=\\dfrac{8/24}{11/24}=\\dfrac{8}{11}=0.727$.</p></div><div class=\"ml-vi\"><p>Định lý Bayes. $P(\\text{túi giấy})=P(\\text{túi nhựa})=\\frac12$; $P(R\\mid\\text{túi giấy})=\\frac{2}{3}$; $P(R\\mid\\text{túi nhựa})=\\frac{1}{4}$.<br/>Toàn phần: $P(R)=\\frac12\\cdot\\frac23+\\frac12\\cdot\\frac14=\\frac13+\\frac18=\\frac{11}{24}$.<br/>Vậy $P(\\text{túi giấy}\\mid R)=\\dfrac{1/3}{11/24}=\\dfrac{8/24}{11/24}=\\dfrac{8}{11}=0{,}727$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1002,7 +1002,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2083,
-          "prompt": "<div class=\"ml-en\"><p>At a computer manufacturing company, the actual size of computer chips is normally distributed with a mean of 1 centimeter and a standard deviation of 0.1 centimeter. A random sample of 12 computer chips is taken. What is the probability that the sample mean will be between 0.99 and 1.01 centimeters?&lt;br/&gt;Let $P(Z<0.1)=0.54$, $P(Z<0.346)=0.64$, $P(Z<-0.346)=0.36$.</p></div><div class=\"ml-vi\"><p>Tại một công ty sản xuất máy tính, kích thước thực tế của các con chip tuân theo phân phối chuẩn với trung bình 1 cm và độ lệch chuẩn 0,1 cm. Lấy ngẫu nhiên một mẫu gồm 12 con chip. Xác suất để trung bình mẫu nằm giữa 0,99 và 1,01 cm là bao nhiêu?&lt;br/&gt;Cho $P(Z<0,1)=0,54$; $P(Z<0,346)=0,64$; $P(Z<-0,346)=0,36$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>At a computer manufacturing company, the actual size of computer chips is normally distributed with a mean of 1 centimeter and a standard deviation of 0.1 centimeter. A random sample of 12 computer chips is taken. What is the probability that the sample mean will be between 0.99 and 1.01 centimeters?<br/>Let $P(Z<0.1)=0.54$, $P(Z<0.346)=0.64$, $P(Z<-0.346)=0.36$.</p></div><div class=\"ml-vi\"><p>Tại một công ty sản xuất máy tính, kích thước thực tế của các con chip tuân theo phân phối chuẩn với trung bình 1 cm và độ lệch chuẩn 0,1 cm. Lấy ngẫu nhiên một mẫu gồm 12 con chip. Xác suất để trung bình mẫu nằm giữa 0,99 và 1,01 cm là bao nhiêu?<br/>Cho $P(Z<0,1)=0,54$; $P(Z<0,346)=0,64$; $P(Z<-0,346)=0,36$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D17/q39.png",
           "options": [
             {
@@ -1050,7 +1050,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2083,
-          "prompt": "<div class=\"ml-en\"><p>Given a table of 50 data values (read row by row):&lt;br/&gt;44, 63, 84, 98, 56, 32, 26, 75, 35, 97&lt;br/&gt;53, 39, 96, 36, 97, 44, 74, 26, 85, 84&lt;br/&gt;13, 46, 64, 38, 96, 45, 89, 86, 43, 71&lt;br/&gt;60, 12, 46, 84, 15, 75, 37, 80, 37, 27&lt;br/&gt;97, 46, 36, 38, 37, 58, 85, 44, 57, 72&lt;br/&gt;What is the relative frequency of the interval $70\\le x<80$?</p></div><div class=\"ml-vi\"><p>Cho một bảng gồm 50 giá trị dữ liệu (đọc theo từng hàng):&lt;br/&gt;44, 63, 84, 98, 56, 32, 26, 75, 35, 97&lt;br/&gt;53, 39, 96, 36, 97, 44, 74, 26, 85, 84&lt;br/&gt;13, 46, 64, 38, 96, 45, 89, 86, 43, 71&lt;br/&gt;60, 12, 46, 84, 15, 75, 37, 80, 37, 27&lt;br/&gt;97, 46, 36, 38, 37, 58, 85, 44, 57, 72&lt;br/&gt;Tần suất tương đối của khoảng $70\\le x<80$ là bao nhiêu?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given a table of 50 data values (read row by row):<br/>44, 63, 84, 98, 56, 32, 26, 75, 35, 97<br/>53, 39, 96, 36, 97, 44, 74, 26, 85, 84<br/>13, 46, 64, 38, 96, 45, 89, 86, 43, 71<br/>60, 12, 46, 84, 15, 75, 37, 80, 37, 27<br/>97, 46, 36, 38, 37, 58, 85, 44, 57, 72<br/>What is the relative frequency of the interval $70\\le x<80$?</p></div><div class=\"ml-vi\"><p>Cho một bảng gồm 50 giá trị dữ liệu (đọc theo từng hàng):<br/>44, 63, 84, 98, 56, 32, 26, 75, 35, 97<br/>53, 39, 96, 36, 97, 44, 74, 26, 85, 84<br/>13, 46, 64, 38, 96, 45, 89, 86, 43, 71<br/>60, 12, 46, 84, 15, 75, 37, 80, 37, 27<br/>97, 46, 36, 38, 37, 58, 85, 44, 57, 72<br/>Tần suất tương đối của khoảng $70\\le x<80$ là bao nhiêu?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D17/q41.png",
           "options": [
             {
@@ -1128,7 +1128,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2083,
-          "prompt": "<div class=\"ml-en\"><p>Assume that $Z$ scores are normally distributed with a mean of 0 and a standard deviation of 1. If $P(0.2<Z<a)=0.2314$, find $a$.&lt;br/&gt;Let $P(Z<0.2000)=0.5793$, $P(Z>0.7342)=0.2314$, $P(Z<0.8805)=0.8107$, $P(Z<-0.3910)=0.3479$.</p></div><div class=\"ml-vi\"><p>Giả sử điểm $Z$ tuân theo phân phối chuẩn với trung bình 0 và độ lệch chuẩn 1. Nếu $P(0{,}2<Z<a)=0{,}2314$, hãy tìm $a$.&lt;br/&gt;Cho $P(Z<0{,}2000)=0{,}5793$; $P(Z>0{,}7342)=0{,}2314$; $P(Z<0{,}8805)=0{,}8107$; $P(Z<-0{,}3910)=0{,}3479$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Assume that $Z$ scores are normally distributed with a mean of 0 and a standard deviation of 1. If $P(0.2<Z<a)=0.2314$, find $a$.<br/>Let $P(Z<0.2000)=0.5793$, $P(Z>0.7342)=0.2314$, $P(Z<0.8805)=0.8107$, $P(Z<-0.3910)=0.3479$.</p></div><div class=\"ml-vi\"><p>Giả sử điểm $Z$ tuân theo phân phối chuẩn với trung bình 0 và độ lệch chuẩn 1. Nếu $P(0{,}2<Z<a)=0{,}2314$, hãy tìm $a$.<br/>Cho $P(Z<0{,}2000)=0{,}5793$; $P(Z>0{,}7342)=0{,}2314$; $P(Z<0{,}8805)=0{,}8107$; $P(Z<-0{,}3910)=0{,}3479$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D17/q44.png",
           "options": [
             {
@@ -1209,7 +1209,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2083,
-          "prompt": "<div class=\"ml-en\"><p>A researcher at a major hospital wishes to estimate the proportion of the adult population of the United States that has high blood pressure. How large a sample is needed in order to be 95% confident that the sample proportion will not differ from the true proportion by more than 4%?&lt;br/&gt;Let $z_{0.1}=1.28$, $z_{0.05}=1.64$, $z_{0.025}=1.96$.</p></div><div class=\"ml-vi\"><p>Một nhà nghiên cứu tại một bệnh viện lớn muốn ước lượng tỷ lệ người trưởng thành ở Hoa Kỳ bị cao huyết áp. Cần cỡ mẫu bao nhiêu để tin cậy 95% rằng tỷ lệ mẫu sai lệch không quá 4% so với tỷ lệ thật?&lt;br/&gt;Cho $z_{0,1}=1{,}28$; $z_{0,05}=1{,}64$; $z_{0,025}=1{,}96$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A researcher at a major hospital wishes to estimate the proportion of the adult population of the United States that has high blood pressure. How large a sample is needed in order to be 95% confident that the sample proportion will not differ from the true proportion by more than 4%?<br/>Let $z_{0.1}=1.28$, $z_{0.05}=1.64$, $z_{0.025}=1.96$.</p></div><div class=\"ml-vi\"><p>Một nhà nghiên cứu tại một bệnh viện lớn muốn ước lượng tỷ lệ người trưởng thành ở Hoa Kỳ bị cao huyết áp. Cần cỡ mẫu bao nhiêu để tin cậy 95% rằng tỷ lệ mẫu sai lệch không quá 4% so với tỷ lệ thật?<br/>Cho $z_{0,1}=1{,}28$; $z_{0,05}=1{,}64$; $z_{0,025}=1{,}96$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D17/q47.png",
           "options": [
             {
@@ -1231,7 +1231,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\"><p>With no prior estimate of $p$, use the worst case $p=0.5$ (which maximises $p(1-p)=0.25$). For 95% confidence, $z_{\\alpha/2}=z_{0.025}=1.96$ and $E=0.04$:&lt;br/&gt;$n=\\dfrac{z_{\\alpha/2}^{2}\\,p(1-p)}{E^{2}}=\\dfrac{(1.96)^{2}(0.25)}{(0.04)^{2}}=\\dfrac{3.8416\\times0.25}{0.0016}=\\dfrac{0.9604}{0.0016}=600.25$.&lt;br/&gt;Sample size is always rounded UP, giving $n=601$.</p></div><div class=\"ml-vi\"><p>Không có ước lượng trước cho $p$ nên dùng trường hợp xấu nhất $p=0{,}5$ (giá trị làm $p(1-p)=0{,}25$ lớn nhất). Với độ tin cậy 95%, $z_{\\alpha/2}=z_{0,025}=1{,}96$ và $E=0{,}04$:&lt;br/&gt;$n=\\dfrac{z_{\\alpha/2}^{2}\\,p(1-p)}{E^{2}}=\\dfrac{(1{,}96)^{2}(0{,}25)}{(0{,}04)^{2}}=\\dfrac{3{,}8416\\times0{,}25}{0{,}0016}=\\dfrac{0{,}9604}{0{,}0016}=600{,}25$.&lt;br/&gt;Cỡ mẫu luôn làm tròn LÊN, được $n=601$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>With no prior estimate of $p$, use the worst case $p=0.5$ (which maximises $p(1-p)=0.25$). For 95% confidence, $z_{\\alpha/2}=z_{0.025}=1.96$ and $E=0.04$:<br/>$n=\\dfrac{z_{\\alpha/2}^{2}\\,p(1-p)}{E^{2}}=\\dfrac{(1.96)^{2}(0.25)}{(0.04)^{2}}=\\dfrac{3.8416\\times0.25}{0.0016}=\\dfrac{0.9604}{0.0016}=600.25$.<br/>Sample size is always rounded UP, giving $n=601$.</p></div><div class=\"ml-vi\"><p>Không có ước lượng trước cho $p$ nên dùng trường hợp xấu nhất $p=0{,}5$ (giá trị làm $p(1-p)=0{,}25$ lớn nhất). Với độ tin cậy 95%, $z_{\\alpha/2}=z_{0,025}=1{,}96$ và $E=0{,}04$:<br/>$n=\\dfrac{z_{\\alpha/2}^{2}\\,p(1-p)}{E^{2}}=\\dfrac{(1{,}96)^{2}(0{,}25)}{(0{,}04)^{2}}=\\dfrac{3{,}8416\\times0{,}25}{0{,}0016}=\\dfrac{0{,}9604}{0{,}0016}=600{,}25$.<br/>Cỡ mẫu luôn làm tròn LÊN, được $n=601$.</p></div>"
         },
         {
           "kind": "MCQ",

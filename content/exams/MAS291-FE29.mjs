@@ -72,7 +72,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The following is SUMMARY OUTPUT from a simple regression model; some values are missing.</p><p>Regression Statistics: Multiple R $= 0.756604788$; Standard Error $= 1.565657067$; Observations $= 5$.</p><p>ANOVA: Residual $df = 3$, $SS = 7.353846154$, $MS = 2.451282051$; Total $df = 4$, $SS = 17.2$.</p><p>Coefficients table: Intercept — Coefficient $= 1.138461538$, Standard Error $= 1.413767192$, $t$ Stat $= 0.805268042$; X Variable 1 — Coefficient $= 0.615384615$, Standard Error $= 0.307050613$, $t$ Stat $= 2.004179733$.</p><p>What is the test statistic for the test $H_1:\\beta_0 < 2$?</p></div><div class=\"ml-vi\"><p>Dưới đây là SUMMARY OUTPUT của một mô hình hồi quy tuyến tính đơn, một số giá trị bị khuyết.</p><p>Regression Statistics: Multiple R $= 0.756604788$; Standard Error $= 1.565657067$; Observations $= 5$.</p><p>ANOVA: Residual $df = 3$, $SS = 7.353846154$, $MS = 2.451282051$; Total $df = 4$, $SS = 17.2$.</p><p>Bảng hệ số: Intercept — hệ số $= 1.138461538$, sai số chuẩn $= 1.413767192$, $t$ Stat $= 0.805268042$; X Variable 1 — hệ số $= 0.615384615$, sai số chuẩn $= 0.307050613$, $t$ Stat $= 2.004179733$.</p><p>Thống kê kiểm định cho phép kiểm $H_1:\\beta_0 < 2$ bằng bao nhiêu?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The following is SUMMARY OUTPUT from a simple regression model; some values are missing.<br/><br/>Regression Statistics: Multiple R $= 0.756604788$; Standard Error $= 1.565657067$; Observations $= 5$.<br/><br/>ANOVA: Residual $df = 3$, $SS = 7.353846154$, $MS = 2.451282051$; Total $df = 4$, $SS = 17.2$.<br/><br/>Coefficients table: Intercept — Coefficient $= 1.138461538$, Standard Error $= 1.413767192$, $t$ Stat $= 0.805268042$; X Variable 1 — Coefficient $= 0.615384615$, Standard Error $= 0.307050613$, $t$ Stat $= 2.004179733$.<br/><br/>What is the test statistic for the test $H_1:\\beta_0 < 2$?</p></div><div class=\"ml-vi\"><p>Dưới đây là SUMMARY OUTPUT của một mô hình hồi quy tuyến tính đơn, một số giá trị bị khuyết.<br/><br/>Regression Statistics: Multiple R $= 0.756604788$; Standard Error $= 1.565657067$; Observations $= 5$.<br/><br/>ANOVA: Residual $df = 3$, $SS = 7.353846154$, $MS = 2.451282051$; Total $df = 4$, $SS = 17.2$.<br/><br/>Bảng hệ số: Intercept — hệ số $= 1.138461538$, sai số chuẩn $= 1.413767192$, $t$ Stat $= 0.805268042$; X Variable 1 — hệ số $= 0.615384615$, sai số chuẩn $= 0.307050613$, $t$ Stat $= 2.004179733$.<br/><br/>Thống kê kiểm định cho phép kiểm $H_1:\\beta_0 < 2$ bằng bao nhiêu?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q3.png",
           "options": [
             {
@@ -99,7 +99,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Consider the hypothesis test $H_0: p_1 = p_2$ against $H_1: p_1 \\neq p_2$. Suppose that sample sizes $n_1 = 1000$ and $n_2 = 900$, and that $X_1 = 900$ and $X_2 = 720$. Compute the value of the test statistic.</p></div><div class=\"ml-vi\"><p>Xét bài toán kiểm định $H_0: p_1 = p_2$ đối với $H_1: p_1 \\neq p_2$. Giả sử cỡ mẫu $n_1 = 1000$ và $n_2 = 900$, với $X_1 = 900$ và $X_2 = 720$. Tính giá trị của thống kê kiểm định.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Consider the hypothesis test $H_0: p_1 = p_2$ against $H_1: p_1 <br/>eq p_2$. Suppose that sample sizes $n_1 = 1000$ and $n_2 = 900$, and that $X_1 = 900$ and $X_2 = 720$. Compute the value of the test statistic.</p></div><div class=\"ml-vi\"><p>Xét bài toán kiểm định $H_0: p_1 = p_2$ đối với $H_1: p_1 <br/>eq p_2$. Giả sử cỡ mẫu $n_1 = 1000$ và $n_2 = 900$, với $X_1 = 900$ và $X_2 = 720$. Tính giá trị của thống kê kiểm định.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q4.png",
           "options": [
             {
@@ -177,7 +177,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The investigation in your book involves collecting resting pulse rates from 30 students in your class, shown below. Construct the boxplot for the data set.</p><p>56, 57, 60, 60, 64, 65, 65, 65, 68, 70, 70, 76, 77, 77, 77, 77, 78, 80, 82, 85, 87, 87, 88, 89, 89, 89, 89, 90, 90, 90</p><p>Candidate boxplots (min, $Q_1$, median, $Q_3$, max):<br/>(i) $56,\\;65,\\;77,\\;89,\\;90$<br/>(ii) $56,\\;65,\\;76,\\;89,\\;90$<br/>(iii) $56,\\;65,\\;77,\\;88.5,\\;90$</p></div><div class=\"ml-vi\"><p>Nghiên cứu trong sách của bạn thu thập nhịp mạch lúc nghỉ của 30 sinh viên trong lớp, cho dưới đây. Hãy dựng biểu đồ hộp cho tập dữ liệu.</p><p>56, 57, 60, 60, 64, 65, 65, 65, 68, 70, 70, 76, 77, 77, 77, 77, 78, 80, 82, 85, 87, 87, 88, 89, 89, 89, 89, 90, 90, 90</p><p>Các biểu đồ hộp ứng viên (min, $Q_1$, trung vị, $Q_3$, max):<br/>(i) $56,\\;65,\\;77,\\;89,\\;90$<br/>(ii) $56,\\;65,\\;76,\\;89,\\;90$<br/>(iii) $56,\\;65,\\;77,\\;88.5,\\;90$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The investigation in your book involves collecting resting pulse rates from 30 students in your class, shown below. Construct the boxplot for the data set.<br/><br/>56, 57, 60, 60, 64, 65, 65, 65, 68, 70, 70, 76, 77, 77, 77, 77, 78, 80, 82, 85, 87, 87, 88, 89, 89, 89, 89, 90, 90, 90<br/><br/>Candidate boxplots (min, $Q_1$, median, $Q_3$, max):<br/>(i) $56,\\;65,\\;77,\\;89,\\;90$<br/>(ii) $56,\\;65,\\;76,\\;89,\\;90$<br/>(iii) $56,\\;65,\\;77,\\;88.5,\\;90$</p></div><div class=\"ml-vi\"><p>Nghiên cứu trong sách của bạn thu thập nhịp mạch lúc nghỉ của 30 sinh viên trong lớp, cho dưới đây. Hãy dựng biểu đồ hộp cho tập dữ liệu.<br/><br/>56, 57, 60, 60, 64, 65, 65, 65, 68, 70, 70, 76, 77, 77, 77, 77, 78, 80, 82, 85, 87, 87, 88, 89, 89, 89, 89, 90, 90, 90<br/><br/>Các biểu đồ hộp ứng viên (min, $Q_1$, trung vị, $Q_3$, max):<br/>(i) $56,\\;65,\\;77,\\;89,\\;90$<br/>(ii) $56,\\;65,\\;76,\\;89,\\;90$<br/>(iii) $56,\\;65,\\;77,\\;88.5,\\;90$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q7.png",
           "options": [
             {
@@ -228,7 +228,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>At a computer manufacturing company, the actual size of computer chips is normally distributed with a mean of 1 centimeter and a standard deviation of 0.1 centimeter. A random sample of 12 computer chips is taken. What is the probability that the sample mean will be between 0.99 and 1.01 centimeters?</p><p>Let $P(Z < 0.1) = 0.54$, $P(Z < 0.346) = 0.64$, $P(Z < -0.346) = 0.36$.</p></div><div class=\"ml-vi\"><p>Tại một công ty sản xuất máy tính, kích thước thực của con chip tuân theo phân phối chuẩn với trung bình 1 cm và độ lệch chuẩn 0.1 cm. Lấy ngẫu nhiên một mẫu 12 con chip. Xác suất để trung bình mẫu nằm trong khoảng 0.99 đến 1.01 cm là bao nhiêu?</p><p>Cho $P(Z < 0.1) = 0.54$, $P(Z < 0.346) = 0.64$, $P(Z < -0.346) = 0.36$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>At a computer manufacturing company, the actual size of computer chips is normally distributed with a mean of 1 centimeter and a standard deviation of 0.1 centimeter. A random sample of 12 computer chips is taken. What is the probability that the sample mean will be between 0.99 and 1.01 centimeters?<br/><br/>Let $P(Z < 0.1) = 0.54$, $P(Z < 0.346) = 0.64$, $P(Z < -0.346) = 0.36$.</p></div><div class=\"ml-vi\"><p>Tại một công ty sản xuất máy tính, kích thước thực của con chip tuân theo phân phối chuẩn với trung bình 1 cm và độ lệch chuẩn 0.1 cm. Lấy ngẫu nhiên một mẫu 12 con chip. Xác suất để trung bình mẫu nằm trong khoảng 0.99 đến 1.01 cm là bao nhiêu?<br/><br/>Cho $P(Z < 0.1) = 0.54$, $P(Z < 0.346) = 0.64$, $P(Z < -0.346) = 0.36$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q9.png",
           "options": [
             {
@@ -321,7 +321,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Of 1000 randomly selected cases of lung cancer, 800 resulted in death within 12 years. Using the point estimate of $p$ obtained from this sample, what sample size is needed to be 95% confident that the error in estimating the true value of $p$ is less than 0.03?</p><p>Let $z_{0.025} = 1.96$ and $z_{0.05} = 1.65$.</p></div><div class=\"ml-vi\"><p>Trong 1000 ca ung thư phổi được chọn ngẫu nhiên, 800 ca tử vong trong vòng 12 năm. Dùng ước lượng điểm của $p$ từ mẫu này, cần cỡ mẫu bao nhiêu để tin cậy 95% rằng sai số ước lượng giá trị thật của $p$ nhỏ hơn 0.03?</p><p>Cho $z_{0.025} = 1.96$ và $z_{0.05} = 1.65$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Of 1000 randomly selected cases of lung cancer, 800 resulted in death within 12 years. Using the point estimate of $p$ obtained from this sample, what sample size is needed to be 95% confident that the error in estimating the true value of $p$ is less than 0.03?<br/><br/>Let $z_{0.025} = 1.96$ and $z_{0.05} = 1.65$.</p></div><div class=\"ml-vi\"><p>Trong 1000 ca ung thư phổi được chọn ngẫu nhiên, 800 ca tử vong trong vòng 12 năm. Dùng ước lượng điểm của $p$ từ mẫu này, cần cỡ mẫu bao nhiêu để tin cậy 95% rằng sai số ước lượng giá trị thật của $p$ nhỏ hơn 0.03?<br/><br/>Cho $z_{0.025} = 1.96$ và $z_{0.05} = 1.65$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q13.png",
           "options": [
             {
@@ -348,7 +348,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The probability density function of the time customers arrive at a terminal (in minutes after 9:00 A.M.) is given by $f(x) = \\dfrac{1}{9}e^{-x/9},\\; x > 0$. Determine the cumulative distribution function $F(x)$.</p><p>(i) $1 - e^{-x/9},\\; x>0$<br/>(ii) $1 - (1/9)e^{-x/9},\\; x>0$<br/>(iii) $e^{-x/9},\\; x>0$<br/>(iv) $(1/9)e^{-x/9},\\; x>0$</p></div><div class=\"ml-vi\"><p>Hàm mật độ xác suất của thời điểm khách hàng đến một quầy (tính bằng phút sau 9:00 sáng) là $f(x) = \\dfrac{1}{9}e^{-x/9},\\; x > 0$. Xác định hàm phân phối tích luỹ $F(x)$.</p><p>(i) $1 - e^{-x/9},\\; x>0$<br/>(ii) $1 - (1/9)e^{-x/9},\\; x>0$<br/>(iii) $e^{-x/9},\\; x>0$<br/>(iv) $(1/9)e^{-x/9},\\; x>0$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The probability density function of the time customers arrive at a terminal (in minutes after 9:00 A.M.) is given by $f(x) = \\dfrac{1}{9}e^{-x/9},\\; x > 0$. Determine the cumulative distribution function $F(x)$.<br/><br/>(i) $1 - e^{-x/9},\\; x>0$<br/>(ii) $1 - (1/9)e^{-x/9},\\; x>0$<br/>(iii) $e^{-x/9},\\; x>0$<br/>(iv) $(1/9)e^{-x/9},\\; x>0$</p></div><div class=\"ml-vi\"><p>Hàm mật độ xác suất của thời điểm khách hàng đến một quầy (tính bằng phút sau 9:00 sáng) là $f(x) = \\dfrac{1}{9}e^{-x/9},\\; x > 0$. Xác định hàm phân phối tích luỹ $F(x)$.<br/><br/>(i) $1 - e^{-x/9},\\; x>0$<br/>(ii) $1 - (1/9)e^{-x/9},\\; x>0$<br/>(iii) $e^{-x/9},\\; x>0$<br/>(iv) $(1/9)e^{-x/9},\\; x>0$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q14.png",
           "options": [
             {
@@ -453,7 +453,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A random variable $X$ has the following probability distribution. Determine the mean and variance of $X$.</p><p>| $X$ | 1 | 1.5 | 2 | 2.5 |<br/>|---|---|---|---|---|<br/>| $P(X)$ | 0.2 | 0.3 | 0.1 | 0.4 |</p></div><div class=\"ml-vi\"><p>Biến ngẫu nhiên $X$ có bảng phân phối xác suất sau. Xác định kỳ vọng và phương sai của $X$.</p><p>| $X$ | 1 | 1.5 | 2 | 2.5 |<br/>|---|---|---|---|---|<br/>| $P(X)$ | 0.2 | 0.3 | 0.1 | 0.4 |</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A random variable $X$ has the following probability distribution. Determine the mean and variance of $X$.<br/><br/><table class=\"exam-table\"><thead><tr><th>$X$</th><th>1</th><th>1.5</th><th>2</th><th>2.5</th></tr></thead><tbody><tr><td>$P(X)$</td><td>0.2</td><td>0.3</td><td>0.1</td><td>0.4</td></tr></tbody></table></p></div><div class=\"ml-vi\"><p>Biến ngẫu nhiên $X$ có bảng phân phối xác suất sau. Xác định kỳ vọng và phương sai của $X$.<br/><br/><table class=\"exam-table\"><thead><tr><th>$X$</th><th>1</th><th>1.5</th><th>2</th><th>2.5</th></tr></thead><tbody><tr><td>$P(X)$</td><td>0.2</td><td>0.3</td><td>0.1</td><td>0.4</td></tr></tbody></table></p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q18.png",
           "options": [
             {
@@ -531,7 +531,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>In simple linear regression, the estimated standard error of the slope is ______.</p><p>(i) $se(\\hat\\beta_1) = \\sqrt{\\hat\\sigma^2\\left[\\dfrac{1}{n}+\\dfrac{\\bar x^2}{S_{xx}}\\right]}$<br/>(ii) $se(\\hat\\beta_0) = \\dfrac{\\hat\\sigma^2}{S_{xx}}$<br/>(iii) $se(\\hat\\beta_1) = \\sqrt{\\dfrac{\\hat\\sigma^2}{S_{xx}}}$<br/>(iv) $se(\\hat\\beta_0) = \\sqrt{\\hat\\sigma^2\\left[\\dfrac{1}{n}+\\dfrac{\\bar x^2}{S_{xx}}\\right]}$</p></div><div class=\"ml-vi\"><p>Trong hồi quy tuyến tính đơn, sai số chuẩn ước lượng của hệ số góc là ______.</p><p>(i) $se(\\hat\\beta_1) = \\sqrt{\\hat\\sigma^2\\left[\\dfrac{1}{n}+\\dfrac{\\bar x^2}{S_{xx}}\\right]}$<br/>(ii) $se(\\hat\\beta_0) = \\dfrac{\\hat\\sigma^2}{S_{xx}}$<br/>(iii) $se(\\hat\\beta_1) = \\sqrt{\\dfrac{\\hat\\sigma^2}{S_{xx}}}$<br/>(iv) $se(\\hat\\beta_0) = \\sqrt{\\hat\\sigma^2\\left[\\dfrac{1}{n}+\\dfrac{\\bar x^2}{S_{xx}}\\right]}$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>In simple linear regression, the estimated standard error of the slope is ______.<br/><br/>(i) $se(\\hat\\beta_1) = \\sqrt{\\hat\\sigma^2\\left[\\dfrac{1}{n}+\\dfrac{\\bar x^2}{S_{xx}}\\right]}$<br/>(ii) $se(\\hat\\beta_0) = \\dfrac{\\hat\\sigma^2}{S_{xx}}$<br/>(iii) $se(\\hat\\beta_1) = \\sqrt{\\dfrac{\\hat\\sigma^2}{S_{xx}}}$<br/>(iv) $se(\\hat\\beta_0) = \\sqrt{\\hat\\sigma^2\\left[\\dfrac{1}{n}+\\dfrac{\\bar x^2}{S_{xx}}\\right]}$</p></div><div class=\"ml-vi\"><p>Trong hồi quy tuyến tính đơn, sai số chuẩn ước lượng của hệ số góc là ______.<br/><br/>(i) $se(\\hat\\beta_1) = \\sqrt{\\hat\\sigma^2\\left[\\dfrac{1}{n}+\\dfrac{\\bar x^2}{S_{xx}}\\right]}$<br/>(ii) $se(\\hat\\beta_0) = \\dfrac{\\hat\\sigma^2}{S_{xx}}$<br/>(iii) $se(\\hat\\beta_1) = \\sqrt{\\dfrac{\\hat\\sigma^2}{S_{xx}}}$<br/>(iv) $se(\\hat\\beta_0) = \\sqrt{\\hat\\sigma^2\\left[\\dfrac{1}{n}+\\dfrac{\\bar x^2}{S_{xx}}\\right]}$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q21.png",
           "options": [
             {
@@ -558,7 +558,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>We have created a 95% confidence interval for $\\mu$ with the result $(10, 15)$. What decision will we make if we test $H_0: \\mu = 16$ versus $H_1: \\mu \\neq 16$ at $\\alpha = 0.05$?</p><p>(i) Reject $H_0$ in favor of $H_1$.<br/>(ii) Fail to reject $H_0$ in favor of $H_1$.<br/>(iii) Accept $H_0$ in favor of $H_1$.<br/>(iv) We cannot tell what our decision will be from the information given.</p></div><div class=\"ml-vi\"><p>Ta đã lập khoảng tin cậy 95% cho $\\mu$ và thu được $(10, 15)$. Ta sẽ quyết định thế nào nếu kiểm định $H_0: \\mu = 16$ đối với $H_1: \\mu \\neq 16$ ở mức $\\alpha = 0.05$?</p><p>(i) Bác bỏ $H_0$, nghiêng về $H_1$.<br/>(ii) Không bác bỏ được $H_0$.<br/>(iii) Chấp nhận $H_0$.<br/>(iv) Không thể biết quyết định từ thông tin đã cho.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>We have created a 95% confidence interval for $\\mu$ with the result $(10, 15)$. What decision will we make if we test $H_0: \\mu = 16$ versus $H_1: \\mu <br/>eq 16$ at $\\alpha = 0.05$?<br/><br/>(i) Reject $H_0$ in favor of $H_1$.<br/>(ii) Fail to reject $H_0$ in favor of $H_1$.<br/>(iii) Accept $H_0$ in favor of $H_1$.<br/>(iv) We cannot tell what our decision will be from the information given.</p></div><div class=\"ml-vi\"><p>Ta đã lập khoảng tin cậy 95% cho $\\mu$ và thu được $(10, 15)$. Ta sẽ quyết định thế nào nếu kiểm định $H_0: \\mu = 16$ đối với $H_1: \\mu <br/>eq 16$ ở mức $\\alpha = 0.05$?<br/><br/>(i) Bác bỏ $H_0$, nghiêng về $H_1$.<br/>(ii) Không bác bỏ được $H_0$.<br/>(iii) Chấp nhận $H_0$.<br/>(iv) Không thể biết quyết định từ thông tin đã cho.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q22.png",
           "options": [
             {
@@ -577,7 +577,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>A two-sided level-$\\alpha$ test and a $100(1-\\alpha)\\%$ confidence interval are equivalent: $H_0:\\mu=\\mu_0$ is rejected at level $\\alpha$ exactly when $\\mu_0$ falls OUTSIDE the interval. Here $\\alpha = 0.05$ matches the 95% interval $(10,15)$, and $16 \\notin (10,15)$, so we reject $H_0$.</p></div><div class=\"ml-vi\"><p>Kiểm định hai phía mức $\\alpha$ và khoảng tin cậy $100(1-\\alpha)\\%$ là tương đương: bác bỏ $H_0:\\mu=\\mu_0$ ở mức $\\alpha$ đúng khi $\\mu_0$ nằm NGOÀI khoảng. Ở đây $\\alpha = 0.05$ khớp với khoảng 95% $(10,15)$, và $16 \\notin (10,15)$, nên ta bác bỏ $H_0$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>A two-sided level-$\\alpha$ test and a $100(1-\\alpha)\\%$ confidence interval are equivalent: $H_0:\\mu=\\mu_0$ is rejected at level $\\alpha$ exactly when $\\mu_0$ falls OUTSIDE the interval. Here $\\alpha = 0.05$ matches the 95% interval $(10,15)$, and $16 <br/>otin (10,15)$, so we reject $H_0$.</p></div><div class=\"ml-vi\"><p>Kiểm định hai phía mức $\\alpha$ và khoảng tin cậy $100(1-\\alpha)\\%$ là tương đương: bác bỏ $H_0:\\mu=\\mu_0$ ở mức $\\alpha$ đúng khi $\\mu_0$ nằm NGOÀI khoảng. Ở đây $\\alpha = 0.05$ khớp với khoảng 95% $(10,15)$, và $16 <br/>otin (10,15)$, nên ta bác bỏ $H_0$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -606,7 +606,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The amount of corn chips dispensed into a 20-ounce bag by the dispensing machine has been identified at possessing a normal distribution with a mean of 20.5 ounces and a standard deviation of 0.2 ounce. Suppose 100 bags of chips were randomly selected from this dispensing machine. Find the probability that the sample mean weight of these 100 bags exceeded 20.6 ounces.</p><p>Let $P(Z < -0.87) = 0.1922$, $P(Z < -0.5) = 0.3085$, $P(Z < 0.5) = 0.6915$ and $P(Z < 5) = 1$.</p></div><div class=\"ml-vi\"><p>Lượng bim bim ngô được máy rót vào túi 20-ounce tuân theo phân phối chuẩn với trung bình 20.5 ounce và độ lệch chuẩn 0.2 ounce. Giả sử chọn ngẫu nhiên 100 túi từ máy này. Tìm xác suất để trọng lượng trung bình mẫu của 100 túi này vượt quá 20.6 ounce.</p><p>Cho $P(Z < -0.87) = 0.1922$, $P(Z < -0.5) = 0.3085$, $P(Z < 0.5) = 0.6915$ và $P(Z < 5) = 1$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The amount of corn chips dispensed into a 20-ounce bag by the dispensing machine has been identified at possessing a normal distribution with a mean of 20.5 ounces and a standard deviation of 0.2 ounce. Suppose 100 bags of chips were randomly selected from this dispensing machine. Find the probability that the sample mean weight of these 100 bags exceeded 20.6 ounces.<br/><br/>Let $P(Z < -0.87) = 0.1922$, $P(Z < -0.5) = 0.3085$, $P(Z < 0.5) = 0.6915$ and $P(Z < 5) = 1$.</p></div><div class=\"ml-vi\"><p>Lượng bim bim ngô được máy rót vào túi 20-ounce tuân theo phân phối chuẩn với trung bình 20.5 ounce và độ lệch chuẩn 0.2 ounce. Giả sử chọn ngẫu nhiên 100 túi từ máy này. Tìm xác suất để trọng lượng trung bình mẫu của 100 túi này vượt quá 20.6 ounce.<br/><br/>Cho $P(Z < -0.87) = 0.1922$, $P(Z < -0.5) = 0.3085$, $P(Z < 0.5) = 0.6915$ và $P(Z < 5) = 1$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q24.png",
           "options": [
             {
@@ -630,7 +630,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Past experience indicates that the time for high school seniors to complete a standardized test is a normal random variable with a mean of 35 minutes. If a random sample of 20 high school seniors took an average of 33.1 minutes to complete this test with a standard deviation of 4.3 minutes, test the hypothesis at the 0.025 level of significance that $\\mu = 35$ minutes against the alternative that $\\mu < 35$ minutes.</p><p>Let $t_{0.025,19} = 2.09$.</p></div><div class=\"ml-vi\"><p>Kinh nghiệm cho thấy thời gian học sinh cuối cấp hoàn thành một bài kiểm tra chuẩn hoá là biến ngẫu nhiên chuẩn với trung bình 35 phút. Nếu mẫu ngẫu nhiên 20 học sinh cuối cấp mất trung bình 33.1 phút để hoàn thành bài kiểm tra với độ lệch chuẩn 4.3 phút, hãy kiểm định ở mức ý nghĩa 0.025 giả thuyết $\\mu = 35$ phút đối với đối thuyết $\\mu < 35$ phút.</p><p>Cho $t_{0.025,19} = 2.09$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Past experience indicates that the time for high school seniors to complete a standardized test is a normal random variable with a mean of 35 minutes. If a random sample of 20 high school seniors took an average of 33.1 minutes to complete this test with a standard deviation of 4.3 minutes, test the hypothesis at the 0.025 level of significance that $\\mu = 35$ minutes against the alternative that $\\mu < 35$ minutes.<br/><br/>Let $t_{0.025,19} = 2.09$.</p></div><div class=\"ml-vi\"><p>Kinh nghiệm cho thấy thời gian học sinh cuối cấp hoàn thành một bài kiểm tra chuẩn hoá là biến ngẫu nhiên chuẩn với trung bình 35 phút. Nếu mẫu ngẫu nhiên 20 học sinh cuối cấp mất trung bình 33.1 phút để hoàn thành bài kiểm tra với độ lệch chuẩn 4.3 phút, hãy kiểm định ở mức ý nghĩa 0.025 giả thuyết $\\mu = 35$ phút đối với đối thuyết $\\mu < 35$ phút.<br/><br/>Cho $t_{0.025,19} = 2.09$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q25.png",
           "options": [
             {
@@ -684,7 +684,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Given the probability distribution of a random discrete variable $X$:</p><p>| $x$ | 0 | 1 | 2 | 3 | 5 |<br/>|---|---|---|---|---|---|<br/>| $P(x)$ | 0.18 | 0.27 | 0.15 | 0.15 | 0.25 |</p><p>Find $P(X < 4)$.</p></div><div class=\"ml-vi\"><p>Cho bảng phân phối xác suất của biến ngẫu nhiên rời rạc $X$:</p><p>| $x$ | 0 | 1 | 2 | 3 | 5 |<br/>|---|---|---|---|---|---|<br/>| $P(x)$ | 0.18 | 0.27 | 0.15 | 0.15 | 0.25 |</p><p>Tìm $P(X < 4)$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given the probability distribution of a random discrete variable $X$:<br/><br/><table class=\"exam-table\"><thead><tr><th>$x$</th><th>0</th><th>1</th><th>2</th><th>3</th><th>5</th></tr></thead><tbody><tr><td>$P(x)$</td><td>0.18</td><td>0.27</td><td>0.15</td><td>0.15</td><td>0.25</td></tr></tbody></table><br/>Find $P(X < 4)$.</p></div><div class=\"ml-vi\"><p>Cho bảng phân phối xác suất của biến ngẫu nhiên rời rạc $X$:<br/><br/><table class=\"exam-table\"><thead><tr><th>$x$</th><th>0</th><th>1</th><th>2</th><th>3</th><th>5</th></tr></thead><tbody><tr><td>$P(x)$</td><td>0.18</td><td>0.27</td><td>0.15</td><td>0.15</td><td>0.25</td></tr></tbody></table><br/>Tìm $P(X < 4)$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q27.png",
           "options": [
             {
@@ -759,7 +759,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The diameter of holes for cable harness is known to have a normal distribution with $\\sigma = 0.010$ inch. A random sample of size 10 yields an average diameter of 1.545 inch. Find a 99% two-sided confidence interval on the mean hole diameter.</p><p>Let $z_{0.005} = 2.58$.</p></div><div class=\"ml-vi\"><p>Đường kính lỗ của bó dây cáp tuân theo phân phối chuẩn với $\\sigma = 0.010$ inch. Mẫu ngẫu nhiên cỡ 10 cho đường kính trung bình 1.545 inch. Hãy tìm khoảng tin cậy hai phía 99% cho đường kính lỗ trung bình.</p><p>Cho $z_{0.005} = 2.58$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The diameter of holes for cable harness is known to have a normal distribution with $\\sigma = 0.010$ inch. A random sample of size 10 yields an average diameter of 1.545 inch. Find a 99% two-sided confidence interval on the mean hole diameter.<br/><br/>Let $z_{0.005} = 2.58$.</p></div><div class=\"ml-vi\"><p>Đường kính lỗ của bó dây cáp tuân theo phân phối chuẩn với $\\sigma = 0.010$ inch. Mẫu ngẫu nhiên cỡ 10 cho đường kính trung bình 1.545 inch. Hãy tìm khoảng tin cậy hai phía 99% cho đường kính lỗ trung bình.<br/><br/>Cho $z_{0.005} = 2.58$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q30.png",
           "options": [
             {
@@ -786,7 +786,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Find the estimated regression line (rounded to 2 decimal places).</p><p>| $y$ | 110 | 113 | 75 | 94 |<br/>|---|---|---|---|---|<br/>| $x$ | 35.5 | 43.0 | 40.5 | 33.0 |</p><p>(i) $\\hat y = 93.44 + 0.12x$<br/>(ii) $\\hat y = 0.12 + 93.44x$<br/>(iii) $\\hat y = 0.12 + 0.93x$</p></div><div class=\"ml-vi\"><p>Tìm đường hồi quy ước lượng (làm tròn 2 chữ số thập phân).</p><p>| $y$ | 110 | 113 | 75 | 94 |<br/>|---|---|---|---|---|<br/>| $x$ | 35.5 | 43.0 | 40.5 | 33.0 |</p><p>(i) $\\hat y = 93.44 + 0.12x$<br/>(ii) $\\hat y = 0.12 + 93.44x$<br/>(iii) $\\hat y = 0.12 + 0.93x$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find the estimated regression line (rounded to 2 decimal places).<br/><br/><table class=\"exam-table\"><thead><tr><th>$y$</th><th>110</th><th>113</th><th>75</th><th>94</th></tr></thead><tbody><tr><td>$x$</td><td>35.5</td><td>43.0</td><td>40.5</td><td>33.0</td></tr></tbody></table><br/>(i) $\\hat y = 93.44 + 0.12x$<br/>(ii) $\\hat y = 0.12 + 93.44x$<br/>(iii) $\\hat y = 0.12 + 0.93x$</p></div><div class=\"ml-vi\"><p>Tìm đường hồi quy ước lượng (làm tròn 2 chữ số thập phân).<br/><br/><table class=\"exam-table\"><thead><tr><th>$y$</th><th>110</th><th>113</th><th>75</th><th>94</th></tr></thead><tbody><tr><td>$x$</td><td>35.5</td><td>43.0</td><td>40.5</td><td>33.0</td></tr></tbody></table><br/>(i) $\\hat y = 93.44 + 0.12x$<br/>(ii) $\\hat y = 0.12 + 93.44x$<br/>(iii) $\\hat y = 0.12 + 0.93x$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q31.png",
           "options": [
             {
@@ -1020,7 +1020,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The manufacturing of semiconductor chips produces 2% defective chips. Assume the chips are independent and that a lot contains 2000 chips. Use the normal distribution to approximate the probability that more than 50 chips are defective.</p><p>Let $P(Z < 1.677) = 0.9532$; $P(Z < 1.358) = 0.9128$.</p></div><div class=\"ml-vi\"><p>Quy trình sản xuất chip bán dẫn tạo ra 2% chip lỗi. Giả sử các chip độc lập và một lô chứa 2000 chip. Dùng phân phối chuẩn để xấp xỉ xác suất có hơn 50 chip bị lỗi.</p><p>Cho $P(Z < 1.677) = 0.9532$; $P(Z < 1.358) = 0.9128$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The manufacturing of semiconductor chips produces 2% defective chips. Assume the chips are independent and that a lot contains 2000 chips. Use the normal distribution to approximate the probability that more than 50 chips are defective.<br/><br/>Let $P(Z < 1.677) = 0.9532$; $P(Z < 1.358) = 0.9128$.</p></div><div class=\"ml-vi\"><p>Quy trình sản xuất chip bán dẫn tạo ra 2% chip lỗi. Giả sử các chip độc lập và một lô chứa 2000 chip. Dùng phân phối chuẩn để xấp xỉ xác suất có hơn 50 chip bị lỗi.<br/><br/>Cho $P(Z < 1.677) = 0.9532$; $P(Z < 1.358) = 0.9128$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q40.png",
           "options": [
             {
@@ -1044,7 +1044,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The yield of a chemical process is being studied. From previous experience, yield is known to be normally distributed and $\\sigma = 3$. The past 5 days of plant operation have resulted in the following percent yields: 91.6, 88.75, 90.8, 89.95, and 91.3. Find a 95% two-sided confidence interval on the true mean yield.</p><p>Let $z_{0.025} = 1.960$; $z_{0.05} = 1.645$.</p></div><div class=\"ml-vi\"><p>Hiệu suất của một quy trình hoá học đang được nghiên cứu. Từ kinh nghiệm trước đây, hiệu suất tuân theo phân phối chuẩn với $\\sigma = 3$. Năm ngày vận hành gần nhất cho các hiệu suất phần trăm: 91.6, 88.75, 90.8, 89.95 và 91.3. Hãy tìm khoảng tin cậy hai phía 95% cho hiệu suất trung bình thật.</p><p>Cho $z_{0.025} = 1.960$; $z_{0.05} = 1.645$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The yield of a chemical process is being studied. From previous experience, yield is known to be normally distributed and $\\sigma = 3$. The past 5 days of plant operation have resulted in the following percent yields: 91.6, 88.75, 90.8, 89.95, and 91.3. Find a 95% two-sided confidence interval on the true mean yield.<br/><br/>Let $z_{0.025} = 1.960$; $z_{0.05} = 1.645$.</p></div><div class=\"ml-vi\"><p>Hiệu suất của một quy trình hoá học đang được nghiên cứu. Từ kinh nghiệm trước đây, hiệu suất tuân theo phân phối chuẩn với $\\sigma = 3$. Năm ngày vận hành gần nhất cho các hiệu suất phần trăm: 91.6, 88.75, 90.8, 89.95 và 91.3. Hãy tìm khoảng tin cậy hai phía 95% cho hiệu suất trung bình thật.<br/><br/>Cho $z_{0.025} = 1.960$; $z_{0.05} = 1.645$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q41.png",
           "options": [
             {
@@ -1068,7 +1068,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A machine is producing metal pieces that are cylindrical in shape. A sample of pieces is taken and the diameters are 1.01, 0.97, 1.03, 1.04, 0.99, 0.98, 0.99, 1.01, 1.03 (centimeters). From this sample, one can compute a mean of 1.005 and a standard deviation of 0.025. Find a 99% confidence interval for the mean diameter of pieces from this machine, assuming an approximate normal distribution.</p><p>Let $t_{0.005,8} = 3.355$, $t_{0.01,8} = 2.896$.</p></div><div class=\"ml-vi\"><p>Một máy sản xuất các chi tiết kim loại hình trụ. Lấy một mẫu và đo đường kính được 1.01, 0.97, 1.03, 1.04, 0.99, 0.98, 0.99, 1.01, 1.03 (centimet). Từ mẫu này tính được trung bình 1.005 và độ lệch chuẩn 0.025. Hãy tìm khoảng tin cậy 99% cho đường kính trung bình các chi tiết do máy này sản xuất, giả sử phân phối xấp xỉ chuẩn.</p><p>Cho $t_{0.005,8} = 3.355$, $t_{0.01,8} = 2.896$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A machine is producing metal pieces that are cylindrical in shape. A sample of pieces is taken and the diameters are 1.01, 0.97, 1.03, 1.04, 0.99, 0.98, 0.99, 1.01, 1.03 (centimeters). From this sample, one can compute a mean of 1.005 and a standard deviation of 0.025. Find a 99% confidence interval for the mean diameter of pieces from this machine, assuming an approximate normal distribution.<br/><br/>Let $t_{0.005,8} = 3.355$, $t_{0.01,8} = 2.896$.</p></div><div class=\"ml-vi\"><p>Một máy sản xuất các chi tiết kim loại hình trụ. Lấy một mẫu và đo đường kính được 1.01, 0.97, 1.03, 1.04, 0.99, 0.98, 0.99, 1.01, 1.03 (centimet). Từ mẫu này tính được trung bình 1.005 và độ lệch chuẩn 0.025. Hãy tìm khoảng tin cậy 99% cho đường kính trung bình các chi tiết do máy này sản xuất, giả sử phân phối xấp xỉ chuẩn.<br/><br/>Cho $t_{0.005,8} = 3.355$, $t_{0.01,8} = 2.896$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q42.png",
           "options": [
             {
@@ -1119,7 +1119,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>At one college, GPAs are normally distributed with a mean of 2.6 and a standard deviation of 0.4. What percentage of students at the college have a GPA between 2.2 and 3?</p><p>Let $P(Z < -1) = 0.1613$, $P(Z < 0) = 0.5$, $P(Z < 1) = 0.8413$ and $P(Z < 2) = 0.977$.</p></div><div class=\"ml-vi\"><p>Tại một trường đại học, điểm GPA tuân theo phân phối chuẩn với trung bình 2.6 và độ lệch chuẩn 0.4. Bao nhiêu phần trăm sinh viên của trường có GPA nằm giữa 2.2 và 3?</p><p>Cho $P(Z < -1) = 0.1613$, $P(Z < 0) = 0.5$, $P(Z < 1) = 0.8413$ và $P(Z < 2) = 0.977$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>At one college, GPAs are normally distributed with a mean of 2.6 and a standard deviation of 0.4. What percentage of students at the college have a GPA between 2.2 and 3?<br/><br/>Let $P(Z < -1) = 0.1613$, $P(Z < 0) = 0.5$, $P(Z < 1) = 0.8413$ and $P(Z < 2) = 0.977$.</p></div><div class=\"ml-vi\"><p>Tại một trường đại học, điểm GPA tuân theo phân phối chuẩn với trung bình 2.6 và độ lệch chuẩn 0.4. Bao nhiêu phần trăm sinh viên của trường có GPA nằm giữa 2.2 và 3?<br/><br/>Cho $P(Z < -1) = 0.1613$, $P(Z < 0) = 0.5$, $P(Z < 1) = 0.8413$ và $P(Z < 2) = 0.977$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q44.png",
           "options": [
             {
@@ -1146,7 +1146,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The heights (in inches) of 20 adult males are listed below.</p><p>70, 72, 71, 70, 69, 73, 69, 68, 70, 71, 67, 71, 70, 74, 69, 68, 71, 71, 71, 72</p><p>Find the range of the data set.</p></div><div class=\"ml-vi\"><p>Chiều cao (đơn vị inch) của 20 nam giới trưởng thành được liệt kê dưới đây.</p><p>70, 72, 71, 70, 69, 73, 69, 68, 70, 71, 67, 71, 70, 74, 69, 68, 71, 71, 71, 72</p><p>Hãy tìm khoảng biến thiên (range) của tập dữ liệu.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The heights (in inches) of 20 adult males are listed below.<br/><br/>70, 72, 71, 70, 69, 73, 69, 68, 70, 71, 67, 71, 70, 74, 69, 68, 71, 71, 71, 72<br/><br/>Find the range of the data set.</p></div><div class=\"ml-vi\"><p>Chiều cao (đơn vị inch) của 20 nam giới trưởng thành được liệt kê dưới đây.<br/><br/>70, 72, 71, 70, 69, 73, 69, 68, 70, 71, 67, 71, 70, 74, 69, 68, 71, 71, 71, 72<br/><br/>Hãy tìm khoảng biến thiên (range) của tập dữ liệu.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q45.png",
           "options": [
             {
@@ -1200,7 +1200,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A soft drink manufacturer claims that the average volume of soft drink in its bottle is at least 2000 ml. Express the null hypothesis and the alternative hypothesis in symbolic form.</p><p>(i) $H_0: \\mu = 2000$; $H_1: \\mu > 2000$<br/>(ii) $H_0: \\mu = 2000$; $H_1: \\mu < 2000$<br/>(iii) $H_0: \\mu < 2000$; $H_1: \\mu \\ge 2000$<br/>(iv) $H_0: \\mu > 2000$; $H_1: \\mu \\le 2000$</p></div><div class=\"ml-vi\"><p>Một nhà sản xuất nước giải khát tuyên bố thể tích trung bình nước trong chai của họ ít nhất là 2000 ml. Hãy viết giả thuyết không và đối thuyết dưới dạng ký hiệu.</p><p>(i) $H_0: \\mu = 2000$; $H_1: \\mu > 2000$<br/>(ii) $H_0: \\mu = 2000$; $H_1: \\mu < 2000$<br/>(iii) $H_0: \\mu < 2000$; $H_1: \\mu \\ge 2000$<br/>(iv) $H_0: \\mu > 2000$; $H_1: \\mu \\le 2000$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A soft drink manufacturer claims that the average volume of soft drink in its bottle is at least 2000 ml. Express the null hypothesis and the alternative hypothesis in symbolic form.<br/><br/>(i) $H_0: \\mu = 2000$; $H_1: \\mu > 2000$<br/>(ii) $H_0: \\mu = 2000$; $H_1: \\mu < 2000$<br/>(iii) $H_0: \\mu < 2000$; $H_1: \\mu \\ge 2000$<br/>(iv) $H_0: \\mu > 2000$; $H_1: \\mu \\le 2000$</p></div><div class=\"ml-vi\"><p>Một nhà sản xuất nước giải khát tuyên bố thể tích trung bình nước trong chai của họ ít nhất là 2000 ml. Hãy viết giả thuyết không và đối thuyết dưới dạng ký hiệu.<br/><br/>(i) $H_0: \\mu = 2000$; $H_1: \\mu > 2000$<br/>(ii) $H_0: \\mu = 2000$; $H_1: \\mu < 2000$<br/>(iii) $H_0: \\mu < 2000$; $H_1: \\mu \\ge 2000$<br/>(iv) $H_0: \\mu > 2000$; $H_1: \\mu \\le 2000$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q47.png",
           "options": [
             {
@@ -1224,7 +1224,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Which of the following shows the data in a stem-and-leaf plot?</p><p>20, 35, 42, 52, 65, 20, 60, 49, 24, 37, 23, 24, 22, 20, 41, 25, 28, 27, 50, 47, 58, 30</p><p>(1) 2 | 0002344578 · 3 | 057 · 4 | 1279 · 5 | 028 · 6 | 05<br/>(2) 2 | 0023 44578 · 3 | 0257 · 4 | 12789 · 5 | 028 · 6 | 05<br/>(3) 2 | 000234457 · 3 | 02578 · 4 | 1279 · 5 | 028 · 6 | 05</p></div><div class=\"ml-vi\"><p>Biểu đồ thân–lá nào sau đây thể hiện đúng dữ liệu?</p><p>20, 35, 42, 52, 65, 20, 60, 49, 24, 37, 23, 24, 22, 20, 41, 25, 28, 27, 50, 47, 58, 30</p><p>(1) 2 | 0002344578 · 3 | 057 · 4 | 1279 · 5 | 028 · 6 | 05<br/>(2) 2 | 0023 44578 · 3 | 0257 · 4 | 12789 · 5 | 028 · 6 | 05<br/>(3) 2 | 000234457 · 3 | 02578 · 4 | 1279 · 5 | 028 · 6 | 05</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Which of the following shows the data in a stem-and-leaf plot?<br/><br/>20, 35, 42, 52, 65, 20, 60, 49, 24, 37, 23, 24, 22, 20, 41, 25, 28, 27, 50, 47, 58, 30<br/><br/>(1) 2 | 0002344578 · 3 | 057 · 4 | 1279 · 5 | 028 · 6 | 05<br/>(2) 2 | 0023 44578 · 3 | 0257 · 4 | 12789 · 5 | 028 · 6 | 05<br/>(3) 2 | 000234457 · 3 | 02578 · 4 | 1279 · 5 | 028 · 6 | 05</p></div><div class=\"ml-vi\"><p>Biểu đồ thân–lá nào sau đây thể hiện đúng dữ liệu?<br/><br/>20, 35, 42, 52, 65, 20, 60, 49, 24, 37, 23, 24, 22, 20, 41, 25, 28, 27, 50, 47, 58, 30<br/><br/>(1) 2 | 0002344578 · 3 | 057 · 4 | 1279 · 5 | 028 · 6 | 05<br/>(2) 2 | 0023 44578 · 3 | 0257 · 4 | 12789 · 5 | 028 · 6 | 05<br/>(3) 2 | 000234457 · 3 | 02578 · 4 | 1279 · 5 | 028 · 6 | 05</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q48.png",
           "options": [
             {
@@ -1248,7 +1248,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A supermarket manager has determined that the amount of time customers spend in the supermarket is approximately normally distributed with a mean of 45 minutes and a standard deviation of 6 minutes. Find the number of minutes, $m$, for which the probability that a customer spends less than $m$ minutes in the supermarket is 0.10.</p><p>Let $P(Z < -1.28) = 0.1$, $P(Z < 0) = 0.5$ and $P(Z < 1) = 0.8$.</p></div><div class=\"ml-vi\"><p>Quản lý một siêu thị xác định rằng thời gian khách hàng ở trong siêu thị xấp xỉ phân phối chuẩn với trung bình 45 phút và độ lệch chuẩn 6 phút. Hãy tìm số phút $m$ sao cho xác suất một khách hàng ở trong siêu thị ít hơn $m$ phút bằng 0.10.</p><p>Cho $P(Z < -1.28) = 0.1$, $P(Z < 0) = 0.5$ và $P(Z < 1) = 0.8$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A supermarket manager has determined that the amount of time customers spend in the supermarket is approximately normally distributed with a mean of 45 minutes and a standard deviation of 6 minutes. Find the number of minutes, $m$, for which the probability that a customer spends less than $m$ minutes in the supermarket is 0.10.<br/><br/>Let $P(Z < -1.28) = 0.1$, $P(Z < 0) = 0.5$ and $P(Z < 1) = 0.8$.</p></div><div class=\"ml-vi\"><p>Quản lý một siêu thị xác định rằng thời gian khách hàng ở trong siêu thị xấp xỉ phân phối chuẩn với trung bình 45 phút và độ lệch chuẩn 6 phút. Hãy tìm số phút $m$ sao cho xác suất một khách hàng ở trong siêu thị ít hơn $m$ phút bằng 0.10.<br/><br/>Cho $P(Z < -1.28) = 0.1$, $P(Z < 0) = 0.5$ và $P(Z < 1) = 0.8$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q49.png",
           "options": [
             {

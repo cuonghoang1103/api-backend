@@ -40,7 +40,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\"><p>Collecting and summarizing data about the whole group of interest (all employees of the firm), without drawing any conclusion about a larger population, is exactly **descriptive statistics**. Inferential statistics would require generalizing from a sample to a population. A *parameter* is a numeric summary of a population and a *statistic* is a numeric summary of a sample — neither describes the activity of collecting/summarizing.</p></div><div class=\"ml-vi\"><p>Thu thập và tóm tắt dữ liệu của chính nhóm quan tâm (toàn bộ nhân viên công ty), không suy rộng ra tổng thể lớn hơn, chính là **thống kê mô tả**. Thống kê suy diễn phải suy từ mẫu ra tổng thể. *Parameter* là số đặc trưng của tổng thể, *statistic* là số đặc trưng của mẫu — cả hai đều không mô tả hoạt động thu thập/tóm tắt.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Collecting and summarizing data about the whole group of interest (all employees of the firm), without drawing any conclusion about a larger population, is exactly <strong>descriptive statistics</strong>. Inferential statistics would require generalizing from a sample to a population. A *parameter* is a numeric summary of a population and a *statistic* is a numeric summary of a sample — neither describes the activity of collecting/summarizing.</p></div><div class=\"ml-vi\"><p>Thu thập và tóm tắt dữ liệu của chính nhóm quan tâm (toàn bộ nhân viên công ty), không suy rộng ra tổng thể lớn hơn, chính là <strong>thống kê mô tả</strong>. Thống kê suy diễn phải suy từ mẫu ra tổng thể. *Parameter* là số đặc trưng của tổng thể, *statistic* là số đặc trưng của mẫu — cả hai đều không mô tả hoạt động thu thập/tóm tắt.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -64,7 +64,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\"><p>The three standard data-collection modes are: a **retrospective study** (uses historical / already-recorded data), an **observational study** (the analyst watches the process as it runs, without disturbing it), and a **designed experiment** (the analyst deliberately changes the inputs). Data from 1918 is archived historical data collected long after the event, so it is a retrospective study.</p></div><div class=\"ml-vi\"><p>Ba cách thu thập dữ liệu chuẩn: **nghiên cứu hồi cứu** (dùng dữ liệu lịch sử đã ghi sẵn), **nghiên cứu quan sát** (quan sát quá trình đang chạy mà không can thiệp), và **thí nghiệm thiết kế** (chủ động thay đổi đầu vào). Dữ liệu năm 1918 là dữ liệu lịch sử lưu trữ, thu thập rất lâu sau sự kiện ⇒ nghiên cứu hồi cứu.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The three standard data-collection modes are: a <strong>retrospective study</strong> (uses historical / already-recorded data), an <strong>observational study</strong> (the analyst watches the process as it runs, without disturbing it), and a <strong>designed experiment</strong> (the analyst deliberately changes the inputs). Data from 1918 is archived historical data collected long after the event, so it is a retrospective study.</p></div><div class=\"ml-vi\"><p>Ba cách thu thập dữ liệu chuẩn: <strong>nghiên cứu hồi cứu</strong> (dùng dữ liệu lịch sử đã ghi sẵn), <strong>nghiên cứu quan sát</strong> (quan sát quá trình đang chạy mà không can thiệp), và <strong>thí nghiệm thiết kế</strong> (chủ động thay đổi đầu vào). Dữ liệu năm 1918 là dữ liệu lịch sử lưu trữ, thu thập rất lâu sau sự kiện ⇒ nghiên cứu hồi cứu.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -241,7 +241,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Independence requires $P(C \\cap D) = P(C)P(D)$. Here $P(C)P(D) = 0.5 \\times 0.2 = 0.10 \\ne 0.11 = P(C \\cap D)$, so the events are **not** independent.</p></div><div class=\"ml-vi\"><p>Độc lập đòi hỏi $P(C \\cap D) = P(C)P(D)$. Ở đây $P(C)P(D) = 0{,}5 \\times 0{,}2 = 0{,}10 \\ne 0{,}11 = P(C \\cap D)$, nên hai biến cố **không** độc lập.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Independence requires $P(C \\cap D) = P(C)P(D)$. Here $P(C)P(D) = 0.5 \\times 0.2 = 0.10 <br/>e 0.11 = P(C \\cap D)$, so the events are <strong>not</strong> independent.</p></div><div class=\"ml-vi\"><p>Độc lập đòi hỏi $P(C \\cap D) = P(C)P(D)$. Ở đây $P(C)P(D) = 0{,}5 \\times 0{,}2 = 0{,}10 <br/>e 0{,}11 = P(C \\cap D)$, nên hai biến cố <strong>không</strong> độc lập.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -292,7 +292,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\"><p>A count that can only take the values $0,1,2,\\dots$ is a **discrete** random variable. The number of goals is a count; the other three (volume, time, lifetime) are measurements on a continuous scale.</p></div><div class=\"ml-vi\"><p>Một đại lượng đếm chỉ nhận các giá trị $0,1,2,\\dots$ là biến ngẫu nhiên **rời rạc**. Số bàn thắng là đại lượng đếm; ba lựa chọn còn lại (thể tích, thời gian, tuổi thọ) đều là phép đo trên thang liên tục.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>A count that can only take the values $0,1,2,\\dots$ is a <strong>discrete</strong> random variable. The number of goals is a count; the other three (volume, time, lifetime) are measurements on a continuous scale.</p></div><div class=\"ml-vi\"><p>Một đại lượng đếm chỉ nhận các giá trị $0,1,2,\\dots$ là biến ngẫu nhiên <strong>rời rạc</strong>. Số bàn thắng là đại lượng đếm; ba lựa chọn còn lại (thể tích, thời gian, tuổi thọ) đều là phép đo trên thang liên tục.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -736,7 +736,7 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>Poisson $\\lambda = 25 \\Rightarrow \\mu = 25$, $\\sigma = \\sqrt{25} = 5$. &#39;No more than 20&#39; is $P(X \\le 20)$; the discrete-to-continuous **continuity correction** replaces it with $P(X \\le 20.5)$, giving $z = \\frac{20.5-25}{5} = -0.9$ and $P = 0.1841$. (Without the continuity correction one gets $z = \\frac{20-25}{5} = -1$ and $0.1586$ — that is why both table values are supplied; the standard textbook approximation applies the correction.)</p></div><div class=\"ml-vi\"><p>Poisson $\\lambda = 25 \\Rightarrow \\mu = 25$, $\\sigma = \\sqrt{25} = 5$. &#39;Không quá 20&#39; là $P(X \\le 20)$; **hiệu chỉnh liên tục** đổi thành $P(X \\le 20{,}5)$, cho $z = \\frac{20{,}5-25}{5} = -0{,}9$ và $P = 0{,}1841$. (Nếu bỏ hiệu chỉnh liên tục thì $z = \\frac{20-25}{5} = -1$ và kết quả $0{,}1586$ — chính vì vậy đề cho cả hai giá trị bảng; giáo trình chuẩn có áp dụng hiệu chỉnh.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Poisson $\\lambda = 25 \\Rightarrow \\mu = 25$, $\\sigma = \\sqrt{25} = 5$. &#39;No more than 20&#39; is $P(X \\le 20)$; the discrete-to-continuous <strong>continuity correction</strong> replaces it with $P(X \\le 20.5)$, giving $z = \\frac{20.5-25}{5} = -0.9$ and $P = 0.1841$. (Without the continuity correction one gets $z = \\frac{20-25}{5} = -1$ and $0.1586$ — that is why both table values are supplied; the standard textbook approximation applies the correction.)</p></div><div class=\"ml-vi\"><p>Poisson $\\lambda = 25 \\Rightarrow \\mu = 25$, $\\sigma = \\sqrt{25} = 5$. &#39;Không quá 20&#39; là $P(X \\le 20)$; <strong>hiệu chỉnh liên tục</strong> đổi thành $P(X \\le 20{,}5)$, cho $z = \\frac{20{,}5-25}{5} = -0{,}9$ và $P = 0{,}1841$. (Nếu bỏ hiệu chỉnh liên tục thì $z = \\frac{20-25}{5} = -1$ và kết quả $0{,}1586$ — chính vì vậy đề cho cả hai giá trị bảng; giáo trình chuẩn có áp dụng hiệu chỉnh.)</p></div>"
         },
         {
           "kind": "MCQ",
@@ -790,7 +790,7 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\"><p>Tally the frequencies: $67$ appears $2$ times, $68$ once, $71$ once, $72$ **four** times, $73$ once, $76$ once. The most frequent value is $72$.</p></div><div class=\"ml-vi\"><p>Đếm tần số: $67$ xuất hiện $2$ lần, $68$ một lần, $71$ một lần, $72$ **bốn** lần, $73$ một lần, $76$ một lần. Giá trị xuất hiện nhiều nhất là $72$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Tally the frequencies: $67$ appears $2$ times, $68$ once, $71$ once, $72$ <strong>four</strong> times, $73$ once, $76$ once. The most frequent value is $72$.</p></div><div class=\"ml-vi\"><p>Đếm tần số: $67$ xuất hiện $2$ lần, $68$ một lần, $71$ một lần, $72$ <strong>bốn</strong> lần, $73$ một lần, $76$ một lần. Giá trị xuất hiện nhiều nhất là $72$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -841,7 +841,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>The mode is the **value of the variable** that occurs most often, not the frequency itself. The largest frequency is $140$, which belongs to the value &#39;3 bedrooms&#39;, so the mode is $3$.</p></div><div class=\"ml-vi\"><p>Mode là **giá trị của biến** xuất hiện nhiều nhất, không phải bản thân tần số. Tần số lớn nhất là $140$, ứng với giá trị &#39;3 phòng ngủ&#39;, nên mode là $3$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The mode is the <strong>value of the variable</strong> that occurs most often, not the frequency itself. The largest frequency is $140$, which belongs to the value &#39;3 bedrooms&#39;, so the mode is $3$.</p></div><div class=\"ml-vi\"><p>Mode là <strong>giá trị của biến</strong> xuất hiện nhiều nhất, không phải bản thân tần số. Tần số lớn nhất là $140$, ứng với giá trị &#39;3 phòng ngủ&#39;, nên mode là $3$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -865,7 +865,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>(i) is false: $15$ is $Q_1$, so about **75%** (not 25%) of the data lies above it. (ii) is false: the median of an even-sized data set is the average of the two middle values, so $18$ need not be an observed value. (iii) is false for the same reason applied to $Q_3 = 20$. Hence $0$ statements are correct.</p></div><div class=\"ml-vi\"><p>(i) sai: $15$ là $Q_1$, nên khoảng **75%** (chứ không phải 25%) dữ liệu nằm trên nó. (ii) sai: với cỡ mẫu chẵn, trung vị là trung bình hai giá trị giữa, nên $18$ không nhất thiết là một giá trị quan sát. (iii) sai vì lý do tương tự với $Q_3 = 20$. Vậy có $0$ phát biểu đúng.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>(i) is false: $15$ is $Q_1$, so about <strong>75%</strong> (not 25%) of the data lies above it. (ii) is false: the median of an even-sized data set is the average of the two middle values, so $18$ need not be an observed value. (iii) is false for the same reason applied to $Q_3 = 20$. Hence $0$ statements are correct.</p></div><div class=\"ml-vi\"><p>(i) sai: $15$ là $Q_1$, nên khoảng <strong>75%</strong> (chứ không phải 25%) dữ liệu nằm trên nó. (ii) sai: với cỡ mẫu chẵn, trung vị là trung bình hai giá trị giữa, nên $18$ không nhất thiết là một giá trị quan sát. (iii) sai vì lý do tương tự với $Q_3 = 20$. Vậy có $0$ phát biểu đúng.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -967,7 +967,7 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>Half-length $E = z_{\\alpha/2}\\frac{\\sigma}{\\sqrt{n}} \\Rightarrow n = \\left(\\frac{z_{0.025}\\sigma}{E}\\right)^2 = \\left(\\frac{1.96 \\times 100}{50}\\right)^2 = (3.92)^2 = 15.37$. Round **up** to $n = 16$.</p></div><div class=\"ml-vi\"><p>Nửa độ dài $E = z_{\\alpha/2}\\frac{\\sigma}{\\sqrt{n}} \\Rightarrow n = \\left(\\frac{z_{0{,}025}\\sigma}{E}\\right)^2 = \\left(\\frac{1{,}96 \\times 100}{50}\\right)^2 = (3{,}92)^2 = 15{,}37$. Làm tròn **lên** thành $n = 16$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Half-length $E = z_{\\alpha/2}\\frac{\\sigma}{\\sqrt{n}} \\Rightarrow n = \\left(\\frac{z_{0.025}\\sigma}{E}\\right)^2 = \\left(\\frac{1.96 \\times 100}{50}\\right)^2 = (3.92)^2 = 15.37$. Round <strong>up</strong> to $n = 16$.</p></div><div class=\"ml-vi\"><p>Nửa độ dài $E = z_{\\alpha/2}\\frac{\\sigma}{\\sqrt{n}} \\Rightarrow n = \\left(\\frac{z_{0{,}025}\\sigma}{E}\\right)^2 = \\left(\\frac{1{,}96 \\times 100}{50}\\right)^2 = (3{,}92)^2 = 15{,}37$. Làm tròn <strong>lên</strong> thành $n = 16$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1021,12 +1021,12 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>With no prior estimate of $p$ use the worst case $p = 0.5$: $n = \\frac{z_{\\alpha/2}^2\\,p(1-p)}{E^2} = \\frac{(2.575)^2(0.25)}{(0.04)^2} = \\frac{6.6306 \\times 0.25}{0.0016} = 1036.04$. Round **up** to $n = 1037$.</p></div><div class=\"ml-vi\"><p>Không có ước lượng trước cho $p$ nên lấy trường hợp xấu nhất $p = 0{,}5$: $n = \\frac{z_{\\alpha/2}^2\\,p(1-p)}{E^2} = \\frac{(2{,}575)^2(0{,}25)}{(0{,}04)^2} = \\frac{6{,}6306 \\times 0{,}25}{0{,}0016} = 1036{,}04$. Làm tròn **lên** thành $n = 1037$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>With no prior estimate of $p$ use the worst case $p = 0.5$: $n = \\frac{z_{\\alpha/2}^2\\,p(1-p)}{E^2} = \\frac{(2.575)^2(0.25)}{(0.04)^2} = \\frac{6.6306 \\times 0.25}{0.0016} = 1036.04$. Round <strong>up</strong> to $n = 1037$.</p></div><div class=\"ml-vi\"><p>Không có ước lượng trước cho $p$ nên lấy trường hợp xấu nhất $p = 0{,}5$: $n = \\frac{z_{\\alpha/2}^2\\,p(1-p)}{E^2} = \\frac{(2{,}575)^2(0{,}25)}{(0{,}04)^2} = \\frac{6{,}6306 \\times 0{,}25}{0{,}0016} = 1036{,}04$. Làm tròn <strong>lên</strong> thành $n = 1037$.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A manufacturer of a certain brand of rice cereal claims that the average saturated fat content does not exceed 1.6 grams. State the null and alternative hypotheses to be used in testing this claim. (i) $H_0: \\mu = 1.6$, $H_1: \\mu \\ne 1.6$. (ii) $H_0: \\mu = 1.6$, $H_1: \\mu < 1.6$. (iii) $H_0: \\mu = 1.6$, $H_1: \\mu > 1.6$. (iv) $H_0: \\mu > 1.6$, $H_1: \\mu = 1.6$.</p></div><div class=\"ml-vi\"><p>Nhà sản xuất một loại ngũ cốc gạo tuyên bố hàm lượng chất béo bão hoà trung bình không vượt quá 1,6 gam. Hãy phát biểu giả thuyết không và giả thuyết đối để kiểm định tuyên bố này. (i) $H_0: \\mu = 1{,}6$, $H_1: \\mu \\ne 1{,}6$. (ii) $H_0: \\mu = 1{,}6$, $H_1: \\mu < 1{,}6$. (iii) $H_0: \\mu = 1{,}6$, $H_1: \\mu > 1{,}6$. (iv) $H_0: \\mu > 1{,}6$, $H_1: \\mu = 1{,}6$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A manufacturer of a certain brand of rice cereal claims that the average saturated fat content does not exceed 1.6 grams. State the null and alternative hypotheses to be used in testing this claim. (i) $H_0: \\mu = 1.6$, $H_1: \\mu <br/>e 1.6$. (ii) $H_0: \\mu = 1.6$, $H_1: \\mu < 1.6$. (iii) $H_0: \\mu = 1.6$, $H_1: \\mu > 1.6$. (iv) $H_0: \\mu > 1.6$, $H_1: \\mu = 1.6$.</p></div><div class=\"ml-vi\"><p>Nhà sản xuất một loại ngũ cốc gạo tuyên bố hàm lượng chất béo bão hoà trung bình không vượt quá 1,6 gam. Hãy phát biểu giả thuyết không và giả thuyết đối để kiểm định tuyên bố này. (i) $H_0: \\mu = 1{,}6$, $H_1: \\mu <br/>e 1{,}6$. (ii) $H_0: \\mu = 1{,}6$, $H_1: \\mu < 1{,}6$. (iii) $H_0: \\mu = 1{,}6$, $H_1: \\mu > 1{,}6$. (iv) $H_0: \\mu > 1{,}6$, $H_1: \\mu = 1{,}6$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D2/q40.png",
           "options": [
             {
@@ -1069,7 +1069,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>By definition the critical value marks the boundary of the rejection region. B is wrong ($z_{0.05} = 1.645 \\ne 0$); C is wrong because the critical value is a quantile determined by $\\alpha$; D is wrong because at $\\alpha = 0.05$ a one-tailed test uses $1.645$ while a two-tailed test uses $\\pm 1.96$.</p></div><div class=\"ml-vi\"><p>Theo định nghĩa, giá trị tới hạn là ranh giới của miền bác bỏ. B sai ($z_{0{,}05} = 1{,}645 \\ne 0$); C sai vì giá trị tới hạn là phân vị được xác định bởi $\\alpha$; D sai vì ở $\\alpha = 0{,}05$, kiểm định một phía dùng $1{,}645$ còn hai phía dùng $\\pm 1{,}96$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>By definition the critical value marks the boundary of the rejection region. B is wrong ($z_{0.05} = 1.645 <br/>e 0$); C is wrong because the critical value is a quantile determined by $\\alpha$; D is wrong because at $\\alpha = 0.05$ a one-tailed test uses $1.645$ while a two-tailed test uses $\\pm 1.96$.</p></div><div class=\"ml-vi\"><p>Theo định nghĩa, giá trị tới hạn là ranh giới của miền bác bỏ. B sai ($z_{0{,}05} = 1{,}645 <br/>e 0$); C sai vì giá trị tới hạn là phân vị được xác định bởi $\\alpha$; D sai vì ở $\\alpha = 0{,}05$, kiểm định một phía dùng $1{,}645$ còn hai phía dùng $\\pm 1{,}96$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1093,12 +1093,12 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>Two-sided $t$-test: $t_0 = \\frac{\\bar{x}-\\mu_0}{s/\\sqrt{n}} = \\frac{14.6-15.4}{2.5/\\sqrt{35}} = \\frac{-0.8}{0.42258} = -1.8931$. The rejection rule is $|t_0| > t_{0.025,34} = 2.032$. Since $1.8931 < 2.032$, we **fail to reject** $H_0$.</p></div><div class=\"ml-vi\"><p>Kiểm định $t$ hai phía: $t_0 = \\frac{\\bar{x}-\\mu_0}{s/\\sqrt{n}} = \\frac{14{,}6-15{,}4}{2{,}5/\\sqrt{35}} = \\frac{-0{,}8}{0{,}42258} = -1{,}8931$. Quy tắc bác bỏ là $|t_0| > t_{0{,}025;34} = 2{,}032$. Vì $1{,}8931 < 2{,}032$ nên **không bác bỏ** $H_0$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Two-sided $t$-test: $t_0 = \\frac{\\bar{x}-\\mu_0}{s/\\sqrt{n}} = \\frac{14.6-15.4}{2.5/\\sqrt{35}} = \\frac{-0.8}{0.42258} = -1.8931$. The rejection rule is $|t_0| > t_{0.025,34} = 2.032$. Since $1.8931 < 2.032$, we <strong>fail to reject</strong> $H_0$.</p></div><div class=\"ml-vi\"><p>Kiểm định $t$ hai phía: $t_0 = \\frac{\\bar{x}-\\mu_0}{s/\\sqrt{n}} = \\frac{14{,}6-15{,}4}{2{,}5/\\sqrt{35}} = \\frac{-0{,}8}{0{,}42258} = -1{,}8931$. Quy tắc bác bỏ là $|t_0| > t_{0{,}025;34} = 2{,}032$. Vì $1{,}8931 < 2{,}032$ nên <strong>không bác bỏ</strong> $H_0$.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Which of the following is a two-sided alternative hypothesis? (i) $H_0: p=p_0$; $H_1: p>p_0$. (ii) $H_0: p \\ne p_0$; $H_1: p = p_0$. (iii) $H_0: p=p_0$; $H_1: p \\ne p_0$. (iv) $H_0: p>p_0$; $H_1: p<p_0$.</p></div><div class=\"ml-vi\"><p>Trường hợp nào sau đây là đối thuyết hai phía? (i) $H_0: p=p_0$; $H_1: p>p_0$. (ii) $H_0: p \\ne p_0$; $H_1: p = p_0$. (iii) $H_0: p=p_0$; $H_1: p \\ne p_0$. (iv) $H_0: p>p_0$; $H_1: p<p_0$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Which of the following is a two-sided alternative hypothesis? (i) $H_0: p=p_0$; $H_1: p>p_0$. (ii) $H_0: p <br/>e p_0$; $H_1: p = p_0$. (iii) $H_0: p=p_0$; $H_1: p <br/>e p_0$. (iv) $H_0: p>p_0$; $H_1: p<p_0$.</p></div><div class=\"ml-vi\"><p>Trường hợp nào sau đây là đối thuyết hai phía? (i) $H_0: p=p_0$; $H_1: p>p_0$. (ii) $H_0: p <br/>e p_0$; $H_1: p = p_0$. (iii) $H_0: p=p_0$; $H_1: p <br/>e p_0$. (iv) $H_0: p>p_0$; $H_1: p<p_0$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D2/q43.png",
           "options": [
             {
@@ -1120,7 +1120,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\"><p>A two-sided (two-tailed) alternative is one of the form $H_1: p \\ne p_0$, paired with the equality null $H_0: p = p_0$. That is exactly (iii). (i) and (iv) are one-sided, and (ii) is invalid because $H_0$ must contain the equality.</p></div><div class=\"ml-vi\"><p>Đối thuyết hai phía có dạng $H_1: p \\ne p_0$, đi kèm giả thuyết không chứa dấu bằng $H_0: p = p_0$. Đó chính là (iii). (i) và (iv) là một phía, còn (ii) không hợp lệ vì $H_0$ phải chứa dấu bằng.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>A two-sided (two-tailed) alternative is one of the form $H_1: p <br/>e p_0$, paired with the equality null $H_0: p = p_0$. That is exactly (iii). (i) and (iv) are one-sided, and (ii) is invalid because $H_0$ must contain the equality.</p></div><div class=\"ml-vi\"><p>Đối thuyết hai phía có dạng $H_1: p <br/>e p_0$, đi kèm giả thuyết không chứa dấu bằng $H_0: p = p_0$. Đó chính là (iii). (i) và (iv) là một phía, còn (ii) không hợp lệ vì $H_0$ phải chứa dấu bằng.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1168,7 +1168,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Pooled variance: $s_p^2 = \\frac{(n_1-1)s_1^2+(n_2-1)s_2^2}{n_1+n_2-2} = \\frac{25(1.5876)+22(3.0976)}{47} = \\frac{107.837}{47} = 2.2944$, so $s_p = 1.5147$. Standard error $= s_p\\sqrt{\\frac{1}{26}+\\frac{1}{23}} = 1.5147(0.28625) = 0.43359$. Half-length $= t_{0.025,47} \\times 0.43359 = 2(0.43359) = 0.8672$, so the **width** is $2(0.8672) = 1.734$.</p></div><div class=\"ml-vi\"><p>Phương sai gộp: $s_p^2 = \\frac{(n_1-1)s_1^2+(n_2-1)s_2^2}{n_1+n_2-2} = \\frac{25(1{,}5876)+22(3{,}0976)}{47} = \\frac{107{,}837}{47} = 2{,}2944$, nên $s_p = 1{,}5147$. Sai số chuẩn $= s_p\\sqrt{\\frac{1}{26}+\\frac{1}{23}} = 1{,}5147(0{,}28625) = 0{,}43359$. Nửa độ dài $= t_{0{,}025;47} \\times 0{,}43359 = 2(0{,}43359) = 0{,}8672$, nên **độ rộng** là $2(0{,}8672) = 1{,}734$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Pooled variance: $s_p^2 = \\frac{(n_1-1)s_1^2+(n_2-1)s_2^2}{n_1+n_2-2} = \\frac{25(1.5876)+22(3.0976)}{47} = \\frac{107.837}{47} = 2.2944$, so $s_p = 1.5147$. Standard error $= s_p\\sqrt{\\frac{1}{26}+\\frac{1}{23}} = 1.5147(0.28625) = 0.43359$. Half-length $= t_{0.025,47} \\times 0.43359 = 2(0.43359) = 0.8672$, so the <strong>width</strong> is $2(0.8672) = 1.734$.</p></div><div class=\"ml-vi\"><p>Phương sai gộp: $s_p^2 = \\frac{(n_1-1)s_1^2+(n_2-1)s_2^2}{n_1+n_2-2} = \\frac{25(1{,}5876)+22(3{,}0976)}{47} = \\frac{107{,}837}{47} = 2{,}2944$, nên $s_p = 1{,}5147$. Sai số chuẩn $= s_p\\sqrt{\\frac{1}{26}+\\frac{1}{23}} = 1{,}5147(0{,}28625) = 0{,}43359$. Nửa độ dài $= t_{0{,}025;47} \\times 0{,}43359 = 2(0{,}43359) = 0{,}8672$, nên <strong>độ rộng</strong> là $2(0{,}8672) = 1{,}734$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1222,7 +1222,7 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\"><p>$\\hat{\\beta}_1 = \\frac{n\\sum xy - \\sum x \\sum y}{n\\sum x^2 - (\\sum x)^2} = \\frac{8(21087)-492(379)}{8(32894)-492^2} = \\frac{168696-186468}{263152-242064} = \\frac{-17772}{21088} = -0.84275$. Then $\\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1\\bar{x} = 47.375 - (-0.84275)(61.5) = 47.375 + 51.829 = \\mathbf{99.204}$. This does not equal any of the four numeric options (the nearest, 97.871, is off by 1.33), so the correct choice is &#39;None of the other choices is correct&#39;. **Flag:** if the intended key is 97.871, one of the printed sums in the source image is likely mistyped — $\\hat{\\beta}_0 = 97.871$ would require $\\sum x_i y_i \\approx 21145$ or $\\sum x_i^2 \\approx 32965$.</p></div><div class=\"ml-vi\"><p>$\\hat{\\beta}_1 = \\frac{n\\sum xy - \\sum x \\sum y}{n\\sum x^2 - (\\sum x)^2} = \\frac{8(21087)-492(379)}{8(32894)-492^2} = \\frac{168696-186468}{263152-242064} = \\frac{-17772}{21088} = -0{,}84275$. Khi đó $\\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1\\bar{x} = 47{,}375 - (-0{,}84275)(61{,}5) = 47{,}375 + 51{,}829 = \\mathbf{99{,}204}$. Giá trị này không trùng phương án số nào trong bốn phương án (gần nhất là 97,871, lệch 1,33), nên đáp án đúng là &#39;Không phương án nào khác đúng&#39;. **Lưu ý:** nếu đáp án chuẩn của đề là 97,871 thì nhiều khả năng một trong các tổng in trong ảnh gốc bị sai — muốn $\\hat{\\beta}_0 = 97{,}871$ thì phải có $\\sum x_i y_i \\approx 21145$ hoặc $\\sum x_i^2 \\approx 32965$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$\\hat{\\beta}_1 = \\frac{n\\sum xy - \\sum x \\sum y}{n\\sum x^2 - (\\sum x)^2} = \\frac{8(21087)-492(379)}{8(32894)-492^2} = \\frac{168696-186468}{263152-242064} = \\frac{-17772}{21088} = -0.84275$. Then $\\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1\\bar{x} = 47.375 - (-0.84275)(61.5) = 47.375 + 51.829 = \\mathbf{99.204}$. This does not equal any of the four numeric options (the nearest, 97.871, is off by 1.33), so the correct choice is &#39;None of the other choices is correct&#39;. <strong>Flag:</strong> if the intended key is 97.871, one of the printed sums in the source image is likely mistyped — $\\hat{\\beta}_0 = 97.871$ would require $\\sum x_i y_i \\approx 21145$ or $\\sum x_i^2 \\approx 32965$.</p></div><div class=\"ml-vi\"><p>$\\hat{\\beta}_1 = \\frac{n\\sum xy - \\sum x \\sum y}{n\\sum x^2 - (\\sum x)^2} = \\frac{8(21087)-492(379)}{8(32894)-492^2} = \\frac{168696-186468}{263152-242064} = \\frac{-17772}{21088} = -0{,}84275$. Khi đó $\\hat{\\beta}_0 = \\bar{y} - \\hat{\\beta}_1\\bar{x} = 47{,}375 - (-0{,}84275)(61{,}5) = 47{,}375 + 51{,}829 = \\mathbf{99{,}204}$. Giá trị này không trùng phương án số nào trong bốn phương án (gần nhất là 97,871, lệch 1,33), nên đáp án đúng là &#39;Không phương án nào khác đúng&#39;. <strong>Lưu ý:</strong> nếu đáp án chuẩn của đề là 97,871 thì nhiều khả năng một trong các tổng in trong ảnh gốc bị sai — muốn $\\hat{\\beta}_0 = 97{,}871$ thì phải có $\\sum x_i y_i \\approx 21145$ hoặc $\\sum x_i^2 \\approx 32965$.</p></div>"
         },
         {
           "kind": "MCQ",

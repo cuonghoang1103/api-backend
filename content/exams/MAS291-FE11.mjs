@@ -72,7 +72,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>For women aged 18-24, systolic blood pressures (in mm Hg) are normally distributed with a mean of 114.8 and a standard deviation of 13.1. If 23 women aged 18-24 are randomly selected, find the probability that their mean systolic blood pressure is between 119 and 122.</p><p>Let $P(Z<0.3206)=0.6257$, $P(Z<0.5496)=0.7087$, $P(Z<2.6359)=0.9958$, $P(Z<1.5376)=0.9381$.</p></div><div class=\"ml-vi\"><p>Với phụ nữ tuổi 18-24, huyết áp tâm thu (mm Hg) tuân theo phân phối chuẩn với trung bình 114,8 và độ lệch chuẩn 13,1. Chọn ngẫu nhiên 23 phụ nữ tuổi 18-24, tìm xác suất để huyết áp tâm thu trung bình của họ nằm giữa 119 và 122.</p><p>Cho $P(Z<0.3206)=0.6257$, $P(Z<0.5496)=0.7087$, $P(Z<2.6359)=0.9958$, $P(Z<1.5376)=0.9381$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>For women aged 18-24, systolic blood pressures (in mm Hg) are normally distributed with a mean of 114.8 and a standard deviation of 13.1. If 23 women aged 18-24 are randomly selected, find the probability that their mean systolic blood pressure is between 119 and 122.<br/><br/>Let $P(Z<0.3206)=0.6257$, $P(Z<0.5496)=0.7087$, $P(Z<2.6359)=0.9958$, $P(Z<1.5376)=0.9381$.</p></div><div class=\"ml-vi\"><p>Với phụ nữ tuổi 18-24, huyết áp tâm thu (mm Hg) tuân theo phân phối chuẩn với trung bình 114,8 và độ lệch chuẩn 13,1. Chọn ngẫu nhiên 23 phụ nữ tuổi 18-24, tìm xác suất để huyết áp tâm thu trung bình của họ nằm giữa 119 và 122.<br/><br/>Cho $P(Z<0.3206)=0.6257$, $P(Z<0.5496)=0.7087$, $P(Z<2.6359)=0.9958$, $P(Z<1.5376)=0.9381$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D11/q3.png",
           "options": [
             {
@@ -207,7 +207,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>An electrical firm manufactures a certain type of light bulb that has a mean light of 1,800 hours and a standard deviation of 200 hours. Find the probability that a random sample of 100 bulbs will have an average life of more than 1,825 hours.</p><p>Let $P(Z<-1.77)=0.0384$, $P(Z<-1.25)=0.1056$, $P(Z<1.25)=0.8944$ and $P(Z<1.77)=0.9616$.</p></div><div class=\"ml-vi\"><p>Một hãng điện sản xuất loại bóng đèn có tuổi thọ trung bình 1.800 giờ và độ lệch chuẩn 200 giờ. Tìm xác suất để một mẫu ngẫu nhiên 100 bóng có tuổi thọ trung bình lớn hơn 1.825 giờ.</p><p>Cho $P(Z<-1.77)=0.0384$, $P(Z<-1.25)=0.1056$, $P(Z<1.25)=0.8944$ và $P(Z<1.77)=0.9616$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>An electrical firm manufactures a certain type of light bulb that has a mean light of 1,800 hours and a standard deviation of 200 hours. Find the probability that a random sample of 100 bulbs will have an average life of more than 1,825 hours.<br/><br/>Let $P(Z<-1.77)=0.0384$, $P(Z<-1.25)=0.1056$, $P(Z<1.25)=0.8944$ and $P(Z<1.77)=0.9616$.</p></div><div class=\"ml-vi\"><p>Một hãng điện sản xuất loại bóng đèn có tuổi thọ trung bình 1.800 giờ và độ lệch chuẩn 200 giờ. Tìm xác suất để một mẫu ngẫu nhiên 100 bóng có tuổi thọ trung bình lớn hơn 1.825 giờ.<br/><br/>Cho $P(Z<-1.77)=0.0384$, $P(Z<-1.25)=0.1056$, $P(Z<1.25)=0.8944$ và $P(Z<1.77)=0.9616$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D11/q8.png",
           "options": [
             {
@@ -363,7 +363,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>How many possible events are there in a sample space of $N$ outcomes?</p><p>(i) $2^{N}$<br/>(ii) $2*N$<br/>(iii) $N^{2}$<br/>(iv) $N$</p></div><div class=\"ml-vi\"><p>Có bao nhiêu biến cố có thể có trong một không gian mẫu gồm $N$ kết cục?</p><p>(i) $2^{N}$<br/>(ii) $2*N$<br/>(iii) $N^{2}$<br/>(iv) $N$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>How many possible events are there in a sample space of $N$ outcomes?<br/><br/>(i) $2^{N}$<br/>(ii) $2*N$<br/>(iii) $N^{2}$<br/>(iv) $N$</p></div><div class=\"ml-vi\"><p>Có bao nhiêu biến cố có thể có trong một không gian mẫu gồm $N$ kết cục?<br/><br/>(i) $2^{N}$<br/>(ii) $2*N$<br/>(iii) $N^{2}$<br/>(iv) $N$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D11/q14.png",
           "options": [
             {
@@ -387,7 +387,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Two different types of injection-molding machines are used to form plastic parts. Two random samples, each of size 100, are selected, and 5 defective parts are found in the sample from machine 1 while 3 defective parts are found in the sample from machine 2. Construct a two-sided 90% confidence interval on the difference in the two fractions defective.</p><p>Let $z_{0.1}=1.28$ and $z_{0.05}=1.65$.</p></div><div class=\"ml-vi\"><p>Hai loại máy ép phun khác nhau được dùng để tạo chi tiết nhựa. Chọn hai mẫu ngẫu nhiên, mỗi mẫu cỡ 100; mẫu từ máy 1 có 5 chi tiết lỗi, mẫu từ máy 2 có 3 chi tiết lỗi. Hãy lập khoảng tin cậy 90% hai phía cho hiệu hai tỷ lệ lỗi.</p><p>Cho $z_{0.1}=1.28$ và $z_{0.05}=1.65$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Two different types of injection-molding machines are used to form plastic parts. Two random samples, each of size 100, are selected, and 5 defective parts are found in the sample from machine 1 while 3 defective parts are found in the sample from machine 2. Construct a two-sided 90% confidence interval on the difference in the two fractions defective.<br/><br/>Let $z_{0.1}=1.28$ and $z_{0.05}=1.65$.</p></div><div class=\"ml-vi\"><p>Hai loại máy ép phun khác nhau được dùng để tạo chi tiết nhựa. Chọn hai mẫu ngẫu nhiên, mỗi mẫu cỡ 100; mẫu từ máy 1 có 5 chi tiết lỗi, mẫu từ máy 2 có 3 chi tiết lỗi. Hãy lập khoảng tin cậy 90% hai phía cho hiệu hai tỷ lệ lỗi.<br/><br/>Cho $z_{0.1}=1.28$ và $z_{0.05}=1.65$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D11/q15.png",
           "options": [
             {
@@ -414,7 +414,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Let the discrete random variable $X$ with probability mass function<br/>$$f(x)=\\frac{2x+1}{25},\\qquad x=0,1,2,3,4.$$<br/>Which of the following statements are TRUE?</p><p>(i) $P(X=4)=9/25$<br/>(ii) $P(2\\le X<4)=12/25$<br/>(iii) $P(X\\le 1)=4/25$</p></div><div class=\"ml-vi\"><p>Cho biến ngẫu nhiên rời rạc $X$ có hàm khối xác suất<br/>$$f(x)=\\frac{2x+1}{25},\\qquad x=0,1,2,3,4.$$<br/>Phát biểu nào sau đây là ĐÚNG?</p><p>(i) $P(X=4)=9/25$<br/>(ii) $P(2\\le X<4)=12/25$<br/>(iii) $P(X\\le 1)=4/25$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Let the discrete random variable $X$ with probability mass function<br/>$$f(x)=\\frac{2x+1}{25},\\qquad x=0,1,2,3,4.$$<br/>Which of the following statements are TRUE?<br/><br/>(i) $P(X=4)=9/25$<br/>(ii) $P(2\\le X<4)=12/25$<br/>(iii) $P(X\\le 1)=4/25$</p></div><div class=\"ml-vi\"><p>Cho biến ngẫu nhiên rời rạc $X$ có hàm khối xác suất<br/>$$f(x)=\\frac{2x+1}{25},\\qquad x=0,1,2,3,4.$$<br/>Phát biểu nào sau đây là ĐÚNG?<br/><br/>(i) $P(X=4)=9/25$<br/>(ii) $P(2\\le X<4)=12/25$<br/>(iii) $P(X\\le 1)=4/25$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D11/q16.png",
           "options": [
             {
@@ -438,7 +438,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Assume that $Z$ scores are normally distributed with a mean of 0 and a standard deviation of 1. If $P(Z>c)=0.1093$, find $c$.</p><p>Let $P(Z<-1.23)=0.1093$, $P(Z<0.27)=0.6064$, $P(Z<-0.11)=0.4562$ and $P(Z<1.23)=0.8907$.</p></div><div class=\"ml-vi\"><p>Giả sử điểm $Z$ tuân theo phân phối chuẩn với trung bình 0 và độ lệch chuẩn 1. Nếu $P(Z>c)=0.1093$, hãy tìm $c$.</p><p>Cho $P(Z<-1.23)=0.1093$, $P(Z<0.27)=0.6064$, $P(Z<-0.11)=0.4562$ và $P(Z<1.23)=0.8907$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Assume that $Z$ scores are normally distributed with a mean of 0 and a standard deviation of 1. If $P(Z>c)=0.1093$, find $c$.<br/><br/>Let $P(Z<-1.23)=0.1093$, $P(Z<0.27)=0.6064$, $P(Z<-0.11)=0.4562$ and $P(Z<1.23)=0.8907$.</p></div><div class=\"ml-vi\"><p>Giả sử điểm $Z$ tuân theo phân phối chuẩn với trung bình 0 và độ lệch chuẩn 1. Nếu $P(Z>c)=0.1093$, hãy tìm $c$.<br/><br/>Cho $P(Z<-1.23)=0.1093$, $P(Z<0.27)=0.6064$, $P(Z<-0.11)=0.4562$ và $P(Z<1.23)=0.8907$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D11/q17.png",
           "options": [
             {
@@ -465,7 +465,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>The following is Excel output of a simple regression model.</p><p>Regression Statistics: R Square $=0.273484848$; Observations $=7$.</p><p>ANOVA — Regression: $df=1$, $SS=5.157142857$; Residual: $SS=13.7$, $MS=2.74$; Total: $df=6$, $SS=18.85714286$.</p><p>Coefficients — Intercept: coefficient $=11.2$, standard error $=3.226763084$, $t$ Stat $=3.470970663$; X Variable 1: coefficient $=-0.475$, standard error $=0.346229693$, $t$ Stat $=-1.371921618$.</p><p>What is the value of the test statistic for testing whether the regression slope coefficient is equal to $-1$?</p></div><div class=\"ml-vi\"><p>Dưới đây là kết quả Excel của một mô hình hồi quy đơn.</p><p>Regression Statistics: R Square $=0.273484848$; Observations $=7$.</p><p>ANOVA — Regression: $df=1$, $SS=5.157142857$; Residual: $SS=13.7$, $MS=2.74$; Total: $df=6$, $SS=18.85714286$.</p><p>Coefficients — Intercept: hệ số $=11.2$, sai số chuẩn $=3.226763084$, $t$ Stat $=3.470970663$; X Variable 1: hệ số $=-0.475$, sai số chuẩn $=0.346229693$, $t$ Stat $=-1.371921618$.</p><p>Giá trị của thống kê kiểm định để kiểm tra hệ số góc hồi quy có bằng $-1$ hay không là bao nhiêu?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The following is Excel output of a simple regression model.<br/><br/>Regression Statistics: R Square $=0.273484848$; Observations $=7$.<br/><br/>ANOVA — Regression: $df=1$, $SS=5.157142857$; Residual: $SS=13.7$, $MS=2.74$; Total: $df=6$, $SS=18.85714286$.<br/><br/>Coefficients — Intercept: coefficient $=11.2$, standard error $=3.226763084$, $t$ Stat $=3.470970663$; X Variable 1: coefficient $=-0.475$, standard error $=0.346229693$, $t$ Stat $=-1.371921618$.<br/><br/>What is the value of the test statistic for testing whether the regression slope coefficient is equal to $-1$?</p></div><div class=\"ml-vi\"><p>Dưới đây là kết quả Excel của một mô hình hồi quy đơn.<br/><br/>Regression Statistics: R Square $=0.273484848$; Observations $=7$.<br/><br/>ANOVA — Regression: $df=1$, $SS=5.157142857$; Residual: $SS=13.7$, $MS=2.74$; Total: $df=6$, $SS=18.85714286$.<br/><br/>Coefficients — Intercept: hệ số $=11.2$, sai số chuẩn $=3.226763084$, $t$ Stat $=3.470970663$; X Variable 1: hệ số $=-0.475$, sai số chuẩn $=0.346229693$, $t$ Stat $=-1.371921618$.<br/><br/>Giá trị của thống kê kiểm định để kiểm tra hệ số góc hồi quy có bằng $-1$ hay không là bao nhiêu?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D11/q18.png",
           "options": [
             {
@@ -519,7 +519,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Given a table of data (50 values, read row by row):</p><p>Row 1: 44, 63, 84, 98, 56, 32, 26, 75, 35, 97<br/>Row 2: 53, 39, 96, 36, 97, 44, 74, 26, 85, 84<br/>Row 3: 13, 46, 64, 38, 96, 45, 89, 86, 43, 71<br/>Row 4: 60, 12, 46, 84, 15, 75, 37, 80, 37, 27<br/>Row 5: 97, 46, 36, 38, 37, 58, 85, 44, 57, 72</p><p>In the corresponding stem-and-leaf diagram of this data table, what are the data values of stem 3?</p></div><div class=\"ml-vi\"><p>Cho bảng dữ liệu (50 giá trị, đọc theo từng hàng):</p><p>Hàng 1: 44, 63, 84, 98, 56, 32, 26, 75, 35, 97<br/>Hàng 2: 53, 39, 96, 36, 97, 44, 74, 26, 85, 84<br/>Hàng 3: 13, 46, 64, 38, 96, 45, 89, 86, 43, 71<br/>Hàng 4: 60, 12, 46, 84, 15, 75, 37, 80, 37, 27<br/>Hàng 5: 97, 46, 36, 38, 37, 58, 85, 44, 57, 72</p><p>Trong biểu đồ thân-lá tương ứng của bảng dữ liệu này, các lá của thân 3 là gì?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given a table of data (50 values, read row by row):<br/><br/>Row 1: 44, 63, 84, 98, 56, 32, 26, 75, 35, 97<br/>Row 2: 53, 39, 96, 36, 97, 44, 74, 26, 85, 84<br/>Row 3: 13, 46, 64, 38, 96, 45, 89, 86, 43, 71<br/>Row 4: 60, 12, 46, 84, 15, 75, 37, 80, 37, 27<br/>Row 5: 97, 46, 36, 38, 37, 58, 85, 44, 57, 72<br/><br/>In the corresponding stem-and-leaf diagram of this data table, what are the data values of stem 3?</p></div><div class=\"ml-vi\"><p>Cho bảng dữ liệu (50 giá trị, đọc theo từng hàng):<br/><br/>Hàng 1: 44, 63, 84, 98, 56, 32, 26, 75, 35, 97<br/>Hàng 2: 53, 39, 96, 36, 97, 44, 74, 26, 85, 84<br/>Hàng 3: 13, 46, 64, 38, 96, 45, 89, 86, 43, 71<br/>Hàng 4: 60, 12, 46, 84, 15, 75, 37, 80, 37, 27<br/>Hàng 5: 97, 46, 36, 38, 37, 58, 85, 44, 57, 72<br/><br/>Trong biểu đồ thân-lá tương ứng của bảng dữ liệu này, các lá của thân 3 là gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D11/q20.png",
           "options": [
             {
@@ -588,7 +588,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>An economist is interested in studying the incomes of consumers in a particular region. The population standard deviation is known to be $1000. A random sample of 50 individuals resulted in an average income of $15000. What total sample size would the economist need to use for a 95% confidence interval if the width of the interval should not be more than $100?</p><p>Let $z_{0.05}=1.645$; $z_{0.025}=1.960$; $t_{0.05;49}=1.677$; $t_{0.025;49}=2.010$.</p></div><div class=\"ml-vi\"><p>Một nhà kinh tế nghiên cứu thu nhập của người tiêu dùng ở một vùng. Độ lệch chuẩn tổng thể đã biết là 1000 đô la. Một mẫu ngẫu nhiên 50 người cho thu nhập trung bình 15000 đô la. Nhà kinh tế cần cỡ mẫu tổng cộng bao nhiêu để khoảng tin cậy 95% có độ rộng không quá 100 đô la?</p><p>Cho $z_{0.05}=1.645$; $z_{0.025}=1.960$; $t_{0.05;49}=1.677$; $t_{0.025;49}=2.010$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>An economist is interested in studying the incomes of consumers in a particular region. The population standard deviation is known to be $1000. A random sample of 50 individuals resulted in an average income of $15000. What total sample size would the economist need to use for a 95% confidence interval if the width of the interval should not be more than $100?<br/><br/>Let $z_{0.05}=1.645$; $z_{0.025}=1.960$; $t_{0.05;49}=1.677$; $t_{0.025;49}=2.010$.</p></div><div class=\"ml-vi\"><p>Một nhà kinh tế nghiên cứu thu nhập của người tiêu dùng ở một vùng. Độ lệch chuẩn tổng thể đã biết là 1000 đô la. Một mẫu ngẫu nhiên 50 người cho thu nhập trung bình 15000 đô la. Nhà kinh tế cần cỡ mẫu tổng cộng bao nhiêu để khoảng tin cậy 95% có độ rộng không quá 100 đô la?<br/><br/>Cho $z_{0.05}=1.645$; $z_{0.025}=1.960$; $t_{0.05;49}=1.677$; $t_{0.025;49}=2.010$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D11/q23.png",
           "options": [
             {
@@ -615,7 +615,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Two types of flares are tested for their burning times (in minutes) and sample results are given below:</p><p>Brand X: $n=35$, $\\bar{x}=19.4$, $s=1.4$<br/>Brand Y: $n=40$, $\\bar{x}=15.1$, $s=0.8$</p><p>Construct a 95% confidence interval for the difference $\\mu_X-\\mu_Y$ based on the sample data. Assume that the two samples are independent and that they have been randomly selected.</p><p>Let $t_{0.025,34}=2.032$ and $t_{0.025,73}=1.993$.</p></div><div class=\"ml-vi\"><p>Hai loại pháo sáng được thử nghiệm thời gian cháy (phút), kết quả mẫu như sau:</p><p>Hiệu X: $n=35$, $\\bar{x}=19.4$, $s=1.4$<br/>Hiệu Y: $n=40$, $\\bar{x}=15.1$, $s=0.8$</p><p>Hãy lập khoảng tin cậy 95% cho hiệu $\\mu_X-\\mu_Y$ dựa trên dữ liệu mẫu. Giả sử hai mẫu độc lập và được chọn ngẫu nhiên.</p><p>Cho $t_{0.025,34}=2.032$ và $t_{0.025,73}=1.993$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Two types of flares are tested for their burning times (in minutes) and sample results are given below:<br/><br/>Brand X: $n=35$, $\\bar{x}=19.4$, $s=1.4$<br/>Brand Y: $n=40$, $\\bar{x}=15.1$, $s=0.8$<br/><br/>Construct a 95% confidence interval for the difference $\\mu_X-\\mu_Y$ based on the sample data. Assume that the two samples are independent and that they have been randomly selected.<br/><br/>Let $t_{0.025,34}=2.032$ and $t_{0.025,73}=1.993$.</p></div><div class=\"ml-vi\"><p>Hai loại pháo sáng được thử nghiệm thời gian cháy (phút), kết quả mẫu như sau:<br/><br/>Hiệu X: $n=35$, $\\bar{x}=19.4$, $s=1.4$<br/>Hiệu Y: $n=40$, $\\bar{x}=15.1$, $s=0.8$<br/><br/>Hãy lập khoảng tin cậy 95% cho hiệu $\\mu_X-\\mu_Y$ dựa trên dữ liệu mẫu. Giả sử hai mẫu độc lập và được chọn ngẫu nhiên.<br/><br/>Cho $t_{0.025,34}=2.032$ và $t_{0.025,73}=1.993$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D11/q24.png",
           "options": [
             {
@@ -774,7 +774,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>A salesperson knows that 20% of her presentations result in sales. Use the normal approximation formula for the Binomial distribution to find the probability that in the next 60 presentations at least 9 result in sales.</p><p>Let $P(Z<-1.13)=0.1268$ and $P(Z<-0.81)=0.2089$.</p></div><div class=\"ml-vi\"><p>Một nhân viên bán hàng biết rằng 20% các buổi thuyết trình của cô dẫn tới doanh số. Dùng công thức xấp xỉ chuẩn cho phân phối nhị thức để tìm xác suất trong 60 buổi thuyết trình kế tiếp có ít nhất 9 buổi dẫn tới doanh số.</p><p>Cho $P(Z<-1.13)=0.1268$ và $P(Z<-0.81)=0.2089$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A salesperson knows that 20% of her presentations result in sales. Use the normal approximation formula for the Binomial distribution to find the probability that in the next 60 presentations at least 9 result in sales.<br/><br/>Let $P(Z<-1.13)=0.1268$ and $P(Z<-0.81)=0.2089$.</p></div><div class=\"ml-vi\"><p>Một nhân viên bán hàng biết rằng 20% các buổi thuyết trình của cô dẫn tới doanh số. Dùng công thức xấp xỉ chuẩn cho phân phối nhị thức để tìm xác suất trong 60 buổi thuyết trình kế tiếp có ít nhất 9 buổi dẫn tới doanh số.<br/><br/>Cho $P(Z<-1.13)=0.1268$ và $P(Z<-0.81)=0.2089$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D11/q30.png",
           "options": [
             {
@@ -801,7 +801,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Construct a 98% confidence interval for the population mean. Assume the population has a normal distribution. A study of 14 bowlers showed that their average score was 192 with a standard deviation of 8.</p><p>Let $t_{0.01,\\,13}=2.65$.</p></div><div class=\"ml-vi\"><p>Hãy lập khoảng tin cậy 98% cho trung bình tổng thể. Giả sử tổng thể có phân phối chuẩn. Một nghiên cứu trên 14 người chơi bowling cho điểm trung bình 192 với độ lệch chuẩn 8.</p><p>Cho $t_{0.01,\\,13}=2.65$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Construct a 98% confidence interval for the population mean. Assume the population has a normal distribution. A study of 14 bowlers showed that their average score was 192 with a standard deviation of 8.<br/><br/>Let $t_{0.01,\\,13}=2.65$.</p></div><div class=\"ml-vi\"><p>Hãy lập khoảng tin cậy 98% cho trung bình tổng thể. Giả sử tổng thể có phân phối chuẩn. Một nghiên cứu trên 14 người chơi bowling cho điểm trung bình 192 với độ lệch chuẩn 8.<br/><br/>Cho $t_{0.01,\\,13}=2.65$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D11/q31.png",
           "options": [
             {
@@ -936,7 +936,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Assuming that the weights (kg) of two groups of children with non-smoking and smoking mothers both follow normal distributions with standard deviations of 0.576 and 0.776, respectively. Data for two random samples from these two groups are as follows:<br/>$$n_1=20,\\ \\bar{x}_1=3.4;\\qquad n_2=17,\\ \\bar{x}_2=3.2.$$<br/>Calculate a 95% confidence interval on the difference in population means $(\\mu_1-\\mu_2)$.</p><p>Let $z_{0.05}=1.65$; $z_{0.025}=1.96$.</p></div><div class=\"ml-vi\"><p>Giả sử cân nặng (kg) của hai nhóm trẻ có mẹ không hút thuốc và có mẹ hút thuốc đều tuân theo phân phối chuẩn với độ lệch chuẩn lần lượt là 0,576 và 0,776. Dữ liệu hai mẫu ngẫu nhiên từ hai nhóm như sau:<br/>$$n_1=20,\\ \\bar{x}_1=3.4;\\qquad n_2=17,\\ \\bar{x}_2=3.2.$$<br/>Hãy tính khoảng tin cậy 95% cho hiệu hai trung bình tổng thể $(\\mu_1-\\mu_2)$.</p><p>Cho $z_{0.05}=1.65$; $z_{0.025}=1.96$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Assuming that the weights (kg) of two groups of children with non-smoking and smoking mothers both follow normal distributions with standard deviations of 0.576 and 0.776, respectively. Data for two random samples from these two groups are as follows:<br/>$$n_1=20,\\ \\bar{x}_1=3.4;\\qquad n_2=17,\\ \\bar{x}_2=3.2.$$<br/>Calculate a 95% confidence interval on the difference in population means $(\\mu_1-\\mu_2)$.<br/><br/>Let $z_{0.05}=1.65$; $z_{0.025}=1.96$.</p></div><div class=\"ml-vi\"><p>Giả sử cân nặng (kg) của hai nhóm trẻ có mẹ không hút thuốc và có mẹ hút thuốc đều tuân theo phân phối chuẩn với độ lệch chuẩn lần lượt là 0,576 và 0,776. Dữ liệu hai mẫu ngẫu nhiên từ hai nhóm như sau:<br/>$$n_1=20,\\ \\bar{x}_1=3.4;\\qquad n_2=17,\\ \\bar{x}_2=3.2.$$<br/>Hãy tính khoảng tin cậy 95% cho hiệu hai trung bình tổng thể $(\\mu_1-\\mu_2)$.<br/><br/>Cho $z_{0.05}=1.65$; $z_{0.025}=1.96$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D11/q36.png",
           "options": [
             {
@@ -984,7 +984,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>A market trader sells ball-point pens on his stall. He sells the pens for a different fixed price, $x$ pence, in each of 4 weeks. He notes the number of pens, $y$, that he sells in each of these 4 weeks. The results are shown in the following table:</p><p>$x$: 12, 15, 20, 25<br/>$y$: 69, 60, 55, 48</p><p>Find the simple linear regression model $\\hat{y}=a+bx$ using the method of least squares.</p></div><div class=\"ml-vi\"><p>Một người bán hàng bán bút bi ở quầy. Trong mỗi tuần của 4 tuần, anh ta bán bút với một mức giá cố định khác nhau là $x$ xu. Anh ta ghi lại số bút $y$ bán được trong mỗi tuần. Kết quả như bảng sau:</p><p>$x$: 12, 15, 20, 25<br/>$y$: 69, 60, 55, 48</p><p>Hãy tìm mô hình hồi quy tuyến tính đơn $\\hat{y}=a+bx$ bằng phương pháp bình phương tối thiểu.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A market trader sells ball-point pens on his stall. He sells the pens for a different fixed price, $x$ pence, in each of 4 weeks. He notes the number of pens, $y$, that he sells in each of these 4 weeks. The results are shown in the following table:<br/><br/>$x$: 12, 15, 20, 25<br/>$y$: 69, 60, 55, 48<br/><br/>Find the simple linear regression model $\\hat{y}=a+bx$ using the method of least squares.</p></div><div class=\"ml-vi\"><p>Một người bán hàng bán bút bi ở quầy. Trong mỗi tuần của 4 tuần, anh ta bán bút với một mức giá cố định khác nhau là $x$ xu. Anh ta ghi lại số bút $y$ bán được trong mỗi tuần. Kết quả như bảng sau:<br/><br/>$x$: 12, 15, 20, 25<br/>$y$: 69, 60, 55, 48<br/><br/>Hãy tìm mô hình hồi quy tuyến tính đơn $\\hat{y}=a+bx$ bằng phương pháp bình phương tối thiểu.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D11/q38.png",
           "options": [
             {
@@ -1035,7 +1035,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Transportation officials tell us that 80% of drivers wear seat belts while driving. Use normal distribution to approximate the probability of observing 518 or fewer drivers wearing seat belts in a sample of 700 drivers.</p><p>Let $P(Z>3.92)=0$; $P(Z<-0.52)=0.3$.</p></div><div class=\"ml-vi\"><p>Cơ quan giao thông cho biết 80% tài xế thắt dây an toàn khi lái xe. Dùng phân phối chuẩn để xấp xỉ xác suất quan sát được 518 tài xế trở xuống thắt dây an toàn trong mẫu 700 tài xế.</p><p>Cho $P(Z>3.92)=0$; $P(Z<-0.52)=0.3$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Transportation officials tell us that 80% of drivers wear seat belts while driving. Use normal distribution to approximate the probability of observing 518 or fewer drivers wearing seat belts in a sample of 700 drivers.<br/><br/>Let $P(Z>3.92)=0$; $P(Z<-0.52)=0.3$.</p></div><div class=\"ml-vi\"><p>Cơ quan giao thông cho biết 80% tài xế thắt dây an toàn khi lái xe. Dùng phân phối chuẩn để xấp xỉ xác suất quan sát được 518 tài xế trở xuống thắt dây an toàn trong mẫu 700 tài xế.<br/><br/>Cho $P(Z>3.92)=0$; $P(Z<-0.52)=0.3$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D11/q40.png",
           "options": [
             {
@@ -1164,7 +1164,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>From a prior study, the population proportion $p$ is estimated by 0.6. What sample size is needed to be 99% confident that the point estimate of $p$ will be within 0.2 around the population $p$?</p><p>Let $z_{0.005}=2.58$ and $z_{0.01}=2.33$.</p></div><div class=\"ml-vi\"><p>Từ một nghiên cứu trước, tỷ lệ tổng thể $p$ được ước lượng bằng 0,6. Cần cỡ mẫu bao nhiêu để tin cậy 99% rằng ước lượng điểm của $p$ sai lệch không quá 0,2 so với $p$ của tổng thể?</p><p>Cho $z_{0.005}=2.58$ và $z_{0.01}=2.33$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>From a prior study, the population proportion $p$ is estimated by 0.6. What sample size is needed to be 99% confident that the point estimate of $p$ will be within 0.2 around the population $p$?<br/><br/>Let $z_{0.005}=2.58$ and $z_{0.01}=2.33$.</p></div><div class=\"ml-vi\"><p>Từ một nghiên cứu trước, tỷ lệ tổng thể $p$ được ước lượng bằng 0,6. Cần cỡ mẫu bao nhiêu để tin cậy 99% rằng ước lượng điểm của $p$ sai lệch không quá 0,2 so với $p$ của tổng thể?<br/><br/>Cho $z_{0.005}=2.58$ và $z_{0.01}=2.33$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D11/q45.png",
           "options": [
             {
@@ -1242,7 +1242,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>The box plot below is constructed from a given data set. Reading its five-number summary from the axis: the lower whisker starts at 10 (minimum), the box starts at 15 (first quartile $Q_1$), the line inside the box is at 18 (median), the box ends at 20 (third quartile $Q_3$) and the upper whisker ends at 22 (maximum).</p><p>How many of the following statements are correct?</p><p>i) Half of the data falls between 15 and 20.<br/>ii) The number 22 must be in the data set.<br/>iii) The number 18 must be in the data set.</p></div><div class=\"ml-vi\"><p>Biểu đồ hộp dưới đây được dựng từ một tập dữ liệu cho trước. Đọc tóm tắt năm số từ trục: râu dưới bắt đầu tại 10 (giá trị nhỏ nhất), hộp bắt đầu tại 15 (tứ phân vị thứ nhất $Q_1$), vạch trong hộp tại 18 (trung vị), hộp kết thúc tại 20 (tứ phân vị thứ ba $Q_3$) và râu trên kết thúc tại 22 (giá trị lớn nhất).</p><p>Có bao nhiêu phát biểu sau đây là đúng?</p><p>i) Một nửa dữ liệu nằm giữa 15 và 20.<br/>ii) Số 22 chắc chắn có trong tập dữ liệu.<br/>iii) Số 18 chắc chắn có trong tập dữ liệu.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The box plot below is constructed from a given data set. Reading its five-number summary from the axis: the lower whisker starts at 10 (minimum), the box starts at 15 (first quartile $Q_1$), the line inside the box is at 18 (median), the box ends at 20 (third quartile $Q_3$) and the upper whisker ends at 22 (maximum).<br/><br/>How many of the following statements are correct?<br/><br/>i) Half of the data falls between 15 and 20.<br/>ii) The number 22 must be in the data set.<br/>iii) The number 18 must be in the data set.</p></div><div class=\"ml-vi\"><p>Biểu đồ hộp dưới đây được dựng từ một tập dữ liệu cho trước. Đọc tóm tắt năm số từ trục: râu dưới bắt đầu tại 10 (giá trị nhỏ nhất), hộp bắt đầu tại 15 (tứ phân vị thứ nhất $Q_1$), vạch trong hộp tại 18 (trung vị), hộp kết thúc tại 20 (tứ phân vị thứ ba $Q_3$) và râu trên kết thúc tại 22 (giá trị lớn nhất).<br/><br/>Có bao nhiêu phát biểu sau đây là đúng?<br/><br/>i) Một nửa dữ liệu nằm giữa 15 và 20.<br/>ii) Số 22 chắc chắn có trong tập dữ liệu.<br/>iii) Số 18 chắc chắn có trong tập dữ liệu.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D11/q48.png",
           "options": [
             {
@@ -1266,7 +1266,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Find the standard deviation for the given probability distribution.</p><p>$X$: 0, 1, 2, 3, 4<br/>$P(X)$: 0.37, 0.05, 0.13, 0.25, 0.20</p></div><div class=\"ml-vi\"><p>Tìm độ lệch chuẩn của phân phối xác suất cho sau đây.</p><p>$X$: 0, 1, 2, 3, 4<br/>$P(X)$: 0,37; 0,05; 0,13; 0,25; 0,20</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find the standard deviation for the given probability distribution.<br/><br/>$X$: 0, 1, 2, 3, 4<br/>$P(X)$: 0.37, 0.05, 0.13, 0.25, 0.20</p></div><div class=\"ml-vi\"><p>Tìm độ lệch chuẩn của phân phối xác suất cho sau đây.<br/><br/>$X$: 0, 1, 2, 3, 4<br/>$P(X)$: 0,37; 0,05; 0,13; 0,25; 0,20</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D11/q49.png",
           "options": [
             {

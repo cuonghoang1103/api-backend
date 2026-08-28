@@ -21,7 +21,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The chancellor of a major university was concerned about alcohol abuse on her campus and wanted to find out the proportion of students at her university who visited campus bars on the weekend before the final exam week. Her assistant took a random sample of 250 students. The portion of students in the sample who visited campus bars on the weekend before the final exam week is an example of ________.</p></div><div class=\"ml-vi\"><p>Hiệu trưởng một trường đại học lớn lo ngại về tình trạng lạm dụng rượu bia trong trường và muốn biết tỉ lệ sinh viên của trường đã tới các quán bar trong khuôn viên vào cuối tuần trước tuần thi cuối kỳ. Trợ lý của bà lấy một mẫu ngẫu nhiên gồm 250 sinh viên. Tỉ lệ sinh viên **trong mẫu** đã tới quán bar vào cuối tuần trước tuần thi là một ví dụ của ________.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The chancellor of a major university was concerned about alcohol abuse on her campus and wanted to find out the proportion of students at her university who visited campus bars on the weekend before the final exam week. Her assistant took a random sample of 250 students. The portion of students in the sample who visited campus bars on the weekend before the final exam week is an example of ________.</p></div><div class=\"ml-vi\"><p>Hiệu trưởng một trường đại học lớn lo ngại về tình trạng lạm dụng rượu bia trong trường và muốn biết tỉ lệ sinh viên của trường đã tới các quán bar trong khuôn viên vào cuối tuần trước tuần thi cuối kỳ. Trợ lý của bà lấy một mẫu ngẫu nhiên gồm 250 sinh viên. Tỉ lệ sinh viên <strong>trong mẫu</strong> đã tới quán bar vào cuối tuần trước tuần thi là một ví dụ của ________.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q1.png",
           "options": [
             {
@@ -43,12 +43,12 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>A numerical summary computed from a **sample** is a *statistic*; the same quantity computed on the whole **population** is a *parameter*. Here the proportion comes from the 250 sampled students, i.e. $\\hat p$ (sample proportion), not $p$ (population proportion). So it is a statistic.</p></div><div class=\"ml-vi\"><p>Đại lượng số tính từ **mẫu** gọi là *thống kê*; nếu tính trên toàn **tổng thể** thì gọi là *tham số*. Ở đây tỉ lệ được tính từ 250 sinh viên trong mẫu, tức $\\hat p$ (tỉ lệ mẫu), không phải $p$ (tỉ lệ tổng thể). Vậy đó là một thống kê.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>A numerical summary computed from a <strong>sample</strong> is a *statistic*; the same quantity computed on the whole <strong>population</strong> is a *parameter*. Here the proportion comes from the 250 sampled students, i.e. $\\hat p$ (sample proportion), not $p$ (population proportion). So it is a statistic.</p></div><div class=\"ml-vi\"><p>Đại lượng số tính từ <strong>mẫu</strong> gọi là *thống kê*; nếu tính trên toàn <strong>tổng thể</strong> thì gọi là *tham số*. Ở đây tỉ lệ được tính từ 250 sinh viên trong mẫu, tức $\\hat p$ (tỉ lệ mẫu), không phải $p$ (tỉ lệ tổng thể). Vậy đó là một thống kê.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A method of gathering data when subjects are exposed to certain treatments and the data of interest is recorded is known as ________.</p></div><div class=\"ml-vi\"><p>Phương pháp thu thập dữ liệu trong đó các đối tượng được cho chịu tác động của một số **tác nhân (treatment)** rồi ghi lại dữ liệu quan tâm được gọi là ________.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A method of gathering data when subjects are exposed to certain treatments and the data of interest is recorded is known as ________.</p></div><div class=\"ml-vi\"><p>Phương pháp thu thập dữ liệu trong đó các đối tượng được cho chịu tác động của một số <strong>tác nhân (treatment)</strong> rồi ghi lại dữ liệu quan tâm được gọi là ________.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q2.png",
           "options": [
             {
@@ -67,7 +67,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>The key phrase is *&quot;subjects are exposed to certain treatments&quot;* — the investigator **actively sets** the levels of the input factor and then measures the response. That is the definition of a **designed experiment**. An observational study only records what happens with no intervention; a retrospective study digs through historical records that already exist.</p></div><div class=\"ml-vi\"><p>Cụm từ mấu chốt là *&quot;đối tượng được cho chịu tác động của tác nhân&quot;* — người nghiên cứu **chủ động đặt** mức của nhân tố đầu vào rồi đo phản hồi. Đó chính là định nghĩa của **thí nghiệm có thiết kế**. Nghiên cứu quan sát chỉ ghi nhận mà không can thiệp; nghiên cứu hồi cứu thì lục lại dữ liệu lịch sử có sẵn.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The key phrase is *&quot;subjects are exposed to certain treatments&quot;* — the investigator <strong>actively sets</strong> the levels of the input factor and then measures the response. That is the definition of a <strong>designed experiment</strong>. An observational study only records what happens with no intervention; a retrospective study digs through historical records that already exist.</p></div><div class=\"ml-vi\"><p>Cụm từ mấu chốt là *&quot;đối tượng được cho chịu tác động của tác nhân&quot;* — người nghiên cứu <strong>chủ động đặt</strong> mức của nhân tố đầu vào rồi đo phản hồi. Đó chính là định nghĩa của <strong>thí nghiệm có thiết kế</strong>. Nghiên cứu quan sát chỉ ghi nhận mà không can thiệp; nghiên cứu hồi cứu thì lục lại dữ liệu lịch sử có sẵn.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -91,7 +91,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>$S$ has $2^3 = 8$ outcomes. $A$ = &quot;at least one head&quot; = every outcome **except** $TTT$ (7 outcomes). $B$ = &quot;tail on 3rd toss&quot; $= \\{HHT, HTT, THT, TTT\\}$. The union puts $TTT$ (contributed by $B$) back with the other seven, so $A \\cup B = S$. Note option C is exactly $A$ alone, missing $TTT$.</p></div><div class=\"ml-vi\"><p>$S$ có $2^3 = 8$ kết cục. $A$ = &quot;ít nhất một mặt ngửa&quot; = tất cả **trừ** $TTT$ (7 kết cục). $B$ = &quot;lần 3 ra sấp&quot; $= \\{HHT, HTT, THT, TTT\\}$. Hợp của hai biến cố đưa $TTT$ (do $B$ đóng góp) trở lại cùng bảy kết cục kia, nên $A \\cup B = S$. Lưu ý phương án C chính là $A$ đứng một mình, còn thiếu $TTT$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$S$ has $2^3 = 8$ outcomes. $A$ = &quot;at least one head&quot; = every outcome <strong>except</strong> $TTT$ (7 outcomes). $B$ = &quot;tail on 3rd toss&quot; $= \\{HHT, HTT, THT, TTT\\}$. The union puts $TTT$ (contributed by $B$) back with the other seven, so $A \\cup B = S$. Note option C is exactly $A$ alone, missing $TTT$.</p></div><div class=\"ml-vi\"><p>$S$ có $2^3 = 8$ kết cục. $A$ = &quot;ít nhất một mặt ngửa&quot; = tất cả <strong>trừ</strong> $TTT$ (7 kết cục). $B$ = &quot;lần 3 ra sấp&quot; $= \\{HHT, HTT, THT, TTT\\}$. Hợp của hai biến cố đưa $TTT$ (do $B$ đóng góp) trở lại cùng bảy kết cục kia, nên $A \\cup B = S$. Lưu ý phương án C chính là $A$ đứng một mình, còn thiếu $TTT$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -115,7 +115,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Order does not matter (a *sample*, not an arrangement), so this is a combination: $\\binom{10}{5} = \\dfrac{10!}{5!\\,5!} = \\dfrac{30240}{120} = 252$. The distractor 30240 is the **permutation** $P(10,5) = 10\\cdot 9\\cdot 8\\cdot 7\\cdot 6$, which would count orderings.</p></div><div class=\"ml-vi\"><p>Thứ tự không quan trọng (đây là một *mẫu*, không phải một cách sắp xếp), nên dùng tổ hợp: $\\binom{10}{5} = \\dfrac{10!}{5!\\,5!} = \\dfrac{30240}{120} = 252$. Con số 30240 là **chỉnh hợp** $P(10,5) = 10\\cdot 9\\cdot 8\\cdot 7\\cdot 6$, tức có tính thứ tự.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Order does not matter (a *sample*, not an arrangement), so this is a combination: $\\binom{10}{5} = \\dfrac{10!}{5!\\,5!} = \\dfrac{30240}{120} = 252$. The distractor 30240 is the <strong>permutation</strong> $P(10,5) = 10\\cdot 9\\cdot 8\\cdot 7\\cdot 6$, which would count orderings.</p></div><div class=\"ml-vi\"><p>Thứ tự không quan trọng (đây là một *mẫu*, không phải một cách sắp xếp), nên dùng tổ hợp: $\\binom{10}{5} = \\dfrac{10!}{5!\\,5!} = \\dfrac{30240}{120} = 252$. Con số 30240 là <strong>chỉnh hợp</strong> $P(10,5) = 10\\cdot 9\\cdot 8\\cdot 7\\cdot 6$, tức có tính thứ tự.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -147,7 +147,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Assume that a researcher randomly selects 9 newborn babies and counts the number of girls selected, $X$. The probabilities corresponding to the 9 possible values of $X$ are summarized in the table below.</p><p>$X$ (girls): 0, 1, 2, 3, 4, 5, 6, 7, 8, 9<br/>$P$: 0.000, 0.012, 0.026, 0.022, 0.121, 0.122, 0.183, 0.209, 0.183, 0.122</p><p>Find the probability of selecting 7 or more girls.</p></div><div class=\"ml-vi\"><p>Một nhà nghiên cứu chọn ngẫu nhiên 9 trẻ sơ sinh và đếm số bé gái $X$. Xác suất ứng với các giá trị có thể của $X$ được cho trong bảng sau.</p><p>$X$ (số bé gái): 0, 1, 2, 3, 4, 5, 6, 7, 8, 9<br/>$P$: 0.000, 0.012, 0.026, 0.022, 0.121, 0.122, 0.183, 0.209, 0.183, 0.122</p><p>Tìm xác suất chọn được **từ 7 bé gái trở lên**.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Assume that a researcher randomly selects 9 newborn babies and counts the number of girls selected, $X$. The probabilities corresponding to the 9 possible values of $X$ are summarized in the table below.<br/><br/>$X$ (girls): 0, 1, 2, 3, 4, 5, 6, 7, 8, 9<br/>$P$: 0.000, 0.012, 0.026, 0.022, 0.121, 0.122, 0.183, 0.209, 0.183, 0.122<br/><br/>Find the probability of selecting 7 or more girls.</p></div><div class=\"ml-vi\"><p>Một nhà nghiên cứu chọn ngẫu nhiên 9 trẻ sơ sinh và đếm số bé gái $X$. Xác suất ứng với các giá trị có thể của $X$ được cho trong bảng sau.<br/><br/>$X$ (số bé gái): 0, 1, 2, 3, 4, 5, 6, 7, 8, 9<br/>$P$: 0.000, 0.012, 0.026, 0.022, 0.121, 0.122, 0.183, 0.209, 0.183, 0.122<br/><br/>Tìm xác suất chọn được <strong>từ 7 bé gái trở lên</strong>.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q6.png",
           "options": [
             {
@@ -174,7 +174,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A die is rolled. Find the probability that an even number is obtained knowing the number is greater than 3.</p></div><div class=\"ml-vi\"><p>Gieo một con xúc xắc. Tính xác suất ra số chẵn, **biết rằng** số nhận được lớn hơn 3.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A die is rolled. Find the probability that an even number is obtained knowing the number is greater than 3.</p></div><div class=\"ml-vi\"><p>Gieo một con xúc xắc. Tính xác suất ra số chẵn, <strong>biết rằng</strong> số nhận được lớn hơn 3.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q7.png",
           "options": [
             {
@@ -225,7 +225,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Find the probability of answering the two multiple choice questions correctly if random guesses are made. Assume the questions each have five choices for the answer. Only one of the choices is correct.</p></div><div class=\"ml-vi\"><p>Tính xác suất trả lời đúng **cả hai** câu trắc nghiệm nếu đoán ngẫu nhiên. Giả sử mỗi câu có năm lựa chọn và chỉ một lựa chọn đúng.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find the probability of answering the two multiple choice questions correctly if random guesses are made. Assume the questions each have five choices for the answer. Only one of the choices is correct.</p></div><div class=\"ml-vi\"><p>Tính xác suất trả lời đúng <strong>cả hai</strong> câu trắc nghiệm nếu đoán ngẫu nhiên. Giả sử mỗi câu có năm lựa chọn và chỉ một lựa chọn đúng.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q9.png",
           "options": [
             {
@@ -252,7 +252,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Bag A contains 15 white and 10 black balls while another Bag B contains 10 white and 15 black balls. One ball is drawn at random from one of the bags and it is found to be white. Find the probability that it was drawn from Bag B.</p></div><div class=\"ml-vi\"><p>Túi A chứa 15 bi trắng và 10 bi đen; túi B chứa 10 bi trắng và 15 bi đen. Lấy ngẫu nhiên một bi từ một trong hai túi và thấy nó màu trắng. Tính xác suất bi đó được lấy từ **túi B**.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Bag A contains 15 white and 10 black balls while another Bag B contains 10 white and 15 black balls. One ball is drawn at random from one of the bags and it is found to be white. Find the probability that it was drawn from Bag B.</p></div><div class=\"ml-vi\"><p>Túi A chứa 15 bi trắng và 10 bi đen; túi B chứa 10 bi trắng và 15 bi đen. Lấy ngẫu nhiên một bi từ một trong hai túi và thấy nó màu trắng. Tính xác suất bi đó được lấy từ <strong>túi B</strong>.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q10.png",
           "options": [
             {
@@ -276,7 +276,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Which of the following is NOT TRUE about continuous random variables?</p></div><div class=\"ml-vi\"><p>Phát biểu nào sau đây **KHÔNG ĐÚNG** về biến ngẫu nhiên liên tục?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Which of the following is NOT TRUE about continuous random variables?</p></div><div class=\"ml-vi\"><p>Phát biểu nào sau đây <strong>KHÔNG ĐÚNG</strong> về biến ngẫu nhiên liên tục?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q11.png",
           "options": [
             {
@@ -295,12 +295,12 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\"><p>A continuous random variable takes values over an **interval** of the real line, which is *uncountably* infinite. &quot;Countably infinite range&quot; is precisely the definition of a **discrete** random variable (like the integers), so statement D is the false one. A, B and C are all true of continuous variables.</p></div><div class=\"ml-vi\"><p>Biến ngẫu nhiên liên tục nhận giá trị trên một **khoảng** của trục số thực, tức vô hạn **không đếm được**. &quot;Miền giá trị vô hạn đếm được&quot; đúng là định nghĩa của biến ngẫu nhiên **rời rạc** (như tập số nguyên), nên phát biểu D là sai. A, B, C đều đúng với biến liên tục.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>A continuous random variable takes values over an <strong>interval</strong> of the real line, which is *uncountably* infinite. &quot;Countably infinite range&quot; is precisely the definition of a <strong>discrete</strong> random variable (like the integers), so statement D is the false one. A, B and C are all true of continuous variables.</p></div><div class=\"ml-vi\"><p>Biến ngẫu nhiên liên tục nhận giá trị trên một <strong>khoảng</strong> của trục số thực, tức vô hạn <strong>không đếm được</strong>. &quot;Miền giá trị vô hạn đếm được&quot; đúng là định nghĩa của biến ngẫu nhiên <strong>rời rạc</strong> (như tập số nguyên), nên phát biểu D là sai. A, B, C đều đúng với biến liên tục.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A batch of 50 machined parts contains 5 that do not conform to customer requirements. Determine the range of the random variable that is the number of parts that do not conform to customer requirements in a sample of 8 parts selected without replacement from the batch.</p></div><div class=\"ml-vi\"><p>Một lô 50 chi tiết gia công có 5 chi tiết không đạt yêu cầu của khách hàng. Hãy xác định **miền giá trị** của biến ngẫu nhiên là số chi tiết không đạt yêu cầu trong một mẫu 8 chi tiết được lấy **không hoàn lại** từ lô đó.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A batch of 50 machined parts contains 5 that do not conform to customer requirements. Determine the range of the random variable that is the number of parts that do not conform to customer requirements in a sample of 8 parts selected without replacement from the batch.</p></div><div class=\"ml-vi\"><p>Một lô 50 chi tiết gia công có 5 chi tiết không đạt yêu cầu của khách hàng. Hãy xác định <strong>miền giá trị</strong> của biến ngẫu nhiên là số chi tiết không đạt yêu cầu trong một mẫu 8 chi tiết được lấy <strong>không hoàn lại</strong> từ lô đó.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q12.png",
           "options": [
             {
@@ -319,7 +319,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>This is a hypergeometric setting. The count of nonconforming parts in the sample is bounded above by **both** the sample size (8) and the number of nonconforming parts available in the batch (5), so $X \\le \\min(8,5) = 5$. The minimum is 0. Hence the range is $\\{0,1,2,3,4,5\\}$.</p></div><div class=\"ml-vi\"><p>Đây là tình huống siêu bội. Số chi tiết hỏng trong mẫu bị chặn trên bởi **cả hai**: cỡ mẫu (8) và số chi tiết hỏng có trong lô (5), nên $X \\le \\min(8,5) = 5$. Giá trị nhỏ nhất là 0. Vậy miền giá trị là $\\{0,1,2,3,4,5\\}$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>This is a hypergeometric setting. The count of nonconforming parts in the sample is bounded above by <strong>both</strong> the sample size (8) and the number of nonconforming parts available in the batch (5), so $X \\le \\min(8,5) = 5$. The minimum is 0. Hence the range is $\\{0,1,2,3,4,5\\}$.</p></div><div class=\"ml-vi\"><p>Đây là tình huống siêu bội. Số chi tiết hỏng trong mẫu bị chặn trên bởi <strong>cả hai</strong>: cỡ mẫu (8) và số chi tiết hỏng có trong lô (5), nên $X \\le \\min(8,5) = 5$. Giá trị nhỏ nhất là 0. Vậy miền giá trị là $\\{0,1,2,3,4,5\\}$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -346,12 +346,12 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>This is the textbook definition verbatim: *&quot;The **probability distribution** of a random variable $X$ is a description of the probabilities associated with the possible values of $X$.&quot;* The probability mass function $f(x) = P(X = x)$ is one particular *way* of giving that description (a table or a CDF are others), and the density function belongs to continuous variables — so the general term asked for is the probability distribution.</p></div><div class=\"ml-vi\"><p>Đây đúng nguyên văn định nghĩa trong giáo trình: *&quot;**Phân phối xác suất** của biến ngẫu nhiên $X$ là mô tả các xác suất gắn với những giá trị có thể của $X$.&quot;* Hàm khối xác suất $f(x) = P(X = x)$ chỉ là **một cách** để đưa ra mô tả đó (bảng hoặc hàm phân phối tích lũy là những cách khác), còn hàm mật độ thuộc về biến liên tục — nên thuật ngữ tổng quát được hỏi là phân phối xác suất.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>This is the textbook definition verbatim: *&quot;The <strong>probability distribution</strong> of a random variable $X$ is a description of the probabilities associated with the possible values of $X$.&quot;* The probability mass function $f(x) = P(X = x)$ is one particular *way* of giving that description (a table or a CDF are others), and the density function belongs to continuous variables — so the general term asked for is the probability distribution.</p></div><div class=\"ml-vi\"><p>Đây đúng nguyên văn định nghĩa trong giáo trình: *&quot;<strong>Phân phối xác suất</strong> của biến ngẫu nhiên $X$ là mô tả các xác suất gắn với những giá trị có thể của $X$.&quot;* Hàm khối xác suất $f(x) = P(X = x)$ chỉ là <strong>một cách</strong> để đưa ra mô tả đó (bảng hoặc hàm phân phối tích lũy là những cách khác), còn hàm mật độ thuộc về biến liên tục — nên thuật ngữ tổng quát được hỏi là phân phối xác suất.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Given the probability distribution of a discrete random variable $X$:</p><p>$x$: 0, 1, 2, 3, 4<br/>$P(x)$: 0.15, 0.25, 0.2, 0.1, 0.3</p><p>Denote by $F(x)$ the **cumulative** distribution function of $X$. Find $F(2)$.</p></div><div class=\"ml-vi\"><p>Cho phân phối xác suất của biến ngẫu nhiên rời rạc $X$:</p><p>$x$: 0, 1, 2, 3, 4<br/>$P(x)$: 0.15, 0.25, 0.2, 0.1, 0.3</p><p>Gọi $F(x)$ là hàm phân phối **tích lũy** của $X$. Tính $F(2)$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given the probability distribution of a discrete random variable $X$:<br/><br/>$x$: 0, 1, 2, 3, 4<br/>$P(x)$: 0.15, 0.25, 0.2, 0.1, 0.3<br/><br/>Denote by $F(x)$ the <strong>cumulative</strong> distribution function of $X$. Find $F(2)$.</p></div><div class=\"ml-vi\"><p>Cho phân phối xác suất của biến ngẫu nhiên rời rạc $X$:<br/><br/>$x$: 0, 1, 2, 3, 4<br/>$P(x)$: 0.15, 0.25, 0.2, 0.1, 0.3<br/><br/>Gọi $F(x)$ là hàm phân phối <strong>tích lũy</strong> của $X$. Tính $F(2)$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q14.png",
           "options": [
             {
@@ -378,7 +378,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A basketball player is asked to shoot free throws in sets of four. The player shoots 100 sets of 4 free throws. The probability distribution for making a particular number of free throws is given below. Determine the standard deviation for this discrete probability distribution.</p><p>$X$: 0, 1, 2, 3, 4<br/>$P(X)$: 0.02, 0.07, 0.22, 0.27, 0.42</p></div><div class=\"ml-vi\"><p>Một cầu thủ bóng rổ ném phạt theo từng lượt 4 quả. Anh ta thực hiện 100 lượt, mỗi lượt 4 quả ném phạt. Phân phối xác suất cho số quả ném trúng được cho dưới đây. Hãy xác định **độ lệch chuẩn** của phân phối xác suất rời rạc này.</p><p>$X$: 0, 1, 2, 3, 4<br/>$P(X)$: 0.02, 0.07, 0.22, 0.27, 0.42</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A basketball player is asked to shoot free throws in sets of four. The player shoots 100 sets of 4 free throws. The probability distribution for making a particular number of free throws is given below. Determine the standard deviation for this discrete probability distribution.<br/><br/>$X$: 0, 1, 2, 3, 4<br/>$P(X)$: 0.02, 0.07, 0.22, 0.27, 0.42</p></div><div class=\"ml-vi\"><p>Một cầu thủ bóng rổ ném phạt theo từng lượt 4 quả. Anh ta thực hiện 100 lượt, mỗi lượt 4 quả ném phạt. Phân phối xác suất cho số quả ném trúng được cho dưới đây. Hãy xác định <strong>độ lệch chuẩn</strong> của phân phối xác suất rời rạc này.<br/><br/>$X$: 0, 1, 2, 3, 4<br/>$P(X)$: 0.02, 0.07, 0.22, 0.27, 0.42</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q15.png",
           "options": [
             {
@@ -400,12 +400,12 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\"><p>First the mean:<br/>$$\\mu = 0(0.02)+1(0.07)+2(0.22)+3(0.27)+4(0.42) = 0.07+0.44+0.81+1.68 = 3.00$$<br/>Then $E[X^2] = 0 + 1(0.07)+4(0.22)+9(0.27)+16(0.42) = 0.07+0.88+2.43+6.72 = 10.10$.<br/>$$\\sigma^2 = E[X^2]-\\mu^2 = 10.10 - 9.00 = 1.10 \\quad\\Rightarrow\\quad \\sigma = \\sqrt{1.10} \\approx 1.05$$<br/>Option E (1.10) is the **variance**, a classic trap.</p></div><div class=\"ml-vi\"><p>Trước hết tính kỳ vọng:<br/>$$\\mu = 0(0.02)+1(0.07)+2(0.22)+3(0.27)+4(0.42) = 0.07+0.44+0.81+1.68 = 3.00$$<br/>Tiếp theo $E[X^2] = 0 + 1(0.07)+4(0.22)+9(0.27)+16(0.42) = 0.07+0.88+2.43+6.72 = 10.10$.<br/>$$\\sigma^2 = E[X^2]-\\mu^2 = 10.10 - 9.00 = 1.10 \\quad\\Rightarrow\\quad \\sigma = \\sqrt{1.10} \\approx 1.05$$<br/>Phương án E (1.10) là **phương sai** — cái bẫy kinh điển.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>First the mean:<br/>$$\\mu = 0(0.02)+1(0.07)+2(0.22)+3(0.27)+4(0.42) = 0.07+0.44+0.81+1.68 = 3.00$$<br/>Then $E[X^2] = 0 + 1(0.07)+4(0.22)+9(0.27)+16(0.42) = 0.07+0.88+2.43+6.72 = 10.10$.<br/>$$\\sigma^2 = E[X^2]-\\mu^2 = 10.10 - 9.00 = 1.10 \\quad\\Rightarrow\\quad \\sigma = \\sqrt{1.10} \\approx 1.05$$<br/>Option E (1.10) is the <strong>variance</strong>, a classic trap.</p></div><div class=\"ml-vi\"><p>Trước hết tính kỳ vọng:<br/>$$\\mu = 0(0.02)+1(0.07)+2(0.22)+3(0.27)+4(0.42) = 0.07+0.44+0.81+1.68 = 3.00$$<br/>Tiếp theo $E[X^2] = 0 + 1(0.07)+4(0.22)+9(0.27)+16(0.42) = 0.07+0.88+2.43+6.72 = 10.10$.<br/>$$\\sigma^2 = E[X^2]-\\mu^2 = 10.10 - 9.00 = 1.10 \\quad\\Rightarrow\\quad \\sigma = \\sqrt{1.10} \\approx 1.05$$<br/>Phương án E (1.10) là <strong>phương sai</strong> — cái bẫy kinh điển.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Let the random variable $X$ have a discrete uniform distribution on integers from 30 to 89. Determine $P(X > 47)$.</p></div><div class=\"ml-vi\"><p>Cho biến ngẫu nhiên $X$ có phân phối **đều rời rạc** trên các số nguyên từ 30 đến 89. Tính $P(X > 47)$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Let the random variable $X$ have a discrete uniform distribution on integers from 30 to 89. Determine $P(X > 47)$.</p></div><div class=\"ml-vi\"><p>Cho biến ngẫu nhiên $X$ có phân phối <strong>đều rời rạc</strong> trên các số nguyên từ 30 đến 89. Tính $P(X > 47)$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q16.png",
           "options": [
             {
@@ -432,7 +432,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Find the probability that in 4 tosses of a fair six-sided die, a five will be obtained at most once.</p></div><div class=\"ml-vi\"><p>Tính xác suất để trong 4 lần gieo một con xúc xắc cân đối sáu mặt, mặt 5 chấm xuất hiện **nhiều nhất một lần**.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find the probability that in 4 tosses of a fair six-sided die, a five will be obtained at most once.</p></div><div class=\"ml-vi\"><p>Tính xác suất để trong 4 lần gieo một con xúc xắc cân đối sáu mặt, mặt 5 chấm xuất hiện <strong>nhiều nhất một lần</strong>.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q17.png",
           "options": [
             {
@@ -459,7 +459,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A trading company has eight computers that it uses to trade on the New York Stock Exchange (NYSE). The probability of a computer failing in a day is 0.006, and the computers fail independently. Computers are repaired in the evening and each day is an independent trial. What is the probability that all eight computers fail in a day?</p></div><div class=\"ml-vi\"><p>Một công ty giao dịch có tám máy tính dùng để giao dịch trên sàn NYSE. Xác suất một máy hỏng trong ngày là 0.006, và các máy hỏng độc lập với nhau. Máy được sửa vào buổi tối và mỗi ngày là một phép thử độc lập. Tính xác suất **cả tám máy** cùng hỏng trong một ngày.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A trading company has eight computers that it uses to trade on the New York Stock Exchange (NYSE). The probability of a computer failing in a day is 0.006, and the computers fail independently. Computers are repaired in the evening and each day is an independent trial. What is the probability that all eight computers fail in a day?</p></div><div class=\"ml-vi\"><p>Một công ty giao dịch có tám máy tính dùng để giao dịch trên sàn NYSE. Xác suất một máy hỏng trong ngày là 0.006, và các máy hỏng độc lập với nhau. Máy được sửa vào buổi tối và mỗi ngày là một phép thử độc lập. Tính xác suất <strong>cả tám máy</strong> cùng hỏng trong một ngày.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q18.png",
           "options": [
             {
@@ -483,7 +483,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A wallet holds five 10,000VND bills, three 20,000VND bills and four 50,000VND bills. What is the probability that three bills are blindfoldly drawn from the wallet and two of them are 50,000VND ones?</p></div><div class=\"ml-vi\"><p>Một chiếc ví có năm tờ 10.000 VNĐ, ba tờ 20.000 VNĐ và bốn tờ 50.000 VNĐ. Rút ngẫu nhiên (bịt mắt) ba tờ từ ví. Tính xác suất trong đó có **đúng hai** tờ 50.000 VNĐ.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A wallet holds five 10,000VND bills, three 20,000VND bills and four 50,000VND bills. What is the probability that three bills are blindfoldly drawn from the wallet and two of them are 50,000VND ones?</p></div><div class=\"ml-vi\"><p>Một chiếc ví có năm tờ 10.000 VNĐ, ba tờ 20.000 VNĐ và bốn tờ 50.000 VNĐ. Rút ngẫu nhiên (bịt mắt) ba tờ từ ví. Tính xác suất trong đó có <strong>đúng hai</strong> tờ 50.000 VNĐ.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q19.png",
           "options": [
             {
@@ -510,7 +510,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A statistics professor finds that when he schedules an office hour at the 10:30 a.m. time slot, an average of three students arrive. Use the Poisson distribution to find the probability that in a randomly selected office hour in the 10:30 a.m. time slot exactly five students will arrive.</p></div><div class=\"ml-vi\"><p>Một giáo sư thống kê nhận thấy khi ông xếp giờ tiếp sinh viên vào khung 10h30 sáng thì trung bình có ba sinh viên tới. Dùng phân phối Poisson để tính xác suất trong một giờ tiếp sinh viên khung 10h30 được chọn ngẫu nhiên có **đúng năm** sinh viên tới.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A statistics professor finds that when he schedules an office hour at the 10:30 a.m. time slot, an average of three students arrive. Use the Poisson distribution to find the probability that in a randomly selected office hour in the 10:30 a.m. time slot exactly five students will arrive.</p></div><div class=\"ml-vi\"><p>Một giáo sư thống kê nhận thấy khi ông xếp giờ tiếp sinh viên vào khung 10h30 sáng thì trung bình có ba sinh viên tới. Dùng phân phối Poisson để tính xác suất trong một giờ tiếp sinh viên khung 10h30 được chọn ngẫu nhiên có <strong>đúng năm</strong> sinh viên tới.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q20.png",
           "options": [
             {
@@ -537,7 +537,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The time (in years) until the first critical-part failure for a certain car is exponentially distributed with a mean of 3.4 years. Find the probability that the time until the first critical-part failure is less than 1 year.</p></div><div class=\"ml-vi\"><p>Thời gian (tính bằng năm) cho tới lần hỏng chi tiết quan trọng đầu tiên của một loại xe hơi tuân theo phân phối **mũ** với trung bình 3.4 năm. Tính xác suất thời gian tới lần hỏng đầu tiên **nhỏ hơn 1 năm**.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The time (in years) until the first critical-part failure for a certain car is exponentially distributed with a mean of 3.4 years. Find the probability that the time until the first critical-part failure is less than 1 year.</p></div><div class=\"ml-vi\"><p>Thời gian (tính bằng năm) cho tới lần hỏng chi tiết quan trọng đầu tiên của một loại xe hơi tuân theo phân phối <strong>mũ</strong> với trung bình 3.4 năm. Tính xác suất thời gian tới lần hỏng đầu tiên <strong>nhỏ hơn 1 năm</strong>.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q21.png",
           "options": [
             {
@@ -564,7 +564,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A student doing a summer internship in a company was asked to model the lifetime of certain equipment that the company makes. After a series of tests, the student proposed that the lifetime of the equipment can be modeled by a random variable $X$ that has the probability density function<br/>$$f(x) = \\begin{cases} 0 & , x < 0 \\\\[4pt] \\dfrac{x e^{-x/10}}{100} & , x \\ge 0 \\end{cases}$$<br/>What is the probability that the lifetime of the equipment exceeds 20?</p></div><div class=\"ml-vi\"><p>Một sinh viên thực tập hè tại một công ty được giao mô hình hóa tuổi thọ của một loại thiết bị công ty sản xuất. Sau một loạt thử nghiệm, sinh viên đề xuất tuổi thọ thiết bị có thể mô tả bằng biến ngẫu nhiên $X$ với hàm mật độ xác suất<br/>$$f(x) = \\begin{cases} 0 & , x < 0 \\\\[4pt] \\dfrac{x e^{-x/10}}{100} & , x \\ge 0 \\end{cases}$$<br/>Tính xác suất tuổi thọ thiết bị **vượt quá 20**.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A student doing a summer internship in a company was asked to model the lifetime of certain equipment that the company makes. After a series of tests, the student proposed that the lifetime of the equipment can be modeled by a random variable $X$ that has the probability density function<br/>$$f(x) = \\begin{cases} 0 & , x < 0 \\\\[4pt] \\dfrac{x e^{-x/10}}{100} & , x \\ge 0 \\end{cases}$$<br/>What is the probability that the lifetime of the equipment exceeds 20?</p></div><div class=\"ml-vi\"><p>Một sinh viên thực tập hè tại một công ty được giao mô hình hóa tuổi thọ của một loại thiết bị công ty sản xuất. Sau một loạt thử nghiệm, sinh viên đề xuất tuổi thọ thiết bị có thể mô tả bằng biến ngẫu nhiên $X$ với hàm mật độ xác suất<br/>$$f(x) = \\begin{cases} 0 & , x < 0 \\\\[4pt] \\dfrac{x e^{-x/10}}{100} & , x \\ge 0 \\end{cases}$$<br/>Tính xác suất tuổi thọ thiết bị <strong>vượt quá 20</strong>.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q22.png",
           "options": [
             {
@@ -618,7 +618,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The probability density function of the net weight in pounds of a packaged chemical herbicide is $f(x) = 4x^3$ for $0 < x < 1$. What is the expected value of the net weight?</p></div><div class=\"ml-vi\"><p>Hàm mật độ xác suất của khối lượng tịnh (đơn vị pound) của một gói thuốc diệt cỏ là $f(x) = 4x^3$ với $0 < x < 1$. Tính **kỳ vọng** của khối lượng tịnh.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The probability density function of the net weight in pounds of a packaged chemical herbicide is $f(x) = 4x^3$ for $0 < x < 1$. What is the expected value of the net weight?</p></div><div class=\"ml-vi\"><p>Hàm mật độ xác suất của khối lượng tịnh (đơn vị pound) của một gói thuốc diệt cỏ là $f(x) = 4x^3$ với $0 < x < 1$. Tính <strong>kỳ vọng</strong> của khối lượng tịnh.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q24.png",
           "options": [
             {
@@ -645,7 +645,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Suppose $X$ is a continuous uniform random variable over $[10, 70]$. Find the probability that a randomly selected observation is between 13 and 65.</p></div><div class=\"ml-vi\"><p>Giả sử $X$ là biến ngẫu nhiên **đều liên tục** trên $[10, 70]$. Tính xác suất một quan sát chọn ngẫu nhiên nằm trong khoảng từ 13 đến 65.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose $X$ is a continuous uniform random variable over $[10, 70]$. Find the probability that a randomly selected observation is between 13 and 65.</p></div><div class=\"ml-vi\"><p>Giả sử $X$ là biến ngẫu nhiên <strong>đều liên tục</strong> trên $[10, 70]$. Tính xác suất một quan sát chọn ngẫu nhiên nằm trong khoảng từ 13 đến 65.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q25.png",
           "options": [
             {
@@ -672,7 +672,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A supermarket manager has determined that the amount of time customers spend in the supermarket is approximately normally distributed with a mean of 45 minutes and a standard deviation of 6 minutes. Find the probability that a customer spends less than 48 minutes in the supermarket.</p><p>Let $P(Z < 0.5) = 0.6915$, $P(Z < 0.6) = 0.6854$, $P(Z < 0.7) = 0.7512$ and $P(Z < 1.2) = 0.8756$.</p></div><div class=\"ml-vi\"><p>Quản lý một siêu thị xác định rằng thời gian khách hàng ở trong siêu thị xấp xỉ phân phối chuẩn với trung bình 45 phút và độ lệch chuẩn 6 phút. Tính xác suất một khách hàng ở trong siêu thị **ít hơn 48 phút**.</p><p>Cho $P(Z < 0.5) = 0.6915$, $P(Z < 0.6) = 0.6854$, $P(Z < 0.7) = 0.7512$ và $P(Z < 1.2) = 0.8756$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A supermarket manager has determined that the amount of time customers spend in the supermarket is approximately normally distributed with a mean of 45 minutes and a standard deviation of 6 minutes. Find the probability that a customer spends less than 48 minutes in the supermarket.<br/><br/>Let $P(Z < 0.5) = 0.6915$, $P(Z < 0.6) = 0.6854$, $P(Z < 0.7) = 0.7512$ and $P(Z < 1.2) = 0.8756$.</p></div><div class=\"ml-vi\"><p>Quản lý một siêu thị xác định rằng thời gian khách hàng ở trong siêu thị xấp xỉ phân phối chuẩn với trung bình 45 phút và độ lệch chuẩn 6 phút. Tính xác suất một khách hàng ở trong siêu thị <strong>ít hơn 48 phút</strong>.<br/><br/>Cho $P(Z < 0.5) = 0.6915$, $P(Z < 0.6) = 0.6854$, $P(Z < 0.7) = 0.7512$ và $P(Z < 1.2) = 0.8756$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q26.png",
           "options": [
             {
@@ -699,7 +699,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Assume that the weights of quarters are normally distributed with a mean of 5.67 g and a standard deviation 0.070 g. A vending machine will only accept coins weighing between 5.48 g and 5.82 g. What percentage of legal quarters will be rejected?</p><p>Let $P(Z < -2.71) = 0.0034$; $P(Z < 2.14) = 0.9838$.</p></div><div class=\"ml-vi\"><p>Giả sử khối lượng các đồng 25 xu tuân theo phân phối chuẩn với trung bình 5.67 g và độ lệch chuẩn 0.070 g. Một máy bán hàng tự động chỉ chấp nhận đồng xu nặng từ 5.48 g đến 5.82 g. Hỏi **bao nhiêu phần trăm** đồng 25 xu hợp lệ sẽ bị từ chối?</p><p>Cho $P(Z < -2.71) = 0.0034$; $P(Z < 2.14) = 0.9838$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Assume that the weights of quarters are normally distributed with a mean of 5.67 g and a standard deviation 0.070 g. A vending machine will only accept coins weighing between 5.48 g and 5.82 g. What percentage of legal quarters will be rejected?<br/><br/>Let $P(Z < -2.71) = 0.0034$; $P(Z < 2.14) = 0.9838$.</p></div><div class=\"ml-vi\"><p>Giả sử khối lượng các đồng 25 xu tuân theo phân phối chuẩn với trung bình 5.67 g và độ lệch chuẩn 0.070 g. Một máy bán hàng tự động chỉ chấp nhận đồng xu nặng từ 5.48 g đến 5.82 g. Hỏi <strong>bao nhiêu phần trăm</strong> đồng 25 xu hợp lệ sẽ bị từ chối?<br/><br/>Cho $P(Z < -2.71) = 0.0034$; $P(Z < 2.14) = 0.9838$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q27.png",
           "options": [
             {
@@ -726,7 +726,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A certain baseball player hits a home run in 3% of his at-bats. Consider his at-bats as independent events. Use the normal approximation formula for Binomial distributions to find the probability that this baseball player hits more than 10 home runs in 600 at-bats.</p><p>Let $P(Z < -1.795) = 0.0363$; $P(Z < -1.915) = 0.0277$.</p></div><div class=\"ml-vi\"><p>Một cầu thủ bóng chày đánh được home run trong 3% số lần vào đánh. Coi các lần vào đánh là độc lập. Dùng **xấp xỉ chuẩn cho phân phối nhị thức** để tính xác suất cầu thủ này đánh được **hơn 10** home run trong 600 lần vào đánh.</p><p>Cho $P(Z < -1.795) = 0.0363$; $P(Z < -1.915) = 0.0277$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A certain baseball player hits a home run in 3% of his at-bats. Consider his at-bats as independent events. Use the normal approximation formula for Binomial distributions to find the probability that this baseball player hits more than 10 home runs in 600 at-bats.<br/><br/>Let $P(Z < -1.795) = 0.0363$; $P(Z < -1.915) = 0.0277$.</p></div><div class=\"ml-vi\"><p>Một cầu thủ bóng chày đánh được home run trong 3% số lần vào đánh. Coi các lần vào đánh là độc lập. Dùng <strong>xấp xỉ chuẩn cho phân phối nhị thức</strong> để tính xác suất cầu thủ này đánh được <strong>hơn 10</strong> home run trong 600 lần vào đánh.<br/><br/>Cho $P(Z < -1.795) = 0.0363$; $P(Z < -1.915) = 0.0277$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q28.png",
           "options": [
             {
@@ -748,12 +748,12 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>$X \\sim \\mathrm{Bin}(600, 0.03)$, so $\\mu = np = 18$ and $\\sigma = \\sqrt{np(1-p)} = \\sqrt{600(0.03)(0.97)} = \\sqrt{17.46} = 4.1785$. &quot;More than 10&quot; means $X \\ge 11$; with the **continuity correction** the cutoff is 10.5:<br/>$$z = \\frac{10.5 - 18}{4.1785} = -1.795$$<br/>$$P(X > 10) \\approx P(Z > -1.795) = 1 - 0.0363 = 0.9637$$<br/>(The value $-1.915$ is what you get by skipping the continuity correction — it is the distractor.)</p></div><div class=\"ml-vi\"><p>$X \\sim \\mathrm{Bin}(600, 0.03)$ nên $\\mu = np = 18$ và $\\sigma = \\sqrt{np(1-p)} = \\sqrt{600(0.03)(0.97)} = \\sqrt{17.46} = 4.1785$. &quot;Hơn 10&quot; nghĩa là $X \\ge 11$; dùng **hiệu chỉnh liên tục** thì mốc cắt là 10.5:<br/>$$z = \\frac{10.5 - 18}{4.1785} = -1.795$$<br/>$$P(X > 10) \\approx P(Z > -1.795) = 1 - 0.0363 = 0.9637$$<br/>(Giá trị $-1.915$ là kết quả khi **bỏ qua** hiệu chỉnh liên tục — đó chính là bẫy.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$X \\sim \\mathrm{Bin}(600, 0.03)$, so $\\mu = np = 18$ and $\\sigma = \\sqrt{np(1-p)} = \\sqrt{600(0.03)(0.97)} = \\sqrt{17.46} = 4.1785$. &quot;More than 10&quot; means $X \\ge 11$; with the <strong>continuity correction</strong> the cutoff is 10.5:<br/>$$z = \\frac{10.5 - 18}{4.1785} = -1.795$$<br/>$$P(X > 10) \\approx P(Z > -1.795) = 1 - 0.0363 = 0.9637$$<br/>(The value $-1.915$ is what you get by skipping the continuity correction — it is the distractor.)</p></div><div class=\"ml-vi\"><p>$X \\sim \\mathrm{Bin}(600, 0.03)$ nên $\\mu = np = 18$ và $\\sigma = \\sqrt{np(1-p)} = \\sqrt{600(0.03)(0.97)} = \\sqrt{17.46} = 4.1785$. &quot;Hơn 10&quot; nghĩa là $X \\ge 11$; dùng <strong>hiệu chỉnh liên tục</strong> thì mốc cắt là 10.5:<br/>$$z = \\frac{10.5 - 18}{4.1785} = -1.795$$<br/>$$P(X > 10) \\approx P(Z > -1.795) = 1 - 0.0363 = 0.9637$$<br/>(Giá trị $-1.915$ là kết quả khi <strong>bỏ qua</strong> hiệu chỉnh liên tục — đó chính là bẫy.)</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The top 14 speeds, in miles per hour, for Pro-Stock drag racing over the past two decades are listed below. Find the median speed.</p><p>181.1, 202.2, 190.1, 201.4, 191.3, 201.4, 192.2, 201.2, 193.2, 201.2, 194.5, 199.2, 196.0, 196.2</p></div><div class=\"ml-vi\"><p>Dưới đây là 14 tốc độ cao nhất (dặm/giờ) của đua xe Pro-Stock trong hai thập kỷ qua. Tìm **trung vị** của các tốc độ.</p><p>181.1, 202.2, 190.1, 201.4, 191.3, 201.4, 192.2, 201.2, 193.2, 201.2, 194.5, 199.2, 196.0, 196.2</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The top 14 speeds, in miles per hour, for Pro-Stock drag racing over the past two decades are listed below. Find the median speed.<br/><br/>181.1, 202.2, 190.1, 201.4, 191.3, 201.4, 192.2, 201.2, 193.2, 201.2, 194.5, 199.2, 196.0, 196.2</p></div><div class=\"ml-vi\"><p>Dưới đây là 14 tốc độ cao nhất (dặm/giờ) của đua xe Pro-Stock trong hai thập kỷ qua. Tìm <strong>trung vị</strong> của các tốc độ.<br/><br/>181.1, 202.2, 190.1, 201.4, 191.3, 201.4, 192.2, 201.2, 193.2, 201.2, 194.5, 199.2, 196.0, 196.2</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q29.png",
           "options": [
             {
@@ -775,12 +775,12 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\"><p>Sort the 14 values:<br/>181.1, 190.1, 191.3, 192.2, 193.2, 194.5, **196.0, 196.2**, 199.2, 201.2, 201.2, 201.4, 201.4, 202.2.<br/>With $n = 14$ (even) the median is the average of the 7th and 8th values:<br/>$$\\tilde{x} = \\frac{196.0 + 196.2}{2} = 196.1$$</p></div><div class=\"ml-vi\"><p>Sắp xếp 14 giá trị:<br/>181.1, 190.1, 191.3, 192.2, 193.2, 194.5, **196.0, 196.2**, 199.2, 201.2, 201.2, 201.4, 201.4, 202.2.<br/>Với $n = 14$ (chẵn), trung vị là trung bình của giá trị thứ 7 và thứ 8:<br/>$$\\tilde{x} = \\frac{196.0 + 196.2}{2} = 196.1$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Sort the 14 values:<br/>181.1, 190.1, 191.3, 192.2, 193.2, 194.5, <strong>196.0, 196.2</strong>, 199.2, 201.2, 201.2, 201.4, 201.4, 202.2.<br/>With $n = 14$ (even) the median is the average of the 7th and 8th values:<br/>$$\\tilde{x} = \\frac{196.0 + 196.2}{2} = 196.1$$</p></div><div class=\"ml-vi\"><p>Sắp xếp 14 giá trị:<br/>181.1, 190.1, 191.3, 192.2, 193.2, 194.5, <strong>196.0, 196.2</strong>, 199.2, 201.2, 201.2, 201.4, 201.4, 202.2.<br/>Với $n = 14$ (chẵn), trung vị là trung bình của giá trị thứ 7 và thứ 8:<br/>$$\\tilde{x} = \\frac{196.0 + 196.2}{2} = 196.1$$</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A small company has 7 employees. The numbers of years these employees have worked for this company are shown as follows:</p><p>4, 14, 3, 16, 9, 8, 16</p><p>Based upon this information, the mode number of years that employees have been with this company is ________.</p></div><div class=\"ml-vi\"><p>Một công ty nhỏ có 7 nhân viên. Số năm làm việc của họ tại công ty như sau:</p><p>4, 14, 3, 16, 9, 8, 16</p><p>Dựa vào thông tin này, **mốt (mode)** của số năm nhân viên đã gắn bó với công ty là ________.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A small company has 7 employees. The numbers of years these employees have worked for this company are shown as follows:<br/><br/>4, 14, 3, 16, 9, 8, 16<br/><br/>Based upon this information, the mode number of years that employees have been with this company is ________.</p></div><div class=\"ml-vi\"><p>Một công ty nhỏ có 7 nhân viên. Số năm làm việc của họ tại công ty như sau:<br/><br/>4, 14, 3, 16, 9, 8, 16<br/><br/>Dựa vào thông tin này, <strong>mốt (mode)</strong> của số năm nhân viên đã gắn bó với công ty là ________.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q30.png",
           "options": [
             {
@@ -802,12 +802,12 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>The mode is the most frequently occurring value. Counting: 3, 4, 8, 9 and 14 each appear once, while **16 appears twice**. Hence the mode is 16. (Distractors: the mean is $70/7 = 10$, and the median of the sorted list 3,4,8,**9**,14,16,16 is 9.)</p></div><div class=\"ml-vi\"><p>Mốt là giá trị xuất hiện nhiều lần nhất. Đếm: 3, 4, 8, 9 và 14 mỗi số xuất hiện một lần, còn **16 xuất hiện hai lần**. Vậy mốt là 16. (Các bẫy: trung bình là $70/7 = 10$, còn trung vị của dãy đã sắp 3,4,8,**9**,14,16,16 là 9.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The mode is the most frequently occurring value. Counting: 3, 4, 8, 9 and 14 each appear once, while <strong>16 appears twice</strong>. Hence the mode is 16. (Distractors: the mean is $70/7 = 10$, and the median of the sorted list 3,4,8,<strong>9</strong>,14,16,16 is 9.)</p></div><div class=\"ml-vi\"><p>Mốt là giá trị xuất hiện nhiều lần nhất. Đếm: 3, 4, 8, 9 và 14 mỗi số xuất hiện một lần, còn <strong>16 xuất hiện hai lần</strong>. Vậy mốt là 16. (Các bẫy: trung bình là $70/7 = 10$, còn trung vị của dãy đã sắp 3,4,8,<strong>9</strong>,14,16,16 là 9.)</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A survey was conducted to determine how people rated the quality of programming available on VTV1. Viewers were asked to rate the overall quality from 0 to 100. The stem-and-leaf display of the data is shown below (stem = tens digit, leaves = units digits).</p><p>Stem 3 | leaves 2, 6<br/>Stem 4 | leaves 0, 3, 4, 7, 8, 9, 9, 9<br/>Stem 5 | leaves 0, 1, 1, 2, 3, 4, 5<br/>Stem 6 | leaves 1, 2, 5, 6, 6<br/>Stem 7 | leaves 1, 7<br/>Stem 8 | (no leaves)<br/>Stem 9 | leaf 3</p><p>Identify the maximum quality rating.</p></div><div class=\"ml-vi\"><p>Một khảo sát được tiến hành để xem người xem đánh giá chất lượng chương trình trên VTV1 thế nào. Người xem được yêu cầu chấm điểm tổng thể từ 0 đến 100. Biểu đồ thân–lá của dữ liệu như sau (thân = hàng chục, lá = hàng đơn vị).</p><p>Thân 3 | lá 2, 6<br/>Thân 4 | lá 0, 3, 4, 7, 8, 9, 9, 9<br/>Thân 5 | lá 0, 1, 1, 2, 3, 4, 5<br/>Thân 6 | lá 1, 2, 5, 6, 6<br/>Thân 7 | lá 1, 7<br/>Thân 8 | (không có lá)<br/>Thân 9 | lá 3</p><p>Hãy xác định **điểm chất lượng lớn nhất**.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A survey was conducted to determine how people rated the quality of programming available on VTV1. Viewers were asked to rate the overall quality from 0 to 100. The stem-and-leaf display of the data is shown below (stem = tens digit, leaves = units digits).<br/><br/>Stem 3 | leaves 2, 6<br/>Stem 4 | leaves 0, 3, 4, 7, 8, 9, 9, 9<br/>Stem 5 | leaves 0, 1, 1, 2, 3, 4, 5<br/>Stem 6 | leaves 1, 2, 5, 6, 6<br/>Stem 7 | leaves 1, 7<br/>Stem 8 | (no leaves)<br/>Stem 9 | leaf 3<br/><br/>Identify the maximum quality rating.</p></div><div class=\"ml-vi\"><p>Một khảo sát được tiến hành để xem người xem đánh giá chất lượng chương trình trên VTV1 thế nào. Người xem được yêu cầu chấm điểm tổng thể từ 0 đến 100. Biểu đồ thân–lá của dữ liệu như sau (thân = hàng chục, lá = hàng đơn vị).<br/><br/>Thân 3 | lá 2, 6<br/>Thân 4 | lá 0, 3, 4, 7, 8, 9, 9, 9<br/>Thân 5 | lá 0, 1, 1, 2, 3, 4, 5<br/>Thân 6 | lá 1, 2, 5, 6, 6<br/>Thân 7 | lá 1, 7<br/>Thân 8 | (không có lá)<br/>Thân 9 | lá 3<br/><br/>Hãy xác định <strong>điểm chất lượng lớn nhất</strong>.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q31.png",
           "options": [
             {
@@ -829,12 +829,12 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\"><p>In a stem-and-leaf plot the largest observation sits on the **last stem that has a leaf**. Stem 8 is empty; stem 9 carries the single leaf 3, so the maximum is $9\\,|\\,3 = 93$. (32 is the *minimum*, 49 the largest value on stem 4, 66 the largest on stem 6.)</p></div><div class=\"ml-vi\"><p>Trong biểu đồ thân–lá, quan sát lớn nhất nằm ở **thân cuối cùng còn có lá**. Thân 8 rỗng; thân 9 có đúng một lá là 3, nên giá trị lớn nhất là $9\\,|\\,3 = 93$. (32 là giá trị *nhỏ nhất*, 49 là giá trị lớn nhất ở thân 4, 66 là lớn nhất ở thân 6.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>In a stem-and-leaf plot the largest observation sits on the <strong>last stem that has a leaf</strong>. Stem 8 is empty; stem 9 carries the single leaf 3, so the maximum is $9\\,|\\,3 = 93$. (32 is the *minimum*, 49 the largest value on stem 4, 66 the largest on stem 6.)</p></div><div class=\"ml-vi\"><p>Trong biểu đồ thân–lá, quan sát lớn nhất nằm ở <strong>thân cuối cùng còn có lá</strong>. Thân 8 rỗng; thân 9 có đúng một lá là 3, nên giá trị lớn nhất là $9\\,|\\,3 = 93$. (32 là giá trị *nhỏ nhất*, 49 là giá trị lớn nhất ở thân 4, 66 là lớn nhất ở thân 6.)</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Given a table of data (50 values, read row by row):</p><p>Row 1: 44, 63, 84, 98, 56, 32, 26, 75, 35, 97<br/>Row 2: 53, 39, 96, 36, 97, 44, 74, 26, 85, 84<br/>Row 3: 13, 46, 64, 38, 96, 45, 89, 86, 43, 71<br/>Row 4: 60, 12, 46, 84, 15, 75, 37, 80, 37, 27<br/>Row 5: 97, 46, 36, 38, 37, 58, 85, 44, 57, 72</p><p>Compare the frequency of interval $20 \\le x < 30$ to that of interval $50 \\le x < 60$.</p></div><div class=\"ml-vi\"><p>Cho bảng dữ liệu (50 giá trị, đọc theo từng hàng):</p><p>Hàng 1: 44, 63, 84, 98, 56, 32, 26, 75, 35, 97<br/>Hàng 2: 53, 39, 96, 36, 97, 44, 74, 26, 85, 84<br/>Hàng 3: 13, 46, 64, 38, 96, 45, 89, 86, 43, 71<br/>Hàng 4: 60, 12, 46, 84, 15, 75, 37, 80, 37, 27<br/>Hàng 5: 97, 46, 36, 38, 37, 58, 85, 44, 57, 72</p><p>Hãy so sánh **tần số** của khoảng $20 \\le x < 30$ với tần số của khoảng $50 \\le x < 60$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given a table of data (50 values, read row by row):<br/><br/>Row 1: 44, 63, 84, 98, 56, 32, 26, 75, 35, 97<br/>Row 2: 53, 39, 96, 36, 97, 44, 74, 26, 85, 84<br/>Row 3: 13, 46, 64, 38, 96, 45, 89, 86, 43, 71<br/>Row 4: 60, 12, 46, 84, 15, 75, 37, 80, 37, 27<br/>Row 5: 97, 46, 36, 38, 37, 58, 85, 44, 57, 72<br/><br/>Compare the frequency of interval $20 \\le x < 30$ to that of interval $50 \\le x < 60$.</p></div><div class=\"ml-vi\"><p>Cho bảng dữ liệu (50 giá trị, đọc theo từng hàng):<br/><br/>Hàng 1: 44, 63, 84, 98, 56, 32, 26, 75, 35, 97<br/>Hàng 2: 53, 39, 96, 36, 97, 44, 74, 26, 85, 84<br/>Hàng 3: 13, 46, 64, 38, 96, 45, 89, 86, 43, 71<br/>Hàng 4: 60, 12, 46, 84, 15, 75, 37, 80, 37, 27<br/>Hàng 5: 97, 46, 36, 38, 37, 58, 85, 44, 57, 72<br/><br/>Hãy so sánh <strong>tần số</strong> của khoảng $20 \\le x < 30$ với tần số của khoảng $50 \\le x < 60$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q32.png",
           "options": [
             {
@@ -850,12 +850,12 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Count the values that land in each class.</p><p>$20 \\le x < 30$: **26** (row 1), **26** (row 2), **27** (row 4) $\\Rightarrow$ frequency **3**.</p><p>$50 \\le x < 60$: **56** (row 1), **53** (row 2), **58** and **57** (row 5) $\\Rightarrow$ frequency **4**. Note 60 in row 4 is *excluded* because the class is open at the right end.</p><p>Since $4 > 3$, the interval $50 \\le x < 60$ has the higher frequency — statement (i).</p></div><div class=\"ml-vi\"><p>Đếm số giá trị rơi vào mỗi lớp.</p><p>$20 \\le x < 30$: **26** (hàng 1), **26** (hàng 2), **27** (hàng 4) $\\Rightarrow$ tần số **3**.</p><p>$50 \\le x < 60$: **56** (hàng 1), **53** (hàng 2), **58** và **57** (hàng 5) $\\Rightarrow$ tần số **4**. Lưu ý số 60 ở hàng 4 **không** được tính vì lớp hở ở đầu phải.</p><p>Vì $4 > 3$ nên khoảng $50 \\le x < 60$ có tần số cao hơn — phát biểu (i).</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Count the values that land in each class.<br/><br/>$20 \\le x < 30$: <strong>26</strong> (row 1), <strong>26</strong> (row 2), <strong>27</strong> (row 4) $\\Rightarrow$ frequency <strong>3</strong>.<br/><br/>$50 \\le x < 60$: <strong>56</strong> (row 1), <strong>53</strong> (row 2), <strong>58</strong> and <strong>57</strong> (row 5) $\\Rightarrow$ frequency <strong>4</strong>. Note 60 in row 4 is *excluded* because the class is open at the right end.<br/><br/>Since $4 > 3$, the interval $50 \\le x < 60$ has the higher frequency — statement (i).</p></div><div class=\"ml-vi\"><p>Đếm số giá trị rơi vào mỗi lớp.<br/><br/>$20 \\le x < 30$: <strong>26</strong> (hàng 1), <strong>26</strong> (hàng 2), <strong>27</strong> (hàng 4) $\\Rightarrow$ tần số <strong>3</strong>.<br/><br/>$50 \\le x < 60$: <strong>56</strong> (hàng 1), <strong>53</strong> (hàng 2), <strong>58</strong> và <strong>57</strong> (hàng 5) $\\Rightarrow$ tần số <strong>4</strong>. Lưu ý số 60 ở hàng 4 <strong>không</strong> được tính vì lớp hở ở đầu phải.<br/><br/>Vì $4 > 3$ nên khoảng $50 \\le x < 60$ có tần số cao hơn — phát biểu (i).</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The investigation in your book involves collecting resting pulse rates from 30 students in your class are shown below. Construct the boxplot for the data set.</p><p>56, 57, 60, 60, 64, 65, 65, 65, 68, 70, 70, 76, 77, 77, 77, 77, 78, 80, 82, 85, 87, 87, 88, 89, 89, 89, 89, 90, 90, 90</p><p>The three candidate boxplots are given by their five-number summaries:<br/>(i) min 56, $Q_1$ 65, median 77, $Q_3$ 89, max 90<br/>(ii) min 56, $Q_1$ 65, median 76, $Q_3$ 89, max 90<br/>(iii) min 56, $Q_1$ 65, median 77, $Q_3$ 88.5, max 90</p></div><div class=\"ml-vi\"><p>Bài khảo sát trong sách yêu cầu thu thập nhịp tim lúc nghỉ của 30 sinh viên trong lớp, số liệu như dưới đây. Hãy dựng **biểu đồ hộp** cho tập dữ liệu.</p><p>56, 57, 60, 60, 64, 65, 65, 65, 68, 70, 70, 76, 77, 77, 77, 77, 78, 80, 82, 85, 87, 87, 88, 89, 89, 89, 89, 90, 90, 90</p><p>Ba biểu đồ hộp ứng viên được cho bởi tóm tắt năm số:<br/>(i) min 56, $Q_1$ 65, trung vị 77, $Q_3$ 89, max 90<br/>(ii) min 56, $Q_1$ 65, trung vị 76, $Q_3$ 89, max 90<br/>(iii) min 56, $Q_1$ 65, trung vị 77, $Q_3$ 88.5, max 90</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The investigation in your book involves collecting resting pulse rates from 30 students in your class are shown below. Construct the boxplot for the data set.<br/><br/>56, 57, 60, 60, 64, 65, 65, 65, 68, 70, 70, 76, 77, 77, 77, 77, 78, 80, 82, 85, 87, 87, 88, 89, 89, 89, 89, 90, 90, 90<br/><br/>The three candidate boxplots are given by their five-number summaries:<br/>(i) min 56, $Q_1$ 65, median 77, $Q_3$ 89, max 90<br/>(ii) min 56, $Q_1$ 65, median 76, $Q_3$ 89, max 90<br/>(iii) min 56, $Q_1$ 65, median 77, $Q_3$ 88.5, max 90</p></div><div class=\"ml-vi\"><p>Bài khảo sát trong sách yêu cầu thu thập nhịp tim lúc nghỉ của 30 sinh viên trong lớp, số liệu như dưới đây. Hãy dựng <strong>biểu đồ hộp</strong> cho tập dữ liệu.<br/><br/>56, 57, 60, 60, 64, 65, 65, 65, 68, 70, 70, 76, 77, 77, 77, 77, 78, 80, 82, 85, 87, 87, 88, 89, 89, 89, 89, 90, 90, 90<br/><br/>Ba biểu đồ hộp ứng viên được cho bởi tóm tắt năm số:<br/>(i) min 56, $Q_1$ 65, trung vị 77, $Q_3$ 89, max 90<br/>(ii) min 56, $Q_1$ 65, trung vị 76, $Q_3$ 89, max 90<br/>(iii) min 56, $Q_1$ 65, trung vị 77, $Q_3$ 88.5, max 90</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q33.png",
           "options": [
             {
@@ -871,12 +871,12 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>The data are already sorted, $n = 30$.</p><p>**Median**: average of the 15th and 16th values $= (77+77)/2 = 77$. This immediately kills (ii), which claims 76.</p><p>**$Q_1$**: median of the lower 15 values = the 8th value $= 65$ — all three agree here.</p><p>**$Q_3$**: median of the upper 15 values (positions 16–30) = the 23rd value $= 88$. Using the interpolating convention $0.75(n+1) = 23.25$ gives $88 + 0.25(89-88) = 88.25$. Either way the answer sits between 88 and 88.5, far from 89.</p><p>Min $= 56$, max $= 90$ in all three. So (iii) — five-number summary $56,\\ 65,\\ 77,\\ 88.5,\\ 90$ — is the intended boxplot.</p></div><div class=\"ml-vi\"><p>Dữ liệu đã được sắp xếp sẵn, $n = 30$.</p><p>**Trung vị**: trung bình giá trị thứ 15 và 16 $= (77+77)/2 = 77$. Điều này loại ngay (ii) vì (ii) ghi 76.</p><p>**$Q_1$**: trung vị của 15 giá trị nửa dưới = giá trị thứ 8 $= 65$ — cả ba phương án đều khớp.</p><p>**$Q_3$**: trung vị của 15 giá trị nửa trên (vị trí 16–30) = giá trị thứ 23 $= 88$. Nếu dùng quy ước nội suy $0.75(n+1) = 23.25$ thì được $88 + 0.25(89-88) = 88.25$. Cách nào cũng cho kết quả nằm giữa 88 và 88.5, xa 89.</p><p>Min $= 56$, max $= 90$ ở cả ba. Vậy (iii) — tóm tắt năm số $56,\\ 65,\\ 77,\\ 88.5,\\ 90$ — là biểu đồ hộp được nhắm tới.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The data are already sorted, $n = 30$.<br/><br/><strong>Median</strong>: average of the 15th and 16th values $= (77+77)/2 = 77$. This immediately kills (ii), which claims 76.<br/><br/><strong>$Q_1$</strong>: median of the lower 15 values = the 8th value $= 65$ — all three agree here.<br/><br/><strong>$Q_3$</strong>: median of the upper 15 values (positions 16–30) = the 23rd value $= 88$. Using the interpolating convention $0.75(n+1) = 23.25$ gives $88 + 0.25(89-88) = 88.25$. Either way the answer sits between 88 and 88.5, far from 89.<br/><br/>Min $= 56$, max $= 90$ in all three. So (iii) — five-number summary $56,\\ 65,\\ 77,\\ 88.5,\\ 90$ — is the intended boxplot.</p></div><div class=\"ml-vi\"><p>Dữ liệu đã được sắp xếp sẵn, $n = 30$.<br/><br/><strong>Trung vị</strong>: trung bình giá trị thứ 15 và 16 $= (77+77)/2 = 77$. Điều này loại ngay (ii) vì (ii) ghi 76.<br/><br/><strong>$Q_1$</strong>: trung vị của 15 giá trị nửa dưới = giá trị thứ 8 $= 65$ — cả ba phương án đều khớp.<br/><br/><strong>$Q_3$</strong>: trung vị của 15 giá trị nửa trên (vị trí 16–30) = giá trị thứ 23 $= 88$. Nếu dùng quy ước nội suy $0.75(n+1) = 23.25$ thì được $88 + 0.25(89-88) = 88.25$. Cách nào cũng cho kết quả nằm giữa 88 và 88.5, xa 89.<br/><br/>Min $= 56$, max $= 90$ ở cả ba. Vậy (iii) — tóm tắt năm số $56,\\ 65,\\ 77,\\ 88.5,\\ 90$ — là biểu đồ hộp được nhắm tới.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Suppose a sample of $n = 15$ items is drawn from a population of manufactured products and the weight, $X$, of each item is recorded. Prior experience has shown that the weight has a probability distribution with mean $= 6$ ounces and standard deviation $= 2.5$ ounces. Which of the following is true about the sampling distribution of the sample mean if a sample of size 15 is selected?</p></div><div class=\"ml-vi\"><p>Giả sử lấy một mẫu $n = 15$ sản phẩm từ một tổng thể hàng sản xuất và ghi lại khối lượng $X$ của từng sản phẩm. Kinh nghiệm trước đây cho thấy khối lượng có phân phối xác suất với trung bình $= 6$ ounce và độ lệch chuẩn $= 2.5$ ounce. Phát biểu nào sau đây **đúng** về phân phối mẫu của trung bình mẫu khi chọn mẫu cỡ 15?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose a sample of $n = 15$ items is drawn from a population of manufactured products and the weight, $X$, of each item is recorded. Prior experience has shown that the weight has a probability distribution with mean $= 6$ ounces and standard deviation $= 2.5$ ounces. Which of the following is true about the sampling distribution of the sample mean if a sample of size 15 is selected?</p></div><div class=\"ml-vi\"><p>Giả sử lấy một mẫu $n = 15$ sản phẩm từ một tổng thể hàng sản xuất và ghi lại khối lượng $X$ của từng sản phẩm. Kinh nghiệm trước đây cho thấy khối lượng có phân phối xác suất với trung bình $= 6$ ounce và độ lệch chuẩn $= 2.5$ ounce. Phát biểu nào sau đây <strong>đúng</strong> về phân phối mẫu của trung bình mẫu khi chọn mẫu cỡ 15?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q34.png",
           "options": [
             {
@@ -895,12 +895,12 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>The sample mean is always unbiased: $E[\\bar X] = \\mu = 6$ ounces, so **B is true**.</p><p>C is false — the standard error shrinks with sample size:<br/>$$\\sigma_{\\bar X} = \\frac{\\sigma}{\\sqrt{n}} = \\frac{2.5}{\\sqrt{15}} \\approx 0.645 \\text{ ounces}$$</p><p>D is false because $n = 15 < 30$ and the population shape is not stated to be normal, so the Central Limit Theorem cannot be invoked. With C and D false, A is false too.</p></div><div class=\"ml-vi\"><p>Trung bình mẫu luôn không chệch: $E[\\bar X] = \\mu = 6$ ounce, nên **B đúng**.</p><p>C sai — sai số chuẩn co lại theo cỡ mẫu:<br/>$$\\sigma_{\\bar X} = \\frac{\\sigma}{\\sqrt{n}} = \\frac{2.5}{\\sqrt{15}} \\approx 0.645 \\text{ ounce}$$</p><p>D sai vì $n = 15 < 30$ và đề không nói tổng thể có phân phối chuẩn, nên không viện dẫn được Định lý giới hạn trung tâm. C và D sai thì A cũng sai.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The sample mean is always unbiased: $E[\\bar X] = \\mu = 6$ ounces, so <strong>B is true</strong>.<br/><br/>C is false — the standard error shrinks with sample size:<br/>$$\\sigma_{\\bar X} = \\frac{\\sigma}{\\sqrt{n}} = \\frac{2.5}{\\sqrt{15}} \\approx 0.645 \\text{ ounces}$$<br/><br/>D is false because $n = 15 < 30$ and the population shape is not stated to be normal, so the Central Limit Theorem cannot be invoked. With C and D false, A is false too.</p></div><div class=\"ml-vi\"><p>Trung bình mẫu luôn không chệch: $E[\\bar X] = \\mu = 6$ ounce, nên <strong>B đúng</strong>.<br/><br/>C sai — sai số chuẩn co lại theo cỡ mẫu:<br/>$$\\sigma_{\\bar X} = \\frac{\\sigma}{\\sqrt{n}} = \\frac{2.5}{\\sqrt{15}} \\approx 0.645 \\text{ ounce}$$<br/><br/>D sai vì $n = 15 < 30$ và đề không nói tổng thể có phân phối chuẩn, nên không viện dẫn được Định lý giới hạn trung tâm. C và D sai thì A cũng sai.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The time for a worker to assemble a component is normally distributed with mean 15 minutes and variance 4. Denote the mean assembly times of 16 day-shift workers and 9 night-shift workers by $\\bar X$ and $\\bar Y$, respectively. Assume that the assembly times of the workers are mutually independent. Compute $P(\\bar X - \\bar Y < -1.5)$.</p><p>Let $P(Z < -1.9) = 0.0294$, $P(Z < -1.8) = 0.0359$, $P(Z < -1.6) = 0.0559$ and $P(Z < -1.5) = 0.0668$.</p></div><div class=\"ml-vi\"><p>Thời gian một công nhân lắp ráp một linh kiện tuân theo phân phối chuẩn với trung bình 15 phút và phương sai 4. Ký hiệu $\\bar X$ và $\\bar Y$ lần lượt là thời gian lắp ráp trung bình của 16 công nhân ca ngày và 9 công nhân ca đêm. Giả sử thời gian lắp ráp của các công nhân độc lập với nhau. Tính $P(\\bar X - \\bar Y < -1.5)$.</p><p>Cho $P(Z < -1.9) = 0.0294$, $P(Z < -1.8) = 0.0359$, $P(Z < -1.6) = 0.0559$ và $P(Z < -1.5) = 0.0668$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The time for a worker to assemble a component is normally distributed with mean 15 minutes and variance 4. Denote the mean assembly times of 16 day-shift workers and 9 night-shift workers by $\\bar X$ and $\\bar Y$, respectively. Assume that the assembly times of the workers are mutually independent. Compute $P(\\bar X - \\bar Y < -1.5)$.<br/><br/>Let $P(Z < -1.9) = 0.0294$, $P(Z < -1.8) = 0.0359$, $P(Z < -1.6) = 0.0559$ and $P(Z < -1.5) = 0.0668$.</p></div><div class=\"ml-vi\"><p>Thời gian một công nhân lắp ráp một linh kiện tuân theo phân phối chuẩn với trung bình 15 phút và phương sai 4. Ký hiệu $\\bar X$ và $\\bar Y$ lần lượt là thời gian lắp ráp trung bình của 16 công nhân ca ngày và 9 công nhân ca đêm. Giả sử thời gian lắp ráp của các công nhân độc lập với nhau. Tính $P(\\bar X - \\bar Y < -1.5)$.<br/><br/>Cho $P(Z < -1.9) = 0.0294$, $P(Z < -1.8) = 0.0359$, $P(Z < -1.6) = 0.0559$ và $P(Z < -1.5) = 0.0668$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q35.png",
           "options": [
             {
@@ -922,12 +922,12 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>Both sample means are normal: $\\bar X \\sim N(15, 4/16)$ and $\\bar Y \\sim N(15, 4/9)$. Independence lets the variances add:<br/>$$E[\\bar X - \\bar Y] = 0, \\qquad \\mathrm{Var}(\\bar X - \\bar Y) = \\frac{4}{16} + \\frac{4}{9} = 0.25 + 0.4\\overline{4} = 0.69\\overline{4}$$<br/>$$\\sigma_{\\bar X - \\bar Y} = \\sqrt{0.6944} = 0.8333$$<br/>$$z = \\frac{-1.5 - 0}{0.8333} = -1.8 \\quad\\Rightarrow\\quad P = P(Z < -1.8) = 0.0359$$</p></div><div class=\"ml-vi\"><p>Cả hai trung bình mẫu đều chuẩn: $\\bar X \\sim N(15, 4/16)$ và $\\bar Y \\sim N(15, 4/9)$. Tính độc lập cho phép **cộng phương sai**:<br/>$$E[\\bar X - \\bar Y] = 0, \\qquad \\mathrm{Var}(\\bar X - \\bar Y) = \\frac{4}{16} + \\frac{4}{9} = 0.25 + 0.4\\overline{4} = 0.69\\overline{4}$$<br/>$$\\sigma_{\\bar X - \\bar Y} = \\sqrt{0.6944} = 0.8333$$<br/>$$z = \\frac{-1.5 - 0}{0.8333} = -1.8 \\quad\\Rightarrow\\quad P = P(Z < -1.8) = 0.0359$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Both sample means are normal: $\\bar X \\sim N(15, 4/16)$ and $\\bar Y \\sim N(15, 4/9)$. Independence lets the variances add:<br/>$$E[\\bar X - \\bar Y] = 0, \\qquad \\mathrm{Var}(\\bar X - \\bar Y) = \\frac{4}{16} + \\frac{4}{9} = 0.25 + 0.4\\overline{4} = 0.69\\overline{4}$$<br/>$$\\sigma_{\\bar X - \\bar Y} = \\sqrt{0.6944} = 0.8333$$<br/>$$z = \\frac{-1.5 - 0}{0.8333} = -1.8 \\quad\\Rightarrow\\quad P = P(Z < -1.8) = 0.0359$$</p></div><div class=\"ml-vi\"><p>Cả hai trung bình mẫu đều chuẩn: $\\bar X \\sim N(15, 4/16)$ và $\\bar Y \\sim N(15, 4/9)$. Tính độc lập cho phép <strong>cộng phương sai</strong>:<br/>$$E[\\bar X - \\bar Y] = 0, \\qquad \\mathrm{Var}(\\bar X - \\bar Y) = \\frac{4}{16} + \\frac{4}{9} = 0.25 + 0.4\\overline{4} = 0.69\\overline{4}$$<br/>$$\\sigma_{\\bar X - \\bar Y} = \\sqrt{0.6944} = 0.8333$$<br/>$$z = \\frac{-1.5 - 0}{0.8333} = -1.8 \\quad\\Rightarrow\\quad P = P(Z < -1.8) = 0.0359$$</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>An electrical firm manufactures a certain type of light bulb that has a mean light of 1,800 hours and a standard deviation of 200 hours. Find the probability that a random sample of 100 bulbs will have an average life of not more than 1775 hours and not less than 1760 hours.</p><p>Let $P(Z < -2) = 0.0228$, $P(Z < -1.25) = 0.1056$.</p></div><div class=\"ml-vi\"><p>Một hãng điện sản xuất loại bóng đèn có tuổi thọ trung bình 1.800 giờ và độ lệch chuẩn 200 giờ. Tính xác suất một mẫu ngẫu nhiên 100 bóng có tuổi thọ trung bình **không quá 1775 giờ và không dưới 1760 giờ**.</p><p>Cho $P(Z < -2) = 0.0228$, $P(Z < -1.25) = 0.1056$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>An electrical firm manufactures a certain type of light bulb that has a mean light of 1,800 hours and a standard deviation of 200 hours. Find the probability that a random sample of 100 bulbs will have an average life of not more than 1775 hours and not less than 1760 hours.<br/><br/>Let $P(Z < -2) = 0.0228$, $P(Z < -1.25) = 0.1056$.</p></div><div class=\"ml-vi\"><p>Một hãng điện sản xuất loại bóng đèn có tuổi thọ trung bình 1.800 giờ và độ lệch chuẩn 200 giờ. Tính xác suất một mẫu ngẫu nhiên 100 bóng có tuổi thọ trung bình <strong>không quá 1775 giờ và không dưới 1760 giờ</strong>.<br/><br/>Cho $P(Z < -2) = 0.0228$, $P(Z < -1.25) = 0.1056$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q36.png",
           "options": [
             {
@@ -954,7 +954,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>An electrical firm manufactures light bulbs that have a length of life that is approximately normally distributed with a standard deviation of 40 hours. If a sample of 30 bulbs has an average life of 780 hours, find a 96% confidence interval for the population mean of all bulbs produced by this firm.</p><p>Let $z_{0.04} = 1.751$, $z_{0.02} = 2.054$, $t_{0.02,29} = 2.15$, $t_{0.04,29} = 1.814$.</p></div><div class=\"ml-vi\"><p>Một hãng điện sản xuất bóng đèn có tuổi thọ xấp xỉ phân phối chuẩn với **độ lệch chuẩn tổng thể** 40 giờ. Nếu một mẫu 30 bóng có tuổi thọ trung bình 780 giờ, hãy tìm khoảng tin cậy 96% cho trung bình tổng thể của tất cả bóng đèn hãng này sản xuất.</p><p>Cho $z_{0.04} = 1.751$, $z_{0.02} = 2.054$, $t_{0.02;29} = 2.15$, $t_{0.04;29} = 1.814$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>An electrical firm manufactures light bulbs that have a length of life that is approximately normally distributed with a standard deviation of 40 hours. If a sample of 30 bulbs has an average life of 780 hours, find a 96% confidence interval for the population mean of all bulbs produced by this firm.<br/><br/>Let $z_{0.04} = 1.751$, $z_{0.02} = 2.054$, $t_{0.02,29} = 2.15$, $t_{0.04,29} = 1.814$.</p></div><div class=\"ml-vi\"><p>Một hãng điện sản xuất bóng đèn có tuổi thọ xấp xỉ phân phối chuẩn với <strong>độ lệch chuẩn tổng thể</strong> 40 giờ. Nếu một mẫu 30 bóng có tuổi thọ trung bình 780 giờ, hãy tìm khoảng tin cậy 96% cho trung bình tổng thể của tất cả bóng đèn hãng này sản xuất.<br/><br/>Cho $z_{0.04} = 1.751$, $z_{0.02} = 2.054$, $t_{0.02;29} = 2.15$, $t_{0.04;29} = 1.814$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q37.png",
           "options": [
             {
@@ -976,12 +976,12 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>The **population** $\\sigma = 40$ is known, so use the $z$ interval. For 96% confidence, $\\alpha = 0.04$ and the two-sided critical value is $z_{\\alpha/2} = z_{0.02} = 2.054$.<br/>$$\\text{ME} = z_{0.02}\\frac{\\sigma}{\\sqrt n} = 2.054 \\cdot \\frac{40}{\\sqrt{30}} = 2.054 \\times 7.303 = 15.0$$<br/>$$\\text{CI} = 780 \\pm 15.0 = [765,\\ 795]$$</p></div><div class=\"ml-vi\"><p>Đề cho **độ lệch chuẩn tổng thể** $\\sigma = 40$ đã biết, nên dùng khoảng tin cậy theo $z$. Với độ tin cậy 96%, $\\alpha = 0.04$ và giá trị tới hạn hai phía là $z_{\\alpha/2} = z_{0.02} = 2.054$.<br/>$$\\text{ME} = z_{0.02}\\frac{\\sigma}{\\sqrt n} = 2.054 \\cdot \\frac{40}{\\sqrt{30}} = 2.054 \\times 7.303 = 15.0$$<br/>$$\\text{KTC} = 780 \\pm 15.0 = [765,\\ 795]$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The <strong>population</strong> $\\sigma = 40$ is known, so use the $z$ interval. For 96% confidence, $\\alpha = 0.04$ and the two-sided critical value is $z_{\\alpha/2} = z_{0.02} = 2.054$.<br/>$$\\text{ME} = z_{0.02}\\frac{\\sigma}{\\sqrt n} = 2.054 \\cdot \\frac{40}{\\sqrt{30}} = 2.054 \\times 7.303 = 15.0$$<br/>$$\\text{CI} = 780 \\pm 15.0 = [765,\\ 795]$$</p></div><div class=\"ml-vi\"><p>Đề cho <strong>độ lệch chuẩn tổng thể</strong> $\\sigma = 40$ đã biết, nên dùng khoảng tin cậy theo $z$. Với độ tin cậy 96%, $\\alpha = 0.04$ và giá trị tới hạn hai phía là $z_{\\alpha/2} = z_{0.02} = 2.054$.<br/>$$\\text{ME} = z_{0.02}\\frac{\\sigma}{\\sqrt n} = 2.054 \\cdot \\frac{40}{\\sqrt{30}} = 2.054 \\times 7.303 = 15.0$$<br/>$$\\text{KTC} = 780 \\pm 15.0 = [765,\\ 795]$$</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A local bank needs information concerning the checking account balances of its customers. A random sample of 15 accounts was checked. The mean balance was 686.75 with a standard deviation of 256.20. Find a 98% confidence interval for the true mean. Assume that the account balances are normally distributed.</p><p>Let $z_{0.01} = 2.326$, $z_{0.02} = 2.054$, $t_{0.01,14} = 2.624$, $t_{0.02,14} = 2.264$.</p></div><div class=\"ml-vi\"><p>Một ngân hàng địa phương cần thông tin về số dư tài khoản thanh toán của khách hàng. Kiểm tra một mẫu ngẫu nhiên 15 tài khoản, thu được số dư trung bình 686.75 với **độ lệch chuẩn mẫu** 256.20. Hãy tìm khoảng tin cậy 98% cho trung bình thật. Giả sử số dư tài khoản tuân theo phân phối chuẩn.</p><p>Cho $z_{0.01} = 2.326$, $z_{0.02} = 2.054$, $t_{0.01;14} = 2.624$, $t_{0.02;14} = 2.264$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A local bank needs information concerning the checking account balances of its customers. A random sample of 15 accounts was checked. The mean balance was 686.75 with a standard deviation of 256.20. Find a 98% confidence interval for the true mean. Assume that the account balances are normally distributed.<br/><br/>Let $z_{0.01} = 2.326$, $z_{0.02} = 2.054$, $t_{0.01,14} = 2.624$, $t_{0.02,14} = 2.264$.</p></div><div class=\"ml-vi\"><p>Một ngân hàng địa phương cần thông tin về số dư tài khoản thanh toán của khách hàng. Kiểm tra một mẫu ngẫu nhiên 15 tài khoản, thu được số dư trung bình 686.75 với <strong>độ lệch chuẩn mẫu</strong> 256.20. Hãy tìm khoảng tin cậy 98% cho trung bình thật. Giả sử số dư tài khoản tuân theo phân phối chuẩn.<br/><br/>Cho $z_{0.01} = 2.326$, $z_{0.02} = 2.054$, $t_{0.01;14} = 2.624$, $t_{0.02;14} = 2.264$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q38.png",
           "options": [
             {
@@ -1003,7 +1003,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>The population $\\sigma$ is unknown (256.20 is the **sample** standard deviation) and $n = 15$ is small, so use the $t$ interval with $df = n - 1 = 14$. For 98% confidence $\\alpha/2 = 0.01$, giving $t_{0.01,14} = 2.624$.<br/>$$\\text{ME} = 2.624 \\cdot \\frac{256.20}{\\sqrt{15}} = 2.624 \\times 66.15 = 173.58$$<br/>$$\\text{CI} = 686.75 \\pm 173.58 = (513.17,\\ 860.33)$$</p></div><div class=\"ml-vi\"><p>Không biết $\\sigma$ tổng thể (256.20 là độ lệch chuẩn **mẫu**) và $n = 15$ nhỏ, nên dùng khoảng tin cậy theo $t$ với bậc tự do $df = n - 1 = 14$. Độ tin cậy 98% cho $\\alpha/2 = 0.01$, tức $t_{0.01;14} = 2.624$.<br/>$$\\text{ME} = 2.624 \\cdot \\frac{256.20}{\\sqrt{15}} = 2.624 \\times 66.15 = 173.58$$<br/>$$\\text{KTC} = 686.75 \\pm 173.58 = (513.17,\\ 860.33)$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The population $\\sigma$ is unknown (256.20 is the <strong>sample</strong> standard deviation) and $n = 15$ is small, so use the $t$ interval with $df = n - 1 = 14$. For 98% confidence $\\alpha/2 = 0.01$, giving $t_{0.01,14} = 2.624$.<br/>$$\\text{ME} = 2.624 \\cdot \\frac{256.20}{\\sqrt{15}} = 2.624 \\times 66.15 = 173.58$$<br/>$$\\text{CI} = 686.75 \\pm 173.58 = (513.17,\\ 860.33)$$</p></div><div class=\"ml-vi\"><p>Không biết $\\sigma$ tổng thể (256.20 là độ lệch chuẩn <strong>mẫu</strong>) và $n = 15$ nhỏ, nên dùng khoảng tin cậy theo $t$ với bậc tự do $df = n - 1 = 14$. Độ tin cậy 98% cho $\\alpha/2 = 0.01$, tức $t_{0.01;14} = 2.624$.<br/>$$\\text{ME} = 2.624 \\cdot \\frac{256.20}{\\sqrt{15}} = 2.624 \\times 66.15 = 173.58$$<br/>$$\\text{KTC} = 686.75 \\pm 173.58 = (513.17,\\ 860.33)$$</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1027,12 +1027,12 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>A confidence interval is always built as $\\hat p \\pm \\text{ME}$, so the point estimate is the **midpoint**:<br/>$$\\hat p = \\frac{0.320 + 0.420}{2} = 0.37$$<br/>(The distractor 0.05 is the margin of error, $\\frac{0.420-0.320}{2}$.)</p></div><div class=\"ml-vi\"><p>Khoảng tin cậy luôn có dạng $\\hat p \\pm \\text{ME}$, nên ước lượng điểm chính là **trung điểm**:<br/>$$\\hat p = \\frac{0.320 + 0.420}{2} = 0.37$$<br/>(Con số 0.05 là sai số biên $\\frac{0.420-0.320}{2}$ — cái bẫy.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>A confidence interval is always built as $\\hat p \\pm \\text{ME}$, so the point estimate is the <strong>midpoint</strong>:<br/>$$\\hat p = \\frac{0.320 + 0.420}{2} = 0.37$$<br/>(The distractor 0.05 is the margin of error, $\\frac{0.420-0.320}{2}$.)</p></div><div class=\"ml-vi\"><p>Khoảng tin cậy luôn có dạng $\\hat p \\pm \\text{ME}$, nên ước lượng điểm chính là <strong>trung điểm</strong>:<br/>$$\\hat p = \\frac{0.320 + 0.420}{2} = 0.37$$<br/>(Con số 0.05 là sai số biên $\\frac{0.420-0.320}{2}$ — cái bẫy.)</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A Type I error occurs when ________.</p></div><div class=\"ml-vi\"><p>**Sai lầm loại I** xảy ra khi ________.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A Type I error occurs when ________.</p></div><div class=\"ml-vi\"><p><strong>Sai lầm loại I</strong> xảy ra khi ________.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q40.png",
           "options": [
             {
@@ -1051,7 +1051,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>A **Type I error** is rejecting a **true** $H_0$ — a false alarm; its probability is the significance level $\\alpha$. Option B describes a **Type II error** (failing to reject a false $H_0$), whose probability is $\\beta$. Options C and D are not error types at all.</p></div><div class=\"ml-vi\"><p>**Sai lầm loại I** là bác bỏ $H_0$ khi $H_0$ **đúng** — báo động giả; xác suất của nó chính là mức ý nghĩa $\\alpha$. Phương án B mô tả **sai lầm loại II** (không bác bỏ $H_0$ khi $H_0$ sai), xác suất là $\\beta$. Phương án C và D không phải loại sai lầm nào cả.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>A <strong>Type I error</strong> is rejecting a <strong>true</strong> $H_0$ — a false alarm; its probability is the significance level $\\alpha$. Option B describes a <strong>Type II error</strong> (failing to reject a false $H_0$), whose probability is $\\beta$. Options C and D are not error types at all.</p></div><div class=\"ml-vi\"><p><strong>Sai lầm loại I</strong> là bác bỏ $H_0$ khi $H_0$ <strong>đúng</strong> — báo động giả; xác suất của nó chính là mức ý nghĩa $\\alpha$. Phương án B mô tả <strong>sai lầm loại II</strong> (không bác bỏ $H_0$ khi $H_0$ sai), xác suất là $\\beta$. Phương án C và D không phải loại sai lầm nào cả.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1080,7 +1080,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Trang Tien is a producer of ice cream and would like to test the hypothesis that the average consumes more than 17 ounces of ice cream per month. A random sample of 15 Vietnamese people was found to consume an average of 18.2 ounces of ice cream last month. The standard deviation for this sample was 3.9 ounces. What is the test statistic for this hypothesis test?</p></div><div class=\"ml-vi\"><p>Tràng Tiền là một nhà sản xuất kem, muốn kiểm định giả thuyết rằng trung bình mỗi người tiêu thụ **hơn 17 ounce** kem mỗi tháng. Một mẫu ngẫu nhiên 15 người Việt Nam có mức tiêu thụ trung bình 18.2 ounce kem trong tháng vừa qua. Độ lệch chuẩn của mẫu này là 3.9 ounce. Thống kê kiểm định của phép kiểm định này bằng bao nhiêu?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Trang Tien is a producer of ice cream and would like to test the hypothesis that the average consumes more than 17 ounces of ice cream per month. A random sample of 15 Vietnamese people was found to consume an average of 18.2 ounces of ice cream last month. The standard deviation for this sample was 3.9 ounces. What is the test statistic for this hypothesis test?</p></div><div class=\"ml-vi\"><p>Tràng Tiền là một nhà sản xuất kem, muốn kiểm định giả thuyết rằng trung bình mỗi người tiêu thụ <strong>hơn 17 ounce</strong> kem mỗi tháng. Một mẫu ngẫu nhiên 15 người Việt Nam có mức tiêu thụ trung bình 18.2 ounce kem trong tháng vừa qua. Độ lệch chuẩn của mẫu này là 3.9 ounce. Thống kê kiểm định của phép kiểm định này bằng bao nhiêu?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q42.png",
           "options": [
             {
@@ -1107,7 +1107,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The National Center for Education Statistics would like to test the hypothesis that the proportion of Bachelor&#39;s degrees that were earned by women equals 0.60. A random sample of 140 college graduates with Bachelor degrees found that 75 were women. The National Center for Education Statistics would like to set the significant level to be 0.10. What is the value of the test statistic for this hypothesis test?</p></div><div class=\"ml-vi\"><p>Trung tâm Thống kê Giáo dục Quốc gia muốn kiểm định giả thuyết rằng tỉ lệ bằng Cử nhân do nữ giới đạt được bằng 0.60. Một mẫu ngẫu nhiên 140 người tốt nghiệp đại học có bằng Cử nhân cho thấy 75 người là nữ. Trung tâm đặt mức ý nghĩa là 0.10. Giá trị của **thống kê kiểm định** bằng bao nhiêu?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The National Center for Education Statistics would like to test the hypothesis that the proportion of Bachelor&#39;s degrees that were earned by women equals 0.60. A random sample of 140 college graduates with Bachelor degrees found that 75 were women. The National Center for Education Statistics would like to set the significant level to be 0.10. What is the value of the test statistic for this hypothesis test?</p></div><div class=\"ml-vi\"><p>Trung tâm Thống kê Giáo dục Quốc gia muốn kiểm định giả thuyết rằng tỉ lệ bằng Cử nhân do nữ giới đạt được bằng 0.60. Một mẫu ngẫu nhiên 140 người tốt nghiệp đại học có bằng Cử nhân cho thấy 75 người là nữ. Trung tâm đặt mức ý nghĩa là 0.10. Giá trị của <strong>thống kê kiểm định</strong> bằng bao nhiêu?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q43.png",
           "options": [
             {
@@ -1129,12 +1129,12 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Sample proportion: $\\hat p = 75/140 = 0.5357$. The test of a single proportion uses the **hypothesised** $p_0 = 0.60$ in the standard error:<br/>$$z = \\frac{\\hat p - p_0}{\\sqrt{\\dfrac{p_0(1-p_0)}{n}}} = \\frac{0.5357 - 0.60}{\\sqrt{\\dfrac{0.60 \\times 0.40}{140}}} = \\frac{-0.06429}{0.04140} \\approx -1.55$$</p></div><div class=\"ml-vi\"><p>Tỉ lệ mẫu: $\\hat p = 75/140 = 0.5357$. Kiểm định một tỉ lệ dùng $p_0 = 0.60$ **theo giả thuyết** trong sai số chuẩn:<br/>$$z = \\frac{\\hat p - p_0}{\\sqrt{\\dfrac{p_0(1-p_0)}{n}}} = \\frac{0.5357 - 0.60}{\\sqrt{\\dfrac{0.60 \\times 0.40}{140}}} = \\frac{-0.06429}{0.04140} \\approx -1.55$$</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Sample proportion: $\\hat p = 75/140 = 0.5357$. The test of a single proportion uses the <strong>hypothesised</strong> $p_0 = 0.60$ in the standard error:<br/>$$z = \\frac{\\hat p - p_0}{\\sqrt{\\dfrac{p_0(1-p_0)}{n}}} = \\frac{0.5357 - 0.60}{\\sqrt{\\dfrac{0.60 \\times 0.40}{140}}} = \\frac{-0.06429}{0.04140} \\approx -1.55$$</p></div><div class=\"ml-vi\"><p>Tỉ lệ mẫu: $\\hat p = 75/140 = 0.5357$. Kiểm định một tỉ lệ dùng $p_0 = 0.60$ <strong>theo giả thuyết</strong> trong sai số chuẩn:<br/>$$z = \\frac{\\hat p - p_0}{\\sqrt{\\dfrac{p_0(1-p_0)}{n}}} = \\frac{0.5357 - 0.60}{\\sqrt{\\dfrac{0.60 \\times 0.40}{140}}} = \\frac{-0.06429}{0.04140} \\approx -1.55$$</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The federal government would like to test the hypothesis that the average age of men filing for Social Security is higher than the average age of women set using the significant level of 0.05 with the following data:</p><p>| | Men | Women |<br/>|---|---|---|<br/>| Sample mean | 64.5 years | 63.6 years |<br/>| Sample size | 35 | 39 |<br/>| Population standard deviation | 3.0 years | 3.5 years |</p><p>If Population 1 is defined as men and Population 2 is defined as women, the test statistic for this hypothesis test would be ________.</p></div><div class=\"ml-vi\"><p>Chính phủ liên bang muốn kiểm định giả thuyết rằng tuổi trung bình của nam giới nộp hồ sơ An sinh Xã hội **cao hơn** tuổi trung bình của nữ giới, với mức ý nghĩa 0.05 và số liệu sau:</p><p>| | Nam | Nữ |<br/>|---|---|---|<br/>| Trung bình mẫu | 64.5 năm | 63.6 năm |<br/>| Cỡ mẫu | 35 | 39 |<br/>| Độ lệch chuẩn tổng thể | 3.0 năm | 3.5 năm |</p><p>Nếu Tổng thể 1 là nam và Tổng thể 2 là nữ, thống kê kiểm định của phép kiểm định này bằng ________.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The federal government would like to test the hypothesis that the average age of men filing for Social Security is higher than the average age of women set using the significant level of 0.05 with the following data:<br/><br/><table class=\"exam-table\"><thead><tr><th></th><th>Men</th><th>Women</th></tr></thead><tbody><tr><td>Sample mean</td><td>64.5 years</td><td>63.6 years</td></tr><tr><td>Sample size</td><td>35</td><td>39</td></tr><tr><td>Population standard deviation</td><td>3.0 years</td><td>3.5 years</td></tr></tbody></table><br/>If Population 1 is defined as men and Population 2 is defined as women, the test statistic for this hypothesis test would be ________.</p></div><div class=\"ml-vi\"><p>Chính phủ liên bang muốn kiểm định giả thuyết rằng tuổi trung bình của nam giới nộp hồ sơ An sinh Xã hội <strong>cao hơn</strong> tuổi trung bình của nữ giới, với mức ý nghĩa 0.05 và số liệu sau:<br/><br/><table class=\"exam-table\"><thead><tr><th></th><th>Nam</th><th>Nữ</th></tr></thead><tbody><tr><td>Trung bình mẫu</td><td>64.5 năm</td><td>63.6 năm</td></tr><tr><td>Cỡ mẫu</td><td>35</td><td>39</td></tr><tr><td>Độ lệch chuẩn tổng thể</td><td>3.0 năm</td><td>3.5 năm</td></tr></tbody></table><br/>Nếu Tổng thể 1 là nam và Tổng thể 2 là nữ, thống kê kiểm định của phép kiểm định này bằng ________.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q44.png",
           "options": [
             {
@@ -1156,12 +1156,12 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\"><p>Both **population** standard deviations are given, so this is a two-sample $z$ test:<br/>$$z = \\frac{(\\bar x_1 - \\bar x_2) - 0}{\\sqrt{\\dfrac{\\sigma_1^2}{n_1} + \\dfrac{\\sigma_2^2}{n_2}}} = \\frac{64.5 - 63.6}{\\sqrt{\\dfrac{3.0^2}{35} + \\dfrac{3.5^2}{39}}}$$<br/>$$= \\frac{0.9}{\\sqrt{0.25714 + 0.31410}} = \\frac{0.9}{\\sqrt{0.57124}} = \\frac{0.9}{0.75581} \\approx 1.19$$<br/>The sign is positive because men (Population 1) have the larger sample mean.</p></div><div class=\"ml-vi\"><p>Đề cho **độ lệch chuẩn tổng thể** của cả hai nhóm, nên đây là kiểm định $z$ hai mẫu:<br/>$$z = \\frac{(\\bar x_1 - \\bar x_2) - 0}{\\sqrt{\\dfrac{\\sigma_1^2}{n_1} + \\dfrac{\\sigma_2^2}{n_2}}} = \\frac{64.5 - 63.6}{\\sqrt{\\dfrac{3.0^2}{35} + \\dfrac{3.5^2}{39}}}$$<br/>$$= \\frac{0.9}{\\sqrt{0.25714 + 0.31410}} = \\frac{0.9}{\\sqrt{0.57124}} = \\frac{0.9}{0.75581} \\approx 1.19$$<br/>Dấu dương vì nam (Tổng thể 1) có trung bình mẫu lớn hơn.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Both <strong>population</strong> standard deviations are given, so this is a two-sample $z$ test:<br/>$$z = \\frac{(\\bar x_1 - \\bar x_2) - 0}{\\sqrt{\\dfrac{\\sigma_1^2}{n_1} + \\dfrac{\\sigma_2^2}{n_2}}} = \\frac{64.5 - 63.6}{\\sqrt{\\dfrac{3.0^2}{35} + \\dfrac{3.5^2}{39}}}$$<br/>$$= \\frac{0.9}{\\sqrt{0.25714 + 0.31410}} = \\frac{0.9}{\\sqrt{0.57124}} = \\frac{0.9}{0.75581} \\approx 1.19$$<br/>The sign is positive because men (Population 1) have the larger sample mean.</p></div><div class=\"ml-vi\"><p>Đề cho <strong>độ lệch chuẩn tổng thể</strong> của cả hai nhóm, nên đây là kiểm định $z$ hai mẫu:<br/>$$z = \\frac{(\\bar x_1 - \\bar x_2) - 0}{\\sqrt{\\dfrac{\\sigma_1^2}{n_1} + \\dfrac{\\sigma_2^2}{n_2}}} = \\frac{64.5 - 63.6}{\\sqrt{\\dfrac{3.0^2}{35} + \\dfrac{3.5^2}{39}}}$$<br/>$$= \\frac{0.9}{\\sqrt{0.25714 + 0.31410}} = \\frac{0.9}{\\sqrt{0.57124}} = \\frac{0.9}{0.75581} \\approx 1.19$$<br/>Dấu dương vì nam (Tổng thể 1) có trung bình mẫu lớn hơn.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The diameter of steel rods manufactured on two different extrusion machines is being investigated. Two random samples of sizes $n_1 = 12$ and $n_2 = 10$ are selected, and the sample means and sample variances are $\\bar x_1 = 9.25$, $s_1^2 = 0.4$, $\\bar x_2 = 8.13$, and $s_2^2 = 0.5$. Assume that both populations are normally distributed with the same variance. Find a 90% two-sided confidence interval for the difference in the two population means.</p><p>Let $z_{0.05} = 1.645$, $z_{0.1} = 1.281$, $t_{0.05,20} = 1.725$, $t_{0.1,20} = 1.325$.</p></div><div class=\"ml-vi\"><p>Đường kính các thanh thép sản xuất trên hai máy đùn khác nhau đang được khảo sát. Hai mẫu ngẫu nhiên cỡ $n_1 = 12$ và $n_2 = 10$ được chọn, với trung bình mẫu và phương sai mẫu là $\\bar x_1 = 9.25$, $s_1^2 = 0.4$, $\\bar x_2 = 8.13$, $s_2^2 = 0.5$. Giả sử cả hai tổng thể đều phân phối chuẩn với **cùng phương sai**. Hãy tìm khoảng tin cậy 90% hai phía cho hiệu hai trung bình tổng thể.</p><p>Cho $z_{0.05} = 1.645$, $z_{0.1} = 1.281$, $t_{0.05;20} = 1.725$, $t_{0.1;20} = 1.325$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The diameter of steel rods manufactured on two different extrusion machines is being investigated. Two random samples of sizes $n_1 = 12$ and $n_2 = 10$ are selected, and the sample means and sample variances are $\\bar x_1 = 9.25$, $s_1^2 = 0.4$, $\\bar x_2 = 8.13$, and $s_2^2 = 0.5$. Assume that both populations are normally distributed with the same variance. Find a 90% two-sided confidence interval for the difference in the two population means.<br/><br/>Let $z_{0.05} = 1.645$, $z_{0.1} = 1.281$, $t_{0.05,20} = 1.725$, $t_{0.1,20} = 1.325$.</p></div><div class=\"ml-vi\"><p>Đường kính các thanh thép sản xuất trên hai máy đùn khác nhau đang được khảo sát. Hai mẫu ngẫu nhiên cỡ $n_1 = 12$ và $n_2 = 10$ được chọn, với trung bình mẫu và phương sai mẫu là $\\bar x_1 = 9.25$, $s_1^2 = 0.4$, $\\bar x_2 = 8.13$, $s_2^2 = 0.5$. Giả sử cả hai tổng thể đều phân phối chuẩn với <strong>cùng phương sai</strong>. Hãy tìm khoảng tin cậy 90% hai phía cho hiệu hai trung bình tổng thể.<br/><br/>Cho $z_{0.05} = 1.645$, $z_{0.1} = 1.281$, $t_{0.05;20} = 1.725$, $t_{0.1;20} = 1.325$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q45.png",
           "options": [
             {
@@ -1188,7 +1188,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Compute the test statistic used to test the null hypothesis that the two proportions are equal using the following data:</p><p>A random sample of 600 adult residents of Maricopa County found that 480 were in favor of increasing the highway speed limit to 75 mph, while another sample of 400 adult residents of Pima County found that 300 were in favor of the increased speed limit.</p></div><div class=\"ml-vi\"><p>Hãy tính **thống kê kiểm định** dùng để kiểm định giả thuyết không rằng hai tỉ lệ bằng nhau, với số liệu sau:</p><p>Một mẫu ngẫu nhiên 600 cư dân trưởng thành hạt Maricopa cho thấy 480 người ủng hộ nâng giới hạn tốc độ đường cao tốc lên 75 mph, trong khi một mẫu khác gồm 400 cư dân trưởng thành hạt Pima cho thấy 300 người ủng hộ việc nâng giới hạn này.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Compute the test statistic used to test the null hypothesis that the two proportions are equal using the following data:<br/><br/>A random sample of 600 adult residents of Maricopa County found that 480 were in favor of increasing the highway speed limit to 75 mph, while another sample of 400 adult residents of Pima County found that 300 were in favor of the increased speed limit.</p></div><div class=\"ml-vi\"><p>Hãy tính <strong>thống kê kiểm định</strong> dùng để kiểm định giả thuyết không rằng hai tỉ lệ bằng nhau, với số liệu sau:<br/><br/>Một mẫu ngẫu nhiên 600 cư dân trưởng thành hạt Maricopa cho thấy 480 người ủng hộ nâng giới hạn tốc độ đường cao tốc lên 75 mph, trong khi một mẫu khác gồm 400 cư dân trưởng thành hạt Pima cho thấy 300 người ủng hộ việc nâng giới hạn này.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q46.png",
           "options": [
             {
@@ -1212,7 +1212,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The height $y$ and base diameter $x$ of four trees of a certain variety produced the following data:</p><p>$x$: 2, 2, 3, 5<br/>$y$: 31, 36, 94, 127</p><p>Find the equation of the estimated regression line $\\hat y = a + bx$ of $y$ on $x$.</p></div><div class=\"ml-vi\"><p>Chiều cao $y$ và đường kính gốc $x$ của bốn cây thuộc một giống nhất định cho số liệu sau:</p><p>$x$: 2, 2, 3, 5<br/>$y$: 31, 36, 94, 127</p><p>Hãy tìm phương trình đường hồi quy ước lượng $\\hat y = a + bx$ của $y$ theo $x$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The height $y$ and base diameter $x$ of four trees of a certain variety produced the following data:<br/><br/>$x$: 2, 2, 3, 5<br/>$y$: 31, 36, 94, 127<br/><br/>Find the equation of the estimated regression line $\\hat y = a + bx$ of $y$ on $x$.</p></div><div class=\"ml-vi\"><p>Chiều cao $y$ và đường kính gốc $x$ của bốn cây thuộc một giống nhất định cho số liệu sau:<br/><br/>$x$: 2, 2, 3, 5<br/>$y$: 31, 36, 94, 127<br/><br/>Hãy tìm phương trình đường hồi quy ước lượng $\\hat y = a + bx$ của $y$ theo $x$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q47.png",
           "options": [
             {
@@ -1239,7 +1239,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>In regression analysis, if the independent variable is measured in kilometer, the dependent variable ________.</p></div><div class=\"ml-vi\"><p>Trong phân tích hồi quy, nếu biến độc lập được đo bằng **kilômét** thì biến phụ thuộc ________.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>In regression analysis, if the independent variable is measured in kilometer, the dependent variable ________.</p></div><div class=\"ml-vi\"><p>Trong phân tích hồi quy, nếu biến độc lập được đo bằng <strong>kilômét</strong> thì biến phụ thuộc ________.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q48.png",
           "options": [
             {
@@ -1258,12 +1258,12 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\"><p>Regression places **no** restriction linking the units of $x$ and $y$. The units are simply absorbed into the slope, which carries units of (units of $y$) per (units of $x$) — e.g. regressing fuel cost in dollars on distance in kilometres gives a slope in dollars/km. So the dependent variable can be in any units.</p></div><div class=\"ml-vi\"><p>Hồi quy **không** ràng buộc gì giữa đơn vị của $x$ và $y$. Đơn vị được hấp thụ vào hệ số góc, vốn mang thứ nguyên (đơn vị của $y$) trên (đơn vị của $x$) — ví dụ hồi quy chi phí nhiên liệu (đô la) theo quãng đường (km) cho hệ số góc đơn vị đô la/km. Vậy biến phụ thuộc có thể ở bất kỳ đơn vị nào.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Regression places <strong>no</strong> restriction linking the units of $x$ and $y$. The units are simply absorbed into the slope, which carries units of (units of $y$) per (units of $x$) — e.g. regressing fuel cost in dollars on distance in kilometres gives a slope in dollars/km. So the dependent variable can be in any units.</p></div><div class=\"ml-vi\"><p>Hồi quy <strong>không</strong> ràng buộc gì giữa đơn vị của $x$ và $y$. Đơn vị được hấp thụ vào hệ số góc, vốn mang thứ nguyên (đơn vị của $y$) trên (đơn vị của $x$) — ví dụ hồi quy chi phí nhiên liệu (đô la) theo quãng đường (km) cho hệ số góc đơn vị đô la/km. Vậy biến phụ thuộc có thể ở bất kỳ đơn vị nào.</p></div>"
         },
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A random sample of 20 observations was made on the diameter of spot welds and the corresponding weld shear strength. Given that $r = 0.75$, what is the value of test statistic if we want to test the hypothesis that $\\rho = 0$ at a level of significance of 0.05?</p><p>Let $t_{0.025,18} = 2.1$, $t_{0.05,18} = 1.73$ and $t_{0.025,19} = 2.09$.</p></div><div class=\"ml-vi\"><p>Một mẫu ngẫu nhiên 20 quan sát được thực hiện về đường kính mối hàn điểm và độ bền cắt tương ứng của mối hàn. Biết $r = 0.75$, giá trị của **thống kê kiểm định** là bao nhiêu nếu ta muốn kiểm định giả thuyết $\\rho = 0$ ở mức ý nghĩa 0.05?</p><p>Cho $t_{0.025;18} = 2.1$, $t_{0.05;18} = 1.73$ và $t_{0.025;19} = 2.09$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A random sample of 20 observations was made on the diameter of spot welds and the corresponding weld shear strength. Given that $r = 0.75$, what is the value of test statistic if we want to test the hypothesis that $\\rho = 0$ at a level of significance of 0.05?<br/><br/>Let $t_{0.025,18} = 2.1$, $t_{0.05,18} = 1.73$ and $t_{0.025,19} = 2.09$.</p></div><div class=\"ml-vi\"><p>Một mẫu ngẫu nhiên 20 quan sát được thực hiện về đường kính mối hàn điểm và độ bền cắt tương ứng của mối hàn. Biết $r = 0.75$, giá trị của <strong>thống kê kiểm định</strong> là bao nhiêu nếu ta muốn kiểm định giả thuyết $\\rho = 0$ ở mức ý nghĩa 0.05?<br/><br/>Cho $t_{0.025;18} = 2.1$, $t_{0.05;18} = 1.73$ và $t_{0.025;19} = 2.09$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D12/q49.png",
           "options": [
             {
@@ -1285,7 +1285,7 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>The test statistic for $H_0: \\rho = 0$ is<br/>$$t = \\frac{r\\sqrt{n-2}}{\\sqrt{1-r^2}} = \\frac{0.75\\sqrt{18}}{\\sqrt{1-0.5625}} = \\frac{0.75 \\times 4.2426}{\\sqrt{0.4375}} = \\frac{3.1820}{0.66144} \\approx 4.81$$<br/>The other options (2.09, 2.10, 1.73) are the **critical values** supplied, not the test statistic — since $4.81 > 2.1$ we would reject $H_0$.</p></div><div class=\"ml-vi\"><p>Thống kê kiểm định cho $H_0: \\rho = 0$ là<br/>$$t = \\frac{r\\sqrt{n-2}}{\\sqrt{1-r^2}} = \\frac{0.75\\sqrt{18}}{\\sqrt{1-0.5625}} = \\frac{0.75 \\times 4.2426}{\\sqrt{0.4375}} = \\frac{3.1820}{0.66144} \\approx 4.81$$<br/>Các phương án còn lại (2.09, 2.10, 1.73) là các **giá trị tới hạn** đề cho, không phải thống kê kiểm định — vì $4.81 > 2.1$ nên ta bác bỏ $H_0$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The test statistic for $H_0: \\rho = 0$ is<br/>$$t = \\frac{r\\sqrt{n-2}}{\\sqrt{1-r^2}} = \\frac{0.75\\sqrt{18}}{\\sqrt{1-0.5625}} = \\frac{0.75 \\times 4.2426}{\\sqrt{0.4375}} = \\frac{3.1820}{0.66144} \\approx 4.81$$<br/>The other options (2.09, 2.10, 1.73) are the <strong>critical values</strong> supplied, not the test statistic — since $4.81 > 2.1$ we would reject $H_0$.</p></div><div class=\"ml-vi\"><p>Thống kê kiểm định cho $H_0: \\rho = 0$ là<br/>$$t = \\frac{r\\sqrt{n-2}}{\\sqrt{1-r^2}} = \\frac{0.75\\sqrt{18}}{\\sqrt{1-0.5625}} = \\frac{0.75 \\times 4.2426}{\\sqrt{0.4375}} = \\frac{3.1820}{0.66144} \\approx 4.81$$<br/>Các phương án còn lại (2.09, 2.10, 1.73) là các <strong>giá trị tới hạn</strong> đề cho, không phải thống kê kiểm định — vì $4.81 > 2.1$ nên ta bác bỏ $H_0$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1312,7 +1312,7 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>$r$ ranges over $[-1, 1]$. The value $r = +1$ means every point lies exactly on a straight line with **positive** slope — a perfect positive linear relationship. $r = -1$ would be the perfect negative case (option C), while $r = 0$ corresponds to no linear relationship. A *horizontal* line (options A and E) would mean $y$ does not vary with $x$, which makes $r$ undefined, not 1.</p></div><div class=\"ml-vi\"><p>$r$ nhận giá trị trong $[-1, 1]$. Giá trị $r = +1$ nghĩa là mọi điểm nằm chính xác trên một đường thẳng có hệ số góc **dương** — quan hệ tuyến tính dương hoàn hảo. $r = -1$ mới là trường hợp âm hoàn hảo (phương án C), còn $r = 0$ ứng với không có quan hệ tuyến tính. Đường thẳng **nằm ngang** (phương án A và E) nghĩa là $y$ không đổi theo $x$, khi đó $r$ không xác định chứ không phải bằng 1.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$r$ ranges over $[-1, 1]$. The value $r = +1$ means every point lies exactly on a straight line with <strong>positive</strong> slope — a perfect positive linear relationship. $r = -1$ would be the perfect negative case (option C), while $r = 0$ corresponds to no linear relationship. A *horizontal* line (options A and E) would mean $y$ does not vary with $x$, which makes $r$ undefined, not 1.</p></div><div class=\"ml-vi\"><p>$r$ nhận giá trị trong $[-1, 1]$. Giá trị $r = +1$ nghĩa là mọi điểm nằm chính xác trên một đường thẳng có hệ số góc <strong>dương</strong> — quan hệ tuyến tính dương hoàn hảo. $r = -1$ mới là trường hợp âm hoàn hảo (phương án C), còn $r = 0$ ứng với không có quan hệ tuyến tính. Đường thẳng <strong>nằm ngang</strong> (phương án A và E) nghĩa là $y$ không đổi theo $x$, khi đó $r$ không xác định chứ không phải bằng 1.</p></div>"
         }
       ]
     }

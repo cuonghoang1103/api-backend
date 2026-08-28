@@ -371,7 +371,7 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>\\r is carriage return, which moves the cursor to the start of the current line; \\n is a line feed (new line).</p></div><div class=\"ml-vi\"><p>\\r là carriage return, đưa con trỏ về đầu dòng hiện tại; còn \\n là xuống dòng mới.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>\\r is carriage return, which moves the cursor to the start of the current line; <br/> is a line feed (new line).</p></div><div class=\"ml-vi\"><p>\\r là carriage return, đưa con trỏ về đầu dòng hiện tại; còn <br/> là xuống dòng mới.</p></div>"
         },
         {
           "kind": "MCQ",

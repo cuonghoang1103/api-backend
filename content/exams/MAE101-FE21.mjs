@@ -15,7 +15,7 @@ export default {
       "source": "FUOverflow",
       "shuffleQuestions": false,
       "shuffleOptions": false,
-      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Final Exam</b> paper for <b>Mathematics for Engineering</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>Mathematics for Engineering</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
+      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Final Exam</b> paper for <b>Calculus 1</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>Calculus 1</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
       "isPublished": true,
       "questions": [
         {
@@ -604,7 +604,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>For a system of 4 linear equations in 3 unknowns, which of the following statements are true?<br/>(i) The system can be inconsistent.\\n(ii) The system can have a unique solution.\\n(iii) The system can have infinitely many solutions.</p></div><div class=\"ml-vi\"><p>Với hệ 4 phương trình tuyến tính 3 ẩn, phát biểu nào sau đây đúng?<br/>(i) Hệ có thể vô nghiệm.\\n(ii) Hệ có thể có nghiệm duy nhất.\\n(iii) Hệ có thể có vô số nghiệm.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>For a system of 4 linear equations in 3 unknowns, which of the following statements are true?<br/>(i) The system can be inconsistent.<br/>(ii) The system can have a unique solution.<br/>(iii) The system can have infinitely many solutions.</p></div><div class=\"ml-vi\"><p>Với hệ 4 phương trình tuyến tính 3 ẩn, phát biểu nào sau đây đúng?<br/>(i) Hệ có thể vô nghiệm.<br/>(ii) Hệ có thể có nghiệm duy nhất.<br/>(iii) Hệ có thể có vô số nghiệm.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D21/q25.png",
           "options": [
             {
@@ -706,7 +706,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>For matrices $A,B,C$ and a real number $k$, which of the following statements are correct?<br/>(i) $A+B=A+C$ then $B$ and $C$ have the same size.\\n(ii) If $kB=0$ then $k=0$ or $B=0$.\\n(iii) If $A+B$ is symmetric then so are $A$ and $B$.</p></div><div class=\"ml-vi\"><p>Với các ma trận $A,B,C$ và số thực $k$, phát biểu nào sau đây đúng?<br/>(i) $A+B=A+C$ thì $B$ và $C$ cùng cỡ.\\n(ii) Nếu $kB=0$ thì $k=0$ hoặc $B=0$.\\n(iii) Nếu $A+B$ đối xứng thì $A$ và $B$ cũng đối xứng.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>For matrices $A,B,C$ and a real number $k$, which of the following statements are correct?<br/>(i) $A+B=A+C$ then $B$ and $C$ have the same size.<br/>(ii) If $kB=0$ then $k=0$ or $B=0$.<br/>(iii) If $A+B$ is symmetric then so are $A$ and $B$.</p></div><div class=\"ml-vi\"><p>Với các ma trận $A,B,C$ và số thực $k$, phát biểu nào sau đây đúng?<br/>(i) $A+B=A+C$ thì $B$ và $C$ cùng cỡ.<br/>(ii) Nếu $kB=0$ thì $k=0$ hoặc $B=0$.<br/>(iii) Nếu $A+B$ đối xứng thì $A$ và $B$ cũng đối xứng.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D21/q29.png",
           "options": [
             {
@@ -1135,7 +1135,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Let $\\{\\mathbf{u},\\mathbf{v},\\mathbf{w}\\}$ be independent. Which of the following sets are independent?<br/>(i) $\\{\\mathbf{u}, \\mathbf{v}-\\mathbf{w}, \\mathbf{w}\\}$\\n(ii) $\\{\\mathbf{u}, \\mathbf{u}-\\mathbf{v}, \\mathbf{u}+\\mathbf{v}, \\mathbf{w}\\}$</p></div><div class=\"ml-vi\"><p>Cho $\\{\\mathbf{u},\\mathbf{v},\\mathbf{w}\\}$ độc lập tuyến tính. Tập nào sau đây độc lập tuyến tính?<br/>(i) $\\{\\mathbf{u}, \\mathbf{v}-\\mathbf{w}, \\mathbf{w}\\}$\\n(ii) $\\{\\mathbf{u}, \\mathbf{u}-\\mathbf{v}, \\mathbf{u}+\\mathbf{v}, \\mathbf{w}\\}$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Let $\\{\\mathbf{u},\\mathbf{v},\\mathbf{w}\\}$ be independent. Which of the following sets are independent?<br/>(i) $\\{\\mathbf{u}, \\mathbf{v}-\\mathbf{w}, \\mathbf{w}\\}$<br/>(ii) $\\{\\mathbf{u}, \\mathbf{u}-\\mathbf{v}, \\mathbf{u}+\\mathbf{v}, \\mathbf{w}\\}$</p></div><div class=\"ml-vi\"><p>Cho $\\{\\mathbf{u},\\mathbf{v},\\mathbf{w}\\}$ độc lập tuyến tính. Tập nào sau đây độc lập tuyến tính?<br/>(i) $\\{\\mathbf{u}, \\mathbf{v}-\\mathbf{w}, \\mathbf{w}\\}$<br/>(ii) $\\{\\mathbf{u}, \\mathbf{u}-\\mathbf{v}, \\mathbf{u}+\\mathbf{v}, \\mathbf{w}\\}$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D21/q47.png",
           "options": [
             {

@@ -15,7 +15,7 @@ export default {
       "source": "FUOverflow",
       "shuffleQuestions": false,
       "shuffleOptions": false,
-      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Final Exam</b> paper for <b>Mathematics for Engineering</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>Mathematics for Engineering</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
+      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Final Exam</b> paper for <b>Calculus 1</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>Calculus 1</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
       "isPublished": true,
       "questions": [
         {
@@ -267,7 +267,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2778,
-          "prompt": "<div class=\"ml-en\"><p>Find the derivative of the following function\\n$$g(x) = \\int_0^{\\sin x} \\frac{t^5+4t}{e^{5t}}\\,dt$$</p></div><div class=\"ml-vi\"><p>Tìm đạo hàm của hàm số\\n$$g(x) = \\int_0^{\\sin x} \\frac{t^5+4t}{e^{5t}}\\,dt$$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find the derivative of the following function<br/>$$g(x) = \\int_0^{\\sin x} \\frac{t^5+4t}{e^{5t}}\\,dt$$</p></div><div class=\"ml-vi\"><p>Tìm đạo hàm của hàm số<br/>$$g(x) = \\int_0^{\\sin x} \\frac{t^5+4t}{e^{5t}}\\,dt$$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D35/q14.png",
           "options": [
             {
@@ -291,7 +291,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2778,
-          "prompt": "<div class=\"ml-en\"><p>Solve the following system of linear equations:\\n$$\\begin{cases} 3x-y+7z=0 \\\\ 4x-2y+8z=1 \\\\ x-y+z=1 \\end{cases}$$</p></div><div class=\"ml-vi\"><p>Giải hệ phương trình tuyến tính sau:\\n$$\\begin{cases} 3x-y+7z=0 \\\\ 4x-2y+8z=1 \\\\ x-y+z=1 \\end{cases}$$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Solve the following system of linear equations:<br/>$$\\begin{cases} 3x-y+7z=0 \\\\ 4x-2y+8z=1 \\\\ x-y+z=1 \\end{cases}$$</p></div><div class=\"ml-vi\"><p>Giải hệ phương trình tuyến tính sau:<br/>$$\\begin{cases} 3x-y+7z=0 \\\\ 4x-2y+8z=1 \\\\ x-y+z=1 \\end{cases}$$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D35/q15.png",
           "options": [
             {
@@ -528,7 +528,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2778,
-          "prompt": "<div class=\"ml-en\"><p>Let $A$ be a matrix of size $5 \\times 3$. How many of the following statements are true?\\n(i) If $A$ has a zero entry, then $A$ has a row of zeros.\\n(ii) If $Ax = 0$ where $x \\neq 0$, then $A = 0$.\\n(iii) If $Ax = 0$ has only the trivial solution $x = 0$, then $Ax = b$ has a solution for every $b$.</p></div><div class=\"ml-vi\"><p>Cho $A$ là ma trận cỡ $5 \\times 3$. Có bao nhiêu phát biểu sau đây đúng?\\n(i) Nếu $A$ có một phần tử bằng 0, thì $A$ có một hàng toàn số 0.\\n(ii) Nếu $Ax = 0$ với $x \\neq 0$, thì $A = 0$.\\n(iii) Nếu $Ax = 0$ chỉ có nghiệm tầm thường $x = 0$, thì $Ax = b$ có nghiệm với mọi $b$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Let $A$ be a matrix of size $5 \\times 3$. How many of the following statements are true?<br/>(i) If $A$ has a zero entry, then $A$ has a row of zeros.<br/>(ii) If $Ax = 0$ where $x \\neq 0$, then $A = 0$.<br/>(iii) If $Ax = 0$ has only the trivial solution $x = 0$, then $Ax = b$ has a solution for every $b$.</p></div><div class=\"ml-vi\"><p>Cho $A$ là ma trận cỡ $5 \\times 3$. Có bao nhiêu phát biểu sau đây đúng?<br/>(i) Nếu $A$ có một phần tử bằng 0, thì $A$ có một hàng toàn số 0.<br/>(ii) Nếu $Ax = 0$ với $x \\neq 0$, thì $A = 0$.<br/>(iii) Nếu $Ax = 0$ chỉ có nghiệm tầm thường $x = 0$, thì $Ax = b$ có nghiệm với mọi $b$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D35/q28.png",
           "options": [
             {
@@ -576,7 +576,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2778,
-          "prompt": "<div class=\"ml-en\"><p>Use the Trapezoidal Rule with $n=4$ to estimate the value of the integral $\\int_0^4 f(x)\\,dx$\\n\\n| $x$ | 0.0 | 1.0 | 2.0 | 3.0 | 4.0 |\\n|---|---|---|---|---|---|\\n| $f(x)$ | 1.00 | 1.19 | 1.50 | 1.78 | 2.03 |</p></div><div class=\"ml-vi\"><p>Dùng quy tắc hình thang với $n=4$ để ước lượng giá trị tích phân $\\int_0^4 f(x)\\,dx$\\n\\n| $x$ | 0.0 | 1.0 | 2.0 | 3.0 | 4.0 |\\n|---|---|---|---|---|---|\\n| $f(x)$ | 1.00 | 1.19 | 1.50 | 1.78 | 2.03 |</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Use the Trapezoidal Rule with $n=4$ to estimate the value of the integral $\\int_0^4 f(x)\\,dx$</p><p><table class=\"exam-table\"><thead><tr><th>$x$</th><th>0.0</th><th>1.0</th><th>2.0</th><th>3.0</th><th>4.0</th></tr></thead><tbody><tr><td>$f(x)$</td><td>1.00</td><td>1.19</td><td>1.50</td><td>1.78</td><td>2.03</td></tr></tbody></table></p></div><div class=\"ml-vi\"><p>Dùng quy tắc hình thang với $n=4$ để ước lượng giá trị tích phân $\\int_0^4 f(x)\\,dx$</p><p><table class=\"exam-table\"><thead><tr><th>$x$</th><th>0.0</th><th>1.0</th><th>2.0</th><th>3.0</th><th>4.0</th></tr></thead><tbody><tr><td>$f(x)$</td><td>1.00</td><td>1.19</td><td>1.50</td><td>1.78</td><td>2.03</td></tr></tbody></table></p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D35/q31.png",
           "options": [
             {
@@ -840,7 +840,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2778,
-          "prompt": "<div class=\"ml-en\"><p>Find $c$ so that the function is continuous on $\\mathbb{R}$\\n$$f(x)=\\begin{cases}\\cos(x+\\sin x) & \\text{if } x>0\\\\ x^2+cx+c & \\text{if } x\\le 0\\end{cases}$$</p></div><div class=\"ml-vi\"><p>Tìm $c$ để hàm số liên tục trên $\\mathbb{R}$\\n$$f(x)=\\begin{cases}\\cos(x+\\sin x) & \\text{nếu } x>0\\\\ x^2+cx+c & \\text{nếu } x\\le 0\\end{cases}$$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find $c$ so that the function is continuous on $\\mathbb{R}$<br/>$$f(x)=\\begin{cases}\\cos(x+\\sin x) & \\text{if } x>0\\\\ x^2+cx+c & \\text{if } x\\le 0\\end{cases}$$</p></div><div class=\"ml-vi\"><p>Tìm $c$ để hàm số liên tục trên $\\mathbb{R}$<br/>$$f(x)=\\begin{cases}\\cos(x+\\sin x) & \\text{nếu } x>0\\\\ x^2+cx+c & \\text{nếu } x\\le 0\\end{cases}$$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D35/q46.png",
           "options": [
             {
@@ -867,7 +867,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2778,
-          "prompt": "<div class=\"ml-en\"><p>The graph of $f(x)$ is given (points $a,b,c,d,e,r,s,t$ marked along the $x$-axis: a steep rise to a filled point at $a$, a jump down to an open point, sloping down to a flat horizontal segment from $b$ through $c$ to $d$, then a smooth curve rising to a peak at $e$, dipping to a local min at $r$, rising to a smaller peak at $s$, then falling steeply to an endpoint at $t$). State all the numbers at which $f(x)$ is NOT differentiable.</p></div><div class=\"ml-vi\"><p>Đồ thị của $f(x)$ được cho (các điểm $a,b,c,d,e,r,s,t$ được đánh dấu trên trục hoành: tăng dốc tới điểm đặc tại $a$, nhảy xuống điểm hở, dốc xuống một đoạn nằm ngang từ $b$ qua $c$ đến $d$, rồi một đường cong trơn tăng tới đỉnh tại $e$, hạ xuống cực tiểu tại $r$, tăng lên đỉnh nhỏ hơn tại $s$, rồi giảm dốc xuống điểm cuối tại $t$). Xác định tất cả các số mà tại đó $f(x)$ KHÔNG khả vi.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The graph of $f(x)$ is given (points $a,b,c,d,e,r,s,t$ marked along the $x$-axis: a steep rise from the origin to a filled peak at $a$, then a straight line descending from $a$ into a flat horizontal segment running from $b$ through $c$ to $d$, then a smooth curve rising to a peak at $e$, dipping to a local min at $r$, rising to a smaller peak at $s$, then falling steeply to an endpoint at $t$). State all the numbers at which $f(x)$ is NOT differentiable.</p></div><div class=\"ml-vi\"><p>Đồ thị của $f(x)$ được cho (các điểm $a,b,c,d,e,r,s,t$ được đánh dấu trên trục hoành: tăng dốc từ gốc toạ độ tới đỉnh nhọn tại $a$, rồi một đoạn thẳng đi xuống từ $a$ nối vào một đoạn nằm ngang chạy từ $b$ qua $c$ đến $d$, rồi một đường cong trơn tăng tới đỉnh tại $e$, hạ xuống cực tiểu tại $r$, tăng lên đỉnh nhỏ hơn tại $s$, rồi giảm dốc xuống điểm cuối tại $t$). Xác định tất cả các số mà tại đó $f(x)$ KHÔNG khả vi.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D35/q47.png",
           "options": [
             {
@@ -889,7 +889,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>There is a jump discontinuity at $a$; sharp corners where the flat segment meets the sloped/curved pieces at $b$ and $d$; and a vertical tangent (cusp) at the endpoint $t$. Points $c, e, r, s$ lie on smooth parts of the curve.</p></div><div class=\"ml-vi\"><p>Có bước nhảy gián đoạn tại $a$; có góc nhọn nơi đoạn nằm ngang gặp phần dốc/cong tại $b$ và $d$; và tiếp tuyến đứng (điểm nhọn) tại điểm cuối $t$. Các điểm $c, e, r, s$ nằm trên phần trơn của đường cong.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The graph is continuous everywhere (no jumps), but not smooth at every point: sharp corners occur at $a$ (the rising segment meets the descending segment), at $b$ (the descending segment meets the flat segment), and at $d$ (the flat segment meets the rising curve) — the one-sided derivatives differ there, so $f$ is not differentiable. At $t$ the curve ends at an endpoint of the domain, so no two-sided derivative exists there either. Points $c, e, r, s$ lie on smooth parts of the curve, where $f$ is differentiable.</p></div><div class=\"ml-vi\"><p>Đồ thị liên tục khắp nơi (không có bước nhảy), nhưng không trơn tại mọi điểm: có góc nhọn tại $a$ (đoạn tăng gặp đoạn giảm), tại $b$ (đoạn giảm gặp đoạn nằm ngang), và tại $d$ (đoạn nằm ngang gặp đường cong đi lên) — đạo hàm một phía khác nhau tại các điểm này nên $f$ không khả vi. Tại $t$, đường cong kết thúc ở điểm biên của miền xác định nên cũng không tồn tại đạo hàm hai phía. Các điểm $c, e, r, s$ nằm trên phần trơn của đường cong, tại đó $f$ khả vi.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -948,7 +948,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2778,
-          "prompt": "<div class=\"ml-en\"><p>Suppose that the set of vectors $\\{X_1,X_2,X_3,X_4\\}$ is orthogonal. Which of the following sets are also orthogonal?\\n(i) $\\{X_1+X_2, X_2+X_3\\}$\\n(ii) $\\{X_1+X_2, X_3+X_4\\}$</p></div><div class=\"ml-vi\"><p>Giả sử tập hợp vectơ $\\{X_1,X_2,X_3,X_4\\}$ trực giao. Tập nào sau đây cũng trực giao?\\n(i) $\\{X_1+X_2, X_2+X_3\\}$\\n(ii) $\\{X_1+X_2, X_3+X_4\\}$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose that the set of vectors $\\{X_1,X_2,X_3,X_4\\}$ is orthogonal. Which of the following sets are also orthogonal?<br/>(i) $\\{X_1+X_2, X_2+X_3\\}$<br/>(ii) $\\{X_1+X_2, X_3+X_4\\}$</p></div><div class=\"ml-vi\"><p>Giả sử tập hợp vectơ $\\{X_1,X_2,X_3,X_4\\}$ trực giao. Tập nào sau đây cũng trực giao?<br/>(i) $\\{X_1+X_2, X_2+X_3\\}$<br/>(ii) $\\{X_1+X_2, X_3+X_4\\}$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D35/q50.png",
           "options": [
             {

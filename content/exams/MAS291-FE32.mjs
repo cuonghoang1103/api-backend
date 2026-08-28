@@ -99,7 +99,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A manufacturer of a certain brand of rice cereal claims that the average saturated fat content does not exceed 1.6 grams. State the null and alternative hypotheses to be used in testing this claim.<br/><br/>(i) $H_0:\\mu=1.6$, $H_1:\\mu<br/>eq1.6$<br/>(ii) $H_0:\\mu=1.6$, $H_1:\\mu<1.6$<br/>(iii) $H_0:\\mu=1.6$, $H_1:\\mu>1.6$<br/>(iv) $H_0:\\mu>1.6$, $H_1:\\mu=1.6$</p></div><div class=\"ml-vi\"><p>Nhà sản xuất một loại ngũ cốc gạo tuyên bố hàm lượng chất béo bão hoà trung bình không vượt quá 1,6 gam. Hãy nêu giả thuyết không và giả thuyết đối để kiểm định tuyên bố này.<br/><br/>(i) $H_0:\\mu=1{,}6$, $H_1:\\mu<br/>eq1{,}6$<br/>(ii) $H_0:\\mu=1{,}6$, $H_1:\\mu<1{,}6$<br/>(iii) $H_0:\\mu=1{,}6$, $H_1:\\mu>1{,}6$<br/>(iv) $H_0:\\mu>1{,}6$, $H_1:\\mu=1{,}6$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A manufacturer of a certain brand of rice cereal claims that the average saturated fat content does not exceed 1.6 grams. State the null and alternative hypotheses to be used in testing this claim.<br/><br/>(i) $H_0:\\mu=1.6$, $H_1:\\mu\\neq1.6$<br/>(ii) $H_0:\\mu=1.6$, $H_1:\\mu<1.6$<br/>(iii) $H_0:\\mu=1.6$, $H_1:\\mu>1.6$<br/>(iv) $H_0:\\mu>1.6$, $H_1:\\mu=1.6$</p></div><div class=\"ml-vi\"><p>Nhà sản xuất một loại ngũ cốc gạo tuyên bố hàm lượng chất béo bão hoà trung bình không vượt quá 1,6 gam. Hãy nêu giả thuyết không và giả thuyết đối để kiểm định tuyên bố này.<br/><br/>(i) $H_0:\\mu=1{,}6$, $H_1:\\mu\\neq1{,}6$<br/>(ii) $H_0:\\mu=1{,}6$, $H_1:\\mu<1{,}6$<br/>(iii) $H_0:\\mu=1{,}6$, $H_1:\\mu>1{,}6$<br/>(iv) $H_0:\\mu>1{,}6$, $H_1:\\mu=1{,}6$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D32/q4.png",
           "options": [
             {
@@ -837,7 +837,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The critical values for a two-tail hypothesis test with $H_1:\\mu<br/>eq15$, when the population standard deviation is unknown, the sample size is 150 and $\\alpha=0.01$, are ______<br/><br/>Let $z_{0.005}=2.576$; $z_{0.01}=2.326$; $t_{0.005,149}=2.609$; $t_{0.01,149}=2.352$.</p></div><div class=\"ml-vi\"><p>Các giá trị tới hạn của kiểm định hai phía với $H_1:\\mu<br/>eq15$, khi độ lệch chuẩn tổng thể chưa biết, cỡ mẫu là 150 và $\\alpha=0{,}01$, là ______<br/><br/>Cho $z_{0{,}005}=2{,}576$; $z_{0{,}01}=2{,}326$; $t_{0{,}005,149}=2{,}609$; $t_{0{,}01,149}=2{,}352$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The critical values for a two-tail hypothesis test with $H_1:\\mu\\neq15$, when the population standard deviation is unknown, the sample size is 150 and $\\alpha=0.01$, are ______<br/><br/>Let $z_{0.005}=2.576$; $z_{0.01}=2.326$; $t_{0.005,149}=2.609$; $t_{0.01,149}=2.352$.</p></div><div class=\"ml-vi\"><p>Các giá trị tới hạn của kiểm định hai phía với $H_1:\\mu\\neq15$, khi độ lệch chuẩn tổng thể chưa biết, cỡ mẫu là 150 và $\\alpha=0{,}01$, là ______<br/><br/>Cho $z_{0{,}005}=2{,}576$; $z_{0{,}01}=2{,}326$; $t_{0{,}005,149}=2{,}609$; $t_{0{,}01,149}=2{,}352$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D32/q33.png",
           "options": [
             {
@@ -891,7 +891,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Find the critical value for a two-tailed test with $H_1:\\mu<br/>eq10$, $\\alpha=0.01$, $n=30$. Assume that the data are normally distributed. Let $z_{0.05}=1.645$, $z_{0.025}=1.96$, $z_{0.01}=2.33$, $t_{0.005,29}=2.756$.</p></div><div class=\"ml-vi\"><p>Tìm giá trị tới hạn cho kiểm định hai phía với $H_1:\\mu<br/>eq10$, $\\alpha=0{,}01$, $n=30$. Giả sử dữ liệu có phân phối chuẩn. Cho $z_{0{,}05}=1{,}645$, $z_{0{,}025}=1{,}96$, $z_{0{,}01}=2{,}33$, $t_{0{,}005,29}=2{,}756$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find the critical value for a two-tailed test with $H_1:\\mu\\neq10$, $\\alpha=0.01$, $n=30$. Assume that the data are normally distributed. Let $z_{0.05}=1.645$, $z_{0.025}=1.96$, $z_{0.01}=2.33$, $t_{0.005,29}=2.756$.</p></div><div class=\"ml-vi\"><p>Tìm giá trị tới hạn cho kiểm định hai phía với $H_1:\\mu\\neq10$, $\\alpha=0{,}01$, $n=30$. Giả sử dữ liệu có phân phối chuẩn. Cho $z_{0{,}05}=1{,}645$, $z_{0{,}025}=1{,}96$, $z_{0{,}01}=2{,}33$, $t_{0{,}005,29}=2{,}756$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D32/q35.png",
           "options": [
             {

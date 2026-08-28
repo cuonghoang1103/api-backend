@@ -15,7 +15,7 @@ export default {
       "source": "FUOverflow",
       "shuffleQuestions": false,
       "shuffleOptions": false,
-      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Final Exam</b> paper for <b>Mathematics for Engineering</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>Mathematics for Engineering</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
+      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Final Exam</b> paper for <b>Calculus 1</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>Calculus 1</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
       "isPublished": true,
       "questions": [
         {
@@ -99,7 +99,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>If $C(x)$ = the cost of producing $x$ units of a product, the rate of change of $C(x)$ is called the **marginal cost**.</p><p>Let $C(x) = 0.000003x^3 - 0.04x^2 + 200x + 70000$.</p><p>Find the marginal cost of 3000 units.</p></div><div class=\"ml-vi\"><p>Nếu $C(x)$ là chi phí sản xuất $x$ đơn vị sản phẩm, tốc độ biến thiên của $C(x)$ được gọi là **chi phí biên**.</p><p>Cho $C(x) = 0.000003x^3 - 0.04x^2 + 200x + 70000$.</p><p>Tìm chi phí biên tại 3000 đơn vị.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>If $C(x)$ = the cost of producing $x$ units of a product, the rate of change of $C(x)$ is called the <strong>marginal cost</strong>.</p><p>Let $C(x) = 0.000003x^3 - 0.04x^2 + 200x + 70000$.</p><p>Find the marginal cost of 3000 units.</p></div><div class=\"ml-vi\"><p>Nếu $C(x)$ là chi phí sản xuất $x$ đơn vị sản phẩm, tốc độ biến thiên của $C(x)$ được gọi là <strong>chi phí biên</strong>.</p><p>Cho $C(x) = 0.000003x^3 - 0.04x^2 + 200x + 70000$.</p><p>Tìm chi phí biên tại 3000 đơn vị.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D34/q4.png",
           "options": [
             {
@@ -258,7 +258,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Find $x$ such that the set<br/>$\\{[2\\ \\ x\\ \\ -1]^T,\\ [2\\ \\ 0\\ \\ 1]^T,\\ [0\\ \\ 1\\ \\ 2]^T\\}$<br/>is **dependent**.</p></div><div class=\"ml-vi\"><p>Tìm $x$ để tập<br/>$\\{[2\\ \\ x\\ \\ -1]^T,\\ [2\\ \\ 0\\ \\ 1]^T,\\ [0\\ \\ 1\\ \\ 2]^T\\}$<br/>phụ thuộc tuyến tính.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find $x$ such that the set<br/>$\\{[2\\ \\ x\\ \\ -1]^T,\\ [2\\ \\ 0\\ \\ 1]^T,\\ [0\\ \\ 1\\ \\ 2]^T\\}$<br/>is <strong>dependent</strong>.</p></div><div class=\"ml-vi\"><p>Tìm $x$ để tập<br/>$\\{[2\\ \\ x\\ \\ -1]^T,\\ [2\\ \\ 0\\ \\ 1]^T,\\ [0\\ \\ 1\\ \\ 2]^T\\}$<br/>phụ thuộc tuyến tính.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D34/q10.png",
           "options": [
             {

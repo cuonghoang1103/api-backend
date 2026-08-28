@@ -15,13 +15,13 @@ export default {
       "source": "FUOverflow",
       "shuffleQuestions": false,
       "shuffleOptions": false,
-      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Final Exam</b> paper for <b>Mathematics for Engineering</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>Mathematics for Engineering</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
+      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Final Exam</b> paper for <b>Calculus 1</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>Calculus 1</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
       "isPublished": true,
       "questions": [
         {
           "kind": "MCQ",
           "points": 0.2632,
-          "prompt": "<div class=\"ml-en\"><p>Let $A$ be a $3\\times3$ matrix. Find $\\det A$ if $AA^T=3I$.\\n(i) $1$\\n(ii) $3\\sqrt3$ or $1$\\n(iii) $3\\sqrt3$ or $-3\\sqrt3$\\n(iv) $\\sqrt3$ or $-\\sqrt3$</p></div><div class=\"ml-vi\"><p>Cho $A$ là ma trận $3\\times3$. Tìm $\\det A$ nếu $AA^T=3I$.\\n(i) $1$\\n(ii) $3\\sqrt3$ hoặc $1$\\n(iii) $3\\sqrt3$ hoặc $-3\\sqrt3$\\n(iv) $\\sqrt3$ hoặc $-\\sqrt3$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Let $A$ be a $3\\times3$ matrix. Find $\\det A$ if $AA^T=3I$.<br/>(i) $1$<br/>(ii) $3\\sqrt3$ or $1$<br/>(iii) $3\\sqrt3$ or $-3\\sqrt3$<br/>(iv) $\\sqrt3$ or $-\\sqrt3$</p></div><div class=\"ml-vi\"><p>Cho $A$ là ma trận $3\\times3$. Tìm $\\det A$ nếu $AA^T=3I$.<br/>(i) $1$<br/>(ii) $3\\sqrt3$ hoặc $1$<br/>(iii) $3\\sqrt3$ hoặc $-3\\sqrt3$<br/>(iv) $\\sqrt3$ hoặc $-\\sqrt3$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D39/q1.png",
           "options": [
             {
@@ -72,7 +72,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2632,
-          "prompt": "<div class=\"ml-en\"><p>Write the linear system as a matrix equation in the form $AX=B$:\\n$5x+4y=42$\\n$7x+3y=51$\\n(i) $\\begin{bmatrix}5&4\\\\7&3\\end{bmatrix}\\begin{bmatrix}x\\\\y\\end{bmatrix}=\\begin{bmatrix}42\\\\51\\end{bmatrix}$\\n(ii) $\\begin{bmatrix}42&4\\\\51&7\\end{bmatrix}\\begin{bmatrix}x\\\\y\\end{bmatrix}=\\begin{bmatrix}5\\\\3\\end{bmatrix}$\\n(iii) $\\begin{bmatrix}5&4\\\\7&3\\end{bmatrix}\\begin{bmatrix}x\\\\y\\end{bmatrix}=\\begin{bmatrix}51\\\\42\\end{bmatrix}$\\n(iv) $\\begin{bmatrix}5&7\\\\4&3\\end{bmatrix}\\begin{bmatrix}x\\\\y\\end{bmatrix}=\\begin{bmatrix}42\\\\51\\end{bmatrix}$</p></div><div class=\"ml-vi\"><p>Viết hệ phương trình tuyến tính dưới dạng phương trình ma trận $AX=B$:\\n$5x+4y=42$\\n$7x+3y=51$\\n(i) $\\begin{bmatrix}5&4\\\\7&3\\end{bmatrix}\\begin{bmatrix}x\\\\y\\end{bmatrix}=\\begin{bmatrix}42\\\\51\\end{bmatrix}$\\n(ii) $\\begin{bmatrix}42&4\\\\51&7\\end{bmatrix}\\begin{bmatrix}x\\\\y\\end{bmatrix}=\\begin{bmatrix}5\\\\3\\end{bmatrix}$\\n(iii) $\\begin{bmatrix}5&4\\\\7&3\\end{bmatrix}\\begin{bmatrix}x\\\\y\\end{bmatrix}=\\begin{bmatrix}51\\\\42\\end{bmatrix}$\\n(iv) $\\begin{bmatrix}5&7\\\\4&3\\end{bmatrix}\\begin{bmatrix}x\\\\y\\end{bmatrix}=\\begin{bmatrix}42\\\\51\\end{bmatrix}$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Write the linear system as a matrix equation in the form $AX=B$:<br/>$5x+4y=42$<br/>$7x+3y=51$<br/>(i) $\\begin{bmatrix}5&4\\\\7&3\\end{bmatrix}\\begin{bmatrix}x\\\\y\\end{bmatrix}=\\begin{bmatrix}42\\\\51\\end{bmatrix}$<br/>(ii) $\\begin{bmatrix}42&4\\\\51&7\\end{bmatrix}\\begin{bmatrix}x\\\\y\\end{bmatrix}=\\begin{bmatrix}5\\\\3\\end{bmatrix}$<br/>(iii) $\\begin{bmatrix}5&4\\\\7&3\\end{bmatrix}\\begin{bmatrix}x\\\\y\\end{bmatrix}=\\begin{bmatrix}51\\\\42\\end{bmatrix}$<br/>(iv) $\\begin{bmatrix}5&7\\\\4&3\\end{bmatrix}\\begin{bmatrix}x\\\\y\\end{bmatrix}=\\begin{bmatrix}42\\\\51\\end{bmatrix}$</p></div><div class=\"ml-vi\"><p>Viết hệ phương trình tuyến tính dưới dạng phương trình ma trận $AX=B$:<br/>$5x+4y=42$<br/>$7x+3y=51$<br/>(i) $\\begin{bmatrix}5&4\\\\7&3\\end{bmatrix}\\begin{bmatrix}x\\\\y\\end{bmatrix}=\\begin{bmatrix}42\\\\51\\end{bmatrix}$<br/>(ii) $\\begin{bmatrix}42&4\\\\51&7\\end{bmatrix}\\begin{bmatrix}x\\\\y\\end{bmatrix}=\\begin{bmatrix}5\\\\3\\end{bmatrix}$<br/>(iii) $\\begin{bmatrix}5&4\\\\7&3\\end{bmatrix}\\begin{bmatrix}x\\\\y\\end{bmatrix}=\\begin{bmatrix}51\\\\42\\end{bmatrix}$<br/>(iv) $\\begin{bmatrix}5&7\\\\4&3\\end{bmatrix}\\begin{bmatrix}x\\\\y\\end{bmatrix}=\\begin{bmatrix}42\\\\51\\end{bmatrix}$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D39/q4.png",
           "options": [
             {
@@ -156,7 +156,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2632,
-          "prompt": "<div class=\"ml-en\"><p>Express the following limit as a definite integral:\\n$\\displaystyle\\lim_{n\\to\\infty}\\sum_{i=1}^n \\frac{2+4i/n}{1+(2+4i/n)^5}\\cdot\\frac{4}{n}$\\n(i) $\\int_2^6 \\frac{2+4x}{1+(2+4x)^5}\\,dx$\\n(ii) $\\int_2^6 \\frac{2+x}{1+(2+x)^5}\\,dx$\\n(iii) $\\int_2^6 \\frac{x}{1+x^5}\\,dx$</p></div><div class=\"ml-vi\"><p>Biểu diễn giới hạn sau dưới dạng tích phân xác định:\\n$\\displaystyle\\lim_{n\\to\\infty}\\sum_{i=1}^n \\frac{2+4i/n}{1+(2+4i/n)^5}\\cdot\\frac{4}{n}$\\n(i) $\\int_2^6 \\frac{2+4x}{1+(2+4x)^5}\\,dx$\\n(ii) $\\int_2^6 \\frac{2+x}{1+(2+x)^5}\\,dx$\\n(iii) $\\int_2^6 \\frac{x}{1+x^5}\\,dx$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Express the following limit as a definite integral:<br/>$\\displaystyle\\lim_{n\\to\\infty}\\sum_{i=1}^n \\frac{2+4i/n}{1+(2+4i/n)^5}\\cdot\\frac{4}{n}$<br/>(i) $\\int_2^6 \\frac{2+4x}{1+(2+4x)^5}\\,dx$<br/>(ii) $\\int_2^6 \\frac{2+x}{1+(2+x)^5}\\,dx$<br/>(iii) $\\int_2^6 \\frac{x}{1+x^5}\\,dx$</p></div><div class=\"ml-vi\"><p>Biểu diễn giới hạn sau dưới dạng tích phân xác định:<br/>$\\displaystyle\\lim_{n\\to\\infty}\\sum_{i=1}^n \\frac{2+4i/n}{1+(2+4i/n)^5}\\cdot\\frac{4}{n}$<br/>(i) $\\int_2^6 \\frac{2+4x}{1+(2+4x)^5}\\,dx$<br/>(ii) $\\int_2^6 \\frac{2+x}{1+(2+x)^5}\\,dx$<br/>(iii) $\\int_2^6 \\frac{x}{1+x^5}\\,dx$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D39/q9.png",
           "options": [
             {
@@ -288,7 +288,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2632,
-          "prompt": "<div class=\"ml-en\"><p>Solve the system of equations for $y$:\\n$\\begin{cases}x+4y+2z=1\\\\2x+3y+3z=-1\\\\4x+y+4z=0\\end{cases}$</p></div><div class=\"ml-vi\"><p>Giải hệ phương trình sau theo $y$:\\n$\\begin{cases}x+4y+2z=1\\\\2x+3y+3z=-1\\\\4x+y+4z=0\\end{cases}$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Solve the system of equations for $y$:<br/>$\\begin{cases}x+4y+2z=1\\\\2x+3y+3z=-1\\\\4x+y+4z=0\\end{cases}$</p></div><div class=\"ml-vi\"><p>Giải hệ phương trình sau theo $y$:<br/>$\\begin{cases}x+4y+2z=1\\\\2x+3y+3z=-1\\\\4x+y+4z=0\\end{cases}$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D39/q17.png",
           "options": [
             {
@@ -315,7 +315,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2632,
-          "prompt": "<div class=\"ml-en\"><p>Find the differential of $y=x^2\\cos2x$.\\n(i) $dy=2x(\\cos2x-x\\sin2x)\\,dx$\\n(ii) $dy=x(\\cos2x-2x\\sin2x)\\,dx$\\n(iii) $dy=2x(\\cos2x+x\\sin2x)\\,dx$\\n(iv) $dy=x(2\\cos2x-x\\sin2x)\\,dx$</p></div><div class=\"ml-vi\"><p>Tìm vi phân của $y=x^2\\cos2x$.\\n(i) $dy=2x(\\cos2x-x\\sin2x)\\,dx$\\n(ii) $dy=x(\\cos2x-2x\\sin2x)\\,dx$\\n(iii) $dy=2x(\\cos2x+x\\sin2x)\\,dx$\\n(iv) $dy=x(2\\cos2x-x\\sin2x)\\,dx$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find the differential of $y=x^2\\cos2x$.<br/>(i) $dy=2x(\\cos2x-x\\sin2x)\\,dx$<br/>(ii) $dy=x(\\cos2x-2x\\sin2x)\\,dx$<br/>(iii) $dy=2x(\\cos2x+x\\sin2x)\\,dx$<br/>(iv) $dy=x(2\\cos2x-x\\sin2x)\\,dx$</p></div><div class=\"ml-vi\"><p>Tìm vi phân của $y=x^2\\cos2x$.<br/>(i) $dy=2x(\\cos2x-x\\sin2x)\\,dx$<br/>(ii) $dy=x(\\cos2x-2x\\sin2x)\\,dx$<br/>(iii) $dy=2x(\\cos2x+x\\sin2x)\\,dx$<br/>(iv) $dy=x(2\\cos2x-x\\sin2x)\\,dx$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D39/q18.png",
           "options": [
             {
@@ -369,7 +369,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2632,
-          "prompt": "<div class=\"ml-en\"><p>Find $\\frac{dy}{dx}$ when $y^5+x^2y^3=1+ye^{x^2}$.\\n(i) $\\dfrac{2xye^{x^2}-2xy^3}{5y^4+3x^2y^2-e^{x^2}}$\\n(ii) $\\dfrac{2xye^{x^2}}{5y^4+3x^2y^2-e^{x^2}}$\\n(iii) $\\dfrac{-2xy^3}{5y^4+3x^2y^2-e^{x^2}}$\\n(iv) (see picture)</p></div><div class=\"ml-vi\"><p>Tìm $\\frac{dy}{dx}$ khi $y^5+x^2y^3=1+ye^{x^2}$.\\n(i) $\\dfrac{2xye^{x^2}-2xy^3}{5y^4+3x^2y^2-e^{x^2}}$\\n(ii) $\\dfrac{2xye^{x^2}}{5y^4+3x^2y^2-e^{x^2}}$\\n(iii) $\\dfrac{-2xy^3}{5y^4+3x^2y^2-e^{x^2}}$\\n(iv) (xem hình)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find $\\frac{dy}{dx}$ when $y^5+x^2y^3=1+ye^{x^2}$.<br/>(i) $\\dfrac{2xye^{x^2}-2xy^3}{5y^4+3x^2y^2-e^{x^2}}$<br/>(ii) $\\dfrac{2xye^{x^2}}{5y^4+3x^2y^2-e^{x^2}}$<br/>(iii) $\\dfrac{-2xy^3}{5y^4+3x^2y^2-e^{x^2}}$<br/>(iv) (see picture)</p></div><div class=\"ml-vi\"><p>Tìm $\\frac{dy}{dx}$ khi $y^5+x^2y^3=1+ye^{x^2}$.<br/>(i) $\\dfrac{2xye^{x^2}-2xy^3}{5y^4+3x^2y^2-e^{x^2}}$<br/>(ii) $\\dfrac{2xye^{x^2}}{5y^4+3x^2y^2-e^{x^2}}$<br/>(iii) $\\dfrac{-2xy^3}{5y^4+3x^2y^2-e^{x^2}}$<br/>(iv) (xem hình)</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D39/q21.png",
           "options": [
             {
@@ -522,7 +522,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2632,
-          "prompt": "<div class=\"ml-en\"><p>Estimate the area under the graph of $f(x)=\\sin x$ from $x=0$ to $x=\\pi/2$, using three rectangles and left endpoints.\\n(i) $\\dfrac{\\pi(1+\\sqrt3)}{12}$\\n(ii) $\\dfrac{\\pi(3+\\sqrt3)}{12}$\\n(iii) $\\dfrac{\\pi(3+\\sqrt3)}{6}$\\n(iv) (see picture)</p></div><div class=\"ml-vi\"><p>Ước lượng diện tích dưới đồ thị $f(x)=\\sin x$ từ $x=0$ đến $x=\\pi/2$, dùng ba hình chữ nhật với điểm mút trái.\\n(i) $\\dfrac{\\pi(1+\\sqrt3)}{12}$\\n(ii) $\\dfrac{\\pi(3+\\sqrt3)}{12}$\\n(iii) $\\dfrac{\\pi(3+\\sqrt3)}{6}$\\n(iv) (xem hình)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Estimate the area under the graph of $f(x)=\\sin x$ from $x=0$ to $x=\\pi/2$, using three rectangles and left endpoints.<br/>(i) $\\dfrac{\\pi(1+\\sqrt3)}{12}$<br/>(ii) $\\dfrac{\\pi(3+\\sqrt3)}{12}$<br/>(iii) $\\dfrac{\\pi(3+\\sqrt3)}{6}$<br/>(iv) (see picture)</p></div><div class=\"ml-vi\"><p>Ước lượng diện tích dưới đồ thị $f(x)=\\sin x$ từ $x=0$ đến $x=\\pi/2$, dùng ba hình chữ nhật với điểm mút trái.<br/>(i) $\\dfrac{\\pi(1+\\sqrt3)}{12}$<br/>(ii) $\\dfrac{\\pi(3+\\sqrt3)}{12}$<br/>(iii) $\\dfrac{\\pi(3+\\sqrt3)}{6}$<br/>(iv) (xem hình)</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D39/q32.png",
           "options": [
             {
@@ -597,7 +597,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2632,
-          "prompt": "<div class=\"ml-en\"><p>Find the critical numbers of the function $y=\\dfrac{x^5}{5}-\\dfrac{2x^3}{3}-3x+2$.\\n(i) $-1;\\ 1$\\n(ii) $-1;\\ -\\sqrt3$\\n(iii) $\\sqrt3;\\ 1$\\n(iv) $\\sqrt3;\\ -\\sqrt3$</p></div><div class=\"ml-vi\"><p>Tìm các điểm tới hạn của hàm $y=\\dfrac{x^5}{5}-\\dfrac{2x^3}{3}-3x+2$.\\n(i) $-1;\\ 1$\\n(ii) $-1;\\ -\\sqrt3$\\n(iii) $\\sqrt3;\\ 1$\\n(iv) $\\sqrt3;\\ -\\sqrt3$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find the critical numbers of the function $y=\\dfrac{x^5}{5}-\\dfrac{2x^3}{3}-3x+2$.<br/>(i) $-1;\\ 1$<br/>(ii) $-1;\\ -\\sqrt3$<br/>(iii) $\\sqrt3;\\ 1$<br/>(iv) $\\sqrt3;\\ -\\sqrt3$</p></div><div class=\"ml-vi\"><p>Tìm các điểm tới hạn của hàm $y=\\dfrac{x^5}{5}-\\dfrac{2x^3}{3}-3x+2$.<br/>(i) $-1;\\ 1$<br/>(ii) $-1;\\ -\\sqrt3$<br/>(iii) $\\sqrt3;\\ 1$<br/>(iv) $\\sqrt3;\\ -\\sqrt3$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D39/q35.png",
           "options": [
             {
@@ -705,7 +705,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2632,
-          "prompt": "<div class=\"ml-en\"><p>Evaluate $\\displaystyle\\int x^7(x^8-5)^4\\,dx$.\\n(i) $(40)(x^8-5)^5+C$\\n(ii) $(1/4)(x^8-5)^5+C$\\n(iii) $(1/40)(x^8-5)^5+C$\\n(iv) $(1/40)x^8(x^8-5)^5+C$</p></div><div class=\"ml-vi\"><p>Tính $\\displaystyle\\int x^7(x^8-5)^4\\,dx$.\\n(i) $(40)(x^8-5)^5+C$\\n(ii) $(1/4)(x^8-5)^5+C$\\n(iii) $(1/40)(x^8-5)^5+C$\\n(iv) $(1/40)x^8(x^8-5)^5+C$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Evaluate $\\displaystyle\\int x^7(x^8-5)^4\\,dx$.<br/>(i) $(40)(x^8-5)^5+C$<br/>(ii) $(1/4)(x^8-5)^5+C$<br/>(iii) $(1/40)(x^8-5)^5+C$<br/>(iv) $(1/40)x^8(x^8-5)^5+C$</p></div><div class=\"ml-vi\"><p>Tính $\\displaystyle\\int x^7(x^8-5)^4\\,dx$.<br/>(i) $(40)(x^8-5)^5+C$<br/>(ii) $(1/4)(x^8-5)^5+C$<br/>(iii) $(1/40)(x^8-5)^5+C$<br/>(iv) $(1/40)x^8(x^8-5)^5+C$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D39/q39.png",
           "options": [
             {
@@ -759,7 +759,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2632,
-          "prompt": "<div class=\"ml-en\"><p>Find $A^TA-(AA^T)I_3$ if $A=\\begin{bmatrix}1&1&1\\end{bmatrix}$.\\n(i) $\\begin{bmatrix}-2&-2&-2\\\\-2&-2&-2\\\\-2&-2&-2\\end{bmatrix}$\\n(ii) $\\begin{bmatrix}1&1&1\\\\1&1&1\\\\1&1&1\\end{bmatrix}$\\n(iii) $\\begin{bmatrix}-2&1&1\\\\1&-2&1\\\\1&1&-2\\end{bmatrix}$\\n(iv) $\\begin{bmatrix}0&0&0\\\\0&0&0\\\\0&0&0\\end{bmatrix}$</p></div><div class=\"ml-vi\"><p>Tìm $A^TA-(AA^T)I_3$ nếu $A=\\begin{bmatrix}1&1&1\\end{bmatrix}$.\\n(i) $\\begin{bmatrix}-2&-2&-2\\\\-2&-2&-2\\\\-2&-2&-2\\end{bmatrix}$\\n(ii) $\\begin{bmatrix}1&1&1\\\\1&1&1\\\\1&1&1\\end{bmatrix}$\\n(iii) $\\begin{bmatrix}-2&1&1\\\\1&-2&1\\\\1&1&-2\\end{bmatrix}$\\n(iv) $\\begin{bmatrix}0&0&0\\\\0&0&0\\\\0&0&0\\end{bmatrix}$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find $A^TA-(AA^T)I_3$ if $A=\\begin{bmatrix}1&1&1\\end{bmatrix}$.<br/>(i) $\\begin{bmatrix}-2&-2&-2\\\\-2&-2&-2\\\\-2&-2&-2\\end{bmatrix}$<br/>(ii) $\\begin{bmatrix}1&1&1\\\\1&1&1\\\\1&1&1\\end{bmatrix}$<br/>(iii) $\\begin{bmatrix}-2&1&1\\\\1&-2&1\\\\1&1&-2\\end{bmatrix}$<br/>(iv) $\\begin{bmatrix}0&0&0\\\\0&0&0\\\\0&0&0\\end{bmatrix}$</p></div><div class=\"ml-vi\"><p>Tìm $A^TA-(AA^T)I_3$ nếu $A=\\begin{bmatrix}1&1&1\\end{bmatrix}$.<br/>(i) $\\begin{bmatrix}-2&-2&-2\\\\-2&-2&-2\\\\-2&-2&-2\\end{bmatrix}$<br/>(ii) $\\begin{bmatrix}1&1&1\\\\1&1&1\\\\1&1&1\\end{bmatrix}$<br/>(iii) $\\begin{bmatrix}-2&1&1\\\\1&-2&1\\\\1&1&-2\\end{bmatrix}$<br/>(iv) $\\begin{bmatrix}0&0&0\\\\0&0&0\\\\0&0&0\\end{bmatrix}$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D39/q41.png",
           "options": [
             {
@@ -813,7 +813,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2632,
-          "prompt": "<div class=\"ml-en\"><p>Which of the following statements are true?\\n(i) $\\mathbb{R}^2=\\operatorname{span}\\{(1,0),(0,2)\\}$\\n(ii) $\\mathbb{R}^3=\\operatorname{span}\\{(1,0,0),(0,1,0),(1,1,0)\\}$</p></div><div class=\"ml-vi\"><p>Phát biểu nào sau đây đúng?\\n(i) $\\mathbb{R}^2=\\operatorname{span}\\{(1,0),(0,2)\\}$\\n(ii) $\\mathbb{R}^3=\\operatorname{span}\\{(1,0,0),(0,1,0),(1,1,0)\\}$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Which of the following statements are true?<br/>(i) $\\mathbb{R}^2=\\operatorname{span}\\{(1,0),(0,2)\\}$<br/>(ii) $\\mathbb{R}^3=\\operatorname{span}\\{(1,0,0),(0,1,0),(1,1,0)\\}$</p></div><div class=\"ml-vi\"><p>Phát biểu nào sau đây đúng?<br/>(i) $\\mathbb{R}^2=\\operatorname{span}\\{(1,0),(0,2)\\}$<br/>(ii) $\\mathbb{R}^3=\\operatorname{span}\\{(1,0,0),(0,1,0),(1,1,0)\\}$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D39/q43.png",
           "options": [
             {
@@ -888,7 +888,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2632,
-          "prompt": "<div class=\"ml-en\"><p>If $\\{X,Y\\}$ is independent, which of the following sets are independent?\\n(i) $\\{2X, 4Y\\}$\\n(ii) $\\{2X, X-4Y\\}$\\n(iii) $\\{2X-Y, 8X-4Y\\}$</p></div><div class=\"ml-vi\"><p>Nếu $\\{X,Y\\}$ độc lập tuyến tính, tập nào sau đây độc lập tuyến tính?\\n(i) $\\{2X, 4Y\\}$\\n(ii) $\\{2X, X-4Y\\}$\\n(iii) $\\{2X-Y, 8X-4Y\\}$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>If $\\{X,Y\\}$ is independent, which of the following sets are independent?<br/>(i) $\\{2X, 4Y\\}$<br/>(ii) $\\{2X, X-4Y\\}$<br/>(iii) $\\{2X-Y, 8X-4Y\\}$</p></div><div class=\"ml-vi\"><p>Nếu $\\{X,Y\\}$ độc lập tuyến tính, tập nào sau đây độc lập tuyến tính?<br/>(i) $\\{2X, 4Y\\}$<br/>(ii) $\\{2X, X-4Y\\}$<br/>(iii) $\\{2X-Y, 8X-4Y\\}$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D39/q46.png",
           "options": [
             {
@@ -915,7 +915,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2632,
-          "prompt": "<div class=\"ml-en\"><p>Let $T$ be a linear transformation in the plane, $T[x,y]=\\frac12[x-\\sqrt3y,\\ \\sqrt3x+y]$. Choose the correct statement.\\n(i) $T$ is projection on the line $y=\\sqrt3x$\\n(ii) $T$ is reflection in the line $y=-\\sqrt3x$\\n(iii) $T$ is rotation through $\\pi/3$.</p></div><div class=\"ml-vi\"><p>Cho $T$ là ánh xạ tuyến tính trong mặt phẳng, $T[x,y]=\\frac12[x-\\sqrt3y,\\ \\sqrt3x+y]$. Chọn phát biểu đúng.\\n(i) $T$ là phép chiếu lên đường thẳng $y=\\sqrt3x$\\n(ii) $T$ là phép đối xứng qua đường thẳng $y=-\\sqrt3x$\\n(iii) $T$ là phép quay góc $\\pi/3$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Let $T$ be a linear transformation in the plane, $T[x,y]=\\frac12[x-\\sqrt3y,\\ \\sqrt3x+y]$. Choose the correct statement.<br/>(i) $T$ is projection on the line $y=\\sqrt3x$<br/>(ii) $T$ is reflection in the line $y=-\\sqrt3x$<br/>(iii) $T$ is rotation through $\\pi/3$.</p></div><div class=\"ml-vi\"><p>Cho $T$ là ánh xạ tuyến tính trong mặt phẳng, $T[x,y]=\\frac12[x-\\sqrt3y,\\ \\sqrt3x+y]$. Chọn phát biểu đúng.<br/>(i) $T$ là phép chiếu lên đường thẳng $y=\\sqrt3x$<br/>(ii) $T$ là phép đối xứng qua đường thẳng $y=-\\sqrt3x$<br/>(iii) $T$ là phép quay góc $\\pi/3$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D39/q47.png",
           "options": [
             {
@@ -939,7 +939,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2632,
-          "prompt": "<div class=\"ml-en\"><p>Suppose $g(x)=\\int_1^{-x^3}\\sin(2t+3)\\,dt$. Find $g'(x)$.\\n(i) $g'(x)=\\sin(3-2x^3)$\\n(ii) $g'(x)=-3x^2\\cos(3-2x^3)$\\n(iii) $g'(x)=-3x^2\\sin(3+2x^3)$\\n(iv) $g'(x)=3x\\cos(2x^2+3)$\\n(v) $g'(x)=-3x^2\\sin(3-2x^3)$</p></div><div class=\"ml-vi\"><p>Cho $g(x)=\\int_1^{-x^3}\\sin(2t+3)\\,dt$. Tìm $g'(x)$.\\n(i) $g'(x)=\\sin(3-2x^3)$\\n(ii) $g'(x)=-3x^2\\cos(3-2x^3)$\\n(iii) $g'(x)=-3x^2\\sin(3+2x^3)$\\n(iv) $g'(x)=3x\\cos(2x^2+3)$\\n(v) $g'(x)=-3x^2\\sin(3-2x^3)$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose $g(x)=\\int_1^{-x^3}\\sin(2t+3)\\,dt$. Find $g'(x)$.<br/>(i) $g'(x)=\\sin(3-2x^3)$<br/>(ii) $g'(x)=-3x^2\\cos(3-2x^3)$<br/>(iii) $g'(x)=-3x^2\\sin(3+2x^3)$<br/>(iv) $g'(x)=3x\\cos(2x^2+3)$<br/>(v) $g'(x)=-3x^2\\sin(3-2x^3)$</p></div><div class=\"ml-vi\"><p>Cho $g(x)=\\int_1^{-x^3}\\sin(2t+3)\\,dt$. Tìm $g'(x)$.<br/>(i) $g'(x)=\\sin(3-2x^3)$<br/>(ii) $g'(x)=-3x^2\\cos(3-2x^3)$<br/>(iii) $g'(x)=-3x^2\\sin(3+2x^3)$<br/>(iv) $g'(x)=3x\\cos(2x^2+3)$<br/>(v) $g'(x)=-3x^2\\sin(3-2x^3)$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D39/q48.png",
           "options": [
             {
@@ -996,7 +996,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2632,
-          "prompt": "<div class=\"ml-en\"><p>A table of values for $f,g,f',g'$ is given:\\n| x | f(x) | g(x) | f&#39;(x) | g&#39;(x) |\\n|---|------|------|-------|-------|\\n| 0 | 1 | 1 | 2 | -2 |\\n| 1 | 0 | 2 | 3 | -1 |\\n| 2 | 4 | -1 | 5 | 6 |\\n\\nFind $h'(1)$ if $h(x)=g(f(x))$.</p></div><div class=\"ml-vi\"><p>Cho bảng giá trị của $f,g,f',g'$:\\n| x | f(x) | g(x) | f&#39;(x) | g&#39;(x) |\\n|---|------|------|-------|-------|\\n| 0 | 1 | 1 | 2 | -2 |\\n| 1 | 0 | 2 | 3 | -1 |\\n| 2 | 4 | -1 | 5 | 6 |\\n\\nTìm $h'(1)$ nếu $h(x)=g(f(x))$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A table of values for $f,g,f',g'$ is given:<br/><table class=\"exam-table\"><thead><tr><th>x</th><th>f(x)</th><th>g(x)</th><th>f'(x)</th><th>g'(x)</th></tr></thead><tbody><tr><td>0</td><td>1</td><td>1</td><td>2</td><td>-2</td></tr><tr><td>1</td><td>0</td><td>2</td><td>3</td><td>-1</td></tr><tr><td>2</td><td>4</td><td>-1</td><td>5</td><td>6</td></tr></tbody></table><br/>Find $h'(1)$ if $h(x)=g(f(x))$.</p></div><div class=\"ml-vi\"><p>Cho bảng giá trị của $f,g,f',g'$:<br/><table class=\"exam-table\"><thead><tr><th>x</th><th>f(x)</th><th>g(x)</th><th>f'(x)</th><th>g'(x)</th></tr></thead><tbody><tr><td>0</td><td>1</td><td>1</td><td>2</td><td>-2</td></tr><tr><td>1</td><td>0</td><td>2</td><td>3</td><td>-1</td></tr><tr><td>2</td><td>4</td><td>-1</td><td>5</td><td>6</td></tr></tbody></table><br/>Tìm $h'(1)$ nếu $h(x)=g(f(x))$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D39/q50.png",
           "options": [
             {

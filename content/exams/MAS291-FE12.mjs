@@ -43,7 +43,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>A numerical summary computed from a <strong>sample</strong> is a *statistic*; the same quantity computed on the whole <strong>population</strong> is a *parameter*. Here the proportion comes from the 250 sampled students, i.e. $\\hat p$ (sample proportion), not $p$ (population proportion). So it is a statistic.</p></div><div class=\"ml-vi\"><p>Đại lượng số tính từ <strong>mẫu</strong> gọi là *thống kê*; nếu tính trên toàn <strong>tổng thể</strong> thì gọi là *tham số*. Ở đây tỉ lệ được tính từ 250 sinh viên trong mẫu, tức $\\hat p$ (tỉ lệ mẫu), không phải $p$ (tỉ lệ tổng thể). Vậy đó là một thống kê.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>A numerical summary computed from a <strong>sample</strong> is a &lt;em&gt;statistic&lt;/em&gt;; the same quantity computed on the whole <strong>population</strong> is a &lt;em&gt;parameter&lt;/em&gt;. Here the proportion comes from the 250 sampled students, i.e. $\\hat p$ (sample proportion), not $p$ (population proportion). So it is a statistic.</p></div><div class=\"ml-vi\"><p>Đại lượng số tính từ <strong>mẫu</strong> gọi là &lt;em&gt;thống kê&lt;/em&gt;; nếu tính trên toàn <strong>tổng thể</strong> thì gọi là &lt;em&gt;tham số&lt;/em&gt;. Ở đây tỉ lệ được tính từ 250 sinh viên trong mẫu, tức $\\hat p$ (tỉ lệ mẫu), không phải $p$ (tỉ lệ tổng thể). Vậy đó là một thống kê.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -67,7 +67,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>The key phrase is *&quot;subjects are exposed to certain treatments&quot;* — the investigator <strong>actively sets</strong> the levels of the input factor and then measures the response. That is the definition of a <strong>designed experiment</strong>. An observational study only records what happens with no intervention; a retrospective study digs through historical records that already exist.</p></div><div class=\"ml-vi\"><p>Cụm từ mấu chốt là *&quot;đối tượng được cho chịu tác động của tác nhân&quot;* — người nghiên cứu <strong>chủ động đặt</strong> mức của nhân tố đầu vào rồi đo phản hồi. Đó chính là định nghĩa của <strong>thí nghiệm có thiết kế</strong>. Nghiên cứu quan sát chỉ ghi nhận mà không can thiệp; nghiên cứu hồi cứu thì lục lại dữ liệu lịch sử có sẵn.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The key phrase is &lt;em&gt;&quot;subjects are exposed to certain treatments&quot;&lt;/em&gt; — the investigator <strong>actively sets</strong> the levels of the input factor and then measures the response. That is the definition of a <strong>designed experiment</strong>. An observational study only records what happens with no intervention; a retrospective study digs through historical records that already exist.</p></div><div class=\"ml-vi\"><p>Cụm từ mấu chốt là &lt;em&gt;&quot;đối tượng được cho chịu tác động của tác nhân&quot;&lt;/em&gt; — người nghiên cứu <strong>chủ động đặt</strong> mức của nhân tố đầu vào rồi đo phản hồi. Đó chính là định nghĩa của <strong>thí nghiệm có thiết kế</strong>. Nghiên cứu quan sát chỉ ghi nhận mà không can thiệp; nghiên cứu hồi cứu thì lục lại dữ liệu lịch sử có sẵn.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -115,7 +115,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Order does not matter (a *sample*, not an arrangement), so this is a combination: $\\binom{10}{5} = \\dfrac{10!}{5!\\,5!} = \\dfrac{30240}{120} = 252$. The distractor 30240 is the <strong>permutation</strong> $P(10,5) = 10\\cdot 9\\cdot 8\\cdot 7\\cdot 6$, which would count orderings.</p></div><div class=\"ml-vi\"><p>Thứ tự không quan trọng (đây là một *mẫu*, không phải một cách sắp xếp), nên dùng tổ hợp: $\\binom{10}{5} = \\dfrac{10!}{5!\\,5!} = \\dfrac{30240}{120} = 252$. Con số 30240 là <strong>chỉnh hợp</strong> $P(10,5) = 10\\cdot 9\\cdot 8\\cdot 7\\cdot 6$, tức có tính thứ tự.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Order does not matter (a &lt;em&gt;sample&lt;/em&gt;, not an arrangement), so this is a combination: $\\binom{10}{5} = \\dfrac{10!}{5!\\,5!} = \\dfrac{30240}{120} = 252$. The distractor 30240 is the <strong>permutation</strong> $P(10,5) = 10\\cdot 9\\cdot 8\\cdot 7\\cdot 6$, which would count orderings.</p></div><div class=\"ml-vi\"><p>Thứ tự không quan trọng (đây là một &lt;em&gt;mẫu&lt;/em&gt;, không phải một cách sắp xếp), nên dùng tổ hợp: $\\binom{10}{5} = \\dfrac{10!}{5!\\,5!} = \\dfrac{30240}{120} = 252$. Con số 30240 là <strong>chỉnh hợp</strong> $P(10,5) = 10\\cdot 9\\cdot 8\\cdot 7\\cdot 6$, tức có tính thứ tự.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -295,7 +295,7 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\"><p>A continuous random variable takes values over an <strong>interval</strong> of the real line, which is *uncountably* infinite. &quot;Countably infinite range&quot; is precisely the definition of a <strong>discrete</strong> random variable (like the integers), so statement D is the false one. A, B and C are all true of continuous variables.</p></div><div class=\"ml-vi\"><p>Biến ngẫu nhiên liên tục nhận giá trị trên một <strong>khoảng</strong> của trục số thực, tức vô hạn <strong>không đếm được</strong>. &quot;Miền giá trị vô hạn đếm được&quot; đúng là định nghĩa của biến ngẫu nhiên <strong>rời rạc</strong> (như tập số nguyên), nên phát biểu D là sai. A, B, C đều đúng với biến liên tục.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>A continuous random variable takes values over an <strong>interval</strong> of the real line, which is &lt;em&gt;uncountably&lt;/em&gt; infinite. &quot;Countably infinite range&quot; is precisely the definition of a <strong>discrete</strong> random variable (like the integers), so statement D is the false one. A, B and C are all true of continuous variables.</p></div><div class=\"ml-vi\"><p>Biến ngẫu nhiên liên tục nhận giá trị trên một <strong>khoảng</strong> của trục số thực, tức vô hạn <strong>không đếm được</strong>. &quot;Miền giá trị vô hạn đếm được&quot; đúng là định nghĩa của biến ngẫu nhiên <strong>rời rạc</strong> (như tập số nguyên), nên phát biểu D là sai. A, B, C đều đúng với biến liên tục.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -346,7 +346,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>This is the textbook definition verbatim: *&quot;The <strong>probability distribution</strong> of a random variable $X$ is a description of the probabilities associated with the possible values of $X$.&quot;* The probability mass function $f(x) = P(X = x)$ is one particular *way* of giving that description (a table or a CDF are others), and the density function belongs to continuous variables — so the general term asked for is the probability distribution.</p></div><div class=\"ml-vi\"><p>Đây đúng nguyên văn định nghĩa trong giáo trình: *&quot;<strong>Phân phối xác suất</strong> của biến ngẫu nhiên $X$ là mô tả các xác suất gắn với những giá trị có thể của $X$.&quot;* Hàm khối xác suất $f(x) = P(X = x)$ chỉ là <strong>một cách</strong> để đưa ra mô tả đó (bảng hoặc hàm phân phối tích lũy là những cách khác), còn hàm mật độ thuộc về biến liên tục — nên thuật ngữ tổng quát được hỏi là phân phối xác suất.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>This is the textbook definition verbatim: &lt;em&gt;&quot;The <strong>probability distribution</strong> of a random variable $X$ is a description of the probabilities associated with the possible values of $X$.&quot;&lt;/em&gt; The probability mass function $f(x) = P(X = x)$ is one particular &lt;em&gt;way&lt;/em&gt; of giving that description (a table or a CDF are others), and the density function belongs to continuous variables — so the general term asked for is the probability distribution.</p></div><div class=\"ml-vi\"><p>Đây đúng nguyên văn định nghĩa trong giáo trình: &lt;em&gt;&quot;<strong>Phân phối xác suất</strong> của biến ngẫu nhiên $X$ là mô tả các xác suất gắn với những giá trị có thể của $X$.&quot;&lt;/em&gt; Hàm khối xác suất $f(x) = P(X = x)$ chỉ là <strong>một cách</strong> để đưa ra mô tả đó (bảng hoặc hàm phân phối tích lũy là những cách khác), còn hàm mật độ thuộc về biến liên tục — nên thuật ngữ tổng quát được hỏi là phân phối xác suất.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -559,7 +559,7 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>For an exponential distribution with mean $\\mu = 3.4$, the rate is $\\lambda = 1/3.4$ and the CDF is $F(x) = 1 - e^{-x/3.4}$. Hence<br/>$$P(X < 1) = 1 - e^{-1/3.4} = 1 - e^{-0.29412} = 1 - 0.745189 = 0.254811$$<br/>(0.745189 is the *survival* probability $P(X > 1)$ — the complement.)</p></div><div class=\"ml-vi\"><p>Với phân phối mũ trung bình $\\mu = 3.4$, tham số tốc độ là $\\lambda = 1/3.4$ và hàm phân phối tích lũy là $F(x) = 1 - e^{-x/3.4}$. Do đó<br/>$$P(X < 1) = 1 - e^{-1/3.4} = 1 - e^{-0.29412} = 1 - 0.745189 = 0.254811$$<br/>(0.745189 là xác suất *sống sót* $P(X > 1)$ — phần bù.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>For an exponential distribution with mean $\\mu = 3.4$, the rate is $\\lambda = 1/3.4$ and the CDF is $F(x) = 1 - e^{-x/3.4}$. Hence<br/>$$P(X < 1) = 1 - e^{-1/3.4} = 1 - e^{-0.29412} = 1 - 0.745189 = 0.254811$$<br/>(0.745189 is the &lt;em&gt;survival&lt;/em&gt; probability $P(X > 1)$ — the complement.)</p></div><div class=\"ml-vi\"><p>Với phân phối mũ trung bình $\\mu = 3.4$, tham số tốc độ là $\\lambda = 1/3.4$ và hàm phân phối tích lũy là $F(x) = 1 - e^{-x/3.4}$. Do đó<br/>$$P(X < 1) = 1 - e^{-1/3.4} = 1 - e^{-0.29412} = 1 - 0.745189 = 0.254811$$<br/>(0.745189 là xác suất &lt;em&gt;sống sót&lt;/em&gt; $P(X > 1)$ — phần bù.)</p></div>"
         },
         {
           "kind": "MCQ",
@@ -829,7 +829,7 @@ export default {
           "correctIndexes": [
             4
           ],
-          "explanation": "<div class=\"ml-en\"><p>In a stem-and-leaf plot the largest observation sits on the <strong>last stem that has a leaf</strong>. Stem 8 is empty; stem 9 carries the single leaf 3, so the maximum is $9\\,|\\,3 = 93$. (32 is the *minimum*, 49 the largest value on stem 4, 66 the largest on stem 6.)</p></div><div class=\"ml-vi\"><p>Trong biểu đồ thân–lá, quan sát lớn nhất nằm ở <strong>thân cuối cùng còn có lá</strong>. Thân 8 rỗng; thân 9 có đúng một lá là 3, nên giá trị lớn nhất là $9\\,|\\,3 = 93$. (32 là giá trị *nhỏ nhất*, 49 là giá trị lớn nhất ở thân 4, 66 là lớn nhất ở thân 6.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>In a stem-and-leaf plot the largest observation sits on the <strong>last stem that has a leaf</strong>. Stem 8 is empty; stem 9 carries the single leaf 3, so the maximum is $9\\,|\\,3 = 93$. (32 is the &lt;em&gt;minimum&lt;/em&gt;, 49 the largest value on stem 4, 66 the largest on stem 6.)</p></div><div class=\"ml-vi\"><p>Trong biểu đồ thân–lá, quan sát lớn nhất nằm ở <strong>thân cuối cùng còn có lá</strong>. Thân 8 rỗng; thân 9 có đúng một lá là 3, nên giá trị lớn nhất là $9\\,|\\,3 = 93$. (32 là giá trị &lt;em&gt;nhỏ nhất&lt;/em&gt;, 49 là giá trị lớn nhất ở thân 4, 66 là lớn nhất ở thân 6.)</p></div>"
         },
         {
           "kind": "MCQ",
@@ -850,7 +850,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Count the values that land in each class.<br/><br/>$20 \\le x < 30$: <strong>26</strong> (row 1), <strong>26</strong> (row 2), <strong>27</strong> (row 4) $\\Rightarrow$ frequency <strong>3</strong>.<br/><br/>$50 \\le x < 60$: <strong>56</strong> (row 1), <strong>53</strong> (row 2), <strong>58</strong> and <strong>57</strong> (row 5) $\\Rightarrow$ frequency <strong>4</strong>. Note 60 in row 4 is *excluded* because the class is open at the right end.<br/><br/>Since $4 > 3$, the interval $50 \\le x < 60$ has the higher frequency — statement (i).</p></div><div class=\"ml-vi\"><p>Đếm số giá trị rơi vào mỗi lớp.<br/><br/>$20 \\le x < 30$: <strong>26</strong> (hàng 1), <strong>26</strong> (hàng 2), <strong>27</strong> (hàng 4) $\\Rightarrow$ tần số <strong>3</strong>.<br/><br/>$50 \\le x < 60$: <strong>56</strong> (hàng 1), <strong>53</strong> (hàng 2), <strong>58</strong> và <strong>57</strong> (hàng 5) $\\Rightarrow$ tần số <strong>4</strong>. Lưu ý số 60 ở hàng 4 <strong>không</strong> được tính vì lớp hở ở đầu phải.<br/><br/>Vì $4 > 3$ nên khoảng $50 \\le x < 60$ có tần số cao hơn — phát biểu (i).</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Count the values that land in each class.<br/><br/>$20 \\le x < 30$: <strong>26</strong> (row 1), <strong>26</strong> (row 2), <strong>27</strong> (row 4) $\\Rightarrow$ frequency <strong>3</strong>.<br/><br/>$50 \\le x < 60$: <strong>56</strong> (row 1), <strong>53</strong> (row 2), <strong>58</strong> and <strong>57</strong> (row 5) $\\Rightarrow$ frequency <strong>4</strong>. Note 60 in row 4 is &lt;em&gt;excluded&lt;/em&gt; because the class is open at the right end.<br/><br/>Since $4 > 3$, the interval $50 \\le x < 60$ has the higher frequency — statement (i).</p></div><div class=\"ml-vi\"><p>Đếm số giá trị rơi vào mỗi lớp.<br/><br/>$20 \\le x < 30$: <strong>26</strong> (hàng 1), <strong>26</strong> (hàng 2), <strong>27</strong> (hàng 4) $\\Rightarrow$ tần số <strong>3</strong>.<br/><br/>$50 \\le x < 60$: <strong>56</strong> (hàng 1), <strong>53</strong> (hàng 2), <strong>58</strong> và <strong>57</strong> (hàng 5) $\\Rightarrow$ tần số <strong>4</strong>. Lưu ý số 60 ở hàng 4 <strong>không</strong> được tính vì lớp hở ở đầu phải.<br/><br/>Vì $4 > 3$ nên khoảng $50 \\le x < 60$ có tần số cao hơn — phát biểu (i).</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1312,7 +1312,7 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>$r$ ranges over $[-1, 1]$. The value $r = +1$ means every point lies exactly on a straight line with <strong>positive</strong> slope — a perfect positive linear relationship. $r = -1$ would be the perfect negative case (option C), while $r = 0$ corresponds to no linear relationship. A *horizontal* line (options A and E) would mean $y$ does not vary with $x$, which makes $r$ undefined, not 1.</p></div><div class=\"ml-vi\"><p>$r$ nhận giá trị trong $[-1, 1]$. Giá trị $r = +1$ nghĩa là mọi điểm nằm chính xác trên một đường thẳng có hệ số góc <strong>dương</strong> — quan hệ tuyến tính dương hoàn hảo. $r = -1$ mới là trường hợp âm hoàn hảo (phương án C), còn $r = 0$ ứng với không có quan hệ tuyến tính. Đường thẳng <strong>nằm ngang</strong> (phương án A và E) nghĩa là $y$ không đổi theo $x$, khi đó $r$ không xác định chứ không phải bằng 1.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$r$ ranges over $[-1, 1]$. The value $r = +1$ means every point lies exactly on a straight line with <strong>positive</strong> slope — a perfect positive linear relationship. $r = -1$ would be the perfect negative case (option C), while $r = 0$ corresponds to no linear relationship. A &lt;em&gt;horizontal&lt;/em&gt; line (options A and E) would mean $y$ does not vary with $x$, which makes $r$ undefined, not 1.</p></div><div class=\"ml-vi\"><p>$r$ nhận giá trị trong $[-1, 1]$. Giá trị $r = +1$ nghĩa là mọi điểm nằm chính xác trên một đường thẳng có hệ số góc <strong>dương</strong> — quan hệ tuyến tính dương hoàn hảo. $r = -1$ mới là trường hợp âm hoàn hảo (phương án C), còn $r = 0$ ứng với không có quan hệ tuyến tính. Đường thẳng <strong>nằm ngang</strong> (phương án A và E) nghĩa là $y$ không đổi theo $x$, khi đó $r$ không xác định chứ không phải bằng 1.</p></div>"
         }
       ]
     }

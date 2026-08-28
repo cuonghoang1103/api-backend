@@ -169,7 +169,7 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>Let $M$ = male, $J$ = has an off-campus job. The two events are NOT mutually exclusive ($P(M \\cap J) = 0.15 <br/>eq 0$), so use the general addition rule:<br/>$$P(M \\cup J) = P(M) + P(J) - P(M \\cap J) = 0.45 + 0.33 - 0.15 = 0.63.$$<br/>Simply adding $0.45 + 0.33 = 0.78$ would double-count the overlap.</p></div><div class=\"ml-vi\"><p>Đặt $M$ = nam, $J$ = có việc ngoài trường. Hai biến cố KHÔNG xung khắc ($P(M \\cap J) = 0{,}15 <br/>eq 0$) nên dùng công thức cộng tổng quát:<br/>$$P(M \\cup J) = P(M) + P(J) - P(M \\cap J) = 0{,}45 + 0{,}33 - 0{,}15 = 0{,}63.$$<br/>Nếu chỉ cộng $0{,}45 + 0{,}33 = 0{,}78$ thì phần giao bị đếm hai lần.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Let $M$ = male, $J$ = has an off-campus job. The two events are NOT mutually exclusive ($P(M \\cap J) = 0.15 \\neq 0$), so use the general addition rule:<br/>$$P(M \\cup J) = P(M) + P(J) - P(M \\cap J) = 0.45 + 0.33 - 0.15 = 0.63.$$<br/>Simply adding $0.45 + 0.33 = 0.78$ would double-count the overlap.</p></div><div class=\"ml-vi\"><p>Đặt $M$ = nam, $J$ = có việc ngoài trường. Hai biến cố KHÔNG xung khắc ($P(M \\cap J) = 0{,}15 \\neq 0$) nên dùng công thức cộng tổng quát:<br/>$$P(M \\cup J) = P(M) + P(J) - P(M \\cap J) = 0{,}45 + 0{,}33 - 0{,}15 = 0{,}63.$$<br/>Nếu chỉ cộng $0{,}45 + 0{,}33 = 0{,}78$ thì phần giao bị đếm hai lần.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -250,7 +250,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>From the addition rule, $P(A) + P(B) = P(A \\cup B) + P(A \\cap B) = 0.75 + 0.25 = 1$. Independence gives $P(A)P(B) = P(A \\cap B) = 0.25$. So $P(A)$ and $P(B)$ are the roots of $t^2 - t + 0.25 = 0$, i.e. $(t - 0.5)^2 = 0$, giving the double root $t = 0.5$. Hence $P(A) = P(B) = 1/2$. (Check the other options: B gives sum $13/12 <br/>eq 1$; C gives product $1/4$ but sum $61/60 <br/>eq 1$; D gives sum $1.05 <br/>eq 1$.)</p></div><div class=\"ml-vi\"><p>Từ công thức cộng: $P(A) + P(B) = P(A \\cup B) + P(A \\cap B) = 0{,}75 + 0{,}25 = 1$. Tính độc lập cho $P(A)P(B) = P(A \\cap B) = 0{,}25$. Vậy $P(A)$, $P(B)$ là nghiệm của $t^2 - t + 0{,}25 = 0$, tức $(t - 0{,}5)^2 = 0$, nghiệm kép $t = 0{,}5$. Do đó $P(A) = P(B) = 1/2$. (Kiểm các đáp án khác: B có tổng $13/12 <br/>eq 1$; C có tích $1/4$ nhưng tổng $61/60 <br/>eq 1$; D có tổng $1{,}05 <br/>eq 1$.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>From the addition rule, $P(A) + P(B) = P(A \\cup B) + P(A \\cap B) = 0.75 + 0.25 = 1$. Independence gives $P(A)P(B) = P(A \\cap B) = 0.25$. So $P(A)$ and $P(B)$ are the roots of $t^2 - t + 0.25 = 0$, i.e. $(t - 0.5)^2 = 0$, giving the double root $t = 0.5$. Hence $P(A) = P(B) = 1/2$. (Check the other options: B gives sum $13/12 \\neq 1$; C gives product $1/4$ but sum $61/60 \\neq 1$; D gives sum $1.05 \\neq 1$.)</p></div><div class=\"ml-vi\"><p>Từ công thức cộng: $P(A) + P(B) = P(A \\cup B) + P(A \\cap B) = 0{,}75 + 0{,}25 = 1$. Tính độc lập cho $P(A)P(B) = P(A \\cap B) = 0{,}25$. Vậy $P(A)$, $P(B)$ là nghiệm của $t^2 - t + 0{,}25 = 0$, tức $(t - 0{,}5)^2 = 0$, nghiệm kép $t = 0{,}5$. Do đó $P(A) = P(B) = 1/2$. (Kiểm các đáp án khác: B có tổng $13/12 \\neq 1$; C có tích $1/4$ nhưng tổng $61/60 \\neq 1$; D có tổng $1{,}05 \\neq 1$.)</p></div>"
         },
         {
           "kind": "MCQ",

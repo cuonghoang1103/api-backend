@@ -15,7 +15,7 @@ export default {
       "source": "FUOverflow",
       "shuffleQuestions": false,
       "shuffleOptions": false,
-      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Final Exam</b> paper for <b>Mathematics for Engineering</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>Mathematics for Engineering</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
+      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Final Exam</b> paper for <b>Calculus 1</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>Calculus 1</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
       "isPublished": true,
       "questions": [
         {
@@ -864,7 +864,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Use the Trapezoidal Rule with $n=6$ steps to approximate $\\int_1^4 f(x)\\,dx$, given the table: $x$: 1, 1.5, 2, 2.5, 3, 3.5, [4 — cut off]; $f(x)$: 2, 6, 4, 8, 2, 5, [cut off].</p></div><div class=\"ml-vi\"><p>Dùng quy tắc hình thang với $n=6$ bước để tính gần đúng $\\int_1^4 f(x)\\,dx$, cho bảng: $x$: 1, 1.5, 2, 2.5, 3, 3.5, [4 — bị cắt]; $f(x)$: 2, 6, 4, 8, 2, 5, [bị cắt].</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Use the Trapezoidal Rule with $n=6$ steps to approximate $\\int_1^4 f(x)\\,dx$, given the table: $x$: 1, 1.5, 2, 2.5, 3, 3.5, 4; $f(x)$: 2, 6, 4, 8, 2, 5, 9.</p></div><div class=\"ml-vi\"><p>Dùng quy tắc hình thang với $n=6$ bước để tính gần đúng $\\int_1^4 f(x)\\,dx$, cho bảng: $x$: 1, 1.5, 2, 2.5, 3, 3.5, 4; $f(x)$: 2, 6, 4, 8, 2, 5, 9.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D28/q33.png",
           "options": [
             {
@@ -887,9 +887,9 @@ export default {
             }
           ],
           "correctIndexes": [
-            1
+            5
           ],
-          "explanation": "<div class=\"ml-en\"><p>The table&#39;s last column ($x=4$, $f(4)$) is still cut off in the corrected source crop (table ends at $x=3.5$, $f=5$) — re-checked against the re-cropped image, genuinely absent, not a display artifact. With $h=0.5$: $T=\\frac{h}{2}[f(1)+2(f(1.5)+f(2)+f(2.5)+f(3)+f(3.5))+f(4)] = 0.25[2+2(6+4+8+2+5)+f(4)]=0.25[52+f(4)]$. Assuming $f(4)=2$ (extending the visible pattern) gives $T=13.5$; this remains a low-confidence guess since $f(4)$ is unknown.</p></div><div class=\"ml-vi\"><p>Cột cuối của bảng ($x=4$, $f(4)$) vẫn bị cắt trong ảnh đã sửa (bảng kết thúc ở $x=3.5$, $f=5$) — đã kiểm lại với ảnh cắt lại, thực sự bị thiếu, không phải lỗi hiển thị. Với $h=0.5$: $T=\\frac{h}{2}[f(1)+2(f(1.5)+f(2)+f(2.5)+f(3)+f(3.5))+f(4)] = 0.25[2+2(6+4+8+2+5)+f(4)]=0.25[52+f(4)]$. Giả định $f(4)=2$ (nối tiếp xu hướng đã thấy) cho $T=13.5$; đây vẫn là phỏng đoán độ tin cậy thấp vì không biết $f(4)$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The last column of the table ($x=4$) was cut off in this deck&#39;s screenshot, but the identical table (with $f(4)=9$) appears uncropped in four other decks with this same question (FE12 n=23, FE18 n=23, FE21 n=23, FE27 n=3, all conf=high), confirming $f(4)=9$. With $h=0.5$: $T=\\frac{h}{2}[f(1)+2(f(1.5)+f(2)+f(2.5)+f(3)+f(3.5))+f(4)] = 0.25[2+2(6+4+8+2+5)+9]=0.25[2+50+9]=0.25(61)=15.25$, which is option F.</p></div><div class=\"ml-vi\"><p>Cột cuối của bảng ($x=4$) bị cắt trong ảnh chụp của đề này, nhưng bảng giống hệt (với $f(4)=9$) xuất hiện đầy đủ không bị cắt ở bốn đề khác dùng cùng câu hỏi (FE12 câu 23, FE18 câu 23, FE21 câu 23, FE27 câu 3, đều conf=high), xác nhận $f(4)=9$. Với $h=0.5$: $T=\\frac{h}{2}[f(1)+2(f(1.5)+f(2)+f(2.5)+f(3)+f(3.5))+f(4)] = 0.25[2+2(6+4+8+2+5)+9]=0.25[2+50+9]=0.25(61)=15.25$, là đáp án F.</p></div>"
         },
         {
           "kind": "MCQ",

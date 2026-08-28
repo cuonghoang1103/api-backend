@@ -40,7 +40,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\"><p>Collecting and summarizing data about the whole group of interest (all employees of the firm), without drawing any conclusion about a larger population, is exactly <strong>descriptive statistics</strong>. Inferential statistics would require generalizing from a sample to a population. A *parameter* is a numeric summary of a population and a *statistic* is a numeric summary of a sample — neither describes the activity of collecting/summarizing.</p></div><div class=\"ml-vi\"><p>Thu thập và tóm tắt dữ liệu của chính nhóm quan tâm (toàn bộ nhân viên công ty), không suy rộng ra tổng thể lớn hơn, chính là <strong>thống kê mô tả</strong>. Thống kê suy diễn phải suy từ mẫu ra tổng thể. *Parameter* là số đặc trưng của tổng thể, *statistic* là số đặc trưng của mẫu — cả hai đều không mô tả hoạt động thu thập/tóm tắt.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Collecting and summarizing data about the whole group of interest (all employees of the firm), without drawing any conclusion about a larger population, is exactly <strong>descriptive statistics</strong>. Inferential statistics would require generalizing from a sample to a population. A &lt;em&gt;parameter&lt;/em&gt; is a numeric summary of a population and a &lt;em&gt;statistic&lt;/em&gt; is a numeric summary of a sample — neither describes the activity of collecting/summarizing.</p></div><div class=\"ml-vi\"><p>Thu thập và tóm tắt dữ liệu của chính nhóm quan tâm (toàn bộ nhân viên công ty), không suy rộng ra tổng thể lớn hơn, chính là <strong>thống kê mô tả</strong>. Thống kê suy diễn phải suy từ mẫu ra tổng thể. &lt;em&gt;Parameter&lt;/em&gt; là số đặc trưng của tổng thể, &lt;em&gt;statistic&lt;/em&gt; là số đặc trưng của mẫu — cả hai đều không mô tả hoạt động thu thập/tóm tắt.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -241,7 +241,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Independence requires $P(C \\cap D) = P(C)P(D)$. Here $P(C)P(D) = 0.5 \\times 0.2 = 0.10 <br/>e 0.11 = P(C \\cap D)$, so the events are <strong>not</strong> independent.</p></div><div class=\"ml-vi\"><p>Độc lập đòi hỏi $P(C \\cap D) = P(C)P(D)$. Ở đây $P(C)P(D) = 0{,}5 \\times 0{,}2 = 0{,}10 <br/>e 0{,}11 = P(C \\cap D)$, nên hai biến cố <strong>không</strong> độc lập.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Independence requires $P(C \\cap D) = P(C)P(D)$. Here $P(C)P(D) = 0.5 \\times 0.2 = 0.10 \\ne 0.11 = P(C \\cap D)$, so the events are <strong>not</strong> independent.</p></div><div class=\"ml-vi\"><p>Độc lập đòi hỏi $P(C \\cap D) = P(C)P(D)$. Ở đây $P(C)P(D) = 0{,}5 \\times 0{,}2 = 0{,}10 \\ne 0{,}11 = P(C \\cap D)$, nên hai biến cố <strong>không</strong> độc lập.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1026,7 +1026,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A manufacturer of a certain brand of rice cereal claims that the average saturated fat content does not exceed 1.6 grams. State the null and alternative hypotheses to be used in testing this claim. (i) $H_0: \\mu = 1.6$, $H_1: \\mu <br/>e 1.6$. (ii) $H_0: \\mu = 1.6$, $H_1: \\mu < 1.6$. (iii) $H_0: \\mu = 1.6$, $H_1: \\mu > 1.6$. (iv) $H_0: \\mu > 1.6$, $H_1: \\mu = 1.6$.</p></div><div class=\"ml-vi\"><p>Nhà sản xuất một loại ngũ cốc gạo tuyên bố hàm lượng chất béo bão hoà trung bình không vượt quá 1,6 gam. Hãy phát biểu giả thuyết không và giả thuyết đối để kiểm định tuyên bố này. (i) $H_0: \\mu = 1{,}6$, $H_1: \\mu <br/>e 1{,}6$. (ii) $H_0: \\mu = 1{,}6$, $H_1: \\mu < 1{,}6$. (iii) $H_0: \\mu = 1{,}6$, $H_1: \\mu > 1{,}6$. (iv) $H_0: \\mu > 1{,}6$, $H_1: \\mu = 1{,}6$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A manufacturer of a certain brand of rice cereal claims that the average saturated fat content does not exceed 1.6 grams. State the null and alternative hypotheses to be used in testing this claim. (i) $H_0: \\mu = 1.6$, $H_1: \\mu \\ne 1.6$. (ii) $H_0: \\mu = 1.6$, $H_1: \\mu < 1.6$. (iii) $H_0: \\mu = 1.6$, $H_1: \\mu > 1.6$. (iv) $H_0: \\mu > 1.6$, $H_1: \\mu = 1.6$.</p></div><div class=\"ml-vi\"><p>Nhà sản xuất một loại ngũ cốc gạo tuyên bố hàm lượng chất béo bão hoà trung bình không vượt quá 1,6 gam. Hãy phát biểu giả thuyết không và giả thuyết đối để kiểm định tuyên bố này. (i) $H_0: \\mu = 1{,}6$, $H_1: \\mu \\ne 1{,}6$. (ii) $H_0: \\mu = 1{,}6$, $H_1: \\mu < 1{,}6$. (iii) $H_0: \\mu = 1{,}6$, $H_1: \\mu > 1{,}6$. (iv) $H_0: \\mu > 1{,}6$, $H_1: \\mu = 1{,}6$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D2/q40.png",
           "options": [
             {
@@ -1069,7 +1069,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>By definition the critical value marks the boundary of the rejection region. B is wrong ($z_{0.05} = 1.645 <br/>e 0$); C is wrong because the critical value is a quantile determined by $\\alpha$; D is wrong because at $\\alpha = 0.05$ a one-tailed test uses $1.645$ while a two-tailed test uses $\\pm 1.96$.</p></div><div class=\"ml-vi\"><p>Theo định nghĩa, giá trị tới hạn là ranh giới của miền bác bỏ. B sai ($z_{0{,}05} = 1{,}645 <br/>e 0$); C sai vì giá trị tới hạn là phân vị được xác định bởi $\\alpha$; D sai vì ở $\\alpha = 0{,}05$, kiểm định một phía dùng $1{,}645$ còn hai phía dùng $\\pm 1{,}96$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>By definition the critical value marks the boundary of the rejection region. B is wrong ($z_{0.05} = 1.645 \\ne 0$); C is wrong because the critical value is a quantile determined by $\\alpha$; D is wrong because at $\\alpha = 0.05$ a one-tailed test uses $1.645$ while a two-tailed test uses $\\pm 1.96$.</p></div><div class=\"ml-vi\"><p>Theo định nghĩa, giá trị tới hạn là ranh giới của miền bác bỏ. B sai ($z_{0{,}05} = 1{,}645 \\ne 0$); C sai vì giá trị tới hạn là phân vị được xác định bởi $\\alpha$; D sai vì ở $\\alpha = 0{,}05$, kiểm định một phía dùng $1{,}645$ còn hai phía dùng $\\pm 1{,}96$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1098,7 +1098,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Which of the following is a two-sided alternative hypothesis? (i) $H_0: p=p_0$; $H_1: p>p_0$. (ii) $H_0: p <br/>e p_0$; $H_1: p = p_0$. (iii) $H_0: p=p_0$; $H_1: p <br/>e p_0$. (iv) $H_0: p>p_0$; $H_1: p<p_0$.</p></div><div class=\"ml-vi\"><p>Trường hợp nào sau đây là đối thuyết hai phía? (i) $H_0: p=p_0$; $H_1: p>p_0$. (ii) $H_0: p <br/>e p_0$; $H_1: p = p_0$. (iii) $H_0: p=p_0$; $H_1: p <br/>e p_0$. (iv) $H_0: p>p_0$; $H_1: p<p_0$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Which of the following is a two-sided alternative hypothesis? (i) $H_0: p=p_0$; $H_1: p>p_0$. (ii) $H_0: p \\ne p_0$; $H_1: p = p_0$. (iii) $H_0: p=p_0$; $H_1: p \\ne p_0$. (iv) $H_0: p>p_0$; $H_1: p<p_0$.</p></div><div class=\"ml-vi\"><p>Trường hợp nào sau đây là đối thuyết hai phía? (i) $H_0: p=p_0$; $H_1: p>p_0$. (ii) $H_0: p \\ne p_0$; $H_1: p = p_0$. (iii) $H_0: p=p_0$; $H_1: p \\ne p_0$. (iv) $H_0: p>p_0$; $H_1: p<p_0$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D2/q43.png",
           "options": [
             {
@@ -1120,7 +1120,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\"><p>A two-sided (two-tailed) alternative is one of the form $H_1: p <br/>e p_0$, paired with the equality null $H_0: p = p_0$. That is exactly (iii). (i) and (iv) are one-sided, and (ii) is invalid because $H_0$ must contain the equality.</p></div><div class=\"ml-vi\"><p>Đối thuyết hai phía có dạng $H_1: p <br/>e p_0$, đi kèm giả thuyết không chứa dấu bằng $H_0: p = p_0$. Đó chính là (iii). (i) và (iv) là một phía, còn (ii) không hợp lệ vì $H_0$ phải chứa dấu bằng.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>A two-sided (two-tailed) alternative is one of the form $H_1: p \\ne p_0$, paired with the equality null $H_0: p = p_0$. That is exactly (iii). (i) and (iv) are one-sided, and (ii) is invalid because $H_0$ must contain the equality.</p></div><div class=\"ml-vi\"><p>Đối thuyết hai phía có dạng $H_1: p \\ne p_0$, đi kèm giả thuyết không chứa dấu bằng $H_0: p = p_0$. Đó chính là (iii). (i) và (iv) là một phía, còn (ii) không hợp lệ vì $H_0$ phải chứa dấu bằng.</p></div>"
         },
         {
           "kind": "MCQ",

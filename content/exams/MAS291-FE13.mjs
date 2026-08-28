@@ -1071,7 +1071,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Suppose you want to test the claim that $\\mu <br/>eq 3.5$. Given a sample size of $n = 41$ and a level of significance of $\\alpha = 0.10$, when should you reject $H_0$? Let $z_{0.025} = 1.96$, $z_{0.005} = 2.575$, $z_{0.05} = 1.645$, $z_{0.01} = 2.33$.</p></div><div class=\"ml-vi\"><p>Giả sử bạn muốn kiểm định giả thuyết $\\mu <br/>eq 3.5$. Với cỡ mẫu $n = 41$ và mức ý nghĩa $\\alpha = 0.10$, khi nào bạn bác bỏ $H_0$? Cho $z_{0.025} = 1.96$, $z_{0.005} = 2.575$, $z_{0.05} = 1.645$, $z_{0.01} = 2.33$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose you want to test the claim that $\\mu \\neq 3.5$. Given a sample size of $n = 41$ and a level of significance of $\\alpha = 0.10$, when should you reject $H_0$? Let $z_{0.025} = 1.96$, $z_{0.005} = 2.575$, $z_{0.05} = 1.645$, $z_{0.01} = 2.33$.</p></div><div class=\"ml-vi\"><p>Giả sử bạn muốn kiểm định giả thuyết $\\mu \\neq 3.5$. Với cỡ mẫu $n = 41$ và mức ý nghĩa $\\alpha = 0.10$, khi nào bạn bác bỏ $H_0$? Cho $z_{0.025} = 1.96$, $z_{0.005} = 2.575$, $z_{0.05} = 1.645$, $z_{0.01} = 2.33$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D13/q41.png",
           "options": [
             {
@@ -1093,7 +1093,7 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>$H_a: \\mu <br/>eq 3.5$ makes this a two-tailed test, so $\\alpha$ is split: $\\alpha/2 = 0.05$ in each tail. With $n = 41 > 30$ the z test applies, and the critical values are $\\pm z_{0.05} = \\pm 1.645$. Reject $H_0$ if $z > 1.645$ or $z < -1.645$.</p></div><div class=\"ml-vi\"><p>$H_a: \\mu <br/>eq 3.5$ nên đây là kiểm định hai phía, $\\alpha$ chia đôi: mỗi đuôi $\\alpha/2 = 0.05$. Với $n = 41 > 30$ dùng kiểm định z, giá trị tới hạn là $\\pm z_{0.05} = \\pm 1.645$. Bác bỏ $H_0$ nếu $z > 1.645$ hoặc $z < -1.645$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$H_a: \\mu \\neq 3.5$ makes this a two-tailed test, so $\\alpha$ is split: $\\alpha/2 = 0.05$ in each tail. With $n = 41 > 30$ the z test applies, and the critical values are $\\pm z_{0.05} = \\pm 1.645$. Reject $H_0$ if $z > 1.645$ or $z < -1.645$.</p></div><div class=\"ml-vi\"><p>$H_a: \\mu \\neq 3.5$ nên đây là kiểm định hai phía, $\\alpha$ chia đôi: mỗi đuôi $\\alpha/2 = 0.05$. Với $n = 41 > 30$ dùng kiểm định z, giá trị tới hạn là $\\pm z_{0.05} = \\pm 1.645$. Bác bỏ $H_0$ nếu $z > 1.645$ hoặc $z < -1.645$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1281,7 +1281,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A random sample of 50 observations was made on the diameter of spot welds and the corresponding weld shear strength. Given that the sample correlation coefficient is 0.7. Test the hypothesis that $H_0: \\rho = 0$, $H_1: \\rho <br/>eq 0$ at the 0.05 level of significance. Let $t_{0.025,48} = 2.01$. Which statement is correct? (i) $t_0 = 6.79$, reject $H_0$. (ii) $t_0 = 6.79$, fail to reject $H_0$. (iii) $t_0 = 8.85$, reject $H_0$. (iv) $t_0 = 8.85$, fail to reject $H_0$.</p></div><div class=\"ml-vi\"><p>Một mẫu ngẫu nhiên 50 quan sát được thực hiện trên đường kính mối hàn điểm và độ bền cắt tương ứng của mối hàn. Cho biết hệ số tương quan mẫu là 0.7. Hãy kiểm định giả thuyết $H_0: \\rho = 0$, $H_1: \\rho <br/>eq 0$ ở mức ý nghĩa 0.05. Cho $t_{0.025,48} = 2.01$. Phát biểu nào đúng? (i) $t_0 = 6.79$, bác bỏ $H_0$. (ii) $t_0 = 6.79$, không bác bỏ $H_0$. (iii) $t_0 = 8.85$, bác bỏ $H_0$. (iv) $t_0 = 8.85$, không bác bỏ $H_0$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A random sample of 50 observations was made on the diameter of spot welds and the corresponding weld shear strength. Given that the sample correlation coefficient is 0.7. Test the hypothesis that $H_0: \\rho = 0$, $H_1: \\rho \\neq 0$ at the 0.05 level of significance. Let $t_{0.025,48} = 2.01$. Which statement is correct? (i) $t_0 = 6.79$, reject $H_0$. (ii) $t_0 = 6.79$, fail to reject $H_0$. (iii) $t_0 = 8.85$, reject $H_0$. (iv) $t_0 = 8.85$, fail to reject $H_0$.</p></div><div class=\"ml-vi\"><p>Một mẫu ngẫu nhiên 50 quan sát được thực hiện trên đường kính mối hàn điểm và độ bền cắt tương ứng của mối hàn. Cho biết hệ số tương quan mẫu là 0.7. Hãy kiểm định giả thuyết $H_0: \\rho = 0$, $H_1: \\rho \\neq 0$ ở mức ý nghĩa 0.05. Cho $t_{0.025,48} = 2.01$. Phát biểu nào đúng? (i) $t_0 = 6.79$, bác bỏ $H_0$. (ii) $t_0 = 6.79$, không bác bỏ $H_0$. (iii) $t_0 = 8.85$, bác bỏ $H_0$. (iv) $t_0 = 8.85$, không bác bỏ $H_0$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D13/q49.png",
           "options": [
             {

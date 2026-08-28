@@ -729,7 +729,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The heat evolved in calories per gram of a cement mixture is approximately normally distributed. The mean is thought to be 100 and the standard deviation is 2. We wish to test $H_0:\\mu=100$ versus $H_1:\\mu<br/>e100$ with a sample of $n=16$. If the acceptance region is defined as $98.5\\le\\bar x\\le101.5$, find the type I error probability $\\alpha$.<br/>Let $P(Z\\le-3)=0.00135$; $P(Z\\le3)=0.99865$.</p></div><div class=\"ml-vi\"><p>Nhiệt lượng toả ra (calo/gam) của một hỗn hợp xi măng xấp xỉ phân phối chuẩn. Trung bình được cho là 100 và độ lệch chuẩn là 2. Ta muốn kiểm định $H_0:\\mu=100$ với $H_1:\\mu<br/>e100$ bằng một mẫu $n=16$. Nếu miền chấp nhận được định nghĩa là $98{,}5\\le\\bar x\\le101{,}5$, hãy tìm xác suất sai lầm loại I $\\alpha$.<br/>Cho $P(Z\\le-3)=0{,}00135$; $P(Z\\le3)=0{,}99865$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The heat evolved in calories per gram of a cement mixture is approximately normally distributed. The mean is thought to be 100 and the standard deviation is 2. We wish to test $H_0:\\mu=100$ versus $H_1:\\mu\\ne100$ with a sample of $n=16$. If the acceptance region is defined as $98.5\\le\\bar x\\le101.5$, find the type I error probability $\\alpha$.<br/>Let $P(Z\\le-3)=0.00135$; $P(Z\\le3)=0.99865$.</p></div><div class=\"ml-vi\"><p>Nhiệt lượng toả ra (calo/gam) của một hỗn hợp xi măng xấp xỉ phân phối chuẩn. Trung bình được cho là 100 và độ lệch chuẩn là 2. Ta muốn kiểm định $H_0:\\mu=100$ với $H_1:\\mu\\ne100$ bằng một mẫu $n=16$. Nếu miền chấp nhận được định nghĩa là $98{,}5\\le\\bar x\\le101{,}5$, hãy tìm xác suất sai lầm loại I $\\alpha$.<br/>Cho $P(Z\\le-3)=0{,}00135$; $P(Z\\le3)=0{,}99865$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q28.png",
           "options": [
             {
@@ -933,7 +933,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Suppose that 1000 customers are surveyed and 910 are satisfied or very satisfied with a corporation&#39;s products and services. Compute the p-value when testing the hypothesis $H_0: p = 0.90$ against $H_1: p <br/>e 0.90$ at $\\alpha = 0.01$.<br/>Let $P(Z < 1.05) = 0.85$ and $P(Z < -1.05) = 0.15$.</p></div><div class=\"ml-vi\"><p>Giả sử khảo sát 1000 khách hàng và 910 người hài lòng hoặc rất hài lòng với sản phẩm và dịch vụ của một công ty. Hãy tính giá trị p khi kiểm định giả thuyết $H_0: p = 0{,}90$ với $H_1: p <br/>e 0{,}90$ ở mức $\\alpha = 0{,}01$.<br/>Cho $P(Z < 1{,}05) = 0{,}85$ và $P(Z < -1{,}05) = 0{,}15$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose that 1000 customers are surveyed and 910 are satisfied or very satisfied with a corporation&#39;s products and services. Compute the p-value when testing the hypothesis $H_0: p = 0.90$ against $H_1: p \\ne 0.90$ at $\\alpha = 0.01$.<br/>Let $P(Z < 1.05) = 0.85$ and $P(Z < -1.05) = 0.15$.</p></div><div class=\"ml-vi\"><p>Giả sử khảo sát 1000 khách hàng và 910 người hài lòng hoặc rất hài lòng với sản phẩm và dịch vụ của một công ty. Hãy tính giá trị p khi kiểm định giả thuyết $H_0: p = 0{,}90$ với $H_1: p \\ne 0{,}90$ ở mức $\\alpha = 0{,}01$.<br/>Cho $P(Z < 1{,}05) = 0{,}85$ và $P(Z < -1{,}05) = 0{,}15$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q36.png",
           "options": [
             {
@@ -1033,7 +1033,7 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>The addition rule (the events are NOT mutually exclusive, since $P(M\\cap J)=0.15<br/>e0$):<br/>$$P(M\\cup J)=P(M)+P(J)-P(M\\cap J)=0.45+0.33-0.15=0.63.$$<br/>(0.93 is the trap of forgetting to subtract the overlap: note it would exceed the correct value by exactly $2\\times0.15$.)</p></div><div class=\"ml-vi\"><p>Quy tắc cộng (hai biến cố KHÔNG xung khắc vì $P(M\\cap J)=0{,}15<br/>e0$):<br/>$$P(M\\cup J)=P(M)+P(J)-P(M\\cap J)=0{,}45+0{,}33-0{,}15=0{,}63.$$<br/>(0,93 là bẫy quên trừ phần giao — nó vượt giá trị đúng đúng bằng $2\\times0{,}15$.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The addition rule (the events are NOT mutually exclusive, since $P(M\\cap J)=0.15\\ne0$):<br/>$$P(M\\cup J)=P(M)+P(J)-P(M\\cap J)=0.45+0.33-0.15=0.63.$$<br/>(0.93 is the trap of forgetting to subtract the overlap: note it would exceed the correct value by exactly $2\\times0.15$.)</p></div><div class=\"ml-vi\"><p>Quy tắc cộng (hai biến cố KHÔNG xung khắc vì $P(M\\cap J)=0{,}15\\ne0$):<br/>$$P(M\\cup J)=P(M)+P(J)-P(M\\cap J)=0{,}45+0{,}33-0{,}15=0{,}63.$$<br/>(0,93 là bẫy quên trừ phần giao — nó vượt giá trị đúng đúng bằng $2\\times0{,}15$.)</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1065,7 +1065,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Consider the hypothesis test $H_0: p_1 = p_2$ against $H_1: p_1 <br/>e p_2$. Suppose that sample sizes $n_1 = 1000$ and $n_2 = 900$, and that $X_1 = 900$ and $X_2 = 720$. Compute the value of the test statistic.</p></div><div class=\"ml-vi\"><p>Xét kiểm định giả thuyết $H_0: p_1 = p_2$ với $H_1: p_1 <br/>e p_2$. Giả sử cỡ mẫu $n_1 = 1000$ và $n_2 = 900$, với $X_1 = 900$ và $X_2 = 720$. Hãy tính giá trị của thống kê kiểm định.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Consider the hypothesis test $H_0: p_1 = p_2$ against $H_1: p_1 \\ne p_2$. Suppose that sample sizes $n_1 = 1000$ and $n_2 = 900$, and that $X_1 = 900$ and $X_2 = 720$. Compute the value of the test statistic.</p></div><div class=\"ml-vi\"><p>Xét kiểm định giả thuyết $H_0: p_1 = p_2$ với $H_1: p_1 \\ne p_2$. Giả sử cỡ mẫu $n_1 = 1000$ và $n_2 = 900$, với $X_1 = 900$ và $X_2 = 720$. Hãy tính giá trị của thống kê kiểm định.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D23/q41.png",
           "options": [
             {

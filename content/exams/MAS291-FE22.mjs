@@ -705,7 +705,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Determine the critical value to test the claim about the population proportion $p <br/>e 0.325$, given $n = 42$ and $\\hat{p} = 0.247$. Use $\\alpha = 0.05$.<br/><br/>Let $z_{0.05} = 1.645$, $z_{0.025} = 1.96$, $z_{0.01} = 2.33$, $z_{0.005} = 2.575$.</p></div><div class=\"ml-vi\"><p>Xác định giá trị tới hạn để kiểm định khẳng định về tỷ lệ tổng thể $p <br/>e 0{,}325$, biết $n = 42$ và $\\hat{p} = 0{,}247$. Dùng $\\alpha = 0{,}05$.<br/><br/>Cho $z_{0,05} = 1{,}645$, $z_{0,025} = 1{,}96$, $z_{0,01} = 2{,}33$, $z_{0,005} = 2{,}575$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Determine the critical value to test the claim about the population proportion $p \\ne 0.325$, given $n = 42$ and $\\hat{p} = 0.247$. Use $\\alpha = 0.05$.<br/><br/>Let $z_{0.05} = 1.645$, $z_{0.025} = 1.96$, $z_{0.01} = 2.33$, $z_{0.005} = 2.575$.</p></div><div class=\"ml-vi\"><p>Xác định giá trị tới hạn để kiểm định khẳng định về tỷ lệ tổng thể $p \\ne 0{,}325$, biết $n = 42$ và $\\hat{p} = 0{,}247$. Dùng $\\alpha = 0{,}05$.<br/><br/>Cho $z_{0,05} = 1{,}645$, $z_{0,025} = 1{,}96$, $z_{0,01} = 2{,}33$, $z_{0,005} = 2{,}575$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D22/q28.png",
           "options": [
             {
@@ -727,7 +727,7 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>The alternative $p <br/>e 0.325$ makes this a TWO-TAILED test, so $\\alpha = 0.05$ is split into two tails of $0.025$ each. The critical values are $\\pm z_{\\alpha/2} = \\pm z_{0.025} = \\pm 1.96$. ($\\pm 1.645$ would be right only for a one-tailed test at $\\alpha = 0.05$.) Note $n$ and $\\hat{p}$ are not needed for the critical value — they are only used for the test statistic.</p></div><div class=\"ml-vi\"><p>Đối thuyết $p <br/>e 0{,}325$ khiến đây là kiểm định HAI PHÍA, nên $\\alpha = 0{,}05$ chia đôi thành hai đuôi mỗi đuôi $0{,}025$. Giá trị tới hạn là $\\pm z_{\\alpha/2} = \\pm z_{0,025} = \\pm 1{,}96$. ($\\pm 1{,}645$ chỉ đúng cho kiểm định một phía ở $\\alpha = 0{,}05$.) Lưu ý $n$ và $\\hat{p}$ không cần cho giá trị tới hạn — chúng chỉ dùng để tính thống kê kiểm định.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The alternative $p \\ne 0.325$ makes this a TWO-TAILED test, so $\\alpha = 0.05$ is split into two tails of $0.025$ each. The critical values are $\\pm z_{\\alpha/2} = \\pm z_{0.025} = \\pm 1.96$. ($\\pm 1.645$ would be right only for a one-tailed test at $\\alpha = 0.05$.) Note $n$ and $\\hat{p}$ are not needed for the critical value — they are only used for the test statistic.</p></div><div class=\"ml-vi\"><p>Đối thuyết $p \\ne 0{,}325$ khiến đây là kiểm định HAI PHÍA, nên $\\alpha = 0{,}05$ chia đôi thành hai đuôi mỗi đuôi $0{,}025$. Giá trị tới hạn là $\\pm z_{\\alpha/2} = \\pm z_{0,025} = \\pm 1{,}96$. ($\\pm 1{,}645$ chỉ đúng cho kiểm định một phía ở $\\alpha = 0{,}05$.) Lưu ý $n$ và $\\hat{p}$ không cần cho giá trị tới hạn — chúng chỉ dùng để tính thống kê kiểm định.</p></div>"
         },
         {
           "kind": "MCQ",

@@ -15,7 +15,7 @@ export default {
       "source": "FUOverflow",
       "shuffleQuestions": false,
       "shuffleOptions": false,
-      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Final Exam</b> paper for <b>Mathematics for Engineering</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>Mathematics for Engineering</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
+      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Final Exam</b> paper for <b>Calculus 1</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>Calculus 1</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
       "isPublished": true,
       "questions": [
         {
@@ -642,7 +642,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>How many solutions would a HOMOGENEOUS system of linear equations of 4 equations and [more unknowns than equations, e.g. 6 unknowns — text cut off in source] have?</p></div><div class=\"ml-vi\"><p>Một hệ phương trình tuyến tính THUẦN NHẤT với 4 phương trình và [nhiều ẩn hơn phương trình, ví dụ 6 ẩn — văn bản gốc bị cắt] sẽ có bao nhiêu nghiệm?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>How many solutions would a HOMOGENEOUS system of linear equations of 4 equations and more unknowns than equations (exact number of unknowns illegible — cut off in source) have?</p></div><div class=\"ml-vi\"><p>Một hệ phương trình tuyến tính THUẦN NHẤT với 4 phương trình và nhiều ẩn hơn số phương trình (số ẩn chính xác không đọc được — văn bản gốc bị cắt) sẽ có bao nhiêu nghiệm?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D32/q24.png",
           "options": [
             {
@@ -898,7 +898,7 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\"><p>At $x=-3$: left limit $=9-9=0$, and the middle piece gives $f(-3)=0$ — continuous. At $x=1$: middle piece gives $f(1)=1-9=-8$, but the right limit is $3(1)-2=1\\ne-8$ — discontinuous.</p></div><div class=\"ml-vi\"><p>Tại $x=-3$: giới hạn trái $=9-9=0$, khúc giữa cho $f(-3)=0$ — liên tục. Tại $x=1$: khúc giữa cho $f(1)=1-9=-8$, nhưng giới hạn phải là $3(1)-2=1\\ne-8$ — gián đoạn.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>At $x=-3$: left limit $=9-9=0$, and the middle piece gives $f(-3)=0$ — continuous. At $x=1$: middle piece gives $f(1)=1-9=-8$, but the right limit is $3(1)-2=1<br/>e-8$ — discontinuous.</p></div><div class=\"ml-vi\"><p>Tại $x=-3$: giới hạn trái $=9-9=0$, khúc giữa cho $f(-3)=0$ — liên tục. Tại $x=1$: khúc giữa cho $f(1)=1-9=-8$, nhưng giới hạn phải là $3(1)-2=1<br/>e-8$ — gián đoạn.</p></div>"
         },
         {
           "kind": "MCQ",

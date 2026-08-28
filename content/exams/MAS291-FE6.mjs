@@ -64,7 +64,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>This is the definition of an <strong>observational study</strong>: the researcher only records what happens, without intervening. In an *experiment* the researcher deliberately changes the input variables; a *retrospective* study uses historical records already on file.</p></div><div class=\"ml-vi\"><p>Đây đúng là định nghĩa của <strong>nghiên cứu quan sát</strong>: người nghiên cứu chỉ ghi nhận điều xảy ra, không can thiệp. Trong *thực nghiệm*, người nghiên cứu chủ động thay đổi biến đầu vào; nghiên cứu *hồi cứu* dùng số liệu lịch sử đã có sẵn.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>This is the definition of an <strong>observational study</strong>: the researcher only records what happens, without intervening. In an &lt;em&gt;experiment&lt;/em&gt; the researcher deliberately changes the input variables; a &lt;em&gt;retrospective&lt;/em&gt; study uses historical records already on file.</p></div><div class=\"ml-vi\"><p>Đây đúng là định nghĩa của <strong>nghiên cứu quan sát</strong>: người nghiên cứu chỉ ghi nhận điều xảy ra, không can thiệp. Trong &lt;em&gt;thực nghiệm&lt;/em&gt;, người nghiên cứu chủ động thay đổi biến đầu vào; nghiên cứu &lt;em&gt;hồi cứu&lt;/em&gt; dùng số liệu lịch sử đã có sẵn.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -88,7 +88,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>Order does not matter (the computers are indistinguishable), so the number of samples is the combination $$\\binom{10}{5}=\\frac{10!}{5!\\,5!}=\\frac{10\\cdot9\\cdot8\\cdot7\\cdot6}{120}=252.$$ (30240 would be the *permutation* $P(10,5)$, which would count order.)</p></div><div class=\"ml-vi\"><p>Thứ tự không quan trọng (các máy không phân biệt được), nên số mẫu là tổ hợp $$\\binom{10}{5}=\\frac{10!}{5!\\,5!}=\\frac{10\\cdot9\\cdot8\\cdot7\\cdot6}{120}=252.$$ (30240 là *chỉnh hợp* $P(10,5)$ — có tính thứ tự.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Order does not matter (the computers are indistinguishable), so the number of samples is the combination $$\\binom{10}{5}=\\frac{10!}{5!\\,5!}=\\frac{10\\cdot9\\cdot8\\cdot7\\cdot6}{120}=252.$$ (30240 would be the &lt;em&gt;permutation&lt;/em&gt; $P(10,5)$, which would count order.)</p></div><div class=\"ml-vi\"><p>Thứ tự không quan trọng (các máy không phân biệt được), nên số mẫu là tổ hợp $$\\binom{10}{5}=\\frac{10!}{5!\\,5!}=\\frac{10\\cdot9\\cdot8\\cdot7\\cdot6}{120}=252.$$ (30240 là &lt;em&gt;chỉnh hợp&lt;/em&gt; $P(10,5)$ — có tính thứ tự.)</p></div>"
         },
         {
           "kind": "MCQ",
@@ -241,7 +241,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>In a <strong>series</strong> circuit every device must work, and independence lets the probabilities multiply: $$P=0.9\\times0.95\\times0.98=0.8379.$$ (0.9999 would be the answer if the three were in *parallel*: $1-0.1\\cdot0.05\\cdot0.02$.)</p></div><div class=\"ml-vi\"><p>Mạch <strong>nối tiếp</strong> đòi hỏi MỌI thiết bị phải hoạt động, và do độc lập nên nhân các xác suất: $$P=0,9\\times0,95\\times0,98=0,8379.$$ (0,9999 là đáp án nếu ba thiết bị mắc *song song*: $1-0,1\\cdot0,05\\cdot0,02$.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>In a <strong>series</strong> circuit every device must work, and independence lets the probabilities multiply: $$P=0.9\\times0.95\\times0.98=0.8379.$$ (0.9999 would be the answer if the three were in &lt;em&gt;parallel&lt;/em&gt;: $1-0.1\\cdot0.05\\cdot0.02$.)</p></div><div class=\"ml-vi\"><p>Mạch <strong>nối tiếp</strong> đòi hỏi MỌI thiết bị phải hoạt động, và do độc lập nên nhân các xác suất: $$P=0,9\\times0,95\\times0,98=0,8379.$$ (0,9999 là đáp án nếu ba thiết bị mắc &lt;em&gt;song song&lt;/em&gt;: $1-0,1\\cdot0,05\\cdot0,02$.)</p></div>"
         },
         {
           "kind": "MCQ",
@@ -286,7 +286,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>A *count* takes values in $\\{0,1,2,\\dots\\}$ — a countable set — so X is <strong>discrete</strong>. Continuous variables take every value in an interval (time, length, weight).</p></div><div class=\"ml-vi\"><p>Một đại lượng *đếm* nhận giá trị trong $\\{0,1,2,\\dots\\}$ — tập đếm được — nên X <strong>rời rạc</strong>. Biến liên tục nhận mọi giá trị trong một khoảng (thời gian, độ dài, khối lượng).</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>A &lt;em&gt;count&lt;/em&gt; takes values in $\\{0,1,2,\\dots\\}$ — a countable set — so X is <strong>discrete</strong>. Continuous variables take every value in an interval (time, length, weight).</p></div><div class=\"ml-vi\"><p>Một đại lượng &lt;em&gt;đếm&lt;/em&gt; nhận giá trị trong $\\{0,1,2,\\dots\\}$ — tập đếm được — nên X <strong>rời rạc</strong>. Biến liên tục nhận mọi giá trị trong một khoảng (thời gian, độ dài, khối lượng).</p></div>"
         },
         {
           "kind": "MCQ",
@@ -631,7 +631,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>$X=5+Y$ where $Y$ is exponential with rate $\\lambda=25$. Shifting by a constant does not change the variance, so $$V(X)=V(Y)=\\frac{1}{\\lambda^{2}}=\\frac{1}{625}=0.0016.$$ (0.04 is the *standard deviation* $1/25$, and $E(X)=5.04$.)</p></div><div class=\"ml-vi\"><p>$X=5+Y$ với $Y$ là biến mũ tham số $\\lambda=25$. Tịnh tiến theo hằng số không đổi phương sai nên $$V(X)=V(Y)=\\frac{1}{\\lambda^{2}}=\\frac{1}{625}=0,0016.$$ (0,04 là *độ lệch chuẩn* $1/25$; còn $E(X)=5,04$.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$X=5+Y$ where $Y$ is exponential with rate $\\lambda=25$. Shifting by a constant does not change the variance, so $$V(X)=V(Y)=\\frac{1}{\\lambda^{2}}=\\frac{1}{625}=0.0016.$$ (0.04 is the &lt;em&gt;standard deviation&lt;/em&gt; $1/25$, and $E(X)=5.04$.)</p></div><div class=\"ml-vi\"><p>$X=5+Y$ với $Y$ là biến mũ tham số $\\lambda=25$. Tịnh tiến theo hằng số không đổi phương sai nên $$V(X)=V(Y)=\\frac{1}{\\lambda^{2}}=\\frac{1}{625}=0,0016.$$ (0,04 là &lt;em&gt;độ lệch chuẩn&lt;/em&gt; $1/25$; còn $E(X)=5,04$.)</p></div>"
         },
         {
           "kind": "MCQ",
@@ -712,7 +712,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>&#39;More than 1 SD away&#39; means $|Z|>1$, i.e. both tails: $$P(|Z|>1)=2\\bigl(1-0.8413\\bigr)=2(0.1587)=0.3174=31.74\\%.$$ (68.26% is the complement, the data *within* 1 SD; 15.87% is only one tail.)</p></div><div class=\"ml-vi\"><p>&#39;Cách trung bình hơn 1 độ lệch chuẩn&#39; nghĩa là $|Z|>1$, tức cả hai đuôi: $$P(|Z|>1)=2\\bigl(1-0,8413\\bigr)=2(0,1587)=0,3174=31,74\\%.$$ (68,26% là phần bù — dữ liệu NẰM TRONG 1 độ lệch chuẩn; 15,87% chỉ là một đuôi.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>&#39;More than 1 SD away&#39; means $|Z|>1$, i.e. both tails: $$P(|Z|>1)=2\\bigl(1-0.8413\\bigr)=2(0.1587)=0.3174=31.74\\%.$$ (68.26% is the complement, the data &lt;em&gt;within&lt;/em&gt; 1 SD; 15.87% is only one tail.)</p></div><div class=\"ml-vi\"><p>&#39;Cách trung bình hơn 1 độ lệch chuẩn&#39; nghĩa là $|Z|>1$, tức cả hai đuôi: $$P(|Z|>1)=2\\bigl(1-0,8413\\bigr)=2(0,1587)=0,3174=31,74\\%.$$ (68,26% là phần bù — dữ liệu NẰM TRONG 1 độ lệch chuẩn; 15,87% chỉ là một đuôi.)</p></div>"
         },
         {
           "kind": "MCQ",
@@ -793,7 +793,7 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>$$\\bar{x}=\\frac{25+11+6+4+2+17+9+6}{8}=\\frac{80}{8}=10.$$ (The *median* would be $(6+9)/2=7.5$, and the mode 6 — neither is asked for.)</p></div><div class=\"ml-vi\"><p>$$\\bar{x}=\\frac{25+11+6+4+2+17+9+6}{8}=\\frac{80}{8}=10.$$ (*Trung vị* là $(6+9)/2=7,5$ và mốt là 6 — đề không hỏi hai đại lượng này.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$$\\bar{x}=\\frac{25+11+6+4+2+17+9+6}{8}=\\frac{80}{8}=10.$$ (The &lt;em&gt;median&lt;/em&gt; would be $(6+9)/2=7.5$, and the mode 6 — neither is asked for.)</p></div><div class=\"ml-vi\"><p>$$\\bar{x}=\\frac{25+11+6+4+2+17+9+6}{8}=\\frac{80}{8}=10.$$ (&lt;em&gt;Trung vị&lt;/em&gt; là $(6+9)/2=7,5$ và mốt là 6 — đề không hỏi hai đại lượng này.)</p></div>"
         },
         {
           "kind": "MCQ",
@@ -868,7 +868,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>i) 15 is $Q_1$, so only 25% lies *below* it and about <strong>75%</strong> (not 50%) lies above — false. ii) $IQR=Q_3-Q_1=20-15=5$, not 15 — false. iii) The left whisker ends at the <strong>minimum</strong> of the data set, which is an actual observation, so 10 must be present — true. Exactly <strong>1</strong> statement is correct.</p></div><div class=\"ml-vi\"><p>i) 15 là $Q_1$ nên chỉ 25% nằm *dưới* nó và khoảng <strong>75%</strong> (không phải 50%) nằm trên — SAI. ii) $IQR=Q_3-Q_1=20-15=5$, không phải 15 — SAI. iii) Râu trái kết thúc tại giá trị <strong>nhỏ nhất</strong> của bộ dữ liệu, vốn là một quan sát thực, nên 10 chắc chắn có mặt — ĐÚNG. Vậy đúng <strong>1</strong> phát biểu.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>i) 15 is $Q_1$, so only 25% lies &lt;em&gt;below&lt;/em&gt; it and about <strong>75%</strong> (not 50%) lies above — false. ii) $IQR=Q_3-Q_1=20-15=5$, not 15 — false. iii) The left whisker ends at the <strong>minimum</strong> of the data set, which is an actual observation, so 10 must be present — true. Exactly <strong>1</strong> statement is correct.</p></div><div class=\"ml-vi\"><p>i) 15 là $Q_1$ nên chỉ 25% nằm &lt;em&gt;dưới&lt;/em&gt; nó và khoảng <strong>75%</strong> (không phải 50%) nằm trên — SAI. ii) $IQR=Q_3-Q_1=20-15=5$, không phải 15 — SAI. iii) Râu trái kết thúc tại giá trị <strong>nhỏ nhất</strong> của bộ dữ liệu, vốn là một quan sát thực, nên 10 chắc chắn có mặt — ĐÚNG. Vậy đúng <strong>1</strong> phát biểu.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -892,7 +892,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>This is exactly the <strong>Central Limit Theorem</strong>: for $n$ large enough (a common rule of thumb is $n>30$ or $n>40$), $\\bar{X}$ is approximately $N(\\mu,\\sigma^{2}/n)$ *whatever* the population distribution looks like.</p></div><div class=\"ml-vi\"><p>Đây chính là <strong>Định lý giới hạn trung tâm</strong>: khi $n$ đủ lớn (quy tắc thường dùng là $n>30$ hoặc $n>40$), $\\bar{X}$ xấp xỉ $N(\\mu,\\sigma^{2}/n)$ BẤT KỂ tổng thể có dạng phân phối nào.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>This is exactly the <strong>Central Limit Theorem</strong>: for $n$ large enough (a common rule of thumb is $n>30$ or $n>40$), $\\bar{X}$ is approximately $N(\\mu,\\sigma^{2}/n)$ &lt;em&gt;whatever&lt;/em&gt; the population distribution looks like.</p></div><div class=\"ml-vi\"><p>Đây chính là <strong>Định lý giới hạn trung tâm</strong>: khi $n$ đủ lớn (quy tắc thường dùng là $n>30$ hoặc $n>40$), $\\bar{X}$ xấp xỉ $N(\\mu,\\sigma^{2}/n)$ BẤT KỂ tổng thể có dạng phân phối nào.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -973,7 +973,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>The width is $2z_{\\alpha/2}\\sigma/\\sqrt{n}$. Only $n$ and the confidence level appear in it: increasing $n$ shrinks the width by a factor $1/\\sqrt{n}$, while *raising* the confidence level enlarges $z_{\\alpha/2}$ and widens the interval. Changing the sample or population mean only shifts the interval&#39;s centre, not its width.</p></div><div class=\"ml-vi\"><p>Độ rộng bằng $2z_{\\alpha/2}\\sigma/\\sqrt{n}$. Chỉ có $n$ và độ tin cậy xuất hiện trong đó: tăng $n$ làm hẹp khoảng theo hệ số $1/\\sqrt{n}$, còn *tăng* độ tin cậy làm $z_{\\alpha/2}$ lớn hơn ⇒ khoảng RỘNG hơn. Thay đổi trung bình mẫu hay trung bình tổng thể chỉ dịch tâm khoảng chứ không đổi độ rộng.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The width is $2z_{\\alpha/2}\\sigma/\\sqrt{n}$. Only $n$ and the confidence level appear in it: increasing $n$ shrinks the width by a factor $1/\\sqrt{n}$, while &lt;em&gt;raising&lt;/em&gt; the confidence level enlarges $z_{\\alpha/2}$ and widens the interval. Changing the sample or population mean only shifts the interval&#39;s centre, not its width.</p></div><div class=\"ml-vi\"><p>Độ rộng bằng $2z_{\\alpha/2}\\sigma/\\sqrt{n}$. Chỉ có $n$ và độ tin cậy xuất hiện trong đó: tăng $n$ làm hẹp khoảng theo hệ số $1/\\sqrt{n}$, còn &lt;em&gt;tăng&lt;/em&gt; độ tin cậy làm $z_{\\alpha/2}$ lớn hơn ⇒ khoảng RỘNG hơn. Thay đổi trung bình mẫu hay trung bình tổng thể chỉ dịch tâm khoảng chứ không đổi độ rộng.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1051,7 +1051,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>By the standard definition (Montgomery), a statistical hypothesis is *a statement about the parameters of one or more populations* — e.g. $H_0:\\mu=50$. Hypotheses are never about sample statistics: those are computed from data and are known, so there is nothing to test about them.</p></div><div class=\"ml-vi\"><p>Theo định nghĩa chuẩn (Montgomery), giả thuyết thống kê là *một phát biểu về các tham số của một hay nhiều tổng thể* — ví dụ $H_0:\\mu=50$. Giả thuyết không bao giờ nói về thống kê mẫu: các thống kê này tính ra từ dữ liệu và đã biết, không có gì để kiểm định.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>By the standard definition (Montgomery), a statistical hypothesis is &lt;em&gt;a statement about the parameters of one or more populations&lt;/em&gt; — e.g. $H_0:\\mu=50$. Hypotheses are never about sample statistics: those are computed from data and are known, so there is nothing to test about them.</p></div><div class=\"ml-vi\"><p>Theo định nghĩa chuẩn (Montgomery), giả thuyết thống kê là &lt;em&gt;một phát biểu về các tham số của một hay nhiều tổng thể&lt;/em&gt; — ví dụ $H_0:\\mu=50$. Giả thuyết không bao giờ nói về thống kê mẫu: các thống kê này tính ra từ dữ liệu và đã biết, không có gì để kiểm định.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1102,7 +1102,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>The claim is &#39;equal to $3,300', so $H_0:\\mu=3300$ vs $H_1:\\mu<br/>e3300$ — a <strong>two-tailed</strong> test. Population $\\sigma$ is unknown and $n=12$ is small with a normal population, so the $t$ distribution with $df=n-1=11$ applies. The critical values are $\\pm t_{\\alpha/2,\\,11}=\\pm t_{0.025,11}=\\pm2.201$. ($t_{0.05,11}=1.796$ would be the one-tailed value.)</p></div><div class=\"ml-vi\"><p>Đề nói &#39;bằng 3.300&#39; nên $H_0:\\mu=3300$ đối với $H_1:\\mu<br/>e3300$ — kiểm định <strong>hai phía</strong>. $\\sigma$ tổng thể chưa biết, $n=12$ nhỏ và tổng thể chuẩn nên dùng phân phối $t$ với $df=n-1=11$. Giá trị tới hạn là $\\pm t_{\\alpha/2;\\,11}=\\pm t_{0,025;11}=\\pm2,201$. ($t_{0,05;11}=1,796$ là giá trị một phía.)</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The claim is &#39;equal to $3,300', so $H_0:\\mu=3300$ vs $H_1:\\mu\\ne3300$ — a <strong>two-tailed</strong> test. Population $\\sigma$ is unknown and $n=12$ is small with a normal population, so the $t$ distribution with $df=n-1=11$ applies. The critical values are $\\pm t_{\\alpha/2,\\,11}=\\pm t_{0.025,11}=\\pm2.201$. ($t_{0.05,11}=1.796$ would be the one-tailed value.)</p></div><div class=\"ml-vi\"><p>Đề nói &#39;bằng 3.300&#39; nên $H_0:\\mu=3300$ đối với $H_1:\\mu\\ne3300$ — kiểm định <strong>hai phía</strong>. $\\sigma$ tổng thể chưa biết, $n=12$ nhỏ và tổng thể chuẩn nên dùng phân phối $t$ với $df=n-1=11$. Giá trị tới hạn là $\\pm t_{\\alpha/2;\\,11}=\\pm t_{0,025;11}=\\pm2,201$. ($t_{0,05;11}=1,796$ là giá trị một phía.)</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1155,7 +1155,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Consider the hypothesis test $H_0:\\mu_1=\\mu_2$ against $H_1:\\mu_1<br/>e\\mu_2$. The sample statistics are given below.<br/><br/>$n_1=11,\\ \\bar{x}_1=9.8,\\ s_1^{2}=3$<br/>$n_2=16,\\ \\bar{x}_2=8.2,\\ s_2^{2}=4$<br/><br/>Assume that $\\sigma_1^{2}=\\sigma_2^{2}$ and that the data are drawn from normal distributions. Compute the value of the test statistic.</p></div><div class=\"ml-vi\"><p>Xét bài toán kiểm định $H_0:\\mu_1=\\mu_2$ đối với $H_1:\\mu_1<br/>e\\mu_2$. Các thống kê mẫu cho như sau.<br/><br/>$n_1=11;\\ \\bar{x}_1=9,8;\\ s_1^{2}=3$<br/>$n_2=16;\\ \\bar{x}_2=8,2;\\ s_2^{2}=4$<br/><br/>Giả sử $\\sigma_1^{2}=\\sigma_2^{2}$ và dữ liệu lấy từ các phân phối chuẩn. Tính giá trị của thống kê kiểm định.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Consider the hypothesis test $H_0:\\mu_1=\\mu_2$ against $H_1:\\mu_1\\ne\\mu_2$. The sample statistics are given below.<br/><br/>$n_1=11,\\ \\bar{x}_1=9.8,\\ s_1^{2}=3$<br/>$n_2=16,\\ \\bar{x}_2=8.2,\\ s_2^{2}=4$<br/><br/>Assume that $\\sigma_1^{2}=\\sigma_2^{2}$ and that the data are drawn from normal distributions. Compute the value of the test statistic.</p></div><div class=\"ml-vi\"><p>Xét bài toán kiểm định $H_0:\\mu_1=\\mu_2$ đối với $H_1:\\mu_1\\ne\\mu_2$. Các thống kê mẫu cho như sau.<br/><br/>$n_1=11;\\ \\bar{x}_1=9,8;\\ s_1^{2}=3$<br/>$n_2=16;\\ \\bar{x}_2=8,2;\\ s_2^{2}=4$<br/><br/>Giả sử $\\sigma_1^{2}=\\sigma_2^{2}$ và dữ liệu lấy từ các phân phối chuẩn. Tính giá trị của thống kê kiểm định.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D6/q45.png",
           "options": [
             {

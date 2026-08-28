@@ -147,7 +147,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A random sample of 15 observations is selected from a normal population. For the following summary statistics and hypotheses tests: $\\bar x = 57.4$, $s^2 = 50$; $H_0: \\mu = 60$, $H_1: \\mu <br/>e 60$, $\\alpha = 0.01$. What is the test statistic $t_0$?</p></div><div class=\"ml-vi\"><p>Lấy một mẫu ngẫu nhiên gồm 15 quan trắc từ một tổng thể chuẩn. Với các thống kê tóm tắt và bài toán kiểm định sau: $\\bar x = 57.4$, $s^2 = 50$; $H_0: \\mu = 60$, $H_1: \\mu <br/>e 60$, $\\alpha = 0.01$. Thống kê kiểm định $t_0$ bằng bao nhiêu?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A random sample of 15 observations is selected from a normal population. For the following summary statistics and hypotheses tests: $\\bar x = 57.4$, $s^2 = 50$; $H_0: \\mu = 60$, $H_1: \\mu \\ne 60$, $\\alpha = 0.01$. What is the test statistic $t_0$?</p></div><div class=\"ml-vi\"><p>Lấy một mẫu ngẫu nhiên gồm 15 quan trắc từ một tổng thể chuẩn. Với các thống kê tóm tắt và bài toán kiểm định sau: $\\bar x = 57.4$, $s^2 = 50$; $H_0: \\mu = 60$, $H_1: \\mu \\ne 60$, $\\alpha = 0.01$. Thống kê kiểm định $t_0$ bằng bao nhiêu?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D30/q6.png",
           "options": [
             {
@@ -409,7 +409,7 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\"><p>The claim to be tested is $\\mu = 17000$, so the alternative is two-sided ($H_1: \\mu <br/>e 17000$) and $\\alpha = 0.05$ is split between the two tails. Since $\\sigma$ is known, this is a $z$-test and the critical values are $\\pm z_{\\alpha/2} = \\pm z_{0.025} = \\pm 1.96$.</p></div><div class=\"ml-vi\"><p>Giả thuyết cần kiểm định là $\\mu = 17000$ nên đối thuyết hai phía ($H_1: \\mu <br/>e 17000$) và $\\alpha = 0{,}05$ chia đều cho hai đuôi. Vì đã biết $\\sigma$ nên dùng kiểm định $z$, giá trị tới hạn là $\\pm z_{\\alpha/2} = \\pm z_{0.025} = \\pm 1{,}96$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The claim to be tested is $\\mu = 17000$, so the alternative is two-sided ($H_1: \\mu \\ne 17000$) and $\\alpha = 0.05$ is split between the two tails. Since $\\sigma$ is known, this is a $z$-test and the critical values are $\\pm z_{\\alpha/2} = \\pm z_{0.025} = \\pm 1.96$.</p></div><div class=\"ml-vi\"><p>Giả thuyết cần kiểm định là $\\mu = 17000$ nên đối thuyết hai phía ($H_1: \\mu \\ne 17000$) và $\\alpha = 0{,}05$ chia đều cho hai đuôi. Vì đã biết $\\sigma$ nên dùng kiểm định $z$, giá trị tới hạn là $\\pm z_{\\alpha/2} = \\pm z_{0.025} = \\pm 1{,}96$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -603,7 +603,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A manufacturer of a certain brand of rice cereal claims that the average saturated fat content does not exceed 1.6 grams. State the null and alternative hypotheses to be used in testing this claim.<br/>(i) $H_0: \\mu = 1.6$, $H_1: \\mu <br/>e 1.6$<br/>(ii) $H_0: \\mu = 1.6$, $H_1: \\mu < 1.6$<br/>(iii) $H_0: \\mu = 1.6$, $H_1: \\mu > 1.6$<br/>(iv) $H_0: \\mu > 1.6$, $H_1: \\mu = 1.6$</p></div><div class=\"ml-vi\"><p>Nhà sản xuất một nhãn hiệu ngũ cốc gạo tuyên bố rằng hàm lượng chất béo bão hoà trung bình không vượt quá 1,6 gam. Hãy nêu giả thuyết không và đối thuyết dùng để kiểm định tuyên bố này.<br/>(i) $H_0: \\mu = 1.6$, $H_1: \\mu <br/>e 1.6$<br/>(ii) $H_0: \\mu = 1.6$, $H_1: \\mu < 1.6$<br/>(iii) $H_0: \\mu = 1.6$, $H_1: \\mu > 1.6$<br/>(iv) $H_0: \\mu > 1.6$, $H_1: \\mu = 1.6$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A manufacturer of a certain brand of rice cereal claims that the average saturated fat content does not exceed 1.6 grams. State the null and alternative hypotheses to be used in testing this claim.<br/>(i) $H_0: \\mu = 1.6$, $H_1: \\mu \\ne 1.6$<br/>(ii) $H_0: \\mu = 1.6$, $H_1: \\mu < 1.6$<br/>(iii) $H_0: \\mu = 1.6$, $H_1: \\mu > 1.6$<br/>(iv) $H_0: \\mu > 1.6$, $H_1: \\mu = 1.6$</p></div><div class=\"ml-vi\"><p>Nhà sản xuất một nhãn hiệu ngũ cốc gạo tuyên bố rằng hàm lượng chất béo bão hoà trung bình không vượt quá 1,6 gam. Hãy nêu giả thuyết không và đối thuyết dùng để kiểm định tuyên bố này.<br/>(i) $H_0: \\mu = 1.6$, $H_1: \\mu \\ne 1.6$<br/>(ii) $H_0: \\mu = 1.6$, $H_1: \\mu < 1.6$<br/>(iii) $H_0: \\mu = 1.6$, $H_1: \\mu > 1.6$<br/>(iv) $H_0: \\mu > 1.6$, $H_1: \\mu = 1.6$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D30/q23.png",
           "options": [
             {
@@ -771,7 +771,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A sample of 250 accidents showed that 140 were caused by drunk driving. Let $z_{0.025} = 1.96$, $z_{0.05} = 1.645$. Use the data to test $H_0: p = 0.5$ against $H_1: p <br/>e 0.5$ with $\\alpha = 0.05$; the result is ____________.</p></div><div class=\"ml-vi\"><p>Một mẫu 250 vụ tai nạn cho thấy 140 vụ do lái xe khi say rượu. Cho $z_{0.025} = 1.96$, $z_{0.05} = 1.645$. Dùng dữ liệu này để kiểm định $H_0: p = 0.5$ với $H_1: p <br/>e 0.5$ ở mức $\\alpha = 0.05$; kết quả là ____________.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A sample of 250 accidents showed that 140 were caused by drunk driving. Let $z_{0.025} = 1.96$, $z_{0.05} = 1.645$. Use the data to test $H_0: p = 0.5$ against $H_1: p \\ne 0.5$ with $\\alpha = 0.05$; the result is ____________.</p></div><div class=\"ml-vi\"><p>Một mẫu 250 vụ tai nạn cho thấy 140 vụ do lái xe khi say rượu. Cho $z_{0.025} = 1.96$, $z_{0.05} = 1.645$. Dùng dữ liệu này để kiểm định $H_0: p = 0.5$ với $H_1: p \\ne 0.5$ ở mức $\\alpha = 0.05$; kết quả là ____________.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D30/q30.png",
           "options": [
             {

@@ -99,7 +99,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Consider the hypothesis test $H_0: p_1 = p_2$ against $H_1: p_1 <br/>eq p_2$. Suppose that sample sizes $n_1 = 1000$ and $n_2 = 900$, and that $X_1 = 900$ and $X_2 = 720$. Compute the value of the test statistic.</p></div><div class=\"ml-vi\"><p>Xét bài toán kiểm định $H_0: p_1 = p_2$ đối với $H_1: p_1 <br/>eq p_2$. Giả sử cỡ mẫu $n_1 = 1000$ và $n_2 = 900$, với $X_1 = 900$ và $X_2 = 720$. Tính giá trị của thống kê kiểm định.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Consider the hypothesis test $H_0: p_1 = p_2$ against $H_1: p_1 \\neq p_2$. Suppose that sample sizes $n_1 = 1000$ and $n_2 = 900$, and that $X_1 = 900$ and $X_2 = 720$. Compute the value of the test statistic.</p></div><div class=\"ml-vi\"><p>Xét bài toán kiểm định $H_0: p_1 = p_2$ đối với $H_1: p_1 \\neq p_2$. Giả sử cỡ mẫu $n_1 = 1000$ và $n_2 = 900$, với $X_1 = 900$ và $X_2 = 720$. Tính giá trị của thống kê kiểm định.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q4.png",
           "options": [
             {
@@ -558,7 +558,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>We have created a 95% confidence interval for $\\mu$ with the result $(10, 15)$. What decision will we make if we test $H_0: \\mu = 16$ versus $H_1: \\mu <br/>eq 16$ at $\\alpha = 0.05$?<br/><br/>(i) Reject $H_0$ in favor of $H_1$.<br/>(ii) Fail to reject $H_0$ in favor of $H_1$.<br/>(iii) Accept $H_0$ in favor of $H_1$.<br/>(iv) We cannot tell what our decision will be from the information given.</p></div><div class=\"ml-vi\"><p>Ta đã lập khoảng tin cậy 95% cho $\\mu$ và thu được $(10, 15)$. Ta sẽ quyết định thế nào nếu kiểm định $H_0: \\mu = 16$ đối với $H_1: \\mu <br/>eq 16$ ở mức $\\alpha = 0.05$?<br/><br/>(i) Bác bỏ $H_0$, nghiêng về $H_1$.<br/>(ii) Không bác bỏ được $H_0$.<br/>(iii) Chấp nhận $H_0$.<br/>(iv) Không thể biết quyết định từ thông tin đã cho.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>We have created a 95% confidence interval for $\\mu$ with the result $(10, 15)$. What decision will we make if we test $H_0: \\mu = 16$ versus $H_1: \\mu \\neq 16$ at $\\alpha = 0.05$?<br/><br/>(i) Reject $H_0$ in favor of $H_1$.<br/>(ii) Fail to reject $H_0$ in favor of $H_1$.<br/>(iii) Accept $H_0$ in favor of $H_1$.<br/>(iv) We cannot tell what our decision will be from the information given.</p></div><div class=\"ml-vi\"><p>Ta đã lập khoảng tin cậy 95% cho $\\mu$ và thu được $(10, 15)$. Ta sẽ quyết định thế nào nếu kiểm định $H_0: \\mu = 16$ đối với $H_1: \\mu \\neq 16$ ở mức $\\alpha = 0.05$?<br/><br/>(i) Bác bỏ $H_0$, nghiêng về $H_1$.<br/>(ii) Không bác bỏ được $H_0$.<br/>(iii) Chấp nhận $H_0$.<br/>(iv) Không thể biết quyết định từ thông tin đã cho.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D29/q22.png",
           "options": [
             {
@@ -577,7 +577,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>A two-sided level-$\\alpha$ test and a $100(1-\\alpha)\\%$ confidence interval are equivalent: $H_0:\\mu=\\mu_0$ is rejected at level $\\alpha$ exactly when $\\mu_0$ falls OUTSIDE the interval. Here $\\alpha = 0.05$ matches the 95% interval $(10,15)$, and $16 <br/>otin (10,15)$, so we reject $H_0$.</p></div><div class=\"ml-vi\"><p>Kiểm định hai phía mức $\\alpha$ và khoảng tin cậy $100(1-\\alpha)\\%$ là tương đương: bác bỏ $H_0:\\mu=\\mu_0$ ở mức $\\alpha$ đúng khi $\\mu_0$ nằm NGOÀI khoảng. Ở đây $\\alpha = 0.05$ khớp với khoảng 95% $(10,15)$, và $16 <br/>otin (10,15)$, nên ta bác bỏ $H_0$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>A two-sided level-$\\alpha$ test and a $100(1-\\alpha)\\%$ confidence interval are equivalent: $H_0:\\mu=\\mu_0$ is rejected at level $\\alpha$ exactly when $\\mu_0$ falls OUTSIDE the interval. Here $\\alpha = 0.05$ matches the 95% interval $(10,15)$, and $16 \\notin (10,15)$, so we reject $H_0$.</p></div><div class=\"ml-vi\"><p>Kiểm định hai phía mức $\\alpha$ và khoảng tin cậy $100(1-\\alpha)\\%$ là tương đương: bác bỏ $H_0:\\mu=\\mu_0$ ở mức $\\alpha$ đúng khi $\\mu_0$ nằm NGOÀI khoảng. Ở đây $\\alpha = 0.05$ khớp với khoảng 95% $(10,15)$, và $16 \\notin (10,15)$, nên ta bác bỏ $H_0$.</p></div>"
         },
         {
           "kind": "MCQ",

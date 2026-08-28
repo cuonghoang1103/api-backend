@@ -15,7 +15,7 @@ export default {
       "source": "FUOverflow",
       "shuffleQuestions": false,
       "shuffleOptions": false,
-      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Final Exam</b> paper for <b>Mathematics for Engineering</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>Mathematics for Engineering</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
+      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Final Exam</b> paper for <b>Calculus 1</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>Calculus 1</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
       "isPublished": true,
       "questions": [
         {
@@ -1144,7 +1144,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>The set is independent iff $\\det\\begin{pmatrix}2&m&1\\\\1&0&1\\\\0&1&1\\end{pmatrix}\\ne0$. Expanding: $\\det=-1-m$. Independent when $-1-m\\ne0$, i.e. $m\\ne-1$.</p></div><div class=\"ml-vi\"><p>Tập độc lập tuyến tính khi và chỉ khi $\\det\\begin{pmatrix}2&m&1\\\\1&0&1\\\\0&1&1\\end{pmatrix}\\ne0$. Khai triển: $\\det=-1-m$. Độc lập khi $-1-m\\ne0$, tức $m\\ne-1$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The set is independent iff $\\det\\begin{pmatrix}2&m&1\\\\1&0&1\\\\0&1&1\\end{pmatrix}\\ne0$. Expanding: $\\det=-1-m$. Independent when $-1-m\\ne0$, i.e. $m<br/>e-1$.</p></div><div class=\"ml-vi\"><p>Tập độc lập tuyến tính khi và chỉ khi $\\det\\begin{pmatrix}2&m&1\\\\1&0&1\\\\0&1&1\\end{pmatrix}\\ne0$. Khai triển: $\\det=-1-m$. Độc lập khi $-1-m\\ne0$, tức $m<br/>e-1$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1297,7 +1297,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\"><p>$au+bv=(b,a+b,a-b)$. For $x=(1,3,-1)$: $b=1,a=2$, but $a-b=1\\ne-1$ — not in span. For $y=(0,2,3)$: $b=0,a=2$, but $a-b=2\\ne3$ — not in span. Neither vector is in the span, so the correct choice is &#39;All of the other choices are incorrect&#39;.</p></div><div class=\"ml-vi\"><p>$au+bv=(b,a+b,a-b)$. Với $x=(1,3,-1)$: $b=1,a=2$, nhưng $a-b=1\\ne-1$ — không thuộc span. Với $y=(0,2,3)$: $b=0,a=2$, nhưng $a-b=2\\ne3$ — không thuộc span. Không vectơ nào thuộc span, nên đáp án đúng là &#39;Tất cả các đáp án khác đều sai&#39;.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$au+bv=(b,a+b,a-b)$. For $x=(1,3,-1)$: $b=1,a=2$, but $a-b=1<br/>e-1$ — not in span. For $y=(0,2,3)$: $b=0,a=2$, but $a-b=2\\ne3$ — not in span. Neither vector is in the span, so the correct choice is &#39;All of the other choices are incorrect&#39;.</p></div><div class=\"ml-vi\"><p>$au+bv=(b,a+b,a-b)$. Với $x=(1,3,-1)$: $b=1,a=2$, nhưng $a-b=1<br/>e-1$ — không thuộc span. Với $y=(0,2,3)$: $b=0,a=2$, nhưng $a-b=2\\ne3$ — không thuộc span. Không vectơ nào thuộc span, nên đáp án đúng là &#39;Tất cả các đáp án khác đều sai&#39;.</p></div>"
         }
       ]
     }

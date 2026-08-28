@@ -21,7 +21,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Researchers determined that 52 tissues is the mean number of tissues used during a cold. Suppose a random sample of 100 Kleenex users yielded the following data on the number of tissues used during a cold: sample mean $= 60$, standard deviation $= 22$. Calculate the value of the test statistic to test $H_0: \\mu = 52$ versus $H_1: \\mu <br/>e 52$ at $\\alpha = 0.05$.</p></div><div class=\"ml-vi\"><p>Các nhà nghiên cứu xác định rằng 52 tờ khăn giấy là số khăn giấy trung bình dùng trong một đợt cảm. Giả sử một mẫu ngẫu nhiên 100 người dùng Kleenex cho dữ liệu về số khăn giấy dùng trong một đợt cảm: trung bình mẫu $= 60$, độ lệch chuẩn $= 22$. Tính giá trị của thống kê kiểm định để kiểm định $H_0: \\mu = 52$ với $H_1: \\mu <br/>e 52$ tại $\\alpha = 0.05$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Researchers determined that 52 tissues is the mean number of tissues used during a cold. Suppose a random sample of 100 Kleenex users yielded the following data on the number of tissues used during a cold: sample mean $= 60$, standard deviation $= 22$. Calculate the value of the test statistic to test $H_0: \\mu = 52$ versus $H_1: \\mu \\ne 52$ at $\\alpha = 0.05$.</p></div><div class=\"ml-vi\"><p>Các nhà nghiên cứu xác định rằng 52 tờ khăn giấy là số khăn giấy trung bình dùng trong một đợt cảm. Giả sử một mẫu ngẫu nhiên 100 người dùng Kleenex cho dữ liệu về số khăn giấy dùng trong một đợt cảm: trung bình mẫu $= 60$, độ lệch chuẩn $= 22$. Tính giá trị của thống kê kiểm định để kiểm định $H_0: \\mu = 52$ với $H_1: \\mu \\ne 52$ tại $\\alpha = 0.05$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D31/q1.png",
           "options": [
             {
@@ -1068,7 +1068,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>We will reject the alternative hypothesis $H_1: p <br/>e p_0$ when ______<br/>(i) $|z_0| < z_{\\alpha/2}$<br/>(ii) $z_0 > -z_{\\alpha/2}$ or $z_0 < z_{\\alpha/2}$<br/>(iii) $p_0 > |p_{\\alpha/2}|$</p></div><div class=\"ml-vi\"><p>Ta sẽ bác bỏ đối thuyết $H_1: p <br/>e p_0$ khi ______<br/>(i) $|z_0| < z_{\\alpha/2}$<br/>(ii) $z_0 > -z_{\\alpha/2}$ hoặc $z_0 < z_{\\alpha/2}$<br/>(iii) $p_0 > |p_{\\alpha/2}|$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>We will reject the alternative hypothesis $H_1: p \\ne p_0$ when ______<br/>(i) $|z_0| < z_{\\alpha/2}$<br/>(ii) $z_0 > -z_{\\alpha/2}$ or $z_0 < z_{\\alpha/2}$<br/>(iii) $p_0 > |p_{\\alpha/2}|$</p></div><div class=\"ml-vi\"><p>Ta sẽ bác bỏ đối thuyết $H_1: p \\ne p_0$ khi ______<br/>(i) $|z_0| < z_{\\alpha/2}$<br/>(ii) $z_0 > -z_{\\alpha/2}$ hoặc $z_0 < z_{\\alpha/2}$<br/>(iii) $p_0 > |p_{\\alpha/2}|$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D31/q41.png",
           "options": [
             {
@@ -1087,7 +1087,7 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\"><p>Rejecting $H_1$ is the same as failing to reject $H_0$. For the two-sided test $H_1: p <br/>e p_0$ the rejection region for $H_0$ is $|z_0| > z_{\\alpha/2}$, so we fail to reject $H_0$ (i.e. reject the alternative) exactly when $|z_0| < z_{\\alpha/2}$ — statement (i). Statement (ii) is written with &#39;or&#39;, which is satisfied by essentially every $z_0$, and (iii) mixes proportions with critical values meaninglessly.</p></div><div class=\"ml-vi\"><p>Bác bỏ $H_1$ tương đương với không bác bỏ $H_0$. Với kiểm định hai phía $H_1: p <br/>e p_0$, miền bác bỏ $H_0$ là $|z_0| > z_{\\alpha/2}$, nên ta không bác bỏ $H_0$ (tức bác bỏ đối thuyết) đúng khi $|z_0| < z_{\\alpha/2}$ — phát biểu (i). Phát biểu (ii) dùng &#39;hoặc&#39; nên hầu như mọi $z_0$ đều thoả, còn (iii) trộn lẫn tỉ lệ với giá trị tới hạn một cách vô nghĩa.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Rejecting $H_1$ is the same as failing to reject $H_0$. For the two-sided test $H_1: p \\ne p_0$ the rejection region for $H_0$ is $|z_0| > z_{\\alpha/2}$, so we fail to reject $H_0$ (i.e. reject the alternative) exactly when $|z_0| < z_{\\alpha/2}$ — statement (i). Statement (ii) is written with &#39;or&#39;, which is satisfied by essentially every $z_0$, and (iii) mixes proportions with critical values meaninglessly.</p></div><div class=\"ml-vi\"><p>Bác bỏ $H_1$ tương đương với không bác bỏ $H_0$. Với kiểm định hai phía $H_1: p \\ne p_0$, miền bác bỏ $H_0$ là $|z_0| > z_{\\alpha/2}$, nên ta không bác bỏ $H_0$ (tức bác bỏ đối thuyết) đúng khi $|z_0| < z_{\\alpha/2}$ — phát biểu (i). Phát biểu (ii) dùng &#39;hoặc&#39; nên hầu như mọi $z_0$ đều thoả, còn (iii) trộn lẫn tỉ lệ với giá trị tới hạn một cách vô nghĩa.</p></div>"
         },
         {
           "kind": "MCQ",

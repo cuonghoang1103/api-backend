@@ -358,7 +358,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>$H_0: p=0.5$ vs $H_1: p<br/>e 0.5$. With $\\hat p = 530/1000 = 0.53$, $z=\\dfrac{\\hat p - p_0}{\\sqrt{p_0(1-p_0)/n}}=\\dfrac{0.53-0.50}{\\sqrt{0.25/1000}}=\\dfrac{0.03}{0.015811}=1.897$.</p></div><div class=\"ml-vi\"><p>$H_0: p=0.5$ và $H_1: p<br/>e 0.5$. Với $\\hat p = 530/1000 = 0.53$, $z=\\dfrac{\\hat p - p_0}{\\sqrt{p_0(1-p_0)/n}}=\\dfrac{0.53-0.50}{\\sqrt{0.25/1000}}=\\dfrac{0.03}{0.015811}=1.897$.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$H_0: p=0.5$ vs $H_1: p\\ne 0.5$. With $\\hat p = 530/1000 = 0.53$, $z=\\dfrac{\\hat p - p_0}{\\sqrt{p_0(1-p_0)/n}}=\\dfrac{0.53-0.50}{\\sqrt{0.25/1000}}=\\dfrac{0.03}{0.015811}=1.897$.</p></div><div class=\"ml-vi\"><p>$H_0: p=0.5$ và $H_1: p\\ne 0.5$. Với $\\hat p = 530/1000 = 0.53$, $z=\\dfrac{\\hat p - p_0}{\\sqrt{p_0(1-p_0)/n}}=\\dfrac{0.53-0.50}{\\sqrt{0.25/1000}}=\\dfrac{0.03}{0.015811}=1.897$.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -708,7 +708,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Suppose data is obtained from 27 pairs of $(x,y)$ and the sample correlation coefficient is 0.85. Test the hypothesis that $H_0:\\rho=0$ against $H_1:\\rho<br/>e 0$ with $\\alpha=0.05$. Let $t_{0.025,25}=2.060$.</p></div><div class=\"ml-vi\"><p>Giả sử dữ liệu thu được từ 27 cặp $(x,y)$ và hệ số tương quan mẫu là 0.85. Hãy kiểm định giả thuyết $H_0:\\rho=0$ đối lập $H_1:\\rho<br/>e 0$ với $\\alpha=0.05$. Cho $t_{0.025,25}=2.060$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose data is obtained from 27 pairs of $(x,y)$ and the sample correlation coefficient is 0.85. Test the hypothesis that $H_0:\\rho=0$ against $H_1:\\rho\\ne 0$ with $\\alpha=0.05$. Let $t_{0.025,25}=2.060$.</p></div><div class=\"ml-vi\"><p>Giả sử dữ liệu thu được từ 27 cặp $(x,y)$ và hệ số tương quan mẫu là 0.85. Hãy kiểm định giả thuyết $H_0:\\rho=0$ đối lập $H_1:\\rho\\ne 0$ với $\\alpha=0.05$. Cho $t_{0.025,25}=2.060$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D21/q28.png",
           "options": [
             {
@@ -753,7 +753,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A bearing used in an automotive application is supposed to have a nominal inside diameter of 1.5 inches. A random sample of 36 bearings is selected and the average inside diameter of these bearings is 1.4895 inches. Bearing diameter is known to be normally distributed with standard deviation $\\sigma = 0.02$ inch. Test the hypotheses $H_0:\\mu=1.5$ versus $H_1:\\mu<br/>e 1.5$ using $\\alpha=0.01$. Let $z_{0.01}=2.326$, $z_{0.005}=2.576$.</p></div><div class=\"ml-vi\"><p>Một loại vòng bi dùng trong ô tô được cho là có đường kính trong danh nghĩa 1.5 inch. Lấy mẫu ngẫu nhiên 36 vòng bi thì đường kính trong trung bình là 1.4895 inch. Đường kính vòng bi phân phối chuẩn với độ lệch chuẩn $\\sigma = 0.02$ inch. Hãy kiểm định $H_0:\\mu=1.5$ đối lập $H_1:\\mu<br/>e 1.5$ với $\\alpha=0.01$. Cho $z_{0.01}=2.326$, $z_{0.005}=2.576$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A bearing used in an automotive application is supposed to have a nominal inside diameter of 1.5 inches. A random sample of 36 bearings is selected and the average inside diameter of these bearings is 1.4895 inches. Bearing diameter is known to be normally distributed with standard deviation $\\sigma = 0.02$ inch. Test the hypotheses $H_0:\\mu=1.5$ versus $H_1:\\mu\\ne 1.5$ using $\\alpha=0.01$. Let $z_{0.01}=2.326$, $z_{0.005}=2.576$.</p></div><div class=\"ml-vi\"><p>Một loại vòng bi dùng trong ô tô được cho là có đường kính trong danh nghĩa 1.5 inch. Lấy mẫu ngẫu nhiên 36 vòng bi thì đường kính trong trung bình là 1.4895 inch. Đường kính vòng bi phân phối chuẩn với độ lệch chuẩn $\\sigma = 0.02$ inch. Hãy kiểm định $H_0:\\mu=1.5$ đối lập $H_1:\\mu\\ne 1.5$ với $\\alpha=0.01$. Cho $z_{0.01}=2.326$, $z_{0.005}=2.576$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D21/q30.png",
           "options": [
             {

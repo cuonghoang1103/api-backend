@@ -15,7 +15,7 @@ export default {
       "source": "FUOverflow",
       "shuffleQuestions": false,
       "shuffleOptions": false,
-      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Final Exam</b> paper for <b>Mathematics for Engineering</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>Mathematics for Engineering</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
+      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Final Exam</b> paper for <b>Calculus 1</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>Calculus 1</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
       "isPublished": true,
       "questions": [
         {
@@ -129,7 +129,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>For $f(x) = 3x^2 - 4x + 1$, which of the following limits is $f'(2)$?\\n(i) $\\lim_{x\\to 2}\\frac{(x-2)(3x+2)}{(x-2)}$\\n(ii) $\\lim_{x\\to 2}\\frac{(x-2)(2x+3)}{(x-2)}$\\n(iii) $\\lim_{x\\to 2}\\frac{(x-2)(x+5)}{(x-2)}$\\n(iv) $\\lim_{x\\to 2}\\frac{(x-2)(5x+1)}{(x-2)}$</p></div><div class=\"ml-vi\"><p>Với $f(x) = 3x^2 - 4x + 1$, giới hạn nào sau đây bằng $f'(2)$?\\n(i) $\\lim_{x\\to 2}\\frac{(x-2)(3x+2)}{(x-2)}$\\n(ii) $\\lim_{x\\to 2}\\frac{(x-2)(2x+3)}{(x-2)}$\\n(iii) $\\lim_{x\\to 2}\\frac{(x-2)(x+5)}{(x-2)}$\\n(iv) $\\lim_{x\\to 2}\\frac{(x-2)(5x+1)}{(x-2)}$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>For $f(x) = 3x^2 - 4x + 1$, which of the following limits is $f'(2)$?<br/>(i) $\\lim_{x\\to 2}\\frac{(x-2)(3x+2)}{(x-2)}$<br/>(ii) $\\lim_{x\\to 2}\\frac{(x-2)(2x+3)}{(x-2)}$<br/>(iii) $\\lim_{x\\to 2}\\frac{(x-2)(x+5)}{(x-2)}$<br/>(iv) $\\lim_{x\\to 2}\\frac{(x-2)(5x+1)}{(x-2)}$</p></div><div class=\"ml-vi\"><p>Với $f(x) = 3x^2 - 4x + 1$, giới hạn nào sau đây bằng $f'(2)$?<br/>(i) $\\lim_{x\\to 2}\\frac{(x-2)(3x+2)}{(x-2)}$<br/>(ii) $\\lim_{x\\to 2}\\frac{(x-2)(2x+3)}{(x-2)}$<br/>(iii) $\\lim_{x\\to 2}\\frac{(x-2)(x+5)}{(x-2)}$<br/>(iv) $\\lim_{x\\to 2}\\frac{(x-2)(5x+1)}{(x-2)}$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D15/q5.png",
           "options": [
             {
@@ -180,7 +180,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>A potato is launched vertically upward with an initial velocity of 100 ft/s from a potato gun at the top of an 85-feet-tall building. The distance in feet that the potato travels from the ground after $t$ seconds is given by $s(t) = -16t^2 + 100t + 85$.\\nFind the speed of the potato at 5 seconds.</p></div><div class=\"ml-vi\"><p>Một quả khoai tây được bắn thẳng đứng lên trên với vận tốc ban đầu 100 ft/s từ một khẩu súng bắn khoai tây đặt trên đỉnh tòa nhà cao 85 feet. Khoảng cách (feet) của quả khoai tây tính từ mặt đất sau $t$ giây được cho bởi $s(t) = -16t^2 + 100t + 85$.\\nTìm tốc độ (speed) của quả khoai tây tại thời điểm 5 giây.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>A potato is launched vertically upward with an initial velocity of 100 ft/s from a potato gun at the top of an 85-feet-tall building. The distance in feet that the potato travels from the ground after $t$ seconds is given by $s(t) = -16t^2 + 100t + 85$.<br/>Find the speed of the potato at 5 seconds.</p></div><div class=\"ml-vi\"><p>Một quả khoai tây được bắn thẳng đứng lên trên với vận tốc ban đầu 100 ft/s từ một khẩu súng bắn khoai tây đặt trên đỉnh tòa nhà cao 85 feet. Khoảng cách (feet) của quả khoai tây tính từ mặt đất sau $t$ giây được cho bởi $s(t) = -16t^2 + 100t + 85$.<br/>Tìm tốc độ (speed) của quả khoai tây tại thời điểm 5 giây.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D15/q7.png",
           "options": [
             {
@@ -339,7 +339,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Determine where the function $f(x) = x^3 + 3x^2 - x - 24$ is concave up and where it is concave down.\\n(i) Concave up on $(-\\infty, \\infty)$\\n(ii) Concave down on $(-1, \\infty)$ and concave up on $(-\\infty,-1)$\\n(iii) Concave up on $(-1, \\infty)$ and concave down on $(-\\infty,-1)$\\n(iv) Concave down $(-\\infty, \\infty)$</p></div><div class=\"ml-vi\"><p>Xác định khoảng lồi (concave up) và lõm (concave down) của $f(x) = x^3 + 3x^2 - x - 24$.\\n(i) Lồi trên $(-\\infty, \\infty)$\\n(ii) Lõm trên $(-1, \\infty)$ và lồi trên $(-\\infty,-1)$\\n(iii) Lồi trên $(-1, \\infty)$ và lõm trên $(-\\infty,-1)$\\n(iv) Lõm trên $(-\\infty, \\infty)$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Determine where the function $f(x) = x^3 + 3x^2 - x - 24$ is concave up and where it is concave down.<br/>(i) Concave up on $(-\\infty, \\infty)$<br/>(ii) Concave down on $(-1, \\infty)$ and concave up on $(-\\infty,-1)$<br/>(iii) Concave up on $(-1, \\infty)$ and concave down on $(-\\infty,-1)$<br/>(iv) Concave down $(-\\infty, \\infty)$</p></div><div class=\"ml-vi\"><p>Xác định khoảng lồi (concave up) và lõm (concave down) của $f(x) = x^3 + 3x^2 - x - 24$.<br/>(i) Lồi trên $(-\\infty, \\infty)$<br/>(ii) Lõm trên $(-1, \\infty)$ và lồi trên $(-\\infty,-1)$<br/>(iii) Lồi trên $(-1, \\infty)$ và lõm trên $(-\\infty,-1)$<br/>(iv) Lõm trên $(-\\infty, \\infty)$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D15/q13.png",
           "options": [
             {
@@ -468,7 +468,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Express the integral $\\int_1^3 e^x\\,dx$ as a limit of sums.\\n(i) $\\lim_{n\\to\\infty}\\frac{2}{n}\\sum_{i=1}^n e^{1+i/n}$\\n(ii) $\\lim_{n\\to\\infty}\\frac{2}{n}\\sum_{i=1}^n e^{1+2i/n}$\\n(iii) $\\lim_{n\\to\\infty}\\frac{1}{n}\\sum_{i=1}^n e^{1+2i/n}$\\n(iv) $\\lim_{n\\to\\infty}\\frac{2}{n}\\sum_{i=1}^n e^{2i/n}$\\n(v) $\\lim_{n\\to\\infty}\\frac{1}{n}\\sum_{i=1}^n e^{i/n}$</p></div><div class=\"ml-vi\"><p>Biểu diễn $\\int_1^3 e^x\\,dx$ dưới dạng giới hạn của tổng.\\n(i) $\\lim_{n\\to\\infty}\\frac{2}{n}\\sum_{i=1}^n e^{1+i/n}$\\n(ii) $\\lim_{n\\to\\infty}\\frac{2}{n}\\sum_{i=1}^n e^{1+2i/n}$\\n(iii) $\\lim_{n\\to\\infty}\\frac{1}{n}\\sum_{i=1}^n e^{1+2i/n}$\\n(iv) $\\lim_{n\\to\\infty}\\frac{2}{n}\\sum_{i=1}^n e^{2i/n}$\\n(v) $\\lim_{n\\to\\infty}\\frac{1}{n}\\sum_{i=1}^n e^{i/n}$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Express the integral $\\int_1^3 e^x\\,dx$ as a limit of sums.<br/>(i) $\\lim_{n\\to\\infty}\\frac{2}{n}\\sum_{i=1}^n e^{1+i/n}$<br/>(ii) $\\lim_{n\\to\\infty}\\frac{2}{n}\\sum_{i=1}^n e^{1+2i/n}$<br/>(iii) $\\lim_{n\\to\\infty}\\frac{1}{n}\\sum_{i=1}^n e^{1+2i/n}$<br/>(iv) $\\lim_{n\\to\\infty}\\frac{2}{n}\\sum_{i=1}^n e^{2i/n}$<br/>(v) $\\lim_{n\\to\\infty}\\frac{1}{n}\\sum_{i=1}^n e^{i/n}$</p></div><div class=\"ml-vi\"><p>Biểu diễn $\\int_1^3 e^x\\,dx$ dưới dạng giới hạn của tổng.<br/>(i) $\\lim_{n\\to\\infty}\\frac{2}{n}\\sum_{i=1}^n e^{1+i/n}$<br/>(ii) $\\lim_{n\\to\\infty}\\frac{2}{n}\\sum_{i=1}^n e^{1+2i/n}$<br/>(iii) $\\lim_{n\\to\\infty}\\frac{1}{n}\\sum_{i=1}^n e^{1+2i/n}$<br/>(iv) $\\lim_{n\\to\\infty}\\frac{2}{n}\\sum_{i=1}^n e^{2i/n}$<br/>(v) $\\lim_{n\\to\\infty}\\frac{1}{n}\\sum_{i=1}^n e^{i/n}$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D15/q18.png",
           "options": [
             {
@@ -552,7 +552,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Evaluate $\\int \\frac{t^3}{\\sqrt[4]{3+t^4}}\\,dt$.\\n(i) $(1/4)(3+t^4)^{3/4}+C$\\n(ii) $3(3+t^4)^{3/4}+C$\\n(iii) $(1/3)(3+t^4)^{3/4}+C$\\n(iv) $4(3+t^4)^{3/4}+C$</p></div><div class=\"ml-vi\"><p>Tính $\\int \\frac{t^3}{\\sqrt[4]{3+t^4}}\\,dt$.\\n(i) $(1/4)(3+t^4)^{3/4}+C$\\n(ii) $3(3+t^4)^{3/4}+C$\\n(iii) $(1/3)(3+t^4)^{3/4}+C$\\n(iv) $4(3+t^4)^{3/4}+C$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Evaluate $\\int \\frac{t^3}{\\sqrt[4]{3+t^4}}\\,dt$.<br/>(i) $(1/4)(3+t^4)^{3/4}+C$<br/>(ii) $3(3+t^4)^{3/4}+C$<br/>(iii) $(1/3)(3+t^4)^{3/4}+C$<br/>(iv) $4(3+t^4)^{3/4}+C$</p></div><div class=\"ml-vi\"><p>Tính $\\int \\frac{t^3}{\\sqrt[4]{3+t^4}}\\,dt$.<br/>(i) $(1/4)(3+t^4)^{3/4}+C$<br/>(ii) $3(3+t^4)^{3/4}+C$<br/>(iii) $(1/3)(3+t^4)^{3/4}+C$<br/>(iv) $4(3+t^4)^{3/4}+C$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D15/q21.png",
           "options": [
             {
@@ -609,7 +609,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Use the Left endpoint Method with $n = 6$ steps to approximate the integral $\\int_1^4 f(x)\\,dx$, given the table:\\n$x$: 1, 1.5, 2, 2.5, 3, 3.5, 4\\n$f(x)$: 2, 6, 4, 8, 2, 5, 9</p></div><div class=\"ml-vi\"><p>Dùng phương pháp điểm đầu trái (Left endpoint) với $n = 6$ bước để xấp xỉ $\\int_1^4 f(x)\\,dx$, cho bởi bảng:\\n$x$: 1, 1.5, 2, 2.5, 3, 3.5, 4\\n$f(x)$: 2, 6, 4, 8, 2, 5, 9</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Use the Left endpoint Method with $n = 6$ steps to approximate the integral $\\int_1^4 f(x)\\,dx$, given the table:<br/>$x$: 1, 1.5, 2, 2.5, 3, 3.5, 4<br/>$f(x)$: 2, 6, 4, 8, 2, 5, 9</p></div><div class=\"ml-vi\"><p>Dùng phương pháp điểm đầu trái (Left endpoint) với $n = 6$ bước để xấp xỉ $\\int_1^4 f(x)\\,dx$, cho bởi bảng:<br/>$x$: 1, 1.5, 2, 2.5, 3, 3.5, 4<br/>$f(x)$: 2, 6, 4, 8, 2, 5, 9</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D15/q23.png",
           "options": [
             {
@@ -690,7 +690,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Solve the system of equations for $y$:\\n$\\begin{cases}x+4y+2z=1\\\\ 2x+3y+3z=-1\\\\ 4x+y+4z=0\\end{cases}$</p></div><div class=\"ml-vi\"><p>Giải hệ phương trình tìm $y$:\\n$\\begin{cases}x+4y+2z=1\\\\ 2x+3y+3z=-1\\\\ 4x+y+4z=0\\end{cases}$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Solve the system of equations for $y$:<br/>$\\begin{cases}x+4y+2z=1\\\\ 2x+3y+3z=-1\\\\ 4x+y+4z=0\\end{cases}$</p></div><div class=\"ml-vi\"><p>Giải hệ phương trình tìm $y$:<br/>$\\begin{cases}x+4y+2z=1\\\\ 2x+3y+3z=-1\\\\ 4x+y+4z=0\\end{cases}$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D15/q26.png",
           "options": [
             {
@@ -768,7 +768,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Find the matrix $A$ if $5A - \\begin{pmatrix}1&0\\\\2&3\\end{pmatrix} = 3A - \\begin{pmatrix}3&-2\\\\4&1\\end{pmatrix}$.\\n(i) $\\begin{pmatrix}-1&1\\\\-1&-1\\end{pmatrix}$\\n(ii) $\\begin{pmatrix}-1&-1\\\\1&1\\end{pmatrix}$</p></div><div class=\"ml-vi\"><p>Tìm ma trận $A$ nếu $5A - \\begin{pmatrix}1&0\\\\2&3\\end{pmatrix} = 3A - \\begin{pmatrix}3&-2\\\\4&1\\end{pmatrix}$.\\n(i) $\\begin{pmatrix}-1&1\\\\-1&-1\\end{pmatrix}$\\n(ii) $\\begin{pmatrix}-1&-1\\\\1&1\\end{pmatrix}$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find the matrix $A$ if $5A - \\begin{pmatrix}1&0\\\\2&3\\end{pmatrix} = 3A - \\begin{pmatrix}3&-2\\\\4&1\\end{pmatrix}$.<br/>(i) $\\begin{pmatrix}-1&1\\\\-1&-1\\end{pmatrix}$<br/>(ii) $\\begin{pmatrix}-1&-1\\\\1&1\\end{pmatrix}$</p></div><div class=\"ml-vi\"><p>Tìm ma trận $A$ nếu $5A - \\begin{pmatrix}1&0\\\\2&3\\end{pmatrix} = 3A - \\begin{pmatrix}3&-2\\\\4&1\\end{pmatrix}$.<br/>(i) $\\begin{pmatrix}-1&1\\\\-1&-1\\end{pmatrix}$<br/>(ii) $\\begin{pmatrix}-1&-1\\\\1&1\\end{pmatrix}$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D15/q29.png",
           "options": [
             {
@@ -843,7 +843,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Which of the following statements are true for every square matrix $A$:\\n(1) If $A^2 = 0$ then $A$ is invertible\\n(2) If $A^3 = -I$ then $A$ is invertible</p></div><div class=\"ml-vi\"><p>Phát biểu nào sau đây đúng với mọi ma trận vuông $A$:\\n(1) Nếu $A^2 = 0$ thì $A$ khả nghịch\\n(2) Nếu $A^3 = -I$ thì $A$ khả nghịch</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Which of the following statements are true for every square matrix $A$:<br/>(1) If $A^2 = 0$ then $A$ is invertible<br/>(2) If $A^3 = -I$ then $A$ is invertible</p></div><div class=\"ml-vi\"><p>Phát biểu nào sau đây đúng với mọi ma trận vuông $A$:<br/>(1) Nếu $A^2 = 0$ thì $A$ khả nghịch<br/>(2) Nếu $A^3 = -I$ thì $A$ khả nghịch</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D15/q32.png",
           "options": [
             {
@@ -1209,7 +1209,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Let $U = \\{(x, y, z) \\mid 2x-y+z = 0\\}$ be a subspace of $\\mathbb{R}^3$. Which of the following statements are true?\\n(i) $U = \\text{span}\\{(1, 0, -2), (0, 1, 1)\\}$\\n(ii) $U = \\text{span}\\{(1, 2, 0)\\}$</p></div><div class=\"ml-vi\"><p>Cho $U = \\{(x, y, z) \\mid 2x-y+z = 0\\}$ là không gian con của $\\mathbb{R}^3$. Phát biểu nào sau đây đúng?\\n(i) $U = \\text{span}\\{(1, 0, -2), (0, 1, 1)\\}$\\n(ii) $U = \\text{span}\\{(1, 2, 0)\\}$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Let $U = \\{(x, y, z) \\mid 2x-y+z = 0\\}$ be a subspace of $\\mathbb{R}^3$. Which of the following statements are true?<br/>(i) $U = \\text{span}\\{(1, 0, -2), (0, 1, 1)\\}$<br/>(ii) $U = \\text{span}\\{(1, 2, 0)\\}$</p></div><div class=\"ml-vi\"><p>Cho $U = \\{(x, y, z) \\mid 2x-y+z = 0\\}$ là không gian con của $\\mathbb{R}^3$. Phát biểu nào sau đây đúng?<br/>(i) $U = \\text{span}\\{(1, 0, -2), (0, 1, 1)\\}$<br/>(ii) $U = \\text{span}\\{(1, 2, 0)\\}$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D15/q46.png",
           "options": [
             {
@@ -1257,7 +1257,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Find a basis for the subspace $U = \\{[x, y, z]^T \\mid x + 2y + 3z = 0\\}$ in $\\mathbb{R}^3$.\\n(i) $[-2,-1,0]^T$ and $[3,0,1]^T$\\n(ii) $[-2,1,0]^T$ and $[-3,0,1]^T$\\n(iii) $[2,1,0]^T$ and $[-3,0,1]^T$\\n(iv) $[-2,-1,0]^T$ and $[-3,0,-1]^T$</p></div><div class=\"ml-vi\"><p>Tìm cơ sở của không gian con $U = \\{[x, y, z]^T \\mid x + 2y + 3z = 0\\}$ trong $\\mathbb{R}^3$.\\n(i) $[-2,-1,0]^T$ và $[3,0,1]^T$\\n(ii) $[-2,1,0]^T$ và $[-3,0,1]^T$\\n(iii) $[2,1,0]^T$ và $[-3,0,1]^T$\\n(iv) $[-2,-1,0]^T$ và $[-3,0,-1]^T$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find a basis for the subspace $U = \\{[x, y, z]^T \\mid x + 2y + 3z = 0\\}$ in $\\mathbb{R}^3$.<br/>(i) $[-2,-1,0]^T$ and $[3,0,1]^T$<br/>(ii) $[-2,1,0]^T$ and $[-3,0,1]^T$<br/>(iii) $[2,1,0]^T$ and $[-3,0,1]^T$<br/>(iv) $[-2,-1,0]^T$ and $[-3,0,-1]^T$</p></div><div class=\"ml-vi\"><p>Tìm cơ sở của không gian con $U = \\{[x, y, z]^T \\mid x + 2y + 3z = 0\\}$ trong $\\mathbb{R}^3$.<br/>(i) $[-2,-1,0]^T$ và $[3,0,1]^T$<br/>(ii) $[-2,1,0]^T$ và $[-3,0,1]^T$<br/>(iii) $[2,1,0]^T$ và $[-3,0,1]^T$<br/>(iv) $[-2,-1,0]^T$ và $[-3,0,-1]^T$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D15/q48.png",
           "options": [
             {

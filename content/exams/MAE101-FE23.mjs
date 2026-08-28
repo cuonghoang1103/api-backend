@@ -15,7 +15,7 @@ export default {
       "source": "FUOverflow",
       "shuffleQuestions": false,
       "shuffleOptions": false,
-      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Final Exam</b> paper for <b>Mathematics for Engineering</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>Mathematics for Engineering</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
+      "instructions": "<div class=\"ml-en\"><p>This is a real FPTU <b>Final Exam</b> paper for <b>Calculus 1</b>. Every question is <b>multiple choice</b> and auto-graded.</p><ul><li>Some questions say \"choose TWO\" — they are only correct when both right answers are selected.</li><li>Read code, tables and diagrams carefully; several questions turn on a subtle detail.</li><li>The original scanned question is available under <b>\"Show original image\"</b> on each question.</li></ul><p>You can flag a question and come back. The timer auto-submits at the end. After you submit, every question shows a bilingual explanation.</p></div><div class=\"ml-vi\"><p>Đây là đề <b>thi cuối kỳ (Final Exam)</b> thật của FPTU môn <b>Calculus 1</b>. Mọi câu đều là <b>trắc nghiệm</b>, chấm tự động.</p><ul><li>Một số câu ghi \"chọn HAI\" — chỉ đúng khi chọn đủ cả hai đáp án đúng.</li><li>Đọc kỹ code, bảng và sơ đồ; nhiều câu ăn thua ở một chi tiết nhỏ.</li><li>Ảnh đề gốc đã quét nằm ở nút <b>\"Xem ảnh đề gốc\"</b> trên mỗi câu.</li></ul><p>Bạn có thể đánh dấu câu để quay lại sau. Hết giờ hệ thống tự nộp. Nộp xong, mỗi câu đều có lời giải song ngữ.</p></div>",
       "isPublished": true,
       "questions": [
         {
@@ -621,7 +621,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Use the left endpoint rule with $n=4$ to approximate $\\displaystyle\\int_0^8 f(x)\\,dx$ given the table:\\n$x$: 0,1,2,3,4,5,6,7,8\\n$f(x)$: 3,1,2,5,3,8,7,6,2</p></div><div class=\"ml-vi\"><p>Dùng quy tắc điểm mút trái với $n=4$ để xấp xỉ $\\displaystyle\\int_0^8 f(x)\\,dx$ với bảng giá trị:\\n$x$: 0,1,2,3,4,5,6,7,8\\n$f(x)$: 3,1,2,5,3,8,7,6,2</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Use the left endpoint rule with $n=4$ to approximate $\\displaystyle\\int_0^8 f(x)\\,dx$ given the table:<br/>$x$: 0,1,2,3,4,5,6,7,8<br/>$f(x)$: 3,1,2,5,3,8,7,6,2</p></div><div class=\"ml-vi\"><p>Dùng quy tắc điểm mút trái với $n=4$ để xấp xỉ $\\displaystyle\\int_0^8 f(x)\\,dx$ với bảng giá trị:<br/>$x$: 0,1,2,3,4,5,6,7,8<br/>$f(x)$: 3,1,2,5,3,8,7,6,2</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D23/q23.png",
           "options": [
             {
@@ -1147,7 +1147,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Which of the following are subspaces of $\\mathbb{R}^3$?\\n(i) $U=\\{(4a-b,\\,3a-7b,\\,2a+b)\\mid a,b \\text{ any real numbers}\\}$\\n(ii) $U=\\{(a,b,c)\\mid 2a-3b+c=0,\\ a-b+c=1\\}$</p></div><div class=\"ml-vi\"><p>Tập nào sau đây là không gian con của $\\mathbb{R}^3$?\\n(i) $U=\\{(4a-b,\\,3a-7b,\\,2a+b)\\mid a,b \\text{ là số thực bất kỳ}\\}$\\n(ii) $U=\\{(a,b,c)\\mid 2a-3b+c=0,\\ a-b+c=1\\}$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Which of the following are subspaces of $\\mathbb{R}^3$?<br/>(i) $U=\\{(4a-b,\\,3a-7b,\\,2a+b)\\mid a,b \\text{ any real numbers}\\}$<br/>(ii) $U=\\{(a,b,c)\\mid 2a-3b+c=0,\\ a-b+c=1\\}$</p></div><div class=\"ml-vi\"><p>Tập nào sau đây là không gian con của $\\mathbb{R}^3$?<br/>(i) $U=\\{(4a-b,\\,3a-7b,\\,2a+b)\\mid a,b \\text{ là số thực bất kỳ}\\}$<br/>(ii) $U=\\{(a,b,c)\\mid 2a-3b+c=0,\\ a-b+c=1\\}$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D23/q43.png",
           "options": [
             {
@@ -1171,7 +1171,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Let $\\{X,Y,Z\\}$ be an independent set of vectors. Which of the following sets are also independent?\\n(i) $\\{X-Y+Z,\\ X+Y,\\ 2X+Z\\}$\\n(ii) $\\{X+2Y,\\ Y+2Z,\\ Z+2X\\}$</p></div><div class=\"ml-vi\"><p>Cho $\\{X,Y,Z\\}$ là tập vectơ độc lập tuyến tính. Tập nào sau đây cũng độc lập tuyến tính?\\n(i) $\\{X-Y+Z,\\ X+Y,\\ 2X+Z\\}$\\n(ii) $\\{X+2Y,\\ Y+2Z,\\ Z+2X\\}$</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Let $\\{X,Y,Z\\}$ be an independent set of vectors. Which of the following sets are also independent?<br/>(i) $\\{X-Y+Z,\\ X+Y,\\ 2X+Z\\}$<br/>(ii) $\\{X+2Y,\\ Y+2Z,\\ Z+2X\\}$</p></div><div class=\"ml-vi\"><p>Cho $\\{X,Y,Z\\}$ là tập vectơ độc lập tuyến tính. Tập nào sau đây cũng độc lập tuyến tính?<br/>(i) $\\{X-Y+Z,\\ X+Y,\\ 2X+Z\\}$<br/>(ii) $\\{X+2Y,\\ Y+2Z,\\ Z+2X\\}$</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D23/q44.png",
           "options": [
             {
@@ -1195,7 +1195,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Let $\\{v_1,v_2,v_3\\}$ be an orthogonal set in $\\mathbb{R}^3$. Which of the following statements are true?\\n(i) $\\{v_1,v_2,v_3\\}$ is a basis of $\\mathbb{R}^3$.\\n(ii) $\\{v_1,2v_2,3v_3\\}$ is also an orthogonal set in $\\mathbb{R}^3$.</p></div><div class=\"ml-vi\"><p>Cho $\\{v_1,v_2,v_3\\}$ là tập trực giao trong $\\mathbb{R}^3$. Phát biểu nào sau đây đúng?\\n(i) $\\{v_1,v_2,v_3\\}$ là một cơ sở của $\\mathbb{R}^3$.\\n(ii) $\\{v_1,2v_2,3v_3\\}$ cũng là một tập trực giao trong $\\mathbb{R}^3$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Let $\\{v_1,v_2,v_3\\}$ be an orthogonal set in $\\mathbb{R}^3$. Which of the following statements are true?<br/>(i) $\\{v_1,v_2,v_3\\}$ is a basis of $\\mathbb{R}^3$.<br/>(ii) $\\{v_1,2v_2,3v_3\\}$ is also an orthogonal set in $\\mathbb{R}^3$.</p></div><div class=\"ml-vi\"><p>Cho $\\{v_1,v_2,v_3\\}$ là tập trực giao trong $\\mathbb{R}^3$. Phát biểu nào sau đây đúng?<br/>(i) $\\{v_1,v_2,v_3\\}$ là một cơ sở của $\\mathbb{R}^3$.<br/>(ii) $\\{v_1,2v_2,3v_3\\}$ cũng là một tập trực giao trong $\\mathbb{R}^3$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D23/q45.png",
           "options": [
             {
@@ -1219,7 +1219,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Let $A$ be a matrix of size $m\\times n$ such that $\\operatorname{rank}(A)=r$. Which of the following statements are true?\\n(i) $\\dim(\\operatorname{null} A)=m-r$.\\n(ii) $\\operatorname{rank}(A^T)=r$.</p></div><div class=\"ml-vi\"><p>Cho $A$ là ma trận cỡ $m\\times n$ với $\\operatorname{rank}(A)=r$. Phát biểu nào sau đây đúng?\\n(i) $\\dim(\\operatorname{null} A)=m-r$.\\n(ii) $\\operatorname{rank}(A^T)=r$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Let $A$ be a matrix of size $m\\times n$ such that $\\operatorname{rank}(A)=r$. Which of the following statements are true?<br/>(i) $\\dim(\\operatorname{null} A)=m-r$.<br/>(ii) $\\operatorname{rank}(A^T)=r$.</p></div><div class=\"ml-vi\"><p>Cho $A$ là ma trận cỡ $m\\times n$ với $\\operatorname{rank}(A)=r$. Phát biểu nào sau đây đúng?<br/>(i) $\\dim(\\operatorname{null} A)=m-r$.<br/>(ii) $\\operatorname{rank}(A^T)=r$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D23/q46.png",
           "options": [
             {
@@ -1291,7 +1291,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Which of the following statements are true?\\n(i) $\\mathbb{R}^3=\\operatorname{Span}\\{(1,0,0),(0,1,1),(0,0,1)\\}$.\\n(ii) $(3,4,1)$ is a linear combination of $(1,1,1)$ and $(0,1,-1)$.</p></div><div class=\"ml-vi\"><p>Phát biểu nào sau đây đúng?\\n(i) $\\mathbb{R}^3=\\operatorname{Span}\\{(1,0,0),(0,1,1),(0,0,1)\\}$.\\n(ii) $(3,4,1)$ là tổ hợp tuyến tính của $(1,1,1)$ và $(0,1,-1)$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Which of the following statements are true?<br/>(i) $\\mathbb{R}^3=\\operatorname{Span}\\{(1,0,0),(0,1,1),(0,0,1)\\}$.<br/>(ii) $(3,4,1)$ is a linear combination of $(1,1,1)$ and $(0,1,-1)$.</p></div><div class=\"ml-vi\"><p>Phát biểu nào sau đây đúng?<br/>(i) $\\mathbb{R}^3=\\operatorname{Span}\\{(1,0,0),(0,1,1),(0,0,1)\\}$.<br/>(ii) $(3,4,1)$ là tổ hợp tuyến tính của $(1,1,1)$ và $(0,1,-1)$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAE101/D23/q49.png",
           "options": [
             {

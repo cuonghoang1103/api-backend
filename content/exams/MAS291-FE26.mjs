@@ -69,7 +69,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Consider the following computer output from a data set of 15 observations.<br/>The regression equation is $Y = 26.8 + 1.48x$.<br/>Predictor Constant: Coef $= 26.753$, SE Coef $= 2.373$, T $=$ ?, P $=$ ?<br/>Predictor X: Coef $= 1.4756$, SE Coef $= 0.1063$, T $=$ ?, P $=$ ?<br/>$S = 2.70040$, R-sq $= 93.7\\%$, R-sq(adj) $= 93.2\\%$.<br/>Give a conclusion about the two hypotheses $H_0: \\beta_1 = 1.5$ versus $H_1: \\beta_1 <br/>e 1.5$ with a 5% level of significance.<br/>Note that $t(0.025;\\,13) = 2.160$ and $t(0.05;\\,13) = 1.771$.</p></div><div class=\"ml-vi\"><p>Xét kết xuất máy tính sau từ bộ dữ liệu gồm 15 quan sát.<br/>Phương trình hồi quy là $Y = 26.8 + 1.48x$.<br/>Hệ số chặn (Constant): Coef $= 26.753$, SE Coef $= 2.373$, T $=$ ?, P $=$ ?<br/>Biến X: Coef $= 1.4756$, SE Coef $= 0.1063$, T $=$ ?, P $=$ ?<br/>$S = 2.70040$, R-sq $= 93.7\\%$, R-sq(adj) $= 93.2\\%$.<br/>Hãy kết luận về hai giả thuyết $H_0: \\beta_1 = 1.5$ và $H_1: \\beta_1 <br/>e 1.5$ ở mức ý nghĩa 5%.<br/>Biết $t(0.025;\\,13) = 2.160$ và $t(0.05;\\,13) = 1.771$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Consider the following computer output from a data set of 15 observations.<br/>The regression equation is $Y = 26.8 + 1.48x$.<br/>Predictor Constant: Coef $= 26.753$, SE Coef $= 2.373$, T $=$ ?, P $=$ ?<br/>Predictor X: Coef $= 1.4756$, SE Coef $= 0.1063$, T $=$ ?, P $=$ ?<br/>$S = 2.70040$, R-sq $= 93.7\\%$, R-sq(adj) $= 93.2\\%$.<br/>Give a conclusion about the two hypotheses $H_0: \\beta_1 = 1.5$ versus $H_1: \\beta_1 \\ne 1.5$ with a 5% level of significance.<br/>Note that $t(0.025;\\,13) = 2.160$ and $t(0.05;\\,13) = 1.771$.</p></div><div class=\"ml-vi\"><p>Xét kết xuất máy tính sau từ bộ dữ liệu gồm 15 quan sát.<br/>Phương trình hồi quy là $Y = 26.8 + 1.48x$.<br/>Hệ số chặn (Constant): Coef $= 26.753$, SE Coef $= 2.373$, T $=$ ?, P $=$ ?<br/>Biến X: Coef $= 1.4756$, SE Coef $= 0.1063$, T $=$ ?, P $=$ ?<br/>$S = 2.70040$, R-sq $= 93.7\\%$, R-sq(adj) $= 93.2\\%$.<br/>Hãy kết luận về hai giả thuyết $H_0: \\beta_1 = 1.5$ và $H_1: \\beta_1 \\ne 1.5$ ở mức ý nghĩa 5%.<br/>Biết $t(0.025;\\,13) = 2.160$ và $t(0.05;\\,13) = 1.771$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D26/q3.png",
           "options": [
             {
@@ -117,7 +117,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Assume that $\\sigma_1 = 10$; $\\sigma_2 = 15$, and you are testing $\\begin{cases} H_0: \\mu_1 = \\mu_2 \\\\ H_1: \\mu_1 <br/>e \\mu_2 \\end{cases}$. In addition, from 2 samples we have $n_1 = 30$; $\\bar{x}_1 = 72$; $n_2 = 30$; $\\bar{x}_2 = 66$. What is the value of the Z test statistic? (round to 4 decimal places)</p></div><div class=\"ml-vi\"><p>Giả sử $\\sigma_1 = 10$; $\\sigma_2 = 15$, và ta kiểm định $\\begin{cases} H_0: \\mu_1 = \\mu_2 \\\\ H_1: \\mu_1 <br/>e \\mu_2 \\end{cases}$. Ngoài ra, từ 2 mẫu ta có $n_1 = 30$; $\\bar{x}_1 = 72$; $n_2 = 30$; $\\bar{x}_2 = 66$. Giá trị của thống kê kiểm định Z là bao nhiêu? (làm tròn 4 chữ số thập phân)</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Assume that $\\sigma_1 = 10$; $\\sigma_2 = 15$, and you are testing $\\begin{cases} H_0: \\mu_1 = \\mu_2 \\\\ H_1: \\mu_1 \\ne \\mu_2 \\end{cases}$. In addition, from 2 samples we have $n_1 = 30$; $\\bar{x}_1 = 72$; $n_2 = 30$; $\\bar{x}_2 = 66$. What is the value of the Z test statistic? (round to 4 decimal places)</p></div><div class=\"ml-vi\"><p>Giả sử $\\sigma_1 = 10$; $\\sigma_2 = 15$, và ta kiểm định $\\begin{cases} H_0: \\mu_1 = \\mu_2 \\\\ H_1: \\mu_1 \\ne \\mu_2 \\end{cases}$. Ngoài ra, từ 2 mẫu ta có $n_1 = 30$; $\\bar{x}_1 = 72$; $n_2 = 30$; $\\bar{x}_2 = 66$. Giá trị của thống kê kiểm định Z là bao nhiêu? (làm tròn 4 chữ số thập phân)</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D26/q5.png",
           "options": [
             {
@@ -604,7 +604,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>&quot;All 3 defective&quot; implies &quot;at least 2 defective&quot;, so $A \\subset B$ and $A \\cap B = A <br/>e \\varnothing$. They are therefore NOT mutually exclusive. They are not complementary either ($A \\cup B = B <br/>e S$). And they are not independent: $P(A\\cap B) = P(A)$, whereas independence would need $P(A)P(B)$, and $P(B) < 1$ so $P(A)P(B) < P(A)$. Since none of the three named relations holds, the answer is &quot;None of the others&quot;.</p></div><div class=\"ml-vi\"><p>&quot;Cả 3 đều lỗi&quot; kéo theo &quot;có ít nhất 2 lỗi&quot;, nên $A \\subset B$ và $A \\cap B = A <br/>e \\varnothing$. Vậy chúng KHÔNG xung khắc. Cũng không đối lập ($A \\cup B = B <br/>e S$). Và không độc lập: $P(A\\cap B) = P(A)$, trong khi độc lập đòi hỏi $P(A)P(B)$, mà $P(B) < 1$ nên $P(A)P(B) < P(A)$. Vì không quan hệ nào trong ba quan hệ đó đúng, đáp án là &quot;Không đáp án nào đúng&quot;.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>&quot;All 3 defective&quot; implies &quot;at least 2 defective&quot;, so $A \\subset B$ and $A \\cap B = A \\ne \\varnothing$. They are therefore NOT mutually exclusive. They are not complementary either ($A \\cup B = B \\ne S$). And they are not independent: $P(A\\cap B) = P(A)$, whereas independence would need $P(A)P(B)$, and $P(B) < 1$ so $P(A)P(B) < P(A)$. Since none of the three named relations holds, the answer is &quot;None of the others&quot;.</p></div><div class=\"ml-vi\"><p>&quot;Cả 3 đều lỗi&quot; kéo theo &quot;có ít nhất 2 lỗi&quot;, nên $A \\subset B$ và $A \\cap B = A \\ne \\varnothing$. Vậy chúng KHÔNG xung khắc. Cũng không đối lập ($A \\cup B = B \\ne S$). Và không độc lập: $P(A\\cap B) = P(A)$, trong khi độc lập đòi hỏi $P(A)P(B)$, mà $P(B) < 1$ nên $P(A)P(B) < P(A)$. Vì không quan hệ nào trong ba quan hệ đó đúng, đáp án là &quot;Không đáp án nào đúng&quot;.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -928,7 +928,7 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\"><p>&quot;Must BE 50&quot; makes this a two-sided test: $H_0: \\mu = 50$ vs $H_1: \\mu <br/>e 50$. With $\\sigma$ known, $Z = \\dfrac{51.3 - 50}{2/\\sqrt{25}} = \\dfrac{1.3}{0.4} = 3.25$. Since $|3.25| > z_{0.025} = 1.96$, we reject $H_0$: the mean burning rate differs significantly from 50 cm/s.</p></div><div class=\"ml-vi\"><p>Cụm &quot;phải LÀ 50&quot; cho thấy đây là kiểm định hai phía: $H_0: \\mu = 50$ và $H_1: \\mu <br/>e 50$. Vì đã biết $\\sigma$, $Z = \\dfrac{51.3 - 50}{2/\\sqrt{25}} = \\dfrac{1.3}{0.4} = 3.25$. Do $|3.25| > z_{0.025} = 1.96$ nên bác bỏ $H_0$: tốc độ cháy trung bình khác 50 cm/s một cách có ý nghĩa.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>&quot;Must BE 50&quot; makes this a two-sided test: $H_0: \\mu = 50$ vs $H_1: \\mu \\ne 50$. With $\\sigma$ known, $Z = \\dfrac{51.3 - 50}{2/\\sqrt{25}} = \\dfrac{1.3}{0.4} = 3.25$. Since $|3.25| > z_{0.025} = 1.96$, we reject $H_0$: the mean burning rate differs significantly from 50 cm/s.</p></div><div class=\"ml-vi\"><p>Cụm &quot;phải LÀ 50&quot; cho thấy đây là kiểm định hai phía: $H_0: \\mu = 50$ và $H_1: \\mu \\ne 50$. Vì đã biết $\\sigma$, $Z = \\dfrac{51.3 - 50}{2/\\sqrt{25}} = \\dfrac{1.3}{0.4} = 3.25$. Do $|3.25| > z_{0.025} = 1.96$ nên bác bỏ $H_0$: tốc độ cháy trung bình khác 50 cm/s một cách có ý nghĩa.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -957,7 +957,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Given $H_0: \\mu = 25$, $H_1: \\mu <br/>e 25$, and P-value $= 0.041$. Do you reject or fail to reject $H_0$ at the 0.01 level of significance?</p></div><div class=\"ml-vi\"><p>Cho $H_0: \\mu = 25$, $H_1: \\mu <br/>e 25$ và P-value $= 0.041$. Bạn bác bỏ hay không bác bỏ $H_0$ ở mức ý nghĩa 0.01?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given $H_0: \\mu = 25$, $H_1: \\mu \\ne 25$, and P-value $= 0.041$. Do you reject or fail to reject $H_0$ at the 0.01 level of significance?</p></div><div class=\"ml-vi\"><p>Cho $H_0: \\mu = 25$, $H_1: \\mu \\ne 25$ và P-value $= 0.041$. Bạn bác bỏ hay không bác bỏ $H_0$ ở mức ý nghĩa 0.01?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D26/q39.png",
           "options": [
             {

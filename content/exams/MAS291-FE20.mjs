@@ -112,7 +112,7 @@ export default {
           "correctIndexes": [
             2
           ],
-          "explanation": "<div class=\"ml-en\"><p>A valid assignment needs two things: every probability in $[0,1]$, and the probabilities of all sample points summing to exactly 1. (A) fails because $-1/4<0$. (B) sums to $1/9+1/4+1/2=0.1111+0.25+0.5=0.8611<br/>eq 1$. (D) sums to $3/5=0.6<br/>eq 1$. (C): all values lie in $[0,1]$ and $0+1/14+13/14=14/14=1$ — valid. A probability of exactly 0 is allowed.</p></div><div class=\"ml-vi\"><p>Một cách gán hợp lệ cần hai điều: mọi xác suất nằm trong $[0,1]$, và tổng xác suất của tất cả điểm mẫu đúng bằng 1. (A) sai vì $-1/4<0$. (B) tổng $1/9+1/4+1/2=0{,}8611<br/>eq 1$. (D) tổng $3/5=0{,}6<br/>eq 1$. (C): mọi giá trị thuộc $[0,1]$ và $0+1/14+13/14=1$ — hợp lệ. Xác suất bằng đúng 0 vẫn được phép.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>A valid assignment needs two things: every probability in $[0,1]$, and the probabilities of all sample points summing to exactly 1. (A) fails because $-1/4<0$. (B) sums to $1/9+1/4+1/2=0.1111+0.25+0.5=0.8611\\neq 1$. (D) sums to $3/5=0.6\\neq 1$. (C): all values lie in $[0,1]$ and $0+1/14+13/14=14/14=1$ — valid. A probability of exactly 0 is allowed.</p></div><div class=\"ml-vi\"><p>Một cách gán hợp lệ cần hai điều: mọi xác suất nằm trong $[0,1]$, và tổng xác suất của tất cả điểm mẫu đúng bằng 1. (A) sai vì $-1/4<0$. (B) tổng $1/9+1/4+1/2=0{,}8611\\neq 1$. (D) tổng $3/5=0{,}6\\neq 1$. (C): mọi giá trị thuộc $[0,1]$ và $0+1/14+13/14=1$ — hợp lệ. Xác suất bằng đúng 0 vẫn được phép.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -577,7 +577,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>$F(x)=\\int_0^x \\frac{1}{9}e^{-t/9}\\,dt = \\left[-e^{-t/9}\\right]_0^x = 1-e^{-x/9}$. Sanity checks that kill the other options: a CDF must satisfy $F(0^+)=0$ and $F(\\infty)=1$. Option (ii) gives $F(0)=1-1/9=8/9<br/>eq0$; (iii) gives $F(0)=1$ and decreases; (iv) is just the density again.</p></div><div class=\"ml-vi\"><p>$F(x)=\\int_0^x \\frac{1}{9}e^{-t/9}\\,dt = \\left[-e^{-t/9}\\right]_0^x = 1-e^{-x/9}$. Hai phép kiểm nhanh loại các phương án còn lại: hàm phân phối tích luỹ phải có $F(0^+)=0$ và $F(\\infty)=1$. Phương án (ii) cho $F(0)=1-1/9=8/9<br/>eq0$; (iii) cho $F(0)=1$ và giảm dần; (iv) chính là hàm mật độ.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>$F(x)=\\int_0^x \\frac{1}{9}e^{-t/9}\\,dt = \\left[-e^{-t/9}\\right]_0^x = 1-e^{-x/9}$. Sanity checks that kill the other options: a CDF must satisfy $F(0^+)=0$ and $F(\\infty)=1$. Option (ii) gives $F(0)=1-1/9=8/9\\neq0$; (iii) gives $F(0)=1$ and decreases; (iv) is just the density again.</p></div><div class=\"ml-vi\"><p>$F(x)=\\int_0^x \\frac{1}{9}e^{-t/9}\\,dt = \\left[-e^{-t/9}\\right]_0^x = 1-e^{-x/9}$. Hai phép kiểm nhanh loại các phương án còn lại: hàm phân phối tích luỹ phải có $F(0^+)=0$ và $F(\\infty)=1$. Phương án (ii) cho $F(0)=1-1/9=8/9\\neq0$; (iii) cho $F(0)=1$ và giảm dần; (iv) chính là hàm mật độ.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1104,7 +1104,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Determine the critical value to test the claim about the population proportion $p<br/>eq0.325$, given $n=42$ and $\\hat{p}=0.247$. Use $\\alpha=0.05$. Let $z_{0.05}=1.645$, $z_{0.025}=1.96$, $z_{0.01}=2.33$, $z_{0.005}=2.575$.</p></div><div class=\"ml-vi\"><p>Hãy xác định giá trị tới hạn để kiểm định tuyên bố về tỉ lệ tổng thể $p<br/>eq0{,}325$, biết $n=42$ và $\\hat{p}=0{,}247$. Dùng $\\alpha=0{,}05$. Cho $z_{0{,}05}=1{,}645$, $z_{0{,}025}=1{,}96$, $z_{0{,}01}=2{,}33$, $z_{0{,}005}=2{,}575$.</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Determine the critical value to test the claim about the population proportion $p\\neq0.325$, given $n=42$ and $\\hat{p}=0.247$. Use $\\alpha=0.05$. Let $z_{0.05}=1.645$, $z_{0.025}=1.96$, $z_{0.01}=2.33$, $z_{0.005}=2.575$.</p></div><div class=\"ml-vi\"><p>Hãy xác định giá trị tới hạn để kiểm định tuyên bố về tỉ lệ tổng thể $p\\neq0{,}325$, biết $n=42$ và $\\hat{p}=0{,}247$. Dùng $\\alpha=0{,}05$. Cho $z_{0{,}05}=1{,}645$, $z_{0{,}025}=1{,}96$, $z_{0{,}01}=2{,}33$, $z_{0{,}005}=2{,}575$.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAS291/D20/q43.png",
           "options": [
             {
@@ -1126,7 +1126,7 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\"><p>The alternative is stated with $<br/>eq$, so this is a TWO-tailed test and $\\alpha=0.05$ is split into two tails of $\\alpha/2=0.025$ each. The critical values are $\\pm z_{0.025}=\\pm1.96$. The data ($n=42$, $\\hat{p}=0.247$) affect the test statistic, not the critical value — they are not needed here.</p></div><div class=\"ml-vi\"><p>Giả thuyết đối viết bằng dấu $<br/>eq$ nên đây là kiểm định HAI phía, và $\\alpha=0{,}05$ được chia đều cho hai đuôi, mỗi đuôi $\\alpha/2=0{,}025$. Giá trị tới hạn là $\\pm z_{0{,}025}=\\pm1{,}96$. Dữ liệu ($n=42$, $\\hat{p}=0{,}247$) chỉ ảnh hưởng tới thống kê kiểm định chứ không ảnh hưởng giá trị tới hạn — ở đây không cần dùng.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>The alternative is stated with $\\neq$, so this is a TWO-tailed test and $\\alpha=0.05$ is split into two tails of $\\alpha/2=0.025$ each. The critical values are $\\pm z_{0.025}=\\pm1.96$. The data ($n=42$, $\\hat{p}=0.247$) affect the test statistic, not the critical value — they are not needed here.</p></div><div class=\"ml-vi\"><p>Giả thuyết đối viết bằng dấu $\\neq$ nên đây là kiểm định HAI phía, và $\\alpha=0{,}05$ được chia đều cho hai đuôi, mỗi đuôi $\\alpha/2=0{,}025$. Giá trị tới hạn là $\\pm z_{0{,}025}=\\pm1{,}96$. Dữ liệu ($n=42$, $\\hat{p}=0{,}247$) chỉ ảnh hưởng tới thống kê kiểm định chứ không ảnh hưởng giá trị tới hạn — ở đây không cần dùng.</p></div>"
         },
         {
           "kind": "MCQ",

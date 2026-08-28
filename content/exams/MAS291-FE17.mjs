@@ -541,7 +541,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>TRUE. The null hypothesis always states equality ($=$, or $\\le$ / $\\ge$ whose boundary case is equality) because the whole test is computed AT that boundary value $\\theta_{0}$: the sampling distribution of the test statistic can only be derived from a single specified parameter value. The strict inequality ($<$, $>$, $<br/>e$) belongs to the alternative hypothesis.</p></div><div class=\"ml-vi\"><p>ĐÚNG. Giả thuyết không luôn phát biểu dạng đẳng thức ($=$, hoặc $\\le$ / $\\ge$ mà trường hợp biên là đẳng thức), bởi toàn bộ phép kiểm định được tính TẠI giá trị biên $\\theta_{0}$ đó: phân phối mẫu của thống kê kiểm định chỉ dựng được từ một giá trị tham số cụ thể. Bất đẳng thức nghiêm ngặt ($<$, $>$, $<br/>e$) thuộc về giả thuyết đối.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>TRUE. The null hypothesis always states equality ($=$, or $\\le$ / $\\ge$ whose boundary case is equality) because the whole test is computed AT that boundary value $\\theta_{0}$: the sampling distribution of the test statistic can only be derived from a single specified parameter value. The strict inequality ($<$, $>$, $\\ne$) belongs to the alternative hypothesis.</p></div><div class=\"ml-vi\"><p>ĐÚNG. Giả thuyết không luôn phát biểu dạng đẳng thức ($=$, hoặc $\\le$ / $\\ge$ mà trường hợp biên là đẳng thức), bởi toàn bộ phép kiểm định được tính TẠI giá trị biên $\\theta_{0}$ đó: phân phối mẫu của thống kê kiểm định chỉ dựng được từ một giá trị tham số cụ thể. Bất đẳng thức nghiêm ngặt ($<$, $>$, $\\ne$) thuộc về giả thuyết đối.</p></div>"
         },
         {
           "kind": "MCQ",

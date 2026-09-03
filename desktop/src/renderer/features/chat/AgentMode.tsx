@@ -1523,6 +1523,7 @@ function viecCuaTool(ten: string): string {
     web_anh: 'đang chụp màn hình trang…',
     web_console: 'đang đọc lỗi trang…',
     doc_web: 'đang đọc trang web…',
+    tim_web: 'đang tìm trên web…',
     giao_viec_phu: 'agent phụ đang làm…',
     cap_nhat_ke_hoach: 'đang cập nhật kế hoạch…',
   };
@@ -1555,6 +1556,7 @@ function IconTool({ ten, vong }: { ten: string; vong: 'may' | 'notes' }) {
        một cột icon là biết agent đang làm gì. */
     case 'web_mo':
     case 'doc_web': return <Globe {...p} />;
+    case 'tim_web': return <Search {...p} />;
     case 'web_doc': return <FileCode2 {...p} />;
     case 'web_lien_ket': return <Link2 {...p} />;
     case 'web_tai': return <Download {...p} />;

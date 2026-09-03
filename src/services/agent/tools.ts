@@ -647,6 +647,25 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     },
   },
   {
+    name: 'tim_web',
+    /* KHÔNG có `capability`, giống `doc_web`: đây là vòng MÁY CHỦ, không đụng
+       gì tới máy người dùng nên không có quyền nào để bật/tắt ở app. */
+    ring: 'server',
+    description:
+      'TÌM trên web và trả về danh sách kết quả kèm tóm tắt. Dùng khi bạn KHÔNG BIẾT địa chỉ — '
+      + 'ví dụ "phiên bản mới nhất của thư viện X", "lỗi Y nghĩa là gì", tin tức sau ngày bạn được huấn luyện. '
+      + 'Đã biết địa chỉ rồi thì dùng `doc_web`, đừng tìm lại. '
+      + 'Kết quả chỉ là TÓM TẮT — cần nội dung đầy đủ thì gọi `doc_web` với địa chỉ lấy được ở đây.',
+    parameters: {
+      type: 'object',
+      properties: {
+        q: { type: 'string', description: 'Câu cần tìm. Viết như bạn gõ vào ô tìm kiếm.' },
+        so: { type: 'number', description: 'Số kết quả muốn lấy, 1-8. Mặc định 5.' },
+      },
+      required: ['q'],
+    },
+  },
+  {
     /**
      * Đọc một trang web.
      *

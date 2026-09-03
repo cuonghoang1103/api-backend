@@ -17,6 +17,7 @@
  */
 import { getNote, getTree, htmlToText, searchNotes } from '../notes.service.js';
 import { docWeb } from './webTool.js';
+import { timWeb } from './timWeb.js';
 import { logger } from '../../utils/logger.js';
 
 /** Trần cho từng loại kết quả — không cắt thì một sổ ghi chú lớn nuốt sạch ngữ cảnh. */
@@ -54,6 +55,8 @@ export async function runServerTool(
         return await toolNotesTree(userId);
       case 'doc_web':
         return await docWeb(args);
+      case 'tim_web':
+        return await timWeb(args);
       default:
         return { content: `LỖI: không có tool tên "${name}".`, summary: 'tool lạ' };
     }

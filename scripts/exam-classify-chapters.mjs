@@ -25,6 +25,7 @@ const APPLY = has('--apply');
 const COURSE = val('--course', '');
 const MIN = Number(val('--min', '0.55')) || 0.55;
 const LIMIT = Number(val('--limit', '0')) || 0;
+const CONC = Math.max(1, Number(val('--conc', '1')) || 1); // số câu chạy song song
 if (!COURSE) { console.error('Cần --course <MÃ MÔN>. Ví dụ: --course SWR302'); process.exit(1); }
 
 const plain = (html) => String(html || '')
@@ -66,7 +67,10 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 // (bản trước đếm assigned trước lúc ghi nên "gán 620" mà DB 0 câu).
 let assigned = 0, low = 0, llmFail = 0, writeFail = 0, done = 0;
 const perSection = {};
-for (const q of questions) {
+
+// Phân loại + ghi MỘT câu (an toàn khi chạy xen kẽ: JS đơn luồng nên các biến
+// đếm không đua). Không throw ra ngoài — mọi lỗi đếm nội bộ.
+async function classifyOne(q) {
   done++;
   let idx, conf;
   try {
@@ -81,10 +85,10 @@ for (const q of questions) {
     idx = Number(obj?.section); conf = Number(obj?.confidence);
   } catch (e) {
     llmFail++; if (llmFail <= 8) console.log(`  ✗LLM #${q.id} — ${String(e?.message || e).slice(0, 120)}`);
-    await sleep(2000); continue; // nghỉ dài hơn khi cổng nghẽn
+    return;
   }
-  if (!Number.isInteger(idx) || idx < 1 || idx > sections.length) { low++; continue; }
-  if (!(conf >= MIN)) { low++; continue; }
+  if (!Number.isInteger(idx) || idx < 1 || idx > sections.length) { low++; return; }
+  if (!(conf >= MIN)) { low++; return; }
   const sec = sections[idx - 1];
   const sectionId = sec.id;
   if (APPLY) {
@@ -104,12 +108,18 @@ for (const q of questions) {
       }
       catch (e) { if (a === 2) { writeFail++; if (writeFail <= 8) console.log(`  ✗WRITE #${q.id}→${sectionId} — ${String(e?.message || e).slice(0, 150)}`); } else await sleep(600); }
     }
-    if (!wrote) continue;
+    if (!wrote) return;
   }
   perSection[idx] = (perSection[idx] || 0) + 1; assigned++;
-  await sleep(700);
 }
 
-console.log(`\nXONG (${done}/${questions.length}): GÁN ${assigned} · thấp ${low} · LLM lỗi ${llmFail} · GHI lỗi ${writeFail}${APPLY ? '' : '  (DRY RUN)'}`);
+// Chạy CONC câu song song một lô → nhanh gấp ~CONC lần.
+for (let i = 0; i < questions.length; i += CONC) {
+  await Promise.all(questions.slice(i, i + CONC).map(classifyOne));
+  if (i > 0 && i % 200 < CONC) console.log(`  ...${done}/${questions.length} (gán ${assigned}, LLM lỗi ${llmFail})`);
+  await sleep(150);
+}
+
+console.log(`\nXONG (${done}/${questions.length}) [conc ${CONC}]: GÁN ${assigned} · thấp ${low} · LLM lỗi ${llmFail} · GHI lỗi ${writeFail}${APPLY ? '' : '  (DRY RUN)'}`);
 console.log('Phân bố theo chương: ' + Object.entries(perSection).map(([k, v]) => `ch.${k}=${v}`).join(' · '));
 await prisma.$disconnect();

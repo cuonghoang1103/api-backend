@@ -51,7 +51,20 @@ let questions = await prisma.examQuestion.findMany({
 });
 if (LIMIT) questions = questions.slice(0, LIMIT);
 
-console.log(`Khoá ${course.courseCode} (id ${course.id}) — ${sections.length} chương · ${questions.length} câu. APPLY=${APPLY} MIN=${MIN}`);
+// Bỏ qua câu ĐÃ có trong bản đồ bền (chỉ gán câu còn thiếu) → chạy lại nhanh +
+// không tốn AI cho câu đã map. Thêm --force để gán lại tất.
+const FORCE = has('--force');
+const mappedHashes = new Set(
+  (await prisma.examChapterMap.findMany({ where: { courseCode: course.courseCode }, select: { promptHash: true } })).map((r) => r.promptHash),
+);
+let skipped = 0;
+if (!FORCE && mappedHashes.size) {
+  const before = questions.length;
+  questions = questions.filter((q) => !mappedHashes.has(promptHash(q.prompt)));
+  skipped = before - questions.length;
+}
+
+console.log(`Khoá ${course.courseCode} (id ${course.id}) — ${sections.length} chương · còn ${questions.length} câu cần gán (đã map ${skipped}). APPLY=${APPLY} MIN=${MIN} CONC=${CONC}`);
 console.log('Chương:\n' + sectionList + '\n');
 
 const SYSTEM = `You map ONE exam question to the single best matching chapter of a university course.

@@ -12,6 +12,7 @@
  *   node scripts/exam-classify-chapters.mjs --course SWR302 --apply --min 0.6 --limit 20
  */
 import { PrismaClient } from '@prisma/client';
+import { promptHash } from './_exam-hash.mjs';
 
 const { llmComplete } = await import('../dist/services/interview/llm/index.js');
 
@@ -33,7 +34,7 @@ const plain = (html) => String(html || '')
 const course = await prisma.course.findFirst({
   where: { courseCode: COURSE },
   select: { id: true, courseCode: true, title: true,
-    sections: { select: { id: true, title: true }, orderBy: { sortOrder: 'asc' } } },
+    sections: { select: { id: true, title: true, sortOrder: true }, orderBy: { sortOrder: 'asc' } } },
 });
 if (!course) { console.error(`Không tìm thấy khoá "${COURSE}"`); process.exit(1); }
 if (!course.sections.length) { console.error(`Khoá ${COURSE} chưa có chương (CourseSection).`); process.exit(1); }
@@ -84,11 +85,23 @@ for (const q of questions) {
   }
   if (!Number.isInteger(idx) || idx < 1 || idx > sections.length) { low++; continue; }
   if (!(conf >= MIN)) { low++; continue; }
-  const sectionId = sections[idx - 1].id;
+  const sec = sections[idx - 1];
+  const sectionId = sec.id;
   if (APPLY) {
+    const ph = promptHash(q.prompt);
     let wrote = false;
     for (let a = 0; a < 3 && !wrote; a++) {
-      try { await prisma.examQuestion.update({ where: { id: q.id }, data: { sectionId } }); wrote = true; }
+      try {
+        await prisma.examQuestion.update({ where: { id: q.id }, data: { sectionId } });
+        // Ghi BẢN ĐỒ BỀN theo nội dung câu → vị trí chương (sortOrder). Re-seed
+        // xoá câu này thì reapply sẽ khớp câu mới cùng nội dung về đúng chương.
+        await prisma.examChapterMap.upsert({
+          where: { uk_exam_chapter_map: { courseCode: course.courseCode, promptHash: ph } },
+          create: { courseCode: course.courseCode, promptHash: ph, sectionOrder: sec.sortOrder },
+          update: { sectionOrder: sec.sortOrder },
+        });
+        wrote = true;
+      }
       catch (e) { if (a === 2) { writeFail++; if (writeFail <= 8) console.log(`  ✗WRITE #${q.id}→${sectionId} — ${String(e?.message || e).slice(0, 150)}`); } else await sleep(600); }
     }
     if (!wrote) continue;

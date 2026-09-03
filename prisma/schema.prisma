@@ -1230,6 +1230,24 @@ model ExamQuestion {
   @@map("exam_questions")
 }
 
+// Bản đồ BỀN câu hỏi → chương, theo NỘI DUNG câu (promptHash) chứ không theo id.
+// Re-seed đề xoá+tạo lại câu (id đổi, section_id mất) nhưng nội dung câu giữ
+// nguyên → map này sống sót. Khoá chương dùng CourseSection.sortOrder (vị trí,
+// bền) chứ không dùng sectionId. Phân loại AI ghi vào đây 1 lần; script
+// exam-reapply-chapters.mjs (không AI) khớp câu hiện tại theo promptHash → sortOrder
+// → sectionId hiện tại, chạy định kỳ (cron) để tự lành sau mỗi lần re-seed.
+model ExamChapterMap {
+  id           Int      @id @default(autoincrement())
+  courseCode   String   @map("course_code") @db.VarChar(40)
+  promptHash   String   @map("prompt_hash") @db.VarChar(64)
+  sectionOrder Int      @map("section_order")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@unique([courseCode, promptHash], name: "uk_exam_chapter_map")
+  @@index([courseCode], name: "idx_exam_chapter_map_course")
+  @@map("exam_chapter_map")
+}
+
 model ExamAttempt {
   id               Int       @id @default(autoincrement())
   // No FK to User (interview pattern) — keeps the migration additive.

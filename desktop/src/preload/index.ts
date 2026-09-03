@@ -15,6 +15,8 @@
 import { contextBridge, ipcRenderer, webUtils } from 'electron';
 import type {
   AgentInfo,
+  TerminalKetQua,
+  TerminalDauRa,
   AgentCuocDangMo,
   AgentMcpTrangThai,
   AgentMucKhoiPhuc,
@@ -151,6 +153,15 @@ const bridge: DesktopBridge = {
     clearAll: () => ipcRenderer.invoke('music:clearAll') as Promise<void>,
   },
 
+  /* Bảng chạy lệnh — xem `main/ipc/terminal.ts` để biết vì sao nó KHÔNG phải
+     terminal thật, và vì sao nó dùng lại hạ tầng lệnh nền của agent. */
+  terminal: {
+    chay: (cuocId: string, lenh: string) =>
+      ipcRenderer.invoke('terminal:chay', { cuocId, lenh }) as Promise<TerminalKetQua>,
+    doc: (id: string) => ipcRenderer.invoke('terminal:doc', { id }) as Promise<TerminalDauRa>,
+    dung: (id: string) =>
+      ipcRenderer.invoke('terminal:dung', { id }) as Promise<{ ok: boolean; loi?: string }>,
+  },
   agent: {
     getInfo: () => ipcRenderer.invoke('agent:getInfo') as Promise<AgentInfo>,
     getWorkspace: (cuocId: string) =>

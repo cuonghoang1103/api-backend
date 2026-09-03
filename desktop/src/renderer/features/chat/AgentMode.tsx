@@ -30,6 +30,7 @@ import {
 import { useAppState } from '../../app-state';
 import { useMoRieng } from '../../components/moRieng';
 import { DangNghi } from './DangNghi';
+import { BangLenh } from './BangLenh';
 import { KhungWeb } from './KhungWeb';
 import { GoiYLenh, LENH_AGENT } from './GoiYLenh';
 import type {
@@ -159,6 +160,9 @@ export function AgentMode({
   /* Khung trình duyệt chia đôi. Mở khi agent gọi `web_mo` — main bắn
      `agent:moWeb` vì nó không tự đặt được toạ độ (xem `KhungWeb`). */
   const [webUrl, datWebUrl] = useState<string | null>(null);
+  /* Bảng chạy lệnh — mở/đóng bằng nút, KHÔNG tự mở. Nó chiếm chỗ dưới bảng
+     ghi, và người dùng phần lớn thời gian không cần tới. */
+  const [moBangLenh, datMoBangLenh] = useState(false);
   useEffect(() => {
     const cau = window.cuongthai;
     if (!cau) return;
@@ -523,6 +527,20 @@ export function AgentMode({
           {thuMuc?.choTrinhDuyet ? 'Trình duyệt: BẬT' : 'Trình duyệt: tắt'}
         </button>
 
+        {/* Bảng chạy lệnh của NGƯỜI DÙNG — khác hẳn `run_command` của agent:
+            ở đây không có thẻ duyệt, vì chính người dùng vừa gõ lệnh. Hỏi lại
+            thứ họ vừa tự gõ là màn kịch, và nó dạy người ta bấm bừa. */}
+        <button
+          type="button"
+          className="ct-btn ct-btn-ghost"
+          data-bat={moBangLenh}
+          onClick={() => datMoBangLenh((v) => !v)}
+          title="Chạy lệnh trong thư mục dự án — npm test, git status… (không phải terminal đầy đủ)"
+        >
+          <SquareTerminal size={13} aria-hidden />
+          {moBangLenh ? 'Bảng lệnh: MỞ' : 'Bảng lệnh'}
+        </button>
+
         {/* KHÔNG bọc trong `coThuMuc`: sổ ghi chú nằm trên máy chủ, không phải
             trong thư mục dự án. Ẩn nút này khi chưa mở dự án nghĩa là bắt người
             dùng chọn một thư mục mã chỉ để nhờ agent ghi chú. */}
@@ -874,6 +892,10 @@ export function AgentMode({
         </div>
       )}
       <DaiTepCode tep={dk.tep.filter((t) => !t.dataUrl)} bo={dk.bo} />
+
+      {moBangLenh && (
+        <BangLenh cuocId={cuocId} coThuMuc={coThuMuc} onDong={() => datMoBangLenh(false)} />
+      )}
 
       {lenhTraLoi !== null && (
         <div className="ct-lenh-traloi">

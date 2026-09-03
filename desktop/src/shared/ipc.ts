@@ -661,6 +661,37 @@ export type AgentMucKhoiPhuc =
   | { kieu: 'may'; text: string }
   | { kieu: 'tool'; ten: string; tomTat: string };
 
+/**
+ * BẢNG CHẠY LỆNH — một terminal rút gọn ngay trong app.
+ *
+ * ⚠️ ĐÂY KHÔNG PHẢI TERMINAL THẬT. Không có PTY (`node-pty` là module native,
+ * phải biên dịch lại theo ABI của Electron cho cả ba nền tảng), nên KHÔNG chạy
+ * được `vim`, không có chương trình hỏi-đáp tương tác, không có màu ANSI hay
+ * điều khiển con trỏ. Nó chạy một lệnh, chảy đầu ra, và dừng được — đủ cho
+ * `npm test`, `npm run build`, `git status`, tức phần lớn việc thật.
+ *
+ * Dùng lại nguyên `lenhNen.ts` mà agent đang dùng: hạ tầng đó đã có trần số
+ * tiến trình, dọn theo cuộc, và giết CẢ NHÓM tiến trình khi dừng.
+ */
+export interface TerminalKetQua {
+  ok: boolean;
+  loi?: string;
+  id?: string;
+}
+
+export interface TerminalDauRa {
+  ok: boolean;
+  loi?: string;
+  lenh?: string;
+  dangChay?: boolean;
+  /** Mã thoát. `null` khi còn đang chạy. */
+  ma?: number | null;
+  giay?: number;
+  /** CHỈ phần mới kể từ lần đọc trước — không phải cả đệm. */
+  moi?: string;
+  coGiMoi?: boolean;
+}
+
 /** Phân loại mức nguy hiểm của một lệnh — hiện thẳng trên thẻ duyệt. */
 export interface AgentPhanLoaiLenh {
   muc: 'thuong' | 'cankiem' | 'nguyhiem';
@@ -886,6 +917,15 @@ export const INVOKE_CHANNELS = {
   'agent:datCheDoLenh': agentCheDoLenhSchema,
   'agent:datCheDoNote': agentCheDoNoteSchema,
   'agent:datCheDoTrinhDuyet': agentCheDoTrinhDuyetSchema,
+  'terminal:chay': z.object({
+    cuocId: z.string().min(1),
+    /* Trần 4000 để một lệnh dài (chuỗi `find … -exec …`) vẫn chạy được, nhưng
+       không nhận cả một tệp script dán nhầm vào ô. */
+    lenh: z.string().min(1).max(4000),
+  }),
+  'terminal:doc': z.object({ id: z.string().min(1).max(64) }),
+  'terminal:dung': z.object({ id: z.string().min(1).max(64) }),
+
   'robot:datCo': z.object({ nac: z.number().int().min(0).max(3) }),
   'robot:keoBatDau': z.object({}).optional(),
   /* Độ lệch so với chỗ bấm xuống, đơn vị điểm ảnh CSS. Chặn hai đầu để một
@@ -1180,6 +1220,14 @@ export interface DesktopBridge {
    * có thể vài phút. Tiến trình đi qua sự kiện `agent:event`, không qua giá trị
    * trả về. Renderer phải gắn listener TRƯỚC khi gọi `send()`.
    */
+  terminal: {
+    /** Chạy một lệnh trong thư mục dự án của cuộc này. Trả về NGAY kèm mã. */
+    chay(cuocId: string, lenh: string): Promise<TerminalKetQua>;
+    /** Đọc phần đầu ra MỚI. Giao diện gọi lại mỗi vài trăm mili giây. */
+    doc(id: string): Promise<TerminalDauRa>;
+    /** Dừng — giết CẢ NHÓM tiến trình, không chỉ tiến trình cha. */
+    dung(id: string): Promise<{ ok: boolean; loi?: string }>;
+  };
   agent: {
     getInfo(): Promise<AgentInfo>;
     getWorkspace(cuocId: string): Promise<AgentWorkspace>;

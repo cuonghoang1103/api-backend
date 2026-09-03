@@ -8603,3 +8603,125 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 }
 
 .ct-lenh-traloi > button:hover { color: var(--ct-text); background: var(--ct-hover); }
+
+/* ── Bảng chạy lệnh (24/08/2026) ────────────────────────────
+   Terminal rút gọn trong AI Code. Không phải terminal đầy đủ — xem
+   `main/ipc/terminal.ts`.
+
+   ⚠️ `max-height` cố định + `min-height: 0`: nó nằm trong một chuỗi flex dọc,
+   và thiếu `min-height: 0` ở mắt xích nào là vùng cuộn bên trong KHÔNG BAO GIỜ
+   hiện — đúng lỗi đã dính khi dựng bố cục chat lần đầu. */
+.ct-bang-lenh {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: 340px;
+  margin: 8px 10px 0;
+  background: var(--ct-bg);
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  overflow: hidden;
+}
+
+.ct-bang-lenh-dau {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 8px;
+  font-size: 11.5px;
+  color: var(--ct-text-muted);
+  background: var(--ct-surface);
+  border-bottom: 1px solid var(--ct-border);
+}
+
+.ct-bang-lenh-dau strong { color: var(--ct-text); font-size: 12px; }
+
+/* Giới hạn nói THẲNG trên màn hình, không giấu trong tài liệu: người dùng gõ
+   `vim` rồi ngồi đợi là lỗi của ta, không phải của họ. */
+.ct-bang-lenh-ghi {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ct-text-faint);
+}
+
+.ct-bang-lenh-dau button {
+  display: inline-flex;
+  padding: 3px;
+  color: var(--ct-text-faint);
+  border-radius: 4px;
+}
+
+.ct-bang-lenh-dau button:hover { color: var(--ct-text); background: var(--ct-hover); }
+
+.ct-bang-lenh-cuon {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11.5px;
+}
+
+.ct-bang-lenh-trong { margin: 0; color: var(--ct-text-faint); }
+
+.ct-bang-lenh-muc + .ct-bang-lenh-muc { margin-top: 10px; }
+
+.ct-bang-lenh-dong {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+
+.ct-bang-lenh-dong code {
+  flex: 1;
+  min-width: 0;
+  color: var(--ct-text);
+  word-break: break-all;
+}
+
+.ct-bang-lenh-dau-nhac { color: var(--ct-accent); user-select: none; }
+
+.ct-bang-lenh-trangthai { flex: 0 0 auto; font-size: 11px; color: var(--ct-text-faint); }
+.ct-bang-lenh-trangthai[data-chay="1"] { color: var(--ct-accent); }
+/* Mã thoát là thứ ĐẦU TIÊN người ta tìm sau khi chạy test — cho nó màu, đừng
+   để nó lẫn vào chữ xám. */
+.ct-bang-lenh-trangthai[data-ma="ok"] { color: var(--ct-ok); }
+.ct-bang-lenh-trangthai[data-ma="loi"] { color: var(--ct-err); }
+
+.ct-bang-lenh-ra {
+  margin: 4px 0 0;
+  padding: 6px 8px;
+  max-height: 220px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--ct-text-muted);
+  background: var(--ct-surface);
+  border-radius: 4px;
+}
+
+.ct-bang-lenh-soan {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 8px;
+  border-top: 1px solid var(--ct-border);
+}
+
+.ct-bang-lenh-o {
+  flex: 1;
+  min-width: 0;
+  padding: 5px 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  color: var(--ct-text);
+  background: var(--ct-surface);
+  border: 1px solid var(--ct-border);
+  border-radius: 4px;
+}
+
+.ct-bang-lenh-o:focus { outline: none; border-color: var(--ct-accent); }

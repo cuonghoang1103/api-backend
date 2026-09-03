@@ -17,7 +17,61 @@
  *     ta thật sự làm việc: sửa sâu vài file, không rải khắp dự án.
  */
 import { AlertTriangle, Check, CheckCheck, FilePlus2, FilePen, GitCommitHorizontal, GitPullRequest, NotebookPen, Plug, Terminal, X } from 'lucide-react';
+import hljs from 'highlight.js/lib/common';
 import type { AgentDiff, AgentPhanLoaiLenh, AgentQuyetDinh } from '../../../shared/ipc';
+
+/**
+ * Ngôn ngữ cho `highlight.js`, suy từ đuôi file.
+ *
+ * Trả `null` khi không nhận ra: thà để chữ trắng còn hơn để `highlightAuto`
+ * đoán — đoán trên MỘT DÒNG thì gần như luôn sai, và một dòng bị tô sai ngôn
+ * ngữ trông rối hơn là không tô.
+ */
+function ngonNguTuDuong(duong: string): string | null {
+  const duoi = duong.slice(duong.lastIndexOf('.') + 1).toLowerCase();
+  const bang: Record<string, string> = {
+    ts: 'typescript', tsx: 'typescript', js: 'javascript', jsx: 'javascript', mjs: 'javascript',
+    java: 'java', py: 'python', rb: 'ruby', go: 'go', rs: 'rust', php: 'php',
+    c: 'c', h: 'c', cpp: 'cpp', cc: 'cpp', hpp: 'cpp', cs: 'csharp', swift: 'swift', kt: 'kotlin',
+    sql: 'sql', sh: 'bash', bash: 'bash', zsh: 'bash',
+    json: 'json', yml: 'yaml', yaml: 'yaml', xml: 'xml', html: 'xml', css: 'css', scss: 'scss',
+    md: 'markdown', ini: 'ini', toml: 'ini',
+  };
+  return (bang[duoi] && hljs.getLanguage(bang[duoi]) ? bang[duoi] : null) ?? null;
+}
+
+/**
+ * Một dòng mã đã tô màu.
+ *
+ * ⚠️ CÓ dùng `dangerouslySetInnerHTML`, và đây là đảo lại một quyết định cũ —
+ * nên phải nói rõ vì sao an toàn. Chú thích cũ đúng ở chỗ: nội dung này là mã
+ * nguồn CỦA NGƯỜI DÙNG, dựng thẳng bằng innerHTML thì một file HTML bất kỳ
+ * trong dự án sẽ CHẠY ngay trong renderer.
+ *
+ * Khác biệt: chữ ở đây KHÔNG đi thẳng vào innerHTML — nó đi qua
+ * `hljs.highlight()`, và hàm đó THOÁT đầu vào. Đo thật 24/08/2026 với
+ * `<img src=x onerror=alert(1)> & "q" </script>`:
+ *   `<img`      → `&lt;<span ...>img</span>`   (không còn thẻ thô)
+ *   `</script>` → `&lt;/script&gt;`
+ * Không byte HTML thô nào sống sót. Đây cũng đúng lập luận `markdown.tsx` đã
+ * dùng cho khối mã, chỉ là áp cho từng dòng.
+ *
+ * ⚠️ Tô THEO TỪNG DÒNG nên mất ngữ cảnh nhiều dòng (chuỗi hay chú thích kéo
+ * dài có thể tô sai đoạn giữa). Đổi lại là diff giữ được thứ tự dòng thêm/bỏ
+ * xen kẽ — tô cả khối thì không ghép lại được. Terminal của Claude Code cũng
+ * tô theo dòng.
+ */
+function MaDong({ text, ngonNgu }: { text: string; ngonNgu: string | null }) {
+  if (!ngonNgu) return <span className="ct-diff-text">{text || ' '}</span>;
+  let html: string;
+  try {
+    html = hljs.highlight(text, { language: ngonNgu, ignoreIllegals: true }).value;
+  } catch {
+    // Tô hỏng thì trả về chữ thô qua đường React — an toàn tuyệt đối.
+    return <span className="ct-diff-text">{text || ' '}</span>;
+  }
+  return <span className="ct-diff-text" dangerouslySetInnerHTML={{ __html: html || '&nbsp;' }} />;
+}
 
 export interface TheXinPhep {
   id: string;
@@ -34,6 +88,9 @@ export function XinPhep({
   the: TheXinPhep;
   traLoi: (id: string, q: AgentQuyetDinh) => void;
 }) {
+  // Tính MỘT lần cho cả thẻ, không phải mỗi dòng.
+  const ngonNgu = ngonNguTuDuong(the.duongDan);
+
   return (
     <div className="ct-xinphep">
       <div className="ct-xinphep-dau">
@@ -54,7 +111,7 @@ export function XinPhep({
         </div>
       )}
 
-      <div className="ct-diff">
+      <div className="ct-diff" data-ngonngu={ngonNgu ?? 'tho'}>
         {the.diff.dong.map((d, i) => {
           // Dòng "…" ngăn cách hai cụm thay đổi: cùng kiểu dữ liệu, cả hai số
           // dòng đều null. Xem `rutGonNguCanh` trong main/agent/diff.ts.
@@ -66,10 +123,7 @@ export function XinPhep({
               <span className="ct-diff-so">{d.soCu ?? ''}</span>
               <span className="ct-diff-so">{d.soMoi ?? ''}</span>
               <span className="ct-diff-dau">{d.loai === 'them' ? '+' : d.loai === 'bo' ? '−' : ' '}</span>
-              {/* `pre-wrap` + text thô: KHÔNG dangerouslySetInnerHTML. Nội dung
-                  này đến từ mã nguồn của người dùng, và một file HTML bất kỳ
-                  trong dự án sẽ chạy ngay trong renderer nếu dựng bằng innerHTML. */}
-              <span className="ct-diff-text">{d.text || ' '}</span>
+              <MaDong text={d.text} ngonNgu={ngonNgu} />
             </div>
           );
         })}

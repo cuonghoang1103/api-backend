@@ -40,8 +40,15 @@ describe('cấm ghi file bằng shell', () => {
   });
 
   it('create_file chỉ thẳng sang edit_file khi file đã có', () => {
-    const i = toolApp.indexOf('đã tồn tại');
-    expect(toolApp.slice(i - 200, i + 500), 'thông báo không chỉ đường sang edit_file')
-      .toContain('edit_file');
+    /* ⚠️ Neo vào ĐÚNG hàm, không phải vào chuỗi "đã tồn tại" trần.
+       24/08/2026 thêm `doi_ten_file` — nó cũng báo "đã tồn tại" cho đường ĐÍCH,
+       và nó đứng TRƯỚC trong tệp, nên `indexOf` bắt trúng nó và phép kiểm đỏ
+       trong khi `create_file` chẳng có gì thay đổi. Một phép kiểm neo bằng
+       chuỗi chung chung sẽ đỏ mỗi lần có người thêm mã ở phía trên. */
+    const iHam = toolApp.indexOf('async function toolCreateFile');
+    expect(iHam, 'không thấy hàm toolCreateFile').toBeGreaterThan(-1);
+    const than = toolApp.slice(iHam, toolApp.indexOf('\nasync function ', iHam + 1));
+    expect(than, 'thông báo không chỉ đường sang edit_file').toContain('đã tồn tại');
+    expect(than, 'thông báo không chỉ đường sang edit_file').toContain('edit_file');
   });
 });

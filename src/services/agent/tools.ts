@@ -232,6 +232,70 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     },
   },
 
+  {
+    name: 'xoa_file',
+    ring: 'client',
+    capability: 'fs_write',
+    description:
+      'XOÁ một file trong dự án. Người dùng phải duyệt, và thẻ duyệt hiện rõ đường dẫn. '
+      + 'CHỈ xoá file, KHÔNG xoá thư mục — xoá cả cây là việc không hoàn tác được bằng nút Hoàn tác. '
+      + 'Dùng cái này thay cho `run_command` với `rm`: ở đây có bản sao để hoàn tác, còn `rm` thì mất hẳn.',
+    parameters: {
+      type: 'object',
+      properties: {
+        path: { type: 'string', description: 'Đường dẫn TƯƠNG ĐỐI so với gốc dự án.' },
+      },
+      required: ['path'],
+    },
+  },
+  {
+    name: 'doi_ten_file',
+    ring: 'client',
+    capability: 'fs_write',
+    description:
+      'Đổi tên hoặc DI CHUYỂN một file trong dự án. Cả hai đường đều phải nằm trong gốc dự án. '
+      + 'Thư mục đích còn thiếu sẽ được tạo. Báo lỗi nếu đích đã có file — không ghi đè im lặng.',
+    parameters: {
+      type: 'object',
+      properties: {
+        tu: { type: 'string', description: 'Đường dẫn hiện tại, TƯƠNG ĐỐI so với gốc dự án.' },
+        den: { type: 'string', description: 'Đường dẫn mới, TƯƠNG ĐỐI so với gốc dự án.' },
+      },
+      required: ['tu', 'den'],
+    },
+  },
+  {
+    name: 'sua_nhieu_cho',
+    ring: 'client',
+    capability: 'fs_write',
+    description:
+      'Sửa NHIỀU CHỖ trong MỘT file bằng một lời gọi. DÙNG CÁI NÀY thay vì gọi `edit_file` lặp lại '
+      + 'trên cùng một file — mỗi lời gọi tool chở theo TOÀN BỘ hội thoại, nên đổi tên một biến ở 20 chỗ '
+      + 'bằng 20 lượt tốn gấp hàng chục lần một lượt. '
+      + 'Các phép thay chạy TUẦN TỰ theo thứ tự bạn đưa, và AI PHẢI ĐẢM BẢO mỗi `cu` là DUY NHẤT tại '
+      + 'thời điểm nó chạy. Chỉ cần MỘT phép trượt là CẢ LÔ bị huỷ và file giữ nguyên — không có chuyện '
+      + 'sửa được một nửa. Người dùng duyệt MỘT lần cho cả lô, thấy diff gộp.',
+    parameters: {
+      type: 'object',
+      properties: {
+        path: { type: 'string', description: 'Đường dẫn TƯƠNG ĐỐI so với gốc dự án.' },
+        sua: {
+          type: 'array',
+          description: 'Danh sách phép thay, chạy tuần tự. Tối đa 50 phép mỗi lần.',
+          items: {
+            type: 'object',
+            properties: {
+              cu: { type: 'string', description: 'Chuỗi cần thay, phải khớp CHÍNH XÁC và DUY NHẤT.' },
+              moi: { type: 'string', description: 'Chuỗi thay vào.' },
+            },
+            required: ['cu', 'moi'],
+          },
+        },
+      },
+      required: ['path', 'sua'],
+    },
+  },
+
   // ─── Vòng 1c: CHẠY LỆNH (P3) ───────────────────────────────────
   {
     name: 'run_command',

@@ -25,13 +25,13 @@ import {
   Link2,
   BookOpen, Check, Circle, CircleDot, CircleStop, FileCode2, FilePen, FilePlus2, FolderOpen,
   FolderPlus, FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
-  Sparkles, SquareTerminal, Terminal, Undo2, X, ChevronDown, Cpu, Globe, Zap, ListPlus,
+  Sparkles, SquareTerminal, Terminal, Trash2, Undo2, X, ChevronDown, Cpu, Globe, Zap, ListPlus,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useMoRieng } from '../../components/moRieng';
 import { DangNghi } from './DangNghi';
 import { KhungWeb } from './KhungWeb';
-import { GoiYLenh } from './GoiYLenh';
+import { GoiYLenh, LENH_AGENT } from './GoiYLenh';
 import type {
   AgentInfo, AgentMcpTrangThai, AgentNguCanh, AgentViec, AgentWorktree, CheDoQuyen, ModelAgent, MucNoLuc,
 } from '../../../shared/ipc';
@@ -113,6 +113,14 @@ export function AgentMode({
    * nên chen ngang là hai lượt cùng ghi vào một sổ.
    */
   const [hangCho, datHangCho] = useState<string[]>([]);
+  /**
+   * Câu trả lời của một lệnh gạch chéo chạy CỤC BỘ (`/help`, `/cost`).
+   *
+   * ⛔ CỐ Ý nằm NGOÀI `trangThai.muc`. Hội thoại đó được gửi lại TRỌN VẸN lên
+   * cổng ở MỖI lượt, nên nhét một bảng trợ giúp vào đó là trả tiền cho nó
+   * mãi mãi, ở mọi lượt sau. Nó cũng không phải thứ model cần đọc.
+   */
+  const [lenhTraLoi, datLenhTraLoi] = useState<string | null>(null);
   /* Tấm "Việc đã lưu" cũng vào chung sổ: nó là tấm phủ, và trước đây mở nó
      trong khi bảng MCP đang mở là hai lớp chồng nhau. Nó tự có nền bấm-để-đóng
      nên không cần `boc`. */
@@ -310,6 +318,56 @@ export function AgentMode({
      * nói "không".
      */
     const lenh = text.toLowerCase();
+
+    /* ⛔ Những lệnh dưới đây KHÔNG tốn một lượt nào: chúng đọc trạng thái sẵn
+       có trong renderer. Để chúng rơi vào model là trả tiền cho một câu trả
+       lời mà chính app đã biết. */
+    if (lenh === '/help' || lenh === '/?' || lenh === '/tro-giup') {
+      datNhap('');
+      datLenhTraLoi(
+        `**Lệnh gạch chéo**\n\n${LENH_AGENT.map((l) => {
+          const khac = l.khac?.length ? ` _(hoặc ${l.khac.join(', ')})_` : '';
+          return `- \`${l.ten}\`${khac} — ${l.mo}`;
+        }).join('\n')}`,
+      );
+      return;
+    }
+
+    if (lenh === '/cost' || lenh === '/tien' || lenh === '/chiphi') {
+      datNhap('');
+      const q = trangThai.hanMuc;
+      datLenhTraLoi(
+        `**Chi phí việc này**\n\n`
+        + `- Đã tiêu: **~$${trangThai.tienPhien.toFixed(3)}**\n`
+        + `- Số bước đã đi: ${trangThai.buoc ?? 0}\n`
+        + (q ? `- Hạn mức 5 giờ: còn **${Math.max(0, q.tran - q.daDung).toLocaleString('vi-VN')}**`
+              + ` / ${q.tran.toLocaleString('vi-VN')} token\n` : '')
+        + `- File đã sửa (hoàn tác được): ${trangThai.soFileDaSua}\n\n`
+        + '_Con số là ƯỚC LƯỢNG — cổng không công khai giá._',
+      );
+      return;
+    }
+
+    if (lenh === '/undo' || lenh === '/hoantac') {
+      datNhap('');
+      if (trangThai.soFileDaSua === 0) {
+        datLenhTraLoi('Chưa có file nào để hoàn tác trong việc này.');
+        return;
+      }
+      void hoanTac();
+      return;
+    }
+
+    /* `/diff` KHÁC ba lệnh trên: nó cần đọc đĩa, mà chỉ agent mới có quyền đó.
+       Nên nó biến thành một câu hỏi cho agent — vẫn tốn một lượt, nhưng người
+       dùng gõ bốn ký tự thay vì một câu. */
+    if (lenh === '/diff' || lenh === '/thaydoi') {
+      datNhap('');
+      dk.xoaHet();
+      void gui('Chạy git_diff rồi tóm tắt ngắn gọn những gì đã thay đổi trong dự án.');
+      return;
+    }
+
     if (lenh === '/clear' || lenh === '/new' || lenh === '/moi') {
       datNhap('');
       dk.xoaHet();
@@ -816,6 +874,15 @@ export function AgentMode({
         </div>
       )}
       <DaiTepCode tep={dk.tep.filter((t) => !t.dataUrl)} bo={dk.bo} />
+
+      {lenhTraLoi !== null && (
+        <div className="ct-lenh-traloi">
+          <ChuAgent text={lenhTraLoi} />
+          <button type="button" title="Đóng" onClick={() => datLenhTraLoi(null)}>
+            <X size={12} aria-hidden />
+          </button>
+        </div>
+      )}
 
       {/* Hàng chờ — người dùng phải THẤY câu mình vừa gõ đang nằm đâu, và bỏ
           được. Không hiện thì gõ xong Enter là chữ biến mất, trông y như mất. */}
@@ -1420,6 +1487,9 @@ function viecCuaTool(ten: string): string {
     grep: 'đang tìm trong mã…',
     edit_file: 'đang sửa file…',
     create_file: 'đang tạo file…',
+    sua_nhieu_cho: 'đang sửa nhiều chỗ…',
+    xoa_file: 'đang xoá file…',
+    doi_ten_file: 'đang đổi tên file…',
     run_command: 'đang chạy lệnh…',
     git_status: 'đang xem git…',
     git_diff: 'đang xem thay đổi…',
@@ -1447,6 +1517,9 @@ function IconTool({ ten, vong }: { ten: string; vong: 'may' | 'notes' }) {
     case 'read_file': return <FileCode2 {...p} />;
     case 'edit_file': return <FilePen {...p} />;
     case 'create_file': return <FilePlus2 {...p} />;
+    case 'sua_nhieu_cho': return <FilePen {...p} />;
+    case 'xoa_file': return <Trash2 {...p} />;
+    case 'doi_ten_file': return <FolderTree {...p} />;
     case 'run_command': return <SquareTerminal {...p} />;
     case 'chay_lenh_nen':
     case 'doc_dau_ra_nen':

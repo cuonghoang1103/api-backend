@@ -21,6 +21,10 @@ export interface LenhGach {
 
 export const LENH_AGENT: LenhGach[] = [
   { ten: '/clear', mo: 'Xoá hội thoại, bắt đầu việc mới', khac: ['/new', '/moi'] },
+  { ten: '/undo', mo: 'Hoàn tác mọi file agent đã sửa trong việc này', khac: ['/hoantac'] },
+  { ten: '/cost', mo: 'Tiền đã tiêu và hạn mức còn lại', khac: ['/tien', '/chiphi'] },
+  { ten: '/diff', mo: 'Xem git diff của dự án đang mở', khac: ['/thaydoi'] },
+  { ten: '/help', mo: 'Danh sách lệnh gạch chéo', khac: ['/?', '/tro-giup'] },
 ];
 
 /**

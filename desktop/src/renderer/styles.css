@@ -3765,13 +3765,63 @@ select {
   white-space: pre;
 }
 
+/* ⚠️ DẢI MÀU PHỦ HẾT BỀ RỘNG, kể cả phần cuộn ngang.
+   `.ct-diff` cuộn ngang, mà `display:flex` chỉ tô tới hết NỘI DUNG — dòng ngắn
+   thì dải màu đứt giữa chừng, nhìn như diff bị lỗi. `min-width: max-content`
+   kéo mọi dòng dài bằng dòng dài nhất. */
+.ct-diff-dong { min-width: max-content; width: 100%; }
+
+/* Đậm hơn hẳn bản 14% cũ — người dùng đối chiếu với terminal của Claude Code
+   (ảnh 24/08/2026) và ở đó dải đỏ/xanh đọc được từ xa. 14% trên nền tối gần
+   như không thấy. Dùng `color-mix` nên nó tự đúng ở CẢ HAI chủ đề. */
 .ct-diff-dong[data-loai='them'] {
-  background: color-mix(in srgb, var(--ct-ok) 14%, transparent);
+  background: color-mix(in srgb, var(--ct-ok) 26%, transparent);
 }
 
 .ct-diff-dong[data-loai='bo'] {
-  background: color-mix(in srgb, var(--ct-err) 14%, transparent);
+  background: color-mix(in srgb, var(--ct-err) 26%, transparent);
 }
+
+/* Vạch đứng bên trái: dấu +/− nằm ở cột riêng nên khi cuộn ngang nó trôi mất.
+   Vạch này dính vào mép, luôn nói được dòng nào thêm dòng nào bỏ. */
+.ct-diff-dong[data-loai='them'] { box-shadow: inset 2px 0 0 var(--ct-ok); }
+.ct-diff-dong[data-loai='bo'] { box-shadow: inset 2px 0 0 var(--ct-err); }
+
+/* ── Màu cú pháp trong diff ─────────────────────────────────
+   `highlight.js` chỉ sinh ra `<span class="hljs-…">`; bảng màu do ta đặt, nên
+   nó theo chủ đề của app thay vì kéo theo một tệp CSS của thư viện.
+   Giữ TÔNG NHẠT: nền dòng đã mang màu đỏ/xanh rồi, chữ mà cũng rực thì hai
+   lớp màu đánh nhau và không đọc được cái nào. */
+.ct-diff .hljs-keyword,
+.ct-diff .hljs-built_in { color: #c792ea; }
+.ct-diff .hljs-string,
+.ct-diff .hljs-regexp { color: #c3e88d; }
+.ct-diff .hljs-number,
+.ct-diff .hljs-literal { color: #f78c6c; }
+.ct-diff .hljs-comment { color: var(--ct-text-faint); font-style: italic; }
+.ct-diff .hljs-type,
+.ct-diff .hljs-title,
+.ct-diff .hljs-class { color: #ffcb6b; }
+.ct-diff .hljs-variable,
+.ct-diff .hljs-attr,
+.ct-diff .hljs-property { color: #82aaff; }
+.ct-diff .hljs-operator,
+.ct-diff .hljs-punctuation { color: var(--ct-text-muted); }
+
+/* Chủ đề SÁNG: bảng trên là bảng cho nền tối. Trên nền sáng nó nhạt tới mức
+   mất chữ — đúng họ lỗi "nền cố định gặp chữ theo chủ đề". */
+html[data-ct-theme='light'] .ct-diff .hljs-keyword,
+html[data-ct-theme='light'] .ct-diff .hljs-built_in { color: #8b1a9e; }
+html[data-ct-theme='light'] .ct-diff .hljs-string,
+html[data-ct-theme='light'] .ct-diff .hljs-regexp { color: #1a7f37; }
+html[data-ct-theme='light'] .ct-diff .hljs-number,
+html[data-ct-theme='light'] .ct-diff .hljs-literal { color: #b35000; }
+html[data-ct-theme='light'] .ct-diff .hljs-type,
+html[data-ct-theme='light'] .ct-diff .hljs-title,
+html[data-ct-theme='light'] .ct-diff .hljs-class { color: #8a6d00; }
+html[data-ct-theme='light'] .ct-diff .hljs-variable,
+html[data-ct-theme='light'] .ct-diff .hljs-attr,
+html[data-ct-theme='light'] .ct-diff .hljs-property { color: #0a4fa8; }
 
 /* Số dòng KHÔNG được bôi đen theo khi người dùng bôi để chép đoạn mã. */
 .ct-diff-so {
@@ -8524,3 +8574,32 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-agent-tool[data-chay="1"] { opacity: 0.72; }
 
 .ct-agent-tool[data-chay="1"] .ct-agent-tool-tomtat { font-style: italic; }
+
+/* ── Trả lời của lệnh gạch chéo chạy CỤC BỘ (24/08/2026) ────
+   `/help`, `/cost` — trả lời ngay trong app, KHÔNG tốn một lượt nào. Nằm
+   ngoài dòng hội thoại có chủ đích: hội thoại được gửi lại trọn vẹn lên cổng
+   mỗi lượt, nên nhét bảng trợ giúp vào đó là trả tiền cho nó mãi mãi. */
+.ct-lenh-traloi {
+  position: relative;
+  margin: 8px 10px 0;
+  padding: 10px 30px 10px 12px;
+  font-size: 12.5px;
+  color: var(--ct-text);
+  background: var(--ct-surface);
+  border: 1px solid var(--ct-border);
+  border-left: 2px solid var(--ct-accent);
+  border-radius: var(--ct-radius-sm);
+  min-width: 0;
+}
+
+.ct-lenh-traloi > button {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: inline-flex;
+  padding: 3px;
+  color: var(--ct-text-faint);
+  border-radius: 4px;
+}
+
+.ct-lenh-traloi > button:hover { color: var(--ct-text); background: var(--ct-hover); }

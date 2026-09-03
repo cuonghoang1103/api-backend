@@ -241,6 +241,18 @@ export async function chayToolAgent(
       case 'glob': return await toolGlob(goc, args);
       case 'git_status': return await toolGitStatus(goc);
       case 'git_diff': return await toolGitDiff(goc, args);
+      case 'sua_nhieu_cho': {
+        if (!ghi) return { noiDung: 'LỖI: phiên này không bật quyền sửa file.', tomTat: 'không có quyền' };
+        return await toolSuaNhieuCho(goc, args, ghi);
+      }
+      case 'xoa_file': {
+        if (!ghi) return { noiDung: 'LỖI: phiên này không bật quyền sửa file.', tomTat: 'không có quyền' };
+        return await toolXoaFile(goc, args, ghi);
+      }
+      case 'doi_ten_file': {
+        if (!ghi) return { noiDung: 'LỖI: phiên này không bật quyền sửa file.', tomTat: 'không có quyền' };
+        return await toolDoiTenFile(goc, args, ghi);
+      }
       case 'edit_file':
       case 'create_file': {
         // Không có bối cảnh ghi ⇒ phiên này không bật quyền sửa. Trả lỗi vào
@@ -562,6 +574,185 @@ async function toolEditFile(goc: string, args: Record<string, unknown>, ghi: Boi
     noiDung: `Đã sửa ${tuongDoi}: +${diff.soThem} −${diff.soBo} dòng. Người dùng đã duyệt.`,
     tomTat: `+${diff.soThem} −${diff.soBo}${tuDong ? ' (tự duyệt)' : ''}`,
   };
+}
+
+const MAX_SUA_MOT_LO = 50;
+
+/**
+ * Sửa NHIỀU CHỖ trong MỘT file, một lời gọi, một thẻ duyệt.
+ *
+ * ─── Vì sao cần, khi đã có `edit_file` ───
+ * Mỗi lời gọi tool chở theo TOÀN BỘ hội thoại lên cổng. Đổi tên một biến ở 20
+ * chỗ bằng 20 lần `edit_file` là 20 lượt, mỗi lượt trả tiền cho cả lịch sử —
+ * cùng bài toán mà `web_tai_nhieu` đã giải cho việc tải file.
+ *
+ * ⚠️ TẤT CẢ HOẶC KHÔNG GÌ CẢ. Một phép trượt là huỷ cả lô, file giữ nguyên.
+ * Sửa được một nửa còn tệ hơn không sửa: model tưởng xong, người dùng thấy
+ * diff một nửa, và mã ở trạng thái không ai định.
+ *
+ * ⚠️ Kiểm DUY NHẤT tại thời điểm phép đó chạy, trên nội dung ĐÃ qua các phép
+ * trước — không phải trên nội dung gốc. Một phép trước có thể vừa tạo ra (hoặc
+ * xoá mất) chỗ khớp của phép sau.
+ */
+async function toolSuaNhieuCho(goc: string, args: Record<string, unknown>, ghi: BoiCanhGhi): Promise<KetQuaTool> {
+  const tuongDoi = String(args.path ?? '');
+  if (!tuongDoi) return { noiDung: 'LỖI: thiếu "path".', tomTat: 'thiếu đường dẫn' };
+
+  const tho = Array.isArray(args.sua) ? args.sua : [];
+  const sua = tho
+    .filter((x): x is Record<string, unknown> => !!x && typeof x === 'object')
+    .map((x) => ({ cu: typeof x.cu === 'string' ? x.cu : '', moi: typeof x.moi === 'string' ? x.moi : '' }))
+    .filter((x) => x.cu);
+  if (!sua.length) return { noiDung: 'LỖI: "sua" rỗng hoặc không mục nào có "cu".', tomTat: 'rỗng' };
+  if (sua.length > MAX_SUA_MOT_LO) {
+    return { noiDung: `LỖI: tối đa ${MAX_SUA_MOT_LO} phép mỗi lần, bạn gửi ${sua.length}.`, tomTat: 'quá nhiều' };
+  }
+
+  const dich = await moTrongNguc(goc, tuongDoi, { phaiCoThat: true });
+  const st = await fs.stat(dich);
+  if (st.isDirectory()) return { noiDung: `LỖI: "${tuongDoi}" là thư mục.`, tomTat: 'là thư mục' };
+  if (st.size > TRAN_BYTE_FILE) return { noiDung: 'LỖI: file quá lớn để sửa (trần 2MB).', tomTat: 'quá lớn' };
+
+  const goc0 = await fs.readFile(dich, 'utf8');
+  let hienTai = goc0;
+  for (let i = 0; i < sua.length; i += 1) {
+    const { cu, moi } = sua[i] as { cu: string; moi: string };
+    const soLan = demSoLan(hienTai, cu);
+    if (soLan === 0) {
+      return {
+        noiDung:
+          `LỖI: phép thứ ${i + 1} không tìm thấy "cu" trong ${tuongDoi} (đã áp ${i} phép trước đó). `
+          + 'CẢ LÔ BỊ HUỶ, file giữ nguyên. Gọi read_file đọc lại rồi chép chính xác, kể cả thụt lề.',
+        tomTat: `phép ${i + 1} không khớp — huỷ cả lô`,
+      };
+    }
+    if (soLan > 1) {
+      return {
+        noiDung:
+          `LỖI: phép thứ ${i + 1} khớp ${soLan} chỗ nên không biết sửa chỗ nào. CẢ LÔ BỊ HUỶ. `
+          + 'Lấy thêm vài dòng quanh đoạn đó cho nó đủ riêng biệt.',
+        tomTat: `phép ${i + 1} trùng ${soLan} chỗ — huỷ cả lô`,
+      };
+    }
+    hienTai = hienTai.replace(cu, moi);
+  }
+
+  if (hienTai === goc0) return { noiDung: 'LỖI: sau khi áp hết, file không đổi gì.', tomTat: 'không đổi' };
+  if (Buffer.byteLength(hienTai, 'utf8') > TRAN_BYTE_GHI) {
+    return { noiDung: `LỖI: file sau khi sửa vượt trần ${TRAN_BYTE_GHI / 1024}KB.`, tomTat: 'quá lớn' };
+  }
+
+  // MỘT diff gộp cho cả lô — người dùng duyệt một lần, thấy trọn thay đổi.
+  const diff = soSanhDong(goc0, hienTai);
+  const tuDong = daChoPhepCaFile(ghi.so.quyenDaCap, tuongDoi);
+  const quyet = await hoiNguoiDung(
+    { ten: 'sua_nhieu_cho', duongDan: tuongDoi, tuDuyet: ghi.tuDuyet === true },
+    (y) => ghi.xinPhep({ ...y, diff, taoMoi: false }),
+    ghi.signal,
+    ghi.so.quyenDaCap,
+  );
+  if (quyet === 'tuChoi') return loiTuChoi(`sửa ${sua.length} chỗ trong ${tuongDoi}`);
+
+  await ghiVaNhoDeHoanTac(ghi.so, dich, hienTai, goc0);
+  return {
+    noiDung: `Đã áp ${sua.length} phép sửa vào ${tuongDoi}: +${diff.soThem} −${diff.soBo} dòng. Người dùng đã duyệt.`,
+    tomTat: `${sua.length} chỗ · +${diff.soThem} −${diff.soBo}${tuDong ? ' (tự duyệt)' : ''}`,
+  };
+}
+
+/**
+ * XOÁ một file.
+ *
+ * ⚠️ Có tool riêng thay vì để model gọi `run_command` với `rm`, vì hai lý do:
+ *  • `rm` mất HẲN — nút Hoàn tác chỉ theo dõi thứ đi qua nhật ký ở đây.
+ *  • `rm -rf` gõ sai một dấu cách là xoá nhầm cây thư mục. Ở đây chỉ xoá được
+ *    ĐÚNG MỘT FILE, và ngục đường dẫn vẫn chặn `.env`, khoá riêng…
+ *
+ * Nội dung cũ vào nhật ký TRƯỚC khi xoá, nên Hoàn tác ghi lại được nguyên văn.
+ */
+async function toolXoaFile(goc: string, args: Record<string, unknown>, ghi: BoiCanhGhi): Promise<KetQuaTool> {
+  const tuongDoi = String(args.path ?? '');
+  if (!tuongDoi) return { noiDung: 'LỖI: thiếu "path".', tomTat: 'thiếu đường dẫn' };
+
+  const dich = await moTrongNguc(goc, tuongDoi, { phaiCoThat: true });
+  const st = await fs.stat(dich);
+  if (st.isDirectory()) {
+    return {
+      noiDung: `LỖI: "${tuongDoi}" là THƯ MỤC. Tool này chỉ xoá file — xoá cả cây không hoàn tác được.`,
+      tomTat: 'là thư mục',
+    };
+  }
+  if (st.size > TRAN_BYTE_FILE) {
+    return { noiDung: 'LỖI: file quá lớn để giữ bản hoàn tác (trần 2MB).', tomTat: 'quá lớn' };
+  }
+
+  const noiDungCu = await fs.readFile(dich, 'utf8');
+  /* Diff "xoá sạch": người duyệt phải THẤY mình đang mất gì, không chỉ thấy
+     một dòng chữ "xoá file X". */
+  const diff = soSanhDong(noiDungCu, '');
+  const quyet = await hoiNguoiDung(
+    { ten: 'xoa_file', duongDan: tuongDoi, tuDuyet: ghi.tuDuyet === true },
+    (y) => ghi.xinPhep({ ...y, diff, taoMoi: false }),
+    ghi.signal,
+    ghi.so.quyenDaCap,
+  );
+  if (quyet === 'tuChoi') return loiTuChoi(`xoá ${tuongDoi}`);
+
+  if (!ghi.so.nhatKyHoanTac.has(dich)) ghi.so.nhatKyHoanTac.set(dich, noiDungCu);
+  await fs.rm(dich, { force: true });
+  return {
+    noiDung: `Đã xoá ${tuongDoi} (${diff.soBo} dòng). Người dùng đã duyệt. Nút Hoàn tác khôi phục lại được.`,
+    tomTat: `xoá · −${diff.soBo}`,
+  };
+}
+
+/**
+ * Đổi tên / DI CHUYỂN một file. Cả hai đường đều phải nằm trong ngục.
+ *
+ * Nhật ký hoàn tác nhận HAI mục: đường CŨ mang nội dung (hoàn tác ghi lại) và
+ * đường MỚI mang `null` (hoàn tác xoá đi). Thiếu một trong hai thì Hoàn tác để
+ * lại một bản sao mồ côi.
+ */
+async function toolDoiTenFile(goc: string, args: Record<string, unknown>, ghi: BoiCanhGhi): Promise<KetQuaTool> {
+  const tu = String(args.tu ?? '');
+  const den = String(args.den ?? '');
+  if (!tu || !den) return { noiDung: 'LỖI: cần cả "tu" và "den".', tomTat: 'thiếu đường dẫn' };
+  if (tu === den) return { noiDung: 'LỖI: "tu" và "den" giống nhau.', tomTat: 'không đổi' };
+
+  const dTu = await moTrongNguc(goc, tu, { phaiCoThat: true });
+  const stTu = await fs.stat(dTu);
+  if (stTu.isDirectory()) {
+    return { noiDung: `LỖI: "${tu}" là thư mục. Tool này chỉ đổi tên FILE.`, tomTat: 'là thư mục' };
+  }
+  if (stTu.size > TRAN_BYTE_FILE) {
+    return { noiDung: 'LỖI: file quá lớn để giữ bản hoàn tác (trần 2MB).', tomTat: 'quá lớn' };
+  }
+
+  // `phaiCoThat: false` — đích CHƯA tồn tại là chuyện thường; ngục vẫn kiểm
+  // đường dẫn và danh sách chặn, nên đổi tên thành `.env` vẫn bị chặn.
+  const dDen = await moTrongNguc(goc, den);
+  const daCo = await fs.stat(dDen).then(() => true).catch(() => false);
+  if (daCo) {
+    return {
+      noiDung: `LỖI: "${den}" đã tồn tại. Không ghi đè im lặng — xoá hoặc đổi tên nó trước.`,
+      tomTat: 'đích đã có',
+    };
+  }
+
+  const noiDungCu = await fs.readFile(dTu, 'utf8');
+  const quyet = await hoiNguoiDung(
+    { ten: 'doi_ten_file', duongDan: `${tu} → ${den}`, tuDuyet: ghi.tuDuyet === true },
+    (y) => ghi.xinPhep({ ...y, diff: soSanhDong('', ''), taoMoi: false }),
+    ghi.signal,
+    ghi.so.quyenDaCap,
+  );
+  if (quyet === 'tuChoi') return loiTuChoi(`đổi tên ${tu} thành ${den}`);
+
+  if (!ghi.so.nhatKyHoanTac.has(dTu)) ghi.so.nhatKyHoanTac.set(dTu, noiDungCu);
+  if (!ghi.so.nhatKyHoanTac.has(dDen)) ghi.so.nhatKyHoanTac.set(dDen, null);
+  await fs.mkdir(path.dirname(dDen), { recursive: true });
+  await fs.rename(dTu, dDen);
+  return { noiDung: `Đã đổi ${tu} → ${den}. Người dùng đã duyệt.`, tomTat: `→ ${den}` };
 }
 
 async function toolCreateFile(goc: string, args: Record<string, unknown>, ghi: BoiCanhGhi): Promise<KetQuaTool> {

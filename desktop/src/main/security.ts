@@ -201,7 +201,25 @@ export function applySessionPolicies(): void {
    * của máy vẫn sáng sau khi thu xong và người dùng có mọi lý do để nghĩ app
    * đang nghe lén.
    */
-  const ALLOWED_PERMISSIONS = new Set<string>(['media']);
+  /*
+   * ⚠️ `clipboard-sanitized-write` thêm 24/08/2026 — KHÔNG phải nới tay.
+   *
+   * Thiếu nó thì `navigator.clipboard.writeText()` ném
+   * `NotAllowedError: Write permission denied` — kể cả khi có cử chỉ bấm thật.
+   * Đo trong bản đóng gói: trước khi thêm HỎNG, sau khi thêm OK và chữ vào
+   * đúng clipboard của hệ điều hành (đọc lại bằng `clipboard.readText()` ở
+   * tiến trình main).
+   *
+   * Cả kho có 40 lời gọi `writeText` — nút Chép dưới tin nhắn, chép khối mã,
+   * chép liên kết… TẤT CẢ đều im lặng không làm gì, vì chỗ nào cũng
+   * `.catch()` bỏ qua. Người dùng bấm, không có phản hồi, và không có lỗi nào
+   * để lần ra.
+   *
+   * ⛔ CỐ Ý chỉ mở `-sanitized-write`, KHÔNG mở `clipboard-read`: ghi là app
+   * đưa dữ liệu RA, đọc là app lấy dữ liệu người dùng đã chép ở nơi khác —
+   * mật khẩu, số thẻ. Không tính năng nào cần đọc.
+   */
+  const ALLOWED_PERMISSIONS = new Set<string>(['media', 'clipboard-sanitized-write']);
 
   const isOwnRenderer = (url: string): boolean =>
     url.startsWith(APP_ORIGIN) || (IS_DEV && url.startsWith(DEV_SERVER_URL));

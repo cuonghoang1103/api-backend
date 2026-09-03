@@ -755,7 +755,19 @@ export interface AgentInfo {
 export type AgentUiEvent = { cuocId: string } & (
   | { loai: 'batDau'; model: string; buoc?: number; tranBuoc?: number }
   | { loai: 'chu'; delta: string }
-  | { loai: 'tool'; ten: string; tomTat: string; vong: 'may' | 'notes' }
+  /**
+   * Tool BẮT ĐẦU chạy. Phát TRƯỚC khi gọi, khác `tool` (phát sau khi xong).
+   *
+   * ⚠️ Không có sự kiện này thì mọi tool CHẠY LÂU đều là im lặng hoàn toàn:
+   * tạo file PDF, chạy `npm test`, tải một lô file… màn hình không đổi gì
+   * trong hàng chục giây và người dùng tưởng app treo. Đo 24/08/2026 từ báo
+   * cáo người dùng: "nó tạo file pdf mà không hiện gì, tôi cứ tưởng nó lag".
+   *
+   * `id` là `tool_call_id` của cổng — giao diện dùng nó để THAY dòng đang chạy
+   * bằng dòng kết quả, thay vì đẻ ra hai dòng cho một lời gọi.
+   */
+  | { loai: 'toolBatDau'; id: string; ten: string; vong: 'may' | 'notes' }
+  | { loai: 'tool'; id?: string; ten: string; tomTat: string; vong: 'may' | 'notes' }
   /** Agent ĐANG DỪNG chờ duyệt. Giao diện hiện thẻ diff và bắt buộc phải trả lời. */
   | { loai: 'xinPhep'; id: string; ten: string; duongDan: string; taoMoi: boolean; diff: AgentDiff }
   /** Thẻ đã được trả lời (hoặc hết giờ 5 phút) — gỡ thẻ đi. */

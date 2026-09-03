@@ -25,7 +25,7 @@ import {
   Link2,
   BookOpen, Check, Circle, CircleDot, CircleStop, FileCode2, FilePen, FilePlus2, FolderOpen,
   FolderPlus, FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
-  Sparkles, SquareTerminal, Terminal, Undo2, X, ChevronDown, Cpu, Globe, Zap,
+  Sparkles, SquareTerminal, Terminal, Undo2, X, ChevronDown, Cpu, Globe, Zap, ListPlus,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useMoRieng } from '../../components/moRieng';
@@ -100,6 +100,19 @@ export function AgentMode({
    */
   const { thuMuc, datThuMuc, napThuMuc } = useThuMuc(cuocId);
   const [nhap, datNhap] = useState('');
+  /**
+   * Câu đã gõ TRONG LÚC agent đang chạy, chờ gửi khi lượt kết thúc.
+   *
+   * Trước 24/08/2026 ô nhập bị `disabled` suốt lượt, nên người dùng không
+   * GÕ được, chứ đừng nói gửi — muốn nói thêm thì phải bấm Dừng, tức là vứt
+   * bỏ một lượt đã trả tiền. Claude Code và Codex đều cho gõ tiếp và xếp
+   * hàng; đây là cùng cách.
+   *
+   * ⛔ XẾP HÀNG chứ KHÔNG chen ngang: gửi giữa lượt sẽ cắt ngang hội thoại
+   * mà máy chủ đang giữ, và giao thức ở đây gửi lại CẢ hội thoại mỗi lượt
+   * nên chen ngang là hai lượt cùng ghi vào một sổ.
+   */
+  const [hangCho, datHangCho] = useState<string[]>([]);
   /* Tấm "Việc đã lưu" cũng vào chung sổ: nó là tấm phủ, và trước đây mở nó
      trong khi bảng MCP đang mở là hai lớp chồng nhau. Nó tự có nền bấm-để-đóng
      nên không cần `boc`. */
@@ -277,7 +290,16 @@ export function AgentMode({
 
   const guiDi = (): void => {
     const text = nhap.trim();
-    if (!text || trangThai.dangChay) return;
+    if (!text) return;
+
+    /* Đang chạy ⇒ XẾP HÀNG. Xem chú thích ở `hangCho`. Lệnh gạch chéo cũng
+       xếp hàng chứ không chạy ngay: `/clear` giữa lượt là xoá hội thoại mà
+       máy chủ đang đọc dở. */
+    if (trangThai.dangChay) {
+      datHangCho((truoc) => [...truoc, text]);
+      datNhap('');
+      return;
+    }
 
     /**
      * Lệnh gạch chéo — xử lý ở đây, KHÔNG gửi lên model.
@@ -311,6 +333,23 @@ export function AgentMode({
     dk.xoaHet();
     void gui(kem, dk.anhGuiThang.length ? dk.anhGuiThang : undefined);
   };
+
+  /*
+   * Rút hàng chờ khi lượt vừa xong.
+   *
+   * ⚠️ Gửi TỪNG CÂU MỘT, không gộp: mỗi câu là một lượt riêng trong hội thoại,
+   * gộp lại thành một khối chữ thì `Quay lui`/`Tách nhánh` không còn mốc để
+   * cắt, và model đọc hai yêu cầu rời như một.
+   *
+   * ⚠️ Phụ thuộc `trangThai.dangChay` chứ không tự đặt cờ riêng: `gui()` bật
+   * cờ đó NGAY khi bắt đầu, nên câu thứ hai không thể chen vào giữa.
+   */
+  useEffect(() => {
+    if (trangThai.dangChay || hangCho.length === 0) return;
+    const [dau, ...conLai] = hangCho;
+    datHangCho(conLai);
+    if (dau) void gui(dau);
+  }, [trangThai.dangChay, hangCho, gui]);
 
   const phimTrongO = (e: React.KeyboardEvent<HTMLTextAreaElement>): void => {
     // Bộ gõ tiếng Việt/CJK dùng Enter để CHỐT chữ đang gõ. Gửi lúc đó là cắt
@@ -685,6 +724,19 @@ export function AgentMode({
           // Đầu ra lệnh: hiện nguyên văn, KHÔNG dựng bằng innerHTML. Đây là chữ
           // do một tiến trình bất kỳ trên máy in ra, và nó có thể chứa bất cứ gì.
           if (m.kieu === 'lenhRa') return <pre key={i} className="ct-lenh-ra">{m.text}</pre>;
+          /* ĐANG CHẠY — chưa có kết quả. Trước 24/08/2026 dòng này chỉ xuất
+             hiện SAU khi tool xong, nên một tool mất 30 giây (tạo PDF, chạy
+             `npm test`, tải một lô file) là 30 giây màn hình không đổi gì và
+             người dùng tưởng app treo. */
+          if (m.dangChay === true) {
+            return (
+              <div key={i} className="ct-agent-tool" data-vong={m.vong} data-ten={m.ten} data-chay="1">
+                <Loader2 size={13} className="ct-spin" aria-hidden />
+                <code>{m.ten}</code>
+                <span className="ct-agent-tool-tomtat">{viecCuaTool(m.ten)}</span>
+              </div>
+            );
+          }
           return (
             <div key={i} className="ct-agent-tool" data-vong={m.vong} data-ten={m.ten}>
               <IconTool ten={m.ten} vong={m.vong} />
@@ -765,6 +817,29 @@ export function AgentMode({
       )}
       <DaiTepCode tep={dk.tep.filter((t) => !t.dataUrl)} bo={dk.bo} />
 
+      {/* Hàng chờ — người dùng phải THẤY câu mình vừa gõ đang nằm đâu, và bỏ
+          được. Không hiện thì gõ xong Enter là chữ biến mất, trông y như mất. */}
+      {hangCho.length > 0 && (
+        <div className="ct-hang-cho">
+          {hangCho.map((c, i) => (
+            <div key={`${i}-${c.slice(0, 20)}`} className="ct-hang-cho-o" title={c}>
+              <ListPlus size={11} aria-hidden />
+              <span>{c.length > 70 ? `${c.slice(0, 70)}…` : c}</span>
+              <button
+                type="button"
+                title="Bỏ khỏi hàng chờ"
+                onClick={() => datHangCho((truoc) => truoc.filter((_, k) => k !== i))}
+              >
+                <X size={11} aria-hidden />
+              </button>
+            </div>
+          ))}
+          <span className="ct-hang-cho-nhan">
+            sẽ gửi lần lượt khi lượt hiện tại xong
+          </span>
+        </div>
+      )}
+
       <div className="ct-agent-soan">
         <ODinhKemCode oFileRef={dk.oFileRef} nhanTuO={dk.nhanTuO} />
         {/* Chưa chọn thư mục dự án ⇒ khoá: file trên đĩa phải nằm TRONG gốc dự
@@ -780,13 +855,21 @@ export function AgentMode({
             : 'Chọn thư mục dự án trước, rồi hỏi…'}
           onChange={(e) => datNhap(e.target.value)}
           onKeyDown={phimTrongO}
-          disabled={trangThai.dangChay}
         />
         {trangThai.dangChay ? (
-          <button type="button" className="ct-btn ct-agent-dung" onClick={dung}>
-            <CircleStop size={14} aria-hidden />
-            Dừng
-          </button>
+          <>
+            {nhap.trim() && (
+              <button type="button" className="ct-btn ct-btn-ghost" onClick={guiDi}
+                title="Xếp câu này vào hàng chờ — gửi ngay khi lượt hiện tại xong">
+                <ListPlus size={14} aria-hidden />
+                Xếp hàng
+              </button>
+            )}
+            <button type="button" className="ct-btn ct-agent-dung" onClick={dung}>
+              <CircleStop size={14} aria-hidden />
+              Dừng
+            </button>
+          </>
         ) : (
           <button type="button" data-nut="gui" className="ct-btn" onClick={guiDi} disabled={!nhap.trim()}>
             <Send size={14} aria-hidden />
@@ -1320,6 +1403,40 @@ function NutMcp({ khoa }: { khoa: boolean }) {
  * nhau cho phép nhận ra nhịp làm việc (dò → tìm → đọc → sửa → chạy) chỉ bằng
  * liếc, đúng như Claude Code làm.
  */
+/**
+ * Một câu NGẮN nói tool đang làm gì, hiện trong lúc nó chạy.
+ *
+ * Tên tool (`ghi_file`, `web_tai_nhieu`) là chữ dành cho model, không phải cho
+ * người. Trong lúc chờ, người dùng cần biết "đang tạo file" chứ không phải
+ * "đang chạy một thứ tên là ghi_file".
+ *
+ * Tool lạ (MCP của người dùng cắm vào) thì trả câu chung — thà chung chung
+ * còn hơn im lặng.
+ */
+function viecCuaTool(ten: string): string {
+  const bang: Record<string, string> = {
+    read_file: 'đang đọc file…',
+    list_dir: 'đang xem thư mục…',
+    grep: 'đang tìm trong mã…',
+    edit_file: 'đang sửa file…',
+    create_file: 'đang tạo file…',
+    run_command: 'đang chạy lệnh…',
+    git_status: 'đang xem git…',
+    git_diff: 'đang xem thay đổi…',
+    web_mo: 'đang mở trang…',
+    web_doc: 'đang đọc trang…',
+    web_lien_ket: 'đang lấy danh sách liên kết…',
+    web_tai: 'đang tải file…',
+    web_tai_nhieu: 'đang tải cả lô file…',
+    web_anh: 'đang chụp màn hình trang…',
+    web_console: 'đang đọc lỗi trang…',
+    doc_web: 'đang đọc trang web…',
+    giao_viec_phu: 'agent phụ đang làm…',
+    cap_nhat_ke_hoach: 'đang cập nhật kế hoạch…',
+  };
+  return bang[ten] ?? (ten.startsWith('mcp__') ? 'đang gọi công cụ ngoài…' : 'đang chạy…');
+}
+
 function IconTool({ ten, vong }: { ten: string; vong: 'may' | 'notes' }) {
   const p = { size: 12, 'aria-hidden': true } as const;
   if (vong === 'notes') return <NotebookPen {...p} />;

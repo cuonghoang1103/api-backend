@@ -8467,3 +8467,60 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   text-transform: uppercase;
   color: var(--ct-tool-doc);
 }
+
+/* ── Hàng chờ của AI Code (24/08/2026) ──────────────────────
+   Câu người dùng gõ TRONG LÚC agent chạy. Trước đây ô nhập bị khoá hẳn nên
+   không có gì để hiện; giờ gõ được thì phải thấy nó nằm đâu, nếu không Enter
+   xong chữ biến mất và trông y như mất. */
+.ct-hang-cho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px 0;
+  /* `min-width: 0` để câu dài không đẩy phình cả khung soạn — luật 1 BO-CUC.md */
+  min-width: 0;
+}
+
+.ct-hang-cho-o {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 100%;
+  padding: 3px 6px 3px 8px;
+  font-size: 11.5px;
+  color: var(--ct-text-muted);
+  background: var(--ct-surface);
+  border: 1px dashed var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+}
+
+.ct-hang-cho-o span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.ct-hang-cho-o button {
+  display: inline-flex;
+  padding: 2px;
+  color: var(--ct-text-faint);
+  border-radius: 4px;
+}
+
+.ct-hang-cho-o button:hover { color: var(--ct-err); background: var(--ct-hover); }
+
+.ct-hang-cho-nhan { font-size: 11px; color: var(--ct-text-faint); }
+
+/* ── Dòng công cụ ĐANG CHẠY (24/08/2026) ────────────────────
+   Trước đây dòng công cụ chỉ hiện SAU khi tool xong, nên một tool mất hàng
+   chục giây (tạo PDF, `npm test`, tải một lô file) là ngần ấy thời gian màn
+   hình không đổi gì — người dùng báo "tưởng nó lag".
+
+   Làm mờ nhẹ chứ KHÔNG đổi màu theo nhóm việc: màu nhóm là thứ để đọc lướt
+   (đọc/ghi/lệnh/web/git), đổi nó ở trạng thái tạm sẽ phá đúng cái quy ước đó.
+   Con quay đã đủ nói "chưa xong". */
+.ct-agent-tool[data-chay="1"] { opacity: 0.72; }
+
+.ct-agent-tool[data-chay="1"] .ct-agent-tool-tomtat { font-style: italic; }

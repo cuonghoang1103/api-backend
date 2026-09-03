@@ -60,7 +60,8 @@ export type SuKienAgent =
   | { loai: 'batDau'; model: string; buoc?: number; tranBuoc?: number }
   | { loai: 'chu'; delta: string }
   /** Một tool vừa chạy xong (bất kể vòng 1 hay vòng 2) — để hiện dòng tiến trình. */
-  | { loai: 'tool'; ten: string; tomTat: string; vong: 'may' | 'notes' }
+  | { loai: 'toolBatDau'; id: string; ten: string; vong: 'may' | 'notes' }
+  | { loai: 'tool'; id?: string; ten: string; tomTat: string; vong: 'may' | 'notes' }
   /** Vòng lặp ĐANG DỪNG chờ người dùng duyệt. Giao diện phải hiện thẻ diff. */
   | { loai: 'xinPhep'; id: string; ten: string; duongDan: string; taoMoi: boolean; diff: KetQuaDiff }
   /** Thẻ duyệt đã được trả lời (hoặc hết giờ) — giao diện gỡ nó đi. */
@@ -849,6 +850,11 @@ export async function chayLuot(
           keHoach: (viec: Array<{ ten: string; trangThai: string }>) => phat({ loai: 'keHoach', viec }),
         };
 
+        /* Báo ĐANG CHẠY trước khi gọi. Tool có thể mất hàng chục giây (tạo
+           PDF, `npm test`, tải một lô file) và trước đây màn hình không đổi gì
+           trong suốt thời gian đó — người dùng tưởng app treo. */
+        phat({ loai: 'toolBatDau', id: goi.id, ten: goi.name, vong: 'may' });
+
         // `anh?` để `web_anh` gửi được ảnh chụp lên máy chủ — xem `KetQuaTool`.
         let kq: { noiDung: string; tomTat: string; anh?: Array<{ media_type: string; data: string }> };
         if (laToolMcp(goi.name)) {
@@ -875,7 +881,7 @@ export async function chayLuot(
           role: 'tool', tool_call_id: goi.id, content: kq.noiDung,
           ...(kq.anh?.length ? { anh: kq.anh } : {}),
         });
-        phat({ loai: 'tool', ten: goi.name, tomTat: kq.tomTat, vong: 'may' });
+        phat({ loai: 'tool', id: goi.id, ten: goi.name, tomTat: kq.tomTat, vong: 'may' });
       }
     }
 

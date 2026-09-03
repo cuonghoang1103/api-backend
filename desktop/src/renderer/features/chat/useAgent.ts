@@ -31,7 +31,14 @@ export type MucHienThi =
    */
   | { kieu: 'nguoi'; text: string; anh?: string[]; luc?: number }
   | { kieu: 'may'; text: string }
-  | { kieu: 'tool'; ten: string; tomTat: string; vong: 'may' | 'notes' }
+  /**
+   * Một lời gọi tool. `dangChay` = đã bắt đầu, CHƯA có kết quả.
+   *
+   * `id` là `tool_call_id` của cổng: sự kiện `toolBatDau` tạo dòng, sự kiện
+   * `tool` tìm đúng dòng đó mà THAY, thay vì đẻ ra dòng thứ hai cho cùng một
+   * lời gọi.
+   */
+  | { kieu: 'tool'; id?: string; ten: string; tomTat: string; vong: 'may' | 'notes'; dangChay?: boolean }
   /**
    * Thẻ duyệt nằm NGAY TRONG dòng thời gian hội thoại, không phải hộp thoại
    * nổi. Hộp thoại nổi che mất đoạn agent vừa giải thích lý do nó muốn sửa —
@@ -178,10 +185,31 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
           datDangNghi(false);
           themChu(e.delta);
           break;
-        case 'tool':
+        case 'toolBatDau':
+          /* Tắt con quay "đang nghĩ": agent KHÔNG còn nghĩ, nó đang LÀM — và
+             dòng công cụ có con quay riêng nói rõ đang làm gì. */
           datDangNghi(false);
-          datMuc((truoc) => [...truoc, { kieu: 'tool', ten: e.ten, tomTat: e.tomTat, vong: e.vong }]);
+          datMuc((truoc) => [...truoc,
+            { kieu: 'tool', id: e.id, ten: e.ten, tomTat: '', vong: e.vong, dangChay: true }]);
           break;
+        case 'tool': {
+          datDangNghi(false);
+          datMuc((truoc) => {
+            /* Tìm NGƯỢC từ cuối: cùng một tool có thể được gọi nhiều lần trong
+               một lượt, và ta muốn dòng gần nhất. */
+            const i = e.id === undefined ? -1
+              : truoc.findLastIndex((m) => m.kieu === 'tool' && m.id === e.id && m.dangChay === true);
+            if (i === -1) {
+              // Không khớp dòng nào — phiên cũ, hoặc sự kiện `toolBatDau` bị lỡ.
+              // Thêm dòng đã xong: thà thừa một dòng còn hơn nuốt mất kết quả.
+              return [...truoc, { kieu: 'tool', ten: e.ten, tomTat: e.tomTat, vong: e.vong }];
+            }
+            const sau = [...truoc];
+            sau[i] = { kieu: 'tool', ten: e.ten, tomTat: e.tomTat, vong: e.vong };
+            return sau;
+          });
+          break;
+        }
         case 'xinPhep':
           // Tắt con quay: agent KHÔNG còn đang nghĩ, nó đang chờ NGƯỜI DÙNG.
           // Để con quay quay tiếp thì người dùng ngồi đợi một thứ đang đợi họ.

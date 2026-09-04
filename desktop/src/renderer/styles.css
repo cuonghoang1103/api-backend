@@ -7106,6 +7106,10 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
  * `min-width: 0` + `text-overflow` vì đường dẫn trong monorepo dài hơn bảng gợi
  * ý rất nhiều; không cắt thì nó đẩy bảng rộng ra ngoài cửa sổ.
  */
+/* Thư mục trong bảng gợi ý — phân biệt bằng MÀU, không chỉ bằng dấu `/` cuối:
+   một ký tự ở cuối chuỗi là thứ mắt lướt qua không thấy. */
+.ct-goiy code[data-thumuc='true'] { color: var(--ct-accent, var(--ct-text)); }
+
 .ct-goiy-duong {
   color: var(--ct-text-muted);
   font-size: 11.5px;

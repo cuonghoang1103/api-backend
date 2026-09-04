@@ -64,6 +64,26 @@ describe('đọc thân kỹ năng', () => {
     expect(await docThanKyNang(goc, 'ra-de')).toBe('Bước 1. Đọc mẫu…');
   });
 
+  it('LIỆT KÊ file đi kèm, không nhồi nội dung', async () => {
+    const goc = await duAn({ 'ra-de': DU });
+    await writeFile(join(goc, '.claude/skills/ra-de/mau-de.json'), '{"noi_dung":"RẤT DÀI"}', 'utf8');
+    await mkdir(join(goc, '.claude/skills/ra-de/scripts'), { recursive: true });
+    await writeFile(join(goc, '.claude/skills/ra-de/scripts/chuyen.mjs'), 'console.log(1)', 'utf8');
+
+    const than = await docThanKyNang(goc, 'ra-de');
+    expect(than).toContain('.claude/skills/ra-de/mau-de.json');
+    expect(than).toContain('.claude/skills/ra-de/scripts/chuyen.mjs');
+    expect(than).toContain('read_file');
+    /* Chỉ TÊN, không nội dung: một kỹ năng có 5 file mẫu sẽ ăn hết ngữ cảnh ngay
+       lần gọi đầu, mà 4 trong 5 thường không liên quan tới việc đang làm. */
+    expect(than).not.toContain('RẤT DÀI');
+    expect(than, 'SKILL.md không được tự liệt kê chính nó').not.toContain('ra-de/SKILL.md');
+  });
+
+  it('không có file kèm ⇒ KHÔNG thêm mục thừa', async () => {
+    expect(await docThanKyNang(await duAn({ 'ra-de': DU }), 'ra-de')).toBe('Bước 1. Đọc mẫu…');
+  });
+
   it('tên không có ⇒ null, để tool báo rõ thay vì trả thân rỗng', async () => {
     expect(await docThanKyNang(await duAn({ 'ra-de': DU }), 'khong-ton-tai')).toBeNull();
   });

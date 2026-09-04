@@ -1009,11 +1009,16 @@ export function AgentMode({
           onChon={(duong, tk) => {
             /* Thay ĐÚNG đoạn `@…`, giữ nguyên phần còn lại của câu. Thay cả ô
                nhập là xoá mất thứ người dùng đã viết trước đó. */
-            const moi = `${nhap.slice(0, tk.dau)}@${duong} ${nhap.slice(tk.cuoi)}`;
+            /* Giữ lại phần `:10-40` họ đã gõ. Vứt nó đi thì gõ `@loop:10-40`
+               rồi chọn file sẽ mất luôn khoảng dòng vừa gõ. Thư mục kết thúc
+               bằng `/` nên KHÔNG thêm dấu cách — họ thường gõ tiếp tên file. */
+            const laThuMuc = duong.endsWith('/');
+            const chen = `@${duong}${tk.duoi}${laThuMuc ? '' : ' '}`;
+            const moi = `${nhap.slice(0, tk.dau)}${chen}${nhap.slice(tk.cuoi)}`;
             datNhap(moi);
             datTokenFile(null);
             // Trả con trỏ về ngay sau đường dẫn vừa chèn, không nhảy về cuối ô.
-            const viTri = tk.dau + duong.length + 2;
+            const viTri = tk.dau + chen.length;
             requestAnimationFrame(() => {
               const o = oNhapRef.current;
               if (!o) return;

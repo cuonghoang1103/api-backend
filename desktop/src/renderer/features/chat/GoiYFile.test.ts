@@ -10,12 +10,19 @@ import { docTokenFile } from './GoiYFile';
 
 describe('đọc đoạn @ quanh con trỏ', () => {
   it('bắt được @ đầu dòng và giữa câu', () => {
-    expect(docTokenFile('@src', 4)).toEqual({ tim: 'src', dau: 0, cuoi: 4 });
-    expect(docTokenFile('sửa giúp @loop', 14)).toEqual({ tim: 'loop', dau: 9, cuoi: 14 });
+    expect(docTokenFile('@src', 4)).toEqual({ tim: 'src', duoi: '', dau: 0, cuoi: 4 });
+    expect(docTokenFile('sửa giúp @loop', 14)).toEqual({ tim: 'loop', duoi: '', dau: 9, cuoi: 14 });
+  });
+
+  it('TÁCH phạm vi dòng ra khỏi chuỗi tìm', () => {
+    /* Đem cả `loop:10-40` đi khớp thì không file nào trúng và bảng gợi ý biến
+       mất giữa chừng — đúng lúc người dùng vẫn đang gõ. */
+    expect(docTokenFile('@loop:10-40', 11)).toEqual({ tim: 'loop', duoi: ':10-40', dau: 0, cuoi: 11 });
+    expect(docTokenFile('@loop:', 6)).toEqual({ tim: 'loop', duoi: ':', dau: 0, cuoi: 6 });
   });
 
   it('vừa gõ @ mà chưa gõ chữ ⇒ vẫn mở, với chuỗi tìm rỗng', () => {
-    expect(docTokenFile('xem @', 5)).toEqual({ tim: '', dau: 4, cuoi: 5 });
+    expect(docTokenFile('xem @', 5)).toEqual({ tim: '', duoi: '', dau: 4, cuoi: 5 });
   });
 
   it('KHÔNG bật trên email — @ dính liền chữ phía trước', () => {
@@ -30,7 +37,7 @@ describe('đọc đoạn @ quanh con trỏ', () => {
   it('theo CON TRỎ, không theo cuối chuỗi', () => {
     const chu = '@loop và thêm gì đó';
     // con trỏ ngay sau `@loop` ⇒ đang gõ đoạn đó
-    expect(docTokenFile(chu, 5)).toEqual({ tim: 'loop', dau: 0, cuoi: 5 });
+    expect(docTokenFile(chu, 5)).toEqual({ tim: 'loop', duoi: '', dau: 0, cuoi: 5 });
     // con trỏ ở cuối câu ⇒ đã đi qua khoảng trắng, không còn gõ `@` nữa
     expect(docTokenFile(chu, chu.length)).toBeNull();
   });

@@ -36,6 +36,7 @@ import { toolNotesTao, toolNotesGhi, type BoiCanhNote } from './ghiNote';
 import * as trinhDuyet from '../browser';
 import { layCuaSoChinh } from '../window';
 import { ghiSoTruoc, type SoCuoc } from './so';
+import { chupTrangThai, ghiThayDoiCuaLenh } from './theoDoiLenh';
 
 const chay = promisify(execFile);
 
@@ -889,6 +890,11 @@ async function toolRunCommand(
     };
   }
 
+  /* Chụp trạng thái git TRƯỚC khi chạy. Rẻ (`git status` trên kho đã ấm là vài
+     chục ms) so với chính lệnh sắp chạy, mà đổi lại là nút lùi phủ được cả
+     những gì lệnh làm. Không phải kho git ⇒ `null` ⇒ bỏ qua lặng lẽ. */
+  const anhTruoc = await chupTrangThai(goc);
+
   const kq = await chayLenh({
     lenh,
     cwd: goc,
@@ -896,6 +902,11 @@ async function toolRunCommand(
     signal: boiCanh.signal,
     onRa: boiCanh.onRa,
   });
+
+  /* Ghi lại file lệnh vừa đụng, để nút Hoàn tác và nút lùi phủ được cả chúng.
+     Chụp TRƯỚC nằm ngay trên lời gọi `chayLenh`; xem `theoDoiLenh.ts` cho ba
+     trường hợp và giới hạn của cách này. */
+  const theoDoi = await ghiThayDoiCuaLenh(goc, boiCanh.so, anhTruoc);
 
   // Đầu ra đưa cho model PHẢI mở đầu bằng mã thoát. Model đọc từ trên xuống, và
   // một bãi log 20.000 ký tự không nói được "hỏng hay không" — con số ở dòng
@@ -908,9 +919,20 @@ async function toolRunCommand(
         ? `Lệnh bị dừng giữa chừng (${kq.giay.toFixed(1)}s).`
         : `Lệnh HỎNG, mã thoát ${kq.ma} (${kq.giay.toFixed(1)}s).`;
 
+  /* Nói ra khi lệnh đổi file. Model cần biết vì nó ảnh hưởng bước tiếp theo
+     (đừng sửa tay thứ vừa được sinh ra), còn người dùng cần biết vì đó là thứ
+     nút lùi sẽ đụng tới. */
+  const ghiChuFile = theoDoi.quaNhieu
+    ? '\n\n[Lệnh này đổi HƠN 200 file — quá nhiều để ghi vào sổ hoàn tác, nên KHÔNG lùi tự động được.]'
+    : theoDoi.soGhi > 0
+      ? `\n\n[Lệnh này đổi ${theoDoi.soGhi} file; đã ghi vào sổ nên nút Hoàn tác / lùi phủ được chúng.]`
+      : '';
+
   return {
-    noiDung: `$ ${lenh}\n${dau}\n\n${kq.ra || '(không có đầu ra)'}`,
-    tomTat: kq.hetGio ? 'hết giờ' : kq.ma === 0 ? `xong ${kq.giay.toFixed(0)}s` : `mã thoát ${kq.ma ?? '—'}`,
+    noiDung: `$ ${lenh}\n${dau}\n\n${kq.ra || '(không có đầu ra)'}${ghiChuFile}`,
+    tomTat: kq.hetGio ? 'hết giờ'
+      : `${kq.ma === 0 ? `xong ${kq.giay.toFixed(0)}s` : `mã thoát ${kq.ma ?? '—'}`}`
+        + (theoDoi.soGhi > 0 ? ` · ${theoDoi.soGhi} file` : ''),
   };
 }
 

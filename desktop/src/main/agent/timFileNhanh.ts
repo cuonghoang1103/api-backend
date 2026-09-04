@@ -32,6 +32,7 @@ const MAX_QUET = 20_000;
 /** Bao nhiêu gợi ý trả về. Nhiều hơn số này thì người dùng gõ thêm chữ, không cuộn. */
 const MAX_TRA = 40;
 
+/** `duong` của thư mục KẾT THÚC bằng `/` — dấu hiệu duy nhất phân biệt được ở giao diện. */
 interface Dem { luc: number; file: Array<{ duong: string; ten: string; moi: number }> }
 const dem = new Map<string, Dem>();
 
@@ -49,7 +50,14 @@ async function quet(goc: string): Promise<Dem['file']> {
       if (ra.length >= MAX_QUET) return;
       const p = path.join(thuMuc, m.name);
       if (m.isDirectory()) {
-        if (!thuMucBiCam(m.name)) await di(p);
+        if (thuMucBiCam(m.name)) continue;
+        /* Thư mục cũng gợi ý được. "Rà lại @src/services/agent/" là câu người ta
+           hay hỏi, và trước đây phải gõ tay cả đường dẫn. Dấu `/` cuối vừa là
+           dấu hiệu nhận biết ở giao diện, vừa là thứ agent cần để hiểu đây là
+           thư mục chứ không phải file thiếu đuôi. */
+        const td = `${path.relative(goc, p).split(path.sep).join('/')}/`;
+        ra.push({ duong: td, ten: `${m.name}/`, moi: 0 });
+        await di(p);
         continue;
       }
       if (fileBiCam(m.name)) continue;
@@ -107,6 +115,8 @@ export async function timFileGoiY(goc: string, tim: string): Promise<string[]> {
   // Chuỗi tìm RỖNG (vừa gõ `@`) ⇒ chưa lọc được gì, đưa file sửa gần nhất. Đó
   // gần như luôn là file đang làm dở — thứ hay được nhắc tới nhất.
   if (t === '') {
+    /* Thư mục có `moi = 0` nên chúng tự rơi xuống cuối — đúng ý: chưa gõ chữ
+       nào thì thứ đáng gợi ý là FILE vừa sửa, không phải cây thư mục. */
     return [...file].sort((a, b) => b.moi - a.moi).slice(0, MAX_TRA).map((f) => f.duong);
   }
 

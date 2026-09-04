@@ -30,6 +30,14 @@ const THU_MUC = ['.claude/skills', '.agent/skills'] as const;
 const MAX_KY_NANG = 40;
 /** Trần một file kỹ năng. Dài hơn nữa thì một lần gọi ăn hết ngữ cảnh. */
 const MAX_BYTE = 128 * 1024;
+/**
+ * Trần số file PHỤ liệt kê kèm một kỹ năng.
+ *
+ * Chỉ liệt kê TÊN, không đọc nội dung — model tự gọi `read_file` cái nó cần.
+ * Nhồi sẵn nội dung thì một kỹ năng có 5 file mẫu sẽ ăn hết ngữ cảnh ngay lần
+ * gọi đầu, và 4 trong 5 file đó thường không liên quan tới việc đang làm.
+ */
+const MAX_FILE_PHU = 30;
 
 export interface TomTatKyNang { ten: string; moTa: string }
 
@@ -96,6 +104,29 @@ export async function dsKyNang(goc: string): Promise<TomTatKyNang[]> {
   return (await duyet(goc)).map(({ ten, moTa }) => ({ ten, moTa }));
 }
 
+/**
+ * Liệt kê file PHỤ đi kèm một kỹ năng (script, mẫu, dữ liệu).
+ *
+ * Trả đường dẫn TƯƠNG ĐỐI so với gốc dự án, đúng dạng `read_file` nhận — đưa
+ * đường tuyệt đối thì model phải đoán cách rút gọn, và nó đoán sai.
+ */
+async function fileKemTheo(goc: string, thuMucKyNang: string): Promise<string[]> {
+  const ra: string[] = [];
+  const di = async (thuMuc: string, sau = 0): Promise<void> => {
+    if (ra.length >= MAX_FILE_PHU || sau > 2) return;
+    const muc = await fs.readdir(thuMuc, { withFileTypes: true }).catch(() => []);
+    for (const m of muc) {
+      if (ra.length >= MAX_FILE_PHU) return;
+      const p = path.join(thuMuc, m.name);
+      if (m.isDirectory()) { await di(p, sau + 1); continue; }
+      if (m.name === 'SKILL.md') continue; // chính nó, đã nằm ngay trên
+      ra.push(path.relative(goc, p).split(path.sep).join('/'));
+    }
+  };
+  await di(thuMucKyNang);
+  return ra.sort();
+}
+
 /** Thân một kỹ năng, để trả về làm kết quả tool `dung_ky_nang`. */
 export async function docThanKyNang(goc: string, ten: string): Promise<string | null> {
   const t = ten.trim().toLowerCase();
@@ -103,5 +134,13 @@ export async function docThanKyNang(goc: string, ten: string): Promise<string | 
   if (!co) return null;
   const noiDung = await fs.readFile(co.duong, 'utf8').catch(() => null);
   if (noiDung === null) return null;
-  return docDauKyNang(noiDung).than.trim();
+  const than = docDauKyNang(noiDung).than.trim();
+
+  /* File đi kèm: chỉ NÓI RA là có, kèm đường dẫn. Kỹ năng thật hay mang theo
+     script và file mẫu, mà trước đây model không có cách nào biết chúng tồn
+     tại — nó chỉ thấy đúng chữ trong SKILL.md. */
+  const kem = await fileKemTheo(goc, path.dirname(co.duong));
+  if (kem.length === 0) return than;
+  return `${than}\n\n---\nFILE ĐI KÈM KỸ NĂNG NÀY (dùng \`read_file\` để đọc khi cần):\n`
+    + kem.map((f) => `• ${f}`).join('\n');
 }

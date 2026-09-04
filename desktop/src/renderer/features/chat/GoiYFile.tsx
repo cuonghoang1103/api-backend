@@ -13,7 +13,14 @@
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-export interface TokenFile { tim: string; dau: number; cuoi: number }
+export interface TokenFile {
+  /** Phần dùng để TÌM — đã bỏ phần `:dòng` phía sau. */
+  tim: string;
+  /** Phần `:10-40` người dùng đã gõ, giữ nguyên khi chèn đường dẫn. */
+  duoi: string;
+  dau: number;
+  cuoi: number;
+}
 
 /**
  * Tìm đoạn `@…` mà con trỏ đang nằm trong.
@@ -23,6 +30,10 @@ export interface TokenFile { tim: string; dau: number; cuoi: number }
  *  • `@` phải đứng đầu dòng hoặc sau khoảng trắng. Không có luật này thì
  *    `user@example.com` và mọi địa chỉ email đều bật bảng gợi ý lên.
  *  • Có khoảng trắng giữa `@` và con trỏ ⇒ họ đã gõ xong, đừng chen vào.
+ *
+ * Phần `:10-40` được TÁCH RA khỏi chuỗi tìm: gõ `@loop:10-` mà đem cả cụm đi
+ * khớp thì không file nào trúng và bảng gợi ý biến mất giữa chừng — đúng lúc
+ * người dùng vẫn đang gõ.
  */
 export function docTokenFile(chu: string, caret: number): TokenFile | null {
   const truoc = chu.slice(0, caret);
@@ -32,7 +43,10 @@ export function docTokenFile(chu: string, caret: number): TokenFile | null {
   if (i > 0 && !/\s/.test(truocDo)) return null;
   const giua = truoc.slice(i + 1);
   if (/\s/.test(giua)) return null;
-  return { tim: giua, dau: i, cuoi: caret };
+  const cat = giua.indexOf(':');
+  return cat < 0
+    ? { tim: giua, duoi: '', dau: i, cuoi: caret }
+    : { tim: giua.slice(0, cat), duoi: giua.slice(cat), dau: i, cuoi: caret };
 }
 
 export function GoiYFile({
@@ -87,7 +101,11 @@ export function GoiYFile({
   return (
     <div className="ct-goiy" role="listbox" aria-label="File trong dự án">
       {hien.map((d, i) => {
-        const cat = d.lastIndexOf('/');
+        /* Thư mục kết thúc bằng `/`. Cắt nó ra trước khi tìm dấu `/` cuối, nếu
+           không thì tên hiển thị của mọi thư mục đều thành chuỗi rỗng. */
+        const laThuMuc = d.endsWith('/');
+        const goc2 = laThuMuc ? d.slice(0, -1) : d;
+        const cat = goc2.lastIndexOf('/');
         return (
           <button
             key={d}
@@ -98,8 +116,8 @@ export function GoiYFile({
             onMouseEnter={() => datChon(i)}
             onClick={() => onChon(d, token)}
           >
-            <code>{cat >= 0 ? d.slice(cat + 1) : d}</code>
-            {cat >= 0 ? <span className="ct-goiy-duong">{d.slice(0, cat)}</span> : null}
+            <code data-thumuc={laThuMuc}>{cat >= 0 ? d.slice(cat + 1) : d}</code>
+            {cat >= 0 ? <span className="ct-goiy-duong">{goc2.slice(0, cat)}</span> : null}
           </button>
         );
       })}

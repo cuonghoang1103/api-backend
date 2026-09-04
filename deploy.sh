@@ -641,6 +641,17 @@ REAPPLY_SEED_OUT=$($DC exec -T backend sh -c '
 ') || true
 report_seed "Exam chapter reapply" "seed-exam-reapply" "$REAPPLY_SEED_OUT" "${REAPPLY_SEED_OUT_RC:-0}" || true
 
+# ── Step 3.14c: Reapply exam question comments (idempotent, KHÔNG AI) ─
+# CÙNG lý do với 3.14b, cho bình luận CuongMini: mỗi dòng exam_question_comments
+# tự mang theo (examId, promptHash) lúc đăng (xem examComment.service.ts) —
+# bước này nối lại questionId đúng câu MỚI sau khi Step 3.14 xoá+tạo lại,
+# để bình luận "sống mãi mãi" thay vì CASCADE mất theo câu cũ.
+info "Reapplying exam question comments (khôi phục sau khi re-seed)..."
+REAPPLY_COMMENTS_OUT=$($DC exec -T backend sh -c '
+  node scripts/exam-reapply-comments.mjs --apply 2>&1
+') || true
+report_seed "Exam comment reapply" "seed-exam-reapply-comments" "$REAPPLY_COMMENTS_OUT" "${REAPPLY_COMMENTS_OUT_RC:-0}" || true
+
 # ── Step 3.15: Deep Dive guides (idempotent) ───────────────────
 # One .mjs spec per guide under content/deepdives/ (prose in a sibling .md)
 # → upsert TechTrendArticle keyed by slug, category 'DeepDive'. These are the

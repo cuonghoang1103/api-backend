@@ -7,14 +7,39 @@
  * đó — giống các mục bình luận khác trong site (Tech Trends, Social). Một
  * cấp trả lời qua parentId (theo đúng mẫu ArticleComments/TechTrendComment).
  *
+ * BỀN qua re-seed đề: deploy.sh "Exam Room seed" xoá+tạo lại TOÀN BỘ
+ * ExamQuestion mỗi deploy (id đổi). questionId trên bình luận là CACHE
+ * nhanh — mỗi bình luận còn lưu examId (không đổi) + promptHash (nội dung
+ * câu, CÙNG thuật toán scripts/_exam-hash.mjs, PHẢI khớp để
+ * scripts/exam-reapply-comments.mjs nối lại đúng câu sau mỗi deploy — xem
+ * hàm bên dưới, đừng đổi một bên mà quên bên kia).
+ *
  * Bot "cuongmini" (tạo sẵn bằng migration 20260863000000) tự đăng câu trả
  * lời CuongMini vào đây, đánh dấu isAi=true — xem postAiAnswerComment(),
  * gọi từ examTutor.service.ts sau mỗi lượt AI trả lời thành công.
  */
+import { createHash } from 'node:crypto';
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 
 const MAX_CONTENT = 3000;
+
+// PHẢI khớp hệt scripts/_exam-hash.mjs (dùng bởi exam-reapply-comments.mjs
+// và exam-classify-chapters.mjs) — lệch một ký tự chuẩn hoá là promptHash
+// không bao giờ khớp lại được sau reseed.
+function normalizePrompt(prompt: string): string {
+  return String(prompt || '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase()
+    .slice(0, 600);
+}
+function promptHash(prompt: string): string {
+  return createHash('sha256').update(normalizePrompt(prompt)).digest('hex');
+}
 
 function authorShape(u: { id: number; username: string; displayName: string | null; fullName: string | null; avatarUrl: string | null }) {
   return { id: u.id, username: u.username, displayName: u.displayName, fullName: u.fullName, avatarUrl: u.avatarUrl };
@@ -44,25 +69,32 @@ export async function listComments(questionId: number) {
   }));
 }
 
-export async function createComment(questionId: number, userId: number, content: string, parentId?: number | null) {
+async function createCommentInternal(questionId: number, userId: number, content: string, parentId: number | null | undefined, isAi: boolean) {
   const text = (content || '').trim();
   if (!text) throw new AppError('Bình luận trống.', 400);
   if (text.length > MAX_CONTENT) throw new AppError('Bình luận dài quá.', 400);
 
-  const question = await prisma.examQuestion.findUnique({ where: { id: questionId }, select: { id: true } });
+  const question = await prisma.examQuestion.findUnique({ where: { id: questionId }, select: { id: true, examId: true, prompt: true } });
   if (!question) throw new AppError('Không tìm thấy câu hỏi.', 404);
 
   if (parentId) {
-    const parent = await prisma.examQuestionComment.findUnique({ where: { id: parentId }, select: { questionId: true, parentId: true } });
-    if (!parent || parent.questionId !== questionId) throw new AppError('Không tìm thấy bình luận gốc.', 404);
+    const parent = await prisma.examQuestionComment.findUnique({ where: { id: parentId }, select: { examId: true, parentId: true } });
+    if (!parent || parent.examId !== question.examId) throw new AppError('Không tìm thấy bình luận gốc.', 404);
     if (parent.parentId) throw new AppError('Chỉ trả lời được 1 cấp.', 400);
   }
 
   const created = await prisma.examQuestionComment.create({
-    data: { questionId, userId, parentId: parentId || null, content: text },
+    data: {
+      questionId, examId: question.examId, promptHash: promptHash(question.prompt),
+      userId, parentId: parentId || null, content: text, isAi,
+    },
     include: { user: { select: AUTHOR_SELECT } },
   });
   return { id: created.id, content: created.content, isAi: created.isAi, isEdited: created.isEdited, likesCount: created.likesCount, createdAt: created.createdAt, author: authorShape(created.user), replies: [] as unknown[] };
+}
+
+export async function createComment(questionId: number, userId: number, content: string, parentId?: number | null) {
+  return createCommentInternal(questionId, userId, content, parentId, false);
 }
 
 export async function updateComment(commentId: number, userId: number, content: string) {
@@ -138,6 +170,6 @@ export async function postAiAnswerComment(questionId: number, mode: string, ques
     if (!botId) return; // migration bot user chưa chạy tới — bỏ qua, không lỗi
     const askedText = buildAskedLabel(mode, question);
     const content = `**Hỏi:** ${askedText}\n\n**CuongMini trả lời:**\n${answer}`.slice(0, MAX_CONTENT);
-    await prisma.examQuestionComment.create({ data: { questionId, userId: botId, content, isAi: true } });
+    await createCommentInternal(questionId, botId, content, null, true);
   } catch { /* đăng bình luận hỏng thì thôi, không ảnh hưởng câu trả lời chính */ }
 }

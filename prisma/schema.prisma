@@ -1179,6 +1179,7 @@ model Exam {
   attempts          ExamAttempt[]
   bookmarks         ExamBookmark[]
   questionBookmarks ExamQuestionBookmark[]
+  comments          ExamQuestionComment[]
 
   @@index([courseId], name: "idx_exams_course")
   @@index([courseId, kind], name: "idx_exams_course_kind")
@@ -1333,9 +1334,19 @@ model ExamQuestionBookmark {
 // trả lời qua parentId). isAi=true khi CuongMini tự đăng câu trả lời của nó
 // (userId vẫn trỏ về một User thật — tài khoản "cuongmini", xem
 // scripts seed — không có cột isBot riêng trên User để giữ migration nhỏ).
+//
+// BỀN qua re-seed đề (xem deploy.sh "Exam Room seed" — xoá+tạo lại TOÀN BỘ
+// ExamQuestion mỗi deploy, id đổi mỗi lần): questionId là CACHE nhanh, có
+// thể null tạm sau reseed; examId (không đổi) + promptHash (nội dung câu,
+// cùng thuật toán scripts/_exam-hash.mjs) là khoá THẬT để
+// scripts/exam-reapply-comments.mjs nối lại questionId đúng câu mới sau mỗi
+// deploy — giống hệt cơ chế ExamChapterMap cho sectionId, không có bản đồ
+// riêng: promptHash nằm ngay trên chính dòng bình luận.
 model ExamQuestionComment {
   id         Int      @id @default(autoincrement())
-  questionId Int      @map("question_id")
+  examId     Int      @map("exam_id")
+  questionId Int?     @map("question_id")
+  promptHash String   @map("prompt_hash") @db.VarChar(64)
   userId     Int      @map("user_id")
   parentId   Int?     @map("parent_id")
   content    String   @db.Text
@@ -1345,12 +1356,14 @@ model ExamQuestionComment {
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 
-  question ExamQuestion          @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  exam     Exam                  @relation(fields: [examId], references: [id], onDelete: Cascade)
+  question ExamQuestion?         @relation(fields: [questionId], references: [id], onDelete: SetNull)
   user     User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
   parent   ExamQuestionComment?  @relation("ExamQuestionCommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
   replies  ExamQuestionComment[] @relation("ExamQuestionCommentReplies")
 
   @@index([questionId], name: "idx_exam_qcomments_question")
+  @@index([examId, promptHash], name: "idx_exam_qcomments_reapply")
   @@index([parentId], name: "idx_exam_qcomments_parent")
   @@index([userId], name: "idx_exam_qcomments_user")
   @@map("exam_question_comments")

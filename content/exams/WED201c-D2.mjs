@@ -69,7 +69,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.1667,
-          "prompt": "<div class=\"ml-en\"><p>div {<br/>  background-color: lightblue;<br/>  width: 200px;<br/>  padding: 25px;<br/>  border: 25px solid navy;<br/>}<br/>Which method makes the total (rendered) width of the div tag equal 200px?</p></div><div class=\"ml-vi\"><p>div {<br/>  background-color: lightblue;<br/>  width: 200px;<br/>  padding: 25px;<br/>  border: 25px solid navy;<br/>}<br/>Dùng cách nào để tổng chiều rộng hiển thị của thẻ div vẫn là 200px?</p></div>",
+          "prompt": "<div class=\"ml-en\"><pre><code><span class=\"hljs-selector-tag\">div</span> {\n<span class=\"hljs-attribute\">background-color</span>: lightblue;\n<span class=\"hljs-attribute\">width</span>: <span class=\"hljs-number\">200px</span>;\n<span class=\"hljs-attribute\">padding</span>: <span class=\"hljs-number\">25px</span>;\n<span class=\"hljs-attribute\">border</span>: <span class=\"hljs-number\">25px</span> solid navy;\n}</code></pre><p>Which method makes the total (rendered) width of the div tag equal 200px?</p></div><div class=\"ml-vi\"><pre><code><span class=\"hljs-selector-tag\">div</span> {\n<span class=\"hljs-attribute\">background-color</span>: lightblue;\n<span class=\"hljs-attribute\">width</span>: <span class=\"hljs-number\">200px</span>;\n<span class=\"hljs-attribute\">padding</span>: <span class=\"hljs-number\">25px</span>;\n<span class=\"hljs-attribute\">border</span>: <span class=\"hljs-number\">25px</span> solid navy;\n}</code></pre><p>Dùng cách nào để tổng chiều rộng hiển thị của thẻ div vẫn là 200px?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/WED201c/D2/q3.png",
           "options": [
             {

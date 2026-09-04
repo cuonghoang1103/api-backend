@@ -38,7 +38,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>Infrared is used both for short-range communication and remote controls.</p></div><div class=\"ml-vi\"><p>Hồng ngoại được dùng cho cả truyền thông tầm ngắn lẫn điều khiển từ xa.</p></div>"
         },
@@ -62,7 +62,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>NFC = Near Field Communication.</p></div><div class=\"ml-vi\"><p>NFC = Near Field Communication (giao tiếp trường gần).</p></div>"
         },
@@ -80,7 +80,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Phones can trigger actions (e.g. vibration, notifications, controlling devices), so they act as actuators too.</p></div><div class=\"ml-vi\"><p>Điện thoại có thể tạo ra hành động (rung, thông báo, điều khiển thiết bị) nên cũng đóng vai trò actuator.</p></div>"
         },
@@ -104,7 +104,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Servo motors are controlled via PWM signals, so the microcontroller must have a PWM pin. The source image shows a checkmark on &#39;Digital to Analogue converter&#39; but that is incorrect — servos do not use DAC, they use PWM, established consistently across many prior decks (e.g. Đề 22-23).</p></div><div class=\"ml-vi\"><p>Động cơ servo được điều khiển bằng tín hiệu PWM, nên vi điều khiển cần có chân PWM. Ảnh nguồn đánh dấu &#39;Digital to Analogue converter&#39; nhưng đây là SAI — servo không dùng DAC mà dùng PWM, đã xác lập nhất quán qua nhiều đề trước (VD Đề 22-23).</p></div>"
         },
@@ -128,7 +128,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>The resistor colour code uses black, brown, red, orange, yellow, green, blue, violet, grey, white, gold, silver — turquoise is not among them.</p></div><div class=\"ml-vi\"><p>Mã màu điện trở gồm đen, nâu, đỏ, cam, vàng, lục, lam, tím, xám, trắng, vàng kim, bạc — không có ngọc lam.</p></div>"
         },
@@ -152,7 +152,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>By definition, a system consists of an input, an output and a process. The source image shows a checkmark on &#39;a microprocessor&#39; but that is incorrect — established in Đề 22/23 that the correct answer is input+output+process.</p></div><div class=\"ml-vi\"><p>Theo định nghĩa, hệ thống gồm đầu vào, đầu ra và quá trình xử lý. Ảnh nguồn đánh dấu &#39;a microprocessor&#39; nhưng SAI — đã xác lập ở Đề 22/23 rằng đáp án đúng là đầu vào+đầu ra+quá trình.</p></div>"
         },
@@ -176,7 +176,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Connectivity is what empowers IoT by bringing everyday objects together into a network, established in Đề 23 q41 and elsewhere. The source image shows a checkmark on &#39;Intelligence&#39; but that is incorrect.</p></div><div class=\"ml-vi\"><p>Connectivity (kết nối) là yếu tố tạo sức mạnh cho IoT bằng cách gắn kết các vật thể hàng ngày, đã xác lập ở Đề 23 q41 và các đề khác. Ảnh nguồn đánh dấu &#39;Intelligence&#39; nhưng SAI.</p></div>"
         },
@@ -200,7 +200,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Resource management in IoT is primarily about energy management (battery/power constraints), established in prior decks. The source image shows a checkmark on &#39;Network management&#39; but that is incorrect.</p></div><div class=\"ml-vi\"><p>Quản lý tài nguyên trong IoT chủ yếu là quản lý năng lượng (pin/nguồn điện hạn chế), đã xác lập ở các đề trước. Ảnh nguồn đánh dấu &#39;Network management&#39; nhưng SAI.</p></div>"
         },
@@ -224,7 +224,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Arduino Uno&#39;s built-in LED is connected to digital pin 13.</p></div><div class=\"ml-vi\"><p>LED tích hợp trên Arduino Uno nối với chân số 13.</p></div>"
         },
@@ -248,7 +248,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Connectivity is what empowers IoT objects, consistent with q7 above.</p></div><div class=\"ml-vi\"><p>Connectivity (kết nối) là yếu tố tạo sức mạnh cho vật thể IoT, nhất quán với câu 7 ở trên.</p></div>"
         },
@@ -266,7 +266,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>This is a true statement about future IoT applications via smartphones.</p></div><div class=\"ml-vi\"><p>Đây là phát biểu đúng về ứng dụng tương lai của IoT qua điện thoại thông minh.</p></div>"
         },
@@ -290,7 +290,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Bluetooth has 3 power classes: Class 1 (~100m), Class 2 (~10m), Class 3 (~1m).</p></div><div class=\"ml-vi\"><p>Bluetooth có 3 lớp công suất: Class 1 (~100m), Class 2 (~10m), Class 3 (~1m).</p></div>"
         },
@@ -314,7 +314,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>System stability is the classic concern in badly designed closed-loop feedback systems (oscillation/instability).</p></div><div class=\"ml-vi\"><p>Độ ổn định hệ thống là vấn đề kinh điển trong các hệ vòng kín phản hồi thiết kế kém (dao động/mất ổn định).</p></div>"
         },
@@ -338,7 +338,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>setup() runs once when the Arduino program starts.</p></div><div class=\"ml-vi\"><p>setup() chạy một lần khi chương trình Arduino khởi động.</p></div>"
         },
@@ -362,7 +362,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>digitalWrite(pin, LOW) sets the pin to 0 volt.</p></div><div class=\"ml-vi\"><p>digitalWrite(pin, LOW) đặt chân đó về 0 volt.</p></div>"
         },
@@ -386,7 +386,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>0b10010100 = 128+16+4 = 148.</p></div><div class=\"ml-vi\"><p>0b10010100 = 128+16+4 = 148.</p></div>"
         },
@@ -410,7 +410,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>analogWrite range is 0-255; 75% of 255 = 191.25 ≈ 191.</p></div><div class=\"ml-vi\"><p>analogWrite có phạm vi 0-255; 75% của 255 = 191.25 ≈ 191.</p></div>"
         },
@@ -434,7 +434,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>digitalRead() returns either HIGH or LOW depending on pin state.</p></div><div class=\"ml-vi\"><p>digitalRead() trả về HIGH hoặc LOW tuỳ trạng thái chân.</p></div>"
         },
@@ -458,7 +458,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>bitClear(x, n) clears bit n of variable x.</p></div><div class=\"ml-vi\"><p>bitClear(x, n) xoá bit n của biến x.</p></div>"
         },
@@ -482,7 +482,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>An Arduino program is called a &#39;sketch&#39;.</p></div><div class=\"ml-vi\"><p>Chương trình Arduino được gọi là &#39;sketch&#39;.</p></div>"
         },
@@ -503,7 +503,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>A photoresistor&#39;s resistance changes (specifically decreases) when exposed to light; among the given options only &#39;changes&#39; correctly describes this.</p></div><div class=\"ml-vi\"><p>Điện trở của quang trở thay đổi (cụ thể là giảm) khi có ánh sáng; trong các lựa chọn chỉ &#39;thay đổi&#39; mô tả đúng.</p></div>"
         },
@@ -527,7 +527,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Not verified against a marked source answer; &#39;Role of green IoT system&#39; is the most distinct named future-application concept among the options, chosen as the best-supported guess. Needs review.</p></div><div class=\"ml-vi\"><p>Không có đáp án đánh dấu trong ảnh nguồn để đối chiếu; &#39;Vai trò của hệ thống IoT xanh&#39; là khái niệm ứng dụng tương lai riêng biệt nhất trong các lựa chọn, chọn làm phỏng đoán có cơ sở tốt nhất. Cần xem lại.</p></div>"
         },
@@ -548,7 +548,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Not verified against a marked source answer; option B (resource-constrained devices can&#39;t carry adequate security software) is the classic textbook explanation for IoT data security concerns. Needs review.</p></div><div class=\"ml-vi\"><p>Không có đáp án đánh dấu trong ảnh nguồn để đối chiếu; phương án B (thiết bị hạn chế tài nguyên không mang đủ phần mềm bảo mật) là lời giải thích kinh điển trong giáo trình về lo ngại bảo mật dữ liệu IoT. Cần xem lại.</p></div>"
         },
@@ -572,7 +572,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>Voice recognition reduces device cost by replacing physical interface components (buttons/screens) with voice UI.</p></div><div class=\"ml-vi\"><p>Nhận diện giọng nói giảm chi phí thiết bị bằng cách thay thế các bộ phận giao diện vật lý (nút bấm/màn hình) bằng giao diện giọng nói.</p></div>"
         },
@@ -596,7 +596,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>The shorter/negative LED leg is the cathode.</p></div><div class=\"ml-vi\"><p>Chân ngắn/âm của LED là cathode.</p></div>"
         },
@@ -620,7 +620,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Varying LED brightness requires PWM, so the anode must connect to a PWM-capable pin.</p></div><div class=\"ml-vi\"><p>Thay đổi độ sáng LED cần PWM, nên anode phải nối vào chân có tính năng PWM.</p></div>"
         },
@@ -644,7 +644,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Resource management combines both protocols and algorithms.</p></div><div class=\"ml-vi\"><p>Quản lý tài nguyên kết hợp cả giao thức và thuật toán.</p></div>"
         },
@@ -668,7 +668,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Arduino Uno/Nano&#39;s external interrupt pins are D2 (INT0) and D3 (INT1).</p></div><div class=\"ml-vi\"><p>Chân ngắt ngoài của Arduino Uno/Nano là D2 (INT0) và D3 (INT1).</p></div>"
         },
@@ -692,7 +692,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Arduino is programmed using C/C++ (C Languages).</p></div><div class=\"ml-vi\"><p>Arduino được lập trình bằng C/C++ (họ ngôn ngữ C).</p></div>"
         },
@@ -716,7 +716,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>LoRa is a Low Power Wide Area Network (LPWAN) technology.</p></div><div class=\"ml-vi\"><p>LoRa là công nghệ LPWAN (mạng diện rộng công suất thấp).</p></div>"
         },
@@ -740,7 +740,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Embedded/IoT devices typically form ad-hoc networks.</p></div><div class=\"ml-vi\"><p>Thiết bị nhúng/IoT thường tạo thành mạng ad-hoc.</p></div>"
         },
@@ -764,7 +764,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>The actuator is what performs the physical change/action.</p></div><div class=\"ml-vi\"><p>Actuator là thành phần thực hiện thay đổi/hành động vật lý.</p></div>"
         },
@@ -788,7 +788,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>Community IoT covers citizen contributions to shared/civic infrastructure like a smart city.</p></div><div class=\"ml-vi\"><p>Community IoT (IoT cộng đồng) bao gồm đóng góp của người dân cho hạ tầng chung/công cộng như thành phố thông minh.</p></div>"
         },
@@ -812,7 +812,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>A computer is not a sensor; light, sound, temperature sensors all exist.</p></div><div class=\"ml-vi\"><p>Máy tính không phải là cảm biến; cảm biến ánh sáng, âm thanh, nhiệt độ đều tồn tại.</p></div>"
         },
@@ -839,7 +839,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>LoRaWAN is designed for low power, low data rate communication over several kilometres.</p></div><div class=\"ml-vi\"><p>LoRaWAN được thiết kế cho truyền thông công suất thấp, tốc độ dữ liệu thấp trong phạm vi vài km.</p></div>"
         },
@@ -863,7 +863,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>digitalWrite() sets a pin to HIGH or LOW.</p></div><div class=\"ml-vi\"><p>digitalWrite() đặt trạng thái HIGH hoặc LOW cho chân.</p></div>"
         },
@@ -887,7 +887,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>The door alarm connects to the CPU board&#39;s Alarm inputs, detecting a state — it is a sensor.</p></div><div class=\"ml-vi\"><p>Chuông báo cửa nối vào các chân Alarm (input) trên board CPU, phát hiện trạng thái — nó là cảm biến.</p></div>"
         },
@@ -911,7 +911,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>MQTT is the well-known lightweight messaging protocol for IoT.</p></div><div class=\"ml-vi\"><p>MQTT là giao thức nhắn tin nhẹ nổi tiếng dùng cho IoT.</p></div>"
         },
@@ -935,7 +935,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Digital signals are represented by discrete values.</p></div><div class=\"ml-vi\"><p>Tín hiệu số (digital) được biểu diễn bằng các giá trị rời rạc.</p></div>"
         },
@@ -959,7 +959,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>The Arduino Uno has 3 GND pins (2 in the power header, 1 near the digital pins/AREF).</p></div><div class=\"ml-vi\"><p>Arduino Uno có 3 chân GND (2 chân ở khối power, 1 chân gần dãy chân digital/AREF).</p></div>"
         },
@@ -983,7 +983,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>WSN = Wireless Sensor Network.</p></div><div class=\"ml-vi\"><p>WSN = Wireless Sensor Network (mạng cảm biến không dây).</p></div>"
         },
@@ -1007,7 +1007,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Product development starts by defining the problem the idea sets out to solve.</p></div><div class=\"ml-vi\"><p>Phát triển sản phẩm bắt đầu bằng việc xác định vấn đề mà ý tưởng đó giải quyết.</p></div>"
         },
@@ -1031,7 +1031,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Arduino Uno (ATmega328P) has 32 KB of flash memory.</p></div><div class=\"ml-vi\"><p>Arduino Uno (ATmega328P) có 32 KB bộ nhớ flash.</p></div>"
         },
@@ -1055,7 +1055,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Baud rate is the number of bits transmitted/received per second.</p></div><div class=\"ml-vi\"><p>Baud rate là số bit được truyền/nhận mỗi giây.</p></div>"
         },
@@ -1076,7 +1076,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>Infrared remote controls use (infrared) light to carry signals.</p></div><div class=\"ml-vi\"><p>Điều khiển từ xa hồng ngoại dùng ánh sáng (hồng ngoại) để truyền tín hiệu.</p></div>"
         },
@@ -1100,7 +1100,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Parallel connection does not add voltage — it stays at the nominal voltage of one AAA cell, 1.5V.</p></div><div class=\"ml-vi\"><p>Nối song song không cộng dồn điện áp — vẫn giữ nguyên điện áp danh định của một pin AAA là 1.5V.</p></div>"
         },
@@ -1124,7 +1124,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Connected cars for personal transportation fall under Personal IoT.</p></div><div class=\"ml-vi\"><p>Xe hơi kết nối phục vụ mục đích cá nhân thuộc về Personal IoT.</p></div>"
         },
@@ -1148,7 +1148,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>The water valve is connected to a relay output and performs a physical action (open/close) — it is an actuator.</p></div><div class=\"ml-vi\"><p>Van nước nối vào ngõ ra relay và thực hiện hành động vật lý (đóng/mở) — nó là actuator.</p></div>"
         },
@@ -1169,7 +1169,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>Devices sharing the same set of wires form a multi-point connection; the source image&#39;s checkmark on this option matches established networking terminology.</p></div><div class=\"ml-vi\"><p>Nhiều thiết bị dùng chung bộ dây tạo thành kết nối đa điểm (multi-point); dấu tích trong ảnh nguồn khớp với thuật ngữ mạng đã xác lập.</p></div>"
         },
@@ -1193,7 +1193,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>serialEvent() is called when new data arrives on the serial port.</p></div><div class=\"ml-vi\"><p>serialEvent() được gọi khi có dữ liệu mới đến từ cổng serial.</p></div>"
         }

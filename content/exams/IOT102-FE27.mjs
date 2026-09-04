@@ -38,7 +38,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Reducing supply voltage lowers current and thus power dissipated as heat (P=I²R); the other options don&#39;t directly reduce heat generation.</p></div><div class=\"ml-vi\"><p>Giảm điện áp nguồn làm giảm dòng điện, do đó giảm công suất toả nhiệt (P=I²R); các phương án khác không trực tiếp giảm nhiệt sinh ra.</p></div>"
         },
@@ -62,7 +62,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Turquoise is not a resistor colour code colour.</p></div><div class=\"ml-vi\"><p>Ngọc lam không nằm trong bảng mã màu điện trở.</p></div>"
         },
@@ -86,7 +86,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>MQTT is used for both M2M and IoT communication.</p></div><div class=\"ml-vi\"><p>MQTT được dùng cho cả giao tiếp M2M lẫn IoT.</p></div>"
         },
@@ -110,7 +110,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>A sensor&#39;s role is to gather (collect) information from the environment.</p></div><div class=\"ml-vi\"><p>Vai trò của cảm biến là thu thập thông tin từ môi trường.</p></div>"
         },
@@ -134,7 +134,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>analogWrite range is 0-255; 75% of 255 = 191.25 ≈ 191.</p></div><div class=\"ml-vi\"><p>analogWrite có phạm vi 0-255; 75% của 255 = 191.25 ≈ 191.</p></div>"
         },
@@ -158,7 +158,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Correct syntax: Serial.begin(9600); (object.method, lowercase &#39;begin&#39;).</p></div><div class=\"ml-vi\"><p>Cú pháp đúng: Serial.begin(9600); (đối tượng.phương thức, &#39;begin&#39; viết thường).</p></div>"
         },
@@ -185,7 +185,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Servo motors are controlled via PWM signals, so the microcontroller must have a PWM pin.</p></div><div class=\"ml-vi\"><p>Động cơ servo được điều khiển bằng tín hiệu PWM, nên vi điều khiển cần có chân PWM.</p></div>"
         },
@@ -209,7 +209,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>analogWrite() is the function used to output PWM with values 0-255.</p></div><div class=\"ml-vi\"><p>analogWrite() là hàm dùng để xuất PWM với giá trị 0-255.</p></div>"
         },
@@ -233,7 +233,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>setup() runs once when the Arduino program starts.</p></div><div class=\"ml-vi\"><p>setup() chạy một lần khi chương trình Arduino khởi động.</p></div>"
         },
@@ -257,7 +257,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Orange = digit 3 in the resistor colour code.</p></div><div class=\"ml-vi\"><p>Cam = chữ số 3 trong mã màu điện trở.</p></div>"
         },
@@ -281,7 +281,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>#include is used to bring in outside libraries.</p></div><div class=\"ml-vi\"><p>#include dùng để nhúng thư viện ngoài.</p></div>"
         },
@@ -305,7 +305,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>0b10010100 = 128+16+4 = 148.</p></div><div class=\"ml-vi\"><p>0b10010100 = 128+16+4 = 148.</p></div>"
         },
@@ -329,7 +329,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>PWM = Pulse Width Modulation.</p></div><div class=\"ml-vi\"><p>PWM = Pulse Width Modulation (điều chế độ rộng xung).</p></div>"
         },
@@ -353,7 +353,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Tinkercad is a free online tool suite for creating and simulating circuits.</p></div><div class=\"ml-vi\"><p>Tinkercad là bộ công cụ trực tuyến miễn phí để tạo và mô phỏng mạch điện.</p></div>"
         },
@@ -377,7 +377,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Parallel connection does not add voltage — it stays at the nominal voltage of one AAA cell, 1.5V.</p></div><div class=\"ml-vi\"><p>Nối song song không cộng dồn điện áp — vẫn giữ nguyên điện áp danh định của một pin AAA là 1.5V.</p></div>"
         },
@@ -401,7 +401,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Not verified against a marked source answer; &#39;Cloud and device&#39; chosen as best fit for end-to-end encryption in IoT cloud systems. Needs review.</p></div><div class=\"ml-vi\"><p>Không có đáp án đánh dấu trong ảnh nguồn để đối chiếu; chọn &#39;Cloud và thiết bị&#39; vì phù hợp với mã hoá đầu-cuối trong hệ thống IoT-cloud. Cần xem lại.</p></div>"
         },
@@ -419,7 +419,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>IoT gateways provide security functions for the network.</p></div><div class=\"ml-vi\"><p>Gateway IoT cung cấp các chức năng bảo mật cho mạng.</p></div>"
         },
@@ -443,7 +443,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>delay() takes milliseconds; 1000ms = 1 second.</p></div><div class=\"ml-vi\"><p>delay() nhận tham số mili giây; 1000ms = 1 giây.</p></div>"
         },
@@ -467,7 +467,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>attach(pin) connects the servo&#39;s control wire to the specified digital pin.</p></div><div class=\"ml-vi\"><p>attach(pin) nối dây điều khiển servo vào chân digital chỉ định.</p></div>"
         },
@@ -491,7 +491,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>serialEvent() is called when new data arrives on the serial port.</p></div><div class=\"ml-vi\"><p>serialEvent() được gọi khi có dữ liệu mới đến từ cổng serial.</p></div>"
         },
@@ -515,7 +515,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>IoT resource management challenges are addressed by a combination of clustering, software agents, and synchronization techniques.</p></div><div class=\"ml-vi\"><p>Thách thức quản lý tài nguyên IoT được giải quyết bằng kết hợp các kỹ thuật cluster, software agent và đồng bộ hoá.</p></div>"
         },
@@ -539,7 +539,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>The outdoor camera captures visual data as an input device — it is a sensor.</p></div><div class=\"ml-vi\"><p>Camera ngoài trời thu thập dữ liệu hình ảnh như một thiết bị đầu vào — nó là cảm biến.</p></div>"
         },
@@ -557,7 +557,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>This is the standard characterization in the digital vs analog audio/signal comparison.</p></div><div class=\"ml-vi\"><p>Đây là mô tả tiêu chuẩn khi so sánh tín hiệu digital với analog.</p></div>"
         },
@@ -581,7 +581,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>This describes an actuator — the counterpart to the sensor definition (transducer + signal conditioner).</p></div><div class=\"ml-vi\"><p>Đây là định nghĩa actuator — đối xứng với định nghĩa cảm biến (transducer + mạch điều hoà tín hiệu).</p></div>"
         },
@@ -602,7 +602,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Bluetooth operates in the 2.4-2.485 GHz ISM band.</p></div><div class=\"ml-vi\"><p>Bluetooth hoạt động trong dải tần ISM 2.4-2.485 GHz.</p></div>"
         },
@@ -620,7 +620,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Different Arduino boards use different microcontrollers/microprocessors (ATmega328P, SAMD21, etc.).</p></div><div class=\"ml-vi\"><p>Các board Arduino khác nhau dùng vi điều khiển/vi xử lý khác nhau (ATmega328P, SAMD21, v.v.).</p></div>"
         },
@@ -644,7 +644,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>The shorter/negative LED leg is the cathode.</p></div><div class=\"ml-vi\"><p>Chân ngắn/âm của LED là cathode.</p></div>"
         },
@@ -668,7 +668,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>IR = infrared.</p></div><div class=\"ml-vi\"><p>IR = hồng ngoại (infrared).</p></div>"
         },
@@ -692,7 +692,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>An analog quantity has a continuous range of values.</p></div><div class=\"ml-vi\"><p>Đại lượng analog có tập giá trị liên tục.</p></div>"
         },
@@ -719,7 +719,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>System stability is the classic concern in badly designed closed-loop feedback systems.</p></div><div class=\"ml-vi\"><p>Độ ổn định hệ thống là vấn đề kinh điển trong các hệ vòng kín phản hồi thiết kế kém.</p></div>"
         },
@@ -743,7 +743,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>Smooth continuous data describes an analog signal.</p></div><div class=\"ml-vi\"><p>Dữ liệu mượt liên tục mô tả tín hiệu analog.</p></div>"
         },
@@ -767,7 +767,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>The actuator is what performs the physical change/action.</p></div><div class=\"ml-vi\"><p>Actuator là thành phần thực hiện thay đổi/hành động vật lý.</p></div>"
         },
@@ -791,7 +791,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Connected cars for personal transportation fall under Personal IoT.</p></div><div class=\"ml-vi\"><p>Xe hơi kết nối phục vụ mục đích cá nhân thuộc về Personal IoT.</p></div>"
         },
@@ -815,7 +815,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Resource management in IoT is primarily about energy management (battery/power constraints).</p></div><div class=\"ml-vi\"><p>Quản lý tài nguyên trong IoT chủ yếu là quản lý năng lượng.</p></div>"
         },
@@ -839,7 +839,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Fog computing processes data closer to the source (network edge), reducing exposure and transit distance.</p></div><div class=\"ml-vi\"><p>Fog computing xử lý dữ liệu gần nguồn hơn (biên mạng), giảm phơi nhiễm và quãng đường truyền.</p></div>"
         },
@@ -863,7 +863,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>Not verified against a marked source answer; &#39;Prominent&#39; chosen as data sharing/privacy is a widely-discussed, high-profile topic today. Needs review.</p></div><div class=\"ml-vi\"><p>Không có đáp án đánh dấu trong ảnh nguồn để đối chiếu; chọn &#39;Nổi bật&#39; vì chia sẻ dữ liệu/quyền riêng tư là chủ đề được bàn luận rộng rãi ngày nay. Cần xem lại.</p></div>"
         },
@@ -887,7 +887,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Not verified against a marked source answer; &#39;Machine&#39; scale chosen to reflect that IoT operations occur autonomously without human intervention (M2M theme). Needs review.</p></div><div class=\"ml-vi\"><p>Không có đáp án đánh dấu trong ảnh nguồn để đối chiếu; chọn &#39;Máy móc&#39; vì hoạt động IoT diễn ra tự động không cần con người can thiệp (chủ đề M2M). Cần xem lại.</p></div>"
         },
@@ -905,7 +905,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>A standard servo&#39;s write() angle range is 0-180 degrees; 190 is out of range.</p></div><div class=\"ml-vi\"><p>Servo tiêu chuẩn nhận góc write() trong khoảng 0-180 độ; 190 nằm ngoài phạm vi.</p></div>"
         },
@@ -923,7 +923,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Smart refrigerators are a classic example of consumer IoT devices.</p></div><div class=\"ml-vi\"><p>Tủ lạnh thông minh là ví dụ kinh điển của thiết bị IoT tiêu dùng.</p></div>"
         },
@@ -944,7 +944,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>I = P/V = 1000/240 ≈ 4.17 amps.</p></div><div class=\"ml-vi\"><p>I = P/V = 1000/240 ≈ 4.17 amps.</p></div>"
         },
@@ -968,7 +968,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Arduino Uno/Nano&#39;s external interrupt pins are D2 (INT0) and D3 (INT1).</p></div><div class=\"ml-vi\"><p>Chân ngắt ngoài của Arduino Uno/Nano là D2 (INT0) và D3 (INT1).</p></div>"
         },
@@ -992,7 +992,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Not verified — the source question&#39;s binary/ADC notation is ambiguous (OCR/formatting unclear). Answer chosen as best guess among the options; needs review against the original LM35 ADC formula (Temp = ADC_value × Vref / 1024 / 10mV).</p></div><div class=\"ml-vi\"><p>Không xác minh được — ký hiệu nhị phân/ADC trong câu hỏi gốc không rõ ràng (lỗi định dạng/OCR). Chọn đáp án làm phỏng đoán tốt nhất trong các lựa chọn; cần xem lại theo công thức LM35 (Nhiệt độ = Giá trị ADC × Vref / 1024 / 10mV).</p></div>"
         },
@@ -1016,7 +1016,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Arduino Uno runs at 16 MHz.</p></div><div class=\"ml-vi\"><p>Arduino Uno chạy ở tần số 16 MHz.</p></div>"
         },
@@ -1040,7 +1040,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>A plain resistor is a passive component (part of a temperature sensor&#39;s voltage divider), not itself a sensor, actuator, or control unit.</p></div><div class=\"ml-vi\"><p>Điện trở đơn thuần là linh kiện thụ động (bộ chia áp cho cảm biến nhiệt độ), bản thân nó không phải sensor, actuator hay control.</p></div>"
         },
@@ -1064,7 +1064,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>Not verified against a marked source answer; BAN (Body Area Network) primarily provides network connectivity for on-body/wearable sensors. Needs review.</p></div><div class=\"ml-vi\"><p>Không có đáp án đánh dấu trong ảnh nguồn để đối chiếu; BAN (Body Area Network) chủ yếu cung cấp kết nối mạng cho cảm biến đeo trên người. Cần xem lại.</p></div>"
         },
@@ -1088,7 +1088,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>GPIO = General Purpose Input Output Pins.</p></div><div class=\"ml-vi\"><p>GPIO = General Purpose Input Output Pins (chân vào/ra đa dụng).</p></div>"
         },
@@ -1112,7 +1112,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>pinMode(pin, mode) sets a pin as INPUT or OUTPUT.</p></div><div class=\"ml-vi\"><p>pinMode(chân, mode) đặt chân ở trạng thái INPUT hoặc OUTPUT.</p></div>"
         },
@@ -1139,7 +1139,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>Conveyor belts are driven by AC motors.</p></div><div class=\"ml-vi\"><p>Băng tải được truyền động bởi động cơ AC.</p></div>"
         },
@@ -1163,7 +1163,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>&#39;Mobile, Cloud, Engagement&#39; is the most commonly cited triad of forces accelerating IoT adoption.</p></div><div class=\"ml-vi\"><p>&#39;Mobile, Cloud, Engagement&#39; là bộ ba lực lượng thường được nhắc đến nhất trong tài liệu về thúc đẩy IoT.</p></div>"
         },
@@ -1187,7 +1187,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Bandwidth usage on cellular networks scales with device count and is a major cost driver.</p></div><div class=\"ml-vi\"><p>Băng thông trên mạng di động tăng theo số lượng thiết bị và là yếu tố chi phí chính.</p></div>"
         }

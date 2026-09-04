@@ -20,7 +20,7 @@ export default {
       "questions": [
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the Tinkercad Circuits?</p></div><div class=\"ml-vi\"><p>Tinkercad Circuits là gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q1.png",
           "options": [
@@ -38,13 +38,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Tinkercad is a free online tool suite for creating and simulating circuits, 3D designs, and code.</p></div><div class=\"ml-vi\"><p>Tinkercad là bộ công cụ trực tuyến miễn phí để tạo và mô phỏng mạch điện, thiết kế 3D và lập trình.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>To activate serial monitor, what setup code is to be written?</p></div><div class=\"ml-vi\"><p>Để kích hoạt Serial Monitor, cần viết đoạn mã khởi tạo nào?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q2.png",
           "options": [
@@ -62,13 +62,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>Correct syntax: Serial.begin(9600); (object.method, lowercase &#39;begin&#39;).</p></div><div class=\"ml-vi\"><p>Cú pháp đúng: Serial.begin(9600); (đối tượng.phương thức, &#39;begin&#39; viết thường).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>When you have a potential IoT idea you want to develop properly, what must you first define?</p></div><div class=\"ml-vi\"><p>Khi có ý tưởng IoT tiềm năng muốn phát triển đúng cách, trước tiên bạn phải xác định điều gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q3.png",
           "options": [
@@ -86,13 +86,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Product development starts by defining the problem the idea sets out to solve.</p></div><div class=\"ml-vi\"><p>Phát triển sản phẩm bắt đầu bằng việc xác định vấn đề mà ý tưởng đó giải quyết.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Big Data is not a part of IoT.</p></div><div class=\"ml-vi\"><p>Big Data không phải là một phần của IoT.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q4.png",
           "options": [
@@ -104,13 +104,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Big Data IS a core part of IoT — data collection and analytics are fundamental to IoT systems.</p></div><div class=\"ml-vi\"><p>Big Data LÀ một phần cốt lõi của IoT — thu thập và phân tích dữ liệu là nền tảng của các hệ thống IoT.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the nominal voltage of 6 AAA batteries connected in parallel?</p></div><div class=\"ml-vi\"><p>Điện áp danh định của 6 pin AAA nối song song là bao nhiêu?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q5.png",
           "options": [
@@ -128,13 +128,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Parallel connection does not add voltage — it stays at the nominal voltage of one AAA cell, 1.5V.</p></div><div class=\"ml-vi\"><p>Nối song song không cộng dồn điện áp — vẫn giữ nguyên điện áp danh định của một pin AAA là 1.5V.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Without ____________ IoT devices can easily lead to catastrophe.</p></div><div class=\"ml-vi\"><p>Nếu thiếu ____________ thiết bị IoT có thể dễ dàng dẫn đến thảm hoạ.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q6.png",
           "options": [
@@ -152,13 +152,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Not verified against a marked source answer. &#39;Management system&#39; is chosen as the best fit — without proper management/oversight, uncontrolled IoT devices can cause serious harm. Needs review.</p></div><div class=\"ml-vi\"><p>Không có đáp án đánh dấu trong ảnh nguồn để đối chiếu. Chọn &#39;Hệ thống quản lý&#39; vì thiếu giám sát/quản lý khiến thiết bị IoT mất kiểm soát có thể gây hại nghiêm trọng. Cần xem lại.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>The action that will be performed using this switch case will be:<br/>switch (2): {case 1: digitalWrite(11,HIGH); case 2: analogRead(A3)}</p></div><div class=\"ml-vi\"><p>Hành động sẽ được thực hiện với switch case này là:<br/>switch (2): {case 1: digitalWrite(11,HIGH); case 2: analogRead(A3)}</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q7.png",
           "options": [
@@ -176,13 +176,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>switch(2) matches case 2 directly, which executes analogRead(A3).</p></div><div class=\"ml-vi\"><p>switch(2) khớp trực tiếp với case 2, thực hiện analogRead(A3).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>One advantage of a closed loop feedback system is:</p></div><div class=\"ml-vi\"><p>Một ưu điểm của hệ thống phản hồi vòng kín (closed loop) là:</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q8.png",
           "options": [
@@ -203,13 +203,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>A closed-loop feedback system&#39;s key advantage is its ability to react to and correct for disturbances, unlike an open-loop system.</p></div><div class=\"ml-vi\"><p>Ưu điểm chính của hệ vòng kín là khả năng phản ứng và điều chỉnh trước nhiễu loạn, khác với hệ hở.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>The two basic types of signals are analog and ________.</p></div><div class=\"ml-vi\"><p>Hai loại tín hiệu cơ bản là analog (tương tự) và ________.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q9.png",
           "options": [
@@ -227,13 +227,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>The two basic signal types are analog and digital.</p></div><div class=\"ml-vi\"><p>Hai loại tín hiệu cơ bản là analog và digital (số).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What data security concerns do IoT devices pose?</p></div><div class=\"ml-vi\"><p>Thiết bị IoT đặt ra mối lo ngại bảo mật dữ liệu nào?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q10.png",
           "options": [
@@ -248,13 +248,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Not verified against a marked source answer. Option B (resource-constrained devices can&#39;t carry adequate security software) is the classic textbook explanation for IoT data security concerns, same recurring question as IOT102-FE24 q23. Needs review.</p></div><div class=\"ml-vi\"><p>Không có đáp án đánh dấu trong ảnh nguồn để đối chiếu. Phương án B là lời giải thích kinh điển trong giáo trình, câu lặp lại từ IOT102-FE24 q23. Cần xem lại.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>________ on a cellular network is expensive, especially with many IoT devices.</p></div><div class=\"ml-vi\"><p>________ trên mạng di động rất tốn kém, nhất là khi có nhiều thiết bị IoT.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q11.png",
           "options": [
@@ -272,13 +272,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>Bandwidth usage on cellular networks scales with device count and is a major cost driver for many connected IoT devices.</p></div><div class=\"ml-vi\"><p>Băng thông trên mạng di động tăng theo số lượng thiết bị và là yếu tố chi phí chính khi có nhiều thiết bị IoT kết nối.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>The Output of the below program will print:<br/>void loop()<br/>{int val=analogRead(A6);<br/>Serial.print(val);}</p></div><div class=\"ml-vi\"><p>Kết quả in ra của chương trình dưới đây là:<br/>void loop()<br/>{int val=analogRead(A6);<br/>Serial.print(val);}</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q12.png",
           "options": [
@@ -296,13 +296,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>analogRead() returns a value in the range 0-1023 depending on the actual analog voltage on the pin; with no fixed input specified, the output can be any value in that range.</p></div><div class=\"ml-vi\"><p>analogRead() trả về giá trị trong khoảng 0-1023 tuỳ điện áp analog thực tế trên chân; không có đầu vào cố định nên kết quả có thể là bất kỳ giá trị nào trong khoảng đó.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>WSN stands for ___________</p></div><div class=\"ml-vi\"><p>WSN là viết tắt của ___________</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q13.png",
           "options": [
@@ -320,13 +320,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>WSN = Wireless Sensor Network.</p></div><div class=\"ml-vi\"><p>WSN = Wireless Sensor Network (mạng cảm biến không dây).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>________ is particularly appealing when the human&#39;s hands or eye are otherwise occupied.</p></div><div class=\"ml-vi\"><p>________ đặc biệt hữu ích khi tay hoặc mắt con người đang bận việc khác.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q14.png",
           "options": [
@@ -344,13 +344,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Voice recognition allows hands-free, eyes-free interaction.</p></div><div class=\"ml-vi\"><p>Nhận diện giọng nói cho phép tương tác không cần dùng tay/mắt.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which of the following characterizes an analog quantity?</p></div><div class=\"ml-vi\"><p>Đặc điểm nào sau đây mô tả một đại lượng analog (tương tự)?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q15.png",
           "options": [
@@ -368,13 +368,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>An analog quantity has a continuous range of values, unlike digital (discrete) quantities.</p></div><div class=\"ml-vi\"><p>Đại lượng analog có tập giá trị liên tục, khác với đại lượng digital (rời rạc).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>A sensor is ________.</p></div><div class=\"ml-vi\"><p>Cảm biến (sensor) là ________.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q16.png",
           "options": [
@@ -389,13 +389,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>A sensor detects a change (in the environment/quantity).</p></div><div class=\"ml-vi\"><p>Cảm biến phát hiện sự thay đổi (của môi trường/đại lượng).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>A function is a series of programming statements that can be called by name. Which command is called once when the program starts:</p></div><div class=\"ml-vi\"><p>Hàm là một chuỗi câu lệnh lập trình có thể được gọi theo tên. Lệnh nào được gọi một lần khi chương trình bắt đầu:</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q17.png",
           "options": [
@@ -413,13 +413,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>setup() runs once when the Arduino program starts.</p></div><div class=\"ml-vi\"><p>setup() chạy một lần khi chương trình Arduino khởi động.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>In the reticulation (water irrigation) system, what type of device is the 100K resistor?</p></div><div class=\"ml-vi\"><p>Trong hệ thống tưới tiêu (reticulation), điện trở 100K thuộc loại thiết bị nào?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q18.png",
           "options": [
@@ -437,13 +437,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>A plain resistor is a passive component (here used as part of a temperature sensor&#39;s voltage divider), not itself a sensor, actuator, or control unit — so it fits none of the other three categories.</p></div><div class=\"ml-vi\"><p>Điện trở đơn thuần là linh kiện thụ động (ở đây dùng làm bộ chia áp cho cảm biến nhiệt độ), bản thân nó không phải sensor, actuator hay control — nên không thuộc ba loại còn lại.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What does the &#39;things&#39; in Internet of Things refer to?</p></div><div class=\"ml-vi\"><p>Chữ &#39;things&#39; trong Internet of Things ám chỉ điều gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q19.png",
           "options": [
@@ -458,13 +458,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>&#39;Things&#39; in IoT refers broadly to physical objects with embedded electronics/sensors, not just phones or self-driving machines specifically.</p></div><div class=\"ml-vi\"><p>&#39;Things&#39; trong IoT ám chỉ rộng đến vật thể vật lý có gắn điện tử/cảm biến nhúng, không chỉ riêng điện thoại hay máy móc tự vận hành.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>________ in IoT as one of the key characteristics, devices have different hardware platforms</p></div><div class=\"ml-vi\"><p>________ trong IoT là một đặc tính chính, các thiết bị có nền tảng phần cứng khác nhau</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q20.png",
           "options": [
@@ -482,13 +482,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Heterogeneity refers to devices having different hardware platforms/networks.</p></div><div class=\"ml-vi\"><p>Heterogeneity (tính không đồng nhất) ám chỉ các thiết bị có nền tảng phần cứng/mạng khác nhau.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>________ will enable the humans to access, control and manage the operation.</p></div><div class=\"ml-vi\"><p>________ sẽ giúp con người truy cập, điều khiển và quản lý hoạt động.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q21.png",
           "options": [
@@ -506,13 +506,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>IoT enables humans to remotely access, control, and manage operations of connected systems.</p></div><div class=\"ml-vi\"><p>IoT giúp con người truy cập, điều khiển và quản lý từ xa hoạt động của các hệ thống kết nối.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Voice telephony is an efficient means of ___________ with machines that can listen.</p></div><div class=\"ml-vi\"><p>Điện thoại thoại (voice telephony) là phương tiện hiệu quả để ___________ với máy móc có thể lắng nghe.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q22.png",
           "options": [
@@ -530,13 +530,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Voice telephony is inherently bi-directional communication.</p></div><div class=\"ml-vi\"><p>Điện thoại thoại vốn là truyền thông hai chiều.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the clock speed of the Arduino Uno?</p></div><div class=\"ml-vi\"><p>Tốc độ xung nhịp (clock speed) của Arduino Uno là bao nhiêu?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q23.png",
           "options": [
@@ -554,13 +554,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Arduino Uno runs at 16 MHz.</p></div><div class=\"ml-vi\"><p>Arduino Uno chạy ở tần số 16 MHz.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which category could be used by citizens to contribute to a smart city?</p></div><div class=\"ml-vi\"><p>Danh mục nào có thể được người dân dùng để đóng góp cho thành phố thông minh?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q24.png",
           "options": [
@@ -578,13 +578,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>Community IoT covers citizen contributions to shared/civic infrastructure like a smart city.</p></div><div class=\"ml-vi\"><p>Community IoT (IoT cộng đồng) bao gồm đóng góp của người dân cho hạ tầng chung/công cộng như thành phố thông minh.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Resource management will elaborate the key aspects of ___________.</p></div><div class=\"ml-vi\"><p>Quản lý tài nguyên sẽ làm rõ các khía cạnh chính của ___________.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q25.png",
           "options": [
@@ -602,13 +602,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Resource management in IoT is primarily about energy management (battery/power constraints), established across many prior decks.</p></div><div class=\"ml-vi\"><p>Quản lý tài nguyên trong IoT chủ yếu là quản lý năng lượng, đã xác lập qua nhiều đề trước.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Does IOT gateway provide security for the network?</p></div><div class=\"ml-vi\"><p>Gateway IoT có cung cấp bảo mật cho mạng không?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q26.png",
           "options": [
@@ -620,13 +620,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>IoT gateways provide security functions (e.g. firewall, filtering, protocol translation with authentication) for the network.</p></div><div class=\"ml-vi\"><p>Gateway IoT cung cấp các chức năng bảo mật (tường lửa, lọc, chuyển đổi giao thức có xác thực) cho mạng.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>This clears (writes a 0 to) a bit of a numeric variable.</p></div><div class=\"ml-vi\"><p>Lệnh này xoá (ghi 0 vào) một bit của biến số.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q27.png",
           "options": [
@@ -644,13 +644,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>bitClear(x, n) clears bit n of variable x.</p></div><div class=\"ml-vi\"><p>bitClear(x, n) xoá bit n của biến x.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>75% duty cycle corresponding to analogWrite(pin number,Value), the Value is ________.</p></div><div class=\"ml-vi\"><p>Chu kỳ hoạt động 75% ứng với analogWrite(chân, Value), Value bằng ________.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q28.png",
           "options": [
@@ -668,13 +668,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>analogWrite range is 0-255; 75% of 255 = 191.25 ≈ 191.</p></div><div class=\"ml-vi\"><p>analogWrite có phạm vi 0-255; 75% của 255 = 191.25 ≈ 191.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>To vary the brightness of an LED, anode of the LED is to be connected at ________.</p></div><div class=\"ml-vi\"><p>Để thay đổi độ sáng của LED, cực dương (anode) của LED cần nối vào ________.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q29.png",
           "options": [
@@ -692,13 +692,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Varying LED brightness requires PWM, so the anode must connect to a PWM-capable pin.</p></div><div class=\"ml-vi\"><p>Thay đổi độ sáng LED cần PWM, nên anode phải nối vào chân có tính năng PWM.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>How does fog computing reduce security risks?</p></div><div class=\"ml-vi\"><p>Fog computing giúp giảm rủi ro bảo mật như thế nào?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q30.png",
           "options": [
@@ -716,13 +716,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Fog computing processes data closer to the source (network edge), reducing the exposure window and transit distance for sensitive data.</p></div><div class=\"ml-vi\"><p>Fog computing xử lý dữ liệu gần nguồn hơn (biên mạng), giảm thời gian phơi nhiễm và quãng đường truyền của dữ liệu nhạy cảm.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>IoT devices are naturally vulnerable to __________ threats.</p></div><div class=\"ml-vi\"><p>Thiết bị IoT vốn dễ bị tổn thương trước các mối đe doạ __________.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q31.png",
           "options": [
@@ -740,13 +740,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>IoT devices are naturally vulnerable to security threats.</p></div><div class=\"ml-vi\"><p>Thiết bị IoT vốn dễ bị tổn thương trước các mối đe doạ bảo mật.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>A function is a series of programming statements that can be called by name. Which command LED by a number of milliseconds is ________</p></div><div class=\"ml-vi\"><p>Hàm là chuỗi câu lệnh có thể gọi theo tên. Lệnh nào làm trễ theo số mili giây là ________</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q32.png",
           "options": [
@@ -764,13 +764,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>delay() pauses program execution for a given number of milliseconds.</p></div><div class=\"ml-vi\"><p>delay() tạm dừng chương trình trong số mili giây chỉ định.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>MQTT is better than HTTP for sending and receiving data.</p></div><div class=\"ml-vi\"><p>MQTT tốt hơn HTTP khi gửi và nhận dữ liệu.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q33.png",
           "options": [
@@ -782,13 +782,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>MQTT is a lightweight protocol better suited than HTTP for constrained IoT devices sending/receiving data.</p></div><div class=\"ml-vi\"><p>MQTT là giao thức nhẹ, phù hợp hơn HTTP cho thiết bị IoT hạn chế tài nguyên khi gửi/nhận dữ liệu.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>IoT is a paradigm that involves ubiquitous presence in the environment.</p></div><div class=\"ml-vi\"><p>IoT là mô hình liên quan đến sự hiện diện khắp nơi (ubiquitous) trong môi trường.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q34.png",
           "options": [
@@ -800,13 +800,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>IoT is indeed characterized as a ubiquitous computing paradigm.</p></div><div class=\"ml-vi\"><p>IoT thực sự được mô tả là mô hình điện toán hiện diện khắp nơi (ubiquitous computing).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>The base of a number system is ________.</p></div><div class=\"ml-vi\"><p>Cơ số của một hệ đếm là ________.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q35.png",
           "options": [
@@ -821,13 +821,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>The base of a number system equals the count of distinct digits it uses (e.g. base 10 uses 10 digits 0-9).</p></div><div class=\"ml-vi\"><p>Cơ số của hệ đếm bằng số lượng chữ số khác nhau nó dùng (VD hệ 10 dùng 10 chữ số 0-9).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What does design provides?</p></div><div class=\"ml-vi\"><p>Thiết kế (design) cung cấp điều gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q36.png",
           "options": [
@@ -845,13 +845,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>Not verified against a marked source answer; &#39;Technology and ecosystem&#39; chosen as the most complete option. Needs review.</p></div><div class=\"ml-vi\"><p>Không có đáp án đánh dấu trong ảnh nguồn để đối chiếu; chọn &#39;Công nghệ và hệ sinh thái&#39; vì là phương án đầy đủ nhất. Cần xem lại.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>If you need to increase the current through a resistor in a circuit, what would you do?</p></div><div class=\"ml-vi\"><p>Nếu cần tăng dòng điện qua điện trở trong mạch, bạn sẽ làm gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q37.png",
           "options": [
@@ -872,13 +872,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>By I=V/R, increasing voltage (with R fixed) increases current.</p></div><div class=\"ml-vi\"><p>Theo I=V/R, tăng điện áp (giữ nguyên R) làm tăng dòng điện.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Choose the output of the function digitalRead():</p></div><div class=\"ml-vi\"><p>Chọn đầu ra của hàm digitalRead():</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q38.png",
           "options": [
@@ -896,13 +896,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>digitalRead() returns either HIGH or LOW depending on pin state.</p></div><div class=\"ml-vi\"><p>digitalRead() trả về HIGH hoặc LOW tuỳ trạng thái chân.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>The huge numbers of devices connected to the Internet of things have to communicate autonomously not humans. What is this called?</p></div><div class=\"ml-vi\"><p>Số lượng khổng lồ thiết bị kết nối IoT phải tự giao tiếp với nhau chứ không qua con người. Điều này được gọi là gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q39.png",
           "options": [
@@ -920,13 +920,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Autonomous device-to-device communication without human involvement is called Machine to Machine (M2M).</p></div><div class=\"ml-vi\"><p>Giao tiếp tự động giữa các thiết bị không qua con người được gọi là Machine to Machine (M2M).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>A system must include ________.</p></div><div class=\"ml-vi\"><p>Một hệ thống phải bao gồm ________.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q40.png",
           "options": [
@@ -944,13 +944,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>By definition, a system consists of an input, an output and a process.</p></div><div class=\"ml-vi\"><p>Theo định nghĩa, hệ thống gồm đầu vào, đầu ra và quá trình xử lý.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What is the purpose of the pin named ECHO of HC-SR04 sensor?</p></div><div class=\"ml-vi\"><p>Chân ECHO của cảm biến HC-SR04 có chức năng gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q41.png",
           "options": [
@@ -968,13 +968,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>TRIG sends the ultrasonic pulse; ECHO reports when the reflected pulse returns.</p></div><div class=\"ml-vi\"><p>TRIG phát xung siêu âm; ECHO báo khi xung phản xạ quay về.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which of these colours is NOT used in the resistor value colour code?</p></div><div class=\"ml-vi\"><p>Màu nào sau đây KHÔNG được dùng trong bảng mã màu điện trở?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q42.png",
           "options": [
@@ -992,13 +992,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Turquoise is not a resistor colour code colour.</p></div><div class=\"ml-vi\"><p>Ngọc lam không nằm trong bảng mã màu điện trở.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Internet of Things represents only software integration or only internet not Hardware integration</p></div><div class=\"ml-vi\"><p>Internet of Things chỉ đại diện cho tích hợp phần mềm hoặc chỉ internet, không có tích hợp phần cứng</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q43.png",
           "options": [
@@ -1010,13 +1010,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>IoT represents both hardware AND software/internet integration, not just one side.</p></div><div class=\"ml-vi\"><p>IoT đại diện cho cả tích hợp phần cứng LẪN phần mềm/internet, không chỉ một phía.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Cloud Computing is a computing platform where people can have access to applications and resources, as a service, from anywhere?</p></div><div class=\"ml-vi\"><p>Cloud Computing là nền tảng điện toán mà người dùng có thể truy cập ứng dụng và tài nguyên như một dịch vụ, từ bất cứ đâu?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q44.png",
           "options": [
@@ -1028,13 +1028,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>This is the standard definition of Cloud Computing.</p></div><div class=\"ml-vi\"><p>Đây là định nghĩa tiêu chuẩn của Cloud Computing.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which colour represents the digit 6 in the resistor colour code?</p></div><div class=\"ml-vi\"><p>Màu nào đại diện cho chữ số 6 trong mã màu điện trở?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q45.png",
           "options": [
@@ -1052,13 +1052,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Blue = digit 6 in the resistor colour code.</p></div><div class=\"ml-vi\"><p>Xanh dương = chữ số 6 trong mã màu điện trở.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>MQTT is ___________ protocol.</p></div><div class=\"ml-vi\"><p>MQTT là giao thức ___________.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q46.png",
           "options": [
@@ -1076,13 +1076,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>MQTT is used for both M2M and IoT communication.</p></div><div class=\"ml-vi\"><p>MQTT được dùng cho cả giao tiếp M2M lẫn IoT.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which challenge comes under securing the information?</p></div><div class=\"ml-vi\"><p>Thách thức nào thuộc về việc bảo mật thông tin?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q47.png",
           "options": [
@@ -1100,13 +1100,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Securing information falls under the Security challenge category.</p></div><div class=\"ml-vi\"><p>Bảo mật thông tin thuộc danh mục thách thức Bảo mật.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>The number of bits transmitted or received per second is defined as ________.</p></div><div class=\"ml-vi\"><p>Số bit được truyền hoặc nhận mỗi giây được gọi là ________.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q48.png",
           "options": [
@@ -1124,13 +1124,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Baud rate is the number of bits transmitted/received per second.</p></div><div class=\"ml-vi\"><p>Baud rate là số bit được truyền/nhận mỗi giây.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>Which digit is represented by a black band on a resistor?</p></div><div class=\"ml-vi\"><p>Vòng màu đen trên điện trở đại diện cho chữ số nào?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q49.png",
           "options": [
@@ -1148,13 +1148,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Black = digit 0 in the resistor colour code.</p></div><div class=\"ml-vi\"><p>Đen = chữ số 0 trong mã màu điện trở.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What will the command &quot;delay(1000)&quot; do?</p></div><div class=\"ml-vi\"><p>Lệnh &quot;delay(1000)&quot; sẽ làm gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q50.png",
           "options": [
@@ -1172,13 +1172,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>delay() takes milliseconds; 1000ms = 1 second.</p></div><div class=\"ml-vi\"><p>delay() nhận tham số mili giây; 1000ms = 1 giây.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.1961,
+          "points": 0.2,
           "prompt": "<div class=\"ml-en\"><p>What will the command &quot;delay(1000)&quot; do? (repeat)</p></div><div class=\"ml-vi\"><p>Lệnh &quot;delay(1000)&quot; sẽ làm gì? (lặp lại)</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q51.png",
           "options": [
@@ -1196,7 +1196,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Same question repeated within this deck&#39;s source images (q50 and q51 identical).</p></div><div class=\"ml-vi\"><p>Câu hỏi lặp lại trong ảnh nguồn của đề này (q50 và q51 giống hệt nhau).</p></div>"
         }

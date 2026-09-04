@@ -20,7 +20,7 @@ export default {
       "questions": [
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>Which of the following IS NOT criteria to help select a wired communication protocol?</p></div><div class=\"ml-vi\"><p>Yếu tố nào sau đây KHÔNG phải là tiêu chí để chọn giao thức truyền thông có dây?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q1.png",
           "options": [
@@ -44,13 +44,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Distance to the nearest power point is an installation/power concern, not a criterion for selecting a wired communication protocol (unlike distance, duplex capability, speed, wire count, device count).</p></div><div class=\"ml-vi\"><p>Khoảng cách đến nguồn điện gần nhất là vấn đề lắp đặt/nguồn điện, không phải tiêu chí chọn giao thức truyền thông có dây (khác với khoảng cách, khả năng song công, tốc độ, số dây, số thiết bị).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>Infrared signals can be used for _______.</p></div><div class=\"ml-vi\"><p>Tín hiệu hồng ngoại có thể được dùng để _______.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q2.png",
           "options": [
@@ -68,13 +68,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Infrared is a short-range communication technology only (line of sight, limited distance).</p></div><div class=\"ml-vi\"><p>Hồng ngoại chỉ là công nghệ truyền thông tầm ngắn (cần đường ngắm trực tiếp, khoảng cách hạn chế).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>What will be the correct syntax to make a digital pin (say D2) as an output pin?</p></div><div class=\"ml-vi\"><p>Cú pháp đúng để đặt chân digital (VD D2) làm chân output là gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q3.png",
           "options": [
@@ -92,13 +92,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Correct Arduino syntax: function pinMode (camelCase), constant OUTPUT (all uppercase).</p></div><div class=\"ml-vi\"><p>Cú pháp Arduino đúng: hàm pinMode (camelCase), hằng số OUTPUT (viết hoa toàn bộ).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>Which bluetooth version enables low energy?</p></div><div class=\"ml-vi\"><p>Phiên bản Bluetooth nào hỗ trợ năng lượng thấp (low energy)?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q4.png",
           "options": [
@@ -116,13 +116,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>Bluetooth Low Energy (BLE) was introduced in Bluetooth 4.0.</p></div><div class=\"ml-vi\"><p>Bluetooth Low Energy (BLE) được giới thiệu từ Bluetooth 4.0.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>What is Fog computing?</p></div><div class=\"ml-vi\"><p>Fog computing là gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q5.png",
           "options": [
@@ -140,13 +140,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Fog computing hosts services at the network edge, close to end devices, rather than in a centralized cloud.</p></div><div class=\"ml-vi\"><p>Fog computing lưu trữ dịch vụ ở biên mạng, gần thiết bị đầu cuối, thay vì tập trung trên cloud.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>What are the three dominant technological forces which are accelerating the Internet of Things?</p></div><div class=\"ml-vi\"><p>Ba lực lượng công nghệ chủ đạo nào đang thúc đẩy Internet of Things?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q6.png",
           "options": [
@@ -164,13 +164,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>Not verified against a marked source answer. &#39;Mobile, Cloud, Engagement&#39; is the most commonly cited triad of forces accelerating IoT adoption in the literature. Needs review.</p></div><div class=\"ml-vi\"><p>Không có đáp án đánh dấu trong ảnh nguồn để đối chiếu. &#39;Mobile, Cloud, Engagement&#39; là bộ ba lực lượng thường được nhắc đến nhất trong tài liệu về thúc đẩy IoT. Cần xem lại.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>Arduino IDE consists of 2 functions. What are they?</p></div><div class=\"ml-vi\"><p>Arduino IDE gồm 2 hàm. Đó là gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q7.png",
           "options": [
@@ -188,13 +188,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Every Arduino sketch requires setup() and loop().</p></div><div class=\"ml-vi\"><p>Mỗi sketch Arduino đều cần có setup() và loop().</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>The ________ keyword is used only in function declarations. It indicates that the function is expected to return no information to the function from which it was called.</p></div><div class=\"ml-vi\"><p>Từ khoá ________ chỉ dùng trong khai báo hàm, cho biết hàm không trả về thông tin gì cho nơi gọi nó.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q8.png",
           "options": [
@@ -212,13 +212,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "C"
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>void indicates a function returns no value.</p></div><div class=\"ml-vi\"><p>void cho biết hàm không trả về giá trị nào.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>On a LED, the shorter/negative side is called the ___________ pin.</p></div><div class=\"ml-vi\"><p>Trên đèn LED, chân ngắn hơn/âm được gọi là chân ___________.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q9.png",
           "options": [
@@ -236,13 +236,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>The shorter/negative LED leg is the cathode.</p></div><div class=\"ml-vi\"><p>Chân ngắn/âm của LED là cathode.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>In telecommunications, RS-232 is used for ________ communication transmission of data.</p></div><div class=\"ml-vi\"><p>Trong viễn thông, RS-232 dùng để truyền dữ liệu theo kiểu ________.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q10.png",
           "options": [
@@ -254,13 +254,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>RS-232 is a serial communication standard.</p></div><div class=\"ml-vi\"><p>RS-232 là chuẩn truyền thông nối tiếp (serial).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>WSN stands for ___________</p></div><div class=\"ml-vi\"><p>WSN là viết tắt của ___________</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q11.png",
           "options": [
@@ -278,13 +278,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>WSN = Wireless Sensor Network.</p></div><div class=\"ml-vi\"><p>WSN = Wireless Sensor Network (mạng cảm biến không dây).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>WSN stands for ___________ (repeat)</p></div><div class=\"ml-vi\"><p>WSN là viết tắt của ___________ (lặp lại)</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q12.png",
           "options": [
@@ -302,13 +302,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Same question repeated within this deck&#39;s source images (q11 and q12 identical); WSN = Wireless Sensor Network.</p></div><div class=\"ml-vi\"><p>Câu hỏi lặp lại trong ảnh nguồn của đề này (q11 và q12 giống hệt nhau); WSN = Wireless Sensor Network.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>The combination of a transducer with its signal conditioner is called a ___________?</p></div><div class=\"ml-vi\"><p>Sự kết hợp giữa transducer và mạch điều hòa tín hiệu (signal conditioner) được gọi là ___________?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q13.png",
           "options": [
@@ -326,13 +326,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>A transducer plus signal conditioner together form a sensor.</p></div><div class=\"ml-vi\"><p>Transducer kết hợp với mạch điều hoà tín hiệu tạo thành một cảm biến (sensor).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>The combination of a transducer with its signal conditioner is called a ___________? (repeat)</p></div><div class=\"ml-vi\"><p>Sự kết hợp giữa transducer và mạch điều hòa tín hiệu được gọi là ___________? (lặp lại)</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q14.png",
           "options": [
@@ -350,13 +350,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Same question repeated within this deck&#39;s source images (q13 and q14 identical).</p></div><div class=\"ml-vi\"><p>Câu hỏi lặp lại trong ảnh nguồn của đề này (q13 và q14 giống hệt nhau).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>Which digit does the colour yellow denote on a resistor colour band?</p></div><div class=\"ml-vi\"><p>Màu vàng trên vòng màu điện trở tương ứng với chữ số nào?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q15.png",
           "options": [
@@ -374,13 +374,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Yellow = digit 4 in the resistor colour code.</p></div><div class=\"ml-vi\"><p>Vàng = chữ số 4 trong mã màu điện trở.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>Communication in a network is carried via a ___________?</p></div><div class=\"ml-vi\"><p>Truyền thông trong mạng được thực hiện qua một ___________?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q16.png",
           "options": [
@@ -401,13 +401,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Network communication is carried via a transmission medium (wired or wireless).</p></div><div class=\"ml-vi\"><p>Truyền thông mạng được thực hiện qua môi trường truyền (có dây hoặc không dây).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>A DC motor requires a current of 10 Amperes to operate at full speed. The battery attached supplies 12 Volts. What resistance is required in the circuit to provide exactly 10 A to the motor?</p></div><div class=\"ml-vi\"><p>Động cơ DC cần dòng 10A để chạy hết tốc độ. Pin cấp 12V. Cần điện trở bao nhiêu trong mạch để cấp đúng 10A cho động cơ?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q17.png",
           "options": [
@@ -422,13 +422,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>R = V/I = 12V / 10A = 1.2 ohms.</p></div><div class=\"ml-vi\"><p>R = V/I = 12V / 10A = 1.2 ohms.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>MAC stands for ________</p></div><div class=\"ml-vi\"><p>MAC là viết tắt của ________</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q18.png",
           "options": [
@@ -446,13 +446,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>MAC = Media Access Control.</p></div><div class=\"ml-vi\"><p>MAC = Media Access Control.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>MAC stands for ________ (repeat)</p></div><div class=\"ml-vi\"><p>MAC là viết tắt của ________ (lặp lại)</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q19.png",
           "options": [
@@ -470,13 +470,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Same question repeated within this deck&#39;s source images (q18 and q19 identical).</p></div><div class=\"ml-vi\"><p>Câu hỏi lặp lại trong ảnh nguồn của đề này (q18 và q19 giống hệt nhau).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>When current flows through a resistor, the power involved produces heat. What measures can be taken to reduce the generation of heat inside a computer?</p></div><div class=\"ml-vi\"><p>Khi dòng điện chạy qua điện trở, công suất sinh ra nhiệt. Biện pháp nào giúp giảm sinh nhiệt bên trong máy tính?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q20.png",
           "options": [
@@ -494,13 +494,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Reducing supply voltage lowers current and thus power dissipated as heat (P=I²R); capacitors smooth voltage but don&#39;t reduce steady-state heat, and increasing resistor size only improves dissipation without reducing heat generated.</p></div><div class=\"ml-vi\"><p>Giảm điện áp nguồn làm giảm dòng điện, do đó giảm công suất toả nhiệt (P=I²R); tụ điện chỉ làm phẳng điện áp chứ không giảm nhiệt ổn định, còn tăng kích thước điện trở chỉ giúp tản nhiệt tốt hơn chứ không giảm lượng nhiệt sinh ra.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>What is the clock speed of the Arduino Uno?</p></div><div class=\"ml-vi\"><p>Tốc độ xung nhịp (clock speed) của Arduino Uno là bao nhiêu?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q21.png",
           "options": [
@@ -518,13 +518,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Arduino Uno runs at 16 MHz.</p></div><div class=\"ml-vi\"><p>Arduino Uno chạy ở tần số 16 MHz.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>What is the clock speed of the Arduino Uno? (repeat)</p></div><div class=\"ml-vi\"><p>Tốc độ xung nhịp của Arduino Uno là bao nhiêu? (lặp lại)</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q22.png",
           "options": [
@@ -542,13 +542,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Same question repeated within this deck&#39;s source images (q21 and q22 identical).</p></div><div class=\"ml-vi\"><p>Câu hỏi lặp lại trong ảnh nguồn của đề này (q21 và q22 giống hệt nhau).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>What is another way of thinking of the DTE?</p></div><div class=\"ml-vi\"><p>Có thể hiểu DTE theo cách nào khác?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q23.png",
           "options": [
@@ -563,13 +563,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>DTE (Data Terminal Equipment) can be thought of as a computer (the data source/destination endpoint).</p></div><div class=\"ml-vi\"><p>DTE (Data Terminal Equipment) có thể hiểu như một máy tính (điểm đầu/cuối nguồn dữ liệu).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>What is another way of thinking of the DTE? (repeat)</p></div><div class=\"ml-vi\"><p>Có thể hiểu DTE theo cách nào khác? (lặp lại)</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q24.png",
           "options": [
@@ -584,13 +584,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Same question repeated within this deck&#39;s source images (q23 and q24 identical).</p></div><div class=\"ml-vi\"><p>Câu hỏi lặp lại trong ảnh nguồn của đề này (q23 và q24 giống hệt nhau).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>________ empowers IoT by bringing together everyday objects.</p></div><div class=\"ml-vi\"><p>________ tạo sức mạnh cho IoT bằng cách kết nối các vật thể hàng ngày lại với nhau.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q25.png",
           "options": [
@@ -608,13 +608,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Connectivity empowers IoT by bringing everyday objects together, established across many prior decks.</p></div><div class=\"ml-vi\"><p>Connectivity (kết nối) tạo sức mạnh cho IoT bằng cách gắn kết các vật thể hàng ngày, đã xác lập qua nhiều đề trước.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>________ empowers IoT by bringing together everyday objects. (repeat)</p></div><div class=\"ml-vi\"><p>________ tạo sức mạnh cho IoT bằng cách kết nối các vật thể hàng ngày. (lặp lại)</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q26.png",
           "options": [
@@ -632,13 +632,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Same question repeated within this deck&#39;s source images (q25 and q26 identical).</p></div><div class=\"ml-vi\"><p>Câu hỏi lặp lại trong ảnh nguồn của đề này (q25 và q26 giống hệt nhau).</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>Which of the following is the future application of IoT?</p></div><div class=\"ml-vi\"><p>Ứng dụng tương lai nào sau đây của IoT?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q27.png",
           "options": [
@@ -656,13 +656,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "D"
+            3
           ],
           "explanation": "<div class=\"ml-en\"><p>Not verified against a marked source answer. Same recurring ambiguous question as IOT102-FE24 q22; &#39;Role of green IoT system&#39; chosen as the most distinct named future-application concept among the options. Needs review.</p></div><div class=\"ml-vi\"><p>Không có đáp án đánh dấu trong ảnh nguồn để đối chiếu. Câu hỏi lặp lại từ IOT102-FE24 q22; chọn &#39;Vai trò của hệ thống IoT xanh&#39; vì là khái niệm ứng dụng tương lai riêng biệt nhất trong các lựa chọn. Cần xem lại.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>What does p refer to in ATmega328p?</p></div><div class=\"ml-vi\"><p>Chữ p trong ATmega328p nghĩa là gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q28.png",
           "options": [
@@ -680,13 +680,13 @@ export default {
             }
           ],
           "correctIndexes": [
-            "B"
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>The &#39;P&#39; in ATmega328P denotes picoPower, a low-power technology variant.</p></div><div class=\"ml-vi\"><p>Chữ &#39;P&#39; trong ATmega328P là picoPower, biến thể công nghệ tiết kiệm năng lượng.</p></div>"
         },
         {
           "kind": "MCQ",
-          "points": 0.3448,
+          "points": 0.34,
           "prompt": "<div class=\"ml-en\"><p>Bluetooth uses low power radio waves in the frequency range of ___________?</p></div><div class=\"ml-vi\"><p>Bluetooth dùng sóng radio công suất thấp trong dải tần ___________?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE25/q29.png",
           "options": [
@@ -701,7 +701,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            "A"
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Bluetooth operates in the 2.4-2.485 GHz ISM band.</p></div><div class=\"ml-vi\"><p>Bluetooth hoạt động trong dải tần ISM 2.4-2.485 GHz.</p></div>"
         }

@@ -167,7 +167,10 @@ bank.sort((a, b) => (a.n || 0) - (b.n || 0));
 
 const imgMap = IMAGES && fs.existsSync(IMAGES) ? JSON.parse(fs.readFileSync(IMAGES, 'utf8')) : {};
 
-const pointsPer = +(POINTS / bank.length).toFixed(4);
+// ExamQuestion.points is @db.Decimal(6,2) — max 2 decimal places. A 4dp value
+// (e.g. 10/51 = 0.1961) passes Postgres silently (it rounds), but the sum no
+// longer equals POINTS exactly. Round here so the seed output is exact.
+const pointsPer = +(POINTS / bank.length).toFixed(2);
 
 const questions = bank.map((q) => {
   if (!Array.isArray(q.ans) || !q.ans.length) console.error(`⚠ câu ${q.n}: thiếu ans`);

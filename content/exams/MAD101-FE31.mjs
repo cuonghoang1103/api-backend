@@ -72,7 +72,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Find the output of the recursive algorithm if input n = 5.<br/>procedure TT(n: integer);<br/>If n=1 then f(1):=4<br/>else f(n):=f(n-1)*n;</p></div><div class=\"ml-vi\"><p>Tìm kết quả của thuật toán đệ quy sau nếu đầu vào n = 5.<br/>procedure TT(n: integer);<br/>If n=1 then f(1):=4<br/>else f(n):=f(n-1)*n;</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Find the output of the recursive algorithm if input n = 5.</p><pre><code><span class=\"hljs-function\"><span class=\"hljs-keyword\">procedure</span> <span class=\"hljs-title\">TT</span><span class=\"hljs-params\">(n: integer)</span>;</span>\n<span class=\"hljs-keyword\">If</span> n=<span class=\"hljs-number\">1</span> <span class=\"hljs-keyword\">then</span> f(<span class=\"hljs-number\">1</span>):=<span class=\"hljs-number\">4</span>\n<span class=\"hljs-keyword\">else</span> f(n):=f(n-<span class=\"hljs-number\">1</span>)*n;</code></pre></div><div class=\"ml-vi\"><p>Tìm kết quả của thuật toán đệ quy sau nếu đầu vào n = 5.</p><pre><code><span class=\"hljs-function\"><span class=\"hljs-keyword\">procedure</span> <span class=\"hljs-title\">TT</span><span class=\"hljs-params\">(n: integer)</span>;</span>\n<span class=\"hljs-keyword\">If</span> n=<span class=\"hljs-number\">1</span> <span class=\"hljs-keyword\">then</span> f(<span class=\"hljs-number\">1</span>):=<span class=\"hljs-number\">4</span>\n<span class=\"hljs-keyword\">else</span> f(n):=f(n-<span class=\"hljs-number\">1</span>)*n;</code></pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/MAD101/D31/q3.png",
           "options": [
             {

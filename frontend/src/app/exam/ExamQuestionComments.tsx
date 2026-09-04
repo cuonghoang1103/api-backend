@@ -5,7 +5,7 @@
 // tự đăng lại sau khi trả lời trong panel chat — gắn nhãn riêng để phân biệt
 // với bình luận người thật. Theo đúng mẫu ArticleComments.tsx (Tech Trends).
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
 import { MessageSquare, Loader2, Pencil, Trash2, Send, X, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
@@ -129,45 +129,43 @@ function Avatar({ author, isAi }: { author: ExamQuestionComment['author']; isAi:
   );
 }
 
+// Ngưỡng "dài" tính theo SỐ KÝ TỰ, quyết định ngay lúc render — không đo
+// scrollHeight của DOM sau khi mount. Bản đo DOM (useEffect + ref) từng gãy
+// thật: KaTeX render công thức bằng font web riêng (KaTeX_Math…), font đó
+// TẢI SAU khi component đã mount và đo xong — đo trước lúc font vào làm
+// chiều cao đo được sai (nhỏ hơn thật), người dùng bấm "Xem thêm" thì bung
+// đúng theo maxHeight đã bỏ, nhưng layout font mới lúc đó lại đẩy nội dung
+// cao thêm khiến CẢM GIÁC vẫn còn bị cắt — phải bấm thêm lần nữa mới "thấy
+// đủ". Đếm ký tự tính được ngay lúc render đầu, không phụ thuộc font/ảnh
+// tải xong lúc nào — bấm 1 lần là bỏ hẳn maxHeight, hiện đủ ngay lập tức.
+const LONG_CONTENT_CHARS = 480;
+
 /**
  * Bình luận CuongMini là markdown+LaTeX thô (giống câu trả lời trong panel
  * chat) — render bằng ChatMarkdown thay vì hiện chữ trần, và bọc `chat-studio`
  * để nó ăn theo theme sáng/tối của trang thay vì màu cứng cho nền tối
  * (xem quy ước ở ChatMarkdown.tsx + globals.css `.chat-studio`).
- *
- * Câu trả lời chi tiết có thể rất dài (nhiều bước, nhiều công thức) — thu
- * gọn theo CHIỀU CAO thật đo được (không cắt theo số ký tự, dễ cắt giữa
- * chừng một công thức/khối mã) và chỉ hiện nút "Xem thêm" khi nội dung thật
- * sự tràn quá khung.
  */
 function CollapsibleContent({ content, fadeTo }: { content: string; fadeTo: string }) {
   const [expanded, setExpanded] = useState(false);
-  const [overflowing, setOverflowing] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const long = content.length > LONG_CONTENT_CHARS;
   const MAX_PX = 220;
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    setOverflowing(el.scrollHeight > MAX_PX + 8);
-  }, [content]);
 
   return (
     <div className="chat-studio">
       <div
-        ref={ref}
         className="relative overflow-hidden text-sm leading-relaxed"
-        style={{ maxHeight: !expanded && overflowing ? MAX_PX : undefined }}
+        style={{ maxHeight: long && !expanded ? MAX_PX : undefined }}
       >
         <ChatMarkdown content={content} />
-        {overflowing && !expanded && (
+        {long && !expanded && (
           <div
             className="pointer-events-none absolute inset-x-0 bottom-0 h-12"
             style={{ background: `linear-gradient(to bottom, transparent, ${fadeTo})` }}
           />
         )}
       </div>
-      {overflowing && (
+      {long && (
         <button
           type="button"
           onClick={() => setExpanded((v) => !v)}

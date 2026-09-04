@@ -1134,6 +1134,130 @@ gọi `map.init()` trước.
 
 ---
 
+# 0k. ĐỢT ĐO & VÁ HIỆU NĂNG — 04/09/2026
+
+## ⚠️ Phát hiện lớn nhất: `VITE_COMPRESSED` CHƯA TỪNG ĐƯỢC BẬT
+
+Công tắc có sẵn từ bản gốc folio-2025 (`Game.js` dòng ~97) nhưng `.env.production`
+chỉ có `VITE_BASE_HREF`. Bằng chứng đọc thẳng trong gói ĐÃ DEPLOY
+(`assets/index-BzvckPYU.js`), hằng số sau khi rút gọn:
+
+```js
+const e = "", r = "texture", s = "png", o = "?cb=1";
+```
+
+`e` là `compressedModelSuffix` và nó RỖNG ⇒ production tải `areas.glb` 3,13 MB
+thay vì `areas-compressed.glb` 0,61 MB, `terrain.png` thay vì `terrain.ktx`, cho
+cả 47 mục trong bản kê.
+
+**Đo A/B thật** (Chromium headless, mốc dừng = mạng lặng 6 giây):
+
+| | byte thô | glb | tới lúc lặng |
+|---|---|---|---|
+| gói cũ | 20,51 MB | 12,55 MB | 5,9s |
+| gói mới (nén) | 17,31 MB | 8,85 MB | 4,0s |
+
+Quy về production (nginx gzip cho js/wasm, KHÔNG gzip glb/ktx vì đã nén sẵn):
+**11,94 MB** là con số khách thật sự tải. Cửa vào (`PlaygroundGate`) trước đó
+ghi "~35 MB" — doạ khách gấp ba lần sự thật, ngay chỗ họ quyết định vào hay không.
+Nay ghi ~12 MB.
+
+⚠️ **Bật xong PHẢI nhìn ảnh, đừng tin build xanh.** KTX2 giải mã hỏng thì
+texture ra đen mà KHÔNG có lỗi nào. Đã chụp và xác nhận: tán hoa anh đào, mặt
+lát, đèn lồng đều có vân đúng.
+
+## `KonamiCode.js` bỏ qua công tắc nén — lỗi CÂM
+
+Nó gõ cứng `'vehicle/default.glb'` trong khi `Garage.js` dùng đúng
+`import.meta.env.VITE_COMPRESSED ? '-compressed' : ''`. Đây là chỗ DUY NHẤT
+trong mã bỏ qua công tắc một cách vô ý (mấy chỗ `.png` ở `LabArea`/`ProjectsArea`
+là ngoại lệ CÓ CHỦ Ý, ghi rõ tại chỗ).
+
+Nguy hiểm ở chỗ nó chỉ chạy khi có người gõ mã Konami — nên nếu bước cắt file
+(dưới đây) chạy trước khi sửa chỗ này, kết quả là một lỗi 404 nằm im nhiều
+tháng. Đã sửa, và đã kiểm bằng cách gõ đúng mã Konami trong headless:
+`oldSchool-compressed.glb` trả 200.
+
+## `scripts/prune-dist.mjs` — cắt bản thô khỏi bản dựng
+
+`vite.config.js` khai `publicDir: '../static/'` và Vite chép NGUYÊN thư mục đó
+vào `dist/`. Mà `static/` buộc phải giữ cả hai bản (thô cho `npm run dev`, nén
+cho production), nên bản thô đi luôn vào ảnh Docker. Đo được **6,45 MB** nằm
+không. Bước cắt nay chạy tự động trong `npm run build`.
+
+⚠️ Luật cắt hẹp CÓ CHỦ Ý: chỉ bỏ `X.glb` khi `X-compressed.glb` nằm ngay cạnh,
+`X.png` khi `X.ktx` nằm ngay cạnh. Nhờ vậy `city.glb` · `carrier.glb` ·
+`boss.glb` (chỉ có MỘT bản, đã nén sẵn từ nguồn) và mấy ảnh `.png` của
+`LabArea`/`ProjectsArea` tự động được chừa.
+
+⚠️ **Bản đầu của script này đọc `process.env.VITE_COMPRESSED` và luôn thấy
+rỗng** — `vite.config.js` gọi `dotenv/config`, mà dotenv chỉ nạp `.env`, không
+nạp `.env.<mode>`; chính Vite mới đọc `.env.production` và nó chỉ đưa giá trị
+vào `import.meta.env` của gói. Script nay tự đọc file. Đúng kiểu "chạy xanh mà
+không có tác dụng" đã dính ở bước 6c nginx.
+
+## `Quality` nay được NHỚ, và đoán mặc định tử tế hơn
+
+Có 18 khoá trong `localStorage` (`weatherPreference`, `rocketPreference`,
+`headlightsMode`, `musicVolume`…) — `quality` KHÔNG nằm trong đó. Người máy yếu
+phải tự hạ mức MỖI LẦN vào lại. Nay lưu ở khoá `qualityLevel`.
+
+Phép đoán mặc định cũ chỉ có `/Mobi|Android|iPhone|iPad|iPod/` và thủng hai chỗ,
+cả hai đều rơi về mức CAO:
+
+- **iPad từ iPadOS 13 khai mình là `Macintosh`** — Apple đổi user-agent để web
+  trả bản máy tính. Chuỗi `iPad` KHÔNG còn trong user-agent. Nhận ra bằng
+  `maxTouchPoints > 1` (Mac thật trả 0).
+- **Laptop GPU tích hợp** trông y hệt máy bàn có card rời. Nay xét thêm
+  `hardwareConcurrency <= 4` và `deviceMemory <= 4`.
+
+⚠️ `localStorage` NÉM lỗi (không phải trả `null`) khi Safari ở chế độ riêng tư
+hoặc trình duyệt chặn cookie bên thứ ba. Ném ở đây là ném giữa `new Quality()`
+trong `Game.js` ⇒ chết cả sân chơi ở màn hình tải. Đã bọc `try`.
+
+⚠️ Đọc mức đã lưu phải so `!== null`, KHÔNG dùng `??` hay `||` — mức 0 (cao) là
+giá trị hợp lệ mà `||` sẽ nuốt mất.
+
+## `tools/check-perf.mjs` — bộ kiểm thứ MƯỜI MỘT
+
+Không bộ kiểm nào trước đây đo draw call. Mốc đo 04/09/2026 (dev server,
+quality=1):
+
+```
+mesh thường 4353 · InstancedMesh 107 (7578 bản sao) · 2,85 triệu đỉnh · 285 draw call
+```
+
+| Đảo | mesh | instanced | đỉnh |
+|---|---|---|---|
+| **FPTU** | **1917** | **1 (57)** | 0,09tr |
+| sân chơi | 385 | 0 | 0,03tr |
+| thành phố | 61 | 59 (2958) | 0,85tr |
+| đảo quái | 207 | 11 (877) | 0,44tr |
+| tàu sân bay | 228 | 2 (83) | 0,17tr |
+
+**Đọc bảng này**: đợt gộp instance ngày 1/8 cho thành phố đã ăn — 61 mesh cho cả
+một thành phố. Nhưng **FPTU nay là chỗ nặng nhất: 1917 mesh riêng lẻ, gần như
+không gộp gì**, đúng cái hình dạng mà thành phố từng có trước khi vá.
+
+⚠️ Đừng vội gộp FPTU: 1544 trong số đó là mảnh của hệ PHÁ HUỶ (`FptuDestruction`),
+mỗi mảnh phải gỡ được riêng. `InstancedMesh` làm được (thu ma trận về 0 để giấu
+một bản sao) nhưng phải viết lại sổ đăng ký mảnh — không phải việc một buổi.
+
+⚠️ **KHÔNG đo FPS trong bộ này.** Headless dựng bằng SwiftShader (GPU phần mềm)
+nên mọi con số nhịp hình đọc được là nhịp CPU máy dựng, không dính gì tới máy
+người chơi. Ba con số trên thì độc lập với GPU.
+
+## Việc chưa làm, đáng làm tiếp
+
+**5,5 MB trong 11,94 MB là ba model tải LÚC KHỞI ĐỘNG cho nội dung phần lớn khách
+không bao giờ thấy**: `carrier.glb` 2,87 MB (tàu sân bay giữa biển) và
+`boss.glb` 2,60 MB (quái trùm, chỉ hiện mỗi 5 sóng trong chế độ Sinh tồn). Dời
+hai thứ này sang tải-khi-cần cắt được gần một nửa lần tải đầu. Không làm trong
+đợt này vì phải xử lý cẩn thận nhánh async — `SurvivalMonsters` đang giả định
+`bossModel` có sẵn ngay.
+
+---
+
 # 1. MƯỜI BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
 
 Cần dev server sống: `cd playground-3d && npm run dev` (xem mục 4).

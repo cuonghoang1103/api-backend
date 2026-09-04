@@ -51,13 +51,28 @@ export class KonamiCode
 
     async activate()
     {
+        /**
+         * ⚠️ Hậu tố `-compressed` PHẢI thêm ở đây, y như `Garage.js` đang làm.
+         *
+         * Trước 04/09/2026 chỗ này gõ cứng `'vehicle/default.glb'` — nó là nơi
+         * DUY NHẤT trong mã bỏ qua công tắc `VITE_COMPRESSED` một cách vô ý
+         * (mấy chỗ .png ở `LabArea`/`ProjectsArea` là ngoại lệ CÓ CHỦ Ý, đã ghi
+         * rõ tại chỗ). Hệ quả: bản production vẫn tải file thô 0,23 MB thay vì
+         * bản nén 0,03 MB, và quan trọng hơn — nó buộc hai file thô phải nằm
+         * lại trong ảnh deploy chỉ để phục vụ một quả trứng phục sinh.
+         *
+         * Lỗi kiểu này KHÔNG hiện ra lúc dựng và cũng không hiện lúc chơi bình
+         * thường: chỉ ai gõ đúng mã Konami mới chạm tới, nên nó câm cho tới lúc
+         * có người gặp.
+         */
+        const suffix = import.meta.env.VITE_COMPRESSED ? '-compressed' : ''
         const files = [
-            'vehicle/oldSchool.glb',
-            'vehicle/default.glb'
+            'vehicle/oldSchool',
+            'vehicle/default'
         ]
-        
+
         const resources = await this.game.resourcesLoader.load([
-            [ 'vehicle', `${files[this.activationCount % 2]}?cb=${this.activationCount}`, 'gltf' ],
+            [ 'vehicle', `${files[this.activationCount % 2]}${suffix}.glb?cb=${this.activationCount}`, 'gltf' ],
         ])
             
         this.game.world.visualVehicle.destroy()

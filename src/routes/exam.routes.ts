@@ -20,7 +20,8 @@ import {
   transcribeExamAudio, generateSpeakingQuestions, type PeGradeResult,
 } from '../services/exam.grading.service.js';
 import { askExamTutor, askExamTutorStream, revealAnswer, getRelatedLesson, type TutorMode, type TutorProvider } from '../services/examTutor.service.js';
-import { isProEffective } from '../services/pro.service.js';
+import { isProEffective, laAdmin } from '../services/pro.service.js';
+import { listComments, createComment, updateComment, deleteComment } from '../services/examComment.service.js';
 
 const router = Router();
 const zipUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 30 * 1024 * 1024 } });
@@ -156,7 +157,7 @@ router.get('/course/:courseIdOrSlug', optionalAuth, async (req, res: Response<Ap
 // One exam ready to take (answer keys stripped).
 router.get('/:examId/take', authenticate, async (req, res: Response<ApiResponse>, next) => {
   try {
-    const data = await examSvc.getExamForTaking(Number(req.params.examId));
+    const data = await examSvc.getExamForTaking(Number(req.params.examId), req.userId);
     res.json({ success: true, data });
   } catch (e) { next(e); }
 });
@@ -170,17 +171,16 @@ router.post('/:examId/attempts', authenticate, async (req, res: Response<ApiResp
   } catch (e) { next(e); }
 });
 
-// ── CuongMini — AI đồng hành khi thi (Pro only) ─────────────────────────
-// Pro checked HERE too (not just startAttempt/the button) — an old attempt
-// could carry aiAssisted=true from a Pro period that has since expired.
+// ── CuongMini — AI đồng hành khi thi ────────────────────────────────────
+// Mở cho MỌI tài khoản đã đăng nhập (20/09/2026) — chỉ /ai/ask và
+// /ai/ask-stream (chat/hỏi AI thật) mới cần Pro, kiểm ở requireProForAi().
 async function requireProForAi(userId: number | undefined) {
-  if (!(await isProEffective(userId))) throw new AppError('CuongMini là tính năng Pro.', 403);
+  if (!(await isProEffective(userId))) throw new AppError('Hỏi CuongMini là tính năng Pro.', 403);
 }
 
 // "Hiện đáp án" — không gọi AI, tra thẳng đáp án đã có sẵn trên câu hỏi.
 router.post('/attempts/:attemptId/ai/reveal', authenticate, async (req, res: Response<ApiResponse>, next) => {
   try {
-    await requireProForAi(req.userId);
     const data = await revealAnswer(Number(req.params.attemptId), Number(req.body?.questionId), req.userId!);
     res.json({ success: true, data });
   } catch (e) { next(e); }
@@ -190,7 +190,6 @@ router.post('/attempts/:attemptId/ai/reveal', authenticate, async (req, res: Res
 // (câu chưa được phân loại chương → data:null, KHÔNG lỗi).
 router.post('/attempts/:attemptId/ai/related-lesson', authenticate, async (req, res: Response<ApiResponse>, next) => {
   try {
-    await requireProForAi(req.userId);
     const data = await getRelatedLesson(Number(req.params.attemptId), Number(req.body?.questionId), req.userId!);
     res.json({ success: true, data });
   } catch (e) { next(e); }
@@ -240,13 +239,46 @@ router.post('/attempts/:attemptId/ai/ask-stream', authenticate, async (req, res)
       },
       (delta) => send({ type: 'delta', text: delta }),
     );
-    send({ type: 'done', answer: out.answer });
+    send({ type: 'done', answer: out.answer, cached: out.cached });
   } catch (e) {
     send({ type: 'error', error: (e as Error)?.message || 'CuongMini chưa trả lời được. Thử lại nhé.' });
   } finally {
     clearInterval(keepalive);
     if (!res.writableEnded) res.end();
   }
+});
+
+// ── Bình luận theo câu hỏi — mở cho mọi tài khoản, không cần Pro ────────
+router.get('/questions/:questionId/comments', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await listComments(Number(req.params.questionId));
+    res.json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
+router.post('/questions/:questionId/comments', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const data = await createComment(
+      Number(req.params.questionId), req.userId!,
+      String(req.body?.content || ''),
+      req.body?.parentId ? Number(req.body.parentId) : null,
+    );
+    res.json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
+router.put('/comments/:commentId', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    await updateComment(Number(req.params.commentId), req.userId!, String(req.body?.content || ''));
+    res.json({ success: true });
+  } catch (e) { next(e); }
+});
+
+router.delete('/comments/:commentId', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    await deleteComment(Number(req.params.commentId), req.userId!, await laAdmin(req.userId));
+    res.json({ success: true });
+  } catch (e) { next(e); }
 });
 
 // My attempt history (optional ?examId=).

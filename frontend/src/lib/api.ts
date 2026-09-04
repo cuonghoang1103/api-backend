@@ -1508,6 +1508,9 @@ export interface ExamMy {
   passed: boolean;
   lastAttemptId: number | null;
   inProgressId: number | null;
+  /** In-progress "Start Exam with CuongMini" attempt (untimed) — separate
+   * from `inProgressId`, only present on the /take response. */
+  aiInProgressId?: number | null;
 }
 export interface ExamHeader {
   id: number;
@@ -1561,6 +1564,17 @@ export interface ExamPortalItem {
   semester: { name: string; ordinal: number; code: string } | null;
 }
 
+export interface ExamQuestionComment {
+  id: number;
+  content: string;
+  isAi: boolean;
+  isEdited: boolean;
+  likesCount: number;
+  createdAt: string;
+  author: { id: number; username: string; displayName: string | null; fullName: string | null; avatarUrl: string | null };
+  replies: ExamQuestionComment[];
+}
+
 export const examApi = {
   // Public
   listAll: () => api.get<{ data: ExamPortalItem[] }>('/exams'),
@@ -1576,8 +1590,17 @@ export const examApi = {
     api.post<{ data: { correctIndexes: number[]; explanation: string | null } }>(`/exams/attempts/${attemptId}/ai/reveal`, { questionId }),
   aiRelatedLesson: (attemptId: number, questionId: number) =>
     api.post<{ data: { sectionTitle: string; courseTitle: string; lessonId: number; lessonTitle: string; url: string } | null }>(`/exams/attempts/${attemptId}/ai/related-lesson`, { questionId }),
+  // Bình luận theo câu hỏi — mở cho mọi tài khoản.
+  listQuestionComments: (questionId: number) =>
+    api.get<{ data: ExamQuestionComment[] }>(`/exams/questions/${questionId}/comments`),
+  addQuestionComment: (questionId: number, content: string, parentId?: number | null) =>
+    api.post<{ data: ExamQuestionComment }>(`/exams/questions/${questionId}/comments`, { content, parentId }),
+  editQuestionComment: (commentId: number, content: string) =>
+    api.put(`/exams/comments/${commentId}`, { content }),
+  deleteQuestionComment: (commentId: number) =>
+    api.delete(`/exams/comments/${commentId}`),
   aiAsk: (attemptId: number, body: { questionId: number; mode: string; question?: string; history?: { role: string; content: string }[]; provider?: 'opus' | 'sol' }) =>
-    api.post<{ data: { answer: string } }>(`/exams/attempts/${attemptId}/ai/ask`, body, { timeout: 180000 }),
+    api.post<{ data: { answer: string; cached: boolean } }>(`/exams/attempts/${attemptId}/ai/ask`, body, { timeout: 180000 }),
   myAttempts: (examId?: number) =>
     api.get(`/exams/attempts/mine`, { params: examId ? { examId } : {} }),
   getAttempt: (attemptId: number) => api.get(`/exams/attempts/${attemptId}`),

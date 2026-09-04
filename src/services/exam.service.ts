@@ -14,7 +14,6 @@
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { gradeCode, type PeGradeResult } from './exam.grading.service.js';
-import { isProEffective } from './pro.service.js';
 
 // ── Shapes ────────────────────────────────────────────────────────────
 export type ExamKind = 'FE' | 'PE';
@@ -90,25 +89,27 @@ export async function listExamsForCourse(courseIdOrSlug: string | number, userId
     orderBy: [{ kind: 'asc' }, { sortOrder: 'asc' }, { id: 'asc' }],
   });
 
-  let attemptsByExam: Record<number, { attempts: number; bestScore: number | null; lastScore: number | null; passed: boolean; lastAttemptId: number | null; inProgressId: number | null }> = {};
+  let attemptsByExam: Record<number, { attempts: number; bestScore: number | null; lastScore: number | null; passed: boolean; lastAttemptId: number | null; inProgressId: number | null; aiInProgressId: number | null }> = {};
   if (userId && exams.length) {
     const rows = await prisma.examAttempt.findMany({
       where: { userId, examId: { in: exams.map((e) => e.id) } },
       orderBy: { id: 'desc' },
-      select: { id: true, examId: true, status: true, score: true, passed: true },
+      select: { id: true, examId: true, status: true, score: true, passed: true, aiAssisted: true },
     });
     for (const e of exams) {
       const mine = rows.filter((r) => r.examId === e.id);
-      const graded = mine.filter((r) => r.status === 'SUBMITTED' || r.status === 'GRADED');
+      // CuongMini (untimed practice) never counts toward score history —
+      // it's explicitly not a real, timed attempt (see startAttempt).
+      const graded = mine.filter((r) => (r.status === 'SUBMITTED' || r.status === 'GRADED') && !r.aiAssisted);
       const scores = graded.map((r) => num(r.score));
-      const inProg = mine.find((r) => r.status === 'IN_PROGRESS');
       attemptsByExam[e.id] = {
         attempts: graded.length,
         bestScore: scores.length ? Math.max(...scores) : null,
         lastScore: graded.length ? num(graded[0].score) : null,
         passed: graded.some((r) => r.passed === true),
         lastAttemptId: graded.length ? graded[0].id : null,
-        inProgressId: inProg?.id ?? null,
+        inProgressId: mine.find((r) => r.status === 'IN_PROGRESS' && !r.aiAssisted)?.id ?? null,
+        aiInProgressId: mine.find((r) => r.status === 'IN_PROGRESS' && r.aiAssisted)?.id ?? null,
       };
     }
   }
@@ -117,14 +118,42 @@ export async function listExamsForCourse(courseIdOrSlug: string | number, userId
 }
 
 // ── Public: one exam ready to take (questions with keys stripped) ──────
-export async function getExamForTaking(examId: number) {
+export async function getExamForTaking(examId: number, userId?: number) {
   const exam = await prisma.exam.findUnique({
     where: { id: examId },
     include: { questions: { orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }] } },
   });
   if (!exam || !exam.isPublished) throw new AppError('Không tìm thấy đề thi', 404);
+
+  // Timed real attempts and untimed CuongMini attempts are separate, parallel
+  // attempts on the same exam (see startAttempt) — report BOTH in-progress
+  // ids separately so the intro screen shows the right button as "resume".
+  let my: {
+    attempts: number; bestScore: number | null; lastScore: number | null; passed: boolean;
+    lastAttemptId: number | null; inProgressId: number | null; aiInProgressId: number | null;
+  } | null = null;
+  if (userId) {
+    const rows = await prisma.examAttempt.findMany({
+      where: { userId, examId },
+      orderBy: { id: 'desc' },
+      select: { id: true, status: true, score: true, passed: true, aiAssisted: true },
+    });
+    const graded = rows.filter((r) => (r.status === 'SUBMITTED' || r.status === 'GRADED') && !r.aiAssisted);
+    const scores = graded.map((r) => num(r.score));
+    my = {
+      attempts: graded.length,
+      bestScore: scores.length ? Math.max(...scores) : null,
+      lastScore: graded.length ? num(graded[0].score) : null,
+      passed: graded.some((r) => r.passed === true),
+      lastAttemptId: graded.length ? graded[0].id : null,
+      inProgressId: rows.find((r) => r.status === 'IN_PROGRESS' && !r.aiAssisted)?.id ?? null,
+      aiInProgressId: rows.find((r) => r.status === 'IN_PROGRESS' && r.aiAssisted)?.id ?? null,
+    };
+  }
+
   return {
     ...examHeader(exam),
+    my,
     questions: exam.questions.map(questionForTaking),
   };
 }
@@ -134,15 +163,18 @@ export async function startAttempt(examId: number, userId: number, aiAssisted = 
   const exam = await prisma.exam.findUnique({ where: { id: examId } });
   if (!exam || !exam.isPublished) throw new AppError('Không tìm thấy đề thi', 404);
 
-  // "Start Exam with CuongMini" is Pro-only — checked here too, not just on
-  // the button, so a direct API call can't bypass it.
-  if (aiAssisted && !(await isProEffective(userId))) {
-    throw new AppError('Thi cùng CuongMini là tính năng Pro.', 403);
-  }
+  // "Start Exam with CuongMini" is open to every account (20/09/2026 —
+  // người dùng đổi ý: mọi tài khoản vào phòng CuongMini được, chỉ CHAT/hỏi
+  // AI mới cần Pro — xem requireProForAi() ở exam.routes.ts, chỉ chặn
+  // /ai/ask và /ai/ask-stream). Không kiểm Pro ở đây nữa.
 
   // Resume an unexpired in-progress attempt instead of spawning duplicates.
+  // Filtered by aiAssisted too — a timed real attempt and an untimed
+  // CuongMini attempt on the SAME exam are separate, parallel attempts;
+  // resuming must never hand back the wrong one (a CuongMini click should
+  // never silently resume a real ticking-clock attempt, or vice versa).
   const existing = await prisma.examAttempt.findFirst({
-    where: { userId, examId, status: 'IN_PROGRESS' },
+    where: { userId, examId, status: 'IN_PROGRESS', aiAssisted },
     orderBy: { id: 'desc' },
   });
   const now = Date.now();
@@ -157,7 +189,9 @@ export async function startAttempt(examId: number, userId: number, aiAssisted = 
     });
   }
 
-  const expiresAt = new Date(now + exam.durationMinutes * 60_000);
+  // CuongMini là phòng ôn tập, KHÔNG tính giờ — expiresAt=null tắt luôn đồng
+  // hồ + tự nộp khi hết giờ ở frontend (cả hai đều gate trên `expiresAt &&`).
+  const expiresAt = aiAssisted ? null : new Date(now + exam.durationMinutes * 60_000);
   const created = await prisma.examAttempt.create({
     data: {
       userId, examId, status: 'IN_PROGRESS',

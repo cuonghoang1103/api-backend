@@ -18,12 +18,12 @@ import {
   ArrowLeft as ArrowLeftIcon, ArrowRight as ArrowRightIcon,
   Upload as ArrowUpTrayIcon, Download as ArrowDownTrayIcon,
   Mic as MicrophoneIcon, Square as StopIcon, FileText as DocumentTextIcon,
-  Eye as EyeIcon, EyeOff as EyeOffIcon, Bot as BotIcon, Crown as CrownIcon,
+  Eye as EyeIcon, EyeOff as EyeOffIcon, Bot as BotIcon,
 } from 'lucide-react';
 import { examApi, type ExamHeader, type ExamTakingQuestion } from '@/lib/api';
 import { pickLang, sanitizeHtml, stripInlineColors } from '@/lib/utils';
-import { usePro } from '@/hooks/usePro';
 import ExamRichContent from '../ExamRichContent';
+import ExamQuestionComments from '../ExamQuestionComments';
 import CuongMiniPanel from './CuongMiniPanel';
 import './../exam.css';
 
@@ -41,7 +41,6 @@ function fmt(ms: number): string {
 
 export default function ExamRoomClient({ examId }: { examId: number }) {
   const router = useRouter();
-  const { isPro } = usePro();
   // Exams default to English; local toggle only (does not change site locale).
   const [L, setL] = useState<'en' | 'vi'>('en');
   const isVi = L === 'vi';
@@ -275,21 +274,20 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
               {exam.my?.inProgressId ? (isVi ? 'Tiếp tục bài thi' : 'Resume attempt') : (isVi ? 'Bắt đầu thi' : 'Start exam')}
             </button>
 
-            {exam.kind === 'FE' && !exam.my?.inProgressId && (
-              isPro ? (
-                <button onClick={() => start(true)}
-                  className="mt-3 w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-white transition-transform active:scale-[.99]"
-                  style={{ background: 'linear-gradient(135deg,#8b5cf6,#6366f1)' }}>
-                  <BotIcon className="w-4 h-4" /> {isVi ? 'Bắt đầu thi với CuongMini' : 'Start Exam with CuongMini'}
-                </button>
-              ) : (
-                <a href="/pro"
-                  className="mt-3 w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold border"
-                  style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}>
-                  <CrownIcon className="w-4 h-4" style={{ color: '#f59e0b' }} />
-                  {isVi ? 'Bắt đầu thi với CuongMini (Pro)' : 'Start Exam with CuongMini (Pro)'}
-                </a>
-              )
+            {exam.kind === 'FE' && (
+              <button onClick={() => start(true)}
+                className="mt-3 w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-white transition-transform active:scale-[.99]"
+                style={{ background: 'linear-gradient(135deg,#8b5cf6,#6366f1)' }}>
+                <BotIcon className="w-4 h-4" />
+                {exam.my?.aiInProgressId
+                  ? (isVi ? 'Tiếp tục ôn tập với CuongMini' : 'Continue with CuongMini')
+                  : (isVi ? 'Bắt đầu thi với CuongMini' : 'Start Exam with CuongMini')}
+              </button>
+            )}
+            {exam.kind === 'FE' && (
+              <p className="mt-2 text-center text-[11px]" style={{ color: 'var(--text-muted)' }}>
+                {isVi ? 'Phòng ôn tập cùng CuongMini — không tính giờ, làm từng câu, hỏi AI và bình luận thoải mái.' : 'Study room with CuongMini — untimed, question by question, ask AI and discuss freely.'}
+              </p>
             )}
           </div>
         </div>
@@ -370,6 +368,10 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
               })}
             />
           )}
+
+          {/* Bình luận theo câu — chỉ trong chế độ CuongMini (đây là thi thử
+              để học, không tính điểm nghiêm ngặt như đề thật). */}
+          {exam.kind === 'FE' && aiAssisted && <ExamQuestionComments key={q.id} questionId={q.id} />}
 
           {exam.kind === 'PE' && exam.peType === 'CODE' && (
             <CodeRunner exam={exam} L={L} isVi={isVi} zipFile={zipFile} setZipFile={setZipFile} />

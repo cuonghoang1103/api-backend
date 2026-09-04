@@ -14,6 +14,7 @@ import { ArrowLeft as ArrowLeftIcon, CheckCircle2 as CheckCircleIcon, XCircle as
 import { examApi } from '@/lib/api';
 import { pickLang } from '@/lib/utils';
 import ExamRichContent from '../../ExamRichContent';
+import ExamQuestionComments from '../../ExamQuestionComments';
 import './../../exam.css';
 
 interface ReviewQuestion {
@@ -242,6 +243,8 @@ export default function ExamReviewClient({ attemptId }: { attemptId: number }) {
 
                 {/* Personal note — appears once the question is saved */}
                 {qBm[q.id]?.on && <NoteEditor qid={q.id} initial={qBm[q.id]?.note || ''} isVi={isVi} onSave={saveQNote} />}
+
+                <ExamQuestionComments questionId={q.id} />
               </div>
             );
           })}

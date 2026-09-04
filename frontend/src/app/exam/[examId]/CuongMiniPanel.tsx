@@ -22,6 +22,7 @@ interface Turn {
   role: 'user' | 'assistant';
   content: string;
   streaming?: boolean;
+  cached?: boolean;
 }
 
 const QUICK: { mode: Mode; label: string }[] = [
@@ -92,10 +93,10 @@ export default function CuongMiniPanel({ examId, attemptId, questionId, question
           if (!line.startsWith('data:')) continue;
           const raw = line.slice(5).trim();
           if (!raw) continue;
-          let evt: { type?: string; text?: string; answer?: string; error?: string };
+          let evt: { type?: string; text?: string; answer?: string; error?: string; cached?: boolean };
           try { evt = JSON.parse(raw); } catch { continue; }
           if (evt.type === 'delta' && evt.text) { acc += evt.text; patch(aIdx, { content: acc }); }
-          else if (evt.type === 'done') { patch(aIdx, { content: evt.answer ?? acc, streaming: false }); return; }
+          else if (evt.type === 'done') { patch(aIdx, { content: evt.answer ?? acc, streaming: false, cached: !!evt.cached }); return; }
           else if (evt.type === 'error') throw new Error(evt.error || 'AI lỗi');
         }
       }
@@ -122,7 +123,7 @@ export default function CuongMiniPanel({ examId, attemptId, questionId, question
     } catch {
       try {
         const r = await examApi.aiAsk(attemptId, { questionId, mode, question: q, history: history.map(toMsg), provider });
-        patch(aIdx, { content: r.data.data.answer, streaming: false });
+        patch(aIdx, { content: r.data.data.answer, streaming: false, cached: r.data.data.cached });
       } catch (e: unknown) {
         const status = (e as { response?: { status?: number } })?.response?.status;
         setTurns((t) => t.slice(0, showUser ? -2 : -1));
@@ -206,7 +207,16 @@ export default function CuongMiniPanel({ examId, attemptId, questionId, question
                     ? <span className="whitespace-pre-wrap">{t.content}</span>
                     : (t.streaming && !t.content)
                       ? <span className="inline-flex items-center gap-2 opacity-70"><Loader2 className="h-3.5 w-3.5 animate-spin" /> {isVi ? 'Đang soạn…' : 'Thinking…'}</span>
-                      : <ChatMarkdown content={t.content} renderMath={!t.streaming} />}
+                      : (
+                        <>
+                          <ChatMarkdown content={t.content} renderMath={!t.streaming} />
+                          {t.cached && !t.streaming && (
+                            <span className="mt-1 inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-semibold" style={{ background: 'var(--bg-surface)', color: '#8b5cf6' }}>
+                              ⚡ {isVi ? 'Có sẵn — từng hỏi trước đó' : 'Cached — asked before'}
+                            </span>
+                          )}
+                        </>
+                      )}
                 </div>
               ))}
               <div ref={endRef} />

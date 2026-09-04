@@ -128,6 +128,7 @@ model User {
   emailVerificationTokens EmailVerificationToken[]
   blogComments            Comment[]
   devPostComments         PostComment[]
+  examQuestionComments    ExamQuestionComment[]
   courseReviews           CourseReview[]
   productReviews          ProductReview[]
   shopOrders              ShopOrder[]
@@ -1224,6 +1225,7 @@ model ExamQuestion {
   exam      Exam                   @relation(fields: [examId], references: [id], onDelete: Cascade)
   section   CourseSection?         @relation(fields: [sectionId], references: [id], onDelete: SetNull)
   bookmarks ExamQuestionBookmark[]
+  comments  ExamQuestionComment[]
 
   @@index([examId], name: "idx_exam_questions_exam")
   @@index([sectionId], name: "idx_exam_questions_section")
@@ -1324,6 +1326,34 @@ model ExamQuestionBookmark {
   @@index([userId], name: "idx_exam_qbookmarks_user")
   @@index([examId], name: "idx_exam_qbookmarks_exam")
   @@map("exam_question_bookmarks")
+}
+
+// Bình luận/trao đổi ngay dưới MỘT câu hỏi cụ thể (mọi tài khoản, không chỉ
+// người đang thi câu đó) — theo mẫu TechTrendComment/SocialComment (1 cấp
+// trả lời qua parentId). isAi=true khi CuongMini tự đăng câu trả lời của nó
+// (userId vẫn trỏ về một User thật — tài khoản "cuongmini", xem
+// scripts seed — không có cột isBot riêng trên User để giữ migration nhỏ).
+model ExamQuestionComment {
+  id         Int      @id @default(autoincrement())
+  questionId Int      @map("question_id")
+  userId     Int      @map("user_id")
+  parentId   Int?     @map("parent_id")
+  content    String   @db.Text
+  isAi       Boolean  @default(false) @map("is_ai")
+  isEdited   Boolean  @default(false) @map("is_edited")
+  likesCount Int      @default(0) @map("likes_count")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  question ExamQuestion          @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user     User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent   ExamQuestionComment?  @relation("ExamQuestionCommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies  ExamQuestionComment[] @relation("ExamQuestionCommentReplies")
+
+  @@index([questionId], name: "idx_exam_qcomments_question")
+  @@index([parentId], name: "idx_exam_qcomments_parent")
+  @@index([userId], name: "idx_exam_qcomments_user")
+  @@map("exam_question_comments")
 }
 
 model Enrollment {

@@ -19,6 +19,7 @@ import { AppError } from '../middleware/errorHandler.js';
 import { llmComplete, checkTokenQuota, isAiAvailable, aiOffReason, circuitReopensInMs } from './interview/llm/index.js';
 import { isProEffective } from './pro.service.js';
 import { logger } from '../utils/logger.js';
+import { postAiAnswerComment, findCachedAiAnswer, buildAskedLabel } from './examComment.service.js';
 
 const MAX_QUESTION = 1500;
 const MAX_HISTORY = 12;
@@ -94,9 +95,9 @@ async function loadAiAssistedContext(attemptId: number, questionId: number, user
   return { attempt, question, courseLabel: attempt.exam.course?.courseCode || attempt.exam.title };
 }
 
-/** "Hiện đáp án" — KHÔNG gọi AI, tra thẳng dữ liệu đã có. */
+/** "Hiện đáp án" — KHÔNG gọi AI, tra thẳng dữ liệu đã có. Mở cho mọi tài
+ * khoản (CuongMini không còn Pro-only, chỉ chat/hỏi AI mới cần Pro). */
 export async function revealAnswer(attemptId: number, questionId: number, userId: number) {
-  await assertPro(userId);
   const { question } = await loadAiAssistedContext(attemptId, questionId, userId);
   return {
     correctIndexes: question.correctIndexes,
@@ -125,7 +126,6 @@ function scoreLessonMatch(questionWords: Set<string>, lessonTitle: string): numb
  * → trả null, panel tự ẩn link, không báo lỗi.
  */
 export async function getRelatedLesson(attemptId: number, questionId: number, userId: number) {
-  await assertPro(userId);
   const { question } = await loadAiAssistedContext(attemptId, questionId, userId);
   if (!question.sectionId) return null;
 
@@ -176,13 +176,14 @@ function buildQuestionBlock(q: { sortOrder: number; prompt: string; options: unk
   return `CÂU ĐANG THI (câu ${q.sortOrder + 1}):\n${plain(q.prompt, 2000)}\n${opts}\nĐáp án đúng: ${correct}${expl}`;
 }
 
-const TUTOR_SYSTEM = `You are CuongMini, an AI study companion embedded in an FPT University exam room.
-The student is actively taking a real exam and asked about ONE specific question — you already
-know its full text, options, correct answer and explanation (given below). Teach so they UNDERSTAND
-and remember, don't just restate the answer letter. Keep answers focused and reasonably short —
-this is a live exam, not a lecture. Answer entirely in Vietnamese (keep technical terms/code in
-English). Formatting: short paragraphs, **bold** key terms, fenced code blocks with a language
-when quoting code, inline $…$ / display $$…$$ LaTeX for math.`;
+const TUTOR_SYSTEM = `You are CuongMini, an AI study companion embedded in an FPT University Exam
+Room's untimed STUDY/PRACTICE room ("Start Exam with CuongMini") — there is no clock, no score
+pressure, this is purely for learning. The student asked about ONE specific question — you already
+know its full text, options, correct answer and explanation (given below). Teach thoroughly so they
+UNDERSTAND and remember — do not artificially shorten your answer; give the full explanation,
+worked steps, and any useful context or examples that help mastery. Answer entirely in Vietnamese
+(keep technical terms/code in English). Formatting: short paragraphs, **bold** key terms, fenced
+code blocks with a language when quoting code, inline $…$ / display $$…$$ LaTeX for math.`;
 
 async function buildTutorCall(opts: ExamTutorAskOpts): Promise<{ system: string; messages: TutorMessage[] }> {
   if (opts.mode === 'free_qa') {
@@ -225,7 +226,9 @@ async function callTutor(system: string, messages: TutorMessage[], userId: numbe
     purpose,
     system,
     messages,
-    maxTokens: 3000,
+    // Phòng ôn tập KHÔNG giới hạn độ sâu câu trả lời (không giống chat
+    // thường) — 6000 thay vì mặc định 1500, rambo tự bỏ qua trần này luôn.
+    maxTokens: 6000,
     maxRetries: 1, // 2 lượt là đủ — mỗi lượt thêm là thêm tối đa 180s chờ dồn.
     timeoutMs,
     userId,
@@ -257,22 +260,33 @@ async function callTutor(system: string, messages: TutorMessage[], userId: numbe
   }
 }
 
-export async function askExamTutorStream(opts: ExamTutorAskOpts, onToken: (delta: string) => void): Promise<{ answer: string }> {
+export async function askExamTutorStream(opts: ExamTutorAskOpts, onToken: (delta: string) => void): Promise<{ answer: string; cached: boolean }> {
   await assertPro(opts.userId);
+  // "Tiết kiệm" — câu hỏi này (chip cố định hoặc y hệt chữ tự do) đã có
+  // CuongMini trả lời rồi thì trả lại NGAY, khỏi gọi AI + khỏi đăng trùng
+  // bình luận. Cache HIT: không có delta nào, route gửi thẳng khung 'done'.
+  const cached = await findCachedAiAnswer(opts.questionId, buildAskedLabel(opts.mode, opts.question));
+  if (cached) return { answer: cached, cached: true };
+
   await assertAiReady(opts.userId);
   const { system, messages } = await buildTutorCall(opts);
   const res = await callTutor(system, messages, opts.userId, opts.provider, onToken);
   const answer = (res.text || '').trim();
   if (!answer) throw new AppError('CuongMini chưa trả lời được. Thử lại nhé.', 400);
-  return { answer };
+  void postAiAnswerComment(opts.questionId, opts.mode, opts.question, answer);
+  return { answer, cached: false };
 }
 
-export async function askExamTutor(opts: ExamTutorAskOpts): Promise<{ answer: string }> {
+export async function askExamTutor(opts: ExamTutorAskOpts): Promise<{ answer: string; cached: boolean }> {
   await assertPro(opts.userId);
+  const cached = await findCachedAiAnswer(opts.questionId, buildAskedLabel(opts.mode, opts.question));
+  if (cached) return { answer: cached, cached: true };
+
   await assertAiReady(opts.userId);
   const { system, messages } = await buildTutorCall(opts);
   const res = await callTutor(system, messages, opts.userId, opts.provider);
   const answer = (res.text || '').trim();
   if (!answer) throw new AppError('CuongMini chưa trả lời được. Thử lại nhé.', 400);
-  return { answer };
+  void postAiAnswerComment(opts.questionId, opts.mode, opts.question, answer);
+  return { answer, cached: false };
 }

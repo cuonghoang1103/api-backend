@@ -108,6 +108,9 @@ tiếng quái nào, đang mượn tạm — user đang tìm file, sẽ để ở
 
 Đất đã chừa sẵn trong `PLOTS` (xem mục 0d):
 
+✅ **CẢ BA KHU NAY ĐÃ DỰNG XONG** (nhạc hội 2/8 · làng + cảng 04/09). Đảo sân
+chơi không còn ô đất trống nào — muốn thêm khu mới thì phải dựng đảo mới.
+
 1. **Sân khấu nhạc hội** (`PLOTS.concert`, tâm 34 · 150) — sàn nhảy nhấp theo
    nhạc thật (đọc biên độ từ Howler), lái xe lên 5 bục đĩa than để đổi bài,
    điểm tương tác dẫn về `/music`.
@@ -1255,6 +1258,138 @@ không bao giờ thấy**: `carrier.glb` 2,87 MB (tàu sân bay giữa biển) v
 hai thứ này sang tải-khi-cần cắt được gần một nửa lần tải đầu. Không làm trong
 đợt này vì phải xử lý cẩn thận nhánh async — `SurvivalMonsters` đang giả định
 `bossModel` có sẵn ngay.
+
+---
+
+# 0l. LÀNG NGÔN NGỮ + BẾN CẢNG — hai ô đất cuối, làm 04/09/2026
+
+## ⚠️ BẢN ĐỒ ĐẤT THẬT — đo bằng `shapeDistance()`, dùng lại cho mọi khu sau
+
+Ô đất trong `PLOTS` là hình CHỮ NHẬT. Đảo là **siêu-ellipse bậc 4**. Hai thứ đó
+không khớp nhau ở góc, và chênh lệch lớn hơn tưởng rất nhiều.
+
+Góc Tây-Nam (ô đất làng, x −50…−10):
+
+```
+      x: -50 ............ -10      # đất chắc · . mép · ~ nước · R lòng đường
+170  #####################
+176  #####################
+180  ########RRRRRRRRRRRRR
+184  ..######RRRRRRRRRRRRR
+188  ~....###RRRRRRRRRRRRR
+192  ~~~~......###########
+196  ~~~~~~~~~~...........
+```
+
+Góc Đông-Nam (ô đất cảng, x +10…+58):
+
+```
+      x: +10 ............ +58
+176  #########################
+184  RRRRRRRRRRRRRRRRRR#######
+190  ########################.
+196  .......#############.....
+200  ~~~~~~~~~~..........~~~~~
+```
+
+**`PLOTS.village` khai z 171…197 nhưng góc (−48 · 197) nằm HẲN ngoài đảo**
+(`shapeDistance` = 1,013). Bốn thứ đặt tay ban đầu — một khối chữ ở quảng
+trường, hai khối ở dải Nam, một cột đèn — đều rơi vào vùng mép nước. Vật rơi
+xuống nước KHÔNG báo lỗi gì: nó chìm, `Objects.update()` reset nó, người chơi
+chỉ thấy một chỗ trống.
+
+**Cách làm đúng, đã dùng cho cả hai khu**: mọi hàm dựng có `physical: true` đi
+qua một cửa duy nhất, và cửa đó tự từ chối hai kiểu sai — nằm trong lòng đường,
+và `shapeDistance > 0.93` (ngưỡng lấy đúng của `PlayIsland.setScenery()`, chỗ
+duy nhất trong mã đã trả lời "thế nào là còn đất chắc"). Từ chối thì `console
+.warn` chứ KHÔNG ném — ném ở đây là chết cả sân chơi ở màn hình tải vì một khối
+trang trí đặt lệch.
+
+## ⚠️ ĐƯỜNG NGANG z = 184 XUYÊN QUA CẢ HAI Ô ĐẤT
+
+`PLAY_ROADS.cross` khai `{ z: 184, fromX: -34, toX: 44, halfWidth: 4.5 }`. Với
+làng (x −48…−12) thì hơn nửa phía ĐÔNG là lòng đường; với cảng (x 14…54) thì
+đường chạy tới x = 44 rồi dừng, phần x > 44 là đất tự do — đó là chỗ xe rời
+đường vào cảng.
+
+Đây là lần thứ **TƯ** một khu suýt dựng đè lên đường trên đảo này (trước đó:
+đường ngang xuyên lòng sân bóng · đường trục xuyên tổ quái · khán đài nhạc hội
+giữa lòng đường). Không lần nào bộ kiểm bắt trước — mã dựng phải tự chặn.
+
+## Làng: dùng CHUNG `VocabQuiz`, đừng dựng cái thứ hai
+
+`Bricks` đã `new VocabQuiz()` (World.js dựng `bricks` ở dòng 84, `playIsland` ở
+96). `VocabQuiz` bám vào MỘT phần tử DOM `.js-vocab` và tự gắn bộ bắt phím
+trong `setKeyboard()`. Thể hiện thứ hai = hai bộ bắt phím cùng nghe một nút,
+điểm tính hai lần. `PlayVillage.consume()` gọi `world.bricks?.vocabQuiz?.ask()`
+— mượn được thì mượn, không có thì khối vẫn vỡ bình thường.
+
+## ⚠️ HAI LẦN "ĐÚNG SỐ ĐO MÀ VẪN XẤU" — chỉ ẢNH mới nói ra
+
+1. **Tháp đồng hồ** để 3,6 × 12 (tỉ lệ 1:3,3). Ảnh ra một khối bè bè đọc thành
+   *cái máy bán nước*. Big Ben cao gấp ~9 lần bề ngang; nay 2,6 × 14.
+2. **Chùm sáng hải đăng** để 1,2 × 0,7 đặc hoàn toàn. Ảnh ban đêm ra một **tấm
+   ván vàng** chắn ngang khung hình. Nay ba lát mỏng loe dần, `opacity` 0,34,
+   `depthWrite` tắt (không tắt thì thứ nằm sau nó biến mất từng mảng khi quét).
+
+⚠️ Vật liệu chùm sáng phải dựng RIÊNG, không lấy từ `glowMaterial()`: hàm đó
+nhớ theo mã màu, đặt `transparent` ở đó là buồng đèn (cùng màu) trong suốt theo.
+
+## ⚠️ KIM ĐỒNG HỒ — đừng chồng hai phép xoay trong một Euler
+
+Bản đầu đặt `hand.rotation.y = ry` (hướng mặt) rồi mỗi khung hình ghi
+`hand.rotation.z` (góc kim). Hai phép xoay trong cùng một Euler thứ tự XYZ ⇒ hai
+mặt quay sang ±X có kim quay SAI MẶT PHẲNG, ảnh ra hai vạch ngang nằm im như
+dấu trừ. Nay mỗi kim nằm trong một `Group` ĐÃ xoay sẵn theo hướng mặt, nên trục
+Z cục bộ luôn đâm vuông góc mặt số và `rotation.z` là góc thật.
+
+## Cảng: hai hàm dựng TÁCH BẠCH, không một hàm chung
+
+Cảng là khu duy nhất cố ý dựng ra ngoài đảo — cầu tàu và hải đăng PHẢI ở trên
+biển, đó là ý nghĩa của một cái cảng. Nên `PlayHarbour` có `onLand()` (chặn cả
+lòng đường lẫn mép nước) và `overWater()` (chỉ chặn lòng đường). Tách ra chứ
+không làm một hàm có cờ, để không ai vô ý dùng nhầm cái cho phép ra biển.
+
+Mặt nước ở **y = −0,3** (`Water.surfaceElevation`), mặt đất 0,04 — chênh đúng
+0,34. Sàn cầu tàu vì thế nâng lên 0,7 và có cọc chống; để ngang mặt đất là nó
+nằm sát mặt nước trông như tấm ván trôi.
+
+Đèn hải đăng đọc `dayCycles.isNight()`, **KHÔNG** đọc
+`intervalEvents.get('night').inInterval` — cờ đó kiểm trước khi `override` được
+áp, nên ép trời tối thì cảnh tối mà cờ vẫn báo ban ngày. Cầu vồng đã dính đúng
+bẫy này một lần.
+
+## ⚠️ BỘ KIỂM TỰ BÁO OAN — lần thứ SÁU
+
+`check-harbour.mjs` bản đầu quét sàn cầu tàu tới hết z = 205 và báo
+**"BẬC 12,70 tại z = 203,4"**. Con số đó là THÂN HẢI ĐĂNG: bệ đá rộng
+`radius × 2,6 = 5,72` quanh tâm z = 205,5 nên nó chiếm z ∈ [202,6 · 208,4], tia
+bắn xuống trúng đỉnh tháp cao 14,1 thay vì trúng sàn. Không có bậc nào cả. Nay
+chỉ quét tới z = 202 — phần người chơi thật sự đi được.
+
+**Quy tắc rút ra**: phép quét "bậc trên mặt đi được" phải dừng TRƯỚC mọi công
+trình đứng trên chính mặt đó, không thì nó đo chiều cao công trình.
+
+## Hai bộ kiểm mới + 12 bộ cũ nay chạy được ở mọi máy
+
+`tools/check-village.mjs` (9 mục) và `tools/check-harbour.mjs` (11 mục, có quét
+hành lang xe dọc cầu tàu — thay cho lái thử vốn không chạy được headless).
+
+Và **12 bộ kiểm cũ gõ cứng `/Users/admin/Downloads/api-backend/node_modules/
+playwright/index.mjs`**, tức cả bộ chỉ chạy được ở đúng một máy Mac ở đúng một
+đường dẫn. Nay đọc `process.env.PW` và `process.env.CHROME`, mặc định giữ
+nguyên đường cũ nên máy nhà không phải đổi gì:
+
+```bash
+PW=/đường/tới/playwright/index.mjs CHROME=/đường/tới/chrome \
+  PLAY_URL=http://127.0.0.1:5188 node tools/check-harbour.mjs
+```
+
+## Chi phí hiệu năng
+
+Hai khu cộng lại tốn **+93 mesh** (đảo sân chơi 385 → 478), đỉnh không đổi
+(2,85 triệu — hộp thì rẻ). Toàn cảnh 4353 → 4446 mesh, còn xa ngưỡng 5000 của
+`check-perf.mjs`.
 
 ---
 

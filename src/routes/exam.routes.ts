@@ -56,7 +56,14 @@ router.get('/', async (_req, res: Response<ApiResponse>, next) => {
         _count: { select: { questions: true } },
       },
       orderBy: [{ courseId: 'asc' }, { kind: 'asc' }, { sortOrder: 'asc' }],
-      take: 800,
+      // Trần cứng 800 từng có ở đây — nội dung đã vượt qua nó (844 đề published
+      // lúc phát hiện, 05/09/2026): mọi đề rơi SAU vị trí 800 theo thứ tự
+      // courseId ASC (tức các course tạo GẦN ĐÂY, courseId lớn — MMA301 vừa
+      // thêm hôm nay là nạn nhân đầu tiên bị người dùng phát hiện) biến mất
+      // KHỎI DANH SÁCH môn trong Phòng thi mà không có lỗi/cảnh báo nào. Đây
+      // là metadata nhẹ (không phải nội dung câu hỏi), response ~330KB cho
+      // ~840 dòng — bỏ trần thay vì nâng con số, vì nội dung Exam Room còn
+      // tiếp tục lớn (đang làm Kỳ 7-8-9).
     });
     const data = exams.map((e) => ({
       id: e.id, courseId: e.courseId, kind: e.kind, peType: e.peType,

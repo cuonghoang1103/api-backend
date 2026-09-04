@@ -38,10 +38,67 @@ type TimelineSlot = { hour: number; activity?: { type: ActivityType; label: stri
 // row + active tasks + today's celebration. The frontend calls
 // this once on mount, then patches locally. We DO NOT 404 on
 // missing rows — a brand-new user just gets an empty snapshot.
+/**
+ * SINH BẢN MỚI CHO VIỆC LẶP.
+ *
+ * Việc có `repeat` mà mốc `date` đã thuộc về kỳ TRƯỚC ⇒ chép sang kỳ hiện tại
+ * (giữ tên, ghi chú, ưu tiên, EXP, nhịp lặp) rồi TẮT `repeat` ở bản cũ. Tắt là
+ * điều bắt buộc: không tắt thì lần đọc sau nó lại sinh thêm một bản nữa, và
+ * người dùng mở app buổi sáng thấy mười bản giống hệt nhau.
+ *
+ * ⚠️ Mốc kỳ hiện tại lấy từ THAM SỐ `homNay` của client, không tự tính bằng
+ * UTC. Máy chủ ở UTC còn người dùng ở UTC+7: tự tính thì từ 00:00 tới 07:00 giờ
+ * Việt Nam, "hôm nay" của máy chủ vẫn là hôm qua, nên việc hằng ngày không sinh
+ * bản mới cho tới quá 7 giờ sáng.
+ */
+async function sinhViecLap(userId: number, homNayClient: string): Promise<void> {
+  const cho = await prisma.dashboardTask.findMany({
+    where: { userId, archivedAt: null, repeat: { not: 'none' } },
+    // Trần: người bỏ app ba tháng rồi quay lại không nên phải chờ một vòng sinh
+    // hàng trăm bản. Số còn lại sinh ở lần mở sau.
+    take: 50,
+  });
+  if (cho.length === 0) return;
+
+  const moc = new Date(`${homNayClient}T00:00:00Z`);
+  if (Number.isNaN(moc.getTime())) return;
+
+  for (const v of cho) {
+    const kyNay = scopeDate(v.scope as TaskScope, moc);
+    if (v.date >= kyNay) continue; // vẫn trong kỳ hiện tại, chưa tới lúc sinh
+
+    /* Đã có bản của kỳ này chưa? Hai tab cùng mở, hoặc hai lần đọc trùng nhịp,
+       đều gọi hàm này — không kiểm thì mỗi lần là một bản trùng. */
+    const daCo = await prisma.dashboardTask.findFirst({
+      where: { userId, scope: v.scope, date: kyNay, title: v.title, archivedAt: null },
+      select: { id: true },
+    });
+    if (!daCo) {
+      await prisma.dashboardTask.create({
+        data: {
+          userId, scope: v.scope, date: kyNay, title: v.title,
+          exp: v.exp, activityType: v.activityType,
+          note: v.note, priority: v.priority, repeat: v.repeat,
+          sortOrder: v.sortOrder,
+          /* KHÔNG chép `dueAt`/`remindAt`: chúng là mốc TUYỆT ĐỐI của kỳ cũ.
+             Chép sang thì bản mới sinh ra đã quá hạn từ hôm qua, và lời nhắc
+             kêu ngay lập tức. */
+        },
+      });
+    }
+    await prisma.dashboardTask.update({ where: { id: v.id }, data: { repeat: 'none' } });
+  }
+}
+
 router.get('/', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const userId = req.userId!;
     const today = todayIso();
+
+    /* Ngày theo giờ MÁY của client. App mới gửi kèm; app cũ không gửi thì lùi
+       về ngày UTC — chấp nhận lệch vài giờ còn hơn không sinh việc lặp gì cả. */
+    const hn = String((req.query.homNay ?? '') as string);
+    await sinhViecLap(userId, /^\d{4}-\d{2}-\d{2}$/.test(hn) ? hn : today);
 
     // Fetch state + today's tasks + today's celebration in parallel.
     // Three small reads beat one big join when the user is offline
@@ -61,7 +118,10 @@ router.get('/', async (req: Request, res: Response<ApiResponse>, next) => {
           archivedAt: null,
           NOT: { done: true, completedAt: { lt: completedExpiryCutoff() } },
         },
-        orderBy: [{ scope: 'asc' }, { date: 'asc' }, { id: 'asc' }],
+        /* `sortOrder` TRƯỚC `id`: nó là thứ tự người dùng tự kéo, và nó phải
+           thắng thứ tự tạo. Mọi việc cũ có sortOrder = 0 nên chúng vẫn xếp theo
+           id như trước — nâng cấp không đảo lộn danh sách của ai. */
+        orderBy: [{ scope: 'asc' }, { date: 'asc' }, { sortOrder: 'asc' }, { id: 'asc' }],
       }),
       prisma.dashboardCelebration.findFirst({
         where: { userId, celebratedDate: today },
@@ -219,6 +279,8 @@ router.post('/tasks', async (req: Request, res: Response<ApiResponse>, next) => 
       dueAt?: string | null;
       remindAt?: string | null;
       priority?: number;
+      repeat?: string;
+      parentId?: number | null;
     };
 
     const scope = String(body.scope ?? 'today');
@@ -249,6 +311,15 @@ router.post('/tasks', async (req: Request, res: Response<ApiResponse>, next) => 
         dueAt: docMoc(body.dueAt, 'dueAt') ?? null,
         remindAt: docMoc(body.remindAt, 'remindAt') ?? null,
         priority: docUuTien(body.priority) ?? 0,
+        repeat: docNhipLap(body.repeat) ?? 'none',
+        /* Việc con: kiểm CHA có thật và thuộc về đúng người này. Không kiểm thì
+           một client thù địch gắn việc của mình vào cây việc của người khác —
+           và nó sẽ hiện lên màn hình của họ. */
+        parentId: typeof body.parentId === 'number'
+          ? (await prisma.dashboardTask.findFirst({
+              where: { id: body.parentId, userId }, select: { id: true },
+            }))?.id ?? null
+          : null,
       },
     });
 
@@ -358,6 +429,7 @@ router.patch('/tasks/:id', async (req: Request, res: Response<ApiResponse>, next
       dueAt?: string | null;
       remindAt?: string | null;
       priority?: number;
+      repeat?: string;
       /** Đánh dấu ĐÃ NHẮC — app gọi sau khi hiện thông báo. */
       remindedNow?: boolean;
     };
@@ -406,6 +478,8 @@ router.patch('/tasks/:id', async (req: Request, res: Response<ApiResponse>, next
     const uuTien = docUuTien(body.priority);
     if (uuTien !== undefined) data.priority = uuTien;
     if (body.remindedNow === true) data.remindedAt = new Date();
+    const nhip = docNhipLap(body.repeat);
+    if (nhip !== undefined) data.repeat = nhip;
 
     if (Object.keys(data).length === 0) {
       throw new AppError('Khong co truong hop le de cap nhat', 400);
@@ -426,6 +500,32 @@ router.patch('/tasks/:id', async (req: Request, res: Response<ApiResponse>, next
     if (!task) throw new AppError('Task khong ton tai', 404);
 
     res.json({ success: true, data: serializeTask(task) });
+  } catch (error) { next(error); }
+});
+
+// ─── POST /api/v1/dashboard/tasks/reorder ────────────────────────
+// Đặt lại thứ tự sau khi người dùng kéo thả. Nhận NGUYÊN danh sách
+// id theo thứ tự mới, không nhận "chuyển việc X lên trên việc Y":
+// gửi cả danh sách thì kết quả không phụ thuộc vào việc client và
+// máy chủ có cùng cách hiểu về trạng thái trước đó hay không.
+router.post('/tasks/reorder', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = req.userId!;
+    const ids = (req.body as { ids?: unknown }).ids;
+    if (!Array.isArray(ids) || ids.length === 0) throw new AppError('ids phai la mang', 400);
+    if (ids.length > 500) throw new AppError('qua nhieu id (max 500)', 400);
+    const so = ids.map(Number).filter((n) => Number.isInteger(n) && n > 0);
+    if (so.length !== ids.length) throw new AppError('ids chua gia tri khong hop le', 400);
+
+    /* `updateMany` có `userId` trong WHERE ⇒ một client thù địch gửi id của
+       người khác thì lệnh đó khớp 0 dòng, không phải đổi thứ tự việc của họ. */
+    await prisma.$transaction(
+      so.map((id, i) => prisma.dashboardTask.updateMany({
+        where: { id, userId },
+        data: { sortOrder: i },
+      })),
+    );
+    res.json({ success: true, data: { count: so.length } });
   } catch (error) { next(error); }
 });
 
@@ -842,6 +942,7 @@ function serializeTask(t: {
   createdAt: Date; completedAt: Date | null;
   note?: string | null; dueAt?: Date | null; remindAt?: Date | null;
   remindedAt?: Date | null; priority?: number;
+  repeat?: string; parentId?: number | null; sortOrder?: number;
 }) {
   return {
     id: t.id,
@@ -858,7 +959,21 @@ function serializeTask(t: {
     remindAt: t.remindAt?.toISOString() ?? null,
     remindedAt: t.remindedAt?.toISOString() ?? null,
     priority: t.priority ?? 0,
+    repeat: t.repeat ?? 'none',
+    parentId: t.parentId ?? null,
+    sortOrder: t.sortOrder ?? 0,
   };
+}
+
+/** Nhịp lặp hợp lệ. Chuỗi lạ ⇒ từ chối, đừng lặng lẽ coi như 'none'. */
+export const NHIP_LAP = ['none', 'daily', 'weekly', 'monthly'] as const;
+function docNhipLap(v: unknown): string | undefined {
+  if (v === undefined) return undefined;
+  const t = String(v);
+  if (!(NHIP_LAP as readonly string[]).includes(t)) {
+    throw new AppError(`repeat phai la ${NHIP_LAP.join('|')}`, 400);
+  }
+  return t;
 }
 
 /**

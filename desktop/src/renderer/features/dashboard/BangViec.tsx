@@ -21,9 +21,10 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import {
-  AlarmClock, Bell, Check, ChevronDown, Flag, Plus, StickyNote, Trash2,
+  AlarmClock, Bell, Check, ChevronDown, CornerDownRight, Flag, GripVertical,
+  Plus, Repeat, StickyNote, Trash2, Volume2, VolumeX,
 } from 'lucide-react';
-import { keuBoTick, keuThem, keuXongHet, keuXongViec } from './amThanh';
+import { dangBatAm, datBatAm, keuBoTick, keuThem, keuThu, keuXongHet, keuXongViec } from './amThanh';
 
 export type Scope = 'today' | 'week' | 'month' | 'quarter' | 'year';
 
@@ -38,6 +39,9 @@ export interface Task {
   dueAt?: string | null;
   remindAt?: string | null;
   priority?: number;
+  repeat?: string;
+  parentId?: number | null;
+  sortOrder?: number;
 }
 
 export interface VaSua {
@@ -48,6 +52,7 @@ export interface VaSua {
   remindAt?: string | null;
   priority?: number;
   scope?: Scope;
+  repeat?: string;
 }
 
 const PHAM_VI: Array<{ ma: Scope; ten: string; phu: string }> = [
@@ -60,6 +65,13 @@ const PHAM_VI: Array<{ ma: Scope; ten: string; phu: string }> = [
 
 /** 0 = không đặt. Màu đi từ xám → vàng → cam → đỏ, đọc được mà không cần chú giải. */
 const UU_TIEN = ['Không đặt', 'Thấp', 'Vừa', 'Cao'];
+
+const NHIP_LAP: Array<{ ma: string; ten: string }> = [
+  { ma: 'none', ten: 'Không lặp' },
+  { ma: 'daily', ten: 'Hằng ngày' },
+  { ma: 'weekly', ten: 'Hằng tuần' },
+  { ma: 'monthly', ten: 'Hằng tháng' },
+];
 
 /** Còn bao lâu tới hạn, viết như người nói. `null` = không có hạn. */
 export function conBaoLau(iso: string | null | undefined, bayGio = Date.now()): {
@@ -93,15 +105,27 @@ function choONhap(iso: string | null | undefined): string {
   return buLech.toISOString().slice(0, 16);
 }
 
-function DongViec({ t, onSua, onXoa }: {
+function DongViec({ t, con, onSua, onXoa, onThemCon, keo }: {
   t: Task;
+  /** Việc con của nó. Rỗng với chính việc con — chỉ MỘT tầng. */
+  con?: Task[];
   onSua: (t: Task, v: VaSua) => void;
   onXoa: (t: Task) => void;
+  onThemCon?: (cha: Task, ten: string) => void;
+  /** Bộ điều khiển kéo thả. Vắng ⇒ dòng này không kéo được (việc con). */
+  keo?: {
+    batDau: (id: Task['id']) => void;
+    tren: (id: Task['id']) => void;
+    tha: () => void;
+    dangKeo: Task['id'] | null;
+    dichVao: Task['id'] | null;
+  };
 }) {
   const [moGhiChu, datMoGhiChu] = useState(false);
   const [ghiChu, datGhiChu] = useState(t.note ?? '');
   const [ten, datTen] = useState(t.title);
   const [suaTen, datSuaTen] = useState(false);
+  const [nhapCon, datNhapCon] = useState('');
 
   // Dữ liệu từ máy chủ về sau khi sửa ⇒ đồng bộ lại, nếu không ô vẫn giữ chữ cũ.
   useEffect(() => { datGhiChu(t.note ?? ''); }, [t.note]);
@@ -111,8 +135,25 @@ function DongViec({ t, onSua, onXoa }: {
   const uu = t.priority ?? 0;
 
   return (
-    <li className="ct-viec" data-xong={t.done} data-uu={uu}>
+    <li
+      className="ct-viec"
+      data-xong={t.done}
+      data-uu={uu}
+      data-con={con === undefined}
+      data-dangkeo={keo?.dangKeo === t.id}
+      data-dich={keo?.dichVao === t.id}
+      draggable={keo !== undefined}
+      onDragStart={() => keo?.batDau(t.id)}
+      onDragOver={(e) => { if (keo) { e.preventDefault(); keo.tren(t.id); } }}
+      onDragEnd={() => keo?.tha()}
+      onDrop={(e) => { if (keo) { e.preventDefault(); keo.tha(); } }}
+    >
       <div className="ct-viec-hang">
+        {keo && (
+          /* Tay cầm RIÊNG chứ không kéo cả dòng: cả dòng kéo được thì mọi lần
+             bôi đen chữ để sửa đều biến thành một cú kéo hụt. */
+          <span className="ct-viec-cam" aria-hidden><GripVertical size={13} /></span>
+        )}
         <button
           type="button"
           className="ct-viec-tick"
@@ -151,6 +192,14 @@ function DongViec({ t, onSua, onXoa }: {
           <span className="ct-viec-han" data-tre={han.treZ} data-gap={han.gap}>
             <AlarmClock size={11} aria-hidden /> {han.chu}
           </span>
+        )}
+        {(t.repeat ?? 'none') !== 'none' && (
+          <span className="ct-viec-lap" title={NHIP_LAP.find((n) => n.ma === t.repeat)?.ten}>
+            <Repeat size={11} aria-hidden />
+          </span>
+        )}
+        {con && con.length > 0 && (
+          <span className="ct-viec-demcon">{con.filter((c) => c.done).length}/{con.length}</span>
         )}
         {t.remindAt && <Bell size={11} aria-hidden className="ct-viec-chuong" />}
         {(t.note ?? '') !== '' && !moGhiChu && (
@@ -194,28 +243,68 @@ function DongViec({ t, onSua, onXoa }: {
                 onChange={(e) => onSua(t, { dueAt: e.target.value ? new Date(e.target.value).toISOString() : null })} />
             </label>
             <label>
+              <Repeat size={11} aria-hidden /> Lặp
+              <select value={t.repeat ?? 'none'} onChange={(e) => onSua(t, { repeat: e.target.value })}>
+                {NHIP_LAP.map((n) => <option key={n.ma} value={n.ma}>{n.ten}</option>)}
+              </select>
+            </label>
+            <label>
               <Bell size={11} aria-hidden /> Nhắc lúc
               <input type="datetime-local" value={choONhap(t.remindAt)}
                 onChange={(e) => onSua(t, { remindAt: e.target.value ? new Date(e.target.value).toISOString() : null })} />
             </label>
           </div>
+
+          {onThemCon && (
+            <div className="ct-viec-themcon">
+              <CornerDownRight size={12} aria-hidden />
+              <input
+                value={nhapCon}
+                placeholder="Thêm một bước nhỏ…"
+                onChange={(e) => datNhapCon(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.nativeEvent.isComposing) return; // bộ gõ tiếng Việt dùng Enter để chốt chữ
+                  if (e.key !== 'Enter') return;
+                  const m = nhapCon.trim();
+                  if (!m) return;
+                  onThemCon(t, m);
+                  datNhapCon('');
+                }}
+              />
+            </div>
+          )}
         </div>
+      )}
+
+      {con && con.length > 0 && (
+        <ul className="ct-viec-dscon">
+          {con.map((c) => <DongViec key={c.id} t={c} onSua={onSua} onXoa={onXoa} />)}
+        </ul>
       )}
     </li>
   );
 }
 
-export function BangViec({ tasks, pham, datPham, onThem, onSua, onXoa }: {
+export function BangViec({ tasks, pham, datPham, onThem, onSua, onXoa, onThemCon, onDoiThuTu }: {
   tasks: Task[];
   pham: Scope;
   datPham: (s: Scope) => void;
   onThem: (ten: string, s: Scope) => Promise<void>;
   onSua: (t: Task, v: VaSua) => void;
   onXoa: (t: Task) => void;
+  onThemCon: (cha: Task, ten: string) => void;
+  onDoiThuTu: (ids: Array<Task['id']>) => void;
 }) {
   const [nhap, datNhap] = useState('');
   const [dangThem, datDangThem] = useState(false);
+  const [coTieng, datCoTieng] = useState(dangBatAm());
   const oNhap = useRef<HTMLInputElement>(null);
+
+  /* Kéo thả: giữ id đang kéo và id đang bị rê lên. Không dùng thư viện — HTML5
+     drag đủ cho một danh sách phẳng, và một thư viện kéo thả là ~40KB cùng một
+     mô hình sự kiện riêng phải học. */
+  const [dangKeo, datDangKeo] = useState<Task['id'] | null>(null);
+  const [dichVao, datDichVao] = useState<Task['id'] | null>(null);
 
   const cua = tasks.filter((t) => t.scope === pham);
   const xong = cua.filter((t) => t.done).length;
@@ -224,13 +313,40 @@ export function BangViec({ tasks, pham, datPham, onThem, onSua, onXoa }: {
   /* Chưa xong lên trước, rồi tới ưu tiên cao, rồi hạn gần. Việc đã xong tụt
      xuống đáy thay vì biến mất: nhìn thấy chúng là phần thưởng, và đó chính là
      thứ làm người ta muốn tick tiếp. */
-  const sapXep = [...cua].sort((a, b) => {
+  /* Chỉ việc CHA vào danh sách chính; việc con vẽ lồng trong cha của nó. */
+  const cha = cua.filter((t) => t.parentId == null);
+  const conCua = (id: Task['id']): Task[] => cua.filter((t) => t.parentId === id);
+
+  const sapXep = [...cha].sort((a, b) => {
     if (a.done !== b.done) return a.done ? 1 : -1;
+    /* Thứ tự người dùng KÉO thắng mọi thứ khác — nếu ưu tiên vẫn thắng thì kéo
+       xong nó nhảy về chỗ cũ, và người dùng kết luận kéo thả bị hỏng. */
+    if ((a.sortOrder ?? 0) !== (b.sortOrder ?? 0)) return (a.sortOrder ?? 0) - (b.sortOrder ?? 0);
     if ((b.priority ?? 0) !== (a.priority ?? 0)) return (b.priority ?? 0) - (a.priority ?? 0);
     const ha = a.dueAt ? new Date(a.dueAt).getTime() : Infinity;
     const hb = b.dueAt ? new Date(b.dueAt).getTime() : Infinity;
     return ha - hb;
   });
+
+  const keo = {
+    batDau: datDangKeo,
+    tren: datDichVao,
+    dangKeo,
+    dichVao,
+    tha: () => {
+      if (dangKeo !== null && dichVao !== null && dangKeo !== dichVao) {
+        const ids = sapXep.map((t) => t.id);
+        const tu = ids.indexOf(dangKeo);
+        const den = ids.indexOf(dichVao);
+        if (tu >= 0 && den >= 0) {
+          ids.splice(den, 0, ids.splice(tu, 1)[0]!);
+          onDoiThuTu(ids);
+        }
+      }
+      datDangKeo(null);
+      datDichVao(null);
+    },
+  };
 
   const them = async () => {
     const ten = nhap.trim();
@@ -285,6 +401,23 @@ export function BangViec({ tasks, pham, datPham, onThem, onSua, onXoa }: {
       </div>
 
       <div className="ct-bangviec-tien">
+        <button
+          type="button"
+          className="ct-bangviec-tieng"
+          aria-pressed={coTieng}
+          title={coTieng ? 'Đang bật tiếng — bấm để tắt' : 'Đang tắt tiếng — bấm để bật'}
+          onClick={() => {
+            const moi = !coTieng;
+            datCoTieng(moi);
+            datBatAm(moi);
+            void window.cuongthai?.settings.set('tqAmThanh', moi);
+            /* Kêu thử NGAY khi bật: đó là cách duy nhất người dùng biết tiếng
+               đã bật mà không phải đi tick một việc thật để thử. */
+            if (moi) keuThu();
+          }}
+        >
+          {coTieng ? <Volume2 size={13} aria-hidden /> : <VolumeX size={13} aria-hidden />}
+        </button>
         <div className="ct-bangviec-thanh"><div style={{ width: `${phanTram}%` }} /></div>
         <span>
           {cua.length === 0 ? mo?.phu : `${xong}/${cua.length} việc — ${phanTram}%`}
@@ -312,7 +445,15 @@ export function BangViec({ tasks, pham, datPham, onThem, onSua, onXoa }: {
       ) : (
         <ul className="ct-bangviec-ds">
           {sapXep.map((t) => (
-            <DongViec key={t.id} t={t} onSua={suaCoTieng} onXoa={onXoa} />
+            <DongViec
+              key={t.id}
+              t={t}
+              con={conCua(t.id)}
+              onSua={suaCoTieng}
+              onXoa={onXoa}
+              onThemCon={onThemCon}
+              keo={keo}
+            />
           ))}
         </ul>
       )}

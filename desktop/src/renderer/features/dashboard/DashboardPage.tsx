@@ -169,7 +169,7 @@ export function DashboardPage() {
       const kq = await swr<DashboardData>({
         userId,
         key: 'dashboard',
-        fetcher: () => api.request('/api/v1/dashboard') as Promise<DashboardData>,
+        fetcher: () => api.request(`/api/v1/dashboard?homNay=${mocPhamVi('today')}`) as Promise<DashboardData>,
         online,
         ttlMs: 60_000,
         onRefreshed: setDu,
@@ -356,6 +356,31 @@ export function DashboardPage() {
     }
   }, [api, nap]);
 
+  const themCon = useCallback((cha: ViecUi, ten: string) => {
+    if (!api) return;
+    void api.request('/api/v1/dashboard/tasks', {
+      method: 'POST',
+      /* Việc con nằm cùng phạm vi và cùng mốc ngày với cha — nếu không nó rơi
+         vào một tab khác với cha và không ai tìm thấy nó nữa. */
+      body: { title: ten, scope: cha.scope, date: cha.date, parentId: Number(cha.id) },
+    }).then(() => nap()).catch((e: unknown) => setLoi(e instanceof Error ? e.message : String(e)));
+  }, [api, nap]);
+
+  const doiThuTu = useCallback((ids: Array<string | number>) => {
+    if (!api) return;
+    /* Đổi giao diện TRƯỚC: kéo thả mà phải chờ mạng thì việc nhảy về chỗ cũ rồi
+       vài trăm mili giây sau mới nhảy tới chỗ mới — nhìn như app hỏng. */
+    setDu((c) => c && ({
+      ...c,
+      tasks: c.tasks.map((t) => {
+        const i = ids.indexOf(t.id);
+        return i < 0 ? t : { ...t, sortOrder: i };
+      }),
+    }));
+    void api.request('/api/v1/dashboard/tasks/reorder', { method: 'POST', body: { ids } })
+      .catch(() => void nap());
+  }, [api, nap]);
+
   /**
    * Sửa một việc. Đổi giao diện TRƯỚC rồi mới gọi máy chủ — tick mà phải chờ
    * mạng thì cảm giác như app đơ, và tick là thao tác người ta làm nhiều nhất.
@@ -480,6 +505,8 @@ export function DashboardPage() {
           onThem={themViec}
           onSua={suaViec}
           onXoa={(t) => void xoa(t as Task)}
+          onThemCon={themCon}
+          onDoiThuTu={doiThuTu}
         />
       )}
 

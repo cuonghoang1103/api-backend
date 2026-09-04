@@ -9420,3 +9420,102 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   font: inherit;
   font-size: 11.5px;
 }
+
+/* ── Kéo thả · việc con · lặp · tắt tiếng ───────────────── */
+
+/* Tay cầm kéo: ẩn cho tới khi rê chuột, cùng lý do như hàng nút bên phải —
+   một cột chấm hiện thường trực trên mọi dòng làm danh sách trông rối. */
+.ct-viec-cam {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 14px;
+  margin-left: -4px;
+  color: var(--ct-text-faint);
+  cursor: grab;
+  opacity: 0;
+  transition: opacity var(--ct-motion-fast) var(--ct-ease);
+}
+
+.ct-viec:hover > .ct-viec-hang > .ct-viec-cam { opacity: 1; }
+.ct-viec-cam:active { cursor: grabbing; }
+
+/* Dòng đang bị kéo mờ đi, dòng sắp bị chèn vào có vạch sáng ở trên. Hai dấu
+   hiệu KHÁC NHAU: chỉ mờ thì không biết nó sẽ rơi xuống đâu. */
+.ct-viec[data-dangkeo='true'] { opacity: 0.4; }
+.ct-viec[data-dich='true'] { box-shadow: inset 0 2px 0 var(--ct-accent); }
+
+/* Việc con: thụt vào, chữ nhỏ hơn, không có tay cầm kéo. Một tầng duy nhất —
+   cho lồng sâu thì thụt lề ăn hết bề ngang và người ta lạc trong danh sách. */
+.ct-viec-dscon {
+  list-style: none;
+  margin: 0 0 6px;
+  padding: 0 0 0 38px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ct-viec-dscon .ct-viec {
+  background: transparent;
+  border-left: 0;
+}
+
+.ct-viec-dscon .ct-viec-hang { padding: 4px 8px; }
+.ct-viec-dscon .ct-viec-ten { font-size: 12.5px; }
+.ct-viec-dscon .ct-viec-tick { width: 17px; height: 17px; border-radius: 6px; }
+
+.ct-viec-demcon {
+  flex-shrink: 0;
+  padding: 1px 6px;
+  border-radius: 8px;
+  background: var(--ct-surface-2);
+  color: var(--ct-text-muted);
+  font-size: 10.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.ct-viec-lap { flex-shrink: 0; display: grid; place-items: center; color: var(--ct-accent); }
+
+.ct-viec-themcon {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--ct-text-faint);
+}
+
+.ct-viec-themcon input {
+  flex: 1;
+  min-width: 0;
+  padding: 5px 9px;
+  border-radius: var(--ct-radius-sm);
+  border: 1px dashed var(--ct-border);
+  background: transparent;
+  color: var(--ct-text);
+  font: inherit;
+  font-size: 12.5px;
+}
+
+.ct-viec-themcon input:focus {
+  outline: none;
+  border-style: solid;
+  border-color: var(--ct-accent);
+}
+
+.ct-bangviec-tieng {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: var(--ct-radius-sm);
+  background: transparent;
+  color: var(--ct-text-faint);
+  cursor: pointer;
+  transition: color var(--ct-motion-fast) var(--ct-ease), background var(--ct-motion-fast) var(--ct-ease);
+}
+
+.ct-bangviec-tieng:hover { background: var(--ct-hover); color: var(--ct-text); }
+.ct-bangviec-tieng[aria-pressed='true'] { color: var(--ct-accent); }

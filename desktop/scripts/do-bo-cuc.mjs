@@ -316,6 +316,16 @@ const BANG = [
               : i === 3 ? new Date(Date.now() - 36e5).toISOString() : null,
             note: i === 2 ? 'Ghi chú dài để kiểm dòng chữ không tràn khỏi thẻ.' : null,
             remindAt: i === 1 ? new Date(Date.now() + 18e5).toISOString() : null,
+            repeat: i === 2 ? 'daily' : 'none', parentId: null, sortOrder: i,
+          })),
+          /* Việc CON của việc số 1 — để bộ đo chạm được cả nhánh lồng, thụt lề,
+             và bộ đếm "1/2". */
+          ...mang(2, (i) => ({
+            id: 200 + i, scope: 'today',
+            date: (() => { const d = new Date(); const q = (n) => String(n).padStart(2, '0'); return `${d.getFullYear()}-${q(d.getMonth() + 1)}-${q(d.getDate())}`; })(),
+            title: `Bước nhỏ ${i + 1}`, done: i === 0, exp: 5,
+            priority: 0, dueAt: null, note: null, remindAt: null,
+            repeat: 'none', parentId: 1, sortOrder: i,
           })),
           /* Mốc phải khớp `mocPhamVi` phía app (giờ MÁY), nếu không việc bị lọc
              hết và bộ đo lại chứng minh một danh sách rỗng vẽ ra được. */

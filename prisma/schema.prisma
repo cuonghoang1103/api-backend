@@ -3244,6 +3244,22 @@ model DashboardTask {
   // còn enum thì phải ánh xạ ở mọi chỗ sắp xếp.
   priority   Int       @default(0)
 
+  // 'none' | 'daily' | 'weekly' | 'monthly'. Việc LẶP LẠI. Chuỗi chứ
+  // không enum, cùng lý do như `scope`: thêm nhịp mới (vd 'weekday')
+  // không phải một migration.
+  repeat String @default("none") @db.VarChar(16)
+
+  // Việc CON. Tự tham chiếu: một việc lớn chia thành vài bước nhỏ mà
+  // không cần bảng riêng. Chỉ MỘT tầng — cho lồng sâu thì giao diện
+  // phải thụt lề vô hạn và người ta lạc trong danh sách của chính mình.
+  parentId Int?            @map("parent_id")
+  parent   DashboardTask?  @relation("ViecCon", fields: [parentId], references: [id], onDelete: Cascade)
+  con      DashboardTask[] @relation("ViecCon")
+
+  // Thứ tự do người dùng KÉO THẢ. Nhỏ đứng trước. Mặc định 0 nên mọi
+  // việc cũ giữ nguyên cách sắp xếp hiện tại, không đảo lộn gì.
+  sortOrder Int @default(0) @map("sort_order")
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Active-task index: we read "today's tasks" all the time, so
@@ -3254,6 +3270,7 @@ model DashboardTask {
   @@index([userId, completedAt], name: "idx_dashboard_tasks_completed")
   // Dò việc tới hạn nhắc: chạy đều đặn ở nền, nên nó phải rẻ.
   @@index([userId, remindAt], name: "idx_dashboard_tasks_remind")
+  @@index([parentId], name: "idx_dashboard_tasks_parent")
   @@map("dashboard_tasks")
 }
 

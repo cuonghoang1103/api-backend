@@ -213,7 +213,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>How many errors are present in the code given below?<br/>1. int pin1=12;<br/>2. void setup() {<br/>3.   pinmode(pin1, IN);<br/>4.   Serial.begin(9600);<br/>5. }<br/>6. void loop() {<br/>7.   int value=analogRead(pin1);<br/>8.   Serial.println(value);<br/>9. }</p></div><div class=\"ml-vi\"><p>Có bao nhiêu lỗi trong đoạn code dưới đây?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>How many errors are present in the code given below?</p><pre><code><span class=\"hljs-bullet\">1.</span> int pin1=12;\n<span class=\"hljs-bullet\">2.</span> void setup() {\n<span class=\"hljs-bullet\">3.</span>   pinmode(pin1, IN);\n<span class=\"hljs-bullet\">4.</span>   Serial.begin(9600);\n<span class=\"hljs-bullet\">5.</span> }\n<span class=\"hljs-bullet\">6.</span> void loop() {\n<span class=\"hljs-bullet\">7.</span>   int value=analogRead(pin1);\n<span class=\"hljs-bullet\">8.</span>   Serial.println(value);\n<span class=\"hljs-bullet\">9.</span> }</code></pre></div><div class=\"ml-vi\"><p>Có bao nhiêu lỗi trong đoạn code dưới đây?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE20/q9.png",
           "options": [
             {
@@ -501,7 +501,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>What is the output of the program given below if a voltage of 5V is supplied to the pin corresponding to the A0 pin on an Arduino UNO?<br/>void setup() {<br/>  Serial.begin(9600);<br/>  pinMode(A0, INPUT);<br/>}<br/>void loop() {<br/>  int s = analogRead(A0);<br/>  Serial.println(s);<br/>}</p></div><div class=\"ml-vi\"><p>Kết quả chương trình dưới đây nếu cấp 5V vào chân A0 trên Arduino UNO?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>What is the output of the program given below if a voltage of 5V is supplied to the pin corresponding to the A0 pin on an Arduino UNO?</p><pre><code><span class=\"hljs-function\"><span class=\"hljs-type\">void</span> <span class=\"hljs-title\">setup</span><span class=\"hljs-params\">()</span> </span>{\n<span class=\"hljs-built_in\">Serial</span>.<span class=\"hljs-built_in\">begin</span>(<span class=\"hljs-number\">9600</span>);\n<span class=\"hljs-built_in\">pinMode</span>(A0, <span class=\"hljs-literal\">INPUT</span>);\n}\n<span class=\"hljs-function\"><span class=\"hljs-type\">void</span> <span class=\"hljs-title\">loop</span><span class=\"hljs-params\">()</span> </span>{\n<span class=\"hljs-type\">int</span> s = <span class=\"hljs-built_in\">analogRead</span>(A0);\n<span class=\"hljs-built_in\">Serial</span>.<span class=\"hljs-built_in\">println</span>(s);\n}</code></pre></div><div class=\"ml-vi\"><p>Kết quả chương trình dưới đây nếu cấp 5V vào chân A0 trên Arduino UNO?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE20/q21.png",
           "options": [
             {
@@ -525,7 +525,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>What is the purpose of the following Arduino code?<br/>void setup() {<br/>  Serial.begin(9600);<br/>}<br/>void setup() {<br/>  Serial.write(40);<br/>}</p></div><div class=\"ml-vi\"><p>Mục đích của đoạn code Arduino sau là gì?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>What is the purpose of the following Arduino code?</p><pre><code><span class=\"hljs-function\"><span class=\"hljs-type\">void</span> <span class=\"hljs-title\">setup</span><span class=\"hljs-params\">()</span> </span>{\n<span class=\"hljs-built_in\">Serial</span>.<span class=\"hljs-built_in\">begin</span>(<span class=\"hljs-number\">9600</span>);\n}\n<span class=\"hljs-function\"><span class=\"hljs-type\">void</span> <span class=\"hljs-title\">setup</span><span class=\"hljs-params\">()</span> </span>{\n<span class=\"hljs-built_in\">Serial</span>.<span class=\"hljs-built_in\">write</span>(<span class=\"hljs-number\">40</span>);\n}</code></pre></div><div class=\"ml-vi\"><p>Mục đích của đoạn code Arduino sau là gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE20/q22.png",
           "options": [
             {

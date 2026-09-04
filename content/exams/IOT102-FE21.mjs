@@ -216,7 +216,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>How many errors are present in the code given below?<br/>1. int pin1=12;<br/>2. void setup() {<br/>3.   pinmode(pin1, IN);<br/>4.   Serial.begin(9600);<br/>5. }<br/>6. void loop() {<br/>7.   int value=analogRead(pin1);<br/>8.   Serial.println(value);<br/>9. }</p></div><div class=\"ml-vi\"><p>Có bao nhiêu lỗi trong đoạn code dưới đây?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>How many errors are present in the code given below?</p><pre><code><span class=\"hljs-bullet\">1.</span> int pin1=12;\n<span class=\"hljs-bullet\">2.</span> void setup() {\n<span class=\"hljs-bullet\">3.</span>   pinmode(pin1, IN);\n<span class=\"hljs-bullet\">4.</span>   Serial.begin(9600);\n<span class=\"hljs-bullet\">5.</span> }\n<span class=\"hljs-bullet\">6.</span> void loop() {\n<span class=\"hljs-bullet\">7.</span>   int value=analogRead(pin1);\n<span class=\"hljs-bullet\">8.</span>   Serial.println(value);\n<span class=\"hljs-bullet\">9.</span> }</code></pre></div><div class=\"ml-vi\"><p>Có bao nhiêu lỗi trong đoạn code dưới đây?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE21/q9.png",
           "options": [
             {
@@ -312,7 +312,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>What will be the output of the following Arduino code?<br/>#define X 10;<br/>void setup(){<br/>  X=0;<br/>  Serial.begin(9600);<br/>  Serial.print(X);<br/>}<br/>void loop(){<br/>  //Do nothing...<br/>}</p></div><div class=\"ml-vi\"><p>Kết quả của đoạn code Arduino sau là gì?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>What will be the output of the following Arduino code?</p><pre><code><span class=\"hljs-meta\">#<span class=\"hljs-keyword\">define</span> X 10;</span>\n<span class=\"hljs-function\"><span class=\"hljs-type\">void</span> <span class=\"hljs-title\">setup</span><span class=\"hljs-params\">()</span></span>{\nX=<span class=\"hljs-number\">0</span>;\n<span class=\"hljs-built_in\">Serial</span>.<span class=\"hljs-built_in\">begin</span>(<span class=\"hljs-number\">9600</span>);\n<span class=\"hljs-built_in\">Serial</span>.<span class=\"hljs-built_in\">print</span>(X);\n}\n<span class=\"hljs-function\"><span class=\"hljs-type\">void</span> <span class=\"hljs-title\">loop</span><span class=\"hljs-params\">()</span></span>{\n<span class=\"hljs-comment\">//Do nothing...</span>\n}</code></pre></div><div class=\"ml-vi\"><p>Kết quả của đoạn code Arduino sau là gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE21/q13.png",
           "options": [
             {
@@ -504,7 +504,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>What is the purpose of the following Arduino code?<br/>void setup() {<br/>  Serial.begin(9600);<br/>}<br/>void setup() {<br/>  Serial.write(40);6.<br/>}</p></div><div class=\"ml-vi\"><p>Mục đích của đoạn code Arduino sau là gì?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>What is the purpose of the following Arduino code?</p><pre><code><span class=\"hljs-function\"><span class=\"hljs-type\">void</span> <span class=\"hljs-title\">setup</span><span class=\"hljs-params\">()</span> </span>{\n<span class=\"hljs-built_in\">Serial</span>.<span class=\"hljs-built_in\">begin</span>(<span class=\"hljs-number\">9600</span>);\n}\n<span class=\"hljs-function\"><span class=\"hljs-type\">void</span> <span class=\"hljs-title\">setup</span><span class=\"hljs-params\">()</span> </span>{\n<span class=\"hljs-built_in\">Serial</span>.<span class=\"hljs-built_in\">write</span>(<span class=\"hljs-number\">40</span>);<span class=\"hljs-number\">6.</span>\n}</code></pre></div><div class=\"ml-vi\"><p>Mục đích của đoạn code Arduino sau là gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE21/q21.png",
           "options": [
             {
@@ -552,7 +552,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>What is the purpose of the following Arduino code?<br/>void setup() {<br/>  Serial.begin(9600);<br/>}<br/>void setup() {<br/>  Serial.write(40);<br/>}</p></div><div class=\"ml-vi\"><p>Mục đích của đoạn code Arduino sau là gì?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>What is the purpose of the following Arduino code?</p><pre><code><span class=\"hljs-function\"><span class=\"hljs-type\">void</span> <span class=\"hljs-title\">setup</span><span class=\"hljs-params\">()</span> </span>{\n<span class=\"hljs-built_in\">Serial</span>.<span class=\"hljs-built_in\">begin</span>(<span class=\"hljs-number\">9600</span>);\n}\n<span class=\"hljs-function\"><span class=\"hljs-type\">void</span> <span class=\"hljs-title\">setup</span><span class=\"hljs-params\">()</span> </span>{\n<span class=\"hljs-built_in\">Serial</span>.<span class=\"hljs-built_in\">write</span>(<span class=\"hljs-number\">40</span>);\n}</code></pre></div><div class=\"ml-vi\"><p>Mục đích của đoạn code Arduino sau là gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE21/q23.png",
           "options": [
             {

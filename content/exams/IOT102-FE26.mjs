@@ -279,7 +279,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The Output of the below program will print:<br/>void loop()<br/>{int val=analogRead(A6);<br/>Serial.print(val);}</p></div><div class=\"ml-vi\"><p>Kết quả in ra của chương trình dưới đây là:<br/>void loop()<br/>{int val=analogRead(A6);<br/>Serial.print(val);}</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The Output of the below program will print:</p><pre><code><span class=\"hljs-function\"><span class=\"hljs-type\">void</span> <span class=\"hljs-title\">loop</span><span class=\"hljs-params\">()</span>\n</span>{<span class=\"hljs-type\">int</span> val=<span class=\"hljs-built_in\">analogRead</span>(A6);\n<span class=\"hljs-built_in\">Serial</span>.<span class=\"hljs-built_in\">print</span>(val);}</code></pre></div><div class=\"ml-vi\"><p>Kết quả in ra của chương trình dưới đây là:</p><pre><code><span class=\"hljs-function\"><span class=\"hljs-type\">void</span> <span class=\"hljs-title\">loop</span><span class=\"hljs-params\">()</span>\n</span>{<span class=\"hljs-type\">int</span> val=<span class=\"hljs-built_in\">analogRead</span>(A6);\n<span class=\"hljs-built_in\">Serial</span>.<span class=\"hljs-built_in\">print</span>(val);}</code></pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/IOT102/FE26/q12.png",
           "options": [
             {

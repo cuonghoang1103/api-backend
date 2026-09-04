@@ -626,6 +626,21 @@ EXAM_SEED_OUT=$($DC exec -T backend sh -c '
 ') || true
 report_seed "Exam seed" "seed-exam" "$EXAM_SEED_OUT" "${EXAM_SEED_OUT_RC:-0}" || true
 
+# ── Step 3.14b: Reapply exam chapter map (idempotent, KHÔNG AI) ─
+# Step 3.14 ở trên XOÁ+TẠO LẠI toàn bộ ExamQuestion mỗi lần chạy (id đổi,
+# ExamQuestion.sectionId mất) cho MỌI đề có content/exams/*.mjs — tức MỌI
+# deploy. exam-classify-chapters.mjs (AI, chạy tay/hiếm) ghi vào bản đồ BỀN
+# ExamChapterMap (khoá theo nội dung câu, không theo id) — bước này khôi
+# phục sectionId từ bản đồ đó trong vài giây, không tốn AI, an toàn chạy
+# lặp. Thiếu bước này thì "học phần liên quan" của CuongMini im lặng trống
+# rỗng sau MỌI deploy dù đã tốn AI phân loại trước đó (đã dính thật
+# 04/09/2026 — phải chạy tay để cứu, giờ tự động luôn ở đây).
+info "Reapplying exam chapter map (khôi phục sectionId sau khi re-seed)..."
+REAPPLY_SEED_OUT=$($DC exec -T backend sh -c '
+  node scripts/exam-reapply-chapters.mjs --all --apply 2>&1
+') || true
+report_seed "Exam chapter reapply" "seed-exam-reapply" "$REAPPLY_SEED_OUT" "${REAPPLY_SEED_OUT_RC:-0}" || true
+
 # ── Step 3.15: Deep Dive guides (idempotent) ───────────────────
 # One .mjs spec per guide under content/deepdives/ (prose in a sibling .md)
 # → upsert TechTrendArticle keyed by slug, category 'DeepDive'. These are the

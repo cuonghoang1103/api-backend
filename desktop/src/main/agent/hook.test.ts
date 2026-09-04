@@ -12,7 +12,7 @@ import { describe, expect, it, vi, beforeEach } from 'vitest';
 const thuMucApp = await mkdtemp(join(tmpdir(), 'ct-hookcfg-'));
 vi.mock('electron', () => ({ app: { getPath: () => thuMucApp, isPackaged: false } }));
 
-const { docHook, quenDemHook, chayHook } = await import('./hook');
+const { docHook, quenDemHook, chayHook, docNhatKy, xoaNhatKy } = await import('./hook');
 
 const ghiCauHinh = (o: unknown) => writeFile(join(thuMucApp, 'hooks.json'), JSON.stringify(o), 'utf8');
 
@@ -86,6 +86,34 @@ describe('chạy hook', () => {
     const kq = await chayHook({ moc: 'truocTool', goc, tenTool: 'x', signal: ac() });
     expect(kq.chan).toBe(false);
     expect(kq.ra).toContain('thoát 3');
+  });
+
+  it('phân biệt KHÔNG KHỚP với ĐẠT-mà-im-lặng', async () => {
+    await ghiCauHinh({ hooks: [{ khi: 'sauTool', khop: '^edit_file$', lenh: 'exit 0' }] });
+    quenDemHook();
+    const imLang = await chayHook({ moc: 'sauTool', goc, tenTool: 'edit_file', signal: ac() });
+    const khongKhop = await chayHook({ moc: 'sauTool', goc, tenTool: 'read_file', signal: ac() });
+    /* Cả hai đều cho `ra` rỗng. Không có `soKhop` thì người đang dò cấu hình
+       không phân biệt được "gõ sai khop" với "hook vốn im lặng" — đúng chỗ
+       khó nhất khi mới cấu hình. */
+    expect(imLang.ra).toBe('');
+    expect(khongKhop.ra).toBe('');
+    expect(imLang.soKhop, 'có hook khớp, chỉ là nó không in gì').toBe(1);
+    expect(khongKhop.soKhop, 'không hook nào khớp').toBe(0);
+  });
+
+  it('ghi NHẬT KÝ cả lần đạt mà không in gì', async () => {
+    await ghiCauHinh({ hooks: [{ khi: 'sauTool', khop: 'edit_file', lenh: 'exit 0' }] });
+    quenDemHook();
+    xoaNhatKy();
+    await chayHook({ moc: 'sauTool', goc, tenTool: 'edit_file', signal: ac() });
+    const nk = docNhatKy();
+    /* Đây là cả điểm của nhật ký: lần chạy KHÔNG in gì là lần vô hình nhất, và
+       cũng là lần người dùng hay tưởng "hook không chạy". */
+    expect(nk).toHaveLength(1);
+    expect(nk[0]!.ma).toBe(0);
+    expect(nk[0]!.dong1).toBe('');
+    expect(nk[0]!.tenTool).toBe('edit_file');
   });
 
   it('lọc theo dự án — hook của dự án khác KHÔNG chạy', async () => {

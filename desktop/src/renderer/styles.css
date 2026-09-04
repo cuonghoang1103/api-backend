@@ -5265,6 +5265,101 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
  * của danh sách server bên trên — hai thứ cấu hình khác nhau nằm liền nhau mà
  * không có ranh giới thì người dùng sửa nhầm bảng.
  */
+/* ── Bảng Hook & Kỹ năng ─────────────────────────────────── */
+
+.ct-hook-tieu { font-size: 12px; }
+
+.ct-mcp-canh {
+  font-size: 11.5px;
+  line-height: 1.5;
+  margin: 4px 0 0;
+  color: var(--ct-warn);
+}
+
+.ct-hook-nut { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+
+.ct-hook-thu { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+
+.ct-hook-thu select,
+.ct-hook-thu input {
+  font: inherit;
+  font-size: 12px;
+  padding: 4px 7px;
+  border-radius: var(--ct-radius-sm);
+  border: 1px solid var(--ct-border);
+  background: var(--ct-bg);
+  color: var(--ct-text);
+}
+
+/* `min-width: 0` để ô nhập co được: bảng nổi hẹp, và một `input` không co sẽ
+   đẩy nút "Chạy thử" tràn ra ngoài mép bảng. */
+.ct-hook-thu input { flex: 1; min-width: 0; }
+.ct-hook-thu input:disabled { opacity: 0.5; }
+
+.ct-hook-ra {
+  margin: 8px 0 0;
+  padding: 7px 9px;
+  max-height: 220px;
+  overflow: auto;
+  font-size: 11.5px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+  border: 1px solid var(--ct-border);
+}
+
+.ct-hook-ra[data-chan='true'] {
+  border-color: color-mix(in srgb, var(--ct-err) 45%, transparent);
+  color: var(--ct-err);
+}
+
+.ct-hook-nk, .ct-hook-kn {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  max-height: 240px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.ct-hook-nk li {
+  display: grid;
+  /* Giờ cố định bề rộng, phần còn lại co giãn — nếu để `auto` thì mỗi dòng lệch
+     một kiểu và mắt không lướt được theo cột. */
+  grid-template-columns: auto 1fr;
+  gap: 2px 7px;
+  font-size: 11.5px;
+  padding: 5px 7px;
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+  border-left: 2px solid var(--ct-ok, #3fb950);
+}
+
+.ct-hook-nk li[data-dat='false'] { border-left-color: var(--ct-warn); }
+.ct-hook-nk li[data-chan='true'] { border-left-color: var(--ct-err); }
+
+.ct-hook-nk-gio { color: var(--ct-text-muted); font-variant-numeric: tabular-nums; }
+.ct-hook-nk li code { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ct-hook-nk-phu, .ct-hook-nk-ra, .ct-hook-nk-im { grid-column: 2; color: var(--ct-text-muted); }
+.ct-hook-nk-im { font-style: italic; opacity: 0.8; }
+.ct-hook-nk-ra { white-space: pre-wrap; word-break: break-word; }
+
+.ct-hook-kn li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 11.5px;
+  padding: 5px 7px;
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+}
+
+.ct-hook-kn li span { color: var(--ct-text-muted); line-height: 1.45; }
+
 .ct-mcp-nhom {
   margin-top: 10px;
   padding-top: 10px;

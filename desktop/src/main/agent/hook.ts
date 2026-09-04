@@ -123,11 +123,60 @@ function khopHook(h: Hook, goc: string, tenTool: string | null): boolean {
   try { return new RegExp(h.khop).test(tenTool); } catch { return false; }
 }
 
+/**
+ * NHẬT KÝ hook — vòng đệm trong bộ nhớ.
+ *
+ * Vì sao cần: hook ĐẠT mà không in gì thì cố ý im lặng (xem `chayHook`), nên
+ * lúc mới cấu hình người dùng không phân biệt được "hook chạy và ổn" với "hook
+ * không hề chạy". Hai trạng thái đó trông y hệt nhau, và không có gì để nhìn.
+ *
+ * Chỉ trong bộ nhớ, không ghi đĩa: đây là thứ để soi ngay lúc đang cấu hình,
+ * không phải hồ sơ kiểm toán. Ghi xuống đĩa thì phải lo dọn, lo cỡ file, và lo
+ * việc đầu ra lệnh của người dùng nằm lại trên máy sau khi họ đóng app.
+ */
+export interface MucNhatKy {
+  luc: number;
+  moc: MocHook;
+  lenh: string;
+  tenTool: string | null;
+  /** `null` = bị giết (hết giờ hoặc người dùng dừng). */
+  ma: number | null;
+  giay: number;
+  /** Có bị coi là CHẶN không. */
+  chan: boolean;
+  /** Dòng đầu của đầu ra, để nhìn lướt. Rỗng = không in gì. */
+  dong1: string;
+}
+
+const MAX_NHAT_KY = 40;
+const nhatKy: MucNhatKy[] = [];
+
+/** Mới nhất TRƯỚC — bảng đọc từ trên xuống, và cái vừa xảy ra là cái đáng xem. */
+export function docNhatKy(): MucNhatKy[] {
+  return [...nhatKy].reverse();
+}
+
+export function xoaNhatKy(): void { nhatKy.length = 0; }
+
+function ghiNhatKy(m: MucNhatKy): void {
+  nhatKy.push(m);
+  if (nhatKy.length > MAX_NHAT_KY) nhatKy.shift();
+}
+
 export interface KetQuaHook {
   /** Có hook nào bảo CHẶN không (chỉ `truocTool`). */
   chan: boolean;
   /** Đầu ra gộp, đã cắt. Rỗng = không hook nào chạy hoặc không hook nào nói gì. */
   ra: string;
+  /**
+   * Bao nhiêu hook KHỚP mốc + tên tool này.
+   *
+   * Cần vì `ra` rỗng có HAI nghĩa hoàn toàn khác nhau — "không hook nào khớp"
+   * (cấu hình sai `khop`) và "hook chạy xong, đạt, không in gì" (bình thường).
+   * Gộp hai thứ đó vào một chuỗi rỗng là để người đang dò cấu hình mắc kẹt ở
+   * đúng chỗ khó nhất.
+   */
+  soKhop: number;
 }
 
 /**
@@ -147,7 +196,7 @@ export async function chayHook(opts: {
 }): Promise<KetQuaHook> {
   const ds = (await docHook()).filter((h) => h.khi === opts.moc
     && khopHook(h, opts.goc, opts.tenTool ?? null));
-  if (ds.length === 0) return { chan: false, ra: '' };
+  if (ds.length === 0) return { chan: false, ra: '', soKhop: 0 };
 
   const manh: string[] = [];
   let chan = false;
@@ -160,6 +209,17 @@ export async function chayHook(opts: {
       signal: opts.signal,
     });
     const dat = kq.ma === 0;
+    const seChan = !dat && h.chan === true && opts.moc === 'truocTool';
+    ghiNhatKy({
+      luc: Date.now(),
+      moc: opts.moc,
+      lenh: h.lenh,
+      tenTool: opts.tenTool ?? null,
+      ma: kq.ma,
+      giay: kq.giay,
+      chan: seChan,
+      dong1: kq.ra.trim().split('\n')[0]?.slice(0, 160) ?? '',
+    });
     /* Hook ĐẠT và không in gì ⇒ im lặng. Nhồi "hook xong, mã 0" vào kết quả
        tool là bắt model đọc (và trả tiền cho) một dòng không mang tin gì, ở
        MỌI lời gọi tool. */
@@ -168,10 +228,10 @@ export async function chayHook(opts: {
       `[hook ${opts.moc}: \`${h.lenh}\`${dat ? '' : ` — thoát ${kq.ma ?? 'bị giết'}`}`
       + `${kq.hetGio ? ', HẾT GIỜ' : ''}]\n${kq.ra.trim() || '(không in gì)'}`,
     );
-    if (!dat && h.chan === true && opts.moc === 'truocTool') { chan = true; break; }
+    if (seChan) { chan = true; break; }
   }
 
   let ra = manh.join('\n\n');
   if (ra.length > MAX_RA) ra = `${ra.slice(0, MAX_RA)}\n[… cắt bớt]`;
-  return { chan, ra };
+  return { chan, ra, soKhop: ds.length };
 }

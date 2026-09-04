@@ -42,7 +42,8 @@ import { datDinhKem, datDinhKemTuDuong } from '../agent/dinhKem';
 import { hoanTacTatCa, luiFileVeLuot } from '../agent/tools';
 import { timFileGoiY } from '../agent/timFileNhanh';
 import { docLenhDuAn } from '../agent/lenhTuTao';
-import { docHook, quenDemHook, duongDanCauHinh as duongHook } from '../agent/hook';
+import { chayHook, docHook, docNhatKy, quenDemHook, duongDanCauHinh as duongHook } from '../agent/hook';
+import { dsKyNang } from '../agent/kyNang';
 import { traLoi } from '../agent/xinPhep';
 import { readStoredSession } from './auth';
 import { handle } from './index';
@@ -548,6 +549,46 @@ export function registerAgentHandlers(): void {
   handle('agent:hookDem', async () => {
     quenDemHook();
     return (await docHook()).length;
+  });
+
+  handle('agent:hookNhatKy', () => docNhatKy());
+
+  /*
+   * Chạy thử. Đọc lại cấu hình TRƯỚC (quên nhớ đệm): người ta bấm nút này ngay
+   * sau khi vừa sửa file, và trả kết quả của bản cũ là câu trả lời sai cho đúng
+   * câu hỏi họ đang hỏi.
+   *
+   * Trần 10 phút bằng đúng trần một lệnh thật, để phép thử phản ánh đúng thứ sẽ
+   * xảy ra trong lượt thật.
+   */
+  handle('agent:hookThu', async ({ cuocId, moc, tenTool }) => {
+    const goc = gocCuaCuoc(cuocId);
+    if (!goc) return { chan: false, ra: 'Chưa chọn thư mục dự án — hook cần một chỗ để chạy.', goc: null, soKhop: 0 };
+    quenDemHook();
+    const dieuKhien = new AbortController();
+    const hetGio = setTimeout(() => dieuKhien.abort(), 10 * 60 * 1000);
+    try {
+      const kq = await chayHook({ moc, goc, tenTool, signal: dieuKhien.signal });
+      return {
+        ...kq,
+        goc,
+        /* Phân biệt RÕ hai trường hợp cùng cho `ra` rỗng — đó là cả lý do phép
+           thử này tồn tại. Gộp lại thì người dò cấu hình không biết mình sai
+           `khop` hay hook vốn im lặng. */
+        ra: kq.ra !== ''
+          ? kq.ra
+          : kq.soKhop === 0
+            ? 'KHÔNG hook nào khớp mốc và tên tool này — kiểm lại trường "khop" (và "duAn").'
+            : `${kq.soKhop} hook khớp và đã chạy xong, nhưng không in ra gì (mã thoát 0). Xem "Lần chạy gần đây" bên dưới.`,
+      };
+    } finally {
+      clearTimeout(hetGio);
+    }
+  });
+
+  handle('agent:kyNangDs', async ({ cuocId }) => {
+    const goc = gocCuaCuoc(cuocId);
+    return goc ? dsKyNang(goc) : [];
   });
 
   handle('agent:mcpMoCauHinh', async () => {

@@ -34,6 +34,7 @@ import { BangLenh } from './BangLenh';
 import { KhungWeb } from './KhungWeb';
 import { GoiYLenh, LENH_AGENT } from './GoiYLenh';
 import { GoiYFile, docTokenFile, type TokenFile } from './GoiYFile';
+import { BangHook } from './BangHook';
 import { ghepThamSo } from '../../../shared/lenhDuAn';
 import type {
   AgentInfo, AgentMcpTrangThai, AgentNguCanh, AgentViec, AgentWorktree, CheDoQuyen, ModelAgent, MucNoLuc,
@@ -674,6 +675,8 @@ export function AgentMode({
         )}
 
         <NutMcp khoa={trangThai.dangChay} />
+
+        <BangHook cuocId={cuocId} khoa={trangThai.dangChay} />
 
         <button
           type="button"
@@ -1547,12 +1550,6 @@ function NutMcp({ khoa }: { khoa: boolean }) {
   const { mo, bat, boc } = useMoRieng('agent:mcp');
   const [tt, datTt] = useState<AgentMcpTrangThai | null>(null);
   const [dangNap, datDangNap] = useState(false);
-  /*
-   * Số hook đang hiệu lực. `null` = chưa hỏi — khác hẳn `0` là "đã hỏi, không
-   * có cái nào". Gộp hai thứ đó vào một số thì bảng nói "Đang có 0 hook" ngay
-   * khi vừa mở app, trước cả khi nó kịp đọc file.
-   */
-  const [soHook, datSoHook] = useState<number | null>(null);
 
   // Hỏi lại MỖI LẦN MỞ BẢNG, không chỉ lúc gắn component.
   //
@@ -1568,15 +1565,6 @@ function NutMcp({ khoa }: { khoa: boolean }) {
   }, [mo]);
 
 
-  // Đếm hook cùng nhịp với MCP: cùng một bảng, cùng một lý do — người ta mở nó
-  // ra đúng lúc nghi ngờ có gì đó không chạy như mình nghĩ.
-  useEffect(() => {
-    let con = true;
-    void window.cuongthai?.agent.hookDem()
-      .then((n) => { if (con) datSoHook(n); })
-      .catch(() => { if (con) datSoHook(0); });
-    return () => { con = false; };
-  }, [mo]);
   const napLai = async () => {
     datDangNap(true);
     try {
@@ -1652,40 +1640,6 @@ function NutMcp({ khoa }: { khoa: boolean }) {
             Mở file cấu hình
           </button>
 
-          {/* ── Hook ───────────────────────────────────────────────
-              Đặt cạnh MCP vì cùng một loại: cấu hình do NGƯỜI DÙNG viết ở
-              `userData`, không phải thứ đọc từ repo. Xem ghi chú đầu `hook.ts`. */}
-          <div className="ct-mcp-nhom">
-            <p className="ct-mcp-chan">
-              <strong>Hook</strong> — chạy lệnh của bạn quanh mỗi lời gọi tool.
-              {' '}Ví dụ <code>npx tsc --noEmit</code> sau mỗi lần agent sửa file: nó tự thấy
-              {' '}lỗi kiểu mình vừa gây ra, ngay trong lượt đó.
-              {soHook !== null && (
-                <> {' '}Đang có <strong>{soHook}</strong> hook.</>
-              )}
-            </p>
-            <button
-              type="button"
-              className="ct-btn ct-btn-ghost ct-mcp-nho"
-              onClick={() => {
-                void window.cuongthai?.agent.hookMoCauHinh()
-                  /* Đếm lại SAU khi mở: người dùng sửa file rồi quay lại app, và
-                     con số phải phản ánh bản họ vừa lưu chứ không phải bản cũ. */
-                  .then(() => window.cuongthai?.agent.hookDem())
-                  .then((n) => datSoHook(n ?? 0));
-              }}
-            >
-              <FileCode2 size={12} aria-hidden />
-              Mở file hook
-            </button>
-            <button
-              type="button"
-              className="ct-btn ct-btn-ghost ct-mcp-nho"
-              onClick={() => { void window.cuongthai?.agent.hookDem().then((n) => datSoHook(n ?? 0)); }}
-            >
-              Nạp lại hook
-            </button>
-          </div>
         </div>
       )}
     </div>

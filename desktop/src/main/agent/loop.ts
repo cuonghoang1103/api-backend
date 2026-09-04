@@ -908,7 +908,7 @@ export async function chayLuot(
          */
         const hookTruoc = boiCanh.goc
           ? await chayHook({ moc: 'truocTool', goc: boiCanh.goc, tenTool: goi.name, signal: dieuKhien.signal })
-          : { chan: false, ra: '' };
+          : { chan: false, ra: '', soKhop: 0 };
         if (hookTruoc.chan) {
           const loiHook = `BỊ CHẶN bởi hook của người dùng — tool này KHÔNG chạy.\n\n${hookTruoc.ra}`;
           c.hoiThoai.push({ role: 'tool', tool_call_id: goi.id, content: loiHook });
@@ -959,7 +959,7 @@ export async function chayLuot(
          */
         const hookSau = boiCanh.goc
           ? await chayHook({ moc: 'sauTool', goc: boiCanh.goc, tenTool: goi.name, signal: dieuKhien.signal })
-          : { chan: false, ra: '' };
+          : { chan: false, ra: '', soKhop: 0 };
         const noiDungCuoi = hookSau.ra === '' ? kq.noiDung : `${kq.noiDung}\n\n${hookSau.ra}`;
 
         c.hoiThoai.push({

@@ -19,6 +19,7 @@ import type {
   TerminalDauRa,
   AgentCuocDangMo,
   AgentMcpTrangThai,
+  AgentHookNhatKy,
   AgentMucKhoiPhuc,
   AgentPhien,
   AgentQuyetDinh,
@@ -260,6 +261,12 @@ const bridge: DesktopBridge = {
     mcpMoCauHinh: () => ipcRenderer.invoke('agent:mcpMoCauHinh') as Promise<void>,
     hookMoCauHinh: () => ipcRenderer.invoke('agent:hookMoCauHinh') as Promise<void>,
     hookDem: () => ipcRenderer.invoke('agent:hookDem') as Promise<number>,
+    hookNhatKy: () => ipcRenderer.invoke('agent:hookNhatKy') as Promise<AgentHookNhatKy[]>,
+    hookThu: (cuocId: string, moc: 'truocTool' | 'sauTool' | 'xongLuot', tenTool: string) =>
+      ipcRenderer.invoke('agent:hookThu', { cuocId, moc, tenTool }) as
+        Promise<{ chan: boolean; ra: string; goc: string | null; soKhop: number }>,
+    kyNangDs: (cuocId: string) =>
+      ipcRenderer.invoke('agent:kyNangDs', { cuocId }) as Promise<Array<{ ten: string; moTa: string }>>,
   },
 
   robot: {

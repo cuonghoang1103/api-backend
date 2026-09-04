@@ -607,6 +607,17 @@ export const agentLenhDuAnSchema = agentCuocSchema;
 
 export interface AgentLenhDuAn { ten: string; mo: string; than: string }
 
+export interface AgentHookNhatKy {
+  luc: number;
+  moc: 'truocTool' | 'sauTool' | 'xongLuot';
+  lenh: string;
+  tenTool: string | null;
+  ma: number | null;
+  giay: number;
+  chan: boolean;
+  dong1: string;
+}
+
 /**
  * ⚠️ `duongDan` ở đây là NGOẠI LỆ DUY NHẤT cho quy tắc "renderer không truyền
  * đường dẫn" — và nó an toàn vì main KHÔNG tin chuỗi này: `xoaWorktree` /
@@ -1037,6 +1048,19 @@ export const INVOKE_CHANNELS = {
   'agent:mcpMoCauHinh': null,
   'agent:hookMoCauHinh': null,
   'agent:hookDem': null,
+  'agent:hookNhatKy': null,
+  /**
+   * CHẠY THỬ hook mà không tốn một lượt agent nào.
+   *
+   * Trước khi có nó, cách duy nhất để biết hook đúng chưa là hỏi agent một câu
+   * thật — trả tiền cho một lượt model chỉ để kiểm một dòng JSON.
+   */
+  'agent:hookThu': z.object({
+    cuocId: cuocIdSchema,
+    moc: z.enum(['truocTool', 'sauTool', 'xongLuot']),
+    tenTool: z.string().max(64),
+  }),
+  'agent:kyNangDs': agentCuocSchema,
 } as const;
 
 export type InvokeChannel = keyof typeof INVOKE_CHANNELS;
@@ -1422,6 +1446,13 @@ export interface DesktopBridge {
     hookMoCauHinh(): Promise<void>;
     /** Số hook đang hiệu lực, sau khi nạp lại. Để giao diện nói được con số. */
     hookDem(): Promise<number>;
+    /** Những lần hook chạy gần đây — gồm cả lần ĐẠT mà không in gì. */
+    hookNhatKy(): Promise<AgentHookNhatKy[]>;
+    /** Chạy thử hook ở một mốc, với một tên tool giả. Không đụng hội thoại. */
+    hookThu(cuocId: string, moc: 'truocTool' | 'sauTool' | 'xongLuot', tenTool: string):
+      Promise<{ chan: boolean; ra: string; goc: string | null; soKhop: number }>;
+    /** Danh sách kỹ năng ĐÚNG NHƯ model sẽ nhận — tên + mô tả, không thân. */
+    kyNangDs(cuocId: string): Promise<Array<{ ten: string; moTa: string }>>;
   };
   /**
    * Cửa sổ robot NỔI — trợ lý đứng ngoài app, luôn thấy kể cả khi người dùng

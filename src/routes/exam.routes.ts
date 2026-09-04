@@ -19,7 +19,7 @@ import {
   gradeCode, gradeWrite, gradeSpeaking, extractCodeFromZip,
   transcribeExamAudio, generateSpeakingQuestions, type PeGradeResult,
 } from '../services/exam.grading.service.js';
-import { askExamTutor, askExamTutorStream, revealAnswer, type TutorMode, type TutorProvider } from '../services/examTutor.service.js';
+import { askExamTutor, askExamTutorStream, revealAnswer, getRelatedLesson, type TutorMode, type TutorProvider } from '../services/examTutor.service.js';
 import { isProEffective } from '../services/pro.service.js';
 
 const router = Router();
@@ -182,6 +182,16 @@ router.post('/attempts/:attemptId/ai/reveal', authenticate, async (req, res: Res
   try {
     await requireProForAi(req.userId);
     const data = await revealAnswer(Number(req.params.attemptId), Number(req.body?.questionId), req.userId!);
+    res.json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
+// "Bài này học ở bài nào?" — không gọi AI, tra thẳng ExamQuestion.sectionId
+// (câu chưa được phân loại chương → data:null, KHÔNG lỗi).
+router.post('/attempts/:attemptId/ai/related-lesson', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    await requireProForAi(req.userId);
+    const data = await getRelatedLesson(Number(req.params.attemptId), Number(req.body?.questionId), req.userId!);
     res.json({ success: true, data });
   } catch (e) { next(e); }
 });

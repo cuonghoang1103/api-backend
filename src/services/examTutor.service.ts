@@ -18,6 +18,7 @@ import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { llmComplete, checkTokenQuota, isAiAvailable, aiOffReason, circuitReopensInMs } from './interview/llm/index.js';
 import { isProEffective } from './pro.service.js';
+import { logger } from '../utils/logger.js';
 
 const MAX_QUESTION = 1500;
 const MAX_HISTORY = 12;
@@ -103,6 +104,44 @@ export async function revealAnswer(attemptId: number, questionId: number, userId
   };
 }
 
+/**
+ * "Bài này học ở bài nào trong Academy?" — KHÔNG gọi AI, tra thẳng
+ * ExamQuestion.sectionId (đã gán sẵn bằng scripts/exam-classify-chapters.mjs,
+ * xem prisma/schema.prisma). Trả về link THẬT tới bài học đầu tiên của
+ * chương đó — không để AI tự bịa URL/tên bài, một chữ sai là link chết.
+ * question.sectionId chưa được gán (script phân loại chưa chạy tới câu này)
+ * → trả null, panel tự ẩn link, không báo lỗi.
+ */
+export async function getRelatedLesson(attemptId: number, questionId: number, userId: number) {
+  await assertPro(userId);
+  const { question } = await loadAiAssistedContext(attemptId, questionId, userId);
+  if (!question.sectionId) return null;
+
+  const section = await prisma.courseSection.findUnique({
+    where: { id: question.sectionId },
+    select: {
+      title: true,
+      course: { select: { slug: true, title: true } },
+      lessons: {
+        where: { isPublished: true },
+        orderBy: { sortOrder: 'asc' },
+        take: 1,
+        select: { id: true, title: true },
+      },
+    },
+  });
+  const lesson = section?.lessons[0];
+  if (!section || !lesson) return null;
+
+  return {
+    sectionTitle: section.title,
+    courseTitle: section.course.title,
+    lessonId: lesson.id,
+    lessonTitle: lesson.title,
+    url: `/academy/courses/${section.course.slug}/learn?lessonId=${lesson.id}`,
+  };
+}
+
 const MODE_INSTRUCTION: Record<TutorMode, string> = {
   how_to_solve: 'Học viên hỏi "Câu này làm như nào?" — hướng dẫn CÁCH GIẢI từng bước, dẫn tới đáp án đúng nhưng đừng chỉ đọc chữ cái, giải thích LOGIC.',
   how_to_remember: 'Học viên hỏi "Câu này nhớ như nào?" — đưa mẹo/liên tưởng/quy tắc ngắn gọn giúp nhớ lâu, không lặp lại toàn bộ đề bài.',
@@ -146,6 +185,21 @@ async function buildTutorCall(opts: ExamTutorAskOpts): Promise<{ system: string;
   return { system: TUTOR_SYSTEM, messages };
 }
 
+class DeadlineError extends Error {}
+
+/** Trần THẬT theo đồng hồ, không phải trần rỗi (idle). `llmComplete`'s
+ * `timeoutMs` chỉ reset khi có chunk mới — Opus "thinking" (extended
+ * reasoning) gửi chunk `thinking_delta` liên tục nên trần rỗi không bao giờ
+ * kêu dù chưa có CHỮ nào (đo thật: có câu chỉ 27 thinking-token nên nhanh,
+ * nhưng không có gì đảm bảo mọi câu đều vậy) — cần một trần độc lập với
+ * việc có chunk hay không. */
+function withDeadline<T>(p: Promise<T>, ms: number): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const t = setTimeout(() => reject(new DeadlineError(`quá ${ms}ms`)), ms);
+    p.then((v) => { clearTimeout(t); resolve(v); }, (e) => { clearTimeout(t); reject(e); });
+  });
+}
+
 async function callTutor(system: string, messages: TutorMessage[], userId: number, provider: TutorProvider | undefined, onToken?: (delta: string) => void) {
   const call = (purpose: 'exam_tutor' | 'chat_max', timeoutMs: number, onTok?: (delta: string) => void) => llmComplete({
     step: 'generation',
@@ -154,27 +208,33 @@ async function callTutor(system: string, messages: TutorMessage[], userId: numbe
     system,
     messages,
     maxTokens: 3000,
-    maxRetries: 2,
+    maxRetries: 1, // 2 lượt là đủ — mỗi lượt thêm là thêm tối đa 180s chờ dồn.
     timeoutMs,
     userId,
     onToken: onTok,
   });
 
-  // Người dùng tự chọn tay — gọi thẳng, đợi đủ lâu (180s), không lùi.
+  // Người dùng tự chọn tay — gọi thẳng, đợi đủ lâu (180s/lượt), không lùi
+  // sang model khác (họ MUỐN đúng model này, không phải câu trả lời nhanh
+  // nhất). Lỗi thật giờ đã lên log (xem interview/llm/index.ts) để soát.
   if (provider === 'sol') return call('chat_max', 180_000, onToken);
   if (provider === 'opus') return call('exam_tutor', 180_000, onToken);
 
-  // Tự động: rambo (opus) trước, nhưng chỉ đợi 25s — quan sát thật cho thấy
-  // opus qua rambo trả mẩu chữ đầu trong ~4-5s khi khoẻ; 25s không thấy gì
-  // là có vấn đề, đừng bắt người dùng "đang soạn…" suốt 3 phút mới biết.
-  // Nếu ĐàCÓ mẩu chữ nào về rồi mới hỏng giữa chừng thì KHÔNG lùi — trộn
-  // output của 2 model khác nhau vào cùng một câu trả lời còn tệ hơn báo lỗi.
+  // Tự động: rambo (opus) trước, trần THẬT 40s bất kể có chunk hay không —
+  // quan sát thật opus/rambo trả chữ đầu trong ~5-7s khi khoẻ, 40s là rộng
+  // rãi cho cả một lượt "thinking" dài mà vẫn không bắt người dùng chờ 3
+  // phút. Nếu ĐÃ có chữ rồi mới hỏng giữa chừng thì KHÔNG lùi — trộn output
+  // của 2 model khác nhau vào cùng một câu trả lời còn tệ hơn báo lỗi.
   let gotDelta = false;
   const wrapped = onToken ? (d: string) => { gotDelta = true; onToken(d); } : undefined;
   try {
-    return await call('exam_tutor', 25_000, wrapped);
+    return await withDeadline(call('exam_tutor', 60_000, wrapped), 40_000);
   } catch (e) {
     if (gotDelta) throw e;
+    logger.warn('exam_tutor: rambo/opus lỗi hoặc quá 40s, lùi sang chat_max', {
+      error: e instanceof Error ? e.message : String(e),
+      isDeadline: e instanceof DeadlineError,
+    });
     return call('chat_max', 180_000, onToken);
   }
 }

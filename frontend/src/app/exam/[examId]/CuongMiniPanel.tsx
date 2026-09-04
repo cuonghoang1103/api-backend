@@ -7,7 +7,8 @@
 // (key={questionId} ở component cha).
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Sparkles, Loader2, Send, X, Eye, Bot } from 'lucide-react';
+import Link from 'next/link';
+import { Sparkles, Loader2, Send, X, Eye, Bot, BookOpen } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { examApi } from '@/lib/api';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
@@ -50,9 +51,20 @@ export default function CuongMiniPanel({ attemptId, questionId, questionLabel, i
   const [provider, setProvider] = useState<Provider | undefined>(undefined);
   const [reveal, setReveal] = useState<{ correctIndexes: number[]; explanation: string | null } | null>(null);
   const [revealArmed, setRevealArmed] = useState(false);
+  // undefined = chưa tải; null = câu này chưa được gán chương (ẩn thẻ).
+  const [relatedLesson, setRelatedLesson] = useState<{ sectionTitle: string; courseTitle: string; lessonTitle: string; url: string } | null | undefined>(undefined);
   const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, [turns, asking]);
+
+  // Tải link bài học liên quan đúng 1 lần khi panel mở lần đầu cho câu này —
+  // tra DB thẳng (ExamQuestion.sectionId), không gọi AI, không cần đợi.
+  useEffect(() => {
+    if (!open || relatedLesson !== undefined) return;
+    examApi.aiRelatedLesson(attemptId, questionId)
+      .then((r) => setRelatedLesson(r.data.data))
+      .catch(() => setRelatedLesson(null));
+  }, [open, relatedLesson, attemptId, questionId]);
 
   const patch = (i: number, upd: Partial<Turn>) => setTurns((t) => t.map((x, idx) => (idx === i ? { ...x, ...upd } : x)));
 
@@ -163,6 +175,20 @@ export default function CuongMiniPanel({ attemptId, questionId, questionLabel, i
                 </button>
               ))}
             </div>
+
+            {relatedLesson && (
+              <Link href={relatedLesson.url} target="_blank"
+                className="flex items-center gap-2 border-b px-4 py-2 text-xs hover:bg-[var(--bg-surface)]"
+                style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}>
+                <BookOpen className="h-3.5 w-3.5 shrink-0" style={{ color: '#8b5cf6' }} />
+                <span className="min-w-0 flex-1 truncate">
+                  {isVi ? 'Học phần liên quan: ' : 'Related lesson: '}
+                  <b style={{ color: 'var(--text-primary)' }}>{relatedLesson.sectionTitle}</b>
+                  {' · '}{relatedLesson.courseTitle}
+                </span>
+                <span className="shrink-0 font-semibold" style={{ color: '#8b5cf6' }}>{isVi ? 'Mở →' : 'Open →'}</span>
+              </Link>
+            )}
 
             <div className="flex-1 space-y-2 overflow-y-auto px-4 py-3">
               {turns.length === 0 && (

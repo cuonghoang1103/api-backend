@@ -714,6 +714,15 @@ export async function llmComplete(opts: {
     recordFailure(opts.feature);
     // Never charge quota for a failed call → log with zero tokens.
     await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, feature: opts.feature, step: opts.step, model, inputTokens: 0, outputTokens: 0, success: false }).catch(() => {});
+    // Trước dòng này KHÔNG có log nào ghi lại lỗi thật — caller nhận
+    // `lastErr` nhưng nhiều nơi (vd CuongMini) chỉ in ra một câu chung
+    // chung "chưa trả lời được", nên lỗi gốc (HTTP mấy, timeout hay
+    // "produced no text") biến mất hoàn toàn khỏi log. Ghi lại ở ĐÂY —
+    // một chỗ duy nhất, áp dụng cho mọi purpose.
+    logger.error('llm: hết lượt thử, trả lỗi cho caller', {
+      purpose, feature: opts.feature ?? null, model, attempts: maxRetries + 1,
+      error: lastErr instanceof Error ? lastErr.message : String(lastErr),
+    });
     throw lastErr;
   } finally {
     xin.tra();

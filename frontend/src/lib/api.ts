@@ -1574,6 +1574,8 @@ export const examApi = {
   // CuongMini — "Hiện đáp án" (không gọi AI) + hỏi AI (không stream, đường lùi).
   aiReveal: (attemptId: number, questionId: number) =>
     api.post<{ data: { correctIndexes: number[]; explanation: string | null } }>(`/exams/attempts/${attemptId}/ai/reveal`, { questionId }),
+  aiRelatedLesson: (attemptId: number, questionId: number) =>
+    api.post<{ data: { sectionTitle: string; courseTitle: string; lessonId: number; lessonTitle: string; url: string } | null }>(`/exams/attempts/${attemptId}/ai/related-lesson`, { questionId }),
   aiAsk: (attemptId: number, body: { questionId: number; mode: string; question?: string; history?: { role: string; content: string }[]; provider?: 'opus' | 'sol' }) =>
     api.post<{ data: { answer: string } }>(`/exams/attempts/${attemptId}/ai/ask`, body, { timeout: 180000 }),
   myAttempts: (examId?: number) =>

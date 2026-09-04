@@ -44,6 +44,7 @@ export default {
         {
           kind: 'WRITE',
           points: 10,
+          imageUrl: 'https://media.cuongthai.com/images/exam-questions/ENW492c/W1/q1.png',
           prompt:
             '<div class="ml-en"><p><b>Time: 60 minutes.</b></p><p>Compose an argumentative essay of 350–400 words answering the following question:</p><p>"<b>Prisons: Rehabilitation or Punishment?</b>"</p><p>In your essay, weigh both sides of the argument and clearly present your own position.</p></div>' +
             '<div class="ml-vi"><p><b>Thời gian: 60 phút.</b></p><p>Viết một bài luận thuyết phục 350–400 từ trả lời câu hỏi sau:</p><p>"<b>Nhà tù: Cải tạo hay Trừng phạt?</b>"</p><p>Trong bài luận, hãy cân nhắc cả hai phía của lập luận và nêu rõ lập trường của riêng bạn.</p></div>',

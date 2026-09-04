@@ -1587,7 +1587,11 @@ export const examApi = {
     api.post<{ data: { attemptId: number; startedAt: string; expiresAt: string | null; resumed: boolean; aiAssisted: boolean } }>(`/exams/${examId}/attempts`, opts),
   // CuongMini — "Hiện đáp án" (không gọi AI) + hỏi AI (không stream, đường lùi).
   aiReveal: (attemptId: number, questionId: number) =>
-    api.post<{ data: { correctIndexes: number[]; explanation: string | null } }>(`/exams/attempts/${attemptId}/ai/reveal`, { questionId }),
+    api.post<{ data: {
+      kind: string; correctIndexes: number[]; explanation: string | null;
+      sampleSolution: string | null; expectedOutput: string | null;
+      rubric: { criterion?: string; maxScore?: number }[] | null;
+    } }>(`/exams/attempts/${attemptId}/ai/reveal`, { questionId }),
   aiRelatedLesson: (attemptId: number, questionId: number) =>
     api.post<{ data: { sectionTitle: string; courseTitle: string; lessonId: number; lessonTitle: string; url: string } | null }>(`/exams/attempts/${attemptId}/ai/related-lesson`, { questionId }),
   // Bình luận theo câu hỏi — mở cho mọi tài khoản.

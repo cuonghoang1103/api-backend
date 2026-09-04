@@ -218,7 +218,11 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
           <div className="exam-card p-6 sm:p-8">
             <div className="flex items-center gap-2 mb-3">
               <span className={`exam-badge ${exam.kind === 'FE' ? 'exam-badge-fe' : 'exam-badge-pe'}`}>
-                {exam.kind === 'FE' ? (isVi ? 'Trắc nghiệm (FE)' : 'Multiple Choice (FE)') : `PE · ${exam.peType}`}
+                {exam.kind === 'FE'
+                  ? exam.questions.every((qq) => qq.kind === 'CODE')
+                    ? (isVi ? 'Lập trình (FE)' : 'Coding (FE)')
+                    : (isVi ? 'Trắc nghiệm (FE)' : 'Multiple Choice (FE)')
+                  : `PE · ${exam.peType}`}
               </span>
               {exam.source === 'REAL' && <span className="exam-badge exam-badge-real">{isVi ? 'Đề thật' : 'Real paper'}</span>}
               {exam.code && <span className="exam-badge" style={{ background: 'var(--bg-surface)', color: 'var(--text-secondary)' }}>{exam.code}</span>}
@@ -248,11 +252,15 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
 
             <div className="exam-explain text-sm mb-6">
               {exam.kind === 'FE'
-                ? exam.questions.some((qq) => qq.kind === 'CODE')
+                ? exam.questions.every((qq) => qq.kind === 'CODE')
                   ? (isVi
-                    ? 'Đề gồm câu trắc nghiệm và câu lập trình. Câu trắc nghiệm chấm tự động, câu lập trình bạn gõ code ngay trong phòng thi và AI chấm theo tiêu chí. Đồng hồ chạy ngay khi bắt đầu và tự nộp khi hết giờ.'
-                    : 'This paper mixes multiple-choice with coding questions. MCQs are auto-graded; for the coding ones you type your code right here and AI grades it against a rubric. The timer starts immediately and auto-submits when it ends.')
-                  : (isVi ? 'Chọn đáp án cho từng câu. Có câu chọn nhiều đáp án. Đồng hồ chạy ngay khi bắt đầu và tự nộp khi hết giờ.' : 'Answer each question. Some allow multiple answers. The timer starts immediately and auto-submits when it ends.')
+                    ? 'Đề gồm toàn câu lập trình. Bạn gõ code ngay trong phòng thi cho từng câu, AI chấm theo tiêu chí. Đồng hồ chạy ngay khi bắt đầu và tự nộp khi hết giờ — hoặc bấm "Bắt đầu thi với CuongMini" để luyện không tính giờ, có AI gợi ý.'
+                    : 'This paper is all coding questions. Type your code right here for each one; AI grades it against a rubric. The timer starts immediately and auto-submits when it ends — or use "Start Exam with CuongMini" for an untimed practice room with AI hints.')
+                  : exam.questions.some((qq) => qq.kind === 'CODE')
+                    ? (isVi
+                      ? 'Đề gồm câu trắc nghiệm và câu lập trình. Câu trắc nghiệm chấm tự động, câu lập trình bạn gõ code ngay trong phòng thi và AI chấm theo tiêu chí. Đồng hồ chạy ngay khi bắt đầu và tự nộp khi hết giờ.'
+                      : 'This paper mixes multiple-choice with coding questions. MCQs are auto-graded; for the coding ones you type your code right here and AI grades it against a rubric. The timer starts immediately and auto-submits when it ends.')
+                    : (isVi ? 'Chọn đáp án cho từng câu. Có câu chọn nhiều đáp án. Đồng hồ chạy ngay khi bắt đầu và tự nộp khi hết giờ.' : 'Answer each question. Some allow multiple answers. The timer starts immediately and auto-submits when it ends.')
                 : exam.peType === 'CODE'
                   ? (isVi ? 'Đọc đề, viết code ở IDE/VS Code của bạn, nén tất cả file thành .zip rồi nộp để AI chấm.' : 'Read the problems, code in your own IDE/VS Code, then upload all files as one .zip for AI grading.')
                   : exam.peType === 'WRITE'
@@ -274,21 +282,17 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
               {exam.my?.inProgressId ? (isVi ? 'Tiếp tục bài thi' : 'Resume attempt') : (isVi ? 'Bắt đầu thi' : 'Start exam')}
             </button>
 
-            {exam.kind === 'FE' && (
-              <button onClick={() => start(true)}
-                className="mt-3 w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-white transition-transform active:scale-[.99]"
-                style={{ background: 'linear-gradient(135deg,#8b5cf6,#6366f1)' }}>
-                <BotIcon className="w-4 h-4" />
-                {exam.my?.aiInProgressId
-                  ? (isVi ? 'Tiếp tục ôn tập với CuongMini' : 'Continue with CuongMini')
-                  : (isVi ? 'Bắt đầu thi với CuongMini' : 'Start Exam with CuongMini')}
-              </button>
-            )}
-            {exam.kind === 'FE' && (
-              <p className="mt-2 text-center text-[11px]" style={{ color: 'var(--text-muted)' }}>
-                {isVi ? 'Phòng ôn tập cùng CuongMini — không tính giờ, làm từng câu, hỏi AI và bình luận thoải mái.' : 'Study room with CuongMini — untimed, question by question, ask AI and discuss freely.'}
-              </p>
-            )}
+            <button onClick={() => start(true)}
+              className="mt-3 w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-white transition-transform active:scale-[.99]"
+              style={{ background: 'linear-gradient(135deg,#8b5cf6,#6366f1)' }}>
+              <BotIcon className="w-4 h-4" />
+              {exam.my?.aiInProgressId
+                ? (isVi ? 'Tiếp tục ôn tập với CuongMini' : 'Continue with CuongMini')
+                : (isVi ? 'Bắt đầu thi với CuongMini' : 'Start Exam with CuongMini')}
+            </button>
+            <p className="mt-2 text-center text-[11px]" style={{ color: 'var(--text-muted)' }}>
+              {isVi ? 'Phòng ôn tập cùng CuongMini — không tính giờ, làm từng câu, hỏi AI và bình luận thoải mái.' : 'Study room with CuongMini — untimed, question by question, ask AI and discuss freely.'}
+            </p>
           </div>
         </div>
       </div>
@@ -581,6 +585,7 @@ function InlineCodeQuestion({ q, idx, total, L, isVi, value, onChange, flagged, 
         </button>
       </div>
       <div className="mb-4 text-[15px] leading-relaxed"><Prompt html={q.prompt} L={L} /></div>
+      {q.imageUrl && <QuestionImageToggle url={q.imageUrl} isVi={isVi} resetKey={q.id} />}
       {q.expectedOutput && (
         <div className="mb-4">
           <div className="text-xs text-text-muted mb-1">{isVi ? 'Kết quả mong đợi' : 'Expected output'}</div>

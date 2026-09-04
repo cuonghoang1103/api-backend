@@ -99,12 +99,20 @@ async function loadAiAssistedContext(attemptId: number, questionId: number, user
 }
 
 /** "Hiện đáp án" — KHÔNG gọi AI, tra thẳng dữ liệu đã có. Mở cho mọi tài
- * khoản (CuongMini không còn Pro-only, chỉ chat/hỏi AI mới cần Pro). */
+ * khoản (CuongMini không còn Pro-only, chỉ chat/hỏi AI mới cần Pro).
+ * MCQ (FE) → correctIndexes/explanation. CODE/WRITE/SPEAK (PE, hoặc câu
+ * lập trình chèn trong đề FE) → lời giải mẫu/tiêu chí chấm, KHÔNG có
+ * correctIndexes (rỗng thay vì undefined để FE không phải null-check thêm
+ * kiểu dữ liệu). */
 export async function revealAnswer(attemptId: number, questionId: number, userId: number) {
   const { question } = await loadAiAssistedContext(attemptId, questionId, userId);
   return {
+    kind: question.kind,
     correctIndexes: question.correctIndexes,
     explanation: question.explanation,
+    sampleSolution: question.sampleSolution,
+    expectedOutput: question.expectedOutput,
+    rubric: question.rubric as Array<{ criterion?: string; maxScore?: number }> | null,
   };
 }
 
@@ -174,7 +182,28 @@ const MODE_INSTRUCTION: Record<TutorMode, string> = {
   free_qa: 'Học viên hỏi tự do về câu này — trả lời đúng trọng tâm câu hỏi của họ.',
 };
 
-function buildQuestionBlock(q: { sortOrder: number; prompt: string; options: unknown; correctIndexes: number[]; explanation: string | null }): string {
+type TutorQuestion = {
+  sortOrder: number; kind: string; prompt: string; options: unknown; correctIndexes: number[]; explanation: string | null;
+  language: string | null; starterCode: string | null; sampleSolution: string | null; expectedOutput: string | null; rubric: unknown;
+};
+
+function buildQuestionBlock(q: TutorQuestion): string {
+  if (q.kind !== 'MCQ') {
+    // CODE/WRITE/SPEAK — không có correctIndexes, ngữ cảnh dựa trên lời giải
+    // mẫu + tiêu chí chấm (author đã viết sẵn, đáng tin như MCQ dùng
+    // correctIndexes).
+    const rubricList = Array.isArray(q.rubric)
+      ? (q.rubric as Array<{ criterion?: string; maxScore?: number }>)
+        .map((r) => `  - ${plain(r?.criterion, 200)} (${r?.maxScore ?? '?'} điểm)`).join('\n')
+      : '';
+    const parts = [`CÂU ĐANG THI (câu ${q.sortOrder + 1}, dạng ${q.kind}${q.language ? `, ngôn ngữ ${q.language}` : ''}):`, plain(q.prompt, 3000)];
+    if (q.starterCode) parts.push(`Starter code:\n${plain(q.starterCode, 1500)}`);
+    if (q.expectedOutput) parts.push(`Output mong đợi:\n${plain(q.expectedOutput, 800)}`);
+    if (rubricList) parts.push(`Tiêu chí chấm:\n${rubricList}`);
+    if (q.sampleSolution) parts.push(`Lời giải mẫu (đã có sẵn, dùng để hướng dẫn/gợi ý — chỉ đưa nguyên văn khi học viên xin xem đáp án, còn lại thì giảng giải chứ đừng chỉ dán code):\n${plain(q.sampleSolution, 2500)}`);
+    if (q.explanation) parts.push(`Giải thích thêm: ${plain(q.explanation, 1000)}`);
+    return parts.join('\n\n');
+  }
   const opts = Array.isArray(q.options)
     ? (q.options as Array<{ text?: string }>).map((o, i) => `  ${String.fromCharCode(65 + i)}. ${plain(o?.text, 400)}`).join('\n')
     : '';
@@ -186,7 +215,9 @@ function buildQuestionBlock(q: { sortOrder: number; prompt: string; options: unk
 const TUTOR_SYSTEM = `You are CuongMini, an AI study companion embedded in an FPT University Exam
 Room's untimed STUDY/PRACTICE room ("Start Exam with CuongMini") — there is no clock, no score
 pressure, this is purely for learning. The student asked about ONE specific question — you already
-know its full text, options, correct answer and explanation (given below). Teach thoroughly so they
+know its full text and, depending on the question type, either its options/correct answer/explanation
+(multiple-choice) or its starter code/sample solution/grading rubric (coding/writing question), given
+below. Teach thoroughly so they
 UNDERSTAND and remember — do not artificially shorten your answer; give the full explanation,
 worked steps, and any useful context or examples that help mastery. Answer entirely in Vietnamese
 (keep technical terms/code in English). Formatting: short paragraphs, **bold** key terms, fenced

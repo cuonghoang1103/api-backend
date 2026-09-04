@@ -59,7 +59,11 @@ export default function CuongMiniPanel({ examId, attemptId, questionId, question
   const [asking, setAsking] = useState(false);
   // undefined = tự động (rambo/Opus trước, lùi sang Sol nếu rambo lỗi/chậm).
   const [provider, setProvider] = useState<Provider | undefined>(undefined);
-  const [reveal, setReveal] = useState<{ correctIndexes: number[]; explanation: string | null } | null>(null);
+  const [reveal, setReveal] = useState<{
+    kind: string; correctIndexes: number[]; explanation: string | null;
+    sampleSolution: string | null; expectedOutput: string | null;
+    rubric: { criterion?: string; maxScore?: number }[] | null;
+  } | null>(null);
   const [revealArmed, setRevealArmed] = useState(false);
   // undefined = chưa tải; null = câu này chưa được gán chương (ẩn thẻ).
   const [relatedLesson, setRelatedLesson] = useState<{ sectionTitle: string; courseTitle: string; lessonTitle: string; url: string } | null | undefined>(undefined);
@@ -228,10 +232,34 @@ export default function CuongMiniPanel({ examId, attemptId, questionId, question
               ))}
               <div ref={endRef} />
 
-              {reveal && (
+              {reveal && reveal.kind === 'MCQ' && (
                 <div className="rounded-lg border px-3 py-2 text-sm" style={{ borderColor: '#f59e0b', background: 'rgba(245,158,11,.08)' }}>
                   <div className="mb-1 font-bold">{isVi ? 'Đáp án đúng' : 'Correct answer'}: {reveal.correctIndexes.map((i) => String.fromCharCode(65 + i)).join(', ')}</div>
                   {reveal.explanation && <ExamRichContent html={reveal.explanation} L={isVi ? 'vi' : 'en'} />}
+                </div>
+              )}
+              {reveal && reveal.kind !== 'MCQ' && (
+                <div className="rounded-lg border px-3 py-2 text-sm space-y-2" style={{ borderColor: '#f59e0b', background: 'rgba(245,158,11,.08)' }}>
+                  {reveal.rubric && reveal.rubric.length > 0 && (
+                    <div>
+                      <div className="mb-1 font-bold">{isVi ? 'Tiêu chí chấm' : 'Grading rubric'}</div>
+                      <ul className="list-disc space-y-0.5 pl-4">
+                        {reveal.rubric.map((r, i) => (
+                          <li key={i}>{pickLang(r.criterion || '', isVi ? 'vi' : 'en')}{r.maxScore != null ? ` — ${r.maxScore}đ` : ''}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {reveal.sampleSolution && (
+                    <div>
+                      <div className="mb-1 font-bold">{isVi ? 'Lời giải mẫu' : 'Sample solution'}</div>
+                      <ChatMarkdown content={'```\n' + reveal.sampleSolution + '\n```'} />
+                    </div>
+                  )}
+                  {reveal.explanation && <ExamRichContent html={reveal.explanation} L={isVi ? 'vi' : 'en'} />}
+                  {!reveal.sampleSolution && !reveal.explanation && (!reveal.rubric || !reveal.rubric.length) && (
+                    <p style={{ color: 'var(--text-secondary)' }}>{isVi ? 'Câu này chưa có đáp án mẫu — hỏi CuongMini để được gợi ý.' : 'No sample answer for this one yet — ask CuongMini for hints.'}</p>
+                  )}
                 </div>
               )}
             </div>

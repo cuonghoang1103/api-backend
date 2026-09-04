@@ -484,7 +484,11 @@ function QuestionImageToggle({ url, isVi, resetKey, className = 'mb-5' }: {
         {show ? <EyeOffIcon className="w-3.5 h-3.5" /> : <EyeIcon className="w-3.5 h-3.5" />}
         {show ? (isVi ? 'Ẩn ảnh đề gốc' : 'Hide original image') : (isVi ? 'Xem ảnh đề gốc' : 'Show original image')}
       </button>
-      {show && <img src={url} alt="" className="max-w-full rounded-lg border border-[var(--border-color)] mt-2.5" />}
+      {/* Luôn nằm trong DOM, chỉ đổi `hidden` — không gắn/gỡ node. Bấm nút này
+          từng gãy "Failed to execute 'insertBefore'…" khi có gì đó (tiện ích
+          trình duyệt, dịch trang) đụng vào DOM cạnh khối prompt render bằng
+          dangerouslySetInnerHTML ngay trước lúc React gắn node ảnh mới vào. */}
+      <img src={url} alt="" hidden={!show} className="max-w-full rounded-lg border border-[var(--border-color)] mt-2.5" />
     </div>
   );
 }

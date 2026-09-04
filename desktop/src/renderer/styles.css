@@ -8725,3 +8725,156 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 }
 
 .ct-bang-lenh-o:focus { outline: none; border-color: var(--ct-accent); }
+
+/* ── MÀN ĐĂNG NHẬP (24/08/2026) ─────────────────────────────
+   Người dùng: "sao phần giao diện đăng nhập của app desktop nó xấu thế".
+
+   Bản cũ dùng lại `.ct-boot` + `.ct-card` chung — một thẻ xám trống giữa nền
+   đen. Đây là thứ ĐẦU TIÊN người ta thấy khi mở app, và nó đặt kỳ vọng cho
+   toàn bộ phần còn lại. Ấn tượng đầu là một tính năng, không phải trang trí.
+
+   ⚠️ Mọi màu lấy từ biến của app ⇒ đúng ở CẢ chủ đề sáng lẫn tối. KHÔNG đặt
+   cứng nền tối như trang web — app có cả hai chủ đề, và nền tối cố định gặp
+   chữ theo chủ đề là đúng lỗi 02/07/2026. */
+.ct-dangnhap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: 32px;
+  overflow: hidden;
+}
+
+/* Vệt sáng mờ phía sau thẻ. `pointer-events: none` để nó không nuốt cú bấm
+   vào ô nhập nằm trên nó. */
+.ct-dangnhap-nen {
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  width: min(760px, 120%);
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+  pointer-events: none;
+  background:
+    radial-gradient(closest-side, color-mix(in srgb, var(--ct-accent) 22%, transparent), transparent 70%);
+  filter: blur(8px);
+}
+
+.ct-dangnhap-the {
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  padding: 28px 26px 22px;
+  background: var(--ct-surface);
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-lg);
+  box-shadow: var(--ct-shadow);
+}
+
+.ct-dangnhap-hieu { margin-bottom: 18px; text-align: center; }
+
+/* Icon app THẬT (con panda), không phải một icon vector chung chung: người
+   dùng nhận ra app bằng hình này trên Dock và trên iPhone. */
+.ct-dangnhap-icon {
+  width: 76px;
+  height: 76px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.18);
+}
+
+/* Chữ tô chuyển sắc như bản iOS. `background-clip: text` cần `color:
+   transparent` mới thấy — thiếu nó thì chữ đè lên chính cái nền vừa tô. */
+.ct-dangnhap-hieu h1 {
+  margin: 0 0 2px;
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(90deg, #8b5cf6, #d946ef, #ec4899);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ct-dangnhap-hieu p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ct-text-muted);
+}
+
+/* Hai tab Đăng nhập / Đăng ký, khuôn như iOS. */
+.ct-dangnhap-tab {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 16px;
+  background: var(--ct-bg);
+  border: 1px solid var(--ct-border);
+  border-radius: 999px;
+}
+
+.ct-dangnhap-tab button {
+  padding: 8px 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ct-text-muted);
+  background: none;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.ct-dangnhap-tab button[data-chon="1"] {
+  color: #fff;
+  background: linear-gradient(90deg, #8b5cf6, #d946ef);
+}
+
+.ct-dangnhap-tab button:not([data-chon]):hover { color: var(--ct-text); }
+
+/* Ô nhập bo tròn, cao thoáng — bản cũ dùng ô vuông mặc định của app. */
+.ct-dangnhap-the .ct-input-group input {
+  padding: 11px 13px;
+  border-radius: 12px;
+}
+
+/* Nút Đăng nhập tô chuyển sắc, chiếm trọn bề ngang. */
+.ct-dangnhap-the button[type="submit"] {
+  width: 100%;
+  justify-content: center;
+  margin-top: 10px;
+  padding: 11px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(90deg, #8b5cf6, #d946ef, #ec4899);
+  border: 0;
+  border-radius: 12px;
+}
+
+/* ⚠️ Nút mờ khi bị khoá PHẢI nói ra bằng con trỏ nữa: nền chuyển sắc vẫn rực
+   khi `disabled`, nên chỉ nhìn màu thì tưởng bấm được. */
+.ct-dangnhap-the button[type="submit"]:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.ct-dangnhap-lien {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 14px;
+  padding-top: 13px;
+  border-top: 1px solid var(--ct-border);
+}
+
+.ct-dangnhap-lien button {
+  font-size: 12.5px;
+  color: var(--ct-text-muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.ct-dangnhap-lien button:hover { color: #d946ef; text-decoration: underline; }

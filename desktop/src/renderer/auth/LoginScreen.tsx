@@ -47,18 +47,50 @@ export function LoginScreen({ online }: { online: boolean }) {
   };
 
   return (
-    <div className="ct-boot">
-      <section className="ct-card" style={{ maxWidth: 400 }}>
-        <h1>Đăng nhập CuongThai</h1>
-        <p>Dùng tài khoản của bạn trên cuongthai.com.</p>
+    /* Dựng theo ĐÚNG màn đăng nhập của app iOS (ảnh người dùng gửi 24/08/2026):
+       icon panda trong thẻ bo tròn · chữ "CuongThai" tô chuyển sắc · "Chào mừng
+       trở lại" · ô nhập bo tròn có icon · nút chuyển sắc · liên kết điều khoản.
+
+       Bản cũ dùng lại `.ct-boot` + `.ct-card` chung — một thẻ xám trống giữa
+       nền đen. Đây là thứ ĐẦU TIÊN người dùng thấy khi mở app, nó đặt kỳ vọng
+       cho toàn bộ phần còn lại.
+
+       ⚠️ Icon lấy từ `public/icon.png` — CHÍNH tệp `build/icon.png` dùng làm
+       icon app, chép sang để Vite gói vào bundle. Một bản sao khác là hai thứ
+       sẽ lệch nhau vào ngày ai đó đổi icon app. */
+    <div className="ct-dangnhap">
+      <div className="ct-dangnhap-nen" aria-hidden />
+
+      <section className="ct-dangnhap-the">
+        <div className="ct-dangnhap-hieu">
+          {/* `alt=""` + `aria-hidden`: tên app nằm ngay dưới dạng chữ, đọc lại
+              lần nữa qua ảnh là thừa với trình đọc màn hình. */}
+          <img className="ct-dangnhap-icon" src="/icon.png" alt="" aria-hidden />
+          <h1>CuongThai</h1>
+          <p>Chào mừng trở lại</p>
+        </div>
+
+        {/* Hai tab như iOS. "Đăng ký" mở trên web: luồng đó cần email + captcha,
+            làm lại trong app chỉ để trùng lặp một thứ đã chạy tốt. */}
+        <div className="ct-dangnhap-tab" role="tablist">
+          <button type="button" role="tab" aria-selected="true" data-chon="1">
+            Đăng nhập
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected="false"
+            onClick={() => openWeb('/register')}
+            title="Mở trang đăng ký trên cuongthai.com"
+          >
+            Đăng ký
+          </button>
+        </div>
 
         {!online && (
-          <div className="ct-notice" data-tone="warn">
+          <div className="ct-notice" data-tone="warn" style={{ marginBottom: 12 }}>
             <WifiOff size={15} aria-hidden />
-            <span>
-              Đang ngoại tuyến. Đăng nhập cần kết nối mạng — máy chủ phải xác
-              thực tài khoản.
-            </span>
+            <span>Đang ngoại tuyến. Đăng nhập cần mạng — máy chủ phải xác thực tài khoản.</span>
           </div>
         )}
 
@@ -122,7 +154,7 @@ export function LoginScreen({ online }: { online: boolean }) {
           </button>
         </form>
 
-        <div className="ct-login-links">
+        <div className="ct-dangnhap-lien">
           {/* Quên mật khẩu và đăng ký mở trên web: cả hai luồng cần email và
               captcha, làm lại trong app chỉ để trùng lặp một thứ đã chạy tốt. */}
           <button type="button" onClick={() => openWeb('/forgot-password')}>

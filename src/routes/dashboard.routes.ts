@@ -10,6 +10,8 @@ import {
   scopeDate,
   completedExpiryCutoff,
   COMPLETED_TASK_RETENTION_DAYS,
+  TASK_SCOPES,
+  type TaskScope,
 } from '../utils/dashboard.js';
 
 const router = Router();
@@ -102,17 +104,7 @@ router.get('/', async (req: Request, res: Response<ApiResponse>, next) => {
               tasksTotal: todayCeleb.tasksTotal,
             }
           : null,
-        tasks: tasks.map((t) => ({
-          id: t.id,
-          scope: t.scope,
-          date: t.date,
-          title: t.title,
-          done: t.done,
-          exp: t.exp,
-          activityType: t.activityType as ActivityType | null,
-          createdAt: t.createdAt.toISOString(),
-          completedAt: t.completedAt?.toISOString() ?? null,
-        })),
+        tasks: tasks.map(serializeTask),
       },
     });
   } catch (error) { next(error); }
@@ -223,11 +215,15 @@ router.post('/tasks', async (req: Request, res: Response<ApiResponse>, next) => 
       title?: string;
       exp?: number;
       activityType?: ActivityType | null;
+      note?: string | null;
+      dueAt?: string | null;
+      remindAt?: string | null;
+      priority?: number;
     };
 
     const scope = String(body.scope ?? 'today');
-    if (!['today', 'week', 'month'].includes(scope)) {
-      throw new AppError('scope phai la today|week|month', 400);
+    if (!(TASK_SCOPES as readonly string[]).includes(scope)) {
+      throw new AppError(`scope phai la ${TASK_SCOPES.join('|')}`, 400);
     }
     const title = String(body.title ?? '').trim();
     if (title.length === 0) throw new AppError('title khong duoc rong', 400);
@@ -235,7 +231,7 @@ router.post('/tasks', async (req: Request, res: Response<ApiResponse>, next) => 
 
     // Normalize date so the client can pass anything vaguely
     // ISO-shaped and we always store a clean YYYY-MM-DD.
-    const date = body.date ? normalizeDate(body.date) : scopeDate(scope as 'today' | 'week' | 'month');
+    const date = body.date ? normalizeDate(body.date) : scopeDate(scope as TaskScope);
 
     const exp = typeof body.exp === 'number' && body.exp > 0 && body.exp <= 1000
       ? Math.floor(body.exp)
@@ -249,23 +245,14 @@ router.post('/tasks', async (req: Request, res: Response<ApiResponse>, next) => 
         title,
         exp,
         activityType: body.activityType ?? null,
+        note: docGhiChu(body.note) ?? null,
+        dueAt: docMoc(body.dueAt, 'dueAt') ?? null,
+        remindAt: docMoc(body.remindAt, 'remindAt') ?? null,
+        priority: docUuTien(body.priority) ?? 0,
       },
     });
 
-    res.status(201).json({
-      success: true,
-      data: {
-        id: task.id,
-        scope: task.scope,
-        date: task.date,
-        title: task.title,
-        done: task.done,
-        exp: task.exp,
-        activityType: task.activityType as ActivityType | null,
-        createdAt: task.createdAt.toISOString(),
-        completedAt: task.completedAt?.toISOString() ?? null,
-      },
-    });
+    res.status(201).json({ success: true, data: serializeTask(task) });
   } catch (error) { next(error); }
 });
 
@@ -286,10 +273,10 @@ router.post('/tasks/bulk', async (req: Request, res: Response<ApiResponse>, next
     };
 
     const scope = String(body.scope ?? 'today');
-    if (!['today', 'week', 'month'].includes(scope)) {
-      throw new AppError('scope phai la today|week|month', 400);
+    if (!(TASK_SCOPES as readonly string[]).includes(scope)) {
+      throw new AppError(`scope phai la ${TASK_SCOPES.join('|')}`, 400);
     }
-    const date = body.date ? normalizeDate(body.date) : scopeDate(scope as 'today' | 'week' | 'month');
+    const date = body.date ? normalizeDate(body.date) : scopeDate(scope as TaskScope);
 
     const titles = Array.isArray(body.titles)
       ? body.titles.map((t) => String(t).trim()).filter((t) => t.length > 0).slice(0, 50)
@@ -367,6 +354,12 @@ router.patch('/tasks/:id', async (req: Request, res: Response<ApiResponse>, next
       activityType?: ActivityType | null;
       scope?: string;
       date?: string;
+      note?: string | null;
+      dueAt?: string | null;
+      remindAt?: string | null;
+      priority?: number;
+      /** Đánh dấu ĐÃ NHẮC — app gọi sau khi hiện thông báo. */
+      remindedNow?: boolean;
     };
 
     const data: Record<string, unknown> = {};
@@ -391,14 +384,28 @@ router.patch('/tasks/:id', async (req: Request, res: Response<ApiResponse>, next
       data.activityType = body.activityType ?? null;
     }
     if (body.scope !== undefined) {
-      if (!['today', 'week', 'month'].includes(body.scope)) {
-        throw new AppError('scope phai la today|week|month', 400);
+      if (!(TASK_SCOPES as readonly string[]).includes(body.scope)) {
+        throw new AppError(`scope phai la ${TASK_SCOPES.join('|')}`, 400);
       }
       data.scope = body.scope;
     }
     if (body.date !== undefined) {
       data.date = normalizeDate(body.date);
     }
+    const ghiChu = docGhiChu(body.note);
+    if (ghiChu !== undefined) data.note = ghiChu;
+    const han = docMoc(body.dueAt, 'dueAt');
+    if (han !== undefined) data.dueAt = han;
+    const nhac = docMoc(body.remindAt, 'remindAt');
+    if (nhac !== undefined) {
+      data.remindAt = nhac;
+      /* Đổi giờ nhắc ⇒ XOÁ dấu đã-nhắc. Không xoá thì dời lịch nhắc sang mai
+         xong nó không bao giờ kêu nữa, vì hệ thống vẫn nhớ là "đã nhắc rồi". */
+      data.remindedAt = null;
+    }
+    const uuTien = docUuTien(body.priority);
+    if (uuTien !== undefined) data.priority = uuTien;
+    if (body.remindedNow === true) data.remindedAt = new Date();
 
     if (Object.keys(data).length === 0) {
       throw new AppError('Khong co truong hop le de cap nhat', 400);
@@ -419,6 +426,33 @@ router.patch('/tasks/:id', async (req: Request, res: Response<ApiResponse>, next
     if (!task) throw new AppError('Task khong ton tai', 404);
 
     res.json({ success: true, data: serializeTask(task) });
+  } catch (error) { next(error); }
+});
+
+// ─── GET /api/v1/dashboard/reminders ─────────────────────────────
+// Việc TỚI GIỜ NHẮC mà chưa nhắc. Endpoint RIÊNG, cố ý nhẹ:
+// app hỏi nó mỗi phút ở nền, nên nó không được kéo theo timeline,
+// EXP, celebration như `GET /`. Chỉ trả đúng thứ cần để hiện một
+// thông báo, và dựa lên `idx_dashboard_tasks_remind`.
+router.get('/reminders', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = req.userId!;
+    const bayGio = new Date();
+    const viec = await prisma.dashboardTask.findMany({
+      where: {
+        userId,
+        done: false,
+        archivedAt: null,
+        remindedAt: null,
+        remindAt: { not: null, lte: bayGio },
+      },
+      // Trần 20: nếu người dùng đi vắng ba ngày thì có thể có hàng chục việc
+      // quá hạn nhắc cùng lúc. Bắn 40 thông báo liên tiếp là cách chắc chắn
+      // nhất để họ tắt hẳn tính năng này.
+      take: 20,
+      orderBy: { remindAt: 'asc' },
+    });
+    res.json({ success: true, data: { tasks: viec.map(serializeTask) } });
   } catch (error) { next(error); }
 });
 
@@ -749,7 +783,7 @@ router.post('/import', async (req: Request, res: Response<ApiResponse>, next) =>
 
       if (Array.isArray(body.tasks)) {
         for (const t of body.tasks) {
-          if (!['today', 'week', 'month'].includes(t.scope)) continue;
+          if (!(TASK_SCOPES as readonly string[]).includes(t.scope)) continue;
           if (typeof t.title !== 'string' || t.title.length === 0) continue;
           if (typeof t.date !== 'string' || !isValidIsoDate(t.date)) continue;
           await tx.dashboardTask.create({
@@ -806,6 +840,8 @@ function serializeTask(t: {
   id: number; scope: string; date: string; title: string;
   done: boolean; exp: number; activityType: string | null;
   createdAt: Date; completedAt: Date | null;
+  note?: string | null; dueAt?: Date | null; remindAt?: Date | null;
+  remindedAt?: Date | null; priority?: number;
 }) {
   return {
     id: t.id,
@@ -817,7 +853,43 @@ function serializeTask(t: {
     activityType: t.activityType as ActivityType | null,
     createdAt: t.createdAt.toISOString(),
     completedAt: t.completedAt?.toISOString() ?? null,
+    note: t.note ?? null,
+    dueAt: t.dueAt?.toISOString() ?? null,
+    remindAt: t.remindAt?.toISOString() ?? null,
+    remindedAt: t.remindedAt?.toISOString() ?? null,
+    priority: t.priority ?? 0,
   };
+}
+
+/**
+ * Đọc một mốc thời gian từ thân yêu cầu.
+ *
+ * `null` là GIÁ TRỊ HỢP LỆ (xoá hạn), khác hẳn `undefined` (không đụng tới) —
+ * gộp hai thứ lại thì người dùng không bao giờ bỏ được cái hạn đã đặt.
+ */
+function docMoc(v: unknown, ten: string): Date | null | undefined {
+  if (v === undefined) return undefined;
+  if (v === null || v === '') return null;
+  const d = new Date(String(v));
+  if (Number.isNaN(d.getTime())) throw new AppError(`${ten} khong phai thoi diem hop le`, 400);
+  return d;
+}
+
+/** Ưu tiên 0..3. Ngoài khoảng ⇒ từ chối, đừng lặng lẽ kẹp về biên. */
+function docUuTien(v: unknown): number | undefined {
+  if (v === undefined) return undefined;
+  const n = Number(v);
+  if (!Number.isInteger(n) || n < 0 || n > 3) throw new AppError('priority phai 0..3', 400);
+  return n;
+}
+
+/** Ghi chú: chuỗi rỗng ⇒ `null`, để DB không đầy chuỗi rỗng vô nghĩa. */
+function docGhiChu(v: unknown): string | null | undefined {
+  if (v === undefined) return undefined;
+  if (v === null) return null;
+  const t = String(v);
+  if (t.length > 20000) throw new AppError('note qua dai (max 20000 ky tu)', 400);
+  return t.trim() === '' ? null : t;
 }
 
 function serializeCelebration(c: {

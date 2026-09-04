@@ -163,6 +163,10 @@ export const settingKeySchema = z.enum([
    * năm tầng. Mở sẵn đúng chỗ là cách rẻ nhất để cái nhầm đó không xảy ra nữa.
    */
   'aiThuMucTaiCuoi',
+  /** Tab phạm vi đang xem ở Tổng quan (`today`…`year`). */
+  'tqPhamVi',
+  /** Bật tiếng cho việc tick xong / nhắc nhở. Mặc định BẬT. */
+  'tqAmThanh',
 ]);
 export type SettingKey = z.infer<typeof settingKeySchema>;
 

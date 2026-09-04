@@ -3225,6 +3225,25 @@ model DashboardTask {
   // tasks remain recoverable from a DB backup for years.
   archivedAt   DateTime? @map("archived_at")
 
+  // Ghi chú tự do cho MỘT việc: bối cảnh, đường dẫn, các bước.
+  // Text chứ không VarChar — người ta dán cả đoạn vào đây, và một
+  // giới hạn 500 ký tự sẽ cắt mất thứ họ vừa gõ mà không báo.
+  note       String?   @db.Text
+  // Hạn chót. Khác `date` (ngày việc thuộc về): một việc của
+  // tuần này có thể có hạn vào thứ Năm.
+  dueAt      DateTime? @map("due_at")
+  // Lúc cần nhắc. Tách khỏi `dueAt` vì người ta hay muốn được
+  // nhắc TRƯỚC hạn, và gộp hai thứ thì không nhắc sớm được.
+  remindAt   DateTime? @map("remind_at")
+  // Đã nhắc lúc nào. Không có trường này thì mỗi lần app kiểm
+  // sẽ nhắc lại cùng một việc — vài phút một lần, cho tới khi
+  // người dùng tắt hẳn thông báo.
+  remindedAt DateTime? @map("reminded_at")
+  // 0 = không đặt · 1 = thấp · 2 = vừa · 3 = cao.
+  // Số chứ không enum: thứ tự sắp xếp là chuyện tự nhiên với số,
+  // còn enum thì phải ánh xạ ở mọi chỗ sắp xếp.
+  priority   Int       @default(0)
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   // Active-task index: we read "today's tasks" all the time, so
@@ -3233,6 +3252,8 @@ model DashboardTask {
   @@index([userId, archivedAt, date], name: "idx_dashboard_tasks_active")
   @@index([userId, date], name: "idx_dashboard_tasks_user_date")
   @@index([userId, completedAt], name: "idx_dashboard_tasks_completed")
+  // Dò việc tới hạn nhắc: chạy đều đặn ở nền, nên nó phải rẻ.
+  @@index([userId, remindAt], name: "idx_dashboard_tasks_remind")
   @@map("dashboard_tasks")
 }
 

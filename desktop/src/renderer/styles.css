@@ -9106,3 +9106,317 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   color: var(--ct-text-muted);
   text-align: center;
 }
+
+/* ══════════════════════════════════════════════════════════
+   BẢNG VIỆC — Tổng quan
+   ══════════════════════════════════════════════════════════
+   Bản trước là một danh sách phẳng trên nền phẳng: không có gì dẫn mắt, và mọi
+   dòng nặng như nhau nên nhìn vào không biết bắt đầu từ đâu. Ba thứ sửa điều
+   đó: một thẻ có nền riêng để tách khỏi trang, thanh tiến độ làm mốc nhìn, và
+   viền trái theo ĐỘ ƯU TIÊN để mắt lướt được mà không phải đọc.
+   ────────────────────────────────────────────────────────── */
+
+.ct-bangviec {
+  background: var(--ct-surface);
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-lg);
+  padding: 16px 16px 14px;
+  margin-bottom: 22px;
+  box-shadow: var(--ct-shadow-sm);
+}
+
+/* ── Tab phạm vi ── */
+.ct-bangviec-tab {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  padding: 3px;
+  border-radius: var(--ct-radius);
+  background: var(--ct-bg);
+  margin-bottom: 13px;
+}
+
+.ct-bangviec-tab button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 13px;
+  border: 0;
+  border-radius: calc(var(--ct-radius) - 3px);
+  background: transparent;
+  color: var(--ct-text-muted);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--ct-motion-fast) var(--ct-ease), color var(--ct-motion-fast) var(--ct-ease);
+}
+
+.ct-bangviec-tab button:hover { color: var(--ct-text); background: var(--ct-hover); }
+
+.ct-bangviec-tab button[data-chon='true'] {
+  background: var(--ct-surface);
+  color: var(--ct-text);
+  box-shadow: var(--ct-shadow-sm);
+}
+
+/* Số việc chưa xong ngay trên tab: người ta chọn tab dựa vào "chỗ nào còn
+   việc", nên con số phải nằm ở chính chỗ họ nhìn để quyết định. */
+.ct-bangviec-dem {
+  min-width: 17px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: var(--ct-accent);
+  /* Chữ TRẮNG, không phải `--ct-accent-text`. Biến đó là màu chữ MÀU NHẤN đặt
+     trên nền thường; dùng nó làm chữ TRÊN nền nhấn thì hai màu gần trùng nhau
+     và con số biến thành một chấm tròn đặc — đo bằng ảnh chụp mới thấy, vì
+     "có chữ" và "chữ vô hình" trông giống hệt nhau trong mã. */
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 700;
+  line-height: 17px;
+  text-align: center;
+}
+
+/* ── Thanh tiến độ ── */
+.ct-bangviec-tien {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  color: var(--ct-text-muted);
+}
+
+.ct-bangviec-thanh {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--ct-bg);
+  overflow: hidden;
+}
+
+.ct-bangviec-thanh > div {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--ct-accent), var(--ct-ok));
+  /* Chuyển động chậm hơn hẳn phần còn lại: thanh chạy tới là phần thưởng, và
+     một phần thưởng nhoáng qua trong 120ms thì không ai kịp thấy. */
+  transition: width 520ms var(--ct-spring);
+}
+
+.ct-bangviec-tien > span { flex-shrink: 0; font-variant-numeric: tabular-nums; }
+
+/* ── Ô thêm việc ── */
+.ct-bangviec-them { display: flex; gap: 8px; margin-bottom: 12px; }
+
+.ct-bangviec-them input {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 13px;
+  border-radius: var(--ct-radius);
+  border: 1px solid var(--ct-border);
+  background: var(--ct-bg);
+  color: var(--ct-text);
+  font: inherit;
+  font-size: 13px;
+}
+
+.ct-bangviec-them input:focus {
+  outline: none;
+  border-color: var(--ct-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ct-accent) 18%, transparent);
+}
+
+.ct-bangviec-trong {
+  padding: 22px 4px;
+  text-align: center;
+  color: var(--ct-text-faint);
+  font-size: 12.5px;
+}
+
+.ct-bangviec-ds { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+
+.ct-bangviec-mung {
+  margin: 12px 0 0;
+  padding: 9px;
+  text-align: center;
+  border-radius: var(--ct-radius);
+  background: color-mix(in srgb, var(--ct-ok) 12%, transparent);
+  color: var(--ct-ok);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+/* ── Một dòng việc ── */
+.ct-viec {
+  border-radius: var(--ct-radius);
+  background: var(--ct-bg);
+  /* Viền trái là kênh thông tin RẺ NHẤT: đọc được bằng mắt ngoại vi, không
+     chiếm chỗ, và không cần chú giải. Ưu tiên 0 để trong suốt nên danh sách
+     không đặt ưu tiên trông vẫn sạch. */
+  border-left: 3px solid transparent;
+  transition: background var(--ct-motion-fast) var(--ct-ease);
+}
+
+.ct-viec:hover { background: var(--ct-hover); }
+.ct-viec[data-uu='1'] { border-left-color: color-mix(in srgb, var(--ct-accent) 55%, transparent); }
+.ct-viec[data-uu='2'] { border-left-color: var(--ct-warn); }
+.ct-viec[data-uu='3'] { border-left-color: var(--ct-err); }
+
+.ct-viec-hang { display: flex; align-items: center; gap: 9px; padding: 8px 10px; }
+
+/* Ô tick: to hơn hẳn mức tối thiểu vì đây là thao tác được bấm nhiều nhất
+   trong cả trang, và bấm trượt một ô nhỏ là cảm giác tệ nhất của một app việc. */
+.ct-viec-tick {
+  flex-shrink: 0;
+  width: 21px;
+  height: 21px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  border: 1.5px solid var(--ct-border);
+  background: transparent;
+  color: transparent;
+  cursor: pointer;
+  transition: all var(--ct-motion-fast) var(--ct-ease);
+}
+
+.ct-viec-tick:hover { border-color: var(--ct-ok); color: color-mix(in srgb, var(--ct-ok) 45%, transparent); }
+
+.ct-viec[data-xong='true'] .ct-viec-tick {
+  background: var(--ct-ok);
+  border-color: var(--ct-ok);
+  color: #fff;
+  /* Nảy nhẹ một nhịp khi vừa tick — phần "cute" đắt giá nhất, vì nó xảy ra
+     đúng lúc người dùng vừa làm xong một việc thật. */
+  animation: ct-viec-nay 380ms var(--ct-spring);
+}
+
+@keyframes ct-viec-nay {
+  0% { transform: scale(0.6); }
+  55% { transform: scale(1.22); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ct-viec[data-xong='true'] .ct-viec-tick { animation: none; }
+  .ct-bangviec-thanh > div { transition: none; }
+}
+
+.ct-viec-ten {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ct-text);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: text;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ct-viec[data-xong='true'] .ct-viec-ten { color: var(--ct-text-faint); text-decoration: line-through; }
+
+.ct-viec-sua {
+  flex: 1;
+  min-width: 0;
+  padding: 3px 7px;
+  border-radius: var(--ct-radius-sm);
+  border: 1px solid var(--ct-accent);
+  background: var(--ct-surface);
+  color: var(--ct-text);
+  font: inherit;
+  font-size: 13px;
+}
+
+.ct-viec-han {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 7px;
+  border-radius: 8px;
+  background: var(--ct-surface-2);
+  color: var(--ct-text-muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.ct-viec-han[data-gap='true'] { background: color-mix(in srgb, var(--ct-warn) 16%, transparent); color: var(--ct-warn); }
+.ct-viec-han[data-tre='true'] { background: color-mix(in srgb, var(--ct-err) 16%, transparent); color: var(--ct-err); }
+
+.ct-viec-chuong, .ct-viec-cochu { flex-shrink: 0; color: var(--ct-text-faint); }
+.ct-viec-exp { flex-shrink: 0; font-size: 11px; font-weight: 700; color: var(--ct-text-faint); }
+
+.ct-viec-nut {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: var(--ct-radius-sm);
+  background: transparent;
+  color: var(--ct-text-faint);
+  cursor: pointer;
+  /* Ẩn cho tới khi rê chuột: bốn nút hiện thường trực trên mỗi dòng làm danh
+     sách trông như một bảng điều khiển chứ không phải một danh sách việc. */
+  opacity: 0;
+  transition: opacity var(--ct-motion-fast) var(--ct-ease), color var(--ct-motion-fast) var(--ct-ease);
+}
+
+.ct-viec:hover .ct-viec-nut, .ct-viec-nut:focus-visible { opacity: 1; }
+.ct-viec-nut:hover { background: var(--ct-hover); color: var(--ct-text); }
+.ct-viec-xoa:hover { color: var(--ct-err); }
+
+/* ── Phần bung ra: ghi chú + cài đặt ── */
+.ct-viec-mo {
+  padding: 0 10px 10px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ct-viec-ghichu {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: var(--ct-radius-sm);
+  border: 1px solid var(--ct-border);
+  background: var(--ct-surface);
+  color: var(--ct-text);
+  font: inherit;
+  font-size: 12.5px;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+.ct-viec-ghichu:focus {
+  outline: none;
+  border-color: var(--ct-accent);
+}
+
+.ct-viec-cai { display: flex; gap: 14px; flex-wrap: wrap; }
+
+.ct-viec-cai label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  color: var(--ct-text-muted);
+}
+
+.ct-viec-cai select,
+.ct-viec-cai input {
+  padding: 3px 6px;
+  border-radius: var(--ct-radius-sm);
+  border: 1px solid var(--ct-border);
+  background: var(--ct-bg);
+  color: var(--ct-text);
+  font: inherit;
+  font-size: 11.5px;
+}

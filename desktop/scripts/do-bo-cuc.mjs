@@ -41,6 +41,21 @@ if (!fs.existsSync(path.join(thuMuc, 'bo-cuc/trang-thu.html'))) {
 /** Bề rộng CỬA SỔ để thử. 860 là cỡ người dùng hay kéo về khi xem hai app cạnh nhau. */
 const BE_RONG = [1440, 1180, 1000, 860];
 
+/** Bản sao `mocPhamVi` của app, theo giờ MÁY. */
+function mocPhamViThu(s, ref = new Date()) {
+  const q = (n) => String(n).padStart(2, '0');
+  const y = ref.getFullYear();
+  if (s === 'today') return `${y}-${q(ref.getMonth() + 1)}-${q(ref.getDate())}`;
+  if (s === 'week') {
+    const d = new Date(ref); const thu = d.getDay() || 7;
+    d.setDate(d.getDate() - (thu - 1));
+    return `${d.getFullYear()}-${q(d.getMonth() + 1)}-${q(d.getDate())}`;
+  }
+  if (s === 'month') return `${y}-${q(ref.getMonth() + 1)}-01`;
+  if (s === 'quarter') return `${y}-${q(Math.floor(ref.getMonth() / 3) * 3 + 1)}-01`;
+  return `${y}-01-01`;
+}
+
 const KIEU = { mime: { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css' } };
 
 const may = http.createServer((req, res) => {
@@ -288,7 +303,27 @@ const BANG = [
         thumbnailUrl: null, level: 'BEGINNER', totalLessons: 54, isFree: true }))],
     [/\/dashboard$/, () => ({ level: 3, exp: 120, totalExp: 500, streak: 4,
         timeline: mang(24, (i) => ({ hour: i - 1, activity: i % 3 === 0 ? 'hoc' : null })),
-        tasks: mang(4, (i) => ({ id: i, title: `Việc cần làm số ${i}`, done: i % 2 === 0 })),
+        /* Dữ liệu giả phải chạm được vào MỌI nhánh hiển thị mới, nếu không bộ đo
+           chỉ chứng minh cái danh sách rỗng cũng vẽ ra được: ưu tiên các mức,
+           việc có hạn (trong hạn + quá hạn), có ghi chú, có nhắc, và cả bốn
+           phạm vi ngoài "hôm nay". */
+        tasks: [
+          ...mang(4, (i) => ({
+            id: i, scope: 'today', date: (() => { const d = new Date(); const q = (n) => String(n).padStart(2, '0'); return `${d.getFullYear()}-${q(d.getMonth() + 1)}-${q(d.getDate())}`; })(),
+            title: `Việc cần làm số ${i}`, done: i % 2 === 0, exp: 25,
+            priority: i % 4,
+            dueAt: i === 1 ? new Date(Date.now() + 36e5).toISOString()
+              : i === 3 ? new Date(Date.now() - 36e5).toISOString() : null,
+            note: i === 2 ? 'Ghi chú dài để kiểm dòng chữ không tràn khỏi thẻ.' : null,
+            remindAt: i === 1 ? new Date(Date.now() + 18e5).toISOString() : null,
+          })),
+          /* Mốc phải khớp `mocPhamVi` phía app (giờ MÁY), nếu không việc bị lọc
+             hết và bộ đo lại chứng minh một danh sách rỗng vẽ ra được. */
+          ...['week', 'month', 'quarter', 'year'].map((sc, i) => ({
+            id: 100 + i, scope: sc, date: mocPhamViThu(sc), title: `Mục tiêu ${sc}`,
+            done: false, exp: 25, priority: 0, dueAt: null, note: null, remindAt: null,
+          })),
+        ],
         stats: { unreadMessages: 2, notifications: 1, tasksToday: 4, totalExp: 500 } })],
     [/\/pro|\/membership/, () => ({ isPro: true, plan: 'PRO', expiresAt: '2027-01-01T00:00:00Z' })],
   ];
@@ -511,6 +546,21 @@ for (const duong of DUONG) {
     await p.goto(`http://127.0.0.1:${cong}/bo-cuc/trang-thu.html?trang=${encodeURIComponent(duong)}`);
     await p.waitForTimeout(1200);
     if (CHUAN_BI[duong]) { await CHUAN_BI[duong](p); await p.waitForTimeout(400); }
+
+    /* `CT_CHUP=<thư mục>` ⇒ chụp lại từng trang ở từng bề rộng. Bộ đo này chỉ
+       trả lời "có tràn không"; nó KHÔNG trả lời được "trông có ổn không" — mà
+       đó lại là câu hỏi hay được hỏi nhất khi vừa dựng lại một trang. */
+    if (process.env.CT_CHUP) {
+      /* `CT_THEME=dark` để xem đúng thứ người dùng thấy. App mặc định nền TỐI,
+         còn trang thử thì không — chụp bản sáng rồi kết luận "trông ổn" là kiểm
+         một giao diện gần như không ai nhìn thấy. */
+      if (process.env.CT_THEME) {
+        await p.evaluate((t) => document.documentElement.setAttribute('data-ct-theme', t), process.env.CT_THEME);
+        await p.waitForTimeout(250);
+      }
+      const ten = `${duong.replace(/\//g, '_') || '_goc'}@${rong}.png`;
+      await p.screenshot({ path: `${process.env.CT_CHUP}/${ten}`, fullPage: true }).catch(() => {});
+    }
 
     const kq = await p.evaluate(() => {
       const noi = document.querySelector('.ct-content');

@@ -33,12 +33,13 @@
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Bell, BookOpen, Briefcase, Check, ChevronRight, Coffee, Dumbbell, Flame,
-  Gamepad2, MessageSquare, Moon, Plus, RefreshCw, Trash2, UtensilsCrossed, Users, X,
+  Bell, BookOpen, Briefcase, ChevronRight, Coffee, Dumbbell, Flame,
+  Gamepad2, MessageSquare, Moon, RefreshCw, UtensilsCrossed, Users, X,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { OfflineUnavailableError, swr } from '../../offline/cache';
+import { BangViec, type Scope as PhamVi, type Task as ViecUi, type VaSua } from './BangViec';
 
 /**
  * ⚠️ `api.request` TỰ tuần tự hoá `body` — ĐỪNG `JSON.stringify` trước.
@@ -53,7 +54,7 @@ import { OfflineUnavailableError, swr } from '../../offline/cache';
  * lặng lẽ quay về như cũ vài giây sau. Đo bằng cách hỏi thẳng máy chủ mới ra.
  */
 
-type Scope = 'today' | 'week' | 'month';
+type Scope = PhamVi;
 
 interface Task {
   id: number | string;
@@ -62,6 +63,10 @@ interface Task {
   title: string;
   done: boolean;
   exp: number;
+  note?: string | null;
+  dueAt?: string | null;
+  remindAt?: string | null;
+  priority?: number;
 }
 
 interface TimelineSlot {
@@ -102,10 +107,32 @@ const THEO_KHOA = new Map(HOAT_DONG.map((h) => [h.khoa, h]));
 const EXP_MOI_CAP = 100;
 
 /** `yyyy-mm-dd` theo giờ ĐỊA PHƯƠNG. `toISOString()` là UTC — lệch múi giờ +07 thì "hôm nay" của người dùng sai một ngày trong 7 tiếng mỗi đêm. */
-function homNay(): string {
-  const d = new Date();
+
+/**
+ * Mốc ngày của một phạm vi, theo GIỜ MÁY.
+ *
+ * ⚠️ Máy chủ tính mốc này theo UTC (`scopeDate` trong `utils/dashboard.ts`).
+ * Ở Việt Nam (UTC+7) thì từ 00:00 tới 07:00, "hôm nay" của máy chủ vẫn là ngày
+ * HÔM QUA — nên một việc vừa tạo lúc 2 giờ sáng được gắn ngày hôm qua, rồi biến
+ * mất khỏi danh sách "hôm nay" ngay lập tức. Không có lỗi nào hiện ra: người
+ * dùng gõ việc, bấm Thêm, và không thấy gì.
+ *
+ * Vì thế app TỰ tính mốc theo giờ máy và GỬI KÈM khi tạo. `POST /tasks` nhận
+ * `date`, nên máy chủ dùng đúng con số này thay vì tự suy ra.
+ */
+function mocPhamVi(s: Scope, ref = new Date()): string {
   const p = (n: number) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+  const y = ref.getFullYear();
+  if (s === 'today') return `${y}-${p(ref.getMonth() + 1)}-${p(ref.getDate())}`;
+  if (s === 'week') {
+    const d = new Date(ref);
+    const thu = d.getDay() || 7; // 1..7, thứ Hai = 1
+    d.setDate(d.getDate() - (thu - 1));
+    return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+  }
+  if (s === 'month') return `${y}-${p(ref.getMonth() + 1)}-01`;
+  if (s === 'quarter') return `${y}-${p(Math.floor(ref.getMonth() / 3) * 3 + 1)}-01`;
+  return `${y}-01-01`;
 }
 
 function loiChao(gio: number): string {
@@ -126,9 +153,6 @@ export function DashboardPage() {
   const [chuaDoc, setChuaDoc] = useState({ tinNhan: 0, thongBao: 0 });
   const [loi, setLoi] = useState<string | null>(null);
   const [dangTai, setDangTai] = useState(true);
-  const [nhap, setNhap] = useState('');
-  const [dangThem, setDangThem] = useState(false);
-  const oNhap = useRef<HTMLInputElement>(null);
 
   // Đồng hồ: chỉ để chọn lời chào và làm nổi ô giờ hiện tại. Cập nhật mỗi phút
   // là quá đủ — mỗi giây thì cả trang vẽ lại 60 lần/phút cho một con số không đổi.
@@ -184,19 +208,24 @@ export function DashboardPage() {
     return () => { huy = true; };
   }, [api, online]);
 
-  const ngay = homNay();
+  /**
+   * Việc thuộc KỲ HIỆN TẠI của từng phạm vi.
+   *
+   * Không lọc thì tab "Tuần này" hiện cả việc của mọi tuần đã qua — máy chủ trả
+   * về mọi việc chưa lưu trữ, việc chọn kỳ nào là của client.
+   */
+  const viecKyNay = useMemo(() => {
+    const moc: Record<string, string> = {};
+    for (const s of ['today', 'week', 'month', 'quarter', 'year'] as Scope[]) moc[s] = mocPhamVi(s);
+    return (du?.tasks ?? []).filter((t) => t.date === moc[t.scope]);
+  }, [du]);
+
   const viecHomNay = useMemo(
-    () => (du?.tasks ?? []).filter((t) => t.scope === 'today' && t.date === ngay),
-    [du, ngay],
+    () => viecKyNay.filter((t) => t.scope === 'today'),
+    [viecKyNay],
   );
   const xong = viecHomNay.filter((t) => t.done).length;
 
-  /** Việc còn lại ở phạm vi rộng hơn. Dữ liệu đã nằm sẵn trong cùng lời gọi. */
-  const conLai = useMemo(() => {
-    const t = du?.tasks ?? [];
-    const dem = (s: Scope) => t.filter((x) => x.scope === s && !x.done).length;
-    return { tuan: dem('week'), thang: dem('month') };
-  }, [du]);
 
   /**
    * Giờ nào trong ngày ĐÃ QUA.
@@ -294,38 +323,57 @@ export function DashboardPage() {
     };
   }, [dangChon]);
 
-  /** Tick một việc. Đổi giao diện TRƯỚC rồi mới gọi máy chủ — tick mà phải chờ mạng thì cảm giác như app đơ. */
-  const tick = async (t: Task) => {
-    if (!api) return;
-    const truoc = du;
-    setDu((c) => c && ({ ...c, tasks: c.tasks.map((x) => (x.id === t.id ? { ...x, done: !x.done } : x)) }));
-    try {
-      await api.request(`/api/v1/dashboard/tasks/${t.id}`, {
-        method: 'PATCH', body: { done: !t.done },
-      });
-      void nap(); // EXP/cấp do máy chủ tính — lấy lại con số thật
-    } catch {
-      setDu(truoc); // máy chủ từ chối ⇒ trả giao diện về đúng sự thật
-    }
-  };
 
-  const them = async () => {
-    const ten = nhap.trim();
-    if (!ten || !api || dangThem) return;
-    setDangThem(true);
+  /**
+   * Phạm vi đang xem. Nhớ lại giữa các lần mở app: người ta thường sống ở một
+   * tab (hay nhất là "Hôm nay"), và bắt họ bấm lại mỗi lần mở là phiền vô cớ.
+   */
+  const [pham, datPhamGoc] = useState<Scope>('today');
+  useEffect(() => {
+    void window.cuongthai?.settings.getAll().then((t) => {
+      const p = (t as Record<string, unknown>).tqPhamVi;
+      if (typeof p === 'string' && ['today', 'week', 'month', 'quarter', 'year'].includes(p)) {
+        datPhamGoc(p as Scope);
+      }
+    });
+  }, []);
+  const datPham = useCallback((p: Scope) => {
+    datPhamGoc(p);
+    void window.cuongthai?.settings.set('tqPhamVi', p);
+  }, []);
+
+  const themViec = useCallback(async (ten: string, s: Scope) => {
+    if (!api) return;
     try {
+      /* GỬI KÈM `date` theo giờ máy — xem `mocPhamVi`. Để máy chủ tự tính thì
+         việc tạo lúc 2 giờ sáng rơi vào ngày hôm qua và biến mất ngay. */
       await api.request('/api/v1/dashboard/tasks', {
-        method: 'POST', body: { title: ten, scope: 'today', date: ngay },
+        method: 'POST', body: { title: ten, scope: s, date: mocPhamVi(s) },
       });
-      setNhap('');
       await nap();
-      oNhap.current?.focus();
     } catch (e) {
       setLoi(e instanceof Error ? e.message : String(e));
-    } finally {
-      setDangThem(false);
     }
-  };
+  }, [api, nap]);
+
+  /**
+   * Sửa một việc. Đổi giao diện TRƯỚC rồi mới gọi máy chủ — tick mà phải chờ
+   * mạng thì cảm giác như app đơ, và tick là thao tác người ta làm nhiều nhất.
+   */
+  const suaViec = useCallback((t: ViecUi, v: VaSua) => {
+    if (!api) return;
+    const truoc = du;
+    setDu((c) => c && ({
+      ...c,
+      tasks: c.tasks.map((x) => (x.id === t.id ? { ...x, ...v } as Task : x)),
+    }));
+    void api.request(`/api/v1/dashboard/tasks/${t.id}`, { method: 'PATCH', body: v })
+      /* Nạp lại KHI tick: EXP và cấp do máy chủ tính, nên con số trên đầu trang
+         chỉ đúng sau khi hỏi lại. Sửa ghi chú hay hạn thì không đụng EXP, nên
+         không cần một vòng mạng nữa. */
+      .then(() => { if (v.done !== undefined) void nap(); })
+      .catch(() => setDu(truoc));
+  }, [api, du, nap]);
 
   const xoa = async (t: Task) => {
     if (!api) return;
@@ -422,60 +470,18 @@ export function DashboardPage() {
       </div>
 
       {/* ── Việc hôm nay ───────────────────────────────────── */}
-      <section className="ct-tq-khoi">
-        <div className="ct-tq-khoi-dau">
-          <h2>Việc hôm nay</h2>
-          {viecHomNay.length > 0 && xong === viecHomNay.length && (
-            <span className="ct-tq-xong-het"><Check size={12} aria-hidden /> xong hết</span>
-          )}
-          <span className="ct-tq-khoi-phu">
-            {conLai.tuan > 0 && <>còn {conLai.tuan} việc tuần này</>}
-            {conLai.tuan > 0 && conLai.thang > 0 && ' · '}
-            {conLai.thang > 0 && <>{conLai.thang} việc tháng này</>}
-          </span>
-        </div>
-
-        <div className="ct-tq-them">
-          <input
-            ref={oNhap}
-            value={nhap}
-            placeholder="Thêm một việc cho hôm nay…"
-            maxLength={200}
-            onChange={(e) => setNhap(e.target.value)}
-            onKeyDown={(e) => {
-              // Bộ gõ tiếng Việt dùng Enter để chốt chữ đang gõ.
-              if (e.nativeEvent.isComposing) return;
-              if (e.key === 'Enter') { e.preventDefault(); void them(); }
-            }}
-          />
-          <button type="button" className="ct-btn" onClick={() => void them()}
-            disabled={!nhap.trim() || dangThem}>
-            <Plus size={14} aria-hidden /> Thêm
-          </button>
-        </div>
-
-        {dangTai && !du ? (
-          <p className="ct-muted" style={{ padding: '10px 2px' }}>Đang tải…</p>
-        ) : viecHomNay.length === 0 ? (
-          <p className="ct-tq-trong">Chưa có việc nào cho hôm nay. Gõ vào ô trên để thêm.</p>
-        ) : (
-          <ul className="ct-tq-ds">
-            {viecHomNay.map((t) => (
-              <li key={t.id} className="ct-tq-viec" data-xong={t.done}>
-                <button type="button" className="ct-tq-tick" onClick={() => void tick(t)}
-                  aria-label={t.done ? 'Bỏ đánh dấu xong' : 'Đánh dấu xong'}>
-                  {t.done && <Check size={12} aria-hidden />}
-                </button>
-                <span className="ct-tq-viec-ten">{t.title}</span>
-                <span className="ct-tq-viec-exp">+{t.exp}</span>
-                <button type="button" className="ct-tq-xoa" onClick={() => void xoa(t)} aria-label="Xoá việc">
-                  <Trash2 size={13} aria-hidden />
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+      {dangTai && !du ? (
+        <p className="ct-muted" style={{ padding: '10px 2px' }}>Đang tải…</p>
+      ) : (
+        <BangViec
+          tasks={viecKyNay as ViecUi[]}
+          pham={pham}
+          datPham={datPham}
+          onThem={themViec}
+          onSua={suaViec}
+          onXoa={(t) => void xoa(t as Task)}
+        />
+      )}
 
       {/* ── Dòng thời gian 24 giờ ──────────────────────────── */}
       {du && (

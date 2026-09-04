@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { AppStateProvider, useAppState } from './app-state';
 import { LoginScreen } from './auth/LoginScreen';
 import { SessionProvider, useSession } from './auth/session';
+import { batDauDoNhac } from './features/dashboard/nhacNho';
+import { datBatAm } from './features/dashboard/amThanh';
 import { CommandPalette } from './components/CommandPalette';
 import { MusicPlayerProvider } from './features/music/player';
 import { PlayerBar } from './features/music/PlayerBar';
@@ -179,8 +181,25 @@ function Shell() {
  * người dùng kịp bắt đầu gõ mật khẩu trước khi màn hình biến mất.
  */
 function Gate() {
-  const { phase } = useSession();
+  const { phase, api } = useSession();
   const { online } = useAppState();
+
+  /*
+   * NHẮC NHỞ chạy ở đây chứ không ở trang Tổng quan.
+   *
+   * Một lời nhắc chỉ kêu khi người dùng đang mở đúng trang chứa nó thì vô dụng
+   * — người ta đặt nhắc CHÍNH VÌ họ sẽ không nhìn vào đó. Đặt ở `Gate` nghĩa là
+   * nó sống suốt phiên đăng nhập, bất kể đang xem trang nào.
+   */
+  useEffect(() => {
+    if (phase !== 'da-dang-nhap' || !api) return;
+    void window.cuongthai?.settings.getAll().then((t) => {
+      // Mặc định BẬT tiếng: người dùng xin âm thanh, nên im lặng mặc định là
+      // giao tính năng ở trạng thái tắt và để họ tự đi tìm công tắc.
+      datBatAm((t as Record<string, unknown>).tqAmThanh !== false);
+    });
+    return batDauDoNhac(api, () => { /* thẻ trong app do trang Tổng quan lo */ });
+  }, [phase, api]);
 
   if (phase === 'dang-khoi-phuc') {
     return (

@@ -83,7 +83,18 @@ export function completedExpiryCutoff(now: Date = new Date()): Date {
   return new Date(now.getTime() - COMPLETED_TASK_RETENTION_DAYS * 24 * 60 * 60 * 1000);
 }
 
-export type TaskScope = 'today' | 'week' | 'month';
+/**
+ * Phạm vi của một việc.
+ *
+ * `quarter`/`year` thêm 05/09/2026 cho kế hoạch DÀI HẠN — trước đó xa nhất là
+ * `month`, nên mọi mục tiêu vài tháng đều bị nhét vào "tháng này" và trôi mất
+ * ở cuối tháng.
+ *
+ * Cột `scope` trong DB là `VARCHAR(16)` chứ không phải enum, đúng để thêm được
+ * phạm vi mới mà không cần migration — xem chú thích trong `schema.prisma`.
+ */
+export const TASK_SCOPES = ['today', 'week', 'month', 'quarter', 'year'] as const;
+export type TaskScope = (typeof TASK_SCOPES)[number];
 
 /**
  * Returns the canonical date string for a given scope. Used
@@ -98,6 +109,15 @@ export function scopeDate(scope: TaskScope, ref: Date = new Date()): string {
     d.setUTCDate(d.getUTCDate() - (day - 1));
     return d.toISOString().slice(0, 10);
   }
-  // month
-  return `${ref.getUTCFullYear()}-${String(ref.getUTCMonth() + 1).padStart(2, '0')}-01`;
+  if (scope === 'month') {
+    return `${ref.getUTCFullYear()}-${String(ref.getUTCMonth() + 1).padStart(2, '0')}-01`;
+  }
+  if (scope === 'quarter') {
+    // Đầu quý: tháng 1/4/7/10. Việc dài hạn cần một cái mốc ỔN ĐỊNH để gom
+    // nhóm — lấy ngày tạo thì mỗi việc rơi vào một "quý" khác nhau.
+    const thang = Math.floor(ref.getUTCMonth() / 3) * 3 + 1;
+    return `${ref.getUTCFullYear()}-${String(thang).padStart(2, '0')}-01`;
+  }
+  // year
+  return `${ref.getUTCFullYear()}-01-01`;
 }

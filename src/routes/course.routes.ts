@@ -2825,6 +2825,9 @@ router.post('/lessons/:id(\\d+)/ai/ask', authenticate, async (req, res: Response
       history: Array.isArray(req.body?.history) ? req.body.history : [],
       english: req.body?.english === true,
       cacheKey: typeof req.body?.cacheKey === 'string' ? req.body.cacheKey.slice(0, 40) : undefined,
+      // "Hỏi lại mới": bỏ qua ĐỌC cache nhưng vẫn GHI ĐÈ — đường duy nhất
+      // sửa được một mục cache hỏng (xem TutorAskOpts.refresh).
+      refresh: req.body?.refresh === true,
       quizContext: Array.isArray(req.body?.quizContext) ? req.body.quizContext : undefined,
     });
     res.json({ success: true, data: out });
@@ -2856,6 +2859,9 @@ router.post('/lessons/:id(\\d+)/ai/ask-stream', authenticate, async (req, res) =
         history: Array.isArray(req.body?.history) ? req.body.history : [],
         english: req.body?.english === true,
         cacheKey: typeof req.body?.cacheKey === 'string' ? req.body.cacheKey.slice(0, 40) : undefined,
+        // "Hỏi lại mới": bỏ qua ĐỌC cache nhưng vẫn GHI ĐÈ — đường duy nhất
+        // sửa được một mục cache hỏng (xem TutorAskOpts.refresh).
+        refresh: req.body?.refresh === true,
         quizContext: Array.isArray(req.body?.quizContext) ? req.body.quizContext : undefined,
       },
       (delta) => send({ type: 'delta', text: delta }),

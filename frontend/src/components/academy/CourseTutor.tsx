@@ -75,11 +75,11 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
     setTurns((t) => t.map((x, i) => (i === aIdx ? { ...x, ...upd } : x)));
 
   // SSE: đọc luồng, dồn delta vào turn trợ lý ở vị trí aIdx. Ném lỗi để caller lùi.
-  const runStream = useCallback(async (aIdx: number, q: string, history: Turn[], english: boolean, cacheKey?: string) => {
+  const runStream = useCallback(async (aIdx: number, q: string, history: Turn[], english: boolean, cacheKey?: string, refresh?: boolean) => {
     const res = await fetch(`/api/v1/courses/lessons/${lessonId}/ai/ask-stream`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}) },
-      body: JSON.stringify({ question: q, history: history.map(toMsg), english, cacheKey, ...(inQuiz ? { quizContext } : {}) }),
+      body: JSON.stringify({ question: q, history: history.map(toMsg), english, cacheKey, refresh, ...(inQuiz ? { quizContext } : {}) }),
     });
     if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
 
@@ -118,17 +118,24 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
   }, [lessonId, inQuiz, quizContext]);
 
   // Hỏi một câu. showUser=false + english=true là lúc bấm nút "Bản tiếng Anh".
-  const ask = useCallback(async (text: string, opts?: { english?: boolean; showUser?: boolean; cacheKey?: string }) => {
+  const ask = useCallback(async (text: string, opts?: {
+    english?: boolean; showUser?: boolean; cacheKey?: string;
+    /** Bỏ qua ĐỌC cache nhưng vẫn GHI ĐÈ (nút "Hỏi lại mới"). */
+    refresh?: boolean;
+    /** Gửi lịch sử RỖNG — xem ghi chú ở `askEnglish`. */
+    noHistory?: boolean;
+  }) => {
     const q = (text || '').trim();
     if (!q || asking) return;
     const english = !!opts?.english;
     const showUser = opts?.showUser !== false;
     const cacheKey = opts?.cacheKey;
+    const refresh = !!opts?.refresh;
 
     setAsking(true);
     if (showUser) setQuestion('');
 
-    const history = turns.filter((t) => !t.streaming);
+    const history = opts?.noHistory ? [] : turns.filter((t) => !t.streaming);
     const aIdx = history.length + (showUser ? 1 : 0); // vị trí turn trợ lý mới
 
     setTurns((t) => {
@@ -140,13 +147,13 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
     });
 
     try {
-      await runStream(aIdx, q, history, english, cacheKey);
+      await runStream(aIdx, q, history, english, cacheKey, refresh);
     } catch {
       // SSE hỏng/không hỗ trợ → POST thường, không để chat chết.
       try {
         const r = await api.post<{ success: boolean; data: { answer: string; cached?: boolean } }>(
           `/courses/lessons/${lessonId}/ai/ask`,
-          { question: q, history: history.map(toMsg), english, cacheKey, ...(inQuiz ? { quizContext } : {}) },
+          { question: q, history: history.map(toMsg), english, cacheKey, refresh, ...(inQuiz ? { quizContext } : {}) },
           { timeout: 240_000 });
         patch(aIdx, { content: r.data.data.answer, streaming: false, cached: !!r.data.data.cached });
       } catch (e: unknown) {
@@ -158,20 +165,33 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
     } finally { setAsking(false); }
   }, [asking, turns, lessonId, runStream]);
 
+  // ⚠️⚠️ GỬI LỊCH SỬ RỖNG. Đo thật 05/09/2026: gửi kèm lịch sử thì model trả lời
+  // "Bạn vừa hỏi lại câu này — tôi đã trả lời ở trên rồi nhé! 😊" — nó đọc ra là
+  // hỏi TRÙNG (câu hỏi y hệt vừa nằm trong lịch sử) và đi trả lời chuyện đó thay
+  // vì trả lời câu hỏi. Mà đây vốn không phải một lượt hội thoại tiếp theo — nó
+  // là DỰNG LẠI một câu trả lời bằng thứ tiếng khác. Bỏ lịch sử còn rẻ hơn.
+  //
+  // Dùng lại cùng cacheKey ⇒ bản tiếng Anh cũng được cache dưới lang='en'.
   const askEnglish = useCallback((aIdx: number) => {
     const t = turns[aIdx];
     if (!t?.srcQuestion || asking) return;
     patch(aIdx, { enDone: true });
-    // Dùng lại cùng cacheKey ⇒ bản tiếng Anh cũng được cache dưới lang='en'.
-    void ask(t.srcQuestion, { english: true, showUser: false, cacheKey: t.srcCacheKey });
+    void ask(t.srcQuestion, { english: true, showUser: false, cacheKey: t.srcCacheKey, noHistory: true });
   }, [turns, asking, ask]);
 
-  // "Hỏi lại mới": bỏ cache, sinh câu trả lời tươi (backend upsert nên cache cũng
-  // được làm mới cho người sau). showUser=false để không nhân đôi câu hỏi.
+  // "Hỏi lại mới": sinh câu trả lời tươi VÀ ghi đè cache cho người sau.
+  //
+  // ⚠️ Bản cũ bỏ luôn `cacheKey` và ghi chú rằng "backend upsert nên cache cũng
+  // được làm mới" — SAI: máy chủ chỉ GHI khi có `cacheKey`, nên nó vừa không đọc
+  // vừa không ghi, và một mục cache hỏng nằm lại đó vĩnh viễn cho mọi người.
+  // Nay giữ `cacheKey` + `refresh:true`: bỏ qua bước ĐỌC, vẫn GHI ĐÈ.
   const askFresh = useCallback((aIdx: number) => {
     const t = turns[aIdx];
     if (!t?.srcQuestion || asking) return;
-    void ask(t.srcQuestion, { english: !!t.english, showUser: false });
+    void ask(t.srcQuestion, {
+      english: !!t.english, showUser: false,
+      cacheKey: t.srcCacheKey, refresh: true, noHistory: true,
+    });
   }, [turns, asking, ask]);
 
   const label = [courseCode, courseTitle].filter(Boolean).join(' · ') || 'khoá học';
@@ -221,7 +241,7 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
                           </>}
                   </div>
                   {/* Nhãn + hành động dưới câu trả lời của trợ lý. */}
-                  {t.role === 'assistant' && !t.streaming && (t.cached || (!t.english && t.srcQuestion && !t.enDone)) && (
+                  {t.role === 'assistant' && !t.streaming && (t.cached || (t.srcQuestion && !t.enDone)) && (
                     <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px]" style={{ color: 'var(--text-muted)' }}>
                       {t.cached && (
                         <span className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5"
@@ -235,7 +255,11 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
                           <Languages size={12} /> Bản tiếng Anh
                         </button>
                       )}
-                      {t.cached && t.srcQuestion && (
+                      {/* Hiện cho MỌI câu trả lời có nguồn, không chỉ câu lấy
+                          từ cache: một câu trả lời tươi mà dở thì cũng vừa bị
+                          GHI vào cache dùng chung — người dùng phải có đường
+                          sinh lại và ghi đè ngay. */}
+                      {t.srcQuestion && (
                         <button type="button" onClick={() => askFresh(i)} disabled={asking}
                           className="inline-flex items-center gap-1 disabled:opacity-40">
                           <RefreshCw size={11} /> Hỏi lại mới

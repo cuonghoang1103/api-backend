@@ -17,6 +17,7 @@ import { prisma } from '../config/database.js';
 import { BadRequestError, ForbiddenError, NotFoundError } from '../middleware/errorHandler.js';
 import { llmComplete, checkTokenQuota, isAiAvailable, aiOffReason, circuitReopensInMs } from './interview/llm/index.js';
 import { isProEffective } from './pro.service.js';
+import { logger } from '../utils/logger.js';
 
 const MAX_QUESTION = 1500;
 const MAX_HISTORY = 12;
@@ -150,6 +151,74 @@ const LANG_EN = `\n\nLANGUAGE — Answer ENTIRELY in English.`;
 
 const tutorSystem = (english?: boolean): string => TUTOR_SYSTEM_BASE + (english ? LANG_EN : LANG_VI);
 
+// ─── Ép ngôn ngữ đầu ra (05/09/2026) ────────────────────────────────────────
+//
+// ⚠️⚠️ Một dòng `LANGUAGE — Answer ENTIRELY in English` ở CUỐI system prompt
+// KHÔNG đủ. Đo thật: nút "Bản tiếng Anh" trả về TIẾNG VIỆT, lặp lại được, dù
+// cờ `english` tới nơi (nó có tạo mục cache riêng dưới `lang='en'`).
+//
+// Thủ phạm mạnh nhất KHÔNG phải câu hỏi — mà là **lượt mồi của chính trợ lý**
+// ngay dưới đây: "Đã rõ. Tôi đang xem bài học này và sẵn sàng giúp." Đó là một
+// ví dụ MỘT LƯỢT bằng tiếng Việt, và ví dụ thì mạnh hơn mệnh lệnh — model tiếp
+// tục đúng thứ tiếng nó vừa "nói". Cộng thêm nhãn ngữ cảnh ("NỘI DUNG BÀI") và
+// nội dung bài cũng tiếng Việt.
+//
+// Nên ép ở BA chỗ, không phải một:
+//   1. lượt mồi của trợ lý  2. nhãn ngữ cảnh  3. nhắc lại ngay đầu lượt cuối
+const MOI_TRO_LY = {
+  vi: 'Đã rõ. Tôi đang xem bài học này và sẵn sàng giúp.',
+  en: "Understood. I have the lesson in front of me and I'm ready to help — I will answer in English.",
+} as const;
+
+const NHAN_NGU_CANH = {
+  vi: { bai: 'Bài', noiDung: 'NỘI DUNG BÀI', ghiChu: 'GHI CHÚ GIẢNG DẠY',
+        trong: '(bài này chủ yếu là video/không có nội dung chữ)' },
+  en: { bai: 'Lesson', noiDung: 'LESSON CONTENT', ghiChu: 'TEACHING NOTES',
+        trong: '(this lesson is mostly video — little or no text content)' },
+} as const;
+
+/** Nhắc lại yêu cầu ngôn ngữ ngay đầu lượt NGƯỜI DÙNG — chỗ gần chỗ sinh chữ
+ *  nhất. Chỉ cần khi đòi tiếng Anh: mặc định vốn đã là tiếng Việt. */
+const nhacNgonNgu = (english?: boolean): string =>
+  english ? '[Answer entirely in English, regardless of the language of this question.]\n\n' : '';
+
+// ─── Không lưu cache một câu trả lời hỏng ───────────────────────────────────
+//
+// ⚠️ Cache ở đây DÙNG CHUNG cho mọi người: lần sinh ĐẦU TIÊN quyết định câu
+// trả lời cho tất cả, mãi mãi. 05/09/2026 một câu vô dụng ("Bạn vừa hỏi lại
+// câu này — tôi đã trả lời ở trên rồi nhé!") đã lọt vào `(bài 0.1 CEA201,
+// 'start', 'en')` và mọi người nhận lại đúng nó. Chốt tối thiểu ở đây, và
+// `refresh` bên dưới là đường gỡ.
+
+// Ký tự CHỈ có trong tiếng Việt.
+const CHU_VIET = /[ăâđêôơưĂÂĐÊÔƠƯáàảãạấầẩẫậắằẳẵặéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/g;
+
+/** ⚠️ Đếm TỈ LỆ, không đếm sự có mặt: một câu tiếng Anh đúng vẫn chứa tên
+ *  riêng có dấu ("Cường", "Đà Nẵng") hoặc trích một dòng tiếng Việt.
+ *
+ *  ⚠️ Ngưỡng 10%, KHÔNG phải 2%. Đo trên câu trả lời thật của chính gia sư
+ *  này: tiếng Việt ~26% · tiếng Anh thuần 0% · tiếng Anh có tên riêng có dấu
+ *  2,1% · tiếng Anh trích một dòng tiếng Việt 2,8%. Đặt 2% là hai ca cuối bị
+ *  gán nhầm thành tiếng Việt — đúng cái bẫy đã ghi trong bài học cũ, và tôi
+ *  vẫn đặt 2% ở bản đầu. Khe 2,8% → 26% rất rộng, 10% nằm giữa. */
+function trongNhuTiengViet(chu: string): boolean {
+  const soChu = (chu.match(/\p{L}/gu) || []).length;
+  if (soChu < 80) return false; // quá ngắn để kết luận
+  return ((chu.match(CHU_VIET) || []).length / soChu) > 0.10;
+}
+
+function nenLuuCache(answer: string, english: boolean | undefined, lessonId: number, cacheKey: string): boolean {
+  if (answer.length < 80) {
+    logger.warn('course_tutor: KHÔNG lưu cache — câu trả lời quá ngắn', { lessonId, cacheKey, len: answer.length });
+    return false;
+  }
+  if (english && trongNhuTiengViet(answer)) {
+    logger.warn('course_tutor: KHÔNG lưu cache — xin tiếng Anh mà trả về tiếng Việt', { lessonId, cacheKey });
+    return false;
+  }
+  return true;
+}
+
 export interface TutorAskOpts {
   userId: number;
   question: string;
@@ -159,6 +228,12 @@ export interface TutorAskOpts {
   /** Key của chip gợi ý cố định ('start','exercises'…) ⇒ câu trả lời được CACHE
    *  dùng chung. Không truyền (câu gõ tay) ⇒ không đụng cache, luôn sinh mới. */
   cacheKey?: string;
+  /** "Hỏi lại mới": BỎ QUA bước ĐỌC cache nhưng VẪN GHI ĐÈ.
+   *
+   *  ⚠️ Đây là đường DUY NHẤT sửa được một mục cache hỏng. Bỏ `cacheKey` đi
+   *  thì chỉ né được cache cho riêng mình — máy chủ cũng không ghi (chỉ ghi
+   *  khi có `cacheKey`), nên cái hỏng nằm lại đó cho mọi người. */
+  refresh?: boolean;
   /** Các câu trong bài quiz cuối chương học viên đang làm. Có nó, học viên chỉ
    *  cần gõ "câu 3 tôi chưa hiểu" — gia sư biết đề+đáp án câu đó, khỏi chép lại. */
   quizContext?: { n: number; prompt: string; options: string[]; correctIndexes: number[]; explanation?: string }[];
@@ -197,21 +272,23 @@ async function buildTutorCall(
 
   const course = lesson.section?.course;
   const heading = [course?.courseCode, course?.title].filter(Boolean).join(' — ') || 'Khoá học';
-  const notes = lesson.details?.teachingNotes ? `\n\nGHI CHÚ GIẢNG DẠY\n${plain(lesson.details.teachingNotes, 3000)}` : '';
+  const L = NHAN_NGU_CANH[langOf(opts.english)];
+  const notes = lesson.details?.teachingNotes
+    ? `\n\n${L.ghiChu}\n${plain(lesson.details.teachingNotes, 3000)}` : '';
 
   const quizBlock = buildQuizBlock(opts.quizContext);
   const messages: TutorMessage[] = [
     {
       role: 'user',
       content:
-        `THE LESSON\n${heading}\nBài: ${lesson.title}\n\n` +
-        `NỘI DUNG BÀI\n${plain(lesson.content, 8000) || '(bài này chủ yếu là video/không có nội dung chữ)'}` +
+        `THE LESSON\n${heading}\n${L.bai}: ${lesson.title}\n\n` +
+        `${L.noiDung}\n${plain(lesson.content, 8000) || L.trong}` +
         notes +
         (quizBlock ? `\n\n${quizBlock}` : ''),
     },
-    { role: 'assistant', content: 'Đã rõ. Tôi đang xem bài học này và sẵn sàng giúp.' },
+    { role: 'assistant', content: MOI_TRO_LY[langOf(opts.english)] },
     ...(opts.history || []).slice(-MAX_HISTORY),
-    { role: 'user', content: question },
+    { role: 'user', content: nhacNgonNgu(opts.english) + question },
   ];
   return { system: tutorSystem(opts.english), messages };
 }
@@ -222,7 +299,8 @@ export async function askCourseTutor(lessonId: number, opts: TutorAskOpts): Prom
   const lang = langOf(opts.english);
 
   // Câu hỏi gợi ý (có cacheKey) → thử cache trước; HIT thì trả ngay, khỏi tốn AI.
-  if (opts.cacheKey) {
+  // `refresh` bỏ qua bước ĐỌC này nhưng vẫn đi tới bước GHI bên dưới.
+  if (opts.cacheKey && !opts.refresh) {
     const hit = await getCachedAnswer(lessonId, opts.cacheKey, lang);
     if (hit) return { answer: hit, cached: true };
   }
@@ -242,7 +320,9 @@ export async function askCourseTutor(lessonId: number, opts: TutorAskOpts): Prom
   });
   const answer = (res.text || '').trim();
   if (!answer) throw new BadRequestError('AI chưa trả lời được. Thử lại nhé.');
-  if (opts.cacheKey) void saveCachedAnswer(lessonId, opts.cacheKey, lang, answer);
+  if (opts.cacheKey && nenLuuCache(answer, opts.english, lessonId, opts.cacheKey)) {
+    void saveCachedAnswer(lessonId, opts.cacheKey, lang, answer);
+  }
   return { answer, cached: false };
 }
 
@@ -262,7 +342,8 @@ export async function streamCourseTutor(
 
   // Cache HIT: KHÔNG stream (không có delta) — route sẽ gửi thẳng khung 'done'
   // với answer + cached:true, frontend hiện ngay tức thì.
-  if (opts.cacheKey) {
+  // `refresh` bỏ qua bước ĐỌC này nhưng vẫn đi tới bước GHI bên dưới.
+  if (opts.cacheKey && !opts.refresh) {
     const hit = await getCachedAnswer(lessonId, opts.cacheKey, lang);
     if (hit) return { answer: hit, cached: true };
   }
@@ -283,6 +364,8 @@ export async function streamCourseTutor(
   });
   const answer = (res.text || '').trim();
   if (!answer) throw new BadRequestError('AI chưa trả lời được. Thử lại nhé.');
-  if (opts.cacheKey) void saveCachedAnswer(lessonId, opts.cacheKey, lang, answer);
+  if (opts.cacheKey && nenLuuCache(answer, opts.english, lessonId, opts.cacheKey)) {
+    void saveCachedAnswer(lessonId, opts.cacheKey, lang, answer);
+  }
   return { answer, cached: false };
 }

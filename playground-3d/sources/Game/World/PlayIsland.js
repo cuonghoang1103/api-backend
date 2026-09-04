@@ -6,6 +6,7 @@ import { PLAY_ISLAND, PLAY_BRIDGE, PLAY_ROADS, PLAY_COLORS, PLOTS } from '../../
 import { FootballArena } from './FootballArena.js'
 import { PlayConcert } from './PlayConcert.js'
 import { PlayVillage } from './PlayVillage.js'
+import { PlayHarbour } from './PlayHarbour.js'
 import { Foliage } from './Foliage.js'
 
 /**
@@ -83,6 +84,12 @@ export class PlayIsland
          * `PLOTS.village` để không trồng cây vào giữa làng.
          */
         this.village = new PlayVillage(this)
+
+        /**
+         * Bến cảng — khu thứ ba và là ô đất cuối cùng. Cũng dựng TRƯỚC
+         * `setScenery()` vì cùng lý do với hai khu trên.
+         */
+        this.harbour = new PlayHarbour(this)
 
         this.setScenery()
 

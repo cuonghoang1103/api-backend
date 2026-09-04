@@ -367,3 +367,104 @@ export const VILLAGE_COLORS = {
     letter: '#f0e6cf',
     letterTrim: '#6d5f45',
 }
+
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  BẾN CẢNG + HẢI ĐĂNG — khu thứ BA, ô đất cuối cùng (`PLOTS.harbour`)
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * Bến lát đá chạy dọc bờ Nam, một cầu tàu gỗ trên cọc vươn ra mặt nước, hải
+ * đăng đứng ở đầu cầu và QUÉT ĐÈN thật khi trời tối. Container xếp chồng trên
+ * bến để húc, cần cẩu và nhà kho cho ra dáng cảng.
+ *
+ * ⚠️ ĐƯỜNG NGANG z = 184 KẾT THÚC Ở x = 44, tức ngay giữa ô đất này.
+ * `PLAY_ROADS.cross` khai `{ z: 184, fromX: -34, toX: 44, halfWidth: 4.5 }`,
+ * nên lòng đường chiếm z ∈ [179,5 · 188,5] với mọi x ≤ 44. Ô đất trải
+ * x ∈ [14 · 54]. Phần x > 44 ở dải giữa là đất tự do — đó là chỗ xe rời đường
+ * để vào cảng.
+ *
+ * ⚠️ MẶT NƯỚC Ở y = −0,3 (`Water.surfaceElevation`), mặt đất ở 0,04. Chênh
+ * nhau đúng 0,34 — tức bờ ở đây rất thấp. Sàn cầu tàu vì thế phải NÂNG lên
+ * 0,7 và có cọc chống xuống, không thì nó nằm ngang mặt nước trông như một
+ * tấm ván trôi.
+ *
+ * ⚠️ Đây là khu DUY NHẤT cố ý dựng vật RA NGOÀI hình đảo. Chốt mép nước dùng ở
+ * làng (`shapeDistance > 0.93`) phải TẮT cho cầu tàu và hải đăng — nhưng chỉ
+ * cho chúng, mọi thứ khác vẫn phải đứng trên đất chắc.
+ */
+export const HARBOUR = {
+    /** Tâm ô đất, lấy thẳng từ `PLOTS.harbour`. */
+    x: 34,
+    z: 186,
+
+    /** Mép lòng đường, chép từ `PLAY_ROADS.cross[2]`. Đường KẾT THÚC ở x = 44. */
+    road: { z: 184, halfWidth: 4.5, toX: 44 },
+
+    /**
+     * BẾN — dải lát dọc bờ Nam.
+     *
+     * ⚠️ z = 192 chứ không phải 193, và depth 6 chứ không phải 8: đo thật thì
+     * ở z = 196 đất chắc chỉ còn từ x = 24 trở lên, nên bến sâu hơn là góc
+     * Tây-Nam thò ra mép nước. Xem bản đồ đo được ở mục 0l của bàn giao.
+     */
+    quay: { x: 34, z: 192, width: 28, depth: 6 },
+
+    /** CẦU TÀU — sàn gỗ trên cọc, vươn từ mép bến ra biển. */
+    jetty: {
+        x: 34,
+        fromZ: 195,
+        toZ: 205,
+        width: 5,
+        /** Cao hơn mặt nước (−0,3) một khoảng đủ để nhìn ra là sàn nâng. */
+        deckY: 0.7,
+        /** Cọc chống, cách nhau 2,5 dọc thân cầu. */
+        pileSpacing: 2.5,
+    },
+
+    /** HẢI ĐĂNG — đứng ở đầu cầu tàu, ngoài hình đảo. */
+    lighthouse: { x: 34, z: 205.5, radius: 2.2, height: 13 },
+
+    /** Container xếp chồng trên bến — thứ để húc. */
+    containers: [
+        [ 23, 191, 0 ], [ 23, 193.4, 0 ], [ 26.4, 191, 0 ],
+        [ 41, 191, 1 ], [ 41, 193.4, 1 ], [ 44.4, 193.4, 1 ],
+    ],
+
+    /** Cần cẩu bến — đứng ở mép Đông của bến. */
+    crane: { x: 47, z: 192, height: 9, jib: 10 },
+
+    /** Nhà kho ở dải Bắc (z < 179,5 nên ngoài lòng đường). */
+    warehouse: { x: 24, z: 175, width: 12, depth: 8, height: 4.5 },
+
+    /** Hai chiếc thuyền neo hai bên cầu tàu. */
+    boats: [
+        [ 28.5, 200, 1 ], [ 39.5, 202, -1 ],
+    ],
+
+    /** Cọc buộc dây dọc mép bến. */
+    bollards: [ 22, 27, 32, 37, 42, 47 ],
+
+    /** Điểm hồi sinh: đất tự do phía Đông chỗ đường kết thúc, mũi xe quay ra bến. */
+    respawn: { x: 49, z: 184, rotation: Math.PI * 0.5 },
+}
+
+/** Bảng màu riêng của cảng — tông biển/gỉ sắt, tách hẳn tông làng. */
+export const HARBOUR_COLORS = {
+    quay: '#9aa3a8',
+    quayTrim: '#6f7a80',
+    deck: '#8a6b45',
+    pile: '#5d4830',
+    towerWhite: '#eae4d8',
+    towerRed: '#c8402f',
+    lampGlow: '#ffe9a8',
+    containerA: '#c4553a',
+    containerB: '#2f6f8f',
+    containerTrim: '#3a3a3a',
+    crane: '#d9a53c',
+    craneDark: '#7d6335',
+    warehouse: '#7f8a90',
+    warehouseRoof: '#4a545a',
+    boat: '#e0e6e8',
+    boatHull: '#2f4f6f',
+    bollard: '#4a4a4a',
+}

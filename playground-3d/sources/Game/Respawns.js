@@ -1,7 +1,7 @@
 import * as THREE from 'three/webgpu'
 import { Game } from './Game.js'
 import { RESPAWN } from '../data/fptu.js'
-import { CONCERT, PLAY_RESPAWN, VILLAGE } from '../data/playisland.js'
+import { CONCERT, PLAY_RESPAWN, VILLAGE, HARBOUR } from '../data/playisland.js'
 import { CITY_RESPAWN } from '../data/cityisland.js'
 import { MONSTER_RESPAWN } from '../data/monsterisland.js'
 import { CARRIER_RESPAWN, CARRIER } from '../data/carrier.js'
@@ -75,6 +75,13 @@ export class Respawns
             name: 'village',
             position: new THREE.Vector3(VILLAGE.respawn.x, 4, VILLAGE.respawn.z),
             rotation: VILLAGE.respawn.rotation
+        })
+
+        /** Bến cảng trên đảo sân chơi — cùng lý do, xem ghi chú trên. */
+        this.items.set('harbour', {
+            name: 'harbour',
+            position: new THREE.Vector3(HARBOUR.respawn.x, 4, HARBOUR.respawn.z),
+            rotation: HARBOUR.respawn.rotation
         })
 
         /** Đảo thành phố phía Đông — cũng dựng bằng mã, cũng phải khai ở đây. */

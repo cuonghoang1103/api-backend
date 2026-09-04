@@ -26,9 +26,9 @@
  */
 
 const BASE = process.env.PLAY_URL ?? 'http://localhost:5173'
-const { chromium } = await import('/Users/admin/Downloads/api-backend/node_modules/playwright/index.mjs')
+const { chromium } = await import(process.env.PW ?? '/Users/admin/Downloads/api-backend/node_modules/playwright/index.mjs')
 
-const browser = await chromium.launch()
+const browser = await chromium.launch(process.env.CHROME ? { executablePath: process.env.CHROME } : {})
 const page = await browser.newPage({ viewport: { width: 1280, height: 720 } })
 page.on('pageerror', (error) => console.log('  [lỗi trang]', error.message))
 

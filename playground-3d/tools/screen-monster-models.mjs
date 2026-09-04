@@ -49,7 +49,7 @@ const declaredHeight = (file) =>
 }
 
 const backup = fs.readFileSync(SLOT)
-const { chromium } = await import('/Users/admin/Downloads/api-backend/node_modules/playwright/index.mjs')
+const { chromium } = await import(process.env.PW ?? '/Users/admin/Downloads/api-backend/node_modules/playwright/index.mjs')
 
 const rows = []
 
@@ -63,7 +63,7 @@ for(const name of CANDIDATES)
 
     fs.copyFileSync(src, SLOT)
 
-    const browser = await chromium.launch()
+    const browser = await chromium.launch(process.env.CHROME ? { executablePath: process.env.CHROME } : {})
     const page = await browser.newPage({ viewport: { width: 320, height: 240 } })
     let measured = null
     try

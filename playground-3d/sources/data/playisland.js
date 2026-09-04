@@ -229,3 +229,141 @@ export const PLAY_COLORS = {
     stunt: '#e0a33c',       // dốc nhảy, bập bênh
     stuntDark: '#a8742a',
 }
+
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  LÀNG NGÔN NGỮ — khu thứ HAI trong ba ô đất chừa sẵn (`PLOTS.village`)
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * Ba góc ngôn ngữ quây quanh một quảng trường: **Nhật** (torii + vườn đá khô),
+ * **Trung** (cổng tam quan + đèn lồng), **Anh** (tháp đồng hồ). Tông xe vào một
+ * khối chữ là bật câu hỏi từ vựng — dùng CHUNG `VocabQuiz` với tường gạch.
+ *
+ * ⚠️⚠️ ĐƯỜNG NGANG z = 184 CHẠY XUYÊN QUA Ô ĐẤT NÀY.
+ *
+ * `PLAY_ROADS.cross` khai `{ z: 184, fromX: -34, toX: 44, halfWidth: 4.5 }`,
+ * tức lòng đường chiếm z ∈ [179,5 · 188,5] với MỌI x ≥ −34. Mà ô đất làng trải
+ * x ∈ [−48 · −12]. Nói cách khác: **hơn nửa phía Đông của ô đất là lòng đường**,
+ * và đó chính là lối xe đi vào.
+ *
+ * Đây đúng là cái bẫy đã sập BA lần trên đảo này (đường ngang xuyên lòng sân
+ * bóng · đường trục xuyên tổ quái · khán đài nhạc hội nằm giữa đường). Nên bố
+ * cục dưới đây chia làm ba dải, và KHÔNG dải nào chạm lòng đường:
+ *
+ *     z 171 … 178,5   dải BẮC   — góc Nhật (Tây) + góc Trung (Đông)
+ *     z 179,5 … 188,5 LÒNG ĐƯỜNG — chỉ quảng trường ở khúc x < −35 mới lấn vào
+ *     z 189,5 … 197   dải NAM   — góc Anh (tháp đồng hồ)
+ *
+ * Quảng trường đặt ở khúc x ∈ [−47 · −35], tức phía TÂY chỗ đường kết thúc
+ * (x = −34), nên nó nối liền với đường mà không nằm trong lòng đường.
+ *
+ * ⚠️ Mọi toạ độ ở đây là TUYỆT ĐỐI, không phải tương đối so với tâm ô đất —
+ * gõ tương đối rồi cộng trong lúc dựng là đúng chỗ để lệch một dấu.
+ */
+export const VILLAGE = {
+    /** Tâm ô đất, lấy thẳng từ `PLOTS.village`. */
+    x: -30,
+    z: 184,
+
+    /** Mép lòng đường, chép từ `PLAY_ROADS.cross[2]`. Dựng gì cũng phải né. */
+    road: { z: 184, halfWidth: 4.5, fromX: -34 },
+
+    /** Quảng trường lát đá ở đầu Tây của đường — trái tim của làng. */
+    /**
+     * ⚠️ Bản đầu để `x: -41, width: 12` ⇒ mép Tây ở x = −47, mà đo thật bằng
+     * `shapeDistance()` thì x = −47 ở z = 184 đã là ĐẤT MÉP (> 0,93). Góc
+     * Tây-Nam của đảo bị siêu-ellipse bậc 4 cắt vát rất mạnh — xem bản đồ đo
+     * được trong mục 0l của bàn giao. Dịch sang Đông và thu hẹp còn 10.
+     */
+    plaza: { x: -40, z: 184, width: 10, depth: 10 },
+
+    /** Góc NHẬT: torii đứng trên lối vào vườn đá khô. */
+    japan: {
+        x: -41, z: 175,
+        torii: { x: -41, z: 178, width: 5.4, height: 4.6 },
+        garden: { x: -41, z: 174, width: 9, depth: 6 },
+        /** Năm tảng đá vườn khô, đặt tay cho ra bố cục lệch kiểu karesansui. */
+        stones: [
+            [ -44.2, 173.2, 1.1 ], [ -42.4, 175.4, 0.7 ], [ -40.6, 172.6, 0.9 ],
+            [ -38.8, 174.8, 1.3 ], [ -37.6, 172.9, 0.6 ],
+        ],
+    },
+
+    /** Góc TRUNG: cổng tam quan ba lối + hai hàng đèn lồng. */
+    china: {
+        x: -22, z: 175,
+        gate: { x: -22, z: 178, width: 8.4, height: 5.2 },
+        /** Đèn lồng xếp hai bên lối từ cổng đi vào. */
+        lanterns: [
+            [ -25.6, 176 ], [ -18.4, 176 ],
+            [ -25.6, 173 ], [ -18.4, 173 ],
+        ],
+        pavilion: { x: -22, z: 173, width: 6, depth: 5, height: 3.4 },
+    },
+
+    /** Góc ANH: tháp đồng hồ, cao nhất làng nên nhìn từ xa là thấy. */
+    england: {
+        /**
+         * ⚠️ Bản đầu đặt ở (−30 · 193). Đo thật: ở z = 194 thì đất chắc chỉ
+         * bắt đầu từ x = −22, còn z = 196 thì KHÔNG còn chỗ nào chắc. Tháp
+         * đứng được nhưng chân nó nằm ngay trên vạch mép. Dời sang (−26 · 192),
+         * nơi đất chắc ở cả bốn phía.
+         */
+        x: -26, z: 192,
+        /**
+         * ⚠️ Bản đầu để `side: 3.6, height: 12` — tỉ lệ 1:3,3. Ảnh chụp ra một
+         * khối vuông bè bè, mặt đồng hồ chiếm gần trọn bề ngang, đọc thành
+         * "cái máy bán nước" chứ không phải tháp. Tháp đồng hồ thật mảnh hơn
+         * nhiều: Big Ben cao gấp ~9 lần bề ngang. Ở đây lấy 1:5,4 — đủ mảnh để
+         * ra dáng tháp mà vẫn đứng vững trong khung hình.
+         */
+        tower: { x: -26, z: 192, side: 2.6, height: 14 },
+        /** Bốt điện thoại đỏ + băng ghế, cho ra chất phố Anh. */
+        booth: { x: -21, z: 191.5 },
+        bench: { x: -31, z: 190.5 },
+    },
+
+    /**
+     * KHỐI CHỮ — tông vào là hỏi từ vựng.
+     *
+     * ⚠️ Không khối nào được rơi vào lòng đường (z 179,5…188,5 với x ≥ −34).
+     * Danh sách này đã soát tay, và `check-village.mjs` soát lại bằng máy.
+     */
+    letters: [
+        // dải Bắc, quanh góc Nhật
+        [ -46, 177 ], [ -36, 177 ], [ -44, 171.5 ],
+        // dải Bắc, quanh góc Trung
+        [ -27, 177 ], [ -17, 177 ], [ -20, 171.5 ],
+        // quảng trường (x < −35 nên ngoài lòng đường)
+        // ⚠️ [−46,5 · 187] đã bị chốt mép nước loại — góc Tây-Nam là chỗ đảo
+        //    vát mạnh nhất. Dời vào [−42 · 187].
+        [ -46.5, 181 ], [ -42, 187 ], [ -37, 181 ], [ -37, 187 ],
+        // dải Nam, quanh tháp đồng hồ — cả dải này hẹp, xem bản đồ ở mục 0l
+        [ -32, 190 ], [ -22, 190 ], [ -19, 193 ],
+    ],
+
+    /** Điểm hồi sinh: trên lòng đường phía Đông, mũi xe quay VÀO làng (−X). */
+    respawn: { x: -26, z: 184, rotation: Math.PI },
+}
+
+/** Bảng màu riêng của làng — tông gỗ/giấy, tách hẳn tông đêm hội. */
+export const VILLAGE_COLORS = {
+    plaza: '#cdbfa4',
+    plazaTrim: '#a5977c',
+    gravel: '#e2ddd0',        // vườn đá khô
+    stone: '#8f8a7e',
+    toriiRed: '#c8402f',
+    toriiDark: '#8e2a1e',
+    gateRed: '#b8332b',
+    gateGold: '#d9a53c',
+    gateJade: '#2f7d5c',
+    lantern: '#e8563f',
+    roof: '#3c4a5c',
+    towerStone: '#b9ac93',
+    towerTrim: '#7d6f57',
+    clockFace: '#f2ead6',
+    boothRed: '#b5241f',
+    wood: '#8a6b45',
+    letter: '#f0e6cf',
+    letterTrim: '#6d5f45',
+}

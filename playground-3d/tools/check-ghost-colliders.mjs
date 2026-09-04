@@ -15,11 +15,11 @@
  * Chạy:  node tools/check-ghost-colliders.mjs          (cần dev server đang chạy)
  *        URL=http://localhost:5175/ node tools/...
  */
-const { chromium } = await import('/Users/admin/Downloads/api-backend/node_modules/playwright/index.mjs')
+const { chromium } = await import(process.env.PW ?? '/Users/admin/Downloads/api-backend/node_modules/playwright/index.mjs')
 
 const URL = process.env.URL ?? 'http://localhost:5175/'
 
-const browser = await chromium.launch({ headless: false })
+const browser = await chromium.launch({ ...(process.env.CHROME ? { executablePath: process.env.CHROME } : {}), headless: false })
 const page = await browser.newPage({ viewport: { width: 900, height: 600 } })
 page.on('pageerror', (e) => console.log('  [pageerror]', e.message))
 await page.goto(URL, { waitUntil: 'domcontentloaded' })

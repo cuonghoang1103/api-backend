@@ -5,6 +5,7 @@ import { MeshDefaultMaterial } from '../Materials/MeshDefaultMaterial.js'
 import { PLAY_ISLAND, PLAY_BRIDGE, PLAY_ROADS, PLAY_COLORS, PLOTS } from '../../data/playisland.js'
 import { FootballArena } from './FootballArena.js'
 import { PlayConcert } from './PlayConcert.js'
+import { PlayVillage } from './PlayVillage.js'
 import { Foliage } from './Foliage.js'
 
 /**
@@ -75,6 +76,13 @@ export class PlayIsland
          * kịp cho `Foliage` gom ở cuối hàm dựng.
          */
         this.concert = new PlayConcert(this)
+
+        /**
+         * Làng ngôn ngữ — khu thứ hai. Cũng phải dựng TRƯỚC `setScenery()`
+         * vì nó ghi mốc tán cây vào `canopySpots`, và `setScenery()` đọc
+         * `PLOTS.village` để không trồng cây vào giữa làng.
+         */
+        this.village = new PlayVillage(this)
 
         this.setScenery()
 

@@ -29,14 +29,14 @@
  */
 
 const BASE = process.env.PLAY_URL ?? 'http://localhost:5173'
-const { chromium } = await import('/Users/admin/Downloads/api-backend/node_modules/playwright/index.mjs')
+const { chromium } = await import(process.env.PW ?? '/Users/admin/Downloads/api-backend/node_modules/playwright/index.mjs')
 
 /**
  * Khung nhìn NHỎ, cố ý. Bộ kiểm không nhìn hình, mà headless dựng cả thế giới
  * này ở 1280×720 chỉ được chừng 5 khung hình/giây — mỗi phép chờ dài gấp mười.
  * Thu nhỏ khung nhìn là cách rẻ nhất để bộ kiểm chạy xong trong một phút.
  */
-const browser = await chromium.launch()
+const browser = await chromium.launch(process.env.CHROME ? { executablePath: process.env.CHROME } : {})
 const page = await browser.newPage({ viewport: { width: 480, height: 320 } })
 page.on('pageerror', (error) => console.log('  [lỗi trang]', error.message))
 

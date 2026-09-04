@@ -50,6 +50,8 @@ export class Map
             { name: 'Nhạc hội', respawnName: 'concert', offset: { x: 0.05, y: -0.02 } },
             // Đảo thành phố ở x ≈ 154, cũng ngoài phạm vi ảnh bản đồ nên pin bị
             // kẹp sát viền phải — nhích vào cho đỡ dính mép
+            // Làng ngôn ngữ — cùng đảo sân chơi, xa nhất về phía Nam (z ≈ 184)
+            { name: 'Làng ngôn ngữ', respawnName: 'village', offset: { x: -0.04, y: -0.04 } },
             { name: 'Thành phố', respawnName: 'city', offset: { x: -0.03, y: 0 } },
             // Đảo quái vật ở z ≈ −212, xa nhất về phía Bắc và cũng ngoài phạm vi
             // ảnh bản đồ — pin bị kẹp sát viền TRÊN, nhích xuống cho đỡ dính mép

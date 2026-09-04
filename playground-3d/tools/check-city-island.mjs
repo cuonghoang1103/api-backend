@@ -9,12 +9,12 @@
  * toà nhà lặng lẽ không mọc lên, không một lỗi nào. Nếu con số này tụt xuống
  * dưới 32 thì gần như chắc chắn lại là chuyện tên mảnh.
  */
-const { chromium } = await import('/Users/admin/Downloads/api-backend/node_modules/playwright/index.mjs')
+const { chromium } = await import(process.env.PW ?? '/Users/admin/Downloads/api-backend/node_modules/playwright/index.mjs')
 // ⚠️ Vite NHẢY CỔNG khi 5173 đang bận (rất hay gặp: phiên Claude khác cũng mở
 // dev server trong đúng thư mục này). Đọc cổng THẬT ở `preview_logs` rồi truyền
 // vào bằng `PLAY_URL=`, không thì bộ kiểm chỉ báo ERR_CONNECTION_REFUSED.
 const BASE = process.env.PLAY_URL ?? 'http://localhost:5173'
-const browser = await chromium.launch()
+const browser = await chromium.launch(process.env.CHROME ? { executablePath: process.env.CHROME } : {})
 const page = await browser.newPage({ viewport: { width: 1280, height: 720 } })
 await page.goto(`${BASE}/#skip`, { waitUntil: 'load' })
 await page.waitForFunction(() => window.game?.world?.cityIsland, null, { timeout: 90000 })

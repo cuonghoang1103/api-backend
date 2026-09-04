@@ -1613,6 +1613,104 @@ tiếp thì phải chia nhỏ gói JS, việc khác hẳn.
 
 ---
 
+# 0o. CHIA NHỎ GÓI JS — 04/09/2026
+
+Câu hỏi ban đầu là "gói 1 MB chia nhỏ được không". Đo bằng
+`rollup-plugin-visualizer` (`template: 'raw-data'`) thì hoá ra **hai phần ba
+câu trả lời không phải chia nhỏ, mà là GỠ HẲN.**
+
+Thành phần gói lúc đầu (chưa rút gọn, tổng 9,75 MB):
+
+```
+4705 KB  47,1%  three.js
+1737 KB  17,4%  node_modules khác   ← hoá ra là polyfill crypto
+ 804 KB   8,0%  World/
+ 789 KB   7,9%  tweakpane           ← chỉ dùng khi có #debug
+ 513 KB   5,1%  rapier (js glue)
+ 504 KB   5,0%  Game/ lõi
+```
+
+## ⚠️ 1,1 MB polyfill CRYPTO cho một trò chơi 3D
+
+`vite.config.js` gọi `nodePolyfills()` KHÔNG THAM SỐ, tức polyfill mọi module
+lõi của Node. `crypto` kéo theo cả một cụm: elliptic 206 KB · asn1.js 138 ·
+diffie-hellman 106 · public-encrypt 99 · create-ecdh 95 · miller-rabin 94 ·
+bn.js 90 · browserify-sign 77 · ripemd160 73.
+
+Thứ duy nhất trong kho chạm tới `crypto` là `uuid` trong `Server.js` — mà
+`uuid` v11 dùng `crypto.randomUUID()` **của trình duyệt**, không phải module
+Node. Đã kiểm thật sau khi loại: `localStorage.uuid` vẫn ra UUID hợp lệ, 0 lỗi.
+
+`nodePolyfills({ exclude: [ 'crypto' ] })` → **gzip 1.121 KB → 869 KB, giảm
+253 KB chỉ bằng một dòng cấu hình.**
+
+⚠️ ĐỪNG bỏ luôn `nodePolyfills()`: `msgpack-lite` (cũng ở `Server.js`) cần
+`Buffer`. Chỉ thu hẹp.
+
+💡 Nhân tiện: `Server.js` NGỦ HOÀN TOÀN trên production — `start()` chỉ kết nối
+khi có `import.meta.env.VITE_SERVER_URL`, mà biến đó không được đặt ở bất kỳ
+tệp `.env` nào. Muốn cắt tiếp thì `msgpack` có thể chuyển sang nhập động, chỉ
+nạp khi socket thật sự mở.
+
+## ⚠️ tweakpane 789 KB đi vào gói phát hành cho MỌI khách
+
+`Debug.js` nhập tĩnh `tweakpane` + hai plugin ở đầu file, trong khi
+`this.active = location.hash.match(/debug/i)` — tức bảng chỉ mở khi có
+`#debug`, nhưng thư viện thì luôn được đóng gói.
+
+Sửa: nhập ĐỘNG trong một hàm `async load()`, và `Game.init()` gọi
+`await this.debug.load()` ngay sau `new Debug()`.
+
+⚠️ Được phép làm thế vì `Debug` là thứ **thứ hai** được dựng trong `init()`
+(chỉ sau `new THREE.Scene()`), nên không có gì phía trước đọc `debug.panel`.
+Đổi thứ tự dựng ở `init()` mà quên điều này là bảng gỡ lỗi vỡ câm.
+
+Kết quả: **gzip 869 → 768 KB**, và tweakpane thành 3 chunk riêng (96 KB gzip)
+chỉ tải khi mở `#debug`. Đã kiểm cả hai đường: không hash → 0 chunk tweakpane,
+có `#debug` → 3 chunk + bảng hiện ra, cả hai 0 lỗi JS.
+
+## Tổng và TRẦN
+
+**gzip 1.121 → 768 KB, giảm 353 KB (31%).** Lần tải đầu 7,75 → **7,40 MB**.
+
+Thành phần còn lại (tổng 8,35 MB chưa rút gọn):
+
+```
+4705 KB  55,0%  three.js     ← TRẦN, không chia được
+ 839 KB   9,8%  Game/ lõi
+ 513 KB   6,0%  rapier
+ 469 KB   5,5%  Đảo + khu
+ 283 KB   3,3%  Areas (16 khu)
+ 195 KB   2,3%  Sinh tồn
+```
+
+⛔ **three.js chiếm 55% và KHÔNG chia nhỏ được có ích.** `three/webgpu` mang cả
+hai backend (WebGPU + WebGL dự phòng) và toàn bộ hệ TSL, và tất cả đều cần cho
+khung hình ĐẦU TIÊN. Chia nó ra chỉ đổi chỗ byte chứ không giảm thời gian tới
+lúc chơi được.
+
+Thứ còn hoãn được là **Sinh tồn (195 KB chưa rút gọn ≈ 25 KB gzip)** — chế độ
+này phải tự bật. Nhưng `Survival` đăng ký âm thanh, HUD và bộ bắt sự kiện ngay
+lúc dựng, còn `Options` cần biết nó tồn tại để hiện nút bật. Refactor không
+nhỏ cho 25 KB — chưa làm, và nên cân nhắc kỹ trước khi làm.
+
+## Cách đo lại
+
+```bash
+npm i --no-save --legacy-peer-deps rollup-plugin-visualizer
+# thêm vào plugins: visualizer({ filename: '…/stats.json', template: 'raw-data' })
+npm run build
+# rồi gom `nodeParts[].renderedLength` theo `nodeMetas[].id`
+```
+
+⚠️ `npm i --no-save` ở kho này **GỠ MẤT playwright** ("removed 2 packages") vì
+nó giải lại cây phụ thuộc. Cài lại trước khi chạy bộ kiểm, không thì mọi bộ
+đều chết ở `ERR_MODULE_NOT_FOUND`.
+
+⚠️ Và nhớ **gỡ visualizer khỏi `vite.config.js`** trước khi commit.
+
+---
+
 # 1. MƯỜI BA BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
 
 Cần dev server sống: `cd playground-3d && npm run dev` (xem mục 4).

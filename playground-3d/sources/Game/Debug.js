@@ -1,27 +1,51 @@
 import * as THREE from 'three/webgpu'
-import { Pane } from 'tweakpane'
-import * as EssentialsPlugin from '@tweakpane/plugin-essentials'
-import * as CamerakitPlugin from '@tweakpane/plugin-camerakit'
 
+/**
+ * ⚠️ TWEAKPANE NHẬP ĐỘNG, không nhập tĩnh ở đầu file.
+ *
+ * Bảng gỡ lỗi chỉ mở khi địa chỉ có `#debug`. Nhưng ba gói của nó —
+ * `tweakpane` + hai plugin — nhập tĩnh thì đi vào gói phát hành BẤT KỂ điều
+ * đó: đo ngày 04/09/2026 bằng `rollup-plugin-visualizer` ra **789 KB chưa rút
+ * gọn, 7,9% cả gói**, mà không một người chơi bình thường nào chạm tới.
+ *
+ * Nay chúng nằm trong một chunk riêng, chỉ tải khi thật sự mở `#debug`.
+ *
+ * ⚠️ Cái giá: `panel` không còn sẵn ngay sau `new Debug()`. Nên `Game.init()`
+ * phải `await this.debug.load()` NGAY SAU đó, trước khi dựng bất cứ thứ gì
+ * đọc `debug.panel`. `Debug` là thứ thứ hai được dựng trong `init()` nên
+ * không có gì phía trước bị ảnh hưởng.
+ */
 export class Debug
 {
     constructor()
     {
-        
         this.active = location.hash.match(/debug/i)
+    }
 
-        if(this.active)
+    /**
+     * Nạp tweakpane và dựng bảng. Không có `#debug` thì trả về ngay, không tải
+     * một byte nào.
+     */
+    async load()
+    {
+        if(!this.active)
+            return
+
+        const [ { Pane }, EssentialsPlugin, CamerakitPlugin ] = await Promise.all([
+            import('tweakpane'),
+            import('@tweakpane/plugin-essentials'),
+            import('@tweakpane/plugin-camerakit'),
+        ])
+
+        this.panel = new Pane()
+        this.panel.registerPlugin(EssentialsPlugin)
+        this.panel.registerPlugin(CamerakitPlugin)
+
+        addEventListener('keydown', (event) =>
         {
-            this.panel = new Pane()
-            this.panel.registerPlugin(EssentialsPlugin)
-            this.panel.registerPlugin(CamerakitPlugin)
-
-            addEventListener('keydown', (event) =>
-            {
-                if(event.code === 'KeyH')
-                    this.panel.hidden = !this.panel.hidden
-            })
-        }
+            if(event.code === 'KeyH')
+                this.panel.hidden = !this.panel.hidden
+        })
     }
 
     addManualBinding(panel, object, property, settings, update, manual = false)

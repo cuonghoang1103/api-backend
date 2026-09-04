@@ -42,7 +42,26 @@ export default {
         wasm(),
         topLevelAwait(),
         restart({ restart: [ '../static/**', ] }), // Restart server on static file change
-        nodePolyfills(),
+        /**
+         * ⚠️ LOẠI `crypto` KHỎI POLYFILL — đo được 253 KB (đã gzip).
+         *
+         * `nodePolyfills()` không tham số thì polyfill MỌI module lõi của Node,
+         * trong đó `crypto` kéo theo cả một cụm: elliptic 206 KB · asn1.js 138 ·
+         * diffie-hellman 106 · public-encrypt 99 · create-ecdh 95 ·
+         * miller-rabin 94 · bn.js 90 · browserify-sign 77 · ripemd160 73 —
+         * tổng hơn **1,1 MB chưa rút gọn** cho một trò chơi 3D.
+         *
+         * Thứ duy nhất trong kho chạm tới `crypto` là `uuid` ở `Server.js`, mà
+         * `uuid` v11 dùng `crypto.randomUUID()` CỦA TRÌNH DUYỆT chứ không phải
+         * module Node. Đã kiểm thật: bỏ polyfill đi, `localStorage.uuid` vẫn
+         * sinh ra UUID hợp lệ, 0 lỗi JS.
+         *
+         * `msgpack-lite` (thứ còn lại trong `Server.js`) cần `Buffer`, và
+         * `Buffer` vẫn được polyfill — chỉ `crypto` bị loại.
+         *
+         * ⚠️ Đừng bỏ luôn `nodePolyfills()`: `msgpack-lite` sẽ vỡ. Chỉ thu hẹp.
+         */
+        nodePolyfills({ exclude: [ 'crypto' ] }),
         // basicSsl()
     ]
 }

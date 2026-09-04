@@ -77,6 +77,9 @@ export class Game
         // First batch for intro
         this.scene = new THREE.Scene()
         this.debug = new Debug()
+        // Nạp tweakpane TRƯỚC mọi thứ đọc `debug.panel`. Không có `#debug` thì
+        // câu này trả về ngay lập tức và không tải gì — xem `Debug.js`.
+        await this.debug.load()
         this.resourcesLoader = new ResourcesLoader()
         this.quality = new Quality()
         this.server = new Server()

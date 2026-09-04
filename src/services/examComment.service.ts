@@ -23,6 +23,13 @@ import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 
 const MAX_CONTENT = 3000;
+// Trả lời CuongMini là lời giải nhiều bước/nhiều cách (đã thấy thật 5 cách
+// giải cho 1 câu) — 3000 ký tự cắt cụt giữa chừng, không phải bị "giới hạn
+// câu trả lời" (LLM không giới hạn độ dài) mà là bị CẮT LÚC ĐĂNG BÌNH LUẬN,
+// im lặng không báo, người đọc tưởng bài giải viết dở dang. Người thật gõ
+// tay thì 3000 vẫn đủ (chặn spam bài dài); AI thì nới hẳn — TEXT trong
+// Postgres không có trần thật sự.
+const MAX_AI_CONTENT = 20000;
 
 // PHẢI khớp hệt scripts/_exam-hash.mjs (dùng bởi exam-reapply-comments.mjs
 // và exam-classify-chapters.mjs) — lệch một ký tự chuẩn hoá là promptHash
@@ -72,7 +79,7 @@ export async function listComments(questionId: number) {
 async function createCommentInternal(questionId: number, userId: number, content: string, parentId: number | null | undefined, isAi: boolean) {
   const text = (content || '').trim();
   if (!text) throw new AppError('Bình luận trống.', 400);
-  if (text.length > MAX_CONTENT) throw new AppError('Bình luận dài quá.', 400);
+  if (text.length > (isAi ? MAX_AI_CONTENT : MAX_CONTENT)) throw new AppError('Bình luận dài quá.', 400);
 
   const question = await prisma.examQuestion.findUnique({ where: { id: questionId }, select: { id: true, examId: true, prompt: true } });
   if (!question) throw new AppError('Không tìm thấy câu hỏi.', 404);
@@ -200,7 +207,7 @@ export async function postAiAnswerComment(questionId: number, mode: string, ques
     const botId = await getBotUserId();
     if (!botId) return; // migration bot user chưa chạy tới — bỏ qua, không lỗi
     const askedText = buildAskedLabel(mode, question);
-    const content = `**Hỏi:** ${askedText}\n\n**CuongMini trả lời:**\n${answer}`.slice(0, MAX_CONTENT);
+    const content = `**Hỏi:** ${askedText}\n\n**CuongMini trả lời:**\n${answer}`.slice(0, MAX_AI_CONTENT);
     const parentId = await findRootAiCommentId(questionId, askedText);
     await createCommentInternal(questionId, botId, content, parentId, true);
   } catch { /* đăng bình luận hỏng thì thôi, không ảnh hưởng câu trả lời chính */ }

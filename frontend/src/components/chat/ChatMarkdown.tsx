@@ -278,9 +278,20 @@ function chuanHoaHangRao(text: string): string {
       const mo = /^\$\$(?!\$)(.+)$/.exec(cat);
       if (mo) {
         const than = mo[1].trim();
-        // `$$x=1$$` gọn trên một dòng: tách thành ba dòng cho chắc.
-        const donDong = /^(.*?)\$\$$/.exec(than);
-        if (donDong) { ra.push('$$', donDong[1].trim(), '$$'); continue; }
+        // `$$x=1$$` gọn trên một dòng: tách thành ba dòng cho chắc. Đóng
+        // KHÔNG PHẢI lúc nào cũng nằm ở cuối dòng — model hay viết
+        // `$$x=1$$ ✓` hay `$$x=1$$.` — dùng regex KHÔNG neo cuối dòng
+        // (`$` anchor) và giữ lại phần chữ sau dấu đóng thành dòng riêng.
+        // Bản cũ neo `$$` phải là ký tự CUỐI dòng nên rơi vào nhánh
+        // "mở khối chưa đóng", nuốt luôn phần đuôi + mọi dòng còn lại của
+        // câu trả lời làm "công thức", KaTeX không dựng nổi, hiện chữ thô.
+        const donDong = /^(.*?)\$\$(.*)$/.exec(than);
+        if (donDong) {
+          ra.push('$$', donDong[1].trim(), '$$');
+          const duoi = donDong[2].trim();
+          if (duoi) ra.push(duoi);
+          continue;
+        }
         ra.push('$$', than);
         trongKhoi = true;
         continue;
@@ -289,10 +300,17 @@ function chuanHoaHangRao(text: string): string {
       ra.push(dong);
       continue;
     }
-    // Đang trong khối: đóng khi gặp dòng chỉ có `$$`, hoặc dòng KẾT THÚC bằng `$$`.
+    // Đang trong khối: đóng khi gặp dòng chỉ có `$$`, hoặc dòng CÓ `$$`
+    // (không nhất thiết ở cuối — cùng lý do trên).
     if (cat === '$$') { ra.push('$$'); trongKhoi = false; continue; }
-    const dong2 = /^(.*\S)\$\$$/.exec(cat);
-    if (dong2) { ra.push(dong2[1], '$$'); trongKhoi = false; continue; }
+    const dong2 = /^(.*\S)\$\$(.*)$/.exec(cat);
+    if (dong2) {
+      ra.push(dong2[1], '$$');
+      trongKhoi = false;
+      const duoi = dong2[2].trim();
+      if (duoi) ra.push(duoi);
+      continue;
+    }
     ra.push(dong);
   }
   // Model quên đóng ⇒ tự đóng, còn hơn để nó nuốt hết phần còn lại.

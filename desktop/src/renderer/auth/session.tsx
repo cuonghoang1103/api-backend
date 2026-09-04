@@ -52,6 +52,8 @@ interface SessionContextValue {
   userId: number | null;
   api: ApiClient | null;
   login: (username: string, password: string) => Promise<void>;
+  /** Đăng nhập bằng token OAuth nhận qua cổng vòng 127.0.0.1. */
+  dangNhapBangToken: (token: string) => Promise<void>;
   logout: (options?: { discardUnsynced?: boolean }) => Promise<void>;
   /** Số việc chưa gửi — để hỏi trước khi đăng xuất. */
   unsyncedCount: () => Promise<number>;
@@ -206,6 +208,37 @@ export function SessionProvider({
     setPhase('da-dang-nhap');
   }, []);
 
+  /**
+   * Đăng nhập bằng token nhận từ luồng OAuth qua trình duyệt.
+   *
+   * Token tới từ cổng vòng `127.0.0.1` (xem `main/ipc/oauthVong.ts`), nên nó
+   * ĐÃ do máy chủ của ta cấp — không phải thứ người dùng gõ vào.
+   *
+   * ⚠️ VẪN gọi `/auth/refresh` chứ không tin thẳng: bước đó vừa XÁC MINH token
+   * với máy chủ, vừa lấy về hồ sơ người dùng (tên, vai trò) mà bản thân chuỗi
+   * token không mang theo. Nhận bừa nghĩa là một token giả cũng đăng nhập được
+   * và app sẽ hiện một người dùng rỗng cho tới lời gọi API đầu tiên.
+   */
+  const dangNhapBangToken = useCallback(async (token: string) => {
+    const api = apiRef.current;
+    if (!api) throw new Error('Chưa sẵn sàng kết nối máy chủ.');
+
+    api.setToken(token);
+    try {
+      const fresh = await api.request<AuthResponse>('/api/v1/auth/refresh', { method: 'POST' });
+      api.setToken(fresh.token);
+      await window.cuongthai?.auth.storeSession({
+        userId: fresh.userId,
+        sessionToken: fresh.token,
+      });
+      setUser(toUser(fresh));
+      setPhase('da-dang-nhap');
+    } catch (err) {
+      api.setToken(null);
+      throw err;
+    }
+  }, []);
+
   const logout = useCallback(async (options?: { discardUnsynced?: boolean }) => {
     const api = apiRef.current;
 
@@ -242,10 +275,11 @@ export function SessionProvider({
       userId: user?.userId ?? null,
       api: apiRef.current,
       login,
+      dangNhapBangToken,
       logout,
       unsyncedCount,
     }),
-    [phase, user, login, logout, unsyncedCount],
+    [phase, user, login, dangNhapBangToken, logout, unsyncedCount],
   );
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;

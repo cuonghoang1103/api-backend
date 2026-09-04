@@ -917,6 +917,12 @@ export const INVOKE_CHANNELS = {
   'agent:datCheDoLenh': agentCheDoLenhSchema,
   'agent:datCheDoNote': agentCheDoNoteSchema,
   'agent:datCheDoTrinhDuyet': agentCheDoTrinhDuyetSchema,
+  /* Nhà cung cấp là DANH SÁCH TRẮNG, không phải chuỗi tự do: giá trị này đi
+     thẳng vào URL mở trong trình duyệt, và một chuỗi tuỳ ý ở đó là một chỗ
+     chèn tham số. */
+  'oauth:batDau': z.object({ provider: z.enum(['google', 'github', 'apple']) }),
+  'oauth:huy': null,
+
   'terminal:chay': z.object({
     cuocId: z.string().min(1),
     /* Trần 4000 để một lệnh dài (chuỗi `find … -exec …`) vẫn chạy được, nhưng
@@ -1029,6 +1035,8 @@ export const EVENT_CHANNELS = [
   'agent:moWeb',
   /** Thông báo đẩy tới CỬA SỔ ROBOT nổi (tin nhắn, nhạc, agent xong việc). */
   'robot:tin',
+  /** Đăng nhập OAuth qua trình duyệt đã xong — mang token về cho app. */
+  'oauth:xong',
 ] as const;
 
 export type EventChannel = (typeof EVENT_CHANNELS)[number];
@@ -1220,6 +1228,12 @@ export interface DesktopBridge {
    * có thể vài phút. Tiến trình đi qua sự kiện `agent:event`, không qua giá trị
    * trả về. Renderer phải gắn listener TRƯỚC khi gọi `send()`.
    */
+  oauth: {
+    /** Mở trình duyệt hệ thống và chờ token quay về qua cổng vòng 127.0.0.1. */
+    batDau(provider: 'google' | 'github' | 'apple'): Promise<{ ok: boolean; cong?: number }>;
+    /** Bỏ lượt đang chờ (người dùng đóng màn đăng nhập). */
+    huy(): Promise<{ ok: boolean }>;
+  };
   terminal: {
     /** Chạy một lệnh trong thư mục dự án của cuộc này. Trả về NGAY kèm mã. */
     chay(cuocId: string, lenh: string): Promise<TerminalKetQua>;

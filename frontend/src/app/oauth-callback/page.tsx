@@ -64,6 +64,36 @@ function OAuthCallbackContent() {
         console.error('[oauth-callback] Failed to set backend_token:', err);
       }
 
+      // ── Đăng nhập từ APP DESKTOP: trả token về cổng vòng 127.0.0.1 ──
+      //
+      // App mở trình duyệt kèm `dt_cong` + `dt_nonce`, và dựng một máy chủ HTTP
+      // tạm chỉ nghe trên 127.0.0.1. Token đi từ đây về đó — KHÔNG rời khỏi máy
+      // người dùng. Đây là RFC 8252 (OAuth cho ứng dụng gốc); cách còn lại là
+      // deep link `app://`, nơi token lọt vào log hệ điều hành và bất kỳ app
+      // nào cũng đăng ký cướp được scheme.
+      //
+      // ⚠️ ĐÍCH ĐƯỢC DỰNG TỪ SỐ, KHÔNG BAO GIỜ TỪ CHUỖI NGƯỜI DÙNG ĐƯA.
+      // Nếu lấy nguyên một `redirect` từ URL rồi nhảy tới đó, trang này thành
+      // một cỗ máy phát token: ai dụ được người dùng mở
+      // `/oauth-callback?redirect=https://ke-gian.com` là lấy trọn phiên. Ở đây
+      // chỉ có CỔNG (số) là biến, còn `http://127.0.0.1` là hằng trong mã.
+      const congTho = searchParams?.get('dt_cong');
+      const nonce = searchParams?.get('dt_nonce') ?? '';
+      if (backendToken && congTho && /^\d{1,5}$/.test(congTho) && /^[a-f0-9]{16,64}$/.test(nonce)) {
+        const cong = Number(congTho);
+        // Cổng < 1024 cần quyền root — app không bao giờ mở được ở đó, nên một
+        // con số như vậy là dấu hiệu có người đang bịa tham số.
+        if (cong >= 1024 && cong <= 65535) {
+          setRedirected(true);
+          window.location.replace(
+            `http://127.0.0.1:${cong}/xong`
+            + `?token=${encodeURIComponent(backendToken)}`
+            + `&nonce=${encodeURIComponent(nonce)}`,
+          );
+          return;
+        }
+      }
+
       // Step 2: Fetch the FRESH profile from the backend to get the CURRENT role.
       // This reflects any role changes made by the admin (cuong03dx) immediately.
       const freshEmail = session.user.email;

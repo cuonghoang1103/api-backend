@@ -8878,3 +8878,63 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 }
 
 .ct-dangnhap-lien button:hover { color: #d946ef; text-decoration: underline; }
+
+/* ── Đăng nhập bằng Google/GitHub/Apple ─────────────────────
+   Ba nút mở TRÌNH DUYỆT HỆ THỐNG; token quay về qua cổng vòng 127.0.0.1. */
+.ct-dangnhap-hoac {
+  position: relative;
+  margin: 16px 0 12px;
+  text-align: center;
+}
+
+.ct-dangnhap-hoac::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--ct-border);
+}
+
+.ct-dangnhap-hoac span {
+  position: relative;
+  padding: 0 10px;
+  font-size: 12px;
+  color: var(--ct-text-faint);
+  background: var(--ct-surface);
+}
+
+.ct-dangnhap-ngoai { display: grid; gap: 8px; }
+
+.ct-dangnhap-ngoai button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  padding: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ct-text);
+  background: var(--ct-bg);
+  border: 1px solid var(--ct-border);
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.ct-dangnhap-ngoai button:hover:not(:disabled) {
+  border-color: var(--ct-accent);
+  background: var(--ct-hover);
+}
+
+/* ⚠️ Con trỏ PHẢI đổi khi bị khoá: ba nút này giữ nguyên màu lúc `disabled`
+   (nền chúng vốn đã nhạt), nên chỉ nhìn thì tưởng bấm được. */
+.ct-dangnhap-ngoai button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ct-dangnhap-nhac {
+  margin: 10px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ct-text-muted);
+  text-align: center;
+}

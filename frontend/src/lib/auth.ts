@@ -2,6 +2,8 @@ import NextAuth from "next-auth";
 import { goiBackend, maNhaCungCap } from '@/lib/backendServer';
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
+import AppleProvider from "next-auth/providers/apple";
+import { biMatApple } from "@/lib/appleSecret";
 import type { NextAuthConfig } from "next-auth";
 import type { UserRole } from "@/types/next-auth";
 
@@ -31,6 +33,12 @@ warnMissingEnv('GOOGLE_CLIENT_SECRET');
 warnMissingEnv('GITHUB_CLIENT_ID');
 warnMissingEnv('GITHUB_CLIENT_SECRET');
 warnMissingEnv('AUTH_SECRET');
+
+/* Apple KHÔNG bắt buộc — thiếu thì nút Apple đơn giản là không hiện ra. Vì thế
+ * nó dùng `biMatApple()` (trả null khi chưa cấu hình) chứ không `warnMissingEnv`:
+ * một dòng đỏ mỗi lần khởi động cho một tính năng cố ý chưa bật là cách nhanh
+ * nhất để người ta thôi đọc log. */
+const APPLE_SECRET = biMatApple();
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
@@ -73,6 +81,17 @@ export const authConfig: NextAuthConfig = {
         params: { scope: "read:user user:email" },
       },
     }),
+    /* Apple chỉ được nạp KHI ĐÃ CÓ khoá. Nạp sẵn rồi để trống bí mật thì
+     * `/api/auth/signin/apple` vẫn tồn tại và trả `invalid_client` — một nút
+     * bấm được nhưng luôn hỏng, tệ hơn hẳn một nút không có. */
+    ...(APPLE_SECRET
+      ? [
+          AppleProvider({
+            clientId: process.env.APPLE_CLIENT_ID ?? "",
+            clientSecret: APPLE_SECRET,
+          }),
+        ]
+      : []),
   ],
   callbacks: {
     /**
@@ -97,6 +116,10 @@ export const authConfig: NextAuthConfig = {
             "GitHub OAuth chưa được cấu hình. Vui lòng liên hệ admin."
           );
         }
+      }
+
+      if (account.provider === "apple" && !APPLE_SECRET) {
+        throw new Error("Apple Sign-In chưa được cấu hình. Vui lòng liên hệ admin.");
       }
 
       // Sanity check: email phải có

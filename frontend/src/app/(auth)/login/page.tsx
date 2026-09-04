@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState, useEffect } from 'react';
+import { Suspense, useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
@@ -36,6 +36,63 @@ function isAdminRole(roles: string[]): boolean {
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  /**
+   * Đường quay về sau khi OAuth xong.
+   *
+   * App desktop mở trang này kèm `dt_cong` + `dt_nonce` (xem
+   * `desktop/src/main/ipc/oauthVong.ts`). Hai tham số đó phải đi THEO qua
+   * vòng OAuth để `/oauth-callback` biết trả token về cổng vòng của app —
+   * NextAuth không giữ hộ gì cả, rơi mất là người dùng đăng nhập trên web
+   * xong mà app vẫn đứng im chờ.
+   */
+  const duongVe = (): string => {
+    const sp = new URLSearchParams(window.location.search);
+    const cong = sp.get('dt_cong');
+    const nonce = sp.get('dt_nonce');
+    if (!cong || !nonce) return '/oauth-callback';
+    return `/oauth-callback?dt_cong=${encodeURIComponent(cong)}&dt_nonce=${encodeURIComponent(nonce)}`;
+  };
+
+  /*
+   * Apple bật hay không là chuyện của MÁY CHỦ (có khoá `.p8` hay chưa), mà đây
+   * là client component. Hỏi `/api/auth/providers` — endpoint NextAuth tự phục
+   * vụ, suy thẳng từ mảng `providers` — nên nó KHÔNG THỂ lệch với cấu hình thật.
+   *
+   * ⚠️ Cố ý KHÔNG dùng `NEXT_PUBLIC_APPLE_ENABLED`: biến `NEXT_PUBLIC_*` được
+   * nướng vào gói lúc BUILD, nên bật Apple sẽ cần dựng lại frontend chứ không
+   * phải khởi động lại — đúng cái bẫy đã ghi trong CLAUDE.md.
+   */
+  const [coApple, setCoApple] = useState(false);
+  useEffect(() => {
+    let con = true;
+    fetch('/api/auth/providers')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (con && d && typeof d === 'object') setCoApple('apple' in d); })
+      .catch(() => { /* không hỏi được thì đơn giản là không vẽ nút */ });
+    return () => { con = false; };
+  }, []);
+
+  /*
+   * App desktop bấm "Đăng nhập bằng Apple" → mở trang này kèm `dt_nha=apple`.
+   * Không đọc tham số đó thì người dùng ra trình duyệt và phải bấm LẠI đúng cái
+   * nút vừa bấm — vòng OAuth vẫn chạy được nên không có lỗi nào hiện ra, chỉ có
+   * một bước thừa khó hiểu.
+   *
+   * Ba chốt: chỉ tự chạy khi CÓ ĐỦ `dt_cong`+`dt_nonce` (tức đúng là app gọi),
+   * chỉ với nhà cung cấp trong danh sách trắng, và chỉ MỘT lần (React 18 gọi
+   * effect hai lượt ở chế độ nghiêm ngặt — không chốt thì mở hai vòng OAuth).
+   */
+  const daTuChay = useRef(false);
+  useEffect(() => {
+    if (daTuChay.current) return;
+    const sp = new URLSearchParams(window.location.search);
+    const nha = sp.get('dt_nha');
+    if (!nha || !sp.get('dt_cong') || !sp.get('dt_nonce')) return;
+    if (!['google', 'github', 'apple'].includes(nha)) return;
+    daTuChay.current = true;
+    void signIn(nha, { callbackUrl: duongVe() });
+  }, []);
+
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [backendError, setBackendError] = useState('');
@@ -370,10 +427,10 @@ function LoginForm() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className={`grid gap-3 ${coApple ? 'grid-cols-3' : 'grid-cols-2'}`}>
             <button
               type="button"
-              onClick={() => signIn('google', { callbackUrl: '/oauth-callback' })}
+              onClick={() => signIn('google', { callbackUrl: duongVe() })}
               className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-darkborder bg-darkbg hover:bg-white/5 text-text-secondary hover:text-text-primary transition-all text-sm font-medium"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -386,7 +443,7 @@ function LoginForm() {
             </button>
             <button
               type="button"
-              onClick={() => signIn('github', { callbackUrl: '/oauth-callback' })}
+              onClick={() => signIn('github', { callbackUrl: duongVe() })}
               className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-darkborder bg-darkbg hover:bg-white/5 text-text-secondary hover:text-text-primary transition-all text-sm font-medium"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -394,6 +451,18 @@ function LoginForm() {
               </svg>
               GitHub
             </button>
+            {coApple && (
+              <button
+                type="button"
+                onClick={() => signIn('apple', { callbackUrl: duongVe() })}
+                className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-darkborder bg-darkbg hover:bg-white/5 text-text-secondary hover:text-text-primary transition-all text-sm font-medium"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+                </svg>
+                Apple
+              </button>
+            )}
           </div>
 
           <p className="text-center text-text-muted text-sm mt-6">

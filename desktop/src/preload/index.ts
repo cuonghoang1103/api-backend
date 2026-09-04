@@ -55,6 +55,7 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'browser:trangThai',
   'agent:moWeb',
   'robot:tin',
+  'oauth:xong',
 ];
 
 const bridge: DesktopBridge = {
@@ -155,6 +156,11 @@ const bridge: DesktopBridge = {
 
   /* Bảng chạy lệnh — xem `main/ipc/terminal.ts` để biết vì sao nó KHÔNG phải
      terminal thật, và vì sao nó dùng lại hạ tầng lệnh nền của agent. */
+  oauth: {
+    batDau: (provider: 'google' | 'github' | 'apple') =>
+      ipcRenderer.invoke('oauth:batDau', { provider }) as Promise<{ ok: boolean; cong?: number }>,
+    huy: () => ipcRenderer.invoke('oauth:huy') as Promise<{ ok: boolean }>,
+  },
   terminal: {
     chay: (cuocId: string, lenh: string) =>
       ipcRenderer.invoke('terminal:chay', { cuocId, lenh }) as Promise<TerminalKetQua>,

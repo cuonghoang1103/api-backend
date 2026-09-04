@@ -31,6 +31,12 @@ import {
 
 export class Carrier
 {
+    /**
+     * Bán kính (đơn vị thế giới) mà xe lại gần thì bắt đầu tải `carrier.glb`.
+     * Xem giải thích số đo ở `updateModelStreaming()`.
+     */
+    static MODEL_RADIUS = 120
+
     constructor()
     {
         this.game = Game.getInstance()
@@ -69,8 +75,30 @@ export class Carrier
          * ⚠️ Có model thì BỎ HẲN thân tự dựng. Mũi vát tự dựng trải tới
          * z = −85,6, tức chồng lên đúng chỗ cầu dẫn mũi (z −80…−97) và che mất
          * lối lên — thuần hình nên không chặn xe, nhưng nhìn thì tưởng cụt.
+         *
+         * ⚠️ Từ 04/09/2026 `carrier.glb` NẠP KHI CẦN, nên lúc hàm dựng chạy thì
+         * `usingModel` gần như luôn là `false` và hai phần tự dựng dưới đây LUÔN
+         * được dựng. Model về sau sẽ gọi `applyModel()` để giấu chúng đi.
+         *
+         * Mọi mesh của hai phần đó ghi vào `codeOnlyParts` NGAY LÚC DỰNG —
+         * `setModel()` chạy trước nên không thể lọc theo thứ tự con của group,
+         * và đi dò lại bằng tên/vị trí về sau là mời gọi sai sót.
          */
+        this.codeOnlyParts = []
+
+        /**
+         * ⚠️ Cờ thu thập phải bật/tắt QUANH ĐÚNG hai lời gọi, không phải bọc cả
+         * đoạn dựng.
+         *
+         * Bản đầu bật trước `setHull()` và chỉ tắt sau `setIsland()` — tức nó
+         * gom luôn boong, vạch boong, hai cầu dẫn, khí tài, đèn và máy bay: 35
+         * mảnh thay vì 10. `applyModel()` sau đó tắt hết va chạm của chúng, và
+         * **cả mặt boong biến mất** — xe hồi sinh lên tàu rơi thẳng xuống biển.
+         * Bắn tia đo được: mọi điểm dọc thân tàu từ 3,60 tụt về `null`.
+         */
+        this.collectCodeOnly = true
         if(!this.usingModel) this.setHull()
+        this.collectCodeOnly = false
 
         this.setDeck()
         this.setDeckMarkings()
@@ -89,7 +117,9 @@ export class Carrier
         this.setPlanes()
 
         // Đảo chỉ huy thì model có sẵn (kèm cột radar) — chỉ dựng khi không model
+        this.collectCodeOnly = true
         if(!this.usingModel) this.setIsland()
+        this.collectCodeOnly = false
 
         this.buildInstances()
 
@@ -142,6 +172,11 @@ export class Carrier
         mesh.castShadow = castShadow
         mesh.receiveShadow = receiveShadow
         this.group.add(mesh)
+
+        // Đang dựng phần chỉ-dùng-khi-thiếu-model thì ghi lại, để `applyModel()`
+        // giấu được đúng những mesh này về sau.
+        if(this.collectCodeOnly)
+            this.codeOnlyParts.push(mesh)
 
         if(physical)
         {
@@ -764,8 +799,105 @@ export class Carrier
         }
     }
 
+    /**
+     * NẠP MODEL KHI XE LẠI GẦN — gọi mỗi khung hình, nên phải rẻ và phải tự
+     * chốt để chỉ chạy đúng một lần.
+     *
+     * ⚠️ Bán kính 120 là số CHỌN TỪ SỐ ĐO, không phải ước lượng. Đo thật
+     * 04/09/2026: sương mù che hết ở **68** đơn vị (`fog.far`), còn bờ Bắc đảo
+     * chính cách tâm tàu **63,7** — tức con tàu NHÌN THẤY ĐƯỢC từ đảo chính.
+     *
+     * Chính vì thấy được nên phần tự dựng phải LUÔN có mặt; thứ hoãn lại chỉ là
+     * model chi tiết. 120 cho khoảng đệm ~52 đơn vị giữa lúc bắt đầu tải và lúc
+     * mắt nhìn ra được — đủ để 2,87 MB về kịp ở tốc độ lái bình thường.
+     *
+     * ⚠️ Đo bằng bình phương khoảng cách, KHÔNG `Math.hypot`: hàm này chạy 60
+     * lần/giây suốt cả phiên chơi chỉ để trả lời một câu hỏi có/không.
+     */
+    updateModelStreaming()
+    {
+        if(this.modelRequested)
+            return
+
+        const player = this.game.player?.position
+        if(!player)
+            return
+
+        const dx = player.x - CARRIER.x
+        const dz = player.z - CARRIER.z
+
+        if(dx * dx + dz * dz > Carrier.MODEL_RADIUS * Carrier.MODEL_RADIUS)
+            return
+
+        this.requestModel()
+    }
+
+    /**
+     * Xin model. Gọi được từ bất cứ đâu, bao nhiêu lần cũng chỉ tải một lượt —
+     * `loadLazy()` nhớ theo promise nên lời gọi thứ hai dùng lại lời hứa cũ.
+     *
+     * Trả về promise để chỗ nào cần CHỜ (ví dụ hồi sinh thẳng lên tàu) thì chờ
+     * được, còn chỗ chỉ muốn kích hoạt thì kệ nó.
+     */
+    requestModel()
+    {
+        if(this.modelPromise)
+            return this.modelPromise
+
+        this.modelRequested = true
+
+        this.modelPromise = this.game.resourcesLoader
+            .loadLazy('carrierModel', `carrier/carrier.glb?cb=1`, 'gltf')
+            .then((resource) =>
+            {
+                if(!resource)
+                    return null
+
+                // Cất vào `resources` để `setModel()` tìm thấy như trước đây —
+                // nhờ vậy đường dựng model không phải sửa một dòng nào.
+                this.game.resources.carrierModel = resource
+                this.applyModel()
+                return resource
+            })
+
+        return this.modelPromise
+    }
+
+    /**
+     * TRÁO: giấu phần tự dựng, gắn model vào.
+     *
+     * ⚠️ Ba thứ phải giấu, không phải một:
+     *
+     *  1. **Mesh thường** của `setHull()` + `setIsland()` — đã gom sẵn trong
+     *     `codeOnlyParts`.
+     *  2. **Thân vật lý** của mấy khối trong `setIsland()`. Hàm đó có 2 khối
+     *     `physical: true`, còn `setHull()` thì không có khối nào. Giấu hình mà
+     *     quên tắt va chạm là để lại một cái tháp VÔ HÌNH giữa boong — đúng
+     *     kiểu "vật vô hình chặn xe" mà `check-ghost-colliders` sinh ra để bắt.
+     *  3. **Cụm instance `carrier:rust`** — 28 vệt gỉ dọc mạn thân tự dựng.
+     *     Chúng không nằm trong `codeOnlyParts` vì đi qua `place()` chứ không
+     *     qua `box()`. `'rust'` chỉ được tạo trong `setHull()` (đã kiểm: đúng
+     *     một chỗ gọi trong cả file), nên giấu cả cụm là an toàn.
+     */
+    applyModel()
+    {
+        for(const mesh of this.codeOnlyParts)
+        {
+            mesh.visible = false
+            mesh.userData.object?.physical?.body?.setEnabled(false)
+        }
+
+        const rust = this.group.getObjectByName('carrier:rust')
+        if(rust)
+            rust.visible = false
+
+        this.setModel()
+    }
+
     update()
     {
+        this.updateModelStreaming()
+
         const elapsed = this.game.ticker.elapsedScaled
 
         // Radar quay chậm — chi tiết động duy nhất của phần tự dựng, và là thứ

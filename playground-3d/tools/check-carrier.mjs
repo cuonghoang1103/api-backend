@@ -247,6 +247,82 @@ const report = await page.evaluate(() =>
     return { problems, facts }
 })
 
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ *  PHA 2 — SAU KHI MODEL VỀ VÀ ĐÃ TRÁO
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * Từ 04/09/2026 `carrier.glb` nạp KHI CẦN (xe vào trong bán kính 120), nên tàu
+ * có HAI trạng thái, và người chơi gặp cả hai:
+ *
+ *   · dựng bằng mã — lúc mới vào sân chơi, và mãi mãi nếu không ai bơi ra đó
+ *   · đã tráo model — sau khi lái tới gần
+ *
+ * Mọi mục ở pha 1 đo trạng thái thứ nhất. Pha này đo trạng thái thứ hai, và nó
+ * bắt đúng lớp lỗi mà việc tráo sinh ra: giấu nhầm thứ không nên giấu.
+ *
+ * ⚠️ Mục `boongVanCon` sinh ra từ một lỗi THẬT, bắt được ngay lần chạy đầu:
+ * cờ thu thập mảnh "chỉ-dùng-khi-thiếu-model" bọc cả đoạn dựng thay vì bọc
+ * đúng hai lời gọi, nên nó gom luôn boong, cầu dẫn và máy bay — 35 mảnh thay
+ * vì 17. Tráo xong là toàn bộ va chạm mặt boong biến mất và xe hồi sinh lên
+ * tàu rơi thẳng xuống biển. Bắn tia đo được: mọi điểm dọc thân từ 3,60 về
+ * `null`. Không có bộ kiểm nào ở pha 1 thấy được, vì pha 1 không tráo.
+ */
+await page.evaluate(() => window.game.world.carrier.requestModel())
+await page.waitForFunction(() => window.game.world.carrier.usingModel === true, null, { timeout: 120000 })
+await page.waitForTimeout(4000)
+
+const phase2 = await page.evaluate(() =>
+{
+    const G = window.game
+    const R = G.RAPIER
+    const W = G.physics.world
+    const carrier = G.world.carrier
+    const problems = [], facts = {}
+    const ray = (x, z) =>
+    {
+        const hit = W.castRay(new R.Ray({ x, y: 60, z }, { x: 0, y: -1, z: 0 }), 200, true)
+        return hit ? +(60 - hit.timeOfImpact).toFixed(2) : null
+    }
+
+    facts.dungModelThat_pha2 = carrier.usingModel ? 'có' : 'KHÔNG'
+    if(!carrier.usingModel) problems.push('pha 2: model không tráo được')
+
+    // BOONG PHẢI CÒN NGUYÊN — đây là mục quan trọng nhất của cả bộ
+    const deck = []
+    for(let z = -180; z <= -100; z += 10) deck.push(ray(46, z))
+    const thung = deck.filter(y => y === null || Math.abs(y - 3.6) > 0.2).length
+    facts.boongVanCon = `${deck.length - thung}/${deck.length} điểm ở 3,60`
+    if(thung) problems.push(`pha 2: boong THỦNG ${thung}/${deck.length} điểm — va chạm bị giấu nhầm`)
+
+    const spawn = ray(46, -156)
+    facts.boongTaiDiemHoiSinh_pha2 = spawn
+    if(spawn === null || Math.abs(spawn - 3.6) > 0.2)
+        problems.push(`pha 2: điểm hồi sinh không còn boong (${spawn}) — xe sẽ rơi xuống biển`)
+
+    // Phần tự dựng phải BIẾN MẤT hoàn toàn, cả hình lẫn va chạm
+    const conHien = carrier.codeOnlyParts.filter(m => m.visible).length
+    const conVaCham = carrier.codeOnlyParts.filter(m => m.userData.object?.physical?.body?.isEnabled()).length
+    facts.manhTuDung = `${carrier.codeOnlyParts.length} mảnh · còn hiện ${conHien} · còn va chạm ${conVaCham}`
+    if(conHien) problems.push(`pha 2: ${conHien} mảnh tự dựng còn hiện — chồng lên model`)
+    if(conVaCham) problems.push(`pha 2: ${conVaCham} mảnh tự dựng còn va chạm — vật vô hình chặn xe`)
+
+    const rust = carrier.group.getObjectByName('carrier:rust')
+    facts.vetGi = rust ? (rust.visible ? 'CÒN HIỆN' : 'đã giấu') : 'không có cụm'
+    if(rust?.visible) problems.push('pha 2: cụm vệt gỉ của thân tự dựng còn hiện')
+
+    // Tháp chỉ huy tự dựng phải hết va chạm (model không có tháp va chạm)
+    const thap = ray(46 + 8.2, -140 - 14)
+    facts.thapChiHuy = thap
+    if(thap !== null && thap > 10)
+        problems.push(`pha 2: còn va chạm cao ${thap} ở chỗ tháp tự dựng — tháp vô hình`)
+
+    return { problems, facts }
+})
+
+for(const [ k, v ] of Object.entries(phase2.facts)) report.facts[k] = v
+report.problems.push(...phase2.problems)
+
 await browser.close()
 
 console.log('\n── SỐ LIỆU ĐO ───────────────────────────────────────────')

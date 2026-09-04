@@ -62352,6 +62352,18 @@ body:has(#profiler-panel:not(.visible)) .detached-tab-panel {
         }, void 0, p);
       });
     }
+    loadLazy(e, r, s, o) {
+      if (this.lazyPromises ?? (this.lazyPromises = /* @__PURE__ */ new Map()), this.lazyPromises.has(r)) return this.lazyPromises.get(r);
+      const a = this.load([
+        [
+          e,
+          r,
+          s,
+          o
+        ]
+      ]).then((h) => h[e] ?? null).catch(() => (console.warn(`Resources > n\u1EA1p khi c\u1EA7n th\u1EA5t b\u1EA1i: ${r} \u2014 d\xF9ng b\u1EA3n d\u1EF1 ph\xF2ng`), this.lazyPromises.delete(r), null));
+      return this.lazyPromises.set(r, a), a;
+    }
   }
   class Ticker {
     constructor() {
@@ -102268,9 +102280,9 @@ https://github.com/browserify/crypto-browserify`);
     rust: "#7a5a3e",
     light: "#ff7a3c"
   };
-  class Carrier {
+  const _Carrier = class _Carrier {
     constructor() {
-      this.game = Game.getInstance(), this.group = new Group(), this.group.name = "carrier", this.game.scene.add(this.group), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 10), this.coneGeometry = new ConeGeometry(0.5, 1, 4), this.materials = /* @__PURE__ */ new Map(), this.instanceBatches = /* @__PURE__ */ new Map(), this.setModel(), this.usingModel || this.setHull(), this.setDeck(), this.setDeckMarkings(), this.setRamp(), this.setBowRamp(), this.setEquipment(), this.setNavLights(), this.setSoftSprites(), this.setPlanes(), this.usingModel || this.setIsland(), this.buildInstances(), this.tickCallback = () => this.update(), this.game.ticker.events.on("tick", this.tickCallback, 12);
+      this.game = Game.getInstance(), this.group = new Group(), this.group.name = "carrier", this.game.scene.add(this.group), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 10), this.coneGeometry = new ConeGeometry(0.5, 1, 4), this.materials = /* @__PURE__ */ new Map(), this.instanceBatches = /* @__PURE__ */ new Map(), this.setModel(), this.codeOnlyParts = [], this.collectCodeOnly = true, this.usingModel || this.setHull(), this.collectCodeOnly = false, this.setDeck(), this.setDeckMarkings(), this.setRamp(), this.setBowRamp(), this.setEquipment(), this.setNavLights(), this.setSoftSprites(), this.setPlanes(), this.collectCodeOnly = true, this.usingModel || this.setIsland(), this.collectCodeOnly = false, this.buildInstances(), this.tickCallback = () => this.update(), this.game.ticker.events.on("tick", this.tickCallback, 12);
     }
     getMaterial(e) {
       let r = this.materials.get(e);
@@ -102290,7 +102302,7 @@ https://github.com/browserify/crypto-browserify`);
     }
     box(e, r, s, o, a, h, c, { rotationX: d = 0, rotationY: p = 0, rotationZ: f = 0, physical: m = false, geometry: b = null, castShadow: _ = true, receiveShadow: M = true, material: R = null, friction: O = null } = {}) {
       const L = new Mesh$1(b ?? this.boxGeometry, R ?? this.getMaterial(c));
-      if (L.scale.set(e, r, s), L.position.set(o, a, h), L.rotation.order = "YZX", L.rotation.x = d, L.rotation.y = p, L.rotation.z = f, L.castShadow = _, L.receiveShadow = M, this.group.add(L), m) {
+      if (L.scale.set(e, r, s), L.position.set(o, a, h), L.rotation.order = "YZX", L.rotation.x = d, L.rotation.y = p, L.rotation.z = f, L.castShadow = _, L.receiveShadow = M, this.group.add(L), this.collectCodeOnly && this.codeOnlyParts.push(L), m) {
         const U = new Quaternion$1().setFromEuler(new Euler$1(d, p, f, "YZX"));
         (!(e > 0) || !(r > 0) || !(s > 0)) && console.warn(`[Carrier] k\xEDch th\u01B0\u1EDBc va ch\u1EA1m kh\xF4ng h\u1EE3p l\u1EC7 t\u1EA1i (${o} \xB7 ${a} \xB7 ${h}): ${e} \xD7 ${r} \xD7 ${s}`);
         const q = {
@@ -102749,7 +102761,25 @@ https://github.com/browserify/crypto-browserify`);
         M.rotation.x = -Math.PI * 0.5, M.position.set(f, -0.24, m), M.scale.set(b, _, 1), M.renderOrder = 3, this.group.add(M);
       }
     }
+    updateModelStreaming() {
+      var _a2;
+      if (this.modelRequested) return;
+      const e = (_a2 = this.game.player) == null ? void 0 : _a2.position;
+      if (!e) return;
+      const r = e.x - CARRIER.x, s = e.z - CARRIER.z;
+      r * r + s * s > _Carrier.MODEL_RADIUS * _Carrier.MODEL_RADIUS || this.requestModel();
+    }
+    requestModel() {
+      return this.modelPromise ? this.modelPromise : (this.modelRequested = true, this.modelPromise = this.game.resourcesLoader.loadLazy("carrierModel", "carrier/carrier.glb?cb=1", "gltf").then((e) => e ? (this.game.resources.carrierModel = e, this.applyModel(), e) : null), this.modelPromise);
+    }
+    applyModel() {
+      var _a2, _b, _c;
+      for (const r of this.codeOnlyParts) r.visible = false, (_c = (_b = (_a2 = r.userData.object) == null ? void 0 : _a2.physical) == null ? void 0 : _b.body) == null ? void 0 : _c.setEnabled(false);
+      const e = this.group.getObjectByName("carrier:rust");
+      e && (e.visible = false), this.setModel();
+    }
     update() {
+      this.updateModelStreaming();
       const e = this.game.ticker.elapsedScaled;
       if (this.radarDish && (this.radarDish.rotation.y += this.game.ticker.deltaScaled * 0.6), this.navLights) for (const r of this.navLights) {
         const s = 0.55 + 0.45 * Math.sin(e * 2.2 + r.phase);
@@ -102763,7 +102793,9 @@ https://github.com/browserify/crypto-browserify`);
         }
       }
     }
-  }
+  };
+  __publicField(_Carrier, "MODEL_RADIUS", 120);
+  let Carrier = _Carrier;
   const WEAPONS = {
     rocket: {
       label: "Rocket",
@@ -105161,7 +105193,12 @@ https://github.com/browserify/crypto-browserify`);
     }
     enable() {
       var _a2, _b;
-      this.enabled = true, this.previousTime = this.game.dayCycles.preference.current, this.upgrades = {}, this.wave = 0, this.health = this.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.safeFor = 0, (_a2 = this.hudElement) == null ? void 0 : _a2.classList.add("is-visible"), this.setTheme(true), this.startPreparing(4), (_b = this.game.notifications) == null ? void 0 : _b.show('<div class="top"><p class="title">Ch\u1EBF \u0111\u1ED9 Sinh t\u1ED3n</p></div><div class="bottom"><p class="description">Tr\u1EDDi s\u1EAFp t\u1ED1i. Gi\u1EEF <strong>F</strong> b\u1EAFn \xB7 <strong>X</strong> t\xEAn l\u1EEDa \xB7 <strong>E</strong> xu\u1ED1ng xe \xB7 <strong>B</strong> m\u1EDF c\u1EEDa h\xE0ng l\xFAc ngh\u1EC9 \xB7 h\xFAc th\u1EB3ng c\u0169ng ch\u1EBFt.</p></div>', "is-achievement", 6);
+      this.enabled = true, this.requestMonsterModel(), this.previousTime = this.game.dayCycles.preference.current, this.upgrades = {}, this.wave = 0, this.health = this.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.safeFor = 0, (_a2 = this.hudElement) == null ? void 0 : _a2.classList.add("is-visible"), this.setTheme(true), this.startPreparing(4), (_b = this.game.notifications) == null ? void 0 : _b.show('<div class="top"><p class="title">Ch\u1EBF \u0111\u1ED9 Sinh t\u1ED3n</p></div><div class="bottom"><p class="description">Tr\u1EDDi s\u1EAFp t\u1ED1i. Gi\u1EEF <strong>F</strong> b\u1EAFn \xB7 <strong>X</strong> t\xEAn l\u1EEDa \xB7 <strong>E</strong> xu\u1ED1ng xe \xB7 <strong>B</strong> m\u1EDF c\u1EEDa h\xE0ng l\xFAc ngh\u1EC9 \xB7 h\xFAc th\u1EB3ng c\u0169ng ch\u1EBFt.</p></div>', "is-achievement", 6);
+    }
+    requestMonsterModel() {
+      return this.monsterModelPromise ? this.monsterModelPromise : (this.monsterModelPromise = this.game.resourcesLoader.loadLazy("bossModel", "monsters/boss.glb?cb=1", "gltf").then((e) => (e && (this.game.resources.bossModel = e), e)).finally(() => {
+        this.monsterModelSettled = true;
+      }), this.monsterModelPromise);
     }
     disable() {
       var _a2, _b, _c;
@@ -105247,7 +105284,7 @@ https://github.com/browserify/crypto-browserify`);
       this.setDefeatedOverlay(false), this.clearLoot(), this.upgrades = {}, this.wave = 0, this.health = this.maxHealth, this.score = 0, this.money = 0, this.kills = 0, this.safeFor = 0, this.startPreparing(5);
     }
     update() {
-      var _a2, _b, _c;
+      var _a2, _b, _c, _d;
       if (!this.enabled) return;
       const e = Math.min(this.game.ticker.delta, 0.1), r = this.game.physicalVehicle, s = this.heli.active ? this.heli.position : this.walker.active ? this.walker.position : r.position;
       if (this.phase === "defeated") {
@@ -105257,13 +105294,13 @@ https://github.com/browserify/crypto-browserify`);
       }
       if (this.phase === "preparing") {
         const o = this.phaseTimer;
-        this.phaseTimer -= e, o > 3.6 && this.phaseTimer <= 3.6 && ((_a2 = this.sounds.riser) == null ? void 0 : _a2.play()), this.phaseTimer <= 0 && this.startWave();
+        this.phaseTimer -= e, o > 3.6 && this.phaseTimer <= 3.6 && ((_a2 = this.sounds.riser) == null ? void 0 : _a2.play()), this.phaseTimer <= 0 && (this.monsterModelSettled || this.phaseTimer <= -12 ? this.startWave() : this.warnedModelWait || (this.warnedModelWait = true, (_b = this.game.notifications) == null ? void 0 : _b.show('<div class="top"><p class="title">\u0110ang t\u1EA3i qu\xE1i\u2026</p></div><div class="bottom"><p class="description">S\xF3ng \u0111\u1EA7u ch\u1EDD model v\u1EC1 cho \u0111\u1EE7 \u0111\u1EB9p.</p></div>', "", 3)));
       } else {
         if (this.bossPending && this.toSpawn <= 2) {
           const o = this.monsters.spawn("boss", s.x, s.z);
-          o && (this.bossPending = false, this.boss = o, (_b = this.sounds.bossHorn) == null ? void 0 : _b.play());
+          o && (this.bossPending = false, this.boss = o, (_c = this.sounds.bossHorn) == null ? void 0 : _c.play());
         }
-        this.toSpawn > 0 ? (this.spawnTimer -= e, this.spawnTimer <= 0 && this.monsters.aliveCount < SURVIVAL_WAVES.maxAlive && (this.spawnTimer = SURVIVAL_WAVES.spawnInterval, this.monsters.spawn(this.pickType(), s.x, s.z) && this.toSpawn--)) : this.monsters.aliveCount === 0 && !this.bossPending && (this.wave > this.best && (this.best = this.wave, localStorage.setItem("survivalBestWave", String(this.best))), (_c = this.sounds.waveClear) == null ? void 0 : _c.play(), this.loopSound(this.sounds.nightWind, false), this.startPreparing());
+        this.toSpawn > 0 ? (this.spawnTimer -= e, this.spawnTimer <= 0 && this.monsters.aliveCount < SURVIVAL_WAVES.maxAlive && (this.spawnTimer = SURVIVAL_WAVES.spawnInterval, this.monsters.spawn(this.pickType(), s.x, s.z) && this.toSpawn--)) : this.monsters.aliveCount === 0 && !this.bossPending && (this.wave > this.best && (this.best = this.wave, localStorage.setItem("survivalBestWave", String(this.best))), (_d = this.sounds.waveClear) == null ? void 0 : _d.play(), this.loopSound(this.sounds.nightWind, false), this.startPreparing());
       }
       if (this.monsters.update(e, s, (o) => this.onMonsterReach(o, r), this.sightRange(r)), this.gun.update(e), this.updateRamming(e, r), this.updateLoot(e, s), this.safeFor += e, this.safeFor > SURVIVAL_PLAYER.regenDelay && this.health < this.maxHealth) {
         const o = SURVIVAL_PLAYER.regenRate + this.level("regen") * 3;
@@ -105550,6 +105587,7 @@ https://github.com/browserify/crypto-browserify`);
       });
     }
   }
+  __publicField(Survival, "MODEL_WAIT_MAX", 12);
   class World {
     constructor() {
       this.game = Game.getInstance(), this.step(0);
@@ -118816,7 +118854,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-2kbBiWD1.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-BoSfJVlp.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([
@@ -118861,16 +118899,6 @@ ${e.tab}if ( ${m} ) {
         [
           "cityModel",
           `city/city.glb${o}`,
-          "gltf"
-        ],
-        [
-          "carrierModel",
-          `carrier/carrier.glb${o}`,
-          "gltf"
-        ],
-        [
-          "bossModel",
-          `monsters/boss.glb${o}`,
           "gltf"
         ],
         [

@@ -149,25 +149,38 @@ export class Game
                  */
                 [ 'cityModel',                             `city/city.glb${cb}`,                                                                 'gltf' ],
                 /**
-                 * TÀU SÂN BAY — model gốc user tải về nặng 2.126.216 đỉnh (gấp
-                 * 2,6 lần cả thế giới). Đây là bản ĐÃ LỌC: giữ 59 mảnh nhẹ nhất
-                 * (≤ 3.000 đỉnh mỗi mảnh), bỏ 74 mảnh nặng — còn **43.288 đỉnh**
-                 * và 1,0 MB, mà vẫn trải khắp con tàu nên vẫn ra dáng.
-                 */
-                [ 'carrierModel',                          `carrier/carrier.glb${cb}`,                                                           'gltf' ],
-                /**
-                 * QUÁI TRÙM của chế độ Sinh tồn — model có xương (78 khớp) và
-                 * một clip hoạt ảnh. Xem `static/ATTRIBUTION.txt`.
+                 * ⛔ `carrierModel` VÀ `bossModel` ĐÃ RỜI KHỎI ĐÂY (04/09/2026).
                  *
-                 * ⚠️ Cũng KHÔNG có `${compressedModelSuffix}` như `cityModel`:
-                 * đã nén sẵn một bản dùng cho cả dev lẫn production
-                 * (18,7 MB → 2,6 MB — texture WebP 1024 + Draco).
+                 * Hai tệp này cộng lại **5,47 MB trong tổng 11,94 MB** của lần
+                 * tải đầu — gần một nửa — mà chúng phục vụ nội dung phần lớn
+                 * khách KHÔNG BAO GIỜ thấy: một con tàu neo ngoài biển, và con
+                 * quái trùm chỉ hiện mỗi 5 sóng trong chế độ Sinh tồn vốn phải
+                 * tự bật.
                  *
-                 * ⚠️ **KHÔNG `--simplify`**: model có skinning, giản lược lưới
-                 * là phá trọng số xương và con quái méo mó khi cử động. 28.550
-                 * đỉnh cho MỘT con trùm là chấp nhận được (cả thế giới 804k).
+                 * Nay nạp khi cần qua `resourcesLoader.loadLazy()`:
+                 *
+                 *   · `carrier/carrier.glb` → `World/Carrier.js`, kích hoạt khi
+                 *     xe vào trong bán kính 120 (sương mù chỉ nhìn xa được ~68
+                 *     nên khách không kịp thấy lúc nó hiện ra).
+                 *   · `monsters/boss.glb`   → `World/Survival.js → enable()`,
+                 *     và sóng đầu tiên CHỜ nó về trước khi bắt đầu.
+                 *
+                 * ⚠️ Cả hai nơi dùng đều CÓ SẴN đường lùi từ trước: `Carrier`
+                 * dựng hoàn toàn bằng mã, `SurvivalMonsters` dựng quái bằng
+                 * khối. Chính điều đó khiến việc hoãn nạp an toàn — thiếu model
+                 * là xấu đi chứ không vỡ.
+                 *
+                 * ⚠️ Ghi chú cũ, vẫn đúng, giữ lại vì nó là lý do model có hình
+                 * dạng như hiện nay:
+                 *   · carrier: model gốc 2.126.216 đỉnh (gấp 2,6 lần cả thế
+                 *     giới). Bản đang dùng đã LỌC còn 59 mảnh nhẹ nhất
+                 *     (≤ 3.000 đỉnh/mảnh) — 43.288 đỉnh, 1,0 MB, vẫn trải khắp
+                 *     con tàu nên vẫn ra dáng.
+                 *   · boss: có xương (78 khớp) + một clip hoạt ảnh, đã nén sẵn
+                 *     18,7 MB → 2,6 MB (WebP 1024 + Draco). **KHÔNG
+                 *     `--simplify`** — model có skinning, giản lược lưới là phá
+                 *     trọng số xương và con quái méo mó khi cử động.
                  */
-                [ 'bossModel',                             `monsters/boss.glb${cb}`,                                                             'gltf' ],
                 /**
                  * ⛔ BA MODEL QUÁI KHÁC ĐÃ GỠ KHỎI ĐÂY. Cả ba đều có **TƯ THẾ
                  * BIND VỠ** — hộp bao hình học nói một đằng, lưới mà GPU vẽ ra

@@ -39,6 +39,12 @@ import { SURVIVAL_HELI, SURVIVAL_LOOT, SURVIVAL_PLAYER, SURVIVAL_SHOP, SURVIVAL_
  */
 export class Survival
 {
+    /**
+     * Nhịp nghỉ đầu tiên được phép dài thêm tối đa bao nhiêu giây để chờ
+     * `monsters/boss.glb`. Quá ngưỡng thì vào sóng với quái dựng bằng khối.
+     */
+    static MODEL_WAIT_MAX = 12
+
     constructor()
     {
         this.game = Game.getInstance()
@@ -133,6 +139,10 @@ export class Survival
     {
         this.enabled = true
 
+        // Xin model quái NGAY khi bật chế độ — nhịp nghỉ đầu tiên dài 4 giây,
+        // đủ cho 2,6 MB về ở tốc độ mạng bình thường. Xem `requestMonsterModel()`.
+        this.requestMonsterModel()
+
         // Nhớ lựa chọn giờ của người chơi để trả lại nguyên vẹn khi tắt chế độ
         this.previousTime = this.game.dayCycles.preference.current
 
@@ -156,6 +166,46 @@ export class Survival
             'is-achievement',
             6,
         )
+    }
+
+    /**
+     * XIN MODEL QUÁI — `monsters/boss.glb`, nạp khi cần.
+     *
+     * Cả BỐN loại quái dùng chung tệp này (xem ghi chú ở `Game.js`), nên nó là
+     * điều kiện đủ để cả chế độ trông đúng. 2,6 MB, và nó nằm trong nhóm nội
+     * dung mà phần lớn khách không bao giờ chạm tới — chế độ Sinh tồn phải tự
+     * bật mới có.
+     *
+     * ⚠️ `monsterModelSettled` bật lên kể cả khi nạp HỎNG. Đó là chủ ý: cờ này
+     * chỉ trả lời "còn đáng chờ nữa không", không phải "có model chưa". Đặt nó
+     * chỉ khi thành công là mạng hỏng một lần thì nhịp nghỉ chờ đủ trần
+     * `MODEL_WAIT_MAX` giây ở MỌI sóng sau đó.
+     *
+     * ⚠️ `loadLazy()` không bao giờ ném, nên ở đây không cần `catch`. Nếu có
+     * ngày nó đổi hành vi thì `.finally()` vẫn bật cờ — người chơi không bị kẹt.
+     */
+    requestMonsterModel()
+    {
+        if(this.monsterModelPromise)
+            return this.monsterModelPromise
+
+        this.monsterModelPromise = this.game.resourcesLoader
+            .loadLazy('bossModel', 'monsters/boss.glb?cb=1', 'gltf')
+            .then((resource) =>
+            {
+                // Cất vào `resources` để `SurvivalMonsters.make()` tra được như
+                // trước — đường dựng quái không phải sửa một dòng nào.
+                if(resource)
+                    this.game.resources.bossModel = resource
+
+                return resource
+            })
+            .finally(() =>
+            {
+                this.monsterModelSettled = true
+            })
+
+        return this.monsterModelPromise
     }
 
     disable()
@@ -502,7 +552,36 @@ export class Survival
              */
             if(before > 3.6 && this.phaseTimer <= 3.6) this.sounds.riser?.play()
 
-            if(this.phaseTimer <= 0) this.startWave()
+            /**
+             * ⚠️ Sóng đầu tiên CHỜ model quái về.
+             *
+             * `monsters/boss.glb` nạp khi cần từ 04/09/2026 (xem `Game.js`),
+             * mà `SurvivalMonsters.make()` thiếu model thì lùi về quái dựng
+             * bằng KHỐI. Lùi như thế là đúng khi tệp hỏng thật, nhưng để nó
+             * xảy ra chỉ vì tải chưa xong thì sóng 1 toàn khối hộp còn sóng 2
+             * trở đi mới có quái thật — trông như lỗi chứ không như thiết kế.
+             *
+             * Nên nhịp nghỉ được phép DÀI THÊM tới `MODEL_WAIT_MAX` giây. Quá
+             * ngưỡng đó thì vào sóng luôn: mạng quá chậm không nên khoá người
+             * chơi ở màn hình chờ, và đường lùi bằng khối vẫn chơi được.
+             *
+             * Chỉ chặn ở sóng ĐẦU. Từ sóng 2 trở đi model đã về từ lâu, và
+             * `modelSettled` cũng đã bật, nên điều kiện này không tốn gì.
+             */
+            if(this.phaseTimer <= 0)
+            {
+                if(this.monsterModelSettled || this.phaseTimer <= -Survival.MODEL_WAIT_MAX)
+                    this.startWave()
+                else if(!this.warnedModelWait)
+                {
+                    this.warnedModelWait = true
+                    this.game.notifications?.show(
+                        /* html */`<div class="top"><p class="title">Đang tải quái…</p></div><div class="bottom"><p class="description">Sóng đầu chờ model về cho đủ đẹp.</p></div>`,
+                        '',
+                        3,
+                    )
+                }
+            }
         }
         // ── Đang săn: sinh dần cho đủ số, giết sạch thì sang sóng sau ─────────
         else

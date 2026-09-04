@@ -1393,6 +1393,106 @@ Hai khu cộng lại tốn **+93 mesh** (đảo sân chơi 385 → 478), đỉnh
 
 ---
 
+# 0m. NẠP KHI CẦN: `carrier.glb` + `boss.glb` — 04/09/2026
+
+Hai tệp này từng nằm trong bản kê khởi động của `Game.js` và cộng lại
+**5,47 MB trong tổng 11,94 MB** của lần tải đầu — gần một nửa — cho nội dung
+phần lớn khách KHÔNG BAO GIỜ thấy: một con tàu neo ngoài biển, và con quái trùm
+chỉ hiện trong chế độ Sinh tồn vốn phải tự bật.
+
+Nay nạp qua `ResourcesLoader.loadLazy()`.
+
+## `loadLazy()` — vì sao cần thêm, `load()` đã có cache rồi
+
+`load()` cache theo đường dẫn, nhưng cache đó chỉ GHI LÚC TỆP ĐÃ VỀ. Hai lời
+gọi chồng nhau trong lúc tệp còn đang bay đều thấy cache rỗng ⇒ hai lượt tải
+song song. Với `Carrier` — kích hoạt theo khoảng cách, mỗi khung hình một lần —
+đó không phải trường hợp hiếm mà là điều CHẮC CHẮN xảy ra. `loadLazy()` nhớ
+theo **promise**, nên lời gọi thứ hai nhận đúng lời hứa của lời gọi thứ nhất.
+
+Và nó **không bao giờ `reject`** — trả `null`. Cả hai nơi dùng đều có sẵn đường
+lùi từ trước (`Carrier` dựng bằng mã, `SurvivalMonsters` dựng quái bằng khối),
+nên ném ra chỉ tạo unhandled rejection rồi vẫn phải bắt ở mọi chỗ gọi. Hỏng thì
+xoá promise hỏng khỏi bảng để lần sau còn thử lại được.
+
+## Tàu sân bay: KHÔNG hoãn cả con tàu, chỉ hoãn model
+
+Ý định đầu tiên là hoãn hẳn `new Carrier()` cho tới khi xe lại gần — sạch hơn
+nhiều vì tránh mọi chuyện tráo. **Số đo bác bỏ nó**: sương mù che hết ở
+`fog.far` = **68**, mà bờ Bắc đảo chính cách tâm tàu **63,7** ⇒ con tàu NHÌN
+THẤY ĐƯỢC từ đảo chính. Hoãn cả tàu là để một khoảng biển trống rồi bụp một
+con tàu hiện ra.
+
+Nên: phần tự dựng LUÔN có mặt, model về thì `applyModel()` giấu phần tự dựng đi.
+Bán kính kích hoạt **120** cho đệm ~52 đơn vị giữa lúc bắt đầu tải và lúc mắt
+nhìn ra được.
+
+⚠️ **Ba thứ phải giấu, không phải một:**
+1. mesh thường của `setHull()` + `setIsland()` — gom sẵn vào `codeOnlyParts`
+2. **thân vật lý** của 2 khối `physical: true` trong `setIsland()` (`setHull()`
+   không có khối nào). Giấu hình mà quên tắt va chạm là để lại một cái tháp VÔ
+   HÌNH giữa boong.
+3. cụm instance **`carrier:rust`** — 28 vệt gỉ đi qua `place()` chứ không qua
+   `box()` nên không nằm trong `codeOnlyParts`. `'rust'` chỉ được tạo trong
+   `setHull()` (đã kiểm: đúng một chỗ gọi trong cả file) nên giấu cả cụm là an
+   toàn.
+
+## ⛔ LỖI ĐÃ GÂY RA VÀ ĐÃ SỬA — cờ thu thập bọc quá rộng
+
+Bản đầu đặt `collectCodeOnly = true` TRƯỚC `setHull()` và chỉ tắt SAU
+`setIsland()`. Giữa hai mốc đó còn có `setDeck()`, `setDeckMarkings()`,
+`setRamp()`, `setBowRamp()`, `setEquipment()`, `setNavLights()`,
+`setSoftSprites()`, `setPlanes()` — nên nó gom **35 mảnh thay vì 17**.
+
+`applyModel()` tắt va chạm của cả 35 ⇒ **toàn bộ mặt boong biến mất**. Bắn tia
+dọc thân tàu: mọi điểm từ **3,60 tụt về `null`**, và xe hồi sinh lên tàu rơi
+thẳng xuống biển.
+
+Cờ nay bật/tắt QUANH ĐÚNG hai lời gọi. Bài học rộng hơn: **cờ "đang thu thập"
+phải ôm đúng phạm vi cần thu, đừng bọc cả đoạn rồi tin là trong đó không có gì
+khác.**
+
+Pha 2 của `check-carrier.mjs` sinh ra từ chính lỗi này — nó tráo model rồi mới
+đo, và mục `boongVanCon` bắt được ngay lần chạy đầu. Pha 1 không thấy gì vì pha
+1 không tráo.
+
+## Quái trùm: sóng ĐẦU chờ model, có trần
+
+`Survival.enable()` gọi `requestMonsterModel()`. Nhịp nghỉ đầu (4 giây) được
+phép dài thêm tối đa `Survival.MODEL_WAIT_MAX` = **12 giây** để chờ. Quá ngưỡng
+thì vào sóng luôn với quái dựng bằng khối — mạng quá chậm không nên khoá người
+chơi ở màn hình chờ.
+
+⚠️ `monsterModelSettled` bật lên **kể cả khi nạp HỎNG**. Cờ này trả lời "còn
+đáng chờ nữa không", KHÔNG phải "có model chưa". Đặt nó chỉ khi thành công là
+mạng hỏng một lần thì mọi nhịp nghỉ sau đó đều chờ đủ 12 giây.
+
+## ⚠️ HEADLESS Ở MÁY DỰNG NÀY CHẠY 0,02× THỜI GIAN THỰC
+
+Bàn giao cũ ghi ~0,05×. Đo lại 04/09: nhịp nghỉ 4 giây của Sinh tồn tốn **~200
+giây thật** (timer đi từ 3,7 xuống 1,7 trong 105 giây). Lần đầu tôi tưởng cổng
+chặn model bị treo, hoá ra chỉ là chậm.
+
+**Cách phân biệt "treo" với "chậm"**: in `phaseTimer` mỗi 15 giây. Nó GIẢM đều
+thì là chậm; đứng im mới là treo. Đừng đoán từ một lần hết giờ.
+
+## Đo được sau khi hoãn
+
+Lần tải đầu **11,94 → 6,11 MB** — giảm **5,83 MB, tức 49%**. Nhiều hơn con số
+5,47 MB của riêng hai tệp `.glb`, vì bỏ chúng ra cũng bỏ luôn mấy texture chỉ
+chúng dùng.
+
+`carrier.glb` chỉ về khi xe vào bán kính 120; `boss.glb` chỉ về khi bật Sinh
+tồn. Đo bằng cách chạy thật bản dựng production và đọc `performance
+.getEntriesByType('resource')`, có áp quy tắc gzip của nginx cho js/wasm.
+
+**Thứ nặng nhất còn lại là `city/city.glb` — 2,43 MB, tức 40% của 6,11 MB.**
+Nhưng đảo thành phố nằm trên bản đồ chính và nhìn thấy được, nên hoãn nó phải
+theo kiểu của `Carrier` (dựng bằng mã trước, tráo sau) chứ không hoãn thẳng
+được — mà thành phố thì không có sẵn đường dựng bằng mã như tàu.
+
+---
+
 # 1. MƯỜI BA BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
 
 Cần dev server sống: `cd playground-3d && npm run dev` (xem mục 4).

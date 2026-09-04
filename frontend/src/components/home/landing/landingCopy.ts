@@ -205,7 +205,7 @@ export const LANDING_COPY = {
       introStrong: 'your device’s GPU',
       introAfter: ' — nothing is streamed from a server, so performance depends on the machine you are using.',
       facts: [
-        ['~12 MB to download', 'The first visit takes a moment on a slow connection. It is cached afterwards. Music loads only when you play it.'],
+        ['~6 MB to download', 'The first visit takes a moment on a slow connection. It is cached afterwards. Music, and a few heavy props, load only when you reach them.'],
         ['Needs a recent browser', 'Chrome, Edge or Safari from the last couple of years. WebGPU with a WebGL fallback.'],
         ['Not built for weak hardware', 'Older laptops, low-end phones and integrated graphics may stutter.'],
       ] as [string, string][],
@@ -274,7 +274,7 @@ export const LANDING_COPY = {
       introStrong: 'GPU trên thiết bị của bạn',
       introAfter: ' — không stream từ máy chủ, nên độ mượt phụ thuộc vào chiếc máy bạn đang dùng.',
       facts: [
-        ['Tải khoảng 12 MB', 'Lần đầu sẽ chờ một chút nếu mạng chậm; những lần sau trình duyệt dùng lại bộ nhớ đệm. Nhạc chỉ tải khi bạn bật.'],
+        ['Tải khoảng 6 MB', 'Lần đầu sẽ chờ một chút nếu mạng chậm; những lần sau trình duyệt dùng lại bộ nhớ đệm. Nhạc và vài mô hình nặng chỉ tải khi bạn tới nơi.'],
         ['Cần trình duyệt tương đối mới', 'Chrome, Edge hoặc Safari trong vài năm gần đây; WebGPU có WebGL dự phòng.'],
         ['Không dành cho máy yếu', 'Laptop cũ, điện thoại giá rẻ và GPU tích hợp có thể bị giật.'],
       ] as [string, string][],

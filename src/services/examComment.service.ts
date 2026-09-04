@@ -143,13 +143,17 @@ const AI_COMMENT_RE = /^\*\*Hỏi:\*\* ([\s\S]*?)\n\n\*\*CuongMini trả lời:\
  * cho đúng câu hỏi này (cùng chữ, không phân biệt hoa/thường) thì trả lại
  * NGAY câu trả lời cũ, khỏi gọi AI lần nữa (đặc biệt rẻ với 3 gợi ý dựng sẵn,
  * vì mọi Pro user hỏi cùng 1 câu FIXED cho cùng 1 câu hỏi đề thi).
+ *
+ * Tìm cả GỐC lẫn REPLY (không lọc parentId) — từ khi các câu trả lời trùng
+ * hỏi được gộp thành reply của bản gốc (xem postAiAnswerComment), câu trả
+ * lời "còn sống" có thể nằm ở reply, không chỉ ở gốc.
  */
 export async function findCachedAiAnswer(questionId: number, askedText: string): Promise<string | null> {
   const botId = await getBotUserId();
   if (!botId || !askedText.trim()) return null;
   const norm = askedText.trim().toLowerCase();
   const rows = await prisma.examQuestionComment.findMany({
-    where: { questionId, userId: botId, parentId: null },
+    where: { questionId, userId: botId },
     orderBy: { createdAt: 'desc' },
     select: { content: true },
     take: 30,
@@ -161,15 +165,43 @@ export async function findCachedAiAnswer(questionId: number, askedText: string):
   return null;
 }
 
+/**
+ * Tìm bình luận GỐC (parentId=null, isAi=true) của CuongMini đã trả lời
+ * ĐÚNG câu hỏi này rồi (so nhãn "Hỏi:", không phân biệt hoa/thường) — dùng
+ * để GỘP câu trả lời mới vào làm reply của gốc đó thay vì tạo một bình luận
+ * gốc mới đứng riêng (tránh spam nhiều mục cho cùng 1 câu hỏi khi 2 câu trả
+ * lời khác nhau cho cùng 1 câu hỏi được sinh ra — ví dụ race 2 request gần
+ * như đồng thời trước khi cache kịp thấy nhau).
+ */
+async function findRootAiCommentId(questionId: number, askedText: string): Promise<number | null> {
+  const botId = await getBotUserId();
+  if (!botId) return null;
+  const norm = askedText.trim().toLowerCase();
+  const rows = await prisma.examQuestionComment.findMany({
+    where: { questionId, userId: botId, parentId: null },
+    orderBy: { createdAt: 'asc' },
+    select: { id: true, content: true },
+    take: 30,
+  });
+  for (const r of rows) {
+    const m = r.content.match(AI_COMMENT_RE);
+    if (m && m[1].trim().toLowerCase() === norm) return r.id;
+  }
+  return null;
+}
+
 /** Đăng câu trả lời CuongMini vào bình luận của đúng câu — không chặn/ném lỗi
  * ra caller nếu hỏng (không được để lỗi ghi comment làm hỏng câu trả lời AI
- * người dùng đang chờ). */
+ * người dùng đang chờ). Đã có bình luận gốc trả lời ĐÚNG câu hỏi này rồi thì
+ * đăng làm REPLY của gốc đó (1 câu hỏi = 1 mục, nhiều cách giải nằm gọn bên
+ * trong), chưa có thì mới tạo gốc mới. */
 export async function postAiAnswerComment(questionId: number, mode: string, question: string | undefined, answer: string): Promise<void> {
   try {
     const botId = await getBotUserId();
     if (!botId) return; // migration bot user chưa chạy tới — bỏ qua, không lỗi
     const askedText = buildAskedLabel(mode, question);
     const content = `**Hỏi:** ${askedText}\n\n**CuongMini trả lời:**\n${answer}`.slice(0, MAX_CONTENT);
-    await createCommentInternal(questionId, botId, content, null, true);
+    const parentId = await findRootAiCommentId(questionId, askedText);
+    await createCommentInternal(questionId, botId, content, parentId, true);
   } catch { /* đăng bình luận hỏng thì thôi, không ảnh hưởng câu trả lời chính */ }
 }

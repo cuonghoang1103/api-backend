@@ -652,6 +652,18 @@ REAPPLY_COMMENTS_OUT=$($DC exec -T backend sh -c '
 ') || true
 report_seed "Exam comment reapply" "seed-exam-reapply-comments" "$REAPPLY_COMMENTS_OUT" "${REAPPLY_COMMENTS_OUT_RC:-0}" || true
 
+# ── Step 3.14d: Merge duplicate CuongMini root comments (idempotent) ──
+# examComment.service.ts::postAiAnswerComment() tự gộp câu trả lời trùng câu
+# hỏi thành reply của 1 gốc lúc đăng, nhưng race hiếm (2 request gần như
+# đồng thời) vẫn có thể lọt 2 bản gốc cho cùng 1 câu hỏi — chạy lưới đỡ này
+# mỗi deploy để dọn nốt (xem chú thích trong script, KHÔNG đụng bản có reply
+# riêng của người dùng).
+info "Merging duplicate CuongMini root comments (gộp bình luận AI trùng câu hỏi)..."
+MERGE_COMMENTS_OUT=$($DC exec -T backend sh -c '
+  node scripts/exam-merge-dup-ai-comments.mjs --apply 2>&1
+') || true
+report_seed "Exam comment dedup" "seed-exam-merge-comments" "$MERGE_COMMENTS_OUT" "${MERGE_COMMENTS_OUT_RC:-0}" || true
+
 # ── Step 3.15: Deep Dive guides (idempotent) ───────────────────
 # One .mjs spec per guide under content/deepdives/ (prose in a sibling .md)
 # → upsert TechTrendArticle keyed by slug, category 'DeepDive'. These are the

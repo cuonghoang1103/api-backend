@@ -5,12 +5,13 @@
 // tự đăng lại sau khi trả lời trong panel chat — gắn nhãn riêng để phân biệt
 // với bình luận người thật. Theo đúng mẫu ArticleComments.tsx (Tech Trends).
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
-import { MessageSquare, Loader2, Pencil, Trash2, Send, X, Sparkles } from 'lucide-react';
+import { MessageSquare, Loader2, Pencil, Trash2, Send, X, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
 import { examApi, type ExamQuestionComment } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
+import ChatMarkdown from '@/components/chat/ChatMarkdown';
 
 function timeAgo(iso: string): string {
   const s = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
@@ -128,6 +129,58 @@ function Avatar({ author, isAi }: { author: ExamQuestionComment['author']; isAi:
   );
 }
 
+/**
+ * Bình luận CuongMini là markdown+LaTeX thô (giống câu trả lời trong panel
+ * chat) — render bằng ChatMarkdown thay vì hiện chữ trần, và bọc `chat-studio`
+ * để nó ăn theo theme sáng/tối của trang thay vì màu cứng cho nền tối
+ * (xem quy ước ở ChatMarkdown.tsx + globals.css `.chat-studio`).
+ *
+ * Câu trả lời chi tiết có thể rất dài (nhiều bước, nhiều công thức) — thu
+ * gọn theo CHIỀU CAO thật đo được (không cắt theo số ký tự, dễ cắt giữa
+ * chừng một công thức/khối mã) và chỉ hiện nút "Xem thêm" khi nội dung thật
+ * sự tràn quá khung.
+ */
+function CollapsibleContent({ content, fadeTo }: { content: string; fadeTo: string }) {
+  const [expanded, setExpanded] = useState(false);
+  const [overflowing, setOverflowing] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const MAX_PX = 220;
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    setOverflowing(el.scrollHeight > MAX_PX + 8);
+  }, [content]);
+
+  return (
+    <div className="chat-studio">
+      <div
+        ref={ref}
+        className="relative overflow-hidden text-sm leading-relaxed"
+        style={{ maxHeight: !expanded && overflowing ? MAX_PX : undefined }}
+      >
+        <ChatMarkdown content={content} />
+        {overflowing && !expanded && (
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-12"
+            style={{ background: `linear-gradient(to bottom, transparent, ${fadeTo})` }}
+          />
+        )}
+      </div>
+      {overflowing && (
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          className="mt-1.5 inline-flex items-center gap-1 text-xs font-semibold hover:underline"
+          style={{ color: '#8b5cf6' }}
+        >
+          {expanded ? <>Thu gọn <ChevronUp className="h-3 w-3" /></> : <>Xem thêm <ChevronDown className="h-3 w-3" /></>}
+        </button>
+      )}
+    </div>
+  );
+}
+
 function CommentItem({ comment, myId, isAuthed, onChanged, onReply, posting }: {
   comment: ExamQuestionComment;
   myId: number | null;
@@ -183,7 +236,9 @@ function CommentItem({ comment, myId, isAuthed, onChanged, onReply, posting }: {
               </div>
             </div>
           ) : (
-            <p className="mt-1 whitespace-pre-wrap break-words text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{comment.content}</p>
+            <div className="mt-1" style={{ color: 'var(--text-secondary)' }}>
+              <CollapsibleContent content={comment.content} fadeTo="var(--bg-surface)" />
+            </div>
           )}
         </div>
 

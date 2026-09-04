@@ -812,7 +812,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<p>Given the following code snippet:<br/>int[] arr = new int[100];<br/>Which of the following statements is correct?</p><pre><code class=\"language-java\"><span class=\"hljs-type\">int</span>[] arr = <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">int</span>[<span class=\"hljs-number\">100</span>];</code></pre>|||<p>Cho đoạn mã sau:<br/>int[] arr = new int[100];<br/>Phát biểu nào sau đây là đúng?</p><pre><code class=\"language-java\"><span class=\"hljs-type\">int</span>[] arr = <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">int</span>[<span class=\"hljs-number\">100</span>];</code></pre>",
+          "prompt": "<p>Given the following code snippet:</p><p>Which of the following statements is correct?</p><pre><code class=\"language-java\"><span class=\"hljs-type\">int</span>[] arr = <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">int</span>[<span class=\"hljs-number\">100</span>];</code></pre>|||<p>Cho đoạn mã sau:</p><p>Phát biểu nào sau đây là đúng?</p><pre><code class=\"language-java\"><span class=\"hljs-type\">int</span>[] arr = <span class=\"hljs-keyword\">new</span> <span class=\"hljs-title class_\">int</span>[<span class=\"hljs-number\">100</span>];</code></pre>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRO192/FE3/q33.png",
           "options": [
             {

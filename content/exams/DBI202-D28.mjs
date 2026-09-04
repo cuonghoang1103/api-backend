@@ -884,7 +884,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Suppose we have a relation R(A,B,C,D) with FD&#39;s:<br/>BC -&gt; A;<br/>AD -&gt; C;<br/>CD -&gt; B;<br/>BD -&gt; C</p></div><div class=\"ml-vi\"><p>Giả sử ta có quan hệ R(A,B,C,D) với các FD:<br/>BC -&gt; A;<br/>AD -&gt; C;<br/>CD -&gt; B;<br/>BD -&gt; C</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose we have a relation R(A,B,C,D) with FD&#39;s:</p><pre><code>BC -&gt; A<span class=\"hljs-comment\">;</span>\nAD -&gt; C<span class=\"hljs-comment\">;</span>\nCD -&gt; B<span class=\"hljs-comment\">;</span></code></pre><p>BD -&gt; C</p></div><div class=\"ml-vi\"><p>Giả sử ta có quan hệ R(A,B,C,D) với các FD:</p><pre><code>BC -&gt; A<span class=\"hljs-comment\">;</span>\nAD -&gt; C<span class=\"hljs-comment\">;</span>\nCD -&gt; B<span class=\"hljs-comment\">;</span></code></pre><p>BD -&gt; C</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/DBI202/D28/q38.png",
           "options": [
             {
@@ -932,7 +932,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The relation R(ABCD) has following FDs:<br/>{ ABD -&gt; C ;<br/>CD -&gt; A ;<br/>AC -&gt; B ;<br/>AC -&gt; D }<br/>Choose a correct statement about R?</p></div><div class=\"ml-vi\"><p>Quan hệ R(ABCD) có các FD sau:<br/>{ ABD -&gt; C ;<br/>CD -&gt; A ;<br/>AC -&gt; B ;<br/>AC -&gt; D }<br/>Chọn phát biểu đúng về R?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The relation R(ABCD) has following FDs:</p><pre><code>{ ABD -&gt; C ;\nCD -&gt; A ;\nAC -&gt; B ;\nAC -&gt; D }</code></pre><p>Choose a correct statement about R?</p></div><div class=\"ml-vi\"><p>Quan hệ R(ABCD) có các FD sau:</p><pre><code>{ ABD -&gt; C ;\nCD -&gt; A ;\nAC -&gt; B ;\nAC -&gt; D }</code></pre><p>Chọn phát biểu đúng về R?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/DBI202/D28/q40.png",
           "options": [
             {

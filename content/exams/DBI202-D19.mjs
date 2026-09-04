@@ -553,7 +553,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2041,
-          "prompt": "<div class=\"ml-en\"><p>Suppose we have a relation R(A,B,C,D) with FD&#39;s:<br/>A -&gt; C ;<br/>B -&gt; A ;<br/>A -&gt; D ;<br/>AD -&gt; C</p></div><div class=\"ml-vi\"><p>Giả sử có quan hệ R(A,B,C,D) với các FD:<br/>A -&gt; C ;<br/>B -&gt; A ;<br/>A -&gt; D ;<br/>AD -&gt; C</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose we have a relation R(A,B,C,D) with FD&#39;s:</p><pre><code><span class=\"hljs-selector-tag\">A</span> -&gt; C ;\n<span class=\"hljs-selector-tag\">B</span> -&gt; <span class=\"hljs-selector-tag\">A</span> ;\n<span class=\"hljs-selector-tag\">A</span> -&gt; D ;</code></pre><p>AD -&gt; C</p></div><div class=\"ml-vi\"><p>Giả sử có quan hệ R(A,B,C,D) với các FD:</p><pre><code><span class=\"hljs-selector-tag\">A</span> -&gt; C ;\n<span class=\"hljs-selector-tag\">B</span> -&gt; <span class=\"hljs-selector-tag\">A</span> ;\n<span class=\"hljs-selector-tag\">A</span> -&gt; D ;</code></pre><p>AD -&gt; C</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/DBI202/D19/q24.png",
           "options": [
             {

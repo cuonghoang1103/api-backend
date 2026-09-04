@@ -1008,7 +1008,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Here are three relations, R(A,B), S(C,D), and T(E,F) (see figure). Compute the result of the query:<br/>SELECT A, F, SUM(C), SUM(D)<br/>FROM R, S, T<br/>WHERE B = C AND D = E<br/>GROUP BY A, F<br/>HAVING COUNT(*) &gt; 1</p></div><div class=\"ml-vi\"><p>Cho ba quan hệ R(A,B), S(C,D), T(E,F) (xem hình). Tính kết quả của câu truy vấn:<br/>SELECT A, F, SUM(C), SUM(D)<br/>FROM R, S, T<br/>WHERE B = C AND D = E<br/>GROUP BY A, F<br/>HAVING COUNT(*) &gt; 1</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Here are three relations, R(A,B), S(C,D), and T(E,F) (see figure). Compute the result of the query:</p><pre><code><span class=\"hljs-keyword\">SELECT</span> A, F, <span class=\"hljs-built_in\">SUM</span>(C), <span class=\"hljs-built_in\">SUM</span>(D)\n<span class=\"hljs-keyword\">FROM</span> R, S, T\n<span class=\"hljs-keyword\">WHERE</span> B = C <span class=\"hljs-keyword\">AND</span> D = <span class=\"hljs-built_in\">E</span>\n<span class=\"hljs-keyword\">GROUP</span> <span class=\"hljs-keyword\">BY</span> A, F</code></pre><p>HAVING COUNT(*) &gt; 1</p></div><div class=\"ml-vi\"><p>Cho ba quan hệ R(A,B), S(C,D), T(E,F) (xem hình). Tính kết quả của câu truy vấn:</p><pre><code><span class=\"hljs-keyword\">SELECT</span> A, F, <span class=\"hljs-built_in\">SUM</span>(C), <span class=\"hljs-built_in\">SUM</span>(D)\n<span class=\"hljs-keyword\">FROM</span> R, S, T\n<span class=\"hljs-keyword\">WHERE</span> B = C <span class=\"hljs-keyword\">AND</span> D = <span class=\"hljs-built_in\">E</span>\n<span class=\"hljs-keyword\">GROUP</span> <span class=\"hljs-keyword\">BY</span> A, F</code></pre><p>HAVING COUNT(*) &gt; 1</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/DBI202/D18/q43.png",
           "options": [
             {
@@ -1146,7 +1146,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The relation R(A,B,C,D) has following FDs:<br/>{ACD -&gt; B ;<br/>AC -&gt; D ;<br/>D -&gt; C ;<br/>AC -&gt; B}<br/>Choose the correct statement about R:</p></div><div class=\"ml-vi\"><p>Quan hệ R(A,B,C,D) có các phụ thuộc hàm sau:<br/>{ACD -&gt; B ;<br/>AC -&gt; D ;<br/>D -&gt; C ;<br/>AC -&gt; B}<br/>Chọn phát biểu đúng về R:</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The relation R(A,B,C,D) has following FDs:</p><pre><code>{ACD -&gt; B ;\nAC -&gt; D ;\nD -&gt; C ;\nAC -&gt; B}</code></pre><p>Choose the correct statement about R:</p></div><div class=\"ml-vi\"><p>Quan hệ R(A,B,C,D) có các phụ thuộc hàm sau:</p><pre><code>{ACD -&gt; B ;\nAC -&gt; D ;\nD -&gt; C ;\nAC -&gt; B}</code></pre><p>Chọn phát biểu đúng về R:</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/DBI202/D18/q49.png",
           "options": [
             {

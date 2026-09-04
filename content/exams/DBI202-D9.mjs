@@ -816,7 +816,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>In MS-SQL Server, which of the following is true about join operator?<br/>SELECT * FROM tblCUSTOMER, tblORDER</p><pre><code class=\"language-sql\"><span class=\"hljs-keyword\">SELECT</span> <span class=\"hljs-operator\">*</span> <span class=\"hljs-keyword\">FROM</span> tblCUSTOMER, tblORDER</code></pre></div><div class=\"ml-vi\"><p>Trong MS-SQL Server, phát biểu nào đúng về phép join trong câu lệnh sau?<br/>SELECT * FROM tblCUSTOMER, tblORDER</p><pre><code class=\"language-sql\"><span class=\"hljs-keyword\">SELECT</span> <span class=\"hljs-operator\">*</span> <span class=\"hljs-keyword\">FROM</span> tblCUSTOMER, tblORDER</code></pre></div>",
+          "prompt": "<div class=\"ml-en\"><p>In MS-SQL Server, which of the following is true about join operator?</p><pre><code class=\"language-sql\"><span class=\"hljs-keyword\">SELECT</span> <span class=\"hljs-operator\">*</span> <span class=\"hljs-keyword\">FROM</span> tblCUSTOMER, tblORDER</code></pre></div><div class=\"ml-vi\"><p>Trong MS-SQL Server, phát biểu nào đúng về phép join trong câu lệnh sau?</p><pre><code class=\"language-sql\"><span class=\"hljs-keyword\">SELECT</span> <span class=\"hljs-operator\">*</span> <span class=\"hljs-keyword\">FROM</span> tblCUSTOMER, tblORDER</code></pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/DBI202/D9/q34.png",
           "options": [
             {

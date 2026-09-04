@@ -1105,7 +1105,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Suppose we have a relation R(A,B,C,D) with FD&#39;s:<br/>BC -&gt; A ;<br/>AD -&gt; C ;<br/>CD -&gt; B ;<br/>BD -&gt; C</p></div><div class=\"ml-vi\"><p>Giả sử ta có quan hệ R(A,B,C,D) với các FD:<br/>BC -&gt; A ;<br/>AD -&gt; C ;<br/>CD -&gt; B ;<br/>BD -&gt; C</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Suppose we have a relation R(A,B,C,D) with FD&#39;s:</p><pre><code>BC -&gt; A <span class=\"hljs-comment\">;</span>\nAD -&gt; C <span class=\"hljs-comment\">;</span>\nCD -&gt; B <span class=\"hljs-comment\">;</span></code></pre><p>BD -&gt; C</p></div><div class=\"ml-vi\"><p>Giả sử ta có quan hệ R(A,B,C,D) với các FD:</p><pre><code>BC -&gt; A <span class=\"hljs-comment\">;</span>\nAD -&gt; C <span class=\"hljs-comment\">;</span>\nCD -&gt; B <span class=\"hljs-comment\">;</span></code></pre><p>BD -&gt; C</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/DBI202/D22/q47.png",
           "options": [
             {

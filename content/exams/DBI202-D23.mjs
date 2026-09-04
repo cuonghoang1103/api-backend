@@ -356,7 +356,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The relation R(A,B,C,D) has following FDs:<br/>{ACD -&gt; B ;<br/>AC -&gt; D ;<br/>D -&gt; C ;<br/>AC -&gt; B}<br/>Choose the correct statement about R:</p></div><div class=\"ml-vi\"><p>Quan hệ R(A,B,C,D) có các FD sau:<br/>{ACD -&gt; B ;<br/>AC -&gt; D ;<br/>D -&gt; C ;<br/>AC -&gt; B}<br/>Chọn phát biểu đúng về R:</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The relation R(A,B,C,D) has following FDs:</p><pre><code>{ACD -&gt; B ;\nAC -&gt; D ;\nD -&gt; C ;\nAC -&gt; B}</code></pre><p>Choose the correct statement about R:</p></div><div class=\"ml-vi\"><p>Quan hệ R(A,B,C,D) có các FD sau:</p><pre><code>{ACD -&gt; B ;\nAC -&gt; D ;\nD -&gt; C ;\nAC -&gt; B}</code></pre><p>Chọn phát biểu đúng về R:</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/DBI202/D23/q15.png",
           "options": [
             {
@@ -581,7 +581,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>The table R(X,Y) currently has the following tuples (note there are duplicates). The relation S(A,B,C) has the following tuples:<br/>(See picture)<br/>Which is the result when we execute the following query:<br/>SELECT * FROM R<br/>UNION<br/>SELECT * FROM S</p></div><div class=\"ml-vi\"><p>Bảng R(X,Y) hiện có các bộ sau (lưu ý có trùng lặp). Quan hệ S(A,B,C) có các bộ sau:<br/>(Xem hình)<br/>Kết quả khi thực thi truy vấn sau là gì:<br/>SELECT * FROM R<br/>UNION<br/>SELECT * FROM S</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The table R(X,Y) currently has the following tuples (note there are duplicates). The relation S(A,B,C) has the following tuples: (See picture) Which is the result when we execute the following query:</p><pre><code><span class=\"hljs-selector-tag\">SELECT</span> * <span class=\"hljs-selector-tag\">FROM</span> <span class=\"hljs-attribute\">R</span>\nUNION\n<span class=\"hljs-selector-tag\">SELECT</span> * <span class=\"hljs-selector-tag\">FROM</span> S</code></pre></div><div class=\"ml-vi\"><p>Bảng R(X,Y) hiện có các bộ sau (lưu ý có trùng lặp). Quan hệ S(A,B,C) có các bộ sau: (Xem hình) Kết quả khi thực thi truy vấn sau là gì:</p><pre><code><span class=\"hljs-selector-tag\">SELECT</span> * <span class=\"hljs-selector-tag\">FROM</span> <span class=\"hljs-attribute\">R</span>\nUNION\n<span class=\"hljs-selector-tag\">SELECT</span> * <span class=\"hljs-selector-tag\">FROM</span> S</code></pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/DBI202/D23/q25.png",
           "options": [
             {
@@ -965,7 +965,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>What does the following SQL statement do:<br/>SELECT Customer, COUNT(Order)<br/> FROM Sales<br/> GROUP BY Customer<br/> HAVING COUNT(Order) &gt; 5</p></div><div class=\"ml-vi\"><p>Câu lệnh SQL sau làm gì:<br/>SELECT Customer, COUNT(Order)<br/> FROM Sales<br/> GROUP BY Customer<br/> HAVING COUNT(Order) &gt; 5</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>What does the following SQL statement do:</p><pre><code><span class=\"hljs-keyword\">SELECT</span> Customer, <span class=\"hljs-built_in\">COUNT</span>(<span class=\"hljs-keyword\">Order</span>)\n<span class=\"hljs-keyword\">FROM</span> Sales\n<span class=\"hljs-keyword\">GROUP</span> <span class=\"hljs-keyword\">BY</span> Customer</code></pre><p>HAVING COUNT(Order) &gt; 5</p></div><div class=\"ml-vi\"><p>Câu lệnh SQL sau làm gì:</p><pre><code><span class=\"hljs-keyword\">SELECT</span> Customer, <span class=\"hljs-built_in\">COUNT</span>(<span class=\"hljs-keyword\">Order</span>)\n<span class=\"hljs-keyword\">FROM</span> Sales\n<span class=\"hljs-keyword\">GROUP</span> <span class=\"hljs-keyword\">BY</span> Customer</code></pre><p>HAVING COUNT(Order) &gt; 5</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/DBI202/D23/q42.png",
           "options": [
             {

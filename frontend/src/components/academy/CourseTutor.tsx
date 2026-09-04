@@ -142,7 +142,11 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
       const base = showUser ? [...t, { role: 'user' as const, content: q }] : [...t];
       return [...base, {
         role: 'assistant' as const, content: '', streaming: true,
-        english, srcQuestion: english ? undefined : q, srcCacheKey: cacheKey,
+        // ⚠️ GIỮ `srcQuestion` cả cho lượt tiếng Anh. Để `undefined` thì nút
+        // "Hỏi lại mới" không hiện trên chính lượt tiếng Anh — tức đúng lượt
+        // đang giữ mục cache hỏng lại không sinh lại được. Việc có mời dịch
+        // hay không đã do `english` quyết, không cần mượn `srcQuestion`.
+        english, srcQuestion: q, srcCacheKey: cacheKey,
       }];
     });
 

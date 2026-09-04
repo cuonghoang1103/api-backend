@@ -44,6 +44,6 @@ EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 -- Tài khoản bot "cuongmini" — đăng thay CuongMini khi AI trả lời trong panel
 -- CuongMini. password NULL (không đăng nhập được). Idempotent: ON CONFLICT
 -- theo username (đã UNIQUE) thì bỏ qua, chạy lại migration này không nhân đôi.
-INSERT INTO "users" ("username", "email", "display_name", "full_name", "bio", "enabled", "email_verified")
-VALUES ('cuongmini', 'cuongmini@bot.cuongthai.com', 'CuongMini', 'CuongMini', 'AI đồng hành khi thi — trả lời tự động, đăng lại trong bình luận từng câu.', true, true)
+INSERT INTO "users" ("username", "email", "display_name", "full_name", "bio", "enabled", "email_verified", "updated_at")
+VALUES ('cuongmini', 'cuongmini@bot.cuongthai.com', 'CuongMini', 'CuongMini', 'AI đồng hành khi thi — trả lời tự động, đăng lại trong bình luận từng câu.', true, true, CURRENT_TIMESTAMP)
 ON CONFLICT ("username") DO NOTHING;

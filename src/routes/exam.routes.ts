@@ -19,6 +19,8 @@ import {
   gradeCode, gradeWrite, gradeSpeaking, extractCodeFromZip,
   transcribeExamAudio, generateSpeakingQuestions, type PeGradeResult,
 } from '../services/exam.grading.service.js';
+import { askExamTutor, askExamTutorStream, revealAnswer, type TutorMode, type TutorProvider } from '../services/examTutor.service.js';
+import { isProEffective } from '../services/pro.service.js';
 
 const router = Router();
 const zipUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 30 * 1024 * 1024 } });
@@ -159,12 +161,82 @@ router.get('/:examId/take', authenticate, async (req, res: Response<ApiResponse>
   } catch (e) { next(e); }
 });
 
-// Start (or resume) an attempt.
+// Start (or resume) an attempt. { aiAssisted?: true } → "Start Exam with
+// CuongMini" (Pro-gated inside startAttempt, not just here).
 router.post('/:examId/attempts', authenticate, async (req, res: Response<ApiResponse>, next) => {
   try {
-    const data = await examSvc.startAttempt(Number(req.params.examId), req.userId!);
+    const data = await examSvc.startAttempt(Number(req.params.examId), req.userId!, req.body?.aiAssisted === true);
     res.json({ success: true, data });
   } catch (e) { next(e); }
+});
+
+// ── CuongMini — AI đồng hành khi thi (Pro only) ─────────────────────────
+// Pro checked HERE too (not just startAttempt/the button) — an old attempt
+// could carry aiAssisted=true from a Pro period that has since expired.
+async function requireProForAi(userId: number | undefined) {
+  if (!(await isProEffective(userId))) throw new AppError('CuongMini là tính năng Pro.', 403);
+}
+
+// "Hiện đáp án" — không gọi AI, tra thẳng đáp án đã có sẵn trên câu hỏi.
+router.post('/attempts/:attemptId/ai/reveal', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    await requireProForAi(req.userId);
+    const data = await revealAnswer(Number(req.params.attemptId), Number(req.body?.questionId), req.userId!);
+    res.json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
+// Hỏi CuongMini (không stream) — đường lùi khi SSE hỏng.
+router.post('/attempts/:attemptId/ai/ask', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    await requireProForAi(req.userId);
+    const out = await askExamTutor({
+      userId: req.userId!,
+      attemptId: Number(req.params.attemptId),
+      questionId: Number(req.body?.questionId),
+      mode: (req.body?.mode || 'free_qa') as TutorMode,
+      question: typeof req.body?.question === 'string' ? req.body.question : undefined,
+      history: Array.isArray(req.body?.history) ? req.body.history : [],
+      provider: (req.body?.provider === 'opus' || req.body?.provider === 'sol') ? (req.body.provider as TutorProvider) : undefined,
+    });
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+// Hỏi CuongMini — bản STREAM (SSE), "gõ từng chữ". Khung giống course_tutor:
+// {type:'delta',text}… rồi {type:'done',answer} hoặc {type:'error',error}.
+router.post('/attempts/:attemptId/ai/ask-stream', authenticate, async (req, res) => {
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache, no-transform');
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('X-Accel-Buffering', 'no');
+  res.flushHeaders?.();
+
+  const send = (obj: unknown): void => { if (!res.writableEnded) res.write(`data: ${JSON.stringify(obj)}\n\n`); };
+  const keepalive = setInterval(() => { if (!res.writableEnded) res.write(': ka\n\n'); }, 15_000);
+  req.on('close', () => clearInterval(keepalive));
+
+  try {
+    await requireProForAi(req.userId);
+    const out = await askExamTutorStream(
+      {
+        userId: req.userId!,
+        attemptId: Number(req.params.attemptId),
+        questionId: Number(req.body?.questionId),
+        mode: (req.body?.mode || 'free_qa') as TutorMode,
+        question: typeof req.body?.question === 'string' ? req.body.question : undefined,
+        history: Array.isArray(req.body?.history) ? req.body.history : [],
+        provider: (req.body?.provider === 'opus' || req.body?.provider === 'sol') ? (req.body.provider as TutorProvider) : undefined,
+      },
+      (delta) => send({ type: 'delta', text: delta }),
+    );
+    send({ type: 'done', answer: out.answer });
+  } catch (e) {
+    send({ type: 'error', error: (e as Error)?.message || 'CuongMini chưa trả lời được. Thử lại nhé.' });
+  } finally {
+    clearInterval(keepalive);
+    if (!res.writableEnded) res.end();
+  }
 });
 
 // My attempt history (optional ?examId=).

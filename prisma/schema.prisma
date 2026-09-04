@@ -1275,6 +1275,9 @@ model ExamAttempt {
   integritySignals Json?     @map("integrity_signals") @db.JsonB
   // AUTO (FE) | AI | MANUAL | SELF (PE)
   gradingMode      String    @default("AUTO") @map("grading_mode") @db.VarChar(10)
+  // "Start Exam with CuongMini" (Pro only) — gates the live per-question AI
+  // chat/reveal-answer routes. Set once at attempt creation, never after.
+  aiAssisted       Boolean   @default(false) @map("ai_assisted")
   createdAt        DateTime  @default(now()) @map("created_at")
   updatedAt        DateTime  @updatedAt @map("updated_at")
 

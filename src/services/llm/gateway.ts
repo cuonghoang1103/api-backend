@@ -314,7 +314,8 @@ export type LlmPurpose =
   | 'news_bulletin'       // bản tin công nghệ chạy nền mỗi sáng
   | 'doc_ocr'             // chép đề/bài giảng từ ẢNH ra chữ + công thức
   | 'robot_voice'         // robot Maker Lab — độ trễ quan trọng ngang độ thông minh
-  | 'agent_code';         // agent lập trình của app desktop — GỌI TOOL nhiều lượt
+  | 'agent_code'          // agent lập trình của app desktop — GỌI TOOL nhiều lượt
+  | 'exam_tutor';         // CuongMini — AI đồng hành khi thi (Pro), đi cổng rambo như agent_code
 
 const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   /**
@@ -417,6 +418,15 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * sonnet-5 nhanh nhất trong ba model đo được và rẻ hơn opus 2,5 lần.
    */
   agent_code: 'claude-sonnet-5',
+
+  /**
+   * CuongMini (20/09/2026) — người dùng xác nhận rõ: "cổng rambo đi... vì 2
+   * cổng này đều là của tôi k lo tốn cứ để max đi. Chất lượng là được".
+   * Đi cổng rambo như agent_code (xem RAMBO_PURPOSES ở endpointFor), model
+   * mạnh nhất vì đây là tính năng Pro giảng bài + giải thích sâu từng câu.
+   * Đổi bằng LLM_MODEL_EXAM_TUTOR nếu cần ghim tạm.
+   */
+  exam_tutor: 'claude-opus-4-8',
 };
 
 
@@ -499,11 +509,19 @@ const VISION_PURPOSES = new Set<LlmPurpose>(['chat_vision', 'doc_ocr']);
  */
 const TOOL_PURPOSES = new Set<LlmPurpose>(['agent_code']);
 
+/**
+ * Việc đi cổng rambo riêng (xem `congAgent`) thay vì modelapi.vn — người dùng
+ * đã xác nhận rõ cho CẢ HAI: "cổng này của tôi, không lo phí, chất lượng là
+ * được". `exam_tutor` KHÔNG vào `TOOL_PURPOSES` (không gọi tool nhiều lượt),
+ * nhưng cũng không nằm trong `LLM_LOCAL_PURPOSES` mặc định nên tự động không
+ * rơi vào máy nhà — việc tương tác trực tiếp người dùng không nên xếp hàng.
+ */
+const RAMBO_PURPOSES = new Set<LlmPurpose>(['agent_code', 'exam_tutor']);
+
 export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
-  // Agent lập trình có cổng riêng nếu người dùng đã cắm — xem `congAgent`.
   // Đặt TRƯỚC nhánh máy nhà: `agent_code` nằm trong `TOOL_PURPOSES` nên nó
   // không bao giờ đi máy nhà, nhưng thứ tự này nói rõ ý định.
-  if (purpose === 'agent_code') {
+  if (RAMBO_PURPOSES.has(purpose)) {
     const rieng = congAgent();
     if (rieng) return rieng;
   }
@@ -528,8 +546,10 @@ export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
  *
  * Người dùng tự mở một cổng Anthropic riêng (`rambo.ai.vn`) và muốn AI Code
  * chạy hẳn qua đó. Nó KHÔNG thay cổng chung: chat, CV, bản tin… vẫn đi
- * modelapi. Chỉ `agent_code` đổi đường, vì đó là thứ duy nhất người dùng nói
- * "cứ dùng thoải mái, chất lượng là được".
+ * modelapi. Chỉ những việc trong `RAMBO_PURPOSES` đổi đường — ban đầu chỉ
+ * `agent_code`, từ 20/09/2026 thêm `exam_tutor` (CuongMini) — vì người dùng
+ * xác nhận "cứ dùng thoải mái, chất lượng là được" cho cả hai, không riêng
+ * agent_code.
  *
  * ─── ĐO THẬT 19/08/2026, TRƯỚC KHI VIẾT DÒNG NÀO ───
  * Đường đúng KHÔNG phải `/v1/...` như mọi cổng khác — nó nằm ở

@@ -18,11 +18,13 @@ import {
   ArrowLeft as ArrowLeftIcon, ArrowRight as ArrowRightIcon,
   Upload as ArrowUpTrayIcon, Download as ArrowDownTrayIcon,
   Mic as MicrophoneIcon, Square as StopIcon, FileText as DocumentTextIcon,
-  Eye as EyeIcon, EyeOff as EyeOffIcon,
+  Eye as EyeIcon, EyeOff as EyeOffIcon, Bot as BotIcon, Crown as CrownIcon,
 } from 'lucide-react';
 import { examApi, type ExamHeader, type ExamTakingQuestion } from '@/lib/api';
 import { pickLang, sanitizeHtml, stripInlineColors } from '@/lib/utils';
+import { usePro } from '@/hooks/usePro';
 import ExamRichContent from '../ExamRichContent';
+import CuongMiniPanel from './CuongMiniPanel';
 import './../exam.css';
 
 type FullExam = ExamHeader & { questions: ExamTakingQuestion[] };
@@ -39,6 +41,7 @@ function fmt(ms: number): string {
 
 export default function ExamRoomClient({ examId }: { examId: number }) {
   const router = useRouter();
+  const { isPro } = usePro();
   // Exams default to English; local toggle only (does not change site locale).
   const [L, setL] = useState<'en' | 'vi'>('en');
   const isVi = L === 'vi';
@@ -46,6 +49,7 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
   const [phase, setPhase] = useState<Phase>('loading');
   const [exam, setExam] = useState<FullExam | null>(null);
   const [attemptId, setAttemptId] = useState<number | null>(null);
+  const [aiAssisted, setAiAssisted] = useState(false);
   const [expiresAt, setExpiresAt] = useState<number | null>(null);
   const [nowMs, setNowMs] = useState<number>(() => Date.now());
   const startedRef = useRef<number>(Date.now());
@@ -110,11 +114,12 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
   const timeSpentSeconds = () => Math.max(0, Math.floor((Date.now() - startedRef.current) / 1000));
 
   // ── Start / resume ───────────────────────────────────────────────────
-  const start = useCallback(async () => {
+  const start = useCallback(async (withAi = false) => {
     try {
-      const r = await examApi.start(examId);
+      const r = await examApi.start(examId, withAi ? { aiAssisted: true } : undefined);
       setAttemptId(r.data.data.attemptId);
       setExpiresAt(r.data.data.expiresAt ? new Date(r.data.data.expiresAt).getTime() : null);
+      setAiAssisted(!!r.data.data.aiAssisted);
       startedRef.current = Date.now();
       setNowMs(Date.now());
       setPhase('taking');
@@ -264,11 +269,28 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
               </div>
             )}
 
-            <button onClick={start}
+            <button onClick={() => start(false)}
               className="w-full py-3.5 rounded-xl font-semibold text-white transition-transform active:scale-[.99]"
               style={{ background: 'linear-gradient(135deg, var(--exam-accent), var(--exam-accent-2))' }}>
               {exam.my?.inProgressId ? (isVi ? 'Tiếp tục bài thi' : 'Resume attempt') : (isVi ? 'Bắt đầu thi' : 'Start exam')}
             </button>
+
+            {exam.kind === 'FE' && !exam.my?.inProgressId && (
+              isPro ? (
+                <button onClick={() => start(true)}
+                  className="mt-3 w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-white transition-transform active:scale-[.99]"
+                  style={{ background: 'linear-gradient(135deg,#8b5cf6,#6366f1)' }}>
+                  <BotIcon className="w-4 h-4" /> {isVi ? 'Bắt đầu thi với CuongMini' : 'Start Exam with CuongMini'}
+                </button>
+              ) : (
+                <a href="/pro"
+                  className="mt-3 w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold border"
+                  style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}>
+                  <CrownIcon className="w-4 h-4" style={{ color: '#f59e0b' }} />
+                  {isVi ? 'Bắt đầu thi với CuongMini (Pro)' : 'Start Exam with CuongMini (Pro)'}
+                </a>
+              )
+            )}
           </div>
         </div>
       </div>
@@ -413,6 +435,11 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
           {exam.kind !== 'FE' && <p className="text-[11px] text-text-muted text-center">{isVi ? 'AI sẽ chấm và trả kết quả ngay.' : 'AI grades and returns your result right away.'}</p>}
         </aside>
       </div>
+
+      {exam.kind === 'FE' && aiAssisted && attemptId && q && (
+        <CuongMiniPanel key={q.id} attemptId={attemptId} questionId={q.id}
+          questionLabel={`${isVi ? 'Câu' : 'Question'} ${idx + 1}`} isVi={isVi} />
+      )}
     </div>
   );
 }

@@ -14,6 +14,7 @@
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { gradeCode, type PeGradeResult } from './exam.grading.service.js';
+import { isProEffective } from './pro.service.js';
 
 // ── Shapes ────────────────────────────────────────────────────────────
 export type ExamKind = 'FE' | 'PE';
@@ -129,9 +130,15 @@ export async function getExamForTaking(examId: number) {
 }
 
 // ── Attempts ──────────────────────────────────────────────────────────
-export async function startAttempt(examId: number, userId: number) {
+export async function startAttempt(examId: number, userId: number, aiAssisted = false) {
   const exam = await prisma.exam.findUnique({ where: { id: examId } });
   if (!exam || !exam.isPublished) throw new AppError('Không tìm thấy đề thi', 404);
+
+  // "Start Exam with CuongMini" is Pro-only — checked here too, not just on
+  // the button, so a direct API call can't bypass it.
+  if (aiAssisted && !(await isProEffective(userId))) {
+    throw new AppError('Thi cùng CuongMini là tính năng Pro.', 403);
+  }
 
   // Resume an unexpired in-progress attempt instead of spawning duplicates.
   const existing = await prisma.examAttempt.findFirst({
@@ -140,7 +147,7 @@ export async function startAttempt(examId: number, userId: number) {
   });
   const now = Date.now();
   if (existing && (!existing.expiresAt || existing.expiresAt.getTime() > now)) {
-    return { attemptId: existing.id, startedAt: existing.startedAt, expiresAt: existing.expiresAt, resumed: true };
+    return { attemptId: existing.id, startedAt: existing.startedAt, expiresAt: existing.expiresAt, resumed: true, aiAssisted: existing.aiAssisted };
   }
   // An expired in-progress attempt is auto-submitted (empty) before a new one.
   if (existing) {
@@ -157,9 +164,10 @@ export async function startAttempt(examId: number, userId: number) {
       startedAt: new Date(now), expiresAt,
       answers: {},
       gradingMode: exam.kind === 'FE' ? 'AUTO' : 'AI',
+      aiAssisted,
     },
   });
-  return { attemptId: created.id, startedAt: created.startedAt, expiresAt: created.expiresAt, resumed: false };
+  return { attemptId: created.id, startedAt: created.startedAt, expiresAt: created.expiresAt, resumed: false, aiAssisted: created.aiAssisted };
 }
 
 /** Load an attempt owned by the user (throws on mismatch). */

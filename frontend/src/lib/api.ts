@@ -1569,8 +1569,13 @@ export const examApi = {
   // Taking
   getForTaking: (examId: number) =>
     api.get<{ data: ExamHeader & { questions: ExamTakingQuestion[] } }>(`/exams/${examId}/take`),
-  start: (examId: number) =>
-    api.post<{ data: { attemptId: number; startedAt: string; expiresAt: string | null; resumed: boolean } }>(`/exams/${examId}/attempts`),
+  start: (examId: number, opts?: { aiAssisted?: boolean }) =>
+    api.post<{ data: { attemptId: number; startedAt: string; expiresAt: string | null; resumed: boolean; aiAssisted: boolean } }>(`/exams/${examId}/attempts`, opts),
+  // CuongMini — "Hiện đáp án" (không gọi AI) + hỏi AI (không stream, đường lùi).
+  aiReveal: (attemptId: number, questionId: number) =>
+    api.post<{ data: { correctIndexes: number[]; explanation: string | null } }>(`/exams/attempts/${attemptId}/ai/reveal`, { questionId }),
+  aiAsk: (attemptId: number, body: { questionId: number; mode: string; question?: string; history?: { role: string; content: string }[]; provider?: 'opus' | 'sol' }) =>
+    api.post<{ data: { answer: string } }>(`/exams/attempts/${attemptId}/ai/ask`, body, { timeout: 180000 }),
   myAttempts: (examId?: number) =>
     api.get(`/exams/attempts/mine`, { params: examId ? { examId } : {} }),
   getAttempt: (attemptId: number) => api.get(`/exams/attempts/${attemptId}`),

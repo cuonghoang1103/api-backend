@@ -359,10 +359,12 @@ Kiểm bản đồ đang hiệu lực: `npx tsx --test src/services/llm/gateway.
 ⚠️ **Model `rb-*` cũ ĐÃ CHẾT.** Thấy `rb-` ở đâu là chỗ đó đang trỏ vào
 đường chết.
 
-### 🤖 AI Code chạy cổng RIÊNG (19/08/2026)
+### 🤖 AI Code chạy cổng RIÊNG (19/08/2026, mở rộng 20/09/2026)
 
-`agent_code` — và CHỈ nó — đi qua cổng riêng của người dùng. Chat, CV, bản
-tin… vẫn đi modelapi. Cắm bằng hai biến ở `/opt/cuonghoangdev/.env`:
+`agent_code` (AI Code app desktop) và `exam_tutor` (CuongMini — AI đồng hành
+khi thi, chỉ Pro) — nằm trong `RAMBO_PURPOSES` ở `gateway.ts` — đi qua cổng
+riêng của người dùng. Chat, CV, bản tin… vẫn đi modelapi. Cắm bằng hai biến ở
+`/opt/cuonghoangdev/.env`:
 
 ```bash
 AGENT_GATEWAY_BASE_URL=https://rambo.ai.vn/api/claude

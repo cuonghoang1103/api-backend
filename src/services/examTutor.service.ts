@@ -104,10 +104,22 @@ export async function revealAnswer(attemptId: number, questionId: number, userId
   };
 }
 
+// Đếm từ trùng giữa đề bài và tên bài học (chỉ từ tiếng Anh ≥4 ký tự — tên
+// bài luôn có phần EN, thuật ngữ kỹ thuật cũng ổn định hơn phần dịch VI) để
+// chọn ĐÚNG bài trong chương thay vì luôn lấy bài đầu tiên. Không gọi AI —
+// endpoint này phải trả ngay, và một câu hỏi chỉ khớp 1 chương chứ chưa từng
+// được phân loại tới TỪNG bài, nên đây là cách tốt nhất có sẵn dữ liệu.
+function scoreLessonMatch(questionWords: Set<string>, lessonTitle: string): number {
+  const words = (lessonTitle.toLowerCase().match(/[a-z0-9]{4,}/g) || []);
+  let score = 0;
+  for (const w of words) if (questionWords.has(w)) score++;
+  return score;
+}
+
 /**
  * "Bài này học ở bài nào trong Academy?" — KHÔNG gọi AI, tra thẳng
  * ExamQuestion.sectionId (đã gán sẵn bằng scripts/exam-classify-chapters.mjs,
- * xem prisma/schema.prisma). Trả về link THẬT tới bài học đầu tiên của
+ * xem prisma/schema.prisma). Trả về link THẬT tới bài học khớp nhất trong
  * chương đó — không để AI tự bịa URL/tên bài, một chữ sai là link chết.
  * question.sectionId chưa được gán (script phân loại chưa chạy tới câu này)
  * → trả null, panel tự ẩn link, không báo lỗi.
@@ -125,20 +137,26 @@ export async function getRelatedLesson(attemptId: number, questionId: number, us
       lessons: {
         where: { isPublished: true },
         orderBy: { sortOrder: 'asc' },
-        take: 1,
         select: { id: true, title: true },
       },
     },
   });
-  const lesson = section?.lessons[0];
-  if (!section || !lesson) return null;
+  if (!section || !section.lessons.length) return null;
+
+  const qWords = new Set(plain(question.prompt).toLowerCase().match(/[a-z0-9]{4,}/g) || []);
+  let lesson = section.lessons[0];
+  let best = -1;
+  for (const l of section.lessons) {
+    const s = scoreLessonMatch(qWords, l.title);
+    if (s > best) { best = s; lesson = l; }
+  }
 
   return {
     sectionTitle: section.title,
     courseTitle: section.course.title,
     lessonId: lesson.id,
     lessonTitle: lesson.title,
-    url: `/academy/courses/${section.course.slug}/learn?lessonId=${lesson.id}`,
+    url: `/courses/${section.course.slug}/learn?lessonId=${lesson.id}`,
   };
 }
 

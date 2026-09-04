@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { Sparkles, Loader2, Send, X, Eye, Bot, BookOpen } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { examApi } from '@/lib/api';
+import { pickLang } from '@/lib/utils';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import ExamRichContent from '../ExamRichContent';
 
@@ -37,7 +38,8 @@ function getToken(): string {
 
 const toMsg = (t: Turn) => ({ role: t.role, content: t.content });
 
-export default function CuongMiniPanel({ attemptId, questionId, questionLabel, isVi }: {
+export default function CuongMiniPanel({ examId, attemptId, questionId, questionLabel, isVi }: {
+  examId: number;
   attemptId: number;
   questionId: number;
   questionLabel: string; // "Câu 5"
@@ -177,14 +179,15 @@ export default function CuongMiniPanel({ attemptId, questionId, questionLabel, i
             </div>
 
             {relatedLesson && (
-              <Link href={relatedLesson.url} target="_blank"
+              <Link href={`${relatedLesson.url}&fromExam=${examId}`} target="_blank"
                 className="flex items-center gap-2 border-b px-4 py-2 text-xs hover:bg-[var(--bg-surface)]"
                 style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}>
                 <BookOpen className="h-3.5 w-3.5 shrink-0" style={{ color: '#8b5cf6' }} />
                 <span className="min-w-0 flex-1 truncate">
-                  {isVi ? 'Học phần liên quan: ' : 'Related lesson: '}
-                  <b style={{ color: 'var(--text-primary)' }}>{relatedLesson.sectionTitle}</b>
-                  {' · '}{relatedLesson.courseTitle}
+                  {isVi ? 'Bài học liên quan: ' : 'Related lesson: '}
+                  <b style={{ color: 'var(--text-primary)' }}>{pickLang(relatedLesson.lessonTitle, isVi ? 'vi' : 'en')}</b>
+                  {' — '}{pickLang(relatedLesson.sectionTitle, isVi ? 'vi' : 'en')}
+                  {' · '}{pickLang(relatedLesson.courseTitle, isVi ? 'vi' : 'en')}
                 </span>
                 <span className="shrink-0 font-semibold" style={{ color: '#8b5cf6' }}>{isVi ? 'Mở →' : 'Open →'}</span>
               </Link>

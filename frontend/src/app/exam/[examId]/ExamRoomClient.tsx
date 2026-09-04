@@ -437,7 +437,7 @@ export default function ExamRoomClient({ examId }: { examId: number }) {
       </div>
 
       {exam.kind === 'FE' && aiAssisted && attemptId && q && (
-        <CuongMiniPanel key={q.id} attemptId={attemptId} questionId={q.id}
+        <CuongMiniPanel key={q.id} examId={examId} attemptId={attemptId} questionId={q.id}
           questionLabel={`${isVi ? 'Câu' : 'Question'} ${idx + 1}`} isVi={isVi} />
       )}
     </div>

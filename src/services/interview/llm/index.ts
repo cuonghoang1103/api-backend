@@ -672,7 +672,24 @@ export async function llmComplete(opts: {
         // Tuyến Anthropic (`/v1/messages`) KHÔNG tồn tại trên máy nhà —
         // llama.cpp chỉ mở tuyến OpenAI. Ép đúng adapter, nếu không thì đặt
         // `LLM_PROVIDER=anthropic` một lần là mọi việc cục bộ chết 404.
-        const provider = ep.local ? openAiCompatProvider : getProvider();
+        //
+        // ⚠️ `ep.giaoThuc` PHẢI thắng biến môi trường `LLM_PROVIDER` toàn cục —
+        // đây KHÔNG phải chuyện thẩm mỹ. Cổng rambo (congAgent(), dùng cho
+        // agent_code/exam_tutor) khai `giaoThuc:'anthropic'` vì nó CHỈ mở tuyến
+        // `/v1/messages`. `chatUrlOf()` đã tôn trọng field này (gọi đúng URL),
+        // nhưng nếu chọn nhầm `openAiCompatProvider` (khi LLM_PROVIDER toàn cục
+        // không phải 'anthropic', tức hầu hết production) thì nó vẫn gọi ĐÚNG
+        // URL song gửi BODY dạng OpenAI (`messages[0].role:'system'`, thiếu
+        // `x-api-key`/`anthropic-version`) rồi đọc stream theo khung
+        // `choices[].delta.content` — khung thật của Anthropic là
+        // `content_block_delta`/`text_delta`, nên mọi khung đều bị bỏ qua và
+        // kết quả luôn là "stream produced no text", im lặng không báo rõ vì
+        // sao. Đo thật 04/09/2026: exam_tutor (purpose đầu tiên đi rambo qua
+        // đúng `llmComplete()` dùng chung — agent_code có vòng gọi tool riêng
+        // nên chưa từng lộ lỗi này) luôn hỏng theo đúng kiểu trên.
+        const provider = ep.local
+          ? openAiCompatProvider
+          : ep.giaoThuc === 'anthropic' ? anthropicProvider : getProvider();
         const result = await provider.complete(model, opts.system, opts.messages, { maxTokens: opts.maxTokens, timeoutMs: opts.timeoutMs, ep, onToken: opts.onToken });
         recordSuccess(opts.feature);
         await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, feature: opts.feature, step: opts.step, model, inputTokens: result.inputTokens, outputTokens: result.outputTokens, success: true }).catch(() => {});

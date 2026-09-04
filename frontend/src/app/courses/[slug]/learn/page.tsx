@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import LearnPageClient from './LearnPageClient';
+import ExamReturnBanner from './ExamReturnBanner';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,5 +30,10 @@ export default function LearnPageWrapper({ params }: { params: { slug: string } 
     const callback = encodeURIComponent(`/courses/${params.slug}/learn`);
     redirect(`/login?callbackUrl=${callback}`);
   }
-  return <LearnPageClient slug={params.slug} />;
+  return (
+    <>
+      <ExamReturnBanner />
+      <LearnPageClient slug={params.slug} />
+    </>
+  );
 }

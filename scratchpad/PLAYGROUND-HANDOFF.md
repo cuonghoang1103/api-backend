@@ -1393,7 +1393,7 @@ Hai khu cộng lại tốn **+93 mesh** (đảo sân chơi 385 → 478), đỉnh
 
 ---
 
-# 1. MƯỜI BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
+# 1. MƯỜI BA BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
 
 Cần dev server sống: `cd playground-3d && npm run dev` (xem mục 4).
 
@@ -1408,6 +1408,9 @@ PLAY_URL=http://localhost:5174 node tools/check-monster-island.mjs # đảo quá
 PLAY_URL=http://localhost:5174 node tools/check-carrier.mjs        # tàu sân bay: 7 mục, quét cầu dẫn + đường băng
 PLAY_URL=http://localhost:5174 node tools/check-survival.mjs       # chế độ Sinh tồn: 23 mục, xem mục 0i
 PLAY_URL=http://localhost:5174 node tools/check-concert.mjs        # sân khấu nhạc hội: 7 mục, xem mục 0j
+PLAY_URL=http://localhost:5174 node tools/check-village.mjs        # làng ngôn ngữ: 9 mục, xem mục 0l
+PLAY_URL=http://localhost:5174 node tools/check-harbour.mjs        # bến cảng: 11 mục, xem mục 0l
+PLAY_URL=http://localhost:5174 node tools/check-perf.mjs           # draw call/mesh/đỉnh theo đảo, xem mục 0k
 ```
 
 ⏱️ `check-survival.mjs` chạy **3–4 phút** và đó là bình thường: nó chờ theo
@@ -1426,6 +1429,13 @@ trước đó gõ cứng 5173). `check-fptu-layout.mjs` vẫn gõ cứng 5173.
 KHÔNG tới được cổng lạ đó. Cách vào được: `preview_start({url: 'http://localhost:<cổng thật>'})`.
 Nhưng **Browser pane không chạy vòng lặp game** (đo 1/8: `ticker.elapsed` đứng
 im dù đã `tabs_select`) ⇒ chụp ảnh bằng Playwright headless, đừng bằng pane.
+
+⚠️ **12 bộ kiểm cũ từng gõ cứng đường dẫn playwright của một máy Mac** — nay
+đọc `PW=` và `CHROME=`, mặc định giữ nguyên đường cũ nên máy nhà không đổi gì:
+```bash
+PW=/đường/tới/playwright/index.mjs CHROME=/đường/tới/chrome \
+  PLAY_URL=http://127.0.0.1:5188 node tools/check-village.mjs
+```
 
 **Cả tám hiện 0 lỗi.**
 

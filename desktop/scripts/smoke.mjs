@@ -193,12 +193,22 @@ check('ghi rồi đọc lại được', settingsRoundTrip === 'dark', String(se
 // App khởi động vào màn đăng nhập, không vào shell. Đó là hành vi ĐÚNG — và nó
 // có nghĩa là các phép kiểm shell bên dưới cần một tài khoản thật.
 console.log('\nCổng đăng nhập:');
-await window.waitForSelector('.ct-card, .ct-shell', { timeout: 15_000 });
+/*
+ * ⚠️ Trước 04/09/2026 chỗ này chờ `.ct-card, .ct-shell`. Màn đăng nhập được dựng
+ * lại theo mẫu iOS và đổi sang lớp `.ct-dangnhap`, nên `.ct-card` chỉ CÒN LẠI ở
+ * `ErrorBoundary` — tức phép kiểm đã tự ĐẢO NGHĨA: nó xanh khi app lỗi và đỏ khi
+ * app chạy đúng. Nay chờ đúng lớp thật, và bắt riêng trường hợp màn lỗi.
+ */
+await window.waitForSelector('.ct-dangnhap, .ct-shell, .ct-card', { timeout: 15_000 });
 const gate = await window.evaluate(() => ({
   hasLogin: !!document.querySelector('input[autocomplete="username"]'),
+  manLoi: !!document.querySelector('.ct-card[role="alert"]'),
+  nutNgoai: [...document.querySelectorAll('.ct-dangnhap-ngoai button')].length,
   firstLine: document.body.innerText.split('\n')[0],
 }));
+check('KHÔNG rơi vào màn lỗi', !gate.manLoi, gate.manLoi ? gate.firstLine : 'không có');
 check('chưa đăng nhập thì hiện màn đăng nhập', gate.hasLogin, gate.firstLine);
+check('có nút đăng nhập bằng nhà cung cấp ngoài', gate.nutNgoai >= 2, `${gate.nutNgoai} nút`);
 
 // ── 8. Gọi API THẬT từ origin app://cuongthai ────────────────
 // Không cần tài khoản đúng. Mục đích là chứng minh cả chuỗi thông suốt:

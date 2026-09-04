@@ -75,7 +75,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>What happens to request attributes when sendRedirect() is used?<br/>request.setAttribute(&quot;data&quot;, &quot;value&quot;);<br/>response.sendRedirect(&quot;result.jsp&quot;);</p></div><div class=\"ml-vi\"><p>Điều gì xảy ra với request attribute khi dùng sendRedirect()?<br/>request.setAttribute(&quot;data&quot;, &quot;value&quot;);<br/>response.sendRedirect(&quot;result.jsp&quot;);</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>What happens to request attributes when sendRedirect() is used?</p><pre><code><span class=\"hljs-built_in\">request</span>.setAttribute(<span class=\"hljs-string\">&quot;data&quot;</span>, <span class=\"hljs-string\">&quot;value&quot;</span>);\n<span class=\"hljs-built_in\">response</span>.sendRedirect(<span class=\"hljs-string\">&quot;result.jsp&quot;</span>);</code></pre></div><div class=\"ml-vi\"><p>Điều gì xảy ra với request attribute khi dùng sendRedirect()?</p><pre><code><span class=\"hljs-built_in\">request</span>.setAttribute(<span class=\"hljs-string\">&quot;data&quot;</span>, <span class=\"hljs-string\">&quot;value&quot;</span>);\n<span class=\"hljs-built_in\">response</span>.sendRedirect(<span class=\"hljs-string\">&quot;result.jsp&quot;</span>);</code></pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRJ301/FE1/q3.png",
           "options": [
             {
@@ -603,7 +603,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Given the code below:</p><p>HttpSession session = request.getSession();<br/>session.setAttribute(&quot;username&quot;, &quot;HuyNM&quot;);</p><p>Which of the following is incorrect?</p></div><div class=\"ml-vi\"><p>Xét mã trên. Phát biểu nào sau đây SAI?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given the code below:</p><pre><code>HttpSession <span class=\"hljs-keyword\">session</span> = request.getSession();\n<span class=\"hljs-keyword\">session</span>.setAttribute(&quot;username&quot;, &quot;HuyNM&quot;);</code></pre><p>Which of the following is incorrect?</p></div><div class=\"ml-vi\"><p>Xét mã trên. Phát biểu nào sau đây SAI?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRJ301/FE1/q25.png",
           "options": [
             {
@@ -723,7 +723,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>public class CookieExampleServlet extends HttpServlet {<br/>  protected void doGet(HttpServletRequest request, HttpServletResponse response)<br/>      throws ServletException, IOException {<br/>    // TODO: Your code here<br/>  }<br/>}</p><p>In the doGet method, how to create a Cookie and send it to the client?</p></div><div class=\"ml-vi\"><p>Trong doGet, làm sao tạo Cookie và gửi cho client?</p></div>",
+          "prompt": "<div class=\"ml-en\"><pre><code>public <span class=\"hljs-class\"><span class=\"hljs-keyword\">class</span> <span class=\"hljs-title\">CookieExampleServlet</span> <span class=\"hljs-keyword\">extends</span> <span class=\"hljs-title\">HttpServlet</span> </span>{\n<span class=\"hljs-keyword\">protected</span> void doGet(<span class=\"hljs-type\">HttpServletRequest</span> request, <span class=\"hljs-type\">HttpServletResponse</span> response)\n<span class=\"hljs-keyword\">throws</span> <span class=\"hljs-type\">ServletException</span>, <span class=\"hljs-type\">IOException</span> {\n<span class=\"hljs-comment\">// <span class=\"hljs-doctag\">TODO:</span> Your code here</span>\n}\n}</code></pre><p>In the doGet method, how to create a Cookie and send it to the client?</p></div><div class=\"ml-vi\"><p>Trong doGet, làm sao tạo Cookie và gửi cho client?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRJ301/FE1/q30.png",
           "options": [
             {
@@ -966,7 +966,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Given this JSTL code, what is the correct output of ${myUrl}?<br/>&lt;c:url value=&quot;/app/item&quot; var=&quot;myUrl&quot; scope=&quot;page&quot;&gt;<br/>  &lt;c:param name=&quot;type&quot; value=&quot;book&quot; /&gt;<br/>  &lt;c:param name=&quot;id&quot; value=&quot;123&quot; /&gt;<br/>&lt;/c:url&gt;<br/>${myUrl}</p></div><div class=\"ml-vi\"><p>Xét mã JSTL trên. ${myUrl} in ra kết quả gì?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given this JSTL code, what is the correct output of ${myUrl}?</p><pre><code><span class=\"language-xml\"><span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">c:url</span> <span class=\"hljs-attr\">value</span>=<span class=\"hljs-string\">&quot;/app/item&quot;</span> <span class=\"hljs-attr\">var</span>=<span class=\"hljs-string\">&quot;myUrl&quot;</span> <span class=\"hljs-attr\">scope</span>=<span class=\"hljs-string\">&quot;page&quot;</span>&gt;</span>\n<span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">c:param</span> <span class=\"hljs-attr\">name</span>=<span class=\"hljs-string\">&quot;type&quot;</span> <span class=\"hljs-attr\">value</span>=<span class=\"hljs-string\">&quot;book&quot;</span> /&gt;</span>\n<span class=\"hljs-tag\">&lt;<span class=\"hljs-name\">c:param</span> <span class=\"hljs-attr\">name</span>=<span class=\"hljs-string\">&quot;id&quot;</span> <span class=\"hljs-attr\">value</span>=<span class=\"hljs-string\">&quot;123&quot;</span> /&gt;</span>\n<span class=\"hljs-tag\">&lt;/<span class=\"hljs-name\">c:url</span>&gt;</span>\n$</span><span class=\"hljs-template-variable\">{myUrl}</span></code></pre></div><div class=\"ml-vi\"><p>Xét mã JSTL trên. ${myUrl} in ra kết quả gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRJ301/FE1/q40.png",
           "options": [
             {

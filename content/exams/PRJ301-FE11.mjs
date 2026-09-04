@@ -195,7 +195,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>JavaScript clients of SignalR application call public methods on hubs via the invoke method of the HubConnection. The invoke method accepts the name of the hub method and any arguments defined in the hub method.<br/>Support that you already have defined the following code:<br/>var connection = new signalR.HubConnectionBuilder()<br/>  .withUrl(&quot;/chatHub&quot;)<br/>  .create();<br/>connection.start();<br/>Which the following codes you can call &quot;invoke&quot; method?</p></div><div class=\"ml-vi\"><p>Xét code SignalR trên. Cách gọi &quot;invoke&quot; nào đúng?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>JavaScript clients of SignalR application call public methods on hubs via the invoke method of the HubConnection. The invoke method accepts the name of the hub method and any arguments defined in the hub method. Support that you already have defined the following code: var connection = new signalR.HubConnectionBuilder() .withUrl(&quot;/chatHub&quot;)</p><pre><code>.<span class=\"hljs-keyword\">create</span>();\n<span class=\"hljs-keyword\">connection</span>.<span class=\"hljs-keyword\">start</span>();</code></pre><p>Which the following codes you can call &quot;invoke&quot; method?</p></div><div class=\"ml-vi\"><p>Xét code SignalR trên. Cách gọi &quot;invoke&quot; nào đúng?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRJ301/FE11/q8.png",
           "options": [
             {
@@ -849,7 +849,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>public class MyAppContextListener implements ServletContextListener {<br/>  public void contextInitialized(ServletContextEvent event) {<br/>    // TODO: Your code here<br/>  }</p><p>  public void contextDestroyed(ServletContextEvent event) {<br/>    // TODO: Your code here<br/>  }<br/>}<br/>In the contextInitialized method, what kind of tasks would you typically perform during the initialization of the servlet context?</p></div><div class=\"ml-vi\"><p>Trong contextInitialized, thường thực hiện loại tác vụ nào?</p></div>",
+          "prompt": "<div class=\"ml-en\"><pre><code><span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">class</span> <span class=\"hljs-symbol\">MyAppContextListener</span> <span class=\"hljs-symbol\">implements</span> <span class=\"hljs-symbol\">ServletContextListener</span> {\n<span class=\"hljs-keyword\">public</span> <span class=\"hljs-built_in\">void</span> contextInitialized(ServletContextEvent event) {\n<span class=\"hljs-comment\">// <span class=\"hljs-doctag\">TODO:</span> Your code here</span>\n}\n<span class=\"hljs-function\"><span class=\"hljs-keyword\">public</span> <span class=\"hljs-keyword\">void</span> <span class=\"hljs-title\">contextDestroyed</span>(<span class=\"hljs-params\">ServletContextEvent <span class=\"hljs-keyword\">event</span></span>)</span> {\n<span class=\"hljs-comment\">// <span class=\"hljs-doctag\">TODO:</span> Your code here</span>\n}\n}</code></pre><p>In the contextInitialized method, what kind of tasks would you typically perform during the initialization of the servlet context?</p></div><div class=\"ml-vi\"><p>Trong contextInitialized, thường thực hiện loại tác vụ nào?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRJ301/FE11/q35.png",
           "options": [
             {

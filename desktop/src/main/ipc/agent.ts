@@ -42,6 +42,7 @@ import { datDinhKem, datDinhKemTuDuong } from '../agent/dinhKem';
 import { hoanTacTatCa, luiFileVeLuot } from '../agent/tools';
 import { timFileGoiY } from '../agent/timFileNhanh';
 import { docLenhDuAn } from '../agent/lenhTuTao';
+import { docHook, quenDemHook, duongDanCauHinh as duongHook } from '../agent/hook';
 import { traLoi } from '../agent/xinPhep';
 import { readStoredSession } from './auth';
 import { handle } from './index';
@@ -533,6 +534,20 @@ export function registerAgentHandlers(): void {
   handle('agent:mcpNapLai', async (): Promise<AgentMcpTrangThai> => {
     await napLaiMcp();
     return trangThaiMcp();
+  });
+
+  handle('agent:hookMoCauHinh', async () => {
+    // Đọc một lần trước khi mở: `docHook` tự ghi file mẫu khi chưa có. Mở một
+    // file không tồn tại thì hệ điều hành báo lỗi cụt lủn — cùng lý do như MCP.
+    await docHook().catch(() => []);
+    await shell.openPath(duongHook());
+  });
+
+  /* Người dùng vừa sửa file xong ⇒ phải QUÊN nhớ đệm rồi mới đếm, nếu không
+     con số trả về là của bản cũ và họ tưởng file mình sửa không ăn. */
+  handle('agent:hookDem', async () => {
+    quenDemHook();
+    return (await docHook()).length;
   });
 
   handle('agent:mcpMoCauHinh', async () => {

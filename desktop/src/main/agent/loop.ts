@@ -26,6 +26,8 @@ import { API_ORIGIN } from '../config';
 import { readStoredSession } from '../ipc/auth';
 import type { KetQuaDiff } from './diff';
 import { docGhiChuDuAn } from './ghiChu';
+import { chayHook } from './hook';
+import { dsKyNang, docThanKyNang } from './kyNang';
 import {
   datTokenChoDatTen, docPhien, dungLaiHienThi, luuPhien, taoPhienNhanh,
   type MucKhoiPhuc, type TinNhanLuu,
@@ -727,6 +729,14 @@ export async function chayLuot(
   // lần cho cả lượt là đủ: trong cùng một lượt agent không sửa file này, và đọc
   // lại ở từng vòng chỉ thêm I/O không đổi gì.
   const ghiChuDuAn = boiCanh.goc ? await docGhiChuDuAn(boiCanh.goc) : null;
+  /* Đọc cùng nhịp với ghi chú dự án, và vì cùng một lý do: người dùng có thể
+     vừa thêm một kỹ năng, và đọc một lần lúc mở app thì họ phải khởi động lại
+     mới thấy. Chỉ là tên + mô tả nên rẻ. */
+  const kyNang = boiCanh.goc ? await dsKyNang(boiCanh.goc) : [];
+  /* CHỈ khai khả năng khi thật sự có kỹ năng. Khai bừa thì máy chủ gửi tool
+     `dung_ky_nang` xuống, model gọi, và mọi lời gọi đều trả "không có kỹ năng
+     nào" — nó sẽ thử vài lần trước khi bỏ cuộc, mỗi lần một vòng tính tiền. */
+  if (kyNang.length > 0) capabilities.push('ky_nang');
   if (ghiChuDuAn) {
     phat({ loai: 'tool', ten: ghiChuDuAn.ten, tomTat: 'quy ước dự án', vong: 'may' });
   }
@@ -751,6 +761,7 @@ export async function chayLuot(
             }
           : {}),
         ...(ghiChuDuAn ? { ghiChuDuAn } : {}),
+        ...(kyNang.length > 0 ? { kyNang } : {}),
         ...(boiCanh.mucNoLuc ? { mucNoLuc: boiCanh.mucNoLuc } : {}),
         ...(boiCanh.model ? { model: boiCanh.model } : {}),
         // Gửi ở MỌI vòng, không phải chỉ vòng đầu: người dùng có thể nạp lại
@@ -781,6 +792,21 @@ export async function chayLuot(
       c.hoiThoai.push(...ketQua.append);
 
       if (ketQua.stop === 'end' || ketQua.stop === 'max_steps') {
+        /*
+         * HOOK XONG LƯỢT — chạy TRƯỚC khi báo 'xong'.
+         *
+         * Chạy sau thì màn hình đã hiện "đã xong" trong lúc `npm test` còn chạy
+         * hai phút nữa, và người dùng đóng app giữa chừng. Kết quả hook đi ra
+         * bằng một dòng lệnh trên bảng ghi, KHÔNG vào hội thoại: lượt đã kết
+         * thúc, không còn ai đọc nó, và nhét vào chỉ làm lượt SAU trả tiền cho
+         * đầu ra của một lệnh đã cũ.
+         */
+        if (boiCanh.goc) {
+          const hookXong = await chayHook({
+            moc: 'xongLuot', goc: boiCanh.goc, signal: dieuKhien.signal,
+          });
+          if (hookXong.ra !== '') phat({ loai: 'lenhRa', text: hookXong.ra });
+        }
         phat({
           loai: 'xong', hanMuc: ketQua.quota, tienUsd: ketQua.costUsd,
           daLuoc: ketQua.daLuoc, soFileDaSua: soFileDaSua(c.so),
@@ -871,6 +897,25 @@ export async function chayLuot(
 
         // `anh?` để `web_anh` gửi được ảnh chụp lên máy chủ — xem `KetQuaTool`.
         let kq: { noiDung: string; tomTat: string; anh?: Array<{ media_type: string; data: string }> };
+
+        /*
+         * HOOK TRƯỚC TOOL. Chỉ chạy khi có thư mục dự án — hook chạy lệnh, và
+         * lệnh phải có chỗ để chạy.
+         *
+         * Bị chặn thì tool KHÔNG chạy, và đầu ra hook được trả cho model làm lý
+         * do. Trả một câu chung chung ("bị chặn") là model thử lại y hệt ngay
+         * lượt sau, vòng cho tới khi hết trần bước.
+         */
+        const hookTruoc = boiCanh.goc
+          ? await chayHook({ moc: 'truocTool', goc: boiCanh.goc, tenTool: goi.name, signal: dieuKhien.signal })
+          : { chan: false, ra: '' };
+        if (hookTruoc.chan) {
+          const loiHook = `BỊ CHẶN bởi hook của người dùng — tool này KHÔNG chạy.\n\n${hookTruoc.ra}`;
+          c.hoiThoai.push({ role: 'tool', tool_call_id: goi.id, content: loiHook });
+          phat({ loai: 'tool', id: goi.id, ten: goi.name, tomTat: 'hook chặn', vong: 'may' });
+          continue;
+        }
+
         if (laToolMcp(goi.name)) {
           // Tool MCP xử lý TRƯỚC cả phép kiểm "đã mở dự án chưa": một server
           // Linear hay Sentry không cần thư mục nào trên máy cả.
@@ -884,6 +929,19 @@ export async function chayLuot(
             : { noiDung: 'LỖI: phiên này không bật quyền ghi ghi chú.', tomTat: 'không có quyền' };
         } else if (!boiCanh.goc) {
           kq = { noiDung: 'LỖI: người dùng chưa chọn thư mục dự án nào.', tomTat: 'chưa mở dự án' };
+        } else if (goi.name === 'dung_ky_nang') {
+          /* Thân kỹ năng đi vào hội thoại dưới dạng KẾT QUẢ TOOL, không phải
+             prompt hệ thống. Nội dung này đến từ repo — có thể là repo vừa
+             clone của người lạ — nên nó phải nằm ở tầng mà `prompt.ts` đã rào:
+             kết quả tool không gỡ được luật nào. */
+          const tenKn = typeof goi.args?.ten === 'string' ? goi.args.ten : '';
+          const than = tenKn ? await docThanKyNang(boiCanh.goc, tenKn) : null;
+          kq = than === null
+            ? {
+              noiDung: `LỖI: không có kỹ năng "${tenKn}". Đang có: ${kyNang.map((k) => k.ten).join(', ') || '(không có)'}.`,
+              tomTat: 'không có kỹ năng đó',
+            }
+            : { noiDung: than, tomTat: `kỹ năng ${tenKn}` };
         } else if (goi.name === 'giao_viec_phu') {
           kq = await chayViecPhu(c, goi.args, boiCanh, phien.sessionToken, dieuKhien.signal, phat);
         } else {
@@ -891,11 +949,27 @@ export async function chayLuot(
             boiCanh.goc, goi.name, goi.args, boiCanhGhi, boiCanhLenh, boiCanhKeHoach, boiCanhNen, boiCanhGit,
           );
         }
+        /*
+         * HOOK SAU TOOL — đầu ra NỐI VÀO kết quả tool, nên model đọc được.
+         *
+         * Đây là cả điểm của tính năng: `npx tsc --noEmit` sau mỗi lần sửa file
+         * nghĩa là agent thấy ngay lỗi kiểu nó vừa gây ra, trong chính lượt đó,
+         * thay vì bạn phát hiện sau ba bước nữa. Đẩy ra màn hình mà không đưa
+         * vào hội thoại thì model không bao giờ biết.
+         */
+        const hookSau = boiCanh.goc
+          ? await chayHook({ moc: 'sauTool', goc: boiCanh.goc, tenTool: goi.name, signal: dieuKhien.signal })
+          : { chan: false, ra: '' };
+        const noiDungCuoi = hookSau.ra === '' ? kq.noiDung : `${kq.noiDung}\n\n${hookSau.ra}`;
+
         c.hoiThoai.push({
-          role: 'tool', tool_call_id: goi.id, content: kq.noiDung,
+          role: 'tool', tool_call_id: goi.id, content: noiDungCuoi,
           ...(kq.anh?.length ? { anh: kq.anh } : {}),
         });
-        phat({ loai: 'tool', id: goi.id, ten: goi.name, tomTat: kq.tomTat, vong: 'may' });
+        phat({
+          loai: 'tool', id: goi.id, ten: goi.name, vong: 'may',
+          tomTat: hookSau.ra === '' ? kq.tomTat : `${kq.tomTat} · hook có nói`,
+        });
       }
     }
 
@@ -1122,6 +1196,8 @@ async function mgoiMotLuot(o: {
   capabilities: string[];
   workspace?: { name: string; platform: string; branch?: string };
   ghiChuDuAn?: { ten: string; noiDung: string };
+  /** Tên + mô tả kỹ năng của dự án. KHÔNG kèm thân — xem `kyNang.ts`. */
+  kyNang?: Array<{ ten: string; moTa: string }>;
   mucNoLuc?: string;
   model?: string;
   laPhu?: boolean;
@@ -1167,6 +1243,8 @@ async function mgoiMotLuotThat(o: {
   capabilities: string[];
   workspace?: { name: string; platform: string; branch?: string };
   ghiChuDuAn?: { ten: string; noiDung: string };
+  /** Tên + mô tả kỹ năng của dự án. KHÔNG kèm thân — xem `kyNang.ts`. */
+  kyNang?: Array<{ ten: string; moTa: string }>;
   mucNoLuc?: string;
   model?: string;
   laPhu?: boolean;

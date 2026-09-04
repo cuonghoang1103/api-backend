@@ -5258,6 +5258,30 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   font-size: 11.5px;
 }
 
+/*
+ * Nhóm cấu hình phụ trong bảng MCP (hiện là Hook).
+ *
+ * Có đường kẻ trên để mắt thấy ngay đây là một khối KHÁC, không phải phần đuôi
+ * của danh sách server bên trên — hai thứ cấu hình khác nhau nằm liền nhau mà
+ * không có ranh giới thì người dùng sửa nhầm bảng.
+ */
+.ct-mcp-nhom {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--ct-border);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.ct-mcp-nhom code {
+  font-size: 11px;
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: var(--ct-surface-2, rgba(127, 127, 127, 0.14));
+}
+
 .ct-mcp-chan[data-loi] { color: var(--ct-err); }
 
 /* ── Đính kèm ở chế độ Trò chuyện ── */

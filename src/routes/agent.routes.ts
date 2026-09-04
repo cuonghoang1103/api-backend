@@ -166,7 +166,7 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
   // và app nhận HTTP 200 cho một yêu cầu hỏng. Sai sớm thì sai bằng mã HTTP.
   const body = req.body as {
     messages?: unknown; capabilities?: unknown; workspace?: unknown;
-    ghiChuDuAn?: unknown; mucNoLuc?: unknown; laPhu?: unknown; toolMcp?: unknown;
+    ghiChuDuAn?: unknown; kyNang?: unknown; mucNoLuc?: unknown; laPhu?: unknown; toolMcp?: unknown;
     model?: unknown;
   };
   if (!Array.isArray(body?.messages)) {
@@ -188,6 +188,17 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
   const ghiChuDuAn = gc && typeof gc === 'object'
     && typeof (gc as any).ten === 'string' && typeof (gc as any).noiDung === 'string'
     ? { ten: String((gc as any).ten).slice(0, 80), noiDung: String((gc as any).noiDung).slice(0, 200_000) }
+    : undefined;
+
+  /* Kỹ năng: CHỈ tên + mô tả. Trần chặt vì nó vào thẳng prompt hệ thống ở MỌI
+     lượt — một mô tả 5000 chữ là một khoản tiền lặp lại mãi. */
+  const kn = body.kyNang;
+  const kyNang = Array.isArray(kn)
+    ? kn
+      .filter((x): x is { ten: string; moTa: string } => Boolean(x) && typeof x === 'object'
+        && typeof (x as any).ten === 'string' && typeof (x as any).moTa === 'string')
+      .slice(0, 40)
+      .map((x) => ({ ten: String(x.ten).slice(0, 64), moTa: String(x.moTa).slice(0, 300) }))
     : undefined;
 
   // ─── 2. Mở SSE ───────────────────────────────────────────────
@@ -223,6 +234,7 @@ router.post('/turn', chiPro, async (req: any, res: Response) => {
         capabilities: body.capabilities,
         workspace,
         ...(ghiChuDuAn ? { ghiChuDuAn } : {}),
+        ...(kyNang?.length ? { kyNang } : {}),
         mucNoLuc: body.mucNoLuc,
         model: body.model,
         laPhu: body.laPhu,

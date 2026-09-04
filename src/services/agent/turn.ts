@@ -285,6 +285,7 @@ export interface AgentTurnInput {
    * người dùng cập nhật app.
    */
   ghiChuDuAn?: { ten: string; noiDung: string };
+  kyNang?: Array<{ ten: string; moTa: string }>;
   /**
    * Tool MCP app phát hiện được trên máy người dùng.
    *
@@ -556,6 +557,7 @@ export async function runAgentTurn(
     soToolMcp: toolMcp.length,
     ...(input.workspace ? { workspace: input.workspace } : {}),
     ...(ghiChu ? { ghiChu } : {}),
+    ...(input.kyNang?.length ? { kyNang: input.kyNang } : {}),
   });
   const tools = toolsForGateway(capabilities, toolMcp);
 

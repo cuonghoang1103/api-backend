@@ -1035,6 +1035,8 @@ export const INVOKE_CHANNELS = {
   'agent:mcpTrangThai': null,
   'agent:mcpNapLai': null,
   'agent:mcpMoCauHinh': null,
+  'agent:hookMoCauHinh': null,
+  'agent:hookDem': null,
 } as const;
 
 export type InvokeChannel = keyof typeof INVOKE_CHANNELS;
@@ -1410,6 +1412,16 @@ export interface DesktopBridge {
     mcpNapLai(): Promise<AgentMcpTrangThai>;
     /** Mở file `mcp.json` bằng ứng dụng mặc định của hệ điều hành. */
     mcpMoCauHinh(): Promise<void>;
+    /**
+     * Mở file cấu hình hook trong trình soạn của hệ điều hành.
+     *
+     * Cấu hình sống ở `userData`, KHÔNG trong repo — xem ghi chú đầu `hook.ts`.
+     * Một file trong repo mà chạy được lệnh shell nghĩa là `git clone` một dự
+     * án lạ là đủ để chạy mã tuỳ ý trên máy.
+     */
+    hookMoCauHinh(): Promise<void>;
+    /** Số hook đang hiệu lực, sau khi nạp lại. Để giao diện nói được con số. */
+    hookDem(): Promise<number>;
   };
   /**
    * Cửa sổ robot NỔI — trợ lý đứng ngoài app, luôn thấy kể cả khi người dùng

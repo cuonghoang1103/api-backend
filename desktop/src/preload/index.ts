@@ -258,6 +258,8 @@ const bridge: DesktopBridge = {
     mcpTrangThai: () => ipcRenderer.invoke('agent:mcpTrangThai') as Promise<AgentMcpTrangThai>,
     mcpNapLai: () => ipcRenderer.invoke('agent:mcpNapLai') as Promise<AgentMcpTrangThai>,
     mcpMoCauHinh: () => ipcRenderer.invoke('agent:mcpMoCauHinh') as Promise<void>,
+    hookMoCauHinh: () => ipcRenderer.invoke('agent:hookMoCauHinh') as Promise<void>,
+    hookDem: () => ipcRenderer.invoke('agent:hookDem') as Promise<number>,
   },
 
   robot: {

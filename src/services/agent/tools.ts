@@ -43,6 +43,12 @@ export type AgentCapability =
   | 'fs_read' | 'git_read' | 'fs_write' | 'shell' | 'plan' | 'subagent'
   /** Chạy lệnh ở NỀN + đọc đầu ra + dừng. Tách khỏi `shell` để app cũ không nhận tool nó chưa biết chạy. */
   | 'shell_nen'
+  /**
+   * Dự án CÓ kỹ năng (`.claude/skills/…`). App chỉ gửi khả năng này khi thật
+   * sự tìm thấy ít nhất một cái — không thì model nhận một tool mà mọi lời gọi
+   * đều trả "không có kỹ năng nào", và nó sẽ thử vài lần trước khi bỏ cuộc.
+   */
+  | 'ky_nang'
   /** commit / mở PR. Tách riêng vì nó GHI vào lịch sử git và ĐẨY ra ngoài. */
   | 'git_write'
   /**
@@ -331,6 +337,32 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
   // sách thì người dùng chỉ thấy tool chạy lộn xộn và không biết còn bao lâu.
   // Nó cũng làm agent làm việc có thứ tự hơn: viết kế hoạch ra buộc nó chia
   // việc trước khi lao vào bước đầu tiên.
+  /*
+   * KỸ NĂNG — hướng dẫn dài của dự án, model tự lấy khi cần.
+   *
+   * Danh sách tên + mô tả nằm trong prompt hệ thống (xem `prompt.ts`); tool này
+   * lấy THÂN. Nhét sẵn cả thân của mười kỹ năng vào mọi lượt là 30k token cho
+   * cả những câu hỏi chẳng liên quan — đó là lý do nó là một tool, không phải
+   * một khối trong prompt.
+   */
+  {
+    name: 'dung_ky_nang',
+    ring: 'client',
+    capability: 'ky_nang',
+    description:
+      'Đọc hướng dẫn đầy đủ của một KỸ NĂNG mà dự án này định nghĩa. '
+      + 'Danh sách kỹ năng có sẵn nằm trong phần KỸ NĂNG của hướng dẫn hệ thống, kèm mô tả mỗi cái làm gì. '
+      + 'GỌI NGAY khi việc người dùng nhờ khớp với mô tả của một kỹ năng, TRƯỚC khi bắt tay làm — '
+      + 'kỹ năng chứa quy ước riêng của dự án mà bạn không thể đoán ra, và đọc nó sau khi đã làm sai thì vô ích. '
+      + 'Chỉ gọi khi thật sự khớp; đọc một kỹ năng không liên quan chỉ tốn ngữ cảnh.',
+    parameters: {
+      type: 'object',
+      properties: {
+        ten: { type: 'string', description: 'Tên kỹ năng, đúng như trong danh sách.' },
+      },
+      required: ['ten'],
+    },
+  },
   {
     name: 'cap_nhat_ke_hoach',
     ring: 'client',
@@ -911,7 +943,7 @@ export function laToolMcp(name: string): boolean {
  */
 export const ALL_CAPABILITIES: readonly AgentCapability[] = [
   'fs_read', 'git_read', 'fs_write', 'shell', 'plan', 'subagent', 'shell_nen', 'git_write',
-  'notes_write', 'browser',
+  'notes_write', 'browser', 'ky_nang',
 ];
 
 export function parseCapabilities(raw: unknown): AgentCapability[] {

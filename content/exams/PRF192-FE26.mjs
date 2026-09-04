@@ -189,7 +189,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Given the code below:<br/>int a=2;<br/>printf(&quot;%d&quot;,++a,a+5);<br/>What is printed?</p></div><div class=\"ml-vi\"><p>Cho đoạn mã sau:<br/>int a=2;<br/>printf(&quot;%d&quot;,++a,a+5);<br/>Giá trị nào được in ra?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given the code below:</p><pre><code><span class=\"hljs-keyword\">int</span> a=<span class=\"hljs-number\">2</span>;\n<span class=\"hljs-keyword\">printf</span>(<span class=\"hljs-string\">&quot;<span class=\"hljs-variable\">%d</span>&quot;</span>,++a,a+<span class=\"hljs-number\">5</span>);</code></pre><p>What is printed?</p></div><div class=\"ml-vi\"><p>Cho đoạn mã sau:</p><pre><code><span class=\"hljs-keyword\">int</span> a=<span class=\"hljs-number\">2</span>;\n<span class=\"hljs-keyword\">printf</span>(<span class=\"hljs-string\">&quot;<span class=\"hljs-variable\">%d</span>&quot;</span>,++a,a+<span class=\"hljs-number\">5</span>);</code></pre><p>Giá trị nào được in ra?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRF192/D26/q8.png",
           "options": [
             {
@@ -288,7 +288,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Given:<br/>char name[31];<br/>scanf(&quot;%[a-zA-Z0-9]&quot;, name);<br/>Which is the correct statement about the above code?</p></div><div class=\"ml-vi\"><p>Cho:<br/>char name[31];<br/>scanf(&quot;%[a-zA-Z0-9]&quot;, name);<br/>Nhận định nào đúng về đoạn mã trên?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given:</p><pre><code><span class=\"hljs-type\">char</span> <span class=\"hljs-type\">name</span>[<span class=\"hljs-number\">31</span>];\nscanf(&quot;%[a-zA-Z0-9]&quot;, <span class=\"hljs-type\">name</span>);</code></pre><p>Which is the correct statement about the above code?</p></div><div class=\"ml-vi\"><p>Cho:</p><pre><code><span class=\"hljs-type\">char</span> <span class=\"hljs-type\">name</span>[<span class=\"hljs-number\">31</span>];\nscanf(&quot;%[a-zA-Z0-9]&quot;, <span class=\"hljs-type\">name</span>);</code></pre><p>Nhận định nào đúng về đoạn mã trên?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRF192/D26/q12.png",
           "options": [
             {
@@ -585,7 +585,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Given the below code:<br/>char ch;<br/>scanf(&quot;%c&quot;,&amp;ch);<br/>printf(&quot;%c&quot;,ch);<br/>A user enters &quot;abcd&quot; from the console.<br/>What is printed?</p></div><div class=\"ml-vi\"><p>Cho đoạn mã sau:<br/>char ch;<br/>scanf(&quot;%c&quot;,&amp;ch);<br/>printf(&quot;%c&quot;,ch);<br/>Người dùng nhập &quot;abcd&quot; từ bàn phím.<br/>Giá trị nào được in ra?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given the below code:</p><pre><code><span class=\"hljs-type\">char</span> ch;\n<span class=\"hljs-built_in\">scanf</span>(<span class=\"hljs-string\">&quot;%c&quot;</span>,&amp;ch);\n<span class=\"hljs-built_in\">printf</span>(<span class=\"hljs-string\">&quot;%c&quot;</span>,ch);</code></pre><p>A user enters &quot;abcd&quot; from the console. What is printed?</p></div><div class=\"ml-vi\"><p>Cho đoạn mã sau:</p><pre><code><span class=\"hljs-type\">char</span> ch;\n<span class=\"hljs-built_in\">scanf</span>(<span class=\"hljs-string\">&quot;%c&quot;</span>,&amp;ch);\n<span class=\"hljs-built_in\">printf</span>(<span class=\"hljs-string\">&quot;%c&quot;</span>,ch);</code></pre><p>Người dùng nhập &quot;abcd&quot; từ bàn phím. Giá trị nào được in ra?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRF192/D26/q25.png",
           "options": [
             {
@@ -945,7 +945,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Consider the following code:<br/>int z,x=5,y=-10,a=3,b=2;<br/>z = ++x + y * b / a;<br/>What number will z in the sample code above contain?</p></div><div class=\"ml-vi\"><p>Cho đoạn mã sau:<br/>int z,x=5,y=-10,a=3,b=2;<br/>z = ++x + y * b / a;<br/>Biến z ở trên sẽ chứa giá trị nào?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Consider the following code:</p><pre><code><span class=\"hljs-attribute\">int</span> z,x=<span class=\"hljs-number\">5</span>,y=-<span class=\"hljs-number\">10</span>,a=<span class=\"hljs-number\">3</span>,b=<span class=\"hljs-number\">2</span>;\n<span class=\"hljs-attribute\">z</span> = ++x + y * b / a;</code></pre><p>What number will z in the sample code above contain?</p></div><div class=\"ml-vi\"><p>Cho đoạn mã sau:</p><pre><code><span class=\"hljs-attribute\">int</span> z,x=<span class=\"hljs-number\">5</span>,y=-<span class=\"hljs-number\">10</span>,a=<span class=\"hljs-number\">3</span>,b=<span class=\"hljs-number\">2</span>;\n<span class=\"hljs-attribute\">z</span> = ++x + y * b / a;</code></pre><p>Biến z ở trên sẽ chứa giá trị nào?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRF192/D26/q40.png",
           "options": [
             {
@@ -1065,7 +1065,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Given the below code:<br/>char str[255];<br/>gets(str);<br/>If user enters blank (only enter), what is the value of str?</p></div><div class=\"ml-vi\"><p>Cho đoạn mã sau:<br/>char str[255];<br/>gets(str);<br/>Nếu người dùng chỉ nhấn Enter (không nhập gì), giá trị của str là gì?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given the below code:</p><pre><code>char str<span class=\"hljs-selector-attr\">[255]</span>;\n<span class=\"hljs-built_in\">gets</span>(str);</code></pre><p>If user enters blank (only enter), what is the value of str?</p></div><div class=\"ml-vi\"><p>Cho đoạn mã sau:</p><pre><code>char str<span class=\"hljs-selector-attr\">[255]</span>;\n<span class=\"hljs-built_in\">gets</span>(str);</code></pre><p>Nếu người dùng chỉ nhấn Enter (không nhập gì), giá trị của str là gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRF192/D26/q45.png",
           "options": [
             {
@@ -1134,7 +1134,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Given the following declarations:<br/>int *pa;<br/>int a[3] = {1, 2, 3};<br/>Which of the following expressions are illegal?<br/>1. pa = a;<br/>2. a = pa;<br/>3. pa++;</p></div><div class=\"ml-vi\"><p>Cho các khai báo sau:<br/>int *pa;<br/>int a[3] = {1, 2, 3};<br/>Biểu thức nào dưới đây là không hợp lệ?<br/>1. pa = a;<br/>2. a = pa;<br/>3. pa++;</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given the following declarations:</p><pre><code><span class=\"hljs-attribute\">int</span> *pa;\n<span class=\"hljs-attribute\">int</span> a[<span class=\"hljs-number\">3</span>] = {<span class=\"hljs-number\">1</span>, <span class=\"hljs-number\">2</span>, <span class=\"hljs-number\">3</span>};\n<span class=\"hljs-attribute\">Which</span> of the following expressions are illegal?\n<span class=\"hljs-attribute\">1</span>. pa = a;\n<span class=\"hljs-attribute\">2</span>. a = pa;\n<span class=\"hljs-attribute\">3</span>. pa++;</code></pre></div><div class=\"ml-vi\"><p>Cho các khai báo sau:</p><pre><code><span class=\"hljs-attribute\">int</span> *pa;\n<span class=\"hljs-attribute\">int</span> a[<span class=\"hljs-number\">3</span>] = {<span class=\"hljs-number\">1</span>, <span class=\"hljs-number\">2</span>, <span class=\"hljs-number\">3</span>};\n<span class=\"hljs-attribute\">Bi</span>ểu thức nào dưới đây là không hợp lệ?\n<span class=\"hljs-attribute\">1</span>. pa = a;\n<span class=\"hljs-attribute\">2</span>. a = pa;\n<span class=\"hljs-attribute\">3</span>. pa++;</code></pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRF192/D26/q48.png",
           "options": [
             {

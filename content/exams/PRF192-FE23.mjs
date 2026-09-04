@@ -1053,7 +1053,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Given the following declarations:</p><p>    int *pa;<br/>    int a[3] = {1, 2, 3};</p><p>Which of the following expressions are illegal?<br/>1.  pa = a;<br/>2.  a = pa;<br/>3.  pa++;</p></div><div class=\"ml-vi\"><p>Cho các khai báo sau:</p><p>    int *pa;<br/>    int a[3] = {1, 2, 3};</p><p>Biểu thức nào sau đây không hợp lệ?<br/>1.  pa = a;<br/>2.  a = pa;<br/>3.  pa++;</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Given the following declarations:</p><pre><code><span class=\"hljs-attribute\">int</span> *pa;\n<span class=\"hljs-attribute\">int</span> a[<span class=\"hljs-number\">3</span>] = {<span class=\"hljs-number\">1</span>, <span class=\"hljs-number\">2</span>, <span class=\"hljs-number\">3</span>};</code></pre><p>Which of the following expressions are illegal?</p><pre><code><span class=\"hljs-bullet\">1.</span>  pa = a;\n<span class=\"hljs-bullet\">2.</span>  a = pa;\n<span class=\"hljs-bullet\">3.</span>  pa++;</code></pre></div><div class=\"ml-vi\"><p>Cho các khai báo sau:</p><pre><code><span class=\"hljs-attribute\">int</span> *pa;\n<span class=\"hljs-attribute\">int</span> a[<span class=\"hljs-number\">3</span>] = {<span class=\"hljs-number\">1</span>, <span class=\"hljs-number\">2</span>, <span class=\"hljs-number\">3</span>};</code></pre><p>Biểu thức nào sau đây không hợp lệ?</p><pre><code><span class=\"hljs-bullet\">1.</span>  pa = a;\n<span class=\"hljs-bullet\">2.</span>  a = pa;\n<span class=\"hljs-bullet\">3.</span>  pa++;</code></pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRF192/D23/q44.png",
           "options": [
             {

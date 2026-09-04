@@ -1026,7 +1026,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Assume we have the following codes:<br/>double d=9;<br/>double *p = &amp;d;<br/>Suppose that a double occupies the memory block of 8 bytes, and the address of d is 1200. What is the result of the following expression: p + 8?</p></div><div class=\"ml-vi\"><p>Giả sử ta có đoạn mã sau:<br/>double d=9;<br/>double *p = &amp;d;<br/>Giả sử một double chiếm khối bộ nhớ 8 byte, và địa chỉ của d là 1200. Kết quả của biểu thức p + 8 là gì?</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>Assume we have the following codes:</p><pre><code><span class=\"hljs-built_in\">double</span> d=<span class=\"hljs-number\">9</span>;\n<span class=\"hljs-built_in\">double</span> *p = &amp;d;</code></pre><p>Suppose that a double occupies the memory block of 8 bytes, and the address of d is 1200. What is the result of the following expression: p + 8?</p></div><div class=\"ml-vi\"><p>Giả sử ta có đoạn mã sau:</p><pre><code><span class=\"hljs-built_in\">double</span> d=<span class=\"hljs-number\">9</span>;\n<span class=\"hljs-built_in\">double</span> *p = &amp;d;</code></pre><p>Giả sử một double chiếm khối bộ nhớ 8 byte, và địa chỉ của d là 1200. Kết quả của biểu thức p + 8 là gì?</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRF192/D12/q42.png",
           "options": [
             {

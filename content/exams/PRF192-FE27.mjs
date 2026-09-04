@@ -735,7 +735,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>An array declared as:<br/>int code[100];<br/>The first element of the array is:</p><pre><code class=\"language-c\"><span class=\"hljs-type\">int</span> code[<span class=\"hljs-number\">100</span>];</code></pre></div><div class=\"ml-vi\"><p>Một mảng được khai báo như sau:<br/>int code[100];<br/>Phần tử đầu tiên của mảng là:</p><pre><code class=\"language-c\"><span class=\"hljs-type\">int</span> code[<span class=\"hljs-number\">100</span>];</code></pre></div>",
+          "prompt": "<div class=\"ml-en\"><p>An array declared as:</p><p>The first element of the array is:</p><pre><code class=\"language-c\"><span class=\"hljs-type\">int</span> code[<span class=\"hljs-number\">100</span>];</code></pre></div><div class=\"ml-vi\"><p>Một mảng được khai báo như sau:</p><p>Phần tử đầu tiên của mảng là:</p><pre><code class=\"language-c\"><span class=\"hljs-type\">int</span> code[<span class=\"hljs-number\">100</span>];</code></pre></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/PRF192/D27/q31.png",
           "options": [
             {

@@ -210,6 +210,15 @@ const BANG = [
         lastMessage: { content: 'Tin nhắn gần nhất', createdAt: '2026-08-20T00:00:00Z' },
         unreadCount: i % 2, participants: [nguoi(1), nguoi(i + 1)], updatedAt: '2026-08-20T00:00:00Z' }))],
     [/\/friends|\/users/, () => mang(6, (i) => nguoi(i))],
+    /* `/feed/posts` trả về MỘT MẢNG, không phải `{posts:[…]}` — trang gọi
+       `ds.map` thẳng trên `data`. Trả sai hình dạng thì trang hiện thẻ lỗi,
+       mà thẻ lỗi có đủ chữ để qua chốt "gần như trống" nên bộ đo vẫn báo XANH. */
+    [/\/feed\/posts/, () => mang(4, (i) => ({
+      id: i, content: `Bài viết thử số ${i} — một đoạn đủ dài để thấy cách xuống dòng.`,
+      author: nguoi(i), createdAt: '2026-08-20T00:00:00Z',
+      likeCount: i * 3, commentCount: i, media: [], type: 'POST',
+    }))],
+    [/\/feed\/trending/, () => mang(3, (i) => ({ id: i, tag: `chude${i}`, postsCount: i * 4 }))],
     [/\/posts|\/feed/, () => ({ posts: mang(4, (i) => ({ id: i, content: `Bài viết ${i}`, author: nguoi(i),
         createdAt: '2026-08-20T00:00:00Z', likeCount: i, commentCount: i, media: [] })),
       pagination: { page: 1, size: 10, total: 4, totalPages: 1 } })],
@@ -576,6 +585,12 @@ for (const duong of DUONG) {
       const noi = document.querySelector('.ct-content');
       if (!noi) return { loi: 'không thấy .ct-content' };
       const khung = noi.getBoundingClientRect();
+      /* Thẻ lỗi trong luồng. Lớp thật là `.ct-notice` với `data-tone` err/warn
+         — KHÔNG phải `.ct-loi` như tôi đoán lúc đầu; đoán tên lớp rồi viết chốt
+         quanh nó là cách tạo ra một chốt không bao giờ bắt được gì. */
+      const oLoi = [...noi.querySelectorAll('.ct-notice[data-tone="err"], .ct-notice[data-tone="warn"]')]
+        .find((e) => e.getBoundingClientRect().height > 0);
+      const theLoi = oLoi ? (oLoi.textContent ?? '').trim() : null;
 
       /* Điều khiển NÀO nằm ngoài mép phải. Chỉ xét thứ người dùng bấm/đọc
          được — bỏ phần tử ẩn và phần tử nằm trong vùng CUỘN NGANG cố ý
@@ -609,6 +624,7 @@ for (const duong of DUONG) {
         soDieuKhien: noi.querySelectorAll('button, a, input, select, textarea, [role="tab"]').length,
         soChu: (noi.textContent ?? '').trim().length,
         chuDau: (noi.textContent ?? '').trim().slice(0, 120),
+        theLoi,
       };
     });
 
@@ -630,6 +646,17 @@ for (const duong of DUONG) {
      *
      * Bài học: thêm một ranh giới lỗi là thêm một cách để bộ kiểm nói dối.
      * Chốt này phải đi CÙNG ranh giới đó, không phải sau. */
+    /* ⚠️ CHỐT CHỐNG XANH-GIẢ, LỚP BA — thêm 05/09/2026.
+     *
+     * Trang tự bắt lỗi và vẽ một THẺ LỖI trong luồng (`.ct-loi`) thì nó KHÔNG
+     * rơi vào ranh giới lỗi, KHÔNG trống, và bộ đo cho qua. Đo thật: `/feed`
+     * báo ✓ trong khi màn hình chỉ có đúng dòng "ds.map is not a function".
+     * Cùng bài học với hai lớp dưới: mỗi lần thêm một cách hiển thị lỗi là
+     * thêm một cách để bộ kiểm nói dối. */
+    if (kq.theLoi) {
+      loi.push(`${rong}px: trang hiện THẺ LỖI — ${kq.theLoi.slice(0, 110)}`);
+      continue;
+    }
     if (/^Trang gặp lỗi|^Không tìm thấy/.test(kq.chuDau)) {
       loi.push(`${rong}px: RANH GIỚI LỖI bắt được — trang không dựng nổi: ${kq.chuDau.slice(0, 90)}`);
       continue;

@@ -467,6 +467,16 @@ code {
 .ct-page {
   padding: 26px;
   max-width: 820px;
+  /*
+   * ⚠️ CĂN GIỮA. Thiếu dòng này thì `max-width` chỉ có tác dụng CẮT: trên cửa
+   * sổ rộng, mọi trang dồn hết về mép trái và bỏ trống một mảng lớn bên phải —
+   * người dùng mô tả đúng là "lệch một bên".
+   *
+   * Nó nằm thiếu suốt vì `.ct-cl` và `.ct-pt` tự thêm `margin: 0 auto` cho
+   * riêng mình, nên hai trang đó trông cân còn phần còn lại thì không, và sự
+   * lệch pha đó làm cả hai bên đều trông "đúng như thiết kế".
+   */
+  margin-inline: auto;
 }
 
 .ct-panel {
@@ -6050,11 +6060,23 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 
 .ct-bt-khung {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 268px;
+  /*
+   * Cột giữa khai thẳng 620px thay vì `1fr` rồi chặn bằng `max-width` ở con:
+   * cách cũ để cột 1 nhận hết phần thừa rồi con chỉ chiếm 620px trong đó, nên
+   * giữa bài viết và cột phải hở ra một mảng trống không ai đặt.
+   */
+  grid-template-columns: minmax(0, 620px) 268px;
   gap: 22px;
+  /* Căn giữa cả CẶP cột, không dàn đều ra hai mép. */
+  justify-content: center;
   align-items: start;
 }
-.ct-bt-giua { min-width: 0; max-width: 620px; }
+
+/* Cột phải RỖNG (chưa có xu hướng / gợi ý) thì đừng giữ chỗ cho nó — 268px
+   trống cạnh bài viết trông y như trang bị vỡ bố cục. */
+.ct-bt-khung[data-co-ben='false'] { grid-template-columns: minmax(0, 620px); }
+
+.ct-bt-giua { min-width: 0; }
 
 @media (max-width: 1180px) {
   .ct-bt-khung { grid-template-columns: minmax(0, 1fr); }

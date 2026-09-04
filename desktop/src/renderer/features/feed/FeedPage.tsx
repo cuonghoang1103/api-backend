@@ -237,7 +237,7 @@ export function FeedPage() {
     <div className="ct-page ct-bt">
       <div ref={dinhRef} />
 
-      <div className="ct-bt-khung">
+      <div className="ct-bt-khung" data-co-ben={xuHuong.length > 0 || goiY.length > 0}>
         {/* ══ Cột giữa ══ */}
         <div className="ct-bt-giua">
           <div className="ct-page-head" style={{ marginBottom: 14 }}>

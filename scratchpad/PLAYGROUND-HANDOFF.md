@@ -1161,7 +1161,18 @@ cả 47 mục trong bản kê.
 | gói mới (nén) | 17,31 MB | 8,85 MB | 4,0s |
 
 Quy về production (nginx gzip cho js/wasm, KHÔNG gzip glb/ktx vì đã nén sẵn):
-**11,94 MB** là con số khách thật sự tải. Cửa vào (`PlaygroundGate`) trước đó
+**11,94 MB** là con số khách thật sự tải.
+
+> ⚠️ **ĐÍNH CHÍNH (cuối ngày 04/09)**: con số 11,94 này ĐO THIẾU. Phép đo dùng
+> mốc dừng "mạng lặng 6 giây", mà mốc đó bắn TRƯỚC khi đợt tải âm thanh bắt
+> đầu — `Audio.register()` mặc định `preload: true` nên hàng chục tệp mp3 vào
+> muộn hơn. Đo lại bằng CỬA SỔ CỐ ĐỊNH 60 giây trên đúng bản dựng ấy (lấy từ
+> git, commit `45154a8`): **17,65 MB**. Xem mục 0n.
+>
+> **Bài học: mốc "mạng lặng" chỉ đúng khi mọi thứ tải thành một đợt liền.**
+> Ở đây có ít nhất hai đợt cách nhau, và phép đo dừng ở khe giữa.
+
+Cửa vào (`PlaygroundGate`) trước đó
 ghi "~35 MB" — doạ khách gấp ba lần sự thật, ngay chỗ họ quyết định vào hay không.
 Nay ghi ~12 MB.
 
@@ -1478,18 +1489,127 @@ thì là chậm; đứng im mới là treo. Đừng đoán từ một lần hế
 
 ## Đo được sau khi hoãn
 
-Lần tải đầu **11,94 → 6,11 MB** — giảm **5,83 MB, tức 49%**. Nhiều hơn con số
-5,47 MB của riêng hai tệp `.glb`, vì bỏ chúng ra cũng bỏ luôn mấy texture chỉ
-chúng dùng.
+> ⚠️ **ĐÍNH CHÍNH**: con số "11,94 → 6,11 MB" ghi ở đây lúc đầu là SAI, cả hai
+> vế, vì phép đo dừng ở khe giữa hai đợt tải (xem đính chính ở mục 0k). Đo lại
+> bằng cửa sổ cố định 60 giây: **17,65 → 12,18 MB** sau khi hoãn carrier +
+> boss. Hướng và cỡ tương đối thì đúng, con số tuyệt đối thì không.
 
 `carrier.glb` chỉ về khi xe vào bán kính 120; `boss.glb` chỉ về khi bật Sinh
 tồn. Đo bằng cách chạy thật bản dựng production và đọc `performance
 .getEntriesByType('resource')`, có áp quy tắc gzip của nginx cho js/wasm.
 
-**Thứ nặng nhất còn lại là `city/city.glb` — 2,43 MB, tức 40% của 6,11 MB.**
+**Thứ nặng nhất còn lại là `city/city.glb` — 2,43 MB.**
 Nhưng đảo thành phố nằm trên bản đồ chính và nhìn thấy được, nên hoãn nó phải
 theo kiểu của `Carrier` (dựng bằng mã trước, tráo sau) chứ không hoãn thẳng
 được — mà thành phố thì không có sẵn đường dựng bằng mã như tàu.
+
+---
+
+# 0n. NẠP KHI CẦN, ĐỢT HAI: `city.glb` + nhạc Sinh tồn — và ĐÍNH CHÍNH số đo
+
+## ⚠️ ĐỌC TRƯỚC: mọi con số dung lượng ghi ở mục 0k và 0m ĐỀU SAI
+
+Phép đo cũ dừng ở mốc **"mạng lặng 6 giây"**. Sân chơi tải thành ÍT NHẤT HAI
+ĐỢT cách nhau: model/texture trước, rồi hàng chục tệp mp3 (`Audio.register()`
+mặc định `preload: true`). Mốc "mạng lặng" bắn đúng vào khe giữa hai đợt, nên
+nó đếm thiếu toàn bộ đợt âm thanh.
+
+Đo lại bằng **cửa sổ cố định 60 giây**, trên các bản dựng THẬT lấy từ git:
+
+| Trạng thái | Lần tải đầu |
+|---|---|
+| Trước mọi việc hoãn (commit `45154a8`, dựng thật) | **17,65 MB** |
+| Sau khi hoãn `carrier.glb` + `boss.glb` | **12,18 MB** |
+| Sau khi hoãn thêm `city.glb` | **9,74 MB** |
+| Sau khi hoãn thêm nhạc Sinh tồn | **7,75 MB** |
+
+Tổng cộng **giảm 9,90 MB — 56%**, và 9,90 khớp đúng tổng bốn tệp đã hoãn
+(2,87 + 2,60 + 2,43 + 2,00).
+
+**Quy tắc từ nay: đo dung lượng bằng CỬA SỔ CỐ ĐỊNH, đừng dùng "mạng lặng".**
+Và khi so hai bản, phải chạy CÙNG một phép đo trên cả hai — đừng so số mới với
+số cũ đo bằng cách khác.
+
+## `city.glb` — hai nơi dùng, một lượt tải
+
+2,43 MB, phục vụ `CityIsland` (khu phố) và `MonsterIsland` (khu nhà đổ). Cả hai
+gọi `loadLazy()` với cùng đường dẫn nên chỉ tải MỘT lượt — đã kiểm: đi qua
+thành phố rồi sang đảo quái, `city.glb` chỉ có đúng một request.
+
+**Bán kính chọn từ số đo.** Khoảng cách từ tâm đảo thành phố (232 · 20) tới:
+
+```
+đầu cầu dây văng 148  ← muốn kích hoạt ở đây
+altar 161 · achievements 162 · toilet 168 · bonfire 179 · cầu kia 180
+landing 193  ← CHỖ HỒI SINH MẶC ĐỊNH, KHÔNG được kích hoạt
+projects 196 · lab 214 · circuit 246 · nhạc hội 245 · bến cảng 246
+sân bóng 249 · làng 306 · FPTU 325 · đảo quái 328
+```
+
+**175** nằm gọn giữa "đầu cầu" (148) và "chỗ hồi sinh mặc định" (193). Khu nhà
+đổ trên đảo quái có cửa riêng, bán kính **150** quanh ô đất (62 · −292) — bờ
+Bắc đảo chính cách đó 205 nên không kích hoạt nhầm từ bên kia.
+
+**Cấu trúc dựng phải TÁCH ĐÔI.** `CityIsland` nay có `setDistrict()` gom sáu
+hàm cần kit (`setStreets` · `setRoadMarkings` · `setBlocks` · `setTowers` ·
+`setPlaza` · `setStreetFurniture`) cộng `buildInstances()`. Hai hàm còn lại
+(`setIsland` địa hình, `setBridge` cầu dây văng) dựng bằng mã nên luôn có mặt.
+
+⚠️ `setPlaza()` xếp vào nhóm CẦN KIT dù nó có cả `slab()` lẫn `box()` tự dựng:
+quảng trường là MỘT Ô trong lưới phố, dựng nền lát của nó khi không có phố nào
+xung quanh thì ra một mảng gạch lơ lửng giữa đồng cỏ.
+
+⚠️ Khác `Carrier`, ở đây KHÔNG có gì phải giấu khi model về — vì lúc chưa có
+kit thì `place()` thoát sớm nên chẳng dựng gì cả, kể cả va chạm. Không có
+trạng thái dựng-dở: hoặc chưa có phố nào, hoặc có đủ.
+
+## Nhạc Sinh tồn — và một LỖI CÓ SẴN mà việc hoãn làm lộ ra
+
+`sounds/musics/survival-theme.mp3` nặng **2,0 MB** và tải cho MỌI khách, dù chế
+độ Sinh tồn phải tự bật mới có. `Audio.register()` mặc định `preload: true`.
+Nay khai `preload: false` và `setTheme()` gọi `howl.load()` tay, y như
+`playlist.play()` trong `Audio.js`.
+
+⚠️⚠️ **Lỗi có sẵn phát hiện lúc đo**: `applyThemeVolume()` CHƯA BAO GIỜ có tác
+dụng. Nó ghi thẳng `item.howl.volume(...)`, trong khi `Audio.update()` chạy MỖI
+KHUNG HÌNH và ghi đè `item.howl.volume(item.volume * distanceFadeMultiplier)`
+cho MỌI item đã đăng ký, không điều kiện gì. Nên nhạc chế độ luôn phát ở 0,5
+bất kể thanh trượt Music ở đâu — trái hẳn chú thích ngay bên cạnh nó.
+
+Sửa: ghi vào **`item.volume`**, không chỉ `howl.volume()`. Đo trước/sau:
+0,5 (sai) → 0,1875 (đúng theo thanh trượt).
+
+⚠️ **`check-survival` mục "1b" ĐÃ BÁO XANH suốt** cho cái volume này, vì nó đọc
+`howl.volume()` NGAY sau khi kéo thanh trượt — tức đọc đúng khoảnh khắc trước
+khi vòng lặp mỗi khung hình ghi đè. **Bộ kiểm đo đúng đại lượng, sai thời
+điểm.** Muốn bắt được loại lỗi này thì phải chờ qua vài khung hình rồi mới đọc.
+
+## Bộ kiểm phải TỰ XIN model trước khi đo
+
+`check-city-island` chết ngay ở `ci.roadXs is not iterable` — không phải lỗi
+thế giới, mà là bộ kiểm đo trước khi có thứ để đo. Nay nó gọi
+`cityIsland.requestModel()` rồi chờ `pieces.size > 0`. `check-monster-island`
+cũng vậy với `setRuins()`.
+
+**Quy tắc: mỗi lần chuyển một tài nguyên sang nạp-khi-cần, phải rà lại mọi bộ
+kiểm chạm tới nó.** Ba bộ đã phải sửa trong hai đợt: `check-carrier` (thêm pha
+2), `check-city-island`, `check-monster-island`.
+
+## `check-ghost-colliders` cần X server
+
+Nó là bộ DUY NHẤT mở trình duyệt có giao diện (`headless: false`), nên trong
+container không có màn hình thì phải chạy qua `xvfb-run`:
+
+```bash
+URL=http://127.0.0.1:5188/ xvfb-run -a node tools/check-ghost-colliders.mjs
+```
+
+## Còn nặng nhất sau tất cả
+
+Gói JS 1,08 MB (đã gzip) · `areas-compressed.glb` 0,61 · rapier wasm 0,60 ·
+`lab/images/exp-hub.png` 0,38 · `fptu/sign.glb` 0,36 · `terrain.ktx` 0,33 ·
+`title/letters.glb` 0,30. Không còn tệp đơn lẻ nào chiếm quá 14% — muốn giảm
+tiếp thì phải chia nhỏ gói JS, việc khác hẳn.
 
 ---
 

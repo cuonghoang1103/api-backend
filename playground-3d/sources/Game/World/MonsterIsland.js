@@ -72,6 +72,12 @@ const CRATERS = [
 
 export class MonsterIsland
 {
+    /**
+     * Bán kính quanh ô đất nhà đổ mà xe lại gần thì tải `city.glb`.
+     * Xem giải thích số đo ở `updateModelStreaming()`.
+     */
+    static MODEL_RADIUS = 150
+
     constructor()
     {
         this.game = Game.getInstance()
@@ -110,6 +116,56 @@ export class MonsterIsland
         this.setScenery()
 
         this.buildInstances()
+
+        this.game.ticker.events.on('tick', () => this.updateModelStreaming(), 12)
+    }
+
+    /**
+     * NẠP KIT NHÀ KHI XE LẠI GẦN KHU NHÀ ĐỔ.
+     *
+     * Khu nhà đổ dùng chung `city/city.glb` với đảo thành phố, và từ 04/09/2026
+     * tệp đó nạp khi cần (xem `Game.js`). Đảo quái ở tận (0 · −300) nên bán
+     * kính của đảo thành phố không với tới đây — nó cần cửa kích hoạt riêng.
+     *
+     * ⚠️ Bán kính 150 quanh ô đất nhà đổ (62 · −292), chọn từ số đo: bờ Bắc
+     * đảo chính cách chỗ đó **205** nên đứng bên đảo chính KHÔNG kích hoạt,
+     * còn đầu cầu sang đảo quái (0 · −208) cách **104** nên vừa đặt chân sang
+     * là tải.
+     *
+     * ⚠️ `loadLazy()` nhớ theo promise, nên nếu người chơi đã đi qua thành phố
+     * trước đó thì ở đây không tải lại lần nữa — nó dùng luôn kết quả cũ.
+     */
+    updateModelStreaming()
+    {
+        if(this.modelRequested)
+            return
+
+        const player = this.game.player?.position
+        if(!player)
+            return
+
+        const plot = MONSTER_PLOTS.ruins
+        const dx = player.x - plot.x
+        const dz = player.z - plot.z
+
+        if(dx * dx + dz * dz > MonsterIsland.MODEL_RADIUS * MonsterIsland.MODEL_RADIUS)
+            return
+
+        this.modelRequested = true
+
+        this.game.resourcesLoader
+            .loadLazy('cityModel', `city/city.glb?cb=1`, 'gltf')
+            .then((resource) =>
+            {
+                if(!resource)
+                    return
+
+                this.game.resources.cityModel = resource
+
+                // `setRuins()` ở lần gọi trong hàm dựng đã thoát sớm vì chưa có
+                // model, nên gọi lại đây KHÔNG nhân đôi thứ gì.
+                this.setRuins()
+            })
     }
 
     getMaterial(hex)

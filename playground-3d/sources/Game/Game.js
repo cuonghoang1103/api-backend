@@ -147,7 +147,32 @@ export class Game
                  * nên chỉ có MỘT bản dùng cho cả dev lẫn production. three.js
                  * đọc được WebP trong glTF qua `EXT_texture_webp`.
                  */
-                [ 'cityModel',                             `city/city.glb${cb}`,                                                                 'gltf' ],
+                /**
+                 * ⛔ `cityModel` CŨNG ĐÃ RỜI KHỎI ĐÂY (04/09/2026).
+                 *
+                 * `city/city.glb` là **2,43 MB — 40% của cả lần tải đầu** sau
+                 * khi đã hoãn carrier và boss. Nó phục vụ HAI nơi, và cả hai
+                 * đều ở xa chỗ khách mới vào:
+                 *
+                 *   · `World/CityIsland.js` — khu phố trên đảo thành phố, kích
+                 *     hoạt trong bán kính 175 quanh tâm đảo (232 · 20). 175 nằm
+                 *     giữa "đầu cầu dây văng" (148) và "chỗ hồi sinh mặc định"
+                 *     (193), nên khách mới vào không tải, khách bước lên cầu
+                 *     thì tải.
+                 *   · `World/MonsterIsland.js` — khu nhà đổ, bán kính 150 quanh
+                 *     ô đất (62 · −292). Bờ Bắc đảo chính cách đó 205 nên
+                 *     không kích hoạt nhầm từ bên kia.
+                 *
+                 * `loadLazy()` nhớ theo promise nên hai nơi cùng xin chỉ tải
+                 * MỘT lượt.
+                 *
+                 * ⚠️ Ghi chú cũ vẫn đúng: Downtown City MegaKit (Quaternius,
+                 * CC0) — 153 mảnh, xem `static/ATTRIBUTION.txt`. KHÔNG có
+                 * `${compressedModelSuffix}`: file đến từ nguồn ngoài và ĐÃ tối
+                 * ưu sẵn (Draco + WebP 1024, 91,7 MB → 2,4 MB), nên chỉ có MỘT
+                 * bản dùng cho cả dev lẫn production. three.js đọc được WebP
+                 * trong glTF qua `EXT_texture_webp`.
+                 */
                 /**
                  * ⛔ `carrierModel` VÀ `bossModel` ĐÃ RỜI KHỎI ĐÂY (04/09/2026).
                  *

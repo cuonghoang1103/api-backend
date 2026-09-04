@@ -18,6 +18,21 @@ const browser = await chromium.launch(process.env.CHROME ? { executablePath: pro
 const page = await browser.newPage({ viewport: { width: 1280, height: 720 } })
 await page.goto(`${BASE}/#skip`, { waitUntil: 'load' })
 await page.waitForFunction(() => window.game?.world?.cityIsland, null, { timeout: 90000 })
+
+/**
+ * ⚠️ XIN KIT TRƯỚC KHI ĐO — `city/city.glb` nạp KHI CẦN từ 04/09/2026.
+ *
+ * Lúc mới vào sân chơi, kit chưa về nên khu phố CHƯA DỰNG: `ci.roadXs`,
+ * `ci.instances`, mọi toà nhà đều chưa tồn tại. Bộ kiểm chạy thẳng sẽ chết ở
+ * `ci.roadXs is not iterable` — không phải lỗi thế giới, mà là bộ kiểm đo
+ * trước khi có thứ để đo.
+ *
+ * Kích hoạt thật là xe lái vào bán kính 175 quanh tâm đảo. Ở đây gọi thẳng
+ * `requestModel()` cho nhanh và tất định, rồi chờ kit vào sổ.
+ */
+await page.evaluate(() => window.game.world.cityIsland.requestModel())
+await page.waitForFunction(() => window.game.world.cityIsland.pieces.size > 0, null, { timeout: 120000 })
+await page.waitForTimeout(3000)
 const r = await page.evaluate(() => {
   const G = window.game, R = G.RAPIER, W = G.physics.world, ci = G.world.cityIsland
   const HF = R.ShapeType.HeightField

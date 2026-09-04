@@ -1165,9 +1165,20 @@ export class Survival
          * Âm lượng đọc từ chính thanh trượt Music của người chơi (xem
          * `applyThemeVolume`), nên kéo nhỏ nhạc là nhỏ cả bài này.
          */
+        /**
+         * ⚠️ `preload: false` — bài này nặng **2,0 MB**, tức 20% của cả lần tải
+         * đầu, cho một chế độ chơi mà người ta phải TỰ BẬT mới có. Mặc định của
+         * `Audio.register()` là `preload: true` nên trước 04/09/2026 nó tải
+         * ngay lúc vào sân chơi, cho mọi khách.
+         *
+         * ⚠️ Cái giá của `preload: false` là `Howl.volume()` bị BỎ QUA khi bài
+         * chưa nạp — đã ghi rõ ở `Audio.js` (`playlist.setVolume`), đo được:
+         * chỉnh lên 60% mà bài chưa nạp vẫn giữ 0,0625. Nên `setTheme()` phải
+         * `load()` TAY trước rồi mới đặt âm lượng, y hệt `playlist.play()`.
+         */
         this.sounds.theme = this.game.audio.register({
             path: 'sounds/musics/survival-theme.mp3',
-            autoplay: false, loop: true, volume: 0.5, antiSpam: 0,
+            autoplay: false, loop: true, volume: 0.5, antiSpam: 0, preload: false,
         })
 
         /**
@@ -1212,6 +1223,20 @@ export class Survival
         if(on)
         {
             playlist?.stop?.()
+
+            /**
+             * ⚠️ Nạp TAY — bài này `preload: false` (xem chỗ đăng ký), y như
+             * `playlist.play()` trong `Audio.js` phải làm. Không gọi `load()`
+             * thì Howler chỉ bắt đầu tải lúc `play()`, và lần bật đầu tiên im
+             * lặng một quãng.
+             *
+             * Âm lượng thì không phải lo về thứ tự: `applyThemeVolume()` ghi
+             * vào `item.volume`, mà `Audio.update()` áp giá trị đó mỗi khung
+             * hình — nên nó tự đúng ngay khi bài nạp xong.
+             */
+            if(item.howl.state() === 'unloaded')
+                item.howl.load()
+
             this.applyThemeVolume()
             item.play()
         }
@@ -1222,7 +1247,24 @@ export class Survival
         }
     }
 
-    /** Nhạc chế độ đi theo thanh trượt Music, hơi nhỏ hơn nhạc thường một chút. */
+    /**
+     * Nhạc chế độ đi theo thanh trượt Music, hơi nhỏ hơn nhạc thường một chút.
+     *
+     * ⚠️ PHẢI ghi vào `item.volume`, không chỉ `item.howl.volume()`.
+     *
+     * `Audio.update()` chạy MỖI KHUNG HÌNH và ghi
+     * `item.howl.volume(item.volume * distanceFadeMultiplier)` cho MỌI item đã
+     * đăng ký — không có điều kiện gì cả. Nên đặt thẳng vào Howl là bị ghi đè
+     * lại ngay khung hình kế tiếp bởi `item.volume` (0,5 lúc đăng ký).
+     *
+     * Đây là lỗi CÓ SẴN, phát hiện 04/09/2026 khi đo lúc chuyển bài này sang
+     * `preload: false`: chú thích ở chỗ đăng ký nói "kéo nhỏ nhạc là nhỏ cả bài
+     * này", nhưng đo thật thì âm lượng luôn về 0,5 bất kể thanh trượt ở đâu.
+     *
+     * Ghi vào `item.volume` cũng làm chuyện `preload: false` hoá vô hại: bài
+     * chưa nạp thì `Howl.volume()` bị bỏ qua, nhưng vòng lặp mỗi khung hình sẽ
+     * đặt lại ngay khi nạp xong, không cần bám sự kiện `load`.
+     */
     applyThemeVolume()
     {
         const item = this.sounds?.theme
@@ -1230,7 +1272,9 @@ export class Survival
         if(!item?.howl) return
 
         const base = playlist?.getVolume ? playlist.getVolume() : 0.15
-        item.howl.volume(base * 1.25)
+
+        item.volume = base * 1.25
+        item.howl.volume(item.volume)
     }
 
     /**

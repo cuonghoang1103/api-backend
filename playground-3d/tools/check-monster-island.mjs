@@ -29,6 +29,29 @@ page.on('pageerror', (error) => console.log('  [lỗi trang]', error.message))
 await page.goto(`${BASE}/#skip`, { waitUntil: 'load' })
 await page.waitForFunction(() => window.game?.world?.monsterIsland, null, { timeout: 90000 })
 
+/**
+ * ⚠️ XIN KIT NHÀ TRƯỚC KHI ĐO — khu nhà đổ dùng `city/city.glb`, và tệp đó nạp
+ * KHI CẦN từ 04/09/2026 (bán kính 150 quanh ô đất nhà đổ). Chưa xin thì
+ * `ruinCount` là 0 và mục "nhà đổ" báo oan.
+ */
+await page.evaluate(async () =>
+{
+    const mi = window.game.world.monsterIsland
+
+    if(mi.ruinCount)
+        return
+
+    const resource = await window.game.resourcesLoader.loadLazy('cityModel', 'city/city.glb?cb=1', 'gltf')
+
+    if(!resource)
+        return
+
+    window.game.resources.cityModel = resource
+    mi.modelRequested = true
+    mi.setRuins()
+})
+await page.waitForTimeout(3000)
+
 const report = await page.evaluate(() =>
 {
     const G = window.game

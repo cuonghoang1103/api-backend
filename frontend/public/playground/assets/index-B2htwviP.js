@@ -100910,9 +100910,23 @@ https://github.com/browserify/crypto-browserify`);
     bed: "#3d6f57",
     deep: "#27515e"
   };
-  class CityIsland {
+  const _CityIsland = class _CityIsland {
     constructor() {
-      this.game = Game.getInstance(), this.group = new Group(), this.group.name = "cityIsland", this.game.scene.add(this.group), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 10), this.materials = /* @__PURE__ */ new Map(), this.groundTop = GROUND_TOP$1, this.grid = CITY_GRID, this.instances = /* @__PURE__ */ new Map(), this.indexPieces(), this.setIsland(), this.setBridge(), this.setStreets(), this.setRoadMarkings(), this.setBlocks(), this.setTowers(), this.setPlaza(), this.setStreetFurniture(), this.buildInstances();
+      this.game = Game.getInstance(), this.group = new Group(), this.group.name = "cityIsland", this.game.scene.add(this.group), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 10), this.materials = /* @__PURE__ */ new Map(), this.groundTop = GROUND_TOP$1, this.grid = CITY_GRID, this.instances = /* @__PURE__ */ new Map(), this.indexPieces(), this.setIsland(), this.setBridge(), this.setDistrict(), this.game.ticker.events.on("tick", () => this.updateModelStreaming(), 12);
+    }
+    setDistrict() {
+      return this.pieces.size ? (this.setStreets(), this.setRoadMarkings(), this.setBlocks(), this.setTowers(), this.setPlaza(), this.setStreetFurniture(), this.buildInstances(), true) : false;
+    }
+    updateModelStreaming() {
+      var _a2;
+      if (this.modelRequested) return;
+      const e = (_a2 = this.game.player) == null ? void 0 : _a2.position;
+      if (!e) return;
+      const r = e.x - CITY_ISLAND.x, s = e.z - CITY_ISLAND.z;
+      r * r + s * s > _CityIsland.MODEL_RADIUS * _CityIsland.MODEL_RADIUS || this.requestModel();
+    }
+    requestModel() {
+      return this.modelPromise ? this.modelPromise : (this.modelRequested = true, this.modelPromise = this.game.resourcesLoader.loadLazy("cityModel", "city/city.glb?cb=1", "gltf").then((e) => e ? (this.game.resources.cityModel = e, this.indexPieces(), this.setDistrict(), e) : null), this.modelPromise);
     }
     indexPieces() {
       var _a2;
@@ -101514,7 +101528,9 @@ https://github.com/browserify/crypto-browserify`);
         ]) this.place("Prop_Planter_Single", s.x + c, s.z + d * (o - 2), 0), this.place("Prop_Planter_Single", s.x + d * (o - 2), s.z + c, 0);
       }
     }
-  }
+  };
+  __publicField(_CityIsland, "MODEL_RADIUS", 175);
+  let CityIsland = _CityIsland;
   const MONSTER_ISLAND = {
     x: 0,
     z: -300,
@@ -101643,9 +101659,19 @@ https://github.com/browserify/crypto-browserify`);
       1
     ]
   ];
-  class MonsterIsland {
+  const _MonsterIsland = class _MonsterIsland {
     constructor() {
-      this.game = Game.getInstance(), this.group = new Group(), this.group.name = "monsterIsland", this.game.scene.add(this.group), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 8), this.coneGeometry = new ConeGeometry(0.5, 1, 7), this.sphereGeometry = new SphereGeometry(0.5, 8, 6), this.materials = /* @__PURE__ */ new Map(), this.groundTop = GROUND_TOP, this.roads = MONSTER_ROADS, this.plots = MONSTER_PLOTS, this.instanceBatches = /* @__PURE__ */ new Map(), this.setIsland(), this.setBridge(), this.setRoads(), this.setHive(), this.setRuins(), this.setCraterField(), this.setScrapyard(), this.setScenery(), this.buildInstances();
+      this.game = Game.getInstance(), this.group = new Group(), this.group.name = "monsterIsland", this.game.scene.add(this.group), this.boxGeometry = new BoxGeometry$1(1, 1, 1), this.cylinderGeometry = new CylinderGeometry(0.5, 0.5, 1, 8), this.coneGeometry = new ConeGeometry(0.5, 1, 7), this.sphereGeometry = new SphereGeometry(0.5, 8, 6), this.materials = /* @__PURE__ */ new Map(), this.groundTop = GROUND_TOP, this.roads = MONSTER_ROADS, this.plots = MONSTER_PLOTS, this.instanceBatches = /* @__PURE__ */ new Map(), this.setIsland(), this.setBridge(), this.setRoads(), this.setHive(), this.setRuins(), this.setCraterField(), this.setScrapyard(), this.setScenery(), this.buildInstances(), this.game.ticker.events.on("tick", () => this.updateModelStreaming(), 12);
+    }
+    updateModelStreaming() {
+      var _a2;
+      if (this.modelRequested) return;
+      const e = (_a2 = this.game.player) == null ? void 0 : _a2.position;
+      if (!e) return;
+      const r = MONSTER_PLOTS.ruins, s = e.x - r.x, o = e.z - r.z;
+      s * s + o * o > _MonsterIsland.MODEL_RADIUS * _MonsterIsland.MODEL_RADIUS || (this.modelRequested = true, this.game.resourcesLoader.loadLazy("cityModel", "city/city.glb?cb=1", "gltf").then((a) => {
+        a && (this.game.resources.cityModel = a, this.setRuins());
+      }));
     }
     getMaterial(e) {
       let r = this.materials.get(e);
@@ -102188,7 +102214,9 @@ https://github.com/browserify/crypto-browserify`);
       }
       this.sceneryCount = r;
     }
-  }
+  };
+  __publicField(_MonsterIsland, "MODEL_RADIUS", 150);
+  let MonsterIsland = _MonsterIsland;
   const CARRIER = {
     x: 46,
     z: -140,
@@ -105517,7 +105545,8 @@ https://github.com/browserify/crypto-browserify`);
         autoplay: false,
         loop: true,
         volume: 0.5,
-        antiSpam: 0
+        antiSpam: 0,
+        preload: false
       }), this.game.audio.events.on("playlistChange", () => {
         var _a2, _b;
         ((_a2 = this.sounds.theme) == null ? void 0 : _a2.__on) && (((_b = this.game.audio.playlist) == null ? void 0 : _b.enabled) === false ? this.setTheme(false) : this.applyThemeVolume());
@@ -105526,14 +105555,14 @@ https://github.com/browserify/crypto-browserify`);
     setTheme(e) {
       var _a2, _b, _c, _d;
       const r = (_a2 = this.sounds) == null ? void 0 : _a2.theme, s = (_b = this.game.audio) == null ? void 0 : _b.playlist;
-      (r == null ? void 0 : r.howl) && e !== !!r.__on && (e && s && !s.enabled || (r.__on = e, e ? ((_c = s == null ? void 0 : s.stop) == null ? void 0 : _c.call(s), this.applyThemeVolume(), r.play()) : (r.howl.stop(), (s == null ? void 0 : s.enabled) && ((_d = s.play) == null ? void 0 : _d.call(s)))));
+      (r == null ? void 0 : r.howl) && e !== !!r.__on && (e && s && !s.enabled || (r.__on = e, e ? ((_c = s == null ? void 0 : s.stop) == null ? void 0 : _c.call(s), r.howl.state() === "unloaded" && r.howl.load(), this.applyThemeVolume(), r.play()) : (r.howl.stop(), (s == null ? void 0 : s.enabled) && ((_d = s.play) == null ? void 0 : _d.call(s)))));
     }
     applyThemeVolume() {
       var _a2, _b;
       const e = (_a2 = this.sounds) == null ? void 0 : _a2.theme, r = (_b = this.game.audio) == null ? void 0 : _b.playlist;
       if (!(e == null ? void 0 : e.howl)) return;
       const s = (r == null ? void 0 : r.getVolume) ? r.getVolume() : 0.15;
-      e.howl.volume(s * 1.25);
+      e.volume = s * 1.25, e.howl.volume(e.volume);
     }
     loopSound(e, r) {
       (e == null ? void 0 : e.howl) && r !== !!e.__on && (e.__on = r, r ? e.play() : e.howl.stop());
@@ -118854,7 +118883,7 @@ ${e.tab}if ( ${m} ) {
           }
         ]
       ]), this.options = new Options(), this.respawns = new Respawns("landing"), this.view = new View(), this.rendering.setPostprocessing(), this.rendering.start(), this.reveal = new Reveal(), this.noises = new Noises(), this.weather = new Weather(), this.wind = new Wind(), this.tracks = new Tracks(), this.lighting = new Lighting(), this.fog = new Fog(), this.water = new Water(), this.materials = new Materials(), this.objects = new Objects(), this.explosions = new Explosions(), this.world = new World();
-      const a = __vitePreload(() => import("./rapier-BoSfJVlp.js").then(async (m) => {
+      const a = __vitePreload(() => import("./rapier-DURTVznE.js").then(async (m) => {
         await m.__tla;
         return m;
       }), [], import.meta.url), h = this.resourcesLoader.load([
@@ -118894,11 +118923,6 @@ ${e.tab}if ( ${m} ) {
         [
           "bricksModel",
           `bricks/bricks${e}.glb${o}`,
-          "gltf"
-        ],
-        [
-          "cityModel",
-          `city/city.glb${o}`,
           "gltf"
         ],
         [

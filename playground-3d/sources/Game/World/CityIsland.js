@@ -45,6 +45,12 @@ const PALETTE = {
 
 export class CityIsland
 {
+    /**
+     * Bán kính (đơn vị thế giới) quanh tâm đảo thành phố mà xe lại gần thì bắt
+     * đầu tải `city.glb`. Xem giải thích số đo ở `updateModelStreaming()`.
+     */
+    static MODEL_RADIUS = 175
+
     constructor()
     {
         this.game = Game.getInstance()
@@ -66,8 +72,36 @@ export class CityIsland
 
         this.indexPieces()
 
+        // Hai phần này dựng HOÀN TOÀN bằng mã, không đụng tới kit — nên chúng
+        // luôn có mặt, kể cả khi `city.glb` chưa về.
         this.setIsland()
         this.setBridge()
+
+        this.setDistrict()
+
+        this.game.ticker.events.on('tick', () => this.updateModelStreaming(), 12)
+    }
+
+    /**
+     * KHU PHỐ — mọi thứ cần tới kit `city.glb`.
+     *
+     * ⚠️ `setPlaza()` nằm ở đây dù nó có cả `slab()` lẫn `box()` dựng bằng mã.
+     * Quảng trường là MỘT Ô trong lưới phố; dựng nền lát và hoa văn của nó
+     * trong khi không có phố nào xung quanh thì ra một mảng gạch lơ lửng giữa
+     * đồng cỏ. Cả ô đi cùng nhau, hoặc không có gì.
+     *
+     * ⚠️ `buildInstances()` phải gọi SAU CÙNG, khi sổ instance đã đầy — gọi
+     * sớm là mất trọn phần dựng sau đó.
+     *
+     * Gọi được HAI lần trong đời: một lần trong hàm dựng (không làm gì, vì kit
+     * chưa về) và một lần khi model tới. Không có trạng thái dựng-dở ở giữa:
+     * hoặc chưa có phố nào, hoặc có đủ.
+     */
+    setDistrict()
+    {
+        if(!this.pieces.size)
+            return false
+
         this.setStreets()
         this.setRoadMarkings()
         this.setBlocks()
@@ -75,8 +109,73 @@ export class CityIsland
         this.setPlaza()
         this.setStreetFurniture()
 
-        // SAU CÙNG, khi sổ instance đã đầy — gọi sớm là mất trọn phần dựng sau đó
         this.buildInstances()
+
+        return true
+    }
+
+    /**
+     * NẠP KIT KHI XE LẠI GẦN — chạy mỗi khung hình, nên phải rẻ và tự chốt.
+     *
+     * ⚠️ Bán kính 175 là số CHỌN TỪ SỐ ĐO, không phải ước lượng. Đo thật
+     * 04/09/2026, khoảng cách từ tâm thành phố (232 · 20) tới:
+     *
+     *   · đầu cầu dây văng      148   ← muốn kích hoạt ở đây
+     *   · altar 161 · achievements 162 · toilet 168   (mấy khu phía Đông)
+     *   · bonfire 179 · cầu kia 180 · landing 193 (CHỖ HỒI SINH MẶC ĐỊNH)
+     *   · projects 196 · lab 214 · circuit 246
+     *   · sân bóng 249 · nhạc hội 245 · bến cảng 246 · làng 306 · FPTU 325
+     *
+     * 175 nằm gọn giữa "đầu cầu" và "chỗ hồi sinh mặc định", nên khách mới vào
+     * KHÔNG tải 2,43 MB, còn khách bước lên cầu thì tải ngay.
+     *
+     * Mép TÂY của khu phố ở x = 164 (đo từ sổ instance), tức cách đầu cầu 80,
+     * trong khi sương mù che hết ở 68 — nên còn khoảng đệm để kit về kịp.
+     */
+    updateModelStreaming()
+    {
+        if(this.modelRequested)
+            return
+
+        const player = this.game.player?.position
+        if(!player)
+            return
+
+        const dx = player.x - CITY_ISLAND.x
+        const dz = player.z - CITY_ISLAND.z
+
+        if(dx * dx + dz * dz > CityIsland.MODEL_RADIUS * CityIsland.MODEL_RADIUS)
+            return
+
+        this.requestModel()
+    }
+
+    /**
+     * Xin kit. `loadLazy()` nhớ theo promise nên đảo quái vật (khu nhà đổ cũng
+     * dùng chính tệp này) gọi song song cũng chỉ tải MỘT lượt.
+     */
+    requestModel()
+    {
+        if(this.modelPromise)
+            return this.modelPromise
+
+        this.modelRequested = true
+
+        this.modelPromise = this.game.resourcesLoader
+            .loadLazy('cityModel', `city/city.glb?cb=1`, 'gltf')
+            .then((resource) =>
+            {
+                if(!resource)
+                    return null
+
+                this.game.resources.cityModel = resource
+                this.indexPieces()
+                this.setDistrict()
+
+                return resource
+            })
+
+        return this.modelPromise
     }
 
     /**

@@ -1647,10 +1647,40 @@ Node. Đã kiểm thật sau khi loại: `localStorage.uuid` vẫn ra UUID hợp
 ⚠️ ĐỪNG bỏ luôn `nodePolyfills()`: `msgpack-lite` (cũng ở `Server.js`) cần
 `Buffer`. Chỉ thu hẹp.
 
-💡 Nhân tiện: `Server.js` NGỦ HOÀN TOÀN trên production — `start()` chỉ kết nối
-khi có `import.meta.env.VITE_SERVER_URL`, mà biến đó không được đặt ở bất kỳ
-tệp `.env` nào. Muốn cắt tiếp thì `msgpack` có thể chuyển sang nhập động, chỉ
-nạp khi socket thật sự mở.
+## `msgpack-lite` cũng nhập động — và bỏ luôn `Buffer` toàn cục (46 KB nữa)
+
+`Server.js` NGỦ HOÀN TOÀN trên production: `start()` chỉ kết nối khi có
+`import.meta.env.VITE_SERVER_URL`, mà biến đó không được đặt ở bất kỳ tệp
+`.env` nào. Nhưng nhập tĩnh thì `msgpack-lite` vẫn vào gói cho mọi khách.
+
+Nay `start()` là `async` và `await this.loadCodec()` TRƯỚC khi `connect()`.
+
+⚠️ **Thứ tự đó bắt buộc.** `onReceive()` gọi `decode()` ngay trong bộ bắt sự
+kiện `message` của WebSocket — đồng bộ, không chờ được. Mở socket trước khi có
+bộ giải mã là mời một `TypeError` vào đúng gói tin đầu tiên. (`send()` thì an
+toàn sẵn: nó thoát sớm khi `!connected`, mà cờ đó chỉ bật sau khi socket mở.)
+
+⚠️ `start()` thành `async` không phá gì vì chỗ gọi (`Reveal.js:227`) bắn-rồi-
+quên, không `await`.
+
+### Và `globals: { Buffer: false }` — chỗ đáng ngờ nhất, nên đã kiểm THẬT
+
+`exclude` chỉ bỏ polyfill dạng module; `nodePolyfills` VẪN tiêm một biến
+`Buffer` toàn cục vào gói chính, kể cả khi thứ duy nhất cần nó đã nằm ở chunk
+riêng. Tắt đi được thêm **35 KB gzip**.
+
+Rủi ro: `msgpack-lite` tham chiếu `Buffer` TRẦN (`Buffer.alloc`, `Buffer.from`,
+`Buffer.concat`). Nhưng mọi chỗ đều qua cờ
+`hasBuffer = typeof Buffer !== 'undefined'`, và gói có sẵn nhánh lùi
+`lib/bufferish-uint8array.js`.
+
+**Đọc mã thấy an toàn là chưa đủ** — đã chạy thật trong trình duyệt với
+`typeof Buffer === 'undefined'`: `encode()` một object có object lồng, mảng, số
+thực, `true`, `null` và khoá tiếng Việt → ra `Uint8Array` 81 byte; `decode()`
+lại **khớp hoàn toàn**; 0 lỗi JS. Không cần máy chủ để kiểm — đó chính là
+đường mã mà multiplayer dùng.
+
+⚠️ **Thêm bất cứ gói nào khác cần `Buffer` thì phải đo lại chỗ này.**
 
 ## ⚠️ tweakpane 789 KB đi vào gói phát hành cho MỌI khách
 
@@ -1671,7 +1701,10 @@ có `#debug` → 3 chunk + bảng hiện ra, cả hai 0 lỗi JS.
 
 ## Tổng và TRẦN
 
-**gzip 1.121 → 768 KB, giảm 353 KB (31%).** Lần tải đầu 7,75 → **7,40 MB**.
+**gzip 1.121 → 722 KB, giảm 399 KB (36%).** Lần tải đầu 7,75 → **7,38 MB**.
+
+Ba việc, theo thứ tự đáng giá: bỏ polyfill crypto 253 KB · tách tweakpane
+100 KB · `msgpack` nhập động + bỏ `Buffer` toàn cục 46 KB.
 
 Thành phần còn lại (tổng 8,35 MB chưa rút gọn):
 

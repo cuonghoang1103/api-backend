@@ -61,7 +61,25 @@ export default {
          *
          * ⚠️ Đừng bỏ luôn `nodePolyfills()`: `msgpack-lite` sẽ vỡ. Chỉ thu hẹp.
          */
-        nodePolyfills({ exclude: [ 'crypto' ] }),
+        /**
+         * ⚠️ VÀ KHÔNG TIÊM `Buffer` TOÀN CỤC — thêm 35 KB (đã gzip).
+         *
+         * `exclude` chỉ bỏ polyfill dạng module; `nodePolyfills` vẫn tiêm một
+         * biến `Buffer` toàn cục vào GÓI CHÍNH, kể cả khi thứ duy nhất cần nó
+         * (`msgpack-lite`) đã chuyển sang nhập động và nằm ở chunk riêng.
+         *
+         * `msgpack-lite` tham chiếu `Buffer` TRẦN (`Buffer.alloc`,
+         * `Buffer.from`…) nhưng luôn qua cờ `hasBuffer = typeof Buffer !==
+         * 'undefined'`, và có sẵn nhánh lùi về `Uint8Array`
+         * (`lib/bufferish-uint8array.js`). Đã kiểm THẬT chứ không đọc mã rồi
+         * tin: chạy vòng `encode`/`decode` trong trình duyệt với
+         * `typeof Buffer === 'undefined'` — ra `Uint8Array` 81 byte, giải mã
+         * lại khớp hoàn toàn cả object lồng, số thực, `null` và khoá tiếng
+         * Việt, 0 lỗi.
+         *
+         * ⚠️ Thêm bất cứ gói nào khác cần `Buffer` thì phải đo lại chỗ này.
+         */
+        nodePolyfills({ exclude: [ 'crypto' ], globals: { Buffer: false } }),
         // basicSsl()
     ]
 }

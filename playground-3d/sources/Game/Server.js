@@ -1,4 +1,3 @@
-import msgpack from 'msgpack-lite'
 import { v4 as uuidv4 } from 'uuid'
 import { Events } from './Events.js'
 import { Game } from './Game.js'
@@ -23,19 +22,70 @@ export class Server
         document.documentElement.classList.add('is-server-offline')
     }
 
-    start()
+    /**
+     * ⚠️ `msgpack-lite` NHẬP ĐỘNG, không nhập tĩnh ở đầu file.
+     *
+     * Máy chủ nhiều người chơi NGỦ HOÀN TOÀN trên production: cả hàm này chặn
+     * sau `VITE_SERVER_URL`, mà biến đó không được đặt ở bất kỳ tệp `.env` nào.
+     * Nhập tĩnh thì `msgpack-lite` (56 KB) cùng phần `Buffer` polyfill của nó
+     * vẫn đi vào gói phát hành cho mọi khách, để phục vụ một đường mã không bao
+     * giờ chạy.
+     *
+     * ⚠️ Phải nạp XONG rồi mới `connect()`. `onReceive()` gọi `decode()` ngay
+     * trong bộ bắt sự kiện `message` của WebSocket — đồng bộ, không chờ được.
+     * Mở socket trước khi có bộ giải mã là mời một `TypeError` vào đúng gói tin
+     * đầu tiên.
+     *
+     * `send()` thì an toàn sẵn: nó thoát sớm khi `!this.connected`, mà cờ đó
+     * chỉ bật sau khi socket mở — tức sau khi đã nạp.
+     *
+     * ⚠️ `start()` nay là `async`. Chỗ gọi (`Reveal.js`) bắn-rồi-quên, không
+     * `await`, nên không có gì phải đổi ở đó — nhưng đừng biến nó thành thứ
+     * người khác phải chờ mà không biết.
+     */
+    async start()
     {
-        if(import.meta.env.VITE_SERVER_URL)
+        if(!import.meta.env.VITE_SERVER_URL)
+            return
+
+        if(!await this.loadCodec())
+            return
+
+        // First connect attempt
+        this.connect()
+
+        // Try connect
+        setInterval(() =>
         {
-            // First connect attempt
-            this.connect()
-            
-            // Try connect
-            setInterval(() =>
-            {
-                if(!this.connected)
-                    this.connect()
-            }, 2000)
+            if(!this.connected)
+                this.connect()
+        }, 2000)
+    }
+
+    /**
+     * Nạp bộ mã hoá gói tin. Trả `false` nếu không nạp được — khi đó chế độ
+     * nhiều người chơi tắt hẳn và sân chơi vẫn chạy bình thường offline, đúng
+     * như khi không khai `VITE_SERVER_URL`.
+     */
+    async loadCodec()
+    {
+        if(this.msgpack)
+            return true
+
+        try
+        {
+            const module = await import('msgpack-lite')
+            // Gói này là CommonJS; qua interop của Vite thì nội dung nằm ở
+            // `.default`. Giữ cả hai nhánh cho chắc.
+            this.msgpack = module.default ?? module
+
+            return true
+        }
+        catch(error)
+        {
+            console.error('[Server] không nạp được `msgpack-lite` — tắt chế độ nhiều người chơi', error)
+
+            return false
         }
     }
 
@@ -123,11 +173,11 @@ export class Server
 
     decode(data)
     {
-        return msgpack.decode(new Uint8Array(data))
+        return this.msgpack.decode(new Uint8Array(data))
     }
 
     encode(data)
     {
-        return msgpack.encode(data)
+        return this.msgpack.encode(data)
     }
 }

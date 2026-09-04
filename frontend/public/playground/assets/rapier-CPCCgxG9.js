@@ -1,19 +1,11 @@
-import { B as Ut, __tla as __tla_0 } from "./index-Dy9DDhNY.js";
-let Et, At, jt, xe, Lr, Hr, je, Ur, dt, ue, P, Zr, bt, Le, xt, Ie, He, Vr, Or, Kr, Ah, st, Rr, Fr, jr, Wr, ce, ke, O, Pr, vr, Dr, _e, X, D, Xr, et, oe, Q, kr, Nr, qr, he, Jr, ht, ut, ze, Ir, zr, ne, we, Br, Ih, Dt, pt, gt, Ar, Tr, se, U, Sr, B, Cr, S, Ne, It, Ae, De, Fe, yr, ae, Ee, de, M, ot, at, F, pe, Er, Mr, xr, Yr, Gr, Me, le, Pe, Re, Ce, fr, w, Te, Lt, Fh, Eh, jh;
-let __tla = Promise.all([
-  (() => {
-    try {
-      return __tla_0;
-    } catch {
-    }
-  })()
-]).then(async () => {
-  const $r = "" + new URL("rapier_wasm3d_bg-0Vyjx73g.wasm", import.meta.url).href, Qr = async (s = {}, t) => {
+let Et, At, jt, Ce, Dr, kr, Ae, Or, dt, pe, P, Yr, bt, De, xt, xe, ke, Br, Vr, Jr, Ih, st, vr, Pr, Ar, Gr, _e, Me, O, Er, Sr, Hr, oe, X, D, Ur, et, se, Q, Mr, Lr, Wr, de, Xr, ht, ut, Fe, xr, Fr, ie, le, qr, xh, Dt, pt, gt, Ir, zr, ae, U, yr, B, Rr, S, Le, It, Ie, He, Pe, fr, ne, je, we, M, ot, at, F, he, jr, Tr, Cr, Kr, Nr, Te, ce, Ee, ve, Re, mr, w, ze, Lt, Eh, jh, Ah;
+let __tla = (async () => {
+  const Zr = "" + new URL("rapier_wasm3d_bg-0Vyjx73g.wasm", import.meta.url).href, $r = async (s = {}, t) => {
     let e;
     if (t.startsWith("data:")) {
       const r = t.replace(/^data:.*?base64,/, "");
       let a;
-      if (typeof Ut == "function" && typeof Ut.from == "function") a = Ut.from(r, "base64");
+      if (typeof Buffer == "function" && typeof Buffer.from == "function") a = Buffer.from(r, "base64");
       else if (typeof atob == "function") {
         const o = atob(r);
         a = new Uint8Array(o.length);
@@ -31,7 +23,7 @@ let __tla = Promise.all([
     return e.instance.exports;
   };
   let i;
-  function ti(s) {
+  function Qr(s) {
     i = s;
   }
   const R = new Array(128).fill(void 0);
@@ -45,7 +37,7 @@ let __tla = Promise.all([
     const t = ct;
     return ct = R[t], R[t] = s, t;
   }
-  function ge(s, t) {
+  function ue(s, t) {
     try {
       return s.apply(this, t);
     } catch (e) {
@@ -59,38 +51,38 @@ let __tla = Promise.all([
   function z() {
     return (nt === null || nt.buffer.detached === true || nt.buffer.detached === void 0 && nt.buffer !== i.memory.buffer) && (nt = new DataView(i.memory.buffer)), nt;
   }
-  function ei(s) {
+  function ti(s) {
     s < 132 || (R[s] = ct, ct = s);
   }
   function lt(s) {
     const t = C(s);
-    return ei(s), t;
+    return ti(s), t;
   }
-  const ri = typeof TextDecoder > "u" ? (0, module.require)("util").TextDecoder : TextDecoder;
-  let hr = new ri("utf-8", {
+  const ei = typeof TextDecoder > "u" ? (0, module.require)("util").TextDecoder : TextDecoder;
+  let dr = new ei("utf-8", {
     ignoreBOM: true,
     fatal: true
   });
-  hr.decode();
+  dr.decode();
   let ft = null;
-  function ii() {
+  function ri() {
     return (ft === null || ft.byteLength === 0) && (ft = new Uint8Array(i.memory.buffer)), ft;
   }
-  function pr(s, t) {
-    return s = s >>> 0, hr.decode(ii().subarray(s, s + t));
+  function hr(s, t) {
+    return s = s >>> 0, dr.decode(ri().subarray(s, s + t));
   }
-  function ni() {
+  function ii() {
     let s, t;
     try {
       const a = i.__wbindgen_add_to_stack_pointer(-16);
       i.version(a);
       var e = z().getInt32(a + 0, true), r = z().getInt32(a + 4, true);
-      return s = e, t = r, pr(e, r);
+      return s = e, t = r, hr(e, r);
     } finally {
       i.__wbindgen_add_to_stack_pointer(16), i.__wbindgen_export_1(s, t, 1);
     }
   }
-  function ai(s) {
+  function ni(s) {
     i.reserve_memory(s);
   }
   function c(s, t) {
@@ -102,34 +94,34 @@ let __tla = Promise.all([
     return R[--x] = s, x;
   }
   let yt = null;
-  function si() {
+  function ai() {
     return (yt === null || yt.byteLength === 0) && (yt = new Int32Array(i.memory.buffer)), yt;
   }
-  function oi(s, t) {
-    return s = s >>> 0, si().subarray(s / 4, s / 4 + t);
+  function si(s, t) {
+    return s = s >>> 0, ai().subarray(s / 4, s / 4 + t);
   }
   let St = null;
-  function ur() {
+  function pr() {
     return (St === null || St.byteLength === 0) && (St = new Float32Array(i.memory.buffer)), St;
   }
-  function We(s, t) {
-    return s = s >>> 0, ur().subarray(s / 4, s / 4 + t);
+  function Ge(s, t) {
+    return s = s >>> 0, pr().subarray(s / 4, s / 4 + t);
   }
   let vt = null;
-  function gr() {
+  function ur() {
     return (vt === null || vt.byteLength === 0) && (vt = new Uint32Array(i.memory.buffer)), vt;
   }
-  function _i(s, t) {
-    return s = s >>> 0, gr().subarray(s / 4, s / 4 + t);
+  function oi(s, t) {
+    return s = s >>> 0, ur().subarray(s / 4, s / 4 + t);
   }
   let N = 0;
   function _t(s, t) {
     const e = t(s.length * 4, 4) >>> 0;
-    return gr().set(s, e / 4), N = s.length, e;
+    return ur().set(s, e / 4), N = s.length, e;
   }
   function Z(s, t) {
     const e = t(s.length * 4, 4) >>> 0;
-    return ur().set(s, e / 4), N = s.length, e;
+    return pr().set(s, e / 4), N = s.length, e;
   }
   const Pt = Object.freeze({
     LinX: 0,
@@ -198,7 +190,7 @@ let __tla = Promise.all([
     17: "HalfSpace",
     Voxels: 18,
     18: "Voxels"
-  }), Xt = typeof FinalizationRegistry > "u" ? {
+  }), Ut = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -208,11 +200,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create(rt.prototype);
-      return e.__wbg_ptr = t, Xt.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, Ut.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, Xt.unregister(this), t;
+      return this.__wbg_ptr = 0, Ut.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -220,19 +212,19 @@ let __tla = Promise.all([
     }
     constructor() {
       const t = i.rawbroadphase_new();
-      return this.__wbg_ptr = t >>> 0, Xt.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = t >>> 0, Ut.register(this, this.__wbg_ptr, this), this;
     }
   }
-  const qe = typeof FinalizationRegistry > "u" ? {
+  const We = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
     }
   } : new FinalizationRegistry((s) => i.__wbg_rawccdsolver_free(s >>> 0, 1));
-  class ie {
+  class re {
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, qe.unregister(this), t;
+      return this.__wbg_ptr = 0, We.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -240,19 +232,19 @@ let __tla = Promise.all([
     }
     constructor() {
       const t = i.rawccdsolver_new();
-      return this.__wbg_ptr = t >>> 0, qe.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = t >>> 0, We.register(this, this.__wbg_ptr, this), this;
     }
   }
-  const Be = typeof FinalizationRegistry > "u" ? {
+  const qe = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
     }
   } : new FinalizationRegistry((s) => i.__wbg_rawcharactercollision_free(s >>> 0, 1));
-  class br {
+  class gr {
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, Be.unregister(this), t;
+      return this.__wbg_ptr = 0, qe.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -260,7 +252,7 @@ let __tla = Promise.all([
     }
     constructor() {
       const t = i.rawcharactercollision_new();
-      return this.__wbg_ptr = t >>> 0, Be.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = t >>> 0, qe.register(this, this.__wbg_ptr, this), this;
     }
     handle() {
       return i.rawcharactercollision_handle(this.__wbg_ptr);
@@ -293,7 +285,7 @@ let __tla = Promise.all([
       return l.__wrap(t);
     }
   }
-  const Jt = typeof FinalizationRegistry > "u" ? {
+  const Xt = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -303,11 +295,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create(E.prototype);
-      return e.__wbg_ptr = t, Jt.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, Xt.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, Jt.unregister(this), t;
+      return this.__wbg_ptr = 0, Xt.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -377,7 +369,7 @@ let __tla = Promise.all([
         i.rawcolliderset_coVoxelData(a, this.__wbg_ptr, t);
         var e = z().getInt32(a + 0, true), r = z().getInt32(a + 4, true);
         let o;
-        return e !== 0 && (o = oi(e, r).slice(), i.__wbindgen_export_1(e, r * 4, 4)), o;
+        return e !== 0 && (o = si(e, r).slice(), i.__wbindgen_export_1(e, r * 4, 4)), o;
       } finally {
         i.__wbindgen_add_to_stack_pointer(16);
       }
@@ -401,7 +393,7 @@ let __tla = Promise.all([
         i.rawcolliderset_coVertices(a, this.__wbg_ptr, t);
         var e = z().getInt32(a + 0, true), r = z().getInt32(a + 4, true);
         let o;
-        return e !== 0 && (o = We(e, r).slice(), i.__wbindgen_export_1(e, r * 4, 4)), o;
+        return e !== 0 && (o = Ge(e, r).slice(), i.__wbindgen_export_1(e, r * 4, 4)), o;
       } finally {
         i.__wbindgen_add_to_stack_pointer(16);
       }
@@ -412,7 +404,7 @@ let __tla = Promise.all([
         i.rawcolliderset_coIndices(a, this.__wbg_ptr, t);
         var e = z().getInt32(a + 0, true), r = z().getInt32(a + 4, true);
         let o;
-        return e !== 0 && (o = _i(e, r).slice(), i.__wbindgen_export_1(e, r * 4, 4)), o;
+        return e !== 0 && (o = oi(e, r).slice(), i.__wbindgen_export_1(e, r * 4, 4)), o;
       } finally {
         i.__wbindgen_add_to_stack_pointer(16);
       }
@@ -431,7 +423,7 @@ let __tla = Promise.all([
         i.rawcolliderset_coHeightfieldHeights(a, this.__wbg_ptr, t);
         var e = z().getInt32(a + 0, true), r = z().getInt32(a + 4, true);
         let o;
-        return e !== 0 && (o = We(e, r).slice(), i.__wbindgen_export_1(e, r * 4, 4)), o;
+        return e !== 0 && (o = Ge(e, r).slice(), i.__wbindgen_export_1(e, r * 4, 4)), o;
       } finally {
         i.__wbindgen_add_to_stack_pointer(16);
       }
@@ -597,7 +589,7 @@ let __tla = Promise.all([
     }
     constructor() {
       const t = i.rawcolliderset_new();
-      return this.__wbg_ptr = t >>> 0, Jt.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = t >>> 0, Xt.register(this, this.__wbg_ptr, this), this;
     }
     len() {
       return i.rawcolliderset_len(this.__wbg_ptr) >>> 0;
@@ -609,8 +601,8 @@ let __tla = Promise.all([
       try {
         const Ot = i.__wbindgen_add_to_stack_pointer(-16);
         c(e, m), c(r, l), c(a, v), c(d, l), c(h, l), c(p, v), c(mt, j), i.rawcolliderset_createCollider(Ot, this.__wbg_ptr, t, e.__wbg_ptr, r.__wbg_ptr, a.__wbg_ptr, o, _, d.__wbg_ptr, h.__wbg_ptr, p.__wbg_ptr, u, g, b, y, I, L, G, W, q, tt, Nt, Gt, Wt, qt, Bt, mt.__wbg_ptr);
-        var Vt = z().getInt32(Ot + 0, true), Ge = z().getFloat64(Ot + 8, true);
-        return Vt === 0 ? void 0 : Ge;
+        var Vt = z().getInt32(Ot + 0, true), Ne = z().getFloat64(Ot + 8, true);
+        return Vt === 0 ? void 0 : Ne;
       } finally {
         i.__wbindgen_add_to_stack_pointer(16);
       }
@@ -629,7 +621,7 @@ let __tla = Promise.all([
       }
     }
   }
-  const Ve = typeof FinalizationRegistry > "u" ? {
+  const Be = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -639,11 +631,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create(Ft.prototype);
-      return e.__wbg_ptr = t, Ve.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, Be.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, Ve.unregister(this), t;
+      return this.__wbg_ptr = 0, Be.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -672,21 +664,21 @@ let __tla = Promise.all([
       return l.__wrap(t);
     }
   }
-  const Oe = typeof FinalizationRegistry > "u" ? {
+  const Ve = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
     }
   } : new FinalizationRegistry((s) => i.__wbg_rawcontactforceevent_free(s >>> 0, 1));
-  class be {
+  class ge {
     static __wrap(t) {
       t = t >>> 0;
-      const e = Object.create(be.prototype);
-      return e.__wbg_ptr = t, Oe.register(e, e.__wbg_ptr, e), e;
+      const e = Object.create(ge.prototype);
+      return e.__wbg_ptr = t, Ve.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, Oe.unregister(this), t;
+      return this.__wbg_ptr = 0, Ve.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -713,21 +705,21 @@ let __tla = Promise.all([
       return i.rawcontactforceevent_max_force_magnitude(this.__wbg_ptr);
     }
   }
-  const Ue = typeof FinalizationRegistry > "u" ? {
+  const Oe = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
     }
   } : new FinalizationRegistry((s) => i.__wbg_rawcontactmanifold_free(s >>> 0, 1));
-  class me {
+  class be {
     static __wrap(t) {
       t = t >>> 0;
-      const e = Object.create(me.prototype);
-      return e.__wbg_ptr = t, Ue.register(e, e.__wbg_ptr, e), e;
+      const e = Object.create(be.prototype);
+      return e.__wbg_ptr = t, Oe.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, Ue.unregister(this), t;
+      return this.__wbg_ptr = 0, Oe.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -801,21 +793,21 @@ let __tla = Promise.all([
       return l.__wrap(e);
     }
   }
-  const Xe = typeof FinalizationRegistry > "u" ? {
+  const Ue = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
     }
   } : new FinalizationRegistry((s) => i.__wbg_rawcontactpair_free(s >>> 0, 1));
-  class fe {
+  class me {
     static __wrap(t) {
       t = t >>> 0;
-      const e = Object.create(fe.prototype);
-      return e.__wbg_ptr = t, Xe.register(e, e.__wbg_ptr, e), e;
+      const e = Object.create(me.prototype);
+      return e.__wbg_ptr = t, Ue.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, Xe.unregister(this), t;
+      return this.__wbg_ptr = 0, Ue.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -832,19 +824,19 @@ let __tla = Promise.all([
     }
     contactManifold(t) {
       const e = i.rawcontactpair_contactManifold(this.__wbg_ptr, t);
-      return e === 0 ? void 0 : me.__wrap(e);
+      return e === 0 ? void 0 : be.__wrap(e);
     }
   }
-  const Je = typeof FinalizationRegistry > "u" ? {
+  const Xe = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
     }
   } : new FinalizationRegistry((s) => i.__wbg_rawdebugrenderpipeline_free(s >>> 0, 1));
-  class ci {
+  class _i {
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, Je.unregister(this), t;
+      return this.__wbg_ptr = 0, Xe.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -852,7 +844,7 @@ let __tla = Promise.all([
     }
     constructor() {
       const t = i.rawdebugrenderpipeline_new();
-      return this.__wbg_ptr = t >>> 0, Je.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = t >>> 0, Xe.register(this, this.__wbg_ptr, this), this;
     }
     vertices() {
       const t = i.rawdebugrenderpipeline_vertices(this.__wbg_ptr);
@@ -870,21 +862,21 @@ let __tla = Promise.all([
       }
     }
   }
-  const Ke = typeof FinalizationRegistry > "u" ? {
+  const Je = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
     }
   } : new FinalizationRegistry((s) => i.__wbg_rawdeserializedworld_free(s >>> 0, 1));
-  class ye {
+  class fe {
     static __wrap(t) {
       t = t >>> 0;
-      const e = Object.create(ye.prototype);
-      return e.__wbg_ptr = t, Ke.register(e, e.__wbg_ptr, e), e;
+      const e = Object.create(fe.prototype);
+      return e.__wbg_ptr = t, Je.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, Ke.unregister(this), t;
+      return this.__wbg_ptr = 0, Je.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -927,16 +919,16 @@ let __tla = Promise.all([
       return t === 0 ? void 0 : Y.__wrap(t);
     }
   }
-  const Ye = typeof FinalizationRegistry > "u" ? {
+  const Ke = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
     }
   } : new FinalizationRegistry((s) => i.__wbg_rawdynamicraycastvehiclecontroller_free(s >>> 0, 1));
-  class li {
+  class ci {
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, Ye.unregister(this), t;
+      return this.__wbg_ptr = 0, Ke.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -944,7 +936,7 @@ let __tla = Promise.all([
     }
     constructor(t) {
       const e = i.rawdynamicraycastvehiclecontroller_new(t);
-      return this.__wbg_ptr = e >>> 0, Ye.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = e >>> 0, Ke.register(this, this.__wbg_ptr, this), this;
     }
     current_vehicle_speed() {
       return i.rawdynamicraycastvehiclecontroller_current_vehicle_speed(this.__wbg_ptr);
@@ -972,7 +964,7 @@ let __tla = Promise.all([
     }
     update_vehicle(t, e, r, a, o, _, d) {
       try {
-        c(e, j), c(r, E), c(a, Se), i.rawdynamicraycastvehiclecontroller_update_vehicle(this.__wbg_ptr, t, e.__wbg_ptr, r.__wbg_ptr, a.__wbg_ptr, o, f(_) ? 4294967297 : _ >>> 0, A(d));
+        c(e, j), c(r, E), c(a, ye), i.rawdynamicraycastvehiclecontroller_update_vehicle(this.__wbg_ptr, t, e.__wbg_ptr, r.__wbg_ptr, a.__wbg_ptr, o, f(_) ? 4294967297 : _ >>> 0, A(d));
       } finally {
         R[x++] = void 0;
       }
@@ -1128,16 +1120,16 @@ let __tla = Promise.all([
       }
     }
   }
-  const Ze = typeof FinalizationRegistry > "u" ? {
+  const Ye = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
     }
   } : new FinalizationRegistry((s) => i.__wbg_raweventqueue_free(s >>> 0, 1));
-  class mr {
+  class br {
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, Ze.unregister(this), t;
+      return this.__wbg_ptr = 0, Ye.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -1145,7 +1137,7 @@ let __tla = Promise.all([
     }
     constructor(t) {
       const e = i.raweventqueue_new(t);
-      return this.__wbg_ptr = e >>> 0, Ze.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = e >>> 0, Ye.register(this, this.__wbg_ptr, this), this;
     }
     drainCollisionEvents(t) {
       try {
@@ -1165,7 +1157,7 @@ let __tla = Promise.all([
       i.raweventqueue_clear(this.__wbg_ptr);
     }
   }
-  const $e = typeof FinalizationRegistry > "u" ? {
+  const Ze = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -1175,11 +1167,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create(H.prototype);
-      return e.__wbg_ptr = t, $e.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, Ze.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, $e.unregister(this), t;
+      return this.__wbg_ptr = 0, Ze.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -1221,7 +1213,7 @@ let __tla = Promise.all([
       return a === 0 ? void 0 : H.__wrap(a);
     }
   }
-  const Kt = typeof FinalizationRegistry > "u" ? {
+  const Jt = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -1231,11 +1223,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create(J.prototype);
-      return e.__wbg_ptr = t, Kt.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, Jt.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, Kt.unregister(this), t;
+      return this.__wbg_ptr = 0, Jt.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -1304,7 +1296,7 @@ let __tla = Promise.all([
     }
     constructor() {
       const t = i.rawimpulsejointset_new();
-      return this.__wbg_ptr = t >>> 0, Kt.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = t >>> 0, Jt.register(this, this.__wbg_ptr, this), this;
     }
     createJoint(t, e, r, a) {
       return c(t, H), i.rawimpulsejointset_createJoint(this.__wbg_ptr, t.__wbg_ptr, e, r, a);
@@ -1333,7 +1325,7 @@ let __tla = Promise.all([
       }
     }
   }
-  const Yt = typeof FinalizationRegistry > "u" ? {
+  const Kt = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -1343,11 +1335,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create(it.prototype);
-      return e.__wbg_ptr = t, Yt.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, Kt.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, Yt.unregister(this), t;
+      return this.__wbg_ptr = 0, Kt.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -1355,7 +1347,7 @@ let __tla = Promise.all([
     }
     constructor() {
       const t = i.rawintegrationparameters_new();
-      return this.__wbg_ptr = t >>> 0, Yt.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = t >>> 0, Kt.register(this, this.__wbg_ptr, this), this;
     }
     get dt() {
       return i.rawintegrationparameters_dt(this.__wbg_ptr);
@@ -1427,7 +1419,7 @@ let __tla = Promise.all([
       i.rawintegrationparameters_switchToSmallStepsPgsSolverWithoutWarmstart(this.__wbg_ptr);
     }
   }
-  const Zt = typeof FinalizationRegistry > "u" ? {
+  const Yt = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -1437,11 +1429,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create(K.prototype);
-      return e.__wbg_ptr = t, Zt.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, Yt.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, Zt.unregister(this), t;
+      return this.__wbg_ptr = 0, Yt.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -1449,7 +1441,7 @@ let __tla = Promise.all([
     }
     constructor() {
       const t = i.rawislandmanager_new();
-      return this.__wbg_ptr = t >>> 0, Zt.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = t >>> 0, Yt.register(this, this.__wbg_ptr, this), this;
     }
     forEachActiveRigidBodyHandle(t) {
       try {
@@ -1459,16 +1451,16 @@ let __tla = Promise.all([
       }
     }
   }
-  const Qe = typeof FinalizationRegistry > "u" ? {
+  const $e = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
     }
   } : new FinalizationRegistry((s) => i.__wbg_rawkinematiccharactercontroller_free(s >>> 0, 1));
-  class wi {
+  class li {
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, Qe.unregister(this), t;
+      return this.__wbg_ptr = 0, $e.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -1476,7 +1468,7 @@ let __tla = Promise.all([
     }
     constructor(t) {
       const e = i.rawkinematiccharactercontroller_new(t);
-      return this.__wbg_ptr = e >>> 0, Qe.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = e >>> 0, $e.register(this, this.__wbg_ptr, this), this;
     }
     up() {
       const t = i.rawcharactercollision_translationDeltaApplied(this.__wbg_ptr);
@@ -1551,7 +1543,7 @@ let __tla = Promise.all([
     }
     computeColliderMovement(t, e, r, a, o, _, d, h, p, u, g) {
       try {
-        c(e, j), c(r, E), c(a, Se), c(_, l), i.rawkinematiccharactercontroller_computeColliderMovement(this.__wbg_ptr, t, e.__wbg_ptr, r.__wbg_ptr, a.__wbg_ptr, o, _.__wbg_ptr, d, f(h) ? 4294967297 : Math.fround(h), p, f(u) ? 4294967297 : u >>> 0, A(g));
+        c(e, j), c(r, E), c(a, ye), c(_, l), i.rawkinematiccharactercontroller_computeColliderMovement(this.__wbg_ptr, t, e.__wbg_ptr, r.__wbg_ptr, a.__wbg_ptr, o, _.__wbg_ptr, d, f(h) ? 4294967297 : Math.fround(h), p, f(u) ? 4294967297 : u >>> 0, A(g));
       } finally {
         R[x++] = void 0;
       }
@@ -1567,10 +1559,10 @@ let __tla = Promise.all([
       return i.rawkinematiccharactercontroller_numComputedCollisions(this.__wbg_ptr) >>> 0;
     }
     computedCollision(t, e) {
-      return c(e, br), i.rawkinematiccharactercontroller_computedCollision(this.__wbg_ptr, t, e.__wbg_ptr) !== 0;
+      return c(e, gr), i.rawkinematiccharactercontroller_computedCollision(this.__wbg_ptr, t, e.__wbg_ptr) !== 0;
     }
   }
-  const $t = typeof FinalizationRegistry > "u" ? {
+  const Zt = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -1580,11 +1572,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create(Y.prototype);
-      return e.__wbg_ptr = t, $t.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, Zt.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, $t.unregister(this), t;
+      return this.__wbg_ptr = 0, Zt.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -1626,7 +1618,7 @@ let __tla = Promise.all([
     }
     constructor() {
       const t = i.rawmultibodyjointset_new();
-      return this.__wbg_ptr = t >>> 0, $t.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = t >>> 0, Zt.register(this, this.__wbg_ptr, this), this;
     }
     createJoint(t, e, r, a) {
       return c(t, H), i.rawmultibodyjointset_createJoint(this.__wbg_ptr, t.__wbg_ptr, e, r, a);
@@ -1652,7 +1644,7 @@ let __tla = Promise.all([
       }
     }
   }
-  const Qt = typeof FinalizationRegistry > "u" ? {
+  const $t = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -1662,11 +1654,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create($.prototype);
-      return e.__wbg_ptr = t, Qt.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, $t.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, Qt.unregister(this), t;
+      return this.__wbg_ptr = 0, $t.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -1674,14 +1666,14 @@ let __tla = Promise.all([
     }
     constructor() {
       const t = i.rawnarrowphase_new();
-      return this.__wbg_ptr = t >>> 0, Qt.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = t >>> 0, $t.register(this, this.__wbg_ptr, this), this;
     }
     contact_pairs_with(t, e) {
       i.rawnarrowphase_contact_pairs_with(this.__wbg_ptr, t, T(e));
     }
     contact_pair(t, e) {
       const r = i.rawnarrowphase_contact_pair(this.__wbg_ptr, t, e);
-      return r === 0 ? void 0 : fe.__wrap(r);
+      return r === 0 ? void 0 : me.__wrap(r);
     }
     intersection_pairs_with(t, e) {
       i.rawnarrowphase_intersection_pairs_with(this.__wbg_ptr, t, T(e));
@@ -1690,16 +1682,16 @@ let __tla = Promise.all([
       return i.rawnarrowphase_intersection_pair(this.__wbg_ptr, t, e) !== 0;
     }
   }
-  const tr = typeof FinalizationRegistry > "u" ? {
+  const Qe = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
     }
   } : new FinalizationRegistry((s) => i.__wbg_rawphysicspipeline_free(s >>> 0, 1));
-  class di {
+  class wi {
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, tr.unregister(this), t;
+      return this.__wbg_ptr = 0, Qe.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -1707,25 +1699,25 @@ let __tla = Promise.all([
     }
     constructor() {
       const t = i.rawphysicspipeline_new();
-      return this.__wbg_ptr = t >>> 0, tr.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = t >>> 0, Qe.register(this, this.__wbg_ptr, this), this;
     }
     step(t, e, r, a, o, _, d, h, p, u) {
-      c(t, l), c(e, it), c(r, K), c(a, rt), c(o, $), c(_, j), c(d, E), c(h, J), c(p, Y), c(u, ie), i.rawphysicspipeline_step(this.__wbg_ptr, t.__wbg_ptr, e.__wbg_ptr, r.__wbg_ptr, a.__wbg_ptr, o.__wbg_ptr, _.__wbg_ptr, d.__wbg_ptr, h.__wbg_ptr, p.__wbg_ptr, u.__wbg_ptr);
+      c(t, l), c(e, it), c(r, K), c(a, rt), c(o, $), c(_, j), c(d, E), c(h, J), c(p, Y), c(u, re), i.rawphysicspipeline_step(this.__wbg_ptr, t.__wbg_ptr, e.__wbg_ptr, r.__wbg_ptr, a.__wbg_ptr, o.__wbg_ptr, _.__wbg_ptr, d.__wbg_ptr, h.__wbg_ptr, p.__wbg_ptr, u.__wbg_ptr);
     }
     stepWithEvents(t, e, r, a, o, _, d, h, p, u, g, b, y, I) {
-      c(t, l), c(e, it), c(r, K), c(a, rt), c(o, $), c(_, j), c(d, E), c(h, J), c(p, Y), c(u, ie), c(g, mr), i.rawphysicspipeline_stepWithEvents(this.__wbg_ptr, t.__wbg_ptr, e.__wbg_ptr, r.__wbg_ptr, a.__wbg_ptr, o.__wbg_ptr, _.__wbg_ptr, d.__wbg_ptr, h.__wbg_ptr, p.__wbg_ptr, u.__wbg_ptr, g.__wbg_ptr, T(b), T(y), T(I));
+      c(t, l), c(e, it), c(r, K), c(a, rt), c(o, $), c(_, j), c(d, E), c(h, J), c(p, Y), c(u, re), c(g, br), i.rawphysicspipeline_stepWithEvents(this.__wbg_ptr, t.__wbg_ptr, e.__wbg_ptr, r.__wbg_ptr, a.__wbg_ptr, o.__wbg_ptr, _.__wbg_ptr, d.__wbg_ptr, h.__wbg_ptr, p.__wbg_ptr, u.__wbg_ptr, g.__wbg_ptr, T(b), T(y), T(I));
     }
   }
-  const er = typeof FinalizationRegistry > "u" ? {
+  const tr = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
     }
   } : new FinalizationRegistry((s) => i.__wbg_rawpidcontroller_free(s >>> 0, 1));
-  class hi {
+  class di {
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, er.unregister(this), t;
+      return this.__wbg_ptr = 0, tr.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -1733,7 +1725,7 @@ let __tla = Promise.all([
     }
     constructor(t, e, r, a) {
       const o = i.rawpidcontroller_new(t, e, r, a);
-      return this.__wbg_ptr = o >>> 0, er.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = o >>> 0, tr.register(this, this.__wbg_ptr, this), this;
     }
     set_kp(t, e) {
       i.rawpidcontroller_set_kp(this.__wbg_ptr, t, e);
@@ -1767,7 +1759,7 @@ let __tla = Promise.all([
       return l.__wrap(_);
     }
   }
-  const rr = typeof FinalizationRegistry > "u" ? {
+  const er = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -1777,11 +1769,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create(Rt.prototype);
-      return e.__wbg_ptr = t, rr.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, er.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, rr.unregister(this), t;
+      return this.__wbg_ptr = 0, er.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -1805,7 +1797,7 @@ let __tla = Promise.all([
       return t === 4294967297 ? void 0 : t;
     }
   }
-  const ir = typeof FinalizationRegistry > "u" ? {
+  const rr = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -1815,11 +1807,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create(zt.prototype);
-      return e.__wbg_ptr = t, ir.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, rr.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, ir.unregister(this), t;
+      return this.__wbg_ptr = 0, rr.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -1833,16 +1825,16 @@ let __tla = Promise.all([
       return i.rawpointprojection_isInside(this.__wbg_ptr) !== 0;
     }
   }
-  const nr = typeof FinalizationRegistry > "u" ? {
+  const ir = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
     }
   } : new FinalizationRegistry((s) => i.__wbg_rawquerypipeline_free(s >>> 0, 1));
-  class Se {
+  class ye {
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, nr.unregister(this), t;
+      return this.__wbg_ptr = 0, ir.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -1850,7 +1842,7 @@ let __tla = Promise.all([
     }
     constructor() {
       const t = i.rawquerypipeline_new();
-      return this.__wbg_ptr = t >>> 0, nr.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = t >>> 0, ir.register(this, this.__wbg_ptr, this), this;
     }
     update(t) {
       c(t, E), i.rawquerypipeline_update(this.__wbg_ptr, t.__wbg_ptr);
@@ -1859,7 +1851,7 @@ let __tla = Promise.all([
       try {
         c(t, j), c(e, E), c(r, l), c(a, l);
         const b = i.rawquerypipeline_castRay(this.__wbg_ptr, t.__wbg_ptr, e.__wbg_ptr, r.__wbg_ptr, a.__wbg_ptr, o, _, d, f(h) ? 4294967297 : h >>> 0, !f(p), f(p) ? 0 : p, !f(u), f(u) ? 0 : u, A(g));
-        return b === 0 ? void 0 : ve.__wrap(b);
+        return b === 0 ? void 0 : Se.__wrap(b);
       } finally {
         R[x++] = void 0;
       }
@@ -1939,21 +1931,21 @@ let __tla = Promise.all([
       }
     }
   }
-  const ar = typeof FinalizationRegistry > "u" ? {
+  const nr = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
     }
   } : new FinalizationRegistry((s) => i.__wbg_rawraycolliderhit_free(s >>> 0, 1));
-  class ve {
+  class Se {
     static __wrap(t) {
       t = t >>> 0;
-      const e = Object.create(ve.prototype);
-      return e.__wbg_ptr = t, ar.register(e, e.__wbg_ptr, e), e;
+      const e = Object.create(Se.prototype);
+      return e.__wbg_ptr = t, nr.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, ar.unregister(this), t;
+      return this.__wbg_ptr = 0, nr.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -1966,7 +1958,7 @@ let __tla = Promise.all([
       return i.rawcollidershapecasthit_time_of_impact(this.__wbg_ptr);
     }
   }
-  const sr = typeof FinalizationRegistry > "u" ? {
+  const ar = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -1976,11 +1968,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create(Tt.prototype);
-      return e.__wbg_ptr = t, sr.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, ar.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, sr.unregister(this), t;
+      return this.__wbg_ptr = 0, ar.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -2004,7 +1996,7 @@ let __tla = Promise.all([
       return t === 4294967297 ? void 0 : t;
     }
   }
-  const or = typeof FinalizationRegistry > "u" ? {
+  const sr = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -2014,11 +2006,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create(Mt.prototype);
-      return e.__wbg_ptr = t, or.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, sr.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, or.unregister(this), t;
+      return this.__wbg_ptr = 0, sr.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -2039,7 +2031,7 @@ let __tla = Promise.all([
       return t === 4294967297 ? void 0 : t;
     }
   }
-  const te = typeof FinalizationRegistry > "u" ? {
+  const Qt = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -2049,11 +2041,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create(j.prototype);
-      return e.__wbg_ptr = t, te.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, Qt.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, te.unregister(this), t;
+      return this.__wbg_ptr = 0, Qt.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -2286,7 +2278,7 @@ let __tla = Promise.all([
     }
     constructor() {
       const t = i.rawrigidbodyset_new();
-      return this.__wbg_ptr = t >>> 0, te.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = t >>> 0, Qt.register(this, this.__wbg_ptr, this), this;
     }
     createRigidBody(t, e, r, a, o, _, d, h, p, u, g, b, y, I, L, G, W, q, tt, Nt, Gt, Wt, qt, Bt, mt, Vt) {
       return c(e, l), c(r, v), c(d, l), c(h, l), c(p, l), c(u, l), c(g, v), i.rawrigidbodyset_createRigidBody(this.__wbg_ptr, t, e.__wbg_ptr, r.__wbg_ptr, a, o, _, d.__wbg_ptr, h.__wbg_ptr, p.__wbg_ptr, u.__wbg_ptr, g.__wbg_ptr, b, y, I, L, G, W, q, tt, Nt, Gt, Wt, qt, Bt, mt, Vt);
@@ -2311,7 +2303,7 @@ let __tla = Promise.all([
       c(t, E), i.rawrigidbodyset_propagateModifiedBodyPositionsToColliders(this.__wbg_ptr, t.__wbg_ptr);
     }
   }
-  const ee = typeof FinalizationRegistry > "u" ? {
+  const te = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -2321,11 +2313,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create(v.prototype);
-      return e.__wbg_ptr = t, ee.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, te.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, ee.unregister(this), t;
+      return this.__wbg_ptr = 0, te.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -2333,7 +2325,7 @@ let __tla = Promise.all([
     }
     constructor(t, e, r, a) {
       const o = i.rawrotation_new(t, e, r, a);
-      return this.__wbg_ptr = o >>> 0, ee.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = o >>> 0, te.register(this, this.__wbg_ptr, this), this;
     }
     static identity() {
       const t = i.rawrotation_identity();
@@ -2352,7 +2344,7 @@ let __tla = Promise.all([
       return i.rawrotation_w(this.__wbg_ptr);
     }
   }
-  const _r = typeof FinalizationRegistry > "u" ? {
+  const or = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -2362,11 +2354,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create(Ct.prototype);
-      return e.__wbg_ptr = t, _r.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, or.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, _r.unregister(this), t;
+      return this.__wbg_ptr = 0, or.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -2377,16 +2369,16 @@ let __tla = Promise.all([
       return lt(t);
     }
   }
-  const cr = typeof FinalizationRegistry > "u" ? {
+  const _r = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
     }
   } : new FinalizationRegistry((s) => i.__wbg_rawserializationpipeline_free(s >>> 0, 1));
-  class pi {
+  class hi {
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, cr.unregister(this), t;
+      return this.__wbg_ptr = 0, _r.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -2394,7 +2386,7 @@ let __tla = Promise.all([
     }
     constructor() {
       const t = i.rawserializationpipeline_new();
-      return this.__wbg_ptr = t >>> 0, cr.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = t >>> 0, _r.register(this, this.__wbg_ptr, this), this;
     }
     serializeAll(t, e, r, a, o, _, d, h, p) {
       c(t, l), c(e, it), c(r, K), c(a, rt), c(o, $), c(_, j), c(d, E), c(h, J), c(p, Y);
@@ -2403,10 +2395,10 @@ let __tla = Promise.all([
     }
     deserializeAll(t) {
       const e = i.rawserializationpipeline_deserializeAll(this.__wbg_ptr, T(t));
-      return e === 0 ? void 0 : ye.__wrap(e);
+      return e === 0 ? void 0 : fe.__wrap(e);
     }
   }
-  const lr = typeof FinalizationRegistry > "u" ? {
+  const cr = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -2416,11 +2408,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create(m.prototype);
-      return e.__wbg_ptr = t, lr.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, cr.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, lr.unregister(this), t;
+      return this.__wbg_ptr = 0, cr.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -2551,7 +2543,7 @@ let __tla = Promise.all([
       return d === 0 ? void 0 : Mt.__wrap(d);
     }
   }
-  const wr = typeof FinalizationRegistry > "u" ? {
+  const lr = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -2561,11 +2553,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create(kt.prototype);
-      return e.__wbg_ptr = t, wr.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, lr.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, wr.unregister(this), t;
+      return this.__wbg_ptr = 0, lr.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -2591,7 +2583,7 @@ let __tla = Promise.all([
       return l.__wrap(t);
     }
   }
-  const dr = typeof FinalizationRegistry > "u" ? {
+  const wr = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -2601,11 +2593,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create(wt.prototype);
-      return e.__wbg_ptr = t, dr.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, wr.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, dr.unregister(this), t;
+      return this.__wbg_ptr = 0, wr.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -2631,7 +2623,7 @@ let __tla = Promise.all([
       return l.__wrap(t);
     }
   }
-  const re = typeof FinalizationRegistry > "u" ? {
+  const ee = typeof FinalizationRegistry > "u" ? {
     register: () => {
     },
     unregister: () => {
@@ -2641,11 +2633,11 @@ let __tla = Promise.all([
     static __wrap(t) {
       t = t >>> 0;
       const e = Object.create(l.prototype);
-      return e.__wbg_ptr = t, re.register(e, e.__wbg_ptr, e), e;
+      return e.__wbg_ptr = t, ee.register(e, e.__wbg_ptr, e), e;
     }
     __destroy_into_raw() {
       const t = this.__wbg_ptr;
-      return this.__wbg_ptr = 0, re.unregister(this), t;
+      return this.__wbg_ptr = 0, ee.unregister(this), t;
     }
     free() {
       const t = this.__destroy_into_raw();
@@ -2657,7 +2649,7 @@ let __tla = Promise.all([
     }
     constructor(t, e, r) {
       const a = i.rawvector_new(t, e, r);
-      return this.__wbg_ptr = a >>> 0, re.register(this, this.__wbg_ptr, this), this;
+      return this.__wbg_ptr = a >>> 0, ee.register(this, this.__wbg_ptr, this), this;
     }
     get x() {
       return i.rawrotation_x(this.__wbg_ptr);
@@ -2702,658 +2694,658 @@ let __tla = Promise.all([
       return l.__wrap(t);
     }
   }
-  function ui(s, t, e, r) {
+  function pi(s, t, e, r) {
     const a = C(s).bind(C(t), C(e), C(r));
     return T(a);
   }
-  function gi(s) {
+  function ui(s) {
     const t = C(s).buffer;
     return T(t);
   }
-  function bi() {
-    return ge(function(s, t, e) {
+  function gi() {
+    return ue(function(s, t, e) {
       const r = C(s).call(C(t), C(e));
       return T(r);
     }, arguments);
   }
-  function mi() {
-    return ge(function(s, t, e, r) {
+  function bi() {
+    return ue(function(s, t, e, r) {
       const a = C(s).call(C(t), C(e), C(r));
       return T(a);
     }, arguments);
   }
-  function fi() {
-    return ge(function(s, t, e, r, a) {
+  function mi() {
+    return ue(function(s, t, e, r, a) {
       const o = C(s).call(C(t), C(e), C(r), C(a));
       return T(o);
     }, arguments);
+  }
+  function fi(s) {
+    return C(s).length;
   }
   function yi(s) {
     return C(s).length;
   }
   function Si(s) {
-    return C(s).length;
-  }
-  function vi(s) {
     const t = new Uint8Array(C(s));
     return T(t);
   }
-  function Ri(s, t, e) {
+  function vi(s, t, e) {
     const r = new Uint8Array(C(s), t >>> 0, e >>> 0);
     return T(r);
   }
-  function Ci(s, t, e) {
+  function Ri(s, t, e) {
     const r = new Float32Array(C(s), t >>> 0, e >>> 0);
     return T(r);
   }
-  function xi(s) {
+  function Ci(s) {
     const t = new Float32Array(s >>> 0);
     return T(t);
   }
-  function Ii(s) {
-    const t = be.__wrap(s);
+  function xi(s) {
+    const t = ge.__wrap(s);
     return T(t);
   }
-  function Ai(s) {
+  function Ii(s) {
     const t = Tt.__wrap(s);
     return T(t);
+  }
+  function Ai(s, t, e) {
+    C(s).set(C(t), e >>> 0);
   }
   function ji(s, t, e) {
     C(s).set(C(t), e >>> 0);
   }
-  function Ei(s, t, e) {
-    C(s).set(C(t), e >>> 0);
-  }
-  function Pi(s) {
+  function Ei(s) {
     const t = C(s);
     return typeof t == "boolean" ? t ? 1 : 0 : 2;
   }
-  function Fi(s) {
+  function Pi(s) {
     return typeof C(s) == "function";
   }
-  function zi() {
+  function Fi() {
     const s = i.memory;
     return T(s);
   }
-  function Ti(s, t) {
+  function zi(s, t) {
     const e = C(t), r = typeof e == "number" ? e : void 0;
     z().setFloat64(s + 8, f(r) ? 0 : r, true), z().setInt32(s + 0, !f(r), true);
   }
-  function Mi(s) {
+  function Ti(s) {
     return T(s);
   }
-  function ki(s) {
+  function Mi(s) {
     lt(s);
   }
-  function Hi(s, t) {
-    throw new Error(pr(s, t));
+  function ki(s, t) {
+    throw new Error(hr(s, t));
   }
   URL = globalThis.URL;
-  const n = await Qr({
+  const n = await $r({
     "./rapier_wasm3d_bg.js": {
-      __wbindgen_number_new: Mi,
-      __wbindgen_boolean_get: Pi,
-      __wbindgen_object_drop_ref: ki,
-      __wbindgen_number_get: Ti,
-      __wbindgen_is_function: Fi,
-      __wbg_rawraycolliderintersection_new: Ai,
-      __wbg_rawcontactforceevent_new: Ii,
-      __wbg_call_7cccdd69e0791ae2: bi,
-      __wbg_call_833bed5770ea2041: mi,
-      __wbg_call_b8adc8b1d0a0d8eb: fi,
-      __wbg_bind_c8359b1cba058168: ui,
-      __wbg_buffer_609cc3eee51ed158: gi,
-      __wbg_newwithbyteoffsetandlength_d97e637ebe145a9a: Ri,
-      __wbg_new_a12002a7f91c75be: vi,
-      __wbg_set_65595bdd868b3009: Ei,
-      __wbg_length_a446193dc22c12f8: Si,
-      __wbg_newwithbyteoffsetandlength_e6b7e69acd4c7354: Ci,
-      __wbg_set_10bad9bee0e9c58b: ji,
-      __wbg_length_3b4f022188ae8db6: yi,
-      __wbg_newwithlength_5a5efe313cfd59f1: xi,
-      __wbindgen_throw: Hi,
-      __wbindgen_memory: zi
+      __wbindgen_number_new: Ti,
+      __wbindgen_boolean_get: Ei,
+      __wbindgen_object_drop_ref: Mi,
+      __wbindgen_number_get: zi,
+      __wbindgen_is_function: Pi,
+      __wbg_rawraycolliderintersection_new: Ii,
+      __wbg_rawcontactforceevent_new: xi,
+      __wbg_call_7cccdd69e0791ae2: gi,
+      __wbg_call_833bed5770ea2041: bi,
+      __wbg_call_b8adc8b1d0a0d8eb: mi,
+      __wbg_bind_c8359b1cba058168: pi,
+      __wbg_buffer_609cc3eee51ed158: ui,
+      __wbg_newwithbyteoffsetandlength_d97e637ebe145a9a: vi,
+      __wbg_new_a12002a7f91c75be: Si,
+      __wbg_set_65595bdd868b3009: ji,
+      __wbg_length_a446193dc22c12f8: yi,
+      __wbg_newwithbyteoffsetandlength_e6b7e69acd4c7354: Ri,
+      __wbg_set_10bad9bee0e9c58b: Ai,
+      __wbg_length_3b4f022188ae8db6: fi,
+      __wbg_newwithlength_5a5efe313cfd59f1: Ci,
+      __wbindgen_throw: ki,
+      __wbindgen_memory: Fi
     }
-  }, $r), Di = n.memory, Li = n.version, Ni = n.__wbg_rawkinematiccharactercontroller_free, Gi = n.rawkinematiccharactercontroller_new, Wi = n.rawkinematiccharactercontroller_setUp, qi = n.rawkinematiccharactercontroller_normalNudgeFactor, Bi = n.rawkinematiccharactercontroller_setNormalNudgeFactor, Vi = n.rawkinematiccharactercontroller_setOffset, Oi = n.rawkinematiccharactercontroller_slideEnabled, Ui = n.rawkinematiccharactercontroller_setSlideEnabled, Xi = n.rawkinematiccharactercontroller_autostepMaxHeight, Ji = n.rawkinematiccharactercontroller_autostepMinWidth, Ki = n.rawkinematiccharactercontroller_autostepIncludesDynamicBodies, Yi = n.rawkinematiccharactercontroller_autostepEnabled, Zi = n.rawkinematiccharactercontroller_enableAutostep, $i = n.rawkinematiccharactercontroller_disableAutostep, Qi = n.rawkinematiccharactercontroller_maxSlopeClimbAngle, tn = n.rawkinematiccharactercontroller_setMaxSlopeClimbAngle, en = n.rawkinematiccharactercontroller_minSlopeSlideAngle, rn = n.rawkinematiccharactercontroller_setMinSlopeSlideAngle, nn = n.rawkinematiccharactercontroller_snapToGroundDistance, an = n.rawkinematiccharactercontroller_enableSnapToGround, sn = n.rawkinematiccharactercontroller_disableSnapToGround, on = n.rawkinematiccharactercontroller_snapToGroundEnabled, _n = n.rawkinematiccharactercontroller_computeColliderMovement, cn = n.rawkinematiccharactercontroller_computedMovement, ln = n.rawkinematiccharactercontroller_computedGrounded, wn = n.rawkinematiccharactercontroller_numComputedCollisions, dn = n.rawkinematiccharactercontroller_computedCollision, hn = n.__wbg_rawcharactercollision_free, pn = n.rawcharactercollision_new, un = n.rawcharactercollision_handle, gn = n.rawcharactercollision_translationDeltaApplied, bn = n.rawcharactercollision_translationDeltaRemaining, mn = n.rawcharactercollision_toi, fn = n.rawcharactercollision_worldWitness1, yn = n.rawcharactercollision_worldWitness2, Sn = n.rawcharactercollision_worldNormal1, vn = n.rawcharactercollision_worldNormal2, Rn = n.__wbg_rawpidcontroller_free, Cn = n.rawpidcontroller_new, xn = n.rawpidcontroller_set_kp, In = n.rawpidcontroller_set_ki, An = n.rawpidcontroller_set_kd, jn = n.rawpidcontroller_set_axes_mask, En = n.rawpidcontroller_reset_integrals, Pn = n.rawpidcontroller_apply_linear_correction, Fn = n.rawpidcontroller_apply_angular_correction, zn = n.rawpidcontroller_linear_correction, Tn = n.rawpidcontroller_angular_correction, Mn = n.__wbg_rawdynamicraycastvehiclecontroller_free, kn = n.rawdynamicraycastvehiclecontroller_new, Hn = n.rawdynamicraycastvehiclecontroller_current_vehicle_speed, Dn = n.rawdynamicraycastvehiclecontroller_chassis, Ln = n.rawdynamicraycastvehiclecontroller_index_up_axis, Nn = n.rawdynamicraycastvehiclecontroller_set_index_up_axis, Gn = n.rawdynamicraycastvehiclecontroller_index_forward_axis, Wn = n.rawdynamicraycastvehiclecontroller_set_index_forward_axis, qn = n.rawdynamicraycastvehiclecontroller_add_wheel, Bn = n.rawdynamicraycastvehiclecontroller_num_wheels, Vn = n.rawdynamicraycastvehiclecontroller_update_vehicle, On = n.rawdynamicraycastvehiclecontroller_wheel_chassis_connection_point_cs, Un = n.rawdynamicraycastvehiclecontroller_set_wheel_chassis_connection_point_cs, Xn = n.rawdynamicraycastvehiclecontroller_wheel_suspension_rest_length, Jn = n.rawdynamicraycastvehiclecontroller_set_wheel_suspension_rest_length, Kn = n.rawdynamicraycastvehiclecontroller_wheel_max_suspension_travel, Yn = n.rawdynamicraycastvehiclecontroller_set_wheel_max_suspension_travel, Zn = n.rawdynamicraycastvehiclecontroller_wheel_radius, $n = n.rawdynamicraycastvehiclecontroller_set_wheel_radius, Qn = n.rawdynamicraycastvehiclecontroller_wheel_suspension_stiffness, ta = n.rawdynamicraycastvehiclecontroller_set_wheel_suspension_stiffness, ea = n.rawdynamicraycastvehiclecontroller_wheel_suspension_compression, ra = n.rawdynamicraycastvehiclecontroller_set_wheel_suspension_compression, ia = n.rawdynamicraycastvehiclecontroller_wheel_suspension_relaxation, na = n.rawdynamicraycastvehiclecontroller_set_wheel_suspension_relaxation, aa = n.rawdynamicraycastvehiclecontroller_wheel_max_suspension_force, sa = n.rawdynamicraycastvehiclecontroller_set_wheel_max_suspension_force, oa = n.rawdynamicraycastvehiclecontroller_wheel_brake, _a = n.rawdynamicraycastvehiclecontroller_set_wheel_brake, ca = n.rawdynamicraycastvehiclecontroller_wheel_steering, la = n.rawdynamicraycastvehiclecontroller_set_wheel_steering, wa = n.rawdynamicraycastvehiclecontroller_wheel_engine_force, da = n.rawdynamicraycastvehiclecontroller_set_wheel_engine_force, ha = n.rawdynamicraycastvehiclecontroller_wheel_direction_cs, pa = n.rawdynamicraycastvehiclecontroller_set_wheel_direction_cs, ua = n.rawdynamicraycastvehiclecontroller_wheel_axle_cs, ga = n.rawdynamicraycastvehiclecontroller_set_wheel_axle_cs, ba = n.rawdynamicraycastvehiclecontroller_wheel_friction_slip, ma = n.rawdynamicraycastvehiclecontroller_set_wheel_friction_slip, fa = n.rawdynamicraycastvehiclecontroller_wheel_side_friction_stiffness, ya = n.rawdynamicraycastvehiclecontroller_set_wheel_side_friction_stiffness, Sa = n.rawdynamicraycastvehiclecontroller_wheel_rotation, va = n.rawdynamicraycastvehiclecontroller_wheel_forward_impulse, Ra = n.rawdynamicraycastvehiclecontroller_wheel_side_impulse, Ca = n.rawdynamicraycastvehiclecontroller_wheel_suspension_force, xa = n.rawdynamicraycastvehiclecontroller_wheel_contact_normal_ws, Ia = n.rawdynamicraycastvehiclecontroller_wheel_contact_point_ws, Aa = n.rawdynamicraycastvehiclecontroller_wheel_suspension_length, ja = n.rawdynamicraycastvehiclecontroller_wheel_hard_point_ws, Ea = n.rawdynamicraycastvehiclecontroller_wheel_is_in_contact, Pa = n.rawdynamicraycastvehiclecontroller_wheel_ground_object, Fa = n.__wbg_rawccdsolver_free, za = n.rawccdsolver_new, Ta = n.rawimpulsejointset_jointType, Ma = n.rawimpulsejointset_jointBodyHandle1, ka = n.rawimpulsejointset_jointBodyHandle2, Ha = n.rawimpulsejointset_jointFrameX1, Da = n.rawimpulsejointset_jointFrameX2, La = n.rawimpulsejointset_jointAnchor1, Na = n.rawimpulsejointset_jointAnchor2, Ga = n.rawimpulsejointset_jointSetAnchor1, Wa = n.rawimpulsejointset_jointSetAnchor2, qa = n.rawimpulsejointset_jointContactsEnabled, Ba = n.rawimpulsejointset_jointSetContactsEnabled, Va = n.rawimpulsejointset_jointLimitsEnabled, Oa = n.rawimpulsejointset_jointLimitsMin, Ua = n.rawimpulsejointset_jointLimitsMax, Xa = n.rawimpulsejointset_jointSetLimits, Ja = n.rawimpulsejointset_jointConfigureMotorModel, Ka = n.rawimpulsejointset_jointConfigureMotorVelocity, Ya = n.rawimpulsejointset_jointConfigureMotorPosition, Za = n.rawimpulsejointset_jointConfigureMotor, $a = n.__wbg_rawimpulsejointset_free, Qa = n.rawimpulsejointset_new, ts = n.rawimpulsejointset_createJoint, es = n.rawimpulsejointset_remove, rs = n.rawimpulsejointset_len, is = n.rawimpulsejointset_contains, ns = n.rawimpulsejointset_forEachJointHandle, as = n.rawimpulsejointset_forEachJointAttachedToRigidBody, ss = n.__wbg_rawintegrationparameters_free, os = n.rawintegrationparameters_new, _s = n.rawintegrationparameters_dt, cs = n.rawintegrationparameters_contact_erp, ls = n.rawintegrationparameters_numSolverIterations, ws = n.rawintegrationparameters_minIslandSize, ds = n.rawintegrationparameters_maxCcdSubsteps, hs = n.rawintegrationparameters_lengthUnit, ps = n.rawintegrationparameters_set_dt, us = n.rawintegrationparameters_set_contact_natural_frequency, gs = n.rawintegrationparameters_set_normalizedAllowedLinearError, bs = n.rawintegrationparameters_set_normalizedPredictionDistance, ms = n.rawintegrationparameters_set_numSolverIterations, fs = n.rawintegrationparameters_set_minIslandSize, ys = n.rawintegrationparameters_set_maxCcdSubsteps, Ss = n.rawintegrationparameters_set_lengthUnit, vs = n.rawintegrationparameters_switchToStandardPgsSolver, Rs = n.rawintegrationparameters_switchToSmallStepsPgsSolver, Cs = n.rawintegrationparameters_switchToSmallStepsPgsSolverWithoutWarmstart, xs = n.__wbg_rawislandmanager_free, Is = n.rawislandmanager_new, As = n.rawislandmanager_forEachActiveRigidBodyHandle, js = n.__wbg_rawgenericjoint_free, Es = n.rawgenericjoint_generic, Ps = n.rawgenericjoint_spring, Fs = n.rawgenericjoint_rope, zs = n.rawgenericjoint_spherical, Ts = n.rawgenericjoint_prismatic, Ms = n.rawgenericjoint_fixed, ks = n.rawgenericjoint_revolute, Hs = n.rawmultibodyjointset_jointType, Ds = n.rawmultibodyjointset_jointFrameX1, Ls = n.rawmultibodyjointset_jointFrameX2, Ns = n.rawmultibodyjointset_jointAnchor1, Gs = n.rawmultibodyjointset_jointAnchor2, Ws = n.rawmultibodyjointset_jointContactsEnabled, qs = n.rawmultibodyjointset_jointSetContactsEnabled, Bs = n.rawmultibodyjointset_jointLimitsEnabled, Vs = n.rawmultibodyjointset_jointLimitsMin, Os = n.rawmultibodyjointset_jointLimitsMax, Us = n.__wbg_rawmultibodyjointset_free, Xs = n.rawmultibodyjointset_new, Js = n.rawmultibodyjointset_createJoint, Ks = n.rawmultibodyjointset_remove, Ys = n.rawmultibodyjointset_contains, Zs = n.rawmultibodyjointset_forEachJointHandle, $s = n.rawmultibodyjointset_forEachJointAttachedToRigidBody, Qs = n.rawrigidbodyset_rbTranslation, to = n.rawrigidbodyset_rbRotation, eo = n.rawrigidbodyset_rbSleep, ro = n.rawrigidbodyset_rbIsSleeping, io = n.rawrigidbodyset_rbIsMoving, no = n.rawrigidbodyset_rbNextTranslation, ao = n.rawrigidbodyset_rbNextRotation, so = n.rawrigidbodyset_rbSetTranslation, oo = n.rawrigidbodyset_rbSetRotation, _o = n.rawrigidbodyset_rbSetLinvel, co = n.rawrigidbodyset_rbSetAngvel, lo = n.rawrigidbodyset_rbSetNextKinematicTranslation, wo = n.rawrigidbodyset_rbSetNextKinematicRotation, ho = n.rawrigidbodyset_rbRecomputeMassPropertiesFromColliders, po = n.rawrigidbodyset_rbSetAdditionalMass, uo = n.rawrigidbodyset_rbSetAdditionalMassProperties, go = n.rawrigidbodyset_rbLinvel, bo = n.rawrigidbodyset_rbAngvel, mo = n.rawrigidbodyset_rbVelocityAtPoint, fo = n.rawrigidbodyset_rbLockTranslations, yo = n.rawrigidbodyset_rbSetEnabledTranslations, So = n.rawrigidbodyset_rbLockRotations, vo = n.rawrigidbodyset_rbSetEnabledRotations, Ro = n.rawrigidbodyset_rbDominanceGroup, Co = n.rawrigidbodyset_rbSetDominanceGroup, xo = n.rawrigidbodyset_rbEnableCcd, Io = n.rawrigidbodyset_rbSetSoftCcdPrediction, Ao = n.rawrigidbodyset_rbMass, jo = n.rawrigidbodyset_rbInvMass, Eo = n.rawrigidbodyset_rbEffectiveInvMass, Po = n.rawrigidbodyset_rbLocalCom, Fo = n.rawrigidbodyset_rbWorldCom, zo = n.rawrigidbodyset_rbInvPrincipalInertiaSqrt, To = n.rawrigidbodyset_rbPrincipalInertiaLocalFrame, Mo = n.rawrigidbodyset_rbPrincipalInertia, ko = n.rawrigidbodyset_rbEffectiveWorldInvInertiaSqrt, Ho = n.rawrigidbodyset_rbEffectiveAngularInertia, Do = n.rawrigidbodyset_rbWakeUp, Lo = n.rawrigidbodyset_rbIsCcdEnabled, No = n.rawrigidbodyset_rbSoftCcdPrediction, Go = n.rawrigidbodyset_rbNumColliders, Wo = n.rawrigidbodyset_rbCollider, qo = n.rawrigidbodyset_rbBodyType, Bo = n.rawrigidbodyset_rbSetBodyType, Vo = n.rawrigidbodyset_rbIsFixed, Oo = n.rawrigidbodyset_rbIsKinematic, Uo = n.rawrigidbodyset_rbIsDynamic, Xo = n.rawrigidbodyset_rbLinearDamping, Jo = n.rawrigidbodyset_rbAngularDamping, Ko = n.rawrigidbodyset_rbSetLinearDamping, Yo = n.rawrigidbodyset_rbSetAngularDamping, Zo = n.rawrigidbodyset_rbSetEnabled, $o = n.rawrigidbodyset_rbIsEnabled, Qo = n.rawrigidbodyset_rbGravityScale, t_ = n.rawrigidbodyset_rbSetGravityScale, e_ = n.rawrigidbodyset_rbResetForces, r_ = n.rawrigidbodyset_rbResetTorques, i_ = n.rawrigidbodyset_rbAddForce, n_ = n.rawrigidbodyset_rbApplyImpulse, a_ = n.rawrigidbodyset_rbAddTorque, s_ = n.rawrigidbodyset_rbApplyTorqueImpulse, o_ = n.rawrigidbodyset_rbAddForceAtPoint, __ = n.rawrigidbodyset_rbApplyImpulseAtPoint, c_ = n.rawrigidbodyset_rbAdditionalSolverIterations, l_ = n.rawrigidbodyset_rbSetAdditionalSolverIterations, w_ = n.rawrigidbodyset_rbUserData, d_ = n.rawrigidbodyset_rbSetUserData, h_ = n.rawrigidbodyset_rbUserForce, p_ = n.rawrigidbodyset_rbUserTorque, u_ = n.__wbg_rawrigidbodyset_free, g_ = n.rawrigidbodyset_new, b_ = n.rawrigidbodyset_createRigidBody, m_ = n.rawrigidbodyset_remove, f_ = n.rawrigidbodyset_contains, y_ = n.rawrigidbodyset_forEachRigidBodyHandle, S_ = n.rawrigidbodyset_propagateModifiedBodyPositionsToColliders, v_ = n.__wbg_rawbroadphase_free, R_ = n.rawbroadphase_new, C_ = n.rawcolliderset_coTranslation, x_ = n.rawcolliderset_coRotation, I_ = n.rawcolliderset_coSetTranslation, A_ = n.rawcolliderset_coSetTranslationWrtParent, j_ = n.rawcolliderset_coSetRotation, E_ = n.rawcolliderset_coSetRotationWrtParent, P_ = n.rawcolliderset_coIsSensor, F_ = n.rawcolliderset_coShapeType, z_ = n.rawcolliderset_coHalfspaceNormal, T_ = n.rawcolliderset_coHalfExtents, M_ = n.rawcolliderset_coSetHalfExtents, k_ = n.rawcolliderset_coRadius, H_ = n.rawcolliderset_coSetRadius, D_ = n.rawcolliderset_coHalfHeight, L_ = n.rawcolliderset_coSetHalfHeight, N_ = n.rawcolliderset_coRoundRadius, G_ = n.rawcolliderset_coSetRoundRadius, W_ = n.rawcolliderset_coVoxelData, q_ = n.rawcolliderset_coVoxelSize, B_ = n.rawcolliderset_coSetVoxel, V_ = n.rawcolliderset_coPropagateVoxelChange, O_ = n.rawcolliderset_coCombineVoxelStates, U_ = n.rawcolliderset_coVertices, X_ = n.rawcolliderset_coIndices, J_ = n.rawcolliderset_coTriMeshFlags, K_ = n.rawcolliderset_coHeightFieldFlags, Y_ = n.rawcolliderset_coHeightfieldHeights, Z_ = n.rawcolliderset_coHeightfieldScale, $_ = n.rawcolliderset_coHeightfieldNRows, Q_ = n.rawcolliderset_coHeightfieldNCols, tc = n.rawcolliderset_coParent, ec = n.rawcolliderset_coSetEnabled, rc = n.rawcolliderset_coIsEnabled, ic = n.rawcolliderset_coSetContactSkin, nc = n.rawcolliderset_coContactSkin, ac = n.rawcolliderset_coFriction, sc = n.rawcolliderset_coRestitution, oc = n.rawcolliderset_coDensity, _c = n.rawcolliderset_coMass, cc = n.rawcolliderset_coVolume, lc = n.rawcolliderset_coCollisionGroups, wc = n.rawcolliderset_coSolverGroups, dc = n.rawcolliderset_coActiveHooks, hc = n.rawcolliderset_coActiveCollisionTypes, pc = n.rawcolliderset_coActiveEvents, uc = n.rawcolliderset_coContactForceEventThreshold, gc = n.rawcolliderset_coContainsPoint, bc = n.rawcolliderset_coCastShape, mc = n.rawcolliderset_coCastCollider, fc = n.rawcolliderset_coIntersectsShape, yc = n.rawcolliderset_coContactShape, Sc = n.rawcolliderset_coContactCollider, vc = n.rawcolliderset_coProjectPoint, Rc = n.rawcolliderset_coIntersectsRay, Cc = n.rawcolliderset_coCastRay, xc = n.rawcolliderset_coCastRayAndGetNormal, Ic = n.rawcolliderset_coSetSensor, Ac = n.rawcolliderset_coSetRestitution, jc = n.rawcolliderset_coSetFriction, Ec = n.rawcolliderset_coFrictionCombineRule, Pc = n.rawcolliderset_coSetFrictionCombineRule, Fc = n.rawcolliderset_coRestitutionCombineRule, zc = n.rawcolliderset_coSetRestitutionCombineRule, Tc = n.rawcolliderset_coSetCollisionGroups, Mc = n.rawcolliderset_coSetSolverGroups, kc = n.rawcolliderset_coSetActiveHooks, Hc = n.rawcolliderset_coSetActiveEvents, Dc = n.rawcolliderset_coSetActiveCollisionTypes, Lc = n.rawcolliderset_coSetShape, Nc = n.rawcolliderset_coSetContactForceEventThreshold, Gc = n.rawcolliderset_coSetDensity, Wc = n.rawcolliderset_coSetMass, qc = n.rawcolliderset_coSetMassProperties, Bc = n.__wbg_rawcolliderset_free, Vc = n.rawcolliderset_new, Oc = n.rawcolliderset_len, Uc = n.rawcolliderset_contains, Xc = n.rawcolliderset_createCollider, Jc = n.rawcolliderset_remove, Kc = n.rawcolliderset_forEachColliderHandle, Yc = n.__wbg_rawshapecontact_free, Zc = n.__wbg_rawnarrowphase_free, $c = n.rawnarrowphase_new, Qc = n.rawnarrowphase_contact_pairs_with, tl = n.rawnarrowphase_contact_pair, el = n.rawnarrowphase_intersection_pairs_with, rl = n.rawnarrowphase_intersection_pair, il = n.__wbg_rawcontactmanifold_free, nl = n.rawcontactpair_collider1, al = n.rawcontactpair_collider2, sl = n.rawcontactpair_numContactManifolds, ol = n.rawcontactpair_contactManifold, _l = n.rawcontactmanifold_normal, cl = n.rawcontactmanifold_local_n1, ll = n.rawcontactmanifold_local_n2, wl = n.rawcontactmanifold_subshape1, dl = n.rawcontactmanifold_subshape2, hl = n.rawcontactmanifold_num_contacts, pl = n.rawcontactmanifold_contact_local_p1, ul = n.rawcontactmanifold_contact_local_p2, gl = n.rawcontactmanifold_contact_dist, bl = n.rawcontactmanifold_contact_fid1, ml = n.rawcontactmanifold_contact_fid2, fl = n.rawcontactmanifold_contact_impulse, yl = n.rawcontactmanifold_contact_tangent_impulse_x, Sl = n.rawcontactmanifold_contact_tangent_impulse_y, vl = n.rawcontactmanifold_num_solver_contacts, Rl = n.rawcontactmanifold_solver_contact_point, Cl = n.rawcontactmanifold_solver_contact_dist, xl = n.rawcontactmanifold_solver_contact_friction, Il = n.rawcontactmanifold_solver_contact_restitution, Al = n.rawcontactmanifold_solver_contact_tangent_velocity, jl = n.__wbg_rawpointprojection_free, El = n.rawpointprojection_point, Pl = n.rawpointprojection_isInside, Fl = n.__wbg_rawpointcolliderprojection_free, zl = n.rawpointcolliderprojection_colliderHandle, Tl = n.rawpointcolliderprojection_point, Ml = n.rawpointcolliderprojection_isInside, kl = n.rawpointcolliderprojection_featureType, Hl = n.rawpointcolliderprojection_featureId, Dl = n.__wbg_rawrayintersection_free, Ll = n.__wbg_rawraycolliderhit_free, Nl = n.__wbg_rawshape_free, Gl = n.rawshape_cuboid, Wl = n.rawshape_roundCuboid, ql = n.rawshape_ball, Bl = n.rawshape_halfspace, Vl = n.rawshape_capsule, Ol = n.rawshape_cylinder, Ul = n.rawshape_roundCylinder, Xl = n.rawshape_cone, Jl = n.rawshape_roundCone, Kl = n.rawshape_voxels, Yl = n.rawshape_voxelsFromPoints, Zl = n.rawshape_polyline, $l = n.rawshape_trimesh, Ql = n.rawshape_heightfield, tw = n.rawshape_segment, ew = n.rawshape_triangle, rw = n.rawshape_roundTriangle, iw = n.rawshape_convexHull, nw = n.rawshape_roundConvexHull, aw = n.rawshape_convexMesh, sw = n.rawshape_roundConvexMesh, ow = n.rawshape_castShape, _w = n.rawshape_intersectsShape, cw = n.rawshape_contactShape, lw = n.rawshape_containsPoint, ww = n.rawshape_projectPoint, dw = n.rawshape_intersectsRay, hw = n.rawshape_castRay, pw = n.rawshape_castRayAndGetNormal, uw = n.__wbg_rawshapecasthit_free, gw = n.rawshapecasthit_witness1, bw = n.rawshapecasthit_normal1, mw = n.rawshapecasthit_normal2, fw = n.__wbg_rawcollidershapecasthit_free, yw = n.rawcollidershapecasthit_time_of_impact, Sw = n.rawcollidershapecasthit_witness1, vw = n.rawcollidershapecasthit_witness2, Rw = n.rawrotation_new, Cw = n.rawrotation_identity, xw = n.rawrotation_x, Iw = n.rawrotation_w, Aw = n.rawvector_zero, jw = n.rawvector_new, Ew = n.rawvector_set_x, Pw = n.rawvector_set_z, Fw = n.rawvector_xyz, zw = n.rawvector_yxz, Tw = n.rawvector_zxy, Mw = n.rawvector_xzy, kw = n.rawvector_yzx, Hw = n.rawvector_zyx, Dw = n.rawsdpmatrix3_elements, Lw = n.__wbg_rawdebugrenderpipeline_free, Nw = n.rawdebugrenderpipeline_new, Gw = n.rawdebugrenderpipeline_vertices, Ww = n.rawdebugrenderpipeline_colors, qw = n.rawdebugrenderpipeline_render, Bw = n.__wbg_raweventqueue_free, Vw = n.__wbg_rawcontactforceevent_free, Ow = n.rawcontactforceevent_collider2, Uw = n.rawcontactforceevent_total_force, Xw = n.rawcontactforceevent_total_force_magnitude, Jw = n.rawcontactforceevent_max_force_direction, Kw = n.rawcontactforceevent_max_force_magnitude, Yw = n.raweventqueue_new, Zw = n.raweventqueue_drainCollisionEvents, $w = n.raweventqueue_drainContactForceEvents, Qw = n.raweventqueue_clear, td = n.__wbg_rawphysicspipeline_free, ed = n.rawphysicspipeline_new, rd = n.rawphysicspipeline_step, id = n.rawphysicspipeline_stepWithEvents, nd = n.rawquerypipeline_new, ad = n.rawquerypipeline_update, sd = n.rawquerypipeline_castRay, od = n.rawquerypipeline_castRayAndGetNormal, _d = n.rawquerypipeline_intersectionsWithRay, cd = n.rawquerypipeline_intersectionWithShape, ld = n.rawquerypipeline_projectPoint, wd = n.rawquerypipeline_projectPointAndGetFeature, dd = n.rawquerypipeline_intersectionsWithPoint, hd = n.rawquerypipeline_castShape, pd = n.rawquerypipeline_intersectionsWithShape, ud = n.rawquerypipeline_collidersWithAabbIntersectingAabb, gd = n.__wbg_rawdeserializedworld_free, bd = n.rawdeserializedworld_takeGravity, md = n.rawdeserializedworld_takeIntegrationParameters, fd = n.rawdeserializedworld_takeIslandManager, yd = n.rawdeserializedworld_takeBroadPhase, Sd = n.rawdeserializedworld_takeNarrowPhase, vd = n.rawdeserializedworld_takeBodies, Rd = n.rawdeserializedworld_takeColliders, Cd = n.rawdeserializedworld_takeImpulseJoints, xd = n.rawdeserializedworld_takeMultibodyJoints, Id = n.__wbg_rawserializationpipeline_free, Ad = n.rawserializationpipeline_new, jd = n.rawserializationpipeline_serializeAll, Ed = n.rawserializationpipeline_deserializeAll, Pd = n.rawcolliderset_isHandleValid, Fd = n.rawkinematiccharactercontroller_offset, zd = n.rawintegrationparameters_normalizedAllowedLinearError, Td = n.rawintegrationparameters_numAdditionalFrictionIterations, Md = n.rawintegrationparameters_numInternalPgsIterations, kd = n.rawrigidbodyset_len, Hd = n.rawshapecontact_distance, Dd = n.rawrayintersection_featureType, Ld = n.rawraycolliderintersection_colliderHandle, Nd = n.rawrayintersection_time_of_impact, Gd = n.rawraycolliderintersection_featureType, Wd = n.rawraycolliderhit_colliderHandle, qd = n.rawraycolliderintersection_time_of_impact, Bd = n.rawcollidershapecasthit_colliderHandle, Vd = n.rawraycolliderhit_timeOfImpact, Od = n.rawshapecasthit_time_of_impact, Ud = n.rawrotation_y, Xd = n.rawrotation_z, Jd = n.rawvector_x, Kd = n.rawvector_y, Yd = n.rawvector_z, Zd = n.rawcontactforceevent_collider1, $d = n.rawintegrationparameters_normalizedPredictionDistance, Qd = n.reserve_memory, th = n.__wbg_rawquerypipeline_free, eh = n.rawrayintersection_featureId, rh = n.rawraycolliderintersection_featureId, ih = n.rawkinematiccharactercontroller_up, nh = n.rawshapecontact_normal2, ah = n.rawshapecontact_point1, sh = n.rawshapecontact_point2, oh = n.rawrayintersection_normal, _h = n.rawraycolliderintersection_normal, ch = n.rawshapecontact_normal1, lh = n.rawcollidershapecasthit_normal1, wh = n.rawcollidershapecasthit_normal2, dh = n.rawshapecasthit_witness2, hh = n.rawintegrationparameters_set_numAdditionalFrictionIterations, ph = n.rawintegrationparameters_set_numInternalPgsIterations, uh = n.rawvector_set_y, gh = n.__wbg_rawraycolliderintersection_free, bh = n.__wbg_rawcontactpair_free, mh = n.__wbg_rawsdpmatrix3_free, fh = n.__wbg_rawvector_free, yh = n.__wbg_rawrotation_free, Sh = n.__wbindgen_export_0, vh = n.__wbindgen_add_to_stack_pointer, Rh = n.__wbindgen_export_1, Ch = n.__wbindgen_export_2, xh = Object.freeze(Object.defineProperty({
+  }, Zr), Hi = n.memory, Di = n.version, Li = n.__wbg_rawkinematiccharactercontroller_free, Ni = n.rawkinematiccharactercontroller_new, Gi = n.rawkinematiccharactercontroller_setUp, Wi = n.rawkinematiccharactercontroller_normalNudgeFactor, qi = n.rawkinematiccharactercontroller_setNormalNudgeFactor, Bi = n.rawkinematiccharactercontroller_setOffset, Vi = n.rawkinematiccharactercontroller_slideEnabled, Oi = n.rawkinematiccharactercontroller_setSlideEnabled, Ui = n.rawkinematiccharactercontroller_autostepMaxHeight, Xi = n.rawkinematiccharactercontroller_autostepMinWidth, Ji = n.rawkinematiccharactercontroller_autostepIncludesDynamicBodies, Ki = n.rawkinematiccharactercontroller_autostepEnabled, Yi = n.rawkinematiccharactercontroller_enableAutostep, Zi = n.rawkinematiccharactercontroller_disableAutostep, $i = n.rawkinematiccharactercontroller_maxSlopeClimbAngle, Qi = n.rawkinematiccharactercontroller_setMaxSlopeClimbAngle, tn = n.rawkinematiccharactercontroller_minSlopeSlideAngle, en = n.rawkinematiccharactercontroller_setMinSlopeSlideAngle, rn = n.rawkinematiccharactercontroller_snapToGroundDistance, nn = n.rawkinematiccharactercontroller_enableSnapToGround, an = n.rawkinematiccharactercontroller_disableSnapToGround, sn = n.rawkinematiccharactercontroller_snapToGroundEnabled, on = n.rawkinematiccharactercontroller_computeColliderMovement, _n = n.rawkinematiccharactercontroller_computedMovement, cn = n.rawkinematiccharactercontroller_computedGrounded, ln = n.rawkinematiccharactercontroller_numComputedCollisions, wn = n.rawkinematiccharactercontroller_computedCollision, dn = n.__wbg_rawcharactercollision_free, hn = n.rawcharactercollision_new, pn = n.rawcharactercollision_handle, un = n.rawcharactercollision_translationDeltaApplied, gn = n.rawcharactercollision_translationDeltaRemaining, bn = n.rawcharactercollision_toi, mn = n.rawcharactercollision_worldWitness1, fn = n.rawcharactercollision_worldWitness2, yn = n.rawcharactercollision_worldNormal1, Sn = n.rawcharactercollision_worldNormal2, vn = n.__wbg_rawpidcontroller_free, Rn = n.rawpidcontroller_new, Cn = n.rawpidcontroller_set_kp, xn = n.rawpidcontroller_set_ki, In = n.rawpidcontroller_set_kd, An = n.rawpidcontroller_set_axes_mask, jn = n.rawpidcontroller_reset_integrals, En = n.rawpidcontroller_apply_linear_correction, Pn = n.rawpidcontroller_apply_angular_correction, Fn = n.rawpidcontroller_linear_correction, zn = n.rawpidcontroller_angular_correction, Tn = n.__wbg_rawdynamicraycastvehiclecontroller_free, Mn = n.rawdynamicraycastvehiclecontroller_new, kn = n.rawdynamicraycastvehiclecontroller_current_vehicle_speed, Hn = n.rawdynamicraycastvehiclecontroller_chassis, Dn = n.rawdynamicraycastvehiclecontroller_index_up_axis, Ln = n.rawdynamicraycastvehiclecontroller_set_index_up_axis, Nn = n.rawdynamicraycastvehiclecontroller_index_forward_axis, Gn = n.rawdynamicraycastvehiclecontroller_set_index_forward_axis, Wn = n.rawdynamicraycastvehiclecontroller_add_wheel, qn = n.rawdynamicraycastvehiclecontroller_num_wheels, Bn = n.rawdynamicraycastvehiclecontroller_update_vehicle, Vn = n.rawdynamicraycastvehiclecontroller_wheel_chassis_connection_point_cs, On = n.rawdynamicraycastvehiclecontroller_set_wheel_chassis_connection_point_cs, Un = n.rawdynamicraycastvehiclecontroller_wheel_suspension_rest_length, Xn = n.rawdynamicraycastvehiclecontroller_set_wheel_suspension_rest_length, Jn = n.rawdynamicraycastvehiclecontroller_wheel_max_suspension_travel, Kn = n.rawdynamicraycastvehiclecontroller_set_wheel_max_suspension_travel, Yn = n.rawdynamicraycastvehiclecontroller_wheel_radius, Zn = n.rawdynamicraycastvehiclecontroller_set_wheel_radius, $n = n.rawdynamicraycastvehiclecontroller_wheel_suspension_stiffness, Qn = n.rawdynamicraycastvehiclecontroller_set_wheel_suspension_stiffness, ta = n.rawdynamicraycastvehiclecontroller_wheel_suspension_compression, ea = n.rawdynamicraycastvehiclecontroller_set_wheel_suspension_compression, ra = n.rawdynamicraycastvehiclecontroller_wheel_suspension_relaxation, ia = n.rawdynamicraycastvehiclecontroller_set_wheel_suspension_relaxation, na = n.rawdynamicraycastvehiclecontroller_wheel_max_suspension_force, aa = n.rawdynamicraycastvehiclecontroller_set_wheel_max_suspension_force, sa = n.rawdynamicraycastvehiclecontroller_wheel_brake, oa = n.rawdynamicraycastvehiclecontroller_set_wheel_brake, _a = n.rawdynamicraycastvehiclecontroller_wheel_steering, ca = n.rawdynamicraycastvehiclecontroller_set_wheel_steering, la = n.rawdynamicraycastvehiclecontroller_wheel_engine_force, wa = n.rawdynamicraycastvehiclecontroller_set_wheel_engine_force, da = n.rawdynamicraycastvehiclecontroller_wheel_direction_cs, ha = n.rawdynamicraycastvehiclecontroller_set_wheel_direction_cs, pa = n.rawdynamicraycastvehiclecontroller_wheel_axle_cs, ua = n.rawdynamicraycastvehiclecontroller_set_wheel_axle_cs, ga = n.rawdynamicraycastvehiclecontroller_wheel_friction_slip, ba = n.rawdynamicraycastvehiclecontroller_set_wheel_friction_slip, ma = n.rawdynamicraycastvehiclecontroller_wheel_side_friction_stiffness, fa = n.rawdynamicraycastvehiclecontroller_set_wheel_side_friction_stiffness, ya = n.rawdynamicraycastvehiclecontroller_wheel_rotation, Sa = n.rawdynamicraycastvehiclecontroller_wheel_forward_impulse, va = n.rawdynamicraycastvehiclecontroller_wheel_side_impulse, Ra = n.rawdynamicraycastvehiclecontroller_wheel_suspension_force, Ca = n.rawdynamicraycastvehiclecontroller_wheel_contact_normal_ws, xa = n.rawdynamicraycastvehiclecontroller_wheel_contact_point_ws, Ia = n.rawdynamicraycastvehiclecontroller_wheel_suspension_length, Aa = n.rawdynamicraycastvehiclecontroller_wheel_hard_point_ws, ja = n.rawdynamicraycastvehiclecontroller_wheel_is_in_contact, Ea = n.rawdynamicraycastvehiclecontroller_wheel_ground_object, Pa = n.__wbg_rawccdsolver_free, Fa = n.rawccdsolver_new, za = n.rawimpulsejointset_jointType, Ta = n.rawimpulsejointset_jointBodyHandle1, Ma = n.rawimpulsejointset_jointBodyHandle2, ka = n.rawimpulsejointset_jointFrameX1, Ha = n.rawimpulsejointset_jointFrameX2, Da = n.rawimpulsejointset_jointAnchor1, La = n.rawimpulsejointset_jointAnchor2, Na = n.rawimpulsejointset_jointSetAnchor1, Ga = n.rawimpulsejointset_jointSetAnchor2, Wa = n.rawimpulsejointset_jointContactsEnabled, qa = n.rawimpulsejointset_jointSetContactsEnabled, Ba = n.rawimpulsejointset_jointLimitsEnabled, Va = n.rawimpulsejointset_jointLimitsMin, Oa = n.rawimpulsejointset_jointLimitsMax, Ua = n.rawimpulsejointset_jointSetLimits, Xa = n.rawimpulsejointset_jointConfigureMotorModel, Ja = n.rawimpulsejointset_jointConfigureMotorVelocity, Ka = n.rawimpulsejointset_jointConfigureMotorPosition, Ya = n.rawimpulsejointset_jointConfigureMotor, Za = n.__wbg_rawimpulsejointset_free, $a = n.rawimpulsejointset_new, Qa = n.rawimpulsejointset_createJoint, ts = n.rawimpulsejointset_remove, es = n.rawimpulsejointset_len, rs = n.rawimpulsejointset_contains, is = n.rawimpulsejointset_forEachJointHandle, ns = n.rawimpulsejointset_forEachJointAttachedToRigidBody, as = n.__wbg_rawintegrationparameters_free, ss = n.rawintegrationparameters_new, os = n.rawintegrationparameters_dt, _s = n.rawintegrationparameters_contact_erp, cs = n.rawintegrationparameters_numSolverIterations, ls = n.rawintegrationparameters_minIslandSize, ws = n.rawintegrationparameters_maxCcdSubsteps, ds = n.rawintegrationparameters_lengthUnit, hs = n.rawintegrationparameters_set_dt, ps = n.rawintegrationparameters_set_contact_natural_frequency, us = n.rawintegrationparameters_set_normalizedAllowedLinearError, gs = n.rawintegrationparameters_set_normalizedPredictionDistance, bs = n.rawintegrationparameters_set_numSolverIterations, ms = n.rawintegrationparameters_set_minIslandSize, fs = n.rawintegrationparameters_set_maxCcdSubsteps, ys = n.rawintegrationparameters_set_lengthUnit, Ss = n.rawintegrationparameters_switchToStandardPgsSolver, vs = n.rawintegrationparameters_switchToSmallStepsPgsSolver, Rs = n.rawintegrationparameters_switchToSmallStepsPgsSolverWithoutWarmstart, Cs = n.__wbg_rawislandmanager_free, xs = n.rawislandmanager_new, Is = n.rawislandmanager_forEachActiveRigidBodyHandle, As = n.__wbg_rawgenericjoint_free, js = n.rawgenericjoint_generic, Es = n.rawgenericjoint_spring, Ps = n.rawgenericjoint_rope, Fs = n.rawgenericjoint_spherical, zs = n.rawgenericjoint_prismatic, Ts = n.rawgenericjoint_fixed, Ms = n.rawgenericjoint_revolute, ks = n.rawmultibodyjointset_jointType, Hs = n.rawmultibodyjointset_jointFrameX1, Ds = n.rawmultibodyjointset_jointFrameX2, Ls = n.rawmultibodyjointset_jointAnchor1, Ns = n.rawmultibodyjointset_jointAnchor2, Gs = n.rawmultibodyjointset_jointContactsEnabled, Ws = n.rawmultibodyjointset_jointSetContactsEnabled, qs = n.rawmultibodyjointset_jointLimitsEnabled, Bs = n.rawmultibodyjointset_jointLimitsMin, Vs = n.rawmultibodyjointset_jointLimitsMax, Os = n.__wbg_rawmultibodyjointset_free, Us = n.rawmultibodyjointset_new, Xs = n.rawmultibodyjointset_createJoint, Js = n.rawmultibodyjointset_remove, Ks = n.rawmultibodyjointset_contains, Ys = n.rawmultibodyjointset_forEachJointHandle, Zs = n.rawmultibodyjointset_forEachJointAttachedToRigidBody, $s = n.rawrigidbodyset_rbTranslation, Qs = n.rawrigidbodyset_rbRotation, to = n.rawrigidbodyset_rbSleep, eo = n.rawrigidbodyset_rbIsSleeping, ro = n.rawrigidbodyset_rbIsMoving, io = n.rawrigidbodyset_rbNextTranslation, no = n.rawrigidbodyset_rbNextRotation, ao = n.rawrigidbodyset_rbSetTranslation, so = n.rawrigidbodyset_rbSetRotation, oo = n.rawrigidbodyset_rbSetLinvel, _o = n.rawrigidbodyset_rbSetAngvel, co = n.rawrigidbodyset_rbSetNextKinematicTranslation, lo = n.rawrigidbodyset_rbSetNextKinematicRotation, wo = n.rawrigidbodyset_rbRecomputeMassPropertiesFromColliders, ho = n.rawrigidbodyset_rbSetAdditionalMass, po = n.rawrigidbodyset_rbSetAdditionalMassProperties, uo = n.rawrigidbodyset_rbLinvel, go = n.rawrigidbodyset_rbAngvel, bo = n.rawrigidbodyset_rbVelocityAtPoint, mo = n.rawrigidbodyset_rbLockTranslations, fo = n.rawrigidbodyset_rbSetEnabledTranslations, yo = n.rawrigidbodyset_rbLockRotations, So = n.rawrigidbodyset_rbSetEnabledRotations, vo = n.rawrigidbodyset_rbDominanceGroup, Ro = n.rawrigidbodyset_rbSetDominanceGroup, Co = n.rawrigidbodyset_rbEnableCcd, xo = n.rawrigidbodyset_rbSetSoftCcdPrediction, Io = n.rawrigidbodyset_rbMass, Ao = n.rawrigidbodyset_rbInvMass, jo = n.rawrigidbodyset_rbEffectiveInvMass, Eo = n.rawrigidbodyset_rbLocalCom, Po = n.rawrigidbodyset_rbWorldCom, Fo = n.rawrigidbodyset_rbInvPrincipalInertiaSqrt, zo = n.rawrigidbodyset_rbPrincipalInertiaLocalFrame, To = n.rawrigidbodyset_rbPrincipalInertia, Mo = n.rawrigidbodyset_rbEffectiveWorldInvInertiaSqrt, ko = n.rawrigidbodyset_rbEffectiveAngularInertia, Ho = n.rawrigidbodyset_rbWakeUp, Do = n.rawrigidbodyset_rbIsCcdEnabled, Lo = n.rawrigidbodyset_rbSoftCcdPrediction, No = n.rawrigidbodyset_rbNumColliders, Go = n.rawrigidbodyset_rbCollider, Wo = n.rawrigidbodyset_rbBodyType, qo = n.rawrigidbodyset_rbSetBodyType, Bo = n.rawrigidbodyset_rbIsFixed, Vo = n.rawrigidbodyset_rbIsKinematic, Oo = n.rawrigidbodyset_rbIsDynamic, Uo = n.rawrigidbodyset_rbLinearDamping, Xo = n.rawrigidbodyset_rbAngularDamping, Jo = n.rawrigidbodyset_rbSetLinearDamping, Ko = n.rawrigidbodyset_rbSetAngularDamping, Yo = n.rawrigidbodyset_rbSetEnabled, Zo = n.rawrigidbodyset_rbIsEnabled, $o = n.rawrigidbodyset_rbGravityScale, Qo = n.rawrigidbodyset_rbSetGravityScale, t_ = n.rawrigidbodyset_rbResetForces, e_ = n.rawrigidbodyset_rbResetTorques, r_ = n.rawrigidbodyset_rbAddForce, i_ = n.rawrigidbodyset_rbApplyImpulse, n_ = n.rawrigidbodyset_rbAddTorque, a_ = n.rawrigidbodyset_rbApplyTorqueImpulse, s_ = n.rawrigidbodyset_rbAddForceAtPoint, o_ = n.rawrigidbodyset_rbApplyImpulseAtPoint, __ = n.rawrigidbodyset_rbAdditionalSolverIterations, c_ = n.rawrigidbodyset_rbSetAdditionalSolverIterations, l_ = n.rawrigidbodyset_rbUserData, w_ = n.rawrigidbodyset_rbSetUserData, d_ = n.rawrigidbodyset_rbUserForce, h_ = n.rawrigidbodyset_rbUserTorque, p_ = n.__wbg_rawrigidbodyset_free, u_ = n.rawrigidbodyset_new, g_ = n.rawrigidbodyset_createRigidBody, b_ = n.rawrigidbodyset_remove, m_ = n.rawrigidbodyset_contains, f_ = n.rawrigidbodyset_forEachRigidBodyHandle, y_ = n.rawrigidbodyset_propagateModifiedBodyPositionsToColliders, S_ = n.__wbg_rawbroadphase_free, v_ = n.rawbroadphase_new, R_ = n.rawcolliderset_coTranslation, C_ = n.rawcolliderset_coRotation, x_ = n.rawcolliderset_coSetTranslation, I_ = n.rawcolliderset_coSetTranslationWrtParent, A_ = n.rawcolliderset_coSetRotation, j_ = n.rawcolliderset_coSetRotationWrtParent, E_ = n.rawcolliderset_coIsSensor, P_ = n.rawcolliderset_coShapeType, F_ = n.rawcolliderset_coHalfspaceNormal, z_ = n.rawcolliderset_coHalfExtents, T_ = n.rawcolliderset_coSetHalfExtents, M_ = n.rawcolliderset_coRadius, k_ = n.rawcolliderset_coSetRadius, H_ = n.rawcolliderset_coHalfHeight, D_ = n.rawcolliderset_coSetHalfHeight, L_ = n.rawcolliderset_coRoundRadius, N_ = n.rawcolliderset_coSetRoundRadius, G_ = n.rawcolliderset_coVoxelData, W_ = n.rawcolliderset_coVoxelSize, q_ = n.rawcolliderset_coSetVoxel, B_ = n.rawcolliderset_coPropagateVoxelChange, V_ = n.rawcolliderset_coCombineVoxelStates, O_ = n.rawcolliderset_coVertices, U_ = n.rawcolliderset_coIndices, X_ = n.rawcolliderset_coTriMeshFlags, J_ = n.rawcolliderset_coHeightFieldFlags, K_ = n.rawcolliderset_coHeightfieldHeights, Y_ = n.rawcolliderset_coHeightfieldScale, Z_ = n.rawcolliderset_coHeightfieldNRows, $_ = n.rawcolliderset_coHeightfieldNCols, Q_ = n.rawcolliderset_coParent, tc = n.rawcolliderset_coSetEnabled, ec = n.rawcolliderset_coIsEnabled, rc = n.rawcolliderset_coSetContactSkin, ic = n.rawcolliderset_coContactSkin, nc = n.rawcolliderset_coFriction, ac = n.rawcolliderset_coRestitution, sc = n.rawcolliderset_coDensity, oc = n.rawcolliderset_coMass, _c = n.rawcolliderset_coVolume, cc = n.rawcolliderset_coCollisionGroups, lc = n.rawcolliderset_coSolverGroups, wc = n.rawcolliderset_coActiveHooks, dc = n.rawcolliderset_coActiveCollisionTypes, hc = n.rawcolliderset_coActiveEvents, pc = n.rawcolliderset_coContactForceEventThreshold, uc = n.rawcolliderset_coContainsPoint, gc = n.rawcolliderset_coCastShape, bc = n.rawcolliderset_coCastCollider, mc = n.rawcolliderset_coIntersectsShape, fc = n.rawcolliderset_coContactShape, yc = n.rawcolliderset_coContactCollider, Sc = n.rawcolliderset_coProjectPoint, vc = n.rawcolliderset_coIntersectsRay, Rc = n.rawcolliderset_coCastRay, Cc = n.rawcolliderset_coCastRayAndGetNormal, xc = n.rawcolliderset_coSetSensor, Ic = n.rawcolliderset_coSetRestitution, Ac = n.rawcolliderset_coSetFriction, jc = n.rawcolliderset_coFrictionCombineRule, Ec = n.rawcolliderset_coSetFrictionCombineRule, Pc = n.rawcolliderset_coRestitutionCombineRule, Fc = n.rawcolliderset_coSetRestitutionCombineRule, zc = n.rawcolliderset_coSetCollisionGroups, Tc = n.rawcolliderset_coSetSolverGroups, Mc = n.rawcolliderset_coSetActiveHooks, kc = n.rawcolliderset_coSetActiveEvents, Hc = n.rawcolliderset_coSetActiveCollisionTypes, Dc = n.rawcolliderset_coSetShape, Lc = n.rawcolliderset_coSetContactForceEventThreshold, Nc = n.rawcolliderset_coSetDensity, Gc = n.rawcolliderset_coSetMass, Wc = n.rawcolliderset_coSetMassProperties, qc = n.__wbg_rawcolliderset_free, Bc = n.rawcolliderset_new, Vc = n.rawcolliderset_len, Oc = n.rawcolliderset_contains, Uc = n.rawcolliderset_createCollider, Xc = n.rawcolliderset_remove, Jc = n.rawcolliderset_forEachColliderHandle, Kc = n.__wbg_rawshapecontact_free, Yc = n.__wbg_rawnarrowphase_free, Zc = n.rawnarrowphase_new, $c = n.rawnarrowphase_contact_pairs_with, Qc = n.rawnarrowphase_contact_pair, tl = n.rawnarrowphase_intersection_pairs_with, el = n.rawnarrowphase_intersection_pair, rl = n.__wbg_rawcontactmanifold_free, il = n.rawcontactpair_collider1, nl = n.rawcontactpair_collider2, al = n.rawcontactpair_numContactManifolds, sl = n.rawcontactpair_contactManifold, ol = n.rawcontactmanifold_normal, _l = n.rawcontactmanifold_local_n1, cl = n.rawcontactmanifold_local_n2, ll = n.rawcontactmanifold_subshape1, wl = n.rawcontactmanifold_subshape2, dl = n.rawcontactmanifold_num_contacts, hl = n.rawcontactmanifold_contact_local_p1, pl = n.rawcontactmanifold_contact_local_p2, ul = n.rawcontactmanifold_contact_dist, gl = n.rawcontactmanifold_contact_fid1, bl = n.rawcontactmanifold_contact_fid2, ml = n.rawcontactmanifold_contact_impulse, fl = n.rawcontactmanifold_contact_tangent_impulse_x, yl = n.rawcontactmanifold_contact_tangent_impulse_y, Sl = n.rawcontactmanifold_num_solver_contacts, vl = n.rawcontactmanifold_solver_contact_point, Rl = n.rawcontactmanifold_solver_contact_dist, Cl = n.rawcontactmanifold_solver_contact_friction, xl = n.rawcontactmanifold_solver_contact_restitution, Il = n.rawcontactmanifold_solver_contact_tangent_velocity, Al = n.__wbg_rawpointprojection_free, jl = n.rawpointprojection_point, El = n.rawpointprojection_isInside, Pl = n.__wbg_rawpointcolliderprojection_free, Fl = n.rawpointcolliderprojection_colliderHandle, zl = n.rawpointcolliderprojection_point, Tl = n.rawpointcolliderprojection_isInside, Ml = n.rawpointcolliderprojection_featureType, kl = n.rawpointcolliderprojection_featureId, Hl = n.__wbg_rawrayintersection_free, Dl = n.__wbg_rawraycolliderhit_free, Ll = n.__wbg_rawshape_free, Nl = n.rawshape_cuboid, Gl = n.rawshape_roundCuboid, Wl = n.rawshape_ball, ql = n.rawshape_halfspace, Bl = n.rawshape_capsule, Vl = n.rawshape_cylinder, Ol = n.rawshape_roundCylinder, Ul = n.rawshape_cone, Xl = n.rawshape_roundCone, Jl = n.rawshape_voxels, Kl = n.rawshape_voxelsFromPoints, Yl = n.rawshape_polyline, Zl = n.rawshape_trimesh, $l = n.rawshape_heightfield, Ql = n.rawshape_segment, tw = n.rawshape_triangle, ew = n.rawshape_roundTriangle, rw = n.rawshape_convexHull, iw = n.rawshape_roundConvexHull, nw = n.rawshape_convexMesh, aw = n.rawshape_roundConvexMesh, sw = n.rawshape_castShape, ow = n.rawshape_intersectsShape, _w = n.rawshape_contactShape, cw = n.rawshape_containsPoint, lw = n.rawshape_projectPoint, ww = n.rawshape_intersectsRay, dw = n.rawshape_castRay, hw = n.rawshape_castRayAndGetNormal, pw = n.__wbg_rawshapecasthit_free, uw = n.rawshapecasthit_witness1, gw = n.rawshapecasthit_normal1, bw = n.rawshapecasthit_normal2, mw = n.__wbg_rawcollidershapecasthit_free, fw = n.rawcollidershapecasthit_time_of_impact, yw = n.rawcollidershapecasthit_witness1, Sw = n.rawcollidershapecasthit_witness2, vw = n.rawrotation_new, Rw = n.rawrotation_identity, Cw = n.rawrotation_x, xw = n.rawrotation_w, Iw = n.rawvector_zero, Aw = n.rawvector_new, jw = n.rawvector_set_x, Ew = n.rawvector_set_z, Pw = n.rawvector_xyz, Fw = n.rawvector_yxz, zw = n.rawvector_zxy, Tw = n.rawvector_xzy, Mw = n.rawvector_yzx, kw = n.rawvector_zyx, Hw = n.rawsdpmatrix3_elements, Dw = n.__wbg_rawdebugrenderpipeline_free, Lw = n.rawdebugrenderpipeline_new, Nw = n.rawdebugrenderpipeline_vertices, Gw = n.rawdebugrenderpipeline_colors, Ww = n.rawdebugrenderpipeline_render, qw = n.__wbg_raweventqueue_free, Bw = n.__wbg_rawcontactforceevent_free, Vw = n.rawcontactforceevent_collider2, Ow = n.rawcontactforceevent_total_force, Uw = n.rawcontactforceevent_total_force_magnitude, Xw = n.rawcontactforceevent_max_force_direction, Jw = n.rawcontactforceevent_max_force_magnitude, Kw = n.raweventqueue_new, Yw = n.raweventqueue_drainCollisionEvents, Zw = n.raweventqueue_drainContactForceEvents, $w = n.raweventqueue_clear, Qw = n.__wbg_rawphysicspipeline_free, td = n.rawphysicspipeline_new, ed = n.rawphysicspipeline_step, rd = n.rawphysicspipeline_stepWithEvents, id = n.rawquerypipeline_new, nd = n.rawquerypipeline_update, ad = n.rawquerypipeline_castRay, sd = n.rawquerypipeline_castRayAndGetNormal, od = n.rawquerypipeline_intersectionsWithRay, _d = n.rawquerypipeline_intersectionWithShape, cd = n.rawquerypipeline_projectPoint, ld = n.rawquerypipeline_projectPointAndGetFeature, wd = n.rawquerypipeline_intersectionsWithPoint, dd = n.rawquerypipeline_castShape, hd = n.rawquerypipeline_intersectionsWithShape, pd = n.rawquerypipeline_collidersWithAabbIntersectingAabb, ud = n.__wbg_rawdeserializedworld_free, gd = n.rawdeserializedworld_takeGravity, bd = n.rawdeserializedworld_takeIntegrationParameters, md = n.rawdeserializedworld_takeIslandManager, fd = n.rawdeserializedworld_takeBroadPhase, yd = n.rawdeserializedworld_takeNarrowPhase, Sd = n.rawdeserializedworld_takeBodies, vd = n.rawdeserializedworld_takeColliders, Rd = n.rawdeserializedworld_takeImpulseJoints, Cd = n.rawdeserializedworld_takeMultibodyJoints, xd = n.__wbg_rawserializationpipeline_free, Id = n.rawserializationpipeline_new, Ad = n.rawserializationpipeline_serializeAll, jd = n.rawserializationpipeline_deserializeAll, Ed = n.rawcolliderset_isHandleValid, Pd = n.rawkinematiccharactercontroller_offset, Fd = n.rawintegrationparameters_normalizedAllowedLinearError, zd = n.rawintegrationparameters_numAdditionalFrictionIterations, Td = n.rawintegrationparameters_numInternalPgsIterations, Md = n.rawrigidbodyset_len, kd = n.rawshapecontact_distance, Hd = n.rawrayintersection_featureType, Dd = n.rawraycolliderintersection_colliderHandle, Ld = n.rawrayintersection_time_of_impact, Nd = n.rawraycolliderintersection_featureType, Gd = n.rawraycolliderhit_colliderHandle, Wd = n.rawraycolliderintersection_time_of_impact, qd = n.rawcollidershapecasthit_colliderHandle, Bd = n.rawraycolliderhit_timeOfImpact, Vd = n.rawshapecasthit_time_of_impact, Od = n.rawrotation_y, Ud = n.rawrotation_z, Xd = n.rawvector_x, Jd = n.rawvector_y, Kd = n.rawvector_z, Yd = n.rawcontactforceevent_collider1, Zd = n.rawintegrationparameters_normalizedPredictionDistance, $d = n.reserve_memory, Qd = n.__wbg_rawquerypipeline_free, th = n.rawrayintersection_featureId, eh = n.rawraycolliderintersection_featureId, rh = n.rawkinematiccharactercontroller_up, ih = n.rawshapecontact_normal2, nh = n.rawshapecontact_point1, ah = n.rawshapecontact_point2, sh = n.rawrayintersection_normal, oh = n.rawraycolliderintersection_normal, _h = n.rawshapecontact_normal1, ch = n.rawcollidershapecasthit_normal1, lh = n.rawcollidershapecasthit_normal2, wh = n.rawshapecasthit_witness2, dh = n.rawintegrationparameters_set_numAdditionalFrictionIterations, hh = n.rawintegrationparameters_set_numInternalPgsIterations, ph = n.rawvector_set_y, uh = n.__wbg_rawraycolliderintersection_free, gh = n.__wbg_rawcontactpair_free, bh = n.__wbg_rawsdpmatrix3_free, mh = n.__wbg_rawvector_free, fh = n.__wbg_rawrotation_free, yh = n.__wbindgen_export_0, Sh = n.__wbindgen_add_to_stack_pointer, vh = n.__wbindgen_export_1, Rh = n.__wbindgen_export_2, Ch = Object.freeze(Object.defineProperty({
     __proto__: null,
-    __wbg_rawbroadphase_free: v_,
-    __wbg_rawccdsolver_free: Fa,
-    __wbg_rawcharactercollision_free: hn,
-    __wbg_rawcolliderset_free: Bc,
-    __wbg_rawcollidershapecasthit_free: fw,
-    __wbg_rawcontactforceevent_free: Vw,
-    __wbg_rawcontactmanifold_free: il,
-    __wbg_rawcontactpair_free: bh,
-    __wbg_rawdebugrenderpipeline_free: Lw,
-    __wbg_rawdeserializedworld_free: gd,
-    __wbg_rawdynamicraycastvehiclecontroller_free: Mn,
-    __wbg_raweventqueue_free: Bw,
-    __wbg_rawgenericjoint_free: js,
-    __wbg_rawimpulsejointset_free: $a,
-    __wbg_rawintegrationparameters_free: ss,
-    __wbg_rawislandmanager_free: xs,
-    __wbg_rawkinematiccharactercontroller_free: Ni,
-    __wbg_rawmultibodyjointset_free: Us,
-    __wbg_rawnarrowphase_free: Zc,
-    __wbg_rawphysicspipeline_free: td,
-    __wbg_rawpidcontroller_free: Rn,
-    __wbg_rawpointcolliderprojection_free: Fl,
-    __wbg_rawpointprojection_free: jl,
-    __wbg_rawquerypipeline_free: th,
-    __wbg_rawraycolliderhit_free: Ll,
-    __wbg_rawraycolliderintersection_free: gh,
-    __wbg_rawrayintersection_free: Dl,
-    __wbg_rawrigidbodyset_free: u_,
-    __wbg_rawrotation_free: yh,
-    __wbg_rawsdpmatrix3_free: mh,
-    __wbg_rawserializationpipeline_free: Id,
-    __wbg_rawshape_free: Nl,
-    __wbg_rawshapecasthit_free: uw,
-    __wbg_rawshapecontact_free: Yc,
-    __wbg_rawvector_free: fh,
-    __wbindgen_add_to_stack_pointer: vh,
-    __wbindgen_export_0: Sh,
-    __wbindgen_export_1: Rh,
-    __wbindgen_export_2: Ch,
-    memory: Di,
-    rawbroadphase_new: R_,
-    rawccdsolver_new: za,
-    rawcharactercollision_handle: un,
-    rawcharactercollision_new: pn,
-    rawcharactercollision_toi: mn,
-    rawcharactercollision_translationDeltaApplied: gn,
-    rawcharactercollision_translationDeltaRemaining: bn,
-    rawcharactercollision_worldNormal1: Sn,
-    rawcharactercollision_worldNormal2: vn,
-    rawcharactercollision_worldWitness1: fn,
-    rawcharactercollision_worldWitness2: yn,
-    rawcolliderset_coActiveCollisionTypes: hc,
-    rawcolliderset_coActiveEvents: pc,
-    rawcolliderset_coActiveHooks: dc,
-    rawcolliderset_coCastCollider: mc,
-    rawcolliderset_coCastRay: Cc,
-    rawcolliderset_coCastRayAndGetNormal: xc,
-    rawcolliderset_coCastShape: bc,
-    rawcolliderset_coCollisionGroups: lc,
-    rawcolliderset_coCombineVoxelStates: O_,
-    rawcolliderset_coContactCollider: Sc,
-    rawcolliderset_coContactForceEventThreshold: uc,
-    rawcolliderset_coContactShape: yc,
-    rawcolliderset_coContactSkin: nc,
-    rawcolliderset_coContainsPoint: gc,
-    rawcolliderset_coDensity: oc,
-    rawcolliderset_coFriction: ac,
-    rawcolliderset_coFrictionCombineRule: Ec,
-    rawcolliderset_coHalfExtents: T_,
-    rawcolliderset_coHalfHeight: D_,
-    rawcolliderset_coHalfspaceNormal: z_,
-    rawcolliderset_coHeightFieldFlags: K_,
-    rawcolliderset_coHeightfieldHeights: Y_,
-    rawcolliderset_coHeightfieldNCols: Q_,
-    rawcolliderset_coHeightfieldNRows: $_,
-    rawcolliderset_coHeightfieldScale: Z_,
-    rawcolliderset_coIndices: X_,
-    rawcolliderset_coIntersectsRay: Rc,
-    rawcolliderset_coIntersectsShape: fc,
-    rawcolliderset_coIsEnabled: rc,
-    rawcolliderset_coIsSensor: P_,
-    rawcolliderset_coMass: _c,
-    rawcolliderset_coParent: tc,
-    rawcolliderset_coProjectPoint: vc,
-    rawcolliderset_coPropagateVoxelChange: V_,
-    rawcolliderset_coRadius: k_,
-    rawcolliderset_coRestitution: sc,
-    rawcolliderset_coRestitutionCombineRule: Fc,
-    rawcolliderset_coRotation: x_,
-    rawcolliderset_coRoundRadius: N_,
-    rawcolliderset_coSetActiveCollisionTypes: Dc,
-    rawcolliderset_coSetActiveEvents: Hc,
-    rawcolliderset_coSetActiveHooks: kc,
-    rawcolliderset_coSetCollisionGroups: Tc,
-    rawcolliderset_coSetContactForceEventThreshold: Nc,
-    rawcolliderset_coSetContactSkin: ic,
-    rawcolliderset_coSetDensity: Gc,
-    rawcolliderset_coSetEnabled: ec,
-    rawcolliderset_coSetFriction: jc,
-    rawcolliderset_coSetFrictionCombineRule: Pc,
-    rawcolliderset_coSetHalfExtents: M_,
-    rawcolliderset_coSetHalfHeight: L_,
-    rawcolliderset_coSetMass: Wc,
-    rawcolliderset_coSetMassProperties: qc,
-    rawcolliderset_coSetRadius: H_,
-    rawcolliderset_coSetRestitution: Ac,
-    rawcolliderset_coSetRestitutionCombineRule: zc,
-    rawcolliderset_coSetRotation: j_,
-    rawcolliderset_coSetRotationWrtParent: E_,
-    rawcolliderset_coSetRoundRadius: G_,
-    rawcolliderset_coSetSensor: Ic,
-    rawcolliderset_coSetShape: Lc,
-    rawcolliderset_coSetSolverGroups: Mc,
-    rawcolliderset_coSetTranslation: I_,
-    rawcolliderset_coSetTranslationWrtParent: A_,
-    rawcolliderset_coSetVoxel: B_,
-    rawcolliderset_coShapeType: F_,
-    rawcolliderset_coSolverGroups: wc,
-    rawcolliderset_coTranslation: C_,
-    rawcolliderset_coTriMeshFlags: J_,
-    rawcolliderset_coVertices: U_,
-    rawcolliderset_coVolume: cc,
-    rawcolliderset_coVoxelData: W_,
-    rawcolliderset_coVoxelSize: q_,
-    rawcolliderset_contains: Uc,
-    rawcolliderset_createCollider: Xc,
-    rawcolliderset_forEachColliderHandle: Kc,
-    rawcolliderset_isHandleValid: Pd,
-    rawcolliderset_len: Oc,
-    rawcolliderset_new: Vc,
-    rawcolliderset_remove: Jc,
-    rawcollidershapecasthit_colliderHandle: Bd,
-    rawcollidershapecasthit_normal1: lh,
-    rawcollidershapecasthit_normal2: wh,
-    rawcollidershapecasthit_time_of_impact: yw,
-    rawcollidershapecasthit_witness1: Sw,
-    rawcollidershapecasthit_witness2: vw,
-    rawcontactforceevent_collider1: Zd,
-    rawcontactforceevent_collider2: Ow,
-    rawcontactforceevent_max_force_direction: Jw,
-    rawcontactforceevent_max_force_magnitude: Kw,
-    rawcontactforceevent_total_force: Uw,
-    rawcontactforceevent_total_force_magnitude: Xw,
-    rawcontactmanifold_contact_dist: gl,
-    rawcontactmanifold_contact_fid1: bl,
-    rawcontactmanifold_contact_fid2: ml,
-    rawcontactmanifold_contact_impulse: fl,
-    rawcontactmanifold_contact_local_p1: pl,
-    rawcontactmanifold_contact_local_p2: ul,
-    rawcontactmanifold_contact_tangent_impulse_x: yl,
-    rawcontactmanifold_contact_tangent_impulse_y: Sl,
-    rawcontactmanifold_local_n1: cl,
-    rawcontactmanifold_local_n2: ll,
-    rawcontactmanifold_normal: _l,
-    rawcontactmanifold_num_contacts: hl,
-    rawcontactmanifold_num_solver_contacts: vl,
-    rawcontactmanifold_solver_contact_dist: Cl,
-    rawcontactmanifold_solver_contact_friction: xl,
-    rawcontactmanifold_solver_contact_point: Rl,
-    rawcontactmanifold_solver_contact_restitution: Il,
-    rawcontactmanifold_solver_contact_tangent_velocity: Al,
-    rawcontactmanifold_subshape1: wl,
-    rawcontactmanifold_subshape2: dl,
-    rawcontactpair_collider1: nl,
-    rawcontactpair_collider2: al,
-    rawcontactpair_contactManifold: ol,
-    rawcontactpair_numContactManifolds: sl,
-    rawdebugrenderpipeline_colors: Ww,
-    rawdebugrenderpipeline_new: Nw,
-    rawdebugrenderpipeline_render: qw,
-    rawdebugrenderpipeline_vertices: Gw,
-    rawdeserializedworld_takeBodies: vd,
-    rawdeserializedworld_takeBroadPhase: yd,
-    rawdeserializedworld_takeColliders: Rd,
-    rawdeserializedworld_takeGravity: bd,
-    rawdeserializedworld_takeImpulseJoints: Cd,
-    rawdeserializedworld_takeIntegrationParameters: md,
-    rawdeserializedworld_takeIslandManager: fd,
-    rawdeserializedworld_takeMultibodyJoints: xd,
-    rawdeserializedworld_takeNarrowPhase: Sd,
-    rawdynamicraycastvehiclecontroller_add_wheel: qn,
-    rawdynamicraycastvehiclecontroller_chassis: Dn,
-    rawdynamicraycastvehiclecontroller_current_vehicle_speed: Hn,
-    rawdynamicraycastvehiclecontroller_index_forward_axis: Gn,
-    rawdynamicraycastvehiclecontroller_index_up_axis: Ln,
-    rawdynamicraycastvehiclecontroller_new: kn,
-    rawdynamicraycastvehiclecontroller_num_wheels: Bn,
-    rawdynamicraycastvehiclecontroller_set_index_forward_axis: Wn,
-    rawdynamicraycastvehiclecontroller_set_index_up_axis: Nn,
-    rawdynamicraycastvehiclecontroller_set_wheel_axle_cs: ga,
-    rawdynamicraycastvehiclecontroller_set_wheel_brake: _a,
-    rawdynamicraycastvehiclecontroller_set_wheel_chassis_connection_point_cs: Un,
-    rawdynamicraycastvehiclecontroller_set_wheel_direction_cs: pa,
-    rawdynamicraycastvehiclecontroller_set_wheel_engine_force: da,
-    rawdynamicraycastvehiclecontroller_set_wheel_friction_slip: ma,
-    rawdynamicraycastvehiclecontroller_set_wheel_max_suspension_force: sa,
-    rawdynamicraycastvehiclecontroller_set_wheel_max_suspension_travel: Yn,
-    rawdynamicraycastvehiclecontroller_set_wheel_radius: $n,
-    rawdynamicraycastvehiclecontroller_set_wheel_side_friction_stiffness: ya,
-    rawdynamicraycastvehiclecontroller_set_wheel_steering: la,
-    rawdynamicraycastvehiclecontroller_set_wheel_suspension_compression: ra,
-    rawdynamicraycastvehiclecontroller_set_wheel_suspension_relaxation: na,
-    rawdynamicraycastvehiclecontroller_set_wheel_suspension_rest_length: Jn,
-    rawdynamicraycastvehiclecontroller_set_wheel_suspension_stiffness: ta,
-    rawdynamicraycastvehiclecontroller_update_vehicle: Vn,
-    rawdynamicraycastvehiclecontroller_wheel_axle_cs: ua,
-    rawdynamicraycastvehiclecontroller_wheel_brake: oa,
-    rawdynamicraycastvehiclecontroller_wheel_chassis_connection_point_cs: On,
-    rawdynamicraycastvehiclecontroller_wheel_contact_normal_ws: xa,
-    rawdynamicraycastvehiclecontroller_wheel_contact_point_ws: Ia,
-    rawdynamicraycastvehiclecontroller_wheel_direction_cs: ha,
-    rawdynamicraycastvehiclecontroller_wheel_engine_force: wa,
-    rawdynamicraycastvehiclecontroller_wheel_forward_impulse: va,
-    rawdynamicraycastvehiclecontroller_wheel_friction_slip: ba,
-    rawdynamicraycastvehiclecontroller_wheel_ground_object: Pa,
-    rawdynamicraycastvehiclecontroller_wheel_hard_point_ws: ja,
-    rawdynamicraycastvehiclecontroller_wheel_is_in_contact: Ea,
-    rawdynamicraycastvehiclecontroller_wheel_max_suspension_force: aa,
-    rawdynamicraycastvehiclecontroller_wheel_max_suspension_travel: Kn,
-    rawdynamicraycastvehiclecontroller_wheel_radius: Zn,
-    rawdynamicraycastvehiclecontroller_wheel_rotation: Sa,
-    rawdynamicraycastvehiclecontroller_wheel_side_friction_stiffness: fa,
-    rawdynamicraycastvehiclecontroller_wheel_side_impulse: Ra,
-    rawdynamicraycastvehiclecontroller_wheel_steering: ca,
-    rawdynamicraycastvehiclecontroller_wheel_suspension_compression: ea,
-    rawdynamicraycastvehiclecontroller_wheel_suspension_force: Ca,
-    rawdynamicraycastvehiclecontroller_wheel_suspension_length: Aa,
-    rawdynamicraycastvehiclecontroller_wheel_suspension_relaxation: ia,
-    rawdynamicraycastvehiclecontroller_wheel_suspension_rest_length: Xn,
-    rawdynamicraycastvehiclecontroller_wheel_suspension_stiffness: Qn,
-    raweventqueue_clear: Qw,
-    raweventqueue_drainCollisionEvents: Zw,
-    raweventqueue_drainContactForceEvents: $w,
-    raweventqueue_new: Yw,
-    rawgenericjoint_fixed: Ms,
-    rawgenericjoint_generic: Es,
-    rawgenericjoint_prismatic: Ts,
-    rawgenericjoint_revolute: ks,
-    rawgenericjoint_rope: Fs,
-    rawgenericjoint_spherical: zs,
-    rawgenericjoint_spring: Ps,
-    rawimpulsejointset_contains: is,
-    rawimpulsejointset_createJoint: ts,
-    rawimpulsejointset_forEachJointAttachedToRigidBody: as,
-    rawimpulsejointset_forEachJointHandle: ns,
-    rawimpulsejointset_jointAnchor1: La,
-    rawimpulsejointset_jointAnchor2: Na,
-    rawimpulsejointset_jointBodyHandle1: Ma,
-    rawimpulsejointset_jointBodyHandle2: ka,
-    rawimpulsejointset_jointConfigureMotor: Za,
-    rawimpulsejointset_jointConfigureMotorModel: Ja,
-    rawimpulsejointset_jointConfigureMotorPosition: Ya,
-    rawimpulsejointset_jointConfigureMotorVelocity: Ka,
-    rawimpulsejointset_jointContactsEnabled: qa,
-    rawimpulsejointset_jointFrameX1: Ha,
-    rawimpulsejointset_jointFrameX2: Da,
-    rawimpulsejointset_jointLimitsEnabled: Va,
-    rawimpulsejointset_jointLimitsMax: Ua,
-    rawimpulsejointset_jointLimitsMin: Oa,
-    rawimpulsejointset_jointSetAnchor1: Ga,
-    rawimpulsejointset_jointSetAnchor2: Wa,
-    rawimpulsejointset_jointSetContactsEnabled: Ba,
-    rawimpulsejointset_jointSetLimits: Xa,
-    rawimpulsejointset_jointType: Ta,
-    rawimpulsejointset_len: rs,
-    rawimpulsejointset_new: Qa,
-    rawimpulsejointset_remove: es,
-    rawintegrationparameters_contact_erp: cs,
-    rawintegrationparameters_dt: _s,
-    rawintegrationparameters_lengthUnit: hs,
-    rawintegrationparameters_maxCcdSubsteps: ds,
-    rawintegrationparameters_minIslandSize: ws,
-    rawintegrationparameters_new: os,
-    rawintegrationparameters_normalizedAllowedLinearError: zd,
-    rawintegrationparameters_normalizedPredictionDistance: $d,
-    rawintegrationparameters_numAdditionalFrictionIterations: Td,
-    rawintegrationparameters_numInternalPgsIterations: Md,
-    rawintegrationparameters_numSolverIterations: ls,
-    rawintegrationparameters_set_contact_natural_frequency: us,
-    rawintegrationparameters_set_dt: ps,
-    rawintegrationparameters_set_lengthUnit: Ss,
-    rawintegrationparameters_set_maxCcdSubsteps: ys,
-    rawintegrationparameters_set_minIslandSize: fs,
-    rawintegrationparameters_set_normalizedAllowedLinearError: gs,
-    rawintegrationparameters_set_normalizedPredictionDistance: bs,
-    rawintegrationparameters_set_numAdditionalFrictionIterations: hh,
-    rawintegrationparameters_set_numInternalPgsIterations: ph,
-    rawintegrationparameters_set_numSolverIterations: ms,
-    rawintegrationparameters_switchToSmallStepsPgsSolver: Rs,
-    rawintegrationparameters_switchToSmallStepsPgsSolverWithoutWarmstart: Cs,
-    rawintegrationparameters_switchToStandardPgsSolver: vs,
-    rawislandmanager_forEachActiveRigidBodyHandle: As,
-    rawislandmanager_new: Is,
-    rawkinematiccharactercontroller_autostepEnabled: Yi,
-    rawkinematiccharactercontroller_autostepIncludesDynamicBodies: Ki,
-    rawkinematiccharactercontroller_autostepMaxHeight: Xi,
-    rawkinematiccharactercontroller_autostepMinWidth: Ji,
-    rawkinematiccharactercontroller_computeColliderMovement: _n,
-    rawkinematiccharactercontroller_computedCollision: dn,
-    rawkinematiccharactercontroller_computedGrounded: ln,
-    rawkinematiccharactercontroller_computedMovement: cn,
-    rawkinematiccharactercontroller_disableAutostep: $i,
-    rawkinematiccharactercontroller_disableSnapToGround: sn,
-    rawkinematiccharactercontroller_enableAutostep: Zi,
-    rawkinematiccharactercontroller_enableSnapToGround: an,
-    rawkinematiccharactercontroller_maxSlopeClimbAngle: Qi,
-    rawkinematiccharactercontroller_minSlopeSlideAngle: en,
-    rawkinematiccharactercontroller_new: Gi,
-    rawkinematiccharactercontroller_normalNudgeFactor: qi,
-    rawkinematiccharactercontroller_numComputedCollisions: wn,
-    rawkinematiccharactercontroller_offset: Fd,
-    rawkinematiccharactercontroller_setMaxSlopeClimbAngle: tn,
-    rawkinematiccharactercontroller_setMinSlopeSlideAngle: rn,
-    rawkinematiccharactercontroller_setNormalNudgeFactor: Bi,
-    rawkinematiccharactercontroller_setOffset: Vi,
-    rawkinematiccharactercontroller_setSlideEnabled: Ui,
-    rawkinematiccharactercontroller_setUp: Wi,
-    rawkinematiccharactercontroller_slideEnabled: Oi,
-    rawkinematiccharactercontroller_snapToGroundDistance: nn,
-    rawkinematiccharactercontroller_snapToGroundEnabled: on,
-    rawkinematiccharactercontroller_up: ih,
-    rawmultibodyjointset_contains: Ys,
-    rawmultibodyjointset_createJoint: Js,
-    rawmultibodyjointset_forEachJointAttachedToRigidBody: $s,
-    rawmultibodyjointset_forEachJointHandle: Zs,
-    rawmultibodyjointset_jointAnchor1: Ns,
-    rawmultibodyjointset_jointAnchor2: Gs,
-    rawmultibodyjointset_jointContactsEnabled: Ws,
-    rawmultibodyjointset_jointFrameX1: Ds,
-    rawmultibodyjointset_jointFrameX2: Ls,
-    rawmultibodyjointset_jointLimitsEnabled: Bs,
-    rawmultibodyjointset_jointLimitsMax: Os,
-    rawmultibodyjointset_jointLimitsMin: Vs,
-    rawmultibodyjointset_jointSetContactsEnabled: qs,
-    rawmultibodyjointset_jointType: Hs,
-    rawmultibodyjointset_new: Xs,
-    rawmultibodyjointset_remove: Ks,
-    rawnarrowphase_contact_pair: tl,
-    rawnarrowphase_contact_pairs_with: Qc,
-    rawnarrowphase_intersection_pair: rl,
-    rawnarrowphase_intersection_pairs_with: el,
-    rawnarrowphase_new: $c,
-    rawphysicspipeline_new: ed,
-    rawphysicspipeline_step: rd,
-    rawphysicspipeline_stepWithEvents: id,
-    rawpidcontroller_angular_correction: Tn,
-    rawpidcontroller_apply_angular_correction: Fn,
-    rawpidcontroller_apply_linear_correction: Pn,
-    rawpidcontroller_linear_correction: zn,
-    rawpidcontroller_new: Cn,
-    rawpidcontroller_reset_integrals: En,
-    rawpidcontroller_set_axes_mask: jn,
-    rawpidcontroller_set_kd: An,
-    rawpidcontroller_set_ki: In,
-    rawpidcontroller_set_kp: xn,
-    rawpointcolliderprojection_colliderHandle: zl,
-    rawpointcolliderprojection_featureId: Hl,
-    rawpointcolliderprojection_featureType: kl,
-    rawpointcolliderprojection_isInside: Ml,
-    rawpointcolliderprojection_point: Tl,
-    rawpointprojection_isInside: Pl,
-    rawpointprojection_point: El,
-    rawquerypipeline_castRay: sd,
-    rawquerypipeline_castRayAndGetNormal: od,
-    rawquerypipeline_castShape: hd,
-    rawquerypipeline_collidersWithAabbIntersectingAabb: ud,
-    rawquerypipeline_intersectionWithShape: cd,
-    rawquerypipeline_intersectionsWithPoint: dd,
-    rawquerypipeline_intersectionsWithRay: _d,
-    rawquerypipeline_intersectionsWithShape: pd,
-    rawquerypipeline_new: nd,
-    rawquerypipeline_projectPoint: ld,
-    rawquerypipeline_projectPointAndGetFeature: wd,
-    rawquerypipeline_update: ad,
-    rawraycolliderhit_colliderHandle: Wd,
-    rawraycolliderhit_timeOfImpact: Vd,
-    rawraycolliderintersection_colliderHandle: Ld,
-    rawraycolliderintersection_featureId: rh,
-    rawraycolliderintersection_featureType: Gd,
-    rawraycolliderintersection_normal: _h,
-    rawraycolliderintersection_time_of_impact: qd,
-    rawrayintersection_featureId: eh,
-    rawrayintersection_featureType: Dd,
-    rawrayintersection_normal: oh,
-    rawrayintersection_time_of_impact: Nd,
-    rawrigidbodyset_contains: f_,
-    rawrigidbodyset_createRigidBody: b_,
-    rawrigidbodyset_forEachRigidBodyHandle: y_,
-    rawrigidbodyset_len: kd,
-    rawrigidbodyset_new: g_,
-    rawrigidbodyset_propagateModifiedBodyPositionsToColliders: S_,
-    rawrigidbodyset_rbAddForce: i_,
-    rawrigidbodyset_rbAddForceAtPoint: o_,
-    rawrigidbodyset_rbAddTorque: a_,
-    rawrigidbodyset_rbAdditionalSolverIterations: c_,
-    rawrigidbodyset_rbAngularDamping: Jo,
-    rawrigidbodyset_rbAngvel: bo,
-    rawrigidbodyset_rbApplyImpulse: n_,
-    rawrigidbodyset_rbApplyImpulseAtPoint: __,
-    rawrigidbodyset_rbApplyTorqueImpulse: s_,
-    rawrigidbodyset_rbBodyType: qo,
-    rawrigidbodyset_rbCollider: Wo,
-    rawrigidbodyset_rbDominanceGroup: Ro,
-    rawrigidbodyset_rbEffectiveAngularInertia: Ho,
-    rawrigidbodyset_rbEffectiveInvMass: Eo,
-    rawrigidbodyset_rbEffectiveWorldInvInertiaSqrt: ko,
-    rawrigidbodyset_rbEnableCcd: xo,
-    rawrigidbodyset_rbGravityScale: Qo,
-    rawrigidbodyset_rbInvMass: jo,
-    rawrigidbodyset_rbInvPrincipalInertiaSqrt: zo,
-    rawrigidbodyset_rbIsCcdEnabled: Lo,
-    rawrigidbodyset_rbIsDynamic: Uo,
-    rawrigidbodyset_rbIsEnabled: $o,
-    rawrigidbodyset_rbIsFixed: Vo,
-    rawrigidbodyset_rbIsKinematic: Oo,
-    rawrigidbodyset_rbIsMoving: io,
-    rawrigidbodyset_rbIsSleeping: ro,
-    rawrigidbodyset_rbLinearDamping: Xo,
-    rawrigidbodyset_rbLinvel: go,
-    rawrigidbodyset_rbLocalCom: Po,
-    rawrigidbodyset_rbLockRotations: So,
-    rawrigidbodyset_rbLockTranslations: fo,
-    rawrigidbodyset_rbMass: Ao,
-    rawrigidbodyset_rbNextRotation: ao,
-    rawrigidbodyset_rbNextTranslation: no,
-    rawrigidbodyset_rbNumColliders: Go,
-    rawrigidbodyset_rbPrincipalInertia: Mo,
-    rawrigidbodyset_rbPrincipalInertiaLocalFrame: To,
-    rawrigidbodyset_rbRecomputeMassPropertiesFromColliders: ho,
-    rawrigidbodyset_rbResetForces: e_,
-    rawrigidbodyset_rbResetTorques: r_,
-    rawrigidbodyset_rbRotation: to,
-    rawrigidbodyset_rbSetAdditionalMass: po,
-    rawrigidbodyset_rbSetAdditionalMassProperties: uo,
-    rawrigidbodyset_rbSetAdditionalSolverIterations: l_,
-    rawrigidbodyset_rbSetAngularDamping: Yo,
-    rawrigidbodyset_rbSetAngvel: co,
-    rawrigidbodyset_rbSetBodyType: Bo,
-    rawrigidbodyset_rbSetDominanceGroup: Co,
-    rawrigidbodyset_rbSetEnabled: Zo,
-    rawrigidbodyset_rbSetEnabledRotations: vo,
-    rawrigidbodyset_rbSetEnabledTranslations: yo,
-    rawrigidbodyset_rbSetGravityScale: t_,
-    rawrigidbodyset_rbSetLinearDamping: Ko,
-    rawrigidbodyset_rbSetLinvel: _o,
-    rawrigidbodyset_rbSetNextKinematicRotation: wo,
-    rawrigidbodyset_rbSetNextKinematicTranslation: lo,
-    rawrigidbodyset_rbSetRotation: oo,
-    rawrigidbodyset_rbSetSoftCcdPrediction: Io,
-    rawrigidbodyset_rbSetTranslation: so,
-    rawrigidbodyset_rbSetUserData: d_,
-    rawrigidbodyset_rbSleep: eo,
-    rawrigidbodyset_rbSoftCcdPrediction: No,
-    rawrigidbodyset_rbTranslation: Qs,
-    rawrigidbodyset_rbUserData: w_,
-    rawrigidbodyset_rbUserForce: h_,
-    rawrigidbodyset_rbUserTorque: p_,
-    rawrigidbodyset_rbVelocityAtPoint: mo,
-    rawrigidbodyset_rbWakeUp: Do,
-    rawrigidbodyset_rbWorldCom: Fo,
-    rawrigidbodyset_remove: m_,
-    rawrotation_identity: Cw,
-    rawrotation_new: Rw,
-    rawrotation_w: Iw,
-    rawrotation_x: xw,
-    rawrotation_y: Ud,
-    rawrotation_z: Xd,
-    rawsdpmatrix3_elements: Dw,
-    rawserializationpipeline_deserializeAll: Ed,
-    rawserializationpipeline_new: Ad,
-    rawserializationpipeline_serializeAll: jd,
-    rawshape_ball: ql,
-    rawshape_capsule: Vl,
-    rawshape_castRay: hw,
-    rawshape_castRayAndGetNormal: pw,
-    rawshape_castShape: ow,
-    rawshape_cone: Xl,
-    rawshape_contactShape: cw,
-    rawshape_containsPoint: lw,
-    rawshape_convexHull: iw,
-    rawshape_convexMesh: aw,
-    rawshape_cuboid: Gl,
-    rawshape_cylinder: Ol,
-    rawshape_halfspace: Bl,
-    rawshape_heightfield: Ql,
-    rawshape_intersectsRay: dw,
-    rawshape_intersectsShape: _w,
-    rawshape_polyline: Zl,
-    rawshape_projectPoint: ww,
-    rawshape_roundCone: Jl,
-    rawshape_roundConvexHull: nw,
-    rawshape_roundConvexMesh: sw,
-    rawshape_roundCuboid: Wl,
-    rawshape_roundCylinder: Ul,
-    rawshape_roundTriangle: rw,
-    rawshape_segment: tw,
-    rawshape_triangle: ew,
-    rawshape_trimesh: $l,
-    rawshape_voxels: Kl,
-    rawshape_voxelsFromPoints: Yl,
-    rawshapecasthit_normal1: bw,
-    rawshapecasthit_normal2: mw,
-    rawshapecasthit_time_of_impact: Od,
-    rawshapecasthit_witness1: gw,
-    rawshapecasthit_witness2: dh,
-    rawshapecontact_distance: Hd,
-    rawshapecontact_normal1: ch,
-    rawshapecontact_normal2: nh,
-    rawshapecontact_point1: ah,
-    rawshapecontact_point2: sh,
-    rawvector_new: jw,
-    rawvector_set_x: Ew,
-    rawvector_set_y: uh,
-    rawvector_set_z: Pw,
-    rawvector_x: Jd,
-    rawvector_xyz: Fw,
-    rawvector_xzy: Mw,
-    rawvector_y: Kd,
-    rawvector_yxz: zw,
-    rawvector_yzx: kw,
-    rawvector_z: Yd,
-    rawvector_zero: Aw,
-    rawvector_zxy: Tw,
-    rawvector_zyx: Hw,
-    reserve_memory: Qd,
-    version: Li
+    __wbg_rawbroadphase_free: S_,
+    __wbg_rawccdsolver_free: Pa,
+    __wbg_rawcharactercollision_free: dn,
+    __wbg_rawcolliderset_free: qc,
+    __wbg_rawcollidershapecasthit_free: mw,
+    __wbg_rawcontactforceevent_free: Bw,
+    __wbg_rawcontactmanifold_free: rl,
+    __wbg_rawcontactpair_free: gh,
+    __wbg_rawdebugrenderpipeline_free: Dw,
+    __wbg_rawdeserializedworld_free: ud,
+    __wbg_rawdynamicraycastvehiclecontroller_free: Tn,
+    __wbg_raweventqueue_free: qw,
+    __wbg_rawgenericjoint_free: As,
+    __wbg_rawimpulsejointset_free: Za,
+    __wbg_rawintegrationparameters_free: as,
+    __wbg_rawislandmanager_free: Cs,
+    __wbg_rawkinematiccharactercontroller_free: Li,
+    __wbg_rawmultibodyjointset_free: Os,
+    __wbg_rawnarrowphase_free: Yc,
+    __wbg_rawphysicspipeline_free: Qw,
+    __wbg_rawpidcontroller_free: vn,
+    __wbg_rawpointcolliderprojection_free: Pl,
+    __wbg_rawpointprojection_free: Al,
+    __wbg_rawquerypipeline_free: Qd,
+    __wbg_rawraycolliderhit_free: Dl,
+    __wbg_rawraycolliderintersection_free: uh,
+    __wbg_rawrayintersection_free: Hl,
+    __wbg_rawrigidbodyset_free: p_,
+    __wbg_rawrotation_free: fh,
+    __wbg_rawsdpmatrix3_free: bh,
+    __wbg_rawserializationpipeline_free: xd,
+    __wbg_rawshape_free: Ll,
+    __wbg_rawshapecasthit_free: pw,
+    __wbg_rawshapecontact_free: Kc,
+    __wbg_rawvector_free: mh,
+    __wbindgen_add_to_stack_pointer: Sh,
+    __wbindgen_export_0: yh,
+    __wbindgen_export_1: vh,
+    __wbindgen_export_2: Rh,
+    memory: Hi,
+    rawbroadphase_new: v_,
+    rawccdsolver_new: Fa,
+    rawcharactercollision_handle: pn,
+    rawcharactercollision_new: hn,
+    rawcharactercollision_toi: bn,
+    rawcharactercollision_translationDeltaApplied: un,
+    rawcharactercollision_translationDeltaRemaining: gn,
+    rawcharactercollision_worldNormal1: yn,
+    rawcharactercollision_worldNormal2: Sn,
+    rawcharactercollision_worldWitness1: mn,
+    rawcharactercollision_worldWitness2: fn,
+    rawcolliderset_coActiveCollisionTypes: dc,
+    rawcolliderset_coActiveEvents: hc,
+    rawcolliderset_coActiveHooks: wc,
+    rawcolliderset_coCastCollider: bc,
+    rawcolliderset_coCastRay: Rc,
+    rawcolliderset_coCastRayAndGetNormal: Cc,
+    rawcolliderset_coCastShape: gc,
+    rawcolliderset_coCollisionGroups: cc,
+    rawcolliderset_coCombineVoxelStates: V_,
+    rawcolliderset_coContactCollider: yc,
+    rawcolliderset_coContactForceEventThreshold: pc,
+    rawcolliderset_coContactShape: fc,
+    rawcolliderset_coContactSkin: ic,
+    rawcolliderset_coContainsPoint: uc,
+    rawcolliderset_coDensity: sc,
+    rawcolliderset_coFriction: nc,
+    rawcolliderset_coFrictionCombineRule: jc,
+    rawcolliderset_coHalfExtents: z_,
+    rawcolliderset_coHalfHeight: H_,
+    rawcolliderset_coHalfspaceNormal: F_,
+    rawcolliderset_coHeightFieldFlags: J_,
+    rawcolliderset_coHeightfieldHeights: K_,
+    rawcolliderset_coHeightfieldNCols: $_,
+    rawcolliderset_coHeightfieldNRows: Z_,
+    rawcolliderset_coHeightfieldScale: Y_,
+    rawcolliderset_coIndices: U_,
+    rawcolliderset_coIntersectsRay: vc,
+    rawcolliderset_coIntersectsShape: mc,
+    rawcolliderset_coIsEnabled: ec,
+    rawcolliderset_coIsSensor: E_,
+    rawcolliderset_coMass: oc,
+    rawcolliderset_coParent: Q_,
+    rawcolliderset_coProjectPoint: Sc,
+    rawcolliderset_coPropagateVoxelChange: B_,
+    rawcolliderset_coRadius: M_,
+    rawcolliderset_coRestitution: ac,
+    rawcolliderset_coRestitutionCombineRule: Pc,
+    rawcolliderset_coRotation: C_,
+    rawcolliderset_coRoundRadius: L_,
+    rawcolliderset_coSetActiveCollisionTypes: Hc,
+    rawcolliderset_coSetActiveEvents: kc,
+    rawcolliderset_coSetActiveHooks: Mc,
+    rawcolliderset_coSetCollisionGroups: zc,
+    rawcolliderset_coSetContactForceEventThreshold: Lc,
+    rawcolliderset_coSetContactSkin: rc,
+    rawcolliderset_coSetDensity: Nc,
+    rawcolliderset_coSetEnabled: tc,
+    rawcolliderset_coSetFriction: Ac,
+    rawcolliderset_coSetFrictionCombineRule: Ec,
+    rawcolliderset_coSetHalfExtents: T_,
+    rawcolliderset_coSetHalfHeight: D_,
+    rawcolliderset_coSetMass: Gc,
+    rawcolliderset_coSetMassProperties: Wc,
+    rawcolliderset_coSetRadius: k_,
+    rawcolliderset_coSetRestitution: Ic,
+    rawcolliderset_coSetRestitutionCombineRule: Fc,
+    rawcolliderset_coSetRotation: A_,
+    rawcolliderset_coSetRotationWrtParent: j_,
+    rawcolliderset_coSetRoundRadius: N_,
+    rawcolliderset_coSetSensor: xc,
+    rawcolliderset_coSetShape: Dc,
+    rawcolliderset_coSetSolverGroups: Tc,
+    rawcolliderset_coSetTranslation: x_,
+    rawcolliderset_coSetTranslationWrtParent: I_,
+    rawcolliderset_coSetVoxel: q_,
+    rawcolliderset_coShapeType: P_,
+    rawcolliderset_coSolverGroups: lc,
+    rawcolliderset_coTranslation: R_,
+    rawcolliderset_coTriMeshFlags: X_,
+    rawcolliderset_coVertices: O_,
+    rawcolliderset_coVolume: _c,
+    rawcolliderset_coVoxelData: G_,
+    rawcolliderset_coVoxelSize: W_,
+    rawcolliderset_contains: Oc,
+    rawcolliderset_createCollider: Uc,
+    rawcolliderset_forEachColliderHandle: Jc,
+    rawcolliderset_isHandleValid: Ed,
+    rawcolliderset_len: Vc,
+    rawcolliderset_new: Bc,
+    rawcolliderset_remove: Xc,
+    rawcollidershapecasthit_colliderHandle: qd,
+    rawcollidershapecasthit_normal1: ch,
+    rawcollidershapecasthit_normal2: lh,
+    rawcollidershapecasthit_time_of_impact: fw,
+    rawcollidershapecasthit_witness1: yw,
+    rawcollidershapecasthit_witness2: Sw,
+    rawcontactforceevent_collider1: Yd,
+    rawcontactforceevent_collider2: Vw,
+    rawcontactforceevent_max_force_direction: Xw,
+    rawcontactforceevent_max_force_magnitude: Jw,
+    rawcontactforceevent_total_force: Ow,
+    rawcontactforceevent_total_force_magnitude: Uw,
+    rawcontactmanifold_contact_dist: ul,
+    rawcontactmanifold_contact_fid1: gl,
+    rawcontactmanifold_contact_fid2: bl,
+    rawcontactmanifold_contact_impulse: ml,
+    rawcontactmanifold_contact_local_p1: hl,
+    rawcontactmanifold_contact_local_p2: pl,
+    rawcontactmanifold_contact_tangent_impulse_x: fl,
+    rawcontactmanifold_contact_tangent_impulse_y: yl,
+    rawcontactmanifold_local_n1: _l,
+    rawcontactmanifold_local_n2: cl,
+    rawcontactmanifold_normal: ol,
+    rawcontactmanifold_num_contacts: dl,
+    rawcontactmanifold_num_solver_contacts: Sl,
+    rawcontactmanifold_solver_contact_dist: Rl,
+    rawcontactmanifold_solver_contact_friction: Cl,
+    rawcontactmanifold_solver_contact_point: vl,
+    rawcontactmanifold_solver_contact_restitution: xl,
+    rawcontactmanifold_solver_contact_tangent_velocity: Il,
+    rawcontactmanifold_subshape1: ll,
+    rawcontactmanifold_subshape2: wl,
+    rawcontactpair_collider1: il,
+    rawcontactpair_collider2: nl,
+    rawcontactpair_contactManifold: sl,
+    rawcontactpair_numContactManifolds: al,
+    rawdebugrenderpipeline_colors: Gw,
+    rawdebugrenderpipeline_new: Lw,
+    rawdebugrenderpipeline_render: Ww,
+    rawdebugrenderpipeline_vertices: Nw,
+    rawdeserializedworld_takeBodies: Sd,
+    rawdeserializedworld_takeBroadPhase: fd,
+    rawdeserializedworld_takeColliders: vd,
+    rawdeserializedworld_takeGravity: gd,
+    rawdeserializedworld_takeImpulseJoints: Rd,
+    rawdeserializedworld_takeIntegrationParameters: bd,
+    rawdeserializedworld_takeIslandManager: md,
+    rawdeserializedworld_takeMultibodyJoints: Cd,
+    rawdeserializedworld_takeNarrowPhase: yd,
+    rawdynamicraycastvehiclecontroller_add_wheel: Wn,
+    rawdynamicraycastvehiclecontroller_chassis: Hn,
+    rawdynamicraycastvehiclecontroller_current_vehicle_speed: kn,
+    rawdynamicraycastvehiclecontroller_index_forward_axis: Nn,
+    rawdynamicraycastvehiclecontroller_index_up_axis: Dn,
+    rawdynamicraycastvehiclecontroller_new: Mn,
+    rawdynamicraycastvehiclecontroller_num_wheels: qn,
+    rawdynamicraycastvehiclecontroller_set_index_forward_axis: Gn,
+    rawdynamicraycastvehiclecontroller_set_index_up_axis: Ln,
+    rawdynamicraycastvehiclecontroller_set_wheel_axle_cs: ua,
+    rawdynamicraycastvehiclecontroller_set_wheel_brake: oa,
+    rawdynamicraycastvehiclecontroller_set_wheel_chassis_connection_point_cs: On,
+    rawdynamicraycastvehiclecontroller_set_wheel_direction_cs: ha,
+    rawdynamicraycastvehiclecontroller_set_wheel_engine_force: wa,
+    rawdynamicraycastvehiclecontroller_set_wheel_friction_slip: ba,
+    rawdynamicraycastvehiclecontroller_set_wheel_max_suspension_force: aa,
+    rawdynamicraycastvehiclecontroller_set_wheel_max_suspension_travel: Kn,
+    rawdynamicraycastvehiclecontroller_set_wheel_radius: Zn,
+    rawdynamicraycastvehiclecontroller_set_wheel_side_friction_stiffness: fa,
+    rawdynamicraycastvehiclecontroller_set_wheel_steering: ca,
+    rawdynamicraycastvehiclecontroller_set_wheel_suspension_compression: ea,
+    rawdynamicraycastvehiclecontroller_set_wheel_suspension_relaxation: ia,
+    rawdynamicraycastvehiclecontroller_set_wheel_suspension_rest_length: Xn,
+    rawdynamicraycastvehiclecontroller_set_wheel_suspension_stiffness: Qn,
+    rawdynamicraycastvehiclecontroller_update_vehicle: Bn,
+    rawdynamicraycastvehiclecontroller_wheel_axle_cs: pa,
+    rawdynamicraycastvehiclecontroller_wheel_brake: sa,
+    rawdynamicraycastvehiclecontroller_wheel_chassis_connection_point_cs: Vn,
+    rawdynamicraycastvehiclecontroller_wheel_contact_normal_ws: Ca,
+    rawdynamicraycastvehiclecontroller_wheel_contact_point_ws: xa,
+    rawdynamicraycastvehiclecontroller_wheel_direction_cs: da,
+    rawdynamicraycastvehiclecontroller_wheel_engine_force: la,
+    rawdynamicraycastvehiclecontroller_wheel_forward_impulse: Sa,
+    rawdynamicraycastvehiclecontroller_wheel_friction_slip: ga,
+    rawdynamicraycastvehiclecontroller_wheel_ground_object: Ea,
+    rawdynamicraycastvehiclecontroller_wheel_hard_point_ws: Aa,
+    rawdynamicraycastvehiclecontroller_wheel_is_in_contact: ja,
+    rawdynamicraycastvehiclecontroller_wheel_max_suspension_force: na,
+    rawdynamicraycastvehiclecontroller_wheel_max_suspension_travel: Jn,
+    rawdynamicraycastvehiclecontroller_wheel_radius: Yn,
+    rawdynamicraycastvehiclecontroller_wheel_rotation: ya,
+    rawdynamicraycastvehiclecontroller_wheel_side_friction_stiffness: ma,
+    rawdynamicraycastvehiclecontroller_wheel_side_impulse: va,
+    rawdynamicraycastvehiclecontroller_wheel_steering: _a,
+    rawdynamicraycastvehiclecontroller_wheel_suspension_compression: ta,
+    rawdynamicraycastvehiclecontroller_wheel_suspension_force: Ra,
+    rawdynamicraycastvehiclecontroller_wheel_suspension_length: Ia,
+    rawdynamicraycastvehiclecontroller_wheel_suspension_relaxation: ra,
+    rawdynamicraycastvehiclecontroller_wheel_suspension_rest_length: Un,
+    rawdynamicraycastvehiclecontroller_wheel_suspension_stiffness: $n,
+    raweventqueue_clear: $w,
+    raweventqueue_drainCollisionEvents: Yw,
+    raweventqueue_drainContactForceEvents: Zw,
+    raweventqueue_new: Kw,
+    rawgenericjoint_fixed: Ts,
+    rawgenericjoint_generic: js,
+    rawgenericjoint_prismatic: zs,
+    rawgenericjoint_revolute: Ms,
+    rawgenericjoint_rope: Ps,
+    rawgenericjoint_spherical: Fs,
+    rawgenericjoint_spring: Es,
+    rawimpulsejointset_contains: rs,
+    rawimpulsejointset_createJoint: Qa,
+    rawimpulsejointset_forEachJointAttachedToRigidBody: ns,
+    rawimpulsejointset_forEachJointHandle: is,
+    rawimpulsejointset_jointAnchor1: Da,
+    rawimpulsejointset_jointAnchor2: La,
+    rawimpulsejointset_jointBodyHandle1: Ta,
+    rawimpulsejointset_jointBodyHandle2: Ma,
+    rawimpulsejointset_jointConfigureMotor: Ya,
+    rawimpulsejointset_jointConfigureMotorModel: Xa,
+    rawimpulsejointset_jointConfigureMotorPosition: Ka,
+    rawimpulsejointset_jointConfigureMotorVelocity: Ja,
+    rawimpulsejointset_jointContactsEnabled: Wa,
+    rawimpulsejointset_jointFrameX1: ka,
+    rawimpulsejointset_jointFrameX2: Ha,
+    rawimpulsejointset_jointLimitsEnabled: Ba,
+    rawimpulsejointset_jointLimitsMax: Oa,
+    rawimpulsejointset_jointLimitsMin: Va,
+    rawimpulsejointset_jointSetAnchor1: Na,
+    rawimpulsejointset_jointSetAnchor2: Ga,
+    rawimpulsejointset_jointSetContactsEnabled: qa,
+    rawimpulsejointset_jointSetLimits: Ua,
+    rawimpulsejointset_jointType: za,
+    rawimpulsejointset_len: es,
+    rawimpulsejointset_new: $a,
+    rawimpulsejointset_remove: ts,
+    rawintegrationparameters_contact_erp: _s,
+    rawintegrationparameters_dt: os,
+    rawintegrationparameters_lengthUnit: ds,
+    rawintegrationparameters_maxCcdSubsteps: ws,
+    rawintegrationparameters_minIslandSize: ls,
+    rawintegrationparameters_new: ss,
+    rawintegrationparameters_normalizedAllowedLinearError: Fd,
+    rawintegrationparameters_normalizedPredictionDistance: Zd,
+    rawintegrationparameters_numAdditionalFrictionIterations: zd,
+    rawintegrationparameters_numInternalPgsIterations: Td,
+    rawintegrationparameters_numSolverIterations: cs,
+    rawintegrationparameters_set_contact_natural_frequency: ps,
+    rawintegrationparameters_set_dt: hs,
+    rawintegrationparameters_set_lengthUnit: ys,
+    rawintegrationparameters_set_maxCcdSubsteps: fs,
+    rawintegrationparameters_set_minIslandSize: ms,
+    rawintegrationparameters_set_normalizedAllowedLinearError: us,
+    rawintegrationparameters_set_normalizedPredictionDistance: gs,
+    rawintegrationparameters_set_numAdditionalFrictionIterations: dh,
+    rawintegrationparameters_set_numInternalPgsIterations: hh,
+    rawintegrationparameters_set_numSolverIterations: bs,
+    rawintegrationparameters_switchToSmallStepsPgsSolver: vs,
+    rawintegrationparameters_switchToSmallStepsPgsSolverWithoutWarmstart: Rs,
+    rawintegrationparameters_switchToStandardPgsSolver: Ss,
+    rawislandmanager_forEachActiveRigidBodyHandle: Is,
+    rawislandmanager_new: xs,
+    rawkinematiccharactercontroller_autostepEnabled: Ki,
+    rawkinematiccharactercontroller_autostepIncludesDynamicBodies: Ji,
+    rawkinematiccharactercontroller_autostepMaxHeight: Ui,
+    rawkinematiccharactercontroller_autostepMinWidth: Xi,
+    rawkinematiccharactercontroller_computeColliderMovement: on,
+    rawkinematiccharactercontroller_computedCollision: wn,
+    rawkinematiccharactercontroller_computedGrounded: cn,
+    rawkinematiccharactercontroller_computedMovement: _n,
+    rawkinematiccharactercontroller_disableAutostep: Zi,
+    rawkinematiccharactercontroller_disableSnapToGround: an,
+    rawkinematiccharactercontroller_enableAutostep: Yi,
+    rawkinematiccharactercontroller_enableSnapToGround: nn,
+    rawkinematiccharactercontroller_maxSlopeClimbAngle: $i,
+    rawkinematiccharactercontroller_minSlopeSlideAngle: tn,
+    rawkinematiccharactercontroller_new: Ni,
+    rawkinematiccharactercontroller_normalNudgeFactor: Wi,
+    rawkinematiccharactercontroller_numComputedCollisions: ln,
+    rawkinematiccharactercontroller_offset: Pd,
+    rawkinematiccharactercontroller_setMaxSlopeClimbAngle: Qi,
+    rawkinematiccharactercontroller_setMinSlopeSlideAngle: en,
+    rawkinematiccharactercontroller_setNormalNudgeFactor: qi,
+    rawkinematiccharactercontroller_setOffset: Bi,
+    rawkinematiccharactercontroller_setSlideEnabled: Oi,
+    rawkinematiccharactercontroller_setUp: Gi,
+    rawkinematiccharactercontroller_slideEnabled: Vi,
+    rawkinematiccharactercontroller_snapToGroundDistance: rn,
+    rawkinematiccharactercontroller_snapToGroundEnabled: sn,
+    rawkinematiccharactercontroller_up: rh,
+    rawmultibodyjointset_contains: Ks,
+    rawmultibodyjointset_createJoint: Xs,
+    rawmultibodyjointset_forEachJointAttachedToRigidBody: Zs,
+    rawmultibodyjointset_forEachJointHandle: Ys,
+    rawmultibodyjointset_jointAnchor1: Ls,
+    rawmultibodyjointset_jointAnchor2: Ns,
+    rawmultibodyjointset_jointContactsEnabled: Gs,
+    rawmultibodyjointset_jointFrameX1: Hs,
+    rawmultibodyjointset_jointFrameX2: Ds,
+    rawmultibodyjointset_jointLimitsEnabled: qs,
+    rawmultibodyjointset_jointLimitsMax: Vs,
+    rawmultibodyjointset_jointLimitsMin: Bs,
+    rawmultibodyjointset_jointSetContactsEnabled: Ws,
+    rawmultibodyjointset_jointType: ks,
+    rawmultibodyjointset_new: Us,
+    rawmultibodyjointset_remove: Js,
+    rawnarrowphase_contact_pair: Qc,
+    rawnarrowphase_contact_pairs_with: $c,
+    rawnarrowphase_intersection_pair: el,
+    rawnarrowphase_intersection_pairs_with: tl,
+    rawnarrowphase_new: Zc,
+    rawphysicspipeline_new: td,
+    rawphysicspipeline_step: ed,
+    rawphysicspipeline_stepWithEvents: rd,
+    rawpidcontroller_angular_correction: zn,
+    rawpidcontroller_apply_angular_correction: Pn,
+    rawpidcontroller_apply_linear_correction: En,
+    rawpidcontroller_linear_correction: Fn,
+    rawpidcontroller_new: Rn,
+    rawpidcontroller_reset_integrals: jn,
+    rawpidcontroller_set_axes_mask: An,
+    rawpidcontroller_set_kd: In,
+    rawpidcontroller_set_ki: xn,
+    rawpidcontroller_set_kp: Cn,
+    rawpointcolliderprojection_colliderHandle: Fl,
+    rawpointcolliderprojection_featureId: kl,
+    rawpointcolliderprojection_featureType: Ml,
+    rawpointcolliderprojection_isInside: Tl,
+    rawpointcolliderprojection_point: zl,
+    rawpointprojection_isInside: El,
+    rawpointprojection_point: jl,
+    rawquerypipeline_castRay: ad,
+    rawquerypipeline_castRayAndGetNormal: sd,
+    rawquerypipeline_castShape: dd,
+    rawquerypipeline_collidersWithAabbIntersectingAabb: pd,
+    rawquerypipeline_intersectionWithShape: _d,
+    rawquerypipeline_intersectionsWithPoint: wd,
+    rawquerypipeline_intersectionsWithRay: od,
+    rawquerypipeline_intersectionsWithShape: hd,
+    rawquerypipeline_new: id,
+    rawquerypipeline_projectPoint: cd,
+    rawquerypipeline_projectPointAndGetFeature: ld,
+    rawquerypipeline_update: nd,
+    rawraycolliderhit_colliderHandle: Gd,
+    rawraycolliderhit_timeOfImpact: Bd,
+    rawraycolliderintersection_colliderHandle: Dd,
+    rawraycolliderintersection_featureId: eh,
+    rawraycolliderintersection_featureType: Nd,
+    rawraycolliderintersection_normal: oh,
+    rawraycolliderintersection_time_of_impact: Wd,
+    rawrayintersection_featureId: th,
+    rawrayintersection_featureType: Hd,
+    rawrayintersection_normal: sh,
+    rawrayintersection_time_of_impact: Ld,
+    rawrigidbodyset_contains: m_,
+    rawrigidbodyset_createRigidBody: g_,
+    rawrigidbodyset_forEachRigidBodyHandle: f_,
+    rawrigidbodyset_len: Md,
+    rawrigidbodyset_new: u_,
+    rawrigidbodyset_propagateModifiedBodyPositionsToColliders: y_,
+    rawrigidbodyset_rbAddForce: r_,
+    rawrigidbodyset_rbAddForceAtPoint: s_,
+    rawrigidbodyset_rbAddTorque: n_,
+    rawrigidbodyset_rbAdditionalSolverIterations: __,
+    rawrigidbodyset_rbAngularDamping: Xo,
+    rawrigidbodyset_rbAngvel: go,
+    rawrigidbodyset_rbApplyImpulse: i_,
+    rawrigidbodyset_rbApplyImpulseAtPoint: o_,
+    rawrigidbodyset_rbApplyTorqueImpulse: a_,
+    rawrigidbodyset_rbBodyType: Wo,
+    rawrigidbodyset_rbCollider: Go,
+    rawrigidbodyset_rbDominanceGroup: vo,
+    rawrigidbodyset_rbEffectiveAngularInertia: ko,
+    rawrigidbodyset_rbEffectiveInvMass: jo,
+    rawrigidbodyset_rbEffectiveWorldInvInertiaSqrt: Mo,
+    rawrigidbodyset_rbEnableCcd: Co,
+    rawrigidbodyset_rbGravityScale: $o,
+    rawrigidbodyset_rbInvMass: Ao,
+    rawrigidbodyset_rbInvPrincipalInertiaSqrt: Fo,
+    rawrigidbodyset_rbIsCcdEnabled: Do,
+    rawrigidbodyset_rbIsDynamic: Oo,
+    rawrigidbodyset_rbIsEnabled: Zo,
+    rawrigidbodyset_rbIsFixed: Bo,
+    rawrigidbodyset_rbIsKinematic: Vo,
+    rawrigidbodyset_rbIsMoving: ro,
+    rawrigidbodyset_rbIsSleeping: eo,
+    rawrigidbodyset_rbLinearDamping: Uo,
+    rawrigidbodyset_rbLinvel: uo,
+    rawrigidbodyset_rbLocalCom: Eo,
+    rawrigidbodyset_rbLockRotations: yo,
+    rawrigidbodyset_rbLockTranslations: mo,
+    rawrigidbodyset_rbMass: Io,
+    rawrigidbodyset_rbNextRotation: no,
+    rawrigidbodyset_rbNextTranslation: io,
+    rawrigidbodyset_rbNumColliders: No,
+    rawrigidbodyset_rbPrincipalInertia: To,
+    rawrigidbodyset_rbPrincipalInertiaLocalFrame: zo,
+    rawrigidbodyset_rbRecomputeMassPropertiesFromColliders: wo,
+    rawrigidbodyset_rbResetForces: t_,
+    rawrigidbodyset_rbResetTorques: e_,
+    rawrigidbodyset_rbRotation: Qs,
+    rawrigidbodyset_rbSetAdditionalMass: ho,
+    rawrigidbodyset_rbSetAdditionalMassProperties: po,
+    rawrigidbodyset_rbSetAdditionalSolverIterations: c_,
+    rawrigidbodyset_rbSetAngularDamping: Ko,
+    rawrigidbodyset_rbSetAngvel: _o,
+    rawrigidbodyset_rbSetBodyType: qo,
+    rawrigidbodyset_rbSetDominanceGroup: Ro,
+    rawrigidbodyset_rbSetEnabled: Yo,
+    rawrigidbodyset_rbSetEnabledRotations: So,
+    rawrigidbodyset_rbSetEnabledTranslations: fo,
+    rawrigidbodyset_rbSetGravityScale: Qo,
+    rawrigidbodyset_rbSetLinearDamping: Jo,
+    rawrigidbodyset_rbSetLinvel: oo,
+    rawrigidbodyset_rbSetNextKinematicRotation: lo,
+    rawrigidbodyset_rbSetNextKinematicTranslation: co,
+    rawrigidbodyset_rbSetRotation: so,
+    rawrigidbodyset_rbSetSoftCcdPrediction: xo,
+    rawrigidbodyset_rbSetTranslation: ao,
+    rawrigidbodyset_rbSetUserData: w_,
+    rawrigidbodyset_rbSleep: to,
+    rawrigidbodyset_rbSoftCcdPrediction: Lo,
+    rawrigidbodyset_rbTranslation: $s,
+    rawrigidbodyset_rbUserData: l_,
+    rawrigidbodyset_rbUserForce: d_,
+    rawrigidbodyset_rbUserTorque: h_,
+    rawrigidbodyset_rbVelocityAtPoint: bo,
+    rawrigidbodyset_rbWakeUp: Ho,
+    rawrigidbodyset_rbWorldCom: Po,
+    rawrigidbodyset_remove: b_,
+    rawrotation_identity: Rw,
+    rawrotation_new: vw,
+    rawrotation_w: xw,
+    rawrotation_x: Cw,
+    rawrotation_y: Od,
+    rawrotation_z: Ud,
+    rawsdpmatrix3_elements: Hw,
+    rawserializationpipeline_deserializeAll: jd,
+    rawserializationpipeline_new: Id,
+    rawserializationpipeline_serializeAll: Ad,
+    rawshape_ball: Wl,
+    rawshape_capsule: Bl,
+    rawshape_castRay: dw,
+    rawshape_castRayAndGetNormal: hw,
+    rawshape_castShape: sw,
+    rawshape_cone: Ul,
+    rawshape_contactShape: _w,
+    rawshape_containsPoint: cw,
+    rawshape_convexHull: rw,
+    rawshape_convexMesh: nw,
+    rawshape_cuboid: Nl,
+    rawshape_cylinder: Vl,
+    rawshape_halfspace: ql,
+    rawshape_heightfield: $l,
+    rawshape_intersectsRay: ww,
+    rawshape_intersectsShape: ow,
+    rawshape_polyline: Yl,
+    rawshape_projectPoint: lw,
+    rawshape_roundCone: Xl,
+    rawshape_roundConvexHull: iw,
+    rawshape_roundConvexMesh: aw,
+    rawshape_roundCuboid: Gl,
+    rawshape_roundCylinder: Ol,
+    rawshape_roundTriangle: ew,
+    rawshape_segment: Ql,
+    rawshape_triangle: tw,
+    rawshape_trimesh: Zl,
+    rawshape_voxels: Jl,
+    rawshape_voxelsFromPoints: Kl,
+    rawshapecasthit_normal1: gw,
+    rawshapecasthit_normal2: bw,
+    rawshapecasthit_time_of_impact: Vd,
+    rawshapecasthit_witness1: uw,
+    rawshapecasthit_witness2: wh,
+    rawshapecontact_distance: kd,
+    rawshapecontact_normal1: _h,
+    rawshapecontact_normal2: ih,
+    rawshapecontact_point1: nh,
+    rawshapecontact_point2: ah,
+    rawvector_new: Aw,
+    rawvector_set_x: jw,
+    rawvector_set_y: ph,
+    rawvector_set_z: Ew,
+    rawvector_x: Xd,
+    rawvector_xyz: Pw,
+    rawvector_xzy: Tw,
+    rawvector_y: Jd,
+    rawvector_yxz: Fw,
+    rawvector_yzx: Mw,
+    rawvector_z: Kd,
+    rawvector_zero: Iw,
+    rawvector_zxy: zw,
+    rawvector_zyx: kw,
+    reserve_memory: $d,
+    version: Di
   }, Symbol.toStringTag, {
     value: "Module"
   }));
-  ti(xh);
-  fr = class {
+  Qr(Ch);
+  mr = class {
     constructor(t, e, r) {
       this.x = t, this.y = e, this.z = r;
     }
   };
   w = class {
     static new(t, e, r) {
-      return new fr(t, e, r);
+      return new mr(t, e, r);
     }
     static intoRaw(t) {
       return new l(t.x, t.y, t.z);
@@ -3370,18 +3362,18 @@ let __tla = Promise.all([
       t.x = e.x, t.y = e.y, t.z = e.z;
     }
   };
-  ne = class {
+  ie = class {
     constructor(t, e, r, a) {
       this.x = t, this.y = e, this.z = r, this.w = a;
     }
   };
   S = class {
     static identity() {
-      return new ne(0, 0, 0, 1);
+      return new ie(0, 0, 0, 1);
     }
     static fromRaw(t) {
       if (!t) return null;
-      let e = new ne(t.x, t.y, t.z, t.w);
+      let e = new ie(t.x, t.y, t.z, t.w);
       return t.free(), e;
     }
     static intoRaw(t) {
@@ -3391,7 +3383,7 @@ let __tla = Promise.all([
       t.x = e.x, t.y = e.y, t.z = e.z, t.w = e.w;
     }
   };
-  yr = class {
+  fr = class {
     get m11() {
       return this.elements[0];
     }
@@ -3423,16 +3415,16 @@ let __tla = Promise.all([
       this.elements = t;
     }
   };
-  ae = class {
+  ne = class {
     static fromRaw(t) {
-      const e = new yr(t.elements());
+      const e = new fr(t.elements());
       return t.free(), e;
     }
   };
   (function(s) {
     s[s.Dynamic = 0] = "Dynamic", s[s.Fixed = 1] = "Fixed", s[s.KinematicPositionBased = 2] = "KinematicPositionBased", s[s.KinematicVelocityBased = 3] = "KinematicVelocityBased";
   })(B || (B = {}));
-  se = class {
+  ae = class {
     constructor(t, e, r) {
       this.rawSet = t, this.colliderSet = e, this.handle = r;
     }
@@ -3559,10 +3551,10 @@ let __tla = Promise.all([
       return S.fromRaw(this.rawSet.rbPrincipalInertiaLocalFrame(this.handle));
     }
     effectiveWorldInvInertiaSqrt() {
-      return ae.fromRaw(this.rawSet.rbEffectiveWorldInvInertiaSqrt(this.handle));
+      return ne.fromRaw(this.rawSet.rbEffectiveWorldInvInertiaSqrt(this.handle));
     }
     effectiveAngularInertia() {
-      return ae.fromRaw(this.rawSet.rbEffectiveAngularInertia(this.handle));
+      return ne.fromRaw(this.rawSet.rbEffectiveAngularInertia(this.handle));
     }
     sleep() {
       this.rawSet.rbSleep(this.handle);
@@ -3806,13 +3798,13 @@ let __tla = Promise.all([
       return this.fconv[0] = t, this.uconv[0];
     }
   }
-  Sr = class {
+  yr = class {
     free() {
       this.raw && this.raw.free(), this.raw = void 0, this.map && this.map.clear(), this.map = void 0;
     }
     constructor(t) {
       this.raw = t || new j(), this.map = new Ht(), t && t.forEachRigidBodyHandle((e) => {
-        this.map.set(e, new se(t, null, e));
+        this.map.set(e, new ae(t, null, e));
       });
     }
     finalizeDeserialization(t) {
@@ -3821,7 +3813,7 @@ let __tla = Promise.all([
     createRigidBody(t, e) {
       let r = w.intoRaw(e.translation), a = S.intoRaw(e.rotation), o = w.intoRaw(e.linvel), _ = w.intoRaw(e.centerOfMass), d = w.intoRaw(e.angvel), h = w.intoRaw(e.principalAngularInertia), p = S.intoRaw(e.angularInertiaLocalFrame), u = this.raw.createRigidBody(e.enabled, r, a, e.gravityScale, e.mass, e.massOnly, _, o, d, h, p, e.translationsEnabledX, e.translationsEnabledY, e.translationsEnabledZ, e.rotationsEnabledX, e.rotationsEnabledY, e.rotationsEnabledZ, e.linearDamping, e.angularDamping, e.status, e.canSleep, e.sleeping, e.softCcdPrediction, e.ccdEnabled, e.dominanceGroup, e.additionalSolverIterations);
       r.free(), a.free(), o.free(), _.free(), d.free(), h.free(), p.free();
-      const g = new se(this.raw, t, u);
+      const g = new ae(this.raw, t, u);
       return g.userData = e.userData, this.map.set(u, g), g;
     }
     remove(t, e, r, a, o) {
@@ -3849,7 +3841,7 @@ let __tla = Promise.all([
       return this.map.getAll();
     }
   };
-  vr = class {
+  Sr = class {
     constructor(t) {
       this.raw = t || new it();
     }
@@ -3931,10 +3923,10 @@ let __tla = Promise.all([
   })(D || (D = {}));
   (function(s) {
     s[s.AccelerationBased = 0] = "AccelerationBased", s[s.ForceBased = 1] = "ForceBased";
-  })(oe || (oe = {}));
+  })(se || (se = {}));
   (function(s) {
     s[s.LinX = 1] = "LinX", s[s.LinY = 2] = "LinY", s[s.LinZ = 4] = "LinZ", s[s.AngX = 8] = "AngX", s[s.AngY = 16] = "AngY", s[s.AngZ = 32] = "AngZ";
-  })(_e || (_e = {}));
+  })(oe || (oe = {}));
   O = class {
     constructor(t, e, r) {
       this.rawSet = t, this.bodySet = e, this.handle = r;
@@ -3942,19 +3934,19 @@ let __tla = Promise.all([
     static newTyped(t, e, r) {
       switch (t.jointType(r)) {
         case V.Revolute:
-          return new Ar(t, e, r);
-        case V.Prismatic:
           return new Ir(t, e, r);
-        case V.Fixed:
-          return new Rr(t, e, r);
-        case V.Spring:
+        case V.Prismatic:
           return new xr(t, e, r);
-        case V.Rope:
+        case V.Fixed:
+          return new vr(t, e, r);
+        case V.Spring:
           return new Cr(t, e, r);
+        case V.Rope:
+          return new Rr(t, e, r);
         case V.Spherical:
-          return new Er(t, e, r);
-        case V.Generic:
           return new jr(t, e, r);
+        case V.Generic:
+          return new Ar(t, e, r);
         default:
           return new O(t, e, r);
       }
@@ -4001,7 +3993,7 @@ let __tla = Promise.all([
       return this.rawSet.jointContactsEnabled(this.handle);
     }
   };
-  Re = class extends O {
+  ve = class extends O {
     limitsEnabled() {
       return this.rawSet.jointLimitsEnabled(this.handle, this.rawAxis());
     }
@@ -4027,25 +4019,25 @@ let __tla = Promise.all([
       this.rawSet.jointConfigureMotor(this.handle, this.rawAxis(), t, e, r, a);
     }
   };
+  vr = class extends O {
+  };
   Rr = class extends O {
   };
   Cr = class extends O {
   };
-  xr = class extends O {
-  };
-  Ir = class extends Re {
+  xr = class extends ve {
     rawAxis() {
       return Pt.LinX;
     }
   };
-  Ar = class extends Re {
+  Ir = class extends ve {
     rawAxis() {
       return Pt.AngX;
     }
   };
-  jr = class extends O {
+  Ar = class extends O {
   };
-  Er = class extends O {
+  jr = class extends O {
   };
   X = class {
     constructor() {
@@ -4109,7 +4101,7 @@ let __tla = Promise.all([
       return t.free(), e.free(), a;
     }
   };
-  Pr = class {
+  Er = class {
     free() {
       this.raw && this.raw.free(), this.raw = void 0, this.map && this.map.clear(), this.map = void 0;
     }
@@ -4159,13 +4151,13 @@ let __tla = Promise.all([
     static newTyped(t, e) {
       switch (t.jointType(e)) {
         case V.Revolute:
-          return new Tr(t, e);
-        case V.Prismatic:
           return new zr(t, e);
-        case V.Fixed:
+        case V.Prismatic:
           return new Fr(t, e);
+        case V.Fixed:
+          return new Pr(t, e);
         case V.Spherical:
-          return new Mr(t, e);
+          return new Tr(t, e);
         default:
           return new Q(t, e);
       }
@@ -4180,23 +4172,23 @@ let __tla = Promise.all([
       return this.rawSet.jointContactsEnabled(this.handle);
     }
   };
-  Ce = class extends Q {
+  Re = class extends Q {
   };
-  Fr = class extends Q {
+  Pr = class extends Q {
   };
-  zr = class extends Ce {
+  Fr = class extends Re {
     rawAxis() {
       return Pt.LinX;
     }
   };
-  Tr = class extends Ce {
+  zr = class extends Re {
     rawAxis() {
       return Pt.AngX;
     }
   };
-  Mr = class extends Q {
+  Tr = class extends Q {
   };
-  kr = class {
+  Mr = class {
     free() {
       this.raw && this.raw.free(), this.raw = void 0, this.map && this.map.clear(), this.map = void 0;
     }
@@ -4239,15 +4231,15 @@ let __tla = Promise.all([
   (function(s) {
     s[s.Average = 0] = "Average", s[s.Min = 1] = "Min", s[s.Multiply = 2] = "Multiply", s[s.Max = 3] = "Max";
   })(dt || (dt = {}));
-  Hr = class {
+  kr = class {
     free() {
       this.raw && this.raw.free(), this.raw = void 0;
     }
     constructor(t) {
-      this.raw = t || new ie();
+      this.raw = t || new re();
     }
   };
-  Dr = class {
+  Hr = class {
     free() {
       this.raw && this.raw.free(), this.raw = void 0;
     }
@@ -4258,7 +4250,7 @@ let __tla = Promise.all([
       this.raw.forEachActiveRigidBodyHandle(t);
     }
   };
-  Lr = class {
+  Dr = class {
     free() {
       this.raw && this.raw.free(), this.raw = void 0;
     }
@@ -4266,12 +4258,12 @@ let __tla = Promise.all([
       this.raw = t || new rt();
     }
   };
-  Nr = class {
+  Lr = class {
     free() {
       this.raw && this.raw.free(), this.raw = void 0;
     }
     constructor(t) {
-      this.raw = t || new $(), this.tempManifold = new Gr(null);
+      this.raw = t || new $(), this.tempManifold = new Nr(null);
     }
     contactPairsWith(t, e) {
       this.raw.contact_pairs_with(t, e);
@@ -4292,7 +4284,7 @@ let __tla = Promise.all([
       return this.raw.intersection_pair(t, e);
     }
   };
-  Gr = class {
+  Nr = class {
     free() {
       this.raw && this.raw.free(), this.raw = void 0;
     }
@@ -4393,7 +4385,7 @@ let __tla = Promise.all([
       return e.free(), r;
     }
   };
-  Ih = class {
+  xh = class {
     constructor(t, e) {
       this.origin = t, this.dir = e;
     }
@@ -4461,45 +4453,45 @@ let __tla = Promise.all([
       let a, o, _, d, h, p, u;
       switch (r) {
         case k.Ball:
-          return new xe(t.coRadius(e));
+          return new Ce(t.coRadius(e));
         case k.Cuboid:
-          return a = t.coHalfExtents(e), new Ie(a.x, a.y, a.z);
+          return a = t.coHalfExtents(e), new xe(a.x, a.y, a.z);
         case k.RoundCuboid:
-          return a = t.coHalfExtents(e), o = t.coRoundRadius(e), new Ae(a.x, a.y, a.z, o);
+          return a = t.coHalfExtents(e), o = t.coRoundRadius(e), new Ie(a.x, a.y, a.z, o);
         case k.Capsule:
-          return h = t.coHalfHeight(e), p = t.coRadius(e), new je(h, p);
+          return h = t.coHalfHeight(e), p = t.coRadius(e), new Ae(h, p);
         case k.Segment:
-          return _ = t.coVertices(e), new Ee(w.new(_[0], _[1], _[2]), w.new(_[3], _[4], _[5]));
+          return _ = t.coVertices(e), new je(w.new(_[0], _[1], _[2]), w.new(_[3], _[4], _[5]));
         case k.Polyline:
-          return _ = t.coVertices(e), d = t.coIndices(e), new ze(_, d);
+          return _ = t.coVertices(e), d = t.coIndices(e), new Fe(_, d);
         case k.Triangle:
-          return _ = t.coVertices(e), new Pe(w.new(_[0], _[1], _[2]), w.new(_[3], _[4], _[5]), w.new(_[6], _[7], _[8]));
+          return _ = t.coVertices(e), new Ee(w.new(_[0], _[1], _[2]), w.new(_[3], _[4], _[5]), w.new(_[6], _[7], _[8]));
         case k.RoundTriangle:
-          return _ = t.coVertices(e), o = t.coRoundRadius(e), new Fe(w.new(_[0], _[1], _[2]), w.new(_[3], _[4], _[5]), w.new(_[6], _[7], _[8]), o);
+          return _ = t.coVertices(e), o = t.coRoundRadius(e), new Pe(w.new(_[0], _[1], _[2]), w.new(_[3], _[4], _[5]), w.new(_[6], _[7], _[8]), o);
         case k.HalfSpace:
-          return u = w.fromRaw(t.coHalfspaceNormal(e)), new Wr(u);
+          return u = w.fromRaw(t.coHalfspaceNormal(e)), new Gr(u);
         case k.Voxels:
           const g = t.coVoxelData(e), b = t.coVoxelSize(e);
-          return new Te(g, b);
+          return new ze(g, b);
         case k.TriMesh:
           _ = t.coVertices(e), d = t.coIndices(e);
           const y = t.coTriMeshFlags(e);
-          return new Me(_, d, y);
+          return new Te(_, d, y);
         case k.HeightField:
           const I = t.coHeightfieldScale(e), L = t.coHeightfieldHeights(e), G = t.coHeightfieldNRows(e), W = t.coHeightfieldNCols(e), q = t.coHeightFieldFlags(e);
-          return new ke(G, W, L, I, q);
+          return new Me(G, W, L, I, q);
         case k.ConvexPolyhedron:
           return _ = t.coVertices(e), d = t.coIndices(e), new xt(_, d);
         case k.RoundConvexPolyhedron:
           return _ = t.coVertices(e), d = t.coIndices(e), o = t.coRoundRadius(e), new It(_, d, o);
         case k.Cylinder:
-          return h = t.coHalfHeight(e), p = t.coRadius(e), new He(h, p);
+          return h = t.coHalfHeight(e), p = t.coRadius(e), new ke(h, p);
         case k.RoundCylinder:
-          return h = t.coHalfHeight(e), p = t.coRadius(e), o = t.coRoundRadius(e), new De(h, p, o);
+          return h = t.coHalfHeight(e), p = t.coRadius(e), o = t.coRoundRadius(e), new He(h, p, o);
         case k.Cone:
-          return h = t.coHalfHeight(e), p = t.coRadius(e), new Le(h, p);
+          return h = t.coHalfHeight(e), p = t.coRadius(e), new De(h, p);
         case k.RoundCone:
-          return h = t.coHalfHeight(e), p = t.coRadius(e), o = t.coRoundRadius(e), new Ne(h, p, o);
+          return h = t.coHalfHeight(e), p = t.coRadius(e), o = t.coRoundRadius(e), new Le(h, p, o);
         default:
           throw new Error("unknown shape type: " + r);
       }
@@ -4542,11 +4534,11 @@ let __tla = Promise.all([
   })(F || (F = {}));
   (function(s) {
     s[s.FIX_INTERNAL_EDGES = 1] = "FIX_INTERNAL_EDGES";
-  })(ce || (ce = {}));
+  })(_e || (_e = {}));
   (function(s) {
     s[s.DELETE_BAD_TOPOLOGY_TRIANGLES = 4] = "DELETE_BAD_TOPOLOGY_TRIANGLES", s[s.ORIENTED = 8] = "ORIENTED", s[s.MERGE_DUPLICATE_VERTICES = 16] = "MERGE_DUPLICATE_VERTICES", s[s.DELETE_DEGENERATE_TRIANGLES = 32] = "DELETE_DEGENERATE_TRIANGLES", s[s.DELETE_DUPLICATE_TRIANGLES = 64] = "DELETE_DUPLICATE_TRIANGLES", s[s.FIX_INTERNAL_EDGES = 144] = "FIX_INTERNAL_EDGES";
-  })(le || (le = {}));
-  xe = class extends M {
+  })(ce || (ce = {}));
+  Ce = class extends M {
     constructor(t) {
       super(), this.type = F.Ball, this.radius = t;
     }
@@ -4554,7 +4546,7 @@ let __tla = Promise.all([
       return m.ball(this.radius);
     }
   };
-  Wr = class extends M {
+  Gr = class extends M {
     constructor(t) {
       super(), this.type = F.HalfSpace, this.normal = t;
     }
@@ -4563,7 +4555,7 @@ let __tla = Promise.all([
       return t.free(), e;
     }
   };
-  Ie = class extends M {
+  xe = class extends M {
     constructor(t, e, r) {
       super(), this.type = F.Cuboid, this.halfExtents = w.new(t, e, r);
     }
@@ -4571,7 +4563,7 @@ let __tla = Promise.all([
       return m.cuboid(this.halfExtents.x, this.halfExtents.y, this.halfExtents.z);
     }
   };
-  Ae = class extends M {
+  Ie = class extends M {
     constructor(t, e, r, a) {
       super(), this.type = F.RoundCuboid, this.halfExtents = w.new(t, e, r), this.borderRadius = a;
     }
@@ -4579,7 +4571,7 @@ let __tla = Promise.all([
       return m.roundCuboid(this.halfExtents.x, this.halfExtents.y, this.halfExtents.z, this.borderRadius);
     }
   };
-  je = class extends M {
+  Ae = class extends M {
     constructor(t, e) {
       super(), this.type = F.Capsule, this.halfHeight = t, this.radius = e;
     }
@@ -4587,7 +4579,7 @@ let __tla = Promise.all([
       return m.capsule(this.halfHeight, this.radius);
     }
   };
-  Ee = class extends M {
+  je = class extends M {
     constructor(t, e) {
       super(), this.type = F.Segment, this.a = t, this.b = e;
     }
@@ -4596,7 +4588,7 @@ let __tla = Promise.all([
       return t.free(), e.free(), r;
     }
   };
-  Pe = class extends M {
+  Ee = class extends M {
     constructor(t, e, r) {
       super(), this.type = F.Triangle, this.a = t, this.b = e, this.c = r;
     }
@@ -4605,7 +4597,7 @@ let __tla = Promise.all([
       return t.free(), e.free(), r.free(), a;
     }
   };
-  Fe = class extends M {
+  Pe = class extends M {
     constructor(t, e, r, a) {
       super(), this.type = F.RoundTriangle, this.a = t, this.b = e, this.c = r, this.borderRadius = a;
     }
@@ -4614,7 +4606,7 @@ let __tla = Promise.all([
       return t.free(), e.free(), r.free(), a;
     }
   };
-  ze = class extends M {
+  Fe = class extends M {
     constructor(t, e) {
       super(), this.type = F.Polyline, this.vertices = t, this.indices = e ?? new Uint32Array(0);
     }
@@ -4622,7 +4614,7 @@ let __tla = Promise.all([
       return m.polyline(this.vertices, this.indices);
     }
   };
-  Te = class extends M {
+  ze = class extends M {
     constructor(t, e) {
       super(), this.type = F.Voxels, this.data = t, this.voxelSize = e;
     }
@@ -4631,7 +4623,7 @@ let __tla = Promise.all([
       return this.data instanceof Int32Array ? e = m.voxels(t, this.data) : e = m.voxelsFromPoints(t, this.data), t.free(), e;
     }
   };
-  Me = class extends M {
+  Te = class extends M {
     constructor(t, e, r) {
       super(), this.type = F.TriMesh, this.vertices = t, this.indices = e, this.flags = r;
     }
@@ -4655,7 +4647,7 @@ let __tla = Promise.all([
       return this.indices ? m.roundConvexMesh(this.vertices, this.indices, this.borderRadius) : m.roundConvexHull(this.vertices, this.borderRadius);
     }
   };
-  ke = class extends M {
+  Me = class extends M {
     constructor(t, e, r, a, o) {
       super(), this.type = F.HeightField, this.nrows = t, this.ncols = e, this.heights = r, this.scale = a, this.flags = o;
     }
@@ -4664,7 +4656,7 @@ let __tla = Promise.all([
       return t.free(), e;
     }
   };
-  He = class extends M {
+  ke = class extends M {
     constructor(t, e) {
       super(), this.type = F.Cylinder, this.halfHeight = t, this.radius = e;
     }
@@ -4672,7 +4664,7 @@ let __tla = Promise.all([
       return m.cylinder(this.halfHeight, this.radius);
     }
   };
-  De = class extends M {
+  He = class extends M {
     constructor(t, e, r) {
       super(), this.type = F.RoundCylinder, this.borderRadius = r, this.halfHeight = t, this.radius = e;
     }
@@ -4680,7 +4672,7 @@ let __tla = Promise.all([
       return m.roundCylinder(this.halfHeight, this.radius, this.borderRadius);
     }
   };
-  Le = class extends M {
+  De = class extends M {
     constructor(t, e) {
       super(), this.type = F.Cone, this.halfHeight = t, this.radius = e;
     }
@@ -4688,7 +4680,7 @@ let __tla = Promise.all([
       return m.cone(this.halfHeight, this.radius);
     }
   };
-  Ne = class extends M {
+  Le = class extends M {
     constructor(t, e, r) {
       super(), this.type = F.RoundCone, this.halfHeight = t, this.radius = e, this.borderRadius = r;
     }
@@ -4696,12 +4688,12 @@ let __tla = Promise.all([
       return m.roundCone(this.halfHeight, this.radius, this.borderRadius);
     }
   };
-  qr = class {
+  Wr = class {
     free() {
       this.raw && this.raw.free(), this.raw = void 0;
     }
     constructor(t) {
-      this.raw = t || new di();
+      this.raw = t || new wi();
     }
     step(t, e, r, a, o, _, d, h, p, u, g, b) {
       let y = w.intoRaw(t);
@@ -4710,13 +4702,13 @@ let __tla = Promise.all([
   };
   (function(s) {
     s[s.EXCLUDE_FIXED = 1] = "EXCLUDE_FIXED", s[s.EXCLUDE_KINEMATIC = 2] = "EXCLUDE_KINEMATIC", s[s.EXCLUDE_DYNAMIC = 4] = "EXCLUDE_DYNAMIC", s[s.EXCLUDE_SENSORS = 8] = "EXCLUDE_SENSORS", s[s.EXCLUDE_SOLIDS = 16] = "EXCLUDE_SOLIDS", s[s.ONLY_DYNAMIC = 3] = "ONLY_DYNAMIC", s[s.ONLY_KINEMATIC = 5] = "ONLY_KINEMATIC", s[s.ONLY_FIXED = 6] = "ONLY_FIXED";
-  })(we || (we = {}));
-  Br = class {
+  })(le || (le = {}));
+  qr = class {
     free() {
       this.raw && this.raw.free(), this.raw = void 0;
     }
     constructor(t) {
-      this.raw = t || new Se();
+      this.raw = t || new ye();
     }
     update(t) {
       this.raw.update(t.raw);
@@ -4762,12 +4754,12 @@ let __tla = Promise.all([
       this.raw.collidersWithAabbIntersectingAabb(a, o, r), a.free(), o.free();
     }
   };
-  de = class {
+  we = class {
     free() {
       this.raw && this.raw.free(), this.raw = void 0;
     }
     constructor(t) {
-      this.raw = t || new pi();
+      this.raw = t || new hi();
     }
     serializeAll(t, e, r, a, o, _, d, h, p) {
       let u = w.intoRaw(t);
@@ -4778,27 +4770,27 @@ let __tla = Promise.all([
       return Lt.fromRaw(this.raw.deserializeAll(t));
     }
   };
-  Vr = class {
+  Br = class {
     constructor(t, e) {
       this.vertices = t, this.colors = e;
     }
   };
-  Or = class {
+  Vr = class {
     free() {
       this.raw && this.raw.free(), this.raw = void 0, this.vertices = void 0, this.colors = void 0;
     }
     constructor(t) {
-      this.raw = t || new ci();
+      this.raw = t || new _i();
     }
     render(t, e, r, a, o, _, d) {
       this.raw.render(t.raw, e.raw, r.raw, a.raw, o.raw, _, e.castClosure(d)), this.vertices = this.raw.vertices(), this.colors = this.raw.colors();
     }
   };
-  Ur = class {
+  Or = class {
   };
-  Xr = class {
+  Ur = class {
     constructor(t, e, r, a, o) {
-      this.params = e, this.bodies = r, this.colliders = a, this.queries = o, this.raw = new wi(t), this.rawCharacterCollision = new br(), this._applyImpulsesToDynamicBodies = false, this._characterMass = null;
+      this.params = e, this.bodies = r, this.colliders = a, this.queries = o, this.raw = new li(t), this.rawCharacterCollision = new gr(), this._applyImpulsesToDynamicBodies = false, this._characterMass = null;
     }
     free() {
       this.raw && (this.raw.free(), this.rawCharacterCollision.free()), this.raw = void 0, this.rawCharacterCollision = void 0;
@@ -4898,16 +4890,16 @@ let __tla = Promise.all([
     computedCollision(t, e) {
       if (this.raw.computedCollision(t, this.rawCharacterCollision)) {
         let r = this.rawCharacterCollision;
-        return e = e ?? new Ur(), e.translationDeltaApplied = w.fromRaw(r.translationDeltaApplied()), e.translationDeltaRemaining = w.fromRaw(r.translationDeltaRemaining()), e.toi = r.toi(), e.witness1 = w.fromRaw(r.worldWitness1()), e.witness2 = w.fromRaw(r.worldWitness2()), e.normal1 = w.fromRaw(r.worldNormal1()), e.normal2 = w.fromRaw(r.worldNormal2()), e.collider = this.colliders.get(r.handle()), e;
+        return e = e ?? new Or(), e.translationDeltaApplied = w.fromRaw(r.translationDeltaApplied()), e.translationDeltaRemaining = w.fromRaw(r.translationDeltaRemaining()), e.toi = r.toi(), e.witness1 = w.fromRaw(r.worldWitness1()), e.witness2 = w.fromRaw(r.worldWitness2()), e.normal1 = w.fromRaw(r.worldNormal1()), e.normal2 = w.fromRaw(r.worldNormal2()), e.collider = this.colliders.get(r.handle()), e;
       } else return null;
     }
   };
   (function(s) {
     s[s.None = 0] = "None", s[s.LinX = 1] = "LinX", s[s.LinY = 2] = "LinY", s[s.LinZ = 4] = "LinZ", s[s.AngX = 8] = "AngX", s[s.AngY = 16] = "AngY", s[s.AngZ = 32] = "AngZ", s[s.AllLin = 7] = "AllLin", s[s.AllAng = 56] = "AllAng", s[s.All = 63] = "All";
-  })(he || (he = {}));
-  Jr = class {
+  })(de || (de = {}));
+  Xr = class {
     constructor(t, e, r, a, o, _) {
-      this.params = t, this.bodies = e, this.raw = new hi(r, a, o, _);
+      this.params = t, this.bodies = e, this.raw = new di(r, a, o, _);
     }
     free() {
       this.raw && this.raw.free(), this.raw = void 0;
@@ -4944,9 +4936,9 @@ let __tla = Promise.all([
       return a.free(), o.free(), w.fromRaw(_);
     }
   };
-  Kr = class {
+  Jr = class {
     constructor(t, e, r, a) {
-      this.raw = new li(t.handle), this.bodies = e, this.colliders = r, this.queries = a, this._chassis = t;
+      this.raw = new ci(t.handle), this.bodies = e, this.colliders = r, this.queries = a, this._chassis = t;
     }
     free() {
       this.raw && this.raw.free(), this.raw = void 0;
@@ -5108,7 +5100,7 @@ let __tla = Promise.all([
       this.integrationParameters.free(), this.islands.free(), this.broadPhase.free(), this.narrowPhase.free(), this.bodies.free(), this.colliders.free(), this.impulseJoints.free(), this.multibodyJoints.free(), this.ccdSolver.free(), this.queryPipeline.free(), this.physicsPipeline.free(), this.serializationPipeline.free(), this.debugRenderPipeline.free(), this.characterControllers.forEach((t) => t.free()), this.pidControllers.forEach((t) => t.free()), this.vehicleControllers.forEach((t) => t.free()), this.integrationParameters = void 0, this.islands = void 0, this.broadPhase = void 0, this.narrowPhase = void 0, this.bodies = void 0, this.colliders = void 0, this.ccdSolver = void 0, this.impulseJoints = void 0, this.multibodyJoints = void 0, this.queryPipeline = void 0, this.physicsPipeline = void 0, this.serializationPipeline = void 0, this.debugRenderPipeline = void 0, this.characterControllers = void 0, this.pidControllers = void 0, this.vehicleControllers = void 0;
     }
     constructor(t, e, r, a, o, _, d, h, p, u, g, b, y, I) {
-      this.gravity = t, this.integrationParameters = new vr(e), this.islands = new Dr(r), this.broadPhase = new Lr(a), this.narrowPhase = new Nr(o), this.bodies = new Sr(_), this.colliders = new Zr(d), this.impulseJoints = new Pr(h), this.multibodyJoints = new kr(p), this.ccdSolver = new Hr(u), this.queryPipeline = new Br(g), this.physicsPipeline = new qr(b), this.serializationPipeline = new de(y), this.debugRenderPipeline = new Or(I), this.characterControllers = /* @__PURE__ */ new Set(), this.pidControllers = /* @__PURE__ */ new Set(), this.vehicleControllers = /* @__PURE__ */ new Set(), this.impulseJoints.finalizeDeserialization(this.bodies), this.bodies.finalizeDeserialization(this.colliders), this.colliders.finalizeDeserialization(this.bodies);
+      this.gravity = t, this.integrationParameters = new Sr(e), this.islands = new Hr(r), this.broadPhase = new Dr(a), this.narrowPhase = new Lr(o), this.bodies = new yr(_), this.colliders = new Yr(d), this.impulseJoints = new Er(h), this.multibodyJoints = new Mr(p), this.ccdSolver = new kr(u), this.queryPipeline = new qr(g), this.physicsPipeline = new Wr(b), this.serializationPipeline = new we(y), this.debugRenderPipeline = new Vr(I), this.characterControllers = /* @__PURE__ */ new Set(), this.pidControllers = /* @__PURE__ */ new Set(), this.vehicleControllers = /* @__PURE__ */ new Set(), this.impulseJoints.finalizeDeserialization(this.bodies), this.bodies.finalizeDeserialization(this.colliders), this.colliders.finalizeDeserialization(this.bodies);
     }
     static fromRaw(t) {
       return t ? new Lt(w.fromRaw(t.takeGravity()), t.takeIntegrationParameters(), t.takeIslandManager(), t.takeBroadPhase(), t.takeNarrowPhase(), t.takeBodies(), t.takeColliders(), t.takeImpulseJoints(), t.takeMultibodyJoints()) : null;
@@ -5117,10 +5109,10 @@ let __tla = Promise.all([
       return this.serializationPipeline.serializeAll(this.gravity, this.integrationParameters, this.islands, this.broadPhase, this.narrowPhase, this.bodies, this.colliders, this.impulseJoints, this.multibodyJoints);
     }
     static restoreSnapshot(t) {
-      return new de().deserializeAll(t);
+      return new we().deserializeAll(t);
     }
     debugRender(t, e) {
-      return this.debugRenderPipeline.render(this.bodies, this.colliders, this.impulseJoints, this.multibodyJoints, this.narrowPhase, t, e), new Vr(this.debugRenderPipeline.vertices, this.debugRenderPipeline.colors);
+      return this.debugRenderPipeline.render(this.bodies, this.colliders, this.impulseJoints, this.multibodyJoints, this.narrowPhase, t, e), new Br(this.debugRenderPipeline.vertices, this.debugRenderPipeline.colors);
     }
     step(t, e) {
       this.physicsPipeline.step(this.gravity, this.integrationParameters, this.islands, this.broadPhase, this.narrowPhase, this.bodies, this.colliders, this.impulseJoints, this.multibodyJoints, this.ccdSolver, t, e), this.queryPipeline.update(this.colliders);
@@ -5174,21 +5166,21 @@ let __tla = Promise.all([
       return this.bodies.createRigidBody(this.colliders, t);
     }
     createCharacterController(t) {
-      let e = new Xr(t, this.integrationParameters, this.bodies, this.colliders, this.queryPipeline);
+      let e = new Ur(t, this.integrationParameters, this.bodies, this.colliders, this.queryPipeline);
       return this.characterControllers.add(e), e;
     }
     removeCharacterController(t) {
       this.characterControllers.delete(t), t.free();
     }
     createPidController(t, e, r, a) {
-      let o = new Jr(this.integrationParameters, this.bodies, t, e, r, a);
+      let o = new Xr(this.integrationParameters, this.bodies, t, e, r, a);
       return this.pidControllers.add(o), o;
     }
     removePidController(t) {
       this.pidControllers.delete(t), t.free();
     }
     createVehicleController(t) {
-      let e = new Kr(t, this.bodies, this.colliders, this.queryPipeline);
+      let e = new Jr(t, this.bodies, this.colliders, this.queryPipeline);
       return this.vehicleControllers.add(e), e;
     }
     removeVehicleController(t) {
@@ -5284,7 +5276,7 @@ let __tla = Promise.all([
   (function(s) {
     s[s.NONE = 0] = "NONE", s[s.COLLISION_EVENTS = 1] = "COLLISION_EVENTS", s[s.CONTACT_FORCE_EVENTS = 2] = "CONTACT_FORCE_EVENTS";
   })(At || (At = {}));
-  Yr = class {
+  Kr = class {
     free() {
       this.raw && this.raw.free(), this.raw = void 0;
     }
@@ -5307,9 +5299,9 @@ let __tla = Promise.all([
       return this.raw.max_force_magnitude();
     }
   };
-  Ah = class {
+  Ih = class {
     constructor(t, e) {
-      this.raw = e || new mr(t);
+      this.raw = e || new br(t);
     }
     free() {
       this.raw && this.raw.free(), this.raw = void 0;
@@ -5318,7 +5310,7 @@ let __tla = Promise.all([
       this.raw.drainCollisionEvents(t);
     }
     drainContactForceEvents(t) {
-      let e = new Yr();
+      let e = new Kr();
       this.raw.drainContactForceEvents((r) => {
         e.raw = r, t(e), e.free();
       });
@@ -5332,11 +5324,11 @@ let __tla = Promise.all([
   })(jt || (jt = {}));
   (function(s) {
     s[s.EMPTY = 0] = "EMPTY", s[s.COMPUTE_IMPULSE = 1] = "COMPUTE_IMPULSE";
-  })(pe || (pe = {}));
+  })(he || (he = {}));
   (function(s) {
     s[s.DYNAMIC_DYNAMIC = 1] = "DYNAMIC_DYNAMIC", s[s.DYNAMIC_KINEMATIC = 12] = "DYNAMIC_KINEMATIC", s[s.DYNAMIC_FIXED = 2] = "DYNAMIC_FIXED", s[s.KINEMATIC_KINEMATIC = 52224] = "KINEMATIC_KINEMATIC", s[s.KINEMATIC_FIXED = 8704] = "KINEMATIC_FIXED", s[s.FIXED_FIXED = 32] = "FIXED_FIXED", s[s.DEFAULT = 15] = "DEFAULT", s[s.ALL = 60943] = "ALL";
   })(Et || (Et = {}));
-  ue = class {
+  pe = class {
     constructor(t, e, r, a) {
       this.colliderSet = t, this.handle = e, this._parent = r, this._shape = a;
     }
@@ -5581,63 +5573,63 @@ let __tla = Promise.all([
       this.enabled = true, this.shape = t, this.massPropsMode = et.Density, this.density = 1, this.friction = 0.5, this.restitution = 0, this.rotation = S.identity(), this.translation = w.zeros(), this.isSensor = false, this.collisionGroups = 4294967295, this.solverGroups = 4294967295, this.frictionCombineRule = dt.Average, this.restitutionCombineRule = dt.Average, this.activeCollisionTypes = Et.DEFAULT, this.activeEvents = At.NONE, this.activeHooks = jt.NONE, this.mass = 0, this.centerOfMass = w.zeros(), this.contactForceEventThreshold = 0, this.contactSkin = 0, this.principalAngularInertia = w.zeros(), this.angularInertiaLocalFrame = S.identity();
     }
     static ball(t) {
-      const e = new xe(t);
+      const e = new Ce(t);
       return new P(e);
     }
     static capsule(t, e) {
-      const r = new je(t, e);
+      const r = new Ae(t, e);
       return new P(r);
     }
     static segment(t, e) {
-      const r = new Ee(t, e);
+      const r = new je(t, e);
       return new P(r);
     }
     static triangle(t, e, r) {
-      const a = new Pe(t, e, r);
+      const a = new Ee(t, e, r);
       return new P(a);
     }
     static roundTriangle(t, e, r, a) {
-      const o = new Fe(t, e, r, a);
+      const o = new Pe(t, e, r, a);
       return new P(o);
     }
     static polyline(t, e) {
-      const r = new ze(t, e);
+      const r = new Fe(t, e);
       return new P(r);
     }
     static voxels(t, e) {
-      const r = new Te(t, e);
+      const r = new ze(t, e);
       return new P(r);
     }
     static trimesh(t, e, r) {
-      const a = new Me(t, e, r);
+      const a = new Te(t, e, r);
       return new P(a);
     }
     static cuboid(t, e, r) {
-      const a = new Ie(t, e, r);
+      const a = new xe(t, e, r);
       return new P(a);
     }
     static roundCuboid(t, e, r, a) {
-      const o = new Ae(t, e, r, a);
+      const o = new Ie(t, e, r, a);
       return new P(o);
     }
     static heightfield(t, e, r, a, o) {
-      const _ = new ke(t, e, r, a, o);
+      const _ = new Me(t, e, r, a, o);
       return new P(_);
     }
     static cylinder(t, e) {
-      const r = new He(t, e);
+      const r = new ke(t, e);
       return new P(r);
     }
     static roundCylinder(t, e, r) {
-      const a = new De(t, e, r);
+      const a = new He(t, e, r);
       return new P(a);
     }
     static cone(t, e) {
-      const r = new Le(t, e);
+      const r = new De(t, e);
       return new P(r);
     }
     static roundCone(t, e, r) {
-      const a = new Ne(t, e, r);
+      const a = new Le(t, e, r);
       return new P(a);
     }
     static convexHull(t) {
@@ -5716,13 +5708,13 @@ let __tla = Promise.all([
       return this.contactForceEventThreshold = t, this;
     }
   };
-  Zr = class {
+  Yr = class {
     free() {
       this.raw && this.raw.free(), this.raw = void 0, this.map && this.map.clear(), this.map = void 0;
     }
     constructor(t) {
       this.raw = t || new E(), this.map = new Ht(), t && t.forEachColliderHandle((e) => {
-        this.map.set(e, new ue(this, e, null));
+        this.map.set(e, new pe(this, e, null));
       });
     }
     castClosure(t) {
@@ -5738,7 +5730,7 @@ let __tla = Promise.all([
       if (a && isNaN(r)) throw Error("Cannot create a collider with a parent rigid-body handle that is not a number.");
       let o = e.shape.intoRaw(), _ = w.intoRaw(e.translation), d = S.intoRaw(e.rotation), h = w.intoRaw(e.centerOfMass), p = w.intoRaw(e.principalAngularInertia), u = S.intoRaw(e.angularInertiaLocalFrame), g = this.raw.createCollider(e.enabled, o, _, d, e.massPropsMode, e.mass, h, p, u, e.density, e.friction, e.restitution, e.frictionCombineRule, e.restitutionCombineRule, e.isSensor, e.collisionGroups, e.solverGroups, e.activeCollisionTypes, e.activeHooks, e.activeEvents, e.contactForceEventThreshold, e.contactSkin, a, a ? r : 0, t.raw);
       o.free(), _.free(), d.free(), h.free(), p.free(), u.free();
-      let b = a ? t.get(r) : null, y = new ue(this, g, b, e.shape);
+      let b = a ? t.get(r) : null, y = new pe(this, g, b, e.shape);
       return this.map.set(g, y), y;
     }
     remove(t, e, r, a) {
@@ -5763,13 +5755,13 @@ let __tla = Promise.all([
       return this.map.getAll();
     }
   };
-  jh = function() {
-    return ni();
+  Ah = function() {
+    return ii();
   };
-  Eh = function(s) {
-    ai(s);
+  jh = function(s) {
+    ni(s);
   };
-  Fh = Object.freeze(Object.defineProperty({
+  Eh = Object.freeze(Object.defineProperty({
     __proto__: null,
     get ActiveCollisionTypes() {
       return Et;
@@ -5780,96 +5772,96 @@ let __tla = Promise.all([
     get ActiveHooks() {
       return jt;
     },
-    Ball: xe,
-    BroadPhase: Lr,
-    CCDSolver: Hr,
-    Capsule: je,
-    CharacterCollision: Ur,
+    Ball: Ce,
+    BroadPhase: Dr,
+    CCDSolver: kr,
+    Capsule: Ae,
+    CharacterCollision: Or,
     get CoefficientCombineRule() {
       return dt;
     },
-    Collider: ue,
+    Collider: pe,
     ColliderDesc: P,
-    ColliderSet: Zr,
+    ColliderSet: Yr,
     ColliderShapeCastHit: bt,
-    Cone: Le,
+    Cone: De,
     ConvexPolyhedron: xt,
-    Cuboid: Ie,
-    Cylinder: He,
-    DebugRenderBuffers: Vr,
-    DebugRenderPipeline: Or,
-    DynamicRayCastVehicleController: Kr,
-    EventQueue: Ah,
+    Cuboid: xe,
+    Cylinder: ke,
+    DebugRenderBuffers: Br,
+    DebugRenderPipeline: Vr,
+    DynamicRayCastVehicleController: Jr,
+    EventQueue: Ih,
     get FeatureType() {
       return st;
     },
-    FixedImpulseJoint: Rr,
-    FixedMultibodyJoint: Fr,
-    GenericImpulseJoint: jr,
-    HalfSpace: Wr,
+    FixedImpulseJoint: vr,
+    FixedMultibodyJoint: Pr,
+    GenericImpulseJoint: Ar,
+    HalfSpace: Gr,
     get HeightFieldFlags() {
-      return ce;
-    },
-    Heightfield: ke,
-    ImpulseJoint: O,
-    ImpulseJointSet: Pr,
-    IntegrationParameters: vr,
-    IslandManager: Dr,
-    get JointAxesMask() {
       return _e;
+    },
+    Heightfield: Me,
+    ImpulseJoint: O,
+    ImpulseJointSet: Er,
+    IntegrationParameters: Sr,
+    IslandManager: Hr,
+    get JointAxesMask() {
+      return oe;
     },
     JointData: X,
     get JointType() {
       return D;
     },
-    KinematicCharacterController: Xr,
+    KinematicCharacterController: Ur,
     get MassPropsMode() {
       return et;
     },
     get MotorModel() {
-      return oe;
+      return se;
     },
     MultibodyJoint: Q,
-    MultibodyJointSet: kr,
-    NarrowPhase: Nr,
-    PhysicsPipeline: qr,
+    MultibodyJointSet: Mr,
+    NarrowPhase: Lr,
+    PhysicsPipeline: Wr,
     get PidAxesMask() {
-      return he;
+      return de;
     },
-    PidController: Jr,
+    PidController: Xr,
     PointColliderProjection: ht,
     PointProjection: ut,
-    Polyline: ze,
-    PrismaticImpulseJoint: Ir,
-    PrismaticMultibodyJoint: zr,
-    Quaternion: ne,
+    Polyline: Fe,
+    PrismaticImpulseJoint: xr,
+    PrismaticMultibodyJoint: Fr,
+    Quaternion: ie,
     get QueryFilterFlags() {
-      return we;
+      return le;
     },
-    QueryPipeline: Br,
-    Ray: Ih,
+    QueryPipeline: qr,
+    Ray: xh,
     RayColliderHit: Dt,
     RayColliderIntersection: pt,
     RayIntersection: gt,
-    RevoluteImpulseJoint: Ar,
-    RevoluteMultibodyJoint: Tr,
-    RigidBody: se,
+    RevoluteImpulseJoint: Ir,
+    RevoluteMultibodyJoint: zr,
+    RigidBody: ae,
     RigidBodyDesc: U,
-    RigidBodySet: Sr,
+    RigidBodySet: yr,
     get RigidBodyType() {
       return B;
     },
-    RopeImpulseJoint: Cr,
+    RopeImpulseJoint: Rr,
     RotationOps: S,
-    RoundCone: Ne,
+    RoundCone: Le,
     RoundConvexPolyhedron: It,
-    RoundCuboid: Ae,
-    RoundCylinder: De,
-    RoundTriangle: Fe,
-    SdpMatrix3: yr,
-    SdpMatrix3Ops: ae,
-    Segment: Ee,
-    SerializationPipeline: de,
+    RoundCuboid: Ie,
+    RoundCylinder: He,
+    RoundTriangle: Pe,
+    SdpMatrix3: fr,
+    SdpMatrix3Ops: ne,
+    Segment: je,
+    SerializationPipeline: we,
     Shape: M,
     ShapeCastHit: ot,
     ShapeContact: at,
@@ -5877,125 +5869,125 @@ let __tla = Promise.all([
       return F;
     },
     get SolverFlags() {
-      return pe;
+      return he;
     },
-    SphericalImpulseJoint: Er,
-    SphericalMultibodyJoint: Mr,
-    SpringImpulseJoint: xr,
-    TempContactForceEvent: Yr,
-    TempContactManifold: Gr,
-    TriMesh: Me,
+    SphericalImpulseJoint: jr,
+    SphericalMultibodyJoint: Tr,
+    SpringImpulseJoint: Cr,
+    TempContactForceEvent: Kr,
+    TempContactManifold: Nr,
+    TriMesh: Te,
     get TriMeshFlags() {
-      return le;
+      return ce;
     },
-    Triangle: Pe,
-    UnitImpulseJoint: Re,
-    UnitMultibodyJoint: Ce,
-    Vector3: fr,
+    Triangle: Ee,
+    UnitImpulseJoint: ve,
+    UnitMultibodyJoint: Re,
+    Vector3: mr,
     VectorOps: w,
-    Voxels: Te,
+    Voxels: ze,
     World: Lt,
-    reserveMemory: Eh,
-    version: jh
+    reserveMemory: jh,
+    version: Ah
   }, Symbol.toStringTag, {
     value: "Module"
   }));
-});
+})();
 export {
   Et as ActiveCollisionTypes,
   At as ActiveEvents,
   jt as ActiveHooks,
-  xe as Ball,
-  Lr as BroadPhase,
-  Hr as CCDSolver,
-  je as Capsule,
-  Ur as CharacterCollision,
+  Ce as Ball,
+  Dr as BroadPhase,
+  kr as CCDSolver,
+  Ae as Capsule,
+  Or as CharacterCollision,
   dt as CoefficientCombineRule,
-  ue as Collider,
+  pe as Collider,
   P as ColliderDesc,
-  Zr as ColliderSet,
+  Yr as ColliderSet,
   bt as ColliderShapeCastHit,
-  Le as Cone,
+  De as Cone,
   xt as ConvexPolyhedron,
-  Ie as Cuboid,
-  He as Cylinder,
-  Vr as DebugRenderBuffers,
-  Or as DebugRenderPipeline,
-  Kr as DynamicRayCastVehicleController,
-  Ah as EventQueue,
+  xe as Cuboid,
+  ke as Cylinder,
+  Br as DebugRenderBuffers,
+  Vr as DebugRenderPipeline,
+  Jr as DynamicRayCastVehicleController,
+  Ih as EventQueue,
   st as FeatureType,
-  Rr as FixedImpulseJoint,
-  Fr as FixedMultibodyJoint,
-  jr as GenericImpulseJoint,
-  Wr as HalfSpace,
-  ce as HeightFieldFlags,
-  ke as Heightfield,
+  vr as FixedImpulseJoint,
+  Pr as FixedMultibodyJoint,
+  Ar as GenericImpulseJoint,
+  Gr as HalfSpace,
+  _e as HeightFieldFlags,
+  Me as Heightfield,
   O as ImpulseJoint,
-  Pr as ImpulseJointSet,
-  vr as IntegrationParameters,
-  Dr as IslandManager,
-  _e as JointAxesMask,
+  Er as ImpulseJointSet,
+  Sr as IntegrationParameters,
+  Hr as IslandManager,
+  oe as JointAxesMask,
   X as JointData,
   D as JointType,
-  Xr as KinematicCharacterController,
+  Ur as KinematicCharacterController,
   et as MassPropsMode,
-  oe as MotorModel,
+  se as MotorModel,
   Q as MultibodyJoint,
-  kr as MultibodyJointSet,
-  Nr as NarrowPhase,
-  qr as PhysicsPipeline,
-  he as PidAxesMask,
-  Jr as PidController,
+  Mr as MultibodyJointSet,
+  Lr as NarrowPhase,
+  Wr as PhysicsPipeline,
+  de as PidAxesMask,
+  Xr as PidController,
   ht as PointColliderProjection,
   ut as PointProjection,
-  ze as Polyline,
-  Ir as PrismaticImpulseJoint,
-  zr as PrismaticMultibodyJoint,
-  ne as Quaternion,
-  we as QueryFilterFlags,
-  Br as QueryPipeline,
-  Ih as Ray,
+  Fe as Polyline,
+  xr as PrismaticImpulseJoint,
+  Fr as PrismaticMultibodyJoint,
+  ie as Quaternion,
+  le as QueryFilterFlags,
+  qr as QueryPipeline,
+  xh as Ray,
   Dt as RayColliderHit,
   pt as RayColliderIntersection,
   gt as RayIntersection,
-  Ar as RevoluteImpulseJoint,
-  Tr as RevoluteMultibodyJoint,
-  se as RigidBody,
+  Ir as RevoluteImpulseJoint,
+  zr as RevoluteMultibodyJoint,
+  ae as RigidBody,
   U as RigidBodyDesc,
-  Sr as RigidBodySet,
+  yr as RigidBodySet,
   B as RigidBodyType,
-  Cr as RopeImpulseJoint,
+  Rr as RopeImpulseJoint,
   S as RotationOps,
-  Ne as RoundCone,
+  Le as RoundCone,
   It as RoundConvexPolyhedron,
-  Ae as RoundCuboid,
-  De as RoundCylinder,
-  Fe as RoundTriangle,
-  yr as SdpMatrix3,
-  ae as SdpMatrix3Ops,
-  Ee as Segment,
-  de as SerializationPipeline,
+  Ie as RoundCuboid,
+  He as RoundCylinder,
+  Pe as RoundTriangle,
+  fr as SdpMatrix3,
+  ne as SdpMatrix3Ops,
+  je as Segment,
+  we as SerializationPipeline,
   M as Shape,
   ot as ShapeCastHit,
   at as ShapeContact,
   F as ShapeType,
-  pe as SolverFlags,
-  Er as SphericalImpulseJoint,
-  Mr as SphericalMultibodyJoint,
-  xr as SpringImpulseJoint,
-  Yr as TempContactForceEvent,
-  Gr as TempContactManifold,
-  Me as TriMesh,
-  le as TriMeshFlags,
-  Pe as Triangle,
-  Re as UnitImpulseJoint,
-  Ce as UnitMultibodyJoint,
-  fr as Vector3,
+  he as SolverFlags,
+  jr as SphericalImpulseJoint,
+  Tr as SphericalMultibodyJoint,
+  Cr as SpringImpulseJoint,
+  Kr as TempContactForceEvent,
+  Nr as TempContactManifold,
+  Te as TriMesh,
+  ce as TriMeshFlags,
+  Ee as Triangle,
+  ve as UnitImpulseJoint,
+  Re as UnitMultibodyJoint,
+  mr as Vector3,
   w as VectorOps,
-  Te as Voxels,
+  ze as Voxels,
   Lt as World,
   __tla,
-  Fh as default,
-  Eh as reserveMemory,
-  jh as version
+  Eh as default,
+  jh as reserveMemory,
+  Ah as version
 };

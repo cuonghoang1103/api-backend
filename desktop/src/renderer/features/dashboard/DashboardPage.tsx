@@ -412,6 +412,11 @@ export function DashboardPage() {
 
   return (
     <div className="ct-page ct-tq">
+      {/* Nền AURORA — hai quầng sáng mờ sau phần chào.
+          Trang cũ là chữ trắng trên một mảng đen phẳng, nên nó "đúng" mà không
+          có gì để nhìn. Quầng sáng đặt SAU nội dung (`z-index: 0`, không bắt
+          chuột) nên nó chỉ thêm chiều sâu, không cản thao tác nào. */}
+      <div className="ct-tq-nen" aria-hidden />
       {/* ── Lời chào ───────────────────────────────────────── */}
       <header className="ct-tq-chao">
         <div>

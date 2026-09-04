@@ -9541,3 +9541,152 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 
 .ct-bangviec-tieng:hover { background: var(--ct-hover); color: var(--ct-text); }
 .ct-bangviec-tieng[aria-pressed='true'] { color: var(--ct-accent); }
+
+/* ══════════════════════════════════════════════════════════
+   TỔNG QUAN — phần NHÌN
+   ══════════════════════════════════════════════════════════
+   Bản trước đúng về chức năng nhưng phẳng và nhạt: chữ trắng trên một mảng
+   đen, bốn thẻ xám giống hệt nhau, không có gì chuyển động. Người dùng mô tả
+   là "không có màu hay hiệu ứng động và background nổi bật gì cả".
+
+   Ba việc sửa điều đó, theo thứ tự đắt giá dần:
+     1. Nền aurora — cho trang một chiều sâu thay vì một mặt phẳng.
+     2. Mỗi thẻ số một MÀU RIÊNG — bốn thẻ xám giống nhau thì mắt không bám
+        vào đâu được; bốn màu khác nhau thì nhận ra thẻ cần xem mà không đọc.
+     3. Chuyển động VÀO TRANG, lệch pha nhau — trang hiện ra dần thay vì đập
+        vào mặt, và nó nói cho mắt biết thứ tự đọc.
+   ────────────────────────────────────────────────────────── */
+
+.ct-tq { position: relative; }
+
+.ct-tq-nen {
+  position: absolute;
+  inset: -80px -120px auto -120px;
+  height: 420px;
+  z-index: 0;
+  pointer-events: none;   /* trang trí thì không được ăn cú bấm nào */
+  /*
+   * ⚠️ Quầng phải tắt HẲN trước mép khối, nếu không biên hình chữ nhật lộ ra.
+   * Bản đầu dùng bán kính 60% đặt ở 18% và `blur(6px)`: gradient vẫn còn màu
+   * khi chạm mép trái, và `blur` nhỏ không xoá được một cạnh thẳng — trên ảnh
+   * chụp thấy rõ một hình chữ nhật sáng hơn nền. Nay bán kính nhỏ hơn, tâm
+   * lùi vào trong, blur lớn, và thêm mặt nạ tán dần ở đáy.
+   */
+  background:
+    radial-gradient(42% 48% at 26% 22%, color-mix(in srgb, var(--ct-accent) 34%, transparent), transparent 70%),
+    radial-gradient(38% 44% at 76% 10%, color-mix(in srgb, var(--ct-ok) 24%, transparent), transparent 70%);
+  filter: blur(38px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  opacity: 0.9;
+  animation: ct-tq-tho 14s ease-in-out infinite alternate;
+}
+
+/* Thở rất chậm và rất nhẹ. Nhanh hơn nữa thì nó thành thứ gây mất tập trung
+   ngay trên trang mà người ta mở ra để tập trung. */
+@keyframes ct-tq-tho {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(2%, 8px, 0) scale(1.06); }
+}
+
+/* Nội dung phải nằm TRÊN nền. Thiếu dòng này thì quầng sáng phủ lên chữ. */
+.ct-tq > *:not(.ct-tq-nen) { position: relative; z-index: 1; }
+
+.ct-tq-chao-chu {
+  /* Chữ gradient cho lời chào — chỗ duy nhất trong trang đáng để phá quy tắc
+     "chữ một màu", vì nó là dòng đầu tiên mắt chạm vào. */
+  background: linear-gradient(96deg, var(--ct-text), color-mix(in srgb, var(--ct-accent) 78%, var(--ct-text)));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Bốn thẻ số, mỗi thẻ một màu ── */
+.ct-tq-o[data-nhan='viec'] { --o: var(--ct-accent); }
+.ct-tq-o[data-nhan='tin']  { --o: #38bdf8; }
+.ct-tq-o[data-nhan='bao']  { --o: var(--ct-warn); }
+.ct-tq-o[data-nhan='exp']  { --o: #fb7185; }
+
+.ct-tq-o {
+  overflow: hidden;
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--o, var(--ct-accent)) 13%, transparent), transparent 62%),
+    var(--ct-surface);
+  border-color: color-mix(in srgb, var(--o, var(--ct-border)) 26%, var(--ct-border));
+  transition: transform 200ms var(--ct-spring), box-shadow 200ms var(--ct-ease);
+}
+
+/* Vệt sáng mảnh ở mép trên — mẹo rẻ nhất để một thẻ phẳng trông có khối. */
+.ct-tq-o::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--o, var(--ct-accent)), transparent);
+  opacity: 0.75;
+}
+
+.ct-tq-o-bam:hover { transform: translateY(-2px); box-shadow: var(--ct-shadow); }
+.ct-tq-o-icon { color: var(--o, var(--ct-text-faint)); }
+.ct-tq-o-so { color: var(--ct-text); }
+.ct-tq-o[data-nhan='exp'] .ct-tq-o-so,
+.ct-tq-o[data-nhan='viec'] .ct-tq-o-so { color: var(--o); }
+
+.ct-tq-o-thanh > div { background: var(--o, var(--ct-accent)); }
+
+/* ── Vào trang: hiện dần, lệch pha ── */
+@keyframes ct-tq-len {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.ct-tq-chao,
+.ct-tq-nhip > *,
+.ct-bangviec {
+  animation: ct-tq-len 460ms var(--ct-spring) both;
+}
+
+.ct-tq-nhip > *:nth-child(1) { animation-delay: 40ms; }
+.ct-tq-nhip > *:nth-child(2) { animation-delay: 80ms; }
+.ct-tq-nhip > *:nth-child(3) { animation-delay: 120ms; }
+.ct-tq-nhip > *:nth-child(4) { animation-delay: 160ms; }
+.ct-bangviec { animation-delay: 200ms; }
+
+/* Vòng EXP chạy từ 0 lên, không đứng sẵn ở đích. */
+.ct-tq-vong-chay { transition: stroke-dashoffset 900ms var(--ct-spring); }
+
+/* Thanh tiến độ đầy 100% thì có vệt sáng chạy qua — phần thưởng nhỏ cho việc
+   tick nốt việc cuối, và là thứ duy nhất trong trang tự chuyển động. */
+.ct-bangviec-thanh > div[style*='width: 100%']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  animation: ct-tq-loe 1.6s ease-in-out infinite;
+}
+
+.ct-bangviec-thanh { position: relative; }
+.ct-bangviec-thanh > div { position: relative; overflow: hidden; }
+
+@keyframes ct-tq-loe {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(220%); }
+}
+
+/* Câu mừng nảy lên một nhịp khi xuất hiện. */
+.ct-bangviec-mung { animation: ct-tq-len 420ms var(--ct-spring) both; }
+
+/*
+ * ⚠️ TÔN TRỌNG "giảm chuyển động". Người bật nó thường vì chuyển động gây
+ * chóng mặt hoặc đau đầu thật — một trang tự thở và bốn thẻ trượt lên là đúng
+ * loại thứ họ tắt nó để tránh.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .ct-tq-nen { animation: none; }
+  .ct-tq-chao,
+  .ct-tq-nhip > *,
+  .ct-bangviec,
+  .ct-bangviec-mung { animation: none; }
+  .ct-bangviec-thanh > div[style*='width: 100%']::after { animation: none; }
+  .ct-tq-vong-chay { transition: none; }
+}

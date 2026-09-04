@@ -25,7 +25,10 @@ const MAX_QUESTION = 1500;
 const MAX_HISTORY = 12;
 
 export interface TutorMessage { role: 'user' | 'assistant'; content: string }
-export type TutorMode = 'how_to_solve' | 'how_to_remember' | 'knowledge' | 'free_qa';
+export type TutorMode =
+  | 'how_to_solve' | 'how_to_remember' | 'knowledge'
+  | 'why_others_wrong' | 'similar_example' | 'common_mistakes' | 'summary_rule'
+  | 'free_qa';
 export type TutorProvider = 'opus' | 'sol';
 
 export interface ExamTutorAskOpts {
@@ -164,6 +167,10 @@ const MODE_INSTRUCTION: Record<TutorMode, string> = {
   how_to_solve: 'Học viên hỏi "Câu này làm như nào?" — hướng dẫn CÁCH GIẢI từng bước, dẫn tới đáp án đúng nhưng đừng chỉ đọc chữ cái, giải thích LOGIC.',
   how_to_remember: 'Học viên hỏi "Câu này nhớ như nào?" — đưa mẹo/liên tưởng/quy tắc ngắn gọn giúp nhớ lâu, không lặp lại toàn bộ đề bài.',
   knowledge: 'Học viên hỏi "Câu này kiến thức là gì?" — giải thích khái niệm/kiến thức nền câu hỏi đang kiểm tra, có ví dụ khác ngoài đề nếu giúp hiểu rõ hơn.',
+  why_others_wrong: 'Học viên hỏi "Vì sao các đáp án khác sai?" — giải thích RÕ TỪNG phương án sai vì sao sai (không chỉ nói "sai"), phân biệt với đáp án đúng.',
+  similar_example: 'Học viên hỏi "Cho ví dụ tương tự để luyện thêm" — tự nghĩ ra 1-2 câu hỏi TƯƠNG TỰ (cùng dạng, cùng kiến thức nhưng số liệu/tình huống khác), kèm đáp án + giải thích ngắn, để học viên tự luyện.',
+  common_mistakes: 'Học viên hỏi "Lỗi hay gặp khi làm câu này?" — nêu những NHẦM LẪN/BẪY phổ biến học viên hay mắc với dạng câu này (kể cả nếu chưa chắc lỗi cụ thể của học viên này, hãy nói lỗi PHỔ BIẾN của dạng câu tương tự) và cách tránh.',
+  summary_rule: 'Học viên hỏi "Tóm tắt công thức/quy tắc liên quan" — liệt kê ngắn gọn công thức/quy tắc/cú pháp cốt lõi cần nhớ để làm được dạng câu này, dạng gạch đầu dòng dễ ôn lại.',
   free_qa: 'Học viên hỏi tự do về câu này — trả lời đúng trọng tâm câu hỏi của họ.',
 };
 

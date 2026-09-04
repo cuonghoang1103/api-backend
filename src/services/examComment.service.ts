@@ -94,6 +94,10 @@ const MODE_LABEL: Record<string, string> = {
   how_to_solve: 'Câu này làm như nào?',
   how_to_remember: 'Câu này nhớ như nào?',
   knowledge: 'Câu này kiến thức là gì?',
+  why_others_wrong: 'Vì sao các đáp án khác sai?',
+  similar_example: 'Cho ví dụ tương tự để luyện thêm',
+  common_mistakes: 'Lỗi hay gặp khi làm câu này?',
+  summary_rule: 'Tóm tắt công thức/quy tắc liên quan',
 };
 
 export function buildAskedLabel(mode: string, question: string | undefined): string {

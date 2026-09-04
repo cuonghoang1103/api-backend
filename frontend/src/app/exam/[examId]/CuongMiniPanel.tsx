@@ -15,7 +15,10 @@ import { pickLang } from '@/lib/utils';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
 import ExamRichContent from '../ExamRichContent';
 
-type Mode = 'how_to_solve' | 'how_to_remember' | 'knowledge' | 'free_qa';
+type Mode =
+  | 'how_to_solve' | 'how_to_remember' | 'knowledge'
+  | 'why_others_wrong' | 'similar_example' | 'common_mistakes' | 'summary_rule'
+  | 'free_qa';
 type Provider = 'opus' | 'sol';
 
 interface Turn {
@@ -29,6 +32,10 @@ const QUICK: { mode: Mode; label: string }[] = [
   { mode: 'how_to_solve', label: 'Câu này làm như nào?' },
   { mode: 'how_to_remember', label: 'Câu này nhớ như nào?' },
   { mode: 'knowledge', label: 'Câu này kiến thức là gì?' },
+  { mode: 'why_others_wrong', label: 'Vì sao các đáp án khác sai?' },
+  { mode: 'similar_example', label: 'Cho ví dụ tương tự để luyện thêm' },
+  { mode: 'common_mistakes', label: 'Lỗi hay gặp khi làm câu này?' },
+  { mode: 'summary_rule', label: 'Tóm tắt công thức/quy tắc liên quan' },
 ];
 
 function getToken(): string {

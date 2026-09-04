@@ -805,7 +805,7 @@ export async function chayLuot(
           const hookXong = await chayHook({
             moc: 'xongLuot', goc: boiCanh.goc, signal: dieuKhien.signal,
           });
-          if (hookXong.ra !== '') phat({ loai: 'lenhRa', text: hookXong.ra });
+          if (hookXong.ra !== '') phat({ loai: 'lenhRa', mau: hookXong.ra });
         }
         phat({
           loai: 'xong', hanMuc: ketQua.quota, tienUsd: ketQua.costUsd,

@@ -11,6 +11,7 @@ import { Sparkles, Loader2, Send, X, Eye, Bot } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { examApi } from '@/lib/api';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
+import ExamRichContent from '../ExamRichContent';
 
 type Mode = 'how_to_solve' | 'how_to_remember' | 'knowledge' | 'free_qa';
 type Provider = 'opus' | 'sol';
@@ -45,7 +46,8 @@ export default function CuongMiniPanel({ attemptId, questionId, questionLabel, i
   const [turns, setTurns] = useState<Turn[]>([]);
   const [question, setQuestion] = useState('');
   const [asking, setAsking] = useState(false);
-  const [provider, setProvider] = useState<Provider>('opus');
+  // undefined = tự động (rambo/Opus trước, lùi sang Sol nếu rambo lỗi/chậm).
+  const [provider, setProvider] = useState<Provider | undefined>(undefined);
   const [reveal, setReveal] = useState<{ correctIndexes: number[]; explanation: string | null } | null>(null);
   const [revealArmed, setRevealArmed] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
@@ -148,16 +150,16 @@ export default function CuongMiniPanel({ attemptId, questionId, questionLabel, i
             </div>
 
             <div className="flex items-center gap-1.5 border-b px-4 py-2 text-[11px]" style={{ borderColor: 'var(--border-color)' }}>
-              <span className="text-text-muted">{isVi ? 'Model:' : 'Model:'}</span>
-              {(['opus', 'sol'] as Provider[]).map((p) => (
-                <button key={p} type="button" onClick={() => setProvider(p)}
+              <span className="text-text-muted">Model:</span>
+              {([undefined, 'opus', 'sol'] as (Provider | undefined)[]).map((p) => (
+                <button key={p ?? 'auto'} type="button" onClick={() => setProvider(p)}
                   className="rounded-full border px-2 py-0.5 font-semibold"
                   style={{
                     borderColor: provider === p ? '#8b5cf6' : 'var(--border-color)',
                     background: provider === p ? 'rgba(139,92,246,.12)' : 'transparent',
                     color: provider === p ? '#8b5cf6' : 'var(--text-secondary)',
                   }}>
-                  {p === 'opus' ? 'Opus 4.8' : 'GPT-5.6-Sol'}
+                  {p === undefined ? (isVi ? 'Tự động' : 'Auto') : p === 'opus' ? 'Opus 4.8' : 'GPT-5.6-Sol'}
                 </button>
               ))}
             </div>
@@ -183,7 +185,7 @@ export default function CuongMiniPanel({ attemptId, questionId, questionLabel, i
               {reveal && (
                 <div className="rounded-lg border px-3 py-2 text-sm" style={{ borderColor: '#f59e0b', background: 'rgba(245,158,11,.08)' }}>
                   <div className="mb-1 font-bold">{isVi ? 'Đáp án đúng' : 'Correct answer'}: {reveal.correctIndexes.map((i) => String.fromCharCode(65 + i)).join(', ')}</div>
-                  {reveal.explanation && <ChatMarkdown content={reveal.explanation.replace(/<[^>]+>/g, ' ')} renderMath={false} />}
+                  {reveal.explanation && <ExamRichContent html={reveal.explanation} L={isVi ? 'vi' : 'en'} />}
                 </div>
               )}
             </div>

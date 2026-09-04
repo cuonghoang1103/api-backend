@@ -147,28 +147,35 @@ async function buildTutorCall(opts: ExamTutorAskOpts): Promise<{ system: string;
 }
 
 async function callTutor(system: string, messages: TutorMessage[], userId: number, provider: TutorProvider | undefined, onToken?: (delta: string) => void) {
-  const call = (purpose: 'exam_tutor' | 'chat_max') => llmComplete({
+  const call = (purpose: 'exam_tutor' | 'chat_max', timeoutMs: number, onTok?: (delta: string) => void) => llmComplete({
     step: 'generation',
     feature: 'exam',
     purpose,
     system,
     messages,
     maxTokens: 3000,
-    maxRetries: provider ? 2 : 1,
-    timeoutMs: 180_000,
+    maxRetries: 2,
+    timeoutMs,
     userId,
-    onToken,
+    onToken: onTok,
   });
 
-  if (provider === 'sol') return call('chat_max');
-  if (provider === 'opus') return call('exam_tutor');
-  // Auto: rambo (opus) trước — lỗi (không phải lỗi nội dung) mới lùi về sol,
-  // vì rambo không tôn trọng max_tokens/không có trần chi phí (cổng riêng
-  // của người dùng) nhưng CÓ THỂ rớt mạng như bất kỳ cổng ngoài nào khác.
+  // Người dùng tự chọn tay — gọi thẳng, đợi đủ lâu (180s), không lùi.
+  if (provider === 'sol') return call('chat_max', 180_000, onToken);
+  if (provider === 'opus') return call('exam_tutor', 180_000, onToken);
+
+  // Tự động: rambo (opus) trước, nhưng chỉ đợi 25s — quan sát thật cho thấy
+  // opus qua rambo trả mẩu chữ đầu trong ~4-5s khi khoẻ; 25s không thấy gì
+  // là có vấn đề, đừng bắt người dùng "đang soạn…" suốt 3 phút mới biết.
+  // Nếu ĐàCÓ mẩu chữ nào về rồi mới hỏng giữa chừng thì KHÔNG lùi — trộn
+  // output của 2 model khác nhau vào cùng một câu trả lời còn tệ hơn báo lỗi.
+  let gotDelta = false;
+  const wrapped = onToken ? (d: string) => { gotDelta = true; onToken(d); } : undefined;
   try {
-    return await call('exam_tutor');
+    return await call('exam_tutor', 25_000, wrapped);
   } catch (e) {
-    return call('chat_max');
+    if (gotDelta) throw e;
+    return call('chat_max', 180_000, onToken);
   }
 }
 

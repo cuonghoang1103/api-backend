@@ -318,7 +318,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
    * nhưng có thể chỉ vài dòng trên màn hình). Thứ tự câu hỏi thì luôn khớp,
    * nên nó là điểm neo duy nhất dịch được giữa hai bên.
    */
-  const quayLui = useCallback(async (k: number): Promise<{ cauHoi: string; coSuaFile: boolean } | null> => {
+  const quayLui = useCallback(async (k: number): Promise<{ cauHoi: string; coSuaFile: boolean; soFileSeLui: number } | null> => {
     /**
      * ⚠️ PHẢI bắt lỗi ở đây.
      *
@@ -328,7 +328,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
      * không ăn. Mất bốn lần chạy bộ kiểm mới lần ra, vì mọi triệu chứng đều là
      * "không có gì xảy ra".
      */
-    let r: { ok: boolean; loi?: string; cauHoi?: string; coSuaFile?: boolean } | undefined;
+    let r: { ok: boolean; loi?: string; cauHoi?: string; coSuaFile?: boolean; soFileSeLui?: number } | undefined;
     try {
       r = await window.cuongthai?.agent.quayLui(cuocId, k);
     } catch (err) {
@@ -353,7 +353,29 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
       return cat >= 0 ? truoc.slice(0, cat) : truoc;
     });
     datKeHoach([]);
-    return { cauHoi: r.cauHoi ?? '', coSuaFile: r.coSuaFile === true };
+    return { cauHoi: r.cauHoi ?? '', coSuaFile: r.coSuaFile === true, soFileSeLui: r.soFileSeLui ?? 0 };
+  }, [cuocId]);
+
+  /**
+   * Lùi FILE về trước câu hỏi thứ `k`.
+   *
+   * Bắt lỗi vì đúng lý do như `quayLui` ngay trên: chỗ gọi dùng `void`, nên một
+   * promise bị từ chối biến mất không dấu vết và cú bấm trông như không ăn.
+   */
+  const luiFile = useCallback(async (k: number): Promise<{ soFile: number; loi: string[] } | null> => {
+    try {
+      /* Cố ý KHÔNG đẻ thêm một kiểu mục mới cho một dòng thông báo: mọi kiểu
+         trong `MucHienThi` còn phải đi qua đường khôi phục phiên ở main
+         (`dungLaiHienThi`), nên thêm kiểu là thêm một chỗ nữa để quên. Kết quả
+         đi ra bằng giá trị trả về, và `AgentMode` hiện nó trên dải băng có sẵn. */
+      const kq = await window.cuongthai?.agent.luiFile(cuocId, k);
+      return kq ?? null;
+    } catch (err) {
+      datMuc((truoc) => [...truoc, {
+        kieu: 'loi', ma: 'LUI_FILE', text: `Lùi file hỏng: ${(err as Error).message}`,
+      }]);
+      return null;
+    }
   }, [cuocId]);
 
   const moPhien = useCallback(async (id: string) => {
@@ -491,6 +513,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
     phien,
     phienDangMo,
     quayLui,
+    luiFile,
     tachNhanh,
     moPhien,
     xoaPhien,

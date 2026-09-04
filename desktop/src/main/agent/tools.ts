@@ -35,7 +35,7 @@ import { daChoPhepCaFile, hoiNguoiDung, type YeuCauXinPhep } from './xinPhep';
 import { toolNotesTao, toolNotesGhi, type BoiCanhNote } from './ghiNote';
 import * as trinhDuyet from '../browser';
 import { layCuaSoChinh } from '../window';
-import type { SoCuoc } from './so';
+import { ghiSoTruoc, type SoCuoc } from './so';
 
 const chay = promisify(execFile);
 
@@ -134,7 +134,53 @@ export async function hoanTacTatCa(so: SoCuoc): Promise<{ soFile: number; loi: s
     }
   }
   so.nhatKyHoanTac.clear();
+  so.buocGhi.length = 0;
   return { soFile, loi };
+}
+
+/**
+ * LÙI FILE về trạng thái ngay TRƯỚC câu hỏi thứ `k` của người dùng.
+ *
+ * Khác `hoanTacTatCa` ở chỗ nó có ĐIỂM DỪNG: hoàn tác đưa mọi thứ về lúc bắt
+ * đầu cuộc, còn cái này chỉ bỏ phần từ câu hỏi thứ `k` trở đi. Agent làm đúng
+ * 5 việc rồi hỏng ở việc thứ 6 thì trước đây người dùng chỉ có hai lựa chọn —
+ * giữ hết hoặc bỏ hết cả 5 việc đúng.
+ *
+ * ⚠️ Duyệt NGƯỢC từ cuối. Một file bị sửa ở lượt 3, 4 và 5 có ba bản ghi; đi
+ * xuôi thì bản ghi của lượt 5 được viết SAU CÙNG và file kẹt ở trạng thái của
+ * lượt 4 — sai một lượt, và sai câm. Đi ngược thì bản của lượt 3 thắng, đúng là
+ * trạng thái trước lượt 3.
+ */
+export async function luiFileVeLuot(
+  so: SoCuoc,
+  k: number,
+): Promise<{ soFile: number; loi: string[] }> {
+  const loi: string[] = [];
+  const daLam = new Set<string>();
+  for (let i = so.buocGhi.length - 1; i >= 0; i--) {
+    const b = so.buocGhi[i]!;
+    if (b.luot < k) continue;
+    daLam.add(b.duong);
+    try {
+      if (b.truoc === null) await fs.rm(b.duong, { force: true });
+      else {
+        await fs.mkdir(path.dirname(b.duong), { recursive: true });
+        await fs.writeFile(b.duong, b.truoc, 'utf8');
+      }
+    } catch (err) {
+      loi.push(`${path.basename(b.duong)}: ${(err as Error).message}`);
+    }
+  }
+  so.buocGhi = so.buocGhi.filter((b) => b.luot < k);
+  /* Sổ hoàn-tác-tất-cả KHÔNG được đụng tới: nó nhớ trạng thái trước lần đụng
+     ĐẦU TIÊN của cả cuộc, nên nó vẫn đúng sau khi lùi một phần — và nút Hoàn
+     tác phải còn dùng được để về hẳn lúc bắt đầu. */
+  return { soFile: daLam.size, loi };
+}
+
+/** Có bao nhiêu file sẽ bị lùi nếu lùi về lượt `k` — để hỏi TRƯỚC khi làm. */
+export function demFileSeLui(so: SoCuoc, k: number): number {
+  return new Set(so.buocGhi.filter((b) => b.luot >= k).map((b) => b.duong)).size;
 }
 
 // ─── Trần ──────────────────────────────────────────────────────────
@@ -503,7 +549,7 @@ const TRAN_BYTE_GHI = 512 * 1024;
  * là lưu nhầm bản đã bị sửa.
  */
 async function ghiVaNhoDeHoanTac(so: SoCuoc, duongDan: string, noiDungMoi: string, goc: string | null): Promise<void> {
-  if (!so.nhatKyHoanTac.has(duongDan)) so.nhatKyHoanTac.set(duongDan, goc);
+  ghiSoTruoc(so, duongDan, goc);
   await fs.mkdir(path.dirname(duongDan), { recursive: true });
   await fs.writeFile(duongDan, noiDungMoi, 'utf8');
 }
@@ -698,7 +744,7 @@ async function toolXoaFile(goc: string, args: Record<string, unknown>, ghi: BoiC
   );
   if (quyet === 'tuChoi') return loiTuChoi(`xoá ${tuongDoi}`);
 
-  if (!ghi.so.nhatKyHoanTac.has(dich)) ghi.so.nhatKyHoanTac.set(dich, noiDungCu);
+  ghiSoTruoc(ghi.so, dich, noiDungCu);
   await fs.rm(dich, { force: true });
   return {
     noiDung: `Đã xoá ${tuongDoi} (${diff.soBo} dòng). Người dùng đã duyệt. Nút Hoàn tác khôi phục lại được.`,
@@ -748,8 +794,8 @@ async function toolDoiTenFile(goc: string, args: Record<string, unknown>, ghi: B
   );
   if (quyet === 'tuChoi') return loiTuChoi(`đổi tên ${tu} thành ${den}`);
 
-  if (!ghi.so.nhatKyHoanTac.has(dTu)) ghi.so.nhatKyHoanTac.set(dTu, noiDungCu);
-  if (!ghi.so.nhatKyHoanTac.has(dDen)) ghi.so.nhatKyHoanTac.set(dDen, null);
+  ghiSoTruoc(ghi.so, dTu, noiDungCu);
+  ghiSoTruoc(ghi.so, dDen, null);
   await fs.mkdir(path.dirname(dDen), { recursive: true });
   await fs.rename(dTu, dDen);
   return { noiDung: `Đã đổi ${tu} → ${den}. Người dùng đã duyệt.`, tomTat: `→ ${den}` };

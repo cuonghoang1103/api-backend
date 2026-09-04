@@ -31,7 +31,7 @@ import {
   type MucKhoiPhuc, type TinNhanLuu,
 } from './phien';
 import type { PhanLoaiLenh } from './lenh';
-import { chayToolAgent, soFileDaSua } from './tools';
+import { chayToolAgent, soFileDaSua, demFileSeLui} from './tools';
 import { taoSoCuoc, type SoCuoc } from './so';
 import type { CheDoQuyen } from '../../shared/ipc';
 import { dungLenhNenCua } from './lenhNen';
@@ -518,6 +518,8 @@ export interface KetQuaQuayLui {
   cauHoi?: string;
   /** Có thay đổi file nào xảy ra trong phần bị bỏ không — để cảnh báo. */
   coSuaFile?: boolean;
+  /** Bao nhiêu file lùi được về mốc này — để giao diện MỜI, không chỉ cảnh báo. */
+  soFileSeLui?: number;
 }
 
 export function quayLui(cuocId: string, k: number): KetQuaQuayLui {
@@ -545,8 +547,12 @@ export function quayLui(cuocId: string, k: number): KetQuaQuayLui {
   const coSuaFile = boDi.some((m) => m.role === 'assistant'
     && (m.tool_calls ?? []).some((t) => TOOL_GHI.has(t.function.name)));
 
+  /* Đếm TRƯỚC khi cắt hội thoại: sổ `buocGhi` không bị `quayLui` đụng tới, nên
+     con số vẫn đúng sau khi cắt — nhưng đếm ở đây thì thứ tự đọc của người sửa
+     mã sau này khớp với thứ tự việc xảy ra. */
+  const soFileSeLui = demFileSeLui(c.so, k);
   c.hoiThoai = c.hoiThoai.slice(0, cat);
-  return { ok: true, cauHoi, coSuaFile };
+  return { ok: true, cauHoi, coSuaFile, soFileSeLui };
 }
 
 /**
@@ -674,6 +680,14 @@ export async function chayLuot(
   // Có ảnh ⇒ tin nhắn thành mảng khối. Chữ đi TRƯỚC ảnh: model đọc theo thứ tự,
   // và câu hỏi đặt sau ảnh thì nó đã bắt đầu mô tả tấm ảnh trước khi biết được
   // hỏi gì về nó.
+  /*
+   * Số lượt PHẢI khớp với cách `quayLui` đếm — "câu hỏi thứ k của người dùng".
+   * Tính lại từ chính `hoiThoai` thay vì tăng dần một biến đếm: `quayLui` và
+   * `napPhien` đều CẮT hoặc THAY `hoiThoai`, nên một biến đếm tự tăng sẽ trôi
+   * khỏi hội thoại thật sau lần quay lui đầu tiên — và nút lùi file sẽ trỏ vào
+   * đúng sai chỗ mà không có gì báo.
+   */
+  c.so.luot = c.hoiThoai.filter((m) => m.role === 'user').length + 1;
   c.hoiThoai.push(
     boiCanh.anh?.length
       ? {

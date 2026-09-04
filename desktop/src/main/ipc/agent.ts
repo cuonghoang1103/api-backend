@@ -39,7 +39,9 @@ import {
   nhanBanPhien, xoaPhien,
 } from '../agent/phien';
 import { datDinhKem, datDinhKemTuDuong } from '../agent/dinhKem';
-import { hoanTacTatCa } from '../agent/tools';
+import { hoanTacTatCa, luiFileVeLuot } from '../agent/tools';
+import { timFileGoiY } from '../agent/timFileNhanh';
+import { docLenhDuAn } from '../agent/lenhTuTao';
 import { traLoi } from '../agent/xinPhep';
 import { readStoredSession } from './auth';
 import { handle } from './index';
@@ -442,6 +444,32 @@ export function registerAgentHandlers(): void {
     // với chính nó, và bên thắng là bên ghi sau.
     huyLuotCua(cuocId);
     return hoanTacTatCa(soCuaCuoc(cuocId));
+  });
+
+  /*
+   * Lùi FILE về trước câu hỏi thứ `k`. Anh em với `agent:hoanTac`, khác ở chỗ
+   * nó có ĐIỂM DỪNG: hoàn tác bỏ mọi thứ từ đầu cuộc, cái này chỉ bỏ từ mốc đó
+   * trở đi — agent làm đúng 5 việc rồi hỏng ở việc thứ 6 thì giữ lại được 5.
+   */
+  /* Gợi ý `@`. Chưa mở dự án thì trả MẢNG RỖNG chứ không ném: ô soạn gọi cái
+     này ở mỗi phím gõ, và một ngoại lệ mỗi phím sẽ ngập log mà không giúp gì. */
+  handle('agent:timFile', async ({ cuocId, tim }) => {
+    const goc = gocCuaCuoc(cuocId);
+    if (!goc) return [];
+    return timFileGoiY(goc, tim);
+  });
+
+  handle('agent:lenhDuAn', async ({ cuocId }) => {
+    const goc = gocCuaCuoc(cuocId);
+    if (!goc) return [];
+    return docLenhDuAn(goc);
+  });
+
+  handle('agent:luiFile', async ({ cuocId, k }) => {
+    // Cùng lý do như hoàn tác: lùi trong lúc agent còn đang ghi là chạy đua với
+    // chính nó, và bên ghi SAU thắng.
+    huyLuotCua(cuocId);
+    return luiFileVeLuot(soCuaCuoc(cuocId), k);
   });
 
   // ─── Worktree ────────────────────────────────────────────────────

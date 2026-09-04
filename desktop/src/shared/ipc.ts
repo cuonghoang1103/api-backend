@@ -587,6 +587,26 @@ export const agentQuayLuiSchema = z.object({
   k: z.number().int().min(1).max(500),
 });
 
+/** Lùi FILE về trạng thái trước câu hỏi thứ `k`. Cùng cách đếm với `quayLui`. */
+export const agentLuiFileSchema = agentQuayLuiSchema;
+
+/**
+ * Gợi ý tên file cho `@` trong ô soạn.
+ *
+ * `tim` cho phép RỖNG (vừa gõ `@`, chưa gõ chữ nào) — lúc đó trả về file sửa
+ * gần nhất. Trần 120 ký tự: không ai gõ đường dẫn dài hơn thế để TÌM, và một
+ * chuỗi dài hơn chỉ có thể là dán nhầm cả file vào.
+ */
+export const agentTimFileSchema = z.object({
+  cuocId: cuocIdSchema,
+  tim: z.string().max(120),
+});
+
+/** Đọc lệnh gạch chéo tự tạo của dự án đang mở. */
+export const agentLenhDuAnSchema = agentCuocSchema;
+
+export interface AgentLenhDuAn { ten: string; mo: string; than: string }
+
 /**
  * ⚠️ `duongDan` ở đây là NGOẠI LỆ DUY NHẤT cho quy tắc "renderer không truyền
  * đường dẫn" — và nó an toàn vì main KHÔNG tin chuỗi này: `xoaWorktree` /
@@ -1007,6 +1027,9 @@ export const INVOKE_CHANNELS = {
   'agent:doiWorktree': agentDoiWorktreeSchema,
   'agent:xoaWorktree': agentDoiWorktreeSchema,
   'agent:quayLui': agentQuayLuiSchema,
+  'agent:luiFile': agentLuiFileSchema,
+  'agent:timFile': agentTimFileSchema,
+  'agent:lenhDuAn': agentLenhDuAnSchema,
   'agent:dsCuoc': null,
   'agent:bangGhi': agentCuocSchema,
   'agent:mcpTrangThai': null,
@@ -1341,10 +1364,29 @@ export interface DesktopBridge {
      * diện đặt vào ô soạn.
      *
      * KHÔNG đụng tới file đã sửa — xem ghi chú ở `quayLui` trong agent/loop.ts.
+     * `soFileSeLui` cho giao diện mời người dùng lùi cả file bằng `luiFile`.
      */
     quayLui(cuocId: string, k: number): Promise<{
-      ok: boolean; loi?: string; cauHoi?: string; coSuaFile?: boolean;
+      ok: boolean; loi?: string; cauHoi?: string; coSuaFile?: boolean; soFileSeLui?: number;
     }>;
+    /**
+     * Lùi FILE về trạng thái ngay trước câu hỏi thứ `k`.
+     *
+     * Tách hẳn khỏi `quayLui` chứ không gộp làm một cờ: bỏ hội thoại là việc
+     * đảo ngược được, còn ghi đè file trên đĩa thì không. Hai hậu quả khác hẳn
+     * nhau thì phải là hai lần bấm khác nhau.
+     */
+    luiFile(cuocId: string, k: number): Promise<{ soFile: number; loi: string[] }>;
+    /**
+     * Đường dẫn file khớp `tim`, tương đối với gốc dự án. Rỗng nếu chưa mở dự án.
+     */
+    timFile(cuocId: string, tim: string): Promise<string[]>;
+    /**
+     * Lệnh gạch chéo do DỰ ÁN định nghĩa (`.claude/commands/*.md`).
+     *
+     * Chỉ trả về nội dung — KHÔNG tự chạy gì. Xem ghi chú đầu `lenhTuTao.ts`.
+     */
+    lenhDuAn(cuocId: string): Promise<AgentLenhDuAn[]>;
     dsCuoc(): Promise<AgentCuocDangMo[]>;
     /**
      * Bảng ghi của một cuộc + nó có ĐANG CHẠY không.

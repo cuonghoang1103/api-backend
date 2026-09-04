@@ -46,13 +46,28 @@ export function locLenh(chu: string, ds: LenhGach[] = LENH_AGENT): LenhGach[] {
 }
 
 export function GoiYLenh({
-  chu, onChon, onDong,
+  chu, onChon, onDong, them,
 }: {
   chu: string;
   onChon: (ten: string) => void;
   onDong: () => void;
+  /**
+   * Lệnh do DỰ ÁN định nghĩa (`.claude/commands/*.md`), nối sau lệnh dựng sẵn.
+   *
+   * Đứng SAU chứ không trước: `/clear` và `/undo` là thứ người dùng gõ theo
+   * phản xạ, và một file trong repo tên `clear.md` không được phép đẩy chúng
+   * xuống dưới — lệnh dựng sẵn luôn thắng ở `locLenh`, xem chốt trùng tên.
+   */
+  them?: LenhGach[];
 }) {
-  const ds = useMemo(() => locLenh(chu), [chu]);
+  const ds = useMemo(() => {
+    if (!them?.length) return locLenh(chu);
+    /* Bỏ lệnh dự án nào TRÙNG tên với lệnh dựng sẵn — kể cả trùng tên khác.
+       Không lọc thì bảng hiện hai dòng `/undo` và người dùng không đoán được
+       dòng nào làm gì. */
+    const daCo = new Set(LENH_AGENT.flatMap((l) => [l.ten, ...(l.khac ?? [])]));
+    return locLenh(chu, [...LENH_AGENT, ...them.filter((l) => !daCo.has(l.ten))]);
+  }, [chu, them]);
   const [chon, datChon] = useState(0);
 
   // Gõ thêm ⇒ danh sách đổi ⇒ con trỏ phải về đầu, nếu không nó trỏ vào một

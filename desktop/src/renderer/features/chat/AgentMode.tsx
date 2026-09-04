@@ -33,6 +33,8 @@ import { DangNghi } from './DangNghi';
 import { BangLenh } from './BangLenh';
 import { KhungWeb } from './KhungWeb';
 import { GoiYLenh, LENH_AGENT } from './GoiYLenh';
+import { GoiYFile, docTokenFile, type TokenFile } from './GoiYFile';
+import { ghepThamSo } from '../../../shared/lenhDuAn';
 import type {
   AgentInfo, AgentMcpTrangThai, AgentNguCanh, AgentViec, AgentWorktree, CheDoQuyen, ModelAgent, MucNoLuc,
 } from '../../../shared/ipc';
@@ -80,7 +82,7 @@ export function AgentMode({
   onTachRaTabMoi?: (phienId: string) => void;
 }) {
   const {
-    trangThai, gui, dung, batDauLai, traLoiXinPhep, hoanTac, quayLui, tachNhanh,
+    trangThai, gui, dung, batDauLai, traLoiXinPhep, hoanTac, quayLui, luiFile, tachNhanh,
     phien, phienDangMo, moPhien, xoaPhien,
   } = useAgent(cuocId, info);
   const { settings, setSetting } = useAppState();
@@ -92,7 +94,15 @@ export function AgentMode({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phienCanMo?.lan]);
   /** Cảnh báo sau khi quay lui qua một đoạn CÓ sửa file. */
-  const [canhQuayLui, datCanhQuayLui] = useState<string | null>(null);
+  /*
+   * Dải băng sau khi quay lui. Mang theo `moc` (số thứ tự câu hỏi) chứ không chỉ
+   * chữ, vì nút "Lùi cả file" cần biết lùi về ĐÂU — và mốc đó phải là mốc của
+   * đúng lần quay lui vừa rồi, không phải mốc tính lại từ bảng ghi đã bị cắt.
+   */
+  const [canhQuayLui, datCanhQuayLui] =
+    useState<{ chu: string; moc?: number; soFile?: number } | null>(null);
+  const [dangLuiFile, datDangLuiFile] = useState(false);
+
   /**
    * Thư mục dự án của RIÊNG tab này.
    *
@@ -122,6 +132,50 @@ export function AgentMode({
    * mãi mãi, ở mọi lượt sau. Nó cũng không phải thứ model cần đọc.
    */
   const [lenhTraLoi, datLenhTraLoi] = useState<string | null>(null);
+
+  /*
+   * Lệnh gạch chéo do dự án định nghĩa. Nạp lại mỗi khi đổi thư mục — lệnh
+   * thuộc về DỰ ÁN, nên mang danh sách của dự án cũ sang dự án mới là bày ra
+   * những lệnh không tồn tại ở đây.
+   */
+  const [lenhDuAn, datLenhDuAn] = useState<Array<{ ten: string; mo: string; than: string }>>([]);
+
+  /*
+   * Đoạn `@…` con trỏ đang nằm trong, hoặc `null`.
+   *
+   * Tính từ vị trí CON TRỎ chứ không từ cả chuỗi: người dùng hay quay lại sửa
+   * giữa câu, và nếu chỉ nhìn ký tự cuối thì `@src/a.ts rồi sao nữa` sẽ vẫn mở
+   * bảng gợi ý dù con trỏ đã ở cuối câu.
+   */
+
+
+  const [tokenFile, datTokenFile] = useState<TokenFile | null>(null);
+  const oNhapRef = useRef<HTMLTextAreaElement | null>(null);
+
+  /**
+   * Bung một lệnh của dự án vào ô soạn, và đặt con trỏ vào chỗ cần gõ tiếp.
+   *
+   * ⚠️ KHÔNG tự gửi. Nội dung lệnh nằm trong repo, nên nó có thể tới từ
+   * `git pull` của người khác — tự gửi nghĩa là khởi động một lượt agent tốn
+   * tiền với nội dung người dùng chưa từng đọc. Bung ra rồi để họ bấm Enter
+   * lần nữa: họ nhìn thấy đúng thứ sắp chạy.
+   */
+  const bungLenhDuAn = useCallback((than: string, thamSo: string) => {
+    /* Vị trí `$ARGUMENTS` TRƯỚC khi thay — để con trỏ dừng đúng chỗ trống khi
+       người dùng chưa gõ tham số. Không có nó thì họ nhận một câu thiếu chữ
+       giữa dòng và con trỏ ở tận cuối, phải tự đi tìm chỗ cần điền. */
+    const oTrong = thamSo.trim() === '' ? than.indexOf('$ARGUMENTS') : -1;
+    const chu = ghepThamSo(than, thamSo);
+    datNhap(chu);
+    datTokenFile(null);
+    requestAnimationFrame(() => {
+      const o = oNhapRef.current;
+      if (!o) return;
+      o.focus();
+      const vt = oTrong >= 0 ? oTrong : chu.length;
+      o.setSelectionRange(vt, vt);
+    });
+  }, []);
   /* Tấm "Việc đã lưu" cũng vào chung sổ: nó là tấm phủ, và trước đây mở nó
      trong khi bảng MCP đang mở là hai lớp chồng nhau. Nó tự có nền bấm-để-đóng
      nên không cần `boc`. */
@@ -323,6 +377,19 @@ export function AgentMode({
      */
     const lenh = text.toLowerCase();
 
+    /* Lệnh của DỰ ÁN, gõ tay kèm tham số: `/rade IOT102` + Enter.
+     *
+     * Phải bắt Ở ĐÂY chứ không chỉ ở bảng gợi ý: `locLenh` ẩn bảng ngay khi có
+     * khoảng trắng, nên đường qua bảng KHÔNG BAO GIỜ chạm tới `$ARGUMENTS`.
+     * Thiếu nhánh này thì tham số là một tính năng không có đường nào dùng. */
+    const dauCach = text.indexOf(' ');
+    const tenLenh = (dauCach < 0 ? text : text.slice(0, dauCach)).toLowerCase();
+    const cuaDuAn = lenhDuAn.find((l) => l.ten === tenLenh);
+    if (cuaDuAn) {
+      bungLenhDuAn(cuaDuAn.than, dauCach < 0 ? '' : text.slice(dauCach + 1));
+      return;
+    }
+
     /* ⛔ Những lệnh dưới đây KHÔNG tốn một lượt nào: chúng đọc trạng thái sẵn
        có trong renderer. Để chúng rơi vào model là trả tiền cho một câu trả
        lời mà chính app đã biết. */
@@ -438,6 +505,22 @@ export function AgentMode({
   }
 
   const coThuMuc = Boolean(thuMuc?.path);
+
+  useEffect(() => {
+    let con = true;
+    if (!coThuMuc) { datLenhDuAn([]); return; }
+    void window.cuongthai?.agent.lenhDuAn(cuocId)
+      .then((r) => { if (con) datLenhDuAn(r); })
+      .catch(() => { if (con) datLenhDuAn([]); });
+    return () => { con = false; };
+  }, [cuocId, coThuMuc, thuMuc?.path]);
+
+
+  /** Cập nhật ô soạn VÀ đoạn `@` theo vị trí con trỏ hiện tại của ô đó. */
+  const capNhatNhap = useCallback((chu: string, caret: number) => {
+    datNhap(chu);
+    datTokenFile(coThuMuc ? docTokenFile(chu, caret) : null);
+  }, [coThuMuc]);
 
   return (
     /* ⛔ KHÔNG gắn `coThuMuc ? … : undefined` như bản cũ nữa.
@@ -650,7 +733,31 @@ export function AgentMode({
 
       {canhQuayLui && (
         <div className="ct-notice" data-tone="warn" style={{ margin: '0 0 8px' }}>
-          <span>{canhQuayLui}</span>
+          <span>{canhQuayLui.chu}</span>
+          {canhQuayLui.moc !== undefined && (canhQuayLui.soFile ?? 0) > 0 && (
+            <button
+              type="button"
+              className="ct-notice-nut"
+              disabled={dangLuiFile}
+              onClick={() => {
+                const moc = canhQuayLui.moc;
+                if (moc === undefined) return;
+                datDangLuiFile(true);
+                void luiFile(moc)
+                  .then((kq) => {
+                    datCanhQuayLui(kq === null ? null : {
+                      chu: kq.soFile === 0
+                        ? 'Không có file nào cần lùi ở mốc này.'
+                        : `Đã lùi ${kq.soFile} file về trạng thái trước câu hỏi đó.`
+                          + (kq.loi.length > 0 ? ` ${kq.loi.length} file lùi không được: ${kq.loi.join('; ')}` : ''),
+                    });
+                  })
+                  .finally(() => datDangLuiFile(false));
+              }}
+            >
+              {dangLuiFile ? 'Đang lùi…' : `Lùi cả ${canhQuayLui.soFile} file về mốc này`}
+            </button>
+          )}
           <button type="button" className="ct-agent-icon" onClick={() => datCanhQuayLui(null)} aria-label="Đóng">
             <X size={12} aria-hidden />
           </button>
@@ -684,9 +791,17 @@ export function AgentMode({
                     void quayLui(thuTu).then((r) => {
                       if (!r) return;
                       datNhap(r.cauHoi);
+                      /* Trước đây chỉ nói "dùng nút Hoàn tác" — mà Hoàn tác lùi
+                         TẤT CẢ về đầu cuộc, tức bỏ luôn những việc đúng trước
+                         mốc này. Nay mời đúng thao tác cần: lùi về ĐÚNG mốc. */
                       datCanhQuayLui(r.coSuaFile
-                        ? 'Đã quay lui. Lưu ý: đoạn vừa bỏ CÓ sửa file hoặc chạy lệnh — '
-                          + 'những thay đổi đó vẫn còn trên đĩa. Dùng nút Hoàn tác nếu muốn lùi cả chúng.'
+                        ? {
+                          chu: r.soFileSeLui > 0
+                            ? `Đã quay lui hội thoại. ${r.soFileSeLui} file agent sửa từ mốc này trở đi VẪN CÒN trên đĩa.`
+                            : 'Đã quay lui. Đoạn vừa bỏ có chạy lệnh — thay đổi do lệnh gây ra không lùi được tự động.',
+                          moc: thuTu,
+                          soFile: r.soFileSeLui,
+                        }
                         : null);
                     });
                   }}
@@ -871,9 +986,41 @@ export function AgentMode({
           khoảng trắng. `GoiYLenh` tự lo phím lên/xuống/Enter/Esc. */}
       <GoiYLenh
         chu={nhap}
-        onChon={(ten) => datNhap(`${ten} `)}
+        them={lenhDuAn}
+        onChon={(ten) => {
+          const cua = lenhDuAn.find((l) => l.ten === ten);
+          if (!cua) { datNhap(`${ten} `); return; }
+          /* Lệnh dự án ⇒ THAY bằng nội dung file, giữ lại phần người dùng đã gõ
+             sau tên lệnh làm tham số. Chỉ đặt chữ vào ô soạn, KHÔNG tự gửi —
+             file có thể tới từ `git pull` của người khác. */
+          bungLenhDuAn(cua.than, nhap.includes(' ') ? nhap.slice(nhap.indexOf(' ') + 1) : '');
+        }}
         onDong={() => datNhap('')}
       />
+
+      {/* Bảng gợi ý FILE — chỉ khi con trỏ đang nằm trong một đoạn `@…`. */}
+      {tokenFile !== null && (
+        <GoiYFile
+          cuocId={cuocId}
+          token={tokenFile}
+          onChon={(duong, tk) => {
+            /* Thay ĐÚNG đoạn `@…`, giữ nguyên phần còn lại của câu. Thay cả ô
+               nhập là xoá mất thứ người dùng đã viết trước đó. */
+            const moi = `${nhap.slice(0, tk.dau)}@${duong} ${nhap.slice(tk.cuoi)}`;
+            datNhap(moi);
+            datTokenFile(null);
+            // Trả con trỏ về ngay sau đường dẫn vừa chèn, không nhảy về cuối ô.
+            const viTri = tk.dau + duong.length + 2;
+            requestAnimationFrame(() => {
+              const o = oNhapRef.current;
+              if (!o) return;
+              o.focus();
+              o.setSelectionRange(viTri, viTri);
+            });
+          }}
+          onDong={() => datTokenFile(null)}
+        />
+      )}
 
       {/* ── Ô nhập ── */}
       {/* Ảnh gửi thẳng vẫn hiện thành hình, vì nhìn thấy nó mới biết mình dán
@@ -935,6 +1082,7 @@ export function AgentMode({
             án (ngục của agent), nên không có gốc thì không có chỗ để đặt. */}
         <NutChonTep onBam={dk.moChonTep} khoa={trangThai.dangChay || !coThuMuc} />
         <textarea
+          ref={oNhapRef}
           className="ct-agent-o"
           rows={2}
           onPaste={dk.danVao}
@@ -942,7 +1090,16 @@ export function AgentMode({
           placeholder={coThuMuc
             ? `Hỏi về dự án ${thuMuc?.name}… (kéo thả, dán hoặc bấm 📎 để gửi file)`
             : 'Chọn thư mục dự án trước, rồi hỏi…'}
-          onChange={(e) => datNhap(e.target.value)}
+          onChange={(e) => capNhatNhap(e.target.value, e.target.selectionStart ?? e.target.value.length)}
+          /* Di chuyển con trỏ bằng phím mũi tên hay chuột KHÔNG bắn `onChange`.
+             Thiếu dòng này thì bảng gợi ý còn treo lại sau khi người dùng đã
+             bấm ra chỗ khác trong câu — một bảng nổi nuốt phím Enter ở nơi
+             người dùng không hề gõ `@`. */
+          onSelect={(e) => {
+            const o = e.currentTarget;
+            datTokenFile(coThuMuc ? docTokenFile(o.value, o.selectionStart ?? 0) : null);
+          }}
+          onBlur={() => datTokenFile(null)}
           onKeyDown={phimTrongO}
         />
         {trangThai.dangChay ? (

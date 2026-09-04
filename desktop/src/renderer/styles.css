@@ -834,6 +834,34 @@ code {
   color: var(--ct-err);
 }
 
+/*
+ * Nút HÀNH ĐỘNG nằm trong dải băng — ví dụ "Lùi cả 3 file về mốc này".
+ *
+ * `flex-shrink: 0` và `margin-left: auto` để nó không bị chữ dài ép bẹp: dải
+ * băng là flex, và một câu cảnh báo dài sẽ nén nút xuống còn vài pixel mà vẫn
+ * bấm được — một nút vô hình nhưng bấm trúng là cách hỏng khó chịu nhất.
+ * `currentColor` để nó thừa hưởng màu theo `data-tone`, không phải chép màu ra.
+ */
+.ct-notice-nut {
+  flex-shrink: 0;
+  margin-left: auto;
+  align-self: center;
+  padding: 4px 10px;
+  border-radius: var(--ct-radius-sm);
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 120ms ease;
+}
+
+.ct-notice-nut:hover:not(:disabled) { background: color-mix(in srgb, currentColor 16%, transparent); }
+.ct-notice-nut:disabled { opacity: 0.55; cursor: default; }
+
 .ct-input-group {
   display: block;
   margin-bottom: 13px;
@@ -6953,6 +6981,23 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   font-style: normal; font-size: 11px; color: var(--ct-text-faint);
   font-family: ui-monospace, Menlo, monospace;
 }
+/*
+ * Đường dẫn thư mục của gợi ý file — chữ mờ, đứng sau tên file.
+ *
+ * `min-width: 0` + `text-overflow` vì đường dẫn trong monorepo dài hơn bảng gợi
+ * ý rất nhiều; không cắt thì nó đẩy bảng rộng ra ngoài cửa sổ.
+ */
+.ct-goiy-duong {
+  color: var(--ct-text-muted);
+  font-size: 11.5px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  direction: rtl;      /* cắt ở ĐẦU: đuôi đường dẫn mới là phần phân biệt được */
+  text-align: left;
+}
+
 .ct-goiy-chan {
   margin: 2px 0 0; padding: 4px 10px 2px;
   border-top: 1px solid var(--ct-border);

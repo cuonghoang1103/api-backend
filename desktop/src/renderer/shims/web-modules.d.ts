@@ -220,3 +220,13 @@ declare module '@/components/academy/CourseTutor' {
     quizContext?: unknown[];
   }): JSX.Element;
 }
+
+/** Đề luyện cuối chương — cùng lý do dùng lại như `CourseTutor`. */
+declare module '@/components/academy/ChapterQuiz' {
+  export function ChapterQuiz(props: {
+    sectionId: number;
+    sectionTitle?: string;
+    count: number;
+    lessonId?: number;
+  }): JSX.Element;
+}

@@ -76,7 +76,21 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
 
   // SSE: đọc luồng, dồn delta vào turn trợ lý ở vị trí aIdx. Ném lỗi để caller lùi.
   const runStream = useCallback(async (aIdx: number, q: string, history: Turn[], english: boolean, cacheKey?: string, refresh?: boolean) => {
-    const res = await fetch(`/api/v1/courses/lessons/${lessonId}/ai/ask-stream`, {
+    /*
+     * ⚠️ ĐƯỜNG DẪN TUYỆT ĐỐI, dựng từ `baseURL` của axios.
+     *
+     * Trước đây là `/api/v1/...` trần. Trên web nó trúng proxy Next cùng
+     * origin nên chạy. Nhưng component này còn được app desktop DÙNG LẠI, mà
+     * ở đó origin là `app://cuongthai` — một `fetch` tương đối sẽ bay vào
+     * `app://cuongthai/api/v1/...`, không tồn tại, và gia sư AI hỏng câm ở
+     * đúng chức năng chính của nó.
+     *
+     * `api.defaults.baseURL` là `/api/v1` trên web và `<gốc>/api/v1` trên
+     * desktop (xem `web-api-adapter.ts`), nên cắt đuôi rồi ghép lại là đúng
+     * cho cả hai — web KHÔNG đổi hành vi.
+     */
+    const goc = String(api.defaults.baseURL ?? '').replace(/\/api\/v1\/?$/, '');
+    const res = await fetch(`${goc}/api/v1/courses/lessons/${lessonId}/ai/ask-stream`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...(getToken() ? { Authorization: `Bearer ${getToken()}` } : {}) },
       body: JSON.stringify({ question: q, history: history.map(toMsg), english, cacheKey, refresh, ...(inQuiz ? { quizContext } : {}) }),

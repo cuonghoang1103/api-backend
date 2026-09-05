@@ -30,6 +30,7 @@ import { KhungVideo } from './KhungVideo';
  * chép lại 336 dòng ở đây là tự tạo ra hai bản phải nuôi song song mãi.
  */
 import { CourseTutor } from '@/components/academy/CourseTutor';
+import { ChapterQuiz } from '@/components/academy/ChapterQuiz';
 
 export interface Mon {
   id: number;
@@ -318,6 +319,33 @@ function DocBai({
   bai: Bai; mon: Mon; onQuayLai: () => void;
   truoc: Bai | null; sau: Bai | null; onDoiBai: (b: Bai) => void;
 }) {
+  const { api } = useSession();
+
+  /*
+   * ĐỀ LUYỆN CUỐI CHƯƠNG.
+   *
+   * Web hiện nó trong lộ trình môn, cho MỌI chương có câu hỏi. Ở đây chỉ hiện
+   * cho chương chứa BÀI ĐANG MỞ — người đang đọc bài 4.1 không cần thấy đề của
+   * chín chương khác, và một trang bài học dài thêm chín khối quiz thì phần
+   * chuyển bài bị đẩy xuống tận đáy.
+   *
+   * `section-counts` trả `{ [sectionId]: số câu }`. Chương chưa gán câu nào thì
+   * KHÔNG hiện khối — một nút "Làm đề" mở ra rồi báo "không có câu hỏi" tệ hơn
+   * hẳn là không có nút.
+   */
+  const [soCau, datSoCau] = useState<Record<number, number>>({});
+  useEffect(() => {
+    if (!api || !mon.id) return;
+    let con = true;
+    void api.request<Record<number, number>>(`/api/v1/exams/practice/section-counts/${mon.id}`)
+      .then((r) => { if (con && r && typeof r === 'object') datSoCau(r); })
+      .catch(() => { /* không có đề thì thôi, đừng làm hỏng cả trang bài học */ });
+    return () => { con = false; };
+  }, [api, mon.id]);
+
+  /** Chương chứa bài đang mở. `null` nếu môn chưa tải xong danh sách chương. */
+  const chuong = (mon.sections ?? []).find((m) => (m.lessons ?? []).some((b) => b.id === bai.id)) ?? null;
+
   /* Video HIỆN SẴN khi bài có video — người dùng yêu cầu 20/08/2026: "tôi muốn
      vào video nó hiện cố định, chứ đừng phải ấn vào nó mới hiện".
      Cái giá: mỗi lần mở một bài CÓ video là một lượt tải YouTube, kể cả khi họ
@@ -420,6 +448,15 @@ function DocBai({
         courseTitle={mon.title}
         lessonTitle={bai.title}
       />
+
+      {chuong && (soCau[chuong.id] ?? 0) > 0 && (
+        <ChapterQuiz
+          sectionId={chuong.id}
+          sectionTitle={chuong.title}
+          count={soCau[chuong.id] ?? 0}
+          lessonId={bai.id}
+        />
+      )}
 
       {/* Chuyển bài — đi xuyên mục, y như web.
           Bài kế bị khoá thì KHÔNG giấu nút: giấu đi là người dùng tưởng đã hết

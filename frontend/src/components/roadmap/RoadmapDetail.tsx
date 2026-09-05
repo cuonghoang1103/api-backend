@@ -4,13 +4,17 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { Loader2, ArrowLeft, ArrowRight, Check, Circle, Play, X, ExternalLink, GitBranch, Star, BookOpen, Heart } from 'lucide-react';
+import { Loader2, ArrowLeft, ArrowRight, Check, Circle, Play, X, ExternalLink, GitBranch, Star, BookOpen, Heart, Search } from 'lucide-react';
 import { toast } from 'sonner';
 import { roadmapApi, type RoadmapDetailT, type RoadmapNodeT, type ResourceItemT } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { roadmapIcon } from './icons';
 
 const EASE = [0.16, 1, 0.3, 1] as const;
+
+// Chặng dài hơn NGUONG bước thì mở sẵn MO_SAN bước, phần còn lại bấm mới hiện.
+const NGUONG = 14;
+const MO_SAN = 10;
 
 // Resource type → badge label + color (roadmap.sh style).
 const RES_META: Record<string, { label: string; color: string }> = {
@@ -69,6 +73,11 @@ export default function RoadmapDetail({ slug }: { slug: string }) {
   const [done, setDone] = useState<Set<number>>(new Set());
   const [active, setActive] = useState<RoadmapNodeT | null>(null);
   const [toggling, setToggling] = useState(false);
+  // Một lộ trình giờ có tới ~300 bước (cyber-security), một chặng có thể 60
+  // bước. Mỗi bước là một motion.li có observer riêng, nên dựng hết một lượt
+  // vừa chậm vừa thành bức tường chữ → thu gọn chặng dài, và cho tìm theo tên.
+  const [tim, setTim] = useState('');
+  const [moRong, setMoRong] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     let alive = true;
@@ -100,6 +109,17 @@ export default function RoadmapDetail({ slug }: { slug: string }) {
       toast.error('Không lưu được, thử lại sau.');
     } finally { setToggling(false); }
   }, [isAuthenticated]);
+
+  const khoaTim = tim.trim().toLowerCase();
+  const chang = useMemo(() => {
+    if (!data) return [];
+    if (!khoaTim) return data.stages;
+    return data.stages
+      .map((s) => ({ ...s, nodes: s.nodes.filter((n) =>
+        `${n.title} ${n.subtitle ?? ''} ${n.description ?? ''}`.toLowerCase().includes(khoaTim)) }))
+      .filter((s) => s.nodes.length > 0);
+  }, [data, khoaTim]);
+  const soKhop = useMemo(() => chang.reduce((a, s) => a + s.nodes.length, 0), [chang]);
 
   const total = data?.total ?? 0;
   const doneCount = done.size;
@@ -139,9 +159,37 @@ export default function RoadmapDetail({ slug }: { slug: string }) {
             <Legend swatch={<GitBranch size={13} style={{ color: '#06b6d4' }} />} label="Nhánh — kỹ năng bổ trợ" />
           </div>
 
-          {data.stages.map((stage, si) => {
+          {/* Tìm trong lộ trình */}
+          <div className="mb-7">
+            <div className="relative">
+              <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 opacity-50" style={{ color: 'var(--text-secondary, #888)' }} />
+              <input
+                value={tim} onChange={(e) => setTim(e.target.value)}
+                placeholder={`Tìm trong ${total} bước…`}
+                className="w-full rounded-xl border py-2.5 pl-9 pr-9 text-sm outline-none transition focus:shadow-lg"
+                style={{ borderColor: 'var(--border-color, rgba(127,127,127,0.2))', background: 'var(--bg-secondary, rgba(127,127,127,0.05))', color: 'var(--text-primary)' }}
+              />
+              {tim && (
+                <button type="button" onClick={() => setTim('')} aria-label="Xoá tìm kiếm"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-full p-1 transition hover:bg-black/10 dark:hover:bg-white/10">
+                  <X size={14} style={{ color: 'var(--text-secondary, #888)' }} />
+                </button>
+              )}
+            </div>
+            {khoaTim && (
+              <p className="mt-2 text-xs" style={{ color: 'var(--text-secondary, #888)' }}>
+                {soKhop > 0 ? `${soKhop} bước khớp “${tim.trim()}”` : `Không có bước nào khớp “${tim.trim()}”`}
+              </p>
+            )}
+          </div>
+
+          {chang.map((stage, si) => {
             const stageDone = stage.nodes.filter((n) => done.has(n.id)).length;
             const allDone = stageDone === stage.nodes.length;
+            // Đang tìm thì hiện hết kết quả; không tìm thì chặng dài chỉ mở 10 bước đầu.
+            const daMo = khoaTim ? true : moRong.has(stage.stage);
+            const hienThi = daMo || stage.nodes.length <= NGUONG ? stage.nodes : stage.nodes.slice(0, MO_SAN);
+            const conLai = stage.nodes.length - hienThi.length;
             return (
               <section key={`${stage.stage}-${si}`} className="pb-3">
                 {/* Stage badge */}
@@ -159,7 +207,7 @@ export default function RoadmapDetail({ slug }: { slug: string }) {
                   <div aria-hidden className="absolute left-[22px] bottom-3 top-3 w-0.5 rounded-full sm:left-1/2 sm:-translate-x-1/2"
                     style={{ background: `linear-gradient(${color}55, ${color}18)` }} />
                   <ul className="space-y-5">
-                    {stage.nodes.map((n, ni) => {
+                    {hienThi.map((n, ni) => {
                       const st = statusOf(n.id);
                       const left = n.side === 'left' || (n.side === 'center' && ni % 2 === 1);
                       const Icon = roadmapIcon(n.icon);
@@ -221,6 +269,26 @@ export default function RoadmapDetail({ slug }: { slug: string }) {
                       );
                     })}
                   </ul>
+
+                  {conLai > 0 && (
+                    <div className="mt-5 flex justify-center">
+                      <button type="button"
+                        onClick={() => setMoRong((prev) => new Set(prev).add(stage.stage))}
+                        className="inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-xs font-semibold transition hover:shadow-md"
+                        style={{ borderColor: `${color}55`, color, background: `${color}12` }}>
+                        Xem thêm {conLai} bước <ArrowRight size={13} />
+                      </button>
+                    </div>
+                  )}
+                  {daMo && !khoaTim && stage.nodes.length > NGUONG && (
+                    <div className="mt-5 flex justify-center">
+                      <button type="button"
+                        onClick={() => setMoRong((prev) => { const n = new Set(prev); n.delete(stage.stage); return n; })}
+                        className="text-xs font-medium underline-offset-2 transition hover:underline" style={{ color: 'var(--text-secondary, #888)' }}>
+                        Thu gọn chặng này
+                      </button>
+                    </div>
+                  )}
                 </div>
               </section>
             );

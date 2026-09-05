@@ -6,6 +6,8 @@
  *   resources → Free/Premium resource list with type badge + title.
  *   kind      → 'primary' | 'alternative' (branch) | 'info' (concept).
  */
+import { MO_RONG } from './roadmap.seed.mo-rong.js';
+
 export type SeedLink = { type: 'code-lab' | 'roadmap' | 'external'; ref: string };
 export type SeedResource = { type: 'article' | 'video' | 'course' | 'official' | 'feed'; title: string; url: string; premium?: boolean };
 export interface SeedNode {
@@ -25,7 +27,7 @@ const art = (title: string, url: string): SeedResource => ({ type: 'article', ti
 const crs = (title: string, url: string, premium = false): SeedResource => ({ type: 'course', title, url, premium });
 const vid = (title: string, url: string): SeedResource => ({ type: 'video', title, url });
 
-export const ROADMAP_SEED: SeedRoadmap[] = [
+const BAN_VIET_TAY: SeedRoadmap[] = [
   // ─────────────────────────────── CLAUDE CODE ───────────────────────────────
   {
     slug: 'claude-code', title: 'Claude Code', type: 'skill', icon: 'Terminal', color: '#d97757',
@@ -3605,3 +3607,38 @@ export const ROADMAP_SEED: SeedRoadmap[] = [
     ],
   },
 ];
+
+/**
+ * Gộp phần mở rộng (sinh tự động, đã kiểm link) vào bản viết tay.
+ *
+ * Bước mới ĐƯỢC NỐI VÀO CUỐI chặng cùng tên, nên bước viết tay giữ nguyên vị
+ * trí và giữ nguyên `link` trỏ sang Code Lab. Chặng nào chỉ có trong phần mở
+ * rộng thì xếp sau cùng.
+ *
+ * ⚠️ Trùng tiêu đề bị BỎ ở đây, không phải ở lúc sinh: `seedRoadmaps` khớp
+ * node cũ/mới theo TIÊU ĐỀ để giữ dấu "đã xong" của người dùng, nên hai node
+ * cùng tiêu đề trong một lộ trình sẽ giẫm lên nhau.
+ */
+function gopMoRong(goc: SeedRoadmap[], them: Record<string, SeedStage[]>): SeedRoadmap[] {
+  return goc.map((rm) => {
+    const phan = them[rm.slug];
+    if (!phan?.length) return rm;
+    const daCo = new Set(rm.stages.flatMap((s) => s.nodes.map((n) => n.title.trim().toLowerCase())));
+    const stages = rm.stages.map((s) => ({ ...s, nodes: [...s.nodes] }));
+    for (const st of phan) {
+      const nodes = st.nodes.filter((n) => {
+        const k = n.title.trim().toLowerCase();
+        if (daCo.has(k)) return false;
+        daCo.add(k);
+        return true;
+      });
+      if (!nodes.length) continue;
+      const co = stages.find((s) => s.label === st.label);
+      if (co) co.nodes.push(...nodes);
+      else stages.push({ label: st.label, nodes });
+    }
+    return { ...rm, stages };
+  });
+}
+
+export const ROADMAP_SEED: SeedRoadmap[] = gopMoRong(BAN_VIET_TAY, MO_RONG);

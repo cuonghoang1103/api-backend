@@ -118,25 +118,53 @@ export async function seedRoadmaps(opts: { force?: boolean } = {}): Promise<Arra
           select: { id: true },
         }));
 
-    if (existing) await prisma.roadmapNode.deleteMany({ where: { roadmapId: roadmap.id } });
+    // ⚠️ KHÔNG deleteMany rồi tạo lại. `RoadmapDone.node` là onDelete: Cascade,
+    // nên xoá node là xoá luôn dấu "đã xong" của MỌI người dùng. Thay vào đó
+    // khớp node cũ với node mới rồi cập nhật TẠI CHỖ để giữ nguyên id.
+    //
+    // ⚠️ Khoá khớp là CHẶNG + TIÊU ĐỀ, không phải tiêu đề trần: lộ trình
+    // `claude-code` cố ý có 4 tiêu đề lặp ("Skills", "Hooks", "Plugins",
+    // "Subagents" — một bước khái niệm ở chặng tổng quan, một chặng chuyên
+    // sâu cùng tên). Khoá bằng tiêu đề trần thì mỗi lần seed lại nuốt mất
+    // một bước trong mỗi cặp — đo thật: 1535 node tụt còn 1531.
+    const cu = existing
+      ? await prisma.roadmapNode.findMany({ where: { roadmapId: roadmap.id }, select: { id: true, title: true, stageLabel: true } })
+      : [];
+    const khoa = (stageLabel: string, title: string) => `${stageLabel}\u0000${title}`;
+    const theoTen = new Map(cu.map((n) => [khoa(n.stageLabel, n.title), n.id]));
+    const conDung = new Set<number>();
 
     let created = 0;
     for (let si = 0; si < rm.stages.length; si++) {
       const stage = rm.stages[si];
       for (let ni = 0; ni < stage.nodes.length; ni++) {
         const n = stage.nodes[ni];
-        await prisma.roadmapNode.create({
-          data: {
-            roadmapId: roadmap.id, stage: si, stageLabel: stage.label, order: ni,
-            side: n.side ?? 'center', kind: n.kind ?? 'primary', title: n.title, subtitle: n.subtitle ?? null,
-            icon: n.icon ?? null, description: n.description ?? null,
-            linkType: n.link?.type ?? null, linkRef: n.link?.ref ?? null,
-            resources: n.resources && n.resources.length ? (n.resources as unknown as Prisma.InputJsonValue) : undefined,
-          },
-        });
-        created++;
+        const truong = {
+          stage: si, stageLabel: stage.label, order: ni,
+          side: n.side ?? 'center', kind: n.kind ?? 'primary', subtitle: n.subtitle ?? null,
+          icon: n.icon ?? null, description: n.description ?? null,
+          linkType: n.link?.type ?? null, linkRef: n.link?.ref ?? null,
+          resources: (n.resources && n.resources.length
+            ? (n.resources as unknown as Prisma.InputJsonValue)
+            : Prisma.DbNull),
+        };
+        const idCu = theoTen.get(khoa(stage.label, n.title));
+        if (idCu !== undefined) {
+          conDung.add(idCu);
+          await prisma.roadmapNode.update({ where: { id: idCu }, data: truong });
+        } else {
+          const moi = await prisma.roadmapNode.create({
+            data: { roadmapId: roadmap.id, title: n.title, ...truong },
+            select: { id: true },
+          });
+          conDung.add(moi.id);
+          created++;
+        }
       }
     }
+    const thua = cu.filter((n) => !conDung.has(n.id)).map((n) => n.id);
+    if (thua.length) await prisma.roadmapNode.deleteMany({ where: { id: { in: thua } } });
+
     out.push({ slug: rm.slug, created, skipped: false });
   }
   return out;

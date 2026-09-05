@@ -810,6 +810,28 @@ report_seed "Project retire" "retire-projects" "$PROJECT_DEL_OUT" "${PROJECT_DEL
 # ảnh chụp trong file sẽ đè lên số sao mà "Sync all" vừa làm mới — càng
 # deploy dữ liệu càng cũ đi. Muốn ép theo file thì chạy tay:
 #   docker compose -p cuonghoangdev exec backend node scripts/repos-seed.mjs --apply --refresh-meta
+# ── Step 3.18: RoadMap (lộ trình nghề) ────────────────────────────
+#
+# Nội dung lộ trình sống trong MÃ (`src/services/roadmap.seed.ts` + phần mở
+# rộng sinh tự động), nên nó đi theo ảnh Docker — nhưng chỉ vào DB khi có ai
+# gọi seeder. Trước 06/09/2026 đó là một lệnh `docker exec` chạy tay, và hệ
+# quả đúng như Step 3.5 phía trên: mã "deploy xong" mà nội dung không đổi.
+#
+# `--force` ở đây AN TOÀN: từ 06/09/2026 seeder khớp node cũ/mới theo
+# (chặng + tiêu đề) rồi CẬP NHẬT TẠI CHỖ, không còn `deleteMany`. Quan trọng
+# vì `RoadmapDone.node` khai `onDelete: Cascade` — bản cũ xoá node là xoá
+# sạch dấu "đã xong" của MỌI người dùng mỗi lần deploy. Đã kiểm bằng chạy
+# thật: seed lượt hai tạo 0 node, tổng đứng yên, dấu "đã xong" còn nguyên
+# (scripts/kiem-roadmap-seed.mts).
+info "Running RoadMap seed..."
+ROADMAP_SEED_OUT=$($DC exec -T backend sh -c '
+  node scripts/roadmap-seed.mjs --force 2>&1
+  echo "__SEED_RC__=$?"
+') || true
+ROADMAP_SEED_RC="$(printf '%s\n' "$ROADMAP_SEED_OUT" | sed -n 's/^__SEED_RC__=//p' | tail -1)"
+ROADMAP_SEED_OUT="$(printf '%s\n' "$ROADMAP_SEED_OUT" | grep -v '^__SEED_RC__=')"
+report_seed "RoadMap seed" "seed-roadmap" "$ROADMAP_SEED_OUT" "${ROADMAP_SEED_RC:-0}" || true
+
 info "Running GitHub Repo Hub seed..."
 REPOS_SEED_OUT=$($DC exec -T backend sh -c '
   if [ ! -f content/repos/curated.mjs ]; then

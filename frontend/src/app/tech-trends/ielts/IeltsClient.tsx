@@ -21,6 +21,7 @@
  * ngay dưới thanh tab.
  */
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import {
   ArrowLeft, Target, GraduationCap, BookOpen, Headphones, FileText, PenLine, Mic,
@@ -33,19 +34,53 @@ import { TYPING_PASSAGES } from './data/typing';
 // giọng en-US của trình duyệt, không kéo theo phần nào của luồng phỏng vấn.
 import { useSpeak } from '../tieng-anh-giao-tiep/useSpeak';
 import RoadmapTab from './RoadmapTab';
-import LessonsView from './LessonsView';
-import VocabView from './VocabView';
-import ListeningView from './ListeningView';
-import ReadingView from './ReadingView';
-import WritingView from './WritingView';
-import SpeakingView from './SpeakingView';
-import DailyView from './DailyView';
-import LifeView from './LifeView';
-import ExamView from './ExamView';
-import QuestionTypesView from './QuestionTypesView';
-import TypingPanel from './TypingPanel';
-import LookupView from './LookupView';
-import AiCoachView from './AiCoachView';
+
+/**
+ * MƯỜI BA tab còn lại tải theo yêu cầu (`next/dynamic`), không nằm trong gói
+ * đầu tiên. Chỉ `RoadmapTab` là tĩnh vì nó là tab MẶC ĐỊNH — dựng động nó thì
+ * người mở trang phải nhìn khung xám trước khi thấy nội dung đầu tiên, tức là
+ * đánh đổi đúng cái thứ mà việc tách gói định cải thiện.
+ *
+ * `ssr: false` cho cả mười ba: lúc dựng tĩnh, tab đang mở LUÔN là 'roadmap',
+ * nên không tab nào trong số này từng được render phía máy chủ. Khai `ssr: false`
+ * chỉ nói thẳng ra sự thật đó và cắt luôn phần HTML rỗng tương ứng.
+ *
+ * Chỗ ăn nhiều nhất là `AiCoachView`: nó kéo theo `react-markdown` + `remark-gfm`
+ * + cả họ `micromark`, mà chỉ một tab dùng. Trước khi tách, mọi người mở trang
+ * đều tải chỗ đó dù không bao giờ bấm vào tab AI.
+ *
+ * ⚠️ Việc này KHÔNG tách được dữ liệu bài học. `STAGES` nằm ngay trong file này
+ * (thanh chuyển chặng cần nhãn, và badge trên tab đọc `d.stats`), nên toàn bộ
+ * nội dung năm chặng vẫn ở gói đầu. Muốn tách nốt phần đó thì phải cho `bundles.ts`
+ * nạp theo chặng — đổi lớn hơn và làm badge hiện trễ, nên để riêng.
+ */
+const dyn = <P,>(load: () => Promise<{ default: React.ComponentType<P> }>) =>
+  dynamic(load, { ssr: false, loading: () => <TabSkeleton /> });
+
+const LessonsView = dyn(() => import('./LessonsView'));
+const VocabView = dyn(() => import('./VocabView'));
+const ListeningView = dyn(() => import('./ListeningView'));
+const ReadingView = dyn(() => import('./ReadingView'));
+const WritingView = dyn(() => import('./WritingView'));
+const SpeakingView = dyn(() => import('./SpeakingView'));
+const DailyView = dyn(() => import('./DailyView'));
+const LifeView = dyn(() => import('./LifeView'));
+const ExamView = dyn(() => import('./ExamView'));
+const QuestionTypesView = dyn(() => import('./QuestionTypesView'));
+const TypingPanel = dyn(() => import('./TypingPanel'));
+const LookupView = dyn(() => import('./LookupView'));
+const AiCoachView = dyn(() => import('./AiCoachView'));
+
+/** Khung chờ trong lúc chunk của tab đang tải. Giữ chiều cao để trang không giật. */
+function TabSkeleton() {
+  return (
+    <div className="animate-pulse space-y-3" aria-hidden="true">
+      <div className="h-16 rounded-xl bg-white/[0.04]" />
+      <div className="h-40 rounded-2xl bg-white/[0.03]" />
+      <div className="h-40 rounded-2xl bg-white/[0.03]" />
+    </div>
+  );
+}
 
 type TabId =
   | 'roadmap' | 'daily' | 'ai' | 'qtypes' | 'lessons' | 'vocab' | 'listening'

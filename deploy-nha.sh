@@ -83,7 +83,8 @@ for a in "$@"; do
         # Dựng ảnh ở máy nhà rồi DỪNG — không đẩy GHCR, không tráo. Dùng để thử
         # đường build khi chưa có khoá GHCR, hoặc để xem mã có build nổi không.
         --khong-day) KHONG_DAY=true; CHI_BUILD=true ;;
-        # Bỏ qua bước hỏi duyệt push qua Telegram ở cuối (bước 8).
+        # Bỏ hẳn bước tự push ở cuối (bước 8) — chỉ deploy, không đụng GitHub.
+        # Giữ tên cũ `--khong-hoi` để mọi chỗ đang gọi không phải sửa.
         --khong-hoi) KHONG_HOI=true ;;
     esac
 done
@@ -673,44 +674,75 @@ sshvps "docker image prune -f >/dev/null 2>&1; df -h / | tail -1" | sed 's/^/   
 info "Dọn thư mục build cũ ở máy nhà (giữ 3 bản gần nhất)..."
 sshnha "cd ${THU_MUC_NHA} 2>/dev/null && ls -1t | tail -n +4 | xargs -r rm -rf" 2>/dev/null || true
 
-# ─── 8. Hỏi duyệt trên điện thoại rồi mới push lên GitHub ──────────────
+# ─── 8. Tự đẩy lên GitHub khi các phép kiểm BẮT BUỘC của CI đều xanh ───
 #
-# Quy trình chuẩn (CLAUDE.md): deploy TRƯỚC, người dùng thử production, XONG
-# rồi mới push — lúc đó push chỉ là đồng bộ GitHub với thứ prod đã chạy. Bước
-# này giữ nguyên thứ tự đó, chỉ bỏ đi khoảng chờ: thay vì phải nhớ quay lại
-# gõ `git push`, bot Telegram của máy nhà hỏi ngay trên điện thoại, bấm một nút.
+# Quy trình chuẩn (CLAUDE.md): deploy TRƯỚC, XONG rồi mới push — lúc đó push
+# chỉ là đồng bộ GitHub với thứ production đã chạy.
 #
-# ⚠️ KHÔNG tự push. Đẩy lên `main` là hành động phải có người đồng ý, và cái
-# nút CHÍNH LÀ chỗ đồng ý đó. Không ai bấm ⇒ không push, và deploy vẫn tính là
-# thành công (production đã chạy rồi, push chỉ là việc còn lại).
+# ⚠️ TRƯỚC 06/09/2026 bước này HỎI DUYỆT qua Telegram, và nó hỏng theo kiểu
+# câm nhất: **cả bốn lượt deploy trong một ngày đều hết 15 phút không ai trả
+# lời**, mỗi lần ghi "KHÔNG push" rồi kết thúc THÀNH CÔNG. Không log nào đỏ,
+# không cảnh báo nào. Commit dồn lại tới **288 commit / gần một ngày công chỉ
+# tồn tại trên một cái máy**. Production an toàn (nó chạy ảnh Docker), nhưng
+# GitHub là bản sao lưu DUY NHẤT của mã nguồn — và nó thiếu gần một ngày.
+#
+# Nay đổi chỗ "người đồng ý" thành "mã đã được kiểm": chạy CHÍNH những phép
+# kiểm mà `ci-lint.yml` đánh dấu (required) ngay tại đây, xanh hết thì push.
+#
+# ⚠️ Không thể "đợi CI xanh rồi mới push" — CI chỉ chạy SAU khi push. Nên phải
+# chạy lại đúng bộ kiểm đó ở máy. Ba phép dưới đây tốn ~3 giây (đo thật), hai
+# phép `tsc` tốn thêm chút; so với 15 phút deploy thì không đáng kể.
+#
+# ⚠️ Và KHÔNG dựa vào "ảnh Docker dựng xong nghĩa là CI sẽ xanh": ảnh chỉ chạy
+# `tsc`/`next build`, KHÔNG chạy `npm test` lẫn hai bộ eval golden-set. Bốn thứ
+# CI chặn mà Docker không chặn.
 if [ "$KHONG_HOI" != true ]; then
     git fetch --quiet origin "$NHANH" 2>/dev/null || true
     CHUA_DAY=$(git rev-list --count "origin/${NHANH}..HEAD" 2>/dev/null || echo 0)
     if [ "$CHUA_DAY" = "0" ]; then
         info "GitHub đã có commit này rồi — không cần push."
-    elif ! sshnha "test -x \$HOME/bin/hoi-duyet.sh" 2>/dev/null; then
-        warn "Máy nhà không trả lời (hoặc chưa có hoi-duyet.sh) — bỏ qua hỏi duyệt."
-        warn "Muốn push thì chạy tay: git push origin ${NHANH}"
     else
-        info "Hỏi duyệt push qua Telegram (chờ tối đa 15 phút)..."
-        CAU="✅ Deploy XONG — production đang chạy ${SHA} (nhánh ${NHANH}).
-Smoke-test ${SO_ROUTE} route sạch.
-Còn ${CHUA_DAY} commit chưa lên GitHub. Push bây giờ?"
-        # 0 = đồng ý · 1 = từ chối · 2 = hết giờ. Chỉ 0 mới push.
-        sshnha "bash \$HOME/bin/hoi-duyet.sh $(printf %q "$CAU") 900"
-        TRA_LOI=$?
-        case "$TRA_LOI" in
-            0)  info "Đã duyệt — đang push lên GitHub..."
-                # KHÔNG --force, không bao giờ. Bị từ chối thì để nguyên cho
-                # người xem, đừng tự ép.
-                if git push origin "HEAD:${NHANH}"; then
-                    ok "Đã push ${SHA} lên origin/${NHANH}"
-                else
-                    fail "Push hỏng — production vẫn đang chạy bình thường, chỉ GitHub là chưa đồng bộ."
-                fi ;;
-            1)  info "Đã từ chối — KHÔNG push. Production vẫn chạy ${SHA}." ;;
-            *)  warn "Hết giờ, không ai trả lời — KHÔNG push." ;;
-        esac
+        info "Chạy bộ kiểm BẮT BUỘC của CI trước khi push (${CHUA_DAY} commit)..."
+        KIEM_HONG=""
+        # Đúng thứ tự và đúng lệnh của `.github/workflows/ci-lint.yml`, chỉ lấy
+        # những bước đánh dấu (required) — bỏ ESLint vì CI ghi rõ là
+        # (informational) và nó đang có cảnh báo tồn từ trước.
+        chay_kiem() {
+            local ten="$1"; shift
+            if "$@" >/tmp/deploy-kiem.log 2>&1; then
+                ok "  ✓ ${ten}"
+            else
+                warn "  ✗ ${ten} — HỎNG"
+                tail -12 /tmp/deploy-kiem.log | sed 's/^/      /'
+                KIEM_HONG="${KIEM_HONG} ${ten}"
+            fi
+        }
+        chay_kiem "backend tsc"        npx tsc --noEmit
+        chay_kiem "eval:grader"        npm run eval:grader
+        chay_kiem "eval:cv-linter"     npm run eval:cv-linter
+        chay_kiem "npm test"           npm test
+        chay_kiem "frontend tsc"       bash -c 'cd frontend && npx tsc --noEmit --skipLibCheck'
+
+        if [ -n "$KIEM_HONG" ]; then
+            # ⚠️ KHÔNG push khi có phép kiểm hỏng. Production vẫn chạy bình
+            # thường (ảnh đã tráo xong từ bước trước) — chỉ GitHub là chưa
+            # đồng bộ, và đó là điều ĐÚNG: đẩy một commit làm đỏ CI lên nhánh
+            # chung thì người sau phải dọn.
+            warn "Có phép kiểm hỏng:${KIEM_HONG} — KHÔNG push."
+            warn "Production vẫn chạy ${SHA} bình thường. Sửa xong thì: git push origin ${NHANH}"
+            # ⚠️ BÁO ra ngoài. Đây chính là ca dễ trôi qua im lặng: deploy vẫn
+            # kết thúc THÀNH CÔNG, log không đỏ, và commit lại bắt đầu dồn —
+            # đúng cách bước hỏi-duyệt cũ đã âm thầm gom tới 288 commit.
+            sshnha "test -x \$HOME/bin/bao-tin.sh && bash \$HOME/bin/bao-tin.sh $(printf %q "⚠️ Deploy xong (prod chạy ${SHA}) nhưng KHÔNG push: bộ kiểm CI hỏng —${KIEM_HONG}. Còn ${CHUA_DAY} commit chưa lên GitHub.")" 2>/dev/null || true
+        else
+            ok "Bộ kiểm của CI xanh hết — đang push lên GitHub..."
+            # KHÔNG --force, không bao giờ.
+            if git push origin "HEAD:${NHANH}"; then
+                ok "Đã push ${SHA} lên origin/${NHANH} (${CHUA_DAY} commit)"
+            else
+                fail "Push hỏng — production vẫn đang chạy bình thường, chỉ GitHub là chưa đồng bộ."
+            fi
+        fi
     fi
 fi
 

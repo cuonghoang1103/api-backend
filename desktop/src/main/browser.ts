@@ -204,12 +204,15 @@ function datToanManHinh(bat: boolean): void {
       taTuBatFullCuaSo = false;
       cuaSoChu.setFullScreen(false);
     }
-    // Trả về đúng ô giữ chỗ mà React đang đo.
+    // Trả về đúng ô giữ chỗ mà React đang đo — NHÂN hệ số phóng, cùng lý do
+    // như trong `datVung`. Thiếu ở đây thì thoát toàn màn hình xong video lại
+    // lệch, dù `datVung` đã đúng.
+    const p2 = cuaSoChu?.webContents.getZoomFactor() ?? 1;
     khung?.setBounds({
-      x: Math.round(vungHienTai.x),
-      y: Math.round(vungHienTai.y),
-      width: Math.max(0, Math.round(vungHienTai.width)),
-      height: Math.max(0, Math.round(vungHienTai.height)),
+      x: Math.round(vungHienTai.x * p2),
+      y: Math.round(vungHienTai.y * p2),
+      width: Math.max(0, Math.round(vungHienTai.width * p2)),
+      height: Math.max(0, Math.round(vungHienTai.height * p2)),
     });
   }
 }
@@ -252,14 +255,29 @@ export function datVung(vung: typeof vungHienTai): void {
      React vẫn 16:9 và `ResizeObserver` của nó vẫn bắn mỗi lần kéo cửa sổ —
      áp vào là fullscreen bị bóp về 16:9 ngay khung hình kế tiếp. */
   if (toanManHinh) { phuKinCuaSo(); return; }
+  /*
+   * ⛔⛔ PHẢI NHÂN THEO HỆ SỐ PHÓNG. Đây là lỗi người dùng gửi ảnh ngày
+   * 05/09/2026: video nằm ĐÈ lệch khỏi ô giữ chỗ, và to hơn nó ~1,18 lần.
+   *
+   * `getBoundingClientRect()` ở renderer trả CSS pixel TRƯỚC khi phóng. Còn
+   * `setBounds` của `WebContentsView` nhận DIP của cửa sổ, KHÔNG chịu ảnh
+   * hưởng của `setZoomFactor` trên renderer. Nên hai hệ toạ độ lệch nhau đúng
+   * bằng hệ số phóng: người dùng để 85% thì lớp phủ to hơn ô giữ chỗ 1/0,85 =
+   * 1,18 lần và trôi sang phải, xuống dưới.
+   *
+   * Ở mức 100% hai hệ trùng nhau — nên lỗi này VÔ HÌNH với bất kỳ ai không
+   * đụng vào nút phóng to/thu nhỏ, kể cả mọi phép đo tôi chạy từ trước tới nay.
+   */
+  const phong = cuaSoChu?.webContents.getZoomFactor() ?? 1;
+
   // Làm tròn: `getBoundingClientRect()` trả số thực, còn `setBounds` cần số
   // nguyên. Truyền số thực vào thì Electron tự cắt và khung lệch một pixel so
   // với ô giữ chỗ — đủ để thấy một vệt nền lộ ra ở mép.
   khung?.setBounds({
-    x: Math.round(vung.x),
-    y: Math.round(vung.y),
-    width: Math.max(0, Math.round(vung.width)),
-    height: Math.max(0, Math.round(vung.height)),
+    x: Math.round(vung.x * phong),
+    y: Math.round(vung.y * phong),
+    width: Math.max(0, Math.round(vung.width * phong)),
+    height: Math.max(0, Math.round(vung.height * phong)),
   });
 }
 

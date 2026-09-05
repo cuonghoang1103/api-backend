@@ -202,3 +202,21 @@ declare module '@/components/providers/TanStackQueryProvider' {
   const P: ComponentType<{ children: ReactNode }>;
   export default P;
 }
+
+/**
+ * Gia sư AI của Học viện — dùng lại thẳng component web.
+ *
+ * Khai ở đây thay vì thêm `@/*` vào `paths`: một alias bao trùm sẽ mở cửa cho
+ * MỌI file của web nhập vào renderer, kể cả những file kéo theo `next/*` mà
+ * app không có shim — và lỗi đó chỉ lộ ra lúc chạy, dưới dạng màn hình trắng.
+ * Khai từng module là mỗi lần dùng lại đều là một quyết định có cân nhắc.
+ */
+declare module '@/components/academy/CourseTutor' {
+  export function CourseTutor(props: {
+    lessonId: number;
+    courseCode?: string;
+    courseTitle?: string;
+    lessonTitle?: string;
+    quizContext?: unknown[];
+  }): JSX.Element;
+}

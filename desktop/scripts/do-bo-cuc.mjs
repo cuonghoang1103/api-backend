@@ -39,7 +39,10 @@ if (!fs.existsSync(path.join(thuMuc, 'bo-cuc/trang-thu.html'))) {
 }
 
 /** Bề rộng CỬA SỔ để thử. 860 là cỡ người dùng hay kéo về khi xem hai app cạnh nhau. */
-const BE_RONG = [1440, 1180, 1000, 860];
+/* 1920 thêm 05/09/2026: người dùng chạy app ở cửa sổ ~2000px và báo mọi trang
+   "hẹp ở giữa". Bộ đo cũ dừng ở 1440 nên nó KHÔNG BAO GIỜ thấy được vấn đề đó —
+   nó chỉ hỏi "có tràn khi hẹp không", không hỏi "có phí chỗ khi rộng không". */
+const BE_RONG = [1920, 1440, 1180, 1000, 860];
 
 /** Bản sao `mocPhamVi` của app, theo giờ MÁY. */
 function mocPhamViThu(s, ref = new Date()) {

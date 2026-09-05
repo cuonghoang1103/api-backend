@@ -21,6 +21,15 @@ import { OfflineUnavailableError, swr } from '../../offline/cache';
 import { chuVi, moNgoai, NHAN_BAC, raDanhSach, WEB } from '../chu';
 import './noiDungBai';
 import { KhungVideo } from './KhungVideo';
+/*
+ * GIA SƯ AI — DÙNG LẠI thẳng component của web, không viết lại.
+ *
+ * Người dùng: app "chưa có AI giải thích và giảng dạy + hỏi như trên web".
+ * Đúng — bản app chỉ có video và chữ. `CourseTutor` chỉ dính Next đúng một chỗ
+ * (`next/link`), mà app đã có shim đó sẵn từ khi dùng lại trang Ghi chú; nên
+ * chép lại 336 dòng ở đây là tự tạo ra hai bản phải nuôi song song mãi.
+ */
+import { CourseTutor } from '@/components/academy/CourseTutor';
 
 export interface Mon {
   id: number;
@@ -401,6 +410,16 @@ function DocBai({
             </button>
           </p>
         )}
+
+      {/* Gia sư AI cho ĐÚNG bài đang mở. Đặt SAU nội dung: người ta đọc xong
+          rồi mới có câu hỏi, và một khung chat chen giữa bài thì nó cắt mạch
+          đọc ngay chỗ đang cần liền mạch nhất. */}
+      <CourseTutor
+        lessonId={bai.id}
+        {...(mon.courseCode ? { courseCode: mon.courseCode } : {})}
+        courseTitle={mon.title}
+        lessonTitle={bai.title}
+      />
 
       {/* Chuyển bài — đi xuyên mục, y như web.
           Bài kế bị khoá thì KHÔNG giấu nút: giấu đi là người dùng tưởng đã hết

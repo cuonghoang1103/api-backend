@@ -139,7 +139,7 @@ interface MusicPlayerValue {
   loading: boolean;
   error: string | null;
   setError: (message: string | null) => void;
-  loadTracks: () => Promise<void>;
+  loadTracks: (epMoi?: boolean) => Promise<void>;
   downloaded: Map<number, number>;
   downloading: Set<number>;
   usage: { count: number; totalBytes: number };
@@ -224,7 +224,8 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => { void refreshDownloaded(); }, [refreshDownloaded]);
 
-  const loadTracks = useCallback(async () => {
+  /** `epMoi` = bỏ qua đệm. Dùng sau khi XOÁ/THÊM — xem chú thích ở `swr`. */
+  const loadTracks = useCallback(async (epMoi = false) => {
     if (userId === null || !api) return;
     setLoading(true);
     setError(null);
@@ -235,6 +236,7 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
         fetcher: () => layTatCaBai(api),
         online,
         ttlMs: 10 * 60 * 1000,
+        epMoi,
         onRefreshed: (fresh) => setTracks(asTracks(fresh)),
       });
       setTracks(asTracks(result.value));

@@ -162,7 +162,8 @@ export function DashboardPage() {
     return () => clearInterval(id);
   }, []);
 
-  const nap = useCallback(async () => {
+  /** `epMoi` = bỏ qua đệm. Bắt buộc sau khi THÊM/SỬA/XOÁ việc — xem `swr`. */
+  const nap = useCallback(async (epMoi = false) => {
     if (userId === null || !api) return;
     setLoi(null);
     try {
@@ -172,6 +173,7 @@ export function DashboardPage() {
         fetcher: () => api.request(`/api/v1/dashboard?homNay=${mocPhamVi('today')}`) as Promise<DashboardData>,
         online,
         ttlMs: 60_000,
+        epMoi,
         onRefreshed: setDu,
       });
       setDu(kq.value);
@@ -350,7 +352,7 @@ export function DashboardPage() {
       await api.request('/api/v1/dashboard/tasks', {
         method: 'POST', body: { title: ten, scope: s, date: mocPhamVi(s) },
       });
-      await nap();
+      await nap(true);
     } catch (e) {
       setLoi(e instanceof Error ? e.message : String(e));
     }
@@ -363,7 +365,7 @@ export function DashboardPage() {
       /* Việc con nằm cùng phạm vi và cùng mốc ngày với cha — nếu không nó rơi
          vào một tab khác với cha và không ai tìm thấy nó nữa. */
       body: { title: ten, scope: cha.scope, date: cha.date, parentId: Number(cha.id) },
-    }).then(() => nap()).catch((e: unknown) => setLoi(e instanceof Error ? e.message : String(e)));
+    }).then(() => nap(true)).catch((e: unknown) => setLoi(e instanceof Error ? e.message : String(e)));
   }, [api, nap]);
 
   const doiThuTu = useCallback((ids: Array<string | number>) => {
@@ -378,7 +380,7 @@ export function DashboardPage() {
       }),
     }));
     void api.request('/api/v1/dashboard/tasks/reorder', { method: 'POST', body: { ids } })
-      .catch(() => void nap());
+      .catch(() => void nap(true));
   }, [api, nap]);
 
   /**
@@ -396,7 +398,7 @@ export function DashboardPage() {
       /* Nạp lại KHI tick: EXP và cấp do máy chủ tính, nên con số trên đầu trang
          chỉ đúng sau khi hỏi lại. Sửa ghi chú hay hạn thì không đụng EXP, nên
          không cần một vòng mạng nữa. */
-      .then(() => { if (v.done !== undefined) void nap(); })
+      .then(() => { if (v.done !== undefined) void nap(true); })
       .catch(() => setDu(truoc));
   }, [api, du, nap]);
 

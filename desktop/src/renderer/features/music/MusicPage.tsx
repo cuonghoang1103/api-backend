@@ -13,6 +13,7 @@
  * `durationSeconds` — KHÔNG phải `coverUrl`/`duration`.
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { HenGio } from './HenGio';
 import {
   CheckCircle2, CloudOff, Disc3, Download, HardDrive, ListMusic, Loader2, Maximize2,
   Music2, Pause, Play, Plus, RefreshCw, Search, Shuffle, Youtube,
@@ -54,7 +55,7 @@ export function MusicPage() {
   const {
     tracks, loading, error, setError, loadTracks,
     downloaded, downloading, usage, download, remove, clearAll,
-    current, currentId, playing, playTrack, toggle, tuaToi,
+    current, currentId, playing, playTrack, toggle, tuaToi, volume,
     setVolume, setShuffle, position,
   } = useMusicPlayer();
 
@@ -71,7 +72,7 @@ export function MusicPage() {
     if (!window.confirm(`Xoá "${track.title}" khỏi thư viện nhạc của cả hệ thống?`)) return;
     try {
       await api.request(`/api/v1/music/tracks/${track.id}`, { method: 'DELETE' });
-      await loadTracks();
+      await loadTracks(true); // bỏ đệm: không thì bài vừa xoá vẫn nằm nguyên trên màn hình
     } catch (e) {
       window.alert(`Không xoá được: ${e instanceof Error ? e.message : String(e)}`);
     }
@@ -184,7 +185,7 @@ export function MusicPage() {
     try {
       await rutAmThanh(track.id);
       setTienTrinhThem('Đang làm mới danh sách…');
-      await loadTracks();
+      await loadTracks(true); // bỏ đệm: không thì bài vẫn hiện là "chưa rút âm thanh"
       playTrack({ ...track, audioUrl: null });
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : String(caught));
@@ -227,7 +228,7 @@ export function MusicPage() {
       await rutAmThanh(tao.id);
 
       setTienTrinhThem('Đang làm mới danh sách…');
-      await loadTracks();
+      await loadTracks(true); // bỏ đệm: không thì bài vừa thêm không xuất hiện
       setQuery('');
       // Phát theo dữ liệu vừa nhận, không đi tìm trong `tracks` của lần render
       // này — nó vẫn là bản cũ, danh sách mới chỉ có ở lần render sau.
@@ -419,6 +420,14 @@ export function MusicPage() {
       {/* ─── Thanh công cụ danh sách ─── */}
       {khu === 'thuong' && (<>
       <div className="ct-music-toolbar">
+        {/* Hẹn giờ đứng TRƯỚC ô tìm — nó là thứ người ta bật một lần rồi quên,
+            còn ô tìm thì gõ liên tục; để nó sau ô tìm là nó bị đẩy ra rìa. */}
+        <HenGio
+          playing={playing}
+          volume={volume}
+          setVolume={setVolume}
+          onDung={() => { if (playing) toggle(); }}
+        />
         <label className="ct-music-search">
           <Search size={14} aria-hidden />
           <input

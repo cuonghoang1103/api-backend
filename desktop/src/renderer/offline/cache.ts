@@ -124,9 +124,19 @@ export async function swr<T>(options: {
   online: boolean;
   /** Gọi khi bản mới về, để giao diện cập nhật lần hai. */
   onRefreshed?: (value: T) => void;
+  /**
+   * BỎ QUA bộ nhớ đệm, luôn hỏi máy chủ.
+   *
+   * ⚠️ Bắt buộc dùng sau mỗi lần GHI (xoá, thêm, sửa). Không có nó thì lời gọi
+   * nạp lại ngay sau một thao tác ghi sẽ trả về đúng bản cũ — thao tác thành
+   * công trên máy chủ mà màn hình không đổi gì, và người dùng kết luận nút bị
+   * hỏng. Đo thật 05/09/2026: xoá một bài nhạc (đệm 10 phút) thì bài vẫn nằm
+   * nguyên trong danh sách; cùng lỗi ở Tổng quan với đệm 60 giây.
+   */
+  epMoi?: boolean;
 }): Promise<CachedValue<T>> {
-  const { userId, key, fetcher, ttlMs, online, onRefreshed } = options;
-  const cached = await readCache<T>(userId, key);
+  const { userId, key, fetcher, ttlMs, online, onRefreshed, epMoi } = options;
+  const cached = epMoi === true ? null : await readCache<T>(userId, key);
 
   if (cached && (!cached.isStale || !online)) {
     return cached;

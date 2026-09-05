@@ -51,7 +51,10 @@ export async function POST(request: NextRequest) {
     backendRes = await goiBackend(`/api/v1/auth/oauth/token`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, fullName, provider, providerId }),
+      // `image` là ảnh đại diện nhà cung cấp trả về. Backend TẢI VỀ rồi đẩy
+      // lên R2 chứ không lưu thẳng URL này — URL của Google gắn theo phiên và
+      // sẽ chết. Chỉ điền khi tài khoản CHƯA có ảnh, không đè ảnh tự chọn.
+      body: JSON.stringify({ email, fullName, provider, providerId, avatarUrl: session.user.image ?? undefined }),
     });
   } catch (err) {
     console.error("[oauth/token] Backend fetch error:", err);

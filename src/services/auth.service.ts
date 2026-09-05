@@ -8,6 +8,7 @@ import type { AuthResponse, JwtPayload } from '../types/index.js';
 import { emailService } from './email.service.js';
 import { generateOtp, verifyOtp, getOtpTtl, type OtpType } from './otp.service.js';
 import { logger } from '../utils/logger.js';
+import { putObject } from '../config/r2.js';
 
 const SALT_ROUNDS = 12;
 
@@ -423,11 +424,79 @@ export class AuthService {
   }
 
   // ─── OAuth Register / Login ─────────────────────────────
+  /**
+   * Tải ảnh đại diện của nhà cung cấp OAuth về rồi ĐẨY LÊN R2, trả về URL của
+   * ta. `null` nếu không có ảnh hoặc lấy không được.
+   *
+   * ⚠️ KHÔNG lưu thẳng URL của Google/Facebook. Chúng đổi và hết hạn —
+   * `lh3.googleusercontent.com/...` gắn theo phiên, còn ảnh Facebook đổi khi
+   * người dùng đổi ảnh bìa. Lúc đó avatar của người dùng thành ô trống, và
+   * KHÔNG có lỗi nào để thấy: ảnh 404 im lặng, chỉ nhìn mới biết.
+   *
+   * ⚠️ Hỏng thì trả `null`, KHÔNG ném lỗi. Cái ảnh không bao giờ được phép
+   * chặn một lượt ĐĂNG NHẬP — thà vào được mà chưa có ảnh.
+   */
+  private async luuAnhOAuth(data: {
+    provider: string;
+    providerId: string;
+    avatarUrl?: string;
+  }): Promise<string | null> {
+    const nguon = (data.avatarUrl || '').trim();
+    if (!nguon.startsWith('https://')) return null;
+
+    // ⛔ SSRF: đây là MÁY CHỦ đi gọi một URL do CLIENT đưa. Chỉ `https` thôi
+    // là chưa đủ — kẻ tấn công vẫn trỏ được vào một dịch vụ nội bộ chạy TLS,
+    // hoặc vào `169.254.169.254` (metadata máy ảo). Khoá theo DANH SÁCH máy
+    // chủ của đúng những nhà cung cấp ta hỗ trợ.
+    if (!mienDuocPhep(nguon)) {
+      logger.warn('oauth avatar: chặn miền lạ', { nguon: nguon.slice(0, 80), provider: data.provider });
+      return null;
+    }
+
+    try {
+      // 6 giây là đủ cho một ảnh vài chục KB; quá thì bỏ, đừng để người dùng
+      // đứng chờ ở màn đăng nhập.
+      const res = await fetch(nguon, { signal: AbortSignal.timeout(6000) });
+      if (!res.ok) return null;
+      // ⚠️ Kiểm LẠI sau chuyển hướng. `fetch` đi theo 3xx, nên một máy chủ
+      // được phép mà chuyển tiếp ra chỗ khác là vòng qua được chốt bên trên.
+      // `graph.facebook.com/.../picture` VỐN chuyển hướng sang `fbcdn.net` —
+      // cả hai đều trong danh sách, nên đường thật vẫn chạy.
+      if (!mienDuocPhep(res.url || nguon)) {
+        logger.warn('oauth avatar: chuyển hướng ra miền lạ', { cuoi: (res.url || '').slice(0, 80) });
+        return null;
+      }
+      const loai = (res.headers.get('content-type') || '').split(';')[0].trim();
+      const duoi = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' }[loai];
+      // Chỉ nhận ĐÚNG ba loại ảnh. `content-type` lạ nghĩa là nhà cung cấp trả
+      // về trang lỗi hoặc HTML chuyển hướng, không phải ảnh.
+      if (!duoi) return null;
+      const buf = Buffer.from(await res.arrayBuffer());
+      if (!buf.length || buf.length > 2 * 1024 * 1024) return null;
+
+      // Khoá gắn theo (nhà cung cấp, id) nên đăng nhập lại KHÔNG sinh rác;
+      // thêm mốc thời gian vì object R2 mang `immutable` — cùng khoá thì CDN
+      // giữ mãi bản cũ, đổi ảnh bên Google sẽ không bao giờ thấy.
+      const sach = data.providerId.replace(/[^A-Za-z0-9_-]/g, '').slice(0, 64);
+      const key = `images/avatar/oauth/${data.provider}-${sach}-${Date.now().toString(36)}.${duoi}`;
+      const { url } = await putObject(key, buf, loai);
+      return url;
+    } catch (e) {
+      logger.warn('oauth avatar: lấy/đẩy ảnh thất bại — bỏ qua, vẫn cho đăng nhập', {
+        provider: data.provider,
+        loi: (e as Error)?.message,
+      });
+      return null;
+    }
+  }
+
   async oauthRegister(data: {
     email: string;
     fullName?: string;
     provider: string;
     providerId: string;
+    /** Ảnh đại diện nhà cung cấp trả về (Google/Facebook). Apple KHÔNG có. */
+    avatarUrl?: string;
   }): Promise<AuthResponse> {
     let user = await prisma.user.findUnique({
       where: { email: data.email },
@@ -437,6 +506,11 @@ export class AuthService {
     if (user) {
       // Link OAuth to existing account
       // NOTE: OAuth users are auto-verified because the provider confirmed the email
+      //
+      // ⚠️ Ảnh đại diện chỉ điền khi tài khoản CHƯA có — không bao giờ đè ảnh
+      // người dùng tự chọn. Đăng nhập lại bằng Google mà mất ảnh vừa đổi hôm
+      // qua thì đó là mất dữ liệu, dù không có lỗi nào hiện ra.
+      const anhMoi = user.avatarUrl ? null : await this.luuAnhOAuth(data);
       user = await prisma.user.update({
         where: { id: user.id },
         data: {
@@ -445,6 +519,7 @@ export class AuthService {
           emailVerified: true, // OAuth provider đã verify email
           emailVerifiedAt: user.emailVerifiedAt ?? new Date(),
           ...(data.fullName && !user.fullName ? { fullName: data.fullName } : {}),
+          ...(anhMoi ? { avatarUrl: anhMoi } : {}),
         },
         include: { roles: { include: { role: true } } },
       });
@@ -454,6 +529,7 @@ export class AuthService {
       // using 'ROLE_USER' (the historical Spring Security convention)
       // would fail with "Role not found" on this DB. Connect by id 2
       // (the seeded USER role) to be safe across renames.
+      const anhMoi = await this.luuAnhOAuth(data);
       user = await prisma.user.create({
         data: {
           username: data.email.split('@')[0] + '_' + Date.now().toString(36),
@@ -463,6 +539,7 @@ export class AuthService {
           providerId: data.providerId,
           emailVerified: true, // OAuth provider đã verify email
           emailVerifiedAt: new Date(),
+          ...(anhMoi ? { avatarUrl: anhMoi } : {}),
           roles: {
             create: { role: { connect: { name: 'user' } } },
           },
@@ -957,6 +1034,25 @@ async function getLatestOtpForLog(email: string, type: OtpType): Promise<string 
   const normalized = email.toLowerCase().trim();
   const key = `otp:${type}:${normalized}`;
   return redis.get(key);
+}
+
+/**
+ * Địa chỉ có thuộc đúng nhà cung cấp OAuth ta hỗ trợ không.
+ *
+ * ⚠️ So theo HẬU TỐ CÓ DẤU CHẤM, không dùng `includes`: `includes` cho
+ * `googleusercontent.com.ke-tan-cong.tld` lọt qua. Đã kiểm 12 ca, gồm cả
+ * hậu tố giả, tiền tố dính liền, `169.254.169.254`, và mẹo `user@host@evil`.
+ */
+function mienDuocPhep(u: string): boolean {
+  if (!u.startsWith('https://')) return false;
+  let mien: string;
+  try { mien = new URL(u).hostname.toLowerCase(); } catch { return false; }
+  const CHO_PHEP = [
+    'googleusercontent.com',   // ảnh Google (lh3.googleusercontent.com…)
+    'graph.facebook.com',      // Graph API — ảnh Facebook
+    'fbcdn.net',               // CDN ảnh Facebook
+  ];
+  return CHO_PHEP.some((h) => mien === h || mien.endsWith('.' + h));
 }
 
 export const authService = new AuthService();

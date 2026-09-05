@@ -172,6 +172,11 @@ router.post(
     body('email').isEmail().withMessage('Valid email is required'),
     body('provider').notEmpty().withMessage('Provider is required'),
     body('providerId').notEmpty().withMessage('Provider ID is required'),
+    // Ảnh đại diện nhà cung cấp trả về — KHÔNG bắt buộc (Apple không có).
+    // Phải là https: `luuAnhOAuth` tải ảnh này về, nên đây là một URL do
+    // client cung cấp mà máy chủ sẽ đi gọi — chặn http/ftp/file ngay ở cửa.
+    body('avatarUrl').optional({ values: 'falsy' }).isURL({ protocols: ['https'], require_protocol: true })
+      .withMessage('avatarUrl must be an https URL'),
   ],
   validate,
   async (req: Request, res: Response<ApiResponse<AuthResponse>>, next: NextFunction) => {
@@ -211,6 +216,11 @@ router.post(
     body('email').isEmail().withMessage('Valid email is required'),
     body('provider').notEmpty().withMessage('Provider is required'),
     body('providerId').notEmpty().withMessage('Provider ID is required'),
+    // Ảnh đại diện nhà cung cấp trả về — KHÔNG bắt buộc (Apple không có).
+    // Phải là https: `luuAnhOAuth` tải ảnh này về, nên đây là một URL do
+    // client cung cấp mà máy chủ sẽ đi gọi — chặn http/ftp/file ngay ở cửa.
+    body('avatarUrl').optional({ values: 'falsy' }).isURL({ protocols: ['https'], require_protocol: true })
+      .withMessage('avatarUrl must be an https URL'),
   ],
   validate,
   async (req: Request, res: Response<ApiResponse<AuthResponse>>, next: NextFunction) => {

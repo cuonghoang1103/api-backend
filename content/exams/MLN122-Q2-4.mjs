@@ -128,7 +128,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            3
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>The standard textbook lists five main causes leading to the formation of state-monopoly capitalism.</p></div><div class=\"ml-vi\"><p>Giáo trình liệt kê năm nguyên nhân chính dẫn đến sự hình thành chủ nghĩa tư bản độc quyền nhà nước.</p></div>"
         },
@@ -200,7 +200,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            3
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>The Party&#39;s 9th National Congress (2001) officially introduced the concept of a &#39;socialist-oriented market economy&#39;.</p></div><div class=\"ml-vi\"><p>Đại hội IX của Đảng (năm 2001) chính thức đưa ra khái niệm &#39;kinh tế thị trường định hướng xã hội chủ nghĩa&#39;.</p></div>"
         },
@@ -317,7 +317,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            1
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Horizontal integration is the form of linkage between enterprises operating in the same industry.</p></div><div class=\"ml-vi\"><p>Liên kết ngang là hình thức liên kết giữa các doanh nghiệp hoạt động trong cùng một ngành.</p></div>"
         },
@@ -341,7 +341,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            3
+            2
           ],
           "explanation": "<div class=\"ml-en\"><p>Based on the way value is transferred during circulation, productive capital is divided into fixed capital and circulating capital.</p></div><div class=\"ml-vi\"><p>Căn cứ vào phương thức chu chuyển giá trị, tư bản sản xuất được chia thành tư bản cố định và tư bản lưu động.</p></div>"
         },

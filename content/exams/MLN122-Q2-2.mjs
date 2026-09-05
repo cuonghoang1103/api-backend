@@ -83,7 +83,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            2
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>According to Marx&#39;s theory of surplus value, profit (the external form of surplus value) originates from the unpaid labor of wage workers.</p></div><div class=\"ml-vi\"><p>Theo học thuyết giá trị thặng dư của C. Mác, lợi nhuận (biểu hiện bên ngoài của giá trị thặng dư) có nguồn gốc từ lao động không được trả công của công nhân làm thuê.</p></div>"
         },
@@ -128,7 +128,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            2
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>This is a famous statement by V.I. Lenin from his work &quot;Imperialism, the Highest Stage of Capitalism.&quot;</p></div><div class=\"ml-vi\"><p>Đây là nhận định nổi tiếng của V.I. Lênin trong tác phẩm &quot;Chủ nghĩa đế quốc, giai đoạn tột cùng của chủ nghĩa tư bản&quot;.</p></div>"
         },
@@ -263,7 +263,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            1
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>Constant capital is the part of capital existing as means of production (machinery, equipment, factories, infrastructure...) whose value is preserved and transferred to the product. Labor-power is variable capital, not constant capital.</p></div><div class=\"ml-vi\"><p>Tư bản bất biến là bộ phận tư bản tồn tại dưới hình thái tư liệu sản xuất (máy móc, thiết bị, nhà xưởng, kết cấu hạ tầng...) mà giá trị được bảo tồn và chuyển vào sản phẩm. Sức lao động là tư bản khả biến, không phải tư bản bất biến.</p></div>"
         },
@@ -353,7 +353,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            2
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>The &quot;holding system&quot; (participation system) of finance capital is established through control of a controlling block of shares, allowing financiers to dominate many companies while investing less capital than those companies&#39; combined total.</p></div><div class=\"ml-vi\"><p>Chế độ tham dự (hệ thống tham dự) của tư bản tài chính được thiết lập nhờ nắm giữ số cổ phiếu khống chế, cho phép các nhà tư bản tài chính chi phối nhiều công ty với lượng vốn đầu tư ít hơn tổng vốn của các công ty đó.</p></div>"
         },
@@ -440,7 +440,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            2
+            1
           ],
           "explanation": "<div class=\"ml-en\"><p>Under the modern scientific-technological revolution, labor productivity and social wealth depend mainly on the level of science and technology applied to production, rather than on available natural resources alone.</p></div><div class=\"ml-vi\"><p>Trong điều kiện cách mạng khoa học - công nghệ hiện đại, năng suất lao động và của cải xã hội phụ thuộc chủ yếu vào trình độ phát triển khoa học công nghệ được ứng dụng vào sản xuất, hơn là vào tài nguyên thiên nhiên sẵn có.</p></div>"
         },
@@ -464,7 +464,7 @@ export default {
             }
           ],
           "correctIndexes": [
-            1
+            0
           ],
           "explanation": "<div class=\"ml-en\"><p>The standard textbook defines that, in essence, economic interest is a social relation with a historical character — reflecting the objective purposes and motives of subjects within socio-economic relations, whose content and form vary across historical periods.</p></div><div class=\"ml-vi\"><p>Giáo trình KTCT Mác-Lênin xác định: xét về bản chất, lợi ích kinh tế là quan hệ xã hội, mang tính lịch sử — phản ánh mục đích và động cơ khách quan của các chủ thể trong quan hệ kinh tế - xã hội mà mỗi thời kỳ lịch sử có nội dung, hình thức khác nhau.</p></div>"
         }

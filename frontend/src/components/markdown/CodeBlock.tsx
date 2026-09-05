@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
-import { Check, Copy } from 'lucide-react';
+import { Check, Copy, X } from 'lucide-react';
 
 interface CodeBlockProps {
  code: string;
@@ -128,6 +128,7 @@ export default function CodeBlock({
  const [html, setHtml] = useState<string>('');
  const [expanded, setExpanded] = useState(false);
  const [copied, setCopied] = useState(false);
+ const [loiChep, setLoiChep] = useState(false);
  const [needsTruncation, setNeedsTruncation] = useState(false);
  const preRef = useRef<HTMLPreElement>(null);
  const lang = useMemo(() => normaliseLang(language), [language]);
@@ -160,12 +161,27 @@ export default function CodeBlock({
  setNeedsTruncation(preRef.current.scrollHeight > maxHeight + 4);
  }, [html, maxHeight, expanded]);
 
- const onCopy = useCallback(async () => {
+ const onCopy = useCallback(async (e?: React.MouseEvent) => {
+ /*
+  * ⚠️ CHẶN NỔI BỌT. Khối mã này được dùng lại BÊN TRONG node TipTap của Ghi
+  * chú (`NoteCodeBlock`), mà wrapper ở đó có `onClick` → vào chế độ SỬA.
+  * Không chặn thì bấm Chép sẽ chép xong, rồi click nổi lên wrapper và cả khối
+  * nhảy sang chế độ sửa — người dùng thấy đúng một việc "ấn sao chép thì nó
+  * chuyển sang chỉnh sửa", và dấu tick báo đã chép biến mất cùng lúc nên
+  * trông như không chép được gì.
+  */
+ e?.stopPropagation();
  try {
  await navigator.clipboard.writeText(code);
  setCopied(true);
  setTimeout(() => setCopied(false), 1800);
- } catch { /* clipboard API unavailable; silently fail */ }
+ } catch {
+ /* KHÔNG nuốt im lặng. `catch {}` để trống nghĩa là khi clipboard bị chặn
+    (thiếu quyền, ngữ cảnh không bảo mật) người dùng bấm và KHÔNG có gì xảy
+    ra — không tick, không lỗi, không cách nào biết vì sao. */
+ setLoiChep(true);
+ setTimeout(() => setLoiChep(false), 2400);
+ }
  }, [code]);
 
  // Pull out the inner <code>…</code> from Shiki's output so we
@@ -209,11 +225,20 @@ export default function CodeBlock({
  </div>
  )}
  <button
+ type="button"
+ /* `data-noedit` là thứ `NoteCodeBlock.onContainerClick` dò để bỏ qua click. */
+ data-noedit="1"
  onClick={onCopy}
- aria-label="Copy code"
+ /* Chặn cả `mousedown`: trong TipTap, mousedown đặt lại vùng chọn của editor
+    TRƯỚC khi `click` kịp chạy. */
+ onMouseDown={(e) => e.stopPropagation()}
+ aria-label={loiChep ? 'Không chép được' : 'Chép mã'}
+ title={loiChep ? 'Không chép được — trình duyệt chặn clipboard' : 'Chép mã'}
  className="absolute top-2 right-2 z-10 p-1.5 rounded-lg bg-darkbg/80 border border-darkborder text-text-muted hover:text-text-primary opacity-0 group-hover:opacity-100 transition-opacity"
  >
- {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+ {loiChep
+ ? <X className="w-3.5 h-3.5 text-red-400" />
+ : copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
  </button>
  <pre
  ref={preRef}
@@ -263,7 +288,9 @@ export default function CodeBlock({
  {needsTruncation && (
  <button
  type="button"
- onClick={() => setExpanded((v) => !v)}
+ data-noedit="1"
+ onMouseDown={(e) => e.stopPropagation()}
+ onClick={(e) => { e.stopPropagation(); setExpanded((v) => !v); }}
  className="block w-full text-center py-1.5 text-[10px] uppercase tracking-wider text-text-muted hover:text-text-primary bg-[#161b22] border-t border-[rgba(255,255,255,0.08)]"
  >
  {expanded ? '↑ Thu gọn' : '↓ Xem toàn bộ'}

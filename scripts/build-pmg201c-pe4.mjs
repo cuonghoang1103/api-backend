@@ -1,0 +1,194 @@
+/**
+ * build-pmg201c-pe4.mjs — sinh content/exams/PMG201c-PE4.mjs.
+ *
+ * Nguồn thật: "PMG201c - SP 2025 - PE2" — "E-Commerce Website for Small
+ * Businesses". Không có file solution. Bảng CPM ở Request 4 GIỐNG HỆT bảng
+ * đã dùng ở PMG201c-PE2 (đã verify tính tay đầy đủ trước đó) — TÁI SỬ DỤNG
+ * kết quả đã verify (4 đường đi, đường găng Start-D-H-I-End=19 tuần, float
+ * từng activity), không tính lại từ đầu nhưng đã đối chiếu lại bảng số 2
+ * đề khớp 100% trước khi tái dùng.
+ *
+ * Request 4d là biến thể MỚI: "tuần 8, đang thực hiện D, phát hiện trễ 3
+ * tuần, cần ít nhất 4 giải pháp phục hồi" — vì D nằm trên đường găng
+ * (float=0), trễ D trực tiếp trễ CẢ dự án; đã tự suy luận và trình bày
+ * ≥4 giải pháp khắc phục hợp lý.
+ *
+ * Request 3 (QA/QC activities): tự thiết kế 6 hoạt động (3 QA quy trình +
+ * 3 QC kiểm tra sản phẩm), áp đúng bối cảnh dự án (10k vendor, 100k giao
+ * dịch/ngày, tích hợp thanh toán).
+ *
+ * Seed: node scripts/academy-seed-exam.mjs --file ./content/exams/PMG201c-PE4.mjs --apply
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+
+const OUT = path.resolve(import.meta.dirname, '../content/exams/PMG201c-PE4.mjs');
+
+const B = (en, vi) => `${en}|||${vi}`;
+const ML = (en, vi) => `<div class="ml-en">${en}</div><div class="ml-vi">${vi}</div>`;
+
+const projectContext = B(
+  `<div class="pe-system"><b>Context — E-Commerce Website for Small Businesses:</b><br/><p>You are the PM of this project. A company is building a <b>multi-vendor e-commerce platform</b> aimed at small businesses. The platform needs to offer: <b>user registration</b> (businesses can set up their own online stores); <b>payment integration</b> supporting several payment providers; <b>product listing and order tracking</b> capabilities; a <b>customer review system</b> enabling feedback and ratings.</p><p>The website must handle up to <b>10,000 vendors</b> and <b>100,000 daily transactions</b>. The project has <b>6 months</b> to deliver the first version, with a budget of <b>$800,000</b>.</p></div>`,
+  `<div class="pe-system"><b>Bối cảnh — Website Thương mại điện tử cho Doanh nghiệp nhỏ:</b><br/><p>Bạn là PM của dự án này. Một công ty đang xây dựng nền tảng thương mại điện tử đa gian hàng (multi-vendor) hướng tới doanh nghiệp nhỏ. Nền tảng cần cung cấp: <b>đăng ký người dùng</b> (doanh nghiệp tự lập cửa hàng online); <b>tích hợp thanh toán</b> hỗ trợ nhiều nhà cung cấp; <b>đăng sản phẩm và theo dõi đơn hàng</b>; <b>hệ thống đánh giá khách hàng</b> cho phản hồi và xếp hạng.</p><p>Website phải xử lý được tới <b>10,000 gian hàng</b> và <b>100,000 giao dịch/ngày</b>. Dự án có <b>6 tháng</b> để ra mắt phiên bản đầu, ngân sách <b>$800,000</b>.</p></div>`,
+);
+
+const instructions = ML(
+  `<p><strong>PMG201c.PE2 – E-Commerce Website for Small Businesses (Spring 2025)</strong>. This is a written project-management practical exam. There is no code to write; each answer is graded by an AI grader against the rubric shown per question. Write complete, well-reasoned answers.</p>` + projectContext,
+  `<p><strong>PMG201c.PE2 – Website Thương mại điện tử cho Doanh nghiệp nhỏ (Spring 2025)</strong>. Đây là bài thi thực hành quản lý dự án dạng viết. Không có mã nguồn cần viết; mỗi câu trả lời được AI chấm theo tiêu chí ghi ở từng câu. Viết câu trả lời đầy đủ, lập luận rõ ràng.</p>` + projectContext,
+);
+
+const cpmTable = `<table><tr><th>Activity</th><th>Preceding Activity</th><th>Duration (weeks)</th></tr>
+<tr><td>Start</td><td>—</td><td>0</td></tr><tr><td>A</td><td>Start</td><td>4</td></tr>
+<tr><td>B</td><td>A, D</td><td>3</td></tr><tr><td>C</td><td>B</td><td>2</td></tr>
+<tr><td>D</td><td>Start</td><td>5</td></tr><tr><td>E</td><td>D</td><td>4</td></tr>
+<tr><td>F</td><td>E</td><td>2</td></tr><tr><td>G</td><td>C, F</td><td>6</td></tr>
+<tr><td>H</td><td>D</td><td>5</td></tr><tr><td>I</td><td>H</td><td>9</td></tr>
+<tr><td>End</td><td>G, I</td><td>0</td></tr></table>`;
+
+const q1 = {
+  kind: 'WRITE', points: 1.5,
+  prompt: B(
+    `<p><strong>Request 1 (weight 15%):</strong> define at least 2 project objectives using SMART criteria (objectives that are Specific, Measurable, Achievable, Relevant, and Time-bound, providing clarity, trackability, and focus for achieving desired outcomes).</p>`,
+    `<p><strong>Yêu cầu 1 (trọng số 15%):</strong> nêu ít nhất 2 mục tiêu dự án theo tiêu chí SMART.</p>`,
+  ),
+  sampleSolution: B(
+    `<p><strong>Objective 1:</strong> Launch the first version of the multi-vendor e-commerce platform — supporting vendor registration, payment integration, product listing/order tracking, and customer reviews — capable of handling 10,000 vendors and 100,000 daily transactions, within 6 months and the $800,000 budget. (Specific — exact feature set and capacity target; Measurable — vendor count and transaction volume are directly testable via load testing; Achievable — matches the committed budget/timeline; Relevant — this is the project's core deliverable; Time-bound — 6-month deadline.)</p>
+     <p><strong>Objective 2:</strong> Successfully integrate at least 3 payment providers with a transaction success rate of at least 99.5%, verified through load and functional testing before the go-live date in month 6. (Specific — concrete integration count and success-rate target; Measurable — success rate is directly measurable via test logs; Achievable — reasonable given a dedicated payment-integration workstream; Relevant — payment integration is one of the 4 explicitly required platform features; Time-bound — verified before go-live in month 6.)</p>`,
+    `<p><strong>Mục tiêu 1:</strong> Ra mắt phiên bản đầu của nền tảng thương mại điện tử đa gian hàng — hỗ trợ đăng ký gian hàng, tích hợp thanh toán, đăng sản phẩm/theo dõi đơn hàng, và đánh giá khách hàng — xử lý được 10,000 gian hàng và 100,000 giao dịch/ngày, trong 6 tháng và ngân sách $800,000. (Specific — bộ tính năng và mục tiêu tải cụ thể; Measurable — số gian hàng và khối lượng giao dịch đo được trực tiếp qua load test; Achievable — khớp ngân sách/thời gian đã cam kết; Relevant — đây là sản phẩm cốt lõi của dự án; Time-bound — hạn 6 tháng.)</p>
+     <p><strong>Mục tiêu 2:</strong> Tích hợp thành công ít nhất 3 nhà cung cấp thanh toán với tỉ lệ giao dịch thành công ít nhất 99.5%, xác nhận qua kiểm thử tải và chức năng trước ngày ra mắt ở tháng 6. (Specific — số lượng tích hợp và tỉ lệ thành công cụ thể; Measurable — tỉ lệ thành công đo được trực tiếp qua log kiểm thử; Achievable — hợp lý với 1 luồng công việc tích hợp thanh toán chuyên trách; Relevant — tích hợp thanh toán là 1 trong 4 tính năng bắt buộc của nền tảng; Time-bound — xác nhận trước ra mắt ở tháng 6.)</p>`,
+  ),
+  rubric: [
+    { id: 'two_objectives', criterion: B('Provides at least 2 distinct objectives tied to this specific project.', 'Nêu đủ ít nhất 2 mục tiêu khác nhau, gắn với đúng dự án này.'), weight: 1, maxScore: 0.4 },
+    { id: 'smart_specific_measurable', criterion: B('Each objective is genuinely Specific and Measurable.', 'Mỗi mục tiêu thực sự Specific và Measurable.'), weight: 1, maxScore: 0.6 },
+    { id: 'smart_time_bound', criterion: B('Each objective has an explicit, achievable, time-bound deadline consistent with the 6-month project.', 'Mỗi mục tiêu có hạn định rõ ràng, khả thi, khớp dự án 6 tháng.'), weight: 1, maxScore: 0.5 },
+  ],
+};
+
+const q2 = {
+  kind: 'WRITE', points: 2.5,
+  prompt: B(
+    `<p><strong>Request 2 (weight 25%):</strong> define the project scope, including in-scope items, exclusive (or out-of-scope) items, and the deliverables that must be provided for the project.</p>`,
+    `<p><strong>Yêu cầu 2 (trọng số 25%):</strong> xác định phạm vi dự án, gồm hạng mục trong phạm vi, hạng mục ngoài phạm vi, và sản phẩm bàn giao bắt buộc.</p>`,
+  ),
+  sampleSolution: B(
+    `<p><strong>In-scope:</strong> vendor registration and store setup; integration with at least 3 payment providers; product listing and order-tracking system; customer review/rating system; backend infrastructure capable of supporting 10,000 vendors and 100,000 daily transactions.</p>
+     <p><strong>Out-of-scope:</strong> a native mobile app (web platform only for v1, unless stated otherwise); marketing and vendor-acquisition campaigns (business/sales activity, not a technical deliverable); building an in-house payment processor (the project integrates with EXISTING payment providers, not creates a new one); advanced analytics/BI dashboards beyond basic order tracking; multi-language/multi-currency support; physical shipping-carrier/logistics integration.</p>
+     <p><strong>Deliverables:</strong> (1) the live e-commerce platform v1; (2) the vendor onboarding/registration module; (3) the integrated payment gateway (≥3 providers); (4) the product listing + order-tracking system; (5) the review/rating system; (6) a load-test report confirming the platform meets the 10,000-vendor/100,000-transaction capacity target; (7) user/vendor documentation.</p>`,
+    `<p><strong>Trong phạm vi:</strong> đăng ký và lập gian hàng; tích hợp ít nhất 3 nhà cung cấp thanh toán; hệ thống đăng sản phẩm và theo dõi đơn hàng; hệ thống đánh giá/xếp hạng khách hàng; hạ tầng backend đủ sức chịu tải 10,000 gian hàng và 100,000 giao dịch/ngày.</p>
+     <p><strong>Ngoài phạm vi:</strong> app di động native (chỉ nền tảng web cho v1, trừ khi đề nói khác); chiến dịch marketing/thu hút gian hàng (hoạt động kinh doanh, không phải sản phẩm kỹ thuật); xây bộ xử lý thanh toán riêng (dự án tích hợp với nhà cung cấp thanh toán CÓ SẴN, không tạo mới); dashboard phân tích/BI nâng cao ngoài theo dõi đơn hàng cơ bản; hỗ trợ đa ngôn ngữ/đa tiền tệ; tích hợp vận chuyển/logistics vật lý.</p>
+     <p><strong>Sản phẩm bàn giao:</strong> (1) nền tảng thương mại điện tử v1 hoạt động; (2) module đăng ký/lập gian hàng; (3) cổng thanh toán tích hợp (≥3 nhà cung cấp); (4) hệ thống đăng sản phẩm + theo dõi đơn hàng; (5) hệ thống đánh giá/xếp hạng; (6) báo cáo load-test xác nhận nền tảng đạt mục tiêu 10,000 gian hàng/100,000 giao dịch; (7) tài liệu người dùng/gian hàng.</p>`,
+  ),
+  rubric: [
+    { id: 'in_scope', criterion: B('Lists in-scope items covering all 4 required features plus the capacity requirement.', 'Liệt kê đủ hạng mục trong phạm vi bao quát cả 4 tính năng bắt buộc và yêu cầu tải.'), weight: 1, maxScore: 0.8 },
+    { id: 'out_of_scope', criterion: B('Lists at least 2-3 plausible, specific out-of-scope items.', 'Liệt kê ít nhất 2-3 hạng mục ngoài phạm vi hợp lý, cụ thể.'), weight: 1, maxScore: 0.9 },
+    { id: 'deliverables', criterion: B('Lists concrete deliverables matching the in-scope items, including a load-test/capacity-verification deliverable.', 'Liệt kê sản phẩm bàn giao cụ thể, khớp hạng mục trong phạm vi, gồm cả sản phẩm xác nhận tải/năng lực.'), weight: 1, maxScore: 0.8 },
+  ],
+};
+
+const q3 = {
+  kind: 'WRITE', points: 2.5,
+  prompt: B(
+    `<p><strong>Request 3 (weight 25%):</strong> define at least 5 quality assurance (QA) or quality control (QC) activities for the project. For each activity, classify it as QA or QC and provide detailed descriptions (covering the purpose, when, and how it is done).</p>`,
+    `<p><strong>Yêu cầu 3 (trọng số 25%):</strong> nêu ít nhất 5 hoạt động đảm bảo chất lượng (QA) hoặc kiểm soát chất lượng (QC) cho dự án. Với mỗi hoạt động, phân loại QA hay QC và mô tả chi tiết (mục đích, thời điểm, cách thực hiện).</p>`,
+  ),
+  sampleSolution: B(
+    `<p><strong>QA (process-oriented, preventive):</strong></p>
+     <ul><li><b>Code review process</b> — Purpose: catch defects/style/security issues before they enter the codebase. When: on every pull request, throughout development. How: peer developers review code changes against a checklist (security, performance, coding standards) before approval.</li>
+     <li><b>Definition-of-Done process audit</b> — Purpose: ensure every feature follows the agreed development process (unit tests written, docs updated) before being marked complete. When: end of each sprint. How: the PM/QA lead audits a sample of completed tickets against the Definition-of-Done checklist.</li>
+     <li><b>Payment-security compliance review</b> — Purpose: ensure the payment integration follows secure-payment-handling standards (e.g. PCI-DSS-equivalent practices) by design, not just by testing after the fact. When: at architecture/design phase, and again before each major release. How: a security specialist reviews the payment-flow design and code against a compliance checklist.</li></ul>
+     <p><strong>QC (product-oriented, inspecting the actual deliverable):</strong></p>
+     <ul><li><b>Load/performance testing</b> — Purpose: verify the platform can actually handle 100,000 daily transactions and 10,000 vendor stores without failure. When: before the final release (UAT phase) and after any major backend change. How: run automated load-testing tools (e.g. JMeter) simulating peak transaction volume, measuring response times/error rates against target thresholds.</li>
+     <li><b>Functional testing of payment integration</b> — Purpose: confirm each supported payment provider correctly processes success, failure, and refund cases. When: after payment-integration development, before go-live. How: QA testers execute a test-case suite against a sandbox environment for each provider.</li>
+     <li><b>Pilot user acceptance testing (UAT)</b> — Purpose: verify the end-to-end vendor onboarding, listing, and order-tracking flow actually meets real small-business needs. When: final month before launch. How: a small group of pilot vendors uses the platform on realistic data and reports defects/usability issues.</li></ul>`,
+    `<p><strong>QA (hướng quy trình, phòng ngừa):</strong></p>
+     <ul><li><b>Quy trình review code</b> — Mục đích: bắt lỗi/vấn đề bảo mật trước khi vào codebase. Thời điểm: mỗi pull request, suốt quá trình phát triển. Cách làm: lập trình viên đồng nghiệp review theo checklist (bảo mật, hiệu năng, chuẩn code) trước khi duyệt.</li>
+     <li><b>Kiểm toán quy trình Definition-of-Done</b> — Mục đích: đảm bảo mọi tính năng theo đúng quy trình đã thống nhất (viết unit test, cập nhật tài liệu) trước khi đánh dấu hoàn thành. Thời điểm: cuối mỗi sprint. Cách làm: PM/trưởng QA kiểm tra mẫu ticket đã hoàn thành theo checklist Definition-of-Done.</li>
+     <li><b>Rà soát tuân thủ bảo mật thanh toán</b> — Mục đích: đảm bảo tích hợp thanh toán tuân theo chuẩn xử lý thanh toán an toàn (tương đương PCI-DSS) ngay từ thiết kế, không chỉ kiểm sau. Thời điểm: giai đoạn thiết kế kiến trúc, và trước mỗi bản phát hành lớn. Cách làm: chuyên gia bảo mật rà soát thiết kế/mã luồng thanh toán theo checklist tuân thủ.</li></ul>
+     <p><strong>QC (hướng sản phẩm, kiểm tra sản phẩm bàn giao thật):</strong></p>
+     <ul><li><b>Kiểm thử tải/hiệu năng</b> — Mục đích: xác nhận nền tảng thực sự chịu được 100,000 giao dịch/ngày và 10,000 gian hàng không lỗi. Thời điểm: trước bản phát hành cuối (giai đoạn UAT) và sau mỗi thay đổi backend lớn. Cách làm: chạy công cụ load-test tự động (ví dụ JMeter) mô phỏng khối lượng giao dịch đỉnh, đo thời gian phản hồi/tỉ lệ lỗi so với ngưỡng mục tiêu.</li>
+     <li><b>Kiểm thử chức năng tích hợp thanh toán</b> — Mục đích: xác nhận mỗi nhà cung cấp thanh toán xử lý đúng các trường hợp thành công, thất bại, hoàn tiền. Thời điểm: sau khi phát triển tích hợp thanh toán, trước ra mắt. Cách làm: tester QA chạy bộ test case trên môi trường sandbox cho từng nhà cung cấp.</li>
+     <li><b>Kiểm thử nghiệm thu người dùng (UAT) thí điểm</b> — Mục đích: xác nhận luồng đăng ký gian hàng, đăng sản phẩm, theo dõi đơn hàng thực sự đáp ứng nhu cầu doanh nghiệp nhỏ thật. Thời điểm: tháng cuối trước ra mắt. Cách làm: 1 nhóm nhỏ gian hàng thí điểm dùng nền tảng trên dữ liệu thực tế và báo lỗi/vấn đề trải nghiệm.</li></ul>`,
+  ),
+  rubric: [
+    { id: 'five_activities', criterion: B('Provides at least 5 distinct activities relevant to this project.', 'Nêu đủ ít nhất 5 hoạt động khác nhau, phù hợp với dự án.'), weight: 1, maxScore: 0.6 },
+    { id: 'correct_qa_qc_classification', criterion: B('Correctly classifies each activity as QA (process-focused/preventive) or QC (product-focused/inspection) — not just labeling arbitrarily.', 'Phân loại đúng mỗi hoạt động là QA (hướng quy trình/phòng ngừa) hay QC (hướng sản phẩm/kiểm tra) — không gắn nhãn tuỳ tiện.'), weight: 1, maxScore: 0.8 },
+    { id: 'purpose_when_how', criterion: B('Each activity includes purpose, timing, and method (all 3 required details), tied to this project\'s actual features.', 'Mỗi hoạt động có đủ mục đích, thời điểm, cách làm (đủ 3 chi tiết yêu cầu), gắn với đúng tính năng của dự án.'), weight: 1, maxScore: 0.6 },
+  ],
+};
+
+const q4 = {
+  kind: 'WRITE', points: 3.5,
+  prompt: B(
+    `<p><strong>Request 4 (weight 35%):</strong> suppose that you have defined and estimated the schedule for one of the main project deliverables, with the high-level activities listed below:</p>${cpmTable}
+     <p>a. What are the paths in the network diagram for the deliverable?</p>
+     <p>b. Identify the minimum duration needed to complete that deliverable?</p>
+     <p>c. Which activities have the most flexibility (in terms of time)?</p>
+     <p>d. In week 8, you are executing activity D and realize that the project schedule must be accelerated to recover a 3-week delay. Define at least four solutions, with relevant explanations and assumptions (if needed), to achieve this.</p>`,
+    `<p><strong>Yêu cầu 4 (trọng số 35%):</strong> giả sử bạn đã xác định và ước lượng lịch trình cho 1 sản phẩm bàn giao chính, với các hoạt động mức cao sau:</p>${cpmTable}
+     <p>a. Các đường đi trong sơ đồ mạng lưới là gì?</p>
+     <p>b. Xác định thời lượng tối thiểu cần để hoàn thành sản phẩm bàn giao đó?</p>
+     <p>c. Hoạt động nào có độ linh hoạt (về thời gian) nhiều nhất?</p>
+     <p>d. Ở tuần 8, bạn đang thực hiện hoạt động D và nhận ra lịch trình dự án phải được đẩy nhanh để bù lại độ trễ 3 tuần. Nêu ít nhất 4 giải pháp, kèm giải thích và giả định liên quan (nếu cần), để đạt được điều này.</p>`,
+  ),
+  sampleSolution: B(
+    `<p><strong>a. All paths (Start to End):</strong></p>
+     <ul><li>Start→A→B→C→G→End: 4+3+2+6 = 15 weeks</li>
+     <li>Start→D→B→C→G→End: 5+3+2+6 = 16 weeks</li>
+     <li>Start→D→E→F→G→End: 5+4+2+6 = <b>17 weeks</b></li>
+     <li>Start→D→H→I→End: 5+5+9 = <b>19 weeks (critical path)</b></li></ul>
+     <p><strong>b. Minimum duration:</strong> 19 weeks (Start→D→H→I→End, the critical path).</p>
+     <p><strong>c. Most flexible activity:</strong> A, with 4 weeks of float — the largest in the network (D, H, I are critical with 0 float; B=3, C=3, E=2, F=2, G=2).</p>
+     <p><strong>d. Recovering a 3-week delay while executing D at week 8:</strong> D was originally planned to finish at week 5 (ES=0, EF=5) — being "in week 8, still executing D" means D itself is already running 3 weeks late. Since D sits on the critical path (0 float), this 3-week slip on D translates directly into a 3-week slip for the entire 19-week project unless corrective action is taken. Assuming D still has some remaining work at week 8 (otherwise recovery must happen entirely downstream):</p>
+     <ul><li><b>Solution 1 — Crash the remaining work on D:</b> add extra staff/overtime specifically to finish D's remaining scope faster than originally planned, directly clawing back time on the activity currently causing the delay. Assumption: D's remaining work can be meaningfully parallelized (not a strictly single-threaded task).</li>
+     <li><b>Solution 2 — Crash H and/or I (the next critical-path activities):</b> once D finishes (late), add resources to H and/or I to make up the 3 weeks further down the same critical path, e.g. crash I by 3 weeks (9→6) via additional developers. Assumption: I's scope can be split across more people without excessive coordination overhead.</li>
+     <li><b>Solution 3 — Fast-track by overlapping D's tail end with H's start:</b> begin the parts of H that don't strictly require 100% of D's output as soon as D is "mostly" done, instead of waiting for full completion. Assumption: H's early tasks can start on partial/near-final D deliverables with acceptable rework risk.</li>
+     <li><b>Solution 4 — Reallocate resources from non-critical activities:</b> temporarily pull team members currently assigned to activities with slack (C, F, G, or the A/B branch — none of which are on the critical path) onto D/H/I, since their own paths can absorb a few weeks of delay without affecting the 19-week target. Assumption: those team members have skills transferable to the critical-path work.</li>
+     <li><b>Solution 5 (optional 5th) — Reduce scope of a downstream critical-path activity:</b> negotiate with stakeholders to simplify or defer part of H or I's scope to a later release, directly cutting that activity's duration rather than adding resources. Assumption: stakeholders accept a reduced v1 scope for that specific piece.</li></ul>`,
+    `<p><strong>a. Tất cả đường đi (Start tới End):</strong></p>
+     <ul><li>Start→A→B→C→G→End: 4+3+2+6 = 15 tuần</li>
+     <li>Start→D→B→C→G→End: 5+3+2+6 = 16 tuần</li>
+     <li>Start→D→E→F→G→End: 5+4+2+6 = <b>17 tuần</b></li>
+     <li>Start→D→H→I→End: 5+5+9 = <b>19 tuần (đường găng)</b></li></ul>
+     <p><strong>b. Thời lượng tối thiểu:</strong> 19 tuần (Start→D→H→I→End, đường găng).</p>
+     <p><strong>c. Hoạt động linh hoạt nhất:</strong> A, float 4 tuần — lớn nhất mạng lưới (D, H, I là đường găng float=0; B=3, C=3, E=2, F=2, G=2).</p>
+     <p><strong>d. Phục hồi độ trễ 3 tuần khi đang thực hiện D ở tuần 8:</strong> D vốn dự kiến xong ở tuần 5 (ES=0, EF=5) — "tuần 8 vẫn đang thực hiện D" nghĩa là D đã trễ sẵn 3 tuần. Vì D nằm trên đường găng (float=0), độ trễ 3 tuần này sẽ trực tiếp làm trễ CẢ dự án 19 tuần nếu không khắc phục. Giả định D vẫn còn việc dở dang ở tuần 8 (nếu không, phục hồi phải hoàn toàn nằm ở phía sau):</p>
+     <ul><li><b>Giải pháp 1 — Rút ngắn phần việc còn lại của D:</b> thêm nhân sự/tăng ca riêng cho phần việc D còn lại để xong nhanh hơn kế hoạch gốc, lấy lại trực tiếp thời gian từ chính hoạt động đang gây trễ. Giả định: phần việc còn lại của D có thể song song hoá thật sự (không phải việc tuần tự bắt buộc 1 người).</li>
+     <li><b>Giải pháp 2 — Rút ngắn H và/hoặc I (hoạt động đường găng tiếp theo):</b> khi D xong (trễ), thêm nguồn lực cho H và/hoặc I để bù lại 3 tuần ở phía sau cùng đường găng, ví dụ rút I 3 tuần (9→6) bằng thêm lập trình viên. Giả định: phạm vi I có thể chia nhỏ cho nhiều người mà không tốn quá nhiều chi phí phối hợp.</li>
+     <li><b>Giải pháp 3 — Chồng lấn (fast-track) đuôi D với đầu H:</b> bắt đầu các phần của H không nhất thiết cần 100% đầu ra của D ngay khi D "gần" xong, thay vì đợi xong hẳn. Giả định: các việc đầu của H có thể bắt đầu trên sản phẩm gần-hoàn-thiện của D với rủi ro làm lại chấp nhận được.</li>
+     <li><b>Giải pháp 4 — Điều chuyển nguồn lực từ hoạt động không găng:</b> tạm điều nhân sự đang làm hoạt động có float (C, F, G, hoặc nhánh A/B — đều không nằm trên đường găng) sang D/H/I, vì đường của họ có thể chịu trễ vài tuần mà không ảnh hưởng mục tiêu 19 tuần. Giả định: nhân sự đó có kỹ năng chuyển được sang việc đường găng.</li>
+     <li><b>Giải pháp 5 (tuỳ chọn thứ 5) — Giảm phạm vi 1 hoạt động đường găng phía sau:</b> đàm phán với bên liên quan để đơn giản hoá hoặc dời 1 phần phạm vi của H hoặc I sang bản sau, cắt trực tiếp thời lượng hoạt động đó thay vì thêm nguồn lực. Giả định: bên liên quan chấp nhận giảm phạm vi v1 cho phần đó.</li></ul>`,
+  ),
+  explanation: B(
+    `<p><b>Verified independently by hand</b> — this table is identical to the one in PMG201c-PE2 (already CPM-verified there: forward+backward pass, 4 paths, critical path Start-D-H-I-End at 19 weeks). Reused that verified analysis after re-confirming the two tables match exactly. The week-8/D-delay scenario is new to this deck and was reasoned through from scratch: since D's own planned finish (week 5) has already passed at week 8, and D has zero float, the 3-week slip is unavoidable project-wide without corrective action — a subtlety it's easy to miss if you only look at "3 weeks behind" without connecting it to D's own EF.</p>`,
+    `<p><b>Đã tự tính tay độc lập</b> — bảng này giống hệt bảng ở PMG201c-PE2 (đã verify CPM đầy đủ ở đó: xuôi+ngược, 4 đường đi, đường găng Start-D-H-I-End=19 tuần). Tái dùng phân tích đã verify sau khi đối chiếu lại 2 bảng khớp chính xác. Tình huống trễ D ở tuần 8 là MỚI với đề này, tự suy luận từ đầu: vì D vốn dự kiến xong tuần 5 mà tới tuần 8 vẫn chưa xong, và D có float=0, độ trễ 3 tuần này không tránh được cho cả dự án nếu không khắc phục — 1 điểm tinh tế dễ bỏ sót nếu chỉ nhìn "trễ 3 tuần" mà không nối với EF của chính D.</p>`,
+  ),
+  rubric: [
+    { id: 'all_paths', criterion: B('Correctly lists all 4 distinct start-to-end paths with correct durations.', 'Liệt kê đúng đủ 4 đường đi với thời lượng đúng.'), weight: 1, maxScore: 0.5 },
+    { id: 'min_duration_flexibility', criterion: B('Correctly identifies the minimum duration (19 weeks) and the most flexible activity (A, float=4).', 'Xác định đúng thời lượng tối thiểu (19 tuần) và hoạt động linh hoạt nhất (A, float=4).'), weight: 1, maxScore: 0.7 },
+    { id: 'recognizes_critical_path_impact', criterion: B('Recognizes that because D is on the critical path with zero float, a delay in D directly delays the whole project.', 'Nhận ra vì D nằm trên đường găng float=0, trễ D trực tiếp trễ cả dự án.'), weight: 1, maxScore: 0.6 },
+    { id: 'four_solutions', criterion: B('Proposes at least 4 distinct, technically sound recovery solutions (crashing, fast-tracking, resource reallocation, and/or scope reduction) with relevant assumptions.', 'Đề xuất đủ ít nhất 4 giải pháp phục hồi khác nhau, kỹ thuật hợp lý (crashing, fast-tracking, điều chuyển nguồn lực, và/hoặc giảm phạm vi), kèm giả định phù hợp.'), weight: 1, maxScore: 0.7 },
+  ],
+};
+
+const spec = {
+  course: { courseCode: 'PMG201c' },
+  exams: [{
+    kind: 'PE',
+    peType: 'WRITE',
+    code: 'PE4',
+    title: 'PMG201c.PE2 – E-Commerce Website for Small Businesses (Spring 2025)|||PMG201c.PE2 – Website Thương mại điện tử cho Doanh nghiệp nhỏ (Spring 2025)',
+    description: 'PMG201c PE (WRITE): SMART objectives, scope definition, QA/QC activity planning, critical path method (CPM), and mid-project schedule recovery, AI-graded.|||PE PMG201c (viết): mục tiêu SMART, xác định phạm vi, lập kế hoạch QA/QC, phân tích đường găng (CPM), và phục hồi lịch trình giữa dự án, chấm AI.',
+    durationMinutes: 90,
+    totalPoints: 10,
+    passMark: 5,
+    source: 'FUOverflow',
+    attachmentUrl: null,
+    attachmentName: null,
+    instructions,
+    isPublished: true,
+    questions: [q1, q2, q3, q4],
+  }],
+};
+
+fs.writeFileSync(OUT, `export default ${JSON.stringify(spec, null, 2)};\n`, 'utf8');
+console.log(`✓ ${OUT} — PE/WRITE ${spec.exams[0].questions.length} câu, ${spec.exams[0].totalPoints} điểm`);

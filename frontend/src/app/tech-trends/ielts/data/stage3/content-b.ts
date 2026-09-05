@@ -127,8 +127,8 @@ export const READINGS3B: ReadingPassage[] = [
 export const LISTENINGS3B: ListeningExercise[] = [
   {
     id: 's3l2',
-    title: 'Enrolling on an Evening Course',
-    titleVi: 'Đăng ký lớp học buổi tối',
+    title: 'Booking a Place on a Photography Course',
+    titleVi: 'Giữ chỗ khoá nhiếp ảnh buổi tối',
     kind: 'Section 1 — điền biểu mẫu, hai người nói',
     level: 'Vừa · nhưng đúng chỗ mất điểm oan: số, tên riêng, tiền',
     context:

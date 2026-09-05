@@ -17,6 +17,7 @@ import {
   CheckCircle2, CloudOff, Disc3, Download, HardDrive, ListMusic, Loader2, Maximize2,
   Music2, Pause, Play, Plus, RefreshCw, Search, Shuffle, Youtube,
   Trash2,
+  X,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
@@ -39,13 +40,42 @@ interface KetQuaYouTube {
 
 export function MusicPage() {
   const { online } = useAppState();
-  const { api } = useSession();
+  const { api, user } = useSession();
+
+  /*
+   * Chỉ ADMIN mới thấy nút xoá hẳn — khớp đúng quyền máy chủ đòi
+   * (`requireRole('ADMIN')` ở `DELETE /music/tracks/:id`). Hiện nút cho mọi
+   * người rồi để máy chủ từ chối là bày ra một nút luôn báo lỗi.
+   */
+  const laAdmin = (user?.roles ?? []).some(
+    (r) => r.replace(/^ROLE_/, '').toUpperCase() === 'ADMIN',
+  );
+
   const {
     tracks, loading, error, setError, loadTracks,
     downloaded, downloading, usage, download, remove, clearAll,
     current, currentId, playing, playTrack, toggle, tuaToi,
     setVolume, setShuffle, position,
   } = useMusicPlayer();
+
+  /**
+   * Xoá HẲN một bài khỏi thư viện dùng chung.
+   *
+   * Hỏi xác nhận vì từ app không hoàn tác được — máy chủ xoá mềm (`active=false`)
+   * nên vẫn khôi phục được trong CSDL, nhưng người dùng không có đường nào làm
+   * việc đó từ đây, và nói "xoá được rồi khôi phục sau" là hứa một thứ giao
+   * diện không có.
+   */
+  const xoaHan = useCallback(async (track: { id: number; title: string }) => {
+    if (!api) return;
+    if (!window.confirm(`Xoá "${track.title}" khỏi thư viện nhạc của cả hệ thống?`)) return;
+    try {
+      await api.request(`/api/v1/music/tracks/${track.id}`, { method: 'DELETE' });
+      await loadTracks();
+    } catch (e) {
+      window.alert(`Không xoá được: ${e instanceof Error ? e.message : String(e)}`);
+    }
+  }, [api, loadTracks]);
 
   const [query, setQuery] = useState('');
   /** 'thuong' = thư viện thường · 'remix' = bàn DJ. Giống hai thẻ trên web. */
@@ -243,7 +273,26 @@ export function MusicPage() {
   const offlineCount = downloaded.size;
 
   return (
-    <div className="ct-music">
+    <div className="ct-music" data-dangphat={playing}>
+      {/*
+        CẢNH ĐÊM NGOÀI CỬA SỔ — nền động cho trang Nhạc.
+        Toàn bộ bằng CSS, không ảnh, không canvas: trang này đã nặng vì danh
+        sách bài và trình phát, thêm một vòng lặp vẽ mỗi khung hình là tốn pin
+        cho một thứ trang trí.
+
+        ⚠️ Nó theo TRẠNG THÁI ĐANG PHÁT, không theo nhịp nhạc. Đọc nhịp thật cần
+        `AnalyserNode`, mà thẻ <audio> ở đây không đặt `crossOrigin` — bật lên
+        thì nguồn nào thiếu CORS sẽ hỏng HẲN việc phát, tức đánh đổi một thứ
+        đang chạy lấy một hiệu ứng trang trí.
+      */}
+      <div className="ct-canh" aria-hidden>
+        <div className="ct-canh-troi" />
+        <div className="ct-canh-sao" />
+        <div className="ct-canh-trang" />
+        <div className="ct-canh-may" />
+        <div className="ct-canh-pho" />
+        <div className="ct-canh-khung" />
+      </div>
       <div className="ct-page-head" style={{ marginBottom: 14 }}>
         <div>
           <h1 style={{ margin: 0, fontSize: 19 }}>Nhạc</h1>
@@ -440,6 +489,7 @@ export function MusicPage() {
               onExtract={() => void rutRoiPhat(track)}
               onDownload={() => void download(track)}
               onRemove={() => void remove(track.id)}
+              onXoaHan={laAdmin ? () => void xoaHan(track) : undefined}
             />
           ))}
         </ol>
@@ -524,7 +574,7 @@ export function MusicPage() {
 /** Một dòng trong danh sách thư viện. Tách riêng cho dễ đọc, không có trạng thái. */
 function DongBai({
   track, index, isCurrent, playing, isDownloaded, isDownloading, chuaRutAmThanh, dangRut, online,
-  onPlay, onExtract, onDownload, onRemove,
+  onPlay, onExtract, onDownload, onRemove, onXoaHan,
 }: {
   track: Track;
   index: number;
@@ -540,6 +590,8 @@ function DongBai({
   onExtract: () => void;
   onDownload: () => void;
   onRemove: () => void;
+  /** Xoá HẲN khỏi thư viện. Chỉ admin có — nhạc là thư viện dùng chung. */
+  onXoaHan?: (() => void) | undefined;
 }) {
   const playable = isDownloaded || (online && !chuaRutAmThanh);
   // Bấm phát một dòng YouTube = rút âm thanh rồi phát, chứ không phải báo lỗi.
@@ -615,6 +667,21 @@ function DongBai({
           title={online ? 'Tải về nghe offline' : 'Cần mạng để tải'}
         >
           {isDownloading ? <Loader2 size={14} className="ct-spin" aria-hidden /> : <Download size={14} aria-hidden />}
+        </button>
+      )}
+
+      {/* XOÁ HẲN — chỉ admin. Tách khỏi nút "xoá bản tải về" ở trên vì hai việc
+          khác hẳn nhau: cái kia chỉ xoá file trên máy này, cái này bỏ bài khỏi
+          thư viện của MỌI người. Hỏi xác nhận vì không hoàn tác được từ app. */}
+      {onXoaHan && (
+        <button
+          type="button"
+          className="ct-trk-action ct-trk-xoahan"
+          onClick={onXoaHan}
+          aria-label={`Xoá "${track.title}" khỏi thư viện`}
+          title="Xoá hẳn khỏi thư viện (chỉ admin)"
+        >
+          <X size={15} aria-hidden />
         </button>
       )}
     </li>

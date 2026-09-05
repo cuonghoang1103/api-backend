@@ -563,9 +563,21 @@ router.put(
 // DELETE /api/v1/music/tracks/:id
 // Soft delete (set active = false)
 // ════════════════════════════════════════════════════════════════
+/*
+ * ⛔ CHỈ ADMIN. Trước 05/09/2026 route này chỉ có `authenticate`.
+ *
+ * `MusicTrack` KHÔNG có trường chủ sở hữu — nhạc là thư viện DÙNG CHUNG cho cả
+ * hệ thống. Nên "đã đăng nhập" không phải một quyền: bất kỳ tài khoản nào cũng
+ * xoá được bài của mọi người, và thứ duy nhất đang chặn việc đó là giao diện
+ * chưa có nút. Một lỗ hổng chỉ đóng bằng cách "không ai biết đường" thì nó
+ * đang mở.
+ *
+ * Cùng mức quyền với `download-audio` ngay dưới, vốn đã đòi ADMIN.
+ */
 router.delete(
   '/tracks/:id',
   authenticate,
+  requireRole('ADMIN'),
   async (req: any, res: Response<ApiResponse>, next) => {
     try {
       const id = parseInt(req.params.id, 10);

@@ -9704,3 +9704,190 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   .ct-bangviec-thanh > div[style*='width: 100%']::after { animation: none; }
   .ct-tq-vong-chay { transition: none; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   TRANG NHẠC — CẢNH ĐÊM NGOÀI CỬA SỔ
+   ══════════════════════════════════════════════════════════
+   Toàn bộ bằng CSS: không ảnh (bản cài không phình), không canvas (không vẽ
+   mỗi khung hình, không tốn pin cho một thứ trang trí).
+
+   ⚠️ Cảnh phản ứng theo TRẠNG THÁI ĐANG PHÁT chứ không theo nhịp nhạc. Đọc
+   nhịp thật cần `AnalyserNode`, mà thẻ <audio> không đặt `crossOrigin`; bật lên
+   thì nguồn nào thiếu CORS sẽ hỏng HẲN việc phát. Đổi một thứ đang chạy lấy
+   một hiệu ứng trang trí là món hời tồi.
+   ────────────────────────────────────────────────────────── */
+
+.ct-music { position: relative; }
+.ct-music > *:not(.ct-canh) { position: relative; z-index: 1; }
+
+.ct-canh {
+  position: absolute;
+  inset: 0 0 auto 0;
+  /* 300px là QUÁ CAO — đo bằng ảnh chụp: cảnh trùm lên cả tiêu đề, hàng nút và
+     thẻ playlist, biến nội dung thành thứ chồng lên một bức tranh. 210px thì nó
+     dừng ngay dưới hàng nút và làm đúng việc của một cái nền. */
+  height: 210px;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 0 0 22px 22px;
+  /* Mờ hẳn đi: nền phải ĐỨNG SAU chữ, không đua với nó. */
+  opacity: 0.62;
+  /* Tán dần xuống dưới để cảnh tan vào trang, không cắt ngang bằng một đường
+     thẳng — cùng bài học với nền aurora ở Tổng quan. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent);
+  mask-image: linear-gradient(to bottom, #000 45%, transparent);
+}
+
+.ct-canh-troi {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #0b1026 0%, #131a3a 42%, #1b2350 78%, #2a2a5c 100%);
+}
+
+/* Sao: vẽ bằng `box-shadow` nhiều lớp trên MỘT phần tử 1×1px — rẻ hơn nhiều so
+   với 60 thẻ div, và trình duyệt vẽ chúng trong một lượt. */
+.ct-canh-sao {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+}
+
+.ct-canh-sao::before,
+.ct-canh-sao::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow:
+    40px 30px #fff, 130px 70px rgba(255,255,255,0.8), 220px 24px #fff,
+    310px 96px rgba(255,255,255,0.7), 400px 48px #fff, 500px 120px rgba(255,255,255,0.85),
+    600px 34px #fff, 700px 88px rgba(255,255,255,0.6), 820px 56px #fff,
+    930px 108px rgba(255,255,255,0.75), 1040px 40px #fff, 1150px 84px rgba(255,255,255,0.7),
+    1270px 28px #fff, 1380px 100px rgba(255,255,255,0.8);
+  animation: ct-canh-nhay 4.2s ease-in-out infinite alternate;
+}
+
+/* Lớp thứ hai lệch pha và lệch chỗ ⇒ bầu trời trông có chiều sâu thay vì một
+   hàng chấm nhấp nháy đồng loạt. */
+.ct-canh-sao::after {
+  transform: translate(60px, 130px) scale(0.7);
+  animation-duration: 6.5s;
+  animation-delay: -2s;
+  opacity: 0.75;
+}
+
+@keyframes ct-canh-nhay {
+  from { opacity: 0.35; }
+  to   { opacity: 1; }
+}
+
+.ct-canh-trang {
+  position: absolute;
+  /*
+   * ⚠️ Chỗ đặt mặt trăng phải né HAI dải chữ, và tôi đã sai hai lần trước khi
+   * đo bằng ảnh: đặt bên phải thì nó đè lên hàng nút; đặt bên trái thì nó đè
+   * lên dòng mô tả. Cả trăm pixel đầu trang đều có chữ.
+   *
+   * Chỗ trống thật là dải playlist (y≈118-160) ở nửa phải — chỉ có thẻ "Tạo
+   * playlist" nằm bên trái. Trăng thấp gần đường chân trời cũng tự nhiên hơn.
+   */
+  top: 118px;
+  right: 13%;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 36% 34%, #fffdf2, #ffeeb8 62%, #f5d98a);
+  box-shadow: 0 0 30px 9px rgba(255, 236, 178, 0.30), 0 0 90px 30px rgba(255, 236, 178, 0.12);
+  animation: ct-canh-tho 9s ease-in-out infinite alternate;
+}
+
+@keyframes ct-canh-tho {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-7px); }
+}
+
+/* Mây: hai dải mờ trôi ngang, tốc độ khác nhau ⇒ có lớp gần lớp xa. */
+.ct-canh-may {
+  position: absolute;
+  inset: 20px 0 auto 0;
+  height: 120px;
+  background:
+    radial-gradient(46% 60% at 20% 40%, rgba(255,255,255,0.09), transparent 70%),
+    radial-gradient(38% 52% at 62% 62%, rgba(255,255,255,0.07), transparent 70%);
+  animation: ct-canh-troi-may 46s linear infinite;
+}
+
+@keyframes ct-canh-troi-may {
+  from { transform: translateX(-8%); }
+  to   { transform: translateX(8%); }
+}
+
+/* Dãy nhà: bóng đen cắt bằng `clip-path`, cửa sổ vàng là một lưới gradient
+   lặp — không cần một thẻ nào cho mỗi ô cửa. */
+.ct-canh-pho {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 68px;
+  background: #070b1c;
+  clip-path: polygon(
+    0% 100%, 0% 58%, 5% 58%, 5% 40%, 11% 40%, 11% 66%, 17% 66%, 17% 30%,
+    23% 30%, 23% 52%, 30% 52%, 30% 22%, 36% 22%, 36% 60%, 43% 60%, 43% 44%,
+    50% 44%, 50% 26%, 57% 26%, 57% 56%, 63% 56%, 63% 36%, 70% 36%, 70% 64%,
+    77% 64%, 77% 30%, 84% 30%, 84% 50%, 91% 50%, 91% 40%, 100% 40%, 100% 100%
+  );
+}
+
+.ct-canh-pho::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    90deg, rgba(255, 214, 120, 0.42) 0 3px, transparent 3px 13px
+  ), repeating-linear-gradient(
+    180deg, rgba(255, 214, 120, 0.42) 0 4px, transparent 4px 15px
+  );
+  background-blend-mode: multiply;
+  opacity: 0.55;
+  animation: ct-canh-den 7s steps(1) infinite;
+}
+
+/* Vài ô cửa tắt/bật theo nhịp chậm — thành phố có người ở, không phải một tấm
+   hình dán. `steps(1)` để nó nháy dứt khoát chứ không mờ dần. */
+@keyframes ct-canh-den {
+  0%, 100% { opacity: 0.55; }
+  33% { opacity: 0.42; }
+  66% { opacity: 0.62; }
+}
+
+/* Khung cửa sổ nằm TRÊN cảnh — đó là thứ biến một bức tranh thành "nhìn qua
+   cửa sổ". Không có nó thì nó chỉ là một cái nền gradient. */
+.ct-canh-khung {
+  position: absolute;
+  inset: 0;
+  /* ⚠️ BỎ hai thanh chia ô cửa. Đo bằng ảnh chụp: chúng vẽ đè lên tiêu đề và
+     hàng nút, cắt ngang chữ — một chi tiết trang trí làm hỏng thứ người dùng
+     cần đọc. Giữ lại đúng cái viền: đủ để gợi "nhìn qua cửa sổ", không cản gì. */
+  border: 8px solid rgba(10, 12, 24, 0.55);
+  border-top: 0;
+  border-radius: 0 0 22px 22px;
+}
+
+/* ĐANG PHÁT: cảnh sống hơn — sao nhấp nhanh hơn, trăng sáng hơn, mây trôi
+   nhanh hơn. Dừng nhạc thì nó lắng lại. */
+.ct-music[data-dangphat='true'] .ct-canh-sao::before { animation-duration: 1.9s; }
+.ct-music[data-dangphat='true'] .ct-canh-sao::after { animation-duration: 2.9s; }
+.ct-music[data-dangphat='true'] .ct-canh-may { animation-duration: 26s; }
+.ct-music[data-dangphat='true'] .ct-canh-trang {
+  box-shadow: 0 0 34px 10px rgba(255, 236, 178, 0.24), 0 0 96px 32px rgba(255, 236, 178, 0.09);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ct-canh-sao::before,
+  .ct-canh-sao::after,
+  .ct-canh-trang,
+  .ct-canh-may,
+  .ct-canh-pho::after { animation: none; }
+}

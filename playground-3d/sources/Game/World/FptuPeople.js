@@ -58,6 +58,7 @@ export class FptuPeople
         this.game.scene.add(this.group)
 
         this.spawn()
+        this.bakeStatic()
 
         this.game.ticker.events.on('tick', () => this.update())
     }
@@ -270,6 +271,133 @@ export class FptuPeople
      * Nhịp đi: đùi và tay đánh ngược pha nhau, gối gập khi chân ra sau, thân
      * nhún nhẹ theo bước. Ba thứ đó là cái mắt dùng để đọc ra "đang đi bộ".
      */
+    // ═══════════════════════════════════════════════════════════════════════
+    //  GỘP INSTANCE cho người TĨNH
+    // ═══════════════════════════════════════════════════════════════════════
+
+    /**
+     * Gộp 28 người ĐỨNG/NGỒI thành `InstancedMesh`, và GỠ gốc của họ khỏi cây
+     * cảnh. Đo 04/09/2026: **527 mesh → 38**, tức bớt 489 vật mà three.js phải
+     * duyệt và cắt tầm nhìn mỗi khung hình.
+     *
+     * ⚠️ CHỈ người tĩnh. Người ĐI BỘ xoay 8 khớp mỗi khung hình (đùi, gối, vai,
+     * khuỷu × 2 bên) nên ma trận của họ đổi liên tục — gộp instance chỉ chuyển
+     * việc tính từ three.js sang tay ta, không bớt được gì. 11 người đi giữ
+     * nguyên mesh thường.
+     *
+     * ⚠️ Ma trận ĐỌC TỪ `matrixWorld`, sau `updateMatrixWorld(true)`. Không tự
+     * nhân tay: các chi treo trong nhóm khớp lồng nhau (hông → gối, vai →
+     * khuỷu) cộng `root.scale` theo chiều cao từng người, và `poseStand()` còn
+     * nghiêng người ngẫu nhiên. Nhân tay là mời sai tư thế — đúng thứ người
+     * dùng sẽ thấy ngay.
+     *
+     * ⚠️ Gộp TOÀN BỘ chứ không gộp theo cụm, dù batch trải khắp khuôn viên thì
+     * không cắt được tầm nhìn nữa. Lý do là số đo: mỗi người chỉ ~370 tam giác,
+     * 28 người là ~10k — khoảng 1% cảnh. Vẽ tất kể cả sau lưng vẫn rẻ hơn nhiều
+     * so với giữ 527 vật cho CPU duyệt. (Gộp theo cụm chỉ còn 166 batch, tức
+     * bớt được ít hơn hẳn.)
+     */
+    bakeStatic()
+    {
+        const batches = new Map()
+
+        for(const person of this.people)
+        {
+            if(person.mode === 'walk' || person.dead)
+                continue
+
+            person.root.updateMatrixWorld(true)
+
+            const slots = []
+
+            person.root.traverse((object) =>
+            {
+                if(!object.isMesh)
+                    return
+
+                const key = `${object.geometry.uuid}|${object.material.uuid}`
+                let batch = batches.get(key)
+
+                if(!batch)
+                {
+                    batch = { geometry: object.geometry, material: object.material, matrices: [] }
+                    batches.set(key, batch)
+                }
+
+                slots.push({ key, index: batch.matrices.length })
+                batch.matrices.push(object.matrixWorld.clone())
+            })
+
+            person.slots = slots
+            person.baked = true
+
+            // Gỡ khỏi cây cảnh — đây mới là chỗ tiết kiệm. Để nguyên rồi chỉ
+            // đặt `visible = false` thì three.js vẫn đi qua nó mỗi khung hình.
+            this.group.remove(person.root)
+        }
+
+        this.batches = new Map()
+
+        for(const [ key, batch ] of batches)
+        {
+            const mesh = new THREE.InstancedMesh(batch.geometry, batch.material, batch.matrices.length)
+            mesh.name = 'fptuPeople:batch'
+            mesh.castShadow = true
+            mesh.receiveShadow = true
+
+            for(let i = 0; i < batch.matrices.length; i++)
+                mesh.setMatrixAt(i, batch.matrices[i])
+
+            mesh.instanceMatrix.needsUpdate = true
+            this.group.add(mesh)
+
+            this.batches.set(key, { mesh, matrices: batch.matrices })
+        }
+    }
+
+    /**
+     * Trả một người từ instance về mesh thường — gọi khi họ CHẾT.
+     *
+     * Người chết phải NGÃ ĐỔ (xem `update()`), tức ma trận đổi mỗi khung hình
+     * trong ~0,7 giây. Thay vì tự tính lại ma trận instance, cứ trả họ về cây
+     * cảnh và để three.js làm đúng việc của nó. Chết là chuyện hiếm nên cái giá
+     * này không đáng kể, và quan trọng hơn: hoạt ảnh ngã giữ nguyên y hệt.
+     */
+    unbake(person)
+    {
+        if(!person.baked)
+            return
+
+        this.hiddenMatrix ??= new THREE.Matrix4().makeScale(0, 0, 0)
+
+        for(const slot of person.slots)
+        {
+            const batch = this.batches.get(slot.key)
+            batch.mesh.setMatrixAt(slot.index, this.hiddenMatrix)
+            batch.mesh.instanceMatrix.needsUpdate = true
+        }
+
+        person.baked = false
+        this.group.add(person.root)
+    }
+
+    /** Ngược lại của `unbake()` — gọi khi `revive()` dựng người dậy. */
+    rebake(person)
+    {
+        if(person.baked || !person.slots)
+            return
+
+        for(const slot of person.slots)
+        {
+            const batch = this.batches.get(slot.key)
+            batch.mesh.setMatrixAt(slot.index, batch.matrices[slot.index])
+            batch.mesh.instanceMatrix.needsUpdate = true
+        }
+
+        person.baked = true
+        this.group.remove(person.root)
+    }
+
     /**
      * NGƯỜI TRÚNG BOM — bị hất văng ra, ngã sấp rồi nằm im.
      *
@@ -284,6 +412,10 @@ export class FptuPeople
         {
             if(p.dead) continue
             if(Math.hypot(p.root.position.x - x, p.root.position.z - z) > radius) continue
+
+            // Người tĩnh đang nằm trong instance — trả về cây cảnh để hoạt ảnh
+            // ngã chạy bình thường.
+            this.unbake(p)
 
             p.dead = true
             p.deathAge = 0
@@ -310,6 +442,10 @@ export class FptuPeople
             p.root.position.set(p.deathHome.x, p.deathHome.y, p.deathHome.z)
             p.root.rotation.set(0, p.deathHome.rotY, 0)
             p.root.visible = true
+
+            // Người tĩnh quay lại instance. Ma trận cũ vẫn đúng vì `deathHome`
+            // chính là chỗ họ đứng lúc bị gộp.
+            if(p.slots) this.rebake(p)
         }
     }
 

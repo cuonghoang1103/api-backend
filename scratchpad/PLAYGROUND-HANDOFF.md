@@ -1744,6 +1744,115 @@ nó giải lại cây phụ thuộc. Cài lại trước khi chạy bộ kiểm,
 
 ---
 
+# 0p. GỘP INSTANCE CHO NGƯỜI Ở FPTU — 04/09/2026
+
+**4390 → 3863 mesh, bớt 527 (−12%).** Đo A/B cùng một phép đo, thế giới đầy đủ.
+
+## ⚠️ Đường đi tới đây có HAI lần tôi đoán sai — ghi lại để khỏi lặp
+
+**Lần 1: "cắt bóng vật nhỏ".** Nghe hợp lý, đo ra thì sai hẳn. Vật nhỏ
+(< 0,5 đơn vị) đông nhất — 3.047 cái — nhưng chỉ chiếm **5,7% tam giác đổ
+bóng**. Còn chúng LÀ những cái bóng quan trọng nhất: `fptuPeople` 692,
+`chassis001` + `wheelPainted` (**chính chiếc xe người chơi**), `survivalWalker`
+(**người chơi lúc đi bộ**), `fptuSwans` 36. Bỏ đi là mất bóng thấy nhiều nhất
+để đổi lấy gần như không gì. **Đã KHÔNG làm.**
+
+Chi phí bóng thật nằm ở nhóm 1–4 đơn vị (**76% tam giác**) — nhà cửa, cây,
+quái. Cắt nhóm đó thì lộ liễu hơn nữa.
+
+Khung bóng vốn ĐÃ chỉ bao quanh người chơi (`shadowAmplitude =
+view.optimalArea.radius` = 30,6, tức hộp ~61 đơn vị, bám theo tiêu điểm). Chỗ
+đó làm đúng từ đầu, không có gì để vặn.
+
+**Lần 2: "FptuPeople là ca gộp sạch nhất, gần như không bẫy".** Sai hai chỗ:
+`fptuPeople` là **734 mesh / 39 người**, không phải 692 (692 là số VẬT ĐỔ BÓNG
+dưới tên đó — trích nhầm cột); và người ở đây **có khớp và cử động thật**.
+
+## Vì sao chỉ gộp NGƯỜI TĨNH
+
+Đo: **22 đứng · 6 ngồi · 11 đi bộ**. Người đi xoay 8 khớp mỗi khung hình (đùi,
+gối, vai, khuỷu × 2 bên) cộng nhún thân, đi tới, quay đầu — ma trận đổi liên
+tục, gộp instance chỉ chuyển việc tính từ three.js sang tay ta chứ không bớt
+gì. **11 người đi giữ nguyên mesh thường** (207 mesh). 28 người tĩnh = 527 mesh
+gộp thành **38 `InstancedMesh`**.
+
+⚠️ Ma trận ĐỌC TỪ `matrixWorld` sau `updateMatrixWorld(true)`, KHÔNG nhân tay:
+chi treo trong nhóm khớp lồng nhau, cộng `root.scale` theo chiều cao từng
+người, cộng `poseStand()` nghiêng ngẫu nhiên. Nhân tay là mời sai tư thế.
+
+⚠️ **Gỡ gốc khỏi cây cảnh** (`group.remove(person.root)`), không chỉ đặt
+`visible = false`. Ẩn thì three.js vẫn đi qua nó mỗi khung hình — chỗ tiết kiệm
+nằm ở việc nó không còn trong cây nữa.
+
+## ⚠️ Gộp TOÀN BỘ hay theo CỤM — chọn bằng số đo
+
+Gộp toàn bộ ⇒ 38 batch, nhưng batch trải khắp khuôn viên nên **không cắt được
+tầm nhìn nữa**, vẽ tất kể cả sau lưng. Gộp theo cụm vị trí ⇒ 166 batch, cắt
+tốt nhưng bớt được ít hơn hẳn.
+
+Chọn **gộp toàn bộ**, vì đo ra mỗi người chỉ ~370 tam giác ⇒ 28 người là ~10k,
+khoảng **1% cảnh**. Vẽ thừa 1% rẻ hơn nhiều so với giữ 527 vật cho CPU duyệt.
+
+Cái giá đo được: **draw call 287 → 303 (+16)**. Đổi 16 draw call lấy 527 vật là
+có lợi ở quy mô này — 300 draw call chưa phải nút thắt.
+
+## CHẾT và HỒI SINH — không tự tính ma trận, trả về cây cảnh
+
+Người chết phải NGÃ ĐỔ (ma trận đổi mỗi khung trong ~0,7 giây). Thay vì tự tính
+lại ma trận instance, `killAround()` gọi `unbake(p)`: thu instance về tỉ lệ 0
+rồi **trả gốc về cây cảnh**, để `update()` chạy hoạt ảnh ngã y như cũ.
+`revive()` gọi `rebake(p)` làm ngược lại. Chết là chuyện hiếm nên cái giá không
+đáng kể, đổi lại hoạt ảnh giữ nguyên tuyệt đối.
+
+Đã kiểm vòng tròn: gộp 3797 mesh → giết 3 người thì +38 mesh (2 người tĩnh quay
+về cây cảnh) → hồi sinh về đúng 3797, 28 gộp, 0 chết, 0 lỗi JS.
+
+## ⚠️ CHỨNG MINH "KHÔNG ĐỔI MỘT ĐIỂM ẢNH" — đừng so ảnh, so MA TRẬN
+
+So hai ảnh chụp ra **95% điểm ảnh khác nhau** — nhưng đó là phép so SAI: giữa
+hai ảnh có 6 giây trôi qua, trời đổi màu, 11 người đi bộ bước tiếp, nước gợn.
+Cảnh sống thì không so ảnh được.
+
+Phép chứng minh đúng và mạnh hơn: so từng ma trận instance với `matrixWorld`
+của mesh gốc. Kết quả: **527/527 ma trận, sai lệch lớn nhất = 0**, cùng đối
+tượng `geometry`, cùng đối tượng `material`, không thiếu slot nào. Cùng hình +
+cùng vật liệu + cùng ma trận ⇒ **cùng điểm ảnh theo định nghĩa**.
+
+## ⚠️ LỖI CÓ SẴN phát hiện lúc đo: `Whispers` chết câm vì `NaN`
+
+`Whispers.js:16` viết `parseInt(import.meta.env.VITE_WHISPERS_COUNT)`, mà biến
+đó **không được khai ở bất kỳ tệp `.env` nào** ⇒ `parseInt(undefined)` = `NaN`
+⇒ `new Float32Array(NaN)` rỗng và `new InstancedMesh(..., NaN)`. Cả tính năng
+lời nhắn của khách (528 dòng) không chạy.
+
+**CHƯA sửa, và cố ý.** Whispers gắn với `Server.js` — vốn cũng đang ngủ vì
+`VITE_SERVER_URL` không được đặt. Bật Whispers lên là bật một tính năng cần máy
+chủ; đó là quyết định của người chủ, không phải việc dọn dẹp.
+
+Đã kiểm bằng `git stash` rằng lỗi này CÓ TRƯỚC đợt gộp instance.
+
+⚠️ Nó còn làm `check-perf` in ra `NaN` cho mọi con số — một `NaN` lọt vào là bộ
+kiểm mất tác dụng mà vẫn báo xanh. Nay `check-perf` coi `count` không hợp lệ
+là 0.
+
+## ⚠️ `check-perf` phải TỰ XIN model nạp-khi-cần
+
+Sau đợt hoãn tải, `check-perf` đo một thế giới THIẾU: thành phố 58 mesh thay vì
+61+59 instanced, đảo quái 57 thay vì 207, tàu 191 thay vì 228 — và vẫn báo
+xanh. Nay nó gọi `requestModel()` cho tàu và thành phố rồi mới đo.
+
+**Quy tắc, nhắc lại lần thứ tư: mỗi lần chuyển một tài nguyên sang nạp-khi-cần,
+phải rà lại MỌI bộ kiểm chạm tới nó.**
+
+## Việc tiếp theo, nếu muốn đi xa hơn
+
+`fptuCampus` còn **1.918 mesh phẳng, tĩnh** — 50% cảnh, cùng hình dạng mà đảo
+thành phố từng có trước khi gộp (3035 → 61). Đó mới là cú lớn. Khó ở chỗ phần
+lớn là mảnh của hệ PHÁ HUỶ, mỗi mảnh phải gỡ được riêng — nhưng khuôn đã có sẵn
+hai chỗ: `Bricks.consume()` (thu tỉ lệ về 0) và `unbake()` vừa viết ở đây.
+
+---
+
 # 1. MƯỜI BA BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
 
 Cần dev server sống: `cd playground-3d && npm run dev` (xem mục 4).

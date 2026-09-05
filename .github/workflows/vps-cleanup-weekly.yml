@@ -59,6 +59,27 @@ jobs:
             fi
           '
 
+      - name: Prune ẢNH DEPLOY CŨ (giữ 3 tag mới nhất mỗi kho)
+        run: |
+          # ⚠️ `docker image prune -f` ở bước trên CHỈ xoá ảnh MỒ CÔI (không
+          # tag). Mỗi lần `deploy-nha.sh` chạy lại để lại một cặp ảnh CÓ TAG
+          # `ghcr.io/…-backend:<commit>` + `…-frontend:<commit>` (~3,4GB/cặp)
+          # mà không gì dọn.
+          #
+          # Đo thật 05/09/2026: đĩa 97% (còn 1,6GB), job này chạy XANH và thu
+          # về ĐÚNG 0B — vì 40 ảnh chiếm 27,66GB đều CÓ TAG, và cả 40 đều mới
+          # hơn 15 giờ nên lọc theo tuổi cũng vô dụng. Xoá 34 tag cũ: 1,7GB →
+          # 18GB trống.
+          #
+          # Giữ 3 tag mới nhất mỗi kho làm đường LÙI NHANH khi tráo trúng ảnh
+          # chết (~40 giây `docker tag` thay vì dựng lại 15 phút).
+          for repo in ghcr.io/${{ github.repository_owner }}/api-backend-backend \
+                      ghcr.io/${{ github.repository_owner }}/api-backend-frontend; do
+            echo "=== $repo ==="
+            ssh vps "docker images --format '{{.Repository}}:{{.Tag}}\t{{.CreatedAt}}' $repo \
+              | sort -k2 -r | tail -n +4 | cut -f1 | xargs -r docker rmi" 2>&1 | tail -3
+          done
+
       - name: Truncate container logs > 200MB
         run: |
           echo "=== Truncating oversized logs ==="

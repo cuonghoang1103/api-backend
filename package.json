@@ -51,7 +51,8 @@
     "eval:cv-linter": "tsx src/services/cv/rules/__eval__/run.ts",
     "eval:cv-fabrication": "tsx src/services/cv/rules/__eval__/run-fabrication.ts",
     "eval:cv-ai": "tsx src/services/cv/rules/__eval__/run-ai-eval.ts",
-    "gen:codebase-stats": "node scripts/gen-codebase-stats.mjs"
+    "gen:codebase-stats": "node scripts/gen-codebase-stats.mjs",
+    "ielts:stats": "tsx scripts/gen-ielts-stats.mts"
   },
   "keywords": [
     "portfolio",

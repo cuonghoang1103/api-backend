@@ -19,7 +19,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Flame, RotateCcw, Check, X, Lightbulb, CalendarDays, Sparkles } from 'lucide-react';
 import { LIFE_EXERCISES } from './data/stage1';
-import { STAGES } from './data/bundles';
+import { loadAllStages, type StageBundle } from './data/bundles';
 import type { Exercise } from './data/types';
 import { isCorrect } from './check';
 
@@ -86,6 +86,8 @@ function wordToExercise(w: { en: string; vi: string; ipa: string }): Exercise {
 }
 
 export default function DailyView() {
+  /** Nội dung năm chặng, nạp động khi tab này mở. Rỗng = đang tải. */
+  const [stages, setStages] = useState<StageBundle[]>([]);
   const [today, setToday] = useState<string | null>(null);
   const [st, setSt] = useState<Streak>(EMPTY);
   const [hydrated, setHydrated] = useState(false);
@@ -108,6 +110,18 @@ export default function DailyView() {
   }, []);
 
   /**
+   * Tab này là tab DUY NHẤT (cùng Tra cứu) thật sự cần nội dung của mọi chặng,
+   * nên nó tự nạp lấy thay vì nhận qua prop. `DailyView` đã là tab tải theo
+   * yêu cầu, nên chi phí nạp năm chặng chỉ phát sinh khi người dùng bấm vào đây
+   * — chứ không nằm trong gói đầu của cả trang như trước.
+   */
+  useEffect(() => {
+    let alive = true;
+    loadAllStages().then((all) => { if (alive) setStages(all); });
+    return () => { alive = false; };
+  }, []);
+
+  /**
    * 15 câu của hôm nay: 6 từ vựng + 6 ngữ pháp + 3 đời sống.
    *
    * Gộp từ MỌI chặng đã soạn, không chỉ chặng đang xem. Lý do: mục đích của
@@ -115,16 +129,16 @@ export default function DailyView() {
    * dung chặng cũ — nếu chỉ ôn chặng hiện tại thì chặng 1 rơi rụng dần.
    */
   const items = useMemo<Exercise[]>(() => {
-    if (!today) return [];
+    if (!today || stages.length === 0) return [];
     const rnd = seeded(`${today}#${variant}`);
-    const words = STAGES.flatMap((s) => s.allWords);
-    const exercises = STAGES.flatMap((s) => s.allExercises);
+    const words = stages.flatMap((s) => s.allWords);
+    const exercises = stages.flatMap((s) => s.allExercises);
     return [
       ...pickSome(words, 6, rnd).map(wordToExercise),
       ...pickSome(exercises, 6, rnd),
       ...pickSome(LIFE_EXERCISES, 3, rnd),
     ];
-  }, [today, variant]);
+  }, [today, variant, stages]);
 
   const doneCount = Object.keys(checked).length;
   const score = items.filter((ex, i) => checked[i] && isCorrect(answers[i] ?? '', ex.answer, ex.alt)).length;
@@ -172,7 +186,9 @@ export default function DailyView() {
     });
   }, [today, st.days]);
 
-  if (!hydrated || !today) {
+  // `items.length === 0` cũng là trạng thái đang tải: bộ câu hỏi chỉ dựng được
+  // sau khi năm chặng về, mà chúng nạp động ở effect phía trên.
+  if (!hydrated || !today || items.length === 0) {
     return <div className="h-40 rounded-2xl border border-white/10 bg-white/[0.02] animate-pulse" />;
   }
 

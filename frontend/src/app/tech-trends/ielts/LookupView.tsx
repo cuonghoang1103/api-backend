@@ -18,12 +18,12 @@
  * "tu vung" vẫn ra "từ vựng". Không bỏ dấu thì người dùng phải gõ đúng dấu
  * mới tìm được, mà lúc đang học thì không ai gõ đúng dấu.
  */
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Search, ChevronDown, BookOpen, GraduationCap, ListChecks, PenLine, Mic,
   Scale, Calculator, Clock, ShieldCheck, Link2, Link as LinkIcon,
 } from 'lucide-react';
-import type { StageBundle } from './data/bundles';
+import { loadAllStages, type StageBundle } from './data/bundles';
 import {
   BAND_CRITERIA, SCORE_TABLES, ROUNDING_NOTES, TEST_FORMAT,
   PROOF_CHECKLIST, LINKERS, OFFICIAL_LINKS,
@@ -149,10 +149,25 @@ function Section({
 
 /* ─────────────────── view ─────────────────── */
 
-export default function LookupView({ stages }: { stages: StageBundle[] }) {
+export default function LookupView() {
   const [q, setQ] = useState('');
   const [kind, setKind] = useState<'Tất cả' | HitKind>('Tất cả');
   const [open, setOpen] = useState<Record<string, boolean>>({ band: true });
+
+  /**
+   * Tra cứu là một trong hai tab thật sự cần nội dung MỌI chặng (tab kia là
+   * Luyện mỗi ngày), nên nó tự nạp thay vì nhận qua prop. Vì đây đã là tab tải
+   * theo yêu cầu, chi phí nạp năm chặng chỉ phát sinh khi có người bấm vào.
+   *
+   * Sổ tay bên dưới (mô tả band, quy đổi điểm, checklist) KHÔNG phụ thuộc dữ
+   * liệu chặng nên vẫn hiện ngay, không phải chờ.
+   */
+  const [stages, setStages] = useState<StageBundle[]>([]);
+  useEffect(() => {
+    let alive = true;
+    loadAllStages().then((all) => { if (alive) setStages(all); });
+    return () => { alive = false; };
+  }, []);
 
   const index = useMemo(() => buildIndex(stages), [stages]);
 
@@ -182,9 +197,10 @@ export default function LookupView({ stages }: { stages: StageBundle[] }) {
   return (
     <div>
       <p className="text-sm text-slate-400 leading-relaxed mb-4 rounded-xl border border-sky-500/25 bg-sky-500/[0.06] p-3">
-        Tra cứu <b className="text-slate-200">xuyên cả năm chặng</b>: gõ một từ để tìm nó trong {index.length.toLocaleString('vi-VN')} mục
-        từ vựng, bài học, dạng câu hỏi và cụm mẫu. Bên dưới ô tìm là <b className="text-slate-200">sổ tay tra nhanh</b> —
-        mô tả band, bảng quy đổi điểm, cấu trúc đề và checklist soát bài. Gõ không dấu vẫn tìm được.
+        Tra cứu <b className="text-slate-200">xuyên cả năm chặng</b>: gõ một từ để tìm nó trong{' '}
+        {stages.length === 0 ? '…' : index.length.toLocaleString('vi-VN')} mục từ vựng, bài học, dạng câu hỏi
+        và cụm mẫu. Bên dưới ô tìm là <b className="text-slate-200">sổ tay tra nhanh</b> — mô tả band, bảng
+        quy đổi điểm, cấu trúc đề và checklist soát bài. Gõ không dấu vẫn tìm được.
       </p>
 
       {/* Ô tìm */}
@@ -219,9 +235,11 @@ export default function LookupView({ stages }: { stages: StageBundle[] }) {
           </div>
 
           <p className="text-xs text-slate-500 mb-3">
-            {hits.length === 0
-              ? 'Không tìm thấy mục nào khớp.'
-              : `${hits.length} kết quả${hits.length === 60 ? ' đầu tiên' : ''}.`}
+            {stages.length === 0
+              ? 'Đang nạp nội dung năm chặng…'
+              : hits.length === 0
+                ? 'Không tìm thấy mục nào khớp.'
+                : `${hits.length} kết quả${hits.length === 60 ? ' đầu tiên' : ''}.`}
           </p>
 
           <div className="space-y-2 mb-8">

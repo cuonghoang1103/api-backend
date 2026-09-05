@@ -1,74 +1,40 @@
 /**
- * Gom mỗi chặng thành MỘT bundle cùng hình dạng, để các view dùng chung.
+ * Nạp nội dung MỘT chặng theo yêu cầu, thay vì gom cả năm chặng vào gói đầu.
  *
- * Trước khi có file này, mọi view import thẳng từ `./data/stage1` nên không
- * thể hiện được chặng 2 mà không nhân đôi component. Nay view nhận `d:
- * StageBundle` qua prop và không cần biết mình đang hiện chặng nào.
+ * TRƯỚC (tới 09/2026): file này `import` thẳng cả năm `./stageN`, rồi dựng sẵn
+ * `STAGES` là một mảng hằng. Mọi view lấy dữ liệu qua prop nên code rất gọn —
+ * nhưng cái giá nằm ở chỗ không nhìn thấy: `IeltsClient` import `STAGES`, nên
+ * **1,23 MB nội dung năm chặng đi vào gói JS đầu tiên**, kể cả với người chỉ mở
+ * tab Lộ trình rồi đóng.
  *
- * Hai điểm cần giữ mỗi khi thêm một chặng (đã áp dụng cho cả chặng 3, 4 và 5):
+ * NAY: mỗi chặng là một `import()` động ⇒ webpack cắt thành năm chunk riêng, và
+ * trình duyệt chỉ tải chunk của chặng đang xem. Phần khung trang (thanh chuyển
+ * chặng, badge trên tab, số ở đầu trang) đọc từ hai file NHẸ nạp sẵn:
+ * `stage-meta.ts` (chuỗi gõ tay) và `stats.generated.ts` (số do máy sinh).
  *
- *  - **Khoá localStorage phải KHÁC nhau giữa các chặng.** Tiến độ bài học và
- *    từ vựng của chặng 1 không được đè lên chặng 2 — người học có thể quay lại
- *    ôn chặng cũ bất cứ lúc nào và tiến độ hai chặng là hai chuyện riêng.
- *  - **Trường chỉ có ở một chặng thì để optional** (`questionTypes` chỉ có ở
- *    chặng 2 trở đi, `life`/`exam` là nội dung dùng chung cho cả khoá nên
- *    không nằm trong bundle).
+ * Vì thế badge và con số KHÔNG hiện trễ — chỉ nội dung tab mới phải chờ.
+ *
+ * ⚠️ HAI ĐIỀU PHẢI GIỮ KHI THÊM CHẶNG MỚI:
+ *
+ *  1. **Khoá localStorage phải KHÁC nhau giữa các chặng** (khai ở `stage-meta.ts`).
+ *     Tiến độ chặng 1 không được đè chặng 2 — người học quay lại ôn chặng cũ bất
+ *     cứ lúc nào, và tiến độ hai chặng là hai chuyện riêng.
+ *  2. **Chạy `npm run ielts:stats`** sau khi thêm/bớt nội dung. Quên thì
+ *     `loadStage()` bên dưới kêu `console.error` ở dev ngay lần mở chặng đó —
+ *     xem phần "chốt chống lệch số".
+ *
+ * Trường chỉ có ở một chặng thì để optional (`questionTypes` chỉ có từ chặng 2).
  */
 import type {
   LessonUnit, VocabTopic, VocabWord, ReadingPassage, ListeningExercise,
   ListeningSource, WritingTask, SpeakingTopic, Exercise, QuestionTypeGuide,
 } from './types';
-import {
-  UNITS, VOCAB_TOPICS, ALL_WORDS, READINGS, LISTENINGS, LISTENING_SOURCES,
-  WRITINGS, SPEAKINGS, SPEAKING_RULES, EXERCISES_BY_LESSON, ALL_EXERCISES,
-  STAGE1_STATS,
-} from './stage1';
-import {
-  UNITS2, VOCAB2_TOPICS, ALL_WORDS2, READINGS2, LISTENINGS2, LISTENING_SOURCES2,
-  WRITINGS2, SPEAKINGS2, SPEAKING_RULES2, EXERCISES2_BY_LESSON, ALL_EXERCISES2,
-  STAGE2_STATS, QUESTION_TYPES, STRATEGY_NOTES,
-} from './stage2';
-import {
-  UNITS3, VOCAB3_TOPICS, ALL_WORDS3, READINGS3, LISTENINGS3, LISTENING_SOURCES3,
-  WRITINGS3, SPEAKINGS3, SPEAKING_RULES3, EXERCISES3_BY_LESSON, ALL_EXERCISES3,
-  STAGE3_STATS,
-} from './stage3';
-import {
-  UNITS4, VOCAB4, ALL_WORDS4, READINGS4, LISTENINGS4, LISTENING_SOURCES4,
-  WRITINGS4, SPEAKINGS4, SPEAKING_RULES4, EXERCISES4_BY_LESSON, ALL_EXERCISES4,
-  STAGE4_STATS,
-} from './stage4';
-import {
-  UNITS5, VOCAB5_TOPICS, ALL_WORDS5, READINGS5, LISTENINGS5, LISTENING_SOURCES5,
-  WRITINGS5, SPEAKINGS5, SPEAKING_RULES5, EXERCISES5_BY_LESSON, ALL_EXERCISES5,
-  STAGE5_STATS,
-} from './stage5';
+import { type StageId, type StageMeta, type StageStats, metaFor } from './stage-meta';
+import { STAGE_STATS } from './stats.generated';
 
-export interface StageStats {
-  lessons: number;
-  units: number;
-  words: number;
-  topics: number;
-  readings: number;
-  readingQuestions: number;
-  listenings: number;
-  listeningQuestions: number;
-  sources: number;
-  writings: number;
-  speakingTopics: number;
-  speakingQuestions: number;
-  grammarPoints: number;
-  exercises: number;
-  gradedTotal: number;
-}
+export type { StageId, StageStats } from './stage-meta';
 
-export interface StageBundle {
-  id: 'stage1' | 'stage2' | 'stage3' | 'stage4' | 'stage5';
-  /** Nhãn ngắn hiện trên nút chuyển chặng. */
-  label: string;
-  band: string;
-  /** Một dòng nói chặng này dạy gì — hiện dưới bộ chuyển chặng. */
-  focus: string;
+export interface StageBundle extends StageMeta {
   units: LessonUnit[];
   vocabTopics: VocabTopic[];
   allWords: VocabWord[];
@@ -84,125 +50,154 @@ export interface StageBundle {
   questionTypes?: QuestionTypeGuide[];
   strategyNotes?: { title: string; body: string }[];
   stats: StageStats;
-  /** Khoá localStorage riêng cho từng chặng. */
-  keys: { lessonDone: string; vocabKnown: string };
 }
 
-export const STAGE1: StageBundle = {
-  id: 'stage1',
-  label: 'Chặng 1',
-  band: 'Band 0 → 4.0',
-  focus: 'Xây nền: âm, câu cơ bản, 1.500 từ nền. Chưa đụng đề thi thật.',
-  units: UNITS,
-  vocabTopics: VOCAB_TOPICS,
-  allWords: ALL_WORDS,
-  readings: READINGS,
-  listenings: LISTENINGS,
-  sources: LISTENING_SOURCES,
-  writings: WRITINGS,
-  speakings: SPEAKINGS,
-  speakingRules: SPEAKING_RULES,
-  exercisesByLesson: EXERCISES_BY_LESSON,
-  allExercises: ALL_EXERCISES,
-  stats: STAGE1_STATS,
-  keys: { lessonDone: 'ielts:s1:lessons:v1', vocabKnown: 'ielts:s1:vocab-known:v1' },
+/** Phần NỘI DUNG của một chặng — tất cả trừ phần meta nhẹ đã có sẵn. */
+type StageContent = Omit<StageBundle, keyof StageMeta>;
+
+/**
+ * Mỗi chặng một `import()` viết TƯỜNG MINH, rồi ánh xạ export sang `StageContent`
+ * ngay tại chỗ. Hai lý do, cả hai đều đã suýt cắn:
+ *
+ *  1. **webpack chỉ cắt được chunk khi đường dẫn là hằng lúc build.** Viết
+ *     ``import(`./stage${n}`)`` thì nó phải gộp cả thư mục vào một chunk — mất
+ *     sạch tác dụng của việc tách.
+ *  2. **Tên export giữa các chặng KHÔNG nhất quán**: `VOCAB_TOPICS` (chặng 1),
+ *     `VOCAB2_TOPICS`, `VOCAB3_TOPICS`, `VOCAB4` (không có `_TOPICS`),
+ *     `VOCAB5_TOPICS`. Ghép tên bằng chuỗi thì lệch một chặng là `undefined`
+ *     lặng lẽ chạy tiếp tới lúc render mới nổ. Viết thẳng ra thế này thì `tsc`
+ *     bắt được ngay tại dòng sai.
+ */
+const LOADERS: Record<StageId, () => Promise<StageContent>> = {
+  stage1: () => import('./stage1').then((m) => ({
+    units: m.UNITS,
+    vocabTopics: m.VOCAB_TOPICS,
+    allWords: m.ALL_WORDS,
+    readings: m.READINGS,
+    listenings: m.LISTENINGS,
+    sources: m.LISTENING_SOURCES,
+    writings: m.WRITINGS,
+    speakings: m.SPEAKINGS,
+    speakingRules: m.SPEAKING_RULES,
+    exercisesByLesson: m.EXERCISES_BY_LESSON,
+    allExercises: m.ALL_EXERCISES,
+    stats: m.STAGE1_STATS,
+  })),
+  stage2: () => import('./stage2').then((m) => ({
+    units: m.UNITS2,
+    vocabTopics: m.VOCAB2_TOPICS,
+    allWords: m.ALL_WORDS2,
+    readings: m.READINGS2,
+    listenings: m.LISTENINGS2,
+    sources: m.LISTENING_SOURCES2,
+    writings: m.WRITINGS2,
+    speakings: m.SPEAKINGS2,
+    speakingRules: m.SPEAKING_RULES2,
+    exercisesByLesson: m.EXERCISES2_BY_LESSON,
+    allExercises: m.ALL_EXERCISES2,
+    questionTypes: m.QUESTION_TYPES,
+    strategyNotes: m.STRATEGY_NOTES,
+    stats: m.STAGE2_STATS,
+  })),
+  stage3: () => import('./stage3').then((m) => ({
+    units: m.UNITS3,
+    vocabTopics: m.VOCAB3_TOPICS,
+    allWords: m.ALL_WORDS3,
+    readings: m.READINGS3,
+    listenings: m.LISTENINGS3,
+    sources: m.LISTENING_SOURCES3,
+    writings: m.WRITINGS3,
+    speakings: m.SPEAKINGS3,
+    speakingRules: m.SPEAKING_RULES3,
+    exercisesByLesson: m.EXERCISES3_BY_LESSON,
+    allExercises: m.ALL_EXERCISES3,
+    stats: m.STAGE3_STATS,
+  })),
+  stage4: () => import('./stage4').then((m) => ({
+    units: m.UNITS4,
+    vocabTopics: m.VOCAB4,
+    allWords: m.ALL_WORDS4,
+    readings: m.READINGS4,
+    listenings: m.LISTENINGS4,
+    sources: m.LISTENING_SOURCES4,
+    writings: m.WRITINGS4,
+    speakings: m.SPEAKINGS4,
+    speakingRules: m.SPEAKING_RULES4,
+    exercisesByLesson: m.EXERCISES4_BY_LESSON,
+    allExercises: m.ALL_EXERCISES4,
+    stats: m.STAGE4_STATS,
+  })),
+  stage5: () => import('./stage5').then((m) => ({
+    units: m.UNITS5,
+    vocabTopics: m.VOCAB5_TOPICS,
+    allWords: m.ALL_WORDS5,
+    readings: m.READINGS5,
+    listenings: m.LISTENINGS5,
+    sources: m.LISTENING_SOURCES5,
+    writings: m.WRITINGS5,
+    speakings: m.SPEAKINGS5,
+    speakingRules: m.SPEAKING_RULES5,
+    exercisesByLesson: m.EXERCISES5_BY_LESSON,
+    allExercises: m.ALL_EXERCISES5,
+    stats: m.STAGE5_STATS,
+  })),
 };
 
-export const STAGE2: StageBundle = {
-  id: 'stage2',
-  label: 'Chặng 2',
-  band: 'Band 4.0 → 5.5',
-  focus: 'Vào đề thi thật: học DẠNG câu hỏi, paraphrase, và khung viết/nói đủ 5.5.',
-  units: UNITS2,
-  vocabTopics: VOCAB2_TOPICS,
-  allWords: ALL_WORDS2,
-  readings: READINGS2,
-  listenings: LISTENINGS2,
-  sources: LISTENING_SOURCES2,
-  writings: WRITINGS2,
-  speakings: SPEAKINGS2,
-  speakingRules: SPEAKING_RULES2,
-  exercisesByLesson: EXERCISES2_BY_LESSON,
-  allExercises: ALL_EXERCISES2,
-  questionTypes: QUESTION_TYPES,
-  strategyNotes: STRATEGY_NOTES,
-  stats: STAGE2_STATS,
-  keys: { lessonDone: 'ielts:s2:lessons:v1', vocabKnown: 'ielts:s2:vocab-known:v1' },
-};
+/** Đã nạp rồi thì dùng lại — đổi qua đổi lại giữa các chặng không tải lại chunk. */
+const cache = new Map<StageId, StageBundle>();
+/** Đang nạp dở thì dùng chung một promise, tránh hai lần bấm tải hai lần. */
+const inFlight = new Map<StageId, Promise<StageBundle>>();
 
-export const STAGE3: StageBundle = {
-  id: 'stage3',
-  label: 'Chặng 3',
-  band: 'Band 5.5 → 6.5',
-  focus: 'Chặng kẹt lâu nhất, gần như luôn vì Writing không ai sửa. Trọng tâm: tự chấm và tự sửa bài.',
-  units: UNITS3,
-  vocabTopics: VOCAB3_TOPICS,
-  allWords: ALL_WORDS3,
-  readings: READINGS3,
-  listenings: LISTENINGS3,
-  sources: LISTENING_SOURCES3,
-  writings: WRITINGS3,
-  speakings: SPEAKINGS3,
-  speakingRules: SPEAKING_RULES3,
-  exercisesByLesson: EXERCISES3_BY_LESSON,
-  allExercises: ALL_EXERCISES3,
-  stats: STAGE3_STATS,
-  keys: { lessonDone: 'ielts:s3:lessons:v1', vocabKnown: 'ielts:s3:vocab-known:v1' },
-};
+/**
+ * Chốt chống lệch số: `stats.generated.ts` là ảnh chụp, dữ liệu mới là sự thật.
+ * Khi chặng được nạp thật, ta có cả hai trong tay — so ngay tại đây là chỗ rẻ
+ * nhất và sớm nhất để phát hiện ai đó sửa nội dung mà quên chạy lại generator.
+ *
+ * Chỉ kêu ở môi trường dev: trên production con số lệch vài đơn vị không đáng
+ * làm bẩn console của người học, mà cũng không sửa được gì ở đó nữa.
+ */
+function warnIfStale(id: StageId, real: StageStats): void {
+  if (process.env.NODE_ENV === 'production') return;
+  const snapshot = STAGE_STATS[id];
+  // Duyệt theo khoá của ẢNH CHỤP, không theo khoá của dữ liệu thật: vài chặng
+  // có thêm số riêng (`situations`, `examBlocks`…) mà ảnh chụp cố ý không giữ,
+  // duyệt theo dữ liệu thật thì mọi chặng đó đều báo lệch giả.
+  const off = (Object.keys(snapshot) as (keyof StageStats)[])
+    .filter((k) => real[k] !== snapshot[k])
+    .map((k) => `${k}: sinh ${snapshot[k]} ≠ thật ${real[k]}`);
+  if (off.length > 0) {
+    console.error(
+      `[ielts] stats.generated.ts đã lệch với ${id}. Chạy: npm run ielts:stats\n  ${off.join('\n  ')}`,
+    );
+  }
+}
 
-export const STAGE4: StageBundle = {
-  id: 'stage4',
-  label: 'Chặng 4',
-  band: 'Band 6.5 → 7.5',
-  focus: 'Không học kiến thức mới nữa — chặng này ăn nhau ở việc GIẢM LỖI và dùng từ chính xác.',
-  units: UNITS4,
-  vocabTopics: VOCAB4,
-  allWords: ALL_WORDS4,
-  readings: READINGS4,
-  listenings: LISTENINGS4,
-  sources: LISTENING_SOURCES4,
-  writings: WRITINGS4,
-  speakings: SPEAKINGS4,
-  speakingRules: SPEAKING_RULES4,
-  exercisesByLesson: EXERCISES4_BY_LESSON,
-  allExercises: ALL_EXERCISES4,
-  stats: STAGE4_STATS,
-  keys: { lessonDone: 'ielts:s4:lessons:v1', vocabKnown: 'ielts:s4:vocab-known:v1' },
-};
+/** Nạp trọn nội dung một chặng. Gọi lần hai trả về ngay từ cache. */
+export function loadStage(id: StageId): Promise<StageBundle> {
+  const hit = cache.get(id);
+  if (hit) return Promise.resolve(hit);
 
-export const STAGE5: StageBundle = {
-  id: 'stage5',
-  label: 'Chặng 5',
-  band: 'Band 7.5 → 8.0',
-  focus: 'Chặng KHÔNG có sách. Chỉ còn bốn việc: thuộc band descriptors · có người chấm bài · nguồn vào khó hơn đề thi · nhật ký lỗi.',
-  units: UNITS5,
-  vocabTopics: VOCAB5_TOPICS,
-  allWords: ALL_WORDS5,
-  readings: READINGS5,
-  listenings: LISTENINGS5,
-  sources: LISTENING_SOURCES5,
-  writings: WRITINGS5,
-  speakings: SPEAKINGS5,
-  speakingRules: SPEAKING_RULES5,
-  exercisesByLesson: EXERCISES5_BY_LESSON,
-  allExercises: ALL_EXERCISES5,
-  stats: STAGE5_STATS,
-  keys: { lessonDone: 'ielts:s5:lessons:v1', vocabKnown: 'ielts:s5:vocab-known:v1' },
-};
+  const pending = inFlight.get(id);
+  if (pending) return pending;
 
-export const STAGES: StageBundle[] = [STAGE1, STAGE2, STAGE3, STAGE4, STAGE5];
+  const p = LOADERS[id]().then((content) => {
+    const bundle: StageBundle = { ...metaFor(id), ...content };
+    warnIfStale(id, bundle.stats);
+    cache.set(id, bundle);
+    inFlight.delete(id);
+    return bundle;
+  });
 
-/** Số gộp cả hai chặng — dùng cho phần đầu trang. */
-const sum = (pick: (s: StageBundle) => number): number => STAGES.reduce((n, s) => n + pick(s), 0);
+  inFlight.set(id, p);
+  return p;
+}
 
-export const TOTAL_STATS = {
-  lessons: sum((s) => s.stats.lessons),
-  words: sum((s) => s.stats.words),
-  readings: sum((s) => s.stats.readings),
-  listenings: sum((s) => s.stats.listenings),
-  writings: sum((s) => s.stats.writings),
-  graded: sum((s) => s.stats.gradedTotal),
-  exercises: sum((s) => s.stats.exercises),
-  /** Cẩm nang dạng câu hỏi mới có từ chặng 2 — đếm qua bundle, không qua stats. */
-  questionTypes: STAGE2.questionTypes?.length ?? 0,
-};
+/**
+ * Nạp cả năm chặng. CHỈ dùng cho hai tab thật sự cần trộn nội dung mọi chặng —
+ * "Luyện mỗi ngày" (bốc ngẫu nhiên xuyên chặng) và "Tra cứu" (tìm xuyên chặng).
+ * Cả hai đều là tab tải theo yêu cầu, nên chi phí này chỉ phát sinh khi người
+ * dùng thật sự bấm vào chúng.
+ */
+export function loadAllStages(): Promise<StageBundle[]> {
+  return Promise.all((Object.keys(LOADERS) as StageId[]).map(loadStage));
+}

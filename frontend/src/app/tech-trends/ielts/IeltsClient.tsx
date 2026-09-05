@@ -15,12 +15,12 @@
  * không phải sửa component nào.
  *
  * Hai tab KHÔNG gắn với chặng nào: **Tra cứu** (tìm xuyên cả năm chặng + sổ tay
- * band descriptors, quy đổi điểm, checklist soát bài) và **Học cùng AI** (chấm
- * Viết/Nói + hỏi gia sư). Vì thế `LookupView` nhận cả mảng `STAGES` chứ không
- * nhận `d`, và cả hai được loại khỏi dòng chú thích "nội dung thuộc chặng…"
- * ngay dưới thanh tab.
+ * band descriptors, quy đổi điểm, checklist soát bài) và **Luyện mỗi ngày**
+ * (bốc bài xuyên chặng). Cả hai tự nạp lấy dữ liệu qua `loadAllStages()` bên
+ * trong chunk của chính nó, và cả hai được loại khỏi dòng chú thích "nội dung
+ * thuộc chặng…" ngay dưới thanh tab.
  */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import {
@@ -28,8 +28,9 @@ import {
   Flame, Briefcase, ClipboardList, ListChecks, Keyboard, Search, Sparkles,
 } from 'lucide-react';
 import { IELTS_STATS } from './data/roadmap';
-import { STAGES, TOTAL_STATS, type StageBundle } from './data/bundles';
-import { TYPING_PASSAGES } from './data/typing';
+import { loadStage, type StageBundle } from './data/bundles';
+import { STAGE_META, type StageMeta } from './data/stage-meta';
+import { STAGE_STATS, STAGE_QUESTION_TYPES, TYPING_COUNTS, TOTAL_STATS } from './data/stats.generated';
 // Hook dùng chung với khoá Tiếng Anh Giao Tiếp — chỉ đọc to một câu bằng
 // giọng en-US của trình duyệt, không kéo theo phần nào của luồng phỏng vấn.
 import { useSpeak } from '../tieng-anh-giao-tiep/useSpeak';
@@ -49,10 +50,11 @@ import RoadmapTab from './RoadmapTab';
  * + cả họ `micromark`, mà chỉ một tab dùng. Trước khi tách, mọi người mở trang
  * đều tải chỗ đó dù không bao giờ bấm vào tab AI.
  *
- * ⚠️ Việc này KHÔNG tách được dữ liệu bài học. `STAGES` nằm ngay trong file này
- * (thanh chuyển chặng cần nhãn, và badge trên tab đọc `d.stats`), nên toàn bộ
- * nội dung năm chặng vẫn ở gói đầu. Muốn tách nốt phần đó thì phải cho `bundles.ts`
- * nạp theo chặng — đổi lớn hơn và làm badge hiện trễ, nên để riêng.
+ * Dữ liệu bài học cũng đã tách: `bundles.ts` nạp TỪNG chặng bằng `import()` động
+ * (`loadStage`), nên gói đầu không còn 1,23 MB nội dung năm chặng. Khung trang
+ * đọc từ hai file nhẹ — `stage-meta.ts` (chuỗi) và `stats.generated.ts` (số do
+ * máy sinh) — nên badge và con số ở đầu trang KHÔNG hiện trễ; chỉ nội dung bên
+ * trong tab mới phải chờ chunk của chặng về.
  */
 const dyn = <P,>(load: () => Promise<{ default: React.ComponentType<P> }>) =>
   dynamic(load, { ssr: false, loading: () => <TabSkeleton /> });
@@ -93,40 +95,79 @@ type TabId =
  *
  * Tab "Dạng câu hỏi" chỉ hiện khi chặng đó có dữ liệu (từ chặng 2 trở đi).
  */
-/** Số đoạn gõ của một chặng — chặng chưa có đoạn riêng thì dùng toàn bộ. */
-function typingCountFor(stageId: string): number {
-  const own = TYPING_PASSAGES.filter((p) => p.stage === stageId).length;
-  return own || TYPING_PASSAGES.length;
-}
-
-function tabsFor(d: StageBundle): { id: TabId; label: string; icon: typeof Target; badge?: string }[] {
+/**
+ * Thanh tab dựng từ `STAGE_META` + `stats.generated` — hai file NHẸ, nạp sẵn.
+ *
+ * Đây là chỗ quyết định việc tách gói có làm hỏng trải nghiệm hay không. Nếu
+ * badge đọc từ `d.stats` (dữ liệu nạp động) thì mọi con số sẽ hiện trễ một
+ * nhịp sau mỗi lần đổi chặng — nhìn như trang bị lỗi. Đọc từ số đã sinh sẵn
+ * thì badge có NGAY, chỉ nội dung bên trong tab mới phải chờ chunk của chặng.
+ */
+function tabsFor(meta: StageMeta): { id: TabId; label: string; icon: typeof Target; badge?: string }[] {
+  const st = STAGE_STATS[meta.id];
+  const qtypes = STAGE_QUESTION_TYPES[meta.id];
   return [
     { id: 'roadmap', label: 'Lộ trình', icon: Target },
     { id: 'daily', label: 'Luyện mỗi ngày', icon: Flame, badge: '15' },
     { id: 'ai', label: 'Học cùng AI', icon: Sparkles },
-    ...(d.questionTypes
-      ? [{ id: 'qtypes' as TabId, label: 'Dạng câu hỏi', icon: ListChecks, badge: String(d.questionTypes.length) }]
+    ...(qtypes > 0
+      ? [{ id: 'qtypes' as TabId, label: 'Dạng câu hỏi', icon: ListChecks, badge: String(qtypes) }]
       : []),
-    { id: 'lessons', label: 'Bài học', icon: GraduationCap, badge: String(d.stats.lessons) },
-    { id: 'vocab', label: 'Từ vựng', icon: BookOpen, badge: String(d.stats.words) },
-    { id: 'listening', label: 'Nghe', icon: Headphones, badge: String(d.stats.listenings) },
-    { id: 'reading', label: 'Đọc', icon: FileText, badge: String(d.stats.readings) },
-    { id: 'writing', label: 'Viết', icon: PenLine, badge: String(d.stats.writings) },
-    { id: 'speaking', label: 'Nói', icon: Mic, badge: String(d.stats.speakingTopics) },
-    { id: 'typing', label: 'Gõ đoạn văn', icon: Keyboard, badge: String(typingCountFor(d.id)) },
+    { id: 'lessons', label: 'Bài học', icon: GraduationCap, badge: String(st.lessons) },
+    { id: 'vocab', label: 'Từ vựng', icon: BookOpen, badge: String(st.words) },
+    { id: 'listening', label: 'Nghe', icon: Headphones, badge: String(st.listenings) },
+    { id: 'reading', label: 'Đọc', icon: FileText, badge: String(st.readings) },
+    { id: 'writing', label: 'Viết', icon: PenLine, badge: String(st.writings) },
+    { id: 'speaking', label: 'Nói', icon: Mic, badge: String(st.speakingTopics) },
+    { id: 'typing', label: 'Gõ đoạn văn', icon: Keyboard, badge: String(TYPING_COUNTS[meta.id]) },
     { id: 'lookup', label: 'Tra cứu', icon: Search },
     { id: 'life', label: 'Đời sống & Việc làm', icon: Briefcase, badge: '11' },
     { id: 'exam', label: 'Cẩm nang thi', icon: ClipboardList },
   ];
 }
 
+/** Tab nào cần nội dung chặng. Mấy tab còn lại chạy được mà không cần nạp gì. */
+const NEEDS_STAGE = new Set<TabId>([
+  'qtypes', 'lessons', 'vocab', 'listening', 'reading', 'writing', 'speaking', 'ai',
+]);
+
 export default function IeltsClient() {
   const [tab, setTab] = useState<TabId>('roadmap');
   const [stageIdx, setStageIdx] = useState(0);
   const { speak, current, supported } = useSpeak();
 
-  const d = STAGES[stageIdx];
-  const TABS = tabsFor(d);
+  const meta = STAGE_META[stageIdx];
+  const [loaded, setLoaded] = useState<StageBundle | null>(null);
+
+  /**
+   * `d` chỉ hợp lệ khi bundle đã nạp ĐÚNG là của chặng đang chọn. So `id` thay
+   * vì xoá state lúc đổi chặng: nếu không so, có đúng một nhịp render mà header
+   * ghi "Chặng 2" trong khi bên dưới còn là nội dung chặng 1.
+   */
+  const d = loaded && loaded.id === meta.id ? loaded : null;
+
+  /**
+   * Nạp chặng ngay khi mount, nhưng hoãn tới lúc trình duyệt rảnh. Người mở
+   * trang thấy khung + lộ trình gần như tức thì, còn chunk nội dung tải song
+   * song trong lúc họ đọc — nên bấm sang tab Bài học thường là đã sẵn sàng.
+   *
+   * Hoãn bằng `requestIdleCallback` chứ không gọi thẳng: gọi thẳng thì nó tranh
+   * băng thông với chính những chunk cần cho lần vẽ đầu tiên.
+   */
+  useEffect(() => {
+    let alive = true;
+    const go = () => { loadStage(meta.id).then((b) => { if (alive) setLoaded(b); }); };
+    const ric = typeof window !== 'undefined'
+      ? (window as unknown as { requestIdleCallback?: (cb: () => void) => number }).requestIdleCallback
+      : undefined;
+    const handle = ric ? ric(go) : window.setTimeout(go, 200);
+    return () => {
+      alive = false;
+      if (!ric) window.clearTimeout(handle as number);
+    };
+  }, [meta.id]);
+
+  const TABS = tabsFor(meta);
   // Đổi sang chặng không có tab đang mở (ví dụ Dạng câu hỏi) thì lùi về Lộ trình.
   const activeTab: TabId = TABS.some((t) => t.id === tab) ? tab : 'roadmap';
 
@@ -171,7 +212,7 @@ export default function IeltsClient() {
         <div className="mb-5 rounded-2xl border border-white/10 bg-white/[0.02] p-3">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-xs text-slate-500 mr-1">Đang học chặng</span>
-            {STAGES.map((s, i) => (
+            {STAGE_META.map((s, i) => (
               <button
                 key={s.id}
                 type="button"
@@ -189,7 +230,7 @@ export default function IeltsClient() {
               </button>
             ))}
           </div>
-          <p className="text-xs text-slate-400 mt-2 leading-relaxed">{d.focus}</p>
+          <p className="text-xs text-slate-400 mt-2 leading-relaxed">{meta.focus}</p>
         </div>
 
         {/* Tab */}
@@ -223,7 +264,7 @@ export default function IeltsClient() {
         {activeTab !== 'roadmap' && activeTab !== 'life' && activeTab !== 'exam'
           && activeTab !== 'lookup' && activeTab !== 'ai' && (
           <p className="mb-5 text-xs text-slate-500 leading-relaxed rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2">
-            Nội dung dưới đây thuộc <b className="text-slate-300">{d.label} — {d.band}</b>. Bài đọc, bài
+            Nội dung dưới đây thuộc <b className="text-slate-300">{meta.label} — {meta.band}</b>. Bài đọc, bài
             nghe và đề viết đều do khoá này tự soạn theo đúng dạng đề thật (không chép đề có bản quyền), nên
             mỗi câu đều có lời giải thích vì sao đúng và vì sao sai.
           </p>
@@ -235,18 +276,25 @@ export default function IeltsClient() {
           />
         )}
         {activeTab === 'daily' && <DailyView />}
-        {activeTab === 'ai' && <AiCoachView d={d} />}
-        {activeTab === 'qtypes' && d.questionTypes && (
-          <QuestionTypesView types={d.questionTypes} notes={d.strategyNotes ?? []} />
+        {activeTab === 'typing' && <TypingPanel stageId={meta.id} />}
+        {activeTab === 'lookup' && <LookupView />}
+
+        {/* Tám tab dưới đây cần nội dung chặng — chờ chunk của chặng về mới vẽ. */}
+        {NEEDS_STAGE.has(activeTab) && !d && <TabSkeleton />}
+        {d && (
+          <>
+            {activeTab === 'ai' && <AiCoachView d={d} />}
+            {activeTab === 'qtypes' && d.questionTypes && (
+              <QuestionTypesView types={d.questionTypes} notes={d.strategyNotes ?? []} />
+            )}
+            {activeTab === 'lessons' && <LessonsView d={d} speak={speak} current={current} supported={supported} />}
+            {activeTab === 'vocab' && <VocabView d={d} speak={speak} current={current} supported={supported} />}
+            {activeTab === 'listening' && <ListeningView d={d} supported={supported} />}
+            {activeTab === 'reading' && <ReadingView d={d} />}
+            {activeTab === 'writing' && <WritingView d={d} />}
+            {activeTab === 'speaking' && <SpeakingView d={d} speak={speak} current={current} supported={supported} />}
+          </>
         )}
-        {activeTab === 'lessons' && <LessonsView d={d} speak={speak} current={current} supported={supported} />}
-        {activeTab === 'vocab' && <VocabView d={d} speak={speak} current={current} supported={supported} />}
-        {activeTab === 'listening' && <ListeningView d={d} supported={supported} />}
-        {activeTab === 'reading' && <ReadingView d={d} />}
-        {activeTab === 'writing' && <WritingView d={d} />}
-        {activeTab === 'speaking' && <SpeakingView d={d} speak={speak} current={current} supported={supported} />}
-        {activeTab === 'typing' && <TypingPanel stageId={d.id} />}
-        {activeTab === 'lookup' && <LookupView stages={STAGES} />}
         {activeTab === 'life' && <LifeView speak={speak} current={current} supported={supported} />}
         {activeTab === 'exam' && <ExamView />}
 

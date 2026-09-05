@@ -9,7 +9,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { CheckCircle2, Circle, AlertTriangle, Target, Flag, ArrowRight } from 'lucide-react';
 import { BAND_STAGES, IELTS_STATS } from './data/roadmap';
-import { STAGES } from './data/bundles';
+import { STAGE_META } from './data/stage-meta';
+import { STAGE_STATS, STAGE_QUESTION_TYPES } from './data/stats.generated';
 
 const CHECKPOINT_KEY = 'ielts:checkpoints:v1';
 
@@ -68,10 +69,17 @@ export default function RoadmapTab({ onGoToStage }: { onGoToStage: (stageIdx: nu
             ? stage.checkpoints.filter((_, i) => done[`${stage.id}:${i}`]).length
             : 0;
           const allDone = stageDone === stage.checkpoints.length;
-          // Chặng nào đã có bundle nội dung. Tự nới theo `STAGES` nên thêm chặng
-          // mới vào `bundles.ts` là đủ, không phải sửa ở đây.
-          const hasContent = si < STAGES.length;
-          const bundle = hasContent ? STAGES[si] : null;
+          /**
+           * Chặng nào đã có nội dung học. Đọc từ `STAGE_META` + số đã sinh sẵn,
+           * KHÔNG đụng tới `bundles.ts` — tab Lộ trình là tab mặc định, nếu nó
+           * kéo dữ liệu chặng vào thì việc tách gói mất sạch tác dụng ngay ở
+           * lần vẽ đầu tiên. Tự nới theo `STAGE_META` nên thêm chặng mới không
+           * phải sửa ở đây.
+           */
+          const stageMeta = STAGE_META[si] ?? null;
+          const hasContent = stageMeta !== null;
+          const st = stageMeta ? STAGE_STATS[stageMeta.id] : null;
+          const qtypes = stageMeta ? STAGE_QUESTION_TYPES[stageMeta.id] : 0;
           return (
             <div
               key={stage.id}
@@ -118,7 +126,7 @@ export default function RoadmapTab({ onGoToStage }: { onGoToStage: (stageIdx: nu
 
               {isOpen && (
                 <div className="px-4 sm:px-5 pb-5 space-y-5">
-                  {hasContent && bundle && (
+                  {hasContent && st && (
                     <button
                       type="button"
                       onClick={() => onGoToStage(si)}
@@ -127,10 +135,10 @@ export default function RoadmapTab({ onGoToStage }: { onGoToStage: (stageIdx: nu
                       <div>
                         <p className="text-emerald-200 font-semibold text-sm">Nội dung học chặng này đã sẵn sàng</p>
                         <p className="text-slate-300 text-xs mt-1 leading-relaxed">
-                          {bundle!.stats.lessons} bài học · {bundle!.stats.words} từ vựng ·{' '}
-                          {bundle!.stats.readings} bài đọc · {bundle!.stats.listenings} bài nghe ·{' '}
-                          {bundle!.stats.writings} đề viết · {bundle!.stats.gradedTotal} câu chấm điểm
-                          {bundle!.questionTypes ? ` · ${bundle!.questionTypes.length} dạng câu hỏi` : ''}
+                          {st.lessons} bài học · {st.words} từ vựng ·{' '}
+                          {st.readings} bài đọc · {st.listenings} bài nghe ·{' '}
+                          {st.writings} đề viết · {st.gradedTotal} câu chấm điểm
+                          {qtypes > 0 ? ` · ${qtypes} dạng câu hỏi` : ''}
                         </p>
                       </div>
                       <ArrowRight className="w-5 h-5 text-emerald-300 shrink-0" />

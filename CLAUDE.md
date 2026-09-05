@@ -49,6 +49,20 @@ npx tsc --noEmit
 (cd frontend && npm run build)
 ```
 
+### If IELTS course content changed (`frontend/src/app/tech-trends/ielts/data/**`):
+```bash
+npm run ielts:stats     # sinh lại stats.generated.ts, rồi commit file đó
+```
+Con số ở đầu trang IELTS và badge trên từng tab đọc từ `data/stats.generated.ts`
+— một ảnh chụp do máy sinh — chứ không tính trực tiếp từ dữ liệu nữa. Đổi vậy
+để `IeltsClient` thôi phải nạp 1,23 MB nội dung năm chặng chỉ để đếm; nhờ đó
+First Load JS của route tụt từ 683 kB xuống 224 kB.
+
+Cái giá là ảnh chụp có thể lệch với dữ liệu. `loadStage()` trong
+`data/bundles.ts` so lại hai bên ngay lúc nạp chặng và `console.error` ở dev,
+nên quên chạy thì lộ ra ở lần mở chặng đầu tiên — nhưng **đừng dựa vào lưới đỡ
+đó**, chạy lệnh trên rồi commit luôn file sinh ra.
+
 ### If Prisma schema changed (`prisma/schema.prisma`):
 ```bash
 npx prisma format
@@ -548,6 +562,9 @@ npx prisma format                      # format & validate schema
 npx prisma generate                    # generate client
 npx prisma migrate dev --name <name>   # create migration
 npx prisma migrate status              # check migration state
+
+# Khoá IELTS (/tech-trends/ielts) — BẮT BUỘC sau khi thêm/bớt nội dung chặng
+npm run ielts:stats                    # sinh lại data/stats.generated.ts
 
 # Frontend (subshell so cwd stays at root)
 (cd frontend && npx tsc --noEmit)

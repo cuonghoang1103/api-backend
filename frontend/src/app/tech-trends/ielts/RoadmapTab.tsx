@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Tab Lộ trình — 4 chặng band, tách ra khỏi IeltsClient khi trang có thêm tab.
+ * Tab Lộ trình — 5 chặng band, tách ra khỏi IeltsClient khi trang có thêm tab.
  *
  * Chặng nào đã có nội dung học thì hiện nút dẫn thẳng sang tab tương ứng; các
  * chặng chưa soạn thì nói rõ là chưa có, đỡ để người học đi tìm.
@@ -68,7 +68,8 @@ export default function RoadmapTab({ onGoToStage }: { onGoToStage: (stageIdx: nu
             ? stage.checkpoints.filter((_, i) => done[`${stage.id}:${i}`]).length
             : 0;
           const allDone = stageDone === stage.checkpoints.length;
-          // Số chặng đã soạn nội dung — nới ra khi thêm chặng 3, 4.
+          // Chặng nào đã có bundle nội dung. Tự nới theo `STAGES` nên thêm chặng
+          // mới vào `bundles.ts` là đủ, không phải sửa ở đây.
           const hasContent = si < STAGES.length;
           const bundle = hasContent ? STAGES[si] : null;
           return (

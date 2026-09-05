@@ -21,7 +21,7 @@ export interface TypingPassage {
   id: string;
   title: string;
   /** Chặng nào nên gõ đoạn này. */
-  stage: 'stage1' | 'stage2' | 'stage3' | 'stage4';
+  stage: 'stage1' | 'stage2' | 'stage3' | 'stage4' | 'stage5';
   /** Vì sao đoạn này đáng gõ — nối về phần nào của kỳ thi. */
   why: string;
   text: string;
@@ -221,5 +221,51 @@ export const TYPING_PASSAGES: TypingPassage[] = [
       + 'year, and universities that respond directly to those requests produce graduates trained for a labour '
       + 'market that has since moved.',
     watch: ['a good deal of force', 'dismissal', 'timescale', 'scarce', 'since moved'],
+  },
+
+  /* ═════════════ CHẶNG 5 ═════════════ */
+  {
+    id: 't17',
+    title: 'Câu lập trường neo vào một chữ trong đề',
+    stage: 'stage5',
+    why: 'Khuôn mở bài band 8: nhận nguyên tắc là đúng rồi chỉ ra CHỮ nào trong đề gánh quá sức. Gõ xong là dùng được cho gần như mọi đề Opinion.',
+    text:
+      'The principle behind this proposal is sound; the difficulty lies in the word "only", which assumes that '
+      + 'trials can measure everything worth funding. Public money spent on a programme that does not work is '
+      + 'money taken from one that does, so the demand for evidence is entirely reasonable.',
+    watch: ['principle', 'lies in', 'assumes', 'entirely reasonable'],
+  },
+  {
+    id: 't18',
+    title: 'Nhượng bộ có sức nặng thật',
+    stage: 'stage5',
+    why: 'Nhượng bộ band 8 phải đưa ra một lý lẽ MỚI cho phía kia, không chỉ thừa nhận cho có. Đây là chỗ khác biệt rõ nhất giữa 7.0 và 8.0 ở Task Response.',
+    text:
+      'I would concede that the case for evidence is stronger than it is usually made to sound. Requiring a '
+      + 'trial disciplines the process: it forces the sponsor of a scheme to state in advance what success would '
+      + 'look like, which is often the first time anyone has been made to do so.',
+    watch: ['concede', 'disciplines', 'in advance', 'would look like'],
+  },
+  {
+    id: 't19',
+    title: 'Overview Task 1 không kèm một con số nào',
+    stage: 'stage5',
+    why: 'Overview band 8 nêu xu hướng chung, điểm bất thường và thứ tự cuối kỳ mà KHÔNG dùng số. Số để dành cho thân bài, mỗi số phục vụ một so sánh.',
+    text:
+      'Overall, all three countries saw a pronounced decline, but the pattern was not uniform: Japan and Germany '
+      + 'both reversed direction in the final decade, while the UK continued to fall throughout. Japan is also the '
+      + 'only country whose figure rose before it fell.',
+    watch: ['pronounced', 'uniform', 'reversed direction', 'throughout'],
+  },
+  {
+    id: 't20',
+    title: 'Lật lại khái niệm trong câu hỏi — Part 3',
+    stage: 'stage5',
+    why: 'Kỹ thuật mạnh nhất ở Part 3 band 8: từ chối nhận khái niệm như đã cho, và chỉ ra cơ chế nằm dưới nó. Gõ tới thuộc nhịp câu, rồi nói lại thành tiếng.',
+    text:
+      'That depends on what we mean by data, and I think the word hides a decision that has already been made. '
+      + 'Every dataset is the result of someone choosing what to count, and things get counted when they are easy '
+      + 'to count, not when they matter most.',
+    watch: ['depends on', 'hides', 'dataset', 'matter most'],
   },
 ];

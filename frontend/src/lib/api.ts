@@ -3887,6 +3887,62 @@ export const techTrendsApi = {
 };
 
 
+// ─── IELTS study assistant (khoá tự học ở /tech-trends/ielts) ───────
+// Pro-gated, cùng đường auth với reader AI của Tech Trends nên dùng chung
+// `/tech-trends/ai/status` để biết có bật được nút hay không.
+//
+// timeout dài (3 phút): chấm một bài Task 2 là lượt gọi LLM nặng nhất trong
+// cả web — mặc định 30 giây của axios cắt ngang giữa chừng và người dùng
+// thấy lỗi mạng trong khi backend vẫn đang chấm và vẫn tính tiền.
+
+export interface IeltsCriterionScore {
+  name: string;
+  nameVi: string;
+  band: string;
+  comment: string;
+}
+
+export interface IeltsFix {
+  wrong: string;
+  right: string;
+  why: string;
+}
+
+export interface IeltsWritingGrade {
+  criteria: IeltsCriterionScore[];
+  overall: string;
+  /** Tỷ lệ câu không lỗi, dạng "9/12 (75%)". */
+  cleanSentences: string;
+  fixes: IeltsFix[];
+  nextStep: string;
+  wordCount: number;
+}
+
+export interface IeltsSpeakingGrade {
+  criteria: IeltsCriterionScore[];
+  overall: string;
+  fixes: IeltsFix[];
+  /** Bản nâng cấp của chính câu trả lời — để đối chiếu, không phải để học thuộc. */
+  better: string;
+  why: string;
+}
+
+export const ieltsAiApi = {
+  status() {
+    return api.get<{ data: { available: boolean; isPro: boolean } }>('/tech-trends/ai/status');
+  },
+  gradeWriting(body: { task: string; prompt: string; essay: string }) {
+    return api.post<{ data: IeltsWritingGrade }>('/tech-trends/ielts/ai/writing', body, { timeout: 180_000 });
+  },
+  gradeSpeaking(body: { part: string; question: string; answer: string }) {
+    return api.post<{ data: IeltsSpeakingGrade }>('/tech-trends/ielts/ai/speaking', body, { timeout: 180_000 });
+  },
+  ask(question: string, context?: string) {
+    return api.post<{ data: { answer: string } }>('/tech-trends/ielts/ai/ask', { question, context }, { timeout: 180_000 });
+  },
+};
+
+
 // ─── Tech Trends: news bulletin ─────────────────────────────────────
 export interface NewsFeedDto {
   id: number;

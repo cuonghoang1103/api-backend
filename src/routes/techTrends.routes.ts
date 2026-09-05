@@ -20,6 +20,11 @@ import {
 } from '../services/techTrends/ai.service.js';
 import { isProEffective } from '../services/pro.service.js';
 import {
+  gradeWriting as gradeIeltsWriting,
+  gradeSpeaking as gradeIeltsSpeaking,
+  askTutor as askIeltsTutor,
+} from '../services/techTrends/ielts.ai.service.js';
+import {
   ingestAllFeeds,
   seedDefaultFeeds,
   selectCandidates,
@@ -593,6 +598,70 @@ publicRouter.post('/ask', authenticate, async (req, res: Response<ApiResponse>, 
       success: true,
       data: { ...data, sources: found.map((a) => ({ id: a.id, slug: a.slug, title: a.title })) },
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ─── IELTS study assistant (PRO-gated) ─────────────────────────────────
+// Serves the self-study course at /tech-trends/ielts. Same auth + Pro line as
+// the reader AI above, and the same gateway — no new infra, no new router (so
+// nothing to add to deploy.sh's smoke-test list).
+//
+// Only Writing and Speaking are here on purpose: Listening and Reading already
+// ship with answer keys in the course data, so AI there would cost tokens
+// without adding anything the learner cannot already do alone.
+
+// POST /api/v1/tech-trends/ielts/ai/writing — Pro. Grade one Task 1/2 answer.
+publicRouter.post('/ielts/ai/writing', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = await assertReaderPro(req);
+    const body = req.body as { task?: unknown; prompt?: unknown; essay?: unknown };
+    const essay = String(body.essay ?? '').trim();
+    if (!essay) throw new AppError('Chưa có bài viết để chấm', 400, 'ESSAY_REQUIRED');
+    const data = await gradeIeltsWriting({
+      task: String(body.task ?? 'Task 2'),
+      prompt: String(body.prompt ?? ''),
+      essay,
+      userId,
+    });
+    res.json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/v1/tech-trends/ielts/ai/speaking — Pro. Grade one spoken answer
+// (typed or dictated); Pronunciation is not graded from a transcript.
+publicRouter.post('/ielts/ai/speaking', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = await assertReaderPro(req);
+    const body = req.body as { part?: unknown; question?: unknown; answer?: unknown };
+    const answer = String(body.answer ?? '').trim();
+    if (!answer) throw new AppError('Chưa có câu trả lời để chấm', 400, 'ANSWER_REQUIRED');
+    const data = await gradeIeltsSpeaking({
+      part: String(body.part ?? 'Part 3'),
+      question: String(body.question ?? ''),
+      answer,
+      userId,
+    });
+    res.json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/v1/tech-trends/ielts/ai/ask — Pro. Tutor Q&A about the exam and
+// the course. `context` is the learner's current stage, sent by the UI so the
+// answer can be pitched at the right level.
+publicRouter.post('/ielts/ai/ask', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = await assertReaderPro(req);
+    const body = req.body as { question?: unknown; context?: unknown };
+    const question = String(body.question ?? '').trim();
+    if (!question) throw new AppError('Cần nhập câu hỏi', 400, 'QUESTION_REQUIRED');
+    const data = await askIeltsTutor({ question, context: String(body.context ?? ''), userId });
+    res.json({ success: true, data });
   } catch (error) {
     next(error);
   }

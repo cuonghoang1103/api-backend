@@ -5,7 +5,7 @@
  * thể hiện được chặng 2 mà không nhân đôi component. Nay view nhận `d:
  * StageBundle` qua prop và không cần biết mình đang hiện chặng nào.
  *
- * Hai điểm cần giữ khi thêm chặng 3 và 4:
+ * Hai điểm cần giữ mỗi khi thêm một chặng (đã áp dụng cho cả chặng 3, 4 và 5):
  *
  *  - **Khoá localStorage phải KHÁC nhau giữa các chặng.** Tiến độ bài học và
  *    từ vựng của chặng 1 không được đè lên chặng 2 — người học có thể quay lại
@@ -38,6 +38,11 @@ import {
   WRITINGS4, SPEAKINGS4, SPEAKING_RULES4, EXERCISES4_BY_LESSON, ALL_EXERCISES4,
   STAGE4_STATS,
 } from './stage4';
+import {
+  UNITS5, VOCAB5_TOPICS, ALL_WORDS5, READINGS5, LISTENINGS5, LISTENING_SOURCES5,
+  WRITINGS5, SPEAKINGS5, SPEAKING_RULES5, EXERCISES5_BY_LESSON, ALL_EXERCISES5,
+  STAGE5_STATS,
+} from './stage5';
 
 export interface StageStats {
   lessons: number;
@@ -58,7 +63,7 @@ export interface StageStats {
 }
 
 export interface StageBundle {
-  id: 'stage1' | 'stage2' | 'stage3' | 'stage4';
+  id: 'stage1' | 'stage2' | 'stage3' | 'stage4' | 'stage5';
   /** Nhãn ngắn hiện trên nút chuyển chặng. */
   label: string;
   band: string;
@@ -165,7 +170,27 @@ export const STAGE4: StageBundle = {
   keys: { lessonDone: 'ielts:s4:lessons:v1', vocabKnown: 'ielts:s4:vocab-known:v1' },
 };
 
-export const STAGES: StageBundle[] = [STAGE1, STAGE2, STAGE3, STAGE4];
+export const STAGE5: StageBundle = {
+  id: 'stage5',
+  label: 'Chặng 5',
+  band: 'Band 7.5 → 8.0',
+  focus: 'Chặng KHÔNG có sách. Chỉ còn bốn việc: thuộc band descriptors · có người chấm bài · nguồn vào khó hơn đề thi · nhật ký lỗi.',
+  units: UNITS5,
+  vocabTopics: VOCAB5_TOPICS,
+  allWords: ALL_WORDS5,
+  readings: READINGS5,
+  listenings: LISTENINGS5,
+  sources: LISTENING_SOURCES5,
+  writings: WRITINGS5,
+  speakings: SPEAKINGS5,
+  speakingRules: SPEAKING_RULES5,
+  exercisesByLesson: EXERCISES5_BY_LESSON,
+  allExercises: ALL_EXERCISES5,
+  stats: STAGE5_STATS,
+  keys: { lessonDone: 'ielts:s5:lessons:v1', vocabKnown: 'ielts:s5:vocab-known:v1' },
+};
+
+export const STAGES: StageBundle[] = [STAGE1, STAGE2, STAGE3, STAGE4, STAGE5];
 
 /** Số gộp cả hai chặng — dùng cho phần đầu trang. */
 const sum = (pick: (s: StageBundle) => number): number => STAGES.reduce((n, s) => n + pick(s), 0);

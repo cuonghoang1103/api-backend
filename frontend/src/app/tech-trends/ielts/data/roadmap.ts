@@ -1,5 +1,5 @@
 /**
- * Lộ trình IELTS 0 → 7.5, chia 4 chặng theo band.
+ * Lộ trình IELTS 0 → 8.0, chia 5 chặng theo band.
  *
  * Nguyên tắc khi soạn: mỗi chặng phải trả lời được ba câu người học thật sự
  * hỏi — "tôi đang ở đâu", "mỗi ngày làm gì", "khi nào thì được lên chặng
@@ -242,6 +242,61 @@ export const BAND_STAGES: BandStage[] = [
       'Có danh sách lỗi cá nhân và đã diệt được phần lớn.',
       'Thi thử 7.0–7.5, không kỹ năng nào dưới 6.5.',
       'Viết Task 2 xong trong 38 phút mà vẫn còn thời gian đọc soát.',
+    ],
+  },
+
+  /* ══════════════ CHẶNG 5 ══════════════ */
+  {
+    id: 'mastery',
+    from: '7.5',
+    to: '8.0',
+    title: 'Chặng không có sách — bỏ lỗi, không học thêm',
+    icon: '🎯',
+    duration: '3–6 tháng',
+    youAre:
+      'Bạn viết được bài không ai chê được điểm nào cụ thể, nói trôi chảy về mọi chủ đề, '
+      + 'và vẫn nhận 7.0–7.5 hết lần này tới lần khác mà không hiểu thiếu gì.',
+    keyFocus:
+      'KHÔNG có tài liệu riêng cho chặng này, và đó là điều quan trọng nhất cần biết trước khi đi tìm. '
+      + 'Chỉ còn bốn việc: (1) đọc band descriptors tới mức thuộc — tài liệu miễn phí trên ielts.org; '
+      + '(2) có người chấm bài viết hàng tuần; (3) nghe/đọc nguồn KHÓ HƠN đề thi mỗi ngày; '
+      + '(4) nhật ký lỗi để diệt lỗi lặp. Ai tìm “sách 8.0” ở đây là đang tìm thứ không tồn tại.',
+    skills: [
+      {
+        skill: 'Nghe',
+        icon: '🎧',
+        daily: '15 phút nguồn ngoài đề không phụ đề (BBC Radio 4, podcast học thuật), tóm tắt bằng lời mình rồi mới xem transcript. Mỗi tuần MỘT đề để đo.',
+        target: '35/40 trở thành SÀN chứ không phải trần, kể cả với giọng Úc và Scotland.',
+        trap: 'Bẫy đính chính giữa câu (“sorry, I should say…”). Đáp án luôn nằm ở vế SAU, nhưng tay đã kịp viết vế trước.',
+      },
+      {
+        skill: 'Đọc',
+        icon: '📖',
+        daily: '1 bài ngoài đề 900–1.200 từ có bấm giờ (The Economist, Nature news, Aeon), tự tóm tắt lập luận trong 3 câu.',
+        target: '130–150 từ/phút CÓ HIỂU; xong 3 passage trước 55 phút để còn thời gian dò lại.',
+        trap: 'Phân bổ đều 20–20–20 phút. Passage 3 khó nhất nên phải được 23 phút — chia đều là lý do phổ biến nhất khiến hết giờ.',
+      },
+      {
+        skill: 'Viết',
+        icon: '✍️',
+        daily: '2 bài mới + 1 bài VIẾT LẠI mỗi tuần, đúng 40 phút theo quy trình 5–30–5. Mỗi bài xong là chép lỗi vào nhật ký có nhãn.',
+        target: 'Tỷ lệ câu không lỗi trên 80% (band 7 chỉ cần “frequent”, band 8 cần “majority”) và lập trường nhất quán từ mở tới kết.',
+        trap: 'Nhồi từ hiếm để “nâng band”. Descriptor nói “SKILFULLY uses uncommon lexical items” — dùng vụng là bị trừ ở đúng chỗ tưởng được điểm.',
+      },
+      {
+        skill: 'Nói',
+        icon: '🗣️',
+        daily: '2–3 buổi/tuần với người thật về chủ đề KHÔNG chuẩn bị trước; thu âm và nghe lại, đánh dấu mọi chỗ dừng.',
+        target: 'Mọi chỗ ngập ngừng là vì NỘI DUNG, không vì tìm từ — đúng chữ “hesitation is content-related”.',
+        trap: 'Học thuộc câu trả lời để nói liền mạch. Nhịp đều và ngữ điệu phẳng làm giám khảo nhận ra ngay, và Fluency bị trừ.',
+      },
+    ],
+    checkpoints: [
+      'Đã đọc hết band descriptors bản public và tự chấm được bài mình theo từng tiêu chí.',
+      'Nhật ký lỗi có nhãn cố định, và danh sách đang NGẮN DẦN qua từng tháng.',
+      'Tỷ lệ câu không lỗi trên 80% ở ba bài viết liên tiếp.',
+      'Ít nhất 10 bài Task 2 được người có chuyên môn chấm, và đã viết lại ít nhất 5 trong số đó.',
+      'Thi thử 8.0 tổng, không kỹ năng nào dưới 7.0.',
     ],
   },
 ];

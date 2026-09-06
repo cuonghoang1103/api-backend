@@ -381,7 +381,23 @@ ok "Đã tráo sang ảnh ${SHA}"
 
 # ─── 6. Prisma + sức khoẻ + smoke test ─────────────────────────────────
 info "Chạy migration..."
-sshvps "docker exec ${COMPOSE_PROJECT}_backend npx prisma migrate deploy 2>&1 | tail -5" || warn "migrate có lỗi — kiểm tay"
+# ⚠️ KHÔNG `| tail -5`. Prisma in vài dòng npm notice ("New major version of
+# npm available…") SAU phần kết quả, nên tail -5 cắt đúng thứ cần đọc: đo thật
+# 07/09/2026, một lượt deploy có migration MỚI mà log chỉ còn lại toàn npm
+# notice — không có cách nào biết migration đã áp hay đã chết. Với migration
+# thì im lặng là trạng thái tệ nhất: CLAUDE.md cấm tự sửa migration hỏng, mà
+# muốn không tự sửa thì trước hết phải THẤY nó hỏng.
+#
+# Lọc bỏ tiếng ồn của npm rồi in phần còn lại; thêm chốt bắt mã lỗi Prisma.
+KQ_MIGRATE=$(sshvps "docker exec ${COMPOSE_PROJECT}_backend npx prisma migrate deploy 2>&1" || true)
+printf '%s\n' "$KQ_MIGRATE" | grep -vE '^npm notice|^\s*$|^ *[│└┌─]' | tail -20
+if printf '%s' "$KQ_MIGRATE" | grep -qE 'P30[0-9][0-9]|Error:|migration failed|failed to apply'; then
+    warn "MIGRATION CÓ LỖI — xem Migration Failure Protocol trong CLAUDE.md, ĐỪNG tự resolve"
+elif printf '%s' "$KQ_MIGRATE" | grep -qE 'Applied [0-9]+ migration|No pending migrations|already in sync'; then
+    ok "Migration xong"
+else
+    warn "Không đọc được kết quả migration — kiểm tay"
+fi
 
 # ─── 6b. Seed nội dung (Step 3.5→3.17 của deploy.sh) ───────────────────
 #

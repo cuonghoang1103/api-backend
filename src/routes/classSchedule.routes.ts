@@ -43,7 +43,21 @@ function kiem(b: Record<string, unknown>, batBuoc: boolean) {
   chu('teacher', 150);
   chu('room', 100);
   chu('color', 20);
+  chu('meetUrl', 500);
+  chu('materialsUrl', 500);
   if (b.note !== undefined) ra.note = b.note === null ? null : String(b.note);
+
+  // Slot FAP 0..12. Nhận `null` để bỏ slot khi người dùng chuyển sang giờ tự do.
+  if (b.slot !== undefined) {
+    if (b.slot === null) { ra.slot = null; }
+    else {
+      const n = Number(b.slot);
+      if (!Number.isInteger(n) || n < 0 || n > 12) {
+        throw new AppError('"slot" phải từ 0 tới 12', 400, 'INVALID_SLOT');
+      }
+      ra.slot = n;
+    }
+  }
 
   if (b.weekday !== undefined || batBuoc) {
     const t = Number(b.weekday);

@@ -161,6 +161,8 @@ model User {
   deviceTokens            DeviceToken[]
   classSchedules          ClassSchedule[]
   classAttendances        ClassAttendance[]
+  hocKy                   HocKy[]
+  lichThi                 LichThi[]
 
   // Notification graph — who is the receiver / sender on social
   // notifications. The reverse relations are defined on
@@ -8323,6 +8325,20 @@ model ClassSchedule {
   startTime String @map("start_time") @db.VarChar(5)
   endTime   String @map("end_time") @db.VarChar(5)
 
+  /// Slot của FAP (0..12). Trường xếp lịch theo SLOT chứ không theo giờ tự do:
+  /// Slot 1 = 7:30–9:50 · 2 = 10:00–12:20 · 3 = 12:50–15:10 · 4 = 15:20–17:40.
+  ///
+  /// Giữ CẢ `slot` LẪN `startTime`/`endTime`: slot để nhập nhanh và xếp hàng
+  /// khi hiện bảng tuần, còn giờ vẫn là nguồn sự thật để đặt lời nhắc — trường
+  /// có thể đổi khung giờ slot giữa kỳ, và khi đó lịch đã nhập vẫn phải kêu
+  /// đúng giờ người dùng đang học cho tới khi họ sửa.
+  slot Int?
+
+  /// Hai nút FAP để sẵn trên mỗi ô lịch, và là thứ sinh viên bấm nhiều nhất
+  /// trong ngày học.
+  meetUrl      String? @map("meet_url") @db.VarChar(500)
+  materialsUrl String? @map("materials_url") @db.VarChar(500)
+
   color String? @db.VarChar(20)
   note  String? @db.Text
 
@@ -8378,4 +8394,83 @@ model ClassAttendance {
   @@unique([scheduleId, date], map: "uk_class_attendance_buoi")
   @@index([userId, date], map: "idx_class_attendance_user_date")
   @@map("class_attendances")
+}
+
+/// Một KỲ HỌC. Kỳ ở đây cố định 10 tuần, tuần 8 là tuần thi.
+///
+/// Vì sao cần bảng riêng thay vì suy từ `ClassSchedule.startDate`: suy được số
+/// tuần thì phải lấy min(startDate) của mọi buổi học, mà người dùng có thể
+/// nhập lịch mà bỏ trống ngày kỳ — khi đó "Tuần mấy" im lặng sai. Và kỳ là
+/// thứ người ta nói tới độc lập với lịch: "kỳ này mình học 5 môn".
+model HocKy {
+  id     Int @id @default(autoincrement())
+  userId Int @map("user_id")
+
+  /// "Fall 2026", "Kỳ 1 năm 3" — do người dùng đặt.
+  ten String @db.VarChar(120)
+
+  /// NGÀY THỨ HAI của tuần 1. Chuẩn hoá về thứ Hai lúc ghi để phép tính
+  /// "tuần thứ mấy" chỉ là một phép chia, không phải một chuỗi if.
+  batDau DateTime @map("bat_dau") @db.Date
+
+  /// Số tuần của kỳ. Mặc định 10 theo lối FPT, nhưng để đổi được — trường
+  /// khác và kỳ hè có số tuần khác.
+  soTuan Int @default(10) @map("so_tuan")
+
+  /// Tuần thi. Mặc định 8. Để riêng chứ không suy ra `soTuan - 2`: lịch thi
+  /// có thể rơi vào tuần khác tuỳ kỳ, và đoán sai thì app tô nhầm tuần.
+  tuanThi Int @default(8) @map("tuan_thi")
+
+  /// Chỉ MỘT kỳ được coi là đang học. App hiện lịch của kỳ này.
+  dangHoc Boolean @default(true) @map("dang_hoc")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lichThi LichThi[]
+
+  @@index([userId, dangHoc], map: "idx_hoc_ky_user")
+  @@map("hoc_ky")
+}
+
+/// Một BUỔI THI. Khác `ClassSchedule` ở chỗ nó xảy ra ĐÚNG MỘT LẦN vào một
+/// ngày cụ thể, không lặp hằng tuần — nên nó là ngày, không phải thứ.
+model LichThi {
+  id      Int  @id @default(autoincrement())
+  userId  Int  @map("user_id")
+  hocKyId Int? @map("hoc_ky_id")
+
+  monHoc String  @map("mon_hoc") @db.VarChar(200)
+  maMon  String? @map("ma_mon") @db.VarChar(50)
+
+  /// 'PE' | 'FE' | 'PT' | 'ME' | 'NOI' | 'NGHE' | 'VIET' | 'KHAC'.
+  /// Chuỗi chứ không enum: mỗi môn một kiểu thi (tiếng Nhật có thi nói và
+  /// nghe riêng), và thêm một loại mới không đáng một migration.
+  loai String @db.VarChar(16)
+
+  /// Ngày thi cụ thể.
+  ngay DateTime @db.Date
+
+  batDau  String @map("bat_dau") @db.VarChar(5)
+  ketThuc String @map("ket_thuc") @db.VarChar(5)
+
+  phong     String? @db.VarChar(100)
+  /// Số báo danh / số máy. FAP có cột này và nó là thứ phải nhớ khi vào phòng.
+  soBaoDanh String? @map("so_bao_danh") @db.VarChar(50)
+
+  ghiChu String? @map("ghi_chu") @db.Text
+
+  /// Nhắc trước bao nhiêu phút. Mặc định 60 chứ không 30 như buổi học: thi
+  /// thường ở phòng lạ và phải tới sớm.
+  nhacTruoc Int @default(60) @map("nhac_truoc")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  hocKy HocKy? @relation(fields: [hocKyId], references: [id], onDelete: SetNull)
+
+  @@index([userId, ngay], map: "idx_lich_thi_user_ngay")
+  @@map("lich_thi")
 }

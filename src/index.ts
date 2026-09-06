@@ -67,6 +67,7 @@ const { errorHandler, notFoundHandler } = await import(path.join(__dirname, 'mid
 const authRoutes = (await import(path.join(__dirname, 'routes', 'auth.routes.js'))).default;
 const profileRoutes = (await import(path.join(__dirname, 'routes', 'profile.routes.js'))).default;
 const classScheduleRoutes = (await import(path.join(__dirname, 'routes', 'classSchedule.routes.js'))).default;
+const hocKyRoutes = (await import(path.join(__dirname, 'routes', 'hocKy.routes.js'))).default;
 const userRoutes = (await import(path.join(__dirname, 'routes', 'user.routes.js'))).default;
 const friendRoutes = (await import(path.join(__dirname, 'routes', 'friend.routes.js'))).default;
 const stickerRoutes = (await import(path.join(__dirname, 'routes', 'sticker.routes.js'))).default;
@@ -488,6 +489,7 @@ app.use('/api/', sentryRequestMiddleware);
 app.use('/api/v1/auth', failOpen(authLimiter), authRoutes);
 app.use('/api/v1/profile', profileRoutes);
 app.use('/api/v1/class-schedule', classScheduleRoutes);
+app.use('/api/v1/hoc-ky', hocKyRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/friends', friendRoutes);
 app.use('/api/v1/stickers', stickerRoutes);

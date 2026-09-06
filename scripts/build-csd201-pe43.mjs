@@ -32,6 +32,13 @@
  *
  * Seed: node scripts/academy-seed-exam.mjs --file ./content/exams/CSD201-PE43.mjs --apply
  */
+// ⚠️ ĐỪNG sửa deck này theo PE45 — hai đề KHÁC NHAU, không phải PE43 sai.
+// Nguồn PE43 là PaperNo_2 ("giải-không đề"), nguồn PE45 là PaperNo_4. Một agent
+// dựng PE45 (07/09/2026) đã báo "PE43 đoán sai 6/10 câu" vì lấy đề mình đang làm
+// làm chuẩn cho đề khác. Kiểm lại bằng chính output chuẩn của bộ chấm nằm trong
+// nguồn PE43 (PaperNo_2/Q{1,2,3}/f*.txt): cả 10/10 expectedOutput của deck khớp
+// TỪNG KÝ TỰ với các file f*.txt đó. Ví dụ Q1/f1.txt có mục (A,9,8) và không có
+// mục nào bắt đầu bằng B — đúng với yêu cầu "lọc chữ B" mà deck đang ghi.
 import fs from 'node:fs';
 import path from 'node:path';
 

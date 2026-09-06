@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 
 import AvatarCard from './AvatarCard';
 import Timeline from './Timeline';
+import LichHoc from './LichHoc';
 import TaskList from './TaskList';
 import StatsModal from './StatsModal';
 import { useDashboardStore } from './useDashboardStore';
@@ -15,6 +16,7 @@ import { useAuthStore } from '@/store/authStore';
 import { dashboardApi } from '@/lib/api';
 import { hydrateFromServer } from './store';
 import type { TaskScope, ActivityType } from './types';
+import type { Buoi } from '@/lib/lich/chung';
 import { ACTIVITY_META } from './Timeline';
 
 /** Maps ActivityType → label (shared with Timeline) */
@@ -92,6 +94,12 @@ export default function DashboardPage() {
   const isAllDone = totalToday > 0 && todayTasks.every((t) => t.done);
 
   const [statsOpen, setStatsOpen] = useState(false);
+
+  /* Buổi học HÔM NAY. `LichHoc` đã nạp rồi thì đưa xuống Timeline, không gọi
+     API lần hai — hai lần nạp lệch nhau thì bảng lịch và dải 24 giờ nói hai
+     chuyện khác nhau. `setBuoiHomNay` là hàm đặt state nên nó BỀN qua các lần
+     vẽ; truyền một hàm mới mỗi lần vẽ sẽ làm `nap()` bên kia chạy vô tận. */
+  const [buoiHomNay, datBuoiHomNay] = useState<Buoi[]>([]);
 
   // ── Real-time clock — safe: useState with default, set inside useEffect ──
   const [clock, setClock] = useState({ hour: -1, minute: -1 });
@@ -321,7 +329,7 @@ export default function DashboardPage() {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-cyan-600/4 rounded-full blur-[150px]" />
           </div>
 
-          <div className="relative z-10 max-w-5xl mx-auto px-4 pt-6 space-y-5">
+          <div className="relative z-10 max-w-5xl mx-auto px-4 pt-24 space-y-5">
             {/* ── Header row ── */}
             <div className="flex items-end justify-between">
           <div>
@@ -431,6 +439,10 @@ export default function DashboardPage() {
           <AvatarCard level={level} exp={exp} username={user?.username} isAuthenticated={isAuthenticated} />
         </motion.div>
 
+        {/* Lịch học đứng TRƯỚC lưới chính: việc trong ngày phải nhét vào những
+            khoảng trống mà lịch học chừa ra, nên đọc lịch trước rồi mới xếp việc. */}
+        <LichHoc onHomNay={datBuoiHomNay} />
+
         {/* ── Main grid ── */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
           {/* Left: Timeline */}
@@ -442,6 +454,7 @@ export default function DashboardPage() {
           >
             <Timeline
               timeline={timeline}
+              buoiHomNay={buoiHomNay}
               activeFilter={activityFilter}
               onSetActivity={setActivity}
               onFilterActivity={setActivityFilter}

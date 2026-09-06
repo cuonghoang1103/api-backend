@@ -3606,6 +3606,56 @@ export const dashboardApi = {
   },
 };
 
+import type { Buoi as BuoiHoc, DiemDanh as DiemDanhBuoi } from '@/lib/lich/chung';
+
+// ─────────────────────────────────────────────────────────────
+// Thời khoá biểu + điểm danh
+//
+// Cùng bộ endpoint app desktop dùng. Web KHÔNG có bản riêng: một chỗ đổi
+// hình dạng dữ liệu mà chỗ kia không biết thì lịch hai bên lệch nhau, và
+// người dùng chỉ phát hiện khi điểm danh ghi vào sai buổi.
+// ─────────────────────────────────────────────────────────────
+export const lichHocApi = {
+  /** Cả thời khoá biểu. `ngay` lọc theo kỳ còn hiệu lực vào ngày đó. */
+  list(ngay?: string) {
+    return api.get<{ data: { items: BuoiHoc[] } }>(
+      `/class-schedule${ngay ? `?ngay=${encodeURIComponent(ngay)}` : ''}`,
+    );
+  },
+
+  /** Điểm danh trong khoảng ngày (YYYY-MM-DD). */
+  diemDanh(tu: string, den: string) {
+    return api.get<{ data: { items: DiemDanhBuoi[] } }>(
+      `/class-schedule/attendance?tu=${encodeURIComponent(tu)}&den=${encodeURIComponent(den)}`,
+    );
+  },
+
+  /** Chấm một buổi. `status: null` là BỎ chấm, không phải "vắng". */
+  cham(id: number, date: string, status: 'co' | 'vang' | 'phep' | null) {
+    return api.put<{ data: unknown }>(`/class-schedule/${id}/attendance`, { date, status });
+  },
+
+  /**
+   * Thêm nhiều buổi một lượt.
+   *
+   * ⚠️ KHÔNG bao giờ gửi `thayThe: true` từ bảng soạn lịch. Nó xoá lịch cũ,
+   * mà `ClassAttendance.schedule` khai `onDelete: Cascade` — sửa giờ một buổi
+   * là mất sạch lịch sử điểm danh, đúng con số quyết định đỗ/trượt môn.
+   */
+  themNhieu(items: Array<Partial<BuoiHoc>>) {
+    return api.post<{ data: { items: BuoiHoc[] } }>('/class-schedule/bulk', { thayThe: false, items });
+  },
+
+  sua(id: number, data: Partial<BuoiHoc>) {
+    return api.patch<{ data: BuoiHoc }>(`/class-schedule/${id}`, data);
+  },
+
+  xoa(id: number) {
+    return api.delete<{ data: unknown }>(`/class-schedule/${id}`);
+  },
+};
+
+
 // ───────────────────────────────────────────────────────────────────
 // Tech Trends & Insights API (public + admin)
 //

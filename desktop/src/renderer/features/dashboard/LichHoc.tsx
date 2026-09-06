@@ -24,83 +24,23 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AlertTriangle, Bot, BotOff, CalendarDays, Check, CircleSlash, FileText, Pencil, Plus } from 'lucide-react';
 import { useSession } from '../../auth/session';
 import { useAppState } from '../../app-state';
+/* Kiểu, bảng màu và mấy hàm ngày giờ nằm ở `@/lib/lich/chung` vì WEB cũng
+   dùng đúng chúng. Tái xuất ở đây để mọi chỗ đang `import ... from './LichHoc'`
+   không phải sửa, và để bảng màu không bao giờ tách làm hai. */
+export {
+  TRAN_NGHI, MAU_MON, mauMon, ngayISO, ngayCuaThu, conMayPhut,
+  type Buoi, type DiemDanh,
+} from '@/lib/lich/chung';
+import {
+  TRAN_NGHI, mauMon, ngayISO, ngayCuaThu, conMayPhut,
+  type Buoi, type DiemDanh,
+} from '@/lib/lich/chung';
 import { SoanLich } from './SoanLich';
-
-/** Nghỉ quá con số này là không qua môn. Quy định của trường. */
-export const TRAN_NGHI = 4;
-
-/**
- * Màu cho từng môn.
- *
- * Tám màu chọn tay chứ không sinh từ HSL: HSL rải đều cho ra vàng và lục sát
- * nhau tới mức liếc qua không phân biệt được, mà phân biệt được mới là toàn bộ
- * mục đích. Tám màu này đều đọc rõ trên CẢ nền tối lẫn nền sáng — chúng chỉ
- * làm viền và chữ, còn nền ô là `color-mix` pha loãng nên độ tương phản chữ
- * vẫn do biến chủ đề quyết định.
- */
-export const MAU_MON = [
-  '#f87171', '#fb923c', '#fbbf24', '#4ade80',
-  '#2dd4bf', '#60a5fa', '#c084fc', '#f472b6',
-] as const;
-
-/**
- * Môn nào ra màu nấy, CỐ ĐỊNH giữa các lần mở app.
- *
- * Băm theo tên chứ không phát màu theo thứ tự xuất hiện: xếp theo thứ tự thì
- * thêm một buổi mới là cả bảng đổi màu, và người dùng vừa học thuộc "xanh lá
- * là Lab" đã phải học lại.
- */
-export function mauMon(ten: string, dat?: string | null): string {
-  if (dat && /^#[0-9a-f]{3,8}$/i.test(dat)) return dat;
-  let h = 0;
-  for (let i = 0; i < ten.length; i++) h = (h * 31 + ten.charCodeAt(i)) >>> 0;
-  return MAU_MON[h % MAU_MON.length]!;
-}
 
 const THU = [
   { n: 2, ten: 'Thứ 2' }, { n: 3, ten: 'Thứ 3' }, { n: 4, ten: 'Thứ 4' },
   { n: 5, ten: 'Thứ 5' }, { n: 6, ten: 'Thứ 6' }, { n: 7, ten: 'Thứ 7' }, { n: 8, ten: 'CN' },
 ];
-
-export interface Buoi {
-  id: number;
-  subject: string;
-  classCode?: string | null;
-  teacher?: string | null;
-  room?: string | null;
-  weekday: number;
-  startTime: string;
-  endTime: string;
-  note?: string | null;
-  color?: string | null;
-  remindMinutes?: number;
-  soBuoiVang?: number;
-}
-
-export interface DiemDanh { id: number; scheduleId: number; date: string; status: string }
-
-/** `Date` → `YYYY-MM-DD` theo GIỜ MÁY (không dùng toISOString — nó cho giờ UTC). */
-export function ngayISO(d: Date): string {
-  const p = (n: number) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
-}
-
-/** Ngày của thứ `n` (2..8) trong tuần chứa `moc`. Tuần bắt đầu từ thứ Hai. */
-export function ngayCuaThu(moc: Date, n: number): Date {
-  const d = new Date(moc);
-  const thuHienTai = d.getDay() === 0 ? 8 : d.getDay() + 1; // CN=0 → 8
-  d.setDate(d.getDate() + (n - thuHienTai));
-  d.setHours(0, 0, 0, 0);
-  return d;
-}
-
-/** Còn bao lâu tới giờ học, tính bằng phút. Âm = đã qua. */
-export function conMayPhut(startTime: string, bayGio = new Date()): number {
-  const [g, p] = startTime.split(':').map(Number);
-  const t = new Date(bayGio);
-  t.setHours(g ?? 0, p ?? 0, 0, 0);
-  return Math.round((t.getTime() - bayGio.getTime()) / 60000);
-}
 
 export function LichHoc({ onHomNay }: { onHomNay?: (ds: Buoi[]) => void } = {}) {
   const { api } = useSession();

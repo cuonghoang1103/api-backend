@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, BookOpen, Briefcase, Dumbbell, UtensilsCrossed, Moon, Coffee, Gamepad2, Users } from 'lucide-react';
 import type { ActivityType, TimelineSlot } from './types';
+import { mauMon, phuTheoGio, type Buoi } from '@/lib/lich/chung';
 
 /** Maps each ActivityType to its display metadata */
 export const ACTIVITY_META: Record<ActivityType, {
@@ -28,14 +29,24 @@ const formatHour = (h: number) =>
 
 interface Props {
   timeline: TimelineSlot[];
+  /** Buổi học HÔM NAY — tô lên đúng những ô giờ nó chiếm. */
+  buoiHomNay?: Buoi[];
   activeFilter: ActivityType | null;
   onSetActivity: (hour: number, activity: TimelineSlot['activity']) => void;
   onFilterActivity: (filter: ActivityType | null) => void;
 }
 
 export default function Timeline({
-  timeline, activeFilter, onSetActivity, onFilterActivity,
+  timeline, buoiHomNay, activeFilter, onSetActivity, onFilterActivity,
 }: Props) {
+  /* Lưới này CUỘN DÒNG (6/8/12 cột tuỳ bề rộng), nên một buổi 3 tiếng có thể
+     bị ngắt giữa dòng — không vẽ được ô trải ngang như dải một hàng của app.
+     Đánh dấu từng ô, và chỉ ô ĐẦU mang tên môn. */
+  const hoc = useMemo(() => phuTheoGio(buoiHomNay ?? []), [buoiHomNay]);
+  const hocHomNay = useMemo(
+    () => [...(buoiHomNay ?? [])].sort((a, b) => a.startTime.localeCompare(b.startTime)),
+    [buoiHomNay],
+  );
   const [editingHour, setEditingHour] = useState<number | null>(null);
   const currentHour = new Date().getHours();
 
@@ -81,6 +92,26 @@ export default function Timeline({
       </div>
 
       {/* Hour grid */}
+      {hocHomNay.length > 0 && (
+        <div className="mb-3 flex flex-wrap gap-1.5">
+          {hocHomNay.map((b) => {
+            const m = mauMon(b.subject, b.color);
+            return (
+              <span
+                key={b.id}
+                className="inline-flex items-center gap-1.5 rounded-lg border px-2 py-1 text-[10.5px]"
+                style={{ borderColor: `${m}55`, background: `${m}1a`, color: m }}
+                title={`${b.subject}${b.room ? ` · ${b.room}` : ''}`}
+              >
+                <b>{b.classCode || b.subject}</b>
+                <span className="text-slate-400">{b.startTime}–{b.endTime}</span>
+                {b.room && <span className="text-slate-500">{b.room}</span>}
+              </span>
+            );
+          })}
+        </div>
+      )}
+
       <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-12 gap-2 mb-4">
         {timeline.map((slot) => {
           const meta = slot.activity ? ACTIVITY_META[slot.activity.type] : null;
@@ -88,6 +119,8 @@ export default function Timeline({
           const isNow = slot.hour === currentHour;
           const isPast = slot.hour < currentHour;
           const isFiltered = activeFilter && slot.activity?.type === activeFilter;
+          const buoi = hoc.get(slot.hour);
+          const mauHoc = buoi ? mauMon(buoi.buoi.subject, buoi.buoi.color) : null;
 
           return (
             <motion.button
@@ -113,7 +146,35 @@ export default function Timeline({
               } : isNow ? {
                 boxShadow: '0 0 18px rgba(244,114,182,0.3)',
               } : {}}
+              title={buoi
+                ? `${buoi.buoi.subject}${buoi.buoi.room ? ` · ${buoi.buoi.room}` : ''} · ${buoi.buoi.startTime}–${buoi.buoi.endTime}`
+                : undefined}
             >
+              {/* Buổi học chiếm giờ này. Vẽ ĐÈ lên, kể cả khi ô đã có hoạt
+                  động: lịch học là thứ CỐ ĐỊNH, hoạt động là thứ tự đặt —
+                  cái cố định phải thắng khi hai thứ trỏ vào cùng một giờ. */}
+              {buoi && mauHoc && (
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 rounded-2xl"
+                  style={{
+                    background: `linear-gradient(135deg, ${mauHoc}3d, ${mauHoc}14)`,
+                    boxShadow: `inset 0 0 0 1.5px ${mauHoc}99`,
+                  }}
+                />
+              )}
+              {/* Chấm màu, KHÔNG phải tên môn. Ô là hình vuông ~40px: nhét
+                  "SWR302" vào là ra "SWR." — một chữ cụt không nói được gì mà
+                  còn che mất số giờ. Tên đầy đủ nằm ở dải chú giải bên dưới,
+                  cùng màu, nên mắt nối được hai chỗ. */}
+              {buoi?.dau && mauHoc && (
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute bottom-1 left-1/2 z-20 h-1.5 w-1.5 -translate-x-1/2 rounded-full"
+                  style={{ background: mauHoc, boxShadow: `0 0 6px ${mauHoc}` }}
+                />
+              )}
+
               {/* Hour label */}
               <div className="relative z-10 flex items-center justify-between h-full">
                 <span className={`text-[10px] font-mono font-bold ${slot.activity ? 'text-white/90' : isPast ? 'text-slate-600' : 'text-slate-400'}`}>

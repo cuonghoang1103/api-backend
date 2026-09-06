@@ -33,6 +33,9 @@
       ],
       "next/dynamic": [
         "src/renderer/shims/next-dynamic.tsx"
+      ],
+      "@/lib/lich/*": [
+        "../frontend/src/lib/lich/*"
       ]
     }
   },

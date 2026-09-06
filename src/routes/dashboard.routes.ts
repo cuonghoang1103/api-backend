@@ -93,12 +93,22 @@ async function sinhViecLap(userId: number, homNayClient: string): Promise<void> 
 router.get('/', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const userId = req.userId!;
-    const today = todayIso();
 
-    /* Ngày theo giờ MÁY của client. App mới gửi kèm; app cũ không gửi thì lùi
-       về ngày UTC — chấp nhận lệch vài giờ còn hơn không sinh việc lặp gì cả. */
+    /* ⛔⛔ NGÀY THEO GIỜ MÁY, DÙNG CHO CẢ HÀM — không phải chỉ cho việc lặp.
+     *
+     * Bản cũ giữ `today = todayIso()` (UTC) rồi chỉ truyền ngày của client vào
+     * riêng `sinhViecLap`. Mọi chỗ CÒN LẠI trong hàm vẫn so với UTC:
+     *   · `celebratedToday` → ở UTC+7, từ 00:00 tới 07:00 nó đọc dòng tổng kết
+     *     của HÔM QUA, nên app báo "đã kết thúc ngày hôm nay" khi chưa hề;
+     *   · chuỗi ngày → lệch đúng một ngày, đo thật: 5 ngày liên tiếp ra 4.
+     *
+     * Đây là lần thứ BA cùng một cái bẫy trong đúng tệp này (trước đó:
+     * `/celebrate` trả 0 EXP, `/plan-tomorrow` đặt việc vào hôm nay). Quy tắc:
+     * trong tệp này, hễ chạm tới "hôm nay" thì dùng `today` DƯỚI ĐÂY, và
+     * `todayIso()` chỉ được phép xuất hiện đúng ở dòng lùi dự phòng này. */
     const hn = String((req.query.homNay ?? '') as string);
-    await sinhViecLap(userId, /^\d{4}-\d{2}-\d{2}$/.test(hn) ? hn : today);
+    const today = isValidIsoDate(hn) ? hn : todayIso();
+    await sinhViecLap(userId, today);
 
     // Fetch state + today's tasks + today's celebration in parallel.
     // Three small reads beat one big join when the user is offline
@@ -127,6 +137,35 @@ router.get('/', async (req: Request, res: Response<ApiResponse>, next) => {
         where: { userId, celebratedDate: today },
       }),
     ]);
+
+    /* ── Chuỗi ngày học liên tiếp ─────────────────────────────────────
+     * Đếm từ `DashboardCelebration`, không cần bảng mới: mỗi ngày người dùng
+     * bấm "Kết thúc ngày" là một dòng, và ràng buộc (user_id, celebrated_date)
+     * bảo đảm mỗi ngày đúng một dòng.
+     *
+     * ⚠️ Mốc bắt đầu là HÔM NAY **hoặc HÔM QUA**. Nếu chỉ chấp nhận hôm nay
+     * thì suốt cả ngày — trước lúc người dùng kịp tổng kết — chuỗi hiện 0 và
+     * họ tưởng mình vừa mất chuỗi. Đó đúng là lúc con số cần khích lệ nhất.
+     *
+     * Ngày dùng ở đây là `today` theo GIỜ MÁY (xem đầu hàm). */
+    const ngayMung = await prisma.dashboardCelebration.findMany({
+      where: { userId },
+      select: { celebratedDate: true },
+      orderBy: { celebratedDate: 'desc' },
+      take: 400,
+    });
+    const tapNgay = new Set(ngayMung.map((c) => c.celebratedDate));
+    const lui = (iso: string, n: number) => {
+      const d = new Date(`${iso}T12:00:00.000Z`);   // neo 12:00Z: không múi giờ nào kéo lệch ngày
+      d.setUTCDate(d.getUTCDate() - n);
+      return d.toISOString().slice(0, 10);
+    };
+    let chuoi = 0;
+    let moc = tapNgay.has(today) ? today : (tapNgay.has(lui(today, 1)) ? lui(today, 1) : null);
+    while (moc && tapNgay.has(moc)) {
+      chuoi += 1;
+      moc = lui(moc, 1);
+    }
 
     // Parse the timeline JSON. We never trust it blindly — a
     // corrupted row should still give the user a working dashboard.
@@ -157,6 +196,8 @@ router.get('/', async (req: Request, res: Response<ApiResponse>, next) => {
         lastCelebratedAt: state?.lastCelebratedAt ?? null,
         tomorrowPlanLockedDate: state?.tomorrowPlanLockedDate ?? null,
         celebratedToday: Boolean(todayCeleb),
+        /** Số ngày học liên tiếp, tính tới hôm nay hoặc hôm qua. */
+        streak: chuoi,
         todayStats: todayCeleb
           ? {
               expAwarded: todayCeleb.expAwarded,

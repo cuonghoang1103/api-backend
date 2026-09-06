@@ -31,7 +31,55 @@ import path from 'node:path';
 const OUT = path.resolve(import.meta.dirname, '../content/exams/CSD201-PE20.mjs');
 const ATTACHMENT_URL = 'https://media.cuongthai.com/files/exam-attachments/CSD201/PE20-Given.zip';
 
-const B = (en, vi) => `${en}|||${vi}`;
+// Một trường song ngữ hay được ghép từ những mảnh mà bản thân mảnh đó ĐÃ là
+// chuỗi song ngữ — hoặc nhét vào trong B() (`B(scenario + task_en, ...)`), hoặc
+// nối ở ngoài (`prompt: SCENARIO + B(task_en, task_vi)`). Cả hai kiểu đều làm
+// một trường mang 2-5 dấu "|||", trong khi pickLang() (frontend/src/lib/utils.ts)
+// chỉ tách ở dấu ĐẦU TIÊN — hậu quả: người đọc bản tiếng Việt lãnh nguyên cả
+// đoạn tiếng Anh, kèm dấu "|||" hiện ra màn hình.
+//
+// KHÔNG tách được bằng "tiền tố chung của hai vế": phần mở đầu của task tiếng
+// Anh và tiếng Việt cũng trùng nhau ("Câu 1: addLast() - 1 " rồi mới mark/điểm)
+// nên tách kiểu đó sẽ cắt cụt vế Anh. Nên B() ghi nhớ mọi chuỗi song ngữ chính
+// nó đã tạo; gặp lại chuỗi đó ở bất kỳ đâu thì thay bằng đúng vế cần dùng —
+// ranh giới biết chính xác, không phải suy đoán. __biNormalize() quét lần cuối
+// toàn bộ spec trước khi ghi, bắt nốt kiểu nối ở ngoài B().
+const __biReg = [];
+const __biResolve = (s, side) => {
+  let out = s;
+  for (let guard = 0; guard < 40; guard++) {
+    const hit = __biReg
+      .filter((r) => out.includes(r))
+      .sort((a, b) => b.length - a.length)[0];
+    if (!hit) return out;
+    const k = hit.indexOf('|||');
+    out = out.split(hit).join(side === 'en' ? hit.slice(0, k) : hit.slice(k + 3));
+  }
+  throw new Error('B(): gỡ ||| lồng nhau không hội tụ');
+};
+const B = (en, vi) => {
+  const out = `${__biResolve(en, 'en')}|||${__biResolve(vi, 'vi')}`;
+  if ((out.match(/\|\|\|/g) || []).length !== 1) {
+    throw new Error('B(): còn dấu ||| lồng nhau chưa gỡ được — kiểm tay chỗ gọi B()');
+  }
+  __biReg.push(out);
+  return out;
+};
+const __biNormalize = (v) => {
+  if (typeof v === 'string') {
+    if ((v.match(/\|\|\|/g) || []).length <= 1) return v;
+    const out = `${__biResolve(v, 'en')}|||${__biResolve(v, 'vi')}`;
+    if ((out.match(/\|\|\|/g) || []).length !== 1) {
+      throw new Error('__biNormalize(): trường vẫn còn ||| lồng nhau: ' + v.slice(0, 120));
+    }
+    return out;
+  }
+  if (Array.isArray(v)) return v.map(__biNormalize);
+  if (v && typeof v === 'object') {
+    return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, __biNormalize(x)]));
+  }
+  return v;
+};
 const ML = (en, vi) => `<div class="ml-en">${en}</div><div class="ml-vi">${vi}</div>`;
 
 const instructions = ML(
@@ -225,5 +273,5 @@ const spec = {
   }],
 };
 
-fs.writeFileSync(OUT, `export default ${JSON.stringify(spec, null, 2)};\n`, 'utf8');
+fs.writeFileSync(OUT, `export default ${JSON.stringify(__biNormalize(spec), null, 2)};\n`, 'utf8');
 console.log(`✓ ${OUT} — PE/CODE ${spec.exams[0].questions.length} câu, ${spec.exams[0].totalPoints} điểm`);

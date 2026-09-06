@@ -1853,6 +1853,85 @@ hai chỗ: `Bricks.consume()` (thu tỉ lệ về 0) và `unbake()` vừa viết
 
 ---
 
+# 0q. GỘP INSTANCE CHO KHUÔN VIÊN FPTU — 04/09/2026, cú lớn nhất
+
+**mesh 3863 → 2062 (−1801, −47%)**, draw call chỉ 303 → 308 (**+5**). Đỉnh
+không đổi (2,50 triệu) — gộp instance không bỏ hình học nào, chỉ đổi cách gửi.
+
+FPTU riêng: **1918 mesh → 117 mesh + 93 InstancedMesh**. Cùng khuôn đảo thành
+phố dùng từ 1/8 (3035 → 61) và `FptuPeople` dùng ngay trước đó.
+
+Cộng cả hai đợt trong ngày: **4390 → 2062 mesh, giảm 53%.**
+
+## Mấu chốt: MESH THẬT VẪN SỐNG, chỉ RỜI khỏi cây cảnh
+
+Không xoá một `THREE.Mesh` nào. Chúng vẫn là nguồn sự thật mà `FptuDestruction`
+đọc và ghi — `piece.mesh.position/rotation/scale` khi đổ sập, `piece.mesh
+.material` khi sinh vụn, `piece.home` khi reset. Chỉ `group.remove()` chúng ra
+và vẽ bằng instance.
+
+Nhờ vậy **`FptuDestruction` chỉ thêm HAI dòng**, không sửa một chút logic nào:
+`unbakePiece()` ở đầu `breakPiece()`, `rebakePiece()` trong `reset()`.
+
+## ⚠️ BỐN chỗ phải đúng, sai một là hỏng
+
+**1. Gộp SAU `new FptuDestruction()`, không được sớm hơn.** `collectPieces()`
+có một LƯỢT QUÉT VÉT duyệt `campus.group` gom mesh dựng thẳng không qua `box()`
+(biển vẽ canvas, thông trên đồi). Gộp trước thì nó thấy `InstancedMesh` thay vì
+mesh thật.
+
+**2. CỜ ĐỔ BÓNG PHẢI VÀO KHOÁ GỘP.** Một `InstancedMesh` chỉ có MỘT
+`castShadow` cho mọi bản sao, mà `slab()` dựng tấm lát với `castShadow: false`
+còn tường thì `true`. Gộp chung là **382 tấm lát mặt đường bỗng đổ bóng** — đổi
+hình thấy rõ ngay. Khoá phải là `geometry|material|castShadow|receiveShadow`.
+
+**3. Chỉ gộp mesh là CON TRỰC TIẾP của `group`.** 13 nhóm lồng (85 mesh) chứa
+thứ tự bật/tắt `visible` lúc chạy — khối câu hỏi, hàng chữ FPT UNIVERSITY nạp
+muộn từ `.glb` (`FptuCampus.js:1488` đăng ký SAU hàm dựng). `InstancedMesh`
+không mang theo cờ `visible` từng bản sao.
+
+**4. Gỡ mesh trên BẢN SAO của `group.children`.** Gỡ trong lúc duyệt chính mảng
+đó là vừa duyệt vừa sửa nó — bỏ sót một nửa.
+
+Kèm: bỏ qua `PlaneGeometry` (mảng địa hình `heightPatch`, mỗi mảng một hình học
+riêng nên gộp chẳng được gì) và bỏ qua nhóm chỉ có MỘT bản sao.
+
+## VỠ và RESET — trả về cây cảnh, không tự tính ma trận
+
+Khối vỡ phải ĐỔ SẬP (1,5s) hoặc VĂNG ra (3,4s), ma trận đổi mỗi khung hình.
+`breakPiece()` gọi `unbakePiece()`: thu instance về tỉ lệ 0 rồi trả mesh về cây
+cảnh, để hoạt ảnh chạy y hệt. `reset()` gọi `rebakePiece()` SAU khi khôi phục
+vị trí (vì ma trận instance ghi lại từ đúng chỗ nó đứng ban đầu).
+
+Đo vòng tròn: gộp → campus 117 mesh → phá 48 khối thì **+48 mesh đúng bằng số
+khối vỡ** → reset về đúng 117, 0 khối vỡ.
+
+## Chứng minh "không đổi một điểm ảnh"
+
+**1801/1801 ma trận khớp `matrixWorld`, sai lệch lớn nhất = 0**, cùng đối tượng
+`geometry`, cùng đối tượng `material`, **0 sai cờ bóng**.
+
+⚠️ Muốn kiểm được TRỌN thì phải giữ `this.bakedMeshes`. Mesh đã gộp RỜI cây
+cảnh nên không còn đường nào duyệt tới — lần đầu bộ kiểm chỉ soi được 1420/1801
+vì nó dò qua `destruction.pieces`, bỏ sót 382 tấm lát (tấm lát không phải mảnh
+phá huỷ).
+
+## ⚠️ Một lỗi CÓ SẴN gặp dọc đường: rò 3 quả cầu sau `reset()`
+
+Sau mỗi vòng phá → reset, cảnh dôi ra **3 mesh `SphereGeometry` gắn thẳng vào
+`Scene`**. `reset()` có dọn vụn (`shards`) và bọt nước (`splashes`) nhưng ba
+quả này lọt. Đã xác nhận bằng `git stash`: bản CHƯA gộp instance cũng dôi đúng
+3 — **không phải do đợt này**. Chưa sửa, ghi lại để ai đó truy tiếp.
+
+## Còn lại gì
+
+Sau đợt này FPTU chỉ còn 117 mesh phẳng. Chỗ nặng tiếp theo là `playIsland`
+(536 mesh) và `carrier` (251) — nhưng cả hai đã nhỏ hơn hẳn, và đảo sân chơi
+trộn lẫn thứ động (cửa xoay, bục đĩa than, sàn nhảy nhấp theo nhạc) nên phải
+lọc kỹ hơn nhiều so với khuôn viên.
+
+---
+
 # 1. MƯỜI BA BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
 
 Cần dev server sống: `cd playground-3d && npm run dev` (xem mục 4).

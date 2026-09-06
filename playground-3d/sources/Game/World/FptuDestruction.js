@@ -445,6 +445,13 @@ export class FptuDestruction
     {
         piece.broken = true
 
+        /**
+         * Khối đang nằm trong `InstancedMesh` (xem `FptuCampus.bakeStatic()`)
+         * thì trả nó về cây cảnh TRƯỚC, để hoạt ảnh đổ sập / văng bên dưới có
+         * thứ thật mà chạy. Khối không gộp thì hàm này không làm gì.
+         */
+        this.campus.unbakePiece?.(piece.mesh)
+
         // TẮT VA CHẠM NGAY — nếu không thì hình đi mà tường vô hình ở lại
         piece.object?.physical?.body?.setEnabled(false)
 
@@ -731,6 +738,10 @@ export class FptuDestruction
             piece.mesh.quaternion.copy(piece.home.quaternion)
             piece.mesh.scale.copy(piece.home.scale)
             piece.mesh.visible = piece.home.visible
+
+            // Trả khối về `InstancedMesh` — làm SAU khi đã khôi phục vị trí,
+            // vì ma trận instance được ghi lại từ đúng chỗ nó đứng ban đầu.
+            this.campus.rebakePiece?.(piece.mesh)
 
             const body = piece.object?.physical?.body
             if(body) bodiesToEnable.push(body)

@@ -149,7 +149,16 @@ const r = await page.evaluate(() =>
  * Ngưỡng = mốc đo + ~15% biên. Đây là ngưỡng CHỐNG TRÔI, không phải mục tiêu:
  * nó chỉ nói "đừng tệ hơn hôm nay", không nói "hôm nay đã tốt".
  */
-const NGƯỠNG = { mesh: 4450, đỉnh_triệu: 2.9, drawCalls: 350 }
+const NGƯỠNG = { mesh: 2400, đỉnh_triệu: 2.9, drawCalls: 360 }
+
+/**
+ * ⚠️ MỐC ĐO LẦN BA, sau khi gộp instance cho khuôn viên FPTU (04/09/2026):
+ *
+ *   mesh 2062 · instanced 239 (9938 bản sao) · 2,50 triệu đỉnh · 308 draw call
+ *
+ * So với trước khi gộp: mesh 3863 → 2062 (−1801), draw call 303 → 308 (+5).
+ * Đỉnh không đổi — gộp instance không bỏ đi hình học nào, chỉ đổi cách gửi.
+ */
 
 const đỉnhTr = r.toàn_cảnh.verts / 1e6
 console.log(`backend=${r.backend}  quality=${r.quality}`)

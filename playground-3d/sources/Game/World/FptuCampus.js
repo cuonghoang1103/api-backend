@@ -170,6 +170,184 @@ export class FptuCampus
          * thêm hình nào, nên không đẻ ra va chạm mới.
          */
         this.destruction = new FptuDestruction(this)
+
+        /**
+         * Gộp instance — chạy SAU `new FptuDestruction()`, không được sớm hơn.
+         *
+         * `FptuDestruction.collectPieces()` có một LƯỢT QUÉT VÉT duyệt
+         * `campus.group` để gom mesh dựng thẳng không qua `box()`. Gộp trước
+         * lượt đó thì nó thấy `InstancedMesh` thay vì mesh thật và gom sai.
+         */
+        this.bakeStatic()
+    }
+
+    // ═══════════════════════════════════════════════════════════════════════
+    //  GỘP INSTANCE cho khối TĨNH của khuôn viên
+    // ═══════════════════════════════════════════════════════════════════════
+
+    /**
+     * Gộp 1.833 mesh phẳng của khuôn viên thành ~108 `InstancedMesh`.
+     *
+     * Đây là cùng khuôn đã dùng cho `FptuPeople`, và cùng khuôn mà đảo thành
+     * phố dùng từ 1/8 (3035 → 61 mesh). Điểm khác duy nhất: ở đây phần lớn khối
+     * là MẢNH PHÁ HUỶ, gỡ được từng cái.
+     *
+     * ─── MESH THẬT VẪN SỐNG, chỉ RỜI KHỎI CÂY CẢNH ──────────────────────────
+     * Không xoá `THREE.Mesh` nào. Chúng vẫn là nguồn sự thật mà
+     * `FptuDestruction` đọc và ghi (`piece.mesh.position/rotation/scale`,
+     * `piece.mesh.material` khi sinh vụn). Chỉ `group.remove()` chúng ra, và vẽ
+     * bằng instance thay thế. Nhờ vậy **`FptuDestruction` không phải sửa một
+     * dòng logic nào** — nó vẫn thao tác trên đúng những mesh đó.
+     *
+     * Khi một khối VỠ, `breakPiece()` gọi `unbakePiece()` để trả mesh về cây
+     * cảnh, và hoạt ảnh đổ sập / văng chạy y hệt như trước.
+     *
+     * ⚠️ KHOÁ GỘP PHẢI GỒM CỜ ĐỔ BÓNG. Một `InstancedMesh` chỉ có MỘT
+     * `castShadow` cho mọi bản sao, mà `slab()` dựng tấm lát với
+     * `castShadow: false`. Gộp chung với tường (`castShadow: true`) là 382 tấm
+     * lát mặt đường bỗng nhiên đổ bóng — đổi hình thấy rõ.
+     *
+     * ⚠️ Chỉ gộp mesh là CON TRỰC TIẾP của `group`. Nhóm lồng (13 nhóm, 85
+     * mesh) gồm mấy thứ tự bật/tắt `visible` lúc chạy (khối câu hỏi, hàng chữ
+     * nạp muộn từ `.glb`) — instance không mang theo được cờ đó.
+     *
+     * ⚠️ Bỏ qua `PlaneGeometry`: đó là mảng địa hình của `heightPatch`, mỗi
+     * mảng một hình học riêng nên gộp chẳng được gì.
+     *
+     * ⚠️ Bỏ qua nhóm chỉ có MỘT bản sao — dựng `InstancedMesh` cho một vật là
+     * thêm một lớp phức tạp mà không bớt được gì.
+     */
+    bakeStatic()
+    {
+        const batches = new Map()
+
+        for(const child of this.group.children)
+        {
+            if(!child.isMesh || child.isInstancedMesh)
+                continue
+
+            if(child.geometry?.type === 'PlaneGeometry')
+                continue
+
+            const key = `${child.geometry.uuid}|${child.material.uuid}|${child.castShadow ? 1 : 0}${child.receiveShadow ? 1 : 0}`
+
+            let batch = batches.get(key)
+
+            if(!batch)
+            {
+                batch = {
+                    geometry: child.geometry,
+                    material: child.material,
+                    castShadow: child.castShadow,
+                    receiveShadow: child.receiveShadow,
+                    meshes: [],
+                }
+                batches.set(key, batch)
+            }
+
+            batch.meshes.push(child)
+        }
+
+        this.instanceBatches = new Map()
+
+        /**
+         * Giữ danh sách mesh đã gộp. Chúng đã RỜI cây cảnh nên không còn đường
+         * nào duyệt tới, mà bộ kiểm cần chúng để đối chiếu ma trận instance với
+         * `matrixWorld` thật — thiếu danh sách này thì chỉ soi được số mảnh phá
+         * huỷ, bỏ sót 382 tấm lát.
+         */
+        this.bakedMeshes = []
+
+        let gộp = 0
+
+        for(const [ key, batch ] of batches)
+        {
+            if(batch.meshes.length < 2)
+                continue
+
+            const mesh = new THREE.InstancedMesh(batch.geometry, batch.material, batch.meshes.length)
+            mesh.name = 'fptuCampus:batch'
+            mesh.castShadow = batch.castShadow
+            mesh.receiveShadow = batch.receiveShadow
+
+            const matrices = []
+
+            for(let i = 0; i < batch.meshes.length; i++)
+            {
+                const source = batch.meshes[i]
+                source.updateMatrixWorld(true)
+
+                const matrix = source.matrixWorld.clone()
+                matrices.push(matrix)
+                mesh.setMatrixAt(i, matrix)
+
+                source.userData.instanceSlot = { key, index: i }
+                this.bakedMeshes.push(source)
+                gộp++
+            }
+
+            mesh.instanceMatrix.needsUpdate = true
+            this.group.add(mesh)
+
+            this.instanceBatches.set(key, { mesh, matrices })
+        }
+
+        // Gỡ SAU khi đã đọc xong mọi ma trận, và duyệt trên BẢN SAO của mảng
+        // con — gỡ trong lúc duyệt `group.children` là vừa duyệt vừa sửa đúng
+        // cái mảng đang duyệt, và nó sẽ bỏ sót một nửa.
+        for(const child of [ ...this.group.children ])
+            if(child.userData?.instanceSlot)
+                this.group.remove(child)
+
+        this.bakedCount = gộp
+    }
+
+    /**
+     * Trả một khối từ instance về mesh thường — gọi khi nó VỠ.
+     *
+     * Khối vỡ phải ĐỔ SẬP hoặc VĂNG ra (ma trận đổi mỗi khung hình trong
+     * 1,5–3,4 giây). Thay vì tự tính lại ma trận instance, trả nó về cây cảnh
+     * và để three.js làm đúng việc của nó — hoạt ảnh giữ nguyên tuyệt đối.
+     */
+    unbakePiece(mesh)
+    {
+        const slot = mesh?.userData?.instanceSlot
+
+        if(!slot || mesh.userData.instanceHidden)
+            return
+
+        const batch = this.instanceBatches?.get(slot.key)
+
+        if(!batch)
+            return
+
+        this.hiddenMatrix ??= new THREE.Matrix4().makeScale(0, 0, 0)
+
+        batch.mesh.setMatrixAt(slot.index, this.hiddenMatrix)
+        batch.mesh.instanceMatrix.needsUpdate = true
+
+        mesh.userData.instanceHidden = true
+        this.group.add(mesh)
+    }
+
+    /** Ngược lại của `unbakePiece()` — gọi khi `reset()` dựng lại khối. */
+    rebakePiece(mesh)
+    {
+        const slot = mesh?.userData?.instanceSlot
+
+        if(!slot || !mesh.userData.instanceHidden)
+            return
+
+        const batch = this.instanceBatches?.get(slot.key)
+
+        if(!batch)
+            return
+
+        batch.mesh.setMatrixAt(slot.index, batch.matrices[slot.index])
+        batch.mesh.instanceMatrix.needsUpdate = true
+
+        mesh.userData.instanceHidden = false
+        this.group.remove(mesh)
     }
 
     /**

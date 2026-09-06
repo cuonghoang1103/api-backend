@@ -45,6 +45,11 @@ export const settingKeySchema = z.enum([
   'sidebarMode',
   'robotPanelOpen',
   'robotEnabled',
+  /**
+   * Robot có nhắc "còn bao lâu tới buổi học sớm nhất" mỗi 10 phút không.
+   * Mặc định BẬT. Tắt được ngay trên khối Lịch học — xem `LichHoc.tsx`.
+   */
+  'nhacLichRobot',
   'reducedMotion',
   'zoomLevel',
   'lastRoute',

@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AppStateProvider, useAppState } from './app-state';
 import { LoginScreen } from './auth/LoginScreen';
 import { SessionProvider, useSession } from './auth/session';
 import { batDauDoNhac } from './features/dashboard/nhacNho';
+import { batDauNhacLichRobot, phatCauNhac } from './features/dashboard/nhacLichRobot';
 import { datBatAm } from './features/dashboard/amThanh';
 import { CommandPalette } from './components/CommandPalette';
 import { MusicPlayerProvider } from './features/music/player';
@@ -182,7 +183,14 @@ function Shell() {
  */
 function Gate() {
   const { phase, api } = useSession();
-  const { online } = useAppState();
+  const { online, settings } = useAppState();
+
+  /* Cài đặt trong một `ref`: vòng nhắc chạy suốt phiên và chỉ hỏi lại mỗi 10
+     phút, nên nó phải đọc GIÁ TRỊ MỚI NHẤT chứ không phải giá trị đóng băng
+     lúc effect chạy. Cho `settings` vào mảng phụ thuộc thì mỗi lần đổi bất kỳ
+     cài đặt nào cũng dựng lại cả vòng và đồng hồ nhảy về 0. */
+  const batNhacLich = useRef(settings.nhacLichRobot !== false);
+  batNhacLich.current = settings.nhacLichRobot !== false;
 
   /*
    * NHẮC NHỞ chạy ở đây chứ không ở trang Tổng quan.
@@ -198,7 +206,11 @@ function Gate() {
       // giao tính năng ở trạng thái tắt và để họ tự đi tìm công tắc.
       datBatAm((t as Record<string, unknown>).tqAmThanh !== false);
     });
-    return batDauDoNhac(api, () => { /* thẻ trong app do trang Tổng quan lo */ });
+    const dungNhac = batDauDoNhac(api, () => { /* thẻ trong app do trang Tổng quan lo */ });
+    /* Đồng hồ đếm ngược của robot. Đọc cài đặt Ở MỖI NHỊP qua `ref` — bấm tắt
+       trên khối Lịch học phải có tác dụng ngay, không đợi khởi động lại. */
+    const dungLich = batDauNhacLichRobot(api, phatCauNhac, () => batNhacLich.current);
+    return () => { dungNhac(); dungLich(); };
   }, [phase, api]);
 
   if (phase === 'dang-khoi-phuc') {

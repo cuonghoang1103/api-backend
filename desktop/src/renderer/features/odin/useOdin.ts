@@ -55,6 +55,20 @@ export interface OdinState {
   poke: () => void;
   /** Cho Odin nói một câu và nhảy lên mừng. Dùng cho tin đáng chú ý. */
   announce: (message: string) => void;
+  /**
+   * Nói một câu rồi TỰ TẮT sau `ms`. Dùng cho tin do app tự sinh và lặp lại
+   * (đồng hồ đếm ngược tới buổi học) — thứ nói 10 phút một lần mà bong bóng
+   * nằm mãi thì chiếm góc màn hình vĩnh viễn.
+   *
+   * Khác `announce` ở hai điểm, cả hai đều cố ý:
+   *  • KHÔNG bóc markdown. Chữ ở đây do app viết, không có markdown — mà bộ
+   *    bóc lại ăn mất gạch dưới trong mã lớp: hai mã có `_` trong cùng một câu
+   *    ("AI17_A", "BE-2_1") bị coi là một cặp chữ nghiêng, ra "AI17A" và
+   *    "BE-21". Người dùng đọc sai phòng học.
+   *  • Tự tắt, và CHỈ tắt khi bong bóng vẫn đang là câu đó — người dùng hỏi
+   *    robot xen vào thì câu trả lời của họ phải được ở lại.
+   */
+  announceTam: (message: string, ms?: number) => void;
   startListening: () => Promise<void>;
   stopListening: () => void;
   dismissSay: () => void;
@@ -177,6 +191,28 @@ export function useOdin(options: {
    *     không phải là "nhiều thông tin", nó là một tấm rèm che màn hình. Ai
    *     cần đọc đủ thì mở khung chat — chữ vẫn còn nguyên ở đó.
    */
+  const henTam = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const announceTam = useCallback(
+    (message: string, ms = 14_000) => {
+      const sach = message.length > TRAN_BONG_BONG
+        ? `${message.slice(0, TRAN_BONG_BONG).trimEnd()}…`
+        : message;
+      setSay(sach);
+      moodFor('vui', 1600);
+      if (henTam.current) clearTimeout(henTam.current);
+      /* So bằng hàm cập nhật của `setSay` chứ không bằng `ref`: nó đưa GIÁ TRỊ
+         ĐANG LƯU vào tay, nên không có chuyện đọc phải bản cũ trong closure —
+         và không cần giữ thêm một `ref` phải nhớ đồng bộ. */
+      henTam.current = setTimeout(() => {
+        setSay((cu) => (cu === sach ? null : cu));
+      }, ms);
+    },
+    [moodFor],
+  );
+
+  useEffect(() => () => { if (henTam.current) clearTimeout(henTam.current); }, []);
+
   const announce = useCallback(
     (message: string) => {
       const sach = chuChoMayDoc(message);
@@ -293,6 +329,7 @@ export function useOdin(options: {
     announce,
     startListening,
     stopListening,
+    announceTam,
     dismissSay: () => setSay(null),
   };
 }

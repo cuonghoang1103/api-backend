@@ -21,6 +21,7 @@ import { createRoot } from 'react-dom/client';
 import { AppStateProvider } from '../../src/renderer/app-state';
 import { nativePageFor } from '../../src/renderer/page-registry';
 import { MusicPlayerProvider } from '../../src/renderer/features/music/player';
+import { OdinDock } from '../../src/renderer/features/odin/OdinDock';
 import '../../src/renderer/styles.css';
 
 const duong = new URLSearchParams(location.search).get('trang') ?? '/dashboard';
@@ -39,6 +40,12 @@ createRoot(document.getElementById('root')!).render(
           </div>
           <div style={{ height: 'var(--ct-statusbar-h)' }} />
         </div>
+        {/* Robot chỉ gắn khi `?robot=1`. Nó không liên quan tới bố cục trang,
+            và gắn mặc định thì 42 trang nào cũng phải chịu một cái mic xin
+            quyền. Bật cờ này để CHỨNG MINH đường nhắc lịch chạy thật: bắn sự
+            kiện rồi xem bong bóng có hiện không — thứ mà phép kiểm đơn vị
+            không nói được. */}
+        {new URLSearchParams(location.search).get('robot') === '1' && <OdinDock />}
       </div>
     </MusicPlayerProvider>
   </AppStateProvider>,

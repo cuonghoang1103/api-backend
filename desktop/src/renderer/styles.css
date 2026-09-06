@@ -5911,7 +5911,43 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   position: absolute; bottom: -16px; left: 0;
   font-size: 9px; color: var(--ct-text-faint);
 }
-.ct-tq-dong { padding-bottom: 30px; }
+.ct-tq-dong { padding-bottom: 30px; row-gap: 5px; }
+
+/* ── Buổi học trên dải 24 giờ ──────────────────────────────
+   Nằm trên chính lưới 24 cột, nên mép ô khớp tuyệt đối với cột giờ — không
+   phải một lớp phủ tính bằng phần trăm rồi lệch dần theo `gap`.
+   `pointer-events: none` vì dải này còn để BẤM và KÉO đặt hoạt động: ô học
+   che mất giờ nào thì giờ đó không đặt được nữa, mà buổi học đã chiếm sẵn
+   khung giờ đẹp nhất trong ngày. */
+.ct-tq-hoc {
+  pointer-events: none;
+  overflow: hidden;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+  padding: 3px 7px;
+  border-radius: 5px;
+  border: 1px solid color-mix(in srgb, var(--mau, var(--ct-accent)) 55%, transparent);
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--mau, var(--ct-accent)) 34%, transparent),
+      color-mix(in srgb, var(--mau, var(--ct-accent)) 15%, transparent)),
+    var(--ct-surface);
+  white-space: nowrap;
+}
+.ct-tq-hoc b {
+  font-size: 11px;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--mau, var(--ct-accent)) 60%, var(--ct-text));
+}
+/* Giờ là thứ nhường chỗ khi ô hẹp — tên môn phải sống sót tới cùng. */
+.ct-tq-hoc span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 9.5px;
+  color: var(--ct-text-muted);
+}
 
 /* ── Đi nhanh ── */
 .ct-tq-nhanh {
@@ -10093,33 +10129,78 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 
 .ct-lich-o { position: relative; }
 
+/* Mỗi môn một màu (`--mau`, đặt bằng `mauMon()`).
+   Bảy cột × bốn hàng ô xám hệt nhau thì phải ĐỌC từng ô mới biết môn gì; có
+   màu thì nhận ra cả tuần trong một cái liếc.
+   Màu chỉ pha vào nền và viền, chữ vẫn trộn với `--ct-text` — nền sáng mà để
+   chữ nguyên màu thì vàng trên vàng nhạt là không đọc nổi. */
 .ct-lich-o > button {
   display: block;
   width: 100%;
   padding: 6px 8px;
-  border: 1px solid var(--ct-border);
-  border-left: 3px solid var(--ct-accent);
+  border: 1px solid color-mix(in srgb, var(--mau, var(--ct-accent)) 38%, transparent);
+  border-left: 3px solid var(--mau, var(--ct-accent));
   border-radius: var(--ct-radius-sm);
-  background: var(--ct-bg);
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--mau, var(--ct-accent)) 20%, transparent),
+      color-mix(in srgb, var(--mau, var(--ct-accent)) 7%, transparent)),
+    var(--ct-bg);
   color: var(--ct-text);
   font: inherit;
   text-align: left;
   cursor: pointer;
-  transition: background var(--ct-motion-fast) var(--ct-ease);
+  transition: background var(--ct-motion-fast) var(--ct-ease),
+              transform var(--ct-motion-fast) var(--ct-ease),
+              box-shadow var(--ct-motion-fast) var(--ct-ease);
 }
 
-.ct-lich-o > button:hover { background: var(--ct-hover); }
-.ct-lich-o > button strong { display: block; font-size: 12px; }
+.ct-lich-o > button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--mau, var(--ct-accent)) 28%, transparent);
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--mau, var(--ct-accent)) 30%, transparent),
+      color-mix(in srgb, var(--mau, var(--ct-accent)) 12%, transparent)),
+    var(--ct-bg);
+}
+.ct-lich-o > button strong {
+  display: block;
+  font-size: 12px;
+  color: color-mix(in srgb, var(--mau, var(--ct-accent)) 62%, var(--ct-text));
+}
 .ct-lich-o > button span { display: block; font-size: 10.5px; color: var(--ct-text-muted); }
 .ct-lich-o > button em { display: block; font-style: normal; font-size: 10px; color: var(--ct-text-faint); }
 
-/* Viền trái nói trạng thái điểm danh — cùng cách đọc như ưu tiên của việc. */
+/* Viền trái nói trạng thái điểm danh. Nó GHI ĐÈ màu môn có chủ đích: đã chấm
+   rồi thì trạng thái quan trọng hơn môn gì — môn vẫn đọc được ở nền và ở chữ. */
 .ct-lich-o[data-tt='co'] > button { border-left-color: var(--ct-ok); }
 .ct-lich-o[data-tt='vang'] > button { border-left-color: var(--ct-err); }
 .ct-lich-o[data-tt='phep'] > button { border-left-color: var(--ct-warn); }
 
+/* Buổi sắp tới trong 2 giờ: vòng sáng đập nhẹ. Đây là ô DUY NHẤT cần thấy
+   ngay khi mở app, nên nó được phép động trong khi cả bảng đứng yên. */
 .ct-lich-o[data-sap='true'] > button {
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ct-accent) 45%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--mau, var(--ct-accent)) 60%, transparent);
+  animation: ct-lich-tho 2.4s ease-in-out infinite;
+}
+
+@keyframes ct-lich-tho {
+  0%, 100% { box-shadow: 0 0 0 2px color-mix(in srgb, var(--mau, var(--ct-accent)) 55%, transparent); }
+  50%      { box-shadow: 0 0 0 5px color-mix(in srgb, var(--mau, var(--ct-accent)) 18%, transparent); }
+}
+
+.ct-lich-cham-mau {
+  width: 8px; height: 8px; border-radius: 999px; flex-shrink: 0;
+}
+
+.ct-lich-robot { margin-left: auto; }
+.ct-lich-robot[data-tat='true'] { opacity: 0.6; }
+.ct-lich-sua { margin-left: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ct-lich-o[data-sap='true'] > button { animation: none; }
+  .ct-lich-o > button:hover { transform: none; }
 }
 
 .ct-lich-sap {

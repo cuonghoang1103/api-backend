@@ -18,6 +18,7 @@ import { hoiOdin, phienNoiHienTai } from './hoiOdin';
 import { useSession } from '../../auth/session';
 import { OdinRobot } from './OdinRobot';
 import { useOdin } from './useOdin';
+import { SU_KIEN_NHAC } from '../dashboard/nhacLichRobot';
 import './odin.css';
 
 export function OdinDock() {
@@ -42,6 +43,26 @@ export function OdinDock() {
     enabled,
     onTranscript: (text) => { void traLoiBangTieng(text); },
   });
+
+  /**
+   * Đồng hồ đếm ngược tới buổi học — do vòng ở `App.tsx` bắn xuống.
+   *
+   * Chỉ HIỆN BONG BÓNG, không đọc thành tiếng: nó nói 10 phút một lần cả ngày,
+   * và một giọng nói xen vào mỗi 10 phút thì bị tắt ngay hôm đầu. Muốn nghe
+   * thì hỏi robot.
+   *
+   * Robot tắt (`robotEnabled`) thì im — người đã tắt robot không muốn thấy
+   * bong bóng của nó, dù bật nhắc lịch.
+   */
+  useEffect(() => {
+    if (!enabled) return;
+    const nghe = (e: Event) => {
+      const chu = (e as CustomEvent<{ chu?: string }>).detail?.chu;
+      if (typeof chu === 'string' && chu) odin.announceTam(chu);
+    };
+    window.addEventListener(SU_KIEN_NHAC, nghe);
+    return () => window.removeEventListener(SU_KIEN_NHAC, nghe);
+  }, [enabled, odin]);
 
   // Phím tắt nhấn-giữ. Dùng phím ` (backquote) vì nó gần như không bao giờ
   // xuất hiện giữa lúc gõ tiếng Việt, và nằm sát tay trái.

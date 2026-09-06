@@ -31,6 +31,7 @@
  * Mở app lúc mất mạng vẫn phải thấy việc hôm nay. `swr` trả bản cache trước rồi
  * cập nhật khi bản mới về, nên màn hình không bao giờ trắng vì đang chờ mạng.
  */
+import type React from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Bell, BookOpen, Briefcase, ChevronRight, Coffee, Dumbbell, Flame,
@@ -40,7 +41,8 @@ import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { OfflineUnavailableError, swr } from '../../offline/cache';
 import { BangViec, type Scope as PhamVi, type Task as ViecUi, type VaSua } from './BangViec';
-import { LichHoc } from './LichHoc';
+import { LichHoc, mauMon, type Buoi } from './LichHoc';
+import { xepLan } from './dai24';
 
 /**
  * ⚠️ `api.request` TỰ tuần tự hoá `body` — ĐỪNG `JSON.stringify` trước.
@@ -238,6 +240,12 @@ export function DashboardPage() {
    * đọc được ngay cả khi chưa đặt hoạt động nào.
    */
   const coHoatDong = (du?.timeline ?? []).some((s) => !!s.activity);
+
+  /* Buổi học hôm nay — `LichHoc` đã nạp rồi thì đưa sang, không gọi API lần hai.
+     `datBuoiHomNay` là hàm đặt state của React nên nó BỀN qua các lần vẽ; truyền
+     một hàm mới mỗi lần vẽ vào đây sẽ làm `nap()` bên kia chạy lại vô tận. */
+  const [buoiHomNay, datBuoiHomNay] = useState<Buoi[]>([]);
+  const { o: oHoc, soLan } = useMemo(() => xepLan(buoiHomNay), [buoiHomNay]);
 
   // ── Đặt hoạt động cho từng khung giờ ────────────────────
   /** Giờ đang mở bảng chọn. `null` = không mở. */
@@ -521,13 +529,32 @@ export function DashboardPage() {
       {/* Lịch học đứng SAU việc hôm nay, TRƯỚC dải 24 giờ: việc là thứ mình
           tự đặt ra, lịch học là thứ đã cố định — đọc việc trước rồi mới xem nó
           phải nhét vào những khoảng trống nào. */}
-      <LichHoc />
+      <LichHoc onHomNay={datBuoiHomNay} />
 
       {/* ── Dòng thời gian 24 giờ ──────────────────────────── */}
       {du && (
         <section className="ct-tq-khoi">
           <div className="ct-tq-khoi-dau"><h2>Một ngày của bạn</h2></div>
           <div className="ct-tq-dong">
+            {/* Buổi học của HÔM NAY, nằm trên chính lưới 24 cột đó — cùng màu
+                với bảng lịch phía trên, để hai khối nói cùng một thứ tiếng.
+                `pointer-events: none` để vẫn bấm/kéo đặt hoạt động được ở
+                những giờ nằm dưới. */}
+            {oHoc.map((x) => (
+              <div
+                key={x.buoi.id}
+                className="ct-tq-hoc"
+                style={{
+                  gridColumn: `${x.tu + 1} / span ${x.den - x.tu}`,
+                  gridRow: x.lan + 1,
+                  '--mau': mauMon(x.buoi.subject, x.buoi.color),
+                } as React.CSSProperties}
+                title={`${x.buoi.subject}${x.buoi.room ? ` · ${x.buoi.room}` : ''} · ${x.buoi.startTime}–${x.buoi.endTime}`}
+              >
+                <b>{x.buoi.classCode || x.buoi.subject}</b>
+                <span>{x.buoi.startTime}–{x.buoi.endTime}</span>
+              </div>
+            ))}
             {du.timeline.map((s) => {
               const h = s.activity ? THEO_KHOA.get(s.activity.type as never) : null;
               return (
@@ -535,11 +562,11 @@ export function DashboardPage() {
                   key={s.hour}
                   type="button"
                   className="ct-tq-gio"
+                  style={{ ...(h ? { background: h.mau } : {}), gridRow: soLan + 1 }}
                   data-co={!!s.activity}
                   data-qua={s.hour < gio}
                   data-nay={s.hour === gio}
                   data-mo={dangChon === s.hour}
-                  style={h ? { background: h.mau } : undefined}
                   onMouseDown={() => { dangKeo.current = true; gioBatDau.current = s.hour; datDangChon(s.hour); }}
                   /* Kéo qua để tô hàng loạt bằng cọ vừa chọn. Không có nó thì
                      đặt 8 tiếng ngủ là tám lần bấm + tám lần chọn. */

@@ -19,13 +19,43 @@
  * ngoài trường, học thêm, gia sư. Gom theo `startTime` có thật thì bảng luôn
  * vừa khít: không có hàng trống, và không thiếu hàng cho một giờ lạ.
  */
+import type React from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { AlertTriangle, CalendarDays, Check, CircleSlash, FileText, Pencil, Plus } from 'lucide-react';
+import { AlertTriangle, Bot, BotOff, CalendarDays, Check, CircleSlash, FileText, Pencil, Plus } from 'lucide-react';
 import { useSession } from '../../auth/session';
+import { useAppState } from '../../app-state';
 import { SoanLich } from './SoanLich';
 
 /** Nghỉ quá con số này là không qua môn. Quy định của trường. */
 export const TRAN_NGHI = 4;
+
+/**
+ * Màu cho từng môn.
+ *
+ * Tám màu chọn tay chứ không sinh từ HSL: HSL rải đều cho ra vàng và lục sát
+ * nhau tới mức liếc qua không phân biệt được, mà phân biệt được mới là toàn bộ
+ * mục đích. Tám màu này đều đọc rõ trên CẢ nền tối lẫn nền sáng — chúng chỉ
+ * làm viền và chữ, còn nền ô là `color-mix` pha loãng nên độ tương phản chữ
+ * vẫn do biến chủ đề quyết định.
+ */
+export const MAU_MON = [
+  '#f87171', '#fb923c', '#fbbf24', '#4ade80',
+  '#2dd4bf', '#60a5fa', '#c084fc', '#f472b6',
+] as const;
+
+/**
+ * Môn nào ra màu nấy, CỐ ĐỊNH giữa các lần mở app.
+ *
+ * Băm theo tên chứ không phát màu theo thứ tự xuất hiện: xếp theo thứ tự thì
+ * thêm một buổi mới là cả bảng đổi màu, và người dùng vừa học thuộc "xanh lá
+ * là Lab" đã phải học lại.
+ */
+export function mauMon(ten: string, dat?: string | null): string {
+  if (dat && /^#[0-9a-f]{3,8}$/i.test(dat)) return dat;
+  let h = 0;
+  for (let i = 0; i < ten.length; i++) h = (h * 31 + ten.charCodeAt(i)) >>> 0;
+  return MAU_MON[h % MAU_MON.length]!;
+}
 
 const THU = [
   { n: 2, ten: 'Thứ 2' }, { n: 3, ten: 'Thứ 3' }, { n: 4, ten: 'Thứ 4' },
@@ -42,6 +72,7 @@ export interface Buoi {
   startTime: string;
   endTime: string;
   note?: string | null;
+  color?: string | null;
   remindMinutes?: number;
   soBuoiVang?: number;
 }
@@ -71,13 +102,15 @@ export function conMayPhut(startTime: string, bayGio = new Date()): number {
   return Math.round((t.getTime() - bayGio.getTime()) / 60000);
 }
 
-export function LichHoc() {
+export function LichHoc({ onHomNay }: { onHomNay?: (ds: Buoi[]) => void } = {}) {
   const { api } = useSession();
   const [buoi, datBuoi] = useState<Buoi[]>([]);
   const [diemDanh, datDiemDanh] = useState<DiemDanh[]>([]);
   const [dangTai, datDangTai] = useState(true);
   const [moChon, datMoChon] = useState<string | null>(null); // `${id}|${ngay}`
   const [moSoan, datMoSoan] = useState(false);
+  const { settings, setSetting } = useAppState();
+  const nhacRobot = settings.nhacLichRobot !== false;
 
   const homNay = new Date();
   const thuHomNay = homNay.getDay() === 0 ? 8 : homNay.getDay() + 1;
@@ -88,7 +121,13 @@ export function LichHoc() {
       const ds = await api.request<{ items: Buoi[] }>(
         `/api/v1/class-schedule?ngay=${ngayISO(new Date())}`,
       );
-      datBuoi(ds?.items ?? []);
+      const items = ds?.items ?? [];
+      datBuoi(items);
+      /* Đưa buổi HÔM NAY lên trang cha để dải 24 giờ tô được. Lọc ở đây chứ
+         không để bên kia gọi lại API: hai lời gọi cùng một dữ liệu, và hai lần
+         nạp lệch nhau thì lịch với dải 24 giờ nói hai chuyện khác nhau. */
+      const t = new Date().getDay() === 0 ? 8 : new Date().getDay() + 1;
+      onHomNay?.(items.filter((b) => b.weekday === t));
       const tu = ngayISO(ngayCuaThu(new Date(), 2));
       const den = ngayISO(ngayCuaThu(new Date(), 8));
       const dd = await api.request<{ items: DiemDanh[] }>(
@@ -101,7 +140,7 @@ export function LichHoc() {
     } finally {
       datDangTai(false);
     }
-  }, [api]);
+  }, [api, onHomNay]);
 
   useEffect(() => { void nap(); }, [nap]);
 
@@ -161,6 +200,21 @@ export function LichHoc() {
       <div className="ct-lich-dau">
         <h2><CalendarDays size={15} aria-hidden /> Lịch học tuần này</h2>
         <span className="ct-muted">Bấm vào buổi để chấm điểm danh</span>
+        {/* Tắt robot nhắc NGAY TẠI ĐÂY, không bắt đi lục Cài đặt: thứ làm phiền
+            phải tắt được ở đúng chỗ nó làm phiền, không thì người ta tắt cả
+            robot cho xong. */}
+        <button
+          type="button"
+          className="ct-btn ct-lich-robot"
+          data-tat={!nhacRobot}
+          onClick={() => setSetting('nhacLichRobot', !nhacRobot)}
+          title={nhacRobot
+            ? 'Robot đang nhắc 10 phút một lần — bấm để tắt'
+            : 'Robot đã tắt nhắc lịch — bấm để bật lại'}
+        >
+          {nhacRobot ? <Bot size={13} aria-hidden /> : <BotOff size={13} aria-hidden />}
+          {nhacRobot ? 'Robot đang nhắc' : 'Robot đã tắt'}
+        </button>
         <button type="button" className="ct-btn ct-lich-sua" onClick={() => datMoSoan(true)}>
           <Pencil size={12} aria-hidden /> Sửa lịch
         </button>
@@ -170,7 +224,9 @@ export function LichHoc() {
         <div className="ct-lich-canh">
           {canhBao.map(([mon, n]) => (
             <span key={mon} data-nguy={n >= TRAN_NGHI}>
-              {n >= TRAN_NGHI && <AlertTriangle size={11} aria-hidden />}
+              {n >= TRAN_NGHI
+                ? <AlertTriangle size={11} aria-hidden />
+                : <i className="ct-lich-cham-mau" style={{ background: mauMon(mon) }} aria-hidden />}
               {mon}: nghỉ <strong>{n}</strong>/{TRAN_NGHI}
               {n >= TRAN_NGHI && ' — KHÔNG QUA MÔN'}
             </span>
@@ -209,7 +265,13 @@ export function LichHoc() {
                         const sapToi = phut !== null && phut > 0 && phut <= 120;
                         const khoa = `${b.id}|${ngay}`;
                         return (
-                          <div key={b.id} className="ct-lich-o" data-tt={tt ?? 'chua'} data-sap={sapToi}>
+                          <div
+                            key={b.id}
+                            className="ct-lich-o"
+                            data-tt={tt ?? 'chua'}
+                            data-sap={sapToi}
+                            style={{ '--mau': mauMon(b.subject, b.color) } as React.CSSProperties}
+                          >
                             <button type="button" onClick={() => datMoChon(moChon === khoa ? null : khoa)}>
                               <strong>{b.classCode || b.subject}</strong>
                               {b.room && <span>{b.room}</span>}

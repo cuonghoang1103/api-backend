@@ -25,7 +25,7 @@ Full-stack application:
 - **NEVER** run `npx prisma migrate reset` — it wipes ALL data
 - **NEVER** run `npx prisma db push` against production/VPS — bypasses migration history
 - **NEVER** run `git push --force` or `--force-with-lease` to `main`
-- **NEVER** push to `main` without completing the pre-push checklist below, and always ask the user for confirmation first. (A push no longer deploys — `deploy-nha.sh` does — but `main` is still the shared trunk, so it stays a confirm-first action)
+- **NEVER** push to `main` without completing the pre-push checklist below, and always ask the user for confirmation first. (A push no longer deploys — `deploy-nha.sh` does — but `main` is still the shared trunk, so it stays a confirm-first action.) ⚠️ **Running `deploy-nha.sh` counts as pushing** — it pushes to `origin/main` by itself at the end, so getting approval to deploy IS getting approval to push; see "Docker & Deploy"
 - **NEVER** auto-resolve failed migrations (`prisma migrate resolve`) — see Migration Failure Protocol
 - **NEVER** commit `.env`, `.env.local`, secrets, API keys, or credentials
 - **NEVER** SSH into VPS to modify database or containers directly, unless user explicitly asks
@@ -161,12 +161,25 @@ Rationale: auto-resolving partially-applied migrations can silently corrupt sche
 
 ## Docker & Deploy
 
-**STANDARD deploy + push flow (2026-07-06 — follow this order):**
+**STANDARD deploy + push flow (2026-07-06, corrected 2026-09-07 — follow this order):**
 1. Run the conditional pre-push checklist locally (tsc / build)
 2. Commit to **local `main`**
 3. Deploy with **`bash deploy-nha.sh`** (máy nhà build → GHCR → VPS chỉ tráo). This is the standard path since 2026-08-18. Do NOT deploy by pushing to GitHub
-4. **Wait for the user to test production and confirm the fix works**
-5. Only THEN `git push` to origin (with user confirmation, per Forbidden Actions). At this point the push is just syncing GitHub with what prod already runs
+4. **`deploy-nha.sh` pushes to `origin/main` ITSELF at the end — see the warning below.** There is no separate push step to run, and no waiting for the user to test first
+
+⚠️⚠️ **Deploying IS pushing (verified in the script 2026-09-07).** The old wording
+here said "wait for the user to test production, then push with confirmation" —
+that is **not what happens**. `deploy-nha.sh:699-746` runs the required CI checks
+itself (backend `tsc`, `eval:grader`, `eval:cv-linter`, `npm test`, frontend
+`tsc`) and then **`git push origin HEAD:main` with no prompt** (`:740`). It skips
+the push **only** when one of those checks fails — in which case production still
+runs the freshly swapped image and only GitHub lags, deliberately (`:726-736`).
+
+So when the user says "deploy đi", the truthful reading is **"deploy and push"**.
+Tell them that before running it, and never promise "nothing is pushed until you
+have tested" — the script has already pushed by then. If a deploy must NOT reach
+GitHub, there is no flag for it: the push step has to be skipped by hand. Check
+the real state with `git log --oneline origin/main..HEAD`, never by assuming.
 
 Why not push-to-deploy: `deploy-ghcr.yml` and `backend-vps` once ran on every push to `main` and raced each other into real outages (2026-07-03: feed 500 while schema lagged the image; 2026-07-06: backend recreate race → `Exited(137)` + orphan containers, recovered via `docker start cuonghoangdev_backend`). Deploying stays a script you run, never a side effect of pushing.
 

@@ -591,7 +591,20 @@ router.delete('/tasks/:id', async (req: Request, res: Response<ApiResponse>, nex
 router.post('/celebrate', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const userId = req.userId!;
-    const today = todayIso();
+
+    /* ⛔⛔ NGÀY THEO GIỜ MÁY, KHÔNG PHẢI UTC.
+     *
+     * Bản cũ dùng thẳng `todayIso()` (UTC) và BỎ QUA ngày client gửi. Ở UTC+7,
+     * từ 00:00 tới 07:00 thì "hôm nay" của máy chủ vẫn là HÔM QUA, trong khi
+     * việc được tạo với ngày theo giờ máy (app gửi kèm `date` — xem `GET /`
+     * ngay trên). Hậu quả đo thật lúc 03:39 giờ Việt: một việc đã xong đáng 25
+     * EXP mà tổng kết trả về **0 EXP**, rồi vẫn đóng dấu đã-tổng-kết cho NGÀY
+     * HÔM QUA — người dùng mất luôn lượt của ngày hôm nay và không hiểu vì sao.
+     *
+     * Lỗi này có ở CẢ app desktop, cùng khung giờ. Nhận `homNay` từ client,
+     * lùi về UTC nếu client cũ không gửi. */
+    const hnRaw = String((req.body?.homNay ?? '') as string);
+    const today = isValidIsoDate(hnRaw) ? hnRaw : todayIso();
 
     // 1. Compute today's stats. We do this BEFORE the celebration
     // row so the numbers we persist reflect the moment the user
@@ -720,9 +733,14 @@ router.post('/plan-tomorrow', async (req: Request, res: Response<ApiResponse>, n
       : [];
     if (titles.length === 0) throw new AppError('titles phai la mang khong rong', 400);
 
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const iso = tomorrow.toISOString().slice(0, 10);
+    /* ⛔⛔ Cùng bẫy UTC như `/celebrate`: `new Date()` rồi `toISOString()` cho
+     * ra ngày UTC. Ở UTC+7 lúc 03:39 giờ máy thì UTC vẫn là hôm qua, nên
+     * "ngày mai" tính ra lại đúng bằng HÔM NAY của người dùng — kế hoạch mai
+     * đổ thẳng vào danh sách việc đang làm dở. Nhận `homNay` theo giờ máy. */
+    const hnRaw = String((body as { homNay?: string }).homNay ?? '');
+    const goc = isValidIsoDate(hnRaw) ? new Date(`${hnRaw}T12:00:00.000Z`) : new Date();
+    goc.setUTCDate(goc.getUTCDate() + 1);
+    const iso = goc.toISOString().slice(0, 10);
 
     // Archive any existing tomorrow tasks so the plan replaces
     // instead of stacks. The user explicitly chose these titles.

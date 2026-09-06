@@ -479,6 +479,26 @@ const CHUAN_BI = {
      (lỗi tầng xếp, 07/09/2026) — mà bộ đo chỉ nhìn trang lúc TĨNH thì không
      bao giờ thấy, vì bảng đó chỉ tồn tại sau một cú bấm. */
   '/dashboard': async (p) => {
+    /* `CT_LICH=1` ⇒ đo BẢNG SOẠN LỊCH thay vì trang nền. Nó là một lớp phủ
+       `position: fixed`, nên nó che trang — không đo chung một lượt được.
+       Chạy riêng: CT_TRANG='["/dashboard"]' CT_LICH=1 npm run do:bo-cuc
+       Prep này đi hết đường DÁN chứ không chỉ mở hộp: chỗ dễ vỡ bố cục nhất
+       là bảng xem trước sau khi đọc, lúc nó đã có hàng chục dòng. */
+    if (process.env.CT_LICH) {
+      await p.click('.ct-lich-sua', { timeout: 3000 }).catch(() => {});
+      await p.waitForTimeout(400);
+      await p.click('button:has-text("Dán từ FAP")', { timeout: 2000 }).catch(() => {});
+      await p.fill('.ct-soan-dan textarea', [
+        '\tMON 07/09\tTUE 08/09\tWED 09/09\tTHU 10/09\tFRI 11/09',
+        'Slot 1\tSWT301-View Materials at DE-412 (7:30-9:50) Meet URL\t\tSWT301-View Materials at DE-412 (7:30-9:50)\t\t',
+        'Slot 2\t\tFER202-View Materials at DE-324 (10:00-12:20)\t\tFER202-View Materials at DE-324 (10:00-12:20)\t',
+        'Slot 3\tJPD123-View Materials at BE-101 (12:50-15:10)\t\t\t\tLAB211-View Materials at AL-R201 (12:50-15:10)',
+        'Slot 4\tSWR302-View Materials at DE-208 (Not yet)\t\t\t\t',
+      ].join('\n')).catch(() => {});
+      await p.click('.ct-soan-dan button', { timeout: 2000 }).catch(() => {});
+      await p.waitForTimeout(400);
+      return;
+    }
     await p.click('.ct-tq-dong button', { timeout: 2000 }).catch(() => {});
     await p.waitForTimeout(350);
   },
@@ -631,12 +651,27 @@ for (const duong of DUONG) {
         return false;
       };
 
+      /* Lớp phủ `position: fixed` phủ CẢ CỬA SỔ, kể cả chỗ thanh bên đang
+         đứng — nên nó cố tình nằm ngoài khung nội dung, và so nó với khung ấy
+         là báo nhầm. Đo ngày 07/09/2026: bảng soạn lịch vừa khít, ảnh chụp
+         sạch, mà bộ đo vẫn kêu 2 nút "lọt ra ngoài khung" ở 860px chỉ vì
+         chúng đứng bên TRÁI mép khung. Thứ nằm trong lớp phủ phải so với
+         VIEWPORT. Xem [[feedback_verify_the_checker_before_the_content]]. */
+      const trongLopPhu = (e) => {
+        for (let n = e; n && n !== document.documentElement; n = n.parentElement) {
+          if (getComputedStyle(n).position === 'fixed') return true;
+        }
+        return false;
+      };
+      const manHinh = { left: 0, right: document.documentElement.clientWidth };
+
       const loBenPhai = [];
       for (const e of noi.querySelectorAll('button, a, input, select, textarea, [role="tab"]')) {
         const r = e.getBoundingClientRect();
         if (r.width === 0 || r.height === 0) continue;
         if (trongVungCuon(e)) continue;
-        if (r.right > khung.right + 1 || r.left < khung.left - 1) {
+        const k = trongLopPhu(e) ? manHinh : khung;
+        if (r.right > k.right + 1 || r.left < k.left - 1) {
           loBenPhai.push(`${e.className || e.tagName}: "${(e.textContent ?? '').trim().slice(0, 24)}"`);
         }
       }

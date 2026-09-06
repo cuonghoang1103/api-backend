@@ -20,8 +20,9 @@
  * vừa khít: không có hàng trống, và không thiếu hàng cho một giờ lạ.
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { AlertTriangle, CalendarDays, Check, CircleSlash, FileText, Plus } from 'lucide-react';
+import { AlertTriangle, CalendarDays, Check, CircleSlash, FileText, Pencil, Plus } from 'lucide-react';
 import { useSession } from '../../auth/session';
+import { SoanLich } from './SoanLich';
 
 /** Nghỉ quá con số này là không qua môn. Quy định của trường. */
 export const TRAN_NGHI = 4;
@@ -41,6 +42,7 @@ export interface Buoi {
   startTime: string;
   endTime: string;
   note?: string | null;
+  remindMinutes?: number;
   soBuoiVang?: number;
 }
 
@@ -75,6 +77,7 @@ export function LichHoc() {
   const [diemDanh, datDiemDanh] = useState<DiemDanh[]>([]);
   const [dangTai, datDangTai] = useState(true);
   const [moChon, datMoChon] = useState<string | null>(null); // `${id}|${ngay}`
+  const [moSoan, datMoSoan] = useState(false);
 
   const homNay = new Date();
   const thuHomNay = homNay.getDay() === 0 ? 8 : homNay.getDay() + 1;
@@ -127,16 +130,19 @@ export function LichHoc() {
 
   if (buoi.length === 0) {
     return (
+      <>
+      {moSoan && <SoanLich onDong={() => datMoSoan(false)} onXong={() => void nap()} />}
       <section className="ct-lich ct-lich-trong">
         <CalendarDays size={22} aria-hidden />
         <div>
           <strong>Chưa có thời khoá biểu</strong>
           <p>Thêm buổi học để thấy lịch tuần, nhắc trước giờ và đếm buổi nghỉ.</p>
         </div>
-        <button type="button" className="ct-btn ct-btn-chinh" onClick={() => datMoChon('them')}>
+        <button type="button" className="ct-btn ct-btn-chinh" onClick={() => datMoSoan(true)}>
           <Plus size={14} aria-hidden /> Thêm buổi học
         </button>
       </section>
+      </>
     );
   }
 
@@ -151,9 +157,13 @@ export function LichHoc() {
 
   return (
     <section className="ct-lich">
+      {moSoan && <SoanLich onDong={() => datMoSoan(false)} onXong={() => void nap()} />}
       <div className="ct-lich-dau">
         <h2><CalendarDays size={15} aria-hidden /> Lịch học tuần này</h2>
         <span className="ct-muted">Bấm vào buổi để chấm điểm danh</span>
+        <button type="button" className="ct-btn ct-lich-sua" onClick={() => datMoSoan(true)}>
+          <Pencil size={12} aria-hidden /> Sửa lịch
+        </button>
       </div>
 
       {canhBao.length > 0 && (
@@ -220,6 +230,13 @@ export function LichHoc() {
                                     Bỏ chấm
                                   </button>
                                 )}
+                                <button
+                                  type="button"
+                                  className="ct-lich-go"
+                                  onClick={() => { datMoChon(null); datMoSoan(true); }}
+                                >
+                                  Sửa buổi học
+                                </button>
                               </div>
                             )}
                           </div>

@@ -10163,3 +10163,167 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 
 .ct-lich-cham button:hover { background: var(--ct-hover); }
 .ct-lich-go { color: var(--ct-text-faint) !important; border-top: 1px solid var(--ct-border) !important; border-radius: 0 !important; margin-top: 2px; }
+
+/* ───────────────────────── Soạn thời khoá biểu ─────────────────────────
+   Một cái bảng sửa được, không phải form từng buổi: người dùng vào đây với
+   10-20 buổi trong tay (dán từ FAP), và bắt họ bấm "lưu" 20 lần là mời họ
+   bỏ dở. Mọi ô đều sửa được TRƯỚC khi lưu, nên parser đoán hụt chỉ tốn vài
+   giây sửa tay chứ không tạo ra lịch sai nằm im trong máy. */
+.ct-soan-nen {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: color-mix(in srgb, var(--ct-bg) 72%, transparent);
+  backdrop-filter: blur(6px);
+  animation: ct-soan-vao var(--ct-motion-fast) var(--ct-ease);
+}
+
+@keyframes ct-soan-vao { from { opacity: 0; } to { opacity: 1; } }
+
+.ct-soan {
+  display: flex;
+  flex-direction: column;
+  width: min(1080px, 100%);
+  max-height: 100%;
+  background: var(--ct-surface);
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-lg);
+  box-shadow: 0 24px 64px rgb(0 0 0 / 28%);
+  overflow: hidden;
+}
+
+.ct-soan-dau {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--ct-border);
+}
+.ct-soan-dau h2 { margin: 0; font-size: 14.5px; }
+.ct-soan-x {
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: var(--ct-radius-sm);
+  background: transparent;
+  color: var(--ct-text-muted);
+  cursor: pointer;
+}
+.ct-soan-x:hover { background: var(--ct-hover); color: var(--ct-text); }
+
+.ct-soan-thanh {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--ct-border);
+}
+.ct-soan-thanh .ct-muted { margin-left: auto; font-size: 11.5px; }
+
+.ct-soan-dan { padding: 12px 16px; border-bottom: 1px solid var(--ct-border); background: var(--ct-surface-2); }
+.ct-soan-dan p { margin: 0 0 8px; font-size: 11.5px; line-height: 1.5; }
+.ct-soan-dan textarea {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-surface);
+  color: var(--ct-text);
+  font: 12px/1.55 var(--ct-font-mono, ui-monospace, monospace);
+  resize: vertical;
+}
+.ct-soan-dan textarea:focus { outline: 2px solid var(--ct-accent); outline-offset: -1px; }
+.ct-soan-dan > button { margin-top: 8px; }
+
+/* Dòng đọc hụt: hiện NGUYÊN VĂN. Nói "bỏ 3 dòng" mà không cho xem là bắt
+   người dùng đi dò lại cả bảng FAP để biết mất cái gì. */
+.ct-soan-boqua {
+  display: flex;
+  gap: 9px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--ct-border);
+  background: color-mix(in srgb, var(--ct-warn) 10%, transparent);
+  color: var(--ct-warn);
+  font-size: 11.5px;
+}
+.ct-soan-boqua ul { margin: 5px 0 0; padding-left: 16px; }
+.ct-soan-boqua li { font-family: var(--ct-font-mono, ui-monospace, monospace); opacity: 0.85; }
+
+.ct-soan-bang-boc { flex: 1; overflow: auto; padding: 4px 16px 12px; }
+/* `min-width` + khung cuộn ngang, KHÔNG bóp cột: ở cửa sổ hẹp thì tên môn
+   ("Software Requirement…") và mục nhắc ("Trước 30 phút") bị cắt cụt, mà đó
+   đúng là hai thứ cần đọc để biết dòng này là buổi nào. Cuộn được thì không
+   phải là mất; cắt chữ mới là mất. */
+.ct-soan-bang { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 12px; }
+.ct-soan-bang th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 8px 6px;
+  background: var(--ct-surface);
+  border-bottom: 1px solid var(--ct-border);
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ct-text-muted);
+}
+.ct-soan-bang td { padding: 3px 4px; border-bottom: 1px solid color-mix(in srgb, var(--ct-border) 55%, transparent); }
+.ct-soan-bang input,
+.ct-soan-bang select {
+  width: 100%;
+  min-width: 62px;
+  padding: 6px 7px;
+  border: 1px solid transparent;
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-surface-2);
+  color: var(--ct-text);
+  font: inherit;
+}
+.ct-soan-bang input:hover, .ct-soan-bang select:hover { border-color: var(--ct-border); }
+.ct-soan-bang input:focus, .ct-soan-bang select:focus { outline: 2px solid var(--ct-accent); outline-offset: -1px; }
+.ct-soan-bang td:nth-child(4) input { min-width: 132px; }
+.ct-soan-bang td:nth-child(7) select { min-width: 104px; }
+
+.ct-soan-bang tr[data-loi='true'] input,
+.ct-soan-bang tr[data-loi='true'] select { border-color: color-mix(in srgb, var(--ct-err) 55%, transparent); }
+
+.ct-soan-loi { display: block; margin-top: 2px; font-size: 10px; font-style: normal; color: var(--ct-err); white-space: nowrap; }
+
+.ct-soan-xoa {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: var(--ct-radius-sm);
+  background: transparent;
+  color: var(--ct-text-faint);
+  cursor: pointer;
+}
+.ct-soan-xoa:hover { background: color-mix(in srgb, var(--ct-err) 14%, transparent); color: var(--ct-err); }
+
+.ct-soan-bao { margin: 0 16px 8px; font-size: 11.5px; color: var(--ct-err); }
+
+.ct-soan-chan {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--ct-border);
+}
+.ct-soan-chan .ct-soan-bao { margin: 0 auto 0 0; }
+.ct-soan-chan > .ct-btn:first-of-type { margin-left: auto; }
+.ct-soan-chan .ct-soan-bao ~ .ct-btn:first-of-type { margin-left: 0; }
+
+.ct-lich-sua { margin-left: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ct-soan-nen { animation: none; }
+}

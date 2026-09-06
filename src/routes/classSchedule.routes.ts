@@ -244,6 +244,14 @@ router.post('/', async (req: Request, res: Response<ApiResponse>, next) => {
 // `thayThe: true` xoá sạch lịch cũ trước khi thêm — dùng khi vào kỳ mới.
 // Cả hai bước nằm trong MỘT giao dịch: hỏng giữa chừng thì không ai mất
 // lịch cũ mà cũng chưa có lịch mới.
+//
+// ⚠️ `thayThe: true` XOÁ LUÔN ĐIỂM DANH. `ClassAttendance.schedule` khai
+// `onDelete: Cascade`, nên xoá buổi là xoá mọi lần đã chấm của buổi đó —
+// chính con số quyết định đỗ/trượt môn, và không có gì trên màn hình báo.
+// Chấp nhận được khi vào KỲ MỚI (lịch sử nghỉ của kỳ cũ hết ý nghĩa); KHÔNG
+// chấp nhận được khi người dùng chỉ sửa giờ một buổi. Vì thế bảng soạn lịch
+// của app (`SoanLich.tsx`) để `thayThe: false` và sửa bằng `PATCH /:id` để
+// giữ nguyên id.
 router.post('/bulk', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const userId = req.userId!;

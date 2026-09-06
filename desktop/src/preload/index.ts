@@ -57,6 +57,7 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'agent:moWeb',
   'robot:tin',
   'oauth:xong',
+  'nhac:phim',
 ];
 
 const bridge: DesktopBridge = {

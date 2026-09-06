@@ -9957,3 +9957,37 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 }
 
 .ct-hengio-chan { margin: 9px 0 0; font-size: 11px; line-height: 1.45; color: var(--ct-text-faint); }
+
+/* ── Cảnh đêm NHẢY THEO NHẠC ─────────────────────────────
+   `--nhip` (0..1) do `MusicPage` ghi vào mỗi khung hình từ `AnalyserNode`.
+   Không đọc được nhịp (nguồn thiếu CORS, hoặc đang dừng) thì nó là 0 và cảnh
+   trở về đúng trạng thái tĩnh — hiệu ứng mất đi chứ không hỏng gì.
+
+   ⚠️ KHÔNG dùng `transition` ở đây: giá trị đã được làm mượt trong `nhipNhac.ts`
+   (lên nhanh, xuống chậm). Thêm một lớp transition nữa là nhịp trễ hẳn nửa giây
+   so với tiếng — mắt thấy ngay là "không khớp nhạc". */
+
+.ct-canh { --nhip: 0; }
+
+/* Trăng nở ra và sáng lên theo tiếng — dễ thấy nhất vì nó là vật sáng duy nhất. */
+.ct-canh-trang {
+  transform: scale(calc(1 + var(--nhip) * 0.16));
+  filter: brightness(calc(1 + var(--nhip) * 0.5));
+}
+
+/* Trăng đang có animation `ct-canh-tho` dùng `transform` — hai thứ cùng đặt
+   `transform` thì cái sau thắng. Tắt animation khi có nhịp: lúc nhạc chạy thì
+   nhịp làm việc của nó, lúc dừng thì trăng thở lại. */
+.ct-music[data-dangphat='true'] .ct-canh-trang { animation: none; }
+
+/* Cửa sổ thành phố sáng lên theo nhịp — cả dãy nhà cùng "thở". */
+.ct-canh-pho::after { opacity: calc(0.45 + var(--nhip) * 0.5); }
+
+/* Bầu trời hửng lên rất nhẹ. Mạnh tay ở đây là cả trang nhấp nháy theo nhạc,
+   và không ai đọc nổi tên bài hát. */
+.ct-canh-troi { filter: brightness(calc(1 + var(--nhip) * 0.16)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ct-canh-trang, .ct-canh-troi { transform: none; filter: none; }
+  .ct-canh-pho::after { opacity: 0.55; }
+}

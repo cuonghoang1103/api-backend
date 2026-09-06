@@ -12,7 +12,7 @@
  * ⚠️ TÊN TRƯỜNG. Máy chủ trả thẳng hình dạng model Prisma: `coverImage`,
  * `durationSeconds` — KHÔNG phải `coverUrl`/`duration`.
  */
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { HenGio } from './HenGio';
 import {
   CheckCircle2, CloudOff, Disc3, Download, HardDrive, ListMusic, Loader2, Maximize2,
@@ -48,6 +48,7 @@ export function MusicPage() {
    * (`requireRole('ADMIN')` ở `DELETE /music/tracks/:id`). Hiện nút cho mọi
    * người rồi để máy chủ từ chối là bày ra một nút luôn báo lỗi.
    */
+
   const laAdmin = (user?.roles ?? []).some(
     (r) => r.replace(/^ROLE_/, '').toUpperCase() === 'ADMIN',
   );
@@ -55,9 +56,34 @@ export function MusicPage() {
   const {
     tracks, loading, error, setError, loadTracks,
     downloaded, downloading, usage, download, remove, clearAll,
-    current, currentId, playing, playTrack, toggle, tuaToi, volume,
+    current, currentId, playing, playTrack, toggle, tuaToi, volume, mucNhip,
     setVolume, setShuffle, position,
   } = useMusicPlayer();
+
+  /*
+   * Cảnh đêm NHẢY THEO NHẠC.
+   *
+   * Ghi thẳng vào biến CSS qua `style.setProperty` chứ không qua state React:
+   * đây là 60 lần cập nhật mỗi giây, và một `setState` mỗi khung hình sẽ dựng
+   * lại cả trang nhạc — danh sách 68 bài, trình phát, mọi thứ.
+   *
+   * `requestAnimationFrame` tự dừng khi cửa sổ bị ẩn, nên không tốn pin lúc
+   * app chạy nền.
+   */
+  const canhRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!playing) {
+      canhRef.current?.style.setProperty('--nhip', '0');
+      return;
+    }
+    let id = 0;
+    const chay = (): void => {
+      canhRef.current?.style.setProperty('--nhip', String(mucNhip().toFixed(3)));
+      id = requestAnimationFrame(chay);
+    };
+    id = requestAnimationFrame(chay);
+    return () => cancelAnimationFrame(id);
+  }, [playing, mucNhip]);
 
   /**
    * Xoá HẲN một bài khỏi thư viện dùng chung.
@@ -286,7 +312,7 @@ export function MusicPage() {
         thì nguồn nào thiếu CORS sẽ hỏng HẲN việc phát, tức đánh đổi một thứ
         đang chạy lấy một hiệu ứng trang trí.
       */}
-      <div className="ct-canh" aria-hidden>
+      <div className="ct-canh" ref={canhRef} aria-hidden>
         <div className="ct-canh-troi" />
         <div className="ct-canh-sao" />
         <div className="ct-canh-trang" />

@@ -19,6 +19,7 @@ import {
 } from './security';
 import { registerIpcHandlers } from './ipc';
 import { createMainWindow } from './window';
+import { dangKyPhimMedia, goPhimMedia } from './phimMedia';
 
 registerSchemesAsPrivileged();
 
@@ -126,6 +127,11 @@ async function bootstrap(): Promise<void> {
   const { batTheoDoiTin, dungTheoDoiTin } = await import('./robotTin');
   batTheoDoiTin();
   app.on('will-quit', () => dungTheoDoiTin());
+
+  /* Phím media của bàn phím — chỉ đăng ký khi đã có cửa sổ, gỡ khi thoát.
+     Xem `phimMedia.ts`: nó CƯỚP phím khỏi mọi app khác trên máy. */
+  dangKyPhimMedia();
+  app.on('will-quit', goPhimMedia);
 
   /**
    * Đóng cửa sổ CHÍNH trên Windows/Linux ⇒ thoát app.

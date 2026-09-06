@@ -23,6 +23,7 @@ import {
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { OfflineUnavailableError, swr } from '../../offline/cache';
+import { doNhip, type DoNhip } from './nhipNhac';
 
 export interface Track {
   id: number;
@@ -162,6 +163,8 @@ interface MusicPlayerValue {
   tuaToi: (giay: number) => void;
   volume: number;
   setVolume: (value: number | ((previous: number) => number)) => void;
+  /** Mức năng lượng âm thanh 0..1 để cảnh nền nhảy theo. 0 = không đọc được. */
+  mucNhip: () => number;
   muted: boolean;
   setMuted: (value: boolean | ((previous: boolean) => boolean)) => void;
   shuffle: boolean;
@@ -210,7 +213,25 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   if (audioRef.current === null && typeof Audio !== 'undefined') {
     audioRef.current = new Audio();
+    /*
+     * `crossOrigin` PHẢI đặt trước khi nạp — nó là điều kiện để `AnalyserNode`
+     * đọc được sóng âm (thiếu thì trình duyệt trả dải toàn 0, im lặng, không
+     * lỗi). Đo thật 05/09/2026: `api.cuongthai.com` trả
+     * `access-control-allow-origin: app://cuongthai`, R2 được PROXY qua chính
+     * API đó, và URL ngoài bị máy chủ từ chối thẳng — nên mọi đường phát đều
+     * qua host có CORS.
+     *
+     * Vẫn có chốt canh ở dưới (`canhCam`): nếu gặp một nguồn thiếu CORS thì
+     * Web Audio làm CÂM HẲN bài đó, và không gỡ nối lại được trên cùng một
+     * phần tử. Chốt sẽ dựng thẻ mới không `crossOrigin` và phát tiếp.
+     */
+    audioRef.current.crossOrigin = 'anonymous';
   }
+
+  /** Bộ đọc nhịp, tạo LƯỜI ở lần phát đầu (cần một cú bấm của người dùng). */
+  const nhipRef = useRef<DoNhip | null>(null);
+  const nhipHong = useRef(false);
+  const mucNhip = useCallback(() => nhipRef.current?.muc() ?? 0, []);
   /** Hàng phát: chốt lúc bấm phát, KHÔNG bám theo ô tìm kiếm. */
   const [queue, setQueue] = useState<Track[]>([]);
   const shuffleOrder = useRef<number[]>([]);
@@ -253,6 +274,50 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => { void loadTracks(); }, [loadTracks]);
 
+  /*
+   * CHỐT CANH CÂM.
+   *
+   * Nếu một nguồn thiếu CORS lọt qua, Web Audio KHÔNG báo lỗi — nó chỉ trả về
+   * im lặng, trong khi thanh tiến độ vẫn chạy. Người dùng thấy "bài này bị lỗi
+   * âm", không có cách nào đoán ra nguyên nhân.
+   *
+   * Cách nhận ra: đang phát, `currentTime` VẪN TIẾN, mà biên độ đứng đúng 0
+   * suốt 3 giây. Nhạc thật gần như không bao giờ im tuyệt đối lâu vậy.
+   *
+   * Cách chữa: `createMediaElementSource` gắn vĩnh viễn vào phần tử, không gỡ
+   * được — nên phải DỰNG THẺ MỚI, lần này không `crossOrigin`, rồi phát tiếp
+   * từ đúng giây đang dở. Mất hiệu ứng nhịp, giữ được tiếng.
+   */
+  useEffect(() => {
+    if (!playing || !nhipRef.current || nhipHong.current) return;
+    let im = 0;
+    let mocTruoc = audioRef.current?.currentTime ?? 0;
+    const nhip = setInterval(() => {
+      const el = audioRef.current;
+      if (!el) return;
+      const tien = el.currentTime > mocTruoc + 0.2;
+      mocTruoc = el.currentTime;
+      im = tien && mucNhip() === 0 ? im + 1 : 0;
+      if (im < 6) return; // 6 × 500ms = 3 giây
+
+      clearInterval(nhip);
+      nhipHong.current = true;
+      nhipRef.current?.dong();
+      nhipRef.current = null;
+
+      const moi = new Audio();          // KHÔNG đặt crossOrigin
+      moi.src = el.src;
+      moi.volume = el.volume;
+      moi.currentTime = el.currentTime;
+      el.pause();
+      audioRef.current = moi;
+      void moi.play();
+      console.warn('[nhạc] nguồn không có CORS — bỏ hiệu ứng nhịp để giữ tiếng');
+    }, 500);
+    return () => clearInterval(nhip);
+  }, [playing, mucNhip]);
+
+
   const current = useMemo(
     () => tracks.find((t) => t.id === currentId) ?? queue.find((t) => t.id === currentId) ?? null,
     [tracks, queue, currentId],
@@ -289,6 +354,13 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
     setCurrentId(track.id);
     setPosition(0);
     setLength(track.durationSeconds ?? 0);
+    /* Tạo bộ đọc nhịp ở đây, không phải lúc dựng provider: `AudioContext` tạo
+       trước cú bấm đầu tiên sẽ ở trạng thái `suspended` và im lặng mãi. */
+    if (!nhipRef.current && !nhipHong.current) {
+      nhipRef.current = doNhip(element);
+      if (!nhipRef.current) nhipHong.current = true;
+    }
+
     void element.play().then(
       () => setPlaying(true),
       () => { setError(`Không phát được "${track.title}".`); setPlaying(false); },
@@ -321,6 +393,22 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
     const track = hang.find((t) => t.id === list[nextIndex]);
     if (track) playTrack(track);
   }, [queue, tracks, shuffle, currentId, playTrack]);
+
+  /*
+   * PHÍM MEDIA của bàn phím (kể cả khi app không ở trước) — main gửi xuống qua
+   * `nhac:phim`. Đặt ở provider chứ không ở trang Nhạc: người ta bấm Play khi
+   * đang ở trang khác, hoặc khi app đang chạy nền, và đó chính là lúc phím này
+   * đáng giá nhất.
+   */
+  useEffect(() => {
+    const bo = window.cuongthai?.on('nhac:phim', (p) => {
+      const viec = (p as { viec?: string } | null)?.viec;
+      if (viec === 'toggle') toggle();
+      else if (viec === 'sau') step(1);
+      else if (viec === 'truoc') step(-1);
+    });
+    return () => { bo?.(); };
+  }, [toggle, step]);
 
   // Dựng lại thứ tự xáo trộn mỗi khi BẬT xáo trộn.
   useEffect(() => {
@@ -467,6 +555,7 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
     shownPosition: seeking ?? position,
     playTrack, toggle, step, batDauTua, chotTua, tuaToi,
     volume, setVolume, muted, setMuted, shuffle, setShuffle, repeat, setRepeat,
+    mucNhip,
   }), [
     tracks, loading, error, loadTracks, downloaded, downloading, usage, download, remove, clearAll,
     current, currentId, playing, position, length, seeking,

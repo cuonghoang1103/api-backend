@@ -1090,6 +1090,8 @@ export const EVENT_CHANNELS = [
   'robot:tin',
   /** Đăng nhập OAuth qua trình duyệt đã xong — mang token về cho app. */
   'oauth:xong',
+  /** Phím media của bàn phím (Play/Pause · Next · Prev), kể cả khi app không ở trước. */
+  'nhac:phim',
 ] as const;
 
 export type EventChannel = (typeof EVENT_CHANNELS)[number];

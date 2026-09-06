@@ -159,6 +159,7 @@ model User {
   storyViews              StoryView[]
   storyHides              StoryHide[]
   deviceTokens            DeviceToken[]
+  classSchedules          ClassSchedule[]
 
   // Notification graph — who is the receiver / sender on social
   // notifications. The reverse relations are defined on
@@ -8292,4 +8293,52 @@ model DeviceToken {
 
   @@index([userId], map: "idx_device_token_user")
   @@map("device_tokens")
+}
+
+/// Thời khoá biểu — một BUỔI HỌC LẶP hằng tuần, không phải một sự kiện lịch.
+///
+/// Vì sao không dùng lại `DashboardTask`: việc thì gắn với MỘT ngày cụ thể
+/// (`date`), còn buổi học lặp mỗi tuần suốt cả kỳ. Nhét vào bảng việc thì
+/// hoặc phải sinh ~15 dòng cho mỗi môn mỗi kỳ, hoặc phải nhồi thêm cột lặp
+/// theo thứ — cả hai đều làm hỏng phần thống kê việc.
+model ClassSchedule {
+  id     Int @id @default(autoincrement())
+  userId Int @map("user_id")
+
+  subject   String  @db.VarChar(200)
+  classCode String? @map("class_code") @db.VarChar(50)
+  teacher   String? @db.VarChar(150)
+  room      String? @db.VarChar(100)
+
+  /// 2..8 theo lối gọi của người Việt: 2 = thứ Hai … 8 = Chủ nhật.
+  /// KHÔNG dùng 0-6 kiểu `Date.getDay()`: người dùng gõ "thứ 2" và mọi
+  /// trường học ở đây đánh số như vậy, nên đổi hệ ở tầng dữ liệu là mời
+  /// một lỗi lệch-một vào chỗ khó thấy nhất.
+  weekday Int
+
+  /// "HH:mm" 24 giờ. Chuỗi chứ không DateTime: một buổi học không có NGÀY,
+  /// nó chỉ có giờ trong tuần. Lưu DateTime thì phải bịa ra một ngày gốc,
+  /// và ngày bịa đó sẽ bị múi giờ kéo lệch sang hôm trước/hôm sau.
+  startTime String @map("start_time") @db.VarChar(5)
+  endTime   String @map("end_time") @db.VarChar(5)
+
+  color String? @db.VarChar(20)
+  note  String? @db.Text
+
+  /// Nhắc trước bao nhiêu PHÚT. 0 = không nhắc.
+  remindMinutes Int @default(30) @map("remind_minutes")
+
+  /// Khoảng thời gian của kỳ học. Rỗng = không giới hạn.
+  /// Có nó thì lịch kỳ trước không hiện chồng lên kỳ này, và thông báo
+  /// nhắc học tự tắt khi hết kỳ mà không cần ai nhớ đi xoá.
+  startDate DateTime? @map("start_date") @db.Date
+  endDate   DateTime? @map("end_date") @db.Date
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, weekday], map: "idx_class_schedule_user_day")
+  @@map("class_schedules")
 }

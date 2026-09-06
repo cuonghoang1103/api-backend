@@ -921,6 +921,7 @@ for route in \
     messages/unread-count \
     messages/ice-servers \
     profile \
+    class-schedule \
     social/posts \
     feed/posts \
     social/notifications \

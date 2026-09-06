@@ -313,6 +313,24 @@ const BANG = [
     [/\/courses\?|\/courses$/, () => mang(5, (i) => ({ id: i, slug: `khoa-${i}`,
         title: `Course ${i}|||Khoá học số ${i}`, shortDescription: 'EN|||Mô tả ngắn của khoá.',
         thumbnailUrl: null, level: 'BEGINNER', totalLessons: 54, isFree: true }))],
+    /* Thời khoá biểu — dựng theo đúng lịch thật trong ảnh người dùng gửi
+       (SWT301/FER202/SWR302/JPD123/LAB211), để bảng được đo ở hình dạng thật
+       chứ không phải một lịch hai môn cho dễ. */
+    [/\/class-schedule\/attendance/, () => ({ items: [
+      { id: 1, scheduleId: 1, date: mocPhamViThu('today'), status: 'co' },
+      { id: 2, scheduleId: 3, date: mocPhamViThu('today'), status: 'vang' },
+    ] })],
+    [/\/class-schedule/, () => ({ items: [
+      { id: 1, subject: 'Software Testing', classCode: 'SWT301', room: 'DE-412', weekday: 3, startTime: '07:30', endTime: '09:50', remindMinutes: 30, soBuoiVang: 1 },
+      { id: 2, subject: 'Front-End', classCode: 'FER202', room: 'DE-324', weekday: 4, startTime: '07:30', endTime: '09:50', remindMinutes: 30, soBuoiVang: 0 },
+      { id: 3, subject: 'Software Requirement', classCode: 'SWR302', room: 'BE-201', weekday: 5, startTime: '07:30', endTime: '09:50', remindMinutes: 30, soBuoiVang: 4 },
+      { id: 4, subject: 'Tiếng Nhật', classCode: 'JPD123', room: 'DE-C304', weekday: 6, startTime: '07:30', endTime: '09:50', remindMinutes: 30, soBuoiVang: 0 },
+      { id: 5, subject: 'Software Requirement', classCode: 'SWR302', room: 'BE-210', weekday: 2, startTime: '10:00', endTime: '12:20', remindMinutes: 30, soBuoiVang: 0 },
+      { id: 6, subject: 'Tiếng Nhật', classCode: 'JPD123', room: 'DE-C304', weekday: 3, startTime: '10:00', endTime: '12:20', remindMinutes: 30, soBuoiVang: 2 },
+      { id: 7, subject: 'Software Testing', classCode: 'SWT301', room: 'DE-216', weekday: 5, startTime: '10:00', endTime: '12:20', remindMinutes: 30, soBuoiVang: 0 },
+      { id: 8, subject: 'Lab OOP', classCode: 'LAB211', room: 'DE-223', weekday: 2, startTime: '12:50', endTime: '15:10', remindMinutes: 30, soBuoiVang: 0 },
+      { id: 9, subject: 'Lab OOP', classCode: 'LAB211', room: 'DE-C203', weekday: 5, startTime: '15:20', endTime: '17:40', remindMinutes: 30, soBuoiVang: 0 },
+    ] })],
     [/\/dashboard$/, () => ({ level: 3, exp: 120, totalExp: 500, streak: 4,
         timeline: mang(24, (i) => ({ hour: i - 1, activity: i % 3 === 0 ? 'hoc' : null })),
         /* Dữ liệu giả phải chạm được vào MỌI nhánh hiển thị mới, nếu không bộ đo

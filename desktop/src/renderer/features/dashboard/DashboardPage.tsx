@@ -40,6 +40,7 @@ import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { OfflineUnavailableError, swr } from '../../offline/cache';
 import { BangViec, type Scope as PhamVi, type Task as ViecUi, type VaSua } from './BangViec';
+import { LichHoc } from './LichHoc';
 
 /**
  * ⚠️ `api.request` TỰ tuần tự hoá `body` — ĐỪNG `JSON.stringify` trước.
@@ -516,6 +517,11 @@ export function DashboardPage() {
           onDoiThuTu={doiThuTu}
         />
       )}
+
+      {/* Lịch học đứng SAU việc hôm nay, TRƯỚC dải 24 giờ: việc là thứ mình
+          tự đặt ra, lịch học là thứ đã cố định — đọc việc trước rồi mới xem nó
+          phải nhét vào những khoảng trống nào. */}
+      <LichHoc />
 
       {/* ── Dòng thời gian 24 giờ ──────────────────────────── */}
       {du && (

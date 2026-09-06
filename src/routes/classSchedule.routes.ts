@@ -114,10 +114,100 @@ router.get('/', async (req: Request, res: Response<ApiResponse>, next) => {
       where: loc,
       orderBy: [{ weekday: 'asc' }, { startTime: 'asc' }, { id: 'asc' }],
     });
-    res.json({ success: true, data: { items } });
+
+    /*
+     * Kèm SỐ BUỔI VẮNG của từng buổi học, ngay trong lời gọi này.
+     *
+     * Đây là con số quyết định đỗ/trượt (nghỉ quá 4 buổi = không qua môn), nên
+     * nó phải hiện cùng lúc với lịch — bắt app gọi thêm một vòng nữa nghĩa là
+     * có một khoảnh khắc lịch đã hiện mà cảnh báo thì chưa, và người dùng nhìn
+     * đúng vào lúc đó.
+     *
+     * 'phep' (vắng có phép) KHÔNG tính vào số buổi nghỉ: trường vẫn trừ, nhưng
+     * người dùng cần phân biệt được hai loại, và gộp lại thì con số mất nghĩa.
+     */
+    const dem = await prisma.classAttendance.groupBy({
+      by: ['scheduleId'],
+      where: { userId, status: 'vang', scheduleId: { in: items.map((i) => i.id) } },
+      _count: { _all: true },
+    });
+    const bang = new Map(dem.map((d) => [d.scheduleId, d._count._all]));
+
+    res.json({
+      success: true,
+      data: { items: items.map((i) => ({ ...i, soBuoiVang: bang.get(i.id) ?? 0 })) },
+    });
   } catch (error) {
     next(error);
   }
+});
+
+// ─── GET /api/v1/class-schedule/attendance ────────────────────────
+// Điểm danh trong một khoảng ngày. App gọi cho ĐÚNG tuần đang xem, không tải
+// cả kỳ: một kỳ 15 tuần × 20 buổi là 300 dòng cho một bảng hiện 7 cột.
+router.get('/attendance', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = req.userId!;
+    const tu = String(req.query.tu ?? '');
+    const den = String(req.query.den ?? '');
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(tu) || !/^\d{4}-\d{2}-\d{2}$/.test(den)) {
+      throw new AppError('tu/den phai la YYYY-MM-DD', 400);
+    }
+    const items = await prisma.classAttendance.findMany({
+      where: {
+        userId,
+        date: { gte: new Date(`${tu}T00:00:00.000Z`), lte: new Date(`${den}T00:00:00.000Z`) },
+      },
+      orderBy: [{ date: 'asc' }, { id: 'asc' }],
+    });
+    res.json({ success: true, data: { items } });
+  } catch (error) { next(error); }
+});
+
+// ─── PUT /api/v1/class-schedule/:id/attendance ────────────────────
+// Chấm điểm danh cho MỘT buổi. `upsert` theo (buổi học, ngày) — bấm lại là
+// SỬA, không phải thêm dòng mới. Không có nó thì bấm nhầm rồi bấm lại là số
+// buổi nghỉ đếm gấp đôi, mà đó là con số quyết định đỗ/trượt.
+//
+// `status: null` ⇒ XOÁ bản ghi, tức "chưa chấm". Cần có: người dùng chấm nhầm
+// một buổi chưa diễn ra thì phải gỡ được, chứ không phải chọn bừa một trạng thái.
+router.put('/:id/attendance', async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = req.userId!;
+    const scheduleId = Number(req.params.id);
+    if (!Number.isInteger(scheduleId) || scheduleId <= 0) throw new AppError('id khong hop le', 400);
+
+    const body = req.body as { date?: string; status?: string | null; note?: string | null };
+    const ngay = String(body.date ?? '');
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(ngay)) throw new AppError('date phai la YYYY-MM-DD', 400);
+    const date = new Date(`${ngay}T00:00:00.000Z`);
+
+    /* Buổi học phải thuộc về người gọi. Thiếu chốt này thì một client thù địch
+       chấm điểm danh lên lịch của người khác bằng cách đoán id. */
+    const cua = await prisma.classSchedule.findFirst({
+      where: { id: scheduleId, userId }, select: { id: true },
+    });
+    if (!cua) throw new AppError('Buoi hoc khong ton tai hoac khong thuoc ve ban', 404);
+
+    if (body.status === null || body.status === '') {
+      await prisma.classAttendance.deleteMany({ where: { scheduleId, date } });
+      res.json({ success: true, data: null });
+      return;
+    }
+
+    const status = String(body.status ?? '');
+    if (!['co', 'vang', 'phep'].includes(status)) {
+      throw new AppError('status phai la co|vang|phep', 400);
+    }
+    const note = body.note === undefined ? undefined : (body.note || null);
+
+    const row = await prisma.classAttendance.upsert({
+      where: { scheduleId_date: { scheduleId, date } },
+      create: { userId, scheduleId, date, status, note: note ?? null },
+      update: { status, ...(note === undefined ? {} : { note }) },
+    });
+    res.json({ success: true, data: row });
+  } catch (error) { next(error); }
 });
 
 // ─── POST /api/v1/class-schedule ──────────────────────────────────

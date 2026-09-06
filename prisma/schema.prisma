@@ -160,6 +160,7 @@ model User {
   storyHides              StoryHide[]
   deviceTokens            DeviceToken[]
   classSchedules          ClassSchedule[]
+  classAttendances        ClassAttendance[]
 
   // Notification graph — who is the receiver / sender on social
   // notifications. The reverse relations are defined on
@@ -8339,6 +8340,42 @@ model ClassSchedule {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  attendances ClassAttendance[]
+
   @@index([userId, weekday], map: "idx_class_schedule_user_day")
   @@map("class_schedules")
+}
+
+/// Điểm danh MỘT buổi của MỘT môn.
+///
+/// Vì sao một bảng riêng chứ không đếm bằng một con số trên `ClassSchedule`:
+/// một con số `soBuoiVang` thì không bao giờ sửa lại được cho đúng. Ghi nhầm
+/// một buổi là phải nhớ trừ đi bằng tay, và không ai biết buổi nào đã ghi.
+/// Có dòng theo NGÀY thì bấm lại là sửa được, và xem lại được đã nghỉ hôm nào.
+model ClassAttendance {
+  id         Int @id @default(autoincrement())
+  userId     Int @map("user_id")
+  scheduleId Int @map("schedule_id")
+
+  /// Ngày diễn ra buổi học. `@db.Date` chứ không DateTime: một buổi thuộc về
+  /// một NGÀY, và giữ cả giờ thì hai lần ghi cùng ngày thành hai dòng khác nhau.
+  date DateTime @db.Date
+
+  /// 'co' = có mặt · 'vang' = vắng · 'phep' = vắng có phép.
+  /// Chuỗi chứ không enum, cùng lý do như `scope` của việc: thêm trạng thái mới
+  /// (vd 'muon' — đi muộn) không phải một migration.
+  status String @db.VarChar(8)
+
+  note      String?  @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  schedule ClassSchedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+
+  /// Một buổi chỉ có MỘT bản ghi. Không có ràng buộc này thì bấm hai lần là
+  /// hai dòng, và số buổi nghỉ đếm ra gấp đôi — con số quyết định đỗ/trượt.
+  @@unique([scheduleId, date], map: "uk_class_attendance_buoi")
+  @@index([userId, date], map: "idx_class_attendance_user_date")
+  @@map("class_attendances")
 }

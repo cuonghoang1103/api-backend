@@ -10005,3 +10005,161 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   .ct-canh-trang, .ct-canh-troi { transform: none; filter: none; }
   .ct-canh-pho::after { opacity: 0.55; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   THỜI KHOÁ BIỂU
+   ══════════════════════════════════════════════════════════ */
+
+.ct-lich {
+  background: var(--ct-surface);
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-lg);
+  padding: 15px 16px 13px;
+  margin-bottom: 22px;
+  box-shadow: var(--ct-shadow-sm);
+}
+
+.ct-lich-dau { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 11px; }
+.ct-lich-dau h2 { display: flex; align-items: center; gap: 7px; margin: 0; font-size: 14px; }
+.ct-lich-dau .ct-muted { font-size: 11.5px; }
+
+.ct-lich-trong {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--ct-text-muted);
+}
+.ct-lich-trong strong { display: block; font-size: 13.5px; color: var(--ct-text); }
+.ct-lich-trong p { margin: 3px 0 0; font-size: 12px; }
+.ct-lich-trong > button { margin-left: auto; flex-shrink: 0; }
+
+/* Cảnh báo nghỉ — đặt TRÊN bảng, không nhét vào ô: đây là con số quyết định
+   đỗ/trượt, nó phải đọc được mà không cần dò từng ô. */
+.ct-lich-canh { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 11px; }
+
+.ct-lich-canh span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ct-warn) 14%, transparent);
+  color: var(--ct-warn);
+  font-size: 11.5px;
+}
+
+.ct-lich-canh span[data-nguy='true'] {
+  background: color-mix(in srgb, var(--ct-err) 16%, transparent);
+  color: var(--ct-err);
+  font-weight: 650;
+}
+
+/* Bảng cuộn NGANG riêng: 7 cột × ô có chữ không bao giờ vừa cửa sổ hẹp, mà bóp
+   cột lại thì mã môn bị cắt — thứ duy nhất trong ô cần đọc được. */
+.ct-lich-bang-boc { overflow-x: auto; margin: 0 -4px; padding: 0 4px 4px; }
+
+.ct-lich-bang { width: 100%; border-collapse: separate; border-spacing: 4px; min-width: 720px; }
+
+.ct-lich-bang th {
+  padding: 5px 6px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--ct-text-muted);
+  text-align: center;
+}
+
+.ct-lich-bang thead th em { display: block; font-style: normal; font-size: 10.5px; color: var(--ct-text-faint); }
+
+.ct-lich-bang thead th[data-homnay='true'] {
+  color: var(--ct-accent);
+  background: color-mix(in srgb, var(--ct-accent) 12%, transparent);
+  border-radius: var(--ct-radius-sm);
+}
+
+.ct-lich-gio {
+  width: 52px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ct-text-faint) !important;
+  white-space: nowrap;
+}
+
+.ct-lich-bang td {
+  vertical-align: top;
+  padding: 0;
+  border-radius: var(--ct-radius-sm);
+}
+
+.ct-lich-bang td[data-homnay='true'] { background: color-mix(in srgb, var(--ct-accent) 7%, transparent); }
+
+.ct-lich-o { position: relative; }
+
+.ct-lich-o > button {
+  display: block;
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--ct-border);
+  border-left: 3px solid var(--ct-accent);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-bg);
+  color: var(--ct-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--ct-motion-fast) var(--ct-ease);
+}
+
+.ct-lich-o > button:hover { background: var(--ct-hover); }
+.ct-lich-o > button strong { display: block; font-size: 12px; }
+.ct-lich-o > button span { display: block; font-size: 10.5px; color: var(--ct-text-muted); }
+.ct-lich-o > button em { display: block; font-style: normal; font-size: 10px; color: var(--ct-text-faint); }
+
+/* Viền trái nói trạng thái điểm danh — cùng cách đọc như ưu tiên của việc. */
+.ct-lich-o[data-tt='co'] > button { border-left-color: var(--ct-ok); }
+.ct-lich-o[data-tt='vang'] > button { border-left-color: var(--ct-err); }
+.ct-lich-o[data-tt='phep'] > button { border-left-color: var(--ct-warn); }
+
+.ct-lich-o[data-sap='true'] > button {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ct-accent) 45%, transparent);
+}
+
+.ct-lich-sap {
+  display: block;
+  margin-top: 2px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ct-accent);
+}
+
+.ct-lich-dau-co { color: var(--ct-ok); }
+.ct-lich-dau-vang { color: var(--ct-err); }
+.ct-lich-dau-phep { color: var(--ct-warn); }
+
+.ct-lich-cham {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  min-width: 118px;
+  padding: 4px;
+  border-radius: var(--ct-radius-sm);
+  border: 1px solid var(--ct-border);
+  background: var(--ct-surface);
+  box-shadow: var(--ct-shadow);
+}
+
+.ct-lich-cham button {
+  padding: 5px 9px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--ct-text);
+  font: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ct-lich-cham button:hover { background: var(--ct-hover); }
+.ct-lich-go { color: var(--ct-text-faint) !important; border-top: 1px solid var(--ct-border) !important; border-radius: 0 !important; margin-top: 2px; }

@@ -374,6 +374,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ crs('CS50 — Khóa học nhập môn khoa học máy tính', 'https://cs50.harvard.edu') ] },
       { title: 'Chọn ngôn ngữ lập trình', subtitle: 'Quyết định bắt đầu với Kotlin hay Java', kind: 'info', side: 'left', icon: 'Code', description: 'Chọn ngôn ngữ để bắt đầu học Android. Kotlin là ngôn ngữ chính thức được Google khuyến khích, có cú pháp hiện đại, ngắn gọn. Java là ngôn ngữ truyền thống, vẫn phổ biến ở các dự án legacy.',
         resources: [ off('Kotlin — Ngôn ngữ chính thức', 'https://kotlinlang.org/'), off('Java — Ngôn ngữ truyền thống', 'https://developer.android.com/studio/write/java8-support') ] },
+      { title: 'Chọn ngôn ngữ lập trình Android', subtitle: 'Kotlin hay Java — chọn theo mục tiêu cá nhân', kind: 'info', side: 'right', icon: 'Code', description: 'Android hỗ trợ hai ngôn ngữ chính: Kotlin (chính thức, được Google khuyên dùng từ 2019) và Java (ngôn ngữ truyền thống, cộng đồng rộng). Chọn ngôn ngữ phù hợp dựa trên nền tảng lập trình hiện có và mục tiêu nghề nghiệp.',
+        resources: [ off('Build your first Android app — Android Developers', 'https://developer.android.com/training/basics/firstapp') ] },
     ]},
     { label: 'Nền tảng', nodes: [
       { title: 'Hệ thống build Gradle', subtitle: 'Cấu hình và quản lý dependency', side: 'right', icon: 'Settings', description: 'Hiểu cách Gradle quản lý build, khai báo dependencies, tạo task và cấu hình build variants. Gradle là công cụ không thể thiếu khi debug, build release hay tuỳ chỉnh quy trình biên dịch ứng dụng.',
@@ -394,6 +396,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ off('Trang chủ GitLab', 'https://gitlab.com') ] },
       { title: 'Gradle là gì và cách sử dụng', subtitle: 'Hệ thống build tự động, quản lý dependency', side: 'right', icon: 'Server', description: 'Gradle là hệ thống build tự động dùng cho dự án Android, quản lý dependency và cấu hình build. Hầu hết dự án Android đều dùng Gradle thay cho Ant hoặc Maven.',
         resources: [ off('Gradle Documentation', 'https://docs.gradle.org/'), off('Android build configuration', 'https://developer.android.com/build') ] },
+      { title: 'Nền tảng lập trình cơ bản', subtitle: 'Biến, kiểu dữ liệu, vòng lặp, hàm, OOP', kind: 'info', side: 'left', icon: 'BookOpen', description: 'Nắm vững các khái niệm lập trình nền tảng — biến, kiểu dữ liệu, cấu trúc điều khiển, hàm, lập trình hướng đối tượng (OOP) — trước khi bước vào phát triển Android. Đây là kiến thức chung áp dụng cho mọi ngôn ngữ lập trình.',
+        resources: [ crs('Kotlin Basics — JetBrains Academy', 'https://hyperskill.org/track/8'), crs('Java Programming — Codecademy', 'https://www.codecademy.com/learn/learn-java') ] },
     ]},
     { label: 'App Components', nodes: [
       { title: 'Tổng quan App Components', subtitle: 'Bốn trụ cột của ứng dụng Android', kind: 'info', side: 'left', icon: 'Server', description: 'Tìm hiểu Activity, Service, BroadcastReceiver và ContentProvider — bốn thành phần cốt lõi kiến tạo nên mọi ứng dụng Android. Hiểu vai trò và cách chúng tương tác giúp nắm được kiến trúc tổng thể của hệ thống.',
@@ -456,6 +460,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ off('Tài liệu ImageView', 'https://developer.android.com/reference/android/widget/ImageView') ] },
       { title: 'Navigation Component — Điều hướng màn hình', subtitle: 'Quản lý điều hướng bằng Navigation Graph', side: 'left', description: 'Navigation Component quản lý điều hướng giữa các destination (màn hình) thông qua Navigation Graph. Hỗ trợ deep link, animation chuyển màn, và back stack tự động. Đây là cách tiếp cận chuẩn cho điều hướng Android.',
         resources: [ off('Tài liệu Navigation Component', 'https://developer.android.com/guide/navigation'), crs('Navigation Codelab', 'https://developer.android.com/codelabs/android-navigation') ] },
+      { title: 'RecyclerView — Hiển thị danh sách cuộn hiệu quả', side: 'right', icon: 'Layers', description: 'RecyclerView là thành phần Android dùng để hiển thị danh sách lớn các phần tử theo chiều dọc hoặc chiều ngang một cách hiệu quả về bộ nhớ, bằng cách tái sử dụng (recycle) các View đã cuộn ra khỏi màn hình thay vì tạo mới.',
+        resources: [ off('RecyclerView — Android Developers', 'https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView'), art('Create a List with RecyclerView — Android Developers', 'https://developer.android.com/guide/topics/ui/layout/recyclerview') ] },
     ]},
     { label: 'Kiến trúc & Design Pattern', nodes: [
       { title: 'Lập trình hướng đối tượng (OOP)', subtitle: 'Nền tảng lý thuyết cho mọi ngôn ngữ', side: 'right', icon: 'Boxes', description: 'Nắm vững các nguyên lý Class, Object, Inheritance, Polymorphism, Encapsulation và Abstraction. Đây là nền tảng tư duy giúp bạn thiết kế code có tổ chức, dễ bảo trì và mở rộng trong Android.',
@@ -590,6 +596,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ art('TCP/IP Model – GeeksforGeeks', 'https://www.geeksforgeeks.org/tcp-ip-model/') ] },
       { title: 'Các loại bản ghi DNS', subtitle: 'A, AAAA, CNAME, MX, TXT...', side: 'left', icon: 'Globe', description: 'Biết A, AAAA, CNAME, MX, TXT, NS, PTR, SOA records giúp cấu hình domain chính xác và debug DNS issues nhanh.',
         resources: [ art('DNS Records Types – Mozilla MDN', 'https://developer.mozilla.org/en-US/docs/Glossary/DNS'), art('DNS Records – Cloudflare', 'https://www.cloudflare.com/learning/dns/dns-records/') ] },
+      { title: 'Cơ chế Rendering của Trình duyệt (Critical Rendering Path)', subtitle: 'Cách trình duyệt biến code thành pixel', kind: 'info', side: 'right', icon: 'Monitor', description: 'Tìm hiểu Critical Rendering Path — trình tự trình duyệt parse HTML, build DOM/CSSOM, chạy JavaScript và paint pixel lên màn hình. Cần khi debug layout shift, optimize First Contentful Paint, hoặc thiết kế API trả dữ liệu phù hợp cho frontend.',
+        resources: [ off('developer.mozilla.org', 'https://developer.mozilla.org/en-US/docs/Web/Performance/How_browsers_work'), art('web.dev', 'https://web.dev/articles/howbrowserswork') ] },
     ]},
     { label: 'Chọn MỘT ngôn ngữ', nodes: [
       { title: 'JavaScript (Node.js)', subtitle: 'JavaScript cho phía server', kind: 'alternative', side: 'right', icon: 'Braces', description: 'Dùng Node.js để viết backend bằng JavaScript, tận dụng npm với hàng trăm nghìn package. Xử lý I/O bất đồng bộ hiệu quả, framework phổ biến: Express, Fastify, NestJS.',
@@ -852,6 +860,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ off('OpenAI API Docs', 'https://platform.openai.com/docs/guides/fine-tuning'), art('DeepSeek API', 'https://platform.deepseek.com/api-docs/'), off('Google Gemini API', 'https://ai.google.dev/gemini-api/docs') ] },
       { title: 'RAG (Retrieval-Augmented Generation)', subtitle: 'Tìm kiếm ngữ nghĩa kết hợp LLM', kind: 'info', side: 'left', icon: 'Search', description: 'RAG kết hợp retrieval (tìm kiếm vector) với LLM để tạo câu trả lời chính xác và cập nhật. Hiểu chunking strategy, embedding model, vector store và cách đánh giá RAG quality.',
         resources: [ art('RAG Explained — AWS', 'https://docs.aws.amazon.com/comprehend/latest/dg/retrieval-augmented-generation.html') ] },
+      { title: 'RAGs (Retrieval-Augmented Generation Systems)', subtitle: 'Kết hợp tìm kiếm vector với LLM để trả lời chính xác', side: 'right', icon: 'Brain', description: 'Tìm hiểu kiến trúc RAG — chunk văn bản, embed sang vector, lưu vào Vector Database, retrieve đoạn liên quan khi có query, rồi truyền cho LLM. Dùng khi cần LLM trả lời chính xác dựa trên dữ liệu riêng (tài liệu nội bộ, codebase, cơ sở tri thức).',
+        resources: [ art('python.langchain.com', 'https://python.langchain.com/docs/tutorials/rag/') ] },
     ]},
   ],
   'blockchain': [
@@ -1416,6 +1426,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ off('Microsoft Windows Server Documentation', 'https://learn.microsoft.com/en-us/windows-server/'), off('The Linux Kernel Documentation', 'https://www.kernel.org/doc/html/latest/') ] },
       { title: 'Kỹ năng Lập trình (Programming Skills)', subtitle: 'Tự động hóa tác vụ với Python, Bash, PowerShell', kind: 'info', side: 'left', icon: 'Code', description: 'Viết script để tự động hóa tác vụ an ninh: Python (phân tích log, scanning, malware analysis), Bash/PowerShell (quản lý hệ thống, hardening), JavaScript (phân tích tấn công web). Không cần trở thành software engineer — chỉ cần đọc và viết code để automation và phân tích.',
         resources: [ off('Python Official Documentation', 'https://docs.python.org/3/'), off('Bash Reference Manual', 'https://www.gnu.org/software/bash/manual/'), off('MDN: JavaScript Guide', 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide') ] },
+      { title: 'Phiên bản và Sự khác biệt giữa các hệ điều hành (OS Versions)', subtitle: 'Windows, Linux, macOS — editions & differences', kind: 'info', side: 'right', icon: 'Monitor', description: 'Phân biệt các phiên bản và edition của hệ điều hành: Windows Pro/Enterprise, Ubuntu LTS/server, macOS variants. Dùng khi triển khai hệ thống hoặc chọn OS phù hợp với yêu cầu bảo mật.',
+        resources: [ art('roadmap.sh — Cyber Security', 'https://roadmap.sh/cyber-security') ] },
     ]},
     { label: 'Mạng máy tính', nodes: [
       { title: 'WiFi & Bluetooth', subtitle: '802.11, WPA2/WPA3, BLE, lỗ hổng không dây', kind: 'info', side: 'left', icon: 'Globe', description: 'Hai giao thức không dây phổ biến nhất: WiFi (802.11) và Bluetooth (BLE). Hiểu cơ chế hoạt động, bảo mật và các lỗ hổng phổ biến như KRACK, Evil Twin để đánh giá rủi ro hệ thống thực tế.',
@@ -1552,6 +1564,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ art('en.wikipedia.org', 'https://en.wikipedia.org/wiki/Handshaking') ] },
       { title: 'Kiến thức Mạng máy tính (Networking Knowledge)', subtitle: 'Giao tiếp và truyền dữ liệu giữa các thiết bị', kind: 'info', side: 'left', icon: 'Network', description: 'Nắm vững mô hình OSI 7 lớp, TCP/IP, Subnetting, DNS, DHCP, routing, switching, firewall, VPN. Kiến thức mạng là xương sống của an ninh mạng — hầu hết tấn công và phòng thủ đều diễn ra ở các tầng mạng.',
         resources: [ off('RFC 791: Internet Protocol', 'https://datatracker.ietf.org/doc/html/rfc791') ] },
+      { title: 'Quy trình Handshake trong kết nối mạng (Handshakes)', subtitle: 'TCP 3-way handshake và TLS handshake', kind: 'info', side: 'right', icon: 'Network', description: 'Hiểu TCP three-way handshake (SYN → SYN-ACK → ACK) và TLS handshake để thiết lập kết nối bảo mật. Dùng khi phân tích packet capture, troubleshoot kết nối, và detect MITM attack.',
+        resources: [ art('Handshaking – Wikipedia', 'https://en.wikipedia.org/wiki/Handshaking'), art('TLS – Wikipedia', 'https://en.wikipedia.org/wiki/Transport_Layer_Security') ] },
     ]},
     { label: 'Nền tảng An ninh', nodes: [
       { title: 'SSL và TLS cơ bản', subtitle: 'Mã hoá truyền thông mạng', side: 'left', icon: 'Lock', description: 'TLS 1.2/1.3 thay thế SSL đã lỗi thời, mã hóa dữ liệu client-server bằng asymmetric và symmetric crypto. Hiểu handshake, certificate chain, cipher suite giúp phát hiện misconfiguration TLS và tấn công downgrade.',
@@ -1666,6 +1680,12 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ art('Network Segmentation — CISA', 'https://www.cisa.gov/sites/default/files/publications/National_Segmentation_Security_Council_Overview.pdf') ] },
       { title: 'Quy trình Handshake', subtitle: 'TCP three-way handshake và TLS handshake', side: 'right', icon: 'Layers', description: 'Hiểu TCP three-way handshake (SYN → SYN-ACK → ACK) thiết lập kết nối tin cậy, và TLS handshake với certificate exchange tạo kênh bảo mật. Biết handshake để phân tích packet capture, phát hiện tấn công replay, và hiểu cơ chế MITM exploit.',
         resources: [ off('RFC 793 — TCP Handshake', 'https://datatracker.ietf.org/doc/html/rfc793'), off('RFC 8446 — TLS 1.3', 'https://datatracker.ietf.org/doc/html/rfc8446') ] },
+      { title: 'Hiểu khái niệm Risk trong An ninh thông tin (Risk Definition)', subtitle: 'Likelihood × Impact = Risk', kind: 'info', side: 'left', icon: 'Gauge', description: 'Risk = Likelihood (khả năng xảy ra) × Impact (tác động). Hiểu cách đánh giá, phân loại và ưu tiên rủi ro để phân bổ nguồn lực bảo mật hiệu quả.',
+        resources: [ off('NIST SP 800-37 – Risk Management Framework', 'https://csrc.nist.gov/pubs/sp/800/37/r2/final') ] },
+      { title: 'Sao lưu và Khả năng phục hồi (Backups & Resiliency)', subtitle: 'Full, incremental, differential — DRP & BCP', kind: 'info', side: 'right', icon: 'Database', description: 'Nắm các chiến lược sao lưu (full, incremental, differential), RTO/RPO, và nguyên tắc khả năng phục hồi (resiliency). Dùng khi xây dựng kế hoạch phục hồi thảm họa (DRP) và kinh doanh liên tục (BCP).',
+        resources: [ art('Backup – Wikipedia', 'https://en.wikipedia.org/wiki/Backup') ] },
+      { title: 'Khái niệm Isolation trong bảo mật (Isolation)', subtitle: 'Tách biệt hệ thống, mạng, và tiến trình', kind: 'info', side: 'left', icon: 'Shield', description: 'Isolation là tách biệt hệ thống, mạng hoặc tiến trình để ngăn mối đe dọa lan rộng, bao gồm network segmentation, sandboxing, và containerization. Dùng khi thiết kế defense in depth và giảm surface attack.',
+        resources: [ art('roadmap.sh — Cyber Security', 'https://roadmap.sh/cyber-security') ] },
     ]},
     { label: 'Mối đe doạ & Tấn công', nodes: [
       { title: 'Hiểu các công cụ tấn công phổ biến', subtitle: 'Metasploit, Burp Suite, SQLMap, John the Ripper — cách dùng và mục đích', side: 'left', icon: 'Wrench', description: 'Làm quen với các công cụ khai thác và tấn công thường gặp: Metasploit Framework, Burp Suite, SQLMap, John the Ripper, Hydra. Không chỉ biết cách dùng mà còn hiểu nguyên lý hoạt động và cách phát hiện dấu vết chúng trong hệ thống.',
@@ -1870,6 +1890,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ off('NIST SP 800-61 Computer Security Incident Handling Guide', 'https://csrc.nist.gov/publications/detail/sp/800-61/rev-2/final') ] },
       { title: 'Khái niệm cơ bản về Pháp y số', subtitle: 'Thu thập, bảo quản và phân tích bằng chứng số', side: 'right', icon: 'Search', description: 'Thu thập bằng chứng từ disk image, memory dump và log file. Duy trì chain of custody, tạo hash toàn bộ drive trước khi phân tích. Phân tích timeline, file artifacts và deleted data bằng Autopsy, FTK Imager, Volatility — kỹ năng nền tảng cho IR và điều tra nội bộ.',
         resources: [ off('NIST SP 800-86 Guide to Integrating Forensic Techniques', 'https://csrc.nist.gov/publications/detail/sp/800-86/final') ] },
+      { title: 'Hiểu khái niệm Runbook (Runbooks)', subtitle: 'Quy trình vận hành có kịch bản trong SecOps', kind: 'info', side: 'left', icon: 'BookOpen', description: 'Runbook là tài liệu hướng dẫn từng bước các quy trình vận hành an ninh thường lặp lại: xử lý alert, quarantine endpoint, escalate sự cố. Dùng khi xây dựng và duy trì SOAR và incident response.',
+        resources: [ off('NIST SP 800-61 – Computer Security Incident Handling Guide', 'https://csrc.nist.gov/pubs/sp/800/61/r2/final') ] },
     ]},
     { label: 'Thực hành có kiểm soát', nodes: [
       { title: 'HackTheBox', subtitle: 'Lab penetration testing, máy thực tế từ dễ đến khó', kind: 'alternative', side: 'left', icon: 'Shield', description: 'Nền tảng thực hành bảo mật với hàng trăm máy ảo có lỗ hổng thực tế. Phù hợp cho người đã có nền tảng mạng và Linux, muốn thực chiến kỹ năng penetration testing trong môi trường hợp pháp.',
@@ -1914,6 +1936,10 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ art('offensive-security.com', 'https://www.offensive-security.com/metasploit-unleashed/') ] },
       { title: 'Kỹ năng và Kiến thức Đám mây (Cloud Skills and Knowledge)', subtitle: 'AWS, Azure, GCP — nền tảng đám mây phổ biến', kind: 'info', side: 'left', icon: 'Cloud', description: 'Nắm kiến thức và kỹ năng về các nhà cung cấp đám mây phổ biến: AWS (EC2, S3, IAM, VPC), Azure (Virtual Machines, Entra ID, Security Center), GCP (Compute Engine, Cloud IAM). Hiểu shared responsibility model, cloud-native security tools, và cách harden tài nguyên cloud.',
         resources: [ off('AWS Security Documentation', 'https://docs.aws.amazon.com/security/'), off('Azure Security Documentation', 'https://learn.microsoft.com/en-us/azure/security/'), off('Google Cloud Security Documentation', 'https://cloud.google.com/security/security-sheet') ] },
+      { title: 'Triển khai trên Đám mây — Tổng quan (Cloud Deployment)', subtitle: 'CI/CD, IaC, triển khai trên AWS, Azure, GCP', kind: 'info', side: 'right', icon: 'Cloud', description: 'Hiểu quy trình triển khai ứng dụng lên đám mây: CI/CD pipeline, Infrastructure as Code (Terraform, CloudFormation), container deployment. Dùng khi kiểm thử bảo mật hạ tầng cloud-native.',
+        resources: [ off('AWS DevOps – Implementing CI/CD', 'https://docs.aws.amazon.com/whitepapers/latest/introduction-devops-aws/welcome.html'), off('What is Infrastructure as Code – Microsoft Learn', 'https://learn.microsoft.com/en-us/devops/deliver/what-is-infrastructure-as-code') ] },
+      { title: 'Kiến trúc Serverless — Mô hình không máy chủ (Serverless)', subtitle: 'Lambda, Azure Functions, Cloud Functions security', kind: 'info', side: 'left', icon: 'Cloud', description: 'Hiểu kiến trúc serverless (AWS Lambda, Azure Functions, Google Cloud Functions): không quản lý máy chủ vật lý, auto-scaling, billing theo usage. Cân nhắc bảo mật: supply chain attacks, IAM misconfigurations, function injection.',
+        resources: [ off('AWS Lambda Documentation', 'https://docs.aws.amazon.com/lambda/latest/dg/welcome.html') ] },
     ]},
     { label: 'Chứng chỉ', nodes: [
       { title: 'CISM – Certified Information Security Manager', subtitle: 'Quản lý an ninh thông tin', side: 'right', description: 'CISM tập trung vào Governance, Risk Management, và Incident Response — thiên về quản lý chiến lược thay vì kỹ thuật thuần túy. Phù hợp cho người muốn chuyển từ kỹ thuật sang vai trò quản lý an ninh (CISO, Security Director).',
@@ -2014,6 +2040,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ art('Data Cleaning in Python', 'https://pandas.pydata.org/docs/getting_started/intro_tutorials/06_calculate_statistics.html'), art('Data Cleaning best practices', 'https://en.wikipedia.org/wiki/Data_cleansing') ] },
       { title: 'Loại bỏ dữ liệu trùng lặp (Removing Duplicates)', subtitle: 'Nhận diện và xử lý bản ghi trùng lặp', side: 'left', icon: 'Boxes', description: 'Phát hiện các bản ghi trùng lặp dựa trên một hoặc nhiều cột (unique key). Dùng drop_duplicates() trong pandas hoặc tính năng Remove Duplicates trong Excel để đảm bảo dữ liệu phân tích không bị sai lệch.',
         resources: [ off('Pandas drop_duplicates', 'https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.drop_duplicates.html') ] },
+      { title: 'APIs (REST API / GraphQL)', subtitle: 'Giao thức truy cập dữ liệu từ bên ngoài', kind: 'info', side: 'right', icon: 'Network', description: 'API là cơ chế để chương trình giao tiếp với nhau. Data Analyst dùng REST API để tự động lấy dữ liệu từ các dịch vụ web, thay vì tải thủ công từng file.',
+        resources: [ art('API Concepts - MDN', 'https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Introduction'), off('REST API Tutorial', 'https://restfulapi.net/') ] },
     ]},
     { label: 'Phân tích Thống kê Mô tả', nodes: [
       { title: 'Phân tích thống kê (Statistical Analysis)', subtitle: 'Kiểm định giả thuyết và suy luận thống kê', side: 'right', icon: 'Atom', description: 'Áp dụng kiểm định T-test, Chi-square, ANOVA và các phương pháp suy luận thống kê để xác nhận hoặc bác bỏ giả thuyết, đưa ra kết luận có ý nghĩa thống kê chặt chẽ.',
@@ -2192,6 +2220,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ art('Python Official', 'https://www.python.org'), art('Go Official', 'https://go.dev'), art('Bash Reference Manual', 'https://www.gnu.org/software/bash/manual') ] },
       { title: 'Lập trình cơ bản cho DevOps', subtitle: 'Biến, vòng lặp, hàm, regex — nền tảng chung của mọi ngôn ngữ script', kind: 'info', side: 'right', icon: 'Code', description: 'Nắm vững các khái niệm lập trình phổ quát (biến, kiểu dữ liệu, cấu trúc điều khiển, hàm, regex, xử lý lỗi) trước khi chọn ngôn ngữ cụ thể. Kỹ năng này chuyển đổi trực tiếp sang Python, Bash, Go, hoặc JavaScript.',
         resources: [ crs('Automate the Boring Stuff with Python', 'https://automatetheboringstuff.com'), off('Bash Scripting Tutorial', 'https://linuxconfig.org/bash-scripting-tutorial') ] },
+      { title: 'Học một ngôn ngữ lập trình cho DevOps', subtitle: 'Nền tảng tự động hoá bằng code', kind: 'info', side: 'left', icon: 'Code', description: 'Script và lập trình là kỹ năng cốt lõi giúp DevOps tự động hoá quy trình, viết công cụ nội bộ, và tương tác hiệu quả với CI/CD, infrastructure và monitoring. Nắm vững một ngôn ngữ như Python, Go hoặc Bash giúp bạn xây dựng giải pháp tùy chỉnh thay vì chỉ dựa vào công cụ có sẵn.',
+        resources: [ off('Learn Python — python.org', 'https://www.python.org/about/gettingstarted/'), off('Go Tour — Interactive Go Tutorial', 'https://go.dev/tour/welcome/1'), off('Bash Reference Manual', 'https://www.gnu.org/software/bash/manual/') ] },
     ]},
     { label: 'Hệ điều hành', nodes: [
       { title: 'SUSE Linux', subtitle: 'Enterprise Linux distribution', side: 'right', icon: 'Server', description: 'SUSE Linux Enterprise Server (SLES) là bản phân phối doanh nghiệp dùng rộng rãi trong môi trường SAP và mission-critical. Hiểu SUSE giúp quản lý hạ tầng trên nền tảng SUSE Rancher và OpenSUSE Leap.',
@@ -2458,6 +2488,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ off('containerd documentation', 'https://containerd.io/docs/'), off('OCI Image Specification', 'https://github.com/opencontainers/image-spec') ] },
       { title: 'Thiết kế ứng dụng cho Container', subtitle: 'Kiến trúc phù hợp với mô hình container', kind: 'info', side: 'right', icon: 'Layers', description: 'Container đòi hỏi thiết kế ứng dụng theo hướng stateless — trạng thái nên lưu ra bên ngoài qua volume hoặc database. Cấu hình truyền qua biến môi trường, không hard-code. Health check endpoint giúp container runtime giám sát trạng thái.',
         resources: [ art('Twelve-Factor App methodology', 'https://12factor.net/'), art('Container best practices', 'https://sysdig.com/blog/dockerfile-best-practices/') ] },
+      { title: 'Các công nghệ nền tảng — BuildKit, Kaniko, img', subtitle: 'Build tool cho container image vượt trội hơn docker build', kind: 'info', side: 'left', icon: 'Wrench', description: 'Mặc định Docker dùng build engine cũ. BuildKit hỗ trợ build song song, cache thông minh, và giảm dung lượng image. Dùng khi project cần CI/CD nhanh hoặc muốn tích hợp build không cần Docker daemon.',
+        resources: [ off('Docker BuildKit', 'https://docs.docker.com/build/'), off('BuildKit — moby/buildkit', 'https://github.com/moby/buildkit') ] },
     ]},
     { label: 'Cài đặt & CLI', nodes: [
       { title: 'Quản lý package trong Linux', subtitle: 'apt, yum, apk — nền tảng cho Dockerfile', kind: 'info', side: 'left', description: 'Container images thường dựa trên Linux, cần biết cách cài đặt và cập nhật phần mềm bằng package manager (apt, yum/dnf, apk) để viết Dockerfile hiệu quả.',
@@ -2480,6 +2512,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ off('docker compose CLI reference', 'https://docs.docker.com/compose/reference/'), art('dive - Docker image analyzer', 'https://github.com/wagoodman/dive') ] },
       { title: 'Các công cụ CLI bổ sung', subtitle: 'Công cụ hỗ trợ debug và giám sát container', side: 'right', icon: 'Terminal', description: 'Ngoài docker CLI cơ bản, cần biết docker stats (giám sát tài nguyên), docker inspect (xem chi tiết config), dive (phân tích image layers) và ctr/crictl (tương tác trực tiếp với container runtime) để debug khi docker CLI không đủ.',
         resources: [ off('Docker CLI reference', 'https://docs.docker.com/reference/'), art('Dive — Image layer analysis', 'https://github.com/wagoodman/dive') ] },
+      { title: 'Công cụ CLI bổ sung — dive, ctop, docker-scan', subtitle: 'Công cụ bên thứ ba giúp phân tích và quản lý container hiệu quả', kind: 'info', side: 'left', icon: 'Terminal', description: 'Các công cụ CLI ngoài docker native giúp inspect image (dive), giám sát container (ctop/top), quét lỗ hổng (trivy/docker-scan), và tương tác container (ctr, nerdctl). Dùng khi cần phân tích sâu hoặc thay thế công cụ mặc định.',
+        resources: [ off('Trivy — Container Security Scanner', 'https://trivy.dev/'), art('dive — Explore Docker images', 'https://github.com/wagoodman/dive') ] },
     ]},
     { label: 'Image & Dockerfile', nodes: [
       { title: 'Sử dụng Image từ bên thứ ba', subtitle: 'Pull, xác minh và quản lý public images', side: 'right', icon: 'Database', description: 'Hầu hết workload đều dùng image có sẵn từ Docker Hub hoặc registry khác. Biết cách phân biệt official vs community image, kiểm tra tags, quét bảo mật và tránh rủi ro supply chain.',
@@ -2532,6 +2566,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ off('docs.docker.com', 'https://docs.docker.com/engine/reference/commandline/login/') ] },
       { title: 'Container Registries (Cloud)', subtitle: 'ECR, GCR, ACR, ghcr.io và cách chọn', kind: 'info', side: 'right', icon: 'Cloud', description: 'Ngoài Docker Hub, mỗi nền tảng cloud có registry riêng: AWS ECR, Google GCR, Azure ACR và GitHub ghcr.io. Chúng tích hợp sâu với IAM/authorization của nền tảng, automatic scanning, và private networking. Chọn registry cùng cloud provider để giảm latency và đơn giản hóa networking.',
         resources: [ off('Amazon ECR', 'https://docs.aws.amazon.com/ecr/'), off('Azure Container Registry', 'https://learn.microsoft.com/en-us/azure/container-registry/') ] },
+      { title: 'Sử dụng Image từ bên thứ ba — verify, pin tag, multi-arch', subtitle: 'Pull image an toàn và kiểm soát nguồn gốc trước khi deploy', kind: 'info', side: 'left', icon: 'Shield', description: 'Không phải image nào trên Hub hay registry công khai cũng đáng tin. Cần kiểm tra nguồn gốc (official image, stars, maintainer), pinning digest thay vì tag (avoid :latest drift), và verify multi-arch image phù hợp CPU. Dùng trước khi deploy bất kỳ image không tự build nào vào production.',
+        resources: [ off('Docker Official Images', 'https://docs.docker.com/docker-hub/official_images/'), art('Docker Content Trust & Image Signing', 'https://docs.docker.com/engine/security/trust/') ] },
     ]},
     { label: 'Bảo mật & Tối ưu', nodes: [
       { title: 'Giới Hạn Tài Nguyên Container', subtitle: '--cpus, --memory, --pids-limit', side: 'right', icon: 'Gauge', description: 'Dùng --memory và --cpus để giới hạn resource ngăn container ngốn hết host. Đặt --pids-limit để tránh fork bomb attack. Không giới hạn tài nguyên là lỗi phổ biến gây crash toàn host.',
@@ -2542,6 +2578,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ off('docs.docker.com', 'https://docs.docker.com/engine/security/') ] },
       { title: 'Runtime Security', subtitle: 'Seccomp, AppArmor và Linux capabilities nâng cao', kind: 'info', side: 'left', icon: 'Lock', description: 'Phần này mở rộng kiến thức bảo mật: dùng `--security-opt seccomp=profile.json` để áp dụng profile tùy chỉnh, `--cap-drop ALL` kết hợp `--cap-add` chỉ những quyền cần thiết, và kiểm tra capabilities bằng `docker run --rm alpine capsh --print` để xác nhận container không có đặc quyền thừa.',
         resources: [ off('Docker security documentation', 'https://docs.docker.com/engine/security/'), art('Linux capabilities explained', 'https://www.kernel.org/doc/html/latest/security/credentials.html') ] },
+      { title: 'Cấu hình Runtime — Storage driver, logging driver, daemon.json', subtitle: 'Tuning Docker Daemon phù hợp với hệ điều hành và workload', kind: 'info', side: 'right', icon: 'Settings', description: 'Docker Daemon có nhiều tuỳ chọn runtime cấu hình được qua daemon.json: storage driver (overlay2, btrfs), logging driver (json-file, syslog), registry mirror, insecure registry. Dùng khi triển khai trên server vật lý hoặc cần tối ưu I/O và log.',
+        resources: [ off('Docker Daemon Configuration', 'https://docs.docker.com/engine/reference/commandline/dockerd/'), off('Configure logging drivers', 'https://docs.docker.com/engine/admin/logging/') ] },
     ]},
     { label: 'Debug & CI', nodes: [
       { title: 'Debug Container Đang Chạy', subtitle: 'docker exec, diff, logs, stats', side: 'left', icon: 'Bug', description: 'Dùng docker exec -it để mở shell vào container đang chạy, docker diff kiểm tra thay đổi filesystem, docker stats xem CPU/memory thời gian thực. Bộ ba công cụ không thể thiếu khi container không hoạt động đúng.',
@@ -2640,6 +2678,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ art('roadmap.sh — Data Structures & Algorithms', 'https://roadmap.sh/datastructures-and-algorithms') ] },
       { title: 'Cấu trúc dữ liệu cơ bản (Basic Data Structures)', subtitle: 'Array, List, Stack, Queue, Hash Table', kind: 'info', side: 'left', icon: 'Boxes', description: 'Nắm chắc bốn cấu trúc nền tảng: Array, Linked List, Stack, Queue và Hash Table — làm cơ sở để học mọi cấu trúc phức tạp hơn.',
         resources: [ art('Basic Data Structures — GeeksforGeeks', 'https://www.geeksforgeeks.org/data-structures/') ] },
+      { title: 'Cây hậu tố & Mảng hậu tố (Suffix Trees & Suffix Arrays)', subtitle: 'Cấu trúc dữ liệu chuyên sâu cho xử lý chuỗi', kind: 'info', side: 'right', icon: 'Boxes', description: 'Hai cấu trúc dữ liệu chuyên dụng cho lập chỉ mục chuỗi, cho phép tìm kiếm O(m) trên chuỗi độ dài n (m là độ dài pattern), thay vì duyệt O(n). Dùng khi cần truy vấn substring nhanh trên tập dữ liệu văn bản lớn.',
+        resources: [ art('Suffix Array – Wikipedia', 'https://en.wikipedia.org/wiki/Suffix_array'), art('Suffix Tree – Wikipedia', 'https://en.wikipedia.org/wiki/Suffix_tree') ] },
     ]},
     { label: 'Sắp xếp & Tìm kiếm', nodes: [
       { title: 'Thuật toán Bubble Sort', subtitle: 'Sắp xếp nổi bọt', kind: 'alternative', side: 'left', icon: 'Braces', description: 'So sánh từng cặp phần tử liền kề và đổi chỗ nếu sai thứ tự, lặp đến khi đã sắp xếp. Dù hiếm khi dùng trong thực tế, Bubble Sort là cách tuyệt vời để hiểu tư duy sắp xếp và khái niệm swaps.',
@@ -2774,6 +2814,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ art('promptingguide.ai', 'https://www.promptingguide.ai') ] },
       { title: 'Prompting Techniques', subtitle: 'Kỹ thuật viết prompt hiệu quả', side: 'left', description: 'Học các kỹ thuật prompt nâng cao: chain-of-thought, few-shot, system prompt,拆解 task phức tạp. Prompt tốt giúp LLM sinh code chính xác hơn, giảm iteration và tiết kiệm token.',
         resources: [ art('promptingguide.ai', 'https://www.promptingguide.ai'), off('platform.openai.com', 'https://platform.openai.com/docs/guides/prompt-engineering'), crs('deeplearning.ai', 'https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/') ] },
+      { title: 'Trình duyệt xử lý mã như thế nào', subtitle: 'Từ HTML/CSS/JS đến pixel trên màn hình', kind: 'info', side: 'right', icon: 'Monitor', description: 'Tìm hiểu cách trình duyệt phân tích HTML thành DOM, CSS thành CSSOM, chạy JavaScript trong main thread, xây dựng Render Tree, layout và compositing. Cần hiểu để tối ưu hiệu năng và debug rendering issues.',
+        resources: [ art('roadmap.sh — Frontend', 'https://roadmap.sh/frontend') ] },
     ]},
     { label: 'CSS', nodes: [
       { title: 'Antigravity', subtitle: 'Animation libraries nâng cao', side: 'right', icon: 'Zap', description: 'GSAP và Framer Motion là thư viện animation mạnh mẽ hơn CSS transitions thuần, hỗ trợ timeline, stagger, morph SVG, scroll-trigger và physics-based animation cho UI sinh động.',
@@ -2826,6 +2868,10 @@ export const MO_RONG: Record<string, SeedStage[]> = {
     { label: 'Server-Side Rendering', nodes: [
       { title: 'Streamed Responses', subtitle: 'Trả dữ liệu từng phần với streaming', kind: 'info', side: 'left', icon: 'Layers', description: 'Streamed Responses là kỹ thuật gửi phản hồi HTTP theo từng chunk thay vì đợi toàn bộ dữ liệu sẵn sàng. Học kỹ thuật này giúp cải thiện perceived performance và First Contentful Paint đáng kể.',
         resources: [ art('developer.mozilla.org', 'https://developer.mozilla.org/en-US/docs/Web/API/ReadableStream') ] },
+    ]},
+    { label: 'PWA & Web API nâng cao', nodes: [
+      { title: 'Progressive Web Apps (PWA)', subtitle: 'Web app có thể cài đặt, hoạt động offline', kind: 'info', side: 'left', icon: 'Smartphone', description: 'PWA là web app tận dụng Service Worker, Web App Manifest và HTTPS để mang lại trải nghiệm gần native — có thể cài đặt lên màn hình chính, hoạt động offline, gửi push notification. Dùng khi cần user engagement cao và khả năng truy cập không phụ thuộc mạng.',
+        resources: [ art('roadmap.sh — Frontend', 'https://roadmap.sh/frontend') ] },
     ]},
     { label: 'Hiệu năng (Performance)', nodes: [
       { title: 'Sử dụng DevTools', subtitle: 'Elements, Console, Network, Application, Sources', side: 'left', icon: 'Bug', description: 'Chrome DevTools gồm nhiều panel: Elements chỉnh CSS, Console debug JS, Network theo dõi request, Application quản lý storage và service worker. Dùng DevTools để debug, profile và tối ưu hiệu năng hàng ngày.',
@@ -3128,6 +3174,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ art('roadmap.sh — Git & GitHub', 'https://roadmap.sh/git-github') ] },
       { title: 'Git so với các hệ thống VCS khác', subtitle: 'Phân biệt Git với SVN, CVS, Mercurial', side: 'left', icon: 'GitBranch', description: 'Git là hệ thống phân tán (mỗi người có toàn bộ lịch sử trên máy), hoạt động nhanh vì không phụ thuộc mạng, và dùng mô hình nhánh mạnh mẽ. So với Subversion (tập trung), Git linh hoạt hơn và phù hợp với quy trình phát triển hiện đại.',
         resources: [ art('roadmap.sh — Git & GitHub', 'https://roadmap.sh/git-github') ] },
+      { title: 'Cài đặt Git qua Package Manager', subtitle: 'Homebrew, apt, winget — chọn cách phù hợp với hệ điều hành', kind: 'alternative', side: 'right', icon: 'Terminal', description: 'Nhiều hệ điều hành cho phép cài Git thông qua trình quản lý gói (package manager) thay vì tải trình cài đặt riêng. Dùng package manager khi bạn muốn cập nhật dễ dàng và quản lý phần mềm tập trung.',
+        resources: [ off('Git - Installing on macOS', 'https://git-scm.com/download/mac'), off('Git - Installing on Linux', 'https://git-scm.com/download/linux') ] },
     ]},
     { label: 'Repository & Staging', nodes: [
       { title: 'Repository là gì', subtitle: 'Thư mục chứa dữ liệu dự án', side: 'right', icon: 'Database', description: 'Repository (kho) là thư mục mà Git theo dõi toàn bộ thay đổi bên trong. Nó lưu trữ các đối tượng như commits, branches, tags — chứa đầy đủ lịch sử và dữ liệu của dự án.',
@@ -3784,6 +3832,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ art('roadmap.sh — iOS', 'https://roadmap.sh/ios') ] },
       { title: 'Keeping Updated with WWDC', subtitle: 'Cập nhật xu hướng từ WWDC', kind: 'info', side: 'right', icon: 'Monitor', description: 'WWDC diễn ra hàng năm là nơi Apple công bố framework mới, thay đổi Swift, và best practices mới. Theo dõi các session chính thức và cập nhật Swift/iOS SDK thường xuyên giúp lộ trình học không bị lỗi thời.',
         resources: [ off('Apple Developer - WWDC Videos', 'https://developer.apple.com/videos/wwdc2024/'), off('Swift.org Blog', 'https://swift.org/blog/') ] },
+      { title: 'Cài đặt môi trường phát triển', subtitle: 'Xcode, simulators và công cụ cần thiết', kind: 'info', side: 'left', description: 'Tải và cài đặt Xcode từ Mac App Store — đây là IDE chính thức duy nhất để phát triển iOS. Tạo và quản lý các máy ảo (simulator) cho từng dòng thiết bị iPhone, iPad, Apple Watch để kiểm thử ứng dụng.',
+        resources: [ off('developer.apple.com', 'https://developer.apple.com/xcode/'), off('developer.apple.com', 'https://developer.apple.com/documentation/') ] },
     ]},
     { label: 'UIKit & SwiftUI', nodes: [
       { title: 'Interface Builder', subtitle: 'Storyboard, XIB, canvas, object library', side: 'right', description: 'Interface Builder (IB) cho phép thiết kế giao diện trực quan bằng storyboard (.storyboard) hoặc XIB file (.xib). Tìm hiểu canvas, Object Library, Size inspector, Connection inspector.',
@@ -4108,6 +4158,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ off('Extending Kubernetes', 'https://kubernetes.io/docs/concepts/extend-kubernetes'), off('API Machinery Concepts', 'https://kubernetes.io/docs/concepts/overview/kubernetes-api') ] },
       { title: 'Các khái niệm và thuật ngữ cốt lõi', subtitle: 'Từ Pod đến Control Plane', kind: 'info', side: 'right', icon: 'Cpu', description: 'Nắm vững từ vựng Kubernetes: Pod, Node, Cluster, Control Plane, Worker, Namespace, Label, Selector, Annotation — nền tảng để hiểu mọi thành phần tiếp theo.',
         resources: [ off('kubernetes.io', 'https://kubernetes.io/docs/concepts/overview/components/'), off('kubernetes.io', 'https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/') ] },
+      { title: 'Các khái niệm và thuật ngữ nền tảng', subtitle: 'Từ Pod đến Control Plane', kind: 'info', side: 'left', icon: 'BookOpen', description: 'Nắm vững các khối xây dựng cơ bản: Pod (đơn vị nhỏ nhất), Node (máy worker), Control Plane (quản lý cluster), Cluster, Namespace (cách ly tài nguyên). Hiểu cách các thành phần tương tác với nhau trước khi đi sâu vào từng chủ đề.',
+        resources: [ off('Kubernetes Concepts', 'https://kubernetes.io/docs/concepts/'), off('Kubernetes Architecture', 'https://kubernetes.io/docs/concepts/overview/') ] },
     ]},
     { label: 'Cài đặt Cluster', nodes: [
       { title: 'Quản lý Multi-Cluster', subtitle: 'Điều phối và vận hành nhiều Kubernetes cluster', kind: 'info', side: 'right', icon: 'Boxes', description: 'Quản lý nhiều cluster cùng lúc đòi hỏi chiến lược về federation, quản lý cấu hình thống nhất và giám sát tập trung. Các công cụ như Rancher, Tanzu, Lens hoặc Cluster API giúp giảm phức tạp trong việc đồng bộ policy, workload và identity across clusters.',
@@ -4144,6 +4196,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ off('kubernetes.io', 'https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/'), off('kubernetes.io', 'https://kubernetes.io/docs/concepts/storage/persistent-volumes/') ] },
       { title: 'Chạy và quản lý Ứng dụng', subtitle: 'Từ triển khai đến vận hành hàng ngày', side: 'left', icon: 'Boxes', description: 'Quy trình thực tế khi vận hành ứng dụng trên cluster: đưa image vào cluster, scale up/down, cập nhật phiên bản, kiểm tra trạng thái và xử lý sự cố thôngười dụng kubectl.',
         resources: [ off('Managing Kubernetes Objects', 'https://kubernetes.io/docs/concepts/overview/working-with-objects/object-management/'), off('kubectl Overview', 'https://kubernetes.io/docs/reference/kubectl/') ] },
+      { title: 'Chạy và quản lý Ứng dụng trên Kubernetes', subtitle: 'Vòng đời, health check, restart', side: 'right', icon: 'Boxes', description: 'Nắm quy trình đóng gói ứng dụng thành image, viết manifest Deployment/Service, triển khai và kiểm tra. Hiểu cách Kubernetes tự phục hồi (self-healing), cập nhật phiên bản (Rolling Update), và rollback khi có lỗi. Dùng khi lần đầu đưa một ứng dụng lên cluster.',
+        resources: [ off('Workloads', 'https://kubernetes.io/docs/concepts/workloads/'), off('Deploying an Application', 'https://kubernetes.io/docs/tutorials/stateless-application/hello-minikube/') ] },
     ]},
     { label: 'Configuration Management', nodes: [
       { title: 'ConfigMaps — Cấu hình ứng dụng', subtitle: 'Tách cấu hình khỏi container image', side: 'left', icon: 'Boxes', description: 'ConfigMap lưu trữ cấu hình không nhạy cảm dưới dạng key-value hoặc file, inject vào Pod qua biến môi trường hoặc volume mount. Tách cấu hình khỏi image giúp ứng dụng linh hoạt qua nhiều môi trường.',
@@ -4578,6 +4632,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ off('http module', 'https://nodejs.org/api/http.html'), off('Express.js', 'https://expressjs.com/') ] },
       { title: 'Tổng quan Xây dựng và Gọi API', subtitle: 'Sơ đồ REST, HTTP methods, status codes', kind: 'info', side: 'right', icon: 'Network', description: 'Nắm vững nguyên tắc thiết kế RESTful API — cách đặt tên endpoint, dùng đúng HTTP method và status code. Làm việc với HTTP request/response, headers và body trong Node.js.',
         resources: [ art('REST API Tutorial', 'https://restfulapi.net/'), off('MDN — HTTP request methods', 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods') ] },
+      { title: 'Kiến trúc REST API — Thiết kế endpoint theo chuẩn', subtitle: 'REST principles, HTTP methods, status codes', kind: 'info', side: 'left', icon: 'Network', description: 'Thiết kế RESTful API đúng chuẩn giúp client và server giao tiếp nhất quán. Cần nắm rõ HTTP methods (GET/POST/PUT/DELETE/PATCH), status codes (2xx/4xx/5xx), resource naming conventions và versioning strategy.',
+        resources: [ art('restfulapi.net', 'https://restfulapi.net/'), art('vinaysahni.com', 'https://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api') ] },
     ]},
     { label: 'Xác thực & Realtime', nodes: [
       { title: 'jsonwebtoken — Mã hoá JWT thủ công', subtitle: 'Khi không dùng Passport.js', side: 'left', icon: 'Key', description: 'Package jsonwebtoken cho phép ký và verify JWT trực tiếp mà không qua Passport. Dùng khi muốn kiểm soát hoàn toàn luồng auth hoặc cần tích hợp với hệ thống SSO/identity provider có sẵn.',
@@ -5160,6 +5216,18 @@ export const MO_RONG: Record<string, SeedStage[]> = {
     { label: 'Cú pháp cơ bản', nodes: [
       { title: 'Tuple', subtitle: 'Mảng cố định kiểu hỗn hợp', side: 'right', icon: 'Boxes', description: 'Tuple cho phép nhóm các giá trị có kiểu khác nhau vào một cấu trúc cố định. Rất hữu ích khi trả về nhiều giá trị từ hàm hoặc tổ chức dữ liệu không đồng nhất.',
         resources: [ art('doc.rust-lang.org', 'https://doc.rust-lang.org/book/ch03-02-data-types.html#the-tuple-type'), off('doc.rust-lang.org', 'https://doc.rust-lang.org/std/primitive.tuple.html') ] },
+      { title: 'Hàm (Functions) và cú pháp Method', subtitle: 'Khai báo fn, tham số, trả về và impl Block', side: 'left', icon: 'Code', description: 'Học cách định nghĩa hàm bằng fn, truyền tham số, trả về giá trị, và dùng impl Block để gắn method vào struct/enum. Dùng khi cần tái sử dụng logic hoặc đóng gói hành vi vào kiểu dữ liệu.',
+        resources: [ off('Method Syntax — Rust Book', 'https://doc.rust-lang.org/book/ch05-03-method-syntax.html') ] },
+      { title: 'Số nguyên (Integers)', subtitle: 'i8..i128, u8..u128, isize, usize và overflow', side: 'right', icon: 'Binary', description: 'Nắm các kiểu số nguyên có dấu (i8–i128) và không dấu (u8–u128), phân biệt isize/usize theo kiến trúc máy. Hiểu checked/unwrap/saturating/wrapping overflow để tránh lỗi runtime.',
+        resources: [ off('Integer Types — Rust Reference', 'https://doc.rust-lang.org/reference/types/numeric.html'), off('Integer Overflow — Rust By Example', 'https://doc.rust-lang.org/rust-by-example/primitives/array.html') ] },
+      { title: 'Boolean', subtitle: 'Kiểu bool và short-circuit evaluation', side: 'left', icon: 'Zap', description: 'Kiểu bool chỉ có hai giá trị true/false, dùng trong if/while/while let. Toán tử && và || áp dụng short-circuit: không đánh giá toán hạng thứ hai nếu kết quả đã xác định.',
+        resources: [ off('Booleans — Rust Reference', 'https://doc.rust-lang.org/reference/types/boolean.html') ] },
+      { title: 'Số thực dấu phẩy động (Floats)', subtitle: 'f32 và f64, NaN, infinity và precision', side: 'right', icon: 'Gauge', description: 'Hai kiểu float: f32 (IEEE-754 single) và f64 (IEEE-754 double, mặc định). Cần f64 khi cần độ chính xác cao trong tính toán khoa học/tài chính; f32 khi cần tiết kiệm bộ nhớ và tốc độ GPU/WASM.',
+        resources: [ off('Floating-Point Numeric Types — Rust Reference', 'https://doc.rust-lang.org/reference/types/numeric.html#floating-point-types') ] },
+      { title: 'Ký tự (Character)', subtitle: 'char là Unicode scalar value 4 byte', side: 'left', icon: 'FileCode', description: 'Kiểu char trong Rust lưu một Unicode Scalar Value (4 byte), không phải byte ASCII như nhiều ngôn ngữ khác. Dùng char khi cần thao tác với từng ký tự đơn lẻ; dùng String/&str cho chuỗi văn bản.',
+        resources: [ off('char — Rust Reference', 'https://doc.rust-lang.org/reference/types/char.html') ] },
+      { title: 'Mảng (Array)', subtitle: '[T; N] — độ dài cố định tại compile time', side: 'right', icon: 'Boxes', description: 'Mảng trong Rust có độ dài cố định được kiểm tra tại compile time: [T; N]. Dùng khi số phần tử biết trước (tuple struct, fixed buffer). Cần độ dài động thì dùng Vec thay vì Array.',
+        resources: [ off('Arrays, Slices, and Vectors — Rust Reference', 'https://doc.rust-lang.org/reference/types/array.html'), off('Arrays and Slices — Rust By Example', 'https://doc.rust-lang.org/rust-by-example/primitives/array.html') ] },
     ]},
     { label: 'Ownership — Trái tim của Rust', nodes: [
       { title: 'Box<T> — Smart pointer heap allocation', subtitle: 'Cấp phát heap cho kiểu đệ quy và trait objects', side: 'right', description: 'Box<T> cấp phát giá trị T trên heap thay vì stack, trả về con trỏ đơn với drop tự động. Cần thiết cho kiểu đệ quy, trait objects (dyn Trait) và trả về type lớn từ hàm mà không move ownership.',
@@ -5340,12 +5408,16 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ off('Clean Code JavaScript — rsbh', 'https://github.com/ryanmcdermott/clean-code-javascript') ] },
       { title: 'Refactoring — Cải thiện code hiện có', subtitle: 'Thay đổi cấu trúc bên trong không đổi hành vi', side: 'right', icon: 'Wrench', description: 'Refactoring là cải thiện code mà không thay đổi hành vi bên ngoài. Dùng kỹ thuật extract method, rename, inline để nâng cao quality mà không ảnh hưởng chức năng.',
         resources: [ art('Refactoring — Martin Fowler', 'https://refactoring.com/'), art('Refactoring techniques — SourceMaking', 'https://sourcemaking.com/refactoring') ] },
+      { title: 'Nắm vững kiến thức nền tảng (Understand the Basics)', subtitle: 'Nền tảng vững quyết định tầm nhìn xa', side: 'left', icon: 'BookOpen', description: 'Xây dựng nền tảng vững chắc bằng cách hiểu sâu về cấu trúc dữ liệu, thuật toán, hệ điều hành, mạng máy tính và nguyên lý lập trình trước khi nhảy vào kiến trúc cao cấp. Dùng khi cần phân tích sâu hiệu năng, debug phức tạp hoặc đưa ra quyết định kiến trúc có cơ sở.',
+        resources: [ off('Teach Yourself Computer Science', 'https://teachyourselfcs.com/') ] },
     ]},
     { label: 'Trách nhiệm', nodes: [
       { title: 'Architecture vs Design — Phân biệt cấp độ', subtitle: 'Cấu trúc cấp cao và chi tiết bên trong module', kind: 'info', side: 'right', icon: 'Layers', description: 'Architecture xác định cấu trúc cấp cao và giao tiếp giữa các component. Design tập trung chi tiết bên trong từng module. Cả hai đều là trách nhiệm của kiến trúc sư ở các cấp độ khác nhau.',
         resources: [ art('Software Architecture vs Design — Stack Overflow', 'https://stackoverflow.com/questions/3663291/software-architecture-vs-software-design') ] },
       { title: 'Tech Stack Management', subtitle: 'Chọn, theo dõi, loại bỏ công nghệ', kind: 'info', side: 'left', icon: 'Gauge', description: 'Architect chịu trách nhiệm quản lý tech stack: đánh giá và chọn công nghệ mới, theo dõi xu hướng, đánh giá adoption risk, lên kế hoạch loại bỏ công nghệ lỗi thời (sunset plan).',
         resources: [ art('Technology Governance in Software Architecture', 'https://research.google.com/teams/architecture/') ] },
+      { title: 'Trách nhiệm cốt lõi của Software Architect', subtitle: 'Quyết định, giao tiếp, dẫn dắt kỹ thuật', side: 'right', icon: 'Users', description: 'Nắm rõ ba trụ cột: đưa ra quyết định kiến trúc có cơ sở (decision-making), truyền đạt thiết kế cho team và stakeholder (communication), và dẫn dắt kỹ thuật để đảm bảo chất lượng triển khai (leadership). Dùng khi bắt đầu một dự án mới hoặc khi tham gia đánh giá kiến trúc.',
+        resources: [ art('roadmap.sh — Software Architect', 'https://roadmap.sh/software-architect') ] },
     ]},
     { label: 'Ngôn ngữ lập trình', nodes: [
       { title: 'Java / Kotlin / Scala / Swift — Ngôn ngữ Backend & Mobile', subtitle: 'JVM ecosystem và iOS/Android development', side: 'right', icon: 'Code', description: 'Hiểu hệ sinh thái JVM (Java, Kotlin, Scala) cho backend enterprise và Spring Boot. Biết Swift cho phát triển iOS. Mỗi ngôn ngữ có trade-off về type safety, performance và ecosystem phù hợp từng ngữ cảnh.',
@@ -5386,6 +5458,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ off('IBM Business Automation Workflow', 'https://www.ibm.com/docs/en/baw'), art('BPMN 2.0 Specification', 'https://www.omg.org/spec/BPMN') ] },
       { title: 'Salesforce', subtitle: 'Nền tảng CRM cloud hàng đầu', kind: 'alternative', side: 'right', icon: 'Cloud', description: 'Hiểu kiến trúc Salesforce: Salesforce Platform, Sales Cloud, Service Cloud, Experience Cloud, Apex và Flow. Kiến trúc sư cần biết cách mở rộng Salesforce qua API và Heroku.',
         resources: [ off('Salesforce Developers', 'https://developer.salesforce.com/docs') ] },
+      { title: 'Kỹ năng then chốt cần phát triển', subtitle: 'Từ kỹ thuật đến mềm, đều quan trọng', side: 'left', icon: 'Brain', description: 'Phát triển song song ba nhóm kỹ năng: kỹ năng kỹ thuật (system design, code review, security), kỹ năng mềm (giao tiếp, thuyết trình, đàm phán), và kỹ năng quản lý (quản lý stakeholder, roadmap kỹ thuật). Dùng xuyên suốt sự nghiệp, ưu tiên kỹ năng giao tiếp cao vì kiến trúc sư là cầu nối giữa kỹ thuật và kinh doanh.',
+        resources: [ art('The Key Skills Every Software Architect Needs', 'https://www.oreilly.com/library/view/software-architecture-fundamentals/9781491916077/') ] },
     ]},
     { label: 'Design Patterns & Nguyên tắc', nodes: [
       { title: 'Design Patterns thường dùng', subtitle: 'Pattern ngôn ngữ, giao tiếp, triển khai', side: 'left', icon: 'Braces', description: 'Nắm các pattern phổ biến ngoài GoF: Repository, Unit of Work, Event Sourcing, Saga, CQRS, Adapter, Facade. Biết khi nào áp dụng và khi nào tránh over-engineering.',
@@ -5408,6 +5482,8 @@ export const MO_RONG: Record<string, SeedStage[]> = {
         resources: [ off('UML Specification — OMG', 'https://www.omg.org/spec/UML/') ] },
       { title: 'DRY, KISS, YAGNI & Law of Demeter', subtitle: 'Các nguyên tắc thiết kế nền tảng', side: 'right', icon: 'Brain', description: 'DRY (Don\'t Repeat Yourself), KISS (Keep It Simple), YAGNI (You Aren\'t Gonna Need It) và Law of Demeter giúp viết code sạch, giảm coupling. Áp dụng làm tiêu chuẩn review cho toàn team.',
         resources: [ art('Law of Demeter — Wiki', 'https://en.wikipedia.org/wiki/Law_of_Demeter') ] },
+      { title: 'Đơn giản hoá (Simplifying Things)', subtitle: 'Giữ kiến trúc tối giản, tránh over-engineering', side: 'left', icon: 'Boxes', description: 'Phân biệt giữa "đủ tốt" và "hoàn hảo không cần thiết". Áp dụng heuristic để loại bỏ complexity không mang giá trị, tránh thiết kế phức tạp khi giải pháp đơn giản vẫn đáp ứng. Dùng khi đánh giá trade-off giữa tính linh hoạt và sự phức tạp.',
+        resources: [ art('A Philosophy of Software Design', 'https://www.goodreads.com/book/show/39996759-a-philosophy-of-software-design') ] },
     ]},
     { label: 'Phong cách Kiến trúc', nodes: [
       { title: 'Serverless & Event-Driven Architecture', subtitle: 'AWS Lambda, Kafka, message-driven', side: 'left', icon: 'Zap', description: 'Hiểu kiến trúc không máy chủ (Serverless) và lập trình hướng sự kiện (Event-Driven). Biết ưu điểm về chi phí và nhược điểm về cold start, vendor lock-in để chọn đúng khi thiết kế microservices.',

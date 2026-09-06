@@ -457,6 +457,13 @@ const choNoiDung = async (p) => {
 };
 
 const CHUAN_BI = {
+  /* Mở bảng chọn hoạt động trên dải 24 giờ. Nó từng bị khối "Đi nhanh" vẽ đè
+     (lỗi tầng xếp, 07/09/2026) — mà bộ đo chỉ nhìn trang lúc TĨNH thì không
+     bao giờ thấy, vì bảng đó chỉ tồn tại sau một cú bấm. */
+  '/dashboard': async (p) => {
+    await p.click('.ct-tq-dong button', { timeout: 2000 }).catch(() => {});
+    await p.waitForTimeout(350);
+  },
   /* MỌI trang dùng lại mã web đều phải chờ nội dung, không chỉ hai màn động.
      Chúng nạp chậm bằng `import()` RỒI mới gọi API, nên mốc 1200ms bắt trúng
      chữ "Đang mở …" tuỳ máy và tuỳ bề rộng — đo được: `/interview` xanh ở

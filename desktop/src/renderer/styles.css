@@ -9603,8 +9603,22 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   to   { transform: translate3d(2%, 8px, 0) scale(1.06); }
 }
 
-/* Nội dung phải nằm TRÊN nền. Thiếu dòng này thì quầng sáng phủ lên chữ. */
-.ct-tq > *:not(.ct-tq-nen) { position: relative; z-index: 1; }
+/*
+ * Nội dung phải nằm TRÊN nền aurora.
+ *
+ * ⛔ CHỈ `position: relative`, TUYỆT ĐỐI KHÔNG kèm `z-index`.
+ *
+ * Bản đầu đặt `z-index: 1` cho mọi con, và nó tạo ra một TẦNG XẾP riêng cho
+ * từng khối. Hệ quả: bảng chọn hoạt động bung ra từ dải 24 giờ bị khối "Đi
+ * nhanh" nằm SAU nó trong DOM vẽ đè lên — dù bảng đó đặt `z-index` bao nhiêu
+ * cũng vô nghĩa, vì cuộc so sánh đã diễn ra ở tầng cha. Người dùng gửi ảnh
+ * bảng chọn bị cắt đôi, 07/09/2026.
+ *
+ * Không có `z-index` thì cả nền lẫn các khối đều là phần tử ĐƯỢC ĐỊNH VỊ ở
+ * cùng một tầng, và THỨ TỰ DOM quyết định — nền đứng đầu nên nó nằm dưới, còn
+ * `z-index` bên trong từng khối lại có tác dụng như bình thường.
+ */
+.ct-tq > *:not(.ct-tq-nen) { position: relative; }
 
 .ct-tq-chao-chu {
   /* Chữ gradient cho lời chào — chỗ duy nhất trong trang đáng để phá quy tắc

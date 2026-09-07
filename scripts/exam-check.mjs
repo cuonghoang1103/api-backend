@@ -85,7 +85,24 @@ function assemble(starterCode, sampleSolution) {
  * Thư mục tạm không có package.json nên `.ts` chạy ở chế độ CommonJS — lời giải
  * mẫu vì thế phải là một file độc lập, không `import` / `export`.
  */
-const extFor = (language) => (String(language ?? '').toLowerCase() === 'typescript' ? 'ts' : 'cjs');
+const extFor = (language, source = '') => {
+  const l = String(language ?? '').toLowerCase();
+  if (l === 'typescript') return 'ts';
+  // Lời giải bash phải chạy bằng BASH, không phải node — trước đây mọi thứ
+  // không phải TypeScript đều ghi ra `.cjs` rồi đưa cho node, nên script shell
+  // chết ngay dòng đầu bằng SyntaxError và đề bash KHÔNG THỂ kiểm được.
+  //
+  // ⚠️ NHƯNG KHÔNG ĐƯỢC quyết theo nhãn `language`. Đo thật 08/09/2026:
+  // `GIT-PE.mjs` khai `language: 'bash'` (đúng, vì thứ học viên VIẾT là git/
+  // shell) nhưng `sampleSolution` lại là một file CommonJS bọc bash trong
+  // `spawn`. Chọn theo nhãn là đưa JavaScript cho bash — hỏng ngay, mà hỏng
+  // theo kiểu trông như lỗi của đề. Nên dò theo NỘI DUNG THẬT.
+  if (l === 'bash' || l === 'sh' || l === 'shell') {
+    const js = /^\s*(?:\/\/|const |let |var |import |require\()/m.test(String(source).slice(0, 400));
+    return js ? 'cjs' : 'sh';
+  }
+  return 'cjs';
+};
 
 async function runSnippet(source, stdin, ext = 'cjs') {
   const dir = await mkdtemp(path.join(tmpdir(), 'exam-check-'));
@@ -94,7 +111,7 @@ async function runSnippet(source, stdin, ext = 'cjs') {
     await writeFile(file, source, 'utf8');
     // execFileSync, không phải bản async: chỉ bản SYNC mới bơm được `input`
     // vào stdin — bản async sẽ treo ở readFileSync(0) của đề PE.
-    const stdout = execFileSync(process.execPath, [file], {
+    const stdout = execFileSync(ext === 'sh' ? '/bin/bash' : process.execPath, [file], {
       input: stdin ?? '', timeout: 20_000, maxBuffer: 8 << 20, encoding: 'utf8',
     });
     return stdout.replace(/\s+$/, '');
@@ -175,7 +192,7 @@ async function checkFile(file) {
         const source = io ? q.sampleSolution : assemble(q.starterCode ?? '', q.sampleSolution);
         if (!source) { err(`${at}: starterCode thiếu mốc "${MARK_SOLVE}" hoặc "${MARK_GIVEN}"`); continue; }
         try {
-          const got = await runSnippet(source, io?.stdin, extFor(q.language));
+          const got = await runSnippet(source, io?.stdin, extFor(q.language, source));
           const want = io ? io.expected : q.expectedOutput.replace(/\s+$/, '');
           if (got !== want) {
             err(`${at}: đáp án mẫu CHẠY RA KHÁC expectedOutput`);

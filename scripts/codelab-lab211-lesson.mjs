@@ -441,12 +441,12 @@ add(
   chính ngữ cảnh quản lý bác sĩ</strong> để nói lúc review là khớp với source của mình.</p>
   <p>Nhớ: slide nội quy ghi <em>"Implement và hiểu SOLID được cộng LOC"</em>. Đây là tiền.</p>`),
 
+  IMG('sol-03.png', 'Năm nguyên lý SOLID — slide 3 bộ SOLID-Principles của thầy.'),
   H('S — Single Responsibility: một class, một lý do để thay đổi'),
   P(`<p>Đây là nguyên lý <strong>bạn ĐÃ tuân thủ</strong> nếu làm đúng kiến trúc 8 package — và là điều
   slide của thầy nhấn mạnh nhất: <em>"Model đáp ứng nguyên tắc Single Responsibility"</em>.</p>`),
-  IMG('sol__image4.png', 'SRP — slide 5: class ôm quá nhiều trách nhiệm thì có quá nhiều lý do để phải sửa nó.'),
-  IMG('sol__image5.png', 'SRP — slide 5: tách ra, mỗi class một việc.'),
 
+  IMG('sol-05.png', 'SRP — slide 5: một class ôm bốn trách nhiệm thì có bốn lý do để phải sửa nó.'),
   C('SRP — chính là lý do có 8 package', `// ❌ Vi phạm: một class ôm hết
 public class DoctorManager {
     public void themBacSi() { }      // nghiệp vụ
@@ -467,8 +467,8 @@ public class DoctorManager {
   nên em không để chung."</p>`),
 
   H('O — Open/Closed: mở để mở rộng, đóng để sửa đổi'),
-  IMG('sol__image6.jpg', 'OCP — slide 9: mở rộng bằng cách THÊM lớp mới, không mở lớp cũ ra sửa.'),
 
+  IMG('sol-09.png', 'OCP — slide 9: mở rộng bằng cách THÊM lớp mới, không mở lớp cũ ra sửa.'),
   C('OCP — thêm cách tìm kiếm mới mà KHÔNG sửa code cũ', `// ❌ Vi phạm: thêm kiểu tìm mới là phải mở class này ra sửa
 public Map<String, Doctor> search(String input, String kieu) {
     if (kieu.equals("NAME")) { ... }
@@ -509,6 +509,7 @@ public Map<String, Doctor> search(String tuKhoa, TieuChiTimKiem tieuChi) {
 
   H('L — Liskov Substitution: class con phải thay được class cha'),
   P(`<p>Ví dụ kinh điển trong cả slide lẫn sách của thầy: <code>HinhVuong extends HinhChuNhat</code>.</p>`),
+  IMG('sol-13.png', 'LSP — slide 13: class con phải thay được class cha mà chương trình vẫn chạy đúng.'),
   C('LSP — vì sao Hình vuông KHÔNG nên kế thừa Hình chữ nhật', `// ❌ Vi phạm LSP
 public class HinhChuNhat {
     protected double rong, cao;
@@ -541,6 +542,7 @@ public class HinhVuong2  implements Hinh { /* canh * canh */ }`),
   được mọi lời hứa</em> của class cha.</p>`),
 
   H('I — Interface Segregation: đừng ép ai cài method họ không dùng'),
+  IMG('sol-17.png', 'ISP — slide 17: đừng ép client cài những method nó không dùng.'),
   C('ISP — tách interface to thành interface nhỏ', `// ❌ Vi phạm: mọi kho đều bị ép có cả 4 hàm
 public interface Kho {
     void them(Doctor d);
@@ -567,6 +569,7 @@ public class DoctorRepository implements KhoCoBan { ... }
 public class UserRepository implements KhoCoBan, KhoCoFile { ... }`),
 
   H('D — Dependency Inversion: phụ thuộc vào hợp đồng, không vào class cụ thể'),
+  IMG('sol-21.png', 'DIP — slide 21: cả module cấp cao lẫn cấp thấp đều phụ thuộc vào abstraction.'),
   C('DIP — Controller không nên tự new Repository', `// ❌ Vi phạm DIP: Controller gắn CHẶT vào một loại kho cụ thể
 public class DoctorController {
     private DoctorRepository repo = new DoctorRepository();  // cứng
@@ -642,8 +645,9 @@ add(
   CR --> L1["LAB211 dùng:<br/>Singleton, Factory Method, Builder"]
   BE --> L2["LAB211 dùng:<br/>Strategy, Observer"]`),
 
-  IMG('dp__image5.png', 'Bản đồ quan hệ giữa 23 pattern — slide 13, "Design pattern space". Các mũi tên cho thấy pattern nào thường đi cùng pattern nào.'),
 
+  IMG('dp-08.png', 'Ba nhóm pattern — slide 8 bộ Design Pattern của thầy.'),
+  IMG('dp-13.png', 'Bản đồ quan hệ giữa 23 pattern — slide 13. Mũi tên cho thấy pattern nào thường đi cùng pattern nào.'),
   P(`<p><strong>Mẹo nhớ:</strong> Creational = <em>"đẻ ra đối tượng thế nào"</em>.
   Structural = <em>"lắp các đối tượng vào nhau ra sao"</em>.
   Behavioral = <em>"ai làm việc gì, nói chuyện với nhau kiểu gì"</em>.</p>`),
@@ -655,6 +659,8 @@ add(
   <strong>kho dữ liệu</strong> chỉ nên có một — nếu Controller A tạo một <code>DoctorRepository</code> và
   Controller B tạo một cái khác, hai bên sẽ thấy hai danh sách bác sĩ khác nhau.</p>`),
 
+  IMG('dp-26.png', 'Singleton — slide 26: bài toán gốc. Nhiều máy in nhưng chỉ MỘT hàng đợi in.'),
+  IMG('dp-27.png', 'Singleton — slide 27: lời giải. Instance() la cua duy nhat, uniqueInstance la ban duy nhat.'),
   M(`classDiagram
   class DoctorRepository {
     -static DoctorRepository instance
@@ -721,9 +727,9 @@ private DoctorRepository repo = DoctorRepository.getInstance();`),
   Student chính quy / Student liên thông, Xe máy / Ô tô trong bài Car showroom) và người dùng chọn loại
   ở menu.</p>`),
 
-  IMG('dp__image15.png', 'Factory Method — bài toán gốc trong slide 29: framework biết LÚC NÀO cần tạo tài liệu, nhưng không biết tạo LOẠI nào.'),
-  IMG('dp__image16.png', 'Factory Method — lời giải, slide 30. Creator khai báo factory method, ConcreteCreator quyết định trả về ConcreteProduct nào.'),
 
+  IMG('dp-29.png', 'Factory Method — slide 29: framework biết LÚC NÀO cần tạo tài liệu, nhưng không biết tạo LOẠI nào.'),
+  IMG('dp-30.png', 'Factory Method — slide 30: Creator khai báo factory method, ConcreteCreator quyết định trả về ConcreteProduct nào.'),
   M(`classDiagram
   class Person { <<abstract>> +moTaVaiTro() String }
   class Doctor
@@ -776,6 +782,8 @@ add(
   P(`<p><strong>Problem (slide 22):</strong> <em>"Separate the construction of a complex object from its
   representation"</em>. Khi một đối tượng có nhiều thuộc tính, constructor dài ngoằng trở nên không đọc nổi.</p>`),
 
+  IMG('dp-22.png', 'Builder — slide 22: tách việc DỰNG một đối tượng phức tạp khỏi cách nó được biểu diễn.'),
+  IMG('dp-24.png', 'Builder — slide 24: Director điều khiển quá trình, ConcreteBuilder lắp từng phần, Product là thành phẩm.'),
   C('Vấn đề Builder giải', `// ❌ Nhìn vào lời gọi này, ai biết số 5 là gì? true là gì?
 Doctor d = new Doctor("D01", "An", "Tim mach", 5, true, "Ca sang", 3);
 
@@ -851,9 +859,9 @@ Doctor d = new Doctor.Builder()
   <p>Đây là pattern <strong>hợp với LAB211 nhất</strong>: gần như bài quản lý nào cũng có chức năng
   "sắp xếp theo …" với vài lựa chọn.</p>`),
 
-  IMG('dp__image58.png', 'Strategy — slide 80: thuật toán ngắt dòng bị nhúng cứng vào class Composition, muốn đổi cách là phải sửa chính nó.'),
-  IMG('dp__image59.png', 'Strategy — slide 81: mỗi thuật toán tách thành một Compositor riêng, Composition chỉ giữ tham chiếu tới interface.'),
 
+  IMG('dp-80.png', 'Strategy — slide 80: thuật toán bị nhúng cứng vào class dùng nó, muốn đổi là phải sửa chính nó.'),
+  IMG('dp-81.png', 'Strategy — slide 81: mỗi thuật toán tách thành một class riêng, Context chỉ giữ tham chiếu tới interface.'),
   M(`classDiagram
   class ChienLuocSapXep { <<interface>> +sapXep(list) }
   class SapXepTheoTen
@@ -929,9 +937,9 @@ switch (choice) {
   <p>Trong LAB211 nó ít tự nhiên hơn 4 cái trên, vì bài console thường chỉ có một View.
   Nhưng có <strong>một chỗ dùng rất hợp lý</strong>: ghi log / thống kê mỗi khi dữ liệu đổi.</p>`),
 
-  IMG('dp__image46.png', 'Observer — slide 66: Subject giữ danh sách Observer, gọi Notify() thì mọi Observer tự Update().'),
-  IMG('dp__image47.png', 'Observer — slide 67: sơ đồ tuần tự. Subject KHÔNG biết có bao nhiêu observer đang nghe.'),
 
+  IMG('dp-66.png', 'Observer — slide 66: Subject giữ danh sách Observer; gọi Notify() thì mọi Observer tự Update().'),
+  IMG('dp-67.png', 'Observer — slide 67: sơ đồ tuần tự. Subject KHÔNG biết có bao nhiêu observer đang nghe.'),
   M(`sequenceDiagram
   participant C as Controller
   participant R as DoctorRepository<br/>(Subject)
@@ -992,6 +1000,7 @@ public class GhiLogObserver implements DoctorObserver {
 
   // ── Bản đồ SOLID ↔ Pattern ──────────────────────────────────
   H('SOLID và Design Pattern liên quan thế nào'),
+  IMG('sol-25.png', 'SOLID và Design Pattern — slide 25: nguyên lý là kim chỉ nam, pattern là lời giải cụ thể.'),
   P(`<p>Slide 25 của bộ SOLID nói rõ: <strong>"SOLID Principles are NOT Design Patterns"</strong>.
   SOLID là <em>nguyên tắc</em> — kim chỉ nam. Pattern là <em>lời giải cụ thể</em>. Nhiều pattern sinh ra
   chính là để hiện thực hoá một nguyên lý SOLID:</p>
@@ -1062,10 +1071,10 @@ add(
       <td>Hoá đơn <em>có</em> dòng hoá đơn — xoá hoá đơn thì dòng cũng mất</td></tr>
   </table>`),
 
-  IMG('ch7__image3.png', 'Sáu loại quan hệ giữa các class — Chapter 7, slide 5.'),
-  IMG('ch7__image17.png', 'Composition và Aggregation — Chapter 7, slide 18. Hình thoi ĐẶC là composition (chết cùng nhau), hình thoi RỖNG là aggregation (rời được).'),
-  IMG('ch7__image18.png', 'Ví dụ phân cấp composition/aggregation — Chapter 7, slide 19.'),
 
+  IMG('ch7-05.png', 'Sáu loại quan hệ giữa các class — Chapter 7, slide 5.'),
+  IMG('ch7-18.png', 'Composition và Aggregation — Chapter 7, slide 18. Hình thoi ĐẶC = composition (chết cùng nhau), hình thoi RỖNG = aggregation (rời được).'),
+  IMG('ch7-19.png', 'Ví dụ phân cấp composition/aggregation — Chapter 7, slide 19.'),
   M(`classDiagram
   class Khoa
   class Doctor
@@ -1078,6 +1087,7 @@ add(
   còn sống không?"</em> Còn sống → Aggregation. Chết theo → Composition.</p>`),
 
   H('Multiplicity — số lượng hai đầu quan hệ'),
+  IMG('ch7-07.png', 'Năm dạng multiplicity — Chapter 7, slide 7.'),
   P(`<p>Slide 7–8 nêu năm dạng: <strong>một–một</strong>, <strong>một–nhiều</strong>,
   <strong>nhiều–nhiều</strong>, <strong>số cụ thể</strong>, <strong>tuỳ chọn (0..1)</strong>.</p>
   <p>Nó quyết định kiểu dữ liệu bạn khai trong model:</p>

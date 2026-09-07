@@ -24,6 +24,9 @@ const P = (html) => ({ type: 'prose', html });
 const C = (title, code, language = 'java') => ({ type: 'code', title, language, code });
 const M = (code) => ({ type: 'mermaid', code });
 const PART = (number, text, subtitle) => ({ type: 'part', number, text, subtitle });
+// Ảnh cắt thẳng từ slide giảng viên phát, đã tải lên R2.
+const R2 = 'https://media.cuongthai.com/code-lab/lab211/slide';
+const IMG = (file, caption) => ({ type: 'image', url: `${R2}/${file}`, caption });
 
 const blocks = [];
 const add = (...b) => blocks.push(...b);
@@ -441,6 +444,9 @@ add(
   H('S — Single Responsibility: một class, một lý do để thay đổi'),
   P(`<p>Đây là nguyên lý <strong>bạn ĐÃ tuân thủ</strong> nếu làm đúng kiến trúc 8 package — và là điều
   slide của thầy nhấn mạnh nhất: <em>"Model đáp ứng nguyên tắc Single Responsibility"</em>.</p>`),
+  IMG('sol__image4.png', 'SRP — slide 5: class ôm quá nhiều trách nhiệm thì có quá nhiều lý do để phải sửa nó.'),
+  IMG('sol__image5.png', 'SRP — slide 5: tách ra, mỗi class một việc.'),
+
   C('SRP — chính là lý do có 8 package', `// ❌ Vi phạm: một class ôm hết
 public class DoctorManager {
     public void themBacSi() { }      // nghiệp vụ
@@ -461,6 +467,8 @@ public class DoctorManager {
   nên em không để chung."</p>`),
 
   H('O — Open/Closed: mở để mở rộng, đóng để sửa đổi'),
+  IMG('sol__image6.jpg', 'OCP — slide 9: mở rộng bằng cách THÊM lớp mới, không mở lớp cũ ra sửa.'),
+
   C('OCP — thêm cách tìm kiếm mới mà KHÔNG sửa code cũ', `// ❌ Vi phạm: thêm kiểu tìm mới là phải mở class này ra sửa
 public Map<String, Doctor> search(String input, String kieu) {
     if (kieu.equals("NAME")) { ... }
@@ -634,6 +642,8 @@ add(
   CR --> L1["LAB211 dùng:<br/>Singleton, Factory Method, Builder"]
   BE --> L2["LAB211 dùng:<br/>Strategy, Observer"]`),
 
+  IMG('dp__image5.png', 'Bản đồ quan hệ giữa 23 pattern — slide 13, "Design pattern space". Các mũi tên cho thấy pattern nào thường đi cùng pattern nào.'),
+
   P(`<p><strong>Mẹo nhớ:</strong> Creational = <em>"đẻ ra đối tượng thế nào"</em>.
   Structural = <em>"lắp các đối tượng vào nhau ra sao"</em>.
   Behavioral = <em>"ai làm việc gì, nói chuyện với nhau kiểu gì"</em>.</p>`),
@@ -710,6 +720,9 @@ private DoctorRepository repo = DoctorRepository.getInstance();`),
   <p>Trong LAB211: khi bài có <strong>nhiều loại đối tượng cùng gốc</strong> (Doctor / Nurse,
   Student chính quy / Student liên thông, Xe máy / Ô tô trong bài Car showroom) và người dùng chọn loại
   ở menu.</p>`),
+
+  IMG('dp__image15.png', 'Factory Method — bài toán gốc trong slide 29: framework biết LÚC NÀO cần tạo tài liệu, nhưng không biết tạo LOẠI nào.'),
+  IMG('dp__image16.png', 'Factory Method — lời giải, slide 30. Creator khai báo factory method, ConcreteCreator quyết định trả về ConcreteProduct nào.'),
 
   M(`classDiagram
   class Person { <<abstract>> +moTaVaiTro() String }
@@ -838,6 +851,9 @@ Doctor d = new Doctor.Builder()
   <p>Đây là pattern <strong>hợp với LAB211 nhất</strong>: gần như bài quản lý nào cũng có chức năng
   "sắp xếp theo …" với vài lựa chọn.</p>`),
 
+  IMG('dp__image58.png', 'Strategy — slide 80: thuật toán ngắt dòng bị nhúng cứng vào class Composition, muốn đổi cách là phải sửa chính nó.'),
+  IMG('dp__image59.png', 'Strategy — slide 81: mỗi thuật toán tách thành một Compositor riêng, Composition chỉ giữ tham chiếu tới interface.'),
+
   M(`classDiagram
   class ChienLuocSapXep { <<interface>> +sapXep(list) }
   class SapXepTheoTen
@@ -912,6 +928,9 @@ switch (choice) {
   when one object changes state, all its dependents are notified and updated automatically."</em></p>
   <p>Trong LAB211 nó ít tự nhiên hơn 4 cái trên, vì bài console thường chỉ có một View.
   Nhưng có <strong>một chỗ dùng rất hợp lý</strong>: ghi log / thống kê mỗi khi dữ liệu đổi.</p>`),
+
+  IMG('dp__image46.png', 'Observer — slide 66: Subject giữ danh sách Observer, gọi Notify() thì mọi Observer tự Update().'),
+  IMG('dp__image47.png', 'Observer — slide 67: sơ đồ tuần tự. Subject KHÔNG biết có bao nhiêu observer đang nghe.'),
 
   M(`sequenceDiagram
   participant C as Controller
@@ -1042,6 +1061,10 @@ add(
   <tr><td><strong>Composition</strong></td><td>"có, và chết cùng nhau"</td><td>Tạo bên trong, không sống rời</td>
       <td>Hoá đơn <em>có</em> dòng hoá đơn — xoá hoá đơn thì dòng cũng mất</td></tr>
   </table>`),
+
+  IMG('ch7__image3.png', 'Sáu loại quan hệ giữa các class — Chapter 7, slide 5.'),
+  IMG('ch7__image17.png', 'Composition và Aggregation — Chapter 7, slide 18. Hình thoi ĐẶC là composition (chết cùng nhau), hình thoi RỖNG là aggregation (rời được).'),
+  IMG('ch7__image18.png', 'Ví dụ phân cấp composition/aggregation — Chapter 7, slide 19.'),
 
   M(`classDiagram
   class Khoa
@@ -1241,7 +1264,11 @@ const cu = Array.isArray(mod.lessonBlocks) ? mod.lessonBlocks.length : 0;
 console.log(`Track   : ${mod.track.name}`);
 console.log(`Module  : ${mod.name} (id ${mod.id})`);
 console.log(`Hiện có : ${cu} khối`);
-console.log(`Sẽ NỐI  : ${blocks.length} khối — ${chu.toLocaleString('vi-VN')} ký tự  →  tổng ${cu + blocks.length}`);
+// Tính đúng tổng SAU khi cắt phần cũ của chính script này, không cộng thẳng.
+const cuArrXem = Array.isArray(mod.lessonBlocks) ? mod.lessonBlocks : [];
+const catXem = cuArrXem.findIndex((b) => b && b.type === 'part' && b.text === blocks[0].text);
+const giuXem = catXem >= 0 ? catXem : cuArrXem.length;
+console.log(`Sẽ NỐI  : ${blocks.length} khối — ${chu.toLocaleString('vi-VN')} ký tự  →  giữ ${giuXem} cũ, tổng ${giuXem + blocks.length}`);
 console.log(`          part ${dem.part} · heading ${dem.heading} · prose ${dem.prose} · code ${dem.code} · mermaid ${dem.mermaid}`);
 
 if (!APPLY) {

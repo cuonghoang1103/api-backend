@@ -242,18 +242,45 @@ async function buildTutorCall(opts: ExamTutorAskOpts): Promise<{ system: string;
   return { system: TUTOR_SYSTEM, messages };
 }
 
-class DeadlineError extends Error {}
+export class DeadlineError extends Error {}
 
-/** Trần THẬT theo đồng hồ, không phải trần rỗi (idle). `llmComplete`'s
- * `timeoutMs` chỉ reset khi có chunk mới — Opus "thinking" (extended
- * reasoning) gửi chunk `thinking_delta` liên tục nên trần rỗi không bao giờ
- * kêu dù chưa có CHỮ nào (đo thật: có câu chỉ 27 thinking-token nên nhanh,
- * nhưng không có gì đảm bảo mọi câu đều vậy) — cần một trần độc lập với
- * việc có chunk hay không. */
-function withDeadline<T>(p: Promise<T>, ms: number): Promise<T> {
+/** Trần CHỜ CHỮ ĐẦU — không phải trần cho cả lượt.
+ *
+ * Vì sao cần: `llmComplete`'s `timeoutMs` là trần RỖI, chỉ reset khi có chunk
+ * mới. Opus "thinking" gửi `thinking_delta` liên tục nên trần rỗi không bao giờ
+ * kêu dù chưa có CHỮ nào. Cần một trần độc lập để biết khi nào nên lùi model.
+ *
+ * ⛔ Nhưng trần đó phải TẮT NGAY khi có chữ đầu tiên. Bản trước đặt nó cho CẢ
+ * lượt, nên câu trả lời dài đang chảy bình thường vẫn bị chặt ở giây thứ 40 —
+ * người dùng thấy chữ dừng giữa chừng kèm "quá 40000ms". Đo thật 08/09/2026:
+ * câu giải thích Bubble Sort của CuongMini đứt ngang ở "Vòng 3, 4... ti".
+ *
+ * Chính chú thích ở `callTutor` đã nói đúng ý định — "nếu ĐÃ có chữ rồi mới
+ * hỏng giữa chừng thì KHÔNG lùi" — nhưng code lại giết cả lượt thay vì chỉ bỏ
+ * chốt lùi. Sau khi có chữ, trần rỗi của `llmComplete` lo tiếp là đủ: model
+ * treo thật thì nó vẫn kêu.
+ */
+export function withFirstTokenDeadline<T>(
+  chay: (onTok?: (d: string) => void) => Promise<T>,
+  ms: number,
+  onToken?: (delta: string) => void,
+): Promise<T> {
   return new Promise((resolve, reject) => {
-    const t = setTimeout(() => reject(new DeadlineError(`quá ${ms}ms`)), ms);
-    p.then((v) => { clearTimeout(t); resolve(v); }, (e) => { clearTimeout(t); reject(e); });
+    let dongHo: ReturnType<typeof setTimeout> | null = setTimeout(
+      () => reject(new DeadlineError(`quá ${ms}ms mà chưa có chữ nào`)),
+      ms,
+    );
+    const tatDongHo = () => {
+      if (dongHo) { clearTimeout(dongHo); dongHo = null; }
+    };
+    // Chữ đầu tiên tới là tắt trần — từ đây model đã chứng minh nó sống.
+    const boc = onToken
+      ? (d: string) => { tatDongHo(); onToken(d); }
+      : undefined;
+    chay(boc).then(
+      (v) => { tatDongHo(); resolve(v); },
+      (e) => { tatDongHo(); reject(e); },
+    );
   });
 }
 
@@ -285,9 +312,15 @@ async function callTutor(system: string, messages: TutorMessage[], userId: numbe
   // phút. Nếu ĐÃ có chữ rồi mới hỏng giữa chừng thì KHÔNG lùi — trộn output
   // của 2 model khác nhau vào cùng một câu trả lời còn tệ hơn báo lỗi.
   let gotDelta = false;
-  const wrapped = onToken ? (d: string) => { gotDelta = true; onToken(d); } : undefined;
+  const ghiNhan = onToken ? (d: string) => { gotDelta = true; onToken(d); } : undefined;
   try {
-    return await withDeadline(call('exam_tutor', 60_000, wrapped), 40_000);
+    // Trần 40s chỉ áp cho quãng CHỜ CHỮ ĐẦU. Có chữ rồi thì để nó chảy hết,
+    // dù câu trả lời dài tới đâu.
+    return await withFirstTokenDeadline(
+      (tok) => call('exam_tutor', 60_000, tok),
+      40_000,
+      ghiNhan,
+    );
   } catch (e) {
     if (gotDelta) throw e;
     logger.warn('exam_tutor: rambo/opus lỗi hoặc quá 40s, lùi sang chat_max', {

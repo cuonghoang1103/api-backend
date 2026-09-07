@@ -209,8 +209,26 @@ export async function explainExercise(
     userId: opts.userId,
   });
 
-  const blocks = normalizeBlocks(parseBlocks(res.text));
+  const boc = parseBlocks(res.text);
+  const blocks = normalizeBlocks(boc.blocks);
   if (!blocks.length) throw new BadRequestError('The AI returned nothing usable. Please try again.');
+
+  /* Bài giảng bị cắt: giữ phần đã có (vẫn dùng được) nhưng NÓI RA cả hai phía.
+     Im lặng ở đây chính là thứ làm người dùng thấy bài giảng dừng ở một tiêu
+     đề trống mà không hiểu vì sao — xem chú thích ở `parseBlocks`. */
+  if (boc.daCuuVan) {
+    console.warn(
+      `[codelab] bài giảng BỊ CẮT giữa mảng JSON · exerciseId=${exerciseId} `
+      + `· cứu được ${blocks.length} khối · model trả ${res.outputTokens} token`,
+    );
+    blocks.push({
+      type: 'paragraph',
+      text: '⚠️ This explanation was cut off — the model stopped partway through. '
+        + 'Press "Regenerate" to get the missing part.',
+      textVi: '⚠️ Bài giảng này bị cắt giữa chừng — model dừng khi chưa viết xong. '
+        + 'Bấm "Tạo lại" để lấy phần còn thiếu.',
+    } as never);
+  }
 
   await prisma.codeExercise.update({
     where: { id: exerciseId },
@@ -223,17 +241,39 @@ export async function explainExercise(
 }
 
 /** Pull the JSON array out of a reply that may be fenced or padded with prose. */
-function parseBlocks(raw: string): unknown {
+/**
+ * Kết quả bóc khối. `daCuuVan` = mảng JSON bị cắt giữa chừng và ta chỉ giữ
+ * được phần đầu.
+ *
+ * ⚠️ VÌ SAO PHẢI CÓ CỜ NÀY (07/09/2026). Đường cứu vãn bên dưới im lặng, nên
+ * "26 khối, đủ cả" và "9 khối, mất 17" trả về hình dạng y hệt nhau. Người dùng
+ * báo bài giảng Code Lab "bị ngắt"; đo trong DB thì bài
+ * `lab211-j1-s-p0080-shapes` lưu đúng 9 khối và khối CUỐI là một TIÊU ĐỀ
+ * TRỐNG — phần thân của nó nằm trong đoạn bị bỏ. Trang hiện trung thực thứ đã
+ * lưu; chỗ mất nằm ở đây, trước lúc lưu, và không ai được báo.
+ *
+ * Không phải do `max_tokens`: đo thật trên production cùng ngày, CẢ HAI cổng
+ * đều BỎ QUA nó (modelapi xin 12 trả 2.213 token; rambo xin 12 trả 10.657, cả
+ * hai vẫn báo dừng bình thường). Nên đây là mô hình tự dừng hoặc mạng đứt —
+ * và cách duy nhất để biết là ghi lại lúc nó xảy ra.
+ */
+interface KetQuaBoc {
+  blocks: unknown;
+  daCuuVan: boolean;
+}
+
+/** Xuất ra để kiểm được — xem `codeLabExplain.parse.test.ts`. */
+export function parseBlocks(raw: string): KetQuaBoc {
   const text = (raw || '').trim();
   const fenced = /```(?:json)?\s*([\s\S]*?)```/i.exec(text);
   const body = fenced ? fenced[1] : text;
   const start = body.indexOf('[');
-  if (start < 0) return [];
+  if (start < 0) return { blocks: [], daCuuVan: false };
 
   const end = body.lastIndexOf(']');
   if (end > start) {
     try {
-      return JSON.parse(body.slice(start, end + 1));
+      return { blocks: JSON.parse(body.slice(start, end + 1)), daCuuVan: false };
     } catch {
       /* fall through to the salvage below */
     }
@@ -245,7 +285,7 @@ function parseBlocks(raw: string): unknown {
   // as "the AI returned nothing usable" after a five-minute wait.
   //
   // So walk the text and keep every top-level object that closed properly.
-  return salvageObjects(body.slice(start + 1));
+  return { blocks: salvageObjects(body.slice(start + 1)), daCuuVan: true };
 }
 
 /** Every complete top-level {...} in a possibly truncated array body. */

@@ -40,7 +40,7 @@ import { validateCommand, type ValidatedCommand } from './commands.js';
 import { synthesizeSpeech, sinhTronGoi } from './tts.js';
 import { checkHeardSpeech } from './hallucination.js';
 import { PCM_SAMPLE_RATE } from './audio.js';
-import { gatewayKey, gatewayRoot, modelFor, endpointFor } from '../llm/gateway.js';
+import { gatewayKey, gatewayRoot, modelFor, endpointFor, diemCuoiMayNha} from '../llm/gateway.js';
 import { xinSlot } from '../llm/hangDoi.js';
 import { khopLenhNhanh } from './phanXa.js';
 import { CHE_DO, khopDoiCheDo, type CheDo } from './cheDo.js';
@@ -568,7 +568,11 @@ function llmChain(nao: Nao | null = null, boQuaMayNha = false): LlmProvider[] {
   // vé thì lượt nào cũng cõng thêm một phép thử thất bại trước khi tụt xuống
   // cổng — đúng cái bệnh "robot chậm hẳn" mà bộ ngắt mạch ở trên sinh ra để
   // chữa.
-  const ep = nao === 'may-nha' ? { ...endpointFor('robot_voice'), local: true } : endpointFor('robot_voice');
+  // ⚠️ Lấy máy nhà bằng `diemCuoiMayNha()`, KHÔNG phải `{...endpointFor(), local:true}`.
+  // Từ 07/09/2026 `endpointFor()` trả về RAMBO cho mọi việc, nên cách ghép cũ tạo ra
+  // điểm cuối lai (địa chỉ rambo + cờ local) và gọi rambo bằng giao thức OpenAI —
+  // rambo chỉ mở tuyến Anthropic, robot sẽ hỏng mà trông như máy nhà chết.
+  const ep = nao === 'may-nha' ? (diemCuoiMayNha() ?? endpointFor('robot_voice')) : endpointFor('robot_voice');
   if (ep.local && ep.key && !dangChet('may-nha') && !boQuaMayNha) {
     chain.push({ baseURL: `${ep.root}/v1`, key: ep.key, label: 'may-nha' });
   }

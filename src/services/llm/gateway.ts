@@ -455,6 +455,25 @@ function localRoot(): string | undefined {
   return raw.replace(/\/+$/, '').replace(/\/v1$/, '');
 }
 
+/**
+ * Điểm cuối MÁY NHÀ, lấy thẳng — KHÔNG đi qua `endpointFor()`.
+ *
+ * ⚠️ Sinh ra 07/09/2026 vì một hồi quy suýt lọt: từ khi rambo thành cổng chính,
+ * `endpointFor()` trả về RAMBO cho mọi việc, kể cả `robot_voice`. Chỗ gọi ở
+ * `voiceLoop.ts` lại làm `{ ...endpointFor('robot_voice'), local: true }` để ép
+ * đi máy nhà — ghép lại thành một điểm cuối lai: địa chỉ rambo mà gắn cờ local,
+ * rồi bị gọi bằng giao thức OpenAI trong khi rambo CHỈ mở tuyến Anthropic.
+ * Robot sẽ hỏng và trông y như "máy nhà chết", không ai lần ra được.
+ *
+ * Ai cần đúng máy nhà (độ trễ 96-333ms, không phải chất lượng) thì gọi hàm này.
+ */
+export function diemCuoiMayNha(): LlmEndpoint | null {
+  const root = localRoot();
+  const key = process.env.LLM_LOCAL_API_KEY;
+  if (!root || !key) return null;
+  return { root, key, local: true, label: 'may-nha' };
+}
+
 /** Việc nào được phép đi máy nhà. Tên sai chính tả ⇒ việc đó đi cổng, im lặng. */
 function localPurposes(): Set<string> {
   const raw = process.env.LLM_LOCAL_PURPOSES ?? '';
@@ -553,6 +572,25 @@ export function ramboDangNghi(): boolean {
   return Date.now() < ramboHongToi;
 }
 
+/**
+ * ⚠️⚠️ VIỆC MÀ NƠI GỌI CHỈ NÓI ĐƯỢC GIAO THỨC OPENAI — KHÔNG ĐƯỢC ĐẨY SANG RAMBO.
+ *
+ * Rambo CHỈ mở tuyến Anthropic (`/v1/messages`). Ba chỗ dưới đây nhận điểm cuối
+ * rồi `fetch` thẳng bằng body kiểu OpenAI và KHÔNG hề đọc `ep.giaoThuc`:
+ *   • `src/services/cv/llm/index.ts`   → cv_parse · cv_critique · cv_writing
+ *   • `src/services/docTools/vision.ts` → doc_ocr
+ *   • `src/services/agent/datTen.ts`    → cv_parse
+ * Đẩy chúng sang rambo thì `chatUrlOf()` gọi ĐÚNG URL nhưng BODY sai khung ⇒
+ * hỏng CÂM, không báo lỗi rõ ràng — đúng cái bẫy đã ghi ngày 04/09/2026 với
+ * exam_tutor ("stream produced no text").
+ *
+ * Nên chặn ở đây, chỗ DUY NHẤT ráp {địa chỉ + khoá}, thay vì trông vào việc mỗi
+ * nơi gọi tự nhớ. Muốn mấy việc này cũng lên rambo thì phải dạy nơi gọi nói
+ * giao thức Anthropic trước (xem cách `interview/llm/index.ts` chọn provider
+ * theo `ep.giaoThuc`), rồi mới bỏ tên khỏi danh sách này.
+ */
+const VIEC_CHI_OPENAI = new Set<LlmPurpose>(['cv_parse', 'cv_critique', 'cv_writing', 'doc_ocr']);
+
 export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
   // Đặt TRƯỚC nhánh máy nhà: `agent_code` nằm trong `TOOL_PURPOSES` nên nó
   // không bao giờ đi máy nhà, nhưng thứ tự này nói rõ ý định.
@@ -562,7 +600,7 @@ export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
   // phải đi rambo KỂ CẢ lúc cầu dao mở — chúng là việc tương tác trực tiếp mà
   // modelapi không phục vụ được bằng model Claude.
   const rieng = congAgent();
-  if (rieng && (!ramboDangNghi() || RAMBO_PURPOSES.has(purpose))) return rieng;
+  if (rieng && !VIEC_CHI_OPENAI.has(purpose) && (!ramboDangNghi() || RAMBO_PURPOSES.has(purpose))) return rieng;
   const root = localRoot();
   if (root && !VISION_PURPOSES.has(purpose) && !TOOL_PURPOSES.has(purpose) && localPurposes().has(purpose) && process.env.LLM_LOCAL_API_KEY) {
     return { root, key: process.env.LLM_LOCAL_API_KEY, local: true, label: 'may-nha' };

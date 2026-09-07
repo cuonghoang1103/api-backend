@@ -202,9 +202,24 @@ async function checkFile(file) {
         // Chạy SQL ở đây được thì tốt, nhưng nó đòi một máy chủ sống ⇒ bộ kiểm
         // hết tự chứa và sẽ đỏ trên mọi máy không có DB. Nên nói thẳng là KHÔNG
         // KIỂM, thay vì báo một lỗi sai. Mọi phép kiểm cấu trúc phía trên vẫn chạy.
-        const KHONG_CHAY_DUOC = new Set(['sql', 'postgresql', 'plpgsql']);
+        // Ngôn ngữ KHAI BÁO không phải thứ node chạy được: SQL, Dockerfile, YAML.
+        // Đây là thuộc tính của NGÔN NGỮ, đúng cho mọi câu, nên xét theo nhãn.
+        const KHONG_CHAY_DUOC = new Set([
+          'sql', 'postgresql', 'plpgsql',
+          'dockerfile', 'docker', 'yaml', 'yml', 'compose', 'docker-compose',
+        ]);
         if (KHONG_CHAY_DUOC.has(String(q.language ?? '').toLowerCase())) {
           note(`${at}: ngôn ngữ "${q.language}" — bộ kiểm không chạy được, CHỈ kiểm cấu trúc (lời giải phải tự kiểm trên máy chủ thật)`);
+          continue;
+        }
+
+        // ⚠️ MIỄN TỪNG CÂU — chỉ khi ngôn ngữ CHẠY ĐƯỢC nhưng CÂU NÀY thì không:
+        // nó đòi tham số dòng lệnh, một daemon sống, hay mạng. Cố tình KHÔNG gộp
+        // vào tập trên: nhãn `bash` phải tiếp tục được chạy thật ở LINUX-BASH-PE,
+        // nhét 'bash' vào đó là tắt phép kiểm của cả một khoá để làm xanh một câu.
+        // Bắt buộc kèm LÝ DO bằng chữ ⇒ không ai miễn được trong im lặng.
+        if (q.khongChayDuoc) {
+          note(`${at}: miễn chạy — ${q.khongChayDuoc}`);
           continue;
         }
 

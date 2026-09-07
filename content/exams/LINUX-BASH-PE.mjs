@@ -278,7 +278,9 @@ const Q4_SOLUTION =
   '    tmp=$(mktemp)\n' +
   '    trap \'rm -f "$tmp"\' EXIT\n' +
   '    printf \'%s %s\\n\' "$env" "$tag" > "$tmp"\n' +
-  '    printf \'released %s %s (manifest %s bytes)\\n\' "$env" "$tag" "$(stat -c %s "$tmp")"\n' +
+  '    # wc -c < file, KHÔNG PHẢI stat -c %s: `stat -c` là cú pháp GNU, BSD/macOS\n' +
+  '    # đòi `stat -f%z` và sẽ báo "illegal option -- c". wc -c là POSIX, số y hệt.\n' +
+  '    printf \'released %s %s (manifest %s bytes)\\n\' "$env" "$tag" "$(wc -c < "$tmp" | tr -d \' \')"\n' +
   '  )\n' +
   '}\n';
 
@@ -534,7 +536,7 @@ export default {
             '<li>Not exactly two arguments → print <code>usage: release &lt;env&gt; &lt;tag&gt;</code> <b>to stderr</b> and return <b>2</b>.</li>' +
             '<li>The environment is neither <code>staging</code> nor <code>production</code> → print <code>unknown env: &lt;env&gt;</code> to stderr and return <b>3</b>.</li>' +
             '<li>The environment is <code>production</code> and the tag is <code>latest</code> → print <code>refusing to release latest to production</code> to stderr and return <b>4</b>.</li>' +
-            '<li>Otherwise: create a temp file with <code>mktemp</code>, write <code>&lt;env&gt; &lt;tag&gt;</code> plus a newline into it, print <code>released &lt;env&gt; &lt;tag&gt; (manifest &lt;n&gt; bytes)</code> where <code>&lt;n&gt;</code> is the file\'s size from <code>stat -c %s</code>, remove the temp file, and return <b>0</b>.</li>' +
+            '<li>Otherwise: create a temp file with <code>mktemp</code>, write <code>&lt;env&gt; &lt;tag&gt;</code> plus a newline into it, print <code>released &lt;env&gt; &lt;tag&gt; (manifest &lt;n&gt; bytes)</code> where <code>&lt;n&gt;</code> is the file\'s size from <code>wc -c</code> (portable; <code>stat -c %s</code> is the GNU-only equivalent and fails on BSD/macOS), remove the temp file, and return <b>0</b>.</li>' +
             '</ul>' +
             '<p>Four things are being measured beyond the output.</p>' +
             '<ul>' +
@@ -551,7 +553,7 @@ export default {
             '<li>Không đúng hai tham số → in <code>usage: release &lt;env&gt; &lt;tag&gt;</code> <b>ra stderr</b> rồi trả về <b>2</b>.</li>' +
             '<li>Môi trường không phải <code>staging</code> cũng không phải <code>production</code> → in <code>unknown env: &lt;env&gt;</code> ra stderr rồi trả về <b>3</b>.</li>' +
             '<li>Môi trường là <code>production</code> và nhãn là <code>latest</code> → in <code>refusing to release latest to production</code> ra stderr rồi trả về <b>4</b>.</li>' +
-            '<li>Còn lại: tạo một file tạm bằng <code>mktemp</code>, ghi vào đó <code>&lt;env&gt; &lt;tag&gt;</code> kèm một dấu xuống dòng, in <code>released &lt;env&gt; &lt;tag&gt; (manifest &lt;n&gt; bytes)</code> với <code>&lt;n&gt;</code> là kích thước file lấy từ <code>stat -c %s</code>, xoá file tạm, và trả về <b>0</b>.</li>' +
+            '<li>Còn lại: tạo một file tạm bằng <code>mktemp</code>, ghi vào đó <code>&lt;env&gt; &lt;tag&gt;</code> kèm một dấu xuống dòng, in <code>released &lt;env&gt; &lt;tag&gt; (manifest &lt;n&gt; bytes)</code> với <code>&lt;n&gt;</code> là kích thước file lấy từ <code>wc -c</code> (chạy được mọi nơi; <code>stat -c %s</code> là bản tương đương chỉ có ở GNU, hỏng trên BSD/macOS), xoá file tạm, và trả về <b>0</b>.</li>' +
             '</ul>' +
             '<p>Ngoài kết quả in ra, còn bốn thứ đang được chấm.</p>' +
             '<ul>' +

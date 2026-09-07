@@ -101,6 +101,52 @@ router.get('/practice/section-counts/:courseId', async (req, res: Response<ApiRe
   } catch (e) { next(e); }
 });
 
+// Bài THỰC HÀNH của MỘT chương: các câu KHÔNG phải trắc nghiệm (WRITE/CODE) của
+// đề PE thật đã được gán về chương này. Bộ phân loại (exam-classify-chapters.mjs)
+// vốn KHÔNG lọc theo kind nên câu PE đã có sectionId sẵn — trước đây chỉ thiếu
+// đường phục vụ, vì route MCQ bên dưới lọc cứng kind:'MCQ'.
+//
+// Khác quiz trắc nghiệm: không tự chấm được, nên trả kèm sampleSolution + rubric
+// để người học tự đối chiếu, và gia sư AI trên trang đã biết ngữ cảnh này.
+//   ?limit=N   lấy tối đa N câu (mặc định 20, trần cứng 50)
+router.get('/practice/by-section/:sectionId/practical', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const sectionId = Number(req.params.sectionId);
+    if (!Number.isInteger(sectionId)) return next(new AppError('sectionId không hợp lệ', 400));
+    const limit = Math.min(Math.max(Number(req.query.limit) || 20, 1), 50);
+
+    const qs = await prisma.examQuestion.findMany({
+      where: { sectionId, kind: { not: 'MCQ' } },
+      select: {
+        id: true, kind: true, points: true, prompt: true, imageUrl: true,
+        language: true, starterCode: true, sampleSolution: true, expectedOutput: true,
+        rubric: true, explanation: true,
+        exam: { select: { kind: true, code: true, title: true } },
+      },
+      orderBy: [{ examId: 'asc' }, { sortOrder: 'asc' }],
+    });
+
+    // Khử trùng theo đề bài chuẩn hoá — nhiều đề PE dùng lại cùng một câu.
+    const norm = (s: string | null) => String(s || '').replace(/\s+/g, ' ').trim().toLowerCase().slice(0, 300);
+    const seen = new Set<string>();
+    const data = [] as Array<Record<string, unknown>>;
+    for (const q of qs) {
+      const k = norm(q.prompt);
+      if (!k || seen.has(k)) continue;
+      seen.add(k);
+      data.push({
+        id: q.id, kind: q.kind, points: Number(q.points), prompt: q.prompt, imageUrl: q.imageUrl,
+        language: q.language, starterCode: q.starterCode, sampleSolution: q.sampleSolution,
+        expectedOutput: q.expectedOutput, rubric: q.rubric, explanation: q.explanation,
+        examKind: q.exam?.kind ?? null, examCode: q.exam?.code ?? null, examTitle: q.exam?.title ?? null,
+      });
+      if (data.length >= limit) break;
+    }
+
+    res.json({ success: true, data });
+  } catch (e) { next(e); }
+});
+
 // Câu hỏi luyện tập của MỘT chương (chỉ MCQ có đáp án để tự chấm), gộp từ ĐỀ
 // THẬT FE/PE/PT đã gán chương. Khử trùng lặp theo prompt (nhiều đề lặp cùng câu).
 //   ?random=1     trộn ngẫu nhiên

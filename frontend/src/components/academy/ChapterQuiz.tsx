@@ -10,7 +10,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import {
   FileQuestion, Loader2, Shuffle, ListChecks, X, CheckCircle2, XCircle,
-  RotateCcw, Languages,
+  RotateCcw, Languages, PenLine,
 } from 'lucide-react';
 import { api } from '@/lib/api';
 import ExamRichContent from '@/app/exam/ExamRichContent';
@@ -26,6 +26,24 @@ interface ExamQ {
   explanation?: string | null;
   points: number;
   examKind?: string | null;
+}
+
+// Câu THỰC HÀNH (PE) của chương — không trắc nghiệm nên không tự chấm được;
+// hiện đề + đề bài gốc, lời giải mẫu giấu trong <details> để tự làm trước.
+interface PracticeQ {
+  id: number;
+  kind: string;                 // WRITE | CODE
+  points: number;
+  prompt: string;
+  imageUrl: string | null;
+  language?: string | null;
+  starterCode?: string | null;
+  sampleSolution?: string | null;
+  expectedOutput?: string | null;
+  rubric?: unknown;
+  explanation?: string | null;
+  examCode?: string | null;
+  examTitle?: string | null;
 }
 
 const normOpts = (o: unknown): string[] =>
@@ -90,6 +108,86 @@ function QuestionCard({ q, idx, L, selected, submitted, onToggle }: {
           <ExamRichContent html={q.explanation} L={L} className="exam-explain" />
         </div>
       )}
+    </div>
+  );
+}
+
+// ── Khối THỰC HÀNH (PE) của chương ────────────────────────────────────
+// Tách riêng khỏi quiz trắc nghiệm: câu PE là bài viết/vẽ/code nên KHÔNG chấm
+// tự động được. Hiện đề thật + lời giải mẫu giấu trong <details> để người học
+// tự làm trước rồi mới đối chiếu.
+function PracticeBlock({ sectionId, L }: { sectionId: number; L: 'vi' | 'en' }) {
+  const [items, setItems] = useState<PracticeQ[] | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    setLoading(true); setErr(null);
+    try {
+      const r = await api.get<{ success: boolean; data: PracticeQ[] }>(
+        `/exams/practice/by-section/${sectionId}/practical`,
+      );
+      const data = r.data?.data ?? [];
+      if (!data.length) { setErr('Chương này chưa có bài thực hành từ đề PE.'); return; }
+      setItems(data);
+    } catch {
+      setErr('Không tải được bài thực hành. Thử lại nhé.');
+    } finally { setLoading(false); }
+  }, [sectionId]);
+
+  if (!items) {
+    return (
+      <div className="mt-2 border-t pt-3" style={{ borderColor: 'var(--border-color)' }}>
+        <button type="button" disabled={loading} onClick={load}
+          className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold disabled:opacity-50"
+          style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}>
+          {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <PenLine className="h-3.5 w-3.5" />}
+          Bài thực hành (PE) của chương này
+        </button>
+        {err && <p className="mt-1.5 text-[11px]" style={{ color: 'var(--text-muted)' }}>{err}</p>}
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-2 space-y-3 border-t pt-3" style={{ borderColor: 'var(--border-color)' }}>
+      <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+        <b>{items.length} bài thực hành</b> lấy từ đề PE thật đã gán về chương này. Không chấm tự động —
+        tự làm rồi mở lời giải mẫu để đối chiếu.
+      </p>
+      {items.map((p, i) => (
+        <div key={p.id} className="rounded-lg border p-3" style={{ borderColor: 'var(--border-color)' }}>
+          <div className="mb-1.5 flex flex-wrap items-center gap-2 text-[11px]" style={{ color: 'var(--text-muted)' }}>
+            <span className="rounded px-1.5 py-0.5 font-bold" style={{ background: 'rgba(139,92,246,.15)', color: 'var(--accent-color,#8b5cf6)' }}>
+              Bài {i + 1} · {p.kind}
+            </span>
+            <span>{p.points} điểm</span>
+            {p.examCode && <span>· từ đề {p.examCode}</span>}
+            {p.language && <span>· {p.language}</span>}
+          </div>
+          <ExamRichContent html={p.prompt} L={L} />
+          {p.imageUrl && <img src={p.imageUrl} alt="" className="mt-2 max-w-full rounded-lg border" style={{ borderColor: 'var(--border-color)' }} />}
+          {p.starterCode && (
+            <details className="mt-2">
+              <summary className="cursor-pointer text-xs font-semibold" style={{ color: 'var(--text-secondary)' }}>Mã cho sẵn</summary>
+              <pre className="mt-1.5 overflow-x-auto rounded-lg p-2.5 text-[11px]" style={{ background: 'var(--bg-surface)' }}><code>{p.starterCode}</code></pre>
+            </details>
+          )}
+          <details className="mt-2">
+            <summary className="cursor-pointer text-xs font-semibold" style={{ color: 'var(--accent-color,#8b5cf6)' }}>Xem lời giải mẫu</summary>
+            {p.sampleSolution && (
+              <pre className="mt-1.5 overflow-x-auto rounded-lg p-2.5 text-[11px]" style={{ background: 'var(--bg-surface)' }}><code>{p.sampleSolution}</code></pre>
+            )}
+            {p.expectedOutput && (
+              <>
+                <p className="mt-2 text-[11px] font-semibold" style={{ color: 'var(--text-secondary)' }}>Kết quả mong đợi</p>
+                <pre className="mt-1 overflow-x-auto rounded-lg p-2.5 text-[11px]" style={{ background: 'var(--bg-surface)' }}><code>{p.expectedOutput}</code></pre>
+              </>
+            )}
+            {p.explanation && <div className="mt-2"><ExamRichContent html={p.explanation} L={L} className="exam-explain" /></div>}
+          </details>
+        </div>
+      ))}
     </div>
   );
 }
@@ -170,6 +268,7 @@ export function ChapterQuiz({ sectionId, sectionTitle, count, lessonId }: {
           </button>
         </div>
         {err && <p className="mt-2 text-[11px]" style={{ color: 'var(--exam-bad, #ef4444)' }}>{err}</p>}
+        <PracticeBlock sectionId={sectionId} L={L} />
       </div>
     );
   }
@@ -232,6 +331,8 @@ export function ChapterQuiz({ sectionId, sectionTitle, count, lessonId }: {
             </button>
           </div>
         )}
+
+        <PracticeBlock sectionId={sectionId} L={L} />
 
         {/* Gia sư AI biết các câu quiz — hỏi "câu N" là hiểu ngay */}
         {lessonId && (

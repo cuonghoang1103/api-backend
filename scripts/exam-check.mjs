@@ -76,9 +76,20 @@ function assemble(starterCode, sampleSolution) {
   ].join('\n');
 }
 
-async function runSnippet(source, stdin) {
+/**
+ * Đuôi file quyết định Node có XOÁ chú thích kiểu hay không.
+ * Từ Node 22.18 việc xoá kiểu bật sẵn, nhưng CHỈ cho `.ts`/`.mts`/`.cts` —
+ * ghi đúng đoạn TypeScript ấy vào `answer.cjs` thì Node coi nó là JavaScript và
+ * `const x: number = 1` chết ngay với "Missing initializer in const
+ * declaration". Đo thật trên Node v22.21.0 trước khi thêm dòng này.
+ * Thư mục tạm không có package.json nên `.ts` chạy ở chế độ CommonJS — lời giải
+ * mẫu vì thế phải là một file độc lập, không `import` / `export`.
+ */
+const extFor = (language) => (String(language ?? '').toLowerCase() === 'typescript' ? 'ts' : 'cjs');
+
+async function runSnippet(source, stdin, ext = 'cjs') {
   const dir = await mkdtemp(path.join(tmpdir(), 'exam-check-'));
-  const file = path.join(dir, 'answer.cjs');
+  const file = path.join(dir, `answer.${ext}`);
   try {
     await writeFile(file, source, 'utf8');
     // execFileSync, không phải bản async: chỉ bản SYNC mới bơm được `input`
@@ -164,7 +175,7 @@ async function checkFile(file) {
         const source = io ? q.sampleSolution : assemble(q.starterCode ?? '', q.sampleSolution);
         if (!source) { err(`${at}: starterCode thiếu mốc "${MARK_SOLVE}" hoặc "${MARK_GIVEN}"`); continue; }
         try {
-          const got = await runSnippet(source, io?.stdin);
+          const got = await runSnippet(source, io?.stdin, extFor(q.language));
           const want = io ? io.expected : q.expectedOutput.replace(/\s+$/, '');
           if (got !== want) {
             err(`${at}: đáp án mẫu CHẠY RA KHÁC expectedOutput`);

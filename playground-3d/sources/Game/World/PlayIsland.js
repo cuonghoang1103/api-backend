@@ -99,6 +99,164 @@ export class PlayIsland
          * qua `canopy()`.
          */
         this.leafClusters = new Foliage(this.canopySpots, uniform(color('#7fb43f')), uniform(color('#b4d150')))
+
+        /**
+         * SAU CÙNG, khi mọi khu đã dựng xong: gộp phần TĨNH thành instance.
+         * Phải đứng cuối — gộp giữa chừng thì khu dựng sau vẫn thêm mesh thường
+         * vào `group` và chỗ đó không được gộp.
+         */
+        this.bakeStatic()
+    }
+
+    /**
+     * Những thứ TUYỆT ĐỐI KHÔNG được gộp — mọi mesh nhúc nhích từng khung hình.
+     *
+     * Liệt kê TAY theo `update()` của từng khu chứ không dò tự động: dò bằng
+     * cách chụp hai lần ma trận thì thứ chỉ động khi có nhạc (sàn nhảy) hoặc
+     * chỉ động ban đêm (đèn hải đăng) lọt lưới ngay, mà chạy không đầu thì
+     * KHÔNG có nhạc. Danh sách này đã đối chiếu với phép đo 20 giây (ép trời
+     * tối): 125 vật khai ở đây phủ trọn 78 vật đo được cử động, lọt 0.
+     *
+     * Vật lý ĐỘNG (`type: 'dynamic'`) cũng nằm đây: khối chữ ở làng và
+     * container ở cảng bị xe húc là đổi vị trí.
+     */
+    collectAnimated()
+    {
+        const keep = new Set()
+        const add = (object) => { if(object?.isObject3D) object.traverse((child) => keep.add(child.uuid)) }
+
+        // Nhạc hội: ô sàn nhảy nhấp theo nhạc · chùm đèn quét · viền + đĩa bục
+        for(const tile of this.concert?.tiles ?? []) add(tile.mesh)
+        for(const beam of this.concert?.beams ?? []) { add(beam.mesh); add(beam.bulb) }
+        for(const deck of this.concert?.decks ?? []) { add(deck.rim); add(deck.disc) }
+
+        // Làng: kim đồng hồ (nằm trong `pivot`, vốn là Group nên không gộp,
+        // nhưng khai cho đủ) · khối chữ vật lý động
+        for(const clock of this.village?.clockHands ?? []) { add(clock.hourPivot); add(clock.minutePivot) }
+        for(const letter of this.village?.letters ?? []) add(letter.mesh)
+
+        // Cảng: chùm sáng hải đăng quay + tắt/bật theo đêm · container vật lý động
+        for(const container of this.harbour?.containers ?? []) add(container.mesh)
+        add(this.harbour?.beam)
+        add(this.harbour?.lamp)
+
+        // Sân bóng: quả bóng (`arena.ball` là BỌC `{ mesh, body }` chứ không
+        // phải Object3D — quên `.mesh` là khai hụt mà không báo lỗi gì). Thực
+        // ra `Objects` treo nó thẳng vào `scene`, không nằm trong `group`.
+        add(this.arena?.ball?.mesh)
+
+        return keep
+    }
+
+    /**
+     * GỘP INSTANCE cho phần tĩnh của đảo.
+     *
+     * Cùng khuôn với `FptuCampus.bakeStatic()`, và cùng một nguyên tắc: KHÔNG
+     * đổi một pixel nào. Mesh gốc vẫn sống (chỉ RỜI cây cảnh), ma trận instance
+     * chép nguyên `matrixWorld` của nó, vật liệu và cờ đổ bóng lấy y hệt — nên
+     * ảnh dựng ra phải trùng khít bản cũ. Cái mất đi chỉ là 500 lượt duyệt cây
+     * và 500 lệnh vẽ mỗi khung hình.
+     *
+     * Ba cửa loại trừ, mỗi cửa vì một lý do khác nhau:
+     *  - `collectAnimated()`: gộp thứ động là đóng băng nó.
+     *  - `PlaneGeometry`: đó là mảng địa hình, mỗi tấm một hình riêng nên không
+     *    bao giờ ghép được với ai — và nó là thứ duy nhất `receiveShadow` toàn
+     *    mặt đảo, đụng vào là hỏng bóng đổ.
+     *  - `transparent` / `renderOrder`: vật trong suốt phải được XẾP theo chiều
+     *    sâu từng cái một. Gộp chúng lại là cả cụm dùng chung MỘT thứ tự vẽ,
+     *    và thứ tự sai ở vật trong suốt hiện ra thành viền đen.
+     */
+    bakeStatic()
+    {
+        const keep = this.collectAnimated()
+        const batches = new Map()
+
+        for(const child of this.group.children)
+        {
+            if(!child.isMesh || child.isInstancedMesh)
+                continue
+
+            if(keep.has(child.uuid))
+                continue
+
+            if(child.geometry?.type === 'PlaneGeometry')
+                continue
+
+            if(child.material?.transparent || child.renderOrder !== 0)
+                continue
+
+            const key = `${child.geometry.uuid}|${child.material.uuid}|${child.castShadow ? 1 : 0}${child.receiveShadow ? 1 : 0}`
+
+            let batch = batches.get(key)
+
+            if(!batch)
+            {
+                batch = {
+                    geometry: child.geometry,
+                    material: child.material,
+                    castShadow: child.castShadow,
+                    receiveShadow: child.receiveShadow,
+                    meshes: [],
+                }
+                batches.set(key, batch)
+            }
+
+            batch.meshes.push(child)
+        }
+
+        /**
+         * ⚠️ KHÔNG giữ bản sao ma trận như `FptuCampus` làm. Ở đó `instanceBatches`
+         * mang thêm `matrices` để `rebakePiece()` dựng lại một khối sau khi nó vỡ
+         * — đảo này không có gì vỡ, nên bản sao đó là 398 `Matrix4` chết. Cần ma
+         * trận gốc thì đọc thẳng `bakedMeshes[i].matrixWorld`, vẫn là nguồn thật.
+         */
+        this.instanceBatches = new Map()
+
+        /**
+         * Giữ danh sách mesh đã gộp. Chúng đã RỜI cây cảnh nên không còn đường
+         * nào duyệt tới, mà `tools/check-play-island.mjs` cần hộp bao của chúng
+         * để biết một collider có hình đi kèm hay là "va chạm mồ côi".
+         */
+        this.bakedMeshes = []
+
+        let baked = 0
+
+        for(const [ key, batch ] of batches)
+        {
+            if(batch.meshes.length < 2)
+                continue
+
+            const mesh = new THREE.InstancedMesh(batch.geometry, batch.material, batch.meshes.length)
+            mesh.name = 'playIsland:batch'
+            mesh.castShadow = batch.castShadow
+            mesh.receiveShadow = batch.receiveShadow
+
+            for(let i = 0; i < batch.meshes.length; i++)
+            {
+                const source = batch.meshes[i]
+                source.updateMatrixWorld(true)
+
+                mesh.setMatrixAt(i, source.matrixWorld)
+
+                source.userData.instanceSlot = { key, index: i }
+                this.bakedMeshes.push(source)
+                baked++
+            }
+
+            mesh.instanceMatrix.needsUpdate = true
+            this.group.add(mesh)
+
+            this.instanceBatches.set(key, { mesh })
+        }
+
+        // Gỡ SAU khi đã đọc xong mọi ma trận, và duyệt trên BẢN SAO của mảng
+        // con — gỡ trong lúc duyệt `group.children` là vừa duyệt vừa sửa đúng
+        // cái mảng đang duyệt, và nó bỏ sót một nửa.
+        for(const child of [ ...this.group.children ])
+            if(child.userData?.instanceSlot)
+                this.group.remove(child)
+
+        this.bakedCount = baked
     }
 
     getMaterial(hex)

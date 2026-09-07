@@ -1932,6 +1932,137 @@ lọc kỹ hơn nhiều so với khuôn viên.
 
 ---
 
+# 0r. GỘP INSTANCE CHO ĐẢO SÂN CHƠI — 04/09/2026, khép lại đợt tối ưu
+
+**mesh 2062 → 1664 (−398, −19%)**, draw call 308 → 291 (**−17**). Đảo sân chơi
+riêng: **530 con trực tiếp → 179** (127 mesh + 47 `InstancedMesh` gói 398 bản +
+5 nhóm). Đỉnh không đổi.
+
+Cộng cả ba đợt: **4390 → 1664 mesh, giảm 62%.**
+
+Cùng khuôn `FptuCampus.bakeStatic()`, nhưng đảo này KHÔNG cần
+`unbake`/`rebake`: không có gì trên đó vỡ ra. Thứ động thì loại từ đầu.
+
+## Khác biệt thật sự: DANH SÁCH LOẠI TRỪ PHẢI KHAI TAY
+
+`collectAnimated()` liệt kê đích danh theo `update()` của từng khu. **Đừng dò
+tự động bằng cách chụp hai lần ma trận** — cách đó bỏ sót đúng hai thứ quan
+trọng nhất:
+
+- **Sàn nhảy chỉ nhấp KHI CÓ NHẠC.** Chạy không đầu thì không có nhạc.
+- **Chùm sáng hải đăng chỉ quét BAN ĐÊM.** Chụp giữa trưa thì nó đứng im.
+
+Gộp trúng một trong hai là ĐÓNG BĂNG nó vĩnh viễn, và không bộ kiểm nào bắt
+được vì hình vẫn ở đúng chỗ.
+
+Vẫn đo để ĐỐI CHIẾU, không phải để sinh danh sách: ép `dayCycles.preference
+.set('night')`, chụp ma trận cách nhau 20 giây → 78 vật cử động. Danh sách khai
+tay có 125 vật, **phủ trọn 78, lọt 0**.
+
+Bốn nguồn động, tất cả nằm trong `update()`:
+
+| Khu | Thứ động | Vì sao |
+|---|---|---|
+| `PlayConcert` | `tiles[].mesh` · `beams[].mesh` + `.bulb` · `decks[].rim/.disc` | sàn nhấp theo dải trầm, chùm quét theo dải cao |
+| `PlayVillage` | `clockHands[].hourPivot/minutePivot` · `letters[].mesh` | kim quay theo chu kỳ ngày · khối chữ là thân vật lý ĐỘNG |
+| `PlayHarbour` | `beam` · `lamp` · `containers[].mesh` | chùm quay + tắt ban ngày · container bị xe húc |
+| `FootballArena` | `ball.mesh` | thân vật lý động |
+
+⚠️ **`arena.ball` là BỌC `{ mesh, body }`, không phải `Object3D`.** Viết
+`add(arena.ball)` thì hàm lọc lặng lẽ bỏ qua, không báo gì. Phải là
+`add(arena.ball?.mesh)`. (Thực ra `Objects` treo quả bóng thẳng vào `scene` nên
+nó không nằm trong `group` — nhưng khai vẫn đúng hơn là dựa vào chi tiết đó.)
+
+## Thêm hai cửa loại trừ mà khu FPTU không cần
+
+- **`material.transparent` hoặc `renderOrder !== 0`.** Vật trong suốt phải được
+  XẾP theo chiều sâu từng cái. Gộp lại là cả cụm dùng chung MỘT thứ tự vẽ. Đảo
+  này có chùm đèn `ConeGeometry` trong suốt `renderOrder = 4`; khuôn viên FPTU
+  không có thứ nào như vậy.
+- **`PlaneGeometry`** — như FPTU: mảng địa hình `heightPatch`, mỗi mảng một hình
+  riêng, mà nó lại là thứ `receiveShadow` cả mặt đảo.
+
+Còn lại 127 mesh thường = **105 động + 2 mảng địa hình + 20 vật ĐỘC BẢN**. 20
+vật độc bản là thật: 5 vệt sáng trên phông sân khấu trông giống hệt nhau nhưng
+mỗi vệt một MÀU ⇒ mỗi vệt một `material` ⇒ không mẻ nào đủ 2 bản.
+
+## Sai lệch ma trận KHÔNG bằng 0 ở đây — và đó là đúng
+
+Khu FPTU đo được lệch **0**. Đảo này lệch **7,3e−6** (7 micromet). Đừng đi tìm
+lỗi: `instanceMatrix` là **Float32**, còn `matrixWorld.elements` là Float64.
+Đối chiếu lại sau khi làm tròn xuống float32 (`Math.fround`) thì lệch **về đúng
+0**. FPTU bằng 0 chỉ vì toạ độ ở đó gõ tay toàn số tròn; ở đây toạ độ cây cối
+sinh từ hàm băm lượng giác nên chữ số lẻ mới lộ ra. Mọi hệ instance có sẵn của
+dự án (`Foliage`, `Grass`, `carrier:rust`…) đều chịu đúng phép làm tròn này.
+
+## ⚠️ Bộ kiểm phải sửa THEO, nếu không nó báo oan cả loạt
+
+`check-play-island.mjs` mục 5 gom hộp bao mọi mesh để biết một collider có hình
+đi kèm hay là "va chạm mồ côi". Với `InstancedMesh`, `matrixWorld` là ma trận
+ĐƠN VỊ và hình là khối hộp đơn vị ⇒ đo thẳng ra một cái hộp 1×1×1 ở gốc toạ độ
+⇒ **mọi collider của phần đã gộp thành mồ côi**. Đã sửa: bung từng bản bằng
+`getMatrixAt()`, cộng thêm `island.bakedMeshes`.
+
+(`check-ghost-colliders.mjs` vốn đã bung instance đúng từ đầu — nhưng nó khoá
+cứng `headless: false`. Đã cho `HEADLESS=1` ép chạy không đầu.)
+
+## ⚠️ CHỤP ẢNH SO SÁNH: bốn cái bẫy, gặp đủ cả bốn
+
+Lần đầu ảnh cũ và ảnh mới khác nhau **97,7% điểm ảnh** — nghe như hỏng nặng.
+Không phải. Bốn thứ phải chặn hết mới so được:
+
+1. **`preference.set('day')` chuyển dần trong 4 GIÂY.** Hai bản dựng boot lệch
+   nhau vài chục mili giây là hai ảnh rơi vào hai pha khác nhau ⇒ nền trời lệch
+   màu ⇒ khác gần như toàn khung hình. Phải `set('day', 0)` để ghim
+   `progress = 0,05` tức thì.
+2. **Xe rơi xuống biển.** Cả hai ảnh đầu chỉ là sương mù dưới nước (huy hiệu
+   "Under the sea" hiện lên mới lộ). Dùng ĐIỂM HỒI SINH mà bộ kiểm đã xác nhận
+   nằm trên đất: nhạc hội (34·165), làng (−26·184), cảng (49·184).
+3. **Chế độ máy quay TỰ DO không dùng được.** Đặt máy quay đứng xa 30 đơn vị
+   thì cả đảo tan vào sương mù, ảnh ra chỉ còn nền + mấy cột đèn (vật liệu
+   `MeshBasicNodeMaterial` không ăn sương). Sương mù lấy thông số từ
+   `view.optimalArea`, thứ tính quanh CHỖ XE ĐỨNG. Phải để máy quay bám xe.
+4. **Máy quay trượt tới chậm.** Chụp sau `moveTo` 4 giây thì nó còn cách 47 đơn
+   vị. Đợi 14 giây, và IN RA toạ độ máy quay ở mỗi lần chụp để biết lần nào
+   chưa kịp đứng yên.
+
+Và quan trọng nhất: **phải đo NỀN NHIỄU** — chụp cùng MỘT bản dựng hai lần rồi
+so. Lá cây động theo gió, nên nền nhiễu không hề bằng 0:
+
+| Mốc | nền nhiễu (cùng bản) | cũ vs gộp |
+|---|---|---|
+| nhạc hội | 1,13% | 0,76% |
+| làng | 23,60% | 15,25% |
+| cảng | 4,07% | 3,85% |
+| sân bóng | 0,72% | 0,90% |
+
+Khác biệt cũ↔mới **nằm trong nền nhiễu ở cả bốn mốc** ⇒ ảnh chụp KHÔNG phân
+biệt được hai bản. Ảnh lệch (`diff-cang.png`) cho thấy chỗ khác đúng là các
+cụm lá, không phải hình khối.
+
+Chứng cứ chắc vẫn là chứng cứ ma trận: **398/398 khớp**, cùng đối tượng
+`geometry`, cùng `material`, 0 sai cờ bóng.
+
+## ⚠️ Bản PRODUCTION không phơi `window.game`
+
+`VITE_GAME_PUBLIC` chỉ có trong `.env.development`. Mọi bộ kiểm bám vào
+`window.game` nên **không chạy được với `dist/`** — đó là chủ ý, đừng "sửa".
+Kiểm bản dựng thì đo thứ nhìn thấy được: đợi nút Play hiện ra, đếm `pageerror`
+và HTTP ≥ 400.
+
+⚠️ Và phải bày `dist` DƯỚI `/playground/`, không phải ở gốc: `index.html` mang
+`<base href="/playground/">`, bày ở gốc là mọi tài nguyên 404 — đúng lỗi
+30/07/2026 trong `CLAUDE.md`. `vite preview` bày ở gốc nên KHÔNG dùng được;
+viết một server tĩnh 20 dòng thì xong.
+
+## Còn lại gì
+
+`carrier` 251 mesh là chỗ nặng nhất còn lại, nhưng nó đã có sẵn 3 `InstancedMesh`
+và phần lớn mesh còn lại thuộc thân tàu dựng bằng mã, không lặp nhiều. Lợi ích
+nhỏ hơn hẳn ba đợt vừa rồi.
+
+---
+
 # 1. MƯỜI BA BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
 
 Cần dev server sống: `cd playground-3d && npm run dev` (xem mục 4).

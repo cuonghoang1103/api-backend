@@ -19,7 +19,17 @@ const { chromium } = await import(process.env.PW ?? '/Users/admin/Downloads/api-
 
 const URL = process.env.URL ?? 'http://localhost:5175/'
 
-const browser = await chromium.launch({ ...(process.env.CHROME ? { executablePath: process.env.CHROME } : {}), headless: false })
+/**
+ * `headless: false` là mặc định CÓ CHỦ Ý — WebGPU/WebGL của bản không đầu dựng
+ * cảnh khác đủ để phép đo lệch. Nhưng máy không có màn hình thì nó chết ngay ở
+ * `launch()`, nên cho phép ép bằng `HEADLESS=1` (kèm SwiftShader).
+ */
+const headless = process.env.HEADLESS === '1'
+const browser = await chromium.launch({
+    ...(process.env.CHROME ? { executablePath: process.env.CHROME } : {}),
+    headless,
+    ...(headless ? { args: [ '--enable-unsafe-swiftshader', '--use-gl=swiftshader' ] } : {}),
+})
 const page = await browser.newPage({ viewport: { width: 900, height: 600 } })
 page.on('pageerror', (e) => console.log('  [pageerror]', e.message))
 await page.goto(URL, { waitUntil: 'domcontentloaded' })

@@ -211,12 +211,46 @@ const report = await page.evaluate(() =>
         const collect = (root) => root.traverse((o) =>
         {
             if(!o.isMesh && !o.isInstancedMesh) return
+
             o.updateWorldMatrix(true, false)
             const bb = o.geometry.boundingBox ?? (o.geometry.computeBoundingBox(), o.geometry.boundingBox)
-            const b = bb.clone().applyMatrix4(o.matrixWorld)
-            boxes.push(b)
+
+            /**
+             * ⚠️ InstancedMesh phải BUNG TỪNG BẢN, không lấy hộp bao của chính
+             * nó. `matrixWorld` của nó là ma trận đơn vị và hình là khối hộp
+             * đơn vị, nên đo thẳng ra một cái hộp 1×1×1 ở gốc toạ độ — mọi
+             * collider của phần đã gộp bỗng thành "va chạm mồ côi".
+             */
+            if(o.isInstancedMesh)
+            {
+                const m = new o.matrixWorld.constructor()
+                for(let i = 0; i < o.count; i++)
+                {
+                    o.getMatrixAt(i, m)
+                    m.premultiply(o.matrixWorld)
+                    boxes.push(bb.clone().applyMatrix4(m))
+                }
+                return
+            }
+
+            boxes.push(bb.clone().applyMatrix4(o.matrixWorld))
         })
+
         collect(island.group)
+
+        /**
+         * Thêm mesh gốc của phần đã gộp. Bung instance ở trên vốn đã phủ đúng
+         * chỗ chúng đứng, nên đây là lớp thứ hai: `bakedMeshes` là danh sách
+         * duy nhất còn trỏ tới chúng sau khi chúng rời cây cảnh, và nó giữ cho
+         * phép kiểm này đúng kể cả khi luật gộp đổi (một bản bị thu về tỉ lệ 0,
+         * một mẻ bị tách ra) — những lúc đó bung instance sẽ hụt.
+         */
+        for(const mesh of island.bakedMeshes ?? [])
+        {
+            mesh.updateWorldMatrix(true, false)
+            const bb = mesh.geometry.boundingBox ?? (mesh.geometry.computeBoundingBox(), mesh.geometry.boundingBox)
+            boxes.push(bb.clone().applyMatrix4(mesh.matrixWorld))
+        }
         if(arena.ball?.mesh) collect(arena.ball.mesh)
 
         const orphans = []

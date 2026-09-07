@@ -94,8 +94,59 @@ ok()   { echo "[$(date '+%H:%M:%S')] [✅ OK]  $*"; }
 warn() { echo "[$(date '+%H:%M:%S')] [WARN]  $*"; }
 fail() { echo "[$(date '+%H:%M:%S')] [❌ FAIL] $*"; }
 
-sshnha() { ssh -o ConnectTimeout=15 -o BatchMode=yes "$MAY_NHA" "$@"; }
-sshvps() { ssh -i "$VPS_SSH_KEY" -o ConnectTimeout=15 -o StrictHostKeyChecking=accept-new "${VPS_USER}@${VPS_IP}" "$@"; }
+# ─── SSH KHÔNG ĐƯỢC TREO VÔ HẠN ──────────────────────────────────────
+#
+# 07/09/2026: hai lượt deploy của hai phiên khác nhau treo 2 GIỜ, mỗi lượt
+# kẹt ở một `ssh` trong khi VPS rảnh hoàn toàn — không docker, không prisma,
+# mọi container healthy. Chúng giữ luôn `/var/lock/cuongthai-deploy.lock`,
+# nên mọi lượt deploy sau xếp hàng sau chúng và cũng treo theo. Phải giết tay
+# 8 tiến trình mới thông.
+#
+# `ConnectTimeout` KHÔNG cứu được: nó chỉ chặn giai đoạn BẮT TAY. Phiên đã
+# nối rồi mà đứng im thì nó không nói gì. Hai lớp chặn:
+#
+#  1. `ServerAliveInterval`/`CountMax` — ssh tự bỏ cuộc sau ~60s nếu đầu kia
+#     không đáp. Bắt được link chết.
+#  2. `chay_canh_gio` — trần thời gian THẬT cho cả lời gọi. Bắt được ca xấu
+#     hơn: phiên vẫn sống, lệnh từ xa đã xong, mà ssh không chịu trả về.
+#     ServerAlive mù với ca này vì kết nối vẫn khoẻ.
+#
+# macOS không có `timeout`/`gtimeout` nên chó gác phải tự viết.
+SSH_SONG=(-o ServerAliveInterval=15 -o ServerAliveCountMax=4)
+
+# Trần cho MỘT lời gọi ssh. Bước lâu nhất đo được là dựng ảnh ở nhà (~15 phút)
+# và kéo ảnh về VPS; 2400s (40 phút) rộng rãi mà vẫn hữu hạn. Đặt
+# `SSH_TRAN=0` để tắt hẳn chó gác khi cần soi tay.
+SSH_TRAN=${SSH_TRAN:-2400}
+
+chay_canh_gio() {
+    if [ "$SSH_TRAN" -le 0 ]; then "$@"; return $?; fi
+    # `<&0` là BẮT BUỘC: bash chuyển stdin của job nền sang /dev/null, nên
+    # `sshvps "bash -s" <<EOF` sẽ gửi lên stdin RỖNG — bước tráo ảnh chạy một
+    # script trống, báo thành công, và KHÔNG có gì đổi trên VPS. Đã bắt được
+    # lỗi này bằng phép kiểm riêng trước khi cắm vào đây.
+    "$@" <&0 &
+    local pid=$!
+    (
+        local n=0
+        while kill -0 "$pid" 2>/dev/null; do
+            n=$((n + 1))
+            if [ "$n" -ge "$SSH_TRAN" ]; then
+                echo "[chó gác] ssh treo quá ${SSH_TRAN}s — giết pid $pid" >&2
+                kill -9 "$pid" 2>/dev/null
+                exit 0
+            fi
+            sleep 1
+        done
+    ) &
+    local cho=$!
+    wait "$pid"; local ma=$?
+    kill "$cho" 2>/dev/null; wait "$cho" 2>/dev/null
+    return $ma
+}
+
+sshnha() { chay_canh_gio ssh -o ConnectTimeout=15 "${SSH_SONG[@]}" -o BatchMode=yes "$MAY_NHA" "$@"; }
+sshvps() { chay_canh_gio ssh -i "$VPS_SSH_KEY" -o ConnectTimeout=15 "${SSH_SONG[@]}" -o StrictHostKeyChecking=accept-new "${VPS_USER}@${VPS_IP}" "$@"; }
 
 lui_ve_vps() {
     local ly_do="$1"

@@ -309,7 +309,8 @@ export async function askExamTutorStream(opts: ExamTutorAskOpts, onToken: (delta
   await assertAiReady(opts.userId);
   const { system, messages } = await buildTutorCall(opts);
   const res = await callTutor(system, messages, opts.userId, opts.provider, onToken);
-  const answer = (res.text || '').trim();
+  /* Cắt giữa chừng thì PHẢI NÓI RA — xem `LLMResult.biCat`. */
+  const answer = ((res.text || '').trim() + (res.biCat ? '\n\n> ⚠️ *Câu trả lời chạm trần độ dài nên bị cắt ở đây. Hỏi tiếp “nói tiếp phần còn lại” để nghe nốt.*' : '')).trim();
   if (!answer) throw new AppError('CuongMini chưa trả lời được. Thử lại nhé.', 400);
   void postAiAnswerComment(opts.questionId, opts.mode, opts.question, answer);
   return { answer, cached: false };
@@ -323,7 +324,8 @@ export async function askExamTutor(opts: ExamTutorAskOpts): Promise<{ answer: st
   await assertAiReady(opts.userId);
   const { system, messages } = await buildTutorCall(opts);
   const res = await callTutor(system, messages, opts.userId, opts.provider);
-  const answer = (res.text || '').trim();
+  /* Cắt giữa chừng thì PHẢI NÓI RA — xem `LLMResult.biCat`. */
+  const answer = ((res.text || '').trim() + (res.biCat ? '\n\n> ⚠️ *Câu trả lời chạm trần độ dài nên bị cắt ở đây. Hỏi tiếp “nói tiếp phần còn lại” để nghe nốt.*' : '')).trim();
   if (!answer) throw new AppError('CuongMini chưa trả lời được. Thử lại nhé.', 400);
   void postAiAnswerComment(opts.questionId, opts.mode, opts.question, answer);
   return { answer, cached: false };

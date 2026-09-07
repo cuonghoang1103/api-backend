@@ -318,7 +318,9 @@ export async function askCourseTutor(lessonId: number, opts: TutorAskOpts): Prom
     timeoutMs: 180_000,
     userId: opts.userId,
   });
-  const answer = (res.text || '').trim();
+  /* Cắt giữa chừng thì PHẢI NÓI RA. Người dùng đọc tới chỗ cụt rồi tưởng AI
+     lỗi, hoặc tệ hơn: tưởng đó là hết bài. Xem `LLMResult.biCat`. */
+  const answer = ((res.text || '').trim() + (res.biCat ? '\n\n> ⚠️ *Câu trả lời chạm trần độ dài nên bị cắt ở đây. Hỏi tiếp “nói tiếp phần còn lại” để nghe nốt.*' : '')).trim();
   if (!answer) throw new BadRequestError('AI chưa trả lời được. Thử lại nhé.');
   if (opts.cacheKey && nenLuuCache(answer, opts.english, lessonId, opts.cacheKey)) {
     void saveCachedAnswer(lessonId, opts.cacheKey, lang, answer);
@@ -362,7 +364,9 @@ export async function streamCourseTutor(
     userId: opts.userId,
     onToken,
   });
-  const answer = (res.text || '').trim();
+  /* Cắt giữa chừng thì PHẢI NÓI RA. Người dùng đọc tới chỗ cụt rồi tưởng AI
+     lỗi, hoặc tệ hơn: tưởng đó là hết bài. Xem `LLMResult.biCat`. */
+  const answer = ((res.text || '').trim() + (res.biCat ? '\n\n> ⚠️ *Câu trả lời chạm trần độ dài nên bị cắt ở đây. Hỏi tiếp “nói tiếp phần còn lại” để nghe nốt.*' : '')).trim();
   if (!answer) throw new BadRequestError('AI chưa trả lời được. Thử lại nhé.');
   if (opts.cacheKey && nenLuuCache(answer, opts.english, lessonId, opts.cacheKey)) {
     void saveCachedAnswer(lessonId, opts.cacheKey, lang, answer);

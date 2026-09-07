@@ -334,7 +334,8 @@ export async function askFollowUp(
     userId: opts.userId,
   });
 
-  const answer = (res.text || '').trim();
+  /* Cắt giữa chừng thì PHẢI NÓI RA — xem `LLMResult.biCat`. */
+  const answer = ((res.text || '').trim() + (res.biCat ? '\n\n> ⚠️ *Câu trả lời chạm trần độ dài nên bị cắt ở đây. Hỏi tiếp “nói tiếp phần còn lại” để nghe nốt.*' : '')).trim();
   if (!answer) throw new BadRequestError('The AI returned nothing. Please try again.');
   return { answer };
 }

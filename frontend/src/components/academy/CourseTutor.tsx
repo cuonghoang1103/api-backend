@@ -396,83 +396,93 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
                 {asking ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />} Hỏi
               </button>
 
-              <button
-                type="button"
-                onClick={() => { const m = !moFaq; setMoFaq(m); if (m && faq === null) void napFaq(); }}
-                className="inline-flex items-center gap-1 rounded-lg border px-3 py-2 text-sm font-semibold"
-                style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
-                title="Câu hỏi mọi người đã hỏi ở bài này, kèm câu trả lời của AI"
-              >
-                <BookMarked size={14} /> Câu hỏi thường gặp
-                {faq && faq.length > 0 && (
-                  <span className="rounded-full px-1.5 text-[11px]"
-                    style={{ background: 'var(--accent-color, #8b5cf6)', color: '#fff' }}>{faq.length}</span>
-                )}
-                <ChevronDown size={13} className={moFaq ? 'rotate-180 transition-transform' : 'transition-transform'} />
-              </button>
             </div>
 
-            {moFaq && (
-              <div className="mt-3 rounded-lg border" style={{ borderColor: 'var(--border-color)' }}>
-                {dangTaiFaq ? (
-                  <p className="px-3 py-4 text-center text-xs" style={{ color: 'var(--text-secondary)' }}>
-                    Đang tải…
-                  </p>
-                ) : !faq || faq.length === 0 ? (
-                  <p className="px-3 py-4 text-center text-xs" style={{ color: 'var(--text-secondary)' }}>
-                    Chưa ai hỏi gì ở bài này. Câu bạn hỏi sẽ được lưu lại đây cho người sau.
-                  </p>
-                ) : (
-                  <ul>
-                    {faq.map((f) => {
-                      const mo = moMuc === f.id;
-                      return (
-                        <li key={f.id} className="border-b last:border-b-0" style={{ borderColor: 'var(--border-color)' }}>
-                          <div className="flex items-start gap-2 px-3 py-2">
+          </>
+        )}
+
+        {/* ── Câu hỏi thường gặp ──────────────────────────────
+            NGOÀI cổng Pro có chủ đích: đây là câu trả lời ĐÃ CÓ SẴN, và người
+            chưa Pro chính là nhóm hưởng lợi nhiều nhất — họ đọc được thay vì
+            phải hỏi lại, mà mỗi lần hỏi lại là một lượt gọi model tốn tiền.
+            Vẫn cần đăng nhập: nội dung này do người học của khoá tạo ra. */}
+        {isAuthed && (
+          <div className="mt-3">
+            <button
+              type="button"
+              onClick={() => { const m = !moFaq; setMoFaq(m); if (m && faq === null) void napFaq(); }}
+              className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-semibold"
+              style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
+              title="Câu hỏi mọi người đã hỏi ở bài này, kèm câu trả lời của AI"
+            >
+              <BookMarked size={14} /> Câu hỏi thường gặp
+              {faq && faq.length > 0 && (
+                <span className="rounded-full px-1.5 text-[11px]"
+                  style={{ background: 'var(--accent-color, #8b5cf6)', color: '#fff' }}>{faq.length}</span>
+              )}
+              <ChevronDown size={13} className={moFaq ? 'rotate-180 transition-transform' : 'transition-transform'} />
+            </button>
+      {moFaq && (
+            <div className="mt-3 rounded-lg border" style={{ borderColor: 'var(--border-color)' }}>
+              {dangTaiFaq ? (
+                <p className="px-3 py-4 text-center text-xs" style={{ color: 'var(--text-secondary)' }}>
+                  Đang tải…
+                </p>
+              ) : !faq || faq.length === 0 ? (
+                <p className="px-3 py-4 text-center text-xs" style={{ color: 'var(--text-secondary)' }}>
+                  Chưa ai hỏi gì ở bài này. Câu bạn hỏi sẽ được lưu lại đây cho người sau.
+                </p>
+              ) : (
+                <ul>
+                  {faq.map((f) => {
+                    const mo = moMuc === f.id;
+                    return (
+                      <li key={f.id} className="border-b last:border-b-0" style={{ borderColor: 'var(--border-color)' }}>
+                        <div className="flex items-start gap-2 px-3 py-2">
+                          <button
+                            type="button"
+                            onClick={() => setMoMuc(mo ? null : f.id)}
+                            className="flex-1 text-left"
+                          >
+                            <span className="block text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+                              {f.question}
+                            </span>
+                            <span className="mt-0.5 block text-[11px]" style={{ color: 'var(--text-secondary)' }}>
+                              {f.nguoiHoi}
+                              {' · '}
+                              {new Date(f.createdAt).toLocaleDateString('vi-VN')}
+                              {f.lang === 'en' && ' · EN'}
+                              {!mo && ' · bấm để xem câu trả lời'}
+                            </span>
+                          </button>
+                          {f.cuaToi && (
                             <button
                               type="button"
-                              onClick={() => setMoMuc(mo ? null : f.id)}
-                              className="flex-1 text-left"
+                              onClick={() => void xoaFaq(f.id)}
+                              aria-label="Xoá câu hỏi này"
+                              className="shrink-0 rounded p-1.5 opacity-50 hover:opacity-100"
+                              style={{ color: 'var(--text-secondary)' }}
                             >
-                              <span className="block text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
-                                {f.question}
-                              </span>
-                              <span className="mt-0.5 block text-[11px]" style={{ color: 'var(--text-secondary)' }}>
-                                {f.nguoiHoi}
-                                {' · '}
-                                {new Date(f.createdAt).toLocaleDateString('vi-VN')}
-                                {f.lang === 'en' && ' · EN'}
-                                {!mo && ' · bấm để xem câu trả lời'}
-                              </span>
+                              <Trash2 size={13} />
                             </button>
-                            {f.cuaToi && (
-                              <button
-                                type="button"
-                                onClick={() => void xoaFaq(f.id)}
-                                aria-label="Xoá câu hỏi này"
-                                className="shrink-0 rounded p-1.5 opacity-50 hover:opacity-100"
-                                style={{ color: 'var(--text-secondary)' }}
-                              >
-                                <Trash2 size={13} />
-                              </button>
-                            )}
-                          </div>
-                          {/* Câu trả lời hiện NGUYÊN VĂN — không cắt, không "xem thêm".
-                              Cắt một câu giảng giữa chừng là làm hỏng đúng thứ người
-                              ta mở mục này ra để đọc. */}
-                          {mo && (
-                            <div className="px-3 pb-3">
-                              <ChatMarkdown content={f.answer} />
-                            </div>
                           )}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                )}
-              </div>
-            )}
-          </>
+                        </div>
+                        {/* Câu trả lời hiện NGUYÊN VĂN — không cắt, không "xem thêm".
+                            Cắt một câu giảng giữa chừng là làm hỏng đúng thứ người
+                            ta mở mục này ra để đọc. */}
+                        {mo && (
+                          <div className="px-3 pb-3">
+                            <ChatMarkdown content={f.answer} />
+                          </div>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
+          )}
+          </div>
         )}
       </div>
     </section>

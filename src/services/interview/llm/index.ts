@@ -44,11 +44,34 @@ export interface LLMMessage {
    *  below accept this: Anthropic natively, openai_compat via `toOpenAiContent`. */
   content: string | ClaudeContentBlock[];
 }
+/**
+ * Lý do dừng có nghĩa là "hết chỗ", không phải "nói xong".
+ *
+ * Nhận CẢ HAI cách viết ở CẢ HAI tuyến: chuẩn OpenAI là `finish_reason:
+ * 'length'`, chuẩn Anthropic là `stop_reason: 'max_tokens'`, nhưng cổng ở
+ * giữa là phần mềm New API dịch qua lại — và cổng này đã có tiền sử không
+ * theo chuẩn (nó KHÔNG tôn trọng `max_tokens`, xem `gateway.ts`). Chấp cả hai
+ * chuỗi thì một quirk của cổng không làm phép nhận diện im lặng vô hiệu.
+ */
+function laCat(ly: string | undefined | null): boolean {
+  return ly === 'length' || ly === 'max_tokens';
+}
+
 export interface LLMResult {
   text: string;
   inputTokens: number;
   outputTokens: number;
   model: string;
+  /**
+   * Model DỪNG VÌ CHẠM TRẦN `maxTokens`, không phải vì nó nói xong.
+   *
+   * Trước 07/09/2026 không chỗ nào đọc `finish_reason` (tuyến OpenAI) hay
+   * `stop_reason` (tuyến Anthropic) — chúng còn không có trong kiểu. Nên một
+   * câu trả lời bị cắt GIỮA CÂU trông y hệt một câu trả lời hoàn chỉnh, và
+   * người dùng chỉ biết khi đọc tới chỗ cụt. Người dùng đã báo đúng triệu
+   * chứng đó ở Code Lab.
+   */
+  biCat?: boolean;
 }
 export type LLMStep = 'interview' | 'report' | 'generation';
 
@@ -143,13 +166,17 @@ const anthropicProvider: LLMProvider = {
 
       const json = (await res.json()) as {
         content?: Array<{ type: string; text?: string }>;
+        stop_reason?: string;
         usage?: { input_tokens?: number; output_tokens?: number; cache_creation_input_tokens?: number; cache_read_input_tokens?: number };
       };
       // Only text blocks (ignore thinking blocks a gateway may return).
       const text = (json.content ?? []).filter((b) => b.type === 'text').map((b) => b.text ?? '').join('');
       const u = json.usage ?? {};
       const inputTokens = (u.input_tokens ?? 0) + (u.cache_creation_input_tokens ?? 0) + (u.cache_read_input_tokens ?? 0);
-      return { text, inputTokens, outputTokens: u.output_tokens ?? 0, model };
+      return {
+        text, inputTokens, outputTokens: u.output_tokens ?? 0, model,
+        biCat: laCat(json.stop_reason),
+      };
     } catch (e) {
       if ((e as Error).name === 'AbortError') throw new LLMError('LLM timeout', true);
       throw e;
@@ -215,12 +242,15 @@ const openAiCompatProvider: LLMProvider = {
       }
 
       const json = (await res.json()) as {
-        choices?: Array<{ message?: { content?: string } }>;
+        choices?: Array<{ message?: { content?: string }; finish_reason?: string }>;
         usage?: { prompt_tokens?: number; completion_tokens?: number };
       };
       const text = json.choices?.[0]?.message?.content ?? '';
       const u = json.usage ?? {};
-      return { text, inputTokens: u.prompt_tokens ?? 0, outputTokens: u.completion_tokens ?? 0, model };
+      return {
+        text, inputTokens: u.prompt_tokens ?? 0, outputTokens: u.completion_tokens ?? 0, model,
+        biCat: laCat(json.choices?.[0]?.finish_reason),
+      };
     } catch (e) {
       if ((e as Error).name === 'AbortError') throw new LLMError('LLM timeout', true);
       throw e;
@@ -253,6 +283,7 @@ async function readOpenAiStream(
   let text = '';
   let inputTokens = 0;
   let outputTokens = 0;
+  let biCat = false;
 
   for (;;) {
     const { done, value } = await reader.read();
@@ -268,7 +299,7 @@ async function readOpenAiStream(
         const payload = line.slice(5).trim();
         if (!payload || payload === '[DONE]') continue;
         let evt: {
-          choices?: Array<{ delta?: { content?: string } }>;
+          choices?: Array<{ delta?: { content?: string }; finish_reason?: string }>;
           usage?: { prompt_tokens?: number; completion_tokens?: number };
           error?: { message?: string };
         };
@@ -280,6 +311,9 @@ async function readOpenAiStream(
         if (evt.error) throw new LLMError(`openai_compat stream error: ${evt.error.message ?? 'unknown'}`, true);
         const delta = evt.choices?.[0]?.delta?.content;
         if (delta) { text += delta; onToken?.(delta); }
+        // Mẩu CUỐI mang `finish_reason`. 'length' = model bị cắt vì chạm trần,
+        // không phải nó nói xong — đọc ở đây mới phân biệt được hai thứ đó.
+        if (evt.choices?.[0]?.finish_reason) biCat = laCat(evt.choices[0].finish_reason);
         if (evt.usage) {
           inputTokens = evt.usage.prompt_tokens ?? inputTokens;
           outputTokens = evt.usage.completion_tokens ?? outputTokens;
@@ -289,7 +323,7 @@ async function readOpenAiStream(
   }
 
   if (!text.trim()) throw new LLMError('openai_compat stream produced no text', true);
-  return { text, inputTokens, outputTokens, model };
+  return { text, inputTokens, outputTokens, model, biCat };
 }
 
 
@@ -318,6 +352,7 @@ async function readStream(
   let text = '';
   let inputTokens = 0;
   let outputTokens = 0;
+  let biCat = false;
 
   for (;;) {
     const { done, value } = await reader.read();
@@ -337,7 +372,7 @@ async function readStream(
         if (!payload || payload === '[DONE]') continue;
         let evt: {
           type?: string;
-          delta?: { type?: string; text?: string };
+          delta?: { type?: string; text?: string; stop_reason?: string };
           message?: { usage?: { input_tokens?: number; cache_creation_input_tokens?: number; cache_read_input_tokens?: number } };
           usage?: { output_tokens?: number };
           error?: { message?: string };
@@ -358,13 +393,14 @@ async function readStream(
           inputTokens = (u.input_tokens ?? 0) + (u.cache_creation_input_tokens ?? 0) + (u.cache_read_input_tokens ?? 0);
         } else if (evt.type === 'message_delta') {
           outputTokens = evt.usage?.output_tokens ?? outputTokens;
+          if (evt.delta?.stop_reason) biCat = laCat(evt.delta.stop_reason);
         }
       }
     }
   }
 
   if (!text.trim()) throw new LLMError('anthropic stream produced no text', true);
-  return { text, inputTokens, outputTokens, model };
+  return { text, inputTokens, outputTokens, model, biCat };
 }
 
 /**
@@ -695,6 +731,17 @@ export async function llmComplete(opts: {
           : ep.giaoThuc === 'anthropic' ? anthropicProvider : getProvider();
         const result = await provider.complete(model, opts.system, opts.messages, { maxTokens: opts.maxTokens, timeoutMs: opts.timeoutMs, ep, onToken: opts.onToken });
         if (ep.label === 'cong-agent') baoRamboOk();
+        /* Chạm trần độ dài — ghi WARN để CÒN LẦN RA ĐƯỢC. Trước đây không chỗ
+           nào đọc `finish_reason`, nên một câu trả lời cụt giữa chừng trông y
+           hệt câu trả lời xong, và log cũng sạch bong. Không ném lỗi: phần đã
+           sinh ra vẫn dùng được, chỉ là thiếu đuôi. */
+        if (result.biCat) {
+          console.warn(
+            `[llm] BI CAT vi cham maxTokens=${opts.maxTokens ?? '?'} `
+            + `· purpose=${purpose} · feature=${opts.feature ?? 'khong ro'} · model=${model} `
+            + `· ra ${result.outputTokens} token`,
+          );
+        }
         recordSuccess(opts.feature);
         await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, feature: opts.feature, step: opts.step, model, inputTokens: result.inputTokens, outputTokens: result.outputTokens, success: true }).catch(() => {});
         return result;

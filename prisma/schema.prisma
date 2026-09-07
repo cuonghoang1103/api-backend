@@ -162,6 +162,7 @@ model User {
   classSchedules          ClassSchedule[]
   classAttendances        ClassAttendance[]
   lessonTutorAsks         LessonTutorAsk[]
+  codeExerciseTutorAsks   CodeExerciseTutorAsk[]
   hocKy                   HocKy[]
   lichThi                 LichThi[]
 
@@ -7691,10 +7692,11 @@ model CodeExercise {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  module   CodeModule     @relation(fields: [moduleId], references: [id], onDelete: Cascade)
-  track    CodeTrack      @relation(fields: [trackId], references: [id], onDelete: Cascade)
-  author   User?          @relation(fields: [authorId], references: [id], onDelete: SetNull)
-  progress CodeProgress[]
+  module    CodeModule             @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  track     CodeTrack              @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  author    User?                  @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  progress  CodeProgress[]
+  tutorAsks CodeExerciseTutorAsk[]
 
   @@index([moduleId, sortOrder], name: "idx_code_exercise_module_order")
   @@index([trackId], name: "idx_code_exercise_track")
@@ -7703,6 +7705,31 @@ model CodeExercise {
   @@index([language], name: "idx_code_exercise_language")
   @@index([slug], name: "idx_code_exercise_slug")
   @@map("code_exercises")
+}
+
+/// Một lượt hỏi gia sư AI của một bài Code Lab, LƯU LẠI để người sau đọc được.
+///
+/// Cùng hợp đồng với `LessonTutorAsk` (bên Academy) và cố ý là BẢNG RIÊNG chứ
+/// không nhét chung một bảng đa hình: hai bên trỏ vào hai bảng cha khác nhau,
+/// và một khoá ngoại thật bắt được dữ liệu mồ côi mà cột `kind` + `refId` thì
+/// không. Cái giá là một bảng nữa; cái được là DB tự canh toàn vẹn.
+model CodeExerciseTutorAsk {
+  id         Int @id @default(autoincrement())
+  exerciseId Int @map("exercise_id")
+  userId     Int @map("user_id")
+
+  /// Nguyên văn, KHÔNG cắt ở bất cứ đâu.
+  question String @db.Text
+  answer   String @db.Text
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  exercise CodeExercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([exerciseId, createdAt], map: "idx_code_ex_tutor_ask_ex")
+  @@index([userId], map: "idx_code_ex_tutor_ask_user")
+  @@map("code_exercise_tutor_asks")
 }
 
 // ─── Per-user practice progress (one row per user+exercise) ──────

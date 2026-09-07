@@ -26,7 +26,8 @@
 import { Router, type Request, type Response } from 'express';
 import multer from 'multer';
 import { authenticate, optionalAuth, requireRole } from '../middleware/auth.js';
-import { BadRequestError } from '../middleware/errorHandler.js';
+import { BadRequestError, AppError } from '../middleware/errorHandler.js';
+import { prisma } from '../config/database.js';
 import type { ApiResponse } from '../types/index.js';
 import * as codeLab from '../services/codeLab.service.js';
 import * as explainService from '../services/codeLab.explain.service.js';
@@ -187,6 +188,82 @@ router.post('/exercises/:id(\\d+)/ai/ask', authenticate, async (req, res: Respon
       history: Array.isArray(req.body?.history) ? req.body.history : [],
     });
     res.json({ success: true, data: out });
+    /* Lưu SAU khi đã trả lời: ghi DB không được nằm giữa người dùng và câu
+       trả lời. Lưu ở MÁY CHỦ chứ không để client gọi thêm một route — web và
+       app desktop dùng chung component nhưng đi hai đường mạng khác nhau. */
+    await luuLuotHoiCodeLab(
+      Number(req.params.id), req.user!.userId,
+      String(req.body?.question || ''), out.answer,
+    );
+  } catch (e) { next(e); }
+});
+
+/**
+ * Lưu một lượt hỏi gia sư Code Lab. KHÔNG cắt chữ (cột `TEXT`).
+ * Ghi hỏng thì nuốt lỗi — người dùng đã có câu trả lời trên màn hình rồi.
+ */
+async function luuLuotHoiCodeLab(
+  exerciseId: number, userId: number, question: string, answer: string,
+): Promise<void> {
+  const q = question.trim();
+  const a = (answer ?? '').trim();
+  if (!q || !a) return;
+  try {
+    await prisma.codeExerciseTutorAsk.create({ data: { exerciseId, userId, question: q, answer: a } });
+  } catch { /* xem chú thích trên */ }
+}
+
+// ─── GET /api/v1/code-lab/exercises/:id/ai/asks ───────────────────
+// "Câu hỏi thường gặp" của một bài: mọi người hỏi gì, AI trả lời ra sao.
+// CHUNG cho mọi người học — người thứ hai gặp đúng chỗ khó đọc được câu trả
+// lời sẵn thay vì tốn thêm một lượt gọi model. KHÔNG chặn theo Pro.
+router.get('/exercises/:id(\\d+)/ai/asks', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const rows = await prisma.codeExerciseTutorAsk.findMany({
+      where: { exerciseId: Number(req.params.id) },
+      orderBy: { createdAt: 'desc' },
+      take: 40, // đủ đọc mà không biến một lời gọi thành vài trăm KB
+      select: {
+        id: true, question: true, answer: true, createdAt: true, userId: true,
+        user: { select: { username: true, displayName: true, avatarUrl: true } },
+      },
+    });
+    res.json({
+      success: true,
+      data: {
+        items: rows.map((r) => ({
+          id: r.id,
+          question: r.question,
+          answer: r.answer,           // NGUYÊN VĂN
+          lang: 'vi',
+          createdAt: r.createdAt,
+          nguoiHoi: r.user?.displayName || r.user?.username || 'Người học',
+          avatar: r.user?.avatarUrl ?? null,
+          cuaToi: r.userId === req.user!.userId,
+        })),
+      },
+    });
+  } catch (e) { next(e); }
+});
+
+// ─── DELETE /api/v1/code-lab/exercises/:id/ai/asks/:askId ─────────
+// Chỉ người hỏi hoặc admin — mục này công khai.
+router.delete('/exercises/:id(\\d+)/ai/asks/:askId(\\d+)', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const askId = Number(req.params.askId);
+    const cu = await prisma.codeExerciseTutorAsk.findUnique({ where: { id: askId }, select: { userId: true } });
+    if (!cu) throw new AppError('Không tìm thấy câu hỏi', 404, 'NOT_FOUND');
+
+    const laAdmin = (await prisma.user.findUnique({
+      where: { id: req.user!.userId },
+      select: { roles: { select: { role: { select: { name: true } } } } },
+    }))?.roles.some((r) => r.role.name.replace(/^ROLE_/, '').toUpperCase() === 'ADMIN') ?? false;
+
+    if (cu.userId !== req.user!.userId && !laAdmin) {
+      throw new AppError('Chỉ người hỏi hoặc admin mới xoá được', 403, 'FORBIDDEN');
+    }
+    await prisma.codeExerciseTutorAsk.delete({ where: { id: askId } });
+    res.json({ success: true, data: { deleted: askId } });
   } catch (e) { next(e); }
 });
 

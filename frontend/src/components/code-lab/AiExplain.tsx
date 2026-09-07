@@ -14,6 +14,7 @@ import type { DocBlock, DocLang } from '@/types/exp-hub';
 import { hasVietnamese } from '@/types/exp-hub';
 import { DocBlocksView } from '@/components/exp-hub/DocBlocksView';
 import { codeLabApi } from '@/lib/code-lab-api';
+import FaqGiaSu from '@/components/academy/FaqGiaSu';
 import { useAuthStore } from '@/store/authStore';
 import { usePro } from '@/hooks/usePro';
 // Render câu trả lời AI như AI Chat chính: markdown + toán KaTeX + code + SVG.
@@ -249,6 +250,12 @@ export function AiExplain({ exerciseId }: { exerciseId: number }) {
                   <Crown size={14} /> Upgrade to Pro to ask follow-up questions
                 </Link>
               )}
+
+              {/* Câu hỏi mọi người đã hỏi ở bài này — NGOÀI cổng Pro, cùng
+                  component với gia sư Academy (`FaqGiaSu.tsx`). Người chưa Pro
+                  không hỏi được nhưng đọc được câu đã có sẵn, và đó mới là
+                  chỗ tiết kiệm: không phải gọi model lại cho câu đã trả lời. */}
+              <FaqGiaSu duong={`/code-lab/exercises/${exerciseId}/ai/asks`} khoaDoiBai={exerciseId} />
             </div>
           </>
         )}

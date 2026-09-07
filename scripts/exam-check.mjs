@@ -40,6 +40,11 @@ let errors = 0;
 let warnings = 0;
 const err = (msg) => { errors++; console.error('  ✗ ' + msg); };
 const warn = (msg) => { warnings++; console.warn('  ⚠ ' + msg); };
+// Thông tin, KHÔNG phải vấn đề: không tăng lỗi lẫn cảnh báo. Dùng cho những
+// thứ bộ kiểm cố ý không kiểm (xem nhánh ngôn ngữ không chạy được bên dưới) —
+// đếm chúng là cảnh báo thì file sạch không bao giờ "xanh", và người sau sẽ
+// học cách phớt lờ cảnh báo, đúng thứ làm hỏng mọi bộ kiểm.
+const note = (msg) => { console.log('  ℹ ' + msg); };
 
 /** Chuỗi song ngữ dạng ống phải có đúng hai nửa, không nửa nào rỗng. */
 function checkBilingual(label, s) {
@@ -185,6 +190,23 @@ async function checkFile(file) {
         else q.rubric.forEach((c, ci) => checkBilingual(`${at}.rubric ${ci + 1}`, c.criterion));
         if (/\bTODO\b/.test(q.sampleSolution ?? '')) err(`${at}: đáp án mẫu còn TODO`);
         if (!q.sampleSolution || !q.expectedOutput) continue;
+
+        // ⚠️ NGÔN NGỮ BỘ KIỂM KHÔNG CHẠY ĐƯỢC ⇒ BỎ QUA, KHÔNG BÁO LỖI.
+        //
+        // Bộ kiểm chỉ có node và bash. Với SQL thì nó đưa lời giải cho node và
+        // nhận `SyntaxError`, rồi in "đáp án mẫu KHÔNG CHẠY ĐƯỢC" — nghe y như
+        // đề hỏng, trong khi đề hoàn toàn đúng. Đo thật 08/09/2026 ở
+        // POSTGRESQL-PE: 5/5 câu báo lỗi, mà chạy trên Postgres thật thì 5/5
+        // khớp `expectedOutput` từng byte.
+        //
+        // Chạy SQL ở đây được thì tốt, nhưng nó đòi một máy chủ sống ⇒ bộ kiểm
+        // hết tự chứa và sẽ đỏ trên mọi máy không có DB. Nên nói thẳng là KHÔNG
+        // KIỂM, thay vì báo một lỗi sai. Mọi phép kiểm cấu trúc phía trên vẫn chạy.
+        const KHONG_CHAY_DUOC = new Set(['sql', 'postgresql', 'plpgsql']);
+        if (KHONG_CHAY_DUOC.has(String(q.language ?? '').toLowerCase())) {
+          note(`${at}: ngôn ngữ "${q.language}" — bộ kiểm không chạy được, CHỈ kiểm cấu trúc (lời giải phải tự kiểm trên máy chủ thật)`);
+          continue;
+        }
 
         // Hai khuôn câu lập trình: PT/FE có starterCode (ghép lời giải vào giữa),
         // PE thì lời giải là một chương trình trọn vẹn đọc stdin.

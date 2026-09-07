@@ -43,6 +43,8 @@ if (!fs.existsSync(path.join(thuMuc, 'bo-cuc/trang-thu.html'))) {
    "hẹp ở giữa". Bộ đo cũ dừng ở 1440 nên nó KHÔNG BAO GIỜ thấy được vấn đề đó —
    nó chỉ hỏi "có tràn khi hẹp không", không hỏi "có phí chỗ khi rộng không". */
 const BE_RONG = [1920, 1440, 1180, 1000, 860];
+/** Cao khung nhìn dùng cho mọi trang — chốt "lớp phủ có nằm trong tầm nhìn không" đo theo nó. */
+const innerHeightGia = 900;
 
 /** Bản sao `mocPhamVi` của app, theo giờ MÁY. */
 function mocPhamViThu(s, ref = new Date()) {
@@ -540,6 +542,48 @@ const CHUAN_BI = {
     '/finance', '/forum', '/saved', '/profile',
     '/projects/search', '/finance/debts/calendar',
   ].map((d) => [d, choNoiDung])),
+  /* Nút "Xem toàn màn hình" chỉ tồn tại khi CÓ bài đang phát, nên bộ đo nhìn
+     trang lúc tĩnh không bao giờ chạm tới nó. Bấm một bài rồi bấm nút, và
+     kiểm xem lớp phủ có thật sự hiện ra không. */
+  '/music': async (p) => {
+    await p.click('.ct-trk-art', { timeout: 3000 }).catch(() => {});
+    await p.waitForTimeout(700);
+
+    /* Màn "Đang phát toàn cảnh" PHẢI là một lớp phủ `fixed` nằm trong khung
+       nhìn. 07/09/2026 nó im lặng hỏng: `.ct-music > *:not(.ct-canh)
+       { position: relative }` (thêm sau, nên đè) biến nó thành khối trong
+       luồng, tụt 1231px xuống dưới màn hình. Lớp phủ VẪN dựng ra, vẫn
+       `visible`, vẫn `opacity: 1` — chỉ là không ai nhìn thấy. Nút trông
+       như chết mà không có lỗi nào để lần.
+       Nút chỉ tồn tại khi CÓ bài đang phát, nên phải bấm một bài trước. */
+    const nut = await p.$('.ct-np-mo');
+    if (nut) {
+      await nut.click().catch(() => {});
+      await p.waitForTimeout(500);
+      const tmh = await p.evaluate(() => {
+        const e = document.querySelector('.ct-nowfull');
+        if (!e) return { co: false };
+        const r = e.getBoundingClientRect();
+        return { co: true, position: getComputedStyle(e).position, top: Math.round(r.top) };
+      });
+      if (!tmh.co || tmh.position !== 'fixed' || tmh.top > innerHeightGia) {
+        throw new Error(
+          `Màn "Xem toàn màn hình" không phủ được: ${JSON.stringify(tmh)}. `
+          + 'Kiểm quy tắc `.ct-music > *` có đè `position: fixed` không.',
+        );
+      }
+      await p.keyboard.press('Escape').catch(() => {});
+      await p.click('.ct-nowfull-back', { timeout: 1500 }).catch(() => {});
+      await p.waitForTimeout(300);
+    }
+
+    /* Máy chủ giả không có tiếng thật nên cú bấm phát ở trên luôn đẻ ra thẻ
+       "Không phát được…". Đó là hệ quả của PHÉP ĐO, không phải lỗi của trang —
+       để nguyên thì chốt "trang không được hiện thẻ lỗi" đỏ mãi, và một phép
+       kiểm đỏ triền miên là phép kiểm không ai đọc nữa. Dọn nó đi. */
+    await p.click('.ct-notice[data-tone="err"] button', { timeout: 1500 }).catch(() => {});
+    await p.waitForTimeout(250);
+  },
   '/chat': async (p) => {
     // Bật chế độ Lập trình rồi mở thêm tab: đây đúng là thao tác người dùng
     // làm khi họ báo lỗi ("tôi ấn tạo task mới thì nó lại bị").

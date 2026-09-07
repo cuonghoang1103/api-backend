@@ -671,6 +671,11 @@ function DongBai({
 
       <span className="ct-trk-time">{clock(track.durationSeconds)}</span>
 
+      {/* HAI nút trong MỘT ô lưới. `.ct-trk` khai 6 cột; để nút xoá-hẳn thành
+          con thứ 7 thì lưới đẩy nó xuống DÒNG MỚI ở cột 1 — nó hiện ra dưới
+          bên trái mỗi bài và độn thêm cả một hàng chiều cao, làm danh sách
+          trông thưa thếch. */}
+      <span className="ct-trk-nut">
       {chuaRutAmThanh ? (
         <button
           type="button"
@@ -719,6 +724,7 @@ function DongBai({
           <X size={15} aria-hidden />
         </button>
       )}
+      </span>
     </li>
   );
 }

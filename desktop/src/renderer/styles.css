@@ -1853,6 +1853,11 @@ code {
   transition: background var(--ct-motion-fast) var(--ct-ease);
 }
 .ct-trk:hover { background: var(--ct-hover); }
+
+/* Cụm nút bên phải — MỘT ô lưới chứa cả hai nút, không phải hai con riêng.
+   Xem chú thích ở `MusicPage.tsx`: con thứ 7 trong lưới 6 cột rơi xuống dòng
+   mới. Nút xoá-hẳn nằm NGAY SAU thùng rác, đúng chỗ người dùng đi tìm nó. */
+.ct-trk-nut { display: inline-flex; align-items: center; gap: 2px; }
 .ct-trk[data-current='true'] { background: var(--ct-active); }
 .ct-trk[data-current='true'] .ct-trk-title { color: var(--ct-accent-text); }
 
@@ -9780,11 +9785,23 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
    ────────────────────────────────────────────────────────── */
 
 .ct-music { position: relative; }
-.ct-music > *:not(.ct-canh) { position: relative; z-index: 1; }
+/* Cảnh đêm nằm SAU bằng `z-index: -1`, KHÔNG bằng cách nâng mọi đứa con lên.
+   Bản trước làm `.ct-music > *:not(.ct-canh) { position: relative; z-index: 1 }`
+   — và vì nó nằm sau trong tệp, nó ĐÈ luôn `position: fixed` của màn Đang phát
+   toàn cảnh (`.ct-nowfull`). Kết quả: bấm "Xem toàn màn hình" thì lớp phủ vẫn
+   dựng ra nhưng nằm TRONG LUỒNG, tụt 1231px xuống dưới màn hình — nhìn y như
+   nút chết. Không có lỗi nào, không có gì để thấy.
+
+   Đây là lần THỨ HAI cùng một lỗi trong một phiên (lần đầu: `z-index: 1` cho
+   mọi con của `.ct-tq` vẽ đè lên bảng chọn giờ). Bài học: một quy tắc chặn đầu
+   `> *` áp cho MỌI đứa con là cái bẫy đặt sẵn cho mọi thành phần thêm về sau.
+   `isolation` giữ `z-index: -1` không tụt ra sau nền trang. */
+.ct-music { isolation: isolate; }
 
 .ct-canh {
   position: absolute;
   inset: 0 0 auto 0;
+  z-index: -1;
   /* 300px là QUÁ CAO — đo bằng ảnh chụp: cảnh trùm lên cả tiêu đề, hàng nút và
      thẻ playlist, biến nội dung thành thứ chồng lên một bức tranh. 210px thì nó
      dừng ngay dưới hàng nút và làm đúng việc của một cái nền. */

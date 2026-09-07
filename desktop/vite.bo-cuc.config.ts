@@ -74,7 +74,12 @@ function gia() {
           const API = { request: (d, o) => window.__giaApi(d, o),
                         baseUrlForForms: () => '', authHeaders: () => ({}),
                         getToken: () => 'gia', setToken: () => {} };
-          const NGUOI = { id: 1, username: 'thu', displayName: 'Người thử', isPro: true, role: 'USER' };
+          /* ADMIN chứ không USER: nút chỉ-admin là đường KHÔNG BAO GIỜ được đo
+             nếu người thử là thường dân. 07/09/2026 nút "xoá hẳn" của trang
+             nhạc rơi xuống DÒNG MỚI trong lưới 6 cột suốt nhiều bản mà bộ đo
+             không thấy gì, vì nó chưa từng được dựng ra. */
+          const NGUOI = { id: 1, username: 'thu', displayName: 'Người thử', isPro: true,
+                          role: 'ADMIN', roles: ['ADMIN'] };
           const PHIEN = { userId: 1, api: API, user: NGUOI, phase: 'ready',
                           dangNhap: async () => {}, dangXuat: async () => {} };
           export function useSession() { return PHIEN; }

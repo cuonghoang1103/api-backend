@@ -2063,6 +2063,113 @@ nhỏ hơn hẳn ba đợt vừa rồi.
 
 ---
 
+# 0s. GỘP INSTANCE CHO TÀU SÂN BAY — 04/09/2026, và MỘT LỖI SUÝT LỌT
+
+**204 hậu duệ → 58.** Gộp 156 mesh vào 13 `InstancedMesh` (267 bản, gồm 3 cụm
+`carrier:*` vốn đã có).
+
+## ⚠️⚠️ LỖI ĐÁNG NHỚ NHẤT CẢ ĐỢT: `updateMatrixWorld` KHÔNG làm mới cha
+
+`mesh.updateMatrixWorld(true)` dựng lại từ CHÍNH NÓ XUỐNG con cháu. Lên trên
+nó **đọc thẳng `parent.matrixWorld` y nguyên, không làm mới**. Trong hàm dựng
+thì chưa khung hình nào chạy ⇒ `matrixWorld` của bảy nhóm máy bay vẫn là MA
+TRẬN ĐƠN VỊ ⇒ toàn bộ phép dời/xoay của nhóm bị mất.
+
+Đo thật: **93/156 bản văng khỏi thân tàu**, có cái rơi về z = +5 (giữa đảo
+chính), cách chỗ đúng gần 150 đơn vị.
+
+Sửa: **`this.group.updateMatrixWorld(true)` MỘT LẦN TỪ GỐC** trước khi đọc bất
+cứ ma trận nào. Sau đó không cần (và không nên) gọi lại từng mesh.
+
+`FptuCampus` và `PlayIsland` thoát nạn **NGẪU NHIÊN**: ở đó mọi mesh gộp đều là
+con trực tiếp của một `group` nằm ở gốc toạ độ, nên ma trận đơn vị tình cờ
+đúng. Đã thêm cùng dòng đó vào `PlayIsland` — đúng do luật, không do may.
+
+### Và phép kiểm ma trận ĐÃ NÓI DỐI
+
+Nó báo "156/156 khớp, lệch 7,3e−6" trong lúc 93 bản đang nằm sai chỗ — vì nó so
+instance với **đúng cái `matrixWorld` hỏng mà instance vừa chép ra**. Tự khớp
+với chính nó.
+
+⚠️ Và cách sửa hiển nhiên cũng sai: gọi `src.updateMatrixWorld(true)` trong
+phép kiểm thì mesh đã RỜI cây cảnh (`parent === null`) nên three.js đặt
+`matrixWorld = matrix` CỤC BỘ — lệch vọt lên 185,98. Hai lần liền phép kiểm nói
+sai theo hai hướng ngược nhau.
+
+### Phép kiểm ĐÚNG: so DANH SÁCH VỊ TRÍ THẾ GIỚI
+
+Bỏ hẳn lối so ma trận. Chạy `tools/`-kiểu probe trên **bản cũ** và **bản gộp**,
+mỗi bên đổ ra vị trí thế giới của mọi phần nhìn thấy được (bung từng bản của
+`InstancedMesh`), sắp xếp, rồi `diff` hai file:
+
+> **289 điểm cả hai bên. Đúng MỘT điểm lệch, lệch 0,01 ở Y** — biên làm tròn
+> của float32. 288 điểm còn lại trùng tới hai chữ số thập phân.
+
+Phép này không dính máy quay, không dính hoạt ảnh, không dính thời điểm, và
+KHÔNG thể tự khớp với chính nó. Đây mới là khuôn nên dùng cho mọi lần gộp sau.
+
+### Ảnh chụp mới là thứ phát hiện ra lỗi
+
+Không phải bộ kiểm. Chín bộ kiểm — `check-carrier` (kể cả phép bắn tia mặt
+boong), `check-perf`, `check-ghost-colliders`, `check-play-island`… — **đều báo
+0 lỗi trong lúc 93 mảnh nằm sai chỗ**, vì không bộ nào đo xem mấy chiếc máy bay
+đứng ở đâu. Chỉ nhìn ảnh mới thấy boong trống trơn.
+
+⚠️ Nhưng đừng dùng ảnh để KẾT LUẬN: máy quay bám xe mỗi lượt dừng một chỗ hơi
+khác (đo được lệch 1,6 đơn vị giữa hai lượt), và chỉ thế thôi đã đẩy sai khác
+lên 31,6% điểm ảnh. Ảnh để PHÁT HIỆN, danh sách vị trí để KẾT LUẬN.
+
+## ⚠️ ĐÍNH CHÍNH: con số `draw call` của `check-perf` KHÔNG so sánh được
+
+Đo thật, chạy `check-perf` **BA LẦN trên ĐÚNG MỘT bản dựng**:
+
+| lượt | mesh thường | draw call |
+|---|---|---|
+| 1 | 1508 | **307** |
+| 2 | 1508 | **315** |
+| 3 | 1508 | **281** |
+
+Mesh đếm ổn định tuyệt đối; draw call trải **34 đơn vị**. Lý do: nó đọc
+`renderer.info.render.drawCalls` của MỘT khung hình bất kỳ sau 8 giây, mà lúc
+đó máy quay còn đang trượt về chỗ đứng — mỗi lượt cắt frustum một kiểu.
+
+⇒ **Mọi con số "draw call giảm/tăng N" ở mục 0q và 0r là ĐỌC NHIỄU, không phải
+phép đo.** Cụ thể: 0q ghi "303 → 308 (+5)" và 0r ghi "308 → 291 (−17)" — cả hai
+nằm gọn trong khoảng nhiễu, không kết luận được gì. Chỉ dùng **số mesh** để so
+các đợt gộp; `drawCalls` chỉ để canh cái NGƯỠNG 360, việc mà nó vẫn làm tốt.
+
+## Ba khác biệt so với hai đợt trước
+
+**1. Gộp theo DANH SÁCH GỐC ĐƯỢC PHÉP, không theo "con trực tiếp".** Phần nặng
+nhất — 88 mesh của bảy máy bay — nằm trong bảy nhóm CON. Nhưng cũng đừng đổi
+thành `traverse()` toàn bộ: làm vậy là chui vào `radarMast` (chảo quay) và vào
+chính `carrier.glb`. Danh sách gốc = `this.group` + `this.planeGroups`.
+
+⚠️ `planeGroups` phải được GHI LẠI LÚC DỰNG (đã thêm vào `setPlanes()`). Dò
+theo hình dạng ("nhóm nào có 11–13 mesh hộp") thì `radarMast` cũng lọt.
+
+**2. `codeOnlyParts` TUYỆT ĐỐI không được gộp.** `applyModel()` tắt `visible`
+từng cái khi `carrier.glb` về, mà `InstancedMesh` không có cờ `visible` cho
+từng bản. Gộp trúng là thân tự dựng đâm xuyên model vĩnh viễn. Đây là cái bẫy
+riêng của con tàu — hai đảo kia không có gì tráo lúc chạy. Đã kiểm sau khi
+model về: **17/17 mảnh ẩn, 17/17 tắt va chạm, vệt gỉ đã giấu, boong 9/9 điểm
+vẫn ở 3,60**.
+
+**3. Không chặn `PlaneGeometry`.** Hai đợt trước chặn vì đó là mảng địa hình.
+Tàu không có địa hình; `PlaneGeometry` ở đây chỉ là khói và vệt sóng bạc, vốn
+đã bị cửa `transparent` chặn rồi. Chép nguyên luật cũ sang là bắt chước chứ
+không phải hiểu.
+
+## Còn lại 33 mesh thường, tất cả có lý do
+
+17 `codeOnlyParts` · 5 đèn hàng hải (đổi `scale` mỗi khung) · 6 khói (đổi vị
+trí + tỉ lệ + quaternion) · 4 vệt sóng bạc (trong suốt) · 1 vật độc bản.
+
+Bảy nhóm máy bay giờ RỖNG nhưng vẫn nằm trong cây — 7 nút thừa, để nguyên cho
+`planeGroups` khỏi trỏ vào thứ đã gỡ.
+
+---
+
 # 1. MƯỜI BA BỘ KIỂM — CHẠY TRƯỚC KHI TIN BẤT CỨ THỨ GÌ
 
 Cần dev server sống: `cd playground-3d && npm run dev` (xem mục 4).

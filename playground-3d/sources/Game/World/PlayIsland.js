@@ -171,6 +171,16 @@ export class PlayIsland
         const keep = this.collectAnimated()
         const batches = new Map()
 
+        /**
+         * ⚠️ Cập nhật ma trận TỪ GỐC. Ở đây mọi mesh gộp đều là con trực tiếp
+         * của `group`, mà `group` nằm ở gốc toạ độ, nên bỏ dòng này vẫn đúng —
+         * nhưng đúng do MAY, không do luật. `mesh.updateMatrixWorld(true)` chỉ
+         * dựng lại từ chính nó xuống, còn lên trên thì đọc `parent.matrixWorld`
+         * y nguyên, chưa làm mới. Ở `Carrier` đúng chỗ này đã làm 93/156 bản
+         * văng khỏi thân tàu vì máy bay nằm trong nhóm CÓ phép dời/xoay.
+         */
+        this.group.updateMatrixWorld(true)
+
         for(const child of this.group.children)
         {
             if(!child.isMesh || child.isInstancedMesh)
@@ -234,7 +244,6 @@ export class PlayIsland
             for(let i = 0; i < batch.meshes.length; i++)
             {
                 const source = batch.meshes[i]
-                source.updateMatrixWorld(true)
 
                 mesh.setMatrixAt(i, source.matrixWorld)
 

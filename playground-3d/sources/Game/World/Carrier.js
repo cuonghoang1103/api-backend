@@ -123,6 +123,12 @@ export class Carrier
 
         this.buildInstances()
 
+        /**
+         * SAU `buildInstances()` — gộp trước thì mấy cụm `carrier:*` chưa tồn
+         * tại, mà sau thì chúng đã là `InstancedMesh` nên tự bị bỏ qua.
+         */
+        this.bakeStatic()
+
         this.tickCallback = () => this.update()
         this.game.ticker.events.on('tick', this.tickCallback, 12)
     }
@@ -582,12 +588,21 @@ export class Carrier
     {
         const { x, z, deckY } = CARRIER
 
+        /**
+         * Giữ danh sách nhóm máy bay. `bakeStatic()` cần biết ĐÍCH DANH nhóm
+         * nào được phép chui vào gộp — dò theo hình dạng ("nhóm nào có 11–13
+         * mesh hộp") thì `radarMast` cũng lọt, và gộp trúng nó là chảo radar
+         * đứng im vĩnh viễn.
+         */
+        this.planeGroups = []
+
         for(const [ dx, dz, angle, folded ] of CARRIER_PLANES)
         {
             const group = new THREE.Group()
             group.position.set(x + dx, deckY + 0.05, z + dz)
             group.rotation.y = angle
             this.group.add(group)
+            this.planeGroups.push(group)
 
             const part = (w, h, d, px, py, pz, hex, rotY = 0, rotZ = 0, geometry = null) =>
             {
@@ -797,6 +812,163 @@ export class Carrier
             foam.renderOrder = 3
             this.group.add(foam)
         }
+    }
+
+    /**
+     * Mesh KHÔNG được gộp. Bốn nhóm, mỗi nhóm một lý do khác hẳn nhau:
+     *
+     *  1. **`codeOnlyParts`** — `applyModel()` tắt `visible` từng cái khi
+     *     `carrier.glb` về. `InstancedMesh` KHÔNG có cờ `visible` cho từng bản,
+     *     nên gộp trúng là thân tự dựng đâm xuyên qua model vĩnh viễn. Đây là
+     *     cái bẫy riêng của con tàu: hai đảo kia không có gì tráo lúc chạy.
+     *  2. **`navLights`** — `update()` đổi `scale` mỗi khung hình (đèn nhấp).
+     *  3. **`smoke`** — `update()` đổi vị trí, tỉ lệ VÀ quaternion (luôn quay
+     *     mặt về máy quay).
+     *  4. **Chảo radar** — nằm trong `radarMast`, mà nhóm đó không có trong
+     *     danh sách gốc được duyệt, nên nó an toàn sẵn. Vẫn khai cho rõ ý.
+     *
+     * `foam` không cần khai: nó trong suốt nên cửa lọc vật liệu đã chặn.
+     */
+    collectAnimated()
+    {
+        const keep = new Set()
+        const add = (object) => { if(object?.isObject3D) object.traverse((child) => keep.add(child.uuid)) }
+
+        for(const mesh of this.codeOnlyParts ?? []) add(mesh)
+        for(const lamp of this.navLights ?? []) add(lamp.mesh)
+        for(const puff of this.smoke ?? []) add(puff.mesh)
+        add(this.radarMast)
+
+        return keep
+    }
+
+    /**
+     * GỘP INSTANCE cho phần tĩnh của tàu.
+     *
+     * ⚠️ Khác `FptuCampus`/`PlayIsland` ở MỘT điểm cốt tử: hai chỗ kia chỉ gộp
+     * **con trực tiếp** của `group`, còn ở đây phần nặng nhất — 88 mesh của bảy
+     * chiếc máy bay — nằm trong bảy nhóm CON. Chỉ quét con trực tiếp thì bỏ lỡ
+     * hơn nửa số mesh gộp được.
+     *
+     * Nên thay vì "con trực tiếp", luật là **DANH SÁCH GỐC ĐƯỢC PHÉP**:
+     * `this.group` và bảy nhóm máy bay. Đừng đổi thành `traverse()` toàn bộ —
+     * làm vậy sẽ chui vào `radarMast` (chảo quay) và vào chính `carrier.glb`
+     * (model ngoài, không được đụng tới).
+     *
+     * Ma trận lấy từ `matrixWorld` nên máy bay nằm trong nhóm xoay/dời vẫn ra
+     * đúng chỗ sau khi gộp; `InstancedMesh` treo thẳng vào `this.group`.
+     */
+    bakeStatic()
+    {
+        const keep = this.collectAnimated()
+        const batches = new Map()
+
+        /**
+         * ⚠️⚠️ CẬP NHẬT MA TRẬN TỪ GỐC, TRƯỚC KHI ĐỌC BẤT CỨ THỨ GÌ.
+         *
+         * `mesh.updateMatrixWorld(true)` chỉ dựng lại từ CHÍNH NÓ XUỐNG con
+         * cháu; lên trên nó **đọc thẳng `parent.matrixWorld` mà không làm mới**.
+         * Trong hàm dựng thì chưa có khung hình nào chạy, nên `matrixWorld` của
+         * bảy nhóm máy bay vẫn là MA TRẬN ĐƠN VỊ — và toàn bộ phép dời/xoay của
+         * nhóm bị mất.
+         *
+         * Đo thật khi chưa có dòng này: **93/156 bản văng ra khỏi thân tàu**,
+         * có cái rơi về tận z = +5 (giữa đảo chính), trong khi phép đối chiếu
+         * ma trận vẫn báo "156/156 khớp" — vì nó so instance với đúng cái
+         * `matrixWorld` hỏng đó. Tự nó khớp với chính nó.
+         *
+         * `FptuCampus` và `PlayIsland` thoát nạn NGẪU NHIÊN: ở đó mọi mesh gộp
+         * đều là con trực tiếp của một `group` nằm ở gốc toạ độ, nên ma trận
+         * đơn vị tình cờ đúng.
+         */
+        this.group.updateMatrixWorld(true)
+
+        const roots = [ this.group, ...(this.planeGroups ?? []) ]
+
+        for(const root of roots)
+        {
+            for(const child of root.children)
+            {
+                if(!child.isMesh || child.isInstancedMesh)
+                    continue
+
+                if(keep.has(child.uuid))
+                    continue
+
+                // Vật trong suốt phải được xếp theo chiều sâu từng cái; gộp lại
+                // là cả cụm dùng chung một thứ tự vẽ (khói, vệt sóng bạc).
+                if(child.material?.transparent || child.renderOrder !== 0)
+                    continue
+
+                const key = `${child.geometry.uuid}|${child.material.uuid}|${child.castShadow ? 1 : 0}${child.receiveShadow ? 1 : 0}`
+
+                let batch = batches.get(key)
+
+                if(!batch)
+                {
+                    batch = {
+                        geometry: child.geometry,
+                        material: child.material,
+                        castShadow: child.castShadow,
+                        receiveShadow: child.receiveShadow,
+                        meshes: [],
+                    }
+                    batches.set(key, batch)
+                }
+
+                batch.meshes.push(child)
+            }
+        }
+
+        this.staticBatches = new Map()
+
+        /**
+         * Mesh đã gộp RỜI cây cảnh nên không còn đường nào duyệt tới. Giữ danh
+         * sách để còn đối chiếu ma trận được — và để `applyModel()` về sau vẫn
+         * tìm lại được chúng nếu luật gộp có đổi.
+         */
+        this.bakedMeshes = []
+
+        let baked = 0
+
+        for(const [ key, batch ] of batches)
+        {
+            if(batch.meshes.length < 2)
+                continue
+
+            const mesh = new THREE.InstancedMesh(batch.geometry, batch.material, batch.meshes.length)
+            mesh.name = 'carrier:batch'
+            mesh.castShadow = batch.castShadow
+            mesh.receiveShadow = batch.receiveShadow
+
+            for(let i = 0; i < batch.meshes.length; i++)
+            {
+                // `matrixWorld` đã đúng nhờ lượt cập nhật từ gốc ở trên —
+                // gọi lại `source.updateMatrixWorld()` ở đây là VÔ ÍCH, vì nó
+                // vẫn đọc `parent.matrixWorld` chứ không dựng lại chuỗi cha.
+                const source = batch.meshes[i]
+
+                mesh.setMatrixAt(i, source.matrixWorld)
+
+                source.userData.instanceSlot = { key, index: i }
+                this.bakedMeshes.push(source)
+                baked++
+            }
+
+            mesh.instanceMatrix.needsUpdate = true
+            this.group.add(mesh)
+
+            this.staticBatches.set(key, { mesh })
+        }
+
+        // Gỡ SAU khi đã đọc xong mọi ma trận, và duyệt trên BẢN SAO mảng con —
+        // gỡ trong lúc duyệt chính mảng đó là bỏ sót một nửa.
+        for(const root of roots)
+            for(const child of [ ...root.children ])
+                if(child.userData?.instanceSlot)
+                    root.remove(child)
+
+        this.bakedCount = baked
     }
 
     /**

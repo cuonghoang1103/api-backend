@@ -5886,8 +5886,15 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 
 /* ── Dòng thời gian 24 giờ ── */
 .ct-tq-dong {
+  /* Một nguồn duy nhất cho chiều cao ô giờ: `.ct-tq-gio` và ô buổi học
+     (`.ct-tq-hoc`, nằm ĐÈ lên cùng hàng) đều đo theo biến này. */
+  --ct-gio-cao: 34px;
   display: grid;
-  grid-template-columns: repeat(24, 1fr);
+  /* `minmax(0, 1fr)` chứ không `1fr`: cỡ nhỏ nhất tự động của một ô lưới là
+     theo NỘI DUNG, nên ô buổi học trải 3 cột kéo giãn đúng 3 cột đó và bóp
+     những cột còn lại — đo thật 07/09/2026: nhãn giờ 18 và 21 dồn vào nhau
+     thành "1821" ở mép phải. */
+  grid-template-columns: repeat(24, minmax(0, 1fr));
   gap: 3px;
   padding: 13px;
   border: 1px solid var(--ct-border);
@@ -5896,7 +5903,7 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 }
 .ct-tq-gio {
   position: relative;
-  height: 34px;
+  height: var(--ct-gio-cao);
   border-radius: 5px;
   background: var(--ct-hover);
   transition: background var(--ct-motion) var(--ct-ease);
@@ -5911,42 +5918,47 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   position: absolute; bottom: -16px; left: 0;
   font-size: 9px; color: var(--ct-text-faint);
 }
-.ct-tq-dong { padding-bottom: 30px; row-gap: 5px; }
+.ct-tq-dong { padding-bottom: 30px; }
 
-/* ── Buổi học trên dải 24 giờ ──────────────────────────────
-   Nằm trên chính lưới 24 cột, nên mép ô khớp tuyệt đối với cột giờ — không
-   phải một lớp phủ tính bằng phần trăm rồi lệch dần theo `gap`.
-   `pointer-events: none` vì dải này còn để BẤM và KÉO đặt hoạt động: ô học
-   che mất giờ nào thì giờ đó không đặt được nữa, mà buổi học đã chiếm sẵn
-   khung giờ đẹp nhất trong ngày. */
+/* ── Buổi học TRONG ô giờ ──────────────────────────────────
+   Nằm trên chính lưới 24 cột và cùng HÀNG với ô giờ, nên nó tô màu vào đúng
+   những ô giờ nó chiếm thay vì chiếm thêm một tầng riêng phía trên (bản đầu
+   làm thế, và nhìn ra hai tầng rườm rà).
+
+   Nền chỉ có màu TRONG SUỐT một phần, không có lớp đục bên dưới: hoạt động
+   người dùng tự đặt cho giờ đó vẫn nhìn thấy xuyên qua. `pointer-events: none`
+   để vẫn bấm và kéo đặt hoạt động ở những giờ nằm dưới — buổi học đã chiếm
+   sẵn khung giờ đẹp nhất trong ngày. */
 .ct-tq-hoc {
   pointer-events: none;
   overflow: hidden;
+  align-self: start;
+  height: calc(var(--ct-gio-cao) / var(--so-lan, 1));
+  margin-top: calc(var(--ct-gio-cao) * var(--lan, 0) / var(--so-lan, 1));
   display: flex;
-  align-items: baseline;
-  gap: 6px;
+  align-items: center;
+  justify-content: center;
   min-width: 0;
-  padding: 3px 7px;
+  padding: 0 4px;
   border-radius: 5px;
-  border: 1px solid color-mix(in srgb, var(--mau, var(--ct-accent)) 55%, transparent);
-  background:
-    linear-gradient(135deg,
-      color-mix(in srgb, var(--mau, var(--ct-accent)) 34%, transparent),
-      color-mix(in srgb, var(--mau, var(--ct-accent)) 15%, transparent)),
-    var(--ct-surface);
-  white-space: nowrap;
+  border: 1px solid color-mix(in srgb, var(--mau, var(--ct-accent)) 75%, transparent);
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--mau, var(--ct-accent)) 46%, transparent),
+    color-mix(in srgb, var(--mau, var(--ct-accent)) 24%, transparent));
 }
+
+/* Chỉ MÃ MÔN, không kèm giờ: ô rộng bằng đúng số giờ buổi học chiếm, mà một
+   buổi 2 tiếng chỉ có ~90px — nhét thêm "10:00–12:20" vào là cả hai thứ cùng
+   bị cắt. Giờ đã đọc được ở chính vị trí ô trên dải, và ở tooltip. */
 .ct-tq-hoc b {
-  font-size: 11px;
-  font-weight: 700;
-  color: color-mix(in srgb, var(--mau, var(--ct-accent)) 60%, var(--ct-text));
-}
-/* Giờ là thứ nhường chỗ khi ô hẹp — tên môn phải sống sót tới cùng. */
-.ct-tq-hoc span {
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 9.5px;
-  color: var(--ct-text-muted);
+  white-space: nowrap;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: color-mix(in srgb, var(--mau, var(--ct-accent)) 45%, var(--ct-text));
+  text-shadow: 0 1px 2px rgb(0 0 0 / 45%);
 }
 
 /* ── Đi nhanh ── */

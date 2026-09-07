@@ -536,25 +536,6 @@ export function DashboardPage() {
         <section className="ct-tq-khoi">
           <div className="ct-tq-khoi-dau"><h2>Một ngày của bạn</h2></div>
           <div className="ct-tq-dong">
-            {/* Buổi học của HÔM NAY, nằm trên chính lưới 24 cột đó — cùng màu
-                với bảng lịch phía trên, để hai khối nói cùng một thứ tiếng.
-                `pointer-events: none` để vẫn bấm/kéo đặt hoạt động được ở
-                những giờ nằm dưới. */}
-            {oHoc.map((x) => (
-              <div
-                key={x.buoi.id}
-                className="ct-tq-hoc"
-                style={{
-                  gridColumn: `${x.tu + 1} / span ${x.den - x.tu}`,
-                  gridRow: x.lan + 1,
-                  '--mau': mauMon(x.buoi.subject, x.buoi.color),
-                } as React.CSSProperties}
-                title={`${x.buoi.subject}${x.buoi.room ? ` · ${x.buoi.room}` : ''} · ${x.buoi.startTime}–${x.buoi.endTime}`}
-              >
-                <b>{x.buoi.classCode || x.buoi.subject}</b>
-                <span>{x.buoi.startTime}–{x.buoi.endTime}</span>
-              </div>
-            ))}
             {du.timeline.map((s) => {
               const h = s.activity ? THEO_KHOA.get(s.activity.type as never) : null;
               return (
@@ -562,7 +543,12 @@ export function DashboardPage() {
                   key={s.hour}
                   type="button"
                   className="ct-tq-gio"
-                  style={{ ...(h ? { background: h.mau } : {}), gridRow: soLan + 1 }}
+                  /* Cột CHỈ ĐỊNH TƯỜNG MINH, không để lưới tự xếp. Ô buổi
+                     học nằm cùng hàng 1 và có vị trí xác định nên được đặt
+                     TRƯỚC; 24 ô giờ tự xếp sau sẽ NHẢY QUA những cột đã bị
+                     chiếm và tràn ra cột ẩn — đo thật: lưới thành 30 cột, 6 ô
+                     giờ cuối rộng 0px, nhãn "18" và "21" chồng lên nhau. */
+                  style={{ ...(h ? { background: h.mau } : {}), gridRow: 1, gridColumn: s.hour + 1 }}
                   data-co={!!s.activity}
                   data-qua={s.hour < gio}
                   data-nay={s.hour === gio}
@@ -585,6 +571,37 @@ export function DashboardPage() {
                 </button>
               );
             })}
+
+            {/* Buổi học của HÔM NAY — nằm ĐÈ LÊN chính ô giờ, cùng hàng 1.
+                Trước đây nó chiếm hàng riêng phía trên và thành hai tầng rườm
+                rà; giờ nó tô màu vào đúng ô giờ nó chiếm, tên môn nằm trong ô.
+                Nền để MÀU CÓ ĐỘ TRONG (không có lớp đục bên dưới) nên hoạt
+                động người dùng tự đặt vẫn nhìn thấy xuyên qua.
+                Vẽ SAU các ô giờ để nó nằm trên mà không cần `z-index` — thêm
+                z-index ở đây là tạo tầng xếp mới, đúng thứ từng làm bảng chọn
+                giờ bị vẽ đè hôm 07/09. */}
+            {oHoc.map((x) => (
+              <div
+                key={x.buoi.id}
+                className="ct-tq-hoc"
+                style={{
+                  gridColumn: `${x.tu + 1} / span ${x.den - x.tu}`,
+                  gridRow: 1,
+                  /* Chiều cao/lệch tính bằng `--ct-gio-cao` (CSS đặt, ô giờ
+                     cũng dùng đúng biến đó) chứ KHÔNG bằng phần trăm:
+                     `margin-top: 50%` tính theo CHIỀU RỘNG khung chứa, không
+                     phải chiều cao — đo thật 07/09/2026, nó đội hàng giờ lên
+                     gấp đôi. Gần như luôn `soLan === 1`; nhiều làn chỉ xảy ra
+                     khi hai buổi chồng giờ THẬT. */
+                  '--lan': x.lan,
+                  '--so-lan': soLan,
+                  '--mau': mauMon(x.buoi.subject, x.buoi.color),
+                } as React.CSSProperties}
+                title={`${x.buoi.subject}${x.buoi.room ? ` · ${x.buoi.room}` : ''} · ${x.buoi.startTime}–${x.buoi.endTime}`}
+              >
+                <b>{x.buoi.classCode || x.buoi.subject}</b>
+              </div>
+            ))}
 
             {dangChon !== null && (
               <div

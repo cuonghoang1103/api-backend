@@ -501,6 +501,27 @@ const CHUAN_BI = {
     }
     await p.click('.ct-tq-dong button', { timeout: 2000 }).catch(() => {});
     await p.waitForTimeout(350);
+    /* Dải 24 giờ phải LUÔN có đúng 24 cột, không cột nào rộng 0.
+       07/09/2026: ô buổi học đặt vào cùng hàng 1 với vị trí cột xác định nên
+       được lưới xếp TRƯỚC; 24 ô giờ tự xếp sau nhảy qua chỗ đã bị chiếm rồi
+       tràn ra CỘT ẨN — lưới thành 30 cột, 6 ô giờ cuối rộng 0px và hai nhãn
+       "18"/"21" chồng lên nhau ở mép phải. Nhìn ảnh chụp thì nó chỉ là hai
+       chữ số dính nhau, dễ bỏ qua; đo thì lộ ngay. Tôi đã đoán sai nguyên
+       nhân hai lần trước khi chịu đo. */
+    const luoi = await p.evaluate(() => {
+      const d = document.querySelector('.ct-tq-dong');
+      if (!d) return null;
+      const cot = getComputedStyle(d).gridTemplateColumns.split(' ').filter(Boolean);
+      const rong = [...d.querySelectorAll('.ct-tq-gio')]
+        .map((e) => Math.round(e.getBoundingClientRect().width));
+      return { soCot: cot.length, soNut: rong.length, deo: rong.filter((w) => w === 0).length };
+    });
+    if (luoi && (luoi.soCot !== 24 || luoi.deo > 0)) {
+      throw new Error(
+        `Dải 24 giờ vỡ lưới: ${luoi.soCot} cột (phải 24), ${luoi.deo}/${luoi.soNut} ô giờ rộng 0px. `
+        + 'Ô giờ phải có `gridColumn` TƯỜNG MINH — xem chú thích ở DashboardPage.tsx.',
+      );
+    }
   },
   /* MỌI trang dùng lại mã web đều phải chờ nội dung, không chỉ hai màn động.
      Chúng nạp chậm bằng `import()` RỒI mới gọi API, nên mốc 1200ms bắt trúng

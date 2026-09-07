@@ -36,6 +36,30 @@ describe('xepLan', () => {
     expect(xepLan([b(1, '07:30', '09:50'), b(2, '10:00', '12:20')]).soLan).toBe(1);
   });
 
+  /* Ca THƯỜNG GẶP NHẤT của thời khoá biểu, và là ca từng đẻ ra một tầng thừa:
+     10:00–12:20 rồi 12:50–15:10 KHÔNG hề chồng nhau, nhưng cả hai cùng chạm
+     giờ 12. Xếp làn theo cột đã làm tròn thì buổi sau bị đẩy xuống làn hai cho
+     một xung đột không có thật. Phải xếp theo GIỜ THẬT rồi cắt bớt đuôi. */
+  it('hai buổi LIỀN NHAU cùng chạm một giờ ⇒ vẫn MỘT làn, buổi trước bị cắt đuôi', () => {
+    const { o, soLan } = xepLan([b(1, '10:00', '12:20'), b(2, '12:50', '15:10')]);
+    expect(soLan).toBe(1);
+    expect(o.map((x) => x.lan)).toEqual([0, 0]);
+    expect(o[0]).toMatchObject({ tu: 10, den: 12 }); // cắt từ 13 → 12
+    expect(o[1]).toMatchObject({ tu: 12, den: 16 });
+  });
+
+  it('cắt đuôi KHÔNG BAO GIỜ làm ô rộng 0 cột', () => {
+    // 12:10–12:40 rồi 12:50–13:10: cả hai đều nằm gọn trong giờ 12.
+    const { o } = xepLan([b(1, '12:10', '12:40'), b(2, '12:50', '13:10')]);
+    for (const x of o) expect(x.den).toBeGreaterThan(x.tu);
+  });
+
+  it('buổi CHỒNG THẬT vẫn tách làn, không bị cắt oan', () => {
+    const { o, soLan } = xepLan([b(1, '08:00', '11:00'), b(2, '09:00', '10:00')]);
+    expect(soLan).toBe(2);
+    expect(o[0]).toMatchObject({ tu: 8, den: 11 });
+  });
+
   it('giờ hỏng thì BỎ, không nổ và không vẽ ô ma', () => {
     expect(xepLan([b(1, '', ''), b(2, '25:00', '26:00'), b(3, '10:00', '09:00')]).o).toEqual([]);
   });

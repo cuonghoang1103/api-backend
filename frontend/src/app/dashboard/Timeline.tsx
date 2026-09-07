@@ -92,20 +92,23 @@ export default function Timeline({
       </div>
 
       {/* Hour grid */}
+      {/* Dải này tồn tại vì lưới giờ ở web CUỘN DÒNG thành 2 hàng ô vuông
+          ~30px — "SWR302" không nhét vừa vào trong ô như bản desktop (ở đó ô
+          học trải ngang 2-3 cột nên có chỗ). Ô mang MÀU, tên nằm ở đây, cùng
+          màu để mắt nối được hai chỗ. Giữ một dòng, chỉ mã + giờ bắt đầu. */}
       {hocHomNay.length > 0 && (
-        <div className="mb-3 flex flex-wrap gap-1.5">
+        <div className="mb-3 flex flex-wrap gap-1">
           {hocHomNay.map((b) => {
             const m = mauMon(b.subject, b.color);
             return (
               <span
                 key={b.id}
-                className="inline-flex items-center gap-1.5 rounded-lg border px-2 py-1 text-[10.5px]"
-                style={{ borderColor: `${m}55`, background: `${m}1a`, color: m }}
-                title={`${b.subject}${b.room ? ` · ${b.room}` : ''}`}
+                className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-bold"
+                style={{ background: `${m}22`, color: m }}
+                title={`${b.subject}${b.room ? ` · ${b.room}` : ''} · ${b.startTime}–${b.endTime}`}
               >
-                <b>{b.classCode || b.subject}</b>
-                <span className="text-slate-400">{b.startTime}–{b.endTime}</span>
-                {b.room && <span className="text-slate-500">{b.room}</span>}
+                {b.classCode || b.subject}
+                <span className="font-normal text-slate-500">{b.startTime}</span>
               </span>
             );
           })}

@@ -104,27 +104,41 @@ function phut(s: string): number | null {
 }
 
 export function xepLan(ds: Buoi[]): { o: OHoc[]; soLan: number } {
-  const tho: Array<Omit<OHoc, 'lan'>> = [];
+  const tho: Array<Omit<OHoc, 'lan'> & { bd: number; kt: number }> = [];
   for (const b of ds) {
     const bd = phut(b.startTime);
     const kt = phut(b.endTime);
     if (bd === null || kt === null || kt <= bd) continue;
     const tu = Math.max(0, Math.min(23, Math.floor(bd / 60)));
     const den = Math.max(tu + 1, Math.min(24, Math.ceil(kt / 60)));
-    tho.push({ buoi: b, tu, den });
+    tho.push({ buoi: b, tu, den, bd, kt });
   }
-  tho.sort((a, b) => (a.tu - b.tu) || (a.den - b.den) || (a.buoi.id - b.buoi.id));
+  tho.sort((a, b) => (a.bd - b.bd) || (a.kt - b.kt) || (a.buoi.id - b.buoi.id));
 
-  /** Cột kết thúc của buổi cuối cùng trên từng làn. */
-  const cuoi: number[] = [];
+  /* Xếp làn theo GIỜ THẬT, không theo cột đã làm tròn.
+     Hai buổi liền nhau (12:20 hết, 12:50 vào) không hề chồng nhau, nhưng cả
+     hai cùng CHẠM giờ 12 nên nếu xếp theo cột thì chúng "chồng" và buổi sau
+     bị đẩy xuống làn hai — dải 24 giờ đẻ thêm một tầng cho một xung đột KHÔNG
+     CÓ THẬT. Đó là trường hợp thường gặp nhất của thời khoá biểu. */
+  const cuoiPhut: number[] = [];
   const o: OHoc[] = [];
   for (const t of tho) {
-    let lan = cuoi.findIndex((c) => c <= t.tu);
-    if (lan === -1) { lan = cuoi.length; cuoi.push(0); }
-    cuoi[lan] = t.den;
-    o.push({ ...t, lan });
+    let lan = cuoiPhut.findIndex((c) => c <= t.bd);
+    if (lan === -1) { lan = cuoiPhut.length; cuoiPhut.push(0); }
+    cuoiPhut[lan] = t.kt;
+    o.push({ buoi: t.buoi, tu: t.tu, den: t.den, lan });
   }
-  return { o, soLan: cuoi.length };
+
+  /* Cùng làn mà cột vẫn đè nhau (đúng cái giờ 12 ở trên) thì CẮT bớt đuôi
+     buổi trước. Mất phần hiển thị 12:00–12:20, đổi lại cả dải gọn một tầng —
+     và giờ chính xác vẫn đọc được ở bảng lịch tuần lẫn tooltip. */
+  for (let i = 0; i < o.length; i++) {
+    const a = o[i]!;
+    const sau = o.slice(i + 1).find((x) => x.lan === a.lan);
+    if (sau && a.den > sau.tu) a.den = Math.max(a.tu + 1, sau.tu);
+  }
+
+  return { o, soLan: cuoiPhut.length };
 }
 
 /**

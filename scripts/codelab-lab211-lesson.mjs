@@ -33,7 +33,7 @@ const add = (...b) => blocks.push(...b);
 
 // ══════════════════════════════════════════════════════════════
 add(
-  PART('12', 'Luật chơi LAB211', 'Đọc mục này trước khi gõ dòng code đầu tiên'),
+  PART('16', 'Luật chơi LAB211', 'Đọc mục này trước khi gõ dòng code đầu tiên'),
 
   P(`<p>LAB211 không chấm bằng điểm số mà bằng <strong>LOC (Lines Of Code) tích luỹ</strong>.
   Bạn cần <strong>≥ 750 LOC</strong> để qua môn. Mỗi bài làm xong, được giảng viên review đạt,
@@ -103,7 +103,7 @@ add(
 
 // ══════════════════════════════════════════════════════════════
 add(
-  PART('13', 'Kiến trúc 8 package', 'Sai cấu trúc = không được review, dù code chạy đúng'),
+  PART('17', 'Kiến trúc 8 package', 'Sai cấu trúc = không được review, dù code chạy đúng'),
 
   P(`<p>Giảng viên gọi đây là <strong>"MVC của JSP"</strong>: cùng một mô hình với web Java, chỉ đổi lớp vỏ.
   Trong web, View là trang JSP và Controller là Servlet. Trong bài console, View là class chỉ lo in ra
@@ -190,7 +190,7 @@ public void addDoctor(DoctorRequestDTO requestDTO) throws Exception {
 
 // ══════════════════════════════════════════════════════════════
 add(
-  PART('14', '4 tính chất OOP — soi thẳng vào bài P0055',
+  PART('18', '4 tính chất OOP — soi thẳng vào bài P0055',
        'Thầy hỏi: "liệt kê 4 tính chất, rồi chỉ ra trong source của em"'),
 
   P(`<p>Đây là câu hỏi review gần như chắc chắn có. Học thuộc định nghĩa thôi thì trượt —
@@ -305,7 +305,7 @@ public String toString() {
 
 // ══════════════════════════════════════════════════════════════
 add(
-  PART('15', 'Access modifier & static', 'Hai chỗ giảng viên reject nhiều nhất'),
+  PART('19', 'Access modifier & static', 'Hai chỗ giảng viên reject nhiều nhất'),
 
   H('Bảng phạm vi — học thuộc bảng này'),
   P(`<table>
@@ -434,7 +434,7 @@ public final class Validation {
 
 // ══════════════════════════════════════════════════════════════
 add(
-  PART('16', '5 nguyên lý SOLID', 'Slide của thầy viết bằng C# — dưới đây đã dịch sang Java'),
+  PART('20', '5 nguyên lý SOLID', 'Slide của thầy viết bằng C# — dưới đây đã dịch sang Java'),
 
   P(`<p>Slide <code>SOLID-Principles.pptx</code> dùng ví dụ C# (<code>public string Name { get; set; }</code>,
   <code>Console.WriteLine</code>). Bạn không chép thẳng được. Dưới đây là <strong>bản Java, đặt trong
@@ -611,7 +611,7 @@ DoctorController controller = new DoctorController(new DoctorMemoryRepository())
 
 // ══════════════════════════════════════════════════════════════
 add(
-  PART('17', 'DESIGN PATTERN — phần quan trọng nhất',
+  PART('21', 'DESIGN PATTERN — phần quan trọng nhất',
        'Thầy nói: hiểu và áp dụng thành thạo phần này thì pass sớm'),
 
   P(`<p>Bộ slide <code>Design Pattern.pptx</code> có <strong>89 trang, đủ 23 pattern GoF</strong>.
@@ -1049,7 +1049,7 @@ public class GhiLogObserver implements DoctorObserver {
 
 // ══════════════════════════════════════════════════════════════
 add(
-  PART('18', 'Quan hệ giữa class & Coding Convention',
+  PART('22', 'Quan hệ giữa class & Coding Convention',
        'Chapter 7 – Static Modeling và Java Code Conventions (Sun 1997)'),
 
   H('Sáu loại quan hệ giữa class'),
@@ -1149,7 +1149,7 @@ public void searchDoctor(String input) throws Exception {
 
 // ══════════════════════════════════════════════════════════════
 add(
-  PART('19', '12 câu hỏi review & đáp án mẫu', 'Ôn trước khi giơ tay xin review'),
+  PART('23', '12 câu hỏi review & đáp án mẫu', 'Ôn trước khi giơ tay xin review'),
 
   P(`<p>Danh sách này lấy nguyên văn từ slide 10 (<em>"Khi review, cần đảm bảo và trả lời được"</em>).
   Trả lời bằng cách <strong>chỉ vào dòng code của mình</strong>, không nói lý thuyết suông.</p>`),
@@ -1231,7 +1231,7 @@ add(
 
 // ══════════════════════════════════════════════════════════════
 add(
-  PART('20', 'Đọc hiểu bộ khung — từng file một',
+  PART('24', 'Đọc hiểu bộ khung — từng file một',
        'Giải thích theo ĐÚNG thứ tự bạn sẽ gõ'),
 
   P(`<p>Bộ khung <code>J1.S.P0055</code> đính kèm ở tab <strong>Starter code</strong> có 10 file.

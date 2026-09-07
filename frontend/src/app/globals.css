@@ -5890,3 +5890,84 @@ html.theme-dark .chat-studio {
 /* KaTeX kế thừa `currentColor`, nhưng vài phần tử của nó tự đặt màu. */
 .chat-export-sheet .katex,
 .chat-export-sheet .katex * { color: #111827; }
+
+/* ── LAB211: tài liệu gốc của thầy, đọc từng trang ─────────────
+ * Ba lớp dùng chung cho Code Lab (`.exp-doc-prose`, khối prose của
+ * DocBlocksView) và Academy (`.rich-content`, HTML bài học):
+ *   .anh-slide   ảnh chụp một trang tài liệu + chú thích
+ *   .trich-slide "trên trang này in gì" — nguyên văn, để đối chiếu ảnh
+ *   .khoi-ma     khối code có nhãn (Academy; Code Lab dùng block `code`)
+ * Tách khỏi phần phân tích bên dưới, nếu không người đọc không phân biệt
+ * được đâu là chữ của thầy và đâu là lời giảng.
+ */
+.exp-doc-prose .anh-slide,
+.rich-content .anh-slide {
+  margin: 1.25rem 0;
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: var(--bg-surface-active, rgba(255, 255, 255, 0.04));
+}
+.exp-doc-prose .anh-slide img,
+.rich-content .anh-slide img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  border-radius: 0;
+}
+.exp-doc-prose .anh-slide figcaption,
+.rich-content .anh-slide figcaption,
+.rich-content .anh-slide .chu-thich {
+  padding: 0.55rem 0.75rem;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  margin: 0;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+}
+
+.exp-doc-prose .trich-slide,
+.rich-content .trich-slide {
+  margin: 1rem 0;
+  padding: 0.75rem 0.9rem;
+  border-left: 3px solid var(--accent-color, #6366f1);
+  border-radius: 0 0.5rem 0.5rem 0;
+  background: var(--bg-surface-active, rgba(255, 255, 255, 0.04));
+  font-size: 0.9em;
+}
+.exp-doc-prose .trich-slide > p,
+.rich-content .trich-slide > p {
+  margin: 0.35rem 0;
+}
+.exp-doc-prose .trich-slide .nhan,
+.rich-content .trich-slide .nhan {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.rich-content .khoi-ma {
+  margin: 1rem 0;
+}
+.rich-content .khoi-ma .nhan-ma {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* Nút "làm bài này trên Code Lab" ở cuối mỗi bài Academy. */
+.rich-content .di-toi {
+  margin: 1.25rem 0 0;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--accent-color, #6366f1);
+  border-radius: 0.6rem;
+  background: color-mix(in srgb, var(--accent-color, #6366f1) 10%, transparent);
+}
+.rich-content .di-toi a {
+  font-weight: 600;
+  text-decoration: none;
+}

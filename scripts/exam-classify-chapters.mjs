@@ -44,9 +44,14 @@ if (!course.sections.length) { console.error(`Khoá ${COURSE} chưa có chương
 const sections = course.sections;
 const sectionList = sections.map((s, i) => `${i + 1}. ${plain(s.title).slice(0, 120)}`).join('\n');
 
+// ⚠️ PHẢI lấy cả options + explanation, không chỉ prompt. Đo thật 07/09/2026:
+// gửi mỗi prompt thì những câu có đề bài trống nghĩa ("Which of the following
+// statements is NOT true?") bị gán bừa, vì toàn bộ nội dung nằm ở PHƯƠNG ÁN.
+// Lời giải cũng thường gọi thẳng tên khái niệm nên là tín hiệu rất mạnh.
+// (Khoá bản đồ vẫn là promptHash(prompt) — KHÔNG đổi, để map cũ còn dùng được.)
 let questions = await prisma.examQuestion.findMany({
   where: { exam: { courseId: course.id } },
-  select: { id: true, prompt: true, sectionId: true },
+  select: { id: true, prompt: true, sectionId: true, options: true, explanation: true },
   orderBy: { id: 'asc' },
 });
 if (LIMIT) questions = questions.slice(0, LIMIT);
@@ -73,6 +78,23 @@ no prose: {"section": <chapter number 1..N>, "confidence": <0..1>}. confidence =
 are it belongs to that chapter (0.9 clearly, 0.5 unsure, <0.4 could be several). Judge by the
 TOPIC the question tests, not by wording.`;
 
+// Phần phụ gửi kèm đề bài: PHƯƠNG ÁN + lời giải (cắt ngắn). Nhiều câu trắc
+// nghiệm có đề bài trống nghĩa, chủ đề chỉ lộ ra ở phương án; lời giải thì hay
+// gọi thẳng tên khái niệm. Thiếu hai thứ này là nguồn sai chính (đo 07/09/2026).
+const cauHoiPhu = (q) => {
+  let s = '';
+  const opts = Array.isArray(q.options) ? q.options : [];
+  if (opts.length) {
+    const items = opts
+      .map((o, i) => `${String.fromCharCode(65 + i)}. ${plain(typeof o === 'string' ? o : o?.text).slice(0, 160)}`)
+      .filter((t) => t.length > 3);
+    if (items.length) s += `\n\nOPTIONS:\n${items.join('\n')}`;
+  }
+  const ex = plain(q.explanation).slice(0, 400);
+  if (ex) s += `\n\nEXPLANATION (why the answer is right — strong topic signal):\n${ex}`;
+  return s;
+};
+
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // Tách rõ 3 loại hỏng: LLM lỗi (429/timeout), AI trả section lạ, GHI DB lỗi —
@@ -90,7 +112,7 @@ async function classifyOne(q) {
     const res = await llmComplete({
       step: 'generation', feature: 'codelab', purpose: 'codelab_bulk',
       system: SYSTEM,
-      messages: [{ role: 'user', content: `CHAPTERS:\n${sectionList}\n\nQUESTION:\n${plain(q.prompt)}` }],
+      messages: [{ role: 'user', content: `CHAPTERS:\n${sectionList}\n\nQUESTION:\n${plain(q.prompt)}${cauHoiPhu(q)}` }],
       maxTokens: 120, maxRetries: 3, timeoutMs: 60_000, userId: 1,
     });
     const m = res.text.match(/\{[\s\S]*\}/);

@@ -2831,6 +2831,13 @@ router.post('/lessons/:id(\\d+)/ai/ask', authenticate, async (req, res: Response
       quizContext: Array.isArray(req.body?.quizContext) ? req.body.quizContext : undefined,
     });
     res.json({ success: true, data: out });
+    // Cả đường LÙI (không stream) cũng phải lưu. Chỉ gắn ở đường stream thì
+    // mọi lượt hỏi lúc SSE hỏng sẽ biến mất khỏi "Câu hỏi thường gặp" — và
+    // đó đúng là lúc người dùng ít để ý nhất.
+    await luuLuotHoi(
+      Number(req.params.id), req.userId!,
+      String(req.body?.question || ''), out.answer, req.body?.english === true,
+    );
   } catch (e) { next(e); }
 });
 
@@ -2869,11 +2876,110 @@ router.post('/lessons/:id(\\d+)/ai/ask-stream', authenticate, async (req, res) =
     // cached:true ⇒ out.answer là bản có sẵn, không có delta nào trước đó → frontend
     // hiện thẳng answer + gắn nhãn "⚡ Trả lời có sẵn".
     send({ type: 'done', answer: out.answer, cached: out.cached });
+    /* Lưu SAU khi đã gửi xong cho người dùng: ghi vào DB không được nằm giữa
+       họ và câu trả lời. Lưu cả lượt lấy từ cache — mục "Câu hỏi thường gặp"
+       là lịch sử AI ĐÃ TRẢ LỜI AI, không phải nhật ký gọi model. */
+    await luuLuotHoi(
+      Number(req.params.id), req.userId!,
+      String(req.body?.question || ''), out.answer, req.body?.english === true,
+    );
   } catch (e) {
     send({ type: 'error', error: (e as Error)?.message || 'AI chưa trả lời được. Thử lại nhé.' });
   } finally {
     clearInterval(keepalive);
     if (!res.writableEnded) res.end();
+  }
+});
+
+/**
+ * Lưu lại một lượt hỏi gia sư, để người sau đọc được ở mục "Câu hỏi thường gặp".
+ *
+ * Chạy ở MÁY CHỦ chứ không để client gọi thêm một route "lưu": web và app
+ * desktop dùng chung component nhưng đi qua hai đường mạng khác nhau, và một
+ * bên quên gọi thì lịch sử thủng mà không ai biết. Ở đây thì mọi lượt hỏi
+ * thành công đều được ghi, bất kể ai hỏi từ đâu.
+ *
+ * KHÔNG CẮT chữ. Câu trả lời gia sư bị cắt giữa chừng còn tệ hơn không lưu —
+ * người đọc không biết phần thiếu nằm ở đâu. Cột là `TEXT`.
+ *
+ * Nuốt lỗi có chủ đích: ghi hỏng KHÔNG được làm hỏng câu trả lời người dùng
+ * vừa nhận. Họ đã có câu trả lời trên màn hình rồi.
+ */
+async function luuLuotHoi(
+  lessonId: number, userId: number, question: string, answer: string, english: boolean,
+): Promise<void> {
+  const q = question.trim();
+  const a = (answer ?? '').trim();
+  if (!q || !a) return;
+  try {
+    await prisma.lessonTutorAsk.create({
+      data: { lessonId, userId, question: q, answer: a, lang: english ? 'en' : 'vi' },
+    });
+  } catch { /* xem chú thích trên */ }
+}
+
+// ── GET /api/v1/courses/lessons/:id/ai/asks ───────────────────────
+// "Câu hỏi thường gặp" của một bài: mọi người hỏi gì, AI trả lời ra sao.
+//
+// CHUNG cho mọi người học, không phải riêng tư — đó là toàn bộ giá trị: người
+// thứ hai gặp đúng chỗ khó ấy không phải hỏi lại (và không tốn thêm một lượt
+// gọi model). Vì thế trả kèm TÊN người hỏi.
+router.get('/lessons/:id(\\d+)/ai/asks', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const lessonId = Number(req.params.id);
+    /* Trần 40: đủ để một bài đông người hỏi vẫn có cái mà đọc, mà không biến
+       một lời gọi thành vài trăm KB. Câu trả lời trả về NGUYÊN VĂN — cắt ở đây
+       thì mục này mất hẳn ý nghĩa. */
+    const rows = await prisma.lessonTutorAsk.findMany({
+      where: { lessonId },
+      orderBy: { createdAt: 'desc' },
+      take: 40,
+      select: {
+        id: true, question: true, answer: true, lang: true, createdAt: true, userId: true,
+        user: { select: { username: true, displayName: true, avatarUrl: true } },
+      },
+    });
+    res.json({
+      success: true,
+      data: {
+        items: rows.map((r) => ({
+          id: r.id,
+          question: r.question,
+          answer: r.answer,
+          lang: r.lang,
+          createdAt: r.createdAt,
+          nguoiHoi: r.user?.displayName || r.user?.username || 'Người học',
+          avatar: r.user?.avatarUrl ?? null,
+          cuaToi: r.userId === req.userId,
+        })),
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ── DELETE /api/v1/courses/lessons/:id/ai/asks/:askId ──────────────
+// Xoá một lượt. Chỉ người hỏi hoặc admin — mục này công khai, nên không thể
+// để ai cũng xoá được câu của người khác.
+router.delete('/lessons/:id(\\d+)/ai/asks/:askId(\\d+)', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const askId = Number(req.params.askId);
+    const cu = await prisma.lessonTutorAsk.findUnique({ where: { id: askId }, select: { userId: true } });
+    if (!cu) throw new AppError('Không tìm thấy câu hỏi', 404, 'NOT_FOUND');
+
+    const laAdmin = (await prisma.user.findUnique({
+      where: { id: req.userId! },
+      select: { roles: { select: { role: { select: { name: true } } } } },
+    }))?.roles.some((r) => r.role.name.replace(/^ROLE_/, '').toUpperCase() === 'ADMIN') ?? false;
+
+    if (cu.userId !== req.userId && !laAdmin) {
+      throw new AppError('Chỉ người hỏi hoặc admin mới xoá được', 403, 'FORBIDDEN');
+    }
+    await prisma.lessonTutorAsk.delete({ where: { id: askId } });
+    res.json({ success: true, data: { deleted: askId } });
+  } catch (error) {
+    next(error);
   }
 });
 

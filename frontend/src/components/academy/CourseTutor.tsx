@@ -7,7 +7,8 @@
 //   "Bản tiếng Anh" để hỏi lại đúng câu đó bằng tiếng Anh khi cần.
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Sparkles, Loader2, Send, MessageCircle, Crown, User, Languages, RefreshCw } from 'lucide-react';
+import { Sparkles, Loader2, Send, MessageCircle, Crown, User, Languages, RefreshCw,
+  BookMarked, ChevronDown, Trash2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import Link from 'next/link';
 import { api } from '@/lib/api';
@@ -15,6 +16,19 @@ import { useAuthStore } from '@/store/authStore';
 import { usePro } from '@/hooks/usePro';
 // Render câu trả lời như AI Chat chính: markdown + KaTeX + code + sơ đồ SVG.
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
+
+/** Một lượt hỏi đã lưu — hiện trong mục "Câu hỏi thường gặp". */
+interface Faq {
+  id: number;
+  question: string;
+  /** NGUYÊN VĂN, máy chủ không cắt. */
+  answer: string;
+  lang: string;
+  createdAt: string;
+  nguoiHoi: string;
+  avatar: string | null;
+  cuaToi: boolean;
+}
 
 interface Turn {
   role: 'user' | 'assistant';
@@ -69,6 +83,43 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
   }, []);
 
   useEffect(() => { setTurns([]); setQuestion(''); }, [lessonId]);
+
+  /* ── Câu hỏi thường gặp ──────────────────────────────────
+     Mọi lượt hỏi của bài này, của MỌI người học, do máy chủ tự lưu (xem
+     `luuLuotHoi` trong `course.routes.ts`). Đây là chỗ đắt nhất của cả tính
+     năng: người thứ hai gặp đúng chỗ khó ấy đọc được câu trả lời sẵn, không
+     phải hỏi lại — và không tốn thêm một lượt gọi model.
+     Nạp LƯỜI: chỉ hỏi máy chủ khi người dùng mở mục ra. Bài đông người hỏi có
+     thể trả về vài trăm KB, không đáng kéo về cho mọi lần mở bài. */
+  const [moFaq, setMoFaq] = useState(false);
+  const [faq, setFaq] = useState<Faq[] | null>(null);
+  const [dangTaiFaq, setDangTaiFaq] = useState(false);
+  const [moMuc, setMoMuc] = useState<number | null>(null);
+
+  const napFaq = useCallback(async () => {
+    setDangTaiFaq(true);
+    try {
+      const r = await api.get(`/courses/lessons/${lessonId}/ai/asks`);
+      setFaq(r.data?.data?.items ?? []);
+    } catch {
+      setFaq([]);
+    } finally {
+      setDangTaiFaq(false);
+    }
+  }, [lessonId]);
+
+  // Đổi bài thì đóng và VỨT danh sách cũ — giữ lại là hiện câu hỏi của bài khác.
+  useEffect(() => { setMoFaq(false); setFaq(null); setMoMuc(null); }, [lessonId]);
+
+  const xoaFaq = async (id: number) => {
+    if (!window.confirm('Xoá câu hỏi này khỏi mục Câu hỏi thường gặp?')) return;
+    try {
+      await api.delete(`/courses/lessons/${lessonId}/ai/asks/${id}`);
+      setFaq((ds) => (ds ?? []).filter((x) => x.id !== id));
+    } catch {
+      toast.error('Xoá không được.');
+    }
+  };
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, [turns, asking]);
 
   const patch = (aIdx: number, upd: Partial<Turn>) =>
@@ -325,7 +376,10 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
                 ))}
               </div>
             ))}
-            <div className="flex items-end gap-2">
+            {/* `flex-wrap` + `min-w` cho ô nhập: hàng này giờ có BA thứ (ô nhập,
+                nút Hỏi, nút Câu hỏi thường gặp). Không cho xuống dòng thì ở cửa
+                sổ hẹp ô nhập bị bóp còn một cột chữ dọc — đo thật ở 800px. */}
+            <div className="flex flex-wrap items-end gap-2">
               <textarea
                 ref={taRef}
                 value={question}
@@ -333,7 +387,7 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
                 onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); void ask(question); } }}
                 rows={2}
                 placeholder={inQuiz ? 'VD: câu 3 mình chưa hiểu vì sao đáp án là B…' : 'Hỏi bất cứ điều gì về bài này — hoặc dán code/bài làm của bạn nhờ chữa…'}
-                className="flex-1 resize-none rounded-lg border px-3 py-2 text-sm outline-none"
+                className="min-w-[min(100%,220px)] flex-1 resize-none rounded-lg border px-3 py-2 text-sm outline-none"
                 style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)', color: 'var(--text-primary)' }}
               />
               <button onClick={() => void ask(question)} disabled={asking || !question.trim()}
@@ -341,7 +395,83 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
                 style={{ background: 'var(--accent-color, #8b5cf6)', color: '#fff' }}>
                 {asking ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />} Hỏi
               </button>
+
+              <button
+                type="button"
+                onClick={() => { const m = !moFaq; setMoFaq(m); if (m && faq === null) void napFaq(); }}
+                className="inline-flex items-center gap-1 rounded-lg border px-3 py-2 text-sm font-semibold"
+                style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}
+                title="Câu hỏi mọi người đã hỏi ở bài này, kèm câu trả lời của AI"
+              >
+                <BookMarked size={14} /> Câu hỏi thường gặp
+                {faq && faq.length > 0 && (
+                  <span className="rounded-full px-1.5 text-[11px]"
+                    style={{ background: 'var(--accent-color, #8b5cf6)', color: '#fff' }}>{faq.length}</span>
+                )}
+                <ChevronDown size={13} className={moFaq ? 'rotate-180 transition-transform' : 'transition-transform'} />
+              </button>
             </div>
+
+            {moFaq && (
+              <div className="mt-3 rounded-lg border" style={{ borderColor: 'var(--border-color)' }}>
+                {dangTaiFaq ? (
+                  <p className="px-3 py-4 text-center text-xs" style={{ color: 'var(--text-secondary)' }}>
+                    Đang tải…
+                  </p>
+                ) : !faq || faq.length === 0 ? (
+                  <p className="px-3 py-4 text-center text-xs" style={{ color: 'var(--text-secondary)' }}>
+                    Chưa ai hỏi gì ở bài này. Câu bạn hỏi sẽ được lưu lại đây cho người sau.
+                  </p>
+                ) : (
+                  <ul>
+                    {faq.map((f) => {
+                      const mo = moMuc === f.id;
+                      return (
+                        <li key={f.id} className="border-b last:border-b-0" style={{ borderColor: 'var(--border-color)' }}>
+                          <div className="flex items-start gap-2 px-3 py-2">
+                            <button
+                              type="button"
+                              onClick={() => setMoMuc(mo ? null : f.id)}
+                              className="flex-1 text-left"
+                            >
+                              <span className="block text-sm font-medium" style={{ color: 'var(--text-primary)' }}>
+                                {f.question}
+                              </span>
+                              <span className="mt-0.5 block text-[11px]" style={{ color: 'var(--text-secondary)' }}>
+                                {f.nguoiHoi}
+                                {' · '}
+                                {new Date(f.createdAt).toLocaleDateString('vi-VN')}
+                                {f.lang === 'en' && ' · EN'}
+                                {!mo && ' · bấm để xem câu trả lời'}
+                              </span>
+                            </button>
+                            {f.cuaToi && (
+                              <button
+                                type="button"
+                                onClick={() => void xoaFaq(f.id)}
+                                aria-label="Xoá câu hỏi này"
+                                className="shrink-0 rounded p-1.5 opacity-50 hover:opacity-100"
+                                style={{ color: 'var(--text-secondary)' }}
+                              >
+                                <Trash2 size={13} />
+                              </button>
+                            )}
+                          </div>
+                          {/* Câu trả lời hiện NGUYÊN VĂN — không cắt, không "xem thêm".
+                              Cắt một câu giảng giữa chừng là làm hỏng đúng thứ người
+                              ta mở mục này ra để đọc. */}
+                          {mo && (
+                            <div className="px-3 pb-3">
+                              <ChatMarkdown content={f.answer} />
+                            </div>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </div>
+            )}
           </>
         )}
       </div>

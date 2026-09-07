@@ -161,6 +161,7 @@ model User {
   deviceTokens            DeviceToken[]
   classSchedules          ClassSchedule[]
   classAttendances        ClassAttendance[]
+  lessonTutorAsks         LessonTutorAsk[]
   hocKy                   HocKy[]
   lichThi                 LichThi[]
 
@@ -1040,6 +1041,7 @@ model Lesson {
   assignments    Assignment[]
   lessonProgress LessonProgress[]
   aiAnswers      LessonAiAnswer[]
+  tutorAsks      LessonTutorAsk[]
 
   @@index([sectionId], name: "idx_lessons_section")
   @@index([isPublished], name: "idx_lessons_published")
@@ -1064,6 +1066,36 @@ model LessonAiAnswer {
   @@unique([lessonId, cacheKey, lang], name: "lessonId_cacheKey_lang")
   @@index([lessonId], name: "idx_lesson_ai_answers_lesson")
   @@map("lesson_ai_answers")
+}
+
+/// Một lượt hỏi gia sư AI của một bài, LƯU LẠI để người sau đọc được.
+///
+/// Khác `LessonAiAnswer` ở chỗ căn bản: cái kia là CACHE theo `cacheKey` của
+/// mấy chip gợi ý — một câu trả lời cho một khoá, ghi đè liên tục, không có
+/// người hỏi. Cái này là LỊCH SỬ: ai hỏi gì, AI trả lời ra sao, giữ nguyên văn.
+///
+/// Câu hỏi và câu trả lời để `@db.Text` và KHÔNG cắt ở bất cứ đâu — một câu
+/// trả lời gia sư bị cắt giữa chừng còn tệ hơn không lưu, vì người đọc không
+/// biết phần thiếu nằm ở đâu.
+model LessonTutorAsk {
+  id       Int @id @default(autoincrement())
+  lessonId Int @map("lesson_id")
+  userId   Int @map("user_id")
+
+  question String @db.Text
+  answer   String @db.Text
+
+  /// 'vi' | 'en' — cùng một câu hỏi hỏi hai thứ tiếng là hai lượt khác nhau.
+  lang String @default("vi") @db.VarChar(4)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([lessonId, createdAt], map: "idx_lesson_tutor_ask_lesson")
+  @@index([userId], map: "idx_lesson_tutor_ask_user")
+  @@map("lesson_tutor_asks")
 }
 
 model LessonDetail {

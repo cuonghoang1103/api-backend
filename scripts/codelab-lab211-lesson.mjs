@@ -1228,6 +1228,186 @@ add(
   Lab Grading Policy.</em></p>`),
 );
 
+
+// ══════════════════════════════════════════════════════════════
+add(
+  PART('20', 'Đọc hiểu bộ khung — từng file một',
+       'Giải thích theo ĐÚNG thứ tự bạn sẽ gõ'),
+
+  P(`<p>Bộ khung <code>J1.S.P0055</code> đính kèm ở tab <strong>Starter code</strong> có 10 file.
+  Dưới đây giải thích từng file theo <strong>đúng thứ tự gõ</strong> — thầy bảo "code model trước rồi
+  đến data", và thứ tự đó không tuỳ tiện: <strong>mỗi file chỉ dùng những file đã viết trước nó</strong>,
+  nên gõ xuôi là không bao giờ phải quay lại sửa.</p>`),
+
+  H('1. model/Doctor.java — gõ đầu tiên'),
+  P(`<p>Đây là bản mô tả MỘT bác sĩ. Không hơn.</p>`),
+  C('Đóng gói — tính chất OOP số 1', `public class Doctor {
+    private String code;          // private: ben ngoai KHONG cham thang duoc
+    private int availability;`),
+  P(`<p><code>private</code> không phải để giấu bí mật, mà để <strong>sau này sửa luật chỉ phải sửa một
+  chỗ</strong>. Mai thầy bảo "số ca trực không quá 7" — bạn thêm câu kiểm tra vào
+  <code>setAvailability()</code>, mọi nơi gọi không phải đổi gì. Nếu field <code>public</code> thì phải
+  đi tìm khắp chương trình.</p>`),
+
+  C('this — giải quyết trùng tên', `public Doctor(String code, String name, String specialization, int availability) {
+    this.code = code;    // trai: THUOC TINH cua doi tuong · phai: THAM SO truyen vao
+    this.name = name;
+}`),
+  P(`<p>Bỏ <code>this</code> đi là nó tự gán cho chính nó, field vẫn <code>null</code> — lỗi kinh điển
+  của người lâu không viết Java.</p>`),
+
+  C('@Override toString() — Đa hình có sẵn trong bài', `@Override
+public String toString() {
+    return String.format(Constants.ROW_FORMAT, code, name, specialization, availability);
+}`),
+  P(`<p><code>@Override</code> nghĩa là <em>"tôi đang ghi đè hàm của lớp cha"</em>. Mọi class trong Java
+  đều ngầm kế thừa <code>Object</code>, mà <code>Object</code> có sẵn <code>toString()</code>. Bạn viết
+  đè lên — <strong>đó chính là Đa hình (Polymorphism)</strong>, có sẵn trong bài, không cần bịa thêm.</p>
+  <p>⚠️ Chú ý nó <strong><code>return</code> chứ không <code>println</code></strong>, vì model bị cấm in.
+  Nó trả về chuỗi, ai cần in thì tự in.</p>
+  <p><strong>Thầy hỏi "chỉ cho thầy Encapsulation trong bài em"</strong> → chỉ vào file này.</p>`),
+
+  H('2. dto/DoctorRequestDTO.java và DoctorResponseDTO.java'),
+  P(`<p>Hai cái này trông <strong>giống hệt</strong> <code>Doctor</code>, và đó là chỗ ai cũng thắc mắc:
+  "sao phải viết lại?". Vì chúng có <strong>nhiệm vụ khác</strong>:</p>
+  <table>
+  <tr><th>Class</th><th>Nhiệm vụ</th></tr>
+  <tr><td><code>Doctor</code></td><td>Sống trong kho — là dữ liệu THẬT</td></tr>
+  <tr><td><code>RequestDTO</code></td><td>Cái HỘP chở dữ liệu từ Main vào Controller</td></tr>
+  <tr><td><code>ResponseDTO</code></td><td>Cái HỘP chở kết quả từ Controller ra View</td></tr>
+  </table>`),
+  C('Đây là lời giải cho "không truyền 3 tham số vào 1 hàm"', `// Khong co DTO — 4 tham so, them truong la sua het moi noi goi
+controller.addDoctor(code, name, specialization, availability);
+
+// Co DTO — 1 tham so, them truong chi sua trong DTO
+controller.addDoctor(dto);`),
+  P(`<p>Trong đời thật hai cái hộp không giống nhau: hộp <strong>gửi vào</strong> có thể chứa mật khẩu,
+  hộp <strong>hiện ra</strong> thì không được có. Bài này chúng giống nhau, nhưng vẫn tách để đúng
+  kiến trúc.</p>`),
+
+  H('3. repository/DoctorRepository.java — cái "data" thầy nói'),
+  C('Kho dữ liệu', `private Map<String, Doctor> doctorMap = new HashMap<>();`),
+  P(`<p>Đọc là: <em>"một bảng tra, khoá là <code>String</code> (mã bác sĩ), giá trị là
+  <code>Doctor</code>"</em>.</p>
+  <p><strong>Vì sao <code>HashMap</code> chứ không <code>ArrayList</code></strong> — thầy chắc chắn hỏi:</p>
+  <ul>
+  <li>Thao tác chính của bài là <strong>tìm theo mã</strong>. <code>HashMap</code> tra theo khoá gần như
+  tức thì; <code>ArrayList</code> phải duyệt từ đầu tới cuối.</li>
+  <li>Khoá của <code>Map</code> là <strong>duy nhất</strong>, nên nó chặn trùng mã hộ luôn.</li>
+  </ul>`),
+  C('Vòng lặp for-each và hàm private dùng lại', `for (Doctor doctor : doctorMap.values()) {   // .values() lay GIA TRI, .keySet() lay KHOA
+
+// private vi CHI dung trong chinh class nay — ca searchDoctor lan findAll deu can
+private DoctorResponseDTO toResponse(Doctor doctor) { ... }`),
+  P(`<p><strong>Thầy hỏi "sao hàm này private mà hàm kia public?"</strong> → <em>"Vì ngoài class không ai
+  gọi <code>toResponse</code>. Để <code>public</code> là mở rộng hơn mức cần thiết."</em></p>`),
+
+  H('4. controller/DoctorController.java — người điều phối'),
+  P(`<p>Controller <strong>không tự làm gì cả</strong>. Nó chỉ ra lệnh.</p>`),
+  C('Ba dòng, ba vai', `public void addDoctor(DoctorRequestDTO requestDTO) throws Exception {
+    // 1. Kiem tra
+    if (doctorRepository.isDuplicate(requestDTO.getCode())) {
+        throw new Exception(Message.DUPLICATE);
+    }
+    // 2. Bao kho luu
+    doctorRepository.addDoctor(requestDTO);
+    // 3. Bao view thong bao
+    doctorView.showMessage(Message.ADD_SUCCESS);
+}`),
+  P(`<p><code>throws Exception</code> = <em>"hàm này có thể ném lỗi, ai gọi thì phải hứng"</em>.
+  <code>throw new Exception(...)</code> = <em>"ném ngay bây giờ"</em>. Lỗi bay lên tận <code>Main</code>,
+  nơi có <code>try/catch</code> bắt và in ra.</p>
+  <p>Đó là lý do <strong>cả chương trình chỉ có MỘT chỗ <code>catch</code></strong> thay vì rải
+  <code>if (loi) System.out.println(...)</code> khắp nơi.</p>
+  <p>Đây cũng là <strong>Trừu tượng hoá (Abstraction)</strong>: Main gọi <code>addDoctor(dto)</code> là
+  xong, hoàn toàn không biết dữ liệu nằm trong <code>HashMap</code>.</p>`),
+
+  H('5. view/DoctorView.java — chỉ biết in'),
+  C('printf và cách làm bảng thẳng cột', `System.out.printf("%-10s%-20s%-20s%-12s%n", "Code", "Name", "Specialization", "Availability");`),
+  P(`<p><code>%-10s</code> = <em>"chuỗi, chiếm 10 ô, căn trái"</em>. Dấu <code>-</code> là căn trái, bỏ đi
+  thành căn phải. <code>%n</code> là xuống dòng.</p>
+  <p>Đây là cách làm bảng thẳng cột — dùng <code>\\t</code> là <strong>vỡ ngay khi có tên dài</strong>.</p>
+  <p>View KHÔNG tính toán gì. Nó nhận <code>ResponseDTO</code> đã xong xuôi rồi in.</p>`),
+
+  H('6. utils/Validation.java — chỗ DUY NHẤT được dùng static'),
+  C('Ba từ khoá, ba lý do', `public final class Validation {      // final: khong ai extends duoc
+    private Validation() { }         // private ctor: khong ai new duoc
+    public static String getString(String input) throws Exception { ... }
+}`),
+  P(`<ul>
+  <li><strong><code>final</code></strong> — class tiện ích không có gì để kế thừa.</li>
+  <li><strong><code>private</code> constructor</strong> — <code>new</code> ra cũng vô nghĩa, nó chẳng giữ gì.</li>
+  <li><strong><code>static</code></strong> — gọi thẳng <code>Validation.getString(...)</code> không cần đối tượng.</li>
+  </ul>`),
+  P(`<p><strong>Ba câu thầy hỏi về <code>static</code>, trả lời bằng chính file này:</strong></p>
+  <p><em>"Tại sao static?"</em> — Hàm thuần: cùng đầu vào luôn ra cùng kết quả, không đọc/ghi thuộc tính
+  của đối tượng nào. Gọi từ rất nhiều nơi trong Main. Không static thì mỗi lần gọi phải tạo một đối
+  tượng rỗng.</p>
+  <p><em>"Bỏ static thì sao?"</em> — Không biên dịch được, vì gọi method của thể hiện qua tên class là
+  sai cú pháp.</p>
+  <p><em>"Không dùng static thì sửa thế nào?"</em> — Bỏ <code>private</code> ở constructor, trong Main
+  tạo <code>Validation v = new Validation();</code>, đổi mọi lời gọi thành <code>v.getString(...)</code>.
+  Chạy được, nhưng thừa một đối tượng vô nghĩa.</p>`),
+
+  H('7. constants/Message.java và Constants.java'),
+  C('Hằng số', `public static final String MENU = "...";`),
+  P(`<p><code>static final</code> = <strong>hằng số</strong>: <code>static</code> để gọi
+  <code>Message.MENU</code> không cần <code>new</code>, <code>final</code> để không ai gán lại.
+  Tên viết <code>UPPER_SNAKE_CASE</code> — convention Sun, thầy chấm.</p>
+  <p>Vì sao gom hết câu chữ vào đây: sửa một câu chỉ phải sửa một chỗ, và <strong>không có chuỗi lạ nào
+  nằm rải rác</strong> trong Controller hay View. Thầy nhìn thấy
+  <code>System.out.println("Nhap ma bac si: ")</code> giữa Controller là trừ điểm ngay.</p>
+  <p><code>Constants</code> tách riêng vì nó chứa <strong>số</strong>, không phải câu chữ: giới hạn menu,
+  trần số ca trực, định dạng cột.</p>`),
+
+  H('8. main/Main.java — gõ cuối cùng'),
+  C('Dòng này chỉ được xuất hiện ĐÚNG MỘT LẦN trong cả project', `Scanner sc = new Scanner(System.in);`),
+  C('Vòng lặp menu và chỗ bắt lỗi duy nhất', `while (true) {
+    System.out.println(Message.MENU);
+    try {
+        int choice = Validation.getChoice(sc.nextLine(), 1, 6);
+        switch (choice) {
+            case 1: themBacSi(sc, controller); break;
+            case 6: return;                    // thoat han ham main
+        }
+    } catch (Exception e) {
+        System.out.println(e.getMessage());    // MOT cho bat loi cho TAT CA
+    }
+}`),
+  P(`<p><code>while (true)</code> chạy mãi, thoát bằng <code>return</code> ở <code>case 6</code>.
+  <strong><code>break</code> chỉ nhảy ra khỏi <code>switch</code>, KHÔNG thoát vòng lặp</strong> —
+  nhầm hai cái này là chương trình không bao giờ tắt.</p>
+  <p><code>catch (Exception e)</code> đặt <strong>ngoài</strong> <code>switch</code> nên mọi lỗi từ mọi
+  chức năng đều rơi vào đây. Đó là lý do Controller chỉ cần <code>throw</code> rồi thôi.</p>
+  <p>Các hàm <code>private static void themBacSi(...)</code> — <code>static</code> <strong>với hàm</strong>
+  thì được; thầy chỉ cấm <code>static</code> <strong>với biến</strong> ở Main.</p>`),
+
+  H('Nhìn lại cả bộ'),
+  M(`flowchart LR
+  MAIN["Main<br/><i>Scanner</i>"] -->|RequestDTO| CTRL[Controller]
+  CTRL --> REPO[Repository] --> MODEL[Model]
+  CTRL -->|ResponseDTO| VIEW["View<br/><i>System.out</i>"]
+  MAIN -.-> VAL["Validation<br/><i>static</i>"]
+  MODEL -. "KHONG BAO GIO" .-x VIEW`),
+  P(`<p>Mũi tên <strong>một chiều</strong>. Model và View không bao giờ nói chuyện với nhau — model muốn
+  hiện ra thì trả <code>toString()</code> ngược về, đi qua Repository → Controller → View.</p>
+  <p>Thuộc được sơ đồ này là bạn trả lời được hầu hết câu hỏi kiến trúc, vì mọi câu đều quy về
+  <em>"tại sao thứ này không được gọi thẳng thứ kia"</em>.</p>`),
+
+  H('Ba lỗi trong bản mẫu của thầy — đã vá trong bộ khung'),
+  P(`<table>
+  <tr><th>Chỗ</th><th>Bản mẫu</th><th>Vấn đề</th></tr>
+  <tr><td><code>getString</code></td><td><code>input.equals(null)</code></td>
+      <td>Không bao giờ đúng; <code>input</code> là <code>null</code> thì ném NullPointerException</td></tr>
+  <tr><td><code>getChoice</code></td><td>một <code>catch (Exception)</code> bọc cả hai lỗi</td>
+      <td>Nhập 9 cho menu 1–6 báo nhầm "không phải số"</td></tr>
+  <tr><td><code>getPosititveInteger</code></td><td>sai chính tả, khai <code>float</code> mà parse <code>Integer</code></td>
+      <td>Convention bị chấm</td></tr>
+  </table>
+  <p>Bản mẫu còn <strong>thiếu</strong>: <code>case 3</code> (xoá) tạo DTO xong nhưng không gọi controller
+  — bấm xoá không xoá gì; và không có chức năng hiển thị toàn bộ. Bộ khung đã bổ sung cả hai.</p>`),
+);
+
 // ══════════════════════════════════════════════════════════════
 const dem0 = {};
 let chu0 = 0;

@@ -72,6 +72,19 @@ EOF
 )
 canh "stdin heredoc đi qua" "$ra" "dong-mot"
 
+# 6b. Heredoc DÀI, nhiều dòng, có escape — đúng hình dạng bước build ở
+#     `deploy-nha.sh` (~40 dòng, có `\$`, dấu nháy, và `&`/`wait` bên trong).
+mong=$(printf 'a-1\nPID=$!\nwait $PID\nb "trong nhay"\nc-cuoi')
+ra=$(chay_canh_gio cat <<EOF
+a-1
+PID=\$!
+wait \$PID
+b "trong nhay"
+c-cuoi
+EOF
+)
+canh "heredoc dài + escape qua nguyên vẹn" "$ra" "$mong"
+
 # 6. Lệnh nhanh KHÔNG được đợi hết trần rồi mới trả (chó gác phải chết theo)
 bd=$(date +%s); chay_canh_gio true; het=$(( $(date +%s) - bd ))
 canh "lệnh nhanh trả về ngay (${het}s)" "$([ $het -le 1 ] && echo co || echo khong)" "co"

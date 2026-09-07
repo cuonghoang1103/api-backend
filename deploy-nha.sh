@@ -258,7 +258,11 @@ info "Build backend + frontend SONG SONG ở máy nhà (đo trước: ~6 phút).
 # ⚠️ KHÔNG bọc lệnh nền trong subshell `( … & )`: khi đó tiến trình build là
 # con của SUBSHELL, còn `wait` chạy ở shell cha ⇒ "not a child of this shell",
 # script tưởng build xong ngay lập tức. Phải chạy nền thẳng ở shell này.
-if ! ssh -o ConnectTimeout=15 -o BatchMode=yes "$MAY_NHA" bash -s <<EOF
+# Bước DÀI NHẤT của cả script (~6 phút khi khoẻ) và là lời gọi ssh thô duy
+# nhất còn lại — nên nó phải nằm dưới chó gác như hai helper kia. 07/09/2026
+# nó chạy 42 PHÚT rồi chết vì đứt hầm (`Can't assign requested address`); bản
+# vá đầu của tôi chỉ bọc `sshnha`/`sshvps` nên bỏ sót đúng chỗ đau nhất.
+if ! chay_canh_gio ssh -o ConnectTimeout=15 "${SSH_SONG[@]}" -o BatchMode=yes "$MAY_NHA" bash -s <<EOF
 set -u
 cd ${DICH} || exit 1
 export DOCKER_BUILDKIT=1

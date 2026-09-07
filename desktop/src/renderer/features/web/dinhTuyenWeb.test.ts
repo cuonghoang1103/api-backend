@@ -133,7 +133,10 @@ describe('khopTuyenWeb', () => {
       expect(thay.has(t.mau), `mẫu trùng: ${t.mau}`).toBe(false);
       thay.add(t.mau);
     }
-    expect(thay.size).toBe(65);
+    /* Con số CỐ Ý viết cứng: nó là dây bẫy, buộc người thêm tuyến phải mở tệp
+       này ra và nhìn lại danh sách. 65 → 73 ngày 07/09/2026 khi cây
+       `/tech-trends` (8 tuyến) được dùng lại từ web. */
+    expect(thay.size).toBe(73);
   });
 });
 

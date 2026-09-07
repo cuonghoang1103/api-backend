@@ -98,6 +98,20 @@ export const TUYEN_WEB: readonly TuyenWeb[] = [
   { mau: '/cv/xem', nap: () => import('@/app/cv/xem/page') },
   { mau: '/cv/builder/:id', nap: () => import('@/app/cv/builder/[id]/page') },
 
+  /* ── Tech Trends ──
+     TĨNH TRƯỚC ĐỘNG. Sáu trang chuyên đề (`/news`, `/ielts`, `/hoc-sql`…) đều
+     dài đúng 2 đoạn giống `/tech-trends/:slug` của bài viết, nên xếp sau mẫu
+     động là chúng bị nuốt: mở "Việc làm Claude Code" sẽ ra một trang bài viết
+     RỖNG chứ không phải lỗi — hỏng im lặng, đúng cảnh báo ở đầu tệp. */
+  { mau: '/tech-trends', nap: () => import('@/app/tech-trends/page') },
+  { mau: '/tech-trends/news', nap: () => import('@/app/tech-trends/news/page') },
+  { mau: '/tech-trends/ielts', nap: () => import('@/app/tech-trends/ielts/page') },
+  { mau: '/tech-trends/hoc-sql', nap: () => import('@/app/tech-trends/hoc-sql/page') },
+  { mau: '/tech-trends/on-thi-jpd113', nap: () => import('@/app/tech-trends/on-thi-jpd113/page') },
+  { mau: '/tech-trends/tieng-anh-giao-tiep', nap: () => import('@/app/tech-trends/tieng-anh-giao-tiep/page') },
+  { mau: '/tech-trends/viec-lam-claude-code', nap: () => import('@/app/tech-trends/viec-lam-claude-code/page') },
+  { mau: '/tech-trends/:slug', nap: () => import('@/app/tech-trends/[slug]/page') },
+
   /* ═══ MƯỜI CÂY CÒN LẠI — 22/08/2026 ═══════════════════════════
      Đo trước khi làm: 60 tệp · 13.928 dòng · 39 chỗ dính Next.js, TOÀN BỘ là
      `next/link` và `next/navigation`. KHÔNG có `next/image`, KHÔNG có
@@ -235,6 +249,7 @@ export const GOC_WEB: readonly string[] = [
   '/language', '/roadmap', '/interview', '/cv',
   '/maker-lab', '/creator', '/projects', '/exp-hub',
   '/finance', '/forum', '/saved', '/profile',
+  '/tech-trends',
 ];
 
 /** Đường dẫn này có thuộc một cây web không (kể cả các trang con động). */

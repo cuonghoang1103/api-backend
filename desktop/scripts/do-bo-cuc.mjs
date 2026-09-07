@@ -229,8 +229,26 @@ const BANG = [
       pagination: { page: 1, size: 10, total: 4, totalPages: 1 } })],
     [/\/music\/tracks/, () => ({ items: mang(8, (i) => ({ id: i, title: `Bài hát ${i}`, artist: 'Ca sĩ',
         audioUrl: '', coverUrl: null, durationSec: 200 })), total: 8 })],
-    [/\/tech-trends\/articles/, () => mang(6, (i) => ({ id: i, title: `Bài công nghệ ${i}`, slug: `bai-${i}`,
-        summary: 'Tóm tắt bài viết.', publishedAt: '2026-08-20T00:00:00Z', category: { name: 'AI' } }))],
+    /* ⚠️ Mock này viết cho màn NATIVE cũ (một danh sách phẳng) và thiếu gần
+       hết các trường. Từ 07/09/2026 desktop dùng lại CÂY WEB, và cây đó chạy
+       `for (const t of a.tags)` không chốt ⇒ thiếu `tags` là VỠ CẢ TRANG
+       ("a.tags is not iterable"), không phải hiển thị thiếu.
+       API thật luôn trả `tags: … ?? []` (techTrends.routes.ts:191) nên đây là
+       lỗ hổng của MOCK, không phải lỗi sản phẩm — nhưng một mock nghèo hơn
+       API thật thì đo ra kết quả vô nghĩa. Giữ khớp hình dạng thật. */
+    [/\/tech-trends\/articles/, () => mang(6, (i) => ({
+      id: i, title: `Bài công nghệ ${i}`, slug: `bai-${i}`,
+      summary: 'Tóm tắt bài viết.', publishedAt: '2026-08-20T00:00:00Z',
+      category: ['AI', 'Backend', 'Frontend'][i % 3],
+      tags: ['docker', 'ci'].slice(0, (i % 2) + 1),
+      coverEmoji: '📰', coverImageUrl: null, codeBlock: null,
+      toc: [], readTimeMin: 6, trendingScore: i, isFeatured: i === 0,
+      status: 'PUBLISHED', kind: 'ARTICLE', sources: [], author: null,
+    }))],
+    [/\/tech-trends\/resources/, () => mang(4, (i) => ({
+      id: i, title: `Tài nguyên ${i}`, url: 'https://example.com',
+      description: 'Mô tả ngắn.', tags: ['tool'], category: 'Tooling',
+    }))],
     /* ── CV Builder (22/08/2026) ──
        Mock CŨ ở đây trả một DANH SÁCH CV (`[{id,title,updatedAt}]`) — sai hình
        dạng với cây web: `/cv/profile` trả MỘT hồ sơ có `items`/`skills`/…

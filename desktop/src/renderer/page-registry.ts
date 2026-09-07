@@ -33,7 +33,7 @@ import { TrangCaNhanPage } from './features/profile/TrangCaNhanPage';
 import { MusicPage } from './features/music/MusicPage';
 import { NotesPage } from './features/notes/NotesPage';
 import { ProPage } from './features/pro/ProPage';
-import { TechTrendsPage } from './features/tech-trends/TechTrendsPage';
+import { TechTrendsWebPage } from './features/tech-trends/TechTrendsWebPage';
 import { HocVienPage } from './features/academy/HocVienPage';
 import { KhoaHocPage } from './features/academy/KhoaHocPage';
 import { CodeLabPage } from './features/codelab/CodeLabPage';
@@ -56,7 +56,7 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/music': MusicPage,
   '/notes': NotesPage,
   '/pro': ProPage,
-  '/tech-trends': TechTrendsPage,
+  '/tech-trends': TechTrendsWebPage,
   '/ai-templates': MauAIPage,
   '/voice': GiongNoiPage,
   '/academy': HocVienPage,
@@ -104,6 +104,7 @@ const CHU_CAY: ReadonlyArray<readonly [string, ComponentType]> = [
   ['/forum', DienDanPage],
   ['/saved', DaLuuPage],
   ['/profile', TrangCaNhanPage],
+  ['/tech-trends', TechTrendsWebPage],
 ];
 
 export function nativePageFor(path: string): ComponentType | undefined {

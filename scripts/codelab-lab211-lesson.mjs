@@ -1408,6 +1408,317 @@ private DoctorResponseDTO toResponse(Doctor doctor) { ... }`),
   — bấm xoá không xoá gì; và không có chức năng hiển thị toàn bộ. Bộ khung đã bổ sung cả hai.</p>`),
 );
 
+
+// ══════════════════════════════════════════════════════════════
+const HDC = 'https://media.cuongthai.com/code-lab/lab211/hdc';
+const TRANG = (file, caption) => ({ type: 'image', url: `${HDC}/${file}`, caption });
+
+add(
+  PART('25', 'Hướng dẫn chung — từng trang tài liệu của thầy',
+       'Slide học LAB211 · Hướng dẫn dùng LAB · Hướng dẫn USB LAB · Chính sách chấm'),
+
+  P(`<p>Phần này đi <strong>từng trang</strong> bốn tài liệu giảng viên phát đầu kỳ. Mỗi trang: ảnh gốc,
+  rồi giải thích <em>nó nói gì</em>, <em>vì sao quan trọng</em>, và <em>bạn phải làm gì</em>.
+  Thầy nhấn mạnh phần này ở buổi đầu — và đây là thứ <strong>không được nhắc lại</strong>:
+  <em>"Việc hướng dẫn về cách làm và các quy định sẽ được tiến hành ở buổi đầu tiên (1 lần duy nhất)."</em></p>`),
+
+  // ── A. Slide Hướng dẫn học LAB211 ──────────────────────────
+  H('A. Slide "Hướng dẫn học LAB211" — 10 slide'),
+
+  TRANG('hd-01.png', 'Slide 1 — Giảng viên: Nguyen Van An (FE FPTU HN), annv22@fe.edu.vn.'),
+  P(`<p><strong>Slide 1.</strong> Ghi lại email thầy: <code>annv22@fe.edu.vn</code>. Bạn sẽ cần nó cho
+  email đăng ký MAC (mục C bên dưới) — phải <strong>CC thầy</strong>, không CC thì email vô hiệu.</p>`),
+
+  TRANG('hd-02.png', 'Slide 2 — Mục tiêu và Yêu cầu: 20 slot · tham gia ≥ 80% · tổng LOC ≥ 750 · đã pass PRO192.'),
+  P(`<p><strong>Slide 2.</strong> Bốn con số quyết định qua/trượt:</p>
+  <ul>
+  <li><strong>20 slot</strong> — mỗi slot 1,5 giờ. Syllabus chính thức ghi 30 slot; hỏi lại thầy con số thật của lớp bạn.</li>
+  <li><strong>Tham gia ≥ 80%</strong> — với 20 slot, bạn chỉ được vắng <strong>4 buổi</strong>. Vắng buổi thứ 5 là
+  trượt vì chuyên cần, bất kể LOC.</li>
+  <li><strong>LOC ≥ 750</strong> — thước đo duy nhất về bài làm.</li>
+  <li><strong>Pass PRO192</strong> — điều kiện tiên quyết, bạn đã có.</li>
+  </ul>`),
+
+  TRANG('hd-03.png', 'Slide 3 — Kiến thức cần nắm (1–4): OOP, Java coding convention, Access modifier, Static.'),
+  P(`<p><strong>Slide 3.</strong> Bốn thứ đầu tiên thầy liệt kê — <strong>không phải ngẫu nhiên</strong> mà
+  đó cũng chính là bốn thứ thầy hỏi lúc review (slide 10). Từng thứ đã có phần riêng trong bài giảng này:
+  OOP → Phần 18, Convention → Phần 22, Access modifier &amp; Static → Phần 19.</p>`),
+
+  TRANG('hd-04.png', 'Slide 4 — Kiến thức cần nắm (5–7): khai báo/gọi hàm/truyền tham số · kiểu dữ liệu · SOLID, Design Pattern.'),
+  P(`<p><strong>Slide 4.</strong> Để ý dòng <em>"Kiểu dữ liệu cơ bản: int, float, double, String, Date,
+  <strong>List, ArrayList, Map, HashMap</strong>"</em>. Thầy liệt kê <strong>cả bốn</strong>, cả giao diện lẫn bản
+  cài đặt — nghĩa là thầy muốn bạn <em>phân biệt được</em> chúng, không phải cấm dùng cái nào.
+  Câu trả lời mẫu ở Phần 23, câu 8–9.</p>
+  <p>Mục 5 <em>"truyền tham số"</em> chính là chỗ đẻ ra luật "không truyền 3 tham số vào 1 hàm" — xem Phần 17.</p>`),
+
+  TRANG('hd-05.png', 'Slide 5 — Yêu cầu thực hành: OOP · Cấu trúc project theo MVC · SOLID (Model đáp ứng SRP) · Đóng gói.'),
+  P(`<p><strong>Slide 5.</strong> Bốn yêu cầu, mỗi cái một dòng, nhưng dòng cuối cần đọc kỹ:
+  <em>"Đóng gói — <strong>Không truyền dữ liệu qua lại</strong>"</em>.</p>
+  <p>Nghĩa là: dữ liệu không được chạy lung tung giữa các class bằng tham số rời. Nó phải nằm
+  <strong>trong đối tượng</strong> (model) hoặc <strong>trong hộp</strong> (DTO) rồi mới được chuyển. Đây là lý do
+  sâu xa của cả kiến trúc 8 package.</p>`),
+
+  TRANG('hd-06.png', 'Slide 6 — Quy tắc đặt tên: Project RollNo_ExcerciseNo_ExcerciseDescription · Package main, controllers/services, exceptions, utils · Class Student, Worker · Method calcSummaryFee(), checkValidAge().'),
+  P(`<p><strong>Slide 6.</strong> Bốn tầng đặt tên:</p>
+  <table>
+  <tr><th>Tầng</th><th>Quy tắc</th><th>Ví dụ của bạn</th></tr>
+  <tr><td>Project</td><td><code>RollNo_ExcerciseNo_ExcerciseDescription</code></td><td><code>HE176322_J1S0055_DoctorManagement</code></td></tr>
+  <tr><td>Package</td><td>chữ thường, danh từ số nhiều cho tầng</td><td><code>controller</code>, <code>utils</code></td></tr>
+  <tr><td>Class</td><td>PascalCase, danh từ</td><td><code>Doctor</code>, <code>DoctorRepository</code></td></tr>
+  <tr><td>Method</td><td>camelCase, <strong>động từ</strong></td><td><code>addDoctor()</code>, <code>isDuplicate()</code></td></tr>
+  </table>
+  <p>⚠️ Slide liệt kê package <code><strong>exceptions</strong></code> — bộ khung <code>P0055</code> mẫu của thầy
+  <em>không</em> có nó (dùng <code>Exception</code> chung). Nghĩa là thầy <em>chấp nhận</em> cả hai, nhưng
+  <strong>có package <code>exceptions</code> với class riêng</strong> (ví dụ <code>ValidationException</code>)
+  là điểm cộng khi thầy hỏi về exception. Làm sau khi đã thuộc khung.</p>`),
+
+  TRANG('hd-07.png', 'Slide 7 — Single Responsibility: Model định nghĩa class với thuộc tính · Controller/Service thực hiện hàm chức năng.'),
+  P(`<p><strong>Slide 7.</strong> Thầy dành nguyên một slide cho <strong>một</strong> nguyên lý SOLID — SRP.
+  Đó là tín hiệu: trong 5 nguyên lý, thầy chấm SRP kỹ nhất. Và định nghĩa của thầy rất cụ thể:</p>
+  <ul>
+  <li><strong>Model</strong> = class với thuộc tính. Hết. Không hàm nghiệp vụ.</li>
+  <li><strong>Controller/Service</strong> = nơi thực hiện hàm chức năng.</li>
+  </ul>
+  <p>Nên nếu bạn viết <code>doctor.tinhLuong()</code> trong model — thầy sẽ hỏi ngay "sao model lại tính?".
+  Hàm đó thuộc về Service.</p>`),
+
+  TRANG('hd-08.png', 'Slide 8 — Quá trình thực hành: (1) Không sử dụng điện thoại · (2) Save draft · (3) Review.'),
+  P(`<p><strong>Slide 8.</strong> Ba bước trong một buổi, theo đúng thứ tự:</p>
+  <ol>
+  <li><strong>Không điện thoại</strong> — cất lên phía trên lớp trước khi làm gì khác.</li>
+  <li><strong>Save draft</strong> — lưu nháp liên tục lên PTS. Không lưu là mất bài (mục B).</li>
+  <li><strong>Review</strong> — xin thầy chấm, <strong>trước khi hết giờ 30 phút</strong>, tối đa 3 bài/slot.</li>
+  </ol>
+  <p>Nhịp thực tế: gõ 20 phút → save draft → gõ tiếp → save draft → chạy thử đủ case → xin review.</p>`),
+
+  TRANG('hd-09.png', 'Slide 9 — Nội quy: điện thoại, điểm danh, bài P0055 buổi đầu, bài nào tránh.'),
+  P(`<p><strong>Slide 9 — slide quan trọng nhất bộ.</strong> Đọc từng dòng:</p>
+  <table>
+  <tr><th>Luật</th><th>Hậu quả</th><th>Việc phải làm</th></tr>
+  <tr><td>Điện thoại, balo, đồng hồ thông minh để lên phía trên lớp</td><td>Để trong người → <strong>reject hết bài đang làm</strong></td><td>Cất TRƯỚC khi ngồi xuống</td></tr>
+  <tr><td>Xem điện thoại/đồng hồ/tài liệu</td><td><strong>Nghỉ luôn, không có lần đầu</strong></td><td>Muốn tra thì mang điện thoại ra hành lang</td></tr>
+  <tr><td>Khởi động lại máy trước khi thầy start lớp; tắt máy trước khi về</td><td>—</td><td>Thành thói quen</td></tr>
+  <tr><td>Học hộ, cheating nặng</td><td>Bàn giao khảo thí</td><td>—</td></tr>
+  <tr><td>Điểm danh</td><td>Duy nhất 1 lần, 10 phút đầu</td><td><strong>Đến sớm</strong></td></tr>
+  <tr><td>Buổi đầu làm <code>S.P0055</code> theo mẫu</td><td>Không tính LOC</td><td>Được mở file Guide</td></tr>
+  <tr><td>Bài thuật toán (fibo, sắp xếp) cũng phải MVC</td><td>Không MVC → không review</td><td>Dùng đủ 8 package cả bài 40 LOC</td></tr>
+  <tr><td>Bài Candidate</td><td>Cần đủ SOLID → rất khó</td><td><strong>Tránh</strong></td></tr>
+  <tr><td>Bài Hoa quả</td><td>Cần ERD, console rất phức tạp</td><td><strong>Tránh</strong></td></tr>
+  <tr><td>Review tối đa 3 bài/SV/slot</td><td>—</td><td>Xin review trước khi hết giờ 30 phút</td></tr>
+  </table>
+  <p>Hai dòng về Candidate và Hoa quả là thầy <em>nói thẳng</em> bài nào không nên chọn — hiếm giảng viên
+  nào nói rõ vậy. Lộ trình 9 bài ở Phần 16 đã né cả hai.</p>`),
+
+  TRANG('hd-10.png', 'Slide 10 — Nội quy (tiếp): cấu trúc MVC bắt buộc, và những gì phải trả lời được khi review.'),
+  P(`<p><strong>Slide 10 — bảng câu hỏi review, nguyên văn.</strong> Đây là đề cương "vấn đáp" của môn:</p>
+  <ol>
+  <li><strong>Source bắt buộc theo MVC</strong> — không có cấu trúc → không review.</li>
+  <li><strong>Đúng coding convention</strong> — không đảm bảo → không review tiếp. <em>Ưu tiên
+  <code>Alt + Shift + F</code></em> (NetBeans tự định dạng).</li>
+  <li><strong>Đủ comment</strong> cho function và block/rẽ nhánh — không có → không review.</li>
+  <li><strong>Phải debug được</strong> khi thầy yêu cầu — không debug được → không review tiếp.</li>
+  <li><strong>Test đủ happy case + hiện đủ message validation</strong> — test thiếu → không review.</li>
+  <li><strong>Đúng OOP</strong>: class cho từng đối tượng, đủ attribute và method, <strong>đúng access modifier</strong>.
+  Dùng được kế thừa, đa hình → <strong>cộng LOC</strong>. Implement và hiểu SOLID → <strong>cộng LOC</strong>.</li>
+  <li>Access modifier: <strong>khái niệm, phạm vi, và chỉ rõ tại sao chỗ đó cần dùng</strong>.</li>
+  <li>Kiểu trả về: <strong>tại sao <code>void</code>, tại sao <code>String</code></strong>.</li>
+  <li>Static: <strong>tại sao dùng? Bỏ đi thì sao? Không dùng thì sửa source thế nào cho chạy?</strong></li>
+  <li>4 tính chất OOP: <strong>liệt kê, rồi chỉ vào source của em</strong>.</li>
+  </ol>
+  <p>Năm mục đầu là <strong>điều kiện được review</strong>. Năm mục sau là <strong>câu hỏi lúc review</strong>.
+  Đáp án mẫu cho từng câu ở Phần 23.</p>`),
+
+  // ── B. Hướng dẫn Sinh Viên sử dụng LAB ─────────────────────
+  H('B. "Hướng dẫn Sinh Viên sử dụng LAB" — hệ thống PTS, nộp bài'),
+
+  TRANG('lab-1.png', 'Trang 1 — Mục lục: Lưu ý chung · Đăng nhập · Chọn bài · Lưu bài (DRAFT / SUBMIT).'),
+  TRANG('lab-2.png', 'Trang 2 — Toàn bộ nội dung: đăng nhập PTS, chọn tối đa 5 bài, DRAFT vs SUBMIT.'),
+  P(`<p><strong>Trang 2 — quy trình PTS.</strong> PTS là hệ thống nộp bài của phòng lab. Bốn việc:</p>
+  <p><strong>Đăng nhập máy:</strong> tài khoản wifi, hoặc thêm <code>FU\\</code> trước tên. Sau đó bấm
+  shortcut <strong>PTS</strong> trên desktop → trình duyệt mở → đăng nhập lại bằng tài khoản wifi,
+  <em>lần này KHÔNG thêm <code>FU\\</code></em>.</p>
+  <p><strong>Chọn bài:</strong> chỉ chọn bài <em>dự định làm</em>, <strong>tối đa 5 bài</strong>. Xong bài nào mới chọn
+  tiếp. Đừng chọn cả 9 bài trong lộ trình cùng lúc.</p>
+  <p><strong>DRAFT</strong> = lưu nháp: đang làm dở thì lưu để buổi sau làm tiếp. <strong>Không lưu là mất bài, làm lại
+  từ đầu.</strong> Upload được nhiều lần sau mỗi lần sửa. Chỉ nhận <strong>file zip ≤ 10MB</strong>.</p>
+  <p><strong>SUBMIT</strong> = chốt: <strong>chỉ SUBMIT khi thầy đã đánh giá đạt</strong>. Đã SUBMIT thì không sửa,
+  không upload lại được nữa.</p>
+  <p>⚠️ Dòng đỏ trong tài liệu: <em>"SV cần đăng nhập lại bằng cách bấm vào Shortcut PTS <strong>trước khi</strong>
+  tiến hành lưu bài để đảm bảo bài có thể được lưu thành công."</em> Phiên PTS hết hạn im lặng — bấm
+  Save mà không đăng nhập lại là mất công gõ.</p>`),
+
+  // ── C. Hướng dẫn USB LAB ───────────────────────────────────
+  H('C. "Hướng dẫn chuẩn bị thực hành LAB sử dụng trên USB LAB" — 10 trang'),
+  P(`<p>Đây là tài liệu <strong>quan trọng nhất về mặt hậu cần</strong>: phòng lab không dùng máy của trường.
+  Bạn mang <strong>laptop của mình</strong>, cắm <strong>USB của lab</strong> (chứa Ubuntu), <strong>boot từ USB đó</strong>,
+  và làm bài trong môi trường ấy. Laptop không boot được USB = không có buổi học.</p>`),
+
+  TRANG('usb-01.png', 'Trang 1 — Mục lục 5 phần: Nội quy · Yêu cầu chuẩn bị · Chuẩn bị phần mềm (7 bước) · Gửi mail đăng ký MAC · Xử lý sự cố.'),
+
+  TRANG('usb-02.png', 'Trang 2 — Nội quy phòng LAB USB và yêu cầu về laptop.'),
+  P(`<p><strong>Trang 2 — hai khung đỏ.</strong></p>
+  <p><strong>Khung nội quy:</strong> từ buổi thứ hai trở đi, khi bước vào phòng, laptop <strong>bắt buộc</strong> ở
+  một trong hai trạng thái: <em>tắt hoàn toàn</em>, hoặc <em>đã boot vào USB LAB</em>. Không có trạng thái thứ ba.
+  Kể cả hết giờ, kể cả không làm bài — còn ngồi trong phòng là còn phải tuân thủ. Vi phạm =
+  <strong>gian lận = trượt môn</strong> hoặc nặng hơn. Muốn vào Windows thì <strong>ra khỏi phòng</strong>.</p>
+  <p>Không mang USB LAB ra khỏi phòng với bất kỳ lý do gì — trả thầy trước khi rời. Shutdown đúng thủ tục,
+  <strong>không rút USB trước khi Shutdown</strong>.</p>
+  <p><strong>Khung yêu cầu laptop:</strong> Windows 10+, <strong>ít nhất 1 cổng USB Type-A</strong>, màn HD trở lên,
+  <strong>không MacBook, không Chromebook</strong>. Và quan trọng nhất — dòng đỏ cuối:
+  <em>"máy phải <strong>boot được vào USB Ubuntu</strong> và <strong>kết nối được Wifi</strong> với USB Ubuntu.
+  Sinh viên phải chuẩn bị đảm bảo 2 điều trên <strong>TRƯỚC KHI</strong> vào lớp thực hành."</em></p>
+  <p>💡 Việc cần làm <strong>trước buổi 2</strong>: mượn USB LAB (hoặc tự làm một USB Ubuntu live) thử boot ở nhà.
+  Đừng để buổi 2 là lần đầu thử.</p>`),
+
+  TRANG('usb-03.png', 'Trang 3 — Bước 1: vào BIOS. Phím theo hãng máy. Ảnh: màn hình BIOS Aptio (American Megatrends).'),
+  P(`<p><strong>Trang 3 — vào BIOS.</strong> Bật máy, bấm liên tục phím theo hãng:</p>
+  <table>
+  <tr><th>Phím</th><th>Hãng</th></tr>
+  <tr><td><code>F12</code></td><td>Acer, Dell, Lenovo, Toshiba, Fujitsu</td></tr>
+  <tr><td><code>F9</code> hoặc <code>Esc</code></td><td>HP, Compaq</td></tr>
+  <tr><td><code>F8</code> hoặc <code>Esc</code></td><td>Asus</td></tr>
+  <tr><td><code>F11</code></td><td>Sony Vaio, MSI</td></tr>
+  </table>
+  <p>Ảnh là BIOS kiểu <em>Aptio Setup Utility</em> — giao diện chữ xanh xám cổ điển. Máy đời mới có thể là
+  giao diện đồ hoạ, nhưng các mục cần tìm (Secure Boot, Boot Order) vẫn tên như vậy.</p>
+  <p>Khung đỏ: <strong>tự làm 5–10 phút không được thì qua phòng IT 300L</strong>. Đừng mất cả buổi mò BIOS.</p>`),
+
+  TRANG('usb-04.png', 'Trang 4 — Bước 2–5: tắt Secure Boot/TPM/Fast Boot/Windows To Go · F10 lưu · chọn boot Ubuntu · mật khẩu khoá màn hình 12345678.'),
+  P(`<p><strong>Trang 4 — bốn bước liền.</strong></p>
+  <p><strong>Bước 2 — Tắt Secure Boot.</strong> Vì Ubuntu trên USB không có chữ ký Microsoft, Secure Boot sẽ chặn.
+  Tắt Secure Boot trước; vẫn chưa boot được thì tắt tiếp <strong>TPM</strong>, <strong>Fast Boot</strong>; vẫn không được
+  nữa thì tắt <strong>Windows To Go</strong>. Ảnh trên: mục <code>Launch CSM</code> trong tab Boot — chuyển
+  <code>Disabled</code> → <code>Enabled</code> trên một số máy Asus cũng là cách mở boot USB.</p>
+  <p><strong>Bước 3 — Lưu.</strong> <code>F10</code> → <code>Yes</code>. Ảnh dưới là hộp thoại
+  <em>"Save configuration and exit?"</em>.</p>
+  <p><strong>Bước 4 — Chọn boot USB.</strong> Vào Boot Menu, chọn thiết bị tên <strong>Ubuntu</strong> (tên có thể
+  khác tuỳ máy — tìm dòng có chữ USB hoặc tên hãng USB).</p>
+  <p><strong>Bước 5 — Boot xong.</strong> Nếu máy tự khoá màn hình, mật khẩu là <strong><code>12345678</code></strong>
+  (in đỏ, to trong tài liệu — thầy biết ai cũng quên).</p>`),
+
+  TRANG('usb-05.png', 'Trang 5 — Màn hình Ubuntu sau khi boot (chỉ có icon PTS) và bước 6: tự động kết nối mạng FPTU_Laboratory.'),
+  P(`<p><strong>Trang 5 — màn hình đích và mạng.</strong> Ảnh là desktop Ubuntu của USB LAB: nền đen trắng,
+  <strong>đúng một icon <code>PTS</code></strong> góc trên trái, thanh dưới có Firefox và trình quản lý file.
+  Thấy màn hình này là boot thành công.</p>
+  <p>Sau đó <strong>đứng yên chờ</strong> máy tự nối vào wifi <code>FPTU_Laboratory</code>. Không thể đổi
+  sang mạng khác. Khung đỏ liệt kê các tình huống:</p>
+  <ul>
+  <li>Không tự nối → bấm chọn <code>FPTU_Laboratory</code>, <strong>không làm gì thêm</strong>.</li>
+  <li>Chưa tích <em>Enable Network</em> / <em>Enable Wifi</em> → tích vào.</li>
+  <li>Boot được nhưng <strong>không thấy wifi nào</strong> → quay lại BIOS tắt Secure Boot và TPM.</li>
+  <li>Vẫn không thấy → mượn <strong>card wifi ở phòng AL-L300</strong>.</li>
+  <li>Thấy wifi nhưng nối xong <strong>bị đẩy ra ngay</strong> → tắt máy, rút USB, vào Windows,
+  <em>Forget</em> mạng <code>DH-FPT</code> rồi đăng nhập lại, tắt máy, cắm USB boot lại.</li>
+  </ul>
+  <p>Dòng gạch chân cuối: <em>"Tuyệt đối không được vào bất kỳ mạng nào khác, nếu không máy đấy sẽ bị khoá
+  không thể thực hành được nữa đồng thời <strong>mọi dữ liệu trên máy sẽ bị huỷ</strong>."</em>
+  Không phải doạ — hệ thống khoá theo MAC.</p>`),
+
+  TRANG('usb-06.png', 'Trang 6 — Bước 7: đăng ký máy lần đầu qua PTS; máy đã đăng ký thì bỏ qua; đổi máy thì gửi email.'),
+  P(`<p><strong>Trang 6 — đăng ký máy (chỉ lần đầu).</strong> Hệ thống nhận diện laptop bằng <strong>địa chỉ MAC</strong>
+  của card wifi. Ba trường hợp:</p>
+  <ol>
+  <li><strong>Đã từng đăng ký, không đổi máy</strong> → bỏ qua bước này. Bạn học lại lần 5 — nếu vẫn dùng laptop
+  cũ thì có thể đã có trong hệ thống. Hỏi thầy.</li>
+  <li><strong>Máy chưa từng dùng</strong> → bấm icon <code>PTS</code>, đăng nhập bằng tài khoản wifi
+  <strong>NGAY khi popup hiện</strong> (chậm là không đăng nhập được), nhận thông báo MAC đã đăng ký,
+  <strong>giữ nguyên màn hình đó cho thầy kiểm tra trực tiếp</strong> rồi mới được dùng máy.</li>
+  <li><strong>Đã đăng ký nhưng đổi máy / đổi phần cứng</strong> → thầy kiểm tra tại máy, rồi bạn gửi email
+  theo đúng format (trang 8–9), có CC thầy, đợi thầy reply đồng ý.</li>
+  </ol>`),
+
+  TRANG('usb-07.png', 'Trang 7 — Cách lấy địa chỉ MAC: icon mạng → "Connection Information" → mục "Hardware Address".'),
+  P(`<p><strong>Trang 7 — lấy MAC.</strong> Hai ảnh: bấm icon mạng ở thanh dưới → chọn
+  <strong>Connection Information</strong> → cửa sổ hiện ra, MAC nằm ở dòng <strong>Hardware Address</strong>
+  (dạng <code>XX:XX:XX:XX:XX:XX</code>). Ghi lại đúng từng ký tự — email đăng ký sai một chữ là
+  không vào được lớp.</p>
+  <p>⚠️ Trong ảnh mẫu, giao diện đang nối <em>Ethernet</em> (dây). Máy bạn nối wifi thì tab sẽ là tên wifi,
+  nhưng dòng <em>Hardware Address</em> vẫn ở cùng vị trí. Lấy MAC của <strong>card wifi</strong>, không phải
+  card dây.</p>`),
+
+  TRANG('usb-08.png', 'Trang 8 — Email đăng ký MAC: From · To tuanvm23@fe.edu.vn · CC giảng viên · Subject theo format cứng.'),
+  P(`<p><strong>Trang 8 — format email, sai là không vào được lớp.</strong></p>
+  <ul>
+  <li><strong>From:</strong> email trường, đúng tên đầy đủ.</li>
+  <li><strong>To:</strong> <code>tuanvm23@fe.edu.vn</code> (người quản lý hệ thống lab).</li>
+  <li><strong>CC:</strong> giảng viên lớp — với bạn là <code>annv22@fe.edu.vn</code>. <strong>Thiếu CC = vô hiệu.</strong></li>
+  <li><strong>Subject:</strong> <code>MAC_</code> + lớp LAB + <code>|</code> + mã SV + <code>|</code> + MAC.
+  <strong>Không có dấu cách nào.</strong> Ví dụ trong tài liệu:
+  <code>MAC_SE1406|HE130212|1C-4D-70-62-75-05</code>. Để ý MAC viết bằng <strong>dấu gạch ngang</strong>,
+  không phải hai chấm.</li>
+  </ul>
+  <p>Khung đỏ đầu trang: <em>"Nếu nội dung email <strong>không có lý do đổi MAC</strong> thì kể cả GV đồng ý
+  cũng sẽ không được chấp nhận."</em> Có cả link ứng dụng tự sinh email đúng format — dùng nó cho chắc.</p>`),
+
+  TRANG('usb-09.png', 'Trang 9 — Nội dung email mẫu và ảnh chụp email thật; đầu mục V: Xử lý sự cố.'),
+  P(`<p><strong>Trang 9 — thân email.</strong> Năm dòng, theo đúng thứ tự:</p>
+  <pre>Tên sinh viên: Nguyễn Văn A
+Lớp LAB: SE1406
+Mã sinh viên: HE130212
+Địa chỉ MAC Wi-fi: 1C-4D-70-62-75-05
+Lý do gửi mail: Máy của em bị hỏng nên cần đăng ký địa chỉ MAC cho máy mới</pre>
+  <p>Ảnh chụp là email thật đã soạn xong trong Outlook — nhìn để bắt chước bố cục. Dòng
+  <strong>lý do</strong> là bắt buộc (khung NOTE đỏ nhắc lại lần nữa). Email chỉ có hiệu lực <strong>sau khi GV
+  reply confirm</strong>.</p>
+  <p>Mục V bắt đầu: <em>"SV rút tất cả các USB trừ USB LAB"</em> — nhiều USB cắm cùng lúc làm menu boot
+  nhiễu, chọn nhầm.</p>`),
+
+  TRANG('usb-10.png', 'Trang 10 — Bảng xử lý sự cố: không thấy wifi · nối rồi bị out · PTS không cho vào · màn hình đen · email không được xử lý.'),
+  P(`<p><strong>Trang 10 — cây xử lý sự cố.</strong> Đọc theo triệu chứng:</p>
+  <table>
+  <tr><th>Triệu chứng</th><th>Làm gì</th></tr>
+  <tr><td>Boot được, không thấy wifi</td><td>Tắt Secure Boot + TPM. Vẫn không → mượn card wifi AL-L300</td></tr>
+  <tr><td>Nối <code>FPTU_Laboratory</code> xong bị out ngay</td><td>Tắt máy, rút USB → Windows → Forget <code>DH-FPT</code>, đăng nhập lại → tắt → cắm USB boot lại</td></tr>
+  <tr><td>Nối được, đăng nhập PTS lần đầu OK, PTS vẫn không cho vào</td><td>Nhờ thầy kiểm đã gán USB cho mình chưa; kiểm lại format + MAC đã gửi</td></tr>
+  <tr><td>Đăng nhập PTS xong <strong>màn hình đen</strong></td><td>Xoá cookies → tắt trình duyệt → bấm PTS đăng nhập lại</td></tr>
+  <tr><td>Đã gửi email, thầy đã đồng ý, vẫn không được xử lý</td><td>Sai format hoặc thiếu lý do — kiểm lại từng ký tự Subject và MAC</td></tr>
+  </table>
+  <p>Gần như mọi lỗi "không vào được" đều quy về <strong>hai thứ</strong>: Secure Boot chưa tắt, hoặc email sai
+  format. Kiểm hai cái đó trước.</p>`),
+
+  // ── D. Grading policy ──────────────────────────────────────
+  H('D. "Lab Grading Policy" — 2 trang'),
+
+  TRANG('gp-1.png', 'Trang 1 — Ba tiêu chí chấm: Program structure · Coding convention · Meet the assignment requirements. Chính sách học thuật: Cheating, Plagiarism.'),
+  P(`<p><strong>Trang 1 — ba tiêu chí, theo thứ tự.</strong></p>
+  <ol>
+  <li><strong>Program structure</strong> — đúng cấu trúc mô tả trong đề. Với thầy bạn = 8 package MVC.</li>
+  <li><strong>Coding convention</strong> — tên file, tên hàm, tên biến, comment, định dạng câu lệnh. Tài liệu tham
+  chiếu là <em>Java Coding Conventions</em> (Sun 1997) — link trên CMS.</li>
+  <li><strong>Meet the assignment requirements</strong> — chạy đúng yêu cầu.</li>
+  </ol>
+  <p>Để ý thứ tự: <strong>cấu trúc đứng trước "chạy đúng"</strong>. Chương trình chạy hoàn hảo mà sai cấu trúc
+  vẫn trượt tiêu chí 1 — khớp với slide 10: "không có cấu trúc → không review".</p>
+  <p><strong>Cheating</strong> = nói chuyện, nhìn bài người khác, hay bất kỳ cách truyền thông tin lén nào.
+  <strong>Plagiarism</strong> = dùng bài người khác mà không ghi nguồn — kể cả <em>"đổi tên biến rồi nộp"</em>,
+  tài liệu ghi thẳng: <em>"Simple rewording… or changing the field names in their program… may be construed as
+  plagiarism."</em></p>`),
+
+  TRANG('gp-2.png', 'Trang 2 — How Not To Plagiarize: được phép dùng code mẫu của môn; giúp bạn thì đừng cho xem bài mình.'),
+  P(`<p><strong>Trang 2 — ranh giới được/không được.</strong> Đây là đoạn quan trọng vì nó nói rõ thứ bạn
+  <strong>được phép</strong>:</p>
+  <blockquote><em>"You may imitate and dissect the sample code in the subject web site and the printed subject
+  notes. You may use this code in your submissions, including your assignments."</em></blockquote>
+  <p>Tức là: <strong>bộ khung <code>P0055</code> mẫu của thầy — dùng được, chép được, không cần trích dẫn.</strong>
+  Đó là lý do Code Lab đính nó làm starter code cho bạn.</p>
+  <p>Cái <strong>không được</strong>: bài của bạn cùng lớp, và code từ web/sách ngoài môn mà không ghi nguồn.</p>
+  <p>Hai luật khi giúp nhau: người giúp thì <em>cất bài mình đi</em>, nhìn màn hình của bạn và gỡ theo cách của
+  bạn — <strong>không cho xem cách mình làm</strong>. Người được giúp thì mục tiêu là <em>hiểu vấn đề</em>,
+  không phải xin đáp án — vì lát nữa chính bạn phải trả lời thầy.</p>`),
+
+  H('Việc cần làm trước buổi 2 — rút từ bốn tài liệu'),
+  P(`<ol>
+  <li>☐ Thử <strong>boot laptop từ USB Ubuntu</strong> ở nhà, xác nhận <strong>wifi chạy</strong> trong Ubuntu.
+  Không có USB LAB thì tự tạo một USB Ubuntu live để thử — mục tiêu chỉ là biết máy boot được.</li>
+  <li>☐ Biết <strong>phím vào BIOS</strong> của máy mình, biết tắt Secure Boot ở đâu.</li>
+  <li>☐ Ghi sẵn <strong>địa chỉ MAC wifi</strong> của máy (phòng khi phải gửi email).</li>
+  <li>☐ Lưu sẵn email thầy <code>annv22@fe.edu.vn</code> và <code>tuanvm23@fe.edu.vn</code>.</li>
+  <li>☐ Gõ lại bộ khung <code>P0055</code> đến khi không cần nhìn mẫu.</li>
+  <li>☐ Đến sớm — điểm danh chỉ trong 10 phút đầu, một lần duy nhất.</li>
+  <li>☐ Cất điện thoại + đồng hồ thông minh lên phía trên lớp <strong>trước khi ngồi</strong>.</li>
+  </ol>`),
+);
+
 // ══════════════════════════════════════════════════════════════
 const dem0 = {};
 let chu0 = 0;

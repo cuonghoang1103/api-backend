@@ -516,15 +516,53 @@ const TOOL_PURPOSES = new Set<LlmPurpose>(['agent_code']);
  * nhưng cũng không nằm trong `LLM_LOCAL_PURPOSES` mặc định nên tự động không
  * rơi vào máy nhà — việc tương tác trực tiếp người dùng không nên xếp hàng.
  */
-const RAMBO_PURPOSES = new Set<LlmPurpose>(['agent_code', 'exam_tutor']);
+export const RAMBO_PURPOSES_CO_DINH = new Set<LlmPurpose>(['agent_code', 'exam_tutor']);
+const RAMBO_PURPOSES = RAMBO_PURPOSES_CO_DINH;
+
+/**
+ * ============================================================
+ * RAMBO LÀ CỔNG CHÍNH (07/09/2026) — modelapi chỉ còn là DỰ PHÒNG
+ * ============================================================
+ *
+ * Người dùng chốt: *"lấy cổng rambo làm cổng chính, dùng model chất lượng như
+ * opus-4.8 thoải mái đừng tiết kiệm vì nó reset mỗi 5h gói max x5; cổng
+ * modelapi làm dự phòng, lấy gpt-5.6-sol khi rambo không hoạt động, rambo sống
+ * lại thì quay về rambo; mặc định rambo, đừng giới hạn gì hết."*
+ *
+ * Vì sao cần CẦU DAO chứ không chỉ đổi mặc định: `endpointFor()` là hàm ĐỒNG
+ * BỘ, nó không biết lượt gọi vừa rồi hỏng hay không. Nếu rambo sập mà vẫn cứ
+ * trả về rambo thì mọi tính năng AI cùng chết — đúng kiểu hỏng đã xảy ra hôm
+ * nay với nhóm GPT của modelapi (503 hàng loạt). Nên nơi gọi báo về bằng
+ * `baoRamboHong()`, cổng bị nghỉ `RAMBO_NGHI_MS`, hết hạn thì TỰ thử lại —
+ * không cần deploy, không cần ai vặn tay.
+ */
+const RAMBO_NGHI_MS = Math.max(15_000, Number(process.env.RAMBO_NGHI_MS) || 60_000);
+let ramboHongToi = 0;
+
+/** Nơi gọi báo: lượt vừa rồi qua rambo đã hỏng ⇒ cho cổng nghỉ một lát. */
+export function baoRamboHong(): void {
+  ramboHongToi = Date.now() + RAMBO_NGHI_MS;
+}
+
+/** Rambo vừa trả lời được ⇒ mở cầu dao ngay, không phải chờ hết hạn nghỉ. */
+export function baoRamboOk(): void {
+  ramboHongToi = 0;
+}
+
+export function ramboDangNghi(): boolean {
+  return Date.now() < ramboHongToi;
+}
 
 export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
   // Đặt TRƯỚC nhánh máy nhà: `agent_code` nằm trong `TOOL_PURPOSES` nên nó
   // không bao giờ đi máy nhà, nhưng thứ tự này nói rõ ý định.
-  if (RAMBO_PURPOSES.has(purpose)) {
-    const rieng = congAgent();
-    if (rieng) return rieng;
-  }
+  //
+  // Rambo giờ nhận MỌI việc (không còn giới hạn ở `RAMBO_PURPOSES`), trừ khi
+  // cầu dao đang mở vì nó vừa hỏng. `RAMBO_PURPOSES` giữ lại vì hai việc đó
+  // phải đi rambo KỂ CẢ lúc cầu dao mở — chúng là việc tương tác trực tiếp mà
+  // modelapi không phục vụ được bằng model Claude.
+  const rieng = congAgent();
+  if (rieng && (!ramboDangNghi() || RAMBO_PURPOSES.has(purpose))) return rieng;
   const root = localRoot();
   if (root && !VISION_PURPOSES.has(purpose) && !TOOL_PURPOSES.has(purpose) && localPurposes().has(purpose) && process.env.LLM_LOCAL_API_KEY) {
     return { root, key: process.env.LLM_LOCAL_API_KEY, local: true, label: 'may-nha' };
@@ -728,9 +766,49 @@ function modelCong(purpose: LlmPurpose): string {
   return env?.trim() || PURPOSE_MODEL[purpose];
 }
 
+/**
+ * Model cho ĐƯỜNG RAMBO. Người dùng bảo "đừng tiết kiệm", nên mặc định là
+ * `claude-opus-4-8` — model mạnh nhất cổng này có.
+ *
+ * Ngoại lệ DUY NHẤT là mấy việc nền chạy hàng chục nghìn lượt (phân loại
+ * chương, sinh nội dung hàng loạt): ở đó `claude-sonnet-5` được chọn không
+ * phải để tiết kiệm tiền mà vì THỜI GIAN — đo thật 19/08: opus-4-8 mất 4.706ms
+ * tới mẩu đầu còn sonnet-5 chỉ 2.460ms, tức gần gấp đôi. Với 15.406 câu thì
+ * chênh lệch đó là nhiều giờ đồng hồ, mà chất lượng phân loại một câu hỏi vào
+ * chương thì sonnet-5 đã thừa sức.
+ */
+const RAMBO_MODEL_MANH = 'claude-opus-4-8';
+const RAMBO_MODEL_HANG_LOAT = 'claude-sonnet-5';
+const RAMBO_VIEC_HANG_LOAT = new Set<LlmPurpose>([
+  'codelab_bulk', 'language_bulk', 'exphub_doc', 'news_bulletin', 'cv_parse',
+]);
+
+/**
+ * Model dùng khi PHẢI lùi về modelapi. Người dùng chỉ định `gpt-5.6-sol`.
+ *
+ * ⚠️ ĐO THẬT 07/09/2026: nhóm GPT của cổng đang **503 toàn bộ** —
+ * `gpt-5.6-sol` VÀ `gpt-5.4-mini` đều hỏng, trong khi `LLM_GATEWAY_API_KEY_GPT`
+ * CÓ trong `/opt/cuonghoangdev/.env`. Tức không phải thiếu khoá mà là kênh đã
+ * đóng, và `modelGoiDuoc()` không cứu được (nó chỉ lùi khi THIẾU KHOÁ).
+ * Cùng lúc đó `claude-sonnet-5` qua chính modelapi trả lời trong 2,6s — trái
+ * với ghi chú 20/08 nói nhóm claude của modelapi không gọi được.
+ *
+ * ⇒ Chừng nào kênh GPT chưa mở lại, đặt biến này thành `claude-sonnet-5` thì
+ * đường lùi mới thật sự có tác dụng:
+ *     LLM_MODELAPI_DU_PHONG=claude-sonnet-5
+ * Vặn được ngay trên VPS, không cần deploy.
+ */
+const MODELAPI_DU_PHONG = process.env.LLM_MODELAPI_DU_PHONG?.trim() || 'gpt-5.6-sol';
+
 export function modelFor(purpose: LlmPurpose, ep?: LlmEndpoint): string {
   const env = process.env[`LLM_MODEL_${purpose.toUpperCase()}`]?.trim();
   const diem = ep ?? endpointFor(purpose);
+  // Đường rambo: chỉ phục vụ model Claude, nên bản đồ `PURPOSE_MODEL` (vốn đầy
+  // tên `gpt-*` của modelapi) KHÔNG dùng được ở đây — lấy nhầm là 404/503.
+  if (diem.label === 'cong-agent') return env || (RAMBO_VIEC_HANG_LOAT.has(purpose) ? RAMBO_MODEL_HANG_LOAT : RAMBO_MODEL_MANH);
+  // Lùi về modelapi: dùng model dự phòng người dùng chỉ định, trừ khi việc này
+  // vốn đã trỏ vào một model gpt còn sống (giữ nguyên lựa chọn cũ nếu có).
+  if (!diem.local && ramboDangNghi()) return modelGoiDuoc(env || MODELAPI_DU_PHONG);
   // ⚠️ `LLM_MODEL_<VIỆC>` phải THẮNG, kể cả khi việc này đang chạy ở máy nhà —
   // đó là cái van người ta vặn lúc đang chữa cháy, và một cái van bị nhánh
   // khác nuốt mất thì lần sau không ai tin nó nữa.

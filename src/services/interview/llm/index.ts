@@ -23,6 +23,9 @@ import {
   chatCompletionsUrl,
   chatUrlOf,
   costUsd as gatewayCostUsd,
+  baoRamboHong,
+  RAMBO_PURPOSES_CO_DINH,
+  baoRamboOk,
   fallbackEndpoint,
   gatewayConfigured,
   gatewayKey,
@@ -691,6 +694,7 @@ export async function llmComplete(opts: {
           ? openAiCompatProvider
           : ep.giaoThuc === 'anthropic' ? anthropicProvider : getProvider();
         const result = await provider.complete(model, opts.system, opts.messages, { maxTokens: opts.maxTokens, timeoutMs: opts.timeoutMs, ep, onToken: opts.onToken });
+        if (ep.label === 'cong-agent') baoRamboOk();
         recordSuccess(opts.feature);
         await logLlmCall({ userId: opts.userId, sessionId: opts.sessionId, feature: opts.feature, step: opts.step, model, inputTokens: result.inputTokens, outputTokens: result.outputTokens, success: true }).catch(() => {});
         return result;
@@ -721,6 +725,28 @@ export async function llmComplete(opts: {
           // Không sợ lặp vô hạn: `ep` giờ không còn local nên nhánh này không
           // vào lại được nữa.
           attempt--;
+          continue;
+        }
+
+        // ⭐ RAMBO HỎNG THÌ LÙI SANG MODELAPI NGAY — cùng lẽ với nhánh máy nhà
+        // ngay trên. Rambo là cổng CHÍNH từ 07/09/2026, nên nó sập là mọi tính
+        // năng AI cùng chết nếu không có đường lùi. `baoRamboHong()` mở cầu dao
+        // để những lượt gọi SAU đi thẳng modelapi, khỏi phải đâm đầu vào tường
+        // rồi mới lùi từng lượt một; hết hạn nghỉ, `endpointFor()` tự thử lại
+        // rambo — không cần deploy, không cần ai vặn tay.
+        //
+        // ⚠️ TRỪ `agent_code`/`exam_tutor`: modelapi KHÔNG phục vụ được model
+        // Claude (đo 20/08: liệt kê đủ 6 model nhưng gọi thật thì 500/503/hết
+        // giờ), nên lùi hai việc đó sang modelapi chỉ đổi một lỗi lấy một lỗi.
+        if (ep.label === 'cong-agent' && !RAMBO_PURPOSES_CO_DINH.has(purpose)) {
+          baoRamboHong();
+          logger.warn('llm: rambo hỏng, lượt này lùi sang modelapi', {
+            purpose, feature: opts.feature ?? null, model,
+            error: e instanceof Error ? e.message : String(e),
+          });
+          ep = fallbackEndpoint();
+          model = modelForStep(opts.step, opts.feature, opts.purpose, ep);
+          attempt--; // xem chú thích ở nhánh máy nhà: `continue` vẫn tăng attempt
           continue;
         }
 

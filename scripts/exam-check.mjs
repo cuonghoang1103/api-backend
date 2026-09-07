@@ -208,6 +208,7 @@ async function checkFile(file) {
           'sql', 'postgresql', 'plpgsql',
           'dockerfile', 'docker', 'yaml', 'yml', 'compose', 'docker-compose',
           'nginx', 'conf', 'ini', 'toml',
+          'prisma', 'graphql', 'proto',
         ]);
         if (KHONG_CHAY_DUOC.has(String(q.language ?? '').toLowerCase())) {
           note(`${at}: ngôn ngữ "${q.language}" — bộ kiểm không chạy được, CHỈ kiểm cấu trúc (lời giải phải tự kiểm trên máy chủ thật)`);

@@ -8,6 +8,7 @@
  * comments (the server also lets admins delete for moderation).
  */
 
+import { anhTuyetDoi } from '@/lib/anhTuyetDoi';
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -181,7 +182,7 @@ function CommentItem({
     <li className="flex gap-3">
       {comment.author.avatarUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={comment.author.avatarUrl} alt={name(comment.author)} className="w-9 h-9 rounded-full object-cover shrink-0" />
+        <img src={anhTuyetDoi(comment.author.avatarUrl)} alt={name(comment.author)} className="w-9 h-9 rounded-full object-cover shrink-0" />
       ) : (
         <div className="w-9 h-9 rounded-full bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center text-xs font-bold text-white shrink-0">
           {name(comment.author).slice(0, 1).toUpperCase()}

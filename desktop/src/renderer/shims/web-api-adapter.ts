@@ -58,6 +58,16 @@ export function configureWebApi(options: {
   cauHinh = options;
   webApi.defaults.baseURL = `${options.apiBase}/api/v1`;
 
+  /* Gốc site cho MÃ WEB dựng URL tài nguyên (ảnh, file tĩnh) — xem
+     `frontend/src/lib/anhTuyetDoi.ts`.
+     Vì sao một biến toàn cục chứ không đọc `defaults.baseURL`: hàm đó đọc lúc
+     VẼ, còn `configureWebApi` chạy trong một effect của `TrangWeb`. Đo thật
+     07/09/2026: lúc thẻ ảnh được dựng, `defaults.baseURL` vẫn là `/api/v1`
+     (giá trị mặc định của axios), nên ảnh vẫn ra URL tương đối và vẫn vỡ.
+     Biến này được đặt một lần lúc app khởi động nên không có cửa sổ thời gian
+     nào để lọt qua. Trên web nó không tồn tại ⇒ mã web giữ nguyên hành vi cũ. */
+  (globalThis as { __CT_GOC_SITE__?: string }).__CT_GOC_SITE__ = options.apiBase;
+
   // KHÔNG gửi cookie: app desktop xác thực bằng Bearer, và gửi kèm cookie chỉ
   // tạo đường thứ hai để nhầm lẫn phiên nào đang có hiệu lực.
   webApi.defaults.withCredentials = false;

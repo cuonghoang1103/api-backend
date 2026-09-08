@@ -1,3 +1,4 @@
+import { anhTuyetDoi } from '@/lib/anhTuyetDoi';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getServerApiBaseUrl } from '@/lib/server-api';
@@ -104,7 +105,7 @@ export default async function NewsPage() {
                   // plain img with an explicit ratio avoids any layout shift.
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={latest.coverImageUrl}
+                    src={anhTuyetDoi(latest.coverImageUrl)}
                     alt=""
                     width={1200}
                     height={630}
@@ -148,7 +149,7 @@ export default async function NewsPage() {
                         {a.coverImageUrl && (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
-                            src={a.coverImageUrl}
+                            src={anhTuyetDoi(a.coverImageUrl)}
                             alt=""
                             width={200}
                             height={105}

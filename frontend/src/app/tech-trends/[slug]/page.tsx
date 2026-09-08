@@ -1,3 +1,4 @@
+import { anhTuyetDoi } from '@/lib/anhTuyetDoi';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { cache } from 'react';
@@ -194,7 +195,7 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
           {article.coverImageUrl ? (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={article.coverImageUrl} alt={article.title} className="absolute inset-0 w-full h-full object-cover" />
+              <img src={anhTuyetDoi(article.coverImageUrl)} alt={article.title} className="absolute inset-0 w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-[#0a0a0f]/30 to-transparent" />
             </>
           ) : (
@@ -221,7 +222,7 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
             <div className="flex items-center gap-3">
               {article.author?.avatarUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={article.author.avatarUrl} alt={authorName(article.author)} className="w-10 h-10 rounded-full object-cover" />
+                <img src={anhTuyetDoi(article.author.avatarUrl)} alt={authorName(article.author)} className="w-10 h-10 rounded-full object-cover" />
               ) : (
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center text-sm font-bold text-white">
                   {authorName(article.author).slice(0, 1).toUpperCase()}
@@ -353,7 +354,7 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
                     <div className="shrink-0 w-12 h-12 rounded-xl overflow-hidden bg-darkbg border border-darkborder flex items-center justify-center">
                       {r.coverImageUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={r.coverImageUrl} alt="" className="w-full h-full object-cover" />
+                        <img src={anhTuyetDoi(r.coverImageUrl)} alt="" className="w-full h-full object-cover" />
                       ) : (
                         <span className="text-2xl">{r.coverEmoji || rc.emoji}</span>
                       )}

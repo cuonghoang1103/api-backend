@@ -1,5 +1,6 @@
 'use client';
 
+import { anhTuyetDoi } from '@/lib/anhTuyetDoi';
 import { useState, useMemo, useEffect, useCallback, type ReactNode } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -739,7 +740,7 @@ function ArticleCard({
           {article.coverImageUrl ? (
             <>
               <img
-                src={article.coverImageUrl}
+                src={anhTuyetDoi(article.coverImageUrl)}
                 alt={article.title}
                 loading="lazy"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -879,7 +880,7 @@ function ArticleCard({
             <div className="flex items-center gap-2.5 min-w-0">
               {article.author?.avatarUrl ? (
                 <img
-                  src={article.author.avatarUrl}
+                  src={anhTuyetDoi(article.author.avatarUrl)}
                   alt={authorDisplayName(article.author)}
                   className="w-8 h-8 rounded-full object-cover shrink-0"
                 />
@@ -993,7 +994,7 @@ function ResourceCard({ resource, index, onSelectTag }: {
           {resource.thumbnailUrl ? (
             <>
               <img
-                src={resource.thumbnailUrl}
+                src={anhTuyetDoi(resource.thumbnailUrl)}
                 alt={resource.title}
                 loading="lazy"
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -1254,7 +1255,7 @@ function TopAuthorsCard({ items }: { items: TopAuthor[] }) {
             </span>
             {author.avatarUrl ? (
               <img
-                src={author.avatarUrl}
+                src={anhTuyetDoi(author.avatarUrl)}
                 alt={authorDisplayName(author)}
                 className="w-9 h-9 rounded-full object-cover shrink-0"
               />

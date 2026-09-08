@@ -53,12 +53,22 @@ router.get('/', async (req: Request, res: Response<ApiResponse>, next: NextFunct
         : Promise.resolve([]),
 
       can('bai-viet')
-        ? prisma.post.findMany({
+        ? /* ⚠️ `TechTrendArticle`, KHÔNG phải `Post`.
+           * Bản đầu tôi viết `prisma.post` vì đọc mã thì đó là "bảng bài
+           * viết". Hỏi dữ liệu mới ra sự thật: `Post` còn **3 dòng** (2 đã
+           * đăng) — tàn dư của blog cũ; cuộc gộp 05/08 chép nội dung sang
+           * `TechTrendArticle` (**31 bài**, 30 đã đăng) mà không xoá bảng cũ.
+           * Tìm ở `Post` thì tab "Bài viết" gần như luôn rỗng.
+           * Và KHÔNG tìm cả hai bảng: chúng có slug TRÙNG nhau, sẽ ra kết
+           * quả đôi trỏ về cùng một bài. */
+          prisma.techTrendArticle.findMany({
             // Chỉ bài ĐÃ ĐĂNG: bản nháp là của riêng tác giả, lọt vào tìm
             // kiếm chung là rò rỉ nội dung chưa muốn công bố.
-            where: { status: 'PUBLISHED', OR: [{ title: chua }, { excerpt: chua }] },
-            select: { id: true, title: true, slug: true, excerpt: true,
-                      thumbnailUrl: true, publishedAt: true, viewCount: true },
+            where: { status: 'PUBLISHED',
+                     OR: [{ title: chua }, { summary: chua }, { tags: { has: q } }] },
+            select: { id: true, title: true, slug: true, summary: true,
+                      coverImageUrl: true, coverEmoji: true, category: true,
+                      publishedAt: true, viewCount: true },
             take: gioiHan,
             orderBy: { publishedAt: 'desc' },
           })

@@ -25,10 +25,22 @@ import { MusicPlayerProvider } from '../../src/renderer/features/music/player';
    `useQuery` ném ngay lúc vẽ, và bộ đo báo "trang trống" — một lỗi của BỘ ĐO
    đội lốt lỗi của trang, đúng cái bẫy đã ghi hai lần trong tệp cấu hình. */
 import TanStackQueryProvider from '@/components/providers/TanStackQueryProvider';
+import { useAuthStore } from '@/store/authStore';
 import { OdinDock } from '../../src/renderer/features/odin/OdinDock';
 import '../../src/renderer/styles.css';
 
 
+
+/* Nạp phiên vào `authStore` của WEB, y như `Gate()` của app thật làm qua
+   `useCauNoiWeb()`. Thiếu bước này thì mọi mã web khoá theo
+   `authStore.isAuthenticated` (rõ nhất là `usePro()`) hành xử như KHÁCH: gia
+   sư AI hiện "Đăng nhập để dùng" và bộ đo không bao giờ chạm tới nhánh Pro —
+   đúng lỗi người dùng gặp 09/09/2026 mà bộ đo không thấy. */
+useAuthStore.getState().setAuth({
+  userId: 1, username: 'thu', email: 'thu@thu.test', fullName: 'Nguoi thu',
+  avatarUrl: '', roles: ['ADMIN'], role: 'ADMIN', roleVersion: 0,
+  token: 'gia', refreshToken: '',
+} as never);
 
 const duong = new URLSearchParams(location.search).get('trang') ?? '/dashboard';
 const Trang = nativePageFor(duong);

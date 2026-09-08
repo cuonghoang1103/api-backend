@@ -291,6 +291,12 @@ const BANG = [
         createdAt: '2026-08-20T00:00:00Z', fileName: `ho-so-${i}.pdf`, error: null }))],
     [/\/cv\/documents/, () => mang(2, (i) => ({ id: i, name: `Tài liệu ${i}`,
         createdAt: '2026-08-20T00:00:00Z' }))],
+    /* Trạng thái Pro — `usePro()` hỏi endpoint này. Không có mock thì nó trả
+       rỗng và mọi tính năng Pro bị khoá trong bộ đo, che mất đúng nhánh cần đo. */
+    [/\/pro\/status|\/pro\/me/, () => ({
+      isAdmin: true, isPro: true, effective: true, lifetime: true,
+      expiresAt: null, source: 'admin',
+    })],
     [/\/academy\/semesters/, () => mang(9, (i) => ({ id: i, name: `Kỳ ${i}`, code: `KY${i}`, ordinal: i }))],
     /* ⚠️ Mock CŨ dừng ở danh sách KỲ — không có môn, nên không có thẻ nào để
        bấm, nên bộ đo CHƯA BAO GIỜ mở tới màn bài học. Và màn bài học mới là

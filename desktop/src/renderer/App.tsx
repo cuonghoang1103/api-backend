@@ -4,6 +4,7 @@ import { LoginScreen } from './auth/LoginScreen';
 import { SessionProvider, useSession } from './auth/session';
 import { batDauDoNhac } from './features/dashboard/nhacNho';
 import { batDauNhacLichRobot, phatCauNhac } from './features/dashboard/nhacLichRobot';
+import { useCauNoiWeb } from './features/web/TrangWeb';
 import { datBatAm } from './features/dashboard/amThanh';
 import { CommandPalette } from './components/CommandPalette';
 import { MusicPlayerProvider } from './features/music/player';
@@ -184,6 +185,23 @@ function Shell() {
 function Gate() {
   const { phase, api } = useSession();
   const { online, settings } = useAppState();
+
+  /* Cầu nối web ↔ desktop chạy Ở ĐÂY, một lần cho cả app.
+   *
+   * Nó nạp phiên đăng nhập của app vào `authStore` của web. Trước đây chỉ
+   * `TrangWeb` gọi, tức chỉ những trang DÙNG LẠI NGUYÊN CÂY web mới có phiên.
+   * Trang NATIVE mà nhúng một component web thì không — và `usePro()` khoá
+   * theo `authStore.isAuthenticated`, nên nó tắt hẳn query trạng thái Pro và
+   * trả về "không phải Pro".
+   *
+   * Hậu quả đo thật 09/09/2026: người dùng là ADMIN + Pro mà Học viện vẫn
+   * khoá mọi tính năng Pro, vì `monHoc.tsx` là trang native nhúng
+   * `CourseTutor`. Không có lỗi nào hiện ra — chỉ là ổ khoá ở chỗ đáng lẽ
+   * phải là gia sư AI.
+   *
+   * Gọi ở tầng này thì mọi trang native nhúng mã web đều có phiên, không phải
+   * nhớ thêm dòng nào. `configureWebApi` và `setAuth` đều là đặt-đè. */
+  useCauNoiWeb();
 
   /* Cài đặt trong một `ref`: vòng nhắc chạy suốt phiên và chỉ hỏi lại mỗi 10
      phút, nên nó phải đọc GIÁ TRỊ MỚI NHẤT chứ không phải giá trị đóng băng

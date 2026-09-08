@@ -84,4 +84,22 @@ describe('App.tsx giải đường dẫn', () => {
     expect(nguon, 'mất đường lùi — đường con của cây web sẽ hỏng lại')
       .toContain('nativePageFor(definition?.path ?? route)');
   });
+
+  /**
+   * Cầu nối web ↔ desktop phải chạy Ở TẦNG APP, không chỉ trong `TrangWeb`.
+   *
+   * Nó nạp phiên đăng nhập vào `authStore` của web. Chỉ để trong `TrangWeb`
+   * thì riêng những trang DÙNG LẠI NGUYÊN CÂY web mới có phiên; trang NATIVE
+   * nhúng một component web thì không — và `usePro()` khoá theo
+   * `authStore.isAuthenticated`, nên nó trả "không phải Pro".
+   *
+   * Đo thật 09/09/2026: người dùng là ADMIN + Pro mà Học viện vẫn khoá gia sư
+   * AI, vì `monHoc.tsx` là trang native nhúng `CourseTutor`. Không lỗi nào
+   * hiện ra, chỉ là một ổ khoá ở chỗ đáng lẽ có gia sư.
+   */
+  it('App.tsx gọi useCauNoiWeb() — nếu không, trang NATIVE nhúng mã web mất phiên', () => {
+    const nguon = readFileSync(join(__dirname, 'App.tsx'), 'utf8');
+    expect(nguon, 'thiếu cầu nối ⇒ usePro() coi mọi người là khách, Pro bị khoá')
+      .toContain('useCauNoiWeb()');
+  });
 });

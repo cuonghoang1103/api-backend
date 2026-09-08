@@ -10,7 +10,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import {
   FileQuestion, Loader2, Shuffle, ListChecks, X, CheckCircle2, XCircle,
-  RotateCcw, Languages, PenLine, Sparkles,
+  RotateCcw, Languages, PenLine, Sparkles, ChevronDown,
 } from 'lucide-react';
 import { api } from '@/lib/api';
 import ExamRichContent from '@/app/exam/ExamRichContent';
@@ -53,14 +53,41 @@ const sameSet = (a: number[], b: number[]) =>
 const LETTER = (i: number) => String.fromCharCode(65 + i); // 0 → A
 
 // ── Một câu hỏi (render như phòng thi) ────────────────────────────────
+/**
+ * Bảy việc học viên hay cần hỏi về MỘT câu — đúng bộ `QUICK` của CuongMini
+ * trong Phòng thi (`app/exam/[examId]/CuongMiniPanel.tsx`).
+ *
+ * Vì sao chép y nguyên chứ không tự nghĩ bộ khác: người học đã quen bộ này ở
+ * Phòng thi. Hai chỗ hỏi cùng một loại câu mà nhãn khác nhau thì họ phải học
+ * lại giao diện, và câu trả lời cũng lệch nhau vì lời nhắc khác.
+ *
+ * ⚠️ Câu gửi lên PHẢI mở đầu bằng "Câu N" — gia sư tra `quizContext` theo số
+ * thứ tự người dùng thấy. Bỏ số đi là nó không biết đang hỏi câu nào.
+ */
+const VIEC_HOI: { ma: string; nhan: string; nhanEn: string; cau: (n: number) => string }[] = [
+  { ma: 'lam_sao', nhan: 'Câu này làm như nào?', nhanEn: 'How do I solve it?',
+    cau: (n) => `Câu ${n}: hướng dẫn tôi cách làm câu này từng bước, đừng chỉ đưa đáp án.` },
+  { ma: 'vi_sao_sai', nhan: 'Vì sao các đáp án khác sai?', nhanEn: 'Why are the others wrong?',
+    cau: (n) => `Câu ${n}: vì sao đáp án đúng là đúng, và MỖI đáp án còn lại sai ở chỗ nào?` },
+  { ma: 'kien_thuc', nhan: 'Kiến thức của câu này là gì?', nhanEn: 'What knowledge is this?',
+    cau: (n) => `Câu ${n}: câu này kiểm tra kiến thức gì? Giảng lại phần lý thuyết đó cho tôi.` },
+  { ma: 'ghi_nho', nhan: 'Nhớ như nào cho lâu?', nhanEn: 'How do I remember it?',
+    cau: (n) => `Câu ${n}: cho tôi một cách ghi nhớ dễ thuộc cho phần kiến thức của câu này.` },
+  { ma: 'loi_hay_gap', nhan: 'Lỗi hay gặp ở câu này?', nhanEn: 'Common mistakes?',
+    cau: (n) => `Câu ${n}: người học hay sai ở chỗ nào khi làm dạng câu này? Làm sao tránh?` },
+  { ma: 'vi_du', nhan: 'Cho ví dụ tương tự để luyện', nhanEn: 'Give me a similar example',
+    cau: (n) => `Câu ${n}: cho tôi 2 câu tương tự để luyện thêm, kèm đáp án và giải thích.` },
+  { ma: 'quy_tac', nhan: 'Tóm tắt quy tắc liên quan', nhanEn: 'Summarise the rule',
+    cau: (n) => `Câu ${n}: tóm tắt công thức/quy tắc liên quan thành vài gạch đầu dòng dễ tra lại.` },
+];
+
 function QuestionCard({ q, idx, L, selected, submitted, onToggle, onHoiAI }: {
   q: ExamQ; idx: number; L: 'vi' | 'en'; selected: number[]; submitted: boolean;
   onToggle: (q: ExamQ, i: number) => void;
-  /** `soCau` là số thứ tự NGƯỜI DÙNG THẤY (1-based) — gia sư tra `quizContext`
-   *  theo đúng số đó. `coGiaiThich` để câu hỏi gửi lên nói khác nhau: đề đã có
-   *  giải thích thì xin giảng sâu hơn, chưa có thì xin giải thích từ đầu. */
-  onHoiAI?: (soCau: number, coGiaiThich: boolean) => void;
+  /** Nhận thẳng câu hỏi đã dựng sẵn (đã kèm "Câu N" ở đầu). */
+  onHoiAI?: (cauHoi: string) => void;
 }) {
+  const [moHoi, setMoHoi] = useState(false);
   const opts = normOpts(q.options);
   const multi = (q.correctIndexes?.length || 0) > 1;
   const isRight = submitted && sameSet(selected, q.correctIndexes || []);
@@ -113,23 +140,42 @@ function QuestionCard({ q, idx, L, selected, submitted, onToggle, onHoiAI }: {
         </div>
       )}
 
-      {/* Hỏi gia sư về ĐÚNG câu này.
-          Bản iOS đã có nút này từ trước (LuyenChuongView "Hỏi AI vì sao sai");
-          web thì trước đây phải tự gõ "câu 3 sai vì sao" vào ô gia sư bên dưới
-          — mà muốn gõ được thì phải nhớ số thứ tự câu, nên gần như không ai
-          dùng. Nút này gửi luôn câu hỏi kèm số thứ tự.
+      {/* Hỏi gia sư về ĐÚNG câu này — bảy việc giống hệt CuongMini ở Phòng thi.
+          Trước đây web phải tự gõ "câu 3 sai vì sao" vào ô gia sư bên dưới, mà
+          muốn gõ được thì phải nhớ số thứ tự câu, nên gần như không ai dùng.
           Hiện cho MỌI câu đã nộp, không chỉ câu sai: câu đoán mò mà đúng cũng
-          đáng hỏi, và phần giải thích trong đề thường rất ngắn. */}
+          đáng hỏi, và phần giải thích trong đề thường rất ngắn.
+          Gấp lại theo mặc định — bảy con chip mở sẵn dưới mỗi câu thì một đề
+          164 câu thành một bức tường nút. */}
       {submitted && onHoiAI && (
-        <button
-          type="button"
-          onClick={() => onHoiAI(idx + 1, !!q.explanation)}
-          className="mt-2 inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-colors"
-          style={{ color: 'var(--accent-color, #8b5cf6)', background: 'color-mix(in srgb, var(--accent-color, #8b5cf6) 12%, transparent)' }}
-        >
-          <Sparkles size={13} />
-          {L === 'vi' ? 'Hỏi AI về câu này' : 'Ask AI about this question'}
-        </button>
+        <div className="mt-2">
+          <button
+            type="button"
+            onClick={() => setMoHoi((v) => !v)}
+            aria-expanded={moHoi}
+            className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-colors"
+            style={{ color: 'var(--accent-color, #8b5cf6)', background: 'color-mix(in srgb, var(--accent-color, #8b5cf6) 12%, transparent)' }}
+          >
+            <Sparkles size={13} />
+            {L === 'vi' ? 'Hỏi AI về câu này' : 'Ask AI about this question'}
+            <ChevronDown size={12} className={`transition-transform ${moHoi ? 'rotate-180' : ''}`} />
+          </button>
+          {moHoi && (
+            <div className="mt-1.5 flex flex-wrap gap-1.5">
+              {VIEC_HOI.map((v) => (
+                <button
+                  key={v.ma}
+                  type="button"
+                  onClick={() => onHoiAI(v.cau(idx + 1))}
+                  className="rounded-full px-2.5 py-1 text-[11.5px] font-medium transition-colors"
+                  style={{ color: 'var(--text-secondary)', background: 'var(--bg-surface)', border: '1px solid var(--border-color)' }}
+                >
+                  {L === 'vi' ? v.nhan : v.nhanEn}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       )}
     </div>
   );
@@ -230,13 +276,8 @@ export function ChapterQuiz({ sectionId, sectionTitle, count, lessonId }: {
      thêm một lượt — mỗi lượt là một lần tính tiền. */
   const [tuHoi, setTuHoi] = useState<{ key: number; text: string } | null>(null);
   const khuGiaSu = useRef<HTMLDivElement>(null);
-  const hoiAIVeCau = useCallback((soCau: number, coGiaiThich: boolean) => {
-    setTuHoi((cu) => ({
-      key: (cu?.key ?? 0) + 1,
-      text: coGiaiThich
-        ? `Câu ${soCau}: giảng kỹ hơn giúp tôi — vì sao đáp án đó đúng, và mỗi đáp án còn lại sai ở đâu?`
-        : `Câu ${soCau}: giải thích giúp tôi vì sao đáp án đó đúng, và các đáp án còn lại sai ở đâu?`,
-    }));
+  const hoiAIVeCau = useCallback((cauHoi: string) => {
+    setTuHoi((cu) => ({ key: (cu?.key ?? 0) + 1, text: cauHoi }));
     // Cuộn xuống khu gia sư, nếu không thì câu trả lời chảy ở ngoài màn hình
     // và người dùng tưởng bấm nút không ăn.
     requestAnimationFrame(() => {

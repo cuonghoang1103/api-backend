@@ -8166,8 +8166,17 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-hv-noidung table { max-width: 100%; overflow-x: auto; }
 .ct-hv-noidung img { max-width: 100%; height: auto; }
 
-/* ── Khung video trong bài (do MAIN vẽ đè, xem KhungVideo.tsx) ── */
+/* ── Khung video trong bài (do MAIN vẽ đè, xem KhungVideo.tsx) ──
+   KẸP Ở HỘP NGOÀI, không phải ô trong.
+   Cột đọc nay lấy hết bề rộng (1400px), mà 16:9 thì video cao 787px — nuốt
+   trọn màn hình dù người dùng chưa bấm phóng to. Trên web nó là một khung
+   ~960px, phần giảng nằm ngay dưới, và chỉ toàn màn hình khi bấm nút.
+   Kẹp ô TRONG thôi thì chưa đủ: hộp ngoài vẫn tràn hết và nền nó màu đen, nên
+   nhìn vẫn to y như cũ — đo bằng ảnh chụp, không bằng con số của ô trong.
+   `calc(62vh * 16 / 9)` kẹp theo CHIỀU CAO cửa sổ: cửa sổ thấp thì khung hẹp
+   lại chứ không bị cắt. */
 .ct-hv-video {
+  max-width: min(960px, 100%, calc(62vh * 16 / 9));
   border: 1px solid var(--ct-border);
   border-radius: var(--ct-radius);
   overflow: hidden;

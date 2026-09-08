@@ -314,8 +314,12 @@ const BANG = [
       sections: [{
         id: 1, title: 'Chương 1|||Chương 1',
         lessons: [
+          /* CÓ video: khung phát là thứ chiếm nhiều chỗ nhất trên màn bài học
+             và là chỗ vừa vỡ bố cục (09/09/2026, video cao 787px nuốt cả màn
+             hình). `videoUrl: null` thì bộ đo không bao giờ dựng nó ra. */
           { id: 1, title: 'Bài 0.1|||Bài 0.1', isFreePreview: true, durationSec: 567,
-            content: 'Nội dung bài học.', videoPlatform: 'EMBED', videoUrl: null },
+            content: 'Nội dung bài học.', videoPlatform: 'EMBED',
+            videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' },
           { id: 2, title: 'Bài 0.2|||Bài 0.2', isFreePreview: true, durationSec: 0,
             content: 'Nội dung bài hai.', videoPlatform: 'EMBED', videoUrl: null },
         ],

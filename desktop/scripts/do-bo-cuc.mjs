@@ -241,7 +241,12 @@ const BANG = [
       summary: 'Tóm tắt bài viết.', publishedAt: '2026-08-20T00:00:00Z',
       category: ['AI', 'Backend', 'Frontend'][i % 3],
       tags: ['docker', 'ci'].slice(0, (i % 2) + 1),
-      coverEmoji: '📰', coverImageUrl: null, codeBlock: null,
+      coverEmoji: '📰', codeBlock: null,
+      /* Một nửa TƯƠNG ĐỐI, một nửa TUYỆT ĐỐI — đúng hai dạng có thật trong DB
+         production. Dạng tương đối là dạng vỡ trên app (origin `app://`), nên
+         mock phải có nó thì bộ đo mới chạm tới được. */
+      coverImageUrl: i % 2 ? '/deepdives/vue/reactivity-tracking.svg'
+                           : 'https://media.cuongthai.com/images/post/u1/a.webp',
       toc: [], readTimeMin: 6, trendingScore: i, isFeatured: i === 0,
       status: 'PUBLISHED', kind: 'ARTICLE', sources: [], author: null,
     }))],
@@ -287,6 +292,29 @@ const BANG = [
     [/\/cv\/documents/, () => mang(2, (i) => ({ id: i, name: `Tài liệu ${i}`,
         createdAt: '2026-08-20T00:00:00Z' }))],
     [/\/academy\/semesters/, () => mang(9, (i) => ({ id: i, name: `Kỳ ${i}`, code: `KY${i}`, ordinal: i }))],
+    /* ⚠️ Mock CŨ dừng ở danh sách KỲ — không có môn, nên không có thẻ nào để
+       bấm, nên bộ đo CHƯA BAO GIỜ mở tới màn bài học. Và màn bài học mới là
+       chỗ gắn `CourseTutor` của web. 09/09/2026 cả trang Học viện chết trong
+       bản đã phát hành ("No QueryClient set") mà bộ đo vẫn 42/42 xanh — nó đo
+       đúng phần không hỏng. Hai mock dưới đây mở đường tới đó. */
+    [/\/courses\/semester\//, () => mang(3, (i) => ({
+      id: i, slug: `mon-${i}`, title: `Môn ${i}|||Môn ${i}`, courseCode: `SWT30${i}`,
+      thumbnailUrl: null, totalLessons: 2,
+      sections: [{ id: i, title: `Chương 1`, lessonCount: 2 }],
+    }))],
+    [/\/courses\/[a-z0-9-]+$/, () => ({
+      id: 1, slug: 'mon-1', title: 'Môn 1|||Môn 1', courseCode: 'SWT301',
+      isEnrolled: true,
+      sections: [{
+        id: 1, title: 'Chương 1|||Chương 1',
+        lessons: [
+          { id: 1, title: 'Bài 0.1|||Bài 0.1', isFreePreview: true, durationSec: 567,
+            content: 'Nội dung bài học.', videoPlatform: 'EMBED', videoUrl: null },
+          { id: 2, title: 'Bài 0.2|||Bài 0.2', isFreePreview: true, durationSec: 0,
+            content: 'Nội dung bài hai.', videoPlatform: 'EMBED', videoUrl: null },
+        ],
+      }],
+    })],
     [/\/courses\/semester\//, () => mang(5, (i) => ({
         id: i, slug: `mon-${i}`, title: `Course Title ${i}|||Tên môn học số ${i}`,
         courseCode: ['PRF192', 'LAB211', 'CSD201', 'DBI202', 'PRJ301'][i - 1],
@@ -601,6 +629,19 @@ const CHUAN_BI = {
        kiểm đỏ triền miên là phép kiểm không ai đọc nữa. Dọn nó đi. */
     await p.click('.ct-notice[data-tone="err"] button', { timeout: 1500 }).catch(() => {});
     await p.waitForTimeout(250);
+  },
+  /* Đi HẾT đường tới màn bài học: mở kỳ → mở môn → mở bài. Chỉ ở đó
+     `CourseTutor` (mã web) mới được gắn, và nó là thứ kéo theo `usePro()` →
+     `useQuery`. Thiếu `QueryClientProvider` thì cả trang chết, mà nhìn trang
+     Học viện lúc TĨNH thì không thấy gì. */
+  '/academy': async (p) => {
+    await p.waitForTimeout(500);
+    await p.click('.ct-hv-ky-dau', { timeout: 3000 }).catch(() => {});
+    await p.waitForTimeout(300);
+    await p.click('.ct-hv-the', { timeout: 3000 }).catch(() => {});
+    await p.waitForTimeout(500);
+    await p.click('.ct-hv-bai', { timeout: 3000 }).catch(() => {});
+    await p.waitForTimeout(600);
   },
   '/chat': async (p) => {
     // Bật chế độ Lập trình rồi mở thêm tab: đây đúng là thao tác người dùng

@@ -21,14 +21,21 @@ import { createRoot } from 'react-dom/client';
 import { AppStateProvider } from '../../src/renderer/app-state';
 import { nativePageFor } from '../../src/renderer/page-registry';
 import { MusicPlayerProvider } from '../../src/renderer/features/music/player';
+/* Giống `main.tsx` của app thật: thiếu provider này là mọi mã web dùng
+   `useQuery` ném ngay lúc vẽ, và bộ đo báo "trang trống" — một lỗi của BỘ ĐO
+   đội lốt lỗi của trang, đúng cái bẫy đã ghi hai lần trong tệp cấu hình. */
+import TanStackQueryProvider from '@/components/providers/TanStackQueryProvider';
 import { OdinDock } from '../../src/renderer/features/odin/OdinDock';
 import '../../src/renderer/styles.css';
+
+
 
 const duong = new URLSearchParams(location.search).get('trang') ?? '/dashboard';
 const Trang = nativePageFor(duong);
 
 createRoot(document.getElementById('root')!).render(
   <AppStateProvider tuyenBanDau={duong}>
+   <TanStackQueryProvider>
     <MusicPlayerProvider>
       {/* Đúng cây vỏ của App.tsx: shell > sidebar > main > content > trang. */}
       <div className="ct-shell">
@@ -48,5 +55,6 @@ createRoot(document.getElementById('root')!).render(
         {new URLSearchParams(location.search).get('robot') === '1' && <OdinDock />}
       </div>
     </MusicPlayerProvider>
+   </TanStackQueryProvider>
   </AppStateProvider>,
 );

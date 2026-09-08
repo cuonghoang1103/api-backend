@@ -36,6 +36,15 @@
       ],
       "@/lib/lich/*": [
         "../frontend/src/lib/lich/*"
+      ],
+      "@/lib/anhTuyetDoi": [
+        "../frontend/src/lib/anhTuyetDoi.ts"
+      ],
+      "@/components/providers/*": [
+        "../frontend/src/components/providers/*"
+      ],
+      "@/lib/queryClient": [
+        "../frontend/src/lib/queryClient.ts"
       ]
     }
   },

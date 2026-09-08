@@ -63,6 +63,11 @@ declare module '@/lib/api' {
     };
   };
   export default api;
+  /* Mã web nhập nó theo CẢ HAI cách — `import api from` và `import { api } from`
+     — vì `lib/api.ts` vừa `export { api }` vừa `export default api` (CÙNG một
+     object). Khai thiếu bản có tên thì `tsc` của desktop đỏ ở những tệp web
+     hoàn toàn hợp lệ, ví dụ `lib/anhTuyetDoi.ts`. */
+  export { api };
 }
 
 /* ────────────────────────────────────────────────────────────────────────────

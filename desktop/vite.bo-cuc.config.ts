@@ -71,8 +71,17 @@ function gia() {
            chạy lại ⇒ setState ⇒ lặp vô hạn, luồng chính đứng hình. Phiên thật
            đã `useMemo`, nên bản giả phải giống. */
         return `
+          /* Goc TUYET DOI, nhu app that. TrangWeb chuyen gia tri nay vao
+             configureWebApi, no thanh api.defaults.baseURL, va MOI ma web suy
+             URL tu do (anhTuyetDoi, CourseTutor...). De chuoi rong thi bo do
+             hanh xu nhu WEB va khong bao gio cham toi loi CHI CO TRONG APP:
+             07/09/2026 no giau mat chuyen anh bia tuong doi tro vao bundle.
+             Duong mang van do ctx.route cua Playwright bat, nen goc nay khong
+             sinh ra loi goi that nao.
+             (Khong dau huyen, khong backtick: ca khoi nay nam TRONG mot
+             template literal - xem canh bao ngay phia tren.) */
           const API = { request: (d, o) => window.__giaApi(d, o),
-                        baseUrlForForms: () => '', authHeaders: () => ({}),
+                        baseUrlForForms: () => 'https://cuongthai.com', authHeaders: () => ({}),
                         getToken: () => 'gia', setToken: () => {} };
           /* ADMIN chứ không USER: nút chỉ-admin là đường KHÔNG BAO GIỜ được đo
              nếu người thử là thường dân. 07/09/2026 nút "xoá hẳn" của trang

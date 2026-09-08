@@ -169,12 +169,60 @@ async function f5Fetch(path: string, init?: RequestInit): Promise<Response_> {
  * thêm ở đây chỉ tổ dài thêm chứ không nhanh hơn.
  */
 const MAX_RUNNING_PER_USER = 2;
-const running = new Map<number, Set<string>>();
 
-function userJobs(userId: number): Set<string> {
+/**
+ * Ô chạy tự HẾT HẠN.
+ *
+ * ⚠️ BẢN CŨ RÒ Ô, VÀ RÒ VĨNH VIỄN. Ô chỉ được trả lại ở `GET /tts/:jobId`
+ * khi lượt hỏi ấy đi tới kết quả cuối. Nhưng người dùng đóng app, bấm Dừng,
+ * hay chỉ cần chờ quá lâu rồi bỏ đi — thì lượt hỏi ấy KHÔNG BAO GIỜ tới, ô
+ * nằm lại mãi, và sau đúng hai lần bỏ dở thì mọi lượt đọc sau đều nhận 429.
+ * Không có bộ dọn nào, nên chỉ khởi động lại backend mới gỡ được.
+ *
+ * Nay ô mang theo giờ đặt và tự rụng sau `HAN_O_MS`. Trần vẫn còn tác dụng
+ * với người bấm dồn dập trong vài giây — đúng thứ nó sinh ra để chặn — mà
+ * không còn biến thành cái khoá chết.
+ */
+const HAN_O_MS = Number(process.env.VOICE_MINI_SLOT_TTL_MS) || 3 * 60 * 1000;
+
+/** Việc đang chạy của mỗi người: jobId → lúc đặt (ms). */
+const running = new Map<number, Map<string, number>>();
+
+function userJobs(userId: number): Map<string, number> {
   let s = running.get(userId);
-  if (!s) running.set(userId, (s = new Set()));
+  if (!s) running.set(userId, (s = new Map()));
   return s;
+}
+
+/** Ghi một việc vừa đặt. Tách ra để phép kiểm bơm được mốc thời gian giả. */
+export function ghiViec(userId: number, jobId: string, luc = Date.now()): void {
+  userJobs(userId).set(jobId, luc);
+}
+
+/** Số ô ĐANG THỰC SỰ bận — ô quá hạn bị bỏ ngay tại đây. */
+export function demViecDangChay(userId: number, bayGio = Date.now()): number {
+  const s = userJobs(userId);
+  for (const [id, luc] of s) {
+    if (bayGio - luc > HAN_O_MS) s.delete(id);
+  }
+  if (s.size === 0) running.delete(userId);
+  return s.size;
+}
+
+/**
+ * Người đang gọi.
+ *
+ * ⚠️ BẢN CŨ ĐỌC `req.user.id` — TRƯỜNG ĐÓ KHÔNG TỒN TẠI. `authenticate` gán
+ * `req.user = decoded`, mà `JwtPayload` khai `userId`, không khai `id`. Nên
+ * mọi lượt đều rơi về `?? 0`, và cả website dùng CHUNG một xô hai ô: hai lần
+ * bỏ dở của bất kỳ ai là tắt máy đọc của TẤT CẢ.
+ *
+ * Bằng chứng trong log production 08/09/2026:
+ *     {"msg":"VoiceMini đặt việc","userId":0,"kyTu":1200}
+ */
+export function aiDangGoi(req: Request): number {
+  const r = req as Request & { userId?: number; user?: { userId?: number } };
+  return r.userId ?? r.user?.userId ?? 0;
 }
 
 async function upstream(path: string, init?: RequestInit): Promise<Response_> {
@@ -263,7 +311,7 @@ router.get('/voices', authenticate, async (_req, res: Response<ApiResponse>) => 
 });
 
 router.post('/tts', authenticate, async (req: Request, res: Response<ApiResponse>) => {
-  const userId = (req as Request & { user?: { id: number } }).user?.id ?? 0;
+  const userId = aiDangGoi(req);
   const text = String(req.body?.text ?? '').trim();
   const voice = req.body?.voice ? String(req.body.voice) : undefined;
 
@@ -278,7 +326,7 @@ router.post('/tts', authenticate, async (req: Request, res: Response<ApiResponse
     });
     return;
   }
-  if (userJobs(userId).size >= MAX_RUNNING_PER_USER) {
+  if (demViecDangChay(userId) >= MAX_RUNNING_PER_USER) {
     res.status(429).json({
       success: false,
       message: 'Bạn đang có 2 bản đọc chạy dở. Chờ xong một cái rồi tạo tiếp.',
@@ -346,7 +394,7 @@ router.post('/tts', authenticate, async (req: Request, res: Response<ApiResponse
     const data = (await r.json()) as { jobId?: string; detail?: string };
     if (!r.ok || !data.jobId) throw new Error(data.detail || `tts HTTP ${r.status}`);
 
-    userJobs(userId).add(data.jobId);
+    ghiViec(userId, data.jobId);
     logger.info('VoiceMini đặt việc', { userId, jobId: data.jobId, kyTu: text.length, voice });
     res.json({ success: true, data });
   } catch (e) {
@@ -356,7 +404,7 @@ router.post('/tts', authenticate, async (req: Request, res: Response<ApiResponse
 });
 
 router.get('/tts/:jobId', authenticate, async (req: Request, res: Response) => {
-  const userId = (req as Request & { user?: { id: number } }).user?.id ?? 0;
+  const userId = aiDangGoi(req);
   const jobId = String(req.params.jobId);
 
   // Việc của F5 đã xong từ lúc đặt — lấy thẳng trong kho tạm, không hỏi ai.
@@ -408,6 +456,27 @@ router.get('/tts/:jobId', authenticate, async (req: Request, res: Response) => {
     res.status(503).json({ success: false, message: 'Mất kết nối tới máy đọc' });
   }
 });
+
+/**
+ * Trả lại ô khi người dùng BỎ NGANG.
+ *
+ * Bấm Dừng, hay đóng app giữa chừng, thì lượt hỏi kết quả không bao giờ chạy
+ * tới nơi — mà chỉ chỗ đó mới trả ô. Hạn `HAN_O_MS` là lưới đỡ cuối, còn đây
+ * là đường sạch: app gọi một cái, ô về ngay, người dùng bấm đọc lại được
+ * luôn thay vì phải chờ hết hạn.
+ *
+ * Cố ý KHÔNG gọi ngược lên dịch vụ tts để huỷ: nó không có đường huỷ, và một
+ * lượt đang sinh dở thì cứ để nó sinh nốt còn rẻ hơn là bỏ giữa chừng.
+ */
+router.delete('/tts/:jobId', authenticate, (req: Request, res: Response<ApiResponse>) => {
+  const userId = aiDangGoi(req);
+  const jobId = String(req.params.jobId);
+  khoTiengF5.delete(jobId);
+  const co = userJobs(userId).delete(jobId);
+  demViecDangChay(userId);   // nhân tiện quét ô quá hạn
+  res.json({ success: true, data: { released: co } });
+});
+
 
 /**
  * Nhân bản một giọng từ đoạn mẫu.
@@ -520,7 +589,7 @@ router.post(
   authenticate,
   nhanFile,
   async (req: Request, res: Response<ApiResponse>) => {
-    const userId = (req as Request & { user?: { id: number } }).user?.id ?? 0;
+    const userId = aiDangGoi(req);
     const file = (req as unknown as { file?: { buffer: Buffer; originalname?: string } }).file;
     const name = String(req.body?.name ?? '').trim().slice(0, 60);
 

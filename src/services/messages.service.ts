@@ -836,6 +836,12 @@ export class MessagesService {
       },
       select: {
         id: true,
+        type: true,
+        userId: true,
+        adminUserId: true,
+        userAId: true,
+        userBId: true,
+        preferences: true,
         messages: {
           orderBy: { id: 'desc' },
           take: 1,
@@ -843,13 +849,36 @@ export class MessagesService {
         },
       },
     });
+
+    /* ⚠️ PHẢI lọc y hệt `listThreadsForUser`, nếu không huy hiệu đếm những
+     * luồng người dùng KHÔNG NHÌN THẤY — và khi đó họ không có cách nào tắt
+     * nó, vì muốn đọc thì phải mở, mà mở thì không tìm ra.
+     *
+     * Đã xảy ra thật 09/09/2026: người dùng xoá luồng hỗ trợ #11 hồi 18/06;
+     * ngày 20/08 có người nhắn tiếp vào đó ("ad ơi"). Danh sách ẩn luồng đó
+     * đi, còn hàm này vẫn đếm ⇒ huy hiệu "1 tin nhắn chưa đọc" đứng mãi suốt
+     * gần ba tuần, vào Tin nhắn thì mọi thứ đã đọc hết.
+     *
+     * Chú thích "Keep in sync with listThreadsForUser" đã nằm ngay trên đầu
+     * hàm này từ trước — nhưng nó chỉ nói về mệnh đề `where`, còn hai bộ lọc
+     * THẬT của danh sách lại nằm ở bước `.filter()` sau truy vấn.
+     *
+     * Lọc `deletedAt` (xoá-cho-riêng-tôi) và người bị chặn, KHÔNG lọc
+     * `archivedAt`: luồng lưu trữ vẫn hiện trong danh sách, nên vẫn phải đếm.
+     */
+    const blockedIds = await this.getBlockedIds(userId);
+    const nhinThay = threads.filter((t) => {
+      if (this.collectThreadPeerIds(t).some((pid) => blockedIds.has(pid))) return false;
+      return !this.getPreferenceForViewer(t.preferences, userId)?.deletedAt;
+    });
+
     const reads = await prisma.messageRead.findMany({
-      where: { userId, threadId: { in: threads.map((t) => t.id) } },
+      where: { userId, threadId: { in: nhinThay.map((t) => t.id) } },
     });
     const readMap = new Map(reads.map((r) => [r.threadId, r.lastReadAt]));
 
     let count = 0;
-    for (const t of threads) {
+    for (const t of nhinThay) {
       const last = t.messages[0];
       if (!last) continue;
       const lastRead = readMap.get(t.id) ?? new Date(0);

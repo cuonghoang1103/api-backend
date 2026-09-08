@@ -10,7 +10,7 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import {
   FileQuestion, Loader2, Shuffle, ListChecks, X, CheckCircle2, XCircle,
-  RotateCcw, Languages, PenLine,
+  RotateCcw, Languages, PenLine, Sparkles,
 } from 'lucide-react';
 import { api } from '@/lib/api';
 import ExamRichContent from '@/app/exam/ExamRichContent';
@@ -53,9 +53,13 @@ const sameSet = (a: number[], b: number[]) =>
 const LETTER = (i: number) => String.fromCharCode(65 + i); // 0 → A
 
 // ── Một câu hỏi (render như phòng thi) ────────────────────────────────
-function QuestionCard({ q, idx, L, selected, submitted, onToggle }: {
+function QuestionCard({ q, idx, L, selected, submitted, onToggle, onHoiAI }: {
   q: ExamQ; idx: number; L: 'vi' | 'en'; selected: number[]; submitted: boolean;
   onToggle: (q: ExamQ, i: number) => void;
+  /** `soCau` là số thứ tự NGƯỜI DÙNG THẤY (1-based) — gia sư tra `quizContext`
+   *  theo đúng số đó. `coGiaiThich` để câu hỏi gửi lên nói khác nhau: đề đã có
+   *  giải thích thì xin giảng sâu hơn, chưa có thì xin giải thích từ đầu. */
+  onHoiAI?: (soCau: number, coGiaiThich: boolean) => void;
 }) {
   const opts = normOpts(q.options);
   const multi = (q.correctIndexes?.length || 0) > 1;
@@ -107,6 +111,25 @@ function QuestionCard({ q, idx, L, selected, submitted, onToggle }: {
           <span className="mb-1 block text-xs font-semibold" style={{ color: 'var(--text-secondary)' }}>Giải thích</span>
           <ExamRichContent html={q.explanation} L={L} className="exam-explain" />
         </div>
+      )}
+
+      {/* Hỏi gia sư về ĐÚNG câu này.
+          Bản iOS đã có nút này từ trước (LuyenChuongView "Hỏi AI vì sao sai");
+          web thì trước đây phải tự gõ "câu 3 sai vì sao" vào ô gia sư bên dưới
+          — mà muốn gõ được thì phải nhớ số thứ tự câu, nên gần như không ai
+          dùng. Nút này gửi luôn câu hỏi kèm số thứ tự.
+          Hiện cho MỌI câu đã nộp, không chỉ câu sai: câu đoán mò mà đúng cũng
+          đáng hỏi, và phần giải thích trong đề thường rất ngắn. */}
+      {submitted && onHoiAI && (
+        <button
+          type="button"
+          onClick={() => onHoiAI(idx + 1, !!q.explanation)}
+          className="mt-2 inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-colors"
+          style={{ color: 'var(--accent-color, #8b5cf6)', background: 'color-mix(in srgb, var(--accent-color, #8b5cf6) 12%, transparent)' }}
+        >
+          <Sparkles size={13} />
+          {L === 'vi' ? 'Hỏi AI về câu này' : 'Ask AI about this question'}
+        </button>
       )}
     </div>
   );
@@ -201,6 +224,25 @@ export function ChapterQuiz({ sectionId, sectionTitle, count, lessonId }: {
   const [L, setL] = useState<'vi' | 'en'>('vi');
   const [ans, setAns] = useState<Record<number, number[]>>({});
   const [submitted, setSubmitted] = useState(false);
+
+  /* Nút "Hỏi AI về câu này" ở từng câu. `key` tăng dần thay vì so nội dung:
+     bấm lại đúng một câu vẫn hỏi lại được, mà re-render thường không bắn nhầm
+     thêm một lượt — mỗi lượt là một lần tính tiền. */
+  const [tuHoi, setTuHoi] = useState<{ key: number; text: string } | null>(null);
+  const khuGiaSu = useRef<HTMLDivElement>(null);
+  const hoiAIVeCau = useCallback((soCau: number, coGiaiThich: boolean) => {
+    setTuHoi((cu) => ({
+      key: (cu?.key ?? 0) + 1,
+      text: coGiaiThich
+        ? `Câu ${soCau}: giảng kỹ hơn giúp tôi — vì sao đáp án đó đúng, và mỗi đáp án còn lại sai ở đâu?`
+        : `Câu ${soCau}: giải thích giúp tôi vì sao đáp án đó đúng, và các đáp án còn lại sai ở đâu?`,
+    }));
+    // Cuộn xuống khu gia sư, nếu không thì câu trả lời chảy ở ngoài màn hình
+    // và người dùng tưởng bấm nút không ăn.
+    requestAnimationFrame(() => {
+      khuGiaSu.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }, []);
   const topRef = useRef<HTMLDivElement>(null);
 
   const start = useCallback(async (mode: 'random' | 'all') => {
@@ -306,7 +348,7 @@ export function ChapterQuiz({ sectionId, sectionTitle, count, lessonId }: {
       {/* Câu hỏi */}
       <div className="space-y-3 p-4">
         {qs.map((q, i) => (
-          <QuestionCard key={q.id} q={q} idx={i} L={L} selected={ans[q.id] || []} submitted={submitted} onToggle={toggle} />
+          <QuestionCard key={q.id} q={q} idx={i} L={L} selected={ans[q.id] || []} submitted={submitted} onToggle={toggle} onHoiAI={hoiAIVeCau} />
         ))}
 
         {/* Nộp / kết quả / làm lại */}
@@ -337,7 +379,9 @@ export function ChapterQuiz({ sectionId, sectionTitle, count, lessonId }: {
         {/* Gia sư AI biết các câu quiz — hỏi "câu N" là hiểu ngay */}
         {lessonId && (
           <div className="mt-2 border-t pt-3" style={{ borderColor: 'var(--border-color)' }}>
-            <CourseTutor lessonId={lessonId} lessonTitle={sectionTitle} quizContext={quizContext} />
+            <div ref={khuGiaSu}>
+              <CourseTutor lessonId={lessonId} lessonTitle={sectionTitle} quizContext={quizContext} autoAsk={tuHoi} />
+            </div>
           </div>
         )}
       </div>

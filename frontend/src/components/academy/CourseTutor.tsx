@@ -48,10 +48,15 @@ const toMsg = (t: Turn) => ({ role: t.role, content: t.content });
 // Câu quiz truyền vào để gia sư biết "câu N" là gì (dùng ở Đề luyện cuối chương).
 export interface TutorQuizItem { n: number; prompt: string; options: string[]; correctIndexes: number[]; explanation?: string }
 
-export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, quizContext }: {
+export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, quizContext, autoAsk }: {
   lessonId: number; courseCode?: string; courseTitle?: string; lessonTitle?: string;
   /** Có ⇒ chế độ hỏi trong quiz: gia sư biết đề+đáp án các câu, học viên chỉ gõ "câu N". */
   quizContext?: TutorQuizItem[];
+  /** Câu hỏi bắn đi NGAY khi `key` đổi — dùng cho nút "Hỏi AI vì sao sai" ở
+   *  từng câu quiz. Bấm nút là muốn câu trả lời, không phải muốn một ô trống
+   *  để tự gõ lại đề. `key` là số tăng dần: bấm lại cùng một câu vẫn hỏi lại
+   *  được, còn re-render thường thì không bắn nhầm thêm lượt (tốn tiền). */
+  autoAsk?: { key: number; text: string } | null;
 }) {
   const isAuthed = useAuthStore((s) => s.isAuthenticated);
   const { isPro } = usePro();
@@ -191,6 +196,18 @@ export function CourseTutor({ lessonId, courseCode, courseTitle, lessonTitle, qu
   // là DỰNG LẠI một câu trả lời bằng thứ tiếng khác. Bỏ lịch sử còn rẻ hơn.
   //
   // Dùng lại cùng cacheKey ⇒ bản tiếng Anh cũng được cache dưới lang='en'.
+  /* Nút "Hỏi AI vì sao sai" ở từng câu quiz bắn qua đây.
+     Chỉ chạy khi `key` ĐỔI — nếu theo dõi cả `text` thì một lần re-render đổi
+     chuỗi (ví dụ đổi ngôn ngữ) sẽ tự hỏi lại, mà mỗi lượt là một lần tính tiền. */
+  const autoKey = autoAsk?.key ?? 0;
+  const daBan = useRef(0);
+  useEffect(() => {
+    if (!autoKey || daBan.current === autoKey) return;
+    daBan.current = autoKey;
+    const t = autoAsk?.text?.trim();
+    if (t) void ask(t);
+  }, [autoKey, autoAsk?.text, ask]);
+
   const askEnglish = useCallback((aIdx: number) => {
     const t = turns[aIdx];
     if (!t?.srcQuestion || asking) return;

@@ -9,6 +9,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { CheckCircle2, Circle, ChevronDown, ChevronRight, Map as MapIcon, Target, PenLine } from 'lucide-react';
 import type { CourseSection, LessonDto } from '@/types';
 import { ChapterQuiz } from './ChapterQuiz';
+import { pickLang } from '@/lib/utils';
+import { useTranslation } from '@/context/LocaleContext';
 
 type Goal = 'pass' | 'good';
 
@@ -23,6 +25,12 @@ interface Props {
 }
 
 export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallProgress, courseId, courseCode, onJump }: Props) {
+  /* Tiêu đề chương/bài lưu dạng song ngữ `EN|||VI`. Quên tách là người dùng
+     đọc thấy nguyên dấu `|||` giữa hai bản dịch — đã lọt ra production và
+     người dùng báo ngày 08/09/2026. Lấy locale từ hook toàn cục (đúng cái
+     nút EN/VN trên đầu trang bật) thay vì bắt nơi gọi truyền xuống, để
+     component nào dùng lại cũng không thể quên. */
+  const { locale } = useTranslation();
   // Số câu Exam Room ĐÃ gán theo từng chương (điền dần bằng script phân loại).
   // Fetch 1 lần/khoá; chương nào có câu thì hiện link "luyện chương này".
   const [counts, setCounts] = useState<Record<number, number>>({});
@@ -154,7 +162,7 @@ export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallP
                 >
                   {isOpen ? <ChevronDown className="w-4 h-4 text-text-muted shrink-0" /> : <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />}
                   <span className="flex-1 min-w-0">
-                    <span className="block text-sm font-semibold text-text-primary truncate">{section.title}</span>
+                    <span className="block text-sm font-semibold text-text-primary truncate">{pickLang(section.title, locale)}</span>
                     <span className="block text-xs text-text-muted">{dCount}/{tCount} bài · {pct}%</span>
                   </span>
                   {complete && <span className="shrink-0 rounded-full bg-green-500/15 px-2 py-0.5 text-[10px] font-bold uppercase text-green-400">Xong</span>}
@@ -178,7 +186,7 @@ export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallP
                             {ldone
                               ? <CheckCircle2 className="w-4 h-4 shrink-0 text-green-400" />
                               : <Circle className="w-4 h-4 shrink-0 text-text-muted" />}
-                            <span className="flex-1 min-w-0 truncate">{lesson.title}</span>
+                            <span className="flex-1 min-w-0 truncate">{pickLang(lesson.title, locale)}</span>
                             {isCurrent && <span className="shrink-0 text-[10px] font-bold uppercase text-neon-violet">Đang học</span>}
                           </button>
                         </li>
@@ -188,7 +196,7 @@ export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallP
                   </ul>
                   {/* Đề luyện cuối chương — làm ngay trong bài, tự chấm (câu đề thật đã gán chương). */}
                   {counts[section.id] > 0 && (
-                    <ChapterQuiz sectionId={section.id} sectionTitle={section.title} count={counts[section.id]} lessonId={lessons[0]?.id} />
+                    <ChapterQuiz sectionId={section.id} sectionTitle={pickLang(section.title, locale)} count={counts[section.id]} lessonId={lessons[0]?.id} />
                   )}
                   {/* Mở nguyên Phòng Thi lọc đúng chương này (đề thực hành PE đầy đủ). */}
                   {courseCode && counts[section.id] > 0 && (

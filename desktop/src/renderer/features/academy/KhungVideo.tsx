@@ -59,7 +59,18 @@ export function KhungVideo({
   const oRef = useRef<HTMLDivElement>(null);
   const daMoRef = useRef(false);
 
-  /** Đo ô giữ chỗ rồi báo lên main. Toạ độ theo VIEWPORT của cửa sổ. */
+  /**
+ * Gốc site để dựng đường tới `/nhung-video`.
+ *
+ * `__CT_GOC_SITE__` do `configureWebApi()` đặt lúc app khởi động. Không có nó
+ * (chưa qua cầu nối web) thì trả rỗng và nơi gọi lùi về đường cũ, thay vì dựng
+ * ra một URL cụt.
+ */
+function gocSite(): string {
+  return ((globalThis as { __CT_GOC_SITE__?: string }).__CT_GOC_SITE__ ?? '').trim();
+}
+
+/** Đo ô giữ chỗ rồi báo lên main. Toạ độ theo VIEWPORT của cửa sổ. */
   const doVaBao = useCallback((moLuon: boolean) => {
     const el = oRef.current;
     const cau = window.cuongthai;
@@ -72,15 +83,21 @@ export function KhungVideo({
     if (moLuon && !daMoRef.current) {
       daMoRef.current = true;
       const ma = maYouTube(url);
-      /* ⚠️ TRANG XEM, KHÔNG PHẢI `/embed/`.
-         `youtube.com/embed/<id>` nạp ở cấp cao nhất trả **Error 153 — Video
-         player configuration error**: khung nhúng chỉ chạy khi nằm TRONG một
-         iframe của trang cha có origin thật. Đo bằng ảnh chụp chính lớp phủ,
-         không bằng trạng thái nạp — trang báo lỗi cũng "nạp thành công".
-         Trang xem thì kéo theo thanh đầu YouTube, nên tỉa bằng CSS ngay sau. */
-      void cau.browser
-        .mo(vung, ma ? `https://www.youtube.com/watch?v=${ma}` : url)
-        .then(() => cau.browser.tiaYouTube());
+      /* ⚠️ KHÔNG nạp `/embed/` trực tiếp, và cũng KHÔNG còn nạp trang xem
+         YouTube nữa.
+         • `/embed/<id>` ở cấp cao nhất trả Error 153: khung nhúng chỉ chạy khi
+           nằm TRONG một trang cha có ORIGIN THẬT, và phải là bên thứ ba.
+         • Trang xem `youtube.com/watch` thì chạy được, nhưng kéo theo quảng
+           cáo, cột gợi ý và bố cục riêng của YouTube — nặng, và trình phát
+           không lấp đầy khung. Cắt bằng CSS chỉ GIẤU chứ không ngăn tải.
+         Nay nạp `/nhung-video` của CHÍNH cuongthai.com: origin thật (y như
+         lúc nhúng trên web, vốn đã chạy), trang chỉ có đúng một iframe lấp
+         100% khung, không còn gì khác để tải. */
+      const goc = gocSite();
+      const dich = ma && goc
+        ? `${goc}/nhung-video?v=${encodeURIComponent(ma)}`
+        : url;
+      void cau.browser.mo(vung, dich);
     } else {
       void cau.browser.datVung(vung);
     }
@@ -93,16 +110,10 @@ export function KhungVideo({
     return () => cancelAnimationFrame(id);
   }, [doVaBao]);
 
-  /* Tỉa LẠI mỗi lần trang báo nạp xong. YouTube là ứng dụng một trang: bấm một
-     video gợi ý là nó thay nội dung mà không nạp lại tài liệu, và CSS chèn lần
-     đầu vẫn còn — nhưng lần điều hướng THẬT (tải lại, lùi/tới) thì mất. */
-  useEffect(() => {
-    const cau = window.cuongthai;
-    if (!cau) return;
-    return cau.on('browser:trangThai', (t) => {
-      if ((t as { dangTai?: boolean }).dangTai === false) void cau.browser.tiaYouTube();
-    });
-  }, []);
+  /* KHÔNG còn tỉa CSS ở đây. Lớp phủ nay nạp `/nhung-video` của chính mình —
+     một trang chỉ có đúng một iframe lấp 100% khung, nên không có gì để tỉa.
+     `tiaYouTube()` vẫn còn trong main cho đường LÙI (khi chưa có gốc site thì
+     `doVaBao` vẫn mở thẳng URL gốc). */
 
   /* Gỡ hẳn khi tháo — và DỪNG PHÁT, không chỉ gỡ.
      `an()` một mình chỉ tháo khung khỏi cửa sổ; trang YouTube vẫn chạy nền và

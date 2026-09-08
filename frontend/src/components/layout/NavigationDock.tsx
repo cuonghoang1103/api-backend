@@ -411,7 +411,9 @@ export default function NavigationDock() {
   // /creator có thanh công cụ studio riêng; nút nổi của dock sẽ tranh chỗ
   // trên cùng bên trái với nó. Chặn ở ĐÂY — sau khi mọi hook đã chạy — chứ
   // không chặn ở đầu hàm (xem chú thích dài ở đầu component).
-  if (pathname?.startsWith('/creator')) return null;
+  // `/nhung-video` — khung nhúng trần cho app desktop; xem chú thích cùng tên
+  // trong `Navbar.tsx`. Dock vẽ đè lên đáy video.
+  if (pathname?.startsWith('/creator') || pathname?.startsWith('/nhung-video')) return null;
 
   return (
     <>

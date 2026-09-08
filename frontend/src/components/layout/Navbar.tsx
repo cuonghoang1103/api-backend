@@ -255,7 +255,11 @@ export default function Navbar() {
  // its own amber-accent topbar. Hide the site-wide Navbar
  // there so it doesn't sit on top of the studio topbar
  // (z-40 > z-20) and clip the first row of editor controls.
- const isStudioPage = pathname?.startsWith('/creator') ?? false;
+ /* `/nhung-video` la khung nhung TRAN cho lop phu cua app desktop: no chi co
+    dung mot iframe lap kin man hinh. Thanh dieu huong ve de len giua video —
+    do that 09/09/2026. Cung ly do nhu `/creator`. */
+ const isStudioPage = (pathname?.startsWith('/creator') ?? false)
+   || (pathname?.startsWith('/nhung-video') ?? false);
   if (isAuthPage || isStudioPage || pathname === '/') return null;
 
   const contactItems = [

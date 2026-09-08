@@ -49,8 +49,11 @@ export default function FloatingAIAssistant() {
  // change the hook count between renders (e.g. '/' → '/admin') and throw
  // React error #310 "rendered fewer hooks than expected". Compute the flag
  // now, call every hook unconditionally, then bail out just before the JSX.
+ // `/nhung-video`: khung nhung TRAN cho lop phu cua app desktop, chi co dung
+ // mot iframe lap kin man hinh. Bong bong tro ly ve de len giua video.
  const hidden = Boolean(
-   pathname?.startsWith('/creator') || pathname?.startsWith('/admin') || hiddenOnMobile,
+   pathname?.startsWith('/creator') || pathname?.startsWith('/admin')
+   || pathname?.startsWith('/nhung-video') || hiddenOnMobile,
  );
 
  const { isStreaming, robotEmotion } = useChatStore();

@@ -69,6 +69,7 @@ const profileRoutes = (await import(path.join(__dirname, 'routes', 'profile.rout
 const classScheduleRoutes = (await import(path.join(__dirname, 'routes', 'classSchedule.routes.js'))).default;
 const hocKyRoutes = (await import(path.join(__dirname, 'routes', 'hocKy.routes.js'))).default;
 const userRoutes = (await import(path.join(__dirname, 'routes', 'user.routes.js'))).default;
+const timKiemRoutes = (await import(path.join(__dirname, 'routes', 'timKiem.routes.js'))).default;
 const friendRoutes = (await import(path.join(__dirname, 'routes', 'friend.routes.js'))).default;
 const stickerRoutes = (await import(path.join(__dirname, 'routes', 'sticker.routes.js'))).default;
 const blogRoutes = (await import(path.join(__dirname, 'routes', 'blog.routes.js'))).default;
@@ -491,6 +492,7 @@ app.use('/api/v1/profile', profileRoutes);
 app.use('/api/v1/class-schedule', classScheduleRoutes);
 app.use('/api/v1/hoc-ky', hocKyRoutes);
 app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/tim-kiem', timKiemRoutes);
 app.use('/api/v1/friends', friendRoutes);
 app.use('/api/v1/stickers', stickerRoutes);
 app.use('/api/v1/blog', blogRoutes);

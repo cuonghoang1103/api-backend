@@ -24,7 +24,11 @@ const router = Router();
 // ─── GET /me — current user quota ────────────────────────
 router.get('/me', authenticate, async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userId = (req as any).user.id;
+    // ⚠️ CÙNG LỖI với voiceMini: `req.user` là `JwtPayload`, nó khai `userId`
+    // chứ KHÔNG có `id`. Đọc `.id` ra `undefined` ⇒ khoá Redis thành
+    // "quota:undefined:…" ⇒ chỉ báo hạn mức trên web luôn hiện 0 cho mọi
+    // người. Không lộ dữ liệu (bản lùi Postgres chặn `NaN`), nhưng sai hẳn.
+    const userId = String((req as Request & { userId?: number }).userId ?? '');
     const status = await getQuotaStatus(userId);
     const response: ApiResponse = {
       success: true,

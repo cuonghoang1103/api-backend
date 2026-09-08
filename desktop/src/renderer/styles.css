@@ -96,18 +96,39 @@
    không sẽ có một khoảng trống 50px không ai hiểu vì sao. */
 .ct-shell:has(.ct-player[data-thu='true']) { --ct-player-h: var(--ct-player-h-thu); }
 
+/* ─── Nền tối: DỊU, không phải đen kịt (09/09/2026) ───
+ *
+ * Bản cũ để nền `#0a0a11` — gần như đen tuyệt đối — với chữ `#f2f2f7` gần như
+ * trắng tinh. Tương phản đó quá gắt để ngồi đọc bài học hàng giờ, và người
+ * dùng báo đúng vậy khi đặt cạnh trang web.
+ *
+ * Đo hai bảng màu rồi mới sửa, không phỏng đoán:
+ *            app cũ      web        app mới
+ *   nền      #0a0a11    #18191a    #16161d
+ *   thẻ      #14141d    #242526    #20202a
+ *   bề mặt   #191924    #303031    #2a2a36
+ *   viền     #262633    #3e4042    #383846
+ *   chữ      #f2f2f7    #e4e6eb    #e8e8f0
+ *
+ * Lấy ĐỘ SÁNG của web (nền sáng hơn hẳn, các lớp tách bạch hơn) nhưng giữ
+ * chút sắc lạnh: accent tím `#818cf8`, dải aurora ở Tổng quan và cảnh đêm ở
+ * trang Nhạc đều dựng trên tông đó — đổi sang xám trung tính của web thì
+ * chúng lạc màu.
+ *
+ * Chữ hạ từ trắng tinh xuống `#e8e8f0`: vẫn hơn 12:1 trên nền mới, thừa mức
+ * AAA, mà bớt chói. */
 :root[data-ct-theme='dark'] {
-  --ct-bg: #0a0a11;
-  --ct-surface: #14141d;
-  --ct-surface-2: #191924;
-  --ct-sidebar: #101018;
-  --ct-border: #262633;
-  --ct-hover: rgba(255, 255, 255, 0.06);
-  --ct-active: rgba(129, 140, 248, 0.16);
+  --ct-bg: #16161d;
+  --ct-surface: #20202a;
+  --ct-surface-2: #2a2a36;
+  --ct-sidebar: #1b1b23;
+  --ct-border: #383846;
+  --ct-hover: rgba(255, 255, 255, 0.07);
+  --ct-active: rgba(129, 140, 248, 0.18);
 
-  --ct-text: #f2f2f7;
-  --ct-text-muted: #a0a0b0;
-  --ct-text-faint: #71717f;
+  --ct-text: #e8e8f0;
+  --ct-text-muted: #a8a8ba;
+  --ct-text-faint: #7e7e90;
 
   --ct-accent: #818cf8;
   --ct-accent-text: #a5b4fc;

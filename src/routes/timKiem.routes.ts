@@ -23,7 +23,11 @@ const router = Router();
  *  thành vài trăm KB — màn này gọi lại sau mỗi lần người dùng ngừng gõ. */
 const TRAN = 20;
 
-type Loai = 'tat-ca' | 'nguoi' | 'bai-viet' | 'khoa-hoc' | 'nhac';
+/* ⚠️ KHÔNG có 'nhac'. Bỏ 09/09/2026 theo yêu cầu người dùng: kho nhạc phát
+ * nội dung không có quyền phân phối, đưa vào app iOS là rủi ro bị App Store
+ * từ chối (Guideline 5.2 — Intellectual Property). Web giữ nguyên, chỉ app
+ * không có lối vào. */
+type Loai = 'tat-ca' | 'nguoi' | 'bai-viet' | 'khoa-hoc';
 
 router.get('/', async (req: Request, res: Response<ApiResponse>, next: NextFunction) => {
   try {
@@ -33,14 +37,14 @@ router.get('/', async (req: Request, res: Response<ApiResponse>, next: NextFunct
 
     // Một ký tự thì mọi thứ đều khớp — trả về rỗng thay vì quét cả bảng.
     if (q.length < 2) {
-      res.json({ success: true, data: { q, nguoi: [], baiViet: [], khoaHoc: [], nhac: [] } });
+      res.json({ success: true, data: { q, nguoi: [], baiViet: [], khoaHoc: [] } });
       return;
     }
 
     const can = (l: Loai) => loai === 'tat-ca' || loai === l;
     const chua = { contains: q, mode: 'insensitive' as const };
 
-    const [nguoi, baiViet, khoaHoc, nhac] = await Promise.all([
+    const [nguoi, baiViet, khoaHoc] = await Promise.all([
       can('nguoi')
         ? prisma.user.findMany({
             where: { enabled: true,
@@ -85,16 +89,6 @@ router.get('/', async (req: Request, res: Response<ApiResponse>, next: NextFunct
           })
         : Promise.resolve([]),
 
-      can('nhac')
-        ? prisma.musicTrack.findMany({
-            // `active` chứ không `isPublic` — bài tắt là bài admin đã gỡ.
-            where: { active: true, OR: [{ title: chua }, { artist: chua }] },
-            select: { id: true, title: true, artist: true, coverImage: true,
-                      audioUrl: true, cloudinaryUrl: true, durationSeconds: true },
-            take: gioiHan,
-            orderBy: { id: 'desc' },
-          })
-        : Promise.resolve([]),
     ]);
 
     res.json({
@@ -107,8 +101,7 @@ router.get('/', async (req: Request, res: Response<ApiResponse>, next: NextFunct
         // chủ là ép cả hai bên nói cùng một thứ tiếng.
         baiViet,
         khoaHoc,
-        nhac,
-        tong: nguoi.length + baiViet.length + khoaHoc.length + nhac.length,
+        tong: nguoi.length + baiViet.length + khoaHoc.length,
       },
     });
   } catch (error) {

@@ -48,7 +48,11 @@ const sau = await doc();
 canh('bắn xong thì bong bóng hiện', sau.co === true);
 canh('mã lớp có gạch dưới còn nguyên (AI17_A)', sau.chu.includes('AI17_A'));
 canh('phòng có gạch dưới còn nguyên (BE-2_1)', sau.chu.includes('BE-2_1'));
-await p.screenshot({ path: process.env.CT_ANH ?? 'robot.png' });
+/* Ảnh chụp chỉ để soi khi cần, và mặc định KHÔNG ghi gì: bản cũ ghi thẳng
+   `robot.png` vào `desktop/` nên nó nằm lại trong kho, và một tệp lạ trong
+   `desktop/` là đủ để `npm run phat-hanh` từ chối chạy (nó đòi thư mục sạch).
+   Đặt `CT_ANH=<đường dẫn>` khi thật sự muốn ảnh. */
+if (process.env.CT_ANH) await p.screenshot({ path: process.env.CT_ANH });
 
 /* Đợi qua mốc tự tắt. 14s + dư. */
 await p.waitForTimeout(15_000);

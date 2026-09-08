@@ -31,6 +31,7 @@ import {
   gatewayKey,
   messagesUrl,
   modelFor,
+  uuTienCua,
   xinDiemCuoi,
   type LlmEndpoint,
   type LlmPurpose,
@@ -95,7 +96,22 @@ export interface LLMProvider {
 const costUsd = gatewayCostUsd;
 
 class LLMError extends Error {
-  constructor(message: string, public retryable: boolean) {
+  /**
+   * `statusCode`/`code` để errorHandler trả đúng thứ người dùng cần đọc.
+   *
+   * Không có chúng thì mọi lỗi ở đây rơi về 500, và errorHandler CỐ Ý thay câu
+   * thật bằng "Internal Server Error" để không lộ nội bộ ra ngoài. Ngày
+   * 08/09/2026 người dùng gặp đúng chuyện đó: cầu dao ngân sách chặn lời gọi và
+   * ghi rõ lý do vào log, nhưng app chỉ hiện "Internal Server Error" — trông
+   * như web hỏng, trong khi thật ra chỉ là hết hạn mức trong ngày. Chặn vì
+   * chính sách là 4xx, không phải sự cố máy chủ.
+   */
+  constructor(
+    message: string,
+    public retryable: boolean,
+    public statusCode?: number,
+    public code?: string,
+  ) {
     super(message);
   }
 }
@@ -699,10 +715,21 @@ export async function llmComplete(opts: {
     // đơn nào để mà chặn. Chặn nó nghĩa là hết hạn mức tiền thì cả những việc
     // MIỄN PHÍ cũng ngừng — đúng ngược với lý do dựng máy nhà.
     if (!ep.local) {
-      const verdict = await checkBudget(isBackground ? 'background' : 'interactive');
+      // Phân loại theo CẢ feature LẪN purpose.
+      //
+      // Chỉ nhìn `feature` là chưa đủ: `codelab_bulk`, `language_bulk`,
+      // `exphub_doc`, `news_bulletin` đều mang feature 'codelab'/'language'/…
+      // nên trước 08/09/2026 chúng được tính là "người đang ngồi chờ" và đi
+      // thẳng qua trần MỀM — đúng thứ trần mềm sinh ra để chặn. Bản đồ
+      // `uuTienCua()` đã biết việc nào chạy nền (nó dùng để xếp hàng máy nhà),
+      // nên dùng lại nó thay vì nuôi danh sách thứ hai lệch pha dần.
+      const chayNen = isBackground || uuTienCua(purpose) === 'nen';
+      const verdict = await checkBudget(chayNen ? 'background' : 'interactive');
       if (!verdict.allowed) {
         logger.warn('llm budget chặn lời gọi', { feature: opts.feature ?? null, step: opts.step, model, reason: verdict.reason, spentUsd: Number(verdict.spentUsd.toFixed(4)) });
-        throw new LLMError(budgetMessage(verdict), false);
+        // 429 chứ không phải 500: đây là hạn mức, không phải sự cố. 4xx thì
+        // errorHandler giữ nguyên câu chữ, nên app hiện được lý do thật.
+        throw new LLMError(budgetMessage(verdict), false, 429, 'BUDGET_EXCEEDED');
       }
     }
 

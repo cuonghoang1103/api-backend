@@ -2911,10 +2911,23 @@ async function luuLuotHoi(
   const q = question.trim();
   const a = (answer ?? '').trim();
   if (!q || !a) return;
+  const lang = english ? 'en' : 'vi';
   try {
-    await prisma.lessonTutorAsk.create({
-      data: { lessonId, userId, question: q, answer: a, lang: english ? 'en' : 'vi' },
-    });
+    /* MỘT dòng cho mỗi (bài, câu hỏi, ngôn ngữ) — bản mới đè bản cũ.
+     *
+     * Vì sao cần: cùng một câu được ghi từ HAI chỗ. Đường SSE ghi khi chảy
+     * xong, và khi SSE hỏng trước lúc nhả chữ thì client rơi về `/ai/ask` —
+     * đường đó cũng ghi. Đo thật trên production 08/09/2026: bài 777 có hai
+     * dòng giống hệt nhau, cùng câu hỏi, cùng độ dài câu trả lời, cách nhau
+     * vài giây. Trong một danh sách DÙNG CHUNG thì trùng lặp là nhiễu thuần
+     * tuý — người đọc phải tự đoán hai dòng giống nhau khác nhau chỗ nào.
+     *
+     * Đè chứ không bỏ qua: bấm "Hỏi lại mới" là người dùng nói câu cũ chưa
+     * đạt, nên thứ đọng lại phải là bản mới nhất. */
+    await prisma.$transaction([
+      prisma.lessonTutorAsk.deleteMany({ where: { lessonId, question: q, lang } }),
+      prisma.lessonTutorAsk.create({ data: { lessonId, userId, question: q, answer: a, lang } }),
+    ]);
   } catch { /* xem chú thích trên */ }
 }
 

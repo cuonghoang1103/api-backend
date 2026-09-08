@@ -517,7 +517,13 @@ export function MusicPage() {
               playing={playing}
               isDownloaded={downloaded.has(track.id)}
               isDownloading={downloading.has(track.id)}
-              chuaRutAmThanh={laBaiYouTube(track) && !downloaded.has(track.id)}
+              /* CHỈ hỏi "bài này đã có trên máy chủ chưa" — KHÔNG trộn với
+                 "đã tải về máy này chưa". Bản cũ `&& !downloaded.has(...)`
+                 làm nút rút-lên-máy-chủ BIẾN MẤT ngay khi người dùng tải bài
+                 về máy, dù trên máy chủ vẫn chưa có gì: tải về máy là bản
+                 riêng của một máy, rút lên R2 là cho mọi thiết bị và cho phát
+                 nền. Người dùng báo đúng chuyện này 09/09/2026. */
+              chuaRutAmThanh={laBaiYouTube(track)}
               dangRut={dangThem === String(track.id)}
               online={online}
               onPlay={() => (currentId === track.id ? toggle() : playTrack(track, visible))}
@@ -676,7 +682,11 @@ function DongBai({
           bên trái mỗi bài và độn thêm cả một hàng chiều cao, làm danh sách
           trông thưa thếch. */}
       <span className="ct-trk-nut">
-      {chuaRutAmThanh ? (
+      {/* Rút lên MÁY CHỦ (R2) — đứng RIÊNG, không thay thế nút tải về máy.
+          Hai việc khác nhau: tải về máy là bản riêng của máy này, rút lên R2
+          là cho mọi thiết bị và cho phát nền. Bản cũ để chúng loại trừ nhau
+          nên tải về máy xong là mất luôn đường đưa bài lên máy chủ. */}
+      {chuaRutAmThanh && (
         <button
           type="button"
           className="ct-trk-action"
@@ -687,7 +697,9 @@ function DongBai({
         >
           {dangRut ? <Loader2 size={14} className="ct-spin" aria-hidden /> : <Youtube size={15} aria-hidden />}
         </button>
-      ) : isDownloaded ? (
+      )}
+
+      {isDownloaded ? (
         <button
           type="button"
           className="ct-trk-action"

@@ -306,9 +306,16 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
       nhipRef.current = null;
 
       const moi = new Audio();          // KHÔNG đặt crossOrigin
+      const mocDangDo = el.currentTime;
       moi.src = el.src;
       moi.volume = el.volume;
-      moi.currentTime = el.currentTime;
+      /* ⚠️ ĐẶT `currentTime` SAU khi có metadata, không phải ngay.
+       * Thẻ vừa tạo chưa biết bài dài bao nhiêu, nên gán `currentTime` lúc này
+       * bị BỎ QUA IM LẶNG và bài phát lại từ giây 0 — người dùng đang nghe dở
+       * bỗng về đầu, không có lỗi nào. */
+      moi.addEventListener('loadedmetadata', () => {
+        try { moi.currentTime = mocDangDo; } catch { /* chịu */ }
+      }, { once: true });
       el.pause();
       audioRef.current = moi;
       void moi.play();
@@ -483,6 +490,22 @@ export function MusicPlayerProvider({ children }: { children: ReactNode }) {
   const batDauTua = useCallback((giay: number) => {
     seekingRef.current = giay;
     setSeeking(giay);
+    /* ÁP NGAY, không đợi thả tay.
+     *
+     * Bản cũ chỉ ghi nhớ rồi để `chotTua` áp khi nghe `pointerup` — mà cái
+     * nghe đó được gắn trong một `useEffect` chạy SAU khi React vẽ lại. Một cú
+     * BẤM (không kéo) thì `pointerdown → change → pointerup` xong trong cùng
+     * một nhịp, tức `pointerup` có thể đã bay qua trước khi có ai nghe. Khi đó
+     * lần tua không bao giờ được áp: thanh trượt nhảy tới chỗ bấm rồi tụt về
+     * đúng chỗ tiếng đang chạy — nhìn như "bấm đâu cũng về đầu".
+     *
+     * Áp ngay ở đây thì bấm và kéo đều đúng; `chotTua` chỉ còn việc xoá trạng
+     * thái hiển thị. Thẻ <audio> chịu được nhiều lần đặt `currentTime` liên
+     * tiếp lúc kéo — đó là cách mọi trình phát vẫn làm. */
+    const el = audioRef.current;
+    if (el && Number.isFinite(giay)) {
+      try { el.currentTime = giay; } catch { /* chưa nạp xong thì bỏ qua */ }
+    }
   }, []);
   const chotTua = useCallback(() => {
     const giaTri = seekingRef.current;

@@ -29,7 +29,7 @@ const THEO_THOI_GIAN = [
   'mới nhất', 'hiện nay', 'hiện tại', 'bây giờ', 'gần đây', 'vừa rồi',
   'năm nay', 'tháng này', 'hôm nay', 'đang', 'cập nhật',
   'giá', 'bao nhiêu tiền', 'tỷ giá', 'thời tiết', 'tin tức', 'lịch thi đấu',
-  'phiên bản mới', 'ra mắt', 'sắp ra',
+  'phiên bản mới', 'ra mắt', 'sắp ra', 'có tin gì',
 ];
 
 /** Năm từ 2026 trở đi — sau ngày cắt dữ liệu của phần lớn model. */
@@ -46,6 +46,33 @@ export interface QuyetDinh {
   viSao: string;
 }
 
+/**
+ * Câu này có phải CÂU HỎI không.
+ *
+ * ⛔⛔ HAI LỖI Ở BẢN CŨ, cả hai đều làm trợ lý từ chối tra cứu thứ nó tra
+ * được. Đo thật 10/09/2026 trên đúng câu người dùng gõ:
+ *
+ *     ✗ "Hôm nay ở bên Anthropic có tin tức gì mới không"
+ *     ✓ "Hôm nay ở bên Anthropic có tin tức gì mới không?"   ← chỉ khác DẤU HỎI
+ *
+ * 1. **Thiếu tiểu từ nghi vấn tiếng Việt.** Người Việt hỏi có/không bằng cách
+ *    kết câu bằng "không", "chưa", "à", "hả", "nhỉ", "chứ" — chứ không phải
+ *    bằng dấu "?". Mà gõ trên điện thoại thì gần như không ai đánh dấu hỏi.
+ *
+ * 2. **`\b` KHÔNG hiểu chữ có dấu.** `\b` trong JavaScript chỉ tính
+ *    `[A-Za-z0-9_]`, nên `\bgì\b` KHÔNG BAO GIỜ khớp "là gì": sau `ì` không
+ *    có ranh giới nào cả. Đo được:
+ *        /\bgì\b/.test("là gì") === false
+ *        /\bgì/.test("là gì")   === true
+ *    Vì thế "là gì", "thế nào", "ở đâu", "khi nào" đều chết; chỉ "bao nhiêu"
+ *    sống sót vì nó kết thúc bằng chữ ASCII. Xem
+ *    `feedback_regex_word_boundary_breaks_vietnamese`.
+ *
+ * Nay dùng lookaround theo LỚP CHỮ (`\p{L}` với cờ `u`) thay cho `\b`.
+ */
+export const LA_CAU_HOI =
+  /[?？]|^(cho|hỏi|xem|kiểm tra)(?![\p{L}])|(?<![\p{L}])(là gì|bao nhiêu|thế nào|ở đâu|khi nào|ai là|có gì)(?![\p{L}])|(không|chưa|chăng|hả|nhỉ|chứ|à)\s*[?？!.]*$/iu;
+
 export function canTimWeb(cauHoi: string): QuyetDinh {
   const q = (cauHoi ?? '').trim();
   const thuong = q.toLowerCase();
@@ -57,7 +84,15 @@ export function canTimWeb(cauHoi: string): QuyetDinh {
   // Câu chào/cảm ơn — chặn sớm, vì chúng hay chứa từ "hiện tại", "bây giờ".
   if (/^(chào|hi|hello|cảm ơn|cám ơn|thanks|ok|được rồi)\b/i.test(thuong)) return khong;
 
-  const dau = (ds: string[]): string | null => ds.find((t) => thuong.includes(t)) ?? null;
+  /*
+   * ⚠️ "giá" KHÔNG được khớp khi nó nằm trong "giá trị" — đó là từ lập trình,
+   * không phải hỏi giá cả. Trước đây ca này lọt lưới nhờ MỘT LỖI KHÁC: phép
+   * nhận dạng câu hỏi dùng `\bở đâu\b`, mà `\b` không hiểu chữ có dấu nên nó
+   * không bao giờ khớp. Vá lỗi kia xong thì chỗ này mới lộ ra — phép kiểm cũ
+   * vẫn xanh, nhưng xanh vì LÝ DO SAI.
+   */
+  const sach = thuong.replace(/giá\s*trị/g, '§§');
+  const dau = (ds: string[]): string | null => ds.find((t) => sach.includes(t)) ?? null;
 
   const noiThang = dau(NOI_THANG);
   if (noiThang) return { can: true, cauTim: catCauTim(q), viSao: `người dùng nói thẳng: "${noiThang}"` };
@@ -73,7 +108,7 @@ export function canTimWeb(cauHoi: string): QuyetDinh {
     // ⚠️ Một dấu hiệu thời gian ĐƠN LẺ chưa đủ. "đang" và "giá" xuất hiện
     // trong vô số câu chẳng liên quan gì tới tra cứu ("giá trị của biến",
     // "đang chạy hàm nào"). Đòi thêm dấu hiệu thứ hai: câu phải là câu HỎI.
-    if (/[?？]|^(cho|hỏi|xem|kiểm tra)\b|\b(là gì|bao nhiêu|thế nào|ở đâu|khi nào|ai là)\b/i.test(thuong)) {
+    if (LA_CAU_HOI.test(thuong)) {
       return { can: true, cauTim: catCauTim(q), viSao: `dấu hiệu thời gian: "${thoiGian}"` };
     }
   }

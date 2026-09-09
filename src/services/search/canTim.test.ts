@@ -64,3 +64,45 @@ test('luôn kèm LÝ DO để sau này gỡ lỗi được', () => {
   const d = canTimWeb('bảng giá điện 2026');
   assert.ok(d.viSao.length > 0);
 });
+
+// ════════════════════════════════════════════════════════════════
+// Sinh ra từ lỗi thật 10/09/2026: người dùng hỏi "Hôm nay ở bên Anthropic có
+// tin tức gì mới không" và trợ lý trả lời "mình không truy cập được internet"
+// — trong khi nó tra web được. Cùng câu đó THÊM DẤU HỎI thì lại tra.
+// ════════════════════════════════════════════════════════════════
+import { LA_CAU_HOI } from './canTim.js';
+
+test('câu hỏi có/không tiếng Việt KHÔNG cần dấu hỏi', () => {
+  // ⚠️ "có gì mới" ĐƠN LẺ cố ý KHÔNG kích hoạt — "có gì mới ở Node 26 không"
+  // là hỏi phiên bản, không phải hỏi tin tức. Phải có thêm một dấu hiệu thời
+  // gian thật ("hôm nay", "tin tức", "mới nhất"). Xem phép kiểm về số phiên bản.
+  // Người Việt hỏi bằng tiểu từ cuối câu, và gõ trên điện thoại thì hiếm ai
+  // đánh dấu "?".
+  for (const c of [
+    'Hôm nay ở bên Anthropic có tin tức gì mới không',
+    'Hôm nay có tin gì mới không',
+    'Giá vàng hôm nay tăng hay giảm nhỉ',
+  ]) {
+    assert.equal(canTimWeb(c).can, true, `phải tra web: "${c}"`);
+  }
+});
+
+test('⛔ `\\b` KHÔNG hiểu chữ có dấu — đây là chỗ đã chết âm thầm', () => {
+  // Bằng chứng cho chính cái bẫy: sau `ì` không có ranh giới ASCII nào.
+  assert.equal(/\bgì\b/i.test('là gì'), false, 'đây là lý do bản cũ trượt');
+  // Bản mới dùng lookaround theo lớp chữ nên khớp được.
+  assert.equal(LA_CAU_HOI.test('tin tức mới nhất của anthropic là gì'), true);
+  assert.equal(LA_CAU_HOI.test('cái này thế nào'), true);
+  assert.equal(LA_CAU_HOI.test('quán đó ở đâu'), true);
+});
+
+test('KHÔNG bắt nhầm câu lập trình thường ngày', () => {
+  // Nới tay quá thì mỗi câu hỏi code đều tốn vài giây tra web vô ích.
+  for (const c of [
+    'biến này đang giữ giá trị gì trong vòng lặp',
+    'giải thích cho mình con trỏ trong C',
+    'viết hàm Java đảo ngược một chuỗi',
+  ]) {
+    assert.equal(canTimWeb(c).can, false, `KHÔNG được tra web: "${c}"`);
+  }
+});

@@ -44,26 +44,107 @@ export interface PhanLoaiLenh {
  * xoá thật, đẩy lên máy chủ thật, đổi máy của người dùng, hoặc kéo mã lạ từ
  * Internet về chạy. Nút Hoàn tác của P2 không cứu được cái nào trong số đó.
  */
+/**
+ * Ranh giới TRƯỚC một tên lệnh.
+ *
+ * ⚠️ Bản cũ là `[\s;&|]` và nó để lọt cả một lớp lệnh: `bash -c "rm -rf build"`
+ * — ký tự ngay trước `rm` là dấu `"`, không phải khoảng trắng — nên xếp
+ * **thường**, tự chạy, và còn được nhớ. Đo thật 09/09/2026.
+ *
+ * Nay gồm cả nháy, ngoặc, backtick và `=`: mọi thứ có thể đứng ngay trước một
+ * tên lệnh mà không phải ký tự chữ. KHÔNG dùng `\b` trần vì `npm`/`confirm`
+ * cũng chứa `rm`.
+ */
+const RANH = String.raw`(?:^|[\s;&|(){}"'\x60=])`;
+const L = (than: string): RegExp => new RegExp(RANH + than, 'i');
+
+/**
+ * Lệnh KHÔNG BAO GIỜ được nhớ, và luôn kèm cảnh báo.
+ *
+ * Tiêu chí vào đây không phải "nghe đáng sợ" mà là **không có đường lùi**:
+ * xoá thật, đẩy lên máy chủ thật, đổi máy của người dùng, hoặc kéo mã lạ từ
+ * Internet về chạy. Nút Hoàn tác của P2 không cứu được cái nào trong số đó.
+ *
+ * ⚠️⚠️ BA NHÓM, VÀ NHÓM NÀO THIẾU CŨNG LÀ MỘT NỀN TẢNG KHÔNG ĐƯỢC BẢO VỆ.
+ * Bản trước chỉ có nhóm POSIX. Đo thật trên 15 lệnh phá hoại của Windows
+ * (`del /f /s /q`, `rd /s /q`, `Remove-Item -Recurse -Force`, `format`,
+ * `reg delete`, `runas`, `takeown`…): **15/15 xếp "thường"** ⇒ ở chế độ
+ * `tuSuaVaLenh` chúng tự chạy KHÔNG HỎI và còn được ghi nhớ. Cùng những lệnh
+ * đó trên macOS/Linux thì bị chặn đúng. Người dùng Windows đã chạy một chế độ
+ * KHÁC HẲN thứ giao diện nói.
+ */
 const NGUY_HIEM: ReadonlyArray<{ re: RegExp; lyDo: string }> = [
-  { re: /(^|[\s;&|])rm\s/, lyDo: 'xoá file — không hoàn tác được' },
-  { re: /(^|[\s;&|])(rmdir|unlink)\s/, lyDo: 'xoá — không hoàn tác được' },
-  { re: /(^|[\s;&|])(sudo|su|doas)\s/, lyDo: 'chạy với quyền quản trị' },
-  { re: /(^|[\s;&|])(chmod|chown|chgrp)\s/, lyDo: 'đổi quyền file' },
-  { re: /(^|[\s;&|])(dd|mkfs|fdisk|diskutil)\s/, lyDo: 'thao tác đĩa ở mức thấp' },
-  { re: /(^|[\s;&|])(shutdown|reboot|halt)\b/, lyDo: 'tắt/khởi động lại máy' },
-  { re: /(^|[\s;&|])(kill|pkill|killall)\s/, lyDo: 'giết tiến trình khác' },
-  { re: /git\s+push/, lyDo: 'đẩy lên kho từ xa — người khác thấy ngay' },
-  { re: /git\s+(reset\s+--hard|clean\s+-|checkout\s+--\s|restore\s)/, lyDo: 'vứt bỏ thay đổi chưa lưu' },
-  { re: /git\s+(commit|rebase|merge|cherry-pick|revert)\b/, lyDo: 'đổi lịch sử git' },
-  { re: /(^|[\s;&|])(npm|yarn|pnpm)\s+publish/, lyDo: 'phát hành gói ra công khai' },
-  { re: /(^|[\s;&|])(curl|wget|nc|ncat)\s/, lyDo: 'gọi ra Internet — có thể tải mã lạ về' },
-  { re: /(^|[\s;&|])(ssh|scp|rsync|sftp)\s/, lyDo: 'nối tới máy khác' },
-  { re: /(^|[\s;&|])(brew|apt|apt-get|yum|dnf|pacman|port)\s/, lyDo: 'cài/gỡ phần mềm của máy' },
-  { re: /(^|[\s;&|])(launchctl|systemctl|service)\s/, lyDo: 'đổi dịch vụ chạy nền của máy' },
-  { re: /(^|[\s;&|])(docker|kubectl)\s/, lyDo: 'điều khiển container/cụm máy' },
-  { re: /(^|[\s;&|])(npm|yarn|pnpm)\s+(install|add|i)\b/, lyDo: 'cài gói mới — chạy script của gói đó' },
-  { re: />\s*\/(etc|usr|bin|sbin|System)\b/, lyDo: 'ghi vào thư mục hệ thống' },
+  // ── Xoá / ghi đè (POSIX) ──
+  { re: L(String.raw`rm\b`), lyDo: 'xoá file — không hoàn tác được' },
+  { re: L(String.raw`(rmdir|unlink|shred|truncate)\s`), lyDo: 'xoá/cắt trắng file — không hoàn tác được' },
+  { re: /find\s[^|]*-(delete|exec|execdir)\b/i, lyDo: 'find kèm -delete/-exec — xoá hoặc chạy hàng loạt' },
+  { re: L(String.raw`xargs\b`), lyDo: 'chạy một lệnh khác hàng loạt' },
+
+  // ── Xoá / ghi đè (Windows) ──
+  { re: L(String.raw`(del|erase)\s`), lyDo: 'xoá file — không hoàn tác được' },
+  { re: L(String.raw`rd\s`), lyDo: 'xoá thư mục — không hoàn tác được' },
+  { re: L(String.raw`(remove-item|ri|rmdir)\s`), lyDo: 'xoá — không hoàn tác được' },
+  { re: L(String.raw`(format|diskpart|bcdedit|vssadmin)\b`), lyDo: 'thao tác đĩa/khởi động ở mức thấp' },
+
+  // ── Trình thông dịch: cửa sau của MỌI mẫu khác ──
+  // `bash -c "…"` chạy được bất cứ thứ gì; không mẫu nào ở trên nhìn vào
+  // trong chuỗi đó. Xếp nguy hiểm theo CÁCH GỌI, không theo nội dung.
+  { re: L(String.raw`(bash|sh|zsh|dash|ksh|fish|cmd)\s+(-c|/c|/k)\b`), lyDo: 'chạy chuỗi lệnh qua shell khác — nội dung không kiểm được' },
+  { re: L(String.raw`(powershell|pwsh)\b`), lyDo: 'chạy PowerShell — nội dung không kiểm được' },
+  { re: L(String.raw`(node|deno|bun)\s+-(e|p|-eval)\b`), lyDo: 'chạy mã ngay trên dòng lệnh' },
+  { re: L(String.raw`(perl|ruby|php)\s+-(e|r)\b`), lyDo: 'chạy mã ngay trên dòng lệnh' },
+  { re: L(String.raw`python[0-9.]*\s+-c\b`), lyDo: 'chạy mã ngay trên dòng lệnh' },
+  { re: L(String.raw`eval\b`), lyDo: 'eval — chạy chuỗi tuỳ ý' },
+  { re: L(String.raw`wsl\b`), lyDo: 'chạy sang Linux con — ra ngoài tầm mọi phép kiểm ở đây' },
+
+  // ── Quyền hạn ──
+  { re: L(String.raw`(sudo|su|doas|runas)\s`), lyDo: 'chạy với quyền quản trị' },
+  { re: L(String.raw`(chmod|chown|chgrp|icacls|takeown|cacls)\s`), lyDo: 'đổi quyền file' },
+
+  // ── Đĩa / hệ thống ──
+  { re: L(String.raw`(dd|mkfs|fdisk|diskutil)\s`), lyDo: 'thao tác đĩa ở mức thấp' },
+  { re: L(String.raw`(shutdown|reboot|halt)\b`), lyDo: 'tắt/khởi động lại máy' },
+  { re: L(String.raw`(kill|pkill|killall|taskkill|stop-process)\b`), lyDo: 'giết tiến trình khác' },
+  { re: L(String.raw`reg\s+(add|delete|import)\b`), lyDo: 'sửa registry của Windows' },
+  { re: L(String.raw`(launchctl|systemctl|service)\s`), lyDo: 'đổi dịch vụ chạy nền của máy' },
+  { re: L(String.raw`(sc|net)\s+(start|stop|config|delete)\b`), lyDo: 'đổi dịch vụ chạy nền của máy' },
+
+  // ── git ──
+  { re: /git\s+push/i, lyDo: 'đẩy lên kho từ xa — người khác thấy ngay' },
+  { re: /git\s+(reset\s+--hard|clean\s+-|checkout\s+--\s|restore\s)/i, lyDo: 'vứt bỏ thay đổi chưa lưu' },
+  { re: /git\s+(commit|rebase|merge|cherry-pick|revert)\b/i, lyDo: 'đổi lịch sử git' },
+  { re: /git\s+branch\s+-(D|d\b)/, lyDo: 'xoá nhánh' },
+
+  // ── Ra Internet / cài đặt ──
+  { re: L(String.raw`(curl|wget|nc|ncat)\s`), lyDo: 'gọi ra Internet — có thể tải mã lạ về' },
+  { re: L(String.raw`(invoke-webrequest|invoke-restmethod|iwr|irm|start-bitstransfer)\b`), lyDo: 'gọi ra Internet — có thể tải mã lạ về' },
+  { re: L(String.raw`(ssh|scp|rsync|sftp)\s`), lyDo: 'nối tới máy khác' },
+  { re: L(String.raw`(brew|apt|apt-get|yum|dnf|pacman|port|winget|choco|scoop)\s`), lyDo: 'cài/gỡ phần mềm của máy' },
+  { re: L(String.raw`(docker|kubectl)\s`), lyDo: 'điều khiển container/cụm máy' },
+  { re: L(String.raw`(npm|yarn|pnpm)\s+publish`), lyDo: 'phát hành gói ra công khai' },
+  { re: L(String.raw`(npm|yarn|pnpm)\s+(install|add|i)\b`), lyDo: 'cài gói mới — chạy script của gói đó' },
+  { re: L(String.raw`make\s+install\b`), lyDo: 'cài vào hệ thống' },
+
+  // ── Khác ──
+  { re: />\s*[/\\](etc|usr|bin|sbin|System|Windows)\b/i, lyDo: 'ghi vào thư mục hệ thống' },
   { re: /:\(\)\s*\{.*\}\s*;?\s*:/, lyDo: 'fork bomb' },
+];
+
+/**
+ * LƯỠNG DỤNG — luôn hỏi, nhưng không xếp 'nguy hiểm'.
+ *
+ * `npx tsc --noEmit` chạy đúng cái binary trong `node_modules/.bin`, không tải
+ * gì cả; `npx mot-goi-la` thì tải và chạy mã lạ. Cùng một chữ, không phân biệt
+ * được từ chuỗi lệnh.
+ *
+ * Xếp 'cankiem' chứ không 'nguyhiem' vì HAI mức đó đều LUÔN HỎI và đều không
+ * cho nhớ — khác nhau chỉ ở chữ trên thẻ. Gọi `npx tsc` là "nguy hiểm" mười
+ * lần một buổi thì người dùng ngừng đọc thẻ, rồi bật thẳng "Bỏ qua tất cả".
+ * Cảnh báo sai chỗ ăn mòn đúng cái chốt nó định bảo vệ.
+ */
+const LUONG_DUNG: ReadonlyArray<{ re: RegExp; lyDo: string }> = [
+  { re: L(String.raw`npx\s`), lyDo: 'npx — chạy binary trong dự án, hoặc tải một gói từ Internet' },
+  { re: L(String.raw`mv\s`), lyDo: 'chuyển file — có thể ra ngoài dự án' },
 ];
 
 /**
@@ -91,6 +172,14 @@ export function phanLoaiLenh(lenh: string): PhanLoaiLenh {
   }
 
   if (nguyHiem) return { muc: 'nguyhiem', lyDo, choNho: false };
+
+  const luongDung = LUONG_DUNG.filter(({ re }) => re.test(s));
+  if (luongDung.length) {
+    /* `choNho: true` — khoá ghi nhớ là NGUYÊN VĂN chuỗi lệnh (xem `tools.ts`),
+       nên duyệt `npx tsc --noEmit` một lần KHÔNG mở đường cho `npx goi-la`.
+       Không cho nhớ thì nó hỏi lại mãi cùng một câu, và người dùng bấm bừa. */
+    return { muc: 'cankiem', lyDo: luongDung.map((x) => x.lyDo), choNho: true };
+  }
 
   // Nhiều lệnh nối nhau: chưa chắc xấu (`cd x && npm test` là chuyện thường),
   // nhưng KHÔNG cho nhớ. Nhớ một chuỗi nối nghĩa là lần sau cả chuỗi tự chạy,

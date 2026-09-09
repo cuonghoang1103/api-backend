@@ -160,7 +160,26 @@ export function buildSystemPrompt(opts: {
   const hoanCanh: string[] = [];
   if (opts.workspace?.name) hoanCanh.push(`Thư mục dự án đang mở: "${opts.workspace.name}".`);
   if (opts.workspace?.branch) hoanCanh.push(`Nhánh git: ${opts.workspace.branch}.`);
-  if (opts.workspace?.platform) hoanCanh.push(`Hệ điều hành: ${opts.workspace.platform}.`);
+  if (opts.workspace?.platform) {
+    hoanCanh.push(`Hệ điều hành: ${opts.workspace.platform}.`);
+    /*
+     * ⚠️ NÓI RÕ SHELL, không chỉ tên hệ điều hành.
+     *
+     * App chạy lệnh bằng `spawn(lenh, { shell: true })`, mà trên Windows điều
+     * đó nghĩa là **cmd.exe** (`%ComSpec%`) chứ không phải PowerShell hay bash.
+     * Bảo model "Hệ điều hành: win32" là chưa đủ: nó vẫn viết `ls`, `rm -rf`,
+     * `$(...)`, nháy đơn — cmd.exe không hiểu cái nào, và người dùng nhận một
+     * chuỗi lệnh hỏng không rõ vì sao.
+     */
+    if (opts.workspace.platform === 'win32' && coLenh) {
+      hoanCanh.push(
+        'Lệnh chạy qua **cmd.exe**, KHÔNG phải PowerShell hay bash. Dùng cú pháp cmd '
+          + '(`dir`, `type`, `copy`, `%VAR%`, `&&`), không dùng nháy đơn, `$(...)`, `ls`, `rm`. '
+          + 'Cần PowerShell thì gọi rõ: `powershell -NoProfile -Command "..."`. '
+          + 'Đường dẫn dùng `\\`, và có dấu cách thì bọc trong nháy kép.',
+      );
+    }
+  }
   if (!coFile) {
     hoanCanh.push(
       'Người dùng CHƯA chọn thư mục dự án, nên lúc này bạn không đọc được file nào trên máy họ. ' +

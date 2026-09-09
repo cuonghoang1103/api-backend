@@ -80,3 +80,45 @@ test('agent CHÍNH được liệt kê các loại, nếu không tính năng th�
   assert.match(p, /Rà lỗ bảo mật/);
   assert.match(p, /loai/, 'không nói tên tham số ⇒ model không biết truyền vào đâu');
 });
+
+/*
+ * ── AGENT PHẢI BIẾT MÌNH CÀI ĐƯỢC PHẦN MỀM ──
+ *
+ * 10/09/2026 người dùng nhờ cài Node.js. Agent chạy `brew install node`, gặp
+ * mã thoát 1 (máy chưa có Homebrew), rồi TỪ CHỐI bằng chữ: "tôi không có quyền
+ * tải file cài đặt từ internet", và đẩy người dùng đi tải bằng tay.
+ *
+ * Không phải giới hạn kỹ thuật — chính prompt bảo nó thế:
+ *
+ *     • ĐỪNG chạy: lệnh xoá, cài gói, git commit/push. Người dùng sẽ từ chối…
+ *
+ * Câu đó viết như một mẹo tiết kiệm lượt, nhưng model đọc thành CẤM. Và nó mâu
+ * thuẫn thẳng với gạch đầu dòng ngay bên dưới ("BẠN CÓ RA ĐƯỢC MẠNG… nói mình
+ * không làm được trong khi làm được là từ chối oan").
+ */
+test('prompt KHÔNG cấm tuyệt đối việc cài gói', () => {
+  const p = buildSystemPrompt({
+    capabilities: ['fs_read', 'fs_write', 'shell'],
+    workspace: { name: 'd', platform: 'darwin' },
+  } as never);
+  assert.doesNotMatch(p, /ĐỪNG chạy: lệnh xoá, cài gói/,
+    'câu cấm tuyệt đối đã quay lại — agent sẽ từ chối khi người dùng NHỜ cài');
+  assert.match(p, /KHI HỌ NHỜ THÌ CỨ GỌI TOOL/);
+});
+
+test('prompt nói rõ KHÔNG CÓ TTY và chỉ đường không cần mật khẩu', () => {
+  // Đây là giới hạn THẬT (`spawn` bằng ống, không PTY), khác hẳn cái cấm ở
+  // trên. Không nói ra thì agent thử `sudo` rồi treo tới hết giờ.
+  const p = buildSystemPrompt({
+    capabilities: ['fs_read', 'shell'], workspace: { name: 'd', platform: 'darwin' },
+  } as never);
+  assert.match(p, /KHÔNG CÓ TTY/);
+  assert.match(p, /nvm/);
+});
+
+test('không có quyền chạy lệnh ⇒ KHÔNG nhồi luật shell vào prompt', () => {
+  const p = buildSystemPrompt({
+    capabilities: ['fs_read'], workspace: { name: 'd', platform: 'darwin' },
+  } as never);
+  assert.doesNotMatch(p, /KHÔNG CÓ TTY/);
+});

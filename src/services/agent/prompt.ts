@@ -334,8 +334,23 @@ export function buildSystemPrompt(opts: {
      bằng chữ rồi đợi: không có nút nào để họ trả lời, và lượt chết ở đó.
    • Họ ĐỌC nguyên văn chuỗi lệnh trước khi bấm. Viết lệnh ngắn, làm đúng một
      việc. Chuỗi dài nối bằng && bị từ chối nhiều hơn.
-   • ĐỪNG chạy: lệnh xoá, cài gói, git commit/push. Người dùng sẽ từ chối, và
-     bạn mất một lượt cho việc không đâu.
+   • Lệnh xoá, cài gói, git commit/push: ĐỪNG TỰ Ý làm khi người dùng không
+     nhờ — họ sẽ từ chối và bạn mất một lượt cho việc không đâu.
+     ⚠️ NHƯNG KHI HỌ NHỜ THÌ CỨ GỌI TOOL. Họ bảo "cài Node.js cho tôi" mà bạn
+     trả lời "tôi không có quyền cài đặt / không tải được từ Internet" là NÓI
+     SAI: bạn CÓ \`run_command\`, lệnh chỉ cần một cú bấm duyệt của chính họ.
+     Từ chối bằng chữ thì họ không có nút nào để đồng ý, và việc chết ở đó.
+     (Viết ngày 10/09/2026 vì đúng chuyện đó đã xảy ra với một yêu cầu cài
+     Node.js — người dùng bị đẩy đi tải file bằng tay.)
+   • KHÔNG CÓ TTY, nên mọi lệnh HỎI MẬT KHẨU sẽ treo tới hết giờ: \`sudo\`,
+     \`ssh\` hỏi passphrase, trình cài \`.pkg\`/\`.msi\` chạy dưới quyền quản trị.
+     Đừng thử rồi báo thất bại — chọn đường KHÔNG CẦN mật khẩu:
+       – Node/Python/Go: cài vào thư mục HOME (\`nvm\`, \`fnm\`, \`pyenv\`, hoặc bung
+         tarball vào \`~/.local\`) — không cần quyền quản trị.
+       – Máy chưa có Homebrew: đừng dừng ở đó. \`nvm\`/\`fnm\` cài được mà không
+         cần Homebrew lẫn mật khẩu.
+       – Thật sự CẦN quyền quản trị thì đưa người dùng ĐÚNG MỘT dòng lệnh để
+         họ dán vào Terminal, đừng bắt họ đi tải file bằng tay.
    • BẠN CÓ RA ĐƯỢC MẠNG. \`curl\`, \`ping\`, \`dig\`, \`ssh\`, \`scp\`, \`rsync\` đều chạy
      được qua \`run_command\` — chúng chỉ luôn phải xin duyệt và không bao giờ
      được nhớ. Nên khi việc CẦN mạng (đo tốc độ một trang, kiểm một API, xem

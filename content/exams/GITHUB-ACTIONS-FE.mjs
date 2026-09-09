@@ -106,7 +106,7 @@ export default {
       kind: 'FE',
       code: 'FE',
       source: 'SAMPLE',
-      sortOrder: 1,
+      sortOrder: 4,
       title: B(
         'Final Exam — the whole GitHub Actions course (50 questions)',
         'Thi cuối khoá — toàn bộ khoá GitHub Actions (50 câu)',

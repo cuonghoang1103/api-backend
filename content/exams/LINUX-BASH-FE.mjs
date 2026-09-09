@@ -45,7 +45,7 @@ export default {
       kind: 'FE',
       code: 'FE',
       source: 'SAMPLE',
-      sortOrder: 1,
+      sortOrder: 4,
       title: B(
         'Final Exam — the whole Linux & Bash course (50 questions)',
         'Thi cuối khoá — toàn bộ khoá Linux & Bash (50 câu)',

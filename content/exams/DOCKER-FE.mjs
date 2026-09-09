@@ -46,7 +46,7 @@ export default {
       kind: 'FE',
       code: 'FE',
       source: 'SAMPLE',
-      sortOrder: 1,
+      sortOrder: 4,
       title: B(
         'Final Exam — the whole Docker course (50 questions)',
         'Thi cuối khoá — toàn bộ khoá Docker (50 câu)',

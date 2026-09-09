@@ -497,20 +497,40 @@ function NotesPageInner() {
   }, []);
 
   // ─── Mutations (refresh tree after structural changes) ─────
+  /*
+   * TẠO XONG LÀ MỞ Ô ĐẶT TÊN NGAY.
+   *
+   * Trước đây tạo xong để nguyên tên mặc định, và người dùng phải tự đi tìm
+   * dòng mới rồi nhấp đúp. Bấm ba lần là ba dòng "Môn học mới" y hệt nhau —
+   * đúng thứ đang có trên màn hình của người dùng (6 môn + 3 chương trùng tên).
+   *
+   * `vuaTao` là khoá của mục vừa tạo; thanh bên mở ô đổi tên cho đúng hàng đó.
+   * Xoá khoá sau một nhịp: giữ mãi thì mở lại ô đặt tên mỗi lần cây vẽ lại.
+   */
+  const [vuaTao, setVuaTao] = useState<string | null>(null);
+  useEffect(() => {
+    if (!vuaTao) return;
+    const t = setTimeout(() => setVuaTao(null), 1500);
+    return () => clearTimeout(t);
+  }, [vuaTao]);
+
   const addSubject = useCallback(async () => {
-    await notesApi.createSubject({ name: 'Môn học mới', emoji: '📘' });
+    const res = await notesApi.createSubject({ name: 'Môn học mới', emoji: '📘' });
     await refreshTree();
+    setVuaTao(`mon:${res.data.data.id}`);
   }, [refreshTree]);
 
   const addChapter = useCallback(async (subjectId: number) => {
-    await notesApi.createChapter({ subjectId, title: 'Chương mới' });
+    const res = await notesApi.createChapter({ subjectId, title: 'Chương mới' });
     await refreshTree();
+    setVuaTao(`chuong:${res.data.data.id}`);
   }, [refreshTree]);
 
   const addNote = useCallback(async (subjectId: number, chapterId: number | null) => {
     const res = await notesApi.createNote({ subjectId, chapterId, title: 'Ghi chú mới' });
     await refreshTree();
     setSelected(res.data.data);
+    setVuaTao(`ghichu:${res.data.data.id}`);
   }, [refreshTree]);
 
  const renameSubject = useCallback(async (id: number, name: string) => { await notesApi.updateSubject(id, { name }); await refreshTree(); }, [refreshTree]);
@@ -758,6 +778,8 @@ function NotesPageInner() {
    }, []);
 
    const callbacks = {
+    /* Khoá mục vừa tạo — thanh bên mở ô đặt tên cho đúng hàng đó. */
+    vuaTao,
     onSelectNote: selectNote,
     onOpenSubject: openSubject,
     onAddSubject: addSubject,
@@ -868,7 +890,7 @@ function NotesPageInner() {
             <button onClick={() => setDrawerOpen(true)} className="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/[0.05] md:hidden" aria-label="Mở danh sách">
               <Menu className="h-5 w-5" />
             </button>
-            <button onClick={() => setSearchOpen(true)} className="flex min-h-[36px] min-w-0 shrink items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-[13px] text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:border-white/[0.06] dark:bg-white/[0.02] dark:text-slate-400 dark:hover:bg-white/[0.05] dark:hover:text-slate-200">
+            <button onClick={() => setSearchOpen(true)} className="flex min-h-[36px] min-w-0 shrink items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-[13px] text-slate-500 hover:bg-slate-100 hover:text-slate-800 dark:border-white/[0.06] dark:hover:bg-white/[0.02] dark:text-slate-400 dark:hover:bg-white/[0.05] dark:hover:text-slate-200">
               <Search className="h-4 w-4" /> <span className="hidden sm:inline">Tìm kiếm</span>
               <kbd className="ml-1 hidden rounded bg-slate-200 px-1.5 text-[10px] text-slate-500 dark:bg-white/[0.06] md:inline">⌘K</kbd>
             </button>
@@ -1094,7 +1116,7 @@ function NotesPageInner() {
                               onClick={async () => {
                                 await handleOpenSharedNote(sharedSubject.id, note.id);
                               }}
-                              className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left hover:bg-slate-100 dark:bg-white/[0.04] min-h-[40px]"
+                              className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left hover:bg-slate-100 dark:hover:bg-white/[0.04] min-h-[40px]"
                             >
                               <FileText className="h-3.5 w-3.5 shrink-0 text-slate-500 dark:text-slate-500" />
                               <span className="truncate text-[13px] text-slate-800 dark:text-slate-200">
@@ -1123,7 +1145,7 @@ function NotesPageInner() {
                                     onClick={async () => {
                                       await handleOpenSharedNote(sharedSubject.id, note.id);
                                     }}
-                                    className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 pl-4 text-left hover:bg-slate-100 dark:bg-white/[0.04] min-h-[40px]"
+                                    className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 pl-4 text-left hover:bg-slate-100 dark:hover:bg-white/[0.04] min-h-[40px]"
                                   >
                                     <FileText className="h-3.5 w-3.5 shrink-0 text-slate-500 dark:text-slate-500" />
                                     <span className="truncate text-[13px] text-slate-800 dark:text-slate-200">

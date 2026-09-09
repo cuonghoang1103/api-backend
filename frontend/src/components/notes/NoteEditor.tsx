@@ -22,6 +22,7 @@
 // `StarterKit` is still imported eagerly because every note uses it.
 
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { hoiMotDong } from './hoiMotDongAsync';
 import { useEditor, EditorContent, BubbleMenu, type Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Collaboration, { isChangeOrigin } from '@tiptap/extension-collaboration';
@@ -746,13 +747,17 @@ export default function NoteEditor({ note, tree, onSave, onDuplicate, ownerContr
                 return;
               }
               const previous = (editor.getAttributes('link').href as string | undefined) ?? '';
-              const href = window.prompt('Địa chỉ liên kết', previous);
-              if (href === null) return;            // bấm Huỷ — không đụng gì
-              if (href.trim() === '') {
-                editor.chain().focus().extendMarkRange('link').unsetLink().run();
-                return;
-              }
-              editor.chain().focus().extendMarkRange('link').setLink({ href: href.trim() }).run();
+              /* `window.prompt` NÉM trong Electron ⇒ nút này chết câm trên bản
+                 desktop. Xem `HoiMotDong.tsx`. */
+              void hoiMotDong({ tieuDe: 'Địa chỉ liên kết', banDau: previous, goiY: 'https://…' })
+                .then((href) => {
+                  if (href === null) return;        // bấm Huỷ — không đụng gì
+                  if (href.trim() === '') {
+                    editor.chain().focus().extendMarkRange('link').unsetLink().run();
+                    return;
+                  }
+                  editor.chain().focus().extendMarkRange('link').setLink({ href: href.trim() }).run();
+                });
             }}
           >
             {editor.isActive('link') ? <Link2Off className="h-3.5 w-3.5" /> : <Link2 className="h-3.5 w-3.5" />}
@@ -925,7 +930,7 @@ function FlagButton({
       className={`flex min-h-[30px] items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors ${
         active
           ? activeClass ?? 'border-amber-500/40 bg-amber-100 dark:bg-amber-500/15 text-amber-100'
-          : 'border-slate-300 dark:border-white/10 bg-slate-100 dark:bg-white/[0.02] text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:border-white/20 hover:bg-slate-100 dark:bg-white/[0.05] hover:text-slate-900 dark:hover:text-slate-200'
+          : 'border-slate-300 dark:border-white/10 bg-slate-100 dark:bg-white/[0.02] text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:border-white/20 hover:bg-slate-100 dark:hover:bg-white/[0.05] hover:text-slate-900 dark:hover:text-slate-200'
       }`}
       title={label}
     >

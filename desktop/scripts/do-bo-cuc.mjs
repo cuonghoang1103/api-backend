@@ -91,6 +91,32 @@ const nguoi = (i) => ({ id: i, username: `nguoi${i}`, displayName: `Người dù
 const mang = (n, f) => Array.from({ length: n }, (_, i) => f(i + 1));
 
 const BANG = [
+    /* ── Sổ tay (Notes) ──
+       Để đường này không có mock thì `/notes` vẽ ra "Chưa có môn học nào" —
+       tức là cả thanh bên phân cấp (môn → chương → ghi chú), ô đổi tên tại
+       chỗ, nút kéo-thả và mọi khác biệt bậc chữ CHƯA TỪNG được đo một lần.
+       Đúng cái bẫy ghi ở đầu tệp: trạng thái rỗng là trạng thái dễ qua nhất. */
+    [/\/notes\/tree/, () => ({
+      tree: mang(4, (i) => ({
+        id: i, name: ['JPD113', 'SWR302', 'JPD123', 'cuongthai.com'][i - 1] ?? `Môn ${i}`,
+        color: null, emoji: ['🇯🇵', '📘', '🏛️', '🌐'][i - 1] ?? '📘',
+        description: null, sortOrder: i, isPinned: i === 1,
+        chapters: mang(i === 2 ? 3 : 1, (k) => ({
+          id: i * 100 + k, title: `Chương ${k}`, sortOrder: k,
+          notes: mang(2, (n) => ({
+            id: i * 1000 + k * 10 + n, title: `Bài ${k}.${n}`, sortOrder: n,
+            isPinned: false, isFavorite: false, isArchived: false, needsReview: false,
+            updatedAt: '2026-09-01T00:00:00Z',
+          })),
+        })),
+        notes: mang(1, (n) => ({
+          id: i * 7000 + n, title: 'Ghi chú rời', sortOrder: n,
+          isPinned: i === 1, isFavorite: false, isArchived: false, needsReview: false,
+          updatedAt: '2026-09-01T00:00:00Z',
+        })),
+      })),
+      recent: mang(3, (i) => ({ id: i, title: `Vừa mở ${i}`, subjectId: 1, chapterId: null })),
+    })],
     /* ── Bốn cây port 24/08/2026 ──
        Endpoint đo bằng cách BẮT LỜI GỌI THẬT (`page.on('request')`) chứ không
        đọc mã đoán. Xếp mẫu CỤ THỂ trước: `/admin/content/projects` cũng khớp
@@ -781,12 +807,63 @@ const CHUAN_BI = {
     await p.waitForTimeout(200);
   },
   '/notes': async (p) => {
-    // Gập cột Sổ tay rồi mở lại — nút này phải có mặt và phải đổi được trạng
-    // thái, nếu không thì bản vá "cột che hết nội dung" chỉ nằm trên giấy.
+    const demHang = () => p.evaluate(() =>
+      [...document.querySelectorAll('.notes-theme-root .group')]
+        .filter((e) => e.querySelector('button') && e.offsetHeight > 20).length);
+
+    const truoc = await demHang();
+    if (truoc < 4) throw new Error(`Cây Sổ tay chỉ có ${truoc} hàng — mock \`/notes/tree\` hỏng?`);
+
+    /* Gập cột Sổ tay RỒI MỞ LẠI.
+       ⚠️ Bản cũ chỉ bấm MỘT lần dù chú thích ghi "rồi mở lại" — nên cột nằm
+       gập suốt phần còn lại của phép đo, và mọi chốt nhắm vào cây bên trong
+       nó đo một thứ không có trên màn hình. Đo thật: 21 hàng trước khi bấm,
+       0 hàng sau. */
     const nut = p.locator('button[aria-label*="cột Sổ tay"]').first();
     if (await nut.count()) {
       await nut.click({ force: true }).catch(() => {});
       await p.waitForTimeout(300);
+      const khiGap = await demHang();
+      if (khiGap >= truoc) throw new Error(`Bấm gập cột Sổ tay mà cây vẫn còn ${khiGap} hàng.`);
+      await nut.click({ force: true }).catch(() => {});
+      await p.waitForTimeout(300);
+      const khiMo = await demHang();
+      if (khiMo < 4) throw new Error(`Mở lại cột Sổ tay mà chỉ còn ${khiMo} hàng.`);
+    }
+
+    /* ─── CHỦ ĐỀ TỐI CỦA NOTES ───
+       Notes có bộ chuyển chủ đề RIÊNG (Trắng/Tối/Nâu), mặc định Trắng — khác
+       chủ đề của app. Nên mọi phép đo trước giờ chỉ nhìn bản SÁNG, và một lỗi
+       chỉ-ở-tối là vô hình.
+
+       Đúng chuyện đã xảy ra: hàng trong cây có `hover:bg-slate-100
+       dark:bg-white/[0.04]` — bản tối THIẾU tiền tố `hover:`, nên mọi hàng
+       mang nền xám THƯỜNG TRỰC và cả danh sách thành một bức tường ô hộp.
+       Sáng thì đúng, tối thì sai, và không ai thấy vì bộ đo đứng ở bản sáng. */
+    await p.locator('.notes-theme-root button:has-text("Tối")').first()
+      .click({ timeout: 3000 }).catch(() => {});
+    await p.waitForTimeout(350);
+
+    const nen = await p.evaluate(() => {
+      const hang = [...document.querySelectorAll('.notes-theme-root .group')]
+        .filter((e) => e.querySelector('button') && e.offsetHeight > 20);
+      // KHÔNG rê chuột: đo đúng trạng thái NGHỈ. Hàng nghỉ mà đã có nền thì rê
+      // vào cũng chẳng có gì đổi — và đó là cái làm mất sạch phản hồi.
+      const mau = hang.slice(0, 8).map((e) => getComputedStyle(e).backgroundColor);
+      return {
+        soHang: hang.length,
+        mau,
+        soCoNen: mau.filter((m) => m !== 'rgba(0, 0, 0, 0)' && m !== 'transparent').length,
+      };
+    });
+    if (nen.soHang < 4) throw new Error(`Sau khi đổi chủ đề, cây Sổ tay còn ${nen.soHang} hàng.`);
+    /* Cho phép ĐÚNG MỘT hàng có nền (hàng đang chọn). Nhiều hơn nghĩa là nền
+       thường trực đã quay lại. */
+    if (nen.soCoNen > 1) {
+      throw new Error(
+        `${nen.soCoNen}/8 hàng Sổ tay có nền khi KHÔNG rê chuột — thiếu tiền tố `
+        + `\`hover:\` ở biến thể dark? ${JSON.stringify(nen.mau)}`,
+      );
     }
   },
   '/code-lab': async (p) => {

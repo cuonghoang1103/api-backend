@@ -81,7 +81,7 @@ export default function NotesSearch({ open, onClose, subjects, onJump }: Props) 
                 className="min-w-0 flex-1 bg-transparent text-base text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:outline-none"
               />
               {loading && <Loader2 className="h-4 w-4 animate-spin text-slate-500 dark:text-slate-500" />}
-              <button onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 dark:text-slate-500 hover:bg-slate-100 dark:bg-white/[0.05]" aria-label="Đóng"><X className="h-4 w-4" /></button>
+              <button onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 dark:text-slate-500 hover:bg-slate-100 dark:hover:bg-white/[0.05]" aria-label="Đóng"><X className="h-4 w-4" /></button>
             </div>
 
             {/* Filters */}
@@ -110,7 +110,7 @@ export default function NotesSearch({ open, onClose, subjects, onJump }: Props) 
                     <button
                       key={r.id}
                       onClick={() => { onJump(r.id); onClose(); }}
-                      className="flex w-full items-start gap-2.5 rounded-lg px-2.5 py-2 text-left hover:bg-slate-100 dark:bg-white/[0.04]"
+                      className="flex w-full items-start gap-2.5 rounded-lg px-2.5 py-2 text-left hover:bg-slate-100 dark:hover:bg-white/[0.04]"
                     >
                       <FileText className="mt-0.5 h-4 w-4 shrink-0 text-teal-600 dark:text-teal-300/70" />
                       <div className="min-w-0 flex-1">

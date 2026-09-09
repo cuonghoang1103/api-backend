@@ -34,6 +34,14 @@ import type { NoteSubjectTree, NoteRecent, NoteSummary } from '@/types';
 export interface SidebarCallbacks {
  onSelectNote: (id: number) => void;
  onOpenSubject: (id: number) => void;
+ /**
+  * Khoá của mục VỪA ĐƯỢC TẠO (`mon:12` / `chuong:34` / `ghichu:56`).
+  *
+  * Hàng khớp khoá này mở ô đặt tên NGAY. Không có nó thì mỗi lần bấm "+" đẻ ra
+  * một "Môn học mới" nữa và người dùng phải tự đi tìm rồi nhấp đúp — bấm ba
+  * lần là ba dòng trùng tên không phân biệt nổi.
+  */
+ vuaTao?: string | null;
  onAddSubject: () => void;
  onAddChapter: (subjectId: number) => void;
  onAddNote: (subjectId: number, chapterId: number | null) => void;
@@ -164,7 +172,7 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
          <div className="flex items-center gap-1">
            <button
              onClick={cb.onAddSubject}
-             className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-white/[0.05] hover:text-teal-600 dark:hover:text-teal-300 sm:h-7 sm:w-7"
+             className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/[0.05] hover:text-teal-600 dark:hover:text-teal-300 sm:h-7 sm:w-7"
              title="Thêm môn học"
              aria-label="Thêm môn học"
            >
@@ -173,7 +181,7 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
            {onClose && (
              <button
                onClick={onClose}
-               className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-white/[0.05] hover:text-slate-900 dark:hover:text-slate-200 md:hidden"
+               className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/[0.05] hover:text-slate-900 dark:hover:text-slate-200 md:hidden"
                title="Đóng"
                aria-label="Đóng"
              >
@@ -221,7 +229,7 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
               key={`pinned-note-${n.id}`}
               onClick={() => cb.onSelectNote(n.id)}
               className={`group flex w-full items-center gap-2 truncate rounded-md px-2 py-1.5 text-left text-[12.5px] min-h-[36px] ${
-                selectedNoteId === n.id ? 'bg-teal-100 dark:bg-teal-500/10 text-teal-700 dark:text-teal-200' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-white/[0.04] hover:text-slate-900 dark:hover:text-slate-200'
+                selectedNoteId === n.id ? 'bg-teal-100 dark:bg-teal-500/10 text-teal-700 dark:text-teal-200' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/[0.04] hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               <Pin className="h-3 w-3 shrink-0 text-amber-400" />
@@ -244,7 +252,7 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
                 key={`r-${n.id}`}
                 onClick={() => cb.onSelectNote(n.id)}
                 className={`flex w-full items-center gap-2 truncate rounded-md px-2 py-1.5 text-left text-[12.5px] min-h-[36px] ${
-                  selectedNoteId === n.id ? 'bg-teal-100 dark:bg-teal-500/10 text-teal-700 dark:text-teal-200' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-white/[0.04] hover:text-slate-900 dark:hover:text-slate-200'
+                  selectedNoteId === n.id ? 'bg-teal-100 dark:bg-teal-500/10 text-teal-700 dark:text-teal-200' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/[0.04] hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
               >
                 {n.isPinned ? <Pin className="h-3 w-3 shrink-0 text-amber-400" /> : <FileText className="h-3 w-3 shrink-0 opacity-60" />}
@@ -287,7 +295,7 @@ export default function NotesSidebar({ tree, recent, selectedNoteId, filter, fil
             key={`f-${n.id}`}
             onClick={() => cb.onSelectNote(n.id)}
             className={`flex w-full items-center gap-2 truncate rounded-md px-2 py-1.5 text-left text-[12.5px] min-h-[36px] ${
-              selectedNoteId === n.id ? 'bg-teal-100 dark:bg-teal-500/10 text-teal-700 dark:text-teal-200' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-white/[0.04] hover:text-slate-900 dark:hover:text-slate-200'
+              selectedNoteId === n.id ? 'bg-teal-100 dark:bg-teal-500/10 text-teal-700 dark:text-teal-200' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/[0.04] hover:text-slate-900 dark:hover:text-slate-200'
             }`}
           >
             {filter === 'trash' ? <Trash2 className="h-3 w-3 shrink-0 text-rose-400" /> : n.isPinned ? <Pin className="h-3 w-3 shrink-0 text-amber-400" /> : <FileText className="h-3 w-3 shrink-0 opacity-60" />}
@@ -441,6 +449,8 @@ function SubjectBranch({
   {(handleProps) => (
   <Row
   depth={0}
+  bac="mon"
+  datTenNgay={cb.vuaTao === `mon:${subject.id}`}
   open={isOpen}
   onToggle={() => setExpanded((e) => ({ ...e, [subject.id]: !e[subject.id] }))}
   color={subject.color}
@@ -510,6 +520,8 @@ function SubjectBranch({
  {(handleProps) => (
  <Row
  depth={1}
+ bac="chuong"
+ datTenNgay={cb.vuaTao === `chuong:${chapter.id}`}
  open={cOpen}
  onToggle={() => setExpanded((e) => ({ ...e, [chapter.id * -1]: !(e[chapter.id * -1] ?? true) }))}
  label={chapter.title}
@@ -647,6 +659,8 @@ function NoteRow({ note, depth, active, cb }: { note: NoteSummary; depth: number
  <Row
  depth={depth}
  leaf
+ bac="ghichu"
+ datTenNgay={cb.vuaTao === `ghichu:${note.id}`}
  label={note.title || 'Không có tiêu đề'}
  icon={note.isPinned ? Pin : FileText}
  active={active}
@@ -729,16 +743,28 @@ interface DragHandleProps {
  attributes: unknown;
 }
 function Row({
- depth, label, color, emoji, icon: Icon, open, leaf, active,
+ depth, label, color, emoji, icon: Icon, open, leaf, active, bac,
  onToggle, onClick, onRename, onDelete, onIconClick, actions = [], dragHandleProps,
+ datTenNgay,
 }: {
  depth: number; label: string; color?: string | null; emoji?: string | null;
  icon?: React.ComponentType<{ className?: string }>; open?: boolean; leaf?: boolean; active: boolean;
+ /** 'mon' | 'chuong' | 'ghichu' — quyết định cỡ chữ, độ đậm, màu. */
+ bac?: 'mon' | 'chuong' | 'ghichu';
  onToggle?: () => void; onClick?: () => void; onRename: (v: string) => void; onDelete: () => void;
  onIconClick?: () => void; actions?: RowAction[];
  dragHandleProps?: DragHandleProps;
+ /**
+  * Vừa được tạo ⇒ MỞ Ô ĐẶT TÊN NGAY.
+  *
+  * Không có cái này thì mỗi lần bấm "+" đẻ ra một "Môn học mới" nữa, và người
+  * dùng phải đi tìm nó rồi nhấp đúp để sửa. Ai bấm ba lần thì có ba dòng trùng
+  * tên y hệt và không phân biệt được cái nào là cái nào — đúng thứ đang thấy
+  * trên màn hình của người dùng (6 dòng "Môn học mới", 3 dòng "Chương mới").
+  */
+ datTenNgay?: boolean;
 }) {
-  const [editing, setEditing] = useState(false);
+  const [editing, setEditing] = useState(Boolean(datTenNgay));
   const [val, setVal] = useState(label);
   const inputRef = useRef<HTMLInputElement>(null);
   const pad = { paddingLeft: 8 + depth * 14 };
@@ -759,11 +785,24 @@ function Row({
 
   return (
     <div
- className={`group relative flex items-center gap-1 rounded-md pr-1 min-h-[36px] ${
- active ? 'bg-teal-100 dark:bg-teal-500/10' : 'hover:bg-slate-100 dark:bg-white/[0.04]'
- }`}
- style={pad}
- >
+      /*
+       * 🐛 `dark:bg-white/[0.04]` THIẾU TIỀN TỐ `hover:`.
+       *
+       * Ở theme tối, mọi hàng đều mang nền xám THƯỜNG TRỰC — cả danh sách
+       * thành một bức tường ô hộp giống hệt nhau, và không có phản hồi nào khi
+       * rê chuột. Trên theme sáng thì đúng (`hover:bg-slate-100`), nên lỗi này
+       * vô hình với ai chỉ thử ở chế độ sáng.
+       *
+       * Hàng ĐANG CHỌN nay có thêm vạch màu bên trái: nền teal nhạt một mình
+       * rất khó thấy khi cả cột đều tối.
+       */
+      className={`group relative flex items-center gap-1 rounded-md pr-1 min-h-[32px] ${
+        active
+          ? 'bg-teal-100 dark:bg-teal-500/[0.14] before:absolute before:left-0 before:top-1 before:bottom-1 before:w-[2.5px] before:rounded-full before:bg-teal-500'
+          : 'hover:bg-slate-100 dark:hover:bg-white/[0.055]'
+      }`}
+      style={pad}
+    >
  {/* Drag grip (Phase 2.5). Pointer listeners live here only;
  clicking anywhere else still triggers select / toggle /
  inline rename. cursor-grab hints that the row is grabbable. */}
@@ -836,7 +875,27 @@ function Row({
         <button
           onClick={onClick ?? onToggle}
           onDoubleClick={() => { setVal(label); setEditing(true); }}
-          className={`min-w-0 flex-1 truncate py-1.5 text-left text-[13px] ${active ? 'text-teal-800 dark:text-teal-100' : leaf ? 'text-slate-700 dark:text-slate-300' : 'font-medium text-slate-800 dark:text-slate-200'}`}
+          /*
+           * BA BẬC PHẢI NHÌN RA ĐƯỢC TỪ XA.
+           *
+           * Bản cũ: môn học, chương và ghi chú đều `text-[13px]`, khác nhau
+           * đúng một nấc đậm — nên cả cây là một cột chữ xám đều, và người
+           * dùng nói thẳng "rất khó nhìn, không nổi bật để phân biệt".
+           *
+           * Nay khác nhau ở BA thứ cùng lúc (cỡ chữ · độ đậm · độ sáng), là
+           * mức tối thiểu để phân biệt được khi liếc chứ không phải khi đọc.
+           * Notion cũng làm đúng thế: cấp trên to và đậm hơn hẳn cấp dưới.
+           */
+          className={`min-w-0 flex-1 truncate text-left ${
+            bac === 'mon' ? 'py-1.5 text-[13.5px] font-semibold tracking-tight'
+              : bac === 'chuong' ? 'py-1 text-[12.5px] font-medium'
+                : 'py-1 text-[12.5px]'
+          } ${
+            active ? 'text-teal-700 dark:text-teal-200'
+              : bac === 'mon' ? 'text-slate-900 dark:text-slate-100'
+                : bac === 'chuong' ? 'text-slate-700 dark:text-slate-300'
+                  : 'text-slate-500 dark:text-slate-400'
+          }`}
           title={`${label} — nhấp đúp để đổi tên`}
         >
           {label}
@@ -854,17 +913,28 @@ function Row({
           <button
             onClick={(e) => {
               e.stopPropagation();
-              // Use a native prompt for rename — reliable everywhere. The
-              // inline <input> inside the dnd-kit sortable row was fragile
-              // (lost focus/keystrokes), so this guarantees rename works.
-              const next = window.prompt('Đổi tên:', label);
-              if (next === null) return;
-              const v = next.trim();
-              if (v && v !== label) onRename(v);
+              /*
+               * ⚠️ TRƯỚC ĐÂY DÙNG `window.prompt` — VÀ NÓ LÀM CHẾT BẢN DESKTOP.
+               *
+               * Chú thích cũ ở đây nói inline `<input>` "mất focus/phím trong
+               * hàng kéo-thả" nên đổi sang prompt cho chắc. Nhưng Electron
+               * KHÔNG hỗ trợ `prompt`: đo thật trong app đã build —
+               * `window.prompt('x','y')` NÉM `Error: prompt() is not
+               * supported.` Ném, chứ không phải trả `null`. Nên mọi câu lệnh
+               * sau nó trong cùng hàm cũng không chạy, và người dùng bấm nút
+               * đổi tên thì KHÔNG CÓ GÌ XẢY RA.
+               *
+               * Còn cái lý do cũ thì đã hết từ lâu: phím kéo-thả nay chỉ gắn ở
+               * TAY NẮM (xem `dragHandleProps` bên dưới), và ô nhập đã chặn
+               * `pointerdown`/`keydown` lan lên. Nhấp đúp vào tên vẫn dùng
+               * đúng ô đó suốt thời gian qua và không ai báo hỏng.
+               */
+              setVal(label);
+              setEditing(true);
             }}
             title="Đổi tên"
             aria-label="Đổi tên"
-            className="flex h-7 w-7 items-center justify-center rounded text-slate-500 dark:text-slate-500 hover:bg-slate-100 dark:bg-white/[0.06] hover:text-teal-600 dark:hover:text-teal-300"
+            className="flex h-7 w-7 items-center justify-center rounded text-slate-500 dark:text-slate-500 hover:bg-slate-100 dark:hover:bg-white/[0.06] hover:text-teal-600 dark:hover:text-teal-300"
           >
             <Pencil className="h-3.5 w-3.5" />
           </button>
@@ -875,7 +945,7 @@ function Row({
           <Trash2 className="h-3.5 w-3.5" />
         </button>
         {actions.map((a, i) => (
-          <button key={i} onClick={a.onClick} title={a.title} aria-label={a.title} className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-slate-500 dark:text-slate-500 hover:bg-slate-100 dark:bg-white/[0.06] hover:text-teal-600 dark:hover:text-teal-300">
+          <button key={i} onClick={a.onClick} title={a.title} aria-label={a.title} className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-slate-500 dark:text-slate-500 hover:bg-slate-100 dark:hover:bg-white/[0.06] hover:text-teal-600 dark:hover:text-teal-300">
             <a.icon className="h-3.5 w-3.5" />
           </button>
         ))}

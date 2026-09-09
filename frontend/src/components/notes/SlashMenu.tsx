@@ -33,6 +33,7 @@ import {
   useCallback, useEffect, useImperativeHandle, useLayoutEffect,
   useMemo, useRef, useState, forwardRef,
 } from 'react';
+import { hoiMotDong } from './hoiMotDongAsync';
 import type { Editor } from '@tiptap/react';
 import {
   Heading1, Heading2, Heading3, List, ListOrdered, ListChecks, Code2,
@@ -202,20 +203,27 @@ function buildItems(
       run: (ed, r) => {
         // Hỏi địa chỉ TRƯỚC khi xoá "/": người dùng bấm Huỷ thì mọi thứ y
         // nguyên, không để lại một dòng cụt đã bị xoá mất dấu "/".
-        const url = window.prompt('Dán địa chỉ liên kết');
-        if (!url?.trim()) return;
-        at(ed, r).insertContent({ type: 'bookmark', attrs: { url: url.trim() } }).run();
+        void hoiMotDong({ tieuDe: 'Dán địa chỉ liên kết', goiY: 'https://…', nhanXong: 'Chèn' })
+          .then((url) => {
+            if (!url?.trim()) return;
+            at(ed, r).insertContent({ type: 'bookmark', attrs: { url: url.trim() } }).run();
+          });
       },
     },
     {
       label: 'Nhúng', hint: 'YouTube, Vimeo, Figma, Google Docs…', icon: Frame, group: 'Khối nội dung',
       keywords: ['embed', 'nhung', 'youtube', 'vimeo', 'figma', 'iframe', 'video'],
       run: (ed, r) => {
-        const url = window.prompt('Dán địa chỉ cần nhúng (YouTube, Vimeo, Figma, Google Docs, CodePen…)');
-        if (!url?.trim()) return;
-        // `setEmbed` tự đổi sang bookmark nếu địa chỉ không thuộc nhà cung cấp
-        // nào — CSP sẽ chặn iframe lạ và để lại khung trắng câm.
-        at(ed, r).setEmbed(url.trim()).run();
+        void hoiMotDong({
+          tieuDe: 'Dán địa chỉ cần nhúng',
+          goiY: 'YouTube, Vimeo, Figma, Google Docs, CodePen…',
+          nhanXong: 'Nhúng',
+        }).then((url) => {
+          if (!url?.trim()) return;
+          // `setEmbed` tự đổi sang bookmark nếu địa chỉ không thuộc nhà cung
+          // cấp nào — CSP sẽ chặn iframe lạ và để lại khung trắng câm.
+          at(ed, r).setEmbed(url.trim()).run();
+        });
       },
     },
     {

@@ -163,7 +163,7 @@ export default function FlashcardReview({ noteId, onClose }: Props) {
       <div className="flex h-full flex-col items-center justify-center gap-3 px-6 text-center">
         <GraduationCap className="h-8 w-8 text-slate-500 dark:text-slate-500" />
         <p className="text-sm text-slate-600 dark:text-slate-400">Chưa có từ vựng nào trong ghi chú này.</p>
-        <button onClick={onClose} className="rounded-lg border border-slate-300 dark:border-white/10 px-3 py-1.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:bg-white/5">Đóng</button>
+        <button onClick={onClose} className="rounded-lg border border-slate-300 dark:border-white/10 px-3 py-1.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5">Đóng</button>
       </div>
     );
   }
@@ -183,14 +183,14 @@ export default function FlashcardReview({ noteId, onClose }: Props) {
           <button
             onClick={resetAll}
             disabled={busy}
-            className="flex h-9 items-center gap-1 rounded-lg px-2 text-xs text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-white/[0.05] hover:text-slate-900 dark:hover:text-slate-200 disabled:opacity-50"
+            className="flex h-9 items-center gap-1 rounded-lg px-2 text-xs text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/[0.05] hover:text-slate-900 dark:hover:text-slate-200 disabled:opacity-50"
             aria-label="Đặt lại toàn bộ"
           >
             <RefreshCcw className="h-3.5 w-3.5" /> Đặt lại
           </button>
           <button
             onClick={onClose}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:bg-white/[0.05]"
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/[0.05]"
             aria-label="Đóng"
           >×</button>
         </div>
@@ -221,7 +221,7 @@ export default function FlashcardReview({ noteId, onClose }: Props) {
               {current.reading && (
                 <button
                   onClick={(e) => { e.stopPropagation(); void speak(current); }}
-                  className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-slate-300 dark:border-white/10 px-2.5 py-1 text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:bg-white/5"
+                  className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-slate-300 dark:border-white/10 px-2.5 py-1 text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5"
                   aria-label="Phát âm"
                 >
                   <Volume2 className="h-3.5 w-3.5" /> {current.reading}
@@ -263,13 +263,13 @@ export default function FlashcardReview({ noteId, onClose }: Props) {
           <button
             onClick={goPrev}
             disabled={index === 0}
-            className="flex h-11 w-11 items-center justify-center rounded-lg border border-slate-300 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:bg-white/5 disabled:opacity-40"
+            className="flex h-11 w-11 items-center justify-center rounded-lg border border-slate-300 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 disabled:opacity-40"
             aria-label="Thẻ trước"
           ><ArrowLeft className="h-5 w-5" /></button>
 
           <button
             onClick={() => setFlipped((f) => !f)}
-            className="flex h-11 items-center gap-2 rounded-lg border border-slate-300 dark:border-white/10 px-4 text-sm text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:bg-white/5"
+            className="flex h-11 items-center gap-2 rounded-lg border border-slate-300 dark:border-white/10 px-4 text-sm text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5"
             aria-label="Lật thẻ"
           >
             <RotateCw className="h-4 w-4" /> Lật
@@ -287,7 +287,7 @@ export default function FlashcardReview({ noteId, onClose }: Props) {
           <button
             onClick={() => void grade(true)}
             disabled={busy}
-            className="flex h-11 items-center gap-1.5 rounded-lg border border-teal-500/30 bg-teal-100 dark:bg-teal-500/10 px-3 text-sm text-teal-700 dark:text-teal-200 hover:bg-teal-100 dark:bg-teal-500/20 disabled:opacity-50"
+            className="flex h-11 items-center gap-1.5 rounded-lg border border-teal-500/30 bg-teal-100 dark:bg-teal-500/10 px-3 text-sm text-teal-700 dark:text-teal-200 hover:bg-teal-100 dark:hover:bg-teal-500/20 disabled:opacity-50"
             aria-label="Đã thuộc"
           >
             <Check className="h-4 w-4" /> Đã thuộc
@@ -296,7 +296,7 @@ export default function FlashcardReview({ noteId, onClose }: Props) {
           <button
             onClick={goNext}
             disabled={index >= total - 1}
-            className="flex h-11 w-11 items-center justify-center rounded-lg border border-slate-300 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:bg-white/5 disabled:opacity-40"
+            className="flex h-11 w-11 items-center justify-center rounded-lg border border-slate-300 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 disabled:opacity-40"
             aria-label="Thẻ tiếp"
           ><ArrowRight className="h-5 w-5" /></button>
         </div>

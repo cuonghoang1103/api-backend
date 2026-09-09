@@ -101,7 +101,7 @@ export default function NoteResourcePanel({ parent, attachments, links, onChange
           <button
             onClick={() => fileRef.current?.click()}
             disabled={uploading}
-            className="flex items-center gap-1 rounded-md px-2 py-1 text-[11px] text-teal-600 dark:text-teal-300 hover:bg-teal-100 dark:bg-teal-500/10 disabled:opacity-50 min-h-[32px]"
+            className="flex items-center gap-1 rounded-md px-2 py-1 text-[11px] text-teal-600 dark:text-teal-300 hover:bg-teal-100 dark:hover:bg-teal-500/10 disabled:opacity-50 min-h-[32px]"
           >
             {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />} Thêm
           </button>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { HoiMotDong } from './HoiMotDong';
 import { AlertTriangle, CalendarDays, Check, Columns3, GanttChartSquare, LayoutGrid, Loader2, Plus, Rows3, Table2, Trash2, X } from 'lucide-react';
 import { toast } from 'sonner';
 import {
@@ -71,6 +72,9 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
   const [database, setDatabase] = useState<NoteDatabaseFull | null>(null);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
+  /* Hộp thoại một dòng thay `window.prompt` — xem `HoiMotDong.tsx`. `null` =
+     không có hộp nào đang mở. */
+  const [hoi, datHoi] = useState<{ loai: 'themKhung' | 'doiTenKhung'; banDau: string } | null>(null);
   const [editing, setEditing] = useState<{ rowId: number; propertyId: number } | null>(null);
   const [draft, setDraft] = useState('');
   const [viewType, setViewType] = useState<NoteDatabaseViewType>('TABLE');
@@ -136,10 +140,14 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
    * Chép sang nghe có vẻ tiện, nhưng người ta tạo khung nhìn mới chính vì muốn
    * một góc nhìn KHÁC — nhận sẵn bộ lọc cũ thì việc đầu tiên phải làm là đi xoá
    * từng điều kiện một. */
-  const addView = async () => {
+  /* `window.prompt` NÉM trong Electron (đo thật) ⇒ nút chết trên bản desktop.
+     Xem `HoiMotDong.tsx`. Mở hộp thoại rồi làm việc trong hàm gọi lại. */
+  const addView = (): void => {
     if (!canEdit || busy) return;
-    const name = window.prompt('Tên khung nhìn mới', `Khung nhìn ${orderedViews.length + 1}`);
-    if (name === null) return;
+    datHoi({ loai: 'themKhung', banDau: `Khung nhìn ${orderedViews.length + 1}` });
+  };
+
+  const themKhungThat = async (name: string): Promise<void> => {
     setBusy(true);
     try {
       const res = await noteDatabaseApi.createView(databaseId, { name: name.trim() || 'Khung nhìn mới', type: 'TABLE' });
@@ -151,10 +159,13 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
     } finally { setBusy(false); }
   };
 
-  const renameView = async () => {
+  const renameView = (): void => {
     if (!canEdit || !activeView) return;
-    const name = window.prompt('Đổi tên khung nhìn', activeView.name);
-    if (name === null || !name.trim() || name.trim() === activeView.name) return;
+    datHoi({ loai: 'doiTenKhung', banDau: activeView.name });
+  };
+
+  const doiTenKhungThat = async (name: string): Promise<void> => {
+    if (!activeView || !name.trim() || name.trim() === activeView.name) return;
     const next = name.trim();
     // Đổi tên hiện ngay rồi mới ghi: đây là nhãn, không phải dữ liệu.
     setDatabase((current) => current && ({
@@ -798,7 +809,7 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
                               href={file.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="max-w-[10rem] truncate rounded bg-slate-100 px-1.5 py-0.5 text-[11px] text-slate-700 hover:bg-slate-200 dark:bg-white/10 dark:text-slate-200"
+                              className="max-w-[10rem] truncate rounded bg-slate-100 px-1.5 py-0.5 text-[11px] text-slate-700 hover:bg-slate-200 dark:hover:bg-white/10 dark:text-slate-200"
                             >
                               {file.name || file.url}
                             </a>
@@ -1023,6 +1034,20 @@ export default function NoteDatabaseTable({ databaseId, canEdit, onDeleted }: Pr
             </button>
           )}
         </footer>
+      )}
+
+      {hoi && (
+        <HoiMotDong
+          tieuDe={hoi.loai === 'themKhung' ? 'Tên khung nhìn mới' : 'Đổi tên khung nhìn'}
+          banDau={hoi.banDau}
+          nhanXong={hoi.loai === 'themKhung' ? 'Tạo' : 'Đổi tên'}
+          onXong={(gt) => {
+            datHoi(null);
+            if (gt === null) return;
+            if (hoi.loai === 'themKhung') void themKhungThat(gt);
+            else void doiTenKhungThat(gt);
+          }}
+        />
       )}
     </section>
   );

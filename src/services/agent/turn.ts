@@ -174,7 +174,17 @@ const IM_LANG_MS = 60_000;
  */
 const MAX_OUTPUT_TOKENS = 16_000;
 /** Ảnh mỗi lượt, và trần cho một data URI (~5,5MB chuỗi ≈ 4MB ảnh). */
-const MAX_ANH = 3;
+/**
+ * Trần số ảnh MỖI LƯỢT.
+ *
+ * 3 → 8 (09/09/2026). App chuẩn hoá mọi ảnh về cạnh dài 1568px trước khi gửi
+ * (`DinhKemCode.tsx`), nên 8 ảnh ≈ 6MB chứ không phải 8 × 5,6MB.
+ *
+ * ⚠️ BA CON SỐ PHẢI ĐI CÙNG NHAU: `MAX_ANH_THANG` (app) · `anhSchema.max()`
+ * (IPC) · `MAX_ANH` (đây). Lệch một cái thì ảnh thứ n bị bỏ IM LẶNG ở tầng có
+ * số nhỏ nhất — không lỗi, không cảnh báo, model chỉ đơn giản không thấy nó.
+ */
+const MAX_ANH = 8;
 const MAX_ANH_BYTES = 5_600_000;
 
 // ─── Kiểu tin nhắn (theo giao thức OpenAI) ─────────────────────────

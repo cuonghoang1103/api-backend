@@ -5800,18 +5800,72 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 
 /* Ảnh trong bong bóng đã gửi: giới hạn chiều cao để một ảnh chụp cả màn hình
    không đẩy toàn bộ hội thoại xuống dưới. */
+/* ── Ảnh người dùng gửi kèm ──
+   Ảnh CHẠM MÉP bóng, không có khung.
+
+   Bản cũ: ảnh trần 180×130 nằm giữa bóng tím, thụt vào 14px mỗi bên và còn
+   thêm một đường viền trắng mờ. Đo thật 09/09/2026 với một ảnh chụp màn hình
+   1200×760: bóng 208×185, ảnh 180×115 ⇒ **46% diện tích bóng là nền tím**.
+   Người dùng gọi đúng tên nó: "viền xanh xanh, xấu".
+
+   Hai chuyện cùng lúc, và cái thứ hai nặng hơn: 180px là quá nhỏ để ĐỌC được
+   một ảnh chụp màn hình — họ gửi ảnh để trao đổi về nội dung trong đó, mà
+   trong bảng ghi thì nó chỉ còn là một ô xám.
+
+   Nay ảnh ăn hết padding của bóng bằng lề âm và bo góc trên theo bóng. Nền tím
+   chỉ còn ở phần CHỮ, tức là ở chỗ nó có nghĩa. */
 .ct-anh-goi {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin-bottom: 8px;
+  display: grid;
+  gap: 3px;
+  /* Khớp CHÍNH XÁC padding của `.ct-agent-nguoi` (10px 14px). Lệch một pixel
+     là hở một sọc tím mỏng ở mép — khó thấy mà nhìn ra thì rất bẩn. */
+  margin: -10px -14px 9px;
+  /* Bo góc trên theo bóng (14px), góc dưới vuông vì còn chữ bên dưới. */
+  border-radius: 14px 14px 0 0;
+  overflow: hidden;
 }
 
+/* Số cột theo SỐ ẢNH, lấy từ `data-so` React đặt — không dùng `:has()` đếm
+   anh em: `data-so` là con số thật, kiểm được, và không phụ thuộc phiên bản
+   Chromium của Electron. */
+/* Số cột chọn để CHIA HẾT khi có thể — ô lưới trống lộ ra một mảng nền, và
+   mảng đó nằm giữa các ảnh nên rất chướng. Chỉ 5 và 7 còn dư đúng một ô. */
+.ct-anh-goi { grid-template-columns: 1fr 1fr 1fr; }        /* 3 · 5 · 6 */
+.ct-anh-goi[data-so='1'] { grid-template-columns: 1fr; }
+.ct-anh-goi[data-so='2'],
+.ct-anh-goi[data-so='4'] { grid-template-columns: 1fr 1fr; }
+.ct-anh-goi[data-so='7'],
+.ct-anh-goi[data-so='8'] { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+/* Nền TỐI cho khe hở và ô dư, không để nền tím của bóng lộ ra: một đường kẻ
+   tím giữa hai ảnh trông như lỗi vẽ, còn một mảng tối đọc như phần của khối
+   ảnh. */
+/* 70% chứ không 30%: đo thật trên nền tím `rgb(129,140,248)` thì 30% cho ra
+   `rgb(90,98,174)` — vẫn là tím, chỉ tối hơn, nên khe hở giữa hai ảnh trông
+   như một đường kẻ tím vẽ lỗi. 70% cho `rgb(39,42,74)`, đọc ra là bóng tối. */
+.ct-anh-goi:not([data-so='1']) { background: rgb(0 0 0 / 70%); }
+
 .ct-anh-goi img {
-  max-width: 180px;
-  max-height: 130px;
-  border-radius: 8px;
-  border: 1px solid color-mix(in srgb, #fff 25%, transparent);
+  display: block;
+  width: 100%;
+  border: 0;
+  cursor: zoom-in;
+}
+
+/* MỘT ảnh: giữ nguyên tỉ lệ, không cắt. Ảnh chụp màn hình mà bị cắt thì mất
+   đúng phần người ta muốn hỏi. Trần chiều cao để một ảnh dọc không đẩy cả câu
+   trả lời xuống dưới màn hình. */
+.ct-anh-goi[data-so='1'] img {
+  height: auto;
+  max-height: 420px;
+  object-fit: contain;
+}
+
+/* NHIỀU ảnh: ô vuông đều nhau, cắt để lưới thẳng hàng — ở đây chúng là ảnh
+   xem trước, bấm vào mới xem đủ. */
+.ct-anh-goi:not([data-so='1']) img {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
 }
 
 /* ════════════════════════════════════════════════════════════

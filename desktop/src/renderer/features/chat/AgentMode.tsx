@@ -43,6 +43,7 @@ import { useAgent, useThuMuc } from './useAgent';
 import { LichSu } from './LichSu';
 import { ChuAgent } from './markdown';
 import { NutTinNhan } from './NutTinNhan';
+import { AnhPhongTo } from '../feed/AnhPhongTo';
 import { ChonCheDo } from './ChonCheDo';
 import {
   DaiTepCode, NutChonTep, ODinhKemCode, useDinhKemCode,
@@ -112,6 +113,9 @@ export function AgentMode({
    */
   const { thuMuc, datThuMuc, napThuMuc } = useThuMuc(cuocId);
   const [nhap, datNhap] = useState('');
+  /* Ảnh đang xem phóng to. Dùng lại `AnhPhongTo` của bảng tin thay vì viết
+     lightbox thứ hai — nó đã lo chặn cuộn nền, phím Esc và mũi tên. */
+  const [anhTo, datAnhTo] = useState<{ ds: string[]; i: number } | null>(null);
   /**
    * Câu đã gõ TRONG LÚC agent đang chạy, chờ gửi khi lượt kết thúc.
    *
@@ -827,8 +831,17 @@ export function AgentMode({
             return (
               <div key={i} className="ct-agent-nguoi">
                 {m.anh?.length ? (
-                  <div className="ct-anh-goi">
-                    {m.anh.map((a, k) => <img key={k} src={a} alt={`ảnh ${k + 1}`} />)}
+                  /* `data-so` cho CSS biết xếp mấy cột — con số thật, kiểm
+                     được, không nhờ `:has()` đếm anh em. Bấm để xem đủ cỡ:
+                     ảnh trong lưới nhiều-ảnh bị cắt vuông, và ảnh chụp màn
+                     hình bị cắt thì mất đúng phần người ta muốn hỏi. */
+                  <div className="ct-anh-goi" data-so={m.anh.length}>
+                    {m.anh.map((a, k) => (
+                      <img
+                        key={k} src={a} alt={`ảnh ${k + 1}`}
+                        onClick={() => datAnhTo({ ds: m.anh!, i: k })}
+                      />
+                    ))}
                   </div>
                 ) : null}
                 {m.text}
@@ -1200,6 +1213,15 @@ export function AgentMode({
         </span>
         {trangThai.tienPhien > 0 && <span className="ct-muted">~${trangThai.tienPhien.toFixed(3)} phiên này</span>}
       </div>
+
+      {anhTo && (
+        <AnhPhongTo
+          media={anhTo.ds.map((u, k) => ({ id: k, type: 'IMAGE', url: u }))}
+          chiSo={anhTo.i}
+          onDoiChiSo={(i) => datAnhTo({ ...anhTo, i })}
+          onDong={() => datAnhTo(null)}
+        />
+      )}
     </div>
   );
 }

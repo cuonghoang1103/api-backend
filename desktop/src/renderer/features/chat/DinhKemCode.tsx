@@ -21,7 +21,19 @@ import { FileText, ImageIcon, Loader2, Paperclip, X } from 'lucide-react';
 
 /** Trần của cổng cho ảnh gửi thẳng. Trên mức này thì rơi xuống đường đĩa. */
 const TRAN_ANH_BYTE = 4 * 1024 * 1024;
-const MAX_ANH_THANG = 3;
+/**
+ * Trần số ảnh gửi thẳng trong một lượt.
+ *
+ * 3 → 8 (09/09/2026, người dùng yêu cầu). Được, vì từ bản trước mọi ảnh đều
+ * ĐƯỢC CHUẨN HOÁ về cạnh dài 1568px trước khi gửi, nên 8 ảnh ≈ 6MB chứ không
+ * phải 8 × 5,6MB = 45MB như nếu để nguyên bản gốc.
+ *
+ * ⚠️ CÁI GIÁ LÀ TIỀN, và nó nhân lên: một ảnh 1568px ≈ 1.600 token, 8 ảnh ≈
+ * 13k token — mà vòng lặp agent GỬI LẠI TOÀN BỘ hội thoại ở MỖI bước. Một
+ * việc 10 bước với 8 ảnh là ~130k token ảnh. Nhãn dưới ô đính kèm nói thẳng
+ * điều này; đừng nâng tiếp mà không đo lại.
+ */
+const MAX_ANH_THANG = 8;
 const LOAI_ANH = /^image\/(png|jpeg|webp|gif)$/;
 
 export interface TepCode {
@@ -82,6 +94,18 @@ function byteCuaDataUrl(url: string): number {
   const than = url.slice(url.indexOf(',') + 1);
   const dem = (than.endsWith('==') ? 2 : than.endsWith('=') ? 1 : 0);
   return Math.max(0, Math.floor((than.length * 3) / 4) - dem);
+}
+
+/** Cạnh dài có vượt mức model co về không. Đọc kích thước, không giải mã cả ảnh. */
+async function quaTo(f: File): Promise<boolean> {
+  try {
+    const bm = await createImageBitmap(f);
+    const to = Math.max(bm.width, bm.height) > CANH_DAI;
+    bm.close();
+    return to;
+  } catch {
+    return false;   // không đọc được kích thước ⇒ cứ gửi nguyên, đừng chặn
+  }
 }
 
 async function thuNhoAnh(f: File): Promise<string> {
@@ -169,8 +193,20 @@ export function useDinhKemCode(cuocId: string) {
 
       try {
         if (guiThang) {
+          /*
+           * LUÔN chuẩn hoá về 1568px, không chỉ khi vượt trần byte.
+           *
+           * Trước đây chỉ ảnh >4MB mới bị thu nhỏ, nên một ảnh 3,9MB đi
+           * nguyên cỡ: tốn token theo DIỆN TÍCH mà model vẫn co nó về 1568px
+           * ở đầu kia — trả tiền cho phần bị vứt đi. Với trần 8 ảnh thì đó là
+           * tám lần trả thừa trong mỗi bước của vòng lặp.
+           *
+           * Ảnh vốn đã nhỏ hơn 1568px thì `thuNhoAnh` trả về ngay ở vòng đầu
+           * (tỉ lệ bị kẹp ở 1) nên không phóng to, chỉ mã hoá lại.
+           */
           const thang = await docFile(f, 'dataUrl');
-          const url = thang.length <= TRAN_ANH_BYTE ? thang : await thuNhoAnh(f);
+          const canThu = thang.length > TRAN_ANH_BYTE || await quaTo(f);
+          const url = canThu ? await thuNhoAnh(f) : thang;
           datTep((cu) => cu.map((t) => (t.id === id
             // Ảnh đã thu nhỏ thì hiện KÍCH THƯỚC MỚI, không phải cỡ gốc: thẻ
             // ghi "8.4 MB" cạnh một tấm đã co còn 300KB là nói sai với người

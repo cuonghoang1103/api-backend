@@ -401,7 +401,10 @@ export const agentSendSchema = z.object({
   /** Cuộc hội thoại (tab) nhận câu hỏi này. Mọi kênh có trạng thái đều phải mang nó. */
   cuocId: cuocIdSchema,
   text: z.string().trim().min(1, 'Chưa nhập gì').max(8000),
-  anh: z.array(anhSchema).max(3).optional(),
+  /* 8 ảnh — khớp `MAX_ANH_THANG` ở `DinhKemCode.tsx` VÀ `MAX_ANH` ở máy chủ.
+     Ba con số này phải đi cùng nhau: lệch thì ảnh thứ n bị bỏ IM LẶNG ở đúng
+     tầng nào có số nhỏ nhất, và không có gì báo. */
+  anh: z.array(anhSchema).max(8).optional(),
 });
 
 /**

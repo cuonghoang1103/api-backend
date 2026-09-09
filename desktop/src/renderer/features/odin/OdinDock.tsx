@@ -17,6 +17,7 @@ import { docThanhTieng, ngungNoi, phatTieng, datTocDoDoc } from './giongNoi';
 import { hoiOdin, phienNoiHienTai } from './hoiOdin';
 import { useSession } from '../../auth/session';
 import { OdinRobot } from './OdinRobot';
+import { kepDock, ngoaiKhung, type KhungKep } from './viTriDock';
 import { useOdin } from './useOdin';
 import { SU_KIEN_NHAC } from '../dashboard/nhacLichRobot';
 import './odin.css';
@@ -245,6 +246,43 @@ export function OdinDock() {
   const henBam = useRef<ReturnType<typeof setTimeout> | null>(null);
   const keo = useRef<{ x: number; y: number; phai: number; duoi: number } | null>(null);
   const [dangKeo, datDangKeo] = useState(false);
+  const oRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * Vị trí ĐANG KÉO — giữ ở state cục bộ, KHÔNG ghi vào thiết đặt từng khung.
+   *
+   * ⚠️ Đây là nguyên nhân "kéo không mượt", và nó đo được chứ không phải cảm
+   * giác. Mã cũ gọi `setSetting` HAI lần cho MỖI `pointermove`:
+   *   • `setSetting` cập nhật `settings` trong AppState, mà `settings` nằm
+   *     trong danh sách phụ thuộc của `useMemo` dựng giá trị context — nên
+   *     **35 component** đang gọi `useAppState()` dựng lại. Hai lần mỗi khung.
+   *     Chuột 120Hz ⇒ ~240 lượt dựng lại toàn app mỗi giây.
+   *   • Nó còn gửi hai lời gọi IPC xuống main, và main `writeFileSync` +
+   *     `renameSync` NGUYÊN tệp cấu hình một cách ĐỒNG BỘ cho mỗi lời gọi.
+   *
+   * Nay: kéo chỉ đụng state của riêng component này; ghi xuống đĩa MỘT lần
+   * lúc thả tay.
+   */
+  const [keoTam, datKeoTam] = useState<{ phai: number; duoi: number } | null>(null);
+  /** Cú kéo vừa rồi có đi đủ xa để tính là KÉO, không phải BẤM. */
+  const daDi = useRef(false);
+
+  /** Đo khung để kẹp. `getBoundingClientRect` trả hộp SAU `scale`, nên không
+      phải nhân `heSo` bằng tay — và nó tự đúng cả khi bong bóng làm dock cao
+      lên. */
+  const khung = useCallback((): KhungKep | null => {
+    const el = oRef.current;
+    if (!el) return null;
+    const r = el.getBoundingClientRect();
+    const sb = parseFloat(
+      getComputedStyle(document.documentElement).getPropertyValue('--ct-statusbar-h'),
+    ) || 0;
+    return {
+      rong: r.width, cao: r.height,
+      cuaRong: window.innerWidth, cuaCao: window.innerHeight,
+      thanhTrangThai: sb,
+    };
+  }, []);
 
   /** Đếm cú bấm; đủ ba trong 600ms thì lật khoá. Trả `true` nếu vừa lật. */
   const demVaLat = (): boolean => {
@@ -263,28 +301,66 @@ export function OdinDock() {
     if (!dangKeo) return;
     const di = (e: PointerEvent): void => {
       const b = keo.current;
-      if (!b) return;
-      // Kẹp trong cửa sổ: kéo ra ngoài rồi thả là mất robot.
-      setSetting('odinPhai', Math.max(4, Math.min(b.phai - (e.clientX - b.x), window.innerWidth - 80)));
-      setSetting('odinDuoi', Math.max(4, Math.min(b.duoi - (e.clientY - b.y), window.innerHeight - 80)));
+      const k = khung();
+      if (!b || !k) return;
+      /* Kẹp theo CỠ THẬT của dock, không theo hằng `80` của bản cũ. Đo trong
+         Chromium: dock 104×136, và luật cũ cho mép TRÊN = -86px khi kéo hết
+         lên — 63% con robot nằm ngoài cửa sổ, kể cả phần bấm được, nên không
+         còn cách nào lôi nó xuống. Xem `viTriDock.ts`. */
+      // Ngưỡng 4px: tay ai cũng rung một hai pixel lúc bấm, và coi đó là kéo
+      // thì mỗi cú bấm hơi lệch sẽ nuốt mất hành động của cú bấm ấy.
+      if (Math.abs(e.clientX - b.x) > 4 || Math.abs(e.clientY - b.y) > 4) daDi.current = true;
+      datKeoTam(kepDock(b.phai - (e.clientX - b.x), b.duoi - (e.clientY - b.y), k));
     };
-    const tha = (): void => { datDangKeo(false); keo.current = null; };
+    const tha = (): void => {
+      datDangKeo(false);
+      keo.current = null;
+      // GHI MỘT LẦN, lúc thả tay. Xem chú thích ở `keoTam`.
+      datKeoTam((cuoi) => {
+        if (cuoi) { setSetting('odinPhai', cuoi.phai); setSetting('odinDuoi', cuoi.duoi); }
+        return null;
+      });
+    };
     window.addEventListener('pointermove', di);
     window.addEventListener('pointerup', tha, { once: true });
+    window.addEventListener('pointercancel', tha, { once: true });
     return () => {
       window.removeEventListener('pointermove', di);
       window.removeEventListener('pointerup', tha);
+      window.removeEventListener('pointercancel', tha);
     };
-  }, [dangKeo, setSetting]);
+  }, [dangKeo, setSetting, khung]);
+
+  /**
+   * Đổi cỡ cửa sổ ⇒ KẸP LẠI.
+   *
+   * Không có nhánh này thì thu cửa sổ nhỏ đi là robot ra ngoài vùng nhìn thấy
+   * VĨNH VIỄN: cử chỉ mở khoá kéo nằm trên chính con robot, nên không còn thứ
+   * gì bấm được để lôi nó về. Chỉ ghi khi thật sự lệch — mỗi lần kéo mép cửa
+   * sổ mà ghi một lần là hàng trăm lượt ghi đĩa.
+   */
+  useEffect(() => {
+    if (!enabled) return;
+    const doi = (): void => {
+      const k = khung();
+      if (!k || !ngoaiKhung(phai, duoi, k)) return;
+      const o = kepDock(phai, duoi, k);
+      setSetting('odinPhai', o.phai);
+      setSetting('odinDuoi', o.duoi);
+    };
+    window.addEventListener('resize', doi);
+    return () => window.removeEventListener('resize', doi);
+  }, [enabled, phai, duoi, khung, setSetting]);
 
   if (!enabled) return null;
 
   return (
     <div
+      ref={oRef}
       className="odin-dock"
       style={{
-        right: phai,
-        bottom: `calc(var(--ct-statusbar-h) + ${duoi}px)`,
+        right: keoTam?.phai ?? phai,
+        bottom: `calc(var(--ct-statusbar-h) + ${keoTam?.duoi ?? duoi}px)`,
         /* Thu nhỏ từ GÓC DƯỚI-PHẢI: neo mặc định ở đó, nên co từ tâm sẽ làm
            robot nhảy vào giữa màn hình mỗi lần đổi nấc. */
         transform: heSo === 1 ? undefined : `scale(${heSo})`,
@@ -293,7 +369,12 @@ export function OdinDock() {
       data-keo={keoDuoc}
       data-dang-keo={dangKeo}
       onPointerDown={(e) => {
-        if (!keoDuoc) return;
+        if (!keoDuoc || e.button !== 0) return;
+        /* GIỮ CON TRỎ: kéo nhanh thì chuột vượt ra khỏi con robot, và nếu thả
+           tay ở ngoài cửa sổ thì `pointerup` không bao giờ tới — cờ `dangKeo`
+           kẹt bật và robot bám dính con trỏ cho tới cú bấm sau. */
+        (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+        daDi.current = false;
         keo.current = { x: e.clientX, y: e.clientY, phai, duoi };
         datDangKeo(true);
       }}
@@ -374,6 +455,10 @@ export function OdinDock() {
         onFocus={() => setHovering(true)}
         onBlur={() => setHovering(false)}
         onClick={() => {
+          /* Vừa KÉO xong thì đây không phải một cú bấm. Không chặn thì mỗi lần
+             dời robot lại cộng một nhịp vào bộ đếm ba-cú-bấm, và ba lần dời
+             liên tiếp sẽ tự khoá robot lại giữa lúc người dùng đang sắp chỗ. */
+          if (daDi.current) { daDi.current = false; return; }
           // Cú bấm thứ ba lật khoá — KHÔNG chuyển trang, nếu không mỗi lần
           // mở/khoá lại nhảy sang AI Chat.
           if (demVaLat()) return;

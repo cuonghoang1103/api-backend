@@ -373,6 +373,13 @@ function Robot() {
         className="rb-than"
         onPointerDown={(e) => {
           if (!keoDuoc || e.button !== 0) return;
+          /* GIỮ CON TRỎ. Cửa sổ chạy theo chuột, nhưng nó chạy sau một nhịp
+             IPC — kéo nhanh là con trỏ vượt ra khỏi cửa sổ 150px này, và khi
+             ấy `pointermove` ngừng tới, robot khựng lại rồi giật một cái khi
+             chuột quay vào. Tệ hơn: thả chuột ở ngoài thì `pointerup` không
+             bao giờ tới, cờ `dangKeo` kẹt bật và robot bám dính con trỏ.
+             `setPointerCapture` bắt mọi sự kiện về đúng phần tử này. */
+          e.currentTarget.setPointerCapture(e.pointerId);
           keo.current = { x: e.screenX, y: e.screenY };
           datDangKeo(true);
           void window.cuongthai?.robot.keoBatDau();

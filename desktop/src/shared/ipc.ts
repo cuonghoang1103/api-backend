@@ -157,6 +157,18 @@ export const settingKeySchema = z.enum([
   'odinPhai',
   'odinDuoi',
   /**
+   * Vị trí cửa sổ robot NỔI trên màn hình (toạ độ tuyệt đối của hệ điều hành).
+   *
+   * ⚠️ Khác `odinPhai`/`odinDuoi` — hai khoá đó là của con robot vẽ TRONG
+   * trang, đo theo mép cửa sổ app. Con nổi là một cửa sổ hệ điều hành riêng,
+   * nên nó phải nhớ toạ độ màn hình.
+   *
+   * Lưu tuyệt đối được vì `viTriDaLuu()` luôn soi lại: điểm đó còn nằm trên
+   * một màn hình đang cắm không, rồi mới kẹp vào vùng làm việc của màn ấy.
+   */
+  'robotX',
+  'robotY',
+  /**
    * Thư mục người dùng đã chọn cho `web_tai` ở LẦN GẦN NHẤT.
    *
    * KHÔNG phải để bỏ qua hộp thoại — hộp thoại vẫn hiện mỗi cuộc, vì `web_tai`

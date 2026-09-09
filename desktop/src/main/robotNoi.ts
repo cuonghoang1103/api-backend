@@ -30,6 +30,8 @@
 import { BrowserWindow, screen, app } from 'electron';
 import path from 'node:path';
 import { IS_DEV, DEV_SERVER_URL, RENDERER_SOURCE, APP_ORIGIN } from './config';
+import { kep, doiCoGiuGoc, vungChoDiem, type Vung } from './robotViTri';
+import { getSettings, setSetting } from './store';
 
 /** Kích thước lúc thu gọn — vừa đúng con robot cộng một chút bóng đổ. */
 const GON = { width: 150, height: 190 };
@@ -108,6 +110,42 @@ function viTriGocDuoi(w: number, h: number): { x: number; y: number } {
   };
 }
 
+/**
+ * Vùng làm việc của màn hình ĐANG CHỨA cửa sổ robot.
+ *
+ * ⚠️ KHÔNG dùng `getPrimaryDisplay()` cho việc kẹp. Người dùng kéo robot sang
+ * màn ngoài rồi thu nhỏ nó, mà kẹp theo màn CHÍNH thì cửa sổ bị lôi ngược về
+ * màn chính — trông y như robot tự nhảy chỗ.
+ */
+function vungHienTai(w: BrowserWindow): Vung {
+  return screen.getDisplayMatching(w.getBounds()).workArea;
+}
+
+/** Vị trí đã lưu, nếu nó còn nằm trên một màn hình đang cắm. */
+function viTriDaLuu(w: number, h: number): { x: number; y: number } | null {
+  const c = getSettings();
+  if (typeof c.robotX !== 'number' || typeof c.robotY !== 'number') return null;
+  const cacVung = screen.getAllDisplays().map((d) => d.workArea);
+  const vung = vungChoDiem({ x: c.robotX, y: c.robotY }, cacVung, screen.getPrimaryDisplay().workArea);
+  const o = kep({ x: c.robotX, y: c.robotY, width: w, height: h }, vung);
+  return { x: o.x, y: o.y };
+}
+
+/**
+ * Ghi vị trí xuống đĩa.
+ *
+ * Gọi ở `keoXong`, KHÔNG gọi trong `keoToi`: `keoToi` chạy mỗi khung hình lúc
+ * kéo, và `setSetting` ghi cả tệp cấu hình bằng `writeFileSync` đồng bộ ngay
+ * trên tiến trình main. Ghi 120 lần mỗi giây ở đó là tự làm cửa sổ giật.
+ */
+function luuViTri(): void {
+  const w = cuaSoRobot();
+  if (!w) return;
+  const b = w.getBounds();
+  setSetting('robotX', b.x);
+  setSetting('robotY', b.y);
+}
+
 export function robotDangMo(): boolean {
   return !!cuaSo && !cuaSo.isDestroyed();
 }
@@ -119,9 +157,15 @@ export function cuaSoRobot(): BrowserWindow | null {
 export function moRobot(): BrowserWindow {
   if (cuaSo && !cuaSo.isDestroyed()) return cuaSo;
 
-  const { x, y } = viTriGocDuoi(GON.width, GON.height);
+  /* Vị trí đã lưu trước, mặc định góc dưới-phải sau. Trước bản này `moRobot`
+     LUÔN lấy góc dưới-phải: đo thật 10/09/2026 — kéo robot tới (154,61), thoát
+     app, mở lại thì nó về (1554,841). Người dùng đặt robot ở đâu cũng vô nghĩa
+     sau lần khởi động kế tiếp. */
+  const kt = nhan(GON);
+  const { x, y } = viTriDaLuu(kt.width, kt.height) ?? viTriGocDuoi(kt.width, kt.height);
   cuaSo = new BrowserWindow({
     ...GON,
+    ...kt,
     x,
     y,
     frame: false,
@@ -200,14 +244,12 @@ export function doiCo(co: CoRobot, bong?: { rong: number; cao: number }): void {
   // Khung chat mini KHÔNG co theo nấc: nó chứa chữ để đọc, thu nhỏ là
   // không đọc nổi. Chỉ con robot mới co.
   const kt = co === 'rong' ? RONG : co === 'noi' ? coNoi(bong) : nhan(GON);
-  const cu = w.getBounds();
-  // Neo theo góc DƯỚI-PHẢI: robot đứng ở đó, và phình sang trái/lên trên thì
-  // nó không nhảy chỗ dưới mắt người dùng.
-  w.setBounds({
-    x: cu.x + cu.width - kt.width,
-    y: cu.y + cu.height - kt.height,
-    ...kt,
-  });
+  /* Neo theo góc GẦN NHẤT, không phải cứng góc dưới-phải.
+     Đo thật 10/09/2026, cả hai đều hỏng ở góc trên-trái:
+       • thu về nấc 52% ở (10,43) ⇒ nhảy tới (82,134) — rời khỏi góc đã chọn;
+       • mở khung chat 380×520 ở (10,43) ⇒ (-220,-287), văng hẳn khỏi màn hình.
+     Neo dưới-phải chỉ đúng khi robot ĐANG ở góc dưới-phải. */
+  w.setBounds(doiCoGiuGoc(w.getBounds(), kt, vungHienTai(w)));
 }
 
 export function doiKichThuoc(rong: boolean): void {
@@ -218,12 +260,10 @@ export function doiKichThuoc(rong: boolean): void {
   // `nhan(GON)` chứ không phải `GON`: người dùng đã chọn nấc cỡ, đóng khung
   // chat mà trả về 100% là xoá mất lựa chọn của họ.
   const kt = rong ? RONG : nhan(GON);
-  const cu = w.getBounds();
-  w.setBounds({
-    x: cu.x + cu.width - kt.width,
-    y: cu.y + cu.height - kt.height,
-    ...kt,
-  });
+  /* Cùng luật neo-góc-gần-nhất với `doiCo`. ⚠️ Đây là đường RIÊNG: vá mỗi
+     `doiCo` rồi đo lại vẫn thấy khung chat văng tới (-230,-297) khi robot
+     đứng ở góc trên-trái — hai hàm cùng chép một phép tính neo sai. */
+  w.setBounds(doiCoGiuGoc(w.getBounds(), kt, vungHienTai(w)));
 }
 
 /**
@@ -260,11 +300,16 @@ export function keoToi(dx: number, dy: number): void {
   // Chỉ đổi x/y. Đưa cả width/height vào là ép cửa sổ vẽ lại toàn bộ mỗi
   // khung hình khi kéo, và trên máy chậm nó giật.
   const b = w.getBounds();
-  w.setBounds({ ...b, x: Math.round(g.x + dx), y: Math.round(g.y + dy) });
+  /* KẸP trong màn hình. Đo thật trước khi vá: `keoToi(9000,9000)` cho ra
+     x=1688 trên vùng 1728 rộng — robot 150px chỉ còn 40px thò vào. macOS chặn
+     hờ một phần; **Windows không chặn gì**, `x` nhận đúng -5000 và cửa sổ
+     không khung + `skipTaskbar` ấy không còn đường nào lôi lại. */
+  w.setBounds(kep({ ...b, x: Math.round(g.x + dx), y: Math.round(g.y + dy) }, vungHienTai(w)));
 }
 
 export function keoXong(): void {
   gocKeo = null;
+  luuViTri();
 }
 
 export function dangMoRong(): boolean {

@@ -49,7 +49,10 @@ body {
 /* Mở khoá kéo: KHÔNG bật `-webkit-app-region: drag`. Nó nuốt sạch sự kiện
    chuột nên ba cú bấm để khoá lại không bao giờ tới nơi — người dùng mở khoá
    xong là kẹt. Cửa sổ dời bằng `setBounds` ở main (xem `robotNoi.ts`). */
-.rb[data-keo='true'] .rb-than { -webkit-app-region: no-drag; cursor: grab; }
+/* `touch-action: none` — bàn di chính xác của Windows gửi cử chỉ cuộn/vuốt
+   dưới dạng sự kiện con trỏ; thiếu dòng này thì trình duyệt nuốt mất chuỗi
+   `pointermove` để cuộn trang, và cú kéo đứt giữa chừng. */
+.rb[data-keo='true'] .rb-than { -webkit-app-region: no-drag; cursor: grab; touch-action: none; }
 .rb[data-dang-keo='true'] .rb-than { cursor: grabbing; }
 .rb[data-keo='true'] .rb-than::before {
   content: '';

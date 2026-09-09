@@ -34,6 +34,17 @@
    nhấp nháy nhẹ + con trỏ bàn tay là đủ, không cần thêm chữ. */
 .odin-dock[data-keo='true'] {
   cursor: grab;
+  /* Mở khoá ⇒ CẢ vùng bao thành chỗ nắm, không chỉ mấy pixel trên con robot.
+     Lúc khoá thì `.odin-dock` là `pointer-events: none` (xem dưới) để phần
+     rỗng không nuốt cú bấm vào nội dung — nhưng lúc kéo thì ngược lại: vùng
+     nắm càng rộng càng dễ trúng. Nó cũng là thứ giữ `setPointerCapture` chạy
+     được, vì bắt con trỏ trên một phần tử `pointer-events: none` là đặt cược
+     vào chi tiết cài đặt của trình duyệt. */
+  pointer-events: auto;
+  /* Bàn di chính xác của Windows gửi cử chỉ cuộn dưới dạng sự kiện con trỏ;
+     thiếu dòng này thì trình duyệt cướp chuỗi `pointermove` để cuộn, và cú
+     kéo đứt giữa chừng. Đo trong app: `touch-action` đang là `auto`. */
+  touch-action: none;
   border-radius: 999px;
   outline: 2px dashed var(--ct-accent);
   outline-offset: 6px;

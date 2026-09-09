@@ -1,0 +1,15 @@
+# Vân tay của TỪNG phát hiện được miễn trừ — hẹp hơn `targetRules` trong
+# .gitleaks.toml rất nhiều: nó ghim đúng tệp + đúng rule + đúng dòng. Một khoá
+# riêng tư THẬT ở bất kỳ dòng nào khác, kể cả trong chính tệp này, vẫn bị chặn.
+# Cố ý KHÔNG nới `private-key` cho cả `content/exams/` — chốt "khoá riêng tư
+# trong đề thi vẫn bị chặn" là chốt đã được thử hai chiều lúc dựng .gitleaks.toml.
+#
+# Vì vân tay có kèm SỐ DÒNG, sửa tệp làm dòng xê dịch thì miễn trừ hết tác dụng
+# và commit bị chặn lại — hỏng theo hướng AN TOÀN, phải xem lại rồi cập nhật.
+#
+# GITHUB-ACTIONS-FE q33 (chương 6) dạy đúng cái bẫy này: bí mật đem mã hoá
+# base64 thì runner KHÔNG che, nên `cat` tệp đã giải mã sẽ phun khoá ra log.
+# Muốn dạy được thì đề phải in ra dòng đầu của tệp khoá. Ở đây chỉ có ĐÚNG dòng
+# tiêu đề PEM và một chuỗi base64 cụt (`LS0tLS1CRUdJTiBPUEVOU1NIIFBSSV...`, giải
+# ra vừa đúng `-----BEGIN OPENSSH PRIV`) — không có một byte vật liệu khoá nào.
+content/exams/GITHUB-ACTIONS-FE.mjs:private-key:1358

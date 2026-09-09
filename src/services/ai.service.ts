@@ -374,8 +374,15 @@ async function themBoiCanhCaNhan(ragContext: string, ctx: ChatContext): Promise<
     const phan =
       '\n### Lịch và việc của chính người đang hỏi (dữ liệu THẬT, ưu tiên dùng):\n'
       + khoi
-      + '\nKhi họ hỏi hôm nay học gì / làm gì / còn việc gì, TRẢ LỜI THẲNG từ phần này. '
-      + 'Phần này không có thì nói là chưa có trong lịch, đừng suy đoán.\n'
+      + '\nDÙNG phần này CHỈ KHI câu hỏi nói về LỊCH HỌC, BUỔI THI hoặc VIỆC CẦN LÀM '
+      + 'CỦA CHÍNH HỌ — ví dụ "hôm nay tôi học gì", "còn việc gì chưa xong", "mấy giờ vào lớp".\n'
+      + '⛔ TUYỆT ĐỐI KHÔNG đọc lịch ra khi họ hỏi chuyện khác. Đo thật 10/09/2026: người dùng '
+      + 'hỏi "hôm nay web cuongthai.com có gì mới không" và nhận về nguyên thời khoá biểu — '
+      + 'sai hoàn toàn, chỉ vì câu hỏi có chữ "hôm nay". Hỏi về tin tức, về website, về một '
+      + 'môn học, về kiến thức, hay bất cứ gì KHÔNG phải lịch/việc của họ thì coi như phần '
+      + 'này không tồn tại.\n'
+      + 'Câu hỏi đúng là về lịch/việc mà phần này không có dữ kiện thì nói thẳng là chưa có '
+      + 'trong lịch, đừng suy đoán.\n'
       + '\n### Khi người dùng BẢO BẠN LÀM một việc với danh sách trên:\n'
       + 'Trả lời bình thường, rồi kết bằng MỘT dòng dấu lệnh ở cuối:\n'
       + '- Họ bảo đã làm xong một việc → <<VIEC:XONG|đúng tên việc trong danh sách trên>>\n'

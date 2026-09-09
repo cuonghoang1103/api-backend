@@ -831,6 +831,37 @@ const CHUAN_BI = {
       if (khiMo < 4) throw new Error(`Mở lại cột Sổ tay mà chỉ còn ${khiMo} hàng.`);
     }
 
+    /* ─── ĐỔI TÊN PHẢI MỞ Ô NGAY KHI BẤM BÚT CHÌ ───
+       Đây là cái nút đã CHẾT CÂM trên bản desktop suốt thời gian dài: nó gọi
+       `window.prompt`, mà Electron thì NÉM `prompt() is not supported` — bấm
+       vào không có gì xảy ra, không lỗi nào hiện ra.
+
+       Chốt này bấm THẬT rồi đòi thấy ô nhập. Đo được vì bộ đo chạy đúng bản
+       renderer của desktop; `tsc` và grep không nói được nút có mở ô hay không. */
+    const hangDau = p.locator('.notes-theme-root .group').first();
+    await hangDau.hover().catch(() => {});
+    await p.waitForTimeout(200);
+    const nutBut = hangDau.locator('button[aria-label="Đổi tên"]').first();
+    if (await nutBut.count() === 0) {
+      throw new Error('Không thấy nút "Đổi tên" trên hàng đầu của cây Sổ tay.');
+    }
+    await nutBut.click({ force: true }).catch(() => {});
+    await p.waitForTimeout(250);
+    const oSua = await p.evaluate(() => {
+      const o = document.querySelector('.notes-theme-root .group input');
+      if (!o) return { co: false };
+      return { co: true, focus: document.activeElement === o, gt: o.value };
+    });
+    if (!oSua.co) {
+      throw new Error(
+        'Bấm nút Đổi tên mà KHÔNG mở ô nhập — `window.prompt` quay lại? '
+        + '(Electron ném `prompt() is not supported`, nên nút chết câm.)',
+      );
+    }
+    if (!oSua.focus) throw new Error('Ô đổi tên mở ra nhưng KHÔNG được focus — gõ ngay là mất chữ.');
+    await p.keyboard.press('Escape').catch(() => {});
+    await p.waitForTimeout(150);
+
     /* ─── CHỦ ĐỀ TỐI CỦA NOTES ───
        Notes có bộ chuyển chủ đề RIÊNG (Trắng/Tối/Nâu), mặc định Trắng — khác
        chủ đề của app. Nên mọi phép đo trước giờ chỉ nhìn bản SÁNG, và một lỗi

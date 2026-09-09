@@ -2205,17 +2205,22 @@ model AiPrompt {
 // ============================================================
 
 model DocumentChunk {
-  id           Int      @id @default(autoincrement())
-  content      String   @db.Text
-  metadata     Json?    @default("{}") @db.JsonB
-  chunkIndex   Int      @map("chunk_index")
-  documentId   String   @map("document_id") @db.VarChar(100)
-  documentType String   @map("document_type") @db.VarChar(50)
-  createdAt    DateTime @default(now()) @map("created_at")
+  id           Int                         @id @default(autoincrement())
+  content      String                      @db.Text
+  metadata     Json?                       @default("{}") @db.JsonB
+  chunkIndex   Int                         @map("chunk_index")
+  documentId   String                      @map("document_id") @db.VarChar(100)
+  documentType String                      @map("document_type") @db.VarChar(50)
+  createdAt    DateTime                    @default(now()) @map("created_at")
   /// 768-dim vector embedding (Groq `nomic-embed-text-v1.5` compatible).
   /// Added via raw SQL migration in scripts/enable-pgvector.sql because
   /// Prisma doesn't natively support pgvector's `vector(N)` type.
   embedding    Json?
+  /// Vector THẬT để pgvector so khoảng cách. `embedding` (jsonb) giữ lại để
+  /// tương thích ngược — mọi mã cũ vẫn đọc được, còn phần tra cứu dùng cột
+  /// này. Prisma chưa hiểu kiểu `vector`, nên `Unsupported` để nó đừng đề
+  /// nghị xoá đi ở lần `migrate diff` sau.
+  embeddingVec Unsupported("vector(384)")? @map("embedding_vec")
 
   @@index([documentType], name: "idx_document_chunks_type")
   @@index([documentId], name: "idx_document_chunks_doc_id")

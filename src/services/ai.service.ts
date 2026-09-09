@@ -834,6 +834,56 @@ export class AIService {
    *
    * Gracefully returns empty string if table does not exist yet (first run).
    */
+  /**
+   * Tìm mẩu kiến thức LIÊN QUAN NHẤT trong TOÀN BỘ kho, bằng pgvector.
+   *
+   * ⚠️ BẢN CŨ KHÔNG TÌM THEO ĐỘ LIÊN QUAN. Nó chạy
+   * `findMany({ orderBy: { createdAt: 'desc' }, take: 20 })` — lấy 20 mẩu
+   * MỚI NHẤT rồi mới xếp hạng trong số đó. Kho có 64 mẩu nên 20/64 là một
+   * phần ba corpus và nó chạy được NHỜ MAY MẮN. Thêm vài trăm mẩu bài học
+   * vào là 20 mẩu mới nhất toàn bài học, và mọi câu hỏi về website mất hẳn
+   * đường vào — tức nạp thêm kiến thức lại làm HỎNG thứ đang chạy.
+   *
+   * Nay để Postgres so khoảng cách trên cột `vector(384)` có chỉ mục HNSW:
+   * đúng mẩu liên quan nhất, bất kể kho lớn tới đâu.
+   *
+   * Hỏng thì LÙI về đường cũ chứ không ném — mất ngữ cảnh là câu trả lời
+   * nhạt đi, còn ném lỗi là mất cả câu trả lời.
+   */
+  private async traTheoVector(
+    documentType: string | undefined,
+    topK: number,
+    cauHoi: string,
+  ): Promise<Array<{ content: string; documentId: string; documentType: string }> | null> {
+    try {
+      const [vec] = await computeEmbeddings([cauHoi]);
+      if (!Array.isArray(vec) || vec.length !== 384) return null;
+      const lit = `[${vec.join(',')}]`;
+      const rows = documentType
+        ? await prisma.$queryRaw<Array<{ content: string; document_id: string; document_type: string }>>`
+            SELECT content, document_id, document_type
+              FROM document_chunks
+             WHERE embedding_vec IS NOT NULL AND document_type = ${documentType}
+             ORDER BY embedding_vec <=> ${lit}::vector
+             LIMIT ${topK}`
+        : await prisma.$queryRaw<Array<{ content: string; document_id: string; document_type: string }>>`
+            SELECT content, document_id, document_type
+              FROM document_chunks
+             WHERE embedding_vec IS NOT NULL
+             ORDER BY embedding_vec <=> ${lit}::vector
+             LIMIT ${topK}`;
+      if (!rows.length) return null;
+      return rows.map((r) => ({
+        content: r.content, documentId: r.document_id, documentType: r.document_type,
+      }));
+    } catch (e) {
+      logger.warn('RAG: tra bằng pgvector hỏng, lùi về đường cũ', {
+        error: e instanceof Error ? e.message : String(e),
+      });
+      return null;
+    }
+  }
+
   async getRAGContext(
     documentType: string | undefined,
     topK: number,
@@ -848,6 +898,17 @@ export class AIService {
     }>;
 
     try {
+      // Đường CHÍNH: pgvector tìm trên toàn kho. Chỉ lùi về đường cũ khi nó
+      // hỏng hoặc câu hỏi rỗng.
+      if (userMessage) {
+        const theoVector = await this.traTheoVector(documentType, topK, userMessage);
+        if (theoVector) {
+          return theoVector
+            .map((c) => `[${c.documentType}:${c.documentId}]\n${c.content}`)
+            .join('\n\n');
+        }
+      }
+
       // Step 1: fetch candidate set
       if (documentType) {
         chunks = await prisma.documentChunk.findMany({

@@ -597,6 +597,7 @@ export function AgentMode({
 
         {coThuMuc && (
           <ChonCheDo
+            cuocId={cuocId}
             cheDo={thuMuc?.cheDoQuyen ?? 'keHoach'}
             khoa={trangThai.dangChay}
             onChon={(c) => void doiCheDoQuyen(c)}

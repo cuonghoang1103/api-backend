@@ -612,7 +612,7 @@ async function toolEditFile(goc: string, args: Record<string, unknown>, ghi: Boi
     { ten: 'edit_file', duongDan: tuongDoi, tuDuyet: ghi.tuDuyet === true },
     (y) => ghi.xinPhep({ ...y, diff, taoMoi: false }),
     ghi.signal,
-    ghi.so.quyenDaCap,
+    ghi.so,
   );
   if (quyet === 'tuChoi') return loiTuChoi(`sửa ${tuongDoi}`);
 
@@ -696,7 +696,7 @@ async function toolSuaNhieuCho(goc: string, args: Record<string, unknown>, ghi: 
     { ten: 'sua_nhieu_cho', duongDan: tuongDoi, tuDuyet: ghi.tuDuyet === true },
     (y) => ghi.xinPhep({ ...y, diff, taoMoi: false }),
     ghi.signal,
-    ghi.so.quyenDaCap,
+    ghi.so,
   );
   if (quyet === 'tuChoi') return loiTuChoi(`sửa ${sua.length} chỗ trong ${tuongDoi}`);
 
@@ -741,7 +741,7 @@ async function toolXoaFile(goc: string, args: Record<string, unknown>, ghi: BoiC
     { ten: 'xoa_file', duongDan: tuongDoi, tuDuyet: ghi.tuDuyet === true },
     (y) => ghi.xinPhep({ ...y, diff, taoMoi: false }),
     ghi.signal,
-    ghi.so.quyenDaCap,
+    ghi.so,
   );
   if (quyet === 'tuChoi') return loiTuChoi(`xoá ${tuongDoi}`);
 
@@ -791,7 +791,7 @@ async function toolDoiTenFile(goc: string, args: Record<string, unknown>, ghi: B
     { ten: 'doi_ten_file', duongDan: `${tu} → ${den}`, tuDuyet: ghi.tuDuyet === true },
     (y) => ghi.xinPhep({ ...y, diff: soSanhDong('', ''), taoMoi: false }),
     ghi.signal,
-    ghi.so.quyenDaCap,
+    ghi.so,
   );
   if (quyet === 'tuChoi') return loiTuChoi(`đổi tên ${tu} thành ${den}`);
 
@@ -830,7 +830,7 @@ async function toolCreateFile(goc: string, args: Record<string, unknown>, ghi: B
     { ten: 'create_file', duongDan: tuongDoi, tuDuyet: ghi.tuDuyet === true },
     (y) => ghi.xinPhep({ ...y, diff, taoMoi: true }),
     ghi.signal,
-    ghi.so.quyenDaCap,
+    ghi.so,
   );
   if (quyet === 'tuChoi') return loiTuChoi(`tạo ${tuongDoi}`);
 
@@ -878,7 +878,7 @@ async function toolRunCommand(
     },
     (y) => boiCanh.xinPhepLenh({ ...y, phanLoai }),
     boiCanh.signal,
-    boiCanh.so.quyenDaCap,
+    boiCanh.so,
   );
   if (quyet === 'tuChoi') {
     return {
@@ -1163,7 +1163,7 @@ async function toolChayLenhNen(
     { ten: 'run_command', duongDan: lenh, khoa: `nen:${lenh}`, choNho: phanLoai.choNho },
     (y) => nen.xinPhepLenh({ ...y, phanLoai }),
     nen.signal,
-    nen.so.quyenDaCap,
+    nen.so,
   );
   if (quyet === 'tuChoi') {
     return { noiDung: `NGƯỜI DÙNG TỪ CHỐI chạy nền: ${lenh}`, tomTat: 'bị từ chối' };
@@ -1227,7 +1227,7 @@ async function toolGitCommit(
     { ten: 'git_commit', duongDan: `commit ${cb.file!.length} file lên ${cb.nhanh}`, khoa: `commit:${Date.now()}`, choNho: false },
     (y) => g.xinPhepGit({ ...y, viec: 'commit', chiTiet }),
     g.signal,
-    g.so.quyenDaCap,
+    g.so,
   );
   if (quyet === 'tuChoi') return { noiDung: 'NGƯỜI DÙNG TỪ CHỐI commit.', tomTat: 'bị từ chối' };
 
@@ -1256,7 +1256,7 @@ async function toolTaoPr(
     { ten: 'tao_pr', duongDan: `mở PR từ ${cb.nhanh}`, khoa: `pr:${Date.now()}`, choNho: false },
     (y) => g.xinPhepGit({ ...y, viec: 'pr', chiTiet }),
     g.signal,
-    g.so.quyenDaCap,
+    g.so,
   );
   if (quyet === 'tuChoi') return { noiDung: 'NGƯỜI DÙNG TỪ CHỐI mở PR.', tomTat: 'bị từ chối' };
 
@@ -1360,7 +1360,7 @@ async function toolWebTacDong(
     { ten, duongDan: moTa, khoa: `${ten}:${trinhDuyet.urlHienTai()}:${boChon}`, choNho: false },
     (y) => boiCanh.xinPhepLenh({ ...y, phanLoai: { muc: 'cankiem', lyDo: ['tác động lên trang web đang mở'], choNho: false } }),
     boiCanh.signal,
-    boiCanh.so.quyenDaCap,
+    boiCanh.so,
   );
   if (quyet === 'tuChoi') {
     return {
@@ -1542,7 +1542,7 @@ async function toolWebTai(args: Record<string, unknown>, boiCanh: BoiCanhLenh): 
         phanLoai: { muc: 'nguyhiem', lyDo: ['file chạy được, tải từ một địa chỉ trên trang web'], choNho: false },
       }),
       boiCanh.signal,
-      boiCanh.so.quyenDaCap,
+      boiCanh.so,
     );
     if (quyet === 'tuChoi') {
       return {
@@ -1656,7 +1656,7 @@ async function toolWebTaiNhieu(args: Record<string, unknown>, boiCanh: BoiCanhLe
         },
       }),
       boiCanh.signal,
-      boiCanh.so.quyenDaCap,
+      boiCanh.so,
     );
     if (quyet === 'tuChoi') tuChoiChay = true;
   }

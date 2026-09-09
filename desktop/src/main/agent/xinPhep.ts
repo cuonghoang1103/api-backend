@@ -18,6 +18,8 @@
  * lượt gọi cổng đã trả tiền.
  */
 
+import type { SoCuoc } from './so.js';
+
 export type QuyetDinh = 'choPhep' | 'choPhepCaFile' | 'tuChoi';
 
 export interface YeuCauXinPhep {
@@ -87,8 +89,13 @@ export function hoiNguoiDung(
   yeuCau: Omit<YeuCauXinPhep, 'id'> & { khoa?: string; choNho?: boolean; tuDuyet?: boolean },
   phat: (y: YeuCauXinPhep) => void,
   signal: AbortSignal,
-  soNho: Set<string>,
+  /* Nhận cả SỔ của cuộc, không chỉ cái `Set` khoá đã cấp: nhận sổ thì cờ
+     `boQuaHet` tự đi theo và tool mới không thể quên nó — xem `so.ts`. Vẫn
+     nhận `Set` trần để chỗ chưa có sổ (bộ kiểm) gọi được. */
+  so: SoCuoc | Set<string>,
 ): Promise<QuyetDinh> {
+  const soNho = so instanceof Set ? so : so.quyenDaCap;
+  const boQuaHet = so instanceof Set ? false : so.boQuaHet === true;
   const khoa = yeuCau.khoa ?? yeuCau.duongDan;
   const choNho = yeuCau.choNho !== false;
 
@@ -109,6 +116,18 @@ export function hoiNguoiDung(
    * lựa chọn tạm thời thành quyền vĩnh viễn của cả phiên.
    */
   if (yeuCau.tuDuyet === true) return Promise.resolve('choPhep');
+
+  /*
+   * ─── BỎ QUA TẤT CẢ ───
+   *
+   * Người dùng đã đọc cảnh báo và tự bật (`ChonCheDo.tsx`). Đặt SAU `tuDuyet`
+   * và TRƯỚC sổ nhớ, và đọc từ SỔ chứ không từ tham số của bên gọi — vì đúng
+   * cái "bên gọi tự tính" là chỗ sáu tool đã quên truyền.
+   *
+   * Vẫn KHÔNG ghi vào `soNho`: hạ chế độ xuống là phải hỏi lại ngay, không để
+   * lại quyền vĩnh viễn nào.
+   */
+  if (boQuaHet) return Promise.resolve('choPhep');
 
   // Đã cấp quyền cho khoá này rồi ⇒ đi thẳng, không hỏi lại. Đây là thứ giữ cho
   // việc sửa mười chỗ trong cùng một file (hay chạy `npm test` mười lần trong

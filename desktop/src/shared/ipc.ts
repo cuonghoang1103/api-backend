@@ -418,12 +418,24 @@ export const agentSendSchema = z.object({
  *   tuSua        sửa file khỏi hỏi; lệnh vẫn hỏi từng cái.
  *   tuSuaVaLenh  sửa file khỏi hỏi + lệnh THƯỜNG khỏi hỏi. Lệnh bị xếp
  *                'cankiem'/'nguyhiem' VẪN hỏi — xem `phanLoaiLenh`.
+ *   boQuaHet     KHÔNG HỎI GÌ HẾT, kể cả lệnh 'nguyhiem'. Xem cảnh báo dưới.
  *
- * ⛔ KHÔNG có chế độ "bỏ qua tất cả". Shell đọc được `.env` (chính chân màn
- * hình của app đang nói câu đó), nên một chế độ tắt sạch chốt chặn là đưa
- * khoá của người dùng cho model quyết định.
+ * ⚠️⚠️ `boQuaHet` — VÌ SAO NÓ TỪNG BỊ TỪ CHỐI, VÀ VÌ SAO NAY CÓ.
+ *
+ * Bản trước ghi ở đây: "KHÔNG có chế độ bỏ qua tất cả. Shell đọc được `.env`
+ * (chính chân màn hình của app đang nói câu đó), nên một chế độ tắt sạch chốt
+ * chặn là đưa khoá của người dùng cho model quyết định." Lý lẽ đó VẪN ĐÚNG
+ * nguyên vẹn — nó không hết hạn, và đừng ai gỡ đoạn này đi.
+ *
+ * Người dùng yêu cầu chế độ này (09/09/2026) và tự nêu điều kiện: phải có
+ * cảnh báo đọc trước khi đồng ý. Nên cái đổi ở đây KHÔNG phải "rủi ro biến
+ * mất" mà là "ai chịu rủi ro": chủ máy, sau khi đọc đúng những gì mình mất.
+ *
+ * Vì thế `boQuaHet` chỉ được bật qua cửa xác nhận ở `ChonCheDo.tsx`, và nó
+ * KHÔNG được là mặc định của bất cứ đường nào — mở thư mục mới là tụt về
+ * `keHoach` (xem `datGocChoCuoc` trong `loop.ts`).
  */
-export const CHE_DO_QUYEN = ['keHoach', 'hoi', 'tuSua', 'tuSuaVaLenh'] as const;
+export const CHE_DO_QUYEN = ['keHoach', 'hoi', 'tuSua', 'tuSuaVaLenh', 'boQuaHet'] as const;
 export type CheDoQuyen = (typeof CHE_DO_QUYEN)[number];
 export const agentCheDoQuyenSchema = z.object({
   cuocId: cuocIdSchema,

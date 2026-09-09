@@ -485,17 +485,35 @@ await ctx.addInitScript(() => {
 
   /* Cầu nối Electron giả. Mỗi nhóm trả thứ HỢP KIỂU cho nhóm đó — `undefined`
      ở khắp nơi làm trang nổ ở chỗ chẳng liên quan gì tới bố cục. */
+  let demCuoc = 0;
   const RA = {
     getInfo: { version: '0.0.0', platform: 'darwin', apiOrigin: '', pro: true, configured: true,
                soViecConLai: 20, models: [], mucNoLuc: [] },
     getAll: {}, listDownloaded: [], usage: { count: 0, totalBytes: 0 },
     dsCuocDangMo: [], dsPhien: [], phien: [], dsWorktree: [],
     mcpTrangThai: { soTool: 0, server: [], daDung: 0, tran: 200 },
-    getStatus: { state: 'idle' }, taoCuoc: 'cuoc-1',
-    getWorkspace: { path: null, name: null },
+    getStatus: { state: 'idle' },
+    /* HÀM, không phải hằng — mỗi tab một id, đúng như `taoCuoc()` thật.
+       Trả hằng `'cuoc-1'` thì sáu tab mang cùng một id, và mọi lỗi kiểu
+       "trạng thái của tab này rò sang tab kia" trở nên VÔ HÌNH với harness.
+       Đúng chuyện đã xảy ra 09/09/2026: vá xong lỗi 6 menu chồng nhau, chạy
+       lại vẫn 6 menu — vì bản vá khoá theo `cuocId` mà mock cho chúng trùng. */
+    taoCuoc: () => `cuoc-${++demCuoc}`,
+    /* CÓ thư mục, không phải `null`.
+       Nửa thanh công cụ của AI Code — bộ chọn chế độ quyền, nút bỏ thư mục,
+       dải lệnh dự án — chỉ dựng khi `coThuMuc`. Để `null` thì mọi chốt nhắm
+       vào chúng bỏ qua IM LẶNG mà harness vẫn báo xanh, đúng chuyện đã xảy ra
+       09/09/2026: chốt cửa cảnh báo "Bỏ qua tất cả" viết xong, chạy xanh, mà
+       chưa từng chạy một lần nào. */
+    getWorkspace: { path: '/tmp/du-an-do-bo-cuc', name: 'du-an-do-bo-cuc' },
   };
   const nhomGia = new Proxy({}, {
-    get: (_t, ten) => async () => (ten in RA ? RA[ten] : undefined),
+    // Giá trị là HÀM ⇒ gọi nó (mỗi lần một kết quả). Ngược lại trả hằng.
+    get: (_t, ten) => async (...tv) => {
+      if (!(ten in RA)) return undefined;
+      const v = RA[ten];
+      return typeof v === 'function' ? v(...tv) : v;
+    },
   });
   window.cuongthai = new Proxy({ on: () => () => {} }, {
     get: (t, nhom) => (nhom === 'on' ? t.on : nhomGia),
@@ -662,6 +680,89 @@ const CHUAN_BI = {
       await p.click('.ct-tab-them', { timeout: 1500 }).catch(() => {});
       await p.waitForTimeout(120);
     }
+
+    /* Cửa cảnh báo của chế độ "Bỏ qua tất cả" PHẢI hiện ra và PHẢI nằm trong
+       khung nhìn. Nó là thứ duy nhất đứng giữa model và `rm -rf` — một lớp phủ
+       dựng ra nhưng tụt khỏi màn hình ở đây nghĩa là người dùng bấm một mục
+       menu rồi thấy KHÔNG GÌ XẢY RA, và tệ hơn: nếu có ngày ai đổi thứ tự
+       thành "đổi chế độ trước, hỏi sau" thì chế độ đã bật mà cảnh báo vô hình.
+       Ảnh chụp trang lúc TĨNH không thấy được — cửa này chỉ tồn tại sau HAI cú
+       bấm. Xem [[feedback_quy_tac_css_chan_dau_cho_moi_con]]. */
+    /* ─── Cửa cảnh báo của chế độ "Bỏ qua tất cả" ───
+       Nó là thứ duy nhất đứng giữa model và `rm -rf`, và nó chỉ tồn tại sau
+       HAI cú bấm — ảnh chụp trang lúc tĩnh không thấy được.
+
+       BẮT BUỘC, không `if (tìm thấy thì kiểm)`. Bản đầu viết `if (nutQuyen)`,
+       tôi làm cửa cảnh báo VÔ HÌNH rồi chạy lại, và harness vẫn xanh: nút
+       không có (mock để `getWorkspace.path = null`) nên chốt tự tắt. Một chốt
+       tự tắt khi không tìm thấy thứ nó gác thì không gác gì cả.
+       Xem [[feedback_phep_kiem_dat_vi_ly_do_sai]]. */
+    /* `:visible` — với 6 tab thì có 6 nút trong DOM, và `p.$()` trả về cái ĐẦU
+       TIÊN, tức nút của một tab đang bị ẩn. Bấm nó thì không có menu nào mở ra
+       và chốt đỏ với lý do sai hoàn toàn. */
+    const nutQuyen = p.locator('[data-nut="chedoquyen"]:visible').first();
+    if (await nutQuyen.count() === 0) {
+      throw new Error('Không thấy nút chọn chế độ quyền ([data-nut="chedoquyen"]) đang HIỆN ở /chat.');
+    }
+    await nutQuyen.click({ timeout: 3000 }).catch(() => {});
+    await p.waitForTimeout(250);
+    /* ĐÚNG MỘT menu. Với 6 tab mở, khoá `useMoRieng` dùng chung từng cho ra
+       SÁU menu chồng nhau, và cú bấm rơi vào menu của tab khác — tab đó đổi
+       quyền còn tab đang xem thì không. Chốt này canh đúng chuyện đó. */
+    const soMenu = await p.evaluate(() => document.querySelectorAll('.ct-chedo-menu').length);
+    if (soMenu !== 1) {
+      throw new Error(`Mở bộ chọn chế độ quyền ra ${soMenu} menu (phải đúng 1). `
+        + 'Khoá `useMoRieng` có kèm `cuocId` không?');
+    }
+
+    /* Bấm bằng DOM chứ không `p.click`: `p.click` cuộn phần tử vào tầm nhìn
+       trước, mà menu này đóng theo BẤT KỲ sự kiện `scroll` nào (listener
+       capture trên window) — nên nó tự đóng rồi Playwright chờ một phần tử đã
+       biến mất. Đó là hệ quả của cách ĐO, không phải lỗi của trang. Nên kiểm
+       "bấm tới được" bằng `elementFromPoint` riêng, rồi mới kích hoạt. */
+    const bam = await p.evaluate(() => {
+      const muc = document.querySelector('.ct-chedo-muc[data-bac="4"]');
+      if (!muc) return { loi: `menu mở nhưng không có mục bậc 4 (có ${document.querySelectorAll('.ct-chedo-muc').length} mục)` };
+      const r = muc.getBoundingClientRect();
+      if (r.width < 40 || r.top < 0 || r.bottom > window.innerHeight) {
+        return { loi: `mục "Bỏ qua tất cả" nằm ngoài khung nhìn: ${JSON.stringify({ t: Math.round(r.top), b: Math.round(r.bottom), vh: window.innerHeight })}` };
+      }
+      // Điểm giữa mục phải THUỘC VỀ chính mục đó — không bị thẻ khác phủ lên.
+      const tren = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      if (!muc.contains(tren)) return { loi: `có thứ khác che mục: ${tren?.tagName}.${tren?.className}` };
+      muc.click();
+      return { loi: null };
+    });
+    if (bam.loi) throw new Error(`Chế độ "Bỏ qua tất cả": ${bam.loi}`);
+    await p.waitForTimeout(300);
+
+    const cb = await p.evaluate(() => {
+      const e = document.querySelector('.ct-chedo-canhbao');
+      if (!e) return { co: false };
+      const r = e.getBoundingClientRect();
+      const nut = e.querySelector('.ct-btn-nguy');
+      return {
+        co: true,
+        rong: Math.round(r.width),
+        tren: Math.round(r.top),
+        duoi: Math.round(r.bottom),
+        hien: getComputedStyle(e).visibility,
+        coNutDongY: !!nut,
+        // Nút đồng ý phải THẤY được, không chỉ tồn tại: thẻ có `overflow-y`
+        // nên nội dung dài đẩy nó ra ngoài là chuyện có thật.
+        nutTrongThe: nut ? nut.getBoundingClientRect().bottom <= r.bottom + 1 : false,
+      };
+    });
+    if (!cb.co || cb.hien !== 'visible' || cb.rong < 200
+        || cb.tren < 0 || cb.duoi > innerHeightGia || !cb.coNutDongY || !cb.nutTrongThe) {
+      throw new Error(
+        `Cửa cảnh báo "Bỏ qua tất cả" không dùng được: ${JSON.stringify(cb)}. `
+        + 'Đây là chốt duy nhất trước khi agent được chạy lệnh nguy hiểm.',
+      );
+    }
+    // Huỷ — KHÔNG để chế độ đó bật trong ảnh chụp của các bước sau.
+    await p.keyboard.press('Escape').catch(() => {});
+    await p.waitForTimeout(200);
   },
   '/notes': async (p) => {
     // Gập cột Sổ tay rồi mở lại — nút này phải có mặt và phải đổi được trạng

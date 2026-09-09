@@ -101,7 +101,7 @@ export async function toolNotesTao(
     { ten: 'notes_tao', duongDan: `tạo ghi chú "${tieuDe}"`, khoa: `note:tao:${subjectId}:${tieuDe}`, choNho: false },
     (y) => b.xinPhepNote({ ...y, viec: 'tao', chiTiet }),
     b.signal,
-    b.so.quyenDaCap,
+    b.so,
   );
   if (quyet === 'tuChoi') return { noiDung: 'NGƯỜI DÙNG TỪ CHỐI tạo ghi chú.', tomTat: 'bị từ chối' };
 
@@ -179,7 +179,7 @@ export async function toolNotesGhi(
     },
     (y) => b.xinPhepNote({ ...y, viec: 'ghi', chiTiet }),
     b.signal,
-    b.so.quyenDaCap,
+    b.so,
   );
   if (quyet === 'tuChoi') return { noiDung: 'NGƯỜI DÙNG TỪ CHỐI ghi vào ghi chú.', tomTat: 'bị từ chối' };
 

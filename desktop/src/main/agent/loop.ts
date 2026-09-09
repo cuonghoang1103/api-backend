@@ -303,6 +303,11 @@ export function datGocChoCuoc(id: string, goc: string | null): void {
   c.choSua = false;
   c.choChayLenh = false;
   c.choGhiNote = false;
+  /* Đổi dự án ⇒ HẠ luôn bỏ-qua-hết. Người dùng bật nó cho MỘT thư mục họ tin
+     tưởng; để nó theo sang thư mục vừa mở là cho agent toàn quyền trên một
+     nơi chưa ai đồng ý gì cả. */
+  c.cheDoQuyen = 'keHoach';
+  c.so.boQuaHet = false;
   xoaHoiThoai(id);
 }
 
@@ -336,21 +341,32 @@ export function datCheDoQuyen(id: string, cheDo: CheDoQuyen): void {
   const moQuyen = cheDo !== 'keHoach';
   c.choSua = moQuyen;
   c.choChayLenh = moQuyen;
+  /* Cờ bỏ-qua-hết sống trên SỔ, để mọi thẻ duyệt thấy nó mà không cần bên gọi
+     nhớ truyền — xem `so.ts`. Ghi ở ĐÂY, cùng chỗ duy nhất đặt hai cờ trên,
+     nên không thể có lúc chúng nói ngược nhau. */
+  c.so.boQuaHet = cheDo === 'boQuaHet';
 }
 
 /** Chế độ có cho tự duyệt việc SỬA FILE không. */
 export function tuDuyetSua(cheDo: CheDoQuyen): boolean {
-  return cheDo === 'tuSua' || cheDo === 'tuSuaVaLenh';
+  return cheDo === 'tuSua' || cheDo === 'tuSuaVaLenh' || cheDo === 'boQuaHet';
 }
 
 /**
  * Chế độ có cho tự duyệt lệnh MỨC NÀY không.
  *
- * Chỉ `tuSuaVaLenh`, và chỉ với lệnh xếp loại `thuong`. Lệnh `cankiem` /
- * `nguyhiem` LUÔN hỏi, bất kể chế độ — đó là ranh giới không có chế độ nào
- * vượt qua được, vì `rm -rf` và `cat .env` nằm đúng bên kia nó.
+ * `tuSuaVaLenh` chỉ tự duyệt lệnh xếp loại `thuong`; `cankiem`/`nguyhiem` vẫn
+ * hỏi. Đó là ranh giới đúng cho việc dùng hằng ngày, vì `rm -rf` và
+ * `cat .env` nằm đúng bên kia nó.
+ *
+ * ⚠️⚠️ `boQuaHet` VƯỢT QUA CẢ RANH GIỚI ĐÓ — nó là chế độ duy nhất trả `true`
+ * cho `nguyhiem`. Người dùng bật nó qua một cửa xác nhận nói thẳng điều này
+ * (`ChonCheDo.tsx`). ĐỪNG thêm chế độ thứ hai vào nhánh này: chỗ nào cần
+ * "hơi mở thêm một chút" thì thêm một MỨC lệnh mới ở `phanLoaiLenh`, đừng
+ * nới cái cửa đã mở hết cỡ.
  */
 export function tuDuyetLenh(cheDo: CheDoQuyen, muc: 'thuong' | 'cankiem' | 'nguyhiem'): boolean {
+  if (cheDo === 'boQuaHet') return true;
   return cheDo === 'tuSuaVaLenh' && muc === 'thuong';
 }
 
@@ -391,7 +407,10 @@ export function napPhien(
   // nên tắt nó ở đây chỉ là bắt người dùng bật lại một thứ không hề đổi.
   // Mở việc cũ ⇒ về chế độ AN TOÀN NHẤT. Quyền đã cấp hôm qua không được
   // tự sống lại hôm nay — mở lại là một lần ngồi xuống mới.
-  if (goc !== undefined) { c.goc = goc; c.daChonGoc = true; c.cheDoQuyen = 'keHoach'; c.choSua = false; c.choChayLenh = false; }
+  if (goc !== undefined) {
+    c.goc = goc; c.daChonGoc = true; c.cheDoQuyen = 'keHoach';
+    c.choSua = false; c.choChayLenh = false; c.so.boQuaHet = false;
+  }
   // Quyền đã cấp và nhật ký hoàn tác KHÔNG khôi phục theo. Hoàn tác một thay
   // đổi từ hôm qua là ghi đè lên thứ người dùng có thể đã sửa tiếp bằng tay; và
   // quyền "cho phép cả file này" cấp cho phiên trước thì hết hiệu lực cùng
@@ -1039,7 +1058,7 @@ async function chayToolMcpCoDuyet(
     // truyền `choNho: false`, nên `hoiNguoiDung` không bao giờ chạm vào sổ —
     // `undefined` đi qua mà không ai dereference. Nó chỉ nổ khi có người sau
     // này cho MCP nhớ quyền.
-    c.so.quyenDaCap,
+    c.so,
   );
   if (quyet === 'tuChoi') {
     return {

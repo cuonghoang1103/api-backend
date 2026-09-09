@@ -17,6 +17,20 @@ export interface SoCuoc {
   /** Khoá đã được "cho phép cả …" trong cuộc này. Không bao giờ ghi xuống đĩa. */
   quyenDaCap: Set<string>;
   /**
+   * Chế độ `boQuaHet` đang bật cho cuộc này ⇒ `hoiNguoiDung` cho phép NGAY,
+   * mọi thẻ duyệt, kể cả lệnh `nguyhiem`.
+   *
+   * ⚠️ Cờ này sống trên SỔ chứ không phải tham số của từng tool, và đó là chủ
+   * ý: trước đây `tuDuyet` do BÊN GỌI tự tính, nên sáu chỗ hỏi phép
+   * (`chay_lenh_nen`, `git_commit`, `tao_pr`, `web_bam`/`web_go`, `web_tai`,
+   * `web_tai_nhieu`) quên truyền và vẫn hỏi — trong khi chú thích của
+   * `hoiNguoiDung` khẳng định "cửa tự duyệt CHỈ MỘT và nằm ở đây". Đưa lên sổ
+   * thì tool mới không thể quên, vì nó vốn đã phải truyền sổ vào rồi.
+   *
+   * KHÔNG ghi xuống đĩa, và mở thư mục mới là tụt về `keHoach`.
+   */
+  boQuaHet: boolean;
+  /**
    * Thư mục người dùng đã chọn cho `web_tai` ghi vào, của RIÊNG cuộc này.
    *
    * ⚠️ Đây là ranh giới cho phép của việc tải file, và nó phải là một lựa chọn
@@ -54,7 +68,7 @@ export interface SoCuoc {
 }
 
 export function taoSoCuoc(): SoCuoc {
-  return { nhatKyHoanTac: new Map(), quyenDaCap: new Set(), thuMucTai: null, luot: 1, buocGhi: [] };
+  return { nhatKyHoanTac: new Map(), quyenDaCap: new Set(), boQuaHet: false, thuMucTai: null, luot: 1, buocGhi: [] };
 }
 
 /**

@@ -3405,15 +3405,34 @@ select {
   display: flex; align-items: center; gap: 4px;
   padding-bottom: 6px;
 }
-.ct-khungweb-url {
+/* Ô ĐỊA CHỈ — gõ được, không phải nhãn chết.
+   `min-width: 0` trên CẢ bọc lẫn input: input có `size` mặc định 20 ký tự, và
+   trong flex thì `min-width:auto` lấy đúng cái đó làm sàn ⇒ khung web hẹp là
+   thanh này đẩy nút Nạp lại/Đóng tràn ra ngoài thay vì tự co. */
+.ct-khungweb-dc {
   flex: 1; min-width: 0;
+  display: flex; align-items: center; gap: 6px;
   padding: 3px 8px;
+  border: 1px solid transparent;
   border-radius: 6px;
   background: var(--ct-surface-2);
-  font-size: 11px; color: var(--ct-text-faint);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  color: var(--ct-text-faint);
 }
+.ct-khungweb-dc:focus-within {
+  border-color: color-mix(in srgb, var(--ct-accent) 55%, transparent);
+  background: var(--ct-bg);
+}
+.ct-khungweb-dc > svg { flex-shrink: 0; }
+.ct-khungweb-dc input {
+  flex: 1; min-width: 0;
+  border: none; outline: none; background: none;
+  color: var(--ct-text);
+  font-size: 11px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  text-overflow: ellipsis;
+}
+.ct-khungweb-dau button:disabled { opacity: 0.35; cursor: default; }
+.ct-khungweb-dau button:disabled:hover { background: none; color: var(--ct-text-faint); }
 .ct-khungweb-dau button {
   display: inline-flex; align-items: center; justify-content: center;
   width: 24px; height: 24px; flex-shrink: 0;
@@ -3716,6 +3735,23 @@ select {
   gap: 10px;
 }
 
+/* ⚠️⚠️ CON CỦA BẢNG GHI KHÔNG ĐƯỢC CO.
+ *
+ * `.ct-agent-scroll` là cột flex, mà con flex mặc định `flex-shrink: 1`. Khi
+ * nội dung dài hơn khung, trình duyệt BÓP các con lại thay vì cho cuộn — và
+ * con nào có `overflow` khác `visible` (`.ct-lenh-ra`, `.ct-ma`) thì co được
+ * xuống tận 0, nội dung bị CẮT CỤT và dòng dưới trông như đè lên nó.
+ *
+ * Đo thật 10/09/2026 trên đúng ca người dùng gặp: khối đầu ra lệnh cao 28px
+ * trong khi nội dung cần 39px. Sau khi đặt `flex-shrink: 0`: 41px, hết cắt.
+ *
+ * Dùng `> *` ở đây là ĐÚNG, khác hẳn ca `.ct-music > *` từng gây hoạ (xem
+ * [[feedback_quy_tac_css_chan_dau_cho_moi_con]]): ở đó quy tắc đặt `position`
+ * và đè mất `fixed` của một lớp phủ thêm sau. Còn "tin nhắn trong bảng ghi
+ * không bao giờ được bóp" đúng với MỌI con, kể cả con thêm về sau — nên nó là
+ * luật của container, không phải nợ kỹ thuật. */
+.ct-agent-scroll > * { flex-shrink: 0; }
+
 .ct-agent-nguoi {
   align-self: flex-end;
   max-width: 78%;
@@ -3857,7 +3893,7 @@ select {
 
 /* Bước thứ mấy / tổng bao nhiêu, hiện cạnh con quay. Sắp chạm trần thì đổi
    màu — người dùng biết TRƯỚC khi bị dừng, thay vì đọc một câu từ chối. */
-.ct-agent-nghi-buoc {
+.ct-danglam-buoc {
   padding: 1px 7px;
   border-radius: 999px;
   background: var(--ct-hover);
@@ -3865,18 +3901,84 @@ select {
   font-variant-numeric: tabular-nums;
   color: var(--ct-text-faint);
 }
-.ct-agent-nghi-buoc[data-sap-het='true'] {
+.ct-danglam-buoc[data-sap-het='true'] {
   background: color-mix(in srgb, var(--ct-warn) 18%, transparent);
   color: var(--ct-warn);
 }
 
-.ct-agent-nghi {
+/* ── THANH "ODIN ĐANG…" ──
+   Ghim NGAY TRÊN ô soạn, ngoài vùng cuộn. Xem `ThanhDangLam.tsx` cho lý do:
+   dòng chờ cũ nằm trong vùng cuộn và bám cờ `dangNghi`, nên nó tắt sau mỗi
+   tool và biến mất khi cuộn lên — đúng hai lúc người dùng cần nó nhất.
+
+   `flex-shrink: 0` KHÔNG thừa: cha là cột flex, và con của cột flex mặc định
+   co được — cùng cái bẫy đã cắt cụt `.ct-lenh-ra` hôm nay. */
+.ct-danglam {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: var(--ct-text-muted);
+  /* ⚠️ PHẢI `wrap`. `.ct-danglam-phu` dựa vào `flex-basis: 100%` để xuống hàng
+     riêng, mà trong hàng `nowrap` thì flex-basis chỉ là kích thước ĐỀ NGHỊ:
+     câu trấn an nằm lì bên phải số giây và `margin-left: auto` của số giây
+     tính ra 0. Đo thật trước khi thêm dòng này: phu ở x=247 CÙNG hàng với
+     chữ chính, không phải hàng dưới. */
+  flex-wrap: wrap;
+  gap: 3px 9px;
+  flex-shrink: 0;
+  margin-top: 8px;
+  padding: 7px 11px;
+  border: 1px solid color-mix(in srgb, var(--ct-accent) 26%, var(--ct-border));
+  border-radius: 10px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--ct-accent) 11%, transparent),
+    color-mix(in srgb, var(--ct-accent) 3%, transparent) 55%,
+    transparent
+  );
+  color: var(--ct-text);
   font-size: 12.5px;
-  padding: 2px 0;
+  line-height: 1.35;
+}
+
+/* Con quay nhận màu nhấn: đây là dấu hiệu "còn sống" của cả màn hình, để nó
+   xám như chữ phụ là vứt đi đúng thứ mắt cần bắt được. */
+.ct-danglam > svg { color: var(--ct-accent); flex-shrink: 0; }
+
+/* Câu chính đậm hơn chữ thường một nấc. Nó phải đọc được bằng cách LIẾC, vì
+   người dùng chỉ nhìn nó để xác nhận app còn chạy rồi quay lại việc khác. */
+.ct-danglam-chu { font-weight: 550; }
+
+/* Nhịp thở CHỈ trên câu chính. Cho cả thanh thở thì số giây cũng mờ theo và
+   nó trông như sắp tắt, ngược hẳn ý nghĩa cần truyền. */
+.ct-danglam[data-kieu='lam'] .ct-danglam-chu {
+  animation: ct-tho 1.8s ease-in-out infinite;
+}
+
+.ct-danglam-giay {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  font-size: 11.5px;
+  color: var(--ct-text-faint);
+}
+
+/* Câu trấn an dài — đẩy xuống hàng riêng khi khung hẹp thay vì cắt cụt. */
+.ct-danglam-phu {
+  flex-basis: 100%;
+  order: 9;
+  font-size: 11.5px;
+  color: var(--ct-text-faint);
+}
+
+/* ĐANG CHỜ NGƯỜI DÙNG: đổi hẳn sang màu cảnh báo và KHÔNG quay. Giữ nguyên
+   vẻ "đang chạy" ở đây là bảo người ta ngồi đợi một thứ đang đợi chính họ. */
+.ct-danglam[data-kieu='cho'] {
+  border-color: color-mix(in srgb, var(--ct-warn) 40%, var(--ct-border));
+  background: color-mix(in srgb, var(--ct-warn) 10%, transparent);
+}
+.ct-danglam[data-kieu='cho'] > svg { color: var(--ct-warn); }
+
+@keyframes ct-tho {
+  0%, 100% { opacity: 0.58; }
+  50% { opacity: 1; }
 }
 
 .ct-agent-trong {
@@ -4689,8 +4791,8 @@ html[data-ct-theme='light'] .ct-diff .hljs-property { color: #0a4fa8; }
 html[data-ct-theme='light'] .ct-lenh-chu { color: #0184bc; }
 
 /* Lệnh ĐÃ CHẠY thu về một dòng — vẫn phải khác màu văn xuôi. */
-.ct-agent-tool > code { color: #56b6c2; }
-html[data-ct-theme='light'] .ct-agent-tool > code { color: #0184bc; }
+.ct-agent-tool .ct-agent-tool-dong > code { color: #56b6c2; }
+html[data-ct-theme='light'] .ct-agent-tool .ct-agent-tool-dong > code { color: #0184bc; }
 
 /* ── Chữ ĐẬM phải NỔI HẲN ──
    Bản trước `strong` chỉ đậm hơn một chút, cùng màu chữ thường, nên "phân
@@ -4779,14 +4881,14 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-agent-tool:hover { background: var(--ct-hover); }
 
 /* Máng icon: rộng cố định ⇒ tên tool luôn bắt đầu ở cùng một cột. */
-.ct-agent-tool > svg {
+.ct-agent-tool .ct-agent-tool-dong > svg:not(.ct-agent-tool-mui) {
   flex: 0 0 14px;
   color: var(--ct-text-faint);
 }
 
-.ct-agent-tool[data-vong='notes'] > svg { color: var(--ct-accent); }
-.ct-agent-tool[data-xong='dongY'] > svg { color: var(--ct-ok); }
-.ct-agent-tool[data-xong='tuChoi'] > svg { color: var(--ct-err); }
+.ct-agent-tool[data-vong='notes'] .ct-agent-tool-dong > svg:not(.ct-agent-tool-mui) { color: var(--ct-accent); }
+.ct-agent-tool[data-xong='dongY'] .ct-agent-tool-dong > svg:not(.ct-agent-tool-mui) { color: var(--ct-ok); }
+.ct-agent-tool[data-xong='tuChoi'] .ct-agent-tool-dong > svg:not(.ct-agent-tool-mui) { color: var(--ct-err); }
 
 /* Tên tool: chữ đơn sắc, KHÔNG nền. Nền biến nó thành cái nút — mắt tưởng bấm
    được và cứ dừng lại ở đó. */
@@ -4834,22 +4936,6 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   padding-bottom: 12px;
 }
 
-/* ── Con quay: có nhịp thở, không đứng chết ──
-   Người dùng nhìn nó suốt ~10 giây im lặng đầu mỗi lượt. Một dòng chữ tĩnh
-   trong 10 giây trông y hệt một app treo. */
-.ct-agent-nghi {
-  gap: 9px;
-  padding: 6px 8px;
-  font-size: 12.5px;
-  color: var(--ct-text-muted);
-}
-
-.ct-agent-nghi span { animation: ct-tho 1.8s ease-in-out infinite; }
-
-@keyframes ct-tho {
-  0%, 100% { opacity: 0.55; }
-  50% { opacity: 1; }
-}
 
 /* ── Chữ ──
    Bộ font hệ thống, nhưng khai báo RÕ thay vì để trình duyệt tự chọn: mặc định
@@ -9037,29 +9123,34 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   --ct-tool-git: #fb7185;
 }
 
-.ct-agent-tool[data-ten='list_dir'] > svg,
-.ct-agent-tool[data-ten='glob'] > svg,
-.ct-agent-tool[data-ten='grep'] > svg,
-.ct-agent-tool[data-ten='read_file'] > svg { color: var(--ct-tool-doc); }
+/* ⚠️ Đường chọn phải đi QUA `.ct-agent-tool-dong`.
+   Bản 0.5.95 biến `.ct-agent-tool` thành khối DỌC và đưa icon + tên vào một
+   hàng con — làm 18 luật `> svg` và 3 luật `> code` ở tệp này ngừng khớp cùng
+   lúc. Hậu quả: icon mất màu theo loại tool, tên tool mất màu và mất canh cột.
+   Không lỗi nào báo, chỉ là bảng ghi trông "xấu" — đúng chữ người dùng dùng. */
+.ct-agent-tool[data-ten='list_dir'] .ct-agent-tool-dong > svg:not(.ct-agent-tool-mui),
+.ct-agent-tool[data-ten='glob'] .ct-agent-tool-dong > svg:not(.ct-agent-tool-mui),
+.ct-agent-tool[data-ten='grep'] .ct-agent-tool-dong > svg:not(.ct-agent-tool-mui),
+.ct-agent-tool[data-ten='read_file'] .ct-agent-tool-dong > svg:not(.ct-agent-tool-mui) { color: var(--ct-tool-doc); }
 
-.ct-agent-tool[data-ten='edit_file'] > svg,
-.ct-agent-tool[data-ten='create_file'] > svg { color: var(--ct-tool-ghi); }
+.ct-agent-tool[data-ten='edit_file'] .ct-agent-tool-dong > svg:not(.ct-agent-tool-mui),
+.ct-agent-tool[data-ten='create_file'] .ct-agent-tool-dong > svg:not(.ct-agent-tool-mui) { color: var(--ct-tool-ghi); }
 
-.ct-agent-tool[data-ten='run_command'] > svg,
-.ct-agent-tool[data-ten='chay_lenh_nen'] > svg,
-.ct-agent-tool[data-ten='doc_dau_ra_nen'] > svg,
-.ct-agent-tool[data-ten='dung_lenh_nen'] > svg { color: var(--ct-tool-chay); }
+.ct-agent-tool[data-ten='run_command'] .ct-agent-tool-dong > svg:not(.ct-agent-tool-mui),
+.ct-agent-tool[data-ten='chay_lenh_nen'] .ct-agent-tool-dong > svg:not(.ct-agent-tool-mui),
+.ct-agent-tool[data-ten='doc_dau_ra_nen'] .ct-agent-tool-dong > svg:not(.ct-agent-tool-mui),
+.ct-agent-tool[data-ten='dung_lenh_nen'] .ct-agent-tool-dong > svg:not(.ct-agent-tool-mui) { color: var(--ct-tool-chay); }
 
-.ct-agent-tool[data-ten^='web_'] > svg,
-.ct-agent-tool[data-ten='doc_web'] > svg { color: var(--ct-tool-web); }
+.ct-agent-tool[data-ten^='web_'] .ct-agent-tool-dong > svg:not(.ct-agent-tool-mui),
+.ct-agent-tool[data-ten='doc_web'] .ct-agent-tool-dong > svg:not(.ct-agent-tool-mui) { color: var(--ct-tool-web); }
 
-.ct-agent-tool[data-ten^='git_'] > svg,
-.ct-agent-tool[data-ten='tao_pr'] > svg { color: var(--ct-tool-git); }
+.ct-agent-tool[data-ten^='git_'] .ct-agent-tool-dong > svg:not(.ct-agent-tool-mui),
+.ct-agent-tool[data-ten='tao_pr'] .ct-agent-tool-dong > svg:not(.ct-agent-tool-mui) { color: var(--ct-tool-git); }
 
 /* Tên tool: bề rộng tối thiểu để mọi TÓM TẮT bắt đầu ở cùng một cột. Đây là
    thứ biến một chuỗi dòng lộn xộn thành một bảng đọc lướt được. Không đặt
    `max-width` — tên dài hơn thì cứ đẩy cột ra, thà lệch còn hơn cắt tên. */
-.ct-agent-tool > code {
+.ct-agent-tool .ct-agent-tool-dong > code {
   min-width: 13ch;   /* `web_lien_ket` đúng 12 ký tự — 12ch là vừa khít, hụt một nhịp */
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }

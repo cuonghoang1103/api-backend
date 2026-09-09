@@ -19,14 +19,31 @@
  * đóng khung mà quên gọi `an()` thì nó ở lại lơ lửng trên mọi màn hình khác.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ExternalLink, RotateCw, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ExternalLink, Globe, Loader2, RotateCw, X } from 'lucide-react';
 
 import type { BrowserTrangThai } from '../../../shared/ipc';
 
-export function KhungWeb({ url, onDong }: { url: string; onDong: () => void }) {
+export function KhungWeb({
+  url,
+  onDong,
+  ep = true,
+}: {
+  url: string;
+  onDong: () => void;
+  /**
+   * `url` là MỆNH LỆNH hay chỉ là MẶC ĐỊNH.
+   *
+   * Agent gọi `web_mo` ⇒ `true`: nó vừa nói rõ muốn mở trang nào.
+   * Người dùng bấm nút mở khung ⇒ `false`: họ chỉ muốn THẤY trình duyệt, và
+   * ép nạp lúc đó là cuốn phăng trang họ đang đăng nhập dở ở tab Trình duyệt
+   * — cùng một `WebContentsView` dùng chung cho cả hai chỗ.
+   */
+  ep?: boolean;
+}) {
   const oRef = useRef<HTMLDivElement>(null);
   const daMoRef = useRef(false);
   const [tt, datTt] = useState<BrowserTrangThai | null>(null);
+  const [oNhap, datONhap] = useState(url);
 
   const doVaBao = useCallback((moLuon: boolean) => {
     const el = oRef.current;
@@ -39,11 +56,11 @@ export function KhungWeb({ url, onDong }: { url: string; onDong: () => void }) {
     const vung = { x: r.left, y: r.top, width: r.width, height: r.height };
     if (moLuon && !daMoRef.current) {
       daMoRef.current = true;
-      void cau.browser.mo(vung, url);
+      void cau.browser.mo(vung, url, ep);
     } else {
       void cau.browser.datVung(vung);
     }
-  }, [url]);
+  }, [url, ep]);
 
   useEffect(() => {
     // Đợi một khung hình để bố cục xong rồi mới đo — đo ngay trong effect thì
@@ -53,9 +70,10 @@ export function KhungWeb({ url, onDong }: { url: string; onDong: () => void }) {
   }, [doVaBao]);
 
   // Trang đã mở rồi mà agent gọi `web_mo` với URL khác ⇒ điều hướng.
+  // `ep: false` (người dùng tự mở khung) thì KHÔNG — xem chú thích của `ep`.
   useEffect(() => {
-    if (daMoRef.current && url) void window.cuongthai?.browser.diToi(url);
-  }, [url]);
+    if (ep && daMoRef.current && url) void window.cuongthai?.browser.diToi(url);
+  }, [url, ep]);
 
   useEffect(() => () => { void window.cuongthai?.browser.an(); }, []);
 
@@ -72,14 +90,62 @@ export function KhungWeb({ url, onDong }: { url: string; onDong: () => void }) {
   useEffect(() => {
     const cau = window.cuongthai;
     if (!cau) return;
-    return cau.on('browser:trangThai', (p) => datTt(p as BrowserTrangThai));
+    return cau.on('browser:trangThai', (p) => {
+      const t = p as BrowserTrangThai;
+      datTt(t);
+      // Chỉ đồng bộ ô địa chỉ khi người dùng KHÔNG đang gõ dở — đè lên chữ họ
+      // đang nhập là kiểu khó chịu điển hình của thanh địa chỉ làm ẩu.
+      if (t.url && document.activeElement !== document.getElementById('ct-khungweb-o-dc')) {
+        datONhap(t.url);
+      }
+    });
   }, []);
+
+  const di = (): void => {
+    const u = oNhap.trim();
+    if (!u) return;
+    void window.cuongthai?.browser.diToi(u).then((r) => {
+      if (!r.ok && r.loi) datTt((cu) => ({ ...(cu ?? khung0()), loi: r.loi! }));
+    });
+  };
 
   return (
     <div className="ct-khungweb">
+      {/* Thanh điều hướng THẬT, không phải một dòng chữ chết.
+          Trước bản này đầu khung chỉ in ra URL: mở được trang agent chọn, rồi
+          hết — muốn gõ địa chỉ khác phải sang tab Trình duyệt và mất luôn cột
+          AI Code, đúng cái bước thủ công mà khung này sinh ra để bỏ đi. */}
       <div className="ct-khungweb-dau">
-        <span className="ct-khungweb-url" title={tt?.url ?? url}>{tt?.url ?? url}</span>
-        <button type="button" onClick={() => void window.cuongthai?.browser.napLai()} title="Nạp lại">
+        <button
+          type="button" onClick={() => void window.cuongthai?.browser.lui()}
+          disabled={!tt?.luiDuoc} title="Lùi" aria-label="Lùi"
+        >
+          <ArrowLeft size={12} aria-hidden />
+        </button>
+        <button
+          type="button" onClick={() => void window.cuongthai?.browser.toi()}
+          disabled={!tt?.toiDuoc} title="Tới" aria-label="Tới"
+        >
+          <ArrowRight size={12} aria-hidden />
+        </button>
+        <div className="ct-khungweb-dc">
+          {tt?.dangTai
+            ? <Loader2 size={11} aria-hidden className="ct-spin" />
+            : <Globe size={11} aria-hidden />}
+          <input
+            id="ct-khungweb-o-dc"
+            value={oNhap}
+            spellCheck={false}
+            placeholder="localhost:3000 hoặc https://…"
+            title={tt?.url ?? url}
+            onChange={(e) => datONhap(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.nativeEvent.isComposing) return;
+              if (e.key === 'Enter') { e.preventDefault(); di(); }
+            }}
+          />
+        </div>
+        <button type="button" onClick={() => void window.cuongthai?.browser.napLai()} title="Nạp lại" aria-label="Nạp lại">
           <RotateCw size={12} aria-hidden />
         </button>
         <button type="button" onClick={() => void window.cuongthai?.browser.moNgoai()} title="Mở bằng trình duyệt máy">
@@ -95,4 +161,8 @@ export function KhungWeb({ url, onDong }: { url: string; onDong: () => void }) {
       {tt?.loi && <p className="ct-khungweb-loi">{tt.loi}</p>}
     </div>
   );
+}
+
+function khung0(): BrowserTrangThai {
+  return { url: '', tieuDe: '', dangTai: false, luiDuoc: false, toiDuoc: false, loi: null };
 }

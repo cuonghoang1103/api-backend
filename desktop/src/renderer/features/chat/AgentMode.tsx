@@ -25,11 +25,12 @@ import {
   Link2,
   BookOpen, Check, Circle, CircleDot, CircleStop, FileCode2, FilePen, FilePlus2, FolderOpen,
   FolderPlus, FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
-  ShieldCheck, Sparkles, SquareTerminal, Terminal, Trash2, Undo2, X, ChevronDown, Cpu, Globe, Zap, ListPlus,
+  ShieldCheck, Sparkles, SquareTerminal, Terminal, Trash2, Undo2, X, ChevronDown, Cpu, Globe, Zap, ListPlus, PanelRight,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useMoRieng } from '../../components/moRieng';
-import { DangNghi } from './DangNghi';
+import { ThanhDangLam } from './ThanhDangLam';
+import { viecDangLam, viecCuaTool } from './viecDangLam';
 import { BangLenh } from './BangLenh';
 import { KhungWeb } from './KhungWeb';
 import { GoiYLenh, LENH_AGENT } from './GoiYLenh';
@@ -217,9 +218,18 @@ export function AgentMode({
    * Nút chỉ hiện khi ĐANG Ở XA đáy. Hiện thường trực thì nó che chữ suốt cả
    * những lúc chẳng cần tới.
    */
-  /* Khung trình duyệt chia đôi. Mở khi agent gọi `web_mo` — main bắn
-     `agent:moWeb` vì nó không tự đặt được toạ độ (xem `KhungWeb`). */
-  const [webUrl, datWebUrl] = useState<string | null>(null);
+  /* Khung trình duyệt chia đôi. Hai đường mở:
+       • agent gọi `web_mo` → main bắn `agent:moWeb` (nó không tự đặt được
+         toạ độ — xem `KhungWeb`) ⇒ `ep: true`, URL là mệnh lệnh;
+       • người dùng bấm nút "Khung web" ⇒ `ep: false`, chỉ muốn NHÌN THẤY
+         trình duyệt, không muốn cuốn phăng trang đang mở.
+     Giữ `ep` trong cùng một state với `url` chứ không tách hai `useState`:
+     tách ra là hai lần đặt state cho một sự kiện, và React gộp không đồng bộ
+     thì có một khung hình khung mở với cờ `ep` của lần trước. */
+  const [web, datWeb] = useState<{ url: string; ep: boolean } | null>(null);
+  const webUrl = web?.url ?? null;
+  /** localhost:3000 — dev server hay dùng nhất, và chỉ là MẶC ĐỊNH (`ep:false`). */
+  const WEB_MAC_DINH = 'http://localhost:3000';
   /* Bảng chạy lệnh — mở/đóng bằng nút, KHÔNG tự mở. Nó chiếm chỗ dưới bảng
      ghi, và người dùng phần lớn thời gian không cần tới. */
   const [moBangLenh, datMoBangLenh] = useState(false);
@@ -228,7 +238,7 @@ export function AgentMode({
     if (!cau) return;
     return cau.on('agent:moWeb', (p) => {
       const u = (p as { url?: string })?.url;
-      if (typeof u === 'string' && u) datWebUrl(u);
+      if (typeof u === 'string' && u) datWeb({ url: u, ep: true });
     });
   }, []);
 
@@ -327,14 +337,10 @@ export function AgentMode({
     if (w) datThuMuc(w);
   };
 
-  /* Đếm giây trong lúc agent nghĩ. Không có nó thì dòng chờ đứng im, và một
-     dòng đứng im 50 giây không phân biệt được với app treo. */
-  const [nghiGiay, datNghiGiay] = useState(0);
-  useEffect(() => {
-    if (!trangThai.dangNghi) { datNghiGiay(0); return; }
-    const id = setInterval(() => datNghiGiay((c) => c + 1), 1000);
-    return () => clearInterval(id);
-  }, [trangThai.dangNghi]);
+  /* Odin đang làm gì, tính lại mỗi lần bảng ghi đổi. Suy từ bảng ghi chứ
+     không giữ cờ riêng: một cờ riêng là thứ thứ hai phải giữ cho khớp, và nó
+     sẽ lệch đúng vào lúc có sự kiện lạ (huỷ giữa chừng, thẻ duyệt hết giờ). */
+  const viecHienTai = viecDangLam(trangThai.muc, trangThai.dangNghi);
 
   const doiModel = async (m: ModelAgent): Promise<void> => {
     await window.cuongthai?.agent.datModel(m);
@@ -717,6 +723,25 @@ export function AgentMode({
           {thuMuc?.choTrinhDuyet ? 'Trình duyệt: BẬT' : 'Trình duyệt: tắt'}
         </button>
 
+        {/* MỞ KHUNG WEB ngay trong AI Code, không phải sang tab Trình duyệt.
+            Khác hẳn nút bên trái: nút kia cấp QUYỀN cho agent lái trình duyệt,
+            nút này chỉ mở khung cho NGƯỜI DÙNG nhìn — nên nó không bị khoá
+            lúc agent đang chạy, đó chính là lúc cần xem trang nhất.
+            `ep: false` ⇒ chỉ nạp `WEB_MAC_DINH` khi chưa có trang nào; trang
+            đang mở ở tab Trình duyệt được giữ nguyên. */}
+        <button
+          type="button"
+          className="ct-btn ct-btn-ghost"
+          data-bat={webUrl !== null}
+          onClick={() => datWeb((cu) => (cu ? null : { url: WEB_MAC_DINH, ep: false }))}
+          title={webUrl !== null
+            ? 'Đóng khung trình duyệt bên phải'
+            : 'Mở trình duyệt ngay cạnh bảng ghi — xem trang chạy trong lúc agent sửa mã'}
+        >
+          <PanelRight size={13} aria-hidden />
+          {webUrl !== null ? 'Khung web: MỞ' : 'Khung web'}
+        </button>
+
         {/* Bảng chạy lệnh của NGƯỜI DÙNG — khác hẳn `run_command` của agent:
             ở đây không có thẻ duyệt, vì chính người dùng vừa gõ lệnh. Hỏi lại
             thứ họ vừa tự gõ là màn kịch, và nó dạy người ta bấm bừa. */}
@@ -1049,16 +1074,9 @@ export function AgentMode({
           return <DongTool key={i} m={m} />;
         })}
 
-        {/* Con quay bật từ khung `batDau`, KHÔNG chờ tới chữ đầu tiên. */}
-        {trangThai.dangNghi && (
-          <DangNghi
-            giay={nghiGiay}
-            {...(trangThai.buoc ? { buoc: trangThai.buoc } : {})}
-            /* Agent có việc để nói ở chặng đầu: nó ĐANG ĐỌC mã, chứ không
-               chỉ ngồi nghĩ. Nói đúng việc thì người dùng chờ dễ hơn. */
-            chuRieng="Chờ tớ đọc qua đã nhé…"
-          />
-        )}
+        {/* Dòng chờ KHÔNG còn nằm ở đây. Nó thành thanh ghim trên ô soạn:
+            trong này thì cuộn lên đọc lại là mất, mà đó đúng là lúc người dùng
+            đang tìm bằng chứng app còn chạy. Xem `ThanhDangLam`. */}
       </div>
 
       {webUrl !== null && (
@@ -1073,7 +1091,7 @@ export function AgentMode({
             title="Kéo để đổi bề rộng · bấm đúp để về mặc định"
           />
           <div className="ct-khungweb-boc" style={{ width: rongWeb }}>
-            <KhungWeb url={webUrl} onDong={() => datWebUrl(null)} />
+            <KhungWeb url={webUrl} ep={web?.ep ?? true} onDong={() => datWeb(null)} />
           </div>
         </>
       )}
@@ -1189,6 +1207,18 @@ export function AgentMode({
             sẽ gửi lần lượt khi lượt hiện tại xong
           </span>
         </div>
+      )}
+
+      {/* ⚠️ KEO THEO `dangChay`, KHÔNG PHẢI `dangNghi`. `dangNghi` tắt ở gần
+          như mọi sự kiện (chu, toolBatDau, tool, cả năm loại xinPhep) và chỉ
+          bật lại ở `batDau` của vòng SAU — nên nó để lại một khoảng vài giây
+          sau MỖI tool mà màn hình đứng im hoàn toàn. `dangChay` bật từ `gui()`
+          và tắt ở `finally`, phủ trọn lượt, không kẽ hở. */}
+      {trangThai.dangChay && (
+        <ThanhDangLam
+          viec={viecHienTai}
+          {...(trangThai.buoc ? { buoc: trangThai.buoc } : {})}
+        />
       )}
 
       <div className="ct-agent-soan">
@@ -1817,43 +1847,6 @@ function NutMcp({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
  * nhau cho phép nhận ra nhịp làm việc (dò → tìm → đọc → sửa → chạy) chỉ bằng
  * liếc, đúng như Claude Code làm.
  */
-/**
- * Một câu NGẮN nói tool đang làm gì, hiện trong lúc nó chạy.
- *
- * Tên tool (`ghi_file`, `web_tai_nhieu`) là chữ dành cho model, không phải cho
- * người. Trong lúc chờ, người dùng cần biết "đang tạo file" chứ không phải
- * "đang chạy một thứ tên là ghi_file".
- *
- * Tool lạ (MCP của người dùng cắm vào) thì trả câu chung — thà chung chung
- * còn hơn im lặng.
- */
-function viecCuaTool(ten: string): string {
-  const bang: Record<string, string> = {
-    read_file: 'đang đọc file…',
-    list_dir: 'đang xem thư mục…',
-    grep: 'đang tìm trong mã…',
-    edit_file: 'đang sửa file…',
-    create_file: 'đang tạo file…',
-    sua_nhieu_cho: 'đang sửa nhiều chỗ…',
-    xoa_file: 'đang xoá file…',
-    doi_ten_file: 'đang đổi tên file…',
-    run_command: 'đang chạy lệnh…',
-    git_status: 'đang xem git…',
-    git_diff: 'đang xem thay đổi…',
-    web_mo: 'đang mở trang…',
-    web_doc: 'đang đọc trang…',
-    web_lien_ket: 'đang lấy danh sách liên kết…',
-    web_tai: 'đang tải file…',
-    web_tai_nhieu: 'đang tải cả lô file…',
-    web_anh: 'đang chụp màn hình trang…',
-    web_console: 'đang đọc lỗi trang…',
-    doc_web: 'đang đọc trang web…',
-    tim_web: 'đang tìm trên web…',
-    giao_viec_phu: 'agent phụ đang làm…',
-    cap_nhat_ke_hoach: 'đang cập nhật kế hoạch…',
-  };
-  return bang[ten] ?? (ten.startsWith('mcp__') ? 'đang gọi công cụ ngoài…' : 'đang chạy…');
-}
 
 /**
  * Một dòng tool đã xong — BẤM ĐỂ MỞ RA XEM ĐẦY ĐỦ.

@@ -292,6 +292,10 @@ export async function chayToolAgent(
         if (!ghi) return { noiDung: 'LỖI: phiên này không bật quyền sửa file.', tomTat: 'không có quyền' };
         return await toolSuaNhieuCho(goc, args, ghi);
       }
+      case 'sua_o_notebook': {
+        if (!ghi) return { noiDung: 'LỖI: phiên này không bật quyền sửa file.', tomTat: 'không có quyền' };
+        return await toolSuaONotebook(goc, args, ghi);
+      }
       case 'xoa_file': {
         if (!ghi) return { noiDung: 'LỖI: phiên này không bật quyền sửa file.', tomTat: 'không có quyền' };
         return await toolXoaFile(goc, args, ghi);
@@ -402,6 +406,30 @@ async function toolReadFile(goc: string, args: Record<string, unknown>): Promise
    * `docPdf` tự cắt ở 120k ký tự.
    */
   if (path.extname(dich).toLowerCase() === '.pdf') return await docFilePdf(dich, st.size, String(args.path ?? ''));
+
+  /*
+   * NOTEBOOK: dựng lại thành chữ, KHÔNG đổ nguyên JSON.
+   *
+   * `.ipynb` là JSON nên nhánh đọc-file-thường "chạy được" — và đó mới là bẫy:
+   * một notebook 30 ô thường là vài trăm KB, phần lớn là `outputs` chứa ảnh
+   * base64 và metadata. Model đọc hết đống đó để tìm 5 dòng Python. Xem
+   * `notebook.ts`.
+   */
+  if (path.extname(dich).toLowerCase() === '.ipynb') {
+    if (st.size > TRAN_BYTE_FILE * 4) {
+      return { noiDung: `LỖI: notebook nặng ${(st.size / 1048576).toFixed(1)}MB, quá lớn.`, tomTat: 'quá lớn' };
+    }
+    const { docNotebook } = await import('./notebook');
+    const r = docNotebook(await fs.readFile(dich, 'utf8'));
+    if (!r.ok) return { noiDung: `LỖI: đọc notebook hỏng — ${r.loi}.`, tomTat: 'notebook hỏng' };
+    return {
+      noiDung: `Notebook ${path.basename(dich)} — ${r.soO} ô.\n`
+        + 'Sửa bằng `sua_o_notebook` (theo CHỈ SỐ ô), đừng dùng `edit_file`: '
+        + '`source` là mảng chuỗi JSON đã thoát, khớp chuỗi thô sẽ phá cấu trúc file.\n\n'
+        + r.chu,
+      tomTat: `notebook ${r.soO} ô`,
+    };
+  }
 
   if (st.size > TRAN_BYTE_FILE) {
     return {
@@ -620,6 +648,60 @@ async function toolEditFile(goc: string, args: Record<string, unknown>, ghi: Boi
   return {
     noiDung: `Đã sửa ${tuongDoi}: +${diff.soThem} −${diff.soBo} dòng. Người dùng đã duyệt.`,
     tomTat: `+${diff.soThem} −${diff.soBo}${tuDong ? ' (tự duyệt)' : ''}`,
+  };
+}
+
+/**
+ * Sửa MỘT Ô của notebook `.ipynb`.
+ *
+ * ─── Vì sao không để `edit_file` làm ───
+ * `source` của Jupyter là MẢNG CHUỖI, mỗi phần tử một dòng còn nguyên `\n`, và
+ * cả file là JSON đã thoát. Khớp chuỗi thô lên đó thì hoặc không khớp (model
+ * gõ `print(x)` còn file ghi `"print(x)"` trong một mảng), hoặc khớp trúng rồi
+ * phá cấu trúc JSON — và notebook hỏng nghĩa là Jupyter không mở được nữa, mất
+ * cả kết quả đã chạy. Ở đây sửa theo CHỈ SỐ Ô và ghi lại bằng `JSON.stringify`,
+ * nên cấu trúc không thể vỡ.
+ *
+ * Đi qua ĐÚNG một cửa duyệt và ĐÚNG một sổ hoàn tác như mọi tool ghi khác
+ * (`ghiVaNhoDeHoanTac`). Tự ghi thẳng ở đây là một tool ghi file mà nút Hoàn
+ * tác không biết tới — xem chú thích ở `so.ts`.
+ */
+async function toolSuaONotebook(goc: string, args: Record<string, unknown>, ghi: BoiCanhGhi): Promise<KetQuaTool> {
+  const tuongDoi = String(args.path ?? '');
+  if (!tuongDoi) return { noiDung: 'LỖI: thiếu "path".', tomTat: 'thiếu đường dẫn' };
+  if (!tuongDoi.toLowerCase().endsWith('.ipynb')) {
+    return { noiDung: 'LỖI: tool này chỉ dùng cho file `.ipynb`.', tomTat: 'sai loại file' };
+  }
+
+  const viec = String(args.viec ?? 'thay');
+  if (viec !== 'thay' && viec !== 'chen' && viec !== 'xoa') {
+    return { noiDung: 'LỖI: "viec" phải là thay | chen | xoa.', tomTat: 'việc không hợp lệ' };
+  }
+  const chiSo = Number(args.o);
+  const dich = await moTrongNguc(goc, tuongDoi, { phaiCoThat: true });
+  const truoc = await fs.readFile(dich, 'utf8');
+
+  const { suaNotebook } = await import('./notebook');
+  const r = suaNotebook(
+    truoc, viec, chiSo,
+    typeof args.noi_dung === 'string' ? args.noi_dung : undefined,
+    typeof args.loai_o === 'string' ? args.loai_o : undefined,
+  );
+  if (!r.ok) return { noiDung: `LỖI: ${r.loi}`, tomTat: 'không sửa được' };
+
+  const diff = soSanhDong(truoc, r.json);
+  const quyet = await hoiNguoiDung(
+    { ten: 'sua_o_notebook', duongDan: `${tuongDoi} — ${r.moTa}`, tuDuyet: ghi.tuDuyet === true },
+    (y) => ghi.xinPhep({ ...y, diff, taoMoi: false }),
+    ghi.signal,
+    ghi.so,
+  );
+  if (quyet === 'tuChoi') return loiTuChoi(`${r.moTa} trong ${tuongDoi}`);
+
+  await ghiVaNhoDeHoanTac(ghi.so, dich, r.json, truoc);
+  return {
+    noiDung: `Đã ${r.moTa} trong ${tuongDoi}: +${diff.soThem} −${diff.soBo} dòng. Người dùng đã duyệt.`,
+    tomTat: r.moTa,
   };
 }
 

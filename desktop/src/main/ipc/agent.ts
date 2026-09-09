@@ -31,8 +31,9 @@ import {
   daChonGocCua, datGocNeuChuaCo, gocCuaCuoc, huyLuotCua, napPhien, quayLui, quyenCuaCuoc, soCuaCuoc,
   datCheDoQuyen, tachNhanhCuoc, taoCuoc,
   xoaHoiThoai, type SuKienAgent,
+  dsQuyenLauCua, xoaQuyenLauCua,
 } from '../agent/loop';
-import { duongDanCauHinh, hanMucMcp, napLaiMcp, toolMcpHienCo, trangThaiServer } from '../agent/mcp';
+import { duongDanCauHinh, duyetDuAn, hanMucMcp, napLaiMcp, toolMcpHienCo, trangThaiServer } from '../agent/mcp';
 import { dsWorktree, taoWorktree, xoaWorktree } from '../agent/worktree';
 import {
   danhSachPhien, datGhimPhien, datLuuTruPhien, docPhien, doiTenPhien, dungLaiHienThi,
@@ -366,6 +367,10 @@ export function registerAgentHandlers(): void {
     datQuyenChoCuoc(cuocId, { choTrinhDuyet: bat });
     return moTa(cuocId, gocCua(cuocId));
   });
+  handle('agent:dsQuyenLau', ({ cuocId }) => dsQuyenLauCua(cuocId));
+
+  handle('agent:xoaQuyenLau', ({ cuocId, khoa }) => xoaQuyenLauCua(cuocId, khoa));
+
   handle('agent:datCheDoNote', async ({ cuocId, bat }): Promise<AgentWorkspace> => {
     if (cuocDangChay(cuocId)) throw new Error('Việc này đang chạy dở — hãy dừng trước khi đổi quyền ghi ghi chú.');
     datQuyenChoCuoc(cuocId, { choGhiNote: bat });
@@ -532,8 +537,22 @@ export function registerAgentHandlers(): void {
 
   handle('agent:mcpTrangThai', (): AgentMcpTrangThai => trangThaiMcp());
 
-  handle('agent:mcpNapLai', async (): Promise<AgentMcpTrangThai> => {
-    await napLaiMcp();
+  handle('agent:mcpNapLai', async ({ cuocId }): Promise<AgentMcpTrangThai> => {
+    // Nạp theo DỰ ÁN của tab đang hỏi: `.mcp.json` là của dự án.
+    await napLaiMcp(cuocId ? gocCua(cuocId) : null);
+    return trangThaiMcp();
+  });
+
+  /*
+   * Duyệt `.mcp.json` của dự án rồi nạp lại NGAY.
+   *
+   * Duyệt xong mà không nạp thì người dùng bấm "Duyệt", bảng vẫn ghi "cần
+   * duyệt", và họ bấm tiếp — không có gì nói rằng phải bấm thêm "Nạp lại".
+   */
+  handle('agent:mcpDuyetDuAn', async ({ cuocId }): Promise<AgentMcpTrangThai> => {
+    const goc = gocCua(cuocId);
+    await duyetDuAn(goc);
+    await napLaiMcp(goc);
     return trangThaiMcp();
   });
 

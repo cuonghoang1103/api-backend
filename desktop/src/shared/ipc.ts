@@ -570,7 +570,7 @@ export interface AgentDiff {
 }
 
 /** Người dùng bấm gì trên thẻ duyệt. */
-export const agentQuyetDinhSchema = z.enum(['choPhep', 'choPhepCaFile', 'tuChoi']);
+export const agentQuyetDinhSchema = z.enum(['choPhep', 'choPhepCaFile', 'choPhepMai', 'tuChoi']);
 export type AgentQuyetDinh = z.infer<typeof agentQuyetDinhSchema>;
 
 export const agentTraLoiSchema = z.object({
@@ -797,7 +797,13 @@ export interface AgentCuocDangMo {
 export interface AgentMcpTrangThai {
   /** Đường dẫn file cấu hình — hiện lên để người dùng biết sửa ở đâu. */
   duongDan: string;
-  server: Array<{ ten: string; ok: boolean; soTool: number; loi?: string }>;
+  server: Array<{
+    ten: string; ok: boolean; soTool: number; loi?: string;
+    /** Đến từ `.mcp.json` của dự án, không phải file toàn cục. */
+    tuDuAn?: boolean;
+    /** Đang chờ người dùng duyệt — nó CHƯA chạy. */
+    canDuyet?: boolean;
+  }>;
   soTool: number;
   hanMuc: { daDung: number; tran: number };
 }
@@ -967,6 +973,11 @@ export const INVOKE_CHANNELS = {
   'agent:traLoiXinPhep': agentTraLoiSchema,
   'agent:datCheDoSua': agentCheDoSuaSchema,
   'agent:datCheDoLenh': agentCheDoLenhSchema,
+  'agent:dsQuyenLau': agentCuocSchema,
+  /* `khoa` để trống ⇒ thu hồi CẢ dự án. Dùng `.optional()` chứ không phải
+     chuỗi rỗng: "" là một khoá hợp lệ về mặt kiểu, và nhầm hai thứ đó nghĩa là
+     một cú bấm xoá-một-cái lại quét sạch danh sách. */
+  'agent:xoaQuyenLau': agentCuocSchema.extend({ khoa: z.string().min(1).max(2000).optional() }),
   'agent:datCheDoNote': agentCheDoNoteSchema,
   'agent:datCheDoTrinhDuyet': agentCheDoTrinhDuyetSchema,
   /* Nhà cung cấp là DANH SÁCH TRẮNG, không phải chuỗi tự do: giá trị này đi
@@ -1064,8 +1075,11 @@ export const INVOKE_CHANNELS = {
   'agent:lenhDuAn': agentLenhDuAnSchema,
   'agent:dsCuoc': null,
   'agent:bangGhi': agentCuocSchema,
-  'agent:mcpTrangThai': null,
-  'agent:mcpNapLai': null,
+  /* Có `cuocId` để main biết DỰ ÁN nào — `.mcp.json` là của dự án, và mỗi tab
+     một dự án. `.optional()` vì bảng MCP còn mở được từ chỗ chưa có tab. */
+  'agent:mcpTrangThai': z.object({ cuocId: z.string().min(1).optional() }),
+  'agent:mcpNapLai': z.object({ cuocId: z.string().min(1).optional() }),
+  'agent:mcpDuyetDuAn': agentCuocSchema,
   'agent:mcpMoCauHinh': null,
   'agent:hookMoCauHinh': null,
   'agent:hookDem': null,
@@ -1454,9 +1468,11 @@ export interface DesktopBridge {
     /** Xoá worktree do app tạo. CỐ Ý không xoá ép khi còn thay đổi chưa commit. */
     xoaWorktree(cuocId: string, duongDan: string): Promise<{ ok: boolean; loi?: string }>;
     /** Trạng thái MCP hiện tại. Không khởi động lại server nào. */
-    mcpTrangThai(): Promise<AgentMcpTrangThai>;
+    mcpTrangThai(cuocId?: string): Promise<AgentMcpTrangThai>;
+    /** Duyệt `.mcp.json` của dự án rồi nạp lại. Vân tay đổi là phải duyệt lại. */
+    mcpDuyetDuAn(cuocId: string): Promise<AgentMcpTrangThai>;
     /** Tắt hết server MCP rồi bật lại theo file cấu hình. Có thể mất vài giây. */
-    mcpNapLai(): Promise<AgentMcpTrangThai>;
+    mcpNapLai(cuocId?: string): Promise<AgentMcpTrangThai>;
     /** Mở file `mcp.json` bằng ứng dụng mặc định của hệ điều hành. */
     mcpMoCauHinh(): Promise<void>;
     /**
@@ -1476,6 +1492,10 @@ export interface DesktopBridge {
       Promise<{ chan: boolean; ra: string; goc: string | null; soKhop: number }>;
     /** Danh sách kỹ năng ĐÚNG NHƯ model sẽ nhận — tên + mô tả, không thân. */
     kyNangDs(cuocId: string): Promise<Array<{ ten: string; moTa: string }>>;
+    /** Danh sách khoá đã "Luôn cho phép" ở dự án của cuộc này. */
+    dsQuyenLau(cuocId: string): Promise<{ goc: string | null; khoa: string[] }>;
+    /** Thu hồi một khoá, hoặc CẢ dự án khi bỏ trống. Trả về số khoá đã xoá. */
+    xoaQuyenLau(cuocId: string, khoa?: string): Promise<number>;
   };
   /**
    * Cửa sổ robot NỔI — trợ lý đứng ngoài app, luôn thấy kể cả khi người dùng

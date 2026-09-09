@@ -19,8 +19,9 @@
  */
 
 import type { SoCuoc } from './so.js';
+import { themQuyenLau } from './quyenLau.js';
 
-export type QuyetDinh = 'choPhep' | 'choPhepCaFile' | 'tuChoi';
+export type QuyetDinh = 'choPhep' | 'choPhepCaFile' | 'choPhepMai' | 'tuChoi';
 
 export interface YeuCauXinPhep {
   id: string;
@@ -48,6 +49,10 @@ interface DangCho {
   khoa: string;
   /** Có được phép nhớ không. Lệnh nguy hiểm ⇒ false, dù người dùng bấm nút nhớ. */
   choNho: boolean;
+  /** Sổ quyền LÂU DÀI của cuộc (nếu có) — để `choPhepMai` ghi vào ngay. */
+  quyenLau?: Set<string>;
+  /** Ghi khoá xuống đĩa. Tiêm vào để module này không phải biết `electron`. */
+  themLau?: (khoa: string) => Promise<boolean>;
 }
 
 /**
@@ -96,6 +101,8 @@ export function hoiNguoiDung(
 ): Promise<QuyetDinh> {
   const soNho = so instanceof Set ? so : so.quyenDaCap;
   const boQuaHet = so instanceof Set ? false : so.boQuaHet === true;
+  const quyenLau = so instanceof Set ? null : so.quyenLau;
+  const gocCuoc = so instanceof Set ? null : so.goc;
   const khoa = yeuCau.khoa ?? yeuCau.duongDan;
   const choNho = yeuCau.choNho !== false;
 
@@ -134,6 +141,11 @@ export function hoiNguoiDung(
   // vòng lặp sửa→chạy→sửa) không thành mười lần bấm.
   if (choNho && soNho.has(khoa)) return Promise.resolve('choPhepCaFile');
 
+  /* Đã cho phép LÂU DÀI ở dự án này (`quyenLau.ts`). Đặt SAU sổ của cuộc và
+     cùng điều kiện `choNho`: thứ không được nhớ trong một cuộc thì càng không
+     được nhớ qua nhiều cuộc. */
+  if (choNho && quyenLau?.has(khoa)) return Promise.resolve('choPhepCaFile');
+
   const id = `xp_${++demId}`;
   return new Promise<QuyetDinh>((resolve) => {
     let xong = false;
@@ -149,7 +161,11 @@ export function hoiNguoiDung(
     function huy(): void { ketThuc('tuChoi'); }
 
     const dongHo = setTimeout(() => ketThuc('tuChoi'), HET_GIO_MS);
-    dangCho.set(id, { giaiPhong: ketThuc, dongHo, khoa, choNho, soNho });
+    dangCho.set(id, {
+      giaiPhong: ketThuc, dongHo, khoa, choNho, soNho,
+      ...(quyenLau ? { quyenLau } : {}),
+      ...(gocCuoc ? { themLau: (k: string) => themQuyenLau(gocCuoc, k) } : {}),
+    });
 
     // Người dùng bấm Dừng giữa lúc thẻ duyệt đang mở ⇒ coi như từ chối. KHÔNG
     // được để treo: lượt đã bị huỷ thì không còn ai đọc kết quả nữa.
@@ -167,6 +183,19 @@ export function traLoi(id: string, quyetDinh: QuyetDinh): boolean {
   // là không ghi nhớ. Giao diện đã ẩn nút đó với lệnh nguy hiểm; đây là lớp
   // chặn thứ hai, phòng khi một app bị sửa vẫn gửi lên quyết định ấy.
   if (quyetDinh === 'choPhepCaFile' && muc.choNho) muc.soNho.add(muc.khoa);
+  /*
+   * "Luôn cho phép" — ghi xuống đĩa, theo dự án.
+   *
+   * Điều kiện `muc.choNho` là chốt THẬT, không phải giao diện: nút đã bị ẩn với
+   * lệnh `nguyhiem`/`cankiem`, nhưng một app bị sửa vẫn gửi lên được quyết định
+   * này. Ghi hỏng (đĩa đầy, quyền) thì lượt NÀY vẫn đi tiếp — chỉ là lần sau
+   * hỏi lại. Chặn công việc vì lỗi đĩa thì tệ hơn.
+   */
+  if (quyetDinh === 'choPhepMai' && muc.choNho) {
+    muc.soNho.add(muc.khoa);
+    muc.quyenLau?.add(muc.khoa);
+    void muc.themLau?.(muc.khoa);
+  }
   muc.giaiPhong(quyetDinh);
   return true;
 }

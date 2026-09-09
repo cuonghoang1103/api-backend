@@ -16,7 +16,7 @@
  *     Đây là chỗ đổi chác giữa phiền và an toàn, và nó nghiêng theo cách người
  *     ta thật sự làm việc: sửa sâu vài file, không rải khắp dự án.
  */
-import { AlertTriangle, Check, CheckCheck, FilePlus2, FilePen, GitCommitHorizontal, GitPullRequest, NotebookPen, Plug, Terminal, X } from 'lucide-react';
+import { AlertTriangle, Check, CheckCheck, FilePlus2, Infinity, FilePen, GitCommitHorizontal, GitPullRequest, NotebookPen, Plug, Terminal, X } from 'lucide-react';
 import hljs from 'highlight.js/lib/common';
 import type { AgentDiff, AgentPhanLoaiLenh, AgentQuyetDinh } from '../../../shared/ipc';
 
@@ -138,6 +138,14 @@ export function XinPhep({
           <CheckCheck size={14} aria-hidden />
           Cho phép cả file này
         </button>
+        <button
+          type="button" className="ct-btn ct-btn-ghost"
+          onClick={() => traLoi(the.id, 'choPhepMai')}
+          title="Nhớ cho dự án này, kể cả lần sau mở lại app. Gõ /quyen để xem và thu hồi."
+        >
+          <Infinity size={14} aria-hidden />
+          Luôn cho phép
+        </button>
         <button type="button" className="ct-btn ct-btn-ghost ct-xinphep-tuchoi" onClick={() => traLoi(the.id, 'tuChoi')}>
           <X size={14} aria-hidden />
           Từ chối
@@ -206,11 +214,23 @@ export function XinPhepLenh({
           <Check size={14} aria-hidden />
           {nguyHiem ? 'Vẫn chạy' : 'Chạy lệnh'}
         </button>
+{/* Chỉ hiện khi `choNho` — lệnh `nguy hiểm`/`cần kiểm` KHÔNG có đường
+            nào ghi nhớ, và chốt thật nằm ở `traLoi` chứ không ở đây. */}
         {phanLoai.choNho && (
-          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => traLoi(id, 'choPhepCaFile')}>
-            <CheckCheck size={14} aria-hidden />
-            Chạy, và đừng hỏi lại lệnh này
-          </button>
+          <>
+            <button type="button" className="ct-btn ct-btn-ghost" onClick={() => traLoi(id, 'choPhepCaFile')}>
+              <CheckCheck size={14} aria-hidden />
+              Đừng hỏi lại trong cuộc này
+            </button>
+            <button
+              type="button" className="ct-btn ct-btn-ghost"
+              onClick={() => traLoi(id, 'choPhepMai')}
+              title="Nhớ cho dự án này, kể cả lần sau mở lại app. Gõ /quyen để xem và thu hồi."
+            >
+              <Infinity size={14} aria-hidden />
+              Luôn cho phép lệnh này
+            </button>
+          </>
         )}
         <button type="button" className="ct-btn ct-btn-ghost ct-xinphep-tuchoi" onClick={() => traLoi(id, 'tuChoi')}>
           <X size={14} aria-hidden />

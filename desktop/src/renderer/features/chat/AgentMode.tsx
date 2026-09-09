@@ -25,7 +25,7 @@ import {
   Link2,
   BookOpen, Check, Circle, CircleDot, CircleStop, FileCode2, FilePen, FilePlus2, FolderOpen,
   FolderPlus, FolderTree, GitBranch, History, ListChecks, Loader2, NotebookPen, Plug, RotateCcw, Search, Send,
-  Sparkles, SquareTerminal, Terminal, Trash2, Undo2, X, ChevronDown, Cpu, Globe, Zap, ListPlus,
+  ShieldCheck, Sparkles, SquareTerminal, Terminal, Trash2, Undo2, X, ChevronDown, Cpu, Globe, Zap, ListPlus,
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useMoRieng } from '../../components/moRieng';
@@ -416,6 +416,40 @@ export function AgentMode({
       return;
     }
 
+    /*
+     * `/quyen` — xem và thu hồi danh sách "Luôn cho phép".
+     *
+     * Một danh sách cho phép KHÔNG xoá được là một cái bẫy: người dùng bấm một
+     * lần lúc vội, rồi không bao giờ tìm lại được thứ mình đã cho phép. Nên
+     * lệnh này ra đời cùng lúc với cái nút, không phải sau.
+     *
+     * Chạy ngay tại chỗ, không tốn một lượt gọi cổng — nó chỉ đọc trạng thái
+     * cục bộ, khác `/diff` (phải nhờ agent vì cần quyền đọc đĩa).
+     */
+    if (lenh === '/quyen' || lenh === '/permissions') {
+      datNhap('');
+      const dau = text.trim().split(/\s+/);
+      void (async () => {
+        if (dau[1] === 'xoa' || dau[1] === 'clear') {
+          const rieng = dau.slice(2).join(' ').trim();
+          const so = await window.cuongthai?.agent.xoaQuyenLau(cuocId, rieng || undefined) ?? 0;
+          datLenhTraLoi(so === 0
+            ? 'Không có quyền nào bị thu hồi.'
+            : `Đã thu hồi **${so}** quyền${rieng ? ` cho \`${rieng}\`` : ' của dự án này'}.`);
+          return;
+        }
+        const r = await window.cuongthai?.agent.dsQuyenLau(cuocId);
+        if (!r?.goc) { datLenhTraLoi('Tab này chưa mở dự án nào.'); return; }
+        datLenhTraLoi(r.khoa.length === 0
+          ? `Dự án \`${r.goc}\` chưa có quyền nào được "Luôn cho phép".\n\n`
+            + '_Nút đó nằm trên thẻ duyệt, cạnh "Cho phép"._'
+          : `**${r.khoa.length}** thứ đang được tự duyệt ở \`${r.goc}\`:\n\n`
+            + r.khoa.map((k) => `- \`${k}\``).join('\n')
+            + '\n\nThu hồi tất cả: `/quyen xoa` · thu hồi một cái: `/quyen xoa <nguyên văn>`');
+      })();
+      return;
+    }
+
     if (lenh === '/cost' || lenh === '/tien' || lenh === '/chiphi') {
       datNhap('');
       const q = trangThai.hanMuc;
@@ -686,7 +720,7 @@ export function AgentMode({
           <NutWorktree cuocId={cuocId} khoa={trangThai.dangChay} onDoi={() => { void napThuMuc(); void batDauLai(); }} />
         )}
 
-        <NutMcp khoa={trangThai.dangChay} />
+        <NutMcp cuocId={cuocId} khoa={trangThai.dangChay} />
 
         <BangHook cuocId={cuocId} khoa={trangThai.dangChay} />
 
@@ -1570,7 +1604,7 @@ function NutWorktree({
  * agent chỉ đơn giản không có tool đó, không có gì đỏ ở đâu cả, và người dùng
  * ngồi hỏi tại sao nó không chịu dùng công cụ mình vừa cắm.
  */
-function NutMcp({ khoa }: { khoa: boolean }) {
+function NutMcp({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
   const { mo, bat, boc } = useMoRieng('agent:mcp');
   const [tt, datTt] = useState<AgentMcpTrangThai | null>(null);
   const [dangNap, datDangNap] = useState(false);
@@ -1585,14 +1619,14 @@ function NutMcp({ khoa }: { khoa: boolean }) {
   // `mo` trong danh sách phụ thuộc ⇒ chạy cả lúc gắn (để nút hiện được số tool)
   // lẫn mỗi lần mở bảng.
   useEffect(() => {
-    void window.cuongthai?.agent.mcpTrangThai().then(datTt).catch(() => {});
-  }, [mo]);
+    void window.cuongthai?.agent.mcpTrangThai(cuocId).then(datTt).catch(() => {});
+  }, [mo, cuocId]);
 
 
   const napLai = async () => {
     datDangNap(true);
     try {
-      const kq = await window.cuongthai?.agent.mcpNapLai();
+      const kq = await window.cuongthai?.agent.mcpNapLai(cuocId);
       if (kq) datTt(kq);
     } finally {
       datDangNap(false);
@@ -1601,6 +1635,19 @@ function NutMcp({ khoa }: { khoa: boolean }) {
 
   const soTool = tt?.soTool ?? 0;
   const soHong = tt?.server.filter((s) => !s.ok).length ?? 0;
+  const canDuyet = tt?.server.some((s) => s.canDuyet) ?? false;
+
+  /* Duyệt `.mcp.json` của dự án. Chỉ hiện khi THẬT SỰ có thứ chờ duyệt — một
+     nút "Duyệt" đứng sẵn ở đó mọi lúc là thứ người ta bấm cho xong. */
+  const duyet = async () => {
+    datDangNap(true);
+    try {
+      const kq = await window.cuongthai?.agent.mcpDuyetDuAn(cuocId);
+      if (kq) datTt(kq);
+    } finally {
+      datDangNap(false);
+    }
+  };
 
   return (
     <div className="ct-mcp-boc" ref={boc}>
@@ -1642,10 +1689,32 @@ function NutMcp({ khoa }: { khoa: boolean }) {
                 <li key={s.ten} data-ok={s.ok}>
                   <span className="ct-mcp-cham" />
                   <span className="ct-mcp-ten">{s.ten}</span>
+                  {s.tuDuAn && <span className="ct-mcp-nhan" title=".mcp.json trong dự án">dự án</span>}
                   <span className="ct-mcp-phu">{s.ok ? `${s.soTool} tool` : (s.loi ?? 'hỏng')}</span>
                 </li>
               ))}
             </ul>
+          )}
+
+          {canDuyet && (
+            /* Nói thẳng cái giá trước khi hỏi. `.mcp.json` là một dòng lệnh sẽ
+               chạy với env của người dùng — "bạn có muốn bật không?" là câu hỏi
+               sai; câu đúng là "bạn có tin repo này chạy lệnh trên máy bạn
+               không?". Duyệt khoá theo NỘI DUNG: sửa file là hỏi lại. */
+            <div className="ct-mcp-duyet">
+              <p>
+                Dự án này khai server MCP trong <code>.mcp.json</code>. Bật lên nghĩa là
+                <strong> repo được chạy lệnh trên máy bạn</strong>, với biến môi trường của bạn.
+                Chỉ duyệt nếu bạn tin nguồn của nó.
+              </p>
+              <button
+                type="button" className="ct-btn ct-btn-ghost ct-mcp-nho"
+                onClick={() => void duyet()} disabled={dangNap || khoa}
+              >
+                <ShieldCheck size={12} aria-hidden />
+                Tôi tin dự án này — bật
+              </button>
+            </div>
           )}
 
           {tt && (

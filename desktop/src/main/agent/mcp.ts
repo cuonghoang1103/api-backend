@@ -37,6 +37,7 @@ import { app } from 'electron';
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 
 // ─── Trần ──────────────────────────────────────────────────────────
 const MAX_SERVER = 5;
@@ -117,6 +118,97 @@ async function docCauHinh(): Promise<Record<string, CauHinhServer>> {
   }
 }
 
+/**
+ * ============================================================
+ * MCP CỦA DỰ ÁN — `.mcp.json` trong kho mã
+ * ============================================================
+ *
+ * Quy ước của Claude Code, và là thứ người ta thật sự cần: mỗi dự án một bộ
+ * server (kho tài liệu riêng, CSDL riêng), chứ không phải một danh sách toàn
+ * cục dùng chung cho mọi repo.
+ *
+ * ⚠️⚠️ NHƯNG FILE NÀY NẰM TRONG KHO MÃ, VÀ NÓ LÀ MỘT DÒNG LỆNH SẼ CHẠY.
+ * `git clone` một repo lạ rồi mở nó trong app = repo đó chọn giúp bạn một
+ * tiến trình con, với env của bạn, không ai hỏi gì. Đây không phải nguy cơ lý
+ * thuyết: `command` + `args` là toàn quyền trên máy.
+ *
+ * Nên PHẢI có cửa duyệt, và cửa đó khoá theo VÂN TAY của chính cấu hình:
+ * người dùng duyệt một nội dung cụ thể, không phải duyệt "dự án này mãi mãi".
+ * Sửa một ký tự trong `.mcp.json` là hỏi lại — kể cả khi kẻ sửa là một lần
+ * `git pull`.
+ *
+ * Agent CÓ quyền ghi trong kho mã, nên kho duyệt tuyệt đối không được nằm ở
+ * đó: nó ở `userData`, cùng chỗ với `quyen-lau.json`.
+ */
+const TEN_FILE_DU_AN = '.mcp.json';
+
+function duongDanKhoDuyet(): string {
+  return path.join(app.getPath('userData'), 'mcp-duan-duyet.json');
+}
+
+/** Vân tay của một bộ cấu hình. Đổi một ký tự là đổi vân tay ⇒ hỏi lại. */
+export function vanTay(ch: Record<string, CauHinhServer>): string {
+  const chuan = Object.keys(ch).sort().map((k) => [k, ch[k]] as const);
+  return createHash('sha256').update(JSON.stringify(chuan)).digest('hex').slice(0, 32);
+}
+
+/**
+ * Đọc `.mcp.json` của dự án.
+ *
+ * Nhận CẢ HAI tên khoá: `mcpServers` (Claude Code — thứ người ta chép từ tài
+ * liệu của server) và `servers` (giống file toàn cục của app). Bắt đúng một
+ * tên thì file chép về từ README của server MCP sẽ im lặng không có tác dụng,
+ * và không có gì nói vì sao.
+ */
+export async function docCauHinhDuAn(goc: string | null): Promise<Record<string, CauHinhServer>> {
+  if (!goc) return {};
+  try {
+    const tho = await fs.readFile(path.join(goc, TEN_FILE_DU_AN), 'utf8');
+    const j = JSON.parse(tho) as { mcpServers?: unknown; servers?: unknown };
+    const bang = (j.mcpServers ?? j.servers) as Record<string, CauHinhServer> | undefined;
+    if (!bang || typeof bang !== 'object' || Array.isArray(bang)) return {};
+    // Lọc ngay ở đây: một mục thiếu `command` không được lọt vào vân tay, nếu
+    // không thì sửa một mục hỏng thành hỏng kiểu khác cũng bắt duyệt lại.
+    return Object.fromEntries(
+      Object.entries(bang).filter(([, c]) => c && typeof (c as CauHinhServer).command === 'string'),
+    );
+  } catch {
+    return {};   // không có file, hoặc JSON hỏng — cả hai đều là "không có MCP dự án"
+  }
+}
+
+async function khoDuyet(): Promise<Record<string, string>> {
+  try {
+    const j = JSON.parse(await fs.readFile(duongDanKhoDuyet(), 'utf8')) as Record<string, string>;
+    return j && typeof j === 'object' && !Array.isArray(j) ? j : {};
+  } catch {
+    return {};
+  }
+}
+
+/** Cấu hình `.mcp.json` của dự án này đã được duyệt ĐÚNG NỘI DUNG HIỆN TẠI chưa. */
+export async function daDuyetDuAn(goc: string | null, ch: Record<string, CauHinhServer>): Promise<boolean> {
+  if (!goc || Object.keys(ch).length === 0) return false;
+  return (await khoDuyet())[goc] === vanTay(ch);
+}
+
+/** Ghi nhận người dùng đã duyệt nội dung `.mcp.json` HIỆN TẠI của dự án. */
+export async function duyetDuAn(goc: string | null): Promise<boolean> {
+  if (!goc) return false;
+  const ch = await docCauHinhDuAn(goc);
+  if (Object.keys(ch).length === 0) return false;
+  try {
+    const kho = await khoDuyet();
+    kho[goc] = vanTay(ch);
+    const p = duongDanKhoDuyet();
+    await fs.writeFile(`${p}.tam`, JSON.stringify(kho, null, 2), 'utf8');
+    await fs.rename(`${p}.tam`, p);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 // ─── JSON-RPC qua stdio ────────────────────────────────────────────
 
 /**
@@ -180,7 +272,13 @@ function noiStdout(s: ServerDangChay): void {
 export interface KetQuaNap {
   tool: ToolMcp[];
   /** Server nào chạy được, server nào hỏng và vì sao — hiện thẳng cho người dùng. */
-  server: Array<{ ten: string; ok: boolean; soTool: number; loi?: string }>;
+  server: Array<{
+    ten: string; ok: boolean; soTool: number; loi?: string;
+    /** Đến từ `.mcp.json` của dự án, không phải file toàn cục. */
+    tuDuAn?: boolean;
+    /** Đang chờ người dùng duyệt — nó CHƯA chạy. */
+    canDuyet?: boolean;
+  }>;
 }
 
 /**
@@ -189,9 +287,19 @@ export interface KetQuaNap {
  * Luôn tắt trước: nạp lại mà không tắt thì mỗi lần bấm "Nạp lại" là thêm một
  * bộ tiến trình con nữa sống mãi tới khi đóng app.
  */
-export async function napLaiMcp(): Promise<KetQuaNap> {
+export async function napLaiMcp(goc: string | null = null): Promise<KetQuaNap> {
   await tatHet();
-  const cauHinh = await docCauHinh();
+  const toanCuc = await docCauHinh();
+  const cuaDuAn = await docCauHinhDuAn(goc);
+  const daDuyet = await daDuyetDuAn(goc, cuaDuAn);
+
+  /* TOÀN CỤC THẮNG khi trùng tên. Cùng lý do lệnh gạch chéo dựng sẵn thắng
+     `.claude/commands`: một file trong repo không được phép thay thế thứ người
+     dùng tự cắm — đó là cách êm nhất để tráo một server. */
+  const tenDuAn = Object.keys(cuaDuAn).filter((t) => !(t in toanCuc));
+  const cauHinh: Record<string, CauHinhServer> = { ...toanCuc };
+  if (daDuyet) for (const t of tenDuAn) cauHinh[t] = cuaDuAn[t]!;
+
   const ten = Object.keys(cauHinh).slice(0, MAX_SERVER);
   const server: KetQuaNap['server'] = [];
   const tool: ToolMcp[] = [];
@@ -213,6 +321,22 @@ export async function napLaiMcp(): Promise<KetQuaNap> {
       // Một server hỏng KHÔNG được làm chết những server còn lại.
       server.push({ ten: t, ok: false, soTool: 0, loi: (err as Error).message.slice(0, 160) });
     }
+  }
+
+  /*
+   * Server dự án CHƯA duyệt vẫn phải HIỆN RA, kèm lý do.
+   *
+   * Bỏ im lặng thì người dùng cắm `.mcp.json` vào repo, mở app, và không thấy
+   * gì — không tool, không lỗi, không một dòng nào nói vì sao. Đó đúng là kiểu
+   * hỏng câm mà cả bảng này sinh ra để chống.
+   */
+  if (!daDuyet) {
+    for (const t of tenDuAn.slice(0, MAX_SERVER)) {
+      server.push({ ten: t, ok: false, soTool: 0, tuDuAn: true, canDuyet: true,
+        loi: 'từ .mcp.json của dự án — cần bạn duyệt trước khi chạy' });
+    }
+  } else {
+    for (const s2 of server) if (tenDuAn.includes(s2.ten)) s2.tuDuAn = true;
   }
 
   toolDaBiet = tool;

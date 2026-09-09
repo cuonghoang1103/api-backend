@@ -24,6 +24,7 @@ export const LENH_AGENT: LenhGach[] = [
   { ten: '/undo', mo: 'Hoàn tác mọi file agent đã sửa trong việc này', khac: ['/hoantac'] },
   { ten: '/cost', mo: 'Tiền đã tiêu và hạn mức còn lại', khac: ['/tien', '/chiphi'] },
   { ten: '/diff', mo: 'Xem git diff của dự án đang mở', khac: ['/thaydoi'] },
+  { ten: '/quyen', mo: 'Xem và thu hồi các lệnh đã "Luôn cho phép"', khac: ['/permissions'] },
   { ten: '/help', mo: 'Danh sách lệnh gạch chéo', khac: ['/?', '/tro-giup'] },
 ];
 

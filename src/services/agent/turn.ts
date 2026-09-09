@@ -286,6 +286,10 @@ export interface AgentTurnInput {
    */
   ghiChuDuAn?: { ten: string; noiDung: string };
   kyNang?: Array<{ ten: string; moTa: string }>;
+  /** Loại agent phụ dự án khai — tên + mô tả, để model biết gọi `loai` nào. */
+  agentPhu?: Array<{ ten: string; moTa: string }>;
+  /** Prompt riêng cho lượt phụ, lấy từ `.claude/agents/<loại>.md` của dự án. */
+  promptPhu?: string;
   /**
    * Tool MCP app phát hiện được trên máy người dùng.
    *
@@ -558,6 +562,8 @@ export async function runAgentTurn(
     ...(input.workspace ? { workspace: input.workspace } : {}),
     ...(ghiChu ? { ghiChu } : {}),
     ...(input.kyNang?.length ? { kyNang: input.kyNang } : {}),
+    ...(input.agentPhu?.length ? { agentPhu: input.agentPhu } : {}),
+    ...(input.promptPhu ? { promptPhu: input.promptPhu } : {}),
   });
   const tools = toolsForGateway(capabilities, toolMcp);
 

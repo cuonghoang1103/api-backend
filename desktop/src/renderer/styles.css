@@ -5480,6 +5480,21 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   background: var(--ct-surface-2, rgba(127, 127, 127, 0.14));
 }
 
+.ct-mcp-nhan {
+  padding: 1px 5px; border-radius: 4px;
+  background: color-mix(in srgb, var(--ct-accent) 18%, transparent);
+  color: var(--ct-accent); font-size: 9.5px; font-weight: 600;
+}
+.ct-mcp-duyet {
+  margin: 6px 0 2px; padding: 8px 9px;
+  border: 1px solid color-mix(in srgb, var(--ct-warn) 55%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--ct-warn) 8%, transparent);
+}
+.ct-mcp-duyet p {
+  margin: 0 0 7px; font-size: 11px; line-height: 1.5; color: var(--ct-text-muted);
+}
+.ct-mcp-duyet strong { color: var(--ct-warn); }
 .ct-mcp-chan[data-loi] { color: var(--ct-err); }
 
 /* ── Đính kèm ở chế độ Trò chuyện ── */

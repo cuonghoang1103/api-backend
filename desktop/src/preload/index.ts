@@ -196,6 +196,10 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('agent:datCheDoTrinhDuyet', { cuocId, bat }) as Promise<AgentWorkspace>,
     datCheDoNote: (cuocId: string, bat: boolean) =>
       ipcRenderer.invoke('agent:datCheDoNote', { cuocId, bat }) as Promise<AgentWorkspace>,
+    dsQuyenLau: (cuocId: string) =>
+      ipcRenderer.invoke('agent:dsQuyenLau', { cuocId }) as Promise<{ goc: string | null; khoa: string[] }>,
+    xoaQuyenLau: (cuocId: string, khoa?: string) =>
+      ipcRenderer.invoke('agent:xoaQuyenLau', { cuocId, ...(khoa ? { khoa } : {}) }) as Promise<number>,
     datMucNoLuc: (muc: MucNoLuc) =>
       ipcRenderer.invoke('agent:datMucNoLuc', { muc }) as Promise<void>,
     datModel: (model: ModelAgent) =>
@@ -257,8 +261,12 @@ const bridge: DesktopBridge = {
     bangGhi: (cuocId: string) =>
       ipcRenderer.invoke('agent:bangGhi', { cuocId }) as
         Promise<{ muc: AgentMucKhoiPhuc[]; dangChay: boolean }>,
-    mcpTrangThai: () => ipcRenderer.invoke('agent:mcpTrangThai') as Promise<AgentMcpTrangThai>,
-    mcpNapLai: () => ipcRenderer.invoke('agent:mcpNapLai') as Promise<AgentMcpTrangThai>,
+    mcpTrangThai: (cuocId?: string) =>
+      ipcRenderer.invoke('agent:mcpTrangThai', cuocId ? { cuocId } : {}) as Promise<AgentMcpTrangThai>,
+    mcpNapLai: (cuocId?: string) =>
+      ipcRenderer.invoke('agent:mcpNapLai', cuocId ? { cuocId } : {}) as Promise<AgentMcpTrangThai>,
+    mcpDuyetDuAn: (cuocId: string) =>
+      ipcRenderer.invoke('agent:mcpDuyetDuAn', { cuocId }) as Promise<AgentMcpTrangThai>,
     mcpMoCauHinh: () => ipcRenderer.invoke('agent:mcpMoCauHinh') as Promise<void>,
     hookMoCauHinh: () => ipcRenderer.invoke('agent:hookMoCauHinh') as Promise<void>,
     hookDem: () => ipcRenderer.invoke('agent:hookDem') as Promise<number>,

@@ -28,6 +28,7 @@ import type { KetQuaDiff } from './diff';
 import { docGhiChuDuAn } from './ghiChu';
 import { chayHook } from './hook';
 import { dsKyNang, docThanKyNang } from './kyNang';
+import { dsAgentPhu, docThanAgentPhu } from './agentPhu';
 import {
   datTokenChoDatTen, docPhien, dungLaiHienThi, luuPhien, taoPhienNhanh,
   type MucKhoiPhuc, type TinNhanLuu,
@@ -35,6 +36,7 @@ import {
 import type { PhanLoaiLenh } from './lenh';
 import { chayToolAgent, soFileDaSua, demFileSeLui} from './tools';
 import { taoSoCuoc, type SoCuoc } from './so';
+import { napQuyenLau, xoaQuyenLau } from './quyenLau';
 import type { CheDoQuyen } from '../../shared/ipc';
 import { dungLenhNenCua } from './lenhNen';
 import { hanMucMcp, goiToolMcp, laToolMcp, toolMcpHienCo } from './mcp';
@@ -308,6 +310,7 @@ export function datGocChoCuoc(id: string, goc: string | null): void {
      nơi chưa ai đồng ý gì cả. */
   c.cheDoQuyen = 'keHoach';
   c.so.boQuaHet = false;
+  dongBoQuyenLau(c);
   xoaHoiThoai(id);
 }
 
@@ -326,6 +329,57 @@ export function datGocNeuChuaCo(id: string, goc: string): void {
   const c = layCuoc(id);
   if (c.daChonGoc || c.goc) return;
   c.goc = goc;
+  dongBoQuyenLau(c);
+}
+
+/**
+ * Đồng bộ SỔ theo thư mục dự án: đổi gốc ⇒ nạp lại danh sách quyền lâu dài.
+ *
+ * MỘT chỗ duy nhất, gọi từ cả ba nơi đặt `c.goc`. Rải ra thì thêm một đường
+ * đặt gốc mới là thêm một chỗ có thể QUÊN — và quên ở đây nghĩa là quyền của
+ * dự án CŨ còn nằm trong sổ khi đã sang dự án khác.
+ *
+ * `void` chứ không `await`: các hàm đặt gốc đều đồng bộ, và đọc một file JSON
+ * nhỏ xong trước khi agent gọi tool đầu tiên (còn phải đi một vòng qua cổng
+ * LLM). Chậm hơn cũng chỉ là một lần hỏi thừa, không phải một quyền bị rò.
+ */
+function dongBoQuyenLau(c: { goc: string | null; so: SoCuoc }): void {
+  c.so.goc = c.goc;
+  c.so.quyenLau = new Set();
+  const goc = c.goc;
+  if (!goc) return;
+  void napQuyenLau(goc).then((ds) => {
+    // Người dùng có thể đã đổi gốc trong lúc đọc đĩa — chỉ nhận nếu còn khớp.
+    if (c.so.goc === goc) c.so.quyenLau = ds;
+  });
+}
+
+/** Danh sách quyền lâu dài của dự án đang mở ở cuộc này. */
+export async function dsQuyenLauCua(id: string): Promise<{ goc: string | null; khoa: string[] }> {
+  const c = layCuoc(id);
+  const ds = await napQuyenLau(c.goc);
+  // Sổ trong bộ nhớ là thứ đang có HIỆU LỰC; đọc lại đĩa để bắt cả trường hợp
+  // người dùng sửa file bằng tay, rồi hợp nhất.
+  c.so.quyenLau = ds;
+  return { goc: c.goc, khoa: [...ds].sort() };
+}
+
+/**
+ * Thu hồi. Không truyền `khoa` ⇒ xoá CẢ dự án.
+ *
+ * Xoá ở CẢ HAI chỗ: đĩa và sổ trong bộ nhớ. Chỉ xoá đĩa thì cuộc đang mở vẫn
+ * còn quyền cũ trong `so.quyenLau` và tiếp tục tự duyệt — người dùng vừa bấm
+ * thu hồi xong vẫn thấy agent chạy thẳng, không hiểu vì sao.
+ *
+ * `quyenDaCap` (sổ của riêng cuộc) cũng phải xoá theo, vì nó đã hấp thụ khoá
+ * đó ngay lúc bấm "Luôn cho phép".
+ */
+export async function xoaQuyenLauCua(id: string, khoa?: string): Promise<number> {
+  const c = layCuoc(id);
+  const so = await xoaQuyenLau(c.goc, khoa);
+  if (khoa === undefined) { c.so.quyenLau.clear(); c.so.quyenDaCap.clear(); }
+  else { c.so.quyenLau.delete(khoa); c.so.quyenDaCap.delete(khoa); }
+  return so;
 }
 
 /**
@@ -410,6 +464,7 @@ export function napPhien(
   if (goc !== undefined) {
     c.goc = goc; c.daChonGoc = true; c.cheDoQuyen = 'keHoach';
     c.choSua = false; c.choChayLenh = false; c.so.boQuaHet = false;
+    dongBoQuyenLau(c);
   }
   // Quyền đã cấp và nhật ký hoàn tác KHÔNG khôi phục theo. Hoàn tác một thay
   // đổi từ hôm qua là ghi đè lên thứ người dùng có thể đã sửa tiếp bằng tay; và
@@ -752,6 +807,10 @@ export async function chayLuot(
      vừa thêm một kỹ năng, và đọc một lần lúc mở app thì họ phải khởi động lại
      mới thấy. Chỉ là tên + mô tả nên rẻ. */
   const kyNang = boiCanh.goc ? await dsKyNang(boiCanh.goc) : [];
+  /* Loại agent phụ dự án khai (`.claude/agents/*.md`). Chỉ tên + mô tả — thân
+     file chỉ được đọc khi model THẬT SỰ giao việc cho loại đó, cùng lý do
+     `kyNang` không gửi thân. */
+  const agentPhu = boiCanh.goc ? await dsAgentPhu(boiCanh.goc) : [];
   /* CHỈ khai khả năng khi thật sự có kỹ năng. Khai bừa thì máy chủ gửi tool
      `dung_ky_nang` xuống, model gọi, và mọi lời gọi đều trả "không có kỹ năng
      nào" — nó sẽ thử vài lần trước khi bỏ cuộc, mỗi lần một vòng tính tiền. */
@@ -781,6 +840,7 @@ export async function chayLuot(
           : {}),
         ...(ghiChuDuAn ? { ghiChuDuAn } : {}),
         ...(kyNang.length > 0 ? { kyNang } : {}),
+        ...(agentPhu.length > 0 ? { agentPhu } : {}),
         ...(boiCanh.mucNoLuc ? { mucNoLuc: boiCanh.mucNoLuc } : {}),
         ...(boiCanh.model ? { model: boiCanh.model } : {}),
         // Gửi ở MỌI vòng, không phải chỉ vòng đầu: người dùng có thể nạp lại
@@ -1110,7 +1170,31 @@ async function chayViecPhu(
   }
   c.soViecPhu++;
 
-  phat({ loai: 'tool', ten: 'giao_viec_phu', tomTat: `${nhiemVu.slice(0, 60)}…`, vong: 'may' });
+  /*
+   * Loại agent phụ do dự án khai. Đọc thân file NGAY TẠI ĐÂY, không nạp sẵn từ
+   * đầu lượt: hai mươi loại × 32KB là 640KB giữ trong bộ nhớ cho một tính năng
+   * thường không dùng tới, và thân file có thể vừa đổi giữa chừng.
+   *
+   * Loại không tồn tại thì BÁO LỖI kèm danh sách, không im lặng chạy loại mặc
+   * định: model gọi sai tên rồi nhận về một kết quả trông hợp lý là cách hỏng
+   * khó thấy nhất — nó không biết mình đã không được thứ vừa yêu cầu.
+   */
+  const loai = typeof args?.loai === 'string' ? args.loai.trim() : '';
+  let promptPhu: string | null = null;
+  if (loai) {
+    promptPhu = await docThanAgentPhu(boiCanh.goc, loai);
+    if (promptPhu === null) {
+      const co = (await dsAgentPhu(boiCanh.goc)).map((a) => a.ten).join(', ');
+      return {
+        noiDung: `LỖI: không có loại agent phụ "${loai}". Đang có: ${co || '(không có)'}. `
+          + 'Bỏ trống `loai` để dùng agent phụ mặc định.',
+        tomTat: 'không có loại đó',
+      };
+    }
+  }
+
+  phat({ loai: 'tool', ten: 'giao_viec_phu',
+    tomTat: `${loai ? `[${loai}] ` : ''}${nhiemVu.slice(0, 60)}…`, vong: 'may' });
 
   const phu: TinNhan[] = [{ role: 'user', content: nhiemVu }];
   let traLoi = '';
@@ -1133,6 +1217,7 @@ async function chayViecPhu(
       // rất nhanh. Trần thật là hạn mức 5 giờ, và bảng chọn đã nói trước điều đó.
       ...(boiCanh.model ? { model: boiCanh.model } : {}),
       laPhu: true,
+      ...(promptPhu ? { promptPhu } : {}),
       signal,
       // Sự kiện của agent phụ KHÔNG đẩy lên màn hình: bảng ghi sẽ thành một mớ
       // hai luồng chữ đan nhau mà người dùng không biết luồng nào của ai. Họ
@@ -1217,6 +1302,16 @@ async function mgoiMotLuot(o: {
   ghiChuDuAn?: { ten: string; noiDung: string };
   /** Tên + mô tả kỹ năng của dự án. KHÔNG kèm thân — xem `kyNang.ts`. */
   kyNang?: Array<{ ten: string; moTa: string }>;
+  /** Loại agent phụ dự án khai (`.claude/agents/*.md`). Tên + mô tả, KHÔNG kèm thân. */
+  agentPhu?: Array<{ ten: string; moTa: string }>;
+  /**
+   * Prompt riêng cho MỘT lượt phụ, lấy từ thân `.claude/agents/<loại>.md`.
+   *
+   * ⚠️ KHAI TƯỜNG MINH ở cả hai interface, đừng tin `tsc` khi truyền bằng
+   * `...(x ? { promptPhu } : {})` — cú pháp trải KHÔNG kích hoạt kiểm thuộc
+   * tính thừa, nên một trường sai tên vẫn qua `tsc` rồi bị máy chủ lặng lẽ bỏ.
+   */
+  promptPhu?: string;
   mucNoLuc?: string;
   model?: string;
   laPhu?: boolean;
@@ -1277,6 +1372,16 @@ async function mgoiMotLuotThat(o: {
   ghiChuDuAn?: { ten: string; noiDung: string };
   /** Tên + mô tả kỹ năng của dự án. KHÔNG kèm thân — xem `kyNang.ts`. */
   kyNang?: Array<{ ten: string; moTa: string }>;
+  /** Loại agent phụ dự án khai (`.claude/agents/*.md`). Tên + mô tả, KHÔNG kèm thân. */
+  agentPhu?: Array<{ ten: string; moTa: string }>;
+  /**
+   * Prompt riêng cho MỘT lượt phụ, lấy từ thân `.claude/agents/<loại>.md`.
+   *
+   * ⚠️ KHAI TƯỜNG MINH ở cả hai interface, đừng tin `tsc` khi truyền bằng
+   * `...(x ? { promptPhu } : {})` — cú pháp trải KHÔNG kích hoạt kiểm thuộc
+   * tính thừa, nên một trường sai tên vẫn qua `tsc` rồi bị máy chủ lặng lẽ bỏ.
+   */
+  promptPhu?: string;
   mucNoLuc?: string;
   model?: string;
   laPhu?: boolean;

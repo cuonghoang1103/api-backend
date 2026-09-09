@@ -31,6 +31,16 @@ export interface SoCuoc {
    */
   boQuaHet: boolean;
   /**
+   * Khoá đã được cho phép LÂU DÀI ở dự án này — nạp từ đĩa khi mở thư mục.
+   *
+   * Nạp sẵn vào bộ nhớ chứ không đọc file ở mỗi thẻ duyệt: một lượt agent gọi
+   * hàng chục tool, và `hoiNguoiDung` phải quyết được ngay chứ không đợi đĩa.
+   * Xem `quyenLau.ts`.
+   */
+  quyenLau: Set<string>;
+  /** Thư mục dự án của cuộc này — khoá để tra `quyenLau`. `null` = chưa chọn. */
+  goc: string | null;
+  /**
    * Thư mục người dùng đã chọn cho `web_tai` ghi vào, của RIÊNG cuộc này.
    *
    * ⚠️ Đây là ranh giới cho phép của việc tải file, và nó phải là một lựa chọn
@@ -68,7 +78,10 @@ export interface SoCuoc {
 }
 
 export function taoSoCuoc(): SoCuoc {
-  return { nhatKyHoanTac: new Map(), quyenDaCap: new Set(), boQuaHet: false, thuMucTai: null, luot: 1, buocGhi: [] };
+  return {
+    nhatKyHoanTac: new Map(), quyenDaCap: new Set(), boQuaHet: false,
+    quyenLau: new Set(), goc: null, thuMucTai: null, luot: 1, buocGhi: [],
+  };
 }
 
 /**

@@ -271,6 +271,31 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     },
   },
   {
+    name: 'sua_o_notebook',
+    ring: 'client',
+    capability: 'fs_write',
+    description:
+      'Sửa MỘT Ô của notebook Jupyter (`.ipynb`). '
+      + '⛔ ĐỪNG dùng `edit_file`/`sua_nhieu_cho` cho file `.ipynb`: `source` là MẢNG CHUỖI trong JSON đã thoát, '
+      + 'khớp chuỗi thô hoặc trượt, hoặc phá cấu trúc file và Jupyter không mở được nữa. '
+      + 'Chỉ số ô lấy từ `read_file` — nó in ra "ô 0", "ô 1"… theo đúng thứ tự này. '
+      + 'Thay một ô mã sẽ XOÁ đầu ra cũ của ô đó (đầu ra cũ không còn đúng với mã mới).',
+    parameters: {
+      type: 'object',
+      properties: {
+        path: { type: 'string', description: 'Đường dẫn `.ipynb`, tương đối so với gốc dự án.' },
+        viec: { type: 'string', enum: ['thay', 'chen', 'xoa'], description: 'Mặc định `thay`.' },
+        o: {
+          type: 'integer',
+          description: 'Chỉ số ô, đếm từ 0. Với `chen`, ô mới nằm TẠI vị trí này; dùng số ô hiện có để chèn vào cuối.',
+        },
+        noi_dung: { type: 'string', description: 'Nội dung mới của ô. Bắt buộc với `thay`/`chen`.' },
+        loai_o: { type: 'string', enum: ['code', 'markdown', 'raw'], description: 'Mặc định `code` khi chèn; giữ nguyên khi thay.' },
+      },
+      required: ['path', 'o'],
+    },
+  },
+  {
     name: 'sua_nhieu_cho',
     ring: 'client',
     capability: 'fs_write',
@@ -419,6 +444,13 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
         nhiem_vu: {
           type: 'string',
           description: 'Nhiệm vụ đầy đủ, tự đứng một mình được — agent phụ KHÔNG thấy hội thoại của bạn.',
+        },
+        loai: {
+          type: 'string',
+          description:
+            'Loại agent phụ do dự án khai trong `.claude/agents/*.md`. Bỏ trống để dùng loại mặc định. '
+            + 'Danh sách các loại đang có nằm trong phần bối cảnh của prompt; '
+            + 'gọi một tên không có trong đó sẽ trả về lỗi kèm danh sách đúng.',
         },
       },
       required: ['nhiem_vu'],

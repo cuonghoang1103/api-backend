@@ -1,5 +1,7 @@
 import { Router, type Response, type Request } from 'express';
+import multer from 'multer';
 import { prisma } from '../config/database.js';
+import { docLichTuAnh } from '../services/lichHoc/docAnhLich.js';
 import { authenticate } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
@@ -277,6 +279,42 @@ router.post('/bulk', async (req: Request, res: Response<ApiResponse>, next) => {
       });
     });
     res.status(201).json({ success: true, data: { items: ra } });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ─── POST /api/v1/class-schedule/doc-anh ──────────────────────────
+//
+// Chụp bảng lịch của trường → trả về các buổi đã bóc tách.
+//
+// ⚠️ KHÔNG GHI GÌ VÀO DATABASE, và đó là chủ đích. Nó chỉ ĐỀ NGHỊ: app hiện
+// bản xem trước, người dùng sửa chỗ sai, rồi mới bấm lưu qua `/bulk`. Tự lưu
+// thẳng thì một dòng đọc nhầm sẽ đưa người ta tới nhầm phòng vào sáng hôm
+// sau, mà họ chưa từng nhìn thấy con số nào để mà ngờ.
+//
+// Giữ ảnh trong BỘ NHỚ: nó đi thẳng sang cổng LLM rồi bỏ, không có lý do gì
+// để một ảnh chụp lịch cá nhân chạm vào đĩa VPS.
+const nhanAnh = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 12 * 1024 * 1024, files: 1 },
+  fileFilter: (_req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) cb(null, true);
+    else cb(new AppError('Chỉ nhận ảnh', 400, 'NOT_IMAGE'));
+  },
+});
+
+router.post('/doc-anh', nhanAnh.single('anh'), async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const f = (req as Request & { file?: { buffer: Buffer; mimetype: string } }).file;
+    if (!f?.buffer?.length) throw new AppError('Chưa chọn ảnh', 400, 'NO_IMAGE');
+
+    const kq = await docLichTuAnh({
+      anh: f.buffer,
+      mediaType: f.mimetype || 'image/jpeg',
+      userId: req.userId ?? null,
+    });
+    res.json({ success: true, data: kq });
   } catch (error) {
     next(error);
   }

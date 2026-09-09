@@ -951,6 +951,19 @@ router.get('/admin/:id', authenticate, requireAdmin('ROLE_ADMIN'), async (req, r
   } catch (error) { next(error); }
 });
 
+/**
+ * Đóng gói một môn cho đường `?gon=1`.
+ *
+ * Tách khỏi route để kiểm được — cái bẫy ở đây không nhìn ra bằng mắt:
+ * `price` là `Decimal`, `JSON.stringify` biến nó thành CHUỖI.
+ */
+export function dongGoiMonGon<T extends { _count: { enrollments: number }; price: unknown }>(
+  m: T,
+): Omit<T, '_count' | 'price'> & { price: number; totalStudents: number } {
+  const { _count, price, ...c } = m;
+  return { ...c, price: Number(price), totalStudents: _count.enrollments };
+}
+
 router.get('/semester/:semesterId', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {
     const semesterId = parseInt(req.params.semesterId, 10);
@@ -1017,7 +1030,15 @@ router.get('/semester/:semesterId', optionalAuth, async (req, res: Response<ApiR
         success: true,
         // `totalStudents` lấy từ _count như đường cũ, không lấy cột đếm sẵn
         // (cột đó trôi vì không phải lối ghi danh nào cũng cộng vào).
-        data: gon.map(({ _count, ...c }) => ({ ...c, totalStudents: _count.enrollments })),
+        //
+        // ⚠️ `Number(price)` KHÔNG được bỏ. `price` là `Decimal` trong Prisma
+        // và ra JSON thành CHUỖI ("0", không phải 0). App iOS khai
+        // `let price: Double`, gặp chuỗi là `JSONDecoder` ném lỗi và màn Học
+        // viện trắng trơn — hỏng câm, không thông báo gì. Đường cũ đã làm
+        // đúng ở `serializeCourse` (`price: Number(course.price)`); bản gọn
+        // đầu tiên của tôi quên, và chỉ lộ ra khi soi KIỂU trong JSON thật
+        // chứ không phải khi soi tên trường.
+        data: gon.map(dongGoiMonGon),
       });
       return;
     }

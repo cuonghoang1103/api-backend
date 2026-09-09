@@ -10,6 +10,91 @@
  */
 export { B, EX, code, mcq } from './nodejs-exam-kit.mjs';
 
+import { B as _B } from './nodejs-exam-kit.mjs';
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * THÊM 10/09/2026 cho `WF-PE.mjs` — đề THỰC HÀNH đầu tiên của khoá này.
+ * Chỉ THÊM, không đổi và không xoá thứ gì ở trên: WF-FE / WF-PT1 / WF-PT2
+ * vẫn chỉ nhập { B, EX, code, mcq, wfInstructions } và không thấy ba export
+ * dưới đây.
+ * ───────────────────────────────────────────────────────────────────────── */
+
+const esc = (s) => String(s)
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;');
+
+/**
+ * Mã INLINE trong một câu văn — tự thoát `< > &`.
+ * Đề PE nói nhiều về `<img>`, `<label for>`, `a.diem - b.diem`, `Number('abc')`
+ * … gõ `&lt;` bằng tay cho từng chỗ là cách chắc chắn sót một chỗ.
+ */
+export const c = (src) => `<code>${esc(src)}</code>`;
+
+/**
+ * Rubric MẶC ĐỊNH cho câu lập trình của khoá nền tảng.
+ * ⚠️ Tổng `maxScore` = 2, đúng bằng `points` của một câu PE ở đây — KHÁC bộ
+ * kit Node.js (3 tiêu chí × maxScore 4). Mỗi câu trong WF-PE tự khai rubric
+ * riêng nên cái này chỉ là lưới đỡ, nhưng nó phải cộng ra 2 để không âm thầm
+ * biến một câu 2 điểm thành 12 điểm.
+ */
+export const RUBRIC_CODE = [
+  {
+    id: 'chay-dung',
+    criterion: _B(
+      'The file runs with <code>node bai.js</code> and prints exactly the expected output, including the edge cases the question lists (empty input, ties, missing values).',
+      'File chạy được bằng <code>node bai.js</code> và in ra ĐÚNG kết quả mong đợi, kể cả những ca biên đề đã liệt kê (đầu vào rỗng, giá trị bằng nhau, dữ liệu thiếu).',
+    ),
+    weight: 1,
+    maxScore: 1,
+  },
+  {
+    id: 'dung-muc',
+    criterion: _B(
+      'The solution stays inside what the course teaches — plain JavaScript, no extra package, no framework — and the block marked <code>ĐỀ CHO SẴN</code> is left untouched.',
+      'Lời giải nằm trong phạm vi khoá học — JavaScript thuần, không gói ngoài, không framework — và phần đánh dấu <code>ĐỀ CHO SẴN</code> được giữ nguyên.',
+    ),
+    weight: 1,
+    maxScore: 0.6,
+  },
+  {
+    id: 'de-doc',
+    criterion: _B(
+      'Readable: clear names, no dead code, no data given by the question mutated behind the reader’s back.',
+      'Dễ đọc: đặt tên rõ, không có mã thừa, không âm thầm sửa dữ liệu mà đề cho sẵn.',
+    ),
+    weight: 1,
+    maxScore: 0.4,
+  },
+];
+
+/**
+ * Một câu lập trình. `khongChayDuoc` (chuỗi lý do) khai rằng
+ * `scripts/exam-check.mjs` KHÔNG chạy được lời giải mẫu này — kèm lý do bằng
+ * chữ, để không ai miễn được trong im lặng. Bỏ trống nghĩa là bộ kiểm phải
+ * chạy thật và khớp `expectedOutput` từng dòng.
+ */
+export const codeQ = ({
+  points,
+  prompt,
+  language = 'javascript',
+  starterCode,
+  expectedOutput,
+  sampleSolution,
+  rubric = RUBRIC_CODE,
+  khongChayDuoc,
+}) => ({
+  kind: 'CODE',
+  points,
+  prompt,
+  language,
+  starterCode,
+  expectedOutput,
+  sampleSolution,
+  rubric,
+  ...(khongChayDuoc ? { khongChayDuoc } : {}),
+});
+
 /** Hướng dẫn đầu đề song ngữ cho một đề Web Foundations (MCQ thuần). */
 export const wfInstructions = (label, chapters) =>
   '<div class="ml-en">' +

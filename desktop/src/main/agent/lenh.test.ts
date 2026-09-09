@@ -142,6 +142,13 @@ const PHAI_CHO_QUA = [
   'git log --oneline -5', 'git add .', 'ls -la', 'cat package.json', 'pwd',
   'node --version', 'pytest', 'go test ./...', 'cargo build', 'tsc --noEmit',
   'echo hello', 'grep -rn foo src', 'wc -l src/a.ts', 'head -20 a.ts',
+  /* Sáu ca dưới đây là GIÁ của việc nới lớp ranh giới, và chúng ĐÃ đỏ một
+     lần: bản nới tay có cả nháy và `=` biến `echo "rm is a word"` và
+     `npm run test -- --grep="format"` thành 'nguy hiểm'. Chúng ở đây để lần
+     sau ai nới tiếp thì thấy ngay. */
+  'echo "rm is a word"', 'npm run test -- --grep="format"',
+  'npm run build -- --mode=production', 'NODE_ENV=production npm run build',
+  'git log --format="%h %s" -5', 'grep -n "del" src/a.ts',
 ];
 
 describe('ba bộ đối chứng cho phanLoaiLenh', () => {

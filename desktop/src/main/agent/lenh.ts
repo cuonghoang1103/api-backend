@@ -51,11 +51,18 @@ export interface PhanLoaiLenh {
  * — ký tự ngay trước `rm` là dấu `"`, không phải khoảng trắng — nên xếp
  * **thường**, tự chạy, và còn được nhớ. Đo thật 09/09/2026.
  *
- * Nay gồm cả nháy, ngoặc, backtick và `=`: mọi thứ có thể đứng ngay trước một
- * tên lệnh mà không phải ký tự chữ. KHÔNG dùng `\b` trần vì `npm`/`confirm`
- * cũng chứa `rm`.
+ * Nay gồm cả NGOẶC: `(rm -rf build)` là lệnh xoá thật, và `(` không nằm trong
+ * `META` nên nó không có cả đường lùi 'cankiem' — nó xếp thẳng 'thường'.
+ *
+ * ⚠️ CỐ Ý KHÔNG có nháy, backtick và `=`. Đã thử và ĐO thấy báo oan:
+ * `echo "rm is a word"` và `npm run test -- --grep="format"` thành 'nguy hiểm'.
+ * Mà chúng không mua thêm gì: `bash -c "rm -rf x"` đã bị nhóm TRÌNH THÔNG DỊCH
+ * bắt theo CÁCH GỌI, còn backtick và `$(` thì `META` đẩy xuống 'cankiem' — vẫn
+ * luôn hỏi. Báo oan thì đắt thật: người dùng bấm bừa rồi bật "Bỏ qua tất cả".
+ *
+ * KHÔNG dùng `\b` trần vì `npm`/`confirm` cũng chứa `rm`.
  */
-const RANH = String.raw`(?:^|[\s;&|(){}"'\x60=])`;
+const RANH = String.raw`(?:^|[\s;&|(){}])`;
 const L = (than: string): RegExp => new RegExp(RANH + than, 'i');
 
 /**

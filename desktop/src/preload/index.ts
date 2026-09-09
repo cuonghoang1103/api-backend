@@ -269,7 +269,13 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('agent:mcpDuyetDuAn', { cuocId }) as Promise<AgentMcpTrangThai>,
     mcpMoCauHinh: () => ipcRenderer.invoke('agent:mcpMoCauHinh') as Promise<void>,
     hookMoCauHinh: () => ipcRenderer.invoke('agent:hookMoCauHinh') as Promise<void>,
-    hookDem: () => ipcRenderer.invoke('agent:hookDem') as Promise<number>,
+    hookDem: (cuocId?: string) =>
+      ipcRenderer.invoke('agent:hookDem', cuocId ? { cuocId } : {}) as Promise<number>,
+    hookChoDuyet: (cuocId: string) =>
+      ipcRenderer.invoke('agent:hookChoDuyet', { cuocId }) as Promise<
+        Array<{ khi: string; lenh: string; khop?: string; chan?: boolean }>>,
+    hookDuyetDuAn: (cuocId: string) =>
+      ipcRenderer.invoke('agent:hookDuyetDuAn', { cuocId }) as Promise<boolean>,
     hookNhatKy: () => ipcRenderer.invoke('agent:hookNhatKy') as Promise<AgentHookNhatKy[]>,
     hookThu: (cuocId: string, moc: 'truocTool' | 'sauTool' | 'xongLuot', tenTool: string) =>
       ipcRenderer.invoke('agent:hookThu', { cuocId, moc, tenTool }) as

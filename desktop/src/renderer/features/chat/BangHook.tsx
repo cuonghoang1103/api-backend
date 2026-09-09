@@ -16,7 +16,7 @@
  *    tôi đoán từ tên thư mục.
  */
 import { useCallback, useEffect, useState } from 'react';
-import { FileCode2, Play, RotateCw } from 'lucide-react';
+import { FileCode2, Play, RotateCw, ShieldCheck } from 'lucide-react';
 import { useMoRieng } from '../../components/moRieng';
 import type { AgentHookNhatKy } from '../../../shared/ipc';
 
@@ -39,16 +39,19 @@ export function BangHook({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
   const [tenTool, datTenTool] = useState('edit_file');
   const [dangThu, datDangThu] = useState(false);
   const [ketQua, datKetQua] = useState<{ chan: boolean; ra: string } | null>(null);
+  /** Hook `.claude/settings.json` của dự án đang CHỜ duyệt. */
+  const [choDuyet, datChoDuyet] = useState<Array<{ khi: string; lenh: string; khop?: string; chan?: boolean }>>([]);
 
   const napLai = useCallback(async () => {
     const b = window.cuongthai?.agent;
     if (!b) return;
-    const [n, nk, kn] = await Promise.all([
-      b.hookDem().catch(() => 0),
+    const [n, nk, kn, cd] = await Promise.all([
+      b.hookDem(cuocId).catch(() => 0),
       b.hookNhatKy().catch(() => []),
       b.kyNangDs(cuocId).catch(() => []),
+      b.hookChoDuyet(cuocId).catch(() => []),
     ]);
-    datSoHook(n); datNhatKy(nk); datKyNang(kn);
+    datSoHook(n); datNhatKy(nk); datKyNang(kn); datChoDuyet(cd);
   }, [cuocId]);
 
   /* Đọc lại MỖI LẦN MỞ, không chỉ lúc gắn: người ta mở bảng này ngay sau khi
@@ -94,6 +97,41 @@ export function BangHook({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
             ⚠️ Hook không có <code>khop</code> sẽ chạy sau <strong>mọi</strong> tool, kể cả
             {' '}<code>read_file</code>. Luôn đặt <code>khop</code>.
           </p>
+
+          {choDuyet.length > 0 && (
+            /*
+             * IN NGUYÊN VĂN TỪNG DÒNG LỆNH trước khi hỏi.
+             *
+             * Hook nguy hiểm hơn `.mcp.json`: server MCP chỉ chạy khi model
+             * CHỌN gọi nó, còn hook chạy ở MỌI lời gọi tool, tự động. Mở một
+             * repo lạ rồi hỏi một câu vô hại là đủ.
+             *
+             * Nên không hỏi "bạn có tin repo này không?" — câu đó người ta trả
+             * lời bằng phản xạ. Hỏi bằng chính dòng lệnh sẽ chạy.
+             */
+            <div className="ct-chedo-canhbao-nho">
+              <p>
+                Dự án này khai <strong>{choDuyet.length}</strong> hook trong
+                {' '}<code>.claude/settings.json</code>. Chúng chạy <strong>tự động ở mọi lời gọi
+                tool</strong>, không hỏi lại. Đây là những lệnh sẽ chạy trên máy bạn:
+              </p>
+              <ul className="ct-hook-duyet-ds">
+                {choDuyet.map((h, i) => (
+                  <li key={`${h.khi}-${h.lenh}-${i}`}>
+                    <span className="ct-hook-duyet-moc">{h.khi}{h.khop ? ` · ${h.khop}` : ' · MỌI tool'}</span>
+                    <code>{h.lenh}</code>
+                  </li>
+                ))}
+              </ul>
+              <button
+                type="button" className="ct-btn ct-btn-ghost ct-mcp-nho"
+                disabled={khoa}
+                onClick={() => { void window.cuongthai?.agent.hookDuyetDuAn(cuocId).then(napLai); }}
+              >
+                <ShieldCheck size={12} aria-hidden /> Tôi đã đọc — cho chạy
+              </button>
+            </div>
+          )}
 
           <div className="ct-hook-nut">
             <button type="button" className="ct-btn ct-btn-ghost ct-mcp-nho"

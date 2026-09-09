@@ -14,7 +14,8 @@ import path from 'node:path';
 const USER_DATA = await fs.mkdtemp(path.join(os.tmpdir(), 'ct-mcpud-'));
 vi.mock('electron', () => ({ app: { getPath: () => USER_DATA }, BrowserWindow: {} }));
 
-const { docCauHinhDuAn, daDuyetDuAn, duyetDuAn, vanTay } = await import('./mcp');
+const { docCauHinhDuAn, daDuyetDuAn, duyetDuAn } = await import('./mcp');
+const { vanTay } = await import('./duyetDuAn');
 
 let goc = '';
 

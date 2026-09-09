@@ -5480,6 +5480,34 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   background: var(--ct-surface-2, rgba(127, 127, 127, 0.14));
 }
 
+/* ── Cửa duyệt hook của dự án ──
+   Đỏ chứ không cam như MCP: hook chạy ở MỌI lời gọi tool, tự động, không ai
+   bấm gì — nguy hiểm hơn một server MCP mà model phải chọn gọi. */
+.ct-chedo-canhbao-nho {
+  margin: 6px 0; padding: 9px 10px;
+  border: 1px solid var(--ct-err); border-radius: 8px;
+  background: color-mix(in srgb, var(--ct-err) 9%, transparent);
+}
+.ct-chedo-canhbao-nho p {
+  margin: 0 0 7px; font-size: 11px; line-height: 1.5; color: var(--ct-text-muted);
+}
+.ct-chedo-canhbao-nho strong { color: var(--ct-err); }
+.ct-hook-duyet-ds { margin: 0 0 8px; padding: 0; list-style: none; }
+.ct-hook-duyet-ds li {
+  margin-bottom: 5px; padding: 5px 7px;
+  border-radius: 6px; background: var(--ct-surface-2);
+}
+.ct-hook-duyet-moc {
+  display: block; margin-bottom: 2px;
+  font-size: 9.5px; color: var(--ct-text-faint); text-transform: uppercase;
+}
+/* Lệnh có thể rất dài — cho xuống dòng, đừng cắt. Một dòng lệnh bị cắt đuôi là
+   đúng chỗ nguy hiểm nhất bị giấu đi. */
+.ct-hook-duyet-ds code {
+  display: block; font-size: 10.5px; color: var(--ct-text);
+  word-break: break-all; white-space: pre-wrap;
+}
+
 .ct-mcp-nhan {
   padding: 1px 5px; border-radius: 4px;
   background: color-mix(in srgb, var(--ct-accent) 18%, transparent);

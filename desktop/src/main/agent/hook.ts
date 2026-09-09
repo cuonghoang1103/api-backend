@@ -30,6 +30,7 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { app } from 'electron';
 import { chayLenh } from './lenh';
+import { daDuyet, ghiDuyet } from './duyetDuAn';
 
 export type MocHook = 'truocTool' | 'sauTool' | 'xongLuot';
 
@@ -93,12 +94,72 @@ function hopLe(x: unknown): x is Hook {
   return true;
 }
 
-let demHook: { luc: number; ds: Hook[] } | null = null;
+let demHook: { luc: number; goc: string | null; ds: Hook[] } | null = null;
 /** Nhớ đệm 5 giây: một lượt gọi hàng chục tool, đọc lại file mỗi lần là vô ích. */
 const TTL_MS = 5000;
 
-export async function docHook(): Promise<Hook[]> {
-  if (demHook && Date.now() - demHook.luc < TTL_MS) return demHook.ds;
+/**
+ * ============================================================
+ * HOOK CỦA DỰ ÁN — `.claude/settings.json` trong kho mã
+ * ============================================================
+ *
+ * Cái lợi: cả nhóm dùng chung một repo thì chia sẻ được hook (chạy linter của
+ * dự án sau mỗi lần sửa file), thay vì mỗi người tự cấu hình rồi không ai biết
+ * người kia đã cấu hình đúng chưa.
+ *
+ * ⚠️⚠️ VÀ ĐÂY NGUY HIỂM HƠN `.mcp.json`, KHÔNG PHẢI NGANG.
+ * Server MCP chỉ chạy khi MODEL chọn gọi nó. Hook chạy ở MỌI lời gọi tool, tự
+ * động, không ai bấm gì — mở một repo lạ rồi hỏi nó một câu vô hại là đủ.
+ *
+ * Nên cửa duyệt ở đây phải nói NHIỀU HƠN chỗ MCP: giao diện in NGUYÊN VĂN từng
+ * dòng lệnh sẽ chạy (`dsHookChoDuyet`), chứ không chỉ báo "dự án này có hook".
+ * "Bạn có tin repo này không?" là câu hỏi mà người ta trả lời bằng phản xạ;
+ * "lệnh này sẽ chạy: `curl … | sh`" thì không.
+ *
+ * Vẫn khoá theo VÂN TAY — sửa một ký tự, kể cả do `git pull`, là hỏi lại.
+ */
+const KHO_DUYET = 'hook-duan-duyet.json';
+const FILE_DU_AN = ['.claude/settings.json', '.agent/settings.json'] as const;
+
+/**
+ * Đọc hook dự án khai. Trả về mảng ĐÃ LỌC hợp lệ (chưa xét duyệt).
+ *
+ * ⚠️ Định dạng là mảng `hooks` GIỐNG file của app (`khi`/`khop`/`lenh`), KHÔNG
+ * phải dạng lồng theo sự kiện của Claude Code. Nhận nhầm dạng thì ngữ nghĩa
+ * `matcher` khác nhau và hook chạy sai chỗ — tệ hơn là không chạy. File dùng
+ * dạng lồng sẽ cho ra mảng rỗng, và bảng Hook nói rõ điều đó.
+ */
+export async function docHookDuAn(goc: string | null): Promise<Hook[]> {
+  if (!goc) return [];
+  for (const ten of FILE_DU_AN) {
+    try {
+      const j = JSON.parse(await fs.readFile(path.join(goc, ...ten.split('/')), 'utf8')) as { hooks?: unknown };
+      if (Array.isArray(j.hooks)) return j.hooks.filter(hopLe).slice(0, MAX_HOOK);
+    } catch {
+      continue;
+    }
+  }
+  return [];
+}
+
+/** Hook dự án đang CHỜ duyệt. Rỗng khi không có, hoặc khi đã duyệt rồi. */
+export async function dsHookChoDuyet(goc: string | null): Promise<Hook[]> {
+  const ds = await docHookDuAn(goc);
+  if (ds.length === 0) return [];
+  return (await daDuyet(KHO_DUYET, goc, ds)) ? [] : ds;
+}
+
+/** Người dùng duyệt nội dung hook HIỆN TẠI của dự án. */
+export async function duyetHookDuAn(goc: string | null): Promise<boolean> {
+  const ok = await ghiDuyet(KHO_DUYET, goc, await docHookDuAn(goc));
+  if (ok) quenDemHook();      // nếu không thì hook vừa duyệt phải chờ hết 5s đệm
+  return ok;
+}
+
+export async function docHook(goc: string | null = null): Promise<Hook[]> {
+  // Đệm khoá theo cả GỐC: đổi tab sang dự án khác mà dùng lại đệm cũ nghĩa là
+  // chạy hook của dự án trước — im lặng, và trên máy người dùng.
+  if (demHook && demHook.goc === goc && Date.now() - demHook.luc < TTL_MS) return demHook.ds;
   const p = duongDanCauHinh();
   let ds: Hook[] = [];
   try {
@@ -108,7 +169,16 @@ export async function docHook(): Promise<Hook[]> {
     // Chưa có file ⇒ ghi mẫu. Không cấu hình hook là trạng thái BÌNH THƯỜNG.
     await fs.writeFile(p, MAU, 'utf8').catch(() => {});
   }
-  demHook = { luc: Date.now(), ds };
+
+  /* Hook của DỰ ÁN, chỉ khi đã duyệt đúng nội dung hiện tại. Nối SAU hook của
+     máy: hook của người dùng chạy trước, và một file trong repo không đẩy được
+     chúng xuống dưới. */
+  const duAn = await docHookDuAn(goc);
+  if (duAn.length > 0 && await daDuyet(KHO_DUYET, goc, duAn)) {
+    ds = [...ds, ...duAn].slice(0, MAX_HOOK);
+  }
+
+  demHook = { luc: Date.now(), goc, ds };
   return ds;
 }
 
@@ -194,7 +264,7 @@ export async function chayHook(opts: {
   args?: unknown;
   signal: AbortSignal;
 }): Promise<KetQuaHook> {
-  const ds = (await docHook()).filter((h) => h.khi === opts.moc
+  const ds = (await docHook(opts.goc)).filter((h) => h.khi === opts.moc
     && khopHook(h, opts.goc, opts.tenTool ?? null));
   if (ds.length === 0) return { chan: false, ra: '', soKhop: 0 };
 

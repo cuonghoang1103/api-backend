@@ -43,7 +43,7 @@ import { datDinhKem, datDinhKemTuDuong } from '../agent/dinhKem';
 import { hoanTacTatCa, luiFileVeLuot } from '../agent/tools';
 import { timFileGoiY } from '../agent/timFileNhanh';
 import { docLenhDuAn } from '../agent/lenhTuTao';
-import { chayHook, docHook, docNhatKy, quenDemHook, duongDanCauHinh as duongHook } from '../agent/hook';
+import { chayHook, docHook, docNhatKy, quenDemHook, duongDanCauHinh as duongHook, dsHookChoDuyet, duyetHookDuAn} from '../agent/hook';
 import { dsKyNang } from '../agent/kyNang';
 import { traLoi } from '../agent/xinPhep';
 import { readStoredSession } from './auth';
@@ -565,10 +565,14 @@ export function registerAgentHandlers(): void {
 
   /* Người dùng vừa sửa file xong ⇒ phải QUÊN nhớ đệm rồi mới đếm, nếu không
      con số trả về là của bản cũ và họ tưởng file mình sửa không ăn. */
-  handle('agent:hookDem', async () => {
+  handle('agent:hookDem', async ({ cuocId }) => {
     quenDemHook();
-    return (await docHook()).length;
+    return (await docHook(cuocId ? gocCua(cuocId) : null)).length;
   });
+
+  handle('agent:hookChoDuyet', ({ cuocId }) => dsHookChoDuyet(gocCua(cuocId)));
+
+  handle('agent:hookDuyetDuAn', ({ cuocId }) => duyetHookDuAn(gocCua(cuocId)));
 
   handle('agent:hookNhatKy', () => docNhatKy());
 

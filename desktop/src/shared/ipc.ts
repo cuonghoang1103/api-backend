@@ -1082,7 +1082,10 @@ export const INVOKE_CHANNELS = {
   'agent:mcpDuyetDuAn': agentCuocSchema,
   'agent:mcpMoCauHinh': null,
   'agent:hookMoCauHinh': null,
-  'agent:hookDem': null,
+  /* Có `cuocId` để biết DỰ ÁN nào — hook dự án là của dự án đang mở ở tab đó. */
+  'agent:hookDem': z.object({ cuocId: z.string().min(1).optional() }),
+  'agent:hookChoDuyet': agentCuocSchema,
+  'agent:hookDuyetDuAn': agentCuocSchema,
   'agent:hookNhatKy': null,
   /**
    * CHẠY THỬ hook mà không tốn một lượt agent nào.
@@ -1484,7 +1487,11 @@ export interface DesktopBridge {
      */
     hookMoCauHinh(): Promise<void>;
     /** Số hook đang hiệu lực, sau khi nạp lại. Để giao diện nói được con số. */
-    hookDem(): Promise<number>;
+    hookDem(cuocId?: string): Promise<number>;
+    /** Hook dự án đang CHỜ duyệt — nguyên văn, để giao diện in ra trước khi hỏi. */
+    hookChoDuyet(cuocId: string): Promise<Array<{ khi: string; lenh: string; khop?: string; chan?: boolean }>>;
+    /** Duyệt hook `.claude/settings.json` của dự án. Vân tay đổi là phải duyệt lại. */
+    hookDuyetDuAn(cuocId: string): Promise<boolean>;
     /** Những lần hook chạy gần đây — gồm cả lần ĐẠT mà không in gì. */
     hookNhatKy(): Promise<AgentHookNhatKy[]>;
     /** Chạy thử hook ở một mốc, với một tên tool giả. Không đụng hội thoại. */

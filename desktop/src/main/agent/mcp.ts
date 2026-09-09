@@ -37,7 +37,7 @@ import { app } from 'electron';
 import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { createHash } from 'node:crypto';
+import { daDuyet, ghiDuyet } from './duyetDuAn';
 
 // ─── Trần ──────────────────────────────────────────────────────────
 const MAX_SERVER = 5;
@@ -142,15 +142,8 @@ async function docCauHinh(): Promise<Record<string, CauHinhServer>> {
  */
 const TEN_FILE_DU_AN = '.mcp.json';
 
-function duongDanKhoDuyet(): string {
-  return path.join(app.getPath('userData'), 'mcp-duan-duyet.json');
-}
-
-/** Vân tay của một bộ cấu hình. Đổi một ký tự là đổi vân tay ⇒ hỏi lại. */
-export function vanTay(ch: Record<string, CauHinhServer>): string {
-  const chuan = Object.keys(ch).sort().map((k) => [k, ch[k]] as const);
-  return createHash('sha256').update(JSON.stringify(chuan)).digest('hex').slice(0, 32);
-}
+/** Tên kho duyệt trong `userData`. Riêng cho MCP — hook có kho của nó. */
+const KHO_DUYET = 'mcp-duan-duyet.json';
 
 /**
  * Đọc `.mcp.json` của dự án.
@@ -177,36 +170,14 @@ export async function docCauHinhDuAn(goc: string | null): Promise<Record<string,
   }
 }
 
-async function khoDuyet(): Promise<Record<string, string>> {
-  try {
-    const j = JSON.parse(await fs.readFile(duongDanKhoDuyet(), 'utf8')) as Record<string, string>;
-    return j && typeof j === 'object' && !Array.isArray(j) ? j : {};
-  } catch {
-    return {};
-  }
-}
-
 /** Cấu hình `.mcp.json` của dự án này đã được duyệt ĐÚNG NỘI DUNG HIỆN TẠI chưa. */
 export async function daDuyetDuAn(goc: string | null, ch: Record<string, CauHinhServer>): Promise<boolean> {
-  if (!goc || Object.keys(ch).length === 0) return false;
-  return (await khoDuyet())[goc] === vanTay(ch);
+  return daDuyet(KHO_DUYET, goc, ch);
 }
 
 /** Ghi nhận người dùng đã duyệt nội dung `.mcp.json` HIỆN TẠI của dự án. */
 export async function duyetDuAn(goc: string | null): Promise<boolean> {
-  if (!goc) return false;
-  const ch = await docCauHinhDuAn(goc);
-  if (Object.keys(ch).length === 0) return false;
-  try {
-    const kho = await khoDuyet();
-    kho[goc] = vanTay(ch);
-    const p = duongDanKhoDuyet();
-    await fs.writeFile(`${p}.tam`, JSON.stringify(kho, null, 2), 'utf8');
-    await fs.rename(`${p}.tam`, p);
-    return true;
-  } catch {
-    return false;
-  }
+  return ghiDuyet(KHO_DUYET, goc, await docCauHinhDuAn(goc));
 }
 
 // ─── JSON-RPC qua stdio ────────────────────────────────────────────

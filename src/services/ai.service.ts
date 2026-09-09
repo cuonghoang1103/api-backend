@@ -375,7 +375,17 @@ async function themBoiCanhCaNhan(ragContext: string, ctx: ChatContext): Promise<
       '\n### Lịch và việc của chính người đang hỏi (dữ liệu THẬT, ưu tiên dùng):\n'
       + khoi
       + '\nKhi họ hỏi hôm nay học gì / làm gì / còn việc gì, TRẢ LỜI THẲNG từ phần này. '
-      + 'Phần này không có thì nói là chưa có trong lịch, đừng suy đoán.\n';
+      + 'Phần này không có thì nói là chưa có trong lịch, đừng suy đoán.\n'
+      + '\n### Khi người dùng BẢO BẠN LÀM một việc với danh sách trên:\n'
+      + 'Trả lời bình thường, rồi kết bằng MỘT dòng dấu lệnh ở cuối:\n'
+      + '- Họ bảo đã làm xong một việc → <<VIEC:XONG|đúng tên việc trong danh sách trên>>\n'
+      + '- Họ bảo thêm một việc mới    → <<VIEC:THEM|tên việc ngắn gọn>>\n'
+      + 'Dấu lệnh này bị app CẮT BỎ trước khi hiện và trước khi đọc lên, nên ĐỪNG nhắc tới nó, '
+      + 'đừng đọc nó ra, và đừng giải thích nó.\n'
+      + '⚠️ Nó chỉ là ĐỀ NGHỊ — app sẽ hỏi người dùng xác nhận rồi mới làm. Vì thế đừng nói '
+      + '"đã xong rồi" như việc đã chắc chắn; nói kiểu "mình đánh dấu xong nhé".\n'
+      + '⚠️ CHỈ phát dấu lệnh khi họ THỰC SỰ yêu cầu. Họ chỉ hỏi thăm hay kể chuyện thì tuyệt '
+      + 'đối không phát — mỗi dấu lệnh thừa là một lần app hỏi họ một câu vô cớ.\n';
     return ragContext ? ragContext + phan : phan;
   } catch (e) {
     logger.warn('trợ lý: không lấy được bối cảnh hôm nay', {

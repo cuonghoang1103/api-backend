@@ -1226,11 +1226,24 @@ async function mgoiMotLuot(o: {
     if (o.signal.aborted) throw err; // người dùng bấm Dừng — không phải lỗi mạng
     const tin = (err as Error)?.message ?? '';
     if (/terminated|aborted|ECONNRESET|socket hang up|fetch failed|ETIMEDOUT|network|EPIPE/i.test(tin)) {
+      /* GHI RA NGUYÊN VĂN lỗi gốc, và cho nó vào cả câu người dùng thấy.
+       *
+       * Bản cũ gộp bảy loại lỗi mạng khác nhau vào đúng MỘT câu. Khi người
+       * dùng báo "sao nó cứ lỗi này" (09/09/2026) thì không ai — kể cả tôi —
+       * biết nó là `terminated` (undici cắt vì luồng im), `ECONNRESET` (đầu
+       * kia đóng), hay `ETIMEDOUT` (không tới nơi). Ba nguyên nhân đó ở ba
+       * chỗ khác nhau và cần ba bản vá khác nhau.
+       *
+       * Một câu báo lỗi nuốt mất nguyên nhân thì mỗi lần gặp lại là một lần
+       * phải đoán từ đầu. Xem [[feedback_dung_nuot_loi_thanh_cau_co_dinh]]. */
+      console.warn('[agent] mất kết nối tới máy chủ:', tin);
+      const goi = tin.trim().slice(0, 80);
       return {
         ok: false,
         ma: 'CONNECTION_LOST',
         thongDiep:
-          'Kết nối tới máy chủ đứt giữa chừng. Đang thử lại — phần đã làm vẫn còn trong hội thoại.',
+          `Kết nối tới máy chủ đứt giữa chừng${goi ? ` (${goi})` : ''}. `
+          + 'Đang thử lại — phần đã làm vẫn còn trong hội thoại.',
       };
     }
     throw err;

@@ -132,6 +132,48 @@ describe('datDinhKemTuDuong — kéo-thả từ Finder', () => {
     ngoai = await fs.mkdtemp(path.join(os.tmpdir(), 'ct-ngoai-'));
   });
 
+  /**
+   * CHÍNH THƯ MỤC DỰ ÁN phải được nhận là "trong dự án".
+   *
+   * 09/09/2026 người dùng báo: chọn thư mục bằng đúng nút chọn, rồi đưa nó cho
+   * agent, thì nhận câu "Thư mục này nằm ngoài dự án — hãy mở nó bằng nút chọn
+   * thư mục". Tự mâu thuẫn, và không có cách nào thoát.
+   *
+   * Nguyên nhân: `path.relative(goc, goc)` trả CHUỖI RỖNG, mà điều kiện lại là
+   * `rel !== '' && …`. Nên đúng cái thư mục gốc — thứ hay được đưa cho agent
+   * nhất — là trường hợp DUY NHẤT bị xếp nhầm ra ngoài.
+   */
+  it('CHÍNH thư mục dự án ⇒ trong dự án, trả về "."', async () => {
+    const kq = await datDinhKemTuDuong(goc, goc);
+    expect(kq.laThuMuc).toBe(true);
+    expect(kq.coSan).toBe(true);
+    expect(kq.tuongDoi).toBe('.');
+  });
+
+  it('thư mục gốc dạng có dấu / ở cuối cũng vậy', async () => {
+    const kq = await datDinhKemTuDuong(goc, `${goc}${path.sep}`);
+    expect(kq.tuongDoi).toBe('.');
+    expect(kq.coSan).toBe(true);
+  });
+
+  /**
+   * `'.'` mà `datDinhKemTuDuong` trả về phải ĐI QUA ĐƯỢC cái ngục — không thì
+   * chỉ là đổi lỗi này lấy lỗi khác: đính kèm thành công rồi agent đọc là hỏng.
+   * Chốt ở đây vì đó là hợp đồng giữa hai tệp, mà không tệp nào tự canh được.
+   */
+  it('"." đi qua được ngục đường dẫn — agent dùng được thứ vừa trả về', async () => {
+    const { moTrongNguc } = await import('./jail');
+    await expect(moTrongNguc(goc, '.')).resolves.toBe(goc);
+  });
+
+  it('thư mục ANH EM tên gần giống vẫn bị coi là NGOÀI dự án', async () => {
+    // `/a/duan-cu` cũng `startsWith('/a/duan')` — chốt này giữ cho bản vá trên
+    // không nới lỏng thành so chuỗi cẩu thả.
+    const anhEm = `${goc}-cu`;
+    await fs.mkdir(anhEm, { recursive: true });
+    await expect(datDinhKemTuDuong(goc, anhEm)).rejects.toThrow(/ngoài dự án/);
+  });
+
   it('file NGOÀI dự án thì chép vào .cuongthai/dinh-kem', async () => {
     const f = path.join(ngoai, 'log.txt');
     await fs.writeFile(f, 'nội dung thật');

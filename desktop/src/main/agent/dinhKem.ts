@@ -177,9 +177,25 @@ export async function datDinhKemTuDuong(goc: string, duong: string): Promise<Ket
      `/a/duan`, và một cú so chuỗi cẩu thả ở đây nghĩa là file NGOÀI dự án bị
      coi là trong, rồi đưa cho agent một đường dẫn mà cái ngục sẽ từ chối. */
   const rel = path.relative(gocThat, that);
-  const trongDuAn = rel !== '' && !rel.startsWith('..') && !path.isAbsolute(rel);
+  /* ⚠️ KHÔNG loại `rel === ''`. Đó là CHÍNH thư mục dự án, và nó là thứ người
+     dùng đưa cho agent nhiều nhất ("xem cả dự án giúp tôi"). Bản cũ có
+     `rel !== ''` nên đúng thư mục gốc rơi xuống nhánh bên dưới và nhận câu
+     "Thư mục này nằm ngoài dự án — hãy mở nó bằng nút chọn thư mục": tự mâu
+     thuẫn, vì họ vừa chọn nó bằng đúng nút đó, và không có đường nào thoát.
+     Người dùng báo 09/09/2026.
+
+     Vẫn so bằng `relative`, KHÔNG `startsWith`: `/a/duan-cu` cũng
+     `startsWith('/a/duan')`, và một cú so chuỗi cẩu thả ở đây nghĩa là thư mục
+     NGOÀI dự án bị coi là trong. Có phép kiểm riêng canh đúng ca đó. */
+  const trongDuAn = !rel.startsWith('..') && !path.isAbsolute(rel);
   if (trongDuAn) {
-    return { tuongDoi: rel, byte: tt.isDirectory() ? 0 : tt.size, laThuMuc: tt.isDirectory(), coSan: true };
+    return {
+      // `''` là gốc — agent cần một đường dẫn dùng được, `'.'` mới là nó.
+      tuongDoi: rel || '.',
+      byte: tt.isDirectory() ? 0 : tt.size,
+      laThuMuc: tt.isDirectory(),
+      coSan: true,
+    };
   }
 
   /* Thư mục NGOÀI dự án: không chép (một cú kéo nhỡ tay có thể là 2GB

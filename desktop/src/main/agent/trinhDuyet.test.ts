@@ -343,10 +343,28 @@ describe('đứt kết nối giữa lượt — phải THÀNH MÃ, không ném t
   it('nhận diện `terminated` và trả mã CONNECTION_LOST', () => {
     const i = lp.indexOf('return await mgoiMotLuotThat(o);');
     expect(i, 'không thấy chỗ bọc').toBeGreaterThan(-1);
-    const than = lp.slice(i, i + 900);
+    // Cửa sổ 1800: khối này có chú thích dài, và cắt hụt thì phép kiểm đỏ vì
+    // ĐỌC THIẾU chứ không phải vì mã sai — một kiểu báo nhầm khó chịu.
+    const than = lp.slice(i, i + 1800);
     expect(than, 'không nhận diện chuỗi undici').toContain('terminated');
     expect(than, 'không trả mã đáng thử lại').toContain("ma: 'CONNECTION_LOST'");
     expect(than, 'nuốt luôn cả lệnh Dừng của người dùng').toContain('o.signal.aborted');
+  });
+
+  /**
+   * Câu báo lỗi phải MANG THEO nguyên nhân gốc.
+   *
+   * Bản cũ gộp bảy loại lỗi mạng vào đúng một câu cố định. 09/09/2026 người
+   * dùng báo "sao nó cứ lỗi này vậy" và không ai — kể cả tôi — biết nó là
+   * `terminated`, `ECONNRESET` hay `ETIMEDOUT`: ba nguyên nhân ở ba chỗ khác
+   * nhau, cần ba bản vá khác nhau. Nuốt nguyên nhân nghĩa là mỗi lần gặp lại
+   * là một lần đoán từ đầu.
+   */
+  it('câu báo lỗi kèm nguyên nhân gốc, và ghi ra log', () => {
+    const i = lp.indexOf('return await mgoiMotLuotThat(o);');
+    const than = lp.slice(i, i + 1800);
+    expect(than, 'không ghi nguyên nhân ra log').toMatch(/console\.warn\(.*agent/);
+    expect(than, 'câu báo lỗi không chèn nguyên nhân gốc').toContain('${goi');
   });
 
   it('CONNECTION_LOST nằm trong nhóm được thử lại', () => {

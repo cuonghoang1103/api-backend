@@ -1447,8 +1447,15 @@ export const academyApi = {
   // When called from the admin panel we want to see DRAFT courses too
   // (the user is editing). The public /academy page never sets this
   // flag, so it still only ever sees PUBLISHED courses.
-  getCoursesBySemester: (semesterId: number, opts?: { includeDraft?: boolean }) =>
-    api.get(`/courses/semester/${semesterId}`, { params: opts?.includeDraft ? { includeDraft: 'true' } : {} }),
+  // `gon: true` → chỉ 8 trường trang danh sách thật sự hiện. Không truyền thì
+  // vẫn nhận đủ cả cây `sections` như cũ (app desktop/iOS đang dựa vào đó).
+  getCoursesBySemester: (semesterId: number, opts?: { includeDraft?: boolean; gon?: boolean }) =>
+    api.get(`/courses/semester/${semesterId}`, {
+      params: {
+        ...(opts?.includeDraft ? { includeDraft: 'true' } : {}),
+        ...(opts?.gon ? { gon: '1' } : {}),
+      },
+    }),
   getLessonAssignments: (lessonId: number) => api.get(`/courses/lessons/${lessonId}/assignments`),
   submitAssignment: (data: { assignmentId: number; submissionUrl: string; notes?: string }) =>
     api.post('/courses/assignments/submit', data),

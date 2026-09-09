@@ -960,15 +960,71 @@ router.get('/semester/:semesterId', optionalAuth, async (req, res: Response<ApiR
     // /academy page never sets this, so it still only ever sees PUBLISHED
     // courses.
     const includeDraft = String(req.query.includeDraft || '').toLowerCase() === 'true';
+    const where = { semesterId, ...(includeDraft ? {} : { status: 'PUBLISHED' as const }) };
+    const thuTu = [{ courseCode: 'asc' as const }, { createdAt: 'asc' as const }];
+
+    /*
+     * ?gon=1 — DANH SÁCH, không phải chi tiết.
+     *
+     * ⚠️ Đường mặc định ở dưới gọi `serializeCourse` MỘT LẦN CHO MỖI MÔN, và
+     * mỗi lần đó kéo về TOÀN BỘ cây chương → bài → chi tiết bài. Đo thật trên
+     * production 09/09/2026, trang /academy nạp 9 kỳ song song:
+     *
+     *     9 request · 2.072 KB · trường `sections` chiếm 1.803 KB (93%)
+     *     mỗi request ~1,9-2,0 giây — tất cả cùng về một lúc, dấu hiệu kinh
+     *     điển của tranh nhau ở máy chủ chứ không phải mạng chậm
+     *
+     * Mà trang danh sách chỉ hiện 8 trường: tên, mã, ảnh, mô tả ngắn, số bài.
+     * Nó KHÔNG đọc `sections` lấy một lần.
+     *
+     * ⛔ KHÔNG cắt `sections` khỏi đường mặc định: app desktop và app iOS
+     * đang lấy sẵn cây chương từ chính endpoint này (xem chú thích đầu
+     * `desktop/src/renderer/features/academy/HocVienPage.tsx`). Nên đây là
+     * đường MỚI, chọn bằng tham số — ai không truyền gì thì không đổi gì.
+     */
+    if (String(req.query.gon || '') === '1') {
+      const gon = await prisma.course.findMany({
+        where,
+        orderBy: thuTu,
+        select: {
+          id: true, slug: true, title: true, courseCode: true,
+          thumbnailUrl: true, shortDescription: true, description: true,
+          // ⚠️ Lấy ĐÚNG CỘT mà `serializeCourse` trả về (dòng
+          // `totalLessons: course.totalLessons`), không đếm lại. Đếm lại thì
+          // phải join cả bảng bài, và nếu cột từng lệch thì con số trên màn
+          // hình sẽ ĐỔI so với trước — người dùng thấy khác mà không ai biết
+          // vì sao. Cột này do `syncCourseStats()` giữ đồng bộ (6 nơi gọi).
+          totalLessons: true,
+          /*
+           * ⚠️ BỐN TRƯỜNG DƯỚI ĐÂY BẮT BUỘC PHẢI CÓ, dù trang web không hiện
+           * cái nào. `struct Course` của app iOS khai chúng KHÔNG optional:
+           *
+           *     let price: Double        let isFree: Bool
+           *     let level: String        let totalStudents: Int
+           *
+           * Thiếu một cái là `JSONDecoder` ném lỗi và màn Học viện trên iOS
+           * TRẮNG TRƠN — hỏng câm, không có thông báo nào. Chúng đều là số/
+           * chuỗi ngắn nên gần như không tốn gì.
+           */
+          price: true,
+          isFree: true,
+          level: true,
+          _count: { select: { enrollments: true } },
+        },
+      });
+      res.set('Cache-Control', 'public, max-age=120, stale-while-revalidate=600');
+      res.json({
+        success: true,
+        // `totalStudents` lấy từ _count như đường cũ, không lấy cột đếm sẵn
+        // (cột đó trôi vì không phải lối ghi danh nào cũng cộng vào).
+        data: gon.map(({ _count, ...c }) => ({ ...c, totalStudents: _count.enrollments })),
+      });
+      return;
+    }
+
     const courses = await prisma.course.findMany({
-      where: {
-        semesterId,
-        ...(includeDraft ? {} : { status: 'PUBLISHED' }),
-      },
-      orderBy: [
-        { courseCode: 'asc' },
-        { createdAt: 'asc' },
-      ],
+      where,
+      orderBy: thuTu,
       select: { id: true },
     });
 

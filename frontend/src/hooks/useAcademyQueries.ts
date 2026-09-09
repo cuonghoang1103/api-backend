@@ -37,7 +37,11 @@ export function useCoursesBySemesters(semesters: Semester[]) {
     queries: semesters.map((semester) => ({
       queryKey: academyKeys.coursesBySemester(semester.id),
       queryFn: async () => {
-        const res = await academyApi.getCoursesBySemester(semester.id);
+        // `gon` — trang này chỉ hiện tên/mã/ảnh/mô tả ngắn/số bài. Không có
+        // nó thì mỗi kỳ kéo về cả cây chương-bài: đo thật 09/09/2026 là
+        // 2.072 KB cho 50 môn, 93% là `sections` không ai đọc, và 9 request
+        // song song đều mất ~2 giây vì tranh nhau ở máy chủ.
+        const res = await academyApi.getCoursesBySemester(semester.id, { gon: true });
         return (res.data.data || []) as Course[];
       },
       enabled: semester.id > 0,

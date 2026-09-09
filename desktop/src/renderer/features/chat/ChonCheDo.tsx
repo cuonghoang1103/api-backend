@@ -28,6 +28,7 @@
  */
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useMoRieng } from '../../components/moRieng';
+import { useAppState } from '../../app-state';
 import { createPortal } from 'react-dom';
 import { ChevronDown, FilePen, ListChecks, ShieldAlert, ShieldCheck, Terminal } from 'lucide-react';
 
@@ -113,6 +114,12 @@ export function ChonCheDo({
    * Vẫn dùng sổ chung để không chồng lên tấm khác — chỉ khoá là riêng.
    */
   const { mo, bat, dong: dongTam } = useMoRieng(`agent:quyen:${cuocId}`, false);
+  /* Chế độ mặc định khi mở dự án. Đặt Ở ĐÂY chứ không chôn trong một trang
+     cài đặt: người dùng đang đứng đúng chỗ chọn chế độ, và "lần sau cũng thế"
+     là ý nghĩ xảy ra ngay tại khoảnh khắc đó. */
+  const { settings, setSetting } = useAppState();
+  const macDinh = typeof settings.aiCheDoQuyenMacDinh === 'string'
+    ? settings.aiCheDoQuyenMacDinh : 'keHoach';
   const [viTri, datViTri] = useState<{ trai: number; tren: number } | null>(null);
   /* Chế độ đang chờ người dùng đọc cảnh báo. `null` = không có cửa nào mở. */
   const [choXacNhan, datChoXacNhan] = useState<CheDoQuyen | null>(null);
@@ -202,6 +209,23 @@ export function ChonCheDo({
           {/* Nói thẳng ranh giới. Câu cũ ("nguy hiểm luôn hỏi ở MỌI chế độ")
               đã sai từ khi có `boQuaHet` — một dòng chân trang nói sai về
               chính chốt an toàn thì tệ hơn là không có dòng nào. */}
+          {/* "Lần sau cũng thế". `boQuaHet` KHÔNG có ở đây — nó phải là một
+              lựa chọn có ý thức mỗi lần, không phải một thứ bật một lần rồi
+              quên. Chốt thật nằm ở `cheDoMacDinh()` trong `loop.ts`. */}
+          {cheDo !== 'boQuaHet' && (
+            <button
+              type="button"
+              className="ct-chedo-macdinh"
+              data-la={macDinh === cheDo}
+              onClick={() => { setSetting('aiCheDoQuyenMacDinh', cheDo); dongTam(); }}
+              disabled={macDinh === cheDo}
+            >
+              {macDinh === cheDo
+                ? '✓ Đang là mặc định khi mở dự án'
+                : 'Đặt làm mặc định khi mở dự án'}
+            </button>
+          )}
+
           <p className="ct-chedo-chan">
             Lệnh bị xếp <strong>nguy hiểm</strong> vẫn hỏi ở mọi chế độ —
             trừ <strong>Bỏ qua tất cả</strong>.

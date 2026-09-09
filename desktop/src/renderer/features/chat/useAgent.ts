@@ -14,6 +14,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
+  AgentDiff,
   AgentInfo, AgentMucKhoiPhuc, AgentNguCanh, AgentPhanLoaiLenh, AgentPhien, AgentQuota, AgentQuyetDinh,
   AgentUiEvent, AgentViec, AgentWorkspace,
 } from '../../../shared/ipc';
@@ -38,7 +39,14 @@ export type MucHienThi =
    * `tool` tìm đúng dòng đó mà THAY, thay vì đẻ ra dòng thứ hai cho cùng một
    * lời gọi.
    */
-  | { kieu: 'tool'; id?: string; ten: string; tomTat: string; vong: 'may' | 'notes'; dangChay?: boolean }
+  | {
+      kieu: 'tool'; id?: string; ten: string; tomTat: string; vong: 'may' | 'notes';
+      dangChay?: boolean;
+      /** Nguyên văn kết quả tool (đã cắt) — bấm vào dòng tool để mở ra xem. */
+      chiTiet?: string;
+      /** Diff của lần ghi file. CÓ cả ở chế độ tự duyệt, nơi không có thẻ duyệt. */
+      diff?: AgentDiff;
+    }
   /**
    * Thẻ duyệt nằm NGAY TRONG dòng thời gian hội thoại, không phải hộp thoại
    * nổi. Hộp thoại nổi che mất đoạn agent vừa giải thích lý do nó muốn sửa —
@@ -202,10 +210,18 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
             if (i === -1) {
               // Không khớp dòng nào — phiên cũ, hoặc sự kiện `toolBatDau` bị lỡ.
               // Thêm dòng đã xong: thà thừa một dòng còn hơn nuốt mất kết quả.
-              return [...truoc, { kieu: 'tool', ten: e.ten, tomTat: e.tomTat, vong: e.vong }];
+              return [...truoc, {
+              kieu: 'tool', ten: e.ten, tomTat: e.tomTat, vong: e.vong,
+              ...(e.chiTiet ? { chiTiet: e.chiTiet } : {}),
+              ...(e.diff ? { diff: e.diff } : {}),
+            }];
             }
             const sau = [...truoc];
-            sau[i] = { kieu: 'tool', ten: e.ten, tomTat: e.tomTat, vong: e.vong };
+            sau[i] = {
+              kieu: 'tool', ten: e.ten, tomTat: e.tomTat, vong: e.vong,
+              ...(e.chiTiet ? { chiTiet: e.chiTiet } : {}),
+              ...(e.diff ? { diff: e.diff } : {}),
+            };
             return sau;
           });
           break;

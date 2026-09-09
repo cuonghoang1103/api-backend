@@ -22,6 +22,7 @@ import {
 
 import { useAppState } from '../../app-state';
 import { MenuChamDoc, type MucMenu } from './MenuChamDoc';
+import { mauDuAn } from './mauDuAn';
 
 export interface ThuMuc {
   id: string;
@@ -196,7 +197,9 @@ export function ThanhBenChat({
 
         {nhom.map(([nhanNhom, ps, laGhim]) => (
           <section key={nhanNhom} className="ct-tb-nhom">
-            <h3>
+            {/* `data-mau` suy từ TÊN dự án — xem `mauDuAn.ts`. Nhóm ghim giữ
+                màu riêng, vì "đã ghim" là trạng thái chứ không phải dự án. */}
+            <h3 data-mau={laGhim ? 'ghim' : mauDuAn(nhanNhom)}>
               {laGhim ? <Pin size={11} aria-hidden /> : <FolderOpen size={11} aria-hidden />}
               {' '}{nhanNhom}
             </h3>

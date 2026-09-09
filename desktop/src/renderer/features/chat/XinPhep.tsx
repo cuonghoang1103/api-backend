@@ -81,6 +81,37 @@ export interface TheXinPhep {
   diff: AgentDiff;
 }
 
+/**
+ * Khối diff — dùng CHUNG cho thẻ duyệt và cho dòng tool đã xong.
+ *
+ * Tách ra vì từ 09/09/2026 diff còn hiện ở chế độ TỰ DUYỆT, nơi không có thẻ
+ * duyệt nào. Chép bộ vẽ này ra chỗ thứ hai thì hai bản sẽ trôi khỏi nhau —
+ * và trôi ở đây nghĩa là hai chỗ tô màu thay đổi theo hai cách khác nhau, đúng
+ * thứ người dùng dùng để đối chiếu.
+ */
+export function KhoiDiff({ diff, duongDan }: { diff: AgentDiff; duongDan: string }) {
+  const ngonNgu = ngonNguTuDuong(duongDan);
+  return (
+    <div className="ct-diff" data-ngonngu={ngonNgu ?? 'tho'}>
+      {diff.dong.map((d, i) => {
+        // Dòng "…" ngăn cách hai cụm thay đổi: cùng kiểu dữ liệu, cả hai số
+        // dòng đều null. Xem `rutGonNguCanh` trong main/agent/diff.ts.
+        if (d.loai === 'giu' && d.soCu === null && d.soMoi === null) {
+          return <div key={i} className="ct-diff-ngat">⋯</div>;
+        }
+        return (
+          <div key={i} className="ct-diff-dong" data-loai={d.loai}>
+            <span className="ct-diff-so">{d.soCu ?? ''}</span>
+            <span className="ct-diff-so">{d.soMoi ?? ''}</span>
+            <span className="ct-diff-dau">{d.loai === 'them' ? '+' : d.loai === 'bo' ? '−' : ' '}</span>
+            <MaDong text={d.text} ngonNgu={ngonNgu} />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export function XinPhep({
   the,
   traLoi,
@@ -88,9 +119,6 @@ export function XinPhep({
   the: TheXinPhep;
   traLoi: (id: string, q: AgentQuyetDinh) => void;
 }) {
-  // Tính MỘT lần cho cả thẻ, không phải mỗi dòng.
-  const ngonNgu = ngonNguTuDuong(the.duongDan);
-
   return (
     <div className="ct-xinphep">
       <div className="ct-xinphep-dau">
@@ -111,23 +139,7 @@ export function XinPhep({
         </div>
       )}
 
-      <div className="ct-diff" data-ngonngu={ngonNgu ?? 'tho'}>
-        {the.diff.dong.map((d, i) => {
-          // Dòng "…" ngăn cách hai cụm thay đổi: cùng kiểu dữ liệu, cả hai số
-          // dòng đều null. Xem `rutGonNguCanh` trong main/agent/diff.ts.
-          if (d.loai === 'giu' && d.soCu === null && d.soMoi === null) {
-            return <div key={i} className="ct-diff-ngat">⋯</div>;
-          }
-          return (
-            <div key={i} className="ct-diff-dong" data-loai={d.loai}>
-              <span className="ct-diff-so">{d.soCu ?? ''}</span>
-              <span className="ct-diff-so">{d.soMoi ?? ''}</span>
-              <span className="ct-diff-dau">{d.loai === 'them' ? '+' : d.loai === 'bo' ? '−' : ' '}</span>
-              <MaDong text={d.text} ngonNgu={ngonNgu} />
-            </div>
-          );
-        })}
-      </div>
+      <KhoiDiff diff={the.diff} duongDan={the.duongDan} />
 
       <div className="ct-xinphep-nut">
         <button type="button" className="ct-btn" onClick={() => traLoi(the.id, 'choPhep')}>

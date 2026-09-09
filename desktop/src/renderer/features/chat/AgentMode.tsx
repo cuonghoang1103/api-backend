@@ -39,10 +39,11 @@ import { ghepThamSo } from '../../../shared/lenhDuAn';
 import type {
   AgentInfo, AgentMcpTrangThai, AgentNguCanh, AgentViec, AgentWorktree, CheDoQuyen, ModelAgent, MucNoLuc,
 } from '../../../shared/ipc';
-import { useAgent, useThuMuc } from './useAgent';
+import { useAgent, useThuMuc, type MucHienThi } from './useAgent';
 import { LichSu } from './LichSu';
 import { ChuAgent } from './markdown';
 import { NutTinNhan } from './NutTinNhan';
+import { KhoiDiff } from './XinPhep';
 import { AnhPhongTo } from '../feed/AnhPhongTo';
 import { ChonCheDo } from './ChonCheDo';
 import {
@@ -990,15 +991,7 @@ export function AgentMode({
               </div>
             );
           }
-          return (
-            <div key={i} className="ct-agent-tool" data-vong={m.vong} data-ten={m.ten}>
-              <IconTool ten={m.ten} vong={m.vong} />
-              <code>{m.ten}</code>
-              {/* `title`: cột hẹp lại khi mở khung trình duyệt nên tóm tắt hay bị
-                  cắt cụt — rê chuột đọc được nguyên văn là đủ, không cần nới cột. */}
-              <span className="ct-agent-tool-tomtat" title={m.tomTat}>{m.tomTat}</span>
-            </div>
-          );
+          return <DongTool key={i} m={m} />;
         })}
 
         {/* Con quay bật từ khung `batDau`, KHÔNG chờ tới chữ đầu tiên. */}
@@ -1805,6 +1798,65 @@ function viecCuaTool(ten: string): string {
     cap_nhat_ke_hoach: 'đang cập nhật kế hoạch…',
   };
   return bang[ten] ?? (ten.startsWith('mcp__') ? 'đang gọi công cụ ngoài…' : 'đang chạy…');
+}
+
+/**
+ * Một dòng tool đã xong — BẤM ĐỂ MỞ RA XEM ĐẦY ĐỦ.
+ *
+ * ─── Vì sao cần ───
+ * Trước bản này dòng tool chỉ có một tóm tắt, và tóm tắt còn bị cắt cụt bởi
+ * `text-overflow`. Người dùng thấy `list_dir  demo-se205…` rồi hết. Họ hỏi
+ * đúng chỗ đó: "sao mấy cái lệnh nó chạy không hiện đầy đủ cho tôi xem?" —
+ * và câu trả lời là dữ liệu chưa từng được gửi lên giao diện.
+ *
+ * Với tool GHI FILE thì mở ra là DIFF từng dòng. Đây là thứ quan trọng nhất
+ * của cả thay đổi này: ở chế độ tự duyệt không có thẻ duyệt nào, nên trước đây
+ * "cho nó tự sửa" đồng nghĩa với "không xem được nó sửa gì".
+ *
+ * MẶC ĐỊNH ĐÓNG. Một việc 40 bước mà mở sẵn hết thì bảng ghi thành mấy nghìn
+ * dòng và không ai tìm được câu trả lời của agent ở đâu nữa.
+ */
+function DongTool({ m }: { m: Extract<MucHienThi, { kieu: 'tool' }> }) {
+  const [mo, datMo] = useState(false);
+  const coGiDeXem = Boolean(m.diff ?? m.chiTiet);
+
+  return (
+    <div className="ct-agent-tool" data-vong={m.vong} data-ten={m.ten} data-mo={mo}>
+      <div
+        className="ct-agent-tool-dong"
+        {...(coGiDeXem
+          ? {
+            role: 'button' as const,
+            tabIndex: 0,
+            onClick: () => datMo((v) => !v),
+            /* Bàn phím cũng phải mở được — dòng này là `div`, không phải
+               `button`, vì nó nằm trong một hàng có `code` và nhãn riêng. */
+            onKeyDown: (e: React.KeyboardEvent) => {
+              if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); datMo((v) => !v); }
+            },
+            title: mo ? 'Thu lại' : 'Bấm để xem đầy đủ',
+          }
+          : {})}
+      >
+        <IconTool ten={m.ten} vong={m.vong} />
+        <code>{m.ten}</code>
+        <span className="ct-agent-tool-tomtat" title={m.tomTat}>{m.tomTat}</span>
+        {coGiDeXem && (
+          <ChevronDown size={12} aria-hidden className="ct-agent-tool-mui" />
+        )}
+      </div>
+
+      {mo && m.diff && (
+        <KhoiDiff diff={m.diff} duongDan={m.tomTat} />
+      )}
+      {mo && !m.diff && m.chiTiet && (
+        /* `pre` chứ không phải markdown: đây là ĐẦU RA THÔ của lệnh/tool, và
+           dựng nó thành markdown sẽ nuốt mất khoảng trắng căn cột — thứ duy
+           nhất làm `ls -la` hay một bảng lỗi đọc được. */
+        <pre className="ct-agent-tool-chitiet">{m.chiTiet}</pre>
+      )}
+    </div>
+  );
 }
 
 function IconTool({ ten, vong }: { ten: string; vong: 'may' | 'notes' }) {

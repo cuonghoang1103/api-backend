@@ -490,7 +490,23 @@ await ctx.addInitScript(() => {
     getInfo: { version: '0.0.0', platform: 'darwin', apiOrigin: '', pro: true, configured: true,
                soViecConLai: 20, models: [], mucNoLuc: [] },
     getAll: {}, listDownloaded: [], usage: { count: 0, totalBytes: 0 },
-    dsCuocDangMo: [], dsPhien: [], phien: [], dsWorktree: [],
+    dsCuocDangMo: [],
+    /* Danh sách việc đã lưu, NHIỀU DỰ ÁN.
+       Để rỗng thì thanh bên chỉ hiện "Chưa có việc nào được lưu" — tức là mọi
+       chốt nhắm vào nó (nhóm theo dự án, màu nhóm, tiêu đề dính khi cuộn, nút
+       đổi tên) chưa từng chạy một lần nào. Một bộ đo nhìn vào màn hình rỗng
+       thì không đo gì cả. */
+    dsPhien: [
+      { id: 'p1', tieuDe: 'Tạo dự án React với CRA', duAn: 'ett1', luucLuc: 1757000000000, soTinNhan: 12 },
+      { id: 'p2', tieuDe: 'Kiểm tra phiên bản Node', duAn: 'project-for-me', luucLuc: 1757000100000, soTinNhan: 4 },
+      { id: 'p3', tieuDe: 'Tải tài liệu DBI202 từ trường', duAn: 'de-thi-cac-mon', luucLuc: 1757000200000, soTinNhan: 30 },
+      { id: 'p4', tieuDe: 'Bạn kiểm tra file này giúp tôi', duAn: 'api-backend', luucLuc: 1757000300000, soTinNhan: 8 },
+      { id: 'p5', tieuDe: 'bạn kiểm tra dự án này', duAn: 'mini-me-robot', luucLuc: 1757000400000, soTinNhan: 6 },
+      { id: 'p6', tieuDe: 'Bạn có thể tạo cho tôi đề IELTS', duAn: 'ielts', luucLuc: 1757000500000, soTinNhan: 3 },
+      { id: 'p7', tieuDe: 'Mở fuoverflow', duAn: null, luucLuc: 1757000600000, soTinNhan: 2 },
+      { id: 'p8', tieuDe: 'Việc đã ghim', duAn: 'api-backend', luucLuc: 1757000700000, soTinNhan: 9, ghim: true },
+    ],
+    phien: [], dsWorktree: [],
     mcpTrangThai: { soTool: 0, server: [], daDung: 0, tran: 200 },
     getStatus: { state: 'idle' },
     /* HÀM, không phải hằng — mỗi tab một id, đúng như `taoCuoc()` thật.

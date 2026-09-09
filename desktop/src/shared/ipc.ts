@@ -172,6 +172,19 @@ export const settingKeySchema = z.enum([
   'tqPhamVi',
   /** Bật tiếng cho việc tick xong / nhắc nhở. Mặc định BẬT. */
   'tqAmThanh',
+  /**
+   * Chế độ quyền MẶC ĐỊNH khi mở một dự án trong AI Code.
+   *
+   * Người dùng: "setting cố định luôn là nó luôn có quyền dùng terminal đi" —
+   * mở dự án nào cũng phải bấm đổi chế độ là một thao tác thừa lặp mãi.
+   *
+   * ⚠️ KHÔNG nhận `boQuaHet`. Chế độ đó tắt SẠCH mọi thẻ duyệt, kể cả lệnh
+   * `nguyhiem`, và nó có một cửa cảnh báo riêng phải đọc trước khi bật. Biến
+   * nó thành mặc định tự động cho MỌI dự án mở về sau — kể cả một repo vừa
+   * clone — là bỏ đúng cái cửa đó đi. Chốt nằm ở `datGocChoCuoc` trong
+   * `loop.ts`, không chỉ ở giao diện.
+   */
+  'aiCheDoQuyenMacDinh',
 ]);
 export type SettingKey = z.infer<typeof settingKeySchema>;
 
@@ -859,7 +872,14 @@ export type AgentUiEvent = { cuocId: string } & (
    * bằng dòng kết quả, thay vì đẻ ra hai dòng cho một lời gọi.
    */
   | { loai: 'toolBatDau'; id: string; ten: string; vong: 'may' | 'notes' }
-  | { loai: 'tool'; id?: string; ten: string; tomTat: string; vong: 'may' | 'notes' }
+  /** `chiTiet`/`diff` chỉ để HIỆN cho người dùng — không đi vào hội thoại. */
+  | {
+      loai: 'tool'; id?: string; ten: string; tomTat: string; vong: 'may' | 'notes';
+      /** Nguyên văn kết quả tool, đã cắt ở 20k ký tự. */
+      chiTiet?: string;
+      /** Diff của lần ghi file — có cả khi TỰ DUYỆT, lúc không có thẻ duyệt nào. */
+      diff?: AgentDiff;
+    }
   /** Agent ĐANG DỪNG chờ duyệt. Giao diện hiện thẻ diff và bắt buộc phải trả lời. */
   | { loai: 'xinPhep'; id: string; ten: string; duongDan: string; taoMoi: boolean; diff: AgentDiff }
   /** Thẻ đã được trả lời (hoặc hết giờ 5 phút) — gỡ thẻ đi. */

@@ -206,6 +206,15 @@ export interface KetQuaTool {
    * kết quả tool, và ở đó máy chủ tự bỏ kèm một dòng nói rõ đã bỏ.
    */
   anh?: Array<{ media_type: string; data: string }>;
+  /**
+   * Diff của lần ghi này — CHỈ để hiện cho người dùng, KHÔNG gửi cho model.
+   *
+   * Ở chế độ tự duyệt không có thẻ duyệt nào, nên trước bản này người dùng
+   * thấy đúng một dòng "edit_file · +3 −1" và không có cách nào xem agent đã
+   * đổi gì. "Cho nó tự sửa" mà không xem được nó sửa gì thì không phải là tin
+   * tưởng, mà là nhắm mắt.
+   */
+  diff?: KetQuaDiff;
 }
 
 /**
@@ -648,6 +657,7 @@ async function toolEditFile(goc: string, args: Record<string, unknown>, ghi: Boi
   return {
     noiDung: `Đã sửa ${tuongDoi}: +${diff.soThem} −${diff.soBo} dòng. Người dùng đã duyệt.`,
     tomTat: `+${diff.soThem} −${diff.soBo}${tuDong ? ' (tự duyệt)' : ''}`,
+    diff,
   };
 }
 
@@ -702,6 +712,7 @@ async function toolSuaONotebook(goc: string, args: Record<string, unknown>, ghi:
   return {
     noiDung: `Đã ${r.moTa} trong ${tuongDoi}: +${diff.soThem} −${diff.soBo} dòng. Người dùng đã duyệt.`,
     tomTat: r.moTa,
+    diff,
   };
 }
 
@@ -786,6 +797,7 @@ async function toolSuaNhieuCho(goc: string, args: Record<string, unknown>, ghi: 
   return {
     noiDung: `Đã áp ${sua.length} phép sửa vào ${tuongDoi}: +${diff.soThem} −${diff.soBo} dòng. Người dùng đã duyệt.`,
     tomTat: `${sua.length} chỗ · +${diff.soThem} −${diff.soBo}${tuDong ? ' (tự duyệt)' : ''}`,
+    diff,
   };
 }
 
@@ -832,6 +844,7 @@ async function toolXoaFile(goc: string, args: Record<string, unknown>, ghi: BoiC
   return {
     noiDung: `Đã xoá ${tuongDoi} (${diff.soBo} dòng). Người dùng đã duyệt. Nút Hoàn tác khôi phục lại được.`,
     tomTat: `xoá · −${diff.soBo}`,
+    diff,
   };
 }
 
@@ -920,6 +933,7 @@ async function toolCreateFile(goc: string, args: Record<string, unknown>, ghi: B
   return {
     noiDung: `Đã tạo ${tuongDoi} (${noiDung.split('\n').length} dòng). Người dùng đã duyệt.`,
     tomTat: `tạo mới, ${noiDung.split('\n').length} dòng`,
+    diff,
   };
 }
 

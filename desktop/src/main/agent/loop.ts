@@ -37,6 +37,7 @@ import type { PhanLoaiLenh } from './lenh';
 import { chayToolAgent, soFileDaSua, demFileSeLui} from './tools';
 import { taoSoCuoc, type SoCuoc } from './so';
 import { napQuyenLau, xoaQuyenLau } from './quyenLau';
+import { getSettings } from '../store';
 import type { CheDoQuyen } from '../../shared/ipc';
 import { dungLenhNenCua } from './lenhNen';
 import { hanMucMcp, goiToolMcp, laToolMcp, toolMcpHienCo } from './mcp';
@@ -57,6 +58,15 @@ import { hoiNguoiDung, huyTatCa, type YeuCauXinPhep } from './xinPhep';
  * trần của máy chủ. `loop.test.ts` đọc thẳng bảng bên máy chủ và đỏ nếu hai
  * bên lệch lại lần nữa.
  */
+/**
+ * Trần chữ của kết quả tool GỬI LÊN GIAO DIỆN.
+ *
+ * Rộng tay hơn nhiều so với tóm tắt, nhưng vẫn phải có trần: một `read_file`
+ * 2000 dòng là ~200KB, và giữ 50 lời gọi như thế trong state của renderer là
+ * 10MB chữ không ai đọc. Cắt ở đây, và giao diện nói rõ là đã cắt.
+ */
+const TRAN_CHI_TIET = 20_000;
+
 const MAX_VONG = 320;
 
 /** Sự kiện đẩy lên renderer. Đây là thứ giao diện vẽ. */
@@ -65,7 +75,19 @@ export type SuKienAgent =
   | { loai: 'chu'; delta: string }
   /** Một tool vừa chạy xong (bất kể vòng 1 hay vòng 2) — để hiện dòng tiến trình. */
   | { loai: 'toolBatDau'; id: string; ten: string; vong: 'may' | 'notes' }
-  | { loai: 'tool'; id?: string; ten: string; tomTat: string; vong: 'may' | 'notes' }
+  /**
+   * `chiTiet` / `diff` CHỈ để hiện cho người dùng — không đi vào hội thoại.
+   *
+   * Trước bản này giao diện chỉ nhận `tomTat` một dòng, nên `list_dir` hiện
+   * "demo-se205…" và hết. Người dùng hỏi đúng chỗ đó: "sao mấy cái lệnh nó
+   * chạy không hiện đầy đủ cho tôi xem". Câu trả lời là dữ liệu chưa từng
+   * được gửi lên, chứ không phải giao diện giấu.
+   */
+  | {
+      loai: 'tool'; id?: string; ten: string; tomTat: string; vong: 'may' | 'notes';
+      chiTiet?: string;
+      diff?: KetQuaDiff;
+    }
   /** Vòng lặp ĐANG DỪNG chờ người dùng duyệt. Giao diện phải hiện thẻ diff. */
   | { loai: 'xinPhep'; id: string; ten: string; duongDan: string; taoMoi: boolean; diff: KetQuaDiff }
   /** Thẻ duyệt đã được trả lời (hoặc hết giờ) — giao diện gỡ nó đi. */
@@ -308,8 +330,7 @@ export function datGocChoCuoc(id: string, goc: string | null): void {
   /* Đổi dự án ⇒ HẠ luôn bỏ-qua-hết. Người dùng bật nó cho MỘT thư mục họ tin
      tưởng; để nó theo sang thư mục vừa mở là cho agent toàn quyền trên một
      nơi chưa ai đồng ý gì cả. */
-  c.cheDoQuyen = 'keHoach';
-  c.so.boQuaHet = false;
+  datCheDoQuyen(id, cheDoMacDinh());
   dongBoQuyenLau(c);
   xoaHoiThoai(id);
 }
@@ -352,6 +373,24 @@ function dongBoQuyenLau(c: { goc: string | null; so: SoCuoc }): void {
     // Người dùng có thể đã đổi gốc trong lúc đọc đĩa — chỉ nhận nếu còn khớp.
     if (c.so.goc === goc) c.so.quyenLau = ds;
   });
+}
+
+/**
+ * Chế độ quyền mặc định khi mở một dự án — người dùng đặt trong Cài đặt.
+ *
+ * ⚠️ `boQuaHet` KHÔNG BAO GIỜ được làm mặc định, dù cài đặt có ghi thế.
+ *
+ * Chế độ đó tắt sạch mọi thẻ duyệt, kể cả lệnh `nguyhiem`, và nó có một cửa
+ * cảnh báo riêng phải đọc trước khi bật. Cho nó làm mặc định tự động cho MỌI
+ * dự án mở về sau — kể cả một repo vừa `git clone` — chính là bỏ cái cửa đó
+ * đi, chỉ khác là bỏ một lần rồi quên mất là đã bỏ.
+ *
+ * Chốt nằm Ở ĐÂY chứ không ở giao diện: giao diện đã không cho chọn, nhưng
+ * file cài đặt là JSON trên đĩa, sửa tay được.
+ */
+function cheDoMacDinh(): CheDoQuyen {
+  const v = getSettings().aiCheDoQuyenMacDinh;
+  return v === 'hoi' || v === 'tuSua' || v === 'tuSuaVaLenh' ? v : 'keHoach';
 }
 
 /** Danh sách quyền lâu dài của dự án đang mở ở cuộc này. */
@@ -462,8 +501,8 @@ export function napPhien(
   // Mở việc cũ ⇒ về chế độ AN TOÀN NHẤT. Quyền đã cấp hôm qua không được
   // tự sống lại hôm nay — mở lại là một lần ngồi xuống mới.
   if (goc !== undefined) {
-    c.goc = goc; c.daChonGoc = true; c.cheDoQuyen = 'keHoach';
-    c.choSua = false; c.choChayLenh = false; c.so.boQuaHet = false;
+    c.goc = goc; c.daChonGoc = true;
+    datCheDoQuyen(cuocId, cheDoMacDinh());
     dongBoQuyenLau(c);
   }
   // Quyền đã cấp và nhật ký hoàn tác KHÔNG khôi phục theo. Hoàn tác một thay
@@ -975,7 +1014,14 @@ export async function chayLuot(
         phat({ loai: 'toolBatDau', id: goi.id, ten: goi.name, vong: 'may' });
 
         // `anh?` để `web_anh` gửi được ảnh chụp lên máy chủ — xem `KetQuaTool`.
-        let kq: { noiDung: string; tomTat: string; anh?: Array<{ media_type: string; data: string }> };
+        /* Chép tay hình dạng của `KetQuaTool` — nhánh MCP/kỹ năng/việc phụ
+           không đi qua `chayToolAgent` nên không mượn được kiểu đó. Thiếu một
+           trường ở đây là trường đó BỊ BỎ IM LẶNG khi phát sự kiện. */
+        let kq: {
+          noiDung: string; tomTat: string;
+          anh?: Array<{ media_type: string; data: string }>;
+          diff?: KetQuaDiff;
+        };
 
         /*
          * HOOK TRƯỚC TOOL. Chỉ chạy khi có thư mục dự án — hook chạy lệnh, và
@@ -1048,6 +1094,12 @@ export async function chayLuot(
         phat({
           loai: 'tool', id: goi.id, ten: goi.name, vong: 'may',
           tomTat: hookSau.ra === '' ? kq.tomTat : `${kq.tomTat} · hook có nói`,
+          /* Gửi ĐÚNG thứ model đọc (`noiDungCuoi`, tức đã gồm cả phần hook
+             nói thêm), cắt ở `TRAN_CHI_TIET`. Gửi `kq.noiDung` thì người dùng
+             và model đọc hai bản khác nhau — và chênh lệch đó chính là chỗ
+             không ai đối chiếu được khi agent làm sai. */
+          ...(noiDungCuoi ? { chiTiet: noiDungCuoi.slice(0, TRAN_CHI_TIET) } : {}),
+          ...(kq.diff ? { diff: kq.diff } : {}),
         });
       }
     }

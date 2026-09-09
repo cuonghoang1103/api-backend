@@ -25,6 +25,7 @@ import {
 import { useAppState } from '../../app-state';
 import type { AgentPhien } from '../../../shared/ipc';
 import { MenuChamDoc, type MucMenu } from './MenuChamDoc';
+import { mauDuAn } from './mauDuAn';
 
 /** Kéo hẹp hơn thì tiêu đề cụt tới mức vô dụng; rộng hơn thì lấn hội thoại. */
 const RONG_MIN = 190;
@@ -249,7 +250,9 @@ export function ThanhBen({
 
         {nhom.map(([ten, ps, laGhim]) => (
           <section key={ten} className="ct-tb-nhom">
-            <h3>
+            {/* `data-mau` suy từ TÊN dự án — xem `mauDuAn.ts`. Nhóm ghim giữ
+                màu riêng, vì "đã ghim" là trạng thái chứ không phải dự án. */}
+            <h3 data-mau={laGhim ? 'ghim' : mauDuAn(ten)}>
               {laGhim ? <Pin size={11} aria-hidden /> : <FolderGit2 size={11} aria-hidden />}
               {' '}{ten}
             </h3>

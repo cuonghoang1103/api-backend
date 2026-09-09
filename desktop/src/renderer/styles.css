@@ -2917,17 +2917,59 @@ select {
 }
 
 .ct-tb-nhom { margin-bottom: 12px; }
+/* ── Tiêu đề nhóm dự án ──
+   Trước: mọi nhóm cùng một màu xám nhạt, nên với chục dự án thì mắt phải ĐỌC
+   từng chữ mới biết đang ở đâu — trong khi thứ người ta thật sự làm là liếc.
+   Nay mỗi dự án một màu ổn định suy từ tên (`mauDuAn.ts`), hiện ở icon, ở chữ,
+   và ở một vạch dọc bên trái để nhận ra được cả khi liếc rất nhanh. */
 .ct-tb-nhom h3 {
-  display: flex; align-items: center; gap: 5px;
-  margin: 0 0 4px; padding: 0 4px;
+  display: flex; align-items: center; gap: 6px;
+  margin: 0 0 5px;
+  padding: 5px 6px 5px 8px;
+  border-left: 2px solid var(--mau-duan, var(--ct-border));
+  border-radius: 0 6px 6px 0;
   font-size: 10.5px; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.04em;
-  color: var(--ct-text-faint);
-  /* Dính lại khi cuộn: danh sách dài thì phải luôn biết đang xem dự án nào. */
+  /* Chữ lấy chính màu của dự án, pha với màu chữ thường để không chói: một
+     hàng chữ HOA bão hoà 100% đọc rất mệt, mà đây là nhãn chứ không phải nội
+     dung. */
+  color: color-mix(in srgb, var(--mau-duan, var(--ct-text-faint)) 62%, var(--ct-text-muted));
+  background: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--mau-duan, transparent) 13%, transparent),
+    transparent 70%
+  );
+  /* Dính lại khi cuộn: danh sách dài thì phải luôn biết đang xem dự án nào.
+     ⚠️ Nền PHẢI đục — `sticky` mà nền trong suốt thì chữ của mục bên dưới
+     chạy xuyên qua tiêu đề khi cuộn. Vạch màu ở trên vẽ đè lên nền này. */
   position: sticky; top: 0; z-index: 1;
-  background: var(--ct-surface);
-  padding-top: 4px; padding-bottom: 4px;
+  background-color: var(--ct-surface);
 }
+.ct-tb-nhom h3 svg { color: var(--mau-duan, var(--ct-text-faint)); flex: none; }
+
+/* Bảng màu dự án — 8 sắc tách nhau rõ trên vòng màu, và mỗi sắc có bản riêng
+   cho nền tối / nền sáng. Không dùng `filter` hay `opacity` để tự sinh: chúng
+   kéo cả sắc lẫn độ sáng theo nền, và ở theme sáng thì cả tám cái cùng nhợt. */
+.ct-tb-nhom h3[data-mau='0'] { --mau-duan: #818cf8; }   /* chàm  */
+.ct-tb-nhom h3[data-mau='1'] { --mau-duan: #34d399; }   /* lục   */
+.ct-tb-nhom h3[data-mau='2'] { --mau-duan: #fbbf24; }   /* hổ phách */
+.ct-tb-nhom h3[data-mau='3'] { --mau-duan: #f472b6; }   /* hồng  */
+.ct-tb-nhom h3[data-mau='4'] { --mau-duan: #22d3ee; }   /* lam   */
+.ct-tb-nhom h3[data-mau='5'] { --mau-duan: #a78bfa; }   /* tím   */
+.ct-tb-nhom h3[data-mau='6'] { --mau-duan: #fb923c; }   /* cam   */
+.ct-tb-nhom h3[data-mau='7'] { --mau-duan: #4ade80; }   /* lục sáng */
+.ct-tb-nhom h3[data-mau='ghim'] { --mau-duan: var(--ct-warn); }
+
+/* Theme SÁNG: cùng sắc nhưng đậm hơn. Tám màu ở trên chọn cho nền tối; đặt
+   nguyên chúng lên nền trắng thì chữ nhạt tới mức không đọc nổi. */
+:root[data-ct-theme='light'] .ct-tb-nhom h3[data-mau='0'] { --mau-duan: #4f46e5; }
+:root[data-ct-theme='light'] .ct-tb-nhom h3[data-mau='1'] { --mau-duan: #059669; }
+:root[data-ct-theme='light'] .ct-tb-nhom h3[data-mau='2'] { --mau-duan: #b45309; }
+:root[data-ct-theme='light'] .ct-tb-nhom h3[data-mau='3'] { --mau-duan: #db2777; }
+:root[data-ct-theme='light'] .ct-tb-nhom h3[data-mau='4'] { --mau-duan: #0891b2; }
+:root[data-ct-theme='light'] .ct-tb-nhom h3[data-mau='5'] { --mau-duan: #7c3aed; }
+:root[data-ct-theme='light'] .ct-tb-nhom h3[data-mau='6'] { --mau-duan: #ea580c; }
+:root[data-ct-theme='light'] .ct-tb-nhom h3[data-mau='7'] { --mau-duan: #16a34a; }
 
 .ct-tb-muc { display: flex; align-items: center; gap: 2px; }
 .ct-tb-muc-mo {
@@ -2994,6 +3036,21 @@ select {
 .ct-chedo-muc-dau { display: flex; align-items: center; gap: 6px; font-size: 12.5px; }
 .ct-chedo-muc-dau strong { color: var(--ct-text); font-weight: 600; }
 .ct-chedo-muc-mo { font-size: 11px; color: var(--ct-text-faint); line-height: 1.45; }
+.ct-chedo-macdinh {
+  width: 100%; margin-top: 5px;
+  padding: 6px 8px;
+  border: 1px dashed var(--ct-border); border-radius: 7px;
+  background: none; color: var(--ct-text-faint);
+  font: inherit; font-size: 10.5px; text-align: left;
+  cursor: pointer;
+}
+.ct-chedo-macdinh:hover:not(:disabled) { border-color: var(--ct-accent); color: var(--ct-text); }
+.ct-chedo-macdinh[data-la='true'] {
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--ct-accent) 45%, transparent);
+  color: var(--ct-accent); cursor: default;
+}
+
 .ct-chedo-chan {
   margin: 5px 4px 2px; padding-top: 7px;
   border-top: 1px solid var(--ct-border);
@@ -3709,6 +3766,49 @@ select {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* ── Dòng tool MỞ RA XEM ĐƯỢC ──
+   `.ct-agent-tool` giờ là khối dọc: hàng tóm tắt ở trên, phần chi tiết bung
+   xuống dưới. Hàng tóm tắt giữ nguyên bố cục ngang cũ. */
+.ct-agent-tool { flex-direction: column; align-items: stretch; }
+.ct-agent-tool-dong {
+  display: flex; align-items: center; gap: 7px;
+  min-width: 0;                 /* cho `text-overflow` của tóm tắt hoạt động */
+}
+.ct-agent-tool-dong[role='button'] { cursor: pointer; border-radius: 5px; }
+.ct-agent-tool-dong[role='button']:hover { background: var(--ct-hover); }
+.ct-agent-tool-dong[role='button']:hover .ct-agent-tool-mui { opacity: 0.9; }
+.ct-agent-tool-mui {
+  margin-left: auto; flex: none;
+  opacity: 0.4; transition: transform var(--ct-motion-fast) var(--ct-ease);
+}
+.ct-agent-tool[data-mo='true'] .ct-agent-tool-mui { transform: rotate(180deg); opacity: 0.9; }
+
+/* Mở ra thì tóm tắt KHÔNG cắt cụt nữa — đang mở là đang muốn đọc. */
+.ct-agent-tool[data-mo='true'] .ct-agent-tool-tomtat {
+  overflow: visible; white-space: normal; word-break: break-word;
+}
+
+.ct-agent-tool-chitiet {
+  margin: 6px 0 2px;
+  padding: 9px 11px;
+  max-height: 420px; overflow: auto;
+  border: 1px solid var(--ct-border); border-radius: 8px;
+  background: var(--ct-surface-2);
+  color: var(--ct-text-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11.5px; line-height: 1.5;
+  /* `pre-wrap` chứ không `pre`: giữ khoảng trắng căn cột của `ls -la`, nhưng
+     vẫn xuống dòng thay vì đẻ ra thanh cuộn ngang dài vô tận. */
+  white-space: pre-wrap; word-break: break-word;
+}
+
+/* Diff nằm trong dòng tool: hẹp hơn trong thẻ duyệt nên cần trần chiều cao,
+   không thì một lần sửa 300 dòng đẩy cả câu trả lời xuống dưới màn hình. */
+.ct-agent-tool .ct-diff {
+  margin: 6px 0 2px;
+  max-height: 420px; overflow: auto;
 }
 
 /* Bước thứ mấy / tổng bao nhiêu, hiện cạnh con quay. Sắp chạm trần thì đổi
@@ -9076,6 +9176,18 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   border: 1px solid var(--ct-border);
   border-radius: var(--ct-radius-sm);
   overflow: hidden;
+}
+
+/* Tay nắm kéo chiều cao. 6px là mức mà chuột bắt trúng mà không ăn vào nội
+   dung; vạch nhìn thấy chỉ 2px, phần còn lại là vùng bắt vô hình. */
+.ct-bang-lenh-keo {
+  height: 6px; flex: none; cursor: ns-resize;
+  background: linear-gradient(to bottom, transparent 2px, var(--ct-border) 2px, var(--ct-border) 4px, transparent 4px);
+}
+.ct-bang-lenh-keo:hover,
+.ct-bang-lenh-keo:focus-visible {
+  background: linear-gradient(to bottom, transparent 2px, var(--ct-accent) 2px, var(--ct-accent) 4px, transparent 4px);
+  outline: none;
 }
 
 .ct-bang-lenh-dau {

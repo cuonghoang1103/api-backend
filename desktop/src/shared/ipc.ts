@@ -879,6 +879,8 @@ export type AgentUiEvent = { cuocId: string } & (
       chiTiet?: string;
       /** Diff của lần ghi file — có cả khi TỰ DUYỆT, lúc không có thẻ duyệt nào. */
       diff?: AgentDiff;
+      /** Đường dẫn file — giao diện dùng để đoán ngôn ngữ mà tô màu. */
+      duongDan?: string;
     }
   /** Agent ĐANG DỪNG chờ duyệt. Giao diện hiện thẻ diff và bắt buộc phải trả lời. */
   | { loai: 'xinPhep'; id: string; ten: string; duongDan: string; taoMoi: boolean; diff: AgentDiff }

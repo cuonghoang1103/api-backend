@@ -87,6 +87,8 @@ export type SuKienAgent =
       loai: 'tool'; id?: string; ten: string; tomTat: string; vong: 'may' | 'notes';
       chiTiet?: string;
       diff?: KetQuaDiff;
+      /** Đường dẫn file — giao diện dùng để đoán ngôn ngữ mà tô màu. */
+      duongDan?: string;
     }
   /** Vòng lặp ĐANG DỪNG chờ người dùng duyệt. Giao diện phải hiện thẻ diff. */
   | { loai: 'xinPhep'; id: string; ten: string; duongDan: string; taoMoi: boolean; diff: KetQuaDiff }
@@ -1100,6 +1102,12 @@ export async function chayLuot(
              không ai đối chiếu được khi agent làm sai. */
           ...(noiDungCuoi ? { chiTiet: noiDungCuoi.slice(0, TRAN_CHI_TIET) } : {}),
           ...(kq.diff ? { diff: kq.diff } : {}),
+          /* Đường dẫn để giao diện ĐOÁN NGÔN NGỮ mà tô màu.
+             Không có nó thì `KhoiDiff` nhận `tomTat` ("+3 −1") làm đường dẫn,
+             đoán ra `null`, và diff hiện ra chữ trắng trơn — đúng thứ người
+             dùng vừa chỉ ra. Lỗi của chính bản 0.5.95. */
+          ...(typeof goi.args?.path === 'string' && goi.args.path
+            ? { duongDan: goi.args.path } : {}),
         });
       }
     }

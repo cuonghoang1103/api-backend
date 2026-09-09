@@ -43,7 +43,7 @@ import { useAgent, useThuMuc, type MucHienThi } from './useAgent';
 import { LichSu } from './LichSu';
 import { ChuAgent } from './markdown';
 import { NutTinNhan } from './NutTinNhan';
-import { KhoiDiff } from './XinPhep';
+import { KhoiDiff, MaDong, ngonNguTuDuong } from './XinPhep';
 import { AnhPhongTo } from '../feed/AnhPhongTo';
 import { ChonCheDo } from './ChonCheDo';
 import {
@@ -1871,6 +1871,50 @@ function viecCuaTool(ten: string): string {
  * MẶC ĐỊNH ĐÓNG. Một việc 40 bước mà mở sẵn hết thì bảng ghi thành mấy nghìn
  * dòng và không ai tìm được câu trả lời của agent ở đâu nữa.
  */
+/**
+ * Đầu ra tool dạng MÃ — tô màu và có máng số dòng, như trình soạn thảo.
+ *
+ * ─── Vì sao không để `pre` trơn ───
+ * Người dùng chỉ đúng chỗ này: "sao nó không có màu code như VSCode". Với một
+ * file 77 dòng thì chữ trắng đều tăm tắp là thứ mắt phải ĐỌC từng dòng mới
+ * hiểu, trong khi mã có màu thì liếc là thấy đâu là chuỗi, đâu là từ khoá,
+ * đâu là thẻ JSX.
+ *
+ * ─── `read_file` trả `<số>\t<nội dung>` ───
+ * Số dòng nằm ngay trong chữ (xem `toolReadFile`). Để nguyên thì nó trôi
+ * trong cùng dòng mã và bị tô màu nhầm thành số của ngôn ngữ. Tách ra máng
+ * riêng vừa đúng vừa canh cột được — mã thụt lề mới thẳng hàng.
+ *
+ * KHÔNG có số dòng (đầu ra `run_command`, `git_status`) thì rơi về `pre` trơn:
+ * đầu ra lệnh không phải mã của ngôn ngữ nào, đoán bừa sẽ tô sai lung tung.
+ */
+function KhoiMa({ chu, duongDan }: { chu: string; duongDan?: string }) {
+  const dong = chu.split('\n');
+  /* Chỉ coi là "có đánh số" khi ĐA SỐ dòng khớp. Một dòng lẻ bắt đầu bằng số
+     rồi tab là chuyện thường trong đầu ra lệnh; đòi mọi dòng khớp thì dòng
+     "[… còn 42 dòng nữa]" ở cuối `read_file` cũng làm hỏng cả khối. */
+  const tach = dong.map((d) => /^(\d+)\t([\s\S]*)$/.exec(d));
+  const soKhop = tach.filter(Boolean).length;
+  const coSo = dong.length > 1 && soKhop >= Math.ceil(dong.length * 0.6);
+
+  if (!coSo) return <pre className="ct-agent-tool-chitiet">{chu}</pre>;
+
+  const ngonNgu = ngonNguTuDuong(duongDan ?? '');
+  return (
+    <div className="ct-ma" data-ngonngu={ngonNgu ?? 'tho'}>
+      {dong.map((d, i) => {
+        const m = tach[i];
+        return (
+          <div key={i} className="ct-ma-dong" data-phu={!m}>
+            <span className="ct-ma-so">{m ? m[1] : ''}</span>
+            <MaDong text={m ? m[2]! : d} ngonNgu={m ? ngonNgu : null} />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function DongTool({ m }: { m: Extract<MucHienThi, { kieu: 'tool' }> }) {
   const [mo, datMo] = useState(false);
   const coGiDeXem = Boolean(m.diff ?? m.chiTiet);
@@ -1902,13 +1946,13 @@ function DongTool({ m }: { m: Extract<MucHienThi, { kieu: 'tool' }> }) {
       </div>
 
       {mo && m.diff && (
-        <KhoiDiff diff={m.diff} duongDan={m.tomTat} />
+        /* `duongDan`, KHÔNG phải `tomTat`. Bản 0.5.95 truyền `tomTat` — mà với
+           `edit_file` nó là "+3 −1", không có đuôi file, nên `ngonNguTuDuong`
+           trả `null` và diff hiện ra chữ trắng trơn. */
+        <KhoiDiff diff={m.diff} duongDan={m.duongDan ?? ''} />
       )}
       {mo && !m.diff && m.chiTiet && (
-        /* `pre` chứ không phải markdown: đây là ĐẦU RA THÔ của lệnh/tool, và
-           dựng nó thành markdown sẽ nuốt mất khoảng trắng căn cột — thứ duy
-           nhất làm `ls -la` hay một bảng lỗi đọc được. */
-        <pre className="ct-agent-tool-chitiet">{m.chiTiet}</pre>
+        <KhoiMa chu={m.chiTiet} {...(m.duongDan ? { duongDan: m.duongDan } : {})} />
       )}
     </div>
   );

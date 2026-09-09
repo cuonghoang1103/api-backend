@@ -3790,6 +3790,50 @@ select {
   overflow: visible; white-space: normal; word-break: break-word;
 }
 
+/* ── Khối mã trong dòng tool: máng số dòng + tô màu ──
+   Dùng LƯỚI hai cột chứ không phải padding: số dòng rộng khác nhau (9 và
+   1234), và với padding thì mã tụt lệch nhau theo độ dài số — thụt lề mất
+   thẳng hàng, đúng thứ làm mã khó đọc nhất. */
+.ct-ma {
+  margin: 6px 0 2px;
+  max-height: 460px; overflow: auto;
+  padding: 8px 0;
+  border: 1px solid var(--ct-border); border-radius: 8px;
+  background: var(--ct-surface-2);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11.5px; line-height: 1.55;
+  /* Không cho xuống dòng: mã xuống dòng giữa chừng thì số dòng và nội dung
+     không còn khớp nhau nữa. Dài thì cuộn ngang. */
+  white-space: pre;
+}
+.ct-ma-dong {
+  display: grid; grid-template-columns: 3.6em 1fr;
+  /* `max-content` + `min-width: 100%`: dòng dài đẩy khối rộng ra (khối tự cuộn
+     ngang), dòng ngắn vẫn trải hết bề ngang để vệt rê chuột không bị cụt. */
+  width: max-content; min-width: 100%;
+}
+.ct-ma-dong:hover { background: var(--ct-hover); }
+
+/* ⚠️ ĐÈ LẠI `.ct-diff-text`.
+   Lớp đó dùng chung với bảng diff, nơi nó mang `white-space: pre-wrap` +
+   `word-break: break-word` cho hợp cột hẹp. Ở đây thì ngược lại: một dòng mã
+   xuống hàng sẽ chui xuống DƯỚI máng số, và mọi thụt lề mất thẳng hàng — đúng
+   thứ làm mã khó đọc nhất. Đo thật trong Chromium: `pre` ở khối cha KHÔNG
+   thắng, vì `.ct-diff-text` đặt trực tiếp trên chính phần tử chữ. */
+.ct-ma .ct-diff-text { white-space: pre; word-break: normal; }
+.ct-ma-so {
+  padding-right: 10px;
+  color: var(--ct-text-faint); opacity: 0.55;
+  text-align: right;
+  /* Không bôi đen được số dòng — chép cả khối ra thì không dính số vào mã. */
+  user-select: none;
+}
+/* Dòng không có số (ví dụ "[… còn 42 dòng nữa]") — nhạt đi, nó là chú thích
+   của tool chứ không phải mã trong file. */
+.ct-ma-dong[data-phu='true'] .ct-diff-text {
+  color: var(--ct-text-faint); font-style: italic;
+}
+
 .ct-agent-tool-chitiet {
   margin: 6px 0 2px;
   padding: 9px 11px;

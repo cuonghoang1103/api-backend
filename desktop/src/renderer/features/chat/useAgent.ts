@@ -46,6 +46,8 @@ export type MucHienThi =
       chiTiet?: string;
       /** Diff của lần ghi file. CÓ cả ở chế độ tự duyệt, nơi không có thẻ duyệt. */
       diff?: AgentDiff;
+      /** Đường dẫn file — để đoán ngôn ngữ mà tô màu. */
+      duongDan?: string;
     }
   /**
    * Thẻ duyệt nằm NGAY TRONG dòng thời gian hội thoại, không phải hộp thoại
@@ -214,6 +216,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
               kieu: 'tool', ten: e.ten, tomTat: e.tomTat, vong: e.vong,
               ...(e.chiTiet ? { chiTiet: e.chiTiet } : {}),
               ...(e.diff ? { diff: e.diff } : {}),
+              ...(e.duongDan ? { duongDan: e.duongDan } : {}),
             }];
             }
             const sau = [...truoc];
@@ -221,6 +224,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
               kieu: 'tool', ten: e.ten, tomTat: e.tomTat, vong: e.vong,
               ...(e.chiTiet ? { chiTiet: e.chiTiet } : {}),
               ...(e.diff ? { diff: e.diff } : {}),
+              ...(e.duongDan ? { duongDan: e.duongDan } : {}),
             };
             return sau;
           });

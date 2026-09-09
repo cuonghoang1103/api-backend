@@ -27,7 +27,7 @@ import type { AgentDiff, AgentPhanLoaiLenh, AgentQuyetDinh } from '../../../shar
  * đoán — đoán trên MỘT DÒNG thì gần như luôn sai, và một dòng bị tô sai ngôn
  * ngữ trông rối hơn là không tô.
  */
-function ngonNguTuDuong(duong: string): string | null {
+export function ngonNguTuDuong(duong: string): string | null {
   const duoi = duong.slice(duong.lastIndexOf('.') + 1).toLowerCase();
   const bang: Record<string, string> = {
     ts: 'typescript', tsx: 'typescript', js: 'javascript', jsx: 'javascript', mjs: 'javascript',
@@ -61,7 +61,7 @@ function ngonNguTuDuong(duong: string): string | null {
  * xen kẽ — tô cả khối thì không ghép lại được. Terminal của Claude Code cũng
  * tô theo dòng.
  */
-function MaDong({ text, ngonNgu }: { text: string; ngonNgu: string | null }) {
+export function MaDong({ text, ngonNgu }: { text: string; ngonNgu: string | null }) {
   if (!ngonNgu) return <span className="ct-diff-text">{text || ' '}</span>;
   let html: string;
   try {

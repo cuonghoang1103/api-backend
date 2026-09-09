@@ -996,6 +996,14 @@ export const INVOKE_CHANNELS = {
   'agent:traLoiXinPhep': agentTraLoiSchema,
   'agent:datCheDoSua': agentCheDoSuaSchema,
   'agent:datCheDoLenh': agentCheDoLenhSchema,
+  /* Kho kỹ năng `/ai-templates`. `tuKhoa` là chuỗi người dùng gõ nên có trần
+     độ dài; `ten`+`loai` chọn từ chính danh sách trả về, không phải gõ tay. */
+  'agent:khoTim': agentCuocSchema.extend({ tuKhoa: z.string().min(1).max(80) }),
+  'agent:khoCai': agentCuocSchema.extend({
+    ten: z.string().min(1).max(120),
+    loai: z.enum(['skill', 'agent', 'command']),
+    ghiDe: z.boolean().optional(),
+  }),
   'agent:dsQuyenLau': agentCuocSchema,
   /* `khoa` để trống ⇒ thu hồi CẢ dự án. Dùng `.optional()` chứ không phải
      chuỗi rỗng: "" là một khoá hợp lệ về mặt kiểu, và nhầm hai thứ đó nghĩa là
@@ -1524,6 +1532,12 @@ export interface DesktopBridge {
     kyNangDs(cuocId: string): Promise<Array<{ ten: string; moTa: string }>>;
     /** Danh sách khoá đã "Luôn cho phép" ở dự án của cuộc này. */
     dsQuyenLau(cuocId: string): Promise<{ goc: string | null; khoa: string[] }>;
+    /** Tìm trong kho AI Templates (skill/agent/command). */
+    khoTim(cuocId: string, tuKhoa: string): Promise<
+      Array<{ ten: string; duong: string; danhMuc: string; loai: 'skill' | 'agent' | 'command' }>>;
+    /** Cài một component vào `.claude/…` của dự án đang mở. */
+    khoCai(cuocId: string, ten: string, loai: 'skill' | 'agent' | 'command', ghiDe?: boolean):
+      Promise<{ ok: boolean; duongDan?: string; loi?: string; xemTruoc?: string }>;
     /** Thu hồi một khoá, hoặc CẢ dự án khi bỏ trống. Trả về số khoá đã xoá. */
     xoaQuyenLau(cuocId: string, khoa?: string): Promise<number>;
   };

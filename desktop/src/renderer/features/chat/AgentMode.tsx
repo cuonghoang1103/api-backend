@@ -431,6 +431,61 @@ export function AgentMode({
      * Chạy ngay tại chỗ, không tốn một lượt gọi cổng — nó chỉ đọc trạng thái
      * cục bộ, khác `/diff` (phải nhờ agent vì cần quyền đọc đĩa).
      */
+    /*
+     * `/kynang` — mượn kỹ năng từ kho `/ai-templates` (1.877 component).
+     *
+     * Kho đó và AI Code theo CÙNG quy ước Claude Code, nên "học" một kỹ năng
+     * chỉ là chép đúng tệp vào đúng thư mục — không cần dịch gì cả. Xem
+     * `main/agent/khoKyNang.ts`.
+     *
+     * ⚠️ CỐ Ý không cài được hook và MCP từ đây: chúng là dòng lệnh SẼ CHẠY
+     * trên máy, và chúng có cửa duyệt vân tay riêng. Ba loại ở đây là CHỮ đi
+     * vào ngữ cảnh của model — rủi ro khác hẳn, nên đường vào cũng khác.
+     */
+    if (lenh === '/kynang' || lenh === '/skill') {
+      datNhap('');
+      const phan = text.trim().split(/\s+/);
+      void (async () => {
+        const b = window.cuongthai?.agent;
+        if (!b) return;
+        if (phan[1] === 'cai' || phan[1] === 'install') {
+          const ten = phan[2];
+          if (!ten) { datLenhTraLoi('Thiếu tên. Ví dụ: `/kynang cai database-optimizer`'); return; }
+          const ghiDe = phan.includes('--de');
+          datLenhTraLoi(`Đang tải \`${ten}\`…`);
+          /* Tìm lại để biết LOẠI — người dùng chỉ gõ tên. Trùng tên giữa hai
+             loại thì ưu tiên `skill`: đó là loại đông nhất và cũng là thứ họ
+             gõ `/kynang` để tìm. */
+          const kq = await b.khoTim(cuocId, ten);
+          const m = kq.find((x) => x.ten === ten) ?? kq[0];
+          if (!m) { datLenhTraLoi(`Không tìm thấy \`${ten}\` trong kho.`); return; }
+          const r = await b.khoCai(cuocId, m.ten, m.loai, ghiDe);
+          datLenhTraLoi(r.ok
+            ? `Đã cài **${m.ten}** (${m.loai}) vào \`${r.duongDan}\`.\n\n`
+              + 'Agent thấy nó từ lượt sau. Xem lại bằng `git diff` trước khi commit — '
+              + 'đây là nội dung từ repo của người khác.\n\n```\n'
+              + `${(r.xemTruoc ?? '').slice(0, 600)}\n\`\`\``
+            : `Không cài được: ${r.loi}`);
+          return;
+        }
+        const tuKhoa = phan.slice(1).join(' ').trim();
+        if (!tuKhoa) {
+          datLenhTraLoi('**Kho AI Templates** — 871 kỹ năng · 421 agent phụ · 286 lệnh.\n\n'
+            + '- Tìm: `/kynang <từ khoá>` (bỏ dấu cũng ra — `bao mat`)\n'
+            + '- Cài: `/kynang cai <tên>` · ghi đè: thêm `--de`\n\n'
+            + '_Hook và MCP không cài từ đây — chúng là lệnh sẽ chạy, và có cửa duyệt riêng._');
+          return;
+        }
+        const ds = await b.khoTim(cuocId, tuKhoa).catch(() => []);
+        datLenhTraLoi(ds.length === 0
+          ? `Không có gì khớp "${tuKhoa}".`
+          : `**${ds.length}** kết quả cho "${tuKhoa}":\n\n`
+            + ds.map((x) => `- \`${x.ten}\` · ${x.loai} · ${x.danhMuc}`).join('\n')
+            + '\n\nCài: `/kynang cai <tên>`');
+      })();
+      return;
+    }
+
     if (lenh === '/quyen' || lenh === '/permissions') {
       datNhap('');
       const dau = text.trim().split(/\s+/);

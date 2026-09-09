@@ -34,6 +34,8 @@ import {
   dsQuyenLauCua, xoaQuyenLauCua,
 } from '../agent/loop';
 import { duongDanCauHinh, duyetDuAn, hanMucMcp, napLaiMcp, toolMcpHienCo, trangThaiServer } from '../agent/mcp';
+import { cai, napChiMuc, tim } from '../agent/khoKyNang';
+import { WEB_ORIGIN } from '../config';
 import { dsWorktree, taoWorktree, xoaWorktree } from '../agent/worktree';
 import {
   danhSachPhien, datGhimPhien, datLuuTruPhien, docPhien, doiTenPhien, dungLaiHienThi,
@@ -367,6 +369,22 @@ export function registerAgentHandlers(): void {
     datQuyenChoCuoc(cuocId, { choTrinhDuyet: bat });
     return moTa(cuocId, gocCua(cuocId));
   });
+  /*
+   * Kho kỹ năng — chỉ mục lấy từ CHÍNH WEB của người dùng, nội dung lấy từ
+   * GitHub. Cả hai gọi ở tiến trình CHÍNH: renderer bị CSP chặn `connect-src`
+   * ra ngoài, và lỗi hiện ra chỉ là "Failed to fetch" không nhắc gì tới CSP.
+   */
+  handle('agent:khoTim', async ({ cuocId, tuKhoa }) => {
+    void cuocId;
+    return tim(await napChiMuc(WEB_ORIGIN), tuKhoa);
+  });
+
+  handle('agent:khoCai', async ({ cuocId, ten, loai, ghiDe }) => {
+    const m = (await napChiMuc(WEB_ORIGIN)).find((x) => x.ten === ten && x.loai === loai);
+    if (!m) return { ok: false, loi: `Không có "${ten}" (${loai}) trong kho.` };
+    return cai(gocCua(cuocId), m, { ghiDe: ghiDe === true });
+  });
+
   handle('agent:dsQuyenLau', ({ cuocId }) => dsQuyenLauCua(cuocId));
 
   handle('agent:xoaQuyenLau', ({ cuocId, khoa }) => xoaQuyenLauCua(cuocId, khoa));

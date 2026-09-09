@@ -196,6 +196,12 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('agent:datCheDoTrinhDuyet', { cuocId, bat }) as Promise<AgentWorkspace>,
     datCheDoNote: (cuocId: string, bat: boolean) =>
       ipcRenderer.invoke('agent:datCheDoNote', { cuocId, bat }) as Promise<AgentWorkspace>,
+    khoTim: (cuocId: string, tuKhoa: string) =>
+      ipcRenderer.invoke('agent:khoTim', { cuocId, tuKhoa }) as Promise<
+        Array<{ ten: string; duong: string; danhMuc: string; loai: 'skill' | 'agent' | 'command' }>>,
+    khoCai: (cuocId: string, ten: string, loai: string, ghiDe?: boolean) =>
+      ipcRenderer.invoke('agent:khoCai', { cuocId, ten, loai, ...(ghiDe ? { ghiDe } : {}) }) as Promise<
+        { ok: boolean; duongDan?: string; loi?: string; xemTruoc?: string }>,
     dsQuyenLau: (cuocId: string) =>
       ipcRenderer.invoke('agent:dsQuyenLau', { cuocId }) as Promise<{ goc: string | null; khoa: string[] }>,
     xoaQuyenLau: (cuocId: string, khoa?: string) =>

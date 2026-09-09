@@ -264,6 +264,15 @@ export function OdinDock() {
    * lúc thả tay.
    */
   const [keoTam, datKeoTam] = useState<{ phai: number; duoi: number } | null>(null);
+
+  /* Menu chuột phải đổi cỡ ở MAIN. AppState chỉ nạp thiết đặt một lần lúc mở
+     app, nên không nghe tin này thì con robot trong app giữ nguyên cỡ cũ và
+     người dùng thấy hai con robot lệch cỡ nhau. */
+  useEffect(() => window.cuongthai?.on('robot:coDoi', (p) => {
+    const n = (p as { nac?: number }).nac;
+    if (typeof n === 'number') setSetting('odinCo', n);
+  }), [setSetting]);
+  useEffect(() => window.cuongthai?.on('robot:tat', () => setSetting('robotEnabled', false)), [setSetting]);
   /** Cú kéo vừa rồi có đi đủ xa để tính là KÉO, không phải BẤM. */
   const daDi = useRef(false);
 
@@ -357,7 +366,7 @@ export function OdinDock() {
   return (
     <div
       ref={oRef}
-      className="odin-dock"
+      className="odin-dock odin-canh"
       style={{
         right: keoTam?.phai ?? phai,
         bottom: `calc(var(--ct-statusbar-h) + ${keoTam?.duoi ?? duoi}px)`,
@@ -381,6 +390,7 @@ export function OdinDock() {
       data-mood={odin.mood}
       data-listening={odin.listening}
       data-hover={hovering}
+      onContextMenu={(e) => { e.preventDefault(); void window.cuongthai?.robot.menu(true); }}
     >
       {/* Nút cỡ chỉ hiện lúc mở khoá — bày thường trực thì hai nút nhỏ đè lên
           robot suốt ngày và người dùng bấm nhầm khi định mở AI Chat. */}

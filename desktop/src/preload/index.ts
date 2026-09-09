@@ -56,6 +56,9 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'browser:trangThai',
   'agent:moWeb',
   'robot:tin',
+  'robot:coDoi',
+  'robot:tat',
+  'robot:viec',
   'oauth:xong',
   'nhac:phim',
 ];
@@ -299,6 +302,8 @@ const bridge: DesktopBridge = {
     keoBatDau: () => ipcRenderer.invoke('robot:keoBatDau') as Promise<void>,
     keoToi: (dx: number, dy: number) => ipcRenderer.invoke('robot:keoToi', { dx, dy }) as Promise<void>,
     keoXong: () => ipcRenderer.invoke('robot:keoXong') as Promise<void>,
+    menu: (trongApp: boolean) => ipcRenderer.invoke('robot:menu', { trongApp }) as Promise<void>,
+    hutMep: () => ipcRenderer.invoke('robot:hutMep') as Promise<void>,
     moChinh: (duongDan: string) =>
       ipcRenderer.invoke('robot:moChinh', { duongDan }) as Promise<void>,
     hoi: (chu: string) => ipcRenderer.invoke('robot:hoi', { chu }) as Promise<{ chu: string }>,

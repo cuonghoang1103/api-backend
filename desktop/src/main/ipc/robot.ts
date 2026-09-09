@@ -5,11 +5,16 @@
  */
 import {
   datNacCo, doiCo, doiKichThuoc, keoBatDau, keoToi, keoXong, moTrangChinh,
+  dongRobot, hutLaiVaoMep, nacCoHienTai,
 } from '../robotNoi';
+import { Menu, BrowserWindow } from 'electron';
+
+import { bangMenuRobot } from '../robotMenu';
+
 import { baoNhac } from '../robotTin';
 import { API_ORIGIN } from '../config';
 import { readStoredSession } from './auth';
-import { getSettings } from '../store';
+import { getSettings, setSetting } from '../store';
 import { tachCau } from '../../renderer/features/odin/tachCau';
 import { handle } from './index';
 
@@ -27,6 +32,49 @@ export function registerRobotHandlers(): void {
   handle('robot:keoBatDau', () => { keoBatDau(); });
   handle('robot:keoToi', ({ dx, dy }) => { keoToi(Number(dx) || 0, Number(dy) || 0); });
   handle('robot:keoXong', () => { keoXong(); });
+
+  /**
+   * MENU CHUỘT PHẢI — menu NATIVE của hệ điều hành.
+   *
+   * Vì sao không tự vẽ một `div`: cửa sổ robot chỉ rộng 150px và Electron CẮT
+   * mọi thứ tràn ra ngoài biên cửa sổ, nên một menu tự vẽ sẽ bị xén còn vài
+   * chữ. Menu native nổi ra ngoài mọi cửa sổ và tự lật hướng khi gần mép màn
+   * hình — thứ không thể làm lại bằng HTML trong một cửa sổ 150px.
+   *
+   * Nó thay cho cử chỉ ba-cú-bấm: cử chỉ ấy vẫn còn (người quen tay), nhưng
+   * không ai đoán ra nó nếu không được kể. Chuột phải thì ai cũng thử.
+   */
+  handle('robot:menu', ({ trongApp }) => {
+    Menu.buildFromTemplate(bangMenuRobot({
+      trongApp,
+      nacCo: nacCoHienTai(),
+      bamMep: getSettings().robotBamMep !== false,
+      moChat: () => moTrangChinh('/chat', ''),
+      datCo: (n) => {
+        setSetting('odinCo', n);
+        datNacCo(n);
+        /* Con robot TRONG app đọc `odinCo` từ AppState, mà AppState chỉ nạp
+           thiết đặt một lần lúc mở app. Không bắn tin thì đổi cỡ từ menu chỉ
+           ăn ở con nổi, và người dùng thấy hai con robot lệch cỡ nhau. */
+        for (const w of BrowserWindow.getAllWindows()) w.webContents.send('robot:coDoi', { nac: n });
+        hutLaiVaoMep();
+      },
+      datBamMep: (v) => setSetting('robotBamMep', v),
+      tat: () => {
+        if (trongApp) {
+          setSetting('robotEnabled', false);
+          for (const w of BrowserWindow.getAllWindows()) w.webContents.send('robot:tat', {});
+        } else {
+          dongRobot();
+        }
+      },
+    // KHÔNG truyền `window` vào `popup()`: mặc định nó bám cửa sổ đang có tiêu
+    // điểm, mà cửa sổ robot cố ý KHÔNG nhận tiêu điểm (bấm vào robot không
+    // được kéo cả app lên trước). Bỏ trống thì Electron bật menu tại con trỏ.
+    })).popup();
+  });
+
+  handle('robot:hutMep', () => { hutLaiVaoMep(); });
 
   handle('robot:moChinh', ({ duongDan }) => {
     // Chỉ nhận đường dẫn TRONG app, không nhận URL. Một chuỗi `https://…` lọt

@@ -25,6 +25,16 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ApiClient } from '../../api/client';
 import { chuChoMayDoc } from './loiNoi';
 
+/**
+ * AI Code vừa xong một việc — bắn trong renderer để con robot ăn mừng.
+ *
+ * Sự kiện của cửa sổ chứ không phải state dùng chung: `OdinDock` và
+ * `AgentMode` nằm ở hai nhánh cây React khác nhau và không có tổ tiên chung
+ * nào giữ state, nên nối bằng context là phải kéo một provider bọc cả app cho
+ * đúng một tín hiệu chạy vài lần mỗi ngày.
+ */
+export const SU_KIEN_AGENT_XONG = 'ct:agent-xong';
+
 export type OdinMood =
   /** Bình thường, trôi lên xuống. */
   | 'thuong'
@@ -37,7 +47,11 @@ export type OdinMood =
   /** Có lỗi hoặc mất mạng. */
   | 'lo'
   /** Không có gì xảy ra một lúc lâu. */
-  | 'ngu';
+  | 'ngu'
+  /** Vừa có tin nhắn / thông báo — vẫy tay gọi. */
+  | 'vay'
+  /** Agent vừa làm xong việc — ăn mừng. */
+  | 'mung';
 
 /**
  * Trần chữ cho bong bóng nổi. ~40 từ — đủ cho một câu trả lời nói, và vừa
@@ -79,6 +93,17 @@ function nextBlinkDelay(): number {
   return 1800 + Math.random() * 2600;
 }
 
+/**
+ * Người thật thỉnh thoảng chớp HAI cái liền nhau.
+ *
+ * Một nhịp chớp đều tăm tắp là thứ mắt nhận ra ngay là máy móc — nó đúng cái
+ * "thung lũng kỳ lạ" nho nhỏ khiến con robot trông như một GIF lặp thay vì một
+ * nhân vật. Một phần tư số lần là đủ để phá nhịp mà không thành giật mắt.
+ */
+function chopDoi(): boolean {
+  return Math.random() < 0.25;
+}
+
 export function useOdin(options: {
   api: ApiClient | null;
   online: boolean;
@@ -109,17 +134,67 @@ export function useOdin(options: {
     if (!enabled) return;
     let timer: ReturnType<typeof setTimeout>;
 
+    const hen: ReturnType<typeof setTimeout>[] = [];
+    const chop = (sau: number, xong?: () => void) => {
+      hen.push(setTimeout(() => {
+        setBlinking(true);
+        hen.push(setTimeout(() => { setBlinking(false); xong?.(); }, 130));
+      }, sau));
+    };
+
     const schedule = () => {
       timer = setTimeout(() => {
         // Không nháy khi đang nghe: mắt nhắm giữa lúc người dùng đang nói trông
         // như robot lơ đãng.
-        setBlinking(true);
-        setTimeout(() => setBlinking(false), 130);
-        schedule();
+        if (chopDoi()) chop(0, () => chop(120, schedule));
+        else chop(0, schedule);
       }, nextBlinkDelay());
     };
     schedule();
-    return () => clearTimeout(timer);
+    return () => { clearTimeout(timer); for (const h of hen) clearTimeout(h); };
+  }, [enabled]);
+
+  /**
+   * ĂN MỪNG khi AI Code vừa xong một việc.
+   *
+   * Nghe sự kiện trong renderer chứ không hỏi máy chủ: `AgentMode` nằm cùng
+   * tiến trình, và cả điểm của nó là phản ứng NGAY lúc việc xong.
+   */
+  useEffect(() => {
+    if (!enabled) return;
+    const nghe = (): void => moodFor('mung', 2600);
+    window.addEventListener(SU_KIEN_AGENT_XONG, nghe);
+    return () => window.removeEventListener(SU_KIEN_AGENT_XONG, nghe);
+  }, [enabled, moodFor]);
+
+  /**
+   * NGỦ GÀ khi người dùng bỏ máy một lúc.
+   *
+   * ⚠️ Mood `'ngu'` đã có CSS và có mắt nhắm từ lâu, nhưng KHÔNG CÓ GÌ bật nó —
+   * một tính năng chết nằm im trong mã. Đây là chỗ nối lại.
+   *
+   * Nghe trên `document` ở pha BẮT (capture): phần lớn sự kiện trong app bị
+   * `stopPropagation` ở đâu đó trên đường nổi lên, nên nghe pha nổi thì robot
+   * chỉ tỉnh khi người dùng bấm vào chỗ trống.
+   */
+  useEffect(() => {
+    if (!enabled) return;
+    let hen: ReturnType<typeof setTimeout>;
+    const NGU_SAU = 3 * 60_000;
+    const datLai = (): void => {
+      clearTimeout(hen);
+      // Chỉ đánh thức khi đang NGỦ. Gọi `setMood('thuong')` vô điều kiện là
+      // xoá mất mọi tâm trạng khác mỗi lần người dùng động vào chuột.
+      setMood((cu) => (cu === 'ngu' ? 'thuong' : cu));
+      hen = setTimeout(() => setMood((cu) => (cu === 'thuong' ? 'ngu' : cu)), NGU_SAU);
+    };
+    const cacSuKien = ['pointermove', 'pointerdown', 'keydown', 'wheel'] as const;
+    for (const t of cacSuKien) document.addEventListener(t, datLai, { capture: true, passive: true });
+    datLai();
+    return () => {
+      clearTimeout(hen);
+      for (const t of cacSuKien) document.removeEventListener(t, datLai, { capture: true });
+    };
   }, [enabled]);
 
   // ── Mất mạng thì lo ──────────────────────────────────────
@@ -152,7 +227,9 @@ export function useOdin(options: {
           // Chỉ reo lên khi có thông báo MỚI, không reo mỗi lần hỏi lại. Robot
           // nhảy nhót mỗi 60 giây là robot bị tắt sau ngày đầu tiên.
           if (count > previous && previous >= 0) {
-            moodFor('vui', 1600);
+            // VẪY TAY, khác hẳn nhảy tưng tưng lúc được bấm: cái này là robot
+            // GỌI người dùng ("có tin đấy"), cái kia là robot đáp lại họ.
+            moodFor('vay', 2200);
           }
           return count;
         });

@@ -91,3 +91,24 @@ export function vungChoDiem(
     diem.x >= v.x && diem.x < v.x + v.width
     && diem.y >= v.y && diem.y < v.y + v.height) ?? vungChinh;
 }
+
+/**
+ * HÚT VÀO MÉP gần hơn theo chiều NGANG.
+ *
+ * Kiểu "bong bóng chat" của Messenger/iOS, và nó được chọn có lý do: chiều
+ * DỌC là thứ người dùng dùng để tránh che nội dung (kéo lên khỏi thanh tác vụ,
+ * xuống dưới thanh menu), nên hút cả hai chiều là cướp mất quyết định ấy. Chỉ
+ * hút ngang thì robot luôn dính mép, không bao giờ lửng lơ giữa màn hình che
+ * mất thứ đang đọc, mà vẫn ở đúng độ cao người dùng đặt.
+ *
+ * So bằng TÂM cửa sổ, không bằng mép trái: so mép trái thì một cửa sổ rộng
+ * (khung chat 380px) nằm chính giữa sẽ luôn bị coi là "gần mép trái".
+ */
+export function hutMep(o: Vung, vung: Vung, le = 0): Vung {
+  const tamX = o.x + o.width / 2;
+  const benTrai = tamX < vung.x + vung.width / 2;
+  return kep({
+    ...o,
+    x: benTrai ? vung.x + le : vung.x + vung.width - o.width - le,
+  }, vung);
+}

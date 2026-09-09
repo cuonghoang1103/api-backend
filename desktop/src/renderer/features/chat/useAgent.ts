@@ -19,6 +19,7 @@ import type {
   AgentUiEvent, AgentViec, AgentWorkspace,
 } from '../../../shared/ipc';
 import type { TheXinPhep } from './XinPhep';
+import { SU_KIEN_AGENT_XONG } from '../odin/useOdin';
 
 /** Một mục trên màn hình. Không phải một tin nhắn giao thức. */
 export type MucHienThi =
@@ -473,6 +474,10 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
       dangGui.current = false;
       datDangChay(false);
       datDangNghi(false);
+      /* Con robot ăn mừng. Bắn ở `finally` nên nó chạy cả khi lượt kết thúc
+         bằng lỗi — "xong" ở đây nghĩa là "hết chạy", và người dùng cần biết
+         điều đó dù kết quả thế nào. */
+      window.dispatchEvent(new CustomEvent(SU_KIEN_AGENT_XONG));
       // Main lưu phiên ở `finally` của mỗi lượt, nên danh sách chỉ đúng SAU khi
       // lượt kết thúc. Nạp lại ở đây thay vì theo đồng hồ.
       void napPhien();

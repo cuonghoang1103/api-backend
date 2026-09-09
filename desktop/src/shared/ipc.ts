@@ -168,6 +168,8 @@ export const settingKeySchema = z.enum([
    */
   'robotX',
   'robotY',
+  /** Thả tay thì robot có tự hút vào mép màn hình không. Mặc định BẬT. */
+  'robotBamMep',
   /**
    * Thư mục người dùng đã chọn cho `web_tai` ở LẦN GẦN NHẤT.
    *
@@ -1050,6 +1052,10 @@ export const INVOKE_CHANNELS = {
     dy: z.number().min(-20000).max(20000),
   }),
   'robot:keoXong': z.object({}).optional(),
+  /* Menu chuột phải. `trongApp` phân biệt hai con robot: con nổi có mục
+     "Ghim/Bỏ ghim" và "Tắt robot nổi", con trong app thì không. */
+  'robot:menu': z.object({ trongApp: z.boolean() }),
+  'robot:hutMep': z.object({}).optional(),
   'agent:datMucNoLuc': agentMucNoLucSchema,
   'agent:datModel': agentModelSchema,
   'agent:hoanTac': agentCuocSchema,
@@ -1167,6 +1173,25 @@ export const EVENT_CHANNELS = [
   'agent:moWeb',
   /** Thông báo đẩy tới CỬA SỔ ROBOT nổi (tin nhắn, nhạc, agent xong việc). */
   'robot:tin',
+  /**
+   * Nấc cỡ robot vừa đổi (từ menu chuột phải).
+   *
+   * Cần một sự kiện RIÊNG chứ không đọc lại thiết đặt: con robot trong app giữ
+   * `odinCo` trong AppState, mà AppState chỉ nạp thiết đặt một lần lúc mở app.
+   * Không bắn tin thì đổi cỡ từ menu chỉ ăn ở con nổi, còn con trong app đứng
+   * nguyên — và người dùng thấy hai con robot khác cỡ nhau.
+   */
+  'robot:coDoi',
+  /** Người dùng vừa tắt robot từ menu chuột phải. */
+  'robot:tat',
+  /**
+   * AI Code đang làm gì — báo LIÊN TỤC, không phải một thông báo chớp tắt.
+   *
+   * Khác `robot:tin` ở chỗ nó KHÔNG tự mờ sau 8 giây: đây là trạng thái sống,
+   * và cả điểm của nó là để người dùng đang làm việc ở app khác liếc sang thấy
+   * "vẫn đang chạy" mà không phải chuyển cửa sổ. `chu: null` = đã xong.
+   */
+  'robot:viec',
   /** Đăng nhập OAuth qua trình duyệt đã xong — mang token về cho app. */
   'oauth:xong',
   /** Phím media của bàn phím (Play/Pause · Next · Prev), kể cả khi app không ở trước. */
@@ -1577,6 +1602,16 @@ export interface DesktopBridge {
     keoBatDau(): Promise<void>;
     keoToi(dx: number, dy: number): Promise<void>;
     keoXong(): Promise<void>;
+    /**
+     * Mở menu chuột phải NATIVE tại con trỏ.
+     *
+     * Menu của hệ điều hành chứ không phải `div` tự vẽ: menu tự vẽ trong cửa
+     * sổ robot bị CẮT ở biên cửa sổ (nó chỉ rộng 150px), còn menu native nổi
+     * ra ngoài mọi cửa sổ và tự lật hướng khi gần mép màn hình.
+     */
+    menu(trongApp: boolean): Promise<void>;
+    /** Hút lại vào mép ngay (sau khi đổi cỡ từ menu). */
+    hutMep(): Promise<void>;
     /** Hỏi nhanh một câu, trả về câu trả lời đã hoàn chỉnh (không chảy chữ). */
     hoi(chu: string): Promise<{ chu: string }>;
     /**

@@ -43,7 +43,10 @@ function Eyes({
     );
   }
 
-  if (happy || mood === 'vui') {
+  /* `vay` và `mung` cũng là mặt cười — chúng là hai kiểu VUI khác nhau, khác ở
+     ĐỘNG TÁC (tay vẫy / hai tay giơ, xem `odin.css`) chứ không ở mặt. Thiếu
+     dòng này thì robot vẫy tay với gương mặt ngái ngủ mặc định. */
+  if (happy || mood === 'vui' || mood === 'vay' || mood === 'mung') {
     // Mắt cười hình vòng cung ngược + hai má ửng. Má là chi tiết nhỏ nhưng nó
     // làm khác biệt lớn nhất giữa "robot đang cười" và "robot dễ thương".
     return (

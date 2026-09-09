@@ -935,6 +935,7 @@ export async function chayLuot(
         // Việc agent thường chạy nhiều phút; người dùng đi làm việc khác là
         // chuyện bình thường. Robot nổi báo hộ. Nhập động để `loop.ts` không kéo
         // theo cả tầng cửa sổ khi chạy trong vitest.
+        baoViecRaRobot(null);
         void import('../robotTin')
           .then(({ baoAgentXong }) => {
             const n = soFileDaSua(c.so);
@@ -1014,6 +1015,10 @@ export async function chayLuot(
            PDF, `npm test`, tải một lô file) và trước đây màn hình không đổi gì
            trong suốt thời gian đó — người dùng tưởng app treo. */
         phat({ loai: 'toolBatDau', id: goi.id, ten: goi.name, vong: 'may' });
+        /* Cũng báo ra CON ROBOT NỔI. Việc agent chạy nhiều phút và người dùng
+           đi làm việc khác là chuyện thường — trước đây họ chỉ biết lúc XONG,
+           nên khoảng giữa không phân biệt được với "app đã chết". */
+        baoViecRaRobot(viecNganCuaTool(goi.name));
 
         // `anh?` để `web_anh` gửi được ảnh chụp lên máy chủ — xem `KetQuaTool`.
         /* Chép tay hình dạng của `KetQuaTool` — nhánh MCP/kỹ năng/việc phụ
@@ -1529,4 +1534,34 @@ async function mgoiMotLuotThat(o: {
   }
 
   return loi ? { ok: false, ...loi } : { ok: true, ketQua: ra };
+}
+
+
+/**
+ * Báo việc đang làm ra con robot nổi.
+ *
+ * Nhập ĐỘNG: `loop.ts` chạy trong vitest, và `robotTin` kéo theo cả tầng cửa
+ * sổ Electron — nhập tĩnh là mọi phép kiểm của vòng lặp agent phải dựng một
+ * `BrowserWindow` giả. Nuốt lỗi vì đây là thông báo phụ: robot không mở thì
+ * cũng không có gì hỏng.
+ */
+function baoViecRaRobot(chu: string | null): void {
+  void import('../robotTin').then(({ baoAgentViec }) => baoAgentViec(chu)).catch(() => {});
+}
+
+/** Câu NGẮN cho con robot — nó chỉ rộng 150px, không chứa nổi câu dài. */
+function viecNganCuaTool(ten: string): string {
+  const bang: Record<string, string> = {
+    read_file: 'Đang đọc mã…',
+    list_dir: 'Đang xem thư mục…',
+    grep: 'Đang tìm trong mã…',
+    edit_file: 'Đang sửa code…',
+    create_file: 'Đang tạo tệp…',
+    sua_nhieu_cho: 'Đang sửa code…',
+    xoa_file: 'Đang xoá tệp…',
+    doi_ten_file: 'Đang đổi tên tệp…',
+    run_command: 'Đang chạy lệnh…',
+    giao_viec_phu: 'Agent phụ đang làm…',
+  };
+  return bang[ten] ?? 'Đang làm việc…';
 }

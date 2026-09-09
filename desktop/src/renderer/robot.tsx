@@ -19,6 +19,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { OdinRobot } from './features/odin/OdinRobot';
+import type { OdinMood } from './features/odin/useOdin';
 import { batDauThu, ngungPhat, phatBase64, type BoThu } from './features/odin/nghePhat';
 import './features/odin/odin.css';
 import './robot.css';
@@ -39,6 +40,14 @@ function Robot() {
   const [rong, datRong] = useState(false);
   const [nhay, datNhay] = useState(false);
   const [tin, datTin] = useState<ThongBao | null>(null);
+  /**
+   * AI Code đang làm gì — trạng thái SỐNG, không tự mờ sau 8 giây như `tin`.
+   *
+   * Đây là điểm khác biệt của nó: người dùng giao một việc rồi chuyển sang app
+   * khác, và trước bản này họ chỉ biết lúc XONG. Khoảng giữa — thường vài phút
+   * — không phân biệt được với "app đã chết".
+   */
+  const [viec, datViec] = useState<string | null>(null);
   const [hover, datHover] = useState(false);
   const henRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [tt, datTt] = useState<TrangThaiNoi>('im');
@@ -75,7 +84,18 @@ function Robot() {
    * khung hình bong bóng bị xén rồi mới giãn ra.
    */
   const doRef = useRef<HTMLButtonElement | null>(null);
-  const chuBong = tin ? tin.chu : tt === 'nghi' ? CHU_CHO : null;
+  /*
+   * ⚠️ `viec` PHẢI đi qua đúng đường bong bóng này, không được vẽ một dải
+   * riêng dưới chân robot. Cửa sổ chỉ 150×190 và Electron **xén** mọi thứ
+   * tràn ra ngoài biên cửa sổ — một dải thêm ở dưới sẽ mất hẳn, không lỗi,
+   * không dấu vết. `doiCo('noi', …)` bên dưới mới là thứ phóng cửa sổ cho vừa,
+   * và nó chỉ chạy cho `chuBong`.
+   *
+   * Thứ tự: thông báo thật (tin nhắn, bản mới) > đang nghĩ câu trả lời cho
+   * người dùng > việc agent chạy nền. Việc nền là thứ ít cấp nhất — nó chạy
+   * hàng phút, còn hai cái kia là chuyện vừa xảy ra.
+   */
+  const chuBong = tin ? tin.chu : tt === 'nghi' ? CHU_CHO : viec;
 
   useLayoutEffect(() => {
     if (rong) return;                       // đang mở khung chat, cỡ đã to sẵn
@@ -98,6 +118,11 @@ function Robot() {
       setTimeout(() => datTin((cu) => (cu === t ? null : cu)), 8000);
     });
   }, []);
+
+  useEffect(() => window.cuongthai?.on('robot:viec', (p) => {
+    const c = (p as { chu?: string | null }).chu;
+    datViec(typeof c === 'string' && c ? c : null);
+  }), []);
 
   const doiRong = useCallback((v: boolean) => {
     datRong(v);
@@ -228,11 +253,18 @@ function Robot() {
       void window.cuongthai?.robot.datCo(n);
     });
   }, []);
+  /* Menu chuột phải đổi cỡ ở MAIN, nên renderer phải nghe lại — không thì
+     nhãn "%" trên thanh nút vẫn hiện số cũ trong khi cửa sổ đã co. */
+  useEffect(() => window.cuongthai?.on('robot:coDoi', (p) => {
+    const n = (p as { nac?: number }).nac;
+    if (typeof n === 'number') datNacCo(n);
+  }), []);
+
   const doiNac = useCallback((d: number) => {
     datNacCo((cu) => {
       const moi = Math.max(0, Math.min(3, cu + d));
       void window.cuongthai?.settings.set('odinCo', moi);
-      void window.cuongthai?.robot.datCo(moi);
+      void window.cuongthai?.robot.datCo(moi).then(() => window.cuongthai?.robot.hutMep());
       return moi;
     });
   }, []);
@@ -300,8 +332,32 @@ function Robot() {
     }, 260);
   }, []);
 
+  /**
+   * Tâm trạng hiện tại — tính MỘT chỗ, dùng cho cả vỏ (`data-mood`, để CSS bật
+   * hoạt ảnh) lẫn `OdinRobot` (đôi mắt). Hai chỗ tự tính riêng là một ngày nào
+   * đó mắt cười trong khi thân đang lo.
+   */
+  const moodHienTai: OdinMood =
+    tt === 'nghe' ? 'nghe'
+      : tt === 'nghi' ? 'nghi'
+        /* Agent đang chạy ⇒ robot ra dáng ĐANG NGHĨ. Để 'thuong' thì nó đứng
+           cười tươi trong lúc máy đang cày — nói sai chuyện đang xảy ra. */
+        : viec ? 'nghi'
+          : tin ? 'vay' : 'thuong';
+
   return (
-    <div className="rb" data-rong={rong} data-keo={keoDuoc} data-dang-keo={dangKeo}>
+    <div
+      className="rb odin-canh"
+      data-rong={rong}
+      data-keo={keoDuoc}
+      data-dang-keo={dangKeo}
+      /* ⚠️ `odin-canh` + `data-mood` là thứ bật MỌI biểu cảm (xem chú thích dài
+         trong `odin.css`). Trước bản này vỏ chỉ có `.rb`, mà mọi luật biểu cảm
+         lại viết `.odin-dock[data-mood=…]` — nên con robot nổi chưa từng nhảy,
+         vẫy hay lo lần nào; chỉ đôi mắt đổi. */
+      data-mood={moodHienTai}
+      data-hover={hover}
+    >
       {rong && <KhungChat onDong={() => doiRong(false)} />}
 
       {/*
@@ -348,6 +404,14 @@ function Robot() {
       {!tin && !rong && tt === 'nghi' && (
         <div className="rb-bong" data-loai="cho">Chờ tớ suy nghĩ xíu nhé…</div>
       )}
+      {/* Việc AI Code đang chạy. `data-loai="viec"` để nó nhạt hơn thông báo
+          thật — nó là nền cảnh, không phải thứ đòi bạn phản ứng. */}
+      {!tin && !rong && tt !== 'nghi' && viec && (
+        <div className="rb-bong" data-loai="viec">
+          <i className="rb-viec-cham" aria-hidden />
+          {viec}
+        </div>
+      )}
       {tin && !rong && (
         /*
          * Bấm vào KHUNG CHỮ ⇒ mở thẳng trang AI Chat ở đúng cuộc trò
@@ -386,6 +450,9 @@ function Robot() {
         }}
         onClick={bam}
         onDoubleClick={bamDup}
+        /* Menu chuột phải — cửa duy nhất người dùng ĐOÁN RA được. Cử chỉ
+           ba-cú-bấm vẫn còn cho người quen tay, nhưng không ai tự nghĩ ra nó. */
+        onContextMenu={(e) => { e.preventDefault(); void window.cuongthai?.robot.menu(false); }}
         onMouseEnter={() => datHover(true)}
         onMouseLeave={() => datHover(false)}
         title={'Bấm một lần: mở khung chat nhanh\nBấm hai lần: mở trang AI Chat\nKéo để dời'}
@@ -402,7 +469,7 @@ function Robot() {
           </span>
         )}
         <OdinRobot
-          mood={tt === 'nghe' ? 'vui' : tt === 'nghi' ? 'nghi' : tin ? 'vui' : 'thuong'}
+          mood={moodHienTai}
           blinking={nhay}
           hovering={hover}
           size={Math.round(104 * [1, 0.82, 0.66, 0.52][nacCo]!)}

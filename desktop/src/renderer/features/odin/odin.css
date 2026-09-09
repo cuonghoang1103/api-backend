@@ -10,6 +10,26 @@
  * `prefers-reduced-motion` ở đầu styles.css áp lên mọi animation của app.
  */
 
+/* ══════════════════════════════════════════════════════════
+   ⚠️ NHỊP CHUYỂN ĐỘNG — PHẢI khai ở ĐÂY, không chỉ ở `styles.css`
+   ══════════════════════════════════════════════════════════
+   Cửa sổ robot nổi (`robot.tsx`) nạp ĐÚNG hai tệp: `odin.css` và `robot.css`.
+   Nó KHÔNG nạp `styles.css` — nơi `--ct-ease`/`--ct-spring` vốn được khai.
+
+   Hậu quả đo thật 10/09/2026 trong app đã dựng: `getPropertyValue('--ct-spring')`
+   trả **chuỗi rỗng**, và `animationName` của mood `vui` là **`none`**. Một
+   `var()` không giải được làm HỎNG CẢ khai báo `animation` rút gọn ("invalid at
+   computed-value time") — nên nó bị vứt IM LẶNG, không cảnh báo, không lỗi.
+   Tức là con robot nổi CHƯA TỪNG nhảy khi được bấm, và tay nó chưa từng vẫy;
+   chỉ những hoạt ảnh viết nhịp bằng chữ (`ease-in-out`) mới chạy.
+
+   Giá trị phải KHỚP `styles.css` — có phép kiểm canh
+   (`odin.nhipChuyenDong.test.ts`), sửa một bên mà quên bên kia là nó đỏ. */
+:root {
+  --ct-ease: cubic-bezier(0.32, 0.72, 0, 1);
+  --ct-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
 /*
  * Bảng màu ở `:root`, KHÔNG ở `.odin-dock`.
  *
@@ -75,6 +95,22 @@
   50%      { outline-color: var(--ct-accent); }
 }
 
+ /* ══════════════════════════════════════════════════════════
+    ⚠️ `.odin-canh` vs `.odin-dock` — ĐỌC TRƯỚC KHI SỬA
+    ══════════════════════════════════════════════════════════
+    Cùng một con robot được vẽ ở HAI chỗ: `.odin-dock` (trong trang app) và
+    `.rb` (cửa sổ nổi riêng, `robot.tsx`). Cả hai đều dựng `OdinRobot`, và cả
+    hai đều nạp tệp này.
+
+    Trước 10/09/2026 mọi luật biểu cảm viết là `.odin-dock[data-mood=…]`, nên
+    ở con NỔI **không luật nào ăn** — đếm được 0. Nó chưa từng nhảy, vẫy, lo
+    hay nghĩ; chỉ đôi mắt đổi (mắt vẽ trong SVG theo prop `mood`, không qua
+    CSS). Một tính năng chết mà nhìn qua tưởng chạy, vì con trong app thì chạy.
+
+    Nay: `.odin-canh` là lớp CHUNG mang biểu cảm — cả `.odin-dock` lẫn `.rb`
+    đều đeo nó cùng `data-mood`. `.odin-dock` chỉ còn lo vị trí/bố cục.
+    Thêm biểu cảm mới thì viết `.odin-canh[data-mood=…]`, đừng viết
+    `.odin-dock[…]` — viết thế là con nổi lại câm như cũ. */
 .odin-dock {
   position: fixed;
   right: 22px;
@@ -152,16 +188,16 @@
   50%      { transform: scaleX(0.86); opacity: 0.13; }
 }
 
-.odin-dock[data-mood='thuong'] .odin-head,
-.odin-dock[data-mood='thuong'] .odin-body,
-.odin-dock[data-mood='ngu'] .odin-head,
-.odin-dock[data-mood='ngu'] .odin-body {
+.odin-canh[data-mood='thuong'] .odin-head,
+.odin-canh[data-mood='thuong'] .odin-body,
+.odin-canh[data-mood='ngu'] .odin-head,
+.odin-canh[data-mood='ngu'] .odin-body {
   animation: odin-float 3.4s ease-in-out infinite;
 }
 
 /* Đầu trôi lệch pha một chút so với thân → cổ như có độ đàn hồi. Cùng pha thì
    cả con robot trông như một khối gỗ trượt lên xuống. */
-.odin-dock[data-mood='thuong'] .odin-head {
+.odin-canh[data-mood='thuong'] .odin-head {
   animation-delay: -0.22s;
 }
 
@@ -183,8 +219,8 @@
 
 /* Nén xuống trước khi bật lên (18%) là thứ khiến cú nhảy có lực. Bỏ khung đó
    đi thì robot chỉ "trượt lên rồi trượt xuống". */
-.odin-dock[data-mood='vui'] .odin-head,
-.odin-dock[data-mood='vui'] .odin-body {
+.odin-canh[data-mood='vui'] .odin-head,
+.odin-canh[data-mood='vui'] .odin-body {
   animation: odin-hop 900ms var(--ct-spring);
   transform-origin: center bottom;
 }
@@ -199,8 +235,115 @@
   transform-origin: 50% 10%;
 }
 
-.odin-dock[data-mood='vui'] .odin-arm-right {
+.odin-canh[data-mood='vui'] .odin-arm-right {
   animation: odin-arm-wave 900ms var(--ct-ease);
+}
+
+/* ══════════════════════════════════════════════════════════
+   VẪY TAY — "có tin đấy", robot GỌI người dùng
+   ══════════════════════════════════════════════════════════
+   Khác hẳn `vui` (nhảy tưng tưng): `vui` là robot ĐÁP LẠI cú bấm của người
+   dùng, còn cái này là robot chủ động gọi họ. Nên tay vẫy nhiều nhịp và thân
+   chỉ nghiêng nhẹ — nhảy cẫng lên khi báo tin nhắn thì nó át mất cái tin. */
+@keyframes odin-vay-tay {
+  0%, 100% { transform: rotate(0deg); }
+  15%      { transform: rotate(-42deg); }
+  32%      { transform: rotate(-10deg); }
+  49%      { transform: rotate(-42deg); }
+  66%      { transform: rotate(-10deg); }
+  83%      { transform: rotate(-38deg); }
+}
+@keyframes odin-vay-than {
+  0%, 100% { transform: rotate(0deg); }
+  25%      { transform: rotate(-3.5deg); }
+  75%      { transform: rotate(3.5deg); }
+}
+.odin-canh[data-mood='vay'] .odin-arm-right {
+  animation: odin-vay-tay 2000ms var(--ct-ease);
+}
+.odin-canh[data-mood='vay'] .odin-head,
+.odin-canh[data-mood='vay'] .odin-body {
+  animation: odin-vay-than 2000ms ease-in-out;
+  transform-origin: center bottom;
+}
+
+/* ══════════════════════════════════════════════════════════
+   ĂN MỪNG — AI Code vừa xong việc
+   ══════════════════════════════════════════════════════════
+   Hai tay giơ lên và ba nhịp nhảy nhỏ dần. Nhỏ dần chứ không đều: ba cú nhảy
+   cùng độ cao trông như một vòng lặp bị kẹt, còn tắt dần thì nó có mở đầu và
+   có kết. */
+@keyframes odin-mung-nhay {
+  0%   { transform: translateY(0) scaleY(1); }
+  12%  { transform: translateY(3px) scaleY(0.86); }
+  28%  { transform: translateY(-24px) scaleY(1.12); }
+  44%  { transform: translateY(0) scaleY(0.92); }
+  58%  { transform: translateY(-14px) scaleY(1.06); }
+  72%  { transform: translateY(0) scaleY(0.96); }
+  84%  { transform: translateY(-6px) scaleY(1.02); }
+  100% { transform: translateY(0) scaleY(1); }
+}
+@keyframes odin-mung-tay-trai {
+  0%, 100% { transform: rotate(0deg); }
+  25%, 75% { transform: rotate(58deg); }
+}
+@keyframes odin-mung-tay-phai {
+  0%, 100% { transform: rotate(0deg); }
+  25%, 75% { transform: rotate(-58deg); }
+}
+.odin-canh[data-mood='mung'] .odin-head,
+.odin-canh[data-mood='mung'] .odin-body {
+  animation: odin-mung-nhay 1600ms var(--ct-spring);
+  transform-origin: center bottom;
+}
+.odin-canh[data-mood='mung'] .odin-arm-left {
+  animation: odin-mung-tay-trai 1600ms var(--ct-ease);
+}
+.odin-canh[data-mood='mung'] .odin-arm-right {
+  animation: odin-mung-tay-phai 1600ms var(--ct-ease);
+}
+
+/* ══════════════════════════════════════════════════════════
+   NGỦ GÀ — không ai động vào máy 3 phút
+   ══════════════════════════════════════════════════════════
+   ⚠️ Mood `'ngu'` đã có sẵn CSS mắt nhắm và một luật màu từ lâu, nhưng KHÔNG
+   CÓ GÌ trong mã bật nó — một tính năng chết. `useOdin.ts` nay nối lại.
+   Thở chậm và nghiêng đầu: robot đứng im hoàn toàn thì không phân biệt được
+   với robot bị treo. */
+@keyframes odin-ngu-tho {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50%      { transform: translateY(3px) rotate(-4deg); }
+}
+/* ⚠️ Đầu VÀ thân, cùng một nhịp. Đo trong Chromium: để mỗi đầu thì thân vẫn
+   chạy `odin-float` (chu kỳ khác hẳn), hai nhịp trôi lệch dần và con robot
+   trông như hai mảnh rời chứ không phải một cơ thể đang ngủ. */
+.odin-canh[data-mood='ngu'] .odin-head,
+.odin-canh[data-mood='ngu'] .odin-body {
+  animation: odin-ngu-tho 3.4s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+/* Thân không nghiêng theo đầu — nghiêng cả người là ngã, không phải ngủ gật. */
+.odin-canh[data-mood='ngu'] .odin-body { animation-name: odin-ngu-tho-than; }
+@keyframes odin-ngu-tho-than {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(3px); }
+}
+
+/* ⚠️ Tôn trọng "giảm chuyển động" của hệ điều hành. Một con robot nhảy nhót
+   trong góc màn hình là đúng thứ thiết đặt ấy sinh ra để tắt — và người bật
+   nó thường là người thấy chóng mặt vì chuyển động, không phải người chê vui. */
+@media (prefers-reduced-motion: reduce) {
+  .odin-canh[data-mood='vay'] .odin-arm-right,
+  .odin-canh[data-mood='vay'] .odin-head,
+  .odin-canh[data-mood='vay'] .odin-body,
+  .odin-canh[data-mood='mung'] .odin-head,
+  .odin-canh[data-mood='mung'] .odin-body,
+  .odin-canh[data-mood='mung'] .odin-arm-left,
+  .odin-canh[data-mood='mung'] .odin-arm-right,
+  .odin-canh[data-mood='ngu'] .odin-head,
+  .odin-canh[data-mood='ngu'] .odin-body {
+    animation: none;
+  }
 }
 
 /* ── Đang nghĩ ─────────────────────────────────────────── */
@@ -210,7 +353,7 @@
   50%      { transform: rotate(4deg); }
 }
 
-.odin-dock[data-mood='nghi'] .odin-head {
+.odin-canh[data-mood='nghi'] .odin-head {
   animation: odin-think 1.5s ease-in-out infinite;
   transform-origin: 50% 90%;
 }
@@ -222,7 +365,7 @@
   50%      { transform: scale(1.035); }
 }
 
-.odin-dock[data-mood='nghe'] .odin-head {
+.odin-canh[data-mood='nghe'] .odin-head {
   animation: odin-listen 780ms ease-in-out infinite;
   transform-origin: center;
 }
@@ -237,8 +380,8 @@
 
 /* Rung RẤT nhẹ và CHẬM. Robot báo lỗi mà rung bần bật thì tạo lo lắng thay vì
    truyền tin — trạng thái lỗi phải bình tĩnh. */
-.odin-dock[data-mood='lo'] .odin-head,
-.odin-dock[data-mood='lo'] .odin-body {
+.odin-canh[data-mood='lo'] .odin-head,
+.odin-canh[data-mood='lo'] .odin-body {
   animation: odin-worry 2.6s ease-in-out infinite;
 }
 
@@ -478,8 +621,8 @@
   100% { transform: scaleX(0.55); opacity: 0.1; }
 }
 
-.odin-dock[data-hover='true'] .odin-head,
-.odin-dock[data-hover='true'] .odin-body {
+.odin-canh[data-hover='true'] .odin-head,
+.odin-canh[data-hover='true'] .odin-body {
   animation:
     odin-fly-body 420ms var(--ct-spring) forwards,
     odin-fly-hover 1.6s ease-in-out 420ms infinite;
@@ -487,7 +630,7 @@
 }
 
 /* Đầu bay cao hơn thân một chút và trễ hơn 40ms → cổ có độ đàn hồi. */
-.odin-dock[data-hover='true'] .odin-head {
+.odin-canh[data-hover='true'] .odin-head {
   animation-delay: 0.04s, 0.46s;
 }
 
@@ -497,13 +640,13 @@
   transition: transform 200ms var(--ct-ease);
 }
 
-.odin-dock[data-hover='true'] .odin-arm-left {
+.odin-canh[data-hover='true'] .odin-arm-left {
   animation:
     odin-fly-arm-left 380ms var(--ct-spring) forwards,
     odin-fly-arm-left-wave 1.1s ease-in-out 380ms infinite;
 }
 
-.odin-dock[data-hover='true'] .odin-arm-right {
+.odin-canh[data-hover='true'] .odin-arm-right {
   animation:
     odin-fly-arm-right 380ms var(--ct-spring) forwards,
     odin-fly-arm-right-wave 1.1s ease-in-out 460ms infinite;
@@ -517,31 +660,31 @@
   transform-origin: center top;
 }
 
-.odin-dock[data-hover='true'] .odin-arms {
+.odin-canh[data-hover='true'] .odin-arms {
   animation: odin-fly-arms-lift 420ms var(--ct-spring) forwards;
 }
 
-.odin-dock[data-hover='true'] .odin-legs {
+.odin-canh[data-hover='true'] .odin-legs {
   animation: odin-fly-legs 420ms var(--ct-spring) forwards;
 }
 
-.odin-dock[data-hover='true'] .odin-shadow {
+.odin-canh[data-hover='true'] .odin-shadow {
   animation: odin-fly-shadow 420ms var(--ct-ease) forwards;
 }
 
 /* Rê chuột ĐÈ LÊN trạng thái trôi bình thường. Không có dòng này thì hai
    animation cùng tranh thuộc tính `transform` và robot giật loạn. */
-.odin-dock[data-hover='true'][data-mood='thuong'] .odin-head,
-.odin-dock[data-hover='true'][data-mood='thuong'] .odin-body,
-.odin-dock[data-hover='true'][data-mood='ngu'] .odin-head,
-.odin-dock[data-hover='true'][data-mood='ngu'] .odin-body {
+.odin-canh[data-hover='true'][data-mood='thuong'] .odin-head,
+.odin-canh[data-hover='true'][data-mood='thuong'] .odin-body,
+.odin-canh[data-hover='true'][data-mood='ngu'] .odin-head,
+.odin-canh[data-hover='true'][data-mood='ngu'] .odin-body {
   animation:
     odin-fly-body 420ms var(--ct-spring) forwards,
     odin-fly-hover 1.6s ease-in-out 420ms infinite;
 }
 
 /* Cú NHẤN vẫn thắng cả hai: đó là hành động chủ động nhất của người dùng. */
-.odin-dock[data-mood='vui'] .odin-head,
-.odin-dock[data-mood='vui'] .odin-body {
+.odin-canh[data-mood='vui'] .odin-head,
+.odin-canh[data-mood='vui'] .odin-body {
   animation: odin-hop 900ms var(--ct-spring) !important;
 }

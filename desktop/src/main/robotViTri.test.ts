@@ -6,7 +6,7 @@
  * tôi nghĩ ra.
  */
 import { describe, expect, it } from 'vitest';
-import { kep, doiCoGiuGoc, vungChoDiem } from './robotViTri';
+import { kep, doiCoGiuGoc, vungChoDiem, hutMep } from './robotViTri';
 
 /** Vùng làm việc thật của máy đo: MacBook 1728×1022, mép trên 33px là menu bar. */
 const VUNG = { x: 0, y: 33, width: 1728, height: 1022 };
@@ -80,5 +80,29 @@ describe('màn hình đã lưu có thể không còn', () => {
     // Không có nhánh này thì vị trí cũ trỏ vào khoảng không, và một cửa sổ
     // không khung nằm ngoài mọi màn hình là cửa sổ không lấy lại được.
     expect(vungChoDiem({ x: 2000, y: 500 }, [chinh], chinh)).toBe(chinh);
+  });
+});
+
+describe('hút vào mép', () => {
+  it('nửa TRÁI ⇒ dính mép trái; nửa PHẢI ⇒ dính mép phải', () => {
+    expect(hutMep({ x: 300, y: 400, ...GON }, VUNG).x).toBe(0);
+    expect(hutMep({ x: 1200, y: 400, ...GON }, VUNG).x).toBe(1728 - 150);
+  });
+
+  it('GIỮ NGUYÊN chiều dọc — đó là chiều người dùng dùng để tránh che nội dung', () => {
+    expect(hutMep({ x: 300, y: 512, ...GON }, VUNG).y).toBe(512);
+  });
+
+  it('so bằng TÂM, không bằng mép trái', () => {
+    // Khung chat 380px đặt chính giữa: mép trái ở 674 (nửa trái màn hình),
+    // nhưng TÂM ở 864 = đúng giữa ⇒ phải tính là nửa phải, không phải trái.
+    const giua = { x: 674, y: 300, width: 380, height: 520 };
+    expect(hutMep(giua, VUNG).x).toBe(1728 - 380);
+  });
+
+  it('chừa được lề, và vẫn kẹp trong màn hình', () => {
+    const r = hutMep({ x: 1200, y: 400, ...GON }, VUNG, 12);
+    expect(r.x).toBe(1728 - 150 - 12);
+    expect(r.x + r.width).toBeLessThanOrEqual(VUNG.x + VUNG.width);
   });
 });

@@ -183,6 +183,29 @@ body {
 .rb-bong[data-loai='nhac'] { border-left: 3px solid #34d399; }
 .rb-bong[data-loai='agent'] { border-left: 3px solid #a78bfa; }
 
+/* ── AI Code đang chạy ──
+   Nhạt hơn thông báo thật: đây là NỀN CẢNH ("vẫn đang chạy"), không phải thứ
+   đòi người dùng phản ứng. Nó cũng sống hàng phút chứ không chớp tắt 8 giây,
+   nên nếu nổi bật bằng thông báo thì nó thành thứ gây phiền suốt buổi. */
+.rb-bong[data-loai='viec'] {
+  display: flex; align-items: center; gap: 6px;
+  border-left: 3px solid #a78bfa;
+  opacity: 0.92;
+  font-size: 11px;
+}
+/* Chấm THỞ — bằng chứng sống rằng còn thứ đang chạy. Một dòng chữ đứng im
+   vài phút không phân biệt được với một dòng chữ bị kẹt lại từ lượt trước. */
+.rb-viec-cham {
+  width: 6px; height: 6px; flex-shrink: 0;
+  border-radius: 50%;
+  background: #a78bfa;
+  animation: rb-tho-cham 1.4s ease-in-out infinite;
+}
+@keyframes rb-tho-cham {
+  0%, 100% { opacity: 0.35; transform: scale(0.8); }
+  50%      { opacity: 1;    transform: scale(1.15); }
+}
+
 /* Bong bóng "có tin" là NÚT (bấm để mở trang chat đầy đủ). `<button>` mang
    theo một bộ mặc định của trình duyệt, nên phải đặt lại — nhưng đặt lại bằng
    `font: inherit` thì HỎNG.

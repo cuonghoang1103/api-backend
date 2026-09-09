@@ -149,6 +149,19 @@ export function baoNhac(ten: string): void {
   baoRobot('robot:tin', { loai: 'nhac', chu: `♪ ${ten}` });
 }
 
+/**
+ * AI Code đang làm gì — trạng thái SỐNG, gửi liên tục trong lúc chạy.
+ *
+ * ⚠️ KHÔNG lọc bằng `dangNhinApp()` như các thông báo khác. Người dùng bắt đầu
+ * một việc rồi mới chuyển sang app khác — lọc lúc GỬI thì trạng thái không bao
+ * giờ tới nơi, vì lúc gửi họ vẫn đang nhìn app. Cửa sổ robot tự ẩn khi người
+ * dùng ở trong app (xem `theoTieuDiem` bên `robotNoi.ts`), nên gửi luôn là
+ * đúng và cũng rẻ.
+ */
+export function baoAgentViec(chu: string | null): void {
+  baoRobot('robot:viec', { chu });
+}
+
 /** Việc của agent chạy xong. Cũng chỉ báo khi người dùng đã đi chỗ khác. */
 export function baoAgentXong(chuThich: string): void {
   if (dangNhinApp()) return;

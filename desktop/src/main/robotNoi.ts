@@ -30,7 +30,7 @@
 import { BrowserWindow, screen, app } from 'electron';
 import path from 'node:path';
 import { IS_DEV, DEV_SERVER_URL, RENDERER_SOURCE, APP_ORIGIN } from './config';
-import { kep, doiCoGiuGoc, vungChoDiem, type Vung } from './robotViTri';
+import { kep, doiCoGiuGoc, vungChoDiem, hutMep, type Vung } from './robotViTri';
 import { getSettings, setSetting } from './store';
 
 /** Kích thước lúc thu gọn — vừa đúng con robot cộng một chút bóng đổ. */
@@ -307,9 +307,64 @@ export function keoToi(dx: number, dy: number): void {
   w.setBounds(kep({ ...b, x: Math.round(g.x + dx), y: Math.round(g.y + dy) }, vungHienTai(w)));
 }
 
+/** Lề khi robot dính mép — 0 thì nó trông như bị cắt mất một nửa cái bóng. */
+const LE_MEP = 6;
+
+let henHut: ReturnType<typeof setInterval> | null = null;
+
+/**
+ * Trượt cửa sổ về đích trong ~180ms.
+ *
+ * ⚠️ KHÔNG nhảy một phát tới đích. `setBounds` không có hoạt ảnh trên Windows
+ * lẫn Linux (macOS có tham số `animate` nhưng nó chỉ chạy cho cửa sổ thường),
+ * nên nhảy thẳng là robot biến mất ở chỗ này rồi hiện ra chỗ kia — mắt đọc nó
+ * là "lỗi", không phải "hút vào mép". Tự nội suy từng khung là cách duy nhất
+ * trông có chủ đích trên cả ba nền tảng.
+ */
+function truotToi(w: BrowserWindow, dich: { x: number; y: number }): void {
+  if (henHut) { clearInterval(henHut); henHut = null; }
+  const dau = w.getBounds();
+  const dx = dich.x - dau.x;
+  const dy = dich.y - dau.y;
+  if (dx === 0 && dy === 0) return;
+  const KHUNG = 12;
+  let i = 0;
+  henHut = setInterval(() => {
+    i += 1;
+    const w2 = cuaSoRobot();
+    if (!w2) { if (henHut) clearInterval(henHut); henHut = null; return; }
+    // easeOutCubic: nhanh lúc đầu, êm lúc chạm mép.
+    const t = 1 - Math.pow(1 - i / KHUNG, 3);
+    const b = w2.getBounds();
+    w2.setBounds({ ...b, x: Math.round(dau.x + dx * t), y: Math.round(dau.y + dy * t) });
+    if (i >= KHUNG) {
+      if (henHut) clearInterval(henHut);
+      henHut = null;
+      luuViTri();
+    }
+  }, 15);
+}
+
+/** Nấc cỡ đang dùng — menu chuột phải cần biết để chấm dấu đúng mục. */
+export function nacCoHienTai(): number { return nacCo; }
+
+/** Hút lại vào mép ngay, không cần kéo — dùng sau khi đổi cỡ từ menu. */
+export function hutLaiVaoMep(): void {
+  const w = cuaSoRobot();
+  if (!w || getSettings().robotBamMep === false) return;
+  truotToi(w, hutMep(w.getBounds(), vungHienTai(w), LE_MEP));
+}
+
 export function keoXong(): void {
   gocKeo = null;
-  luuViTri();
+  const w = cuaSoRobot();
+  if (!w) return;
+  /* HÚT VÀO MÉP kiểu bong bóng chat. Tắt được bằng `robotBamMep: false` —
+     có người muốn đặt robot đúng một chỗ giữa màn hình, và ép hút là cướp mất
+     lựa chọn đó. Mặc định BẬT: mép là chỗ ít che nội dung nhất. */
+  if (getSettings().robotBamMep === false) { luuViTri(); return; }
+  const dich = hutMep(w.getBounds(), vungHienTai(w), LE_MEP);
+  truotToi(w, dich);
 }
 
 export function dangMoRong(): boolean {

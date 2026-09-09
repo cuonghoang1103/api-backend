@@ -359,6 +359,17 @@ export function AgentMode({
     const text = nhap.trim();
     if (!text) return;
 
+    /*
+     * ⚠️ CHẶN KHI ĐÍNH KÈM CHƯA XONG. Không có chốt này thì bấm Gửi sớm một
+     * nhịp là `dk.anhGuiThang`/`dk.duongDanTrenDia` còn RỖNG — câu hỏi đi một
+     * mình, model nói "tôi không thấy ảnh nào", và trên màn hình thẻ file vẫn
+     * nằm đó như đã gửi. Không có lỗi nào để lần.
+     *
+     * Cửa sổ này rộng ra hẳn từ khi ảnh to được THU NHỎ ngay trong app
+     * (`thuNhoAnh`): giải mã + vẽ + nén một ảnh 4K mất vài trăm mili giây.
+     */
+    if (dk.dangTai) return;
+
     /* Đang chạy ⇒ XẾP HÀNG. Xem chú thích ở `hangCho`. Lệnh gạch chéo cũng
        xếp hàng chứ không chạy ngay: `/clear` giữa lượt là xoá hội thoại mà
        máy chủ đang đọc dở. */
@@ -1125,7 +1136,14 @@ export function AgentMode({
             </button>
           </>
         ) : (
-          <button type="button" data-nut="gui" className="ct-btn" onClick={guiDi} disabled={!nhap.trim()}>
+          <button
+            type="button"
+            data-nut="gui"
+            className="ct-btn"
+            onClick={guiDi}
+            disabled={!nhap.trim() || dk.dangTai}
+            title={dk.dangTai ? 'Đang chuẩn bị file đính kèm…' : undefined}
+          >
             <Send size={14} aria-hidden />
             Gửi
           </button>

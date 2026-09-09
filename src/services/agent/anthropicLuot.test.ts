@@ -85,3 +85,57 @@ test('tuyến Anthropic: gửi đúng hình dạng, đọc đúng tool', async (
   assert.equal(xong.stop, 'tool_calls');
   assert.equal(xong.usage.inputTokens, 120);
 });
+
+/*
+ * CHỐT MỐI NỐI GIỮA `turn.ts` VÀ `anthropic.ts`.
+ *
+ * Phép kiểm đơn vị của từng tệp đều xanh trong khi ảnh dán ở AI Code KHÔNG tới
+ * model: `turn.ts` cho `image_url` qua (đúng, đó là giao thức OpenAI), còn
+ * `sangAnthropic` lại chỉ nhận `image` — mà AI Code chạy tuyến ANTHROPIC. Chỉ
+ * phép kiểm đọc THÂN YÊU CẦU THẬT gửi đi mới thấy được chỗ rơi.
+ */
+test('tuyến Anthropic: ảnh dán đi hết đường, tới THÂN yêu cầu gửi cổng', async (t) => {
+  const luu = ['AGENT_GATEWAY_BASE_URL', 'AGENT_GATEWAY_API_KEY', 'LLM_GATEWAY_API_KEY']
+    .map((k) => [k, process.env[k]] as const);
+  process.env.AGENT_GATEWAY_BASE_URL = 'https://vi-du.test/api/claude';
+  process.env.AGENT_GATEWAY_API_KEY = 'sk-gia-lap';
+  process.env.LLM_GATEWAY_API_KEY = 'sk-gia-lap';
+  t.after(() => { for (const [k, v] of luu) { if (v === undefined) delete process.env[k]; else process.env[k] = v; } });
+
+  const goc = globalThis.fetch;
+  const daGui: any[] = [];
+  globalThis.fetch = (async (_url: any, init: any) => {
+    daGui.push(JSON.parse(String(init.body)));
+    return new Response(than([
+      { type: 'content_block_start', index: 0, content_block: { type: 'text' } },
+      { type: 'content_block_delta', index: 0, delta: { type: 'text_delta', text: 'Ảnh 1×1 màu đen.' } },
+      { type: 'message_delta', delta: { stop_reason: 'end_turn' }, usage: { output_tokens: 8 } },
+    ]), { status: 200 });
+  }) as typeof fetch;
+  t.after(() => { globalThis.fetch = goc; });
+
+  // ĐÚNG thứ app desktop gửi lên: khối `text` + khối `image_url` data URI.
+  const than64 = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+  await runAgentTurn(
+    { userId: 1, capabilities: [], mucNoLuc: 'vua', messages: [{
+      role: 'user',
+      content: [
+        { type: 'text', text: 'Ảnh này màu gì?' },
+        { type: 'image_url', image_url: { url: `data:image/png;base64,${than64}` } },
+      ],
+    }] } as any,
+    () => {},
+    new AbortController().signal,
+  );
+
+  const kh = daGui[0].messages.at(-1).content;
+  assert.ok(Array.isArray(kh), `content không phải mảng khối: ${JSON.stringify(kh).slice(0, 200)}`);
+  const anh = kh.find((k: any) => k.type === 'image');
+  assert.ok(anh, `THÂN GỬI CỔNG KHÔNG CÓ ẢNH — model sẽ nói "tôi không nhận được ảnh". Khối: ${
+    JSON.stringify(kh.map((k: any) => k.type))}`);
+  assert.equal(anh.source.type, 'base64');
+  assert.equal(anh.source.media_type, 'image/png');
+  assert.equal(anh.source.data, than64);
+  // Và KHÔNG được còn hình dạng OpenAI sót lại — cổng Anthropic không hiểu nó.
+  assert.ok(!kh.some((k: any) => k.type === 'image_url'), 'còn khối image_url kiểu OpenAI');
+});

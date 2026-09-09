@@ -82,6 +82,38 @@ type TinVao =
  * sinh ra chuỗi `tool, tool, tool` rất thường xuyên (model gọi ba tool một
  * lượt). Không gộp là 400.
  */
+/**
+ * `image_url` (hình dạng OpenAI) → khối `image` của Anthropic.
+ *
+ * ⚠️⚠️ ĐÂY LÀ MỐI NỐI ĐÃ TỪNG ĐỨT CÂM, và nó làm hỏng ẢNH DÁN Ở AI CODE trên
+ * mọi hệ điều hành. Cả app desktop lẫn `turn.ts` đều nói giao thức OpenAI, nên
+ * ảnh đi tới đây dưới dạng `{type:'image_url', image_url:{url:'data:…'}}`.
+ * Nhưng AI Code chạy qua cổng riêng (rambo) = tuyến ANTHROPIC, và bản cũ ở đây
+ * chỉ nhận `{type:'image'}`. Khối ảnh bị bỏ IM LẶNG — không lỗi, không cảnh
+ * báo — chữ vẫn qua, và model trả lời "tôi không nhận được ảnh nào", đúng như
+ * nó thấy. Không có gì để lần, vì cả hai đầu đều tự thấy mình đúng.
+ *
+ * Phép kiểm cũ CÓ kiểm ảnh, và vẫn xanh: nó dựng sẵn khối `image` — hình dạng
+ * mà KHÔNG chỗ nào trong đường thật sinh ra. Xem
+ * [[feedback_phep_kiem_dat_vi_ly_do_sai]].
+ *
+ * CHỈ nhận data URI. Chuyển tiếp một `image_url` trỏ ra Internet là bắt cổng
+ * đi tải thay mặt người dùng, mà chẳng ai duyệt lời gọi đó — cùng lý do
+ * `sanitizeIncoming` trong `turn.ts` đã lọc.
+ */
+function anhTuImageUrl(c: Record<string, any>): KhoiAnthropic | null {
+  const url: unknown = c.image_url?.url;
+  if (typeof url !== 'string') return null;
+  /* Cắt ở dấu phẩy ĐẦU TIÊN thay vì cho regex chạy trên cả chuỗi: thân ảnh
+     lên tới 5,6MB, còn base64 thì không chứa dấu phẩy — phần đầu là đủ. */
+  const phay = url.indexOf(',');
+  if (phay < 0) return null;
+  const dau = /^data:(image\/(?:png|jpeg|webp|gif));base64$/.exec(url.slice(0, phay));
+  const than = url.slice(phay + 1);
+  if (!dau || !than) return null;
+  return { type: 'image', source: { type: 'base64', media_type: dau[1]!, data: than } };
+}
+
 export function sangAnthropic(messages: TinVao[]): { system: string; messages: TinAnthropic[] } {
   const heThong: string[] = [];
   const ra: TinAnthropic[] = [];
@@ -157,6 +189,10 @@ export function sangAnthropic(messages: TinVao[]): { system: string; messages: T
     for (const c of (Array.isArray(m.content) ? m.content : []) as Array<Record<string, any>>) {
       if (c?.type === 'text' && typeof c.text === 'string') khoi.push({ type: 'text', text: c.text });
       else if (c?.type === 'image' && c.source) khoi.push({ type: 'image', source: c.source });
+      else if (c?.type === 'image_url') {
+        const a = anhTuImageUrl(c);
+        if (a) khoi.push(a);
+      }
     }
     them('user', khoi);
   }

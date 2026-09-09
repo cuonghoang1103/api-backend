@@ -90,6 +90,60 @@ test('ảnh trong tin user giữ nguyên khối image', () => {
   assert.equal(k[1].source.media_type, 'image/png');
 });
 
+/*
+ * ⚠️ Phép kiểm ngay TRÊN đây xanh suốt, mà ảnh dán ở AI Code vẫn không tới
+ * model — vì nó dựng sẵn khối `image`, hình dạng KHÔNG chỗ nào trong đường
+ * thật sinh ra. Đường thật (desktop → `agent:send` → `sanitizeIncoming`) sinh
+ * ra `image_url` kiểu OpenAI. Bốn phép kiểm dưới đây kiểm ĐÚNG hình dạng đó.
+ */
+test('ĐƯỜNG THẬT: `image_url` data URI → khối `image` của Anthropic', () => {
+  const r = sangAnthropic([
+    { role: 'user', content: [
+      { type: 'text', text: 'ảnh này là gì' },
+      { type: 'image_url', image_url: { url: 'data:image/png;base64,QUJD' } },
+    ] },
+  ]);
+  const k = r.messages[0]!.content as any[];
+  assert.equal(k.length, 2, `ảnh bị bỏ: ${JSON.stringify(k)}`);
+  assert.equal(k[1].type, 'image');
+  assert.equal(k[1].source.type, 'base64');
+  assert.equal(k[1].source.media_type, 'image/png');
+  assert.equal(k[1].source.data, 'QUJD');   // KHÔNG được dính cả tiền tố data:
+});
+
+test('`image_url` webp/jpeg/gif cũng qua — cả bốn loại app cho dán', () => {
+  for (const loai of ['jpeg', 'webp', 'gif']) {
+    const r = sangAnthropic([
+      { role: 'user', content: [{ type: 'image_url', image_url: { url: `data:image/${loai};base64,QQ==` } }] },
+    ]);
+    const k = r.messages[0]!.content as any[];
+    assert.equal(k[0]?.source?.media_type, `image/${loai}`, loai);
+  }
+});
+
+test('`image_url` trỏ ra Internet bị BỎ — không bắt cổng đi tải hộ', () => {
+  const r = sangAnthropic([
+    { role: 'user', content: [
+      { type: 'text', text: 'xem hộ' },
+      { type: 'image_url', image_url: { url: 'https://ke-la.example/a.png' } },
+      { type: 'image_url', image_url: { url: 'data:text/html;base64,QQ==' } },
+      { type: 'image_url', image_url: { url: 'data:image/png;base64,' } },
+    ] },
+  ]);
+  const k = r.messages[0]!.content as any[];
+  assert.equal(k.length, 1, `lọt khối không phải ảnh: ${JSON.stringify(k)}`);
+  assert.equal(k[0].type, 'text');
+});
+
+test('tin CHỈ có ảnh hỏng ⇒ không đẩy tin rỗng (cổng trả 400)', () => {
+  const r = sangAnthropic([
+    { role: 'user', content: [{ type: 'image_url', image_url: { url: 'https://ke-la.example/a.png' } }] },
+    { role: 'user', content: 'câu hỏi thật' },
+  ]);
+  assert.equal(r.messages.length, 1);
+  assert.deepEqual(r.messages[0]!.content, [{ type: 'text', text: 'câu hỏi thật' }]);
+});
+
 test('tool OpenAI → Anthropic: `parameters` thành `input_schema`', () => {
   const r = toolSangAnthropic([{ type: 'function', function: {
     name: 'doc_file', description: 'Đọc file', parameters: { type: 'object', properties: { p: { type: 'string' } } } } }]);

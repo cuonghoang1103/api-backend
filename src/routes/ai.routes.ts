@@ -386,6 +386,21 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
     // Chế độ GỌI: câu trả lời sẽ được đọc thành tiếng nên phải ngắn và
     // KHÔNG markdown — xem `VOICE_RULES` trong ai.service.ts.
     voice: (req.body as { voice?: unknown }).voice === true,
+    /*
+     * "Hôm nay" và "bây giờ" theo MÁY CỦA NGƯỜI DÙNG.
+     *
+     * ⚠️ Container chạy UTC còn người dùng ở +07. Tự tính ngày ở máy chủ thì
+     * từ 17:00 giờ VN trở đi nó đã sang hôm sau — trợ lý sẽ đọc lịch của
+     * ngày mai và nói chắc nịch. Máy người dùng biết chắc; máy chủ thì không.
+     */
+    homNay: ((v): string | undefined =>
+      typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : undefined)(
+      (req.body as { homNay?: unknown }).homNay,
+    ),
+    gioPhut: ((v): string | undefined =>
+      typeof v === 'string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(v) ? v : undefined)(
+      (req.body as { gioPhut?: unknown }).gioPhut,
+    ),
     // Ngôn ngữ KHOÁ trong thiết đặt — danh sách trắng, không nhận chữ tự do.
     ngonNgu: ((v): 'vi' | 'en' | undefined => (v === 'vi' || v === 'en' ? v : undefined))(
       (req.body as { ngonNgu?: unknown }).ngonNgu,

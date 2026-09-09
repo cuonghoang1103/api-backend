@@ -48,6 +48,7 @@ import { goKhoiCheck, kiemHinh, tachHinh, thayHinh, type HinhTrongCauTraLoi } fr
 import { isProEffective } from './pro.service.js';
 import { isAnthropicModel } from './llm/gateway.js';
 import { canTimWeb } from './search/canTim.js';
+import { boiCanhHomNay } from './troLy/boiCanhHomNay.js';
 import { goiChoModel, timWeb } from './search/searxng.js';
 import { logger } from '../utils/logger.js';
 
@@ -351,6 +352,39 @@ function luatTaoFile(): string {
   );
 }
 
+/**
+ * Ghép bối cảnh CÁ NHÂN của người dùng vào sau ngữ cảnh RAG.
+ *
+ * Chỉ chạy khi có `homNay` — tức client đã chủ động gửi lên. Người chưa đăng
+ * nhập, hoặc client cũ chưa gửi, thì không tốn một truy vấn nào và hành vi
+ * y như trước.
+ *
+ * Hỏng thì BỎ QUA, không ném: không lấy được lịch là mất một tiện ích, còn
+ * ném lỗi là mất cả câu trả lời.
+ */
+async function themBoiCanhCaNhan(ragContext: string, ctx: ChatContext): Promise<string> {
+  if (!ctx.userId || !ctx.homNay) return ragContext;
+  try {
+    const t0 = Date.now();
+    const khoi = await boiCanhHomNay({ userId: ctx.userId, homNay: ctx.homNay, gioPhut: ctx.gioPhut });
+    if (!khoi) return ragContext;
+    logger.info('trợ lý: dựng bối cảnh hôm nay', {
+      userId: ctx.userId, ms: Date.now() - t0, kyTu: khoi.length,
+    });
+    const phan =
+      '\n### Lịch và việc của chính người đang hỏi (dữ liệu THẬT, ưu tiên dùng):\n'
+      + khoi
+      + '\nKhi họ hỏi hôm nay học gì / làm gì / còn việc gì, TRẢ LỜI THẲNG từ phần này. '
+      + 'Phần này không có thì nói là chưa có trong lịch, đừng suy đoán.\n';
+    return ragContext ? ragContext + phan : phan;
+  } catch (e) {
+    logger.warn('trợ lý: không lấy được bối cảnh hôm nay', {
+      error: e instanceof Error ? e.message : String(e),
+    });
+    return ragContext;
+  }
+}
+
 function buildSystemPrompt(
   ragContext: string,
   deep = false,
@@ -422,6 +456,10 @@ interface ChatContext {
   documents?: ChatDocumentInput[];
   /** Lượt hỏi đến từ chế độ GỌI — câu trả lời sẽ được đọc thành tiếng. */
   voice?: boolean;
+  /** "YYYY-MM-DD" theo máy NGƯỜI DÙNG. Có nó thì trợ lý biết lịch hôm nay. */
+  homNay?: string;
+  /** "HH:mm" theo máy người dùng — để nói được "còn 30 phút nữa vào học". */
+  gioPhut?: string;
   /**
    * Ngôn ngữ người dùng KHOÁ trong thiết đặt. Bỏ trống = để model theo ngôn
    * ngữ của câu hỏi (hành vi cũ của trang /chat).
@@ -895,10 +933,9 @@ export class AIService {
     const { sessionId, message, documentType, topK } = context;
 
     // Build RAG context
-    const ragContext = await this.getRAGContext(
-      documentType,
-      topK ?? 5,
-      message,
+    const ragContext = await themBoiCanhCaNhan(
+      await this.getRAGContext(documentType, topK ?? 5, message),
+      context,
     );
     // ⚠️ `voice` phải đi qua CẢ đường này. Bỏ sót ở đây nghĩa là người dùng
     // KHÔNG Pro bấm micro thì nhận về câu đầy markdown rồi máy đọc phải đọc cả
@@ -943,10 +980,9 @@ export class AIService {
     const { sessionId, message, documentType, topK } = context;
 
     // Build RAG context
-    const ragContext = await this.getRAGContext(
-      documentType,
-      topK ?? 5,
-      message,
+    const ragContext = await themBoiCanhCaNhan(
+      await this.getRAGContext(documentType, topK ?? 5, message),
+      context,
     );
 
     // ─── Selected model routing ──────────────────────────────

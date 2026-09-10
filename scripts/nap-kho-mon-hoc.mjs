@@ -30,6 +30,11 @@ if (!maMon) { console.error('Thiếu mã môn. Ví dụ: LAB211'); process.exit(
 /** Bỏ thẻ HTML, giữ chữ. Nội dung bài học lưu dạng HTML. */
 function boHtml(s) {
   return String(s || '')
+    // ⚠️ Tiêu đề và nội dung bài lưu SONG NGỮ, ngăn bằng `|||`
+    // (Anh|||Việt). Để nguyên là dấu đó lọt vào ngữ cảnh model đọc thành rác.
+    // Giữ CẢ HAI nửa, ngăn bằng " / ": người dùng hỏi bằng tiếng Việt mà nội
+    // dung bài là tiếng Anh, bỏ nửa nào cũng mất đường tìm.
+    .replace(/\s*\|\|\|\s*/g, ' / ')
     .replace(/<(script|style)[\s\S]*?<\/\1>/gi, ' ')
     .replace(/<br\s*\/?>/gi, '\n')
     .replace(/<\/(p|div|h[1-6]|li|tr)>/gi, '\n')
@@ -83,7 +88,7 @@ for (const b of bai) {
   if (chu.length < 120) continue;
   // Gắn TÊN MÔN + TÊN BÀI vào đầu mỗi mẩu: không có nó thì mẩu ở giữa bài
   // trôi nổi không biết thuộc đâu, và model trích dẫn sai bài.
-  const dau = `[${khoa.courseCode} · ${b.section?.title ?? ''} · ${b.title}]\n`;
+  const dau = `[${khoa.courseCode} · ${boHtml(b.section?.title ?? '')} · ${boHtml(b.title)}]\n`;
   for (const m of catMau(chu)) mau.push({ noiDung: dau + m, baiId: b.id });
 }
 

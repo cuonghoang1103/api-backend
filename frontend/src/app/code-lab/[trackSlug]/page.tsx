@@ -24,7 +24,16 @@ export default function TrackRoadmapPage() {
   const searchParams = useSearchParams();
   // Carry ?ref=&reflabel= (set by an Academy/Courses lesson link) onto the
   // exercise links too, so the "back to course" button survives one more hop.
-  const refQS = searchParams.get('ref') ? `?${searchParams.toString()}` : '';
+  // `chon` là param của RIÊNG trang này (đường đi từ trong một phòng ra để
+  // nhặt thêm bài), nên nó bị gạt khỏi chuỗi mang sang trang bài — mang theo
+  // thì link bài nào cũng đeo một tham số không ai đọc.
+  const refQS = (() => {
+    if (!searchParams.get('ref')) return '';
+    const qs = new URLSearchParams(searchParams.toString());
+    qs.delete('chon');
+    return `?${qs.toString()}`;
+  })();
+  const phongGhim = Number(searchParams.get('chon')) || null;
   const isAuthed = useAuthStore((s) => s.isAuthenticated);
 
   const [track, setTrack] = useState<CodeTrack | null>(null);
@@ -38,8 +47,12 @@ export default function TrackRoadmapPage() {
   // Chế độ chọn bài để lập Phòng Lab. Tách hẳn khỏi luồng bấm-vào-bài thường:
   // trong chế độ này một cú bấm là TICK, không phải mở bài — trộn hai nghĩa vào
   // cùng một cú bấm là cách chắc chắn nhất để người dùng mất chỗ đang đọc.
-  const [dangChon, setDangChon] = useState(false);
+  const [dangChon, setDangChon] = useState(!!phongGhim);
   const [daChon, setDaChon] = useState<number[]>([]);
+  // Bài đã nằm sẵn trong phòng ghim. Không có nó thì người dùng tick mù: chọn
+  // năm bài, bấm Thêm, và nhận về "đã có sẵn trong phòng rồi" mà không hiểu
+  // bài nào trùng.
+  const [daCoTrongPhong, setDaCoTrongPhong] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     (async () => {
@@ -58,6 +71,13 @@ export default function TrackRoadmapPage() {
       } catch { setTrack(null); } finally { setLoading(false); }
     })();
   }, [slug, isAuthed]);
+
+  useEffect(() => {
+    if (!phongGhim) { setDaCoTrongPhong(new Set()); return; }
+    codeLabApi.getLabRoom(phongGhim)
+      .then((r) => setDaCoTrongPhong(new Set((r.data.data.items || []).map((i) => i.exerciseId))))
+      .catch(() => setDaCoTrongPhong(new Set()));
+  }, [phongGhim]);
 
   useEffect(() => {
     if (!track) return;
@@ -94,8 +114,10 @@ export default function TrackRoadmapPage() {
     };
   }, [track, daChon]);
 
-  const toggleChon = (id: number) =>
+  const toggleChon = (id: number) => {
+    if (daCoTrongPhong.has(id)) return;
     setDaChon((cu) => (cu.includes(id) ? cu.filter((x) => x !== id) : [...cu, id]));
+  };
 
   if (loading) return <div className="flex justify-center py-24"><Loader2 className="animate-spin" style={{ color: 'var(--text-muted)' }} /></div>;
   if (!track) return (
@@ -232,13 +254,16 @@ export default function TrackRoadmapPage() {
                 const isSolved = progress[ex.id]?.status === 'SOLVED';
                 const inProgress = progress[ex.id]?.status === 'IN_PROGRESS';
                 const loc = locFromTitle(ex.title);
+                const daCo = daCoTrongPhong.has(ex.id);
                 const ticked = daChon.includes(ex.id);
                 const noiDung = (
                   <>
                     {dangChon
-                      ? (ticked
-                        ? <CheckSquare size={19} className="shrink-0" style={{ color: accent }} />
-                        : <Square size={19} className="shrink-0" style={{ color: 'var(--border-color)' }} />)
+                      ? (daCo
+                        ? <CheckSquare size={19} className="shrink-0" style={{ color: 'var(--text-muted)' }} />
+                        : ticked
+                          ? <CheckSquare size={19} className="shrink-0" style={{ color: accent }} />
+                          : <Square size={19} className="shrink-0" style={{ color: 'var(--border-color)' }} />)
                       : (isSolved
                         ? <CheckCircle2 size={19} className="shrink-0" style={{ color: '#22c55e' }} />
                         : <Circle size={19} className="shrink-0" style={{ color: inProgress ? '#d97706' : 'var(--border-color)' }} />)}
@@ -246,6 +271,9 @@ export default function TrackRoadmapPage() {
                     <span className="min-w-0 flex-1 truncate text-sm font-medium transition-colors group-hover:text-[var(--cl-accent)]" style={{ color: isSolved ? 'var(--text-secondary)' : 'var(--text-primary)' }}>{ex.title}</span>
                     {inProgress && !isSolved && !dangChon && (
                       <span className="hidden rounded-full px-2 py-0.5 text-[10px] font-semibold sm:inline-block" style={{ background: 'rgba(217,119,6,0.14)', color: '#d97706' }}>In progress</span>
+                    )}
+                    {dangChon && daCo && (
+                      <span className="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold" style={{ background: 'var(--bg-surface)', color: 'var(--text-muted)' }}>đã có trong phòng</span>
                     )}
                     {dangChon && loc > 0 && (
                       <span className="shrink-0 text-xs font-semibold tabular-nums" style={{ color: ticked ? accent : 'var(--text-muted)' }}>{loc} LOC</span>
@@ -262,8 +290,8 @@ export default function TrackRoadmapPage() {
                   <li key={ex.id} className="group border-t first:border-t-0" style={{ borderColor: 'var(--border-color)' }}>
                     {dangChon ? (
                       <button
-                        type="button" onClick={() => toggleChon(ex.id)}
-                        className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-[var(--bg-surface-hover)]"
+                        type="button" onClick={() => toggleChon(ex.id)} disabled={daCo}
+                        className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors enabled:hover:bg-[var(--bg-surface-hover)] disabled:cursor-not-allowed disabled:opacity-55"
                         style={ticked ? { background: `color-mix(in srgb, ${accent} 9%, transparent)` } : undefined}>
                         {noiDung}
                       </button>
@@ -287,6 +315,7 @@ export default function TrackRoadmapPage() {
         <LabRoomBar
           trackSlug={track.slug} trackName={track.name}
           picked={picked} totalLoc={totalLoc} coLoc={coLoc}
+          phongGhim={phongGhim}
           onClear={() => setDaChon([])}
           onRemove={(id) => setDaChon((cu) => cu.filter((x) => x !== id))}
         />

@@ -10,6 +10,7 @@ tắc của thầy**.
 ```
 /code-lab/lab211                 bấm "Chọn bài lập phòng Lab" → tick từng bài
       │                          thanh dưới đáy cộng dồn LOC + đặt mục tiêu
+      │                          ô đích: tạo phòng MỚI, hoặc THÊM vào phòng có sẵn
       ▼
 /code-lab/phong-lab/<id>         phòng riêng
       ├── Giảng đề              AI đọc đề, nói nó THẬT SỰ hỏi gì, kiến trúc nào,
@@ -30,6 +31,31 @@ tắc của thầy**.
 
 Gộp hai cái vào một thanh là biến mục tiêu thành thứ đạt được bằng cách tick thêm
 bài, chứ không phải bằng cách làm xong bài.
+
+## Nhặt thêm bài vào phòng đang có
+
+Không phải lần chọn nào cũng là lần đầu. Chỉ có nút "Tạo phòng Lab" thì người đã
+có phòng và muốn thêm ba bài nữa sẽ tạo phòng thứ hai — rồi tiến độ LOC nằm rải
+ở hai chỗ và không chỗ nào nói đúng sự thật.
+
+* Thanh chọn bài có **ô đích**: mặc định *Tạo phòng mới*, kèm mọi phòng **của
+  đúng track này** (phòng LAB211 không nhận được bài track khác — backend chặn,
+  nên không bày ra để người dùng chọn rồi ăn lỗi).
+* Trong phòng, link *"+ Chọn thêm bài từ track"* mở
+  `/code-lab/<track>?chon=<roomId>` — trang track mở **đã ở chế độ chọn** và
+  **ghim sẵn phòng đó** làm đích. Quên đổi ô một lần là có phòng thứ hai.
+* Bài đã nằm trong phòng ghim hiện nhãn *"đã có trong phòng"* và **không tick
+  được**. Không có nó thì người dùng tick mù rồi nhận về "đã có sẵn rồi" mà
+  không biết bài nào trùng.
+* Ba chốt chặn cái bug "vô tình đẻ thêm phòng":
+  1. danh sách phòng CHƯA về thì nút chưa bấm được (bấm sớm sẽ rơi vào nhánh
+     tạo mới);
+  2. phòng ghim trong URL đã bị xoá / thuộc track khác thì rơi về *Tạo phòng
+     mới* thay vì để nút chết cứng không lời giải thích;
+  3. `themBai` **ném lỗi có chữ** khi không thêm được bài nào, thay vì im lặng
+     trả phòng y nguyên.
+* Khi đích là một phòng có sẵn, thanh tiến độ đo theo **mục tiêu của phòng đó**,
+  không phải ô nhập trên thanh — hai màn hình phải nói cùng một con số.
 
 ## Bộ quy tắc của thầy
 
@@ -88,7 +114,7 @@ Tất cả dưới `/api/v1/code-lab/lab-rooms`, đều `authenticate`.
 | GET | `/` | danh sách phòng của tôi |
 | POST | `/` | tạo phòng `{trackSlug, exerciseIds[], name?, locGoal?}` |
 | GET · PATCH · DELETE | `/:id` | đọc · đổi tên/mục tiêu · xoá |
-| POST | `/:id/items` | thêm bài `{exerciseIds[]}` |
+| POST | `/:id/items` | thêm bài `{exerciseIds[]}` — ném lỗi nếu không có bài nào MỚI |
 | DELETE | `/:id/items/:itemId` | bỏ bài |
 | POST | `/:id/items/:itemId/select` | mở bài |
 | GET · POST | `/:id/items/:itemId/intro` | giảng đề (GET dùng bản đã soạn, POST soạn lại) |

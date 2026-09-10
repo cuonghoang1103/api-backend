@@ -205,12 +205,15 @@ export default function PhongLabPage() {
             })}
             {room.items.length === 0 && (
               <li className="px-4 py-6 text-center text-xs" style={{ color: 'var(--text-muted)' }}>
-                Phòng trống. <Link href={`/code-lab/${room.track.slug}`} className="underline">Chọn thêm bài</Link>
+                Phòng trống. <Link href={`/code-lab/${room.track.slug}?chon=${room.id}`} className="underline">Chọn thêm bài</Link>
               </li>
             )}
           </ul>
           <footer className="border-t px-4 py-3" style={{ borderColor: 'var(--border-color)' }}>
-            <Link href={`/code-lab/${room.track.slug}`} className="text-xs underline" style={{ color: 'var(--text-muted)' }}>
+            {/* `?chon=<id>` mở trang track ĐÃ ở chế độ chọn và ghim sẵn phòng
+                này làm đích — không có nó thì người dùng tick xong lại phải nhớ
+                đổi ô "Tạo phòng mới", và quên một lần là có phòng thứ hai. */}
+            <Link href={`/code-lab/${room.track.slug}?chon=${room.id}`} className="text-xs underline" style={{ color: 'var(--text-muted)' }}>
               + Chọn thêm bài từ track
             </Link>
           </footer>

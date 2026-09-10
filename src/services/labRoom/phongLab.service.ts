@@ -265,16 +265,20 @@ export async function themBai(userId: number, roomId: number, exerciseIds: unkno
     where: { id: { in: ids.filter((i) => !daCo.has(i)) }, trackId: room.trackId, status: 'PUBLISHED' },
     select: CHON_BAI_LOC,
   });
+  if (!them.length) {
+    // Im lặng trả về phòng y nguyên là câu trả lời tệ nhất: người dùng vừa tick
+    // năm bài, bấm Thêm, và màn hình không đổi gì — họ không biết là đã có sẵn
+    // hay là hỏng.
+    throw new BadRequestError('Những bài bạn chọn đã có sẵn trong phòng này rồi.');
+  }
   if (room.items.length + them.length > MAX_BAI_MOI_PHONG) {
     throw new BadRequestError(`Một phòng nhận tối đa ${MAX_BAI_MOI_PHONG} bài.`);
   }
-  if (them.length) {
-    let n = room.items.length;
-    await prisma.codeLabRoomItem.createMany({
-      data: them.map((e) => ({ roomId, exerciseId: e.id, loc: locCuaBai(e), sortOrder: n++ })),
-    });
-    await prisma.codeLabRoom.update({ where: { id: roomId }, data: { updatedAt: new Date() } });
-  }
+  let n = room.items.length;
+  await prisma.codeLabRoomItem.createMany({
+    data: them.map((e) => ({ roomId, exerciseId: e.id, loc: locCuaBai(e), sortOrder: n++ })),
+  });
+  await prisma.codeLabRoom.update({ where: { id: roomId }, data: { updatedAt: new Date() } });
   return tomTat(await phongCuaToi(userId, roomId));
 }
 

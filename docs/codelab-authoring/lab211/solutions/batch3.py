@@ -478,9 +478,9 @@ for a class that <em>implements Comparator</em>.</p>
 <p><strong>Where the two methods live, and why that is not an accident.</strong> The Guidelines end
 with three words that decide the whole layout: <em>"in startup code"</em>. So <code>sortStudent</code>
 and <code>display</code> are <code>public static</code> methods of <code>Main</code>, not of a manager
-class. Three reasons line up behind that. The sheet says so. Four files is the band where the course
-says <code>entity</code> + <code>utils</code> + <code>ui</code> and <strong>no</strong> business layer —
-and a manager holding two one-line delegations enforces no rule, so it would be a layer that loses a
+class. Three reasons line up behind that. The sheet says so. At four files the count decides nothing (the
+passing samples went both ways), so the responsibility decides — and here there is no business rule for
+a manager to guard: it would hold two one-line delegations and enforce nothing, a layer that loses a
 mark rather than earning one. And <code>display</code> prints: a business object that prints is the one
 layering rule the course states with no exception, so a manager would have put this program in breach
 of it for nothing. Expect "why is there no manager class?" at the review, and answer with those three,
@@ -515,10 +515,9 @@ tên hai phương thức — <code>sortStudent</code> và <code>display</code> �
 <p><strong>Hai phương thức đó nằm ở đâu, và vì sao đó không phải tình cờ.</strong> Phần Hướng dẫn kết
 thúc bằng ba chữ quyết định cả bố cục: <em>"in startup code"</em>. Nên <code>sortStudent</code> và
 <code>display</code> là phương thức <code>public static</code> của <code>Main</code>, không phải của một
-lớp manager. Ba lý do cùng chỉ về đó. Thứ nhất, đề nói vậy. Thứ hai, bốn tệp là đúng vạch mà khóa học
-nói <code>entity</code> + <code>utils</code> + <code>ui</code> và <strong>không</strong> tầng nghiệp vụ —
-một lớp manager chỉ chứa hai dòng ủy quyền thì không áp luật nào, tức là một tầng làm mất điểm chứ không
-được điểm. Thứ ba, <code>display</code> có in ra màn hình: "lớp nghiệp vụ không bao giờ in" là quy tắc
+lớp manager. Ba lý do cùng chỉ về đó. Thứ nhất, đề nói vậy. Thứ hai, ở bốn tệp thì con số không quyết định được gì (mẫu
+đã pass có cả hai kiểu), nên trách nhiệm quyết định — mà ở đây không có luật nghiệp vụ nào để một lớp
+manager canh: nó chỉ chứa hai dòng ủy quyền, tức là một tầng làm mất điểm chứ không được điểm. Thứ ba, <code>display</code> có in ra màn hình: "lớp nghiệp vụ không bao giờ in" là quy tắc
 phân tầng duy nhất khóa học phát biểu không ngoại lệ, nên đặt nó vào manager là tự đẩy chương trình vào
 thế vi phạm mà chẳng đổi lại được gì. Hãy chờ câu "sao không có lớp manager?" ở buổi review, và trả lời
 đúng ba ý đó, theo đúng thứ tự đó.</p>

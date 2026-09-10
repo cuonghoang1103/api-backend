@@ -60,18 +60,46 @@ python3 -c "import solkit, batchN; solkit.capture('J1.S.P00XX')"
 
 ## Project shape — measured from the user's own passing submissions
 
-This is not a convention someone invented. It was counted across 17 real
-projects that were marked and passed:
+**Decide by what the program DOES, then use the file count only to sanity-check.**
 
-| files | layers | examples |
+* A `bo` appears when there is a business rule or an algorithm worth keeping off
+  the screen. That happens in **three-file** projects too — the sorting and
+  searching briefs put the algorithm in a `bo` with no `entity` in sight.
+* A `controller` appears when the program performs **several distinct operations
+  on one stored collection** — add / update / delete / search / save. Not when
+  it is merely large.
+
+Both sentences are measured. Counting the kinds of collection operation each of
+the 54 reference solutions performs:
+
+| | kinds of collection operation |
+|---|---|
+| projects **with** a controller (11) | **≈ 4.8** on average |
+| projects **without** one | **≈ 0.9** on average |
+
+File count does **not** separate those two groups, so it cannot be the rule. The
+clearest proof is `P0080` Shapes: **ten files and correctly no controller**,
+because nine of them are shape classes, not features — the program performs zero
+collection operations. "It keeps `main()` short" is not the reason either: main
+averages 58 lines with a controller and 67 without.
+
+As a rough cross-check only, counted across 17 passing submissions:
+
+| files | what they usually did | examples |
 |---|---|---|
-| 2–4 | `entity` + `ui` + `utils`, **no `bo`** | fibonacci(2), BinarySearch(3), CalculatorBill(4) |
-| 4–6 | add `bo` | MatrixOOP(4), ChangeBaseNumber(5), ManagerFruit(6) |
-| ≥7 | add `controller` | ManageStudent(7), TaskManagement(7), ManagerWorker(9) |
+| 2–3 | no `bo` | fibonacci(2), BinarySearch(3) |
+| **4** | **both ways** — the count settles nothing here | CalculatorBill(4) *without*, MatrixOOP(4) *with* |
+| 5–6 | a `bo` | ChangeBaseNumber(5), ManagerFruit(6) |
+| ≥7 | a `controller` | ManageStudent(7), TaskManagement(7), ManagerWorker(9) |
 
-Every project with ≥7 files had a `controller`; every project with ≤3 had no
-`bo`. So **add a layer only where this program needs one** — and be ready to
-say why. An empty controller in a 40-line assignment is a mark lost, not gained.
+So **add a layer only where this program needs one** — and be ready to say why,
+in terms of the operations the program performs, never a file count. An empty
+controller in a 40-line assignment is a mark lost, not gained.
+
+**And the Guidelines outrank all of it.** A brief that ends its Guidelines with
+"Student must implement methods X, Y *in startup code*" puts those methods in
+`Main`, not in a manager class, whatever the final file count is. P0054, P0063
+and P0068 are all that case.
 
 Inside the layers:
 

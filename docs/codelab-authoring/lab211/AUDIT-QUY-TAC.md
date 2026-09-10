@@ -104,41 +104,71 @@ tầng không controller — ngay dưới cái bảng vừa dạy quy tắc đó
 
 ## 4. Lệch quy tắc — cần bạn quyết, không tự sửa
 
-### 4.1 Quy tắc "số file → tầng" bị chính lời giải mẫu phá 24/54 lần
+### 4.1 Quy tắc "số file → tầng" ✅ ĐÃ SỬA — và cách sửa đầu tiên cũng sai
 
-Quy tắc đang dạy (Academy 1.1 + `AUTHORING-BRIEF.md`): 2–4 file → `entity+ui+utils`
-không `bo`; 4–6 file → thêm `bo`; ≥7 file → thêm `controller`.
+Quy tắc đang dạy đếm **số tệp**: 2–4 → không `bo`; 4–6 → thêm `bo`; ≥7 → thêm
+`controller`. Hai lỗi cùng lúc:
 
-| Kiểu lệch | Số bài | Bài |
-|---|---|---|
-| ≤3 file mà đã có `bo` | 16 | P0001–P0006, P0008, P0009, P0010, P0053, P0058, P0067, P0069, P0075, P0076, P0079 |
-| 5–6 file mà **không** có `bo` | 1 | P0061 (6f) |
-| ≥7 file mà **không** có `controller` | 2 | P0081 (7f), P0080 (10f) |
-| <7 file mà đã có `controller` | 4 | P0085 (5f), P0071, P0072, L.P0025 (6f) |
+1. **Tự mâu thuẫn ở đúng n = 4** — "2–4" và "4–6" cùng phủ nó, nên một project
+   bốn tệp vừa đúng vừa sai tuỳ đọc dòng nào trước. Nguồn gốc lộ ra ngay trong
+   chính bảng ví dụ của `AUTHORING-BRIEF`: `CalculatorBill(4)` nằm ở hàng
+   "không bo", `MatrixOOP(4)` nằm ở hàng "thêm bo". **Dữ liệu gốc mơ hồ ở bốn
+   tệp**, và cái bảng chỉ chép lại sự mơ hồ đó thành một quy tắc.
+2. **Đếm sai thứ** — 23/54 lời giải "vi phạm" bảng này, mà đọc kỹ thì phần lớn
+   không sai: 16 bài ba tệp có `bo` là các đề thuật toán, `bo` giữ đúng thuật
+   toán và không có entity nào cả.
 
-Tổng: **23/54 lệch, 31/54 đúng** (sau khi sửa §4.2; trước đó là 24/30).
+#### Hai lần phát biểu lại đầu tiên đều bị phép đo bác bỏ
 
-Và bảng đang dạy **tự mâu thuẫn ở đúng con số 4**: "2–4 file → không `bo`" và
-"4–6 file → thêm `bo`" cùng phủ n = 4, nên một project 4 tệp vừa đúng vừa sai
-tuỳ đọc dòng nào trước. Riêng chỗ này phải sửa dù chọn phương án nào.
+Đây là phần đáng đọc nhất của mục này. Tôi viết quy tắc mới, rồi đo nó trên 54
+lời giải, và hai lần đầu đều sai:
 
-Đọc kỹ thì 16 ca đầu **không phải code sai** — chúng là các bài thuật toán
-(bubble/selection/insertion/quick/merge sort, tìm kiếm, xử lý tệp) không có
-entity nào cả, và lớp `bo` ở đó giữ đúng thuật toán. Chính quy tắc mới là thứ
-phát biểu chưa chuẩn: nó đếm **file**, trong khi thứ quyết định thật là **có
-mấy loại trách nhiệm**.
+| Phát biểu thử | Phép đo bác bỏ nó |
+|---|---|
+| "`controller` xuất hiện khi `ui` phải điều phối **nhiều hơn một `bo`**" | 7 phản chứng, gồm cả P0056 — chính project tôi vừa đưa lên slide làm mẫu chuẩn. Tất cả đều 1 `bo` + 1 controller |
+| "`controller` để **giữ `main()` ngắn**" | `main` trung bình **58 dòng khi CÓ** controller và **67 dòng khi KHÔNG** — không có tín hiệu. `main` dài nhất (173 dòng, P0054) lại không có controller |
 
-Hai lựa chọn, nên chọn (a):
+Phát biểu thứ ba mới trụ được, vì nó tách được hai nhóm bằng một con số:
 
-* **(a) Sửa quy tắc, giữ code.** Phát biểu lại theo trách nhiệm: "`bo` xuất hiện
-  khi có luật nghiệp vụ hoặc thuật toán tách được khỏi màn hình — kể cả project
-  3 file; `controller` xuất hiện khi `ui` phải điều phối nhiều hơn một `bo`."
-  Rồi bổ sung bảng số file như một *chỉ dấu*, không phải luật.
-* **(b) Sửa 24 lời giải cho khớp bảng.** Tốn công, và làm P0001 tệ đi: nhét
-  thuật toán sort vào `ui/Main` là bước lùi.
+> **`controller` xuất hiện khi chương trình làm NHIỀU LOẠI THAO TÁC KHÁC NHAU
+> TRÊN MỘT TẬP DỮ LIỆU ĐƯỢC LƯU** — thêm/sửa/xoá/tìm/lưu. Không phải khi nó chỉ
+> đơn giản là to.
 
-Dù chọn cách nào, **P0080 (10 file, không controller)** vẫn nên thêm controller
-— đó là ca duy nhất mà bảng và lẽ thường nói cùng một điều.
+| | số loại thao tác trên tập dữ liệu |
+|---|---|
+| 11 bài **CÓ** controller | trung bình **≈ 4,8** |
+| Các bài **KHÔNG** có | trung bình **≈ 0,9** |
+
+Và `bo`: **xuất hiện khi có luật nghiệp vụ hoặc thuật toán đáng tách khỏi màn
+hình — kể cả project ba tệp.**
+
+#### Vì sao P0080 mười tệp mà không cần controller
+
+Đây là ca chứng minh số tệp không dùng làm luật được. P0080 Shapes có mười tệp
+nhưng **chín tệp là lớp hình**, không phải chức năng — chương trình không thao
+tác gì trên tập dữ liệu (0 loại). Bảng cũ bắt nó phải có controller; quy tắc mới
+nói đúng là không. Đề nghị "thêm controller cho P0080" trong bản báo cáo trước
+**là sai, đã rút**.
+
+#### Kết quả sau khi phát biểu lại
+
+**51/54 đúng quy tắc** (bảng cũ đếm theo tệp: 31/54). Ba ca còn lại là phát hiện
+thật, đáng cân nhắc thêm `controller`:
+
+| Bài | tệp | loại thao tác | `main` |
+|---|---|---|---|
+| P0073 quản lý chi tiêu | 4 | 6 | 118 dòng |
+| P0055 quản lý bác sĩ | 4 | 5 | 135 dòng |
+| P0058 từ điển | 3 | 5 | 95 dòng |
+
+Đã sửa ở **năm chỗ** cho khớp nhau: Academy bài 1.1 (EN+VI) · Quiz 1 câu 1 ·
+`AUTHORING-BRIEF.md` · `src/services/labRoom/quyTacThay.ts` (bộ quy tắc AI dựa
+vào) · và hai walkthrough còn chép lại dải cũ (batch3, batch24).
+
+Câu Quiz 1 hỏi "project 3 tệp nên có gì → entity + ui + utils, không bo" nay
+**sai theo chính quy tắc mới**, đã đổi thành câu hỏi đúng thứ cần kiểm: *"Bạn
+quyết định có thêm tầng bo hay không dựa vào…"* → *"có luật nghiệp vụ hay thuật
+toán nào đáng tách khỏi màn hình không"*.
 
 ### 4.2 `bo` in ra màn hình — 3 bài ✅ ĐÃ SỬA
 
@@ -239,14 +269,20 @@ nên hoặc sửa hình vẽ, hoặc nói rõ "gộp được khi `bo` chỉ ph�
 * Gỡ tầng `bo` khỏi P0054, P0063, P0068 và đưa các phương thức Guidelines nêu
   tên vào `ui/Main` đúng như đề nói — kèm sửa chữ ký `sortStudent` của P0068 và
   viết lại ba walkthrough (§4.2).
+* Phát biểu lại quy tắc tầng theo **thứ chương trình LÀM**, bỏ hẳn chỗ tự mâu
+  thuẫn ở n = 4 — sau khi hai phát biểu thử đầu tiên bị chính phép đo bác bỏ.
+  Sửa đồng bộ ở năm chỗ. Đúng quy tắc nay **51/54** (§4.1).
 
 ## 7. Việc đề nghị làm tiếp (theo thứ tự ưu tiên)
 
-1. **Sửa chỗ tự mâu thuẫn ở n = 4** trong bảng "số file → tầng", rồi phát biểu
-   lại quy tắc theo **trách nhiệm** thay vì **số file** (§4.1).
-2. Nới quy tắc `Serializable` thành "khi có ghi tệp" (§4.3).
-3. Thêm controller cho P0080 (10 file) (§4.1).
-4. Thêm đoạn "vì sao entity ở bài này được phép in" vào walkthrough P0061 (§4.4).
-5. Đổi `System.exit()` trong `L.P0013/Validator` thành exception (§4.5).
-6. **Giữ lượt verify dưới locale `vi_VN` trong mọi quy trình** — đó là thứ duy
+1. Nới quy tắc `Serializable` thành "khi có ghi tệp" (§4.3).
+2. Cân nhắc thêm `controller` cho **P0073, P0055, P0058** — ba ca duy nhất còn
+   lệch sau khi phát biểu lại quy tắc, và cả ba đều có `main` dài kèm 5–6 loại
+   thao tác trên tập dữ liệu (§4.1).
+3. Thêm đoạn "vì sao entity ở bài này được phép in" vào walkthrough P0061 (§4.4).
+4. Đổi `System.exit()` trong `L.P0013/Validator` thành exception (§4.5).
+5. **Giữ lượt verify dưới locale `vi_VN` trong mọi quy trình** — đó là thứ duy
    nhất bắt được lỗi §3.1, và nó là locale của máy chấm.
+
+~~Thêm controller cho P0080~~ — **đã rút**: phép đo cho thấy P0080 đúng là không
+cần (xem §4.1).

@@ -79,16 +79,34 @@ Four things decide the mark:
   utils      Validator and small helpers. private static final Scanner, a
              private constructor, every method static.
 
-  ADD A LAYER ONLY WHERE THIS PROGRAM NEEDS ONE. The test is RESPONSIBILITY,
-  not line count:
+  ADD A LAYER ONLY WHERE THIS PROGRAM NEEDS ONE. Decide by RESPONSIBILITY, not
+  by counting files:
     - a bo appears when there is a business rule or an algorithm worth keeping
-      away from the screen;
-    - a controller appears when the ui has to coordinate more than one bo.
-  File count is a useful cross-check, not the law: projects of 2–4 files
-  normally have entity + ui + utils and no bo; 5–6 add a bo; 7 or more add a
-  controller. An empty controller in a 40-line assignment LOSES a mark.
-  Expect "why is there no controller here?" and answer with the responsibility
-  and the file count, never with a preference.
+      away from the screen. This happens in THREE-file programs too: the
+      sorting and searching briefs put the algorithm in a bo with no entity
+      anywhere in sight.
+    - a controller appears when the program performs SEVERAL DISTINCT
+      OPERATIONS ON ONE STORED COLLECTION — add / update / delete / search /
+      save. Not when it is merely large.
+
+  Those two sentences are measured, not asserted. Across the 54 reference
+  solutions, counting the kinds of collection operation each program performs:
+      with a controller     ~4.8 kinds on average (11 projects)
+      without a controller  ~0.9 kinds on average
+  File count does NOT separate the two groups and must not be used as the rule.
+  The clearest proof is the Shapes brief: TEN files and correctly no controller,
+  because nine of them are shape classes, not features, and the program performs
+  zero collection operations. The average main() is 58 lines with a controller
+  and 67 without — so "it keeps main short" is not the reason either.
+
+  As a rough cross-check only, counted across 17 passing submissions: 2-3 files
+  usually had no bo, 5-6 usually had one, 7+ usually had a controller. Four
+  files went BOTH ways (CalculatorBill without a bo, MatrixOOP with one), which
+  is exactly why the count is a cross-check and not the rule.
+
+  An empty controller in a 40-line assignment LOSES a mark. Expect "why is
+  there no controller here?" and answer with the operations the program
+  performs, never with a file count and never with a preference.
 
   The test of whether the layers are real: you can delete the whole menu and
   the model still compiles. If removing System.out breaks the entity, they are

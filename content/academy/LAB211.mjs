@@ -382,16 +382,22 @@ export default {
   <div class="lz-layer"><b>utils / Validator</b> — a class of static input helpers: <span class="badge">private static final Scanner</span>, a private constructor, methods like <span class="badge">getInt(msg, msgRange, msgErr, min, max)</span>.</div>
 </div>
 <h3>The rule: only add a layer when the size demands it</h3>
-<p>This is the exact question mentors love to ask — "why does this program have no controller?" The answer is measured, not guessed:</p>
+<p>This is the exact question mentors love to ask — "why does this program have no controller?" Decide by <b>what the program does</b>, then use the file count only to sanity-check the answer:</p>
+<div class="lz-stack">
+  <div class="lz-layer">A <b>bo</b> appears when there is a business rule or an algorithm worth keeping off the screen. That happens in <b>three-file</b> programs too — the sorting and searching briefs put the algorithm in a <span class="badge">bo</span> with no entity anywhere in sight.</div>
+  <div class="lz-layer">A <b>controller</b> appears when the program performs <b>several distinct operations on one stored collection</b> — add / update / delete / search / save. Not when it is merely large.</div>
+</div>
+<p>Both sentences are measured, not asserted. Counting the kinds of collection operation each of the 54 reference solutions performs:</p>
 <table>
-  <thead><tr><th>Project size</th><th>Layers used</th></tr></thead>
+  <thead><tr><th></th><th>Kinds of collection operation</th></tr></thead>
   <tbody>
-    <tr><td>2–4 files</td><td><span class="badge">entity</span> + <span class="badge">ui</span> + <span class="badge">utils</span> — <b>no bo</b></td></tr>
-    <tr><td>4–6 files</td><td>add <span class="badge">bo</span></td></tr>
-    <tr><td>≥ 7 files</td><td>add <span class="badge">controller</span></td></tr>
+    <tr><td>Projects <b>with</b> a controller (11)</td><td><b>&asymp; 4.8</b> on average</td></tr>
+    <tr><td>Projects <b>without</b> one</td><td><b>&asymp; 0.9</b> on average</td></tr>
   </tbody>
 </table>
-<div class="note-ct">Every sample project with ≥ 7 files had a controller; every one with ≤ 3 files had no bo. So "I only add a layer when the program is big enough to need it" is a correct, confident answer — and it matches the passing samples.</div>
+<div class="note-ct">File count does <b>not</b> separate those two groups, so it cannot be the rule. The clearest proof is the Shapes brief: <b>ten files and correctly no controller</b>, because nine of them are shape classes, not features — the program performs zero collection operations. "It keeps main() short" is not the reason either: main averages 58 lines with a controller and 67 without.</div>
+<p>As a rough cross-check only, counted across 17 passing submissions: 2&ndash;3 files usually had no <span class="badge">bo</span>, 5&ndash;6 usually had one, &ge; 7 usually had a <span class="badge">controller</span>. Four files went <b>both</b> ways &mdash; CalculatorBill(4) without a bo, MatrixOOP(4) with one &mdash; which is exactly why the count is a cross-check and not the law.</p>
+<div class="pitfall"><b>And the Guidelines outrank all of it.</b> When a brief ends its Guidelines with "Student must implement methods X, Y <em>in startup code</em>", those methods go in <code>Main</code> &mdash; not in a manager class &mdash; whatever the final file count is.</div>
 <h3>The data flow</h3>
 <div class="lz-flow">
   <div class="lz-step">ui shows menu</div>
@@ -421,16 +427,22 @@ export default {
   <div class="lz-layer"><b>utils / Validator</b> — lớp toàn hàm nhập tĩnh: <span class="badge">private static final Scanner</span>, constructor private, hàm như <span class="badge">getInt(msg, msgRange, msgErr, min, max)</span>.</div>
 </div>
 <h3>Quy tắc: chỉ thêm tầng khi kích thước đòi hỏi</h3>
-<p>Đây đúng là câu mentor thích hỏi — "sao chương trình này không có controller?". Câu trả lời là ĐO ĐƯỢC, không phải đoán:</p>
+<p>Đây đúng là câu mentor thích hỏi — "sao chương trình này không có controller?". Quyết định bằng <b>chương trình LÀM GÌ</b>, còn số tệp chỉ dùng để soát lại câu trả lời:</p>
+<div class="lz-stack">
+  <div class="lz-layer">Tầng <b>bo</b> xuất hiện khi có một luật nghiệp vụ hoặc một thuật toán đáng tách khỏi màn hình. Chuyện đó xảy ra cả ở project <b>ba tệp</b> — các đề sắp xếp và tìm kiếm đặt thuật toán vào <span class="badge">bo</span> trong khi không có entity nào cả.</div>
+  <div class="lz-layer">Tầng <b>controller</b> xuất hiện khi chương trình làm <b>nhiều loại thao tác khác nhau trên một tập dữ liệu được lưu</b> — thêm / sửa / xoá / tìm / lưu. Không phải khi nó chỉ đơn giản là to.</div>
+</div>
+<p>Cả hai câu trên là ĐO ĐƯỢC, không phải khẳng định suông. Đếm số loại thao tác trên tập dữ liệu của cả 54 lời giải mẫu:</p>
 <table>
-  <thead><tr><th>Kích thước project</th><th>Tầng dùng</th></tr></thead>
+  <thead><tr><th></th><th>Số loại thao tác trên tập dữ liệu</th></tr></thead>
   <tbody>
-    <tr><td>2–4 file</td><td><span class="badge">entity</span> + <span class="badge">ui</span> + <span class="badge">utils</span> — <b>không bo</b></td></tr>
-    <tr><td>4–6 file</td><td>thêm <span class="badge">bo</span></td></tr>
-    <tr><td>≥ 7 file</td><td>thêm <span class="badge">controller</span></td></tr>
+    <tr><td>Bài <b>CÓ</b> controller (11 bài)</td><td>trung bình <b>&asymp; 4,8</b></td></tr>
+    <tr><td>Bài <b>KHÔNG</b> có</td><td>trung bình <b>&asymp; 0,9</b></td></tr>
   </tbody>
 </table>
-<div class="note-ct">Mọi project mẫu ≥ 7 file đều có controller; mọi project ≤ 3 file đều không có bo. Nên "tôi chỉ thêm tầng khi chương trình đủ lớn để cần" là câu trả lời đúng, tự tin — và khớp với các bản mẫu đã pass.</div>
+<div class="note-ct">Số tệp <b>không</b> tách được hai nhóm đó, nên nó không thể là quy tắc. Bằng chứng rõ nhất là đề Shapes: <b>mười tệp và đúng là không cần controller</b>, vì chín tệp trong đó là lớp hình chứ không phải chức năng — chương trình không thao tác gì trên tập dữ liệu cả. "Để main() ngắn lại" cũng không phải lý do: main trung bình 58 dòng khi có controller và 67 dòng khi không.</div>
+<p>Chỉ dùng để soát lại, đếm trên 17 bài nộp đã pass: 2&ndash;3 tệp thường không có <span class="badge">bo</span>, 5&ndash;6 tệp thường có, &ge; 7 tệp thường có <span class="badge">controller</span>. Riêng 4 tệp thì <b>cả hai kiểu đều có</b> &mdash; CalculatorBill(4) không bo, MatrixOOP(4) có &mdash; và đó đúng là lý do con số chỉ để soát chứ không phải để phán.</p>
+<div class="pitfall"><b>Và phần Hướng dẫn của đề đứng trên tất cả.</b> Khi đề kết thúc phần Guidelines bằng "Student must implement methods X, Y <em>in startup code</em>", các phương thức đó nằm trong <code>Main</code> &mdash; không phải trong lớp manager &mdash; bất kể cuối cùng project có mấy tệp.</div>
 <h3>Luồng dữ liệu</h3>
 <div class="lz-flow">
   <div class="lz-step">ui hiện menu</div>
@@ -609,7 +621,7 @@ System.out.<span class="tok-function">printf</span>(<span class="tok-string">"%-
           quiz: {
             timeLimitSeconds: 420,
             questions: [
-              { question: 'A project with 3 files should have…|||Project 3 file nên có…', options: ['entity + bo + controller', 'entity + ui + utils, no bo|||entity + ui + utils, không bo', 'only a Main class|||chỉ một lớp Main', 'controller + service + data'], correctIndex: 1, points: 1 },
+              { question: 'You decide whether to add a bo layer by…|||Bạn quyết định có thêm tầng bo hay không dựa vào…', options: ['counting the files first|||đếm số tệp trước đã', 'whether there is a business rule or algorithm worth keeping off the screen|||có luật nghiệp vụ hay thuật toán nào đáng tách khỏi màn hình không', 'the number of lines of code|||số dòng code của bài', 'what the previous assignment used|||bài trước dùng gì thì theo'], correctIndex: 1, points: 1 },
               { question: 'The bo (business object) layer should…|||Tầng bo (business object) nên…', options: ['print messages to the screen|||in thông báo ra màn hình', 'hold the collection and throw exceptions with messages|||giữ collection và ném ngoại lệ kèm thông báo', 'read from Scanner|||đọc từ Scanner', 'contain the menu|||chứa menu'], correctIndex: 1, points: 1 },
               { question: 'Why is reading input with nextInt() then nextLine() buggy?|||Vì sao đọc bằng nextInt() rồi nextLine() bị lỗi?', options: ['nextInt is deprecated|||nextInt đã lỗi thời', 'nextInt leaves the newline, so nextLine reads an empty string|||nextInt để lại ký tự xuống dòng, nên nextLine đọc chuỗi rỗng', 'they cannot be used together at all|||không thể dùng chung được', 'nextLine is slower|||nextLine chậm hơn'], correctIndex: 1, points: 1 },
               { question: 'To avoid a crash on bad numeric input, you should…|||Để tránh sập khi nhập số sai, bạn nên…', options: ['use nextInt() directly|||dùng nextInt() trực tiếp', 'read a line and parse with Integer.parseInt inside try/catch|||đọc một dòng và parse bằng Integer.parseInt trong try/catch', 'ignore the input|||bỏ qua input', 'exit the program|||thoát chương trình'], correctIndex: 1, points: 1 },

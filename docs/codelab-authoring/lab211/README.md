@@ -41,7 +41,26 @@ python3 verify_java.py java.json          # javac + run + diff
 ./gen_errors.sh                           # regenerate REAL javac messages
 ```
 
-Ship with the batch file the write script expects:
+Ship it with **one** command, from máy nhà:
+
+```bash
+bash docs/codelab-authoring/lab211/ship-847.sh                # dựng lại + kiểm + đẩy
+bash docs/codelab-authoring/lab211/ship-847.sh --khong-day    # dựng lại + kiểm, không đẩy
+```
+
+It rebuilds `blocks.json` first (never trusts the copy on disk), refuses to ship
+if any Java snippet fails `verify_java.py`, and — the part hand-typing never did
+— **compares the block count the server echoes against the count sent**, failing
+loudly on a mismatch. `normalizeBlock` silently drops blocks it does not know and
+still reports success, so "ok" alone is not evidence.
+
+⛔ **Do not ship this lesson with `ship-lessons.sh`.** Its allow-list is
+`heading/prose/code/mermaid/links/image`; this lesson carries `part` ×15 and
+`practice` ×13, so that script prints `SKIP (bad block types part,practice)` and
+exits 0 having shipped nothing. The backend accepts both types — the rejection is
+in that script, not on the server.
+
+The manual sequence it replaces, for reference:
 
 ```bash
 python3 -c "import json;\
@@ -51,9 +70,6 @@ scp batch.json root@VPS:/tmp/lesson-batch.json
 ssh root@VPS 'docker cp /tmp/lesson-batch.json cuonghoangdev_backend:/tmp/ && \
   docker exec cuonghoangdev_backend sh -c "cat /tmp/lesson-batch.json | node scripts/codelab-lesson-write.mjs"'
 ```
-
-The backend must already be deployed with the block types a lesson uses —
-`normalizeBlock` silently drops anything it does not know, and reports success.
 
 ## Solutions (`solutions/`)
 

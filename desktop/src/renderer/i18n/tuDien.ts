@@ -741,4 +741,22 @@ export const TU_DIEN: Record<string, string> = {
   'Chưa có file nào để hoàn tác trong việc này.': 'No files to undo in this task.',
   'Tab này chưa mở dự án nào.': 'This tab has no project open.',
   'Không có quyền nào bị thu hồi.': 'No permissions were revoked.',
+
+  // ── Đầu ra lệnh gạch chéo (/kynang · /quyen · /tien) ────
+  '**Kho AI Templates** — 871 kỹ năng · 421 agent phụ · 286 lệnh.\n\n- Tìm: `/kynang <từ khoá>` (bỏ dấu cũng ra — `bao mat`)\n- Cài: `/kynang cai <tên>` · ghi đè: thêm `--de`\n\n_Hook và MCP không cài từ đây — chúng là lệnh sẽ chạy, và có cửa duyệt riêng._':
+    '**AI Templates library** — 871 skills · 421 sub-agents · 286 commands.\n\n- Search: `/kynang <keyword>`\n- Install: `/kynang cai <name>` · overwrite: add `--de`\n\n_Hooks and MCP servers are not installed from here — they are commands that will run, and they have their own approval gate._',
+  'Không có gì khớp "{tu}".': 'Nothing matches “{tu}”.',
+  'Dự án `{goc}` chưa có quyền nào được "Luôn cho phép".\n\n_Nút đó nằm trên thẻ duyệt, cạnh "Cho phép"._':
+    'Project `{goc}` has nothing set to “Always allow” yet.\n\n_That button is on the approval card, next to “Allow”._',
+  '**{n}** thứ đang được tự duyệt ở `{goc}`:': '**{n}** things are auto-approved in `{goc}`:',
+  'Thu hồi tất cả: `/quyen xoa` · thu hồi một cái: `/quyen xoa <nguyên văn>`':
+    'Revoke everything: `/quyen xoa` · revoke one: `/quyen xoa <exact text>`',
+  '**Chi phí việc này**': '**Cost of this task**',
+  '- Đã tiêu: **~${tien}**\n': '- Spent: **~${tien}**\n',
+  '- Số bước đã đi: {n}\n': '- Steps taken: {n}\n',
+  '- Hạn mức 5 giờ: còn **{con}** / {tran} token\n':
+    '- 5-hour quota: **{con}** of {tran} tokens left\n',
+  '- File đã sửa (hoàn tác được): {n}\n\n': '- Files changed (undoable): {n}\n\n',
+  '_Con số là ƯỚC LƯỢNG — cổng không công khai giá._':
+    '_These figures are ESTIMATES — the gateway does not publish its prices._',
 };

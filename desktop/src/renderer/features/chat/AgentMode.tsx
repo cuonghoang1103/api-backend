@@ -485,15 +485,15 @@ export function AgentMode({
         }
         const tuKhoa = phan.slice(1).join(' ').trim();
         if (!tuKhoa) {
-          datLenhTraLoi('**Kho AI Templates** — 871 kỹ năng · 421 agent phụ · 286 lệnh.\n\n'
-            + '- Tìm: `/kynang <từ khoá>` (bỏ dấu cũng ra — `bao mat`)\n'
-            + '- Cài: `/kynang cai <tên>` · ghi đè: thêm `--de`\n\n'
-            + '_Hook và MCP không cài từ đây — chúng là lệnh sẽ chạy, và có cửa duyệt riêng._');
+          /* Trọn khối markdown là MỘT mục từ điển. Cắt theo dòng rồi nối lại
+             thì bản dịch không đảo được trật tự, mà tiếng Anh cần đảo ở đúng
+             những dòng có chỗ thay. */
+          datLenhTraLoi(dich('**Kho AI Templates** — 871 kỹ năng · 421 agent phụ · 286 lệnh.\n\n- Tìm: `/kynang <từ khoá>` (bỏ dấu cũng ra — `bao mat`)\n- Cài: `/kynang cai <tên>` · ghi đè: thêm `--de`\n\n_Hook và MCP không cài từ đây — chúng là lệnh sẽ chạy, và có cửa duyệt riêng._'));
           return;
         }
         const ds = await b.khoTim(cuocId, tuKhoa).catch(() => []);
         datLenhTraLoi(ds.length === 0
-          ? `Không có gì khớp "${tuKhoa}".`
+          ? dichP('Không có gì khớp "{tu}".', { tu: tuKhoa })
           : `**${ds.length}** kết quả cho "${tuKhoa}":\n\n`
             + ds.map((x) => `- \`${x.ten}\` · ${x.loai} · ${x.danhMuc}`).join('\n')
             + '\n\nCài: `/kynang cai <tên>`');
@@ -516,11 +516,12 @@ export function AgentMode({
         const r = await window.cuongthai?.agent.dsQuyenLau(cuocId);
         if (!r?.goc) { datLenhTraLoi(dich('Tab này chưa mở dự án nào.')); return; }
         datLenhTraLoi(r.khoa.length === 0
-          ? `Dự án \`${r.goc}\` chưa có quyền nào được "Luôn cho phép".\n\n`
-            + '_Nút đó nằm trên thẻ duyệt, cạnh "Cho phép"._'
-          : `**${r.khoa.length}** thứ đang được tự duyệt ở \`${r.goc}\`:\n\n`
+          ? dichP('Dự án `{goc}` chưa có quyền nào được "Luôn cho phép".\n\n_Nút đó nằm trên thẻ duyệt, cạnh "Cho phép"._', { goc: r.goc ?? '' })
+          : dichP('**{n}** thứ đang được tự duyệt ở `{goc}`:', { n: r.khoa.length, goc: r.goc ?? '' })
+            + '\n\n'
             + r.khoa.map((k) => `- \`${k}\``).join('\n')
-            + '\n\nThu hồi tất cả: `/quyen xoa` · thu hồi một cái: `/quyen xoa <nguyên văn>`');
+            + '\n\n'
+            + dich('Thu hồi tất cả: `/quyen xoa` · thu hồi một cái: `/quyen xoa <nguyên văn>`'));
       })();
       return;
     }
@@ -529,13 +530,19 @@ export function AgentMode({
       datNhap('');
       const q = trangThai.hanMuc;
       datLenhTraLoi(
-        `**Chi phí việc này**\n\n`
-        + `- Đã tiêu: **~$${trangThai.tienPhien.toFixed(3)}**\n`
-        + `- Số bước đã đi: ${trangThai.buoc ?? 0}\n`
-        + (q ? `- Hạn mức 5 giờ: còn **${Math.max(0, q.tran - q.daDung).toLocaleString('vi-VN')}**`
-              + ` / ${q.tran.toLocaleString('vi-VN')} token\n` : '')
-        + `- File đã sửa (hoàn tác được): ${trangThai.soFileDaSua}\n\n`
-        + '_Con số là ƯỚC LƯỢNG — cổng không công khai giá._',
+        dich('**Chi phí việc này**') + '\n\n'
+        + dichP('- Đã tiêu: **~${tien}**\n', { tien: trangThai.tienPhien.toFixed(3) })
+        /* `buoc` là `{ nay, tran }`, không phải số — lấy `nay`. Bản cũ nội
+           suy thẳng cả object nên dòng này in ra `[object Object]` ở mọi lượt
+           có bước; `tsc` chỉ bắt được sau khi chuyển sang `dichP` (nội suy
+           trong template literal thì mọi thứ đều hợp lệ). */
+        + dichP('- Số bước đã đi: {n}\n', { n: trangThai.buoc?.nay ?? 0 })
+        + (q ? dichP('- Hạn mức 5 giờ: còn **{con}** / {tran} token\n', {
+          con: Math.max(0, q.tran - q.daDung).toLocaleString('vi-VN'),
+          tran: q.tran.toLocaleString('vi-VN'),
+        }) : '')
+        + dichP('- File đã sửa (hoàn tác được): {n}\n\n', { n: trangThai.soFileDaSua })
+        + dich('_Con số là ƯỚC LƯỢNG — cổng không công khai giá._'),
       );
       return;
     }

@@ -420,7 +420,15 @@ elif echo "$PRISMA_OUT" | grep -qi "error"; then
 # Tín hiệu CHÍNH vẫn là MÃ THOÁT — các seeder đều `process.exit(1)` khi
 # hỏng. Bộ dò văn bản chỉ là lưới thứ hai cho trường hợp script in lỗi mà
 # vẫn thoát 0.
-SEED_ERR_RE='(^|[[:space:]])(✗|✘)|^[[:space:]]*[A-Za-z]*Error:|Cannot find module|Invalid `prisma\.|^cần --file'
+# ⚠️ `is not running` / `No such container` PHẢI nằm ở đây. 10/09/2026 backend
+# chết giữa lượt seed; 13 bước sau đó chạy `docker compose exec backend …` vào
+# một container đã tắt, mỗi bước in đúng một dòng `service "backend" is not
+# running` rồi report_seed vẫn báo `✅ OK`. Log xanh toàn tập, mà KHÔNG bước
+# seed nào chạy — chỉ phát hiện được bằng cách curl production đối chiếu.
+# Hai dòng đó không khớp mẫu `Error:` (chúng là `Error response from daemon:`
+# và một câu trần), nên chốt cũ bỏ lọt hoàn toàn. Đã thử hai chiều trước khi
+# đổi: bắt đủ 4 ca lỗi, không báo nhầm dòng nào trong log deploy bình thường.
+SEED_ERR_RE='(^|[[:space:]])(✗|✘)|^[[:space:]]*[A-Za-z]*Error:|Cannot find module|Invalid `prisma\.|^cần --file|is not running|No such (container|service)|Cannot connect to the Docker daemon'
 
 # Log seed nằm trong repo trên VPS thay vì /tmp: thông báo cũ trỏ tới
 # /tmp/seed-*.log nhưng file đó thường KHÔNG tồn tại khi cần đọc (container

@@ -194,6 +194,31 @@ if [ -n "$BAN" ]; then
 fi
 ok "Deploy commit ${SHA} (nhánh ${NHANH})"
 
+# ─── 0b. Đề thi: CHỐT TIỀN-DEPLOY ──────────────────────────────────────
+# `deploy.sh` có chốt này từ lâu (nó chạy exam-check TRƯỚC rsync và chặn deploy
+# nếu đề hỏng); `deploy-nha.sh` thì CHƯA TỪNG CÓ — phát hiện 10/09/2026 khi đẩy
+# 48 đề PT mới. Đây là lỗi DỮ LIỆU mà `tsc` và `next build` không bao giờ thấy:
+# một đề mà chính đáp án mẫu chạy không khớp expectedOutput thì học viên không
+# bao giờ đúng được, và AI cũng chấm sai theo.
+# ⚠️ Chạy TRẦN thì exam-check chỉ quét NODEJS-*/NEXTJS-*/WF-* (20 trên 1183
+# file), nên phải liệt kê tường minh các khoá Courses.
+if [ -f scripts/exam-check.mjs ] && command -v node &>/dev/null; then
+    info "Kiểm đề thi (đáp án mẫu phải chạy đúng)..."
+    DE_LOI=0
+    for de in content/exams/{AUTHENTICATION,DOCKER,GIT,LINUX-BASH,NEXTJS,NGINX,NODEJS,POSTGRESQL,PRISMA-ORM,REDIS,SOCKET-IO,TAILWIND-CSS,TYPESCRIPT,WF,GITHUB-ACTIONS,OBJECT-STORAGE,DEPLOY-VPS,MEDIA-PROCESSING,OBSERVABILITY-MONITORING}-*.mjs; do
+        [ -e "$de" ] || continue
+        if ! node scripts/exam-check.mjs "$de" >/tmp/exam-check-nha.log 2>&1; then
+            warn "  đề hỏng: $de"; tail -6 /tmp/exam-check-nha.log | sed 's/^/         /'
+            DE_LOI=$((DE_LOI+1))
+        fi
+    done
+    if [ "$DE_LOI" != "0" ]; then
+        fail "exam-check thất bại ở ${DE_LOI} đề — sửa xong hãy deploy"
+        exit 1
+    fi
+    ok "Đề thi OK"
+fi
+
 # ─── 1. Máy nhà còn sống không ─────────────────────────────────────────
 info "Kiểm máy nhà..."
 # LAN trước, đường hầm sau. `-o BatchMode` để không bao giờ ngồi chờ hỏi mật khẩu.

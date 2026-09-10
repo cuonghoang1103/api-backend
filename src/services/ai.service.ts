@@ -846,7 +846,21 @@ export class AIService {
       try {
         const { prisma: db } = await import('../config/database.js');
         const { costUsd } = await import('./llm/gateway.js');
-        const model = meta?.effective ?? context.model ?? DEFAULT_CHAT_MODEL_ID;
+        /*
+         * ⚠️ GHI TÊN MODEL CỦA CỔNG, không phải mã BẬC.
+         *
+         * `meta.effective` là `'cuongmini-pro'` — một cái tên chỉ có trong app
+         * này. `priceOf()` không biết nó, và nó rơi vào mức mặc định $3/$15
+         * cho mọi model lạ. Nghĩa là ví chat sẽ đếm bằng một cái giá BỊA, và
+         * bịa theo cả hai chiều: bậc rẻ bị tính đắt, bậc đắt bị tính rẻ.
+         * Cả hai đều im lặng, vì con số vẫn trông hợp lý.
+         *
+         * Bậc mặc định (Groq) không có `gatewayModel` — nó chạy ở nhà cung cấp
+         * khác, và giữ nguyên mã bậc ở đó là đúng: chi phí của nó không đo
+         * bằng bảng giá của cổng.
+         */
+        const bac = CHAT_MODELS[meta?.effective ?? context.model ?? DEFAULT_CHAT_MODEL_ID];
+        const model = bac?.gatewayModel?.() ?? bac?.id ?? DEFAULT_CHAT_MODEL_ID;
         const vao = estimateTokens(cauHoi);
         const ra = estimateTokens(traLoi);
         await db.interviewLLMCallLog.create({

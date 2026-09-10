@@ -638,23 +638,45 @@ public class Validator {
     }
 
     /**
+     * Thrown when stdin closes with the program still running.
+     *
+     * It is NOT an error: Ctrl-D, or a marker's script running out of
+     * keystrokes, means there is nobody left to ask. Treating that as Quit is
+     * the only sane reading. What it must not do is END THE PROCESS here -
+     * see nextLine() below for why.
+     */
+    public static class EndOfInput extends RuntimeException {
+
+        private static final long serialVersionUID = 1L;
+
+        EndOfInput() {
+            super("standard input closed");
+        }
+    }
+
+    /**
      * The single point where a line is read.
      *
-     * On end-of-input (Ctrl-D, or a script that runs out of keystrokes) Scanner
-     * throws NoSuchElementException, which reaches the user as a stack trace -
-     * exactly the "interrupt the program" the brief forbids. Treating a closed
-     * stdin as Quit is the only sane reading: there is nobody left to ask.
+     * On end-of-input Scanner throws NoSuchElementException, which reaches the
+     * user as a stack trace - exactly the "interrupt the program" the brief
+     * forbids. So it is turned into EndOfInput and thrown UP to the screen.
+     *
+     * The earlier version called System.exit(0) right here, and that was a bug
+     * with no symptom in testing: System.exit ends the JVM immediately, so the
+     * "store unsaved vehicles before quitting" step in Main never ran. A user
+     * who closed the terminal after entering ten vehicles lost all ten, and
+     * nothing on screen said so. A utility class does not get to decide that
+     * the program is over - it reports, and the screen decides.
      */
     private static String nextLine() {
         try {
             if (!SCANNER.hasNextLine()) {
                 System.out.println();
-                System.exit(0);
+                throw new EndOfInput();
             }
             return SCANNER.nextLine().trim();
         } catch (NoSuchElementException e) {
-            System.exit(0);
-            return "";
+            throw new EndOfInput();
         }
     }
 
@@ -1194,33 +1216,44 @@ public class Main {
                 .add("Store data to file")
                 .add("Quit");
 
-        while (true) {
-            switch (menu.getChoice()) {
-                case 1:
-                    controller.loadFromFile();
-                    break;
-                case 2:
-                    addMenu(controller);
-                    break;
-                case 3:
-                    controller.updateVehicle();
-                    break;
-                case 4:
-                    controller.deleteVehicle();
-                    break;
-                case 5:
-                    searchMenu(controller);
-                    break;
-                case 6:
-                    showMenu(controller);
-                    break;
-                case 7:
-                    controller.storeToFile();
-                    break;
-                default:
-                    quit(controller);
-                    return;
+        try {
+            while (true) {
+                switch (menu.getChoice()) {
+                    case 1:
+                        controller.loadFromFile();
+                        break;
+                    case 2:
+                        addMenu(controller);
+                        break;
+                    case 3:
+                        controller.updateVehicle();
+                        break;
+                    case 4:
+                        controller.deleteVehicle();
+                        break;
+                    case 5:
+                        searchMenu(controller);
+                        break;
+                    case 6:
+                        showMenu(controller);
+                        break;
+                    case 7:
+                        controller.storeToFile();
+                        break;
+                    default:
+                        quit(controller);
+                        return;
+                }
             }
+        } catch (Validator.EndOfInput e) {
+            // stdin closed with the program still running. quit() cannot run as
+            // it stands - it ASKS whether to store, and asking needs the input
+            // that just disappeared. So the half that can still be done is done:
+            // unsaved work is written without a question nobody can answer.
+            if (controller.hasUnsavedChanges()) {
+                controller.storeToFile();
+            }
+            System.out.println("Goodbye.");
         }
     }
 
@@ -1779,6 +1812,39 @@ Your choice:
 Your choice: Goodbye.'''
 
 
+def _p0013_eof_luu(out):
+    """Hết input giữa chừng thì phải LƯU rồi mới chào, không được giết JVM.
+
+    Chốt này sinh ra từ một lỗi có thật: `Validator.nextLine()` từng gọi
+    `System.exit(0)` khi stdin đóng, nên bước "lưu xe chưa lưu trước khi thoát"
+    trong Main không bao giờ chạy. Người dùng nhập mười cái xe rồi tắt cửa sổ là
+    mất cả mười, và trên màn hình không có gì nói điều đó. Ba lượt chạy cũ đều
+    bấm Quit tử tế nên KHÔNG lượt nào chạm tới đường này.
+    """
+    if 'Exception' in out:
+        return False, 'stdin đóng mà chương trình ném stack trace ra màn hình'
+    if 'Stored 1 vehicle(s)' not in out:
+        return False, 'hết input mà không lưu phần chưa lưu — đúng lỗi System.exit gây ra'
+    if not out.rstrip().endswith('Goodbye.'):
+        return False, f'phải thoát sạch bằng Goodbye., màn hình kết thúc bằng: {out.rstrip()[-60:]!r}'
+    return True, ''
+
+
+def _p0013_doc_lai(out):
+    """Tiến trình MỚI đọc lại tệp — bằng chứng duy nhất là lượt trước ghi thật.
+
+    Nhìn màn hình lượt trước chỉ biết nó IN ra chữ "Stored"; chỉ lượt này, chạy
+    trong một tiến trình khác, mới chứng minh đĩa thật sự đã đổi.
+    """
+    if 'Loaded 1 vehicle(s)' not in out:
+        return False, 'tệp phải còn đúng một xe sau khi lượt trước xoá C001'
+    if 'C001' in out:
+        return False, 'C001 đã bị xoá ở lượt trước mà vẫn còn trong tệp'
+    if 'C002' not in out:
+        return False, 'C002 phải còn lại sau khi xoá C001'
+    return True, ''
+
+
 solution(
     'J1.L.P0013',
     title_vi='Quản lý phương tiện trong showroom',
@@ -1795,7 +1861,13 @@ solution(
     main_class='ui.Main',
     runs=[(P0013_RUN0_IN, P0013_RUN0_OUT),
           (P0013_RUN1_IN, P0013_RUN1_OUT),
-          (P0013_RUN2_IN, P0013_RUN2_OUT)],
+          (P0013_RUN2_IN, P0013_RUN2_OUT),
+          # ── stdin đóng giữa chừng ─────────────────────────────
+          # Ba lượt trên đều bấm 8 (Quit), nên không lượt nào đi qua đường
+          # "hết input". Hai lượt này đi qua nó, và lượt sau đọc lại tệp
+          # bằng một TIẾN TRÌNH KHÁC — cách duy nhất chứng minh đĩa đã đổi.
+          ('1\n4\nC001\ny\n', _p0013_eof_luu),
+          ('1\n6\n1\n3\n8\n', _p0013_doc_lai)],
     explain_en='''<p><strong>Ten classes is a lot to meet at once, so here is the map first.</strong>
 <code>entity</code> holds four types and no behaviour worth the name: <code>Vehicle</code> (abstract —
 id, name, color, price, brand, the table row, the natural order), <code>Car</code> (type, year),

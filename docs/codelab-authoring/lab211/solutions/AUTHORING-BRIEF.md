@@ -122,8 +122,13 @@ Getting this backwards costs marks in both directions.
 
 Inside the layers:
 
-- `entity` — POJO, `implements Serializable`, private fields, full constructor,
-  getters/setters, `toString`. No rules, no printing.
+- `entity` — POJO, private fields, full constructor, getters/setters,
+  `toString`. No rules, no printing. `implements Serializable` **only when the
+  program writes objects with `ObjectOutputStream`** — measured across all 54:
+  **not one does**, every file assignment here writes text, CSV or a `.dat`
+  written as text. So in this track it is a habit, not a requirement; 22 of the
+  solutions keep it because a marker expects it, and the walkthrough should be
+  ready for "you never serialize anything, why is this Serializable?".
 - `bo` — holds the collection and the rules. **Throws `Exception` with the
   brief's own message**; never prints.
 - `controller` — reads input via the validator, calls `bo`, reports the outcome.

@@ -341,6 +341,18 @@ solution(
 Guidelines are explicit: <em>"Create an abstract class Shape contains three methods printResult,
 getPerimeter and getArea. Create classes Triangle, Rectangle, Circle that extend from class
 Shape."</em> The formulas are the easy part; the marks are in the structure.</p>
+<p><strong>Yes, this entity prints — and that is the brief's call, not a slip.</strong> The course
+states one layering rule with no exception: an <code>entity</code> holds data and does not touch the
+screen. Here the Guidelines name a method <code>printResult</code>, declare it <code>void</code>, and put
+it on <code>Shape</code> — a void method called "print" can mean nothing else. When the sheet and the
+architecture disagree, the sheet wins, because the sheet is what the marker checks.</p>
+<p><strong>So expect the question, and have the answer ready.</strong> "Your course says an entity must
+not print — why does yours?" A good answer has three parts, in this order: <em>the brief requires this
+exact method on this exact class</em>; <em>I know it breaks the layering rule, and here is what it costs —
+<code>Shape</code> can no longer be reused by a program that draws to a window instead of a console</em>;
+<em>if I were free to design it, <code>printResult</code> would move to the ui layer and each shape would
+expose only <code>getArea()</code> and <code>getPerimeter()</code>, which it already does.</em> Naming the
+cost is what separates "I followed the sheet" from "I did not notice".</p>
 <p><strong>Why Shape is abstract.</strong> A shape with no kind has no area — there is no formula to
 write at that level. Making the class abstract means <code>new Shape()</code> is a compile error, and
 declaring the three methods there is a contract every subclass must honour. If an examiner asks
@@ -368,6 +380,18 @@ screen with theirs. It is worth mentioning that you noticed.</p>''',
 lớp. Mục Hướng dẫn nói rất rõ: <em>"Create an abstract class Shape contains three methods printResult,
 getPerimeter and getArea. Create classes Triangle, Rectangle, Circle that extend from class
 Shape."</em> Công thức là phần dễ; điểm nằm ở cấu trúc.</p>
+<p><strong>Đúng, entity ở bài này CÓ in — và đó là quyết định của đề, không phải sơ suất.</strong>
+Khóa học phát biểu đúng một quy tắc phân tầng không ngoại lệ: <code>entity</code> giữ dữ liệu và không
+chạm vào màn hình. Ở đây Hướng dẫn gọi tên một phương thức <code>printResult</code>, khai nó
+<code>void</code>, và đặt nó trên <code>Shape</code> — một phương thức void tên là "print" thì chẳng thể
+mang nghĩa nào khác. Khi đề và kiến trúc vênh nhau thì đề thắng, vì đề mới là thứ người chấm soi.</p>
+<p><strong>Nên hãy chờ đúng câu hỏi đó, và có sẵn câu trả lời.</strong> "Khóa học của em nói entity
+không được in — sao cái của em lại in?" Một câu trả lời tốt có ba phần, theo đúng thứ tự này:
+<em>đề bắt buộc đúng phương thức này trên đúng lớp này</em>; <em>em biết nó phá quy tắc phân tầng, và
+đây là cái giá phải trả — <code>Shape</code> không còn dùng lại được cho một chương trình vẽ ra cửa sổ
+thay vì ra console</em>; <em>nếu được tự thiết kế thì <code>printResult</code> sẽ chuyển sang tầng ui,
+còn mỗi hình chỉ để lộ <code>getArea()</code> và <code>getPerimeter()</code> — mà nó vốn đã có sẵn.</em>
+Nói ra được cái giá chính là chỗ tách "em làm theo đề" khỏi "em không để ý".</p>
 <p><strong>Vì sao Shape phải abstract.</strong> Một hình không thuộc loại nào thì không có diện tích —
 ở mức đó không có công thức nào để viết. Để lớp là abstract nghĩa là <code>new Shape()</code> sẽ báo
 lỗi biên dịch, và việc khai báo ba phương thức ở đó là một hợp đồng mà mọi lớp con phải tuân thủ. Nếu

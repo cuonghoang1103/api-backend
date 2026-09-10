@@ -75,11 +75,15 @@ Four things decide the mark:
 
 --- 2. THE LAYERS, AND WHEN TO ADD ONE --------------------------
   entity     Plain data object. Private fields, full constructor, getters/
-             setters, toString(). implements Serializable WHEN the program
-             actually writes it to a file with ObjectOutputStream — do not
-             bolt Serializable onto a Circle that is never persisted, and be
-             ready to say why it is not there.
-             Knows its data. No rules, no printing.
+             setters, toString(). Knows its data. No rules, no printing.
+             implements Serializable ONLY when the program writes objects with
+             ObjectOutputStream. Measured across all 54 briefs: NOT ONE does —
+             every file assignment here writes text, CSV, or a .dat file
+             written as text. So in this course the interface changes nothing
+             at run time; 22 reference solutions keep it because markers expect
+             to see it. Either answer is defensible, silence is not: be ready
+             for "you never serialize anything, why is this Serializable?" and
+             for "this one has no Serializable, why not?".
   bo         Holds the collection and the rules. Throws Exception carrying the
              brief's own message. **NEVER prints.** This is the one layering
              rule stated with no exception.

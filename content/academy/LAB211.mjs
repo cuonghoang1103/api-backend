@@ -190,7 +190,7 @@ export default {
   <div class="lz-layer"><b>Output</b> — <span class="badge">printf</span>, <span class="badge">%-15s</span>, <span class="badge">%.2f</span>, String.format; matching a screen exactly.</div>
   <div class="lz-layer"><b>Data</b> — arrays, ArrayList, LinkedHashMap, HashMap; Comparator &amp; sorting objects.</div>
   <div class="lz-layer"><b>Logic</b> — sorting (bubble/selection/insertion/quick/merge), linear &amp; binary search, base conversion, recursion.</div>
-  <div class="lz-layer"><b>OOP</b> — entity classes (Serializable, getters/setters, toString), inheritance &amp; polymorphism, abstract/interface.</div>
+  <div class="lz-layer"><b>OOP</b> — entity classes (getters/setters, toString), inheritance &amp; polymorphism, abstract/interface.</div>
   <div class="lz-layer"><b>Files</b> — read/write text, object serialization, CSV, copy &amp; zip; the byte-vs-char trap.</div>
   <div class="lz-layer"><b>Robustness</b> — validation that never crashes, exceptions with messages taken from the brief.</div>
 </div>
@@ -219,7 +219,7 @@ export default {
   <div class="lz-layer"><b>Xuất</b> — <span class="badge">printf</span>, <span class="badge">%-15s</span>, <span class="badge">%.2f</span>, String.format; khớp màn hình y hệt.</div>
   <div class="lz-layer"><b>Dữ liệu</b> — mảng, ArrayList, LinkedHashMap, HashMap; Comparator &amp; sắp xếp đối tượng.</div>
   <div class="lz-layer"><b>Logic</b> — sắp xếp (bubble/selection/insertion/quick/merge), tìm tuyến tính &amp; nhị phân, đổi hệ cơ số, đệ quy.</div>
-  <div class="lz-layer"><b>OOP</b> — lớp entity (Serializable, getter/setter, toString), kế thừa &amp; đa hình, abstract/interface.</div>
+  <div class="lz-layer"><b>OOP</b> — lớp entity (getter/setter, toString), kế thừa &amp; đa hình, abstract/interface.</div>
   <div class="lz-layer"><b>Tệp</b> — đọc/ghi text, serialize đối tượng, CSV, copy &amp; zip; bẫy byte-vs-char.</div>
   <div class="lz-layer"><b>Bền bỉ</b> — validate không bao giờ sập, ngoại lệ với thông báo lấy từ đề.</div>
 </div>
@@ -375,12 +375,13 @@ export default {
 <p class="lead">Every LAB211 solution uses the same shape. Learn it once and you never waste exam time deciding "where does this code go". This layout is not invented here — it was reverse-engineered from 17 sample projects that already passed at FPT.</p>
 <h3>The five layers</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><b>entity</b> — plain data objects (POJO). <span class="badge">implements Serializable</span>, private fields, full constructor, getters/setters, <span class="badge">toString()</span>. Knows its data, nothing else.</div>
+  <div class="lz-layer"><b>entity</b> — plain data objects (POJO). Private fields, full constructor, getters/setters, <span class="badge">toString()</span>. Knows its data, nothing else. <span class="badge">implements Serializable</span> <b>only when the program writes objects with <code>ObjectOutputStream</code></b> — see the note below.</div>
   <div class="lz-layer"><b>bo</b> (business object) — holds the collection and the rules. <span class="badge">throws Exception</span> with a message (e.g. "Doctor code [D001] is duplicate."); it never prints to the screen.</div>
   <div class="lz-layer"><b>controller</b> — the glue: calls the Validator to gather input, calls the bo, prints the result message.</div>
   <div class="lz-layer"><b>ui / Main</b> — only the menu and the loop; delegates each choice to a controller method.</div>
   <div class="lz-layer"><b>utils / Validator</b> — a class of static input helpers: <span class="badge">private static final Scanner</span>, a private constructor, methods like <span class="badge">getInt(msg, msgRange, msgErr, min, max)</span>.</div>
 </div>
+<div class="note-ct"><b>About <code>Serializable</code> — measured, and it surprises people.</b> Not one of the 54 briefs writes an object with <code>ObjectOutputStream</code>: every file assignment here uses text, CSV or a <code>.dat</code> file written as text. So in this course <code>implements Serializable</code> changes nothing at run time — it is a habit, and 22 of the reference solutions keep it because a marker expects to see it. Keep the habit if you like, but be ready for the follow-up: <em>"you never serialize anything — why is this class Serializable?"</em> The answer that scores is "it costs one word and keeps the door open if the data file ever becomes an object stream", not silence. And there is a reason these briefs avoid it: appending with a second <code>ObjectOutputStream</code> writes a second header that <code>ObjectInputStream</code> chokes on (Lesson 5.2).</div>
 <h3>The rule: only add a layer when the size demands it</h3>
 <p>This is the exact question mentors love to ask — "why does this program have no controller?" Decide by <b>what the program does</b>, then use the file count only to sanity-check the answer:</p>
 <div class="lz-stack">
@@ -420,12 +421,13 @@ export default {
 <p class="lead">Mọi lời giải LAB211 dùng chung một hình dạng. Thuộc nó một lần và bạn không bao giờ phí thời gian thi để quyết "code này đặt ở đâu". Kiểu bố cục này không phải tự chế ra — nó được đúc kết từ 17 project mẫu đã pass ở FPT.</p>
 <h3>Năm tầng</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><b>entity</b> — đối tượng dữ liệu thuần (POJO). <span class="badge">implements Serializable</span>, trường private, constructor đầy đủ, getter/setter, <span class="badge">toString()</span>. Chỉ biết dữ liệu của mình, không gì khác.</div>
+  <div class="lz-layer"><b>entity</b> — đối tượng dữ liệu thuần (POJO). Trường private, constructor đầy đủ, getter/setter, <span class="badge">toString()</span>. Chỉ biết dữ liệu của mình, không gì khác. <span class="badge">implements Serializable</span> <b>chỉ khi chương trình ghi đối tượng bằng <code>ObjectOutputStream</code></b> — xem ghi chú bên dưới.</div>
   <div class="lz-layer"><b>bo</b> (business object) — giữ collection và luật. <span class="badge">throws Exception</span> kèm thông báo (vd "Doctor code [D001] is duplicate."); nó KHÔNG in ra màn hình.</div>
   <div class="lz-layer"><b>controller</b> — chất keo: gọi Validator lấy input, gọi bo, in thông báo kết quả.</div>
   <div class="lz-layer"><b>ui / Main</b> — chỉ menu và vòng lặp; ủy thác mỗi lựa chọn cho một hàm controller.</div>
   <div class="lz-layer"><b>utils / Validator</b> — lớp toàn hàm nhập tĩnh: <span class="badge">private static final Scanner</span>, constructor private, hàm như <span class="badge">getInt(msg, msgRange, msgErr, min, max)</span>.</div>
 </div>
+<div class="note-ct"><b>Về <code>Serializable</code> — đo thật, và nó làm nhiều người bất ngờ.</b> Không một đề nào trong 54 đề ghi đối tượng bằng <code>ObjectOutputStream</code>: mọi bài có tệp ở đây đều ghi dạng văn bản, CSV, hoặc tệp <code>.dat</code> ghi bằng chữ. Nên trong môn này <code>implements Serializable</code> không thay đổi gì lúc chạy — nó là một thói quen, và 22 lời giải mẫu vẫn giữ vì người chấm quen thấy nó. Cứ giữ thói quen đó nếu muốn, nhưng phải sẵn câu trả lời cho vế sau: <em>"em có serialize bao giờ đâu — sao lớp này lại Serializable?"</em> Câu ăn điểm là "nó tốn một chữ và để ngỏ đường nếu sau này tệp dữ liệu chuyển sang luồng đối tượng", chứ không phải im lặng. Và có lý do các đề này tránh nó: ghi nối bằng một <code>ObjectOutputStream</code> thứ hai sẽ tạo thêm một header mà <code>ObjectInputStream</code> không đọc nổi (Bài 5.2).</div>
 <h3>Quy tắc: chỉ thêm tầng khi kích thước đòi hỏi</h3>
 <p>Đây đúng là câu mentor thích hỏi — "sao chương trình này không có controller?". Quyết định bằng <b>chương trình LÀM GÌ</b>, còn số tệp chỉ dùng để soát lại câu trả lời:</p>
 <div class="lz-stack">
@@ -1133,7 +1135,7 @@ students.<span class="tok-function">sort</span>(
 <h2>Full management programs — putting it together</h2>
 <p class="lead">Now combine everything: an entity, a bo with rules, a controller, the Validator, and a menu. These medium briefs (63–73 LOC) are exactly the shape of a typical exam question. Do several until the structure is automatic.</p>
 <div class="lz-stack">
-  <div class="lz-layer"><b>entity</b> — e.g. Doctor(code, name, specialty), Serializable, toString for the display row.</div>
+  <div class="lz-layer"><b>entity</b> — e.g. Doctor(code, name, specialty), toString for the display row.</div>
   <div class="lz-layer"><b>bo</b> — <span class="badge">add</span> checks for duplicate code and throws; <span class="badge">find</span>, <span class="badge">sort</span>, <span class="badge">getAll</span>.</div>
   <div class="lz-layer"><b>controller</b> — reads via Validator, calls bo, prints outcome / list.</div>
   <div class="lz-layer"><b>Main</b> — the menu loop from 4.1.</div>
@@ -1151,7 +1153,7 @@ students.<span class="tok-function">sort</span>(
 <h2>Chương trình quản lý hoàn chỉnh — ghép lại</h2>
 <p class="lead">Giờ ghép tất cả: một entity, một bo có luật, một controller, Validator, và một menu. Các đề medium này (63–73 LOC) đúng là hình dạng câu hỏi thi điển hình. Làm vài bài tới khi cấu trúc thành tự động.</p>
 <div class="lz-stack">
-  <div class="lz-layer"><b>entity</b> — vd Doctor(code, name, specialty), Serializable, toString cho dòng hiển thị.</div>
+  <div class="lz-layer"><b>entity</b> — vd Doctor(code, name, specialty), toString cho dòng hiển thị.</div>
   <div class="lz-layer"><b>bo</b> — <span class="badge">add</span> kiểm mã trùng và ném; <span class="badge">find</span>, <span class="badge">sort</span>, <span class="badge">getAll</span>.</div>
   <div class="lz-layer"><b>controller</b> — đọc qua Validator, gọi bo, in kết quả / danh sách.</div>
   <div class="lz-layer"><b>Main</b> — vòng lặp menu từ bài 4.1.</div>

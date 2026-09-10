@@ -262,33 +262,71 @@ không có lớp manager?" chính là câu vấn đáp sẽ được hỏi.
 Kiểm lại sau khi sửa: **54/54 xanh** ở cả `en_US` lẫn `vi_VN`, màn hình không
 đổi một ký tự. Số bài có `bo` in ra màn hình: **0**.
 
-### 4.3 `entity` không `implements Serializable` — 29 lớp POJO
+### 4.3 `Serializable` ✅ ĐÃ SỬA — và con số làm đảo ngược cả câu hỏi
 
-Quy tắc nói "luôn luôn". Thực tế 29 lớp không có, và **hầu hết là hợp lý**:
-`Shape`, `Circle`, `Bee`, `MyStack`, `Deck`… không bao giờ được ghi ra tệp.
+Quy tắc nói "luôn luôn". Câu hỏi ban đầu của tôi là "29 lớp thiếu thì có sao
+không". Đo xong thì hoá ra phải hỏi ngược lại:
 
-Nên **sửa quy tắc** thành: "`implements Serializable` khi entity có thể bị ghi
-ra tệp bằng `ObjectOutputStream`; các bài còn lại thì không cần — và biết trả
-lời *vì sao không cần* là điểm cộng khi vấn đáp." Cargo-cult `Serializable`
-trên một lớp `Circle` là thứ mentor sẽ hỏi ngược lại.
+> **0/54 lời giải thật sự gọi `ObjectOutputStream` hay `ObjectInputStream`
+> trong mã.** Mọi bài có tệp ở đây đều ghi văn bản, CSV, hoặc tệp `.dat` ghi
+> bằng chữ. Trong khi đó **22 lớp** khai `implements Serializable`.
 
-### 4.4 `entity` in ra màn hình — 2 bài, nhưng đề bắt
+Nghĩa là trong cả môn này, `implements Serializable` **không thay đổi một thứ
+gì lúc chạy**. Nó là thói quen, không phải yêu cầu — và quy tắc "entity luôn
+`implements Serializable`" đang dạy một phản xạ mà chính 54 đề không dùng đến.
+
+Đáng chú ý: `L.P0013` có `Vehicle implements Serializable` kèm Javadoc tự thú
+rằng tệp dữ liệu là văn bản thuần, giữ lại vì "tốn một chữ và để ngỏ đường".
+Đó là câu trả lời trung thực — và cũng là câu người học phải nói được.
+
+**Đã sửa cách phát biểu ở ba chỗ** (Academy 1.1 EN+VI kèm một ghi chú nêu thẳng
+con số, `AUTHORING-BRIEF.md`, `quyTacThay.ts`), và bỏ chữ `Serializable` khỏi
+hai chỗ liệt kê ngắn (bài 0.3, bài 4.3) nơi nó bị nêu như thành phần bắt buộc
+của một entity. **Không đụng vào mã**: 22 lớp kia giữ nguyên, vì giữ hay bỏ đều
+bảo vệ được — cái không bảo vệ được là im lặng khi bị hỏi.
+
+Lý do các đề tránh serialize thì Academy 5.2 đã dạy sẵn: ghi nối bằng một
+`ObjectOutputStream` thứ hai tạo thêm một header mà `ObjectInputStream` không
+đọc nổi.
+
+### 4.4 `entity` in ra màn hình — 2 bài, nhưng đề bắt ✅ ĐÃ SỬA
 
 P0061 (`Shape.printResult()`) và P0052 (`Country`) in ra màn hình vì
-**Guidelines của đề yêu cầu đúng phương thức đó**. Lời giải theo đề là đúng
-(Guidelines là hợp đồng). Nhưng phần walkthrough của P0061 giải thích rất kỹ
-mọi thứ khác mà **không có một câu nào** về mâu thuẫn này — trong khi
-"sao entity của em lại in, trong khi khoá học nói entity không in?" là câu
-vấn đáp gần như chắc chắn. Nên thêm một đoạn.
+**Guidelines của đề yêu cầu đúng phương thức đó**. Lời giải theo đề là đúng.
+Nhưng walkthrough P0061 giải thích rất kỹ mọi thứ khác mà **không có một câu
+nào** về mâu thuẫn này — trong khi "sao entity của em lại in, trong khi khoá
+học nói entity không in?" là câu vấn đáp gần như chắc chắn.
 
-### 4.5 `System.exit()` trong Validator — L.P0013
+Đã thêm hai đoạn (EN+VI) vào walkthrough P0061, và câu trả lời được dựng thành
+**ba phần theo đúng thứ tự** để người học nói lại được: *đề bắt buộc đúng
+phương thức này trên đúng lớp này* → *em biết nó phá quy tắc phân tầng, và giá
+phải trả là `Shape` không dùng lại được cho chương trình vẽ ra cửa sổ* → *nếu
+được tự thiết kế thì `printResult` chuyển sang tầng ui, mỗi hình chỉ để lộ
+`getArea()` và `getPerimeter()` — mà nó vốn đã có sẵn*.
+
+Nói ra được cái giá chính là chỗ tách "em làm theo đề" khỏi "em không để ý".
+
+### 4.5 `System.exit()` trong Validator — L.P0013 ✅ ĐÃ SỬA
 
 Bài giảng 847 Part 5 nói rõ: "Thoát bằng cờ boolean, **không** `System.exit(0)`
 — `System.exit` giết JVM ngay, bước lưu tệp trước khi thoát không bao giờ chạy."
-`L.P0013/utils/Validator.java:81,85` gọi `System.exit(0)` khi stdin đóng.
-Lý do trong comment là hợp lý (EOF = không còn ai để hỏi), nhưng bài này **có
-ghi tệp**, nên đường thoát đó bỏ qua lưu. Nên đổi sang ném một exception
-"đã hết input" để `ui` bắt và thoát sạch.
+`L.P0013/utils/Validator.java` gọi `System.exit(0)` khi stdin đóng.
+
+**Và nó là lỗi thật, không phải lỗi lý thuyết.** Đo bằng cách chạy: nạp 3 xe →
+xoá 1 → cắt input → với mã cũ, `vehicles.txt` **vẫn còn 3 dòng**; với mã mới nó
+còn 2. Người dùng nhập mười cái xe rồi tắt cửa sổ là mất cả mười, và trên màn
+hình không có gì nói điều đó.
+
+Đã đổi sang một exception `Validator.EndOfInput` ném lên cho `ui` bắt. `quit()`
+cũ không dùng lại được ở đường này vì nó **hỏi** "lưu trước khi thoát?", mà hỏi
+thì cần đúng cái input vừa biến mất — nên nhánh EOF làm nửa còn làm được: lưu
+phần chưa lưu, không hỏi câu không ai trả lời được.
+
+**Ba lượt chạy cũ đều bấm Quit tử tế nên không lượt nào chạm tới đường này.** Đã
+thêm hai lượt: một lượt cắt input giữa chừng, và một lượt **chạy trong tiến
+trình khác** đọc lại tệp — cách duy nhất chứng minh đĩa đổi thật chứ không chỉ
+in ra chữ "Stored". Kiểm ngược: dựng lại đúng `nextLine()` cũ thì lượt mới đỏ
+với đúng câu *"hết input mà không lưu phần chưa lưu"*.
 
 ### 4.6 `bo` kiêm luôn đọc/ghi tệp — 15 bài (SRP)
 
@@ -328,16 +366,32 @@ nên hoặc sửa hình vẽ, hoặc nói rõ "gộp được khi `bo` chỉ ph�
 * Đọc lại cho đúng cụm **"in startup code"**: nó KHÔNG tự nó quyết định lớp nào,
   và P0055 là phản chứng nằm ngay trong cùng một đề (§3.4).
 
-## 7. Việc đề nghị làm tiếp (theo thứ tự ưu tiên)
+## 7. Việc đề nghị làm tiếp
 
-1. Nới quy tắc `Serializable` thành "khi có ghi tệp" (§4.3).
-2. ~~Cân nhắc thêm `controller` cho P0073, P0055, P0058~~ — **đã rút**. Đi kiểm
-   thì không bài nào thiếu controller; thứ thực sự lệch là **tên phương thức và
-   tên lớp không khớp đề**, đã sửa và đã có phép kiểm tự động chặn (§3.3).
-3. Thêm đoạn "vì sao entity ở bài này được phép in" vào walkthrough P0061 (§4.4).
-4. Đổi `System.exit()` trong `L.P0013/Validator` thành exception (§4.5).
-5. **Giữ lượt verify dưới locale `vi_VN` trong mọi quy trình** — đó là thứ duy
-   nhất bắt được lỗi §3.1, và nó là locale của máy chấm.
+**Hết.** Cả sáu mục của bản đầu đã đóng — bốn cái sửa được thì đã sửa, hai cái
+hoá ra là tôi đề nghị sai thì đã rút và ghi lại vì sao:
 
-~~Thêm controller cho P0080~~ — **đã rút**: phép đo cho thấy P0080 đúng là không
-cần (xem §4.1).
+| | Kết cục |
+|---|---|
+| §3.1 Locale | đã vá 21 chỗ, thêm chốt hai locale |
+| §3.2 Slide 1.1 chỉ sai project | đã trỏ sang P0056 |
+| §3.3 Tên không khớp đề | đã sửa 3 bài, thêm `khopchuky.py` |
+| §3.4 "in startup code" | đã đọc lại cho đúng, sửa 4 chỗ |
+| §4.1 Quy tắc tầng | đã phát biểu lại theo phép đo |
+| §4.2 `bo` in ra màn hình | đã gỡ tầng `bo` khỏi 3 bài |
+| §4.3 `Serializable` | đã nới quy tắc; mã giữ nguyên có chủ đích |
+| §4.4 entity in ở P0061 | đã thêm đoạn giải thích + câu trả lời vấn đáp |
+| §4.5 `System.exit()` | đã đổi sang exception, kèm 2 lượt chạy chứng minh |
+| §4.6 `bo` kiêm đọc/ghi tệp | **để ngỏ** — xem bên dưới |
+| ~~thêm controller cho P0080~~ | rút: phép đo cho thấy P0080 đúng |
+| ~~thêm controller cho P0073/P0055/P0058~~ | rút: lỗi thật là tên không khớp đề |
+
+Chỉ còn **§4.6** chưa động tới, và nó là chuyện *thẩm mỹ kiến trúc* chứ không
+phải lỗi: 15 lời giải để `bo` kiêm luôn đọc/ghi tệp, trong khi hình vẽ ở bài
+giảng 847 Part 12 tách riêng một `FileHelper`. Với quy mô LAB211 thì gộp được,
+nên hai đường đi được: hoặc sửa hình vẽ cho khớp mã, hoặc nói rõ "gộp được khi
+`bo` chỉ phục vụ một entity". Cần bạn chọn, vì đây là quyết định về thứ muốn
+dạy chứ không phải về thứ đang sai.
+
+Và một việc không bao giờ đóng: **giữ lượt verify dưới locale `vi_VN`** — đó là
+thứ duy nhất bắt được §3.1, và nó là locale của máy chấm.

@@ -19,6 +19,7 @@ import { useSession } from '../../auth/session';
 import { OfflineUnavailableError, swr } from '../../offline/cache';
 import { chuVi, fold, moNgoai, WEB } from '../chu';
 import { ChiTietMon, TheMon, type Mon } from './monHoc';
+import { useDich } from '../../i18n';
 
 /** Backend trả mảng trần; chấp cả dạng bọc để không vỡ nếu nó đổi. */
 function docDs(p: unknown): Mon[] {
@@ -29,6 +30,7 @@ function docDs(p: unknown): Mon[] {
 }
 
 export function KhoaHocPage() {
+  const { dich } = useDich();
   const { online } = useAppState();
   const { api, userId } = useSession();
 
@@ -86,7 +88,7 @@ export function KhoaHocPage() {
     <div className="ct-page ct-hv">
       <header className="ct-hv-dau">
         <div>
-          <h1><Library size={20} aria-hidden /> Khoá học</h1>
+          <h1><Library size={20} aria-hidden /> {dich('Khoá học')}</h1>
           <p className="ct-muted">
             {ds.length > 0
               ? `${ds.length} khoá · ${tongBai} bài — soạn riêng, học theo thứ tự`
@@ -94,7 +96,7 @@ export function KhoaHocPage() {
           </p>
         </div>
         <div className="ct-hv-dau-nut">
-          {cu && <span className="ct-gn-cu"><CloudOff size={13} aria-hidden /> bản đã lưu</span>}
+          {cu && <span className="ct-gn-cu"><CloudOff size={13} aria-hidden /> {dich('bản đã lưu')}</span>}
           <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void nap()}>
             <RefreshCw size={14} aria-hidden /> Tải lại
           </button>
@@ -109,11 +111,11 @@ export function KhoaHocPage() {
         <input
           value={tim}
           onChange={(e) => setTim(e.target.value)}
-          placeholder="Tìm khoá học…"
-          aria-label="Tìm khoá học"
+          placeholder={dich('Tìm khoá học…')}
+          aria-label={dich('Tìm khoá học')}
         />
         {tim && (
-          <button type="button" className="ct-linklike" onClick={() => setTim('')} aria-label="Xoá tìm kiếm">
+          <button type="button" className="ct-linklike" onClick={() => setTim('')} aria-label={dich('Xoá tìm kiếm')}>
             <X size={13} aria-hidden />
           </button>
         )}
@@ -123,10 +125,10 @@ export function KhoaHocPage() {
         <div className="ct-empty">
           <CloudOff size={26} aria-hidden className="ct-empty-icon" />
           <p>{loi}</p>
-          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void nap()}>Thử lại</button>
+          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void nap()}>{dich('Thử lại')}</button>
         </div>
       ) : dangTai && ds.length === 0 ? (
-        <p className="ct-muted">Đang tải…</p>
+        <p className="ct-muted">{dich('Đang tải…')}</p>
       ) : ketQua.length === 0 ? (
         <div className="ct-empty">
           <Library size={26} aria-hidden className="ct-empty-icon" />

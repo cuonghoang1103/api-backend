@@ -31,6 +31,7 @@ import { KhungVideo } from './KhungVideo';
  */
 import { CourseTutor } from '@/components/academy/CourseTutor';
 import { ChapterQuiz } from '@/components/academy/ChapterQuiz';
+import { useDich } from '../../i18n';
 
 export interface Mon {
   id: number;
@@ -89,6 +90,7 @@ export interface Bai {
 /* ── Thẻ một môn ─────────────────────────────────────────────────────────── */
 
 export function TheMon({ mon, onMo }: { mon: Mon; onMo: () => void }) {
+  const { dich } = useDich();
   const soBai = mon.totalLessons
     ?? (mon.sections ?? []).reduce((n, s) => n + (s.lessonCount ?? (s.lessons ?? []).length), 0);
 
@@ -106,7 +108,7 @@ export function TheMon({ mon, onMo }: { mon: Mon; onMo: () => void }) {
         <span className="ct-hv-the-so">
           {soBai > 0 && <span><PlayCircle size={12} aria-hidden /> {soBai} bài</span>}
           {mon.level && <span className="ct-mau-tag">{NHAN_BAC[mon.level] ?? mon.level}</span>}
-          {mon.isFree && <span className="ct-hv-free">Miễn phí</span>}
+          {mon.isFree && <span className="ct-hv-free">{dich('Miễn phí')}</span>}
         </span>
       </span>
     </button>
@@ -125,6 +127,7 @@ export function ChiTietMon({
      đang ở đâu trong cây. */
   nhanQuayLai?: string;
 }) {
+  const { dich } = useDich();
   const { online } = useAppState();
   const { api, userId } = useSession();
 
@@ -205,7 +208,7 @@ export function ChiTietMon({
         <button type="button" className="ct-btn ct-btn-ghost ct-gn-lui" onClick={onQuayLai}>
           <ArrowLeft size={14} aria-hidden /> {nhanQuayLai}
         </button>
-        <p className="ct-muted">Đang tải…</p>
+        <p className="ct-muted">{dich('Đang tải…')}</p>
       </div>
     );
   }
@@ -226,7 +229,7 @@ export function ChiTietMon({
           <p className="ct-hv-hero-nhan">
             {mon.courseCode && <span className="ct-hv-ma">{mon.courseCode}</span>}
             {mon.level && <span className="ct-mau-tag">{NHAN_BAC[mon.level] ?? mon.level}</span>}
-            {mon.isFree && <span className="ct-hv-free">Miễn phí</span>}
+            {mon.isFree && <span className="ct-hv-free">{dich('Miễn phí')}</span>}
           </p>
           <h1>{chuVi(mon.title)}</h1>
           {mon.shortDescription && <p className="ct-hv-hero-mo">{chuVi(mon.shortDescription)}</p>}
@@ -243,22 +246,22 @@ export function ChiTietMon({
 
       {hoc.length > 0 && (
         <section className="ct-hv-hoc">
-          <h2>Học xong bạn làm được gì</h2>
+          <h2>{dich('Học xong bạn làm được gì')}</h2>
           <ul>{hoc.map((x, i) => <li key={i}>{x}</li>)}</ul>
         </section>
       )}
 
       {canCo.length > 0 && (
         <section className="ct-hv-hoc">
-          <h2>Cần có trước</h2>
+          <h2>{dich('Cần có trước')}</h2>
           <ul>{canCo.map((x, i) => <li key={i}>{x}</li>)}</ul>
         </section>
       )}
 
       <section className="ct-hv-muc-ds">
-        <h2>Nội dung môn học</h2>
+        <h2>{dich('Nội dung môn học')}</h2>
         {muc.length === 0 ? (
-          <p className="ct-muted">Môn này chưa có bài học nào được đăng.</p>
+          <p className="ct-muted">{dich('Môn này chưa có bài học nào được đăng.')}</p>
         ) : muc.map((s) => {
           const mo = mucMo.includes(s.id);
           const bai = s.lessons ?? [];
@@ -293,7 +296,7 @@ export function ChiTietMon({
                             : b.videoUrl ? <PlayCircle size={13} aria-hidden />
                               : <FileText size={13} aria-hidden />}
                           <span className="ct-hv-bai-ten">{chuVi(b.title)}</span>
-                          {b.isFreePreview && <span className="ct-hv-free">xem thử</span>}
+                          {b.isFreePreview && <span className="ct-hv-free">{dich('xem thử')}</span>}
                         </button>
                       </li>
                     );
@@ -319,6 +322,7 @@ function DocBai({
   bai: Bai; mon: Mon; onQuayLai: () => void;
   truoc: Bai | null; sau: Bai | null; onDoiBai: (b: Bai) => void;
 }) {
+  const { dich } = useDich();
   const { api } = useSession();
 
   /*
@@ -434,7 +438,7 @@ function DocBai({
           <p className="ct-muted">
             Bài này chưa có nội dung chữ.{' '}
             <button type="button" className="ct-linklike" onClick={() => moNgoai(`${WEB}/courses/${mon.slug}`)}>
-              Mở trên web
+              {dich('Mở trên web')}
             </button>
           </p>
         )}
@@ -462,7 +466,7 @@ function DocBai({
           Bài kế bị khoá thì KHÔNG giấu nút: giấu đi là người dùng tưởng đã hết
           bài. Hiện ổ khoá và mở bản web, đúng cách danh sách bài đang làm. */}
       {(truoc || sau) && (
-        <nav className="ct-hv-chuyen" aria-label="Chuyển bài">
+        <nav className="ct-hv-chuyen" aria-label={dich('Chuyển bài')}>
           {truoc ? (
             <button
               type="button"
@@ -473,7 +477,7 @@ function DocBai({
             >
               <ArrowLeft size={15} aria-hidden />
               <span className="ct-hv-chuyen-chu">
-                <span className="ct-hv-chuyen-nhan">Bài trước</span>
+                <span className="ct-hv-chuyen-nhan">{dich('Bài trước')}</span>
                 <span className="ct-hv-chuyen-ten">
                   {baiKhoa(truoc) && <Lock size={11} aria-hidden />} {chuVi(truoc.title)}
                 </span>
@@ -490,7 +494,7 @@ function DocBai({
               title={chuVi(sau.title)}
             >
               <span className="ct-hv-chuyen-chu">
-                <span className="ct-hv-chuyen-nhan">Bài tiếp theo</span>
+                <span className="ct-hv-chuyen-nhan">{dich('Bài tiếp theo')}</span>
                 <span className="ct-hv-chuyen-ten">
                   {baiKhoa(sau) && <Lock size={11} aria-hidden />} {chuVi(sau.title)}
                 </span>

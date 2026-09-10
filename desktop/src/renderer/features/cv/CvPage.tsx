@@ -42,6 +42,7 @@ import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { OfflineUnavailableError, swr, writeCache } from '../../offline/cache';
 import { enqueue } from '../../offline/sync-queue';
+import { useDich } from '../../i18n';
 import {
   EMPTY_DRAFT,
   fetchProfile,
@@ -60,6 +61,7 @@ const AUTOSAVE_DELAY_MS = 800;
 type LocalState = 'chua-doi' | 'dang-luu' | 'da-luu-cuc-bo';
 
 export function CvPage() {
+  const { dich } = useDich();
   const { online } = useAppState();
   const { api, userId } = useSession();
 
@@ -183,7 +185,7 @@ export function CvPage() {
       <div className="ct-page">
         <div className="ct-empty">
           <Loader2 size={22} className="ct-spin" aria-hidden />
-          <p style={{ marginTop: 10 }}>Đang tải hồ sơ CV…</p>
+          <p style={{ marginTop: 10 }}>{dich('Đang tải hồ sơ CV…')}</p>
         </div>
       </div>
     );
@@ -194,12 +196,12 @@ export function CvPage() {
       <div className="ct-page">
         <div className="ct-empty">
           <CloudOff size={28} aria-hidden className="ct-empty-icon" />
-          <h1>Không mở được hồ sơ</h1>
+          <h1>{dich('Không mở được hồ sơ')}</h1>
           <p>{loadError}</p>
           <div className="ct-actions">
             <button type="button" className="ct-btn" onClick={() => void load()}>
               <RefreshCw size={14} aria-hidden />
-              Thử lại
+              {dich('Thử lại')}
             </button>
           </div>
         </div>
@@ -212,9 +214,9 @@ export function CvPage() {
       <div className="ct-panel">
         <div className="ct-page-head">
           <div>
-            <h1>Hồ sơ CV</h1>
+            <h1>{dich('Hồ sơ CV')}</h1>
             <p className="ct-muted" style={{ margin: 0 }}>
-              Hồ sơ gốc dùng để sinh các bản CV. Sửa được cả khi ngoại tuyến.
+              {dich('Hồ sơ gốc dùng để sinh các bản CV. Sửa được cả khi ngoại tuyến.')}
             </p>
           </div>
           <SaveIndicator state={localState} />
@@ -231,7 +233,7 @@ export function CvPage() {
         )}
 
         <section className="ct-section">
-          <h2>Thông tin liên hệ</h2>
+          <h2>{dich('Thông tin liên hệ')}</h2>
           <Field
             label="Họ và tên"
             value={draft.fullName}
@@ -267,7 +269,7 @@ export function CvPage() {
         </section>
 
         <section className="ct-section">
-          <h2>Liên kết</h2>
+          <h2>{dich('Liên kết')}</h2>
           {(['github', 'linkedin', 'portfolio', 'website'] as const).map((key) => (
             <Field
               key={key}
@@ -280,13 +282,13 @@ export function CvPage() {
         </section>
 
         <section className="ct-section">
-          <h2>Giới thiệu</h2>
+          <h2>{dich('Giới thiệu')}</h2>
           <textarea
             className="ct-textarea"
             rows={6}
             value={draft.summary}
             maxLength={8000}
-            placeholder="Vài dòng tóm tắt kinh nghiệm và thế mạnh của bạn…"
+            placeholder={dich('Vài dòng tóm tắt kinh nghiệm và thế mạnh của bạn…')}
             onChange={(event) => onChange({ summary: event.target.value })}
           />
           <div className="ct-field-help" style={{ textAlign: 'right' }}>
@@ -306,18 +308,19 @@ export function CvPage() {
  * là hứa một điều chưa xảy ra.
  */
 function SaveIndicator({ state }: { state: LocalState }) {
+  const { dich } = useDich();
   if (state === 'chua-doi') return null;
   return (
     <span className="ct-save-indicator" data-state={state}>
       {state === 'dang-luu' ? (
         <>
           <Loader2 size={13} className="ct-spin" aria-hidden />
-          Đang lưu…
+          {dich('Đang lưu…')}
         </>
       ) : (
         <>
           <Save size={13} aria-hidden />
-          Đã lưu trên máy
+          {dich('Đã lưu trên máy')}
         </>
       )}
     </span>

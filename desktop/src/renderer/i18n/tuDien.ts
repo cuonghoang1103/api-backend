@@ -584,4 +584,102 @@ export const TU_DIEN: Record<string, string> = {
     'The agent CAN drive the browser: open pages, read them after JavaScript runs, check the console. Clicks and typing still need your approval. Click to turn off. (Remembered for future tasks.)',
   'Bật cho agent MỞ TRANG WEB — YouTube, tài liệu, localhost — ngay cạnh bảng ghi, đọc nội dung sau khi JS chạy và xem lỗi console. Mọi thao tác bấm/gõ vẫn hỏi bạn. (Nhớ cho những việc sau.)':
     'Let the agent OPEN WEB PAGES — YouTube, docs, localhost — right beside the transcript, read them after JavaScript runs, and check the console. Clicks and typing still ask you first. (Remembered for future tasks.)',
+
+  // ══ Phòng thi ══════════════════════════════════════════
+  'Tìm đề thi': 'Search exams',
+  'Tìm theo mã môn (PRO192), tên đề hoặc kỳ…': 'Search by subject code (PRO192), exam name or term…',
+  'Lọc theo môn': 'Filter by subject',
+  'Lọc theo dạng đề': 'Filter by exam type',
+  'Không đề nào khớp bộ lọc đang chọn.': 'No exams match the current filters.',
+  'Mã đề': 'Exam code',
+  'Số câu': 'Questions',
+  'Thời gian làm': 'Time limit',
+  'Thang điểm': 'Marking scale',
+  'Đang mở đề…': 'Opening the exam…',
+  'Nộp rồi không sửa lại được.': 'Once submitted, it cannot be changed.',
+  'Nộp bài bằng file .zip': 'Submit as a .zip file',
+  'Nén cả thư mục bài làm rồi chọn file ở đây. Máy chủ giải nén và chấm.':
+    'Zip your whole solution folder and pick the file here. The server unpacks and marks it.',
+  'Ghi lại từ đầu': 'Record again',
+  'Chuyển bài': 'Switch question',
+  'Bài tiếp theo': 'Next question',
+  'Viết bài của bạn ở đây…': 'Write your answer here…',
+  'Viết mã của bạn ở đây…': 'Write your code here…',
+  'Đang làm tiếp lượt thi mở dở trước đó — bài đã làm vẫn còn.':
+    'Resuming your earlier attempt — everything you had done is still there.',
+  'Bấm “Vào thi” là bắt đầu tính giờ ({n} phút).': 'Pressing “Start” begins the {n}-minute timer.',
+  'Bấm “Vào thi” là bắt đầu tính giờ.': 'Pressing “Start” begins the timer.',
+  'Bài làm được lưu xuống máy sau mỗi thao tác, nên đóng app rồi mở lại vẫn còn — và bấm “Vào thi” lần nữa sẽ NỐI LẠI lượt đang dở chứ không đốt lượt mới.':
+    'Your work is saved locally after every action, so closing and reopening the app keeps it — and pressing “Start” again RESUMES the attempt in progress instead of burning a new one.',
+  'Vào': 'Enter',
+
+  // ══ Học viện · Khoá học ════════════════════════════════
+  'Tìm môn học': 'Search subjects',
+  'Tìm theo mã môn (LAB211) hoặc tên môn…': 'Search by subject code (LAB211) or name…',
+  'Không môn nào khớp. Thử mã môn, ví dụ `PRF192`.':
+    'No subjects match. Try a subject code, e.g. `PRF192`.',
+  'Kỳ này chưa có môn nào được đăng.': 'No subjects have been published for this term yet.',
+  'Môn này chưa có bài học nào được đăng.': 'No lessons have been published for this subject yet.',
+  'Nội dung môn học': 'Subject contents',
+  'Học xong bạn làm được gì': 'What you’ll be able to do',
+  'Cần có trước': 'Prerequisites',
+  'xem thử': 'preview',
+  'Miễn phí': 'Free',
+  'Tìm khoá học': 'Search courses',
+  'Tìm khoá học…': 'Search courses…',
+  'Lộ trình này chưa có mục nào.': 'This roadmap has no items yet.',
+  'Đóng video': 'Close the video',
+  'Đang phát trong app': 'Playing in the app',
+  'Điểm qua': 'Overview',
+
+  // ══ Code Lab ═══════════════════════════════════════════
+  'Tìm bài tập': 'Search exercises',
+  'Tìm bài tập trong toàn bộ kho…': 'Search every exercise in the library…',
+  'Không bài nào khớp. Thử từ khoá ngắn hơn, ví dụ `join`.':
+    'No exercises match. Try a shorter keyword, e.g. `join`.',
+  'Mã khởi đầu': 'Starter code',
+  'Đầu vào': 'Input',
+  'Đầu ra': 'Output',
+  'Ví dụ': 'Example',
+  'Ràng buộc': 'Constraints',
+  'Bài học và bài tập đã được kiểm bằng cách CHẠY THẬT':
+    'Lessons and exercises are verified by ACTUALLY RUNNING them',
+  'Đã kiểm': 'Verified',
+
+  // ══ CV Builder ═════════════════════════════════════════
+  'Hồ sơ CV': 'CV profile',
+  'Hồ sơ gốc dùng để sinh các bản CV. Sửa được cả khi ngoại tuyến.':
+    'The master profile your CVs are generated from. Editable offline too.',
+  'Đang tải hồ sơ CV…': 'Loading your CV profile…',
+  'Không mở được hồ sơ': 'Can’t open the profile',
+  'Thông tin liên hệ': 'Contact details',
+  'Vài dòng tóm tắt kinh nghiệm và thế mạnh của bạn…':
+    'A few lines summarising your experience and strengths…',
+  'Đang lưu…': 'Saving…',
+  'Đã lưu trên máy': 'Saved on this device',
+
+  // ══ Mẫu AI · Tech Trends · chung ═══════════════════════
+  'Tìm mẫu': 'Search templates',
+  'Loại mẫu': 'Template type',
+  'Danh mục': 'Category',
+  'Tác giả': 'Author',
+  'Giấy phép': 'Licence',
+  'Phiên bản': 'Version',
+  'Nội dung tệp': 'File contents',
+  'Xem trên GitHub': 'View on GitHub',
+  'Mở trên web': 'Open on the web',
+  'Liên kết': 'Links',
+  'Nhận xét': 'Reviews',
+  'Trạng thái': 'Status',
+  'Thời gian': 'Time',
+  'Xoá tìm kiếm': 'Clear the search',
+  'Danh sách bài': 'Article list',
+  'Đang tải bài…': 'Loading the article…',
+  'Không tải được danh sách': 'Couldn’t load the list',
+  'Danh sách là bản đã lưu.': 'Showing the saved copy of the list.',
+  'Bản đã lưu trên máy.': 'Saved copy on this device.',
+  'Bài đã mở được lưu lại để đọc khi không có mạng.':
+    'Articles you open are saved so you can read them offline.',
+  'Đọc được offline': 'Available offline',
+  'Mở bản đầy đủ trên web': 'Open the full version on the web',
 };

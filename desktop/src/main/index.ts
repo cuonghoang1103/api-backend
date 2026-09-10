@@ -136,9 +136,20 @@ async function bootstrap(): Promise<void> {
 
   const theoDoiTieuDiem = (w: BrowserWindow): void => {
     /* `isFocused()` chưa đổi kịp ngay trong tay xử lý của mấy sự kiện này
-       (thu nhỏ/khôi phục), nên hoãn một nhịp rồi mới hỏi lại. */
+       (thu nhỏ/khôi phục), nên hoãn một nhịp rồi mới hỏi lại.
+
+       ⚠️ Gọi `on` RIÊNG từng sự kiện, đừng lặp qua một mảng tên.
+       `BrowserWindow.on` là một chồng overload, mỗi tên một chữ ký — truyền
+       vào một UNION tên thì TypeScript thử khớp với overload CUỐI CÙNG và báo
+       `'closed' is not assignable to '"will-resize"'`, một câu chẳng nhắc gì
+       tới chuyện thật sự sai. `tsc -p tsconfig.json` KHÔNG thấy (nó không bao
+       `src/main`); chỉ `tsconfig.node.json` mới thấy — tức là chỉ CI thấy. */
     const sau = (): void => { setTimeout(capNhatRobot, 0); };
-    for (const sk of ['show', 'hide', 'minimize', 'restore', 'closed'] as const) w.on(sk, sau);
+    w.on('show', sau);
+    w.on('hide', sau);
+    w.on('minimize', sau);
+    w.on('restore', sau);
+    w.on('closed', sau);
   };
   theoDoiTieuDiem(mainWindow);
   // Cửa sổ chính vừa mở là đang có tiêu điểm — ẩn con nổi ngay, đừng để nó

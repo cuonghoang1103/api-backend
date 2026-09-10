@@ -29,6 +29,8 @@ import { useSession } from '../../auth/session';
 import { OfflineUnavailableError, swr } from '../../offline/cache';
 import { bocDauKiem, chuVi, moNgoai, NHAN_BAC, WEB } from '../chu';
 import '../academy/noiDungBai';
+import { useDich } from '../../i18n';
+import { Chu } from '../../i18n/Chu';
 
 interface Track {
   id: number;
@@ -110,6 +112,7 @@ const sach = (html: string | null | undefined): string =>
 const viTruoc = (vi?: string | null, en?: string | null): string => sach(vi || en);
 
 export function CodeLabPage() {
+  const { dich } = useDich();
   const { online } = useAppState();
   const { api, userId } = useSession();
 
@@ -201,7 +204,7 @@ export function CodeLabPage() {
           </p>
         </div>
         <div className="ct-hv-dau-nut">
-          {cu && <span className="ct-gn-cu"><CloudOff size={13} aria-hidden /> bản đã lưu</span>}
+          {cu && <span className="ct-gn-cu"><CloudOff size={13} aria-hidden /> {dich('bản đã lưu')}</span>}
           <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void nap()}>
             <RefreshCw size={14} aria-hidden /> Tải lại
           </button>
@@ -226,11 +229,11 @@ export function CodeLabPage() {
         <input
           value={tim}
           onChange={(e) => setTim(e.target.value)}
-          placeholder="Tìm bài tập trong toàn bộ kho…"
-          aria-label="Tìm bài tập"
+          placeholder={dich('Tìm bài tập trong toàn bộ kho…')}
+          aria-label={dich('Tìm bài tập')}
         />
         {tim && (
-          <button type="button" className="ct-linklike" onClick={() => setTim('')} aria-label="Xoá tìm kiếm">
+          <button type="button" className="ct-linklike" onClick={() => setTim('')} aria-label={dich('Xoá tìm kiếm')}>
             <X size={13} aria-hidden />
           </button>
         )}
@@ -240,7 +243,7 @@ export function CodeLabPage() {
         <div className="ct-empty">
           <CloudOff size={26} aria-hidden className="ct-empty-icon" />
           <p>{loi}</p>
-          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void nap()}>Thử lại</button>
+          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void nap()}>{dich('Thử lại')}</button>
         </div>
       ) : ketQua !== null ? (
         <section>
@@ -250,7 +253,7 @@ export function CodeLabPage() {
           {ketQua.length === 0 && !dangTim ? (
             <div className="ct-empty">
               <Search size={26} aria-hidden className="ct-empty-icon" />
-              <p>Không bài nào khớp. Thử từ khoá ngắn hơn, ví dụ <code>join</code>.</p>
+              <p><Chu cau="Không bài nào khớp. Thử từ khoá ngắn hơn, ví dụ `join`." /></p>
             </div>
           ) : (
             <ul className="ct-cl-bai-ds">
@@ -259,7 +262,7 @@ export function CodeLabPage() {
           )}
         </section>
       ) : dangTai && nhom.length === 0 ? (
-        <p className="ct-muted">Đang tải…</p>
+        <p className="ct-muted">{dich('Đang tải…')}</p>
       ) : (
         <div className="ct-hv-ky-ds">
           {nhom.map((g) => {
@@ -288,7 +291,7 @@ export function CodeLabPage() {
                             <span className="ct-mau-cham" style={{ '--mau-sac': t.color ?? g.color ?? 'var(--ct-accent)' } as React.CSSProperties} aria-hidden />
                             <span className="ct-cl-track-ten">{t.name}</span>
                             {daKiem && (
-                              <span className="ct-cl-kiem" title="Bài học và bài tập đã được kiểm bằng cách CHẠY THẬT">
+                              <span className="ct-cl-kiem" title={dich('Bài học và bài tập đã được kiểm bằng cách CHẠY THẬT')}>
                                 <CheckCircle2 size={11} aria-hidden /> Đã kiểm
                               </span>
                             )}
@@ -340,6 +343,7 @@ function DongBai({ bai, onMo }: { bai: BaiTom; onMo: () => void }) {
 function ChiTietTrack({
   slug, onQuayLai, onMoBai,
 }: { slug: string; onQuayLai: () => void; onMoBai: (slug: string) => void }) {
+  const { dich } = useDich();
   const { online } = useAppState();
   const { api, userId } = useSession();
   const [tr, setTr] = useState<TrackDay | null>(null);
@@ -388,7 +392,7 @@ function ChiTietTrack({
         <button type="button" className="ct-btn ct-btn-ghost ct-gn-lui" onClick={onQuayLai}>
           <ArrowLeft size={14} aria-hidden /> Code Lab
         </button>
-        <p className="ct-muted">Đang tải…</p>
+        <p className="ct-muted">{dich('Đang tải…')}</p>
       </div>
     );
   }
@@ -407,7 +411,7 @@ function ChiTietTrack({
           {tr.group?.name && <span className="ct-mau-tag">{tr.group.name}</span>}
           {tr.language && <span className="ct-mau-tag">{tr.language}</span>}
           {tr.level && <span className="ct-mau-tag">{NHAN_BAC[tr.level] ?? tr.level}</span>}
-          {daKiem && <span className="ct-cl-kiem"><CheckCircle2 size={11} aria-hidden /> Đã kiểm</span>}
+          {daKiem && <span className="ct-cl-kiem"><CheckCircle2 size={11} aria-hidden /> {dich('Đã kiểm')}</span>}
         </p>
         <h1>{tr.name}</h1>
         {chu && <p className="ct-hv-hero-mo">{chu}</p>}
@@ -428,7 +432,7 @@ function ChiTietTrack({
       </header>
 
       {mod.length === 0 ? (
-        <p className="ct-muted">Lộ trình này chưa có mục nào.</p>
+        <p className="ct-muted">{dich('Lộ trình này chưa có mục nào.')}</p>
       ) : mod.map((m) => {
         const b = mo.includes(m.id);
         const ds = m.exercises ?? [];
@@ -459,6 +463,7 @@ function ChiTietTrack({
 /* ── Một bài tập ─────────────────────────────────────────────────────────── */
 
 function ChiTietBai({ slug, onQuayLai }: { slug: string; onQuayLai: () => void }) {
+  const { dich } = useDich();
   const { online } = useAppState();
   const { api, userId } = useSession();
   const [b, setB] = useState<BaiDay | null>(null);
@@ -505,7 +510,7 @@ function ChiTietBai({ slug, onQuayLai }: { slug: string; onQuayLai: () => void }
         <button type="button" className="ct-btn ct-btn-ghost ct-gn-lui" onClick={onQuayLai}>
           <ArrowLeft size={14} aria-hidden /> Quay lại
         </button>
-        <p className="ct-muted">Đang tải…</p>
+        <p className="ct-muted">{dich('Đang tải…')}</p>
       </div>
     );
   }
@@ -538,18 +543,18 @@ function ChiTietBai({ slug, onQuayLai }: { slug: string; onQuayLai: () => void }
 
       {(b.inputSpec || b.outputSpec || b.constraints) && (
         <dl className="ct-mau-tin ct-cl-dac">
-          {b.inputSpec && <><dt>Đầu vào</dt><dd>{b.inputSpec}</dd></>}
-          {b.outputSpec && <><dt>Đầu ra</dt><dd>{b.outputSpec}</dd></>}
-          {b.constraints && <><dt>Ràng buộc</dt><dd>{b.constraints}</dd></>}
+          {b.inputSpec && <><dt>{dich('Đầu vào')}</dt><dd>{b.inputSpec}</dd></>}
+          {b.outputSpec && <><dt>{dich('Đầu ra')}</dt><dd>{b.outputSpec}</dd></>}
+          {b.constraints && <><dt>{dich('Ràng buộc')}</dt><dd>{b.constraints}</dd></>}
         </dl>
       )}
 
       {viDu.length > 0 && (
         <section className="ct-cl-vidu">
-          <h2>Ví dụ</h2>
+          <h2>{dich('Ví dụ')}</h2>
           {viDu.map((v, i) => (
             <div key={i} className="ct-cl-vidu-o">
-              {v.input && <><p className="ct-cl-nhan">Vào</p><pre>{v.input}</pre></>}
+              {v.input && <><p className="ct-cl-nhan">{dich('Vào')}</p><pre>{v.input}</pre></>}
               {v.output && <><p className="ct-cl-nhan">Ra</p><pre>{v.output}</pre></>}
               {v.explanation && <p className="ct-muted">{v.explanation}</p>}
             </div>
@@ -559,7 +564,7 @@ function ChiTietBai({ slug, onQuayLai }: { slug: string; onQuayLai: () => void }
 
       {(b.starterCodeJson ?? []).length > 0 && (
         <section className="ct-cl-ma">
-          <h2><Code2 size={15} aria-hidden /> Mã khởi đầu</h2>
+          <h2><Code2 size={15} aria-hidden /> {dich('Mã khởi đầu')}</h2>
           {b.starterCodeJson!.map((m, i) => <KhoiMa key={i} ma={m} />)}
         </section>
       )}

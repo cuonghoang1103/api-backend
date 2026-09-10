@@ -19,6 +19,7 @@ import { ArrowLeft, CloudOff, ExternalLink, RefreshCw } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { OfflineUnavailableError, readCache, swr } from '../../offline/cache';
+import { useDich } from '../../i18n';
 
 interface ArticleSummary {
   id: number;
@@ -46,6 +47,7 @@ function asList(payload: unknown): ArticleSummary[] {
 }
 
 export function TechTrendsPage() {
+  const { dich } = useDich();
   const { online } = useAppState();
   const { api, userId } = useSession();
 
@@ -131,7 +133,7 @@ export function TechTrendsPage() {
         <div>
           <h1 style={{ margin: 0, fontSize: 19 }}>Tech Trends</h1>
           <p className="ct-muted" style={{ margin: 0 }}>
-            Bài đã mở được lưu lại để đọc khi không có mạng.
+            {dich('Bài đã mở được lưu lại để đọc khi không có mạng.')}
           </p>
         </div>
         <button
@@ -141,7 +143,7 @@ export function TechTrendsPage() {
           disabled={!online}
         >
           <RefreshCw size={14} aria-hidden />
-          Làm mới
+          {dich('Làm mới')}
         </button>
       </div>
 
@@ -149,7 +151,7 @@ export function TechTrendsPage() {
         <div className="ct-notice" data-tone="warn">
           <CloudOff size={15} aria-hidden />
           <span>
-            Danh sách là bản đã lưu.
+            {dich('Danh sách là bản đã lưu.')}
             {online ? ' Đang làm mới…' : ' Sẽ cập nhật khi có mạng.'}
           </span>
         </div>
@@ -158,12 +160,12 @@ export function TechTrendsPage() {
       {listError && (
         <div className="ct-empty">
           <CloudOff size={28} aria-hidden className="ct-empty-icon" />
-          <h1>Không tải được danh sách</h1>
+          <h1>{dich('Không tải được danh sách')}</h1>
           <p>{listError}</p>
         </div>
       )}
 
-      {loading && articles.length === 0 && !listError && <p>Đang tải…</p>}
+      {loading && articles.length === 0 && !listError && <p>{dich('Đang tải…')}</p>}
 
       {articles.length > 0 && (
         <ul className="ct-article-list">
@@ -191,7 +193,7 @@ export function TechTrendsPage() {
                   <div className="ct-article-meta">
                     {article.category?.name && <span>{article.category.name}</span>}
                     {article.publishedAt && <span>{formatDate(article.publishedAt)}</span>}
-                    {readable && <span className="ct-offline-tag">Đọc được offline</span>}
+                    {readable && <span className="ct-offline-tag">{dich('Đọc được offline')}</span>}
                   </div>
                 </button>
               </li>
@@ -204,6 +206,7 @@ export function TechTrendsPage() {
 }
 
 function ArticleView({ articleId, onBack }: { articleId: number; onBack: () => void }) {
+  const { dich } = useDich();
   const { online } = useAppState();
   const { api, userId } = useSession();
   const [article, setArticle] = useState<ArticleDetail | null>(null);
@@ -241,7 +244,7 @@ function ArticleView({ articleId, onBack }: { articleId: number; onBack: () => v
     <div className="ct-page" style={{ maxWidth: 760 }}>
       <button type="button" className="ct-back" onClick={onBack}>
         <ArrowLeft size={15} aria-hidden />
-        Danh sách bài
+        {dich('Danh sách bài')}
       </button>
 
       {error && (
@@ -262,7 +265,7 @@ function ArticleView({ articleId, onBack }: { articleId: number; onBack: () => v
           {isStale && !online && (
             <div className="ct-notice" data-tone="warn">
               <CloudOff size={15} aria-hidden />
-              <span>Bản đã lưu trên máy.</span>
+              <span>{dich('Bản đã lưu trên máy.')}</span>
             </div>
           )}
 
@@ -289,13 +292,13 @@ function ArticleView({ articleId, onBack }: { articleId: number; onBack: () => v
               }
             >
               <ExternalLink size={14} aria-hidden />
-              Mở bản đầy đủ trên web
+              {dich('Mở bản đầy đủ trên web')}
             </button>
           </div>
         </article>
       )}
 
-      {!article && !error && <p>Đang tải bài…</p>}
+      {!article && !error && <p>{dich('Đang tải bài…')}</p>}
     </div>
   );
 }

@@ -35,6 +35,7 @@ import templatesJson from '@/data/ai-templates/templates.json';
 import pluginsJson from '@/data/ai-templates/plugins.json';
 import type { NoiDungMau } from '@shared/ipc';
 import { ChuAgent } from '../chat/markdown';
+import { useDich } from '../../i18n';
 
 /** Đúng phần bản ghi trang này đọc tới. */
 interface BanGhiMau {
@@ -94,6 +95,7 @@ function fold(text: string): string {
 }
 
 export function MauAIPage() {
+  const { dich } = useDich();
   const [iKho, setIKho] = useState(0);
   const [tim, setTim] = useState('');
   const [nhomChon, setNhomChon] = useState<string | null>(null);
@@ -178,7 +180,7 @@ export function MauAIPage() {
     <div className="ct-page ct-mau">
       <header className="ct-mau-dau">
         <div>
-          <h1>Mẫu AI</h1>
+          <h1>{dich('Mẫu AI')}</h1>
           <p className="ct-muted">
             {TONG.toLocaleString('vi-VN')} mẫu cho Claude Code — tra cứu được cả khi mất mạng.
           </p>
@@ -197,7 +199,7 @@ export function MauAIPage() {
         </div>
       </header>
 
-      <div className="ct-mau-loai" role="tablist" aria-label="Loại mẫu">
+      <div className="ct-mau-loai" role="tablist" aria-label={dich('Loại mẫu')}>
         {KHO.map((k, i) => (
           <button
             key={k.meta.slug}
@@ -219,7 +221,7 @@ export function MauAIPage() {
 
       <div className="ct-mau-than">
         <aside className="ct-mau-nhom">
-          <p className="ct-mau-nhom-nhan">Danh mục</p>
+          <p className="ct-mau-nhom-nhan">{dich('Danh mục')}</p>
           <button type="button" data-active={nhomChon === null} onClick={() => setNhomChon(null)}>
             Tất cả <span>{kho.ds.length}</span>
           </button>
@@ -243,10 +245,10 @@ export function MauAIPage() {
               value={tim}
               onChange={(e) => setTim(e.target.value)}
               placeholder={`Tìm trong ${kho.ds.length.toLocaleString('vi-VN')} ${kho.meta.label}…`}
-              aria-label="Tìm mẫu"
+              aria-label={dich('Tìm mẫu')}
             />
             {tim && (
-              <button type="button" className="ct-linklike" onClick={() => setTim('')} aria-label="Xoá tìm kiếm">
+              <button type="button" className="ct-linklike" onClick={() => setTim('')} aria-label={dich('Xoá tìm kiếm')}>
                 <X size={13} aria-hidden />
               </button>
             )}
@@ -310,7 +312,7 @@ export function MauAIPage() {
             <div className="ct-mau-chitiet-dau">
               <span className="ct-mau-cham" style={{ '--mau-sac': kho.meta.color } as React.CSSProperties} aria-hidden />
               <h2>{prettyName(chon.name)}</h2>
-              <button type="button" className="ct-trk-action" onClick={() => setChon(null)} aria-label="Đóng">
+              <button type="button" className="ct-trk-action" onClick={() => setChon(null)} aria-label={dich('Đóng')}>
                 <X size={15} aria-hidden />
               </button>
             </div>
@@ -335,10 +337,10 @@ export function MauAIPage() {
             </div>
 
             <dl className="ct-mau-tin">
-              <dt>Danh mục</dt><dd>{categoryLabel(chon.category)}</dd>
-              {chon.author && <><dt>Tác giả</dt><dd>{chon.author}</dd></>}
-              {chon.version && <><dt>Phiên bản</dt><dd>{chon.version}</dd></>}
-              {chon.license && <><dt>Giấy phép</dt><dd>{chon.license}</dd></>}
+              <dt>{dich('Danh mục')}</dt><dd>{categoryLabel(chon.category)}</dd>
+              {chon.author && <><dt>{dich('Tác giả')}</dt><dd>{chon.author}</dd></>}
+              {chon.version && <><dt>{dich('Phiên bản')}</dt><dd>{chon.version}</dd></>}
+              {chon.license && <><dt>{dich('Giấy phép')}</dt><dd>{chon.license}</dd></>}
               {typeof chon.stars === 'number' && <><dt>Sao GitHub</dt><dd>{chon.stars.toLocaleString('vi-VN')}</dd></>}
             </dl>
 
@@ -360,13 +362,13 @@ export function MauAIPage() {
                     ? 'Loại này không có tệp nguồn riêng — nội dung nằm trong chính gói cài.'
                     : 'Không tải được nội dung (mất mạng hoặc repo gốc đã đổi tệp).'}{' '}
                   <button type="button" className="ct-linklike" onClick={() => moNgoai(SOURCE_REPO)}>
-                    Xem trên GitHub
+                    {dich('Xem trên GitHub')}
                   </button>
                 </p>
               ) : (
                 <>
                   <div className="ct-mau-noidung-thanh">
-                    <span className="ct-muted">Nội dung tệp</span>
+                    <span className="ct-muted">{dich('Nội dung tệp')}</span>
                     <button type="button" className="ct-linklike" onClick={() => chep(noiDung.text, 'tep')}>
                       {daChep === 'tep' ? 'Đã chép' : 'Chép tệp'}
                     </button>

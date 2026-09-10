@@ -42,7 +42,7 @@ export function ThanhDangLam({
   /** Bước thứ mấy trên tổng bao nhiêu. Báo trước khi chạm trần. */
   buoc?: { nay: number; tran: number };
 }) {
-  const { dich } = useDich();
+  const { dich, dichP } = useDich();
   const [giay, datGiay] = useState(0);
 
   /* Đếm lại từ 0 mỗi khi CÂU đổi: mốc có nghĩa là "giai đoạn này", và nó tự
@@ -62,11 +62,14 @@ export function ThanhDangLam({
 
       {buoc && (
         <span className="ct-danglam-buoc" data-sap-het={buoc.tran - buoc.nay <= 1}>
-          bước {buoc.nay}/{buoc.tran}
+          {dichP('bước {nay}/{tran}', { nay: buoc.nay, tran: buoc.tran })}
         </span>
       )}
 
-      <span className="ct-danglam-chu">{viec.chu}</span>
+      {/* ⚠️ PHẢI qua `dich()`. `viecDangLam` là hàm THUẦN, nó trả câu tiếng
+          Việt — dựng thẳng ra màn hình thì đây là dòng chữ người dùng nhìn
+          nhiều nhất trong AI Code mà lại không bao giờ đổi theo ngôn ngữ. */}
+      <span className="ct-danglam-chu">{dich(viec.chu)}</span>
 
       {/* Số giây chỉ hiện sau 3s: việc nhanh mà kèm một con số nhảy liên tục
           thì nó thành thứ gây lo, không phải thứ trấn an. */}

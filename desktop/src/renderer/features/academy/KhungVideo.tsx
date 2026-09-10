@@ -43,6 +43,7 @@
  */
 import { useCallback, useEffect, useRef } from 'react';
 import { ExternalLink, X } from 'lucide-react';
+import { useDich } from '../../i18n';
 
 /** Mã video từ mọi dạng liên kết YouTube thường gặp. */
 export function maYouTube(url: string | null | undefined): string | null {
@@ -56,6 +57,7 @@ export function maYouTube(url: string | null | undefined): string | null {
 export function KhungVideo({
   url, onDong,
 }: { url: string; onDong: () => void }) {
+  const { dich } = useDich();
   const oRef = useRef<HTMLDivElement>(null);
   const daMoRef = useRef(false);
 
@@ -154,11 +156,11 @@ function gocSite(): string {
   return (
     <div className="ct-hv-video">
       <div className="ct-hv-video-thanh">
-        <span className="ct-muted">Đang phát trong app</span>
+        <span className="ct-muted">{dich('Đang phát trong app')}</span>
         <button type="button" className="ct-linklike" onClick={() => void window.cuongthai?.app.openExternal(url)}>
           <ExternalLink size={12} aria-hidden /> Mở YouTube
         </button>
-        <button type="button" className="ct-trk-action" onClick={onDong} aria-label="Đóng video">
+        <button type="button" className="ct-trk-action" onClick={onDong} aria-label={dich('Đóng video')}>
           <X size={15} aria-hidden />
         </button>
       </div>

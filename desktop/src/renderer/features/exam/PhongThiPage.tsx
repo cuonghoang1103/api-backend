@@ -26,6 +26,7 @@ import { useSession } from '../../auth/session';
 import { OfflineUnavailableError, swr } from '../../offline/cache';
 import { chuVi, fold, moNgoai, WEB } from '../chu';
 import { LamBai } from './LamBai';
+import { useDich } from '../../i18n';
 
 interface De {
   id: number;
@@ -53,6 +54,7 @@ function docDs(p: unknown): De[] {
 }
 
 export function PhongThiPage() {
+  const { dich } = useDich();
   const { online } = useAppState();
   const { api, userId } = useSession();
 
@@ -126,7 +128,7 @@ export function PhongThiPage() {
     <div className="ct-page ct-pt">
       <header className="ct-hv-dau">
         <div>
-          <h1><ClipboardList size={20} aria-hidden /> Phòng thi</h1>
+          <h1><ClipboardList size={20} aria-hidden /> {dich('Phòng thi')}</h1>
           <p className="ct-muted">
             {ds.length > 0
               ? `${ds.length} đề · ${soFE} trắc nghiệm · ${soPE} thực hành`
@@ -134,7 +136,7 @@ export function PhongThiPage() {
           </p>
         </div>
         <div className="ct-hv-dau-nut">
-          {cu && <span className="ct-gn-cu"><CloudOff size={13} aria-hidden /> bản đã lưu</span>}
+          {cu && <span className="ct-gn-cu"><CloudOff size={13} aria-hidden /> {dich('bản đã lưu')}</span>}
           <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void nap()}>
             <RefreshCw size={14} aria-hidden /> Tải lại
           </button>
@@ -150,18 +152,18 @@ export function PhongThiPage() {
           <input
             value={tim}
             onChange={(e) => setTim(e.target.value)}
-            placeholder="Tìm theo mã môn (PRO192), tên đề hoặc kỳ…"
-            aria-label="Tìm đề thi"
+            placeholder={dich('Tìm theo mã môn (PRO192), tên đề hoặc kỳ…')}
+            aria-label={dich('Tìm đề thi')}
           />
           {tim && (
-            <button type="button" className="ct-linklike" onClick={() => setTim('')} aria-label="Xoá tìm kiếm">
+            <button type="button" className="ct-linklike" onClick={() => setTim('')} aria-label={dich('Xoá tìm kiếm')}>
               <X size={13} aria-hidden />
             </button>
           )}
         </label>
 
-        <div className="ct-gn-chip" role="group" aria-label="Lọc theo dạng đề">
-          <button type="button" data-active={dang === null} onClick={() => setDang(null)}>Tất cả</button>
+        <div className="ct-gn-chip" role="group" aria-label={dich('Lọc theo dạng đề')}>
+          <button type="button" data-active={dang === null} onClick={() => setDang(null)}>{dich('Tất cả')}</button>
           {(['FE', 'PE'] as const).map((k) => (
             <button key={k} type="button" data-active={dang === k} onClick={() => setDang(dang === k ? null : k)}>
               {NHAN_DANG[k]}
@@ -171,7 +173,7 @@ export function PhongThiPage() {
         </div>
 
         {dsMon.length > 0 && (
-          <div className="ct-gn-chip" role="group" aria-label="Lọc theo môn">
+          <div className="ct-gn-chip" role="group" aria-label={dich('Lọc theo môn')}>
             {dsMon.map(([ma, so]) => (
               <button key={ma} type="button" data-active={mon === ma} onClick={() => setMon(mon === ma ? null : ma)}>
                 {ma}
@@ -186,20 +188,20 @@ export function PhongThiPage() {
         <div className="ct-empty">
           <CloudOff size={26} aria-hidden className="ct-empty-icon" />
           <p>{loi}</p>
-          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void nap()}>Thử lại</button>
+          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void nap()}>{dich('Thử lại')}</button>
         </div>
       ) : dangTai && ds.length === 0 ? (
-        <p className="ct-muted">Đang tải…</p>
+        <p className="ct-muted">{dich('Đang tải…')}</p>
       ) : ketQua.length === 0 ? (
         <div className="ct-empty">
           <Search size={26} aria-hidden className="ct-empty-icon" />
-          <p>Không đề nào khớp bộ lọc đang chọn.</p>
+          <p>{dich('Không đề nào khớp bộ lọc đang chọn.')}</p>
           <button
             type="button"
             className="ct-btn ct-btn-ghost"
             onClick={() => { setTim(''); setDang(null); setMon(null); }}
           >
-            Bỏ hết bộ lọc
+            {dich('Bỏ hết bộ lọc')}
           </button>
         </div>
       ) : (
@@ -237,6 +239,7 @@ function TheDe({ de, onMo }: { de: De; onMo: () => void }) {
 }
 
 function ChiTietDe({ de, onQuayLai }: { de: De; onQuayLai: () => void }) {
+  const { dich, dichP } = useDich();
   const [dangThi, datDangThi] = useState(false);
   if (dangThi) {
     return <LamBai examId={de.id} tenDe={de.title} onThoat={() => datDangThi(false)} />;
@@ -258,11 +261,11 @@ function ChiTietDe({ de, onQuayLai }: { de: De; onQuayLai: () => void }) {
       {de.description && <p className="ct-hv-hero-mo">{chuVi(de.description)}</p>}
 
       <dl className="ct-mau-tin ct-pt-tin">
-        {!!de.questionCount && <><dt>Số câu</dt><dd>{de.questionCount}</dd></>}
-        {!!de.durationMinutes && <><dt>Thời gian</dt><dd>{de.durationMinutes} phút</dd></>}
-        {de.totalPoints != null && <><dt>Thang điểm</dt><dd>{de.totalPoints}</dd></>}
-        {de.passMark != null && <><dt>Điểm qua</dt><dd>{de.passMark}</dd></>}
-        {de.code && <><dt>Mã đề</dt><dd>{de.code}</dd></>}
+        {!!de.questionCount && <><dt>{dich('Số câu')}</dt><dd>{de.questionCount}</dd></>}
+        {!!de.durationMinutes && <><dt>{dich('Thời gian')}</dt><dd>{de.durationMinutes} phút</dd></>}
+        {de.totalPoints != null && <><dt>{dich('Thang điểm')}</dt><dd>{de.totalPoints}</dd></>}
+        {de.passMark != null && <><dt>{dich('Điểm qua')}</dt><dd>{de.passMark}</dd></>}
+        {de.code && <><dt>{dich('Mã đề')}</dt><dd>{de.code}</dd></>}
       </dl>
 
       <div className="ct-hv-bai-nut">
@@ -282,9 +285,13 @@ function ChiTietDe({ de, onQuayLai }: { de: De; onQuayLai: () => void }) {
       {/* Nói rõ luật chơi TRƯỚC khi họ bấm — mất 60 phút vì không biết là lỗi
           của màn hình này, không phải của người dùng. */}
       <p className="ct-muted ct-pt-luuy">
-        Bấm “Vào thi” là bắt đầu tính giờ{de.durationMinutes ? ` (${de.durationMinutes} phút)` : ''}.
-        Bài làm được lưu xuống máy sau mỗi thao tác, nên đóng app rồi mở lại vẫn còn —
-        và bấm “Vào thi” lần nữa sẽ NỐI LẠI lượt đang dở chứ không đốt lượt mới.
+        {/* Số phút là CHỖ THAY, không phải mẩu ghép — tiếng Anh đặt nó ở vị
+            trí khác trong câu. */}
+        {de.durationMinutes
+          ? dichP('Bấm “Vào thi” là bắt đầu tính giờ ({n} phút).', { n: de.durationMinutes })
+          : dich('Bấm “Vào thi” là bắt đầu tính giờ.')}
+        {' '}
+        {dich('Bài làm được lưu xuống máy sau mỗi thao tác, nên đóng app rồi mở lại vẫn còn — và bấm “Vào thi” lần nữa sẽ NỐI LẠI lượt đang dở chứ không đốt lượt mới.')}
         {de.kind === 'PE' && de.peType === 'CODE' && ' Đề này nộp bằng file .zip.'}
         {de.kind === 'PE' && de.peType === 'SPEAK' && ' Đề này ghi âm trực tiếp trong app.'}
       </p>

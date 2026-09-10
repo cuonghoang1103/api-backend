@@ -32,6 +32,8 @@ import { useSession } from '../../auth/session';
 import { OfflineUnavailableError, swr } from '../../offline/cache';
 import { chuVi, fold, moNgoai, WEB } from '../chu';
 import { ChiTietMon, TheMon, type Mon } from './monHoc';
+import { useDich } from '../../i18n';
+import { Chu } from '../../i18n/Chu';
 
 interface Ky {
   id: number;
@@ -42,6 +44,7 @@ interface Ky {
 }
 
 export function HocVienPage() {
+  const { dich } = useDich();
   const { online } = useAppState();
   const { api, userId } = useSession();
 
@@ -139,7 +142,7 @@ export function HocVienPage() {
     <div className="ct-page ct-hv">
       <header className="ct-hv-dau">
         <div>
-          <h1><GraduationCap size={20} aria-hidden /> Học viện</h1>
+          <h1><GraduationCap size={20} aria-hidden /> {dich('Học viện')}</h1>
           <p className="ct-muted">
             {ky.length > 0
               ? `${ky.length} kỳ · ${tongMon} môn — chương trình FPTU`
@@ -147,7 +150,7 @@ export function HocVienPage() {
           </p>
         </div>
         <div className="ct-hv-dau-nut">
-          {cu && <span className="ct-gn-cu"><CloudOff size={13} aria-hidden /> bản đã lưu</span>}
+          {cu && <span className="ct-gn-cu"><CloudOff size={13} aria-hidden /> {dich('bản đã lưu')}</span>}
           <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void nap()}>
             <RefreshCw size={14} aria-hidden /> Tải lại
           </button>
@@ -162,11 +165,11 @@ export function HocVienPage() {
         <input
           value={tim}
           onChange={(e) => setTim(e.target.value)}
-          placeholder="Tìm theo mã môn (LAB211) hoặc tên môn…"
-          aria-label="Tìm môn học"
+          placeholder={dich('Tìm theo mã môn (LAB211) hoặc tên môn…')}
+          aria-label={dich('Tìm môn học')}
         />
         {tim && (
-          <button type="button" className="ct-linklike" onClick={() => setTim('')} aria-label="Xoá tìm kiếm">
+          <button type="button" className="ct-linklike" onClick={() => setTim('')} aria-label={dich('Xoá tìm kiếm')}>
             <X size={13} aria-hidden />
           </button>
         )}
@@ -176,17 +179,17 @@ export function HocVienPage() {
         <div className="ct-empty">
           <CloudOff size={26} aria-hidden className="ct-empty-icon" />
           <p>{loi}</p>
-          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void nap()}>Thử lại</button>
+          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void nap()}>{dich('Thử lại')}</button>
         </div>
       ) : dangTai && ky.length === 0 ? (
-        <p className="ct-muted">Đang tải…</p>
+        <p className="ct-muted">{dich('Đang tải…')}</p>
       ) : tim.trim() ? (
         <section className="ct-hv-kq">
           <p className="ct-hv-sokq">{ketQua.length} môn khớp “{tim.trim()}”</p>
           {ketQua.length === 0 ? (
             <div className="ct-empty">
               <Search size={26} aria-hidden className="ct-empty-icon" />
-              <p>Không môn nào khớp. Thử mã môn, ví dụ <code>PRF192</code>.</p>
+              <p><Chu cau="Không môn nào khớp. Thử mã môn, ví dụ `PRF192`." /></p>
             </div>
           ) : (
             <div className="ct-hv-luoi">
@@ -214,7 +217,7 @@ export function HocVienPage() {
                 </button>
                 {mo && (
                   ds.length === 0 ? (
-                    <p className="ct-muted ct-hv-ky-trong">Kỳ này chưa có môn nào được đăng.</p>
+                    <p className="ct-muted ct-hv-ky-trong">{dich('Kỳ này chưa có môn nào được đăng.')}</p>
                   ) : (
                     <div className="ct-hv-luoi">
                       {ds.map((m) => <TheMon key={m.id} mon={m} onMo={() => setMoSlug(m.slug)} />)}

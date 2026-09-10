@@ -39,6 +39,7 @@ import {
 } from 'lucide-react';
 import { useSession } from '../../auth/session';
 import { chuVi } from '../chu';
+import { useDich } from '../../i18n';
 
 type DangCau = 'MCQ' | 'CODE' | 'WRITE' | 'SPEAK';
 
@@ -124,6 +125,7 @@ function demNguoc(giay: number): string {
 export function LamBai({
   examId, tenDe, onThoat,
 }: { examId: number; tenDe: string; onThoat: () => void }) {
+  const { dich } = useDich();
   const { api } = useSession();
 
   const [de, setDe] = useState<DeLam | null>(null);
@@ -256,7 +258,7 @@ export function LamBai({
         <button type="button" className="ct-btn ct-btn-ghost ct-gn-lui" onClick={onThoat}>
           <ArrowLeft size={14} aria-hidden /> Phòng thi
         </button>
-        <p className="ct-muted"><Loader2 size={14} className="ct-spin" aria-hidden /> Đang mở đề…</p>
+        <p className="ct-muted"><Loader2 size={14} className="ct-spin" aria-hidden /> {dich('Đang mở đề…')}</p>
       </div>
     );
   }
@@ -288,7 +290,7 @@ export function LamBai({
 
       {luot.resumed && (
         <p className="ct-notice" data-tone="warn">
-          Đang làm tiếp lượt thi mở dở trước đó — bài đã làm vẫn còn.
+          {dich('Đang làm tiếp lượt thi mở dở trước đó — bài đã làm vẫn còn.')}
         </p>
       )}
       {hetGio && (
@@ -301,8 +303,8 @@ export function LamBai({
       {/* PE nộp mã: chọn file .zip */}
       {de.kind === 'PE' && de.peType === 'CODE' && (
         <section className="ct-lb-zip">
-          <h2><FileArchive size={16} aria-hidden /> Nộp bài bằng file .zip</h2>
-          <p className="ct-muted">Nén cả thư mục bài làm rồi chọn file ở đây. Máy chủ giải nén và chấm.</p>
+          <h2><FileArchive size={16} aria-hidden /> {dich('Nộp bài bằng file .zip')}</h2>
+          <p className="ct-muted">{dich('Nén cả thư mục bài làm rồi chọn file ở đây. Máy chủ giải nén và chấm.')}</p>
           <label className="ct-btn ct-btn-ghost ct-lb-chonfile">
             <Upload size={14} aria-hidden /> {zip ? zip.name : 'Chọn file .zip'}
             <input
@@ -367,7 +369,7 @@ export function LamBai({
                 rows={10}
                 disabled={hetGio}
                 value={bai.luan[c.id] ?? ''}
-                placeholder="Viết bài của bạn ở đây…"
+                placeholder={dich('Viết bài của bạn ở đây…')}
                 onChange={(e) => setBai((b) => ({ ...b, luan: { ...b.luan, [c.id]: e.target.value } }))}
               />
             )}
@@ -378,7 +380,7 @@ export function LamBai({
                 rows={12}
                 disabled={hetGio}
                 value={bai.vietMa[c.id] ?? c.starterCode ?? ''}
-                placeholder="Viết mã của bạn ở đây…"
+                placeholder={dich('Viết mã của bạn ở đây…')}
                 onChange={(e) => setBai((b) => ({ ...b, vietMa: { ...b.vietMa, [c.id]: e.target.value } }))}
               />
             )}
@@ -402,7 +404,7 @@ export function LamBai({
           <button type="button" className="ct-btn" onClick={() => void nop()} disabled={dangNop || hetGio}>
             {dangNop ? 'Đang nộp…' : `Nộp bài (${daLam}/${de.questions.length})`}
           </button>
-          <span className="ct-muted">Nộp rồi không sửa lại được.</span>
+          <span className="ct-muted">{dich('Nộp rồi không sửa lại được.')}</span>
         </div>
       )}
     </div>
@@ -433,6 +435,7 @@ function CauNoi({
   giayDaLam: () => number;
   onXong: (kq: KetQua) => void;
 }) {
+  const { dich } = useDich();
   const [dangGhi, setDangGhi] = useState(false);
   const [ban, setBan] = useState<Blob[]>([]);
   const [dangNop, setDangNop] = useState(false);
@@ -510,7 +513,7 @@ function CauNoi({
         <span className="ct-muted">{ban.length}/12 đoạn đã ghi</span>
         {ban.length > 0 && !dangGhi && (
           <button type="button" className="ct-btn ct-btn-ghost" onClick={() => setBan([])} disabled={dangNop}>
-            Ghi lại từ đầu
+            {dich('Ghi lại từ đầu')}
           </button>
         )}
       </div>
@@ -532,6 +535,7 @@ function CauNoi({
 /* ── Kết quả ─────────────────────────────────────────────────────────── */
 
 function ManKetQua({ kq, tenDe, onThoat }: { kq: KetQua; tenDe: string; onThoat: () => void }) {
+  const { dich } = useDich();
   const a = kq.attempt;
   const qua = a.passed === true;
   return (
@@ -551,14 +555,14 @@ function ManKetQua({ kq, tenDe, onThoat }: { kq: KetQua; tenDe: string; onThoat:
 
       <h1 className="ct-hv-bai-tieude">{chuVi(tenDe)}</h1>
       <dl className="ct-mau-tin">
-        <dt>Trạng thái</dt><dd>{a.status}</dd>
-        {a.timeSpentSeconds != null && <><dt>Thời gian làm</dt><dd>{Math.round(a.timeSpentSeconds / 60)} phút</dd></>}
+        <dt>{dich('Trạng thái')}</dt><dd>{a.status}</dd>
+        {a.timeSpentSeconds != null && <><dt>{dich('Thời gian làm')}</dt><dd>{Math.round(a.timeSpentSeconds / 60)} phút</dd></>}
       </dl>
 
       {/* Nhận xét của bộ chấm (PE dùng AI chấm) — hiện nguyên văn, không tóm tắt. */}
       {a.feedback && Object.keys(a.feedback).length > 0 && (
         <section className="ct-lb-nhanxet">
-          <h2>Nhận xét</h2>
+          <h2>{dich('Nhận xét')}</h2>
           <pre>{JSON.stringify(a.feedback, null, 2)}</pre>
         </section>
       )}

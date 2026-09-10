@@ -59,3 +59,18 @@ test('ngân hàng vấn đáp đi kèm khi chấm, và nó hỏi về MÃ CỦA 
   const s = heThong(NGAN_HANG_VAN_DAP);
   assert.ok(s.includes(NGAN_HANG_VAN_DAP.slice(0, 60)));
 });
+
+test('luật chấm: cắt digest thì KHÔNG được cho đạt, và CẤM lộ lời giải mẫu', async () => {
+  // Hai luật này vừa được thêm vì hai rủi ro thật:
+  //   • bản đầu `slice()` mù rồi vứt cờ `truncated` ⇒ grader chấm nửa project
+  //     mà tưởng đủ và trả về "đạt";
+  //   • đưa lời giải mẫu vào để làm THƯỚC ĐO thì cũng mở đúng một cửa: model
+  //     chép nó ra cho người học. Mất luật này là mất luôn ý nghĩa việc học.
+  const { NHIEM_VU_CHAM } = await import('./phongLab.service.js');
+  assert.match(NHIEM_VU_CHAM, /TRUNCATED[\s\S]*?"dat" MUST be false/,
+    'mất luật "digest bị cắt thì không được cho đạt"');
+  assert.match(NHIEM_VU_CHAM, /NEVER reproduce, quote or paraphrase the reference solution/,
+    'mất luật cấm lộ lời giải mẫu — grader sẽ phát đáp án cho người học');
+  assert.match(NHIEM_VU_CHAM, /NOT the only correct answer/,
+    'mất câu chống chấm máy móc theo lời giải mẫu');
+});

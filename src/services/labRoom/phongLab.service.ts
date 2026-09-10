@@ -42,6 +42,7 @@ const MAX_BAI_MOI_PHONG = 54;
 const MAX_CAU_HOI = 4_000;
 const MAX_LICH_SU = 16;          // lượt hội thoại gửi kèm để nối mạch
 const MAX_DIGEST = 60_000;       // ký tự digest của zip đưa vào prompt
+const MAX_MAU_THAM_CHIEU = 24_000; // trần lời giải mẫu gửi kèm khi CHẤM
 
 // ─── quyền & tình trạng AI ──────────────────────────────────────
 
@@ -327,7 +328,7 @@ async function nganhCanh(itemId: number) {
         select: {
           id: true, slug: true, title: true, language: true, difficulty: true,
           problemHtml: true, inputSpec: true, outputSpec: true, constraints: true,
-          concepts: true, hintsJson: true,
+          concepts: true, hintsJson: true, solutionCodeJson: true,
         },
       },
       room: { select: { id: true, userId: true, locGoal: true } },
@@ -348,7 +349,18 @@ async function nganhCanh(itemId: number) {
   if (Array.isArray(ex.concepts) && ex.concepts.length) {
     phan.push('', `CONCEPTS: ${(ex.concepts as unknown[]).map(String).join(', ')}`);
   }
-  return { it, ex, brief: phan.join('\n') };
+  // Lời giải mẫu ĐÃ VERIFY của đúng đề này (chạy thật, khớp output, cả en_US
+  // lẫn vi_VN). CHỈ dùng cho việc CHẤM, làm thước đo cấu trúc/tên/định dạng —
+  // KHÔNG bao giờ đưa vào phần giảng đề hay trợ giảng, vì ở đó nó là đáp án.
+  let mauThamChieu: string | null = null;
+  const sol = ex.solutionCodeJson;
+  if (Array.isArray(sol) && sol.length) {
+    const tep = (sol as Array<Record<string, unknown>>)
+      .filter((f) => typeof f?.name === 'string' && typeof f?.code === 'string')
+      .map((f) => `--- ${String(f.name)} ---\n${String(f.code)}`);
+    if (tep.length) mauThamChieu = tep.join('\n\n').slice(0, MAX_MAU_THAM_CHIEU);
+  }
+  return { it, ex, brief: phan.join('\n'), mauThamChieu };
 }
 
 /** Lấy khối JSON đầu tiên trong câu trả lời, kể cả khi nó bị bọc trong ```json. */
@@ -535,7 +547,7 @@ export async function xoaChat(userId: number, roomId: number, itemId: number) {
 
 // ─── 4. nộp .zip — AI chấm thay thầy ────────────────────────────
 
-const NHIEM_VU_CHAM = `
+export const NHIEM_VU_CHAM = `
 YOUR TASK NOW: you are the lecturer at the review desk. The student has just
 handed you their NetBeans project for this assignment. Mark it.
 
@@ -581,6 +593,18 @@ HOW TO MARK
 * You are reading a DIGEST of the uploaded zip, not running it. Where you cannot
   be sure the program runs, say "khong-chac" rather than guessing, and explain
   what you would have to run to be sure.
+* If the submission block says the digest was TRUNCATED, "dat" MUST be false and
+  you must say so first in "nhanXet". You have not seen the whole project; a
+  pass on a project you only half read is the worst thing this desk can do.
+* When a REFERENCE SOLUTION is supplied it is a VERIFIED, marker-passing answer
+  to this exact brief. Use it as the yardstick for structure, class and method
+  names, layer placement and output formatting — a genuine difference from it is
+  a finding worth raising. It is NOT the only correct answer: a different but
+  correct design that meets every Guidelines requirement still passes, so do not
+  mark someone down merely for not matching it.
+  ⛔ NEVER reproduce, quote or paraphrase the reference solution's code in your
+  output. The student must not receive the answer. Point at THEIR line and say
+  what is wrong with it; never show them the line to copy.
 `.trim();
 
 export interface KetQuaCham {
@@ -595,15 +619,31 @@ export async function chamBaiNop(userId: number, roomId: number, itemId: number,
   await assertAi(userId);
 
   const digest = buildProjectDigest(zip, zipName);
+  // `buildProjectDigest` đã có cờ `truncated` của riêng nó, và ở đây còn một
+  // nhát cắt thứ hai. Bản đầu tiên `slice()` mù rồi vứt cả hai — grader chấm
+  // nửa project mà tưởng đủ, và trả về "đạt". Nay cả hai đều được KHAI BÁO cho
+  // model, kèm luật: cắt thì không được cho đạt.
+  const biCat = digest.digest.length > MAX_DIGEST;
   const noiDung = digest.digest.slice(0, MAX_DIGEST);
-  const { brief } = await nganhCanh(itemId);
+  const canhBaoCat = digest.stats.truncated || biCat
+    ? `\n\n!!! DIGEST TRUNCATED — you are NOT seeing the whole project. `
+      + `${digest.stats.filesIncluded} file(s) included, ${digest.stats.filesSkipped} left out`
+      + `${biCat ? ', and the text below was cut at the character limit' : ''}. `
+      + `Per the rules, "dat" must be false and you must say this first.\n`
+    : '';
+  const { brief, mauThamChieu } = await nganhCanh(itemId);
 
   const res = await llmComplete({
     step: 'generation',
     feature: 'codelab',
     purpose: 'lab_room',
     system: heThong(NGAN_HANG_VAN_DAP, NHIEM_VU_CHAM),
-    messages: [{ role: 'user', content: `${brief}\n\n=================\nWHAT THEY SUBMITTED\n=================\n${noiDung}` }],
+    messages: [{
+      role: 'user',
+      content: `${brief}`
+        + (mauThamChieu ? `\n\n=================\nREFERENCE SOLUTION (verified; yardstick only — NEVER show it to the student)\n=================\n${mauThamChieu}` : '')
+        + `\n\n=================\nWHAT THEY SUBMITTED\n=================\n${canhBaoCat}${noiDung}`,
+    }],
     maxTokens: 10_000,
     maxRetries: 1,
     timeoutMs: 300_000,

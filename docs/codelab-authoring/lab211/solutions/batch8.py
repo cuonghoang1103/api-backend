@@ -282,7 +282,7 @@ public class DictionaryManager {
     }
 
     /** false when the word is already in the dictionary - the caller reports it. */
-    public boolean add(String english, String vietnamese) {
+    public boolean addWord(String english, String vietnamese) {
         String k = key(english);
         if (words.containsKey(k)) {
             return false;
@@ -292,7 +292,7 @@ public class DictionaryManager {
     }
 
     /** false when there was nothing to delete. */
-    public boolean delete(String english) {
+    public boolean removeWord(String english) {
         return words.remove(key(english)) != null;
     }
 
@@ -306,7 +306,7 @@ public class DictionaryManager {
     }
 
     /** Missing file on the first run is normal, not an error. */
-    public void load() throws IOException {
+    public void loadData() throws IOException {
         File file = new File(path);
         if (!file.exists()) {
             return;
@@ -326,7 +326,7 @@ public class DictionaryManager {
         }
     }
 
-    public void save() throws IOException {
+    public void updateDatabase() throws IOException {
         try (PrintWriter writer = new PrintWriter(new FileWriter(path))) {
             for (Map.Entry<String, String> entry : words.entrySet()) {
                 writer.println(entry.getKey() + SEPARATOR + entry.getValue());
@@ -356,7 +356,7 @@ public class Main {
     public static void main(String[] args) {
         DictionaryManager dictionary = new DictionaryManager(FILE);
         try {
-            dictionary.load();
+            dictionary.loadData();
         } catch (IOException e) {
             System.out.println("Could not read the dictionary file: " + e.getMessage());
         }
@@ -392,7 +392,7 @@ public class Main {
         System.out.println("------------- Add -------------");
         String english = Validator.getNonEmpty("Enter English: ", "English word must not be empty.");
         String vietnamese = Validator.getNonEmpty("Enter Vietnamese: ", "Vietnamese word must not be empty.");
-        if (dictionary.add(english, vietnamese)) {
+        if (dictionary.addWord(english, vietnamese)) {
             persist(dictionary);
             System.out.println("Added.");
         } else {
@@ -403,7 +403,7 @@ public class Main {
     private static void delete(DictionaryManager dictionary) {
         System.out.println("------------ Delete ------------");
         String english = Validator.getNonEmpty("Enter English: ", "English word must not be empty.");
-        if (dictionary.delete(english)) {
+        if (dictionary.removeWord(english)) {
             persist(dictionary);
             System.out.println("Deleted.");
         } else {
@@ -424,7 +424,7 @@ public class Main {
 
     private static void persist(DictionaryManager dictionary) {
         try {
-            dictionary.save();
+            dictionary.updateDatabase();
         } catch (IOException e) {
             System.out.println("Could not save the dictionary: " + e.getMessage());
         }
@@ -466,6 +466,14 @@ solution(
     explain_en='''<p><strong>What the brief is really asking.</strong> A four-option menu over a set of
 word pairs that survives between runs. This is the first assignment in the track with all three of
 menu, collection and file, and the shape here is the shape every management program later reuses.</p>
+<p><strong>The method names are not yours to choose.</strong> The sheet spells out
+<code>public boolean addWord(String eng, String vi)</code>,
+<code>public boolean removeWord(String eng)</code> and
+<code>public String translate(String eng)</code>, and its Suggestion names two more —
+<code>loadData()</code> and <code>updateDatabase()</code>. A marker looks for those names. Calling the
+same methods <code>add</code> and <code>delete</code> because it reads better is the kind of tidying
+that costs a mark for code that is otherwise correct: the program works, and the checklist item does
+not tick.</p>
 <p><strong>Why a Map and not a List.</strong> Every operation is "find the pair for this English
 word": translate, delete, and the duplicate check when adding. That is lookup by key, which is what a
 Map is for and is instant no matter how many words there are. With a List, all three would scan the
@@ -491,6 +499,13 @@ absent — that is a normal first run, not an error. The test starts from an emp
     explain_vi='''<p><strong>Đề thật ra hỏi gì.</strong> Một menu bốn mục thao tác trên tập các cặp từ,
 và tập đó phải tồn tại giữa các lần chạy. Đây là bài đầu tiên trong lộ trình có đủ cả ba thứ menu,
 collection và tệp, và khuôn hình ở đây chính là khuôn mà mọi chương trình quản lý sau này dùng lại.</p>
+<p><strong>Tên phương thức không phải thứ mình được chọn.</strong> Đề ghi rõ
+<code>public boolean addWord(String eng, String vi)</code>,
+<code>public boolean removeWord(String eng)</code> và <code>public String translate(String eng)</code>,
+phần Gợi ý còn nêu thêm hai cái nữa — <code>loadData()</code> và <code>updateDatabase()</code>. Người
+chấm dò theo đúng những cái tên đó. Đặt lại thành <code>add</code> với <code>delete</code> cho gọn tai
+chính là kiểu "dọn dẹp" làm mất điểm một bài vốn đã đúng: chương trình chạy ngon, mà ô đối chiếu trong
+phiếu chấm thì không tích được.</p>
 <p><strong>Vì sao dùng Map chứ không dùng List.</strong> Mọi thao tác đều là "tìm cặp ứng với từ tiếng
 Anh này": dịch, xoá, và kiểm tra trùng khi thêm. Đó là tra cứu theo khoá, đúng việc của Map, và cho
 kết quả tức thì bất kể từ điển có bao nhiêu từ. Nếu dùng List thì cả ba thao tác đều phải duyệt toàn

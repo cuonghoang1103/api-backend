@@ -56,7 +56,15 @@ cd solutions
 python3 -c "import solkit, batchN; solkit.verify_all_locales()"   # both locales
 python3 -c "import solkit, batchN; solkit.verify_all()"            # home only, faster
 python3 -c "import solkit, batchN; solkit.capture('J1.S.P00XX')"
+python3 khopchuky.py                                               # tên khớp đề chưa
 ```
+
+**`khopchuky.py` là phép kiểm thứ hai, và nó bắt thứ `javac` không thấy.** Người
+chấm dò theo TÊN: một bài chạy đúng, in đúng, mà đặt tên `add` trong khi đề viết
+`addWord` thì ô đối chiếu trong phiếu chấm không tích được — còn `verify_all()`
+vẫn xanh, vì nó chỉ biết chương trình in ra cái gì. Đã lọt lưới ba lần trước khi
+có nó: P0068 (`sortStudent` khai `void` thay vì trả `List`), P0058 (bốn tên sai
+một lúc), P0053 (thiếu hẳn `checkIn`, `sortAscending`, `sortDescending`).
 
 ## Project shape — measured from the user's own passing submissions
 
@@ -96,10 +104,21 @@ So **add a layer only where this program needs one** — and be ready to say why
 in terms of the operations the program performs, never a file count. An empty
 controller in a 40-line assignment is a mark lost, not gained.
 
-**And the Guidelines outrank all of it.** A brief that ends its Guidelines with
-"Student must implement methods X, Y *in startup code*" puts those methods in
-`Main`, not in a manager class, whatever the final file count is. P0054, P0063
-and P0068 are all that case.
+**And the Guidelines outrank all of it — but read the sheet before acting on
+them.** "Student must implement methods X, Y *in startup code*" means *these are
+the methods you must write in the project you hand in*. It does **not** by
+itself say which class they go in:
+
+* The brief names no class and hands the collection in as a parameter
+  (`addContact(List<Contact> list, Contact c)`) → they go in `Main`. **P0054,
+  P0063, P0068** are that case, and a manager class there would hold no state
+  and enforce no rule.
+* The brief **names** a class to hold them → that name is what a marker looks
+  for. **P0055** is that case: its Suggestion says *"Class **DoctorHash**
+  contains adding, editing, deleting and searching functions"*, so the class is
+  called `DoctorHash` and the four methods live in it.
+
+Getting this backwards costs marks in both directions.
 
 Inside the layers:
 
@@ -180,6 +199,7 @@ Import `SOLUTIONS` alongside `solution` from `solkit`.
 
 ```bash
 python3 -c "import solkit, batchN; print(solkit.verify_all_locales())"   # must be True
+python3 khopchuky.py                                                     # must print 0
 ```
 
 Report: which labs are green, the file count and layers of each, anything the

@@ -55,9 +55,20 @@ Four things decide the mark:
 * Where the marker diffs the screen character by character, copy the brief's
   wording EXACTLY, inconsistencies included ("Area: " with a space for one
   shape and "Area:" without for another is a real case; do not tidy it).
-* When Guidelines say "Student must implement methods X, Y **in startup code**",
-  those methods belong in the STARTUP CLASS (Main) — not in a manager class.
-  That sentence decides the layout; it is not decoration.
+* "Student must implement methods X, Y **in startup code**" means: these are the
+  methods you must write in the project you hand in. It does NOT by itself say
+  WHICH CLASS they go in — read the rest of the brief for that.
+    - The brief names no class and hands the collection in as a parameter
+      ("addContact(List<Contact> list, Contact c)") -> they go in the startup
+      class Main. P0054, P0063 and P0068 are that case, and there a manager
+      class is a file that holds no state and enforces no rule.
+    - The brief NAMES a class to hold them -> that class is what the marker
+      looks for, and putting the methods in Main instead loses the mark.
+      P0055 is that case: its Suggestion says "Class DoctorHash contains
+      adding, editing, deleting and searching functions", so the class must be
+      called DoctorHash.
+  Getting this backwards costs marks in both directions. Read the whole sheet
+  before deciding, and say which sentence you followed.
 * Method names and signatures named by the brief are checked by name. Match them
   letter for letter, including a capitalised name like Damage() that breaks the
   usual convention, and including the declared RETURN TYPE.

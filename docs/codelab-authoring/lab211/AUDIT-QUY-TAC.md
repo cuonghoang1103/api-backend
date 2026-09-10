@@ -102,6 +102,57 @@ tầng không controller — ngay dưới cái bảng vừa dạy quy tắc đó
 
 ---
 
+### 3.3 Tên phương thức không khớp đề — 3 bài ⚠️ NGHIÊM TRỌNG
+
+**Người chấm dò theo TÊN.** Một bài chạy đúng, in đúng từng ký tự, mà đặt tên
+`add` trong khi đề viết `addWord` thì ô đối chiếu trong phiếu chấm không tích
+được — và `javac` lẫn `verify_all()` đều không nói gì, vì cả hai chỉ biết
+chương trình in ra cái gì, không biết đề đòi gọi nó là gì.
+
+Đi tìm mục §7.2 cũ ("cân nhắc thêm controller cho P0073, P0055, P0058") thì
+không thấy vấn đề controller đâu, mà thấy cái này:
+
+| Bài | Đề đòi | Lời giải có | |
+|---|---|---|---|
+| P0058 | `addWord` · `removeWord` · `loadData` · `updateDatabase` | `add` · `delete` · `load` · `save` | **4 tên sai** |
+| P0053 | `checkIn` · `sortAscending` · `sortDescending` | *không có cái nào* | **thiếu cả 3** |
+| P0055 | class **`DoctorHash`** | class `DoctorManager` | **sai tên lớp** |
+
+P0073 thì không lệch gì: cả ba chữ ký khớp, và `displayAll` nằm ở `Main` có lập
+luận đúng.
+
+Đã sửa cả ba, và **viết thêm một phép kiểm thứ hai** —
+`solutions/khopchuky.py` — đọc chữ ký cùng khối "implement methods … in startup
+code" của từng đề rồi soát xem lời giải có đúng những cái tên đó không. Quét lại
+cả 54 bài: **0 lệch**. Đã kiểm ngược chính nó (tháo `addWord`/`removeWord` ra
+thì nó đỏ đúng hai chỗ) trước khi tin.
+
+Ba lần lọt lưới trước khi có phép kiểm này: P0068 (`sortStudent` khai `void` thay
+vì trả `List`), P0058, P0053.
+
+### 3.4 "in startup code" — tôi đã đọc SAI, và P0055 là phản chứng
+
+Ở §4.2 tôi kết luận: *"in startup code" nghĩa là phương thức phải nằm trong lớp
+khởi động*. Đọc rộng ra thì **không phải** — nó nghĩa là *"đây là những phương
+thức bạn phải viết trong project nộp lên"*, và **không tự nó nói lớp nào**.
+
+Phản chứng nằm ngay trong P0055: Hướng dẫn nói "…in startup code", còn phần Gợi
+ý của **cùng một đề** nói *"Class **DoctorHash** contains adding, editing,
+deleting and searching functions"*. Nếu cụm đó có nghĩa "trong `Main`" thì đề tự
+mâu thuẫn với chính nó ở cách hai dòng.
+
+Cách đọc đúng, và cách đã ghi lại vào bộ quy tắc:
+
+* Đề **không** nêu tên lớp nào và truyền collection vào làm tham số
+  (`addContact(List<Contact> list, Contact c)`) → phương thức nằm ở `Main`.
+  **P0054, P0063, P0068** đúng là ca này, nên §4.2 vẫn đứng vững — chỉ có lý do
+  tôi đưa ra là chưa đủ.
+* Đề **có** nêu tên lớp → chính cái tên đó là thứ người chấm tìm. **P0055** là
+  ca này.
+
+Hiểu ngược là mất điểm ở cả hai chiều. Đã sửa cách phát biểu ở bốn chỗ: Academy
+1.1 (EN+VI), `AUTHORING-BRIEF.md`, `quyTacThay.ts`, và walkthrough P0055.
+
 ## 4. Lệch quy tắc — cần bạn quyết, không tự sửa
 
 ### 4.1 Quy tắc "số file → tầng" ✅ ĐÃ SỬA — và cách sửa đầu tiên cũng sai
@@ -272,13 +323,17 @@ nên hoặc sửa hình vẽ, hoặc nói rõ "gộp được khi `bo` chỉ ph�
 * Phát biểu lại quy tắc tầng theo **thứ chương trình LÀM**, bỏ hẳn chỗ tự mâu
   thuẫn ở n = 4 — sau khi hai phát biểu thử đầu tiên bị chính phép đo bác bỏ.
   Sửa đồng bộ ở năm chỗ. Đúng quy tắc nay **51/54** (§4.1).
+* Sửa tên phương thức/lớp cho khớp đề ở **P0058, P0053, P0055**, và thêm phép
+  kiểm `khopchuky.py` soát cả 54 bài — thứ `javac` không bao giờ thấy (§3.3).
+* Đọc lại cho đúng cụm **"in startup code"**: nó KHÔNG tự nó quyết định lớp nào,
+  và P0055 là phản chứng nằm ngay trong cùng một đề (§3.4).
 
 ## 7. Việc đề nghị làm tiếp (theo thứ tự ưu tiên)
 
 1. Nới quy tắc `Serializable` thành "khi có ghi tệp" (§4.3).
-2. Cân nhắc thêm `controller` cho **P0073, P0055, P0058** — ba ca duy nhất còn
-   lệch sau khi phát biểu lại quy tắc, và cả ba đều có `main` dài kèm 5–6 loại
-   thao tác trên tập dữ liệu (§4.1).
+2. ~~Cân nhắc thêm `controller` cho P0073, P0055, P0058~~ — **đã rút**. Đi kiểm
+   thì không bài nào thiếu controller; thứ thực sự lệch là **tên phương thức và
+   tên lớp không khớp đề**, đã sửa và đã có phép kiểm tự động chặn (§3.3).
 3. Thêm đoạn "vì sao entity ở bài này được phép in" vào walkthrough P0061 (§4.4).
 4. Đổi `System.exit()` trong `L.P0013/Validator` thành exception (§4.5).
 5. **Giữ lượt verify dưới locale `vi_VN` trong mọi quy trình** — đó là thứ duy

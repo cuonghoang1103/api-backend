@@ -19,7 +19,9 @@ lab211/
 ├── api-usage.json      which of the 54 briefs needs which Java API — MEASURED, not guessed
 ├── payload.json        the 54 exercises as shipped
 ├── lesson/             the four bilingual reference lessons
-└── solutions/          the worked solutions and their verifier
+└── solutions/          the worked solutions and their two verifiers —
+                        solkit.py runs them, khopchuky.py checks the method
+                        names against what each brief demands
 ```
 
 ## Lessons (`lesson/`)

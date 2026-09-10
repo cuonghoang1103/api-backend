@@ -315,7 +315,8 @@ export type LlmPurpose =
   | 'doc_ocr'             // chép đề/bài giảng từ ẢNH ra chữ + công thức
   | 'robot_voice'         // robot Maker Lab — độ trễ quan trọng ngang độ thông minh
   | 'agent_code'          // agent lập trình của app desktop — GỌI TOOL nhiều lượt
-  | 'exam_tutor';         // CuongMini — AI đồng hành khi thi (Pro), đi cổng rambo như agent_code
+  | 'exam_tutor'          // CuongMini — AI đồng hành khi thi (Pro), đi cổng rambo như agent_code
+  | 'lab_room';           // Phòng Lab LAB211 — giảng đề, kèm code, chấm bài nộp; cổng rambo, model mạnh nhất
 
 const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   /**
@@ -427,6 +428,19 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * Đổi bằng LLM_MODEL_EXAM_TUTOR nếu cần ghim tạm.
    */
   exam_tutor: 'claude-opus-4-8',
+
+  /**
+   * Phòng Lab LAB211 (10/09/2026) — người dùng yêu cầu rõ: "dùng opus 4.8 max ở
+   * cổng Rambo.AI cho phần này và dùng all tốt nhất đừng giới hạn nó".
+   *
+   * Việc ở đây là việc KHÓ NHẤT trong cả web tính theo chất lượng đầu ra: đọc
+   * một đề FPTU, giảng nó, kèm người học viết từng lớp, rồi CHẤM một project
+   * Java nộp lên và hỏi vặn đúng kiểu thầy hỏi. Một câu chấm sai ở đây không
+   * chỉ tốn tiền — nó dạy sai một người đang ôn thi.
+   *
+   * Đổi tạm bằng LLM_MODEL_LAB_ROOM nếu cần ghim.
+   */
+  lab_room: 'claude-opus-4-8',
 };
 
 
@@ -530,12 +544,18 @@ const TOOL_PURPOSES = new Set<LlmPurpose>(['agent_code']);
 
 /**
  * Việc đi cổng rambo riêng (xem `congAgent`) thay vì modelapi.vn — người dùng
- * đã xác nhận rõ cho CẢ HAI: "cổng này của tôi, không lo phí, chất lượng là
- * được". `exam_tutor` KHÔNG vào `TOOL_PURPOSES` (không gọi tool nhiều lượt),
- * nhưng cũng không nằm trong `LLM_LOCAL_PURPOSES` mặc định nên tự động không
- * rơi vào máy nhà — việc tương tác trực tiếp người dùng không nên xếp hàng.
+ * đã xác nhận rõ cho CẢ BA: "cổng này của tôi, không lo phí, chất lượng là
+ * được". `exam_tutor` và `lab_room` KHÔNG vào `TOOL_PURPOSES` (không gọi tool
+ * nhiều lượt), nhưng cũng không nằm trong `LLM_LOCAL_PURPOSES` mặc định nên tự
+ * động không rơi vào máy nhà — việc tương tác trực tiếp người dùng không nên
+ * xếp hàng.
+ *
+ * Nằm trong tập này còn có một hệ quả thứ hai, quan trọng hơn: khi rambo hỏng,
+ * `llmComplete` KHÔNG lùi ba việc này sang modelapi (xem nhánh `cong-agent` ở
+ * `interview/llm/index.ts`). Đó là cố ý — modelapi không phục vụ được model
+ * Claude, nên lùi sang đó chỉ đổi một lỗi lấy một lỗi.
  */
-export const RAMBO_PURPOSES_CO_DINH = new Set<LlmPurpose>(['agent_code', 'exam_tutor']);
+export const RAMBO_PURPOSES_CO_DINH = new Set<LlmPurpose>(['agent_code', 'exam_tutor', 'lab_room']);
 const RAMBO_PURPOSES = RAMBO_PURPOSES_CO_DINH;
 
 /**

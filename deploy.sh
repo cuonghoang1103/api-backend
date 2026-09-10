@@ -955,6 +955,7 @@ for route in \
     landing/promos \
     landing/stats \
     code-lab/groups \
+    code-lab/lab-rooms \
     roadmaps \
     exams \
     maker-lab/projects \

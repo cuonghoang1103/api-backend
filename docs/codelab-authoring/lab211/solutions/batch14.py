@@ -389,6 +389,7 @@ import entity.SalaryHistory;
 import entity.SalaryStatus;
 import entity.Worker;
 import java.util.List;
+import java.util.Locale;
 import utils.Validator;
 
 /**
@@ -447,7 +448,7 @@ public class WorkerController {
                 "Code", "Name", "Age", "Salary", "Status", "Date");
         for (SalaryHistory line : lines) {
             Worker worker = line.getWorker();
-            System.out.printf("%-8s%-12s%-6d%-12.1f%-8s%s%n",
+            System.out.printf(Locale.US, "%-8s%-12s%-6d%-12.1f%-8s%s%n",
                     worker.getCode(), worker.getName(), worker.getAge(),
                     line.getSalary(), line.getStatus(), line.getFormattedDate());
         }

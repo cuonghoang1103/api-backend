@@ -402,9 +402,9 @@ export default {
 </div>
 <div class="pitfall"><b>Trap:</b> the NetBeans "To change this license header…" comment is a sign of auto-generated code. Delete it and replace with a short Javadoc that explains <em>why</em> the class exists — mentors notice.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Never close the System.in Scanner.</b> Calling sc.close() on a Scanner that wraps System.in shuts stdin for the whole program, and the next read throws NoSuchElementException. Keep one shared static Scanner in your Validator and never close it. <em>Why beyond the syllabus: it is a resource-management subtlety PRO192 rarely drills, yet it silently zeroes exam runs.</em></div>
-<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0055-doctor-management-program?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0056-program-to-manage-worker-information?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🧩</span>
-  <span class="lc-body"><span class="lc-title">See the full pattern: Doctor Management</span><span class="lc-sub">A ≥7-file project with entity/bo/controller/Validator — the reference layout.</span></span>
+  <span class="lc-body"><span class="lc-title">See the full pattern: Worker Management</span><span class="lc-sub">The 7-file project that really does use all five layers — entity/bo/controller/ui/Validator.</span></span>
   <span class="lc-cta">CODE LAB →</span>
 </a>
 </div>
@@ -441,9 +441,9 @@ export default {
 </div>
 <div class="pitfall"><b>Bẫy:</b> comment "To change this license header…" của NetBeans là dấu hiệu code sinh sẵn. Xóa nó và thay bằng một Javadoc ngắn giải thích <em>vì sao</em> lớp tồn tại — mentor để ý đấy.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đừng bao giờ đóng Scanner của System.in.</b> Gọi sc.close() trên Scanner bọc System.in sẽ đóng luôn stdin của cả chương trình, và lần đọc sau ném NoSuchElementException. Giữ một Scanner static dùng chung trong Validator và không bao giờ đóng nó. <em>Vì sao ngoài syllabus: đây là điểm tinh tế về quản lý tài nguyên PRO192 ít luyện, nhưng lại âm thầm làm 0 điểm lần chạy thi.</em></div>
-<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0055-doctor-management-program?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0056-program-to-manage-worker-information?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🧩</span>
-  <span class="lc-body"><span class="lc-title">Xem trọn mẫu: Doctor Management</span><span class="lc-sub">Project ≥7 file với entity/bo/controller/Validator — bố cục chuẩn.</span></span>
+  <span class="lc-body"><span class="lc-title">Xem trọn mẫu: Worker Management</span><span class="lc-sub">Project 7 file dùng đủ cả năm tầng — entity/bo/controller/ui/Validator.</span></span>
   <span class="lc-cta">CODE LAB →</span>
 </a>
 </div>

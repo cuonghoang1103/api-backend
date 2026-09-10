@@ -7,10 +7,20 @@ by a mistake someone already made.
 
 **Compiling proves nothing about behaviour. Only running it proves that.**
 
-A solution is finished when `solkit.verify_all(only=[...])` prints `LỖI=0` —
+A solution is finished when `solkit.verify_all_locales(only=[...])` prints
+`LỖI=0` **twice** — once at home, once with the marker's Vietnamese locale —
 which means the whole project compiled AND every scripted run's console matched
-the expectation exactly. Never write an expected output from imagination: run
-`solkit.capture('<LAB>')`, read the real console, and paste that back.
+the expectation exactly on both. Never write an expected output from
+imagination: run `solkit.capture('<LAB>')`, read the real console, and paste
+that back.
+
+**Why twice.** `String.format("%.2f", 3.5)` follows the DEFAULT locale, so it
+prints `3.50` here and `3,50` on the Vietnamese machine in the FPTU lab. Eight
+solutions shipped green under `verify_all()` alone and would have printed
+commas at the marker's desk — an exact-match failure, which is zero for that
+run. Pin every numeric format: `String.format(Locale.US, "%.2f", x)` or
+`printf(Locale.US, ...)`. Same for a date pattern with a text month
+(`dd-MMM-yyyy` needs `Locale.ENGLISH`, or "Apr" is not a month name).
 
 Never report a lab as done that has not gone green. A solution a student pastes
 in and cannot build is the worst possible failure of teaching material.
@@ -43,7 +53,8 @@ Verify only your own labs (fast, and does not touch anyone else's):
 
 ```bash
 cd solutions
-python3 -c "import solkit, batchN; solkit.verify_all()"
+python3 -c "import solkit, batchN; solkit.verify_all_locales()"   # both locales
+python3 -c "import solkit, batchN; solkit.verify_all()"            # home only, faster
 python3 -c "import solkit, batchN; solkit.capture('J1.S.P00XX')"
 ```
 
@@ -140,7 +151,7 @@ Import `SOLUTIONS` alongside `solution` from `solkit`.
 ## Finish line
 
 ```bash
-python3 -c "import solkit, batchN; print(solkit.verify_all())"   # must be True
+python3 -c "import solkit, batchN; print(solkit.verify_all_locales())"   # must be True
 ```
 
 Report: which labs are green, the file count and layers of each, anything the

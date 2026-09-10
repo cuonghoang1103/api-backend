@@ -55,8 +55,15 @@ def check_source_text(sol):
     return problems
 
 
-def compile_and_run(sol, workdir):
-    """Returns (ok, report). Compiles every file, then plays each scripted run."""
+def compile_and_run(sol, workdir, locale=None):
+    """Returns (ok, report). Compiles every file, then plays each scripted run.
+
+    `locale` runs the program under a different default locale, e.g. 'vi-VN'.
+    That is not a nicety: String.format("%.2f", 3.5) prints "3,50" on a machine
+    set to Vietnamese, and the marker's machine in the FPTU lab is set to
+    Vietnamese. Eight solutions shipped green here and would have printed
+    commas there. Only Locale.US at the call site makes the two agree.
+    """
     text_problems = check_source_text(sol)
     if text_problems:
         return False, 'NGUỒN:\n' + '\n'.join(text_problems[:10])
@@ -82,9 +89,13 @@ def compile_and_run(sol, workdir):
 
     for i, (stdin_text, expected) in enumerate(sol['runs']):
         try:
-            p = subprocess.run(['java', '-cp', out, sol['mainClass']],
-                               input=stdin_text, capture_output=True, text=True,
-                               timeout=60, cwd=root)
+            cmd = ['java']
+            if locale:
+                lang, _, country = locale.partition('-')
+                cmd += [f'-Duser.language={lang}', f'-Duser.country={country}']
+            cmd += ['-cp', out, sol['mainClass']]
+            p = subprocess.run(cmd, input=stdin_text, capture_output=True,
+                               text=True, timeout=60, cwd=root)
         except subprocess.TimeoutExpired:
             return False, f'RUN {i}: timed out — the program is probably waiting for input it was never given'
         got = (p.stdout or '').rstrip('\n')
@@ -103,7 +114,7 @@ def compile_and_run(sol, workdir):
     return True, ''
 
 
-def verify_all(only=None):
+def verify_all(only=None, locale=None):
     work = tempfile.mkdtemp(prefix='lab211-sol-')
     ok = bad = 0
     problems = []
@@ -119,13 +130,13 @@ def verify_all(only=None):
         if blank:
             unchecked.append((sol['lab'], blank, len(sol['runs'])))
 
-        good, report = compile_and_run(sol, work)
+        good, report = compile_and_run(sol, work, locale)
         if good:
             ok += 1
         else:
             bad += 1
             problems.append((sol['lab'], report))
-    print(f'lời giải: OK={ok}  LỖI={bad}')
+    print(f'lời giải: OK={ok}  LỖI={bad}' + (f'  [locale {locale}]' if locale else ''))
     for lab, rep in problems:
         print(f'\n──────── {lab}\n{rep[:2500]}')
     if unchecked:
@@ -134,6 +145,18 @@ def verify_all(only=None):
             print(f'    {lab}: {blank}/{total} lần chạy')
     shutil.rmtree(work, ignore_errors=True)
     return bad == 0 and not unchecked
+
+
+def verify_all_locales(only=None):
+    """The real gate: green at home AND on the marker's Vietnamese machine.
+
+    Run this, not verify_all(), before reporting a lab done. A solution that is
+    green only under en_US is a solution that prints "1000,00" where the brief's
+    screen says "1000.00", and that run scores zero.
+    """
+    home = verify_all(only)
+    lab_machine = verify_all(only, locale='vi-VN')
+    return home and lab_machine
 
 
 def capture(lab):

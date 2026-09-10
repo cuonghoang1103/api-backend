@@ -250,6 +250,8 @@ public class Cart implements Serializable {
 
 MONEY = '''package utils;
 
+import java.util.Locale;
+
 /**
  * One place that turns a number into money on the screen.
  *
@@ -269,7 +271,7 @@ public class Money {
     }
 
     public static String format(double amount) {
-        String text = String.format("%.2f", amount);
+        String text = String.format(Locale.US, "%.2f", amount);
         while (text.endsWith("0")) {
             text = text.substring(0, text.length() - 1);
         }

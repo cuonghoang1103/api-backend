@@ -32,7 +32,7 @@ import 'katex/dist/katex.min.css';
 import { Check, CircleStop, Copy, Download, Play } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useSandbox, type KetQuaChay } from './useSandbox';
-import { useT } from '../../i18n';
+import { useDich } from '../../i18n';
 
 // ─── Khối ──────────────────────────────────────────────────────────
 
@@ -303,7 +303,7 @@ export function tachKhoi(tho: string): Khoi[] {
 // ─── Vẽ ────────────────────────────────────────────────────────────
 
 function KhoiMa({ ngonNgu, noiDung }: { ngonNgu: string; noiDung: string }) {
-  const { t } = useT();
+  const { dich } = useDich();
   const [daChep, datDaChep] = useState(false);
 
   // ```mermaid ⇒ VẼ, không tô màu cú pháp. Người ta viết mermaid để nhìn thấy
@@ -335,7 +335,7 @@ function KhoiMa({ ngonNgu, noiDung }: { ngonNgu: string; noiDung: string }) {
     <div className="ct-md-ma">
       <div className="ct-md-ma-dau">
         <span className="ct-md-ma-ngon">{ngonNgu || 'mã'}</span>
-        <button type="button" className="ct-md-ma-chep" onClick={chep} title={t('Chép')}>
+        <button type="button" className="ct-md-ma-chep" onClick={chep} title={dich('Chép')}>
           {daChep ? <Check size={12} aria-hidden /> : <Copy size={12} aria-hidden />}
           {daChep ? 'Đã chép' : 'Chép'}
         </button>
@@ -364,7 +364,7 @@ function chayDuoc(ngonNgu: string): boolean {
  * qua hộp thoại hệ điều hành; renderer không bao giờ truyền đường dẫn.
  */
 function ChayPython({ ma, ngonNgu }: { ma: string; ngonNgu: string }) {
-  const { t } = useT();
+  const { dich } = useDich();
   const { chay, giet, dangChay, tienTrinh } = useSandbox();
   const [kq, datKq] = useState<KetQuaChay | null>(null);
   const [daLuu, datDaLuu] = useState<string | null>(null);
@@ -387,19 +387,19 @@ function ChayPython({ ma, ngonNgu }: { ma: string; ngonNgu: string }) {
       <div className="ct-ma-dau">
         <span className="ct-ma-ngonngu">{ngonNgu}</span>
         {dangChay ? (
-          <button type="button" className="ct-ma-chep" onClick={giet} title={t('Dừng — giết hẳn tiến trình')}>
+          <button type="button" className="ct-ma-chep" onClick={giet} title={dich('Dừng — giết hẳn tiến trình')}>
             <CircleStop size={12} aria-hidden />
-            {t('Dừng')}
+            {dich('Dừng')}
           </button>
         ) : (
           <button
             type="button"
             className="ct-ma-chep"
             onClick={() => { datDaLuu(null); void chay(ma).then(datKq); }}
-            title={t('Chạy trong hộp cát Python (WebAssembly) — không đụng tới máy bạn')}
+            title={dich('Chạy trong hộp cát Python (WebAssembly) — không đụng tới máy bạn')}
           >
             <Play size={12} aria-hidden />
-            {t('Chạy')}
+            {dich('Chạy')}
           </button>
         )}
       </div>
@@ -442,7 +442,7 @@ function ChayPython({ ma, ngonNgu }: { ma: string; ngonNgu: string }) {
  * nháy chữ đỏ suốt vài giây. Cùng bài học với KaTeX dựng trên DOM.
  */
 function SoDo({ ma }: { ma: string }) {
-  const { t } = useT();
+  const { dich } = useDich();
   const [html, datHtml] = useState<string | null>(null);
   const [loi, datLoi] = useState<string | null>(null);
   const oRef = useRef<HTMLDivElement>(null);
@@ -498,7 +498,7 @@ function SoDo({ ma }: { ma: string }) {
       </div>
     );
   }
-  if (!html) return <div className="ct-sodo" data-cho>{t('Đang vẽ sơ đồ…')}</div>;
+  if (!html) return <div className="ct-sodo" data-cho>{dich('Đang vẽ sơ đồ…')}</div>;
   // SVG do mermaid sinh ở `securityLevel: 'strict'` — đã lọc script và thuộc
   // tính sự kiện. Cùng hạng tin cậy với đầu ra của highlight.js.
   return <div className="ct-sodo" ref={oRef} dangerouslySetInnerHTML={{ __html: html }} />;

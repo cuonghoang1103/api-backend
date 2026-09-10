@@ -23,7 +23,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { CircleStop, Play, Terminal, Trash2, X } from 'lucide-react';
-import { useT } from '../../i18n';
+import { useDich } from '../../i18n';
 
 /** Một lệnh đã chạy, kèm đầu ra tích được. */
 interface MucLenh {
@@ -48,7 +48,7 @@ export function BangLenh({ cuocId, coThuMuc, onDong }: {
   coThuMuc: boolean;
   onDong: () => void;
 }) {
-  const { t } = useT();
+  const { dich } = useDich();
   const [nhap, datNhap] = useState('');
   const [ds, datDs] = useState<MucLenh[]>([]);
   const [loi, datLoi] = useState<string | null>(null);
@@ -163,7 +163,7 @@ export function BangLenh({ cuocId, coThuMuc, onDong }: {
       <div
         className="ct-bang-lenh-keo"
         role="separator"
-        aria-label={t('Kéo để đổi chiều cao bảng lệnh')}
+        aria-label={dich('Kéo để đổi chiều cao bảng lệnh')}
         aria-orientation="horizontal"
         tabIndex={0}
         onPointerDown={(e) => {
@@ -181,16 +181,16 @@ export function BangLenh({ cuocId, coThuMuc, onDong }: {
       />
       <div className="ct-bang-lenh-dau">
         <Terminal size={13} aria-hidden />
-        <strong>{t('Bảng chạy lệnh')}</strong>
+        <strong>{dich('Bảng chạy lệnh')}</strong>
         <span className="ct-bang-lenh-ghi">
           không phải terminal đầy đủ — không chạy được `vim` hay chương trình hỏi-đáp
         </span>
         {ds.length > 0 && (
-          <button type="button" title={t('Xoá lịch sử hiển thị')} onClick={() => datDs([])}>
+          <button type="button" title={dich('Xoá lịch sử hiển thị')} onClick={() => datDs([])}>
             <Trash2 size={12} aria-hidden />
           </button>
         )}
-        <button type="button" title={t('Đóng bảng')} onClick={onDong}>
+        <button type="button" title={dich('Đóng bảng')} onClick={onDong}>
           <X size={13} aria-hidden />
         </button>
       </div>
@@ -252,12 +252,12 @@ export function BangLenh({ cuocId, coThuMuc, onDong }: {
         {dangChay ? (
           <button type="button" className="ct-btn ct-agent-dung" onClick={dung}>
             <CircleStop size={13} aria-hidden />
-            {t('Dừng')}
+            {dich('Dừng')}
           </button>
         ) : (
           <button type="button" className="ct-btn" onClick={() => void chay()} disabled={!nhap.trim() || !coThuMuc}>
             <Play size={13} aria-hidden />
-            {t('Chạy')}
+            {dich('Chạy')}
           </button>
         )}
       </div>

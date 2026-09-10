@@ -23,6 +23,7 @@ import { CloudOff, RefreshCw, ShieldCheck, ShieldX, Sparkles } from 'lucide-reac
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { OfflineUnavailableError, swr } from '../../offline/cache';
+import { useDich } from '../../i18n';
 
 interface ProStatus {
   isAdmin: boolean;
@@ -35,6 +36,7 @@ interface ProStatus {
 }
 
 export function ProPage() {
+  const { dich } = useDich();
   const { online } = useAppState();
   const { api, userId } = useSession();
 
@@ -93,7 +95,7 @@ export function ProPage() {
     return (
       <div className="ct-page">
         <div className="ct-empty">
-          <p>Đang tải trạng thái Pro…</p>
+          <p>{dich('Đang tải trạng thái Pro…')}</p>
         </div>
       </div>
     );
@@ -104,12 +106,12 @@ export function ProPage() {
       <div className="ct-page">
         <div className="ct-empty">
           <CloudOff size={28} aria-hidden className="ct-empty-icon" />
-          <h1>Không xem được trạng thái Pro</h1>
+          <h1>{dich('Không xem được trạng thái Pro')}</h1>
           <p>{error}</p>
           <div className="ct-actions">
             <button type="button" className="ct-btn" onClick={() => void load()}>
               <RefreshCw size={14} aria-hidden />
-              Thử lại
+              {dich('Thử lại')}
             </button>
           </div>
         </div>
@@ -126,9 +128,9 @@ export function ProPage() {
       <div className="ct-panel">
         <div className="ct-page-head">
           <div>
-            <h1>Tài khoản Pro</h1>
+            <h1>{dich('Tài khoản Pro')}</h1>
             <p className="ct-muted" style={{ margin: 0 }}>
-              Quyền lợi do máy chủ quyết định.
+              {dich('Quyền lợi do máy chủ quyết định.')}
             </p>
           </div>
         </div>
@@ -172,22 +174,22 @@ export function ProPage() {
         </div>
 
         <section className="ct-section">
-          <h2>Chi tiết</h2>
+          <h2>{dich('Chi tiết')}</h2>
           <dl className="ct-rows">
             <div className="ct-row">
-              <dt>Quyền lợi có hiệu lực</dt>
+              <dt>{dich('Quyền lợi có hiệu lực')}</dt>
               <dd>{status.effective ? 'Có' : 'Không'}</dd>
             </div>
             <div className="ct-row">
-              <dt>Cờ Pro trên tài khoản</dt>
+              <dt>{dich('Cờ Pro trên tài khoản')}</dt>
               <dd>{status.isPro ? 'Có' : 'Không'}</dd>
             </div>
             <div className="ct-row">
-              <dt>Ngày hết hạn</dt>
+              <dt>{dich('Ngày hết hạn')}</dt>
               <dd>{status.expiresAt ? formatDate(status.expiresAt) : '—'}</dd>
             </div>
             <div className="ct-row">
-              <dt>Nguồn</dt>
+              <dt>{dich('Nguồn')}</dt>
               <dd>{status.source ?? '—'}</dd>
             </div>
           </dl>
@@ -205,12 +207,11 @@ export function ProPage() {
             disabled={!online}
           >
             <RefreshCw size={14} aria-hidden />
-            Kiểm tra lại
+            {dich('Kiểm tra lại')}
           </button>
         </div>
         <p className="ct-field-help">
-          Nhập mã kích hoạt và thanh toán thực hiện trên web — cả hai đều đổi
-          quyền lợi thật nên cần kết nối ổn định.
+          {dich('Nhập mã kích hoạt và thanh toán thực hiện trên web — cả hai đều đổi quyền lợi thật nên cần kết nối ổn định.')}
         </p>
       </div>
     </div>

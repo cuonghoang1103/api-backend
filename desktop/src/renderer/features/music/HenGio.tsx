@@ -22,6 +22,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Moon, X } from 'lucide-react';
+import { useDich } from '../../i18n';
 
 const MUC = [15, 30, 45, 60, 90];
 /** Bao lâu để nhỏ dần trước khi dừng. */
@@ -33,6 +34,7 @@ export function HenGio({ playing, onDung, volume, setVolume }: {
   volume: number;
   setVolume: (v: number) => void;
 }) {
+  const { dich } = useDich();
   const [mo, datMo] = useState(false);
   /** Mốc kết thúc (ms). `null` = không hẹn. `'het-bai'` = dừng khi hết bài. */
   const [moc, datMoc] = useState<number | 'het-bai' | null>(null);
@@ -105,7 +107,7 @@ export function HenGio({ playing, onDung, volume, setVolume }: {
 
       {mo && (
         <div className="ct-hengio-bang">
-          <p className="ct-hengio-dau">Tắt nhạc sau</p>
+          <p className="ct-hengio-dau">{dich('Tắt nhạc sau')}</p>
           <div className="ct-hengio-muc">
             {MUC.map((p) => (
               <button
@@ -122,7 +124,7 @@ export function HenGio({ playing, onDung, volume, setVolume }: {
               data-chon={moc === 'het-bai'}
               onClick={() => { datMoc('het-bai'); datMo(false); }}
             >
-              Hết bài này
+              {dich('Hết bài này')}
             </button>
           </div>
           {dangHen && (

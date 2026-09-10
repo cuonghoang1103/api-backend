@@ -4,8 +4,8 @@
  * ============================================================
  *
  * ─── VÌ SAO KHOÁ LÀ CHÍNH CÂU TIẾNG VIỆT, KHÔNG PHẢI `nav.dashboard` ───
- * Kiểu khoá-định-danh (`t('nav.dashboard')`) là chuẩn công nghiệp, nhưng ở kho
- * này nó trả giá đắt hơn phần nó được:
+ * Kiểu khoá-định-danh là chuẩn công nghiệp, nhưng ở kho này nó trả giá đắt hơn
+ * phần nó được:
  *
  *  • App có ~1.400 chuỗi trong 104 tệp. Đặt khoá cho từng chuỗi nghĩa là bịa ra
  *    1.400 cái tên, và mỗi cái tên là một cơ hội gõ sai mà `tsc` không bắt được
@@ -16,15 +16,22 @@
  *  • Thiếu bản dịch thì kiểu khoá cho ra `nav.dashboard` giữa giao diện; kiểu
  *    này cho ra **tiếng Việt** — vẫn đọc được, vẫn đúng nghĩa.
  *
+ * ─── ⚠️ VÌ SAO TÊN LÀ `dich`, KHÔNG PHẢI `t` ───
+ * `t` là tên chuẩn của giới i18n, và nó SAI ở kho này: `t` cũng là tên biến
+ * vòng lặp quen tay. Đo thật 10/09/2026 — **21 tệp** trong `features/` có
+ * `(t) => …`, và ở mỗi tệp đó `const { t } = useDich()` bị biến vòng lặp che
+ * mất, cho ra `Type 'Task' has no call signatures` ở những dòng chẳng liên quan
+ * gì tới ngôn ngữ. Đổi tên lúc mới 361 chỗ dùng rẻ hơn nhiều so với lúc 1.400.
+ *
  * ─── VÌ SAO KHÔNG DÙNG CONTEXT CỦA REACT ───
- * `t()` cũng cần gọi được từ mã KHÔNG phải component (`viecDangLam.ts`,
- * `routes.ts`, các hàm dựng chuỗi). Một biến ở tầm mô-đun + danh sách người
- * nghe làm được cả hai: hàm thuần đọc thẳng, còn component dùng `useT()` để
- * dựng lại khi người dùng đổi ngôn ngữ.
+ * `dich()` cũng cần gọi được từ mã KHÔNG phải component (các hàm dựng chuỗi,
+ * bảng hằng). Một biến ở tầm mô-đun + danh sách người nghe làm được cả hai:
+ * hàm thuần đọc thẳng, còn component dùng `useDich()` để dựng lại khi người
+ * dùng đổi ngôn ngữ.
  *
  * ⚠️ ĐỔI NGÔN NGỮ KHÔNG NẠP LẠI APP. Nạp lại là mất trạng thái đang làm dở —
  * cuộc trò chuyện agent đang chạy, ghi chú đang gõ. Nên mọi chỗ hiện chữ phải
- * đi qua `useT()`, không được đọc `TU_DIEN` một lần rồi nhớ vào biến.
+ * đi qua `useDich()`, không được đọc `TU_DIEN` một lần rồi nhớ vào biến.
  */
 import { useCallback, useEffect, useState } from 'react';
 
@@ -59,7 +66,7 @@ export function datNgonNgu(n: NgonNgu): void {
  * đích: một câu tiếng Việt lọt giữa giao diện tiếng Anh thì lạ mắt nhưng vẫn
  * dùng được, còn một chuỗi rỗng hay một mã khoá thì không.
  */
-export function t(cau: string): string {
+export function dich(cau: string): string {
   if (hienTai === 'vi') return cau;
   return TU_DIEN[cau] ?? cau;
 }
@@ -67,24 +74,25 @@ export function t(cau: string): string {
 /**
  * Dịch có chỗ thay.
  *
- * `tp('Còn {n} việc', { n: 3 })`. Chỗ thay giữ nguyên tên ở cả hai ngôn ngữ,
+ * `dichP('Còn {n} việc', { n: 3 })`. Chỗ thay giữ nguyên tên ở cả hai ngôn ngữ,
  * nên bản dịch được phép ĐẢO thứ tự — điều bắt buộc phải làm được, vì trật tự
  * từ tiếng Anh và tiếng Việt khác nhau ở đúng những câu hay ghép chuỗi nhất.
  */
-export function tp(cau: string, thay: Record<string, string | number>): string {
-  return t(cau).replace(/\{(\w+)\}/g, (nguyen, ten: string) =>
+export function dichP(cau: string, thay: Record<string, string | number>): string {
+  return dich(cau).replace(/\{(\w+)\}/g, (nguyen, ten: string) =>
     (ten in thay ? String(thay[ten]) : nguyen));
 }
 
 /**
  * Hook cho component — dựng lại khi ngôn ngữ đổi.
  *
- * Trả về `t`/`tp` bọc trong `useCallback` phụ thuộc `nn`, nên component nào
- * gọi nó cũng nhận hàm MỚI sau khi đổi ngôn ngữ ⇒ mọi `useMemo` dựa vào `t`
- * cũng tính lại. Trả hàm cố định thì nhãn nằm trong `useMemo` sẽ kẹt ở ngôn
- * ngữ cũ cho tới lần dựng sau — đúng kiểu lỗi "đổi rồi mà một nửa app chưa đổi".
+ * Trả về `dich`/`dichP` bọc trong `useCallback` phụ thuộc `nn`, nên component
+ * nào gọi nó cũng nhận hàm MỚI sau khi đổi ngôn ngữ ⇒ mọi `useMemo` dựa vào
+ * `dich` cũng tính lại. Trả hàm cố định thì nhãn nằm trong `useMemo` sẽ kẹt ở
+ * ngôn ngữ cũ cho tới lần dựng sau — đúng kiểu lỗi "đổi rồi mà một nửa app
+ * chưa đổi".
  */
-export function useT(): { t: typeof t; tp: typeof tp; nn: NgonNgu } {
+export function useDich(): { dich: typeof dich; dichP: typeof dichP; nn: NgonNgu } {
   const [nn, datNn] = useState<NgonNgu>(hienTai);
   useEffect(() => {
     const f = (): void => datNn(ngonNguHienTai());
@@ -94,12 +102,12 @@ export function useT(): { t: typeof t; tp: typeof tp; nn: NgonNgu } {
     return () => { nguoiNghe.delete(f); };
   }, []);
 
-  const tt = useCallback((cau: string) => (nn === 'vi' ? cau : TU_DIEN[cau] ?? cau), [nn]);
-  const ttp = useCallback(
+  const d = useCallback((cau: string) => (nn === 'vi' ? cau : TU_DIEN[cau] ?? cau), [nn]);
+  const dP = useCallback(
     (cau: string, thay: Record<string, string | number>) =>
-      tt(cau).replace(/\{(\w+)\}/g, (nguyen, ten: string) =>
+      d(cau).replace(/\{(\w+)\}/g, (nguyen, ten: string) =>
         (ten in thay ? String(thay[ten]) : nguyen)),
-    [tt],
+    [d],
   );
-  return { t: tt, tp: ttp, nn };
+  return { dich: d, dichP: dP, nn };
 }

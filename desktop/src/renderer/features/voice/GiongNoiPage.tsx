@@ -32,6 +32,7 @@ import {
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { OfflineUnavailableError, swr } from '../../offline/cache';
+import { useDich } from '../../i18n';
 
 interface Nguoi {
   id?: number;
@@ -128,6 +129,7 @@ function docDanhSach(p: unknown): { posts: BaiTom[]; total: number } {
 }
 
 export function GiongNoiPage() {
+  const { dich } = useDich();
   const { online } = useAppState();
   const { api, userId } = useSession();
 
@@ -221,11 +223,11 @@ export function GiongNoiPage() {
     <div className="ct-page ct-gn">
       <header className="ct-gn-dau">
         <div>
-          <h1>Giọng nói</h1>
-          <p className="ct-muted">Vlog, reaction, podcast và hướng dẫn — có bình luận và lượt thích.</p>
+          <h1>{dich('Giọng nói')}</h1>
+          <p className="ct-muted">{dich('Vlog, reaction, podcast và hướng dẫn — có bình luận và lượt thích.')}</p>
         </div>
         <div className="ct-gn-dau-nut">
-          {cu && <span className="ct-gn-cu"><CloudOff size={13} aria-hidden /> bản đã lưu</span>}
+          {cu && <span className="ct-gn-cu"><CloudOff size={13} aria-hidden /> {dich('bản đã lưu')}</span>}
           <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void napDanhSach()}>
             <RefreshCw size={14} aria-hidden /> Tải lại
           </button>
@@ -241,14 +243,14 @@ export function GiongNoiPage() {
           <input
             value={tim}
             onChange={(e) => setTim(e.target.value)}
-            placeholder="Tìm theo tiêu đề, tóm tắt hoặc thẻ…"
-            aria-label="Tìm bài"
+            placeholder={dich('Tìm theo tiêu đề, tóm tắt hoặc thẻ…')}
+            aria-label={dich('Tìm bài')}
           />
         </form>
 
-        <div className="ct-gn-chip" role="group" aria-label="Lọc theo loại">
+        <div className="ct-gn-chip" role="group" aria-label={dich('Lọc theo loại')}>
           <button type="button" data-active={loai === null} onClick={() => doiLoc(() => setLoai(null))}>
-            Tất cả
+            {dich('Tất cả')}
           </button>
           {Object.entries(NHAN_LOAI).map(([ma, nhan]) => (
             <button
@@ -263,7 +265,7 @@ export function GiongNoiPage() {
         </div>
 
         {seriesDs.length > 0 && (
-          <div className="ct-gn-chip" role="group" aria-label="Lọc theo series">
+          <div className="ct-gn-chip" role="group" aria-label={dich('Lọc theo series')}>
             {seriesDs.map((s) => (
               <button
                 key={s.id}
@@ -284,11 +286,11 @@ export function GiongNoiPage() {
           <CloudOff size={26} aria-hidden className="ct-empty-icon" />
           <p>{loi}</p>
           <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void napDanhSach()}>
-            Thử lại
+            {dich('Thử lại')}
           </button>
         </div>
       ) : dangTai && bai.length === 0 ? (
-        <p className="ct-muted">Đang tải…</p>
+        <p className="ct-muted">{dich('Đang tải…')}</p>
       ) : bai.length === 0 ? (
         <div className="ct-empty">
           <Play size={26} aria-hidden className="ct-empty-icon" />
@@ -305,7 +307,7 @@ export function GiongNoiPage() {
               className="ct-btn ct-btn-ghost"
               onClick={() => doiLoc(() => { setLoai(null); setSeriesChon(null); setTim(''); setTimDaGui(''); })}
             >
-              Bỏ hết bộ lọc
+              {dich('Bỏ hết bộ lọc')}
             </button>
           )}
         </div>
@@ -348,7 +350,7 @@ export function GiongNoiPage() {
                 disabled={trang <= 1}
                 onClick={() => setTrang((t) => Math.max(1, t - 1))}
               >
-                Trước
+                {dich('Trước')}
               </button>
               <span className="ct-muted">Trang {trang} / {soTrang}</span>
               <button
@@ -378,6 +380,7 @@ function ChiTietBai({
   onQuayLai: () => void;
   onMoBai: (slug: string) => void;
 }) {
+  const { dich } = useDich();
   const { online } = useAppState();
   const { api, userId } = useSession();
 
@@ -496,7 +499,7 @@ function ChiTietBai({
         <button type="button" className="ct-btn ct-btn-ghost ct-gn-lui" onClick={onQuayLai}>
           <ArrowLeft size={14} aria-hidden /> Danh sách
         </button>
-        <p className="ct-muted">Đang tải…</p>
+        <p className="ct-muted">{dich('Đang tải…')}</p>
       </div>
     );
   }
@@ -529,7 +532,7 @@ function ChiTietBai({
                 : <img src={`https://i.ytimg.com/vi/${bai.youtubeId}/hqdefault.jpg`} alt="" />}
               <span className="ct-gn-yt-nut">
                 <Play size={20} aria-hidden />
-                Xem trên YouTube
+                {dich('Xem trên YouTube')}
               </span>
             </button>
           ) : (
@@ -587,7 +590,7 @@ function ChiTietBai({
 
         {(bai.chapters ?? []).length > 0 && (
           <section className="ct-gn-chuong">
-            <h2>Mốc thời gian</h2>
+            <h2>{dich('Mốc thời gian')}</h2>
             <ul>
               {bai.chapters!.map((c) => (
                 <li key={`${c.t}-${c.label}`}>
@@ -605,9 +608,9 @@ function ChiTietBai({
           <textarea
             value={soanBl}
             onChange={(e) => setSoanBl(e.target.value)}
-            placeholder="Viết bình luận…"
+            placeholder={dich('Viết bình luận…')}
             rows={3}
-            aria-label="Nội dung bình luận"
+            aria-label={dich('Nội dung bình luận')}
           />
           <button
             type="button"
@@ -621,7 +624,7 @@ function ChiTietBai({
         {loiBl && <p className="ct-gn-loi">{loiBl}</p>}
 
         {binhLuan.length === 0 ? (
-          <p className="ct-muted">Chưa có bình luận nào.</p>
+          <p className="ct-muted">{dich('Chưa có bình luận nào.')}</p>
         ) : (
           <ul className="ct-gn-bl-ds">
             {binhLuan.map((c) => (
@@ -652,7 +655,7 @@ function ChiTietBai({
 
       {lienQuan.length > 0 && (
         <section className="ct-gn-lq">
-          <h2>Bài liên quan</h2>
+          <h2>{dich('Bài liên quan')}</h2>
           <div className="ct-gn-lq-ds">
             {lienQuan.map((b) => (
               <button key={b.id} type="button" onClick={() => onMoBai(b.slug)}>

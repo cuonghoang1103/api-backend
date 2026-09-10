@@ -14,7 +14,7 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 import { TU_DIEN } from './tuDien';
-import { t, tp, datNgonNgu, ngonNguHienTai } from './index';
+import { dich, dichP, datNgonNgu, ngonNguHienTai } from './index';
 
 const GOC = join(__dirname, '..');
 
@@ -27,7 +27,7 @@ function moiTep(thuMuc: string, ra: string[] = []): string[] {
   return ra;
 }
 
-/** Mọi chuỗi hằng nằm trong `t('…')` / `tp('…')` khắp renderer. */
+/** Mọi chuỗi hằng nằm trong `dich('…')` / `dichP('…')` khắp renderer. */
 function chuoiDaBoc(): { cau: string; tep: string }[] {
   const ra: { cau: string; tep: string }[] = [];
   for (const tep of moiTep(GOC)) {
@@ -35,7 +35,7 @@ function chuoiDaBoc(): { cau: string; tep: string }[] {
     const ma = readFileSync(tep, 'utf8')
       .replace(/\/\*[\s\S]*?\*\//g, '')
       .replace(/^\s*\/\/.*$/gm, '');
-    for (const m of ma.matchAll(/(?<![A-Za-z0-9_$.])tp?\(\s*'((?:[^'\\]|\\.)*)'/g)) {
+    for (const m of ma.matchAll(/(?<![A-Za-z0-9_$.])dichP?\(\s*'((?:[^'\\]|\\.)*)'/g)) {
       ra.push({ cau: m[1]!.replace(/\\'/g, "'"), tep: tep.slice(GOC.length + 1) });
     }
     /* `<Chu cau="…" />` — văn xuôi có định dạng. Bỏ sót nhánh này thì mọi câu
@@ -89,21 +89,21 @@ describe('cơ chế đổi', () => {
   it('mặc định tiếng Việt ⇒ trả nguyên câu', () => {
     datNgonNgu('vi');
     expect(ngonNguHienTai()).toBe('vi');
-    expect(t('Cài đặt')).toBe('Cài đặt');
+    expect(dich('Cài đặt')).toBe('Cài đặt');
   });
 
   it('đổi sang tiếng Anh ⇒ dịch, và câu LẠ vẫn trả tiếng Việt chứ không rỗng', () => {
     datNgonNgu('en');
-    expect(t('Cài đặt')).toBe('Settings');
+    expect(dich('Cài đặt')).toBe('Settings');
     // Đây là lựa chọn có chủ đích: thà lạ mắt còn hơn một ô trống.
-    expect(t('Một câu chưa ai dịch')).toBe('Một câu chưa ai dịch');
+    expect(dich('Một câu chưa ai dịch')).toBe('Một câu chưa ai dịch');
     datNgonNgu('vi');
   });
 
   it('chỗ thay giữ nguyên tên, và bản dịch được phép ĐẢO thứ tự', () => {
     // Trật tự từ tiếng Anh và tiếng Việt khác nhau ở đúng những câu hay ghép
     // chuỗi nhất, nên nối chuỗi bằng `+` là không dịch được.
-    expect(tp('Còn {n} việc', { n: 3 })).toBe('Còn 3 việc');
-    expect(tp('Còn {n} việc', {})).toBe('Còn {n} việc');   // thiếu ⇒ giữ chỗ thay
+    expect(dichP('Còn {n} việc', { n: 3 })).toBe('Còn 3 việc');
+    expect(dichP('Còn {n} việc', {})).toBe('Còn {n} việc');   // thiếu ⇒ giữ chỗ thay
   });
 });

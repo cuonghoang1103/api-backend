@@ -29,8 +29,10 @@ import WebNotesPage from '@/app/notes/page';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from '../../auth/session';
 import { configureWebApi } from '../../shims/web-api-adapter';
+import { useDich } from '../../i18n';
 
 export function NotesPage() {
+  const { dich } = useDich();
   const { api, user } = useSession();
   const [ready, setReady] = useState(false);
 
@@ -69,7 +71,7 @@ export function NotesPage() {
       <div className="ct-boot">
         <div className="ct-empty">
           <Loader2 size={22} className="ct-spin" aria-hidden />
-          <p style={{ marginTop: 10 }}>Đang mở Ghi chú…</p>
+          <p style={{ marginTop: 10 }}>{dich('Đang mở Ghi chú…')}</p>
         </div>
       </div>
     );

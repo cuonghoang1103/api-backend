@@ -238,6 +238,41 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     },
   },
 
+  /**
+   * GHI FILE NGOÀI THƯ MỤC DỰ ÁN — đường duy nhất, và luôn phải người dùng duyệt.
+   *
+   * ─── Vì sao phải có ───
+   * `create_file`/`edit_file` bị nhốt trong gốc dự án (đúng, đừng nới), còn
+   * `run_command` thì BỊ CẤM ghi file vì shell làm hỏng nội dung thật: đo
+   * 19/08/2026 — PowerShell ghi UTF-16 nên đọc lại ra byte rác xen giữa mọi
+   * ký tự, và lớp thoát của shell biến `"` thành `'` làm sai cú pháp.
+   *
+   * Kết quả là một lỗ hổng năng lực: người dùng nhờ sửa một tệp cấu hình nằm
+   * ngoài dự án, agent không có đường nào và đẩy họ đi mở Notepad gõ tay. Đúng
+   * chuyện xảy ra 10/09/2026.
+   *
+   * Tool này bịt lỗ ấy mà không nới ngục: đường dẫn TUYỆT ĐỐI, ghi bằng Node
+   * (UTF-8 đúng, không qua shell), và luôn hiện thẻ duyệt kèm đường dẫn đầy đủ.
+   */
+  {
+    name: 'ghi_file_ngoai',
+    ring: 'client',
+    capability: 'fs_write',
+    description:
+      'Ghi một file NGOÀI thư mục dự án (tệp cấu hình, file trong thư mục HOME…). '
+      + 'Đường dẫn phải TUYỆT ĐỐI. Người dùng luôn thấy đường dẫn đầy đủ và phải duyệt. '
+      + 'Dùng tool này thay vì bảo người dùng tự mở Notepad/TextEdit gõ tay, và thay vì '
+      + 'ghi bằng run_command (shell làm hỏng dấu ngoặc kép và mã hoá ký tự).',
+    parameters: {
+      type: 'object',
+      properties: {
+        path: { type: 'string', description: 'Đường dẫn TUYỆT ĐỐI tới file cần ghi.' },
+        content: { type: 'string', description: 'Toàn bộ nội dung file sau khi ghi.' },
+      },
+      required: ['path', 'content'],
+    },
+  },
+
   {
     name: 'xoa_file',
     ring: 'client',

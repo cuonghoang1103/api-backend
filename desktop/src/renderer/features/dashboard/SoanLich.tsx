@@ -19,6 +19,7 @@ import { AlertTriangle, ClipboardPaste, Plus, Trash2, X } from 'lucide-react';
 import { useSession } from '../../auth/session';
 import { docLichFAP } from './docLichFAP';
 import type { Buoi } from './LichHoc';
+import { useDich } from '../../i18n';
 
 const THU = [
   { n: 2, ten: 'Thứ 2' }, { n: 3, ten: 'Thứ 3' }, { n: 4, ten: 'Thứ 4' }, { n: 5, ten: 'Thứ 5' },
@@ -70,6 +71,7 @@ export function loiDong(d: Pick<Dong, 'subject' | 'weekday' | 'startTime' | 'end
 }
 
 export function SoanLich({ onDong, onXong }: { onDong: () => void; onXong: () => void }) {
+  const { dich } = useDich();
   const { api } = useSession();
   const [dong, datDong] = useState<Dong[]>([]);
   const [banDau, datBanDau] = useState<number[]>([]);
@@ -214,15 +216,15 @@ export function SoanLich({ onDong, onXong }: { onDong: () => void; onXong: () =>
       className="ct-soan-nen"
       role="dialog"
       aria-modal="true"
-      aria-label="Soạn thời khoá biểu"
+      aria-label={dich('Soạn thời khoá biểu')}
       /* Chỉ đóng khi bấm ĐÚNG tấm nền. Không so `currentTarget` thì thả chuột
          sau một cú kéo chọn chữ trong bảng cũng đóng hộp, mất hết dòng đang sửa. */
       onMouseDown={(e) => { if (e.target === e.currentTarget) onDong(); }}
     >
       <div className="ct-soan">
         <header className="ct-soan-dau">
-          <h2>Thời khoá biểu</h2>
-          <button type="button" className="ct-soan-x" onClick={onDong} aria-label="Đóng">
+          <h2>{dich('Thời khoá biểu')}</h2>
+          <button type="button" className="ct-soan-x" onClick={onDong} aria-label={dich('Đóng')}>
             <X size={16} aria-hidden />
           </button>
         </header>
@@ -244,8 +246,8 @@ export function SoanLich({ onDong, onXong }: { onDong: () => void; onXong: () =>
         {moDan && (
           <div className="ct-soan-dan">
             <p className="ct-muted">
-              Mở FAP → bôi đen cả bảng thời khoá biểu → sao chép → dán vào đây.
-              Đọc xong bạn xem lại từng dòng bên dưới rồi mới lưu.
+              {dich('Mở FAP → bôi đen cả bảng thời khoá biểu → sao chép → dán vào đây.')}
+              {dich('Đọc xong bạn xem lại từng dòng bên dưới rồi mới lưu.')}
             </p>
             <textarea
               ref={oDan}
@@ -271,12 +273,12 @@ export function SoanLich({ onDong, onXong }: { onDong: () => void; onXong: () =>
         )}
 
         <div className="ct-soan-bang-boc">
-          {dangTai ? <p className="ct-muted">Đang nạp…</p> : (
+          {dangTai ? <p className="ct-muted">{dich('Đang nạp…')}</p> : (
             <table className="ct-soan-bang">
               <thead>
                 <tr>
-                  <th>Thứ</th><th>Bắt đầu</th><th>Kết thúc</th><th>Môn</th>
-                  <th>Mã lớp</th><th>Phòng</th><th>Nhắc</th><th />
+                  <th>{dich('Thứ')}</th><th>{dich('Bắt đầu')}</th><th>{dich('Kết thúc')}</th><th>{dich('Môn')}</th>
+                  <th>{dich('Mã lớp')}</th><th>{dich('Phòng')}</th><th>{dich('Nhắc')}</th><th />
                 </tr>
               </thead>
               <tbody>
@@ -286,7 +288,7 @@ export function SoanLich({ onDong, onXong }: { onDong: () => void; onXong: () =>
                     <tr key={d.khoa} data-loi={l !== null}>
                       <td>
                         <select value={d.weekday} onChange={(e) => sua(d.khoa, { weekday: Number(e.target.value) })}>
-                          {d.weekday === 0 && <option value={0}>— chọn —</option>}
+                          {d.weekday === 0 && <option value={0}>{dich('— chọn —')}</option>}
                           {THU.map((t) => <option key={t.n} value={t.n}>{t.ten}</option>)}
                         </select>
                       </td>
@@ -318,7 +320,7 @@ export function SoanLich({ onDong, onXong }: { onDong: () => void; onXong: () =>
 
         <footer className="ct-soan-chan">
           {hong.length > 0 && <span className="ct-soan-bao">{hong.length} dòng còn thiếu, sửa xong mới lưu được</span>}
-          <button type="button" className="ct-btn" onClick={onDong}>Huỷ</button>
+          <button type="button" className="ct-btn" onClick={onDong}>{dich('Huỷ')}</button>
           <button type="button" className="ct-btn ct-btn-chinh" onClick={() => void ghi()} disabled={luu || hong.length > 0 || dangTai}>
             {luu ? 'Đang lưu…' : 'Lưu lịch'}
           </button>

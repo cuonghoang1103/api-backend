@@ -28,6 +28,8 @@ import {
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { OfflineUnavailableError, swr } from '../../offline/cache';
+import { useDich } from '../../i18n';
+import { Chu } from '../../i18n/Chu';
 
 interface Nguoi {
   id: number;
@@ -51,6 +53,7 @@ function ten(n?: Nguoi | null): string {
 }
 
 export function FriendsPage() {
+  const { dich } = useDich();
   const { online, navigate } = useAppState();
   const { api, userId } = useSession();
 
@@ -183,7 +186,7 @@ export function FriendsPage() {
     <div className="ct-page ct-bb" style={{ maxWidth: 780 }}>
       <div className="ct-page-head" style={{ marginBottom: 12 }}>
         <div>
-          <h1>Bạn bè</h1>
+          <h1>{dich('Bạn bè')}</h1>
           <p className="ct-muted" style={{ margin: 0 }}>
             {ban.length ? `${ban.length} người bạn` : 'Kết nối với người khác trên cuongthai.com'}
           </p>
@@ -211,11 +214,11 @@ export function FriendsPage() {
 
       {/* ── Bạn bè ── */}
       {tab === 'ban' && (
-        dangTai && ban.length === 0 ? <p className="ct-muted">Đang tải…</p>
+        dangTai && ban.length === 0 ? <p className="ct-muted">{dich('Đang tải…')}</p>
           : ban.length === 0 ? (
             <div className="ct-empty">
               <Users size={28} aria-hidden className="ct-empty-icon" />
-              <p>Chưa có người bạn nào. Sang tab <strong>Tìm bạn</strong> để bắt đầu.</p>
+              <p><Chu cau="Chưa có người bạn nào. Sang tab **Tìm bạn** để bắt đầu." /></p>
             </div>
           ) : (
             <ul className="ct-bb-ds">
@@ -225,7 +228,7 @@ export function FriendsPage() {
                     <MessageSquare size={13} aria-hidden /> Nhắn tin
                   </button>
                   <button type="button" className="ct-bb-huy" onClick={() => void huyBan(n)}
-                    disabled={dangChay.has(n.id)} title="Huỷ kết bạn">
+                    disabled={dangChay.has(n.id)} title={dich('Huỷ kết bạn')}>
                     <UserMinus size={14} aria-hidden />
                   </button>
                 </Dong>
@@ -239,7 +242,7 @@ export function FriendsPage() {
         den.length === 0 ? (
           <div className="ct-empty">
             <UserCheck size={28} aria-hidden className="ct-empty-icon" />
-            <p>Không có lời mời nào đang chờ.</p>
+            <p>{dich('Không có lời mời nào đang chờ.')}</p>
           </div>
         ) : (
           <ul className="ct-bb-ds">
@@ -262,15 +265,15 @@ export function FriendsPage() {
         di.length === 0 ? (
           <div className="ct-empty">
             <UserPlus size={28} aria-hidden className="ct-empty-icon" />
-            <p>Bạn chưa gửi lời mời nào.</p>
+            <p>{dich('Bạn chưa gửi lời mời nào.')}</p>
           </div>
         ) : (
           <ul className="ct-bb-ds">
             {di.map((m) => (
               <Dong key={m.friendshipId} n={m.user}>
-                <span className="ct-bb-cho">Đang chờ</span>
+                <span className="ct-bb-cho">{dich('Đang chờ')}</span>
                 <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void rutLoiMoi(m)} disabled={dangChay.has(m.user.id)}>
-                  Thu hồi
+                  {dich('Thu hồi')}
                 </button>
               </Dong>
             ))}
@@ -285,14 +288,14 @@ export function FriendsPage() {
             <Search size={15} aria-hidden />
             <input
               value={tuKhoa}
-              placeholder="Tìm theo tên hoặc tên đăng nhập…"
+              placeholder={dich('Tìm theo tên hoặc tên đăng nhập…')}
               maxLength={80}
               onChange={(e) => datTuKhoa(e.target.value)}
             />
           </div>
 
           {tuKhoa.trim().length >= 2 ? (
-            dangTim ? <p className="ct-muted">Đang tìm…</p>
+            dangTim ? <p className="ct-muted">{dich('Đang tìm…')}</p>
               : ketQua?.length === 0 ? <p className="ct-muted">Không tìm thấy ai khớp “{tuKhoa.trim()}”.</p>
                 : (
                   <ul className="ct-bb-ds">
@@ -305,8 +308,8 @@ export function FriendsPage() {
                 )
           ) : (
             <>
-              <p className="ct-bb-nhan">Gợi ý cho bạn</p>
-              {goiY.length === 0 ? <p className="ct-muted">Chưa có gợi ý nào.</p> : (
+              <p className="ct-bb-nhan">{dich('Gợi ý cho bạn')}</p>
+              {goiY.length === 0 ? <p className="ct-muted">{dich('Chưa có gợi ý nào.')}</p> : (
                 <ul className="ct-bb-ds">
                   {goiY.filter((n) => n.id !== userId).map((n) => (
                     <Dong key={n.id} n={n}>
@@ -327,9 +330,10 @@ export function FriendsPage() {
 function NutKetBan({ n, qh, dang, onMoi }: {
   n: Nguoi; qh: 'ban' | 'den' | 'di' | 'chua'; dang: boolean; onMoi: () => void;
 }) {
-  if (qh === 'ban') return <span className="ct-bb-cho" data-ok="true"><UserCheck size={12} aria-hidden /> Bạn bè</span>;
-  if (qh === 'di') return <span className="ct-bb-cho">Đã gửi lời mời</span>;
-  if (qh === 'den') return <span className="ct-bb-cho">Đang chờ bạn trả lời</span>;
+  const { dich } = useDich();
+  if (qh === 'ban') return <span className="ct-bb-cho" data-ok="true"><UserCheck size={12} aria-hidden /> {dich('Bạn bè')}</span>;
+  if (qh === 'di') return <span className="ct-bb-cho">{dich('Đã gửi lời mời')}</span>;
+  if (qh === 'den') return <span className="ct-bb-cho">{dich('Đang chờ bạn trả lời')}</span>;
   return (
     <button type="button" className="ct-btn" onClick={onMoi} disabled={dang} aria-label={`Kết bạn với ${ten(n)}`}>
       <UserPlus size={13} aria-hidden /> Kết bạn
@@ -338,12 +342,13 @@ function NutKetBan({ n, qh, dang, onMoi }: {
 }
 
 function Dong({ n, children }: { n: Nguoi; children: React.ReactNode }) {
+  const { dich } = useDich();
   return (
     <li className="ct-bb-dong">
       <Avatar n={n} />
       <div className="ct-bb-dong-chu">
         <strong>{ten(n)}</strong>
-        <span>@{n.username}{n.isOnline && <em className="ct-bb-online"> · đang online</em>}</span>
+        <span>@{n.username}{n.isOnline && <em className="ct-bb-online"> {dich('· đang online')}</em>}</span>
       </div>
       <div className="ct-bb-nut">{children}</div>
     </li>

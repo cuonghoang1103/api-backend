@@ -27,6 +27,7 @@ import {
 
 import { useSession } from '../../auth/session';
 import { NoiDungBai, maYouTube } from './noiDung';
+import { useDich } from '../../i18n';
 import {
   CAM_XUC, MAT_CAM_XUC, coTep, chuanHoa, khiNao, ten, tongCamXuc, topCamXuc,
   type Bai, type BinhLuan, type CamXuc, type Media, type TacGia,
@@ -43,6 +44,7 @@ export function BaiViet({
   onXoa: (id: number) => void;
   onXemAnh: (ds: Media[], i: number) => void;
 }) {
+  const { dich } = useDich();
   const { api, userId } = useSession();
   const [moBinhLuan, datMoBinhLuan] = useState(false);
   const [moMenu, datMoMenu] = useState(false);
@@ -139,7 +141,7 @@ export function BaiViet({
           <button
             type="button"
             className="ct-bt-menu-nut"
-            aria-label="Tuỳ chọn bài viết"
+            aria-label={dich('Tuỳ chọn bài viết')}
             onClick={() => datMoMenu((v) => !v)}
           >
             <MoreHorizontal size={17} aria-hidden />
@@ -229,7 +231,7 @@ export function BaiViet({
         </button>
       </footer>
 
-      {daChep && <p className="ct-bt-dachep"><Check size={13} aria-hidden /> Đã sao chép liên kết</p>}
+      {daChep && <p className="ct-bt-dachep"><Check size={13} aria-hidden /> {dich('Đã sao chép liên kết')}</p>}
 
       {moBinhLuan && <KhungBinhLuan bai={bai} onDoi={onDoi} />}
     </article>
@@ -391,6 +393,7 @@ interface BinhLuanDay extends BinhLuan {
 }
 
 function KhungBinhLuan({ bai, onDoi }: { bai: Bai; onDoi: (b: Bai) => void }) {
+  const { dich } = useDich();
   const { api } = useSession();
   const [ds, datDs] = useState<BinhLuanDay[] | null>(null);
   const [traLoiCho, datTraLoiCho] = useState<number | null>(null);
@@ -438,8 +441,8 @@ function KhungBinhLuan({ bai, onDoi }: { bai: Bai; onDoi: (b: Bai) => void }) {
     <div className="ct-bt-bl">
       <SoanBinhLuan onGui={(chu) => gui(chu, null)} tuDong={false} />
 
-      {ds === null && <p className="ct-muted ct-bt-bl-trong">Đang tải bình luận…</p>}
-      {ds?.length === 0 && <p className="ct-muted ct-bt-bl-trong">Chưa có bình luận nào.</p>}
+      {ds === null && <p className="ct-muted ct-bt-bl-trong">{dich('Đang tải bình luận…')}</p>}
+      {ds?.length === 0 && <p className="ct-muted ct-bt-bl-trong">{dich('Chưa có bình luận nào.')}</p>}
 
       {ds?.map((c) => (
         <div key={c.id} className="ct-bt-bl-nhom">
@@ -476,6 +479,7 @@ function KhungBinhLuan({ bai, onDoi }: { bai: Bai; onDoi: (b: Bai) => void }) {
 function MotBinhLuan({
   c, onThich, onTraLoi,
 }: { c: BinhLuan; onThich: () => void; onTraLoi: () => void }) {
+  const { dich } = useDich();
   const t = c.author ?? c.user ?? null;
   return (
     <div className="ct-bt-bl-muc">
@@ -489,7 +493,7 @@ function MotBinhLuan({
           <button type="button" data-bat={!!c.isLiked} onClick={onThich}>
             Thích{c.likesCount ? ` · ${c.likesCount}` : ''}
           </button>
-          <button type="button" onClick={onTraLoi}>Trả lời</button>
+          <button type="button" onClick={onTraLoi}>{dich('Trả lời')}</button>
           <span>{khiNao(c.createdAt)}</span>
         </div>
       </div>

@@ -18,12 +18,14 @@ import {
 import { useSession } from '../../auth/session';
 import { clock, laBaiYouTube, useMusicPlayer } from './player';
 import { layDanhSachPlaylist, themBaiVaoPlaylist, type Playlist } from './playlists';
+import { useDich } from '../../i18n';
 
 type The = 'nghe' | 'loi' | 'tin' | 'chia-se';
 
 const WEB = 'https://cuongthai.com/music';
 
 export function NowPlaying({ onDong, onDaThemVaoPlaylist }: { onDong: () => void; onDaThemVaoPlaylist: () => void }) {
+  const { dich } = useDich();
   const { api } = useSession();
   const {
     current, playing, length, shownPosition, position,
@@ -98,7 +100,7 @@ export function NowPlaying({ onDong, onDaThemVaoPlaylist }: { onDong: () => void
         <button type="button" className="ct-nowfull-back" onClick={onDong}>
           <ArrowLeft size={14} aria-hidden /> QUAY LẠI
         </button>
-        <span className="ct-nowfull-eyebrow">ĐANG PHÁT</span>
+        <span className="ct-nowfull-eyebrow">{dich('ĐANG PHÁT')}</span>
         <nav className="ct-nowfull-tabs">
           {([
             ['nghe', 'NGHE', <Radio size={13} aria-hidden key="i" />],
@@ -142,7 +144,7 @@ export function NowPlaying({ onDong, onDaThemVaoPlaylist }: { onDong: () => void
 
         {the === 'loi' && (
           <div className="ct-nowfull-panel">
-            {dangTaiLoi && <p className="ct-muted">Đang tải lời…</p>}
+            {dangTaiLoi && <p className="ct-muted">{dich('Đang tải lời…')}</p>}
             {!dangTaiLoi && loi && <pre className="ct-nowfull-loi">{loi}</pre>}
             {!dangTaiLoi && !loi && (
               <p className="ct-muted">
@@ -155,14 +157,14 @@ export function NowPlaying({ onDong, onDaThemVaoPlaylist }: { onDong: () => void
         {the === 'tin' && (
           <div className="ct-nowfull-panel">
             <dl className="ct-nowfull-tin">
-              <dt>Tên bài</dt><dd>{current.title}</dd>
-              <dt>Nghệ sĩ</dt><dd>{current.artist || 'Không rõ'}</dd>
-              <dt>Thời lượng</dt><dd>{clock(length || current.durationSeconds)}</dd>
-              <dt>Mã bài</dt><dd>#{current.id}</dd>
-              <dt>Nguồn</dt>
+              <dt>{dich('Tên bài')}</dt><dd>{current.title}</dd>
+              <dt>{dich('Nghệ sĩ')}</dt><dd>{current.artist || 'Không rõ'}</dd>
+              <dt>{dich('Thời lượng')}</dt><dd>{clock(length || current.durationSeconds)}</dd>
+              <dt>{dich('Mã bài')}</dt><dd>#{current.id}</dd>
+              <dt>{dich('Nguồn')}</dt>
               <dd>{laBaiYouTube(current) ? 'YouTube (chưa rút âm thanh)' : 'Máy chủ CuongThai (R2)'}</dd>
-              <dt>Ngoại tuyến</dt>
-              <dd>{daTai ? <><Download size={12} aria-hidden /> đã tải về máy này</> : 'chưa tải'}</dd>
+              <dt>{dich('Ngoại tuyến')}</dt>
+              <dd>{daTai ? <><Download size={12} aria-hidden /> {dich('đã tải về máy này')}</> : dich('chưa tải')}</dd>
             </dl>
           </div>
         )}
@@ -183,7 +185,7 @@ export function NowPlaying({ onDong, onDaThemVaoPlaylist }: { onDong: () => void
               <ListPlus size={14} aria-hidden /> Thêm bài này vào playlist
             </p>
             {danhSachPl.length === 0 ? (
-              <p className="ct-muted">Chưa có playlist nào. Tạo một cái ở trang Nhạc.</p>
+              <p className="ct-muted">{dich('Chưa có playlist nào. Tạo một cái ở trang Nhạc.')}</p>
             ) : (
               <div className="ct-nowfull-chiase">
                 {danhSachPl.map((p) => (
@@ -207,7 +209,7 @@ export function NowPlaying({ onDong, onDaThemVaoPlaylist }: { onDong: () => void
             value={Math.floor(shownPosition)}
             style={{ ['--ct-progress' as string]: `${progress}%` }}
             onChange={(e) => batDauTua(Number(e.target.value))}
-            aria-label="Tua bài hát"
+            aria-label={dich('Tua bài hát')}
           />
           <div className="ct-nowfull-time">
             <span>{clock(position)}</span>
@@ -220,24 +222,24 @@ export function NowPlaying({ onDong, onDaThemVaoPlaylist }: { onDong: () => void
             type="button"
             className={`ct-pbtn${shuffle ? ' is-on' : ''}`}
             onClick={() => setShuffle((s) => !s)}
-            aria-label="Phát ngẫu nhiên"
+            aria-label={dich('Phát ngẫu nhiên')}
           >
             <Shuffle size={18} aria-hidden />
           </button>
-          <button type="button" className="ct-pbtn" onClick={() => step(-1)} aria-label="Bài trước">
+          <button type="button" className="ct-pbtn" onClick={() => step(-1)} aria-label={dich('Bài trước')}>
             <SkipBack size={22} aria-hidden />
           </button>
           <button type="button" className="ct-pbtn ct-pbtn-to" onClick={toggle} aria-label={playing ? 'Tạm dừng' : 'Phát'}>
             {playing ? <Pause size={26} aria-hidden /> : <Play size={26} aria-hidden />}
           </button>
-          <button type="button" className="ct-pbtn" onClick={() => step(1)} aria-label="Bài sau">
+          <button type="button" className="ct-pbtn" onClick={() => step(1)} aria-label={dich('Bài sau')}>
             <SkipForward size={22} aria-hidden />
           </button>
           <button
             type="button"
             className={`ct-pbtn${repeat !== 'off' ? ' is-on' : ''}`}
             onClick={() => setRepeat((r) => (r === 'off' ? 'all' : r === 'all' ? 'one' : 'off'))}
-            aria-label="Lặp"
+            aria-label={dich('Lặp')}
           >
             {repeat === 'one' ? <Repeat1 size={18} aria-hidden /> : <Repeat size={18} aria-hidden />}
           </button>

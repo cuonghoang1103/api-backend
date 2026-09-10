@@ -51,7 +51,7 @@ import {
   DaiTepCode, NutChonTep, ODinhKemCode, useDinhKemCode,
 } from './DinhKemCode';
 import { XinPhep, XinPhepGit, XinPhepLenh, XinPhepMcp, XinPhepNote } from './XinPhep';
-import { useT } from '../../i18n';
+import { useDich } from '../../i18n';
 import { Chu } from '../../i18n/Chu';
 
 export function AgentMode({
@@ -87,7 +87,7 @@ export function AgentMode({
    */
   onTachRaTabMoi?: (phienId: string) => void;
 }) {
-  const { t, tp } = useT();
+  const { dich, dichP } = useDich();
   const {
     trangThai, gui, dung, batDauLai, traLoiXinPhep, hoanTac, quayLui, luiFile, tachNhanh,
     phien, phienDangMo, moPhien, xoaPhien,
@@ -355,7 +355,13 @@ export function AgentMode({
   };
 
   const doiCheDoTrinhDuyet = async (): Promise<void> => {
-    const w = await window.cuongthai?.agent.datCheDoTrinhDuyet(cuocId, !thuMuc?.choTrinhDuyet);
+    const bat = !thuMuc?.choTrinhDuyet;
+    /* NHỚ lựa chọn cho những cuộc sau. Trước bản này nút chỉ sống trong bộ nhớ
+       của một cuộc: mở việc mới là tắt lại, và model — không được kể là công
+       cụ ấy tồn tại — trả lời "tôi không mở được trang web". Người dùng đọc ra
+       thành "app thiếu tính năng". */
+    setSetting('aiTrinhDuyetMacDinh', bat);
+    const w = await window.cuongthai?.agent.datCheDoTrinhDuyet(cuocId, bat);
     if (w) datThuMuc(w);
   };
 
@@ -610,10 +616,10 @@ export function AgentMode({
   if (!info.configured) {
     return (
       <div className="ct-empty">
-        <h1>{t('Máy chủ chưa bật AI')}</h1>
-        <p>{t('Chế độ Lập trình cần khoá AI ở máy chủ. Hãy thử lại sau.')}</p>
+        <h1>{dich('Máy chủ chưa bật AI')}</h1>
+        <p>{dich('Chế độ Lập trình cần khoá AI ở máy chủ. Hãy thử lại sau.')}</p>
         <div className="ct-actions">
-          <button type="button" className="ct-btn ct-btn-ghost" onClick={napLai}>{t('Thử lại')}</button>
+          <button type="button" className="ct-btn ct-btn-ghost" onClick={napLai}>{dich('Thử lại')}</button>
         </div>
       </div>
     );
@@ -690,7 +696,7 @@ export function AgentMode({
             className="ct-agent-icon"
             data-nut="boThuMuc"
             onClick={() => void boThuMuc()}
-            title={t('Thôi cho đọc thư mục này')}
+            title={dich('Thôi cho đọc thư mục này')}
           >
             <X size={13} aria-hidden />
           </button>
@@ -718,8 +724,8 @@ export function AgentMode({
           disabled={trangThai.dangChay}
           title={
             thuMuc?.choTrinhDuyet
-              ? 'Agent ĐANG lái được trình duyệt: mở trang, đọc sau khi JS chạy, xem console. Bấm/gõ vẫn phải bạn duyệt. Bấm để tắt.'
-              : 'Bật cho agent mở trang trong tab Trình duyệt, đọc nội dung thật và xem lỗi console. Mọi thao tác bấm/gõ vẫn hỏi bạn.'
+              ? dich('Agent ĐANG lái được trình duyệt: mở trang, đọc sau khi JS chạy, xem console. Bấm/gõ vẫn phải bạn duyệt. Bấm để tắt. (Nhớ cho những việc sau.)')
+              : dich('Bật cho agent MỞ TRANG WEB — YouTube, tài liệu, localhost — ngay cạnh bảng ghi, đọc nội dung sau khi JS chạy và xem lỗi console. Mọi thao tác bấm/gõ vẫn hỏi bạn. (Nhớ cho những việc sau.)')
           }
         >
           <Globe size={13} aria-hidden />
@@ -753,7 +759,7 @@ export function AgentMode({
           className="ct-btn ct-btn-ghost"
           data-bat={moBangLenh}
           onClick={() => datMoBangLenh((v) => !v)}
-          title={t('Chạy lệnh trong thư mục dự án — npm test, git status… (không phải terminal đầy đủ)')}
+          title={dich('Chạy lệnh trong thư mục dự án — npm test, git status… (không phải terminal đầy đủ)')}
         >
           <SquareTerminal size={13} aria-hidden />
           {moBangLenh ? 'Bảng lệnh: MỞ' : 'Bảng lệnh'}
@@ -784,7 +790,7 @@ export function AgentMode({
             type="button"
             className="ct-agent-hoantac"
             onClick={() => void hoanTac()}
-            title={t('Trả mọi file agent đã sửa trong việc này về nguyên trạng')}
+            title={dich('Trả mọi file agent đã sửa trong việc này về nguyên trạng')}
           >
             <Undo2 size={13} aria-hidden />
             Hoàn tác {trangThai.soFileDaSua} file
@@ -828,7 +834,7 @@ export function AgentMode({
           data-nut="viecMoi"
           onClick={() => void batDauLai()}
           disabled={trangThai.muc.length === 0}
-          title={t('Bắt đầu việc mới (xoá hội thoại, KHÔNG hoàn lại hạn mức)')}
+          title={dich('Bắt đầu việc mới (xoá hội thoại, KHÔNG hoàn lại hạn mức)')}
         >
           <RotateCcw size={13} aria-hidden />
         </button>
@@ -855,7 +861,7 @@ export function AgentMode({
         && trangThai.keHoach.some((v) => v.trangThai !== 'xong') && (
         <div className="ct-notice" data-tone="warn" style={{ margin: '0 0 8px' }}>
           <span>
-            {tp('Kế hoạch còn {n} việc chưa xong mà agent đã dừng.',
+            {dichP('Kế hoạch còn {n} việc chưa xong mà agent đã dừng.',
               { n: trangThai.keHoach.filter((v) => v.trangThai !== 'xong').length })}
           </span>
           <button
@@ -863,7 +869,7 @@ export function AgentMode({
             className="ct-btn ct-btn-ghost"
             onClick={() => void gui('Làm tiếp những việc còn lại trong kế hoạch.')}
           >
-            {t('Làm tiếp')}
+            {dich('Làm tiếp')}
           </button>
         </div>
       )}
@@ -895,7 +901,7 @@ export function AgentMode({
               {dangLuiFile ? 'Đang lùi…' : `Lùi cả ${canhQuayLui.soFile} file về mốc này`}
             </button>
           )}
-          <button type="button" className="ct-agent-icon" onClick={() => datCanhQuayLui(null)} aria-label={t('Đóng')}>
+          <button type="button" className="ct-agent-icon" onClick={() => datCanhQuayLui(null)} aria-label={dich('Đóng')}>
             <X size={12} aria-hidden />
           </button>
         </div>
@@ -1091,7 +1097,7 @@ export function AgentMode({
             data-keo={dangKeoWeb}
             onPointerDown={(e) => { keoWebRef.current = { x: e.clientX, rong: rongWeb }; datDangKeoWeb(true); }}
             onDoubleClick={() => setSetting('aiKhungWebRong', 560)}
-            title={t('Kéo để đổi bề rộng · bấm đúp để về mặc định')}
+            title={dich('Kéo để đổi bề rộng · bấm đúp để về mặc định')}
           />
           <div className="ct-khungweb-boc" style={{ width: rongWeb }}>
             <KhungWeb url={webUrl} ep={web?.ep ?? true} onDong={() => datWeb(null)} />
@@ -1105,8 +1111,8 @@ export function AgentMode({
           type="button"
           className="ct-agent-xuongday"
           onClick={() => xuongDay()}
-          title={t('Xuống cuối hội thoại')}
-          aria-label={t('Xuống cuối hội thoại')}
+          title={dich('Xuống cuối hội thoại')}
+          aria-label={dich('Xuống cuối hội thoại')}
         >
           <ChevronDown size={16} aria-hidden />
           {trangThai.dangChay && <span className="ct-agent-xuongday-cham" aria-hidden />}
@@ -1167,7 +1173,7 @@ export function AgentMode({
           {dk.tep.filter((tep) => tep.dataUrl).map((tep) => (
             <div key={tep.id} className="ct-anh-o">
               <img src={tep.dataUrl} alt={tep.ten} />
-              <button type="button" onClick={() => dk.bo(tep.id)} title={t('Bỏ ảnh này')}>
+              <button type="button" onClick={() => dk.bo(tep.id)} title={dich('Bỏ ảnh này')}>
                 <X size={11} aria-hidden />
               </button>
             </div>
@@ -1183,7 +1189,7 @@ export function AgentMode({
       {lenhTraLoi !== null && (
         <div className="ct-lenh-traloi">
           <ChuAgent text={lenhTraLoi} />
-          <button type="button" title={t('Đóng')} onClick={() => datLenhTraLoi(null)}>
+          <button type="button" title={dich('Đóng')} onClick={() => datLenhTraLoi(null)}>
             <X size={12} aria-hidden />
           </button>
         </div>
@@ -1199,7 +1205,7 @@ export function AgentMode({
               <span>{c.length > 70 ? `${c.slice(0, 70)}…` : c}</span>
               <button
                 type="button"
-                title={t('Bỏ khỏi hàng chờ')}
+                title={dich('Bỏ khỏi hàng chờ')}
                 onClick={() => datHangCho((truoc) => truoc.filter((_, k) => k !== i))}
               >
                 <X size={11} aria-hidden />
@@ -1207,7 +1213,7 @@ export function AgentMode({
             </div>
           ))}
           <span className="ct-hang-cho-nhan">
-            {t('sẽ gửi lần lượt khi lượt hiện tại xong')}
+            {dich('sẽ gửi lần lượt khi lượt hiện tại xong')}
           </span>
         </div>
       )}
@@ -1254,14 +1260,14 @@ export function AgentMode({
           <>
             {nhap.trim() && (
               <button type="button" className="ct-btn ct-btn-ghost" onClick={guiDi}
-                title={t('Xếp câu này vào hàng chờ — gửi ngay khi lượt hiện tại xong')}>
+                title={dich('Xếp câu này vào hàng chờ — gửi ngay khi lượt hiện tại xong')}>
                 <ListPlus size={14} aria-hidden />
-                {t('Xếp hàng')}
+                {dich('Xếp hàng')}
               </button>
             )}
             <button type="button" className="ct-btn ct-agent-dung" onClick={dung}>
               <CircleStop size={14} aria-hidden />
-              {t('Dừng')}
+              {dich('Dừng')}
             </button>
           </>
         ) : (
@@ -1274,7 +1280,7 @@ export function AgentMode({
             title={dk.dangTai ? 'Đang chuẩn bị file đính kèm…' : undefined}
           >
             <Send size={14} aria-hidden />
-            {t('Gửi')}
+            {dich('Gửi')}
           </button>
         )}
       </div>
@@ -1315,7 +1321,7 @@ export function AgentMode({
  * đúng lúc câu hỏi đó bắt đầu nhức.
  */
 function BangKeHoach({ viec }: { viec: AgentViec[] }) {
-  const { t } = useT();
+  const { dich } = useDich();
   const xong = viec.filter((v) => v.trangThai === 'xong').length;
   const trongXong = viec.length > 0 && xong === viec.length;
 
@@ -1348,7 +1354,7 @@ function BangKeHoach({ viec }: { viec: AgentViec[] }) {
         title={gap ? 'Mở kế hoạch' : 'Gập kế hoạch'}
       >
         <ListChecks size={13} aria-hidden />
-        <span>{t('Kế hoạch')}</span>
+        <span>{dich('Kế hoạch')}</span>
         <span className="ct-kehoach-dem">{xong}/{viec.length}</span>
         <div className="ct-kehoach-thanh">
           <div className="ct-kehoach-day" style={{ width: `${(xong / viec.length) * 100}%` }} />
@@ -1413,7 +1419,7 @@ function ChonModelVaMuc({
   muc: MucNoLuc; model: ModelAgent; khoa: boolean; info: AgentInfo;
   onChonMuc: (m: MucNoLuc) => void; onChonModel: (m: ModelAgent) => void;
 }) {
-  const { t } = useT();
+  const { dich } = useDich();
   /* Đóng-khi-bấm-ra-ngoài và "mỗi lúc một tấm" nay ở `useMoRieng`. Bản cũ tự
      lo phần ra-ngoài của RIÊNG nó, nên mở bảng này trong khi bảng MCP đang mở
      là hai bảng chồng lên nhau — không chỗ nào biết chỗ kia tồn tại. */
@@ -1466,7 +1472,7 @@ function ChonModelVaMuc({
       </button>
 
       {mo && (
-        <div className="ct-chonmm-bang" role="dialog" aria-label={t('Model và mức nỗ lực')}>
+        <div className="ct-chonmm-bang" role="dialog" aria-label={dich('Model và mức nỗ lực')}>
           <p className="ct-chonmm-nhan">Model</p>
           <ul className="ct-chonmm-ds">
             {dsModel.map((m) => (
@@ -1489,7 +1495,7 @@ function ChonModelVaMuc({
             ))}
           </ul>
 
-          <p className="ct-chonmm-nhan">{t('Mức nỗ lực')}</p>
+          <p className="ct-chonmm-nhan">{dich('Mức nỗ lực')}</p>
           <ul className="ct-chonmm-ds">
             {dsMuc.map((m) => (
               <li key={m.id}>
@@ -1511,7 +1517,7 @@ function ChonModelVaMuc({
           </ul>
 
           <p className="ct-chonmm-chan">
-            {t('Mức càng cao càng tốn hạn mức 5 giờ. Ultracode có thể dùng hết hạn mức')}
+            {dich('Mức càng cao càng tốn hạn mức 5 giờ. Ultracode có thể dùng hết hạn mức')}
             trong một việc — nó được sinh ra để làm cho xong hẳn, không để hỏi nhanh.
           </p>
         </div>
@@ -1582,7 +1588,7 @@ function VongNguCanh({ n }: { n: AgentNguCanh }) {
 function NutWorktree({
   cuocId, khoa, onDoi,
 }: { cuocId: string; khoa: boolean; onDoi: () => void }) {
-  const { t } = useT();
+  const { dich } = useDich();
   const { mo, bat, boc } = useMoRieng('agent:worktree');
   const [ds, datDs] = useState<AgentWorktree[]>([]);
   const [ten, datTen] = useState('');
@@ -1626,7 +1632,7 @@ function NutWorktree({
           <div className="ct-mcp-dau"><strong>Worktree</strong></div>
 
           {ds.length === 0 ? (
-            <p className="ct-mcp-trong">{t('Thư mục này không phải kho git, nên chưa dùng worktree được.')}</p>
+            <p className="ct-mcp-trong">{dich('Thư mục này không phải kho git, nên chưa dùng worktree được.')}</p>
           ) : (
             <ul className="ct-mcp-ds ct-wt-ds">
               {ds.map((w) => (
@@ -1639,8 +1645,8 @@ function NutWorktree({
                     title={w.duongDan}
                   >
                     <span className="ct-mcp-ten">{w.nhanh ?? '(tách rời)'}</span>
-                    {w.laChinh && <span className="ct-wt-nhan">{t('chính')}</span>}
-                    {w.dangDung && <span className="ct-wt-nhan" data-dang>{t('đang mở')}</span>}
+                    {w.laChinh && <span className="ct-wt-nhan">{dich('chính')}</span>}
+                    {w.dangDung && <span className="ct-wt-nhan" data-dang>{dich('đang mở')}</span>}
                   </button>
                   {w.cuaApp && !w.dangDung && (
                     <button
@@ -1663,7 +1669,7 @@ function NutWorktree({
               <input
                 className="ct-td-o"
                 value={ten}
-                placeholder={t('tên nhánh mới…')}
+                placeholder={dich('tên nhánh mới…')}
                 spellCheck={false}
                 disabled={ban || khoa}
                 onChange={(e) => datTen(e.target.value)}
@@ -1682,7 +1688,7 @@ function NutWorktree({
                 onClick={() => void chay(() => window.cuongthai!.agent.taoWorktree(cuocId, ten)).then(() => datTen(''))}
               >
                 {ban ? <Loader2 size={12} aria-hidden className="ct-spin" /> : <FolderPlus size={12} aria-hidden />}
-                {t('Tạo')}
+                {dich('Tạo')}
               </button>
             </div>
           )}
@@ -1710,7 +1716,7 @@ function NutWorktree({
  * ngồi hỏi tại sao nó không chịu dùng công cụ mình vừa cắm.
  */
 function NutMcp({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
-  const { t } = useT();
+  const { dich } = useDich();
   const { mo, bat, boc } = useMoRieng('agent:mcp');
   const [tt, datTt] = useState<AgentMcpTrangThai | null>(null);
   const [dangNap, datDangNap] = useState(false);
@@ -1781,7 +1787,7 @@ function NutMcp({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
               title={khoa ? 'Đang chạy một việc — nạp lại sau khi xong' : 'Tắt hết rồi bật lại theo file cấu hình'}
             >
               {dangNap ? <Loader2 size={12} aria-hidden className="ct-spin" /> : <RotateCcw size={12} aria-hidden />}
-              {t('Nạp lại')}
+              {dich('Nạp lại')}
             </button>
           </div>
 
@@ -1795,7 +1801,7 @@ function NutMcp({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
                 <li key={s.ten} data-ok={s.ok}>
                   <span className="ct-mcp-cham" />
                   <span className="ct-mcp-ten">{s.ten}</span>
-                  {s.tuDuAn && <span className="ct-mcp-nhan" title={t('.mcp.json trong dự án')}>{t('dự án')}</span>}
+                  {s.tuDuAn && <span className="ct-mcp-nhan" title={dich('.mcp.json trong dự án')}>{dich('dự án')}</span>}
                   <span className="ct-mcp-phu">{s.ok ? `${s.soTool} tool` : (s.loi ?? 'hỏng')}</span>
                 </li>
               ))}
@@ -1816,7 +1822,7 @@ function NutMcp({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
                 onClick={() => void duyet()} disabled={dangNap || khoa}
               >
                 <ShieldCheck size={12} aria-hidden />
-                {t('Tôi tin dự án này — bật')}
+                {dich('Tôi tin dự án này — bật')}
               </button>
             </div>
           )}
@@ -1834,7 +1840,7 @@ function NutMcp({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
             onClick={() => void window.cuongthai?.agent.mcpMoCauHinh()}
           >
             <FileCode2 size={12} aria-hidden />
-            {t('Mở file cấu hình')}
+            {dich('Mở file cấu hình')}
           </button>
 
         </div>
@@ -2028,21 +2034,21 @@ function ThanhHanMuc({
 }
 
 function ManHinhTrong({ coThuMuc }: { coThuMuc: boolean }) {
-  const { t } = useT();
+  const { dich } = useDich();
   return (
     <div className="ct-agent-trong">
       <Sparkles size={26} aria-hidden className="ct-empty-icon" />
       <h2>{coThuMuc ? 'Hỏi gì về dự án này?' : 'Chọn thư mục dự án để bắt đầu'}</h2>
       {coThuMuc ? (
         <ul className="ct-agent-goiy">
-          <li>{t('Giải thích cho tôi luồng xác thực trong dự án này.')}</li>
-          <li>{t('Tôi đang sửa dở gì? Tóm tắt các thay đổi chưa commit.')}</li>
-          <li>{t('Hàm xử lý thanh toán nằm ở đâu, và nó gọi những gì?')}</li>
-          <li>{t('Trong ghi chú của tôi có kế hoạch nào cho dự án này không?')}</li>
+          <li>{dich('Giải thích cho tôi luồng xác thực trong dự án này.')}</li>
+          <li>{dich('Tôi đang sửa dở gì? Tóm tắt các thay đổi chưa commit.')}</li>
+          <li>{dich('Hàm xử lý thanh toán nằm ở đâu, và nó gọi những gì?')}</li>
+          <li>{dich('Trong ghi chú của tôi có kế hoạch nào cho dự án này không?')}</li>
         </ul>
       ) : (
         <p className="ct-muted">
-          {t('Agent chỉ đọc được thư mục bạn tự chọn — không đọc chỗ nào khác trên máy.')}
+          {dich('Agent chỉ đọc được thư mục bạn tự chọn — không đọc chỗ nào khác trên máy.')}
         </p>
       )}
     </div>
@@ -2057,7 +2063,7 @@ function ManHinhTrong({ coThuMuc }: { coThuMuc: boolean }) {
  * cờ cục bộ nào ở đây mở khoá được gì, kể cả khi app bị sửa.
  */
 function MoiNangCap() {
-  const { t } = useT();
+  const { dich } = useDich();
   const moWeb = (): void => {
     void window.cuongthai?.app
       .getInfo()
@@ -2067,12 +2073,12 @@ function MoiNangCap() {
   return (
     <div className="ct-empty">
       <Sparkles size={28} aria-hidden className="ct-empty-icon" />
-      <h1>{t('Chế độ Lập trình dành cho tài khoản Pro')}</h1>
+      <h1>{dich('Chế độ Lập trình dành cho tài khoản Pro')}</h1>
       <p>
-        {t('Agent mở dự án trên máy bạn, đọc mã, tra cứu ghi chú của bạn và trả lời kèm trích dẫn tới đúng dòng. Chế độ Trò chuyện vẫn dùng bình thường.')}
+        {dich('Agent mở dự án trên máy bạn, đọc mã, tra cứu ghi chú của bạn và trả lời kèm trích dẫn tới đúng dòng. Chế độ Trò chuyện vẫn dùng bình thường.')}
       </p>
       <div className="ct-actions">
-        <button type="button" className="ct-btn" onClick={moWeb}>{t('Xem gói Pro')}</button>
+        <button type="button" className="ct-btn" onClick={moWeb}>{dich('Xem gói Pro')}</button>
       </div>
     </div>
   );

@@ -27,6 +27,7 @@ import { PlaylistBar } from './PlaylistBar';
 import { RemixDeck } from './RemixDeck';
 import { TaiNhacLen } from './TaiNhacLen';
 import { clock, fold, formatBytes, laBaiYouTube, shuffled, useMusicPlayer, type Track } from './player';
+import { useDich } from '../../i18n';
 
 /** Một kết quả tìm trên YouTube — hình dạng của `GET /music/youtube-search`. */
 interface KetQuaYouTube {
@@ -40,6 +41,7 @@ interface KetQuaYouTube {
 }
 
 export function MusicPage() {
+  const { dich } = useDich();
   const { online } = useAppState();
   const { api, user } = useSession();
 
@@ -322,19 +324,19 @@ export function MusicPage() {
       </div>
       <div className="ct-page-head" style={{ marginBottom: 14 }}>
         <div>
-          <h1 style={{ margin: 0, fontSize: 19 }}>Nhạc</h1>
+          <h1 style={{ margin: 0, fontSize: 19 }}>{dich('Nhạc')}</h1>
           <p className="ct-muted" style={{ margin: 0 }}>
             Nghe trực tuyến, tìm thêm trên YouTube, hoặc tải về máy để nghe khi mất mạng.
           </p>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <div className="ct-segmented" role="tablist" aria-label="Khu vực nhạc">
+          <div className="ct-segmented" role="tablist" aria-label={dich('Khu vực nhạc')}>
             <button
               type="button" role="tab" aria-selected={khu === 'thuong'}
               data-active={khu === 'thuong'}
               onClick={() => setKhu('thuong')}
             >
-              NHẠC THƯỜNG
+              {dich('NHẠC THƯỜNG')}
             </button>
             <button
               type="button" role="tab" aria-selected={khu === 'remix'}
@@ -352,7 +354,7 @@ export function MusicPage() {
           />
           <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void loadTracks()} disabled={!online}>
             <RefreshCw size={14} aria-hidden />
-            Làm mới
+            {dich('Làm mới')}
           </button>
         </div>
       </div>
@@ -378,7 +380,7 @@ export function MusicPage() {
 
       {/* ─── Đang phát ─── */}
       {khu === 'thuong' && current && (
-        <section className="ct-np" aria-label="Đang phát">
+        <section className="ct-np" aria-label={dich('Đang phát')}>
           {/* Nền mờ lấy chính ảnh bìa: mỗi bài một sắc riêng mà không cần bảng
               màu gõ tay cho từng bài. */}
           {current.coverImage && (
@@ -395,7 +397,7 @@ export function MusicPage() {
             </div>
 
             <div className="ct-np-meta">
-              <p className="ct-np-eyebrow">Đang phát</p>
+              <p className="ct-np-eyebrow">{dich('Đang phát')}</p>
               <h2 className="ct-np-title" title={current.title}>{current.title}</h2>
               <p className="ct-np-artist">{current.artist || 'Không rõ nghệ sĩ'}</p>
               <button type="button" className="ct-btn ct-btn-ghost ct-np-mo" onClick={() => setMoToanManh(true)}>
@@ -418,14 +420,14 @@ export function MusicPage() {
 
       {/* ─── Tấm bìa thư viện — thay chỗ trống lúc chưa nghe gì ─── */}
       {khu === 'thuong' && !current && tracks.length > 0 && (
-        <section className="ct-lib" aria-label="Thư viện">
+        <section className="ct-lib" aria-label={dich('Thư viện')}>
           <div className="ct-lib-collage" aria-hidden>
             {anhBia.length > 0
               ? anhBia.map((u, i) => <img key={i} src={u} alt="" loading="lazy" />)
               : <span className="ct-lib-collage-blank"><ListMusic size={30} /></span>}
           </div>
           <div className="ct-lib-meta">
-            <p className="ct-np-eyebrow">Thư viện của bạn</p>
+            <p className="ct-np-eyebrow">{dich('Thư viện của bạn')}</p>
             <h2 className="ct-lib-title">{tracks.length} bài hát</h2>
             <p className="ct-np-artist">
               {doDaiThuVien}
@@ -459,8 +461,8 @@ export function MusicPage() {
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Tìm trong thư viện hoặc trên YouTube…"
-            aria-label="Tìm bài hát"
+            placeholder={dich('Tìm trong thư viện hoặc trên YouTube…')}
+            aria-label={dich('Tìm bài hát')}
           />
           {dangTimYT && <Loader2 size={14} className="ct-spin" aria-hidden />}
         </label>
@@ -477,7 +479,7 @@ export function MusicPage() {
                 }
               }}
             >
-              Xoá hết
+              {dich('Xoá hết')}
             </button>
           </span>
         )}
@@ -500,11 +502,11 @@ export function MusicPage() {
       {error && (
         <div className="ct-notice" data-tone="err" role="alert">
           <span>{error}</span>
-          <button type="button" className="ct-linklike" onClick={() => setError(null)}>Đóng</button>
+          <button type="button" className="ct-linklike" onClick={() => setError(null)}>{dich('Đóng')}</button>
         </div>
       )}
 
-      {loading && tracks.length === 0 && <p>Đang tải…</p>}
+      {loading && tracks.length === 0 && <p>{dich('Đang tải…')}</p>}
 
       {visible.length > 0 && (
         <ol className="ct-tracks">
@@ -538,12 +540,12 @@ export function MusicPage() {
 
       {/* ─── Kết quả YouTube ─── */}
       {ketQuaYT.length > 0 && (
-        <section className="ct-yt" aria-label="Kết quả trên YouTube">
+        <section className="ct-yt" aria-label={dich('Kết quả trên YouTube')}>
           <h3 className="ct-yt-head">
             <Youtube size={15} aria-hidden />
-            Trên YouTube
+            {dich('Trên YouTube')}
             <span className="ct-muted" style={{ fontWeight: 400, fontSize: 12 }}>
-              — thêm vào thư viện là nghe được như mọi bài khác
+              {dich('— thêm vào thư viện là nghe được như mọi bài khác')}
             </span>
           </h3>
           <ol className="ct-tracks">
@@ -569,7 +571,7 @@ export function MusicPage() {
                     onClick={() => void themTuYouTube(r)}
                     disabled={dangThem !== null || !online}
                     aria-label={`Thêm ${r.title} vào thư viện`}
-                    title="Thêm vào thư viện và phát"
+                    title={dich('Thêm vào thư viện và phát')}
                   >
                     {dangLam ? <Loader2 size={14} className="ct-spin" aria-hidden /> : <Plus size={15} aria-hidden />}
                   </button>
@@ -590,7 +592,7 @@ export function MusicPage() {
       {!loading && tracks.length === 0 && !error && (
         <div className="ct-empty">
           <Music2 size={28} aria-hidden className="ct-empty-icon" />
-          <p>Chưa có bài hát nào. Gõ tên bài vào ô tìm để lấy từ YouTube.</p>
+          <p>{dich('Chưa có bài hát nào. Gõ tên bài vào ô tìm để lấy từ YouTube.')}</p>
         </div>
       )}
 
@@ -634,6 +636,7 @@ function DongBai({
   /** Xoá HẲN khỏi thư viện. Chỉ admin có — nhạc là thư viện dùng chung. */
   onXoaHan?: (() => void) | undefined;
 }) {
+  const { dich } = useDich();
   const playable = isDownloaded || (online && !chuaRutAmThanh);
   // Bấm phát một dòng YouTube = rút âm thanh rồi phát, chứ không phải báo lỗi.
   const bam = chuaRutAmThanh && online ? onExtract : onPlay;
@@ -642,7 +645,7 @@ function DongBai({
     <li className="ct-trk" data-current={isCurrent} onDoubleClick={() => bamDuoc && bam()}>
       <span className="ct-trk-index">
         {isCurrent && playing
-          ? <span className="ct-trk-bars" aria-label="đang phát"><i /><i /><i /></span>
+          ? <span className="ct-trk-bars" aria-label={dich('đang phát')}><i /><i /><i /></span>
           : index + 1}
       </span>
 
@@ -672,7 +675,7 @@ function DongBai({
       </span>
 
       {isDownloaded
-        ? <span className="ct-offline-tag" title="Đã có trên máy"><CheckCircle2 size={11} aria-hidden /> đã tải</span>
+        ? <span className="ct-offline-tag" title={dich('Đã có trên máy')}><CheckCircle2 size={11} aria-hidden /> {dich('đã tải')}</span>
         : <span />}
 
       <span className="ct-trk-time">{clock(track.durationSeconds)}</span>
@@ -693,7 +696,7 @@ function DongBai({
           onClick={onExtract}
           disabled={!online || dangRut}
           aria-label={`Rút âm thanh cho ${track.title}`}
-          title="Bài lấy từ YouTube — rút âm thanh về máy chủ để nghe được trong app"
+          title={dich('Bài lấy từ YouTube — rút âm thanh về máy chủ để nghe được trong app')}
         >
           {dangRut ? <Loader2 size={14} className="ct-spin" aria-hidden /> : <Youtube size={15} aria-hidden />}
         </button>
@@ -705,7 +708,7 @@ function DongBai({
           className="ct-trk-action"
           onClick={onRemove}
           aria-label={`Xoá bản tải về của ${track.title}`}
-          title="Xoá bản đã tải"
+          title={dich('Xoá bản đã tải')}
         >
           <Trash2 size={14} aria-hidden />
         </button>
@@ -731,7 +734,7 @@ function DongBai({
           className="ct-trk-action ct-trk-xoahan"
           onClick={onXoaHan}
           aria-label={`Xoá "${track.title}" khỏi thư viện`}
-          title="Xoá hẳn khỏi thư viện (chỉ admin)"
+          title={dich('Xoá hẳn khỏi thư viện (chỉ admin)')}
         >
           <X size={15} aria-hidden />
         </button>

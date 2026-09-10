@@ -24,6 +24,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Disc3, Headphones, Loader2, Pause, Play, RotateCcw } from 'lucide-react';
 import { useSession } from '../../auth/session';
 import { clock, laBaiYouTube, type Track } from './player';
+import { useDich } from '../../i18n';
 
 interface MamState {
   track: Track | null;
@@ -55,6 +56,7 @@ interface MamNode {
 }
 
 export function RemixDeck({ baiRemix, baiThuong }: { baiRemix: Track[]; baiThuong: Track[] }) {
+  const { dich } = useDich();
   const tracks = [...baiRemix, ...baiThuong];
   const { api } = useSession();
   const ctxRef = useRef<AudioContext | null>(null);
@@ -431,7 +433,7 @@ export function RemixDeck({ baiRemix, baiThuong }: { baiRemix: Track[]; baiThuon
                 onClick={() => veDau(ten)}
                 disabled={!st.track}
                 aria-label={`Về đầu bài mâm ${ten}`}
-                title="Về đầu bài"
+                title={dich('Về đầu bài')}
               >
                 <RotateCcw size={16} aria-hidden />
               </button>
@@ -440,14 +442,14 @@ export function RemixDeck({ baiRemix, baiThuong }: { baiRemix: Track[]; baiThuon
         </div>
 
         <label className="ct-dj-num">
-          <span>TỐC ĐỘ <b>{st.tocDo === 1 ? '0.0%' : `${st.tocDo > 1 ? '+' : ''}${((st.tocDo - 1) * 100).toFixed(1)}%`}</b></span>
+          <span>{dich('TỐC ĐỘ')} <b>{st.tocDo === 1 ? '0.0%' : `${st.tocDo > 1 ? '+' : ''}${((st.tocDo - 1) * 100).toFixed(1)}%`}</b></span>
           <input type="range" min={0.7} max={1.3} step={0.01} value={st.tocDo}
             style={{ ['--ct-progress' as string]: `${((st.tocDo - 0.7) / 0.6) * 100}%` }}
             onChange={(e) => doiTocDo(ten, Number(e.target.value))} />
         </label>
 
         <label className="ct-dj-num">
-          <span>LỌC <b>{st.loc === 0 ? 'thẳng' : st.loc < 0 ? 'trầm' : 'bổng'}</b></span>
+          <span>{dich('LỌC')} <b>{st.loc === 0 ? 'thẳng' : st.loc < 0 ? 'trầm' : 'bổng'}</b></span>
           <input type="range" min={-1} max={1} step={0.02} value={st.loc}
             style={{ ['--ct-progress' as string]: `${((st.loc + 1) / 2) * 100}%` }}
             onChange={(e) => doiLoc(ten, Number(e.target.value))} />
@@ -469,7 +471,7 @@ export function RemixDeck({ baiRemix, baiThuong }: { baiRemix: Track[]; baiThuon
             }}
             aria-label={`Chọn bài cho mâm ${ten}`}
           >
-            <option value="">— chọn bài —</option>
+            <option value="">{dich('— chọn bài —')}</option>
             {baiRemix.length > 0 && (
               <optgroup label="Kho Remix">
                 {baiRemix.map((t) => <option key={t.id} value={t.id}>{t.title}</option>)}
@@ -487,10 +489,10 @@ export function RemixDeck({ baiRemix, baiThuong }: { baiRemix: Track[]; baiThuon
   };
 
   return (
-    <section className="ct-dj" aria-label="Bàn DJ">
+    <section className="ct-dj" aria-label={dich('Bàn DJ')}>
       <div className="ct-dj-den">
         <canvas ref={canvasRef} className="ct-dj-canvas" />
-        <span className="ct-dj-den-nhan"><Headphones size={13} aria-hidden /> ĐÈN CHẠY THEO NHẠC THẬT</span>
+        <span className="ct-dj-den-nhan"><Headphones size={13} aria-hidden /> {dich('ĐÈN CHẠY THEO NHẠC THẬT')}</span>
       </div>
 
       <div className="ct-dj-ban">
@@ -503,7 +505,7 @@ export function RemixDeck({ baiRemix, baiThuong }: { baiRemix: Track[]; baiThuon
             className="ct-dj-cross"
             style={{ ['--ct-progress' as string]: `${crossfade * 100}%` }}
             onChange={(e) => doiCross(Number(e.target.value))}
-            aria-label="Crossfader giữa mâm A và mâm B"
+            aria-label={dich('Crossfader giữa mâm A và mâm B')}
           />
           <div className="ct-dj-cross-nhan"><span>A</span><span>B</span></div>
         </div>
@@ -513,8 +515,7 @@ export function RemixDeck({ baiRemix, baiThuong }: { baiRemix: Track[]; baiThuon
 
       {loi && <div className="ct-notice" data-tone="err"><span>{loi}</span></div>}
       <p className="ct-muted ct-dj-ghichu">
-        Nhạc ở bàn DJ được tải nguyên bài về bộ nhớ rồi mới phát, nên đổi tốc độ và lọc không
-        làm méo tiếng. Bài dài có thể mất vài giây để nạp.
+        {dich('Nhạc ở bàn DJ được tải nguyên bài về bộ nhớ rồi mới phát, nên đổi tốc độ và lọc không làm méo tiếng. Bài dài có thể mất vài giây để nạp.')}
       </p>
     </section>
   );

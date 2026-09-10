@@ -33,7 +33,7 @@ import { createPortal } from 'react-dom';
 import { ChevronDown, FilePen, ListChecks, ShieldAlert, ShieldCheck, Terminal } from 'lucide-react';
 
 import type { CheDoQuyen } from '../../../shared/ipc';
-import { useT } from '../../i18n';
+import { useDich } from '../../i18n';
 import { Chu } from '../../i18n/Chu';
 
 interface MoTaCheDo {
@@ -120,7 +120,7 @@ export function ChonCheDo({
      cài đặt: người dùng đang đứng đúng chỗ chọn chế độ, và "lần sau cũng thế"
      là ý nghĩ xảy ra ngay tại khoảnh khắc đó. */
   const { settings, setSetting } = useAppState();
-  const { t } = useT();
+  const { dich } = useDich();
   const macDinh = typeof settings.aiCheDoQuyenMacDinh === 'string'
     ? settings.aiCheDoQuyenMacDinh : 'keHoach';
   const [viTri, datViTri] = useState<{ trai: number; tren: number } | null>(null);
@@ -167,12 +167,12 @@ export function ChonCheDo({
         disabled={khoa}
         aria-haspopup="menu"
         aria-expanded={mo}
-        title={`${t(hienTai.nhan)} — ${t(hienTai.mo)}${khoa ? `\n${t('(đang chạy dở, dừng lại mới đổi được)')}` : ''}`}
+        title={`${dich(hienTai.nhan)} — ${dich(hienTai.mo)}${khoa ? `\n${dich('(đang chạy dở, dừng lại mới đổi được)')}` : ''}`}
         onClick={(e) => { e.stopPropagation(); bat(); }}
         onPointerDown={(e) => e.stopPropagation()}
       >
         {hienTai.icon}
-        {t(hienTai.nhan)}
+        {dich(hienTai.nhan)}
         <ChevronDown size={12} aria-hidden />
       </button>
 
@@ -204,9 +204,9 @@ export function ChonCheDo({
             >
               <span className="ct-chedo-muc-dau">
                 {c.icon}
-                <strong>{t(c.nhan)}</strong>
+                <strong>{dich(c.nhan)}</strong>
               </span>
-              <span className="ct-chedo-muc-mo">{t(c.mo)}</span>
+              <span className="ct-chedo-muc-mo">{dich(c.mo)}</span>
             </button>
           ))}
           {/* Nói thẳng ranh giới. Câu cũ ("nguy hiểm luôn hỏi ở MỌI chế độ")
@@ -224,8 +224,8 @@ export function ChonCheDo({
               disabled={macDinh === cheDo}
             >
               {macDinh === cheDo
-                ? `✓ ${t('Đang là mặc định khi mở dự án')}`
-                : t('Đặt làm mặc định khi mở dự án')}
+                ? `✓ ${dich('Đang là mặc định khi mở dự án')}`
+                : dich('Đặt làm mặc định khi mở dự án')}
             </button>
           )}
 
@@ -259,7 +259,7 @@ export function ChonCheDo({
  *     đường ra trước khi bước vào.
  */
 function CanhBaoBoQuaHet({ onHuy, onDongY }: { onHuy: () => void; onDongY: () => void }) {
-  const { t } = useT();
+  const { dich } = useDich();
   const huyRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     huyRef.current?.focus();
@@ -276,10 +276,10 @@ function CanhBaoBoQuaHet({ onHuy, onDongY }: { onHuy: () => void; onDongY: () =>
         className="ct-chedo-canhbao"
         role="alertdialog"
         aria-modal="true"
-        aria-label={t('Bỏ qua tất cả — cảnh báo')}
+        aria-label={dich('Bỏ qua tất cả — cảnh báo')}
         onPointerDown={(e) => e.stopPropagation()}
       >
-        <h3><ShieldAlert size={16} aria-hidden /> {t('Bỏ qua tất cả — đọc trước khi bật')}</h3>
+        <h3><ShieldAlert size={16} aria-hidden /> {dich('Bỏ qua tất cả — đọc trước khi bật')}</h3>
         {/* ⚠️ Mỗi gạch đầu dòng là MỘT câu trọn vẹn trong từ điển, với phần
             đậm/mã đánh dấu ngay trong chuỗi. Cắt nhỏ ra rồi dịch từng mẩu thì
             trật tự từ tiếng Anh làm phần ĐẬM rơi vào chữ khác — nhấn sai chỗ
@@ -295,9 +295,9 @@ function CanhBaoBoQuaHet({ onHuy, onDongY }: { onHuy: () => void; onDongY: () =>
           <Chu cau="Chỉ bật khi bạn đang ngồi xem màn hình. Đổi dự án hoặc mở việc khác là nó **tự tắt**; muốn tắt ngay thì chọn lại một chế độ khác." />
         </p>
         <div className="ct-chedo-canhbao-nut">
-          <button ref={huyRef} type="button" className="ct-btn" onClick={onHuy}>{t('Huỷ')}</button>
+          <button ref={huyRef} type="button" className="ct-btn" onClick={onHuy}>{dich('Huỷ')}</button>
           <button type="button" className="ct-btn ct-btn-nguy" onClick={onDongY}>
-            {t('Tôi đã đọc — bật bỏ qua tất cả')}
+            {dich('Tôi đã đọc — bật bỏ qua tất cả')}
           </button>
         </div>
       </div>

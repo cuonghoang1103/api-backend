@@ -22,7 +22,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, ExternalLink, Globe, Loader2, RotateCw, X } from 'lucide-react';
 
 import type { BrowserTrangThai } from '../../../shared/ipc';
-import { useT } from '../../i18n';
+import { useDich } from '../../i18n';
 
 export function KhungWeb({
   url,
@@ -41,7 +41,7 @@ export function KhungWeb({
    */
   ep?: boolean;
 }) {
-  const { t } = useT();
+  const { dich } = useDich();
   const oRef = useRef<HTMLDivElement>(null);
   const daMoRef = useRef(false);
   const [tt, datTt] = useState<BrowserTrangThai | null>(null);
@@ -120,13 +120,13 @@ export function KhungWeb({
       <div className="ct-khungweb-dau">
         <button
           type="button" onClick={() => void window.cuongthai?.browser.lui()}
-          disabled={!tt?.luiDuoc} title={t('Lùi')} aria-label={t('Lùi')}
+          disabled={!tt?.luiDuoc} title={dich('Lùi')} aria-label={dich('Lùi')}
         >
           <ArrowLeft size={12} aria-hidden />
         </button>
         <button
           type="button" onClick={() => void window.cuongthai?.browser.toi()}
-          disabled={!tt?.toiDuoc} title={t('Tới')} aria-label={t('Tới')}
+          disabled={!tt?.toiDuoc} title={dich('Tới')} aria-label={dich('Tới')}
         >
           <ArrowRight size={12} aria-hidden />
         </button>
@@ -138,7 +138,7 @@ export function KhungWeb({
             id="ct-khungweb-o-dc"
             value={oNhap}
             spellCheck={false}
-            placeholder={t('localhost:3000 hoặc https://…')}
+            placeholder={dich('localhost:3000 hoặc https://…')}
             title={tt?.url ?? url}
             onChange={(e) => datONhap(e.target.value)}
             onKeyDown={(e) => {
@@ -147,13 +147,13 @@ export function KhungWeb({
             }}
           />
         </div>
-        <button type="button" onClick={() => void window.cuongthai?.browser.napLai()} title={t('Nạp lại')} aria-label={t('Nạp lại')}>
+        <button type="button" onClick={() => void window.cuongthai?.browser.napLai()} title={dich('Nạp lại')} aria-label={dich('Nạp lại')}>
           <RotateCw size={12} aria-hidden />
         </button>
-        <button type="button" onClick={() => void window.cuongthai?.browser.moNgoai()} title={t('Mở bằng trình duyệt máy')}>
+        <button type="button" onClick={() => void window.cuongthai?.browser.moNgoai()} title={dich('Mở bằng trình duyệt máy')}>
           <ExternalLink size={12} aria-hidden />
         </button>
-        <button type="button" onClick={onDong} title={t('Đóng khung trình duyệt')} aria-label={t('Đóng')}>
+        <button type="button" onClick={onDong} title={dich('Đóng khung trình duyệt')} aria-label={dich('Đóng')}>
           <X size={13} aria-hidden />
         </button>
       </div>

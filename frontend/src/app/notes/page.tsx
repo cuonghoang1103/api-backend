@@ -514,23 +514,33 @@ function NotesPageInner() {
     return () => clearTimeout(t);
   }, [vuaTao]);
 
+  /*
+   * ⚠️ ĐẶT `vuaTao` TRƯỚC `refreshTree()`, không phải sau.
+   *
+   * `refreshTree()` là thứ DỰNG RA hàng mới. Đặt cờ sau nó nghĩa là hàng đã
+   * mount xong với cờ `false`, và `Row` đọc cờ bằng `useState` — chỉ đọc một
+   * lần, lần đầu. Hôm nay React 18 gộp hai lần đặt state ấy làm một lượt dựng
+   * nên nó vẫn chạy — nhưng đó là chi tiết cài đặt, không phải hợp đồng. Đặt
+   * cờ trước thì thứ tự đúng không phụ thuộc vào việc React có gộp hay không.
+   * (`Row` cũng nghe cờ đổi, hai lớp cùng chắn.)
+   */
   const addSubject = useCallback(async () => {
     const res = await notesApi.createSubject({ name: 'Môn học mới', emoji: '📘' });
-    await refreshTree();
     setVuaTao(`mon:${res.data.data.id}`);
+    await refreshTree();
   }, [refreshTree]);
 
   const addChapter = useCallback(async (subjectId: number) => {
     const res = await notesApi.createChapter({ subjectId, title: 'Chương mới' });
-    await refreshTree();
     setVuaTao(`chuong:${res.data.data.id}`);
+    await refreshTree();
   }, [refreshTree]);
 
   const addNote = useCallback(async (subjectId: number, chapterId: number | null) => {
     const res = await notesApi.createNote({ subjectId, chapterId, title: 'Ghi chú mới' });
+    setVuaTao(`ghichu:${res.data.data.id}`);
     await refreshTree();
     setSelected(res.data.data);
-    setVuaTao(`ghichu:${res.data.data.id}`);
   }, [refreshTree]);
 
  const renameSubject = useCallback(async (id: number, name: string) => { await notesApi.updateSubject(id, { name }); await refreshTree(); }, [refreshTree]);
@@ -541,25 +551,55 @@ function NotesPageInner() {
  setSelected((s) => (s && s.id === id ? { ...s, title } : s));
  }, [refreshTree]);
 
- const delSubject = useCallback(async (id: number) => {
- if (!confirm('Xoá môn học này và toàn bộ chương/ghi chú bên trong?')) return;
- await notesApi.deleteSubject(id); setSelected((s) => (s?.subjectId === id ? null : s)); await refreshTree();
- }, [refreshTree]);
- const delChapter = useCallback(async (id: number) => {
- if (!confirm('Xoá chương này? (ghi chú bên trong sẽ chuyển về môn học)')) return;
- await notesApi.deleteChapter(id); await refreshTree();
- }, [refreshTree]);
- const delNote = useCallback(async (id: number) => {
- if (!confirm('Đưa ghi chú này vào Thùng rác? Bạn có thể khôi phục trong 30 ngày.')) return;
- await notesApi.deleteNote(id);
- setSelected((s) => (s?.id === id ? null : s));
- await refreshTree();
- if (filter !== 'tree') {
-   const res = await notesApi.getFilteredNotes(filter);
-   setFilteredNotes(res.data.data.notes);
- }
- toast.success('Đã chuyển ghi chú vào Thùng rác');
- }, [refreshTree, filter]);
+  /*
+   * ⚠️ XOÁ KHÔNG ĐƯỢC THẤT BẠI IM LẶNG.
+   *
+   * Người dùng báo 10/09/2026: "khi tôi xoá tôi phải spam 2 lần nó mới xoá
+   * được". Đo trong Chromium: MỘT cú bấm ⇒ đúng MỘT `confirm` ⇒ đúng MỘT lời
+   * gọi DELETE. Nên đường bấm không sai; thứ sai là mã cũ KHÔNG có `catch`
+   * nào — lời gọi hỏng thì `refreshTree()` phía sau cũng không chạy, màn hình
+   * đứng y nguyên, và người dùng chỉ còn cách bấm lại.
+   *
+   * Nay: hỏng thì NÓI RA, và làm mới cây trong `finally` — vì hai kiểu hỏng
+   * hay gặp nhất (mục đã bị xoá ở nơi khác, hoặc đã bị xoá kèm theo cha) đều
+   * có nghĩa là cây trên màn hình đang CŨ, đúng lúc cần nạp lại nhất.
+   */
+  const xoaVaBaoLoi = useCallback(async (viec: () => Promise<unknown>, hong: string) => {
+    try {
+      await viec();
+      return true;
+    } catch (e) {
+      const chiTiet = (e as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      toast.error(chiTiet ? `${hong}: ${chiTiet}` : hong);
+      return false;
+    } finally {
+      await refreshTree();
+    }
+  }, [refreshTree]);
+
+  const delSubject = useCallback(async (id: number) => {
+    if (!confirm('Xoá môn học này và toàn bộ chương/ghi chú bên trong?')) return;
+    const ok = await xoaVaBaoLoi(() => notesApi.deleteSubject(id), 'Không xoá được môn học');
+    if (ok) { setSelected((s) => (s?.subjectId === id ? null : s)); toast.success('Đã xoá môn học'); }
+  }, [xoaVaBaoLoi]);
+
+  const delChapter = useCallback(async (id: number) => {
+    if (!confirm('Xoá chương này? (ghi chú bên trong sẽ chuyển về môn học)')) return;
+    const ok = await xoaVaBaoLoi(() => notesApi.deleteChapter(id), 'Không xoá được chương');
+    if (ok) toast.success('Đã xoá chương');
+  }, [xoaVaBaoLoi]);
+
+  const delNote = useCallback(async (id: number) => {
+    if (!confirm('Đưa ghi chú này vào Thùng rác? Bạn có thể khôi phục trong 30 ngày.')) return;
+    const ok = await xoaVaBaoLoi(() => notesApi.deleteNote(id), 'Không xoá được ghi chú');
+    if (!ok) return;
+    setSelected((s) => (s?.id === id ? null : s));
+    if (filter !== 'tree') {
+      const res = await notesApi.getFilteredNotes(filter);
+      setFilteredNotes(res.data.data.notes);
+    }
+    toast.success('Đã chuyển ghi chú vào Thùng rác');
+  }, [xoaVaBaoLoi, filter]);
 
  const restoreDeleted = useCallback(async () => {
    if (!selected || !selected.deletedAt || trashAction) return;

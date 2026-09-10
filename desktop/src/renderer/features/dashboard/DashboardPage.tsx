@@ -43,6 +43,7 @@ import { OfflineUnavailableError, swr } from '../../offline/cache';
 import { BangViec, type Scope as PhamVi, type Task as ViecUi, type VaSua } from './BangViec';
 import { LichHoc, mauMon, type Buoi } from './LichHoc';
 import { xepLan } from './dai24';
+import { useDich } from '../../i18n';
 
 /**
  * ⚠️ `api.request` TỰ tuần tự hoá `body` — ĐỪNG `JSON.stringify` trước.
@@ -149,6 +150,7 @@ function loiChao(gio: number): string {
 const THU = ['Chủ nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
 
 export function DashboardPage() {
+  const { dich } = useDich();
   const { online, navigate } = useAppState();
   const { api, userId, user } = useSession();
 
@@ -455,7 +457,7 @@ export function DashboardPage() {
               </svg>
               <div className="ct-tq-cap-so">
                 <strong>{du.level}</strong>
-                <span>cấp</span>
+                <span>{dich('cấp')}</span>
               </div>
             </div>
             {/* Vòng ở cấp 1 với 0 EXP gần như rỗng — nhìn như hỏng. Con số viết
@@ -481,7 +483,7 @@ export function DashboardPage() {
       <div className="ct-tq-nhip">
         <div className="ct-tq-o" data-nhan="viec">
           <span className="ct-tq-o-so">{xong}<i>/{viecHomNay.length}</i></span>
-          <span className="ct-tq-o-nhan">việc hôm nay</span>
+          <span className="ct-tq-o-nhan">{dich('việc hôm nay')}</span>
           {viecHomNay.length > 0 && (
             <div className="ct-tq-o-thanh">
               <div style={{ width: `${(xong / viecHomNay.length) * 100}%` }} />
@@ -493,26 +495,26 @@ export function DashboardPage() {
           onClick={() => navigate('/messages')} disabled={!chuaDoc.tinNhan}>
           <MessageSquare size={15} aria-hidden className="ct-tq-o-icon" />
           <span className="ct-tq-o-so">{chuaDoc.tinNhan}</span>
-          <span className="ct-tq-o-nhan">tin nhắn chưa đọc</span>
+          <span className="ct-tq-o-nhan">{dich('tin nhắn chưa đọc')}</span>
         </button>
 
         <button type="button" className="ct-tq-o ct-tq-o-bam" data-nhan="bao"
           onClick={() => navigate('/notifications')} disabled={!chuaDoc.thongBao}>
           <Bell size={15} aria-hidden className="ct-tq-o-icon" />
           <span className="ct-tq-o-so">{chuaDoc.thongBao}</span>
-          <span className="ct-tq-o-nhan">thông báo mới</span>
+          <span className="ct-tq-o-nhan">{dich('thông báo mới')}</span>
         </button>
 
         <div className="ct-tq-o" data-nhan="exp">
           <Flame size={15} aria-hidden className="ct-tq-o-icon" />
           <span className="ct-tq-o-so">{du?.totalExp ?? 0}</span>
-          <span className="ct-tq-o-nhan">tổng EXP</span>
+          <span className="ct-tq-o-nhan">{dich('tổng EXP')}</span>
         </div>
       </div>
 
       {/* ── Việc hôm nay ───────────────────────────────────── */}
       {dangTai && !du ? (
-        <p className="ct-muted" style={{ padding: '10px 2px' }}>Đang tải…</p>
+        <p className="ct-muted" style={{ padding: '10px 2px' }}>{dich('Đang tải…')}</p>
       ) : (
         <BangViec
           tasks={viecKyNay as ViecUi[]}
@@ -534,7 +536,7 @@ export function DashboardPage() {
       {/* ── Dòng thời gian 24 giờ ──────────────────────────── */}
       {du && (
         <section className="ct-tq-khoi">
-          <div className="ct-tq-khoi-dau"><h2>Một ngày của bạn</h2></div>
+          <div className="ct-tq-khoi-dau"><h2>{dich('Một ngày của bạn')}</h2></div>
           <div className="ct-tq-dong">
             {du.timeline.map((s) => {
               const h = s.activity ? THEO_KHOA.get(s.activity.type as never) : null;
@@ -612,7 +614,7 @@ export function DashboardPage() {
                 >
                   <div className="ct-tq-chon-dau">
                     <strong>{String(dangChon).padStart(2, '0')}:00</strong>
-                    <button type="button" onClick={() => datDangChon(null)} aria-label="Đóng">
+                    <button type="button" onClick={() => datDangChon(null)} aria-label={dich('Đóng')}>
                       <X size={13} aria-hidden />
                     </button>
                   </div>
@@ -636,7 +638,7 @@ export function DashboardPage() {
                     className="ct-tq-chon-bo"
                     onMouseDown={(e) => { e.stopPropagation(); datGio(dangChon, null); }}
                   >
-                    Bỏ trống giờ này
+                    {dich('Bỏ trống giờ này')}
                   </button>
               </div>
             )}
@@ -651,7 +653,7 @@ export function DashboardPage() {
 
       {/* ── Đi nhanh ───────────────────────────────────────── */}
       <section className="ct-tq-khoi">
-        <div className="ct-tq-khoi-dau"><h2>Đi nhanh</h2></div>
+        <div className="ct-tq-khoi-dau"><h2>{dich('Đi nhanh')}</h2></div>
         <div className="ct-tq-nhanh">
           {([
             { p: '/chat', t: 'AI Chat', m: 'Hỏi đáp, lập trình, chạy code' },

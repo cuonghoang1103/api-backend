@@ -90,14 +90,18 @@ const nguoi = (i) => ({ id: i, username: `nguoi${i}`, displayName: `Người dù
                         fullName: `Người dùng ${i}`, avatarUrl: null });
 const mang = (n, f) => Array.from({ length: n }, (_, i) => f(i + 1));
 
-const BANG = [
-    /* ── Sổ tay (Notes) ──
-       Để đường này không có mock thì `/notes` vẽ ra "Chưa có môn học nào" —
-       tức là cả thanh bên phân cấp (môn → chương → ghi chú), ô đổi tên tại
-       chỗ, nút kéo-thả và mọi khác biệt bậc chữ CHƯA TỪNG được đo một lần.
-       Đúng cái bẫy ghi ở đầu tệp: trạng thái rỗng là trạng thái dễ qua nhất. */
-    [/\/notes\/tree/, () => ({
-      tree: mang(4, (i) => ({
+/*
+ * CÂY SỔ TAY — CÓ TRẠNG THÁI.
+ *
+ * `POST /notes/subjects` thêm một môn thật vào cây, `DELETE` bỏ nó ra, và lần
+ * gọi `/notes/tree` sau đó trả cây ĐÃ ĐỔI. Nhờ vậy chốt "tạo mới phải mở ô đặt
+ * tên" và "xoá phải ăn ngay lần bấm đầu" mới đo được điều chúng nói.
+ */
+let _cay = null;
+let _idMoi = 900;
+function cayNotes() {
+  if (!_cay) {
+    _cay = mang(4, (i) => ({
         id: i, name: ['JPD113', 'SWR302', 'JPD123', 'cuongthai.com'][i - 1] ?? `Môn ${i}`,
         color: null, emoji: ['🇯🇵', '📘', '🏛️', '🌐'][i - 1] ?? '📘',
         description: null, sortOrder: i, isPinned: i === 1,
@@ -114,7 +118,43 @@ const BANG = [
           isPinned: i === 1, isFavorite: false, isArchived: false, needsReview: false,
           updatedAt: '2026-09-01T00:00:00Z',
         })),
-      })),
+      }));
+  }
+  return _cay;
+}
+function themMonGia(name) {
+  const m = { id: ++_idMoi, name: name ?? 'Môn học mới', color: null, emoji: '📘',
+              description: null, sortOrder: 99, isPinned: false, chapters: [], notes: [] };
+  cayNotes().push(m);
+  return m;
+}
+function xoaMonGia(id) { _cay = cayNotes().filter((m) => m.id !== id); }
+function themGhiChuGia(subjectId, chapterId, title) {
+  const g = { id: ++_idMoi, title: title ?? 'Ghi chú mới', sortOrder: 99,
+              isPinned: false, isFavorite: false, isArchived: false, needsReview: false,
+              updatedAt: '2026-09-01T00:00:00Z' };
+  const mon = cayNotes().find((m) => m.id === subjectId) ?? cayNotes()[0];
+  const chuong = chapterId ? mon.chapters.find((c) => c.id === chapterId) : null;
+  (chuong ? chuong.notes : mon.notes).push(g);
+  /* Trả về HÌNH DẠNG ĐẦY ĐỦ của một ghi chú: `addNote` gọi `setSelected(res…)`
+     và khung soạn thảo đọc `contentJson`. Trả thiếu là trang nổ ở chỗ chẳng
+     liên quan gì tới thứ đang đo. */
+  return { ...g, subjectId: mon.id, chapterId: chapterId ?? null,
+           content: '', contentJson: null, deletedAt: null, tags: [] };
+}
+
+const BANG = [
+    /* ── Sổ tay (Notes) ──
+       Để đường này không có mock thì `/notes` vẽ ra "Chưa có môn học nào" —
+       tức là cả thanh bên phân cấp (môn → chương → ghi chú), ô đổi tên tại
+       chỗ, nút kéo-thả và mọi khác biệt bậc chữ CHƯA TỪNG được đo một lần.
+       Đúng cái bẫy ghi ở đầu tệp: trạng thái rỗng là trạng thái dễ qua nhất. */
+    /* ⚠️ Cây này là BIẾN, không phải hằng dựng lại mỗi lần gọi.
+       Mock tĩnh không đo được "tạo mới" lẫn "xoá": tạo xong gọi lại
+       `/notes/tree` vẫn ra cây cũ, nên hàng mới không bao giờ xuất hiện và
+       mọi chốt nhắm vào nó đo một thứ không có trên màn hình. */
+    [/\/notes\/tree/, () => ({
+      tree: cayNotes(),
       recent: mang(3, (i) => ({ id: i, title: `Vừa mở ${i}`, subjectId: 1, chapterId: null })),
     })],
     /* ── Bốn cây port 24/08/2026 ──
@@ -476,6 +516,42 @@ const BANG = [
  */
 await ctx.route('**/api/v1/**', async (tuyen) => {
   const duong = new URL(tuyen.request().url()).pathname;
+  const cach = tuyen.request().method();
+
+  /* ── Sổ tay: GHI được, không chỉ ĐỌC ──
+     Tạo/xoá là hai thao tác người dùng báo hỏng nhiều nhất, và cả hai chỉ đo
+     được nếu lần gọi `/notes/tree` KẾ TIẾP phản ánh thay đổi. Mock chỉ-đọc thì
+     hàng mới không bao giờ xuất hiện, và chốt nhắm vào nó luôn đỏ với lý do
+     sai (hoặc tệ hơn: tự tắt và báo xanh). */
+  if (/\/notes\/notes$/.test(duong) && cach === 'POST') {
+    let than = {};
+    try { than = JSON.parse(tuyen.request().postData() ?? '{}'); } catch { /* body rỗng */ }
+    await tuyen.fulfill({
+      status: 200, contentType: 'application/json',
+      body: JSON.stringify({ success: true, message: 'ok',
+        data: themGhiChuGia(than.subjectId, than.chapterId ?? null, than.title),
+        timestamp: '2026-08-22T00:00:00Z' }),
+    });
+    return;
+  }
+
+  if (/\/notes\/subjects(\/\d+)?$/.test(duong) && cach !== 'GET') {
+    let du = null;
+    if (cach === 'POST') {
+      let ten;
+      try { ten = JSON.parse(tuyen.request().postData() ?? '{}').name; } catch { /* body rỗng */ }
+      du = themMonGia(ten);
+    } else if (cach === 'DELETE') {
+      xoaMonGia(Number(duong.split('/').pop()));
+      du = { ok: true };
+    }
+    await tuyen.fulfill({
+      status: 200, contentType: 'application/json',
+      body: JSON.stringify({ success: true, message: 'ok', data: du, timestamp: '2026-08-22T00:00:00Z' }),
+    });
+    return;
+  }
+
   const khop = BANG.find(([re]) => re.test(duong));
   /* ⚠️ KHÔNG bịa payload cho đường chưa có mock.
      Bản đầu trả `[]` cho mọi đường không khớp, và nó làm `/notes` NỔ THẬT
@@ -871,6 +947,107 @@ const CHUAN_BI = {
     if (!oSua.focus) throw new Error('Ô đổi tên mở ra nhưng KHÔNG được focus — gõ ngay là mất chữ.');
     await p.keyboard.press('Escape').catch(() => {});
     await p.waitForTimeout(150);
+
+    /* ─── TẠO MỚI ⇒ MỞ Ô ĐẶT TÊN · XOÁ ⇒ ĂN NGAY LẦN BẤM ĐẦU ───
+       Hai lỗi người dùng báo 10/09/2026, đo trong MỘT mạch để mục vừa tạo
+       cũng chính là mục bị xoá — cây gốc giữ nguyên cho các chốt phía sau.
+
+       • "tạo 1 tài liệu mới, tôi ấn vào đổi tên không được": nguyên nhân là
+         THỨ TỰ — `refreshTree()` dựng hàng mới TRƯỚC khi cờ `vuaTao` được đặt,
+         mà `Row` đọc cờ bằng `useState` (chỉ đọc lần đầu, im lặng bỏ qua mọi
+         lần đổi sau).
+       • "xoá phải spam 2 lần": đo được MỘT cú bấm ⇒ MỘT `confirm` ⇒ MỘT lời
+         gọi DELETE, nên đường bấm đúng; chốt này canh phần còn lại — hàng có
+         thật sự biến khỏi cây sau đúng một lần bấm không. */
+    {
+      const demHangTruoc = await demHang();
+      const themMon = p.locator('button[aria-label="Thêm môn học"]').first();
+      if (await themMon.count() === 0) throw new Error('Không thấy nút "Thêm môn học".');
+      await themMon.click({ force: true }).catch(() => {});
+      await p.waitForTimeout(700);
+
+      const oMoi = await p.evaluate(() => {
+        const o = document.querySelector('.notes-theme-root .group input');
+        return o ? { co: true, focus: document.activeElement === o } : { co: false };
+      });
+      if (!oMoi.co) {
+        throw new Error(
+          'Tạo mục mới mà KHÔNG mở ô đặt tên — cờ `vuaTao` đặt SAU `refreshTree()`? '
+          + '(`Row` đọc cờ bằng useState, chỉ đọc lần đầu.)',
+        );
+      }
+      if (!oMoi.focus) throw new Error('Ô đặt tên mở ra nhưng KHÔNG được focus — gõ ngay là mất chữ.');
+      await p.keyboard.press('Escape').catch(() => {});
+      await p.waitForTimeout(250);
+
+      const sauKhiTao = await demHang();
+      if (sauKhiTao <= demHangTruoc) {
+        throw new Error(`Tạo môn mới mà cây không dài ra (${demHangTruoc} → ${sauKhiTao}).`);
+      }
+
+      /* ─── VÀ ĐƯỜNG NGƯỜI DÙNG THẬT SỰ ĐI: TẠO GHI CHÚ ───
+         Khác tạo MÔN ở một chỗ quyết định: tạo ghi chú còn gọi `setSelected`,
+         tức là khung soạn thảo TipTap bên phải mount ngay sau đó — và TipTap
+         tự chiếm tiêu điểm. Ô đặt tên mở ra rồi bị cướp focus, `onBlur` chốt
+         luôn cái tên mặc định, và người dùng thấy đúng cái họ tả: "ấn vào đổi
+         tên không được".
+         ⚠️ Phải chờ ĐỦ LÂU rồi mới hỏi: hỏi ngay thì ô vẫn còn focus và chốt
+         xanh oan — TipTap cướp tiêu điểm ở khung hình sau. */
+      {
+        const hangMon = p.locator('.notes-theme-root .group').first();
+        await hangMon.hover().catch(() => {});
+        await p.waitForTimeout(200);
+        const themGhiChu = hangMon.locator('button[aria-label="Thêm ghi chú"]').first();
+        if (await themGhiChu.count()) {
+          await themGhiChu.click({ force: true }).catch(() => {});
+          await p.waitForTimeout(1400);
+          const o = await p.evaluate(() => {
+            const e = document.querySelector('.notes-theme-root .group input');
+            return e
+              ? { co: true, focus: document.activeElement === e, ai: document.activeElement?.className?.slice(0, 60) ?? '' }
+              : { co: false, ai: document.activeElement?.className?.slice(0, 60) ?? '' };
+          });
+          if (!o.co) throw new Error('Tạo GHI CHÚ mới mà không mở ô đặt tên.');
+          if (!o.focus) {
+            throw new Error(
+              `Ô đặt tên của ghi chú mới MẤT tiêu điểm (đang ở: ${o.ai}) — `
+              + 'khung soạn thảo cướp focus, gõ tên là mất chữ.',
+            );
+          }
+          await p.keyboard.press('Escape').catch(() => {});
+          await p.waitForTimeout(200);
+        }
+      }
+
+      /* Xoá đúng mục vừa tạo. `confirm` bị thay để đo được không cần người. */
+      /* Đếm NGAY TRƯỚC khi xoá, không dùng lại số đo từ trước khi tạo ghi chú
+         — bước tạo ghi chú ở trên đã làm cây dài thêm một hàng. */
+      const truocKhiXoa = await demHang();
+      const soDelete = [];
+      const demXoa = (r) => { if (r.method() === 'DELETE') soDelete.push(r.url()); };
+      p.on('request', demXoa);
+      await p.evaluate(() => {
+        globalThis.__demConfirm = 0;
+        window.confirm = () => { globalThis.__demConfirm += 1; return true; };
+      });
+      const hangMoi = p.locator('.notes-theme-root .group', { hasText: 'Môn học mới' }).last();
+      await hangMoi.hover().catch(() => {});
+      await p.waitForTimeout(200);
+      await hangMoi.locator('button[aria-label="Xoá"]').first().click({ force: true }).catch(() => {});
+      await p.waitForTimeout(900);
+      p.off('request', demXoa);
+
+      const demC = await p.evaluate(() => globalThis.__demConfirm);
+      const sauKhiXoa = await demHang();
+      if (demC !== 1) throw new Error(`Một cú bấm Xoá mà \`confirm\` hiện ${demC} lần.`);
+      if (soDelete.length !== 1) throw new Error(`Một cú bấm Xoá mà gửi ${soDelete.length} lời gọi DELETE.`);
+      if (sauKhiXoa >= truocKhiXoa) {
+        throw new Error(
+          `Xoá MỘT lần mà cây vẫn còn ${sauKhiXoa} hàng (trước khi bấm: ${truocKhiXoa}) — `
+          + 'hàng không biến mất sau một cú bấm, đúng thứ người dùng phải "spam 2 lần".',
+        );
+      }
+    }
 
     /* ─── CHỦ ĐỀ TỐI CỦA NOTES ───
        Notes có bộ chuyển chủ đề RIÊNG (Trắng/Tối/Nâu), mặc định Trắng — khác

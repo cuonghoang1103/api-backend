@@ -21,8 +21,10 @@ import { kepDock, ngoaiKhung, type KhungKep } from './viTriDock';
 import { useOdin } from './useOdin';
 import { SU_KIEN_NHAC } from '../dashboard/nhacLichRobot';
 import './odin.css';
+import { useDich } from '../../i18n';
 
 export function OdinDock() {
+  const { dich } = useDich();
   const { navigate, settings, setSetting, online } = useAppState();
   const { api } = useSession();
   /** Ngôn ngữ Odin nói. Mặc định tiếng Việt — đây là app tiếng Việt. */
@@ -397,10 +399,10 @@ export function OdinDock() {
       {keoDuoc && (
         <div className="odin-co">
           <button type="button" onClick={() => setSetting('odinCo', Math.min(3, nacCo + 1))}
-            disabled={nacCo >= 3} title="Nhỏ hơn">−</button>
+            disabled={nacCo >= 3} title={dich('Nhỏ hơn')}>−</button>
           <span>{['100%', '82%', '66%', '52%'][nacCo]}</span>
           <button type="button" onClick={() => setSetting('odinCo', Math.max(0, nacCo - 1))}
-            disabled={nacCo <= 0} title="To hơn">+</button>
+            disabled={nacCo <= 0} title={dich('To hơn')}>+</button>
         </div>
       )}
 
@@ -427,7 +429,7 @@ export function OdinDock() {
             <button
               type="button"
               className="odin-bubble-mo"
-              title="Bấm để đọc đầy đủ trong AI Chat"
+              title={dich('Bấm để đọc đầy đủ trong AI Chat')}
               onClick={() => {
                 const id = phienNoiHienTai();
                 odin.dismissSay();
@@ -435,7 +437,7 @@ export function OdinDock() {
               }}
             >
               <span>{odin.say}</span>
-              <span className="odin-bubble-goi-y">Bấm để đọc đầy đủ →</span>
+              <span className="odin-bubble-goi-y">{dich('Bấm để đọc đầy đủ →')}</span>
             </button>
           ) : (
             <span>{odin.say}</span>
@@ -445,7 +447,7 @@ export function OdinDock() {
             type="button"
             className="odin-bubble-dong"
             onClick={(e) => { e.stopPropagation(); odin.dismissSay(); }}
-            aria-label="Đóng"
+            aria-label={dich('Đóng')}
           >
             <X size={12} aria-hidden />
           </button>
@@ -491,8 +493,8 @@ export function OdinDock() {
         type="button"
         className="odin-mic"
         data-active={odin.listening}
-        aria-label="Giữ để nói với Odin"
-        title="Giữ để nói (hoặc giữ phím ` )"
+        aria-label={dich('Giữ để nói với Odin')}
+        title={dich('Giữ để nói (hoặc giữ phím ` )')}
         onPointerDown={() => void odin.startListening()}
         onPointerUp={odin.stopListening}
         onPointerLeave={odin.stopListening}

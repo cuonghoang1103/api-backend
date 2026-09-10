@@ -17,6 +17,7 @@
 import { useRef, useState } from 'react';
 import { Loader2, Upload } from 'lucide-react';
 import { useSession } from '../../auth/session';
+import { useDich } from '../../i18n';
 
 interface Props {
   /** 'NORMAL' = thư viện thường · 'REMIX' = kho remix cho bàn DJ. */
@@ -52,6 +53,7 @@ function doThoiLuong(file: File): Promise<number | undefined> {
 }
 
 export function TaiNhacLen({ category, onXong }: Props) {
+  const { dich } = useDich();
   const { api } = useSession();
   const oFile = useRef<HTMLInputElement | null>(null);
   const [dangTai, setDangTai] = useState<string | null>(null);
@@ -142,7 +144,7 @@ export function TaiNhacLen({ category, onXong }: Props) {
       {loi && (
         <div className="ct-notice" data-tone="err" role="alert" style={{ width: '100%' }}>
           <span>{loi}</span>
-          <button type="button" className="ct-linklike" onClick={() => setLoi(null)}>Đóng</button>
+          <button type="button" className="ct-linklike" onClick={() => setLoi(null)}>{dich('Đóng')}</button>
         </div>
       )}
     </>

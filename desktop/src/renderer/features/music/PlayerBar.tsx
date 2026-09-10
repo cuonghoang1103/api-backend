@@ -15,8 +15,10 @@ import {
 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { clock, useMusicPlayer } from './player';
+import { useDich } from '../../i18n';
 
 export function PlayerBar() {
+  const { dich } = useDich();
   const { route, navigate, settings, setSetting } = useAppState();
   const {
     current, playing, length, shownPosition,
@@ -37,7 +39,7 @@ export function PlayerBar() {
      hỏng vừa sửa hôm nay khi thanh này còn nằm trong trang Nhạc. */
   if (thuGon) {
     return (
-      <div className="ct-player" data-thu="true" role="group" aria-label="Điều khiển phát nhạc (đã thu gọn)">
+      <div className="ct-player" data-thu="true" role="group" aria-label={dich('Điều khiển phát nhạc (đã thu gọn)')}>
         <span className="ct-player-line" aria-hidden style={{ width: `${progress}%` }} />
         <button
           type="button"
@@ -62,8 +64,8 @@ export function PlayerBar() {
           type="button"
           className="ct-pbtn ct-pbtn-nho"
           onClick={() => setSetting('playerThuGon', false)}
-          aria-label="Mở rộng thanh phát"
-          title="Mở rộng thanh phát"
+          aria-label={dich('Mở rộng thanh phát')}
+          title={dich('Mở rộng thanh phát')}
         >
           <ChevronUp size={15} aria-hidden />
         </button>
@@ -72,7 +74,7 @@ export function PlayerBar() {
   }
 
   return (
-    <div className="ct-player" role="group" aria-label="Điều khiển phát nhạc">
+    <div className="ct-player" role="group" aria-label={dich('Điều khiển phát nhạc')}>
       {/* Bấm vào tên bài để nhảy về trang Nhạc — lối quay lại quen thuộc khi
           đang nghe dở mà đi lang thang chỗ khác. */}
       <button
@@ -98,12 +100,12 @@ export function PlayerBar() {
             className={`ct-pbtn${shuffle ? ' is-on' : ''}`}
             onClick={() => setShuffle((s) => !s)}
             aria-pressed={shuffle}
-            aria-label="Phát ngẫu nhiên"
-            title="Phát ngẫu nhiên"
+            aria-label={dich('Phát ngẫu nhiên')}
+            title={dich('Phát ngẫu nhiên')}
           >
             <Shuffle size={15} aria-hidden />
           </button>
-          <button type="button" className="ct-pbtn" onClick={() => step(-1)} aria-label="Bài trước" title="Bài trước">
+          <button type="button" className="ct-pbtn" onClick={() => step(-1)} aria-label={dich('Bài trước')} title={dich('Bài trước')}>
             <SkipBack size={17} aria-hidden />
           </button>
           <button
@@ -115,7 +117,7 @@ export function PlayerBar() {
           >
             {playing ? <Pause size={18} aria-hidden /> : <Play size={18} aria-hidden />}
           </button>
-          <button type="button" className="ct-pbtn" onClick={() => step(1)} aria-label="Bài sau" title="Bài sau">
+          <button type="button" className="ct-pbtn" onClick={() => step(1)} aria-label={dich('Bài sau')} title={dich('Bài sau')}>
             <SkipForward size={17} aria-hidden />
           </button>
           <button
@@ -141,7 +143,7 @@ export function PlayerBar() {
             value={Math.floor(shownPosition)}
             style={{ ['--ct-progress' as string]: `${progress}%` }}
             onChange={(event) => batDauTua(Number(event.target.value))}
-            aria-label="Tua bài hát"
+            aria-label={dich('Tua bài hát')}
           />
           <span className="ct-seek-time">{clock(length)}</span>
         </div>
@@ -167,14 +169,14 @@ export function PlayerBar() {
           value={Math.round((muted ? 0 : volume) * 100)}
           style={{ ['--ct-progress' as string]: `${Math.round((muted ? 0 : volume) * 100)}%` }}
           onChange={(event) => { setMuted(false); setVolume(Number(event.target.value) / 100); }}
-          aria-label="Âm lượng"
+          aria-label={dich('Âm lượng')}
         />
         <button
           type="button"
           className="ct-pbtn"
           onClick={() => setSetting('playerThuGon', true)}
-          aria-label="Thu gọn thanh phát"
-          title="Thu gọn — nhạc vẫn phát bình thường"
+          aria-label={dich('Thu gọn thanh phát')}
+          title={dich('Thu gọn — nhạc vẫn phát bình thường')}
         >
           <ChevronDown size={16} aria-hidden />
         </button>

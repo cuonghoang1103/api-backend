@@ -276,6 +276,32 @@ export function buildSystemPrompt(opts: {
 
    Người dùng bảo "mở/xem/kiểm tra trang X" ⇒ gọi \`web_mo\` rồi \`web_doc\`.
    ĐỪNG trả lời "tôi không mở được localhost" — bạn mở được.`);
+  } else {
+    /*
+     * ⚠️⚠️ NHÁNH NÀY TỪNG KHÔNG TỒN TẠI, VÀ ĐÓ LÀ MỘT LỖI THẬT.
+     *
+     * Trước 10/09/2026 chỉ có `if (coWeb)`. Khi người dùng CHƯA bật nút Trình
+     * duyệt, model không được kể là công cụ ấy có tồn tại — nên nó kết luận
+     * đúng theo những gì được cho biết và trả lời "mình KHÔNG CÓ khả năng truy
+     * cập YouTube", rồi liệt kê các tool khác.
+     *
+     * Người dùng đọc câu đó thành "app này thiếu tính năng", và họ báo lại
+     * đúng như vậy: "trên macOS mở được, Windows/Linux thì không". Thật ra hai
+     * máy chỉ khác nhau ở một cái công tắc chưa ai chỉ cho họ thấy —
+     * `choTrinhDuyet` mặc định TẮT và trước bản này còn không được nhớ.
+     *
+     * Một câu từ chối tự tin thì không ai đi tìm cái công tắc. Nên khi công cụ
+     * đang tắt, model phải nói ĐÚNG chỗ để bật, không được nói là không có.
+     */
+    muc.push(`TRÌNH DUYỆT — ĐANG TẮT, NHƯNG APP CÓ
+   App CÓ trình duyệt gắn sẵn: mở trang cho người dùng xem ngay cạnh bảng ghi,
+   đọc nội dung sau khi JavaScript chạy, chụp màn hình, xem lỗi console.
+   Phiên này chưa bật nên bạn chưa gọi được.
+
+   ⛔ ĐỪNG nói "tôi không có khả năng mở trang web / xem YouTube". Nói thế là
+   SAI về app, và người dùng sẽ tin là app thiếu tính năng.
+   ✅ Nói đúng: "Bật nút **Trình duyệt** trên thanh công cụ phía trên (cạnh nút
+   Bỏ qua tất cả) là tôi mở được ngay." Rồi hỏi họ có muốn bật không.`);
   }
 
   muc.push(`TRÍCH DẪN
@@ -370,6 +396,14 @@ export function buildSystemPrompt(opts: {
      File ĐÃ CÓ ⇒ dùng \`edit_file\`. \`create_file\` báo "đã tồn tại" KHÔNG có
      nghĩa là hãy đi vòng qua shell — nó có nghĩa là dùng \`edit_file\`.
      Cần thay TRỌN file thì gọi \`edit_file\` với \`old_text\` là cả nội dung cũ.
+   • FILE NẰM NGOÀI THƯ MỤC DỰ ÁN: dùng \`ghi_file_ngoai\` (đường dẫn TUYỆT
+     ĐỐI). ĐỪNG bảo người dùng tự mở Notepad/TextEdit gõ tay, và cũng đừng
+     ghi bằng \`run_command\` — hai đường đó đều sai, một đường đẩy việc sang
+     họ, một đường làm hỏng nội dung.
+     (Viết 10/09/2026 vì đúng chuyện đó đã xảy ra: agent gặp một tệp cấu hình
+     ngoài dự án, không có đường nào, và trả lời "bạn cần sửa tay file
+     settings.txt: mở Notepad…". Nay đã có tool, và nó vẫn hiện thẻ duyệt kèm
+     đường dẫn đầy đủ nên người dùng vẫn nắm quyền quyết định.)
    • ĐỪNG dùng lệnh để đọc file — đã có read_file. File bị chặn thì bị chặn có
      lý do, và lách qua shell là phản bội lòng tin vừa được cấp.
    • Lệnh chạy KHÔNG có bàn phím: thứ gì hỏi lại sẽ treo tới lúc hết giờ.

@@ -14,7 +14,7 @@ import { SyncPanel } from '../components/SyncPanel';
 import { UpdatePanel } from '../components/UpdatePanel';
 import { OdinPanel } from '../features/odin/OdinPanel';
 import type { ThemeSetting } from '../../shared/ipc';
-import { useT, type NgonNgu } from '../i18n';
+import { useDich, type NgonNgu } from '../i18n';
 
 function formatBytes(bytes: number): string {
   if (bytes <= 0) return '0 B';
@@ -39,7 +39,7 @@ const NGON_NGU: { value: NgonNgu; label: string }[] = [
 
 export function Settings() {
   const { theme, setSetting, settings } = useAppState();
-  const { t } = useT();
+  const { dich } = useDich();
   const ngonNgu: NgonNgu = settings.ngonNgu === 'en' ? 'en' : 'vi';
   const [httpCache, setHttpCache] = useState<number | null>(null);
   const [estimate, setEstimate] = useState<StorageEstimate | null>(null);
@@ -73,19 +73,19 @@ export function Settings() {
   return (
     <div className="ct-page">
       <div className="ct-panel">
-        <h1>{t('Cài đặt')}</h1>
+        <h1>{dich('Cài đặt')}</h1>
 
         <section className="ct-section">
-          <h2>{t('Giao diện')}</h2>
+          <h2>{dich('Giao diện')}</h2>
 
           <div className="ct-field">
             <div>
-              <div className="ct-field-label">{t('Chủ đề')}</div>
+              <div className="ct-field-label">{dich('Chủ đề')}</div>
               <div className="ct-field-help">
-                {t('“Theo hệ thống” sẽ đổi theo cài đặt sáng/tối của máy.')}
+                {dich('“Theo hệ thống” sẽ đổi theo cài đặt sáng/tối của máy.')}
               </div>
             </div>
-            <div className="ct-segmented" role="radiogroup" aria-label={t('Chủ đề')}>
+            <div className="ct-segmented" role="radiogroup" aria-label={dich('Chủ đề')}>
               {THEME_OPTIONS.map((option) => (
                 <button
                   key={option.value}
@@ -95,7 +95,7 @@ export function Settings() {
                   data-active={theme === option.value}
                   onClick={() => setSetting('theme', option.value)}
                 >
-                  {t(option.label)}
+                  {dich(option.label)}
                 </button>
               ))}
             </div>
@@ -105,12 +105,12 @@ export function Settings() {
               app", và đó là chỗ người ta tìm đầu tiên. */}
           <div className="ct-field">
             <div>
-              <div className="ct-field-label">{t('Ngôn ngữ')}</div>
+              <div className="ct-field-label">{dich('Ngôn ngữ')}</div>
               <div className="ct-field-help">
-                {t('Chữ trong app đổi ngay, không cần khởi động lại. Nội dung tải từ web (bài học, bài viết, tin nhắn) giữ nguyên ngôn ngữ gốc.')}
+                {dich('Chữ trong app đổi ngay, không cần khởi động lại. Nội dung tải từ web (bài học, bài viết, tin nhắn) giữ nguyên ngôn ngữ gốc.')}
               </div>
             </div>
-            <div className="ct-segmented" role="radiogroup" aria-label={t('Ngôn ngữ')}>
+            <div className="ct-segmented" role="radiogroup" aria-label={dich('Ngôn ngữ')}>
               {NGON_NGU.map((o) => (
                 <button
                   key={o.value}
@@ -120,7 +120,7 @@ export function Settings() {
                   data-active={ngonNgu === o.value}
                   onClick={() => setSetting('ngonNgu', o.value)}
                 >
-                  {t(o.label)}
+                  {dich(o.label)}
                 </button>
               ))}
             </div>
@@ -128,9 +128,9 @@ export function Settings() {
 
           <div className="ct-field">
             <div>
-              <div className="ct-field-label">{t('Trợ lý Odin')}</div>
+              <div className="ct-field-label">{dich('Trợ lý Odin')}</div>
               <div className="ct-field-help">
-                {t('Hiển thị bảng trợ lý ở cạnh phải. Tắt đi thì app vẫn dùng bình thường.')}
+                {dich('Hiển thị bảng trợ lý ở cạnh phải. Tắt đi thì app vẫn dùng bình thường.')}
               </div>
             </div>
             <label className="ct-switch">
@@ -151,19 +151,19 @@ export function Settings() {
         <OdinPanel />
 
         <section className="ct-section">
-          <h2>{t('Dung lượng')}</h2>
+          <h2>{dich('Dung lượng')}</h2>
 
           <dl className="ct-rows">
             <div className="ct-row">
-              <dt>{t('Cache HTTP (ảnh, tệp tĩnh)')}</dt>
+              <dt>{dich('Cache HTTP (ảnh, tệp tĩnh)')}</dt>
               <dd>{httpCache === null ? '…' : formatBytes(httpCache)}</dd>
             </div>
             <div className="ct-row">
-              <dt>{t('Dữ liệu ứng dụng đã dùng')}</dt>
+              <dt>{dich('Dữ liệu ứng dụng đã dùng')}</dt>
               <dd>{estimate?.usage === undefined ? '…' : formatBytes(estimate.usage)}</dd>
             </div>
             <div className="ct-row">
-              <dt>{t('Hạn mức trình duyệt cấp')}</dt>
+              <dt>{dich('Hạn mức trình duyệt cấp')}</dt>
               <dd>{estimate?.quota === undefined ? '…' : formatBytes(estimate.quota)}</dd>
             </div>
           </dl>
@@ -176,7 +176,7 @@ export function Settings() {
               disabled={clearing}
             >
               <Trash2 size={14} aria-hidden />
-              {clearing ? t('Đang xoá…') : t('Xoá cache HTTP')}
+              {clearing ? dich('Đang xoá…') : dich('Xoá cache HTTP')}
             </button>
           </div>
           {/* Câu này có <strong> ở GIỮA. Cắt thành ba mẩu để dịch là hỏng:
@@ -184,7 +184,7 @@ export function Settings() {
               câu vô nghĩa. Nên dịch TRỌN câu, rồi tô đậm bằng cách tách theo
               dấu ** — cùng một cách ở cả hai thứ tiếng. */}
           <p className="ct-field-help">
-            {t('Chỉ xoá ảnh và tệp tĩnh đã tải. **Không** đụng tới nháp hay dữ liệu ngoại tuyến của bạn.')
+            {dich('Chỉ xoá ảnh và tệp tĩnh đã tải. **Không** đụng tới nháp hay dữ liệu ngoại tuyến của bạn.')
               .split('**')
               .map((m, i) => (i % 2 ? <strong key={i}>{m}</strong> : <span key={i}>{m}</span>))}
           </p>

@@ -378,8 +378,25 @@ export function an(): void {
   // Đóng video giữa lúc đang toàn màn hình: phải hạ cờ, không thì lần mở sau
   // `datVung` vẫn nghĩ đang fullscreen và phủ kín cửa sổ.
   if (toanManHinh) datToanManHinh(false);
-  if (khung && dangHien && cuaSoChu && !cuaSoChu.isDestroyed()) {
-    cuaSoChu.contentView.removeChildView(khung);
+  /*
+   * ⚠️ GỠ VÔ ĐIỀU KIỆN, đừng hỏi cờ `dangHien` trước.
+   *
+   * Cờ ấy là bản sao của sự thật, và bản sao thì lệch được: một lần `mo()`
+   * ném giữa chừng, một cửa sổ dựng lại, một `an()` gọi hai lần — sau đó
+   * `dangHien` nói "đã ẩn" trong khi `WebContentsView` VẪN nằm trong cửa sổ.
+   *
+   * Hậu quả không hề nhẹ và cũng không hề giống nguyên nhân: lớp phủ ấy trong
+   * suốt nhưng NUỐT CHUỘT — phần tử bên dưới không nhận `hover` (nút hiện
+   * theo hover biến mất) và con trỏ đi vào vùng đó thì mất tăm. Đúng hai thứ
+   * người dùng Windows báo ở trang Ghi chú ngày 10/09/2026.
+   *
+   * `removeChildView` với một view không phải con là không làm gì cả, nên gỡ
+   * thừa không tốn gì — còn gỡ thiếu thì để lại một mảng màn hình chết.
+   */
+  if (khung) {
+    for (const w of BrowserWindow.getAllWindows()) {
+      if (!w.isDestroyed()) w.contentView.removeChildView(khung);
+    }
   }
   dangHien = false;
 }

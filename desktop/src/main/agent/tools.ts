@@ -28,6 +28,7 @@ import { promisify } from 'node:util';
 
 import { soSanhDong, type KetQuaDiff } from './diff';
 import { fileBiCam, LoiNguc, moTrongNguc, thuMucBiCam, TRAN_BYTE_FILE } from './jail';
+import { kiemDuongDanNgoai } from './ghiNgoai';
 import { chuanBiCommit, chuanBiPr, commit, taoPr } from './gitViet';
 import { chayLenh, phanLoaiLenh, TRAN_GIAY_MAC_DINH, type PhanLoaiLenh } from './lenh';
 import { batLenhNen, docDauRaNen, dungLenhNen } from './lenhNen';
@@ -312,6 +313,13 @@ export async function chayToolAgent(
       case 'doi_ten_file': {
         if (!ghi) return { noiDung: 'LỖI: phiên này không bật quyền sửa file.', tomTat: 'không có quyền' };
         return await toolDoiTenFile(goc, args, ghi);
+      }
+      /* Ghi RA NGOÀI dự án. Cùng `capability: fs_write` nên cùng bật/tắt với
+         quyền sửa file — nhưng nó KHÔNG đi qua `moTrongNguc`, mà qua ranh giới
+         riêng ở `ghiNgoai.ts`. Xem chú thích ở đó cho lý do tool này tồn tại. */
+      case 'ghi_file_ngoai': {
+        if (!ghi) return { noiDung: 'LỖI: phiên này không bật quyền sửa file.', tomTat: 'không có quyền' };
+        return await toolGhiFileNgoai(args, ghi);
       }
       case 'edit_file':
       case 'create_file': {
@@ -895,6 +903,52 @@ async function toolDoiTenFile(goc: string, args: Record<string, unknown>, ghi: B
   await fs.mkdir(path.dirname(dDen), { recursive: true });
   await fs.rename(dTu, dDen);
   return { noiDung: `Đã đổi ${tu} → ${den}. Người dùng đã duyệt.`, tomTat: `→ ${den}` };
+}
+
+/**
+ * Ghi một file NGOÀI thư mục dự án.
+ *
+ * Khác `create_file` ở ba chỗ, và cả ba đều có lý do:
+ *  • Đường dẫn TUYỆT ĐỐI, kiểm bằng `kiemDuongDanNgoai` chứ không `moTrongNguc`.
+ *  • Thẻ duyệt hiện ĐƯỜNG DẪN ĐẦY ĐỦ (rút gọn `~`) — ở ngoài dự án thì thứ
+ *    người duyệt cần biết nhất chính là *file nằm ở đâu*.
+ *  • Ghi ĐÈ được file đã có (đó là ca dùng chính: sửa một tệp cấu hình), nên
+ *    diff phải so với nội dung CŨ để người dùng thấy mình đang thay cái gì.
+ */
+async function toolGhiFileNgoai(args: Record<string, unknown>, ghi: BoiCanhGhi): Promise<KetQuaTool> {
+  const noiDung = typeof args.content === 'string' ? args.content : '';
+  if (Buffer.byteLength(noiDung, 'utf8') > TRAN_BYTE_GHI) {
+    return { noiDung: `LỖI: nội dung vượt trần ${TRAN_BYTE_GHI / 1024}KB.`, tomTat: 'quá lớn' };
+  }
+
+  let kq: { duongDan: string; hienThi: string };
+  try {
+    kq = kiemDuongDanNgoai(String(args.path ?? ''));
+  } catch (e) {
+    return { noiDung: `LỖI: ${(e as Error).message}`, tomTat: 'bị chặn' };
+  }
+
+  /* Đọc nội dung cũ để dựng diff. File chưa có thì coi như rỗng — `taoMoi`
+     nói cho thẻ duyệt biết đây là tạo mới hay ghi đè. */
+  const cu = await fs.readFile(kq.duongDan, 'utf8').catch(() => null);
+  const diff = soSanhDong(cu ?? '', noiDung);
+
+  const quyet = await hoiNguoiDung(
+    { ten: 'ghi_file_ngoai', duongDan: kq.hienThi, tuDuyet: ghi.tuDuyet === true },
+    (y) => ghi.xinPhep({ ...y, diff, taoMoi: cu === null }),
+    ghi.signal,
+    ghi.so,
+  );
+  if (quyet === 'tuChoi') return loiTuChoi(`ghi ${kq.hienThi}`);
+
+  /* `goc: null` — file này nằm ngoài dự án, nên nút Hoàn tác của lượt vẫn ghi
+     lại được bản cũ mà không cần một gốc dự án để tính đường tương đối. */
+  await ghiVaNhoDeHoanTac(ghi.so, kq.duongDan, noiDung, null);
+  return {
+    noiDung: `Đã ghi ${kq.hienThi} (${Buffer.byteLength(noiDung, 'utf8')} byte).`,
+    tomTat: kq.hienThi,
+    diff,
+  };
 }
 
 async function toolCreateFile(goc: string, args: Record<string, unknown>, ghi: BoiCanhGhi): Promise<KetQuaTool> {

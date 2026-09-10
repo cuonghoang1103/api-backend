@@ -13,7 +13,7 @@
 import { Search } from 'lucide-react';
 import { useAppState } from '../app-state';
 import { findRoute, INTERNAL_ROUTES } from '../routes';
-import { useT } from '../i18n';
+import { useDich } from '../i18n';
 
 /* ⚠️ Tiếng Việt Ở ĐÂY, dịch tại chỗ dựng — đây là hằng tầm mô-đun, tính đúng
    một lần lúc nạp tệp. Gọi `t()` ngay đây thì tiêu đề cửa sổ kẹt ở ngôn ngữ
@@ -24,10 +24,10 @@ const TITLES: Record<string, string> = {
 };
 
 export function TitleBar({ onOpenPalette }: { onOpenPalette: () => void }) {
-  const { t } = useT();
+  const { dich } = useDich();
   const { route } = useAppState();
   const nhan = TITLES[route] ?? findRoute(route)?.label;
-  const title = nhan ? t(nhan) : 'CuongThai';
+  const title = nhan ? dich(nhan) : 'CuongThai';
 
   const isMac = navigator.userAgent.includes('Mac');
 
@@ -39,10 +39,10 @@ export function TitleBar({ onOpenPalette }: { onOpenPalette: () => void }) {
         type="button"
         className="ct-titlebar-search"
         onClick={onOpenPalette}
-        aria-label={t('Mở bảng lệnh')}
+        aria-label={dich('Mở bảng lệnh')}
       >
         <Search size={14} aria-hidden />
-        <span>{t('Tìm kiếm hoặc chạy lệnh')}</span>
+        <span>{dich('Tìm kiếm hoặc chạy lệnh')}</span>
         <kbd>{isMac ? '⌘K' : 'Ctrl K'}</kbd>
       </button>
     </header>

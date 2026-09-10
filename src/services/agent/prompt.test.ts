@@ -122,3 +122,38 @@ test('không có quyền chạy lệnh ⇒ KHÔNG nhồi luật shell vào promp
   } as never);
   assert.doesNotMatch(p, /KHÔNG CÓ TTY/);
 });
+
+/*
+ * ⛔⛔ NĂNG LỰC ĐANG TẮT VẪN PHẢI ĐƯỢC NHẮC TỚI.
+ *
+ * Lỗi thật 10/09/2026: `prompt.ts` chỉ có `if (coWeb) { … }`, không `else`.
+ * Người dùng chưa bật nút Trình duyệt ⇒ model không được kể là công cụ ấy TỒN
+ * TẠI ⇒ nó kết luận đúng theo những gì được cho biết và trả lời:
+ *
+ *   "Không, mình không có khả năng truy cập hay phát video YouTube."
+ *
+ * Người dùng đọc thành "app thiếu tính năng" và báo lại là "macOS mở được,
+ * Windows/Linux thì không" — trong khi hai máy chỉ khác nhau ở một cái công
+ * tắc chưa ai chỉ cho họ thấy. Một câu từ chối TỰ TIN thì không ai đi tìm
+ * công tắc.
+ */
+test('không có quyền trình duyệt ⇒ prompt VẪN nói app có, và chỉ chỗ bật', () => {
+  const p = dung('win32', ['fs_read']);
+  assert.match(p, /TRÌNH DUYỆT — ĐANG TẮT/);
+  assert.match(p, /Bật nút \*\*Trình duyệt\*\*/);
+});
+
+test('có quyền trình duyệt ⇒ nói cách dùng, KHÔNG nói đang tắt', () => {
+  const p = dung('win32', ['fs_read', 'browser']);
+  assert.match(p, /TRÌNH DUYỆT — BẠN MỞ ĐƯỢC TRANG/);
+  assert.doesNotMatch(p, /TRÌNH DUYỆT — ĐANG TẮT/);
+});
+
+test('hai nhánh trình duyệt LOẠI TRỪ nhau ở mọi tổ hợp quyền', () => {
+  for (const caps of [[], ['browser'], ['fs_read'], ['fs_read', 'fs_write', 'shell', 'browser']]) {
+    const p = dung('win32', caps);
+    const bat = /TRÌNH DUYỆT — BẠN MỞ ĐƯỢC TRANG/.test(p);
+    const tat = /TRÌNH DUYỆT — ĐANG TẮT/.test(p);
+    assert.equal(bat !== tat, true, `capabilities=${JSON.stringify(caps)} ra ${bat}/${tat}`);
+  }
+});

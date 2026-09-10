@@ -122,8 +122,18 @@ jobs:
           cp -r dist prisma package.json package-lock.json build-ctx/backend/
           # The Dockerfile references scripts/fix-uploads-perms.sh which
           # lives at the repo root (./scripts/), not under backend/.
-          # Stage it where the Dockerfile expects it.
-          cp scripts/fix-uploads-perms.sh build-ctx/backend/scripts/
+          #
+          # Stage the WHOLE scripts/ dir, not just that one file. The
+          # Dockerfile ends with `COPY scripts ./scripts`, so whatever is
+          # staged here IS /app/scripts in the running container — and
+          # staging one file quietly shipped an image whose /app/scripts held
+          # nothing else. The compose image (Dockerfile.backend, `COPY . .`)
+          # has the full dir, so the two deploy paths produced containers that
+          # differed in what `docker exec ... node scripts/<x>.mjs` could run:
+          # every ops script (codelab-lesson-write, academy-seed-course, the
+          # seeders) was MODULE_NOT_FOUND after a GHCR deploy and fine after a
+          # compose one. Same repo, same commit, different container.
+          cp -r scripts/. build-ctx/backend/scripts/
           # node_modules is large; copy the pruned production copy.
           cp -r node_modules build-ctx/backend/node_modules
           echo "--- backend build context size ---"

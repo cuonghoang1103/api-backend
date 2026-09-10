@@ -128,111 +128,6 @@ public class Contact implements Serializable {
 }
 '''
 
-P0054_BO = '''package bo;
-
-import entity.Contact;
-import java.util.List;
-
-/**
- * The three methods the Guidelines name, with the signatures they name.
- *
- * The Guidelines hand the List in as a parameter rather than letting this class
- * own it, so the class is deliberately STATELESS: the list lives in the screen
- * layer and is passed down. That is not how a bo is usually built, but the
- * signature is the contract a marker checks, and inventing a private list here
- * as well would mean two places that both think they hold the contacts.
- *
- * displayAll printing is the same story: a bo should not touch the screen, but
- * the brief's own signature returns void and is called "display", so printing
- * is the only thing it can mean. Both departures are the brief's, not ours -
- * say so if you are asked, rather than pretending the layering is clean.
- */
-public class ContactManager {
-
-    /**
-     * Fixed column widths, not tab stops.
-     *
-     * The brief's expected screen is a \\t table, and it is already broken
-     * there: "Iker Casillas" is 13 characters, so it eats its tab stop and the
-     * First Name column jumps left on that row alone. printf with widths cannot
-     * do that - every row lines up whatever the names are. The widths are
-     * generous enough that a long name pushes the row out instead of losing the
-     * alignment silently.
-     */
-    private static final String ROW = "%-4s%-18s%-12s%-12s%-8s%-12s%s%n";
-
-    /** The ID rule, in the one place that can see the whole list. */
-    public int nextId(List<Contact> list) {
-        if (list.isEmpty()) {
-            return 1;
-        }
-        // "new contact has ID equal to last ID contact + 1" - the brief's own
-        // words, so it is the LAST element that is asked, not the largest ID.
-        // The difference shows after a deletion: remove the tail and the next
-        // contact reuses its ID. Taking max + 1 would avoid that, but it would
-        // also be a different rule from the one on the sheet.
-        return list.get(list.size() - 1).getId() + 1;
-    }
-
-    /**
-     * Adds one contact, stamping the generated ID on the way in.
-     *
-     * Stamping it here rather than in the caller means the rule cannot be
-     * bypassed by a screen that forgets to ask for the next ID.
-     */
-    public boolean addContact(List<Contact> list, Contact contact) {
-        if (list == null || contact == null) {
-            return false;
-        }
-        contact.setId(nextId(list));
-        return list.add(contact);
-    }
-
-    public void displayAll(List<Contact> list) {
-        if (list == null || list.isEmpty()) {
-            System.out.println("No found contact");
-            return;
-        }
-        System.out.printf(ROW, "ID", "Name", "First Name", "Last Name", "Group", "Address", "Phone");
-        for (Contact contact : list) {
-            System.out.printf(ROW, contact.getId(), contact.getFullName(),
-                    contact.getFirstName(), contact.getLastName(),
-                    contact.getGroup(), contact.getAddress(), contact.getPhone());
-        }
-    }
-
-    /**
-     * Deletes by identity of the ID, not by list.remove(Object).
-     *
-     * remove(Object) uses equals(), and Contact does not override it, so it
-     * would only ever match the very same object. Scanning for the ID keeps
-     * working if the caller rebuilds a Contact carrying just the ID - which is
-     * the natural thing to do when the user typed an ID, not an object.
-     */
-    public boolean deleteContact(List<Contact> list, Contact contact) {
-        if (list == null || contact == null) {
-            return false;
-        }
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getId() == contact.getId()) {
-                list.remove(i);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /** The lookup the screen needs before it can call deleteContact. */
-    public Contact findById(List<Contact> list, int id) {
-        for (Contact contact : list) {
-            if (contact.getId() == id) {
-                return contact;
-            }
-        }
-        return null;
-    }
-}
-'''
 
 P0054_VALIDATOR = '''package utils;
 
@@ -330,22 +225,46 @@ public class Validator {
 
 P0054_MAIN = '''package ui;
 
-import bo.ContactManager;
 import entity.Contact;
 import java.util.ArrayList;
 import java.util.List;
 import utils.Validator;
 
-/** The menu and the screen, nothing else. */
+/**
+ * The startup class: the menu, the screen, and the three methods the
+ * Guidelines demand live in it.
+ *
+ * "Student must implement methods addContact, displayAll, deleteContact IN
+ * STARTUP CODE" is the brief's own wording, and the file count agrees with it:
+ * three files is the band where the course says entity + ui + utils and no
+ * business layer. It also settles a conflict that would otherwise be real -
+ * displayAll is specified as returning void and being called "display", so
+ * printing is the only thing it can mean, and a bo that prints is the one
+ * thing the course forbids outright. Put it in the startup class, where
+ * printing belongs, and both rules are satisfied at once.
+ *
+ * What stays separated is the part that matters: the LIST is a parameter of
+ * every method, never a field, because the Guidelines hand it in that way.
+ * That is what keeps these methods callable from any screen.
+ */
 public class Main {
 
     private static final String MENU_ERROR = "Please choice one option from 1 to 4.";
 
+    /**
+     * Fixed column widths, not tab stops.
+     *
+     * The brief's expected screen is a \t table, and it is already broken
+     * there: "Iker Casillas" is 13 characters, so it eats its tab stop and the
+     * First Name column jumps left on that row alone. printf with widths cannot
+     * do that - every row lines up whatever the names are. The widths are
+     * generous enough that a long name pushes the row out instead of losing the
+     * alignment silently.
+     */
+    private static final String ROW = "%-4s%-18s%-12s%-12s%-8s%-12s%s%n";
+
     public static void main(String[] args) {
-        // The list lives here because the Guidelines' three methods take it as
-        // a parameter - see ContactManager for why that is their decision.
         List<Contact> contacts = new ArrayList<>();
-        ContactManager manager = new ContactManager();
 
         boolean running = true;
         while (running) {
@@ -357,14 +276,14 @@ public class Main {
 
             switch (Validator.getInt("Please choice one option: Your choice: ", MENU_ERROR, 1, 4)) {
                 case 1:
-                    add(manager, contacts);
+                    add(contacts);
                     break;
                 case 2:
                     System.out.println("--------------------------------- Display all Contact ----------------------------");
-                    manager.displayAll(contacts);
+                    displayAll(contacts);
                     break;
                 case 3:
-                    delete(manager, contacts);
+                    delete(contacts);
                     break;
                 default:
                     running = false;
@@ -372,13 +291,86 @@ public class Main {
         }
     }
 
-    private static void add(ContactManager manager, List<Contact> contacts) {
+    /**
+     * Required: public boolean addContact(List<Contact> list, Contact contact)
+     *
+     * The ID is stamped on the way in rather than by the caller, so a screen
+     * that forgets to ask for the next ID cannot bypass the rule.
+     */
+    public static boolean addContact(List<Contact> list, Contact contact) {
+        if (list == null || contact == null) {
+            return false;
+        }
+        contact.setId(nextId(list));
+        return list.add(contact);
+    }
+
+    /** Required: public void displayAll(List<Contact> list) */
+    public static void displayAll(List<Contact> list) {
+        if (list == null || list.isEmpty()) {
+            System.out.println("No found contact");
+            return;
+        }
+        System.out.printf(ROW, "ID", "Name", "First Name", "Last Name", "Group", "Address", "Phone");
+        for (Contact contact : list) {
+            System.out.printf(ROW, contact.getId(), contact.getFullName(),
+                    contact.getFirstName(), contact.getLastName(),
+                    contact.getGroup(), contact.getAddress(), contact.getPhone());
+        }
+    }
+
+    /**
+     * Required: public boolean deleteContact(List<Contact> list, Contact contact)
+     *
+     * Deletes by identity of the ID, not by list.remove(Object).
+     * remove(Object) uses equals(), and Contact does not override it, so it
+     * would only ever match the very same object. Scanning for the ID keeps
+     * working if the caller rebuilds a Contact carrying just the ID - which is
+     * the natural thing to do when the user typed an ID, not an object.
+     */
+    public static boolean deleteContact(List<Contact> list, Contact contact) {
+        if (list == null || contact == null) {
+            return false;
+        }
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getId() == contact.getId()) {
+                list.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** The ID rule, in the one place that can see the whole list. */
+    private static int nextId(List<Contact> list) {
+        if (list.isEmpty()) {
+            return 1;
+        }
+        // "new contact has ID equal to last ID contact + 1" - the brief's own
+        // words, so it is the LAST element that is asked, not the largest ID.
+        // The difference shows after a deletion: remove the tail and the next
+        // contact reuses its ID. Taking max + 1 would avoid that, but it would
+        // also be a different rule from the one on the sheet.
+        return list.get(list.size() - 1).getId() + 1;
+    }
+
+    /** The lookup the screen needs before it can call deleteContact. */
+    private static Contact findById(List<Contact> list, int id) {
+        for (Contact contact : list) {
+            if (contact.getId() == id) {
+                return contact;
+            }
+        }
+        return null;
+    }
+
+    private static void add(List<Contact> contacts) {
         System.out.println("-------- Add a Contact --------");
         String name = Validator.getNonBlank("Enter Name: ", "Name must not be blank.");
         String group = Validator.getNonBlank("Enter Group: ", "Group must not be blank.");
         String address = Validator.getNonBlank("Enter Address: ", "Address must not be blank.");
         String phone = Validator.getPhone("Enter Phone: ");
-        if (manager.addContact(contacts, new Contact(name, group, address, phone))) {
+        if (addContact(contacts, new Contact(name, group, address, phone))) {
             System.out.println("Successful");
         }
     }
@@ -388,17 +380,17 @@ public class Main {
      * turned into a contact first, and THAT lookup is where "No found contact"
      * comes from - not from the delete itself.
      */
-    private static void delete(ContactManager manager, List<Contact> contacts) {
+    private static void delete(List<Contact> contacts) {
         System.out.println("------- Delete a Contact -------");
         // The same message covers "not a number" and "0 or negative", because
         // IDs start at 1 - a non-positive ID can never exist either.
         int id = Validator.getInt("Enter ID: ", "ID is digit", 1, Integer.MAX_VALUE);
-        Contact target = manager.findById(contacts, id);
+        Contact target = findById(contacts, id);
         if (target == null) {
             System.out.println("No found contact");
             return;
         }
-        if (manager.deleteContact(contacts, target)) {
+        if (deleteContact(contacts, target)) {
             System.out.println("Successful");
         }
     }
@@ -445,7 +437,6 @@ solution(
     'J1.S.P0054',
     title_vi='Chương trình quản lý danh bạ',
     files=[('src/entity/Contact.java', P0054_CONTACT),
-           ('src/bo/ContactManager.java', P0054_BO),
            ('src/utils/Validator.java', P0054_VALIDATOR),
            ('src/ui/Main.java', P0054_MAIN)],
     main_class='ui.Main',
@@ -507,20 +498,21 @@ solution(
          + _row54(2, 'Madonna', 'Madonna', '', 'Singer', 'USA', '(123)-456-7890') + '\n'
          + P0054_MENU),
     ],
-    explain_en='''<p><strong>The Guidelines decide the shape, even where they are odd.</strong> The sheet
-names three methods and their signatures: <code>addContact(List&lt;Contact&gt;, Contact)</code>,
-<code>displayAll(List&lt;Contact&gt;)</code>, <code>deleteContact(List&lt;Contact&gt;, Contact)</code>.
-All three take the list as a <em>parameter</em>, so <code>ContactManager</code> is stateless and the list
-lives in <code>Main</code>. That is not how a <code>bo</code> is normally built — it usually owns its
-collection — but the signature is what a marker checks, and keeping a private list in here as well would
-give the program two places that each think they hold the contacts. Same story with
-<code>displayAll</code>: a <code>bo</code> should not print, but a method called "display" that returns
-<code>void</code> can mean nothing else. Both departures are the brief's; name them out loud rather than
-pretending the layering came out clean.</p>
-<p><strong>Four files, no controller.</strong> <code>entity</code> + <code>bo</code> +
-<code>utils</code> + <code>ui</code>. A controller layer here would have exactly one job — pass the list
-from <code>Main</code> to <code>ContactManager</code> — and <code>Main</code> already does that in one
-line. Add a layer where the program needs one.</p>
+    explain_en='''<p><strong>The Guidelines decide the shape, and they say where the methods live.</strong>
+The sheet names three methods with their signatures — <code>addContact(List&lt;Contact&gt;, Contact)</code>,
+<code>displayAll(List&lt;Contact&gt;)</code>, <code>deleteContact(List&lt;Contact&gt;, Contact)</code> — and
+then one line that settles the design: <em>"in startup code"</em>. So they go in <code>Main</code>, not
+in a manager class. Two other rules point the same way. Three files is the band where the course says
+<code>entity</code> + <code>ui</code> + <code>utils</code> and no business layer. And <code>displayAll</code>
+is specified as <code>void</code> and called "display", so printing is the only thing it can mean — while
+"a <code>bo</code> never prints" is the one layering rule the course states without exception. Put the
+method where printing belongs and the conflict disappears instead of needing an apology.</p>
+<p><strong>Three files, no <code>bo</code>, no controller.</strong> <code>entity</code> +
+<code>utils</code> + <code>ui</code>. The list is a <em>parameter</em> of all three required methods, so
+there is no collection for a business object to own and nothing for it to guard — a
+<code>ContactManager</code> here would be a file that holds no state and enforces no rule the startup
+class could not. Expect to be asked "why no <code>bo</code>?" and answer with the file count and the
+signatures, not with a preference. Add a layer where the program needs one.</p>
 <p><strong>Name splitting belongs in the entity, and it must be <code>final</code>.</strong>
 <code>setFullName</code> stores the name and derives <code>firstName</code>/<code>lastName</code> from it
 in the same breath, so the three can never disagree. It is declared <code>final</code> because the
@@ -571,20 +563,21 @@ with "ID is digit", a real delete, and an empty list. Run 1 adds seven contacts,
 format, then types a value that must be refused before it will accept an eighth — so every branch of the
 regex is exercised by a real program and not by reading it. Run 2 types a one-word name, deletes an ID that does not exist, and shows
 the ID being reused after the tail contact is removed.</p>''',
-    explain_vi='''<p><strong>Phần Hướng dẫn quyết định hình dạng chương trình, kể cả ở chỗ nó kỳ
-lạ.</strong> Đề nêu tên ba phương thức kèm chữ ký: <code>addContact(List&lt;Contact&gt;, Contact)</code>,
-<code>displayAll(List&lt;Contact&gt;)</code>, <code>deleteContact(List&lt;Contact&gt;, Contact)</code>.
-Cả ba đều nhận danh sách như một <em>tham số</em>, nên <code>ContactManager</code> không giữ trạng thái và
-danh sách nằm ở <code>Main</code>. Đó không phải cách người ta thường viết một lớp <code>bo</code> — bình
-thường nó tự giữ tập dữ liệu — nhưng chữ ký mới là thứ người chấm soi, và nếu giữ thêm một danh sách
-private ở đây thì chương trình có hai chỗ cùng tưởng mình đang giữ danh bạ. <code>displayAll</code> cũng
-vậy: <code>bo</code> lẽ ra không in ra màn hình, nhưng một phương thức tên "display" trả về
-<code>void</code> thì chẳng thể mang nghĩa nào khác. Cả hai chỗ lệch chuẩn đều là của đề — hãy nói thẳng
-ra, đừng giả vờ rằng phân tầng ở đây sạch sẽ.</p>
-<p><strong>Bốn tệp, không có controller.</strong> <code>entity</code> + <code>bo</code> +
-<code>utils</code> + <code>ui</code>. Thêm tầng controller ở đây thì nó chỉ có đúng một việc — chuyển danh
-sách từ <code>Main</code> sang <code>ContactManager</code> — mà <code>Main</code> đã làm việc đó bằng một
-dòng. Chỉ thêm tầng khi chương trình cần.</p>
+    explain_vi='''<p><strong>Phần Hướng dẫn quyết định hình dạng, và nó nói luôn các phương thức nằm
+ở đâu.</strong> Đề nêu ba phương thức kèm chữ ký — <code>addContact(List&lt;Contact&gt;, Contact)</code>,
+<code>displayAll(List&lt;Contact&gt;)</code>, <code>deleteContact(List&lt;Contact&gt;, Contact)</code> — rồi một
+dòng chốt hạ: <em>"in startup code"</em>. Vậy nên chúng nằm trong <code>Main</code>, không phải trong một
+lớp manager. Hai quy tắc khác cũng chỉ về cùng hướng. Ba tệp là đúng vạch mà khóa học nói
+<code>entity</code> + <code>ui</code> + <code>utils</code>, không tầng nghiệp vụ. Và <code>displayAll</code>
+được đặc tả trả về <code>void</code> và tên là "display", nên nó chỉ có thể là in — trong khi "lớp
+<code>bo</code> không bao giờ in" là quy tắc phân tầng duy nhất khóa học phát biểu không ngoại lệ. Đặt
+phương thức vào đúng chỗ được phép in thì mâu thuẫn biến mất, thay vì phải đi xin lỗi nó.</p>
+<p><strong>Ba tệp, không <code>bo</code>, không controller.</strong> <code>entity</code> +
+<code>utils</code> + <code>ui</code>. Danh sách là <em>tham số</em> của cả ba phương thức bắt buộc, nên
+không có tập dữ liệu nào để một lớp nghiệp vụ sở hữu và cũng không có luật nào để nó canh — một
+<code>ContactManager</code> ở đây sẽ là một tệp không giữ trạng thái và không áp luật nào mà lớp khởi
+động không làm được. Hãy chờ câu hỏi "sao không có <code>bo</code>?" và trả lời bằng số tệp và chữ ký
+phương thức, đừng trả lời bằng sở thích. Chỉ thêm tầng khi chương trình cần.</p>
 <p><strong>Việc tách tên thuộc về lớp entity, và phải là <code>final</code>.</strong>
 <code>setFullName</code> vừa lưu tên vừa suy ra <code>firstName</code>/<code>lastName</code> trong cùng một
 nhịp, nên ba giá trị không bao giờ mâu thuẫn. Nó được khai báo <code>final</code> vì constructor gọi nó:

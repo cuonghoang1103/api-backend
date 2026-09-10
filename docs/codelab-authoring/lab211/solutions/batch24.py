@@ -1300,8 +1300,8 @@ gom dữ liệu, gọi bo, báo kết quả; còn <code>Main</code> là một th
 với bất kỳ dòng nào trong project này: "dòng này có thể nằm chỗ khác không?" — câu trả lời phải là
 không.</p>
 <p><strong>Vì sao tám tệp và có controller.</strong> Hình dạng project này được đếm từ các bài nộp thật
-đã qua: hai đến bốn tệp thì không cần <code>bo</code>, còn mọi bài từ bảy tệp trở lên đều có
-<code>controller</code>. Bài này có bốn chức năng, mỗi chức năng mười lăm đến hai lăm dòng hỏi/đáp. Để
+đã qua: hai đến ba tệp thì không cần <code>bo</code>, còn mọi bài từ bảy tệp trở lên đều có
+<code>controller</code>. (Ở đúng bốn tệp thì con số không nói được gì — mẫu có cả hai kiểu.) Bài này có bốn chức năng, mỗi chức năng mười lăm đến hai lăm dòng hỏi/đáp. Để
 nguyên trong <code>Main</code> thì vòng lặp thực đơn bị chôn dưới tám mươi dòng
 <code>System.out.print</code>; tách sang <code>StudentController</code> thì mỗi chức năng tự đọc được và
 thực đơn vẫn là thực đơn. Controller ở đây không phải trang trí — nó là thứ ngăn <code>Main</code> biến

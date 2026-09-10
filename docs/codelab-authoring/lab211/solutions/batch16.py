@@ -61,6 +61,8 @@ public abstract class ThreeDimensionalShape extends Shape {
 
 P0080_CIRCLE = '''package entity;
 
+import java.util.Locale;
+
 /** A = pi * r^2. */
 public class Circle extends TwoDimensionalShape {
 
@@ -77,12 +79,14 @@ public class Circle extends TwoDimensionalShape {
 
     @Override
     public String toString() {
-        return String.format("Circle [r=%.2f]", radius);
+        return String.format(Locale.US, "Circle [r=%.2f]", radius);
     }
 }
 '''
 
 P0080_SQUARE = '''package entity;
+
+import java.util.Locale;
 
 /** A = s^2. */
 public class Square extends TwoDimensionalShape {
@@ -100,12 +104,14 @@ public class Square extends TwoDimensionalShape {
 
     @Override
     public String toString() {
-        return String.format("Square [side=%.2f]", side);
+        return String.format(Locale.US, "Square [side=%.2f]", side);
     }
 }
 '''
 
 P0080_TRIANGLE = '''package entity;
+
+import java.util.Locale;
 
 /** A = 1/2 * base * height. */
 public class Triangle extends TwoDimensionalShape {
@@ -125,12 +131,14 @@ public class Triangle extends TwoDimensionalShape {
 
     @Override
     public String toString() {
-        return String.format("Triangle [base=%.2f, h=%.2f]", base, height);
+        return String.format(Locale.US, "Triangle [base=%.2f, h=%.2f]", base, height);
     }
 }
 '''
 
 P0080_SPHERE = '''package entity;
+
+import java.util.Locale;
 
 /** Surface A = 4 * pi * r^2, V = (4/3) * pi * r^3. */
 public class Sphere extends ThreeDimensionalShape {
@@ -155,12 +163,14 @@ public class Sphere extends ThreeDimensionalShape {
 
     @Override
     public String toString() {
-        return String.format("Sphere [r=%.2f]", radius);
+        return String.format(Locale.US, "Sphere [r=%.2f]", radius);
     }
 }
 '''
 
 P0080_CUBE = '''package entity;
+
+import java.util.Locale;
 
 /** Surface A = 6 * s^2, V = s^3. */
 public class Cube extends ThreeDimensionalShape {
@@ -183,12 +193,14 @@ public class Cube extends ThreeDimensionalShape {
 
     @Override
     public String toString() {
-        return String.format("Cube [side=%.2f]", side);
+        return String.format(Locale.US, "Cube [side=%.2f]", side);
     }
 }
 '''
 
 P0080_TETRAHEDRON = '''package entity;
+
+import java.util.Locale;
 
 /** Regular tetrahedron: A = sqrt(3) * s^2, V = s^3 / (6 * sqrt(2)). */
 public class Tetrahedron extends ThreeDimensionalShape {
@@ -211,7 +223,7 @@ public class Tetrahedron extends ThreeDimensionalShape {
 
     @Override
     public String toString() {
-        return String.format("Tetrahedron [side=%.2f]", side);
+        return String.format(Locale.US, "Tetrahedron [side=%.2f]", side);
     }
 }
 '''
@@ -226,6 +238,7 @@ import entity.Square;
 import entity.Tetrahedron;
 import entity.ThreeDimensionalShape;
 import entity.Triangle;
+import java.util.Locale;
 
 /**
  * The report.
@@ -251,14 +264,14 @@ public class Main {
 
         for (int i = 0; i < shapes.length; i++) {
             Shape shape = shapes[i];
-            String area = String.format("%.2f", shape.getArea());
+            String area = String.format(Locale.US, "%.2f", shape.getArea());
 
             // Run-time type identification, asked for by name in the brief. It
             // asks about the ABSTRACT level, not the concrete class, so a new
             // 3-D shape is handled correctly the day it is written.
             String volume = "-";
             if (shape instanceof ThreeDimensionalShape) {
-                volume = String.format("%.2f", ((ThreeDimensionalShape) shape).getVolume());
+                volume = String.format(Locale.US, "%.2f", ((ThreeDimensionalShape) shape).getVolume());
             }
             System.out.printf("%-3d %-30s %10s %10s%n", i + 1, shape, area, volume);
         }
@@ -609,6 +622,7 @@ P0081_MAIN = '''package ui;
 import bo.Colony;
 import entity.Bee;
 import java.util.List;
+import java.util.Locale;
 import utils.Validator;
 
 /** Menu and screen only. */
@@ -662,7 +676,7 @@ public class Main {
 
         for (int i = 0; i < bees.size(); i++) {
             Bee bee = bees.get(i);
-            String health = String.format("%.2f %%", bee.getHealth());
+            String health = String.format(Locale.US, "%.2f %%", bee.getHealth());
             String status = bee.isDead() ? "Dead" : "Alive";
             if (damage == null) {
                 System.out.printf("%-3d %-7s %10s   %s%n", i + 1, bee.getType(), health, status);

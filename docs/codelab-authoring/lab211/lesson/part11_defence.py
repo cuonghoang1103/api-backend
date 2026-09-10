@@ -45,15 +45,15 @@ def build():
     out('A real crash, line by line', 'Một lần crash thật, đọc từng dòng',
         """Exception in thread "main" java.lang.NullPointerException: Cannot invoke
         "String.length()" because "<local1>" is null
-    at doctormanagement.DoctorManager.findByCode(DoctorManager.java:23)
-    at doctormanagement.Main.updateDoctor(Main.java:88)
-    at doctormanagement.Main.main(Main.java:31)""",
+    at bo.DoctorHash.findByCode(DoctorHash.java:23)
+    at ui.Main.updateDoctor(Main.java:88)
+    at ui.Main.main(Main.java:31)""",
         verify=False)
 
     ol(['<strong>Line 1 names the problem.</strong> Modern Java even tells you which expression was '
         'null — here something whose <code>length()</code> was called.',
         '<strong>The FIRST <code>at</code> line is where it broke</strong> — '
-        '<code>DoctorManager.java</code> line 23. Start there, not at the bottom.',
+        '<code>DoctorHash.java</code> line 23. Start there, not at the bottom.',
         '<strong>The lines below are who called it.</strong> Read them as a story: '
         '<code>main</code> line 31 called <code>updateDoctor</code>, which at line 88 called '
         '<code>findByCode</code>.',
@@ -61,7 +61,7 @@ def build():
         'in your package, never in the JDK.'],
        ['<strong>Dòng 1 nêu tên vấn đề.</strong> Java hiện đại còn nói rõ biểu thức nào bị null — ở đây '
         'là thứ vừa bị gọi <code>length()</code>.',
-        '<strong>Dòng <code>at</code> ĐẦU TIÊN là nơi phát nổ</strong> — <code>DoctorManager.java</code> '
+        '<strong>Dòng <code>at</code> ĐẦU TIÊN là nơi phát nổ</strong> — <code>DoctorHash.java</code> '
         'dòng 23. Hãy bắt đầu từ đó, đừng đọc từ dưới lên.',
         '<strong>Các dòng bên dưới cho biết ai đã gọi nó.</strong> Đọc như một câu chuyện: '
         '<code>main</code> dòng 31 gọi <code>updateDoctor</code>, hàm này ở dòng 88 gọi '

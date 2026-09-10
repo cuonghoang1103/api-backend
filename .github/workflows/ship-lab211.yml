@@ -1,0 +1,163 @@
+name: Ship LAB211 content (lesson 847 + Academy)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Đẩy NỘI DUNG (không phải mã) lên production: bài giảng CodeLab module 847 và
+# khoá Academy LAB211. Chạy tay:  Actions → workflow này → Run workflow.
+#
+# Vì sao cần workflow riêng thay vì để deploy làm: bài giảng KHÔNG nằm trong
+# ảnh Docker. `blocks.json` ở trong `.gitignore`, còn khoá Academy thì sống
+# trong DB. Deploy xanh vẫn để nguyên bài giảng cũ trên web, không dấu hiệu gì.
+#
+# Bản chạy tay tương đương là `bash docs/codelab-authoring/lab211/ship-847.sh`
+# ở máy nhà. Workflow này tồn tại cho lúc không ngồi ở máy nhà.
+#
+# ⚠️ TỰ MANG SCRIPT VÀO CONTAINER, không trông vào ảnh. Ảnh dựng bằng
+#    `Dockerfile.ghcr.backend` chỉ nhận build context đã staging, mà bước
+#    staging của `deploy-ghcr.yml` từng chỉ chép mỗi `fix-uploads-perms.sh`
+#    vào `scripts/`. Ảnh dựng bằng `Dockerfile.backend` (`COPY . .`) thì có đủ.
+#    Hai đường cho ra hai nội dung `/app/scripts` khác nhau, nên `docker cp`
+#    script vào ngay trước khi chạy là cách duy nhất đúng với CẢ HAI.
+# ─────────────────────────────────────────────────────────────────────────────
+
+on:
+  workflow_dispatch:
+    inputs:
+      lesson:
+        description: 'Ship bài giảng CodeLab module 847'
+        type: boolean
+        default: true
+      academy:
+        description: 'Nạp khoá Academy LAB211'
+        type: boolean
+        default: true
+
+concurrency:
+  group: ship-lab211
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  CT: cuonghoangdev_backend
+  MODULE: '847'
+
+jobs:
+  ship:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # verify_java.py biên dịch VÀ CHẠY từng đoạn Java trong bài giảng.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      # ── 1. dựng lại bài giảng từ nguồn ─────────────────────────────
+      # Không bao giờ tin `blocks.json` sẵn có: nó bị gitignore nên bản trong
+      # checkout này không tồn tại, và ở máy ai đó thì có thể đã cũ.
+      - name: Dựng lại blocks.json
+        if: ${{ inputs.lesson }}
+        working-directory: docs/codelab-authoring/lab211/lesson
+        run: python3 main.py
+
+      # ── 2. cửa chặn thật: bài giảng phải chạy đúng thứ nó dạy ───────
+      # verify_java.py thoát 1 khi có đoạn không biên dịch được hoặc chạy ra
+      # khác transcript đã ghi. Bài giảng dạy sai tệ hơn bài giảng cũ.
+      - name: Biên dịch và CHẠY mọi đoạn Java
+        if: ${{ inputs.lesson }}
+        working-directory: docs/codelab-authoring/lab211/lesson
+        run: python3 verify_java.py java.json
+
+      - name: Đóng gói batch.json
+        if: ${{ inputs.lesson }}
+        id: batch
+        run: |
+          GUI=$(MODULE="$MODULE" node -e '
+            const fs = require("fs");
+            const p = "docs/codelab-authoring/lab211/lesson/blocks.json";
+            const blocks = JSON.parse(fs.readFileSync(p, "utf8"));
+            if (!Array.isArray(blocks) || !blocks.length) {
+              console.error("blocks.json rỗng"); process.exit(1);
+            }
+            fs.writeFileSync("batch.json",
+              JSON.stringify([{ moduleId: Number(process.env.MODULE), blocks }]));
+            console.log(blocks.length);
+          ')
+          echo "gui=$GUI" >> "$GITHUB_OUTPUT"
+          echo "$GUI khối · $(wc -c < batch.json) byte"
+
+      - name: Set up SSH key
+        env:
+          VPS_SSH_PRIVATE_KEY_B64: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${VPS_SSH_PRIVATE_KEY_B64}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
+          printf 'Host vps\n    HostName %s\n    User %s\n    IdentityFile ~/.ssh/deploy_key\n    StrictHostKeyChecking no\n    ServerAliveInterval 60\n    ServerAliveCountMax 10\n    ConnectTimeout 30\n' \
+            "${{ secrets.VPS_HOST }}" "${{ secrets.VPS_USER }}" > ~/.ssh/config
+
+      - name: Verify SSH connection
+        run: ssh vps "echo SSH_OK && docker inspect -f '{{.State.Status}}' $CT"
+
+      # ── 3. ghi bài giảng, rồi ĐỐI CHIẾU SỐ KHỐI ────────────────────
+      - name: Ghi bài giảng vào module 847
+        if: ${{ inputs.lesson }}
+        env:
+          GUI: ${{ steps.batch.outputs.gui }}
+        run: |
+          scp -q batch.json scripts/codelab-lesson-write.mjs vps:/tmp/
+          ssh vps "
+            docker cp /tmp/batch.json                $CT:/tmp/lesson-batch.json
+            docker cp /tmp/codelab-lesson-write.mjs  $CT:/app/scripts/codelab-lesson-write.mjs
+          "
+          KQ=$(ssh vps "docker exec -i $CT sh -c 'cd /app && cat /tmp/lesson-batch.json | node scripts/codelab-lesson-write.mjs'")
+          echo "$KQ"
+
+          # `normalizeBlock` LẶNG LẼ bỏ khối nó không hiểu rồi vẫn báo thành
+          # công, nên riêng dòng "ok" không chứng minh gì. Đối chiếu số khối.
+          NHAN=$(printf '%s\n' "$KQ" | sed -n "s/^ok  module $MODULE → \([0-9]\+\) blocks$/\1/p" | head -1)
+          if [ -z "$NHAN" ]; then
+            echo "::error::không đọc được dòng 'ok  module $MODULE → N blocks' — coi như CHƯA ghi được"
+            exit 1
+          fi
+          if [ "$NHAN" != "$GUI" ]; then
+            echo "::error::gửi $GUI khối, server chỉ giữ $NHAN — normalizeBlock đã bỏ $(( GUI - NHAN ))"
+            exit 1
+          fi
+          echo "[OK] module $MODULE: $NHAN/$GUI khối, không khối nào bị bỏ"
+
+      # ── 4. khoá Academy ────────────────────────────────────────────
+      # Script này cần `scripts/lib/simulation-block.mjs` và file nội dung,
+      # nên mang cả hai vào. Chạy `--dry` trước để thấy nó định làm gì.
+      - name: Nạp khoá Academy LAB211
+        if: ${{ inputs.academy }}
+        run: |
+          ssh vps "mkdir -p /tmp/lab211-academy"
+          scp -q scripts/academy-seed-course.mjs vps:/tmp/lab211-academy/
+          scp -q scripts/lib/simulation-block.mjs vps:/tmp/lab211-academy/
+          scp -q content/academy/LAB211.mjs vps:/tmp/lab211-academy/
+          ssh vps "
+            docker exec $CT sh -c 'mkdir -p /app/scripts/lib /app/content/academy'
+            docker cp /tmp/lab211-academy/academy-seed-course.mjs  $CT:/app/scripts/academy-seed-course.mjs
+            docker cp /tmp/lab211-academy/simulation-block.mjs     $CT:/app/scripts/lib/simulation-block.mjs
+            docker cp /tmp/lab211-academy/LAB211.mjs               $CT:/app/content/academy/LAB211.mjs
+          "
+          echo '--- thử khô ---'
+          ssh vps "docker exec -i $CT sh -c 'cd /app && node scripts/academy-seed-course.mjs --file ./content/academy/LAB211.mjs --dry'"
+          echo '--- ghi thật ---'
+          ssh vps "docker exec -i $CT sh -c 'cd /app && node scripts/academy-seed-course.mjs --file ./content/academy/LAB211.mjs --apply'"
+
+      - name: Dọn tệp tạm trên VPS
+        if: always()
+        run: |
+          ssh vps "rm -rf /tmp/lab211-academy /tmp/batch.json /tmp/codelab-lesson-write.mjs" || true

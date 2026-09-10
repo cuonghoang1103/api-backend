@@ -14,6 +14,7 @@ P0085_EMPLOYEE = r'''package entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Locale;
 
 /**
  * One employee record: the ten fields the brief lists, and nothing else.
@@ -140,7 +141,7 @@ public class Employee implements Serializable {
 
     @Override
     public String toString() {
-        return String.format(
+        return String.format(Locale.US,
                 "Employee{id=%s, name=%s, phone=%s, email=%s, address=%s, "
                 + "dob=%s, sex=%s, salary=%.2f, agency=%s}",
                 id, getFullName(), phone, email, address, dob, sex, salary, agency);
@@ -254,6 +255,7 @@ P0085_VALIDATOR = r'''package utils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -357,7 +359,7 @@ public class Validator {
     }
 
     public static double getSalary(String label, Double current) {
-        String text = ask(label, current == null ? null : String.format("%.2f", current), value -> {
+        String text = ask(label, current == null ? null : String.format(Locale.US, "%.2f", current), value -> {
             try {
                 return Double.parseDouble(value) > 0
                         ? null : "Salary must be greater than 0.";
@@ -405,6 +407,7 @@ import bo.EmployeeManager;
 import entity.Employee;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 import utils.Validator;
 
 /**
@@ -549,7 +552,7 @@ public class EmployeeController {
     }
 
     private static String money(double salary) {
-        return String.format("%.2f", salary);
+        return String.format(Locale.US, "%.2f", salary);
     }
 }
 '''
@@ -1918,6 +1921,7 @@ import entity.Request;
 import entity.Transaction;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 import utils.Validator;
 
 /**
@@ -2107,8 +2111,8 @@ public class EmployeeController {
         System.out.println(LINE);
         for (Asset asset : list) {
             System.out.printf(ASSET_ROW, asset.getAssetID(), asset.getName(), asset.getColor(),
-                    String.format("%.2f", asset.getPrice()),
-                    String.format("%.2f", asset.getWeight()),
+                    String.format(Locale.US, "%.2f", asset.getPrice()),
+                    String.format(Locale.US, "%.2f", asset.getWeight()),
                     String.valueOf(asset.getQuantity()));
         }
         System.out.println(LINE);

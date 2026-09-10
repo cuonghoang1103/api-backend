@@ -10,6 +10,7 @@ from solkit import solution, SOLUTIONS
 P0059_PERSON = r'''package entity;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 /**
  * One line of the data file, after it has been parsed.
@@ -72,7 +73,7 @@ public class Person implements Serializable {
      */
     @Override
     public String toString() {
-        return String.format("%-10s %-15s %10.1f", name, address, salary);
+        return String.format(Locale.US, "%-10s %-15s %10.1f", name, address, salary);
     }
 }
 '''

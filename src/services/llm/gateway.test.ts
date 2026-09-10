@@ -16,7 +16,17 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { allPurposeModels, goiDuocModel, modelFor, endpointFor, LLM_PURPOSES } from './gateway.js';
+import {
+  allPurposeModels,
+  baoRamboHong,
+  baoRamboOk,
+  endpointFor,
+  goiDuocModel,
+  LLM_PURPOSES,
+  modelFor,
+  RAMBO_PURPOSES_CO_DINH,
+  ramboDangNghi,
+} from './gateway.js';
 
 test('mọi việc đều tra được model mà không gọi vòng', () => {
   for (const p of LLM_PURPOSES) {
@@ -110,4 +120,67 @@ test('việc gọi tool KHÔNG được phân cho model đã loại', () => {
   // lỗi đó thì đi kiểm tải trước, đừng đổ cho model.
   const LOAI = new Set(['grok-4.5', 'grok-4.6']);
   assert.ok(!LOAI.has(modelFor('agent_code')), 'agent_code đang trỏ vào model đã loại');
+});
+
+test('Phòng Lab đi cổng rambo, và KHÔNG lùi sang modelapi khi cầu dao mở', () => {
+  // ⚠️ Vì sao phép kiểm này tồn tại. `lab_room` là việc DUY NHẤT của Phòng Lab
+  // gọi model, và modelapi KHÔNG phục vụ được model Claude nào (đo thật
+  // 20/08: liệt kê đủ 6 cái, gọi thì 500/503/hết giờ). Gỡ `lab_room` khỏi
+  // `RAMBO_PURPOSES_CO_DINH` thì mã vẫn biên dịch, `tsc` vẫn xanh, và hỏng chỉ
+  // lộ ra vào đúng lúc rambo nghỉ một lát: cả Phòng Lab trả lời TRỐNG, không
+  // câu lỗi nào nhắc tới "model" hay "cổng".
+  //
+  // Phép kiểm TỰ DỰNG môi trường, không mượn `.env` — bài học của phép kiểm
+  // khoá GPT ngay bên trên: xanh ở máy nhà nhờ khoá thật, đỏ trên CI vì không
+  // có, và cả hai kết quả đều không nói gì về mã.
+  const luu = [
+    'AGENT_GATEWAY_BASE_URL',
+    'AGENT_GATEWAY_API_KEY',
+    'LLM_LOCAL_BASE_URL',
+    'LLM_LOCAL_API_KEY',
+  ].map((t) => [t, process.env[t]] as const);
+  delete process.env.LLM_LOCAL_BASE_URL;
+  delete process.env.LLM_LOCAL_API_KEY;
+  process.env.AGENT_GATEWAY_BASE_URL = 'https://rambo.ai.vn/api/claude';
+  process.env.AGENT_GATEWAY_API_KEY = 'sk-gia-lap-rambo';
+  try {
+    const ep = endpointFor('lab_room');
+    assert.equal(ep.label, 'cong-agent', 'lab_room không đi cổng rambo');
+    assert.equal(ep.giaoThuc, 'anthropic', 'lab_room gửi body sai khung ⇒ hỏng CÂM');
+    // Bẫy đã ghi 19/08: gốc `/v1` của rambo trả 200 KỂ CẢ khi không có khoá,
+    // nên đường đúng bắt buộc mang `/api/claude`.
+    assert.match(ep.root, /\/api\/claude$/, 'đường rambo mất phần /api/claude');
+
+    // Người dùng chốt "dùng opus 4.8 max, đừng giới hạn nó" cho Phòng Lab.
+    assert.equal(modelFor('lab_room'), 'claude-opus-4-8');
+
+    // ─── phần đáng kiểm nhất: CẦU DAO ĐANG MỞ ───
+    baoRamboHong();
+    try {
+      assert.ok(ramboDangNghi(), 'cầu dao đáng lẽ đang mở — phép kiểm dưới vô nghĩa');
+      assert.equal(
+        endpointFor('lab_room').label,
+        'cong-agent',
+        'lab_room lùi sang modelapi, nơi không có model Claude nào gọi được',
+      );
+      // KIỂM BỘ KIỂM: một việc KHÔNG cố định thì PHẢI lùi. Thiếu dòng này thì
+      // dòng trên vẫn xanh cả khi cầu dao mất tác dụng hoàn toàn.
+      assert.notEqual(
+        endpointFor('chat_pro').label,
+        'cong-agent',
+        'cầu dao không có tác dụng ⇒ khẳng định phía trên không chứng minh gì',
+      );
+    } finally {
+      baoRamboOk();
+    }
+
+    // Cuối cùng: `lab_room` không được lọt vào `VIEC_CHI_OPENAI` — nằm trong đó
+    // thì nó không bao giờ tới rambo, dù `RAMBO_PURPOSES_CO_DINH` có nó.
+    assert.ok(RAMBO_PURPOSES_CO_DINH.has('lab_room'));
+  } finally {
+    for (const [t, gt] of luu) {
+      if (gt === undefined) delete process.env[t];
+      else process.env[t] = gt;
+    }
+  }
 });

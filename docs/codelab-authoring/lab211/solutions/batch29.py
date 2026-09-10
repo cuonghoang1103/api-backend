@@ -1026,6 +1026,7 @@ import entity.Request;
 import entity.Transaction;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Locale;
 import utils.Validator;
 
 /**
@@ -1155,10 +1156,10 @@ public class ManagerController {
         String name = Validator.getOptionalText("Name     [" + asset.getName() + "]: ");
         String color = Validator.getOptionalText("Color    [" + asset.getColor() + "]: ");
         Double price = Validator.getOptionalPositive(
-                String.format("Price    [%.2f]: ", asset.getPrice()),
+                String.format(Locale.US, "Price    [%.2f]: ", asset.getPrice()),
                 "The price must be greater than 0.");
         Double weight = Validator.getOptionalPositive(
-                String.format("Weight   [%.2f]: ", asset.getWeight()),
+                String.format(Locale.US, "Weight   [%.2f]: ", asset.getWeight()),
                 "The weight must be greater than 0.");
         Integer quantity = Validator.getOptionalQuantity("Quantity [" + asset.getQuantity() + "]: ");
 
@@ -1285,8 +1286,8 @@ public class ManagerController {
         System.out.println(LINE);
         for (Asset asset : list) {
             System.out.printf(ASSET_ROW, asset.getAssetID(), asset.getName(), asset.getColor(),
-                    String.format("%.2f", asset.getPrice()),
-                    String.format("%.2f", asset.getWeight()),
+                    String.format(Locale.US, "%.2f", asset.getPrice()),
+                    String.format(Locale.US, "%.2f", asset.getWeight()),
                     String.valueOf(asset.getQuantity()));
         }
         System.out.println(LINE);

@@ -190,7 +190,7 @@ export default {
   <div class="lz-layer"><b>Output</b> — <span class="badge">printf</span>, <span class="badge">%-15s</span>, <span class="badge">%.2f</span>, String.format; matching a screen exactly.</div>
   <div class="lz-layer"><b>Data</b> — arrays, ArrayList, LinkedHashMap, HashMap; Comparator &amp; sorting objects.</div>
   <div class="lz-layer"><b>Logic</b> — sorting (bubble/selection/insertion/quick/merge), linear &amp; binary search, base conversion, recursion.</div>
-  <div class="lz-layer"><b>OOP</b> — entity classes (Serializable, getters/setters, toString), inheritance &amp; polymorphism, abstract/interface.</div>
+  <div class="lz-layer"><b>OOP</b> — entity classes (getters/setters, toString), inheritance &amp; polymorphism, abstract/interface.</div>
   <div class="lz-layer"><b>Files</b> — read/write text, object serialization, CSV, copy &amp; zip; the byte-vs-char trap.</div>
   <div class="lz-layer"><b>Robustness</b> — validation that never crashes, exceptions with messages taken from the brief.</div>
 </div>
@@ -219,7 +219,7 @@ export default {
   <div class="lz-layer"><b>Xuất</b> — <span class="badge">printf</span>, <span class="badge">%-15s</span>, <span class="badge">%.2f</span>, String.format; khớp màn hình y hệt.</div>
   <div class="lz-layer"><b>Dữ liệu</b> — mảng, ArrayList, LinkedHashMap, HashMap; Comparator &amp; sắp xếp đối tượng.</div>
   <div class="lz-layer"><b>Logic</b> — sắp xếp (bubble/selection/insertion/quick/merge), tìm tuyến tính &amp; nhị phân, đổi hệ cơ số, đệ quy.</div>
-  <div class="lz-layer"><b>OOP</b> — lớp entity (Serializable, getter/setter, toString), kế thừa &amp; đa hình, abstract/interface.</div>
+  <div class="lz-layer"><b>OOP</b> — lớp entity (getter/setter, toString), kế thừa &amp; đa hình, abstract/interface.</div>
   <div class="lz-layer"><b>Tệp</b> — đọc/ghi text, serialize đối tượng, CSV, copy &amp; zip; bẫy byte-vs-char.</div>
   <div class="lz-layer"><b>Bền bỉ</b> — validate không bao giờ sập, ngoại lệ với thông báo lấy từ đề.</div>
 </div>
@@ -375,23 +375,31 @@ export default {
 <p class="lead">Every LAB211 solution uses the same shape. Learn it once and you never waste exam time deciding "where does this code go". This layout is not invented here — it was reverse-engineered from 17 sample projects that already passed at FPT.</p>
 <h3>The five layers</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><b>entity</b> — plain data objects (POJO). <span class="badge">implements Serializable</span>, private fields, full constructor, getters/setters, <span class="badge">toString()</span>. Knows its data, nothing else.</div>
+  <div class="lz-layer"><b>entity</b> — plain data objects (POJO). Private fields, full constructor, getters/setters, <span class="badge">toString()</span>. Knows its data, nothing else. <span class="badge">implements Serializable</span> <b>only when the program writes objects with <code>ObjectOutputStream</code></b> — see the note below.</div>
   <div class="lz-layer"><b>bo</b> (business object) — holds the collection and the rules. <span class="badge">throws Exception</span> with a message (e.g. "Doctor code [D001] is duplicate."); it never prints to the screen.</div>
   <div class="lz-layer"><b>controller</b> — the glue: calls the Validator to gather input, calls the bo, prints the result message.</div>
   <div class="lz-layer"><b>ui / Main</b> — only the menu and the loop; delegates each choice to a controller method.</div>
   <div class="lz-layer"><b>utils / Validator</b> — a class of static input helpers: <span class="badge">private static final Scanner</span>, a private constructor, methods like <span class="badge">getInt(msg, msgRange, msgErr, min, max)</span>.</div>
 </div>
+<div class="note-ct"><b>About <code>Serializable</code> — measured, and it surprises people.</b> Not one of the 54 briefs writes an object with <code>ObjectOutputStream</code>: every file assignment here uses text, CSV or a <code>.dat</code> file written as text. So in this course <code>implements Serializable</code> changes nothing at run time — it is a habit, and 22 of the reference solutions keep it because a marker expects to see it. Keep the habit if you like, but be ready for the follow-up: <em>"you never serialize anything — why is this class Serializable?"</em> The answer that scores is "it costs one word and keeps the door open if the data file ever becomes an object stream", not silence. And there is a reason these briefs avoid it: appending with a second <code>ObjectOutputStream</code> writes a second header that <code>ObjectInputStream</code> chokes on (Lesson 5.2).</div>
+<div class="note-ct"><b>Where the file reading and writing goes — counted, not guessed.</b> It belongs in <b>bo</b>: never in <code>utils</code>, never in the controller, never in the entity. Whether it gets a class of its own is a judgement call and both answers pass. Of the 54 reference solutions, 15 touch a file at all; <b>11 keep a separate class for it and 4 merge it into the business class</b> — and all 11 separate classes live in <code>bo/</code> (<code>VehicleFile</code>, <code>DataStore</code>, <code>FileProcessor</code>, <code>CSVFormatter</code>, <code>CopyManager</code>, <code>ZipManager</code>, <code>WordSearcher</code>, <code>DocumentFileManager</code>, <code>FileManager</code>, <code>FileProcessing</code> — ten names for eleven projects, <code>DataStore</code> serving both P0014 and P0015). <b>Merge</b> when one bo owns one file for one entity (<code>FruitManager</code> + <code>fruits.txt</code>) — a <code>FileHelper</code> there is an indirection with nothing behind it. <b>Split</b> when several bo classes share one file (<code>DataStore</code> in P0014/P0015 serves <code>AssetStore</code>, <code>EmployeeStore</code>, <code>RequestStore</code>, <code>BorrowStore</code>), or when the file format <em>is</em> the assignment: zip, CSV, copying, searching a file for a word. The only file writing in <code>utils/</code> across all 54 is <code>SampleData</code>, which creates the demo input so the first run has something to read.</div>
 <h3>The rule: only add a layer when the size demands it</h3>
-<p>This is the exact question mentors love to ask — "why does this program have no controller?" The answer is measured, not guessed:</p>
+<p>This is the exact question mentors love to ask — "why does this program have no controller?" Decide by <b>what the program does</b>, then use the file count only to sanity-check the answer:</p>
+<div class="lz-stack">
+  <div class="lz-layer">A <b>bo</b> appears when there is a business rule or an algorithm worth keeping off the screen. That happens in <b>three-file</b> programs too — the sorting and searching briefs put the algorithm in a <span class="badge">bo</span> with no entity anywhere in sight.</div>
+  <div class="lz-layer">A <b>controller</b> appears when the program performs <b>several distinct operations on one stored collection</b> — add / update / delete / search / save. Not when it is merely large.</div>
+</div>
+<p>Both sentences are measured, not asserted. Counting the kinds of collection operation each of the 54 reference solutions performs:</p>
 <table>
-  <thead><tr><th>Project size</th><th>Layers used</th></tr></thead>
+  <thead><tr><th></th><th>Kinds of collection operation</th></tr></thead>
   <tbody>
-    <tr><td>2–4 files</td><td><span class="badge">entity</span> + <span class="badge">ui</span> + <span class="badge">utils</span> — <b>no bo</b></td></tr>
-    <tr><td>4–6 files</td><td>add <span class="badge">bo</span></td></tr>
-    <tr><td>≥ 7 files</td><td>add <span class="badge">controller</span></td></tr>
+    <tr><td>Projects <b>with</b> a controller (11)</td><td><b>&asymp; 4.8</b> on average</td></tr>
+    <tr><td>Projects <b>without</b> one</td><td><b>&asymp; 0.9</b> on average</td></tr>
   </tbody>
 </table>
-<div class="note-ct">Every sample project with ≥ 7 files had a controller; every one with ≤ 3 files had no bo. So "I only add a layer when the program is big enough to need it" is a correct, confident answer — and it matches the passing samples.</div>
+<div class="note-ct">File count does <b>not</b> separate those two groups, so it cannot be the rule. The clearest proof is the Shapes brief: <b>ten files and correctly no controller</b>, because nine of them are shape classes, not features — the program performs zero collection operations. "It keeps main() short" is not the reason either: main averages 58 lines with a controller and 67 without.</div>
+<p>As a rough cross-check only, counted across 17 passing submissions: 2&ndash;3 files usually had no <span class="badge">bo</span>, 5&ndash;6 usually had one, &ge; 7 usually had a <span class="badge">controller</span>. Four files went <b>both</b> ways &mdash; CalculatorBill(4) without a bo, MatrixOOP(4) with one &mdash; which is exactly why the count is a cross-check and not the law.</p>
+<div class="pitfall"><b>And the Guidelines outrank all of it &mdash; but read the sheet before acting on them.</b> "Student must implement methods X, Y <em>in startup code</em>" means <em>these are the methods you must write in the project you hand in</em>. It does <b>not</b> by itself say which class they go in. Brief names no class and passes the collection in as a parameter &rarr; they go in <code>Main</code>. Brief <b>names</b> a class &mdash; the Doctor brief says "Class <b>DoctorHash</b> contains adding, editing, deleting and searching functions" &mdash; then that name is what a marker looks for. Getting it backwards costs marks in both directions.</div>
 <h3>The data flow</h3>
 <div class="lz-flow">
   <div class="lz-step">ui shows menu</div>
@@ -402,9 +410,9 @@ export default {
 </div>
 <div class="pitfall"><b>Trap:</b> the NetBeans "To change this license header…" comment is a sign of auto-generated code. Delete it and replace with a short Javadoc that explains <em>why</em> the class exists — mentors notice.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Never close the System.in Scanner.</b> Calling sc.close() on a Scanner that wraps System.in shuts stdin for the whole program, and the next read throws NoSuchElementException. Keep one shared static Scanner in your Validator and never close it. <em>Why beyond the syllabus: it is a resource-management subtlety PRO192 rarely drills, yet it silently zeroes exam runs.</em></div>
-<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0055-doctor-management-program?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0056-program-to-manage-worker-information?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🧩</span>
-  <span class="lc-body"><span class="lc-title">See the full pattern: Doctor Management</span><span class="lc-sub">A ≥7-file project with entity/bo/controller/Validator — the reference layout.</span></span>
+  <span class="lc-body"><span class="lc-title">See the full pattern: Worker Management</span><span class="lc-sub">The 7-file project that really does use all five layers — entity/bo/controller/ui/Validator.</span></span>
   <span class="lc-cta">CODE LAB →</span>
 </a>
 </div>
@@ -414,23 +422,31 @@ export default {
 <p class="lead">Mọi lời giải LAB211 dùng chung một hình dạng. Thuộc nó một lần và bạn không bao giờ phí thời gian thi để quyết "code này đặt ở đâu". Kiểu bố cục này không phải tự chế ra — nó được đúc kết từ 17 project mẫu đã pass ở FPT.</p>
 <h3>Năm tầng</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><b>entity</b> — đối tượng dữ liệu thuần (POJO). <span class="badge">implements Serializable</span>, trường private, constructor đầy đủ, getter/setter, <span class="badge">toString()</span>. Chỉ biết dữ liệu của mình, không gì khác.</div>
+  <div class="lz-layer"><b>entity</b> — đối tượng dữ liệu thuần (POJO). Trường private, constructor đầy đủ, getter/setter, <span class="badge">toString()</span>. Chỉ biết dữ liệu của mình, không gì khác. <span class="badge">implements Serializable</span> <b>chỉ khi chương trình ghi đối tượng bằng <code>ObjectOutputStream</code></b> — xem ghi chú bên dưới.</div>
   <div class="lz-layer"><b>bo</b> (business object) — giữ collection và luật. <span class="badge">throws Exception</span> kèm thông báo (vd "Doctor code [D001] is duplicate."); nó KHÔNG in ra màn hình.</div>
   <div class="lz-layer"><b>controller</b> — chất keo: gọi Validator lấy input, gọi bo, in thông báo kết quả.</div>
   <div class="lz-layer"><b>ui / Main</b> — chỉ menu và vòng lặp; ủy thác mỗi lựa chọn cho một hàm controller.</div>
   <div class="lz-layer"><b>utils / Validator</b> — lớp toàn hàm nhập tĩnh: <span class="badge">private static final Scanner</span>, constructor private, hàm như <span class="badge">getInt(msg, msgRange, msgErr, min, max)</span>.</div>
 </div>
+<div class="note-ct"><b>Về <code>Serializable</code> — đo thật, và nó làm nhiều người bất ngờ.</b> Không một đề nào trong 54 đề ghi đối tượng bằng <code>ObjectOutputStream</code>: mọi bài có tệp ở đây đều ghi dạng văn bản, CSV, hoặc tệp <code>.dat</code> ghi bằng chữ. Nên trong môn này <code>implements Serializable</code> không thay đổi gì lúc chạy — nó là một thói quen, và 22 lời giải mẫu vẫn giữ vì người chấm quen thấy nó. Cứ giữ thói quen đó nếu muốn, nhưng phải sẵn câu trả lời cho vế sau: <em>"em có serialize bao giờ đâu — sao lớp này lại Serializable?"</em> Câu ăn điểm là "nó tốn một chữ và để ngỏ đường nếu sau này tệp dữ liệu chuyển sang luồng đối tượng", chứ không phải im lặng. Và có lý do các đề này tránh nó: ghi nối bằng một <code>ObjectOutputStream</code> thứ hai sẽ tạo thêm một header mà <code>ObjectInputStream</code> không đọc nổi (Bài 5.2).</div>
+<div class="note-ct"><b>Phần đọc/ghi tệp để ở đâu — đếm chứ không đoán.</b> Nó thuộc về <b>bo</b>: không bao giờ ở <code>utils</code>, không ở controller, không ở entity. Còn có tách thành lớp riêng hay không thì tuỳ, và cả hai cách đều qua được. Trong 54 lời giải mẫu, 15 bài có đụng tới tệp; <b>11 bài tách riêng một lớp lo tệp, 4 bài gộp vào lớp nghiệp vụ</b> — và cả 11 lớp tách riêng ấy đều nằm trong <code>bo/</code> (<code>VehicleFile</code>, <code>DataStore</code>, <code>FileProcessor</code>, <code>CSVFormatter</code>, <code>CopyManager</code>, <code>ZipManager</code>, <code>WordSearcher</code>, <code>DocumentFileManager</code>, <code>FileManager</code>, <code>FileProcessing</code> — mười cái tên cho mười một bài, vì <code>DataStore</code> dùng chung cho cả P0014 lẫn P0015). <b>Gộp</b> khi một bo giữ một tệp của một entity (<code>FruitManager</code> + <code>fruits.txt</code>) — thêm <code>FileHelper</code> ở đó chỉ là một lớp trung gian rỗng ruột. <b>Tách</b> khi nhiều lớp bo dùng chung một tệp (<code>DataStore</code> ở P0014/P0015 phục vụ <code>AssetStore</code>, <code>EmployeeStore</code>, <code>RequestStore</code>, <code>BorrowStore</code>), hoặc khi <em>chính định dạng tệp</em> mới là đề bài: nén zip, CSV, sao chép, tìm từ trong tệp. Thứ duy nhất ghi tệp trong <code>utils/</code> của cả 54 bài là <code>SampleData</code>, lớp tạo sẵn dữ liệu mẫu để lần chạy đầu có cái mà đọc.</div>
 <h3>Quy tắc: chỉ thêm tầng khi kích thước đòi hỏi</h3>
-<p>Đây đúng là câu mentor thích hỏi — "sao chương trình này không có controller?". Câu trả lời là ĐO ĐƯỢC, không phải đoán:</p>
+<p>Đây đúng là câu mentor thích hỏi — "sao chương trình này không có controller?". Quyết định bằng <b>chương trình LÀM GÌ</b>, còn số tệp chỉ dùng để soát lại câu trả lời:</p>
+<div class="lz-stack">
+  <div class="lz-layer">Tầng <b>bo</b> xuất hiện khi có một luật nghiệp vụ hoặc một thuật toán đáng tách khỏi màn hình. Chuyện đó xảy ra cả ở project <b>ba tệp</b> — các đề sắp xếp và tìm kiếm đặt thuật toán vào <span class="badge">bo</span> trong khi không có entity nào cả.</div>
+  <div class="lz-layer">Tầng <b>controller</b> xuất hiện khi chương trình làm <b>nhiều loại thao tác khác nhau trên một tập dữ liệu được lưu</b> — thêm / sửa / xoá / tìm / lưu. Không phải khi nó chỉ đơn giản là to.</div>
+</div>
+<p>Cả hai câu trên là ĐO ĐƯỢC, không phải khẳng định suông. Đếm số loại thao tác trên tập dữ liệu của cả 54 lời giải mẫu:</p>
 <table>
-  <thead><tr><th>Kích thước project</th><th>Tầng dùng</th></tr></thead>
+  <thead><tr><th></th><th>Số loại thao tác trên tập dữ liệu</th></tr></thead>
   <tbody>
-    <tr><td>2–4 file</td><td><span class="badge">entity</span> + <span class="badge">ui</span> + <span class="badge">utils</span> — <b>không bo</b></td></tr>
-    <tr><td>4–6 file</td><td>thêm <span class="badge">bo</span></td></tr>
-    <tr><td>≥ 7 file</td><td>thêm <span class="badge">controller</span></td></tr>
+    <tr><td>Bài <b>CÓ</b> controller (11 bài)</td><td>trung bình <b>&asymp; 4,8</b></td></tr>
+    <tr><td>Bài <b>KHÔNG</b> có</td><td>trung bình <b>&asymp; 0,9</b></td></tr>
   </tbody>
 </table>
-<div class="note-ct">Mọi project mẫu ≥ 7 file đều có controller; mọi project ≤ 3 file đều không có bo. Nên "tôi chỉ thêm tầng khi chương trình đủ lớn để cần" là câu trả lời đúng, tự tin — và khớp với các bản mẫu đã pass.</div>
+<div class="note-ct">Số tệp <b>không</b> tách được hai nhóm đó, nên nó không thể là quy tắc. Bằng chứng rõ nhất là đề Shapes: <b>mười tệp và đúng là không cần controller</b>, vì chín tệp trong đó là lớp hình chứ không phải chức năng — chương trình không thao tác gì trên tập dữ liệu cả. "Để main() ngắn lại" cũng không phải lý do: main trung bình 58 dòng khi có controller và 67 dòng khi không.</div>
+<p>Chỉ dùng để soát lại, đếm trên 17 bài nộp đã pass: 2&ndash;3 tệp thường không có <span class="badge">bo</span>, 5&ndash;6 tệp thường có, &ge; 7 tệp thường có <span class="badge">controller</span>. Riêng 4 tệp thì <b>cả hai kiểu đều có</b> &mdash; CalculatorBill(4) không bo, MatrixOOP(4) có &mdash; và đó đúng là lý do con số chỉ để soát chứ không phải để phán.</p>
+<div class="pitfall"><b>Và phần Hướng dẫn đứng trên tất cả &mdash; nhưng phải đọc hết đề rồi mới làm theo.</b> "Student must implement methods X, Y <em>in startup code</em>" nghĩa là <em>đây là những phương thức bạn phải viết trong project nộp lên</em>. Nó <b>không</b> tự nó nói các phương thức đó nằm ở lớp nào. Đề không nêu tên lớp nào và truyền collection vào làm tham số &rarr; chúng nằm trong <code>Main</code>. Đề <b>có nêu tên</b> một lớp &mdash; đề Doctor viết "Class <b>DoctorHash</b> contains adding, editing, deleting and searching functions" &mdash; thì chính cái tên đó là thứ người chấm tìm. Hiểu ngược là mất điểm ở cả hai chiều.</div>
 <h3>Luồng dữ liệu</h3>
 <div class="lz-flow">
   <div class="lz-step">ui hiện menu</div>
@@ -441,9 +457,9 @@ export default {
 </div>
 <div class="pitfall"><b>Bẫy:</b> comment "To change this license header…" của NetBeans là dấu hiệu code sinh sẵn. Xóa nó và thay bằng một Javadoc ngắn giải thích <em>vì sao</em> lớp tồn tại — mentor để ý đấy.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đừng bao giờ đóng Scanner của System.in.</b> Gọi sc.close() trên Scanner bọc System.in sẽ đóng luôn stdin của cả chương trình, và lần đọc sau ném NoSuchElementException. Giữ một Scanner static dùng chung trong Validator và không bao giờ đóng nó. <em>Vì sao ngoài syllabus: đây là điểm tinh tế về quản lý tài nguyên PRO192 ít luyện, nhưng lại âm thầm làm 0 điểm lần chạy thi.</em></div>
-<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0055-doctor-management-program?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
+<a class="link-card codelab" href="/code-lab/lab211/lab211-j1-s-p0056-program-to-manage-worker-information?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🧩</span>
-  <span class="lc-body"><span class="lc-title">Xem trọn mẫu: Doctor Management</span><span class="lc-sub">Project ≥7 file với entity/bo/controller/Validator — bố cục chuẩn.</span></span>
+  <span class="lc-body"><span class="lc-title">Xem trọn mẫu: Worker Management</span><span class="lc-sub">Project 7 file dùng đủ cả năm tầng — entity/bo/controller/ui/Validator.</span></span>
   <span class="lc-cta">CODE LAB →</span>
 </a>
 </div>
@@ -609,7 +625,7 @@ System.out.<span class="tok-function">printf</span>(<span class="tok-string">"%-
           quiz: {
             timeLimitSeconds: 420,
             questions: [
-              { question: 'A project with 3 files should have…|||Project 3 file nên có…', options: ['entity + bo + controller', 'entity + ui + utils, no bo|||entity + ui + utils, không bo', 'only a Main class|||chỉ một lớp Main', 'controller + service + data'], correctIndex: 1, points: 1 },
+              { question: 'You decide whether to add a bo layer by…|||Bạn quyết định có thêm tầng bo hay không dựa vào…', options: ['counting the files first|||đếm số tệp trước đã', 'whether there is a business rule or algorithm worth keeping off the screen|||có luật nghiệp vụ hay thuật toán nào đáng tách khỏi màn hình không', 'the number of lines of code|||số dòng code của bài', 'what the previous assignment used|||bài trước dùng gì thì theo'], correctIndex: 1, points: 1 },
               { question: 'The bo (business object) layer should…|||Tầng bo (business object) nên…', options: ['print messages to the screen|||in thông báo ra màn hình', 'hold the collection and throw exceptions with messages|||giữ collection và ném ngoại lệ kèm thông báo', 'read from Scanner|||đọc từ Scanner', 'contain the menu|||chứa menu'], correctIndex: 1, points: 1 },
               { question: 'Why is reading input with nextInt() then nextLine() buggy?|||Vì sao đọc bằng nextInt() rồi nextLine() bị lỗi?', options: ['nextInt is deprecated|||nextInt đã lỗi thời', 'nextInt leaves the newline, so nextLine reads an empty string|||nextInt để lại ký tự xuống dòng, nên nextLine đọc chuỗi rỗng', 'they cannot be used together at all|||không thể dùng chung được', 'nextLine is slower|||nextLine chậm hơn'], correctIndex: 1, points: 1 },
               { question: 'To avoid a crash on bad numeric input, you should…|||Để tránh sập khi nhập số sai, bạn nên…', options: ['use nextInt() directly|||dùng nextInt() trực tiếp', 'read a line and parse with Integer.parseInt inside try/catch|||đọc một dòng và parse bằng Integer.parseInt trong try/catch', 'ignore the input|||bỏ qua input', 'exit the program|||thoát chương trình'], correctIndex: 1, points: 1 },
@@ -1121,7 +1137,7 @@ students.<span class="tok-function">sort</span>(
 <h2>Full management programs — putting it together</h2>
 <p class="lead">Now combine everything: an entity, a bo with rules, a controller, the Validator, and a menu. These medium briefs (63–73 LOC) are exactly the shape of a typical exam question. Do several until the structure is automatic.</p>
 <div class="lz-stack">
-  <div class="lz-layer"><b>entity</b> — e.g. Doctor(code, name, specialty), Serializable, toString for the display row.</div>
+  <div class="lz-layer"><b>entity</b> — e.g. Doctor(code, name, specialty), toString for the display row.</div>
   <div class="lz-layer"><b>bo</b> — <span class="badge">add</span> checks for duplicate code and throws; <span class="badge">find</span>, <span class="badge">sort</span>, <span class="badge">getAll</span>.</div>
   <div class="lz-layer"><b>controller</b> — reads via Validator, calls bo, prints outcome / list.</div>
   <div class="lz-layer"><b>Main</b> — the menu loop from 4.1.</div>
@@ -1139,7 +1155,7 @@ students.<span class="tok-function">sort</span>(
 <h2>Chương trình quản lý hoàn chỉnh — ghép lại</h2>
 <p class="lead">Giờ ghép tất cả: một entity, một bo có luật, một controller, Validator, và một menu. Các đề medium này (63–73 LOC) đúng là hình dạng câu hỏi thi điển hình. Làm vài bài tới khi cấu trúc thành tự động.</p>
 <div class="lz-stack">
-  <div class="lz-layer"><b>entity</b> — vd Doctor(code, name, specialty), Serializable, toString cho dòng hiển thị.</div>
+  <div class="lz-layer"><b>entity</b> — vd Doctor(code, name, specialty), toString cho dòng hiển thị.</div>
   <div class="lz-layer"><b>bo</b> — <span class="badge">add</span> kiểm mã trùng và ném; <span class="badge">find</span>, <span class="badge">sort</span>, <span class="badge">getAll</span>.</div>
   <div class="lz-layer"><b>controller</b> — đọc qua Validator, gọi bo, in kết quả / danh sách.</div>
   <div class="lz-layer"><b>Main</b> — vòng lặp menu từ bài 4.1.</div>

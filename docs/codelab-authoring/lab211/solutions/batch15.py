@@ -635,7 +635,7 @@ public class Doctor implements Serializable {
 }
 '''
 
-P0055_MANAGER = '''package bo;
+P0055_HASH = '''package bo;
 
 import entity.Doctor;
 import java.util.HashMap;
@@ -650,7 +650,7 @@ import java.util.LinkedHashMap;
  * only ever built here, no menu branch can drift into a slightly different
  * spelling of it, and the marker diffs one string rather than four.
  */
-public class DoctorManager {
+public class DoctorHash {
 
     // The Guidelines' own wording, copied character for character - including
     // the fact that add says "Data does not exist" while update and delete say
@@ -677,7 +677,7 @@ public class DoctorManager {
      */
     private final HashMap<String, Doctor> doctors;
 
-    public DoctorManager() {
+    public DoctorHash() {
         this(new LinkedHashMap<String, Doctor>());
     }
 
@@ -686,7 +686,7 @@ public class DoctorManager {
      * map can actually arrive from outside - hence this constructor. It is also
      * the seam a test uses to hand in a pre-filled map.
      */
-    public DoctorManager(HashMap<String, Doctor> doctors) {
+    public DoctorHash(HashMap<String, Doctor> doctors) {
         this.doctors = doctors;
     }
 
@@ -874,7 +874,7 @@ public class Validation {
 
 P0055_MAIN = '''package ui;
 
-import bo.DoctorManager;
+import bo.DoctorHash;
 import entity.Doctor;
 import java.util.HashMap;
 import utils.Validation;
@@ -883,7 +883,7 @@ import utils.Validation;
  * The menu and the screen, nothing else.
  *
  * No rule is decided here and no error message is written here: every failure
- * is an Exception thrown by DoctorManager, and this class only prints
+ * is an Exception thrown by DoctorHash, and this class only prints
  * e.getMessage(). That is why the brief's wording can never drift.
  */
 public class Main {
@@ -892,7 +892,7 @@ public class Main {
             "Availability must be greater than or equal to 0";
 
     public static void main(String[] args) {
-        DoctorManager manager = new DoctorManager();
+        DoctorHash manager = new DoctorHash();
         boolean running = true;
         while (running) {
             System.out.println("========= Doctor Management ==========");
@@ -923,7 +923,7 @@ public class Main {
         }
     }
 
-    private static void add(DoctorManager manager) {
+    private static void add(DoctorHash manager) {
         System.out.println("--------- Add Doctor ----------");
         String code = Validation.getNonBlank("Enter Code: ", "Code cannot be blank.");
         String name = Validation.getString("Enter Name: ");
@@ -951,7 +951,7 @@ public class Main {
      * When the code is unknown the program still calls updateDoctor, purely so
      * that the "doesn't exist" message comes from the one place that owns it.
      */
-    private static void update(DoctorManager manager) {
+    private static void update(DoctorHash manager) {
         System.out.println("--------- Update Doctor -------");
         String code = Validation.getString("Enter Code: ");
         Doctor old = manager.getDoctor(code);
@@ -975,7 +975,7 @@ public class Main {
         }
     }
 
-    private static void delete(DoctorManager manager) {
+    private static void delete(DoctorHash manager) {
         System.out.println("--------- Delete Doctor -------");
         String code = Validation.getString("Enter Code: ");
         try {
@@ -986,7 +986,7 @@ public class Main {
         }
     }
 
-    private static void search(DoctorManager manager) {
+    private static void search(DoctorHash manager) {
         System.out.println("---------- Search Doctor --------");
         String text = Validation.getString("Enter text: ");
         try {
@@ -1028,7 +1028,7 @@ solution(
     'J1.S.P0055',
     title_vi='Chương trình quản lý bác sĩ',
     files=[('src/entity/Doctor.java', P0055_DOCTOR),
-           ('src/bo/DoctorManager.java', P0055_MANAGER),
+           ('src/bo/DoctorHash.java', P0055_HASH),
            ('src/utils/Validation.java', P0055_VALIDATION),
            ('src/ui/Main.java', P0055_MAIN)],
     main_class='ui.Main',
@@ -1105,11 +1105,14 @@ solution(
          MENU_0055 + 'Please choose an option: Goodbye.'),
     ],
     explain_en='''<p><strong>Four files, four layers, and each one has a job you can name.</strong>
-<code>entity.Doctor</code> holds the data and nothing else. <code>bo.DoctorManager</code> holds the
-collection and every rule, and never prints. <code>utils.Validation</code> owns the single
-<code>Scanner</code>. <code>ui.Main</code> is the menu. There is no <code>controller</code> package
-because with one entity and one manager it would do nothing but forward calls — the sample projects that
-passed added a controller at seven files and up, not at four.</p>
+<code>entity.Doctor</code> holds the data and nothing else. <code>bo.DoctorHash</code> — the class name
+comes straight from the sheet, which says "Class DoctorHash contains adding, editing, deleting and
+searching functions" — holds the collection and every rule, and never prints. <code>utils.Validation</code>
+owns the single <code>Scanner</code>. <code>ui.Main</code> is the menu. There is no
+<code>controller</code> package because a controller earns its place when a program performs several
+kinds of operation on a <em>stored</em> collection: measured across the 54 solutions, projects with one
+average 4.8 kinds and projects without average 0.9. This one runs entirely in memory, so a controller
+here would do nothing but forward calls.</p>
 <p><strong>The messages live in exactly one place.</strong> Every failure is an
 <code>Exception</code> thrown by the manager with the brief's own wording, and <code>Main</code> only
 ever prints <code>e.getMessage()</code>. That is not ceremony: the marker diffs these strings, and a
@@ -1160,11 +1163,13 @@ and one that matches nothing. The third types the things a marker types to break
 word "many" for availability, a negative availability, and a menu choice out of range. Every line of
 console in this walkthrough came from a real run.</p>''',
     explain_vi='''<p><strong>Bốn tệp, bốn tầng, và mỗi tầng có một việc gọi tên được.</strong>
-<code>entity.Doctor</code> chỉ giữ dữ liệu. <code>bo.DoctorManager</code> giữ tập dữ liệu và toàn bộ luật,
-và không bao giờ in ra màn hình. <code>utils.Validation</code> sở hữu <code>Scanner</code> duy nhất.
-<code>ui.Main</code> là thực đơn. Không có gói <code>controller</code>, vì với một entity và một manager
-thì nó chỉ gọi chuyển tiếp — các project mẫu đã đỗ chỉ thêm controller từ bảy tệp trở lên, không phải ở
-bốn tệp.</p>
+<code>entity.Doctor</code> chỉ giữ dữ liệu. <code>bo.DoctorHash</code> — tên lớp lấy nguyên từ đề, chỗ nó
+viết "Class DoctorHash contains adding, editing, deleting and searching functions" — giữ tập dữ liệu và
+toàn bộ luật, và không bao giờ in ra màn hình. <code>utils.Validation</code> sở hữu <code>Scanner</code>
+duy nhất. <code>ui.Main</code> là thực đơn. Không có gói <code>controller</code>, vì controller chỉ đáng
+có khi chương trình làm nhiều loại thao tác trên một tập dữ liệu được <em>lưu</em>: đo trên 54 lời giải,
+bài có controller trung bình 4,8 loại thao tác, bài không có trung bình 0,9. Bài này chạy hoàn toàn trong
+bộ nhớ, nên controller ở đây chỉ là một lớp gọi chuyển tiếp.</p>
 <p><strong>Thông báo lỗi nằm ở đúng một chỗ.</strong> Mọi thất bại đều là một <code>Exception</code> do
 manager ném ra với đúng câu chữ của đề, còn <code>Main</code> chỉ in <code>e.getMessage()</code>. Đây
 không phải hình thức: người chấm so từng chuỗi, và một thông báo được ghép ở bốn nơi khác nhau thì đến

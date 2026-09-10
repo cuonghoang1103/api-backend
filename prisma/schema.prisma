@@ -326,6 +326,8 @@ model User {
   // ─── Code Lab — authored exercises + personal practice progress ──
   codeExercises CodeExercise[]
   codeProgress  CodeProgress[]
+  // Phòng Lab: một phòng luyện có mục tiêu LOC, do chính người dùng lập.
+  labRooms      CodeLabRoom[]
 
   // ─── My Language — learning progress (per-user, SRS) ─────────
   // Additive. Every row is scoped by userId; SM-2 spaced repetition
@@ -7561,6 +7563,7 @@ model CodeTrack {
   group       CodeGroup            @relation(fields: [groupId], references: [id], onDelete: Cascade)
   modules     CodeModule[]
   exercises   CodeExercise[]
+  labRooms    CodeLabRoom[]
   // Additional groups this track is featured in (besides its primary group).
   extraGroups CodeGroupTrackLink[] @relation("TrackExtraGroups")
 
@@ -7697,11 +7700,12 @@ model CodeExercise {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  module    CodeModule             @relation(fields: [moduleId], references: [id], onDelete: Cascade)
-  track     CodeTrack              @relation(fields: [trackId], references: [id], onDelete: Cascade)
-  author    User?                  @relation(fields: [authorId], references: [id], onDelete: SetNull)
-  progress  CodeProgress[]
-  tutorAsks CodeExerciseTutorAsk[]
+  module       CodeModule             @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  track        CodeTrack              @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  author       User?                  @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  progress     CodeProgress[]
+  tutorAsks    CodeExerciseTutorAsk[]
+  labRoomItems CodeLabRoomItem[]
 
   @@index([moduleId, sortOrder], name: "idx_code_exercise_module_order")
   @@index([trackId], name: "idx_code_exercise_track")
@@ -7756,6 +7760,113 @@ model CodeProgress {
   @@index([userId, status], name: "idx_code_progress_user_status")
   @@index([exerciseId], name: "idx_code_progress_exercise")
   @@map("code_progress")
+}
+
+// ─── Phòng Lab (10/09/2026) ─────────────────────────────────────
+//
+// Người học chọn một nhóm bài trong track, đặt một mục tiêu LOC, rồi làm từng
+// bài trong một "phòng" riêng có gia sư AI kèm và một vòng nộp bài để AI chấm
+// thay thầy. Ba bảng, không phải một:
+//
+//   CodeLabRoom        cái phòng: mục tiêu, bài đang làm
+//   CodeLabRoomItem    một bài đã chọn trong phòng — trạng thái, LOC, kết quả chấm
+//   CodeLabRoomMessage một lượt hội thoại với gia sư, gắn với ĐÚNG một bài
+//
+// Vì sao LOC chép vào `CodeLabRoomItem` thay vì đọc lại từ đề mỗi lần: LOC là
+// con số người học đã nhìn thấy và đã dựa vào đó để chọn. Nếu sau này ai sửa
+// tiêu đề bài thì tổng LOC của một phòng đang làm dở KHÔNG được phép nhảy —
+// mục tiêu 750 mà tự đổi thành 780 là thứ không giải thích được với người dùng.
+
+enum CodeLabRoomItemStatus {
+  PENDING
+  IN_PROGRESS
+  PASSED
+
+  @@map("code_lab_room_item_status")
+}
+
+model CodeLabRoom {
+  id      Int    @id @default(autoincrement())
+  userId  Int    @map("user_id")
+  /// Phòng luôn thuộc đúng một track — 54 bài LAB211 là một track.
+  trackId Int    @map("track_id")
+  name    String @db.VarChar(200)
+
+  /// Mục tiêu LOC của phòng. Mặc định 750 theo đúng yêu cầu tính năng.
+  locGoal Int @default(750) @map("loc_goal")
+
+  /// Bài đang mở trong phòng. SetNull chứ không Cascade: bỏ một bài ra khỏi
+  /// phòng thì phòng vẫn còn, chỉ là không còn bài nào đang mở.
+  activeItemId Int? @unique(map: "uk_lab_room_active_item") @map("active_item_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user       User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  track      CodeTrack            @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  activeItem CodeLabRoomItem?     @relation("LabRoomActiveItem", fields: [activeItemId], references: [id], onDelete: SetNull)
+  items      CodeLabRoomItem[]    @relation("LabRoomItems")
+  messages   CodeLabRoomMessage[]
+
+  @@index([userId, updatedAt(sort: Desc)], name: "idx_lab_room_user")
+  @@map("code_lab_rooms")
+}
+
+model CodeLabRoomItem {
+  id         Int @id @default(autoincrement())
+  roomId     Int @map("room_id")
+  exerciseId Int @map("exercise_id")
+
+  /// LOC chốt tại lúc chọn — xem chú thích ở đầu khối về vì sao không đọc lại.
+  loc       Int                   @default(0)
+  sortOrder Int                   @default(0) @map("sort_order")
+  status    CodeLabRoomItemStatus @default(PENDING)
+
+  /// Bài giảng mở đầu do AI soạn cho ĐÚNG bài này (DocBlock-ish JSON). Lưu lại
+  /// vì nó không đổi theo người đọc và soạn lại mỗi lần vào phòng là đốt tiền.
+  introJson  Json? @map("intro_json")
+  /// Kết quả chấm gần nhất của bài nộp (JSON: điểm, từng mục, câu hỏi vấn đáp).
+  reviewJson Json? @map("review_json")
+  /// Bài hướng dẫn "cách review với thầy", chỉ sinh sau khi bài đã PASSED.
+  guideJson  Json? @map("guide_json")
+
+  passedAt  DateTime? @map("passed_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  room     CodeLabRoom          @relation("LabRoomItems", fields: [roomId], references: [id], onDelete: Cascade)
+  exercise CodeExercise         @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  activeIn CodeLabRoom?         @relation("LabRoomActiveItem")
+  messages CodeLabRoomMessage[]
+
+  /// `name` đặt tên khoá phía Prisma Client, `map` đặt tên INDEX phía
+  /// Postgres — hai thứ khác nhau. Thiếu `map` thì DB tự đặt
+  /// `code_lab_room_items_room_id_exercise_id_key`, lệch với migration viết
+  /// tay, và `migrate diff` sẽ đòi đổi tên ở mỗi lần deploy.
+  @@unique([roomId, exerciseId], name: "uk_lab_room_item", map: "uk_lab_room_item")
+  @@index([roomId, sortOrder], name: "idx_lab_room_item_order")
+  @@index([exerciseId], name: "idx_lab_room_item_exercise")
+  @@map("code_lab_room_items")
+}
+
+model CodeLabRoomMessage {
+  id     Int @id @default(autoincrement())
+  roomId Int @map("room_id")
+  /// Hội thoại gắn với ĐÚNG một bài: đổi bài là đổi ngữ cảnh, và trộn hai bài
+  /// vào một mạch chat là cách nhanh nhất để gia sư trả lời về nhầm đề.
+  itemId Int @map("item_id")
+
+  /// 'user' | 'assistant'
+  role    String @db.VarChar(16)
+  content String @db.Text
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  room CodeLabRoom     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  item CodeLabRoomItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@index([itemId, createdAt], name: "idx_lab_room_msg_item")
+  @@map("code_lab_room_messages")
 }
 
 // ─── Web analytics — page views (added 2026-07-20) ───────────────

@@ -163,26 +163,72 @@ public class DatDemo {
       '<p>Từ 150 LOC trở lên, người chấm thôi hỏi "chạy được không" và bắt đầu hỏi "tổ chức thế nào". Câu '
       'trả lời họ chờ đợi là sự tách bạch trách nhiệm, thường gọi là MVC.</p>')
 
-    table(['Layer', 'Holds', 'Knows about', 'Must NOT'],
-          ['Tầng', 'Chứa gì', 'Biết về', 'Tuyệt đối KHÔNG'],
-          [['<strong>Model</strong>', '<code>Doctor</code>, <code>Employee</code> — data + its rules',
-            'nothing else', 'print anything'],
-           ['<strong>View</strong>', 'menus, prompts, formatted output', 'nothing about storage',
+    p('<p>MVC has three words, but the projects on this track create <strong>five</strong> folders '
+      'under <code>src/</code>. Model splits in two — <code>entity</code> carries the data, '
+      '<code>bo</code> carries the rules that guard it — and the readers from Part 5 get a folder of '
+      'their own. Measured across the 54 reference solutions: <code>ui</code> 54/54, '
+      '<code>utils</code> 50, <code>bo</code> 42, <code>entity</code> 34, <code>controller</code> 11. '
+      '<strong>Not one of the 54 puts every class in a single flat package.</strong></p>',
+      '<p>MVC có ba chữ, nhưng các project trong lộ trình này tạo <strong>năm</strong> thư mục dưới '
+      '<code>src/</code>. Model tách làm đôi — <code>entity</code> giữ dữ liệu, <code>bo</code> giữ '
+      'luật bảo vệ dữ liệu đó — còn mấy hàm đọc ở Phần 5 được ở riêng một thư mục. Đo trên 54 lời giải '
+      'mẫu: <code>ui</code> 54/54, <code>utils</code> 50, <code>bo</code> 42, <code>entity</code> 34, '
+      '<code>controller</code> 11. <strong>Không một bài nào trong 54 bài dồn hết lớp vào một gói '
+      'phẳng.</strong></p>')
+
+    table(['Folder under <code>src/</code>', 'Holds', 'Talks to', 'Must NOT'],
+          ['Thư mục trong <code>src/</code>', 'Chứa gì', 'Nói chuyện với', 'Tuyệt đối KHÔNG'],
+          [['<code>entity/</code> <strong>= M</strong>',
+            '<code>Fruit</code>, <code>Doctor</code> — fields, constructor, getters, <code>toString</code>',
+            'nothing — it is the leaf', 'print, or open a file'],
+           ['<code>bo/</code> <strong>= M</strong>',
+            'the collection, the rules, and on this track the load/save too',
+            '<code>entity</code> and the data file',
+            'print — the one rule stated with no exception'],
+           ['<code>controller/</code> <strong>= C</strong>',
+            'one method per menu choice: read → call <code>bo</code> → report the outcome',
+            '<code>bo</code>, <code>utils</code>, the screen', 'hold a rule of its own'],
+           ['<code>ui/Main</code> <strong>= V</strong>', 'the menu and the loop',
+            '<code>controller</code>, or <code>bo</code> directly when there is none',
             'contain business rules'],
-           ['<strong>Controller</strong>', '<code>DoctorManager</code> — add / update / delete / search',
-            'the model and the file', 'read from the keyboard']],
-          [['<strong>Model</strong>', '<code>Doctor</code>, <code>Employee</code> — dữ liệu và luật của nó',
-            'không biết gì khác', 'in ra màn hình'],
-           ['<strong>View</strong>', 'menu, câu nhắc, kết quả có định dạng', 'không biết gì về lưu trữ',
+           ['<code>utils/</code>',
+            '<code>Validator</code> — every keyboard read in one place — plus tiny helpers',
+            'the keyboard and the screen', 'own the data, or the rules']],
+          [['<code>entity/</code> <strong>= M</strong>',
+            '<code>Fruit</code>, <code>Doctor</code> — thuộc tính, hàm dựng, getter, <code>toString</code>',
+            'không ai cả — nó là lá', 'in ra màn hình, hay mở tệp'],
+           ['<code>bo/</code> <strong>= M</strong>',
+            'danh sách, các luật, và trong lộ trình này gánh luôn phần đọc/ghi tệp',
+            '<code>entity</code> và tệp dữ liệu',
+            'in ra màn hình — quy tắc duy nhất không có ngoại lệ'],
+           ['<code>controller/</code> <strong>= C</strong>',
+            'mỗi lựa chọn menu một phương thức: đọc → gọi <code>bo</code> → báo kết quả',
+            '<code>bo</code>, <code>utils</code>, màn hình', 'tự giữ luật nghiệp vụ'],
+           ['<code>ui/Main</code> <strong>= V</strong>', 'menu và vòng lặp',
+            '<code>controller</code>, hoặc gọi thẳng <code>bo</code> khi không có controller',
             'chứa nghiệp vụ'],
-           ['<strong>Controller</strong>', '<code>DoctorManager</code> — thêm/sửa/xoá/tìm',
-            'model và tệp dữ liệu', 'đọc bàn phím']])
+           ['<code>utils/</code>',
+            '<code>Validator</code> — gom mọi lần đọc bàn phím về một chỗ — cùng vài hàm phụ nhỏ',
+            'bàn phím và màn hình', 'giữ dữ liệu, hay giữ luật']])
+
+    p('<p>One line there surprises people, so it is worth saying plainly: on this track '
+      '<strong>the controller reads the keyboard and prints</strong>. All eleven controllers in the 54 '
+      'solutions do — they call <code>Validator</code> for the input and print the result. It is '
+      '<code>bo</code> that must stay silent, not the controller. Where a project has no controller — '
+      '43 of the 54 — <code>Main</code> does that job itself and calls <code>bo</code> directly, which '
+      '31 of those 43 do.</p>',
+      '<p>Có một dòng hay làm người đọc bất ngờ, nên nói thẳng: trong lộ trình này '
+      '<strong>controller ĐƯỢC đọc bàn phím và ĐƯỢC in</strong>. Cả 11 controller trong 54 lời giải đều '
+      'làm thế — gọi <code>Validator</code> để đọc rồi in kết quả ra. Thứ phải im lặng là '
+      '<code>bo</code>, không phải controller. Bài nào không có controller — 43/54 — thì '
+      '<code>Main</code> tự làm việc đó và gọi thẳng <code>bo</code>, đúng như 31 trong 43 bài ấy.</p>')
 
     mermaid("""flowchart LR
-    U[User] --> V[View - Main and menu]
-    V --> C[Controller - DoctorManager]
-    C --> M[Model - Doctor]
-    C --> F[File - doctors.txt]
+    U[User] --> V[ui.Main - menu loop]
+    V --> C[controller.ShopController]
+    C --> B[bo.FruitManager - rules]
+    B --> E[entity.Fruit - data]
+    B --> F[fruits.txt]
     C --> V
     V --> U""")
 
@@ -197,7 +243,7 @@ public class DatDemo {
          'Ba tầng, đầy đủ và chạy được',
          """import java.util.*;
 
-// ---------- MODEL: data plus the rules that protect it ----------
+// ---------- entity: data plus the rules that protect it ----------
 class Doctor {
     private final String code;
     private String name;
@@ -220,7 +266,7 @@ class Doctor {
     }
 }
 
-// ---------- CONTROLLER: every operation on the data, no printing ----------
+// ---------- bo: every operation on the data, and it never prints ----------
 class DoctorManager {
     private final List<Doctor> doctors = new ArrayList<>();
 
@@ -261,7 +307,7 @@ class DoctorManager {
     }
 }
 
-// ---------- VIEW: talks to the human, holds no rules ----------
+// ---------- ui: talks to the human, holds no rules ----------
 public class MvcDemo {
     public static void main(String[] args) {
         DoctorManager manager = new DoctorManager();
@@ -303,23 +349,85 @@ true
     h('Which files to create for a big assignment',
       'Bài lớn thì tạo những file nào')
 
-    out('A 350 LOC assignment, laid out', 'Bố cục một bài 350 LOC',
-        """src/fruitshop/
-├── Fruit.java            MODEL       fields + getters/setters + toString
-├── Order.java            MODEL
-├── FruitManager.java     CONTROLLER  add / update / delete / search / sort
-├── OrderManager.java     CONTROLLER
-├── Validation.java       UTILITY     the reusable readers from Part 5
-├── FileHelper.java       UTILITY     load() and save()
-└── Main.java             VIEW        menu loop only""",
+    p('<p>This is not a sketch. It is <code>J1.L.P0023</code> "Fruit Shop" — a real 350 LOC brief from '
+      'this track — as the reference solution actually lays it out: nine files, 594 lines of real '
+      'code.</p>',
+      '<p>Đây không phải hình vẽ minh hoạ. Đây là <code>J1.L.P0023</code> "Fruit Shop" — một đề 350 LOC '
+      'có thật trong lộ trình này — đúng như lời giải mẫu xếp nó: chín tệp, 594 dòng mã thật.</p>')
+
+    out('P0023 Fruit Shop, as the reference solution lays it out',
+        'P0023 Fruit Shop, đúng bố cục của lời giải mẫu',
+        """src/
+├── entity/
+│   ├── Fruit.java             fields + getters/setters + toString
+│   ├── Item.java              one line of a cart
+│   └── Cart.java              what one customer is buying
+├── bo/
+│   ├── FruitManager.java      add/update/delete/search  +  fruits.txt
+│   └── OrderManager.java      the order book            +  orders.txt
+├── controller/
+│   └── ShopController.java    one method per menu choice
+├── utils/
+│   ├── Validator.java         the reusable readers from Part 5
+│   └── Money.java             one place that formats a price
+└── ui/
+    └── Main.java              the menu loop — 54 lines, nothing else""",
         verify=False)
 
-    p('<p>Seven small files beat one big one at every stage: you find things faster, you can explain '
+    p('<p>Nine small files beat one big one at every stage: you find things faster, you can explain '
       'each file in a sentence, and when a marker asks "where do you check for a duplicate id" you open '
       'one file instead of scrolling.</p>',
-      '<p>Bảy file nhỏ hơn hẳn một file to ở mọi khâu: bạn tìm nhanh hơn, bạn giải thích được từng file '
+      '<p>Chín file nhỏ hơn hẳn một file to ở mọi khâu: bạn tìm nhanh hơn, bạn giải thích được từng file '
       'trong một câu, và khi người chấm hỏi "chỗ nào kiểm tra trùng mã" thì bạn mở đúng một file thay vì '
       'cuộn tìm.</p>')
+
+    h('Where the file reading and writing goes',
+      'Phần đọc/ghi tệp thì để ở đâu')
+
+    p('<p>Notice that <code>FruitManager</code> above owns <code>fruits.txt</code> itself — there is no '
+      'separate <code>FileHelper</code>. Both shapes pass, and the 54 solutions were counted rather '
+      'than guessed. Fifteen of them touch a file at all. Of those fifteen, '
+      '<strong>eleven keep a separate class for the file and four merge it into the business class</strong> '
+      '— and in all eleven that separate class lives in <code>bo/</code>, never in <code>utils/</code>: '
+      '<code>VehicleFile</code>, <code>DataStore</code>, <code>FileProcessor</code>, '
+      '<code>CSVFormatter</code>, <code>CopyManager</code>, <code>ZipManager</code>, '
+      '<code>WordSearcher</code>, <code>DocumentFileManager</code>, <code>FileManager</code>, '
+      '<code>FileProcessing</code> — ten names for eleven projects, because <code>DataStore</code> '
+      'serves both <code>P0014</code> and <code>P0015</code>.</p>',
+      '<p>Để ý <code>FruitManager</code> ở trên tự giữ luôn <code>fruits.txt</code> — không có lớp '
+      '<code>FileHelper</code> riêng nào cả. Cả hai cách đều qua được, và 54 lời giải đã được ĐẾM chứ '
+      'không đoán. Mười lăm bài có đụng tới tệp. Trong mười lăm bài đó, '
+      '<strong>mười một bài tách riêng một lớp lo tệp, bốn bài gộp vào lớp nghiệp vụ</strong> — và cả '
+      'mười một lần lớp tách riêng ấy đều nằm trong <code>bo/</code>, không lần nào ở '
+      '<code>utils/</code>: <code>VehicleFile</code>, <code>DataStore</code>, '
+      '<code>FileProcessor</code>, <code>CSVFormatter</code>, <code>CopyManager</code>, '
+      '<code>ZipManager</code>, <code>WordSearcher</code>, <code>DocumentFileManager</code>, '
+      '<code>FileManager</code>, <code>FileProcessing</code> — mười cái tên cho mười một bài, vì '
+      '<code>DataStore</code> dùng chung cho cả <code>P0014</code> lẫn <code>P0015</code>.</p>')
+
+    ul(['<strong>Merge it</strong> when one <code>bo</code> owns one file for one entity — '
+        '<code>FruitManager</code> and <code>fruits.txt</code>, <code>DictionaryManager</code> and '
+        '<code>dictionary.txt</code>. A <code>FileHelper</code> there would be one indirection with '
+        'nothing to justify it, and you would have to defend it out loud.',
+        '<strong>Split it out</strong> when several <code>bo</code> classes share one file — '
+        '<code>DataStore</code> in <code>P0014</code>/<code>P0015</code> serves <code>AssetStore</code>, '
+        '<code>EmployeeStore</code>, <code>RequestStore</code> and <code>BorrowStore</code> — or when '
+        'the file format <em>is</em> the assignment: zipping, CSV, copying, word-searching.',
+        '<strong>Never in <code>utils/</code>.</strong> The only file writing that appears there across '
+        'all 54 is <code>SampleData</code>, which creates the demo input so the first run has something '
+        'to read. The program\'s own load and save are not utilities.'],
+       ['<strong>Gộp</strong> khi một lớp <code>bo</code> giữ một tệp của một entity — '
+        '<code>FruitManager</code> với <code>fruits.txt</code>, <code>DictionaryManager</code> với '
+        '<code>dictionary.txt</code>. Nhét thêm <code>FileHelper</code> vào đó chỉ là một lớp trung '
+        'gian không có gì biện minh, và bạn sẽ phải tự bảo vệ nó khi bị hỏi.',
+        '<strong>Tách riêng</strong> khi nhiều lớp <code>bo</code> dùng chung một tệp — '
+        '<code>DataStore</code> ở <code>P0014</code>/<code>P0015</code> phục vụ '
+        '<code>AssetStore</code>, <code>EmployeeStore</code>, <code>RequestStore</code> và '
+        '<code>BorrowStore</code> — hoặc khi <em>chính định dạng tệp</em> mới là đề bài: nén zip, CSV, '
+        'sao chép, tìm từ trong tệp.',
+        '<strong>Đừng bao giờ để trong <code>utils/</code>.</strong> Thứ duy nhất ghi tệp ở đó trong cả '
+        '54 bài là <code>SampleData</code>, lớp tạo sẵn dữ liệu mẫu để lần chạy đầu có cái mà đọc. '
+        'Phần đọc/ghi của chính chương trình không phải là tiện ích.'])
 
     practice([
         (543, 'Advanced I/O, NIO.2 and networking', 'I/O nâng cao, NIO.2 và mạng',

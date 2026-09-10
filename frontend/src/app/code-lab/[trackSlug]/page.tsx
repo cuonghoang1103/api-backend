@@ -8,14 +8,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
-import { ArrowLeft, CheckCircle2, Circle, Loader2, BookOpen, Clock, ExternalLink, Target } from 'lucide-react';
-import { codeLabApi } from '@/lib/code-lab-api';
+import { ArrowLeft, CheckCircle2, Circle, Loader2, Clock, ExternalLink, Target, FlaskConical, CheckSquare, Square } from 'lucide-react';
+import { codeLabApi, locFromTitle } from '@/lib/code-lab-api';
 import type { CodeTrack, MyProgressItem } from '@/types/code-lab';
 import { useAuthStore } from '@/store/authStore';
 import { DifficultyBadge, LevelPill, ProgressRing, TechIcon, VerifiedBadge, parseVerified } from '@/components/code-lab/shared';
 import { ModuleLesson } from '@/components/code-lab/ModuleLesson';
 import { CourseBackLink } from '@/components/code-lab/CourseBackLink';
 import { SkillCoverage } from '@/components/code-lab/SkillCoverage';
+import { LabRoomBar } from '@/components/code-lab/LabRoomBar';
 
 export default function TrackRoadmapPage() {
   const params = useParams<{ trackSlug: string }>();
@@ -23,7 +24,16 @@ export default function TrackRoadmapPage() {
   const searchParams = useSearchParams();
   // Carry ?ref=&reflabel= (set by an Academy/Courses lesson link) onto the
   // exercise links too, so the "back to course" button survives one more hop.
-  const refQS = searchParams.get('ref') ? `?${searchParams.toString()}` : '';
+  // `chon` là param của RIÊNG trang này (đường đi từ trong một phòng ra để
+  // nhặt thêm bài), nên nó bị gạt khỏi chuỗi mang sang trang bài — mang theo
+  // thì link bài nào cũng đeo một tham số không ai đọc.
+  const refQS = (() => {
+    if (!searchParams.get('ref')) return '';
+    const qs = new URLSearchParams(searchParams.toString());
+    qs.delete('chon');
+    return `?${qs.toString()}`;
+  })();
+  const phongGhim = Number(searchParams.get('chon')) || null;
   const isAuthed = useAuthStore((s) => s.isAuthenticated);
 
   const [track, setTrack] = useState<CodeTrack | null>(null);
@@ -34,6 +44,15 @@ export default function TrackRoadmapPage() {
   // Resolve it ourselves once the data is in, and open that module's lesson —
   // the whole point of such a link is "take me to this topic".
   const [focusModuleId, setFocusModuleId] = useState<number | null>(null);
+  // Chế độ chọn bài để lập Phòng Lab. Tách hẳn khỏi luồng bấm-vào-bài thường:
+  // trong chế độ này một cú bấm là TICK, không phải mở bài — trộn hai nghĩa vào
+  // cùng một cú bấm là cách chắc chắn nhất để người dùng mất chỗ đang đọc.
+  const [dangChon, setDangChon] = useState(!!phongGhim);
+  const [daChon, setDaChon] = useState<number[]>([]);
+  // Bài đã nằm sẵn trong phòng ghim. Không có nó thì người dùng tick mù: chọn
+  // năm bài, bấm Thêm, và nhận về "đã có sẵn trong phòng rồi" mà không hiểu
+  // bài nào trùng.
+  const [daCoTrongPhong, setDaCoTrongPhong] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     (async () => {
@@ -54,6 +73,13 @@ export default function TrackRoadmapPage() {
   }, [slug, isAuthed]);
 
   useEffect(() => {
+    if (!phongGhim) { setDaCoTrongPhong(new Set()); return; }
+    codeLabApi.getLabRoom(phongGhim)
+      .then((r) => setDaCoTrongPhong(new Set((r.data.data.items || []).map((i) => i.exerciseId))))
+      .catch(() => setDaCoTrongPhong(new Set()));
+  }, [phongGhim]);
+
+  useEffect(() => {
     if (!track) return;
     const m = /#module-(\d+)/.exec(window.location.hash);
     if (!m) return;
@@ -71,6 +97,27 @@ export default function TrackRoadmapPage() {
     const s = all.filter((e) => progress[e.id]?.status === 'SOLVED').length;
     return { total: all.length, solved: s };
   }, [track, progress]);
+
+  // LOC nằm trong TIÊU ĐỀ bài (LAB211 ghi "... (37 LOC)"), track khác không có.
+  // `coLoc` quyết định thanh dưới có hiện phần LOC hay chỉ đếm số bài.
+  const { picked, totalLoc, coLoc } = useMemo(() => {
+    const all = (track?.modules || []).flatMap((m) => m.exercises || []);
+    const byId = new Map(all.map((e) => [e.id, e]));
+    const list = daChon
+      .map((id) => byId.get(id))
+      .filter((e): e is NonNullable<typeof e> => !!e)
+      .map((e) => ({ id: e.id, title: e.title, loc: locFromTitle(e.title) }));
+    return {
+      picked: list,
+      totalLoc: list.reduce((a, b) => a + b.loc, 0),
+      coLoc: all.some((e) => locFromTitle(e.title) > 0),
+    };
+  }, [track, daChon]);
+
+  const toggleChon = (id: number) => {
+    if (daCoTrongPhong.has(id)) return;
+    setDaChon((cu) => (cu.includes(id) ? cu.filter((x) => x !== id) : [...cu, id]));
+  };
 
   if (loading) return <div className="flex justify-center py-24"><Loader2 className="animate-spin" style={{ color: 'var(--text-muted)' }} /></div>;
   if (!track) return (
@@ -116,6 +163,22 @@ export default function TrackRoadmapPage() {
                 <a href={track.docsUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold text-white transition-transform hover:-translate-y-0.5" style={{ background: accent }}>
                   <ExternalLink size={12} /> Official docs
                 </a>
+              )}
+              {isAuthed && total > 0 && (
+                <button
+                  onClick={() => { setDangChon((v) => !v); if (dangChon) setDaChon([]); }}
+                  className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold transition-colors"
+                  style={dangChon
+                    ? { background: accent, borderColor: accent, color: '#fff' }
+                    : { borderColor: 'var(--border-color)', color: 'var(--text-secondary)', background: 'var(--bg-card)' }}>
+                  <FlaskConical size={12} /> {dangChon ? 'Xong, thoát chọn' : 'Chọn bài lập phòng Lab'}
+                </button>
+              )}
+              {isAuthed && (
+                <Link href="/code-lab/phong-lab" className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium transition-colors hover:bg-[var(--bg-surface-hover)]"
+                  style={{ borderColor: 'var(--border-color)', color: 'var(--text-muted)', background: 'var(--bg-card)' }}>
+                  Phòng Lab của tôi
+                </Link>
               )}
             </div>
           </div>
@@ -190,24 +253,53 @@ export default function TrackRoadmapPage() {
               {(m.exercises || []).map((ex, i) => {
                 const isSolved = progress[ex.id]?.status === 'SOLVED';
                 const inProgress = progress[ex.id]?.status === 'IN_PROGRESS';
+                const loc = locFromTitle(ex.title);
+                const daCo = daCoTrongPhong.has(ex.id);
+                const ticked = daChon.includes(ex.id);
+                const noiDung = (
+                  <>
+                    {dangChon
+                      ? (daCo
+                        ? <CheckSquare size={19} className="shrink-0" style={{ color: 'var(--text-muted)' }} />
+                        : ticked
+                          ? <CheckSquare size={19} className="shrink-0" style={{ color: accent }} />
+                          : <Square size={19} className="shrink-0" style={{ color: 'var(--border-color)' }} />)
+                      : (isSolved
+                        ? <CheckCircle2 size={19} className="shrink-0" style={{ color: '#22c55e' }} />
+                        : <Circle size={19} className="shrink-0" style={{ color: inProgress ? '#d97706' : 'var(--border-color)' }} />)}
+                    <span className="w-6 shrink-0 text-xs tabular-nums" style={{ color: 'var(--text-muted)' }}>{i + 1}.</span>
+                    <span className="min-w-0 flex-1 truncate text-sm font-medium transition-colors group-hover:text-[var(--cl-accent)]" style={{ color: isSolved ? 'var(--text-secondary)' : 'var(--text-primary)' }}>{ex.title}</span>
+                    {inProgress && !isSolved && !dangChon && (
+                      <span className="hidden rounded-full px-2 py-0.5 text-[10px] font-semibold sm:inline-block" style={{ background: 'rgba(217,119,6,0.14)', color: '#d97706' }}>In progress</span>
+                    )}
+                    {dangChon && daCo && (
+                      <span className="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold" style={{ background: 'var(--bg-surface)', color: 'var(--text-muted)' }}>đã có trong phòng</span>
+                    )}
+                    {dangChon && loc > 0 && (
+                      <span className="shrink-0 text-xs font-semibold tabular-nums" style={{ color: ticked ? accent : 'var(--text-muted)' }}>{loc} LOC</span>
+                    )}
+                    {!dangChon && ex.estimatedMinutes ? (
+                      <span className="hidden items-center gap-1 text-xs sm:flex" style={{ color: 'var(--text-muted)' }}>
+                        <Clock size={12} />{ex.estimatedMinutes}m
+                      </span>
+                    ) : null}
+                    <DifficultyBadge difficulty={ex.difficulty} small />
+                  </>
+                );
                 return (
                   <li key={ex.id} className="group border-t first:border-t-0" style={{ borderColor: 'var(--border-color)' }}>
-                    <Link href={`/code-lab/${track.slug}/${ex.slug}${refQS}`} className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-[var(--bg-surface-hover)]">
-                      {isSolved
-                        ? <CheckCircle2 size={19} className="shrink-0" style={{ color: '#22c55e' }} />
-                        : <Circle size={19} className="shrink-0" style={{ color: inProgress ? '#d97706' : 'var(--border-color)' }} />}
-                      <span className="w-6 shrink-0 text-xs tabular-nums" style={{ color: 'var(--text-muted)' }}>{i + 1}.</span>
-                      <span className="min-w-0 flex-1 truncate text-sm font-medium transition-colors group-hover:text-[var(--cl-accent)]" style={{ color: isSolved ? 'var(--text-secondary)' : 'var(--text-primary)' }}>{ex.title}</span>
-                      {inProgress && !isSolved && (
-                        <span className="hidden rounded-full px-2 py-0.5 text-[10px] font-semibold sm:inline-block" style={{ background: 'rgba(217,119,6,0.14)', color: '#d97706' }}>In progress</span>
-                      )}
-                      {ex.estimatedMinutes ? (
-                        <span className="hidden items-center gap-1 text-xs sm:flex" style={{ color: 'var(--text-muted)' }}>
-                          <Clock size={12} />{ex.estimatedMinutes}m
-                        </span>
-                      ) : null}
-                      <DifficultyBadge difficulty={ex.difficulty} small />
-                    </Link>
+                    {dangChon ? (
+                      <button
+                        type="button" onClick={() => toggleChon(ex.id)} disabled={daCo}
+                        className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors enabled:hover:bg-[var(--bg-surface-hover)] disabled:cursor-not-allowed disabled:opacity-55"
+                        style={ticked ? { background: `color-mix(in srgb, ${accent} 9%, transparent)` } : undefined}>
+                        {noiDung}
+                      </button>
+                    ) : (
+                      <Link href={`/code-lab/${track.slug}/${ex.slug}${refQS}`} className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-[var(--bg-surface-hover)]">
+                        {noiDung}
+                      </Link>
+                    )}
                   </li>
                 );
               })}
@@ -216,6 +308,18 @@ export default function TrackRoadmapPage() {
           );
         })}
       </div>
+
+      {/* Thanh chọn bài dính đáy. Chừa chỗ cuộn để nó không che mất bài cuối. */}
+      {dangChon && picked.length > 0 && <div style={{ height: coLoc ? 132 : 96 }} />}
+      {dangChon && (
+        <LabRoomBar
+          trackSlug={track.slug} trackName={track.name}
+          picked={picked} totalLoc={totalLoc} coLoc={coLoc}
+          phongGhim={phongGhim}
+          onClear={() => setDaChon([])}
+          onRemove={(id) => setDaChon((cu) => cu.filter((x) => x !== id))}
+        />
+      )}
     </div>
   );
 }

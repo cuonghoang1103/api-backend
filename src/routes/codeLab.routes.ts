@@ -16,6 +16,8 @@
  * Authenticated (any logged-in user):
  *  - POST /exercises/:id/progress       — save attempt / mark solved
  *  - GET  /progress/mine ? trackId=
+ *  - /lab-rooms/…                       — Phòng Lab: chọn bài theo mục tiêu LOC,
+ *                                         gia sư AI kèm, nộp .zip cho AI chấm
  * Admin / Editor:
  *  - CRUD groups / tracks / modules / exercises
  *  - POST /admin/ai/roadmap             — AI roadmap proposal (preview)
@@ -35,6 +37,7 @@ import * as coachService from '../services/codeLab.coach.service.js';
 import * as workspace from '../services/codeLab.workspace.service.js';
 import { generateRoadmap, generateExercises, commitExercises } from '../services/codeLab.ai.service.js';
 import { generateLesson, commitLesson, getModuleLesson, clearLesson } from '../services/codeLab.lesson.service.js';
+import * as phongLab from '../services/labRoom/phongLab.service.js';
 
 const router = Router();
 
@@ -352,6 +355,139 @@ router.post(
     } catch (e) { next(e); }
   },
 );
+
+// ─── Phòng Lab ──────────────────────────────────────────────────
+//
+// Mọi route ở đây đều `authenticate`, và service còn kiểm QUYỀN SỞ HỮU phòng
+// một lần nữa — route chỉ biết "có đăng nhập", nó không biết phòng này của ai.
+
+const dsIdBai = (v: unknown) => (Array.isArray(v) ? v : []);
+
+router.get('/lab-rooms', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await phongLab.dsPhong(req.user!.userId) }); } catch (e) { next(e); }
+});
+
+router.post('/lab-rooms', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await phongLab.taoPhong(req.user!.userId, {
+      trackSlug: req.body?.trackSlug, trackId: req.body?.trackId,
+      exerciseIds: dsIdBai(req.body?.exerciseIds),
+      name: req.body?.name, locGoal: req.body?.locGoal,
+    });
+    res.status(201).json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+router.get('/lab-rooms/:id(\\d+)', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await phongLab.layPhong(req.user!.userId, Number(req.params.id)) }); } catch (e) { next(e); }
+});
+
+router.patch('/lab-rooms/:id(\\d+)', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await phongLab.suaPhong(req.user!.userId, Number(req.params.id), { name: req.body?.name, locGoal: req.body?.locGoal });
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+router.delete('/lab-rooms/:id(\\d+)', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try { res.json({ success: true, data: await phongLab.xoaPhong(req.user!.userId, Number(req.params.id)) }); } catch (e) { next(e); }
+});
+
+router.post('/lab-rooms/:id(\\d+)/items', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await phongLab.themBai(req.user!.userId, Number(req.params.id), dsIdBai(req.body?.exerciseIds));
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+router.delete('/lab-rooms/:id(\\d+)/items/:itemId(\\d+)', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await phongLab.boBai(req.user!.userId, Number(req.params.id), Number(req.params.itemId));
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+router.post('/lab-rooms/:id(\\d+)/items/:itemId(\\d+)/select', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await phongLab.chonBai(req.user!.userId, Number(req.params.id), Number(req.params.itemId));
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+// Giới thiệu bài. GET trả bản đã soạn (soạn lần đầu nếu chưa có); POST bắt soạn lại.
+router.get('/lab-rooms/:id(\\d+)/items/:itemId(\\d+)/intro', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await phongLab.gioiThieuBai(req.user!.userId, Number(req.params.id), Number(req.params.itemId), false);
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+router.post('/lab-rooms/:id(\\d+)/items/:itemId(\\d+)/intro', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await phongLab.gioiThieuBai(req.user!.userId, Number(req.params.id), Number(req.params.itemId), true);
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+router.get('/lab-rooms/:id(\\d+)/items/:itemId(\\d+)/chat', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await phongLab.lichSuChat(req.user!.userId, Number(req.params.id), Number(req.params.itemId));
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+router.post('/lab-rooms/:id(\\d+)/items/:itemId(\\d+)/chat', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await phongLab.chat(req.user!.userId, Number(req.params.id), Number(req.params.itemId), String(req.body?.question || ''));
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+router.delete('/lab-rooms/:id(\\d+)/items/:itemId(\\d+)/chat', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await phongLab.xoaChat(req.user!.userId, Number(req.params.id), Number(req.params.itemId));
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+// Nộp .zip project — dùng lại đúng giới hạn 30MB của coach/check-zip; file chỉ
+// nằm trong RAM, không lưu đâu cả.
+router.post(
+  '/lab-rooms/:id(\\d+)/items/:itemId(\\d+)/submit',
+  authenticate,
+  projectZipUpload.single('file'),
+  async (req, res: Response<ApiResponse>, next) => {
+    try {
+      if (!req.file?.buffer?.length) throw new BadRequestError('Hãy chọn file .zip của project.');
+      const out = await phongLab.chamBaiNop(
+        req.user!.userId, Number(req.params.id), Number(req.params.itemId),
+        req.file.buffer, req.file.originalname,
+      );
+      res.json({ success: true, data: out });
+    } catch (e) { next(e); }
+  },
+);
+
+router.get('/lab-rooms/:id(\\d+)/items/:itemId(\\d+)/review', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await phongLab.ketQuaChamCu(req.user!.userId, Number(req.params.id), Number(req.params.itemId));
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+router.get('/lab-rooms/:id(\\d+)/items/:itemId(\\d+)/guide', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await phongLab.huongDanReview(req.user!.userId, Number(req.params.id), Number(req.params.itemId), false);
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
+
+router.post('/lab-rooms/:id(\\d+)/items/:itemId(\\d+)/guide', authenticate, async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const out = await phongLab.huongDanReview(req.user!.userId, Number(req.params.id), Number(req.params.itemId), true);
+    res.json({ success: true, data: out });
+  } catch (e) { next(e); }
+});
 
 router.get('/tracks/:slug/skills', optionalAuth, async (req, res: Response<ApiResponse>, next) => {
   try {

@@ -23,10 +23,30 @@ import type {
   SpecCheck,
   ProjectCheck,
   SkillCoverageResponse,
+  LabRoom,
+  LabRoomSummary,
+  LabRoomIntro,
+  LabRoomReview,
+  LabRoomGuide,
+  LabRoomChatTurn,
 } from '@/types/code-lab';
 import type { DocBlock } from '@/types/exp-hub';
 
 const BASE = '/code-lab';
+
+/**
+ * Số dòng code của một bài, đọc từ chính tiêu đề.
+ *
+ * LAB211 nhét LOC vào tiêu đề đúng dạng `... (37 LOC)` — đo thật trên cả 54
+ * bài. Track khác không có, và hàm trả 0 để giao diện tự biết đường ẩn phần
+ * LOC đi thay vì bày ra một con số 0 vô nghĩa. Backend có bản sao của phép
+ * đọc này (`locCuaBai` trong phongLab.service.ts) và nó mới là bản CHỐT SỐ:
+ * phía này chỉ để cộng dồn lúc người dùng đang chọn.
+ */
+export function locFromTitle(title: string | null | undefined): number {
+  const m = /\((\d{1,4})\s*LOC\)/i.exec(title || '');
+  return m ? Number(m[1]) : 0;
+}
 
 interface Ok<T> { success: boolean; data: T }
 interface Paginated<T> { exercises: T[]; total: number; page: number; limit: number; totalPages: number }
@@ -81,6 +101,53 @@ export const codeLabApi = {
     return api.post<Ok<{ files: CodeBlock[]; skipped: number }>>(
       `${BASE}/exercises/${exerciseId}/workspace/import`, fd, { timeout: 120_000 });
   },
+
+  // ─── Phòng Lab ────────────────────────────────────────────────
+  // Mọi lời gọi AI ở đây chạy Opus 4.8 qua cổng riêng, nên timeout rộng: một
+  // lượt chấm .zip đọc cả project rồi soạn 6-10 câu hỏi vặn, và 30s mặc định
+  // của client dùng chung sẽ bỏ dở đúng lúc server đang làm việc có ích.
+  labRooms: () => api.get<Ok<LabRoomSummary[]>>(`${BASE}/lab-rooms`),
+  createLabRoom: (body: { trackSlug?: string; trackId?: number; exerciseIds: number[]; name?: string; locGoal?: number }) =>
+    api.post<Ok<LabRoom>>(`${BASE}/lab-rooms`, body),
+  getLabRoom: (id: number) => api.get<Ok<LabRoom>>(`${BASE}/lab-rooms/${id}`),
+  updateLabRoom: (id: number, body: { name?: string; locGoal?: number }) =>
+    api.patch<Ok<LabRoom>>(`${BASE}/lab-rooms/${id}`, body),
+  deleteLabRoom: (id: number) => api.delete(`${BASE}/lab-rooms/${id}`),
+  addLabRoomItems: (id: number, exerciseIds: number[]) =>
+    api.post<Ok<LabRoom>>(`${BASE}/lab-rooms/${id}/items`, { exerciseIds }),
+  removeLabRoomItem: (id: number, itemId: number) =>
+    api.delete<Ok<LabRoom>>(`${BASE}/lab-rooms/${id}/items/${itemId}`),
+  selectLabRoomItem: (id: number, itemId: number) =>
+    api.post<Ok<LabRoom>>(`${BASE}/lab-rooms/${id}/items/${itemId}/select`),
+
+  labRoomIntro: (id: number, itemId: number) =>
+    api.get<Ok<LabRoomIntro>>(`${BASE}/lab-rooms/${id}/items/${itemId}/intro`, { timeout: 600_000 }),
+  regenLabRoomIntro: (id: number, itemId: number) =>
+    api.post<Ok<LabRoomIntro>>(`${BASE}/lab-rooms/${id}/items/${itemId}/intro`, {}, { timeout: 600_000 }),
+
+  labRoomChatHistory: (id: number, itemId: number) =>
+    api.get<Ok<LabRoomChatTurn[]>>(`${BASE}/lab-rooms/${id}/items/${itemId}/chat`),
+  labRoomAsk: (id: number, itemId: number, question: string) =>
+    api.post<Ok<{ answer: string }>>(`${BASE}/lab-rooms/${id}/items/${itemId}/chat`, { question }, { timeout: 600_000 }),
+  clearLabRoomChat: (id: number, itemId: number) =>
+    api.delete(`${BASE}/lab-rooms/${id}/items/${itemId}/chat`),
+
+  /** Nộp .zip project — file chỉ nằm trong RAM cả hai đầu, không lưu đâu cả. */
+  submitLabRoomZip: (id: number, itemId: number, file: File) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    return api.post<Ok<{ ketQua: LabRoomReview; phong: LabRoom }>>(
+      `${BASE}/lab-rooms/${id}/items/${itemId}/submit`, fd, { timeout: 900_000 });
+  },
+
+  /** Kết quả chấm đã lưu — đọc lại thì KHÔNG gọi AI, nên không có timeout rộng. */
+  labRoomLastReview: (id: number, itemId: number) =>
+    api.get<Ok<LabRoomReview | null>>(`${BASE}/lab-rooms/${id}/items/${itemId}/review`),
+
+  labRoomGuide: (id: number, itemId: number) =>
+    api.get<Ok<LabRoomGuide>>(`${BASE}/lab-rooms/${id}/items/${itemId}/guide`, { timeout: 600_000 }),
+  regenLabRoomGuide: (id: number, itemId: number) =>
+    api.post<Ok<LabRoomGuide>>(`${BASE}/lab-rooms/${id}/items/${itemId}/guide`, {}, { timeout: 600_000 }),
 
   askAiFollowUp: (exerciseId: number, question: string,
                   history: Array<{ role: 'user' | 'assistant'; content: string }>) =>

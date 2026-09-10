@@ -1,0 +1,450 @@
+# LAB211 — đối chiếu 54 lời giải mẫu với bộ quy tắc đang dạy
+
+Ngày kiểm: 2026-09-10. Phạm vi: toàn bộ bài giảng Academy `LAB211`, bài giảng
+Code Lab module 847, quy tắc SOLID/access modifier kế thừa từ `PRO192`, và
+54 lời giải trong `solutions/batch*.py`.
+
+Mọi con số dưới đây là **đo được**, không suy đoán: các lời giải được biên dịch
+và chạy thật với kịch bản phím của người chấm, dưới ba locale khác nhau.
+
+---
+
+## 1. "Prompt của thầy" thực ra nằm ở ba chỗ, không phải một
+
+| Nguồn | Nội dung | Vai trò |
+|---|---|---|
+| Academy `LAB211` — 40 bài / 10 mục | kiến trúc 5 tầng, quy tắc thêm tầng theo số file, Validator, output khớp ký tự, bẫy người chấm, CheckStyle | **hợp đồng chính** |
+| Code Lab module 847 — 15 phần / 265 khối | MVC, đặt tên, access modifier, 4 trụ OOP, 25 câu vấn đáp, checklist nộp bài | chi tiết kỹ thuật |
+| Academy `PRO192` 3.1 + N2.1 | bảng access modifier, đóng gói, **SOLID** | nền tảng (môn tiên quyết) |
+
+Ba điều cần nói thẳng:
+
+* **SOLID không được dạy trong LAB211.** Nó chỉ xuất hiện ở `PRO192` bài N2.1,
+  ở mức khái niệm (5 nguyên tắc, mỗi cái một câu). LAB211 chỉ dùng lại phần
+  "một lớp một việc" dưới tên khác: *tầng*.
+* **Design pattern không thuộc LAB211.** Nó ở `SWD392`. Trong module 847 chỉ có
+  đúng một nút "practise" trỏ sang Java Core. Chấm LAB211 bằng thước design
+  pattern là chấm sai môn.
+* **Access modifier thì có, và rất cụ thể:** trường `private` luôn luôn, phương
+  thức `public` khi là hợp đồng của lớp, `protected` chỉ khi lớp con thật sự
+  cần, lớp tiện ích thì `private` constructor + `private static final Scanner`.
+
+---
+
+## 2. Những gì 54 bài làm ĐÚNG tuyệt đối
+
+| Quy tắc | Nguồn | Kết quả |
+|---|---|---|
+| Biên dịch + chạy khớp màn hình mong đợi | Academy 0.2 | **54/54** |
+| Xoá header mẫu NetBeans | Academy 1.1 | 54/54 |
+| Không thực thể HTML lọt vào mã Java | `solkit.check_source_text` | 54/54 |
+| Không `nextInt()/nextDouble()` trực tiếp | Academy 1.2 | 54/54 |
+| Không đóng `Scanner` bọc `System.in` | Academy 1.1 | 54/54 |
+| `@Override` trên **mọi** phương thức ghi đè | Academy 5.1 | 54/54 |
+| `equals()` luôn đi kèm `hashCode()` | Academy 4.2 | 54/54 |
+| Ngày tháng parse `setLenient(false)` / STRICT | Academy 3.2 | 5/5 bài có parse ngày |
+| Mọi lớp có Javadoc nói *vì sao* nó tồn tại | Academy 1.1 | 54/54 |
+| Đặt tên PascalCase / camelCase / UPPER_SNAKE | 847 Part 5 | 54/54 |
+| `main()` / phương thức không phình | 847 Part 5 | 53/54 |
+
+Ba chỗ tên gọi "sai chuẩn" đều là **đề bắt**, và lời giải theo đề là đúng:
+`Bee.Damage()` (đề viết hoa D), `Messages_en` / `Messages_vi` (quy ước
+`ResourceBundle`), `Country` với trường `protected` (đề in nguyên xi như vậy).
+
+---
+
+## 3. Lỗi thật — đã tìm ra và đã vá
+
+### 3.1 Locale: 8/54 bài in dấu phẩy trên máy Việt Nam ⚠️ NGHIÊM TRỌNG
+
+Bài giảng Academy 1.3 dạy đúng quy tắc này:
+
+> `System.out.printf("%.2f", 3.5)` có thể in `3,50` trên máy locale dấu phẩy và
+> trượt phép so khớp. Ép dấu chấm bằng `String.format(Locale.US, …)`.
+
+46 lời giải làm đúng. 8 lời giải quên. Đo thật (`-Duser.language=vi -Duser.country=VN`):
+
+```
+lời giải: OK=46  LỖI=8
+   J1.S.P0056 · J1.S.P0059 · J1.S.P0080 · J1.S.P0081
+   J1.S.P0085 · J1.L.P0014 · J1.L.P0015 · J1.L.P0023
+```
+
+Ví dụ thật từ P0014: `1000,00` và `2,20` thay vì `1000.00` và `2.20`.
+
+Vì sao bộ verify không bắt được: nó chạy trong container locale `en_US`, còn
+máy phòng lab FPTU thì `vi_VN`. Đúng kiểu lỗi "xanh ở nhà, đỏ ở chỗ chấm".
+
+**Đã vá 21 chỗ trong 16 file Java** (thêm `Locale.US` + `import java.util.Locale`).
+Kiểm lại:
+
+```
+en_US  → OK=54  LỖI=0
+vi_VN  → OK=54  LỖI=0
+de_DE  → OK=54  LỖI=0
+```
+
+### 3.2 Slide 1.1 chỉ vào một project không tồn tại như nó mô tả
+
+Thẻ link cuối bài *"1.1 — Kiến trúc phân tầng chuẩn FPTU"* nói:
+
+> **Xem trọn mẫu: Doctor Management** — Project ≥7 file với
+> entity/bo/controller/Validator — bố cục chuẩn.
+
+Lời giải P0055 thật có **4 file** và **không có controller**:
+`entity/Doctor` · `bo/DoctorManager` · `ui/Main` · `utils/Validation`.
+
+Học viên bấm vào để xem "bố cục ≥7 file có controller" và thấy một project 4
+tầng không controller — ngay dưới cái bảng vừa dạy quy tắc đó.
+
+**Đã sửa:** trỏ sang **P0056 Worker Management** — 7 file, dùng đủ cả năm tầng
+`entity` (3 lớp) + `bo` + `controller` + `ui` + `utils`.
+
+---
+
+### 3.3 Tên phương thức không khớp đề — 3 bài ⚠️ NGHIÊM TRỌNG
+
+**Người chấm dò theo TÊN.** Một bài chạy đúng, in đúng từng ký tự, mà đặt tên
+`add` trong khi đề viết `addWord` thì ô đối chiếu trong phiếu chấm không tích
+được — và `javac` lẫn `verify_all()` đều không nói gì, vì cả hai chỉ biết
+chương trình in ra cái gì, không biết đề đòi gọi nó là gì.
+
+Đi tìm mục §7.2 cũ ("cân nhắc thêm controller cho P0073, P0055, P0058") thì
+không thấy vấn đề controller đâu, mà thấy cái này:
+
+| Bài | Đề đòi | Lời giải có | |
+|---|---|---|---|
+| P0058 | `addWord` · `removeWord` · `loadData` · `updateDatabase` | `add` · `delete` · `load` · `save` | **4 tên sai** |
+| P0053 | `checkIn` · `sortAscending` · `sortDescending` | *không có cái nào* | **thiếu cả 3** |
+| P0055 | class **`DoctorHash`** | class `DoctorManager` | **sai tên lớp** |
+
+P0073 thì không lệch gì: cả ba chữ ký khớp, và `displayAll` nằm ở `Main` có lập
+luận đúng.
+
+Đã sửa cả ba, và **viết thêm một phép kiểm thứ hai** —
+`solutions/khopchuky.py` — đọc chữ ký cùng khối "implement methods … in startup
+code" của từng đề rồi soát xem lời giải có đúng những cái tên đó không. Quét lại
+cả 54 bài: **0 lệch**. Đã kiểm ngược chính nó (tháo `addWord`/`removeWord` ra
+thì nó đỏ đúng hai chỗ) trước khi tin.
+
+Ba lần lọt lưới trước khi có phép kiểm này: P0068 (`sortStudent` khai `void` thay
+vì trả `List`), P0058, P0053.
+
+### 3.4 "in startup code" — tôi đã đọc SAI, và P0055 là phản chứng
+
+Ở §4.2 tôi kết luận: *"in startup code" nghĩa là phương thức phải nằm trong lớp
+khởi động*. Đọc rộng ra thì **không phải** — nó nghĩa là *"đây là những phương
+thức bạn phải viết trong project nộp lên"*, và **không tự nó nói lớp nào**.
+
+Phản chứng nằm ngay trong P0055: Hướng dẫn nói "…in startup code", còn phần Gợi
+ý của **cùng một đề** nói *"Class **DoctorHash** contains adding, editing,
+deleting and searching functions"*. Nếu cụm đó có nghĩa "trong `Main`" thì đề tự
+mâu thuẫn với chính nó ở cách hai dòng.
+
+Cách đọc đúng, và cách đã ghi lại vào bộ quy tắc:
+
+* Đề **không** nêu tên lớp nào và truyền collection vào làm tham số
+  (`addContact(List<Contact> list, Contact c)`) → phương thức nằm ở `Main`.
+  **P0054, P0063, P0068** đúng là ca này, nên §4.2 vẫn đứng vững — chỉ có lý do
+  tôi đưa ra là chưa đủ.
+* Đề **có** nêu tên lớp → chính cái tên đó là thứ người chấm tìm. **P0055** là
+  ca này.
+
+Hiểu ngược là mất điểm ở cả hai chiều. Đã sửa cách phát biểu ở bốn chỗ: Academy
+1.1 (EN+VI), `AUTHORING-BRIEF.md`, `quyTacThay.ts`, và walkthrough P0055.
+
+## 4. Lệch quy tắc — cần bạn quyết, không tự sửa
+
+### 4.1 Quy tắc "số file → tầng" ✅ ĐÃ SỬA — và cách sửa đầu tiên cũng sai
+
+Quy tắc đang dạy đếm **số tệp**: 2–4 → không `bo`; 4–6 → thêm `bo`; ≥7 → thêm
+`controller`. Hai lỗi cùng lúc:
+
+1. **Tự mâu thuẫn ở đúng n = 4** — "2–4" và "4–6" cùng phủ nó, nên một project
+   bốn tệp vừa đúng vừa sai tuỳ đọc dòng nào trước. Nguồn gốc lộ ra ngay trong
+   chính bảng ví dụ của `AUTHORING-BRIEF`: `CalculatorBill(4)` nằm ở hàng
+   "không bo", `MatrixOOP(4)` nằm ở hàng "thêm bo". **Dữ liệu gốc mơ hồ ở bốn
+   tệp**, và cái bảng chỉ chép lại sự mơ hồ đó thành một quy tắc.
+2. **Đếm sai thứ** — 23/54 lời giải "vi phạm" bảng này, mà đọc kỹ thì phần lớn
+   không sai: 16 bài ba tệp có `bo` là các đề thuật toán, `bo` giữ đúng thuật
+   toán và không có entity nào cả.
+
+#### Hai lần phát biểu lại đầu tiên đều bị phép đo bác bỏ
+
+Đây là phần đáng đọc nhất của mục này. Tôi viết quy tắc mới, rồi đo nó trên 54
+lời giải, và hai lần đầu đều sai:
+
+| Phát biểu thử | Phép đo bác bỏ nó |
+|---|---|
+| "`controller` xuất hiện khi `ui` phải điều phối **nhiều hơn một `bo`**" | 7 phản chứng, gồm cả P0056 — chính project tôi vừa đưa lên slide làm mẫu chuẩn. Tất cả đều 1 `bo` + 1 controller |
+| "`controller` để **giữ `main()` ngắn**" | `main` trung bình **58 dòng khi CÓ** controller và **67 dòng khi KHÔNG** — không có tín hiệu. `main` dài nhất (173 dòng, P0054) lại không có controller |
+
+Phát biểu thứ ba mới trụ được, vì nó tách được hai nhóm bằng một con số:
+
+> **`controller` xuất hiện khi chương trình làm NHIỀU LOẠI THAO TÁC KHÁC NHAU
+> TRÊN MỘT TẬP DỮ LIỆU ĐƯỢC LƯU** — thêm/sửa/xoá/tìm/lưu. Không phải khi nó chỉ
+> đơn giản là to.
+
+| | số loại thao tác trên tập dữ liệu |
+|---|---|
+| 11 bài **CÓ** controller | trung bình **≈ 4,8** |
+| Các bài **KHÔNG** có | trung bình **≈ 0,9** |
+
+Và `bo`: **xuất hiện khi có luật nghiệp vụ hoặc thuật toán đáng tách khỏi màn
+hình — kể cả project ba tệp.**
+
+#### Vì sao P0080 mười tệp mà không cần controller
+
+Đây là ca chứng minh số tệp không dùng làm luật được. P0080 Shapes có mười tệp
+nhưng **chín tệp là lớp hình**, không phải chức năng — chương trình không thao
+tác gì trên tập dữ liệu (0 loại). Bảng cũ bắt nó phải có controller; quy tắc mới
+nói đúng là không. Đề nghị "thêm controller cho P0080" trong bản báo cáo trước
+**là sai, đã rút**.
+
+#### Kết quả sau khi phát biểu lại
+
+**51/54 đúng quy tắc** (bảng cũ đếm theo tệp: 31/54). Ba ca còn lại là phát hiện
+thật, đáng cân nhắc thêm `controller`:
+
+| Bài | tệp | loại thao tác | `main` |
+|---|---|---|---|
+| P0073 quản lý chi tiêu | 4 | 6 | 118 dòng |
+| P0055 quản lý bác sĩ | 4 | 5 | 135 dòng |
+| P0058 từ điển | 3 | 5 | 95 dòng |
+
+Đã sửa ở **năm chỗ** cho khớp nhau: Academy bài 1.1 (EN+VI) · Quiz 1 câu 1 ·
+`AUTHORING-BRIEF.md` · `src/services/labRoom/quyTacThay.ts` (bộ quy tắc AI dựa
+vào) · và hai walkthrough còn chép lại dải cũ (batch3, batch24).
+
+Câu Quiz 1 hỏi "project 3 tệp nên có gì → entity + ui + utils, không bo" nay
+**sai theo chính quy tắc mới**, đã đổi thành câu hỏi đúng thứ cần kiểm: *"Bạn
+quyết định có thêm tầng bo hay không dựa vào…"* → *"có luật nghiệp vụ hay thuật
+toán nào đáng tách khỏi màn hình không"*.
+
+### 4.2 `bo` in ra màn hình — 3 bài ✅ ĐÃ SỬA
+
+Quy tắc (Academy 1.1, và là **đáp án đúng của Quiz 4 câu 5**): "`bo` giữ
+collection và ném Exception kèm thông báo; nó **KHÔNG** in ra màn hình."
+
+Ba bài vi phạm: P0054 (`bo/ContactManager` in cả bảng danh bạ), P0063
+(`bo/PersonManager` in "Information of Person…"), P0068 (`bo/StudentManager`
+in danh sách sinh viên).
+
+**Nhưng lời sửa đầu tiên tôi đề xuất — "chuyển phần in sang `ui`, để `bo` trả
+về `List`" — là SAI, và đọc kỹ đề mới thấy.** Cả ba đề đều kết thúc phần
+Guidelines bằng đúng ba chữ:
+
+> Student must implement methods · `displayAll` / `displayPersonInfo` /
+> `display` · **in startup code.**
+
+"in startup code" nghĩa là các phương thức đó phải nằm trong **lớp khởi động**,
+tức `Main` — không phải trong một lớp manager. Và cả ba đề đều đặc tả kiểu trả
+về là `void` với cái tên "display", nên in ra màn hình là nghĩa duy nhất nó có
+thể mang. Lớp `bo` chưa bao giờ là chỗ của chúng.
+
+**Cách sửa đã áp dụng:** gộp các phương thức Guidelines nêu tên vào `ui/Main`
+và **xoá hẳn tầng `bo`** ở cả ba bài. Ba quy tắc cùng thoả một lúc:
+
+| | trước | sau | vì sao |
+|---|---|---|---|
+| P0054 | 4 tệp, có `bo` | **3 tệp** `entity+utils+ui` | danh sách là *tham số* của cả ba phương thức → không có tập dữ liệu nào để `bo` sở hữu |
+| P0063 | 4 tệp, có `bo` | **3 tệp** `entity+utils+ui` | 25 LOC — dưới xa vạch cần tầng nghiệp vụ |
+| P0068 | 5 tệp, có `bo` | **4 tệp**, Comparator sang `utils` | manager chỉ chứa 2 dòng uỷ quyền |
+
+Bắt thêm được một lỗi khớp đề trong lúc sửa: đề P0068 viết
+`List<Student> sortStudent(List<Student> students)` — **trả về** danh sách đã
+sắp — còn lời giải cũ khai `void`. Đã sửa đúng chữ ký, và chỗ gọi nay đọc thành
+`display(sortStudent(students))`.
+
+Ba walkthrough đã được viết lại để giải thích quyết định này, vì "sao bài này
+không có lớp manager?" chính là câu vấn đáp sẽ được hỏi.
+
+Kiểm lại sau khi sửa: **54/54 xanh** ở cả `en_US` lẫn `vi_VN`, màn hình không
+đổi một ký tự. Số bài có `bo` in ra màn hình: **0**.
+
+### 4.3 `Serializable` ✅ ĐÃ SỬA — và con số làm đảo ngược cả câu hỏi
+
+Quy tắc nói "luôn luôn". Câu hỏi ban đầu của tôi là "29 lớp thiếu thì có sao
+không". Đo xong thì hoá ra phải hỏi ngược lại:
+
+> **0/54 lời giải thật sự gọi `ObjectOutputStream` hay `ObjectInputStream`
+> trong mã.** Mọi bài có tệp ở đây đều ghi văn bản, CSV, hoặc tệp `.dat` ghi
+> bằng chữ. Trong khi đó **22 lớp** khai `implements Serializable`.
+
+Nghĩa là trong cả môn này, `implements Serializable` **không thay đổi một thứ
+gì lúc chạy**. Nó là thói quen, không phải yêu cầu — và quy tắc "entity luôn
+`implements Serializable`" đang dạy một phản xạ mà chính 54 đề không dùng đến.
+
+Đáng chú ý: `L.P0013` có `Vehicle implements Serializable` kèm Javadoc tự thú
+rằng tệp dữ liệu là văn bản thuần, giữ lại vì "tốn một chữ và để ngỏ đường".
+Đó là câu trả lời trung thực — và cũng là câu người học phải nói được.
+
+**Đã sửa cách phát biểu ở ba chỗ** (Academy 1.1 EN+VI kèm một ghi chú nêu thẳng
+con số, `AUTHORING-BRIEF.md`, `quyTacThay.ts`), và bỏ chữ `Serializable` khỏi
+hai chỗ liệt kê ngắn (bài 0.3, bài 4.3) nơi nó bị nêu như thành phần bắt buộc
+của một entity. **Không đụng vào mã**: 22 lớp kia giữ nguyên, vì giữ hay bỏ đều
+bảo vệ được — cái không bảo vệ được là im lặng khi bị hỏi.
+
+Lý do các đề tránh serialize thì Academy 5.2 đã dạy sẵn: ghi nối bằng một
+`ObjectOutputStream` thứ hai tạo thêm một header mà `ObjectInputStream` không
+đọc nổi.
+
+### 4.4 `entity` in ra màn hình — 2 bài, nhưng đề bắt ✅ ĐÃ SỬA
+
+P0061 (`Shape.printResult()`) và P0052 (`Country`) in ra màn hình vì
+**Guidelines của đề yêu cầu đúng phương thức đó**. Lời giải theo đề là đúng.
+Nhưng walkthrough P0061 giải thích rất kỹ mọi thứ khác mà **không có một câu
+nào** về mâu thuẫn này — trong khi "sao entity của em lại in, trong khi khoá
+học nói entity không in?" là câu vấn đáp gần như chắc chắn.
+
+Đã thêm hai đoạn (EN+VI) vào walkthrough P0061, và câu trả lời được dựng thành
+**ba phần theo đúng thứ tự** để người học nói lại được: *đề bắt buộc đúng
+phương thức này trên đúng lớp này* → *em biết nó phá quy tắc phân tầng, và giá
+phải trả là `Shape` không dùng lại được cho chương trình vẽ ra cửa sổ* → *nếu
+được tự thiết kế thì `printResult` chuyển sang tầng ui, mỗi hình chỉ để lộ
+`getArea()` và `getPerimeter()` — mà nó vốn đã có sẵn*.
+
+Nói ra được cái giá chính là chỗ tách "em làm theo đề" khỏi "em không để ý".
+
+### 4.5 `System.exit()` trong Validator — L.P0013 ✅ ĐÃ SỬA
+
+Bài giảng 847 Part 5 nói rõ: "Thoát bằng cờ boolean, **không** `System.exit(0)`
+— `System.exit` giết JVM ngay, bước lưu tệp trước khi thoát không bao giờ chạy."
+`L.P0013/utils/Validator.java` gọi `System.exit(0)` khi stdin đóng.
+
+**Và nó là lỗi thật, không phải lỗi lý thuyết.** Đo bằng cách chạy: nạp 3 xe →
+xoá 1 → cắt input → với mã cũ, `vehicles.txt` **vẫn còn 3 dòng**; với mã mới nó
+còn 2. Người dùng nhập mười cái xe rồi tắt cửa sổ là mất cả mười, và trên màn
+hình không có gì nói điều đó.
+
+Đã đổi sang một exception `Validator.EndOfInput` ném lên cho `ui` bắt. `quit()`
+cũ không dùng lại được ở đường này vì nó **hỏi** "lưu trước khi thoát?", mà hỏi
+thì cần đúng cái input vừa biến mất — nên nhánh EOF làm nửa còn làm được: lưu
+phần chưa lưu, không hỏi câu không ai trả lời được.
+
+**Ba lượt chạy cũ đều bấm Quit tử tế nên không lượt nào chạm tới đường này.** Đã
+thêm hai lượt: một lượt cắt input giữa chừng, và một lượt **chạy trong tiến
+trình khác** đọc lại tệp — cách duy nhất chứng minh đĩa đổi thật chứ không chỉ
+in ra chữ "Stored". Kiểm ngược: dựng lại đúng `nextLine()` cũ thì lượt mới đỏ
+với đúng câu *"hết input mà không lưu phần chưa lưu"*.
+
+### 4.6 Hình vẽ bố cục ở 847 Part 12 không khớp mã — ĐÃ VẼ LẠI
+
+**Con số "15 bài gộp" tôi viết ở bản trước là SAI, và sai theo hướng ngược
+hẳn.** Nó là ước lượng đọc lướt, không phải phép đếm. Đếm thật cả 54 bài:
+
+| | Số bài |
+|---|---|
+| không đụng tới tệp | 39 |
+| **tách riêng** một lớp lo tệp | **11** |
+| **gộp** phần tệp vào lớp nghiệp vụ | **4** |
+
+Bốn bài gộp là `L.P0023` (`FruitManager`, `OrderManager`), `S.P0057`
+(`UserManager`), `S.P0058` (`DictionaryManager`), `S.P0073` (`ExpenseManager`).
+Mười một bài tách riêng: `VehicleFile` · `DataStore` (P0014 và P0015) ·
+`DocumentFileManager` · `FileProcessor` · `FileManager` · `FileProcessing` ·
+`CSVFormatter` · `WordSearcher` · `CopyManager` · `ZipManager`.
+
+Nên **ý** của hình vẽ (tách riêng một lớp lo tệp) hoá ra là đa số, không phải
+thiểu số. Cái sai của hình vẽ nằm ở chỗ khác, và là bốn chỗ:
+
+| Hình vẽ cũ nói | Mã thật |
+|---|---|
+| `src/fruitshop/` — một gói phẳng | **không một bài nào trong 54** xếp phẳng; tất cả dùng `entity`/`bo`/`controller`/`ui`/`utils` (`ui` 54/54, `utils` 50, `bo` 42, `entity` 34, `controller` 11) |
+| `FileHelper.java  UTILITY` | cả 11 lớp lo tệp đều nằm trong **`bo/`**, không lần nào ở `utils/`, và không lần nào tên là `FileHelper` |
+| `FruitManager` / `OrderManager` là **CONTROLLER** | ở `L.P0023` thật, hai lớp đó nằm trong `bo/`; controller là `ShopController` |
+| bảng tầng: controller **"tuyệt đối KHÔNG đọc bàn phím"** | cả 11 controller trong 54 bài đều gọi `Validator` để đọc **và** in ra màn hình. Thứ phải im lặng là `bo` |
+
+Sơ đồ mermaid cũng vẽ sai một mũi tên: `Controller → File`. Trong mã thì
+`controller → bo → tệp`.
+
+**Đã sửa** — vẽ lại bằng chính `L.P0023` (đề "Fruit Shop" 350 LOC, đúng cái mà
+hình cũ đang phác), kèm quy tắc gộp/tách đã đo:
+
+* `lesson/part9_files.py` — bảng tầng viết lại theo năm thư mục thật, sơ đồ
+  mermaid nối lại đúng chiều, cây thư mục thay bằng bố cục 9 tệp của P0023,
+  thêm mục *"Where the file reading and writing goes"*.
+* `lesson/part1_intro.py` — cây project NetBeans cũng đang vẽ gói phẳng
+  `doctormanagement/`; thay bằng `entity`/`bo`/`utils`/`ui` của P0055 thật.
+* `lesson/part11_defence.py` — stack trace mẫu mang tên gói phẳng; đổi sang
+  `bo.DoctorHash` / `ui.Main`.
+* `lesson/part4_menu.py` — ví dụ đặt tên gói đổi sang gói có thật.
+* `lesson/part5_validation.py` — nói rõ lớp này tên `Validator` ở 48/54 bài,
+  đề nào tự đặt tên thì theo đề.
+* `quyTacThay.ts`, `AUTHORING-BRIEF.md`, `content/academy/LAB211.mjs` — thêm
+  cùng một đoạn "đọc/ghi tệp thuộc về `bo`", để ba nơi giữ quy tắc không lệch
+  nhau.
+
+Quy tắc phát biểu ra: **gộp** khi một `bo` giữ một tệp của một entity; **tách**
+khi nhiều `bo` dùng chung một tệp (`DataStore` phục vụ bốn store ở P0014/P0015)
+hoặc khi chính định dạng tệp mới là đề bài (zip, CSV, sao chép, tìm từ). Và
+không bao giờ để ở `utils/`: thứ duy nhất ghi tệp ở đó trong cả 54 bài là
+`SampleData`, lớp tạo dữ liệu mẫu cho lần chạy đầu.
+
+Kiểm lại sau khi sửa: `python3 main.py` dựng lại `blocks.json` (272 khối), và
+`verify_java.py java.json` — **40/40 đoạn Java biên dịch được, 30 lượt chạy
+thật khớp output**.
+
+---
+
+## 5. Chấm 54 bài theo thước SOLID (tham khảo — LAB211 không đòi)
+
+| | Trạng thái |
+|---|---|
+| **S** Single Responsibility | Tốt. §4.2 (3 bài `bo` in) đã sửa; §4.6 hoá ra là hình vẽ sai chứ không phải mã sai — 11/15 bài có tệp đã tách riêng lớp lo tệp |
+| **O** Open/Closed | Tốt — `Shape`/`Bee`/`Person` đều là `abstract` + lớp con tự lo, không có `if (kiểu == …)` |
+| **L** Liskov | Tốt — không có lớp con nào ném `UnsupportedOperation` hay đổi nghĩa hợp đồng |
+| **I** Interface Segregation | Chỉ 3 bài có `interface` (`Soundable`, `Persistable` ×2), đều nhỏ và đúng chỗ. Đề không đòi thêm |
+| **D** Dependency Inversion | Hầu như không có — `controller` phụ thuộc thẳng lớp `bo` cụ thể. **Đúng với quy mô LAB211**; nhét DI vào đây là over-engineering và sẽ bị trừ điểm chứ không được cộng |
+
+---
+
+## 6. Việc đã làm trong lần kiểm này
+
+* Vá `Locale.US` — 21 chỗ / 16 file / 8 bài. Verify xanh dưới `en_US`, `vi_VN`, `de_DE`.
+* Sửa thẻ link bài Academy 1.1 → P0056 (project thật sự có đủ 5 tầng).
+* Thêm `solkit.verify_all_locales()` — chốt chạy cả hai locale, và đã **kiểm
+  ngược chính cái chốt** (tháo `Locale.US` ra thì nó đỏ đúng chỗ) trước khi tin nó.
+* Gỡ tầng `bo` khỏi P0054, P0063, P0068 và đưa các phương thức Guidelines nêu
+  tên vào `ui/Main` đúng như đề nói — kèm sửa chữ ký `sortStudent` của P0068 và
+  viết lại ba walkthrough (§4.2).
+* Phát biểu lại quy tắc tầng theo **thứ chương trình LÀM**, bỏ hẳn chỗ tự mâu
+  thuẫn ở n = 4 — sau khi hai phát biểu thử đầu tiên bị chính phép đo bác bỏ.
+  Sửa đồng bộ ở năm chỗ. Đúng quy tắc nay **51/54** (§4.1).
+* Sửa tên phương thức/lớp cho khớp đề ở **P0058, P0053, P0055**, và thêm phép
+  kiểm `khopchuky.py` soát cả 54 bài — thứ `javac` không bao giờ thấy (§3.3).
+* Đọc lại cho đúng cụm **"in startup code"**: nó KHÔNG tự nó quyết định lớp nào,
+  và P0055 là phản chứng nằm ngay trong cùng một đề (§3.4).
+* Vẽ lại bố cục ở Part 12 bằng chính `L.P0023` thay cho gói phẳng `fruitshop/`
+  tưởng tượng, sửa cùng lối vẽ ấy ở Part 1 / Part 4 / Part 11, và **sửa con số
+  "15 bài gộp" của chính tôi thành 4** sau khi đếm thật (§4.6).
+
+## 7. Việc đề nghị làm tiếp
+
+**Hết, và lần này là hết thật.** Mọi mục của bản đầu đã đóng — cái sửa được thì
+đã sửa, cái hoá ra tôi đề nghị sai thì đã rút và ghi lại vì sao:
+
+| | Kết cục |
+|---|---|
+| §3.1 Locale | đã vá 21 chỗ, thêm chốt hai locale |
+| §3.2 Slide 1.1 chỉ sai project | đã trỏ sang P0056 |
+| §3.3 Tên không khớp đề | đã sửa 3 bài, thêm `khopchuky.py` |
+| §3.4 "in startup code" | đã đọc lại cho đúng, sửa 4 chỗ |
+| §4.1 Quy tắc tầng | đã phát biểu lại theo phép đo |
+| §4.2 `bo` in ra màn hình | đã gỡ tầng `bo` khỏi 3 bài |
+| §4.3 `Serializable` | đã nới quy tắc; mã giữ nguyên có chủ đích |
+| §4.4 entity in ở P0061 | đã thêm đoạn giải thích + câu trả lời vấn đáp |
+| §4.5 `System.exit()` | đã đổi sang exception, kèm 2 lượt chạy chứng minh |
+| §4.6 hình vẽ bố cục Part 12 | đã vẽ lại theo P0023 thật; con số "15 bài gộp" của tôi là sai, thật ra 4 |
+| ~~thêm controller cho P0080~~ | rút: phép đo cho thấy P0080 đúng |
+| ~~thêm controller cho P0073/P0055/P0058~~ | rút: lỗi thật là tên không khớp đề |
+
+§4.6 là mục cuối, và nó dạy lại đúng bài học của §4.1: **tôi đã viết "15 lời
+giải gộp phần tệp vào `bo`" mà chưa đếm.** Đếm thật thì 11 bài tách riêng, 4
+bài gộp — ngược hẳn. Mã không sai; hình vẽ sai, và sai ở bốn chỗ khác hẳn chỗ
+tôi tưởng (gói phẳng, `FileHelper` đặt ở `utils`, `FruitManager` gắn nhãn
+CONTROLLER, và dòng "controller tuyệt đối không đọc bàn phím" trong khi cả 11
+controller đều đọc). Đã vẽ lại bằng chính `L.P0023`.
+
+Và một việc không bao giờ đóng: **giữ lượt verify dưới locale `vi_VN`** — đó là
+thứ duy nhất bắt được §3.1, và nó là locale của máy chấm.

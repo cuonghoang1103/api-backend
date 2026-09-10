@@ -228,3 +228,89 @@ export interface SkillCoverageResponse {
   totalExercises: number;
   solvedExercises: number;
 }
+
+// ─── Phòng Lab ──────────────────────────────────────────────────
+// Chọn một nhóm bài trong track, đặt mục tiêu LOC, làm từng bài có gia sư AI
+// kèm và một vòng nộp .zip cho AI chấm thay thầy.
+
+export type LabRoomItemStatus = 'PENDING' | 'IN_PROGRESS' | 'PASSED';
+
+export interface LabRoomItem {
+  id: number;
+  exerciseId: number;
+  slug: string;
+  title: string;
+  difficulty: CodeDifficulty;
+  estimatedMinutes: number | null;
+  /** LOC chốt lúc chọn — cố ý KHÔNG đọc lại từ đề, xem chú thích ở service. */
+  loc: number;
+  status: LabRoomItemStatus;
+  passedAt: string | null;
+  coGioiThieu: boolean;
+  coKetQuaCham: boolean;
+  coHuongDanReview: boolean;
+}
+
+export interface LabRoom {
+  id: number;
+  name: string;
+  locGoal: number;
+  /** Cộng dồn LOC của những bài ĐÃ ĐẠT. */
+  locDaDat: number;
+  /** Cộng dồn LOC của mọi bài đã chọn vào phòng. */
+  locDaChon: number;
+  soBai: number;
+  soBaiDat: number;
+  activeItemId: number | null;
+  track: { id: number; slug: string; name: string; color: string | null };
+  createdAt: string;
+  updatedAt: string;
+  items: LabRoomItem[];
+}
+
+export type LabRoomSummary = Omit<LabRoom, 'items' | 'activeItemId' | 'createdAt'>;
+
+export interface LabRoomIntro {
+  tongQuan: string;
+  yeuCauBatBuoc: string[];
+  kienTruc: {
+    tang: Array<{ goi: string; file: string; viec: string }>;
+    viSao: string;
+  };
+  cacBuoc: string[];
+  bayCanTranh: string[];
+  cauHoiVanDap: string[];
+  locUocTinh: number;
+}
+
+export interface LabRoomReview {
+  dat: boolean;
+  diem: number | null;
+  chay: {
+    bienDichDuoc: boolean | null;
+    lyDo?: string | null;
+    khopManHinh: 'khop' | 'lech' | 'khong-chac';
+    lechChoNao?: string[];
+  };
+  theoQuyTac: Array<{ muc: string; ket: 'dat' | 'thieu' | 'sai'; chiTiet: string; file?: string | null; dong?: number | null }>;
+  thieuSoVoiDe: string[];
+  hieuBaiKhong: Array<{ hoi: string; viSao: string; traLoiTot: string }>;
+  phaiSuaTruocKhiNop: string[];
+  diemManh: string[];
+  nhanXet: string;
+  chamLuc: string;
+}
+
+export interface LabRoomGuide {
+  moDau: string;
+  thuTuTrinhBay: Array<{ buoc: string; noiGi: string; moFileNao: string; viSao: string }>;
+  chiVaoDau: Array<{ khiThayHoi: string; moFileNao: string; noiGi: string }>;
+  cauHoiChacChanBiHoi: Array<{ hoi: string; traLoiNgan: string }>;
+  dungLam: string[];
+  chotHa: string;
+}
+
+export interface LabRoomChatTurn {
+  role: 'user' | 'assistant';
+  content: string;
+}

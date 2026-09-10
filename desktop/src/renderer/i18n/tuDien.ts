@@ -721,4 +721,24 @@ export const TU_DIEN: Record<string, string> = {
   'Odin đang cập nhật kế hoạch…': 'Odin is updating the plan…',
   'Odin đang gọi công cụ ngoài…': 'Odin is calling an external tool…',
   'Odin đang chạy…': 'Odin is working…',
+  // ── Thanh công cụ AI Code ───────────────────────────────
+  'Trình duyệt: BẬT': 'Browser: ON',
+  'Trình duyệt: tắt': 'Browser: off',
+  'Khung web': 'Web panel',
+  'Khung web: MỞ': 'Web panel: OPEN',
+  'Đóng khung trình duyệt bên phải': 'Close the browser panel on the right',
+  'Mở trình duyệt ngay cạnh bảng ghi — xem trang chạy trong lúc agent sửa mã':
+    'Open the browser next to the transcript — watch your page while the agent edits code',
+  'Bảng lệnh: MỞ': 'Command runner: OPEN',
+  'Ghi chú: BẬT': 'Notes: ON',
+  'Ghi chú: tắt': 'Notes: off',
+  'Chưa chọn thư mục dự án': 'No project folder chosen',
+  'Chọn thư mục dự án…': 'Choose a project folder…',
+  'Chọn thư mục dự án trước đã — agent chỉ đọc được trong đó':
+    'Choose a project folder first — that is the only place the agent can read',
+  'Thả file hoặc thư mục vào đây — agent sẽ đọc được nó':
+    'Drop a file or folder here — the agent will be able to read it',
+  'Chưa có file nào để hoàn tác trong việc này.': 'No files to undo in this task.',
+  'Tab này chưa mở dự án nào.': 'This tab has no project open.',
+  'Không có quyền nào bị thu hồi.': 'No permissions were revoked.',
 };

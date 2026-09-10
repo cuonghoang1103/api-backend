@@ -9,6 +9,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { ListMusic, Loader2, Play, Plus, Trash2, X } from 'lucide-react';
 import { useSession } from '../../auth/session';
 import { clock, type Track } from './player';
+import { useDich } from '../../i18n';
 import {
   boBaiKhoiPlaylist, layDanhSachPlaylist, layPlaylist, taoPlaylist, tongThoiLuong,
   xoaPlaylist, type Playlist,
@@ -25,6 +26,7 @@ export function PlaylistBar({
   /** Đổi giá trị này là buộc nạp lại (ví dụ vừa thêm bài vào playlist). */
   moiThem: number;
 }) {
+  const { dich } = useDich();
   const { api } = useSession();
   const [danhSach, setDanhSach] = useState<Playlist[]>([]);
   const [dangMo, setDangMo] = useState<Playlist | null>(null);
@@ -122,7 +124,7 @@ export function PlaylistBar({
 
         {bai.length === 0 ? (
           <p className="ct-muted" style={{ padding: '10px 4px' }}>
-            Playlist này chưa có bài nào. Mở một bài rồi bấm “Thêm vào playlist” ở màn hình đang phát.
+            {dich('Playlist này chưa có bài nào. Mở một bài rồi bấm “Thêm vào playlist” ở màn hình đang phát.')}
           </p>
         ) : (
           <ol className="ct-tracks">
@@ -147,7 +149,7 @@ export function PlaylistBar({
                   onClick={() => void boBai(t.id)}
                   disabled={ban}
                   aria-label={`Bỏ ${t.title} khỏi playlist`}
-                  title="Bỏ khỏi playlist"
+                  title={dich('Bỏ khỏi playlist')}
                 >
                   <X size={15} aria-hidden />
                 </button>
@@ -197,23 +199,23 @@ export function PlaylistBar({
                 if (e.key === 'Enter') void tao();
                 if (e.key === 'Escape') { setDangTao(false); setTen(''); }
               }}
-              placeholder="Tên playlist…"
-              aria-label="Tên playlist mới"
+              placeholder={dich('Tên playlist…')}
+              aria-label={dich('Tên playlist mới')}
             />
             <div style={{ display: 'flex', gap: 6 }}>
               <button type="button" className="ct-btn" onClick={() => void tao()} disabled={ban || !ten.trim()}>
                 {ban ? <Loader2 size={14} className="ct-spin" aria-hidden /> : 'Tạo'}
               </button>
               <button type="button" className="ct-btn ct-btn-ghost" onClick={() => { setDangTao(false); setTen(''); }}>
-                Huỷ
+                {dich('Huỷ')}
               </button>
             </div>
           </div>
         ) : (
           <button type="button" className="ct-pl-card ct-pl-card-them" onClick={() => setDangTao(true)}>
             <span className="ct-pl-card-art ct-pl-blank"><Plus size={26} /></span>
-            <span className="ct-pl-card-name">Tạo playlist</span>
-            <span className="ct-pl-card-sub">danh sách của riêng bạn</span>
+            <span className="ct-pl-card-name">{dich('Tạo playlist')}</span>
+            <span className="ct-pl-card-sub">{dich('danh sách của riêng bạn')}</span>
           </button>
         )}
       </div>

@@ -15,6 +15,8 @@ import { Loader2, Volume2 } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { docThanhTieng, layDanhSachGiong, ngungNoi, phatTieng, type Giong, datTocDoDoc } from './giongNoi';
+import { useDich } from '../../i18n';
+import { Chu } from '../../i18n/Chu';
 
 const CAU_THU: Record<'vi' | 'en', string> = {
   vi: 'Xin chào, mình là Odin. Mình sẽ đọc câu trả lời bằng giọng này.',
@@ -29,6 +31,7 @@ const CAU_THU: Record<'vi' | 'en', string> = {
 const TOC_DO = [0.5, 0.75, 0.85, 0.95, 1, 1.25, 1.5];
 
 export function OdinPanel() {
+  const { dich } = useDich();
   const { settings, setSetting } = useAppState();
   const { api } = useSession();
   const [giong, setGiong] = useState<Giong[]>([]);
@@ -77,27 +80,27 @@ export function OdinPanel() {
 
   return (
     <section className="ct-section">
-      <h2>Trợ lý Odin</h2>
+      <h2>{dich('Trợ lý Odin')}</h2>
 
       <dl className="ct-rows">
         <div className="ct-row">
-          <dt>Đọc câu trả lời thành tiếng</dt>
+          <dt>{dich('Đọc câu trả lời thành tiếng')}</dt>
           <dd>
             <div className="ct-segmented">
               <button type="button" data-active={noiThanhTieng}
-                onClick={() => setSetting('odinNoiThanhTieng', true)}>Bật</button>
+                onClick={() => setSetting('odinNoiThanhTieng', true)}>{dich('Bật')}</button>
               <button type="button" data-active={!noiThanhTieng}
-                onClick={() => { setSetting('odinNoiThanhTieng', false); ngungNoi(); }}>Tắt</button>
+                onClick={() => { setSetting('odinNoiThanhTieng', false); ngungNoi(); }}>{dich('Tắt')}</button>
             </div>
           </dd>
         </div>
 
         <div className="ct-row">
-          <dt>Ngôn ngữ</dt>
+          <dt>{dich('Ngôn ngữ')}</dt>
           <dd>
             <div className="ct-segmented">
               <button type="button" data-active={ngonNgu === 'vi'}
-                onClick={() => setSetting('odinNgonNgu', 'vi')}>Tiếng Việt</button>
+                onClick={() => setSetting('odinNgonNgu', 'vi')}>{dich('Tiếng Việt')}</button>
               <button type="button" data-active={ngonNgu === 'en'}
                 onClick={() => setSetting('odinNgonNgu', 'en')}>English</button>
             </div>
@@ -105,7 +108,7 @@ export function OdinPanel() {
         </div>
 
         <div className="ct-row">
-          <dt>Ngắt lời bằng giọng</dt>
+          <dt>{dich('Ngắt lời bằng giọng')}</dt>
           <dd>
             <label className="ct-congtac">
               <input
@@ -116,16 +119,13 @@ export function OdinPanel() {
               <span>{settings.odinCatLoi !== false ? 'Bật' : 'Tắt'}</span>
             </label>
             <p className="ct-ghichu">
-              Trong màn nói chuyện, cứ nói chen vào là trợ lý im ngay — không phải
-              chạm. Dùng <strong>tai nghe</strong> thì chính xác nhất; loa ngoài mở
-              to có thể rò tiếng vào micro làm nó tự ngắt lời chính mình, khi đó
-              hãy tắt mục này.
+              <Chu cau="Trong màn nói chuyện, cứ nói chen vào là trợ lý im ngay — không phải chạm. Dùng **tai nghe** thì chính xác nhất; loa ngoài mở to có thể rò tiếng vào micro làm nó tự ngắt lời chính mình, khi đó hãy tắt mục này." />
             </p>
           </dd>
         </div>
 
         <div className="ct-row">
-          <dt>Tốc độ đọc</dt>
+          <dt>{dich('Tốc độ đọc')}</dt>
           <dd>
             <div className="ct-tocdo">
               {TOC_DO.map((v) => (
@@ -141,8 +141,7 @@ export function OdinPanel() {
               ))}
             </div>
             <p className="ct-ghichu">
-              Áp cho mọi giọng, đổi là ăn ngay — không phải đọc lại. Giữ cao độ
-              nên chậm lại không thành giọng trầm đục.
+              {dich('Áp cho mọi giọng, đổi là ăn ngay — không phải đọc lại. Giữ cao độ nên chậm lại không thành giọng trầm đục.')}
             </p>
           </dd>
         </div>
@@ -159,7 +158,7 @@ export function OdinPanel() {
                 border: '1px solid var(--ct-border)', borderRadius: 'var(--ct-radius-sm)',
                 background: 'var(--ct-bg)', color: 'var(--ct-text)' }}
             >
-              <option value="">— giọng mặc định của máy chủ —</option>
+              <option value="">{dich('— giọng mặc định của máy chủ —')}</option>
               {theoNgonNgu.map((g) => (
                 <option key={g.id} value={g.id}>{g.label || g.id}</option>
               ))}
@@ -172,16 +171,16 @@ export function OdinPanel() {
         </div>
       </dl>
 
-      {dangTai && <p className="ct-muted">Đang lấy danh sách giọng từ máy chủ…</p>}
+      {dangTai && <p className="ct-muted">{dich('Đang lấy danh sách giọng từ máy chủ…')}</p>}
       {!dangTai && theoNgonNgu.length === 0 && !loi && (
         <p className="ct-muted">
-          Máy chủ chưa có giọng nào cho ngôn ngữ này.
+          {dich('Máy chủ chưa có giọng nào cho ngôn ngữ này.')}
         </p>
       )}
       {loi && (
         <div className="ct-notice" data-tone="err" role="alert">
           <span>{loi}</span>
-          <button type="button" className="ct-linklike" onClick={() => setLoi(null)}>Đóng</button>
+          <button type="button" className="ct-linklike" onClick={() => setLoi(null)}>{dich('Đóng')}</button>
         </div>
       )}
     </section>

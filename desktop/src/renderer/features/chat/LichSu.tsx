@@ -15,7 +15,7 @@
  */
 import { Clock, FolderOpen, MessagesSquare, Trash2, X } from 'lucide-react';
 import type { AgentPhien } from '../../../shared/ipc';
-import { useT } from '../../i18n';
+import { useDich } from '../../i18n';
 import { Chu } from '../../i18n/Chu';
 
 /** "3 phút trước", "hôm qua" — mốc tuyệt đối không giúp người ta nhận ra việc nào. */
@@ -42,23 +42,23 @@ export function LichSu({
   onXoa: (id: string) => void;
   onDong: () => void;
 }) {
-  const { t } = useT();
+  const { dich } = useDich();
   return (
     <div className="ct-lichsu-phu" onClick={onDong}>
       {/* Chặn nổi bọt: bấm TRONG bảng không được đóng bảng. */}
       <div className="ct-lichsu" onClick={(e) => e.stopPropagation()}>
         <div className="ct-lichsu-dau">
           <MessagesSquare size={15} aria-hidden />
-          <strong>{t('Việc đã lưu')}</strong>
+          <strong>{dich('Việc đã lưu')}</strong>
           <span className="ct-muted-inline">{phien.length}</span>
-          <button type="button" className="ct-agent-icon" onClick={onDong} title={t('Đóng')}>
+          <button type="button" className="ct-agent-icon" onClick={onDong} title={dich('Đóng')}>
             <X size={14} aria-hidden />
           </button>
         </div>
 
         {phien.length === 0 ? (
           <p className="ct-muted" style={{ padding: '14px 4px', margin: 0 }}>
-            {t('Chưa có việc nào được lưu. Mỗi việc bạn hỏi sẽ tự lưu lại sau khi agent chạy xong.')}
+            {dich('Chưa có việc nào được lưu. Mỗi việc bạn hỏi sẽ tự lưu lại sau khi agent chạy xong.')}
           </p>
         ) : (
           <ul className="ct-lichsu-ds">
@@ -75,7 +75,7 @@ export function LichSu({
                   type="button"
                   className="ct-agent-icon"
                   onClick={() => onXoa(p.id)}
-                  title={t('Xoá việc này khỏi danh sách (không đụng tới mã nguồn)')}
+                  title={dich('Xoá việc này khỏi danh sách (không đụng tới mã nguồn)')}
                 >
                   <Trash2 size={13} aria-hidden />
                 </button>

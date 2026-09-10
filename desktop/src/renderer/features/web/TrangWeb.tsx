@@ -32,6 +32,11 @@ import { configureWebApi } from '../../shims/web-api-adapter';
 import { LoiChuyenHuong, LoiKhongTimThay, ThamSoTuyen } from '../../shims/next-navigation';
 import TanStackQueryProvider from '@/components/providers/TanStackQueryProvider';
 import { khopTuyenWeb } from './dinhTuyenWeb';
+/* ⚠️ `dich` (hàm tầm mô-đun) chứ không chỉ `useDich`: `RanhGioiTuyen` là CLASS
+   component — ranh giới lỗi bắt buộc phải là class — và hook không gọi được
+   trong `render()` của nó. Hàm tầm mô-đun đọc thẳng ngôn ngữ hiện tại; đổi
+   ngôn ngữ giữa lúc màn hình lỗi đang hiện là trường hợp không cần lo. */
+import { dich, useDich } from '../../i18n';
 
 function DangMo({ ten }: { ten: string }) {
   return (
@@ -187,8 +192,8 @@ class RanhGioiTuyen extends Component<
       return (
         <div className="ct-page">
           <div className="ct-empty">
-            <h1>Không tìm thấy</h1>
-            <p>Mục bạn mở không còn tồn tại, hoặc đường dẫn đã cũ.</p>
+            <h1>{dich('Không tìm thấy')}</h1>
+            <p>{dich('Mục bạn mở không còn tồn tại, hoặc đường dẫn đã cũ.')}</p>
           </div>
         </div>
       );
@@ -197,7 +202,7 @@ class RanhGioiTuyen extends Component<
     return (
       <div className="ct-page">
         <div className="ct-empty">
-          <h1>Trang gặp lỗi</h1>
+          <h1>{dich('Trang gặp lỗi')}</h1>
           <p>{loi instanceof Error ? loi.message : String(loi)}</p>
         </div>
       </div>
@@ -210,6 +215,7 @@ class RanhGioiTuyen extends Component<
  * Dùng cho Ngoại ngữ và Lộ trình — hai cây có trang con.
  */
 export function TrangWebTheoTuyen({ ten }: { ten: string }) {
+  const { dich } = useDich();
   const { route, navigate } = useAppState();
   const san = useCauNoiWeb();
   const khop = useMemo(() => khopTuyenWeb(route), [route]);
@@ -222,8 +228,8 @@ export function TrangWebTheoTuyen({ ten }: { ten: string }) {
     return (
       <div className="ct-page">
         <div className="ct-empty">
-          <h1>Không tìm thấy</h1>
-          <p>Không có trang cho đường dẫn <code>{route}</code>.</p>
+          <h1>{dich('Không tìm thấy')}</h1>
+          <p>{dich('Không có trang cho đường dẫn')} <code>{route}</code>.</p>
           <button type="button" className="ct-btn ct-btn-ghost" onClick={() => navigate(goc)}>
             Về {ten}
           </button>

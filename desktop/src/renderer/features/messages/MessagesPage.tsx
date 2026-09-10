@@ -29,6 +29,7 @@ import { useSession } from '../../auth/session';
 import KhungGoi from './KhungGoi';
 import { laySocket } from '../../realtime/socket';
 import { OfflineUnavailableError, swr } from '../../offline/cache';
+import { useDich } from '../../i18n';
 
 interface NguoiKia {
   id: number;
@@ -79,6 +80,7 @@ function gioNgan(iso: string): string {
 }
 
 export function MessagesPage() {
+  const { dich } = useDich();
   const { online } = useAppState();
   const { api, userId } = useSession();
   /** Bộ đếm bấm nút gọi — xem ghi chú ở `KhungGoi`. */
@@ -201,7 +203,7 @@ export function MessagesPage() {
     <div className="ct-page ct-tn" style={{ maxWidth: 1000 }}>
       <div className="ct-page-head" style={{ marginBottom: 12 }}>
         <div>
-          <h1>Tin nhắn</h1>
+          <h1>{dich('Tin nhắn')}</h1>
           <p className="ct-muted" style={{ margin: 0 }}>
             {ds.length ? `${ds.length} cuộc trò chuyện` : 'Trò chuyện với bạn bè và hỗ trợ'}
           </p>
@@ -220,11 +222,11 @@ export function MessagesPage() {
       <div className="ct-tn-khung" data-mo={dangMo !== null}>
         {/* ── Danh sách cuộc ── */}
         <aside className="ct-tn-ds">
-          {dangTai && ds.length === 0 && <p className="ct-muted" style={{ padding: 12, fontSize: 13 }}>Đang tải…</p>}
+          {dangTai && ds.length === 0 && <p className="ct-muted" style={{ padding: 12, fontSize: 13 }}>{dich('Đang tải…')}</p>}
           {!dangTai && ds.length === 0 && (
             <div className="ct-empty" style={{ padding: 24 }}>
               <MessageSquare size={26} aria-hidden className="ct-empty-icon" />
-              <p>Chưa có cuộc trò chuyện nào.</p>
+              <p>{dich('Chưa có cuộc trò chuyện nào.')}</p>
             </div>
           )}
           {ds.map((c) => (
@@ -257,14 +259,14 @@ export function MessagesPage() {
           {dangMo === null ? (
             <div className="ct-empty" style={{ margin: 'auto' }}>
               <MessageSquare size={28} aria-hidden className="ct-empty-icon" />
-              <p>Chọn một cuộc trò chuyện để bắt đầu.</p>
+              <p>{dich('Chọn một cuộc trò chuyện để bắt đầu.')}</p>
             </div>
           ) : (
             <>
               <header className="ct-tn-hoi-dau">
                 {/* Nút quay lại chỉ có nghĩa khi cửa sổ hẹp (một cột) — CSS ẩn
                     nó ở cửa sổ rộng, nơi hai cột hiện cùng lúc. */}
-                <button type="button" className="ct-tn-lui" onClick={() => datDangMo(null)} aria-label="Quay lại">
+                <button type="button" className="ct-tn-lui" onClick={() => datDangMo(null)} aria-label={dich('Quay lại')}>
                   <ArrowLeft size={16} aria-hidden />
                 </button>
                 <Avatar p={cuocDangMo?.peer ?? null} nho />
@@ -276,8 +278,8 @@ export function MessagesPage() {
                     type="button"
                     className="ct-btn ct-btn-ghost ct-tn-goi"
                     onClick={() => datLanBamGoi((n) => n + 1)}
-                    aria-label="Gọi thoại"
-                    title="Gọi thoại"
+                    aria-label={dich('Gọi thoại')}
+                    title={dich('Gọi thoại')}
                   >
                     <Phone size={15} aria-hidden />
                   </button>
@@ -287,7 +289,7 @@ export function MessagesPage() {
               <div className="ct-tn-cuon" ref={cuonRef}>
                 {tin.length === 0 && (
                   <p className="ct-muted" style={{ fontSize: 13, textAlign: 'center', padding: 20 }}>
-                    Chưa có tin nhắn. Gõ câu đầu tiên bên dưới.
+                    {dich('Chưa có tin nhắn. Gõ câu đầu tiên bên dưới.')}
                   </p>
                 )}
                 {tin.map((t) => {
@@ -295,7 +297,7 @@ export function MessagesPage() {
                   if (t.recalled || t.deleted) {
                     return (
                       <div key={t.id} className="ct-tn-tin" data-toi={cuaToi}>
-                        <em className="ct-tn-thu-hoi">Tin nhắn đã được thu hồi</em>
+                        <em className="ct-tn-thu-hoi">{dich('Tin nhắn đã được thu hồi')}</em>
                       </div>
                     );
                   }
@@ -314,7 +316,7 @@ export function MessagesPage() {
               <div className="ct-tn-soan">
                 <input
                   value={nhap}
-                  placeholder="Nhắn tin…"
+                  placeholder={dich('Nhắn tin…')}
                   maxLength={4000}
                   onChange={(e) => datNhap(e.target.value)}
                   onKeyDown={(e) => {

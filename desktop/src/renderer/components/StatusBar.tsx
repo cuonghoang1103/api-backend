@@ -11,7 +11,7 @@ import { useAppState } from '../app-state';
 import { useSession } from '../auth/session';
 import { useSync } from '../offline/use-sync';
 import { makeTransport } from '../offline/transport';
-import { useT } from '../i18n';
+import { useDich } from '../i18n';
 
 const ZOOM_STEPS = [0.8, 0.9, 1, 1.1, 1.25, 1.5] as const;
 
@@ -28,7 +28,7 @@ const TONE: Record<string, 'ok' | 'warn' | 'err' | 'muted'> = {
 };
 
 export function StatusBar() {
-  const { t } = useT();
+  const { dich } = useDich();
   const { online, settings, setSetting } = useAppState();
   const { userId, api } = useSession();
   const bridge = window.cuongthai;
@@ -59,7 +59,7 @@ export function StatusBar() {
     <footer className="ct-statusbar">
       <span className="ct-badge" data-state={online ? 'online' : 'offline'}>
         {online ? <Wifi size={13} aria-hidden /> : <WifiOff size={13} aria-hidden />}
-        {online ? t('Trực tuyến') : t('Ngoại tuyến')}
+        {online ? dich('Trực tuyến') : dich('Ngoại tuyến')}
       </span>
 
       <button
@@ -68,7 +68,7 @@ export function StatusBar() {
         data-tone={TONE[sync.state] ?? 'muted'}
         disabled={!canAct}
         onClick={() => void (sync.state === 'that-bai' ? sync.retry() : sync.syncNow())}
-        title={canAct ? t('Đồng bộ ngay') : undefined}
+        title={canAct ? dich('Đồng bộ ngay') : undefined}
       >
         <RefreshCw
           size={13}
@@ -82,7 +82,7 @@ export function StatusBar() {
         <button
           type="button"
           onClick={() => changeZoom(-1)}
-          aria-label={t('Thu nhỏ')}
+          aria-label={dich('Thu nhỏ')}
           disabled={zoom <= ZOOM_STEPS[0]}
         >
           <Minus size={13} aria-hidden />
@@ -91,7 +91,7 @@ export function StatusBar() {
         <button
           type="button"
           onClick={() => changeZoom(1)}
-          aria-label={t('Phóng to')}
+          aria-label={dich('Phóng to')}
           disabled={zoom >= ZOOM_STEPS[ZOOM_STEPS.length - 1]!}
         >
           <Plus size={13} aria-hidden />

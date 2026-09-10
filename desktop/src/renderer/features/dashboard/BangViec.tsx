@@ -25,6 +25,7 @@ import {
   Plus, Repeat, StickyNote, Trash2, Volume2, VolumeX,
 } from 'lucide-react';
 import { dangBatAm, datBatAm, keuBoTick, keuThem, keuThu, keuXongHet, keuXongViec } from './amThanh';
+import { useDich } from '../../i18n';
 
 export type Scope = 'today' | 'week' | 'month' | 'quarter' | 'year';
 
@@ -121,6 +122,7 @@ function DongViec({ t, con, onSua, onXoa, onThemCon, keo }: {
     dichVao: Task['id'] | null;
   };
 }) {
+  const { dich } = useDich();
   const [moGhiChu, datMoGhiChu] = useState(false);
   const [ghiChu, datGhiChu] = useState(t.note ?? '');
   const [ten, datTen] = useState(t.title);
@@ -183,7 +185,7 @@ function DongViec({ t, con, onSua, onXoa, onThemCon, keo }: {
         ) : (
           /* Bấm vào chữ để sửa — không cần nút "sửa" riêng. Một dòng việc đã có
              bốn nút rồi; thêm nút thứ năm thì hàng nút dài hơn cả tên việc. */
-          <button type="button" className="ct-viec-ten" onClick={() => datSuaTen(true)} title="Bấm để sửa">
+          <button type="button" className="ct-viec-ten" onClick={() => datSuaTen(true)} title={dich('Bấm để sửa')}>
             {t.title}
           </button>
         )}
@@ -209,11 +211,11 @@ function DongViec({ t, con, onSua, onXoa, onThemCon, keo }: {
         <span className="ct-viec-exp">+{t.exp}</span>
 
         <button type="button" className="ct-viec-nut" onClick={() => datMoGhiChu((v) => !v)}
-          aria-label="Ghi chú và cài đặt" title="Ghi chú, hạn, nhắc">
+          aria-label={dich('Ghi chú và cài đặt')} title={dich('Ghi chú, hạn, nhắc')}>
           <ChevronDown size={13} aria-hidden style={{ transform: moGhiChu ? 'rotate(180deg)' : 'none' }} />
         </button>
         <button type="button" className="ct-viec-nut ct-viec-xoa" onClick={() => onXoa(t)}
-          aria-label="Xoá việc" title="Xoá">
+          aria-label={dich('Xoá việc')} title={dich('Xoá')}>
           <Trash2 size={13} aria-hidden />
         </button>
       </div>
@@ -224,7 +226,7 @@ function DongViec({ t, con, onSua, onXoa, onThemCon, keo }: {
             className="ct-viec-ghichu"
             value={ghiChu}
             rows={3}
-            placeholder="Ghi chú cho việc này — bối cảnh, các bước, đường dẫn…"
+            placeholder={dich('Ghi chú cho việc này — bối cảnh, các bước, đường dẫn…')}
             onChange={(e) => datGhiChu(e.target.value)}
             /* Lưu lúc RỜI ô, không phải mỗi phím: gõ một đoạn ghi chú là hàng
                trăm lần gọi máy chủ nếu lưu theo từng ký tự. */
@@ -260,7 +262,7 @@ function DongViec({ t, con, onSua, onXoa, onThemCon, keo }: {
               <CornerDownRight size={12} aria-hidden />
               <input
                 value={nhapCon}
-                placeholder="Thêm một bước nhỏ…"
+                placeholder={dich('Thêm một bước nhỏ…')}
                 onChange={(e) => datNhapCon(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.nativeEvent.isComposing) return; // bộ gõ tiếng Việt dùng Enter để chốt chữ
@@ -295,6 +297,7 @@ export function BangViec({ tasks, pham, datPham, onThem, onSua, onXoa, onThemCon
   onThemCon: (cha: Task, ten: string) => void;
   onDoiThuTu: (ids: Array<Task['id']>) => void;
 }) {
+  const { dich } = useDich();
   const [nhap, datNhap] = useState('');
   const [dangThem, datDangThem] = useState(false);
   const [coTieng, datCoTieng] = useState(dangBatAm());
@@ -379,7 +382,7 @@ export function BangViec({ tasks, pham, datPham, onThem, onSua, onXoa, onThemCon
 
   return (
     <section className="ct-bangviec">
-      <div className="ct-bangviec-tab" role="tablist" aria-label="Phạm vi kế hoạch">
+      <div className="ct-bangviec-tab" role="tablist" aria-label={dich('Phạm vi kế hoạch')}>
         {PHAM_VI.map((p) => {
           const ds = tasks.filter((t) => t.scope === p.ma);
           const chuaXong = ds.filter((t) => !t.done).length;
@@ -439,7 +442,7 @@ export function BangViec({ tasks, pham, datPham, onThem, onSua, onXoa, onThemCon
 
       {sapXep.length === 0 ? (
         <p className="ct-bangviec-trong">
-          Chưa có gì ở đây. Gõ vào ô trên để thêm việc đầu tiên
+          {dich('Chưa có gì ở đây. Gõ vào ô trên để thêm việc đầu tiên')}
           {pham === 'today' ? ' cho hôm nay' : ''}.
         </p>
       ) : (

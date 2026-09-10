@@ -23,7 +23,7 @@ import {
 import { useAppState } from '../../app-state';
 import { MenuChamDoc, type MucMenu } from './MenuChamDoc';
 import { mauDuAn } from './mauDuAn';
-import { useT } from '../../i18n';
+import { useDich } from '../../i18n';
 
 export interface ThuMuc {
   id: string;
@@ -76,7 +76,7 @@ export function ThanhBenChat({
   onDoiTen: (id: string, ten: string) => void;
   onTachNhanh: (id: string) => void;
 }) {
-  const { t } = useT();
+  const { dich } = useDich();
   const { settings, setSetting } = useAppState();
   const [tim, datTim] = useState('');
   const [dangKeo, datDangKeo] = useState(false);
@@ -159,8 +159,8 @@ export function ThanhBenChat({
         type="button"
         className="ct-tb-mo"
         onClick={() => setSetting('chatThanhBenGap', false)}
-        title={t('Hiện lịch sử trò chuyện')}
-        aria-label={t('Hiện lịch sử trò chuyện')}
+        title={dich('Hiện lịch sử trò chuyện')}
+        aria-label={dich('Hiện lịch sử trò chuyện')}
       >
         <ChevronLeft size={14} aria-hidden style={{ transform: 'rotate(180deg)' }} />
       </button>
@@ -170,19 +170,19 @@ export function ThanhBenChat({
   return (
     <aside className="ct-tb" style={{ width: rong }} data-keo={dangKeo}>
       <div className="ct-tb-dau">
-        <button type="button" className="ct-tb-nut" onClick={onTaoMoi} title={t('Cuộc mới')}>
+        <button type="button" className="ct-tb-nut" onClick={onTaoMoi} title={dich('Cuộc mới')}>
           <MessageSquarePlus size={14} aria-hidden />
         </button>
         <div className="ct-tb-tim">
           <Search size={12} aria-hidden />
-          <input value={tim} placeholder={t('Tìm cuộc cũ…')} onChange={(e) => datTim(e.target.value)} />
+          <input value={tim} placeholder={dich('Tìm cuộc cũ…')} onChange={(e) => datTim(e.target.value)} />
         </div>
         <button
           type="button"
           className="ct-tb-nut"
           onClick={() => setSetting('chatThanhBenGap', true)}
-          title={t('Ẩn thanh bên')}
-          aria-label={t('Ẩn thanh bên')}
+          title={dich('Ẩn thanh bên')}
+          aria-label={dich('Ẩn thanh bên')}
         >
           <ChevronLeft size={14} aria-hidden />
         </button>
@@ -257,8 +257,8 @@ export function ThanhBenChat({
         data-dang={xemLuuTru}
       >
         {xemLuuTru
-          ? <><ChevronLeft size={12} aria-hidden /> {t('Về danh sách')}</>
-          : <><Archive size={12} aria-hidden /> {t('Kho lưu trữ')}</>}
+          ? <><ChevronLeft size={12} aria-hidden /> {dich('Về danh sách')}</>
+          : <><Archive size={12} aria-hidden /> {dich('Kho lưu trữ')}</>}
       </button>
 
       <div
@@ -267,7 +267,7 @@ export function ThanhBenChat({
         aria-orientation="vertical"
         onPointerDown={(e) => { keoRef.current = { x: e.clientX, rong }; datDangKeo(true); }}
         onDoubleClick={() => setSetting('chatThanhBenRong', RONG_MAC_DINH)}
-        title={t('Kéo để đổi bề rộng · bấm đúp để về mặc định')}
+        title={dich('Kéo để đổi bề rộng · bấm đúp để về mặc định')}
       />
     </aside>
   );

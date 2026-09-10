@@ -769,6 +769,40 @@ function Row({
   const inputRef = useRef<HTMLInputElement>(null);
   const pad = { paddingLeft: 8 + depth * 14 };
 
+  /*
+   * `useState(Boolean(datTenNgay))` một mình là ĐỦ MỎNG.
+   *
+   * Nó chỉ đọc cờ ở lần dựng ĐẦU của mỗi instance. Hôm nay nó vẫn chạy vì
+   * React 18 gộp `setTree` (trong `refreshTree`) và `setVuaTao` thành MỘT lượt
+   * dựng, nên hàng mới mount đã mang sẵn cờ `true`.
+   *
+   * ⚠️ Đó là một chi tiết CÀI ĐẶT, không phải hợp đồng. Chỉ cần một
+   * `flushSync`, một `await` chen vào giữa, hay một đổi thay trong cách React
+   * gộp — là hàng mount trước khi cờ bật, và ô đặt tên không bao giờ mở nữa,
+   * im lặng. Effect này làm cho việc "cờ bật sau khi mount" cũng chạy đúng.
+   *
+   * ⚠️ CHỈ MỞ, KHÔNG BAO GIỜ ĐÓNG. `vuaTao` tự xoá sau 1,5 giây; nếu effect
+   * này cũng đóng theo thì người dùng gõ chậm bị ô đóng ngang chừng.
+   *
+   * (Đo 10/09/2026: gỡ effect này ra, bộ đo bố cục VẪN xanh — tức nó là lớp
+   * chắn thứ hai, không phải bản vá cho lỗi người dùng đang gặp trên Windows.
+   * Lỗi ấy vẫn chưa dựng lại được ngoài Windows.)
+   */
+  useEffect(() => {
+    if (datTenNgay) { setVal(label); setEditing(true); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [datTenNgay]);
+
+  /* Tên đổi từ NƠI KHÁC (sửa tiêu đề trong trang, đồng bộ về) thì ô nhập phải
+     theo. `useState(label)` cũng chỉ đọc một lần — thiếu dòng này thì mở ô đổi
+     tên lần hai sẽ thấy tên CŨ, và bấm Enter là ghi đè ngược lại tên mới.
+     (Suy từ mã, chưa dựng lại được trên bộ đo — nhưng `useState` giữ giá trị
+     đầu là hành vi chắc chắn, không phải phỏng đoán.) */
+  useEffect(() => {
+    if (!editing) setVal(label);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [label]);
+
   // Focus + select the rename field when editing starts. autoFocus is
   // unreliable inside a dnd-kit sortable (the draggable wrapper competes for
   // focus), so we focus explicitly on the next frame.

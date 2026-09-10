@@ -5,8 +5,8 @@
  * Tôi dính đúng bẫy này HAI lần trong năm phút khi nối `t()` vào khung app:
  *
  * ```ts
- * const MODE_LABEL = { full: t('Thu gọn thành biểu tượng'), … };   // ⛔
- * const TITLES     = { [ROUTES.settings]: t('Cài đặt'), … };        // ⛔
+ * const MODE_LABEL = { full: dich('Thu gọn thành biểu tượng'), … };   // ⛔
+ * const TITLES     = { [ROUTES.settings]: dich('Cài đặt'), … };        // ⛔
  * ```
  *
  * Hằng tầm mô-đun tính **đúng một lần**, lúc tệp được nạp. Nên chuỗi ấy đông
@@ -18,7 +18,7 @@
  * thấy được (mã hợp lệ hoàn toàn), mắt nhìn cũng khó thấy (chỉ lộ ra khi thật
  * sự bấm đổi ngôn ngữ và soi đúng ba nhãn đó).
  *
- * ✅ Cách đúng: giữ tiếng Việt trong hằng, gọi `t(HANG[khoa])` tại chỗ DỰNG.
+ * ✅ Cách đúng: giữ tiếng Việt trong hằng, gọi `dich(HANG[khoa])` tại chỗ DỰNG.
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
@@ -52,7 +52,7 @@ function goiTTamModun(ma: string): string[] {
   const sach = ma.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
   const dong = sach.split('\n');
   const loi: string[] = [];
-  const LA_T = /(?<![A-Za-z0-9_$.])tp?\(\s*['"`]/;
+  const LA_T = /(?<![A-Za-z0-9_$.])dichP?\(\s*['"`]/;
 
   for (let i = 0; i < dong.length; i++) {
     const d = dong[i]!;
@@ -84,7 +84,7 @@ describe('t() không được gọi ở tầm mô-đun', () => {
     expect(
       xau,
       'Dịch ở tầm mô-đun ⇒ chuỗi đông cứng ở ngôn ngữ lúc khởi động.\n'
-      + 'Giữ tiếng Việt trong hằng, gọi t(HANG[khoa]) tại chỗ dựng.\n'
+      + 'Giữ tiếng Việt trong hằng, gọi dich(HANG[khoa]) tại chỗ dựng.\n'
       + xau.join('\n'),
     ).toEqual([]);
   });
@@ -93,13 +93,13 @@ describe('t() không được gọi ở tầm mô-đun', () => {
     // Kiểm bộ kiểm trước nội dung: một phép dò luôn trả rỗng thì nó chứng nhận
     // mọi thứ, kể cả lúc mã đang sai.
     const xau = goiTTamModun([
-      "import { useT } from '../i18n';",
+      "import { useDich } from '../i18n';",
       "const NHAN = {",
-      "  full: t('Thu gọn thành biểu tượng'),",
+      "  full: dich('Thu gọn thành biểu tượng'),",
       '};',
       'export function X() {',
-      '  const { t } = useT();',
-      "  return <span title={t('Cài đặt')}>{t('Thu gọn')}</span>;",
+      '  const { dich } = useDich();',
+      "  return <span title={dich('Cài đặt')}>{dich('Thu gọn')}</span>;",
       '}',
     ].join('\n'));
     expect(xau, 'phải bắt hằng tầm mô-đun, và CHỈ nó').toHaveLength(1);

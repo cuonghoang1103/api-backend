@@ -36,6 +36,7 @@ import {
   type Buoi, type DiemDanh,
 } from '@/lib/lich/chung';
 import { SoanLich } from './SoanLich';
+import { useDich } from '../../i18n';
 
 const THU = [
   { n: 2, ten: 'Thứ 2' }, { n: 3, ten: 'Thứ 3' }, { n: 4, ten: 'Thứ 4' },
@@ -43,6 +44,7 @@ const THU = [
 ];
 
 export function LichHoc({ onHomNay }: { onHomNay?: (ds: Buoi[]) => void } = {}) {
+  const { dich } = useDich();
   const { api } = useSession();
   const [buoi, datBuoi] = useState<Buoi[]>([]);
   const [diemDanh, datDiemDanh] = useState<DiemDanh[]>([]);
@@ -114,8 +116,8 @@ export function LichHoc({ onHomNay }: { onHomNay?: (ds: Buoi[]) => void } = {}) 
       <section className="ct-lich ct-lich-trong">
         <CalendarDays size={22} aria-hidden />
         <div>
-          <strong>Chưa có thời khoá biểu</strong>
-          <p>Thêm buổi học để thấy lịch tuần, nhắc trước giờ và đếm buổi nghỉ.</p>
+          <strong>{dich('Chưa có thời khoá biểu')}</strong>
+          <p>{dich('Thêm buổi học để thấy lịch tuần, nhắc trước giờ và đếm buổi nghỉ.')}</p>
         </div>
         <button type="button" className="ct-btn ct-btn-chinh" onClick={() => datMoSoan(true)}>
           <Plus size={14} aria-hidden /> Thêm buổi học
@@ -138,8 +140,8 @@ export function LichHoc({ onHomNay }: { onHomNay?: (ds: Buoi[]) => void } = {}) 
     <section className="ct-lich">
       {moSoan && <SoanLich onDong={() => datMoSoan(false)} onXong={() => void nap()} />}
       <div className="ct-lich-dau">
-        <h2><CalendarDays size={15} aria-hidden /> Lịch học tuần này</h2>
-        <span className="ct-muted">Bấm vào buổi để chấm điểm danh</span>
+        <h2><CalendarDays size={15} aria-hidden /> {dich('Lịch học tuần này')}</h2>
+        <span className="ct-muted">{dich('Bấm vào buổi để chấm điểm danh')}</span>
         {/* Tắt robot nhắc NGAY TẠI ĐÂY, không bắt đi lục Cài đặt: thứ làm phiền
             phải tắt được ở đúng chỗ nó làm phiền, không thì người ta tắt cả
             robot cho xong. */}
@@ -224,12 +226,12 @@ export function LichHoc({ onHomNay }: { onHomNay?: (ds: Buoi[]) => void } = {}) 
 
                             {moChon === khoa && (
                               <div className="ct-lich-cham">
-                                <button type="button" onClick={() => void cham(b.id, ngay, 'co')}>Có mặt</button>
-                                <button type="button" onClick={() => void cham(b.id, ngay, 'vang')}>Vắng</button>
-                                <button type="button" onClick={() => void cham(b.id, ngay, 'phep')}>Có phép</button>
+                                <button type="button" onClick={() => void cham(b.id, ngay, 'co')}>{dich('Có mặt')}</button>
+                                <button type="button" onClick={() => void cham(b.id, ngay, 'vang')}>{dich('Vắng')}</button>
+                                <button type="button" onClick={() => void cham(b.id, ngay, 'phep')}>{dich('Có phép')}</button>
                                 {tt && (
                                   <button type="button" className="ct-lich-go" onClick={() => void cham(b.id, ngay, null)}>
-                                    Bỏ chấm
+                                    {dich('Bỏ chấm')}
                                   </button>
                                 )}
                                 <button
@@ -237,7 +239,7 @@ export function LichHoc({ onHomNay }: { onHomNay?: (ds: Buoi[]) => void } = {}) 
                                   className="ct-lich-go"
                                   onClick={() => { datMoChon(null); datMoSoan(true); }}
                                 >
-                                  Sửa buổi học
+                                  {dich('Sửa buổi học')}
                                 </button>
                               </div>
                             )}

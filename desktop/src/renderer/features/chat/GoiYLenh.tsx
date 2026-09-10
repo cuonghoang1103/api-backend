@@ -11,7 +11,7 @@
  * xạ. Một tính năng không ai biết là một tính năng không tồn tại.
  */
 import { useEffect, useMemo, useState } from 'react';
-import { useT } from '../../i18n';
+import { useDich } from '../../i18n';
 
 export interface LenhGach {
   ten: string;
@@ -63,7 +63,7 @@ export function GoiYLenh({
    */
   them?: LenhGach[];
 }) {
-  const { t } = useT();
+  const { dich } = useDich();
   const ds = useMemo(() => {
     if (!them?.length) return locLenh(chu);
     /* Bỏ lệnh dự án nào TRÙNG tên với lệnh dựng sẵn — kể cả trùng tên khác.
@@ -99,7 +99,7 @@ export function GoiYLenh({
   if (ds.length === 0) return null;
 
   return (
-    <div className="ct-goiy" role="listbox" aria-label={t('Lệnh')}>
+    <div className="ct-goiy" role="listbox" aria-label={dich('Lệnh')}>
       {ds.map((l, i) => (
         <button
           key={l.ten}
@@ -115,7 +115,7 @@ export function GoiYLenh({
           {l.khac?.length ? <em>{l.khac.join(' ')}</em> : null}
         </button>
       ))}
-      <p className="ct-goiy-chan">{t('↑↓ chọn · Enter hoặc Tab để dùng · Esc để bỏ')}</p>
+      <p className="ct-goiy-chan">{dich('↑↓ chọn · Enter hoặc Tab để dùng · Esc để bỏ')}</p>
     </div>
   );
 }

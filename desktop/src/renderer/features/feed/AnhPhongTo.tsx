@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 
 import type { Media } from './kieu';
+import { useDich } from '../../i18n';
 
 export function AnhPhongTo({
   media, chiSo, onDoiChiSo, onDong,
@@ -18,6 +19,7 @@ export function AnhPhongTo({
   onDoiChiSo: (i: number) => void;
   onDong: () => void;
 }) {
+  const { dich } = useDich();
   const m = media[chiSo];
 
   useEffect(() => {
@@ -38,8 +40,8 @@ export function AnhPhongTo({
   if (!m) return null;
 
   return (
-    <div className="ct-bt-xem" onClick={onDong} role="dialog" aria-modal="true" aria-label="Xem ảnh">
-      <button type="button" className="ct-bt-xem-dong" aria-label="Đóng" onClick={onDong}>
+    <div className="ct-bt-xem" onClick={onDong} role="dialog" aria-modal="true" aria-label={dich('Xem ảnh')}>
+      <button type="button" className="ct-bt-xem-dong" aria-label={dich('Đóng')} onClick={onDong}>
         <X size={20} aria-hidden />
       </button>
 
@@ -47,7 +49,7 @@ export function AnhPhongTo({
         <button
           type="button"
           className="ct-bt-xem-lui"
-          aria-label="Ảnh trước"
+          aria-label={dich('Ảnh trước')}
           onClick={(e) => { e.stopPropagation(); onDoiChiSo(chiSo - 1); }}
         >
           <ChevronLeft size={22} aria-hidden />
@@ -64,7 +66,7 @@ export function AnhPhongTo({
         <button
           type="button"
           className="ct-bt-xem-toi"
-          aria-label="Ảnh sau"
+          aria-label={dich('Ảnh sau')}
           onClick={(e) => { e.stopPropagation(); onDoiChiSo(chiSo + 1); }}
         >
           <ChevronRight size={22} aria-hidden />

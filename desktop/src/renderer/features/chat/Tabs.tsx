@@ -13,7 +13,7 @@
  * nếu không họ gõ ở tab mới và nhận một lỗi khó hiểu.
  */
 import { Plus, X } from 'lucide-react';
-import { useT } from '../../i18n';
+import { useDich } from '../../i18n';
 
 export interface TabAgent {
   id: string;
@@ -36,9 +36,9 @@ export function ThanhTab({
   onThem: () => void;
   onDong: (id: string) => void;
 }) {
-  const { t } = useT();
+  const { dich } = useDich();
   return (
-    <div className="ct-tabs" role="tablist" aria-label={t('Việc đang mở')}>
+    <div className="ct-tabs" role="tablist" aria-label={dich('Việc đang mở')}>
       {tabs.map((tab) => (
         <div key={tab.id} className="ct-tab" data-chon={tab.id === dangMo} role="tab" aria-selected={tab.id === dangMo}>
           <button
@@ -47,7 +47,7 @@ export function ThanhTab({
             onClick={() => onChon(tab.id)}
             title={tab.duAn ? `${tab.tieuDe}\n📁 ${tab.duAn}` : tab.tieuDe}
           >
-            {tab.dangChay && <span className="ct-tab-cham" aria-label={t('đang chạy')} />}
+            {tab.dangChay && <span className="ct-tab-cham" aria-label={dich('đang chạy')} />}
             <span className="ct-tab-chu">{tab.tieuDe}</span>
             {/* Tên dự án ngay trên tab: từ khi mỗi tab một dự án, hai tab cùng
                 tên việc mà khác repo là chuyện thường, và không có nhãn này thì
@@ -57,13 +57,13 @@ export function ThanhTab({
           {/* Tab cuối cùng KHÔNG có nút đóng: đóng hết thì màn hình trống trơn
               và người dùng phải đi tìm cách tạo lại. Luôn còn ít nhất một. */}
           {tabs.length > 1 && (
-            <button type="button" className="ct-tab-dong" onClick={() => onDong(tab.id)} title={t('Đóng việc này')}>
+            <button type="button" className="ct-tab-dong" onClick={() => onDong(tab.id)} title={dich('Đóng việc này')}>
               <X size={11} aria-hidden />
             </button>
           )}
         </div>
       ))}
-      <button type="button" className="ct-tab-them" onClick={onThem} title={t('Mở việc mới')}>
+      <button type="button" className="ct-tab-them" onClick={onThem} title={dich('Mở việc mới')}>
         <Plus size={13} aria-hidden />
       </button>
     </div>

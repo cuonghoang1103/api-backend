@@ -37,7 +37,7 @@ import { NutTinNhan } from './NutTinNhan';
    là chỗ vẽ chúng ra, và hai bản khai trùng nhau thì thêm một trường ở máy chủ
    là phải nhớ sửa hai chỗ — đúng kiểu trôi dạt đã làm vỡ seed hồi 08/08. */
 import { ThanhBenChat, type PhienChat, type ThuMuc } from './ThanhBenChat';
-import { useT } from '../../i18n';
+import { useDich } from '../../i18n';
 
 /**
  * Bộ lọc thư mục đang chọn.
@@ -88,10 +88,10 @@ interface Luot {
  * hỏng, còn thiếu ảnh thì thẻ vẫn đọc được bằng số, tiêu đề và tên miền.
  */
 function TheNguon({ nguon }: { nguon: Nguon[] }) {
-  const { t } = useT();
+  const { dich } = useDich();
   return (
     <div className="ct-nguon">
-      <p className="ct-nguon-nhan">{t('Nguồn')}</p>
+      <p className="ct-nguon-nhan">{dich('Nguồn')}</p>
       <ul>
         {nguon.map((n, i) => (
           <li key={n.url + i}>
@@ -136,7 +136,7 @@ const BAC = [
 ] as const;
 
 export function ChatMode({ pro }: { pro: boolean }) {
-  const { t } = useT();
+  const { dich } = useDich();
   const { api } = useSession();
   const { settings, layThamSo, lanDieuHuong } = useAppState();
   const [luot, datLuot] = useState<Luot[]>([]);
@@ -771,7 +771,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
           bị tính là bấm ra ngoài ⇒ nó tự đóng ngay khi vừa chạm vào. */}
       <div className="ct-boc-suot" ref={lichSu.boc}>
       <div className="ct-chat-thanh">
-        <button type="button" className="ct-agent-icon" data-nut="chatMoi" onClick={chatMoi} title={t('Bắt đầu cuộc mới')}>
+        <button type="button" className="ct-agent-icon" data-nut="chatMoi" onClick={chatMoi} title={dich('Bắt đầu cuộc mới')}>
           <Plus size={14} aria-hidden />
         </button>
         <button
@@ -787,10 +787,10 @@ export function ChatMode({ pro }: { pro: boolean }) {
       </div>
 
       {moLichSu && (
-        <div className="ct-lichsu" role="dialog" aria-label={t('Cuộc trò chuyện đã lưu')}>
+        <div className="ct-lichsu" role="dialog" aria-label={dich('Cuộc trò chuyện đã lưu')}>
           <div className="ct-lichsu-dau">
-            <strong>{t('Cuộc đã lưu')}</strong>
-            <button type="button" className="ct-agent-icon" onClick={lichSu.dong} aria-label={t('Đóng')}>
+            <strong>{dich('Cuộc đã lưu')}</strong>
+            <button type="button" className="ct-agent-icon" onClick={lichSu.dong} aria-label={dich('Đóng')}>
               <X size={14} aria-hidden />
             </button>
           </div>
@@ -798,10 +798,10 @@ export function ChatMode({ pro }: { pro: boolean }) {
               gộp lại là mất đường xem toàn bộ. */}
           <div className="ct-tm-dai">
             <button type="button" className="ct-tm-nut" data-chon={loc === null} onClick={() => datLoc(null)}>
-              {t('Tất cả')}
+              {dich('Tất cả')}
             </button>
             <button type="button" className="ct-tm-nut" data-chon={loc === 'none'} onClick={() => datLoc('none')}>
-              {t('Chưa phân loại')}
+              {dich('Chưa phân loại')}
             </button>
             {dsThuMuc.map((f) => (
               <span key={f.id} className="ct-tm-o">
@@ -829,7 +829,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
             <input
               className="ct-td-o"
               value={tenMoi}
-              placeholder={t('tên thư mục mới, ví dụ Java…')}
+              placeholder={dich('tên thư mục mới, ví dụ Java…')}
               maxLength={80}
               onChange={(e) => datTenMoi(e.target.value)}
               onKeyDown={(e) => {
@@ -839,7 +839,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
             />
             <button type="button" className="ct-btn ct-mcp-nho" disabled={!tenMoi.trim()} onClick={() => void taoThuMuc()}>
               <FolderPlus size={12} aria-hidden />
-              {t('Tạo')}
+              {dich('Tạo')}
             </button>
           </div>
 
@@ -871,9 +871,9 @@ export function ChatMode({ pro }: { pro: boolean }) {
                       className="ct-tm-chon"
                       value={p.folderId ?? ''}
                       onChange={(e) => void xepVaoThuMuc(p.id, e.target.value || null)}
-                      title={t('Xếp cuộc này vào thư mục')}
+                      title={dich('Xếp cuộc này vào thư mục')}
                     >
-                      <option value="">{t('— chưa phân loại —')}</option>
+                      <option value="">{dich('— chưa phân loại —')}</option>
                       {dsThuMuc.map((f) => <option key={f.id} value={f.id}>{f.ten}</option>)}
                     </select>
                   )}
@@ -895,7 +895,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
         {luot.length === 0 && (
           <div className="ct-agent-trong">
             <MessageSquare size={26} aria-hidden className="ct-empty-icon" />
-            <h2>{t('Hỏi gì cũng được')}</h2>
+            <h2>{dich('Hỏi gì cũng được')}</h2>
             <p className="ct-muted">
               Kéo thả, dán hoặc bấm 📎 để gửi kèm ảnh và tài liệu (PDF, Word, txt, md, csv).
             </p>
@@ -949,7 +949,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
           className="ct-agent-o"
           rows={2}
           value={nhap}
-          placeholder={t('Nhắn cho trợ lý…  (dán hoặc kéo thả ảnh, PDF, Word)')}
+          placeholder={dich('Nhắn cho trợ lý…  (dán hoặc kéo thả ảnh, PDF, Word)')}
           onChange={(e) => datNhap(e.target.value)}
           onPaste={pro ? dk.danVao : undefined}
           onKeyDown={(e) => {
@@ -969,8 +969,8 @@ export function ChatMode({ pro }: { pro: boolean }) {
           data-nut="mogoi"
           disabled={dangChay}
           onClick={() => datMoManGoi(true)}
-          title={t('Nói chuyện — rảnh tay, tự nghe tiếp sau mỗi câu')}
-          aria-label={t('Mở màn nói chuyện')}
+          title={dich('Nói chuyện — rảnh tay, tự nghe tiếp sau mỗi câu')}
+          aria-label={dich('Mở màn nói chuyện')}
         >
           <span className="ct-nut-goi-song">
             {[0, 1, 2].map((i) => <i key={i} style={{ animationDelay: `${i * 130}ms` }} />)}
@@ -980,18 +980,18 @@ export function ChatMode({ pro }: { pro: boolean }) {
         {dangChay ? (
           <button type="button" className="ct-btn ct-agent-dung" onClick={() => huyRef.current?.abort()}>
             <CircleStop size={14} aria-hidden />
-            {t('Dừng')}
+            {dich('Dừng')}
           </button>
         ) : (
           <button type="button" data-nut="gui" className="ct-btn" onClick={() => void guiDi()} disabled={!coGiDeGui}>
             <Send size={14} aria-hidden />
-            {t('Gửi')}
+            {dich('Gửi')}
           </button>
         )}
       </div>
 
       <div className="ct-chat-chan">
-        <div className="ct-noluc" role="group" aria-label={t('Bậc model')}>
+        <div className="ct-noluc" role="group" aria-label={dich('Bậc model')}>
           {BAC.map((b) => (
             <button
               key={b.id}

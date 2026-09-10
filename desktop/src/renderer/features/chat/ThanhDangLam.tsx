@@ -29,7 +29,7 @@ import { useEffect, useState } from 'react';
 import { Loader2, Hand } from 'lucide-react';
 
 import type { ViecHienTai } from './viecDangLam';
-import { useT } from '../../i18n';
+import { useDich } from '../../i18n';
 
 /** Giây bắt đầu nói ra nguyên nhân. Dưới ngần này thì chưa có gì bất thường. */
 const CHANG_LO_GIAY = 15;
@@ -42,7 +42,7 @@ export function ThanhDangLam({
   /** Bước thứ mấy trên tổng bao nhiêu. Báo trước khi chạm trần. */
   buoc?: { nay: number; tran: number };
 }) {
-  const { t } = useT();
+  const { dich } = useDich();
   const [giay, datGiay] = useState(0);
 
   /* Đếm lại từ 0 mỗi khi CÂU đổi: mốc có nghĩa là "giai đoạn này", và nó tự
@@ -76,7 +76,7 @@ export function ThanhDangLam({
 
       {viec.kieu === 'lam' && giay >= CHANG_LO_GIAY && (
         <span className="ct-danglam-phu">
-          {t('Cổng AI đang chậm chứ app không treo — bấm Dừng nếu muốn thử lại.')}
+          {dich('Cổng AI đang chậm chứ app không treo — bấm Dừng nếu muốn thử lại.')}
         </span>
       )}
     </div>

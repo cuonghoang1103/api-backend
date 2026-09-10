@@ -28,7 +28,7 @@
  */
 import type { ReactNode } from 'react';
 
-import { useT } from './index';
+import { useDich } from './index';
 
 /** Cắt một câu thành các mẩu chữ / đậm / mã. */
 export function tachDinhDang(cau: string): { loai: 'chu' | 'dam' | 'ma'; chu: string }[] {
@@ -55,8 +55,8 @@ export function tachDinhDang(cau: string): { loai: 'chu' | 'dam' | 'ma'; chu: st
  * `<Chu cau="Chạy **mọi lệnh**, kể cả `rm -rf`." />`
  */
 export function Chu({ cau }: { cau: string }): ReactNode {
-  const { t } = useT();
-  return tachDinhDang(t(cau)).map((m, i) => {
+  const { dich } = useDich();
+  return tachDinhDang(dich(cau)).map((m, i) => {
     if (m.loai === 'dam') return <strong key={i}>{m.chu}</strong>;
     if (m.loai === 'ma') return <code key={i}>{m.chu}</code>;
     return <span key={i}>{m.chu}</span>;

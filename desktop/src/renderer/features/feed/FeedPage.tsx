@@ -33,6 +33,7 @@ import { OfflineUnavailableError, swr } from '../../offline/cache';
 import { AnhPhongTo } from './AnhPhongTo';
 import { Avatar, BaiViet } from './BaiViet';
 import { chuanHoa, ten, type Bai, type Media, type TacGia } from './kieu';
+import { useDich } from '../../i18n';
 
 const MOI_TRANG = 12;
 
@@ -55,6 +56,7 @@ const TAB_LOAI: Array<{ id: Loai; ten: string }> = [
 interface TheXuHuong { id: number; tag: string; postsCount: number }
 
 export function FeedPage() {
+  const { dich } = useDich();
   const { online } = useAppState();
   const { api, userId } = useSession();
 
@@ -242,8 +244,8 @@ export function FeedPage() {
         <div className="ct-bt-giua">
           <div className="ct-page-head" style={{ marginBottom: 14 }}>
             <div>
-              <h1>Bảng tin</h1>
-              <p className="ct-muted" style={{ margin: 0 }}>Bài mới từ cuongthai.com</p>
+              <h1>{dich('Bảng tin')}</h1>
+              <p className="ct-muted" style={{ margin: 0 }}>{dich('Bài mới từ cuongthai.com')}</p>
             </div>
             <button type="button" className="ct-btn ct-btn-ghost" onClick={() => void nap()} disabled={dangTai}>
               <RefreshCw size={14} aria-hidden className={dangTai ? 'ct-spin' : undefined} /> Làm mới
@@ -256,7 +258,7 @@ export function FeedPage() {
               <Avatar t={null} />
               <textarea
                 value={soan}
-                placeholder="Bạn đang nghĩ gì?"
+                placeholder={dich('Bạn đang nghĩ gì?')}
                 rows={soan ? 3 : 1}
                 maxLength={5000}
                 onChange={(e) => datSoan(e.target.value)}
@@ -276,7 +278,7 @@ export function FeedPage() {
 
           {/* ── Tab lọc ── */}
           <div className="ct-bt-tab">
-            <div className="ct-bt-tab-hang" role="tablist" aria-label="Sắp xếp">
+            <div className="ct-bt-tab-hang" role="tablist" aria-label={dich('Sắp xếp')}>
               {TAB_SAP.map((t) => (
                 <button
                   key={t.id}
@@ -292,7 +294,7 @@ export function FeedPage() {
                 </button>
               ))}
             </div>
-            <div className="ct-bt-tab-hang" data-phu="true" role="tablist" aria-label="Loại nội dung">
+            <div className="ct-bt-tab-hang" data-phu="true" role="tablist" aria-label={dich('Loại nội dung')}>
               {TAB_LOAI.map((t) => (
                 <button
                   key={t.id}
@@ -363,7 +365,7 @@ export function FeedPage() {
         <aside className="ct-bt-phai">
           {xuHuong.length > 0 && (
             <section className="ct-bt-the">
-              <h2><Flame size={14} aria-hidden /> Xu hướng hôm nay</h2>
+              <h2><Flame size={14} aria-hidden /> {dich('Xu hướng hôm nay')}</h2>
               <ul>
                 {xuHuong.map((x) => (
                   <li key={x.id}>
@@ -377,7 +379,7 @@ export function FeedPage() {
 
           {goiY.length > 0 && (
             <section className="ct-bt-the">
-              <h2><Sparkles size={14} aria-hidden /> Gợi ý theo dõi</h2>
+              <h2><Sparkles size={14} aria-hidden /> {dich('Gợi ý theo dõi')}</h2>
               <ul>
                 {goiY.map((u) => (
                   <li key={u.id} className="ct-bt-the-nguoi">
@@ -390,7 +392,7 @@ export function FeedPage() {
                   </li>
                 ))}
               </ul>
-              <p className="ct-bt-the-chan">Theo dõi và nhắn tin thì mở trên web</p>
+              <p className="ct-bt-the-chan">{dich('Theo dõi và nhắn tin thì mở trên web')}</p>
             </section>
           )}
         </aside>

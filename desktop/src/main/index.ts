@@ -109,18 +109,41 @@ async function bootstrap(): Promise<void> {
    *
    * `blur`/`hide`/`minimize` ⇒ hiện con nổi; quay vào app ⇒ ẩn nó đi.
    */
+  /**
+   * ⚠️ HỎI TOÀN BỘ CỬA SỔ, đừng suy từ một sự kiện đơn lẻ.
+   *
+   * Bản cũ gắn `focus`/`blur` vào ĐÚNG một cửa sổ và suy thẳng ra `true`/
+   * `false`. Hai chỗ hổng, và người dùng Windows gặp cả hai:
+   *  • THIẾU `restore`. Trên Windows, khôi phục từ thu nhỏ bắn `restore`, và
+   *    `focus` chỉ bắn kèm trong một số đường (bấm taskbar khi app khác đang
+   *    giữ tiêu điểm thì không). Robot đã hiện lúc `minimize` sẽ nằm lại.
+   *  • Cửa sổ chính DỰNG LẠI (macOS bấm icon Dock sau khi đóng) là một
+   *    `BrowserWindow` MỚI — không có listener nào cả.
+   *
+   * Tính lại từ trạng thái thật của mọi cửa sổ thì cả hai chỗ ấy tự đúng.
+   */
+  const dangOTrongApp = (): boolean => BrowserWindow.getAllWindows().some(
+    (w) => !w.isDestroyed()
+      && !w.webContents.getURL().endsWith('/robot.html')
+      && w.isFocused(),
+  );
+  const capNhatRobot = (): void => robotTheoTieuDiem(dangOTrongApp());
+
+  /* Cấp APP, không cấp cửa sổ: hai sự kiện này bắn cho MỌI cửa sổ, kể cả cửa
+     sổ được dựng lại sau này. */
+  app.on('browser-window-focus', capNhatRobot);
+  app.on('browser-window-blur', capNhatRobot);
+
   const theoDoiTieuDiem = (w: BrowserWindow): void => {
-    w.on('focus', () => robotTheoTieuDiem(true));
-    w.on('show', () => robotTheoTieuDiem(true));
-    w.on('blur', () => robotTheoTieuDiem(false));
-    w.on('hide', () => robotTheoTieuDiem(false));
-    w.on('minimize', () => robotTheoTieuDiem(false));
-    w.on('closed', () => robotTheoTieuDiem(false));
+    /* `isFocused()` chưa đổi kịp ngay trong tay xử lý của mấy sự kiện này
+       (thu nhỏ/khôi phục), nên hoãn một nhịp rồi mới hỏi lại. */
+    const sau = (): void => { setTimeout(capNhatRobot, 0); };
+    for (const sk of ['show', 'hide', 'minimize', 'restore', 'closed'] as const) w.on(sk, sau);
   };
   theoDoiTieuDiem(mainWindow);
   // Cửa sổ chính vừa mở là đang có tiêu điểm — ẩn con nổi ngay, đừng để nó
   // nháy lên một cái rồi mới biến mất.
-  robotTheoTieuDiem(mainWindow.isFocused());
+  capNhatRobot();
 
   // Nguồn tin cho robot: hỏi thăm tin nhắn/thông báo chưa đọc ở MAIN, độc lập
   // với mọi cửa sổ — vì cửa sổ chính có thể đã đóng trong khi app vẫn chạy.

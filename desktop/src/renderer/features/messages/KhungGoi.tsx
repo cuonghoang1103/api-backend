@@ -10,6 +10,7 @@ import { Mic, MicOff, Phone, PhoneOff } from 'lucide-react';
 import { CuocGoi, type IceServer, type TrangThaiGoi } from '../../realtime/cuocGoi';
 import { laySocket } from '../../realtime/socket';
 import { useSession } from '../../auth/session';
+import { useDich } from '../../i18n';
 
 interface Props {
   threadId: number | null;
@@ -21,6 +22,7 @@ interface Props {
 }
 
 export default function KhungGoi({ threadId, peerId, peerTen, lanBamGoi }: Props) {
+  const { dich } = useDich();
   const { api } = useSession();
   const [trangThai, datTrangThai] = useState<TrangThaiGoi>('roi');
   const [loi, datLoi] = useState<string | null>(null);
@@ -167,16 +169,16 @@ export default function KhungGoi({ threadId, peerId, peerTen, lanBamGoi }: Props
         {trangThai === 'do-chuong' ? (
           <>
             <button type="button" className="ct-goi-tron ct-goi-do"
-                    onClick={() => goiRef.current?.tuChoi()} aria-label="Từ chối">
+                    onClick={() => goiRef.current?.tuChoi()} aria-label={dich('Từ chối')}>
               <PhoneOff size={26} aria-hidden />
             </button>
             <button type="button" className="ct-goi-tron ct-goi-xanh"
-                    onClick={() => void goiRef.current?.nhan()} aria-label="Nhận cuộc gọi">
+                    onClick={() => void goiRef.current?.nhan()} aria-label={dich('Nhận cuộc gọi')}>
               <Phone size={26} aria-hidden />
             </button>
           </>
         ) : loi && trangThai === 'roi' ? (
-          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => datLoi(null)}>Đóng</button>
+          <button type="button" className="ct-btn ct-btn-ghost" onClick={() => datLoi(null)}>{dich('Đóng')}</button>
         ) : (
           <>
             <button type="button" className={`ct-goi-tron ${tatMic ? 'ct-goi-tat' : 'ct-goi-mo'}`}
@@ -184,7 +186,7 @@ export default function KhungGoi({ threadId, peerId, peerTen, lanBamGoi }: Props
               {tatMic ? <MicOff size={22} aria-hidden /> : <Mic size={22} aria-hidden />}
             </button>
             <button type="button" className="ct-goi-tron ct-goi-do"
-                    onClick={() => goiRef.current?.cupMay()} aria-label="Cúp máy">
+                    onClick={() => goiRef.current?.cupMay()} aria-label={dich('Cúp máy')}>
               <PhoneOff size={26} aria-hidden />
             </button>
           </>

@@ -157,6 +157,13 @@ export function cuaSoRobot(): BrowserWindow | null {
 export function moRobot(): BrowserWindow {
   if (cuaSo && !cuaSo.isDestroyed()) return cuaSo;
 
+  /* Lấy nấc cỡ từ THIẾT ĐẶT ngay, đừng đợi renderer của robot gọi `datCo`.
+     Không có dòng này thì cửa sổ mở ở 100% rồi mới co lại sau vài trăm mili
+     giây — và trong khoảng đó con nổi to hơn hẳn con trong app, đúng cái
+     "hai con robot khác cỡ" người dùng chụp lại. */
+  const nacLuu = getSettings().odinCo;
+  if (typeof nacLuu === 'number') nacCo = Math.max(0, Math.min(HE_SO.length - 1, Math.round(nacLuu)));
+
   /* Vị trí đã lưu trước, mặc định góc dưới-phải sau. Trước bản này `moRobot`
      LUÔN lấy góc dưới-phải: đo thật 10/09/2026 — kéo robot tới (154,61), thoát
      app, mở lại thì nó về (1554,841). Người dùng đặt robot ở đâu cũng vô nghĩa
@@ -213,7 +220,7 @@ export function moRobot(): BrowserWindow {
     : `${APP_ORIGIN}/robot.html`;
   void cuaSo.loadURL(duong);
 
-  cuaSo.on('closed', () => { cuaSo = null; dangRong = false; });
+  cuaSo.on('closed', () => { cuaSo = null; dangRong = false; dangAn = false; });
 
   return cuaSo;
 }
@@ -392,16 +399,30 @@ export function baoRobot(kenh: string, du: unknown): void {
  * KHÔNG ẩn khi khung chat mini đang mở: người dùng vừa gõ dở trong đó mà cửa
  * sổ chính tình cờ nhận tiêu điểm thì khung biến mất giữa câu.
  */
+/**
+ * Ta TỰ NHỚ đang ẩn hay hiện, không hỏi `isVisible()`.
+ *
+ * ⚠️ Người dùng Windows báo 10/09/2026: hai con robot cùng hiện trong lúc họ
+ * đang gõ TRONG app. Trên macOS luật này chạy đúng (đo thật: có tiêu điểm ⇒
+ * ẩn, mất tiêu điểm ⇒ hiện, lấy lại ⇒ ẩn), nên chỗ hỏng nằm ở phần phụ thuộc
+ * nền tảng — và `isVisible()` của một cửa sổ `alwaysOnTop` + `skipTaskbar`
+ * vừa `showInactive()` là đúng loại câu hỏi mỗi hệ trả lời một kiểu.
+ *
+ * Bỏ hẳn nó đi: `hide()` trên cửa sổ đã ẩn là không làm gì, `showInactive()`
+ * trên cửa sổ đã hiện cũng thế. Cái `if` ấy không tiết kiệm được gì mà lại
+ * thêm một cách hỏng.
+ */
+let dangAn = false;
+
 export function robotTheoTieuDiem(dangOTrongApp: boolean): void {
   const w = cuaSoRobot();
   if (!w) return;
-  if (dangOTrongApp && !dangRong) {
-    if (w.isVisible()) w.hide();
-  } else if (!w.isVisible()) {
-    // `showInactive`: hiện lại KHÔNG cướp tiêu điểm. `show()` sẽ kéo app
-    // CuongThai lên trước mặt người đang gõ ở app khác.
-    w.showInactive();
-  }
+  const nenAn = dangOTrongApp && !dangRong;
+  if (nenAn === dangAn) return;
+  dangAn = nenAn;
+  // `showInactive`: hiện lại KHÔNG cướp tiêu điểm. `show()` sẽ kéo app
+  // CuongThai lên trước mặt người đang gõ ở app khác.
+  if (nenAn) w.hide(); else w.showInactive();
 }
 
 export function dongRobot(): void {

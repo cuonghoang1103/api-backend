@@ -23,7 +23,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 
 import { canhNguoiNoiChen, ngheMotCau, useBienDo, type BoCanh, type BoNghe } from './useGiongSong';
-import { useT } from '../../i18n';
+import { useDich } from '../../i18n';
 
 type Pha = 'nghe' | 'nghi' | 'noi' | 'dung';
 
@@ -49,7 +49,7 @@ export function ManGoi({
   /** Gửi câu đã nghe được, nhận về câu trả lời + tiếng đọc. */
   hoi: (cau: string) => Promise<{ traLoi: string; phat: () => Promise<void>; ngung: () => void }>;
 }) {
-  const { t } = useT();
+  const { dich } = useDich();
   const [pha, datPha] = useState<Pha>('dung');
   const [cauCuoi, datCauCuoi] = useState('');
   const [traLoi, datTraLoi] = useState('');
@@ -139,8 +139,8 @@ export function ManGoi({
   const no = pha === 'nghe' ? Math.min(1, bienDo * 9) : 0;
 
   return (
-    <div className="ct-goi-man" role="dialog" aria-label={t('Nói chuyện với trợ lý')}>
-      <button type="button" className="ct-goi-dong" onClick={onDong} aria-label={t('Đóng')}>
+    <div className="ct-goi-man" role="dialog" aria-label={dich('Nói chuyện với trợ lý')}>
+      <button type="button" className="ct-goi-dong" onClick={onDong} aria-label={dich('Đóng')}>
         <X size={18} aria-hidden />
       </button>
 

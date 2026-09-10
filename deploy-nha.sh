@@ -842,6 +842,53 @@ if [ "$KHONG_HOI" != true ]; then
     fi
 fi
 
+# ─── 8. CHỐT CUỐI: production có THẬT SỰ chạy ảnh vừa tráo không ────────
+#
+# ⚠️ 11/09/2026 — dòng "XONG — production đang chạy ${SHA}" từng là một LỜI
+# KHẲNG ĐỊNH, không phải phép đo, và nó nói dối một lần rất tốn:
+#
+#   21:00  deploy-nha.sh tráo xong ảnh 4bf5b5c0 (có route /ai/usage) — xanh
+#   21:02  một phiên Claude KHÁC bấm tay "Deploy via GHCR (fast path)".
+#          Workflow đó dựng từ `main` TRÊN GITHUB, lúc ấy còn là dccad0e6,
+#          và dccad0e6 KHÔNG chứa mã vừa tráo (nó rẽ từ main cũ hơn).
+#   21:08  deploy-nha.sh mới push 4505f533 lên GitHub — muộn 6 phút.
+#
+# Kết quả: production chạy ảnh CŨ HƠN thứ vừa deploy, log deploy vẫn xanh
+# toàn tập, và tính năng mới trả 404 cho tới khi có người đi dò tay.
+#
+# Gốc rễ là cửa sổ giữa TRÁO và PUSH: trong khoảng đó, `main` trên GitHub
+# CHƯA có mã đang chạy trên production, nên mọi lượt deploy-ghcr.yml rơi vào
+# khoảng ấy đều lùi production về sau lưng mình. Cửa sổ đó không đóng lại
+# được (bộ kiểm CI phải chạy trước khi push, và push có thể bị từ chối) —
+# nhưng nó PHẢI kêu.
+#
+# Phép kiểm rẻ nhất bắt đúng lớp đó: so mã băm ảnh mà container ĐANG chạy
+# với mã băm ảnh ta vừa tráo. Khác nhau = có người tráo đè.
+info "Kiểm lại: container có đang chạy đúng ảnh vừa tráo không..."
+KQ_CHOT=$(sshvps "
+    for d in backend frontend; do
+        MUON=\$(docker image inspect -f '{{.Id}}' ghcr.io/cuonghoang1103/api-backend-\$d:${SHA} 2>/dev/null)
+        THAT=\$(docker inspect -f '{{.Image}}' ${COMPOSE_PROJECT}_\$d 2>/dev/null)
+        TEN=\$(docker inspect -f '{{.Config.Image}}' ${COMPOSE_PROJECT}_\$d 2>/dev/null)
+        if [ -z \"\$MUON\" ] || [ -z \"\$THAT\" ]; then echo \"\$d KHONG_DOC_DUOC \$TEN\"
+        elif [ \"\$MUON\" = \"\$THAT\" ]; then echo \"\$d KHOP \$TEN\"
+        else echo \"\$d LECH \$TEN\"; fi
+    done" 2>/dev/null)
+
+if echo "$KQ_CHOT" | grep -q 'LECH\|KHONG_DOC_DUOC'; then
+    echo ""
+    fail "⚠️  PRODUCTION KHÔNG CHẠY ẢNH VỪA TRÁO — có phiên khác tráo đè lên."
+    echo "$KQ_CHOT" | sed 's/^/         /'
+    fail "Ảnh ${SHA} vẫn nằm trên VPS. Tráo lại bằng tay:"
+    fail "    ssh ${VPS_USER}@${VPS_IP} \"docker tag ghcr.io/cuonghoang1103/api-backend-backend:${SHA} ${COMPOSE_PROJECT}-backend:latest && \\"
+    fail "        cd ${REPO_VPS} && set -a && . /opt/cuonghoangdev/.env; set +a; \\"
+    fail "        docker compose -p ${COMPOSE_PROJECT} up -d --no-build backend\""
+    fail "Hoặc đơn giản nhất: chạy lại 'bash deploy-nha.sh' khi phiên kia đã xong."
+    sshnha "test -x \$HOME/bin/bao-tin.sh && bash \$HOME/bin/bao-tin.sh $(printf %q "⛔ Deploy ${SHA} BỊ TRÁO ĐÈ — production đang chạy ảnh khác. Chạy lại deploy-nha.sh.")" 2>/dev/null || true
+    exit 1
+fi
+ok "Container đang chạy ĐÚNG ảnh ${SHA} (đã so mã băm, không phải tin lời log)"
+
 echo ""
 ok "XONG — production đang chạy commit ${SHA}"
 echo ""

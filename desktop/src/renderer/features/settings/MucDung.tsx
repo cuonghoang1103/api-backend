@@ -18,6 +18,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { RefreshCw } from 'lucide-react';
 
+import { ApiError } from '../../api/client';
 import { useSession } from '../../auth/session';
 import { useDich } from '../../i18n';
 
@@ -34,6 +35,9 @@ interface Vi {
   hoiHetLuc: string | null;
 }
 
+/** Dấu riêng cho ca "máy chủ cũ", để chỗ hiện chữ phân biệt được với lỗi thật. */
+const MAY_CHU_CU = '\0may-chu-cu';
+
 export function MucDung() {
   const { api } = useSession();
   const { dich, dichP } = useDich();
@@ -49,7 +53,17 @@ export function MucDung() {
       datVi(r);
       datLoi(null);
     } catch (e) {
-      datLoi((e as Error).message);
+      /* ⚠️ 404 KHÔNG phải lỗi của người dùng, và câu máy chủ trả về
+         ("Route GET /api/v1/ai/usage not found") thì họ không làm gì được với
+         nó. Nó chỉ có một nghĩa: máy chủ đang chạy bản CŨ HƠN app — ví tiền
+         riêng chưa lên tới nơi. Ca thật 11/09/2026: hai đường deploy giẫm
+         nhau, production bị tráo về ảnh cũ, và ô này phơi nguyên tên route ra
+         màn hình người dùng. Nói thẳng chuyện đang xảy ra, và nói nó sẽ tự
+         hết — đừng bắt người đọc đi dịch một câu lỗi HTTP. */
+      const cu = e instanceof ApiError
+        && e.failure.kind === 'rejected'
+        && e.failure.status === 404;
+      datLoi(cu ? MAY_CHU_CU : (e as Error).message);
     } finally {
       datDangTai(false);
     }
@@ -65,7 +79,11 @@ export function MucDung() {
 
       {loi && (
         <div className="ct-notice" data-tone="warn" style={{ margin: '0 0 8px' }}>
-          <span>{dich('Không đọc được mức dùng')} — {loi}</span>
+          <span>
+            {loi === MAY_CHU_CU
+              ? dich('Máy chủ đang chạy bản cũ hơn app nên chưa có ô này. Nó sẽ tự hiện sau lần cập nhật máy chủ kế tiếp — bạn không cần làm gì.')
+              : `${dich('Không đọc được mức dùng')} — ${loi}`}
+          </span>
         </div>
       )}
 

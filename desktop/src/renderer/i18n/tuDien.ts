@@ -762,6 +762,7 @@ export const TU_DIEN: Record<string, string> = {
   // ── Mức dùng (Cài đặt) ──────────────────────────────────
   'Mức dùng': 'Usage',
   'Không đọc được mức dùng': 'Couldn’t read your usage',
+  'Máy chủ đang chạy bản cũ hơn app nên chưa có ô này. Nó sẽ tự hiện sau lần cập nhật máy chủ kế tiếp — bạn không cần làm gì.': 'The server is running an older build than the app, so this panel isn’t there yet. It will appear on its own after the next server update — nothing for you to do.',
   'Đang đọc…': 'Reading…',
   'Đọc lại': 'Refresh',
   'Hạn mức bắt đầu hồi lại từ {gio}.': 'Your allowance starts recovering at {gio}.',

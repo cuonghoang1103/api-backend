@@ -289,7 +289,7 @@ export function SoanLich({ onDong, onXong }: { onDong: () => void; onXong: () =>
                       <td>
                         <select value={d.weekday} onChange={(e) => sua(d.khoa, { weekday: Number(e.target.value) })}>
                           {d.weekday === 0 && <option value={0}>{dich('— chọn —')}</option>}
-                          {THU.map((t) => <option key={t.n} value={t.n}>{t.ten}</option>)}
+                          {THU.map((t) => <option key={t.n} value={t.n}>{dich(t.ten)}</option>)}
                         </select>
                       </td>
                       <td><input type="time" value={d.startTime} onChange={(e) => sua(d.khoa, { startTime: e.target.value })} /></td>
@@ -299,7 +299,7 @@ export function SoanLich({ onDong, onXong }: { onDong: () => void; onXong: () =>
                       <td><input value={d.room} placeholder="DE-412" onChange={(e) => sua(d.khoa, { room: e.target.value })} /></td>
                       <td>
                         <select value={d.remindMinutes} onChange={(e) => sua(d.khoa, { remindMinutes: Number(e.target.value) })}>
-                          {NHAC.map((n) => <option key={n.n} value={n.n}>{n.ten}</option>)}
+                          {NHAC.map((n) => <option key={n.n} value={n.n}>{dich(n.ten)}</option>)}
                         </select>
                       </td>
                       <td>

@@ -60,15 +60,33 @@ export function datNgonNgu(n: NgonNgu): void {
 }
 
 /**
+ * Gỡ tiền tố NGỮ CẢNH khỏi khoá: `'hoatdong|Học tập'` → `'Học tập'`.
+ *
+ * ⚠️ VÌ SAO CẦN NGỮ CẢNH — giới hạn cốt lõi của kiểu lấy câu làm khoá.
+ * Một câu tiếng Việt có thể mang hai nghĩa khác nhau ở hai chỗ, và tiếng Anh
+ * phân biệt chúng. Ca thật gặp 11/09/2026: `'Học tập'` vừa là NHÓM trong thanh
+ * bên (gom Học viện, Khoá học, Code Lab, Phòng thi… ⇒ *Learning*), vừa là một
+ * HOẠT ĐỘNG trong ngày trên trang Tổng quan (⇒ *Study*). Cùng một khoá thì
+ * TypeScript báo trùng, và chọn bừa một nghĩa thì một trong hai chỗ sai.
+ *
+ * Chỉ tách ở dấu `|` ĐẦU TIÊN, và tiền tố phải là chữ thường/gạch dưới. Nhờ
+ * thế một câu tiếng Việt có dấu `|` thật (hiếm, nhưng có) không bị cắt nhầm.
+ */
+const NGU_CANH = /^[a-z_]{2,20}\|/;
+export function boNguCanh(cau: string): string {
+  return NGU_CANH.test(cau) ? cau.slice(cau.indexOf('|') + 1) : cau;
+}
+
+/**
  * Dịch một câu.
  *
- * Không có trong từ điển ⇒ trả nguyên câu tiếng Việt. Đó là lựa chọn có chủ
- * đích: một câu tiếng Việt lọt giữa giao diện tiếng Anh thì lạ mắt nhưng vẫn
- * dùng được, còn một chuỗi rỗng hay một mã khoá thì không.
+ * Không có trong từ điển ⇒ trả nguyên câu tiếng Việt (đã gỡ tiền tố ngữ cảnh).
+ * Đó là lựa chọn có chủ đích: một câu tiếng Việt lọt giữa giao diện tiếng Anh
+ * thì lạ mắt nhưng vẫn dùng được, còn một chuỗi rỗng hay một mã khoá thì không.
  */
 export function dich(cau: string): string {
-  if (hienTai === 'vi') return cau;
-  return TU_DIEN[cau] ?? cau;
+  if (hienTai === 'vi') return boNguCanh(cau);
+  return TU_DIEN[cau] ?? boNguCanh(cau);
 }
 
 /**
@@ -102,7 +120,10 @@ export function useDich(): { dich: typeof dich; dichP: typeof dichP; nn: NgonNgu
     return () => { nguoiNghe.delete(f); };
   }, []);
 
-  const d = useCallback((cau: string) => (nn === 'vi' ? cau : TU_DIEN[cau] ?? cau), [nn]);
+  const d = useCallback(
+    (cau: string) => (nn === 'vi' ? boNguCanh(cau) : TU_DIEN[cau] ?? boNguCanh(cau)),
+    [nn],
+  );
   const dP = useCallback(
     (cau: string, thay: Record<string, string | number>) =>
       d(cau).replace(/\{(\w+)\}/g, (nguyen, ten: string) =>

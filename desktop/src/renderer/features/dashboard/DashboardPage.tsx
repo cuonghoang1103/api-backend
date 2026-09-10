@@ -95,14 +95,14 @@ interface DashboardData {
  * một giờ hiện hai chữ khác nhau ở hai nơi.
  */
 const HOAT_DONG = [
-  { khoa: 'study',    ten: 'Học tập',    mau: '#7c3aed', Icon: BookOpen },
-  { khoa: 'work',     ten: 'Làm việc',   mau: '#0891b2', Icon: Briefcase },
-  { khoa: 'exercise', ten: 'Thể dục',    mau: '#059669', Icon: Dumbbell },
-  { khoa: 'cook',     ten: 'Nấu ăn',     mau: '#ea580c', Icon: UtensilsCrossed },
-  { khoa: 'sleep',    ten: 'Đi ngủ',     mau: '#4f46e5', Icon: Moon },
-  { khoa: 'rest',     ten: 'Nghỉ ngơi',  mau: '#db2777', Icon: Coffee },
-  { khoa: 'leisure',  ten: 'Giải trí',   mau: '#d97706', Icon: Gamepad2 },
-  { khoa: 'social',   ten: 'Bạn bè',     mau: '#0d9488', Icon: Users },
+  { khoa: 'study',    ten: 'hoatdong|Học tập',    mau: '#7c3aed', Icon: BookOpen },
+  { khoa: 'work',     ten: 'hoatdong|Làm việc',   mau: '#0891b2', Icon: Briefcase },
+  { khoa: 'exercise', ten: 'hoatdong|Thể dục',    mau: '#059669', Icon: Dumbbell },
+  { khoa: 'cook',     ten: 'hoatdong|Nấu ăn',     mau: '#ea580c', Icon: UtensilsCrossed },
+  { khoa: 'sleep',    ten: 'hoatdong|Đi ngủ',     mau: '#4f46e5', Icon: Moon },
+  { khoa: 'rest',     ten: 'hoatdong|Nghỉ ngơi',  mau: '#db2777', Icon: Coffee },
+  { khoa: 'leisure',  ten: 'hoatdong|Giải trí',   mau: '#d97706', Icon: Gamepad2 },
+  { khoa: 'social',   ten: 'hoatdong|Bạn bè',     mau: '#0d9488', Icon: Users },
 ] as const;
 
 const THEO_KHOA = new Map(HOAT_DONG.map((h) => [h.khoa, h]));
@@ -629,7 +629,7 @@ export function DashboardPage() {
                       >
                         <span className="ct-tq-chon-cham" style={{ background: mau }} />
                         <Icon size={13} aria-hidden />
-                        {ten}
+                        {dich(ten)}
                       </button>
                     ))}
                   </div>

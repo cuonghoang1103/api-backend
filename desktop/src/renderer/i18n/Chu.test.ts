@@ -8,6 +8,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { tachDinhDang } from './Chu';
+import { boNguCanh } from './index';
 
 describe('tách đậm và mã', () => {
   it('câu trơn ⇒ một mẩu', () => {
@@ -44,5 +45,28 @@ describe('tách đậm và mã', () => {
 
   it('dấu lẻ không cặp thì để nguyên, không nuốt mất chữ', () => {
     expect(tachDinhDang('2 ** 3 = 8').map((m) => m.chu).join('')).toBe('2 ** 3 = 8');
+  });
+});
+
+describe('tiền tố ngữ cảnh', () => {
+  it('⛔ gỡ tiền tố khi trả về tiếng Việt', () => {
+    // `'hoatdong|Học tập'` phải hiện ra là "Học tập", không phải cả khoá.
+    // Thiếu bước gỡ thì người dùng tiếng Việt nhìn thấy chính cái khoá kỹ thuật.
+    expect(boNguCanh('hoatdong|Học tập')).toBe('Học tập');
+  });
+
+  it('câu KHÔNG có tiền tố thì để nguyên', () => {
+    expect(boNguCanh('Cài đặt')).toBe('Cài đặt');
+  });
+
+  it('⛔ dấu `|` THẬT trong câu không bị cắt nhầm', () => {
+    // Tiền tố phải là chữ thường/gạch dưới. "Ctrl | Alt" hay "Tên | Mô tả" là
+    // chữ người dùng đọc, không phải khoá.
+    expect(boNguCanh('Tên | Mô tả')).toBe('Tên | Mô tả');
+    expect(boNguCanh('Bấm Ctrl|C để chép')).toBe('Bấm Ctrl|C để chép');
+  });
+
+  it('chỉ tách ở dấu `|` ĐẦU TIÊN', () => {
+    expect(boNguCanh('nhom|A|B')).toBe('A|B');
   });
 });

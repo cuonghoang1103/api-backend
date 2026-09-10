@@ -806,4 +806,33 @@ export const TU_DIEN: Record<string, string> = {
   'Thấp': 'Low',
   'Vừa': 'Medium',
   'Không lặp': 'Doesn’t repeat',
+  /* ⚠️ Những mục dưới đây đi qua `dich(bien)`, KHÔNG phải `dich('chuỗi')` —
+     nên `tuDien.test.ts` không thấy chúng (nó chỉ soi chuỗi hằng). Thêm hoặc
+     đổi nhãn trong các hằng ấy thì phải nhớ sang đây, không ai nhắc. */
+
+  // ── Hoạt động trong ngày (Tổng quan) ────────────────────
+  'hoatdong|Học tập': 'Study',
+  'hoatdong|Làm việc': 'Work',
+  'hoatdong|Thể dục': 'Exercise',
+  'hoatdong|Nấu ăn': 'Cooking',
+  'hoatdong|Đi ngủ': 'Sleep',
+  'hoatdong|Nghỉ ngơi': 'Rest',
+  'hoatdong|Giải trí': 'Leisure',
+
+  // ── Thứ trong tuần (Soạn lịch) ──────────────────────────
+  'Thứ 2': 'Monday',
+  'Thứ 3': 'Tuesday',
+  'Thứ 4': 'Wednesday',
+  'Thứ 5': 'Thursday',
+  'Thứ 6': 'Friday',
+  'Thứ 7': 'Saturday',
+  'Chủ nhật': 'Sunday',
+
+  // ── Nhắc trước giờ học ──────────────────────────────────
+  'Không nhắc': 'No reminder',
+  'Trước 5 phút': '5 minutes before',
+  'Trước 10 phút': '10 minutes before',
+  'Trước 15 phút': '15 minutes before',
+  'Trước 30 phút': '30 minutes before',
+  'Trước 1 giờ': '1 hour before',
 };

@@ -136,7 +136,7 @@ const BAC = [
 ] as const;
 
 export function ChatMode({ pro }: { pro: boolean }) {
-  const { dich } = useDich();
+  const { dich, dichP } = useDich();
   const { api } = useSession();
   const { settings, layThamSo, lanDieuHuong } = useAppState();
   const [luot, datLuot] = useState<Luot[]>([]);
@@ -230,7 +230,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
       datTenMoi('');
       await napThuMuc();
     } catch (err) {
-      datLoi(`Không tạo được thư mục: ${(err as Error).message}`);
+      datLoi(dichP('Không tạo được thư mục: {loi}', { loi: (err as Error).message }));
     }
   }, [api, tenMoi, napThuMuc]);
 
@@ -244,7 +244,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
       if (loc === id) datLoc(null);
       await Promise.all([napThuMuc(), napDsPhien()]);
     } catch (err) {
-      datLoi(`Không xoá được thư mục: ${(err as Error).message}`);
+      datLoi(dichP('Không xoá được thư mục: {loi}', { loi: (err as Error).message }));
     }
   }, [api, loc, napThuMuc, napDsPhien]);
 
@@ -254,7 +254,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
       await api.request(`/api/v1/ai/chat/sessions/${sid}/folder`, { method: 'PATCH', body: { folderId } });
       await Promise.all([napThuMuc(), napDsPhien()]);
     } catch (err) {
-      datLoi(`Không xếp được: ${(err as Error).message}`);
+      datLoi(dichP('Không xếp được: {loi}', { loi: (err as Error).message }));
     }
   }, [api, napThuMuc, napDsPhien]);
 
@@ -300,7 +300,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
       lichSu.dong();
       datLoi(null);
     } catch (err) {
-      datLoi(`Không mở được việc cũ: ${(err as Error).message}`);
+      datLoi(dichP('Không mở được việc cũ: {loi}', { loi: (err as Error).message }));
     }
   }, [api]);
 
@@ -311,7 +311,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
       if (id === phienId) { datPhienId(null); datLuot([]); }
       await napDsPhien();
     } catch (err) {
-      datLoi(`Không xoá được: ${(err as Error).message}`);
+      datLoi(dichP('Không xoá được: {loi}', { loi: (err as Error).message }));
     }
   }, [api, phienId, napDsPhien]);
 
@@ -330,7 +330,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
         method: 'PATCH', body: { pinned: p.pinned !== true },
       });
       await napDsPhien();
-    } catch (err) { datLoi(`Không ghim được: ${(err as Error).message}`); }
+    } catch (err) { datLoi(dichP('Không ghim được: {loi}', { loi: (err as Error).message })); }
   }, [api, napDsPhien]);
 
   const luuTruPhien = useCallback(async (p: PhienChat) => {
@@ -341,7 +341,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
         method: 'PATCH', body: { archived: !xemLuuTru },
       });
       await napDsPhien();
-    } catch (err) { datLoi(`Không lưu trữ được: ${(err as Error).message}`); }
+    } catch (err) { datLoi(dichP('Không lưu trữ được: {loi}', { loi: (err as Error).message })); }
   }, [api, napDsPhien, xemLuuTru]);
 
   const doiTenPhien = useCallback(async (id: string, ten: string) => {
@@ -349,7 +349,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
     try {
       await api.request(`/api/v1/ai/chat/sessions/${id}`, { method: 'PATCH', body: { title: ten } });
       await napDsPhien();
-    } catch (err) { datLoi(`Không đổi tên được: ${(err as Error).message}`); }
+    } catch (err) { datLoi(dichP('Không đổi tên được: {loi}', { loi: (err as Error).message })); }
   }, [api, napDsPhien]);
 
   /**
@@ -367,7 +367,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
       );
       await napDsPhien();
       if (r?.sessionId) await moPhien(r.sessionId);
-    } catch (err) { datLoi(`Không tách nhánh được: ${(err as Error).message}`); }
+    } catch (err) { datLoi(dichP('Không tách nhánh được: {loi}', { loi: (err as Error).message })); }
   }, [api, napDsPhien, moPhien]);
 
   /**
@@ -389,7 +389,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
       });
       await napDsPhien();
     } catch (err) {
-      datLoi(`Đã cắt trên màn hình nhưng máy chủ chưa cắt được: ${(err as Error).message}`);
+      datLoi(dichP('Đã cắt trên màn hình nhưng máy chủ chưa cắt được: {loi}', { loi: (err as Error).message }));
     }
   }, [api, luot, phienId, napDsPhien]);
 
@@ -409,7 +409,7 @@ export function ChatMode({ pro }: { pro: boolean }) {
       await napDsPhien();
       if (r?.sessionId) await moPhien(r.sessionId);
     } catch (err) {
-      datLoi(`Không tách nhánh được: ${(err as Error).message}`);
+      datLoi(dichP('Không tách nhánh được: {loi}', { loi: (err as Error).message }));
     }
   }, [api, phienId, napDsPhien, moPhien]);
 
@@ -1000,9 +1000,11 @@ export function ChatMode({ pro }: { pro: boolean }) {
               data-chon={b.id === bac}
               disabled={dangChay || (b.canPro && !pro)}
               onClick={() => datBac(b.id)}
-              title={b.canPro && !pro ? `${b.mo} (bạn chưa có Pro)` : b.mo}
+              title={b.canPro && !pro
+                ? dichP('{mo} (bạn chưa có Pro)', { mo: dich(b.mo) })
+                : dich(b.mo)}
             >
-              {b.nhan}
+              {dich(b.nhan)}
             </button>
           ))}
         </div>

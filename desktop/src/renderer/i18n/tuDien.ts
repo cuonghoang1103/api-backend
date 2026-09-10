@@ -771,4 +771,39 @@ export const TU_DIEN: Record<string, string> = {
     'Admin account — never blocked. Usage is still recorded.',
   'Mỗi tài khoản có ví RIÊNG cho từng mảng, tính trượt trong {n} giờ vừa qua — người khác dùng nhiều không ảnh hưởng tới bạn, và AI Code hết không làm AI Chat dừng theo.':
     'Every account has its OWN allowance per area, measured over a rolling {n}-hour window — heavy use by other people does not affect you, and running out on AI Code does not stop AI Chat.',
+  // ── Bậc model trong AI Chat ─────────────────────────────
+  'Thường': 'Standard',
+  'Nhanh, đủ cho hỏi đáp hằng ngày': 'Fast, enough for everyday questions',
+  'Suy luận sâu hơn — cần tài khoản Pro': 'Deeper reasoning — requires a Pro account',
+  'Mạnh nhất, đọc ảnh và tài liệu — cần Pro': 'The strongest tier, reads images and documents — requires Pro',
+  '{mo} (bạn chưa có Pro)': '{mo} (you don’t have Pro)',
+
+  // ── Câu lỗi ghép chuỗi ──────────────────────────────────
+  'Không tạo được thư mục: {loi}': 'Couldn’t create the folder: {loi}',
+  'Không xoá được thư mục: {loi}': 'Couldn’t delete the folder: {loi}',
+  'Không xếp được: {loi}': 'Couldn’t move it: {loi}',
+  'Không mở được việc cũ: {loi}': 'Couldn’t reopen that task: {loi}',
+  'Không xoá được: {loi}': 'Couldn’t delete it: {loi}',
+  'Không ghim được: {loi}': 'Couldn’t pin it: {loi}',
+  'Không lưu trữ được: {loi}': 'Couldn’t archive it: {loi}',
+  'Không đổi tên được: {loi}': 'Couldn’t rename it: {loi}',
+  'Không tách nhánh được: {loi}': 'Couldn’t branch off: {loi}',
+  'Đã cắt trên màn hình nhưng máy chủ chưa cắt được: {loi}':
+    'Stopped on screen, but the server hasn’t stopped yet: {loi}',
+
+  // ── Phạm vi & nhịp lặp của Bảng việc ────────────────────
+  'Hôm nay': 'Today',
+  'việc phải xong trong ngày': 'due today',
+  'Tuần này': 'This week',
+  'việc của cả tuần': 'due this week',
+  'Tháng này': 'This month',
+  'việc của cả tháng': 'due this month',
+  'Quý này': 'This quarter',
+  'mục tiêu vài tháng': 'goals spanning a few months',
+  'Năm nay': 'This year',
+  'mục tiêu dài hạn': 'long-term goals',
+  'Không đặt': 'None',
+  'Thấp': 'Low',
+  'Vừa': 'Medium',
+  'Không lặp': 'Doesn’t repeat',
 };

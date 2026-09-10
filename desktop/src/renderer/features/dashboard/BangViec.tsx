@@ -196,7 +196,7 @@ function DongViec({ t, con, onSua, onXoa, onThemCon, keo }: {
           </span>
         )}
         {(t.repeat ?? 'none') !== 'none' && (
-          <span className="ct-viec-lap" title={NHIP_LAP.find((n) => n.ma === t.repeat)?.ten}>
+          <span className="ct-viec-lap" title={(() => { const n = NHIP_LAP.find((x) => x.ma === t.repeat); return n ? dich(n.ten) : undefined; })()}>
             <Repeat size={11} aria-hidden />
           </span>
         )}
@@ -247,7 +247,7 @@ function DongViec({ t, con, onSua, onXoa, onThemCon, keo }: {
             <label>
               <Repeat size={11} aria-hidden /> Lặp
               <select value={t.repeat ?? 'none'} onChange={(e) => onSua(t, { repeat: e.target.value })}>
-                {NHIP_LAP.map((n) => <option key={n.ma} value={n.ma}>{n.ten}</option>)}
+                {NHIP_LAP.map((n) => <option key={n.ma} value={n.ma}>{dich(n.ten)}</option>)}
               </select>
             </label>
             <label>
@@ -394,9 +394,9 @@ export function BangViec({ tasks, pham, datPham, onThem, onSua, onXoa, onThemCon
               aria-selected={pham === p.ma}
               data-chon={pham === p.ma}
               onClick={() => datPham(p.ma)}
-              title={p.phu}
+              title={dich(p.phu)}
             >
-              {p.ten}
+              {dich(p.ten)}
               {chuaXong > 0 && <span className="ct-bangviec-dem">{chuaXong}</span>}
             </button>
           );

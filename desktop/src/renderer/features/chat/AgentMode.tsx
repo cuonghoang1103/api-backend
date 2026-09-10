@@ -485,15 +485,15 @@ export function AgentMode({
         }
         const tuKhoa = phan.slice(1).join(' ').trim();
         if (!tuKhoa) {
-          datLenhTraLoi('**Kho AI Templates** — 871 kỹ năng · 421 agent phụ · 286 lệnh.\n\n'
-            + '- Tìm: `/kynang <từ khoá>` (bỏ dấu cũng ra — `bao mat`)\n'
-            + '- Cài: `/kynang cai <tên>` · ghi đè: thêm `--de`\n\n'
-            + '_Hook và MCP không cài từ đây — chúng là lệnh sẽ chạy, và có cửa duyệt riêng._');
+          /* Trọn khối markdown là MỘT mục từ điển. Cắt theo dòng rồi nối lại
+             thì bản dịch không đảo được trật tự, mà tiếng Anh cần đảo ở đúng
+             những dòng có chỗ thay. */
+          datLenhTraLoi(dich('**Kho AI Templates** — 871 kỹ năng · 421 agent phụ · 286 lệnh.\n\n- Tìm: `/kynang <từ khoá>` (bỏ dấu cũng ra — `bao mat`)\n- Cài: `/kynang cai <tên>` · ghi đè: thêm `--de`\n\n_Hook và MCP không cài từ đây — chúng là lệnh sẽ chạy, và có cửa duyệt riêng._'));
           return;
         }
         const ds = await b.khoTim(cuocId, tuKhoa).catch(() => []);
         datLenhTraLoi(ds.length === 0
-          ? `Không có gì khớp "${tuKhoa}".`
+          ? dichP('Không có gì khớp "{tu}".', { tu: tuKhoa })
           : `**${ds.length}** kết quả cho "${tuKhoa}":\n\n`
             + ds.map((x) => `- \`${x.ten}\` · ${x.loai} · ${x.danhMuc}`).join('\n')
             + '\n\nCài: `/kynang cai <tên>`');
@@ -509,18 +509,19 @@ export function AgentMode({
           const rieng = dau.slice(2).join(' ').trim();
           const so = await window.cuongthai?.agent.xoaQuyenLau(cuocId, rieng || undefined) ?? 0;
           datLenhTraLoi(so === 0
-            ? 'Không có quyền nào bị thu hồi.'
+            ? dich('Không có quyền nào bị thu hồi.')
             : `Đã thu hồi **${so}** quyền${rieng ? ` cho \`${rieng}\`` : ' của dự án này'}.`);
           return;
         }
         const r = await window.cuongthai?.agent.dsQuyenLau(cuocId);
-        if (!r?.goc) { datLenhTraLoi('Tab này chưa mở dự án nào.'); return; }
+        if (!r?.goc) { datLenhTraLoi(dich('Tab này chưa mở dự án nào.')); return; }
         datLenhTraLoi(r.khoa.length === 0
-          ? `Dự án \`${r.goc}\` chưa có quyền nào được "Luôn cho phép".\n\n`
-            + '_Nút đó nằm trên thẻ duyệt, cạnh "Cho phép"._'
-          : `**${r.khoa.length}** thứ đang được tự duyệt ở \`${r.goc}\`:\n\n`
+          ? dichP('Dự án `{goc}` chưa có quyền nào được "Luôn cho phép".\n\n_Nút đó nằm trên thẻ duyệt, cạnh "Cho phép"._', { goc: r.goc ?? '' })
+          : dichP('**{n}** thứ đang được tự duyệt ở `{goc}`:', { n: r.khoa.length, goc: r.goc ?? '' })
+            + '\n\n'
             + r.khoa.map((k) => `- \`${k}\``).join('\n')
-            + '\n\nThu hồi tất cả: `/quyen xoa` · thu hồi một cái: `/quyen xoa <nguyên văn>`');
+            + '\n\n'
+            + dich('Thu hồi tất cả: `/quyen xoa` · thu hồi một cái: `/quyen xoa <nguyên văn>`'));
       })();
       return;
     }
@@ -529,13 +530,19 @@ export function AgentMode({
       datNhap('');
       const q = trangThai.hanMuc;
       datLenhTraLoi(
-        `**Chi phí việc này**\n\n`
-        + `- Đã tiêu: **~$${trangThai.tienPhien.toFixed(3)}**\n`
-        + `- Số bước đã đi: ${trangThai.buoc ?? 0}\n`
-        + (q ? `- Hạn mức 5 giờ: còn **${Math.max(0, q.tran - q.daDung).toLocaleString('vi-VN')}**`
-              + ` / ${q.tran.toLocaleString('vi-VN')} token\n` : '')
-        + `- File đã sửa (hoàn tác được): ${trangThai.soFileDaSua}\n\n`
-        + '_Con số là ƯỚC LƯỢNG — cổng không công khai giá._',
+        dich('**Chi phí việc này**') + '\n\n'
+        + dichP('- Đã tiêu: **~${tien}**\n', { tien: trangThai.tienPhien.toFixed(3) })
+        /* `buoc` là `{ nay, tran }`, không phải số — lấy `nay`. Bản cũ nội
+           suy thẳng cả object nên dòng này in ra `[object Object]` ở mọi lượt
+           có bước; `tsc` chỉ bắt được sau khi chuyển sang `dichP` (nội suy
+           trong template literal thì mọi thứ đều hợp lệ). */
+        + dichP('- Số bước đã đi: {n}\n', { n: trangThai.buoc?.nay ?? 0 })
+        + (q ? dichP('- Hạn mức 5 giờ: còn **{con}** / {tran} token\n', {
+          con: Math.max(0, q.tran - q.daDung).toLocaleString('vi-VN'),
+          tran: q.tran.toLocaleString('vi-VN'),
+        }) : '')
+        + dichP('- File đã sửa (hoàn tác được): {n}\n\n', { n: trangThai.soFileDaSua })
+        + dich('_Con số là ƯỚC LƯỢNG — cổng không công khai giá._'),
       );
       return;
     }
@@ -543,7 +550,7 @@ export function AgentMode({
     if (lenh === '/undo' || lenh === '/hoantac') {
       datNhap('');
       if (trangThai.soFileDaSua === 0) {
-        datLenhTraLoi('Chưa có file nào để hoàn tác trong việc này.');
+        datLenhTraLoi(dich('Chưa có file nào để hoàn tác trong việc này.'));
         return;
       }
       void hoanTac();
@@ -662,8 +669,8 @@ export function AgentMode({
         <div className="ct-dk-phu" data-thieu={!coThuMuc}>
           <span>
             {coThuMuc
-              ? 'Thả file hoặc thư mục vào đây — agent sẽ đọc được nó'
-              : 'Chọn thư mục dự án trước đã — agent chỉ đọc được trong đó'}
+              ? dich('Thả file hoặc thư mục vào đây — agent sẽ đọc được nó')
+              : dich('Chọn thư mục dự án trước đã — agent chỉ đọc được trong đó')}
           </span>
         </div>
       )}
@@ -683,10 +690,10 @@ export function AgentMode({
           type="button"
           className="ct-agent-ws"
           onClick={() => void chonThuMuc()}
-          title={thuMuc?.path ?? 'Chưa chọn thư mục dự án'}
+          title={thuMuc?.path ?? dich('Chưa chọn thư mục dự án')}
         >
           <FolderOpen size={14} aria-hidden />
-          <span className="ct-agent-ws-name">{thuMuc?.name ?? 'Chọn thư mục dự án…'}</span>
+          <span className="ct-agent-ws-name">{thuMuc?.name ?? dich('Chọn thư mục dự án…')}</span>
           {thuMuc?.branch && <span className="ct-agent-branch">{thuMuc.branch}</span>}
         </button>
 
@@ -729,7 +736,7 @@ export function AgentMode({
           }
         >
           <Globe size={13} aria-hidden />
-          {thuMuc?.choTrinhDuyet ? 'Trình duyệt: BẬT' : 'Trình duyệt: tắt'}
+          {thuMuc?.choTrinhDuyet ? dich('Trình duyệt: BẬT') : dich('Trình duyệt: tắt')}
         </button>
 
         {/* MỞ KHUNG WEB ngay trong AI Code, không phải sang tab Trình duyệt.
@@ -744,11 +751,11 @@ export function AgentMode({
           data-bat={webUrl !== null}
           onClick={() => datWeb((cu) => (cu ? null : { url: WEB_MAC_DINH, ep: false }))}
           title={webUrl !== null
-            ? 'Đóng khung trình duyệt bên phải'
-            : 'Mở trình duyệt ngay cạnh bảng ghi — xem trang chạy trong lúc agent sửa mã'}
+            ? dich('Đóng khung trình duyệt bên phải')
+            : dich('Mở trình duyệt ngay cạnh bảng ghi — xem trang chạy trong lúc agent sửa mã')}
         >
           <PanelRight size={13} aria-hidden />
-          {webUrl !== null ? 'Khung web: MỞ' : 'Khung web'}
+          {webUrl !== null ? dich('Khung web: MỞ') : dich('Khung web')}
         </button>
 
         {/* Bảng chạy lệnh của NGƯỜI DÙNG — khác hẳn `run_command` của agent:
@@ -762,7 +769,7 @@ export function AgentMode({
           title={dich('Chạy lệnh trong thư mục dự án — npm test, git status… (không phải terminal đầy đủ)')}
         >
           <SquareTerminal size={13} aria-hidden />
-          {moBangLenh ? 'Bảng lệnh: MỞ' : 'Bảng lệnh'}
+          {moBangLenh ? dich('Bảng lệnh: MỞ') : dich('Bảng lệnh')}
         </button>
 
         {/* KHÔNG bọc trong `coThuMuc`: sổ ghi chú nằm trên máy chủ, không phải
@@ -782,7 +789,7 @@ export function AgentMode({
           }
         >
           <NotebookPen size={13} aria-hidden />
-          {thuMuc?.choGhiNote ? 'Ghi chú: BẬT' : 'Ghi chú: tắt'}
+          {thuMuc?.choGhiNote ? dich('Ghi chú: BẬT') : dich('Ghi chú: tắt')}
         </button>
 
         {trangThai.soFileDaSua > 0 && (

@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import type { AppInfo } from '../../shared/ipc';
+import { useDich } from '../i18n';
 
 export function About() {
+  const { dich } = useDich();
   const [info, setInfo] = useState<AppInfo | null>(null);
 
   useEffect(() => {
@@ -13,12 +15,12 @@ export function About() {
       <div className="ct-panel">
         <h1>CuongThai Desktop</h1>
         <p className="ct-muted">
-          Ứng dụng desktop cho cuongthai.com — nền tảng CuongHoangDev.
+          {dich('Ứng dụng desktop cho cuongthai.com — nền tảng CuongHoangDev.')}
         </p>
 
         <dl className="ct-rows">
           <div className="ct-row">
-            <dt>Phiên bản</dt>
+            <dt>{dich('Phiên bản')}</dt>
             <dd>{info?.version ?? '…'}</dd>
           </div>
           <div className="ct-row">
@@ -34,11 +36,11 @@ export function About() {
             <dd>{info?.nodeVersion ?? '…'}</dd>
           </div>
           <div className="ct-row">
-            <dt>Nền tảng</dt>
+            <dt>{dich('Nền tảng')}</dt>
             <dd>{info ? `${info.platform} · ${info.arch}` : '…'}</dd>
           </div>
           <div className="ct-row">
-            <dt>Máy chủ API</dt>
+            <dt>{dich('Máy chủ API')}</dt>
             <dd>{info?.apiOrigin ?? '…'}</dd>
           </div>
         </dl>

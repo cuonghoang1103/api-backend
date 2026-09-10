@@ -27,6 +27,20 @@ function moiTep(thuMuc: string, ra: string[] = []): string[] {
   return ra;
 }
 
+/**
+ * Gỡ lớp thoát của chuỗi trong MÃ NGUỒN về đúng chuỗi lúc CHẠY.
+ *
+ * ⚠️ Thiếu bước này là phép kiểm báo nhầm: trong mã, `'a\\nb'` là bốn ký tự
+ * (có dấu gạch chéo ngược), còn khoá từ điển `'a\\nb'` sau khi JS phân tích là
+ * ba ký tự (xuống dòng thật). So thẳng hai thứ ấy thì mọi câu nhiều dòng —
+ * tức là mọi đầu ra lệnh gạch chéo — đều bị báo là "thiếu bản dịch" trong khi
+ * chúng có đủ.
+ */
+function boThoat(s: string): string {
+  return s.replace(/\\([nrt'"\\`])/g, (_, c: string) =>
+    ({ n: '\n', r: '\r', t: '\t' }[c] ?? c));
+}
+
 /** Mọi chuỗi hằng nằm trong `dich('…')` / `dichP('…')` khắp renderer. */
 function chuoiDaBoc(): { cau: string; tep: string }[] {
   const ra: { cau: string; tep: string }[] = [];
@@ -36,7 +50,7 @@ function chuoiDaBoc(): { cau: string; tep: string }[] {
       .replace(/\/\*[\s\S]*?\*\//g, '')
       .replace(/^\s*\/\/.*$/gm, '');
     for (const m of ma.matchAll(/(?<![A-Za-z0-9_$.])dichP?\(\s*'((?:[^'\\]|\\.)*)'/g)) {
-      ra.push({ cau: m[1]!.replace(/\\'/g, "'"), tep: tep.slice(GOC.length + 1) });
+      ra.push({ cau: boThoat(m[1]!), tep: tep.slice(GOC.length + 1) });
     }
     /* `<Chu cau="…" />` — văn xuôi có định dạng. Bỏ sót nhánh này thì mọi câu
        dài nhất trong app (cảnh báo, hướng dẫn) không ai canh, mà chúng lại là

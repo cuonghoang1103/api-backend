@@ -8,8 +8,11 @@
  */
 import { ExternalLink } from 'lucide-react';
 import type { RouteDef } from '../routes';
+import { useDich } from '../i18n';
+import { Chu } from '../i18n/Chu';
 
 export function NotPorted({ route }: { route: RouteDef }) {
+  const { dich } = useDich();
   const openOnWeb = () => {
     void window.cuongthai?.app
       .getInfo()
@@ -20,16 +23,14 @@ export function NotPorted({ route }: { route: RouteDef }) {
     <div className="ct-page">
       <div className="ct-empty">
         <route.icon size={30} aria-hidden className="ct-empty-icon" />
-        <h1>{route.label}</h1>
+        <h1>{dich(route.label)}</h1>
         <p>
-          Tính năng này đã có trên <strong>cuongthai.com</strong> nhưng chưa được
-          đưa vào bản desktop. Nó nằm trong kế hoạch — xem
-          {' '}<code>docs/electron-implementation-plan.md</code>.
+          <Chu cau="Tính năng này đã có trên **cuongthai.com** nhưng chưa được đưa vào bản desktop. Nó nằm trong kế hoạch — xem `docs/electron-implementation-plan.md`." />
         </p>
         <div className="ct-actions">
           <button type="button" className="ct-btn" onClick={openOnWeb}>
             <ExternalLink size={14} aria-hidden />
-            Mở trên web
+            {dich('Mở trên web')}
           </button>
         </div>
         <p className="ct-empty-note">

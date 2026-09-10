@@ -682,4 +682,81 @@ export const TU_DIEN: Record<string, string> = {
     'Articles you open are saved so you can read them offline.',
   'Đọc được offline': 'Available offline',
   'Mở bản đầy đủ trên web': 'Open the full version on the web',
+  'Tính năng này đã có trên **cuongthai.com** nhưng chưa được đưa vào bản desktop. Nó nằm trong kế hoạch — xem `docs/electron-implementation-plan.md`.':
+    'This feature already exists on **cuongthai.com** but has not been brought into the desktop app yet. It is on the roadmap — see `docs/electron-implementation-plan.md`.',
+  'Ứng dụng desktop cho cuongthai.com — nền tảng CuongHoangDev.':
+    'The desktop app for cuongthai.com — the CuongHoangDev platform.',
+  'Nền tảng': 'Platform',
+  'Máy chủ API': 'API server',
+  // ── Thanh "Odin đang…" (chuỗi do `viecDangLam` sinh) ────
+  'bước {nay}/{tran}': 'step {nay}/{tran}',
+  'Đang chờ bạn duyệt — Odin dừng ở đây tới khi bạn bấm.':
+    'Waiting for your approval — Odin stops here until you decide.',
+  'Odin đang code…': 'Odin is coding…',
+  'Odin đang xem kết quả lệnh…': 'Odin is reading the command output…',
+  'Odin đang đọc mã dự án…': 'Odin is reading your code…',
+  'Odin đang đọc dự án…': 'Odin is reading the project…',
+  'Odin đang chuẩn bị…': 'Odin is getting ready…',
+  'Odin đang đọc file…': 'Odin is reading a file…',
+  'Odin đang xem thư mục…': 'Odin is listing a folder…',
+  'Odin đang tìm trong mã…': 'Odin is searching the code…',
+  'Odin đang sửa file…': 'Odin is editing a file…',
+  'Odin đang tạo file…': 'Odin is creating a file…',
+  'Odin đang sửa nhiều chỗ…': 'Odin is making several edits…',
+  'Odin đang xoá file…': 'Odin is deleting a file…',
+  'Odin đang đổi tên file…': 'Odin is renaming a file…',
+  'Odin đang chạy lệnh…': 'Odin is running a command…',
+  'Odin đang xem git…': 'Odin is checking git…',
+  'Odin đang xem thay đổi…': 'Odin is reviewing the changes…',
+  'Odin đang mở trang…': 'Odin is opening a page…',
+  'Odin đang đọc trang…': 'Odin is reading the page…',
+  'Odin đang lấy danh sách liên kết…': 'Odin is collecting the links…',
+  'Odin đang tải file…': 'Odin is downloading a file…',
+  'Odin đang tải cả lô file…': 'Odin is downloading a batch of files…',
+  'Odin đang chụp màn hình trang…': 'Odin is taking a screenshot…',
+  'Odin đang đọc lỗi trang…': 'Odin is reading the page errors…',
+  'Odin đang đọc trang web…': 'Odin is reading the web page…',
+  'Odin đang tìm trên web…': 'Odin is searching the web…',
+  'Odin agent phụ đang làm…': 'Odin’s sub-agent is working…',
+  'Odin đang cập nhật kế hoạch…': 'Odin is updating the plan…',
+  'Odin đang gọi công cụ ngoài…': 'Odin is calling an external tool…',
+  'Odin đang chạy…': 'Odin is working…',
+  // ── Thanh công cụ AI Code ───────────────────────────────
+  'Trình duyệt: BẬT': 'Browser: ON',
+  'Trình duyệt: tắt': 'Browser: off',
+  'Khung web': 'Web panel',
+  'Khung web: MỞ': 'Web panel: OPEN',
+  'Đóng khung trình duyệt bên phải': 'Close the browser panel on the right',
+  'Mở trình duyệt ngay cạnh bảng ghi — xem trang chạy trong lúc agent sửa mã':
+    'Open the browser next to the transcript — watch your page while the agent edits code',
+  'Bảng lệnh: MỞ': 'Command runner: OPEN',
+  'Ghi chú: BẬT': 'Notes: ON',
+  'Ghi chú: tắt': 'Notes: off',
+  'Chưa chọn thư mục dự án': 'No project folder chosen',
+  'Chọn thư mục dự án…': 'Choose a project folder…',
+  'Chọn thư mục dự án trước đã — agent chỉ đọc được trong đó':
+    'Choose a project folder first — that is the only place the agent can read',
+  'Thả file hoặc thư mục vào đây — agent sẽ đọc được nó':
+    'Drop a file or folder here — the agent will be able to read it',
+  'Chưa có file nào để hoàn tác trong việc này.': 'No files to undo in this task.',
+  'Tab này chưa mở dự án nào.': 'This tab has no project open.',
+  'Không có quyền nào bị thu hồi.': 'No permissions were revoked.',
+
+  // ── Đầu ra lệnh gạch chéo (/kynang · /quyen · /tien) ────
+  '**Kho AI Templates** — 871 kỹ năng · 421 agent phụ · 286 lệnh.\n\n- Tìm: `/kynang <từ khoá>` (bỏ dấu cũng ra — `bao mat`)\n- Cài: `/kynang cai <tên>` · ghi đè: thêm `--de`\n\n_Hook và MCP không cài từ đây — chúng là lệnh sẽ chạy, và có cửa duyệt riêng._':
+    '**AI Templates library** — 871 skills · 421 sub-agents · 286 commands.\n\n- Search: `/kynang <keyword>`\n- Install: `/kynang cai <name>` · overwrite: add `--de`\n\n_Hooks and MCP servers are not installed from here — they are commands that will run, and they have their own approval gate._',
+  'Không có gì khớp "{tu}".': 'Nothing matches “{tu}”.',
+  'Dự án `{goc}` chưa có quyền nào được "Luôn cho phép".\n\n_Nút đó nằm trên thẻ duyệt, cạnh "Cho phép"._':
+    'Project `{goc}` has nothing set to “Always allow” yet.\n\n_That button is on the approval card, next to “Allow”._',
+  '**{n}** thứ đang được tự duyệt ở `{goc}`:': '**{n}** things are auto-approved in `{goc}`:',
+  'Thu hồi tất cả: `/quyen xoa` · thu hồi một cái: `/quyen xoa <nguyên văn>`':
+    'Revoke everything: `/quyen xoa` · revoke one: `/quyen xoa <exact text>`',
+  '**Chi phí việc này**': '**Cost of this task**',
+  '- Đã tiêu: **~${tien}**\n': '- Spent: **~${tien}**\n',
+  '- Số bước đã đi: {n}\n': '- Steps taken: {n}\n',
+  '- Hạn mức 5 giờ: còn **{con}** / {tran} token\n':
+    '- 5-hour quota: **{con}** of {tran} tokens left\n',
+  '- File đã sửa (hoàn tác được): {n}\n\n': '- Files changed (undoable): {n}\n\n',
+  '_Con số là ƯỚC LƯỢNG — cổng không công khai giá._':
+    '_These figures are ESTIMATES — the gateway does not publish its prices._',
 };

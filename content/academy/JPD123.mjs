@@ -18,7 +18,7 @@ export default {
     status: 'PUBLISHED',
     shortDescription: 'The second step in Japanese, straight after JPD113: verbs and the polite ます-form, adjectives, telling time, making invitations, the essential て-form, plus ~300 words and 40 kanji — enough to talk about your hometown, plans and daily life.|||Bước thứ hai trong tiếng Nhật, ngay sau JPD113: động từ và thể lịch sự ます, tính từ, nói giờ, mời rủ, thể て thiết yếu, cùng ~300 từ và 40 kanji — đủ để nói về quê hương, dự định và đời sống hằng ngày.',
     description: 'Môn tiếng Nhật sơ cấp A1.2, nối tiếp JPD113 (A1.1). Bạn sẽ học động từ và chia thể ます (hiện tại/quá khứ, khẳng định/phủ định), tính từ (い và な), cách nói thời gian và ngày tháng, mời rủ và đề xuất (～ませんか, ～ましょう), thể て (nhờ vả, nối câu), cùng khoảng 300 từ vựng và hơn 40 chữ Hán. Mục tiêu: giới thiệu về quê hương, nói về dự định và công việc thường làm, mời bạn tham gia hoạt động. Tiên quyết: JPD113.',
-    whatYouLearn: 'Động từ tiếng Nhật & thể lịch sự ます (hiện tại/quá khứ, khẳng định/phủ định); trợ từ chuyển động & hành động (へ/で/を/に); tính từ い và な để mô tả; thời gian, ngày, giờ; mời rủ & đề xuất (～ませんか / ～ましょう); thể て (～てください, nối hành động); ~300 từ vựng chủ đề; hơn 40 kanji; và giới thiệu về quê hương/dự định của bản thân.',
+    whatYouLearn: 'Động từ tiếng Nhật & thể lịch sự ます (hiện tại/quá khứ, khẳng định/phủ định); trợ từ chuyển động & hành động (へ/で/を/に); tính từ い và な để mô tả; thời gian, ngày, giờ; quãng đường AからBまで + どのくらい và bảng đếm 〜じかん/〜ふん; mời rủ & đề xuất (～ませんか / ～ましょう); thể て (～てください, nối hành động); ~300 từ vựng chủ đề; hơn 40 kanji; và giới thiệu về quê hương/dự định của bản thân.',
     requirements: 'Tiên quyết: đạt JPD113 (đọc/viết thành thạo hiragana & katakana, biết mẫu câu は/です/の và ~200 từ đầu). Khuyên dùng My Language (/language/ja) + heyjapan.net để luyện SRS.',
     documentsNote: 'Giáo trình: できる日本語 初級 本冊 (Dekiru Nihongo) · わたしのことばノート・わたしの文法ノート · 漢字たまご 初級 (Kanji Tamago). Công cụ: My Language (/language/ja) để luyện từ vựng/kanji/ngữ pháp, và heyjapan.net. Kèm file syllabus gốc JPD123.pdf.',
   },
@@ -47,7 +47,7 @@ export default {
   <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Particles of motion &amp; action</div><div class="lz-nsub">へ · で · を · に</div></div></div>
   <div class="lz-stage">Describing</div>
   <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Adjectives (い &amp; な)</div><div class="lz-nsub">Four forms · degree words · connectives</div></div></div>
-  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Invitations, time &amp; counting</div><div class="lz-nsub">～ませんか · ～ましょう · counters</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Invitations, time, counting &amp; journeys</div><div class="lz-nsub">～ませんか · ～ましょう · counters · AからBまで どのくらい</div></div></div>
   <div class="lz-stage">Expressing yourself</div>
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Wishes, likes &amp; purpose</div><div class="lz-nsub">ほしい · ～たい · ～に いきます · すき</div></div></div>
   <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Comparison</div><div class="lz-nsub">より · ほど · いちばん · どちらが</div></div></div>
@@ -101,7 +101,7 @@ export default {
   <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Trợ từ chuyển động &amp; hành động</div><div class="lz-nsub">へ · で · を · に</div></div></div>
   <div class="lz-stage">Mô tả</div>
   <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Tính từ (い &amp; な)</div><div class="lz-nsub">Bốn dạng · từ mức độ · liên từ</div></div></div>
-  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Mời rủ, thời gian &amp; đếm</div><div class="lz-nsub">～ませんか · ～ましょう · trợ số từ</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Mời rủ, thời gian, đếm &amp; quãng đường</div><div class="lz-nsub">～ませんか · ～ましょう · trợ số từ · AからBまで どのくらい</div></div></div>
   <div class="lz-stage">Bày tỏ bản thân</div>
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Mong muốn, sở thích &amp; mục đích</div><div class="lz-nsub">ほしい · ～たい · ～に いきます · すき</div></div></div>
   <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">So sánh</div><div class="lz-nsub">より · ほど · いちばん · どちらが</div></div></div>
@@ -803,10 +803,10 @@ Nhận diện từng mảnh: ちいさいです<b>が</b> (liên từ trong câu
       ],
     },
 
-    /* ══════════════════ CHƯƠNG 4 — MỜI RỦ & THỜI GIAN ══════════════════ */
+    /* ══════════════════ CHƯƠNG 4 — MỜI RỦ, THỜI GIAN & QUÃNG ĐƯỜNG ══════════════════ */
     {
-      title: 'Chapter 4 — Invitations, time & counting|||Chương 4 — Mời rủ, thời gian & đếm đồ vật',
-      description: 'Rủ bạn làm gì đó (～ませんか), đề xuất cùng làm (～ましょう), nói giờ/ngày đầy đủ, và trợ số đếm đồ vật (助数詞).',
+      title: 'Chapter 4 — Invitations, time, counting & journeys|||Chương 4 — Mời rủ, thời gian, đếm & quãng đường',
+      description: 'Rủ bạn làm gì đó (～ませんか), đề xuất cùng làm (～ましょう), nói giờ/ngày đầy đủ, trợ số đếm đồ vật (助数詞), quãng đường AからBまで + どのくらい với bảng đếm 〜じかん, và cách nói quê mình ở đâu (〜は〜のどこですか).',
       lessons: [
         {
           title: '4.1 — ～ませんか, ～ましょう & telling time|||4.1 — ～ませんか, ～ましょう & nói giờ',
@@ -941,6 +941,438 @@ Hỏi: なんじに はじまりますか。 ("Mấy giờ bắt đầu?")  Đá
 <a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a12%2Flearn&reflabel=JPD123%20%E2%80%94%20Elementary%20Japanese%20A1.2" target="_blank" rel="noopener">
   <span class="lc-ico">🔢</span>
   <span class="lc-body"><span class="lc-title">Luyện trợ số &amp; giờ</span><span class="lc-sub">Từ vựng số &amp; trợ số SRS trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '4.3 — From A to B: how long does it take?|||4.3 — Từ A đến B mất bao lâu?',
+          slug: 'jpd123-tu-a-den-b',
+          type: 'VIDEO',
+          description: 'AからBまで どのくらいですか + trả lời bằng [phương tiện]で [thời gian]くらいです; bảng đếm 〜じかん đầy đủ (よじかん・しちじかん・くじかん); bẫy あるいて không có で; và かかります. Mọi câu đều có cách đọc kana + rōmaji.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 4 · Lesson 4.3</span>
+<h2>From A to B — how long does it take?</h2>
+<p class="lead">Lesson 4.2 gave you the clock (<strong>〜じ</strong>) and the minute hand (<strong>〜ふん</strong>). This lesson gives you the other kind of time: <strong>how long something lasts</strong>. It is the single most-tested pattern in the JPD123 exam bank — roughly one in three past papers contains it.</p>
+<p>Every sentence below is written three ways: the Japanese as it is printed, the <strong>kana reading</strong>, and the <strong>rōmaji</strong>, so you can say it out loud without guessing.</p>
+
+<h3>1. The question — から・まで・どのくらい</h3>
+<div class="formula"><span class="lbl">Asking the duration of a journey</span>A から  B まで  どのくらい  ですか。<br>A kara  B made  dono kurai  desu ka.</div>
+<p><strong>から</strong> = from (starting point) · <strong>まで</strong> = up to (end point) · <strong>どのくらい</strong> = about how much / how long. The pair から…まで never splits and never reverses.</p>
+<div class="out"><strong>Q:</strong> ハノイから 日本まで どのくらいですか。<br>
+kana: ハノイから にほんまで どのくらいですか<br>
+<em>Hanoi kara Nihon made dono kurai desu ka.</em><br>
+= How long is it from Hanoi to Japan?<br>
+<strong>A:</strong> 五時間くらいです。<br>
+kana: ごじかんくらいです<br>
+<em>Go-jikan kurai desu.</em><br>
+= About five hours.</div>
+<div class="note-ct"><strong>どのくらい・どのぐらい・どれくらい</strong> are all correct and all mean the same thing. Textbooks and exams print <strong>どのくらい</strong> most often, so make that your default — but do not mark the others wrong. <strong>どうくらい</strong> and <strong>どんなくらい</strong> do not exist; they only appear as exam distractors.</div>
+
+<h3>2. The answer — transport で + duration くらいです</h3>
+<div class="formula"><span class="lbl">Answering with the means of travel</span>A から  B まで  [transport] で  [duration] くらいです。<br>A kara  B made  [transport] de  [duration] kurai desu.</div>
+<div class="out"><strong>Q:</strong> とうきょうから アユタヤまで どのくらいですか。<br>
+kana: とうきょうから あゆたやまで どのくらいですか<br>
+<em>Tōkyō kara Ayutaya made dono kurai desu ka.</em><br>
+= How long from Tokyo to Ayutthaya?<br>
+<strong>A:</strong> ひこうきで 六時間くらいです。<br>
+kana: ひこうきで ろくじかんくらいです<br>
+<em>Hikōki de roku-jikan kurai desu.</em><br>
+= About six hours by plane.</div>
+
+<h3>Means of transport — the word that goes before で</h3>
+<table>
+  <thead><tr><th>Japanese</th><th>Kana</th><th>Rōmaji</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td>飛行機</td><td>ひこうき</td><td>hikōki</td><td>plane</td></tr>
+    <tr><td>電車</td><td>でんしゃ</td><td>densha</td><td>train</td></tr>
+    <tr><td>新幹線</td><td>しんかんせん</td><td>shinkansen</td><td>bullet train</td></tr>
+    <tr><td>地下鉄</td><td>ちかてつ</td><td>chikatetsu</td><td>subway</td></tr>
+    <tr><td>車</td><td>くるま</td><td>kuruma</td><td>car</td></tr>
+    <tr><td>自転車</td><td>じてんしゃ</td><td>jitensha</td><td>bicycle</td></tr>
+    <tr><td>船</td><td>ふね</td><td>fune</td><td>boat</td></tr>
+    <tr><td>バス / タクシー / バイク</td><td>—</td><td>basu / takushī / baiku</td><td>bus / taxi / motorbike</td></tr>
+    <tr><td>歩いて</td><td>あるいて</td><td>aruite</td><td>on foot — <strong>no で</strong></td></tr>
+  </tbody>
+</table>
+
+<div class="pitfall"><strong>Trap — あるいて never takes で.</strong> Every word in the table above is a noun and needs で. <strong>あるいて</strong> is not: it is the て-form of the verb 歩きます (to walk), and a て-form already carries the meaning "doing it this way", so a particle after it is ungrammatical.<br>
+✓ うちから 学校まで <strong>あるいて</strong> 五分です。 (uchi kara gakkō made <strong>aruite</strong> go-fun desu)<br>
+✗ うちから 学校まで <strong>あるいてで</strong> 五分です。<br>
+The JPD123 papers ask this directly — the correct choice is the one marked "×" (no particle).</div>
+
+<h3>3. Counting hours — 〜じかん (時間)</h3>
+<p>〜じかん counts a <strong>length</strong> of time. Three readings are irregular; they are the three the examiner listens for.</p>
+<table>
+  <thead><tr><th>Hours</th><th>Kana</th><th>Rōmaji</th></tr></thead>
+  <tbody>
+    <tr><td>1時間</td><td>いちじかん</td><td>ichi-jikan</td></tr>
+    <tr><td>2時間</td><td>にじかん</td><td>ni-jikan</td></tr>
+    <tr><td>3時間</td><td>さんじかん</td><td>san-jikan</td></tr>
+    <tr><td>4時間</td><td><strong>よじかん</strong></td><td><strong>yo-jikan</strong> (not yon-)</td></tr>
+    <tr><td>5時間</td><td>ごじかん</td><td>go-jikan</td></tr>
+    <tr><td>6時間</td><td>ろくじかん</td><td>roku-jikan</td></tr>
+    <tr><td>7時間</td><td><strong>しちじかん</strong></td><td><strong>shichi-jikan</strong> (ななじかん nana-jikan also heard)</td></tr>
+    <tr><td>8時間</td><td>はちじかん</td><td>hachi-jikan</td></tr>
+    <tr><td>9時間</td><td><strong>くじかん</strong></td><td><strong>ku-jikan</strong> (not kyū-)</td></tr>
+    <tr><td>10時間</td><td>じゅうじかん</td><td>jū-jikan</td></tr>
+    <tr><td>? 時間</td><td><strong>なんじかん</strong></td><td><strong>nan-jikan</strong> = how many hours</td></tr>
+  </tbody>
+</table>
+<div class="formula"><span class="lbl">Half an hour</span>半 = はん = han   ·   2時間半 = にじかんはん = ni-jikan-han = two and a half hours</div>
+
+<div class="pitfall"><strong>The biggest trap of the whole lesson — 〜じ or 〜じかん?</strong><br>
+<strong>〜じ</strong> (時) is a <strong>point</strong> on the clock: 四時に おきます。(よじに おきます / yo-ji ni okimasu) = I get up <strong>at</strong> 4 o'clock.<br>
+<strong>〜じかん</strong> (時間) is a <strong>span</strong>: 四時間 ねました。(よじかん ねました / yo-jikan nemashita) = I slept <strong>for</strong> 4 hours.<br>
+Spoken fast, よじ and よじかん differ by two syllables at the very end. Listen to the end of the word before you answer.</div>
+
+<h3>4. Minutes again — 〜ふん / 〜ぷん (分)</h3>
+<p>Same table as Lesson 4.2, now used for duration instead of clock time — the readings do not change.</p>
+<div class="formula"><span class="lbl">The rule in one line</span>1 · 3 · 4 · 6 · 8 · 10 → ぷん (pun)     ·     2 · 5 · 7 · 9 → ふん (fun)</div>
+<table>
+  <thead><tr><th>Minutes</th><th>Kana</th><th>Rōmaji</th><th>Minutes</th><th>Kana</th><th>Rōmaji</th></tr></thead>
+  <tbody>
+    <tr><td>1分</td><td>いっぷん</td><td>ippun</td><td>6分</td><td>ろっぷん</td><td>roppun</td></tr>
+    <tr><td>2分</td><td>にふん</td><td>ni-fun</td><td>7分</td><td>ななふん</td><td>nana-fun</td></tr>
+    <tr><td>3分</td><td>さんぷん</td><td>san-pun</td><td>8分</td><td>はっぷん</td><td>happun</td></tr>
+    <tr><td>4分</td><td>よんぷん</td><td>yon-pun</td><td>9分</td><td>きゅうふん</td><td>kyū-fun</td></tr>
+    <tr><td>5分</td><td>ごふん</td><td>go-fun</td><td>10分</td><td>じゅっぷん</td><td>juppun / jippun</td></tr>
+    <tr><td>30分</td><td>さんじゅっぷん</td><td>san-juppun = 半 han</td><td>? 分</td><td>なんぷん</td><td>nan-pun</td></tr>
+  </tbody>
+</table>
+
+<h3>5. Saying it takes time — かかります</h3>
+<p>To state explicitly that a journey <strong>takes</strong> time, end with the verb かかります instead of です.</p>
+<div class="out"><strong>Q:</strong> ホーチミン市から ハノイまで どのくらい かかりますか。<br>
+kana: ほーちみんしから はのいまで どのくらい かかりますか<br>
+<em>Hōchimin-shi kara Hanoi made dono kurai kakarimasu ka.</em><br>
+= How long does it take from Ho Chi Minh City to Hanoi?<br>
+<strong>A:</strong> ひこうきで 二時間 かかります。<br>
+kana: ひこうきで にじかん かかります<br>
+<em>Hikōki de ni-jikan kakarimasu.</em><br>
+= By plane it takes two hours.</div>
+<div class="note-ct">Pick one ending, never both. A sentence that already ends in <strong>ですか</strong> must not also carry かかります.</div>
+
+<h3>6. どのくらい also asks how long you DO something</h3>
+<div class="out"><strong>Q:</strong> まいにち どのくらい 日本語を べんきょうしますか。<br>
+kana: まいにち どのくらい にほんごを べんきょうしますか<br>
+<em>Mainichi dono kurai Nihongo o benkyō-shimasu ka.</em><br>
+= How long do you study Japanese every day?<br>
+<strong>A:</strong> 二時間くらい べんきょうします。<br>
+kana: にじかんくらい べんきょうします<br>
+<em>Ni-jikan kurai benkyō-shimasu.</em><br>
+= I study for about two hours.</div>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Why くらい softens a number.</strong> くらい (also written ぐらい) turns an exact figure into an estimate — "about", "roughly". Japanese conversation prefers the softened number: stating 五時間です flatly can sound like a timetable, while 五時間くらいです sounds like a person talking. The same instinct produces ちょっと for "a little" and 〜ぐらい for prices and quantities. Note the contrast with about-a-point-in-time, which uses <strong>ごろ</strong> instead: 三時ごろ (san-ji goro) = around 3 o'clock. Span → くらい, point → ごろ.</div>
+<a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a12%2Flearn&reflabel=JPD123%20%E2%80%94%20Elementary%20Japanese%20A1.2" target="_blank" rel="noopener">
+  <span class="lc-ico">🚉</span>
+  <span class="lc-body"><span class="lc-title">Drill transport &amp; duration</span><span class="lc-sub">Vocabulary SRS on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 4 · Bài 4.3</span>
+<h2>Từ A đến B mất bao lâu?</h2>
+<p class="lead">Bài 4.2 đã cho bạn mặt đồng hồ (<strong>〜じ</strong>) và kim phút (<strong>〜ふん</strong>). Bài này cho loại thời gian còn lại: <strong>một việc kéo dài bao lâu</strong>. Đây là mẫu câu bị hỏi nhiều nhất trong ngân hàng đề JPD123 — cứ khoảng ba đề cũ thì một đề có nó.</p>
+<p>Mọi câu bên dưới đều viết ba dòng: chữ Nhật như in trong sách, <strong>cách đọc kana</strong>, và <strong>rōmaji</strong> — để bạn đọc thành tiếng được ngay, không phải đoán.</p>
+
+<h3>1. Câu hỏi — から・まで・どのくらい</h3>
+<div class="formula"><span class="lbl">Hỏi quãng đường mất bao lâu</span>A から  B まで  どのくらい  ですか。<br>A kara  B made  dono kurai  desu ka.</div>
+<p><strong>から</strong> = từ (điểm đi) · <strong>まで</strong> = đến (điểm tới) · <strong>どのくらい</strong> = khoảng bao lâu. Cặp から…まで không bao giờ tách rời và không bao giờ đảo thứ tự.</p>
+<div class="out"><strong>Hỏi:</strong> ハノイから 日本まで どのくらいですか。<br>
+kana: ハノイから にほんまで どのくらいですか<br>
+<em>Hanoi kara Nihon made dono kurai desu ka.</em><br>
+= Từ Hà Nội đến Nhật mất khoảng bao lâu?<br>
+<strong>Đáp:</strong> 五時間くらいです。<br>
+kana: ごじかんくらいです<br>
+<em>Go-jikan kurai desu.</em><br>
+= Khoảng năm tiếng.</div>
+<div class="note-ct"><strong>どのくらい・どのぐらい・どれくらい</strong> đều đúng và cùng nghĩa. Giáo trình và đề thi in <strong>どのくらい</strong> nhiều nhất nên hãy lấy nó làm mặc định — nhưng đừng coi hai cái kia là sai. Còn <strong>どうくらい</strong> và <strong>どんなくらい</strong> thì không tồn tại; chúng chỉ xuất hiện làm phương án nhiễu trong đề.</div>
+
+<h3>2. Câu trả lời — phương tiện で + thời gian くらいです</h3>
+<div class="formula"><span class="lbl">Trả lời kèm phương tiện</span>A から  B まで  [phương tiện] で  [thời gian] くらいです。<br>A kara  B made  [phương tiện] de  [thời gian] kurai desu.</div>
+<div class="out"><strong>Hỏi:</strong> とうきょうから アユタヤまで どのくらいですか。<br>
+kana: とうきょうから あゆたやまで どのくらいですか<br>
+<em>Tōkyō kara Ayutaya made dono kurai desu ka.</em><br>
+= Từ Tokyo đến Ayutthaya mất bao lâu?<br>
+<strong>Đáp:</strong> ひこうきで 六時間くらいです。<br>
+kana: ひこうきで ろくじかんくらいです<br>
+<em>Hikōki de roku-jikan kurai desu.</em><br>
+= Đi máy bay khoảng sáu tiếng.</div>
+
+<h3>Phương tiện — từ đứng ngay trước で</h3>
+<table>
+  <thead><tr><th>Chữ Nhật</th><th>Kana</th><th>Rōmaji</th><th>Nghĩa</th></tr></thead>
+  <tbody>
+    <tr><td>飛行機</td><td>ひこうき</td><td>hikōki</td><td>máy bay</td></tr>
+    <tr><td>電車</td><td>でんしゃ</td><td>densha</td><td>tàu điện</td></tr>
+    <tr><td>新幹線</td><td>しんかんせん</td><td>shinkansen</td><td>tàu siêu tốc</td></tr>
+    <tr><td>地下鉄</td><td>ちかてつ</td><td>chikatetsu</td><td>tàu điện ngầm</td></tr>
+    <tr><td>車</td><td>くるま</td><td>kuruma</td><td>ô tô</td></tr>
+    <tr><td>自転車</td><td>じてんしゃ</td><td>jitensha</td><td>xe đạp</td></tr>
+    <tr><td>船</td><td>ふね</td><td>fune</td><td>tàu thuỷ</td></tr>
+    <tr><td>バス / タクシー / バイク</td><td>—</td><td>basu / takushī / baiku</td><td>xe buýt / taxi / xe máy</td></tr>
+    <tr><td>歩いて</td><td>あるいて</td><td>aruite</td><td>đi bộ — <strong>không có で</strong></td></tr>
+  </tbody>
+</table>
+
+<div class="pitfall"><strong>Bẫy — あるいて không bao giờ đi với で.</strong> Mọi từ trong bảng trên đều là danh từ nên cần で. <strong>あるいて</strong> thì không: nó là thể て của động từ 歩きます (đi bộ), mà thể て đã tự mang nghĩa "làm theo cách đó" rồi, nên thêm trợ từ phía sau là sai ngữ pháp.<br>
+✓ うちから 学校まで <strong>あるいて</strong> 五分です。 (uchi kara gakkō made <strong>aruite</strong> go-fun desu)<br>
+✗ うちから 学校まで <strong>あるいてで</strong> 五分です。<br>
+Đề JPD123 hỏi thẳng chỗ này — đáp án đúng là phương án ghi "×" (không điền trợ từ nào).</div>
+
+<h3>3. Đếm số tiếng — 〜じかん (時間)</h3>
+<p>〜じかん đếm một <strong>khoảng dài</strong> thời gian. Ba cách đọc bất quy tắc, và đó đúng là ba chỗ giám khảo nghe.</p>
+<table>
+  <thead><tr><th>Số tiếng</th><th>Kana</th><th>Rōmaji</th></tr></thead>
+  <tbody>
+    <tr><td>1時間</td><td>いちじかん</td><td>ichi-jikan</td></tr>
+    <tr><td>2時間</td><td>にじかん</td><td>ni-jikan</td></tr>
+    <tr><td>3時間</td><td>さんじかん</td><td>san-jikan</td></tr>
+    <tr><td>4時間</td><td><strong>よじかん</strong></td><td><strong>yo-jikan</strong> (không phải yon-)</td></tr>
+    <tr><td>5時間</td><td>ごじかん</td><td>go-jikan</td></tr>
+    <tr><td>6時間</td><td>ろくじかん</td><td>roku-jikan</td></tr>
+    <tr><td>7時間</td><td><strong>しちじかん</strong></td><td><strong>shichi-jikan</strong> (cũng nghe ななじかん nana-jikan)</td></tr>
+    <tr><td>8時間</td><td>はちじかん</td><td>hachi-jikan</td></tr>
+    <tr><td>9時間</td><td><strong>くじかん</strong></td><td><strong>ku-jikan</strong> (không phải kyū-)</td></tr>
+    <tr><td>10時間</td><td>じゅうじかん</td><td>jū-jikan</td></tr>
+    <tr><td>? 時間</td><td><strong>なんじかん</strong></td><td><strong>nan-jikan</strong> = mấy tiếng</td></tr>
+  </tbody>
+</table>
+<div class="formula"><span class="lbl">Rưỡi</span>半 = はん = han   ·   2時間半 = にじかんはん = ni-jikan-han = hai tiếng rưỡi</div>
+
+<div class="pitfall"><strong>Bẫy lớn nhất cả bài — 〜じ hay 〜じかん?</strong><br>
+<strong>〜じ</strong> (時) là một <strong>mốc</strong> trên đồng hồ: 四時に おきます。(よじに おきます / yo-ji ni okimasu) = tôi dậy <strong>lúc</strong> 4 giờ.<br>
+<strong>〜じかん</strong> (時間) là một <strong>khoảng</strong>: 四時間 ねました。(よじかん ねました / yo-jikan nemashita) = tôi đã ngủ <strong>suốt</strong> 4 tiếng.<br>
+Nói nhanh thì よじ và よじかん chỉ khác nhau hai âm ở cuối. Nghe hết đuôi từ rồi hãy trả lời.</div>
+
+<h3>4. Nhắc lại phút — 〜ふん / 〜ぷん (分)</h3>
+<p>Vẫn đúng bảng của Bài 4.2, giờ dùng cho khoảng thời gian thay vì giờ đồng hồ — cách đọc không đổi.</p>
+<div class="formula"><span class="lbl">Câu thần chú</span>1 · 3 · 4 · 6 · 8 · 10 → ぷん (pun)     ·     2 · 5 · 7 · 9 → ふん (fun)</div>
+<table>
+  <thead><tr><th>Phút</th><th>Kana</th><th>Rōmaji</th><th>Phút</th><th>Kana</th><th>Rōmaji</th></tr></thead>
+  <tbody>
+    <tr><td>1分</td><td>いっぷん</td><td>ippun</td><td>6分</td><td>ろっぷん</td><td>roppun</td></tr>
+    <tr><td>2分</td><td>にふん</td><td>ni-fun</td><td>7分</td><td>ななふん</td><td>nana-fun</td></tr>
+    <tr><td>3分</td><td>さんぷん</td><td>san-pun</td><td>8分</td><td>はっぷん</td><td>happun</td></tr>
+    <tr><td>4分</td><td>よんぷん</td><td>yon-pun</td><td>9分</td><td>きゅうふん</td><td>kyū-fun</td></tr>
+    <tr><td>5分</td><td>ごふん</td><td>go-fun</td><td>10分</td><td>じゅっぷん</td><td>juppun / jippun</td></tr>
+    <tr><td>30分</td><td>さんじゅっぷん</td><td>san-juppun = 半 han</td><td>? 分</td><td>なんぷん</td><td>nan-pun</td></tr>
+  </tbody>
+</table>
+
+<h3>5. Nói rõ là "mất" bao lâu — かかります</h3>
+<p>Muốn nói thẳng rằng chuyến đi <strong>mất</strong> bao nhiêu thời gian thì kết câu bằng động từ かかります thay cho です.</p>
+<div class="out"><strong>Hỏi:</strong> ホーチミン市から ハノイまで どのくらい かかりますか。<br>
+kana: ほーちみんしから はのいまで どのくらい かかりますか<br>
+<em>Hōchimin-shi kara Hanoi made dono kurai kakarimasu ka.</em><br>
+= Từ TP.HCM ra Hà Nội mất bao lâu?<br>
+<strong>Đáp:</strong> ひこうきで 二時間 かかります。<br>
+kana: ひこうきで にじかん かかります<br>
+<em>Hikōki de ni-jikan kakarimasu.</em><br>
+= Đi máy bay mất hai tiếng.</div>
+<div class="note-ct">Chọn một kiểu kết câu, đừng dùng cả hai. Câu đã kết bằng <strong>ですか</strong> thì không kèm かかります nữa.</div>
+
+<h3>6. どのくらい còn hỏi bạn LÀM một việc bao lâu</h3>
+<div class="out"><strong>Hỏi:</strong> まいにち どのくらい 日本語を べんきょうしますか。<br>
+kana: まいにち どのくらい にほんごを べんきょうしますか<br>
+<em>Mainichi dono kurai Nihongo o benkyō-shimasu ka.</em><br>
+= Mỗi ngày bạn học tiếng Nhật bao lâu?<br>
+<strong>Đáp:</strong> 二時間くらい べんきょうします。<br>
+kana: にじかんくらい べんきょうします<br>
+<em>Ni-jikan kurai benkyō-shimasu.</em><br>
+= Tôi học khoảng hai tiếng.</div>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Vì sao くらい làm mềm con số.</strong> くらい (viết ぐらい cũng được) biến một con số chính xác thành ước lượng — "khoảng", "chừng". Hội thoại tiếng Nhật chuộng con số đã làm mềm: nói trần 五時間です nghe như đọc bảng giờ tàu, còn 五時間くらいです nghe như một người đang nói chuyện. Cùng bản năng đó sinh ra ちょっと cho "một chút" và 〜ぐらい cho giá cả, số lượng. Chú ý chỗ đối lập: ước lượng một <strong>mốc</strong> thời gian thì dùng <strong>ごろ</strong> chứ không phải くらい — 三時ごろ (san-ji goro) = khoảng 3 giờ. Khoảng dài → くらい, mốc → ごろ.</div>
+<a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a12%2Flearn&reflabel=JPD123%20%E2%80%94%20Elementary%20Japanese%20A1.2" target="_blank" rel="noopener">
+  <span class="lc-ico">🚉</span>
+  <span class="lc-body"><span class="lc-title">Luyện phương tiện &amp; thời lượng</span><span class="lc-sub">Từ vựng SRS trên My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '4.4 — Where is your town? (〜は 〜の どこですか)|||4.4 — Quê bạn ở đâu? (〜は 〜の どこですか)',
+          slug: 'jpd123-que-o-dau',
+          type: 'VIDEO',
+          description: 'Hai mẫu hỏi vị trí thành phố: 〜は どこですか → 〜は [nước]の [phương hướng]です, và 〜は [nước]の どこですか. Kèm từ chỉ miền/phương hướng (北部・中部・南部・きた・みなみ・ひがし・にし) và cách đọc kana + rōmaji.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 4 · Lesson 4.4</span>
+<h2>Where is your town?</h2>
+<p class="lead">A stated goal of this course is being able to <strong>introduce your hometown</strong>. That takes exactly two question patterns — and they differ by one small thing: whether the country has already been named.</p>
+<p>As in Lesson 4.3, every sentence is given three ways: printed Japanese, <strong>kana reading</strong>, and <strong>rōmaji</strong>.</p>
+
+<h3>Pattern ① — the country is NOT yet known</h3>
+<div class="formula"><span class="lbl">Open question, full answer</span>[city] は どこですか。<br>[city] wa doko desu ka.<br><br>→ ([city] は) [country] の [position] です。<br>→ ([city] wa) [country] no [position] desu.</div>
+<div class="out"><strong>Q:</strong> フエは どこですか。<br>
+kana: ふえは どこですか<br>
+<em>Fue wa doko desu ka.</em><br>
+= Where is Hue?<br>
+<strong>A:</strong> フエは ベトナムの 中部です。<br>
+kana: ふえは べとなむの ちゅうぶです<br>
+<em>Fue wa Betonamu no chūbu desu.</em><br>
+= Hue is in central Vietnam.</div>
+
+<h3>Pattern ② — the country IS already known</h3>
+<div class="formula"><span class="lbl">Narrowing down inside a country</span>[city] は [country] の どこですか。<br>[city] wa [country] no doko desu ka.</div>
+<div class="out"><strong>Q:</strong> ハノイは ベトナムの どこですか。<br>
+kana: はのいは べとなむの どこですか<br>
+<em>Hanoi wa Betonamu no doko desu ka.</em><br>
+= Whereabouts in Vietnam is Hanoi?<br>
+<strong>A:</strong> ベトナムの 北部です。<br>
+kana: べとなむの ほくぶです<br>
+<em>Betonamu no hokubu desu.</em><br>
+= In the north of Vietnam.</div>
+
+<div class="pitfall"><strong>Two traps in these two patterns.</strong><br>
+<strong>1. の runs big → small.</strong> The country comes first, the position second: ベトナムの 中部 = "the central part <em>of</em> Vietnam". Writing 中部の ベトナム reverses it and means nothing.<br>
+<strong>2. Answer the question that was actually asked.</strong> Pattern ② already names the country, so 北部です alone is a complete answer. Pattern ① does not, so 北部です alone leaves out the very information asked for — say the country.</div>
+
+<h3>Position words — what goes in the [position] slot</h3>
+<table>
+  <thead><tr><th>Japanese</th><th>Kana</th><th>Rōmaji</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td>北部</td><td>ほくぶ</td><td>hokubu</td><td>the north / northern region</td></tr>
+    <tr><td>中部</td><td>ちゅうぶ</td><td>chūbu</td><td>the centre / central region</td></tr>
+    <tr><td>南部</td><td>なんぶ</td><td>nanbu</td><td>the south / southern region</td></tr>
+    <tr><td>東部</td><td>とうぶ</td><td>tōbu</td><td>the east / eastern region</td></tr>
+    <tr><td>西部</td><td>せいぶ</td><td>seibu</td><td>the west / western region</td></tr>
+    <tr><td>北</td><td>きた</td><td>kita</td><td>north</td></tr>
+    <tr><td>南</td><td>みなみ</td><td>minami</td><td>south</td></tr>
+    <tr><td>東</td><td>ひがし</td><td>higashi</td><td>east</td></tr>
+    <tr><td>西</td><td>にし</td><td>nishi</td><td>west</td></tr>
+    <tr><td>—</td><td>まんなか</td><td>mannaka</td><td>the middle, dead centre</td></tr>
+    <tr><td>〜の方</td><td>〜のほう</td><td>~ no hō</td><td>towards ~, the ~ side (softer)</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">The 〜部 words describe a <strong>region of a country</strong>; the bare 北・南・東・西 words describe a <strong>direction</strong>. Both answer どこ, and both are accepted — 北部です and 北です are equally good replies.</div>
+
+<h3>Worked set — five cities</h3>
+<div class="out">
+ハノイは ベトナムの 北部です。 (はのいは べとなむの ほくぶです / <em>Hanoi wa Betonamu no hokubu desu.</em>) = Hanoi is in northern Vietnam.<br>
+ダナンは ベトナムの 中部です。 (だなんは べとなむの ちゅうぶです / <em>Danan wa Betonamu no chūbu desu.</em>) = Da Nang is in central Vietnam.<br>
+ホーチミン市は ベトナムの 南部です。 (ほーちみんしは べとなむの なんぶです / <em>Hōchimin-shi wa Betonamu no nanbu desu.</em>) = Ho Chi Minh City is in southern Vietnam.<br>
+とうきょうは 日本の 東です。 (とうきょうは にほんの ひがしです / <em>Tōkyō wa Nihon no higashi desu.</em>) = Tokyo is in the east of Japan.<br>
+おおさかは 日本の 西です。 (おおさかは にほんの にしです / <em>Ōsaka wa Nihon no nishi desu.</em>) = Osaka is in the west of Japan.
+</div>
+<div class="note-ct"><strong>市 (し, shi)</strong> = city, attached to a name: ホーチミン市 (Hōchimin-shi). Do not read it as いち — that is the number one.</div>
+
+<h3>Nearby questions the examiner may pair with these</h3>
+<table>
+  <thead><tr><th>Question</th><th>Kana · Rōmaji</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td>おくには どちらですか。</td><td>おくには どちらですか · <em>O-kuni wa dochira desu ka.</em></td><td>Which country are you from? (polite)</td></tr>
+    <tr><td>出身地は どこですか。</td><td>しゅっしんちは どこですか · <em>Shusshinchi wa doko desu ka.</em></td><td>Where is your hometown?</td></tr>
+    <tr><td>どこから きましたか。</td><td>どこから きましたか · <em>Doko kara kimashita ka.</em></td><td>Where did you come from?</td></tr>
+    <tr><td>いま どこに すんでいますか。</td><td>いま どこに すんでいますか · <em>Ima doko ni sunde imasu ka.</em></td><td>Where do you live now?</td></tr>
+  </tbody>
+</table>
+<div class="note-ct"><strong>どちら</strong> is the polite form of <strong>どこ</strong>. Use it when asking someone about themselves (おくには どちらですか); plain どこ is fine for places and things.</div>
+
+<h3>Put it together — your own two sentences</h3>
+<div class="out">わたしの まちは ベトナムの 北部です。ハノイから うちまで バスで 二時間くらいです。<br>
+kana: わたしの まちは べとなむの ほくぶです。はのいから うちまで ばすで にじかんくらいです<br>
+<em>Watashi no machi wa Betonamu no hokubu desu. Hanoi kara uchi made basu de ni-jikan kurai desu.</em><br>
+= My town is in northern Vietnam. From Hanoi to my house it is about two hours by bus.</div>
+<p>These two sentences chain Lesson 4.4 into Lesson 4.3 and answer most of what an examiner asks about your hometown. Memorise your own version with your own town, and say it out loud until it needs no thinking.</p>
+
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Vietnamese learners get 北部・中部・南部 for free.</strong> The 部 in these words is the same Chinese character Vietnamese borrowed as <em>bộ</em> — so 北部 is literally <em>Bắc Bộ</em>, 中部 is <em>Trung Bộ</em>, 南部 is <em>Nam Bộ</em>. Same characters, same meaning, only the pronunciation differs (hokubu / chūbu / nanbu). Any time a Japanese word looks like a Hán-Việt compound you already know, that is not a coincidence — roughly 60% of the Japanese vocabulary you will meet is Sino-Japanese, and it maps onto Hán-Việt with startling regularity. Learn to notice it and your vocabulary load drops sharply.<br><br>
+Note also that Japanese people rarely describe their own country with 北部/南部. They use named regions instead — 関東 (かんとう, Kantō, the Tokyo area) and 関西 (かんさい, Kansai, the Osaka–Kyoto area) are the two you will hear constantly. They are beyond A1.2, but recognising them will save you in a real conversation.</div>
+<a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a12%2Flearn&reflabel=JPD123%20%E2%80%94%20Elementary%20Japanese%20A1.2" target="_blank" rel="noopener">
+  <span class="lc-ico">🗺️</span>
+  <span class="lc-body"><span class="lc-title">Drill countries &amp; directions</span><span class="lc-sub">Vocabulary SRS on My Language.</span></span>
+  <span class="lc-cta">MY LANGUAGE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 4 · Bài 4.4</span>
+<h2>Quê bạn ở đâu?</h2>
+<p class="lead">Một mục tiêu môn học ghi rõ là <strong>giới thiệu được về quê hương</strong>. Việc đó cần đúng hai mẫu câu hỏi — và chúng khác nhau đúng một chỗ: đã nêu tên nước hay chưa.</p>
+<p>Như Bài 4.3, mọi câu đều cho ba dòng: chữ Nhật như in, <strong>cách đọc kana</strong>, và <strong>rōmaji</strong>.</p>
+
+<h3>Mẫu ① — chưa biết thuộc nước nào</h3>
+<div class="formula"><span class="lbl">Hỏi trống, trả lời đầy đủ</span>[thành phố] は どこですか。<br>[thành phố] wa doko desu ka.<br><br>→ ([thành phố] は) [tên nước] の [vị trí] です。<br>→ ([thành phố] wa) [tên nước] no [vị trí] desu.</div>
+<div class="out"><strong>Hỏi:</strong> フエは どこですか。<br>
+kana: ふえは どこですか<br>
+<em>Fue wa doko desu ka.</em><br>
+= Huế ở đâu?<br>
+<strong>Đáp:</strong> フエは ベトナムの 中部です。<br>
+kana: ふえは べとなむの ちゅうぶです<br>
+<em>Fue wa Betonamu no chūbu desu.</em><br>
+= Huế ở miền Trung Việt Nam.</div>
+
+<h3>Mẫu ② — đã biết nước rồi</h3>
+<div class="formula"><span class="lbl">Hỏi hẹp lại trong một nước</span>[thành phố] は [tên nước] の どこですか。<br>[thành phố] wa [tên nước] no doko desu ka.</div>
+<div class="out"><strong>Hỏi:</strong> ハノイは ベトナムの どこですか。<br>
+kana: はのいは べとなむの どこですか<br>
+<em>Hanoi wa Betonamu no doko desu ka.</em><br>
+= Hà Nội ở chỗ nào của Việt Nam?<br>
+<strong>Đáp:</strong> ベトナムの 北部です。<br>
+kana: べとなむの ほくぶです<br>
+<em>Betonamu no hokubu desu.</em><br>
+= Ở miền Bắc Việt Nam.</div>
+
+<div class="pitfall"><strong>Hai cái bẫy của hai mẫu này.</strong><br>
+<strong>1. の chạy từ lớn xuống nhỏ.</strong> Tên nước đứng trước, vị trí đứng sau: ベトナムの 中部 = "miền Trung <em>của</em> Việt Nam". Viết 中部の ベトナム là ngược và không có nghĩa.<br>
+<strong>2. Trả lời đúng cái được hỏi.</strong> Mẫu ② đã nêu tên nước rồi nên chỉ nói 北部です là đã trả lời trọn. Mẫu ① thì chưa, nên nói trống 北部です là bỏ mất chính thông tin người ta hỏi — phải nói tên nước.</div>
+
+<h3>Từ chỉ vị trí — điền vào ô [vị trí]</h3>
+<table>
+  <thead><tr><th>Chữ Nhật</th><th>Kana</th><th>Rōmaji</th><th>Nghĩa</th></tr></thead>
+  <tbody>
+    <tr><td>北部</td><td>ほくぶ</td><td>hokubu</td><td>miền Bắc</td></tr>
+    <tr><td>中部</td><td>ちゅうぶ</td><td>chūbu</td><td>miền Trung</td></tr>
+    <tr><td>南部</td><td>なんぶ</td><td>nanbu</td><td>miền Nam</td></tr>
+    <tr><td>東部</td><td>とうぶ</td><td>tōbu</td><td>miền Đông</td></tr>
+    <tr><td>西部</td><td>せいぶ</td><td>seibu</td><td>miền Tây</td></tr>
+    <tr><td>北</td><td>きた</td><td>kita</td><td>phía bắc</td></tr>
+    <tr><td>南</td><td>みなみ</td><td>minami</td><td>phía nam</td></tr>
+    <tr><td>東</td><td>ひがし</td><td>higashi</td><td>phía đông</td></tr>
+    <tr><td>西</td><td>にし</td><td>nishi</td><td>phía tây</td></tr>
+    <tr><td>—</td><td>まんなか</td><td>mannaka</td><td>chính giữa</td></tr>
+    <tr><td>〜の方</td><td>〜のほう</td><td>~ no hō</td><td>phía ~, về phía ~ (nói mềm hơn)</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">Nhóm 〜部 mô tả một <strong>miền của một nước</strong>; còn 北・南・東・西 trơn mô tả một <strong>phương hướng</strong>. Cả hai đều trả lời được どこ — nói 北部です hay 北です đều đúng.</div>
+
+<h3>Làm mẫu — năm thành phố</h3>
+<div class="out">
+ハノイは ベトナムの 北部です。 (はのいは べとなむの ほくぶです / <em>Hanoi wa Betonamu no hokubu desu.</em>) = Hà Nội ở miền Bắc Việt Nam.<br>
+ダナンは ベトナムの 中部です。 (だなんは べとなむの ちゅうぶです / <em>Danan wa Betonamu no chūbu desu.</em>) = Đà Nẵng ở miền Trung Việt Nam.<br>
+ホーチミン市は ベトナムの 南部です。 (ほーちみんしは べとなむの なんぶです / <em>Hōchimin-shi wa Betonamu no nanbu desu.</em>) = TP.HCM ở miền Nam Việt Nam.<br>
+とうきょうは 日本の 東です。 (とうきょうは にほんの ひがしです / <em>Tōkyō wa Nihon no higashi desu.</em>) = Tokyo ở phía đông Nhật Bản.<br>
+おおさかは 日本の 西です。 (おおさかは にほんの にしです / <em>Ōsaka wa Nihon no nishi desu.</em>) = Osaka ở phía tây Nhật Bản.
+</div>
+<div class="note-ct"><strong>市 (し, shi)</strong> = thành phố, gắn sau tên: ホーチミン市 (Hōchimin-shi). Đừng đọc thành いち — đó là số một.</div>
+
+<h3>Những câu hỏi cô hay hỏi kèm</h3>
+<table>
+  <thead><tr><th>Câu hỏi</th><th>Kana · Rōmaji</th><th>Nghĩa</th></tr></thead>
+  <tbody>
+    <tr><td>おくには どちらですか。</td><td>おくには どちらですか · <em>O-kuni wa dochira desu ka.</em></td><td>Bạn từ nước nào? (lịch sự)</td></tr>
+    <tr><td>出身地は どこですか。</td><td>しゅっしんちは どこですか · <em>Shusshinchi wa doko desu ka.</em></td><td>Quê bạn ở đâu?</td></tr>
+    <tr><td>どこから きましたか。</td><td>どこから きましたか · <em>Doko kara kimashita ka.</em></td><td>Bạn đến từ đâu?</td></tr>
+    <tr><td>いま どこに すんでいますか。</td><td>いま どこに すんでいますか · <em>Ima doko ni sunde imasu ka.</em></td><td>Bây giờ bạn sống ở đâu?</td></tr>
+  </tbody>
+</table>
+<div class="note-ct"><strong>どちら</strong> là dạng lịch sự của <strong>どこ</strong>. Dùng nó khi hỏi về bản thân người đối diện (おくには どちらですか); còn どこ trơn thì dùng cho nơi chốn, đồ vật là đủ.</div>
+
+<h3>Ghép lại — hai câu của riêng bạn</h3>
+<div class="out">わたしの まちは ベトナムの 北部です。ハノイから うちまで バスで 二時間くらいです。<br>
+kana: わたしの まちは べとなむの ほくぶです。はのいから うちまで ばすで にじかんくらいです<br>
+<em>Watashi no machi wa Betonamu no hokubu desu. Hanoi kara uchi made basu de ni-jikan kurai desu.</em><br>
+= Quê tôi ở miền Bắc Việt Nam. Từ Hà Nội về nhà tôi đi xe buýt khoảng hai tiếng.</div>
+<p>Hai câu này nối Bài 4.4 với Bài 4.3 và trả lời được phần lớn những gì giám khảo hỏi về quê bạn. Hãy thuộc bản của riêng mình với đúng tên quê mình, rồi đọc to tới lúc không cần nghĩ nữa.</p>
+
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Người Việt được tặng không 北部・中部・南部.</strong> Chữ 部 trong mấy từ này chính là chữ Hán mà tiếng Việt mượn thành <em>bộ</em> — nên 北部 đọc theo Hán Việt đúng là <em>Bắc Bộ</em>, 中部 là <em>Trung Bộ</em>, 南部 là <em>Nam Bộ</em>. Cùng chữ, cùng nghĩa, chỉ khác cách phát âm (hokubu / chūbu / nanbu). Mỗi lần một từ tiếng Nhật trông giống một từ Hán Việt bạn đã biết thì đó không phải trùng hợp — khoảng 60% từ vựng tiếng Nhật bạn sẽ gặp là từ gốc Hán, và chúng ánh xạ sang Hán Việt đều đặn tới mức đáng kinh ngạc. Tập để ý điều này thì gánh nặng học từ giảm hẳn.<br><br>
+Cũng nên biết: người Nhật hiếm khi mô tả nước mình bằng 北部/南部. Họ gọi theo tên vùng — 関東 (かんとう, Kantō, vùng Tokyo) và 関西 (かんさい, Kansai, vùng Osaka–Kyoto) là hai cái bạn sẽ nghe suốt. Chúng vượt mức A1.2, nhưng nhận ra được thì đỡ bí trong hội thoại thật.</div>
+<a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a12%2Flearn&reflabel=JPD123%20%E2%80%94%20Elementary%20Japanese%20A1.2" target="_blank" rel="noopener">
+  <span class="lc-ico">🗺️</span>
+  <span class="lc-body"><span class="lc-title">Luyện tên nước &amp; phương hướng</span><span class="lc-sub">Từ vựng SRS trên My Language.</span></span>
   <span class="lc-cta">MY LANGUAGE →</span>
 </a>
 </div>

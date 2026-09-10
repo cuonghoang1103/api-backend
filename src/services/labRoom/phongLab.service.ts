@@ -375,7 +375,19 @@ Return ONLY JSON, no prose around it:
    "tang": [{"goi": "entity", "file": "Contact.java", "viec": "what it holds and what it must NOT do"}],
    "viSao": "2-4 sentences justifying THIS layer set for THIS assignment: the responsibility test first, the file count as the cross-check. If the Guidelines say the methods go 'in startup code', say so and put them in Main."
  },
+ "soDo": "a mermaid diagram of THIS program's flow, as plain text starting with 'flowchart LR' or 'flowchart TD'. One node per class or per stage, arrows for who calls whom and where the data goes. Keep node labels short and ASCII. null if a diagram would add nothing.",
+ "dienTien": {
+   "co": true|false,
+   "viDu": "the concrete starting data, e.g. an array [5,1,4,2]",
+   "buoc": [{"vong": "pass 1", "trangThai": "[1,4,2,5]", "giaiThich": "one line: what moved and why"}]
+ },
  "cacBuoc": ["the build order, one feature at a time, each step ending in something runnable"],
+ "boTest": [
+   {"go": "exactly what the marker types, newline-separated", "cho": "exactly what the console must show back, or the property it must satisfy when part of the output is random", "viSao": "which requirement this case proves"}
+ ],
+ "khuonMau": [
+   {"ten": "the named form, e.g. Validator.getInt loop / try-with-resources / menu loop", "vietSao": "the shape in 2-4 lines of pseudo-Java", "khiNao": "when this brief needs it"}
+ ],
  "bayCanTranh": ["traps specific to THIS brief — a lenient date, a locale-sensitive %f, an off-by-one, a message the screen and the Guidelines disagree on"],
  "cauHoiVanDap": ["3-5 questions the examiner will ask about THIS assignment"],
  "locUocTinh": <integer: the LOC the sheet states>
@@ -387,6 +399,24 @@ Rules for this task:
   "bayCanTranh" — noticing it earns marks.
 * Do NOT write the solution. This is the briefing, not the answer. Name the
   classes and their responsibilities; do not hand over method bodies.
+* LAYERS: run the responsibility test on bo and on controller SEPARATELY. The
+  4.8-vs-0.9 measurement governs controller ONLY. A brief whose core is an
+  algorithm the student must write by hand gets a bo even at three files — see
+  the J1.S.P0001 worked case in the rules above. Saying "no bo" there is wrong
+  and it costs the student marks.
+* "dienTien" is for briefs whose heart is an ALGORITHM (a sort, a search, a
+  conversion, a matrix walk). Trace it on a SMALL concrete example, one row per
+  pass, showing the array or the state after that pass. This is the single most
+  useful thing a briefing can contain for such a brief. Set "co": false and an
+  empty "buoc" for briefs that are menus and CRUD.
+* "boTest" is the marker's own keystrokes. Give 4-7 cases and ALWAYS include:
+  the happy path; a non-numeric input; a negative or out-of-range input; and the
+  boundary the brief implies (0 items, 1 item, already-sorted). When part of the
+  output is random, state the PROPERTY instead of fixed text — "10 integers in
+  [0,n), then the same 10 in non-decreasing order" — never invent exact numbers.
+* "khuonMau" is the reusable shape the lecturer expects to see, not this brief's
+  answer: the Validator loop contract, try-with-resources, the menu loop, the
+  Comparator, strict date parsing. Only the ones THIS brief actually needs.
 `.trim();
 
 export async function gioiThieuBai(userId: number, roomId: number, itemId: number, lamMoi = false) {
@@ -405,7 +435,9 @@ export async function gioiThieuBai(userId: number, roomId: number, itemId: numbe
     purpose: 'lab_room',
     system: heThong(NHIEM_VU_GIOI_THIEU),
     messages: [{ role: 'user', content: brief }],
-    maxTokens: 4_000,
+    // Bài giảng nay có thêm sơ đồ, bảng diễn tiến, bộ test và khuôn mẫu —
+    // 4k token cắt ngang JSON là hỏng cả lượt, không phải hỏng một mục.
+    maxTokens: 9_000,
     maxRetries: 1,
     timeoutMs: 180_000,
     userId,

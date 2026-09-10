@@ -127,6 +127,21 @@ Four things decide the mark:
   solutions, counting the kinds of collection operation each program performs:
       with a controller     ~4.8 kinds on average (11 projects)
       without a controller  ~0.9 kinds on average
+  WARNING - THOSE TWO NUMBERS GOVERN controller ONLY. They say NOTHING about
+  bo. Reading "0.9 operations" as "so it needs no bo either" is a real mistake
+  this sheet has watched happen, on J1.S.P0001 (bubble sort): the answer said
+  "no controller" correctly and then added "no bo", while the reference
+  solution for that exact brief is THREE files WITH a bo -
+      bo/ArraySorter.java    generate() and bubbleSort()
+      utils/Validator.java   reads the size, re-asks on bad input
+      ui/Main.java           24 lines, owns the screen
+  and ArraySorter's own comment states the reason: "No printing: the ui layer
+  owns the screen, which is what lets this class be reused and tested."
+  An algorithm the brief tells the student to WRITE BY HAND is precisely what a
+  bo exists to hold. Run the responsibility test on bo and on controller
+  SEPARATELY. Never let the answer for one decide the other, and never answer
+  "no bo" for a brief whose core IS an algorithm.
+
   File count does NOT separate the two groups and must not be used as the rule.
   The clearest proof is the Shapes brief: TEN files and correctly no controller,
   because nine of them are shape classes, not features, and the program performs

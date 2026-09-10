@@ -18,6 +18,7 @@ import {
   AlertTriangle, Bot, CheckCircle2, ClipboardCheck, FileUp, Loader2, RefreshCw,
   Send, Sparkles, Trash2, XCircle, Presentation,
 } from 'lucide-react';
+import { MermaidDiagram } from '@/components/exp-hub/MermaidDiagram';
 import { codeLabApi } from '@/lib/code-lab-api';
 import type { LabRoom, LabRoomChatTurn, LabRoomGuide, LabRoomIntro, LabRoomItem, LabRoomReview } from '@/types/code-lab';
 import Markdown from '@/components/markdown/Markdown';
@@ -127,6 +128,38 @@ export function GioiThieuBai({ roomId, item }: { roomId: number; item: LabRoomIt
             </section>
           )}
 
+          {data.soDo && (
+            <section>
+              <h4 className="mb-1.5 text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Luồng chạy của chương trình</h4>
+              <div className="overflow-x-auto rounded-xl border p-2" style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)' }}>
+                <MermaidDiagram chart={data.soDo} />
+              </div>
+            </section>
+          )}
+
+          {/* Với đề mà lõi là thuật toán, một bảng lần theo từng vòng trên ví dụ
+              nhỏ dạy nhanh hơn mọi đoạn văn — người học thấy mảng đổi thật. */}
+          {data.dienTien?.co && (data.dienTien.buoc || []).length > 0 && (
+            <section>
+              <h4 className="mb-1.5 text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
+                Thuật toán chạy ra sao — lần theo <span className="font-mono normal-case">{data.dienTien.viDu}</span>
+              </h4>
+              <div className="overflow-x-auto rounded-xl border" style={{ borderColor: 'var(--border-color)' }}>
+                <table className="w-full text-xs">
+                  <tbody>
+                    {data.dienTien.buoc.map((b, i) => (
+                      <tr key={i} style={{ borderTop: i ? '1px solid var(--border-color)' : undefined }}>
+                        <td className="whitespace-nowrap px-3 py-1.5 font-semibold" style={{ color: 'var(--text-muted)' }}>{b.vong}</td>
+                        <td className="whitespace-nowrap px-3 py-1.5 font-mono" style={{ color: 'var(--cl-accent, var(--accent-color))' }}>{b.trangThai}</td>
+                        <td className="px-3 py-1.5">{b.giaiThich}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          )}
+
           <section>
             <h4 className="mb-1.5 text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Làm theo thứ tự này</h4>
             <ol className="space-y-1">
@@ -135,6 +168,44 @@ export function GioiThieuBai({ roomId, item }: { roomId: number; item: LabRoomIt
               ))}
             </ol>
           </section>
+
+          {(data.boTest || []).length > 0 && (
+            <section>
+              <h4 className="mb-1.5 text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>
+                Tự chấm trước khi nộp — gõ gì, phải ra gì
+              </h4>
+              <div className="space-y-1.5">
+                {(data.boTest || []).map((t, i) => (
+                  <div key={i} className="rounded-xl border px-3 py-2" style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)' }}>
+                    <div className="flex flex-wrap items-start gap-x-2 gap-y-1 text-xs">
+                      <span className="font-bold" style={{ color: 'var(--text-muted)' }}>GÕ</span>
+                      <code className="whitespace-pre-wrap font-mono" style={{ color: 'var(--cl-accent, var(--accent-color))' }}>{t.go}</code>
+                    </div>
+                    <div className="mt-1 flex flex-wrap items-start gap-x-2 gap-y-1 text-xs">
+                      <span className="font-bold" style={{ color: 'var(--text-muted)' }}>RA</span>
+                      <code className="whitespace-pre-wrap font-mono">{t.cho}</code>
+                    </div>
+                    <p className="mt-1 text-xs italic" style={{ color: 'var(--text-muted)' }}>{t.viSao}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {(data.khuonMau || []).length > 0 && (
+            <section>
+              <h4 className="mb-1.5 text-xs font-bold uppercase tracking-wide" style={{ color: 'var(--text-muted)' }}>Khuôn mẫu thầy quen thấy</h4>
+              <div className="space-y-1.5">
+                {(data.khuonMau || []).map((k, i) => (
+                  <div key={i} className="rounded-xl border px-3 py-2" style={{ borderColor: 'var(--border-color)', background: 'var(--bg-surface)' }}>
+                    <span className="text-xs font-bold" style={{ color: 'var(--cl-accent, var(--accent-color))' }}>{k.ten}</span>
+                    <pre className="mt-1 overflow-x-auto whitespace-pre-wrap font-mono text-xs" style={{ color: 'var(--text-secondary)' }}>{k.vietSao}</pre>
+                    <p className="mt-1 text-xs italic" style={{ color: 'var(--text-muted)' }}>{k.khiNao}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
 
           <section>
             <h4 className="mb-1.5 text-xs font-bold uppercase tracking-wide" style={{ color: '#d97706' }}>Bẫy của riêng đề này</h4>

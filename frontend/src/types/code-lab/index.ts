@@ -277,7 +277,19 @@ export interface LabRoomIntro {
     tang: Array<{ goi: string; file: string; viec: string }>;
     viSao: string;
   };
+  /** Nguồn mermaid cho sơ đồ luồng của riêng đề này; null khi vẽ ra không thêm gì. */
+  soDo?: string | null;
+  /** Diễn tiến thuật toán trên một ví dụ nhỏ — chỉ có ở đề mà lõi là thuật toán. */
+  dienTien?: {
+    co: boolean;
+    viDu: string;
+    buoc: Array<{ vong: string; trangThai: string; giaiThich: string }>;
+  } | null;
   cacBuoc: string[];
+  /** Bộ phím người chấm sẽ gõ, và thứ console phải trả lại. */
+  boTest?: Array<{ go: string; cho: string; viSao: string }>;
+  /** Khuôn mẫu thầy quen thấy: hợp đồng Validator, try-with-resources, vòng menu… */
+  khuonMau?: Array<{ ten: string; vietSao: string; khiNao: string }>;
   bayCanTranh: string[];
   cauHoiVanDap: string[];
   locUocTinh: number;

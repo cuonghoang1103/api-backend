@@ -5971,3 +5971,37 @@ html.theme-dark .chat-studio {
   font-weight: 600;
   text-decoration: none;
 }
+
+/* ── Mốc Phòng Lab (LabRoomBeacon) ─────────────────────────────────────
+   Ba chuyển động rẻ, chỉ đụng transform/opacity nên không ép trình duyệt
+   tính lại bố cục: khối nhô lên hạ xuống, quầng sáng thở, và một vệt sáng
+   quét ngang mặt thẻ. Vệt quét chạy chậm và có quãng nghỉ dài — nhấp nháy
+   liên tục ở góc màn hình đọc ra là quảng cáo, không phải công cụ. */
+@keyframes lr-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+@keyframes lr-halo {
+  0%, 100% { opacity: .30; transform: scale(1); }
+  50%      { opacity: .70; transform: scale(1.03); }
+}
+@keyframes lr-sweep {
+  0%, 62%  { transform: translateX(-140%); }
+  100%     { transform: translateX(320%); }
+}
+@keyframes lr-pop {
+  from { opacity: 0; transform: translateY(-10px) scale(.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+.lr-float { animation: lr-float 3.6s ease-in-out infinite; }
+.lr-halo  { animation: lr-halo 2.8s ease-in-out infinite; }
+.lr-sweep { animation: lr-sweep 5.5s ease-in-out infinite; }
+.lr-pop   { animation: lr-pop .28s ease-out both; }
+
+/* Người bật giảm chuyển động vẫn phải DÙNG được tính năng, không phải chịu
+   đựng nó — tắt sạch, giữ nguyên bố cục. */
+@media (prefers-reduced-motion: reduce) {
+  .lr-float, .lr-halo, .lr-sweep, .lr-pop { animation: none !important; }
+  .lr-halo { opacity: .45; }
+}

@@ -578,4 +578,10 @@ export const TU_DIEN: Record<string, string> = {
     'What you opened no longer exists, or the link is out of date.',
   'Không có trang cho đường dẫn': 'No page for the path',
   'Trang gặp lỗi': 'This page hit an error',
+  'File này nằm **NGOÀI thư mục dự án**. Đọc kỹ đường dẫn trước khi duyệt.':
+    'This file is **OUTSIDE the project folder**. Read the path carefully before approving.',
+  'Agent ĐANG lái được trình duyệt: mở trang, đọc sau khi JS chạy, xem console. Bấm/gõ vẫn phải bạn duyệt. Bấm để tắt. (Nhớ cho những việc sau.)':
+    'The agent CAN drive the browser: open pages, read them after JavaScript runs, check the console. Clicks and typing still need your approval. Click to turn off. (Remembered for future tasks.)',
+  'Bật cho agent MỞ TRANG WEB — YouTube, tài liệu, localhost — ngay cạnh bảng ghi, đọc nội dung sau khi JS chạy và xem lỗi console. Mọi thao tác bấm/gõ vẫn hỏi bạn. (Nhớ cho những việc sau.)':
+    'Let the agent OPEN WEB PAGES — YouTube, docs, localhost — right beside the transcript, read them after JavaScript runs, and check the console. Clicks and typing still ask you first. (Remembered for future tasks.)',
 };

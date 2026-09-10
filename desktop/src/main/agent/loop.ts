@@ -256,7 +256,7 @@ function layCuoc(id: string): CuocHoiThoai {
     c = {
       id, phienId: id, hoiThoai: [], duAn: null, dangChay: null, so: taoSoCuoc(), soViecPhu: 0,
       goc: null, daChonGoc: false, cheDoQuyen: 'keHoach', choSua: false, choChayLenh: false, choGhiNote: false,
-      choTrinhDuyet: false,
+      choTrinhDuyet: trinhDuyetMacDinh(),
     };
     cuoc.set(id, c);
   }
@@ -393,6 +393,19 @@ function dongBoQuyenLau(c: { goc: string | null; so: SoCuoc }): void {
 function cheDoMacDinh(): CheDoQuyen {
   const v = getSettings().aiCheDoQuyenMacDinh;
   return v === 'hoi' || v === 'tuSua' || v === 'tuSuaVaLenh' ? v : 'keHoach';
+}
+
+/**
+ * Nút Trình duyệt có bật sẵn cho cuộc mới không.
+ *
+ * KHÁC chế độ quyền ở một điểm quan trọng: chế độ quyền tụt về `keHoach` mỗi
+ * lần đổi dự án vì nó quyết định agent được SỬA gì trên máy. Trình duyệt thì
+ * chỉ MỞ TRANG cho người dùng xem — mọi thao tác bấm/gõ vẫn hỏi duyệt riêng —
+ * nên nhớ nó không nới thêm quyền nào, mà bỏ đi được cái phiền "bật lại từ
+ * đầu mỗi lần mở việc mới".
+ */
+function trinhDuyetMacDinh(): boolean {
+  return getSettings().aiTrinhDuyetMacDinh === true;
 }
 
 /** Danh sách quyền lâu dài của dự án đang mở ở cuộc này. */

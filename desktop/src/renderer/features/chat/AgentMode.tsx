@@ -355,7 +355,13 @@ export function AgentMode({
   };
 
   const doiCheDoTrinhDuyet = async (): Promise<void> => {
-    const w = await window.cuongthai?.agent.datCheDoTrinhDuyet(cuocId, !thuMuc?.choTrinhDuyet);
+    const bat = !thuMuc?.choTrinhDuyet;
+    /* NHỚ lựa chọn cho những cuộc sau. Trước bản này nút chỉ sống trong bộ nhớ
+       của một cuộc: mở việc mới là tắt lại, và model — không được kể là công
+       cụ ấy tồn tại — trả lời "tôi không mở được trang web". Người dùng đọc ra
+       thành "app thiếu tính năng". */
+    setSetting('aiTrinhDuyetMacDinh', bat);
+    const w = await window.cuongthai?.agent.datCheDoTrinhDuyet(cuocId, bat);
     if (w) datThuMuc(w);
   };
 
@@ -718,8 +724,8 @@ export function AgentMode({
           disabled={trangThai.dangChay}
           title={
             thuMuc?.choTrinhDuyet
-              ? 'Agent ĐANG lái được trình duyệt: mở trang, đọc sau khi JS chạy, xem console. Bấm/gõ vẫn phải bạn duyệt. Bấm để tắt.'
-              : 'Bật cho agent mở trang trong tab Trình duyệt, đọc nội dung thật và xem lỗi console. Mọi thao tác bấm/gõ vẫn hỏi bạn.'
+              ? dich('Agent ĐANG lái được trình duyệt: mở trang, đọc sau khi JS chạy, xem console. Bấm/gõ vẫn phải bạn duyệt. Bấm để tắt. (Nhớ cho những việc sau.)')
+              : dich('Bật cho agent MỞ TRANG WEB — YouTube, tài liệu, localhost — ngay cạnh bảng ghi, đọc nội dung sau khi JS chạy và xem lỗi console. Mọi thao tác bấm/gõ vẫn hỏi bạn. (Nhớ cho những việc sau.)')
           }
         >
           <Globe size={13} aria-hidden />

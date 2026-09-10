@@ -207,6 +207,16 @@ export const settingKeySchema = z.enum([
    * `loop.ts`, không chỉ ở giao diện.
    */
   'aiCheDoQuyenMacDinh',
+  /**
+   * Nút "Trình duyệt" của AI Code có được BẬT SẴN cho cuộc mới không.
+   *
+   * ⚠️ Trước 10/09/2026 nó chỉ sống trong bộ nhớ của từng cuộc, mặc định TẮT,
+   * và không có gì nói cho người dùng biết là nó tồn tại. Kết quả: bật ở máy
+   * này rồi sang máy khác (hoặc chỉ cần mở việc mới) là mất, model trả lời
+   * "tôi không mở được trang web", và người dùng kết luận app thiếu tính năng
+   * — họ báo đúng như thế: "macOS mở được, Windows/Linux thì không".
+   */
+  'aiTrinhDuyetMacDinh',
 ]);
 export type SettingKey = z.infer<typeof settingKeySchema>;
 

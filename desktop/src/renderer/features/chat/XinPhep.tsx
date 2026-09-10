@@ -124,6 +124,17 @@ export function XinPhep({
   const { dich } = useDich();
   return (
     <div className="ct-xinphep">
+      {/* ⚠️ NÓI RÕ KHI FILE NẰM NGOÀI DỰ ÁN.
+          Với file trong dự án, thấy `src/a.ts` là đủ. Với file ngoài, thứ
+          quan trọng nhất KHÔNG phải nội dung mà là *nó nằm ở đâu* — người
+          dùng đã cấp quyền sửa dự án của họ, không phải sửa cả ổ đĩa. Thiếu
+          dải này thì hai việc rất khác nhau trông y hệt nhau. */}
+      {the.ten === 'ghi_file_ngoai' && (
+        <div className="ct-notice" data-tone="warn" style={{ margin: '0 0 8px' }}>
+          <AlertTriangle size={15} aria-hidden />
+          <span><Chu cau="File này nằm **NGOÀI thư mục dự án**. Đọc kỹ đường dẫn trước khi duyệt." /></span>
+        </div>
+      )}
       <div className="ct-xinphep-dau">
         {the.taoMoi ? <FilePlus2 size={14} aria-hidden /> : <FilePen size={14} aria-hidden />}
         <code className="ct-xinphep-duongdan">{the.duongDan}</code>

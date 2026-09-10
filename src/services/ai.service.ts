@@ -850,6 +850,25 @@ export class AIService {
    * Hỏng thì LÙI về đường cũ chứ không ném — mất ngữ cảnh là câu trả lời
    * nhạt đi, còn ném lỗi là mất cả câu trả lời.
    */
+  /**
+   * Mã môn xuất hiện trong câu hỏi, nếu có ("CSD201", "JPD123", "SSL101c").
+   *
+   * ⚠️ VÌ SAO CẦN: model embedding là `all-MiniLM-L6-v2`, HUẤN LUYỆN BẰNG
+   * TIẾNG ANH. Mã môn là token hiếm, còn câu hỏi thì tiếng Việt — nên tìm
+   * thuần ngữ nghĩa kéo nhầm môn. Đo thật trên kho 9.692 mẩu 10/09/2026:
+   *
+   *     "CSD201 dạy cấu trúc dữ liệu gì?"  → NWC203c, PRF192, PRJ301  (TRƯỢT HẲN)
+   *     "JPD123 học tới bài nào?"          → JPD113 đứng trước JPD123
+   *
+   * Người dùng gõ mã môn ra là họ đã nói rõ muốn hỏi môn NÀO. Lọc thẳng theo
+   * mã thì chính xác tuyệt đối, và rẻ hơn cả tìm ngữ nghĩa.
+   */
+  private maMonTrongCau(cauHoi: string): string | null {
+    // 2-4 chữ hoa + 3 số, có thể kèm một chữ thường ở cuối (SSL101c, WDU203c).
+    const m = cauHoi.toUpperCase().match(/\b([A-Z]{2,4}\d{3}[A-Z]?)\b/);
+    return m?.[1] ?? null;
+  }
+
   private async traTheoVector(
     documentType: string | undefined,
     topK: number,
@@ -859,6 +878,27 @@ export class AIService {
       const [vec] = await computeEmbeddings([cauHoi]);
       if (!Array.isArray(vec) || vec.length !== 384) return null;
       const lit = `[${vec.join(',')}]`;
+
+      /* Câu hỏi có nêu MÃ MÔN thì lọc thẳng theo môn đó trước. Có kết quả là
+       * dùng luôn; môn đó chưa nạp vào kho thì rơi xuống tìm ngữ nghĩa như
+       * thường, không mất gì. */
+      const maMon = this.maMonTrongCau(cauHoi);
+      if (maMon && !documentType) {
+        const theoMa = await prisma.$queryRaw<Array<{ content: string; document_id: string; document_type: string }>>`
+            SELECT content, document_id, document_type
+              FROM document_chunks
+             WHERE embedding_vec IS NOT NULL
+               AND document_type = 'khoa-hoc'
+               AND upper(document_id) = ${maMon}
+             ORDER BY embedding_vec <=> ${lit}::vector
+             LIMIT ${topK}`;
+        if (theoMa.length) {
+          return theoMa.map((r) => ({
+            content: r.content, documentId: r.document_id, documentType: r.document_type,
+          }));
+        }
+      }
+
       const rows = documentType
         ? await prisma.$queryRaw<Array<{ content: string; document_id: string; document_type: string }>>`
             SELECT content, document_id, document_type

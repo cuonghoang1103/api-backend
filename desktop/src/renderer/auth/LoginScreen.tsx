@@ -10,8 +10,10 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { Eye, EyeOff, LogIn, WifiOff } from 'lucide-react';
 import { ApiError } from '../api/client';
 import { useSession } from './session';
+import { useDich } from '../i18n';
 
 export function LoginScreen({ online }: { online: boolean }) {
+  const { dich } = useDich();
   const { login, dangNhapBangToken } = useSession();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -129,36 +131,36 @@ export function LoginScreen({ online }: { online: boolean }) {
               lần nữa qua ảnh là thừa với trình đọc màn hình. */}
           <img className="ct-dangnhap-icon" src="/icon.png" alt="" aria-hidden />
           <h1>CuongThai</h1>
-          <p>Chào mừng trở lại</p>
+          <p>{dich('Chào mừng trở lại')}</p>
         </div>
 
         {/* Hai tab như iOS. "Đăng ký" mở trên web: luồng đó cần email + captcha,
             làm lại trong app chỉ để trùng lặp một thứ đã chạy tốt. */}
         <div className="ct-dangnhap-tab" role="tablist">
           <button type="button" role="tab" aria-selected="true" data-chon="1">
-            Đăng nhập
+            {dich('Đăng nhập')}
           </button>
           <button
             type="button"
             role="tab"
             aria-selected="false"
             onClick={() => openWeb('/register')}
-            title="Mở trang đăng ký trên cuongthai.com"
+            title={dich('Mở trang đăng ký trên cuongthai.com')}
           >
-            Đăng ký
+            {dich('Đăng ký')}
           </button>
         </div>
 
         {!online && (
           <div className="ct-notice" data-tone="warn" style={{ marginBottom: 12 }}>
             <WifiOff size={15} aria-hidden />
-            <span>Đang ngoại tuyến. Đăng nhập cần mạng — máy chủ phải xác thực tài khoản.</span>
+            <span>{dich('Đang ngoại tuyến. Đăng nhập cần mạng — máy chủ phải xác thực tài khoản.')}</span>
           </div>
         )}
 
         <form onSubmit={(event) => void onSubmit(event)}>
           <label className="ct-input-group">
-            <span>Tên đăng nhập</span>
+            <span>{dich('Tên đăng nhập')}</span>
             <input
               value={username}
               onChange={(event) => setUsername(event.target.value)}
@@ -170,7 +172,7 @@ export function LoginScreen({ online }: { online: boolean }) {
           </label>
 
           <label className="ct-input-group">
-            <span>Mật khẩu</span>
+            <span>{dich('Mật khẩu')}</span>
             {/* Nút hiện/ẩn mật khẩu. Không phải tiện nghi thừa: gõ mù một chuỗi
                 dài rồi nhận "sai mật khẩu" mà không biết mình gõ nhầm ở đâu là
                 cách nhanh nhất để người dùng nghĩ app hỏng. */}
@@ -216,7 +218,7 @@ export function LoginScreen({ online }: { online: boolean }) {
           </button>
         </form>
 
-        <div className="ct-dangnhap-hoac"><span>hoặc</span></div>
+        <div className="ct-dangnhap-hoac"><span>{dich('hoặc')}</span></div>
 
         {/* Ba nút mở TRÌNH DUYỆT HỆ THỐNG. Token quay về qua cổng vòng
             `127.0.0.1` — không đi qua deep link của hệ điều hành, nơi nó lọt
@@ -254,7 +256,7 @@ export function LoginScreen({ online }: { online: boolean }) {
 
         {dangCho !== null && (
           <p className="ct-dangnhap-nhac">
-            Đã mở trình duyệt. Đăng nhập ở đó rồi quay lại — app sẽ tự nhận.
+            {dich('Đã mở trình duyệt. Đăng nhập ở đó rồi quay lại — app sẽ tự nhận.')}
           </p>
         )}
 
@@ -262,10 +264,10 @@ export function LoginScreen({ online }: { online: boolean }) {
           {/* Quên mật khẩu và đăng ký mở trên web: cả hai luồng cần email và
               captcha, làm lại trong app chỉ để trùng lặp một thứ đã chạy tốt. */}
           <button type="button" onClick={() => openWeb('/forgot-password')}>
-            Quên mật khẩu?
+            {dich('Quên mật khẩu?')}
           </button>
           <button type="button" onClick={() => openWeb('/register')}>
-            Tạo tài khoản
+            {dich('Tạo tài khoản')}
           </button>
         </div>
       </section>

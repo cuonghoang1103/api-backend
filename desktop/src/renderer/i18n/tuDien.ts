@@ -835,4 +835,28 @@ export const TU_DIEN: Record<string, string> = {
   'Trước 15 phút': '15 minutes before',
   'Trước 30 phút': '30 minutes before',
   'Trước 1 giờ': '1 hour before',
+  // ── Màn đăng nhập ───────────────────────────────────────
+  'Đăng nhập': 'Sign in',
+  'Đăng ký': 'Sign up',
+  'Chào mừng trở lại': 'Welcome back',
+  'Tên đăng nhập': 'Username',
+  'Mật khẩu': 'Password',
+  'Quên mật khẩu?': 'Forgot your password?',
+  'Tạo tài khoản': 'Create an account',
+  'Mở trang đăng ký trên cuongthai.com': 'Open the sign-up page on cuongthai.com',
+  'hoặc': 'or',
+  'Đã mở trình duyệt. Đăng nhập ở đó rồi quay lại — app sẽ tự nhận.':
+    'Your browser is open. Sign in there and come back — the app will pick it up.',
+  'Đang ngoại tuyến. Đăng nhập cần mạng — máy chủ phải xác thực tài khoản.':
+    'You’re offline. Signing in needs a connection — the server has to verify your account.',
+
+  // ── Hàng đợi đồng bộ ────────────────────────────────────
+  'Hàng đợi đồng bộ': 'Sync queue',
+  'Đang chờ gửi': 'Waiting to send',
+  'Không có thay đổi nào đang chờ gửi.': 'Nothing is waiting to be sent.',
+  'Cần bạn xử lý': 'Needs your attention',
+  '**{n}** thay đổi cần bạn xử lý — app không tự gửi lại được.':
+    '**{n}** changes need your attention — the app can’t resend them on its own.',
+  'Gửi lỗi (tự thử lại)': 'Failed to send (retrying)',
+  'Bỏ thay đổi này': 'Discard this change',
 };

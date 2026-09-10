@@ -15,6 +15,8 @@ import { AlertTriangle, Check, Clock, RefreshCw, Trash2 } from 'lucide-react';
 import { db, type SyncRecord } from '../offline/db';
 import { retryFailed } from '../offline/sync-queue';
 import { useSession } from '../auth/session';
+import { useDich } from '../i18n';
+import { Chu } from '../i18n/Chu';
 
 const STATUS_LABEL: Record<string, string> = {
   pending: 'Đang chờ gửi',
@@ -34,6 +36,7 @@ const ENTITY_LABEL: Record<string, string> = {
 };
 
 export function SyncPanel() {
+  const { dich, dichP } = useDich();
   const { userId } = useSession();
   const [records, setRecords] = useState<SyncRecord[]>([]);
   const [busy, setBusy] = useState(false);
@@ -98,10 +101,10 @@ export function SyncPanel() {
   if (records.length === 0) {
     return (
       <section className="ct-section">
-        <h2>Hàng đợi đồng bộ</h2>
+        <h2>{dich('Hàng đợi đồng bộ')}</h2>
         <p className="ct-field-help" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <Check size={14} aria-hidden />
-          Không có thay đổi nào đang chờ gửi.
+          {dich('Không có thay đổi nào đang chờ gửi.')}
         </p>
       </section>
     );
@@ -109,29 +112,29 @@ export function SyncPanel() {
 
   return (
     <section className="ct-section">
-      <h2>Hàng đợi đồng bộ</h2>
+      <h2>{dich('Hàng đợi đồng bộ')}</h2>
 
       {actionable.length > 0 && (
         <div className="ct-notice" data-tone="err">
           <AlertTriangle size={15} aria-hidden />
           <span>
-            <strong>{actionable.length}</strong> thay đổi cần bạn xử lý — app không
-            tự gửi lại được.
+            {/* Số nằm GIỮA câu ⇒ chỗ thay, không phải mẩu ghép. */}
+            <Chu cau={dichP('**{n}** thay đổi cần bạn xử lý — app không tự gửi lại được.', { n: actionable.length })} />
           </span>
         </div>
       )}
 
       <dl className="ct-rows">
         <div className="ct-row">
-          <dt>Đang chờ gửi</dt>
+          <dt>{dich('Đang chờ gửi')}</dt>
           <dd>{waiting.length}</dd>
         </div>
         <div className="ct-row">
-          <dt>Gửi lỗi (tự thử lại)</dt>
+          <dt>{dich('Gửi lỗi (tự thử lại)')}</dt>
           <dd>{failed.length}</dd>
         </div>
         <div className="ct-row">
-          <dt>Cần bạn xử lý</dt>
+          <dt>{dich('Cần bạn xử lý')}</dt>
           <dd>{actionable.length}</dd>
         </div>
       </dl>
@@ -160,8 +163,8 @@ export function SyncPanel() {
                   type="button"
                   className="ct-queue-discard"
                   onClick={() => void onDiscard(record)}
-                  aria-label="Bỏ thay đổi này"
-                  title="Bỏ thay đổi này"
+                  aria-label={dich('Bỏ thay đổi này')}
+                  title={dich('Bỏ thay đổi này')}
                 >
                   <Trash2 size={13} aria-hidden />
                 </button>

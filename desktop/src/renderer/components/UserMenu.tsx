@@ -9,8 +9,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { AlertTriangle, LogOut, User } from 'lucide-react';
 import { useSession } from '../auth/session';
+import { useT } from '../i18n';
 
 export function UserMenu({ collapsed }: { collapsed: boolean }) {
+  const { t } = useT();
   const { user, phase, logout, unsyncedCount } = useSession();
   const [open, setOpen] = useState(false);
   const [confirming, setConfirming] = useState<number | null>(null);
@@ -37,7 +39,7 @@ export function UserMenu({ collapsed }: { collapsed: boolean }) {
 
   if (!user) return null;
 
-  const label = user.fullName?.trim() || user.username || 'Tài khoản';
+  const label = user.fullName?.trim() || user.username || t('Tài khoản');
   const unverified = phase === 'chua-xac-minh-duoc';
 
   const startLogout = async () => {

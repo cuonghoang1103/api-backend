@@ -39,7 +39,15 @@ function gia() {
              (Không dùng dấu huyền ở đây: cả khối này nằm TRONG một template
              literal, một dấu huyền là cắt đứt chuỗi và hỏng cả file cấu hình.) */
           import { createContext, useContext, useState, useMemo } from 'react';
-          const S = { online: true, settings: {}, setSetting: () => {}, resolvedTheme: 'dark',
+          /* ⚠️ NGÔN NGỮ phải đi qua ĐÚNG mô-đun i18n thật.
+             Bản giả này thay HẲN app-state, nên thiết đặt từ cầu nối giả
+             (\`settings.getAll()\`) không bao giờ tới nơi — đo thật 10/09/2026:
+             \`getAll\` trả \`{ngonNgu:'en'}\` mà thanh bên vẫn tiếng Việt.
+             Nên bơm thẳng vào i18n, và giữ nguyên phần còn lại của bản giả. */
+          import { datNgonNgu } from './i18n';
+          const NN = globalThis.__CT_NGON_NGU === 'en' ? 'en' : 'vi';
+          datNgonNgu(NN);
+          const S = { online: true, settings: { ngonNgu: NN }, setSetting: () => {}, resolvedTheme: 'dark',
                       theme: 'dark', toggleSidebar: () => {}, zoom: 1, datZoom: () => {},
                       layThamSo: () => null, datThamSo: () => {}, lanDieuHuong: 0 };
           /* ⚠️ PHẢI CÓ route + navigate THẬT, không phải hằng.

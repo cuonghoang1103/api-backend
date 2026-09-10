@@ -11,6 +11,7 @@ import { bangMenuRobot, NHAN_CO, type TuyChonMenuRobot } from './robotMenu';
 
 const goc = (): TuyChonMenuRobot => ({
   trongApp: false,
+  tiengAnh: false,
   nacCo: 0,
   bamMep: true,
   moChat: vi.fn(),
@@ -83,5 +84,21 @@ describe('bấm thì gọi đúng việc', () => {
     (muc(b, 'Tắt robot nổi')!.click as () => void)();
     expect(o.moChat).toHaveBeenCalled();
     expect(o.tat).toHaveBeenCalled();
+  });
+});
+
+describe('menu theo ngôn ngữ', () => {
+  it('⛔ đổi sang tiếng Anh thì MENU cũng phải đổi', () => {
+    // Main không dùng được `useT()` của renderer. Bỏ qua chỗ này thì người dùng
+    // đổi ngôn ngữ xong vẫn thấy một menu tiếng Việt — đúng kiểu "đổi rồi mà
+    // một chỗ chưa đổi", và chỗ ấy lại là chỗ hay bấm nhất.
+    const b = bangMenuRobot({ ...goc(), tiengAnh: true });
+    expect(b.map((m) => m.label)).toContain('Open AI Chat');
+    expect(muc(b, 'Snap to screen edge')).toBeTruthy();
+    expect(muc(b, 'Turn off the floating robot')).toBeTruthy();
+  });
+
+  it('tiếng Việt giữ nguyên', () => {
+    expect(muc(bangMenuRobot(goc()), 'Mở AI Chat')).toBeTruthy();
   });
 });

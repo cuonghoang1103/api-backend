@@ -14,6 +14,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { ExternalLink, Info, Settings as SettingsIcon } from 'lucide-react';
 import { useAppState } from '../app-state';
 import { INTERNAL_ROUTES, ROUTES } from '../routes';
+import { useT } from '../i18n';
 
 function normalize(input: string): string {
   return input
@@ -36,6 +37,7 @@ interface Command {
 
 export function CommandPalette({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { navigate, route } = useAppState();
+  const { t } = useT();
   const [query, setQuery] = useState('');
   const [index, setIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -43,31 +45,33 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
   const commands = useMemo<Command[]>(() => {
     const navCommands: Command[] = ROUTES.map((item) => ({
       id: `nav:${item.path}`,
-      label: item.label,
-      hint: 'Mở',
-      keywords: normalize([item.label, item.path, ...(item.keywords ?? [])].join(' ')),
+      label: t(item.label),
+      hint: t('Mở'),
+      /* Tìm được bằng CẢ HAI thứ tiếng: người dùng đổi sang tiếng Anh vẫn quen
+         gõ "ghi chú", và ngược lại. Gộp cả nhãn gốc lẫn nhãn đã dịch. */
+      keywords: normalize([item.label, t(item.label), item.path, ...(item.keywords ?? [])].join(' ')),
       run: () => navigate(item.path),
     }));
 
     const actions: Command[] = [
       {
         id: 'app:settings',
-        label: 'Cài đặt',
-        hint: 'Ứng dụng',
+        label: t('Cài đặt'),
+        hint: t('Ứng dụng'),
         keywords: normalize('cài đặt settings tuỳ chọn'),
         run: () => navigate(INTERNAL_ROUTES.settings),
       },
       {
         id: 'app:about',
-        label: 'Giới thiệu',
-        hint: 'Ứng dụng',
+        label: t('Giới thiệu'),
+        hint: t('Ứng dụng'),
         keywords: normalize('giới thiệu about phiên bản'),
         run: () => navigate(INTERNAL_ROUTES.about),
       },
       {
         id: 'app:openWeb',
-        label: 'Mở trang hiện tại trên web',
-        hint: 'Trình duyệt',
+        label: t('Mở trang hiện tại trên web'),
+        hint: t('Trình duyệt'),
         keywords: normalize('mở web browser trình duyệt'),
         run: () => {
           void window.cuongthai?.app
@@ -77,15 +81,15 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
       },
       {
         id: 'app:reload',
-        label: 'Tải lại ứng dụng',
-        hint: 'Ứng dụng',
+        label: t('Tải lại ứng dụng'),
+        hint: t('Ứng dụng'),
         keywords: normalize('tải lại reload refresh'),
         run: () => void window.cuongthai?.app.reload(),
       },
     ];
 
     return [...navCommands, ...actions];
-  }, [navigate, route]);
+  }, [navigate, route, t]);
 
   const filtered = useMemo(() => {
     const q = normalize(query.trim());
@@ -125,15 +129,15 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
         className="ct-palette"
         role="dialog"
         aria-modal="true"
-        aria-label="Bảng lệnh"
+        aria-label={t('Bảng lệnh')}
         onClick={(event) => event.stopPropagation()}
       >
         <input
           ref={inputRef}
           className="ct-palette-input"
           value={query}
-          placeholder="Tìm trang hoặc lệnh…"
-          aria-label="Tìm trang hoặc lệnh"
+          placeholder={t('Tìm trang hoặc lệnh…')}
+          aria-label={t('Tìm trang hoặc lệnh')}
           onChange={(event) => setQuery(event.target.value)}
           onKeyDown={(event) => {
             if (event.key === 'Escape') {
@@ -151,9 +155,9 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
           }}
         />
 
-        <div className="ct-palette-list" role="listbox" aria-label="Kết quả">
+        <div className="ct-palette-list" role="listbox" aria-label={t('Kết quả')}>
           {filtered.length === 0 && (
-            <div className="ct-palette-empty">Không có kết quả nào.</div>
+            <div className="ct-palette-empty">{t('Không có kết quả nào.')}</div>
           )}
           {filtered.map((command, i) => (
             <button

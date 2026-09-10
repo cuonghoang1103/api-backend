@@ -171,6 +171,14 @@ export const settingKeySchema = z.enum([
   /** Thả tay thì robot có tự hút vào mép màn hình không. Mặc định BẬT. */
   'robotBamMep',
   /**
+   * Ngôn ngữ GIAO DIỆN app: `'vi'` (mặc định) hoặc `'en'`.
+   *
+   * ⚠️ Chỉ đổi chữ của APP. Nội dung tải từ web (bài học, bài viết, tin nhắn)
+   * và những chỗ song ngữ cố ý giữ nguyên — chúng là dữ liệu, không phải nhãn
+   * giao diện, và "dịch" chúng nghĩa là bịa lại nội dung.
+   */
+  'ngonNgu',
+  /**
    * Thư mục người dùng đã chọn cho `web_tai` ở LẦN GẦN NHẤT.
    *
    * KHÔNG phải để bỏ qua hộp thoại — hộp thoại vẫn hiện mỗi cuộc, vì `web_tai`

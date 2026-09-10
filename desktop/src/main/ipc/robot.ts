@@ -47,6 +47,7 @@ export function registerRobotHandlers(): void {
   handle('robot:menu', ({ trongApp }) => {
     Menu.buildFromTemplate(bangMenuRobot({
       trongApp,
+      tiengAnh: getSettings().ngonNgu === 'en',
       nacCo: nacCoHienTai(),
       bamMep: getSettings().robotBamMep !== false,
       moChat: () => moTrangChinh('/chat', ''),

@@ -52,6 +52,8 @@ interface AppState {
   hasBridge: boolean;
 }
 
+import { datNgonNgu } from './i18n';
+
 const AppStateContext = createContext<AppState | null>(null);
 
 function systemPrefersDark(): boolean {
@@ -204,6 +206,14 @@ export function AppStateProvider({
     if (v !== null) viTri.current = '';   // đọc một lần rồi thôi
     return v;
   }, []);
+
+  /* Bơm ngôn ngữ xuống tầng mô-đun của `i18n`, để `t()` gọi được cả từ mã
+     KHÔNG phải component (routes.ts, các hàm dựng chuỗi). `datNgonNgu` tự bỏ
+     qua khi giá trị không đổi, nên effect này chạy mỗi lần thiết đặt đổi cũng
+     không tốn gì. */
+  useEffect(() => {
+    datNgonNgu(settings.ngonNgu === 'en' ? 'en' : 'vi');
+  }, [settings.ngonNgu]);
 
   const value = useMemo<AppState>(
     () => ({

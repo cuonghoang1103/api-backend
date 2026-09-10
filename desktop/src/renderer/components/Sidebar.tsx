@@ -12,6 +12,7 @@ import { useAppState } from '../app-state';
 import { UpdateBanner } from './UpdateBanner';
 import { UserMenu } from './UserMenu';
 import { GROUP_LABELS, GROUP_ORDER, INTERNAL_ROUTES, ROUTES, isPorted } from '../routes';
+import { useT } from '../i18n';
 
 /**
  * Ba trạng thái thay vì hai.
@@ -31,6 +32,11 @@ const NEXT_MODE: Record<SidebarMode, SidebarMode> = {
   hidden: 'full',
 };
 
+/* ⚠️ GIỮ NGUYÊN TIẾNG VIỆT ở đây, dịch tại chỗ DỰNG.
+   Đây là hằng tầm mô-đun: nó tính ĐÚNG MỘT LẦN, lúc tệp được nạp. Gọi `t()`
+   ngay tại đây thì nhãn kẹt ở ngôn ngữ đang có lúc khởi động, và đổi ngôn ngữ
+   xong sẽ có đúng ba dòng chữ không đổi theo — kiểu lỗi "đổi rồi mà một nửa
+   app chưa đổi" mà người dùng phải khởi động lại mới hết. */
 const MODE_LABEL: Record<SidebarMode, string> = {
   full: 'Thu gọn thành biểu tượng',
   icons: 'Ẩn hẳn thanh bên',
@@ -39,6 +45,7 @@ const MODE_LABEL: Record<SidebarMode, string> = {
 
 export function Sidebar() {
   const { route, navigate, settings, setSetting } = useAppState();
+  const { t } = useT();
   const mode: SidebarMode =
     settings.sidebarMode === 'icons' || settings.sidebarMode === 'hidden'
       ? settings.sidebarMode
@@ -93,7 +100,7 @@ export function Sidebar() {
                   trình đọc màn hình — cấu trúc không nên biến mất chỉ vì
                   giao diện hẹp lại. */}
               <div className="ct-nav-group-label" aria-hidden={collapsed}>
-                {GROUP_LABELS[group]}
+                {t(GROUP_LABELS[group])}
               </div>
               {items.map((item) => {
                 const active = route === item.path;
@@ -106,12 +113,12 @@ export function Sidebar() {
                     data-active={active}
                     aria-current={active ? 'page' : undefined}
                     // `title` cho tooltip gốc của HĐH khi sidebar thu gọn.
-                    title={collapsed ? item.label : undefined}
+                    title={collapsed ? t(item.label) : undefined}
                     tabIndex={active ? 0 : -1}
                     onClick={() => navigate(item.path)}
                   >
                     <item.icon className="ct-nav-icon" size={17} aria-hidden />
-                    <span className="ct-nav-label">{item.label}</span>
+                    <span className="ct-nav-label">{t(item.label)}</span>
                     {/* Chấm nhỏ = đã có màn hình native trong app. Route chưa
                         port vẫn vào được, chỉ là hiện màn "mở trên web". */}
                     {isPorted(item.path) && (
@@ -140,26 +147,26 @@ export function Sidebar() {
           type="button"
           className="ct-nav-item"
           data-active={route === INTERNAL_ROUTES.settings}
-          title={collapsed ? 'Cài đặt' : undefined}
+          title={collapsed ? t('Cài đặt') : undefined}
           onClick={() => navigate(INTERNAL_ROUTES.settings)}
         >
           <Settings className="ct-nav-icon" size={17} aria-hidden />
-          <span className="ct-nav-label">Cài đặt</span>
+          <span className="ct-nav-label">{t('Cài đặt')}</span>
         </button>
 
         <button
           type="button"
           className="ct-nav-item"
           onClick={() => setSetting('sidebarMode', NEXT_MODE[mode])}
-          aria-label={MODE_LABEL[mode]}
-          title={`${MODE_LABEL[mode]}  (⌘B)`}
+          aria-label={t(MODE_LABEL[mode])}
+          title={`${t(MODE_LABEL[mode])}  (⌘B)`}
         >
           {mode === 'full' ? (
             <PanelLeftClose className="ct-nav-icon" size={17} aria-hidden />
           ) : (
             <PanelLeftOpen className="ct-nav-icon" size={17} aria-hidden />
           )}
-          <span className="ct-nav-label">Thu gọn</span>
+          <span className="ct-nav-label">{t('Thu gọn')}</span>
         </button>
       </div>
     </nav>

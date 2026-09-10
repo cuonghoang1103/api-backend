@@ -23,11 +23,30 @@
  */
 import type { MenuItemConstructorOptions } from 'electron';
 
+import { TU_DIEN } from '../renderer/i18n/tuDien';
+
+/**
+ * Dịch cho MAIN.
+ *
+ * ⚠️ Tiến trình main KHÔNG dùng được `useT()` của renderer — nó không có React,
+ * và `datNgonNgu()` chỉ chạy trong renderer. Nhưng nó vẫn phải dịch: menu chuột
+ * phải này là chữ do main dựng, và nếu bỏ qua thì người dùng đổi sang tiếng Anh
+ * xong vẫn thấy một menu tiếng Việt — đúng kiểu "đổi rồi mà một chỗ chưa đổi".
+ *
+ * Dùng CHUNG `TU_DIEN` với renderer chứ không chép một bảng riêng: hai bảng là
+ * hai thứ phải giữ cho khớp mãi mãi, và chúng sẽ lệch ngay lần sửa câu chữ đầu.
+ */
+function dich(cau: string, en: boolean): string {
+  return en ? TU_DIEN[cau] ?? cau : cau;
+}
+
 export const NHAN_CO = ['100%', '82%', '66%', '52%'] as const;
 
 export interface TuyChonMenuRobot {
   /** `true` = con robot vẽ TRONG trang app; `false` = cửa sổ nổi riêng. */
   trongApp: boolean;
+  /** Người dùng đang để giao diện tiếng Anh. */
+  tiengAnh: boolean;
   nacCo: number;
   bamMep: boolean;
   moChat: () => void;
@@ -37,11 +56,12 @@ export interface TuyChonMenuRobot {
 }
 
 export function bangMenuRobot(o: TuyChonMenuRobot): MenuItemConstructorOptions[] {
+  const d = (cau: string): string => dich(cau, o.tiengAnh);
   return [
-    { label: 'Mở AI Chat', click: () => o.moChat() },
+    { label: d('Mở AI Chat'), click: () => o.moChat() },
     { type: 'separator' },
     {
-      label: 'Cỡ',
+      label: d('Cỡ'),
       submenu: NHAN_CO.map((ten, i) => ({
         label: ten,
         type: 'radio' as const,
@@ -50,7 +70,7 @@ export function bangMenuRobot(o: TuyChonMenuRobot): MenuItemConstructorOptions[]
       })),
     },
     {
-      label: 'Tự dính mép màn hình',
+      label: d('Tự dính mép màn hình'),
       type: 'checkbox',
       checked: o.bamMep,
       click: (m) => o.datBamMep(m.checked),
@@ -60,7 +80,7 @@ export function bangMenuRobot(o: TuyChonMenuRobot): MenuItemConstructorOptions[]
     },
     { type: 'separator' },
     {
-      label: o.trongApp ? 'Tắt robot trong app' : 'Tắt robot nổi',
+      label: d(o.trongApp ? 'Tắt robot trong app' : 'Tắt robot nổi'),
       click: () => o.tat(),
     },
   ];

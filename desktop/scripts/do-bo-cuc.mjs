@@ -494,7 +494,14 @@ await ctx.route('**/api/v1/**', async (tuyen) => {
   });
 });
 
-await ctx.addInitScript(() => {
+await ctx.addInitScript((nn) => {
+  /* `CT_NGON_NGU=en` để đo bố cục ở BẢN TIẾNG ANH — chữ hai thứ tiếng dài khác
+     nhau, và nhãn nào tràn khỏi nút chỉ lộ ra khi dựng bằng đúng thứ tiếng đó.
+     ⚠️ Phải đặt trên `globalThis`, KHÔNG qua `settings.getAll()`: bản giả
+     `app-state` trong `vite.bo-cuc.config.ts` thay hẳn provider thật nên nó
+     chẳng bao giờ đọc cầu nối. Đo thật: `getAll` trả `{ngonNgu:'en'}` mà thanh
+     bên vẫn tiếng Việt. */
+  globalThis.__CT_NGON_NGU = nn;
   /* API client của chính app desktop (xem chú thích trên). Cho nó đi RA MẠNG
      để `ctx.route` phía Node trả lời, thay vì mang một bản sao bảng dữ liệu
      thứ hai vào trong trang. Người gọi mong nhận payload TRẦN, nên bóc
@@ -515,7 +522,8 @@ await ctx.addInitScript(() => {
   const RA = {
     getInfo: { version: '0.0.0', platform: 'darwin', apiOrigin: '', pro: true, configured: true,
                soViecConLai: 20, models: [], mucNoLuc: [] },
-    getAll: {}, listDownloaded: [], usage: { count: 0, totalBytes: 0 },
+    getAll: nn ? { ngonNgu: nn } : {},
+    listDownloaded: [], usage: { count: 0, totalBytes: 0 },
     dsCuocDangMo: [],
     /* Danh sách việc đã lưu, NHIỀU DỰ ÁN.
        Để rỗng thì thanh bên chỉ hiện "Chưa có việc nào được lưu" — tức là mọi
@@ -560,7 +568,7 @@ await ctx.addInitScript(() => {
   window.cuongthai = new Proxy({ on: () => () => {} }, {
     get: (t, nhom) => (nhom === 'on' ? t.on : nhomGia),
   });
-});
+}, process.env.CT_NGON_NGU === 'en' ? 'en' : null);
 
 /*
  * ─── CHUẨN BỊ: đưa trang vào trạng thái RỘNG NHẤT nó có thể ───
@@ -976,6 +984,26 @@ for (const duong of DUONG) {
     /* `CT_CHUP=<thư mục>` ⇒ chụp lại từng trang ở từng bề rộng. Bộ đo này chỉ
        trả lời "có tràn không"; nó KHÔNG trả lời được "trông có ổn không" — mà
        đó lại là câu hỏi hay được hỏi nhất khi vừa dựng lại một trang. */
+    /* Bản TIẾNG ANH: thanh bên không được còn chữ có dấu.
+       Đây là phép kiểm trên CHỮ ĐÃ DỰNG, mạnh hơn kiểm từ điển: nó bắt cả
+       trường hợp có bản dịch nhưng quên bọc `t()` — chuỗi ấy hiện tiếng Việt
+       giữa giao diện tiếng Anh mà không lỗi nào nổi lên, vì `t()` cố ý trả về
+       câu gốc để không bao giờ có ô trống. */
+    if (process.env.CT_NGON_NGU === 'en') {
+      const sot = await p.evaluate(() => {
+        const CO_DAU = /[\u00C0-\u1EF9]/;
+        return [...document.querySelectorAll('.ct-nav-label, .ct-nav-group > *:first-child')]
+          .map((e) => e.textContent.trim())
+          .filter((c) => CO_DAU.test(c));
+      });
+      if (sot.length) {
+        /* ⚠️ Phải đẩy vào `loi`, KHÔNG phải `loiTrang`. `loiTrang` chỉ được
+           IN RA kèm theo khi đã có lỗi tràn (dòng ~1080) — tự nó không làm
+           trang đỏ. Bản đầu của chốt này đẩy vào `loiTrang` và nó im lặng cho
+           qua: gỡ hẳn một mục từ điển ra, bộ đo vẫn báo XANH. */
+        loi.push(`${rong}px: bản tiếng Anh còn chữ Việt trong thanh bên — ${sot.join(' · ')}`);
+      }
+    }
     if (process.env.CT_CHUP) {
       /* `CT_THEME=dark` để xem đúng thứ người dùng thấy. App mặc định nền TỐI,
          còn trang thử thì không — chụp bản sáng rồi kết luận "trông ổn" là kiểm

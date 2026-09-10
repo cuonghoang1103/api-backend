@@ -27,6 +27,7 @@ import { MusicPlayerProvider } from '../../src/renderer/features/music/player';
 import TanStackQueryProvider from '@/components/providers/TanStackQueryProvider';
 import { useAuthStore } from '@/store/authStore';
 import { OdinDock } from '../../src/renderer/features/odin/OdinDock';
+import { Sidebar } from '../../src/renderer/components/Sidebar';
 import '../../src/renderer/styles.css';
 
 
@@ -51,7 +52,12 @@ createRoot(document.getElementById('root')!).render(
     <MusicPlayerProvider>
       {/* Đúng cây vỏ của App.tsx: shell > sidebar > main > content > trang. */}
       <div className="ct-shell">
-        <div className="ct-sidebar" style={{ width: 240, flex: '0 0 240px' }} />
+        {/* THANH BÊN THẬT, không phải ô giữ chỗ.
+            Ô giữ chỗ 240px cũ khiến bộ đo chưa từng nhìn thấy thanh bên một
+            lần nào — mọi nhãn tràn, mọi nhóm gãy dòng ở đó đều vô hình với nó.
+            Và nó là chỗ DUY NHẤT đo được việc đổi ngôn ngữ có làm vỡ bố cục
+            hay không: chữ Anh và chữ Việt dài khác nhau. */}
+        <Sidebar />
         <div className="ct-main">
           <div style={{ height: 'var(--ct-titlebar-h)' }} />
           <div className="ct-content">

@@ -144,6 +144,31 @@ cả thanh tiến độ mà không có lỗi nào ném ra). Bộ kiểm:
 tiêu đề một bài mà tổng LOC của một phòng đang làm dở nhảy theo là thứ không
 giải thích được với người dùng.
 
+## Đã chứng minh được gì, và chưa chứng minh được gì
+
+Nói rõ ranh giới, vì `tsc` xanh rất dễ bị đọc nhầm thành "chạy được".
+
+**Đã có phép kiểm chạy thật:**
+
+| | Bộ kiểm |
+|---|---|
+| LOC đọc từ tiêu đề, không bao giờ ra `NaN` | `locCuaBai.test.ts` |
+| `lab_room` đi cổng rambo, **không lùi** sang modelapi khi cầu dao mở | `llm/gateway.test.ts` |
+| SQL tay tạo đúng thứ Prisma mong đợi, kèm hành vi khoá ngoại | Postgres 16 thật, xem dưới |
+
+Phép kiểm cổng đã được **kiểm ngược**: gỡ `lab_room` khỏi
+`RAMBO_PURPOSES_CO_DINH` thì nó đỏ đúng câu *"lab_room lùi sang modelapi, nơi
+không có model Claude nào gọi được"*; trả lại thì xanh. Nó tồn tại vì đó là
+kiểu hỏng không ai thấy lúc build: modelapi liệt kê đủ 6 model Claude nhưng gọi
+thật thì 500/503/hết giờ, nên lùi sang đó chỉ đổi một lỗi lấy một lỗi — và
+triệu chứng người dùng nhận được là **câu trả lời trống**, không phải một lỗi
+nhắc tới "model" hay "cổng".
+
+**CHƯA chứng minh:** chưa lượt nào gọi thật qua rambo. Giới thiệu bài, chat gia
+sư, chấm file zip mới chỉ đúng về kiểu dữ liệu và đúng đường đi — chưa có bằng
+chứng model trả về thứ dùng được. Cả bộ kiểm chạy hết ~5 giây, tức là không có
+lời gọi mạng nào trong đó. Chỉ bấm thật trên web mới biết.
+
 ## Triển khai
 
 ```bash

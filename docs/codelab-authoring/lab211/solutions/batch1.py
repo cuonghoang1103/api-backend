@@ -305,75 +305,6 @@ public class Person {
 }
 '''
 
-P0063_MANAGER = '''package bo;
-
-import entity.Person;
-
-/**
- * The three methods the brief names, and nothing else.
- *
- * None of them reads the keyboard. inputPersonInfo receives the three values as
- * TEXT and either returns a Person or throws — deciding what to say to the user
- * and when to ask again is the ui layer's job. That split is the whole reason
- * the brief specifies "throws Exception" instead of "print an error".
- */
-public class PersonManager {
-
-    /**
-     * Required: Person inputPersonInfo(String name, String address, String sSalary) throws Exception
-     *
-     * The three exception messages are dictated by the brief, word for word.
-     */
-    public Person inputPersonInfo(String name, String address, String sSalary) throws Exception {
-        if (sSalary == null || sSalary.trim().isEmpty()) {
-            throw new Exception("You must input Salary.");
-        }
-
-        double salary;
-        try {
-            salary = Double.parseDouble(sSalary.trim());
-        } catch (NumberFormatException e) {
-            // Not a number at all - the brief's third message.
-            throw new Exception("You must input digit.");
-        }
-
-        if (salary <= 0) {
-            throw new Exception("Salary is greater than zero");
-        }
-        return new Person(name, address, salary);
-    }
-
-    /** Required: void displayPersonInfo(Person person) */
-    public void displayPersonInfo(Person person) {
-        System.out.println("Information of Person you have entered:");
-        System.out.println(person);
-    }
-
-    /**
-     * Required: Person[] sortBySalary(Person[] person), using bubble sort.
-     *
-     * The brief forbids the library sort by naming the algorithm. The `swapped`
-     * flag lets an already-sorted array finish in one pass instead of n-1.
-     */
-    public Person[] sortBySalary(Person[] persons) {
-        for (int i = 0; i < persons.length - 1; i++) {
-            boolean swapped = false;
-            for (int j = 0; j < persons.length - 1 - i; j++) {
-                if (persons[j].getSalary() > persons[j + 1].getSalary()) {
-                    Person temp = persons[j];
-                    persons[j] = persons[j + 1];
-                    persons[j + 1] = temp;
-                    swapped = true;
-                }
-            }
-            if (!swapped) {
-                break;
-            }
-        }
-        return persons;
-    }
-}
-'''
 
 P0063_VALIDATOR = '''package utils;
 
@@ -408,21 +339,31 @@ public class Validator {
 
 P0063_MAIN = '''package ui;
 
-import bo.PersonManager;
 import entity.Person;
 import utils.Validator;
 
 /**
- * Screen and flow. It asks, it catches the exception the manager throws, it
- * prints the message, and it asks again — the retry loop lives here because
- * "ask again" is a user-interface decision, not a data rule.
+ * The startup class: the screen, the flow, and the three methods the
+ * Guidelines demand live in it.
+ *
+ * "Student must implement methods inputPersonInfo, displayPersonInfo,
+ * sortBySalary IN STARTUP CODE" is the brief's own wording, and at 25 lines
+ * the layering rule agrees: entity + utils + ui, no business layer. Splitting
+ * three short methods into a manager class here would add a file, add an
+ * import, and answer no question a marker asks.
+ *
+ * Note what did NOT move with them. inputPersonInfo still receives the three
+ * values as TEXT and either returns a Person or throws; it does not read the
+ * keyboard and it does not print. Deciding what to say and when to ask again
+ * stays in main, which is why the brief specifies "throws Exception" instead
+ * of "print an error". A method that both validates and re-prompts can never
+ * be reused by a second screen.
  */
 public class Main {
 
     private static final int SIZE = 3;
 
     public static void main(String[] args) {
-        PersonManager manager = new PersonManager();
         Person[] persons = new Person[SIZE];
 
         System.out.println("=====Management Person programer=====");
@@ -436,17 +377,72 @@ public class Main {
             while (persons[i] == null) {
                 String sSalary = Validator.getString("Please input salary:");
                 try {
-                    persons[i] = manager.inputPersonInfo(name, address, sSalary);
+                    persons[i] = inputPersonInfo(name, address, sSalary);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             }
         }
 
-        Person[] sorted = manager.sortBySalary(persons);
-        for (Person person : sorted) {
-            manager.displayPersonInfo(person);
+        for (Person person : sortBySalary(persons)) {
+            displayPersonInfo(person);
         }
+    }
+
+    /**
+     * Required: Person inputPersonInfo(String name, String address, String sSalary) throws Exception
+     *
+     * The three exception messages are dictated by the brief, word for word.
+     * The empty check comes first: an empty box is not a bad digit, and the
+     * brief gives it its own message.
+     */
+    public static Person inputPersonInfo(String name, String address, String sSalary) throws Exception {
+        if (sSalary == null || sSalary.trim().isEmpty()) {
+            throw new Exception("You must input Salary.");
+        }
+
+        double salary;
+        try {
+            salary = Double.parseDouble(sSalary.trim());
+        } catch (NumberFormatException e) {
+            // Not a number at all - the brief's third message.
+            throw new Exception("You must input digit.");
+        }
+
+        if (salary <= 0) {
+            throw new Exception("Salary is greater than zero");
+        }
+        return new Person(name, address, salary);
+    }
+
+    /** Required: void displayPersonInfo(Person person) */
+    public static void displayPersonInfo(Person person) {
+        System.out.println("Information of Person you have entered:");
+        System.out.println(person);
+    }
+
+    /**
+     * Required: Person[] sortBySalary(Person[] person), using bubble sort.
+     *
+     * The brief forbids the library sort by naming the algorithm. The swapped
+     * flag lets an already-sorted array finish in one pass instead of n-1.
+     */
+    public static Person[] sortBySalary(Person[] persons) {
+        for (int i = 0; i < persons.length - 1; i++) {
+            boolean swapped = false;
+            for (int j = 0; j < persons.length - 1 - i; j++) {
+                if (persons[j].getSalary() > persons[j + 1].getSalary()) {
+                    Person temp = persons[j];
+                    persons[j] = persons[j + 1];
+                    persons[j + 1] = temp;
+                    swapped = true;
+                }
+            }
+            if (!swapped) {
+                break;
+            }
+        }
+        return persons;
     }
 }
 '''
@@ -455,7 +451,6 @@ solution(
     'J1.S.P0063',
     title_vi='Nhập, hiển thị và sắp xếp thông tin Person theo lương',
     files=[('src/entity/Person.java', P0063_PERSON),
-           ('src/bo/PersonManager.java', P0063_MANAGER),
            ('src/utils/Validator.java', P0063_VALIDATOR),
            ('src/ui/Main.java', P0063_MAIN)],
     main_class='ui.Main',
@@ -483,11 +478,14 @@ methods, and a sort you must write yourself. The subtle part is the signature th
 <code>Person inputPersonInfo(String name, String address, String sSalary) throws Exception</code>.
 The salary arrives as <em>text</em>, and the method <em>throws</em> instead of printing. That single
 decision is the architecture of this program.</p>
-<p><strong>Why throwing beats printing.</strong> <code>PersonManager</code> decides whether data is
-valid; <code>Main</code> decides what to say and whether to ask again. Because the manager throws, it
-never touches the screen, and you could reuse it unchanged in a program with a different interface.
-If an examiner asks "why not just print the error inside the method", that is the answer — and it is
-the reason the brief wrote <code>throws Exception</code> into the signature.</p>
+<p><strong>Why throwing beats printing.</strong> <code>inputPersonInfo</code> decides whether the
+data is valid; <code>main</code> decides what to say and whether to ask again. Because the method
+throws instead of printing, it never touches the screen, and you could call it unchanged from a
+different interface. If an examiner asks "why not just print the error inside the method", that is the
+answer — and it is the reason the brief wrote <code>throws Exception</code> into the signature. Note
+that this separation is about <em>responsibility</em>, not about files: all three methods sit in
+<code>Main</code> because the Guidelines say "in startup code", and at 25 lines a separate manager class
+would add a file without adding a rule.</p>
 <p><strong>The three messages are a contract.</strong> Empty gives <em>You must input Salary.</em>,
 non-numeric gives <em>You must input digit.</em>, zero or negative gives <em>Salary is greater than
 zero</em>. Those exact strings come from the Guidelines section, so they are copied literally,
@@ -508,11 +506,13 @@ thuật toán sắp xếp bạn phải tự viết. Phần tinh tế nằm ở c
 <code>Person inputPersonInfo(String name, String address, String sSalary) throws Exception</code>.
 Lương được truyền vào dưới dạng <em>chuỗi</em>, và phương thức <em>ném ngoại lệ</em> chứ không in ra.
 Chỉ một quyết định đó đã định hình toàn bộ kiến trúc chương trình.</p>
-<p><strong>Vì sao ném lỗi tốt hơn in lỗi.</strong> <code>PersonManager</code> quyết định dữ liệu có
-hợp lệ hay không; <code>Main</code> quyết định nói gì với người dùng và có hỏi lại hay không. Vì lớp
-manager ném ngoại lệ nên nó không hề chạm vào màn hình, và bạn có thể mang nguyên nó sang một chương
-trình có giao diện khác. Nếu giám khảo hỏi "sao không in lỗi luôn trong hàm", đó chính là câu trả lời
-— và cũng là lý do đề viết sẵn <code>throws Exception</code> vào chữ ký.</p>
+<p><strong>Vì sao ném lỗi tốt hơn in lỗi.</strong> <code>inputPersonInfo</code> quyết định dữ liệu
+có hợp lệ hay không; <code>main</code> quyết định nói gì với người dùng và có hỏi lại hay không. Vì
+phương thức ném ngoại lệ thay vì in, nó không hề chạm vào màn hình, và bạn có thể gọi nguyên nó từ
+một giao diện khác. Nếu giám khảo hỏi "sao không in lỗi luôn trong hàm", đó chính là câu trả lời — và
+cũng là lý do đề viết sẵn <code>throws Exception</code> vào chữ ký. Lưu ý: tách ở đây là tách
+<em>trách nhiệm</em>, không phải tách tệp — cả ba phương thức nằm trong <code>Main</code> vì Hướng dẫn
+nói "in startup code", và với 25 dòng thì một lớp manager riêng chỉ thêm tệp chứ không thêm luật.</p>
 <p><strong>Ba thông điệp là một hợp đồng.</strong> Bỏ trống thì <em>You must input Salary.</em>, không
 phải số thì <em>You must input digit.</em>, bằng 0 hoặc âm thì <em>Salary is greater than zero</em>.
 Ba chuỗi này lấy từ mục Guidelines nên phải chép đúng từng chữ, kể cả dấu chấm cuối câu. Để ý là ảnh

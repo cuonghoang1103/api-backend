@@ -297,7 +297,7 @@ public class Student {
 }
 '''
 
-P0068_COMPARATOR = '''package bo;
+P0068_COMPARATOR = '''package utils;
 
 import entity.Student;
 import java.util.Comparator;
@@ -322,36 +322,6 @@ public class StudentNameComparator implements Comparator<Student> {
 }
 '''
 
-P0068_MANAGER = '''package bo;
-
-import entity.Student;
-import java.util.Collections;
-import java.util.List;
-
-/**
- * The two methods the brief names.
- */
-public class StudentManager {
-
-    /**
-     * Required: sortStudent. Sorts the list in place, A to Z by name.
-     *
-     * The brief does NOT name a sorting algorithm here, so the library sort is
-     * the right answer — and the Comparator says what "sorted" means.
-     */
-    public void sortStudent(List<Student> students) {
-        Collections.sort(students, new StudentNameComparator());
-    }
-
-    /** Required: display. */
-    public void display(List<Student> students) {
-        for (int i = 0; i < students.size(); i++) {
-            System.out.println("-------------Student " + (i + 1) + "-------------");
-            System.out.println(students.get(i));
-        }
-    }
-}
-'''
 
 P0068_VALIDATOR = '''package utils;
 
@@ -412,17 +382,27 @@ public class Validator {
 
 P0068_MAIN = '''package ui;
 
-import bo.StudentManager;
 import entity.Student;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import utils.StudentNameComparator;
 import utils.Validator;
 
-/** Screen and flow only. */
+/**
+ * The startup class, and the two methods the Guidelines put in it.
+ *
+ * The Guidelines say the student must implement sortStudent and display "in
+ * startup code", so that is where they are. At 37 lines the layering rule asks
+ * for the same thing on its own: entity + utils + ui, and no business layer,
+ * because there is no business rule to hold. A manager class whose whole
+ * content is two one-line delegations is a layer that loses a mark rather than
+ * earning one - and it would also be a bo that prints, which the course
+ * forbids outright.
+ */
 public class Main {
 
     public static void main(String[] args) {
-        StudentManager manager = new StudentManager();
         List<Student> students = new ArrayList<>();
 
         System.out.println("====== Collection Sort Program ======");
@@ -435,8 +415,33 @@ public class Main {
             students.add(new Student(name, classes, mark));
         } while (Validator.confirm("Do you want to enter more student information?(Y/N):"));
 
-        manager.sortStudent(students);
-        manager.display(students);
+        display(sortStudent(students));
+    }
+
+    /**
+     * Required: List<Student> sortStudent(List<Student> students)
+     *
+     * The brief names the return type, so the method RETURNS the sorted list
+     * even though Collections.sort has already reordered it in place. Matching
+     * the signature on the sheet is the contract a marker checks; returning the
+     * list also lets the call read as display(sortStudent(students)), which
+     * says the order of the two steps out loud.
+     *
+     * The brief does not name a sorting algorithm here - it names a Comparator
+     * - so the library sort is the right answer, and the Comparator is what
+     * says which order "sorted" means.
+     */
+    public static List<Student> sortStudent(List<Student> students) {
+        Collections.sort(students, new StudentNameComparator());
+        return students;
+    }
+
+    /** Required: void display(List<Student> students) */
+    public static void display(List<Student> students) {
+        for (int i = 0; i < students.size(); i++) {
+            System.out.println("-------------Student " + (i + 1) + "-------------");
+            System.out.println(students.get(i));
+        }
     }
 }
 '''
@@ -445,8 +450,7 @@ solution(
     'J1.S.P0068',
     title_vi='Nhập, sắp xếp và hiển thị thông tin sinh viên bằng Comparator',
     files=[('src/entity/Student.java', P0068_ENTITY),
-           ('src/bo/StudentNameComparator.java', P0068_COMPARATOR),
-           ('src/bo/StudentManager.java', P0068_MANAGER),
+           ('src/utils/StudentNameComparator.java', P0068_COMPARATOR),
            ('src/utils/Validator.java', P0068_VALIDATOR),
            ('src/ui/Main.java', P0068_MAIN)],
     main_class='ui.Main',
@@ -471,6 +475,21 @@ solution(
 says no, then sort them A to Z by name using a <em>Comparator class</em>, and display them numbered.
 The brief names two methods — <code>sortStudent</code> and <code>display</code> — and asks explicitly
 for a class that <em>implements Comparator</em>.</p>
+<p><strong>Where the two methods live, and why that is not an accident.</strong> The Guidelines end
+with three words that decide the whole layout: <em>"in startup code"</em>. So <code>sortStudent</code>
+and <code>display</code> are <code>public static</code> methods of <code>Main</code>, not of a manager
+class. Three reasons line up behind that. The sheet says so. Four files is the band where the course
+says <code>entity</code> + <code>utils</code> + <code>ui</code> and <strong>no</strong> business layer —
+and a manager holding two one-line delegations enforces no rule, so it would be a layer that loses a
+mark rather than earning one. And <code>display</code> prints: a business object that prints is the one
+layering rule the course states with no exception, so a manager would have put this program in breach
+of it for nothing. Expect "why is there no manager class?" at the review, and answer with those three,
+in that order.</p>
+<p><strong>The return type is part of the contract.</strong> The sheet writes
+<code>List&lt;Student&gt; sortStudent(List&lt;Student&gt; students)</code>, so the method returns the
+sorted list even though <code>Collections.sort</code> has already reordered it in place. Returning it
+also lets the call site read <code>display(sortStudent(students))</code>, which states the order of the
+two steps in one line.</p>
 <p><strong>Comparator or Comparable — the question you will be asked.</strong> Making
 <code>Student</code> implement <code>Comparable</code> would bake ONE ordering into the class itself.
 A separate <code>Comparator</code> is one ordering among many: add
@@ -493,6 +512,20 @@ a stack trace. The second run in this solution is exactly that test.</p>''',
 thôi, rồi sắp xếp theo tên từ A đến Z bằng một <em>lớp Comparator</em>, và hiển thị có đánh số. Đề gọi
 tên hai phương thức — <code>sortStudent</code> và <code>display</code> — và yêu cầu rõ một lớp
 <em>implements Comparator</em>.</p>
+<p><strong>Hai phương thức đó nằm ở đâu, và vì sao đó không phải tình cờ.</strong> Phần Hướng dẫn kết
+thúc bằng ba chữ quyết định cả bố cục: <em>"in startup code"</em>. Nên <code>sortStudent</code> và
+<code>display</code> là phương thức <code>public static</code> của <code>Main</code>, không phải của một
+lớp manager. Ba lý do cùng chỉ về đó. Thứ nhất, đề nói vậy. Thứ hai, bốn tệp là đúng vạch mà khóa học
+nói <code>entity</code> + <code>utils</code> + <code>ui</code> và <strong>không</strong> tầng nghiệp vụ —
+một lớp manager chỉ chứa hai dòng ủy quyền thì không áp luật nào, tức là một tầng làm mất điểm chứ không
+được điểm. Thứ ba, <code>display</code> có in ra màn hình: "lớp nghiệp vụ không bao giờ in" là quy tắc
+phân tầng duy nhất khóa học phát biểu không ngoại lệ, nên đặt nó vào manager là tự đẩy chương trình vào
+thế vi phạm mà chẳng đổi lại được gì. Hãy chờ câu "sao không có lớp manager?" ở buổi review, và trả lời
+đúng ba ý đó, theo đúng thứ tự đó.</p>
+<p><strong>Kiểu trả về cũng là một phần của hợp đồng.</strong> Đề viết
+<code>List&lt;Student&gt; sortStudent(List&lt;Student&gt; students)</code>, nên phương thức TRẢ VỀ danh
+sách đã sắp, dù <code>Collections.sort</code> đã sắp tại chỗ rồi. Trả về còn giúp chỗ gọi đọc thành
+<code>display(sortStudent(students))</code> — một dòng nói rõ thứ tự của hai bước.</p>
 <p><strong>Comparator hay Comparable — câu bạn sẽ bị hỏi.</strong> Cho <code>Student</code> implement
 <code>Comparable</code> là nhét MỘT thứ tự cố định vào bên trong lớp. Một lớp <code>Comparator</code>
 riêng chỉ là một trong nhiều thứ tự: mai bạn thêm <code>StudentMarkComparator</code> mà

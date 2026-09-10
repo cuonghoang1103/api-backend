@@ -112,9 +112,15 @@ không `bo`; 4–6 file → thêm `bo`; ≥7 file → thêm `controller`.
 | Kiểu lệch | Số bài | Bài |
 |---|---|---|
 | ≤3 file mà đã có `bo` | 16 | P0001–P0006, P0008, P0009, P0010, P0053, P0058, P0067, P0069, P0075, P0076, P0079 |
-| 4–6 file mà **không** có `bo` | 2 | P0060 (4f), P0061 (6f) |
+| 5–6 file mà **không** có `bo` | 1 | P0061 (6f) |
 | ≥7 file mà **không** có `controller` | 2 | P0081 (7f), P0080 (10f) |
 | <7 file mà đã có `controller` | 4 | P0085 (5f), P0071, P0072, L.P0025 (6f) |
+
+Tổng: **23/54 lệch, 31/54 đúng** (sau khi sửa §4.2; trước đó là 24/30).
+
+Và bảng đang dạy **tự mâu thuẫn ở đúng con số 4**: "2–4 file → không `bo`" và
+"4–6 file → thêm `bo`" cùng phủ n = 4, nên một project 4 tệp vừa đúng vừa sai
+tuỳ đọc dòng nào trước. Riêng chỗ này phải sửa dù chọn phương án nào.
 
 Đọc kỹ thì 16 ca đầu **không phải code sai** — chúng là các bài thuật toán
 (bubble/selection/insertion/quick/merge sort, tìm kiếm, xử lý tệp) không có
@@ -134,20 +140,46 @@ Hai lựa chọn, nên chọn (a):
 Dù chọn cách nào, **P0080 (10 file, không controller)** vẫn nên thêm controller
 — đó là ca duy nhất mà bảng và lẽ thường nói cùng một điều.
 
-### 4.2 `bo` in ra màn hình — 3 bài
+### 4.2 `bo` in ra màn hình — 3 bài ✅ ĐÃ SỬA
 
 Quy tắc (Academy 1.1, và là **đáp án đúng của Quiz 4 câu 5**): "`bo` giữ
 collection và ném Exception kèm thông báo; nó **KHÔNG** in ra màn hình."
 
-| Bài | Chỗ vi phạm |
-|---|---|
-| P0054 | `bo/ContactManager.java:63,66,68` — in cả bảng danh bạ |
-| P0063 | `bo/PersonManager.java:41,42` — in "Information of Person you have entered:" |
-| P0068 | `bo/StudentManager.java:25,26` — in danh sách sinh viên |
+Ba bài vi phạm: P0054 (`bo/ContactManager` in cả bảng danh bạ), P0063
+(`bo/PersonManager` in "Information of Person…"), P0068 (`bo/StudentManager`
+in danh sách sinh viên).
 
-Đây là vi phạm thật, và là **đúng thứ mentor hay hỏi** ("bỏ menu đi thì `bo`
-còn biên dịch được không?"). Sửa: chuyển phần in sang `ui`, để `bo` trả về
-`List`/`String`. Không ảnh hưởng output nên verify vẫn xanh.
+**Nhưng lời sửa đầu tiên tôi đề xuất — "chuyển phần in sang `ui`, để `bo` trả
+về `List`" — là SAI, và đọc kỹ đề mới thấy.** Cả ba đề đều kết thúc phần
+Guidelines bằng đúng ba chữ:
+
+> Student must implement methods · `displayAll` / `displayPersonInfo` /
+> `display` · **in startup code.**
+
+"in startup code" nghĩa là các phương thức đó phải nằm trong **lớp khởi động**,
+tức `Main` — không phải trong một lớp manager. Và cả ba đề đều đặc tả kiểu trả
+về là `void` với cái tên "display", nên in ra màn hình là nghĩa duy nhất nó có
+thể mang. Lớp `bo` chưa bao giờ là chỗ của chúng.
+
+**Cách sửa đã áp dụng:** gộp các phương thức Guidelines nêu tên vào `ui/Main`
+và **xoá hẳn tầng `bo`** ở cả ba bài. Ba quy tắc cùng thoả một lúc:
+
+| | trước | sau | vì sao |
+|---|---|---|---|
+| P0054 | 4 tệp, có `bo` | **3 tệp** `entity+utils+ui` | danh sách là *tham số* của cả ba phương thức → không có tập dữ liệu nào để `bo` sở hữu |
+| P0063 | 4 tệp, có `bo` | **3 tệp** `entity+utils+ui` | 25 LOC — dưới xa vạch cần tầng nghiệp vụ |
+| P0068 | 5 tệp, có `bo` | **4 tệp**, Comparator sang `utils` | manager chỉ chứa 2 dòng uỷ quyền |
+
+Bắt thêm được một lỗi khớp đề trong lúc sửa: đề P0068 viết
+`List<Student> sortStudent(List<Student> students)` — **trả về** danh sách đã
+sắp — còn lời giải cũ khai `void`. Đã sửa đúng chữ ký, và chỗ gọi nay đọc thành
+`display(sortStudent(students))`.
+
+Ba walkthrough đã được viết lại để giải thích quyết định này, vì "sao bài này
+không có lớp manager?" chính là câu vấn đáp sẽ được hỏi.
+
+Kiểm lại sau khi sửa: **54/54 xanh** ở cả `en_US` lẫn `vi_VN`, màn hình không
+đổi một ký tự. Số bài có `bo` in ra màn hình: **0**.
 
 ### 4.3 `entity` không `implements Serializable` — 29 lớp POJO
 
@@ -202,14 +234,19 @@ nên hoặc sửa hình vẽ, hoặc nói rõ "gộp được khi `bo` chỉ ph�
 
 * Vá `Locale.US` — 21 chỗ / 16 file / 8 bài. Verify xanh dưới `en_US`, `vi_VN`, `de_DE`.
 * Sửa thẻ link bài Academy 1.1 → P0056 (project thật sự có đủ 5 tầng).
+* Thêm `solkit.verify_all_locales()` — chốt chạy cả hai locale, và đã **kiểm
+  ngược chính cái chốt** (tháo `Locale.US` ra thì nó đỏ đúng chỗ) trước khi tin nó.
+* Gỡ tầng `bo` khỏi P0054, P0063, P0068 và đưa các phương thức Guidelines nêu
+  tên vào `ui/Main` đúng như đề nói — kèm sửa chữ ký `sortStudent` của P0068 và
+  viết lại ba walkthrough (§4.2).
 
 ## 7. Việc đề nghị làm tiếp (theo thứ tự ưu tiên)
 
-1. Phát biểu lại quy tắc tầng theo **trách nhiệm**, không theo **số file** (§4.1).
-2. Bỏ `System.out` khỏi `bo` ở P0054, P0063, P0068 (§4.2).
-3. Nới quy tắc `Serializable` thành "khi có ghi tệp" (§4.3).
-4. Thêm controller cho P0080 (10 file) (§4.1).
-5. Thêm đoạn "vì sao entity ở bài này được phép in" vào walkthrough P0061 (§4.4).
-6. Đổi `System.exit()` trong `L.P0013/Validator` thành exception (§4.5).
-7. **Thêm một lượt verify dưới locale `vi_VN` vào quy trình** — đó là thứ duy
+1. **Sửa chỗ tự mâu thuẫn ở n = 4** trong bảng "số file → tầng", rồi phát biểu
+   lại quy tắc theo **trách nhiệm** thay vì **số file** (§4.1).
+2. Nới quy tắc `Serializable` thành "khi có ghi tệp" (§4.3).
+3. Thêm controller cho P0080 (10 file) (§4.1).
+4. Thêm đoạn "vì sao entity ở bài này được phép in" vào walkthrough P0061 (§4.4).
+5. Đổi `System.exit()` trong `L.P0013/Validator` thành exception (§4.5).
+6. **Giữ lượt verify dưới locale `vi_VN` trong mọi quy trình** — đó là thứ duy
    nhất bắt được lỗi §3.1, và nó là locale của máy chấm.

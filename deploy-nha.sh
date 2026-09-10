@@ -459,6 +459,67 @@ then
 fi
 ok "Đã tráo sang ảnh ${SHA}"
 
+# ─── 5b. NẠP LẠI NGINX NGAY — không đợi bước 6c ────────────────────────
+#
+# ⚠️ 11/09/2026 — toàn site 502, và không phải lỗi mã.
+#
+# nginx phân giải `upstream backend { server backend:3001; }` ĐÚNG MỘT LẦN,
+# lúc nạp cấu hình. Không có `resolver` nên nó giữ nguyên cái IP ấy mãi mãi.
+# `docker compose up -d` ở trên XOÁ rồi TẠO LẠI cả hai container, và Docker
+# cấp IP theo thứ tự còn trống — nên hai container có thể TRÁO IP CHO NHAU.
+#
+# Đo thật lượt deploy d8656db2:
+#     nginx nhớ:  backend=172.18.0.2   frontend=172.18.0.5
+#     thực tế:    backend=172.18.0.5   frontend=172.18.0.2
+# ⇒ mọi lệnh API bay vào container FRONTEND cổng 3001 (từ chối), mọi lệnh web
+# bay vào container BACKEND cổng 3000 (từ chối). `cuongthai.com` VÀ
+# `api.cuongthai.com` cùng 502.
+#
+# Bước 6c đã nạp lại nginx sẵn rồi — nhưng nó chạy SAU toàn bộ phần seed nội
+# dung, đo thật lượt này là **15 phút** sau khi tráo (05:18:34 → 05:33:37).
+# Mười lăm phút chết cả web, mỗi lần hai container tình cờ tráo IP.
+#
+# Nên nạp lại NGAY. Rẻ (một tín hiệu, không dừng tiến trình), an toàn (config
+# sai thì nginx giữ bản cũ trong RAM), và nó phân giải lại tên upstream.
+# Bước 6c vẫn giữ nguyên: việc của nó là ĐỔI config, việc của bước này là đuổi
+# kịp IP.
+info "Nạp lại nginx ngay (tráo container có thể đã đổi IP upstream)..."
+if sshvps "docker exec ${COMPOSE_PROJECT}_nginx nginx -s reload" >/dev/null 2>&1; then
+    ok "nginx đã nạp lại — upstream phân giải lại theo IP mới"
+else
+    warn "KHÔNG nạp lại được nginx. Nếu container vừa đổi IP thì site đang 502."
+    warn "Chạy tay: ssh ${VPS_USER}@${VPS_IP} \"docker exec ${COMPOSE_PROJECT}_nginx nginx -s reload\""
+fi
+
+# ─── 5c. KIỂM TỪ NGOÀI — đúng đường người dùng đi ──────────────────────
+#
+# ⚠️ Smoke-test ở bước 6 chạy `docker exec backend curl localhost:3001/...`,
+# tức là TỪ BÊN TRONG container. Nó không đi qua nginx, nên nó KHÔNG THỂ thấy
+# lỗi vừa tả: 11/09/2026 nó báo "sạch (52 route)" trong lúc cả hai tên miền
+# đang trả 502 cho người thật.
+#
+# Phép kiểm này đi đúng đường người dùng đi — DNS → nginx → container. Nó là
+# thứ duy nhất ở đây chứng minh được "web sống", chứ không phải "tiến trình
+# node còn chạy".
+info "Kiểm từ NGOÀI (qua nginx, đúng đường người dùng đi)..."
+NGOAI_OK=false
+for _ in $(seq 1 20); do
+    MA_API=$(curl -s -o /dev/null -m 10 -w '%{http_code}' "https://api.cuongthai.com/api/v1/system/health?kiem=${SHA}" 2>/dev/null)
+    MA_WEB=$(curl -s -o /dev/null -m 10 -w '%{http_code}' "https://cuongthai.com/?kiem=${SHA}" 2>/dev/null)
+    if [ "$MA_API" = "200" ] && [ "$MA_WEB" = "200" ]; then NGOAI_OK=true; break; fi
+    sleep 3
+done
+if [ "$NGOAI_OK" = true ]; then
+    ok "Từ ngoài: api=${MA_API} web=${MA_WEB} — người dùng vào được"
+else
+    fail "TỪ NGOÀI KHÔNG VÀO ĐƯỢC sau 60s: api=${MA_API} web=${MA_WEB}"
+    fail "Container có thể khoẻ mà nginx vẫn trỏ IP cũ. Thử:"
+    fail "    ssh ${VPS_USER}@${VPS_IP} \"docker exec ${COMPOSE_PROJECT}_nginx nginx -s reload\""
+    fail "Rồi đo lại: curl -s -o /dev/null -w '%{http_code}' https://api.cuongthai.com/api/v1/system/health"
+    sshnha "test -x \$HOME/bin/bao-tin.sh && bash \$HOME/bin/bao-tin.sh $(printf %q "⛔ Deploy ${SHA}: container khoẻ nhưng TỪ NGOÀI 502 — nginx trỏ IP cũ?")" 2>/dev/null || true
+    exit 1
+fi
+
 # ─── 6. Prisma + sức khoẻ + smoke test ─────────────────────────────────
 info "Chạy migration..."
 # ⚠️ KHÔNG `| tail -5`. Prisma in vài dòng npm notice ("New major version of

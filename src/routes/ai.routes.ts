@@ -950,7 +950,7 @@ router.post('/feedback', authenticate, async (req: any, res: Response<ApiRespons
 });
 
 // ════════════════════════════════════════════════════════════════
-// GET /api/v1/ai/feedback/stats
+// GET /api/v1/ai/usage
 // ════════════════════════════════════════════════════════════════
 /**
  * MỨC DÙNG CỦA CHÍNH NGƯỜI ĐANG ĐĂNG NHẬP — hai ví, tách theo mảng.
@@ -974,6 +974,9 @@ router.get('/usage', authenticate, async (req: any, res: Response<ApiResponse>, 
   } catch (err) { next(err); }
 });
 
+// ════════════════════════════════════════════════════════════════
+// GET /api/v1/ai/feedback/stats
+// ════════════════════════════════════════════════════════════════
 router.get('/feedback/stats', authenticate, async (_req: any, res: Response<ApiResponse>, next) => {
   try {
     const stats = await aiService.getFeedbackStats();

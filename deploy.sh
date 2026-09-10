@@ -937,6 +937,7 @@ for route in \
     notes \
     notes-shares \
     ai/chat/folders \
+    ai/usage \
     notes-databases \
     music/tracks \
     courses \

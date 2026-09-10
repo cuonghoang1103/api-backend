@@ -18,6 +18,7 @@
  */
 import { useCallback, useRef, useState } from 'react';
 import { FileText, ImageIcon, Loader2, Paperclip, X } from 'lucide-react';
+import { useT } from '../../i18n';
 
 /** Trần của cổng cho ảnh gửi thẳng. Trên mức này thì rơi xuống đường đĩa. */
 const TRAN_ANH_BYTE = 4 * 1024 * 1024;
@@ -319,14 +320,15 @@ export function useDinhKemCode(cuocId: string) {
 }
 
 export function NutChonTep({ onBam, khoa }: { onBam: () => void; khoa: boolean }) {
+  const { t } = useT();
   return (
     <button
       type="button"
       className="ct-agent-icon"
       onClick={onBam}
       disabled={khoa}
-      title="Đính kèm file — ảnh, PDF, log, gì cũng được"
-      aria-label="Đính kèm file"
+      title={t('Đính kèm file — ảnh, PDF, log, gì cũng được')}
+      aria-label={t('Đính kèm file')}
     >
       <Paperclip size={15} aria-hidden />
     </button>

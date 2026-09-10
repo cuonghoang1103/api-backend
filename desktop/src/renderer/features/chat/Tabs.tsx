@@ -13,6 +13,7 @@
  * nếu không họ gõ ở tab mới và nhận một lỗi khó hiểu.
  */
 import { Plus, X } from 'lucide-react';
+import { useT } from '../../i18n';
 
 export interface TabAgent {
   id: string;
@@ -35,33 +36,34 @@ export function ThanhTab({
   onThem: () => void;
   onDong: (id: string) => void;
 }) {
+  const { t } = useT();
   return (
-    <div className="ct-tabs" role="tablist" aria-label="Việc đang mở">
-      {tabs.map((t) => (
-        <div key={t.id} className="ct-tab" data-chon={t.id === dangMo} role="tab" aria-selected={t.id === dangMo}>
+    <div className="ct-tabs" role="tablist" aria-label={t('Việc đang mở')}>
+      {tabs.map((tab) => (
+        <div key={tab.id} className="ct-tab" data-chon={tab.id === dangMo} role="tab" aria-selected={tab.id === dangMo}>
           <button
             type="button"
             className="ct-tab-chon"
-            onClick={() => onChon(t.id)}
-            title={t.duAn ? `${t.tieuDe}\n📁 ${t.duAn}` : t.tieuDe}
+            onClick={() => onChon(tab.id)}
+            title={tab.duAn ? `${tab.tieuDe}\n📁 ${tab.duAn}` : tab.tieuDe}
           >
-            {t.dangChay && <span className="ct-tab-cham" aria-label="đang chạy" />}
-            <span className="ct-tab-chu">{t.tieuDe}</span>
+            {tab.dangChay && <span className="ct-tab-cham" aria-label={t('đang chạy')} />}
+            <span className="ct-tab-chu">{tab.tieuDe}</span>
             {/* Tên dự án ngay trên tab: từ khi mỗi tab một dự án, hai tab cùng
                 tên việc mà khác repo là chuyện thường, và không có nhãn này thì
                 người dùng phải bấm vào từng cái để biết mình đang ở đâu. */}
-            {t.duAn && <span className="ct-tab-duan">{t.duAn}</span>}
+            {tab.duAn && <span className="ct-tab-duan">{tab.duAn}</span>}
           </button>
           {/* Tab cuối cùng KHÔNG có nút đóng: đóng hết thì màn hình trống trơn
               và người dùng phải đi tìm cách tạo lại. Luôn còn ít nhất một. */}
           {tabs.length > 1 && (
-            <button type="button" className="ct-tab-dong" onClick={() => onDong(t.id)} title="Đóng việc này">
+            <button type="button" className="ct-tab-dong" onClick={() => onDong(tab.id)} title={t('Đóng việc này')}>
               <X size={11} aria-hidden />
             </button>
           )}
         </div>
       ))}
-      <button type="button" className="ct-tab-them" onClick={onThem} title="Mở việc mới">
+      <button type="button" className="ct-tab-them" onClick={onThem} title={t('Mở việc mới')}>
         <Plus size={13} aria-hidden />
       </button>
     </div>

@@ -22,6 +22,7 @@
  */
 import { useState, useSyncExternalStore } from 'react';
 import { Check, Copy, GitBranch, Undo2 } from 'lucide-react';
+import { useT } from '../../i18n';
 
 // ─── Đồng hồ chung ────────────────────────────────────────────────
 
@@ -72,6 +73,7 @@ export function NutTinNhan({
   onQuayLui?: () => void;
   onTachNhanh?: () => void;
 }) {
+  const { t } = useT();
   const [daChep, datDaChep] = useState(false);
 
   const chep = (): void => {
@@ -85,7 +87,7 @@ export function NutTinNhan({
 
   return (
     <div className="ct-tn-nut">
-      <button type="button" className="ct-tn-nho" onClick={chep} title="Chép câu này">
+      <button type="button" className="ct-tn-nho" onClick={chep} title={t('Chép câu này')}>
         {daChep ? <Check size={11} aria-hidden /> : <Copy size={11} aria-hidden />}
         {daChep ? 'Đã chép' : 'Chép'}
       </button>
@@ -114,7 +116,7 @@ export function NutTinNhan({
             + 'Việc hiện tại giữ nguyên.'}
         >
           <GitBranch size={11} aria-hidden />
-          Tách nhánh
+          {t('Tách nhánh')}
         </button>
       )}
 

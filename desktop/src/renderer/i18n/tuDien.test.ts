@@ -38,6 +38,12 @@ function chuoiDaBoc(): { cau: string; tep: string }[] {
     for (const m of ma.matchAll(/(?<![A-Za-z0-9_$.])tp?\(\s*'((?:[^'\\]|\\.)*)'/g)) {
       ra.push({ cau: m[1]!.replace(/\\'/g, "'"), tep: tep.slice(GOC.length + 1) });
     }
+    /* `<Chu cau="…" />` — văn xuôi có định dạng. Bỏ sót nhánh này thì mọi câu
+       dài nhất trong app (cảnh báo, hướng dẫn) không ai canh, mà chúng lại là
+       chỗ dễ quên dịch nhất vì trông không giống một "nhãn". */
+    for (const m of ma.matchAll(/<Chu\s+cau="([^"]+)"/g)) {
+      ra.push({ cau: m[1]!, tep: tep.slice(GOC.length + 1) });
+    }
   }
   return ra;
 }

@@ -22,11 +22,13 @@ import {
   ArrowLeft, ArrowRight, ExternalLink, Globe, Loader2, RotateCw, X,
 } from 'lucide-react';
 import type { BrowserTrangThai } from '../../../shared/ipc';
+import { useT } from '../../i18n';
 
 /** Địa chỉ mở sẵn. localhost:3000 là dev server hay dùng nhất của chính dự án này. */
 const MAC_DINH = 'http://localhost:3000';
 
 export function BrowserMode({ hien }: { hien: boolean }) {
+  const { t } = useT();
   const oRef = useRef<HTMLDivElement>(null);
   const [oNhap, datONhap] = useState(MAC_DINH);
   const [tt, datTt] = useState<BrowserTrangThai | null>(null);
@@ -107,21 +109,21 @@ export function BrowserMode({ hien }: { hien: boolean }) {
         <button
           type="button" className="ct-agent-icon" data-nut="tdLui"
           onClick={() => void window.cuongthai?.browser.lui()}
-          disabled={!tt?.luiDuoc} title="Lùi"
+          disabled={!tt?.luiDuoc} title={t('Lùi')}
         >
           <ArrowLeft size={14} aria-hidden />
         </button>
         <button
           type="button" className="ct-agent-icon" data-nut="tdToi"
           onClick={() => void window.cuongthai?.browser.toi()}
-          disabled={!tt?.toiDuoc} title="Tới"
+          disabled={!tt?.toiDuoc} title={t('Tới')}
         >
           <ArrowRight size={14} aria-hidden />
         </button>
         <button
           type="button" className="ct-agent-icon" data-nut="tdNap"
           onClick={() => void window.cuongthai?.browser.napLai()}
-          title="Nạp lại"
+          title={t('Nạp lại')}
         >
           {tt?.dangTai ? <Loader2 size={14} aria-hidden className="ct-spin" /> : <RotateCw size={14} aria-hidden />}
         </button>
@@ -133,7 +135,7 @@ export function BrowserMode({ hien }: { hien: boolean }) {
             className="ct-td-o"
             value={oNhap}
             spellCheck={false}
-            placeholder="localhost:3000 hoặc https://…"
+            placeholder={t('localhost:3000 hoặc https://…')}
             onChange={(e) => datONhap(e.target.value)}
             onKeyDown={(e) => {
               if (e.nativeEvent.isComposing) return;
@@ -141,7 +143,7 @@ export function BrowserMode({ hien }: { hien: boolean }) {
             }}
           />
           {oNhap && (
-            <button type="button" className="ct-td-xoa" onClick={() => datONhap('')} aria-label="Xoá địa chỉ">
+            <button type="button" className="ct-td-xoa" onClick={() => datONhap('')} aria-label={t('Xoá địa chỉ')}>
               <X size={11} aria-hidden />
             </button>
           )}
@@ -150,7 +152,7 @@ export function BrowserMode({ hien }: { hien: boolean }) {
         <button
           type="button" className="ct-agent-icon" data-nut="tdNgoai"
           onClick={() => void window.cuongthai?.browser.moNgoai()}
-          title="Mở bằng trình duyệt hệ thống"
+          title={t('Mở bằng trình duyệt hệ thống')}
         >
           <ExternalLink size={14} aria-hidden />
         </button>

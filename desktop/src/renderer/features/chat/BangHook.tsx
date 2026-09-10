@@ -19,6 +19,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { FileCode2, Play, RotateCw, ShieldCheck } from 'lucide-react';
 import { useMoRieng } from '../../components/moRieng';
 import type { AgentHookNhatKy } from '../../../shared/ipc';
+import { useT } from '../../i18n';
+import { Chu } from '../../i18n/Chu';
 
 const MOC: Array<{ ma: 'truocTool' | 'sauTool' | 'xongLuot'; ten: string }> = [
   { ma: 'sauTool', ten: 'Sau tool' },
@@ -31,6 +33,7 @@ function gio(luc: number): string {
 }
 
 export function BangHook({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
+  const { t, tp } = useT();
   const { mo, bat, boc } = useMoRieng('agent:hook');
   const [soHook, datSoHook] = useState<number | null>(null);
   const [nhatKy, datNhatKy] = useState<AgentHookNhatKy[]>([]);
@@ -75,7 +78,7 @@ export function BangHook({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
         className="ct-btn ct-btn-ghost"
         onClick={bat}
         disabled={khoa}
-        title="Hook và kỹ năng của dự án"
+        title={t('Hook và kỹ năng của dự án')}
       >
         Hook
         {soHook !== null && soHook > 0 && <span className="ct-mcp-dem">{soHook}</span>}
@@ -94,8 +97,7 @@ export function BangHook({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
               MỌI tool, kể cả `read_file`, nên một `npm test` sẽ chạy vài chục lần
               trong một lượt — và người ta chỉ phát hiện khi thấy app "chậm lạ". */}
           <p className="ct-mcp-canh">
-            ⚠️ Hook không có <code>khop</code> sẽ chạy sau <strong>mọi</strong> tool, kể cả
-            {' '}<code>read_file</code>. Luôn đặt <code>khop</code>.
+            ⚠️ <Chu cau="Hook không có `khop` sẽ chạy sau **mọi** tool, kể cả `read_file`. Luôn đặt `khop`." />
           </p>
 
           {choDuyet.length > 0 && (
@@ -110,10 +112,10 @@ export function BangHook({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
              * lời bằng phản xạ. Hỏi bằng chính dòng lệnh sẽ chạy.
              */
             <div className="ct-chedo-canhbao-nho">
+              {/* Số hook là CHỖ THAY trong câu, không phải một mẩu ghép vào —
+                  tiếng Anh đặt nó ở vị trí khác trong câu. */}
               <p>
-                Dự án này khai <strong>{choDuyet.length}</strong> hook trong
-                {' '}<code>.claude/settings.json</code>. Chúng chạy <strong>tự động ở mọi lời gọi
-                tool</strong>, không hỏi lại. Đây là những lệnh sẽ chạy trên máy bạn:
+                <Chu cau={tp('Dự án này khai **{n}** hook trong `.claude/settings.json`. Chúng chạy **tự động ở mọi lời gọi tool**, không hỏi lại. Đây là những lệnh sẽ chạy trên máy bạn:', { n: choDuyet.length })} />
               </p>
               <ul className="ct-hook-duyet-ds">
                 {choDuyet.map((h, i) => (
@@ -145,8 +147,8 @@ export function BangHook({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
 
           {/* ── Chạy thử ── */}
           <div className="ct-mcp-nhom">
-            <strong className="ct-hook-tieu">Chạy thử</strong>
-            <p className="ct-mcp-chan">Không tốn lượt agent nào. Chạy thật trong thư mục dự án.</p>
+            <strong className="ct-hook-tieu">{t('Chạy thử')}</strong>
+            <p className="ct-mcp-chan">{t('Không tốn lượt agent nào. Chạy thật trong thư mục dự án.')}</p>
             <div className="ct-hook-thu">
               <select value={moc} onChange={(e) => datMoc(e.target.value as typeof moc)}>
                 {MOC.map((m) => <option key={m.ma} value={m.ma}>{m.ten}</option>)}
@@ -154,9 +156,9 @@ export function BangHook({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
               <input
                 value={tenTool}
                 onChange={(e) => datTenTool(e.target.value)}
-                placeholder="tên tool giả, vd edit_file"
+                placeholder={t('tên tool giả, vd edit_file')}
                 disabled={moc === 'xongLuot'}
-                aria-label="Tên tool để thử khớp"
+                aria-label={t('Tên tool để thử khớp')}
               />
               <button type="button" className="ct-btn ct-btn-ghost ct-mcp-nho"
                 onClick={chayThu} disabled={dangThu}>
@@ -172,9 +174,9 @@ export function BangHook({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
 
           {/* ── Nhật ký ── */}
           <div className="ct-mcp-nhom">
-            <strong className="ct-hook-tieu">Lần chạy gần đây</strong>
+            <strong className="ct-hook-tieu">{t('Lần chạy gần đây')}</strong>
             {nhatKy.length === 0 ? (
-              <p className="ct-mcp-trong">Chưa có hook nào chạy trong phiên này.</p>
+              <p className="ct-mcp-trong">{t('Chưa có hook nào chạy trong phiên này.')}</p>
             ) : (
               <ul className="ct-hook-nk">
                 {nhatKy.map((m, i) => (
@@ -189,7 +191,7 @@ export function BangHook({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
                     </span>
                     {/* Nói RÕ "đạt, không in gì" thay vì để trống: đó chính là trạng
                         thái trông giống "hook không chạy" nhất. */}
-                    {m.dong1 === '' && m.ma === 0 && <em className="ct-hook-nk-im">đạt, không in gì</em>}
+                    {m.dong1 === '' && m.ma === 0 && <em className="ct-hook-nk-im">{t('đạt, không in gì')}</em>}
                     {m.dong1 !== '' && <span className="ct-hook-nk-ra">{m.dong1}</span>}
                   </li>
                 ))}
@@ -199,10 +201,10 @@ export function BangHook({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
 
           {/* ── Kỹ năng ── */}
           <div className="ct-mcp-nhom">
-            <strong className="ct-hook-tieu">Kỹ năng model đang thấy</strong>
+            <strong className="ct-hook-tieu">{t('Kỹ năng model đang thấy')}</strong>
             {kyNang.length === 0 ? (
               <p className="ct-mcp-trong">
-                Chưa có kỹ năng nào. Tạo <code>.claude/skills/&lt;tên&gt;/SKILL.md</code>,
+                Chưa có kỹ năng nào. Tạo <code>{t('.claude/skills/&lt;tên&gt;/SKILL.md')}</code>,
                 {' '}phần đầu phải khai <code>description</code> — thiếu nó thì kỹ năng bị bỏ qua.
               </p>
             ) : (

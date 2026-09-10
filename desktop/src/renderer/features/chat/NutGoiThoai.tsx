@@ -14,6 +14,7 @@ import { Loader2, Mic, Square } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import { docThanhTieng, ngungNoi, phatTieng } from '../odin/giongNoi';
+import { useT } from '../../i18n';
 
 interface Props {
   /** Gửi câu vừa nói vào khung chat và trả về câu trả lời đã gom đủ. */
@@ -22,6 +23,7 @@ interface Props {
 }
 
 export function NutGoiThoai({ onNoi, khoa }: Props) {
+  const { t } = useT();
   const { api } = useSession();
   const { settings } = useAppState();
   const [dangNghe, setDangNghe] = useState(false);
@@ -94,7 +96,7 @@ export function NutGoiThoai({ onNoi, khoa }: Props) {
         onPointerLeave={() => { if (dangNghe) dungLai(); }}
         disabled={khoa || dangXuLy}
         title={dangNghe ? 'Thả ra để gửi' : 'Giữ để nói với trợ lý'}
-        aria-label="Giữ để nói với trợ lý"
+        aria-label={t('Giữ để nói với trợ lý')}
       >
         {dangXuLy ? <Loader2 size={14} className="ct-spin" aria-hidden />
           : dangNghe ? <Square size={14} aria-hidden /> : <Mic size={14} aria-hidden />}
@@ -103,7 +105,7 @@ export function NutGoiThoai({ onNoi, khoa }: Props) {
       {loi && (
         <div className="ct-notice" data-tone="err" role="alert" style={{ width: '100%' }}>
           <span>{loi}</span>
-          <button type="button" className="ct-linklike" onClick={() => setLoi(null)}>Đóng</button>
+          <button type="button" className="ct-linklike" onClick={() => setLoi(null)}>{t('Đóng')}</button>
         </div>
       )}
     </>

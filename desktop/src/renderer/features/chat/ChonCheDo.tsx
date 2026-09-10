@@ -33,6 +33,8 @@ import { createPortal } from 'react-dom';
 import { ChevronDown, FilePen, ListChecks, ShieldAlert, ShieldCheck, Terminal } from 'lucide-react';
 
 import type { CheDoQuyen } from '../../../shared/ipc';
+import { useT } from '../../i18n';
+import { Chu } from '../../i18n/Chu';
 
 interface MoTaCheDo {
   ma: CheDoQuyen;
@@ -118,6 +120,7 @@ export function ChonCheDo({
      cài đặt: người dùng đang đứng đúng chỗ chọn chế độ, và "lần sau cũng thế"
      là ý nghĩ xảy ra ngay tại khoảnh khắc đó. */
   const { settings, setSetting } = useAppState();
+  const { t } = useT();
   const macDinh = typeof settings.aiCheDoQuyenMacDinh === 'string'
     ? settings.aiCheDoQuyenMacDinh : 'keHoach';
   const [viTri, datViTri] = useState<{ trai: number; tren: number } | null>(null);
@@ -164,12 +167,12 @@ export function ChonCheDo({
         disabled={khoa}
         aria-haspopup="menu"
         aria-expanded={mo}
-        title={`${hienTai.nhan} — ${hienTai.mo}${khoa ? '\n(đang chạy dở, dừng lại mới đổi được)' : ''}`}
+        title={`${t(hienTai.nhan)} — ${t(hienTai.mo)}${khoa ? `\n${t('(đang chạy dở, dừng lại mới đổi được)')}` : ''}`}
         onClick={(e) => { e.stopPropagation(); bat(); }}
         onPointerDown={(e) => e.stopPropagation()}
       >
         {hienTai.icon}
-        {hienTai.nhan}
+        {t(hienTai.nhan)}
         <ChevronDown size={12} aria-hidden />
       </button>
 
@@ -201,9 +204,9 @@ export function ChonCheDo({
             >
               <span className="ct-chedo-muc-dau">
                 {c.icon}
-                <strong>{c.nhan}</strong>
+                <strong>{t(c.nhan)}</strong>
               </span>
-              <span className="ct-chedo-muc-mo">{c.mo}</span>
+              <span className="ct-chedo-muc-mo">{t(c.mo)}</span>
             </button>
           ))}
           {/* Nói thẳng ranh giới. Câu cũ ("nguy hiểm luôn hỏi ở MỌI chế độ")
@@ -221,14 +224,13 @@ export function ChonCheDo({
               disabled={macDinh === cheDo}
             >
               {macDinh === cheDo
-                ? '✓ Đang là mặc định khi mở dự án'
-                : 'Đặt làm mặc định khi mở dự án'}
+                ? `✓ ${t('Đang là mặc định khi mở dự án')}`
+                : t('Đặt làm mặc định khi mở dự án')}
             </button>
           )}
 
           <p className="ct-chedo-chan">
-            Lệnh bị xếp <strong>nguy hiểm</strong> vẫn hỏi ở mọi chế độ —
-            trừ <strong>Bỏ qua tất cả</strong>.
+            <Chu cau="Lệnh bị xếp **nguy hiểm** vẫn hỏi ở mọi chế độ — trừ **Bỏ qua tất cả**." />
           </p>
         </div>,
         document.body,
@@ -257,6 +259,7 @@ export function ChonCheDo({
  *     đường ra trước khi bước vào.
  */
 function CanhBaoBoQuaHet({ onHuy, onDongY }: { onHuy: () => void; onDongY: () => void }) {
+  const { t } = useT();
   const huyRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     huyRef.current?.focus();
@@ -273,29 +276,28 @@ function CanhBaoBoQuaHet({ onHuy, onDongY }: { onHuy: () => void; onDongY: () =>
         className="ct-chedo-canhbao"
         role="alertdialog"
         aria-modal="true"
-        aria-label="Bỏ qua tất cả — cảnh báo"
+        aria-label={t('Bỏ qua tất cả — cảnh báo')}
         onPointerDown={(e) => e.stopPropagation()}
       >
-        <h3><ShieldAlert size={16} aria-hidden /> Bỏ qua tất cả — đọc trước khi bật</h3>
-        <p>Agent sẽ tự làm mọi việc, <strong>không hiện thẻ duyệt nào nữa</strong>:</p>
+        <h3><ShieldAlert size={16} aria-hidden /> {t('Bỏ qua tất cả — đọc trước khi bật')}</h3>
+        {/* ⚠️ Mỗi gạch đầu dòng là MỘT câu trọn vẹn trong từ điển, với phần
+            đậm/mã đánh dấu ngay trong chuỗi. Cắt nhỏ ra rồi dịch từng mẩu thì
+            trật tự từ tiếng Anh làm phần ĐẬM rơi vào chữ khác — nhấn sai chỗ
+            trong một cảnh báo an toàn là đổi luôn ý nghĩa của cảnh báo. */}
+        <p><Chu cau="Agent sẽ tự làm mọi việc, **không hiện thẻ duyệt nào nữa**:" /></p>
         <ul>
-          <li>Chạy <strong>mọi lệnh</strong>, kể cả loại bị xếp nguy hiểm —
-            <code>rm -rf</code>, <code>git push --force</code>, <code>npm publish</code>,
-            cài gói, đổi cấu hình máy.</li>
-          <li>Đọc được <code>.env</code> của bạn — khoá API, mật khẩu cơ sở dữ liệu —
-            và có thể gửi chúng ra ngoài bằng một lệnh mạng.</li>
-          <li>Sửa, xoá, đổi tên file khỏi hỏi. <strong>Hoàn tác chỉ lùi được file,
-            không lùi được lệnh đã chạy.</strong></li>
-          <li>Tải file từ web về máy, kể cả file chạy được.</li>
+          <li><Chu cau="Chạy **mọi lệnh**, kể cả loại bị xếp nguy hiểm — `rm -rf`, `git push --force`, `npm publish`, cài gói, đổi cấu hình máy." /></li>
+          <li><Chu cau="Đọc được `.env` của bạn — khoá API, mật khẩu cơ sở dữ liệu — và có thể gửi chúng ra ngoài bằng một lệnh mạng." /></li>
+          <li><Chu cau="Sửa, xoá, đổi tên file khỏi hỏi. **Hoàn tác chỉ lùi được file, không lùi được lệnh đã chạy.**" /></li>
+          <li><Chu cau="Tải file từ web về máy, kể cả file chạy được." /></li>
         </ul>
         <p className="ct-chedo-canhbao-nhe">
-          Chỉ bật khi bạn đang ngồi xem màn hình. Đổi dự án hoặc mở việc khác là
-          nó <strong>tự tắt</strong>; muốn tắt ngay thì chọn lại một chế độ khác.
+          <Chu cau="Chỉ bật khi bạn đang ngồi xem màn hình. Đổi dự án hoặc mở việc khác là nó **tự tắt**; muốn tắt ngay thì chọn lại một chế độ khác." />
         </p>
         <div className="ct-chedo-canhbao-nut">
-          <button ref={huyRef} type="button" className="ct-btn" onClick={onHuy}>Huỷ</button>
+          <button ref={huyRef} type="button" className="ct-btn" onClick={onHuy}>{t('Huỷ')}</button>
           <button type="button" className="ct-btn ct-btn-nguy" onClick={onDongY}>
-            Tôi đã đọc — bật bỏ qua tất cả
+            {t('Tôi đã đọc — bật bỏ qua tất cả')}
           </button>
         </div>
       </div>

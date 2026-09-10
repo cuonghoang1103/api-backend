@@ -26,6 +26,7 @@ import { useAppState } from '../../app-state';
 import type { AgentPhien } from '../../../shared/ipc';
 import { MenuChamDoc, type MucMenu } from './MenuChamDoc';
 import { mauDuAn } from './mauDuAn';
+import { useT } from '../../i18n';
 
 /** Kéo hẹp hơn thì tiêu đề cụt tới mức vô dụng; rộng hơn thì lấn hội thoại. */
 const RONG_MIN = 190;
@@ -39,6 +40,7 @@ export function ThanhBen({
   onMoPhien: (id: string) => void;
   onTaoTab: () => void;
 }) {
+  const { t } = useT();
   const { settings, setSetting } = useAppState();
   const [ds, datDs] = useState<AgentPhien[] | null>(null);
   const [tim, datTim] = useState('');
@@ -202,8 +204,8 @@ export function ThanhBen({
         type="button"
         className="ct-tb-mo"
         onClick={() => setSetting('aiThanhBenGap', false)}
-        title="Hiện lịch sử"
-        aria-label="Hiện lịch sử"
+        title={t('Hiện lịch sử')}
+        aria-label={t('Hiện lịch sử')}
       >
         <ChevronLeft size={14} aria-hidden style={{ transform: 'rotate(180deg)' }} />
       </button>
@@ -213,14 +215,14 @@ export function ThanhBen({
   return (
     <aside className="ct-tb" style={{ width: rong }} data-keo={dangKeo}>
       <div className="ct-tb-dau">
-        <button type="button" className="ct-tb-nut" onClick={onTaoTab} title="Việc mới">
+        <button type="button" className="ct-tb-nut" onClick={onTaoTab} title={t('Việc mới')}>
           <MessageSquarePlus size={14} aria-hidden />
         </button>
         <div className="ct-tb-tim">
           <Search size={12} aria-hidden />
           <input
             value={tim}
-            placeholder="Tìm việc cũ…"
+            placeholder={t('Tìm việc cũ…')}
             onChange={(e) => datTim(e.target.value)}
           />
         </div>
@@ -228,8 +230,8 @@ export function ThanhBen({
           type="button"
           className="ct-tb-nut"
           onClick={() => setSetting('aiThanhBenGap', true)}
-          title="Ẩn thanh bên"
-          aria-label="Ẩn thanh bên"
+          title={t('Ẩn thanh bên')}
+          aria-label={t('Ẩn thanh bên')}
         >
           <ChevronLeft size={14} aria-hidden />
         </button>
@@ -237,9 +239,9 @@ export function ThanhBen({
 
       <div className="ct-tb-ds">
         {ds === null && (
-          <p className="ct-tb-trong"><Loader2 size={12} className="ct-spin" aria-hidden /> Đang tải…</p>
+          <p className="ct-tb-trong"><Loader2 size={12} className="ct-spin" aria-hidden /> {t('Đang tải…')}</p>
         )}
-        {ds?.length === 0 && <p className="ct-tb-trong">Chưa có việc nào được lưu.</p>}
+        {ds?.length === 0 && <p className="ct-tb-trong">{t('Chưa có việc nào được lưu.')}</p>}
         {ds && ds.length > 0 && nhom.length === 0 && (
           <p className="ct-tb-trong">
             {tim.trim()
@@ -313,7 +315,7 @@ export function ThanhBen({
           data-dang={xemLuuTru}
         >
           {xemLuuTru
-            ? <><ChevronLeft size={12} aria-hidden /> Về danh sách</>
+            ? <><ChevronLeft size={12} aria-hidden /> {t('Về danh sách')}</>
             : <><Archive size={12} aria-hidden /> Kho lưu trữ ({soLuuTru})</>}
         </button>
       )}
@@ -329,7 +331,7 @@ export function ThanhBen({
           datDangKeo(true);
         }}
         onDoubleClick={() => setSetting('aiThanhBenRong', RONG_MAC_DINH)}
-        title="Kéo để đổi bề rộng · bấm đúp để về mặc định"
+        title={t('Kéo để đổi bề rộng · bấm đúp để về mặc định')}
       />
     </aside>
   );

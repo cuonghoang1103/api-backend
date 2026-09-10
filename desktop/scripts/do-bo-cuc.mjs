@@ -724,7 +724,9 @@ const CHUAN_BI = {
   '/chat': async (p) => {
     // Bật chế độ Lập trình rồi mở thêm tab: đây đúng là thao tác người dùng
     // làm khi họ báo lỗi ("tôi ấn tạo task mới thì nó lại bị").
-    await p.click('.ct-segment-nut:has-text("Lập trình")').catch(() => {});
+    /* Chọn theo THUỘC TÍNH, không theo chữ: `:has-text("Lập trình")` trượt ngay
+       khi giao diện sang tiếng Anh, và trượt im lặng vì có `.catch`. */
+    await p.click('.ct-segment-nut[data-che-do="code"]').catch(() => {});
     await p.waitForTimeout(400);
     for (let i = 0; i < 5; i += 1) {
       await p.click('.ct-tab-them', { timeout: 1500 }).catch(() => {});

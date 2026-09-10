@@ -20,10 +20,12 @@ import { ChatMode } from './ChatMode';
 import { ThanhTab, type TabAgent } from './Tabs';
 import { ThanhBen } from './ThanhBen';
 import { useAgentInfo } from './useAgent';
+import { useT } from '../../i18n';
 
 type CheDo = 'chat' | 'code' | 'web';
 
 export function ChatPage() {
+  const { t } = useT();
   const { info, dangTai, nap } = useAgentInfo();
   const { settings, setSetting } = useAppState();
   // Khôi phục chế độ đã chọn lần trước — xem `chatCheDo` trong shared/ipc.ts.
@@ -197,7 +199,7 @@ export function ChatPage() {
             <ChevronUp size={14} aria-hidden />
           </button>
           <div className="ct-page-head-chu">
-            <h1>Trợ lý AI</h1>
+            <h1>{t('Trợ lý AI')}</h1>
             <p className="ct-muted" style={{ margin: 0 }}>
               {cheDo === 'chat'
                 ? 'Hỏi đáp thường ngày.'
@@ -207,28 +209,38 @@ export function ChatPage() {
             </p>
           </div>
 
-          <div className="ct-segment" role="tablist" aria-label="Chế độ trợ lý">
+          <div className="ct-segment" role="tablist" aria-label={t('Chế độ trợ lý')}>
             <button
               type="button"
               role="tab"
               aria-selected={cheDo === 'chat'}
               className="ct-segment-nut"
+              /* Mỏ neo cho bộ đo bố cục. Bấm nút theo CHỮ hiện trên nó
+                 (`:has-text("Lập trình")`) trượt ngay khi app sang tiếng Anh,
+                 và trượt IM LẶNG vì bộ đo bọc `.catch()` — nó tưởng đã bấm,
+                 chế độ không đổi, rồi báo một lỗi hoàn toàn khác. */
+              data-che-do="chat"
               data-chon={cheDo === 'chat'}
               onClick={() => datCheDo('chat')}
             >
               <Bot size={14} aria-hidden />
-              Trò chuyện
+              {t('Trò chuyện')}
             </button>
             <button
               type="button"
               role="tab"
               aria-selected={cheDo === 'code'}
               className="ct-segment-nut"
+              /* Mỏ neo cho bộ đo bố cục. Bấm nút theo CHỮ hiện trên nó
+                 (`:has-text("Lập trình")`) trượt ngay khi app sang tiếng Anh,
+                 và trượt IM LẶNG vì bộ đo bọc `.catch()` — nó tưởng đã bấm,
+                 chế độ không đổi, rồi báo một lỗi hoàn toàn khác. */
+              data-che-do="code"
               data-chon={cheDo === 'code'}
               onClick={() => datCheDo('code')}
             >
               <Terminal size={14} aria-hidden />
-              Lập trình
+              {t('Lập trình')}
               {/* Nhãn Pro hiện cả khi CHƯA biết trạng thái: thà nói trước rồi
                   gỡ đi, còn hơn để người dùng bấm vào rồi mới biết là phải trả
                   tiền. */}
@@ -239,11 +251,16 @@ export function ChatPage() {
               role="tab"
               aria-selected={cheDo === 'web'}
               className="ct-segment-nut"
+              /* Mỏ neo cho bộ đo bố cục. Bấm nút theo CHỮ hiện trên nó
+                 (`:has-text("Lập trình")`) trượt ngay khi app sang tiếng Anh,
+                 và trượt IM LẶNG vì bộ đo bọc `.catch()` — nó tưởng đã bấm,
+                 chế độ không đổi, rồi báo một lỗi hoàn toàn khác. */
+              data-che-do="web"
               data-chon={cheDo === 'web'}
               onClick={() => datCheDo('web')}
             >
               <Globe size={14} aria-hidden />
-              Trình duyệt
+              {t('Trình duyệt')}
             </button>
           </div>
         </div>
@@ -279,7 +296,7 @@ export function ChatPage() {
           {dangTai && !info ? (
             <div className="ct-agent-nghi">
               <Loader2 size={13} aria-hidden className="ct-spin" />
-              <span>Đang kiểm tra quyền…</span>
+              <span>{t('Đang kiểm tra quyền…')}</span>
             </div>
           ) : info ? (
             /* MỌI tab đều được dựng, chỉ ẩn bằng CSS — tháo ra là mất bảng ghi
@@ -287,7 +304,7 @@ export function ChatPage() {
             tabs.length === 0 ? (
               <div className="ct-agent-nghi">
                 <Loader2 size={13} aria-hidden className="ct-spin" />
-                <span>Đang mở việc…</span>
+                <span>{t('Đang mở việc…')}</span>
               </div>
             ) : (
               <>
@@ -323,10 +340,10 @@ export function ChatPage() {
             )
           ) : (
             <div className="ct-empty">
-              <h1>Chưa kết nối được máy chủ</h1>
-              <p>Chế độ Lập trình cần mạng để kiểm tra quyền và hạn mức.</p>
+              <h1>{t('Chưa kết nối được máy chủ')}</h1>
+              <p>{t('Chế độ Lập trình cần mạng để kiểm tra quyền và hạn mức.')}</p>
               <div className="ct-actions">
-                <button type="button" className="ct-btn ct-btn-ghost" onClick={nap}>Thử lại</button>
+                <button type="button" className="ct-btn ct-btn-ghost" onClick={nap}>{t('Thử lại')}</button>
               </div>
             </div>
           )}

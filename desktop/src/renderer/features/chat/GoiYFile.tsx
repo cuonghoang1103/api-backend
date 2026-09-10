@@ -12,6 +12,7 @@
  * đó — thay cả ô nhập sẽ xoá mất câu người dùng đã viết.
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useT } from '../../i18n';
 
 export interface TokenFile {
   /** Phần dùng để TÌM — đã bỏ phần `:dòng` phía sau. */
@@ -57,6 +58,7 @@ export function GoiYFile({
   onChon: (duong: string, token: TokenFile) => void;
   onDong: () => void;
 }) {
+  const { t } = useT();
   const [ds, datDs] = useState<string[]>([]);
   const [chon, datChon] = useState(0);
   const tim = token.tim;
@@ -99,7 +101,7 @@ export function GoiYFile({
   if (hien.length === 0) return null;
 
   return (
-    <div className="ct-goiy" role="listbox" aria-label="File trong dự án">
+    <div className="ct-goiy" role="listbox" aria-label={t('File trong dự án')}>
       {hien.map((d, i) => {
         /* Thư mục kết thúc bằng `/`. Cắt nó ra trước khi tìm dấu `/` cuối, nếu
            không thì tên hiển thị của mọi thư mục đều thành chuỗi rỗng. */
@@ -121,7 +123,7 @@ export function GoiYFile({
           </button>
         );
       })}
-      <p className="ct-goiy-chan">↑↓ chọn · Enter hoặc Tab để chèn · Esc để bỏ</p>
+      <p className="ct-goiy-chan">{t('↑↓ chọn · Enter hoặc Tab để chèn · Esc để bỏ')}</p>
     </div>
   );
 }

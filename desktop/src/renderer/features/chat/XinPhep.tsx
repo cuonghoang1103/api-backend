@@ -19,6 +19,8 @@
 import { AlertTriangle, Check, CheckCheck, FilePlus2, Infinity, FilePen, GitCommitHorizontal, GitPullRequest, NotebookPen, Plug, Terminal, X } from 'lucide-react';
 import hljs from 'highlight.js/lib/common';
 import type { AgentDiff, AgentPhanLoaiLenh, AgentQuyetDinh } from '../../../shared/ipc';
+import { useT } from '../../i18n';
+import { Chu } from '../../i18n/Chu';
 
 /**
  * Ngôn ngữ cho `highlight.js`, suy từ đuôi file.
@@ -119,6 +121,7 @@ export function XinPhep({
   the: TheXinPhep;
   traLoi: (id: string, q: AgentQuyetDinh) => void;
 }) {
+  const { t } = useT();
   return (
     <div className="ct-xinphep">
       <div className="ct-xinphep-dau">
@@ -135,7 +138,7 @@ export function XinPhep({
 
       {the.diff.quaLon && (
         <div className="ct-notice" data-tone="warn" style={{ margin: '0 0 8px' }}>
-          <span>Thay đổi quá lớn để so từng dòng — bảng dưới hiện nguyên cả hai bản.</span>
+          <span>{t('Thay đổi quá lớn để so từng dòng — bảng dưới hiện nguyên cả hai bản.')}</span>
         </div>
       )}
 
@@ -144,23 +147,23 @@ export function XinPhep({
       <div className="ct-xinphep-nut">
         <button type="button" className="ct-btn" onClick={() => traLoi(the.id, 'choPhep')}>
           <Check size={14} aria-hidden />
-          Cho phép
+          {t('Cho phép')}
         </button>
         <button type="button" className="ct-btn ct-btn-ghost" onClick={() => traLoi(the.id, 'choPhepCaFile')}>
           <CheckCheck size={14} aria-hidden />
-          Cho phép cả file này
+          {t('Cho phép cả file này')}
         </button>
         <button
           type="button" className="ct-btn ct-btn-ghost"
           onClick={() => traLoi(the.id, 'choPhepMai')}
-          title="Nhớ cho dự án này, kể cả lần sau mở lại app. Gõ /quyen để xem và thu hồi."
+          title={t('Nhớ cho dự án này, kể cả lần sau mở lại app. Gõ /quyen để xem và thu hồi.')}
         >
           <Infinity size={14} aria-hidden />
-          Luôn cho phép
+          {t('Luôn cho phép')}
         </button>
         <button type="button" className="ct-btn ct-btn-ghost ct-xinphep-tuchoi" onClick={() => traLoi(the.id, 'tuChoi')}>
           <X size={14} aria-hidden />
-          Từ chối
+          {t('Từ chối')}
         </button>
       </div>
     </div>
@@ -194,12 +197,13 @@ export function XinPhepLenh({
   phanLoai: AgentPhanLoaiLenh;
   traLoi: (id: string, q: AgentQuyetDinh) => void;
 }) {
+  const { t } = useT();
   const nguyHiem = phanLoai.muc === 'nguyhiem';
   return (
     <div className="ct-xinphep" data-muc={phanLoai.muc}>
       <div className="ct-xinphep-dau">
         <Terminal size={14} aria-hidden />
-        <span>Agent muốn chạy lệnh</span>
+        <span>{t('Agent muốn chạy lệnh')}</span>
       </div>
 
       <div className="ct-lenh-hop">
@@ -211,7 +215,7 @@ export function XinPhepLenh({
         <div className="ct-notice" data-tone={nguyHiem ? 'err' : 'warn'} style={{ margin: '8px 0 0' }}>
           <AlertTriangle size={15} aria-hidden />
           <span>
-            {nguyHiem ? <strong>Nguy hiểm: </strong> : null}
+            {nguyHiem ? <strong>{t('Nguy hiểm:')} </strong> : null}
             {phanLoai.lyDo.join(' · ')}
           </span>
         </div>
@@ -232,21 +236,21 @@ export function XinPhepLenh({
           <>
             <button type="button" className="ct-btn ct-btn-ghost" onClick={() => traLoi(id, 'choPhepCaFile')}>
               <CheckCheck size={14} aria-hidden />
-              Đừng hỏi lại trong cuộc này
+              {t('Đừng hỏi lại trong cuộc này')}
             </button>
             <button
               type="button" className="ct-btn ct-btn-ghost"
               onClick={() => traLoi(id, 'choPhepMai')}
-              title="Nhớ cho dự án này, kể cả lần sau mở lại app. Gõ /quyen để xem và thu hồi."
+              title={t('Nhớ cho dự án này, kể cả lần sau mở lại app. Gõ /quyen để xem và thu hồi.')}
             >
               <Infinity size={14} aria-hidden />
-              Luôn cho phép lệnh này
+              {t('Luôn cho phép lệnh này')}
             </button>
           </>
         )}
         <button type="button" className="ct-btn ct-btn-ghost ct-xinphep-tuchoi" onClick={() => traLoi(id, 'tuChoi')}>
           <X size={14} aria-hidden />
-          Từ chối
+          {t('Từ chối')}
         </button>
       </div>
     </div>
@@ -280,11 +284,12 @@ export function XinPhepMcp({
   args: string;
   traLoi: (id: string, q: AgentQuyetDinh) => void;
 }) {
+  const { t } = useT();
   return (
     <div className="ct-xinphep" data-muc="cankiem">
       <div className="ct-xinphep-dau">
         <Plug size={14} aria-hidden />
-        <span>Agent muốn gọi tool của server ngoài</span>
+        <span>{t('Agent muốn gọi tool của server ngoài')}</span>
         <span className="ct-xinphep-dem">
           <span className="ct-mcp-ten">{server}</span>
         </span>
@@ -303,18 +308,18 @@ export function XinPhepMcp({
         <AlertTriangle size={15} aria-hidden />
         <span>
           Tool này do <strong>{server}</strong> cung cấp, không phải của ứng dụng.
-          Nó chạy trên máy bạn và có thể làm bất cứ điều gì server đó lập trình sẵn.
+          {t('Nó chạy trên máy bạn và có thể làm bất cứ điều gì server đó lập trình sẵn.')}
         </span>
       </div>
 
       <div className="ct-xinphep-nut">
         <button type="button" className="ct-btn" onClick={() => traLoi(id, 'choPhep')}>
           <Check size={14} aria-hidden />
-          Cho phép lần này
+          {t('Cho phép lần này')}
         </button>
         <button type="button" className="ct-btn ct-btn-ghost ct-xinphep-tuchoi" onClick={() => traLoi(id, 'tuChoi')}>
           <X size={14} aria-hidden />
-          Từ chối
+          {t('Từ chối')}
         </button>
       </div>
     </div>
@@ -344,6 +349,7 @@ export function XinPhepGit({
   chiTiet: string;
   traLoi: (id: string, q: AgentQuyetDinh) => void;
 }) {
+  const { t } = useT();
   const laPr = viec === 'pr';
   return (
     <div className="ct-xinphep" data-muc={laPr ? 'nguyhiem' : 'cankiem'}>
@@ -360,8 +366,7 @@ export function XinPhepGit({
         <div className="ct-notice" data-tone="err" style={{ margin: '8px 0 0' }}>
           <AlertTriangle size={15} aria-hidden />
           <span>
-            <strong>Việc này đi RA NGOÀI.</strong> Nhánh sẽ nằm trên origin và PR sẽ hiện
-            cho người khác cùng repo — họ nhận thông báo ngay. Không có nút hoàn tác.
+            <Chu cau="**Việc này đi RA NGOÀI.** Nhánh sẽ nằm trên origin và PR sẽ hiện cho người khác cùng repo — họ nhận thông báo ngay. Không có nút hoàn tác." />
           </span>
         </div>
       )}
@@ -377,7 +382,7 @@ export function XinPhepGit({
         </button>
         <button type="button" className="ct-btn ct-btn-ghost ct-xinphep-tuchoi" onClick={() => traLoi(id, 'tuChoi')}>
           <X size={14} aria-hidden />
-          Từ chối
+          {t('Từ chối')}
         </button>
       </div>
     </div>
@@ -407,6 +412,7 @@ export function XinPhepNote({
   chiTiet: string;
   traLoi: (id: string, q: AgentQuyetDinh) => void;
 }) {
+  const { t } = useT();
   // `chiTiet` do main dựng và luôn nói rõ chế độ ở dòng đầu.
   const laThay = chiTiet.includes('THAY TOÀN BỘ');
   return (
@@ -427,9 +433,7 @@ export function XinPhepNote({
         <div className="ct-notice" data-tone="err" style={{ margin: '8px 0 0' }}>
           <AlertTriangle size={15} aria-hidden />
           <span>
-            <strong>Toàn bộ nội dung cũ sẽ bị thay.</strong> Đây là ghi chú thật của bạn,
-            không phải file trong dự án — lấy lại được ở lịch sử phiên bản của Ghi chú,
-            nhưng không có nút hoàn tác ở đây.
+            <Chu cau="**Toàn bộ nội dung cũ sẽ bị thay.** Đây là ghi chú thật của bạn, không phải file trong dự án — lấy lại được ở lịch sử phiên bản của Ghi chú, nhưng không có nút hoàn tác ở đây." />
           </span>
         </div>
       )}
@@ -445,7 +449,7 @@ export function XinPhepNote({
         </button>
         <button type="button" className="ct-btn ct-btn-ghost ct-xinphep-tuchoi" onClick={() => traLoi(id, 'tuChoi')}>
           <X size={14} aria-hidden />
-          Từ chối
+          {t('Từ chối')}
         </button>
       </div>
     </div>

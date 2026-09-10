@@ -820,6 +820,56 @@ export class AIService {
     if (meta) meta.savedMessageId = saved.id;
   }
 
+  /**
+   * ⛔⛔ TRƯỚC 11/09/2026 AI CHAT KHÔNG GHI CHI PHÍ LẦN NÀO.
+   *
+   * Đo bằng cách đếm: cả `ai.service.ts` không có một lời gọi
+   * `interviewLLMCallLog` nào. Hai hậu quả, cả hai đều im lặng:
+   *  • Không đo được chat tiêu bao nhiêu, nên không đặt được hạn mức cho nó.
+   *  • Trần tiền của cả web (`budget.ts`) cộng từ chính bảng ấy, nên nó cũng
+   *    KHÔNG nhìn thấy chi phí chat — cầu dao chi phí đã bỏ sót một mảng suốt
+   *    thời gian qua.
+   *
+   * Ghi ở ĐÂY, chỗ duy nhất mọi lượt chat thành công đều đi qua. Rải ra từng
+   * nhánh (stream / không stream / đổi tuyến) là bốn chỗ có thể quên.
+   *
+   * ⚠️ Token là ƯỚC LƯỢNG (~4 ký tự/token) — cổng không trả `usage` đồng nhất,
+   * và chính `saveAssistantMessage` cũng đang ước lượng như thế. Con số dùng để
+   * canh hạn mức và bắt bất thường, không phải để đối soát hoá đơn.
+   * ⚠️ KHÔNG `await`, và nuốt lỗi: ghi sổ hỏng thì người dùng vẫn phải nhận
+   * được câu trả lời họ vừa chờ.
+   */
+  private ghiChiPhiChat(context: ChatContext, meta: ChatModelMeta | undefined, cauHoi: string, traLoi: string): void {
+    const userId = context.userId;
+    if (!userId) return;   // khách vãng lai: không có ví nào để trừ
+    void (async () => {
+      try {
+        const { prisma: db } = await import('../config/database.js');
+        const { costUsd } = await import('./llm/gateway.js');
+        const model = meta?.effective ?? context.model ?? DEFAULT_CHAT_MODEL_ID;
+        const vao = estimateTokens(cauHoi);
+        const ra = estimateTokens(traLoi);
+        await db.interviewLLMCallLog.create({
+          data: {
+            userId,
+            feature: 'chat',
+            step: 'chat',
+            provider: 'gateway',
+            model,
+            inputTokens: vao,
+            outputTokens: ra,
+            costUsd: costUsd(model, vao, ra),
+            success: true,
+          },
+        });
+      } catch (err) {
+        logger.warn('AIService: không ghi được chi phí chat', {
+          error: err instanceof Error ? err.message : String(err),
+        });
+      }
+    })();
+  }
+
   // ─── Fetch RAG context (semantic search with keyword fallback) ──────
   /**
    * Lấy các document chunks liên quan dựa trên user message.
@@ -1078,6 +1128,9 @@ export class AIService {
       if (sessionId && result.text) {
         await this.saveAssistantMessage(sessionId, result.text);
       }
+      // Đường KHÔNG chảy chữ cũng phải ghi sổ — bỏ sót ở đây thì ví chat hụt
+      // đúng những lượt dùng đường lùi, tức là lúc đang có trục trặc.
+      this.ghiChiPhiChat(context, undefined, message, result.text);
       return { text: result.text, sessionId };
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err);
@@ -1204,12 +1257,12 @@ export class AIService {
             if (p.loai === 'xong') ketQua = p.text;
             else yield p.phan;
           }
-          if (sessionId) await this.saveAssistantAndTrack(sessionId, ketQua, meta);
+          if (sessionId) { await this.saveAssistantAndTrack(sessionId, ketQua, meta); this.ghiChiPhiChat(context, meta, message, ketQua); }
           return;
         } catch (err) {
           if (streamed) {
             // Partial answer already shown — save it and stop (don't restart).
-            if (sessionId) await this.saveAssistantAndTrack(sessionId, streamed, meta);
+            if (sessionId) { await this.saveAssistantAndTrack(sessionId, streamed, meta); this.ghiChiPhiChat(context, meta, message, streamed); }
             logger.warn('AIService Claude stream broke mid-answer, kept partial', { model: selected.id });
             return;
           }
@@ -1221,7 +1274,7 @@ export class AIService {
             ? await completeClaudeChat({ model: gwModel, system: systemPrompt, messages: claudeMessages, maxTokens: outTokens })
             : await completeViaOpenAiRoute({ model: gwModel, system: systemPrompt, messages: claudeMessages, maxTokens: outTokens });
           for (let i = 0; i < text.length; i += 4) yield text.slice(i, i + 4);
-          if (sessionId && text) await this.saveAssistantAndTrack(sessionId, text, meta);
+          if (sessionId && text) { await this.saveAssistantAndTrack(sessionId, text, meta); this.ghiChiPhiChat(context, meta, message, text); }
           return;
         } catch (err) {
           logger.warn('AIService gateway non-stream failed, trying the other route', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
@@ -1234,7 +1287,7 @@ export class AIService {
             ? await completeViaOpenAiRoute({ model: gwModel, system: systemPrompt, messages: claudeMessages, maxTokens: outTokens })
             : await completeClaudeChat({ model: gwModel, system: systemPrompt, messages: claudeMessages, maxTokens: outTokens });
           for (let i = 0; i < text.length; i += 4) yield text.slice(i, i + 4);
-          if (sessionId && text) await this.saveAssistantAndTrack(sessionId, text, meta);
+          if (sessionId && text) { await this.saveAssistantAndTrack(sessionId, text, meta); this.ghiChiPhiChat(context, meta, message, text); }
           return;
         } catch (err) {
           logger.warn('AIService both gateway routes failed, falling back to default', { model: selected.id, error: err instanceof Error ? err.message : String(err) });
@@ -1320,7 +1373,7 @@ export class AIService {
         }
 
         if (sessionId && fullResponse) {
-          await this.saveAssistantAndTrack(sessionId, fullResponse, meta);
+          { await this.saveAssistantAndTrack(sessionId, fullResponse, meta); this.ghiChiPhiChat(context, meta, message, fullResponse); }
         }
         return;
       } catch (err) {

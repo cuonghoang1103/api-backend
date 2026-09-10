@@ -759,4 +759,16 @@ export const TU_DIEN: Record<string, string> = {
   '- File đã sửa (hoàn tác được): {n}\n\n': '- Files changed (undoable): {n}\n\n',
   '_Con số là ƯỚC LƯỢNG — cổng không công khai giá._':
     '_These figures are ESTIMATES — the gateway does not publish its prices._',
+  // ── Mức dùng (Cài đặt) ──────────────────────────────────
+  'Mức dùng': 'Usage',
+  'Không đọc được mức dùng': 'Couldn’t read your usage',
+  'Đang đọc…': 'Reading…',
+  'Đọc lại': 'Refresh',
+  'Hạn mức bắt đầu hồi lại từ {gio}.': 'Your allowance starts recovering at {gio}.',
+  'Ví riêng của bạn, tính trong {n} giờ vừa qua.':
+    'Your own allowance, measured over the last {n} hours.',
+  'Tài khoản quản trị — không bị chặn. Số liệu vẫn được ghi.':
+    'Admin account — never blocked. Usage is still recorded.',
+  'Mỗi tài khoản có ví RIÊNG cho từng mảng, tính trượt trong {n} giờ vừa qua — người khác dùng nhiều không ảnh hưởng tới bạn, và AI Code hết không làm AI Chat dừng theo.':
+    'Every account has its OWN allowance per area, measured over a rolling {n}-hour window — heavy use by other people does not affect you, and running out on AI Code does not stop AI Chat.',
 };

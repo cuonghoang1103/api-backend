@@ -180,47 +180,130 @@ export function tranTienNgay(): number {
   return Number.isFinite(n) && n >= 0 ? n : MAC_DINH_TRAN_TIEN;
 }
 
-export interface ViAgent { daTieu: number; tran: number; canVi: boolean }
+export interface ViAgent {
+  daTieu: number;
+  tran: number;
+  canVi: boolean;
+  /** `rieng` = ví của chính người dùng; `site` = trần chung của cả web. */
+  loai: 'rieng' | 'site';
+}
 
-/** Tiền agent đã tiêu hôm nay, cả site. Nhớ 60 giây như `budget.ts`. */
-let demTien: { luc: number; usd: number } | null = null;
+/**
+ * ⛔⛔ VÍ NÀY TỪNG LÀ CỦA CẢ WEB, VÀ ĐÓ LÀ MỘT LỖI.
+ *
+ * Câu truy vấn cũ:
+ *
+ *     where: { feature: 'agent', createdAt: { gte: dau } }
+ *              └─ KHÔNG có `userId`
+ *
+ * Nó cộng tiền agent của **mọi tài khoản** rồi so với một con số duy nhất. Nên
+ * một người dùng nặng tay tiêu hết 60 $ là **tất cả** bị chặn — kể cả một tài
+ * khoản Pro vừa tạo, chưa gọi lượt nào. Người dùng báo đúng hiện tượng đó ngày
+ * 11/09/2026: *"tài khoản A của tôi dùng nhiều bị giới hạn, tôi vào tài khoản B
+ * chưa sử dụng vẫn bị dính limit"*.
+ *
+ * Tệ hơn, câu báo lỗi không hề nói đó là ví CHUNG — nó viết "Ngân sách AI dành
+ * cho chế độ Lập trình hôm nay đã hết", và ai đọc cũng hiểu là ví của mình.
+ *
+ * Nay ví là CỦA TỪNG NGƯỜI. Bảng log đã có sẵn index `[userId, createdAt]` nên
+ * không tốn thêm gì.
+ *
+ * Vẫn còn một trần CHUNG phía sau, nhưng mặc định TẮT (`= 0`) — đúng quyết
+ * định người dùng đã nêu 08/09/2026 ("gói Pro thì dùng không giới hạn"). Bật
+ * nó bằng `AGENT_DAILY_COST_SITE_USD` khi nào muốn một lưới chặn chi phí.
+ */
+type MocDem = { luc: number; usd: number };
+const demTienNguoi = new Map<number, MocDem>();
+let demTienSite: MocDem | null = null;
 
-export async function xemViAgent(): Promise<ViAgent> {
-  const tran = tranTienNgay();
-  if (tran <= 0) return { daTieu: 0, tran, canVi: false };
+/** Trần CHUNG cho cả web. `0` = tắt (mặc định). */
+export function tranTienSiteNgay(): number {
+  const raw = process.env.AGENT_DAILY_COST_SITE_USD;
+  if (raw === undefined || raw === '') return 0;
+  const n = Number(raw);
+  return Number.isFinite(n) && n >= 0 ? n : 0;
+}
 
-  const gio = Date.now();
-  if (demTien && gio - demTien.luc < 60_000) {
-    return { daTieu: demTien.usd, tran, canVi: demTien.usd >= tran };
-  }
+const NHO_MS = 60_000;
 
+async function tongTienAgent(userId: number | null): Promise<number> {
   const dau = new Date();
   dau.setHours(0, 0, 0, 0);
-  try {
-    const agg = await prisma.interviewLLMCallLog.aggregate({
-      where: { feature: 'agent', createdAt: { gte: dau } },
-      _sum: { costUsd: true },
-    });
-    const usd = Number(agg._sum.costUsd ?? 0);
-    demTien = { luc: gio, usd };
-    return { daTieu: usd, tran, canVi: usd >= tran };
-  } catch (err) {
-    // Đồng hồ đo hỏng ⇒ cho đi tiếp. Trần cứng toàn site vẫn đứng sau.
-    logger.warn('agent: không đọc được ví agent, cho đi tiếp', { error: (err as Error).message });
-    return { daTieu: 0, tran, canVi: false };
+  const agg = await prisma.interviewLLMCallLog.aggregate({
+    where: { feature: 'agent', createdAt: { gte: dau }, ...(userId === null ? {} : { userId }) },
+    _sum: { costUsd: true },
+  });
+  return Number(agg._sum.costUsd ?? 0);
+}
+
+/**
+ * Ví agent của MỘT người dùng hôm nay, và trần chung nếu có bật.
+ *
+ * Trả về cái nào ĐANG CHẶN; không cái nào chặn thì trả ví riêng để giao diện
+ * hiện đúng số của chính người đó.
+ */
+export async function xemViAgent(userId: number): Promise<ViAgent> {
+  const tran = tranTienNgay();
+  const tranSite = tranTienSiteNgay();
+  const gio = Date.now();
+
+  let daTieu = 0;
+  if (tran > 0) {
+    const cu = demTienNguoi.get(userId);
+    if (cu && gio - cu.luc < NHO_MS) {
+      daTieu = cu.usd;
+    } else {
+      try {
+        daTieu = await tongTienAgent(userId);
+        demTienNguoi.set(userId, { luc: gio, usd: daTieu });
+      } catch (err) {
+        // Đồng hồ đo hỏng ⇒ cho đi tiếp. Trần cứng toàn site vẫn đứng sau.
+        logger.warn('agent: không đọc được ví agent, cho đi tiếp', { error: (err as Error).message });
+        return { daTieu: 0, tran, canVi: false, loai: 'rieng' };
+      }
+    }
+    if (daTieu >= tran) return { daTieu, tran, canVi: true, loai: 'rieng' };
   }
+
+  if (tranSite > 0) {
+    let mocSite = demTienSite;
+    if (!mocSite || gio - mocSite.luc >= NHO_MS) {
+      try {
+        mocSite = { luc: gio, usd: await tongTienAgent(null) };
+        demTienSite = mocSite;
+      } catch {
+        // Đo hỏng ⇒ bỏ qua lưới này; ví riêng ở trên vẫn đứng.
+        mocSite = null;
+      }
+    }
+    if (mocSite && mocSite.usd >= tranSite) {
+      return { daTieu: mocSite.usd, tran: tranSite, canVi: true, loai: 'site' };
+    }
+  }
+
+  return { daTieu, tran, canVi: false, loai: 'rieng' };
 }
 
 /** Xoá bộ đếm — dùng trong kiểm thử và sau khi admin đổi trần. */
 export function xoaDemTienAgent(): void {
-  demTien = null;
+  demTienNguoi.clear();
+  demTienSite = null;
 }
 
+/**
+ * ⚠️ NÓI RÕ ĐÓ LÀ VÍ CỦA AI.
+ *
+ * Câu cũ chỉ viết "Ngân sách AI dành cho chế độ Lập trình hôm nay đã hết" —
+ * ai đọc cũng hiểu là ví của mình, kể cả khi thứ chặn họ là ví CHUNG mà người
+ * khác đã tiêu hết. Người dùng mất một buổi đi tìm xem mình đã tiêu gì.
+ */
 export function loiCanVi(v: ViAgent): string {
+  const cua = v.loai === 'site'
+    ? 'Ngân sách AI CHUNG của cả web cho chế độ Lập trình hôm nay đã hết'
+    : 'Ngân sách AI của TÀI KHOẢN BẠN cho chế độ Lập trình hôm nay đã hết';
   return (
-    `Ngân sách AI dành cho chế độ Lập trình hôm nay đã hết ` +
-    `(~$${v.daTieu.toFixed(2)} / $${v.tran}). Chế độ này mở lại vào 00:00; ` +
-    `các tính năng AI khác vẫn hoạt động bình thường.`
+    `${cua} (~$${v.daTieu.toFixed(2)} / $${v.tran}). ` +
+    `Chế độ này mở lại vào 00:00; các tính năng AI khác vẫn hoạt động bình thường.`
   );
 }
 

@@ -44,7 +44,8 @@ import { nenNguCanh } from './compact.js';
 import { MAX_VIET_TIEP, gopVietTiep } from './vietTiep.js';
 import { sangAnthropic, stopSangFinish, toolSangAnthropic } from './anthropic.js';
 import { modelAgentTu } from './models.js';
-import { loiCanVi, loiHetHan, xemHanMuc, xemViAgent, type HanMuc } from './quota.js';
+import { loiHetHan, xemHanMuc, type HanMuc } from './quota.js';
+import { loiCanViTien, xemViTien } from './viTien.js';
 import { runServerTool } from './serverTools.js';
 import { buildSystemPrompt, catGhiChu, type WorkspaceHint } from './prompt.js';
 import { catLuotCu, loiNhacDaCat, tongKyTu } from './catCu.js';
@@ -545,11 +546,16 @@ export async function runAgentTurn(
     return;
   }
 
-  // 3. Ví RIÊNG của agent trên cả site. Cạn thì chỉ agent dừng, chat/chấm
-  //    bài/CV của những người không đụng tới agent vẫn chạy.
-  const vi = await xemViAgent();
+  /*
+   * 3. VÍ TIỀN RIÊNG của người dùng này, mảng AI Code, cửa sổ 5 giờ trượt.
+   *
+   * Trước 11/09/2026 đây là ví của CẢ WEB tính theo NGÀY: một người tiêu hết
+   * là mọi tài khoản bị chặn, kể cả tài khoản vừa tạo — người dùng báo đúng
+   * hiện tượng đó. Nay mỗi người một ví, và AI Chat có ví riêng của nó.
+   */
+  const vi = await xemViTien(input.userId, 'code');
   if (vi.canVi) {
-    emit({ type: 'error', error: loiCanVi(vi), code: 'AGENT_BUDGET_EXCEEDED' });
+    emit({ type: 'error', error: loiCanViTien(vi), code: 'AGENT_BUDGET_EXCEEDED' });
     return;
   }
 

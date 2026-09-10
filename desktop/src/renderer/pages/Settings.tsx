@@ -13,6 +13,7 @@ import { useAppState } from '../app-state';
 import { SyncPanel } from '../components/SyncPanel';
 import { UpdatePanel } from '../components/UpdatePanel';
 import { OdinPanel } from '../features/odin/OdinPanel';
+import { MucDung } from '../features/settings/MucDung';
 import type { ThemeSetting } from '../../shared/ipc';
 import { useDich, type NgonNgu } from '../i18n';
 
@@ -143,6 +144,10 @@ export function Settings() {
             </label>
           </div>
         </section>
+
+        {/* Mức dùng đặt TRƯỚC đồng bộ/cập nhật: đây là thứ người dùng vào
+            Cài đặt để tra khi vừa bị chặn, nên nó phải nằm gần đầu. */}
+        <MucDung />
 
         <SyncPanel />
 

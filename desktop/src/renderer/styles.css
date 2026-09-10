@@ -10882,3 +10882,33 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 @media (prefers-reduced-motion: reduce) {
   .ct-soan-nen { animation: none; }
 }
+
+/* ── Mức dùng (Cài đặt) ──
+   Thanh đo phải đọc được bằng cách LIẾC: người dùng mở nó ra đúng lúc vừa bị
+   chặn, và cái họ cần biết là "còn bao nhiêu", không phải một con số chính
+   xác tới xu. */
+.ct-mucdung { display: flex; align-items: center; gap: 10px; min-width: 190px; }
+
+.ct-mucdung-thanh {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--ct-hover);
+  overflow: hidden;
+}
+.ct-mucdung-thanh > div {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--ct-accent);
+  transition: width 240ms var(--ct-ease);
+}
+/* Cạn ví ⇒ đỏ. Cùng màu với mọi chỗ báo "không đi tiếp được" trong app, để
+   người dùng không phải học một quy ước màu riêng cho ô này. */
+.ct-mucdung-thanh[data-can='true'] > div { background: var(--ct-danger, #ef4444); }
+
+.ct-mucdung-so {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ct-text-faint);
+  white-space: nowrap;
+}

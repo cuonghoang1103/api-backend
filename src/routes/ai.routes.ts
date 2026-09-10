@@ -298,6 +298,24 @@ router.post('/chat', optionalAuth, quotaMiddleware(), async (req: any, res: Resp
     return;
   }
 
+  /*
+   * VÍ TIỀN RIÊNG của người dùng cho mảng AI Chat — cửa sổ 5 giờ trượt.
+   *
+   * Tách hẳn khỏi ví AI Code: agent tiêu gấp hàng chục lần chat cho cùng một
+   * câu, nên chung ví nghĩa là một buổi dùng AI Code làm tắt luôn chat.
+   *
+   * Chặn TRƯỚC khi mở SSE. Mở luồng rồi mới báo lỗi thì client đã vào chế độ
+   * chảy chữ và câu lỗi hiện ra như một câu trả lời dở dang.
+   */
+  if (req.userId) {
+    const { xemViTien, loiCanViTien } = await import('../services/agent/viTien.js');
+    const viChat = await xemViTien(req.userId, 'chat');
+    if (viChat.canVi) {
+      res.status(429).json({ success: false, message: loiCanViTien(viChat), code: 'CHAT_BUDGET_EXCEEDED' });
+      return;
+    }
+  }
+
   // ─── 2. Set SSE headers BEFORE flushing ─────────────────
   // These headers are REQUIRED for SSE to work:
   // - Content-Type: tells browser to treat response as event stream
@@ -934,6 +952,28 @@ router.post('/feedback', authenticate, async (req: any, res: Response<ApiRespons
 // ════════════════════════════════════════════════════════════════
 // GET /api/v1/ai/feedback/stats
 // ════════════════════════════════════════════════════════════════
+/**
+ * MỨC DÙNG CỦA CHÍNH NGƯỜI ĐANG ĐĂNG NHẬP — hai ví, tách theo mảng.
+ *
+ * ⚠️ KHÔNG nhận `userId` từ query. Nhận vào là mở một đường cho bất kỳ ai đọc
+ * mức chi tiêu của người khác — đây là dữ liệu tài chính cá nhân, và đường ấy
+ * không có lý do nào để tồn tại: người dùng chỉ cần xem của chính mình.
+ */
+router.get('/usage', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const { xemViTien } = await import('../services/agent/viTien.js');
+    const [code, chat] = await Promise.all([
+      xemViTien(req.userId, 'code'),
+      xemViTien(req.userId, 'chat'),
+    ]);
+    res.json({
+      success: true,
+      message: 'ok',
+      data: { code, chat },
+    });
+  } catch (err) { next(err); }
+});
+
 router.get('/feedback/stats', authenticate, async (_req: any, res: Response<ApiResponse>, next) => {
   try {
     const stats = await aiService.getFeedbackStats();

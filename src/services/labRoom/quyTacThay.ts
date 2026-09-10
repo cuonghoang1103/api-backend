@@ -94,6 +94,25 @@ Four things decide the mark:
   utils      Validator and small helpers. private static final Scanner, a
              private constructor, every method static.
 
+  READING AND WRITING THE DATA FILE BELONGS IN bo. Never in utils, never in
+  the controller, never in the entity. Whether it gets a class of its own is
+  a judgement call, and both answers pass. Measured across the 54 reference
+  solutions: 15 touch a file at all; 11 of those keep a separate class for it
+  and 4 merge it into the business class. All 11 separate classes live in bo
+  (VehicleFile, DataStore, FileProcessor, CSVFormatter, CopyManager,
+  ZipManager, WordSearcher, DocumentFileManager, FileManager, FileProcessing
+  - ten names for eleven projects, DataStore serving both P0014 and P0015).
+    - MERGE it when one bo owns one file for one entity - FruitManager with
+      fruits.txt, DictionaryManager with dictionary.txt. A FileHelper there is
+      an indirection with nothing behind it, and the student has to defend it.
+    - SPLIT it out when several bo classes share one file (DataStore in
+      P0014/P0015 serves AssetStore, EmployeeStore, RequestStore and
+      BorrowStore), or when the file format IS the assignment: zip, CSV,
+      copying, searching a file for a word.
+  The only file writing that appears in utils across all 54 is SampleData,
+  which creates the demo input so the first run has something to read. The
+  program's own load and save are not utilities.
+
   ADD A LAYER ONLY WHERE THIS PROGRAM NEEDS ONE. Decide by RESPONSIBILITY, not
   by counting files:
     - a bo appears when there is a business rule or an algorithm worth keeping

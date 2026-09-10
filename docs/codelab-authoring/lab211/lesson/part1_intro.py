@@ -135,14 +135,24 @@ def build():
 │   ├── build-impl.xml
 │   └── project.properties
 ├── src/                 <- YOUR CODE LIVES HERE, and only here
-│   └── doctormanagement/
-│       ├── Doctor.java
-│       ├── DoctorManager.java
-│       ├── Validation.java
+│   ├── entity/          <- one folder per layer, never one flat package
+│   │   └── Doctor.java
+│   ├── bo/
+│   │   └── DoctorHash.java
+│   ├── utils/
+│   │   └── Validation.java
+│   └── ui/
 │       └── Main.java
 ├── doctors.txt          <- data files sit at the PROJECT ROOT, not in src/
 ├── build/               <- compiled .class files (safe to delete)
 └── dist/                <- the packaged .jar (safe to delete)""")
+
+    p('<p>Those four folders under <code>src/</code> are the layers, and Part 12 is where they get '
+      'explained. The point to take now is that a LAB211 project is <em>not</em> one flat package: not '
+      'one of the 54 reference solutions is laid out that way.</p>',
+      '<p>Bốn thư mục dưới <code>src/</code> chính là các tầng, và Phần 12 sẽ giải thích chúng. Điều cần '
+      'nhớ ngay bây giờ là project LAB211 <em>không</em> phải một gói phẳng: không một bài nào trong 54 '
+      'lời giải mẫu xếp theo kiểu đó.</p>')
 
     p('<p>Two rules that come straight from that layout:</p>'
       '<p><strong>Relative paths are resolved from the project root, not from <code>src/</code>.</strong> '

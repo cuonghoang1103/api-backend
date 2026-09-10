@@ -34,9 +34,20 @@ def build():
 
     p('<p>Write this once, drop it into every assignment. Notice that each method loops until it has '
       'something valid, so calling code stays clean — no <code>try</code> blocks scattered through your '
-      'menu.</p>',
+      'menu.</p>'
+      '<p><strong>The name.</strong> It lives in <code>utils/</code>, and across the 54 reference '
+      'solutions it is called <code>Validator</code> 48 times. <code>P0055</code> calls it '
+      '<code>Validation</code> and <code>P0064</code> splits it into <code>FormatValidator</code> plus '
+      '<code>InputHelper</code> — no brief on this track names the class, so those are the authors\' '
+      'own choices. Unless a brief names it, write <code>utils/Validator.java</code> and stop '
+      'thinking about it.</p>',
       '<p>Viết một lần, mang sang mọi bài. Để ý mỗi phương thức đều lặp cho tới khi có giá trị hợp lệ, '
-      'nên phần code gọi nó rất gọn — không có khối <code>try</code> nào rải rác trong menu.</p>')
+      'nên phần code gọi nó rất gọn — không có khối <code>try</code> nào rải rác trong menu.</p>'
+      '<p><strong>Về cái tên.</strong> Lớp này nằm trong <code>utils/</code>, và trong 54 lời giải mẫu '
+      'nó mang tên <code>Validator</code> 48 lần. <code>P0055</code> gọi là <code>Validation</code>, '
+      '<code>P0064</code> tách đôi thành <code>FormatValidator</code> và <code>InputHelper</code> — '
+      'không đề nào trong lộ trình này đặt tên cho lớp đó, nên hai cái tên kia là do người viết tự '
+      'chọn. Đề không đặt tên thì cứ viết <code>utils/Validator.java</code> rồi thôi.</p>')
 
     code('Validation.java — the workhorse of this track',
          'Validation.java — lớp làm việc chính của cả lộ trình',

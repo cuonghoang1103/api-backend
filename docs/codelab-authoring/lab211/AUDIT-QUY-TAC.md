@@ -328,12 +328,62 @@ trình khác** đọc lại tệp — cách duy nhất chứng minh đĩa đổi
 in ra chữ "Stored". Kiểm ngược: dựng lại đúng `nextLine()` cũ thì lượt mới đỏ
 với đúng câu *"hết input mà không lưu phần chưa lưu"*.
 
-### 4.6 `bo` kiêm luôn đọc/ghi tệp — 15 bài (SRP)
+### 4.6 Hình vẽ bố cục ở 847 Part 12 không khớp mã — ĐÃ VẼ LẠI
 
-Bố cục mẫu ở 847 Part 12 tách riêng `FileHelper.java  UTILITY  load() và save()`.
-15 lời giải gộp phần tệp vào `bo` (`DataStore`, `FruitManager`, `CopyManager`…).
-Với quy mô LAB211 thì chấp nhận được, nhưng nó lệch với chính hình vẽ đang dạy —
-nên hoặc sửa hình vẽ, hoặc nói rõ "gộp được khi `bo` chỉ phục vụ một entity".
+**Con số "15 bài gộp" tôi viết ở bản trước là SAI, và sai theo hướng ngược
+hẳn.** Nó là ước lượng đọc lướt, không phải phép đếm. Đếm thật cả 54 bài:
+
+| | Số bài |
+|---|---|
+| không đụng tới tệp | 39 |
+| **tách riêng** một lớp lo tệp | **11** |
+| **gộp** phần tệp vào lớp nghiệp vụ | **4** |
+
+Bốn bài gộp là `L.P0023` (`FruitManager`, `OrderManager`), `S.P0057`
+(`UserManager`), `S.P0058` (`DictionaryManager`), `S.P0073` (`ExpenseManager`).
+Mười một bài tách riêng: `VehicleFile` · `DataStore` (P0014 và P0015) ·
+`DocumentFileManager` · `FileProcessor` · `FileManager` · `FileProcessing` ·
+`CSVFormatter` · `WordSearcher` · `CopyManager` · `ZipManager`.
+
+Nên **ý** của hình vẽ (tách riêng một lớp lo tệp) hoá ra là đa số, không phải
+thiểu số. Cái sai của hình vẽ nằm ở chỗ khác, và là bốn chỗ:
+
+| Hình vẽ cũ nói | Mã thật |
+|---|---|
+| `src/fruitshop/` — một gói phẳng | **không một bài nào trong 54** xếp phẳng; tất cả dùng `entity`/`bo`/`controller`/`ui`/`utils` (`ui` 54/54, `utils` 50, `bo` 42, `entity` 34, `controller` 11) |
+| `FileHelper.java  UTILITY` | cả 11 lớp lo tệp đều nằm trong **`bo/`**, không lần nào ở `utils/`, và không lần nào tên là `FileHelper` |
+| `FruitManager` / `OrderManager` là **CONTROLLER** | ở `L.P0023` thật, hai lớp đó nằm trong `bo/`; controller là `ShopController` |
+| bảng tầng: controller **"tuyệt đối KHÔNG đọc bàn phím"** | cả 11 controller trong 54 bài đều gọi `Validator` để đọc **và** in ra màn hình. Thứ phải im lặng là `bo` |
+
+Sơ đồ mermaid cũng vẽ sai một mũi tên: `Controller → File`. Trong mã thì
+`controller → bo → tệp`.
+
+**Đã sửa** — vẽ lại bằng chính `L.P0023` (đề "Fruit Shop" 350 LOC, đúng cái mà
+hình cũ đang phác), kèm quy tắc gộp/tách đã đo:
+
+* `lesson/part9_files.py` — bảng tầng viết lại theo năm thư mục thật, sơ đồ
+  mermaid nối lại đúng chiều, cây thư mục thay bằng bố cục 9 tệp của P0023,
+  thêm mục *"Where the file reading and writing goes"*.
+* `lesson/part1_intro.py` — cây project NetBeans cũng đang vẽ gói phẳng
+  `doctormanagement/`; thay bằng `entity`/`bo`/`utils`/`ui` của P0055 thật.
+* `lesson/part11_defence.py` — stack trace mẫu mang tên gói phẳng; đổi sang
+  `bo.DoctorHash` / `ui.Main`.
+* `lesson/part4_menu.py` — ví dụ đặt tên gói đổi sang gói có thật.
+* `lesson/part5_validation.py` — nói rõ lớp này tên `Validator` ở 48/54 bài,
+  đề nào tự đặt tên thì theo đề.
+* `quyTacThay.ts`, `AUTHORING-BRIEF.md`, `content/academy/LAB211.mjs` — thêm
+  cùng một đoạn "đọc/ghi tệp thuộc về `bo`", để ba nơi giữ quy tắc không lệch
+  nhau.
+
+Quy tắc phát biểu ra: **gộp** khi một `bo` giữ một tệp của một entity; **tách**
+khi nhiều `bo` dùng chung một tệp (`DataStore` phục vụ bốn store ở P0014/P0015)
+hoặc khi chính định dạng tệp mới là đề bài (zip, CSV, sao chép, tìm từ). Và
+không bao giờ để ở `utils/`: thứ duy nhất ghi tệp ở đó trong cả 54 bài là
+`SampleData`, lớp tạo dữ liệu mẫu cho lần chạy đầu.
+
+Kiểm lại sau khi sửa: `python3 main.py` dựng lại `blocks.json` (272 khối), và
+`verify_java.py java.json` — **40/40 đoạn Java biên dịch được, 30 lượt chạy
+thật khớp output**.
 
 ---
 
@@ -341,7 +391,7 @@ nên hoặc sửa hình vẽ, hoặc nói rõ "gộp được khi `bo` chỉ ph�
 
 | | Trạng thái |
 |---|---|
-| **S** Single Responsibility | Tốt trừ §4.2 (3 bài `bo` in) và §4.6 (15 bài `bo` kiêm tệp) |
+| **S** Single Responsibility | Tốt. §4.2 (3 bài `bo` in) đã sửa; §4.6 hoá ra là hình vẽ sai chứ không phải mã sai — 11/15 bài có tệp đã tách riêng lớp lo tệp |
 | **O** Open/Closed | Tốt — `Shape`/`Bee`/`Person` đều là `abstract` + lớp con tự lo, không có `if (kiểu == …)` |
 | **L** Liskov | Tốt — không có lớp con nào ném `UnsupportedOperation` hay đổi nghĩa hợp đồng |
 | **I** Interface Segregation | Chỉ 3 bài có `interface` (`Soundable`, `Persistable` ×2), đều nhỏ và đúng chỗ. Đề không đòi thêm |
@@ -365,11 +415,14 @@ nên hoặc sửa hình vẽ, hoặc nói rõ "gộp được khi `bo` chỉ ph�
   kiểm `khopchuky.py` soát cả 54 bài — thứ `javac` không bao giờ thấy (§3.3).
 * Đọc lại cho đúng cụm **"in startup code"**: nó KHÔNG tự nó quyết định lớp nào,
   và P0055 là phản chứng nằm ngay trong cùng một đề (§3.4).
+* Vẽ lại bố cục ở Part 12 bằng chính `L.P0023` thay cho gói phẳng `fruitshop/`
+  tưởng tượng, sửa cùng lối vẽ ấy ở Part 1 / Part 4 / Part 11, và **sửa con số
+  "15 bài gộp" của chính tôi thành 4** sau khi đếm thật (§4.6).
 
 ## 7. Việc đề nghị làm tiếp
 
-**Hết.** Cả sáu mục của bản đầu đã đóng — bốn cái sửa được thì đã sửa, hai cái
-hoá ra là tôi đề nghị sai thì đã rút và ghi lại vì sao:
+**Hết, và lần này là hết thật.** Mọi mục của bản đầu đã đóng — cái sửa được thì
+đã sửa, cái hoá ra tôi đề nghị sai thì đã rút và ghi lại vì sao:
 
 | | Kết cục |
 |---|---|
@@ -382,16 +435,16 @@ hoá ra là tôi đề nghị sai thì đã rút và ghi lại vì sao:
 | §4.3 `Serializable` | đã nới quy tắc; mã giữ nguyên có chủ đích |
 | §4.4 entity in ở P0061 | đã thêm đoạn giải thích + câu trả lời vấn đáp |
 | §4.5 `System.exit()` | đã đổi sang exception, kèm 2 lượt chạy chứng minh |
-| §4.6 `bo` kiêm đọc/ghi tệp | **để ngỏ** — xem bên dưới |
+| §4.6 hình vẽ bố cục Part 12 | đã vẽ lại theo P0023 thật; con số "15 bài gộp" của tôi là sai, thật ra 4 |
 | ~~thêm controller cho P0080~~ | rút: phép đo cho thấy P0080 đúng |
 | ~~thêm controller cho P0073/P0055/P0058~~ | rút: lỗi thật là tên không khớp đề |
 
-Chỉ còn **§4.6** chưa động tới, và nó là chuyện *thẩm mỹ kiến trúc* chứ không
-phải lỗi: 15 lời giải để `bo` kiêm luôn đọc/ghi tệp, trong khi hình vẽ ở bài
-giảng 847 Part 12 tách riêng một `FileHelper`. Với quy mô LAB211 thì gộp được,
-nên hai đường đi được: hoặc sửa hình vẽ cho khớp mã, hoặc nói rõ "gộp được khi
-`bo` chỉ phục vụ một entity". Cần bạn chọn, vì đây là quyết định về thứ muốn
-dạy chứ không phải về thứ đang sai.
+§4.6 là mục cuối, và nó dạy lại đúng bài học của §4.1: **tôi đã viết "15 lời
+giải gộp phần tệp vào `bo`" mà chưa đếm.** Đếm thật thì 11 bài tách riêng, 4
+bài gộp — ngược hẳn. Mã không sai; hình vẽ sai, và sai ở bốn chỗ khác hẳn chỗ
+tôi tưởng (gói phẳng, `FileHelper` đặt ở `utils`, `FruitManager` gắn nhãn
+CONTROLLER, và dòng "controller tuyệt đối không đọc bàn phím" trong khi cả 11
+controller đều đọc). Đã vẽ lại bằng chính `L.P0023`.
 
 Và một việc không bao giờ đóng: **giữ lượt verify dưới locale `vi_VN`** — đó là
 thứ duy nhất bắt được §3.1, và nó là locale của máy chấm.

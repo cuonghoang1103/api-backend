@@ -136,6 +136,24 @@ Inside the layers:
 - `utils/Validator` — `private static final Scanner SCANNER`, a **private
   constructor**, all methods static. Every keyboard read in one place.
 
+**Reading and writing the data file belongs in `bo`** — never `utils`, never the
+controller, never the entity. Whether it gets a class of its own is a judgement
+call and both answers pass. Counted across the 54: **15 touch a file at all; 11
+keep a separate class for it, 4 merge it into the business class**, and all 11
+separate classes live in `bo/` — `VehicleFile`, `DataStore`, `FileProcessor`,
+`CSVFormatter`, `CopyManager`, `ZipManager`, `WordSearcher`,
+`DocumentFileManager`, `FileManager`, `FileProcessing` — ten names for eleven
+projects, `DataStore` serving both `P0014` and `P0015`.
+
+- **Merge** when one `bo` owns one file for one entity (`FruitManager` +
+  `fruits.txt`). A `FileHelper` there is an indirection with nothing behind it.
+- **Split** when several `bo` classes share one file — `DataStore` in
+  `P0014`/`P0015` serves `AssetStore`, `EmployeeStore`, `RequestStore`,
+  `BorrowStore` — or when the file format **is** the assignment: zip, CSV,
+  copying, searching a file for a word.
+- The only file writing in `utils/` across all 54 is `SampleData`, which creates
+  the demo input so the first run has something to read.
+
 **Delete the NetBeans template header** ("To change this license header…") — it
 is the signature of generated code. Replace it with a Javadoc that says WHY the
 class exists, not what it is.

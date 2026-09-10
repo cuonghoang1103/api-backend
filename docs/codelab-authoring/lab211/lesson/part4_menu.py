@@ -159,7 +159,8 @@ public class MenuDemo {
             '<code>a</code>, <code>list1</code>, <code>tam</code>'],
            ['constant', '<code>UPPER_SNAKE</code>', '<code>MAX_SIZE</code>, <code>DATE_PATTERN</code>',
             '<code>maxSize</code>'],
-           ['package', 'all lowercase', '<code>doctormanagement</code>', '<code>DoctorManagement</code>'],
+           ['package', 'all lowercase', '<code>entity</code>, <code>bo</code>, <code>utils</code>',
+            '<code>Entity</code>, <code>BO</code>'],
            ['boolean', 'reads as a question', '<code>isDead</code>, <code>hasLicense</code>',
             '<code>flag</code>, <code>check</code>']],
           [['lớp', '<code>PascalCase</code>, là danh từ', '<code>Doctor</code>, <code>DoctorManager</code>',
@@ -170,7 +171,8 @@ public class MenuDemo {
             '<code>a</code>, <code>list1</code>, <code>tam</code>'],
            ['hằng số', '<code>UPPER_SNAKE</code>', '<code>MAX_SIZE</code>, <code>DATE_PATTERN</code>',
             '<code>maxSize</code>'],
-           ['package', 'viết thường hết', '<code>doctormanagement</code>', '<code>DoctorManagement</code>'],
+           ['package', 'viết thường hết', '<code>entity</code>, <code>bo</code>, <code>utils</code>',
+            '<code>Entity</code>, <code>BO</code>'],
            ['biến boolean', 'đọc lên như một câu hỏi', '<code>isDead</code>, <code>hasLicense</code>',
             '<code>flag</code>, <code>check</code>']])
 

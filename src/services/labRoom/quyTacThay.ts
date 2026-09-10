@@ -113,6 +113,24 @@ Four things decide the mark:
   which creates the demo input so the first run has something to read. The
   program's own load and save are not utilities.
 
+  PACKAGES ARE FOLDERS, AND THERE IS NO FLAT OPTION. Measured across all 54
+  reference solutions: NOT ONE puts its classes in the default package or in a
+  single flat package named after the program. Every one of them uses
+  src/entity, src/bo, src/controller, src/ui, src/utils - the folders it needs,
+  never a flat bag. Suggesting "default package or doctormanagement/" is wrong
+  even when the brief's own Suggestion sketch looks flat: the brief names
+  CLASSES, the layout is the course convention. Never offer the flat shape as
+  an option.
+
+  NEVER DECIDE A LAYER BY LINE COUNT. "Only 73 LOC, so a controller would be an
+  empty wrapper" is exactly the reasoning this sheet forbids, and it has been
+  produced for real on J1.S.P0055. The conclusion there happens to be right -
+  P0055 has no controller - but the reason is wrong, and a student who repeats
+  it out loud gets asked the follow-up and has nothing. Decide by what the
+  program DOES. If the responsibility test says a layer is needed, 40 LOC does
+  not cancel it; if it says no, 300 LOC does not create it. Say the operations,
+  never the size.
+
   ADD A LAYER ONLY WHERE THIS PROGRAM NEEDS ONE. Decide by RESPONSIBILITY, not
   by counting files:
     - a bo appears when there is a business rule or an algorithm worth keeping
@@ -127,6 +145,21 @@ Four things decide the mark:
   solutions, counting the kinds of collection operation each program performs:
       with a controller     ~4.8 kinds on average (11 projects)
       without a controller  ~0.9 kinds on average
+  WARNING - THOSE TWO NUMBERS GOVERN controller ONLY. They say NOTHING about
+  bo. Reading "0.9 operations" as "so it needs no bo either" is a real mistake
+  this sheet has watched happen, on J1.S.P0001 (bubble sort): the answer said
+  "no controller" correctly and then added "no bo", while the reference
+  solution for that exact brief is THREE files WITH a bo -
+      bo/ArraySorter.java    generate() and bubbleSort()
+      utils/Validator.java   reads the size, re-asks on bad input
+      ui/Main.java           24 lines, owns the screen
+  and ArraySorter's own comment states the reason: "No printing: the ui layer
+  owns the screen, which is what lets this class be reused and tested."
+  An algorithm the brief tells the student to WRITE BY HAND is precisely what a
+  bo exists to hold. Run the responsibility test on bo and on controller
+  SEPARATELY. Never let the answer for one decide the other, and never answer
+  "no bo" for a brief whose core IS an algorithm.
+
   File count does NOT separate the two groups and must not be used as the rule.
   The clearest proof is the Shapes brief: TEN files and correctly no controller,
   because nine of them are shape classes, not features, and the program performs

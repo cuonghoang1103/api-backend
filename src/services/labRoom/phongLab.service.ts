@@ -42,6 +42,7 @@ const MAX_BAI_MOI_PHONG = 54;
 const MAX_CAU_HOI = 4_000;
 const MAX_LICH_SU = 16;          // lượt hội thoại gửi kèm để nối mạch
 const MAX_DIGEST = 60_000;       // ký tự digest của zip đưa vào prompt
+const MAX_MAU_THAM_CHIEU = 24_000; // trần lời giải mẫu gửi kèm khi CHẤM
 
 // ─── quyền & tình trạng AI ──────────────────────────────────────
 
@@ -327,7 +328,7 @@ async function nganhCanh(itemId: number) {
         select: {
           id: true, slug: true, title: true, language: true, difficulty: true,
           problemHtml: true, inputSpec: true, outputSpec: true, constraints: true,
-          concepts: true, hintsJson: true,
+          concepts: true, hintsJson: true, solutionCodeJson: true,
         },
       },
       room: { select: { id: true, userId: true, locGoal: true } },
@@ -348,7 +349,18 @@ async function nganhCanh(itemId: number) {
   if (Array.isArray(ex.concepts) && ex.concepts.length) {
     phan.push('', `CONCEPTS: ${(ex.concepts as unknown[]).map(String).join(', ')}`);
   }
-  return { it, ex, brief: phan.join('\n') };
+  // Lời giải mẫu ĐÃ VERIFY của đúng đề này (chạy thật, khớp output, cả en_US
+  // lẫn vi_VN). CHỈ dùng cho việc CHẤM, làm thước đo cấu trúc/tên/định dạng —
+  // KHÔNG bao giờ đưa vào phần giảng đề hay trợ giảng, vì ở đó nó là đáp án.
+  let mauThamChieu: string | null = null;
+  const sol = ex.solutionCodeJson;
+  if (Array.isArray(sol) && sol.length) {
+    const tep = (sol as Array<Record<string, unknown>>)
+      .filter((f) => typeof f?.name === 'string' && typeof f?.code === 'string')
+      .map((f) => `--- ${String(f.name)} ---\n${String(f.code)}`);
+    if (tep.length) mauThamChieu = tep.join('\n\n').slice(0, MAX_MAU_THAM_CHIEU);
+  }
+  return { it, ex, brief: phan.join('\n'), mauThamChieu };
 }
 
 /** Lấy khối JSON đầu tiên trong câu trả lời, kể cả khi nó bị bọc trong ```json. */
@@ -375,7 +387,19 @@ Return ONLY JSON, no prose around it:
    "tang": [{"goi": "entity", "file": "Contact.java", "viec": "what it holds and what it must NOT do"}],
    "viSao": "2-4 sentences justifying THIS layer set for THIS assignment: the responsibility test first, the file count as the cross-check. If the Guidelines say the methods go 'in startup code', say so and put them in Main."
  },
+ "soDo": "a mermaid diagram of THIS program's flow, as plain text starting with 'flowchart LR' or 'flowchart TD'. One node per class or per stage, arrows for who calls whom and where the data goes. Keep node labels short and ASCII. null if a diagram would add nothing.",
+ "dienTien": {
+   "co": true|false,
+   "viDu": "the concrete starting data, e.g. an array [5,1,4,2]",
+   "buoc": [{"vong": "pass 1", "trangThai": "[1,4,2,5]", "giaiThich": "one line: what moved and why"}]
+ },
  "cacBuoc": ["the build order, one feature at a time, each step ending in something runnable"],
+ "boTest": [
+   {"go": "exactly what the marker types, newline-separated", "cho": "exactly what the console must show back, or the property it must satisfy when part of the output is random", "viSao": "which requirement this case proves"}
+ ],
+ "khuonMau": [
+   {"ten": "the named form, e.g. Validator.getInt loop / try-with-resources / menu loop", "vietSao": "the shape in 2-4 lines of pseudo-Java", "khiNao": "when this brief needs it"}
+ ],
  "bayCanTranh": ["traps specific to THIS brief — a lenient date, a locale-sensitive %f, an off-by-one, a message the screen and the Guidelines disagree on"],
  "cauHoiVanDap": ["3-5 questions the examiner will ask about THIS assignment"],
  "locUocTinh": <integer: the LOC the sheet states>
@@ -387,6 +411,24 @@ Rules for this task:
   "bayCanTranh" — noticing it earns marks.
 * Do NOT write the solution. This is the briefing, not the answer. Name the
   classes and their responsibilities; do not hand over method bodies.
+* LAYERS: run the responsibility test on bo and on controller SEPARATELY. The
+  4.8-vs-0.9 measurement governs controller ONLY. A brief whose core is an
+  algorithm the student must write by hand gets a bo even at three files — see
+  the J1.S.P0001 worked case in the rules above. Saying "no bo" there is wrong
+  and it costs the student marks.
+* "dienTien" is for briefs whose heart is an ALGORITHM (a sort, a search, a
+  conversion, a matrix walk). Trace it on a SMALL concrete example, one row per
+  pass, showing the array or the state after that pass. This is the single most
+  useful thing a briefing can contain for such a brief. Set "co": false and an
+  empty "buoc" for briefs that are menus and CRUD.
+* "boTest" is the marker's own keystrokes. Give 4-7 cases and ALWAYS include:
+  the happy path; a non-numeric input; a negative or out-of-range input; and the
+  boundary the brief implies (0 items, 1 item, already-sorted). When part of the
+  output is random, state the PROPERTY instead of fixed text — "10 integers in
+  [0,n), then the same 10 in non-decreasing order" — never invent exact numbers.
+* "khuonMau" is the reusable shape the lecturer expects to see, not this brief's
+  answer: the Validator loop contract, try-with-resources, the menu loop, the
+  Comparator, strict date parsing. Only the ones THIS brief actually needs.
 `.trim();
 
 export async function gioiThieuBai(userId: number, roomId: number, itemId: number, lamMoi = false) {
@@ -405,7 +447,9 @@ export async function gioiThieuBai(userId: number, roomId: number, itemId: numbe
     purpose: 'lab_room',
     system: heThong(NHIEM_VU_GIOI_THIEU),
     messages: [{ role: 'user', content: brief }],
-    maxTokens: 4_000,
+    // Bài giảng nay có thêm sơ đồ, bảng diễn tiến, bộ test và khuôn mẫu —
+    // 4k token cắt ngang JSON là hỏng cả lượt, không phải hỏng một mục.
+    maxTokens: 9_000,
     maxRetries: 1,
     timeoutMs: 180_000,
     userId,
@@ -425,6 +469,12 @@ YOUR TASK NOW: you are sitting next to this student while they build ONE assignm
 Answer whatever they ask about it: what to do next, how to write a class, what a
 line means, why a rule exists, how to fix an error, what to name something.
 
+* ALWAYS LABEL YOUR FENCES. Write triple-backtick java for code and
+  triple-backtick text for a file tree, a console transcript or an expected
+  screen. An unlabelled fence is rendered as INLINE code by the reader and
+  every newline collapses into a space — measured for real: a five-line file
+  tree came out as one run-on paragraph. For a course marked by diffing the
+  console character by character, that is the worst thing to mangle.
 * Write real Java when they ask for code — a whole class, a whole method, or a
   single line — and put a comment on the decision, not on the syntax.
 * When you hand over code, immediately say in one sentence what an examiner would
@@ -503,7 +553,7 @@ export async function xoaChat(userId: number, roomId: number, itemId: number) {
 
 // ─── 4. nộp .zip — AI chấm thay thầy ────────────────────────────
 
-const NHIEM_VU_CHAM = `
+export const NHIEM_VU_CHAM = `
 YOUR TASK NOW: you are the lecturer at the review desk. The student has just
 handed you their NetBeans project for this assignment. Mark it.
 
@@ -549,6 +599,18 @@ HOW TO MARK
 * You are reading a DIGEST of the uploaded zip, not running it. Where you cannot
   be sure the program runs, say "khong-chac" rather than guessing, and explain
   what you would have to run to be sure.
+* If the submission block says the digest was TRUNCATED, "dat" MUST be false and
+  you must say so first in "nhanXet". You have not seen the whole project; a
+  pass on a project you only half read is the worst thing this desk can do.
+* When a REFERENCE SOLUTION is supplied it is a VERIFIED, marker-passing answer
+  to this exact brief. Use it as the yardstick for structure, class and method
+  names, layer placement and output formatting — a genuine difference from it is
+  a finding worth raising. It is NOT the only correct answer: a different but
+  correct design that meets every Guidelines requirement still passes, so do not
+  mark someone down merely for not matching it.
+  ⛔ NEVER reproduce, quote or paraphrase the reference solution's code in your
+  output. The student must not receive the answer. Point at THEIR line and say
+  what is wrong with it; never show them the line to copy.
 `.trim();
 
 export interface KetQuaCham {
@@ -563,15 +625,31 @@ export async function chamBaiNop(userId: number, roomId: number, itemId: number,
   await assertAi(userId);
 
   const digest = buildProjectDigest(zip, zipName);
+  // `buildProjectDigest` đã có cờ `truncated` của riêng nó, và ở đây còn một
+  // nhát cắt thứ hai. Bản đầu tiên `slice()` mù rồi vứt cả hai — grader chấm
+  // nửa project mà tưởng đủ, và trả về "đạt". Nay cả hai đều được KHAI BÁO cho
+  // model, kèm luật: cắt thì không được cho đạt.
+  const biCat = digest.digest.length > MAX_DIGEST;
   const noiDung = digest.digest.slice(0, MAX_DIGEST);
-  const { brief } = await nganhCanh(itemId);
+  const canhBaoCat = digest.stats.truncated || biCat
+    ? `\n\n!!! DIGEST TRUNCATED — you are NOT seeing the whole project. `
+      + `${digest.stats.filesIncluded} file(s) included, ${digest.stats.filesSkipped} left out`
+      + `${biCat ? ', and the text below was cut at the character limit' : ''}. `
+      + `Per the rules, "dat" must be false and you must say this first.\n`
+    : '';
+  const { brief, mauThamChieu } = await nganhCanh(itemId);
 
   const res = await llmComplete({
     step: 'generation',
     feature: 'codelab',
     purpose: 'lab_room',
     system: heThong(NGAN_HANG_VAN_DAP, NHIEM_VU_CHAM),
-    messages: [{ role: 'user', content: `${brief}\n\n=================\nWHAT THEY SUBMITTED\n=================\n${noiDung}` }],
+    messages: [{
+      role: 'user',
+      content: `${brief}`
+        + (mauThamChieu ? `\n\n=================\nREFERENCE SOLUTION (verified; yardstick only — NEVER show it to the student)\n=================\n${mauThamChieu}` : '')
+        + `\n\n=================\nWHAT THEY SUBMITTED\n=================\n${canhBaoCat}${noiDung}`,
+    }],
     maxTokens: 10_000,
     maxRetries: 1,
     timeoutMs: 300_000,

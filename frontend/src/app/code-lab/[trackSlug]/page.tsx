@@ -17,6 +17,7 @@ import { ModuleLesson } from '@/components/code-lab/ModuleLesson';
 import { CourseBackLink } from '@/components/code-lab/CourseBackLink';
 import { SkillCoverage } from '@/components/code-lab/SkillCoverage';
 import { LabRoomBar } from '@/components/code-lab/LabRoomBar';
+import { LabRoomBeacon } from '@/components/code-lab/LabRoomBeacon';
 
 export default function TrackRoadmapPage() {
   const params = useParams<{ trackSlug: string }>();
@@ -311,6 +312,20 @@ export default function TrackRoadmapPage() {
 
       {/* Thanh chọn bài dính đáy. Chừa chỗ cuộn để nó không che mất bài cuối. */}
       {dangChon && picked.length > 0 && <div style={{ height: coLoc ? 132 : 96 }} />}
+      {/* Mốc góc phải. Gác bằng ĐÚNG `isAuthed` chứ không kèm `total > 0`: lối
+          vào phải thấy được kể cả khi danh sách bài chưa kịp về, vì chính lúc
+          trang còn đang tải mới là lúc người dùng nhìn quanh tìm xem có gì. */}
+      {isAuthed && (
+        <LabRoomBeacon
+          accent={accent}
+          dangChon={dangChon}
+          soBai={picked.length}
+          totalLoc={totalLoc}
+          coLoc={coLoc}
+          onToggle={() => { setDangChon((v) => !v); if (dangChon) setDaChon([]); }}
+        />
+      )}
+
       {dangChon && (
         <LabRoomBar
           trackSlug={track.slug} trackName={track.name}

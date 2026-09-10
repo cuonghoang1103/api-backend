@@ -73,17 +73,25 @@ export default function DsPhongLabPage() {
                 <Link href={`/code-lab/phong-lab/${r.id}`} className="min-w-0 flex-1">
                   <h2 className="truncate font-semibold" style={{ color: 'var(--text-primary)' }}>{r.name}</h2>
                   <p className="mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>
-                    {r.track.name} · {r.soBaiDat}/{r.soBai} bài đạt · đã chọn {r.locDaChon} LOC
+                    {r.track.name} · {r.soBai} bài trong phòng ({r.locDaChon} LOC) · đã chấm đạt {r.soBaiDat}/{r.soBai}
                   </p>
                 </Link>
                 <span className="shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold tabular-nums"
                   style={{ background: 'var(--bg-surface)', color: r.locDaDat >= r.locGoal ? '#22c55e' : 'var(--text-secondary)' }}>
-                  <Target size={11} className="mr-1 inline" />{r.locDaDat}/{r.locGoal} LOC
+                  <Target size={11} className="mr-1 inline" />{r.locDaDat}/{r.locGoal} LOC đạt
                 </span>
                 <button onClick={() => void xoa(r.id)} className="shrink-0 rounded p-1 transition-colors hover:text-red-500" style={{ color: 'var(--text-muted)' }} aria-label="Xoá phòng">
                   <Trash2 size={15} />
                 </button>
               </div>
+              {/* Người dùng thật đọc "0/750 LOC" thành "phòng trống" rồi tưởng
+                  thoát web là mất bài. Hai con số LOC đứng cạnh nhau mà không
+                  nói cái nào là cái nào thì lỗi ở giao diện, không ở người đọc. */}
+              {r.soBai > 0 && r.soBaiDat === 0 && (
+                <p className="mt-1.5 text-xs" style={{ color: 'var(--text-muted)' }}>
+                  Bài vẫn còn nguyên trong phòng — thanh LOC chỉ cộng khi một bài được chấm ĐẠT.
+                </p>
+              )}
               <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full" style={{ background: 'var(--bg-surface)' }}>
                 <div className="h-full rounded-full transition-all duration-700"
                   style={{ width: `${pct}%`, background: r.locDaDat >= r.locGoal ? '#22c55e' : accent }} />

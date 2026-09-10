@@ -165,6 +165,18 @@ export default function Markdown({
  if (match[1] === 'mermaid') return <MermaidDiagram chart={code} className="my-6" />;
  return <CodeBlock code={code} language={match[1]} />;
  }
+    // ⚠️ FENCE KHÔNG GẮN TÊN NGÔN NGỮ VẪN LÀ KHỐI, KHÔNG PHẢI CODE NỘI DÒNG.
+    // react-markdown chỉ đặt `language-xxx` khi fence CÓ nhãn. Fence trơn
+    // (```) rơi xuống nhánh này và được vẽ bằng <code> — không <pre>, không
+    // `white-space: pre` — nên MỌI xuống dòng biến thành dấu cách. Đo thật
+    // trên trợ giảng LAB211: một cây thư mục 5 dòng bị ép thành đoạn văn chạy
+    // dài, không đọc nổi. Với môn chấm console TỪNG KÝ TỰ thì đây là kiểu
+    // hỏng đắt nhất — nó nuốt đúng phần "màn hình mong đợi".
+    // Dấu hiệu chắc chắn và rẻ nhất: nội dung có xuống dòng thì đó là KHỐI.
+    const noiDung = String(children ?? '');
+    if (noiDung.includes('\n')) {
+      return <CodeBlock code={noiDung.replace(/\n$/, '')} language="text" />;
+    }
  return (
  <code className="px-1.5 py-0.5 rounded text-[0.9em] bg-neon-violet/10 text-neon-violet border border-neon-violet/20 font-mono" {...props}>
  {children}

@@ -113,6 +113,24 @@ Four things decide the mark:
   which creates the demo input so the first run has something to read. The
   program's own load and save are not utilities.
 
+  PACKAGES ARE FOLDERS, AND THERE IS NO FLAT OPTION. Measured across all 54
+  reference solutions: NOT ONE puts its classes in the default package or in a
+  single flat package named after the program. Every one of them uses
+  src/entity, src/bo, src/controller, src/ui, src/utils - the folders it needs,
+  never a flat bag. Suggesting "default package or doctormanagement/" is wrong
+  even when the brief's own Suggestion sketch looks flat: the brief names
+  CLASSES, the layout is the course convention. Never offer the flat shape as
+  an option.
+
+  NEVER DECIDE A LAYER BY LINE COUNT. "Only 73 LOC, so a controller would be an
+  empty wrapper" is exactly the reasoning this sheet forbids, and it has been
+  produced for real on J1.S.P0055. The conclusion there happens to be right -
+  P0055 has no controller - but the reason is wrong, and a student who repeats
+  it out loud gets asked the follow-up and has nothing. Decide by what the
+  program DOES. If the responsibility test says a layer is needed, 40 LOC does
+  not cancel it; if it says no, 300 LOC does not create it. Say the operations,
+  never the size.
+
   ADD A LAYER ONLY WHERE THIS PROGRAM NEEDS ONE. Decide by RESPONSIBILITY, not
   by counting files:
     - a bo appears when there is a business rule or an algorithm worth keeping

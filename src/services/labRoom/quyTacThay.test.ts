@@ -74,3 +74,19 @@ test('luật chấm: cắt digest thì KHÔNG được cho đạt, và CẤM l�
   assert.match(NHIEM_VU_CHAM, /NOT the only correct answer/,
     'mất câu chống chấm máy móc theo lời giải mẫu');
 });
+
+test('cấm gói phẳng và cấm quyết định tầng theo SỐ DÒNG', () => {
+  // Hai lỗi ĐO ĐƯỢC trên trợ giảng bài J1.S.P0055:
+  //   • nó bày ra "src/ └── (default package hoặc doctormanagement/)" — trong
+  //     khi 0/54 lời giải xếp phẳng, và P0055 thật là entity/bo/utils/ui;
+  //   • nó chốt "chỉ 73 LOC → quá nhỏ, controller sẽ thành empty wrapper" —
+  //     quyết định tầng bằng SỐ DÒNG, đúng thứ quy tắc cấm. Kết luận tình cờ
+  //     đúng, lý lẽ thì sai, và người học đem lý lẽ đó đi trả lời thầy.
+  const s = heThong();
+  assert.match(s, /NOT ONE puts its classes in the default package/,
+    'mất lệnh cấm gói phẳng');
+  assert.match(s, /NEVER DECIDE A LAYER BY LINE COUNT/,
+    'mất lệnh cấm quyết định tầng theo số dòng');
+  assert.match(s, /J1\.S\.P0055/,
+    'mất ca đối chứng P0055 — nói suông thì model không đổi hành vi');
+});

@@ -2744,16 +2744,738 @@ ${SEL}`),
   ].join('\n'),
 };
 
+/* ─────────────── 8.7 More from the 2023 slide set (old SWT6, 32 pages) ─────────────── */
+const D2 = 'oswt6';
+const L87 = {
+  title: '8.7 — More from the 2023 slide set: the old tool list & introducing a tool|||8.7 — Bổ sung từ bộ slide 2023: danh sách công cụ cũ & đưa công cụ vào tổ chức',
+  slug: 'swt301-ch8-slides-2023',
+  type: 'VIDEO',
+  description: 'SWT6 bản 2023 (32 trang): 12 loại công cụ theo cách phân loại cũ (requirements testing, static analysis, test design, test data, test running, comparison, harness & driver, performance, debugging, test management, coverage) đối chiếu sang nhóm CTFL 2018, và "đưa công cụ vào tổ chức" bản 2011 (nguyên tắc chọn, pilot, yếu tố thành công) so với bản 2018.',
+  content: [
+    bi(`<span class="eyebrow">Chapter 8 · Lesson 8.7 · SWT6 (2023) pages 1–32</span>
+<h2>More from the 2023 slide set — the old tool list and introducing a tool</h2>
+<p class="lead">Before the current <em>SWT6_tim</em> deck, SWT301 used an older 32-page deck, "ISTQB / ISEB Foundation Exam Practice — Chapter 6". About a third of it is identical to lessons 8.2–8.4. The rest teaches tools the way the <strong>older syllabi</strong> (CTFL 2005/2011) did: one page per tool type, then "introducing a tool into an organisation".</p>
+<p>Old exam questions and the FE bank still use this vocabulary. So every new page is shown below, explained, and mapped to the <strong>CTFL 2018</strong> category you learned in lesson 8.2.</p>
+<p class="nhan">Learning objectives</p>
+<ul>
+<li>Recognise the twelve tool types of the old classification and name the CTFL 2018 category of each.</li>
+<li>Explain what comparison tools, harnesses and drivers, simulators, coverage instrumentation and debuggers do.</li>
+<li>Compare the 2011 lists (selection principles, pilot objectives, success factors) with the 2018 lists of lesson 8.4.</li>
+<li>Replace outdated words: ISEB, faults, incident management, test running tools, LCSAJ.</li>
+</ul>
+<p class="ghi-chu"><strong>ISEB</strong> (Information Systems Examinations Board, part of BCS in the UK) ran a software-testing Foundation certificate before ISTQB was founded in 2002, then aligned it with ISTQB. Today the exam is simply ISTQB CTFL.</p>
+<h3>Old pages already taught in this chapter</h3>
+<table>
+<thead><tr><th>Old page</th><th>Content</th><th>Already taught in</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Cover "Chapter 6"</td><td>title page — nothing to learn</td></tr>
+<tr><td>2, 18, 24</td><td>Contents: types of tool · effective use · introducing a tool</td><td>agenda pages; the same sections are lessons 8.1–8.4</td></tr>
+<tr><td>4</td><td>Where tools fit (V-model picture)</td><td>8.2, SWT6 slide 35 — the same picture</td></tr>
+<tr><td>14</td><td>Dynamic analysis tools (memory leaks, pointers)</td><td>8.2, SWT6 slide 27</td></tr>
+<tr><td>19</td><td>Effective use of tools — agenda</td><td>8.3, SWT6 slide 37</td></tr>
+<tr><td>20</td><td>Potential benefits of using tools</td><td>8.3, SWT6 slide 38 — identical text</td></tr>
+<tr><td>21–22</td><td>Risks of using tools</td><td>8.3, SWT6 slides 39–40 — identical text</td></tr>
+<tr><td>28</td><td>Pilot project — objectives 1–2</td><td>8.4, SWT6 slide 52 — identical text</td></tr>
+<tr><td>32</td><td>Summary: key points</td><td>repeats the three section titles</td></tr>
+</tbody>
+</table>`,
+    `<span class="eyebrow">Chương 8 · Bài 8.7 · SWT6 (2023) trang 1–32</span>
+<h2>Bổ sung từ bộ slide 2023 — danh sách công cụ cũ và đưa công cụ vào tổ chức</h2>
+<p class="lead">Trước bộ <em>SWT6_tim</em> hiện nay, SWT301 dùng một bộ slide cũ 32 trang, "ISTQB / ISEB Foundation Exam Practice — Chapter 6". Khoảng một phần ba giống hệt bài 8.2–8.4. Phần còn lại dạy công cụ theo cách của <strong>syllabus cũ</strong> (CTFL 2005/2011): mỗi trang một loại công cụ, rồi tới "đưa công cụ vào tổ chức".</p>
+<p>Đề cũ và ngân hàng câu FE vẫn dùng các từ này. Vì vậy mỗi trang mới đều được hiện bên dưới, giải thích, và đối chiếu sang nhóm <strong>CTFL 2018</strong> bạn đã học ở bài 8.2.</p>
+<p class="nhan">Mục tiêu bài học</p>
+<ul>
+<li>Nhận ra mười hai loại công cụ của cách phân loại cũ và gọi đúng tên nhóm CTFL 2018 của từng loại.</li>
+<li>Giải thích comparison tool, harness và driver, simulator, cơ chế chèn mã đo coverage và debugger làm gì.</li>
+<li>So các danh sách bản 2011 (nguyên tắc chọn, mục tiêu pilot, yếu tố thành công) với danh sách bản 2018 ở bài 8.4.</li>
+<li>Thay các từ đã cũ: ISEB, fault, incident management, test running tool, LCSAJ.</li>
+</ul>
+<p class="ghi-chu"><strong>ISEB</strong> (Information Systems Examinations Board, thuộc BCS ở Anh) cấp chứng chỉ Foundation về kiểm thử từ trước khi ISTQB ra đời năm 2002, rồi chuyển sang theo ISTQB. Ngày nay kỳ thi chỉ còn tên ISTQB CTFL.</p>
+<h3>Các trang cũ đã có trong chương này</h3>
+<table>
+<thead><tr><th>Trang cũ</th><th>Nội dung</th><th>Đã học ở</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Bìa "Chapter 6"</td><td>trang tiêu đề — không có gì để học</td></tr>
+<tr><td>2, 18, 24</td><td>Mục lục: các loại công cụ · dùng hiệu quả · đưa công cụ vào</td><td>trang mục lục; ba phần này chính là bài 8.1–8.4</td></tr>
+<tr><td>4</td><td>Where tools fit (hình chữ V)</td><td>8.2, SWT6 slide 35 — cùng một hình</td></tr>
+<tr><td>14</td><td>Dynamic analysis tools (rò rỉ bộ nhớ, con trỏ)</td><td>8.2, SWT6 slide 27</td></tr>
+<tr><td>19</td><td>Effective use of tools — mục lục</td><td>8.3, SWT6 slide 37</td></tr>
+<tr><td>20</td><td>Lợi ích tiềm năng của công cụ</td><td>8.3, SWT6 slide 38 — y hệt chữ</td></tr>
+<tr><td>21–22</td><td>Rủi ro khi dùng công cụ</td><td>8.3, SWT6 slide 39–40 — y hệt chữ</td></tr>
+<tr><td>28</td><td>Dự án pilot — mục tiêu 1–2</td><td>8.4, SWT6 slide 52 — y hệt chữ</td></tr>
+<tr><td>32</td><td>Summary: key points</td><td>nhắc lại ba tiêu đề phần</td></tr>
+</tbody>
+</table>`),
+    walkHead(D2, 3, 31, 'Only the pages that add something are shown; the others are in the table above.', 'Chỉ hiện các trang có thêm nội dung; các trang còn lại nằm trong bảng ở trên.'),
+    walk(D2, [
+      [3, 'Testing tool classification',
+        `<p class="y-chinh">🎯 The old syllabus listed twelve tool types one after another — the 2018 syllabus groups the same tools by the test activity they support.</p>
+<p class="nhan">The twelve types on the page</p>
+<ol class="hai-cot"><li>Requirements testing tools</li><li>Static analysis tools</li><li>Test design tools</li><li>Test data preparation tools</li><li>Test running tools — character-based, GUI</li><li>Comparison tools</li><li>Test harnesses and drivers</li><li>Performance test tools</li><li>Dynamic analysis tools</li><li>Debugging tools</li><li>Test management tools</li><li>Coverage measurement</li></ol>
+<p class="nhan">How the list changed by 2018</p>
+<ul>
+<li><strong>Grouped by activity</strong> — six groups: management, static testing, test design &amp; implementation, execution &amp; logging, performance &amp; dynamic analysis, specialised needs (lesson 8.1, SWT6 slide 7).</li>
+<li><strong>Renamed</strong> — "test running tools" became <em>test execution tools</em>; "coverage measurement" became <em>coverage tools</em>.</li>
+<li><strong>Absorbed</strong> — comparison is now a feature of test execution tools.</li>
+<li><strong>Dropped</strong> — debugging tools: debugging is a development activity, not testing (LO-1.1.2).</li>
+<li><strong>Added</strong> — review, CI, configuration management, monitoring, model-based and TDD/ATDD/BDD tools.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> the full old → new mapping is the table at the end of this lesson.</p>`,
+        `<p class="y-chinh">🎯 Syllabus cũ liệt kê mười hai loại công cụ nối nhau — syllabus 2018 gom chính các công cụ đó theo hoạt động test mà chúng hỗ trợ.</p>
+<p class="nhan">Mười hai loại trên trang</p>
+<ol class="hai-cot"><li>Requirements testing tools</li><li>Static analysis tools</li><li>Test design tools</li><li>Test data preparation tools</li><li>Test running tools — dạng ký tự, GUI</li><li>Comparison tools</li><li>Test harnesses and drivers</li><li>Performance test tools</li><li>Dynamic analysis tools</li><li>Debugging tools</li><li>Test management tools</li><li>Coverage measurement</li></ol>
+<p class="nhan">Danh sách đã đổi thế nào tới 2018</p>
+<ul>
+<li><strong>Gom theo hoạt động</strong> — sáu nhóm: quản lý, kiểm thử tĩnh, thiết kế &amp; hiện thực test, thực thi &amp; ghi log, hiệu năng &amp; phân tích động, nhu cầu đặc thù (bài 8.1, SWT6 slide 7).</li>
+<li><strong>Đổi tên</strong> — "test running tools" thành <em>test execution tools</em>; "coverage measurement" thành <em>coverage tools</em>.</li>
+<li><strong>Gộp vào</strong> — so sánh kết quả giờ là một tính năng của test execution tool.</li>
+<li><strong>Bỏ</strong> — debugging tools: debug là việc của phát triển, không phải kiểm thử (LO-1.1.2).</li>
+<li><strong>Thêm</strong> — công cụ review, CI, quản lý cấu hình, giám sát, model-based và TDD/ATDD/BDD.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> bảng đối chiếu cũ → mới đầy đủ nằm ở cuối bài này.</p>`],
+      [5, 'Requirements testing tools',
+        `<p class="y-chinh">🎯 Requirements testing tools check a <em>model</em> of the requirements before any code exists — today that is split between requirements management and static testing of models.</p>
+<p class="nhan">What the page says</p>
+<ul>
+<li><strong>Automated support</strong> for verification and validation of requirements models.</li>
+<li><strong>Consistency checking</strong> — the tool finds contradictions and gaps, e.g. a state with no way out, or two rules that fire on the same input.</li>
+<li><strong>Animation</strong> — the tool "runs" the model so a user can watch the behaviour and say "that is not what I meant" (validation).</li>
+</ul>
+<p class="nhan">Where it went in CTFL 2018</p>
+<ul>
+<li><strong>Requirements management tools</strong> — store requirements and their traceability to tests (8.2, SWT6 slide 10).</li>
+<li><strong>Static testing of models</strong> — checking a model without executing code is static testing (Chapter 3).</li>
+<li><strong>Model-based testing tools</strong> — reuse the model to generate tests (SWT6 slide 17).</li>
+</ul>
+<p class="ghi-chu">"Tool information available from": Ovum's evaluation service and the CAST report 1999 (CAST = Computer-Aided Software Testing) are sources from around 2000. Today: vendor sites, open-source communities, independent comparisons — then your own proof of concept.</p>`,
+        `<p class="y-chinh">🎯 Requirements testing tool kiểm tra <em>mô hình</em> yêu cầu trước khi có dòng code nào — ngày nay phần đó chia cho quản lý yêu cầu và kiểm thử tĩnh trên mô hình.</p>
+<p class="nhan">Trang nói gì</p>
+<ul>
+<li><strong>Hỗ trợ tự động</strong> việc verification và validation mô hình yêu cầu.</li>
+<li><strong>Kiểm tra tính nhất quán</strong> — công cụ tìm chỗ mâu thuẫn và chỗ hổng, vd một trạng thái không có đường ra, hay hai luật cùng kích hoạt với một input.</li>
+<li><strong>Animation</strong> — công cụ "chạy" mô hình để người dùng xem hành vi và nói "không phải ý tôi" (validation).</li>
+</ul>
+<p class="nhan">Trong CTFL 2018 nó nằm đâu</p>
+<ul>
+<li><strong>Requirements management tools</strong> — lưu yêu cầu và truy vết tới test (8.2, SWT6 slide 10).</li>
+<li><strong>Kiểm thử tĩnh trên mô hình</strong> — soi mô hình mà không chạy code là kiểm thử tĩnh (Chương 3).</li>
+<li><strong>Model-based testing tools</strong> — dùng lại mô hình để sinh test (SWT6 slide 17).</li>
+</ul>
+<p class="ghi-chu">"Tool information available from": dịch vụ đánh giá của Ovum và báo cáo CAST 1999 (CAST = Computer-Aided Software Testing) là nguồn của khoảng năm 2000. Ngày nay: trang của hãng, cộng đồng mã nguồn mở, bài so sánh độc lập — rồi proof of concept của chính bạn.</p>`],
+      [6, 'Static analysis tools',
+        `<p class="y-chinh">🎯 Static analysis tools examine code without running it and turn its structure into objective numbers.</p>
+<ul>
+<li><strong>Information about quality</strong> — the tool reports on the software itself, not on test results.</li>
+<li><strong>Code is examined, not executed</strong> — that is what makes it <em>static</em>.</li>
+<li><strong>Objective measures</strong> — cyclomatic complexity; also nesting levels and size.</li>
+</ul>
+<p class="nhan">Example — cyclomatic complexity</p>
+<p>A method with one <code>if</code> and one <code>while</code> has 2 decisions, so V(G) = 2 + 1 = <strong>3</strong>: three independent paths, which basis-path testing would cover with three tests. A method scoring 25 is a warning sign — hard to test and to maintain.</p>
+<p class="nhan">In CTFL 2018</p>
+<p>Same name, marked <strong>(D)</strong> — mostly used by developers (8.2, SWT6 slide 15; Lab 1 in Chapter 3).</p>`,
+        `<p class="y-chinh">🎯 Static analysis tool soi code mà không chạy nó, và biến cấu trúc code thành những con số khách quan.</p>
+<ul>
+<li><strong>Thông tin về chất lượng</strong> — công cụ báo về chính phần mềm, không phải về kết quả test.</li>
+<li><strong>Code được soi, không được chạy</strong> — đó là lý do gọi là <em>tĩnh</em>.</li>
+<li><strong>Số đo khách quan</strong> — cyclomatic complexity; ngoài ra độ lồng nhau (nesting level) và kích thước.</li>
+</ul>
+<p class="nhan">Ví dụ — cyclomatic complexity</p>
+<p>Một method có một <code>if</code> và một <code>while</code> là 2 điểm quyết định, nên V(G) = 2 + 1 = <strong>3</strong>: ba đường độc lập, basis-path testing cần ba test để phủ. Method nào ra 25 là tín hiệu xấu — khó test và khó bảo trì.</p>
+<p class="nhan">Trong CTFL 2018</p>
+<p>Giữ nguyên tên, đánh dấu <strong>(D)</strong> — chủ yếu developer dùng (8.2, SWT6 slide 15; Lab 1 ở Chương 3).</p>`],
+      [7, 'Test design tools',
+        `<p class="y-chinh">🎯 Test design tools generate test inputs — from a formal specification or from the code itself.</p>
+<ul>
+<li><strong>From a formal specification or CASE repository</strong> — e.g. a state model stored in a CASE tool (Computer-Aided Software Engineering, the 1990s name for modelling tools such as Rational Rose).</li>
+<li><strong>From code</strong> — e.g. inputs that reach code <em>not covered yet</em>.</li>
+</ul>
+<p class="nhan">Today's equivalents</p>
+<ul>
+<li><strong>Model-based testing tools</strong> — generate test cases from a model (SWT6 slides 17 and 46).</li>
+<li><strong>Test design tools</strong> — e.g. pairwise generators such as Microsoft PICT (8.2, SWT6 slide 16).</li>
+<li><strong>From code</strong> — generators such as EvoSuite for Java, or fuzzers that aim at uncovered branches.</li>
+</ul>
+<div class="pitfall">A tool can generate <em>inputs</em>, but it cannot know the correct <em>expected result</em> from the code alone — code-derived tests show what the code does, not what it should do (the test-oracle problem).</div>`,
+        `<p class="y-chinh">🎯 Test design tool sinh input cho test — từ một đặc tả hình thức hoặc từ chính code.</p>
+<ul>
+<li><strong>Từ đặc tả hình thức hoặc kho CASE</strong> — vd một mô hình trạng thái lưu trong công cụ CASE (Computer-Aided Software Engineering, tên gọi thập niên 1990 của các công cụ mô hình hoá như Rational Rose).</li>
+<li><strong>Từ code</strong> — vd input đi tới đoạn code <em>chưa được phủ</em>.</li>
+</ul>
+<p class="nhan">Tương đương ngày nay</p>
+<ul>
+<li><strong>Model-based testing tools</strong> — sinh test case từ mô hình (SWT6 slide 17 và 46).</li>
+<li><strong>Test design tools</strong> — vd bộ sinh pairwise như Microsoft PICT (8.2, SWT6 slide 16).</li>
+<li><strong>Từ code</strong> — bộ sinh như EvoSuite cho Java, hoặc fuzzer nhắm vào nhánh chưa phủ.</li>
+</ul>
+<div class="pitfall">Công cụ sinh được <em>input</em>, nhưng chỉ nhìn code thì không biết <em>kết quả mong đợi</em> đúng là gì — test sinh từ code chỉ cho thấy code đang làm gì, không cho thấy nó phải làm gì (bài toán test oracle).</div>`],
+      [8, 'Test data preparation tools',
+        `<p class="y-chinh">🎯 Test data preparation tools produce the data a test needs — by selecting it, generating it, or editing it from other sources.</p>
+<p class="nhan">Three ways on the page</p>
+<ol>
+<li><strong>Selected</strong> from existing databases or files — e.g. copy 1,000 real orders from production.</li>
+<li><strong>Created</strong> according to rules — e.g. 500 customers aged 18–65, each with a valid phone format.</li>
+<li><strong>Edited</strong> from other sources — e.g. convert a CSV export into the new database schema.</li>
+</ol>
+<p class="nhan">What 2018 adds</p>
+<p>Same name, now in the "test design &amp; implementation" group (SWT6 slide 18). The newer text stresses <strong>anonymising</strong> copied production data: mask names and phone numbers before they reach a test environment.</p>`,
+        `<p class="y-chinh">🎯 Test data preparation tool tạo ra dữ liệu mà test cần — bằng cách chọn, sinh, hoặc chỉnh từ nguồn khác.</p>
+<p class="nhan">Ba cách trên trang</p>
+<ol>
+<li><strong>Chọn</strong> từ database hoặc file có sẵn — vd chép 1.000 đơn hàng thật từ production.</li>
+<li><strong>Tạo</strong> theo luật — vd 500 khách hàng tuổi 18–65, ai cũng có số điện thoại đúng định dạng.</li>
+<li><strong>Chỉnh</strong> từ nguồn khác — vd đổi một file CSV xuất ra sang schema database mới.</li>
+</ol>
+<p class="nhan">Bản 2018 thêm gì</p>
+<p>Giữ tên, nay nằm trong nhóm "thiết kế &amp; hiện thực test" (SWT6 slide 18). Bản mới nhấn mạnh việc <strong>ẩn danh</strong> dữ liệu chép từ production: che tên và số điện thoại trước khi đưa vào môi trường test.</p>`],
+      [9, 'Test running tools 1',
+        `<p class="y-chinh">🎯 A test running tool — today a <em>test execution tool</em> — drives the software the way a human tester would, from scripts.</p>
+<ul>
+<li><strong>Interface to the software being tested</strong> — through its UI, API or command line.</li>
+<li><strong>Runs tests as though run by a human tester</strong> — enters inputs, presses buttons, reads outputs.</li>
+<li><strong>Test scripts in a programmable language</strong> — e.g. Java with Selenium, TypeScript with Playwright.</li>
+<li><strong>Data, inputs and expected results held in test repositories</strong> — kept apart from the script: the idea behind data-driven testing (SWT6 slide 44).</li>
+<li><strong>Most often used to automate regression testing</strong> — the same checks after every change.</li>
+</ul>
+<p class="nhan">Outdated wording</p>
+<p>"Test running tool" is now <strong>test execution tool</strong> (8.2, SWT6 slide 21). Its special considerations — capture/replay, data-driven, keyword-driven — are in lesson 8.3.</p>`,
+        `<p class="y-chinh">🎯 Test running tool — nay gọi là <em>test execution tool</em> — điều khiển phần mềm như một tester thật, theo script.</p>
+<ul>
+<li><strong>Giao tiếp với phần mềm đang test</strong> — qua giao diện, API hoặc dòng lệnh.</li>
+<li><strong>Chạy test như tester thật chạy</strong> — nhập input, bấm nút, đọc output.</li>
+<li><strong>Script viết bằng ngôn ngữ lập trình</strong> — vd Java với Selenium, TypeScript với Playwright.</li>
+<li><strong>Dữ liệu, input và kết quả mong đợi nằm trong kho test</strong> — tách khỏi script: chính là ý tưởng của data-driven testing (SWT6 slide 44).</li>
+<li><strong>Dùng nhiều nhất để tự động hoá regression test</strong> — kiểm lại cùng một thứ sau mỗi lần sửa.</li>
+</ul>
+<p class="nhan">Từ đã cũ</p>
+<p>"Test running tool" nay là <strong>test execution tool</strong> (8.2, SWT6 slide 21). Các lưu ý riêng của nó — capture/replay, data-driven, keyword-driven — nằm ở bài 8.3.</p>`],
+      [10, 'Test running tools 2',
+        `<p class="y-chinh">🎯 Two kinds of test running tool: character-based for old terminal screens, and GUI tools for windows and a mouse.</p>
+<p class="nhan">Character-based</p>
+<ul>
+<li><strong>Simulates user interaction from dumb terminals</strong> — text-only screens attached to a mainframe, like old bank-teller screens.</li>
+<li><strong>Captures keystrokes and screen responses</strong>.</li>
+</ul>
+<p class="nhan">GUI (Graphical User Interface)</p>
+<ul>
+<li><strong>Simulates interaction with WIMP applications</strong> — Windows, Icons, Mouse, Pointer.</li>
+<li><strong>Captures input</strong> — mouse movement, button clicks and keyboard inputs.</li>
+<li><strong>Captures output</strong> — screens, bitmaps, characters and object states.</li>
+</ul>
+<p class="nhan">Today</p>
+<ul>
+<li><strong>Character-based</strong> tools are rare outside mainframe work.</li>
+<li><strong>Capturing</strong> is the capture/replay approach — fragile when the UI changes (8.3, SWT6 slide 43).</li>
+<li><strong>Object states, not bitmaps</strong> — Selenium and Playwright find elements by ID or role, not by pixels, so a button that moves does not break the test.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Hai loại test running tool: loại ký tự cho màn hình terminal cũ, và loại GUI cho cửa sổ và chuột.</p>
+<p class="nhan">Loại ký tự (character-based)</p>
+<ul>
+<li><strong>Giả lập người dùng trên dumb terminal</strong> — màn hình chỉ có chữ nối với máy mainframe, như màn hình giao dịch viên ngân hàng ngày trước.</li>
+<li><strong>Ghi lại phím bấm và phản hồi trên màn hình</strong>.</li>
+</ul>
+<p class="nhan">Loại GUI (giao diện đồ hoạ)</p>
+<ul>
+<li><strong>Giả lập thao tác với ứng dụng WIMP</strong> — Windows, Icons, Mouse, Pointer.</li>
+<li><strong>Ghi input</strong> — di chuột, bấm nút và gõ phím.</li>
+<li><strong>Ghi output</strong> — màn hình, ảnh bitmap, ký tự và trạng thái đối tượng.</li>
+</ul>
+<p class="nhan">Ngày nay</p>
+<ul>
+<li><strong>Loại ký tự</strong> hiếm gặp, trừ khi làm với mainframe.</li>
+<li><strong>Ghi lại thao tác</strong> chính là cách capture/replay — dễ gãy khi giao diện đổi (8.3, SWT6 slide 43).</li>
+<li><strong>Trạng thái đối tượng thay cho bitmap</strong> — Selenium và Playwright tìm phần tử theo ID hoặc role, không theo điểm ảnh, nên nút bị dời chỗ không làm test gãy.</li>
+</ul>`],
+      [11, 'Comparison tools',
+        `<p class="y-chinh">🎯 A comparison tool detects differences between actual and expected results — and must be told which differences to ignore.</p>
+<ul>
+<li><strong>Compares</strong> screens, characters and bitmaps.</li>
+<li><strong>Masking and filtering</strong> — hides the parts that legitimately change on every run.</li>
+<li><strong>Built in</strong> — test running tools normally include comparison.</li>
+<li><strong>Stand-alone</strong> — separate comparators for files or databases.</li>
+</ul>
+<p class="nhan">Example — why masking matters</p>
+<p>An invoice report contains the print date and an invoice number. Compared byte by byte with yesterday's expected file, it "fails" every day. Mask the date and the number, and the tool reports only real differences, such as a wrong total.</p>
+<p class="nhan">In CTFL 2018</p>
+<p>No separate category: comparing actual with expected results is a function of <strong>test execution tools</strong> (8.2, SWT6 slide 21). Today's examples: <code>assertEquals</code> in JUnit (lesson 8.5), <code>diff</code>, database-compare tools, visual-regression tools.</p>`,
+        `<p class="y-chinh">🎯 Comparison tool phát hiện chỗ khác nhau giữa kết quả thực tế và kết quả mong đợi — và phải được dặn chỗ khác nào cần bỏ qua.</p>
+<ul>
+<li><strong>So sánh</strong> màn hình, ký tự và ảnh bitmap.</li>
+<li><strong>Che và lọc (masking, filtering)</strong> — giấu những phần đổi hợp lệ sau mỗi lần chạy.</li>
+<li><strong>Có sẵn bên trong</strong> — test running tool thường đã có chức năng so sánh.</li>
+<li><strong>Công cụ riêng</strong> — bộ so sánh file hoặc database.</li>
+</ul>
+<p class="nhan">Ví dụ — vì sao cần che</p>
+<p>Một báo cáo hoá đơn có ngày in và số hoá đơn. So từng byte với file mong đợi hôm qua thì ngày nào nó cũng "fail". Che ngày và số hoá đơn đi, công cụ chỉ còn báo khác biệt thật, như tổng tiền sai.</p>
+<p class="nhan">Trong CTFL 2018</p>
+<p>Không còn là nhóm riêng: so kết quả thực tế với mong đợi là một chức năng của <strong>test execution tool</strong> (8.2, SWT6 slide 21). Ví dụ ngày nay: <code>assertEquals</code> trong JUnit (bài 8.5), <code>diff</code>, công cụ so database, công cụ visual regression.</p>`],
+      [12, 'Test harnesses and drivers',
+        `<p class="y-chinh">🎯 A test harness exercises software that has no user interface yet — with drivers, stubs and, when the real world is too costly or dangerous, simulators.</p>
+<ul>
+<li><strong>Exercises software without a UI (yet)</strong> — e.g. a payment component called directly from test code.</li>
+<li><strong>Runs groups of automated tests or comparisons</strong>.</li>
+<li><strong>Often custom-built</strong> — written by the team for its own components.</li>
+<li><strong>Simulators</strong> — where testing in the real environment would be too costly or dangerous.</li>
+</ul>
+<p class="nhan">The picture — four parts of a harness</p>
+<ol>
+<li><strong>Test library</strong> — the stored tests.</li>
+<li><strong>Driver and stubs</strong> — the driver calls the component under test; stubs stand in for the components it calls.</li>
+<li><strong>Executing test</strong> — runs the tests.</li>
+<li><strong>Generating reports</strong> — records pass and fail.</li>
+</ol>
+<p class="nhan">Examples</p>
+<ul>
+<li><strong>Driver</strong> — a JUnit test class that calls <code>OrderService.checkout()</code> (lesson 8.5).</li>
+<li><strong>Stub</strong> — a fake payment gateway that always answers "approved".</li>
+<li><strong>Simulator</strong> — a flight simulator for avionics software, or a network simulator standing in for 10,000 phones.</li>
+</ul>
+<p class="ghi-chu">CTFL 2018 keeps "test harnesses (D)" in the execution &amp; logging group (8.2, SWT6 slide 23); unit test frameworks such as JUnit sit next to them (slide 24).</p>`,
+        `<p class="y-chinh">🎯 Test harness chạy thử phần mềm chưa có giao diện — bằng driver, stub, và simulator khi môi trường thật quá đắt hoặc quá nguy hiểm.</p>
+<ul>
+<li><strong>Chạy thử phần mềm chưa có UI</strong> — vd gọi thẳng một component thanh toán từ code test.</li>
+<li><strong>Chạy từng nhóm test tự động hoặc phép so sánh</strong>.</li>
+<li><strong>Thường tự viết</strong> — đội tự dựng cho component của mình.</li>
+<li><strong>Simulator</strong> — khi test trong môi trường thật quá tốn kém hoặc quá nguy hiểm.</li>
+</ul>
+<p class="nhan">Hình minh hoạ — bốn phần của một harness</p>
+<ol>
+<li><strong>Test library</strong> — kho test đã lưu.</li>
+<li><strong>Driver và stub</strong> — driver gọi component đang test; stub đứng thay cho các component mà nó gọi tới.</li>
+<li><strong>Executing test</strong> — chạy test.</li>
+<li><strong>Generating reports</strong> — ghi lại pass và fail.</li>
+</ol>
+<p class="nhan">Ví dụ</p>
+<ul>
+<li><strong>Driver</strong> — một lớp test JUnit gọi <code>OrderService.checkout()</code> (bài 8.5).</li>
+<li><strong>Stub</strong> — cổng thanh toán giả lúc nào cũng trả "approved".</li>
+<li><strong>Simulator</strong> — buồng lái mô phỏng cho phần mềm điều khiển máy bay, hoặc bộ giả lập mạng thay cho 10.000 chiếc điện thoại.</li>
+</ul>
+<p class="ghi-chu">CTFL 2018 giữ "test harnesses (D)" trong nhóm thực thi &amp; ghi log (8.2, SWT6 slide 23); unit test framework như JUnit nằm ngay cạnh (slide 24).</p>`],
+      [13, 'Performance testing tools',
+        `<p class="y-chinh">🎯 A performance testing tool does two jobs: it generates load, and it measures how response time changes under that load.</p>
+<p class="nhan">Load generation</p>
+<ul>
+<li><strong>Drives the application</strong> via the user interface or a test harness.</li>
+<li><strong>Simulates realistic load</strong> on the system and logs the number of transactions.</li>
+</ul>
+<p class="nhan">Transaction measurement and reports</p>
+<ul>
+<li><strong>Response times</strong> for selected transactions, measured via the user interface.</li>
+<li><strong>Reports based on the logs</strong> — graphs of load versus response time.</li>
+</ul>
+<p class="nhan">Example — reading the graph</p>
+<ul>
+<li><strong>100 virtual users</strong> — checkout answers in 0.8 s.</li>
+<li><strong>500 users</strong> — 1.1 s.</li>
+<li><strong>800 users</strong> — 6 s: the "knee" of the curve. If the requirement is "under 2 s for 600 users", run again at 600 to see which side of the knee you are on.</li>
+</ul>
+<p class="ghi-chu">CTFL 2018: "performance testing tools (D)", next to monitoring tools (8.2, SWT6 slides 25–26). Today: JMeter, k6, Gatling. "Performance measurement" on the old V-model picture (page 4) is the same thing.</p>`,
+        `<p class="y-chinh">🎯 Performance testing tool làm hai việc: tạo tải, và đo thời gian phản hồi thay đổi ra sao dưới mức tải đó.</p>
+<p class="nhan">Tạo tải</p>
+<ul>
+<li><strong>Điều khiển ứng dụng</strong> qua giao diện người dùng hoặc qua test harness.</li>
+<li><strong>Giả lập tải thực tế</strong> lên hệ thống và ghi log số giao dịch.</li>
+</ul>
+<p class="nhan">Đo giao dịch và báo cáo</p>
+<ul>
+<li><strong>Thời gian phản hồi</strong> của các giao dịch được chọn, đo qua giao diện.</li>
+<li><strong>Báo cáo dựa trên log</strong> — biểu đồ tải so với thời gian phản hồi.</li>
+</ul>
+<p class="nhan">Ví dụ — đọc biểu đồ</p>
+<ul>
+<li><strong>100 người dùng ảo</strong> — thanh toán phản hồi trong 0,8 s.</li>
+<li><strong>500 người</strong> — 1,1 s.</li>
+<li><strong>800 người</strong> — 6 s: "khúc gãy" của đường cong. Nếu yêu cầu là "dưới 2 s với 600 người", hãy chạy lại đúng 600 để biết mình đang ở phía nào của khúc gãy.</li>
+</ul>
+<p class="ghi-chu">CTFL 2018: "performance testing tools (D)", cạnh công cụ giám sát (8.2, SWT6 slide 25–26). Ngày nay: JMeter, k6, Gatling. "Performance measurement" trên hình chữ V cũ (trang 4) chính là thứ này.</p>`],
+      [15, 'Debugging tools',
+        `<p class="y-chinh">🎯 Debuggers help programmers find and fix the cause of a failure — which is why CTFL 2018 no longer counts them as test tools.</p>
+<ul>
+<li><strong>Used by programmers</strong> when investigating, fixing and testing faults.</li>
+<li><strong>Reproduce faults</strong> and examine program execution in detail.</li>
+<li><strong>Single-stepping</strong> — run one statement at a time.</li>
+<li><strong>Breakpoints or watchpoints</strong> at any statement — stop when a line is reached, or when a variable changes.</li>
+<li><strong>Examine</strong> the contents of variables and other data.</li>
+</ul>
+<p class="nhan">Outdated wording</p>
+<ul>
+<li><strong>"Faults"</strong> — CTFL 2018 says <strong>defects</strong> (error → defect → failure, Chapter 1).</li>
+<li><strong>Debugging is not testing</strong> — testing shows failures; debugging finds, analyses and removes their cause (LO-1.1.2). So the 2018 classification has no "debugging tools" group.</li>
+</ul>
+<div class="pitfall">"What does a debugging tool do?" — locate the cause of a failure. "Find failures" is the job of testing, not of the debugger.</div>`,
+        `<p class="y-chinh">🎯 Debugger giúp lập trình viên tìm và sửa nguyên nhân của failure — chính vì vậy CTFL 2018 không còn xếp nó vào công cụ test.</p>
+<ul>
+<li><strong>Lập trình viên dùng</strong> khi điều tra, sửa và test fault.</li>
+<li><strong>Tái hiện fault</strong> và xem chi tiết chương trình chạy thế nào.</li>
+<li><strong>Single-stepping</strong> — chạy từng câu lệnh một.</li>
+<li><strong>Breakpoint hoặc watchpoint</strong> ở bất kỳ câu lệnh nào — dừng khi tới một dòng, hoặc khi một biến đổi giá trị.</li>
+<li><strong>Xem</strong> nội dung biến và các dữ liệu khác.</li>
+</ul>
+<p class="nhan">Từ đã cũ</p>
+<ul>
+<li><strong>"Fault"</strong> — CTFL 2018 dùng <strong>defect</strong> (error → defect → failure, Chương 1).</li>
+<li><strong>Debug không phải là test</strong> — test làm lộ failure; debug tìm, phân tích và gỡ nguyên nhân (LO-1.1.2). Vì thế phân loại 2018 không có nhóm "debugging tools".</li>
+</ul>
+<div class="pitfall">"Debugging tool làm gì?" — định vị nguyên nhân của failure. "Tìm failure" là việc của kiểm thử, không phải của debugger.</div>`],
+      [16, 'Test management tools',
+        `<p class="y-chinh">🎯 The old "test management tools" page bundles four jobs that CTFL 2018 spreads across the management group.</p>
+<ol>
+<li><strong>Management of testware</strong> — test plans, specifications, results.</li>
+<li><strong>Project management of the test process</strong> — estimation, scheduling tests, logging results.</li>
+<li><strong>Incident management</strong> — may include workflow facilities to track allocation, correction and retesting.</li>
+<li><strong>Traceability</strong> — of tests to requirements and designs.</li>
+</ol>
+<p class="nhan">Where each job lives in CTFL 2018 (8.2, SWT6 slides 9–12)</p>
+<ul>
+<li><strong>Jobs 1–2</strong> — test management tools and ALM tools.</li>
+<li><strong>Job 3</strong> — <strong>defect management tools</strong>, e.g. Jira.</li>
+<li><strong>Job 4</strong> — requirements management tools, linked to the test management tool.</li>
+</ul>
+<div class="pitfall">"Incident" is old wording. CTFL 2018 says <strong>defect management</strong> and <strong>defect report</strong> (Chapter 7). An "incident" was any unexpected event that needed investigation — it could turn out not to be a defect at all.</div>`,
+        `<p class="y-chinh">🎯 Trang "test management tools" cũ gói bốn việc mà CTFL 2018 chia ra khắp nhóm quản lý.</p>
+<ol>
+<li><strong>Quản lý testware</strong> — test plan, đặc tả, kết quả.</li>
+<li><strong>Quản lý dự án cho quy trình test</strong> — ước lượng, lên lịch test, ghi kết quả.</li>
+<li><strong>Quản lý incident</strong> — có thể có workflow để theo dõi việc giao, sửa và test lại.</li>
+<li><strong>Truy vết</strong> — từ test tới yêu cầu và thiết kế.</li>
+</ol>
+<p class="nhan">Mỗi việc nằm đâu trong CTFL 2018 (8.2, SWT6 slide 9–12)</p>
+<ul>
+<li><strong>Việc 1–2</strong> — test management tool và ALM tool.</li>
+<li><strong>Việc 3</strong> — <strong>defect management tool</strong>, vd Jira.</li>
+<li><strong>Việc 4</strong> — requirements management tool, nối với test management tool.</li>
+</ul>
+<div class="pitfall">"Incident" là từ cũ. CTFL 2018 dùng <strong>defect management</strong> và <strong>defect report</strong> (Chương 7). "Incident" là mọi sự kiện bất thường cần điều tra — điều tra xong có khi lại không phải defect.</div>`],
+      [17, 'Coverage measurement tools',
+        `<p class="y-chinh">🎯 A coverage tool instruments the code, runs the tests through it, and reports which parts of the structure were — and were not — executed.</p>
+<p class="nhan">How it works, in order</p>
+<ol>
+<li><strong>Instrument</strong> — the code is instrumented in a static analysis pass: counters are inserted at statements and branches.</li>
+<li><strong>Run</strong> — the tests are run through the instrumented code.</li>
+<li><strong>Report</strong> — what has and has not been covered, line by line, plus summary statistics.</li>
+</ol>
+<p class="nhan">Types of coverage on the page</p>
+<ul>
+<li><strong>Statement</strong> and <strong>branch (decision)</strong> — the two in CTFL 2018 (Chapter 6).</li>
+<li><strong>Condition</strong> — each Boolean sub-condition evaluated true and false; Advanced level.</li>
+<li><strong>LCSAJ</strong> — "linear code sequence and jump": a run of straight-line code followed by a jump. From older standards (BS 7925-2); no longer in the syllabus.</li>
+</ul>
+<p class="nhan">Example</p>
+<p>JaCoCo inserts probes into the bytecode (lesson 8.5). A report such as "Lines 17/20, Branches 5/8" means 3 lines and 3 branch outcomes were never executed — look at them before writing more tests.</p>
+<p class="ghi-chu">CTFL 2018 name: <strong>coverage tools (D)</strong> (8.2, SWT6 slide 22). Instrumentation makes them intrusive — the probe effect of lesson 8.1.</p>`,
+        `<p class="y-chinh">🎯 Coverage tool chèn mã đo vào code, chạy test qua đó, rồi báo phần nào của cấu trúc đã — và chưa — được chạy.</p>
+<p class="nhan">Cách làm, theo thứ tự</p>
+<ol>
+<li><strong>Chèn mã đo</strong> — code được chèn mã đo (instrument) trong một lượt phân tích tĩnh: đặt bộ đếm ở các câu lệnh và nhánh.</li>
+<li><strong>Chạy</strong> — test được chạy qua bản code đã chèn.</li>
+<li><strong>Báo cáo</strong> — cái gì đã phủ, cái gì chưa, theo từng dòng, kèm số liệu tổng.</li>
+</ol>
+<p class="nhan">Các loại coverage trên trang</p>
+<ul>
+<li><strong>Statement</strong> và <strong>branch (decision)</strong> — hai loại có trong CTFL 2018 (Chương 6).</li>
+<li><strong>Condition</strong> — mỗi điều kiện con nhận cả true và false; thuộc cấp Advanced.</li>
+<li><strong>LCSAJ</strong> — "linear code sequence and jump": một đoạn code chạy thẳng rồi tới một cú nhảy. Có trong chuẩn cũ (BS 7925-2); không còn trong syllabus.</li>
+</ul>
+<p class="nhan">Ví dụ</p>
+<p>JaCoCo chèn probe vào bytecode (bài 8.5). Một báo cáo kiểu "Lines 17/20, Branches 5/8" nghĩa là còn 3 dòng và 3 kết quả nhánh chưa bao giờ chạy — hãy xem chúng trước khi viết thêm test.</p>
+<p class="ghi-chu">Tên trong CTFL 2018: <strong>coverage tools (D)</strong> (8.2, SWT6 slide 22). Việc chèn mã đo khiến chúng xâm lấn — chính là probe effect ở bài 8.1.</p>`],
+      [23, 'Special considerations for some types of tools',
+        `<p class="y-chinh">🎯 The old list had four tool types that need special care; CTFL 2018 keeps only two of them (LO-6.1.3).</p>
+<p class="nhan">The four on the page</p>
+<ol>
+<li><strong>Test execution tools</strong> — kept in 2018 (8.3, SWT6 slides 42–46).</li>
+<li><strong>Performance testing tools</strong> — no longer on this list in 2018.</li>
+<li><strong>Static analysis tools</strong> — no longer on this list in 2018.</li>
+<li><strong>Test management tools</strong> — kept in 2018 (8.3, SWT6 slide 47).</li>
+</ol>
+<p class="nhan">What the older syllabi (2007/2011) said about the two dropped ones</p>
+<ul>
+<li><strong>Performance testing tools</strong> — you need someone with performance-testing expertise to design the load and interpret the results.</li>
+<li><strong>Static analysis tools</strong> — run on existing code, they can produce a huge number of warnings. Introduce them gradually: filter some messages at first, and apply the rules to new code first.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> for the 2018 exam, "special considerations" means test <em>execution</em> and test <em>management</em> tools — nothing else.</p>`,
+        `<p class="y-chinh">🎯 Danh sách cũ có bốn loại công cụ cần lưu ý riêng; CTFL 2018 chỉ giữ hai (LO-6.1.3).</p>
+<p class="nhan">Bốn loại trên trang</p>
+<ol>
+<li><strong>Test execution tools</strong> — còn trong bản 2018 (8.3, SWT6 slide 42–46).</li>
+<li><strong>Performance testing tools</strong> — bản 2018 không còn đưa vào danh sách này.</li>
+<li><strong>Static analysis tools</strong> — bản 2018 không còn đưa vào danh sách này.</li>
+<li><strong>Test management tools</strong> — còn trong bản 2018 (8.3, SWT6 slide 47).</li>
+</ol>
+<p class="nhan">Syllabus cũ (2007/2011) nói gì về hai loại bị bỏ</p>
+<ul>
+<li><strong>Performance testing tools</strong> — cần người có chuyên môn test hiệu năng để thiết kế tải và đọc kết quả.</li>
+<li><strong>Static analysis tools</strong> — chạy trên code có sẵn thì có thể ra hàng nghìn cảnh báo. Đưa vào từ từ: lúc đầu lọc bớt một số thông báo, và áp luật cho code mới trước.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> với đề 2018, "special considerations" chỉ là công cụ <em>thực thi</em> test và công cụ <em>quản lý</em> test — không có gì khác.</p>`],
+      [25, 'Introducing a tool into an organization — objectives',
+        `<p class="y-chinh">🎯 The three objectives of the old section "Introducing a tool into an organisation" — today section 6.2, "Effective use of tools".</p>
+<ol>
+<li><strong>State the main principles</strong> of introducing a tool into an organisation.</li>
+<li><strong>State the goals of a proof-of-concept</strong> for tool evaluation and of a <strong>piloting phase</strong> for tool implementation.</li>
+<li><strong>Recognise that factors other than simply acquiring a tool</strong> are required for good tool support.</li>
+</ol>
+<p class="nhan">2011 → 2018</p>
+<ul>
+<li><strong>Objective 1</strong> → LO-6.2.1, identify the main principles for selecting a tool (K1).</li>
+<li><strong>Objective 2</strong> → LO-6.2.2, recall the objectives for using pilot projects (K1).</li>
+<li><strong>Objective 3</strong> → LO-6.2.3, the success factors (K1).</li>
+</ul>
+<p class="nhan">Proof of concept vs pilot — do not mix them up</p>
+<ul>
+<li><strong>Proof of concept</strong> — <em>before</em> buying: does the tool work on our application and meet our requirements? Part of selection (SWT6 slide 51).</li>
+<li><strong>Pilot project</strong> — <em>after</em> choosing: use it on one small real project to learn it, fit the process, set standards and check cost against benefit (SWT6 slides 52–53).</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Ba mục tiêu của phần cũ "Đưa công cụ vào tổ chức" — ngày nay là mục 6.2, "Dùng công cụ hiệu quả".</p>
+<ol>
+<li><strong>Nêu các nguyên tắc chính</strong> khi đưa một công cụ vào tổ chức.</li>
+<li><strong>Nêu mục tiêu của proof-of-concept</strong> khi đánh giá công cụ và của <strong>giai đoạn pilot</strong> khi triển khai.</li>
+<li><strong>Nhận ra rằng chỉ mua công cụ thôi là chưa đủ</strong> — cần thêm nhiều yếu tố khác mới có hỗ trợ tốt.</li>
+</ol>
+<p class="nhan">2011 → 2018</p>
+<ul>
+<li><strong>Mục tiêu 1</strong> → LO-6.2.1, nhận diện nguyên tắc chính khi chọn công cụ (K1).</li>
+<li><strong>Mục tiêu 2</strong> → LO-6.2.2, nhớ mục tiêu của dự án pilot (K1).</li>
+<li><strong>Mục tiêu 3</strong> → LO-6.2.3, các yếu tố thành công (K1).</li>
+</ul>
+<p class="nhan">Proof of concept và pilot — đừng nhầm</p>
+<ul>
+<li><strong>Proof of concept</strong> — <em>trước khi</em> mua: công cụ có chạy được trên ứng dụng của mình và đáp ứng yêu cầu không? Thuộc bước chọn (SWT6 slide 51).</li>
+<li><strong>Dự án pilot</strong> — <em>sau khi</em> đã chọn: dùng thử trên một dự án thật, nhỏ để hiểu công cụ, khớp quy trình, đặt chuẩn và so chi phí với lợi ích (SWT6 slide 52–53).</li>
+</ul>`],
+      [26, 'Main principles (1)',
+        `<p class="y-chinh">🎯 The 2011 list of what matters when selecting a tool, first half: start from the organisation, then evaluate objectively.</p>
+<ol>
+<li><strong>Assess the organisation's maturity</strong> — e.g. its readiness for change.</li>
+<li><strong>Identify the areas</strong> within the organisation where tool support will help to improve the testing process.</li>
+<li><strong>Evaluate tools against clear requirements and objective criteria</strong>.</li>
+<li><strong>Proof of concept</strong> — see whether the product works as desired and meets the requirements and objectives defined for it.</li>
+</ol>
+<p class="nhan">Compared with 2018 (SWT6 slide 50)</p>
+<ul>
+<li><strong>Still there</strong> — items 1–3 ("identify opportunities for an improved test process").</li>
+<li><strong>Moved</strong> — the proof of concept is now the <em>last</em> selection step (slide 51: "finally…").</li>
+<li><strong>New in 2018</strong> — understand the technologies of the test object; know the current build and CI tools, so the new tool can integrate.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> a tool automates a process — if the team has no stable manual test process yet, the tool only automates the chaos.</p>`,
+        `<p class="y-chinh">🎯 Danh sách 2011 về những điều quan trọng khi chọn công cụ, nửa đầu: bắt đầu từ tổ chức, rồi đánh giá khách quan.</p>
+<ol>
+<li><strong>Đánh giá độ trưởng thành của tổ chức</strong> — vd mức sẵn sàng thay đổi.</li>
+<li><strong>Xác định những chỗ</strong> trong tổ chức mà công cụ sẽ giúp cải thiện quy trình test.</li>
+<li><strong>Đánh giá công cụ theo yêu cầu rõ ràng và tiêu chí khách quan</strong>.</li>
+<li><strong>Proof of concept</strong> — xem sản phẩm có chạy như mong muốn và đáp ứng yêu cầu, mục tiêu đã đặt ra không.</li>
+</ol>
+<p class="nhan">So với bản 2018 (SWT6 slide 50)</p>
+<ul>
+<li><strong>Vẫn còn</strong> — mục 1–3 ("xác định cơ hội cải thiện quy trình test").</li>
+<li><strong>Dời chỗ</strong> — proof of concept nay là bước <em>cuối</em> của việc chọn (slide 51: "finally…").</li>
+<li><strong>Mới trong 2018</strong> — hiểu công nghệ của đối tượng test; nắm công cụ build và CI đang dùng để công cụ mới tích hợp được.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> công cụ tự động hoá một quy trình — nếu đội chưa có quy trình test thủ công ổn định, công cụ chỉ tự động hoá sự hỗn loạn.</p>`],
+      [27, 'Main principles (2)',
+        `<p class="y-chinh">🎯 Second half of the 2011 list: look beyond the product — at the vendor, the internal roll-out and the business case.</p>
+<ol start="5">
+<li><strong>Evaluate the vendor</strong> — training, support and other commercial aspects — or the open-source network of support.</li>
+<li><strong>Identify and plan internal implementation</strong> — including training, coaching and mentoring for those new to the tool.</li>
+<li><strong>Estimate the return on investment</strong> — the cost-benefit ratio, based on a concrete and realistic business case.</li>
+</ol>
+<p class="nhan">Compared with 2018 (SWT6 slide 51)</p>
+<ul>
+<li><strong>Still there</strong> — evaluation of the vendor; coaching, mentoring and training needs; a cost-benefit ratio.</li>
+<li><strong>New in 2018</strong> — check whether a free trial is available and for how long; weigh licensing models (commercial or open source).</li>
+<li><strong>Wording</strong> — "return on investment" became "cost-benefit ratio"; the calculation is the same (the break-even example of lesson 8.4: 7 runs).</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Nửa sau danh sách 2011: nhìn ra ngoài sản phẩm — nhà cung cấp, việc triển khai nội bộ và bài toán kinh doanh.</p>
+<ol start="5">
+<li><strong>Đánh giá nhà cung cấp</strong> — đào tạo, hỗ trợ và các mặt thương mại — hoặc mạng lưới hỗ trợ của cộng đồng mã nguồn mở.</li>
+<li><strong>Xác định và lên kế hoạch triển khai nội bộ</strong> — gồm đào tạo, kèm cặp và cố vấn cho người mới dùng.</li>
+<li><strong>Ước lượng lợi tức đầu tư (ROI)</strong> — tỉ lệ chi phí-lợi ích, dựa trên một bài toán kinh doanh cụ thể và thực tế.</li>
+</ol>
+<p class="nhan">So với bản 2018 (SWT6 slide 51)</p>
+<ul>
+<li><strong>Vẫn còn</strong> — đánh giá nhà cung cấp; nhu cầu kèm cặp, cố vấn, đào tạo; tỉ lệ chi phí-lợi ích.</li>
+<li><strong>Mới trong 2018</strong> — xem có bản dùng thử miễn phí không và bao lâu; cân nhắc mô hình bản quyền (thương mại hay mã nguồn mở).</li>
+<li><strong>Câu chữ</strong> — "return on investment" đổi thành "cost-benefit ratio"; cách tính vẫn vậy (ví dụ điểm hoà vốn ở bài 8.4: 7 lần chạy).</li>
+</ul>`],
+      [29, 'Pilot project (2)',
+        `<p class="y-chinh">🎯 Objectives 3 and 4 of the 2011 pilot list: agree on standard ways of using the tool, then judge the pilot against its objectives.</p>
+<ol start="3">
+<li><strong>Decide on standard ways of using the tool</strong> that work for all potential users:
+<ul>
+<li>naming conventions;</li>
+<li>creation of libraries and defining modularity;</li>
+<li>where the different elements will be stored;</li>
+<li>how they, and the tool itself, will be maintained.</li>
+</ul></li>
+<li><strong>Evaluate the pilot project against its objectives</strong> — have the benefits been achieved at reasonable cost?</li>
+</ol>
+<p class="nhan">Compared with 2018 (SWT6 slide 53)</p>
+<ul>
+<li><strong>Objective 3</strong> — kept as "deciding on standard ways of using, managing, storing and maintaining the tool and the test assets".</li>
+<li><strong>Objective 4</strong> — kept as "assessing whether the benefits will be achieved at reasonable cost".</li>
+<li><strong>New in 2018</strong> — understanding the metrics the tool should collect and report, and configuring it to capture them.</li>
+</ul>
+<p class="nhan">Example — the standards a Playwright pilot might set</p>
+<ul>
+<li><strong>Naming</strong> — <code>checkout_guest_pays_by_card.spec.ts</code>.</li>
+<li><strong>Library</strong> — one page object per screen, shared by all tests.</li>
+<li><strong>Storage</strong> — tests in the same Git repository as the code, test data in <code>/fixtures</code>.</li>
+<li><strong>Maintenance</strong> — whoever changes a screen updates its page object in the same pull request.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Mục tiêu 3 và 4 trong danh sách pilot bản 2011: thống nhất cách dùng công cụ chuẩn, rồi chấm pilot theo chính mục tiêu của nó.</p>
+<ol start="3">
+<li><strong>Quyết định cách dùng công cụ chuẩn</strong> hợp với mọi người sẽ dùng:
+<ul>
+<li>quy ước đặt tên;</li>
+<li>cách tạo thư viện và chia module;</li>
+<li>chỗ lưu từng thành phần;</li>
+<li>cách bảo trì chúng, và bảo trì chính công cụ.</li>
+</ul></li>
+<li><strong>Đánh giá dự án pilot theo mục tiêu của nó</strong> — lợi ích có đạt được với chi phí hợp lý không?</li>
+</ol>
+<p class="nhan">So với bản 2018 (SWT6 slide 53)</p>
+<ul>
+<li><strong>Mục tiêu 3</strong> — giữ lại thành "quyết định cách dùng, quản lý, lưu trữ và bảo trì chuẩn cho công cụ và tài sản test".</li>
+<li><strong>Mục tiêu 4</strong> — giữ lại thành "đánh giá lợi ích có đạt được với chi phí hợp lý không".</li>
+<li><strong>Mới trong 2018</strong> — hiểu các số liệu công cụ cần thu thập và báo cáo, và cấu hình để thu được chúng.</li>
+</ul>
+<p class="nhan">Ví dụ — các chuẩn một pilot Playwright có thể đặt ra</p>
+<ul>
+<li><strong>Đặt tên</strong> — <code>checkout_guest_pays_by_card.spec.ts</code>.</li>
+<li><strong>Thư viện</strong> — mỗi màn hình một page object, mọi test dùng chung.</li>
+<li><strong>Lưu trữ</strong> — test nằm cùng kho Git với code, dữ liệu test trong <code>/fixtures</code>.</li>
+<li><strong>Bảo trì</strong> — ai sửa màn hình thì sửa luôn page object của nó trong cùng pull request.</li>
+</ul>`],
+      [30, 'Success factors (1)',
+        `<p class="y-chinh">🎯 The 2011 success factors, first half: roll out step by step, adapt the process, support people, write guidelines.</p>
+<ol>
+<li><strong>Incremental roll-out</strong> (after the pilot) to the rest of the organisation.</li>
+<li><strong>Adapting and improving processes, testware and tool artefacts</strong> — to get the best fit and balance between them and the use of the tool.</li>
+<li><strong>Adequate support, training, coaching and mentoring</strong> of new users.</li>
+<li><strong>Defining and communicating guidelines</strong> for the use of the tool, based on what was learned in the pilot.</li>
+</ol>
+<p class="nhan">Compared with 2018 (SWT6 slide 54)</p>
+<ul>
+<li><strong>Same four ideas</strong> — the 2018 list opens with exactly these.</li>
+<li><strong>A detail 2018 dropped</strong> — the guidelines come <em>from the pilot</em>: the pilot's standards (page 29) become the organisation's guidelines.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Yếu tố thành công bản 2011, nửa đầu: triển khai từng bước, chỉnh quy trình, hỗ trợ con người, viết hướng dẫn.</p>
+<ol>
+<li><strong>Triển khai từng bước</strong> (sau pilot) ra phần còn lại của tổ chức.</li>
+<li><strong>Điều chỉnh và cải tiến quy trình, testware và các sản phẩm của công cụ</strong> — để chúng và việc dùng công cụ khớp và cân bằng nhất.</li>
+<li><strong>Hỗ trợ, đào tạo, kèm cặp và cố vấn đầy đủ</strong> cho người mới dùng.</li>
+<li><strong>Định ra và phổ biến hướng dẫn</strong> sử dụng công cụ, dựa trên những gì học được từ pilot.</li>
+</ol>
+<p class="nhan">So với bản 2018 (SWT6 slide 54)</p>
+<ul>
+<li><strong>Cùng bốn ý</strong> — danh sách 2018 mở đầu bằng đúng bốn ý này.</li>
+<li><strong>Một chi tiết bản 2018 bỏ đi</strong> — hướng dẫn đến <em>từ pilot</em>: các chuẩn của pilot (trang 29) trở thành hướng dẫn của cả tổ chức.</li>
+</ul>`],
+      [31, 'Success factors (2)',
+        `<p class="y-chinh">🎯 Second half: keep improving — measure use and benefit, keep supporting users, learn from every team.</p>
+<ol start="5">
+<li><strong>A continuous improvement mechanism</strong> as tool use spreads through more of the organisation.</li>
+<li><strong>Monitor the use of the tool and the benefits achieved</strong> — and adapt the way it is used to what is learned.</li>
+<li><strong>Continuing support</strong> for anyone using test tools — e.g. technical expertise to help non-programmer testers who use keyword-driven test automation.</li>
+<li><strong>Improvement based on information from all teams</strong> who use test tools.</li>
+</ol>
+<p class="nhan">Compared with 2018 (SWT6 slide 54)</p>
+<ul>
+<li><strong>Kept</strong> — monitoring tool use and benefits; providing support; gathering lessons learned from all users.</li>
+<li><strong>Named differently</strong> — the "continuous improvement mechanism" is close to 2018's "a way to gather usage information from the actual use of the tool".</li>
+<li><strong>The example is worth keeping</strong> — keyword-driven automation lets non-programmers write tests, but someone technical must still build and maintain the keywords (8.3, SWT6 slide 45).</li>
+</ul>
+<div class="pitfall">Training appears in two lists. <em>Planning</em> training, coaching and mentoring is a <strong>selection</strong> principle (page 27); <em>providing</em> it to users is a <strong>success factor</strong> (page 30). Read the verb in the option.</div>`,
+        `<p class="y-chinh">🎯 Nửa sau: cải tiến liên tục — đo việc dùng và lợi ích, tiếp tục hỗ trợ người dùng, học từ mọi đội.</p>
+<ol start="5">
+<li><strong>Cơ chế cải tiến liên tục</strong> khi công cụ lan ra nhiều phần của tổ chức.</li>
+<li><strong>Giám sát việc dùng công cụ và lợi ích đạt được</strong> — và điều chỉnh cách dùng theo điều học được.</li>
+<li><strong>Hỗ trợ lâu dài</strong> cho mọi người dùng công cụ test — vd cần chuyên môn kỹ thuật để giúp tester không biết lập trình dùng keyword-driven automation.</li>
+<li><strong>Cải tiến dựa trên thông tin từ mọi đội</strong> đang dùng công cụ test.</li>
+</ol>
+<p class="nhan">So với bản 2018 (SWT6 slide 54)</p>
+<ul>
+<li><strong>Giữ lại</strong> — giám sát việc dùng và lợi ích; hỗ trợ người dùng; thu bài học kinh nghiệm từ mọi người dùng.</li>
+<li><strong>Đổi cách gọi</strong> — "cơ chế cải tiến liên tục" gần với "cách thu thập thông tin sử dụng từ việc dùng thật" của bản 2018.</li>
+<li><strong>Ví dụ đáng nhớ</strong> — keyword-driven cho người không lập trình viết được test, nhưng vẫn cần người kỹ thuật dựng và bảo trì các keyword (8.3, SWT6 slide 45).</li>
+</ul>
+<div class="pitfall">Đào tạo xuất hiện ở hai danh sách. <em>Lên kế hoạch</em> đào tạo, kèm cặp, cố vấn là nguyên tắc <strong>chọn công cụ</strong> (trang 27); <em>cung cấp</em> nó cho người dùng là <strong>yếu tố thành công</strong> (trang 30). Hãy đọc động từ trong phương án.</div>`],
+    ]),
+    bi(`<h3>Summary table — the old tool list mapped to CTFL 2018</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Old type (2023 deck)</th><th>CTFL 2018 name</th><th>2018 group</th><th>SWT6 slide</th></tr></thead>
+<tbody>
+<tr><td>Requirements testing</td><td>Requirements management tools; model-based testing tools</td><td>Management; test design &amp; implementation</td><td>10, 17</td></tr>
+<tr><td>Static analysis</td><td>Static analysis tools (D)</td><td>Static testing</td><td>15</td></tr>
+<tr><td>Test design</td><td>Test design tools; model-based testing tools</td><td>Test design &amp; implementation</td><td>16–17</td></tr>
+<tr><td>Test data preparation</td><td>Test data preparation tools</td><td>Test design &amp; implementation</td><td>18</td></tr>
+<tr><td>Test running (character-based, GUI)</td><td>Test execution tools</td><td>Execution &amp; logging</td><td>21, 43–46</td></tr>
+<tr><td>Comparison</td><td>part of test execution tools</td><td>Execution &amp; logging</td><td>21</td></tr>
+<tr><td>Harnesses &amp; drivers, simulators</td><td>Test harnesses (D); unit test frameworks (D)</td><td>Execution &amp; logging</td><td>23–24</td></tr>
+<tr><td>Performance</td><td>Performance testing tools (D); monitoring tools</td><td>Performance &amp; dynamic analysis</td><td>25–26</td></tr>
+<tr><td>Dynamic analysis</td><td>Dynamic analysis tools (D)</td><td>Performance &amp; dynamic analysis</td><td>27</td></tr>
+<tr><td>Debugging</td><td>— not a test tool (debugging ≠ testing, LO-1.1.2)</td><td>—</td><td>—</td></tr>
+<tr><td>Test management (incidents, traceability)</td><td>Test management &amp; ALM; defect management; requirements management</td><td>Management</td><td>9–11</td></tr>
+<tr><td>Coverage measurement</td><td>Coverage tools (D)</td><td>Execution &amp; logging</td><td>22</td></tr>
+</tbody>
+</table></div>
+<h3>Ví dụ có lời giải · Worked example — one question, two vocabularies</h3>
+<p><strong>Q.</strong> "A tool captures screens and compares them with stored bitmaps, masking the date field. It is a…" a) comparison tool · b) dynamic analysis tool · c) test harness · d) debugging tool.</p>
+<ol>
+<li><strong>Old list</strong> — page 11: actual vs expected, bitmaps, masking → <strong>a) comparison tool</strong>.</li>
+<li><strong>2018 list</strong> — there is no comparison group; the same function belongs to <strong>test execution tools</strong>. If a newer question offers "test execution tool" instead, choose that.</li>
+<li><strong>Rule out the rest</strong> — dynamic analysis watches memory at run time (page 14), a harness drives components without a UI (page 12), a debugger locates the cause of a failure (page 15).</li>
+</ol>
+<div class="pitfall co-tieu-de"><strong>Old words in exam questions.</strong>
+<ul>
+<li><strong>"Fault", "incident"</strong> — read them as defect, defect report.</li>
+<li><strong>"Test running tool"</strong> — test execution tool.</li>
+<li><strong>"LCSAJ", "condition coverage"</strong> — not examined at Foundation 2018; only statement and decision coverage are.</li>
+</ul></div>`,
+    `<h3>Bảng tổng kết — danh sách công cụ cũ đối chiếu CTFL 2018</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Loại cũ (slide 2023)</th><th>Tên trong CTFL 2018</th><th>Nhóm 2018</th><th>SWT6 slide</th></tr></thead>
+<tbody>
+<tr><td>Requirements testing</td><td>Requirements management tools; model-based testing tools</td><td>Quản lý; thiết kế &amp; hiện thực test</td><td>10, 17</td></tr>
+<tr><td>Static analysis</td><td>Static analysis tools (D)</td><td>Kiểm thử tĩnh</td><td>15</td></tr>
+<tr><td>Test design</td><td>Test design tools; model-based testing tools</td><td>Thiết kế &amp; hiện thực test</td><td>16–17</td></tr>
+<tr><td>Test data preparation</td><td>Test data preparation tools</td><td>Thiết kế &amp; hiện thực test</td><td>18</td></tr>
+<tr><td>Test running (ký tự, GUI)</td><td>Test execution tools</td><td>Thực thi &amp; ghi log</td><td>21, 43–46</td></tr>
+<tr><td>Comparison</td><td>một phần của test execution tools</td><td>Thực thi &amp; ghi log</td><td>21</td></tr>
+<tr><td>Harness &amp; driver, simulator</td><td>Test harnesses (D); unit test frameworks (D)</td><td>Thực thi &amp; ghi log</td><td>23–24</td></tr>
+<tr><td>Performance</td><td>Performance testing tools (D); monitoring tools</td><td>Hiệu năng &amp; phân tích động</td><td>25–26</td></tr>
+<tr><td>Dynamic analysis</td><td>Dynamic analysis tools (D)</td><td>Hiệu năng &amp; phân tích động</td><td>27</td></tr>
+<tr><td>Debugging</td><td>— không phải công cụ test (debug ≠ test, LO-1.1.2)</td><td>—</td><td>—</td></tr>
+<tr><td>Test management (incident, truy vết)</td><td>Test management &amp; ALM; defect management; requirements management</td><td>Quản lý</td><td>9–11</td></tr>
+<tr><td>Coverage measurement</td><td>Coverage tools (D)</td><td>Thực thi &amp; ghi log</td><td>22</td></tr>
+</tbody>
+</table></div>
+<h3>Ví dụ có lời giải · Một câu hỏi, hai bộ từ vựng</h3>
+<p><strong>Câu hỏi.</strong> "Một công cụ chụp màn hình và so với ảnh bitmap đã lưu, có che trường ngày tháng. Đó là…" a) comparison tool · b) dynamic analysis tool · c) test harness · d) debugging tool.</p>
+<ol>
+<li><strong>Danh sách cũ</strong> — trang 11: so thực tế với mong đợi, bitmap, masking → <strong>a) comparison tool</strong>.</li>
+<li><strong>Danh sách 2018</strong> — không có nhóm comparison; chức năng này thuộc <strong>test execution tools</strong>. Nếu câu hỏi mới đưa ra "test execution tool" thì chọn cái đó.</li>
+<li><strong>Loại các phương án còn lại</strong> — dynamic analysis theo dõi bộ nhớ lúc chạy (trang 14), harness chạy component chưa có UI (trang 12), debugger định vị nguyên nhân failure (trang 15).</li>
+</ol>
+<div class="pitfall co-tieu-de"><strong>Từ cũ trong đề thi.</strong>
+<ul>
+<li><strong>"Fault", "incident"</strong> — hiểu là defect, defect report.</li>
+<li><strong>"Test running tool"</strong> — test execution tool.</li>
+<li><strong>"LCSAJ", "condition coverage"</strong> — Foundation 2018 không hỏi; chỉ hỏi statement và decision coverage.</li>
+</ul></div>`),
+  ].join('\n'),
+};
+
 /* ──────────────────────────────── Quiz 8 ──────────────────────────────── */
-// SWT6 has no "Question" slides: 40 questions on the non-question slides and the hands-on lessons.
+// SWT6 has no "Question" slides: 45 questions on the non-question slides, the hands-on lessons and (last 5) the 2023 deck of lesson 8.7.
 const q = (question, options, correctIndex) => ({ question, options, correctIndex, points: 1 });
 const QUIZ8 = {
   title: 'Quiz 8 — Tools & automation (SWT6 + JUnit hands-on)|||Quiz 8 — Công cụ & tự động hoá (SWT6 + thực hành JUnit)',
   slug: 'swt301-quiz-8',
   type: 'QUIZ',
-  description: '40 câu: phân loại công cụ, (D), probe effect, lợi ích/rủi ro, capture/replay vs data-driven vs keyword-driven vs MBT, công cụ quản lý test, chọn công cụ, pilot, yếu tố thành công, JUnit 4/5, build.xml, pyramid, CI, Selenium. SWT6 không có slide Question.',
+  description: '45 câu: phân loại công cụ, (D), probe effect, lợi ích/rủi ro, capture/replay vs data-driven vs keyword-driven vs MBT, công cụ quản lý test, chọn công cụ, pilot, yếu tố thành công, JUnit 4/5, build.xml, pyramid, CI, Selenium, và 5 câu về bộ slide 2023 (bài 8.7). SWT6 không có slide Question.',
   quiz: {
-    timeLimitSeconds: 2400,
+    timeLimitSeconds: 2700,
     questions: [
       q('Which of the following is NOT a purpose of using test tools? (SWT6 s.6)|||Đâu KHÔNG phải mục đích dùng công cụ test? (SWT6 s.6)', ['Automating repetitive tasks|||Tự động hoá việc lặp lại', 'Supporting manual test activities|||Hỗ trợ các hoạt động test thủ công', 'More consistent testing and better defect reproducibility|||Test nhất quán hơn, tái hiện lỗi tốt hơn', 'Removing the need for test design|||Không cần thiết kế test nữa'], 3),
       q('The ISTQB syllabus classifies test tools mainly by… (s.7)|||Syllabus ISTQB phân loại công cụ test chủ yếu theo… (s.7)', ['price|||giá', 'licensing model|||mô hình bản quyền', 'the test activities they support|||hoạt động kiểm thử mà chúng hỗ trợ', 'the vendor|||nhà cung cấp'], 2),
@@ -2795,6 +3517,12 @@ const QUIZ8 = {
       q('The test pyramid recommends…|||Test pyramid khuyến nghị…', ['mostly UI tests, few unit tests|||chủ yếu UI test, ít unit test', 'many unit tests, fewer integration tests, very few UI tests|||nhiều unit test, ít integration hơn, rất ít UI test', 'only manual tests|||chỉ test thủ công', 'equal numbers at every level|||số lượng bằng nhau mọi tầng'], 1),
       q('In CI, what does a RED build mean?|||Trong CI, build ĐỎ nghĩa là gì?', ['The code is ready to ship|||Code sẵn sàng giao', 'A step (e.g. a test) failed; the change should not be merged as it is|||Một bước (vd một test) fail; không nên merge thay đổi nguyên trạng', 'The CI server is switched off|||CI server bị tắt', 'Coverage is 100 %|||Coverage đạt 100 %'], 1),
       q('Selenium WebDriver is primarily a tool for… and which is BEST kept manual rather than automated?|||Selenium WebDriver chủ yếu là công cụ để… và việc nào NÊN giữ thủ công?', ['unit testing; boundary checks|||unit test; kiểm biên', 'driving a real browser for UI/end-to-end tests; usability and exploratory testing|||điều khiển trình duyệt thật cho test UI/đầu-cuối; usability và exploratory testing', 'load testing; smoke tests|||load test; smoke test', 'static analysis; regression checks|||phân tích tĩnh; kiểm regression'], 1),
+      // Lesson 8.7 — the 2023 deck (oswt6): the old tool classification and introducing a tool.
+      { ...q('The 2023 deck lists "incident management tools" under test management tools. What does CTFL 2018 call them? (8.7, page 16)|||Slide 2023 xếp "incident management tools" vào công cụ quản lý test. CTFL 2018 gọi chúng là gì? (8.7, trang 16)', ['Defect management tools|||Công cụ quản lý defect', 'Risk management tools|||Công cụ quản lý rủi ro', 'Configuration management tools|||Công cụ quản lý cấu hình', 'Release management tools|||Công cụ quản lý phát hành'], 0), explanation: 'The old decks said "incident"; CTFL 2018 uses defect management and defect reports. An incident was any unexpected event needing investigation, which might not be a defect.|||Slide cũ dùng "incident"; CTFL 2018 dùng defect management và defect report. Incident là mọi sự kiện bất thường cần điều tra, có khi không phải defect.' },
+      { ...q('Which tool type from the 2023 deck is NOT a category in the CTFL 2018 tool classification? (8.7, page 15)|||Loại công cụ nào của slide 2023 KHÔNG còn là một nhóm trong phân loại CTFL 2018? (8.7, trang 15)', ['Test data preparation tools|||Công cụ chuẩn bị dữ liệu test', 'Debugging tools|||Công cụ debug', 'Coverage tools|||Công cụ coverage', 'Dynamic analysis tools|||Công cụ phân tích động'], 1), explanation: 'Debugging finds, analyses and removes the cause of a failure; it is a development activity, not testing (LO-1.1.2). The other three are still in the 2018 classification.|||Debug là tìm, phân tích và gỡ nguyên nhân của failure; đó là việc của phát triển, không phải kiểm thử (LO-1.1.2). Ba loại còn lại vẫn có trong phân loại 2018.' },
+      { ...q('Flight-control software is tested in a simulator because testing in the real environment would be too costly or dangerous. In the 2023 deck, simulators belong to… (8.7, page 12)|||Phần mềm điều khiển bay được test trong simulator vì test ở môi trường thật quá tốn kém hoặc nguy hiểm. Trong slide 2023, simulator thuộc về… (8.7, trang 12)', ['comparison tools|||công cụ so sánh', 'test harnesses and drivers|||test harness và driver', 'performance testing tools|||công cụ test hiệu năng', 'requirements testing tools|||công cụ test yêu cầu'], 1), explanation: 'Page 12: harnesses and drivers exercise software without a user interface, run groups of automated tests, are often custom-built, and include simulators where the real environment is too costly or dangerous.|||Trang 12: harness và driver chạy thử phần mềm chưa có giao diện, chạy từng nhóm test tự động, thường tự viết, và gồm cả simulator khi môi trường thật quá tốn kém hoặc nguy hiểm.' },
+      { ...q('How does a coverage measurement tool work? (8.7, page 17)|||Công cụ đo coverage hoạt động thế nào? (8.7, trang 17)', ['It counts the test cases written for each requirement|||Đếm số test case viết cho mỗi yêu cầu', 'It instruments the code, runs the tests through the instrumented code, and reports what was and was not executed|||Chèn mã đo vào code, chạy test qua bản đã chèn, rồi báo phần nào đã và chưa được chạy', 'It compares actual screens with stored bitmaps|||So màn hình thực tế với ảnh bitmap đã lưu', 'It generates load and measures response times|||Tạo tải và đo thời gian phản hồi'], 1), explanation: 'Instrument, run, report: counters are inserted in a static pass, the tests run through that code, and the tool reports coverage line by line plus summary statistics. The instrumentation is what makes coverage tools intrusive.|||Chèn, chạy, báo: bộ đếm được chèn trong một lượt tĩnh, test chạy qua code đó, và công cụ báo coverage theo từng dòng kèm số liệu tổng. Việc chèn mã đo khiến công cụ coverage mang tính xâm lấn.' },
+      { ...q('What is the difference between a proof of concept and a pilot project? (8.7, page 25)|||Proof of concept khác dự án pilot ở điểm nào? (8.7, trang 25)', ['The proof of concept comes after roll-out; the pilot comes before buying|||Proof of concept làm sau khi triển khai; pilot làm trước khi mua', 'The proof of concept checks, during selection, that the tool works on our application; the pilot uses the chosen tool on a small real project to learn it, set standards and check cost against benefit|||Proof of concept kiểm, trong lúc chọn, xem công cụ có chạy trên ứng dụng của mình không; pilot dùng công cụ đã chọn trên một dự án thật nhỏ để hiểu nó, đặt chuẩn và so chi phí với lợi ích', 'They are two names for the same activity|||Hai tên gọi của cùng một việc', 'A proof of concept is only for open-source tools|||Proof of concept chỉ dành cho công cụ mã nguồn mở'], 1), explanation: 'A proof of concept is the last step of tool selection (SWT6 slide 51). The pilot comes after the tool is chosen and has its own objectives: learn the tool, fit the process, standardise its use, assess benefits at reasonable cost (slides 52–53).|||Proof of concept là bước cuối của việc chọn công cụ (SWT6 slide 51). Pilot diễn ra sau khi đã chọn và có mục tiêu riêng: hiểu công cụ, khớp quy trình, chuẩn hoá cách dùng, đánh giá lợi ích với chi phí hợp lý (slide 52–53).' },
     ],
   },
 };
@@ -2802,5 +3530,5 @@ const QUIZ8 = {
 export default {
   title: 'Chapter 8 — Test tools & automation|||Chương 8 — Công cụ & tự động hoá',
   description: 'SWT6 (54 slide) học từng slide: mục đích & phân loại công cụ, probe effect, 6 nhóm công cụ theo hoạt động, lợi ích/rủi ro, capture/replay – data-driven – keyword-driven – MBT, chọn công cụ, pilot, yếu tố thành công — cộng thực hành JUnit 4 (bộ mẫu build.xml) → JUnit 5/Maven/JaCoCo, test pyramid, CI và Selenium.',
-  lessons: [L81, L82, L83, L84, L85, L86, QUIZ8],
+  lessons: [L81, L82, L83, L84, L85, L86, L87, QUIZ8],
 };

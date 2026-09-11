@@ -10,6 +10,7 @@
  *   2.4 Test types                       slides 106–130
  *   2.5 Maintenance testing & the high-level test plan  slides 131–143
  *   2.6 The one-page overview (Overview.xlsx)
+ *   2.7 The older 2023 deck (SWT2.ppt, deck key oswt2): its 31 new pages
  * Section title is kept identical to the old file so the seeder finds the
  * existing section even though its first lesson slug changed.
  */
@@ -2966,15 +2967,952 @@ const L26 = {
   ].join('\n'),
 };
 
+/* ─────────────── 2.7 The 2023 slide set (oswt2, 86 pages) ─────────────── */
+const O = 'oswt2';
+const L27 = {
+  title: '2.7 — More from the 2023 slide set: V-model, cost of faults, component process|||2.7 — Bổ sung từ bộ slide 2023: V-model, chi phí lỗi, quy trình component test',
+  slug: 'swt301-ch2-slides-2023',
+  type: 'VIDEO',
+  description: 'Bộ slide SWT2 cũ (2023, 86 trang): 31 trang có nội dung mới — V-model 5 cấp, báo cáo thực tế, "test đặc tả cờ vua thế nào", chuỗi chi phí lỗi (£1.000 → £13.000), quy trình component test BS 7925-2, tích hợp mức lớn, phi chức năng, UAT 80/20, hợp đồng, alpha/beta — kèm bảng đổi thuật ngữ cũ → CTFL v4.0.',
+  content: [
+    bi(`<span class="eyebrow">Chapter 2 · Lesson 2.7 · SWT2 (2023) — 86 pages</span>
+<h2>More from the 2023 slide set</h2>
+<p class="lead">Before the current SWT2 deck, this course used an older 86-page version titled <em>ISTQB / ISEB Foundation Exam Practice</em>. Most of its pages repeat what you studied in Lessons 2.1–2.5. <strong>31 pages</strong> show something the current lessons do not — every one of them is below, with the image and an explanation.</p>
+<p class="nhan">What only the 2023 deck has</p>
+<ul>
+<li><strong>A five-level V-model</strong> — with "integration testing in the small" and "in the large".</li>
+<li><strong>The experience report as slides</strong> — Phase 1 vs Phase 2 of a real project.</li>
+<li><strong>A class exercise</strong> — "How would you test this spec?" (a chess program).</li>
+<li><strong>The economics of testing</strong> — a worked cost of one fault: £1,000 for the developers, £12,000 for the users.</li>
+<li><strong>The BS 7925-2 component test process</strong> — document hierarchy and five activities.</li>
+<li><strong>Integration testing in the large</strong> — scope, approach and planning.</li>
+<li><strong>Acceptance details</strong> — the 80/20 picture, contract acceptance, alpha/beta similarities.</li>
+</ul>
+<p class="nhan">After this lesson you can</p>
+<ol>
+<li>Map the old five-level V onto today's four CTFL test levels.</li>
+<li>Re-compute the deck's fault-cost example and explain why late faults cost so much.</li>
+<li>Name the five activities of the BS 7925-2 component test process and what each produces.</li>
+<li>Plan integration testing in the large: risks first, outside first, one connection at a time.</li>
+<li>Tell contract, user, alpha and beta acceptance testing apart.</li>
+</ol>
+<p class="ghi-chu">The 2023 deck uses older words (ISEB, "faults", BS 7925, "in the small / in the large", "structural testing"). Each card gives today's CTFL v4.0 term, and the ★ table at the end lists them all.</p>`,
+    `<span class="eyebrow">Chương 2 · Bài 2.7 · SWT2 (2023) — 86 trang</span>
+<h2>Bổ sung từ bộ slide 2023</h2>
+<p class="lead">Trước bộ SWT2 hiện tại, môn này dùng một bản cũ 86 trang tên <em>ISTQB / ISEB Foundation Exam Practice</em>. Phần lớn các trang lặp lại những gì bạn đã học ở Bài 2.1–2.5. <strong>31 trang</strong> có nội dung mà các bài hiện tại chưa có — tất cả nằm dưới đây, kèm hình và lời giải thích.</p>
+<p class="nhan">Chỉ bộ 2023 mới có</p>
+<ul>
+<li><strong>V-model năm cấp</strong> — có "integration testing in the small" và "in the large".</li>
+<li><strong>Báo cáo thực tế dạng slide</strong> — Giai đoạn 1 và Giai đoạn 2 của một dự án thật.</li>
+<li><strong>Một bài tập trên lớp</strong> — "Bạn sẽ test đặc tả này thế nào?" (chương trình chơi cờ vua).</li>
+<li><strong>Kinh tế học của kiểm thử</strong> — tính chi phí của một lỗi: £1.000 phía developer, £12.000 phía người dùng.</li>
+<li><strong>Quy trình component test theo BS 7925-2</strong> — cây tài liệu và năm hoạt động.</li>
+<li><strong>Integration testing in the large</strong> — phạm vi, cách tiếp cận và lập kế hoạch.</li>
+<li><strong>Chi tiết về acceptance</strong> — hình 80/20, acceptance theo hợp đồng, điểm giống nhau của alpha/beta.</li>
+</ul>
+<p class="nhan">Học xong bài này bạn có thể</p>
+<ol>
+<li>Chuyển V-model năm cấp cũ sang bốn cấp test của CTFL hiện nay.</li>
+<li>Tính lại ví dụ chi phí lỗi trong slide và giải thích vì sao lỗi phát hiện muộn lại đắt.</li>
+<li>Kể tên năm hoạt động của quy trình component test BS 7925-2 và đầu ra của từng hoạt động.</li>
+<li>Lập kế hoạch integration testing in the large: rủi ro trước, bên ngoài trước, từng kết nối một.</li>
+<li>Phân biệt acceptance theo hợp đồng, UAT, alpha và beta.</li>
+</ol>
+<p class="ghi-chu">Bộ 2023 dùng từ cũ (ISEB, "fault", BS 7925, "in the small / in the large", "structural testing"). Mỗi thẻ đều ghi thuật ngữ CTFL v4.0 hiện nay, và bảng ★ cuối bài liệt kê tất cả.</p>`),
+    bi(`<h3>Old pages already taught in this chapter (55 pages — no images repeated)</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>SWT2 (2023) page</th><th>Already taught in</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td>1 — cover</td><td>2.1, SWT2 slide 1</td><td>"ISEB" was the old British exam board; the exam today is ISTQB CTFL v4.0.</td></tr>
+<tr><td>2, 22, 79, 81 — contents</td><td>2.1 slide 2 · 2.2 slide 36 · 2.4 slide 106 · 2.5 slide 131</td><td>Agenda pages.</td></tr>
+<tr><td>3 — Waterfall model</td><td>2.1, slide 7</td><td>Same figure, different drawing.</td></tr>
+<tr><td>7 — Early test design</td><td>2.1, slide 11</td><td>Identical six reasons.</td></tr>
+<tr><td>10–11 — VV&amp;T</td><td>2.1, slides 12–13</td><td>Same BS 7925-1 definitions.</td></tr>
+<tr><td>12 — Iterative life cycles</td><td>2.1, slides 14–16</td><td>Figure only.</td></tr>
+<tr><td>13 — Agile development</td><td>2.1, slide 22</td><td>Same six practices ("integration several times a day").</td></tr>
+<tr><td>23 — Before planning a set of tests</td><td>2.5, slide 136</td><td>Identical.</td></tr>
+<tr><td>24 — High level test planning</td><td>2.5, slide 137</td><td>Identical questions.</td></tr>
+<tr><td>25–30 — Test Plan 1–6 (IEEE 829)</td><td>2.5, slides 138–143</td><td>Same 16 sections.</td></tr>
+<tr><td>31 — Component testing</td><td>2.2, slides 42–43</td><td>"Also known as unit, module, program testing".</td></tr>
+<tr><td>32–33 — Component test strategy 1–2</td><td>2.2, slides 45–46</td><td>Identical.</td></tr>
+<tr><td>41 — Test design techniques (BS 7925-2)</td><td>2.2, slide 47</td><td>Identical yes/no table.</td></tr>
+<tr><td>43–55 — Big-bang … Integration planning</td><td>2.2, slides 57–69</td><td>Big-bang, incremental, top-down (page 45 = slide 59), stubs, bottom-up, drivers, minimum capability, thread, guidelines, planning.</td></tr>
+<tr><td>57–59 — Functional system testing</td><td>2.4, slides 109–111</td><td>Requirements- and business-process-based testing.</td></tr>
+<tr><td>61–68 — Performance … Documentation testing</td><td>2.4, slides 115–122</td><td>Identical eight pages.</td></tr>
+<tr><td>72–73 — UAT, why user involvement</td><td>2.3, slides 85–86</td><td>Identical.</td></tr>
+<tr><td>78 — Acceptance testing motto</td><td>2.3, slide 91</td><td>Identical.</td></tr>
+<tr><td>82–85 — Maintenance testing</td><td>2.5, slides 132–135</td><td>Identical.</td></tr>
+<tr><td>86 — Summary: key points</td><td>This lesson's objectives</td><td>A recap list; no new fact.</td></tr>
+</tbody></table></div>`,
+    `<h3>Các trang cũ đã được dạy trong chương này (55 trang — không lặp lại hình)</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Trang SWT2 (2023)</th><th>Đã dạy ở</th><th>Ghi chú</th></tr></thead>
+<tbody>
+<tr><td>1 — bìa</td><td>2.1, SWT2 slide 1</td><td>"ISEB" là hội đồng thi cũ của Anh; kỳ thi hiện nay là ISTQB CTFL v4.0.</td></tr>
+<tr><td>2, 22, 79, 81 — mục lục</td><td>2.1 slide 2 · 2.2 slide 36 · 2.4 slide 106 · 2.5 slide 131</td><td>Trang mục lục.</td></tr>
+<tr><td>3 — Mô hình waterfall</td><td>2.1, slide 7</td><td>Cùng hình, vẽ khác.</td></tr>
+<tr><td>7 — Thiết kế test sớm</td><td>2.1, slide 11</td><td>Đúng sáu lý do đó.</td></tr>
+<tr><td>10–11 — VV&amp;T</td><td>2.1, slide 12–13</td><td>Cùng định nghĩa BS 7925-1.</td></tr>
+<tr><td>12 — Vòng đời lặp</td><td>2.1, slide 14–16</td><td>Chỉ có hình.</td></tr>
+<tr><td>13 — Phát triển Agile</td><td>2.1, slide 22</td><td>Cùng sáu thực hành ("tích hợp nhiều lần mỗi ngày").</td></tr>
+<tr><td>23 — Trước khi lập kế hoạch test</td><td>2.5, slide 136</td><td>Giống hệt.</td></tr>
+<tr><td>24 — Lập kế hoạch test tổng thể</td><td>2.5, slide 137</td><td>Cùng các câu hỏi.</td></tr>
+<tr><td>25–30 — Test Plan 1–6 (IEEE 829)</td><td>2.5, slide 138–143</td><td>Cùng 16 mục.</td></tr>
+<tr><td>31 — Component testing</td><td>2.2, slide 42–43</td><td>"Còn gọi là unit, module, program testing".</td></tr>
+<tr><td>32–33 — Chiến lược component test 1–2</td><td>2.2, slide 45–46</td><td>Giống hệt.</td></tr>
+<tr><td>41 — Kỹ thuật thiết kế test (BS 7925-2)</td><td>2.2, slide 47</td><td>Cùng bảng có/không.</td></tr>
+<tr><td>43–55 — Big-bang … Lập kế hoạch tích hợp</td><td>2.2, slide 57–69</td><td>Big-bang, tăng dần, top-down (trang 45 = slide 59), stub, bottom-up, driver, minimum capability, thread, hướng dẫn, kế hoạch.</td></tr>
+<tr><td>57–59 — System test chức năng</td><td>2.4, slide 109–111</td><td>Test dựa trên yêu cầu và trên quy trình nghiệp vụ.</td></tr>
+<tr><td>61–68 — Hiệu năng … Test tài liệu</td><td>2.4, slide 115–122</td><td>Đúng tám trang đó.</td></tr>
+<tr><td>72–73 — UAT, vì sao cần người dùng</td><td>2.3, slide 85–86</td><td>Giống hệt.</td></tr>
+<tr><td>78 — Châm ngôn acceptance</td><td>2.3, slide 91</td><td>Giống hệt.</td></tr>
+<tr><td>82–85 — Kiểm thử bảo trì</td><td>2.5, slide 132–135</td><td>Giống hệt.</td></tr>
+<tr><td>86 — Tóm tắt ý chính</td><td>Mục tiêu của bài này</td><td>Danh sách ôn lại; không có ý mới.</td></tr>
+</tbody></table></div>`),
+    walkHead(O, 4, 80, 'Only the 31 pages that add something are shown; the page numbers jump where a page is in the table above.', 'Chỉ hiện 31 trang có nội dung mới; số trang nhảy cóc ở chỗ trang đó đã nằm trong bảng phía trên.'),
+    walk(O, [
+      [4, 'V-Model: test levels',
+        `<p class="y-chinh">🎯 The 2023 V has five test levels, not four: integration testing appears twice — "in the small" and "in the large".</p>
+<p class="nhan">The five pairs (bottom to top)</p>
+<ol>
+<li><strong>Code</strong> ↔ component testing</li>
+<li><strong>Design specification</strong> ↔ integration testing in the small</li>
+<li><strong>System specification</strong> ↔ system testing</li>
+<li><strong>Project specification</strong> ↔ integration testing in the large</li>
+<li><strong>Business requirements</strong> ↔ acceptance testing</li>
+</ol>
+<p class="nhan">Today's CTFL v4.0 names</p>
+<ul>
+<li><strong>In the small</strong> → <em>component integration testing</em>: interfaces between the components of one system.</li>
+<li><strong>In the large</strong> → <em>system integration testing</em>: your system together with other systems, packages and networks.</li>
+<li><strong>Four levels today</strong> — CTFL keeps both kinds inside one level, "integration testing" (the four-level V of Lesson 2.1, slide 8).</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> <em>small</em> = inside my system, <em>large</em> = my system plus the world around it. That is why "in the large" sits <em>above</em> system testing: you first check your system alone, then its connections.</p>`,
+        `<p class="y-chinh">🎯 V-model bản 2023 có năm cấp test chứ không phải bốn: integration testing xuất hiện hai lần — "in the small" và "in the large".</p>
+<p class="nhan">Năm cặp (từ dưới lên)</p>
+<ol>
+<li><strong>Code</strong> ↔ component testing</li>
+<li><strong>Đặc tả thiết kế</strong> ↔ integration testing in the small</li>
+<li><strong>Đặc tả hệ thống</strong> ↔ system testing</li>
+<li><strong>Đặc tả dự án</strong> ↔ integration testing in the large</li>
+<li><strong>Yêu cầu nghiệp vụ</strong> ↔ acceptance testing</li>
+</ol>
+<p class="nhan">Tên gọi theo CTFL v4.0 hiện nay</p>
+<ul>
+<li><strong>In the small</strong> → <em>component integration testing</em>: giao diện giữa các thành phần của một hệ thống.</li>
+<li><strong>In the large</strong> → <em>system integration testing</em>: hệ thống của bạn cùng các hệ thống, gói phần mềm và mạng khác.</li>
+<li><strong>Nay chỉ còn bốn cấp</strong> — CTFL gộp cả hai loại vào một cấp "integration testing" (chữ V bốn cấp ở Bài 2.1, slide 8).</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> <em>small</em> = bên trong hệ thống của tôi, <em>large</em> = hệ thống của tôi cộng thế giới xung quanh. Vì vậy "in the large" nằm <em>trên</em> system testing: kiểm hệ thống một mình trước, rồi mới kiểm các kết nối của nó.</p>`],
+      [5, 'V-Model: late test design',
+        `<p class="y-chinh">🎯 The excuse "we don't have time to design tests early" pushes all test design to the right arm of the V.</p>
+<p class="nhan">What the picture shows</p>
+<ul>
+<li><strong>Tests bubbles on the right</strong> — each level's tests are designed only when that level is about to run ("Design Tests?" bottom right).</li>
+<li><strong>The green starburst</strong> — the excuse that causes it.</li>
+</ul>
+<p class="nhan">Why the excuse is wrong</p>
+<ul>
+<li><strong>Defects in the documents stay hidden</strong> — nobody questions the requirements until the code exists, when fixing costs 10–100 times more (page 20).</li>
+<li><strong>No extra effort is needed</strong> — page 7 says early test design only <em>re-schedules</em> the same work.</li>
+</ul>
+<p class="ghi-chu">Same idea as Lesson 2.1, slide 9; the 2023 page adds the excuse itself.</p>`,
+        `<p class="y-chinh">🎯 Câu biện hộ "chúng tôi không có thời gian thiết kế test sớm" đẩy toàn bộ việc thiết kế test sang nhánh phải của chữ V.</p>
+<p class="nhan">Hình cho thấy</p>
+<ul>
+<li><strong>Các bong bóng Tests nằm bên phải</strong> — test của mỗi cấp chỉ được thiết kế khi cấp đó sắp chạy ("Design Tests?" góc dưới phải).</li>
+<li><strong>Ngôi sao xanh</strong> — chính câu biện hộ gây ra chuyện đó.</li>
+</ul>
+<p class="nhan">Vì sao câu biện hộ sai</p>
+<ul>
+<li><strong>Lỗi trong tài liệu nằm im</strong> — không ai chất vấn yêu cầu cho tới khi có code, lúc đó sửa đắt gấp 10–100 lần (trang 20).</li>
+<li><strong>Không tốn thêm công</strong> — trang 7 nói thiết kế test sớm chỉ là <em>dời lịch</em> cùng một khối việc.</li>
+</ul>
+<p class="ghi-chu">Cùng ý với Bài 2.1, slide 9; trang 2023 thêm chính câu biện hộ.</p>`],
+      [6, 'V-Model: early test design',
+        `<p class="y-chinh">🎯 Early test design: each document on the left gets its tests designed as soon as it is written; they are run later on the right.</p>
+<p class="nhan">Which tests come from which document</p>
+<ol>
+<li><strong>Business requirements</strong> → acceptance tests</li>
+<li><strong>Project specification</strong> → integration-in-the-large tests</li>
+<li><strong>System specification</strong> → system tests</li>
+<li><strong>Design specification</strong> → integration-in-the-small tests</li>
+<li><strong>Code</strong> → component tests</li>
+</ol>
+<p class="nhan">Why it works</p>
+<p>Designing a test forces you to read the document critically — that is a review (static testing, Chapter 3). Unclear or missing requirements surface while they are still cheap to fix.</p>
+<p class="ghi-chu">Same idea as Lesson 2.1, slide 10, drawn on the five-level V.</p>`,
+        `<p class="y-chinh">🎯 Thiết kế test sớm: mỗi tài liệu ở nhánh trái được thiết kế test ngay khi viết xong; test chạy sau, ở nhánh phải.</p>
+<p class="nhan">Test nào sinh ra từ tài liệu nào</p>
+<ol>
+<li><strong>Yêu cầu nghiệp vụ</strong> → acceptance test</li>
+<li><strong>Đặc tả dự án</strong> → test integration in the large</li>
+<li><strong>Đặc tả hệ thống</strong> → system test</li>
+<li><strong>Đặc tả thiết kế</strong> → test integration in the small</li>
+<li><strong>Code</strong> → component test</li>
+</ol>
+<p class="nhan">Vì sao hiệu quả</p>
+<p>Thiết kế test buộc bạn đọc tài liệu một cách soi xét — đó chính là review (kiểm thử tĩnh, Chương 3). Yêu cầu mơ hồ hay thiếu lộ ra khi còn rẻ để sửa.</p>
+<p class="ghi-chu">Cùng ý với Bài 2.1, slide 10, vẽ trên chữ V năm cấp.</p>`],
+      [8, 'Experience report: Phase 1',
+        `<p class="y-chinh">🎯 Phase 1 of a real project (Scottish Widows, 1996): tests designed late — the release was forced live and failed.</p>
+<p class="nhan">Plan vs actual</p>
+<ul>
+<li><strong>Plan</strong> — 2 months development, then 2 months testing.</li>
+<li><strong>Actual</strong> — development ran late; testing and fixing (pink bar) overran the plan with "lots of dev overtime".</li>
+<li><strong>Go-live</strong> — at the planned date the system "has to go in", but it didn't work.</li>
+</ul>
+<p class="nhan">Quality</p>
+<ul>
+<li><strong>150 faults</strong> found in testing.</li>
+<li><strong>50 faults</strong> found by users in the first month live — a quarter of all 200 faults escaped.</li>
+<li><strong>Users not happy.</strong></li>
+</ul>
+<p class="ghi-chu">The numbers are also in the table after the walkthrough of Lesson 2.1. "Faults" is the old word — CTFL v4.0 says <em>defects</em>.</p>`,
+        `<p class="y-chinh">🎯 Giai đoạn 1 của một dự án thật (Scottish Widows, 1996): thiết kế test muộn — bản phát hành bị ép chạy thật và hỏng.</p>
+<p class="nhan">Kế hoạch và thực tế</p>
+<ul>
+<li><strong>Kế hoạch</strong> — 2 tháng phát triển, rồi 2 tháng test.</li>
+<li><strong>Thực tế</strong> — phát triển trễ; test và sửa lỗi (thanh hồng) vượt kế hoạch, developer "tăng ca rất nhiều".</li>
+<li><strong>Đưa vào vận hành</strong> — tới ngày dự kiến thì hệ thống "phải lên", nhưng chạy không được.</li>
+</ul>
+<p class="nhan">Chất lượng</p>
+<ul>
+<li><strong>150 lỗi</strong> tìm thấy khi test.</li>
+<li><strong>50 lỗi</strong> người dùng gặp trong tháng đầu vận hành — một phần tư trong tổng 200 lỗi đã lọt ra ngoài.</li>
+<li><strong>Người dùng không hài lòng.</strong></li>
+</ul>
+<p class="ghi-chu">Các con số này cũng có trong bảng sau phần slide của Bài 2.1. "Fault" là từ cũ — CTFL v4.0 gọi là <em>defect</em>.</p>`],
+      [9, 'Experience report: Phase 2',
+        `<p class="y-chinh">🎯 Phase 2, same team: tests designed early — shorter testing, zero faults in live use, on time.</p>
+<p class="nhan">Plan vs actual</p>
+<ul>
+<li><strong>Plan</strong> — 2 months development, then only <strong>6 weeks</strong> testing.</li>
+<li><strong>The cylinder</strong> — the test design is now ready at the <em>start</em>, not after development as in Phase 1.</li>
+<li><strong>Actual</strong> — "smooth, not much for dev to do"; finished <strong>on time</strong>.</li>
+<li><strong>Acceptance test</strong> — a full week this time (vs half a day in Phase 1): users could test properly.</li>
+</ul>
+<p class="nhan">Quality</p>
+<ul>
+<li><strong>50 faults</strong> in testing (vs 150).</li>
+<li><strong>0 faults</strong> in the first month live (vs 50) — happy users.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> fewer faults were <em>found</em> because fewer were <em>built in</em>. Early test design is prevention, not just earlier detection.</p>`,
+        `<p class="y-chinh">🎯 Giai đoạn 2, cùng nhóm: thiết kế test sớm — test ngắn hơn, không lỗi nào khi vận hành, đúng hạn.</p>
+<p class="nhan">Kế hoạch và thực tế</p>
+<ul>
+<li><strong>Kế hoạch</strong> — 2 tháng phát triển, rồi chỉ <strong>6 tuần</strong> test.</li>
+<li><strong>Hình trụ</strong> — bộ test đã thiết kế xong ngay từ <em>đầu</em>, chứ không phải sau khi phát triển như Giai đoạn 1.</li>
+<li><strong>Thực tế</strong> — "suôn sẻ, developer ít việc phải làm"; xong <strong>đúng hạn</strong>.</li>
+<li><strong>Acceptance test</strong> — lần này trọn một tuần (so với nửa ngày ở Giai đoạn 1): người dùng test được tử tế.</li>
+</ul>
+<p class="nhan">Chất lượng</p>
+<ul>
+<li><strong>50 lỗi</strong> khi test (so với 150).</li>
+<li><strong>0 lỗi</strong> trong tháng đầu vận hành (so với 50) — người dùng hài lòng.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> <em>tìm thấy</em> ít lỗi hơn vì ít lỗi bị <em>xây vào</em> hơn. Thiết kế test sớm là phòng ngừa, không chỉ là phát hiện sớm hơn.</p>`],
+      [14, 'How would you test this spec?',
+        `<p class="y-chinh">🎯 A three-sentence spec looks complete — until you try to write one test with an expected result.</p>
+<p class="nhan">Questions the spec does not answer</p>
+<ul>
+<li><strong>Which rules?</strong> — castling, en passant, promotion, check, checkmate, stalemate, draw by repetition?</li>
+<li><strong>Illegal moves</strong> — what happens if a piece is dragged to an illegal square, or off the board?</li>
+<li><strong>Game control</strong> — who plays white? Can the user resign, undo or start again?</li>
+<li><strong>The computer</strong> — how strong is it, and how long may it think per move?</li>
+<li><strong>The screen</strong> — which resolutions? Mouse only, or touch as well?</li>
+</ul>
+<p class="nhan">Tests you can still design</p>
+<ol>
+<li><strong>Legal moves per piece</strong> — one partition per piece type; boundary values at the board edges (a1, h8).</li>
+<li><strong>End states</strong> — checkmate, stalemate, draw.</li>
+<li><strong>Invalid input</strong> — an illegal move is rejected and the piece returns to its square.</li>
+<li><strong>Non-functional</strong> — the computer's response time; how easy dragging is (small pieces, mis-drops).</li>
+</ol>
+<p class="meo">🧠 <strong>Remember:</strong> designing tests is a review of the spec. Send the questions back before coding — that is early test design (pages 5–7). The official Laws of Chess can serve as the test oracle for the rules.</p>
+<p class="ghi-chu">A class exercise: the deck gives no answer. The lists above are a model answer.</p>`,
+        `<p class="y-chinh">🎯 Đặc tả ba câu trông có vẻ đủ — cho tới khi bạn thử viết một test có kết quả mong đợi.</p>
+<p class="nhan">Những câu đặc tả chưa trả lời</p>
+<ul>
+<li><strong>Luật nào?</strong> — nhập thành, bắt tốt qua đường, phong cấp, chiếu, chiếu hết, hết nước đi (hoà pat), hoà do lặp nước?</li>
+<li><strong>Nước đi sai luật</strong> — kéo quân vào ô không hợp lệ, hay kéo ra ngoài bàn cờ thì sao?</li>
+<li><strong>Điều khiển ván</strong> — ai cầm quân trắng? Người chơi có được xin thua, đi lại, chơi ván mới?</li>
+<li><strong>Máy</strong> — mạnh cỡ nào, được nghĩ bao lâu mỗi nước?</li>
+<li><strong>Màn hình</strong> — độ phân giải nào? Chỉ chuột, hay cả cảm ứng?</li>
+</ul>
+<p class="nhan">Những test vẫn thiết kế được</p>
+<ol>
+<li><strong>Nước đi hợp lệ của từng quân</strong> — mỗi loại quân một phân vùng; giá trị biên ở mép bàn cờ (a1, h8).</li>
+<li><strong>Trạng thái kết thúc</strong> — chiếu hết, hoà pat, hoà.</li>
+<li><strong>Đầu vào sai</strong> — nước sai luật bị từ chối và quân trở về ô cũ.</li>
+<li><strong>Phi chức năng</strong> — thời gian máy đáp trả; kéo quân có dễ không (quân nhỏ, thả trượt).</li>
+</ol>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> thiết kế test chính là review đặc tả. Gửi các câu hỏi lại trước khi code — đó là thiết kế test sớm (trang 5–7). Luật cờ vua chính thức có thể dùng làm test oracle cho phần luật.</p>
+<p class="ghi-chu">Bài tập trên lớp: slide không có đáp án. Các danh sách trên là một lời giải mẫu.</p>`],
+      [15, '“Testing is expensive”',
+        `<p class="y-chinh">🎯 "Testing is expensive" — compared to what? The honest comparison is with the cost of <em>not</em> testing.</p>
+<p class="nhan">What faults missed in testing cost</p>
+<ul>
+<li><strong>Fixing gets dearer</strong> — the later a fault is found, the more it costs to fix (page 20).</li>
+<li><strong>Poor software costs more to use</strong>:
+<ul>
+<li>users take more time to understand what to do</li>
+<li>users make more mistakes</li>
+<li>morale suffers</li>
+<li>⇒ lower productivity</li>
+</ul></li>
+</ul>
+<p>The page ends with a challenge: <em>do you know what it costs your organisation?</em> Pages 17–21 answer it with numbers.</p>
+<p class="ghi-chu">Today's syllabus says the same in principle 3, "early testing saves time and money" (Chapter 1).</p>`,
+        `<p class="y-chinh">🎯 "Kiểm thử thì tốn kém" — so với cái gì? Phép so sánh trung thực là với chi phí của việc <em>không</em> test.</p>
+<p class="nhan">Lỗi lọt qua test gây tốn kém gì</p>
+<ul>
+<li><strong>Sửa càng muộn càng đắt</strong> — lỗi tìm ra càng muộn thì sửa càng tốn (trang 20).</li>
+<li><strong>Phần mềm kém thì dùng tốn hơn</strong>:
+<ul>
+<li>người dùng mất thêm thời gian để hiểu phải làm gì</li>
+<li>người dùng thao tác sai nhiều hơn</li>
+<li>tinh thần làm việc sa sút</li>
+<li>⇒ năng suất giảm</li>
+</ul></li>
+</ul>
+<p>Trang kết thúc bằng một câu thách: <em>bạn có biết nó tốn của tổ chức mình bao nhiêu không?</em> Trang 17–21 trả lời bằng con số.</p>
+<p class="ghi-chu">Syllabus hiện nay nói cùng ý ở nguyên tắc 3, "kiểm thử sớm tiết kiệm thời gian và tiền bạc" (Chương 1).</p>`],
+      [16, 'What do software faults cost?',
+        `<p class="y-chinh">🎯 An analogy: breaking a PC hurts and you know its price — a software fault usually costs more, but nobody sees the bill.</p>
+<p class="nhan">The questions on the page</p>
+<ul>
+<li><strong>Have you ever destroyed a PC?</strong> — knocked it off the desk, poured coffee into the disc drive, dropped it from a 2nd-storey window.</li>
+<li><strong>How would you feel? How much would it cost?</strong></li>
+</ul>
+<p class="nhan">The point</p>
+<p>A broken PC is a visible, one-off cost. A fault in live software is spread over many people's hours — developers, testers, users — so it feels free. The next three pages add those hours up.</p>`,
+        `<p class="y-chinh">🎯 Một phép so sánh: làm hỏng một cái PC thì đau và bạn biết giá — một lỗi phần mềm thường tốn hơn, nhưng không ai thấy hoá đơn.</p>
+<p class="nhan">Các câu hỏi trên trang</p>
+<ul>
+<li><strong>Bạn từng làm hỏng PC chưa?</strong> — gạt rơi khỏi bàn, đổ cà phê vào ổ đĩa, đánh rơi từ cửa sổ tầng hai.</li>
+<li><strong>Bạn sẽ thấy thế nào? Tốn bao nhiêu tiền?</strong></li>
+</ul>
+<p class="nhan">Ý chính</p>
+<p>PC hỏng là chi phí nhìn thấy được, một lần. Lỗi trong phần mềm đang chạy thật thì rải ra thành giờ công của nhiều người — developer, tester, người dùng — nên có vẻ như miễn phí. Ba trang tiếp theo cộng dồn các giờ đó lại.</p>`],
+      [17, 'Hypothetical Cost - 1',
+        `<p class="y-chinh">🎯 One fault found by a user, at a loaded cost of £50 per hour: £700 of developer time and £50 of user time — before any paperwork.</p>
+<p class="nhan">The items (every 0.5 h = £25)</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Activity</th><th>Hours</th><th>Developer</th><th>User</th></tr></thead>
+<tbody>
+<tr><td>Detect</td><td>0.5</td><td></td><td>£25</td></tr>
+<tr><td>Report</td><td>0.5</td><td></td><td>£25</td></tr>
+<tr><td>Receive &amp; process</td><td>1</td><td>£50</td><td></td></tr>
+<tr><td>Assign &amp; background</td><td>4</td><td>£200</td><td></td></tr>
+<tr><td>Debug</td><td>0.5</td><td>£25</td><td></td></tr>
+<tr><td>Test the fault fix</td><td>0.5</td><td>£25</td><td></td></tr>
+<tr><td>Regression test</td><td>8</td><td>£400</td><td></td></tr>
+<tr><td><strong>Total</strong></td><td>14 + 1</td><td><strong>£700</strong></td><td><strong>£50</strong></td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Loaded salary</strong> — salary plus overheads (office, equipment, benefits) per hour worked.</li>
+<li><strong>"Bkgnd"</strong> — background: time for the assigned developer to understand the context of the fault.</li>
+<li><strong>Biggest item</strong> — the 8-hour regression test (£400), not the half-hour debug.</li>
+</ul>
+<p class="ghi-chu">Arithmetic checked: developer 1 + 4 + 0.5 + 0.5 + 8 = 14 h × £50 = £700; user 0.5 + 0.5 = 1 h × £50 = £50.</p>`,
+        `<p class="y-chinh">🎯 Một lỗi do người dùng phát hiện, tính £50 mỗi giờ công (đã gồm chi phí chung): £700 thời gian developer và £50 thời gian người dùng — chưa tính giấy tờ.</p>
+<p class="nhan">Các khoản (mỗi 0,5 giờ = £25)</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Việc</th><th>Giờ</th><th>Developer</th><th>Người dùng</th></tr></thead>
+<tbody>
+<tr><td>Phát hiện</td><td>0,5</td><td></td><td>£25</td></tr>
+<tr><td>Báo lỗi</td><td>0,5</td><td></td><td>£25</td></tr>
+<tr><td>Tiếp nhận &amp; xử lý</td><td>1</td><td>£50</td><td></td></tr>
+<tr><td>Phân công &amp; tìm hiểu bối cảnh</td><td>4</td><td>£200</td><td></td></tr>
+<tr><td>Debug</td><td>0,5</td><td>£25</td><td></td></tr>
+<tr><td>Test bản sửa</td><td>0,5</td><td>£25</td><td></td></tr>
+<tr><td>Regression test</td><td>8</td><td>£400</td><td></td></tr>
+<tr><td><strong>Tổng</strong></td><td>14 + 1</td><td><strong>£700</strong></td><td><strong>£50</strong></td></tr>
+</tbody></table></div>
+<ul>
+<li><strong>Loaded salary</strong> — lương cộng chi phí chung (văn phòng, thiết bị, phúc lợi) tính trên mỗi giờ làm.</li>
+<li><strong>"Bkgnd"</strong> — background: thời gian để developer được giao hiểu bối cảnh của lỗi.</li>
+<li><strong>Khoản lớn nhất</strong> — 8 giờ regression test (£400), không phải nửa giờ debug.</li>
+</ul>
+<p class="ghi-chu">Đã kiểm phép tính: developer 1 + 4 + 0,5 + 0,5 + 8 = 14 giờ × £50 = £700; người dùng 0,5 + 0,5 = 1 giờ × £50 = £50.</p>`],
+      [18, 'Hypothetical Cost - 2',
+        `<p class="y-chinh">🎯 Add the paperwork and the same fault reaches £1,000 of developer time — 20 hours for a 30-minute code change.</p>
+<p class="nhan">Added to page 17's £700</p>
+<ul>
+<li><strong>Update documentation, CM</strong> — 2 h = £100 (CM = configuration management).</li>
+<li><strong>Update the code library</strong> — 1 h = £50.</li>
+<li><strong>Inform users</strong> — 1 h = £50.</li>
+<li><strong>Admin (10%)</strong> — 2 h = £100.</li>
+</ul>
+<p class="nhan">Total</p>
+<p><strong>20 hours = £1,000</strong> for the developers; the users' £50 stays in its own column.</p>
+<p class="meo">🧠 <strong>Remember:</strong> the debug itself was £25 — only <strong>2.5%</strong> of the £1,000. Most of the cost of a late fault is process, not code.</p>
+<p class="ghi-chu">Arithmetic checked: 14 + 2 + 1 + 1 = 18 h; 10% of 18 h = 1.8 h, rounded to 2 h; 20 h × £50 = £1,000.</p>`,
+        `<p class="y-chinh">🎯 Cộng thêm giấy tờ, cùng lỗi đó lên tới £1.000 thời gian developer — 20 giờ cho một lần sửa code 30 phút.</p>
+<p class="nhan">Cộng thêm vào £700 của trang 17</p>
+<ul>
+<li><strong>Cập nhật tài liệu, CM</strong> — 2 giờ = £100 (CM = quản lý cấu hình).</li>
+<li><strong>Cập nhật thư viện code</strong> — 1 giờ = £50.</li>
+<li><strong>Thông báo người dùng</strong> — 1 giờ = £50.</li>
+<li><strong>Hành chính (10%)</strong> — 2 giờ = £100.</li>
+</ul>
+<p class="nhan">Tổng</p>
+<p><strong>20 giờ = £1.000</strong> phía developer; £50 của người dùng vẫn nằm ở cột riêng.</p>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> bản thân việc debug chỉ £25 — vỏn vẹn <strong>2,5%</strong> của £1.000. Phần lớn chi phí của một lỗi muộn là quy trình, không phải code.</p>
+<p class="ghi-chu">Đã kiểm phép tính: 14 + 2 + 1 + 1 = 18 giờ; 10% của 18 giờ = 1,8 giờ, làm tròn 2 giờ; 20 giờ × £50 = £1.000.</p>`],
+      [19, 'Hypothetical Cost - 3',
+        `<p class="y-chinh">🎯 Now count the users' side: a fault that hits only 5 users costs them £12,000 — twelve times the developers' £1,000.</p>
+<p class="nhan">The users' items (£350 = one 7-hour day)</p>
+<ul>
+<li><strong>Work takes twice as long for 1 week</strong> — £4,000.</li>
+<li><strong>Fix the corrupted data</strong> — 1 day = £350.</li>
+<li><strong>Pay the supplier for the fix</strong> — 3 days of maintenance = £750.</li>
+<li><strong>Regression test &amp; sign-off</strong> — 2 days = £700.</li>
+<li><strong>Update procedures / inform staff</strong> — 1 day = £350.</li>
+<li><strong>Double-check everything</strong> — +12% time for 5 weeks, because they no longer trust the system = £5,000.</li>
+<li><strong>Admin (+7.5%)</strong> — £800.</li>
+</ul>
+<p class="nhan">Totals</p>
+<p>Developers <strong>£1,000</strong> · users <strong>£12,000</strong> · together about <strong>£13,000</strong> for one fault.</p>
+<div class="pitfall">On the slide, the £700 and £350 rows are printed under "Developer", but the developer total stays £1,000. The user column only adds up to £12,000 if those two rows are the users' own days: 50 + 4,000 + 350 + 750 + 700 + 350 + 5,000 + 800 = 12,000.</div>
+<p class="nhan">The teacher's notes, re-checked</p>
+<ul>
+<li><strong>Work × 2</strong> — £50 × 7 h = £350/day; × 5 days = £1,750/week; half is lost = £875 × 5 users = <strong>£4,375</strong> (slide rounds to £4,000).</li>
+<li><strong>Double check</strong> — £350 × 5 users = £1,750/day; 12% = £210 (notes: "£200") × 25 days = <strong>£5,250</strong> (slide: £5,000).</li>
+<li><strong>Admin</strong> — 7.5% of about £11,200 ≈ £840 (slide: £800).</li>
+<li><strong>Without rounding</strong> — the users' side is about £12,700, so £12,000 is on the low side.</li>
+<li><strong>A last example</strong> — a 747 leaving its stand late costs about £1,000 per minute.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Giờ tính phía người dùng: một lỗi chỉ ảnh hưởng 5 người dùng đã làm họ tốn £12.000 — gấp mười hai lần £1.000 của developer.</p>
+<p class="nhan">Các khoản của người dùng (£350 = một ngày 7 giờ)</p>
+<ul>
+<li><strong>Công việc chậm gấp đôi trong 1 tuần</strong> — £4.000.</li>
+<li><strong>Sửa dữ liệu bị hỏng</strong> — 1 ngày = £350.</li>
+<li><strong>Trả nhà cung cấp tiền sửa</strong> — 3 ngày bảo trì = £750.</li>
+<li><strong>Regression test &amp; ký xác nhận</strong> — 2 ngày = £700.</li>
+<li><strong>Cập nhật quy trình / thông báo nhân viên</strong> — 1 ngày = £350.</li>
+<li><strong>Kiểm tra lại mọi thứ</strong> — thêm 12% thời gian trong 5 tuần, vì không còn tin hệ thống = £5.000.</li>
+<li><strong>Hành chính (+7,5%)</strong> — £800.</li>
+</ul>
+<p class="nhan">Tổng</p>
+<p>Developer <strong>£1.000</strong> · người dùng <strong>£12.000</strong> · cộng lại khoảng <strong>£13.000</strong> cho một lỗi.</p>
+<div class="pitfall">Trên slide, hai dòng £700 và £350 in dưới cột "Developer", nhưng tổng developer vẫn là £1.000. Cột người dùng chỉ cộng ra £12.000 nếu hai dòng đó là ngày công của chính người dùng: 50 + 4.000 + 350 + 750 + 700 + 350 + 5.000 + 800 = 12.000.</div>
+<p class="nhan">Ghi chú của thầy/cô, đã kiểm lại</p>
+<ul>
+<li><strong>Công việc × 2</strong> — £50 × 7 giờ = £350/ngày; × 5 ngày = £1.750/tuần; mất một nửa = £875 × 5 người = <strong>£4.375</strong> (slide làm tròn £4.000).</li>
+<li><strong>Kiểm tra lại</strong> — £350 × 5 người = £1.750/ngày; 12% = £210 (ghi chú: "£200") × 25 ngày = <strong>£5.250</strong> (slide: £5.000).</li>
+<li><strong>Hành chính</strong> — 7,5% của khoảng £11.200 ≈ £840 (slide: £800).</li>
+<li><strong>Nếu không làm tròn</strong> — phía người dùng khoảng £12.700, nên £12.000 là con số thấp.</li>
+<li><strong>Ví dụ cuối</strong> — một chiếc 747 rời chỗ đỗ trễ tốn khoảng £1.000 mỗi phút.</li>
+</ul>`],
+      [20, 'Cost of fixing faults',
+        `<p class="y-chinh">🎯 The later a fault is found, the more it costs to fix — about 1 in requirements, 10 in test, 1,000 once the system is in use.</p>
+<p class="nhan">Reading the graph</p>
+<ul>
+<li><strong>Log scale</strong> — each step on the axis (1, 10, 100, 1000) is ×10.</li>
+<li><strong>Req → Des</strong> — the cost rises slowly.</li>
+<li><strong>Test</strong> — about 10.</li>
+<li><strong>Use</strong> — 1,000 or more: the fault has reached many users (the pile of PCs), as in pages 17–19.</li>
+</ul>
+<div class="pitfall">The exact multipliers are an illustration, not syllabus numbers. The exam asks only for the trend: the cost of fixing rises the later a defect is found (principle 3, "early testing saves time and money").</div>`,
+        `<p class="y-chinh">🎯 Lỗi tìm ra càng muộn thì sửa càng đắt — khoảng 1 ở pha yêu cầu, 10 ở pha test, 1.000 khi hệ thống đã được dùng.</p>
+<p class="nhan">Đọc đồ thị</p>
+<ul>
+<li><strong>Thang log</strong> — mỗi vạch trên trục (1, 10, 100, 1000) là ×10.</li>
+<li><strong>Req → Des</strong> — chi phí tăng chậm.</li>
+<li><strong>Test</strong> — khoảng 10.</li>
+<li><strong>Use</strong> — từ 1.000 trở lên: lỗi đã tới tay nhiều người dùng (đống PC bên phải), như trang 17–19.</li>
+</ul>
+<div class="pitfall">Các hệ số cụ thể chỉ để minh hoạ, không phải số liệu của syllabus. Đề thi chỉ hỏi xu hướng: lỗi phát hiện càng muộn thì sửa càng tốn (nguyên tắc 3, "kiểm thử sớm tiết kiệm thời gian và tiền bạc").</div>`],
+      [21, 'How expensive for you?',
+        `<p class="y-chinh">🎯 A 10-minute exercise: put your own numbers on testing and on faults.</p>
+<p class="nhan">Calculate three things</p>
+<ol>
+<li><strong>The cost of testing</strong> — people's time, machines, tools.</li>
+<li><strong>The cost to fix faults found in testing.</strong></li>
+<li><strong>The cost to fix faults missed by testing.</strong></li>
+</ol>
+<p class="nhan">No data?</p>
+<p>Estimate. "Your figures will be the best your company has!" — a rough number beats no number when you argue for testing.</p>
+<p class="ghi-chu">Try it on your SWP391 project: hours spent testing vs hours spent fixing bugs the lecturer found at the demo.</p>`,
+        `<p class="y-chinh">🎯 Bài tập 10 phút: gắn con số của chính bạn vào việc test và vào lỗi.</p>
+<p class="nhan">Tính ba thứ</p>
+<ol>
+<li><strong>Chi phí test</strong> — thời gian của người, máy móc, công cụ.</li>
+<li><strong>Chi phí sửa các lỗi tìm thấy khi test.</strong></li>
+<li><strong>Chi phí sửa các lỗi lọt qua test.</strong></li>
+</ol>
+<p class="nhan">Không có số liệu?</p>
+<p>Hãy ước lượng. "Số liệu của bạn sẽ là số tốt nhất công ty đang có!" — con số thô vẫn hơn không có số khi bạn thuyết phục mọi người đầu tư cho test.</p>
+<p class="ghi-chu">Thử với đồ án SWP391 của bạn: số giờ dành cho test so với số giờ sửa các bug thầy/cô phát hiện lúc demo.</p>`],
+      [34, 'Component Test Document Hierarchy',
+        `<p class="y-chinh">🎯 BS 7925-2 organises component-test documents as a tree: one strategy, one project plan, then a plan, a specification and a report for every component.</p>
+<p class="nhan">The levels (top to bottom)</p>
+<ol>
+<li><strong>Component Test Strategy</strong> — one for the organisation (its content: Lesson 2.2, slides 45–46).</li>
+<li><strong>Project Component Test Plan</strong> — one per project; it fans out to every component.</li>
+<li><strong>Component Test Plan</strong> — one per component.</li>
+<li><strong>Component Test Specification</strong> — the test cases for that component.</li>
+<li><strong>Component Test Report</strong> — the results for that component.</li>
+</ol>
+<p class="ghi-chu">Outdated standard: BS 7925-2 has been withdrawn and replaced by ISO/IEC/IEEE 29119 (part 3 covers test documentation). The idea of a strategy → plan → specification → report chain is unchanged.</p>`,
+        `<p class="y-chinh">🎯 BS 7925-2 sắp xếp tài liệu component test thành một cây: một chiến lược, một kế hoạch dự án, rồi mỗi thành phần có một kế hoạch, một đặc tả và một báo cáo.</p>
+<p class="nhan">Các tầng (từ trên xuống)</p>
+<ol>
+<li><strong>Component Test Strategy</strong> — một bản cho cả tổ chức (nội dung: Bài 2.2, slide 45–46).</li>
+<li><strong>Project Component Test Plan</strong> — một bản cho mỗi dự án; toả xuống mọi thành phần.</li>
+<li><strong>Component Test Plan</strong> — một bản cho mỗi thành phần.</li>
+<li><strong>Component Test Specification</strong> — các test case của thành phần đó.</li>
+<li><strong>Component Test Report</strong> — kết quả của thành phần đó.</li>
+</ol>
+<p class="ghi-chu">Chuẩn đã cũ: BS 7925-2 đã bị rút và thay bằng ISO/IEC/IEEE 29119 (phần 3 về tài liệu test). Ý tưởng chuỗi chiến lược → kế hoạch → đặc tả → báo cáo vẫn giữ nguyên.</p>`],
+      [35, 'Component test process',
+        `<p class="y-chinh">🎯 The BS 7925-2 component test process has five activities, with loops back whenever something is missing or wrong.</p>
+<p class="nhan">The five activities</p>
+<ol>
+<li><strong>Component test planning</strong></li>
+<li><strong>Component test specification</strong></li>
+<li><strong>Component test execution</strong></li>
+<li><strong>Component test recording</strong></li>
+<li><strong>Checking for component test completion</strong> → END</li>
+</ol>
+<p class="nhan">The loops (yellow arrows)</p>
+<ul>
+<li><strong>Recording → execution</strong> — re-run a test after a fix.</li>
+<li><strong>Recording → specification</strong> — the test case itself was wrong.</li>
+<li><strong>Completion → specification</strong> — more test cases are needed to meet the criteria.</li>
+<li><strong>Completion → planning</strong> — the plan itself must change.</li>
+</ul>
+<p class="nhan">Today's CTFL v4.0 test process</p>
+<ul>
+<li><strong>Planning</strong> → test planning.</li>
+<li><strong>Specification</strong> → test analysis, design and implementation.</li>
+<li><strong>Execution + recording</strong> → test execution (run, log, compare, report defects).</li>
+<li><strong>Checking for completion</strong> → monitoring &amp; control against exit criteria, then test completion.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Quy trình component test theo BS 7925-2 có năm hoạt động, với các vòng quay lại mỗi khi thiếu hoặc sai điều gì đó.</p>
+<p class="nhan">Năm hoạt động</p>
+<ol>
+<li><strong>Lập kế hoạch component test</strong></li>
+<li><strong>Đặc tả component test</strong></li>
+<li><strong>Thực thi component test</strong></li>
+<li><strong>Ghi nhận component test</strong></li>
+<li><strong>Kiểm tra điều kiện hoàn thành</strong> → KẾT THÚC</li>
+</ol>
+<p class="nhan">Các vòng lặp (mũi tên vàng)</p>
+<ul>
+<li><strong>Ghi nhận → thực thi</strong> — chạy lại test sau khi sửa.</li>
+<li><strong>Ghi nhận → đặc tả</strong> — chính test case bị sai.</li>
+<li><strong>Hoàn thành → đặc tả</strong> — cần thêm test case để đạt tiêu chí.</li>
+<li><strong>Hoàn thành → kế hoạch</strong> — phải sửa chính kế hoạch.</li>
+</ul>
+<p class="nhan">Quy trình test theo CTFL v4.0 hiện nay</p>
+<ul>
+<li><strong>Planning</strong> → test planning.</li>
+<li><strong>Specification</strong> → test analysis, design và implementation.</li>
+<li><strong>Execution + recording</strong> → test execution (chạy, ghi log, so sánh, báo lỗi).</li>
+<li><strong>Checking for completion</strong> → monitoring &amp; control theo exit criteria, rồi test completion.</li>
+</ul>`],
+      [36, 'Component test process — planning',
+        `<p class="y-chinh">🎯 Component test planning adapts the organisation's strategy and the project plan to one component.</p>
+<ul>
+<li><strong>Apply</strong> — how the test strategy and the project test plan apply to this component.</li>
+<li><strong>Exceptions</strong> — any exceptions to the strategy.</li>
+<li><strong>Surroundings</strong> — all software the component will interact with, e.g. stubs and drivers (Lesson 2.2, slides 60 and 63).</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Lập kế hoạch component test là áp chiến lược của tổ chức và kế hoạch dự án vào một thành phần cụ thể.</p>
+<ul>
+<li><strong>Áp dụng</strong> — chiến lược test và kế hoạch test dự án áp vào thành phần này thế nào.</li>
+<li><strong>Ngoại lệ</strong> — mọi điểm khác với chiến lược.</li>
+<li><strong>Xung quanh</strong> — mọi phần mềm thành phần sẽ tương tác, vd stub và driver (Bài 2.2, slide 60 và 63).</li>
+</ul>`],
+      [37, 'Component test process — specification',
+        `<p class="y-chinh">🎯 Component test specification designs the test cases, using the techniques the plan named.</p>
+<ul>
+<li><strong>Techniques</strong> — taken from the test plan (Section 3 of the standard, Lesson 2.2 slide 47).</li>
+<li><strong>Repeatable</strong> — running a test case twice must give the same result.</li>
+</ul>
+<p class="nhan">A test case has four parts</p>
+<ol>
+<li><strong>Objective</strong> — what it checks.</li>
+<li><strong>Initial state of the component</strong></li>
+<li><strong>Input</strong></li>
+<li><strong>Expected outcome</strong></li>
+</ol>
+<p class="ghi-chu">CTFL v4.0 words: preconditions, inputs, expected results (and postconditions). The <em>actual</em> outcome is not part of the test case — it is written down later, during recording.</p>`,
+        `<p class="y-chinh">🎯 Đặc tả component test là thiết kế test case, bằng các kỹ thuật mà kế hoạch đã chọn.</p>
+<ul>
+<li><strong>Kỹ thuật</strong> — lấy từ test plan (Mục 3 của chuẩn, Bài 2.2 slide 47).</li>
+<li><strong>Lặp lại được</strong> — chạy một test case hai lần phải ra cùng kết quả.</li>
+</ul>
+<p class="nhan">Một test case có bốn phần</p>
+<ol>
+<li><strong>Mục tiêu</strong> — nó kiểm điều gì.</li>
+<li><strong>Trạng thái ban đầu của thành phần</strong></li>
+<li><strong>Đầu vào</strong></li>
+<li><strong>Kết quả mong đợi</strong></li>
+</ol>
+<p class="ghi-chu">Từ theo CTFL v4.0: preconditions, inputs, expected results (và postconditions). Kết quả <em>thực tế</em> không thuộc test case — nó được ghi sau, ở bước ghi nhận.</p>`],
+      [38, 'Component test process — execution',
+        `<p class="y-chinh">🎯 Component test execution runs each test case — by hand or with a tool, the standard does not mind.</p>
+<ul>
+<li><strong>Every test case</strong> in the specification is executed.</li>
+<li><strong>Manual or automated</strong> — the standard does not specify; in practice component tests are usually automated (JUnit in the labs).</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Thực thi component test là chạy từng test case — bằng tay hay bằng công cụ, chuẩn không bắt buộc.</p>
+<ul>
+<li><strong>Mọi test case</strong> trong bản đặc tả đều được chạy.</li>
+<li><strong>Thủ công hay tự động</strong> — chuẩn không quy định; thực tế component test thường tự động (JUnit trong các lab).</li>
+</ul>`],
+      [39, 'Component test process — recording',
+        `<p class="y-chinh">🎯 Component test recording keeps enough evidence to show the testing was really done.</p>
+<ul>
+<li><strong>Identities &amp; versions</strong> — of the component and of the test specification.</li>
+<li><strong>Actual vs expected</strong> — the actual outcome is recorded and compared with the expected outcome.</li>
+<li><strong>Discrepancies logged</strong> — today: a defect report.</li>
+<li><strong>Repeat to remove the discrepancy</strong> — either the test was faulty, or the fix must be verified (today: confirmation testing).</li>
+<li><strong>Coverage achieved</strong> — recorded against the completion criteria in the plan.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> the yellow call-out — records must be "sufficient to show test activities carried out". Think of them as an audit trail.</p>`,
+        `<p class="y-chinh">🎯 Ghi nhận component test là giữ đủ bằng chứng cho thấy việc test đã thật sự được làm.</p>
+<ul>
+<li><strong>Định danh &amp; phiên bản</strong> — của thành phần và của bản đặc tả test.</li>
+<li><strong>Thực tế so với mong đợi</strong> — kết quả thực tế được ghi lại và so với kết quả mong đợi.</li>
+<li><strong>Ghi lại chỗ lệch</strong> — nay gọi là defect report.</li>
+<li><strong>Làm lại cho tới khi hết lệch</strong> — hoặc test bị sai, hoặc phải kiểm lại bản sửa (nay gọi là confirmation testing).</li>
+<li><strong>Coverage đạt được</strong> — ghi theo tiêu chí hoàn thành trong kế hoạch.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> khung vàng — hồ sơ phải "đủ để chứng minh các hoạt động test đã được thực hiện". Hãy coi nó như dấu vết kiểm toán.</p>`],
+      [40, 'Component test process — checking for completion',
+        `<p class="y-chinh">🎯 Checking for completion compares the records with the completion criteria; if they are not met, go back.</p>
+<ul>
+<li><strong>Compare</strong> — test records against the specified completion criteria (e.g. 100% branch coverage).</li>
+<li><strong>Not met</strong> — repeat test activities.</li>
+<li><strong>Maybe back to specification</strong> — design extra test cases to reach the criteria, e.g. white-box cases for uncovered branches.</li>
+</ul>
+<p class="ghi-chu">CTFL v4.0 calls these criteria <em>exit criteria</em> (in Agile: the <em>definition of done</em>).</p>`,
+        `<p class="y-chinh">🎯 Kiểm tra hoàn thành là so hồ sơ với tiêu chí hoàn thành; chưa đạt thì quay lại.</p>
+<ul>
+<li><strong>So sánh</strong> — hồ sơ test với tiêu chí hoàn thành đã đặt (vd 100% branch coverage).</li>
+<li><strong>Chưa đạt</strong> — làm lại các hoạt động test.</li>
+<li><strong>Có thể quay về đặc tả</strong> — thiết kế thêm test case để đạt tiêu chí, vd test white-box cho các nhánh chưa phủ.</li>
+</ul>
+<p class="ghi-chu">CTFL v4.0 gọi các tiêu chí này là <em>exit criteria</em> (trong Agile: <em>definition of done</em>).</p>`],
+      [42, 'Integration testing in the small',
+        `<p class="y-chinh">🎯 "Integration testing in the small" is today's <em>component integration testing</em>: tested components put together inside one system.</p>
+<ul>
+<li><strong>Input</strong> — more than one component, each already tested.</li>
+<li><strong>Focus</strong> — the communication between components.</li>
+<li><strong>What the set can do</strong> — behaviour that no component can perform on its own.</li>
+<li><strong>Non-functional aspects</strong> — if possible (e.g. response time across a call chain).</li>
+<li><strong>Strategy</strong> — big-bang vs incremental: top-down, bottom-up, functional (Lesson 2.2, slides 57–67).</li>
+<li><strong>Who</strong> — designers, analysts or independent testers.</li>
+</ul>
+<div class="pitfall">"Who" has moved. The 2023 page says designers, analysts or independent testers; the current syllabus says component integration testing is usually done by <strong>developers</strong>, and system integration by testers (Lesson 2.2, question slide 71). Answer the exam with the current version.</div>`,
+        `<p class="y-chinh">🎯 "Integration testing in the small" chính là <em>component integration testing</em> ngày nay: ghép các thành phần đã test bên trong một hệ thống.</p>
+<ul>
+<li><strong>Đầu vào</strong> — nhiều hơn một thành phần, mỗi cái đã được test.</li>
+<li><strong>Trọng tâm</strong> — giao tiếp giữa các thành phần.</li>
+<li><strong>Việc cả nhóm làm được</strong> — hành vi mà không thành phần nào tự làm được.</li>
+<li><strong>Phi chức năng</strong> — nếu có thể (vd thời gian phản hồi qua một chuỗi lời gọi).</li>
+<li><strong>Chiến lược</strong> — big-bang hay tăng dần: top-down, bottom-up, theo chức năng (Bài 2.2, slide 57–67).</li>
+<li><strong>Ai làm</strong> — người thiết kế, người phân tích hoặc tester độc lập.</li>
+</ul>
+<div class="pitfall">"Ai làm" đã thay đổi. Trang 2023 ghi người thiết kế, người phân tích hoặc tester độc lập; syllabus hiện nay nói component integration testing thường do <strong>developer</strong> làm, còn system integration do tester làm (Bài 2.2, câu hỏi slide 71). Đi thi thì trả lời theo bản hiện nay.</div>`],
+      [56, 'System testing',
+        `<p class="y-chinh">🎯 The 2023 deck calls system testing "the last integration step": everything inside the system is now together.</p>
+<p class="nhan">Two halves</p>
+<ul>
+<li><strong>Functional</strong> — requirements-based testing and business-process-based testing (Lesson 2.4, slides 110–111).</li>
+<li><strong>Non-functional</strong> — as important as the functional requirements, often poorly specified, and it must be tested.</li>
+</ul>
+<p class="nhan">Who</p>
+<p>Often an <strong>independent test group</strong> — the same as today's syllabus (Lesson 2.3, slide 77).</p>
+<p class="ghi-chu">What is new here is only the framing "last integration step" and the picture: many sub-systems (each a small call graph) joined into one whole.</p>`,
+        `<p class="y-chinh">🎯 Bộ 2023 gọi system testing là "bước tích hợp cuối cùng": mọi thứ bên trong hệ thống giờ đã ghép đủ.</p>
+<p class="nhan">Hai nửa</p>
+<ul>
+<li><strong>Chức năng</strong> — test dựa trên yêu cầu và test dựa trên quy trình nghiệp vụ (Bài 2.4, slide 110–111).</li>
+<li><strong>Phi chức năng</strong> — quan trọng không kém yêu cầu chức năng, thường đặc tả kém, và bắt buộc phải test.</li>
+</ul>
+<p class="nhan">Ai làm</p>
+<p>Thường là <strong>nhóm test độc lập</strong> — giống syllabus hiện nay (Bài 2.3, slide 77).</p>
+<p class="ghi-chu">Điểm mới ở đây chỉ là cách gọi "bước tích hợp cuối" và hình vẽ: nhiều hệ thống con (mỗi cái là một đồ thị lời gọi nhỏ) ghép thành một khối.</p>`],
+      [60, 'Non-functional system testing',
+        `<p class="y-chinh">🎯 The 2023 deck lists nine kinds of non-functional system test; two of them — storage and volume — are not on the current slides.</p>
+<p class="nhan">The list</p>
+<ol class="hai-cot"><li>Usability</li><li>Security</li><li>Documentation</li><li>Storage</li><li>Volume</li><li>Configuration / installation</li><li>Reliability / qualities</li><li>Back-up / recovery</li><li>Performance, load, stress</li></ol>
+<p class="nhan">The two new ones</p>
+<ul>
+<li><strong>Storage testing</strong> — does the system stay within its memory and disk limits?</li>
+<li><strong>Volume testing</strong> — does it still work with very large amounts of data (e.g. a table with 10 million rows)?</li>
+</ul>
+<p class="ghi-chu">The other seven each have a slide in Lesson 2.4 (slides 115–122). In today's ISO/IEC 25010 model, storage and volume belong to <em>performance efficiency</em> (resource utilisation, capacity).</p>`,
+        `<p class="y-chinh">🎯 Bộ 2023 liệt kê chín loại system test phi chức năng; hai loại — storage và volume — không có trên slide hiện tại.</p>
+<p class="nhan">Danh sách</p>
+<ol class="hai-cot"><li>Usability</li><li>Security</li><li>Documentation</li><li>Storage</li><li>Volume</li><li>Configuration / installation</li><li>Reliability / qualities</li><li>Back-up / recovery</li><li>Performance, load, stress</li></ol>
+<p class="nhan">Hai loại mới</p>
+<ul>
+<li><strong>Storage testing</strong> — hệ thống có ở trong giới hạn bộ nhớ và dung lượng đĩa không?</li>
+<li><strong>Volume testing</strong> — có còn chạy đúng với lượng dữ liệu rất lớn không (vd một bảng 10 triệu dòng)?</li>
+</ul>
+<p class="ghi-chu">Bảy loại còn lại đều có slide riêng ở Bài 2.4 (slide 115–122). Theo mô hình ISO/IEC 25010 hiện nay, storage và volume thuộc <em>performance efficiency</em> (sử dụng tài nguyên, dung lượng).</p>`],
+      [69, 'Integration testing in the large',
+        `<p class="y-chinh">🎯 Integration testing in the large (today: <em>system integration testing</em>) tests the finished system working together with other systems.</p>
+<p class="nhan">"Other systems" on the page</p>
+<ul>
+<li><strong>Networks</strong> — LAN / WAN, communications middleware.</li>
+<li><strong>Other internal systems</strong> — billing, stock, personnel, overnight batch, branch offices, other countries.</li>
+<li><strong>External systems</strong> — stock exchange, news, suppliers.</li>
+<li><strong>Intranet, internet / www</strong></li>
+<li><strong>Third-party packages</strong></li>
+<li><strong>Electronic data interchange (EDI)</strong> — business documents exchanged in a standard format.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> today's version of the list — payment gateways, REST APIs of partners, cloud services, single sign-on. The contract-testing box in Lesson 2.2 shows a modern way to test these connections.</p>`,
+        `<p class="y-chinh">🎯 Integration testing in the large (nay: <em>system integration testing</em>) test hệ thống đã hoàn chỉnh khi chạy cùng các hệ thống khác.</p>
+<p class="nhan">"Hệ thống khác" trên trang</p>
+<ul>
+<li><strong>Mạng</strong> — LAN / WAN, phần mềm trung gian truyền thông.</li>
+<li><strong>Hệ thống nội bộ khác</strong> — tính cước, kho, nhân sự, xử lý lô ban đêm, chi nhánh, các nước khác.</li>
+<li><strong>Hệ thống bên ngoài</strong> — sàn chứng khoán, tin tức, nhà cung cấp.</li>
+<li><strong>Intranet, internet / www</strong></li>
+<li><strong>Gói phần mềm bên thứ ba</strong></li>
+<li><strong>Trao đổi dữ liệu điện tử (EDI)</strong> — chứng từ kinh doanh trao đổi theo định dạng chuẩn.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> phiên bản ngày nay của danh sách này — cổng thanh toán, REST API của đối tác, dịch vụ đám mây, đăng nhập một lần (SSO). Khung contract testing ở Bài 2.2 cho thấy cách hiện đại để test các kết nối đó.</p>`],
+      [70, 'Approach',
+        `<p class="y-chinh">🎯 Integrate in the large the same way as in the small: riskiest first, one connection at a time, incrementally.</p>
+<p class="nhan">Identify risks</p>
+<p>Which connections, if missing or malfunctioning, would be most critical? Test them first.</p>
+<p class="nhan">"Divide and conquer"</p>
+<ol>
+<li><strong>Test the outside first</strong> — at the interface to your system, e.g. test a bought package on its own.</li>
+<li><strong>One connection at a time</strong> — your system and one other.</li>
+<li><strong>Combine incrementally</strong> — safer than a non-incremental "big bang" (Lesson 2.2, slides 57–58).</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Tích hợp mức lớn cũng làm như mức nhỏ: rủi ro nhất trước, từng kết nối một, tăng dần.</p>
+<p class="nhan">Xác định rủi ro</p>
+<p>Kết nối nào mà thiếu hoặc chạy sai sẽ nghiêm trọng nhất? Test nó trước.</p>
+<p class="nhan">"Chia để trị"</p>
+<ol>
+<li><strong>Test bên ngoài trước</strong> — tại giao diện với hệ thống của bạn, vd test riêng một gói phần mềm mua về.</li>
+<li><strong>Từng kết nối một</strong> — hệ thống của bạn và một hệ thống khác.</li>
+<li><strong>Ghép tăng dần</strong> — an toàn hơn "big bang" không tăng dần (Bài 2.2, slide 57–58).</li>
+</ol>`],
+      [71, 'Planning considerations',
+        `<p class="y-chinh">🎯 Integration in the large depends on things you do not own, so plan resources, partners — and even the development plan.</p>
+<ul>
+<li><strong>Resources</strong> — identify what will be needed, e.g. networks and test connections to the other systems.</li>
+<li><strong>Co-operation</strong> — plan it with other organisations, e.g. suppliers and technical support teams.</li>
+<li><strong>Development plan</strong> — the integration test plan can change the build order, e.g. conversion software needed early to exchange data formats.</li>
+</ul>
+<p class="ghi-chu">The same idea as Lesson 2.2, slide 69 ("the integration order determines the build order"), one level up.</p>`,
+        `<p class="y-chinh">🎯 Tích hợp mức lớn phụ thuộc vào những thứ bạn không sở hữu, nên phải lên kế hoạch cho tài nguyên, đối tác — thậm chí cả kế hoạch phát triển.</p>
+<ul>
+<li><strong>Tài nguyên</strong> — xác định những gì cần, vd mạng và kết nối test tới các hệ thống khác.</li>
+<li><strong>Phối hợp</strong> — lên kế hoạch cùng các tổ chức khác, vd nhà cung cấp và đội hỗ trợ kỹ thuật.</li>
+<li><strong>Kế hoạch phát triển</strong> — kế hoạch test tích hợp có thể đổi thứ tự xây dựng, vd phần mềm chuyển đổi cần có sớm để trao đổi định dạng dữ liệu.</li>
+</ul>
+<p class="ghi-chu">Cùng ý với Bài 2.2, slide 69 ("thứ tự tích hợp quyết định thứ tự xây dựng"), ở tầng cao hơn.</p>`],
+      [74, 'User Acceptance testing — 80/20',
+        `<p class="y-chinh">🎯 System testing and acceptance testing spread their effort along different lines — so acceptance is not a re-run of system testing.</p>
+<p class="nhan">Reading the picture</p>
+<ul>
+<li><strong>Bottom line (yellow)</strong> — "20% of function by 80% of code": most of the code implements rarely used functions (error handling, exceptions, special options).</li>
+<li><strong>Top line (pink)</strong> — "80% of function by 20% of code": the functions users rely on every day run on a small part of the code.</li>
+<li><strong>System testing</strong> — spread over the bottom line: it follows the code and the specification, so much of its effort lands on the rare cases.</li>
+<li><strong>Acceptance testing</strong> — spread over the top line: it follows how users really work, so it concentrates on the everyday functions.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> engineers test every part of the sports car; the buyer judges it by driving it. Both are needed, and they find different problems.</p>
+<p class="ghi-chu">80/20 is the Pareto rule of thumb, not a measured figure.</p>`,
+        `<p class="y-chinh">🎯 System testing và acceptance testing rải công sức theo hai đường khác nhau — nên acceptance không phải là chạy lại system testing.</p>
+<p class="nhan">Đọc hình</p>
+<ul>
+<li><strong>Đường dưới (vàng)</strong> — "20% chức năng do 80% code": phần lớn code cài các chức năng ít dùng (xử lý lỗi, ngoại lệ, tuỳ chọn đặc biệt).</li>
+<li><strong>Đường trên (hồng)</strong> — "80% chức năng do 20% code": các chức năng người dùng dựa vào hằng ngày chỉ chạy trên một phần nhỏ code.</li>
+<li><strong>System testing</strong> — rải trên đường dưới: bám theo code và đặc tả, nên nhiều công sức rơi vào các trường hợp hiếm.</li>
+<li><strong>Acceptance testing</strong> — rải trên đường trên: bám theo cách người dùng thật sự làm việc, nên tập trung vào các chức năng hằng ngày.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> kỹ sư test từng bộ phận của chiếc xe thể thao; người mua đánh giá nó bằng cách lái thử. Cần cả hai, và mỗi bên tìm ra những vấn đề khác nhau.</p>
+<p class="ghi-chu">80/20 là quy tắc kinh nghiệm Pareto, không phải số đo thật.</p>`],
+      [75, 'Contract acceptance testing',
+        `<p class="y-chinh">🎯 Contract acceptance testing checks the system against the contract and its documented, agreed changes — not against what users now wish.</p>
+<p class="nhan">The contract to supply the system</p>
+<ul>
+<li><strong>Agreed early</strong> — at the contract definition stage.</li>
+<li><strong>Acceptance criteria</strong> — defined and agreed in it.</li>
+<li><strong>May be out of date</strong> — requirements change after signing.</li>
+</ul>
+<p class="nhan">What the test is against</p>
+<ul>
+<li><strong>The contract + documented agreed changes</strong></li>
+<li><strong>Not</strong> "what the users wish they had asked for" — "this system, not wish system".</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> a change agreed only by word of mouth does not exist at contract acceptance. Write every change request down and get it signed.</p>
+<p class="ghi-chu">CTFL v4.0 calls it <em>contractual acceptance testing</em> (Lesson 2.3, slide 88).</p>`,
+        `<p class="y-chinh">🎯 Acceptance theo hợp đồng kiểm hệ thống so với hợp đồng và các thay đổi đã thoả thuận bằng văn bản — không so với điều người dùng bây giờ mong muốn.</p>
+<p class="nhan">Hợp đồng cung cấp hệ thống</p>
+<ul>
+<li><strong>Thống nhất từ sớm</strong> — ở giai đoạn xác lập hợp đồng.</li>
+<li><strong>Tiêu chí nghiệm thu</strong> — được định nghĩa và thống nhất trong đó.</li>
+<li><strong>Có thể đã lỗi thời</strong> — yêu cầu thay đổi sau khi ký.</li>
+</ul>
+<p class="nhan">Test so với cái gì</p>
+<ul>
+<li><strong>Hợp đồng + các thay đổi đã thoả thuận bằng văn bản</strong></li>
+<li><strong>Không phải</strong> "điều người dùng ước gì đã yêu cầu" — "hệ thống này, không phải hệ thống mơ ước".</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> thay đổi chỉ thống nhất bằng miệng thì coi như không tồn tại lúc nghiệm thu hợp đồng. Hãy ghi mọi yêu cầu thay đổi ra giấy và xin chữ ký.</p>
+<p class="ghi-chu">CTFL v4.0 gọi là <em>contractual acceptance testing</em> (Bài 2.3, slide 88).</p>`],
+      [76, 'Alpha and Beta tests: similarities',
+        `<p class="y-chinh">🎯 Alpha and beta tests share four traits: market testers, stable software, realistic use, and feedback.</p>
+<ol>
+<li><strong>Who</strong> — potential customers or representatives of your market. Not suitable for bespoke (custom-built) software: that has one customer, who does UAT or contract acceptance instead.</li>
+<li><strong>When</strong> — once the software is stable.</li>
+<li><strong>How</strong> — using the product realistically, in its operational environment.</li>
+<li><strong>Output</strong> — comments back on the product:
+<ul>
+<li>faults found</li>
+<li>how well the product meets their expectations</li>
+<li>improvement / enhancement suggestions</li>
+</ul></li>
+</ol>
+<p class="ghi-chu">This is why the current slides tie alpha/beta to COTS (off-the-shelf) software — Lesson 2.3, slide 89 and question slide 97.</p>`,
+        `<p class="y-chinh">🎯 Alpha và beta giống nhau ở bốn điểm: người test đại diện thị trường, phần mềm đã ổn định, dùng thực tế, và phản hồi.</p>
+<ol>
+<li><strong>Ai</strong> — khách hàng tiềm năng hoặc người đại diện cho thị trường của bạn. Không hợp với phần mềm đặt làm riêng (bespoke): loại đó chỉ có một khách hàng, họ làm UAT hoặc nghiệm thu hợp đồng.</li>
+<li><strong>Khi nào</strong> — khi phần mềm đã ổn định.</li>
+<li><strong>Thế nào</strong> — dùng sản phẩm một cách thực tế, trong môi trường vận hành của nó.</li>
+<li><strong>Đầu ra</strong> — nhận xét gửi lại về sản phẩm:
+<ul>
+<li>các lỗi tìm thấy</li>
+<li>sản phẩm đáp ứng kỳ vọng của họ tới đâu</li>
+<li>đề xuất cải tiến / bổ sung</li>
+</ul></li>
+</ol>
+<p class="ghi-chu">Vì vậy slide hiện tại gắn alpha/beta với phần mềm đóng gói (COTS) — Bài 2.3, slide 89 và câu hỏi slide 97.</p>`],
+      [77, 'Alpha and Beta tests: differences',
+        `<p class="y-chinh">🎯 The only difference is the place: alpha at the developers' site, beta at the testers' own location.</p>
+<ul>
+<li><strong>Alpha</strong> — simulated or actual operational testing at an in-house site, i.e. the developers' site, by people not otherwise involved with the developers.</li>
+<li><strong>Beta</strong> — operational testing at a site not otherwise involved with the developers, i.e. the testers' own location.</li>
+</ul>
+<div class="pitfall">Alpha happens at the developers' site, but it is <strong>not</strong> done by the developers. "In-house site not otherwise involved" means people outside the development team (Lesson 2.3, question slide 105: answer "developer's end").</div>`,
+        `<p class="y-chinh">🎯 Khác nhau duy nhất ở địa điểm: alpha tại nơi của bên phát triển, beta tại chính chỗ của người test.</p>
+<ul>
+<li><strong>Alpha</strong> — test vận hành mô phỏng hoặc thật tại một địa điểm nội bộ, tức là nơi của bên phát triển, do những người không tham gia phát triển thực hiện.</li>
+<li><strong>Beta</strong> — test vận hành tại nơi không liên quan tới bên phát triển, tức là chính chỗ của người test.</li>
+</ul>
+<div class="pitfall">Alpha diễn ra tại nơi của bên phát triển, nhưng <strong>không</strong> do developer làm. "Địa điểm nội bộ không liên quan" nghĩa là người ngoài nhóm phát triển (Bài 2.3, câu hỏi slide 105: đáp án "phía bên phát triển").</div>`],
+      [80, 'Test types',
+        `<p class="y-chinh">🎯 The same four test types as today, but with 2023-era wording: "structural testing" and the six ISO 9126 characteristics.</p>
+<ol>
+<li><strong>Functional testing</strong> — testing of function.</li>
+<li><strong>Non-functional testing</strong> — testing of software product characteristics: functionality, reliability, usability, efficiency, maintainability, portability.</li>
+<li><strong>Structural testing</strong> — testing of software structure / architecture.</li>
+<li><strong>Change-related testing</strong> — confirmation and regression testing.</li>
+</ol>
+<p class="nhan">Outdated words → today's</p>
+<ul>
+<li><strong>Structural testing</strong> → <em>white-box testing</em> (Lesson 2.4, slide 123).</li>
+<li><strong>ISO 9126 (six characteristics)</strong> → <em>ISO/IEC 25010</em>. CTFL v4.0 lists the non-functional ones as performance efficiency, compatibility, usability, reliability, security, maintainability, portability.</li>
+<li><strong>"Functionality" in the old list</strong> — in ISO 9126 it held sub-characteristics such as security; in 25010 it became <em>functional suitability</em>, and security became a characteristic of its own.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Vẫn là bốn loại test như ngày nay, nhưng dùng từ thời 2023: "structural testing" và sáu đặc tính ISO 9126.</p>
+<ol>
+<li><strong>Functional testing</strong> — test chức năng.</li>
+<li><strong>Non-functional testing</strong> — test các đặc tính của sản phẩm: functionality, reliability, usability, efficiency, maintainability, portability.</li>
+<li><strong>Structural testing</strong> — test cấu trúc / kiến trúc phần mềm.</li>
+<li><strong>Change-related testing</strong> — confirmation và regression testing.</li>
+</ol>
+<p class="nhan">Từ cũ → từ hiện nay</p>
+<ul>
+<li><strong>Structural testing</strong> → <em>white-box testing</em> (Bài 2.4, slide 123).</li>
+<li><strong>ISO 9126 (sáu đặc tính)</strong> → <em>ISO/IEC 25010</em>. CTFL v4.0 liệt kê các đặc tính phi chức năng: performance efficiency, compatibility, usability, reliability, security, maintainability, portability.</li>
+<li><strong>"Functionality" trong danh sách cũ</strong> — ở ISO 9126 nó chứa các đặc tính con như security; ở 25010 nó thành <em>functional suitability</em>, còn security tách thành một đặc tính riêng.</li>
+</ul>`],
+    ]),
+    bi(`<h3>Worked example — what does one late fault really cost?</h3>
+<p>Use only the deck's own numbers (pages 17–20, loaded cost £50 per hour).</p>
+<ol>
+<li><strong>Developer side</strong> — 20 h × £50 = <strong>£1,000</strong> (pages 17–18).</li>
+<li><strong>The code change inside it</strong> — 0.5 h debug = £25, i.e. <strong>2.5%</strong> of £1,000.</li>
+<li><strong>User side</strong> — £12,000 for 5 users = <strong>£2,400 per affected user</strong> (page 19).</li>
+<li><strong>Total</strong> — about £13,000, which is <strong>520 ×</strong> the £25 of actual fixing.</li>
+<li><strong>Caught earlier</strong> — found while designing tests from the requirement, the fix is one sentence in a document: the "1" on the graph of page 20.</li>
+</ol>
+<p class="meo">🧠 <strong>Remember:</strong> the fix is cheap; finding it late is what costs. That is the whole argument for early test design.</p>
+<div class="pitfall"><ul>
+<li><strong>"In the large" ≠ "in the small".</strong> In the large = system integration testing, and it comes after system testing; in the small = component integration testing.</li>
+<li><strong>Alpha is not done by developers</strong> — only at their site.</li>
+<li><strong>Contract acceptance</strong> is against the contract plus documented agreed changes, never against new wishes.</li>
+<li><strong>Who does component integration?</strong> The 2023 page says designers/analysts/testers; today's answer is developers.</li>
+<li><strong>Cost multipliers</strong> (1–10–1000) are an illustration; the exam wants only "later = more expensive".</li>
+</ul></div>`,
+    `<h3>Ví dụ có lời giải — một lỗi phát hiện muộn thật sự tốn bao nhiêu?</h3>
+<p>Chỉ dùng số liệu của chính bộ slide (trang 17–20, £50 mỗi giờ công).</p>
+<ol>
+<li><strong>Phía developer</strong> — 20 giờ × £50 = <strong>£1.000</strong> (trang 17–18).</li>
+<li><strong>Phần sửa code trong đó</strong> — 0,5 giờ debug = £25, tức <strong>2,5%</strong> của £1.000.</li>
+<li><strong>Phía người dùng</strong> — £12.000 cho 5 người = <strong>£2.400 mỗi người bị ảnh hưởng</strong> (trang 19).</li>
+<li><strong>Tổng</strong> — khoảng £13.000, gấp <strong>520 lần</strong> £25 tiền sửa thật.</li>
+<li><strong>Nếu bắt sớm</strong> — phát hiện lúc thiết kế test từ yêu cầu, việc sửa chỉ là một câu trong tài liệu: mức "1" trên đồ thị trang 20.</li>
+</ol>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> sửa thì rẻ; phát hiện muộn mới đắt. Đó là toàn bộ lý lẽ cho việc thiết kế test sớm.</p>
+<div class="pitfall"><ul>
+<li><strong>"In the large" ≠ "in the small".</strong> In the large = system integration testing, đến sau system testing; in the small = component integration testing.</li>
+<li><strong>Alpha không do developer làm</strong> — chỉ diễn ra tại chỗ của họ.</li>
+<li><strong>Acceptance theo hợp đồng</strong> so với hợp đồng cộng các thay đổi đã thoả thuận bằng văn bản, không bao giờ so với mong muốn mới.</li>
+<li><strong>Ai làm component integration?</strong> Trang 2023 ghi người thiết kế/phân tích/tester; đáp án hiện nay là developer.</li>
+<li><strong>Các hệ số chi phí</strong> (1–10–1000) chỉ để minh hoạ; đề thi chỉ cần "càng muộn càng đắt".</li>
+</ul></div>`),
+    bi(`<h3>★ Old words in the 2023 deck → today's CTFL v4.0 words</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>2023 deck says</th><th>Say today</th><th>Page</th></tr></thead>
+<tbody>
+<tr><td>ISEB Foundation</td><td>ISTQB CTFL v4.0</td><td>1</td></tr>
+<tr><td>fault</td><td>defect (bug); error = a human mistake; failure = wrong behaviour seen</td><td>7–21</td></tr>
+<tr><td>integration testing in the small</td><td>component integration testing</td><td>4, 42</td></tr>
+<tr><td>integration testing in the large</td><td>system integration testing</td><td>4, 69–71</td></tr>
+<tr><td>BS 7925-1 / BS 7925-2</td><td>ISO/IEC/IEEE 29119 (BS 7925 withdrawn)</td><td>34–41</td></tr>
+<tr><td>component test specification</td><td>test analysis, design &amp; implementation</td><td>37</td></tr>
+<tr><td>discrepancies logged</td><td>defect report</td><td>39</td></tr>
+<tr><td>repeat to verify the fix</td><td>confirmation testing</td><td>39</td></tr>
+<tr><td>test completion criteria</td><td>exit criteria (Agile: definition of done)</td><td>40</td></tr>
+<tr><td>structural testing</td><td>white-box testing</td><td>80</td></tr>
+<tr><td>ISO 9126 characteristics</td><td>ISO/IEC 25010 quality characteristics</td><td>80</td></tr>
+<tr><td>contract acceptance testing</td><td>contractual acceptance testing</td><td>75</td></tr>
+</tbody></table></div>`,
+    `<h3>★ Từ cũ trong bộ 2023 → từ theo CTFL v4.0 hiện nay</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Bộ 2023 ghi</th><th>Nay gọi là</th><th>Trang</th></tr></thead>
+<tbody>
+<tr><td>ISEB Foundation</td><td>ISTQB CTFL v4.0</td><td>1</td></tr>
+<tr><td>fault</td><td>defect (bug); error = sai sót của người; failure = hành vi sai quan sát được</td><td>7–21</td></tr>
+<tr><td>integration testing in the small</td><td>component integration testing</td><td>4, 42</td></tr>
+<tr><td>integration testing in the large</td><td>system integration testing</td><td>4, 69–71</td></tr>
+<tr><td>BS 7925-1 / BS 7925-2</td><td>ISO/IEC/IEEE 29119 (BS 7925 đã bị rút)</td><td>34–41</td></tr>
+<tr><td>component test specification</td><td>test analysis, design &amp; implementation</td><td>37</td></tr>
+<tr><td>discrepancies logged</td><td>defect report</td><td>39</td></tr>
+<tr><td>repeat to verify the fix</td><td>confirmation testing</td><td>39</td></tr>
+<tr><td>test completion criteria</td><td>exit criteria (Agile: definition of done)</td><td>40</td></tr>
+<tr><td>structural testing</td><td>white-box testing</td><td>80</td></tr>
+<tr><td>đặc tính ISO 9126</td><td>đặc tính chất lượng ISO/IEC 25010</td><td>80</td></tr>
+<tr><td>contract acceptance testing</td><td>contractual acceptance testing</td><td>75</td></tr>
+</tbody></table></div>`),
+  ].join('\n'),
+};
+
 /* ──────────────────────────────── Quiz 2 ──────────────────────────────── */
 const q = (question, options, correctIndex) => ({ question, options, correctIndex, points: 1 });
 const QUIZ2 = {
   title: 'Quiz 2 — Testing throughout the SDLC (all SWT2 slide questions)|||Quiz 2 — Kiểm thử trong SDLC (toàn bộ câu hỏi trên slide SWT2)',
   slug: 'swt301-quiz-2',
   type: 'QUIZ',
-  description: '50 câu: đủ 40 câu "Question/Review Question" trên slide SWT2 (đáp án đã giải trong bài 2.1–2.3) + 10 câu về stub/driver, loại test, bảo trì, IEEE 829 và bảng Overview.',
+  description: '56 câu: đủ 40 câu "Question/Review Question" trên slide SWT2 (đáp án đã giải trong bài 2.1–2.3) + 10 câu về stub/driver, loại test, bảo trì, IEEE 829 và bảng Overview + 6 câu từ bộ slide 2023 (V-model 5 cấp, chi phí lỗi, quy trình BS 7925-2, hợp đồng, alpha/beta).',
   quiz: {
-    timeLimitSeconds: 3000,
+    timeLimitSeconds: 3360,
     questions: [
       q('What does the software development lifecycle describe? (SWT2 s.25)|||Vòng đời phát triển phần mềm mô tả gì? (SWT2 s.25)', ['The types of activities performed in software development projects|||Các loại hoạt động trong dự án phát triển phần mềm', 'The types of test activities performed|||Các loại hoạt động kiểm thử', 'The functional and non-functional requirements|||Các yêu cầu chức năng và phi chức năng'], 0),
       q('Characteristics of good testing: 1 each level has its own objective; 2 analysis/design start only at the end of the development activity; 3 every development activity has a test activity; 4 testers help define requirements. (s.26)|||Đặc điểm kiểm thử tốt: 1 mỗi cấp có mục tiêu riêng; 2 phân tích/thiết kế chỉ bắt đầu khi hoạt động phát triển xong; 3 mỗi hoạt động phát triển có hoạt động test; 4 tester tham gia định nghĩa yêu cầu. (s.26)', ['1 only|||Chỉ 1', '1, 3, 4 correct; 2 wrong|||1, 3, 4 đúng; 2 sai', '1, 3 correct; 2, 4 wrong|||1, 3 đúng; 2, 4 sai'], 1),
@@ -3026,12 +3964,25 @@ const QUIZ2 = {
       q('In Overview.xlsx, the basis for Component Integration Testing (CIT) is…|||Trong Overview.xlsx, cơ sở cho Component Integration Testing (CIT) là…', ['The SRS', 'The ADD and detailed design (sequence diagrams)|||ADD và thiết kế chi tiết (sequence diagram)', 'Class specifications only|||Chỉ đặc tả lớp', 'Business processes|||Quy trình nghiệp vụ'], 1),
       q('Early test design in the V-model means…|||Thiết kế test sớm trong V-model nghĩa là…', ['designing tests on the left arm as each document is produced|||thiết kế test ở nhánh trái khi từng tài liệu ra đời', 'running tests before coding|||chạy test trước khi code', 'skipping reviews|||bỏ qua review', 'testing only at acceptance|||chỉ test ở acceptance'], 0),
       q("Kanban's key principle is…|||Nguyên tắc chính của Kanban là…", ['fixed 2-week sprints|||sprint cố định 2 tuần', 'a limit on work in progress (WIP)|||giới hạn số việc đang làm (WIP)', 'a daily build|||build hằng ngày', 'pair programming|||lập trình cặp'], 1),
+      // Lesson 2.7 — the 2023 deck (oswt2). explanation is plain text EN|||VI.
+      { ...q('In the five-level V-model of the 2023 SWT2 deck, "integration testing in the large" corresponds in CTFL v4.0 to… (SWT2 2023 p.4)|||Trong V-model năm cấp của bộ SWT2 2023, "integration testing in the large" tương ứng với gì trong CTFL v4.0? (SWT2 2023 tr.4)', ['Component integration testing', 'System integration testing', 'System testing', 'Acceptance testing'], 1),
+        explanation: 'In the small = component integration (inside one system); in the large = system integration (the system with other systems, networks and packages). In the old V it sits above system testing.|||In the small = component integration (bên trong một hệ thống); in the large = system integration (hệ thống cùng các hệ thống, mạng, gói phần mềm khác). Trên chữ V cũ nó nằm trên system testing.' },
+      { ...q('In the 2023 hypothetical cost (£50 per hour), a fault found by a user costs the developers 20 h = £1,000, of which debugging took 0.5 h. What share of the developer cost is the debug itself? (p.17–18)|||Trong ví dụ chi phí giả định của bộ 2023 (£50/giờ), một lỗi do người dùng phát hiện tốn developer 20 giờ = £1.000, trong đó debug mất 0,5 giờ. Debug chiếm bao nhiêu phần chi phí developer? (tr.17–18)', ['2.5%|||2,5%', '14%', '25%', '50%'], 0),
+        explanation: '0.5 h × £50 = £25, and £25 / £1,000 = 2.5%. The rest is process: receiving, assigning, regression testing (8 h = £400), documentation and admin.|||0,5 giờ × £50 = £25, và £25 / £1.000 = 2,5%. Phần còn lại là quy trình: tiếp nhận, phân công, regression test (8 giờ = £400), tài liệu và hành chính.' },
+      { ...q('Per BS 7925-2 (SWT2 2023 p.37), which item is NOT part of a component test case?|||Theo BS 7925-2 (SWT2 2023 tr.37), mục nào KHÔNG thuộc một component test case?', ['Objective|||Mục tiêu', 'Initial state of the component|||Trạng thái ban đầu của thành phần', 'Expected outcome|||Kết quả mong đợi', 'Actual outcome|||Kết quả thực tế'], 3),
+        explanation: 'A test case = objective, initial state, input, expected outcome. The actual outcome is written down later, during component test recording, and compared with the expected one.|||Test case = mục tiêu, trạng thái ban đầu, đầu vào, kết quả mong đợi. Kết quả thực tế được ghi sau, ở bước ghi nhận, rồi so với kết quả mong đợi.' },
+      { ...q('In the BS 7925-2 component test process, the records show the branch-coverage completion criterion is not met. What may you need to repeat? (SWT2 2023 p.40)|||Trong quy trình component test BS 7925-2, hồ sơ cho thấy chưa đạt tiêu chí branch coverage. Bạn có thể phải làm lại bước nào? (SWT2 2023 tr.40)', ['Nothing: report the coverage and stop|||Không gì cả: báo coverage rồi dừng', 'Component test specification, to design extra (e.g. white-box) test cases|||Đặc tả component test, để thiết kế thêm test case (vd white-box)', 'Only component test recording|||Chỉ bước ghi nhận', 'The organisation-wide component test strategy|||Chiến lược component test của cả tổ chức'], 1),
+        explanation: 'If the criteria are not met, test activities are repeated; often you go back to specification to design test cases for the uncovered branches, then execute and record them.|||Chưa đạt tiêu chí thì làm lại các hoạt động test; thường phải quay về bước đặc tả để thiết kế test case cho các nhánh chưa phủ, rồi chạy và ghi nhận chúng.' },
+      { ...q('Contract acceptance testing is performed against… (SWT2 2023 p.75)|||Acceptance theo hợp đồng được thực hiện so với… (SWT2 2023 tr.75)', ['The contract and any documented agreed changes|||Hợp đồng và các thay đổi đã thoả thuận bằng văn bản', 'What the users now wish they had asked for|||Điều người dùng bây giờ ước gì đã yêu cầu', 'The latest user stories in the backlog|||Các user story mới nhất trong backlog', 'The source code|||Mã nguồn'], 0),
+        explanation: '"This system, not wish system": acceptance is judged against the agreed contract plus documented changes. Undocumented wishes are change requests, not acceptance criteria.|||"Hệ thống này, không phải hệ thống mơ ước": nghiệm thu dựa trên hợp đồng đã ký cộng các thay đổi có văn bản. Mong muốn chưa ghi lại là yêu cầu thay đổi, không phải tiêu chí nghiệm thu.' },
+      { ...q('According to the 2023 deck, alpha and beta testing are NOT suitable for… (SWT2 2023 p.76)|||Theo bộ 2023, alpha và beta testing KHÔNG phù hợp với… (SWT2 2023 tr.76)', ['Bespoke (custom-built) software|||Phần mềm đặt làm riêng (bespoke)', 'Commercial off-the-shelf (COTS) products|||Sản phẩm đóng gói (COTS)', 'Mobile apps sold in an app store|||Ứng dụng di động bán trên kho ứng dụng', 'Games|||Trò chơi'], 0),
+        explanation: 'Alpha and beta need testers who represent a market. Bespoke software has one customer, who uses UAT or contract acceptance testing instead.|||Alpha và beta cần người test đại diện cho một thị trường. Phần mềm bespoke chỉ có một khách hàng, họ dùng UAT hoặc acceptance theo hợp đồng.' },
     ],
   },
 };
 
 export default {
   title: 'Chapter 2 — Testing throughout the SDLC|||Chương 2 — Kiểm thử xuyên suốt SDLC',
-  description: 'SWT2 (143 slide) học từng slide: mô hình SDLC, 4 cấp test (component/integration/system/acceptance, stub & driver), 4 loại test, kiểm thử bảo trì, test plan IEEE 829, và bảng Overview.xlsx — kèm đáp án mọi câu hỏi trên slide.',
-  lessons: [L21, L22, L23, L24, L25, L26, QUIZ2],
+  description: 'SWT2 (143 slide) học từng slide: mô hình SDLC, 4 cấp test (component/integration/system/acceptance, stub & driver), 4 loại test, kiểm thử bảo trì, test plan IEEE 829, và bảng Overview.xlsx — kèm đáp án mọi câu hỏi trên slide; bài 2.7 bổ sung 31 trang từ bộ slide 2023.',
+  lessons: [L21, L22, L23, L24, L25, L26, L27, QUIZ2],
 };

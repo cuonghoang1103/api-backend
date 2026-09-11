@@ -609,9 +609,9 @@ const L05 = {
   title: '0.5 — The ISTQB exam, the FE and how to answer multiple-choice questions|||0.5 — Đề ISTQB, đề FE và cách làm câu trắc nghiệm',
   slug: 'swt301-istqb-exam-strategy',
   type: 'VIDEO',
-  description: 'SWT0 slide 5–7, 19–21 và Additional Content slide 1, 2, 5: cấu trúc đề CTFL (40 câu, 26 đạt, K1/K2/K3, số câu mỗi chương), 13 mẹo làm trắc nghiệm có ví dụ, và chiến lược cho đề FE của trường.',
+  description: 'SWT0 slide 5–7, 19–21 và Additional Content slide 1, 2, 5: cấu trúc đề CTFL (40 câu, 26 đạt, K1/K2/K3, số câu mỗi chương), 13 mẹo làm trắc nghiệm có ví dụ, chiến lược cho đề FE của trường; cộng SWT7 (bộ slide 2023) trang 4–6, 19–20: trang cấu trúc đề chính thức, chỗ ghi sai K4, tỉ lệ theo chương, mỗi mẹo một ví dụ.',
   content: [
-    bi(`<span class="eyebrow">Section 0 · Lesson 0.5 · SWT0 slides 5–7, 19–21 · Additional Content slides 1, 2, 5</span>
+    bi(`<span class="eyebrow">Section 0 · Lesson 0.5 · SWT0 slides 5–7, 19–21 · Additional Content slides 1, 2, 5 · SWT7 (2023) pages 4–6, 19–20</span>
 <h2>The exam — and how to beat multiple choice</h2>
 <p class="lead">The FPT Theory Exam uses the same question style as the international CTFL exam. Knowing the blueprint tells you where the marks are; knowing MCQ technique stops you losing marks you deserve.</p>
 <table>
@@ -623,7 +623,7 @@ const L05 = {
 <tr><td>Weight by chapter</td><td>C1 8 · C2 5 · C3 5 · C4 11 · C5 9 · C6 2</td><td>similar, plus Agile (Ch.9)</td></tr>
 </tbody>
 </table>`,
-    `<span class="eyebrow">Mục 0 · Bài 0.5 · SWT0 slide 5–7, 19–21 · Additional Content slide 1, 2, 5</span>
+    `<span class="eyebrow">Mục 0 · Bài 0.5 · SWT0 slide 5–7, 19–21 · Additional Content slide 1, 2, 5 · SWT7 (2023) trang 4–6, 19–20</span>
 <h2>Đề thi — và cách chinh phục câu trắc nghiệm</h2>
 <p class="lead">Đề lý thuyết (TE/FE) của FPT dùng cùng kiểu câu hỏi với đề CTFL quốc tế. Biết "bản thiết kế" đề là biết điểm nằm ở đâu; biết kỹ thuật làm trắc nghiệm là không mất những điểm mình xứng đáng có.</p>
 <table>
@@ -809,6 +809,178 @@ const L05 = {
 </ul>
 <p>Slide của lớp theo v3.1 (2018) — đúng bản đề FE dùng. Nếu sau này thi chứng chỉ thật, hãy hỏi đơn vị tổ chức thi dùng phiên bản nào.</p>
 <p class="ghi-chu">Ngoài giáo trình vì khoá học xây trên bản 2018.</p></div>`),
+    bi(`<h3>SWT7 (2023) — the older version of this deck</h3>
+<p>The 2023 course had this material as a separate deck, <em>SWT7 "ISTQB / ISEB Foundation Exam Practice"</em> (21 pages). Almost every page is the same as SWT0. The table lists those pages; the five pages that add something follow below it.</p>
+<table>
+<thead><tr><th>SWT7 page</th><th>Content</th><th>Already taught in</th></tr></thead>
+<tbody>
+<tr><td>1–2</td><td>Cover, contents</td><td>title and agenda pages</td></tr>
+<tr><td>3</td><td>ISTQB certificate map (2021 version)</td><td>0.1, SWT0 slide 3 — a newer map (adds AI Testing and Game Testing)</td></tr>
+<tr><td>7</td><td>Audience</td><td>0.3, SWT0 slide 8</td></tr>
+<tr><td>8</td><td>Contents — the CTFL tree</td><td>0.1, SWT0 slide 4</td></tr>
+<tr><td>9–10</td><td>Business outcomes</td><td>0.3, SWT0 slides 9–10 — the same twelve outcomes</td></tr>
+<tr><td>11</td><td>K-levels (15 / 40 / 7 learning objectives)</td><td>0.3, SWT0 slide 11</td></tr>
+<tr><td>12–18</td><td>Learning objectives, Chapters 1–6</td><td>0.3, SWT0 slides 12–18 — the same 2018 objectives, including the slip that heads 6.2 "Test Planning and Estimation (K3)"</td></tr>
+<tr><td>21</td><td>Summary</td><td>SWT0 slide 21</td></tr>
+</tbody>
+</table>
+<p class="ghi-chu">"ISEB" in the title: the Information Systems Examinations Board (BCS, UK) ran a software-testing Foundation certificate before ISTQB was founded in 2002, then aligned it with ISTQB. Today the exam is simply ISTQB CTFL.</p>`,
+    `<h3>SWT7 (2023) — phiên bản cũ của bộ slide này</h3>
+<p>Khoá 2023 để phần này thành một bộ riêng, <em>SWT7 "ISTQB / ISEB Foundation Exam Practice"</em> (21 trang). Gần như mọi trang giống SWT0. Bảng dưới liệt kê các trang đó; năm trang có thêm nội dung nằm ngay sau bảng.</p>
+<table>
+<thead><tr><th>Trang SWT7</th><th>Nội dung</th><th>Đã học ở</th></tr></thead>
+<tbody>
+<tr><td>1–2</td><td>Bìa, mục lục</td><td>trang tiêu đề và mục lục</td></tr>
+<tr><td>3</td><td>Sơ đồ chứng chỉ ISTQB (bản 2021)</td><td>0.1, SWT0 slide 3 — sơ đồ mới hơn (thêm AI Testing và Game Testing)</td></tr>
+<tr><td>7</td><td>Đối tượng (Audience)</td><td>0.3, SWT0 slide 8</td></tr>
+<tr><td>8</td><td>Mục lục — cây CTFL</td><td>0.1, SWT0 slide 4</td></tr>
+<tr><td>9–10</td><td>Business outcomes</td><td>0.3, SWT0 slide 9–10 — cùng mười hai outcome</td></tr>
+<tr><td>11</td><td>Các mức K (15 / 40 / 7 learning objective)</td><td>0.3, SWT0 slide 11</td></tr>
+<tr><td>12–18</td><td>Learning objective Chương 1–6</td><td>0.3, SWT0 slide 12–18 — cùng bộ objective 2018, kể cả chỗ dán nhầm tiêu đề 6.2 "Test Planning and Estimation (K3)"</td></tr>
+<tr><td>21</td><td>Tóm tắt</td><td>SWT0 slide 21</td></tr>
+</tbody>
+</table>
+<p class="ghi-chu">Chữ "ISEB" trong tiêu đề: Information Systems Examinations Board (thuộc BCS, Anh) cấp chứng chỉ Foundation về kiểm thử từ trước khi ISTQB ra đời năm 2002, rồi chuyển sang theo ISTQB. Ngày nay kỳ thi chỉ còn tên ISTQB CTFL.</p>`),
+    walkHead('oswt7', 4, 20, 'Only pages 4, 5, 6, 19 and 20 are shown — each adds a number, a correction or a worked example to the SWT0 slides above.', 'Chỉ hiện trang 4, 5, 6, 19 và 20 — mỗi trang thêm một con số, một chỗ sửa hoặc một ví dụ cho các slide SWT0 ở trên.'),
+    walk('oswt7', [
+      [4, 'Preparing for the exam — the official exam structure page',
+        `<p class="y-chinh">🎯 The official exam page: 40 questions in 60 minutes, 65% to pass, and 25% extra time if the exam is not in your own language.</p>
+<p class="nhan">The numbers</p>
+<ul>
+<li><strong>Questions</strong> — 40 multiple-choice.</li>
+<li><strong>Pass mark</strong> — 65%, i.e. 26 correct.</li>
+<li><strong>Time</strong> — 60 minutes; <strong>75 minutes</strong> (+25%) when the exam is not in your spoken language. That is where SWT0's "75 minutes for non-native speakers" comes from.</li>
+<li><strong>Pace</strong> — 60 / 40 = 1.5 minutes per question; with 75 minutes, about 1.9.</li>
+</ul>
+<p class="nhan">New on this page: how you sit the exam</p>
+<ul>
+<li><strong>With an Accredited Training Provider</strong> — the exam can be part of an accredited course.</li>
+<li><strong>Independently</strong> — at an examination centre or in a public exam.</li>
+<li><strong>Training</strong> — typically 3 days, and <strong>not a prerequisite</strong>: you may sit the exam without any course.</li>
+<li><strong>Where to check</strong> — the ISTQB Member Board of your country and the list of accredited providers.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> passing SWT301 is not the ISTQB certificate — that comes only from the ISTQB exam, which you register for separately.</p>`,
+        `<p class="y-chinh">🎯 Trang thông tin chính thức: 40 câu trong 60 phút, đúng 65% là đạt, và thêm 25% thời gian nếu thi không bằng tiếng mẹ đẻ.</p>
+<p class="nhan">Các con số</p>
+<ul>
+<li><strong>Số câu</strong> — 40 câu trắc nghiệm.</li>
+<li><strong>Điểm đạt</strong> — 65%, tức đúng 26 câu.</li>
+<li><strong>Thời gian</strong> — 60 phút; <strong>75 phút</strong> (+25%) khi đề không bằng ngôn ngữ bạn nói hằng ngày. Câu "75 phút cho người không bản ngữ" của SWT0 đến từ đây.</li>
+<li><strong>Nhịp làm bài</strong> — 60 / 40 = 1,5 phút mỗi câu; với 75 phút, khoảng 1,9 phút.</li>
+</ul>
+<p class="nhan">Điều mới trên trang: cách đi thi</p>
+<ul>
+<li><strong>Qua Accredited Training Provider</strong> — kỳ thi có thể nằm trong một khoá học được công nhận.</li>
+<li><strong>Thi độc lập</strong> — tại trung tâm khảo thí hoặc một đợt thi công khai.</li>
+<li><strong>Khoá học</strong> — thường 3 ngày, và <strong>không bắt buộc</strong>: bạn được thi mà không cần học khoá nào.</li>
+<li><strong>Tra ở đâu</strong> — Member Board ISTQB của nước bạn và danh sách đơn vị đào tạo được công nhận.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> qua môn SWT301 không phải là có chứng chỉ ISTQB — chứng chỉ chỉ đến từ kỳ thi ISTQB, bạn phải đăng ký riêng.</p>`],
+      [5, 'Preparing for the exam — the rules (K4 wording)',
+        `<p class="y-chinh">🎯 The same rules as SWT0 slide 6 — but one line uses loose wording: K4 means "analyse", not "apply".</p>
+<ul>
+<li><strong>40 single-choice questions</strong>, 26/40 (65%) to pass — you can afford to miss <strong>14</strong>.</li>
+<li><strong>8 × K1</strong> — remember.</li>
+<li><strong>24 × K2</strong> — understand.</li>
+<li><strong>8 × K3/K4</strong> — the page says "apply".</li>
+<li><strong>75 minutes</strong> for non-native speakers.</li>
+<li><strong>No score</strong> on the certificate and <strong>no expiry</strong>.</li>
+</ul>
+<div class="pitfall">"08 questions of K3 and K4: apply" mixes two levels. K3 = <em>apply</em>, K4 = <em>analyse</em> — and the 2018 Foundation exam has <strong>0</strong> K4 questions (SWT0 slide 5), so all 8 are K3. SWT0 slide 6 fixes the wording.</div>`,
+        `<p class="y-chinh">🎯 Cùng luật với SWT0 slide 6 — nhưng một dòng viết lỏng: K4 là "phân tích", không phải "áp dụng".</p>
+<ul>
+<li><strong>40 câu một đáp án</strong>, đúng 26/40 (65%) là đạt — bạn được phép sai <strong>14</strong> câu.</li>
+<li><strong>8 câu K1</strong> — nhớ.</li>
+<li><strong>24 câu K2</strong> — hiểu.</li>
+<li><strong>8 câu K3/K4</strong> — trang ghi "apply".</li>
+<li><strong>75 phút</strong> cho người không bản ngữ.</li>
+<li>Chứng chỉ <strong>không ghi điểm</strong> và <strong>không hết hạn</strong>.</li>
+</ul>
+<div class="pitfall">"08 questions of K3 and K4: apply" gộp hai mức làm một. K3 = <em>áp dụng</em>, K4 = <em>phân tích</em> — và đề Foundation 2018 có <strong>0</strong> câu K4 (SWT0 slide 5), nên cả 8 câu đều là K3. SWT0 slide 6 đã sửa lại câu chữ.</div>`],
+      [6, 'Preparing for the exam — questions per chapter, as a pass plan',
+        `<p class="y-chinh">🎯 Turn the per-chapter counts into shares and a pass plan: Chapters 1, 4 and 5 carry 70% of the marks.</p>
+<table>
+<thead><tr><th>CTFL chapter</th><th>Questions</th><th>Share</th><th>On this site</th></tr></thead>
+<tbody>
+<tr><td>C1 Fundamentals</td><td>8</td><td>20%</td><td>Chapter 1</td></tr>
+<tr><td>C2 Testing throughout the SDLC</td><td>5</td><td>12.5%</td><td>Chapter 2</td></tr>
+<tr><td>C3 Static testing</td><td>5</td><td>12.5%</td><td>Chapter 3</td></tr>
+<tr><td>C4 Test techniques</td><td>11</td><td>27.5%</td><td>Chapters 4–6</td></tr>
+<tr><td>C5 Test management</td><td>9</td><td>22.5%</td><td>Chapter 7</td></tr>
+<tr><td>C6 Tool support</td><td>2</td><td>5%</td><td>Chapter 8</td></tr>
+<tr><td><strong>Total</strong></td><td><strong>40</strong></td><td>100%</td><td></td></tr>
+</tbody>
+</table>
+<p class="nhan">A pass plan in numbers</p>
+<ul>
+<li><strong>Core</strong> — C1 + C4 + C5 = 28 questions. Get 80% of them right → 22.</li>
+<li><strong>The rest</strong> — C2 + C3 + C6 = 12 questions. Get half right → 6.</li>
+<li><strong>Total</strong> — 22 + 6 = 28 ≥ 26: a pass with two questions to spare.</li>
+</ul>
+<p class="ghi-chu">These are the CTFL 2018 counts. The FPT FE has its own mix (about 60 questions, plus Agile) — see the table at the top of this lesson.</p>`,
+        `<p class="y-chinh">🎯 Đổi số câu mỗi chương thành tỉ lệ và một kế hoạch đậu: Chương 1, 4 và 5 chiếm 70% số điểm.</p>
+<table>
+<thead><tr><th>Chương CTFL</th><th>Số câu</th><th>Tỉ lệ</th><th>Trên trang này</th></tr></thead>
+<tbody>
+<tr><td>C1 Nền tảng</td><td>8</td><td>20%</td><td>Chương 1</td></tr>
+<tr><td>C2 Kiểm thử trong vòng đời</td><td>5</td><td>12,5%</td><td>Chương 2</td></tr>
+<tr><td>C3 Kiểm thử tĩnh</td><td>5</td><td>12,5%</td><td>Chương 3</td></tr>
+<tr><td>C4 Kỹ thuật test</td><td>11</td><td>27,5%</td><td>Chương 4–6</td></tr>
+<tr><td>C5 Quản lý test</td><td>9</td><td>22,5%</td><td>Chương 7</td></tr>
+<tr><td>C6 Công cụ</td><td>2</td><td>5%</td><td>Chương 8</td></tr>
+<tr><td><strong>Tổng</strong></td><td><strong>40</strong></td><td>100%</td><td></td></tr>
+</tbody>
+</table>
+<p class="nhan">Kế hoạch đậu bằng con số</p>
+<ul>
+<li><strong>Phần lõi</strong> — C1 + C4 + C5 = 28 câu. Đúng 80% → 22 câu.</li>
+<li><strong>Phần còn lại</strong> — C2 + C3 + C6 = 12 câu. Đúng một nửa → 6 câu.</li>
+<li><strong>Tổng</strong> — 22 + 6 = 28 ≥ 26: đậu, dư hai câu.</li>
+</ul>
+<p class="ghi-chu">Đây là số câu của CTFL 2018. Đề FE của FPT có cơ cấu riêng (khoảng 60 câu, thêm Agile) — xem bảng đầu bài này.</p>`],
+      [19, 'Taking the exam — tips 1–7, one worked example each',
+        `<p class="y-chinh">🎯 Tips 1–7 are the same as SWT0 slide 19 — here each one gets a concrete exam-style example.</p>
+<ol>
+<li><strong>Read the entire question</strong> — "Which of the following is NOT a benefit of test tools?" Miss the NOT and you pick "reduction of repetitive work", the first true statement you see.</li>
+<li><strong>Answer it in your mind first</strong> — "What does the pesticide paradox say?" Say "the same tests stop finding new defects" before looking. Then pick the option that matches, not the one that merely sounds familiar.</li>
+<li><strong>Eliminate wrong answers</strong> — in "Which statement about testing is correct?", cross out "exhaustive testing is possible for small systems" and "testing shows the absence of defects" at once (Principles 2 and 1).</li>
+<li><strong>Use the process of elimination</strong> — valid age 18–65, two-value boundary analysis: a) 17, 18, 65, 66 · b) 18, 65 · c) 17, 66 · d) 0, 18, 65, 100. b has no invalid values, c no valid ones, d uses 0 and 100, which are not boundaries → <strong>a</strong>.</li>
+<li><strong>Select the best answer</strong> — "The MAIN objective of a pilot project?" "Train all testers" is useful, but the syllabus objective is "assess whether the benefits will be achieved at reasonable cost".</li>
+<li><strong>Read every answer option</strong> — "Which BEST describes the value of reviews?" A "Reviews find defects" is true. D "Reviews can find defects, such as deviations from standards, that are hard to find by dynamic testing" answers the question better.</li>
+<li><strong>Answer the questions you know first</strong> — a 60-question FE in 60 minutes: the first pass takes the one-line K1/K2 questions (about 35 minutes). Flag the decision-table and state-transition K3s and come back with the time left.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Mẹo 1–7 giống SWT0 slide 19 — ở đây mỗi mẹo có một ví dụ cụ thể theo kiểu câu thi.</p>
+<ol>
+<li><strong>Đọc hết câu hỏi</strong> — "Which of the following is NOT a benefit of test tools?" Sót chữ NOT là bạn chọn "reduction of repetitive work", câu đúng đầu tiên bạn thấy.</li>
+<li><strong>Tự trả lời trong đầu trước</strong> — "Pesticide paradox nói gì?" Tự nói "chạy mãi một bộ test thì không còn tìm ra lỗi mới" trước khi nhìn. Rồi chọn phương án khớp, không chọn cái chỉ nghe quen.</li>
+<li><strong>Loại phương án sai</strong> — với "Phát biểu nào về kiểm thử là đúng?", gạch ngay "kiểm thử vét cạn làm được với hệ thống nhỏ" và "kiểm thử chứng minh không còn lỗi" (Nguyên tắc 2 và 1).</li>
+<li><strong>Loại trừ dần</strong> — tuổi hợp lệ 18–65, phân tích giá trị biên hai giá trị: a) 17, 18, 65, 66 · b) 18, 65 · c) 17, 66 · d) 0, 18, 65, 100. b không có giá trị không hợp lệ, c không có giá trị hợp lệ, d dùng 0 và 100 vốn không phải biên → <strong>a</strong>.</li>
+<li><strong>Chọn đáp án đúng nhất</strong> — "Mục tiêu CHÍNH của dự án pilot?" "Đào tạo mọi tester" có ích, nhưng mục tiêu theo syllabus là "đánh giá lợi ích có đạt được với chi phí hợp lý không".</li>
+<li><strong>Đọc mọi phương án</strong> — "Câu nào mô tả ĐÚNG NHẤT giá trị của review?" A "Review tìm ra lỗi" là đúng. D "Review tìm được những lỗi khó thấy bằng test động, như sai lệch so với chuẩn" trả lời câu hỏi tốt hơn.</li>
+<li><strong>Làm câu chắc trước</strong> — đề FE 60 câu trong 60 phút: vòng đầu làm các câu K1/K2 một dòng (khoảng 35 phút). Đánh dấu các câu K3 decision table, state transition rồi quay lại với thời gian còn lại.</li>
+</ol>`],
+      [20, 'Taking the exam — tips 8–13, one worked example each',
+        `<p class="y-chinh">🎯 Tips 8–13 are for the questions you are not sure of — each with a concrete example.</p>
+<ol start="8">
+<li><strong>Make an educated guess</strong> — there is no negative marking. With 10 questions still open, blind guessing gives about 2.5 marks (10 × 1/4); eliminating two options first gives about 5 (10 × 1/2).</li>
+<li><strong>Stick with your first choice — but not always</strong> — change only for a concrete reason. You chose "confirmation testing", then notice the stem says "re-run the suite to check that nothing else broke": that is regression testing, a real reason to change.</li>
+<li><strong>"All of the above" / "None of the above"</strong> — "Which are benefits of tools? a) less repetitive work b) greater consistency c) objective assessment d) all of the above". If you are sure of two of a–c, choose d. Choose "none" only when you can refute every option.</li>
+<li><strong>When two answers seem correct</strong> — "retesting after a fix" and "confirmation testing" mean the same; the exam wants the syllabus term, confirmation testing.</li>
+<li><strong>Bet on the positive option</strong> — "Which is TRUE of independent testing?" "Independent testers can recognise different kinds of failures" (positive, syllabus wording) beats "Developers should never test their own code" (absolute and negative).</li>
+<li><strong>The more information… the better</strong> — "What can static analysis find?" The precise option "coding-standard violations, security vulnerabilities and unreachable code, without executing the code" beats a vague "defects".</li>
+</ol>
+<div class="pitfall">Tips 12 and 13 are only heuristics: ISTQB question writers try to keep options similar in length and tone. Use them only when tips 1–6 have not already decided the answer.</div>`,
+        `<p class="y-chinh">🎯 Mẹo 8–13 dành cho những câu bạn chưa chắc — mỗi mẹo kèm một ví dụ cụ thể.</p>
+<ol start="8">
+<li><strong>Đoán có cơ sở</strong> — không trừ điểm câu sai. Còn 10 câu bỏ ngỏ: đoán mò được khoảng 2,5 điểm (10 × 1/4); loại trước hai phương án thì được khoảng 5 điểm (10 × 1/2).</li>
+<li><strong>Giữ lựa chọn đầu tiên — nhưng không phải lúc nào cũng vậy</strong> — chỉ đổi khi có lý do cụ thể. Bạn chọn "confirmation testing", rồi thấy đề viết "chạy lại cả bộ để chắc không có chỗ nào khác hỏng": đó là regression testing, một lý do thật để đổi.</li>
+<li><strong>"Tất cả đều đúng" / "Không có đáp án nào đúng"</strong> — "Lợi ích của công cụ là gì? a) bớt việc lặp lại b) nhất quán hơn c) đánh giá khách quan d) tất cả các ý trên". Chắc chắn được hai trong a–c thì chọn d. Chỉ chọn "không có đáp án nào" khi bác bỏ được từng phương án.</li>
+<li><strong>Khi hai đáp án cùng có vẻ đúng</strong> — "test lại sau khi sửa" và "confirmation testing" cùng nghĩa; đề muốn thuật ngữ của syllabus, confirmation testing.</li>
+<li><strong>Ưu tiên phương án khẳng định</strong> — "Điều nào ĐÚNG về kiểm thử độc lập?" "Tester độc lập nhận ra được những kiểu failure khác" (khẳng định, đúng câu chữ syllabus) thắng "Developer không bao giờ nên test code của mình" (tuyệt đối và phủ định).</li>
+<li><strong>Càng nhiều thông tin càng tốt</strong> — "Static analysis tìm được gì?" Phương án chính xác "vi phạm chuẩn code, lỗ hổng bảo mật và code không bao giờ chạy tới, mà không cần chạy code" thắng câu chung chung "lỗi".</li>
+</ol>
+<div class="pitfall">Mẹo 12 và 13 chỉ là kinh nghiệm: người ra đề ISTQB cố giữ các phương án dài ngắn và giọng văn như nhau. Chỉ dùng khi mẹo 1–6 chưa quyết được đáp án.</div>`],
+    ]),
   ].join('\n'),
 };
 

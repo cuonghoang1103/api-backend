@@ -160,9 +160,18 @@ if (course) {
       const lslug = l.slug || slugify(l.title);
       const quizData = l.quiz ? {
         timeLimitSeconds: l.quiz.timeLimitSeconds ?? 600,
+        // Carry every field LessonQuizPlayer renders. Until 12/09/2026 only question/options/
+        // correctIndex/points survived, so hundreds of written explanations (and multi-answer
+        // correctIndexes, code, ESSAY sampleAnswer) never reached the site. Optional keys are
+        // added only when present, so old quizData stays byte-identical.
         questions: (l.quiz.questions || []).map((q, i) => ({
           id: q.id ?? `q${i + 1}`, question: q.question,
           options: q.options, correctIndex: q.correctIndex, points: q.points ?? 1,
+          ...(Array.isArray(q.correctIndexes) ? { correctIndexes: q.correctIndexes } : {}),
+          ...(q.type ? { type: q.type } : {}),
+          ...(q.code ? { code: q.code, ...(q.codeLang ? { codeLang: q.codeLang } : {}) } : {}),
+          ...(q.sampleAnswer ? { sampleAnswer: q.sampleAnswer } : {}),
+          ...(q.explanation ? { explanation: q.explanation } : {}),
         })),
       } : undefined;
       const lessonCore = {

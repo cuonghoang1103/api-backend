@@ -38,6 +38,15 @@ export const DECKS = {
   'lab2-pcl': { code: 'How to write PCL', en: 'Lab 2 — How to write a PCL', vi: 'Lab 2 — Cách viết PCL', total: 32, w: 1280, h: 721, ver: 'v2' },
   'lab2-structural': { code: 'Lab2 Structural', en: 'Lab 2 — Component (structural) testing', vi: 'Lab 2 — Component test cấu trúc', total: 13, w: 1280, h: 960 },
   'lab2-functional': { code: 'Lab2 Functional', en: 'Lab 2 — Component (functional) testing', vi: 'Lab 2 — Component test chức năng', total: 14, w: 1280, h: 960 },
+  // The OLDER 2023 version of the lecture decks (SWT1.ppt–SWT7.ppt), found in the student's SWP391 folder.
+  // Rendered from the .ppt; only pages that add something to the current lessons are used (see *-slides-2023 lessons).
+  oswt1: { code: 'SWT1 (2023)', en: 'Ch.1 Fundamentals — 2023 deck', vi: 'Ch.1 Nền tảng — bộ slide 2023', total: 70, w: 1280, h: 887 },
+  oswt2: { code: 'SWT2 (2023)', en: 'Ch.2 Testing in the lifecycle — 2023 deck', vi: 'Ch.2 Kiểm thử trong vòng đời — bộ slide 2023', total: 86, w: 1280, h: 887 },
+  oswt3: { code: 'SWT3 (2023)', en: 'Ch.3 Static testing — 2023 deck', vi: 'Ch.3 Kiểm thử tĩnh — bộ slide 2023', total: 43, w: 1280, h: 887 },
+  oswt4: { code: 'SWT4 (2023)', en: 'Ch.4 Test techniques — 2023 deck', vi: 'Ch.4 Kỹ thuật test — bộ slide 2023', total: 55, w: 1280, h: 887 },
+  oswt5: { code: 'SWT5 (2023)', en: 'Ch.5 Test management — 2023 deck', vi: 'Ch.5 Quản lý test — bộ slide 2023', total: 56, w: 1280, h: 887 },
+  oswt6: { code: 'SWT6 (2023)', en: 'Ch.6 Tool support — 2023 deck', vi: 'Ch.6 Công cụ hỗ trợ — bộ slide 2023', total: 32, w: 1280, h: 887 },
+  oswt7: { code: 'SWT7 (2023)', en: 'Exam practice — 2023 deck', vi: 'Luyện thi — bộ slide 2023', total: 21, w: 1280, h: 887 },
 };
 
 /**

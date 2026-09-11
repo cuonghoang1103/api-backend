@@ -9,6 +9,7 @@
  * Lesson split:
  *   5.1 Coverage: statement & decision   swt4 82–90
  *   5.2 V(G), Examples 1–6, PE Question 2 swt4 91–99 (+ swt3 101–103)
+ *   5.3 More from the 2023 deck           oswt4 (SWT4.ppt) pages 34–55 — only the NEW/PARTIAL pages as cards
  * Every coverage number was checked twice: by reasoning on the control-flow
  * graph AND by running JUnit 5.12.2 + JaCoCo 0.8.13 on JDK 21.0.9; the
  * outputs pasted below are the real console output.
@@ -17,6 +18,8 @@ import { walk, walkHead, books, bi, ansEn as AE, ansVi as AV } from './_slides.m
 
 const D = 'swt4';
 const q = (question, options, correctIndex) => ({ question, options, correctIndex, points: 1 });
+// qx = q + explanation (kept in source; the seeder currently stores only question/options/correctIndex/points).
+const qx = (question, options, correctIndex, explanation) => ({ ...q(question, options, correctIndex), explanation });
 
 /* ───────────────────── 5.1 Coverage: statement & decision ───────────────────── */
 const L51 = {
@@ -1413,14 +1416,256 @@ tax-10   TaxCalculator.fncPersonalIncomeTax  lines 16/16  branches 18/18 (100%)<
   ].join('\n'),
 };
 
+/* ─────────────── 5.3 More from the 2023 slide set (SWT4.ppt pages 34–55) ─────────────── */
+const O = 'oswt4';
+const L53 = {
+  title: '5.3 — More from the 2023 slide set: BS 7925-2 white-box list, MC/DC & LCSAJ|||5.3 — Bổ sung từ bộ slide 2023: danh mục white-box BS 7925-2, MC/DC & LCSAJ',
+  slug: 'swt301-ch5-slides-2023',
+  type: 'VIDEO',
+  description: 'Bộ slide SWT4 cũ (2023) trang 34–55: những trang bài 5.1–5.2 và Chương 6 chưa có — bảy kỹ thuật white-box của BS 7925-2, MC/DC (có ví dụ A AND B giải từng bước), LCSAJ và chỗ slide nói quá, error guessing & fault attack. Các trang trùng (coverage, Ví dụ 1–6, chọn kỹ thuật) được liệt kê kèm chỗ đã học và đáp án đã đối chiếu.',
+  content: [
+    bi(`<span class="eyebrow">Chapter 5 · Lesson 5.3 · SWT4 (2023) pages 34–55</span>
+<h2>More from the 2023 slide set — the white-box pages</h2>
+<p class="lead">The older 2023 deck (SWT4.ppt, 55 pages) taught white-box testing with the same coverage pages and Examples 1–6 you met in Lessons 5.1–5.2 — but it also listed the <strong>stronger white-box techniques</strong> of the British standard BS 7925-2. This lesson shows those pages, explains them with worked examples, and points to where every other page is already taught.</p>
+<div class="callout"><strong>Learning objectives.</strong> After this lesson you can:
+<ul>
+<li><strong>list</strong> the seven white-box techniques of BS 7925-2 and rank them from weakest to strongest;</li>
+<li><strong>derive</strong> an MC/DC test set for a decision with two or three conditions (n + 1 tests);</li>
+<li><strong>say</strong> what 100% LCSAJ coverage does — and does not — guarantee;</li>
+<li><strong>place</strong> “error guessing and fault attacks” in today's experience-based techniques.</li>
+</ul></div>
+<h3>Old words → current CTFL words</h3>
+<table>
+<thead><tr><th>In the 2023 deck</th><th>Say today (CTFL 2018 / v4.0)</th></tr></thead>
+<tbody>
+<tr><td>Techniques “defined in BS 7925-2”</td><td>ISO/IEC/IEEE 29119-4 (BS 7925-2 is withdrawn)</td></tr>
+<tr><td>Branch / decision testing</td><td><strong>Decision testing</strong> — the only two white-box techniques in CTFL are statement and decision testing</td></tr>
+<tr><td>Branch condition combination testing</td><td><strong>Multiple condition testing</strong> (Advanced level, not Foundation)</td></tr>
+<tr><td>Modified condition decision testing</td><td><strong>MC/DC</strong> — Advanced Technical Test Analyst</td></tr>
+<tr><td>LCSAJ, data flow testing</td><td>Not in any current ISTQB syllabus; data flow appears only as a static-analysis check</td></tr>
+<tr><td>Error guessing and <em>fault</em> attacks</td><td>Error guessing (a “fault attack” is its methodical form); <em>fault</em> = defect</td></tr>
+</tbody>
+</table>`,
+    `<span class="eyebrow">Chương 5 · Bài 5.3 · SWT4 (2023) trang 34–55</span>
+<h2>Bổ sung từ bộ slide 2023 — phần white-box</h2>
+<p class="lead">Bộ slide cũ 2023 (SWT4.ppt, 55 trang) dạy white-box bằng đúng những trang coverage và Ví dụ 1–6 bạn đã gặp ở bài 5.1–5.2 — nhưng nó còn liệt kê các <strong>kỹ thuật white-box mạnh hơn</strong> của chuẩn Anh BS 7925-2. Bài này đưa các trang đó, giải thích bằng ví dụ có lời giải, và chỉ rõ mọi trang còn lại đã được dạy ở đâu.</p>
+<div class="callout"><strong>Chuẩn đầu ra.</strong> Học xong bài này bạn có thể:
+<ul>
+<li><strong>kể</strong> bảy kỹ thuật white-box của BS 7925-2 và xếp chúng từ yếu tới mạnh;</li>
+<li><strong>lập</strong> bộ test MC/DC cho một quyết định có hai hoặc ba điều kiện (n + 1 test);</li>
+<li><strong>nói được</strong> 100% LCSAJ coverage bảo đảm gì — và không bảo đảm gì;</li>
+<li><strong>đặt</strong> “error guessing and fault attacks” vào đúng chỗ trong nhóm kỹ thuật dựa kinh nghiệm hiện nay.</li>
+</ul></div>
+<h3>Từ cũ → từ CTFL hiện hành</h3>
+<table>
+<thead><tr><th>Trong slide 2023</th><th>Nói theo CTFL 2018 / v4.0</th></tr></thead>
+<tbody>
+<tr><td>Kỹ thuật “định nghĩa trong BS 7925-2”</td><td>ISO/IEC/IEEE 29119-4 (BS 7925-2 đã bị rút)</td></tr>
+<tr><td>Branch / decision testing</td><td><strong>Decision testing</strong> — CTFL chỉ có hai kỹ thuật white-box: statement và decision testing</td></tr>
+<tr><td>Branch condition combination testing</td><td><strong>Multiple condition testing</strong> (cấp Advanced, không thuộc Foundation)</td></tr>
+<tr><td>Modified condition decision testing</td><td><strong>MC/DC</strong> — Advanced Technical Test Analyst</td></tr>
+<tr><td>LCSAJ, data flow testing</td><td>Không còn trong syllabus ISTQB hiện hành; data flow chỉ còn là một phép kiểm của static analysis</td></tr>
+<tr><td>Error guessing and <em>fault</em> attacks</td><td>Error guessing (“fault attack” là dạng có phương pháp của nó); <em>fault</em> = defect</td></tr>
+</tbody>
+</table>`),
+    bi(`<h3>Old pages you have already learned</h3>
+<p>These 2023 pages match the current lessons; the answers printed on pages 45–49 were re-worked and agree with Lesson 5.2. Slide numbers refer to the current <em>SWT4</em> deck.</p>
+<table>
+<thead><tr><th>2023 page</th><th>Topic</th><th>Already taught in</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td>33, 50, 52, 55</td><td>“Contents” agenda / “Summary: key points”</td><td>—</td><td>Repeats of the seven-section agenda (page 2, Lesson 4.7)</td></tr>
+<tr><td>37</td><td>Using structural coverage</td><td>5.1 — slide 84</td><td>Identical</td></tr>
+<tr><td>38</td><td>The test coverage trap</td><td>5.1 — slide 85</td><td>Old “Coverage is not thoroughness” = new “only one aspect of thoroughness”</td></tr>
+<tr><td>39–41</td><td>Statement coverage (87%) · example · decision coverage (50%)</td><td>5.1 — slides 86–88</td><td>Same numbers: 87/100 = 87%, 60/120 = 50%</td></tr>
+<tr><td>42–43</td><td>Paths through code · with loops</td><td>5.1 — slides 89–90</td><td>Identical (2, 2, 3 and 4 paths)</td></tr>
+<tr><td>44</td><td>Example 1 — card and PIN</td><td>5.2 — slides 91–92</td><td>V(G) 3, statement 3, decision 3</td></tr>
+<tr><td>45</td><td>Example 2</td><td>5.2 — slide 93</td><td>3 / 1 / 3 ✓</td></tr>
+<tr><td>46</td><td>Example 3</td><td>5.2 — slide 94</td><td>4 / 2 / 4 ✓</td></tr>
+<tr><td>47</td><td>Example 4 (4 paths)</td><td>5.2 — slide 95</td><td>3 / 2 / 2 ✓</td></tr>
+<tr><td>48</td><td>Example 5</td><td>5.2 — slide 96</td><td>3 / 1 / 2 ✓</td></tr>
+<tr><td>49</td><td>Example 6</td><td>5.2 — slide 97</td><td>3 / 2 / 2 ✓</td></tr>
+<tr><td>53–54</td><td>Choosing a technique: internal and external factors</td><td>6.2 — block on hidden pptx slides 114–115</td><td>Same six internal and five external factors</td></tr>
+</tbody>
+</table>`,
+    `<h3>Những trang cũ bạn đã học</h3>
+<p>Các trang 2023 dưới đây khớp với bài hiện tại; đáp án in trên trang 45–49 đã được giải lại và trùng với bài 5.2. Số slide là số của bộ <em>SWT4</em> hiện tại.</p>
+<table>
+<thead><tr><th>Trang 2023</th><th>Chủ đề</th><th>Đã học ở</th><th>Ghi chú</th></tr></thead>
+<tbody>
+<tr><td>33, 50, 52, 55</td><td>Mục lục “Contents” / “Summary: key points”</td><td>—</td><td>Lặp lại mục lục bảy phần (trang 2, bài 4.7)</td></tr>
+<tr><td>37</td><td>Using structural coverage</td><td>5.1 — slide 84</td><td>Giống hệt</td></tr>
+<tr><td>38</td><td>Bẫy độ phủ</td><td>5.1 — slide 85</td><td>“Coverage is not thoroughness” cũ = “chỉ là một khía cạnh của độ kỹ lưỡng” mới</td></tr>
+<tr><td>39–41</td><td>Statement coverage (87%) · ví dụ · decision coverage (50%)</td><td>5.1 — slide 86–88</td><td>Cùng số: 87/100 = 87%, 60/120 = 50%</td></tr>
+<tr><td>42–43</td><td>Đường đi trong code · có vòng lặp</td><td>5.1 — slide 89–90</td><td>Giống hệt (2, 2, 3 và 4 đường)</td></tr>
+<tr><td>44</td><td>Ví dụ 1 — thẻ và PIN</td><td>5.2 — slide 91–92</td><td>V(G) 3, statement 3, decision 3</td></tr>
+<tr><td>45</td><td>Ví dụ 2</td><td>5.2 — slide 93</td><td>3 / 1 / 3 ✓</td></tr>
+<tr><td>46</td><td>Ví dụ 3</td><td>5.2 — slide 94</td><td>4 / 2 / 4 ✓</td></tr>
+<tr><td>47</td><td>Ví dụ 4 (4 đường)</td><td>5.2 — slide 95</td><td>3 / 2 / 2 ✓</td></tr>
+<tr><td>48</td><td>Ví dụ 5</td><td>5.2 — slide 96</td><td>3 / 1 / 2 ✓</td></tr>
+<tr><td>49</td><td>Ví dụ 6</td><td>5.2 — slide 97</td><td>3 / 2 / 2 ✓</td></tr>
+<tr><td>53–54</td><td>Chọn kỹ thuật: yếu tố bên trong và bên ngoài</td><td>6.2 — khối về slide ẩn pptx 114–115</td><td>Cùng sáu yếu tố bên trong và năm yếu tố bên ngoài</td></tr>
+</tbody>
+</table>`),
+    walkHead(O, 34, 51, 'Only the 2023 pages that add something to Lessons 5.1–5.2 and Chapter 6 are shown, in page order.', 'Chỉ hiện những trang 2023 bổ sung điều mới cho bài 5.1–5.2 và Chương 6, theo đúng thứ tự trang.'),
+    walk(O, [
+      [34, 'White Box test design and measurement techniques (BS 7925-2)',
+        `<p class="y-chinh">🎯 BS 7925-2 defined seven white-box techniques, and every one of them is also a coverage measure.</p>
+<p class="nhan">The seven techniques and what each one counts</p>
+<table>
+<thead><tr><th>Technique</th><th>Coverage item</th><th>In CTFL?</th></tr></thead>
+<tbody>
+<tr><td>Statement testing</td><td>executable statements</td><td>Yes (Lesson 5.1)</td></tr>
+<tr><td>Branch / decision testing</td><td>decision outcomes (True and False)</td><td>Yes (Lesson 5.1)</td></tr>
+<tr><td>Data flow testing</td><td>definition–use pairs of each variable</td><td>No</td></tr>
+<tr><td>Branch condition testing</td><td>each atomic condition True and False</td><td>No</td></tr>
+<tr><td>Branch condition combination testing</td><td>every combination of the atomic conditions (2ⁿ)</td><td>No (Advanced)</td></tr>
+<tr><td>Modified condition decision testing</td><td>each condition shown to change the decision on its own (page 35)</td><td>No (Advanced)</td></tr>
+<tr><td>LCSAJ testing</td><td>linear code sequences and jumps (page 36)</td><td>No</td></tr>
+</tbody>
+</table>
+<p class="nhan">One decision, four strengths — <code>if (a &gt; 0 &amp;&amp; b &gt; 0)</code></p>
+<ul>
+<li><strong>Decision coverage</strong> — 2 tests: (T, T) → True, (F, T) → False.</li>
+<li><strong>Condition coverage</strong> — 2 tests (T, F) and (F, T) make each condition True and False, yet the decision is False both times: only 50% decision coverage.</li>
+<li><strong>MC/DC</strong> — 3 tests: (T, T), (F, T), (T, F).</li>
+<li><strong>Multiple condition</strong> — all 2² = 4 combinations.</li>
+</ul>
+<div class="pitfall">Condition coverage does <em>not</em> include decision coverage — the example above reaches 100% condition coverage with the True branch never taken.</div>
+<p class="ghi-chu">In the rendered image the green ticks are scattered by the old .ppt animation. There are seven ticks, one per technique: all seven are “also a measurement technique”.</p>`,
+        `<p class="y-chinh">🎯 BS 7925-2 định nghĩa bảy kỹ thuật white-box, và kỹ thuật nào cũng đồng thời là một thước đo độ phủ.</p>
+<p class="nhan">Bảy kỹ thuật và thứ mỗi kỹ thuật đếm</p>
+<table>
+<thead><tr><th>Kỹ thuật</th><th>Phần tử độ phủ</th><th>Có trong CTFL?</th></tr></thead>
+<tbody>
+<tr><td>Statement testing</td><td>các câu lệnh thực thi được</td><td>Có (bài 5.1)</td></tr>
+<tr><td>Branch / decision testing</td><td>các kết quả quyết định (True và False)</td><td>Có (bài 5.1)</td></tr>
+<tr><td>Data flow testing</td><td>các cặp định nghĩa–sử dụng của từng biến</td><td>Không</td></tr>
+<tr><td>Branch condition testing</td><td>mỗi điều kiện đơn nhận cả True và False</td><td>Không</td></tr>
+<tr><td>Branch condition combination testing</td><td>mọi tổ hợp của các điều kiện đơn (2ⁿ)</td><td>Không (Advanced)</td></tr>
+<tr><td>Modified condition decision testing</td><td>mỗi điều kiện tự mình đổi được kết quả quyết định (trang 35)</td><td>Không (Advanced)</td></tr>
+<tr><td>LCSAJ testing</td><td>các đoạn code tuần tự kèm bước nhảy (trang 36)</td><td>Không</td></tr>
+</tbody>
+</table>
+<p class="nhan">Một quyết định, bốn mức mạnh — <code>if (a &gt; 0 &amp;&amp; b &gt; 0)</code></p>
+<ul>
+<li><strong>Decision coverage</strong> — 2 test: (T, T) → True, (F, T) → False.</li>
+<li><strong>Condition coverage</strong> — 2 test (T, F) và (F, T) cho mỗi điều kiện cả True lẫn False, nhưng quyết định đều ra False: chỉ đạt 50% decision coverage.</li>
+<li><strong>MC/DC</strong> — 3 test: (T, T), (F, T), (T, F).</li>
+<li><strong>Multiple condition</strong> — đủ 2² = 4 tổ hợp.</li>
+</ul>
+<div class="pitfall">Condition coverage <em>không</em> bao hàm decision coverage — ví dụ trên đạt 100% condition coverage mà nhánh True chưa bao giờ chạy.</div>
+<p class="ghi-chu">Trong ảnh dựng lại, các dấu tích xanh bị animation của file .ppt cũ làm lệch chỗ. Có đúng bảy dấu tích, mỗi kỹ thuật một dấu: cả bảy đều “also a measurement technique”.</p>`],
+      [35, 'Modified condition decision testing (MC/DC)',
+        `<p class="y-chinh">🎯 MC/DC asks for four things; the last one — each condition independently changes the decision — is what makes it strong yet affordable.</p>
+<ol>
+<li><strong>Each entry and exit point is invoked</strong> — every function is called and every return is reached.</li>
+<li><strong>Each decision takes every possible outcome</strong> — this is decision coverage.</li>
+<li><strong>Each condition in a decision takes every possible outcome</strong> — this is condition coverage.</li>
+<li><strong>Each condition is shown to independently affect the outcome</strong> — two tests that differ <em>only</em> in that condition give different decisions.</li>
+</ol>
+<p class="nhan">Worked example — A AND B</p>
+<table>
+<thead><tr><th>Test</th><th>A</th><th>B</th><th>A AND B</th><th>Proves</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>T</td><td>T</td><td>T</td><td>pair partner for both</td></tr>
+<tr><td>2</td><td>F</td><td>T</td><td>F</td><td>A matters (compare with test 1)</td></tr>
+<tr><td>3</td><td>T</td><td>F</td><td>F</td><td>B matters (compare with test 1)</td></tr>
+</tbody>
+</table>
+<p class="nhan">Answers re-worked (checked with a script)</p>
+<ul>
+<li><strong>A AND B</strong> — {TT, FT, TF}: 3 tests. Multiple condition would need 4.</li>
+<li><strong>A OR B</strong> — {FF, TF, FT}: 3 tests.</li>
+<li><strong>A AND (B OR C)</strong> — {TTF, FTF, TFF, TFT}: 4 tests instead of 2³ = 8.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> MC/DC usually needs n + 1 tests for n conditions — it grows linearly, multiple condition grows as 2ⁿ. That is why avionics (DO-178C level A) demands MC/DC rather than all combinations.</p>`,
+        `<p class="y-chinh">🎯 MC/DC đòi bốn điều; điều cuối — mỗi điều kiện tự mình đổi được kết quả quyết định — làm nó vừa mạnh vừa không quá tốn.</p>
+<ol>
+<li><strong>Mọi điểm vào và điểm ra đều được gọi tới</strong> — hàm nào cũng được gọi, lệnh return nào cũng được chạy tới.</li>
+<li><strong>Mỗi quyết định nhận mọi kết quả có thể</strong> — đây là decision coverage.</li>
+<li><strong>Mỗi điều kiện trong quyết định nhận mọi kết quả có thể</strong> — đây là condition coverage.</li>
+<li><strong>Mỗi điều kiện được chứng minh ảnh hưởng độc lập tới kết quả</strong> — hai test chỉ khác nhau <em>đúng</em> ở điều kiện đó cho ra quyết định khác nhau.</li>
+</ol>
+<p class="nhan">Ví dụ có lời giải — A AND B</p>
+<table>
+<thead><tr><th>Test</th><th>A</th><th>B</th><th>A AND B</th><th>Chứng minh</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>T</td><td>T</td><td>T</td><td>test đối chiếu cho cả hai</td></tr>
+<tr><td>2</td><td>F</td><td>T</td><td>F</td><td>A có ảnh hưởng (so với test 1)</td></tr>
+<tr><td>3</td><td>T</td><td>F</td><td>F</td><td>B có ảnh hưởng (so với test 1)</td></tr>
+</tbody>
+</table>
+<p class="nhan">Giải lại đáp án (đã kiểm bằng script)</p>
+<ul>
+<li><strong>A AND B</strong> — {TT, FT, TF}: 3 test. Multiple condition cần 4.</li>
+<li><strong>A OR B</strong> — {FF, TF, FT}: 3 test.</li>
+<li><strong>A AND (B OR C)</strong> — {TTF, FTF, TFF, TFT}: 4 test thay vì 2³ = 8.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> MC/DC thường cần n + 1 test cho n điều kiện — tăng tuyến tính, còn multiple condition tăng theo 2ⁿ. Vì thế hàng không (DO-178C mức A) đòi MC/DC chứ không đòi mọi tổ hợp.</p>`],
+      [36, 'LCSAJ testing',
+        `<p class="y-chinh">🎯 LCSAJ coverage is stronger than statement and branch coverage — but the page claims one thing too many.</p>
+<p class="nhan">What an LCSAJ is</p>
+<p>A <strong>Linear Code Sequence And Jump</strong> is a triple (start line, end line, jump target): a run of consecutive statements executed one after another, ending with a jump of control to another line.</p>
+<p class="nhan">The four claims, checked</p>
+<ol>
+<li><strong>100% LCSAJ ⇒ 100% statement coverage</strong> — ✓ true: every statement lies in some LCSAJ.</li>
+<li><strong>100% LCSAJ ⇒ 100% branch coverage</strong> — ✓ true: every jump and every fall-through is exercised.</li>
+<li><strong>⇒ 100% procedure / function call coverage</strong> — ✓ true: it already follows from statement coverage, since each call is a statement.</li>
+<li><strong>⇒ 100% multiple condition coverage</strong> — ✗ not true. LCSAJ follows jumps between lines; it never looks inside a compound condition.</li>
+</ol>
+<p class="nhan">Counter-example for claim 4</p>
+<p>For <code>if (a &gt; 0 &amp;&amp; b &gt; 0) x = 1;</code> the tests (T, T) and (F, F) take both the fall-through and the jump, so all LCSAJs are covered. The combinations (T, F) and (F, T) never run: multiple condition coverage is 2 of 4 = 50%.</p>
+<p class="ghi-chu">LCSAJ was used with tools such as LDRA Testbed; it is not in any current ISTQB syllabus.</p>`,
+        `<p class="y-chinh">🎯 LCSAJ coverage mạnh hơn statement và branch coverage — nhưng trang này khẳng định dư một điều.</p>
+<p class="nhan">LCSAJ là gì</p>
+<p><strong>Linear Code Sequence And Jump</strong> là một bộ ba (dòng bắt đầu, dòng kết thúc, đích nhảy): một dãy lệnh liền nhau chạy lần lượt, kết thúc bằng một bước nhảy điều khiển sang dòng khác.</p>
+<p class="nhan">Kiểm lại bốn khẳng định</p>
+<ol>
+<li><strong>100% LCSAJ ⇒ 100% statement coverage</strong> — ✓ đúng: câu lệnh nào cũng thuộc một LCSAJ nào đó.</li>
+<li><strong>100% LCSAJ ⇒ 100% branch coverage</strong> — ✓ đúng: mọi bước nhảy và mọi lần đi thẳng đều được chạy.</li>
+<li><strong>⇒ 100% procedure / function call coverage</strong> — ✓ đúng: điều này đã suy ra từ statement coverage, vì mỗi lời gọi là một câu lệnh.</li>
+<li><strong>⇒ 100% multiple condition coverage</strong> — ✗ sai. LCSAJ theo các bước nhảy giữa các dòng; nó không nhìn vào bên trong một điều kiện ghép.</li>
+</ol>
+<p class="nhan">Phản ví dụ cho khẳng định 4</p>
+<p>Với <code>if (a &gt; 0 &amp;&amp; b &gt; 0) x = 1;</code> hai test (T, T) và (F, F) đã đi cả đường thẳng lẫn bước nhảy, nên mọi LCSAJ đều được phủ. Tổ hợp (T, F) và (F, T) chưa bao giờ chạy: multiple condition coverage chỉ 2/4 = 50%.</p>
+<p class="ghi-chu">LCSAJ từng được dùng với công cụ như LDRA Testbed; nó không có trong syllabus ISTQB hiện hành nào.</p>`],
+      [51, 'Experience-based techniques — error guessing and fault attacks',
+        `<p class="y-chinh">🎯 Experience-based techniques complement the formal ones — they are never the only technique you use.</p>
+<p class="nhan">The two techniques on the page</p>
+<ul>
+<li><strong>Error guessing and fault attacks</strong> — use experience to guess where developers make mistakes. A <em>fault attack</em> is the methodical form: write a list of possible defects and failures, then design one test to “attack” each (empty input, 0, a very long string, a full disc, a lost connection…).</li>
+<li><strong>Exploratory testing</strong> — a hands-on approach with minimum planning and maximum test execution: design, execution and learning happen at the same time.</li>
+</ul>
+<p class="nhan">What the current deck adds</p>
+<ul>
+<li><strong>Checklist-based testing</strong> — the third experience-based technique of CTFL 2018 (Lesson 6.1).</li>
+<li><strong>Session-based testing</strong> — exploratory testing inside a time-box, guided by a test charter (Lesson 6.1, slide 104).</li>
+</ul>
+<div class="pitfall">“Should always be used as a <em>complement</em>” — an exam option saying error guessing can replace EP, BVA or decision tables is wrong. Old “fault” = today's <strong>defect</strong>.</div>`,
+        `<p class="y-chinh">🎯 Kỹ thuật dựa kinh nghiệm bổ sung cho các kỹ thuật chính thức — không bao giờ là kỹ thuật duy nhất bạn dùng.</p>
+<p class="nhan">Hai kỹ thuật trên trang</p>
+<ul>
+<li><strong>Error guessing và fault attack</strong> — dùng kinh nghiệm đoán chỗ lập trình viên hay sai. <em>Fault attack</em> là dạng có phương pháp: lập danh sách defect và failure có thể xảy ra, rồi thiết kế mỗi mục một test để “tấn công” (ô trống, số 0, chuỗi rất dài, đĩa đầy, mất kết nối…).</li>
+<li><strong>Exploratory testing</strong> — cách làm thực hành, lập kế hoạch tối thiểu và chạy test tối đa: thiết kế, thực thi và học diễn ra cùng lúc.</li>
+</ul>
+<p class="nhan">Bộ slide hiện tại bổ sung</p>
+<ul>
+<li><strong>Checklist-based testing</strong> — kỹ thuật dựa kinh nghiệm thứ ba của CTFL 2018 (bài 6.1).</li>
+<li><strong>Session-based testing</strong> — exploratory testing trong một khung thời gian cố định, có test charter định hướng (bài 6.1, slide 104).</li>
+</ul>
+<div class="pitfall">“Luôn được dùng như một kỹ thuật <em>bổ sung</em>” — phương án nói error guessing có thể thay EP, BVA hay decision table là sai. “Fault” cũ = <strong>defect</strong> hiện nay.</div>`],
+    ]),
+  ].join('\n'),
+};
+
 /* ─────────────────────────────────── Quiz 5 ─────────────────────────────────── */
 const QUIZ5 = {
   title: 'Quiz 5 — White-box techniques & cyclomatic complexity|||Quiz 5 — Kỹ thuật white-box & độ phức tạp chu trình',
   slug: 'swt301-quiz-5',
   type: 'QUIZ',
-  description: '14 câu: 2 câu "Question" trên slide SWT4 (s.98, s.99), 6 câu từ các ví dụ lưu đồ 1–6 và 6 câu về coverage, V(G) và các bài PE (countCharacters, thuế TNCN, tích điểm).',
+  description: '20 câu: 2 câu "Question" trên slide SWT4 (s.98, s.99), 6 câu từ các ví dụ lưu đồ 1–6, 6 câu về coverage, V(G) và các bài PE (countCharacters, thuế TNCN, tích điểm) + 6 câu từ bộ slide 2023 (bài 5.3: MC/DC, condition coverage, LCSAJ, error guessing).',
   quiz: {
-    timeLimitSeconds: 840,
+    timeLimitSeconds: 1200,
     questions: [
       q('How many test cases are necessary to achieve 100% statement coverage of printSum(a, b) (if result > 0 print "red"… else if result < 0 print "blue"…)? (SWT4 s.98)|||Cần bao nhiêu test case để đạt 100% statement coverage cho printSum(a, b) (if result > 0 in "red"… else if result < 0 in "blue"…)? (SWT4 s.98)', ['1', '2', '4', '3'], 1),
       q('A section of code has one simple IF statement. How many tests are needed for 100% decision coverage? (s.99)|||Một đoạn code có một lệnh IF đơn giản. Cần bao nhiêu test để đạt 100% decision coverage? (s.99)', ['1', '2', '3', 'Unknown with this information|||Không xác định được với thông tin này'], 1),
@@ -1436,6 +1681,19 @@ const QUIZ5 = {
       q('PE FA23: countCharacters(String) loops over the characters with if isUpperCase / else if isLowerCase / else if isDigit / else. Minimum number of test cases for 100% statement AND 100% decision coverage?|||PE FA23: countCharacters(String) lặp qua từng ký tự với if isUpperCase / else if isLowerCase / else if isDigit / else. Số test case tối thiểu cho 100% statement VÀ 100% decision coverage?', ['1', '4', '5', '8'], 0),
       q('PE SU24 tax flowchart: 9 binary decisions, 8 distinct return boxes, and "Return −1" is reached from three different decisions. Minimum tests for 100% statement / 100% decision coverage?|||Lưu đồ thuế PE SU24: 9 quyết định nhị phân, 8 hộp return khác nhau, và "Return −1" được tới từ ba quyết định khác nhau. Số test tối thiểu cho 100% statement / 100% decision coverage?', ['8 / 10', '9 / 10', '8 / 8', '10 / 10'], 0),
       q('Why is 100% path coverage rarely achievable in real code? (s.90)|||Vì sao 100% path coverage hiếm khi đạt được với code thật? (s.90)', ['Tools cannot measure paths|||Công cụ không đo được đường đi', 'Loops make the number of paths unbounded|||Vòng lặp làm số đường đi không giới hạn', 'Every decision has three outcomes|||Mỗi quyết định có ba kết quả', 'Paths only exist in black-box testing|||Đường đi chỉ có trong black-box'], 1),
+      // ── 2023 slide set (Lesson 5.3) ──
+      qx('MC/DC (2023 deck p.35): minimum number of tests for the decision "A AND B"?|||MC/DC (slide 2023 tr.35): số test tối thiểu cho quyết định "A AND B"?', ['2', '3', '4', '8'], 1,
+        '{TT, FT, TF}: FT vs TT shows A changes the outcome alone, TF vs TT shows B does. n + 1 = 3 tests.|||{TT, FT, TF}: FT so với TT cho thấy A tự đổi kết quả, TF so với TT cho thấy B cũng vậy. n + 1 = 3 test.'),
+      qx('For "if (A AND B)" the tests are (A=T, B=F) and (A=F, B=T). Which statement is TRUE?|||Với "if (A AND B)" hai test là (A=T, B=F) và (A=F, B=T). Phát biểu nào ĐÚNG?', ['100% condition coverage, but only 50% decision coverage|||100% condition coverage, nhưng chỉ 50% decision coverage', '100% decision coverage|||100% decision coverage', '100% MC/DC|||100% MC/DC', '100% multiple condition coverage|||100% multiple condition coverage'], 0,
+        'Each condition is True once and False once, but the decision is False in both tests, so the True outcome is never taken. Condition coverage does not include decision coverage.|||Mỗi điều kiện có một lần True và một lần False, nhưng quyết định đều False nên nhánh True chưa bao giờ chạy. Condition coverage không bao hàm decision coverage.'),
+      qx('Branch condition combination (multiple condition) testing of a decision with 3 atomic conditions needs how many combinations?|||Branch condition combination (multiple condition) testing cho một quyết định có 3 điều kiện đơn cần bao nhiêu tổ hợp?', ['3', '4', '6', '8'], 3,
+        'All combinations: 2^3 = 8. MC/DC would need only 4 (n + 1).|||Mọi tổ hợp: 2^3 = 8. MC/DC chỉ cần 4 (n + 1).'),
+      qx('MC/DC for the decision "A AND (B OR C)": minimum number of tests?|||MC/DC cho quyết định "A AND (B OR C)": số test tối thiểu?', ['3', '4', '6', '8'], 1,
+        '{TTF, FTF, TFF, TFT}: A pair TTF/FTF, B pair TTF/TFF, C pair TFF/TFT — 4 tests (checked with a script).|||{TTF, FTF, TFF, TFT}: cặp A là TTF/FTF, cặp B là TTF/TFF, cặp C là TFF/TFT — 4 test (đã kiểm bằng script).'),
+      qx('The 2023 page on LCSAJ (p.36) lists four things 100% LCSAJ coverage gives. Which one does it NOT actually guarantee?|||Trang LCSAJ của slide 2023 (tr.36) liệt kê bốn điều mà 100% LCSAJ mang lại. Điều nào nó thực ra KHÔNG bảo đảm?', ['100% statement coverage|||100% statement coverage', '100% branch coverage|||100% branch coverage', '100% function call coverage|||100% function call coverage', '100% multiple condition coverage|||100% multiple condition coverage'], 3,
+        'LCSAJ follows jumps between lines and never looks inside a compound condition: for "if (a > 0 && b > 0)" the tests TT and FF cover every LCSAJ but only 2 of 4 condition combinations.|||LCSAJ theo bước nhảy giữa các dòng, không nhìn vào trong điều kiện ghép: với "if (a > 0 && b > 0)" hai test TT và FF phủ mọi LCSAJ nhưng chỉ 2/4 tổ hợp điều kiện.'),
+      qx('According to the 2023 deck (p.51), error guessing should always be used…|||Theo slide 2023 (tr.51), error guessing luôn nên được dùng…', ['as the first technique, before any other|||như kỹ thuật đầu tiên, trước mọi kỹ thuật khác', 'only when there is no specification|||chỉ khi không có đặc tả', 'as a complement to other, more formal techniques|||như một kỹ thuật bổ sung cho các kỹ thuật chính thức hơn', 'only by developers|||chỉ bởi lập trình viên'], 2,
+        'Error guessing (and its methodical form, fault attacks) complements EP, BVA, decision tables and white-box testing; it never replaces them.|||Error guessing (và dạng có phương pháp của nó, fault attack) bổ sung cho EP, BVA, decision table và white-box; không bao giờ thay thế chúng.'),
     ],
   },
 };
@@ -1443,5 +1701,5 @@ const QUIZ5 = {
 export default {
   title: 'Chapter 5 — Test design: white-box techniques|||Chương 5 — Thiết kế test: kỹ thuật white-box',
   description: 'SWT4 slide 82–99 học từng slide: coverage, statement & decision coverage, đường đi và vòng lặp, 6 ví dụ lưu đồ có lời giải, cyclomatic complexity (tham chiếu SWT3) — và giải trọn câu 2 của đề PE bằng JUnit 5 chạy thật.',
-  lessons: [L51, L52, QUIZ5],
+  lessons: [L51, L52, L53, QUIZ5],
 };

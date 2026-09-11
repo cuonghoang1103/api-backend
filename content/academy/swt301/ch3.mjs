@@ -8,6 +8,8 @@
  *   3.2 Review process, roles & duties      slides 21–53
  *   3.3 Review types, techniques & success  slides 54–93 (+ hidden pptx 75)
  *   3.4 Static analysis by tools            slides 94–106
+ *   3.5 The older 2023 deck SWT3.ppt (deck 'oswt3', 43 pages): only the pages
+ *       the current lessons do not teach; the rest are listed in a table.
  * Answers to every "Question" slide were worked out against the ISTQB CTFL
  * 2018 syllabus (v3.1) wording, which these slides follow. Every calculation
  * and code output in the worked examples was run (javac/java 21, node).
@@ -2917,16 +2919,692 @@ slide 102 graph 4 (labelled 5): 4 decisions -&gt; V(G) = 5</code></pre>
   ].join('\n'),
 };
 
+/* ──────────────────── 3.5 More from the 2023 slide set (SWT3.ppt) ──────────────────── */
+const O = 'oswt3';
+const L35 = {
+  title: '3.5 — More from the 2023 slide set: people techniques, old review types & why inspection is different|||3.5 — Bổ sung từ bộ slide 2023: kỹ thuật con người, các loại review kiểu cũ & inspection khác gì',
+  slug: 'swt301-ch3-slides-2023',
+  type: 'VIDEO',
+  description: 'Bộ slide SWT3 bản 2023 (43 trang): những trang bài 3.1–3.4 chưa có — kỹ thuật cá nhân/nhóm, lợi ích review, cái gì inspect/review được, 5 loại review kiểu cũ đổi sang tên CTFL, "Reviews in general" 1–4, 3 trang "Inspection is different", sơ đồ quy trình inspection kiểu cũ — kèm bảng đổi thuật ngữ cũ → mới.',
+  content: [
+    bi(`<span class="eyebrow">Chapter 3 · Lesson 3.5 · SWT3 (2023) pages 1–43</span>
+<h2>More from the 2023 slide set: what the older deck adds</h2>
+<p class="lead">Before the current <em>SWT3_tim</em> deck, the course used an older <em>SWT3.ppt</em> (43 pages). Most of it survived into the new deck, and lessons 3.1–3.4 already teach it. About a third of the pages did not survive.</p>
+<ul>
+<li><strong>What this lesson shows</strong> — every old page that teaches something the current lessons do not, with its picture and an explanation.</li>
+<li><strong>What it does not repeat</strong> — pages already taught elsewhere are listed in the table below, with the lesson and slide where you find them.</li>
+<li><strong>Old wording</strong> — the old deck follows an older ISTQB/ISEB syllabus. Each card says where its words differ from the current CTFL terms, so you learn the right vocabulary for the exam.</li>
+</ul>
+<div class="callout"><p><strong>Learning objectives.</strong></p>
+<ul>
+<li>Tell individual static techniques (desk-checking, data-stepping, proof-reading) from group techniques (reviews).</li>
+<li>List what can be inspected and what can be reviewed, and explain why "review" is the wider word.</li>
+<li>Map the old review types (informal, technical/peer, decision-making, walkthrough, inspection) to the four CTFL review types.</li>
+<li>Map the old review activities, roles and deliverables to the CTFL 2018 review process (lesson 3.2).</li>
+<li>Explain in three contrasts why an inspection is different from an ordinary review.</li>
+</ul></div>`,
+    `<span class="eyebrow">Chương 3 · Bài 3.5 · SWT3 (2023) trang 1–43</span>
+<h2>Bổ sung từ bộ slide 2023: bộ slide cũ thêm được gì</h2>
+<p class="lead">Trước bộ <em>SWT3_tim</em> hiện nay, môn học dùng bộ <em>SWT3.ppt</em> cũ hơn (43 trang). Phần lớn đã được giữ sang bộ mới, và bài 3.1–3.4 đã dạy. Khoảng một phần ba số trang thì không được giữ lại.</p>
+<ul>
+<li><strong>Bài này có gì</strong> — mọi trang cũ dạy điều mà các bài hiện tại chưa có, kèm ảnh slide và lời giải thích.</li>
+<li><strong>Bài này không lặp lại gì</strong> — các trang đã dạy ở bài khác nằm trong bảng dưới đây, ghi rõ bài và số slide để bạn tra.</li>
+<li><strong>Từ ngữ cũ</strong> — bộ slide cũ theo syllabus ISTQB/ISEB đời trước. Mỗi thẻ đều ghi chỗ nào từ ngữ khác thuật ngữ CTFL hiện hành, để bạn học đúng từ đi thi.</li>
+</ul>
+<div class="callout"><p><strong>Chuẩn đầu ra.</strong></p>
+<ul>
+<li>Phân biệt kỹ thuật tĩnh cá nhân (desk-checking, data-stepping, proof-reading) với kỹ thuật nhóm (review).</li>
+<li>Kể được cái gì inspect được, cái gì review được, và giải thích vì sao "review" là từ rộng hơn.</li>
+<li>Đổi các loại review kiểu cũ (informal, technical/peer, decision-making, walkthrough, inspection) sang bốn loại review của CTFL.</li>
+<li>Đổi các hoạt động, vai trò và sản phẩm đầu ra của review kiểu cũ sang quy trình review CTFL 2018 (bài 3.2).</li>
+<li>Giải thích bằng ba cặp đối lập vì sao inspection khác một buổi review thông thường.</li>
+</ul></div>`),
+    bi(`<h3>Old pages already taught in lessons 3.1–3.4 (no picture repeated here)</h3>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>Old page (SWT3 2023)</th><th>Already taught in</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td>1 — cover "Static Techniques"</td><td>3.1, slide 1</td><td>Same six-box course map. The header still says "ISTQB / ISEB" — see the terms table at the end.</td></tr>
+<tr><td>2, 10, 30 — Contents</td><td>3.1 slides 2–3 · 3.2 slide 21 · 3.4 slide 94</td><td>Old headings "Reviews and the test process · Types of review · Static analysis" = today's "Static techniques &amp; test process · Review process · Static analysis".</td></tr>
+<tr><td>5 — Reviews are cost-effective</td><td>3.1, slide 10</td><td>Same figures (Freedman &amp; Weinberg, Yourdon, Gilb &amp; Graham).</td></tr>
+<tr><td>9 — Costs of reviews</td><td>3.1, slide 11</td><td>Identical (5–15% of development effort).</td></tr>
+<tr><td>18 — Reviews in general 5 (pitfalls)</td><td>3.3, slide 64</td><td>Identical four pitfalls; the new deck calls them "Formal Review Pitfalls".</td></tr>
+<tr><td>22 — Inspection is more and better</td><td>3.3, slide 65</td><td>Same table (10–20% · 30–40% · 80–95%).</td></tr>
+<tr><td>24–29 — At first glance … Inspection surprises</td><td>3.3, slides 67–72</td><td>Same six pages, same order: checking rate, 1 page = 300 important words.</td></tr>
+<tr><td>31–35 — static analysis, data flow, control flow</td><td>3.4, slides 95–99</td><td>Identical, including the <code>n := 0 … read(y)</code> anomaly example.</td></tr>
+<tr><td>37 — "THEN clause unreachable"</td><td>3.4, slide 100</td><td>The conclusion of page 36 (page 36 itself is shown below: it adds the macro remark).</td></tr>
+<tr><td>38–42 — cyclomatic complexity, other metrics, limitations</td><td>3.4, slides 101–105</td><td>Identical.</td></tr>
+</tbody>
+</table></div>`,
+    `<h3>Các trang cũ đã dạy ở bài 3.1–3.4 (không lặp lại ảnh ở đây)</h3>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>Trang cũ (SWT3 2023)</th><th>Đã dạy ở</th><th>Ghi chú</th></tr></thead>
+<tbody>
+<tr><td>1 — bìa "Static Techniques"</td><td>3.1, slide 1</td><td>Cùng bản đồ sáu ô của môn. Tiêu đề vẫn ghi "ISTQB / ISEB" — xem bảng thuật ngữ cuối bài.</td></tr>
+<tr><td>2, 10, 30 — Contents</td><td>3.1 slide 2–3 · 3.2 slide 21 · 3.4 slide 94</td><td>Mục cũ "Reviews and the test process · Types of review · Static analysis" = mục mới "Static techniques &amp; test process · Review process · Static analysis".</td></tr>
+<tr><td>5 — Reviews are cost-effective</td><td>3.1, slide 10</td><td>Cùng số liệu (Freedman &amp; Weinberg, Yourdon, Gilb &amp; Graham).</td></tr>
+<tr><td>9 — Costs of reviews</td><td>3.1, slide 11</td><td>Giống hệt (5–15% công sức phát triển).</td></tr>
+<tr><td>18 — Reviews in general 5 (cạm bẫy)</td><td>3.3, slide 64</td><td>Giống hệt bốn cạm bẫy; bộ mới gọi là "Formal Review Pitfalls".</td></tr>
+<tr><td>22 — Inspection is more and better</td><td>3.3, slide 65</td><td>Cùng bảng (10–20% · 30–40% · 80–95%).</td></tr>
+<tr><td>24–29 — At first glance … Inspection surprises</td><td>3.3, slide 67–72</td><td>Cùng sáu trang, cùng thứ tự: tốc độ kiểm tra, 1 trang = 300 từ quan trọng.</td></tr>
+<tr><td>31–35 — static analysis, data flow, control flow</td><td>3.4, slide 95–99</td><td>Giống hệt, kể cả ví dụ anomaly <code>n := 0 … read(y)</code>.</td></tr>
+<tr><td>37 — "THEN clause unreachable"</td><td>3.4, slide 100</td><td>Là kết luận của trang 36 (bản thân trang 36 có ở dưới vì nó thêm ý về macro).</td></tr>
+<tr><td>38–42 — cyclomatic complexity, metric khác, giới hạn</td><td>3.4, slide 101–105</td><td>Giống hệt.</td></tr>
+</tbody>
+</table></div>`),
+    walkHead(O, 3, 43, 'This is the <strong>2023</strong> deck: only the pages that add something are shown; the rest are in the table above.', 'Đây là bộ slide <strong>2023</strong>: chỉ hiện những trang có thêm kiến thức; các trang còn lại nằm trong bảng ở trên.'),
+    walk(O, [
+      [3, 'People techniques',
+        `<p class="y-chinh">🎯 The 2023 deck sorts static techniques by <em>who</em> does them — one person or a group — and none of them executes the code.</p>
+<p class="nhan">Individual techniques</p>
+<ul>
+<li><strong>Desk-checking</strong> — you trace the program by hand, on paper, "playing computer". The code is never run by a machine.</li>
+<li><strong>Data-stepping</strong> — you pick an input and follow the values of the variables line by line, writing them down as you go.</li>
+<li><strong>Proof-reading</strong> — you read a document yourself for mistakes, gaps and unclear wording.</li>
+</ul>
+<p class="nhan">Group techniques — as the old deck labels them</p>
+<ul>
+<li><strong>Reviews (informal &amp; formal)</strong> — "for consensus".</li>
+<li><strong>Walkthrough</strong> — "for education".</li>
+<li><strong>Inspection</strong> — the most formal one — "to find faults".</li>
+</ul>
+<p class="nhan">The same idea in today's CTFL words</p>
+<ul>
+<li><strong>Four review types</strong> — CTFL 2018 has informal review, walkthrough, technical review and inspection (lesson 3.3, slides 55–63).</li>
+<li><strong>Consensus</strong> — today it is a main purpose of the <em>technical review</em> (slide 60), not of "reviews" in general.</li>
+<li><strong>Education</strong> — today only an <em>additional</em> purpose of a walkthrough (slide 58). Its main purposes are finding defects, improving the work product, considering alternatives and checking conformance to standards.</li>
+<li><strong>"Faults"</strong> — the old word. Say <strong>defects</strong>.</li>
+<li><strong>The individual techniques</strong> — today they sit inside the <em>individual review</em> activity (lesson 3.2, slide 29) or an informal review done by one colleague.</li>
+</ul>
+<div class="pitfall">An exam option saying "the purpose of a walkthrough is education" is only half true. If another option lists "finding defects, improving the product, considering alternatives", that one is the main purpose.</div>`,
+        `<p class="y-chinh">🎯 Bộ slide 2023 chia kỹ thuật tĩnh theo <em>ai</em> làm — một người hay một nhóm — và không kỹ thuật nào chạy code.</p>
+<p class="nhan">Kỹ thuật cá nhân</p>
+<ul>
+<li><strong>Desk-checking</strong> — tự dò chương trình bằng tay trên giấy, "đóng vai máy tính". Không có máy nào chạy code.</li>
+<li><strong>Data-stepping</strong> — chọn một đầu vào rồi theo dõi giá trị các biến qua từng dòng, vừa dò vừa ghi lại.</li>
+<li><strong>Proof-reading</strong> — tự đọc một tài liệu để tìm lỗi, chỗ thiếu và câu chữ mơ hồ.</li>
+</ul>
+<p class="nhan">Kỹ thuật nhóm — theo nhãn của slide cũ</p>
+<ul>
+<li><strong>Reviews (informal &amp; formal)</strong> — "để đạt đồng thuận".</li>
+<li><strong>Walkthrough</strong> — "để đào tạo".</li>
+<li><strong>Inspection</strong> — chính quy nhất — "để tìm fault".</li>
+</ul>
+<p class="nhan">Cùng ý đó, nói bằng từ CTFL hiện hành</p>
+<ul>
+<li><strong>Bốn loại review</strong> — CTFL 2018 có informal review, walkthrough, technical review và inspection (bài 3.3, slide 55–63).</li>
+<li><strong>Đồng thuận</strong> — nay là mục đích chính của <em>technical review</em> (slide 60), không phải của "review" nói chung.</li>
+<li><strong>Đào tạo</strong> — nay chỉ là mục đích <em>phụ</em> của walkthrough (slide 58). Mục đích chính là tìm defect, cải thiện sản phẩm, xem xét phương án khác và kiểm tra việc tuân thủ chuẩn.</li>
+<li><strong>"Faults"</strong> — từ cũ. Hãy nói <strong>defect</strong>.</li>
+<li><strong>Các kỹ thuật cá nhân</strong> — nay nằm trong hoạt động <em>individual review</em> (bài 3.2, slide 29) hoặc trong một informal review do một đồng nghiệp làm.</li>
+</ul>
+<div class="pitfall">Phương án thi ghi "mục đích của walkthrough là đào tạo" chỉ đúng một nửa. Nếu có phương án khác ghi "tìm defect, cải thiện sản phẩm, xem xét phương án khác" thì đó mới là mục đích chính.</div>`],
+      [4, 'Benefits of reviews',
+        `<p class="y-chinh">🎯 Six business benefits of reviews — five of them are in today's "Benefits of Static Testing", one is new: better customer relations.</p>
+<p class="nhan">The six benefits, matched to the current deck (lesson 3.1, slides 8–9)</p>
+<ol>
+<li><strong>Development productivity improvement</strong> — same as today's "increased development productivity".</li>
+<li><strong>Reduced development timescales</strong> — shorter schedules; the "25% reduction in schedules" figure is on slide 10.</li>
+<li><strong>Reduced testing time and cost</strong> — fewer defects reach test, so fewer failures to investigate, report and retest.</li>
+<li><strong>Lifetime cost reductions</strong> — today "reduced total cost of quality over the software's lifetime" (maintenance included).</li>
+<li><strong>Reduced fault levels</strong> — fewer defects left in the product. Today's wording is "more efficient detection &amp; correction of defects".</li>
+<li><strong>Improved customer relations</strong> — not in the new deck. Fewer defects reach the customer. When customers help review the requirements, they also see early that the product matches what they asked for.</li>
+</ol>
+<p class="meo">🧠 <strong>Remember:</strong> faster, cheaper, fewer defects, and a happier customer. The "etc." means the list is open.</p>`,
+        `<p class="y-chinh">🎯 Sáu lợi ích kinh doanh của review — năm cái có trong "Benefits of Static Testing" hiện nay, một cái mới: quan hệ khách hàng tốt hơn.</p>
+<p class="nhan">Sáu lợi ích, so với bộ slide hiện tại (bài 3.1, slide 8–9)</p>
+<ol>
+<li><strong>Development productivity improvement</strong> — chính là "increased development productivity" hiện nay.</li>
+<li><strong>Reduced development timescales</strong> — rút ngắn lịch; con số "giảm 25% lịch" có ở slide 10.</li>
+<li><strong>Reduced testing time and cost</strong> — ít defect lọt tới giai đoạn test hơn, nên ít failure phải điều tra, báo cáo và test lại.</li>
+<li><strong>Lifetime cost reductions</strong> — nay là "giảm tổng chi phí chất lượng suốt vòng đời phần mềm" (tính cả bảo trì).</li>
+<li><strong>Reduced fault levels</strong> — ít defect sót lại trong sản phẩm. Từ ngữ hiện nay là "phát hiện và sửa defect hiệu quả hơn".</li>
+<li><strong>Improved customer relations</strong> — bộ mới không có. Ít defect tới tay khách hàng hơn. Khi khách hàng cùng review yêu cầu, họ cũng thấy sớm rằng sản phẩm đúng thứ họ cần.</li>
+</ol>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> nhanh hơn, rẻ hơn, ít defect hơn, khách hàng vui hơn. Chữ "etc." nghĩa là danh sách còn mở.</p>`],
+      [6, 'What can be Inspected? Anything written down can be Inspected',
+        `<p class="y-chinh">🎯 If it is written down, it can be inspected — the list reaches far beyond code and requirements.</p>
+<p class="nhan">The six groups on the page</p>
+<ol>
+<li><strong>Business documents</strong> — policy, strategy, business plans, marketing or advertising material, contracts.</li>
+<li><strong>Early project documents</strong> — system requirements, feasibility studies, acceptance test plans.</li>
+<li><strong>Testware</strong> — test plans, test designs, test cases, test results.</li>
+<li><strong>Designs</strong> — system designs, both logical and physical.</li>
+<li><strong>Software code</strong>.</li>
+<li><strong>User-facing documents</strong> — user manuals, procedures, training material.</li>
+</ol>
+<p class="nhan">Compared with the current deck (lesson 3.1, slide 6)</p>
+<ul>
+<li><strong>Already there</strong> — specifications, code, testware, user guides, contracts, project plans.</li>
+<li><strong>Only in the old list</strong> — policy, strategy, business plans, marketing material, feasibility studies, procedures, training material.</li>
+<li><strong>Why an acceptance test plan sits next to the requirements</strong> — it is written from them early, so checking both together finds defects in each.</li>
+</ul>
+<p class="nhan">The current syllabus adds one condition</p>
+<p>CTFL v4.0 (§3.1.1): anything a person can read and understand can be <em>reviewed</em>. <em>Static analysis</em> additionally needs a structure a tool can check, such as code, models or text with a formal syntax.</p>`,
+        `<p class="y-chinh">🎯 Cái gì đã viết ra thì inspect được — danh sách rộng hơn nhiều so với code và tài liệu yêu cầu.</p>
+<p class="nhan">Sáu nhóm trên slide</p>
+<ol>
+<li><strong>Tài liệu kinh doanh</strong> — chính sách, chiến lược, kế hoạch kinh doanh, tài liệu marketing hay quảng cáo, hợp đồng.</li>
+<li><strong>Tài liệu đầu dự án</strong> — yêu cầu hệ thống, nghiên cứu khả thi, acceptance test plan.</li>
+<li><strong>Testware</strong> — test plan, test design, test case, kết quả test.</li>
+<li><strong>Thiết kế</strong> — thiết kế hệ thống, cả logic lẫn vật lý.</li>
+<li><strong>Mã nguồn</strong>.</li>
+<li><strong>Tài liệu cho người dùng</strong> — hướng dẫn sử dụng, quy trình thao tác, tài liệu đào tạo.</li>
+</ol>
+<p class="nhan">So với bộ slide hiện tại (bài 3.1, slide 6)</p>
+<ul>
+<li><strong>Đã có</strong> — đặc tả, code, testware, hướng dẫn sử dụng, hợp đồng, kế hoạch dự án.</li>
+<li><strong>Chỉ danh sách cũ có</strong> — chính sách, chiến lược, kế hoạch kinh doanh, tài liệu marketing, nghiên cứu khả thi, quy trình thao tác, tài liệu đào tạo.</li>
+<li><strong>Vì sao acceptance test plan đứng cạnh tài liệu yêu cầu</strong> — nó được viết sớm, từ chính tài liệu yêu cầu, nên kiểm tra cả hai cùng lúc sẽ tìm ra defect ở cả hai.</li>
+</ul>
+<p class="nhan">Syllabus hiện hành thêm một điều kiện</p>
+<p>CTFL v4.0 (§3.1.1): cái gì con người đọc và hiểu được thì <em>review</em> được. Còn <em>phân tích tĩnh</em> thì cần thêm một cấu trúc để công cụ kiểm tra, như code, mô hình hay văn bản có cú pháp hình thức.</p>`],
+      [7, 'What can be reviewed?',
+        `<p class="y-chinh">🎯 "Review" is the wider word: besides everything that can be inspected, you can review ideas and progress that are not a finished document.</p>
+<p class="nhan">What the page adds to page 6</p>
+<ul>
+<li><strong>Anything which could be inspected</strong> — i.e. anything written down (page 6).</li>
+<li><strong>Plans, visions, the "big picture"</strong> — strategic directions and ideas, even before they become a document.</li>
+<li><strong>Project progress</strong> — is the work completed to schedule?</li>
+<li><strong>"Should we develop this?"</strong> — marketing options, a go/no-go decision.</li>
+</ul>
+<p class="nhan">Why these cannot be inspected</p>
+<p>An inspection checks a document against its sources and agreed rules (page 12). An idea or a progress status has no such sources or rules, so a group can discuss and judge it, but not inspect it.</p>
+<p class="nhan">Today's name for the last two bullets</p>
+<ul>
+<li><strong>Management review</strong> — the ISTQB glossary term for a review that monitors progress and the status of plans and schedules.</li>
+<li><strong>Not one of the four exam types</strong> — CTFL 2018 does not examine it as a review type.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 "Review" là từ rộng hơn: ngoài mọi thứ inspect được, bạn còn review được ý tưởng và tiến độ, những thứ chưa thành tài liệu hoàn chỉnh.</p>
+<p class="nhan">Trang này thêm gì so với trang 6</p>
+<ul>
+<li><strong>Mọi thứ inspect được</strong> — tức là mọi thứ đã viết ra (trang 6).</li>
+<li><strong>Kế hoạch, tầm nhìn, "bức tranh lớn"</strong> — định hướng chiến lược và ý tưởng, kể cả khi chưa thành tài liệu.</li>
+<li><strong>Tiến độ dự án</strong> — công việc có xong đúng lịch không?</li>
+<li><strong>"Có nên phát triển cái này không?"</strong> — các phương án marketing, quyết định làm hay không làm (go/no-go).</li>
+</ul>
+<p class="nhan">Vì sao những thứ này không inspect được</p>
+<p>Inspection kiểm tra một tài liệu so với tài liệu nguồn và bộ quy tắc đã thống nhất (trang 12). Một ý tưởng hay một tình trạng tiến độ không có nguồn và quy tắc như vậy, nên nhóm có thể bàn và đánh giá nó, nhưng không inspect được.</p>
+<p class="nhan">Tên gọi ngày nay cho hai gạch cuối</p>
+<ul>
+<li><strong>Management review</strong> — thuật ngữ trong glossary ISTQB cho loại review theo dõi tiến độ, tình trạng kế hoạch và lịch.</li>
+<li><strong>Không nằm trong bốn loại đi thi</strong> — CTFL 2018 không hỏi nó như một loại review.</li>
+</ul>`],
+      [8, 'What to review / Inspect?',
+        `<p class="y-chinh">🎯 On the V-model, every document on the left <em>and</em> the tests written from it are candidates for review or inspection.</p>
+<p class="nhan">Reading the picture</p>
+<ul>
+<li><strong>Left arm</strong> — Requirements → Functions (the functional specification) → Design → Code.</li>
+<li><strong>Right arm</strong> — Unit Test → Integration Test → System Test → Acceptance Test.</li>
+<li><strong>Horizontal lines</strong> — each left document is the basis for the test level opposite it: Requirements ↔ Acceptance, Functions ↔ System, Design ↔ Integration, Code ↔ Unit.</li>
+<li><strong>The "Tests" ovals</strong> — the tests designed for each level. They are written documents too, so they can be reviewed.</li>
+</ul>
+<p class="nhan">What the picture tells you to do</p>
+<ol>
+<li><strong>Review each left-side document</strong> as soon as it exists, not when testing starts.</li>
+<li><strong>Design the tests for its level early</strong> — writing a test for a requirement quickly shows whether the requirement is vague.</li>
+<li><strong>Review the tests</strong> together with the document they come from.</li>
+</ol>
+<p class="ghi-chu">The V-model itself is taught in Chapter 2. This page only adds where reviews fit into it.</p>`,
+        `<p class="y-chinh">🎯 Trên mô hình chữ V, mọi tài liệu ở nhánh trái <em>và</em> các test viết từ nó đều nên được review hoặc inspect.</p>
+<p class="nhan">Đọc hình</p>
+<ul>
+<li><strong>Nhánh trái</strong> — Requirements → Functions (đặc tả chức năng) → Design → Code.</li>
+<li><strong>Nhánh phải</strong> — Unit Test → Integration Test → System Test → Acceptance Test.</li>
+<li><strong>Đường ngang</strong> — mỗi tài liệu bên trái là cơ sở cho cấp test đối diện: Requirements ↔ Acceptance, Functions ↔ System, Design ↔ Integration, Code ↔ Unit.</li>
+<li><strong>Các ô "Tests"</strong> — các test được thiết kế cho từng cấp. Chúng cũng là tài liệu viết ra, nên cũng review được.</li>
+</ul>
+<p class="nhan">Hình này bảo bạn làm gì</p>
+<ol>
+<li><strong>Review từng tài liệu bên trái</strong> ngay khi nó có, không đợi tới lúc bắt đầu test.</li>
+<li><strong>Thiết kế sớm các test cho cấp tương ứng</strong> — viết test cho một yêu cầu sẽ lộ ngay yêu cầu đó có mơ hồ không.</li>
+<li><strong>Review các test</strong> cùng lúc với tài liệu mà chúng được viết ra từ đó.</li>
+</ol>
+<p class="ghi-chu">Bản thân mô hình chữ V được dạy ở Chương 2. Trang này chỉ thêm việc review nằm ở đâu trong mô hình.</p>`],
+      [11, 'Types of review of documents (1) — informal, technical/peer, decision-making',
+        `<p class="y-chinh">🎯 The old deck names five review types over two pages. This page has the first three, and only two of them survive in CTFL.</p>
+<p class="nhan">What the page says</p>
+<ul>
+<li><strong>Informal review</strong> (undocumented) — widely seen as useful and cheap, "but no one can prove it!" A helpful first step for chaotic organisations.</li>
+<li><strong>Technical review</strong> (or peer review) — peers and technical experts, no management participation. Normally documented and aimed at finding defects. Can be rather subjective.</li>
+<li><strong>Decision-making review</strong> — the group discusses a document and decides about its content: how something should be done, go or no-go, or technical comments.</li>
+</ul>
+<p class="nhan">Mapped to CTFL 2018 (lesson 3.3)</p>
+<ul>
+<li><strong>Informal review</strong> → still <em>informal review</em> (slides 56–57): no documented process, results documentation optional. "No one can prove it" because nobody collects metrics.</li>
+<li><strong>Technical review</strong> → still <em>technical review</em> (slides 60–61). Main purposes today: gaining consensus and detecting potential defects. Reviewers are technical peers of the author and technical experts.</li>
+<li><strong>Decision-making review</strong> → <em>not a CTFL type</em>. Deciding "how it should be done" is the consensus purpose of a technical review; go/no-go is a management review (page 7).</li>
+</ul>
+<div class="pitfall">"Peer review" is <strong>not</strong> another name for technical review in today's glossary. It means any review by colleagues of the author — walkthrough, technical review and inspection are all peer reviews (lesson 3.3, slide 81).</div>`,
+        `<p class="y-chinh">🎯 Slide cũ kể năm loại review trên hai trang. Trang này có ba loại đầu, và chỉ hai loại còn trong CTFL.</p>
+<p class="nhan">Trang này nói gì</p>
+<ul>
+<li><strong>Informal review</strong> (không ghi thành văn bản) — được coi là hữu ích và rẻ, "nhưng không ai chứng minh được!" Là bước khởi đầu tốt cho tổ chức còn lộn xộn.</li>
+<li><strong>Technical review</strong> (hay peer review) — gồm đồng nghiệp và chuyên gia kỹ thuật, không có quản lý tham gia. Thường có ghi chép, nhằm tìm defect. Có thể khá chủ quan.</li>
+<li><strong>Decision-making review</strong> — nhóm bàn về một tài liệu và ra quyết định về nội dung: nên làm thế nào, làm hay không làm (go/no-go), hoặc góp ý kỹ thuật.</li>
+</ul>
+<p class="nhan">Đổi sang CTFL 2018 (bài 3.3)</p>
+<ul>
+<li><strong>Informal review</strong> → vẫn là <em>informal review</em> (slide 56–57): không có quy trình văn bản, ghi kết quả là tuỳ chọn. "Không ai chứng minh được" vì không ai thu metric.</li>
+<li><strong>Technical review</strong> → vẫn là <em>technical review</em> (slide 60–61). Mục đích chính ngày nay: đạt đồng thuận và tìm defect tiềm năng. Người review là đồng nghiệp kỹ thuật của tác giả và chuyên gia kỹ thuật.</li>
+<li><strong>Decision-making review</strong> → <em>không phải loại review của CTFL</em>. Quyết định "nên làm thế nào" là mục đích đồng thuận của technical review; còn go/no-go là management review (trang 7).</li>
+</ul>
+<div class="pitfall">Trong glossary hiện nay "peer review" <strong>không</strong> phải tên khác của technical review. Nó là mọi loại review do đồng nghiệp của tác giả làm — walkthrough, technical review và inspection đều là peer review (bài 3.3, slide 81).</div>`],
+      [12, 'Types of review of documents (2) — walkthrough, inspection',
+        `<p class="y-chinh">🎯 The last two old types: the walkthrough is led by the author, the inspection is formal checking against sources and rules.</p>
+<p class="nhan">What the page says</p>
+<ul>
+<li><strong>Walkthrough</strong> — the author guides the group through a document and his or her thought processes, so all understand the same thing and agree on the changes to make.</li>
+<li><strong>Inspection</strong> — formal individual and group checking:
+<ul>
+<li>using <strong>sources and standards</strong> — the product is compared with the documents it was built from;</li>
+<li>according to <strong>generic and specific rules and checklists</strong> — generic rules apply to every document (e.g. "no ambiguous wording"), specific ones to one document type (e.g. "every requirement is testable");</li>
+<li>using <strong>entry and exit criteria</strong>;</li>
+<li>the <strong>leader must be trained &amp; certified</strong>;</li>
+<li><strong>metrics</strong> are required.</li>
+</ul></li>
+</ul>
+<p class="nhan">Mapped to CTFL 2018 (lesson 3.3)</p>
+<ul>
+<li><strong>Walkthrough</strong> — still typically led by the author (slide 59). Consensus is now only an additional purpose (slide 58).</li>
+<li><strong>Inspection</strong> — defined process, checklists, entry &amp; exit criteria and gathering metrics are all still mandatory (slide 62).</li>
+<li><strong>"Trained &amp; certified"</strong> — CTFL asks for a <em>trained facilitator</em> (slide 63). Certification comes from the Gilb &amp; Graham inspection method, not from the syllabus.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> walkthrough = the author <em>walks</em> you through; inspection = a trained leader makes you <em>check against rules</em>.</p>`,
+        `<p class="y-chinh">🎯 Hai loại cũ còn lại: walkthrough do tác giả dẫn, inspection là kiểm tra chính quy so với tài liệu nguồn và quy tắc.</p>
+<p class="nhan">Trang này nói gì</p>
+<ul>
+<li><strong>Walkthrough</strong> — tác giả dẫn nhóm đi qua tài liệu và cách mình suy nghĩ, để mọi người hiểu giống nhau và thống nhất những thay đổi cần làm.</li>
+<li><strong>Inspection</strong> — kiểm tra chính quy, cả cá nhân lẫn nhóm:
+<ul>
+<li>dùng <strong>tài liệu nguồn và chuẩn</strong> — so sản phẩm với các tài liệu mà nó được làm ra từ đó;</li>
+<li>theo <strong>quy tắc chung, quy tắc riêng và checklist</strong> — quy tắc chung áp cho mọi tài liệu (vd "không có câu mơ hồ"), quy tắc riêng cho một loại tài liệu (vd "mọi yêu cầu đều test được");</li>
+<li>dùng <strong>entry và exit criteria</strong>;</li>
+<li><strong>người dẫn phải được đào tạo và cấp chứng chỉ</strong>;</li>
+<li><strong>bắt buộc có metric</strong>.</li>
+</ul></li>
+</ul>
+<p class="nhan">Đổi sang CTFL 2018 (bài 3.3)</p>
+<ul>
+<li><strong>Walkthrough</strong> — vẫn thường do tác giả dẫn (slide 59). Đồng thuận nay chỉ là mục đích phụ (slide 58).</li>
+<li><strong>Inspection</strong> — quy trình xác định, checklist, entry &amp; exit criteria và thu thập metric vẫn đều bắt buộc (slide 62).</li>
+<li><strong>"Được đào tạo và cấp chứng chỉ"</strong> — CTFL chỉ đòi một <em>facilitator được đào tạo</em> (slide 63). Chuyện chứng chỉ đến từ phương pháp inspection của Gilb &amp; Graham, không phải từ syllabus.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> walkthrough = tác giả <em>dắt</em> bạn đi qua; inspection = người dẫn được đào tạo bắt bạn <em>soi theo quy tắc</em>.</p>`],
+      [13, 'Reviews in general 1 — objectives / goals',
+        `<p class="y-chinh">🎯 Reviews aim at three things: verification &amp; validation, consensus, and process improvement — and the old deck says inspection skips consensus.</p>
+<p class="nhan">The three goals on the page</p>
+<ol>
+<li><strong>Validation &amp; verification</strong> against specifications and standards — are we building the right thing, and building it right?</li>
+<li><strong>Achieve consensus</strong> — "excluding inspection".</li>
+<li><strong>Process improvement</strong> — "ideal, included in inspection".</li>
+</ol>
+<p class="nhan">Compared with CTFL 2018</p>
+<ul>
+<li><strong>Verification &amp; validation</strong> — still what static testing does: checking work products against specifications and standards (lesson 3.1).</li>
+<li><strong>Consensus in inspection</strong> — <em>outdated</em>. CTFL 2018 lists "achieving consensus" as a possible further purpose of an inspection (lesson 3.3, slide 62).</li>
+<li><strong>Process improvement</strong> — still the mark of an inspection: authors improve future work products and the development process (slide 62).</li>
+<li><strong>What the current deck adds</strong> — lesson 3.1, slide 14: educational, mutual understanding, decision-making facilitation, agreed commitment.</li>
+</ul>
+<div class="pitfall">Do not answer "inspection never aims at consensus". In the current syllabus consensus is a further purpose of an inspection too — only its <em>main</em> purposes are detecting defects, evaluating quality and preventing future defects.</div>`,
+        `<p class="y-chinh">🎯 Review nhắm tới ba điều: verification &amp; validation, đồng thuận và cải tiến quy trình — và slide cũ nói inspection không nhắm tới đồng thuận.</p>
+<p class="nhan">Ba mục tiêu trên slide</p>
+<ol>
+<li><strong>Validation &amp; verification</strong> so với đặc tả và chuẩn — làm đúng thứ cần làm chưa, và làm thứ đó đúng chưa?</li>
+<li><strong>Đạt đồng thuận</strong> — "trừ inspection".</li>
+<li><strong>Cải tiến quy trình</strong> — "lý tưởng, inspection có sẵn".</li>
+</ol>
+<p class="nhan">So với CTFL 2018</p>
+<ul>
+<li><strong>Verification &amp; validation</strong> — vẫn là việc kiểm thử tĩnh làm: kiểm tra sản phẩm so với đặc tả và chuẩn (bài 3.1).</li>
+<li><strong>Đồng thuận trong inspection</strong> — <em>đã lỗi thời</em>. CTFL 2018 ghi "đạt đồng thuận" là một mục đích phụ có thể có của inspection (bài 3.3, slide 62).</li>
+<li><strong>Cải tiến quy trình</strong> — vẫn là dấu hiệu của inspection: tác giả làm tốt hơn ở sản phẩm sau, và quy trình phát triển được cải tiến (slide 62).</li>
+<li><strong>Bộ slide hiện tại thêm</strong> — bài 3.1, slide 14: đào tạo, hiểu biết chung, hỗ trợ ra quyết định, cam kết đã thống nhất.</li>
+</ul>
+<div class="pitfall">Đừng chọn "inspection không bao giờ nhắm tới đồng thuận". Trong syllabus hiện hành đồng thuận cũng là mục đích phụ của inspection — chỉ có mục đích <em>chính</em> là tìm defect, đánh giá chất lượng và ngăn defect về sau.</div>`],
+      [14, 'Reviews in general 2 — activities',
+        `<p class="y-chinh">🎯 Six old review activities — they fit exactly onto the five activities of the CTFL 2018 review process.</p>
+<p class="nhan">Old activity → CTFL 2018 activity (lesson 3.2, slides 25–31)</p>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>Old deck (2023)</th><th>CTFL 2018</th><th>Remark</th></tr></thead>
+<tbody>
+<tr><td>Planning</td><td>Planning</td><td>Scope, effort, people, entry &amp; exit criteria.</td></tr>
+<tr><td>Overview / kick-off meeting (inspection)</td><td>Initiate review</td><td>Hand out the work product, explain objectives and process.</td></tr>
+<tr><td>Preparation / individual checking</td><td>Individual review</td><td>Each reviewer checks alone and notes potential defects.</td></tr>
+<tr><td>Review meeting (not always)</td><td>Issue communication &amp; analysis</td><td>The meeting is still optional in lighter review types.</td></tr>
+<tr><td>Follow-up (for some types)</td><td>Fixing &amp; reporting</td><td>Author fixes; someone checks the fixes against the exit criteria.</td></tr>
+<tr><td>Metrics recording &amp; analysis (inspections, sometimes reviews)</td><td>Fixing &amp; reporting — "gathering metrics"</td><td>Only for the more formal review types.</td></tr>
+</tbody>
+</table></div>
+<p class="ghi-chu">CTFL 2011 had six phases (planning, kick-off, individual preparation, review meeting, rework, follow-up). CTFL v4.0 keeps the five 2018 activities under slightly shorter names: review initiation, individual review, communication and analysis, fixing and reporting.</p>`,
+        `<p class="y-chinh">🎯 Sáu hoạt động review kiểu cũ — khớp đúng vào năm hoạt động của quy trình review CTFL 2018.</p>
+<p class="nhan">Hoạt động cũ → hoạt động CTFL 2018 (bài 3.2, slide 25–31)</p>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>Slide cũ (2023)</th><th>CTFL 2018</th><th>Ghi chú</th></tr></thead>
+<tbody>
+<tr><td>Planning</td><td>Planning</td><td>Phạm vi, công sức, con người, entry &amp; exit criteria.</td></tr>
+<tr><td>Overview / kick-off meeting (inspection)</td><td>Initiate review</td><td>Phát sản phẩm, giải thích mục tiêu và quy trình.</td></tr>
+<tr><td>Preparation / individual checking</td><td>Individual review</td><td>Mỗi người review tự kiểm tra và ghi defect tiềm năng.</td></tr>
+<tr><td>Review meeting (không phải lúc nào cũng có)</td><td>Issue communication &amp; analysis</td><td>Buổi họp vẫn là tuỳ chọn ở các loại review nhẹ.</td></tr>
+<tr><td>Follow-up (một số loại)</td><td>Fixing &amp; reporting</td><td>Tác giả sửa; có người kiểm tra bản sửa so với exit criteria.</td></tr>
+<tr><td>Ghi &amp; phân tích metric (inspection, đôi khi review)</td><td>Fixing &amp; reporting — "gathering metrics"</td><td>Chỉ ở các loại review chính quy hơn.</td></tr>
+</tbody>
+</table></div>
+<p class="ghi-chu">CTFL 2011 có sáu giai đoạn (planning, kick-off, individual preparation, review meeting, rework, follow-up). CTFL v4.0 giữ năm hoạt động của 2018 với tên gọn hơn: review initiation, individual review, communication and analysis, fixing and reporting.</p>`],
+      [15, 'Reviews in general 3 — roles: leader / moderator',
+        `<p class="y-chinh">🎯 In the old deck one person, the leader/moderator, does six jobs. CTFL 2018 spreads them over three roles.</p>
+<p class="nhan">The six duties → who does them today (lesson 3.2, slides 42–44)</p>
+<ul>
+<li><strong>Plans the review / inspection</strong> → <em>management</em> is responsible for review planning; the <em>review leader</em> organises it.</li>
+<li><strong>Chooses participants</strong> → <em>review leader</em> ("decides who will be involved").</li>
+<li><strong>Helps &amp; encourages</strong> → <em>facilitator</em> (mediates between points of view).</li>
+<li><strong>Conducts the meeting</strong> → <em>facilitator</em> ("ensures effective running of review meetings").</li>
+<li><strong>Performs follow-up</strong> → <em>facilitator</em> (the teacher's notes on slide 43: checks the fixes).</li>
+<li><strong>Manages metrics</strong> → <em>review leader</em> (overall responsibility), with management watching cost-effectiveness.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> old "moderator" = today's <strong>facilitator</strong> (the syllabus still says "facilitator (often called moderator)"). The review leader is a separate role on top.</p>`,
+        `<p class="y-chinh">🎯 Ở slide cũ một người — leader/moderator — làm sáu việc. CTFL 2018 chia chúng cho ba vai trò.</p>
+<p class="nhan">Sáu nhiệm vụ → ngày nay ai làm (bài 3.2, slide 42–44)</p>
+<ul>
+<li><strong>Lập kế hoạch review / inspection</strong> → <em>management</em> chịu trách nhiệm lập kế hoạch; <em>review leader</em> tổ chức.</li>
+<li><strong>Chọn người tham gia</strong> → <em>review leader</em> ("quyết định ai tham gia").</li>
+<li><strong>Hỗ trợ &amp; động viên</strong> → <em>facilitator</em> (hoà giải các quan điểm khác nhau).</li>
+<li><strong>Điều khiển buổi họp</strong> → <em>facilitator</em> ("đảm bảo buổi họp review diễn ra hiệu quả").</li>
+<li><strong>Theo dõi sau họp (follow-up)</strong> → <em>facilitator</em> (ghi chú của thầy/cô ở slide 43: kiểm tra các bản sửa).</li>
+<li><strong>Quản lý metric</strong> → <em>review leader</em> (chịu trách nhiệm tổng thể), còn management theo dõi hiệu quả chi phí.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> "moderator" cũ = <strong>facilitator</strong> ngày nay (syllabus vẫn ghi "facilitator (thường gọi là moderator)"). Review leader là một vai trò riêng, đứng trên.</p>`],
+      [16, 'Reviews in general 3 — roles: author, reviewers, managers, others',
+        `<p class="y-chinh">🎯 The other old roles: author, reviewers/inspectors, managers and a co-ordinator — and one role that today is mandatory is missing.</p>
+<p class="nhan">What the page says, and today's view</p>
+<ul>
+<li><strong>Author</strong> of the document being reviewed/inspected → same role today (slide 41): creates the work product and fixes its defects.</li>
+<li><strong>Reviewers / inspectors</strong> — in an inspection they get specialised fault-finding roles → today "reviewers may represent different perspectives" (slide 45), and the role-based and perspective-based techniques (lesson 3.3, slides 86–87).</li>
+<li><strong>Managers</strong> — excluded from some review types; they must plan project time for reviews → today management decides on reviews and assigns staff, budget and time (slide 42). Management support is a success factor (slide 93).</li>
+<li><strong>Others</strong>, e.g. an inspection/review co-ordinator → an organisation-wide organiser. There is no such role in CTFL; the closest is the review leader.</li>
+</ul>
+<p class="nhan">Why managers stay out of some reviews</p>
+<p>With the boss in the room, a review can feel like judging the <em>author</em> instead of the <em>document</em>. People then hide defects instead of finding them.</p>
+<div class="pitfall">The old role list has <strong>no scribe</strong>. In CTFL 2018 the scribe (recorder) is mandatory in walkthroughs, technical reviews and inspections (lesson 3.2, slide 46).</div>`,
+        `<p class="y-chinh">🎯 Các vai trò cũ còn lại: tác giả, reviewer/inspector, quản lý và điều phối viên — và thiếu một vai trò mà ngày nay là bắt buộc.</p>
+<p class="nhan">Slide nói gì, và ngày nay nhìn thế nào</p>
+<ul>
+<li><strong>Tác giả</strong> của tài liệu được review/inspect → vai trò y hệt ngày nay (slide 41): tạo sản phẩm và sửa defect của nó.</li>
+<li><strong>Reviewer / inspector</strong> — trong inspection họ được giao vai chuyên soi một loại lỗi → ngày nay là "reviewer có thể đại diện cho các góc nhìn khác nhau" (slide 45), cùng các kỹ thuật role-based và perspective-based (bài 3.3, slide 86–87).</li>
+<li><strong>Quản lý</strong> — không tham gia một số loại review; phải dành thời gian cho review trong lịch dự án → ngày nay management quyết định việc review và cấp người, ngân sách, thời gian (slide 42). Sự ủng hộ của quản lý là một yếu tố thành công (slide 93).</li>
+<li><strong>Vai trò khác</strong>, vd điều phối viên inspection/review → người tổ chức review cho cả tổ chức. CTFL không có vai trò này; gần nhất là review leader.</li>
+</ul>
+<p class="nhan">Vì sao quản lý đứng ngoài một số buổi review</p>
+<p>Có sếp trong phòng, buổi review dễ biến thành chấm điểm <em>tác giả</em> thay vì xem xét <em>tài liệu</em>. Khi đó người ta giấu defect thay vì tìm ra nó.</p>
+<div class="pitfall">Danh sách vai trò cũ <strong>không có scribe</strong>. Trong CTFL 2018 scribe (người ghi chép) là bắt buộc ở walkthrough, technical review và inspection (bài 3.2, slide 46).</div>`],
+      [17, 'Reviews in general 4 — deliverables',
+        `<p class="y-chinh">🎯 A review delivers more than a corrected document: change requests upstream, process improvement ideas and metrics.</p>
+<p class="nhan">The four deliverables</p>
+<ol>
+<li><strong>Changes (edits) in the review product</strong> — the author fixes the document that was reviewed.</li>
+<li><strong>Change requests for source documents</strong> — the predecessor documents the product was built from.</li>
+<li><strong>Process improvement suggestions</strong>:
+<ul>
+<li>to the review/inspection process itself;</li>
+<li>to the development process that produced the product just reviewed.</li>
+</ul></li>
+<li><strong>Metrics</strong> — for inspections and some other review types.</li>
+</ol>
+<p class="nhan">Why a change request instead of an edit</p>
+<p>Reviewing a design, you find that the real mistake is in the requirements. The design team cannot simply edit someone else's document, so they raise a change request to the owner of the requirements. That is the "Change Request" arrow on page 23 and on slide 66 of lesson 3.3.</p>
+<p class="nhan">Today's names (lesson 3.2, slide 31 — Fixing &amp; Reporting)</p>
+<ul>
+<li><strong>Edits in the review product</strong> → "fixing defects (typically by the author)".</li>
+<li><strong>Change requests for source documents</strong> → "communicating defects to the appropriate person/team".</li>
+<li><strong>Metrics</strong> → "gathering metrics (for more formal review types)".</li>
+<li><strong>Not on the old page</strong> — creating defect reports, and accepting the work product once the exit criteria are met.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Review không chỉ cho ra tài liệu đã sửa: còn có change request gửi ngược lên, ý tưởng cải tiến quy trình và metric.</p>
+<p class="nhan">Bốn sản phẩm đầu ra</p>
+<ol>
+<li><strong>Chỉnh sửa trong sản phẩm được review</strong> — tác giả sửa tài liệu vừa được review.</li>
+<li><strong>Change request cho tài liệu nguồn</strong> — các tài liệu đi trước mà sản phẩm được làm ra từ đó.</li>
+<li><strong>Đề xuất cải tiến quy trình</strong>:
+<ul>
+<li>cho chính quy trình review/inspection;</li>
+<li>cho quy trình phát triển đã tạo ra sản phẩm vừa review.</li>
+</ul></li>
+<li><strong>Metric</strong> — với inspection và một số loại review khác.</li>
+</ol>
+<p class="nhan">Vì sao là change request chứ không sửa luôn</p>
+<p>Đang review bản thiết kế, bạn phát hiện lỗi thật nằm ở tài liệu yêu cầu. Nhóm thiết kế không thể tự sửa tài liệu của người khác, nên họ gửi change request cho người sở hữu tài liệu yêu cầu. Đó là mũi tên "Change Request" ở trang 23 và ở slide 66 bài 3.3.</p>
+<p class="nhan">Tên gọi ngày nay (bài 3.2, slide 31 — Fixing &amp; Reporting)</p>
+<ul>
+<li><strong>Chỉnh sửa trong sản phẩm được review</strong> → "sửa defect (thường do tác giả)".</li>
+<li><strong>Change request cho tài liệu nguồn</strong> → "báo defect cho đúng người/nhóm phụ trách".</li>
+<li><strong>Metric</strong> → "thu thập metric (với các loại review chính quy hơn)".</li>
+<li><strong>Trang cũ không có</strong> — tạo defect report, và chấp nhận sản phẩm khi đạt exit criteria.</li>
+</ul>`],
+      [19, 'Inspection is different (1) — what is handed out',
+        `<p class="y-chinh">🎯 Left column: an ordinary review. Boxed column: an inspection. First contrast — what you are given to check.</p>
+<p class="nhan">Ordinary review → inspection</p>
+<ul>
+<li><strong>The document is given out in advance</strong> → <strong>not just the product, but its sources</strong> too: you check the product <em>against</em> the documents it came from.</li>
+<li><strong>Typically dozens of pages</strong> → <strong>a chunk or a sample</strong>: only a few pages, checked at the optimum rate of about 1 page per hour (lesson 3.3, slide 70).</li>
+<li><strong>Instructions: "please review this"</strong> → <strong>training and roles</strong>: every checker is trained and told exactly what to look for.</li>
+</ul>
+<p class="nhan">Why a sample is enough</p>
+<p>If the sample of 2 pages has many major defects, the rest of the document almost certainly has them too. The author then fixes that <em>type</em> of defect everywhere (slide 71).</p>`,
+        `<p class="y-chinh">🎯 Cột trái: một buổi review thông thường. Cột đóng khung: inspection. Cặp đối lập thứ nhất — bạn được giao gì để kiểm tra.</p>
+<p class="nhan">Review thông thường → inspection</p>
+<ul>
+<li><strong>Tài liệu được phát trước</strong> → <strong>không chỉ sản phẩm mà cả tài liệu nguồn</strong>: bạn kiểm tra sản phẩm <em>so với</em> các tài liệu mà nó được làm ra từ đó.</li>
+<li><strong>Thường vài chục trang</strong> → <strong>một phần hoặc một mẫu</strong>: chỉ vài trang, kiểm tra ở tốc độ tối ưu khoảng 1 trang mỗi giờ (bài 3.3, slide 70).</li>
+<li><strong>Chỉ dặn "xem giúp cái này"</strong> → <strong>đào tạo và vai trò</strong>: mỗi người kiểm tra đều được đào tạo và biết chính xác phải soi cái gì.</li>
+</ul>
+<p class="nhan">Vì sao một mẫu là đủ</p>
+<p>Nếu 2 trang mẫu đã có nhiều defect nặng thì gần như chắc chắn phần còn lại cũng có. Tác giả sẽ sửa cả <em>loại</em> defect đó trên toàn bộ tài liệu (slide 71).</p>`],
+      [20, 'Inspection is different (2) — before and during the meeting',
+        `<p class="y-chinh">🎯 Second contrast — preparation and the meeting: in an inspection nobody comes unprepared, and the meeting is short.</p>
+<p class="nhan">Ordinary review → inspection</p>
+<ul>
+<li><strong>Some people find time to look at it and comment before the meeting</strong> (which is hard to arrange) → <strong>entry criteria for the meeting</strong>: if checkers have not prepared, or the sample is too poor, the meeting may not be worth holding.</li>
+<li><strong>The meeting often lasts for hours</strong> → <strong>2 hours maximum, often much shorter</strong>.</li>
+</ul>
+<p class="nhan">Why these rules exist</p>
+<ul>
+<li><strong>Individual preparation is mandatory</strong> in an inspection (lesson 3.3, slide 62). An unprepared meeting only reads the document aloud.</li>
+<li><strong>Attention drops after about two hours</strong>, so a long meeting logs fewer defects per hour.</li>
+<li><strong>Cancelling is a result, not a failure</strong> — a document that fails the entry check goes back to the author before it wastes everyone's time.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Cặp đối lập thứ hai — chuẩn bị và buổi họp: trong inspection không ai đến họp mà chưa chuẩn bị, và buổi họp ngắn.</p>
+<p class="nhan">Review thông thường → inspection</p>
+<ul>
+<li><strong>Vài người có thời gian xem trước và góp ý trước buổi họp</strong> (mà việc này khó sắp xếp) → <strong>có entry criteria cho buổi họp</strong>: nếu người kiểm tra chưa chuẩn bị, hoặc mẫu quá tệ, buổi họp có thể không đáng tổ chức.</li>
+<li><strong>Buổi họp thường kéo dài hàng giờ</strong> → <strong>tối đa 2 giờ, thường ngắn hơn nhiều</strong>.</li>
+</ul>
+<p class="nhan">Vì sao có các quy tắc này</p>
+<ul>
+<li><strong>Chuẩn bị cá nhân là bắt buộc</strong> trong inspection (bài 3.3, slide 62). Buổi họp không ai chuẩn bị chỉ còn là đọc to tài liệu.</li>
+<li><strong>Sự tập trung giảm sau khoảng hai giờ</strong>, nên họp dài thì mỗi giờ ghi được ít defect hơn.</li>
+<li><strong>Huỷ họp là một kết quả, không phải thất bại</strong> — tài liệu không qua được entry check sẽ quay về tác giả trước khi làm mất thời gian của mọi người.</li>
+</ul>`],
+      [21, 'Inspection is different (3) — what is logged and why we keep doing it',
+        `<p class="y-chinh">🎯 Third contrast — the content of the meeting: an inspection logs objective rule violations, fast, and must keep proving its value.</p>
+<p class="nhan">Ordinary review → inspection</p>
+<ul>
+<li><strong>"I don't like this"</strong> → <strong>rule violations: objective, not subjective</strong>. An issue counts only if it breaks a rule the group agreed on.</li>
+<li><strong>Much discussion</strong>, some about technical approaches, some about trivia → <strong>no discussion, highly focused, anti-trivia</strong>. The meeting logs issues; solving them happens later.</li>
+<li><strong>We don't really know if it was worthwhile, but we keep doing it</strong> → <strong>only do it if its value is proven, continually</strong>. The metrics show it.</li>
+</ul>
+<p class="nhan">Links to lesson 3.3</p>
+<ul>
+<li><strong>Rules, democratically agreed</strong>, and <strong>fast logging rates</strong> — the "Inspection surprises" of slide 72.</li>
+<li><strong>Proven value</strong> — the return on investment of slide 65: 6–8 hours saved per inspection hour early on, 8–30 hours when inspection is mature.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember the three pages as "Sources · Short · Rules"</strong>: check against sources, keep the meeting short, log only rule violations.</p>`,
+        `<p class="y-chinh">🎯 Cặp đối lập thứ ba — nội dung buổi họp: inspection ghi các vi phạm quy tắc một cách khách quan và nhanh, và phải liên tục chứng minh giá trị.</p>
+<p class="nhan">Review thông thường → inspection</p>
+<ul>
+<li><strong>"Tôi không thích chỗ này"</strong> → <strong>vi phạm quy tắc: khách quan, không chủ quan</strong>. Một vấn đề chỉ được tính khi nó phạm một quy tắc cả nhóm đã thống nhất.</li>
+<li><strong>Bàn luận nhiều</strong>, có khi về cách làm kỹ thuật, có khi về chuyện vụn vặt → <strong>không bàn luận, rất tập trung, chống chuyện vụn vặt</strong>. Buổi họp chỉ ghi vấn đề; giải quyết để sau.</li>
+<li><strong>Không rõ có đáng không, nhưng vẫn cứ làm</strong> → <strong>chỉ làm khi giá trị được chứng minh, liên tục</strong>. Metric cho thấy điều đó.</li>
+</ul>
+<p class="nhan">Nối với bài 3.3</p>
+<ul>
+<li><strong>Quy tắc được thống nhất dân chủ</strong> và <strong>tốc độ ghi nhanh</strong> — chính là "Inspection surprises" ở slide 72.</li>
+<li><strong>Giá trị đã chứng minh</strong> — lợi tức đầu tư ở slide 65: tiết kiệm 6–8 giờ cho mỗi giờ inspection lúc mới áp dụng, 8–30 giờ khi inspection đã thành thục.</li>
+</ul>
+<p class="meo">🧠 <strong>Nhớ ba trang bằng "Nguồn · Ngắn · Quy tắc"</strong>: so với tài liệu nguồn, họp ngắn, chỉ ghi vi phạm quy tắc.</p>`],
+      [23, 'The Inspection Process (old activity names)',
+        `<p class="y-chinh">🎯 The same picture as slide 66 of lesson 3.3, drawn with the old activity names — read it to translate the names.</p>
+<p class="nhan">Old box → current activity</p>
+<ul>
+<li><strong>Planning</strong> (the long bar over everything) → Planning.</li>
+<li><strong>Kick off</strong> → Initiate review.</li>
+<li><strong>Ind Chk</strong> (individual checking) → Individual review.</li>
+<li><strong>Meet</strong> → Issue communication &amp; analysis.</li>
+<li><strong>Edit</strong> → Fixing &amp; reporting.</li>
+</ul>
+<p class="nhan">Details only the old drawing has</p>
+<ul>
+<li><strong>The two document icons</strong> — at the entry, a page covered in spots (defects). At the exit, a page with a single spot and rays: cleaned, with an <em>estimate</em> of the major defects that remain (slide 65 calls it "quantified estimates of remaining major faults per page").</li>
+<li><strong>Arrow from Edit back to the development stage</strong> — rework is done by the author, on the stage that produced the document.</li>
+<li><strong>Change Request</strong> (pink) — from Edit, for defects found in the <em>source</em> documents (page 17).</li>
+<li><strong>Process Improvement</strong> (cyan) — fed by both Meet and Edit, and pointing out of the picture: the lessons leave this one inspection.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Cùng hình với slide 66 bài 3.3, nhưng vẽ bằng tên hoạt động kiểu cũ — đọc nó để đổi tên cho đúng.</p>
+<p class="nhan">Ô cũ → hoạt động hiện hành</p>
+<ul>
+<li><strong>Planning</strong> (thanh dài phủ lên tất cả) → Planning.</li>
+<li><strong>Kick off</strong> → Initiate review.</li>
+<li><strong>Ind Chk</strong> (kiểm tra cá nhân) → Individual review.</li>
+<li><strong>Meet</strong> → Issue communication &amp; analysis.</li>
+<li><strong>Edit</strong> → Fixing &amp; reporting.</li>
+</ul>
+<p class="nhan">Chi tiết chỉ hình cũ có</p>
+<ul>
+<li><strong>Hai biểu tượng tài liệu</strong> — ở cổng vào, một trang lấm tấm chấm (defect). Ở cổng ra, một trang chỉ còn một chấm và toả sáng: đã được làm sạch, kèm <em>ước lượng</em> số defect nặng còn sót (slide 65 gọi là "ước lượng định lượng số lỗi nặng còn lại trên mỗi trang").</li>
+<li><strong>Mũi tên từ Edit quay về giai đoạn phát triển</strong> — việc sửa do tác giả làm, tại chính giai đoạn đã tạo ra tài liệu.</li>
+<li><strong>Change Request</strong> (hồng) — xuất phát từ Edit, cho các defect nằm ở tài liệu <em>nguồn</em> (trang 17).</li>
+<li><strong>Process Improvement</strong> (xanh) — nhận từ cả Meet lẫn Edit, và chỉ ra ngoài hình: bài học được mang ra khỏi buổi inspection này.</li>
+</ul>`],
+      [36, 'Unreachable code example — macro definitions',
+        `<p class="y-chinh">🎯 The same unreachable-code example as slide 100 of lesson 3.4, plus one remark: the two values are <em>macros</em> that differ from platform to platform.</p>
+<p class="nhan">What the extra line changes</p>
+<ul>
+<li><strong>On this platform</strong> both macros are 1000, so <code>1000 &lt; 1000</code> is false and the THEN clause is unreachable (page 37 = slide 100).</li>
+<li><strong>On another platform</strong> the macros may be, say, <code>Buffsize 500</code> and <code>Mailboxmax 1000</code>. Then the same line is reachable and the Error-Exit is needed.</li>
+<li><strong>So the warning may be a false alarm</strong> — the code is a deliberate safeguard for other platforms. This is the limitation on slide 105: a tool cannot tell "fail-safe" code from a real defect.</li>
+</ul>
+<p class="nhan">The same situation in C</p>
+<pre><code>#define BUFFSIZE    1000   /* platform A: 1000, platform B: 500 */
+#define MAILBOXMAX  1000
+if (BUFFSIZE &lt; MAILBOXMAX) error_exit();</code></pre>
+<p>Analysing the build for platform A, the tool reports dead code. A person has to decide whether it is a defect.</p>`,
+        `<p class="y-chinh">🎯 Cùng ví dụ code không tới được như slide 100 bài 3.4, thêm một ý: hai giá trị là <em>macro</em>, mỗi nền tảng một giá trị khác.</p>
+<p class="nhan">Dòng thêm vào thay đổi điều gì</p>
+<ul>
+<li><strong>Trên nền tảng này</strong> cả hai macro đều là 1000, nên <code>1000 &lt; 1000</code> sai và nhánh THEN không bao giờ tới được (trang 37 = slide 100).</li>
+<li><strong>Trên nền tảng khác</strong> macro có thể là <code>Buffsize 500</code> và <code>Mailboxmax 1000</code>. Khi đó chính dòng này tới được và Error-Exit là cần thiết.</li>
+<li><strong>Vậy cảnh báo có thể là báo động giả</strong> — đoạn code là chốt an toàn có chủ đích cho nền tảng khác. Đây là giới hạn ở slide 105: công cụ không phân biệt được code "fail-safe" với defect thật.</li>
+</ul>
+<p class="nhan">Cùng tình huống viết bằng C</p>
+<pre><code>#define BUFFSIZE    1000   /* nền tảng A: 1000, nền tảng B: 500 */
+#define MAILBOXMAX  1000
+if (BUFFSIZE &lt; MAILBOXMAX) error_exit();</code></pre>
+<p>Khi phân tích bản build cho nền tảng A, công cụ báo dead code. Con người phải quyết định đó có phải defect không.</p>`],
+      [43, 'Summary: Key Points',
+        `<p class="y-chinh">🎯 Three sentences to take away from the old chapter — all still true once "faults" becomes "defects".</p>
+<ol>
+<li><strong>Reviews find defects in development and test documentation, and should be applied early</strong> — the earlier a defect is found, the cheaper it is to fix (lesson 3.1, slide 18).</li>
+<li><strong>Types of review: informal, walkthrough, technical / peer review, inspection</strong> — the same four types as CTFL 2018. Only read "peer review" as today's umbrella word (page 11).</li>
+<li><strong>Static analysis finds defects and gives information about code without executing it</strong> — e.g. data-flow anomalies, unreachable code and cyclomatic complexity (lesson 3.4).</li>
+</ol>
+<p class="ghi-chu">The old deck's summary drops the decision-making review of page 11, which confirms that it is not one of the four types you are examined on.</p>`,
+        `<p class="y-chinh">🎯 Ba câu cần nhớ của chương cũ — vẫn đúng cả, chỉ cần đổi "fault" thành "defect".</p>
+<ol>
+<li><strong>Review tìm defect trong tài liệu phát triển và tài liệu test, và nên làm sớm</strong> — defect tìm ra càng sớm thì sửa càng rẻ (bài 3.1, slide 18).</li>
+<li><strong>Các loại review: informal, walkthrough, technical / peer review, inspection</strong> — đúng bốn loại của CTFL 2018. Chỉ cần hiểu "peer review" theo nghĩa bao trùm như ngày nay (trang 11).</li>
+<li><strong>Phân tích tĩnh tìm defect và cho thông tin về code mà không cần chạy nó</strong> — vd data-flow anomaly, code không tới được, độ phức tạp cyclomatic (bài 3.4).</li>
+</ol>
+<p class="ghi-chu">Phần tóm tắt của slide cũ bỏ decision-making review ở trang 11, điều đó cho thấy nó không thuộc bốn loại review đi thi.</p>`],
+    ]),
+    bi(`<h3>Old word → current CTFL term (learn the right-hand column)</h3>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>2023 deck says</th><th>Say today (CTFL 2018 / v4.0)</th><th>Page</th></tr></thead>
+<tbody>
+<tr><td>ISTQB / ISEB Foundation</td><td>ISTQB CTFL. ISEB was the UK (BCS) exam board whose Foundation certificate was later aligned with ISTQB; you sit the ISTQB exam.</td><td>1</td></tr>
+<tr><td>fault</td><td>defect (fault and bug are synonyms of defect)</td><td>3, 11, 43</td></tr>
+<tr><td>walkthrough "for education"</td><td>main purposes: find defects, improve the product, consider alternatives, check conformance; training is an additional purpose</td><td>3</td></tr>
+<tr><td>peer review = technical review</td><td>peer review = any review by the author's colleagues (walkthrough, technical review, inspection)</td><td>11, 43</td></tr>
+<tr><td>decision-making review</td><td>not a CTFL review type (closest: the consensus purpose of a technical review, or a management review)</td><td>11</td></tr>
+<tr><td>leader "trained &amp; certified"</td><td>a trained facilitator leads the inspection meeting</td><td>12</td></tr>
+<tr><td>consensus "excluding inspection"</td><td>achieving consensus is a further purpose of inspection too</td><td>13</td></tr>
+<tr><td>kick-off · individual checking · meeting · edit / follow-up</td><td>initiate review · individual review · issue communication &amp; analysis · fixing &amp; reporting</td><td>14, 23</td></tr>
+<tr><td>leader / moderator</td><td>review leader + facilitator (moderator), with management planning the reviews</td><td>15</td></tr>
+<tr><td>inspectors</td><td>reviewers — and the scribe, missing from the old list, is mandatory in formal types</td><td>16</td></tr>
+</tbody>
+</table></div>
+<h3>Worked example — name the review type</h3>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>Situation</th><th>2023 deck</th><th>CTFL 2018</th><th>Deciding clue</th></tr></thead>
+<tbody>
+<tr><td>A developer asks the colleague at the next desk to look at a pull request. No notes are kept.</td><td>informal review</td><td><strong>informal review</strong></td><td>no documented process, a "buddy check"</td></tr>
+<tr><td>The business analyst leads the team through the new SRS page by page, explaining her reasoning, so new testers understand it. A scribe notes questions.</td><td>walkthrough</td><td><strong>walkthrough</strong></td><td>led by the author</td></tr>
+<tr><td>Three architects and a senior developer, led by a trained moderator, check a design and agree between a message queue and REST calls. A scribe records the decision.</td><td>technical review / decision-making review</td><td><strong>technical review</strong></td><td>technical peers, consensus, trained moderator who is not the author</td></tr>
+<tr><td>Two sampled pages of a safety-critical spec are checked against their source requirements with agreed rules. The entry check passes, the meeting takes 90 minutes, and major defects per page are counted.</td><td>inspection</td><td><strong>inspection</strong></td><td>sources, rules, sample, entry criteria, metrics</td></tr>
+</tbody>
+</table></div>
+<div class="pitfall"><ol>
+<li><strong>"Peer review"</strong> in an answer usually means the umbrella term, not only the technical review.</li>
+<li><strong>Consensus</strong> — do not reject an option just because it gives consensus as a purpose of inspection. It is a further purpose.</li>
+<li><strong>Walkthrough</strong> — "education" alone is not its main purpose.</li>
+<li><strong>Decision-making review</strong> is never the right answer to "which of the four review types…".</li>
+<li><strong>Moderator</strong> = facilitator. The review leader is a different role.</li>
+</ol></div>`,
+    `<h3>Từ cũ → thuật ngữ CTFL hiện hành (học cột bên phải)</h3>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>Slide 2023 ghi</th><th>Ngày nay nói (CTFL 2018 / v4.0)</th><th>Trang</th></tr></thead>
+<tbody>
+<tr><td>ISTQB / ISEB Foundation</td><td>ISTQB CTFL. ISEB là hội đồng thi của Anh (BCS), chứng chỉ Foundation của họ về sau được đồng bộ với ISTQB; bạn thi theo ISTQB.</td><td>1</td></tr>
+<tr><td>fault</td><td>defect (fault và bug là từ đồng nghĩa của defect)</td><td>3, 11, 43</td></tr>
+<tr><td>walkthrough "để đào tạo"</td><td>mục đích chính: tìm defect, cải thiện sản phẩm, xem xét phương án khác, kiểm tra tuân thủ; đào tạo là mục đích phụ</td><td>3</td></tr>
+<tr><td>peer review = technical review</td><td>peer review = mọi review do đồng nghiệp của tác giả làm (walkthrough, technical review, inspection)</td><td>11, 43</td></tr>
+<tr><td>decision-making review</td><td>không phải loại review của CTFL (gần nhất: mục đích đồng thuận của technical review, hoặc management review)</td><td>11</td></tr>
+<tr><td>leader "được đào tạo &amp; cấp chứng chỉ"</td><td>một facilitator được đào tạo dẫn buổi họp inspection</td><td>12</td></tr>
+<tr><td>đồng thuận "trừ inspection"</td><td>đạt đồng thuận cũng là mục đích phụ của inspection</td><td>13</td></tr>
+<tr><td>kick-off · individual checking · meeting · edit / follow-up</td><td>initiate review · individual review · issue communication &amp; analysis · fixing &amp; reporting</td><td>14, 23</td></tr>
+<tr><td>leader / moderator</td><td>review leader + facilitator (moderator), còn management lập kế hoạch review</td><td>15</td></tr>
+<tr><td>inspectors</td><td>reviewer — và scribe, vai trò slide cũ bỏ sót, là bắt buộc ở các loại chính quy</td><td>16</td></tr>
+</tbody>
+</table></div>
+<h3>Ví dụ có lời giải — gọi tên loại review</h3>
+<div style="overflow-x:auto"><table>
+<thead><tr><th>Tình huống</th><th>Slide 2023</th><th>CTFL 2018</th><th>Dấu hiệu quyết định</th></tr></thead>
+<tbody>
+<tr><td>Một developer nhờ đồng nghiệp ngồi cạnh xem giúp một pull request. Không ghi chép gì.</td><td>informal review</td><td><strong>informal review</strong></td><td>không có quy trình văn bản, kiểu "buddy check"</td></tr>
+<tr><td>Business analyst dẫn cả nhóm đi qua bản SRS mới từng trang, giải thích cách cô ấy nghĩ, để tester mới hiểu. Có scribe ghi câu hỏi.</td><td>walkthrough</td><td><strong>walkthrough</strong></td><td>do tác giả dẫn</td></tr>
+<tr><td>Ba kiến trúc sư và một developer cấp cao, do một moderator được đào tạo dẫn, xem một bản thiết kế và thống nhất chọn message queue hay gọi REST. Scribe ghi lại quyết định.</td><td>technical review / decision-making review</td><td><strong>technical review</strong></td><td>đồng nghiệp kỹ thuật, đồng thuận, moderator được đào tạo và không phải tác giả</td></tr>
+<tr><td>Hai trang mẫu của một đặc tả an toàn-sống-còn được kiểm tra so với yêu cầu nguồn theo bộ quy tắc đã thống nhất. Qua entry check, buổi họp 90 phút, đếm số defect nặng mỗi trang.</td><td>inspection</td><td><strong>inspection</strong></td><td>tài liệu nguồn, quy tắc, mẫu, entry criteria, metric</td></tr>
+</tbody>
+</table></div>
+<div class="pitfall"><ol>
+<li><strong>"Peer review"</strong> trong đáp án thường là từ bao trùm, không chỉ riêng technical review.</li>
+<li><strong>Đồng thuận</strong> — đừng loại một phương án chỉ vì nó ghi đồng thuận là mục đích của inspection. Đó là mục đích phụ.</li>
+<li><strong>Walkthrough</strong> — chỉ "đào tạo" thì không phải mục đích chính.</li>
+<li><strong>Decision-making review</strong> không bao giờ là đáp án cho câu "loại nào trong bốn loại review…".</li>
+<li><strong>Moderator</strong> = facilitator. Review leader là một vai trò khác.</li>
+</ol></div>`),
+  ].join('\n'),
+};
+
 /* ─────────────────────────────────── Quiz 3 ─────────────────────────────────── */
 const q = (question, options, correctIndex) => ({ question, options, correctIndex, points: 1 });
+// Same, with an EN|||VI explanation shown after submit (the seeder carries it since 12/09/2026).
+const qx = (question, options, correctIndex, explanation) => ({ ...q(question, options, correctIndex), explanation });
 
 const QUIZ3 = {
   title: 'Quiz 3 — Static testing (all SWT3 slide questions)|||Quiz 3 — Kiểm thử tĩnh (toàn bộ câu hỏi trên slide SWT3)',
   slug: 'swt301-quiz-3',
   type: 'QUIZ',
-  description: '47 câu: đủ 33 câu "Question" trên slide SWT3 + câu hỏi ở slide ẩn pptx 75 + câu tính V(G) slide 102 (đáp án đã giải trong bài 3.1–3.4) + 12 câu kiểm tra phần lý thuyết.',
+  description: '53 câu: đủ 33 câu "Question" trên slide SWT3 + câu hỏi ở slide ẩn pptx 75 + câu tính V(G) slide 102 (đáp án đã giải trong bài 3.1–3.4) + 12 câu kiểm tra phần lý thuyết + 6 câu về bộ slide SWT3 bản 2023 (bài 3.5).',
   quiz: {
-    timeLimitSeconds: 2820,
+    timeLimitSeconds: 3180,
     questions: [
       q('Which TWO statements about static testing are MOST true? A cheap way to detect and remove defects · B makes dynamic testing less challenging · C early validation of user requirements · D finds run-time problems early · E has less value for safety-critical systems. (SWT3 s.15)|||Hai câu nào về kiểm thử tĩnh ĐÚNG NHẤT? A cách rẻ để tìm và gỡ defect · B làm kiểm thử động bớt thách thức · C validate yêu cầu người dùng từ sớm · D tìm sớm vấn đề lúc chạy · E kém giá trị với hệ thống an toàn-sống-còn. (SWT3 s.15)', ['A and C|||A và C', 'A and D|||A và D', 'B and C|||B và C', 'D and E|||D và E'], 0),
       q('Which is a correct definition of a review? (s.16)|||Định nghĩa đúng của review? (s.16)', ['An automated activity reviewing requirements, code and design to find defects|||Hoạt động tự động review yêu cầu, code, thiết kế để tìm defect', 'A mostly manual activity in which work products like requirements, code and design are reviewed to find defects|||Hoạt động chủ yếu thủ công xem xét các sản phẩm như yêu cầu, code, thiết kế để tìm defect', 'An automated activity reviewing code to find warnings and errors|||Hoạt động tự động xem code để tìm cảnh báo và lỗi', 'A manual activity examining work products to prove there is no defect|||Hoạt động thủ công xem xét sản phẩm để chứng minh không có defect'], 1),
@@ -2975,6 +3653,12 @@ const QUIZ3 = {
       q('Buffsize = 1000, Mailboxmax = 1000; IF Buffsize < Mailboxmax THEN Error-Exit. Static analysis reports…|||Buffsize = 1000, Mailboxmax = 1000; IF Buffsize < Mailboxmax THEN Error-Exit. Phân tích tĩnh báo…', ['an undeclared variable|||biến chưa khai báo', 'the THEN clause is unreachable|||nhánh THEN không bao giờ tới được', 'a parameter type mismatch|||sai kiểu tham số', 'nothing|||không có gì'], 1),
       q('The flow graph of slide 103 has 10 nodes and 12 edges. V(G) = …|||Đồ thị luồng ở slide 103 có 10 đỉnh và 12 cạnh. V(G) = …', ['2', '3', '4', '12'], 2),
       q('A limitation of static analysis tools is that they…|||Một giới hạn của công cụ phân tích tĩnh là chúng…', ['must execute the code|||phải chạy code', 'cannot find unreachable code|||không tìm được code không tới được', 'produce false positives and say nothing about operating conditions|||sinh cảnh báo thừa và không nói gì về điều kiện vận hành', 'only work on requirements documents|||chỉ dùng được cho tài liệu yêu cầu'], 2),
+      qx('The 2023 slides call the technical review "peer review". In today\'s ISTQB glossary a peer review is…|||Slide 2023 gọi technical review là "peer review". Trong glossary ISTQB hiện nay, peer review là…', ['only another name for a technical review|||chỉ là tên khác của technical review', 'any review by colleagues of the author, e.g. walkthrough, technical review or inspection|||mọi review do đồng nghiệp của tác giả làm, vd walkthrough, technical review hay inspection', 'a review led by management|||review do quản lý dẫn', 'an automated review done by a static analysis tool|||review tự động bằng công cụ phân tích tĩnh'], 1, 'ISTQB glossary: a peer review is a review of a work product by colleagues of its author, so walkthroughs, technical reviews and inspections are all peer reviews. The 2023 deck used the term narrowly for the technical review.|||Glossary ISTQB: peer review là review sản phẩm do đồng nghiệp của tác giả thực hiện, nên walkthrough, technical review và inspection đều là peer review. Bộ slide 2023 dùng từ này hẹp hơn, chỉ cho technical review.'),
+      qx('The old review activity "overview / kick-off meeting" corresponds in the CTFL 2018 review process to…|||Hoạt động cũ "overview / kick-off meeting" tương ứng với hoạt động nào trong quy trình review CTFL 2018?', ['Planning', 'Initiate review', 'Individual review', 'Fixing and reporting'], 1, 'The kick-off (distributing the work product, explaining objectives and process, answering questions) belongs to Initiate review in CTFL 2018. Planning comes before it and defines scope, roles and entry/exit criteria.|||Kick-off (phát tài liệu, giải thích mục tiêu và quy trình, trả lời câu hỏi) thuộc hoạt động Initiate review trong CTFL 2018. Planning là bước trước đó, xác định phạm vi, vai trò và tiêu chí vào/ra.'),
+      qx('According to the 2023 slides "Inspection is different", which is typical of an inspection rather than an ordinary review?|||Theo các slide 2023 "Inspection is different", điều nào là đặc trưng của inspection chứ không phải review thông thường?', ['Dozens of pages handed out with the instruction "please review this"|||Phát vài chục trang kèm lời dặn "xem giúp cái này"', 'Checking a sample against its source documents using agreed rules|||Kiểm tra một mẫu so với tài liệu nguồn theo bộ quy tắc đã thống nhất', 'A meeting of several hours discussing technical approaches|||Họp nhiều giờ bàn về cách làm kỹ thuật', 'Only those who have time comment before the meeting|||Ai rảnh thì góp ý trước buổi họp'], 1, 'An inspection checks a limited sample against its source documents using agreed rules and checklists, led by a trained facilitator. Dozens of pages handed out, long technical debates or optional comments are signs of an ordinary, informal review.|||Inspection kiểm một mẫu giới hạn so với tài liệu nguồn theo quy tắc và checklist đã thống nhất, do facilitator được đào tạo dẫn dắt. Phát vài chục trang, họp dài bàn kỹ thuật hay ai rảnh thì góp ý là dấu hiệu của review thông thường, không chính thức.'),
+      qx('While reviewing a design, the team finds that the real mistake is in the requirements specification. Per the 2023 slide "Reviews in general 4", the review should produce…|||Khi review bản thiết kế, nhóm phát hiện lỗi thật nằm ở đặc tả yêu cầu. Theo slide 2023 "Reviews in general 4", buổi review nên cho ra…', ['an edit to the design only|||chỉ một chỉnh sửa trong bản thiết kế', 'a change request for the source document|||một change request cho tài liệu nguồn', 'nothing, because requirements are out of scope|||không gì cả, vì yêu cầu nằm ngoài phạm vi', 'a new test case for the design|||một test case mới cho bản thiết kế'], 1, 'A defect that lives in the source document is not fixed inside the design under review: the review raises a change request for the requirements specification, so its owner corrects it through change control.|||Defect nằm ở tài liệu nguồn không được sửa ngay trong bản thiết kế đang review: buổi review ghi một change request cho đặc tả yêu cầu để người phụ trách sửa qua quy trình quản lý thay đổi.'),
+      qx('The 2023 slides say anything written down can be inspected, but some things can only be reviewed. Which one?|||Slide 2023 nói mọi thứ đã viết ra đều inspect được, nhưng có thứ chỉ review được. Đó là gì?', ['A test plan|||Test plan', 'Source code|||Mã nguồn', 'Project progress and "should we develop this?" options|||Tiến độ dự án và các phương án "có nên phát triển cái này không?"', 'A user manual|||Hướng dẫn sử dụng'], 2, 'An inspection needs a written work product plus source documents and rules to check it against. Project progress and go/no-go options have no such source, so they can be reviewed (for example in a management review) but not inspected; plans, code and manuals can be inspected.|||Inspection cần một sản phẩm viết ra cùng tài liệu nguồn và quy tắc để đối chiếu. Tiến độ dự án và phương án có nên làm hay không không có nguồn như vậy, nên chỉ review được (ví dụ management review) chứ không inspect được; plan, code và tài liệu hướng dẫn thì inspect được.'),
+      qx('The 2023 slides label the walkthrough "for education". Under CTFL 2018 the MAIN purposes of a walkthrough are…|||Slide 2023 ghi walkthrough là "để đào tạo". Theo CTFL 2018, mục đích CHÍNH của walkthrough là…', ['training participants only|||chỉ đào tạo người tham gia', 'finding defects, improving the product, considering alternatives, evaluating conformance to standards|||tìm defect, cải thiện sản phẩm, xem xét phương án khác, đánh giá việc tuân thủ chuẩn', 'gathering metrics for process improvement|||thu thập metric để cải tiến quy trình', 'making a go/no-go release decision|||ra quyết định phát hành go/no-go'], 1, 'CTFL 2018 lists the main purposes of a walkthrough as finding defects, improving the product, considering alternative implementations and evaluating conformance to standards. Training participants is only a possible additional purpose.|||CTFL 2018 liệt kê mục đích chính của walkthrough là tìm defect, cải thiện sản phẩm, xem xét phương án khác và đánh giá việc tuân thủ chuẩn. Đào tạo người tham gia chỉ là mục đích phụ có thể có.'),
     ],
   },
 };
@@ -2982,5 +3666,5 @@ const QUIZ3 = {
 export default {
   title: 'Chapter 3 — Static testing|||Chương 3 — Kiểm thử tĩnh',
   description: 'SWT3 (106 slide) học từng slide: kiểm thử tĩnh và giá trị của nó, quy trình review 5 hoạt động & 6 vai trò, 4 loại review, 5 kỹ thuật review, yếu tố thành công, phân tích tĩnh (data flow, control flow, cyclomatic complexity) — kèm đáp án mọi câu hỏi trên slide, ví dụ review log và code Java chạy thật.',
-  lessons: [L31, L32, L33, L34, QUIZ3],
+  lessons: [L31, L32, L33, L34, L35, QUIZ3],
 };

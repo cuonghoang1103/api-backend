@@ -12,6 +12,7 @@
  *   4.4 Decision table testing            slides 43–59
  *   4.5 State transition testing          slides 60–72
  *   4.6 Use case testing + review Qs      slides 73–81
+ *   4.7 More from the 2023 deck           oswt4 (SWT4.ppt) pages 1–33 — only the NEW/PARTIAL pages as cards
  * Every numeric answer was re-computed with a script (partitions, boundaries,
  * rules, transitions) and the Java example was compiled and run (JDK 21).
  */
@@ -3084,15 +3085,457 @@ ${AV(`C — 3`, `ba vùng valid, không có vùng invalid.`)}`],
   ].join('\n'),
 };
 
+/* ─────────────── 4.7 More from the 2023 slide set (SWT4.ppt pages 1–33) ─────────────── */
+const O = 'oswt4';
+const L47 = {
+  title: '4.7 — More from the 2023 slide set: test development process & the student-access decision table|||4.7 — Bổ sung từ bộ slide 2023: quy trình phát triển test & bảng quyết định “student access”',
+  slug: 'swt301-ch4-slides-2023',
+  type: 'VIDEO',
+  description: 'Bộ slide SWT4 cũ (2023) trang 1–33: những trang bài 4.1–4.4 chưa có — quy trình phát triển test (analysis → design → implementation), danh mục BS 7925-2, tag V/X/B/D của condition template, và trọn ví dụ bảng quyết định “student access” (8 → 4 cột, 5 test case) giải lại từng bước. Các trang trùng được liệt kê kèm chỗ đã học.',
+  content: [
+    bi(`<span class="eyebrow">Chapter 4 · Lesson 4.7 · SWT4 (2023) pages 1–33</span>
+<h2>More from the 2023 slide set — the black-box pages</h2>
+<p class="lead">Before the current <em>SWT4_tim</em> deck, the course used an older 2023 deck (SWT4.ppt, 55 pages, built on the ISEB/ISTQB Foundation slides of the 2000s). Most of its black-box pages reappear almost word for word in Lessons 4.1–4.4. This lesson shows only the pages that teach something new, and lists the others with a pointer to where you already learned them.</p>
+<div class="callout"><strong>Learning objectives.</strong> After this lesson you can:
+<ul>
+<li><strong>name</strong> the three steps of the test development process (analysis → design → implementation) and what each one produces;</li>
+<li><strong>read</strong> the old condition-template tags V, X, B, D as today's VP, IP, VB, IB;</li>
+<li><strong>build, rationalise and test</strong> the <em>student access</em> decision table (8 → 4 columns, 5 test cases);</li>
+<li><strong>replace</strong> outdated vocabulary of the old deck with the current CTFL term.</li>
+</ul></div>
+<p>Pages 34–55 of the same deck (white-box, experience-based, choosing a technique) are covered in <strong>Lesson 5.3</strong>.</p>
+<h3>Old words → current CTFL words</h3>
+<table>
+<thead><tr><th>In the 2023 deck</th><th>Say today (CTFL 2018 / v4.0)</th></tr></thead>
+<tbody>
+<tr><td>ISEB “Foundation Of Software Testing”</td><td>ISTQB Certified Tester Foundation Level (CTFL) — ISEB was the British exam board before ISTQB</td></tr>
+<tr><td>Techniques “defined in BS 7925-2” (1998)</td><td>BS 7925-2 was withdrawn; its successor is <strong>ISO/IEC/IEEE 29119-4</strong> (test techniques)</td></tr>
+<tr><td>Test design / test case / test procedure <em>specification</em> (IEEE 829)</td><td>ISO/IEC/IEEE 29119-3 documents; the syllabus talks about <strong>test conditions, test cases, test procedures and test scripts</strong></td></tr>
+<tr><td>“Functional (Black Box)” / “Structural (White Box)”</td><td><strong>Black-box (specification-based)</strong> — covers functional <em>and</em> non-functional behaviour; <strong>white-box (structure-based)</strong></td></tr>
+<tr><td>“Faults tend to lurk near boundaries”</td><td><strong>Defects</strong> (error → defect → failure); “fault” and “bug” are synonyms of defect</td></tr>
+<tr><td>Cause-effect graphing, syntax testing, random testing</td><td>Not in the CTFL syllabus any more; decision tables replaced cause-effect graphs</td></tr>
+</tbody>
+</table>`,
+    `<span class="eyebrow">Chương 4 · Bài 4.7 · SWT4 (2023) trang 1–33</span>
+<h2>Bổ sung từ bộ slide 2023 — phần black-box</h2>
+<p class="lead">Trước bộ <em>SWT4_tim</em> hiện tại, môn học dùng một bộ slide cũ năm 2023 (SWT4.ppt, 55 trang, dựng từ slide ISEB/ISTQB Foundation những năm 2000). Phần lớn trang black-box của nó xuất hiện lại gần như nguyên văn trong bài 4.1–4.4. Bài này chỉ đưa những trang dạy điều mới, còn các trang trùng được liệt kê kèm chỗ bạn đã học.</p>
+<div class="callout"><strong>Chuẩn đầu ra.</strong> Học xong bài này bạn có thể:
+<ul>
+<li><strong>gọi tên</strong> ba bước của quy trình phát triển test (analysis → design → implementation) và sản phẩm của từng bước;</li>
+<li><strong>đọc</strong> tag cũ V, X, B, D của condition template thành VP, IP, VB, IB như hiện nay;</li>
+<li><strong>lập, rút gọn và thiết kế test</strong> cho bảng quyết định <em>student access</em> (8 → 4 cột, 5 test case);</li>
+<li><strong>thay</strong> các thuật ngữ lỗi thời của bộ slide cũ bằng thuật ngữ CTFL hiện hành.</li>
+</ul></div>
+<p>Trang 34–55 của cùng bộ slide (white-box, dựa kinh nghiệm, chọn kỹ thuật) nằm ở <strong>bài 5.3</strong>.</p>
+<h3>Từ cũ → từ CTFL hiện hành</h3>
+<table>
+<thead><tr><th>Trong slide 2023</th><th>Nói theo CTFL 2018 / v4.0</th></tr></thead>
+<tbody>
+<tr><td>ISEB “Foundation Of Software Testing”</td><td>ISTQB Certified Tester Foundation Level (CTFL) — ISEB là hội đồng thi của Anh trước khi có ISTQB</td></tr>
+<tr><td>Kỹ thuật “định nghĩa trong BS 7925-2” (1998)</td><td>BS 7925-2 đã bị rút; chuẩn kế thừa là <strong>ISO/IEC/IEEE 29119-4</strong> (kỹ thuật test)</td></tr>
+<tr><td>Test design / test case / test procedure <em>specification</em> (IEEE 829)</td><td>Tài liệu theo ISO/IEC/IEEE 29119-3; syllabus nói về <strong>test condition, test case, test procedure và test script</strong></td></tr>
+<tr><td>“Functional (Black Box)” / “Structural (White Box)”</td><td><strong>Black-box (dựa đặc tả)</strong> — gồm cả hành vi chức năng <em>và</em> phi chức năng; <strong>white-box (dựa cấu trúc)</strong></td></tr>
+<tr><td>“Faults tend to lurk near boundaries”</td><td><strong>Defect</strong> (error → defect → failure); “fault” và “bug” là từ đồng nghĩa của defect</td></tr>
+<tr><td>Cause-effect graphing, syntax testing, random testing</td><td>Không còn trong syllabus CTFL; decision table đã thay cho cause-effect graph</td></tr>
+</tbody>
+</table>`),
+    bi(`<h3>Old pages you have already learned</h3>
+<p>These 2023 pages carry nothing that Lessons 4.1–4.4 do not already teach, so they are not repeated here. Slide numbers refer to the current <em>SWT4</em> deck.</p>
+<table>
+<thead><tr><th>2023 page</th><th>Topic</th><th>Already taught in</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Chapter 4 title page</td><td>4.1 — slide 1</td><td>Title only</td></tr>
+<tr><td>5, 9, 33</td><td>“Contents” agenda</td><td>—</td><td>Repeats of page 2, with the next section highlighted</td></tr>
+<tr><td>6</td><td>Three types of systematic technique</td><td>4.1 — slide 6</td><td>Old label “Functional (Black Box)” = today's “Behavioural (Black Box)”</td></tr>
+<tr><td>7</td><td>Some test techniques (big tree)</td><td>4.1 — block “Hidden slide in SWT4_tim.pptx (pptx slide 6)”</td><td>The same BS 7925-2 tree, explained branch by branch</td></tr>
+<tr><td>8</td><td>Black box versus white box</td><td>4.1 — slide 7</td><td>Identical</td></tr>
+<tr><td>11</td><td>Equivalence partitioning</td><td>4.2 — slide 16 (number line 0 | 1–100 | 101 on slide 29)</td><td>Same three bullets</td></tr>
+<tr><td>12</td><td>Boundary value analysis</td><td>4.3 — slide 29</td><td>“Faults” = defects</td></tr>
+<tr><td>13–16</td><td>Loan application: customer name, account number, loan amount</td><td>4.3 — slides 31–34</td><td>Same values. On page 14 the signs before “2 chars” and “64 chars” are lost in the image: read “&lt; 2 chars” and “&gt; 64 chars”</td></tr>
+<tr><td>18</td><td>Design test cases (John Smith / AB)</td><td>4.3 — slide 36</td><td>Same data; old tags V1…/B1… = VP1…/VB1… (see page 17 below)</td></tr>
+<tr><td>19–20</td><td>Why do both EP and BVA? · Test objectives?</td><td>4.3 — slides 37–38</td><td>Slide 38 adds a third objective: confidence with bad input → IP &amp; IB</td></tr>
+<tr><td>21</td><td>Decision tables</td><td>4.4 — slide 43</td><td>Identical</td></tr>
+<tr><td>29–32</td><td>Rationalising outputs · dangers · extended entries · DT vs EP/BVA</td><td>4.4 — slides 53, 55, 56, 57</td><td>Identical</td></tr>
+</tbody>
+</table>`,
+    `<h3>Những trang cũ bạn đã học</h3>
+<p>Các trang 2023 dưới đây không có gì mà bài 4.1–4.4 chưa dạy, nên không lặp lại ở đây. Số slide là số của bộ <em>SWT4</em> hiện tại.</p>
+<table>
+<thead><tr><th>Trang 2023</th><th>Chủ đề</th><th>Đã học ở</th><th>Ghi chú</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Trang tiêu đề Chương 4</td><td>4.1 — slide 1</td><td>Chỉ có tiêu đề</td></tr>
+<tr><td>5, 9, 33</td><td>Mục lục “Contents”</td><td>—</td><td>Lặp lại trang 2, tô sáng mục kế tiếp</td></tr>
+<tr><td>6</td><td>Ba loại kỹ thuật có hệ thống</td><td>4.1 — slide 6</td><td>Nhãn cũ “Functional (Black Box)” = “Behavioural (Black Box)” hiện nay</td></tr>
+<tr><td>7</td><td>Some test techniques (cây lớn)</td><td>4.1 — khối “Slide ẩn trong SWT4_tim.pptx (pptx slide 6)”</td><td>Cùng cây BS 7925-2, đã giải từng nhánh</td></tr>
+<tr><td>8</td><td>Black box versus white box</td><td>4.1 — slide 7</td><td>Giống hệt</td></tr>
+<tr><td>11</td><td>Phân vùng tương đương</td><td>4.2 — slide 16 (trục số 0 | 1–100 | 101 ở slide 29)</td><td>Cùng ba ý</td></tr>
+<tr><td>12</td><td>Phân tích giá trị biên</td><td>4.3 — slide 29</td><td>“Faults” = defect</td></tr>
+<tr><td>13–16</td><td>Đơn vay vốn: tên khách hàng, số tài khoản, số tiền vay</td><td>4.3 — slide 31–34</td><td>Cùng giá trị. Ở trang 14 dấu trước “2 chars” và “64 chars” bị mất khi dựng ảnh: đọc là “&lt; 2 chars” và “&gt; 64 chars”</td></tr>
+<tr><td>18</td><td>Thiết kế test case (John Smith / AB)</td><td>4.3 — slide 36</td><td>Cùng dữ liệu; tag cũ V1…/B1… = VP1…/VB1… (xem trang 17 bên dưới)</td></tr>
+<tr><td>19–20</td><td>Vì sao làm cả EP và BVA? · Mục tiêu test?</td><td>4.3 — slide 37–38</td><td>Slide 38 thêm mục tiêu thứ ba: tin hệ thống xử lý đúng đầu vào xấu → IP &amp; IB</td></tr>
+<tr><td>21</td><td>Decision table</td><td>4.4 — slide 43</td><td>Giống hệt</td></tr>
+<tr><td>29–32</td><td>Rút gọn output · rủi ro rút gọn · mục mở rộng · DT với EP/BVA</td><td>4.4 — slide 53, 55, 56, 57</td><td>Giống hệt</td></tr>
+</tbody>
+</table>`),
+    walkHead(O, 2, 28, 'Only the 2023 pages that add something to Lessons 4.1–4.4 are shown, in page order.', 'Chỉ hiện những trang 2023 bổ sung điều mới cho bài 4.1–4.4, theo đúng thứ tự trang.'),
+    walk(O, [
+      [2, 'Contents — seven sections of the 2023 chapter',
+        `<p class="y-chinh">🎯 The 2023 chapter had seven sections; the current deck keeps four and moved the rest elsewhere.</p>
+<p class="nhan">The seven sections (2023)</p>
+<ol>
+<li><strong>The test development process</strong> — pages 3–4 below; today part of the test process (Chapter 1).</li>
+<li><strong>Categories of test design techniques</strong> — current Lesson 4.1.</li>
+<li><strong>Black and white box testing</strong> — current Lesson 4.1.</li>
+<li><strong>Black box test techniques</strong> — current Lessons 4.2–4.6.</li>
+<li><strong>White box test techniques</strong> — current Chapter 5.</li>
+<li><strong>Experience-based techniques</strong> — current Lesson 6.1.</li>
+<li><strong>Choosing a test technique</strong> — current Lesson 6.2.</li>
+</ol>
+<p class="ghi-chu">The grid 1–6 in the corner is the ISEB six-chapter map; box 4 = “Test design techniques”.</p>`,
+        `<p class="y-chinh">🎯 Chương 2023 có bảy mục; bộ slide hiện tại giữ bốn mục, phần còn lại được chuyển đi chỗ khác.</p>
+<p class="nhan">Bảy mục (2023)</p>
+<ol>
+<li><strong>The test development process</strong> — trang 3–4 bên dưới; nay là một phần của quy trình test (Chương 1).</li>
+<li><strong>Categories of test design techniques</strong> — bài 4.1 hiện tại.</li>
+<li><strong>Black and white box testing</strong> — bài 4.1 hiện tại.</li>
+<li><strong>Black box test techniques</strong> — bài 4.2–4.6 hiện tại.</li>
+<li><strong>White box test techniques</strong> — Chương 5 hiện tại.</li>
+<li><strong>Experience-based techniques</strong> — bài 6.1 hiện tại.</li>
+<li><strong>Choosing a test technique</strong> — bài 6.2 hiện tại.</li>
+</ol>
+<p class="ghi-chu">Lưới 1–6 ở góc là bản đồ sáu chương của ISEB; ô 4 = “Test design techniques”.</p>`],
+      [3, 'The test development process — learning objectives',
+        `<p class="y-chinh">🎯 Four learning objectives: tell the three test documents apart, and write test cases that are traceable and executable.</p>
+<ol>
+<li><strong>Differentiate</strong> a test design specification, a test case specification and a test procedure specification.</li>
+<li><strong>Compare</strong> the terms test condition, test case and test procedure.</li>
+<li><strong>Evaluate</strong> test cases for clear traceability to the requirements and for clear expected results.</li>
+<li><strong>Translate</strong> test cases into a well-structured test procedure, at a level of detail that fits the testers' knowledge.</li>
+</ol>
+<p class="nhan">The three documents (IEEE 829)</p>
+<table>
+<thead><tr><th>Document</th><th>Answers</th><th>Example (loan form, Lesson 4.3)</th></tr></thead>
+<tbody>
+<tr><td>Test design specification</td><td><em>What</em> to test — the test conditions and the approach</td><td>“Customer name 2–64 chars; account number 6 digits, 1st non-zero; loan 500–9000”</td></tr>
+<tr><td>Test case specification</td><td>Inputs, preconditions, <em>expected results</em></td><td>“Name AB, Acc 100000, Loan 500, Term 1 year → repayment 44.80”</td></tr>
+<tr><td>Test procedure specification</td><td>The <em>order of steps</em> to run one or more test cases</td><td>“1. Open the form 2. Type the name … 5. Press Submit 6. Compare the repayment”</td></tr>
+</tbody>
+</table>
+<div class="pitfall">IEEE 829 is superseded. Today the same three documents are described in ISO/IEC/IEEE 29119-3, and CTFL 2018 asks about the <em>work products</em> (test conditions → test cases → test procedures / scripts), not about document names.</div>`,
+        `<p class="y-chinh">🎯 Bốn chuẩn đầu ra: phân biệt ba tài liệu test, và viết test case truy vết được và chạy được.</p>
+<ol>
+<li><strong>Phân biệt</strong> test design specification, test case specification và test procedure specification.</li>
+<li><strong>So sánh</strong> các khái niệm test condition, test case và test procedure.</li>
+<li><strong>Đánh giá</strong> test case theo độ truy vết rõ ràng về yêu cầu và kết quả mong đợi rõ ràng.</li>
+<li><strong>Chuyển</strong> test case thành một test procedure có cấu trúc tốt, ở mức chi tiết hợp với kiến thức của tester.</li>
+</ol>
+<p class="nhan">Ba tài liệu (IEEE 829)</p>
+<table>
+<thead><tr><th>Tài liệu</th><th>Trả lời câu hỏi</th><th>Ví dụ (đơn vay vốn, bài 4.3)</th></tr></thead>
+<tbody>
+<tr><td>Test design specification</td><td>Test <em>cái gì</em> — test condition và cách tiếp cận</td><td>“Tên 2–64 ký tự; số tài khoản 6 chữ số, chữ số đầu khác 0; tiền vay 500–9000”</td></tr>
+<tr><td>Test case specification</td><td>Đầu vào, điều kiện tiên quyết, <em>kết quả mong đợi</em></td><td>“Tên AB, TK 100000, vay 500, kỳ hạn 1 năm → trả góp 44.80”</td></tr>
+<tr><td>Test procedure specification</td><td><em>Thứ tự các bước</em> để chạy một hay nhiều test case</td><td>“1. Mở form 2. Gõ tên … 5. Bấm Submit 6. So số tiền trả góp”</td></tr>
+</tbody>
+</table>
+<div class="pitfall">IEEE 829 đã bị thay thế. Nay ba tài liệu này được mô tả trong ISO/IEC/IEEE 29119-3, và CTFL 2018 hỏi về <em>work product</em> (test condition → test case → test procedure / script), không hỏi tên tài liệu.</div>`],
+      [4, 'The test development process — the three steps',
+        `<p class="y-chinh">🎯 Test development runs in three steps, each producing a more concrete work product — and the documentation can be more or less formal.</p>
+<ol>
+<li><strong>Formality of test documentation</strong> — from none, through a few notes, to full IEEE-style documents. It depends on the organisation, its culture, the risk and the time available.</li>
+<li><strong>Test analysis</strong> — <em>what</em> to test: identify <strong>test conditions</strong> from the test basis (e.g. “loan amount between 500 and 9000”).</li>
+<li><strong>Test design</strong> — <em>how</em> to test: specify <strong>test cases</strong> with inputs and expected results (e.g. loan 499 → rejected).</li>
+<li><strong>Test implementation</strong> — get ready to run: put test cases in order as <strong>test procedures or scripts</strong>, with test data and environment.</li>
+</ol>
+<p class="nhan">Where it is today</p>
+<p>CTFL 2018 keeps the same three steps inside the seven test activities (planning · monitoring &amp; control · <strong>analysis · design · implementation</strong> · execution · completion) — see Chapter 1. Slide 4 of the current deck says the same: a test technique helps identify test conditions, test cases and test data.</p>
+<p class="meo">🧠 <strong>Remember:</strong> analysis = <em>what</em>, design = <em>how</em>, implementation = <em>in which order, with what</em>.</p>`,
+        `<p class="y-chinh">🎯 Phát triển test đi qua ba bước, mỗi bước cho ra một work product cụ thể hơn — và tài liệu có thể trang trọng nhiều hay ít.</p>
+<ol>
+<li><strong>Mức hình thức của tài liệu test</strong> — từ không có gì, vài ghi chú, tới bộ tài liệu đầy đủ kiểu IEEE. Tuỳ tổ chức, văn hoá, mức rủi ro và thời gian có được.</li>
+<li><strong>Test analysis</strong> — test <em>cái gì</em>: xác định <strong>test condition</strong> từ test basis (vd. “số tiền vay từ 500 tới 9000”).</li>
+<li><strong>Test design</strong> — test <em>thế nào</em>: đặc tả <strong>test case</strong> có đầu vào và kết quả mong đợi (vd. vay 499 → bị từ chối).</li>
+<li><strong>Test implementation</strong> — chuẩn bị để chạy: sắp test case thành <strong>test procedure hay script</strong>, kèm test data và môi trường.</li>
+</ol>
+<p class="nhan">Hiện nay nằm ở đâu</p>
+<p>CTFL 2018 giữ nguyên ba bước này bên trong bảy hoạt động test (planning · monitoring &amp; control · <strong>analysis · design · implementation</strong> · execution · completion) — xem Chương 1. Slide 4 của bộ hiện tại cũng nói vậy: kỹ thuật test giúp xác định test condition, test case và test data.</p>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> analysis = test <em>cái gì</em>, design = test <em>thế nào</em>, implementation = chạy <em>theo thứ tự nào, với dữ liệu gì</em>.</p>`],
+      [10, 'Black Box test design and measurement techniques (BS 7925-2)',
+        `<p class="y-chinh">🎯 The old British standard BS 7925-2 defined six black-box techniques; four of them are also a way to <em>measure</em> coverage.</p>
+<p class="nhan">The six techniques — and whether each is also a measurement</p>
+<table>
+<thead><tr><th>Technique</th><th>Also a measurement?</th><th>Coverage measured as</th><th>In CTFL today?</th></tr></thead>
+<tbody>
+<tr><td>Equivalence partitioning</td><td>✓ Yes</td><td>partitions tested ÷ partitions identified</td><td>Yes (Lesson 4.2)</td></tr>
+<tr><td>Boundary value analysis</td><td>✓ Yes</td><td>boundary values tested ÷ boundary values identified</td><td>Yes (Lesson 4.3)</td></tr>
+<tr><td>State transition testing</td><td>✓ Yes</td><td>states / transitions exercised ÷ total</td><td>Yes (Lesson 4.5)</td></tr>
+<tr><td>Cause-effect graphing</td><td>✓ Yes</td><td>cause-effect combinations (rules) exercised ÷ total</td><td>No — replaced by decision tables (Lesson 4.4)</td></tr>
+<tr><td>Syntax testing</td><td>✗ No</td><td>—</td><td>No</td></tr>
+<tr><td>Random testing</td><td>✗ No</td><td>—</td><td>No</td></tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Design technique</strong> — tells you how to <em>choose</em> test cases.</li>
+<li><strong>Measurement technique</strong> — tells you how <em>much</em> of the test basis your tests cover (a percentage).</li>
+<li><strong>“Also defines how to specify other techniques”</strong> — the standard gave a template so that an organisation could describe its own technique in the same way.</li>
+</ul>
+<p class="ghi-chu">BS 7925-2 (1998) has been withdrawn; its techniques and coverage measures now live in ISO/IEC/IEEE 29119-4. Syntax testing and random testing appear there too but are not examined at Foundation level.</p>`,
+        `<p class="y-chinh">🎯 Chuẩn cũ BS 7925-2 của Anh định nghĩa sáu kỹ thuật black-box; bốn trong số đó còn là cách <em>đo</em> độ phủ.</p>
+<p class="nhan">Sáu kỹ thuật — và kỹ thuật nào cũng là thước đo</p>
+<table>
+<thead><tr><th>Kỹ thuật</th><th>Cũng là thước đo?</th><th>Độ phủ tính bằng</th><th>Còn trong CTFL?</th></tr></thead>
+<tbody>
+<tr><td>Equivalence partitioning</td><td>✓ Có</td><td>số partition đã test ÷ số partition xác định được</td><td>Có (bài 4.2)</td></tr>
+<tr><td>Boundary value analysis</td><td>✓ Có</td><td>số giá trị biên đã test ÷ số giá trị biên xác định được</td><td>Có (bài 4.3)</td></tr>
+<tr><td>State transition testing</td><td>✓ Có</td><td>số state / transition đã chạy ÷ tổng số</td><td>Có (bài 4.5)</td></tr>
+<tr><td>Cause-effect graphing</td><td>✓ Có</td><td>số tổ hợp nguyên nhân–kết quả (rule) đã chạy ÷ tổng số</td><td>Không — decision table đã thay thế (bài 4.4)</td></tr>
+<tr><td>Syntax testing</td><td>✗ Không</td><td>—</td><td>Không</td></tr>
+<tr><td>Random testing</td><td>✗ Không</td><td>—</td><td>Không</td></tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Kỹ thuật thiết kế</strong> — cho biết cách <em>chọn</em> test case.</li>
+<li><strong>Kỹ thuật đo</strong> — cho biết test của bạn phủ <em>bao nhiêu</em> phần của test basis (một con số phần trăm).</li>
+<li><strong>“Also defines how to specify other techniques”</strong> — chuẩn này có sẵn khuôn mẫu để tổ chức tự mô tả kỹ thuật riêng theo cùng một cách.</li>
+</ul>
+<p class="ghi-chu">BS 7925-2 (1998) đã bị rút; các kỹ thuật và thước đo độ phủ của nó nay nằm trong ISO/IEC/IEEE 29119-4. Syntax testing và random testing cũng có ở đó nhưng không thi ở cấp Foundation.</p>`],
+      [17, 'Condition template — the old tags V, X, B, D',
+        `<p class="y-chinh">🎯 The same loan-form condition template as current slide 35 — only the tag letters differ, so learn to read both.</p>
+<p class="nhan">Old tag → current tag</p>
+<table>
+<thead><tr><th>Column</th><th>2023 deck</th><th>Current deck / PE template</th><th>How many</th></tr></thead>
+<tbody>
+<tr><td>Valid partitions</td><td>V1–V5</td><td>VP1–VP5</td><td>5</td></tr>
+<tr><td>Invalid partitions</td><td>X1–X12</td><td>IP1–IP12</td><td>12</td></tr>
+<tr><td>Valid boundaries</td><td>B1–B6</td><td>VB1–VB6</td><td>6</td></tr>
+<tr><td>Invalid boundaries</td><td>D1–D8</td><td>IB1–IB8</td><td>8</td></tr>
+</tbody>
+</table>
+<p class="nhan">Every value re-checked</p>
+<ul>
+<li><strong>Customer name (2–64 chars)</strong> — VB 2 and 64 chars; IB 1 and 65 chars (one step outside each end) plus 0 chars (empty field, tested on its own).</li>
+<li><strong>Account number (6 digits, 1st non-zero)</strong> — VB 100000 (smallest) and 999999 (largest). The old page writes the IB as “5 digits / 7 digits / 0 digits”; the current slide gives the values 99999 / 1000000 / empty.</li>
+<li><strong>Loan amount (500–9000)</strong> — VB 500 and 9000; IB 499 and 9001. “0”, “non-integer” and “null” are extra invalid partitions X10–X12.</li>
+</ul>
+<p>Total: 5 + 12 + 6 + 8 = <strong>31 tags</strong>, the same as slide 35.</p>
+<div class="pitfall">In the PE, use the tag letters of the template you are given (VP/IP/VB/IB). If an old paper says “X4” or “D5”, translate it: X4 = IP4 (&lt; 6 digits), D5 = IB5 (7 digits = 1000000).</div>`,
+        `<p class="y-chinh">🎯 Vẫn là condition template của đơn vay vốn như slide 35 hiện tại — chỉ khác chữ cái của tag, nên phải đọc được cả hai kiểu.</p>
+<p class="nhan">Tag cũ → tag hiện tại</p>
+<table>
+<thead><tr><th>Cột</th><th>Slide 2023</th><th>Slide hiện tại / template PE</th><th>Số lượng</th></tr></thead>
+<tbody>
+<tr><td>Valid partitions</td><td>V1–V5</td><td>VP1–VP5</td><td>5</td></tr>
+<tr><td>Invalid partitions</td><td>X1–X12</td><td>IP1–IP12</td><td>12</td></tr>
+<tr><td>Valid boundaries</td><td>B1–B6</td><td>VB1–VB6</td><td>6</td></tr>
+<tr><td>Invalid boundaries</td><td>D1–D8</td><td>IB1–IB8</td><td>8</td></tr>
+</tbody>
+</table>
+<p class="nhan">Kiểm lại từng giá trị</p>
+<ul>
+<li><strong>Tên khách hàng (2–64 ký tự)</strong> — VB 2 và 64 ký tự; IB 1 và 65 ký tự (lệch một bước ra ngoài mỗi đầu) cộng 0 ký tự (ô trống, test riêng).</li>
+<li><strong>Số tài khoản (6 chữ số, chữ số đầu khác 0)</strong> — VB 100000 (nhỏ nhất) và 999999 (lớn nhất). Trang cũ ghi IB là “5 digits / 7 digits / 0 digits”; slide hiện tại ghi giá trị 99999 / 1000000 / để trống.</li>
+<li><strong>Số tiền vay (500–9000)</strong> — VB 500 và 9000; IB 499 và 9001. “0”, “không nguyên” và “null” là ba partition không hợp lệ thêm X10–X12.</li>
+</ul>
+<p>Tổng: 5 + 12 + 6 + 8 = <strong>31 tag</strong>, đúng bằng slide 35.</p>
+<div class="pitfall">Trong đề PE, dùng chữ cái tag của template được phát (VP/IP/VB/IB). Nếu đề cũ ghi “X4” hay “D5” thì đổi ra: X4 = IP4 (&lt; 6 chữ số), D5 = IB5 (7 chữ số = 1000000).</div>`],
+      [22, 'Example: student access',
+        `<p class="y-chinh">🎯 A second decision-table example, next to the SWT course discount of Lesson 4.4: who may log on, and with how much access.</p>
+<p class="nhan">The rule, split into facts</p>
+<ul>
+<li><strong>Precondition</strong> — the student logs on with a valid username <em>and</em> a valid password.</li>
+<li><strong>Normal case</strong> — each student has an allocation of disc space for his or her projects.</li>
+<li><strong>Special case</strong> — when all the allotted space is used, access is <em>restricted</em>: the student may delete files but not create them.</li>
+</ul>
+<p class="nhan">Question on the page: what are the input and output conditions?</p>
+<ul>
+<li><strong>Input conditions (3)</strong> — valid username? · valid password? · account in credit? (“in credit” = there is still free space in the allocation).</li>
+<li><strong>Output conditions (2)</strong> — login accepted? · restricted access?</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> every “if …” in the text becomes an input condition; every “then …” becomes an output (action).</p>`,
+        `<p class="y-chinh">🎯 Ví dụ decision table thứ hai, bên cạnh ví dụ giảm giá khoá SWT của bài 4.4: ai được đăng nhập, và được quyền tới đâu.</p>
+<p class="nhan">Tách luật thành từng ý</p>
+<ul>
+<li><strong>Điều kiện tiên quyết</strong> — sinh viên đăng nhập bằng username hợp lệ <em>và</em> password hợp lệ.</li>
+<li><strong>Trường hợp thường</strong> — mỗi sinh viên được cấp một phần dung lượng đĩa cho đồ án của mình.</li>
+<li><strong>Trường hợp đặc biệt</strong> — khi đã dùng hết dung lượng được cấp, quyền truy cập bị <em>hạn chế</em>: được xoá file nhưng không được tạo file.</li>
+</ul>
+<p class="nhan">Câu hỏi trên trang: input và output condition là gì?</p>
+<ul>
+<li><strong>Input condition (3)</strong> — username hợp lệ? · password hợp lệ? · tài khoản còn dung lượng (“in credit”)?</li>
+<li><strong>Output condition (2)</strong> — đăng nhập được chấp nhận? · truy cập bị hạn chế?</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> mỗi chữ “nếu …” trong đề là một input condition; mỗi chữ “thì …” là một output (action).</p>`],
+      [23, 'List the input and output conditions',
+        `<p class="y-chinh">🎯 Step 1: write the conditions down the first column — inputs on top, outputs underneath.</p>
+<ol>
+<li><strong>Input conditions</strong> in the first column: valid username, valid password, account in credit.</li>
+<li><strong>Output conditions</strong> under them: login accepted, restricted access.</li>
+</ol>
+<p>Each condition is phrased so that its answer is simply <strong>T</strong> (true) or <strong>F</strong> (false) — the rule of slide 43 in Lesson 4.4.</p>
+<p class="ghi-chu">Current slide 45 calls the same two blocks “Conditions” and “Actions/Outcomes”.</p>`,
+        `<p class="y-chinh">🎯 Bước 1: viết các điều kiện xuống cột đầu tiên — input ở trên, output ở dưới.</p>
+<ol>
+<li><strong>Input condition</strong> ở cột đầu: username hợp lệ, password hợp lệ, tài khoản còn dung lượng.</li>
+<li><strong>Output condition</strong> ngay bên dưới: đăng nhập được chấp nhận, truy cập bị hạn chế.</li>
+</ol>
+<p>Mỗi điều kiện được viết sao cho câu trả lời chỉ là <strong>T</strong> (đúng) hoặc <strong>F</strong> (sai) — đúng quy tắc slide 43 ở bài 4.4.</p>
+<p class="ghi-chu">Slide 45 hiện tại gọi hai khối này là “Conditions” và “Actions/Outcomes”.</p>`],
+      [24, 'Determine input combinations',
+        `<p class="y-chinh">🎯 Step 2: one column for every combination — 3 true/false inputs give 2³ = 8 columns.</p>
+<p class="nhan">How to fill the 8 columns without missing one</p>
+<ul>
+<li><strong>First row</strong> (valid username) — halves: T T T T F F F F.</li>
+<li><strong>Second row</strong> (valid password) — pairs: T T F F T T F F.</li>
+<li><strong>Third row</strong> (account in credit) — alternates: T F T F T F T F.</li>
+</ul>
+<p>Read down each column and you get every combination exactly once, from T T T (column 1) to F F F (column 8).</p>
+<p class="meo">🧠 <strong>Remember:</strong> n conditions → 2ⁿ columns; halve the run length on every new row (4 · 2 · 1).</p>`,
+        `<p class="y-chinh">🎯 Bước 2: mỗi tổ hợp một cột — 3 input đúng/sai cho 2³ = 8 cột.</p>
+<p class="nhan">Điền 8 cột mà không sót cột nào</p>
+<ul>
+<li><strong>Hàng 1</strong> (username hợp lệ) — chia đôi: T T T T F F F F.</li>
+<li><strong>Hàng 2</strong> (password hợp lệ) — từng cặp: T T F F T T F F.</li>
+<li><strong>Hàng 3</strong> (còn dung lượng) — xen kẽ: T F T F T F T F.</li>
+</ul>
+<p>Đọc dọc từng cột sẽ được mọi tổ hợp đúng một lần, từ T T T (cột 1) tới F F F (cột 8).</p>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> n điều kiện → 2ⁿ cột; mỗi hàng mới thì độ dài một khối giảm một nửa (4 · 2 · 1).</p>`],
+      [25, 'Rationalise input combinations',
+        `<p class="y-chinh">🎯 Step 3: merge columns whose other inputs no longer matter — 8 columns shrink to 4, marked with “-” (don't care).</p>
+<p class="nhan">Why the table shrinks</p>
+<ul>
+<li><strong>Username F</strong> — the login fails whatever the password or disc space: the four columns 5–8 become one column <strong>F - -</strong>.</li>
+<li><strong>Username T, password F</strong> — the login still fails, disc space is irrelevant: columns 3–4 become <strong>T F -</strong>.</li>
+<li><strong>Username T, password T</strong> — now disc space matters, so columns 1 and 2 stay: <strong>T T F</strong> and <strong>T T T</strong>.</li>
+</ul>
+<p class="nhan">Check that nothing is lost</p>
+<p>A “-” stands for 2 values, so the rationalised columns cover 4 + 2 + 1 + 1 = <strong>8</strong> original columns — all of them, each once.</p>
+<div class="pitfall">Rationalising rests on an assumption: “if the username is wrong, the password and the space are never checked”. If the real system checks them in another order, the merged columns hide a combination. State the assumption (slide 55 in Lesson 4.4).</div>`,
+        `<p class="y-chinh">🎯 Bước 3: gộp các cột mà input còn lại không còn ảnh hưởng — 8 cột co lại còn 4, đánh dấu “-” (don't care).</p>
+<p class="nhan">Vì sao bảng co lại</p>
+<ul>
+<li><strong>Username F</strong> — đăng nhập hỏng bất kể password hay dung lượng: bốn cột 5–8 gộp thành một cột <strong>F - -</strong>.</li>
+<li><strong>Username T, password F</strong> — vẫn hỏng, dung lượng không liên quan: cột 3–4 thành <strong>T F -</strong>.</li>
+<li><strong>Username T, password T</strong> — lúc này dung lượng mới quan trọng, nên cột 1 và 2 giữ nguyên: <strong>T T F</strong> và <strong>T T T</strong>.</li>
+</ul>
+<p class="nhan">Kiểm tra không mất cột nào</p>
+<p>Một dấu “-” thay cho 2 giá trị, nên các cột sau rút gọn phủ 4 + 2 + 1 + 1 = <strong>8</strong> cột gốc — đủ cả, mỗi cột đúng một lần.</p>
+<div class="pitfall">Rút gọn dựa trên một giả định: “username sai thì hệ thống không kiểm password và dung lượng nữa”. Nếu hệ thống thật kiểm theo thứ tự khác, cột đã gộp sẽ che mất một tổ hợp. Hãy ghi rõ giả định (slide 55, bài 4.4).</div>`],
+      [26, 'Complete the table',
+        `<p class="y-chinh">🎯 Step 4: for each of the 4 columns, write the expected outputs from the specification.</p>
+<table>
+<thead><tr><th>Column</th><th>Username · password · in credit</th><th>Login accepted</th><th>Restricted access</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>F · - · -</td><td>F</td><td>- (not applicable: nobody is logged on)</td></tr>
+<tr><td>2</td><td>T · F · -</td><td>F</td><td>-</td></tr>
+<tr><td>3</td><td>T · T · F</td><td>T</td><td>T — space used up, may only delete</td></tr>
+<tr><td>4</td><td>T · T · T</td><td>T</td><td>F — full access</td></tr>
+</tbody>
+</table>
+<ul>
+<li><strong>A “-” in an output row</strong> means the output does not apply, not “don't know”.</li>
+<li><strong>The circled area</strong> on the page is the new information — the expected results that turn each column into a testable rule.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Bước 4: với mỗi cột trong 4 cột, ghi output mong đợi theo đặc tả.</p>
+<table>
+<thead><tr><th>Cột</th><th>Username · password · còn dung lượng</th><th>Đăng nhập được</th><th>Truy cập hạn chế</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>F · - · -</td><td>F</td><td>- (không áp dụng: chưa ai đăng nhập)</td></tr>
+<tr><td>2</td><td>T · F · -</td><td>F</td><td>-</td></tr>
+<tr><td>3</td><td>T · T · F</td><td>T</td><td>T — hết dung lượng, chỉ được xoá</td></tr>
+<tr><td>4</td><td>T · T · T</td><td>T</td><td>F — toàn quyền</td></tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Dấu “-” ở hàng output</strong> nghĩa là output đó không áp dụng, không phải “không biết”.</li>
+<li><strong>Vùng khoanh tròn</strong> trên trang là thông tin mới — kết quả mong đợi biến mỗi cột thành một rule test được.</li>
+</ul>`],
+      [27, 'Determine test case groups',
+        `<p class="y-chinh">🎯 Step 5: give each column a tag (A, B, C, D) — each tag is a group that needs at least one test case.</p>
+<ul>
+<li><strong>A</strong> — invalid username → rejected.</li>
+<li><strong>B</strong> — valid username, invalid password → rejected.</li>
+<li><strong>C</strong> — valid login, no space left → accepted, restricted.</li>
+<li><strong>D</strong> — valid login, space left → accepted, full access.</li>
+</ul>
+<p>The tags play the same role as VP/IP/VB/IB in the condition template: the “Tag” column of the test case table (page 28) proves that every rule was covered.</p>
+<p class="meo">🧠 <strong>Remember:</strong> decision-table coverage = columns exercised ÷ columns in the table. Here 4 of 4 = 100%.</p>`,
+        `<p class="y-chinh">🎯 Bước 5: đặt tag cho mỗi cột (A, B, C, D) — mỗi tag là một nhóm cần ít nhất một test case.</p>
+<ul>
+<li><strong>A</strong> — username sai → bị từ chối.</li>
+<li><strong>B</strong> — username đúng, password sai → bị từ chối.</li>
+<li><strong>C</strong> — đăng nhập đúng, hết dung lượng → được vào, bị hạn chế.</li>
+<li><strong>D</strong> — đăng nhập đúng, còn dung lượng → được vào, toàn quyền.</li>
+</ul>
+<p>Tag ở đây giống VP/IP/VB/IB trong condition template: cột “Tag” của bảng test case (trang 28) chứng minh mọi rule đều được phủ.</p>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> độ phủ decision table = số cột đã chạy ÷ số cột của bảng. Ở đây 4/4 = 100%.</p>`],
+      [28, 'Design test cases',
+        `<p class="y-chinh">🎯 Step 6: usually one test case per column, but a column can get none or several — here 4 columns give 5 test cases.</p>
+<table>
+<thead><tr><th>Test</th><th>Input</th><th>Expected outcome</th><th>Tag</th><th>Why this one</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Username “BrbU”</td><td>Invalid username</td><td>A</td><td>A username that does not exist</td></tr>
+<tr><td>2</td><td>Username “usernametoolong”</td><td>Invalid username</td><td>A</td><td>A <em>different</em> invalid partition: too long</td></tr>
+<tr><td>3</td><td>Username “BobU”, password “abcd”</td><td>Invalid password</td><td>B</td><td>Real user, wrong password</td></tr>
+<tr><td>4</td><td>Valid user, no disc space</td><td>Restricted access</td><td>C</td><td>Space used up</td></tr>
+<tr><td>5</td><td>Valid user with disc space</td><td>Unrestricted access</td><td>D</td><td>Normal case</td></tr>
+</tbody>
+</table>
+<p class="nhan">Answers re-worked</p>
+<ul>
+<li><strong>Minimum for 100% decision-table coverage</strong> — 4 tests (one per column).</li>
+<li><strong>Why 5</strong> — column A holds two invalid <em>partitions</em> of the username (unknown · too long). The deck combines decision table and EP, as on slide 57 of Lesson 4.4.</li>
+<li><strong>“None”</strong> — a column gets no test when the combination is impossible or deliberately left out (e.g. rules 1–2 of the SWT discount in Lesson 4.4).</li>
+</ul>
+<div class="pitfall">Expected outcomes must be concrete. “Valid user, no disc space” is a description, not test data: in a real test case, name the user and state the space used (e.g. allocation 100 MB, used 100 MB). A BVA test at used = 99.9 MB (still in credit) makes the boundary of column C and D explicit.</div>`,
+        `<p class="y-chinh">🎯 Bước 6: thường mỗi cột một test case, nhưng một cột có thể không có hoặc có nhiều — ở đây 4 cột cho 5 test case.</p>
+<table>
+<thead><tr><th>Test</th><th>Đầu vào</th><th>Kết quả mong đợi</th><th>Tag</th><th>Vì sao chọn</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Username “BrbU”</td><td>Invalid username</td><td>A</td><td>Username không tồn tại</td></tr>
+<tr><td>2</td><td>Username “usernametoolong”</td><td>Invalid username</td><td>A</td><td>Một partition không hợp lệ <em>khác</em>: quá dài</td></tr>
+<tr><td>3</td><td>Username “BobU”, password “abcd”</td><td>Invalid password</td><td>B</td><td>User có thật, sai password</td></tr>
+<tr><td>4</td><td>User hợp lệ, hết dung lượng</td><td>Restricted access</td><td>C</td><td>Đã dùng hết dung lượng</td></tr>
+<tr><td>5</td><td>User hợp lệ, còn dung lượng</td><td>Unrestricted access</td><td>D</td><td>Trường hợp bình thường</td></tr>
+</tbody>
+</table>
+<p class="nhan">Giải lại đáp án</p>
+<ul>
+<li><strong>Tối thiểu để phủ 100% decision table</strong> — 4 test (mỗi cột một test).</li>
+<li><strong>Vì sao 5</strong> — cột A chứa hai <em>partition</em> không hợp lệ của username (không tồn tại · quá dài). Slide kết hợp decision table với EP, như slide 57 ở bài 4.4.</li>
+<li><strong>“Không có test”</strong> — một cột không có test khi tổ hợp đó bất khả hoặc cố ý bỏ qua (vd. rule 1–2 của bài giảm giá SWT ở bài 4.4).</li>
+</ul>
+<div class="pitfall">Kết quả mong đợi phải cụ thể. “User hợp lệ, hết dung lượng” là mô tả, chưa phải test data: test case thật phải nêu tên user và dung lượng đã dùng (vd. được cấp 100 MB, đã dùng 100 MB). Thêm một test BVA ở mức đã dùng 99,9 MB (vẫn còn dung lượng) để làm rõ ranh giới giữa cột C và D.</div>`],
+    ]),
+    bi(`<h3>Exam traps from the 2023 pages</h3>
+<ol>
+<li><strong>Columns before rationalising</strong> — n true/false conditions give 2ⁿ columns: student access 2³ = 8, not 3 or 6.</li>
+<li><strong>Columns after rationalising</strong> — 4. Each “-” counts as 2 original columns, so check 4 + 2 + 1 + 1 = 8.</li>
+<li><strong>Columns ≠ test cases</strong> — 4 columns, 5 tests on page 28: “usually one per column, but none or several”.</li>
+<li><strong>Old tags</strong> — V/X/B/D in the 2023 condition template = VP/IP/VB/IB in the PE template; 31 tags either way.</li>
+<li><strong>Order of test development</strong> — analysis (test conditions) → design (test cases) → implementation (test procedures / scripts). Never the other way round.</li>
+</ol>`,
+    `<h3>Bẫy thi từ các trang 2023</h3>
+<ol>
+<li><strong>Số cột trước khi rút gọn</strong> — n điều kiện đúng/sai cho 2ⁿ cột: student access 2³ = 8, không phải 3 hay 6.</li>
+<li><strong>Số cột sau khi rút gọn</strong> — 4. Mỗi “-” tính là 2 cột gốc, nên kiểm 4 + 2 + 1 + 1 = 8.</li>
+<li><strong>Số cột ≠ số test case</strong> — 4 cột, 5 test ở trang 28: “thường mỗi cột một test, nhưng có thể không có hoặc nhiều”.</li>
+<li><strong>Tag cũ</strong> — V/X/B/D trong condition template 2023 = VP/IP/VB/IB trong template PE; kiểu nào cũng 31 tag.</li>
+<li><strong>Thứ tự phát triển test</strong> — analysis (test condition) → design (test case) → implementation (test procedure / script). Không bao giờ ngược lại.</li>
+</ol>`),
+  ].join('\n'),
+};
+
 /* ──────────────────────────────── Quiz 4 ──────────────────────────────── */
 const q = (question, options, correctIndex) => ({ question, options, correctIndex, points: 1 });
+// qx = q + explanation (kept in source; the seeder currently stores only question/options/correctIndex/points).
+const qx = (question, options, correctIndex, explanation) => ({ ...q(question, options, correctIndex), explanation });
 const QUIZ4 = {
   title: 'Quiz 4 — Black-box techniques (all SWT4 slide questions 1–81)|||Quiz 4 — Kỹ thuật black-box (toàn bộ câu hỏi trên slide SWT4 1–81)',
   slug: 'swt301-quiz-4',
   type: 'QUIZ',
-  description: '40 câu: đủ 28 câu "Question" trên slide SWT4 1–81 (đáp án đã giải từng bước trong bài 4.1–4.6) + 12 câu kiểm tra lý thuyết EP, BVA, decision table, state transition, use case.',
+  description: '46 câu: đủ 28 câu "Question" trên slide SWT4 1–81 (đáp án đã giải từng bước trong bài 4.1–4.6) + 12 câu kiểm tra lý thuyết EP, BVA, decision table, state transition, use case + 6 câu từ bộ slide 2023 (bài 4.7: student access, quy trình phát triển test, BS 7925-2, tag cũ).',
   quiz: {
-    timeLimitSeconds: 2400,
+    timeLimitSeconds: 2760,
     questions: [
       q('Which option is categorized as a black-box test technique? (SWT4 s.9)|||Phương án nào là kỹ thuật black-box? (SWT4 s.9)', ['Techniques based on analysis of the architecture|||Kỹ thuật dựa trên phân tích kiến trúc', 'Techniques checking that the test object works according to the technical design|||Kỹ thuật kiểm đối tượng test chạy đúng thiết kế kỹ thuật', 'Techniques based on the expected use of the software|||Kỹ thuật dựa trên cách phần mềm dự kiến được dùng', 'Techniques based on formal requirements|||Kỹ thuật dựa trên yêu cầu chính thức'], 3),
       q('If test cases are derived from looking at the code, which type of technique is used? (s.10)|||Nếu test case được suy ra từ việc đọc code thì đó là loại kỹ thuật nào? (s.10)', ['Black-box', 'White-box', 'Specification-based', 'Behaviour-based'], 1),
@@ -3134,6 +3577,19 @@ const QUIZ4 = {
       q('Which statement about rationalising a decision table is TRUE? (s.55)|||Câu nào về việc rút gọn decision table là ĐÚNG? (s.55)', ['It never loses any defect-finding power|||Nó không bao giờ làm giảm khả năng tìm lỗi', 'It is based on assumptions, which should be stated and may change|||Nó dựa trên giả định, giả định cần được ghi rõ và có thể thay đổi', 'It must remove every impossible rule without testing it|||Phải bỏ mọi rule bất khả mà không test', 'It is only allowed for extended-entry tables|||Chỉ được làm với bảng extended-entry'], 1),
       q('Why is a state TABLE useful in addition to a state diagram? (s.60, s.68)|||Vì sao cần BẢNG trạng thái ngoài sơ đồ trạng thái? (s.60, s.68)', ['It shows the invalid transitions that diagrams usually omit|||Nó cho thấy các chuyển đổi không hợp lệ mà sơ đồ thường bỏ qua', 'It replaces the need for test cases|||Nó thay cho test case', 'It measures code coverage|||Nó đo độ phủ code', 'It is required by the compiler|||Trình biên dịch bắt buộc'], 0),
       q('In the ATM PIN diagram, how many tests cover all transitions? (s.67)|||Trong sơ đồ PIN ATM, bao nhiêu test phủ mọi chuyển đổi? (s.67)', ['2', '3', '4', '7'], 2),
+      // ── 2023 slide set (Lesson 4.7) ──
+      qx('Student access (2023 deck p.24): three true/false input conditions — valid username, valid password, account in credit. How many columns does the FULL decision table have?|||Student access (slide 2023 tr.24): ba input đúng/sai — username hợp lệ, password hợp lệ, còn dung lượng. Bảng quyết định ĐẦY ĐỦ có bao nhiêu cột?', ['3', '6', '8', '9'], 2,
+        'n true/false conditions give 2^n columns: 2^3 = 8.|||n điều kiện đúng/sai cho 2^n cột: 2^3 = 8.'),
+      qx('After rationalising (p.25), the column "valid username = F, password = -, in credit = -" stands for how many columns of the full table?|||Sau khi rút gọn (tr.25), cột "username hợp lệ = F, password = -, còn dung lượng = -" thay cho bao nhiêu cột của bảng đầy đủ?', ['1', '2', '3', '4'], 3,
+        'Each "-" stands for T and F, so two hyphens = 2 x 2 = 4 columns (5-8). Check: 4 + 2 + 1 + 1 = 8.|||Mỗi "-" thay cho T và F, nên hai dấu gạch = 2 x 2 = 4 cột (5-8). Kiểm: 4 + 2 + 1 + 1 = 8.'),
+      qx('On p.28 the 4 rationalised columns produce 5 test cases. Why?|||Ở tr.28, 4 cột đã rút gọn cho ra 5 test case. Vì sao?', ['It is a mistake: there must be exactly one test per column|||Slide sai: mỗi cột phải đúng một test', 'Column A holds two invalid partitions of the username (unknown, too long), each tested once|||Cột A chứa hai partition không hợp lệ của username (không tồn tại, quá dài), mỗi cái một test', 'Every column needs a positive and a negative test|||Cột nào cũng cần một test tích cực và một test tiêu cực', 'Test 5 checks performance|||Test 5 kiểm hiệu năng'], 1,
+        'Usually one test per column, but a column can get none or several. Tests 1 (BrbU) and 2 (usernametoolong) both belong to tag A — decision table combined with EP.|||Thường mỗi cột một test, nhưng một cột có thể không có hoặc nhiều. Test 1 (BrbU) và 2 (usernametoolong) đều thuộc tag A — decision table kết hợp EP.'),
+      qx('In the test development process of the 2023 deck (p.4), what is the correct order?|||Trong quy trình phát triển test của slide 2023 (tr.4), thứ tự đúng là gì?', ['Design (test cases) → analysis (test conditions) → implementation (procedures)|||Design (test case) → analysis (test condition) → implementation (procedure)', 'Analysis (test conditions) → design (test cases) → implementation (test procedures / scripts)|||Analysis (test condition) → design (test case) → implementation (test procedure / script)', 'Implementation → design → analysis|||Implementation → design → analysis', 'Analysis → implementation → design|||Analysis → implementation → design'], 1,
+        'Analysis = what to test, design = how, implementation = in which order and with which data. CTFL 2018 keeps the same order.|||Analysis = test cái gì, design = thế nào, implementation = theo thứ tự nào, dữ liệu gì. CTFL 2018 giữ nguyên thứ tự này.'),
+      qx('Among the black-box techniques of BS 7925-2 (2023 deck p.10), which one is NOT also a measurement technique?|||Trong các kỹ thuật black-box của BS 7925-2 (slide 2023 tr.10), kỹ thuật nào KHÔNG đồng thời là kỹ thuật đo?', ['Equivalence partitioning', 'Boundary value analysis', 'State transition testing', 'Syntax testing'], 3,
+        'EP, BVA, state transition and cause-effect graphing are also coverage measures; syntax testing and random testing are not. BS 7925-2 is now replaced by ISO/IEC/IEEE 29119-4.|||EP, BVA, state transition và cause-effect graphing đồng thời là thước đo độ phủ; syntax testing và random testing thì không. BS 7925-2 nay được thay bằng ISO/IEC/IEEE 29119-4.'),
+      qx('The 2023 condition template (p.17) tags the account-number value "7 digits" as D5. What is that tag in the current PE template?|||Condition template 2023 (tr.17) gắn tag D5 cho giá trị số tài khoản "7 digits". Trong template PE hiện nay tag đó là gì?', ['VB4', 'IP5', 'IB5', 'VP5'], 2,
+        'Old V/X/B/D = VP/IP/VB/IB. D5 is the fifth invalid boundary = IB5 = 1000000 (7 digits). IP5 is the partition "> 6 digits".|||V/X/B/D cũ = VP/IP/VB/IB. D5 là biên không hợp lệ thứ năm = IB5 = 1000000 (7 chữ số). IP5 là partition "> 6 chữ số".'),
     ],
   },
 };
@@ -3141,5 +3597,5 @@ const QUIZ4 = {
 export default {
   title: 'Chapter 4 — Test design: black-box techniques|||Chương 4 — Thiết kế test: kỹ thuật black-box',
   description: 'SWT4 slide 1–81 học từng slide: phân loại kỹ thuật, EP, BVA và bảng condition template của đề PE câu 3 (giải trọn đề FA23), decision table, state transition, use case — mọi câu hỏi tính toán trên slide đều giải từng bước và đã kiểm lại bằng script.',
-  lessons: [L41, L42, L43, L44, L45, L46, QUIZ4],
+  lessons: [L41, L42, L43, L44, L45, L46, L47, QUIZ4],
 };

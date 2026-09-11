@@ -11,6 +11,7 @@
  *   7.4 Configuration management              slides 74–78
  *   7.5 Risk & testing                        slides 79–88
  *   7.6 Defect (incident) management          slides 89–101
+ *   7.7 More from the 2023 slide set          old SWT5.ppt (deck oswt5), NEW/PARTIAL pages 4–50
  * Every schedule / estimate / risk / metric number in the worked examples was
  * computed by a script (scratchpad ch7/sched.mjs and ch7/calc.mjs) and the
  * output is quoted as printed.
@@ -3407,16 +3408,946 @@ weighted coverage 68.3 % unweighted 70 % total weight 24 time plan 48 spent 40</
   ].join('\n'),
 };
 
+/* ─────────────── 7.7 More from the 2023 slide set (old SWT5, 56 pages) ─────────────── */
+// Old deck 'oswt5' (SWT5.ppt, 2023). Only NEW/PARTIAL pages get a card; the rest are in the table.
+const O5 = 'oswt5';
+const L77 = {
+  title: '7.7 — More from the 2023 slide set: buddy testing, CM activities, test cycles, S-curves|||7.7 — Bổ sung từ bộ slide 2023: buddy testing, 4 hoạt động CM, chu kỳ test, S-curve',
+  slug: 'swt301-ch7-slides-2023',
+  type: 'VIDEO',
+  description: 'Bộ slide SWT5 cũ (2023, 56 trang): 25 trang chưa có trong bài 7.1–7.6 — hệ "buddy", 4 hoạt động quản lý cấu hình, cái gì đặt dưới CM (trừ live data), vì sao ước lượng test khác, chu kỳ test, thời gian viết báo cáo lỗi, S-curve phân kỳ, case history, entry/exit tốt–xấu, theo dõi incident — kèm bảng trang trùng và đối chiếu thuật ngữ cũ → CTFL.',
+  content: [
+    bi(`<span class="eyebrow">Chapter 7 · Lesson 7.7 · SWT5 (2023) pages 1–56</span>
+<h2>More from the 2023 slide set — what the old SWT5 deck adds</h2>
+<p class="lead">Before the current SWT5_tim deck, this course used an older 56-page SWT5 deck (2023, footer "ISTQB / ISEB Foundation Exam Practice"). Most of it is already taught in lessons 7.1–7.6. But 25 pages carry something those lessons do not show: the "buddy" level of independence, the four classic CM activities, why test estimates need several test cycles, the diverging S-curve and a real incident chart.</p>
+<p class="nhan">How to use this lesson</p>
+<ul>
+<li><strong>Table first</strong> — pages already taught are listed with the lesson and slide where you learnt them.</li>
+<li><strong>Then slide by slide</strong> — only the new pages, each with its image and an explanation.</li>
+<li><strong>Old words</strong> — the deck uses 2000s ISTQB/ISEB vocabulary ("fault", "incident", "acceptance criteria" for entry criteria). Each card gives the current CTFL term.</li>
+</ul>
+<div class="callout"><strong>Learning objectives.</strong>
+<ol>
+<li>Place the six organisational structures, including the buddy system, on the independence ladder (K2).</li>
+<li>Name the four CM activities and say what is — and is not — put under CM in testing (K2).</li>
+<li>Explain why a test estimate must include several fix-and-retest cycles, and estimate them from history (K3).</li>
+<li>Read planned/run/passed curves and opened/closed incident curves, name causes of divergence and choose control actions (K3).</li>
+<li>Tell poor from good entry/exit criteria, using the current terms (K2).</li>
+</ol></div>`,
+    `<span class="eyebrow">Chương 7 · Bài 7.7 · SWT5 (2023) trang 1–56</span>
+<h2>Bổ sung từ bộ slide 2023 — bộ SWT5 cũ thêm được gì</h2>
+<p class="lead">Trước bộ SWT5_tim hiện tại, môn này dùng một bộ SWT5 cũ 56 trang (2023, chân trang "ISTQB / ISEB Foundation Exam Practice"). Phần lớn đã được dạy trong bài 7.1–7.6. Nhưng có 25 trang mang nội dung các bài đó chưa có: mức độc lập "buddy", 4 hoạt động kinh điển của quản lý cấu hình, vì sao ước lượng test phải tính nhiều chu kỳ test, S-curve phân kỳ và một biểu đồ incident thật.</p>
+<p class="nhan">Cách học bài này</p>
+<ul>
+<li><strong>Xem bảng trước</strong> — các trang đã học được ghi kèm bài và số slide nơi bạn đã học.</li>
+<li><strong>Rồi học từng slide</strong> — chỉ các trang mới, mỗi trang có ảnh và giải thích.</li>
+<li><strong>Thuật ngữ cũ</strong> — bộ slide dùng từ vựng ISTQB/ISEB những năm 2000 ("fault", "incident", "acceptance criteria" để chỉ entry criteria). Mỗi thẻ đều ghi thuật ngữ CTFL hiện hành.</li>
+</ul>
+<div class="callout"><strong>Chuẩn đầu ra.</strong>
+<ol>
+<li>Đặt sáu cơ cấu tổ chức test, kể cả hệ "buddy", lên thang độc lập (K2).</li>
+<li>Kể tên 4 hoạt động CM và nói được cái gì được — và không được — đặt dưới CM trong kiểm thử (K2).</li>
+<li>Giải thích vì sao ước lượng test phải gồm nhiều chu kỳ sửa–test lại, và ước lượng chúng từ số liệu cũ (K3).</li>
+<li>Đọc đường planned/run/passed và đường incident opened/closed, nêu nguyên nhân phân kỳ và chọn hành động kiểm soát (K3).</li>
+<li>Phân biệt entry/exit criteria kém và tốt, dùng đúng thuật ngữ hiện hành (K2).</li>
+</ol></div>`),
+    bi(`<h3>Old pages already taught — no card needed</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Old SWT5 (2023) page</th><th>Already taught in…</th></tr></thead>
+<tbody>
+<tr><td>1, 2, 14, 24, 39, 45 — cover and the "Contents" agenda, repeated before each section</td><td>Title/agenda pages only — the current deck's slides 1–5 do the same job.</td></tr>
+<tr><td>3 Importance of independence (faults found over time)</td><td>7.1 — slide 6 "Independence Testing — faults found over time"</td></tr>
+<tr><td>5 Testing by developers</td><td>7.1 — slide 9</td></tr>
+<tr><td>7 Tester on development team</td><td>7.1 — slide 10</td></tr>
+<tr><td>8 Independent test team</td><td>7.1 — slide 11 "Tester(s) outside Development Team"</td></tr>
+<tr><td>9 Internal test consultants</td><td>7.1 — slide 12</td></tr>
+<tr><td>10 Outside organisation (3rd party)</td><td>7.1 — slide 13</td></tr>
+<tr><td>11 Usual choices</td><td>7.1 — slide 14 "Usual choices per test level"</td></tr>
+<tr><td>12 So what we have seen thus far</td><td>7.1 — slide 16</td></tr>
+<tr><td>13 Skills needed in testing</td><td>7.1 — the "Hidden slide" box after slide 24 (same seven profiles) and slide 20</td></tr>
+<tr><td>15 Problems resulting from poor configuration management</td><td>7.4 — slide 76 (same eight problems)</td></tr>
+<tr><td>38 What actions can you take?</td><td>7.3 — slide 69</td></tr>
+<tr><td>40 Risks and levels of risk</td><td>7.5 — slide 81 (definition and risk level)</td></tr>
+<tr><td>41, 42 Product risks</td><td>7.5 — slide 82</td></tr>
+<tr><td>43 Risk-based testing</td><td>7.5 — slide 85</td></tr>
+<tr><td>44 Four risk options: mitigate, contingency, transfer, ignore</td><td>7.5 — slide 84</td></tr>
+<tr><td>46 Incident management — what is an incident?</td><td>7.6 — slide 91</td></tr>
+<tr><td>48 Use of incident metrics</td><td>7.6 — slide 95</td></tr>
+<tr><td>49 Report as quickly as possible?</td><td>7.6 — slide 96</td></tr>
+<tr><td>51 Severity versus priority</td><td>7.6 — slide 97</td></tr>
+<tr><td>52 Incident lifecycle — tester vs developer tasks</td><td>7.6 — slide 98</td></tr>
+<tr><td>53 Incident lifecycle — Figure 5.3</td><td>7.6 — slide 99 (the same figure)</td></tr>
+<tr><td>54 Metrics example (GQM)</td><td>7.6 — slide 100</td></tr>
+<tr><td>55 Metrics exercise (Reger)</td><td>7.6 — slide 101</td></tr>
+<tr><td>56 Summary: key points</td><td>A five-line recap of the section titles — nothing new.</td></tr>
+</tbody>
+</table></div>`,
+    `<h3>Các trang cũ đã học — không cần thẻ riêng</h3>
+<div class="table-wrap"><table>
+<thead><tr><th>Trang SWT5 (2023)</th><th>Đã học ở…</th></tr></thead>
+<tbody>
+<tr><td>1, 2, 14, 24, 39, 45 — trang bìa và mục lục "Contents" lặp lại trước mỗi phần</td><td>Chỉ là trang tiêu đề/mục lục — slide 1–5 của bộ hiện tại làm đúng việc đó.</td></tr>
+<tr><td>3 Tầm quan trọng của tính độc lập (số lỗi tìm được theo thời gian)</td><td>7.1 — slide 6 "Independence Testing — faults found over time"</td></tr>
+<tr><td>5 Developer tự test</td><td>7.1 — slide 9</td></tr>
+<tr><td>7 Tester nằm trong nhóm phát triển</td><td>7.1 — slide 10</td></tr>
+<tr><td>8 Nhóm test độc lập</td><td>7.1 — slide 11 "Tester(s) outside Development Team"</td></tr>
+<tr><td>9 Tư vấn test nội bộ</td><td>7.1 — slide 12</td></tr>
+<tr><td>10 Tổ chức bên ngoài (bên thứ ba)</td><td>7.1 — slide 13</td></tr>
+<tr><td>11 Lựa chọn thường gặp</td><td>7.1 — slide 14 "Usual choices per test level"</td></tr>
+<tr><td>12 Tóm lại đến giờ</td><td>7.1 — slide 16</td></tr>
+<tr><td>13 Các kỹ năng cần trong kiểm thử</td><td>7.1 — hộp "Slide ẩn" sau slide 24 (đúng bảy vai trò đó) và slide 20</td></tr>
+<tr><td>15 Sự cố do quản lý cấu hình kém</td><td>7.4 — slide 76 (đúng tám sự cố)</td></tr>
+<tr><td>38 Bạn có thể làm gì?</td><td>7.3 — slide 69</td></tr>
+<tr><td>40 Rủi ro và mức rủi ro</td><td>7.5 — slide 81 (định nghĩa và mức rủi ro)</td></tr>
+<tr><td>41, 42 Rủi ro sản phẩm</td><td>7.5 — slide 82</td></tr>
+<tr><td>43 Risk-based testing</td><td>7.5 — slide 85</td></tr>
+<tr><td>44 Bốn lựa chọn với rủi ro: mitigate, contingency, transfer, ignore</td><td>7.5 — slide 84</td></tr>
+<tr><td>46 Quản lý incident — incident là gì?</td><td>7.6 — slide 91</td></tr>
+<tr><td>48 Dùng số đo incident</td><td>7.6 — slide 95</td></tr>
+<tr><td>49 Báo cáo càng nhanh càng tốt?</td><td>7.6 — slide 96</td></tr>
+<tr><td>51 Severity vs priority</td><td>7.6 — slide 97</td></tr>
+<tr><td>52 Vòng đời incident — việc của tester vs developer</td><td>7.6 — slide 98</td></tr>
+<tr><td>53 Vòng đời incident — Figure 5.3</td><td>7.6 — slide 99 (cùng hình)</td></tr>
+<tr><td>54 Ví dụ số đo (GQM)</td><td>7.6 — slide 100</td></tr>
+<tr><td>55 Bài tập số đo (Reger)</td><td>7.6 — slide 101</td></tr>
+<tr><td>56 Tóm tắt: ý chính</td><td>Nhắc lại năm tên phần — không có gì mới.</td></tr>
+</tbody>
+</table></div>`),
+    walkHead(O5, 4, 50, 'Only the 25 pages that add something are shown, in page order; skipped numbers are in the table above.', 'Chỉ hiện 25 trang có nội dung mới, theo thứ tự trang; các số bị bỏ qua nằm trong bảng ở trên.'),
+    walk(O5, [
+      [4, 'Organisational structures for testing',
+        `<p class="y-chinh">🎯 Six ways to organise testing, from least to most independent — one rung more than the current deck shows.</p>
+<p class="nhan">The six structures (low → high independence)</p>
+<ol>
+<li><strong>Developer responsibility (only)</strong> — the author tests their own code (current slide 9).</li>
+<li><strong>Development team responsibility — the "buddy system"</strong> — developers test each other's code. Not in the current deck: see page 6 below.</li>
+<li><strong>Tester(s) on the development team</strong> — current slide 10.</li>
+<li><strong>Dedicated team of testers (not developers)</strong> — current slide 11.</li>
+<li><strong>Internal test consultants</strong> — they advise, review and support, but do <em>not</em> perform the testing (current slide 12).</li>
+<li><strong>Outside organisation</strong> — 3rd-party testers (current slide 13).</li>
+</ol>
+<p class="nhan">Matching it to CTFL 2018 (§5.1.1)</p>
+<p>The syllabus ladder has the same rungs: no independent testers → independent developers or testers inside the team (this is where "developers testing their colleagues' products" — the buddy system — sits) → an independent test team → testers from the business/user side or specialists (usability, security, performance…) → external testers.</p>
+<p class="meo">🧠 <strong>Remember:</strong> the further the tester is from the code's author, the more independent — and the less they know about the code.</p>`,
+        `<p class="y-chinh">🎯 Sáu cách tổ chức kiểm thử, từ ít đến nhiều độc lập — nhiều hơn bộ slide hiện tại một nấc.</p>
+<p class="nhan">Sáu cơ cấu (độc lập thấp → cao)</p>
+<ol>
+<li><strong>Chỉ developer chịu trách nhiệm</strong> — tác giả tự test code của mình (slide 9 hiện tại).</li>
+<li><strong>Nhóm phát triển chịu trách nhiệm — "hệ buddy"</strong> — các developer test code của nhau. Bộ hiện tại không có: xem trang 6 bên dưới.</li>
+<li><strong>Tester nằm trong nhóm phát triển</strong> — slide 10 hiện tại.</li>
+<li><strong>Một nhóm tester chuyên trách (không phải developer)</strong> — slide 11 hiện tại.</li>
+<li><strong>Tư vấn test nội bộ</strong> — tư vấn, review và hỗ trợ, nhưng <em>không</em> tự thực hiện việc test (slide 12 hiện tại).</li>
+<li><strong>Tổ chức bên ngoài</strong> — tester bên thứ ba (slide 13 hiện tại).</li>
+</ol>
+<p class="nhan">Đối chiếu với CTFL 2018 (§5.1.1)</p>
+<p>Thang của syllabus có đúng các nấc này: không có tester độc lập → developer hoặc tester độc lập trong nhóm (đây là chỗ của "developer test sản phẩm của đồng nghiệp" — hệ buddy) → nhóm test độc lập → tester từ phía nghiệp vụ/người dùng hoặc chuyên gia (usability, security, performance…) → tester bên ngoài.</p>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> người test càng xa tác giả code thì càng độc lập — và càng ít hiểu code.</p>`],
+      [6, 'Testing by development team',
+        `<p class="y-chinh">🎯 The "buddy system" — developers test each other's code — buys some independence at almost no cost, but it is still a developer's view.</p>
+<p class="nhan">Pros</p>
+<ul>
+<li><strong>Some independence</strong> — it is not your own code, so the author's blind spots are gone.</li>
+<li><strong>Technical depth</strong> — the buddy can read the code and design white-box tests.</li>
+<li><strong>On friendly terms with the "buddy"</strong> — a colleague's remark is less threatening than a report from a test team.</li>
+</ul>
+<p class="nhan">Cons</p>
+<ul>
+<li><strong>Pressure of own development work</strong> — testing a colleague's code gets squeezed by your own deadlines.</li>
+<li><strong>Technical view, not business view</strong> — it checks that the code works as written, not that it meets the user's need.</li>
+<li><strong>Lack of testing skill</strong> — developers are rarely trained in techniques such as equivalence partitioning or boundary value analysis.</li>
+</ul>
+<p>It sits between slide 9 (developer alone) and slide 10 (a tester in the team). Today's forms of it are peer code review, pull-request review and pair programming.</p>
+<p class="meo">🧠 <strong>Remember:</strong> a buddy is a second pair of eyes, not a second mind-set.</p>`,
+        `<p class="y-chinh">🎯 "Hệ buddy" — developer test code của nhau — có thêm chút độc lập gần như không tốn gì, nhưng vẫn là góc nhìn của developer.</p>
+<p class="nhan">Ưu điểm</p>
+<ul>
+<li><strong>Có phần độc lập</strong> — không phải code của mình nên hết điểm mù của tác giả.</li>
+<li><strong>Chiều sâu kỹ thuật</strong> — người buddy đọc được code và thiết kế được test white-box.</li>
+<li><strong>Quan hệ thân thiện với "buddy"</strong> — góp ý của đồng nghiệp đỡ "đe doạ" hơn một báo cáo từ nhóm test.</li>
+</ul>
+<p class="nhan">Nhược điểm</p>
+<ul>
+<li><strong>Áp lực việc phát triển của chính mình</strong> — test code của bạn bị ép bởi deadline của mình.</li>
+<li><strong>Góc nhìn kỹ thuật, không phải nghiệp vụ</strong> — kiểm code chạy đúng như đã viết, chứ không kiểm nó có đáp ứng nhu cầu người dùng.</li>
+<li><strong>Thiếu kỹ năng test</strong> — developer hiếm khi được học các kỹ thuật như phân vùng tương đương hay phân tích giá trị biên.</li>
+</ul>
+<p>Nó nằm giữa slide 9 (developer tự làm) và slide 10 (có tester trong nhóm). Dạng ngày nay của nó là peer code review, review pull request và lập trình cặp (pair programming).</p>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> buddy là thêm một đôi mắt, chứ không phải thêm một lối tư duy.</p>`],
+    ]),
+    walk(O5, [
+      [16, 'A definition of Configuration Management',
+        `<p class="y-chinh">🎯 The classic IEEE definition: CM identifies the configuration items, controls their release and change, records their status and verifies they are complete and correct.</p>
+<p class="nhan">The four parts of the definition</p>
+<ol>
+<li><strong>Identify and define</strong> the configuration items (<strong>CI</strong>) in a system.</li>
+<li><strong>Control the release and change</strong> of these items throughout the system life cycle.</li>
+<li><strong>Record and report the status</strong> of CIs and of change requests (<strong>CR</strong>).</li>
+<li><strong>Verify the completeness and correctness</strong> of CIs.</li>
+</ol>
+<p>These four parts are exactly the four activities on the next page.</p>
+<p class="nhan">An outdated source</p>
+<ul>
+<li><strong>ANSI/IEEE Std 729-1983</strong> — replaced by IEEE 610.12-1990 and, today, by the vocabulary standard ISO/IEC/IEEE 24765.</li>
+<li><strong>What to write in the exam</strong> — CTFL 2018 words the purpose as: establish and maintain the <em>integrity</em> of the component or system, the testware and their relationships through the project and product lifecycle (current slide 77, lesson 7.4).</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Định nghĩa kinh điển của IEEE: CM định danh các configuration item, kiểm soát việc phát hành và thay đổi chúng, ghi nhận trạng thái và kiểm tra chúng đầy đủ, đúng.</p>
+<p class="nhan">Bốn vế của định nghĩa</p>
+<ol>
+<li><strong>Định danh và xác định</strong> các configuration item (<strong>CI</strong> — hạng mục cấu hình) của hệ thống.</li>
+<li><strong>Kiểm soát việc phát hành và thay đổi</strong> các hạng mục đó suốt vòng đời hệ thống.</li>
+<li><strong>Ghi nhận và báo cáo trạng thái</strong> của CI và của change request (<strong>CR</strong> — yêu cầu thay đổi).</li>
+<li><strong>Kiểm tra tính đầy đủ và đúng đắn</strong> của CI.</li>
+</ol>
+<p>Bốn vế này chính là bốn hoạt động ở trang kế tiếp.</p>
+<p class="nhan">Nguồn đã cũ</p>
+<ul>
+<li><strong>ANSI/IEEE Std 729-1983</strong> — đã được thay bằng IEEE 610.12-1990 và nay là chuẩn thuật ngữ ISO/IEC/IEEE 24765.</li>
+<li><strong>Viết gì khi thi</strong> — CTFL 2018 diễn đạt mục đích là: thiết lập và duy trì <em>tính toàn vẹn</em> của component hay hệ thống, của testware và quan hệ giữa chúng suốt vòng đời dự án và sản phẩm (slide 77 hiện tại, bài 7.4).</li>
+</ul>`],
+      [17, 'Configuration Management — four activities',
+        `<p class="y-chinh">🎯 CM is an engineering management procedure made of four activities: identification, change control, status accounting and audit.</p>
+<ol>
+<li><strong>Configuration identification</strong> — decide what is a CI, then name and number it (page 18).</li>
+<li><strong>Configuration change control</strong> — no change to a CI without an approved, recorded request (page 21).</li>
+<li><strong>Configuration status accounting</strong> — record and report the current state and history of every CI and CR (page 22).</li>
+<li><strong>Configuration audit</strong> — check that what was built matches what was recorded and required (page 22).</li>
+</ol>
+<p>Source on the slide: <em>Encyclopedia of Software Engineering</em>, 1994. The same four core activities are still used by the CM standards (for example IEEE 828 for CM plans).</p>
+<p class="meo">🧠 <strong>Remember:</strong> "Name it · Guard it · Record it · Check it".</p>
+<p class="ghi-chu">CTFL 2018 does not ask you to list these four names; it asks what CM must ensure for testing (current slide 78). The four activities explain <em>how</em> CM delivers that.</p>`,
+        `<p class="y-chinh">🎯 CM là một thủ tục quản lý kỹ thuật gồm bốn hoạt động: định danh, kiểm soát thay đổi, ghi nhận trạng thái và kiểm toán.</p>
+<ol>
+<li><strong>Configuration identification</strong> (định danh cấu hình) — quyết định cái gì là CI, rồi đặt tên và đánh số (trang 18).</li>
+<li><strong>Configuration change control</strong> (kiểm soát thay đổi) — không đổi CI nào nếu không có yêu cầu được duyệt và ghi lại (trang 21).</li>
+<li><strong>Configuration status accounting</strong> (ghi nhận trạng thái) — ghi và báo cáo trạng thái hiện tại và lịch sử của mọi CI và CR (trang 22).</li>
+<li><strong>Configuration audit</strong> (kiểm toán cấu hình) — kiểm tra thứ đã build khớp với thứ đã ghi nhận và được yêu cầu (trang 22).</li>
+</ol>
+<p>Nguồn trên slide: <em>Encyclopedia of Software Engineering</em>, 1994. Bốn hoạt động cốt lõi này vẫn được các chuẩn CM dùng (ví dụ IEEE 828 về kế hoạch CM).</p>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> "Đặt tên · Canh giữ · Ghi sổ · Kiểm tra".</p>
+<p class="ghi-chu">CTFL 2018 không bắt bạn kể bốn tên này; nó hỏi CM phải đảm bảo gì cho kiểm thử (slide 78 hiện tại). Bốn hoạt động giải thích CM làm điều đó <em>bằng cách nào</em>.</p>`],
+    ]),
+    walk(O5, [
+      [18, 'Configuration identification',
+        `<p class="y-chinh">🎯 Identification decides <em>which</em> things are configuration items and gives each one a unique, versioned name.</p>
+<p class="nhan">What is a CI?</p>
+<p>The slide: a "stand alone, test alone, use alone element" — something that can be stored, tested and used on its own: a module, a build, a config file, a test script, a test plan.</p>
+<p class="nhan">Six sub-activities (the boxes under "Configuration Identification")</p>
+<ol>
+<li><strong>CI planning</strong> — which items will be controlled, and from when.</li>
+<li><strong>Configuration structures</strong> — how CIs relate: system → subsystems → components; test suite → test cases + data.</li>
+<li><strong>Selection criteria</strong> — the rule for what becomes a CI, e.g. anything delivered, tested against or shared by several people.</li>
+<li><strong>Naming conventions</strong> — e.g. <code>TC-LOGIN-003</code>, <code>payment-service</code>.</li>
+<li><strong>Version/issue numbering</strong> — e.g. build 2.3.1, issue 4 of the test plan.</li>
+<li><strong>Baseline/release planning</strong> — which versions are frozen together, e.g. "Release 2.3 = build 2.3.1 + config v7 + test suite v3".</li>
+</ol>
+<p class="nhan">Why a tester cares</p>
+<p>A defect report can only say "found in build 2.3.1 with test case TC-LOGIN-003 v2" if both have been identified. Without identification there is nothing to reproduce.</p>`,
+        `<p class="y-chinh">🎯 Định danh quyết định <em>thứ nào</em> là configuration item và gán cho mỗi thứ một tên duy nhất có phiên bản.</p>
+<p class="nhan">CI là gì?</p>
+<p>Slide ghi: "stand alone, test alone, use alone element" — một phần tử có thể lưu, test và dùng độc lập: một module, một build, một file cấu hình, một test script, một test plan.</p>
+<p class="nhan">Sáu hoạt động con (các ô dưới "Configuration Identification")</p>
+<ol>
+<li><strong>CI planning</strong> (lập kế hoạch CI) — những hạng mục nào sẽ được kiểm soát, và từ lúc nào.</li>
+<li><strong>Configuration structures</strong> (cấu trúc cấu hình) — các CI liên hệ ra sao: hệ thống → hệ con → component; bộ test → test case + dữ liệu.</li>
+<li><strong>Selection criteria</strong> (tiêu chí chọn) — quy tắc cái gì thành CI, vd mọi thứ được bàn giao, được dùng làm chuẩn để test, hay nhiều người cùng dùng.</li>
+<li><strong>Naming conventions</strong> (quy ước đặt tên) — vd <code>TC-LOGIN-003</code>, <code>payment-service</code>.</li>
+<li><strong>Version/issue numbering</strong> (đánh số phiên bản) — vd build 2.3.1, lần ban hành thứ 4 của test plan.</li>
+<li><strong>Baseline/release planning</strong> (kế hoạch baseline/phát hành) — những phiên bản nào được "đóng băng" cùng nhau, vd "Release 2.3 = build 2.3.1 + config v7 + bộ test v3".</li>
+</ol>
+<p class="nhan">Vì sao tester cần</p>
+<p>Defect report chỉ ghi được "tìm thấy ở build 2.3.1 với test case TC-LOGIN-003 v2" khi cả hai đã được định danh. Không định danh thì không có gì để tái hiện.</p>`],
+      [19, 'Common CIs (a BMC table)',
+        `<p class="y-chinh">🎯 A table from BMC (an IT-service-management vendor): configuration items are far more than code.</p>
+<ul>
+<li><strong>Services</strong> — email, printing, collaboration, presentation, data processing, user registration.</li>
+<li><strong>Software</strong> — applications, databases, virtual machines, containers, licences.</li>
+<li><strong>Hardware</strong> — servers, routers, computers, switches, printers.</li>
+<li><strong>Devices</strong> — laptops, tablets, smartphones, monitors, keyboards, mice.</li>
+<li><strong>Documents</strong> — policies, governance, release notes, user guides, troubleshooting manuals.</li>
+<li><strong>Locations</strong> — offices, data centres, server rooms.</li>
+<li><strong>Staff</strong> — service desk agents, support specialists, developers.</li>
+</ul>
+<p class="nhan">Read it in the right context</p>
+<p>This is the IT-service-management (ITIL) view, where a configuration database tracks everything that delivers a service — even rooms and people. In testing the CIs are narrower: test items and testware (page 23). The environment rows still matter: the OS, browser, server or phone a test ran on must be recorded, or the failure cannot be reproduced.</p>
+<p class="ghi-chu">The page map marked this page "near-empty" because its content is an image; it is a full table.</p>`,
+        `<p class="y-chinh">🎯 Một bảng của BMC (hãng phần mềm quản lý dịch vụ CNTT): configuration item không chỉ là code.</p>
+<ul>
+<li><strong>Services</strong> (dịch vụ) — email, in ấn, cộng tác, trình chiếu, xử lý dữ liệu, đăng ký người dùng.</li>
+<li><strong>Software</strong> (phần mềm) — ứng dụng, cơ sở dữ liệu, máy ảo, container, giấy phép.</li>
+<li><strong>Hardware</strong> (phần cứng) — server, router, máy tính, switch, máy in.</li>
+<li><strong>Devices</strong> (thiết bị) — laptop, tablet, điện thoại, màn hình, bàn phím, chuột.</li>
+<li><strong>Documents</strong> (tài liệu) — chính sách, quản trị, release notes, hướng dẫn sử dụng, tài liệu xử lý sự cố.</li>
+<li><strong>Locations</strong> (địa điểm) — văn phòng, trung tâm dữ liệu, phòng máy chủ.</li>
+<li><strong>Staff</strong> (nhân sự) — nhân viên service desk, chuyên viên hỗ trợ, developer.</li>
+</ul>
+<p class="nhan">Đọc đúng bối cảnh</p>
+<p>Đây là góc nhìn quản lý dịch vụ CNTT (ITIL), nơi một cơ sở dữ liệu cấu hình theo dõi mọi thứ tạo nên dịch vụ — kể cả phòng ốc và con người. Trong kiểm thử, CI hẹp hơn: hạng mục test và testware (trang 23). Nhưng các dòng về môi trường vẫn quan trọng: hệ điều hành, trình duyệt, server hay điện thoại mà test đã chạy phải được ghi lại, nếu không thì không tái hiện được failure.</p>
+<p class="ghi-chu">Bảng đối chiếu tự động đánh dấu trang này "gần như trống" vì nội dung là ảnh; thực ra đây là một bảng đầy đủ.</p>`],
+    ]),
+    walk(O5, [
+      [20, 'Configuration Management Workflows',
+        `<p class="y-chinh">🎯 An ITIL-style process map shows CM as a loop — plan, identify, control, report, audit — wired to change management and incident management.</p>
+<p class="nhan">The six CM boxes (ST = Service Transition)</p>
+<ol>
+<li><strong>ST3.1 Configuration management and planning</strong> — triggered by a periodic review of the plan.</li>
+<li><strong>ST3.2 Configuration identification</strong> — feeds back into planning.</li>
+<li><strong>ST3.3 Configuration control</strong> — receives the plan and feeds identification and status accounting.</li>
+<li><strong>ST3.4 Status accounting and reporting</strong> — also triggered by "generate periodic status reports".</li>
+<li><strong>ST3.5 Verification and audit</strong> — triggered by a periodic audit.</li>
+<li><strong>ST3.6 Manage master data</strong> — fed by master data received from trusted sources.</li>
+</ol>
+<p class="nhan">The two neighbouring processes</p>
+<ul>
+<li><strong>ST2 Change management</strong> — gets input from identification and control, and feeds back into planning and into verification/audit.</li>
+<li><strong>SO2 Incident management</strong> (SO = Service Operation) — uses the output of status accounting, audit and master data.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> incidents are analysed with CM data — to explain a failure you must know exactly which configuration was running.</p>`,
+        `<p class="y-chinh">🎯 Một sơ đồ quy trình kiểu ITIL cho thấy CM là một vòng — lập kế hoạch, định danh, kiểm soát, báo cáo, kiểm toán — nối với quản lý thay đổi và quản lý sự cố.</p>
+<p class="nhan">Sáu ô của CM (ST = Service Transition)</p>
+<ol>
+<li><strong>ST3.1 Quản lý cấu hình và lập kế hoạch</strong> — khởi động bởi việc rà soát kế hoạch định kỳ.</li>
+<li><strong>ST3.2 Định danh cấu hình</strong> — phản hồi ngược về khâu lập kế hoạch.</li>
+<li><strong>ST3.3 Kiểm soát cấu hình</strong> — nhận kế hoạch, cung cấp cho định danh và ghi nhận trạng thái.</li>
+<li><strong>ST3.4 Ghi nhận trạng thái và báo cáo</strong> — còn được khởi động bởi "lập báo cáo trạng thái định kỳ".</li>
+<li><strong>ST3.5 Kiểm tra và kiểm toán</strong> — khởi động bởi đợt kiểm toán định kỳ.</li>
+<li><strong>ST3.6 Quản lý dữ liệu gốc (master data)</strong> — nhận dữ liệu gốc từ các nguồn tin cậy.</li>
+</ol>
+<p class="nhan">Hai quy trình bên cạnh</p>
+<ul>
+<li><strong>ST2 Quản lý thay đổi</strong> — nhận đầu vào từ định danh và kiểm soát, rồi phản hồi về lập kế hoạch và về kiểm tra/kiểm toán.</li>
+<li><strong>SO2 Quản lý sự cố</strong> (SO = Service Operation) — dùng đầu ra của ghi nhận trạng thái, kiểm toán và dữ liệu gốc.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> sự cố được phân tích bằng dữ liệu CM — muốn giải thích một failure, bạn phải biết chính xác cấu hình nào đang chạy.</p>`],
+      [21, 'Configuration control',
+        `<p class="y-chinh">🎯 After identification, configuration control guards every CI: it lives in a controlled library and changes only through fault reporting and change control, decided by a Configuration Control Board.</p>
+<p class="nhan">Controlled area / library</p>
+<ul>
+<li><strong>CI submission</strong> — an item enters the library only through a formal submission.</li>
+<li><strong>Status/version control</strong> — each CI has a status (draft, reviewed, baselined…) and a version.</li>
+<li><strong>Withdrawal/distribution control</strong> — who may take out or receive a copy; no uncontrolled copies.</li>
+</ul>
+<p class="nhan">Problem / fault reporting</p>
+<ul>
+<li><strong>Investigation</strong> — find the cause and which CIs are affected.</li>
+<li><strong>Clearance</strong> — the problem is resolved and the report closed.</li>
+</ul>
+<p class="nhan">Change control</p>
+<ul>
+<li><strong>Impact analysis</strong> — what else must change: code, tests, documents, schedule.</li>
+<li><strong>Authorised amendment</strong> — the change is approved before it is made (the teacher's notes: authorised = <em>ủy quyền</em>, amendment = <em>sửa đổi</em>).</li>
+<li><strong>Review/test</strong> — the changed CI is reviewed and tested (confirmation and regression testing) before it re-enters the baseline.</li>
+</ul>
+<p><strong>Configuration Control Board (CCB)</strong> — the group (e.g. project manager, dev lead, test lead, customer representative) that approves or rejects change requests.</p>
+<p class="ghi-chu">"Problem/fault reporting" is today's defect management (lesson 7.6); CTFL says <em>defect</em> rather than "fault".</p>`,
+        `<p class="y-chinh">🎯 Sau khi định danh, kiểm soát cấu hình canh giữ mọi CI: CI nằm trong thư viện có kiểm soát và chỉ thay đổi qua báo cáo lỗi và kiểm soát thay đổi, do Configuration Control Board quyết.</p>
+<p class="nhan">Khu vực / thư viện có kiểm soát</p>
+<ul>
+<li><strong>CI submission</strong> (nộp CI) — hạng mục chỉ vào thư viện qua một lần nộp chính thức.</li>
+<li><strong>Status/version control</strong> (kiểm soát trạng thái/phiên bản) — mỗi CI có trạng thái (nháp, đã review, đã baseline…) và phiên bản.</li>
+<li><strong>Withdrawal/distribution control</strong> (kiểm soát lấy ra/phân phối) — ai được lấy ra hay nhận bản sao; không có bản sao trôi nổi.</li>
+</ul>
+<p class="nhan">Báo cáo vấn đề / lỗi</p>
+<ul>
+<li><strong>Investigation</strong> (điều tra) — tìm nguyên nhân và các CI bị ảnh hưởng.</li>
+<li><strong>Clearance</strong> (giải toả) — vấn đề đã xử lý xong và báo cáo được đóng.</li>
+</ul>
+<p class="nhan">Kiểm soát thay đổi</p>
+<ul>
+<li><strong>Impact analysis</strong> (phân tích tác động) — còn gì phải đổi theo: code, test, tài liệu, lịch.</li>
+<li><strong>Authorised amendment</strong> — thay đổi phải được duyệt trước khi làm (ghi chú của thầy/cô: authorised = <em>ủy quyền</em>, amendment = <em>sửa đổi</em>).</li>
+<li><strong>Review/test</strong> — CI đã đổi được review và test (confirmation và regression testing) trước khi quay lại baseline.</li>
+</ul>
+<p><strong>Configuration Control Board (CCB)</strong> — nhóm (vd project manager, trưởng nhóm dev, trưởng nhóm test, đại diện khách hàng) duyệt hoặc từ chối các change request.</p>
+<p class="ghi-chu">"Problem/fault reporting" chính là quản lý defect ngày nay (bài 7.6); CTFL dùng từ <em>defect</em> thay cho "fault".</p>`],
+    ]),
+    walk(O5, [
+      [22, 'Status accounting & Configuration Auditing',
+        `<p class="y-chinh">🎯 Status accounting records the state of every CI and change; auditing checks that the record and the product agree — "agree with the customer what has been built, tested &amp; delivered".</p>
+<p class="nhan">Status accounting</p>
+<ul>
+<li><strong>Status accounting database</strong> — the record itself (today: version control plus the issue tracker).</li>
+<li><strong>Input to the SA database</strong> — every submission, change and release is logged.</li>
+<li><strong>Queries and reports</strong> — e.g. "which change requests are in build 2.3.1?"</li>
+<li><strong>Data analysis</strong> — gives <em>traceability</em> and <em>impact analysis</em> (the note in the middle of the slide).</li>
+</ul>
+<p class="nhan">Configuration auditing</p>
+<ul>
+<li><strong>Procedural conformance</strong> — was the CM procedure actually followed?</li>
+<li><strong>CI verification</strong> — does each CI match its record: right version, complete?</li>
+</ul>
+<p class="nhan">Examples for testers</p>
+<ul>
+<li><strong>Release notes</strong> listing the defects fixed in a build are a status-accounting report.</li>
+<li><strong>Before a release</strong>, an audit checks that the test summary report refers to exactly the build being shipped.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Ghi nhận trạng thái lưu tình trạng của mọi CI và thay đổi; kiểm toán kiểm tra sổ sách và sản phẩm có khớp nhau — "thống nhất với khách hàng cái gì đã được build, test và bàn giao".</p>
+<p class="nhan">Status accounting (ghi nhận trạng thái)</p>
+<ul>
+<li><strong>Cơ sở dữ liệu status accounting</strong> — chính cuốn sổ (ngày nay: version control cộng issue tracker).</li>
+<li><strong>Đầu vào cho cơ sở dữ liệu SA</strong> — mọi lần nộp, thay đổi và phát hành đều được ghi.</li>
+<li><strong>Truy vấn và báo cáo</strong> — vd "những change request nào nằm trong build 2.3.1?"</li>
+<li><strong>Phân tích dữ liệu</strong> — cho ra <em>truy vết</em> (traceability) và <em>phân tích tác động</em> (ghi chú ở giữa slide).</li>
+</ul>
+<p class="nhan">Configuration auditing (kiểm toán cấu hình)</p>
+<ul>
+<li><strong>Procedural conformance</strong> (tuân thủ thủ tục) — thủ tục CM có thực sự được làm theo không?</li>
+<li><strong>CI verification</strong> (kiểm tra CI) — mỗi CI có khớp với hồ sơ: đúng phiên bản, đầy đủ?</li>
+</ul>
+<p class="nhan">Ví dụ cho tester</p>
+<ul>
+<li><strong>Release notes</strong> liệt kê các defect đã sửa trong một build là một báo cáo status accounting.</li>
+<li><strong>Trước khi phát hành</strong>, kiểm toán xác nhận test summary report nói về đúng build sắp giao.</li>
+</ul>`],
+      [23, 'Products for CM in testing',
+        `<p class="y-chinh">🎯 All testware belongs under CM — "CM is critical for controlled testing" — with one famous exception: live data.</p>
+<p class="nhan">What goes under CM</p>
+<ul>
+<li><strong>Test plans</strong> and <strong>test designs</strong>.</li>
+<li><strong>Test cases</strong> — test input, test data, test scripts, expected results.</li>
+<li><strong>Actual results</strong> — test logs are the evidence of what really happened.</li>
+<li><strong>Test tools</strong> — the tool version matters: a script may fail on a new version of the tool, not of the product.</li>
+</ul>
+<p class="nhan">The question on the slide: what would NOT be under CM?</p>
+<p><strong>Live data!</strong> Production data changes every minute, belongs to the business and its users, and often contains personal data — it cannot be frozen and versioned. What you do put under CM is the test data <em>derived</em> from it: a masked, versioned snapshot.</p>
+<p class="meo">🧠 <strong>Remember:</strong> if you would need it to repeat the test next year, put it under CM.</p>
+<p class="ghi-chu">CTFL calls all of these <em>testware</em> and adds the test environment set-up (current slide 78, lesson 7.4).</p>`,
+        `<p class="y-chinh">🎯 Mọi testware đều phải đặt dưới CM — "CM là then chốt để kiểm thử có kiểm soát" — trừ một ngoại lệ nổi tiếng: dữ liệu thật (live data).</p>
+<p class="nhan">Những gì đặt dưới CM</p>
+<ul>
+<li><strong>Test plan</strong> và <strong>test design</strong>.</li>
+<li><strong>Test case</strong> — dữ liệu vào, dữ liệu test, test script, kết quả mong đợi.</li>
+<li><strong>Kết quả thực tế</strong> — test log là bằng chứng về điều đã thật sự xảy ra.</li>
+<li><strong>Công cụ test</strong> — phiên bản công cụ quan trọng: script có thể fail vì công cụ lên bản mới, chứ không phải vì sản phẩm.</li>
+</ul>
+<p class="nhan">Câu hỏi trên slide: cái gì KHÔNG đặt dưới CM?</p>
+<p><strong>Live data!</strong> Dữ liệu production đổi từng phút, thuộc về doanh nghiệp và người dùng, lại thường chứa dữ liệu cá nhân — không thể đóng băng và đánh phiên bản. Thứ bạn đặt dưới CM là dữ liệu test <em>rút ra</em> từ nó: một bản chụp đã che dữ liệu nhạy cảm và có phiên bản.</p>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> cái gì năm sau cần để chạy lại đúng bài test đó thì đặt dưới CM.</p>
+<p class="ghi-chu">CTFL gọi chung những thứ này là <em>testware</em> và thêm cả cách dựng môi trường test (slide 78 hiện tại, bài 7.4).</p>`],
+    ]),
+    walk(O5, [
+      [25, 'Estimating testing is no different',
+        `<p class="y-chinh">🎯 Estimating testing starts like estimating any job: tasks, durations, people, dates, resources and predictable dependencies.</p>
+<p class="nhan">Estimating any job involves</p>
+<ol>
+<li><strong>Identify tasks</strong></li>
+<li><strong>How long</strong> for each task</li>
+<li><strong>Who</strong> should perform the task</li>
+<li><strong>When</strong> the task should start and finish</li>
+<li><strong>What resources, what skills</strong></li>
+<li><strong>Predictable dependencies</strong>:
+<ul>
+<li><strong>task precedence</strong> — build the test before running it;</li>
+<li><strong>technical precedence</strong> — "add &amp; display before edit": you cannot test editing a record that cannot yet be created or shown.</li>
+</ul></li>
+</ol>
+<p>Technical precedence is exactly what the execution-schedule questions of lesson 7.2 (slides 40, 54, 56) test.</p>`,
+        `<p class="y-chinh">🎯 Ước lượng kiểm thử bắt đầu như ước lượng mọi công việc: đầu việc, thời lượng, người làm, ngày, nguồn lực và các phụ thuộc biết trước.</p>
+<p class="nhan">Ước lượng mọi công việc gồm</p>
+<ol>
+<li><strong>Xác định đầu việc</strong></li>
+<li><strong>Mỗi việc mất bao lâu</strong></li>
+<li><strong>Ai</strong> làm việc đó</li>
+<li><strong>Khi nào</strong> bắt đầu và kết thúc</li>
+<li><strong>Nguồn lực nào, kỹ năng nào</strong></li>
+<li><strong>Phụ thuộc biết trước</strong>:
+<ul>
+<li><strong>thứ tự công việc</strong> — phải dựng test xong rồi mới chạy;</li>
+<li><strong>thứ tự kỹ thuật</strong> — "add &amp; display trước edit": không thể test sửa một bản ghi khi còn chưa tạo được hay hiển thị được nó.</li>
+</ul></li>
+</ol>
+<p>Thứ tự kỹ thuật chính là thứ các câu hỏi lịch thực thi ở bài 7.2 (slide 40, 54, 56) kiểm tra.</p>`],
+      [26, 'Estimating testing is different',
+        `<p class="y-chinh">🎯 Testing adds dependencies the test team does not control — and an unknown number of fix-and-retest cycles.</p>
+<p class="nhan">Additional destabilising dependencies</p>
+<ul>
+<li><strong>Testing is not an independent activity</strong> — it needs something to test, delivered by others.</li>
+<li><strong>Delivery schedules for testable items are missed</strong> — a late build eats test time, but the end date rarely moves.</li>
+<li><strong>Test environments are critical</strong> — no environment, no testing.</li>
+</ul>
+<p class="nhan">Test iterations (cycles)</p>
+<ol>
+<li>Testing should find faults…</li>
+<li>…faults need to be fixed…</li>
+<li>…after they are fixed, you need to retest…</li>
+<li>…and <strong>how many times does this happen?</strong> Nobody knows before testing starts — pages 27–29 show how to estimate it.</li>
+</ol>
+<p class="ghi-chu">In CTFL 2018 these are the "factors influencing test effort" (current slides 42–45), especially <em>test results</em>: the number and severity of defects found and the amount of rework. "Fault" is the old word for <em>defect</em>.</p>`,
+        `<p class="y-chinh">🎯 Kiểm thử có thêm những phụ thuộc mà nhóm test không kiểm soát được — và một số chu kỳ sửa–test lại không biết trước.</p>
+<p class="nhan">Những phụ thuộc gây bất ổn thêm</p>
+<ul>
+<li><strong>Kiểm thử không phải hoạt động độc lập</strong> — nó cần thứ để test, do người khác giao.</li>
+<li><strong>Lịch giao hạng mục test bị trễ</strong> — build giao muộn ăn vào thời gian test, còn ngày kết thúc hiếm khi lùi.</li>
+<li><strong>Môi trường test là then chốt</strong> — không có môi trường thì không test được.</li>
+</ul>
+<p class="nhan">Các vòng test (chu kỳ)</p>
+<ol>
+<li>Kiểm thử phải tìm ra lỗi…</li>
+<li>…lỗi phải được sửa…</li>
+<li>…sửa xong phải test lại…</li>
+<li>…và <strong>chuyện này lặp lại bao nhiêu lần?</strong> Không ai biết trước khi bắt đầu test — trang 27–29 chỉ cách ước lượng.</li>
+</ol>
+<p class="ghi-chu">Trong CTFL 2018 đây là các "yếu tố ảnh hưởng công sức test" (slide 42–45 hiện tại), nhất là <em>kết quả test</em>: số lượng và mức nghiêm trọng của defect tìm được và khối lượng làm lại. "Fault" là từ cũ của <em>defect</em>.</p>`],
+    ]),
+    walk(O5, [
+      [27, 'Test cycles / iterations',
+        `<p class="y-chinh">🎯 In theory a test is prepared and run once; in practice execution is followed by debug–retest loops — 3–4 iterations is typical.</p>
+<p class="nhan">Theory (top bar)</p>
+<p>One "Test" block with five steps: <strong>Iden</strong>tify, <strong>Des</strong>ign, <strong>B</strong>ui<strong>ld</strong>, <strong>Ex</strong>ecute, <strong>Ver</strong>ify. Only Ex and Ver fan out into "Retest".</p>
+<p class="nhan">Practice (bottom bar)</p>
+<p>Test → Debug → Retest → D → R → D → R. Identification, design and build happen once; <em>execution</em> repeats after every round of fixes.</p>
+<p class="nhan">Old step names → CTFL 2018 test process</p>
+<ul>
+<li><strong>Identify</strong> (what to test) → test analysis (test conditions).</li>
+<li><strong>Design</strong> → test design (test cases).</li>
+<li><strong>Build</strong> → test implementation (procedures, data, environment).</li>
+<li><strong>Execute + Verify</strong> → test execution (run, compare actual with expected).</li>
+<li><strong>Debug</strong> → the developer's job, not testing (CTFL: debugging is a development activity).</li>
+<li><strong>Retest</strong> → confirmation testing, plus regression testing around the fix.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> plan 3–4 execution cycles, not one — the first is the longest, each later one is shorter.</p>`,
+        `<p class="y-chinh">🎯 Trên lý thuyết bài test được chuẩn bị và chạy một lần; trên thực tế sau khi chạy là các vòng debug–test lại — thường 3–4 vòng.</p>
+<p class="nhan">Lý thuyết (thanh trên)</p>
+<p>Một khối "Test" với năm bước: <strong>Iden</strong>tify (xác định), <strong>Des</strong>ign (thiết kế), <strong>B</strong>ui<strong>ld</strong> (dựng), <strong>Ex</strong>ecute (chạy), <strong>Ver</strong>ify (kiểm kết quả). Chỉ Ex và Ver toả ra thành "Retest".</p>
+<p class="nhan">Thực tế (thanh dưới)</p>
+<p>Test → Debug → Retest → D → R → D → R. Xác định, thiết kế và dựng chỉ làm một lần; <em>chạy test</em> lặp lại sau mỗi đợt sửa.</p>
+<p class="nhan">Tên bước cũ → quy trình test CTFL 2018</p>
+<ul>
+<li><strong>Identify</strong> (test cái gì) → test analysis (test condition).</li>
+<li><strong>Design</strong> → test design (test case).</li>
+<li><strong>Build</strong> → test implementation (thủ tục, dữ liệu, môi trường).</li>
+<li><strong>Execute + Verify</strong> → test execution (chạy, so thực tế với mong đợi).</li>
+<li><strong>Debug</strong> → việc của developer, không phải kiểm thử (CTFL: debugging là hoạt động phát triển).</li>
+<li><strong>Retest</strong> → confirmation testing, cộng regression testing quanh chỗ sửa.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> lập kế hoạch 3–4 chu kỳ chạy test, không phải một — chu kỳ đầu dài nhất, các chu kỳ sau ngắn dần.</p>`],
+      [28, 'Estimating iterations',
+        `<p class="y-chinh">🎯 How many cycles, and how long? Estimate from history: expected faults, how many each cycle finds, how many fixes fail, and the time spent reporting and waiting.</p>
+<ol>
+<li><strong>Past history</strong> — data from earlier, similar projects.</li>
+<li><strong>Number of faults expected</strong>:
+<ul>
+<li>predicted from previous test effectiveness and the faults found earlier (in test, review, Inspection);</li>
+<li><strong>% found in each iteration</strong> — "nested faults": some faults hide behind others and appear only after the first one is fixed;</li>
+<li><strong>% fixed [in]correctly</strong> — every bad fix comes back in the next cycle.</li>
+</ul></li>
+<li><strong>Time to report faults</strong> — page 29.</li>
+<li><strong>Time waiting for fixes</strong> — testers idle or switching tasks.</li>
+<li><strong>How much in each iteration?</strong> — a full rerun, or only retests plus a regression subset?</li>
+</ol>
+<p>The worked example after the walkthrough puts numbers on every line. In CTFL terms this is a <em>metrics-based</em> estimate (current slide 48).</p>`,
+        `<p class="y-chinh">🎯 Bao nhiêu chu kỳ, mỗi chu kỳ bao lâu? Ước lượng từ số liệu cũ: số lỗi dự kiến, mỗi chu kỳ tìm được bao nhiêu, bao nhiêu lần sửa hỏng, và thời gian viết báo cáo, thời gian chờ.</p>
+<ol>
+<li><strong>Số liệu quá khứ</strong> — dữ liệu từ các dự án tương tự trước đây.</li>
+<li><strong>Số lỗi dự kiến</strong>:
+<ul>
+<li>dự đoán từ hiệu quả test trước đây và số lỗi đã tìm được trước đó (khi test, review, Inspection);</li>
+<li><strong>% tìm được ở mỗi vòng</strong> — "lỗi lồng nhau" (nested faults): có lỗi nấp sau lỗi khác, chỉ lộ ra khi lỗi đầu được sửa;</li>
+<li><strong>% sửa đúng/sai</strong> — mỗi lần sửa hỏng sẽ quay lại ở vòng sau.</li>
+</ul></li>
+<li><strong>Thời gian viết báo cáo lỗi</strong> — trang 29.</li>
+<li><strong>Thời gian chờ bản sửa</strong> — tester ngồi chờ hoặc chuyển việc.</li>
+<li><strong>Mỗi vòng chạy bao nhiêu?</strong> — chạy lại toàn bộ, hay chỉ test lại chỗ sửa cộng một phần regression?</li>
+</ol>
+<p>Ví dụ có lời giải sau phần học từng slide gắn số cho từng dòng. Theo CTFL, đây là ước lượng <em>dựa trên số liệu</em> (metrics-based, slide 48 hiện tại).</p>`],
+    ]),
+    walk(O5, [
+      [29, 'Time to report faults',
+        `<p class="y-chinh">🎯 Writing fault reports costs test time — the more reports you write, the less testing you can do.</p>
+<p class="nhan">The slide's question, worked out</p>
+<ul>
+<li><strong>10 minutes per report</strong>, an 8-hour day = 480 minutes → at most 480 ÷ 10 = <strong>48 reports</strong> — and then zero testing that day.</li>
+<li><strong>The bar</strong> — roughly three quarters "Test", one quarter "Fault analysis &amp; reporting".</li>
+</ul>
+<p class="nhan">The suspension criterion quoted on the slide</p>
+<p>Suspend testing when testers spend <strong>more than 25 %</strong> of their time on faults. 25 % of 480 minutes = 120 minutes = <strong>12 reports</strong> of 10 minutes a day. More than that means the software is not ready: stop, send it back, resume when the fixes arrive.</p>
+<p class="ghi-chu">Current term: <em>suspension criteria and resumption requirements</em>, one of the 16 sections of an IEEE 829 test plan (lesson 7.2, slide 27). The slide credits the rule to a named practitioner; the rule is what matters here.</p>`,
+        `<p class="y-chinh">🎯 Viết báo cáo lỗi tốn thời gian test — càng viết nhiều báo cáo thì càng test được ít.</p>
+<p class="nhan">Câu hỏi trên slide, tính ra</p>
+<ul>
+<li><strong>10 phút mỗi báo cáo</strong>, một ngày 8 giờ = 480 phút → tối đa 480 ÷ 10 = <strong>48 báo cáo</strong> — và hôm đó không test được gì.</li>
+<li><strong>Thanh ngang</strong> — khoảng ba phần tư là "Test", một phần tư là "Phân tích và báo cáo lỗi".</li>
+</ul>
+<p class="nhan">Tiêu chí tạm dừng ghi trên slide</p>
+<p>Tạm dừng test khi tester dành <strong>hơn 25 %</strong> thời gian cho lỗi. 25 % của 480 phút = 120 phút = <strong>12 báo cáo</strong> loại 10 phút mỗi ngày. Nhiều hơn nghĩa là phần mềm chưa sẵn sàng: dừng lại, trả về, và test tiếp khi có bản sửa.</p>
+<p class="ghi-chu">Thuật ngữ hiện hành: <em>suspension criteria and resumption requirements</em> (tiêu chí tạm dừng và điều kiện tiếp tục), một trong 16 mục của test plan IEEE 829 (bài 7.2, slide 27). Slide ghi tên người đưa ra quy tắc này; điều cần nhớ là chính quy tắc.</p>`],
+      [30, 'Measuring test execution progress 1',
+        `<p class="y-chinh">🎯 Plot tests planned, run and passed over time: here "run" climbs fast but "passed" barely moves — the curves diverge.</p>
+<p class="nhan">Reading the chart</p>
+<ul>
+<li><strong>Tests planned</strong> — the flat line at the top: the total to reach by the release date.</li>
+<li><strong>Tests run</strong> — rising steeply up to "now".</li>
+<li><strong>Tests passed</strong> — low and almost flat.</li>
+<li><strong>The gap between run and passed</strong> — tests that failed (or were blocked). At this rate "passed" will never meet "planned" by the release date.</li>
+</ul>
+<p class="nhan">The two questions on the slide</p>
+<ol>
+<li><strong>What does this mean?</strong> — most tests fail: the software (or what was let into test) is not good enough. Possible causes: page 31.</li>
+<li><strong>What would you do?</strong> — a control action, also on page 31.</li>
+</ol>
+<p class="meo">🧠 <strong>Remember:</strong> a healthy progress chart is an S-curve — slow start, steep middle, flat end — with "run" and "passed" close together.</p>`,
+        `<p class="y-chinh">🎯 Vẽ số test planned, run và passed theo thời gian: ở đây "run" tăng nhanh mà "passed" gần như đứng yên — hai đường phân kỳ.</p>
+<p class="nhan">Đọc biểu đồ</p>
+<ul>
+<li><strong>Tests planned</strong> (dự kiến) — đường ngang trên cùng: tổng số phải đạt trước ngày phát hành.</li>
+<li><strong>Tests run</strong> (đã chạy) — tăng dốc cho tới "now".</li>
+<li><strong>Tests passed</strong> (đạt) — thấp và gần như phẳng.</li>
+<li><strong>Khoảng cách giữa run và passed</strong> — các test fail (hoặc bị chặn). Cứ đà này, "passed" sẽ không bao giờ chạm "planned" trước ngày phát hành.</li>
+</ul>
+<p class="nhan">Hai câu hỏi trên slide</p>
+<ol>
+<li><strong>Điều này nghĩa là gì?</strong> — phần lớn test fail: phần mềm (hoặc thứ được cho vào test) chưa đủ tốt. Nguyên nhân có thể: trang 31.</li>
+<li><strong>Bạn sẽ làm gì?</strong> — một hành động kiểm soát, cũng ở trang 31.</li>
+</ol>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> biểu đồ tiến độ khoẻ mạnh có dạng chữ S — đầu chậm, giữa dốc, cuối phẳng — và "run" với "passed" đi sát nhau.</p>`],
+    ]),
+    walk(O5, [
+      [31, 'Diverging S-curve',
+        `<p class="y-chinh">🎯 When "run" and "passed" drift apart, find the likely cause first, then choose a control action — and remember every action has side effects, e.g. on the schedule.</p>
+<p class="nhan">Possible causes</p>
+<ol>
+<li><strong>Poor test entry criteria</strong> — software was accepted into test before it was ready.</li>
+<li><strong>Ran easy tests first</strong> — early progress looked good; the hard tests left now fail.</li>
+<li><strong>Insufficient debug effort</strong> — fixes are not coming back, so failed tests stay failed.</li>
+<li><strong>Common faults affect all tests</strong> — one fault (e.g. broken login) blocks many tests at once.</li>
+<li><strong>Software quality very poor</strong></li>
+</ol>
+<p class="nhan">Potential control actions</p>
+<ol>
+<li><strong>Tighten entry criteria</strong></li>
+<li><strong>Cancel the project</strong> — the extreme option.</li>
+<li><strong>Do more debugging</strong></li>
+<li><strong>Stop testing until faults are fixed</strong></li>
+<li><strong>Continue testing to scope software quality</strong> — keep running tests to measure how bad things are.</li>
+</ol>
+<p>The arrows are many-to-many: each cause has several possible actions, and "software quality very poor" points to all five.</p>
+<p class="ghi-chu">Current syllabus version of this idea: the test control examples on slide 62 and "What actions can you take?" on slide 69 (lesson 7.3).</p>`,
+        `<p class="y-chinh">🎯 Khi "run" và "passed" tách xa nhau, hãy tìm nguyên nhân khả dĩ trước rồi mới chọn hành động kiểm soát — và nhớ mọi hành động đều có tác dụng phụ, vd lên lịch.</p>
+<p class="nhan">Nguyên nhân có thể</p>
+<ol>
+<li><strong>Entry criteria quá lỏng</strong> — phần mềm được nhận vào test khi chưa sẵn sàng.</li>
+<li><strong>Chạy test dễ trước</strong> — tiến độ ban đầu trông đẹp; còn lại toàn test khó nên giờ fail.</li>
+<li><strong>Không đủ công debug</strong> — bản sửa không về, nên test fail vẫn fail.</li>
+<li><strong>Lỗi chung ảnh hưởng mọi test</strong> — một lỗi (vd đăng nhập hỏng) chặn nhiều test cùng lúc.</li>
+<li><strong>Chất lượng phần mềm rất kém</strong></li>
+</ol>
+<p class="nhan">Hành động kiểm soát khả dĩ</p>
+<ol>
+<li><strong>Siết entry criteria</strong></li>
+<li><strong>Huỷ dự án</strong> — lựa chọn cực đoan.</li>
+<li><strong>Tăng công debug</strong></li>
+<li><strong>Dừng test tới khi lỗi được sửa</strong></li>
+<li><strong>Tiếp tục test để đo phạm vi chất lượng</strong> — cứ chạy để biết phần mềm tệ tới đâu.</li>
+</ol>
+<p>Các mũi tên là nhiều–nhiều: mỗi nguyên nhân có vài hành động khả dĩ, và "chất lượng rất kém" chỉ tới cả năm.</p>
+<p class="ghi-chu">Phiên bản theo syllabus hiện tại của ý này: các ví dụ kiểm soát test ở slide 62 và "What actions can you take?" ở slide 69 (bài 7.3).</p>`],
+      [32, 'Measuring test execution progress 2',
+        `<p class="y-chinh">🎯 After a control action, "run" pauses while faults are fixed and "passed" climbs steeply — but at the old release date neither has reached "planned", so the date moves.</p>
+<ul>
+<li><strong>Action taken</strong> — the vertical line about a quarter of the way along.</li>
+<li><strong>"Run" goes flat for a while</strong> — testing is stopped until faults are fixed (one of the page-31 actions).</li>
+<li><strong>"Passed" rises steeply</strong> — retests of the fixed faults now pass, and the two curves come closer.</li>
+<li><strong>At the old release date</strong> — "run" is close to "planned" but not there, and "passed" is clearly below it.</li>
+<li><strong>New release date</strong> — the side effect page 31 warned about: the schedule slips.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Sau một hành động kiểm soát, "run" tạm đứng trong lúc sửa lỗi còn "passed" tăng dốc — nhưng tới ngày phát hành cũ cả hai chưa chạm "planned", nên ngày phải lùi.</p>
+<ul>
+<li><strong>Action taken</strong> — vạch đứng ở khoảng một phần tư trục thời gian.</li>
+<li><strong>"Run" đi ngang một đoạn</strong> — dừng test tới khi lỗi được sửa (một trong các hành động ở trang 31).</li>
+<li><strong>"Passed" tăng dốc</strong> — các test lại cho lỗi đã sửa giờ đạt, hai đường xích lại gần nhau.</li>
+<li><strong>Tại ngày phát hành cũ</strong> — "run" gần tới "planned" nhưng chưa tới, còn "passed" thấp hơn rõ.</li>
+<li><strong>Ngày phát hành mới</strong> — đúng tác dụng phụ trang 31 đã cảnh báo: lịch bị lùi.</li>
+</ul>`],
+    ]),
+    walk(O5, [
+      [33, 'Measuring test execution progress 3',
+        `<p class="y-chinh">🎯 The same project continued: after the old release date "run" levels off just below "planned" and "passed" closes in on it by the new date — the curves converge.</p>
+<ul>
+<li><strong>"Run" flattens just under "planned"</strong> — a few tests were never run (descoped or blocked); a summary report must say which, and why.</li>
+<li><strong>"Passed" keeps rising</strong> towards "run" — the remaining failures are being fixed and retested.</li>
+<li><strong>Converging curves</strong> — the sign that exit criteria can be met at the new release date.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> pages 30 → 32 → 33 are one story — measure, act, measure again. That last step is the "feedback" of page 35.</p>`,
+        `<p class="y-chinh">🎯 Tiếp tục dự án đó: sau ngày phát hành cũ, "run" chững lại ngay dưới "planned" và "passed" áp sát nó trước ngày mới — hai đường hội tụ.</p>
+<ul>
+<li><strong>"Run" đi ngang ngay dưới "planned"</strong> — vài test không bao giờ được chạy (bị cắt phạm vi hoặc bị chặn); báo cáo tổng kết phải nêu là test nào, vì sao.</li>
+<li><strong>"Passed" tiếp tục tăng</strong> về phía "run" — các lỗi còn lại đang được sửa và test lại.</li>
+<li><strong>Hai đường hội tụ</strong> — dấu hiệu có thể đạt exit criteria vào ngày phát hành mới.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> trang 30 → 32 → 33 là một câu chuyện — đo, hành động, đo lại. Bước cuối chính là "phản hồi" (feedback) ở trang 35.</p>`],
+      [34, 'Case history — incident reports opened vs closed',
+        `<p class="y-chinh">🎯 Real project data (Philips, 1999): cumulative incident reports opened vs closed — closing lagged far behind opening for months, then caught up in bursts.</p>
+<p class="nhan">Reading the chart (values read off the graph, approximate)</p>
+<ul>
+<li><strong>Opened IRs</strong> — a jump from about 10 to about 40 in early July, about 120 by mid-September, about 155 by early November, flattening near 167 by January.</li>
+<li><strong>Closed IRs</strong> — slow: about 35 by mid-September, about 100 by late October, then a jump to about 145 in early November and about 160 by January.</li>
+<li><strong>The gap</strong> = incidents still open. It is widest in September–October (roughly 70–85) and only about 7 at the end.</li>
+</ul>
+<p class="nhan">What it tells a test manager</p>
+<ul>
+<li><strong>Opened flattening</strong> — fewer new incidents are found: the product is stabilising, or the tests are "wearing out" (lesson 7.6, slide 95).</li>
+<li><strong>A near-vertical step in "closed"</strong> — a batch closure, e.g. a triage meeting or a build with many fixes.</li>
+<li><strong>Release readiness</strong> — "opened" flat and "closed" close to it.</li>
+</ul>
+<p class="ghi-chu">"IR" = incident report; CTFL today says <em>defect report</em>. The slide's source line also names the author; only the company and year are needed here.</p>`,
+        `<p class="y-chinh">🎯 Dữ liệu dự án thật (Philips, 1999): số incident report mở và đóng cộng dồn — việc đóng tụt xa sau việc mở suốt nhiều tháng, rồi đuổi kịp theo từng đợt.</p>
+<p class="nhan">Đọc biểu đồ (giá trị đọc từ đồ thị, gần đúng)</p>
+<ul>
+<li><strong>Opened IRs</strong> (đã mở) — nhảy từ khoảng 10 lên khoảng 40 đầu tháng 7, khoảng 120 giữa tháng 9, khoảng 155 đầu tháng 11, rồi phẳng dần quanh 167 vào tháng 1.</li>
+<li><strong>Closed IRs</strong> (đã đóng) — chậm: khoảng 35 giữa tháng 9, khoảng 100 cuối tháng 10, rồi nhảy lên khoảng 145 đầu tháng 11 và khoảng 160 vào tháng 1.</li>
+<li><strong>Khoảng cách</strong> = số incident còn mở. Rộng nhất vào tháng 9–10 (khoảng 70–85) và chỉ còn khoảng 7 lúc cuối.</li>
+</ul>
+<p class="nhan">Điều test manager đọc được</p>
+<ul>
+<li><strong>Đường opened phẳng dần</strong> — tìm được ít incident mới hơn: sản phẩm đang ổn định, hoặc bộ test đang "mòn" (bài 7.6, slide 95).</li>
+<li><strong>Một bậc gần thẳng đứng ở đường closed</strong> — đóng hàng loạt, vd sau một buổi triage hoặc một build có nhiều bản sửa.</li>
+<li><strong>Sẵn sàng phát hành</strong> — "opened" đã phẳng và "closed" sát nó.</li>
+</ul>
+<p class="ghi-chu">"IR" = incident report; CTFL ngày nay gọi là <em>defect report</em>. Dòng nguồn trên slide có ghi tên tác giả; ở đây chỉ cần tên công ty và năm.</p>`],
+    ]),
+    walk(O5, [
+      [35, 'Control',
+        `<p class="y-chinh">🎯 Control = management actions and decisions that change the process, tasks and people so the objectives are met — against the original or a modified plan.</p>
+<p class="nhan">Management actions and decisions</p>
+<ul>
+<li><strong>Affect</strong> the process, the tasks and the people.</li>
+<li><strong>To meet</strong> the original or a modified plan.</li>
+<li><strong>To achieve</strong> the objectives.</li>
+</ul>
+<p class="nhan">Examples on the slide</p>
+<ul>
+<li><strong>Tighten entry/exit criteria</strong> — pages 36–37.</li>
+<li><strong>Reallocation of resources</strong> — e.g. move two testers to the riskiest area, or ask for more debug effort.</li>
+</ul>
+<p><strong>Feedback is essential</strong> to see the effect of actions and decisions — measure again after acting, as pages 32–33 did.</p>
+<p class="ghi-chu">CTFL 2018 wording: test control takes the actions needed to meet the objectives of the test plan, which may itself be updated. Its three syllabus examples are on current slide 62 (lesson 7.3).</p>`,
+        `<p class="y-chinh">🎯 Kiểm soát (control) = các hành động và quyết định quản lý thay đổi quy trình, công việc và con người để đạt mục tiêu — theo kế hoạch gốc hoặc kế hoạch đã điều chỉnh.</p>
+<p class="nhan">Hành động và quyết định quản lý</p>
+<ul>
+<li><strong>Tác động</strong> lên quy trình, công việc và con người.</li>
+<li><strong>Để đáp ứng</strong> kế hoạch gốc hoặc kế hoạch đã sửa.</li>
+<li><strong>Để đạt</strong> mục tiêu.</li>
+</ul>
+<p class="nhan">Ví dụ trên slide</p>
+<ul>
+<li><strong>Siết entry/exit criteria</strong> — trang 36–37.</li>
+<li><strong>Phân bổ lại nguồn lực</strong> — vd chuyển hai tester sang vùng rủi ro nhất, hoặc xin thêm công debug.</li>
+</ul>
+<p><strong>Phản hồi là thiết yếu</strong> để thấy hiệu quả của hành động và quyết định — đo lại sau khi hành động, như trang 32–33 đã làm.</p>
+<p class="ghi-chu">Cách nói của CTFL 2018: kiểm soát test là thực hiện các hành động cần thiết để đạt mục tiêu của test plan, và bản thân plan có thể được cập nhật. Ba ví dụ của syllabus nằm ở slide 62 hiện tại (bài 7.3).</p>`],
+      [36, 'Entry and exit criteria',
+        `<p class="y-chinh">🎯 Between two test phases, phase 1's exit criteria and phase 2's entry criteria must meet: "tested" for phase 1 has to mean "ready for my testing" for phase 2.</p>
+<p class="nhan">The picture</p>
+<ul>
+<li><strong>Test phase 1</strong> hands over something it calls "tested".</li>
+<li><strong>Test phase 2</strong> asks: "is it ready for my testing?"</li>
+</ul>
+<p class="nhan">The table — old names</p>
+<ul>
+<li><strong>Phase 1 → exit criteria</strong>, also called <em>completion criteria</em>.</li>
+<li><strong>Phase 2 → entry criteria</strong>, which the slide also calls <em>acceptance criteria</em>.</li>
+</ul>
+<div class="pitfall">
+<p><strong>Outdated term.</strong> In today's ISTQB glossary <em>completion criteria</em> is still a synonym of exit criteria (Agile: "definition of done"), and entry criteria are the "definition of ready".</p>
+<p>But <em>acceptance criteria</em> now means something else: the criteria a component or system must satisfy to be accepted by a user, customer or other authorised entity — e.g. the acceptance criteria of a user story. Never write "acceptance criteria" for entry criteria in the exam.</p>
+</div>
+<p class="ghi-chu">Current slides 38–39 (lesson 7.2) give the syllabus lists of typical entry and exit criteria.</p>`,
+        `<p class="y-chinh">🎯 Giữa hai giai đoạn test, exit criteria của giai đoạn 1 và entry criteria của giai đoạn 2 phải khớp nhau: "đã test" với giai đoạn 1 phải có nghĩa là "sẵn sàng cho tôi test" với giai đoạn 2.</p>
+<p class="nhan">Hình vẽ</p>
+<ul>
+<li><strong>Giai đoạn test 1</strong> bàn giao một thứ nó gọi là "tested".</li>
+<li><strong>Giai đoạn test 2</strong> hỏi: "nó đã sẵn sàng cho tôi test chưa?"</li>
+</ul>
+<p class="nhan">Bảng — tên gọi cũ</p>
+<ul>
+<li><strong>Giai đoạn 1 → exit criteria</strong>, còn gọi là <em>completion criteria</em>.</li>
+<li><strong>Giai đoạn 2 → entry criteria</strong>, slide còn gọi là <em>acceptance criteria</em>.</li>
+</ul>
+<div class="pitfall">
+<p><strong>Thuật ngữ đã cũ.</strong> Trong glossary ISTQB hiện nay, <em>completion criteria</em> vẫn là từ đồng nghĩa của exit criteria (Agile: "definition of done"), còn entry criteria là "definition of ready".</p>
+<p>Nhưng <em>acceptance criteria</em> nay mang nghĩa khác: các tiêu chí mà component hay hệ thống phải thoả để được người dùng, khách hàng hoặc bên có thẩm quyền chấp nhận — vd acceptance criteria của một user story. Khi thi, đừng bao giờ viết "acceptance criteria" để chỉ entry criteria.</p>
+</div>
+<p class="ghi-chu">Slide 38–39 hiện tại (bài 7.2) có danh sách entry và exit criteria điển hình theo syllabus.</p>`],
+    ]),
+    walk(O5, [
+      [37, 'Entry/exit criteria examples',
+        `<p class="y-chinh">🎯 Criteria ranked from poor to better: a good criterion is objective and measurable — evidence, not a claim.</p>
+<p class="nhan">The list, top (poor) to bottom (better)</p>
+<ol>
+<li><strong>Clean compiled</strong> — proves only that the syntax is right.</li>
+<li><strong>Programmer claims it is working OK</strong> — a claim, not evidence.</li>
+<li><strong>Lots of tests have been run</strong> — "lots" cannot be measured, and says nothing about results.</li>
+<li><strong>Tests have been reviewed / Inspected</strong> — the tests themselves are trustworthy.</li>
+<li><strong>No faults found in current tests</strong></li>
+<li><strong>All faults found fixed and retested</strong></li>
+<li><strong>Specified coverage achieved</strong> — a measurable target.</li>
+<li><strong>All tests run after the last fault fix, no new faults</strong> — the strongest: it also covers the regression risk of the fixes.</li>
+</ol>
+<p class="meo">🧠 <strong>Remember:</strong> if two people can disagree whether a criterion is met, it is a poor criterion.</p>
+<p class="ghi-chu">"Faults" = defects in current wording. Compare the syllabus exit criteria on current slide 39 (lesson 7.2): planned tests executed, coverage reached, unresolved defects within an agreed limit.</p>`,
+        `<p class="y-chinh">🎯 Các tiêu chí xếp từ kém đến tốt: tiêu chí tốt thì khách quan và đo được — là bằng chứng, không phải lời khẳng định.</p>
+<p class="nhan">Danh sách, từ trên (kém) xuống dưới (tốt hơn)</p>
+<ol>
+<li><strong>Biên dịch sạch</strong> — chỉ chứng minh cú pháp đúng.</li>
+<li><strong>Lập trình viên nói nó chạy ổn</strong> — lời khẳng định, không phải bằng chứng.</li>
+<li><strong>Đã chạy rất nhiều test</strong> — "rất nhiều" không đo được, và chẳng nói gì về kết quả.</li>
+<li><strong>Test đã được review / Inspection</strong> — bản thân bộ test đáng tin.</li>
+<li><strong>Không tìm thấy lỗi trong các test hiện tại</strong></li>
+<li><strong>Mọi lỗi tìm được đã sửa và test lại</strong></li>
+<li><strong>Đạt mức bao phủ đã định</strong> — một mục tiêu đo được.</li>
+<li><strong>Chạy lại mọi test sau lần sửa lỗi cuối, không có lỗi mới</strong> — mạnh nhất: nó phủ luôn rủi ro regression do chính các bản sửa.</li>
+</ol>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> nếu hai người có thể cãi nhau xem tiêu chí đã đạt chưa, thì đó là tiêu chí kém.</p>
+<p class="ghi-chu">"Faults" = defect theo cách nói hiện nay. So với exit criteria của syllabus ở slide 39 hiện tại (bài 7.2): đã chạy các test theo kế hoạch, đạt mức bao phủ, số defect chưa giải quyết trong giới hạn thoả thuận.</p>`],
+      [47, 'Incidents',
+        `<p class="y-chinh">🎯 Incidents are logged once the software has been handed over to test, tracked through defined stages, and used to monitor and improve testing.</p>
+<ul>
+<li><strong>May be used to monitor and improve testing</strong> — incident metrics (lesson 7.6, slide 95).</li>
+<li><strong>Should be logged after hand-over</strong> — before the hand-over, developers fix their own faults informally during component testing; formal logging starts when the item is delivered to a test stage.</li>
+</ul>
+<p class="nhan">The stages to track</p>
+<ol>
+<li><strong>Initial recording</strong></li>
+<li><strong>Analysis</strong> — software fault, test fault, enhancement, etc.</li>
+<li><strong>Assignment to fix</strong> — only if it is a fault.</li>
+<li><strong>Fixed, not tested</strong></li>
+<li><strong>Fixed and tested OK</strong> — the confirmation test passed.</li>
+<li><strong>Closed</strong></li>
+</ol>
+<p class="nhan">Current names</p>
+<p>Figure 5.3 (current slide 99) says Reported → Opened → Assigned → Fixed → Closed, with Rejected, Deferred and Reopened as side branches. CTFL 2018 calls the report a <em>defect report</em>; an "enhancement" found in analysis is not a defect but a change request.</p>`,
+        `<p class="y-chinh">🎯 Incident được ghi nhận từ khi phần mềm đã bàn giao cho test, được theo dõi qua các giai đoạn định sẵn, và dùng để giám sát, cải tiến việc test.</p>
+<ul>
+<li><strong>Có thể dùng để giám sát và cải tiến việc test</strong> — số đo incident (bài 7.6, slide 95).</li>
+<li><strong>Nên ghi nhận sau khi bàn giao</strong> — trước bàn giao, developer tự sửa lỗi của mình một cách không chính thức trong component testing; ghi nhận chính thức bắt đầu khi hạng mục được giao cho một giai đoạn test.</li>
+</ul>
+<p class="nhan">Các giai đoạn cần theo dõi</p>
+<ol>
+<li><strong>Ghi nhận ban đầu</strong></li>
+<li><strong>Phân tích</strong> — lỗi phần mềm, lỗi của test, yêu cầu cải tiến, v.v.</li>
+<li><strong>Giao đi sửa</strong> — chỉ khi đúng là lỗi.</li>
+<li><strong>Đã sửa, chưa test</strong></li>
+<li><strong>Đã sửa và test đạt</strong> — confirmation test đã pass.</li>
+<li><strong>Đóng</strong></li>
+</ol>
+<p class="nhan">Tên gọi hiện nay</p>
+<p>Figure 5.3 (slide 99 hiện tại) ghi Reported → Opened → Assigned → Fixed → Closed, với các nhánh Rejected, Deferred và Reopened. CTFL 2018 gọi báo cáo là <em>defect report</em>; một "enhancement" phát hiện khi phân tích không phải defect mà là change request.</p>`],
+    ]),
+    walk(O5, [
+      [50, 'What information about incidents?',
+        `<p class="y-chinh">🎯 A short 2023 checklist of what an incident report must record — a subset of the eleven defect-report components on current slide 93.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Old page 50</th><th>Current slide 93 component</th></tr></thead>
+<tbody>
+<tr><td>Test ID</td><td>References — including the test case that revealed the problem</td></tr>
+<tr><td>Test environment</td><td>Test item and environment</td></tr>
+<tr><td>Software under test ID</td><td>Test item (configuration item and version)</td></tr>
+<tr><td>Actual &amp; expected results</td><td>Expected and actual results</td></tr>
+<tr><td>Severity, scope, priority</td><td>Scope or degree of impact (severity); urgency/priority to fix</td></tr>
+<tr><td>Name of tester</td><td>Author</td></tr>
+<tr><td>Any other relevant information (e.g. how to reproduce it)</td><td>Description enabling reproduction and resolution</td></tr>
+</tbody>
+</table></div>
+<p class="nhan">Missing from the old list</p>
+<ul>
+<li><strong>Identifier, title, date</strong></li>
+<li><strong>Lifecycle phase</strong> in which it was observed</li>
+<li><strong>State of the report</strong>, conclusions and approvals, global issues, change history</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> "Test ID" and "Software under test ID" only work if CM has identified those items (pages 18 and 23).</p>`,
+        `<p class="y-chinh">🎯 Một danh sách ngắn năm 2023 về những gì incident report phải ghi — là tập con của mười một thành phần defect report ở slide 93 hiện tại.</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Trang 50 (cũ)</th><th>Thành phần tương ứng ở slide 93</th></tr></thead>
+<tbody>
+<tr><td>Test ID</td><td>References — kể cả test case đã làm lộ vấn đề</td></tr>
+<tr><td>Môi trường test</td><td>Test item và môi trường</td></tr>
+<tr><td>ID phần mềm đang test</td><td>Test item (configuration item và phiên bản)</td></tr>
+<tr><td>Kết quả thực tế và mong đợi</td><td>Kết quả mong đợi và thực tế</td></tr>
+<tr><td>Severity, phạm vi, priority</td><td>Phạm vi/mức tác động (severity); độ gấp/ưu tiên sửa</td></tr>
+<tr><td>Tên tester</td><td>Author (người lập)</td></tr>
+<tr><td>Mọi thông tin liên quan khác (vd cách tái hiện)</td><td>Mô tả giúp tái hiện và xử lý</td></tr>
+</tbody>
+</table></div>
+<p class="nhan">Danh sách cũ còn thiếu</p>
+<ul>
+<li><strong>Mã định danh, tiêu đề, ngày</strong></li>
+<li><strong>Giai đoạn vòng đời</strong> nơi phát hiện</li>
+<li><strong>Trạng thái báo cáo</strong>, kết luận và phê duyệt, vấn đề toàn cục, lịch sử thay đổi</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> "Test ID" và "ID phần mềm đang test" chỉ ghi được khi CM đã định danh các hạng mục đó (trang 18 và 23).</p>`],
+    ]),
+    bi(`<h3>Worked example — estimating the test cycles (pages 26–29)</h3>
+<p>A system test has 200 test cases of 0.5 h each. History (page 28) says: about 80 faults to expect; the cycles find 60 %, 30 % and 10 % of them (nested faults); 10 % of fixes are wrong and come back; a report takes 10 minutes; every retest cycle also reruns a 40-test regression subset. Computed with a script:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Cycle</th><th>Tests run</th><th>Execution</th><th>New faults</th><th>Failed fixes</th><th>Reports</th><th>Reporting</th><th>Total</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>200 (full run)</td><td>100 h</td><td>48</td><td>0</td><td>48</td><td>8.00 h</td><td>108.00 h</td></tr>
+<tr><td>2</td><td>88 (48 retests + 40 regression)</td><td>44 h</td><td>24</td><td>5</td><td>29</td><td>4.83 h</td><td>48.83 h</td></tr>
+<tr><td>3</td><td>69 (29 retests + 40 regression)</td><td>34.5 h</td><td>8</td><td>3</td><td>11</td><td>1.83 h</td><td>36.33 h</td></tr>
+<tr><td>4</td><td>51 (11 retests + 40 regression)</td><td>25.5 h</td><td>0</td><td>1</td><td>1</td><td>0.17 h</td><td>25.67 h</td></tr>
+<tr><td colspan="7"><strong>All four cycles</strong></td><td><strong>218.83 h</strong></td></tr>
+</tbody>
+</table></div>
+<p class="nhan">Reading the result</p>
+<ul>
+<li><strong>2.19 times the naive estimate</strong> — "run 200 tests once" is 100 h; even adding one report per fault gives only 113.33 h. This is why page 26 says estimating testing is different.</li>
+<li><strong>Four cycles</strong> — matching "3–4 iterations is typical" (page 27). Cycle 4 still leaves one failed fix: one more small retest, or accept it against the exit criteria.</li>
+<li><strong>Failed fixes</strong> — 10 % of each cycle's reports, rounded: 48 → 5, 29 → 3, 11 → 1.</li>
+<li><strong>Time waiting for fixes</strong> (page 28) is not in the table — it stretches the <em>schedule</em>, not the effort.</li>
+<li><strong>Reporting load</strong> — 8 h of 108 h in cycle 1 is 7.4 %, well under the 25 % suspension threshold of page 29.</li>
+</ul>`,
+    `<h3>Ví dụ có lời giải — ước lượng các chu kỳ test (trang 26–29)</h3>
+<p>Một đợt system test có 200 test case, mỗi cái 0,5 giờ. Số liệu cũ (trang 28) cho biết: dự kiến khoảng 80 lỗi; các chu kỳ tìm được lần lượt 60 %, 30 % và 10 % số đó (lỗi lồng nhau); 10 % bản sửa bị hỏng và quay lại; viết một báo cáo mất 10 phút; mỗi chu kỳ test lại còn chạy thêm một bộ regression 40 test. Tính bằng script:</p>
+<div class="table-wrap"><table>
+<thead><tr><th>Chu kỳ</th><th>Số test chạy</th><th>Chạy test</th><th>Lỗi mới</th><th>Sửa hỏng</th><th>Báo cáo</th><th>Viết báo cáo</th><th>Tổng</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>200 (chạy toàn bộ)</td><td>100 h</td><td>48</td><td>0</td><td>48</td><td>8,00 h</td><td>108,00 h</td></tr>
+<tr><td>2</td><td>88 (48 test lại + 40 regression)</td><td>44 h</td><td>24</td><td>5</td><td>29</td><td>4,83 h</td><td>48,83 h</td></tr>
+<tr><td>3</td><td>69 (29 test lại + 40 regression)</td><td>34,5 h</td><td>8</td><td>3</td><td>11</td><td>1,83 h</td><td>36,33 h</td></tr>
+<tr><td>4</td><td>51 (11 test lại + 40 regression)</td><td>25,5 h</td><td>0</td><td>1</td><td>1</td><td>0,17 h</td><td>25,67 h</td></tr>
+<tr><td colspan="7"><strong>Cả bốn chu kỳ</strong></td><td><strong>218,83 h</strong></td></tr>
+</tbody>
+</table></div>
+<p class="nhan">Đọc kết quả</p>
+<ul>
+<li><strong>Gấp 2,19 lần ước lượng ngây thơ</strong> — "chạy 200 test một lần" là 100 giờ; cộng thêm mỗi lỗi một báo cáo cũng chỉ 113,33 giờ. Vì thế trang 26 nói ước lượng test là khác.</li>
+<li><strong>Bốn chu kỳ</strong> — khớp "3–4 vòng là điển hình" (trang 27). Chu kỳ 4 vẫn còn một bản sửa hỏng: test lại thêm một lượt nhỏ, hoặc chấp nhận theo exit criteria.</li>
+<li><strong>Sửa hỏng</strong> — 10 % số báo cáo của mỗi chu kỳ, làm tròn: 48 → 5, 29 → 3, 11 → 1.</li>
+<li><strong>Thời gian chờ bản sửa</strong> (trang 28) không có trong bảng — nó kéo dài <em>lịch</em>, không làm tăng công sức.</li>
+<li><strong>Tải viết báo cáo</strong> — 8 giờ trên 108 giờ ở chu kỳ 1 là 7,4 %, thấp xa ngưỡng tạm dừng 25 % ở trang 29.</li>
+</ul>`),
+    bi(`<div class="pitfall co-tieu-de"><strong>Exam traps from the 2023 pages.</strong>
+<ol>
+<li><strong>Internal test consultants</strong> advise, review and support — they do not perform the testing (page 4).</li>
+<li><strong>Live data is not put under CM</strong>; a masked, versioned snapshot used as test data is (page 23).</li>
+<li><strong>"Acceptance criteria"</strong> on page 36 means entry criteria — today's acceptance criteria are for acceptance by a user or customer. <em>Completion criteria</em> = exit criteria.</li>
+<li><strong>Debugging is not testing</strong>; the retest after a fix is confirmation testing (page 27).</li>
+<li><strong>Monitoring vs control</strong> — a diverging S-curve is what monitoring shows; tightening entry criteria or stopping testing is control (pages 30–31, 35).</li>
+<li><strong>Old words</strong> — fault → defect; incident report (IR) → defect report; ISEB, the old UK exam board in the deck footer → today simply ISTQB CTFL.</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>The S-curve lives on as the burn-up chart.</strong> Test dashboards in Jira, Azure DevOps or TestRail plot planned scope against executed and passed tests — exactly pages 30–33. A widening gap between "executed" and "passed" is the diverging S-curve. Reliability-growth models fit the "opened" curve of page 34 to predict how many defects are still left.</div>`,
+    `<div class="pitfall co-tieu-de"><strong>Bẫy đề thi từ các trang 2023.</strong>
+<ol>
+<li><strong>Tư vấn test nội bộ</strong> tư vấn, review và hỗ trợ — họ không tự thực hiện việc test (trang 4).</li>
+<li><strong>Live data không đặt dưới CM</strong>; bản chụp đã che dữ liệu nhạy cảm, có phiên bản, dùng làm dữ liệu test thì có (trang 23).</li>
+<li><strong>"Acceptance criteria"</strong> ở trang 36 nghĩa là entry criteria — acceptance criteria ngày nay là tiêu chí để người dùng hay khách hàng chấp nhận. <em>Completion criteria</em> = exit criteria.</li>
+<li><strong>Debug không phải là test</strong>; test lại sau khi sửa là confirmation testing (trang 27).</li>
+<li><strong>Giám sát vs kiểm soát</strong> — S-curve phân kỳ là thứ việc giám sát cho thấy; siết entry criteria hay dừng test là kiểm soát (trang 30–31, 35).</li>
+<li><strong>Từ cũ</strong> — fault → defect; incident report (IR) → defect report; ISEB, hội đồng thi cũ của Anh ghi ở chân slide → nay chỉ còn ISTQB CTFL.</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>S-curve vẫn sống dưới tên burn-up chart.</strong> Dashboard test trong Jira, Azure DevOps hay TestRail vẽ phạm vi dự kiến so với số test đã chạy và đã đạt — đúng như trang 30–33. Khoảng cách "executed" và "passed" ngày càng rộng chính là S-curve phân kỳ. Các mô hình tăng trưởng độ tin cậy (reliability growth) khớp đường "opened" của trang 34 để dự đoán còn bao nhiêu defect.</div>`),
+  ].join('\n'),
+};
+
 /* ──────────────────────────────── Quiz 7 ──────────────────────────────── */
-// Every "Question" slide of SWT5 (17) + the hidden pptx slide 60 question + 12 checks on the non-question slides.
+// Every "Question" slide of SWT5 (17) + the hidden pptx slide 60 question + 12 checks on the non-question slides + 6 on the 2023 deck (lesson 7.7).
 const q = (question, options, correctIndex) => ({ question, options, correctIndex, points: 1 });
 const QUIZ7 = {
   title: 'Quiz 7 — Test management (all SWT5 slide questions)|||Quiz 7 — Quản lý test (toàn bộ câu hỏi trên slide SWT5)',
   slug: 'swt301-quiz-7',
   type: 'QUIZ',
-  description: '30 câu: đủ 17 câu "Question" trên slide SWT5 + 1 câu ở slide ẩn (đáp án đã giải trong bài 7.1–7.6) + 12 câu kiểm tra phần lý thuyết: độc lập, chiến lược, lịch thực thi, ước lượng, rủi ro, CM, defect.',
+  description: '36 câu: đủ 17 câu "Question" trên slide SWT5 + 1 câu ở slide ẩn (đáp án đã giải trong bài 7.1–7.6) + 12 câu kiểm tra phần lý thuyết: độc lập, chiến lược, lịch thực thi, ước lượng, rủi ro, CM, defect — và 6 câu về bộ slide SWT5 2023 (bài 7.7).',
   quiz: {
-    timeLimitSeconds: 1800,
+    timeLimitSeconds: 2160,
     questions: [
       q('Which BEST describes how tasks are divided between the test manager and the tester? (SWT5 s.21)|||Câu nào mô tả ĐÚNG NHẤT cách chia việc giữa test manager và tester? (SWT5 s.21)', ['Manager plans and chooses standards; tester chooses tools and controls|||Manager lập kế hoạch và chọn chuẩn; tester chọn công cụ và kiểm soát', 'Manager plans, organizes and controls; tester specifies and executes tests|||Manager lập kế hoạch, tổ chức và kiểm soát; tester đặc tả và thực thi test', 'Manager plans, monitors and controls; tester designs tests and decides about automation frameworks|||Manager lập kế hoạch, giám sát, kiểm soát; tester thiết kế test và quyết định framework tự động hoá', 'Manager plans, organizes and specifies test cases; tester prioritizes and executes|||Manager lập kế hoạch, tổ chức và đặc tả test case; tester ưu tiên và thực thi'], 1),
       q('Who is normally responsible for creating and updating a test plan? (s.22)|||Ai thường chịu trách nhiệm tạo và cập nhật test plan? (s.22)', ['The project manager|||Project manager', 'The test manager|||Test manager', 'The tester|||Tester', 'The product owner|||Product owner'], 1),
@@ -3448,12 +4379,18 @@ const QUIZ7 = {
       q('A contingency plan for a risk aims to…|||Kế hoạch dự phòng (contingency) cho một rủi ro nhằm…', ['reduce its likelihood in advance|||giảm khả năng xảy ra từ trước', 'reduce its impact if it occurs|||giảm tác động nếu nó xảy ra', 'move it to another stakeholder|||chuyển nó cho bên khác', 'ignore it|||bỏ qua nó'], 1),
       q('A typo in the company name on the home page is typically…|||Gõ sai tên công ty trên trang chủ thường là…', ['high severity, low priority|||severity cao, priority thấp', 'low severity, high priority|||severity thấp, priority cao', 'high severity, high priority|||severity cao, priority cao', 'not a defect|||không phải defect'], 1),
       q('In Figure 5.3, a fixed defect fails its confirmation test. The report moves to…|||Trong Figure 5.3, một defect đã sửa bị fail confirmation test. Báo cáo chuyển sang…', ['Closed', 'Rejected', 'Reopened', 'Deferred'], 2),
+      { question: 'In the 2023 deck, which organisational structure gives advice, reviews and support but does NOT perform the testing itself? (SWT5 2023 p.4)|||Trong bộ slide 2023, cơ cấu tổ chức nào tư vấn, review và hỗ trợ nhưng KHÔNG tự thực hiện việc test? (SWT5 2023 tr.4)', options: ['Development team (buddy system)|||Nhóm phát triển (hệ buddy)', 'Independent test team|||Nhóm test độc lập', 'Internal test consultants|||Tư vấn test nội bộ', 'Outside organisation (3rd party)|||Tổ chức bên ngoài (bên thứ ba)'], correctIndex: 2, points: 1, explanation: 'Page 4 lists internal test consultants as giving advice, review and support, not performing the testing; someone else still has to do the testing.|||Trang 4 ghi tư vấn test nội bộ chỉ tư vấn, review và hỗ trợ, không tự test; việc test vẫn phải do người khác làm.' },
+      { question: 'Which of these should NOT be placed under configuration management in testing? (SWT5 2023 p.23)|||Thứ nào KHÔNG nên đặt dưới quản lý cấu hình trong kiểm thử? (SWT5 2023 tr.23)', options: ['Live production data|||Dữ liệu thật trên production (live data)', 'Test scripts|||Test script', 'Expected results|||Kết quả mong đợi', 'Test tools|||Công cụ test'], correctIndex: 0, points: 1, explanation: 'Page 23 answers its own question: live data. It changes constantly and belongs to the business; a masked, versioned snapshot used as test data is what goes under CM.|||Trang 23 tự trả lời: live data. Nó thay đổi liên tục và thuộc về doanh nghiệp; thứ đặt dưới CM là bản chụp đã che dữ liệu, có phiên bản, dùng làm dữ liệu test.' },
+      { question: 'Recording and reporting the current state and history of every configuration item and change request is called… (SWT5 2023 p.17, 22)|||Ghi nhận và báo cáo trạng thái hiện tại và lịch sử của mọi configuration item và change request được gọi là… (SWT5 2023 tr.17, 22)', options: ['Configuration identification', 'Configuration status accounting', 'Configuration change control', 'Configuration audit'], correctIndex: 1, points: 1, explanation: 'The four CM activities: identification names the items, change control guards changes, status accounting records and reports status, audit checks that the record and the product agree.|||Bốn hoạt động CM: identification đặt tên hạng mục, change control canh giữ thay đổi, status accounting ghi và báo cáo trạng thái, audit kiểm tra sổ sách khớp với sản phẩm.' },
+      { question: 'A fault report takes 10 minutes. With the suspension criterion "testers spend more than 25% of their time on faults", how many reports per 8-hour day can a tester write before testing should be suspended? (SWT5 2023 p.29)|||Viết một báo cáo lỗi mất 10 phút. Với tiêu chí tạm dừng "tester dành hơn 25% thời gian cho lỗi", một tester viết được bao nhiêu báo cáo mỗi ngày 8 giờ trước khi phải tạm dừng test? (SWT5 2023 tr.29)', options: ['12', '25', '36', '48'], correctIndex: 0, points: 1, explanation: '8 h = 480 min; 25% of 480 = 120 min; 120 / 10 = 12 reports. 48 would be the whole day with no testing at all.|||8 giờ = 480 phút; 25% của 480 = 120 phút; 120 / 10 = 12 báo cáo. 48 là cả ngày chỉ viết báo cáo, không test gì.' },
+      { question: 'Tests run rises steeply but tests passed stays almost flat (a diverging S-curve). Which option is a CONTROL ACTION rather than a possible cause? (SWT5 2023 p.31)|||Số test đã chạy tăng dốc nhưng số test đạt gần như đứng yên (S-curve phân kỳ). Lựa chọn nào là HÀNH ĐỘNG KIỂM SOÁT chứ không phải nguyên nhân? (SWT5 2023 tr.31)', options: ['Poor test entry criteria|||Entry criteria quá lỏng', 'Ran easy tests first|||Chạy test dễ trước', 'Common faults affect all tests|||Lỗi chung ảnh hưởng mọi test', 'Stop testing until faults are fixed|||Dừng test tới khi lỗi được sửa'], correctIndex: 3, points: 1, explanation: 'Page 31 has two columns: causes (poor entry criteria, easy tests first, insufficient debug effort, common faults, very poor quality) and control actions (tighten entry criteria, cancel project, more debugging, stop testing until fixed, continue testing to scope quality).|||Trang 31 có hai cột: nguyên nhân (entry criteria lỏng, chạy test dễ trước, thiếu công debug, lỗi chung, chất lượng rất kém) và hành động kiểm soát (siết entry criteria, huỷ dự án, tăng debug, dừng test tới khi sửa, tiếp tục test để đo chất lượng).' },
+      { question: 'The 2023 deck pairs exit criteria with "completion criteria" and entry criteria with "acceptance criteria". In current ISTQB terminology, which is a synonym of EXIT criteria? (SWT5 2023 p.36)|||Bộ slide 2023 ghép exit criteria với "completion criteria" và entry criteria với "acceptance criteria". Theo thuật ngữ ISTQB hiện nay, từ nào đồng nghĩa với EXIT criteria? (SWT5 2023 tr.36)', options: ['Acceptance criteria', 'Definition of ready', 'Completion criteria', 'Suspension criteria'], correctIndex: 2, points: 1, explanation: 'Completion criteria (and, in Agile, definition of done) = exit criteria. Definition of ready = entry criteria. Acceptance criteria today are what a system or user story must satisfy to be accepted by a user or customer.|||Completion criteria (và trong Agile là definition of done) = exit criteria. Definition of ready = entry criteria. Acceptance criteria ngày nay là điều hệ thống hay user story phải thoả để người dùng/khách hàng chấp nhận.' },
     ],
   },
 };
 
 export default {
   title: 'Chapter 7 — Test management|||Chương 7 — Quản lý test',
-  description: 'SWT5 (101 slide) học từng slide: tổ chức & tính độc lập, test plan, 7 chiến lược, entry/exit, lịch thực thi theo ưu tiên & phụ thuộc, ước lượng, giám sát & báo cáo, quản lý cấu hình, rủi ro, quản lý defect — kèm đáp án mọi câu hỏi trên slide, 2 slide ẩn và trang sách tương ứng.',
-  lessons: [L71, L72, L73, L74, L75, L76, QUIZ7],
+  description: 'SWT5 (101 slide) học từng slide: tổ chức & tính độc lập, test plan, 7 chiến lược, entry/exit, lịch thực thi theo ưu tiên & phụ thuộc, ước lượng, giám sát & báo cáo, quản lý cấu hình, rủi ro, quản lý defect — kèm đáp án mọi câu hỏi trên slide, 2 slide ẩn và trang sách tương ứng; bài 7.7 bổ sung 25 trang của bộ slide SWT5 cũ (2023).',
+  lessons: [L71, L72, L73, L74, L75, L76, L77, QUIZ7],
 };

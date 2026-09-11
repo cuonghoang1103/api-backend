@@ -9,6 +9,8 @@
  *   1.3 Seven testing principles    slides 53–72
  *   1.4 Test process                slides 73–98 (+ addl 18–26)
  *   1.5 Psychology & code of ethics slides 99–114
+ *   1.6 The older 2023 deck SWT1.ppt ('oswt1', 70 pages): only the pages the
+ *       current deck lacks (reliability, planning levels, the old test process)
  * Answers to every "Question" slide were worked out against the ISTQB CTFL
  * 2018 syllabus wording (the version these slides follow).
  */
@@ -2671,16 +2673,814 @@ const L15 = {
   ].join('\n'),
 };
 
+/* ─────────────── 1.6 More from the 2023 slide set (SWT1.ppt, deck 'oswt1') ─────────────── */
+const O = 'oswt1';
+const L16 = {
+  title: '1.6 — More from the 2023 slide set: reliability, test planning levels, the old test process|||1.6 — Bổ sung từ bộ slide 2023: độ tin cậy, các cấp lập kế hoạch, quy trình test cũ',
+  slug: 'swt301-ch1-slides-2023',
+  type: 'VIDEO',
+  description: 'Bộ slide SWT1 năm 2023 (70 trang): những trang bài 1.1–1.5 chưa có — reliability vs fault, testing & quality, glossary, test policy / strategy / plan theo cấp, quy trình cũ specification → execution → recording → check completion, biểu đồ niềm tin — kèm bảng đổi thuật ngữ cũ sang CTFL hiện hành.',
+  content: [
+    bi(`<span class="eyebrow">Chapter 1 · Lesson 1.6 · SWT1 (2023) — 70 pages</span>
+<h2>More from the 2023 slide set</h2>
+<p class="lead">Before the current <em>SWT1_tim</em> deck, the course used an older deck, <strong>SWT1.ppt (2023)</strong>. About two thirds of its 70 pages reappear in lessons 1.1–1.5. The rest — mostly the <strong>old “fundamental test process”</strong> and the <strong>levels of test planning</strong> — is shown here, page by page.</p>
+<div class="callout"><strong>Learning objectives.</strong>
+<ul>
+<li>Explain <strong>reliability</strong> and why reliable software can still contain defects.</li>
+<li>Place <strong>test policy, test strategy, project test plan and level test plan</strong> on the right organisational level.</li>
+<li>Walk through the old process — <strong>specification → execution → recording → check completion</strong> — and map every step to the current seven CTFL activities.</li>
+<li>Name typical <strong>exit criteria</strong> and the four kinds of discrepancy you log while recording.</li>
+<li>Translate the deck’s <strong>outdated wording</strong> (ISEB, fault, test record, completion criteria…) into current CTFL terms.</li>
+</ul></div>
+<div class="pitfall co-tieu-de"><strong>Old wording — learn the current term for the exam.</strong>
+<ul>
+<li><strong>ISTQB / ISEB</strong> — ISEB was the British exam board (part of BCS). Today the certificate is the <strong>ISTQB CTFL</strong>.</li>
+<li><strong>Fault</strong> — current syllabus says <strong>defect</strong> (fault and bug are synonyms).</li>
+<li><strong>Test record</strong> — now the <strong>test log</strong>.</li>
+<li><strong>Test completion criteria</strong> — now <strong>exit criteria</strong> (in Agile: definition of done).</li>
+<li><strong>Specification / recording / check completion</strong> — replaced by analysis, design, implementation, execution, completion (table at the end of this lesson).</li>
+</ul></div>`,
+    `<span class="eyebrow">Chương 1 · Bài 1.6 · SWT1 (2023) — 70 trang</span>
+<h2>Bổ sung từ bộ slide 2023</h2>
+<p class="lead">Trước bộ <em>SWT1_tim</em> hiện tại, môn học dùng một bộ slide cũ hơn là <strong>SWT1.ppt (2023)</strong>. Khoảng hai phần ba trong 70 trang của nó đã có lại trong bài 1.1–1.5. Phần còn lại — chủ yếu là <strong>“quy trình kiểm thử cơ bản” kiểu cũ</strong> và <strong>các cấp lập kế hoạch test</strong> — được trình bày ở đây, từng trang một.</p>
+<div class="callout"><strong>Mục tiêu bài học.</strong>
+<ul>
+<li>Giải thích <strong>reliability (độ tin cậy)</strong> và vì sao phần mềm tin cậy vẫn có thể chứa defect.</li>
+<li>Đặt <strong>test policy, test strategy, project test plan và level test plan</strong> vào đúng cấp tổ chức.</li>
+<li>Đi hết quy trình cũ — <strong>specification → execution → recording → check completion</strong> — và ghép từng bước với bảy hoạt động CTFL hiện hành.</li>
+<li>Kể được các <strong>exit criteria</strong> điển hình và bốn loại sai khác cần ghi lại khi recording.</li>
+<li>Đổi <strong>cách gọi cũ</strong> của slide (ISEB, fault, test record, completion criteria…) sang thuật ngữ CTFL hiện nay.</li>
+</ul></div>
+<div class="pitfall co-tieu-de"><strong>Thuật ngữ cũ — đi thi phải dùng tên hiện hành.</strong>
+<ul>
+<li><strong>ISTQB / ISEB</strong> — ISEB là hội đồng thi của Anh (thuộc BCS). Chứng chỉ hiện nay là <strong>ISTQB CTFL</strong>.</li>
+<li><strong>Fault</strong> — syllabus hiện hành gọi là <strong>defect</strong> (fault, bug là từ đồng nghĩa).</li>
+<li><strong>Test record</strong> — nay là <strong>test log</strong>.</li>
+<li><strong>Test completion criteria</strong> — nay là <strong>exit criteria</strong> (trong Agile: definition of done).</li>
+<li><strong>Specification / recording / check completion</strong> — được thay bằng analysis, design, implementation, execution, completion (bảng ở cuối bài).</li>
+</ul></div>`),
+    bi(`<h3>Pages already taught in lessons 1.1–1.5</h3>
+<p>These pages of the 2023 deck repeat a current slide (same text or same figure), so they are not shown again. Open the lesson and slide in the right column.</p>
+<table>
+<thead><tr><th>2023 page</th><th>Content</th><th>Already taught in</th></tr></thead>
+<tbody>
+<tr><td>1, 2, 22, 30, 55, 67</td><td>Cover and the repeated “Contents” agenda</td><td>Title / agenda only — 1.1, slides 1–2</td></tr>
+<tr><td>3</td><td>Testing terminology, BS 7925-1</td><td>1.1, slide 6</td></tr>
+<tr><td>5</td><td>Error → fault → failure picture</td><td>1.2, slide 40 (same picture, “defect” instead of “fault”)</td></tr>
+<tr><td>8 · 9</td><td>Figure 1.1 types of error and defect · Figure 1.2 cost of defects</td><td>1.2, slides 42 and 45</td></tr>
+<tr><td>10 · 11</td><td>Cost of faults (Ariane 5, Mariner…) · safety-critical systems</td><td>1.1, slides 4 and 5</td></tr>
+<tr><td>12</td><td>So why is testing necessary? (✓/✗)</td><td>1.2, slide 46</td></tr>
+<tr><td>13–18</td><td>480,000 tests, exhaustive testing, how much is enough, risk, prioritise</td><td>1.3, slides 56–61</td></tr>
+<tr><td>20</td><td>Other factors that influence testing</td><td>1.3, slide 62</td></tr>
+<tr><td>23–29</td><td>The seven testing principles</td><td>1.3, slides 54, 55, 63–67</td></tr>
+<tr><td>40</td><td>A good test case — the four Es</td><td>1.4, slide 83</td></tr>
+<tr><td>46 · 48 · 51</td><td>Dividers: the process bar with one box highlighted</td><td>Same diagram as page 37 (shown below)</td></tr>
+<tr><td>54</td><td>Comparison of tasks — intellectual vs clerical</td><td>1.4, slide 90</td></tr>
+<tr><td>56 · 58</td><td>Why test? · Assessing software quality</td><td>1.5, slides 100 and 101</td></tr>
+<tr><td>59–62</td><td>Traditional vs better approach, testing paradox, who wants to be a tester?</td><td>1.5, slides 106–109</td></tr>
+<tr><td>63 · 64</td><td>Testers’ rights · responsibilities</td><td>1.5, slides 110 and 111</td></tr>
+<tr><td>65 · 66</td><td>Independence · levels of independence</td><td>1.5, slides 102 and 103</td></tr>
+<tr><td>68 · 69</td><td>ISTQB code of ethics</td><td>1.5, slides 113 and 114</td></tr>
+<tr><td>70</td><td>Chapter review (glossary terms per section)</td><td>1.5, the hidden review slide (pptx 118) at the end of the lesson</td></tr>
+</tbody></table>`,
+    `<h3>Những trang đã học trong bài 1.1–1.5</h3>
+<p>Các trang này của bộ 2023 trùng một slide hiện tại (cùng chữ hoặc cùng hình), nên không chiếu lại. Mở bài và slide ở cột bên phải.</p>
+<table>
+<thead><tr><th>Trang 2023</th><th>Nội dung</th><th>Đã học ở</th></tr></thead>
+<tbody>
+<tr><td>1, 2, 22, 30, 55, 67</td><td>Trang bìa và mục lục “Contents” lặp lại</td><td>Chỉ là tiêu đề / mục lục — 1.1, slide 1–2</td></tr>
+<tr><td>3</td><td>Thuật ngữ kiểm thử, BS 7925-1</td><td>1.1, slide 6</td></tr>
+<tr><td>5</td><td>Hình error → fault → failure</td><td>1.2, slide 40 (cùng hình, ghi “defect” thay cho “fault”)</td></tr>
+<tr><td>8 · 9</td><td>Figure 1.1 các loại error và defect · Figure 1.2 chi phí defect</td><td>1.2, slide 42 và 45</td></tr>
+<tr><td>10 · 11</td><td>Thiệt hại do lỗi (Ariane 5, Mariner…) · hệ thống an toàn sống còn</td><td>1.1, slide 4 và 5</td></tr>
+<tr><td>12</td><td>Vậy vì sao cần kiểm thử? (✓/✗)</td><td>1.2, slide 46</td></tr>
+<tr><td>13–18</td><td>480.000 test, test vét cạn, test bao nhiêu là đủ, rủi ro, ưu tiên</td><td>1.3, slide 56–61</td></tr>
+<tr><td>20</td><td>Các yếu tố khác ảnh hưởng tới kiểm thử</td><td>1.3, slide 62</td></tr>
+<tr><td>23–29</td><td>Bảy nguyên tắc kiểm thử</td><td>1.3, slide 54, 55, 63–67</td></tr>
+<tr><td>40</td><td>Test case tốt — bốn chữ E</td><td>1.4, slide 83</td></tr>
+<tr><td>46 · 48 · 51</td><td>Trang chuyển mục: thanh quy trình tô sáng một ô</td><td>Cùng sơ đồ trang 37 (có bên dưới)</td></tr>
+<tr><td>54</td><td>So sánh công việc — trí tuệ vs hành chính</td><td>1.4, slide 90</td></tr>
+<tr><td>56 · 58</td><td>Why test? · Đánh giá chất lượng phần mềm</td><td>1.5, slide 100 và 101</td></tr>
+<tr><td>59–62</td><td>Cách test truyền thống vs tốt hơn, nghịch lý kiểm thử, ai muốn làm tester?</td><td>1.5, slide 106–109</td></tr>
+<tr><td>63 · 64</td><td>Quyền · trách nhiệm của tester</td><td>1.5, slide 110 và 111</td></tr>
+<tr><td>65 · 66</td><td>Tính độc lập · các mức độc lập</td><td>1.5, slide 102 và 103</td></tr>
+<tr><td>68 · 69</td><td>Quy tắc đạo đức ISTQB</td><td>1.5, slide 113 và 114</td></tr>
+<tr><td>70</td><td>Ôn tập chương (thuật ngữ theo từng mục)</td><td>1.5, slide ôn tập bị ẩn (pptx 118) ở cuối bài</td></tr>
+</tbody></table>`),
+    walkHead(O, 4, 57, 'Only the pages that add something to lessons 1.1–1.5 are shown; the others are listed in the table above.', 'Chỉ hiện các trang bổ sung được điều gì cho bài 1.1–1.5; các trang còn lại nằm trong bảng phía trên.'),
+    walk(O, [
+      [4, 'What is a “bug”? (2023 wording)',
+        `<p class="y-chinh">🎯 The same three words as slide 39 (lesson 1.2), in the older wording: “fault” is the main term and a failure is a “deviation”.</p>
+<p class="nhan">What the page says</p>
+<ul>
+<li><strong>Error</strong> — a human action that produces an incorrect result.</li>
+<li><strong>Fault</strong> — a manifestation of an error in software, also known as a defect or bug. If executed, a fault may cause a failure.</li>
+<li><strong>Failure</strong> — deviation of the software from its expected delivery or service. The sub-bullet “found defect” means: a failure is the moment a defect becomes visible.</li>
+</ul>
+<p class="nhan">Old wording → current CTFL wording</p>
+<table><thead><tr><th>2023 deck</th><th>Current syllabus / glossary</th></tr></thead><tbody>
+<tr><td>Fault (defect, bug)</td><td><strong>Defect</strong> — fault and bug are synonyms</td></tr>
+<tr><td>Failure = deviation from expected delivery or service</td><td><strong>Failure</strong> = an event in which a component or system does not perform a required function within specified limits</td></tr>
+<tr><td>Failure = “found defect”</td><td>The tester <em>observes</em> the failure; the defect itself is located later, by debugging</td></tr>
+</tbody></table>
+<p class="meo">🧠 <strong>Remember:</strong> the yellow box is still true word for word — <em>a failure is an event; a fault (defect) is a state of the software, caused by an error.</em></p>`,
+        `<p class="y-chinh">🎯 Vẫn ba từ của slide 39 (bài 1.2), nhưng theo cách gọi cũ: “fault” là từ chính và failure là một “sự sai lệch”.</p>
+<p class="nhan">Trang slide nói gì</p>
+<ul>
+<li><strong>Error</strong> — hành động của con người tạo ra kết quả sai.</li>
+<li><strong>Fault</strong> — biểu hiện của error nằm trong phần mềm, còn gọi là defect hay bug. Nếu được thực thi, fault có thể gây failure.</li>
+<li><strong>Failure</strong> — sự sai lệch của phần mềm so với cách vận hành hay dịch vụ mong đợi. Dòng phụ “found defect” nghĩa là: failure là lúc một defect lộ ra.</li>
+</ul>
+<p class="nhan">Cách gọi cũ → cách gọi CTFL hiện hành</p>
+<table><thead><tr><th>Slide 2023</th><th>Syllabus / glossary hiện hành</th></tr></thead><tbody>
+<tr><td>Fault (defect, bug)</td><td><strong>Defect</strong> — fault và bug là từ đồng nghĩa</td></tr>
+<tr><td>Failure = sai lệch so với vận hành / dịch vụ mong đợi</td><td><strong>Failure</strong> = sự kiện trong đó thành phần hay hệ thống không thực hiện được chức năng yêu cầu trong giới hạn đã định</td></tr>
+<tr><td>Failure = “found defect”</td><td>Tester <em>quan sát</em> được failure; còn defect thì được tìm ra sau đó, bằng debugging</td></tr>
+</tbody></table>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> câu trong ô vàng vẫn đúng từng chữ — <em>failure là một sự kiện; fault (defect) là một trạng thái của phần mềm, do error gây ra.</em></p>`],
+      [6, 'Reliability versus Faults',
+        `<p class="y-chinh">🎯 Reliability is about how rarely the software fails in use — not about how many defects it contains.</p>
+<p class="nhan">Definition on the page</p>
+<p><strong>Reliability</strong> — the probability that software will not cause the failure of the system for a specified time under specified conditions.</p>
+<p class="nhan">The three questions and the marks on the slide</p>
+<ol>
+<li><strong>Can a system be fault-free (zero faults, right first time)? ✗</strong> — no. Software is written by people (page 7), and since exhaustive testing is impossible we can never show that no defect is left (principle 1).</li>
+<li><strong>Can a system be reliable but still have faults? ✓</strong> — yes. A defect only hurts when it is executed under the right conditions. A defect in a function users almost never run leaves reliability high.</li>
+<li><strong>Is a “fault-free” application always reliable? ✗</strong> — no. Reliability also depends on the conditions of use: hardware, network or environment failures, use outside the specified conditions, or a system that meets a wrong requirement (principle 7, absence-of-errors fallacy).</li>
+</ol>
+<p class="nhan">Current wording</p>
+<p>ISO/IEC 25010, the quality model CTFL uses for non-functional testing, defines reliability as the degree to which a system performs specified functions under specified conditions for a specified period of time. Same two ingredients: <strong>time</strong> and <strong>conditions</strong>.</p>
+<p class="meo">🧠 <strong>Remember:</strong> defects live <em>inside</em> the code; reliability is what the user <em>experiences</em>. A crack in a door nobody opens does not make the house unsafe.</p>`,
+        `<p class="y-chinh">🎯 Reliability là phần mềm hiếm khi hỏng lúc sử dụng — không phải là phần mềm chứa ít hay nhiều defect.</p>
+<p class="nhan">Định nghĩa trên slide</p>
+<p><strong>Reliability (độ tin cậy)</strong> — xác suất mà phần mềm sẽ không gây ra sự cố của hệ thống trong một khoảng thời gian cụ thể, dưới những điều kiện cụ thể (đúng như ghi chú của thầy/cô).</p>
+<p class="nhan">Ba câu hỏi và dấu trên slide</p>
+<ol>
+<li><strong>Hệ thống có thể không có fault nào (zero faults, đúng ngay lần đầu)? ✗</strong> — không. Phần mềm do con người viết (trang 7), và vì không thể test vét cạn nên ta không bao giờ chứng minh được là hết defect (nguyên tắc 1).</li>
+<li><strong>Hệ thống có thể tin cậy mà vẫn có fault? ✓</strong> — có. Defect chỉ gây hại khi được thực thi đúng điều kiện. Defect nằm trong chức năng gần như không ai dùng thì độ tin cậy vẫn cao.</li>
+<li><strong>Ứng dụng “không có fault” thì luôn tin cậy? ✗</strong> — không. Độ tin cậy còn phụ thuộc điều kiện sử dụng: phần cứng, mạng hay môi trường hỏng, dùng ngoài điều kiện đã định, hoặc hệ thống làm đúng một yêu cầu sai (nguyên tắc 7, absence-of-errors fallacy).</li>
+</ol>
+<p class="nhan">Cách gọi hiện hành</p>
+<p>ISO/IEC 25010 — mô hình chất lượng mà CTFL dùng khi nói về test phi chức năng — định nghĩa reliability là mức độ hệ thống thực hiện các chức năng đã định, dưới điều kiện đã định, trong một khoảng thời gian đã định. Vẫn hai thành phần: <strong>thời gian</strong> và <strong>điều kiện</strong>.</p>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> defect nằm <em>bên trong</em> code; độ tin cậy là thứ người dùng <em>cảm nhận</em>. Một vết nứt ở cánh cửa không ai mở không làm ngôi nhà mất an toàn.</p>`],
+      [7, 'Why do faults occur in software?',
+        `<p class="y-chinh">🎯 Faults occur because software is written by people under pressure — an older, shorter version of the eight causes on slide 44 (lesson 1.2).</p>
+<p class="nhan">Two causes on the page</p>
+<ul>
+<li><strong>Software is written by human beings</strong> — who know something but not everything, who have skills but aren’t perfect, and who do make mistakes (errors).</li>
+<li><strong>Pressure to deliver to strict deadlines</strong> — there is no time to check, yet assumptions may be wrong, and systems may be delivered incomplete.</li>
+</ul>
+<p>The last line, “if you have ever written software …”, is left open on purpose: you already know this from your own bugs.</p>
+<p class="nhan">Closest causes on today’s list (slide 44)</p>
+<ul>
+<li><strong>Know something, not everything</strong> → lack of experience, miscommunication</li>
+<li><strong>Skills but not perfect, make mistakes</strong> → human fallibility</li>
+<li><strong>Strict deadlines, no time to check</strong> → time pressure</li>
+<li><strong>Wrong assumptions, incomplete systems</strong> → complexity, system interactions</li>
+</ul>
+<p class="ghi-chu">The teacher’s note only translates “strict” = khắt khe. The current list adds two causes this page does not name: new technologies and environmental conditions.</p>`,
+        `<p class="y-chinh">🎯 Fault xuất hiện vì phần mềm do con người viết dưới áp lực — bản cũ, ngắn hơn của tám nguyên nhân ở slide 44 (bài 1.2).</p>
+<p class="nhan">Hai nguyên nhân trên slide</p>
+<ul>
+<li><strong>Phần mềm do con người viết</strong> — người biết một số thứ chứ không biết mọi thứ, có kỹ năng nhưng không hoàn hảo, và chắc chắn có lúc sai (error).</li>
+<li><strong>Áp lực giao hàng theo deadline khắt khe</strong> — không có thời gian kiểm tra trong khi giả định có thể sai, và hệ thống có thể giao khi còn dang dở.</li>
+</ul>
+<p>Dòng cuối “if you have ever written software …” cố ý bỏ lửng: bạn đã tự biết điều này qua bug của chính mình.</p>
+<p class="nhan">Nguyên nhân gần nhất trong danh sách hiện nay (slide 44)</p>
+<ul>
+<li><strong>Biết một số chứ không biết hết</strong> → thiếu kinh nghiệm, truyền đạt sai</li>
+<li><strong>Có kỹ năng nhưng không hoàn hảo, có lúc sai</strong> → con người vốn dễ sai</li>
+<li><strong>Deadline khắt khe, không kịp kiểm tra</strong> → áp lực thời gian</li>
+<li><strong>Giả định sai, hệ thống dang dở</strong> → độ phức tạp, tương tác hệ thống</li>
+</ul>
+<p class="ghi-chu">Ghi chú của thầy/cô chỉ dịch “strict” = khắt khe. Danh sách hiện nay có thêm hai nguyên nhân trang này không nêu: công nghệ mới và điều kiện môi trường.</p>`],
+      [19, 'Testing and quality',
+        `<p class="y-chinh">🎯 Testing <em>measures</em> quality; quality improves only when the defects it finds are removed.</p>
+<p class="nhan">What the page says</p>
+<ul>
+<li><strong>Testing measures software quality</strong> — the ruler in the picture: testing tells you how good the product is.</li>
+<li><strong>Testing can find faults</strong> — when they are removed, software quality (and <em>possibly</em> reliability) is improved. “Possibly”: removing a defect from a function nobody uses hardly changes reliability (page 6).</li>
+<li><strong>What does testing test?</strong> — system function and correctness of operation (functional), plus non-functional qualities: reliability, usability, maintainability, reusability, testability, etc.</li>
+</ul>
+<p class="nhan">Link to the current syllabus</p>
+<ul>
+<li><strong>The fix improves quality, not the test</strong> — testing is quality control; improvement comes from debugging (slide 27, lesson 1.1) and from process improvement, i.e. quality assurance (slide 38, lesson 1.2).</li>
+<li><strong>The non-functional list</strong> — today it follows ISO/IEC 25010: performance efficiency, compatibility, usability, reliability, security, maintainability, portability (lesson 2.4). Reusability and testability are sub-characteristics of maintainability.</li>
+</ul>
+<div class="pitfall">Slide 8 of the current deck asks for the <em>main goal</em> of testing: the answer is “assess the quality”, not “increase the quality” — exactly the first bullet of this page.</div>`,
+        `<p class="y-chinh">🎯 Kiểm thử <em>đo</em> chất lượng; chất lượng chỉ tăng khi các defect nó tìm ra được sửa bỏ.</p>
+<p class="nhan">Trang slide nói gì</p>
+<ul>
+<li><strong>Kiểm thử đo chất lượng phần mềm</strong> — cây thước trong hình: kiểm thử cho biết sản phẩm tốt tới đâu.</li>
+<li><strong>Kiểm thử có thể tìm ra fault</strong> — khi chúng được sửa bỏ, chất lượng (và <em>có thể</em> cả độ tin cậy) tăng lên. “Có thể”: bỏ một defect ở chức năng không ai dùng thì độ tin cậy gần như không đổi (trang 6).</li>
+<li><strong>Kiểm thử kiểm tra những gì?</strong> — chức năng của hệ thống và tính đúng khi vận hành (chức năng), cùng các đặc tính phi chức năng: reliability, usability, maintainability, reusability, testability, v.v.</li>
+</ul>
+<p class="nhan">Nối với syllabus hiện hành</p>
+<ul>
+<li><strong>Bản sửa làm tăng chất lượng, không phải bài test</strong> — kiểm thử là quality control; cải thiện đến từ debugging (slide 27, bài 1.1) và từ cải tiến quy trình, tức quality assurance (slide 38, bài 1.2).</li>
+<li><strong>Danh sách phi chức năng</strong> — nay theo ISO/IEC 25010: performance efficiency, compatibility, usability, reliability, security, maintainability, portability (bài 2.4). Reusability và testability là đặc tính con của maintainability.</li>
+</ul>
+<div class="pitfall">Slide 8 của bộ hiện tại hỏi <em>mục tiêu chính</em> của kiểm thử: đáp án là “đánh giá chất lượng”, không phải “nâng cao chất lượng” — đúng ý dòng đầu tiên của trang này.</div>`],
+      [21, 'Glossary',
+        `<p class="y-chinh">🎯 Nine glossary terms you must be able to define after section 1.1 — with today’s ISTQB definitions.</p>
+<table><thead><tr><th>Term</th><th>Current ISTQB meaning</th></tr></thead><tbody>
+<tr><td><strong>Bug, defect, fault</strong></td><td>Synonyms: an imperfection or deficiency in a work product where it does not meet its requirements or specifications</td></tr>
+<tr><td><strong>Error</strong> · <strong>mistake</strong></td><td>Synonyms: a human action that produces an incorrect result. The page lists them separately, but they are the same thing</td></tr>
+<tr><td><strong>Failure</strong></td><td>An event in which a component or system does not perform a required function within specified limits</td></tr>
+<tr><td><strong>Quality</strong></td><td>The degree to which a component, system or process meets specified requirements and/or user or customer needs and expectations</td></tr>
+<tr><td><strong>Risk</strong></td><td>A factor that could result in future negative consequences; usually expressed as impact and likelihood</td></tr>
+<tr><td><strong>Software</strong></td><td>Computer programs, procedures, and possibly associated documentation and data pertaining to the operation of a computer system</td></tr>
+<tr><td><strong>Testing</strong></td><td>All lifecycle activities, static and dynamic, concerned with planning, preparation and evaluation of software and related work products, to determine that they satisfy requirements, demonstrate fitness for purpose and detect defects</td></tr>
+<tr><td><strong>Exhaustive testing</strong></td><td>A test approach in which the test suite comprises all combinations of input values and preconditions (also “complete testing”)</td></tr>
+</tbody></table>
+<p class="meo">🧠 <strong>Remember:</strong> the chain uses one word per layer — <strong>error</strong> (person) → <strong>defect</strong> (product) → <strong>failure</strong> (event). Mistake, fault and bug are only aliases.</p>`,
+        `<p class="y-chinh">🎯 Chín thuật ngữ glossary phải định nghĩa được sau mục 1.1 — theo định nghĩa ISTQB hiện nay.</p>
+<table><thead><tr><th>Thuật ngữ</th><th>Nghĩa theo ISTQB hiện hành</th></tr></thead><tbody>
+<tr><td><strong>Bug, defect, fault</strong></td><td>Đồng nghĩa: chỗ khiếm khuyết trong một sản phẩm công việc khiến nó không đáp ứng yêu cầu hay đặc tả</td></tr>
+<tr><td><strong>Error</strong> · <strong>mistake</strong></td><td>Đồng nghĩa: hành động của con người tạo ra kết quả sai. Slide ghi thành hai dòng, nhưng là một</td></tr>
+<tr><td><strong>Failure</strong></td><td>Sự kiện trong đó thành phần hay hệ thống không thực hiện được chức năng yêu cầu trong giới hạn đã định</td></tr>
+<tr><td><strong>Quality</strong></td><td>Mức độ một thành phần, hệ thống hay quy trình đáp ứng yêu cầu đã định và/hoặc nhu cầu, kỳ vọng của người dùng, khách hàng</td></tr>
+<tr><td><strong>Risk</strong></td><td>Yếu tố có thể dẫn tới hậu quả xấu trong tương lai; thường biểu diễn bằng tác động (impact) và khả năng xảy ra (likelihood)</td></tr>
+<tr><td><strong>Software</strong></td><td>Chương trình máy tính, thủ tục, và có thể kèm tài liệu, dữ liệu liên quan tới việc vận hành một hệ thống máy tính</td></tr>
+<tr><td><strong>Testing</strong></td><td>Mọi hoạt động trong vòng đời, tĩnh lẫn động, liên quan tới lập kế hoạch, chuẩn bị và đánh giá phần mềm cùng các sản phẩm liên quan, để xác định chúng đáp ứng yêu cầu, chứng tỏ phù hợp mục đích và tìm defect</td></tr>
+<tr><td><strong>Exhaustive testing</strong></td><td>Cách tiếp cận trong đó bộ test gồm mọi tổ hợp giá trị đầu vào và điều kiện tiên quyết (còn gọi “complete testing”)</td></tr>
+</tbody></table>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> chuỗi nhân quả mỗi tầng một từ — <strong>error</strong> (con người) → <strong>defect</strong> (sản phẩm) → <strong>failure</strong> (sự kiện). Mistake, fault, bug chỉ là tên khác.</p>`],
+      [31, 'Test Planning - different levels',
+        `<p class="y-chinh">🎯 Test planning happens on three levels: company, project and test stage — each level narrows the one above.</p>
+<p class="nhan">The three levels on the page</p>
+<ol>
+<li><strong>Company level</strong> — <em>Test Policy</em> and <em>Test Strategy</em>, written once for the whole organisation.</li>
+<li><strong>Project level (IEEE 829)</strong> — one <em>High-Level Test Plan</em> for each project.</li>
+<li><strong>Test stage level (IEEE 829)</strong> — one <em>Detailed Test Plan</em> for each stage within a project, e.g. component, system.</li>
+</ol>
+<p class="nhan">Old names → current names</p>
+<ul>
+<li><strong>High-level test plan</strong> → <em>master test plan</em> (IEEE 829-2008) or <em>project test plan</em> (ISO/IEC/IEEE 29119-3).</li>
+<li><strong>Detailed test plan</strong> → <em>level test plan</em>, e.g. component test plan, system test plan.</li>
+<li><strong>Test stage</strong> → <em>test level</em>.</li>
+</ul>
+<p>The contents of a plan are taught in lesson 7.2 (IEEE 829, 16 sections) and the high-level plan in lesson 2.5.</p>
+<p class="meo">🧠 <strong>Remember:</strong> policy = <em>why</em> we test (company) · strategy = <em>how</em> in general · plan = <em>what, who, when</em> for one project or level.</p>`,
+        `<p class="y-chinh">🎯 Lập kế hoạch test diễn ra ở ba cấp: công ty, dự án và giai đoạn test — mỗi cấp thu hẹp cấp phía trên.</p>
+<p class="nhan">Ba cấp trên slide</p>
+<ol>
+<li><strong>Cấp công ty</strong> — <em>Test Policy</em> và <em>Test Strategy</em>, viết một lần cho cả tổ chức.</li>
+<li><strong>Cấp dự án (IEEE 829)</strong> — mỗi dự án một <em>High-Level Test Plan</em>.</li>
+<li><strong>Cấp giai đoạn test (IEEE 829)</strong> — mỗi giai đoạn trong dự án một <em>Detailed Test Plan</em>, ví dụ component, system.</li>
+</ol>
+<p class="nhan">Tên cũ → tên hiện hành</p>
+<ul>
+<li><strong>High-level test plan</strong> → <em>master test plan</em> (IEEE 829-2008) hay <em>project test plan</em> (ISO/IEC/IEEE 29119-3).</li>
+<li><strong>Detailed test plan</strong> → <em>level test plan</em>, ví dụ component test plan, system test plan.</li>
+<li><strong>Test stage</strong> → <em>test level</em> (cấp test).</li>
+</ul>
+<p>Nội dung một test plan học ở bài 7.2 (IEEE 829, 16 mục), còn high-level test plan ở bài 2.5.</p>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> policy = <em>vì sao</em> test (công ty) · strategy = test <em>thế nào</em> nói chung · plan = test <em>cái gì, ai, khi nào</em> cho một dự án hay một cấp.</p>`],
+      [32, 'Test Planning - different levels (the V)',
+        `<p class="y-chinh">🎯 The planning levels follow the V: the left leg defines the project, the right leg tests and integrates it, level by level.</p>
+<p class="nhan">Left leg — Project Definition (top → bottom)</p>
+<ol>
+<li>Concept of Operations</li>
+<li>Requirements and Architecture</li>
+<li>Detailed Design</li>
+<li>Implementation (the bottom of the V)</li>
+</ol>
+<p class="nhan">Right leg — Project Test and Integration (bottom → top)</p>
+<ol>
+<li>Integration, Test, and Verification — checks the detailed design</li>
+<li>System Verification and Validation — checks requirements and architecture</li>
+<li>Operation and Maintenance — the system in use, measured against the concept of operations</li>
+</ol>
+<p>The arrow “Verification and Validation” across the V means each right-hand stage is checked against its partner on the left; time runs from left to right. Each right-hand stage is where a detailed (level) test plan from page 31 applies.</p>
+<p class="ghi-chu">This is the systems-engineering version of the V. The software V-model with component, integration, system and acceptance testing is taught in lesson 2.1.</p>`,
+        `<p class="y-chinh">🎯 Các cấp kế hoạch đi theo chữ V: nhánh trái định nghĩa dự án, nhánh phải test và tích hợp nó, từng cấp một.</p>
+<p class="nhan">Nhánh trái — Project Definition (trên → dưới)</p>
+<ol>
+<li>Concept of Operations (khái niệm vận hành)</li>
+<li>Requirements and Architecture (yêu cầu và kiến trúc)</li>
+<li>Detailed Design (thiết kế chi tiết)</li>
+<li>Implementation (đáy chữ V)</li>
+</ol>
+<p class="nhan">Nhánh phải — Project Test and Integration (dưới → trên)</p>
+<ol>
+<li>Integration, Test, and Verification — kiểm thiết kế chi tiết</li>
+<li>System Verification and Validation — kiểm yêu cầu và kiến trúc</li>
+<li>Operation and Maintenance — hệ thống khi sử dụng, đối chiếu với khái niệm vận hành</li>
+</ol>
+<p>Mũi tên “Verification and Validation” vắt ngang nghĩa là mỗi giai đoạn bên phải được kiểm với giai đoạn cặp đôi bên trái; thời gian chạy từ trái sang phải. Mỗi giai đoạn bên phải chính là nơi áp dụng một detailed (level) test plan của trang 31.</p>
+<p class="ghi-chu">Đây là chữ V phiên bản kỹ thuật hệ thống. V-model phần mềm với component, integration, system và acceptance testing được dạy ở bài 2.1.</p>`],
+      [33, 'Test Policy (organisation level)',
+        `<p class="y-chinh">🎯 The test policy is the organisation’s short, stable statement of what testing means to it and how it judges success.</p>
+<p class="nhan">1. Test Policy — organisation level</p>
+<ul>
+<li><strong>Very high-level document</strong> — often one or two pages.</li>
+<li><strong>What “testing” means</strong> for the organisation.</li>
+<li><strong>How the organisation measures test success.</strong></li>
+<li><strong>Relatively static</strong> — it changes only when the organisation’s focus changes.</li>
+<li><strong>Developed by the IT department</strong> — in practice by IT and test management.</li>
+</ul>
+<p class="nhan">Example of a policy statement</p>
+<p>“Testing aims to find defects before our customers do. Every product is tested by a team independent of its developers. Success is measured by the number of defects found after release.”</p>
+<p class="ghi-chu">Current term: ISO/IEC/IEEE 29119-3 still calls it the <em>organizational test policy</em>; the 2011 ISTQB glossary defined it as a high-level document describing the principles, approach and major objectives of the organisation regarding testing.</p>`,
+        `<p class="y-chinh">🎯 Test policy là tuyên bố ngắn, ổn định của tổ chức: kiểm thử có ý nghĩa gì với họ và thành công được đo thế nào.</p>
+<p class="nhan">1. Test Policy — cấp tổ chức</p>
+<ul>
+<li><strong>Tài liệu cấp rất cao</strong> — thường chỉ một, hai trang.</li>
+<li><strong>“Kiểm thử” nghĩa là gì</strong> với tổ chức.</li>
+<li><strong>Tổ chức đo thành công của kiểm thử ra sao.</strong></li>
+<li><strong>Khá tĩnh</strong> — chỉ đổi khi trọng tâm của tổ chức thay đổi.</li>
+<li><strong>Do phòng IT xây dựng</strong> — thực tế là ban quản lý IT và quản lý test.</li>
+</ul>
+<p class="nhan">Ví dụ một câu trong policy</p>
+<p>“Kiểm thử nhằm tìm defect trước khi khách hàng tìm thấy. Mọi sản phẩm được test bởi một nhóm độc lập với người phát triển. Thành công được đo bằng số defect bị phát hiện sau khi phát hành.”</p>
+<p class="ghi-chu">Tên hiện hành: ISO/IEC/IEEE 29119-3 vẫn gọi là <em>organizational test policy</em>; glossary ISTQB 2011 định nghĩa nó là tài liệu cấp cao mô tả nguyên tắc, cách tiếp cận và mục tiêu chính của tổ chức về kiểm thử.</p>`],
+      [34, 'Test Strategy (programme level)',
+        `<p class="y-chinh">🎯 The test strategy turns the policy into concrete testing rules for a programme — a group of projects on one system.</p>
+<p class="nhan">2. Test Strategy — the 15 points on the page</p>
+<ol class="hai-cot">
+<li>Applies to a programme / system covering multiple projects</li>
+<li>Objective and scope of testing</li>
+<li>In-scope / out-of-scope items</li>
+<li>Test levels (unit / module / system / integration)</li>
+<li>Test types (functional / non-functional)</li>
+<li>Entry / exit / stop / resumption criteria per level</li>
+<li>Risks to be addressed</li>
+<li>Test environment</li>
+<li>Test case design methodology (specification-driven, BVA, EQ partitioning)</li>
+<li>Test methodology (top-down / bottom-up / risk-based)</li>
+<li>Test automation approach</li>
+<li>Test tools to be used</li>
+<li>Defect management approach</li>
+<li>Defect classification</li>
+<li>Retesting and regression approach</li>
+</ol>
+<p class="nhan">Where each point is taught now</p>
+<ul>
+<li><strong>Levels, types, retesting &amp; regression</strong> — lessons 2.2–2.4.</li>
+<li><strong>EQ partitioning, BVA</strong> — lessons 4.2 and 4.3.</li>
+<li><strong>Top-down / bottom-up</strong> — integration strategies (lesson 2.2); <strong>risk-based</strong> — lesson 7.5.</li>
+<li><strong>Stop / resumption</strong> — IEEE 829 “suspension criteria and resumption requirements” (lesson 7.2).</li>
+<li><strong>Defect management and classification</strong> — lesson 7.6.</li>
+</ul>
+<p class="ghi-chu">Page 31 puts the strategy at company level, this page at programme level. Both are right: the ISTQB 2011 glossary says a test strategy covers “an organization or programme (one or more projects)”.</p>`,
+        `<p class="y-chinh">🎯 Test strategy biến policy thành các quy tắc test cụ thể cho một chương trình — nhóm nhiều dự án trên cùng một hệ thống.</p>
+<p class="nhan">2. Test Strategy — 15 ý trên slide</p>
+<ol class="hai-cot">
+<li>Áp dụng cho một chương trình / hệ thống gồm nhiều dự án</li>
+<li>Mục tiêu và phạm vi kiểm thử</li>
+<li>Hạng mục trong / ngoài phạm vi test</li>
+<li>Cấp test (unit / module / system / integration)</li>
+<li>Loại test (chức năng / phi chức năng)</li>
+<li>Tiêu chí vào / ra / dừng / tiếp tục cho từng cấp</li>
+<li>Rủi ro cần xử lý</li>
+<li>Môi trường test</li>
+<li>Phương pháp thiết kế test case (theo đặc tả, BVA, phân vùng tương đương)</li>
+<li>Phương pháp test (top-down / bottom-up / dựa rủi ro)</li>
+<li>Cách tiếp cận tự động hoá</li>
+<li>Công cụ test sẽ dùng</li>
+<li>Cách quản lý defect</li>
+<li>Phân loại defect</li>
+<li>Cách retest và regression</li>
+</ol>
+<p class="nhan">Mỗi ý hiện được dạy ở đâu</p>
+<ul>
+<li><strong>Cấp test, loại test, retest &amp; regression</strong> — bài 2.2–2.4.</li>
+<li><strong>Phân vùng tương đương, BVA</strong> — bài 4.2 và 4.3.</li>
+<li><strong>Top-down / bottom-up</strong> — chiến lược tích hợp (bài 2.2); <strong>dựa rủi ro</strong> — bài 7.5.</li>
+<li><strong>Dừng / tiếp tục</strong> — mục IEEE 829 “suspension criteria and resumption requirements” (bài 7.2).</li>
+<li><strong>Quản lý và phân loại defect</strong> — bài 7.6.</li>
+</ul>
+<p class="ghi-chu">Trang 31 đặt strategy ở cấp công ty, trang này ở cấp chương trình. Cả hai đều đúng: glossary ISTQB 2011 nói test strategy áp dụng cho “một tổ chức hoặc một chương trình (một hay nhiều dự án)”.</p>`],
+      [35, 'Test Plan (project level)',
+        `<p class="y-chinh">🎯 The project test plan applies the strategy to one project and adds the project’s own numbers: effort, dates, people, outputs, reporting.</p>
+<p class="nhan">3. Test Plan — project level</p>
+<ul>
+<li><strong>All the strategy points above</strong> — made specific for this project.</li>
+<li><strong>Test estimation &amp; test schedule</strong> — how much effort, and when.</li>
+<li><strong>Test organisation / roles / responsibilities</strong> — who does what.</li>
+<li><strong>Test deliverables</strong> — which documents and testware are handed over.</li>
+<li><strong>Test reporting</strong> — which reports, to whom, how often.</li>
+</ul>
+<p class="nhan">Where it is taught now</p>
+<ul>
+<li>Estimation, schedule and plan contents — lesson 7.2.</li>
+<li>Roles of test manager and tester — lesson 7.1.</li>
+<li>Progress and summary reports — lesson 7.3.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Test plan cấp dự án áp strategy vào một dự án và thêm các con số riêng của dự án: công sức, ngày tháng, con người, sản phẩm bàn giao, báo cáo.</p>
+<p class="nhan">3. Test Plan — cấp dự án</p>
+<ul>
+<li><strong>Mọi ý của strategy ở trên</strong> — cụ thể hoá cho dự án này.</li>
+<li><strong>Ước lượng &amp; lịch test</strong> — tốn bao nhiêu công sức, làm khi nào.</li>
+<li><strong>Tổ chức test / vai trò / trách nhiệm</strong> — ai làm việc gì.</li>
+<li><strong>Sản phẩm bàn giao</strong> — những tài liệu và testware nào được giao.</li>
+<li><strong>Báo cáo test</strong> — báo cáo nào, gửi ai, bao lâu một lần.</li>
+</ul>
+<p class="nhan">Hiện học ở đâu</p>
+<ul>
+<li>Ước lượng, lịch và nội dung plan — bài 7.2.</li>
+<li>Vai trò test manager và tester — bài 7.1.</li>
+<li>Báo cáo tiến độ và báo cáo tổng kết — bài 7.3.</li>
+</ul>`],
+      [36, 'Test planning (detailed level)',
+        `<p class="y-chinh">🎯 The detailed (level) plan says how the strategy and project plan apply to one piece of software — and where it deliberately deviates.</p>
+<p class="nhan">What the detailed plan records</p>
+<ol>
+<li><strong>How the test strategy and project test plan apply</strong> to the software under test.</li>
+<li><strong>Exceptions to the test strategy</strong> — e.g. only one test case design technique is needed for this functional area because it is less critical.</li>
+<li><strong>Other software needed for the tests</strong> — such as stubs and drivers (lesson 2.2), plus environment details.</li>
+<li><strong>Test completion criteria</strong> — when testing of this item may stop. Today: <em>exit criteria</em>; they are checked on pages 52–53.</li>
+</ol>
+<p class="meo">🧠 <strong>Remember:</strong> an exception must be <em>written down</em> with its reason — “less critical” is a risk decision, and risk decides how thoroughly to test (lesson 1.3, slide 60).</p>`,
+        `<p class="y-chinh">🎯 Plan chi tiết (level test plan) nói strategy và plan dự án áp vào một phần mềm cụ thể ra sao — và chỗ nào cố ý làm khác.</p>
+<p class="nhan">Plan chi tiết ghi những gì</p>
+<ol>
+<li><strong>Test strategy và project test plan áp dụng thế nào</strong> vào phần mềm đang test.</li>
+<li><strong>Các ngoại lệ so với test strategy</strong> — ví dụ vùng chức năng này chỉ cần một kỹ thuật thiết kế test vì nó ít quan trọng hơn.</li>
+<li><strong>Phần mềm khác cần cho việc test</strong> — như stub và driver (bài 2.2), cùng chi tiết môi trường.</li>
+<li><strong>Tiêu chí hoàn thành test</strong> — khi nào được dừng test hạng mục này. Nay gọi là <em>exit criteria</em>; chúng được kiểm ở trang 52–53.</li>
+</ol>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> ngoại lệ phải được <em>ghi ra</em> kèm lý do — “ít quan trọng hơn” là một quyết định theo rủi ro, và rủi ro quyết định test kỹ tới đâu (bài 1.3, slide 60).</p>`],
+      [37, 'The test process (2023 deck)',
+        `<p class="y-chinh">🎯 The old process has five parts: detailed planning wraps around four steps — specification → execution → recording → check completion.</p>
+<p>The yellow L-shaped bar means planning starts first and stays alive during all four steps, much like monitoring &amp; control today. This process comes from the British component-testing standard BS 7925-2, which the old ISEB Foundation exam used.</p>
+<table><thead><tr><th>2023 step</th><th>What happens</th><th>CTFL 2018 activity (lesson 1.4)</th></tr></thead><tbody>
+<tr><td>Planning (detailed level)</td><td>The level test plan (page 36)</td><td>Test planning; monitoring &amp; control runs throughout</td></tr>
+<tr><td>Specification</td><td>Identify conditions, design test cases, build tests</td><td>Test analysis + test design + test implementation</td></tr>
+<tr><td>Execution</td><td>Run the test cases</td><td>Test execution</td></tr>
+<tr><td>Recording</td><td>Log outcomes, compare, log discrepancies</td><td>Also test execution (logging, comparing, reporting defects)</td></tr>
+<tr><td>Check completion</td><td>Compare with completion criteria; loop back if not met</td><td>Evaluating exit criteria — part of test monitoring &amp; control</td></tr>
+</tbody></table>
+<div class="pitfall">“Check completion” is <strong>not</strong> the CTFL activity “test completion” (slide 88). The old step decides <em>whether</em> you may stop; CTFL test completion is the closing work <em>after</em> stopping — archive testware, lessons learned, test summary report.</div>`,
+        `<p class="y-chinh">🎯 Quy trình cũ có năm phần: lập kế hoạch chi tiết bao quanh bốn bước — specification → execution → recording → check completion.</p>
+<p>Thanh vàng hình chữ L nghĩa là planning bắt đầu trước và còn chạy suốt bốn bước, giống monitoring &amp; control ngày nay. Quy trình này lấy từ tiêu chuẩn kiểm thử thành phần của Anh BS 7925-2, mà kỳ thi ISEB Foundation cũ dùng.</p>
+<table><thead><tr><th>Bước 2023</th><th>Việc diễn ra</th><th>Hoạt động CTFL 2018 (bài 1.4)</th></tr></thead><tbody>
+<tr><td>Planning (cấp chi tiết)</td><td>Level test plan (trang 36)</td><td>Test planning; monitoring &amp; control chạy suốt</td></tr>
+<tr><td>Specification</td><td>Xác định điều kiện, thiết kế test case, dựng test</td><td>Test analysis + test design + test implementation</td></tr>
+<tr><td>Execution</td><td>Chạy test case</td><td>Test execution</td></tr>
+<tr><td>Recording</td><td>Ghi kết quả, so sánh, ghi các sai khác</td><td>Cũng thuộc test execution (ghi log, so sánh, báo defect)</td></tr>
+<tr><td>Check completion</td><td>So với tiêu chí hoàn thành; chưa đạt thì quay lại</td><td>Đánh giá exit criteria — thuộc test monitoring &amp; control</td></tr>
+</tbody></table>
+<div class="pitfall">“Check completion” <strong>không phải</strong> hoạt động CTFL “test completion” (slide 88). Bước cũ quyết định <em>có được</em> dừng hay chưa; test completion của CTFL là phần việc khép lại <em>sau khi</em> đã dừng — lưu trữ testware, rút kinh nghiệm, báo cáo tổng kết.</div>`],
+      [38, 'Test specification (diagram)',
+        `<p class="y-chinh">🎯 Specification, the pink box, splits into three stair-steps: identify conditions → design test cases → build tests.</p>
+<ul>
+<li><strong>Identify conditions</strong> → today’s test analysis (slide 81).</li>
+<li><strong>Design test cases</strong> → test design (slide 82).</li>
+<li><strong>Build tests</strong> → test implementation (slide 85).</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Specification — ô hồng — tách thành ba bậc thang: identify conditions → design test cases → build tests.</p>
+<ul>
+<li><strong>Identify conditions</strong> → test analysis ngày nay (slide 81).</li>
+<li><strong>Design test cases</strong> → test design (slide 82).</li>
+<li><strong>Build tests</strong> → test implementation (slide 85).</li>
+</ul>`],
+      [39, 'Test specification — three tasks',
+        `<p class="y-chinh">🎯 Specification = decide <em>what</em> to test, then <em>how</em>, then build it.</p>
+<ol>
+<li><strong>Identify</strong> — determine <em>what</em> is to be tested (identify test conditions) and prioritise.</li>
+<li><strong>Design</strong> — determine <em>how</em> the “what” is to be tested, i.e. design test cases.</li>
+<li><strong>Build</strong> — implement the tests: data, scripts, etc.</li>
+</ol>
+<p class="meo">🧠 <strong>Remember:</strong> What → How → Do. The current slides 81–82 keep the same words: analysis = “WHAT to test”, design = “HOW to test”.</p>`,
+        `<p class="y-chinh">🎯 Specification = quyết định test <em>cái gì</em>, rồi test <em>thế nào</em>, rồi dựng nó.</p>
+<ol>
+<li><strong>Identify</strong> — xác định <em>cái gì</em> cần test (xác định test condition) và sắp ưu tiên.</li>
+<li><strong>Design</strong> — xác định “cái gì” đó được test <em>thế nào</em>, tức là thiết kế test case.</li>
+<li><strong>Build</strong> — hiện thực các test: dữ liệu, script, v.v.</li>
+</ol>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> Cái gì → Thế nào → Làm. Slide 81–82 hiện tại giữ nguyên chữ: analysis = “WHAT to test”, design = “HOW to test”.</p>`],
+      [41, 'Task 1: identify conditions',
+        `<p class="y-chinh">🎯 Task 1 lists everything worth testing as test conditions, then ranks them so the most important are surely covered.</p>
+<p class="nhan">List the conditions</p>
+<ul>
+<li><strong>Use the techniques named in the test plan</strong> — e.g. equivalence partitioning, boundary values.</li>
+<li><strong>Expect many conditions</strong> per system function or attribute.</li>
+</ul>
+<p class="nhan">The three examples, decoded</p>
+<ul>
+<li><strong>“Life assurance for a winter sportsman”</strong> — a business category: an insurance rule for a high-risk customer group.</li>
+<li><strong>“Number items ordered &gt; 99”</strong> — a boundary: test 99 and 100.</li>
+<li><strong>“Date = 29-Feb-2004”</strong> — a special value: 2004 is a leap year, so the date is valid and must be accepted.</li>
+</ul>
+<p class="nhan">Prioritise</p>
+<p>Rank the conditions so the most important ones are covered first (page 42).</p>
+<p class="ghi-chu">Current term: a <em>test condition</em> is an aspect of the test basis relevant to achieving specific test objectives; it is identified in test analysis.</p>`,
+        `<p class="y-chinh">🎯 Việc 1 liệt kê mọi thứ đáng test thành test condition, rồi xếp hạng để chắc chắn phủ được cái quan trọng nhất.</p>
+<p class="nhan">Liệt kê điều kiện</p>
+<ul>
+<li><strong>Dùng các kỹ thuật ghi trong test plan</strong> — ví dụ phân vùng tương đương, giá trị biên.</li>
+<li><strong>Sẽ có nhiều điều kiện</strong> cho mỗi chức năng hay thuộc tính của hệ thống.</li>
+</ul>
+<p class="nhan">Giải mã ba ví dụ</p>
+<ul>
+<li><strong>“Bảo hiểm nhân thọ cho người chơi thể thao mùa đông”</strong> — một nhóm nghiệp vụ: quy tắc bảo hiểm cho nhóm khách hàng rủi ro cao.</li>
+<li><strong>“Số món đặt &gt; 99”</strong> — một biên: test 99 và 100.</li>
+<li><strong>“Ngày = 29-02-2004”</strong> — một giá trị đặc biệt: 2004 là năm nhuận nên ngày này hợp lệ và phải được chấp nhận.</li>
+</ul>
+<p class="nhan">Sắp ưu tiên</p>
+<p>Xếp hạng điều kiện để cái quan trọng nhất được phủ trước (trang 42).</p>
+<p class="ghi-chu">Thuật ngữ hiện hành: <em>test condition</em> là một khía cạnh của test basis liên quan tới việc đạt các mục tiêu test cụ thể; nó được xác định trong test analysis.</p>`],
+      [42, 'Selecting test conditions',
+        `<p class="y-chinh">🎯 Pick conditions by importance, not by the order you happen to meet them.</p>
+<p class="nhan">Reading the chart</p>
+<ul>
+<li><strong>Axes</strong> — importance (up) against time (right). Each square is one test condition.</li>
+<li><strong>Dark squares</strong> above the line are important; <strong>light squares</strong> below are less important.</li>
+<li><strong>First set ✗</strong> — everything left of the vertical line, i.e. whatever came first. It mixes unimportant conditions in and misses all important ones on the right.</li>
+<li><strong>Best set ✓</strong> — the whole band above the line: every important condition, wherever it sits in time.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> this is page 18 / slide 61 as a picture — prioritise, so that whenever you stop, you have done the best testing possible in the time available.</p>`,
+        `<p class="y-chinh">🎯 Chọn điều kiện theo mức quan trọng, không theo thứ tự tình cờ gặp chúng.</p>
+<p class="nhan">Đọc biểu đồ</p>
+<ul>
+<li><strong>Hai trục</strong> — mức quan trọng (lên) theo thời gian (sang phải). Mỗi ô vuông là một test condition.</li>
+<li><strong>Ô sẫm</strong> trên đường ngang là quan trọng; <strong>ô nhạt</strong> bên dưới ít quan trọng hơn.</li>
+<li><strong>First set ✗</strong> — mọi thứ bên trái đường dọc, tức là cái gì đến trước lấy trước. Nó lẫn cả điều kiện không quan trọng và bỏ sót mọi điều kiện quan trọng bên phải.</li>
+<li><strong>Best set ✓</strong> — cả dải phía trên đường ngang: mọi điều kiện quan trọng, dù nằm ở thời điểm nào.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> đây là trang 18 / slide 61 vẽ thành hình — sắp ưu tiên để dù dừng lúc nào, bạn cũng đã test tốt nhất có thể trong thời gian có được.</p>`],
+      [43, 'Task 2: design test cases',
+        `<p class="y-chinh">🎯 Task 2 turns conditions into test cases: inputs and data, predicted results, and sets of tests for different goals.</p>
+<ul>
+<li><strong>Design test input and test data</strong> — each test exercises one or more test conditions.</li>
+<li><strong>Determine expected results</strong> — predict the outcome of each test case: what is output, what is changed and what is <em>not</em> changed.</li>
+<li><strong>Design sets of tests</strong> — different sets for different objectives, such as regression, building confidence and finding faults.</li>
+</ul>
+<p class="nhan">Example — “what is not changed”</p>
+<p>A transfer of 500 from an account holding 300 must be rejected. Expected result: an error message <em>and</em> both balances unchanged. A test that only checks the message would miss a defect that debits the money anyway.</p>
+<p class="ghi-chu">Current terms: this is test design (slides 82–84); a “set of tests” is a <em>test suite</em>.</p>`,
+        `<p class="y-chinh">🎯 Việc 2 biến điều kiện thành test case: đầu vào và dữ liệu, kết quả dự đoán, và các bộ test cho các mục tiêu khác nhau.</p>
+<ul>
+<li><strong>Thiết kế đầu vào và dữ liệu test</strong> — mỗi test thực thi một hay nhiều test condition.</li>
+<li><strong>Xác định kết quả mong đợi</strong> — dự đoán kết quả từng test case: cái gì được xuất ra, cái gì thay đổi và cái gì <em>không</em> thay đổi.</li>
+<li><strong>Thiết kế các bộ test</strong> — mỗi mục tiêu một bộ, như regression, tạo niềm tin và tìm lỗi.</li>
+</ul>
+<p class="nhan">Ví dụ — “cái gì không thay đổi”</p>
+<p>Chuyển 500 từ tài khoản chỉ có 300 phải bị từ chối. Kết quả mong đợi: thông báo lỗi <em>và</em> số dư hai tài khoản giữ nguyên. Test chỉ kiểm thông báo sẽ bỏ lọt defect vẫn trừ tiền.</p>
+<p class="ghi-chu">Thuật ngữ hiện hành: đây là test design (slide 82–84); “set of tests” nay gọi là <em>test suite</em>.</p>`],
+      [44, 'Designing test cases',
+        `<p class="y-chinh">🎯 One test case can cover several conditions: wrap every important condition in a test case, and accept that some unimportant ones stay uncovered.</p>
+<ul>
+<li><strong>Red squares</strong> — most important test conditions; <strong>pink</strong> — least important.</li>
+<li><strong>Green shapes</strong> — test cases. Every red square sits inside at least one of them.</li>
+<li><strong>Overlaps</strong> — some conditions are exercised by two test cases.</li>
+<li><strong>Bonus coverage</strong> — the lower-left test case also picks up two pink conditions at no extra cost.</li>
+<li><strong>Left out</strong> — most pink conditions stay outside: a conscious decision not to test them this time.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> this is the “exemplary” E of a good test case — the teacher’s note on page 40: good test cases can test more than one condition at the same time.</p>`,
+        `<p class="y-chinh">🎯 Một test case có thể phủ nhiều điều kiện: gói mọi điều kiện quan trọng vào test case, và chấp nhận một số điều kiện ít quan trọng không được phủ.</p>
+<ul>
+<li><strong>Ô đỏ</strong> — test condition quan trọng nhất; <strong>ô hồng</strong> — ít quan trọng nhất.</li>
+<li><strong>Hình xanh</strong> — test case. Ô đỏ nào cũng nằm trong ít nhất một hình.</li>
+<li><strong>Chồng lấn</strong> — vài điều kiện được hai test case cùng thực thi.</li>
+<li><strong>Phủ thêm</strong> — test case góc dưới bên trái phủ luôn hai ô hồng mà không tốn thêm.</li>
+<li><strong>Bỏ lại</strong> — đa số ô hồng nằm ngoài: quyết định có chủ ý là lần này không test chúng.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> đây là chữ E “exemplary” của test case tốt — ghi chú của thầy/cô ở trang 40: test case tốt có thể test nhiều điều kiện cùng lúc.</p>`],
+      [45, 'Task 3: build test cases',
+        `<p class="y-chinh">🎯 Task 3 makes the tests runnable: scripts, starting data and expected results — all before execution.</p>
+<ul>
+<li><strong>Prepare test scripts</strong> — the less the tester knows the system, the more detailed the scripts must be; scripts for tools must specify every detail.</li>
+<li><strong>Prepare test data</strong> — the data that must exist in files and databases at the start of the tests.</li>
+<li><strong>Prepare expected results</strong> — defined before the test is executed.</li>
+</ul>
+<p class="nhan">Why expected results come first</p>
+<p>If you decide what is “right” only after seeing the output, you tend to accept whatever the system shows — confirmation bias (lesson 1.5).</p>
+<p class="ghi-chu">Current terms: test implementation (slide 85). A manual script is now a <em>test procedure</em>; “test script” is used mainly for automated tests.</p>`,
+        `<p class="y-chinh">🎯 Việc 3 làm cho test chạy được: script, dữ liệu ban đầu và kết quả mong đợi — tất cả trước khi thực thi.</p>
+<ul>
+<li><strong>Chuẩn bị test script</strong> — tester càng ít hiểu hệ thống thì script càng phải chi tiết; script cho công cụ phải ghi mọi chi tiết.</li>
+<li><strong>Chuẩn bị dữ liệu test</strong> — dữ liệu phải có sẵn trong file và cơ sở dữ liệu lúc bắt đầu test.</li>
+<li><strong>Chuẩn bị kết quả mong đợi</strong> — xác định trước khi chạy test.</li>
+</ul>
+<p class="nhan">Vì sao kết quả mong đợi phải có trước</p>
+<p>Nếu đợi xem output rồi mới quyết định thế nào là “đúng”, bạn dễ chấp nhận mọi thứ hệ thống hiện ra — confirmation bias (bài 1.5).</p>
+<p class="ghi-chu">Thuật ngữ hiện hành: test implementation (slide 85). Script chạy tay nay gọi là <em>test procedure</em>; “test script” chủ yếu dùng cho test tự động.</p>`],
+      [47, 'Execution',
+        `<p class="y-chinh">🎯 Run the prescribed test cases, most important first — and know the three situations in which you would not run them all.</p>
+<ul>
+<li><strong>Execute prescribed test cases</strong> — the ones built in specification, most important first.</li>
+<li><strong>Manual or automated</strong> — both count as execution.</li>
+</ul>
+<p class="nhan">You would not execute all test cases if…</p>
+<ol>
+<li><strong>Testing only fault fixes</strong> — run the confirmation tests plus a chosen part of the regression suite.</li>
+<li><strong>Too many faults found by early test cases</strong> — the build is not ready; stop and send it back. The IEEE 829 plan calls this a suspension criterion.</li>
+<li><strong>Time pressure</strong> — because tests run in priority order, what has run so far is still the best testing possible.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Chạy các test case đã định, cái quan trọng nhất trước — và biết ba tình huống không chạy hết.</p>
+<ul>
+<li><strong>Chạy test case đã định</strong> — những cái đã dựng ở bước specification, quan trọng nhất trước.</li>
+<li><strong>Chạy tay hay tự động</strong> — đều tính là execution.</li>
+</ul>
+<p class="nhan">Không chạy hết test case khi…</p>
+<ol>
+<li><strong>Chỉ test các bản sửa lỗi</strong> — chạy confirmation test cộng một phần được chọn của bộ regression.</li>
+<li><strong>Test đầu tiên đã tìm ra quá nhiều lỗi</strong> — bản build chưa sẵn sàng; dừng và trả lại. Test plan IEEE 829 gọi đây là suspension criterion.</li>
+<li><strong>Áp lực thời gian</strong> — vì test chạy theo thứ tự ưu tiên, phần đã chạy vẫn là phần test tốt nhất có thể.</li>
+</ol>`],
+      [49, 'Test recording 1',
+        `<p class="y-chinh">🎯 The test record proves exactly what was tested, on which version, and with what result.</p>
+<p class="nhan">The test record contains</p>
+<ul>
+<li><strong>Identities and versions</strong>, unambiguously, of the software under test and of the test specifications.</li>
+</ul>
+<p class="nhan">Follow the plan</p>
+<ul>
+<li><strong>Mark off progress</strong> on the test script.</li>
+<li><strong>Document actual outcomes</strong> from the test.</li>
+<li><strong>Capture ideas</strong> for new test cases that occur to you while testing.</li>
+<li><strong>Audit trail</strong> — these records establish that all test activities were carried out as specified.</li>
+</ul>
+<p class="nhan">Why versions matter</p>
+<p>A failure reported against “the latest build” cannot be reproduced once a newer build exists. Configuration management (lesson 7.4) keeps test items and testware identifiable.</p>
+<p class="ghi-chu">Current term: the test record is the <em>test log</em>, written during test execution.</p>`,
+        `<p class="y-chinh">🎯 Test record chứng minh chính xác cái gì đã được test, trên phiên bản nào, với kết quả gì.</p>
+<p class="nhan">Test record gồm</p>
+<ul>
+<li><strong>Định danh và phiên bản</strong>, rõ ràng không nhầm lẫn, của phần mềm đang test và của các test specification.</li>
+</ul>
+<p class="nhan">Làm theo kế hoạch</p>
+<ul>
+<li><strong>Đánh dấu tiến độ</strong> trên test script.</li>
+<li><strong>Ghi kết quả thực tế</strong> của từng test.</li>
+<li><strong>Ghi lại ý tưởng</strong> test case mới nảy ra trong lúc test.</li>
+<li><strong>Dấu vết kiểm tra</strong> — các bản ghi này chứng minh mọi hoạt động test đã làm đúng như đặc tả.</li>
+</ul>
+<p class="nhan">Vì sao phiên bản quan trọng</p>
+<p>Failure báo trên “bản build mới nhất” sẽ không tái hiện được khi đã có build mới hơn. Configuration management (bài 7.4) giữ cho hạng mục test và testware luôn định danh được.</p>
+<p class="ghi-chu">Thuật ngữ hiện hành: test record nay là <em>test log</em>, ghi trong lúc test execution.</p>`],
+      [50, 'Test recording 2',
+        `<p class="y-chinh">🎯 Compare actual with expected, classify every discrepancy — only one of the four kinds is a software defect.</p>
+<p class="nhan">Four kinds of discrepancy to log</p>
+<ol>
+<li><strong>Software fault</strong> — a real defect in the product.</li>
+<li><strong>Test fault</strong> — e.g. the expected result was wrong.</li>
+<li><strong>Environment or version fault</strong> — wrong configuration, wrong build, broken test data.</li>
+<li><strong>Test run incorrectly</strong> — the tester skipped or mistyped a step.</li>
+</ol>
+<p class="nhan">Also log</p>
+<ul>
+<li><strong>Coverage levels achieved</strong> — for the measures used as completion criteria (page 53).</li>
+<li><strong>After a fix</strong> — repeat the required activities: execute again, and if needed design or plan again.</li>
+</ul>
+<p class="ghi-chu">Current wording: kinds 2–4 are <em>false positives</em>, which is why a tester must check that tests are correct before reporting a defect (slide 111, lesson 1.5). Re-running after a fix = confirmation testing plus regression testing.</p>`,
+        `<p class="y-chinh">🎯 So thực tế với mong đợi, phân loại mọi sai khác — chỉ một trong bốn loại là defect của phần mềm.</p>
+<p class="nhan">Bốn loại sai khác cần ghi</p>
+<ol>
+<li><strong>Software fault</strong> — defect thật trong sản phẩm.</li>
+<li><strong>Test fault</strong> — ví dụ kết quả mong đợi viết sai.</li>
+<li><strong>Lỗi môi trường hoặc phiên bản</strong> — cấu hình sai, nhầm build, dữ liệu test hỏng.</li>
+<li><strong>Chạy test sai</strong> — tester bỏ sót hay gõ nhầm một bước.</li>
+</ol>
+<p class="nhan">Ghi thêm</p>
+<ul>
+<li><strong>Mức coverage đạt được</strong> — cho các số đo dùng làm tiêu chí hoàn thành (trang 53).</li>
+<li><strong>Sau khi sửa</strong> — lặp lại các hoạt động cần thiết: chạy lại, và nếu cần thì thiết kế lại hay lập kế hoạch lại.</li>
+</ul>
+<p class="ghi-chu">Cách gọi hiện hành: loại 2–4 là <em>false positive</em>, vì vậy tester phải kiểm test đúng rồi mới báo defect (slide 111, bài 1.5). Chạy lại sau khi sửa = confirmation testing cộng regression testing.</p>`],
+      [52, 'Check test completion',
+        `<p class="y-chinh">🎯 Check the results against the completion criteria from the plan; if they are not met, loop back and test more.</p>
+<ul>
+<li><strong>Criteria come from the test plan</strong> — set during detailed planning (page 36).</li>
+<li><strong>Not met</strong> — repeat test activities, e.g. go back to specification to design more tests.</li>
+</ul>
+<p class="nhan">The loop in the diagram</p>
+<ol>
+<li><strong>Coverage too low</strong> — the arrow returns from check completion to specification.</li>
+<li><strong>Coverage OK</strong> — the arrow leaves the process: testing of this level may stop.</li>
+</ol>
+<p class="ghi-chu">Current wording: “evaluating exit criteria”, part of test monitoring &amp; control in CTFL 2018 (slide 80).</p>`,
+        `<p class="y-chinh">🎯 Đối chiếu kết quả với tiêu chí hoàn thành trong plan; chưa đạt thì quay lại test thêm.</p>
+<ul>
+<li><strong>Tiêu chí lấy từ test plan</strong> — đặt ra ở bước lập kế hoạch chi tiết (trang 36).</li>
+<li><strong>Chưa đạt</strong> — lặp lại hoạt động test, ví dụ quay về specification để thiết kế thêm test.</li>
+</ul>
+<p class="nhan">Vòng lặp trong sơ đồ</p>
+<ol>
+<li><strong>Coverage too low</strong> — mũi tên từ check completion quay về specification.</li>
+<li><strong>Coverage OK</strong> — mũi tên đi ra ngoài: được dừng test cấp này.</li>
+</ol>
+<p class="ghi-chu">Cách gọi hiện hành: “evaluating exit criteria”, thuộc test monitoring &amp; control trong CTFL 2018 (slide 80).</p>`],
+      [53, 'Test completion criteria',
+        `<p class="y-chinh">🎯 Completion (exit) criteria exist at every test level and tell you when to stop — measured by coverage, faults or cost and time.</p>
+<p class="nhan">Kinds of criteria on the page</p>
+<ul>
+<li><strong>Coverage</strong>, using a measurement technique — e.g. branch coverage for unit testing (lesson 5.1), coverage of user requirements, coverage of the most frequently used transactions.</li>
+<li><strong>Faults found</strong> — e.g. compared with the number expected.</li>
+<li><strong>Cost or time</strong> — the budget or schedule is used up.</li>
+</ul>
+<p class="nhan">Current CTFL examples</p>
+<ul>
+<li>Planned tests have been executed.</li>
+<li>A defined level of coverage has been achieved.</li>
+<li>Unresolved defects are within an agreed limit.</li>
+<li>Reliability, performance and other quality characteristics have been evaluated.</li>
+</ul>
+<div class="pitfall">“Cost or time” is a legitimate reason to stop only if the stakeholders accept the remaining risk — that is why test summary reports list what was <em>not</em> tested.</div>`,
+        `<p class="y-chinh">🎯 Tiêu chí hoàn thành (exit criteria) có ở mọi cấp test và cho biết khi nào dừng — đo bằng coverage, số lỗi, hoặc chi phí và thời gian.</p>
+<p class="nhan">Các loại tiêu chí trên slide</p>
+<ul>
+<li><strong>Coverage</strong>, đo bằng một kỹ thuật cụ thể — ví dụ branch coverage cho unit test (bài 5.1), mức phủ yêu cầu người dùng, mức phủ các giao dịch dùng nhiều nhất.</li>
+<li><strong>Số lỗi tìm được</strong> — ví dụ so với số dự kiến.</li>
+<li><strong>Chi phí hoặc thời gian</strong> — hết ngân sách hay hết lịch.</li>
+</ul>
+<p class="nhan">Ví dụ theo CTFL hiện hành</p>
+<ul>
+<li>Đã chạy hết các test đã lên kế hoạch.</li>
+<li>Đạt mức coverage đã định.</li>
+<li>Số defect chưa xử lý nằm trong giới hạn đã thoả thuận.</li>
+<li>Đã đánh giá reliability, performance và các đặc tính chất lượng khác.</li>
+</ul>
+<div class="pitfall">“Hết chi phí hay thời gian” chỉ là lý do dừng hợp lệ khi các bên liên quan chấp nhận phần rủi ro còn lại — vì thế báo cáo tổng kết test luôn ghi rõ cái gì <em>chưa</em> được test.</div>`],
+      [57, 'Confidence',
+        `<p class="y-chinh">🎯 Confidence rises while tests pass and drops each time a fault is found — so “no faults found” means nothing unless the tests were good.</p>
+<p class="nhan">Reading the chart</p>
+<ul>
+<li><strong>Rising line</strong> — confidence grows over time as tests pass.</li>
+<li><strong>Two sudden drops</strong> — labelled “Faults found”: each fault shakes confidence.</li>
+<li><strong>After the fixes</strong> — the line climbs again and ends higher than before.</li>
+</ul>
+<p class="nhan">No faults found = confidence?</p>
+<p>Only if the tests were good. With weak tests you may think you are in the top-right corner while you are really bottom-left (page 58 / slide 101). Testing shows the presence of defects, not their absence (principle 1).</p>
+<p class="meo">🧠 <strong>Remember:</strong> the testing paradox (slide 108) — the best way to build confidence is to try to destroy it.</p>`,
+        `<p class="y-chinh">🎯 Niềm tin tăng khi test qua và tụt mỗi khi tìm ra lỗi — nên “không tìm thấy lỗi” chẳng nói lên gì nếu bộ test kém.</p>
+<p class="nhan">Đọc biểu đồ</p>
+<ul>
+<li><strong>Đường đi lên</strong> — niềm tin tăng dần theo thời gian khi test qua.</li>
+<li><strong>Hai cú tụt</strong> — ghi “Faults found”: mỗi lỗi làm lung lay niềm tin.</li>
+<li><strong>Sau khi sửa</strong> — đường lại leo lên và kết thúc cao hơn trước.</li>
+</ul>
+<p class="nhan">Không tìm thấy lỗi = có niềm tin?</p>
+<p>Chỉ khi bộ test tốt. Test kém thì bạn tưởng mình ở góc trên bên phải trong khi thật ra ở góc dưới bên trái (trang 58 / slide 101). Kiểm thử cho thấy defect có mặt, không chứng minh defect vắng mặt (nguyên tắc 1).</p>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> nghịch lý kiểm thử (slide 108) — cách tốt nhất để xây niềm tin là cố phá nó.</p>`],
+    ]),
+    bi(`<h3>Worked example — one condition through the 2023 process</h3>
+<p>Rule: “orders of more than 99 items need a manager’s approval”. Follow the condition “number items ordered &gt; 99” (page 41) through every box of page 37.</p>
+<table><thead><tr><th>2023 step</th><th>What you produce</th></tr></thead><tbody>
+<tr><td>Planning (detailed)</td><td>Exit criterion: every boundary of the order form tested, no open high-severity defect</td></tr>
+<tr><td>Identify</td><td>Conditions: 99 items → no approval; 100 items → approval required</td></tr>
+<tr><td>Design</td><td>TC1: qty 99 → order placed, stock −99. TC2: qty 100 → order “awaiting approval”, stock <em>not</em> changed</td></tr>
+<tr><td>Build</td><td>Test data: a product with 500 in stock; script steps; expected results written down</td></tr>
+<tr><td>Execution</td><td>Run TC1, then TC2</td></tr>
+<tr><td>Recording</td><td>TC2 places the order directly. The spec says “&gt; 99”, so the expected result is right: a <em>software fault</em>, logged with the build number</td></tr>
+<tr><td>Check completion</td><td>A high-severity defect is open → criteria not met. After the fix: rerun TC2 (confirmation) and TC1 (regression), then check again</td></tr>
+</tbody></table>
+<div class="pitfall co-tieu-de"><strong>Exam traps from the 2023 pages.</strong>
+<ul>
+<li><strong>“Fault-free ⇒ reliable”</strong> and <strong>“reliable ⇒ fault-free”</strong> — both false (page 6).</li>
+<li><strong>Check completion ≠ test completion</strong> — the first decides whether to stop, the second closes the work afterwards (page 37).</li>
+<li><strong>Not every failed test is a defect</strong> — test faults, environment faults and wrong runs are false positives (page 50).</li>
+<li><strong>Policy vs strategy vs plan</strong> — policy: company, static, what testing means; strategy: programme-wide rules; plan: one project or level, with dates and people (pages 31–36).</li>
+<li><strong>Expected results before execution</strong> — never after (page 45).</li>
+</ul></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>What replaced BS 7925 and IEEE 829.</strong>
+<ul>
+<li><strong>ISO/IEC/IEEE 29119</strong> (from 2013) superseded both standards the 2023 deck cites.</li>
+<li><strong>Part 2, test processes</strong> — organisational, test management and dynamic test processes: the grown-up form of pages 31–53.</li>
+<li><strong>Part 3, documentation</strong> — test policy, organisational test strategy, test plan, test specifications, test log: the same documents, current names.</li>
+</ul></div>`,
+    `<h3>Ví dụ có lời giải — một điều kiện đi qua quy trình 2023</h3>
+<p>Quy tắc: “đơn đặt quá 99 món cần quản lý duyệt”. Theo điều kiện “số món đặt &gt; 99” (trang 41) qua từng ô của trang 37.</p>
+<table><thead><tr><th>Bước 2023</th><th>Bạn làm ra gì</th></tr></thead><tbody>
+<tr><td>Planning (chi tiết)</td><td>Exit criterion: mọi biên của form đặt hàng đã test, không còn defect nghiêm trọng đang mở</td></tr>
+<tr><td>Identify</td><td>Điều kiện: 99 món → không cần duyệt; 100 món → phải duyệt</td></tr>
+<tr><td>Design</td><td>TC1: 99 món → đặt thành công, kho −99. TC2: 100 món → đơn “chờ duyệt”, kho <em>không</em> đổi</td></tr>
+<tr><td>Build</td><td>Dữ liệu test: một sản phẩm tồn kho 500; các bước script; kết quả mong đợi ghi sẵn</td></tr>
+<tr><td>Execution</td><td>Chạy TC1, rồi TC2</td></tr>
+<tr><td>Recording</td><td>TC2 đặt hàng thẳng. Đặc tả ghi “&gt; 99”, nên kết quả mong đợi đúng: đây là <em>software fault</em>, ghi kèm số build</td></tr>
+<tr><td>Check completion</td><td>Còn một defect nghiêm trọng đang mở → chưa đạt tiêu chí. Sau khi sửa: chạy lại TC2 (confirmation) và TC1 (regression), rồi kiểm lại</td></tr>
+</tbody></table>
+<div class="pitfall co-tieu-de"><strong>Bẫy đề thi từ các trang 2023.</strong>
+<ul>
+<li><strong>“Không có fault ⇒ tin cậy”</strong> và <strong>“tin cậy ⇒ không có fault”</strong> — đều sai (trang 6).</li>
+<li><strong>Check completion ≠ test completion</strong> — cái trước quyết định có dừng không, cái sau khép lại công việc sau khi dừng (trang 37).</li>
+<li><strong>Không phải test hỏng nào cũng là defect</strong> — test fault, lỗi môi trường, chạy sai đều là false positive (trang 50).</li>
+<li><strong>Policy vs strategy vs plan</strong> — policy: cấp công ty, tĩnh, kiểm thử nghĩa là gì; strategy: quy tắc cho cả chương trình; plan: một dự án hay một cấp, có ngày tháng và người làm (trang 31–36).</li>
+<li><strong>Kết quả mong đợi có trước khi chạy</strong> — không bao giờ sau (trang 45).</li>
+</ul></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Thứ đã thay BS 7925 và IEEE 829.</strong>
+<ul>
+<li><strong>ISO/IEC/IEEE 29119</strong> (từ 2013) thay thế cả hai tiêu chuẩn mà slide 2023 trích dẫn.</li>
+<li><strong>Phần 2, quy trình test</strong> — quy trình cấp tổ chức, quản lý test và test động: dạng trưởng thành của trang 31–53.</li>
+<li><strong>Phần 3, tài liệu</strong> — test policy, organisational test strategy, test plan, test specification, test log: vẫn những tài liệu ấy, tên hiện hành.</li>
+</ul></div>`),
+  ].join('\n'),
+};
+
 /* ──────────────────────────────── Quiz 1 ──────────────────────────────── */
-// Every "Question" slide of SWT1 (35) + 11 extra checks on the non-question slides.
+// Every "Question" slide of SWT1 (35) + 11 extra checks on the non-question slides
+// + 6 on the 2023 deck (lesson 1.6).
 const q = (question, options, correctIndex) => ({ question, options, correctIndex, points: 1 });
 const QUIZ1 = {
   title: 'Quiz 1 — Fundamentals of testing (all SWT1 slide questions)|||Quiz 1 — Nền tảng kiểm thử (toàn bộ câu hỏi trên slide SWT1)',
   slug: 'swt301-quiz-1',
   type: 'QUIZ',
-  description: '46 câu: đủ 35 câu "Question" trên slide SWT1 (đáp án đã giải trong bài 1.1–1.5) + 11 câu kiểm tra phần lý thuyết.',
+  description: '52 câu: đủ 35 câu "Question" trên slide SWT1 (đáp án đã giải trong bài 1.1–1.5) + 11 câu kiểm tra phần lý thuyết + 6 câu về bộ slide 2023 (bài 1.6).',
   quiz: {
-    timeLimitSeconds: 2700,
+    timeLimitSeconds: 3000,
     questions: [
       q('Which of the following is a main goal of software testing? (SWT1 s.8)|||Đâu là mục tiêu chính của kiểm thử phần mềm? (SWT1 s.8)', ['Assess the quality of the software|||Đánh giá chất lượng phần mềm', 'Increase the quality of the software|||Nâng cao chất lượng phần mềm'], 0),
       q('If you find a defect early in the lifecycle, what is impacted? (s.9)|||Tìm ra defect sớm trong vòng đời thì điều gì bị ảnh hưởng? (s.9)', ['Risk of meeting it in operation increases|||Rủi ro gặp nó khi vận hành tăng', 'Risk of meeting it in operation is not impacted|||Rủi ro gặp nó khi vận hành không đổi', 'Risk of meeting it in operation is reduced|||Rủi ro gặp nó khi vận hành giảm'], 2),
@@ -2728,12 +3528,19 @@ const QUIZ1 = {
       q('Which level of independence is the LOWEST?|||Mức độc lập THẤP nhất là…', ['Tests by a separate test team|||Test do nhóm test riêng', 'Tests by the author of the code|||Test do chính tác giả code', 'Tests by an external agency|||Test do công ty bên ngoài', 'Tests by another developer|||Test do developer khác'], 1),
       q('The best way to build confidence in software is to…|||Cách tốt nhất để xây niềm tin vào phần mềm là…', ['run only easy test cases|||chỉ chạy test dễ', 'try to destroy it with difficult tests|||cố phá nó bằng test khó', 'let the author test it|||để tác giả tự test', 'skip testing when the deadline is close|||bỏ test khi sát deadline'], 1),
       q('"Certified testers shall maintain integrity and independence in their professional judgment" is the principle…|||"Tester phải giữ chính trực và độc lập trong phán đoán chuyên môn" là nguyên tắc…', ['Public', 'Product', 'Judgment', 'Self'], 2),
+      // Lesson 1.6 — the 2023 deck (oswt1). explanation is plain text EN|||VI.
+      { ...q('Which statement about reliability and faults is TRUE? (SWT1 2023 p.6)|||Câu nào về reliability và fault là ĐÚNG? (SWT1 2023 tr.6)', ['A fault-free application is always reliable|||Ứng dụng không có fault thì luôn tin cậy', 'Software can be reliable and still contain faults|||Phần mềm có thể tin cậy mà vẫn chứa fault', 'Reliability is the number of faults found per test|||Reliability là số fault tìm được trên mỗi test', 'Thorough testing can make a system fault-free|||Test kỹ có thể làm hệ thống hết sạch fault'], 1), explanation: 'A defect only matters when it is executed under the right conditions, so reliable software can still hold defects; zero faults can never be shown, and fault-free software can still fail in its environment.|||Defect chỉ gây hại khi được thực thi đúng điều kiện, nên phần mềm tin cậy vẫn có thể chứa defect; không thể chứng minh zero fault, và phần mềm không fault vẫn có thể hỏng do môi trường.' },
+      { ...q('In the 2023 process, "identify test conditions" corresponds to which CTFL 2018 activity? (p.39)|||Trong quy trình 2023, "identify test conditions" ứng với hoạt động CTFL 2018 nào? (tr.39)', ['Test planning', 'Test analysis', 'Test design', 'Test implementation'], 1), explanation: 'Identify = WHAT to test = test analysis; design = HOW = test design; build = test implementation.|||Identify = test CÁI GÌ = test analysis; design = THẾ NÀO = test design; build = test implementation.' },
+      { ...q('Which document is a very high-level, relatively static statement of what testing means to the organisation and how test success is measured? (p.33)|||Tài liệu nào là tuyên bố cấp rất cao, khá tĩnh, về việc kiểm thử có ý nghĩa gì với tổ chức và thành công được đo thế nào? (tr.33)', ['Test policy', 'Test strategy', 'Project (high-level) test plan|||Test plan cấp dự án (high-level)', 'Detailed (level) test plan|||Test plan chi tiết (level)'], 0), explanation: 'The test policy sits at organisation level and changes only when the organisation’s focus changes; the strategy adds programme-wide rules, the plans add project and level detail.|||Test policy ở cấp tổ chức và chỉ đổi khi trọng tâm tổ chức đổi; strategy thêm quy tắc cho cả chương trình, còn các plan thêm chi tiết của dự án và từng cấp.' },
+      { ...q('A test fails because the expected result written in the test case was wrong. How is this discrepancy logged? (p.50)|||Một test hỏng vì kết quả mong đợi ghi trong test case bị sai. Sai khác này được ghi là gì? (tr.50)', ['Software fault|||Lỗi phần mềm (software fault)', 'Test fault', 'Environment or version fault|||Lỗi môi trường hoặc phiên bản', 'Test run incorrectly|||Chạy test sai'], 1), explanation: 'The product behaved correctly; the test itself was wrong. Today this is a false positive, which is why testers check their tests before reporting a defect.|||Sản phẩm chạy đúng; chính bài test sai. Nay gọi là false positive, vì thế tester phải kiểm test của mình trước khi báo defect.' },
+      { ...q('In the 2023 process, what happens when "check test completion" finds that coverage is too low? (p.52)|||Trong quy trình 2023, khi "check test completion" thấy coverage quá thấp thì làm gì? (tr.52)', ['Stop testing and write the summary report|||Dừng test và viết báo cáo tổng kết', 'Go back to test specification and design more tests|||Quay lại test specification và thiết kế thêm test', 'Lower the completion criteria|||Hạ tiêu chí hoàn thành xuống', 'Release the software with a warning|||Phát hành phần mềm kèm cảnh báo'], 1), explanation: 'The diagram loops "coverage too low" back to specification; only "coverage OK" leaves the process.|||Sơ đồ vẽ vòng "coverage too low" quay về specification; chỉ khi "coverage OK" mới ra khỏi quy trình.' },
+      { ...q('Which is NOT one of the test completion (exit) criteria on p.53?|||Đâu KHÔNG phải tiêu chí hoàn thành (exit criteria) nêu ở tr.53?', ['Branch coverage for unit testing|||Branch coverage cho unit test', 'Faults found compared with the number expected|||Số lỗi tìm được so với số dự kiến', 'Cost or time|||Chi phí hoặc thời gian', 'The developer says the code is finished|||Developer nói code đã xong'], 3), explanation: 'The page lists coverage (branch, user requirements, frequent transactions), faults found versus expected, and cost or time. A developer’s opinion is not a measurable criterion.|||Trang slide nêu coverage (branch, yêu cầu người dùng, giao dịch dùng nhiều), số lỗi so với dự kiến, và chi phí hoặc thời gian. Ý kiến của developer không phải tiêu chí đo được.' },
     ],
   },
 };
 
 export default {
   title: 'Chapter 1 — Fundamentals of testing|||Chương 1 — Nền tảng kiểm thử',
-  description: 'SWT1 (114 slide) học từng slide: kiểm thử là gì, vì sao cần, 7 nguyên tắc, quy trình 7 hoạt động, tâm lý & đạo đức — kèm đáp án mọi câu hỏi trên slide và trang sách tương ứng.',
-  lessons: [L11, L12, L13, L14, L15, QUIZ1],
+  description: 'SWT1 (114 slide) học từng slide: kiểm thử là gì, vì sao cần, 7 nguyên tắc, quy trình 7 hoạt động, tâm lý & đạo đức — kèm đáp án mọi câu hỏi trên slide và trang sách tương ứng; bài 1.6 bổ sung những trang chỉ có trong bộ slide 2023.',
+  lessons: [L11, L12, L13, L14, L15, L16, QUIZ1],
 };

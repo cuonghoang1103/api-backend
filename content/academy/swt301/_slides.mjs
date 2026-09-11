@@ -9,7 +9,9 @@
  * slides are not exported), so "slide 37" is what students see in class.
  *
  * Markup reuses the live classes from globals.css (.anh-slide / .chu-thich /
- * .trich-slide, first built for LAB211) — no frontend change needed.
+ * .trich-slide, first built for LAB211). The explanation under each slide is
+ * wrapped in .giang (globals.css, 11/09/2026): 🎯 .y-chinh · .nhan labels ·
+ * ul/ol one idea per line · .meo · .dap-an · .pitfall — never one long paragraph.
  * The folder is depth 2 under content/academy, so the deploy seed loop
  * (content/academy/*.mjs) never mistakes these modules for course specs.
  */
@@ -63,15 +65,15 @@ export function slide(deck, n, title, en, vi) {
   if (n < 1 || n > d.total) throw new Error(`${deck} has ${d.total} slides, got ${n}`);
   return `<div class="anh-slide"><img src="${img(deck, n)}" alt="${attr(`${d.code} slide ${n}: ${title}`)}" loading="lazy" width="${d.w}" height="${d.h}" />` +
     `<p class="chu-thich">📑 <strong>${d.code}</strong> · slide ${n}/${d.total} — ${title}</p></div>\n` +
-    `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}</div>`;
+    `<div class="ml-en giang">${en}</div>\n<div class="ml-vi giang">${vi}</div>`;
 }
 
 /** A run of slides: rows = [[n, title, en, vi], …]. */
 export const walk = (deck, rows) => rows.map((r) => slide(deck, ...r)).join('\n');
 
 /** Answer line for an in-class "Question" slide. */
-export const ansEn = (letter, why) => `<p><strong>✅ Answer: ${letter}.</strong> ${why}</p>`;
-export const ansVi = (letter, why) => `<p><strong>✅ Đáp án: ${letter}.</strong> ${why}</p>`;
+export const ansEn = (letter, why) => `<p class="dap-an">✅ <strong>Answer: ${letter}.</strong> ${why}</p>`;
+export const ansVi = (letter, why) => `<p class="dap-an">✅ <strong>Đáp án: ${letter}.</strong> ${why}</p>`;
 
 /** Heading that opens a slide walkthrough. */
 export function walkHead(deck, from, to, noteEn = '', noteVi = '') {

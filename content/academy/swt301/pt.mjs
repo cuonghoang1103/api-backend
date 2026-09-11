@@ -183,8 +183,8 @@ export const pt2 = {
 };
 export const pt3 = {
   title: 'Progress Test 3 — Management, tools & Agile|||Progress Test 3 — Quản lý, công cụ & Agile',
-  description: 'Bài kiểm tra tiến độ 3 (mô phỏng): 31 câu về quản lý test, công cụ, Agile — cộng 2 đề PT3 thật trong Phòng thi.',
-  lessons: [ptLesson(3, 'swt301-progress-test-3', '7–9', PT3Q, 'Tổng hợp Chương 7–9: 31 câu, gồm ước lượng ba điểm, severity/priority, chiến lược test, tool, TDD/INVEST. Đề PT3 thật: SWT301-PT3-1, PT3-2 trong Phòng thi.')],
+  description: 'Bài kiểm tra tiến độ 3 (mô phỏng): 30 câu về quản lý test, công cụ, Agile — cộng 2 đề PT3 thật trong Phòng thi.',
+  lessons: [ptLesson(3, 'swt301-progress-test-3', '7–9', PT3Q, 'Tổng hợp Chương 7–9: 30 câu, gồm ước lượng ba điểm, severity/priority, chiến lược test, tool, TDD/INVEST. Đề PT3 thật: SWT301-PT3-1, PT3-2 trong Phòng thi.')],
 };
 
 const PE_GUIDE = {
@@ -204,7 +204,12 @@ const PE_GUIDE = {
 <tr><td>Q3</td><td>Black-box for a function spec: table 3.1 EP/BVA with tags, table 3.2 ten test cases covering the tags, table 3.3 preconditions and procedures</td><td>4</td><td>Ch.4, Practice P.3</td></tr>
 </tbody>
 </table>
-<div class="pitfall"><b>Zero-mark traps from the paper's own instructions:</b> any answer containing information irrelevant to the question gets 0; the blue sample text in the templates must be deleted; grey cells must not be edited.</div>
+<div class="pitfall co-tieu-de"><strong>Zero-mark traps from the paper's own instructions:</strong>
+<ul>
+<li><strong>Irrelevant information</strong> — any answer containing information irrelevant to the question gets 0.</li>
+<li><strong>Blue sample text</strong> — must be deleted from the templates.</li>
+<li><strong>Grey cells</strong> — must not be edited.</li>
+</ul></div>
 <h3>The 22 real PE papers you can take in the Exam room (AI-marked write-in answers)</h3>
 ${grid(PE_LIST)}
 ${EXAM}`,
@@ -219,7 +224,12 @@ ${EXAM}`,
 <tr><td>Q3</td><td>Black-box cho một đặc tả chức năng: bảng 3.1 EP/BVA có tag, bảng 3.2 mười test case phủ các tag, bảng 3.3 điều kiện trước và các bước</td><td>4</td><td>Ch.4, Dự án luyện tập P.3</td></tr>
 </tbody>
 </table>
-<div class="pitfall"><b>Bẫy 0 điểm ngay trong hướng dẫn của đề:</b> câu trả lời chứa thông tin không liên quan tới câu hỏi bị 0 điểm; chữ mẫu màu xanh trong template phải xoá; ô màu xám không được sửa.</div>
+<div class="pitfall co-tieu-de"><strong>Bẫy 0 điểm ngay trong hướng dẫn của đề:</strong>
+<ul>
+<li><strong>Thông tin không liên quan</strong> — câu trả lời chứa thông tin không liên quan tới câu hỏi bị 0 điểm.</li>
+<li><strong>Chữ mẫu màu xanh</strong> — trong template phải xoá.</li>
+<li><strong>Ô màu xám</strong> — không được sửa.</li>
+</ul></div>
 <h3>22 đề PE thật làm được trong Phòng thi (bài viết chấm bằng AI)</h3>
 ${grid(PE_LIST)}
 ${EXAM_VI}`),
@@ -236,10 +246,10 @@ const FE_GUIDE = {
 <h2>The theory exam</h2>
 <p class="lead">About 60 single-choice questions in 60 minutes, drawn from all chapters, in the same style as the ISTQB exam (lesson 0.5). The best preparation is volume: the Exam room holds 22 real papers.</p>
 <ol>
-<li><b>Two weeks before:</b> redo every chapter quiz here (all the slide questions are in them) until ≥ 90%.</li>
-<li><b>From 10 days before:</b> one timed FE paper every day or two; after each, reread the slide behind every wrong answer.</li>
-<li><b>3 days before:</b> the 40-question mock below under exam conditions, plus the mock exam in the main textbook (Ch.7, p.232).</li>
-<li><b>On the day:</b> two passes, flag and return, no blanks.</li>
+<li><strong>Two weeks before:</strong> redo every chapter quiz here (all the slide questions are in them) until ≥ 90%.</li>
+<li><strong>From 10 days before:</strong> one timed FE paper every day or two; after each, reread the slide behind every wrong answer.</li>
+<li><strong>3 days before:</strong> the 40-question mock below under exam conditions, plus the mock exam in the main textbook (Ch.7, p.232).</li>
+<li><strong>On the day:</strong> two passes, flag and return, no blanks.</li>
 </ol>
 <h3>The 22 real FE papers in the Exam room</h3>
 ${grid(FE_LIST)}
@@ -248,10 +258,10 @@ ${EXAM}`,
 <h2>Bài thi lý thuyết</h2>
 <p class="lead">Khoảng 60 câu một đáp án trong 60 phút, lấy từ mọi chương, cùng kiểu câu hỏi với đề ISTQB (bài 0.5). Cách chuẩn bị tốt nhất là làm nhiều: Phòng thi có sẵn 22 đề thật.</p>
 <ol>
-<li><b>Hai tuần trước:</b> làm lại mọi quiz chương trên trang (đã gồm toàn bộ câu hỏi trên slide) tới khi ≥ 90%.</li>
-<li><b>Từ 10 ngày trước:</b> một đề FE bấm giờ mỗi một hai ngày; làm xong đọc lại đúng slide của từng câu sai.</li>
-<li><b>3 ngày trước:</b> làm đề thử 40 câu bên dưới trong điều kiện như thi thật, cộng đề thử trong giáo trình chính (Ch.7, trang 232).</li>
-<li><b>Ngày thi:</b> làm hai lượt, đánh dấu rồi quay lại, không bỏ trống.</li>
+<li><strong>Hai tuần trước:</strong> làm lại mọi quiz chương trên trang (đã gồm toàn bộ câu hỏi trên slide) tới khi ≥ 90%.</li>
+<li><strong>Từ 10 ngày trước:</strong> một đề FE bấm giờ mỗi một hai ngày; làm xong đọc lại đúng slide của từng câu sai.</li>
+<li><strong>3 ngày trước:</strong> làm đề thử 40 câu bên dưới trong điều kiện như thi thật, cộng đề thử trong giáo trình chính (Ch.7, trang 232).</li>
+<li><strong>Ngày thi:</strong> làm hai lượt, đánh dấu rồi quay lại, không bỏ trống.</li>
 </ol>
 <h3>22 đề FE thật trong Phòng thi</h3>
 ${grid(FE_LIST)}

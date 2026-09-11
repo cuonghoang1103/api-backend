@@ -318,7 +318,7 @@ export function ChapterQuiz({ sectionId, sectionTitle, count, lessonId }: {
   }, [qs, submitted, ans]);
 
   // Ngữ cảnh cho gia sư: "câu N" → đề + đáp án câu đó (đã pickLang tiếng Việt).
-  const quizContext: TutorQuizItem[] = useMemo(() => (qs || []).slice(0, 25).map((q, i) => ({
+  const quizContext: TutorQuizItem[] = useMemo(() => (qs || []).slice(0, 60).map((q, i) => ({
     n: i + 1,
     prompt: pickLang(q.prompt, 'vi'),
     options: normOpts(q.options).map((o) => pickLang(o, 'vi')),

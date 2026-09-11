@@ -34,12 +34,12 @@ function page(deck, n, title, en, vi) {
   if (n < 1 || n > d.total) throw new Error(`${deck} has ${d.total} pages, got ${n}`);
   return `<div class="anh-slide"><img src="${img(deck, n)}" alt="${attr(`${d.code} page ${n}: ${title}`)}" loading="lazy" width="${d.w}" height="${d.h}" />` +
     `<p class="chu-thich">📄 <strong>${d.code}</strong> · page ${n}/${d.total} — ${title}</p></div>\n` +
-    `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}</div>`;
+    `<div class="ml-en giang">${en}</div>\n<div class="ml-vi giang">${vi}</div>`;
 }
 const pages = (deck, rows) => rows.map((r) => page(deck, ...r)).join('\n');
 
 /** Shared (language-neutral) block: what you would actually type into the template — always English. */
-const sheet = (label, html) => `<div class="callout ok"><b>📝 ${label}</b></div>\n${html}`;
+const sheet = (label, html) => `<div class="callout ok"><strong>📝 ${label}</strong></div>\n${html}`;
 const tbl = (head, rows) => `<div class="table-wrap"><table><thead><tr>${head.map((h) => `<th>${h}</th>`).join('')}</tr></thead><tbody>` +
   rows.map((r) => `<tr>${r.map((c) => `<td>${c}</td>`).join('')}</tr>`).join('') + '</tbody></table></div>';
 
@@ -52,7 +52,7 @@ function utGrid(s) {
   const n = s.ids.length;
   const chk = (m, what) => { if (m.length !== n) throw new Error(`${s.fname}: marks "${m}" for ${what} must have ${n} chars`); return m; };
   const marks = (m, what) => chk(m, what).split('').map((c) => `<td style="text-align:center">${c === 'O' ? 'O' : ''}</td>`).join('');
-  const row = (sec, item, val, m) => `<tr><td><b>${sec}</b></td><td>${item}</td><td>${val}</td>${marks(m, item + ' ' + val)}</tr>`;
+  const row = (sec, item, val, m) => `<tr><td><strong>${sec}</strong></td><td>${item}</td><td>${val}</td>${marks(m, item + ' ' + val)}</tr>`;
   const type = chk(s.type, 'type'); const res = chk(s.result || 'P'.repeat(n), 'result');
   const cnt = (str, ch) => str.split('').filter((c) => c === ch).length;
   const P = cnt(res, 'P'), F = cnt(res, 'F'), U = n - P - F;
@@ -62,7 +62,7 @@ function utGrid(s) {
   s.ret.forEach(([v, m], i) => { body += row(i ? '' : 'Confirm', i ? '' : 'Return', v, m); });
   (s.exc || []).forEach(([v, m], i) => { body += row('', i ? '' : 'Exception', v, m); });
   (s.log || []).forEach(([v, m], i) => { body += row('', i ? '' : 'Log message', v, m); });
-  body += `<tr><td><b>Result</b></td><td>Type (N: Normal, A: Abnormal, B: Boundary)</td><td></td>${type.split('').map((c) => `<td style="text-align:center">${c}</td>`).join('')}</tr>`;
+  body += `<tr><td><strong>Result</strong></td><td>Type (N: Normal, A: Abnormal, B: Boundary)</td><td></td>${type.split('').map((c) => `<td style="text-align:center">${c}</td>`).join('')}</tr>`;
   body += `<tr><td></td><td>Passed/Failed</td><td></td>${res.split('').map((c) => `<td style="text-align:center">${c === 'P' ? 'P' : c === 'F' ? 'F' : ''}</td>`).join('')}</tr>`;
   body += `<tr><td></td><td>Executed Date</td><td></td>${s.ids.map(() => `<td style="text-align:center">${s.date || ''}</td>`).join('')}</tr>`;
   body += `<tr><td></td><td>Defect ID</td><td></td>${s.ids.map((_, i) => `<td style="text-align:center">${(s.defects || {})[i] || ''}</td>`).join('')}</tr>`;
@@ -85,7 +85,7 @@ function t31(rows) {
     const h = Math.max(1, ...cols.map((c) => c.length));
     for (const c of cols) for (const [, t] of c) { if (tags.includes(t)) throw new Error('duplicate tag ' + t); tags.push(t); }
     for (let i = 0; i < h; i++) {
-      body += '<tr>' + (i === 0 ? `<td rowspan="${h}"><b>${r.c}</b></td>` : '') +
+      body += '<tr>' + (i === 0 ? `<td rowspan="${h}"><strong>${r.c}</strong></td>` : '') +
         cols.map((c) => (c[i] ? `<td>${c[i][0]}</td><td>${c[i][1]}</td>` : '<td></td><td></td>')).join('') + '</tr>';
     }
   }
@@ -101,12 +101,12 @@ function t32(cases, allTags, extra = []) {
   const miss = allTags.filter((t) => !s10.has(t));
   const pct = (k) => (100 * k / allTags.length).toFixed(1);
   const table = tbl(['Test-case No', 'Description (test data)', 'Expected result', 'TAG'], cases.map((c) => [c[0], c[1], c[2], c[3]]));
-  const en = `<p><b>Tag-coverage check (computed from the table above):</b> the ${cases.length} cases cover <b>${s10.size} of ${allTags.length} tags (${pct(s10.size)}%)</b>.` +
+  const en = `<p><strong>Tag-coverage check (computed from the table above):</strong> the ${cases.length} cases cover <strong>${s10.size} of ${allTags.length} tags (${pct(s10.size)}%)</strong>.` +
     (miss.length ? ` Not covered: ${miss.join(', ')}.` : ' Every tag is covered.') +
-    (extra.length ? ` Adding the ${extra.length} extra cases below raises it to <b>${sAll.size}/${allTags.length} (${pct(sAll.size)}%)</b>.` : '') + '</p>';
-  const vi = `<p><b>Kiểm tra độ phủ tag (tính tự động từ bảng trên):</b> ${cases.length} ca phủ <b>${s10.size}/${allTags.length} tag (${pct(s10.size)}%)</b>.` +
+    (extra.length ? ` Adding the ${extra.length} extra cases below raises it to <strong>${sAll.size}/${allTags.length} (${pct(sAll.size)}%)</strong>.` : '') + '</p>';
+  const vi = `<p><strong>Kiểm tra độ phủ tag (tính tự động từ bảng trên):</strong> ${cases.length} ca phủ <strong>${s10.size}/${allTags.length} tag (${pct(s10.size)}%)</strong>.` +
     (miss.length ? ` Chưa phủ: ${miss.join(', ')}.` : ' Mọi tag đều được phủ.') +
-    (extra.length ? ` Thêm ${extra.length} ca bổ sung bên dưới thì lên <b>${sAll.size}/${allTags.length} (${pct(sAll.size)}%)</b>.` : '') + '</p>';
+    (extra.length ? ` Thêm ${extra.length} ca bổ sung bên dưới thì lên <strong>${sAll.size}/${allTags.length} (${pct(sAll.size)}%)</strong>.` : '') + '</p>';
   const ext = extra.length ? tbl(['Extra case', 'Description (test data)', 'Expected result', 'TAG'], extra.map((c) => [c[0], c[1], c[2], c[3]])) : '';
   return { table, check: bi(en, vi), ext };
 }
@@ -131,32 +131,72 @@ const L0 = {
   content: [
     bi(`<span class="eyebrow">Practical Exam · Lesson PE-0 · four past papers from 01.Materials/03.PE</span>
 <h2>How the SWT301 Practical Exam works</h2>
-<p class="lead">The Practical Exam (PE) is <strong>25% of your final grade and must be ≥ 4.0</strong>, otherwise you fail the course regardless of everything else. It is not a coding exam: you <strong>review code</strong>, <strong>design white-box unit tests</strong> and <strong>design black-box test cases</strong>, and you write every answer in English into an official template. This lesson explains the format, walks through the template sheet by sheet, gives a minute-by-minute plan and lists the twelve mistakes that cost students the most marks. Lessons PE-1 to PE-4 then solve four real papers completely.</p>
-<div class="callout"><b>Learning objectives exercised by the PE.</b> Q1 — LO-3.2.4 apply a review technique to a work product (K3). Q2 — LO-4.3.1 statement coverage and LO-4.3.2 decision coverage (K2, but in the PE you must actually <em>produce</em> the tests). Q3 — LO-4.2.1 equivalence partitioning and LO-4.2.2 boundary value analysis (K3); newer papers add LO-4.2.5 use-case testing (K2) and LO-5.2.2 test strategies (K2).</div>
+<p class="lead">The Practical Exam (PE) is <strong>25% of your final grade and must be ≥ 4.0</strong>, otherwise you fail the course regardless of everything else.</p>
+<p>It is not a coding exam. You do three things, and you write every answer <strong>in English into an official template</strong>:</p>
+<ul>
+<li><strong>Review code</strong> — find the defects, with line numbers and fixes.</li>
+<li><strong>Design white-box unit tests</strong> — the minimum set for a coverage target.</li>
+<li><strong>Design black-box test cases</strong> — partitions, boundaries, concrete data.</li>
+</ul>
+<p>This lesson, in four parts:</p>
+<ol>
+<li>the format of the exam;</li>
+<li>the answer template, sheet by sheet;</li>
+<li>a minute-by-minute time plan;</li>
+<li>the twelve mistakes that cost students the most marks.</li>
+</ol>
+<p>Lessons PE-1 to PE-4 then solve four real papers completely.</p>
+<div class="callout"><strong>Learning objectives exercised by the PE.</strong>
+<ul>
+<li><strong>Q1</strong> — LO-3.2.4 apply a review technique to a work product (K3).</li>
+<li><strong>Q2</strong> — LO-4.3.1 statement coverage and LO-4.3.2 decision coverage (K2, but in the PE you must actually <em>produce</em> the tests).</li>
+<li><strong>Q3</strong> — LO-4.2.1 equivalence partitioning and LO-4.2.2 boundary value analysis (K3).</li>
+<li><strong>Newer papers add</strong> — LO-4.2.5 use-case testing (K2) and LO-5.2.2 test strategies (K2).</li>
+</ul></div>
 <h3>The format at a glance</h3>
 <table>
 <thead><tr><th>Item</th><th>What the papers say</th></tr></thead>
 <tbody>
 <tr><td>Duration</td><td>90 min (FA23, SU24 PE1) · 85 min (FALL24; also the figure in the course syllabus) · 80 min (SPRING25)</td></tr>
-<tr><td>Questions &amp; points</td><td>Classic papers: <b>Q1 3 + Q2 3 + Q3 4</b> = 10. FALL24: 3 + 5 + 2. SPRING25: four questions, 3 + 3 + 2 + 2.</td></tr>
-<tr><td>Tools</td><td>FA23 and SU24: <b>no IDE</b> (NetBeans, IntelliJ…). FALL24 explicitly <em>allows</em> an IDE; SPRING25 says nothing. Prepare as if you have no IDE — you must be able to compute coverage and expected results on paper.</td></tr>
-<tr><td>Answer file</td><td>FA23 / SU24: the provided <b>Excel template</b> (sheets Q1, Q2, Q3.1, Q3.2, Q3.3). FALL24 / SPRING25: <b>one Word document</b>, no other format accepted.</td></tr>
+<tr><td>Questions &amp; points</td><td>Classic papers: <strong>Q1 3 + Q2 3 + Q3 4</strong> = 10. FALL24: 3 + 5 + 2. SPRING25: four questions, 3 + 3 + 2 + 2.</td></tr>
+<tr><td>Tools</td><td>FA23 and SU24: <strong>no IDE</strong> (NetBeans, IntelliJ…). FALL24 explicitly <em>allows</em> an IDE; SPRING25 says nothing. Prepare as if you have no IDE — you must be able to compute coverage and expected results on paper.</td></tr>
+<tr><td>Answer file</td><td>FA23 / SU24: the provided <strong>Excel template</strong> (sheets Q1, Q2, Q3.1, Q3.2, Q3.3). FALL24 / SPRING25: <strong>one Word document</strong>, no other format accepted.</td></tr>
 <tr><td>Zero rules</td><td>"You will get 0 for any answer which contains information irrelevant to the corresponding question." SU24 adds: answers must be in English, must reflect <em>this</em> paper, and not using the template = the whole exam gets 0.</td></tr>
 <tr><td>Pass condition</td><td>PE ≥ 4.0 is a hard blocker (course rules in lesson 0); PE and TE (theory MCQ) together make up the Final (50%).</td></tr>
 </tbody>
 </table>`,
       `<span class="eyebrow">Thi thực hành · Bài PE-0 · bốn đề cũ trong 01.Materials/03.PE</span>
 <h2>Bài thi thực hành (PE) SWT301 diễn ra thế nào</h2>
-<p class="lead">Bài thi thực hành (PE) chiếm <strong>25% điểm tổng kết và phải ≥ 4.0</strong>, nếu không thì trượt môn dù các cột khác cao đến đâu. Đây không phải bài thi code: bạn <strong>review code</strong>, <strong>thiết kế unit test hộp trắng</strong> và <strong>thiết kế test case hộp đen</strong>, rồi viết mọi câu trả lời bằng tiếng Anh vào template chính thức. Bài này giải thích hình thức thi, đi qua từng sheet của template, đưa ra kế hoạch chia từng phút và liệt kê mười hai lỗi làm sinh viên mất nhiều điểm nhất. Các bài PE-1 đến PE-4 sau đó giải trọn vẹn bốn đề thật.</p>
-<div class="callout"><b>Chuẩn đầu ra được kiểm tra trong PE.</b> Q1 — LO-3.2.4 áp dụng một kỹ thuật review cho sản phẩm công việc (K3). Q2 — LO-4.3.1 statement coverage và LO-4.3.2 decision coverage (K2, nhưng trong PE bạn phải thực sự <em>tạo ra</em> bộ test). Q3 — LO-4.2.1 phân vùng tương đương và LO-4.2.2 phân tích giá trị biên (K3); các đề mới thêm LO-4.2.5 kiểm thử theo use case (K2) và LO-5.2.2 chiến lược kiểm thử (K2).</div>
+<p class="lead">Bài thi thực hành (PE) chiếm <strong>25% điểm tổng kết và phải ≥ 4.0</strong>, nếu không thì trượt môn dù các cột khác cao đến đâu.</p>
+<p>Đây không phải bài thi code. Bạn làm ba việc, và viết mọi câu trả lời <strong>bằng tiếng Anh vào template chính thức</strong>:</p>
+<ul>
+<li><strong>Review code</strong> — tìm defect, kèm số dòng và cách sửa.</li>
+<li><strong>Thiết kế unit test hộp trắng</strong> — bộ test tối thiểu cho một mục tiêu độ phủ.</li>
+<li><strong>Thiết kế test case hộp đen</strong> — phân vùng, giá trị biên, dữ liệu cụ thể.</li>
+</ul>
+<p>Bài này gồm bốn phần:</p>
+<ol>
+<li>hình thức thi;</li>
+<li>template bài làm, từng sheet một;</li>
+<li>kế hoạch chia thời gian theo từng phút;</li>
+<li>mười hai lỗi làm sinh viên mất nhiều điểm nhất.</li>
+</ol>
+<p>Các bài PE-1 đến PE-4 sau đó giải trọn vẹn bốn đề thật.</p>
+<div class="callout"><strong>Chuẩn đầu ra được kiểm tra trong PE.</strong>
+<ul>
+<li><strong>Q1</strong> — LO-3.2.4 áp dụng một kỹ thuật review cho sản phẩm công việc (K3).</li>
+<li><strong>Q2</strong> — LO-4.3.1 statement coverage và LO-4.3.2 decision coverage (K2, nhưng trong PE bạn phải thực sự <em>tạo ra</em> bộ test).</li>
+<li><strong>Q3</strong> — LO-4.2.1 phân vùng tương đương và LO-4.2.2 phân tích giá trị biên (K3).</li>
+<li><strong>Các đề mới thêm</strong> — LO-4.2.5 kiểm thử theo use case (K2) và LO-5.2.2 chiến lược kiểm thử (K2).</li>
+</ul></div>
 <h3>Hình thức thi trong một bảng</h3>
 <table>
 <thead><tr><th>Mục</th><th>Các đề ghi gì</th></tr></thead>
 <tbody>
 <tr><td>Thời gian</td><td>90 phút (FA23, SU24 PE1) · 85 phút (FALL24; cũng là con số trong syllabus môn) · 80 phút (SPRING25)</td></tr>
-<tr><td>Câu hỏi &amp; điểm</td><td>Đề kiểu cũ: <b>Q1 3 + Q2 3 + Q3 4</b> = 10. FALL24: 3 + 5 + 2. SPRING25: bốn câu, 3 + 3 + 2 + 2.</td></tr>
-<tr><td>Công cụ</td><td>FA23 và SU24: <b>không được dùng IDE</b> (NetBeans, IntelliJ…). FALL24 ghi rõ <em>được</em> dùng IDE; SPRING25 không nhắc. Hãy chuẩn bị như thể không có IDE — bạn phải tự tính được độ phủ và kết quả mong đợi trên giấy.</td></tr>
-<tr><td>File bài làm</td><td>FA23 / SU24: <b>template Excel</b> được phát (các sheet Q1, Q2, Q3.1, Q3.2, Q3.3). FALL24 / SPRING25: <b>một file Word duy nhất</b>, không nhận định dạng khác.</td></tr>
+<tr><td>Câu hỏi &amp; điểm</td><td>Đề kiểu cũ: <strong>Q1 3 + Q2 3 + Q3 4</strong> = 10. FALL24: 3 + 5 + 2. SPRING25: bốn câu, 3 + 3 + 2 + 2.</td></tr>
+<tr><td>Công cụ</td><td>FA23 và SU24: <strong>không được dùng IDE</strong> (NetBeans, IntelliJ…). FALL24 ghi rõ <em>được</em> dùng IDE; SPRING25 không nhắc. Hãy chuẩn bị như thể không có IDE — bạn phải tự tính được độ phủ và kết quả mong đợi trên giấy.</td></tr>
+<tr><td>File bài làm</td><td>FA23 / SU24: <strong>template Excel</strong> được phát (các sheet Q1, Q2, Q3.1, Q3.2, Q3.3). FALL24 / SPRING25: <strong>một file Word duy nhất</strong>, không nhận định dạng khác.</td></tr>
 <tr><td>Luật điểm 0</td><td>"Câu trả lời nào chứa thông tin không liên quan tới câu hỏi sẽ bị 0 điểm." Đề SU24 thêm: phải viết tiếng Anh, phải bám đúng đề <em>này</em>, và không dùng template = cả bài 0 điểm.</td></tr>
 <tr><td>Điều kiện qua</td><td>PE ≥ 4.0 là điều kiện chặn cứng (quy chế môn ở bài 0); PE cùng TE (trắc nghiệm lý thuyết) tạo thành cột Final (50%).</td></tr>
 </tbody>
@@ -165,50 +205,60 @@ const L0 = {
 <table>
 <thead><tr><th>Lesson</th><th>Source file</th><th>Q1</th><th>Q2</th><th>Q3 (Q4)</th><th>Same questions in the Exam room</th></tr></thead>
 <tbody>
-<tr><td>PE-1</td><td>PE3/SWT301_FA23.docx + template.xlsx</td><td>AverageCalculator review (3)</td><td>countCharacters unit tests (3)</td><td>"Create the inspection decision" EP/BVA (4)</td><td><b>SWT301-PE8</b> "Practical Exam Đề 8 (PE - SP 2024 - Block 5)" has all three; SWT301-PE9 (FALL24 - PE3) reuses Q1+Q3; SWT301-PE18 (FA 2023 - PE1.2) reuses Q2</td></tr>
-<tr><td>PE-2</td><td>PE1.jpg — SWT301_SU24_PE1</td><td>Fibonacci review (3)</td><td>fncPersonalIncomeTax flowchart (3)</td><td>BMI Calculator EP/BVA (4)</td><td><b>SWT301-PE14</b> "Practical Exam Đề 14 (SU 2024 - PE1)"</td></tr>
-<tr><td>PE-3</td><td>PE2.jpg — FALL24 final PE</td><td>fileProcessor defect report (3)</td><td>OrderCalculator JUnit, EP/BVA + branches (5)</td><td>Online shopping use case (2)</td><td><b>SWT301-PE11</b> "Practical Exam Đề 11 (FA 2024 - PE1)"</td></tr>
-<tr><td>PE-4</td><td>PE4/SP25.jpg — SPRING25 final PE</td><td>Test strategy (3)</td><td>TravelBooking review (3)</td><td>calculateRewardPoints (2) · system test cases (2)</td><td><b>SWT301-PE7</b> "Practical Exam Đề 7 (PE - SP 2025)"</td></tr>
+<tr><td>PE-1</td><td>PE3/SWT301_FA23.docx + template.xlsx</td><td>AverageCalculator review (3)</td><td>countCharacters unit tests (3)</td><td>"Create the inspection decision" EP/BVA (4)</td><td><strong>SWT301-PE8</strong> "Practical Exam Đề 8 (PE - SP 2024 - Block 5)" has all three; SWT301-PE9 (FALL24 - PE3) reuses Q1+Q3; SWT301-PE18 (FA 2023 - PE1.2) reuses Q2</td></tr>
+<tr><td>PE-2</td><td>PE1.jpg — SWT301_SU24_PE1</td><td>Fibonacci review (3)</td><td>fncPersonalIncomeTax flowchart (3)</td><td>BMI Calculator EP/BVA (4)</td><td><strong>SWT301-PE14</strong> "Practical Exam Đề 14 (SU 2024 - PE1)"</td></tr>
+<tr><td>PE-3</td><td>PE2.jpg — FALL24 final PE</td><td>fileProcessor defect report (3)</td><td>OrderCalculator JUnit, EP/BVA + branches (5)</td><td>Online shopping use case (2)</td><td><strong>SWT301-PE11</strong> "Practical Exam Đề 11 (FA 2024 - PE1)"</td></tr>
+<tr><td>PE-4</td><td>PE4/SP25.jpg — SPRING25 final PE</td><td>Test strategy (3)</td><td>TravelBooking review (3)</td><td>calculateRewardPoints (2) · system test cases (2)</td><td><strong>SWT301-PE7</strong> "Practical Exam Đề 7 (PE - SP 2025)"</td></tr>
 </tbody>
 </table>
-<p>The folder <code>03.PE/SP26</code> is <b>empty</b> — there is no Spring 2026 paper yet. The ids above are the deck files of the site's <b>Exam room</b>. Exam-room pages live at <code>/exam/&lt;number&gt;</code>, and that number is a database id assigned when the exams are loaded, so there is no fixed link: open <b>/exam</b>, filter by SWT301 and pick the paper by its title. The Exam room gives every PE 90 minutes and grades your written answers with an AI rubric; when you practise, set your own timer to the real value (85 or 80 minutes for the newer papers).</p>
-<div class="callout ok"><b>The same questions come back.</b> The FA23 docx questions appear again in three Exam-room papers from different semesters, and the BMI Calculator, the income-tax flowchart and the "inspection decision" form are known repeats. Master these four papers and you have seen most of the question bank's patterns.</div>`,
+<ul>
+<li><strong>No Spring 2026 paper yet</strong> — the folder <code>03.PE/SP26</code> is <strong>empty</strong>.</li>
+<li><strong>What the ids are</strong> — the deck files of the site's <strong>Exam room</strong>.</li>
+<li><strong>How to find a paper</strong> — Exam-room pages live at <code>/exam/&lt;number&gt;</code>, and that number is a database id assigned when the exams are loaded, so there is no fixed link. Open <strong>/exam</strong>, filter by SWT301 and pick the paper by its title.</li>
+<li><strong>Timing</strong> — the Exam room gives every PE 90 minutes and grades your written answers with an AI rubric. When you practise, set your own timer to the real value (85 or 80 minutes for the newer papers).</li>
+</ul>
+<div class="callout ok"><strong>The same questions come back.</strong> The FA23 docx questions appear again in three Exam-room papers from different semesters, and the BMI Calculator, the income-tax flowchart and the "inspection decision" form are known repeats. Master these four papers and you have seen most of the question bank's patterns.</div>`,
       `<h2>🗂️ Bốn đề trong phần này — và chỗ luyện có bấm giờ</h2>
 <table>
 <thead><tr><th>Bài</th><th>File nguồn</th><th>Q1</th><th>Q2</th><th>Q3 (Q4)</th><th>Cùng câu hỏi trong Phòng thi</th></tr></thead>
 <tbody>
-<tr><td>PE-1</td><td>PE3/SWT301_FA23.docx + template.xlsx</td><td>Review AverageCalculator (3)</td><td>Unit test countCharacters (3)</td><td>"Tạo quyết định kiểm tra" EP/BVA (4)</td><td><b>SWT301-PE8</b> "Đề thi thực hành số 8 (PE - SP 2024 - Block 5)" có đủ cả ba câu; SWT301-PE9 (FALL24 - PE3) dùng lại Q1+Q3; SWT301-PE18 (FA 2023 - PE1.2) dùng lại Q2</td></tr>
-<tr><td>PE-2</td><td>PE1.jpg — SWT301_SU24_PE1</td><td>Review Fibonacci (3)</td><td>Lưu đồ fncPersonalIncomeTax (3)</td><td>BMI Calculator EP/BVA (4)</td><td><b>SWT301-PE14</b> "Đề thi thực hành số 14 (SU 2024 - PE1)"</td></tr>
-<tr><td>PE-3</td><td>PE2.jpg — đề PE cuối kỳ FALL24</td><td>Báo cáo defect fileProcessor (3)</td><td>JUnit cho OrderCalculator, EP/BVA + nhánh (5)</td><td>Use case mua hàng online (2)</td><td><b>SWT301-PE11</b> "Đề thi thực hành số 11 (FA 2024 - PE1)"</td></tr>
-<tr><td>PE-4</td><td>PE4/SP25.jpg — đề PE cuối kỳ SPRING25</td><td>Chiến lược kiểm thử (3)</td><td>Review TravelBooking (3)</td><td>calculateRewardPoints (2) · test case hệ thống (2)</td><td><b>SWT301-PE7</b> "Đề thi thực hành số 7 (PE - SP 2025)"</td></tr>
+<tr><td>PE-1</td><td>PE3/SWT301_FA23.docx + template.xlsx</td><td>Review AverageCalculator (3)</td><td>Unit test countCharacters (3)</td><td>"Tạo quyết định kiểm tra" EP/BVA (4)</td><td><strong>SWT301-PE8</strong> "Đề thi thực hành số 8 (PE - SP 2024 - Block 5)" có đủ cả ba câu; SWT301-PE9 (FALL24 - PE3) dùng lại Q1+Q3; SWT301-PE18 (FA 2023 - PE1.2) dùng lại Q2</td></tr>
+<tr><td>PE-2</td><td>PE1.jpg — SWT301_SU24_PE1</td><td>Review Fibonacci (3)</td><td>Lưu đồ fncPersonalIncomeTax (3)</td><td>BMI Calculator EP/BVA (4)</td><td><strong>SWT301-PE14</strong> "Đề thi thực hành số 14 (SU 2024 - PE1)"</td></tr>
+<tr><td>PE-3</td><td>PE2.jpg — đề PE cuối kỳ FALL24</td><td>Báo cáo defect fileProcessor (3)</td><td>JUnit cho OrderCalculator, EP/BVA + nhánh (5)</td><td>Use case mua hàng online (2)</td><td><strong>SWT301-PE11</strong> "Đề thi thực hành số 11 (FA 2024 - PE1)"</td></tr>
+<tr><td>PE-4</td><td>PE4/SP25.jpg — đề PE cuối kỳ SPRING25</td><td>Chiến lược kiểm thử (3)</td><td>Review TravelBooking (3)</td><td>calculateRewardPoints (2) · test case hệ thống (2)</td><td><strong>SWT301-PE7</strong> "Đề thi thực hành số 7 (PE - SP 2025)"</td></tr>
 </tbody>
 </table>
-<p>Thư mục <code>03.PE/SP26</code> <b>trống</b> — chưa có đề Spring 2026. Các mã ở trên là file đề của <b>Phòng thi</b> trên web. Trang phòng thi có địa chỉ <code>/exam/&lt;số&gt;</code>, mà số đó là id trong cơ sở dữ liệu được gán lúc nạp đề, nên không có link cố định: vào <b>/exam</b>, lọc môn SWT301 rồi chọn đề theo tên. Phòng thi cho mọi đề PE 90 phút và chấm câu trả lời viết bằng rubric AI; khi luyện, hãy tự bấm giờ đúng như đề thật (85 hoặc 80 phút với các đề mới).</p>
-<div class="callout ok"><b>Câu hỏi quay lại nhiều lần.</b> Các câu trong file FA23 xuất hiện lại ở ba đề của phòng thi thuộc các kỳ khác nhau; BMI Calculator, lưu đồ thuế thu nhập và form "quyết định kiểm tra" là những câu lặp đã biết. Nắm chắc bốn đề này là bạn đã gặp gần hết các dạng trong ngân hàng đề.</div>`),
+<ul>
+<li><strong>Chưa có đề Spring 2026</strong> — thư mục <code>03.PE/SP26</code> <strong>trống</strong>.</li>
+<li><strong>Các mã là gì</strong> — là file đề của <strong>Phòng thi</strong> trên web.</li>
+<li><strong>Cách tìm đề</strong> — trang phòng thi có địa chỉ <code>/exam/&lt;số&gt;</code>, mà số đó là id trong cơ sở dữ liệu được gán lúc nạp đề, nên không có link cố định. Vào <strong>/exam</strong>, lọc môn SWT301 rồi chọn đề theo tên.</li>
+<li><strong>Thời gian</strong> — Phòng thi cho mọi đề PE 90 phút và chấm câu trả lời viết bằng rubric AI. Khi luyện, hãy tự bấm giờ đúng như đề thật (85 hoặc 80 phút với các đề mới).</li>
+</ul>
+<div class="callout ok"><strong>Câu hỏi quay lại nhiều lần.</strong> Các câu trong file FA23 xuất hiện lại ở ba đề của phòng thi thuộc các kỳ khác nhau; BMI Calculator, lưu đồ thuế thu nhập và form "quyết định kiểm tra" là những câu lặp đã biết. Nắm chắc bốn đề này là bạn đã gặp gần hết các dạng trong ngân hàng đề.</div>`),
     bi(`<h2>🧾 The official answer template, sheet by sheet (SWT301_FA23 template.xlsx)</h2>
 <table>
 <thead><tr><th>Sheet</th><th>Layout</th><th>How to fill it</th></tr></thead>
 <tbody>
-<tr><td><b>Q1 template</b></td><td>Three columns <b>Issue No | Description | Line</b>, rows 1–7. Sample row (blue): "class-level variable x is overshadowed by local variable x | 6".</td><td>One issue per row, with the <em>exact</em> line number. Put the category and the fix in the description ("[Compile error] … Fix: …"). Add rows if you have more than 7 — more correct issues is safer than exactly six.</td></tr>
-<tr><td><b>Q2 template</b></td><td>Header: Function Code, Function Name, Created By, Executed By, Lines of code, Lack of test cases, Test requirement, and counters Passed / Failed / Untested / N/A/B / Total Test Cases. Grid: one column per <b>UTCID01, UTCID02…</b>; row blocks <b>Condition → Precondition</b>, <b>Input condition</b> (one block per parameter, one row per test-data value), <b>Confirm → Return</b>, <b>Exception</b>, <b>Log message</b>, <b>Result → Type (N: Normal, A: Abnormal, B: Boundary)</b>, Passed/Failed, Executed Date, Defect ID.</td><td>Write each distinct value once in the value column and put an <b>O</b> under every UTCID that uses it. Every UTCID needs exactly one O per parameter, at least one O in Return or Exception, and a Type letter. "Don't edit the grey cell."</td></tr>
-<tr><td><b>Q3.1 template</b></td><td>Table 3.1 Test Analysis: <b>Condition | Valid Partitions | Tag | Invalid Partitions | Tag | Valid Boundaries | Tag | Invalid Boundaries | Tag</b>. Sample: Customer name — VP1 2–64 chars, VP2 valid chars; IP1 &lt; 2 chars, IP2 &gt; 64 chars, IP3 invalid chars; VB1 2 chars, VB2 64 chars; IB1 1 char, IB2 65 chars, IB3 0 char.</td><td>One block per business rule/field. Tags are numbered continuously through the whole table (VP1…VPn, IP1…, VB1…, IB1…).</td></tr>
-<tr><td><b>Q3.2 template</b></td><td>Table 3.2 Test case design: <b>Test-case No | Description | Expected result | TAG</b>, rows 1–10. Sample: "Name: John Smith / Acc. No: 123456 / Loan: 2500 / Term: 3 years" → "Repayment: 79.86 …" → "VP1, VP2, VP3, VP4, VP5,…".</td><td>Concrete test data in the description, a concrete expected result, and the list of tags this case exercises.</td></tr>
-<tr><td><b>Q3.3 template</b></td><td>Counters Pass / Fail / Untested / N/A, Percent Complete, Number of cases; columns <b>ID | Test Case Description | Pre-Condition | Test Case Procedure | Expected Output | Result | Bug# | Test date | Note</b>.</td><td>The same 10 cases, now with preconditions and numbered steps a stranger could execute. Result stays "Untested" — you are designing, not running.</td></tr>
+<tr><td><strong>Q1 template</strong></td><td>Three columns <strong>Issue No | Description | Line</strong>, rows 1–7. Sample row (blue): "class-level variable x is overshadowed by local variable x | 6".</td><td>One issue per row, with the <em>exact</em> line number. Put the category and the fix in the description ("[Compile error] … Fix: …"). Add rows if you have more than 7 — more correct issues is safer than exactly six.</td></tr>
+<tr><td><strong>Q2 template</strong></td><td>Header: Function Code, Function Name, Created By, Executed By, Lines of code, Lack of test cases, Test requirement, and counters Passed / Failed / Untested / N/A/B / Total Test Cases. Grid: one column per <strong>UTCID01, UTCID02…</strong>; row blocks <strong>Condition → Precondition</strong>, <strong>Input condition</strong> (one block per parameter, one row per test-data value), <strong>Confirm → Return</strong>, <strong>Exception</strong>, <strong>Log message</strong>, <strong>Result → Type (N: Normal, A: Abnormal, B: Boundary)</strong>, Passed/Failed, Executed Date, Defect ID.</td><td>Write each distinct value once in the value column and put an <strong>O</strong> under every UTCID that uses it. Every UTCID needs exactly one O per parameter, at least one O in Return or Exception, and a Type letter. "Don't edit the grey cell."</td></tr>
+<tr><td><strong>Q3.1 template</strong></td><td>Table 3.1 Test Analysis: <strong>Condition | Valid Partitions | Tag | Invalid Partitions | Tag | Valid Boundaries | Tag | Invalid Boundaries | Tag</strong>. Sample: Customer name — VP1 2–64 chars, VP2 valid chars; IP1 &lt; 2 chars, IP2 &gt; 64 chars, IP3 invalid chars; VB1 2 chars, VB2 64 chars; IB1 1 char, IB2 65 chars, IB3 0 char.</td><td>One block per business rule/field. Tags are numbered continuously through the whole table (VP1…VPn, IP1…, VB1…, IB1…).</td></tr>
+<tr><td><strong>Q3.2 template</strong></td><td>Table 3.2 Test case design: <strong>Test-case No | Description | Expected result | TAG</strong>, rows 1–10. Sample: "Name: John Smith / Acc. No: 123456 / Loan: 2500 / Term: 3 years" → "Repayment: 79.86 …" → "VP1, VP2, VP3, VP4, VP5,…".</td><td>Concrete test data in the description, a concrete expected result, and the list of tags this case exercises.</td></tr>
+<tr><td><strong>Q3.3 template</strong></td><td>Counters Pass / Fail / Untested / N/A, Percent Complete, Number of cases; columns <strong>ID | Test Case Description | Pre-Condition | Test Case Procedure | Expected Output | Result | Bug# | Test date | Note</strong>.</td><td>The same 10 cases, now with preconditions and numbered steps a stranger could execute. Result stays "Untested" — you are designing, not running.</td></tr>
 </tbody>
 </table>
-<div class="callout warn">Every sheet ends with "<b>* Notes: Blue text is sample, needed to be deleted in the answer</b>". Leaving the sample row "Customer name 2–64 chars" in your 3.1 table is exactly the kind of irrelevant content that the zero rule punishes.</div>`,
+<div class="callout warn">Every sheet ends with "<strong>* Notes: Blue text is sample, needed to be deleted in the answer</strong>". Leaving the sample row "Customer name 2–64 chars" in your 3.1 table is exactly the kind of irrelevant content that the zero rule punishes.</div>`,
       `<h2>🧾 Template bài làm chính thức, từng sheet một (SWT301_FA23 template.xlsx)</h2>
 <table>
 <thead><tr><th>Sheet</th><th>Bố cục</th><th>Cách điền</th></tr></thead>
 <tbody>
-<tr><td><b>Q1 template</b></td><td>Ba cột <b>Issue No | Description | Line</b>, dòng 1–7. Dòng mẫu (chữ xanh): "class-level variable x is overshadowed by local variable x | 6".</td><td>Mỗi dòng một lỗi, số dòng phải <em>chính xác</em>. Ghi loại lỗi và cách sửa ngay trong mô tả ("[Compile error] … Fix: …"). Được thêm dòng nếu tìm được hơn 7 — nhiều lỗi đúng an toàn hơn đúng sáu lỗi.</td></tr>
-<tr><td><b>Q2 template</b></td><td>Phần đầu: Function Code, Function Name, Created By, Executed By, Lines of code, Lack of test cases, Test requirement, và các ô đếm Passed / Failed / Untested / N/A/B / Total Test Cases. Lưới: mỗi cột một <b>UTCID01, UTCID02…</b>; các khối dòng <b>Condition → Precondition</b>, <b>Input condition</b> (mỗi tham số một khối, mỗi giá trị test một dòng), <b>Confirm → Return</b>, <b>Exception</b>, <b>Log message</b>, <b>Result → Type (N: Normal, A: Abnormal, B: Boundary)</b>, Passed/Failed, Executed Date, Defect ID.</td><td>Mỗi giá trị khác nhau viết một lần ở cột giá trị, rồi đánh <b>O</b> dưới mọi UTCID dùng giá trị đó. Mỗi UTCID phải có đúng một chữ O cho mỗi tham số, ít nhất một O ở Return hoặc Exception, và một chữ Type. "Không sửa ô màu xám."</td></tr>
-<tr><td><b>Q3.1 template</b></td><td>Bảng 3.1 Test Analysis: <b>Condition | Valid Partitions | Tag | Invalid Partitions | Tag | Valid Boundaries | Tag | Invalid Boundaries | Tag</b>. Mẫu: Customer name — VP1 2–64 ký tự, VP2 ký tự hợp lệ; IP1 &lt; 2 ký tự, IP2 &gt; 64 ký tự, IP3 ký tự không hợp lệ; VB1 2 ký tự, VB2 64 ký tự; IB1 1 ký tự, IB2 65 ký tự, IB3 0 ký tự.</td><td>Mỗi luật nghiệp vụ/trường một khối. Tag đánh số liên tục trong cả bảng (VP1…VPn, IP1…, VB1…, IB1…).</td></tr>
-<tr><td><b>Q3.2 template</b></td><td>Bảng 3.2 Test case design: <b>Test-case No | Description | Expected result | TAG</b>, dòng 1–10. Mẫu: "Name: John Smith / Acc. No: 123456 / Loan: 2500 / Term: 3 years" → "Repayment: 79.86 …" → "VP1, VP2, VP3, VP4, VP5,…".</td><td>Dữ liệu test cụ thể trong mô tả, kết quả mong đợi cụ thể, và danh sách các tag mà ca đó chạm tới.</td></tr>
-<tr><td><b>Q3.3 template</b></td><td>Ô đếm Pass / Fail / Untested / N/A, Percent Complete, Number of cases; các cột <b>ID | Test Case Description | Pre-Condition | Test Case Procedure | Expected Output | Result | Bug# | Test date | Note</b>.</td><td>Vẫn 10 ca đó, giờ thêm điều kiện tiên quyết và các bước đánh số mà người lạ cũng làm theo được. Cột Result để "Untested" — bạn đang thiết kế, chưa chạy.</td></tr>
+<tr><td><strong>Q1 template</strong></td><td>Ba cột <strong>Issue No | Description | Line</strong>, dòng 1–7. Dòng mẫu (chữ xanh): "class-level variable x is overshadowed by local variable x | 6".</td><td>Mỗi dòng một lỗi, số dòng phải <em>chính xác</em>. Ghi loại lỗi và cách sửa ngay trong mô tả ("[Compile error] … Fix: …"). Được thêm dòng nếu tìm được hơn 7 — nhiều lỗi đúng an toàn hơn đúng sáu lỗi.</td></tr>
+<tr><td><strong>Q2 template</strong></td><td>Phần đầu: Function Code, Function Name, Created By, Executed By, Lines of code, Lack of test cases, Test requirement, và các ô đếm Passed / Failed / Untested / N/A/B / Total Test Cases. Lưới: mỗi cột một <strong>UTCID01, UTCID02…</strong>; các khối dòng <strong>Condition → Precondition</strong>, <strong>Input condition</strong> (mỗi tham số một khối, mỗi giá trị test một dòng), <strong>Confirm → Return</strong>, <strong>Exception</strong>, <strong>Log message</strong>, <strong>Result → Type (N: Normal, A: Abnormal, B: Boundary)</strong>, Passed/Failed, Executed Date, Defect ID.</td><td>Mỗi giá trị khác nhau viết một lần ở cột giá trị, rồi đánh <strong>O</strong> dưới mọi UTCID dùng giá trị đó. Mỗi UTCID phải có đúng một chữ O cho mỗi tham số, ít nhất một O ở Return hoặc Exception, và một chữ Type. "Không sửa ô màu xám."</td></tr>
+<tr><td><strong>Q3.1 template</strong></td><td>Bảng 3.1 Test Analysis: <strong>Condition | Valid Partitions | Tag | Invalid Partitions | Tag | Valid Boundaries | Tag | Invalid Boundaries | Tag</strong>. Mẫu: Customer name — VP1 2–64 ký tự, VP2 ký tự hợp lệ; IP1 &lt; 2 ký tự, IP2 &gt; 64 ký tự, IP3 ký tự không hợp lệ; VB1 2 ký tự, VB2 64 ký tự; IB1 1 ký tự, IB2 65 ký tự, IB3 0 ký tự.</td><td>Mỗi luật nghiệp vụ/trường một khối. Tag đánh số liên tục trong cả bảng (VP1…VPn, IP1…, VB1…, IB1…).</td></tr>
+<tr><td><strong>Q3.2 template</strong></td><td>Bảng 3.2 Test case design: <strong>Test-case No | Description | Expected result | TAG</strong>, dòng 1–10. Mẫu: "Name: John Smith / Acc. No: 123456 / Loan: 2500 / Term: 3 years" → "Repayment: 79.86 …" → "VP1, VP2, VP3, VP4, VP5,…".</td><td>Dữ liệu test cụ thể trong mô tả, kết quả mong đợi cụ thể, và danh sách các tag mà ca đó chạm tới.</td></tr>
+<tr><td><strong>Q3.3 template</strong></td><td>Ô đếm Pass / Fail / Untested / N/A, Percent Complete, Number of cases; các cột <strong>ID | Test Case Description | Pre-Condition | Test Case Procedure | Expected Output | Result | Bug# | Test date | Note</strong>.</td><td>Vẫn 10 ca đó, giờ thêm điều kiện tiên quyết và các bước đánh số mà người lạ cũng làm theo được. Cột Result để "Untested" — bạn đang thiết kế, chưa chạy.</td></tr>
 </tbody>
 </table>
-<div class="callout warn">Cuối mỗi sheet đều có dòng "<b>* Notes: Blue text is sample, needed to be deleted in the answer</b>" (chữ xanh là mẫu, phải xoá khi làm bài). Để nguyên dòng mẫu "Customer name 2–64 chars" trong bảng 3.1 chính là loại nội dung lạc đề mà luật điểm 0 trừng phạt.</div>`),
+<div class="callout warn">Cuối mỗi sheet đều có dòng "<strong>* Notes: Blue text is sample, needed to be deleted in the answer</strong>" (chữ xanh là mẫu, phải xoá khi làm bài). Để nguyên dòng mẫu "Customer name 2–64 chars" trong bảng 3.1 chính là loại nội dung lạc đề mà luật điểm 0 trừng phạt.</div>`),
     bi(`<h2>🛠️ A method for each question</h2>
 <h3>Q1 — code review (the checklist that finds 8+ issues in 15 minutes)</h3>
 <div class="lz-flow">
@@ -268,7 +318,12 @@ const L0 = {
 <tr><td>85–90</td><td>Final check: blue sample text deleted, English only, every line number re-checked, file saved in the template format.</td><td>Nothing lost to the zero rules.</td></tr>
 </tbody>
 </table>
-<p>For FALL24 (3 + 5 + 2 in 85 min) give Q2 about 35 minutes and Q3 15; for SPRING25 (3 + 3 + 2 + 2 in 80 min) spend roughly 20 + 20 + 15 + 20 and keep 5 for checking. Rule of thumb: about <b>8 minutes per point</b>, always keeping 5 minutes at the end.</p>`,
+<p>The newer papers have a different shape:</p>
+<ul>
+<li><strong>FALL24</strong> (3 + 5 + 2 in 85 min) — about 20 minutes for Q1, 40 for Q2, 20 for Q3, and 5 for checking (the plan used in lesson PE-3).</li>
+<li><strong>SPRING25</strong> (3 + 3 + 2 + 2 in 80 min) — roughly 20 + 20 + 15 + 20, and 5 for checking.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> about <strong>8 minutes per point</strong>, always keeping 5 minutes at the end.</p>`,
       `<h2>⏱️ Chia thời gian (90 phút, 3 + 3 + 4 điểm)</h2>
 <table>
 <thead><tr><th>Phút</th><th>Làm gì</th><th>Kết quả</th></tr></thead>
@@ -282,36 +337,41 @@ const L0 = {
 <tr><td>85–90</td><td>Soát lần cuối: đã xoá chữ xanh mẫu, chỉ tiếng Anh, kiểm lại từng số dòng, lưu đúng định dạng template.</td><td>Không mất điểm vì luật điểm 0.</td></tr>
 </tbody>
 </table>
-<p>Với FALL24 (3 + 5 + 2 trong 85 phút) dành cho Q2 khoảng 35 phút và Q3 15 phút; với SPRING25 (3 + 3 + 2 + 2 trong 80 phút) chia khoảng 20 + 20 + 15 + 20 và giữ 5 phút để soát. Quy tắc nhanh: khoảng <b>8 phút cho mỗi điểm</b>, luôn giữ 5 phút cuối.</p>`),
+<p>Các đề mới có dạng khác:</p>
+<ul>
+<li><strong>FALL24</strong> (3 + 5 + 2 trong 85 phút) — khoảng 20 phút cho Q1, 40 phút cho Q2, 20 phút cho Q3, và 5 phút để soát (đúng kế hoạch dùng ở bài PE-3).</li>
+<li><strong>SPRING25</strong> (3 + 3 + 2 + 2 trong 80 phút) — chia khoảng 20 + 20 + 15 + 20, và 5 phút để soát.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> khoảng <strong>8 phút cho mỗi điểm</strong>, luôn giữ 5 phút cuối.</p>`),
     bi(`<h2>🚫 The 12 most common ways students lose marks</h2>
 <ol>
-<li><b>Not using the provided template</b> (or submitting a different file type when a single Word file is required) — the whole exam gets 0.</li>
-<li><b>Leaving the blue sample rows</b> ("Customer name 2–64 chars", "class-level variable x is overshadowed…") in the answer — irrelevant content, 0 for that answer.</li>
-<li><b>Pasting an answer prepared for another paper.</b> One wrong class or field name ("OrderService" when the paper says "OrderCalculator") is a keyword "not related to this exam paper" → 0.</li>
-<li><b>Writing in Vietnamese</b> or mixing languages in the template.</li>
-<li><b>Q1 without line numbers, or with wrong ones</b>, or vague descriptions ("bad code", "logic error") with no fix.</li>
-<li><b>Q1 with six issues of the same kind</b> (six naming remarks). Graders expect variety: compile errors, logic, validation, exceptions, resources, conventions.</li>
-<li><b>Q1 missing the compile errors</b> — missing import, missing <code>new</code>, undeclared variable, wrong <code>main</code> signature. They are the easiest marks on the paper.</li>
-<li><b>Q2 forgetting the False outcomes</b>: the loop exit, the final <code>else</code>, the "not greater than" branch of each band — that is decision coverage, not statement coverage.</li>
-<li><b>Q2 not the minimum</b>: redundant cases that add nothing, or too few (8 cases for a flowchart that needs 10).</li>
-<li><b>Q2 data that never reaches the intended branch</b> — e.g. choosing a salary without first computing <code>ti = sal − te − 9,000,000 − nod × 4,000,000</code> — or expected results with no calculation behind them.</li>
-<li><b>Q3 boundaries off by one</b> (51 instead of 50, 254 instead of 255), the empty value forgotten for a required field, or a whole rule skipped (file size, dropdown default, "at least one document").</li>
-<li><b>Q3 cases that combine two invalid values</b> (error masking), tags in 3.2 that do not match the data, or 3.3 procedures without concrete data and a concrete expected output.</li>
+<li><strong>Not using the provided template</strong> (or submitting a different file type when a single Word file is required) — the whole exam gets 0.</li>
+<li><strong>Leaving the blue sample rows</strong> ("Customer name 2–64 chars", "class-level variable x is overshadowed…") in the answer — irrelevant content, 0 for that answer.</li>
+<li><strong>Pasting an answer prepared for another paper.</strong> One wrong class or field name ("OrderService" when the paper says "OrderCalculator") is a keyword "not related to this exam paper" → 0.</li>
+<li><strong>Writing in Vietnamese</strong> or mixing languages in the template.</li>
+<li><strong>Q1 without line numbers, or with wrong ones</strong>, or vague descriptions ("bad code", "logic error") with no fix.</li>
+<li><strong>Q1 with six issues of the same kind</strong> (six naming remarks). Graders expect variety: compile errors, logic, validation, exceptions, resources, conventions.</li>
+<li><strong>Q1 missing the compile errors</strong> — missing import, missing <code>new</code>, undeclared variable, wrong <code>main</code> signature. They are the easiest marks on the paper.</li>
+<li><strong>Q2 forgetting the False outcomes</strong>: the loop exit, the final <code>else</code>, the "not greater than" branch of each band — that is decision coverage, not statement coverage.</li>
+<li><strong>Q2 not the minimum</strong>: redundant cases that add nothing, or too few (8 cases for a flowchart that needs 10).</li>
+<li><strong>Q2 data that never reaches the intended branch</strong> — e.g. choosing a salary without first computing <code>ti = sal − te − 9,000,000 − nod × 4,000,000</code> — or expected results with no calculation behind them.</li>
+<li><strong>Q3 boundaries off by one</strong> (51 instead of 50, 254 instead of 255), the empty value forgotten for a required field, or a whole rule skipped (file size, dropdown default, "at least one document").</li>
+<li><strong>Q3 cases that combine two invalid values</strong> (error masking), tags in 3.2 that do not match the data, or 3.3 procedures without concrete data and a concrete expected output.</li>
 </ol>`,
       `<h2>🚫 12 cách mất điểm phổ biến nhất</h2>
 <ol>
-<li><b>Không dùng template được phát</b> (hoặc nộp sai loại file khi đề yêu cầu đúng một file Word) — cả bài 0 điểm.</li>
-<li><b>Để nguyên dòng mẫu chữ xanh</b> ("Customer name 2–64 chars", "class-level variable x is overshadowed…") trong bài — nội dung lạc đề, câu đó 0 điểm.</li>
-<li><b>Dán bài chuẩn bị sẵn cho đề khác.</b> Chỉ một tên class hay tên trường sai ("OrderService" trong khi đề ghi "OrderCalculator") là đã thành từ khoá "không liên quan tới đề này" → 0.</li>
-<li><b>Viết tiếng Việt</b> hoặc trộn hai thứ tiếng trong template.</li>
-<li><b>Q1 không có số dòng hoặc ghi sai</b>, hay mô tả chung chung ("code xấu", "lỗi logic") mà không có cách sửa.</li>
-<li><b>Q1 sáu lỗi cùng một loại</b> (sáu nhận xét đặt tên). Người chấm muốn thấy đa dạng: lỗi biên dịch, logic, kiểm tra đầu vào, ngoại lệ, tài nguyên, quy ước.</li>
-<li><b>Q1 bỏ sót lỗi biên dịch</b> — thiếu import, thiếu <code>new</code>, biến chưa khai báo, sai chữ ký <code>main</code>. Đây là những điểm dễ ăn nhất của cả đề.</li>
-<li><b>Q2 quên kết cục False</b>: lối thoát vòng lặp, nhánh <code>else</code> cuối, nhánh "không lớn hơn" của từng bậc — đó là decision coverage, không phải statement coverage.</li>
-<li><b>Q2 không phải tối thiểu</b>: thêm ca thừa không phủ thêm gì, hoặc thiếu ca (8 ca cho một lưu đồ cần 10).</li>
-<li><b>Q2 chọn dữ liệu không tới được nhánh mong muốn</b> — ví dụ chọn lương mà không tính trước <code>ti = sal − te − 9.000.000 − nod × 4.000.000</code> — hoặc kết quả mong đợi không có phép tính nào đứng sau.</li>
-<li><b>Q3 lệch biên một đơn vị</b> (51 thay vì 50, 254 thay vì 255), quên giá trị rỗng của trường bắt buộc, hoặc bỏ sót nguyên một luật (dung lượng file, giá trị mặc định của dropdown, "ít nhất một tài liệu").</li>
-<li><b>Q3 một ca chứa hai giá trị không hợp lệ</b> (error masking), tag ở 3.2 không khớp dữ liệu, hoặc thủ tục ở 3.3 không có dữ liệu cụ thể và kết quả mong đợi cụ thể.</li>
+<li><strong>Không dùng template được phát</strong> (hoặc nộp sai loại file khi đề yêu cầu đúng một file Word) — cả bài 0 điểm.</li>
+<li><strong>Để nguyên dòng mẫu chữ xanh</strong> ("Customer name 2–64 chars", "class-level variable x is overshadowed…") trong bài — nội dung lạc đề, câu đó 0 điểm.</li>
+<li><strong>Dán bài chuẩn bị sẵn cho đề khác.</strong> Chỉ một tên class hay tên trường sai ("OrderService" trong khi đề ghi "OrderCalculator") là đã thành từ khoá "không liên quan tới đề này" → 0.</li>
+<li><strong>Viết tiếng Việt</strong> hoặc trộn hai thứ tiếng trong template.</li>
+<li><strong>Q1 không có số dòng hoặc ghi sai</strong>, hay mô tả chung chung ("code xấu", "lỗi logic") mà không có cách sửa.</li>
+<li><strong>Q1 sáu lỗi cùng một loại</strong> (sáu nhận xét đặt tên). Người chấm muốn thấy đa dạng: lỗi biên dịch, logic, kiểm tra đầu vào, ngoại lệ, tài nguyên, quy ước.</li>
+<li><strong>Q1 bỏ sót lỗi biên dịch</strong> — thiếu import, thiếu <code>new</code>, biến chưa khai báo, sai chữ ký <code>main</code>. Đây là những điểm dễ ăn nhất của cả đề.</li>
+<li><strong>Q2 quên kết cục False</strong>: lối thoát vòng lặp, nhánh <code>else</code> cuối, nhánh "không lớn hơn" của từng bậc — đó là decision coverage, không phải statement coverage.</li>
+<li><strong>Q2 không phải tối thiểu</strong>: thêm ca thừa không phủ thêm gì, hoặc thiếu ca (8 ca cho một lưu đồ cần 10).</li>
+<li><strong>Q2 chọn dữ liệu không tới được nhánh mong muốn</strong> — ví dụ chọn lương mà không tính trước <code>ti = sal − te − 9.000.000 − nod × 4.000.000</code> — hoặc kết quả mong đợi không có phép tính nào đứng sau.</li>
+<li><strong>Q3 lệch biên một đơn vị</strong> (51 thay vì 50, 254 thay vì 255), quên giá trị rỗng của trường bắt buộc, hoặc bỏ sót nguyên một luật (dung lượng file, giá trị mặc định của dropdown, "ít nhất một tài liệu").</li>
+<li><strong>Q3 một ca chứa hai giá trị không hợp lệ</strong> (error masking), tag ở 3.2 không khớp dữ liệu, hoặc thủ tục ở 3.3 không có dữ liệu cụ thể và kết quả mong đợi cụ thể.</li>
 </ol>`),
     bi(`<h3>Ví dụ có lời giải · Worked example — the boundary cheat sheet for the rules in these papers</h3>
 <p>Every value below was generated by a script from the rule text (range a–b → VB a, b; IB a−1, b+1), so you can trust it and reuse the pattern.</p>
@@ -329,8 +389,14 @@ const L0 = {
 <tr><td>bookingAmount &lt; 0 → −1 (SP25)</td><td>0</td><td>−0.01</td></tr>
 </tbody>
 </table>
-<div class="pitfall"><b>"Between 50 and 255" is inclusive unless the paper says otherwise.</b> If you think it could be exclusive, write the assumption in the Notes line ("Assumption: 50 and 255 are allowed") — the papers explicitly invite assumptions, and a stated assumption turns an argument about wording into a correct answer.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Coverage stronger than decisions: MC/DC and mutation testing.</b> A decision such as <code>itemPrices == null || itemPrices.length == 0</code> reaches 100% decision coverage with two tests, yet one of its two conditions may never have decided the outcome. <em>Modified condition/decision coverage</em> (MC/DC, required for flight software by DO-178C) demands that each condition be shown to change the outcome on its own. <em>Mutation testing</em> (e.g. PIT for Java) goes further: it plants small bugs such as <code>&gt;</code> → <code>&gt;=</code> and checks that some test fails — a direct measure of whether your boundary tests really bite. <em>Outside the syllabus because CTFL stops at statement and decision coverage.</em></div>`,
+<div class="pitfall co-tieu-de"><strong>"Between 50 and 255" is inclusive unless the paper says otherwise.</strong> If you think it could be exclusive, write the assumption in the Notes line ("Assumption: 50 and 255 are allowed") — the papers explicitly invite assumptions, and a stated assumption turns an argument about wording into a correct answer.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Coverage stronger than decisions: MC/DC and mutation testing.</strong>
+<p>A decision such as <code>itemPrices == null || itemPrices.length == 0</code> reaches 100% decision coverage with two tests, yet one of its two conditions may never have decided the outcome.</p>
+<ul>
+<li><strong>MC/DC</strong> (<em>modified condition/decision coverage</em>, required for flight software by DO-178C) — each condition must be shown to change the outcome on its own.</li>
+<li><strong>Mutation testing</strong> (e.g. PIT for Java) — goes further: it plants small bugs such as <code>&gt;</code> → <code>&gt;=</code> and checks that some test fails. A direct measure of whether your boundary tests really bite.</li>
+</ul>
+<p><em>Outside the syllabus because CTFL stops at statement and decision coverage.</em></p></div>`,
       `<h3>Ví dụ có lời giải · Bảng tra giá trị biên cho các luật trong bốn đề</h3>
 <p>Mọi giá trị dưới đây được một script sinh ra từ nội dung luật (khoảng a–b → VB a, b; IB a−1, b+1), nên bạn có thể tin và dùng lại đúng khuôn này.</p>
 <table>
@@ -347,8 +413,14 @@ const L0 = {
 <tr><td>bookingAmount &lt; 0 → −1 (SP25)</td><td>0</td><td>−0.01</td></tr>
 </tbody>
 </table>
-<div class="pitfall"><b>"Between 50 and 255" là bao gồm hai đầu, trừ khi đề nói khác.</b> Nếu bạn nghĩ có thể là không bao gồm, hãy ghi giả định vào dòng Notes ("Assumption: 50 and 255 are allowed") — đề mời bạn ghi giả định, và một giả định được nói rõ biến cuộc tranh cãi về câu chữ thành một câu trả lời đúng.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Độ phủ mạnh hơn decision: MC/DC và mutation testing.</b> Một quyết định như <code>itemPrices == null || itemPrices.length == 0</code> đạt 100% decision coverage chỉ với hai test, nhưng có thể một trong hai điều kiện chưa bao giờ tự quyết định kết quả. <em>Modified condition/decision coverage</em> (MC/DC, bắt buộc với phần mềm bay theo DO-178C) đòi phải chứng minh từng điều kiện tự nó làm đổi kết quả. <em>Mutation testing</em> (ví dụ PIT cho Java) còn đi xa hơn: nó cài những lỗi nhỏ như <code>&gt;</code> → <code>&gt;=</code> rồi kiểm xem có test nào fail không — thước đo trực tiếp cho việc test biên của bạn có thực sự "cắn" hay không. <em>Ngoài giáo trình vì CTFL chỉ dừng ở statement và decision coverage.</em></div>`),
+<div class="pitfall co-tieu-de"><strong>"Between 50 and 255" là bao gồm hai đầu, trừ khi đề nói khác.</strong> Nếu bạn nghĩ có thể là không bao gồm, hãy ghi giả định vào dòng Notes ("Assumption: 50 and 255 are allowed") — đề mời bạn ghi giả định, và một giả định được nói rõ biến cuộc tranh cãi về câu chữ thành một câu trả lời đúng.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Độ phủ mạnh hơn decision: MC/DC và mutation testing.</strong>
+<p>Một quyết định như <code>itemPrices == null || itemPrices.length == 0</code> đạt 100% decision coverage chỉ với hai test, nhưng có thể một trong hai điều kiện chưa bao giờ tự quyết định kết quả.</p>
+<ul>
+<li><strong>MC/DC</strong> (<em>modified condition/decision coverage</em>, bắt buộc với phần mềm bay theo DO-178C) — phải chứng minh từng điều kiện tự nó làm đổi kết quả.</li>
+<li><strong>Mutation testing</strong> (ví dụ PIT cho Java) — còn đi xa hơn: cài những lỗi nhỏ như <code>&gt;</code> → <code>&gt;=</code> rồi kiểm xem có test nào fail không. Đây là thước đo trực tiếp cho việc test biên của bạn có thực sự "cắn" hay không.</li>
+</ul>
+<p><em>Ngoài giáo trình vì CTFL chỉ dừng ở statement và decision coverage.</em></p></div>`),
     books([
       ['fst4', 'Ch.3 §2 "Review process" — book p.79–99 (PDF p.93–113), for Q1; Ch.4 §2 "Black-box test techniques" p.112–131 (PDF 126–145), Table 4.1 EP/boundaries p.116; Ch.4 §3 "White-box test techniques" p.132–139 (PDF 146–153), Fig. 4.4 control flow p.139', 'Chương 3 §2 "Review process" — trang sách 79–99 (PDF 93–113), cho Q1; Chương 4 §2 "Black-box test techniques" tr.112–131 (PDF 126–145), Bảng 4.1 EP/biên tr.116; Chương 4 §3 "White-box test techniques" tr.132–139 (PDF 146–153), Hình 4.4 luồng điều khiển tr.139'],
       ['sp5', '§5.1.1 Equivalence partitioning PDF p.165, §5.1.2 Boundary value analysis PDF p.176, use-case testing PDF p.208; §5.2.1 statement testing PDF p.215, §5.2.2 decision testing PDF p.218', '§5.1.1 Phân vùng tương đương PDF tr.165, §5.1.2 Phân tích giá trị biên PDF tr.176, kiểm thử theo use case PDF tr.208; §5.2.1 statement testing PDF tr.215, §5.2.2 decision testing PDF tr.218'],
@@ -490,8 +562,19 @@ const L1 = {
   content: [
     bi(`<span class="eyebrow">Practical Exam · Lesson PE-1 · SWT301_FA23.docx + SWT301_FA23 template.xlsx</span>
 <h2>FA23 — the classic 3 + 3 + 4 paper</h2>
-<p class="lead">This is the paper the answer template was made for, so it is the best one to learn the format on. Its questions came back in later semesters: in the Exam room, <b>SWT301-PE8</b> ("Practical Exam Đề 8 (PE - SP 2024 - Block 5)") contains all three, <b>SWT301-PE9</b> (FALL24 - PE3) reuses Q1 and Q3, and <b>SWT301-PE18</b> (FA 2023 - PE1.2) reuses Q2. Solve it here first, then do PE8 against the clock.</p>
-<div class="callout"><b>Learning objectives.</b> LO-3.2.4 apply a review technique (K3) · LO-4.3.1 / 4.3.2 statement and decision coverage (K2) · LO-4.2.1 EP and LO-4.2.2 BVA (K3).</div>
+<p class="lead">This is the paper the answer template was made for, so it is the best one to learn the format on. Solve it here first, then do PE8 against the clock.</p>
+<h4>The same questions in the Exam room</h4>
+<ul>
+<li><strong>SWT301-PE8</strong> ("Practical Exam Đề 8 (PE - SP 2024 - Block 5)") — contains all three questions.</li>
+<li><strong>SWT301-PE9</strong> (FALL24 - PE3) — reuses Q1 and Q3.</li>
+<li><strong>SWT301-PE18</strong> (FA 2023 - PE1.2) — reuses Q2.</li>
+</ul>
+<div class="callout"><strong>Learning objectives.</strong>
+<ul>
+<li><strong>LO-3.2.4</strong> — apply a review technique (K3).</li>
+<li><strong>LO-4.3.1 / 4.3.2</strong> — statement and decision coverage (K2).</li>
+<li><strong>LO-4.2.1 / 4.2.2</strong> — EP and BVA (K3).</li>
+</ul></div>
 <table>
 <thead><tr><th>Q</th><th>Points</th><th>Task</th><th>Template sheet</th><th>Budget</th></tr></thead>
 <tbody>
@@ -502,8 +585,19 @@ const L1 = {
 </table>`,
       `<span class="eyebrow">Thi thực hành · Bài PE-1 · SWT301_FA23.docx + SWT301_FA23 template.xlsx</span>
 <h2>FA23 — đề kinh điển 3 + 3 + 4</h2>
-<p class="lead">Template bài làm được làm ra chính cho đề này, nên đây là đề tốt nhất để học hình thức. Các câu của nó quay lại ở những kỳ sau: trong Phòng thi, <b>SWT301-PE8</b> ("Đề thi thực hành số 8 (PE - SP 2024 - Block 5)") có đủ cả ba câu, <b>SWT301-PE9</b> (FALL24 - PE3) dùng lại Q1 và Q3, còn <b>SWT301-PE18</b> (FA 2023 - PE1.2) dùng lại Q2. Hãy giải ở đây trước, rồi làm PE8 có bấm giờ.</p>
-<div class="callout"><b>Chuẩn đầu ra.</b> LO-3.2.4 áp dụng kỹ thuật review (K3) · LO-4.3.1 / 4.3.2 statement và decision coverage (K2) · LO-4.2.1 EP và LO-4.2.2 BVA (K3).</div>
+<p class="lead">Template bài làm được làm ra chính cho đề này, nên đây là đề tốt nhất để học hình thức. Hãy giải ở đây trước, rồi làm PE8 có bấm giờ.</p>
+<h4>Cùng câu hỏi trong Phòng thi</h4>
+<ul>
+<li><strong>SWT301-PE8</strong> ("Đề thi thực hành số 8 (PE - SP 2024 - Block 5)") — có đủ cả ba câu.</li>
+<li><strong>SWT301-PE9</strong> (FALL24 - PE3) — dùng lại Q1 và Q3.</li>
+<li><strong>SWT301-PE18</strong> (FA 2023 - PE1.2) — dùng lại Q2.</li>
+</ul>
+<div class="callout"><strong>Chuẩn đầu ra.</strong>
+<ul>
+<li><strong>LO-3.2.4</strong> — áp dụng kỹ thuật review (K3).</li>
+<li><strong>LO-4.3.1 / 4.3.2</strong> — statement và decision coverage (K2).</li>
+<li><strong>LO-4.2.1 / 4.2.2</strong> — EP và BVA (K3).</li>
+</ul></div>
 <table>
 <thead><tr><th>Câu</th><th>Điểm</th><th>Yêu cầu</th><th>Sheet template</th><th>Thời gian</th></tr></thead>
 <tbody>
@@ -514,32 +608,136 @@ const L1 = {
 </table>`),
     pages('pe-fa23', [
       [1, 'Question 1 — AverageCalculator (26 numbered lines)',
-        `<p>The original picture of Question 1 from the .docx, with the line numbers you must cite in the "Line" column. Read it once top to bottom before looking for issues; the transcription and the full review log are below.</p>`,
-        `<p>Ảnh gốc câu 1 trong file .docx, có số dòng mà bạn phải ghi vào cột "Line". Đọc một lượt từ trên xuống trước khi tìm lỗi; bản chép lại và bảng review đầy đủ ở phía dưới.</p>`],
+        `<p class="y-chinh">🎯 The original picture of Question 1 — its line numbers are the ones you cite in the "Line" column.</p>
+<ul>
+<li><strong>First pass</strong> — read it once top to bottom before looking for issues.</li>
+<li><strong>Below</strong> — the transcription and the full review log.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Ảnh gốc câu 1 — số dòng trên ảnh chính là số bạn ghi vào cột "Line".</p>
+<ul>
+<li><strong>Lượt đầu</strong> — đọc một lượt từ trên xuống trước khi tìm lỗi.</li>
+<li><strong>Phía dưới</strong> — bản chép lại và bảng review đầy đủ.</li>
+</ul>`],
       [2, 'Question 2 — CharacterCounter.countCharacters (29 numbered lines)',
-        `<p>The original picture of Question 2: the method under test. Its loop plus the if / else-if / else-if / else chain is what the control-flow graph and V(G) below are built from.</p>`,
-        `<p>Ảnh gốc câu 2: phương thức cần test. Vòng lặp cùng chuỗi if / else-if / else-if / else chính là nguồn để dựng đồ thị luồng điều khiển và V(G) bên dưới.</p>`],
+        `<p class="y-chinh">🎯 The original picture of Question 2: the method under test.</p>
+<ul>
+<li><strong>What to look at</strong> — the loop plus the if / else-if / else-if / else chain.</li>
+<li><strong>Why</strong> — they are what the control-flow graph and V(G) below are built from.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Ảnh gốc câu 2: phương thức cần test.</p>
+<ul>
+<li><strong>Chỗ cần nhìn</strong> — vòng lặp cùng chuỗi if / else-if / else-if / else.</li>
+<li><strong>Vì sao</strong> — đó chính là nguồn để dựng đồ thị luồng điều khiển và V(G) bên dưới.</li>
+</ul>`],
       [3, 'Question 3 — screen "Tạo mới quyết định kiểm tra"',
-        `<p>The original screen of Question 3: decision name, details, school drop-down (default placeholder), the document block (document name, document code, file + upload) with "Thêm công văn" to add more rows and a delete icon, and the Save ("Lưu") button. Every field on this screen maps to a condition row in table 3.1.</p>`,
-        `<p>Màn hình gốc của câu 3: tên quyết định, chi tiết, ô chọn trường (có dòng mặc định), khối tài liệu công văn (tên tài liệu, mã tài liệu, tệp + tải lên) với nút "Thêm công văn" để thêm dòng và biểu tượng xoá, và nút "Lưu". Mỗi trường trên màn hình này ứng với một dòng điều kiện trong bảng 3.1.</p>`],
+        `<p class="y-chinh">🎯 The original screen of Question 3 — every field on it maps to a condition row in table 3.1.</p>
+<p class="nhan">What is on the screen</p>
+<ul>
+<li><strong>Decision name</strong> and <strong>details</strong></li>
+<li><strong>School drop-down</strong> — with a default placeholder</li>
+<li><strong>Document block</strong> — document name, document code, file + upload; "Thêm công văn" adds rows, and there is a delete icon</li>
+<li><strong>Save button</strong> — "Lưu"</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Màn hình gốc của câu 3 — mỗi trường trên đó ứng với một dòng điều kiện trong bảng 3.1.</p>
+<p class="nhan">Trên màn hình có gì</p>
+<ul>
+<li><strong>Tên quyết định</strong> và <strong>chi tiết</strong></li>
+<li><strong>Ô chọn trường</strong> — có dòng mặc định</li>
+<li><strong>Khối tài liệu công văn</strong> — tên tài liệu, mã tài liệu, tệp + tải lên; nút "Thêm công văn" để thêm dòng, và có biểu tượng xoá</li>
+<li><strong>Nút lưu</strong> — "Lưu"</li>
+</ul>`],
     ]),
     bi(`<h2>📄 The paper (transcribed from the .docx)</h2>
-<p>The .docx contains the questions as text and three pictures: the two code listings and a screenshot of the form. They are transcribed below with the paper's own line numbers. The instructions: 90 minutes; know at least one programming language; <b>no IDE</b> (NetBeans, IntelliJ…); "you will get 0 for any answer which contains information irrelevant to the corresponding question".</p>`,
+<p>The .docx contains the questions as text and three pictures: the two code listings and a screenshot of the form. They are transcribed below with the paper's own line numbers.</p>
+<h4>The instructions</h4>
+<ul>
+<li><strong>Time</strong> — 90 minutes.</li>
+<li><strong>Prerequisite</strong> — know at least one programming language.</li>
+<li><strong>Tools</strong> — <strong>no IDE</strong> (NetBeans, IntelliJ…).</li>
+<li><strong>Zero rule</strong> — "you will get 0 for any answer which contains information irrelevant to the corresponding question".</li>
+</ul>`,
       `<h2>📄 Đề thi (chép lại từ file .docx)</h2>
-<p>File .docx chứa câu hỏi dạng chữ và ba hình: hai đoạn code và ảnh chụp màn hình form. Tất cả được chép lại dưới đây với đúng số dòng của đề. Hướng dẫn: 90 phút; cần biết ít nhất một ngôn ngữ lập trình; <b>không được dùng IDE</b> (NetBeans, IntelliJ…); "câu trả lời nào chứa thông tin không liên quan tới câu hỏi sẽ bị 0 điểm".</p>`),
-    `<div class="callout"><b>Question 1 (3 points):</b> Review the following class and find (at least) 6 issues in the code (i.e., coding practice, compile errors, potential logical issues, etc.) (Use question 1 template)</div>
+<p>File .docx chứa câu hỏi dạng chữ và ba hình: hai đoạn code và ảnh chụp màn hình form. Tất cả được chép lại dưới đây với đúng số dòng của đề.</p>
+<h4>Hướng dẫn của đề</h4>
+<ul>
+<li><strong>Thời gian</strong> — 90 phút.</li>
+<li><strong>Yêu cầu</strong> — biết ít nhất một ngôn ngữ lập trình.</li>
+<li><strong>Công cụ</strong> — <strong>không được dùng IDE</strong> (NetBeans, IntelliJ…).</li>
+<li><strong>Luật điểm 0</strong> — "câu trả lời nào chứa thông tin không liên quan tới câu hỏi sẽ bị 0 điểm".</li>
+</ul>`),
+    `<div class="callout"><strong>Question 1 (3 points):</strong> Review the following class and find (at least) 6 issues in the code (i.e., coding practice, compile errors, potential logical issues, etc.) (Use question 1 template)</div>
 ${numbered(FA23_Q1)}
-<div class="callout"><b>Question 2 (3 points):</b> Assuming you are assigned to conduct the component test for the method below, please design and create the minimum component test cases (Unit Test case) needed to achieve 100% statement coverage and 100% decision coverage. (Use question 2 template). The countCharacters method counts the number of uppercase letters, lowercase letters, numeric characters, and special characters in a given input string. It returns a HashMap containing this information.</div>
+<div class="callout"><strong>Question 2 (3 points):</strong> Assuming you are assigned to conduct the component test for the method below, please design and create the minimum component test cases (Unit Test case) needed to achieve 100% statement coverage and 100% decision coverage. (Use question 2 template).
+<p>The countCharacters method counts the number of uppercase letters, lowercase letters, numeric characters, and special characters in a given input string. It returns a HashMap containing this information.</p></div>
 ${numbered(FA23_Q2)}
-<div class="callout"><b>Question 3 (4 points):</b> You are assigned to do the functional (black-box) test for function <b>Create the inspection decision</b>. Actors: Department Head. Purpose: provide steps to create the inspection decision.<br><b>Business rules:</b><br>• "Tên quyết định kiểm tra" is a required string with a length ranging from 50 to 255 characters. The first character must not be a number. No special characters or blanks are allowed.<br>• "Chi tiết" is a required string and not exceeding 10,000 chars.<br>• "Trường kiểm tra" is required and selected from a list. Default value is "Chọn trường để kiểm tra".<br>• "Tài liệu công văn": there must be at least one document file; "Tên tài liệu" is a required string with a length ranging from 10 to 100 characters; "Mã tài liệu" is a required string with a length ranging from 3 to 10 characters; each attached file size not exceeding 10MB.<br><b>Normal case:</b> user enters information into the fields of the form and clicks "Lưu"; the system validates the information; the inspection decision is created successfully. <b>Abnormal case:</b> data input is invalid, the system reports an error asking the user to re-enter the information.<br>(1) Analyse test conditions using EP and BVA and fill in table 3.1. (2) Design 10 integration test cases with the test data to cover as many TAGs as possible (table 3.2). (3) Complete the 10 test cases with detailed Pre-condition and Test Case Procedure (table 3.3). <i>Notes: please feel free to include any assumptions needed for your answers to be clearer and more accurate.</i></div>`,
-    bi(`<p><b>The screenshot</b> (image 3 of the .docx): the web app of a school-inspection authority, left menu Dashboard · Danh sách trường · <b>Thanh tra</b> (selected) · Danh sách người dùng · Kế hoạch kiểm tra · Kế hoạch thực hiện · Báo cáo · Kết luận · Hỗ trợ · Đăng xuất. The main panel "Tạo mới quyết định kiểm tra" has a one-line text box <em>Tên quyết định kiểm tra</em>, a multi-line box <em>Chi tiết</em>, a dropdown <em>Trường kiểm tra</em> (showing "Trường mầm non Ánh Sao"), a section <em>Tài liệu công văn</em> with two rows of [Tên tài liệu] [Mã tài liệu] [Tên file | Tải lên] — only the second row has a red trash icon — a button <em>Thêm công văn</em> to add rows, the blue <em>Lưu</em> button, and a <em>Tạo đoàn KT</em> button at the top right that is outside this function.</p>`,
-      `<p><b>Ảnh màn hình</b> (hình 3 trong file .docx): ứng dụng web của một cơ quan thanh tra trường học, menu trái Dashboard · Danh sách trường · <b>Thanh tra</b> (đang chọn) · Danh sách người dùng · Kế hoạch kiểm tra · Kế hoạch thực hiện · Báo cáo · Kết luận · Hỗ trợ · Đăng xuất. Khung chính "Tạo mới quyết định kiểm tra" có ô một dòng <em>Tên quyết định kiểm tra</em>, ô nhiều dòng <em>Chi tiết</em>, dropdown <em>Trường kiểm tra</em> (đang hiện "Trường mầm non Ánh Sao"), mục <em>Tài liệu công văn</em> với hai dòng [Tên tài liệu] [Mã tài liệu] [Tên file | Tải lên] — chỉ dòng thứ hai có biểu tượng thùng rác đỏ — nút <em>Thêm công văn</em> để thêm dòng, nút xanh <em>Lưu</em>, và nút <em>Tạo đoàn KT</em> ở góc phải trên, nằm ngoài chức năng này.</p>`),
+<div class="callout"><strong>Question 3 (4 points):</strong> You are assigned to do the functional (black-box) test for function <strong>Create the inspection decision</strong>. Actors: Department Head. Purpose: provide steps to create the inspection decision.
+<p><strong>Business rules:</strong></p>
+<ul>
+<li>"Tên quyết định kiểm tra" is a required string with a length ranging from 50 to 255 characters. The first character must not be a number. No special characters or blanks are allowed.</li>
+<li>"Chi tiết" is a required string and not exceeding 10,000 chars.</li>
+<li>"Trường kiểm tra" is required and selected from a list. Default value is "Chọn trường để kiểm tra".</li>
+<li>"Tài liệu công văn": there must be at least one document file; "Tên tài liệu" is a required string with a length ranging from 10 to 100 characters; "Mã tài liệu" is a required string with a length ranging from 3 to 10 characters; each attached file size not exceeding 10MB.</li>
+</ul>
+<p><strong>Normal case:</strong> user enters information into the fields of the form and clicks "Lưu"; the system validates the information; the inspection decision is created successfully.</p>
+<p><strong>Abnormal case:</strong> data input is invalid, the system reports an error asking the user to re-enter the information.</p>
+<ol>
+<li>Analyse test conditions using EP and BVA and fill in table 3.1.</li>
+<li>Design 10 integration test cases with the test data to cover as many TAGs as possible (table 3.2).</li>
+<li>Complete the 10 test cases with detailed Pre-condition and Test Case Procedure (table 3.3).</li>
+</ol>
+<p><em>Notes: please feel free to include any assumptions needed for your answers to be clearer and more accurate.</em></p></div>`,
+    bi(`<p><strong>The screenshot</strong> (image 3 of the .docx): the web app of a school-inspection authority.</p>
+<h4>Left menu</h4>
+<p>Dashboard · Danh sách trường · <strong>Thanh tra</strong> (selected) · Danh sách người dùng · Kế hoạch kiểm tra · Kế hoạch thực hiện · Báo cáo · Kết luận · Hỗ trợ · Đăng xuất.</p>
+<h4>Main panel "Tạo mới quyết định kiểm tra"</h4>
+<ul>
+<li><strong><em>Tên quyết định kiểm tra</em></strong> — a one-line text box.</li>
+<li><strong><em>Chi tiết</em></strong> — a multi-line box.</li>
+<li><strong><em>Trường kiểm tra</em></strong> — a dropdown (showing "Trường mầm non Ánh Sao").</li>
+<li><strong><em>Tài liệu công văn</em></strong> — two rows of [Tên tài liệu] [Mã tài liệu] [Tên file | Tải lên]; only the second row has a red trash icon.</li>
+<li><strong><em>Thêm công văn</em></strong> — a button to add rows.</li>
+<li><strong><em>Lưu</em></strong> — the blue save button.</li>
+<li><strong><em>Tạo đoàn KT</em></strong> — a button at the top right that is outside this function.</li>
+</ul>`,
+      `<p><strong>Ảnh màn hình</strong> (hình 3 trong file .docx): ứng dụng web của một cơ quan thanh tra trường học.</p>
+<h4>Menu trái</h4>
+<p>Dashboard · Danh sách trường · <strong>Thanh tra</strong> (đang chọn) · Danh sách người dùng · Kế hoạch kiểm tra · Kế hoạch thực hiện · Báo cáo · Kết luận · Hỗ trợ · Đăng xuất.</p>
+<h4>Khung chính "Tạo mới quyết định kiểm tra"</h4>
+<ul>
+<li><strong><em>Tên quyết định kiểm tra</em></strong> — ô nhập một dòng.</li>
+<li><strong><em>Chi tiết</em></strong> — ô nhập nhiều dòng.</li>
+<li><strong><em>Trường kiểm tra</em></strong> — dropdown (đang hiện "Trường mầm non Ánh Sao").</li>
+<li><strong><em>Tài liệu công văn</em></strong> — hai dòng [Tên tài liệu] [Mã tài liệu] [Tên file | Tải lên]; chỉ dòng thứ hai có biểu tượng thùng rác đỏ.</li>
+<li><strong><em>Thêm công văn</em></strong> — nút để thêm dòng.</li>
+<li><strong><em>Lưu</em></strong> — nút lưu màu xanh.</li>
+<li><strong><em>Tạo đoàn KT</em></strong> — nút ở góc phải trên, nằm ngoài chức năng này.</li>
+</ul>`),
 
     /* ── Q1 ── */
     bi(`<h2>✅ Question 1 — code review of AverageCalculator</h2>
-<p>Run the checklist from lesson PE-0. <b>Compile:</b> <code>Scanner</code> and <code>ArrayList</code> are used without a single import, so the class does not even compile — javac reports four "cannot find symbol" errors, two on line 3 and two on line 4 (real output below). <b>Logic:</b> add the imports and run it: a count of <code>-3</code> skips the loop, but the guard only tests <code>!= 0</code>, so the program divides 0 by −3 and proudly prints <code>The average is: -0.0</code>. <b>Inputs &amp; exceptions:</b> nothing handles non-numeric input. <b>Conventions:</b> <code>NUMBERS</code> and <code>NumValues</code> break Java naming rules, <code>avg</code> is never used, the list is filled but never read, and the Scanner is never closed. That is ten issues of six different kinds — write them all; a correct seventh or tenth issue costs nothing and protects you if a grader rejects one.</p>`,
+<h4>The task</h4>
+<p>Find at least 6 issues (coding practice, compile errors, potential logical issues…) in the 26-line class, and write them in the Q1 template.</p>
+<h4>Run the checklist from lesson PE-0</h4>
+<ol>
+<li><strong>Compile</strong> — <code>Scanner</code> and <code>ArrayList</code> are used without a single import, so the class does not even compile. javac reports four "cannot find symbol" errors, two on line 3 and two on line 4 (real output below).</li>
+<li><strong>Logic</strong> — add the imports and run it: a count of <code>-3</code> skips the loop, but the guard only tests <code>!= 0</code>. So the program divides 0 by −3 and proudly prints <code>The average is: -0.0</code>.</li>
+<li><strong>Inputs &amp; exceptions</strong> — nothing handles non-numeric input.</li>
+<li><strong>Conventions</strong> — <code>NUMBERS</code> and <code>NumValues</code> break Java naming rules, <code>avg</code> is never used, the list is filled but never read, and the Scanner is never closed.</li>
+</ol>
+<h4>Result</h4>
+<p>Ten issues of six different kinds. Write them all: a correct seventh or tenth issue costs nothing and protects you if a grader rejects one.</p>`,
       `<h2>✅ Câu 1 — review code AverageCalculator</h2>
-<p>Chạy checklist của bài PE-0. <b>Biên dịch:</b> <code>Scanner</code> và <code>ArrayList</code> được dùng mà không có dòng import nào, nên class không biên dịch nổi — javac báo bốn lỗi "cannot find symbol", hai lỗi ở dòng 3 và hai ở dòng 4 (output thật bên dưới). <b>Logic:</b> thêm import rồi chạy thử: nhập số lượng <code>-3</code> thì vòng lặp bị bỏ qua, nhưng điều kiện chỉ kiểm <code>!= 0</code>, nên chương trình lấy 0 chia −3 và in ra <code>The average is: -0.0</code>. <b>Đầu vào &amp; ngoại lệ:</b> không có gì xử lý khi người dùng gõ chữ. <b>Quy ước:</b> <code>NUMBERS</code> và <code>NumValues</code> sai quy tắc đặt tên Java, <code>avg</code> không bao giờ được dùng, list được thêm phần tử nhưng không bao giờ được đọc, và Scanner không bao giờ được đóng. Tổng cộng mười lỗi thuộc sáu loại khác nhau — hãy ghi hết; lỗi thứ bảy hay thứ mười nếu đúng thì không mất gì, lại đỡ cho bạn nếu người chấm không công nhận một lỗi.</p>`),
+<h4>Đề yêu cầu</h4>
+<p>Tìm ít nhất 6 lỗi (thực hành code, lỗi biên dịch, lỗi logic tiềm ẩn…) trong class 26 dòng, ghi vào template Q1.</p>
+<h4>Chạy checklist của bài PE-0</h4>
+<ol>
+<li><strong>Biên dịch</strong> — <code>Scanner</code> và <code>ArrayList</code> được dùng mà không có dòng import nào, nên class không biên dịch nổi. javac báo bốn lỗi "cannot find symbol", hai lỗi ở dòng 3 và hai ở dòng 4 (output thật bên dưới).</li>
+<li><strong>Logic</strong> — thêm import rồi chạy thử: nhập số lượng <code>-3</code> thì vòng lặp bị bỏ qua, nhưng điều kiện chỉ kiểm <code>!= 0</code>. Nên chương trình lấy 0 chia −3 và in ra <code>The average is: -0.0</code>.</li>
+<li><strong>Đầu vào &amp; ngoại lệ</strong> — không có gì xử lý khi người dùng gõ chữ.</li>
+<li><strong>Quy ước</strong> — <code>NUMBERS</code> và <code>NumValues</code> sai quy tắc đặt tên Java, <code>avg</code> không bao giờ được dùng, list được thêm phần tử nhưng không bao giờ được đọc, và Scanner không bao giờ được đóng.</li>
+</ol>
+<h4>Kết quả</h4>
+<p>Mười lỗi thuộc sáu loại khác nhau. Hãy ghi hết: lỗi thứ bảy hay thứ mười nếu đúng thì không mất gì, lại đỡ cho bạn nếu người chấm không công nhận một lỗi.</p>`),
     sheet('Answer sheet — Q1 template · Bài làm mẫu cho sheet Q1', tbl(['Issue No', 'Description', 'Line'], [
       ['1', '[Compile error] <code>Scanner</code> is used but <code>java.util.Scanner</code> is not imported → "cannot find symbol". Fix: add <code>import java.util.Scanner;</code> above the class.', '3'],
       ['2', '[Compile error] <code>ArrayList</code> is used but not imported → "cannot find symbol". Fix: <code>import java.util.ArrayList;</code> (and <code>java.util.List</code>).', '4'],
@@ -552,8 +750,8 @@ ${numbered(FA23_Q2)}
       ['9', '[Usability – off by one] The first prompt is "Enter value #0". Fix: print <code>i + 1</code> (or loop from 1 to numValues).', '12'],
       ['10', '[Redundant code] <code>NUMBERS</code> is filled but never read — <code>sum</code> already holds the total. Fix: remove the list, or compute the sum/average from it.', '14'],
     ])),
-    bi(`<p><b>Evidence (real output, JDK 21).</b> The original file, then the same file with the two imports added, then the corrected program below it:</p>`,
-      `<p><b>Bằng chứng (output thật, JDK 21).</b> File gốc, rồi cùng file đó sau khi thêm hai import, rồi chương trình đã sửa ngay bên dưới:</p>`),
+    bi(`<p><strong>Evidence (real output, JDK 21).</strong> The original file, then the same file with the two imports added, then the corrected program below it:</p>`,
+      `<p><strong>Bằng chứng (output thật, JDK 21).</strong> File gốc, rồi cùng file đó sau khi thêm hai import, rồi chương trình đã sửa ngay bên dưới:</p>`),
     code(`
 $ javac AverageCalculator.java            # the paper's code, unchanged
 AverageCalculator.java:3: error: cannot find symbol
@@ -601,6 +799,8 @@ input x         -> Please enter numbers only.`),
 
     /* ── Q2 ── */
     bi(`<h2>✅ Question 2 — unit tests for countCharacters</h2>
+<h4>The task</h4>
+<p>Design the <strong>minimum</strong> unit test cases that give 100% statement <em>and</em> 100% decision coverage of <code>countCharacters</code>, in the Q2 template.</p>
 <h3>Step 1 — control-flow graph</h3>
 <table>
 <thead><tr><th>Node</th><th>Lines</th><th>Content</th><th>Out-edges</th></tr></thead>
@@ -618,10 +818,25 @@ input x         -> Please enter numbers only.`),
 </tbody>
 </table>
 <h3>Step 2 — cyclomatic complexity</h3>
-<p>N = 10 nodes, E = 13 edges → <b>V(G) = E − N + 2 = 13 − 10 + 2 = 5</b>. Cross-check: 4 binary decisions (D1–D4) + 1 = <b>5</b>. The five basis paths are: empty string (loop never entered) and one path through each of N4, N6, N8, N9.</p>
+<p>N = 10 nodes, E = 13 edges → <strong>V(G) = E − N + 2 = 13 − 10 + 2 = 5</strong>. Cross-check: 4 binary decisions (D1–D4) + 1 = <strong>5</strong>. The five basis paths are: empty string (loop never entered) and one path through each of N4, N6, N8, N9.</p>
 <h3>Step 3 — the minimum set</h3>
-<p>The 8 outcomes to cover are D1 T/F, D2 T/F, D3 T/F, D4 T/F. Because the decisions sit inside a loop, <b>one string that contains one character of each kind</b> visits all four increments and then leaves the loop: <code>"Ab1@"</code> → 'A' makes D2 true; 'b' makes D2 false and D3 true; '1' makes D3 false and D4 true; '@' makes D4 false; after the last character D1 is false. A branch probe (every decision outcome instrumented) confirmed it: <b>8/8 decision outcomes with the single case UTCID01</b>. So the minimum is <b>1 test case</b>, even though V(G) is 5 — V(G) counts the basis paths you would need for <em>path</em> testing and is only an upper bound for decision coverage. Two cheap robustness cases (empty string, <code>null</code>) are added as B and A; they add no coverage and are marked as extras.</p>`,
+<p>The 8 outcomes to cover are D1 T/F, D2 T/F, D3 T/F, D4 T/F. Because the decisions sit inside a loop, <strong>one string that contains one character of each kind</strong> visits all four increments and then leaves the loop. Trace <code>"Ab1@"</code>:</p>
+<ol>
+<li><strong>'A'</strong> — makes D2 true.</li>
+<li><strong>'b'</strong> — makes D2 false and D3 true.</li>
+<li><strong>'1'</strong> — makes D3 false and D4 true.</li>
+<li><strong>'@'</strong> — makes D4 false.</li>
+<li><strong>After the last character</strong> — D1 is false (every character also made D1 true).</li>
+</ol>
+<h4>Result</h4>
+<ul>
+<li><strong>Measured</strong> — a branch probe (every decision outcome instrumented) confirmed <strong>8/8 decision outcomes with the single case UTCID01</strong>.</li>
+<li><strong>Minimum = 1 test case</strong>, even though V(G) is 5 — V(G) counts the basis paths you would need for <em>path</em> testing and is only an upper bound for decision coverage.</li>
+<li><strong>Extras</strong> — two cheap robustness cases (empty string, <code>null</code>) are added as B and A; they add no coverage and are marked as extras.</li>
+</ul>`,
       `<h2>✅ Câu 2 — unit test cho countCharacters</h2>
+<h4>Đề yêu cầu</h4>
+<p>Thiết kế bộ unit test <strong>tối thiểu</strong> đạt 100% statement <em>và</em> 100% decision coverage cho <code>countCharacters</code>, điền vào template Q2.</p>
 <h3>Bước 1 — đồ thị luồng điều khiển</h3>
 <table>
 <thead><tr><th>Nút</th><th>Dòng</th><th>Nội dung</th><th>Cạnh ra</th></tr></thead>
@@ -639,9 +854,22 @@ input x         -> Please enter numbers only.`),
 </tbody>
 </table>
 <h3>Bước 2 — độ phức tạp cyclomatic</h3>
-<p>N = 10 nút, E = 13 cạnh → <b>V(G) = E − N + 2 = 13 − 10 + 2 = 5</b>. Kiểm lại: 4 quyết định nhị phân (D1–D4) + 1 = <b>5</b>. Năm đường cơ sở là: chuỗi rỗng (không vào vòng lặp) và mỗi đường đi qua một trong N4, N6, N8, N9.</p>
+<p>N = 10 nút, E = 13 cạnh → <strong>V(G) = E − N + 2 = 13 − 10 + 2 = 5</strong>. Kiểm lại: 4 quyết định nhị phân (D1–D4) + 1 = <strong>5</strong>. Năm đường cơ sở là: chuỗi rỗng (không vào vòng lặp) và mỗi đường đi qua một trong N4, N6, N8, N9.</p>
 <h3>Bước 3 — bộ test tối thiểu</h3>
-<p>Có 8 kết cục cần phủ: D1 T/F, D2 T/F, D3 T/F, D4 T/F. Vì các quyết định nằm trong vòng lặp, <b>một chuỗi chứa mỗi loại một ký tự</b> sẽ ghé cả bốn lệnh tăng rồi thoát vòng: <code>"Ab1@"</code> → 'A' làm D2 đúng; 'b' làm D2 sai và D3 đúng; '1' làm D3 sai và D4 đúng; '@' làm D4 sai; sau ký tự cuối D1 sai. Một bộ đo nhánh (gắn cờ cho từng kết cục) xác nhận: <b>8/8 kết cục chỉ với một ca UTCID01</b>. Vậy tối thiểu là <b>1 test case</b>, dù V(G) bằng 5 — V(G) là số đường cơ sở cần cho <em>path</em> testing và chỉ là cận trên cho decision coverage. Hai ca "bảo hiểm" rẻ (chuỗi rỗng, <code>null</code>) được thêm với loại B và A; chúng không phủ thêm gì và được ghi rõ là ca bổ sung.</p>`),
+<p>Có 8 kết cục cần phủ: D1 T/F, D2 T/F, D3 T/F, D4 T/F. Vì các quyết định nằm trong vòng lặp, <strong>một chuỗi chứa mỗi loại một ký tự</strong> sẽ ghé cả bốn lệnh tăng rồi thoát vòng. Lần theo <code>"Ab1@"</code>:</p>
+<ol>
+<li><strong>'A'</strong> — làm D2 đúng.</li>
+<li><strong>'b'</strong> — làm D2 sai và D3 đúng.</li>
+<li><strong>'1'</strong> — làm D3 sai và D4 đúng.</li>
+<li><strong>'@'</strong> — làm D4 sai.</li>
+<li><strong>Sau ký tự cuối</strong> — D1 sai (mỗi ký tự trước đó đã làm D1 đúng).</li>
+</ol>
+<h4>Kết quả</h4>
+<ul>
+<li><strong>Đã đo</strong> — một bộ đo nhánh (gắn cờ cho từng kết cục) xác nhận <strong>8/8 kết cục chỉ với một ca UTCID01</strong>.</li>
+<li><strong>Tối thiểu = 1 test case</strong>, dù V(G) bằng 5 — V(G) là số đường cơ sở cần cho <em>path</em> testing và chỉ là cận trên cho decision coverage.</li>
+<li><strong>Ca bổ sung</strong> — hai ca "bảo hiểm" rẻ (chuỗi rỗng, <code>null</code>) được thêm với loại B và A; chúng không phủ thêm gì và được ghi rõ là ca bổ sung.</li>
+</ul>`),
     sheet('Answer sheet — Q2 template · Bài làm mẫu cho sheet Q2', utGrid({
       fcode: 'CharacterCounter', fname: 'countCharacters(String input)', loc: 29,
       req: 'Counts upper-case, lower-case, numeric and special characters of the input and returns them in a HashMap. UTCID01 alone gives 100% statement and 100% decision coverage (8/8 outcomes); UTCID02–03 are robustness extras.',
@@ -687,26 +915,86 @@ OK (3 tests)`),
 
     /* ── Q3 ── */
     bi(`<h2>✅ Question 3 — "Create the inspection decision"</h2>
-<p><b>Assumptions (write them in the Notes line of the template):</b> (A1) "No special characters or blanks" means the name may contain only letters (Vietnamese letters with diacritics included) and digits — no spaces anywhere. (A2) All lengths are inclusive and counted in characters. (A3) 1 MB = 1,048,576 bytes, so the limit is 10,485,760 bytes. (A4) Every document row needs a file. (A5) The paper gives no message texts, so an invalid input means "an error message is shown for that field and nothing is saved". (A6) "Chi tiết" is required, so its smallest valid length is 1.</p>
-<p><b>Reading the rules into table 3.1.</b> Seven conditions come out of four bullet points — do not stop at the four field names: the name alone carries <em>four</em> checks (length, first character, special characters, blanks), and "Tài liệu công văn" hides three more (at least one document, each document's name and code, each file's size). Each length rule gives two valid boundaries (a, b) and two invalid ones (a − 1, b + 1), plus the empty value because every field is required. The dropdown has no boundaries — its only invalid partition is keeping the default text.</p>`,
+<h4>The task</h4>
+<p>Black-box test of "Create the inspection decision": (1) EP + BVA in table 3.1, (2) 10 integration test cases covering as many tags as possible in table 3.2, (3) the same 10 cases with pre-conditions and procedures in table 3.3.</p>
+<h4>Assumptions — write them in the Notes line of the template</h4>
+<ol>
+<li><strong>A1 — allowed characters</strong>: "No special characters or blanks" means the name may contain only letters (Vietnamese letters with diacritics included) and digits — no spaces anywhere.</li>
+<li><strong>A2 — lengths</strong>: all lengths are inclusive and counted in characters.</li>
+<li><strong>A3 — megabyte</strong>: 1 MB = 1,048,576 bytes, so the limit is 10,485,760 bytes.</li>
+<li><strong>A4 — files</strong>: every document row needs a file.</li>
+<li><strong>A5 — messages</strong>: the paper gives no message texts, so an invalid input means "an error message is shown for that field and nothing is saved".</li>
+<li><strong>A6 — details</strong>: "Chi tiết" is required, so its smallest valid length is 1.</li>
+</ol>
+<h3>Step 1 — read the rules into table 3.1</h3>
+<p>Seven conditions come out of four bullet points — do not stop at the four field names:</p>
+<ul>
+<li><strong>The name alone</strong> carries <em>four</em> checks — length, first character, special characters, blanks.</li>
+<li><strong>"Tài liệu công văn"</strong> hides three more — at least one document, each document's name and code, each file's size.</li>
+<li><strong>Each length rule</strong> gives two valid boundaries (a, b) and two invalid ones (a − 1, b + 1), plus the empty value because every field is required.</li>
+<li><strong>The dropdown</strong> has no boundaries — its only invalid partition is keeping the default text.</li>
+</ul>`,
       `<h2>✅ Câu 3 — "Tạo mới quyết định kiểm tra"</h2>
-<p><b>Giả định (ghi vào dòng Notes của template):</b> (A1) "No special characters or blanks" nghĩa là tên chỉ được chứa chữ cái (kể cả chữ tiếng Việt có dấu) và chữ số — không có khoảng trắng ở đâu cả. (A2) Mọi độ dài đều bao gồm hai đầu và tính theo ký tự. (A3) 1 MB = 1.048.576 byte, nên giới hạn là 10.485.760 byte. (A4) Mỗi dòng tài liệu phải có file. (A5) Đề không cho nội dung thông báo, nên dữ liệu sai được hiểu là "hiện thông báo lỗi ở trường đó và không lưu gì". (A6) "Chi tiết" bắt buộc, nên độ dài hợp lệ nhỏ nhất là 1.</p>
-<p><b>Chuyển luật thành bảng 3.1.</b> Bốn gạch đầu dòng sinh ra bảy điều kiện — đừng dừng ở bốn tên trường: riêng tên quyết định đã mang <em>bốn</em> phép kiểm (độ dài, ký tự đầu, ký tự đặc biệt, khoảng trắng), còn "Tài liệu công văn" giấu thêm ba (ít nhất một tài liệu, tên và mã của từng tài liệu, dung lượng từng file). Mỗi luật độ dài cho hai biên hợp lệ (a, b) và hai biên không hợp lệ (a − 1, b + 1), cộng thêm giá trị rỗng vì trường nào cũng bắt buộc. Dropdown không có biên — phân vùng không hợp lệ duy nhất là giữ nguyên dòng mặc định.</p>`),
+<h4>Đề yêu cầu</h4>
+<p>Test hộp đen chức năng "Tạo mới quyết định kiểm tra": (1) EP + BVA vào bảng 3.1, (2) 10 integration test case phủ càng nhiều tag càng tốt vào bảng 3.2, (3) hoàn thiện đúng 10 ca đó với tiền điều kiện và thủ tục ở bảng 3.3.</p>
+<h4>Giả định — ghi vào dòng Notes của template</h4>
+<ol>
+<li><strong>A1 — ký tự cho phép</strong>: "No special characters or blanks" nghĩa là tên chỉ được chứa chữ cái (kể cả chữ tiếng Việt có dấu) và chữ số — không có khoảng trắng ở đâu cả.</li>
+<li><strong>A2 — độ dài</strong>: mọi độ dài đều bao gồm hai đầu và tính theo ký tự.</li>
+<li><strong>A3 — megabyte</strong>: 1 MB = 1.048.576 byte, nên giới hạn là 10.485.760 byte.</li>
+<li><strong>A4 — file</strong>: mỗi dòng tài liệu phải có file.</li>
+<li><strong>A5 — thông báo</strong>: đề không cho nội dung thông báo, nên dữ liệu sai được hiểu là "hiện thông báo lỗi ở trường đó và không lưu gì".</li>
+<li><strong>A6 — chi tiết</strong>: "Chi tiết" bắt buộc, nên độ dài hợp lệ nhỏ nhất là 1.</li>
+</ol>
+<h3>Bước 1 — chuyển luật thành bảng 3.1</h3>
+<p>Bốn gạch đầu dòng sinh ra bảy điều kiện — đừng dừng ở bốn tên trường:</p>
+<ul>
+<li><strong>Riêng tên quyết định</strong> đã mang <em>bốn</em> phép kiểm — độ dài, ký tự đầu, ký tự đặc biệt, khoảng trắng.</li>
+<li><strong>"Tài liệu công văn"</strong> giấu thêm ba — ít nhất một tài liệu, tên và mã của từng tài liệu, dung lượng từng file.</li>
+<li><strong>Mỗi luật độ dài</strong> cho hai biên hợp lệ (a, b) và hai biên không hợp lệ (a − 1, b + 1), cộng thêm giá trị rỗng vì trường nào cũng bắt buộc.</li>
+<li><strong>Dropdown</strong> không có biên — phân vùng không hợp lệ duy nhất là giữ nguyên dòng mặc định.</li>
+</ul>`),
     sheet('Answer sheet — Table 3.1 Test Analysis · Bài làm mẫu bảng 3.1', FA23_T31.html),
-    bi(`<p><b>Designing table 3.2.</b> Two valid cases carry <em>all</em> the valid tags: TC1 sits on every lower boundary (50, 1, 10, 3, one document, a file of exactly 10 MB), TC2 on every upper boundary (255, 10,000, 100, 10, two documents). Each of the other eight cases changes <b>exactly one</b> field of TC1 to an invalid value, so if the system accepts or rejects it you know why. A single invalid value often hits two tags at once — 49 characters is both "&lt; 50" (IP1) and the boundary 49 (IB1). The paper caps the table at 10 cases, so not every invalid tag fits; the check below is computed from the table, and the ten extra cases show how you would reach 100%.</p>`,
-      `<p><b>Thiết kế bảng 3.2.</b> Hai ca hợp lệ gánh <em>toàn bộ</em> tag hợp lệ: TC1 nằm trên mọi biên dưới (50, 1, 10, 3, một tài liệu, file đúng 10 MB), TC2 trên mọi biên trên (255, 10.000, 100, 10, hai tài liệu). Mỗi ca trong tám ca còn lại đổi <b>đúng một</b> trường của TC1 thành giá trị không hợp lệ, nên hệ thống nhận hay từ chối thì bạn đều biết vì sao. Một giá trị không hợp lệ thường chạm hai tag cùng lúc — 49 ký tự vừa là "&lt; 50" (IP1) vừa là biên 49 (IB1). Đề giới hạn 10 ca nên không phủ hết được tag không hợp lệ; phần kiểm tra dưới đây được tính từ chính bảng, và mười ca bổ sung cho thấy cách đạt 100%.</p>`),
+    bi(`<h3>Step 2 — design table 3.2</h3>
+<ul>
+<li><strong>Two valid cases carry <em>all</em> the valid tags</strong> — TC1 sits on every lower boundary (50, 1, 10, 3, one document, a file of exactly 10 MB); TC2 on every upper boundary (255, 10,000, 100, 10, two documents).</li>
+<li><strong>One invalid value per case</strong> — each of the other eight cases changes <strong>exactly one</strong> field of TC1 to an invalid value, so if the system accepts or rejects it you know why.</li>
+<li><strong>One value, two tags</strong> — a single invalid value often hits two tags at once: 49 characters is both "&lt; 50" (IP1) and the boundary 49 (IB1).</li>
+<li><strong>The 10-case cap</strong> — not every invalid tag fits. The check below is computed from the table, and the ten extra cases show how you would reach 100%.</li>
+</ul>`,
+      `<h3>Bước 2 — thiết kế bảng 3.2</h3>
+<ul>
+<li><strong>Hai ca hợp lệ gánh <em>toàn bộ</em> tag hợp lệ</strong> — TC1 nằm trên mọi biên dưới (50, 1, 10, 3, một tài liệu, file đúng 10 MB); TC2 trên mọi biên trên (255, 10.000, 100, 10, hai tài liệu).</li>
+<li><strong>Mỗi ca một giá trị không hợp lệ</strong> — mỗi ca trong tám ca còn lại đổi <strong>đúng một</strong> trường của TC1 thành giá trị không hợp lệ, nên hệ thống nhận hay từ chối thì bạn đều biết vì sao.</li>
+<li><strong>Một giá trị, hai tag</strong> — một giá trị không hợp lệ thường chạm hai tag cùng lúc: 49 ký tự vừa là "&lt; 50" (IP1) vừa là biên 49 (IB1).</li>
+<li><strong>Giới hạn 10 ca</strong> — không phủ hết được tag không hợp lệ. Phần kiểm tra dưới đây được tính từ chính bảng, và mười ca bổ sung cho thấy cách đạt 100%.</li>
+</ul>`),
     sheet('Answer sheet — Table 3.2 Test case design · Bài làm mẫu bảng 3.2', FA23_T32.table),
     FA23_T32.check,
     FA23_T32.ext,
     sheet('Answer sheet — Table 3.3 Test case (procedures) · Bài làm mẫu bảng 3.3', FA23_T33),
     bi(`<h3>Ví dụ có lời giải · Worked example — why "Ab1@" and not four separate tests?</h3>
-<p>Many students hand in four UTCIDs ("A", "a", "1", "@"). Each one covers D1 True and False and one increment, so together they do reach 100% — but the question asks for the <b>minimum</b>. Count what each of the four adds beyond "Ab1@": nothing. The grader can therefore read four tests as "does not know what minimum means". Present UTCID01 as the minimum, and if you add more, label them clearly as boundary/abnormal extras, exactly as in the grid above.</p>
-<div class="pitfall"><b>V(G) ≠ number of test cases for decision coverage.</b> V(G) = 5 here, the minimum is 1. The two are equal only when every path ends in a different <code>return</code>, as in the income-tax flowchart of PE-2 (V(G) = 10, minimum = 10). Always reason from the outcomes you must cover, then use V(G) as a sanity check.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>What is a "character" for a 255-char limit?</b> "Quyết" can be stored as 5 Unicode code points (precomposed "ế") or 6 (e + two combining marks), JavaScript's <code>.length</code> counts UTF-16 units, and a MySQL <code>VARCHAR(255)</code> column in a non-UTF8 charset counts bytes. A name of exactly 255 characters can therefore pass the browser check and still be truncated by the database. Real testers add a boundary case with Vietnamese diacritics (255 characters, many of them "ế", "ữ") and one with an emoji. <em>Outside the syllabus because CTFL treats "length" as a single abstract number.</em></div>`,
+<p>Many students hand in four UTCIDs ("A", "a", "1", "@"). Each one covers D1 True and False and one increment, so together they do reach 100% — but the question asks for the <strong>minimum</strong>. Count what each of the four adds beyond "Ab1@": nothing. The grader can therefore read four tests as "does not know what minimum means". Present UTCID01 as the minimum, and if you add more, label them clearly as boundary/abnormal extras, exactly as in the grid above.</p>
+<div class="pitfall co-tieu-de"><strong>V(G) ≠ number of test cases for decision coverage.</strong> V(G) = 5 here, the minimum is 1. The two are equal only when every path ends in a different <code>return</code>, as in the income-tax flowchart of PE-2 (V(G) = 10, minimum = 10). Always reason from the outcomes you must cover, then use V(G) as a sanity check.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>What is a "character" for a 255-char limit?</strong>
+<ul>
+<li><strong>Unicode</strong> — "Quyết" can be stored as 5 code points (precomposed "ế") or 6 (e + two combining marks).</li>
+<li><strong>JavaScript</strong> — <code>.length</code> counts UTF-16 units.</li>
+<li><strong>MySQL</strong> — a <code>VARCHAR(255)</code> column in a non-UTF8 charset counts bytes.</li>
+</ul>
+<p>A name of exactly 255 characters can therefore pass the browser check and still be truncated by the database. Real testers add a boundary case with Vietnamese diacritics (255 characters, many of them "ế", "ữ") and one with an emoji.</p>
+<p><em>Outside the syllabus because CTFL treats "length" as a single abstract number.</em></p></div>`,
       `<h3>Ví dụ có lời giải · Vì sao "Ab1@" mà không phải bốn test riêng?</h3>
-<p>Nhiều bạn nộp bốn UTCID ("A", "a", "1", "@"). Mỗi ca phủ D1 True và False cùng một lệnh tăng, nên gộp lại cũng đạt 100% — nhưng đề hỏi bộ <b>tối thiểu</b>. Hãy đếm xem mỗi ca trong bốn ca đó thêm được gì so với "Ab1@": không gì cả. Người chấm vì vậy có thể đọc bốn test thành "không hiểu tối thiểu là gì". Hãy trình bày UTCID01 là bộ tối thiểu, và nếu thêm ca thì ghi rõ đó là ca biên/bất thường bổ sung, đúng như lưới ở trên.</p>
-<div class="pitfall"><b>V(G) ≠ số test case cho decision coverage.</b> Ở đây V(G) = 5 còn tối thiểu là 1. Hai con số chỉ bằng nhau khi mỗi đường đi kết thúc ở một <code>return</code> khác nhau, như lưu đồ thuế thu nhập ở bài PE-2 (V(G) = 10, tối thiểu = 10). Luôn lập luận từ các kết cục phải phủ, rồi mới dùng V(G) để kiểm tra lại.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Với giới hạn 255 ký tự, "một ký tự" là gì?</b> Chữ "Quyết" có thể lưu thành 5 code point Unicode (chữ "ế" dựng sẵn) hoặc 6 (e + hai dấu tổ hợp), <code>.length</code> của JavaScript đếm đơn vị UTF-16, còn cột MySQL <code>VARCHAR(255)</code> với bảng mã không phải UTF8 thì đếm byte. Một cái tên đúng 255 ký tự vì thế có thể qua kiểm tra ở trình duyệt mà vẫn bị cơ sở dữ liệu cắt cụt. Tester thực tế thêm một ca biên có dấu tiếng Việt (255 ký tự, nhiều chữ "ế", "ữ") và một ca có emoji. <em>Ngoài giáo trình vì CTFL coi "độ dài" chỉ là một con số trừu tượng.</em></div>`),
+<p>Nhiều bạn nộp bốn UTCID ("A", "a", "1", "@"). Mỗi ca phủ D1 True và False cùng một lệnh tăng, nên gộp lại cũng đạt 100% — nhưng đề hỏi bộ <strong>tối thiểu</strong>. Hãy đếm xem mỗi ca trong bốn ca đó thêm được gì so với "Ab1@": không gì cả. Người chấm vì vậy có thể đọc bốn test thành "không hiểu tối thiểu là gì". Hãy trình bày UTCID01 là bộ tối thiểu, và nếu thêm ca thì ghi rõ đó là ca biên/bất thường bổ sung, đúng như lưới ở trên.</p>
+<div class="pitfall co-tieu-de"><strong>V(G) ≠ số test case cho decision coverage.</strong> Ở đây V(G) = 5 còn tối thiểu là 1. Hai con số chỉ bằng nhau khi mỗi đường đi kết thúc ở một <code>return</code> khác nhau, như lưu đồ thuế thu nhập ở bài PE-2 (V(G) = 10, tối thiểu = 10). Luôn lập luận từ các kết cục phải phủ, rồi mới dùng V(G) để kiểm tra lại.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Với giới hạn 255 ký tự, "một ký tự" là gì?</strong>
+<ul>
+<li><strong>Unicode</strong> — chữ "Quyết" có thể lưu thành 5 code point (chữ "ế" dựng sẵn) hoặc 6 (e + hai dấu tổ hợp).</li>
+<li><strong>JavaScript</strong> — <code>.length</code> đếm đơn vị UTF-16.</li>
+<li><strong>MySQL</strong> — cột <code>VARCHAR(255)</code> với bảng mã không phải UTF8 thì đếm byte.</li>
+</ul>
+<p>Một cái tên đúng 255 ký tự vì thế có thể qua kiểm tra ở trình duyệt mà vẫn bị cơ sở dữ liệu cắt cụt. Tester thực tế thêm một ca biên có dấu tiếng Việt (255 ký tự, nhiều chữ "ế", "ữ") và một ca có emoji.</p>
+<p><em>Ngoài giáo trình vì CTFL coi "độ dài" chỉ là một con số trừu tượng.</em></p></div>`),
     books([
       ['fst4', 'Ch.3 §2.4 "Applying review techniques" (checklist-based review) — book p.94–99 (PDF p.108–113); Ch.4 §2.1–2.2 EP and BVA p.113–118, Table 4.1 p.116; Ch.4 §3.1–3.3 statement and decision coverage p.133–139', 'Chương 3 §2.4 "Applying review techniques" (review theo checklist) — trang sách 94–99 (PDF 108–113); Chương 4 §2.1–2.2 EP và BVA tr.113–118, Bảng 4.1 tr.116; Chương 4 §3.1–3.3 statement và decision coverage tr.133–139'],
       ['sp5', '§5.1.1 EP (PDF p.165), §5.1.2 BVA (PDF p.176), §5.2.1–5.2.2 statement and decision testing (PDF p.215–220)', '§5.1.1 EP (PDF tr.165), §5.1.2 BVA (PDF tr.176), §5.2.1–5.2.2 statement và decision testing (PDF tr.215–220)'],
@@ -848,50 +1136,220 @@ const L2 = {
   content: [
     bi(`<span class="eyebrow">Practical Exam · Lesson PE-2 · PE paper 1 (PE1.jpg) pages 1–4</span>
 <h2>SU24 PE1 — Fibonacci · fncPersonalIncomeTax · BMI Calculator</h2>
-<p class="lead">The paper is called <b>SWT301_SU24_PE1_404208</b> and uses the same 3 + 3 + 4 layout and the same Excel template as FA23. It is in the Exam room as <b>SWT301-PE14</b> ("Practical Exam Đề 14 (SU 2024 - PE1)"). Its Q2 is the paper's trickiest question: the method is given only as a <em>flowchart</em>, and the minimum number of tests is exactly V(G) = 10 — students who stop at 8 lose the decision-coverage marks.</p>
-<div class="callout"><b>Learning objectives.</b> LO-3.2.4 apply a review technique (K3) · LO-4.3.1 / 4.3.2 statement and decision coverage (K2) · LO-4.2.1 EP and LO-4.2.2 BVA (K3).</div>
+<p class="lead">The paper is called <strong>SWT301_SU24_PE1_404208</strong> and uses the same 3 + 3 + 4 layout and the same Excel template as FA23. It is in the Exam room as <strong>SWT301-PE14</strong> ("Practical Exam Đề 14 (SU 2024 - PE1)").</p>
+<p>Its Q2 is the paper's trickiest question: the method is given only as a <em>flowchart</em>, and the minimum number of tests is exactly V(G) = 10 — students who stop at 8 lose the decision-coverage marks.</p>
+<div class="callout"><strong>Learning objectives.</strong>
+<ul>
+<li><strong>LO-3.2.4</strong> — apply a review technique (K3).</li>
+<li><strong>LO-4.3.1 / 4.3.2</strong> — statement and decision coverage (K2).</li>
+<li><strong>LO-4.2.1 / 4.2.2</strong> — EP and BVA (K3).</li>
+</ul></div>
 <table>
 <thead><tr><th>Q</th><th>Points</th><th>Task</th><th>Budget</th></tr></thead>
 <tbody>
 <tr><td>1</td><td>3</td><td>Find ≥ 6 issues in <code>Fibonacci</code> (27 lines)</td><td>20 min</td></tr>
 <tr><td>2</td><td>3</td><td>Minimum unit tests, 100% statement + decision coverage, for the flowchart <code>float fncPersonalIncomeTax(float sal, float te, int nod)</code></td><td>25 min</td></tr>
-<tr><td>3</td><td>4</td><td>Black-box test cases for the <b>BMI Calculator</b> (tables 3.1 / 3.2 / 3.3)</td><td>40 min</td></tr>
+<tr><td>3</td><td>4</td><td>Black-box test cases for the <strong>BMI Calculator</strong> (tables 3.1 / 3.2 / 3.3)</td><td>40 min</td></tr>
 </tbody>
 </table>`,
       `<span class="eyebrow">Thi thực hành · Bài PE-2 · PE paper 1 (PE1.jpg) trang 1–4</span>
 <h2>SU24 PE1 — Fibonacci · fncPersonalIncomeTax · BMI Calculator</h2>
-<p class="lead">Đề có tên <b>SWT301_SU24_PE1_404208</b>, cùng bố cục 3 + 3 + 4 và cùng template Excel với FA23. Trong Phòng thi nó là <b>SWT301-PE14</b> ("Đề thi thực hành số 14 (SU 2024 - PE1)"). Q2 là câu khó nhất đề: phương thức chỉ được cho dưới dạng <em>lưu đồ</em>, và số test tối thiểu đúng bằng V(G) = 10 — bạn nào dừng ở 8 sẽ mất điểm decision coverage.</p>
-<div class="callout"><b>Chuẩn đầu ra.</b> LO-3.2.4 áp dụng kỹ thuật review (K3) · LO-4.3.1 / 4.3.2 statement và decision coverage (K2) · LO-4.2.1 EP và LO-4.2.2 BVA (K3).</div>
+<p class="lead">Đề có tên <strong>SWT301_SU24_PE1_404208</strong>, cùng bố cục 3 + 3 + 4 và cùng template Excel với FA23. Trong Phòng thi nó là <strong>SWT301-PE14</strong> ("Đề thi thực hành số 14 (SU 2024 - PE1)").</p>
+<p>Q2 là câu khó nhất đề: phương thức chỉ được cho dưới dạng <em>lưu đồ</em>, và số test tối thiểu đúng bằng V(G) = 10 — bạn nào dừng ở 8 sẽ mất điểm decision coverage.</p>
+<div class="callout"><strong>Chuẩn đầu ra.</strong>
+<ul>
+<li><strong>LO-3.2.4</strong> — áp dụng kỹ thuật review (K3).</li>
+<li><strong>LO-4.3.1 / 4.3.2</strong> — statement và decision coverage (K2).</li>
+<li><strong>LO-4.2.1 / 4.2.2</strong> — EP và BVA (K3).</li>
+</ul></div>
 <table>
 <thead><tr><th>Câu</th><th>Điểm</th><th>Yêu cầu</th><th>Thời gian</th></tr></thead>
 <tbody>
 <tr><td>1</td><td>3</td><td>Tìm ≥ 6 lỗi trong <code>Fibonacci</code> (27 dòng)</td><td>20 phút</td></tr>
 <tr><td>2</td><td>3</td><td>Bộ unit test tối thiểu, 100% statement + decision coverage, cho lưu đồ <code>float fncPersonalIncomeTax(float sal, float te, int nod)</code></td><td>25 phút</td></tr>
-<tr><td>3</td><td>4</td><td>Test case hộp đen cho <b>BMI Calculator</b> (bảng 3.1 / 3.2 / 3.3)</td><td>40 phút</td></tr>
+<tr><td>3</td><td>4</td><td>Test case hộp đen cho <strong>BMI Calculator</strong> (bảng 3.1 / 3.2 / 3.3)</td><td>40 phút</td></tr>
 </tbody>
 </table>`),
-    bi(`<h2>📄 The paper page by page</h2><p>PE1.jpg is one very tall screenshot that contains this 4-page paper <b>twice</b> (the first copy is footed "Page 1|1 … 4|4", the second "Page 1|4 … 4|4", same content). Only the first copy is shown.</p>`,
-      `<h2>📄 Đề thi từng trang</h2><p>PE1.jpg là một ảnh chụp rất dài chứa đề 4 trang này <b>hai lần</b> (bản đầu chân trang ghi "Page 1|1 … 4|4", bản sau ghi "Page 1|4 … 4|4", nội dung như nhau). Ở đây chỉ hiện bản đầu.</p>`),
+    bi(`<h2>📄 The paper page by page</h2><p>PE1.jpg is one very tall screenshot that contains this 4-page paper <strong>twice</strong> (the first copy is footed "Page 1|1 … 4|4", the second "Page 1|4 … 4|4", same content). Only the first copy is shown.</p>`,
+      `<h2>📄 Đề thi từng trang</h2><p>PE1.jpg là một ảnh chụp rất dài chứa đề 4 trang này <strong>hai lần</strong> (bản đầu chân trang ghi "Page 1|1 … 4|4", bản sau ghi "Page 1|4 … 4|4", nội dung như nhau). Ở đây chỉ hiện bản đầu.</p>`),
     pages('pe1', [
       [1, 'Instructions and Question 1 — Fibonacci',
-        `<p>The red instruction is the one to remember: answers <b>in the provided template, in English, reflecting this exam paper</b>; any keyword not related to this paper → that answer gets zero; not using the template → the whole exam gets zero. Question 1 (3 points) asks for at least 6 issues. The introduction says the sequence consists of "positive integers starting with 0 and 1" — 0 is not positive, a small slip in the paper itself. Note that the code is shown with its own line numbers 1–27: use exactly these numbers in the Line column.</p>`,
-        `<p>Dòng hướng dẫn màu đỏ là thứ phải nhớ: trả lời <b>trong template được phát, bằng tiếng Anh, bám đúng đề này</b>; có từ khoá không liên quan tới đề → câu đó 0 điểm; không dùng template → cả bài 0 điểm. Câu 1 (3 điểm) yêu cầu ít nhất 6 lỗi. Đoạn giới thiệu nói dãy gồm "các số nguyên dương bắt đầu bằng 0 và 1" — 0 không phải số dương, một sơ suất nhỏ của chính đề. Chú ý code có sẵn số dòng 1–27: dùng đúng các số này ở cột Line.</p>`],
+        `<p class="y-chinh">🎯 Page 1 = the zero rules in red, then Question 1 (3 points): find at least 6 issues in <code>Fibonacci</code>.</p>
+<p class="nhan">The red instruction — remember it</p>
+<ul>
+<li><strong>Answer format</strong> — <strong>in the provided template, in English, reflecting this exam paper</strong>.</li>
+<li><strong>Irrelevant keyword</strong> — any keyword not related to this paper → that answer gets zero.</li>
+<li><strong>No template</strong> — the whole exam gets zero.</li>
+</ul>
+<p class="nhan">Question 1</p>
+<ul>
+<li><strong>A slip in the paper</strong> — the introduction says the sequence consists of "positive integers starting with 0 and 1"; 0 is not positive.</li>
+<li><strong>Line numbers</strong> — the code is shown with its own numbers 1–27: use exactly these in the Line column.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Trang 1 = các luật điểm 0 màu đỏ, rồi Câu 1 (3 điểm): tìm ít nhất 6 lỗi trong <code>Fibonacci</code>.</p>
+<p class="nhan">Dòng hướng dẫn màu đỏ — phải nhớ</p>
+<ul>
+<li><strong>Cách trả lời</strong> — <strong>trong template được phát, bằng tiếng Anh, bám đúng đề này</strong>.</li>
+<li><strong>Từ khoá lạc đề</strong> — có từ khoá không liên quan tới đề → câu đó 0 điểm.</li>
+<li><strong>Không dùng template</strong> — cả bài 0 điểm.</li>
+</ul>
+<p class="nhan">Câu 1</p>
+<ul>
+<li><strong>Sơ suất của đề</strong> — đoạn giới thiệu nói dãy gồm "các số nguyên dương bắt đầu bằng 0 và 1"; 0 không phải số dương.</li>
+<li><strong>Số dòng</strong> — code có sẵn số dòng 1–27: dùng đúng các số này ở cột Line.</li>
+</ul>`],
       [2, 'Question 2 — flowchart of fncPersonalIncomeTax; Question 3 — BMI Calculator screen',
-        `<p><b>Q2</b> gives no code, only a flowchart with the legend <em>sal = salary, te = tax-exempt amounts, nod = number of dependents</em>. Three diamonds <code>sal &lt; 0</code>, <code>te &lt; 0</code>, <code>nod &lt; 0</code> each lead on "Yes" to the same box <b>Return −1</b>. Otherwise <code>ti := sal − te − 9,000,000 − nod × 4,000,000</code>; if <code>ti &gt; 0</code> is "No" → <b>Return 0</b>. Then a ladder of five brackets: ti &gt; 5M? No → 5% × ti; &gt; 10M? No → 10% × ti − 250,000; &gt; 20M? No → 15% × ti − 750,000; &gt; 40M? No → 20% × ti − 2,250,000; &gt; 80M? No → 25% × ti − 6,250,000, Yes → 30% × ti − 16,250,000. (The paper spells it "covergage".) <b>Q3</b> (4 points) starts at the bottom: the BMI Calculator with Age (hint "ages: 2 - 120"), Gender radio Male/Female, Height (cm), Weight (kg), and the buttons Calculate and Clear.</p>`,
-        `<p><b>Q2</b> không cho code, chỉ cho lưu đồ kèm chú thích <em>sal = lương, te = khoản miễn thuế, nod = số người phụ thuộc</em>. Ba hình thoi <code>sal &lt; 0</code>, <code>te &lt; 0</code>, <code>nod &lt; 0</code>, nhánh "Yes" của cả ba cùng dẫn vào một ô <b>Return −1</b>. Nếu không thì <code>ti := sal − te − 9.000.000 − nod × 4.000.000</code>; nếu <code>ti &gt; 0</code> là "No" → <b>Return 0</b>. Tiếp theo là thang năm bậc: ti &gt; 5 triệu? No → 5% × ti; &gt; 10 triệu? No → 10% × ti − 250.000; &gt; 20 triệu? No → 15% × ti − 750.000; &gt; 40 triệu? No → 20% × ti − 2.250.000; &gt; 80 triệu? No → 25% × ti − 6.250.000, Yes → 30% × ti − 16.250.000. (Đề viết sai chính tả "covergage".) <b>Q3</b> (4 điểm) bắt đầu ở cuối trang: BMI Calculator gồm Age (gợi ý "ages: 2 - 120"), radio Gender Male/Female, Height (cm), Weight (kg), và hai nút Calculate, Clear.</p>`],
+        `<p class="y-chinh">🎯 Q2 gives no code — only a flowchart of <code>fncPersonalIncomeTax</code>; Q3 starts at the bottom with the BMI Calculator screen.</p>
+<p class="nhan">Q2 — reading the flowchart</p>
+<ul>
+<li><strong>Legend</strong> — <em>sal = salary, te = tax-exempt amounts, nod = number of dependents</em>. (The paper spells coverage "covergage".)</li>
+<li><strong>Three guards</strong> — the diamonds <code>sal &lt; 0</code>, <code>te &lt; 0</code>, <code>nod &lt; 0</code> each lead on "Yes" to the same box <strong>Return −1</strong>.</li>
+<li><strong>Taxable income</strong> — otherwise <code>ti := sal − te − 9,000,000 − nod × 4,000,000</code>.</li>
+<li><strong>No tax</strong> — if <code>ti &gt; 0</code> is "No" → <strong>Return 0</strong>.</li>
+</ul>
+<p class="nhan">Then a ladder of five brackets</p>
+<ol>
+<li>ti &gt; 5M? No → 5% × ti</li>
+<li>&gt; 10M? No → 10% × ti − 250,000</li>
+<li>&gt; 20M? No → 15% × ti − 750,000</li>
+<li>&gt; 40M? No → 20% × ti − 2,250,000</li>
+<li>&gt; 80M? No → 25% × ti − 6,250,000; Yes → 30% × ti − 16,250,000</li>
+</ol>
+<p class="nhan">Q3 (4 points) — the screen</p>
+<p>The BMI Calculator: Age (hint "ages: 2 - 120"), Gender radio Male/Female, Height (cm), Weight (kg), and the buttons Calculate and Clear.</p>`,
+        `<p class="y-chinh">🎯 Q2 không cho code — chỉ cho lưu đồ của <code>fncPersonalIncomeTax</code>; Q3 bắt đầu ở cuối trang với màn hình BMI Calculator.</p>
+<p class="nhan">Q2 — đọc lưu đồ</p>
+<ul>
+<li><strong>Chú thích</strong> — <em>sal = lương, te = khoản miễn thuế, nod = số người phụ thuộc</em>. (Đề viết sai chính tả "covergage".)</li>
+<li><strong>Ba phép chặn</strong> — ba hình thoi <code>sal &lt; 0</code>, <code>te &lt; 0</code>, <code>nod &lt; 0</code>, nhánh "Yes" của cả ba cùng dẫn vào một ô <strong>Return −1</strong>.</li>
+<li><strong>Thu nhập tính thuế</strong> — nếu không thì <code>ti := sal − te − 9.000.000 − nod × 4.000.000</code>.</li>
+<li><strong>Không phải nộp thuế</strong> — nếu <code>ti &gt; 0</code> là "No" → <strong>Return 0</strong>.</li>
+</ul>
+<p class="nhan">Tiếp theo là thang năm bậc</p>
+<ol>
+<li>ti &gt; 5 triệu? No → 5% × ti</li>
+<li>&gt; 10 triệu? No → 10% × ti − 250.000</li>
+<li>&gt; 20 triệu? No → 15% × ti − 750.000</li>
+<li>&gt; 40 triệu? No → 20% × ti − 2.250.000</li>
+<li>&gt; 80 triệu? No → 25% × ti − 6.250.000; Yes → 30% × ti − 16.250.000</li>
+</ol>
+<p class="nhan">Q3 (4 điểm) — màn hình</p>
+<p>BMI Calculator gồm Age (gợi ý "ages: 2 - 120"), radio Gender Male/Female, Height (cm), Weight (kg), và hai nút Calculate, Clear.</p>`],
       [3, 'Function detail of the BMI Calculator and the adult BMI table',
-        `<p>Every bullet is a test condition: Age required, number between 2 and 120; Gender required, default Male; Height and Weight required, number greater than 0; Clear empties the fields; Calculate shows "Please provide an age between 2 and 120" when Age is blank and "Input data for Age is out of range!" when it is a number out of range, with "similar validation" for Height and Weight (their messages are not spelled out — an assumption you must state). BMI = Weight × 10,000 / (Height × Height). For <b>20 &lt; Age ≤ 120</b> the message is "BMI for adults = &lt;BMI&gt; kg/m² &lt;Classification&gt;" using eight classes from Severe Thinness (&lt; 16) to Obese Class III (&gt; 40). For <b>2 ≤ Age ≤ 20</b> it is "BMI for children and tens …" (sic — "teens"). The adult ranges are written "16 - 17", "17 - 18.5"…, so which class owns the value 17 exactly is not defined — state the usual lower-inclusive assumption.</p>`,
-        `<p>Mỗi gạch đầu dòng là một điều kiện test: Age bắt buộc, là số từ 2 đến 120; Gender bắt buộc, mặc định Male; Height và Weight bắt buộc, là số lớn hơn 0; Clear xoá các ô; Calculate hiện "Please provide an age between 2 and 120" khi Age để trống và "Input data for Age is out of range!" khi là số ngoài khoảng, với "kiểm tra tương tự" cho Height và Weight (thông báo của chúng không được ghi ra — một giả định bạn phải nêu). BMI = Weight × 10.000 / (Height × Height). Với <b>20 &lt; Age ≤ 120</b> thông báo là "BMI for adults = &lt;BMI&gt; kg/m² &lt;Classification&gt;" theo tám nhóm từ Severe Thinness (&lt; 16) đến Obese Class III (&gt; 40). Với <b>2 ≤ Age ≤ 20</b> là "BMI for children and tens …" (đề viết nhầm "tens" thay cho "teens"). Các khoảng người lớn viết "16 - 17", "17 - 18.5"…, nên giá trị đúng 17 thuộc nhóm nào là không xác định — hãy nêu giả định thông dụng: tính từ cận dưới.</p>`],
+        `<p class="y-chinh">🎯 Page 3 is the function detail of the BMI Calculator — every bullet is a test condition.</p>
+<p class="nhan">The input rules</p>
+<ul>
+<li><strong>Age</strong> — required, number between 2 and 120.</li>
+<li><strong>Gender</strong> — required, default Male.</li>
+<li><strong>Height, Weight</strong> — required, number greater than 0.</li>
+<li><strong>Clear</strong> — empties the fields.</li>
+</ul>
+<p class="nhan">What Calculate does</p>
+<ul>
+<li><strong>Age blank</strong> → "Please provide an age between 2 and 120".</li>
+<li><strong>Age a number out of range</strong> → "Input data for Age is out of range!".</li>
+<li><strong>Height and Weight</strong> — "similar validation"; their messages are not spelled out, an assumption you must state.</li>
+<li><strong>Formula</strong> — BMI = Weight × 10,000 / (Height × Height).</li>
+<li><strong>20 &lt; Age ≤ 120</strong> → "BMI for adults = &lt;BMI&gt; kg/m² &lt;Classification&gt;", using eight classes from Severe Thinness (&lt; 16) to Obese Class III (&gt; 40).</li>
+<li><strong>2 ≤ Age ≤ 20</strong> → "BMI for children and tens …" (sic — "teens").</li>
+</ul>
+<div class="pitfall">The adult ranges are written "16 - 17", "17 - 18.5"…, so which class owns the value 17 exactly is not defined — state the usual lower-inclusive assumption.</div>`,
+        `<p class="y-chinh">🎯 Trang 3 là mô tả chức năng của BMI Calculator — mỗi gạch đầu dòng là một điều kiện test.</p>
+<p class="nhan">Luật cho các ô nhập</p>
+<ul>
+<li><strong>Age</strong> — bắt buộc, là số từ 2 đến 120.</li>
+<li><strong>Gender</strong> — bắt buộc, mặc định Male.</li>
+<li><strong>Height, Weight</strong> — bắt buộc, là số lớn hơn 0.</li>
+<li><strong>Clear</strong> — xoá các ô.</li>
+</ul>
+<p class="nhan">Nút Calculate làm gì</p>
+<ul>
+<li><strong>Age để trống</strong> → "Please provide an age between 2 and 120".</li>
+<li><strong>Age là số ngoài khoảng</strong> → "Input data for Age is out of range!".</li>
+<li><strong>Height và Weight</strong> — "kiểm tra tương tự"; thông báo của chúng không được ghi ra, một giả định bạn phải nêu.</li>
+<li><strong>Công thức</strong> — BMI = Weight × 10.000 / (Height × Height).</li>
+<li><strong>20 &lt; Age ≤ 120</strong> → "BMI for adults = &lt;BMI&gt; kg/m² &lt;Classification&gt;", theo tám nhóm từ Severe Thinness (&lt; 16) đến Obese Class III (&gt; 40).</li>
+<li><strong>2 ≤ Age ≤ 20</strong> → "BMI for children and tens …" (đề viết nhầm "tens" thay cho "teens").</li>
+</ul>
+<div class="pitfall">Các khoảng người lớn viết "16 - 17", "17 - 18.5"…, nên giá trị đúng 17 thuộc nhóm nào là không xác định — hãy nêu giả định thông dụng: tính từ cận dưới.</div>`],
       [4, 'Children & teens table and the CDC BMI-for-age percentile charts',
-        `<p>The children's classification is by percentile, not by BMI: Underweight &lt; 5%, Healthy weight 5%–85%, At risk of overweight 85%–95%, Overweight &gt; 95%. The percentile comes from the two CDC charts "Body mass index-for-age percentiles: Boys / Girls, 2 to 20 years" (curves 5th…95th for boys, 3rd…97th for girls). So the same BMI means different things at different ages and genders — which is why a good test case for a child states age, gender <em>and</em> the chart values it relies on. Exact percentile borders cannot be read precisely from a printed chart; pick values well inside a band.</p>`,
-        `<p>Phân loại trẻ em theo bách phân vị, không theo BMI: Underweight &lt; 5%, Healthy weight 5%–85%, At risk of overweight 85%–95%, Overweight &gt; 95%. Bách phân vị lấy từ hai biểu đồ CDC "Body mass index-for-age percentiles: Boys / Girls, 2 to 20 years" (đường 5th…95th cho nam, 3rd…97th cho nữ). Vì vậy cùng một BMI mang nghĩa khác nhau ở tuổi và giới tính khác nhau — đó là lý do một test case tốt cho trẻ em phải ghi tuổi, giới tính <em>và</em> các giá trị biểu đồ mà nó dựa vào. Không thể đọc chính xác đường biên bách phân vị từ biểu đồ in; hãy chọn giá trị nằm hẳn bên trong một nhóm.</p>`],
+        `<p class="y-chinh">🎯 Children are classified by <em>percentile</em>, not by BMI — so the same BMI means different things at different ages and genders.</p>
+<p class="nhan">The four classes</p>
+<ul>
+<li><strong>Underweight</strong> — &lt; 5%</li>
+<li><strong>Healthy weight</strong> — 5%–85%</li>
+<li><strong>At risk of overweight</strong> — 85%–95%</li>
+<li><strong>Overweight</strong> — &gt; 95%</li>
+</ul>
+<p class="nhan">Where the percentile comes from</p>
+<p>The two CDC charts "Body mass index-for-age percentiles: Boys / Girls, 2 to 20 years" (curves 5th…95th for boys, 3rd…97th for girls).</p>
+<p class="nhan">What it means for your test cases</p>
+<ul>
+<li><strong>State the basis</strong> — a good test case for a child states age, gender <em>and</em> the chart values it relies on.</li>
+<li><strong>Stay inside a band</strong> — exact percentile borders cannot be read precisely from a printed chart; pick values well inside a band.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Trẻ em được phân loại theo <em>bách phân vị</em>, không theo BMI — nên cùng một BMI mang nghĩa khác nhau ở tuổi và giới tính khác nhau.</p>
+<p class="nhan">Bốn nhóm</p>
+<ul>
+<li><strong>Underweight</strong> — &lt; 5%</li>
+<li><strong>Healthy weight</strong> — 5%–85%</li>
+<li><strong>At risk of overweight</strong> — 85%–95%</li>
+<li><strong>Overweight</strong> — &gt; 95%</li>
+</ul>
+<p class="nhan">Bách phân vị lấy từ đâu</p>
+<p>Hai biểu đồ CDC "Body mass index-for-age percentiles: Boys / Girls, 2 to 20 years" (đường 5th…95th cho nam, 3rd…97th cho nữ).</p>
+<p class="nhan">Hệ quả cho test case</p>
+<ul>
+<li><strong>Ghi rõ căn cứ</strong> — một test case tốt cho trẻ em phải ghi tuổi, giới tính <em>và</em> các giá trị biểu đồ mà nó dựa vào.</li>
+<li><strong>Chọn hẳn trong một nhóm</strong> — không thể đọc chính xác đường biên bách phân vị từ biểu đồ in; hãy chọn giá trị nằm hẳn bên trong một nhóm.</li>
+</ul>`],
     ]),
 
     /* ── Q1 ── */
     bi(`<h2>✅ Question 1 — code review of Fibonacci</h2>
-<p>Compile it first: javac stops with <b>7 errors</b> — line 8 (<code>Scanner(System.in)</code> without <code>new</code> is read as a call to a method named Scanner) and lines 11, 15, 17, 20, 22, 23 (all the same root cause: <code>int n1 = 0; n2 = 1;</code> declares only <code>n1</code>). Fix those two and it compiles — then the launcher refuses to start it because <code>main(String args)</code> is not the entry point. Fix that too and the logic bugs appear: for n = 5 it prints <code>0 1 -1 0</code> (four terms, one negative). Three separate faults cause that line: subtraction instead of addition, the wrong update order and the <code>n - 1</code> loop bound. One line = one issue in the template, so each gets its own row.</p>`,
+<h4>The task</h4>
+<p>Find at least 6 issues in the 27-line <code>Fibonacci</code> class, with the paper's own line numbers.</p>
+<h3>Step 1 — compile it first</h3>
+<p>javac stops with <strong>7 errors</strong>, from two root causes:</p>
+<ul>
+<li><strong>Line 8</strong> — <code>Scanner(System.in)</code> without <code>new</code> is read as a call to a method named Scanner.</li>
+<li><strong>Lines 11, 15, 17, 20, 22, 23</strong> — all the same root cause: <code>int n1 = 0; n2 = 1;</code> declares only <code>n1</code>.</li>
+</ul>
+<h3>Step 2 — run it</h3>
+<ul>
+<li><strong>Entry point</strong> — fix those two and it compiles, but the launcher refuses to start it because <code>main(String args)</code> is not the entry point.</li>
+<li><strong>Logic</strong> — fix that too and for n = 5 it prints <code>0 1 -1 0</code> (four terms, one negative).</li>
+</ul>
+<h3>Step 3 — separate the faults</h3>
+<p>Three separate faults cause that one output line:</p>
+<ol>
+<li>subtraction instead of addition;</li>
+<li>the wrong update order;</li>
+<li>the <code>n - 1</code> loop bound.</li>
+</ol>
+<p>One line = one issue in the template, so each gets its own row.</p>`,
       `<h2>✅ Câu 1 — review code Fibonacci</h2>
-<p>Biên dịch trước: javac dừng với <b>7 lỗi</b> — dòng 8 (<code>Scanner(System.in)</code> thiếu <code>new</code> nên bị hiểu là gọi một method tên Scanner) và các dòng 11, 15, 17, 20, 22, 23 (cùng một nguyên nhân: <code>int n1 = 0; n2 = 1;</code> chỉ khai báo <code>n1</code>). Sửa hai chỗ đó là biên dịch được — nhưng lúc chạy, JVM từ chối vì <code>main(String args)</code> không phải điểm vào chương trình. Sửa nốt thì lỗi logic lộ ra: với n = 5 chương trình in <code>0 1 -1 0</code> (bốn số hạng, có một số âm). Ba lỗi riêng biệt cùng gây ra dòng đó: dấu trừ thay cho dấu cộng, sai thứ tự cập nhật và cận vòng lặp <code>n - 1</code>. Mỗi lỗi một dòng trong template, nên mỗi lỗi có dòng riêng.</p>`),
+<h4>Đề yêu cầu</h4>
+<p>Tìm ít nhất 6 lỗi trong class <code>Fibonacci</code> 27 dòng, ghi đúng số dòng của đề.</p>
+<h3>Bước 1 — biên dịch trước</h3>
+<p>javac dừng với <strong>7 lỗi</strong>, từ hai nguyên nhân gốc:</p>
+<ul>
+<li><strong>Dòng 8</strong> — <code>Scanner(System.in)</code> thiếu <code>new</code> nên bị hiểu là gọi một method tên Scanner.</li>
+<li><strong>Các dòng 11, 15, 17, 20, 22, 23</strong> — cùng một nguyên nhân: <code>int n1 = 0; n2 = 1;</code> chỉ khai báo <code>n1</code>.</li>
+</ul>
+<h3>Bước 2 — chạy thử</h3>
+<ul>
+<li><strong>Điểm vào</strong> — sửa hai chỗ đó là biên dịch được, nhưng lúc chạy JVM từ chối vì <code>main(String args)</code> không phải điểm vào chương trình.</li>
+<li><strong>Logic</strong> — sửa nốt thì với n = 5 chương trình in <code>0 1 -1 0</code> (bốn số hạng, có một số âm).</li>
+</ul>
+<h3>Bước 3 — tách từng lỗi</h3>
+<p>Ba lỗi riêng biệt cùng gây ra dòng output đó:</p>
+<ol>
+<li>dấu trừ thay cho dấu cộng;</li>
+<li>sai thứ tự cập nhật;</li>
+<li>cận vòng lặp <code>n - 1</code>.</li>
+</ol>
+<p>Mỗi lỗi một dòng trong template, nên mỗi lỗi có dòng riêng.</p>`),
     sheet('Answer sheet — Q1 template · Bài làm mẫu cho sheet Q1', tbl(['Issue No', 'Description', 'Line'], [
       ['1', '[Compile error] <code>Scanner(System.in)</code> is missing the keyword <code>new</code> → "cannot find symbol: method Scanner". Fix: <code>new Scanner(System.in)</code>.', '8'],
       ['2', '[Compile error] <code>int n1 = 0; n2 = 1;</code> declares only n1; n2 is undeclared → "cannot find symbol" at lines 11, 15, 17, 20, 22, 23. Fix: <code>int n1 = 0, n2 = 1;</code>', '11'],
@@ -930,12 +1388,45 @@ n=abc -> Please enter a whole number.`),
 
     /* ── Q2 ── */
     bi(`<h2>✅ Question 2 — the income-tax flowchart</h2>
-<h3>Control-flow graph and V(G)</h3>
-<p>Decisions in flowchart order: <b>D1</b> sal &lt; 0 · <b>D2</b> te &lt; 0 · <b>D3</b> nod &lt; 0 · <b>D4</b> ti &gt; 0 · <b>D5</b> ti &gt; 5,000,000 · <b>D6</b> ti &gt; 10,000,000 · <b>D7</b> ti &gt; 20,000,000 · <b>D8</b> ti &gt; 40,000,000 · <b>D9</b> ti &gt; 80,000,000. Counting the graph: 1 start + 9 decisions + 1 assignment (ti) + 8 return boxes + 1 exit = <b>N = 20</b> nodes; edges = 1 (start) + 9 × 2 (decisions) + 1 (ti → D4) + 8 (returns → exit) = <b>E = 28</b>. <b>V(G) = 28 − 20 + 2 = 10</b> = 9 decisions + 1.</p>
-<h3>Why the minimum is exactly 10</h3>
-<p>Every test ends in exactly one return, and no return box is reached by two different decision outcomes except Return −1. The True outcomes of D1, D2 and D3 each end the method immediately, so no test can make two of them true: <b>3 tests</b>. D4 False (→ 0): <b>1</b>. The False outcomes of D5, D6, D7, D8 and D9 end at five different returns: <b>5</b>. D9 True (→ 30%): <b>1</b>. Total <b>10</b>. A branch probe confirmed <b>18/18</b> decision outcomes with UTCID01–10 — and dropping <em>any</em> one of them leaves 17/18. Compare with <b>statement coverage alone</b>: 8 tests suffice (one per return box; the three −1 exits share one box), which is exactly the trap: 8 tests give 100% statements but only 16/18 decision outcomes.</p>
-<h3>Choosing the data</h3>
-<p>Work backwards from ti. With te = 0 and nod = 0, <b>ti = sal − 9,000,000</b>, so pick sal = 9,000,000 + a ti in the middle of each bracket: 3M, 8M, 15M, 30M, 60M, 100M. ti = 0 exactly (sal = 9,000,000) is used for the "Return 0" branch because it is also the boundary of D4.</p>
+<h4>The task</h4>
+<p>Design the <strong>minimum</strong> unit test cases for 100% statement and 100% decision coverage of <code>float fncPersonalIncomeTax(float sal, float te, int nod)</code>, given only as a flowchart.</p>
+<h3>Step 1 — control-flow graph and V(G)</h3>
+<p>Decisions in flowchart order:</p>
+<ol class="hai-cot">
+<li><strong>D1</strong> sal &lt; 0</li>
+<li><strong>D2</strong> te &lt; 0</li>
+<li><strong>D3</strong> nod &lt; 0</li>
+<li><strong>D4</strong> ti &gt; 0</li>
+<li><strong>D5</strong> ti &gt; 5,000,000</li>
+<li><strong>D6</strong> ti &gt; 10,000,000</li>
+<li><strong>D7</strong> ti &gt; 20,000,000</li>
+<li><strong>D8</strong> ti &gt; 40,000,000</li>
+<li><strong>D9</strong> ti &gt; 80,000,000</li>
+</ol>
+<ul>
+<li><strong>Nodes</strong> — 1 start + 9 decisions + 1 assignment (ti) + 8 return boxes + 1 exit = <strong>N = 20</strong>.</li>
+<li><strong>Edges</strong> — 1 (start) + 9 × 2 (decisions) + 1 (ti → D4) + 8 (returns → exit) = <strong>E = 28</strong>.</li>
+<li><strong>V(G)</strong> = 28 − 20 + 2 = <strong>10</strong> = 9 decisions + 1.</li>
+</ul>
+<h3>Step 2 — why the minimum is exactly 10</h3>
+<p>Every test ends in exactly one return, and no return box is reached by two different decision outcomes except Return −1. Count the tests each group of outcomes forces:</p>
+<ol>
+<li><strong>D1, D2, D3 True → 3 tests</strong> — each ends the method immediately, so no test can make two of them true.</li>
+<li><strong>D4 False (→ 0) → 1 test.</strong></li>
+<li><strong>D5–D9 False → 5 tests</strong> — they end at five different returns.</li>
+<li><strong>D9 True (→ 30%) → 1 test.</strong></li>
+</ol>
+<ul>
+<li><strong>Total = 10.</strong> A branch probe confirmed <strong>18/18</strong> decision outcomes with UTCID01–10 — and dropping <em>any</em> one of them leaves 17/18.</li>
+<li><strong>The trap — statement coverage alone</strong>: 8 tests suffice (one per return box; the three −1 exits share one box). 8 tests give 100% statements but only 16/18 decision outcomes.</li>
+</ul>
+<h3>Step 3 — choose the data</h3>
+<ul>
+<li><strong>Work backwards from ti</strong> — with te = 0 and nod = 0, <strong>ti = sal − 9,000,000</strong>.</li>
+<li><strong>One ti per bracket</strong> — pick sal = 9,000,000 + a ti in the middle of each bracket: 3M, 8M, 15M, 30M, 60M, 100M.</li>
+<li><strong>ti = 0 exactly</strong> (sal = 9,000,000) — used for the "Return 0" branch because it is also the boundary of D4.</li>
+</ul>
+<h4>Result — the 10 test cases</h4>
 <table>
 <thead><tr><th>UTCID</th><th>sal / te / nod</th><th>ti</th><th>Expected (by hand)</th></tr></thead>
 <tbody>
@@ -952,12 +1443,45 @@ n=abc -> Please enter a whole number.`),
 </tbody>
 </table>`,
       `<h2>✅ Câu 2 — lưu đồ thuế thu nhập</h2>
-<h3>Đồ thị luồng điều khiển và V(G)</h3>
-<p>Các quyết định theo thứ tự lưu đồ: <b>D1</b> sal &lt; 0 · <b>D2</b> te &lt; 0 · <b>D3</b> nod &lt; 0 · <b>D4</b> ti &gt; 0 · <b>D5</b> ti &gt; 5.000.000 · <b>D6</b> ti &gt; 10.000.000 · <b>D7</b> ti &gt; 20.000.000 · <b>D8</b> ti &gt; 40.000.000 · <b>D9</b> ti &gt; 80.000.000. Đếm đồ thị: 1 nút bắt đầu + 9 quyết định + 1 phép gán (ti) + 8 ô return + 1 nút thoát = <b>N = 20</b> nút; cạnh = 1 (bắt đầu) + 9 × 2 (quyết định) + 1 (ti → D4) + 8 (return → thoát) = <b>E = 28</b>. <b>V(G) = 28 − 20 + 2 = 10</b> = 9 quyết định + 1.</p>
-<h3>Vì sao tối thiểu đúng bằng 10</h3>
-<p>Mỗi test kết thúc ở đúng một return, và không ô return nào được hai kết cục khác nhau dẫn tới, trừ Return −1. Kết cục True của D1, D2, D3 đều kết thúc hàm ngay, nên không test nào làm được hai trong ba cùng đúng: <b>3 test</b>. D4 False (→ 0): <b>1</b>. Kết cục False của D5, D6, D7, D8, D9 dừng ở năm return khác nhau: <b>5</b>. D9 True (→ 30%): <b>1</b>. Tổng <b>10</b>. Một bộ đo nhánh xác nhận <b>18/18</b> kết cục với UTCID01–10 — và bỏ <em>bất kỳ</em> một ca nào thì chỉ còn 17/18. So với <b>riêng statement coverage</b>: 8 test là đủ (mỗi ô return một test; ba lối −1 dùng chung một ô), và đó chính là cái bẫy: 8 test cho 100% statement nhưng chỉ 16/18 kết cục quyết định.</p>
-<h3>Chọn dữ liệu</h3>
-<p>Tính ngược từ ti. Với te = 0 và nod = 0 thì <b>ti = sal − 9.000.000</b>, nên chọn sal = 9.000.000 + một giá trị ti ở giữa mỗi bậc: 3 triệu, 8 triệu, 15 triệu, 30 triệu, 60 triệu, 100 triệu. ti = 0 đúng (sal = 9.000.000) dùng cho nhánh "Return 0" vì nó cũng là biên của D4.</p>
+<h4>Đề yêu cầu</h4>
+<p>Thiết kế bộ unit test <strong>tối thiểu</strong> đạt 100% statement và 100% decision coverage cho <code>float fncPersonalIncomeTax(float sal, float te, int nod)</code>, vốn chỉ được cho dưới dạng lưu đồ.</p>
+<h3>Bước 1 — đồ thị luồng điều khiển và V(G)</h3>
+<p>Các quyết định theo thứ tự lưu đồ:</p>
+<ol class="hai-cot">
+<li><strong>D1</strong> sal &lt; 0</li>
+<li><strong>D2</strong> te &lt; 0</li>
+<li><strong>D3</strong> nod &lt; 0</li>
+<li><strong>D4</strong> ti &gt; 0</li>
+<li><strong>D5</strong> ti &gt; 5.000.000</li>
+<li><strong>D6</strong> ti &gt; 10.000.000</li>
+<li><strong>D7</strong> ti &gt; 20.000.000</li>
+<li><strong>D8</strong> ti &gt; 40.000.000</li>
+<li><strong>D9</strong> ti &gt; 80.000.000</li>
+</ol>
+<ul>
+<li><strong>Số nút</strong> — 1 nút bắt đầu + 9 quyết định + 1 phép gán (ti) + 8 ô return + 1 nút thoát = <strong>N = 20</strong>.</li>
+<li><strong>Số cạnh</strong> — 1 (bắt đầu) + 9 × 2 (quyết định) + 1 (ti → D4) + 8 (return → thoát) = <strong>E = 28</strong>.</li>
+<li><strong>V(G)</strong> = 28 − 20 + 2 = <strong>10</strong> = 9 quyết định + 1.</li>
+</ul>
+<h3>Bước 2 — vì sao tối thiểu đúng bằng 10</h3>
+<p>Mỗi test kết thúc ở đúng một return, và không ô return nào được hai kết cục khác nhau dẫn tới, trừ Return −1. Đếm số test mà từng nhóm kết cục buộc phải có:</p>
+<ol>
+<li><strong>D1, D2, D3 True → 3 test</strong> — mỗi kết cục đều kết thúc hàm ngay, nên không test nào làm được hai trong ba cùng đúng.</li>
+<li><strong>D4 False (→ 0) → 1 test.</strong></li>
+<li><strong>D5–D9 False → 5 test</strong> — dừng ở năm return khác nhau.</li>
+<li><strong>D9 True (→ 30%) → 1 test.</strong></li>
+</ol>
+<ul>
+<li><strong>Tổng = 10.</strong> Một bộ đo nhánh xác nhận <strong>18/18</strong> kết cục với UTCID01–10 — và bỏ <em>bất kỳ</em> một ca nào thì chỉ còn 17/18.</li>
+<li><strong>Cái bẫy — riêng statement coverage</strong>: 8 test là đủ (mỗi ô return một test; ba lối −1 dùng chung một ô). 8 test cho 100% statement nhưng chỉ 16/18 kết cục quyết định.</li>
+</ul>
+<h3>Bước 3 — chọn dữ liệu</h3>
+<ul>
+<li><strong>Tính ngược từ ti</strong> — với te = 0 và nod = 0 thì <strong>ti = sal − 9.000.000</strong>.</li>
+<li><strong>Mỗi bậc một ti</strong> — chọn sal = 9.000.000 + một giá trị ti ở giữa mỗi bậc: 3 triệu, 8 triệu, 15 triệu, 30 triệu, 60 triệu, 100 triệu.</li>
+<li><strong>ti = 0 đúng</strong> (sal = 9.000.000) — dùng cho nhánh "Return 0" vì nó cũng là biên của D4.</li>
+</ul>
+<h4>Kết quả — 10 test case</h4>
 <table>
 <thead><tr><th>UTCID</th><th>sal / te / nod</th><th>ti</th><th>Kết quả mong đợi (tính tay)</th></tr></thead>
 <tbody>
@@ -1026,16 +1550,72 @@ OK (10 tests)
 --- the first run used a tolerance of 1 and FAILED on UTCID10 ---
 java.lang.AssertionError: expected:<1.375E7> but was:<1.3750002E7>
 float : 1.3750002E7      double: 1.375E7      0.30f is really 0.300000011920928955078125`),
-    bi(`<p><b>What the float failure teaches.</b> The flowchart's signature uses <code>float</code>. <code>0.30f</code> cannot be stored exactly (it is 0.300000011920928955078125), and at 100,000,000 the error becomes 2 VND: the method returns 13,750,002 instead of 13,750,000. Two consequences for the exam: (1) compare floating-point results with a tolerance (<code>assertEquals(expected, actual, delta)</code>), and (2) it is a legitimate remark to add — money should be <code>long</code> (whole VND) or <code>BigDecimal</code>, never <code>float</code>.</p>`,
-      `<p><b>Bài học từ lần fail vì float.</b> Chữ ký trong lưu đồ dùng <code>float</code>. <code>0.30f</code> không lưu được chính xác (thực chất là 0,300000011920928955078125), và ở mức 100.000.000 sai số thành 2 đồng: hàm trả 13.750.002 thay vì 13.750.000. Hai hệ quả cho bài thi: (1) so sánh kết quả số thực phải có dung sai (<code>assertEquals(expected, actual, delta)</code>), và (2) đây là một nhận xét hợp lệ nên ghi thêm — tiền phải dùng <code>long</code> (đồng nguyên) hoặc <code>BigDecimal</code>, không bao giờ dùng <code>float</code>.</p>`),
+    bi(`<h4>What the float failure teaches</h4>
+<p>The flowchart's signature uses <code>float</code>. <code>0.30f</code> cannot be stored exactly (it is 0.300000011920928955078125), and at 100,000,000 the error becomes 2 VND: the method returns 13,750,002 instead of 13,750,000.</p>
+<p>Two consequences for the exam:</p>
+<ol>
+<li><strong>Compare with a tolerance</strong> — floating-point results need <code>assertEquals(expected, actual, delta)</code>.</li>
+<li><strong>A legitimate remark to add</strong> — money should be <code>long</code> (whole VND) or <code>BigDecimal</code>, never <code>float</code>.</li>
+</ol>`,
+      `<h4>Bài học từ lần fail vì float</h4>
+<p>Chữ ký trong lưu đồ dùng <code>float</code>. <code>0.30f</code> không lưu được chính xác (thực chất là 0,300000011920928955078125), và ở mức 100.000.000 sai số thành 2 đồng: hàm trả 13.750.002 thay vì 13.750.000.</p>
+<p>Hai hệ quả cho bài thi:</p>
+<ol>
+<li><strong>So sánh có dung sai</strong> — kết quả số thực phải dùng <code>assertEquals(expected, actual, delta)</code>.</li>
+<li><strong>Một nhận xét hợp lệ nên ghi thêm</strong> — tiền phải dùng <code>long</code> (đồng nguyên) hoặc <code>BigDecimal</code>, không bao giờ dùng <code>float</code>.</li>
+</ol>`),
 
     /* ── Q3 ── */
     bi(`<h2>✅ Question 3 — BMI Calculator</h2>
-<p><b>Assumptions (Notes line):</b> (A1) Age is a whole number of years. (A2) Height (cm) and Weight (kg) accept numbers with up to two decimals, so the smallest value &gt; 0 is 0.01; the BMI is shown with two decimals. (A3) "Similar validation" for Height/Weight means: blank → "Please provide a height (weight) greater than 0", number ≤ 0 → "Input data for Height (Weight) is out of range!". (A4) Non-numeric text is rejected like a blank field. (A5) Adult classes are lower-inclusive (16.00 is Moderate Thinness, 18.50 Normal, 25.00 Overweight, 30.00 Obese I, 35.00 Obese II, 40.00 Obese III). (A6) Children's classes are read from the CDC chart for the given age and gender; test values are chosen well inside a band. (A7) Clear empties Age, Height and Weight and resets Gender to Male.</p>
-<p><b>Test-data trick.</b> With Height = 200 cm the formula becomes BMI = Weight × 10,000 / 40,000 = <b>Weight / 4</b>, so every adult border is one division away: 64 → 16.00, 63.96 → 15.99, 74 → 18.50, 119.96 → 29.99, 160 → 40.00 (all computed by script). Age has <em>two</em> kinds of boundaries: the validity range 2/120 (with 1/121 invalid) and the switch between the two tables, 20/21 — both matter, because a wrong <code>&lt;</code> vs <code>≤</code> at 20 would send a 20-year-old to the adult table.</p>`,
+<h4>The task</h4>
+<p>Black-box test cases for the BMI Calculator in the Q3 template: table 3.1 (EP/BVA with tags), table 3.2 (10 cases with data and tags), table 3.3 (the same cases with preconditions and steps).</p>
+<h4>Assumptions — Notes line</h4>
+<ol>
+<li><strong>A1</strong> — Age is a whole number of years.</li>
+<li><strong>A2</strong> — Height (cm) and Weight (kg) accept numbers with up to two decimals, so the smallest value &gt; 0 is 0.01; the BMI is shown with two decimals.</li>
+<li><strong>A3</strong> — "Similar validation" for Height/Weight means: blank → "Please provide a height (weight) greater than 0"; number ≤ 0 → "Input data for Height (Weight) is out of range!".</li>
+<li><strong>A4</strong> — Non-numeric text is rejected like a blank field.</li>
+<li><strong>A5</strong> — Adult classes are lower-inclusive: 16.00 is Moderate Thinness, 18.50 Normal, 25.00 Overweight, 30.00 Obese I, 35.00 Obese II, 40.00 Obese III.</li>
+<li><strong>A6</strong> — Children's classes are read from the CDC chart for the given age and gender; test values are chosen well inside a band.</li>
+<li><strong>A7</strong> — Clear empties Age, Height and Weight and resets Gender to Male.</li>
+</ol>
+<h3>Step 1 — the test-data trick</h3>
+<p>With Height = 200 cm the formula becomes BMI = Weight × 10,000 / 40,000 = <strong>Weight / 4</strong>, so every adult border is one division away (all computed by script):</p>
+<ul>
+<li>64 → 16.00 · 63.96 → 15.99</li>
+<li>74 → 18.50 · 119.96 → 29.99</li>
+<li>160 → 40.00</li>
+</ul>
+<h3>Step 2 — two kinds of Age boundaries</h3>
+<ul>
+<li><strong>The validity range</strong> — 2 / 120, with 1 / 121 invalid.</li>
+<li><strong>The switch between the two tables</strong> — 20 / 21. It matters because a wrong <code>&lt;</code> vs <code>≤</code> at 20 would send a 20-year-old to the adult table.</li>
+</ul>`,
       `<h2>✅ Câu 3 — BMI Calculator</h2>
-<p><b>Giả định (dòng Notes):</b> (A1) Age là số năm nguyên. (A2) Height (cm) và Weight (kg) nhận số có tối đa hai chữ số thập phân, nên giá trị nhỏ nhất &gt; 0 là 0,01; BMI hiển thị hai chữ số thập phân. (A3) "Kiểm tra tương tự" cho Height/Weight nghĩa là: để trống → "Please provide a height (weight) greater than 0", số ≤ 0 → "Input data for Height (Weight) is out of range!". (A4) Nhập chữ bị từ chối như ô trống. (A5) Nhóm người lớn tính từ cận dưới (16,00 là Moderate Thinness, 18,50 Normal, 25,00 Overweight, 30,00 Obese I, 35,00 Obese II, 40,00 Obese III). (A6) Nhóm trẻ em đọc từ biểu đồ CDC theo tuổi và giới tính; giá trị test chọn nằm hẳn bên trong một nhóm. (A7) Clear xoá Age, Height, Weight và đưa Gender về Male.</p>
-<p><b>Mẹo chọn dữ liệu.</b> Với Height = 200 cm công thức thành BMI = Weight × 10.000 / 40.000 = <b>Weight / 4</b>, nên mọi biên của người lớn chỉ cách một phép chia: 64 → 16,00, 63,96 → 15,99, 74 → 18,50, 119,96 → 29,99, 160 → 40,00 (đều tính bằng script). Age có <em>hai</em> loại biên: khoảng hợp lệ 2/120 (với 1/121 không hợp lệ) và chỗ chuyển giữa hai bảng, 20/21 — cả hai đều quan trọng, vì nhầm <code>&lt;</code> với <code>≤</code> ở 20 sẽ đưa người 20 tuổi sang bảng người lớn.</p>`),
+<h4>Đề yêu cầu</h4>
+<p>Test case hộp đen cho BMI Calculator trên template Q3: bảng 3.1 (EP/BVA kèm tag), bảng 3.2 (10 ca có dữ liệu và tag), bảng 3.3 (cùng các ca đó kèm tiền điều kiện và các bước).</p>
+<h4>Giả định — dòng Notes</h4>
+<ol>
+<li><strong>A1</strong> — Age là số năm nguyên.</li>
+<li><strong>A2</strong> — Height (cm) và Weight (kg) nhận số có tối đa hai chữ số thập phân, nên giá trị nhỏ nhất &gt; 0 là 0,01; BMI hiển thị hai chữ số thập phân.</li>
+<li><strong>A3</strong> — "Kiểm tra tương tự" cho Height/Weight nghĩa là: để trống → "Please provide a height (weight) greater than 0"; số ≤ 0 → "Input data for Height (Weight) is out of range!".</li>
+<li><strong>A4</strong> — Nhập chữ bị từ chối như ô trống.</li>
+<li><strong>A5</strong> — Nhóm người lớn tính từ cận dưới: 16,00 là Moderate Thinness, 18,50 Normal, 25,00 Overweight, 30,00 Obese I, 35,00 Obese II, 40,00 Obese III.</li>
+<li><strong>A6</strong> — Nhóm trẻ em đọc từ biểu đồ CDC theo tuổi và giới tính; giá trị test chọn nằm hẳn bên trong một nhóm.</li>
+<li><strong>A7</strong> — Clear xoá Age, Height, Weight và đưa Gender về Male.</li>
+</ol>
+<h3>Bước 1 — mẹo chọn dữ liệu</h3>
+<p>Với Height = 200 cm công thức thành BMI = Weight × 10.000 / 40.000 = <strong>Weight / 4</strong>, nên mọi biên của người lớn chỉ cách một phép chia (đều tính bằng script):</p>
+<ul>
+<li>64 → 16,00 · 63,96 → 15,99</li>
+<li>74 → 18,50 · 119,96 → 29,99</li>
+<li>160 → 40,00</li>
+</ul>
+<h3>Bước 2 — hai loại biên của Age</h3>
+<ul>
+<li><strong>Khoảng hợp lệ</strong> — 2 / 120, với 1 / 121 không hợp lệ.</li>
+<li><strong>Chỗ chuyển giữa hai bảng</strong> — 20 / 21. Quan trọng vì nhầm <code>&lt;</code> với <code>≤</code> ở 20 sẽ đưa người 20 tuổi sang bảng người lớn.</li>
+</ul>`),
     sheet('Answer sheet — Table 3.1 Test Analysis · Bài làm mẫu bảng 3.1', BMI_T31.html),
     sheet('Answer sheet — Table 3.2 Test case design · Bài làm mẫu bảng 3.2', BMI_T32.table),
     BMI_T32.check,
@@ -1043,12 +1623,24 @@ float : 1.3750002E7      double: 1.375E7      0.30f is really 0.3000000119209289
     sheet('Answer sheet — Table 3.3 Test case (procedures) · Bài làm mẫu bảng 3.3', BMI_T33),
     bi(`<h3>Ví dụ có lời giải · Worked example — the 8-test answer that loses a point</h3>
 <p>A typical submission for Q2 has one test per return box: sal = −1 (→ −1), then 0, 5%, 10%, 15%, 20%, 25%, 30%. Eight tests, 100% statement coverage — but te &lt; 0 and nod &lt; 0 were never true. Decision coverage is 16/18 = 88.9%, and the paper asked for 100% of both. The two missing tests (te = −1 and nod = −1 with a valid salary) are the difference between full marks and 2 out of 3.</p>
-<div class="pitfall"><b>Do not let an earlier check hide a later one.</b> For UTCID02 (te = −1) the salary must be valid (≥ 0), otherwise D1 returns −1 first and D2 is never evaluated; likewise UTCID03 needs sal ≥ 0 and te ≥ 0. The same rule applies to invalid values in black-box cases: one invalid input per case.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>How the percentile charts are really computed.</b> The CDC charts are drawn from the <em>LMS method</em>: for every age (in months) and sex a table gives three numbers L, M, S, and a child's z-score is ((BMI/M)<sup>L</sup> − 1) / (L·S); the percentile is the normal distribution of that z. A production BMI calculator implements this table, which makes exact percentile boundaries testable — for example boys aged 10.0 years have M ≈ 16.6 and an 85th-percentile BMI ≈ 19.4. <em>Outside the syllabus because the paper only expects you to read the printed chart.</em></div>`,
+<div class="pitfall co-tieu-de"><strong>Do not let an earlier check hide a later one.</strong> For UTCID02 (te = −1) the salary must be valid (≥ 0), otherwise D1 returns −1 first and D2 is never evaluated; likewise UTCID03 needs sal ≥ 0 and te ≥ 0. The same rule applies to invalid values in black-box cases: one invalid input per case.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>How the percentile charts are really computed.</strong>
+<ul>
+<li><strong>The LMS method</strong> — the CDC charts are drawn from it: for every age (in months) and sex a table gives three numbers L, M, S.</li>
+<li><strong>z-score</strong> — a child's z is ((BMI/M)ᴸ − 1) / (L·S); the percentile is the normal distribution of that z.</li>
+<li><strong>Why testers care</strong> — a production BMI calculator implements this table, which makes exact percentile boundaries testable. For example, boys aged 10.0 years have M ≈ 16.6 and an 85th-percentile BMI ≈ 19.4.</li>
+</ul>
+<p><em>Outside the syllabus because the paper only expects you to read the printed chart.</em></p></div>`,
       `<h3>Ví dụ có lời giải · Bài 8 test bị mất một điểm</h3>
 <p>Một bài nộp điển hình cho Q2 có mỗi ô return một test: sal = −1 (→ −1), rồi 0, 5%, 10%, 15%, 20%, 25%, 30%. Tám test, 100% statement coverage — nhưng te &lt; 0 và nod &lt; 0 chưa từng đúng. Decision coverage chỉ 16/18 = 88,9%, trong khi đề đòi 100% cả hai. Hai test còn thiếu (te = −1 và nod = −1 với lương hợp lệ) chính là khác biệt giữa điểm tối đa và 2/3.</p>
-<div class="pitfall"><b>Đừng để phép kiểm phía trước che phép kiểm phía sau.</b> Ở UTCID02 (te = −1) lương phải hợp lệ (≥ 0), nếu không D1 trả −1 trước và D2 không bao giờ được xét; tương tự UTCID03 cần sal ≥ 0 và te ≥ 0. Quy tắc này cũng áp dụng cho giá trị không hợp lệ trong ca hộp đen: mỗi ca một đầu vào không hợp lệ.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Biểu đồ bách phân vị thực ra được tính thế nào.</b> Biểu đồ CDC được vẽ theo <em>phương pháp LMS</em>: với mỗi tháng tuổi và giới tính có một bảng cho ba số L, M, S, và z-score của trẻ là ((BMI/M)<sup>L</sup> − 1) / (L·S); bách phân vị là phân phối chuẩn của z đó. Một ứng dụng BMI thật cài đặt bảng này, nhờ vậy biên bách phân vị trở nên kiểm thử được chính xác — ví dụ bé trai 10,0 tuổi có M ≈ 16,6 và BMI ở bách phân vị 85 ≈ 19,4. <em>Ngoài giáo trình vì đề chỉ yêu cầu đọc biểu đồ in sẵn.</em></div>`),
+<div class="pitfall co-tieu-de"><strong>Đừng để phép kiểm phía trước che phép kiểm phía sau.</strong> Ở UTCID02 (te = −1) lương phải hợp lệ (≥ 0), nếu không D1 trả −1 trước và D2 không bao giờ được xét; tương tự UTCID03 cần sal ≥ 0 và te ≥ 0. Quy tắc này cũng áp dụng cho giá trị không hợp lệ trong ca hộp đen: mỗi ca một đầu vào không hợp lệ.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Biểu đồ bách phân vị thực ra được tính thế nào.</strong>
+<ul>
+<li><strong>Phương pháp LMS</strong> — biểu đồ CDC được vẽ theo nó: với mỗi tháng tuổi và giới tính có một bảng cho ba số L, M, S.</li>
+<li><strong>z-score</strong> — z của trẻ là ((BMI/M)ᴸ − 1) / (L·S); bách phân vị là phân phối chuẩn của z đó.</li>
+<li><strong>Vì sao tester quan tâm</strong> — một ứng dụng BMI thật cài đặt bảng này, nhờ vậy biên bách phân vị trở nên kiểm thử được chính xác. Ví dụ bé trai 10,0 tuổi có M ≈ 16,6 và BMI ở bách phân vị 85 ≈ 19,4.</li>
+</ul>
+<p><em>Ngoài giáo trình vì đề chỉ yêu cầu đọc biểu đồ in sẵn.</em></p></div>`),
     books([
       ['fst4', 'Ch.4 §3 "White-box test techniques" — statement and decision coverage, book p.132–139 (PDF p.146–153), Fig. 4.4 control flow p.139; Ch.4 §2.1–2.2 EP and BVA p.113–118', 'Chương 4 §3 "White-box test techniques" — statement và decision coverage, trang sách 132–139 (PDF 146–153), Hình 4.4 luồng điều khiển tr.139; Chương 4 §2.1–2.2 EP và BVA tr.113–118'],
       ['sp5', '§5.2.2 Decision testing and coverage (PDF p.218), §5.1.2 BVA (PDF p.176)', '§5.2.2 Decision testing và độ phủ (PDF tr.218), §5.1.2 BVA (PDF tr.176)'],
@@ -1121,8 +1713,15 @@ const L3 = {
   content: [
     bi(`<span class="eyebrow">Practical Exam · Lesson PE-3 · PE paper 2 (PE2.jpg) pages 1–6</span>
 <h2>FALL24 — a different shape: 3 + 5 + 2, a Word file, and JUnit</h2>
-<p class="lead">The FALL24 paper breaks the classic pattern: 85 minutes, IDEs <em>allowed</em>, one Word document instead of the Excel template, a defect-report format for Q1, a 5-point JUnit question and a 2-point use-case question. In the Exam room it is <b>SWT301-PE11</b> ("Practical Exam Đề 11 (FA 2024 - PE1)"). Because an IDE is allowed, the expectation rises: your tests must compile and your expected values must be right.</p>
-<div class="callout"><b>Learning objectives.</b> LO-3.2.4 apply a review technique (K3) · LO-5.6.1 write a defect report (K3) · LO-4.2.1 / 4.2.2 EP and BVA (K3) · LO-4.3.2 decision coverage (K2) · LO-4.2.5 use-case testing (K2).</div>
+<p class="lead">The FALL24 paper breaks the classic pattern: 85 minutes, IDEs <em>allowed</em>, one Word document instead of the Excel template, a defect-report format for Q1, a 5-point JUnit question and a 2-point use-case question. In the Exam room it is <strong>SWT301-PE11</strong> ("Practical Exam Đề 11 (FA 2024 - PE1)"). Because an IDE is allowed, the expectation rises: your tests must compile and your expected values must be right.</p>
+<div class="callout"><strong>Learning objectives.</strong>
+<ul>
+<li><strong>LO-3.2.4</strong> — apply a review technique (K3).</li>
+<li><strong>LO-5.6.1</strong> — write a defect report (K3).</li>
+<li><strong>LO-4.2.1 / 4.2.2</strong> — EP and BVA (K3).</li>
+<li><strong>LO-4.3.2</strong> — decision coverage (K2).</li>
+<li><strong>LO-4.2.5</strong> — use-case testing (K2).</li>
+</ul></div>
 <table>
 <thead><tr><th>Q</th><th>Points</th><th>Task</th><th>Budget</th></tr></thead>
 <tbody>
@@ -1133,8 +1732,15 @@ const L3 = {
 </table>`,
       `<span class="eyebrow">Thi thực hành · Bài PE-3 · PE paper 2 (PE2.jpg) trang 1–6</span>
 <h2>FALL24 — một dạng khác: 3 + 5 + 2, file Word, và JUnit</h2>
-<p class="lead">Đề FALL24 phá khuôn cũ: 85 phút, <em>được</em> dùng IDE, nộp một file Word thay cho template Excel, Q1 theo mẫu báo cáo defect, một câu JUnit 5 điểm và một câu use case 2 điểm. Trong Phòng thi nó là <b>SWT301-PE11</b> ("Đề thi thực hành số 11 (FA 2024 - PE1)"). Vì được dùng IDE nên yêu cầu cao hơn: test của bạn phải biên dịch được và giá trị mong đợi phải đúng.</p>
-<div class="callout"><b>Chuẩn đầu ra.</b> LO-3.2.4 áp dụng kỹ thuật review (K3) · LO-5.6.1 viết báo cáo defect (K3) · LO-4.2.1 / 4.2.2 EP và BVA (K3) · LO-4.3.2 decision coverage (K2) · LO-4.2.5 kiểm thử theo use case (K2).</div>
+<p class="lead">Đề FALL24 phá khuôn cũ: 85 phút, <em>được</em> dùng IDE, nộp một file Word thay cho template Excel, Q1 theo mẫu báo cáo defect, một câu JUnit 5 điểm và một câu use case 2 điểm. Trong Phòng thi nó là <strong>SWT301-PE11</strong> ("Đề thi thực hành số 11 (FA 2024 - PE1)"). Vì được dùng IDE nên yêu cầu cao hơn: test của bạn phải biên dịch được và giá trị mong đợi phải đúng.</p>
+<div class="callout"><strong>Chuẩn đầu ra.</strong>
+<ul>
+<li><strong>LO-3.2.4</strong> — áp dụng kỹ thuật review (K3).</li>
+<li><strong>LO-5.6.1</strong> — viết báo cáo defect (K3).</li>
+<li><strong>LO-4.2.1 / 4.2.2</strong> — EP và BVA (K3).</li>
+<li><strong>LO-4.3.2</strong> — decision coverage (K2).</li>
+<li><strong>LO-4.2.5</strong> — kiểm thử theo use case (K2).</li>
+</ul></div>
 <table>
 <thead><tr><th>Câu</th><th>Điểm</th><th>Yêu cầu</th><th>Thời gian</th></tr></thead>
 <tbody>
@@ -1146,30 +1752,224 @@ const L3 = {
     bi(`<h2>📄 The paper page by page</h2>`, `<h2>📄 Đề thi từng trang</h2>`),
     pages('pe2', [
       [1, 'Title, instructions and the Q1 defect-report template',
-        `<p>"SWT301 FALL24 - The final PE · Duration: 85 minutes". The instructions differ from older papers: students <b>may</b> use IDEs like NetBeans or IntelliJ, and must submit <b>a single Word document</b>. Question 1 (3 points) says the class "contains six defects related to code standards, logic, and best practices" and fixes the answer format: <b>Defect ID</b> (DF001, DF002…), <b>Defect Name</b> ("Naming Convention Error"), <b>Line Number</b>, <b>Defect Description</b> (one sentence) and <b>Fixing Solution</b> (the code change). That is a small defect report (lesson 5.6) — use exactly these five fields.</p>`,
-        `<p>"SWT301 FALL24 - The final PE · Duration: 85 minutes". Hướng dẫn khác các đề cũ: sinh viên <b>được</b> dùng IDE như NetBeans hay IntelliJ, và phải nộp <b>một file Word duy nhất</b>. Câu 1 (3 điểm) nói class "có sáu defect liên quan tới chuẩn code, logic và thực hành tốt" và quy định luôn hình thức trả lời: <b>Defect ID</b> (DF001, DF002…), <b>Defect Name</b> ("Naming Convention Error"), <b>Line Number</b>, <b>Defect Description</b> (một câu) và <b>Fixing Solution</b> (thay đổi code). Đó là một báo cáo defect thu nhỏ (bài 5.6) — dùng đúng năm trường này.</p>`],
+        `<p class="y-chinh">🎯 FALL24 changes the rules: an IDE is allowed, you submit one Word file, and Q1 is a small defect report with five fixed fields.</p>
+<p class="nhan">Instructions — "SWT301 FALL24 - The final PE · Duration: 85 minutes"</p>
+<ul>
+<li><strong>Tools</strong> — students <strong>may</strong> use IDEs like NetBeans or IntelliJ.</li>
+<li><strong>Submission</strong> — <strong>a single Word document</strong>.</li>
+</ul>
+<p class="nhan">Question 1 (3 points) — the answer format</p>
+<p>The class "contains six defects related to code standards, logic, and best practices". Each defect gets:</p>
+<ol>
+<li><strong>Defect ID</strong> — DF001, DF002…</li>
+<li><strong>Defect Name</strong> — e.g. "Naming Convention Error"</li>
+<li><strong>Line Number</strong></li>
+<li><strong>Defect Description</strong> — one sentence</li>
+<li><strong>Fixing Solution</strong> — the code change</li>
+</ol>
+<p>That is a small defect report (lesson 5.6) — use exactly these five fields.</p>`,
+        `<p class="y-chinh">🎯 FALL24 đổi luật: được dùng IDE, nộp một file Word, và Q1 là một báo cáo defect thu nhỏ với năm trường cố định.</p>
+<p class="nhan">Hướng dẫn — "SWT301 FALL24 - The final PE · Duration: 85 minutes"</p>
+<ul>
+<li><strong>Công cụ</strong> — sinh viên <strong>được</strong> dùng IDE như NetBeans hay IntelliJ.</li>
+<li><strong>Bài nộp</strong> — <strong>một file Word duy nhất</strong>.</li>
+</ul>
+<p class="nhan">Câu 1 (3 điểm) — hình thức trả lời</p>
+<p>Class "có sáu defect liên quan tới chuẩn code, logic và thực hành tốt". Mỗi defect gồm:</p>
+<ol>
+<li><strong>Defect ID</strong> — DF001, DF002…</li>
+<li><strong>Defect Name</strong> — ví dụ "Naming Convention Error"</li>
+<li><strong>Line Number</strong></li>
+<li><strong>Defect Description</strong> — một câu</li>
+<li><strong>Fixing Solution</strong> — thay đổi code</li>
+</ol>
+<p>Đó là một báo cáo defect thu nhỏ (bài 5.6) — dùng đúng năm trường này.</p>`],
       [2, 'The fileProcessor class (lines 1–35) and the start of Question 2',
-        `<p>The class has a <code>BufferedReader reader</code> field, a <code>String FilePath</code> field, and three methods: <code>openFile(String)</code> (lines 4–13), <code>readFile()</code> (14–25) and <code>processFile()</code> (26–34). There are no import lines at all. Question 2 (5 points) introduces <code>OrderCalculator</code>: "apply equivalence partitioning and boundary value analysis for the input parameters. Additionally, ensure that your test cases cover all branches of the code to achieve 100% code coverage."</p>`,
-        `<p>Class có trường <code>BufferedReader reader</code>, trường <code>String FilePath</code>, và ba method: <code>openFile(String)</code> (dòng 4–13), <code>readFile()</code> (14–25) và <code>processFile()</code> (26–34). Không có dòng import nào. Câu 2 (5 điểm) giới thiệu <code>OrderCalculator</code>: "áp dụng phân vùng tương đương và phân tích giá trị biên cho các tham số đầu vào. Ngoài ra, bảo đảm test case phủ mọi nhánh của code để đạt 100% code coverage."</p>`],
+        `<p class="y-chinh">🎯 Page 2 = the <code>fileProcessor</code> class to review (lines 1–35) and the start of Question 2 (5 points).</p>
+<p class="nhan">The class</p>
+<ul>
+<li><strong>Fields</strong> — <code>BufferedReader reader</code> and <code>String FilePath</code>.</li>
+<li><strong>Methods</strong> — <code>openFile(String)</code> (lines 4–13), <code>readFile()</code> (14–25), <code>processFile()</code> (26–34).</li>
+<li><strong>Imports</strong> — there are no import lines at all.</li>
+</ul>
+<p class="nhan">Question 2 introduces OrderCalculator</p>
+<p>"apply equivalence partitioning and boundary value analysis for the input parameters. Additionally, ensure that your test cases cover all branches of the code to achieve 100% code coverage."</p>`,
+        `<p class="y-chinh">🎯 Trang 2 = class <code>fileProcessor</code> cần review (dòng 1–35) và phần mở đầu Câu 2 (5 điểm).</p>
+<p class="nhan">Class</p>
+<ul>
+<li><strong>Trường</strong> — <code>BufferedReader reader</code> và <code>String FilePath</code>.</li>
+<li><strong>Method</strong> — <code>openFile(String)</code> (dòng 4–13), <code>readFile()</code> (14–25), <code>processFile()</code> (26–34).</li>
+<li><strong>Import</strong> — không có dòng import nào.</li>
+</ul>
+<p class="nhan">Câu 2 giới thiệu OrderCalculator</p>
+<p>"áp dụng phân vùng tương đương và phân tích giá trị biên cho các tham số đầu vào. Ngoài ra, bảo đảm test case phủ mọi nhánh của code để đạt 100% code coverage."</p>`],
       [3, 'OrderCalculator.calculateTotalPrice (lines 1–30) and the sample JUnit class',
-        `<p>The method (lines 3–29): throw if the array is null or empty; sum the prices, throwing if any price ≤ 0; discount 20% for VIP, else 5% if the type equals "Regular" ignoring case; +10% for code "SALE10", +5% for "WELCOME5"; <code>finalPrice = totalPrice × (1 − discount)</code>; return 0 if negative. The partial test class (lines 35–51) already contains <code>testNoItemsInOrder</code> (JUnit 4 style <code>@Test(expected = IllegalArgumentException.class)</code>) and <code>testVIPCustomerWithNoDiscountCode</code> ({100, 200}, VIP → 240.0 with delta 0.01), then "// Add more test case". You must also give a <b>one-line summary per test</b>: "ID: TC1; Test for ___; Input parameter: ___; Expected result: ___".</p>`,
-        `<p>Method (dòng 3–29): ném ngoại lệ nếu mảng null hoặc rỗng; cộng giá, ném ngoại lệ nếu có giá ≤ 0; giảm 20% cho VIP, ngược lại 5% nếu loại khách bằng "Regular" không phân biệt hoa thường; +10% với mã "SALE10", +5% với "WELCOME5"; <code>finalPrice = totalPrice × (1 − discount)</code>; trả 0 nếu âm. Lớp test dở dang (dòng 35–51) đã có <code>testNoItemsInOrder</code> (kiểu JUnit 4 <code>@Test(expected = IllegalArgumentException.class)</code>) và <code>testVIPCustomerWithNoDiscountCode</code> ({100, 200}, VIP → 240.0 với delta 0.01), rồi "// Add more test case". Bạn còn phải viết <b>một dòng tóm tắt cho mỗi test</b>: "ID: TC1; Test for ___; Input parameter: ___; Expected result: ___".</p>`],
+        `<p class="y-chinh">🎯 Page 3 = the method under test and a half-written JUnit class that you must complete.</p>
+<p class="nhan">What calculateTotalPrice does (lines 3–29)</p>
+<ol>
+<li>Throw if the array is null or empty.</li>
+<li>Sum the prices, throwing if any price ≤ 0.</li>
+<li>Discount 20% for VIP, else 5% if the type equals "Regular" ignoring case.</li>
+<li>+10% for code "SALE10", +5% for "WELCOME5".</li>
+<li><code>finalPrice = totalPrice × (1 − discount)</code>; return 0 if negative.</li>
+</ol>
+<p class="nhan">The partial test class (lines 35–51)</p>
+<ul>
+<li><strong><code>testNoItemsInOrder</code></strong> — JUnit 4 style <code>@Test(expected = IllegalArgumentException.class)</code>.</li>
+<li><strong><code>testVIPCustomerWithNoDiscountCode</code></strong> — {100, 200}, VIP → 240.0 with delta 0.01.</li>
+<li><strong>Then</strong> — "// Add more test case".</li>
+</ul>
+<p class="nhan">Also required</p>
+<p>A <strong>one-line summary per test</strong>: "ID: TC1; Test for ___; Input parameter: ___; Expected result: ___".</p>`,
+        `<p class="y-chinh">🎯 Trang 3 = method cần test và một lớp JUnit viết dở mà bạn phải hoàn thiện.</p>
+<p class="nhan">calculateTotalPrice làm gì (dòng 3–29)</p>
+<ol>
+<li>Ném ngoại lệ nếu mảng null hoặc rỗng.</li>
+<li>Cộng giá, ném ngoại lệ nếu có giá ≤ 0.</li>
+<li>Giảm 20% cho VIP, ngược lại 5% nếu loại khách bằng "Regular" không phân biệt hoa thường.</li>
+<li>+10% với mã "SALE10", +5% với "WELCOME5".</li>
+<li><code>finalPrice = totalPrice × (1 − discount)</code>; trả 0 nếu âm.</li>
+</ol>
+<p class="nhan">Lớp test dở dang (dòng 35–51)</p>
+<ul>
+<li><strong><code>testNoItemsInOrder</code></strong> — kiểu JUnit 4 <code>@Test(expected = IllegalArgumentException.class)</code>.</li>
+<li><strong><code>testVIPCustomerWithNoDiscountCode</code></strong> — {100, 200}, VIP → 240.0 với delta 0.01.</li>
+<li><strong>Sau đó</strong> — "// Add more test case".</li>
+</ul>
+<p class="nhan">Còn phải làm</p>
+<p><strong>Một dòng tóm tắt cho mỗi test</strong>: "ID: TC1; Test for ___; Input parameter: ___; Expected result: ___".</p>`],
       [4, 'End of the test-code example; Question 3 — use case "Place an Order"',
-        `<p>The example test code uses <code>assertThrows(IllegalArgumentException.class, () -&gt; numberProcessor.processNumbers(-1, 5, true))</code> — a leftover from <em>another</em> paper (there is no numberProcessor here). Copying it would put an irrelevant keyword in your answer. Question 3 (2 points): an online shopping system; precondition "logged in" and "cart has at least one item"; main success scenario of 8 steps (add items → optional discount code → system validates it → checkout → total with discounts → payment info → payment processed → confirmation); alternates <b>A1</b> empty cart at checkout, <b>A2</b> invalid code (error, continue without discount), <b>A3</b> payment fails (notify, retry); postconditions: confirmation with items and final total "including discounts and taxes", inventory updated. Products: A $50, B $30, C $20.</p>`,
-        `<p>Code ví dụ dùng <code>assertThrows(IllegalArgumentException.class, () -&gt; numberProcessor.processNumbers(-1, 5, true))</code> — sót lại từ một đề <em>khác</em> (ở đây không có numberProcessor). Chép nguyên nó là đưa một từ khoá lạc đề vào bài. Câu 3 (2 điểm): hệ thống mua hàng online; tiền điều kiện "đã đăng nhập" và "giỏ có ít nhất một món"; luồng thành công 8 bước (thêm hàng → mã giảm giá tuỳ chọn → hệ thống kiểm mã → checkout → tổng tiền đã trừ giảm giá → nhập thanh toán → xử lý thanh toán → xác nhận); luồng thay thế <b>A1</b> giỏ trống khi checkout, <b>A2</b> mã sai (báo lỗi, tiếp tục không giảm giá), <b>A3</b> thanh toán lỗi (thông báo, thử lại); hậu điều kiện: xác nhận đơn gồm danh sách hàng và tổng cuối "đã gồm giảm giá và thuế", cập nhật tồn kho. Sản phẩm: A $50, B $30, C $20.</p>`],
+        `<p class="y-chinh">🎯 Page 4 = a trap at the end of the sample test code, then Question 3 (2 points): the use case "Place an Order".</p>
+<div class="pitfall">The example test code uses <code>assertThrows(IllegalArgumentException.class, () -&gt; numberProcessor.processNumbers(-1, 5, true))</code> — a leftover from <em>another</em> paper (there is no numberProcessor here). Copying it would put an irrelevant keyword in your answer.</div>
+<p class="nhan">Q3 — the use case</p>
+<ul>
+<li><strong>System</strong> — an online shopping system; products A $50, B $30, C $20.</li>
+<li><strong>Preconditions</strong> — "logged in" and "cart has at least one item".</li>
+</ul>
+<p class="nhan">Main success scenario — 8 steps</p>
+<ol class="hai-cot">
+<li>Add items</li>
+<li>Optional discount code</li>
+<li>System validates it</li>
+<li>Checkout</li>
+<li>Total with discounts</li>
+<li>Payment info</li>
+<li>Payment processed</li>
+<li>Confirmation</li>
+</ol>
+<p class="nhan">Alternates and postconditions</p>
+<ul>
+<li><strong>A1</strong> — empty cart at checkout.</li>
+<li><strong>A2</strong> — invalid code: error, continue without discount.</li>
+<li><strong>A3</strong> — payment fails: notify, retry.</li>
+<li><strong>Postconditions</strong> — confirmation with items and final total "including discounts and taxes"; inventory updated.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Trang 4 = một cái bẫy ở cuối code test mẫu, rồi Câu 3 (2 điểm): use case "Place an Order".</p>
+<div class="pitfall">Code ví dụ dùng <code>assertThrows(IllegalArgumentException.class, () -&gt; numberProcessor.processNumbers(-1, 5, true))</code> — sót lại từ một đề <em>khác</em> (ở đây không có numberProcessor). Chép nguyên nó là đưa một từ khoá lạc đề vào bài.</div>
+<p class="nhan">Q3 — use case</p>
+<ul>
+<li><strong>Hệ thống</strong> — hệ thống mua hàng online; sản phẩm A $50, B $30, C $20.</li>
+<li><strong>Tiền điều kiện</strong> — "đã đăng nhập" và "giỏ có ít nhất một món".</li>
+</ul>
+<p class="nhan">Luồng thành công — 8 bước</p>
+<ol class="hai-cot">
+<li>Thêm hàng</li>
+<li>Mã giảm giá tuỳ chọn</li>
+<li>Hệ thống kiểm mã</li>
+<li>Checkout</li>
+<li>Tổng tiền đã trừ giảm giá</li>
+<li>Nhập thanh toán</li>
+<li>Xử lý thanh toán</li>
+<li>Xác nhận</li>
+</ol>
+<p class="nhan">Luồng thay thế và hậu điều kiện</p>
+<ul>
+<li><strong>A1</strong> — giỏ trống khi checkout.</li>
+<li><strong>A2</strong> — mã sai: báo lỗi, tiếp tục không giảm giá.</li>
+<li><strong>A3</strong> — thanh toán lỗi: thông báo, thử lại.</li>
+<li><strong>Hậu điều kiện</strong> — xác nhận đơn gồm danh sách hàng và tổng cuối "đã gồm giảm giá và thuế"; cập nhật tồn kho.</li>
+</ul>`],
       [5, 'Discount codes, payment methods, what to deliver, and the example TC001',
-        `<p>Valid codes: <b>SAVE10</b> 10% off, <b>WELCOME5</b> 5% off for new customers; payments by credit/debit card or PayPal; failures are insufficient funds or invalid card details. Deliver test cases covering normal flow, alternative flows and exception scenarios, each with ID, description, preconditions, test steps with test data, expected results and a Note NF / AL / EX. The example "TC001 Normal Flow – Successful Order with Standard Delivery" (a tea cup for $2, credit card) shows the level of detail expected. Watch the trap: the use case says <b>SAVE10</b>, while the Q2 code says <b>SALE10</b> — never mix them.</p>`,
-        `<p>Mã hợp lệ: <b>SAVE10</b> giảm 10%, <b>WELCOME5</b> giảm 5% cho khách mới; thanh toán bằng thẻ tín dụng/ghi nợ hoặc PayPal; lỗi thanh toán là không đủ tiền hoặc sai thông tin thẻ. Cần giao các test case phủ luồng chính, luồng thay thế và tình huống ngoại lệ, mỗi ca có ID, mô tả, tiền điều kiện, các bước kèm dữ liệu test, kết quả mong đợi và Note NF / AL / EX. Ví dụ "TC001 Normal Flow – Successful Order with Standard Delivery" (một cái cốc trà giá $2, thẻ tín dụng) cho thấy mức chi tiết mong muốn. Coi chừng bẫy: use case ghi <b>SAVE10</b>, còn code ở Q2 ghi <b>SALE10</b> — đừng bao giờ trộn lẫn.</p>`],
+        `<p class="y-chinh">🎯 Page 5 gives the data of the use case and exactly what each test case must contain.</p>
+<p class="nhan">The data</p>
+<ul>
+<li><strong>SAVE10</strong> — 10% off.</li>
+<li><strong>WELCOME5</strong> — 5% off for new customers.</li>
+<li><strong>Payments</strong> — credit/debit card or PayPal.</li>
+<li><strong>Failures</strong> — insufficient funds or invalid card details.</li>
+</ul>
+<p class="nhan">What to deliver</p>
+<ul>
+<li><strong>Coverage</strong> — normal flow, alternative flows and exception scenarios.</li>
+<li><strong>Each case</strong> — ID, description, preconditions, test steps with test data, expected results and a Note NF / AL / EX.</li>
+<li><strong>Level of detail</strong> — shown by the example "TC001 Normal Flow – Successful Order with Standard Delivery" (a tea cup for $2, credit card).</li>
+</ul>
+<div class="pitfall">The use case says <strong>SAVE10</strong>, while the Q2 code says <strong>SALE10</strong> — never mix them.</div>`,
+        `<p class="y-chinh">🎯 Trang 5 cho dữ liệu của use case và nói rõ mỗi test case phải có những gì.</p>
+<p class="nhan">Dữ liệu</p>
+<ul>
+<li><strong>SAVE10</strong> — giảm 10%.</li>
+<li><strong>WELCOME5</strong> — giảm 5% cho khách mới.</li>
+<li><strong>Thanh toán</strong> — thẻ tín dụng/ghi nợ hoặc PayPal.</li>
+<li><strong>Lỗi thanh toán</strong> — không đủ tiền hoặc sai thông tin thẻ.</li>
+</ul>
+<p class="nhan">Cần giao gì</p>
+<ul>
+<li><strong>Độ phủ</strong> — luồng chính, luồng thay thế và tình huống ngoại lệ.</li>
+<li><strong>Mỗi ca</strong> — ID, mô tả, tiền điều kiện, các bước kèm dữ liệu test, kết quả mong đợi và Note NF / AL / EX.</li>
+<li><strong>Mức chi tiết</strong> — xem ví dụ "TC001 Normal Flow – Successful Order with Standard Delivery" (một cái cốc trà giá $2, thẻ tín dụng).</li>
+</ul>
+<div class="pitfall">Use case ghi <strong>SAVE10</strong>, còn code ở Q2 ghi <strong>SALE10</strong> — đừng bao giờ trộn lẫn.</div>`],
       [6, 'Last page — the Note of the example and the assumptions line',
-        `<p>Only "Notes: Normal flow (NF)" (the end of the example) and the usual line "Please feel free to include any assumptions needed for your answers to be clearer and more accurate." Take it literally: the use case mentions taxes but gives no rate, and "new customer" is not defined — both need a written assumption.</p>`,
-        `<p>Chỉ còn "Notes: Normal flow (NF)" (phần cuối của ví dụ) và dòng quen thuộc "Cứ thoải mái nêu giả định cần thiết để câu trả lời rõ và chính xác hơn." Hãy làm đúng như vậy: use case nhắc tới thuế nhưng không cho thuế suất, và "khách mới" không được định nghĩa — cả hai cần một giả định viết ra.</p>`],
+        `<p class="y-chinh">🎯 The last page only closes the example and repeats the invitation to state assumptions — take it literally.</p>
+<ul>
+<li><strong>"Notes: Normal flow (NF)"</strong> — the end of the example.</li>
+<li><strong>The usual line</strong> — "Please feel free to include any assumptions needed for your answers to be clearer and more accurate."</li>
+<li><strong>Two gaps that need a written assumption</strong> — the use case mentions taxes but gives no rate, and "new customer" is not defined.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Trang cuối chỉ khép lại ví dụ và nhắc lời mời nêu giả định — hãy làm đúng như vậy.</p>
+<ul>
+<li><strong>"Notes: Normal flow (NF)"</strong> — phần cuối của ví dụ.</li>
+<li><strong>Dòng quen thuộc</strong> — "Cứ thoải mái nêu giả định cần thiết để câu trả lời rõ và chính xác hơn."</li>
+<li><strong>Hai chỗ trống cần giả định viết ra</strong> — use case nhắc tới thuế nhưng không cho thuế suất, và "khách mới" không được định nghĩa.</li>
+</ul>`],
     ]),
 
     /* ── Q1 ── */
     bi(`<h2>✅ Question 1 — defect report for fileProcessor</h2>
-<p>The paper promises six defects; nine are listed so that you have spare ones, and the six strongest come first. The two compile problems are proven by javac: without imports the class stops with 5 "cannot find symbol" errors (lines 2, 6 twice, 10, 20); with the imports added exactly one error is left, "unreported exception IOException; must be caught or declared to be thrown" for <code>reader.close()</code> at line 23. The runtime chain is the interesting part: <code>FilePath</code> is never assigned, so <code>processFile()</code> calls <code>openFile(null)</code>; <code>new FileReader(null)</code> throws <b>NullPointerException</b> — not IOException — so the catch at line 10 does not catch it and the null check at line 29 is never reached.</p>`,
+<h4>The task</h4>
+<p>Report six defects of <code>fileProcessor</code> (code standards, logic, best practices) in the paper's five fields: Defect ID, Defect Name, Line Number, Defect Description, Fixing Solution.</p>
+<h3>Step 1 — let javac prove the two compile problems</h3>
+<ul>
+<li><strong>Without imports</strong> — the class stops with 5 "cannot find symbol" errors (lines 2, 6 twice, 10, 20).</li>
+<li><strong>With the imports added</strong> — exactly one error is left: "unreported exception IOException; must be caught or declared to be thrown" for <code>reader.close()</code> at line 23.</li>
+</ul>
+<h3>Step 2 — follow the runtime chain</h3>
+<ol>
+<li><code>FilePath</code> is never assigned…</li>
+<li>…so <code>processFile()</code> calls <code>openFile(null)</code>;</li>
+<li><code>new FileReader(null)</code> throws <strong>NullPointerException</strong> — not IOException;</li>
+<li>so the catch at line 10 does not catch it, and the null check at line 29 is never reached.</li>
+</ol>
+<h4>Result</h4>
+<p>The paper promises six defects; nine are listed so that you have spare ones, and the six strongest come first.</p>`,
       `<h2>✅ Câu 1 — báo cáo defect cho fileProcessor</h2>
-<p>Đề hứa sáu defect; ở đây liệt kê chín để bạn có dự phòng, sáu cái mạnh nhất đứng đầu. Hai lỗi biên dịch được javac chứng minh: thiếu import thì class dừng với 5 lỗi "cannot find symbol" (dòng 2, dòng 6 hai lỗi, 10, 20); thêm import thì còn đúng một lỗi, "unreported exception IOException; must be caught or declared to be thrown" cho <code>reader.close()</code> ở dòng 23. Chuỗi lỗi lúc chạy mới là phần hay: <code>FilePath</code> không bao giờ được gán, nên <code>processFile()</code> gọi <code>openFile(null)</code>; <code>new FileReader(null)</code> ném <b>NullPointerException</b> — không phải IOException — nên catch ở dòng 10 không bắt được và phép kiểm null ở dòng 29 không bao giờ được chạy tới.</p>`),
+<h4>Đề yêu cầu</h4>
+<p>Báo cáo sáu defect của <code>fileProcessor</code> (chuẩn code, logic, thực hành tốt) theo năm trường của đề: Defect ID, Defect Name, Line Number, Defect Description, Fixing Solution.</p>
+<h3>Bước 1 — để javac chứng minh hai lỗi biên dịch</h3>
+<ul>
+<li><strong>Thiếu import</strong> — class dừng với 5 lỗi "cannot find symbol" (dòng 2, dòng 6 hai lỗi, 10, 20).</li>
+<li><strong>Thêm import</strong> — còn đúng một lỗi: "unreported exception IOException; must be caught or declared to be thrown" cho <code>reader.close()</code> ở dòng 23.</li>
+</ul>
+<h3>Bước 2 — lần theo chuỗi lỗi lúc chạy</h3>
+<ol>
+<li><code>FilePath</code> không bao giờ được gán…</li>
+<li>…nên <code>processFile()</code> gọi <code>openFile(null)</code>;</li>
+<li><code>new FileReader(null)</code> ném <strong>NullPointerException</strong> — không phải IOException;</li>
+<li>nên catch ở dòng 10 không bắt được, và phép kiểm null ở dòng 29 không bao giờ được chạy tới.</li>
+</ol>
+<h4>Kết quả</h4>
+<p>Đề hứa sáu defect; ở đây liệt kê chín để bạn có dự phòng, sáu cái mạnh nhất đứng đầu.</p>`),
     sheet('Answer (Word document) — defect report · Bài làm mẫu — báo cáo defect', tbl(['Defect ID', 'Defect Name', 'Line Number', 'Defect Description', 'Fixing Solution'], [
       ['DF001', 'Missing Import (compile error)', '2, 6, 10, 20', 'BufferedReader, FileReader and IOException are used without imports, so javac reports "cannot find symbol".', 'Add <code>import java.io.BufferedReader; import java.io.FileReader; import java.io.IOException;</code>'],
       ['DF002', 'Unhandled Checked Exception (compile error)', '23', '<code>reader.close()</code> throws IOException, which the finally block neither catches nor declares (and it throws NullPointerException when reader is null).', 'Use try-with-resources: <code>try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) { … }</code>'],
@@ -1206,15 +2006,71 @@ new FileProcessor("demo.txt").processFile()    -> Processing file...
 
     /* ── Q2 ── */
     bi(`<h2>✅ Question 2 — JUnit tests for calculateTotalPrice</h2>
-<h3>Decisions, V(G) and the coverage you can actually reach</h3>
-<p>Nine decisions: <b>O1</b> <code>itemPrices == null || itemPrices.length == 0</code> (line 4) · <b>O2</b> the for-each loop (8) · <b>O3</b> <code>price &lt;= 0</code> (9) · <b>O4</b> <code>isVIP</code> (15) · <b>O5</b> <code>equalsIgnoreCase("Regular")</code> (17) · <b>O6</b> <code>discountCode != null &amp;&amp; !discountCode.isEmpty()</code> (20) · <b>O7</b> <code>equals("SALE10")</code> (21) · <b>O8</b> <code>equals("WELCOME5")</code> (23) · <b>O9</b> the ternary <code>finalPrice &lt; 0</code> (28). So <b>V(G) = 9 + 1 = 10</b>; tools that count every <code>&amp;&amp;</code>/<code>||</code> as an extra decision (SonarQube does) report 12.</p>
-<p><b>100% branch coverage is impossible here.</b> The largest discount is 20% + 10% = 30%, and every price is &gt; 0, so <code>finalPrice = total × (1 − discount) ≥ 0.7 × total &gt; 0</code>: the True outcome of O9 can never happen. That makes the maximum <b>17 of 18 outcomes (94.4%)</b>; say so in your answer and report the unreachable branch as dead code. A branch probe on the 13 tests below measured exactly <b>17/18</b>, with only "O9 True" missing. The <em>minimum</em> for those 17 outcomes is 6 tests — {} · {−1} · {100, 200} VIP SALE10 · {200} Regular WELCOME5 · {50} Guest SALE20 · {100} Guest no code — also measured 17/18. The remaining seven tests are there because the paper also asks for EP and BVA.</p>`,
+<h4>The task</h4>
+<p>Complete the JUnit class for <code>calculateTotalPrice</code>: EP and BVA for the input parameters, plus all branches for 100% code coverage; one-line summary per test.</p>
+<h3>Step 1 — decisions and V(G)</h3>
+<ol>
+<li><strong>O1</strong> <code>itemPrices == null || itemPrices.length == 0</code> (line 4)</li>
+<li><strong>O2</strong> the for-each loop (8)</li>
+<li><strong>O3</strong> <code>price &lt;= 0</code> (9)</li>
+<li><strong>O4</strong> <code>isVIP</code> (15)</li>
+<li><strong>O5</strong> <code>equalsIgnoreCase("Regular")</code> (17)</li>
+<li><strong>O6</strong> <code>discountCode != null &amp;&amp; !discountCode.isEmpty()</code> (20)</li>
+<li><strong>O7</strong> <code>equals("SALE10")</code> (21)</li>
+<li><strong>O8</strong> <code>equals("WELCOME5")</code> (23)</li>
+<li><strong>O9</strong> the ternary <code>finalPrice &lt; 0</code> (28)</li>
+</ol>
+<p>Nine decisions, so <strong>V(G) = 9 + 1 = 10</strong>. Tools that count every <code>&amp;&amp;</code>/<code>||</code> as an extra decision (SonarQube does) report 12.</p>
+<h3>Step 2 — the coverage you can actually reach</h3>
+<div class="pitfall co-tieu-de"><strong>100% branch coverage is impossible here.</strong> The largest discount is 20% + 10% = 30%, and every price is &gt; 0, so <code>finalPrice = total × (1 − discount) ≥ 0.7 × total &gt; 0</code>: the True outcome of O9 can never happen.</div>
+<ul>
+<li><strong>Maximum</strong> — <strong>17 of 18 outcomes (94.4%)</strong>. Say so in your answer and report the unreachable branch as dead code.</li>
+<li><strong>Measured</strong> — a branch probe on the 13 tests below measured exactly <strong>17/18</strong>, with only "O9 True" missing.</li>
+</ul>
+<h4>Result — the minimum for those 17 outcomes is 6 tests (also measured 17/18)</h4>
+<ol class="hai-cot">
+<li>{}</li>
+<li>{−1}</li>
+<li>{100, 200} VIP SALE10</li>
+<li>{200} Regular WELCOME5</li>
+<li>{50} Guest SALE20</li>
+<li>{100} Guest no code</li>
+</ol>
+<p>The remaining seven tests are there because the paper also asks for EP and BVA.</p>`,
       `<h2>✅ Câu 2 — test JUnit cho calculateTotalPrice</h2>
-<h3>Các quyết định, V(G) và độ phủ thực sự đạt được</h3>
-<p>Chín quyết định: <b>O1</b> <code>itemPrices == null || itemPrices.length == 0</code> (dòng 4) · <b>O2</b> vòng for-each (8) · <b>O3</b> <code>price &lt;= 0</code> (9) · <b>O4</b> <code>isVIP</code> (15) · <b>O5</b> <code>equalsIgnoreCase("Regular")</code> (17) · <b>O6</b> <code>discountCode != null &amp;&amp; !discountCode.isEmpty()</code> (20) · <b>O7</b> <code>equals("SALE10")</code> (21) · <b>O8</b> <code>equals("WELCOME5")</code> (23) · <b>O9</b> toán tử ba ngôi <code>finalPrice &lt; 0</code> (28). Vậy <b>V(G) = 9 + 1 = 10</b>; công cụ nào đếm mỗi <code>&amp;&amp;</code>/<code>||</code> thành một quyết định riêng (SonarQube làm vậy) sẽ báo 12.</p>
-<p><b>Ở đây không thể đạt 100% branch coverage.</b> Mức giảm lớn nhất là 20% + 10% = 30%, và mọi giá đều &gt; 0, nên <code>finalPrice = total × (1 − discount) ≥ 0,7 × total &gt; 0</code>: kết cục True của O9 không bao giờ xảy ra. Tối đa chỉ là <b>17/18 kết cục (94,4%)</b>; hãy nói rõ điều này trong bài và báo nhánh không tới được là dead code. Một bộ đo nhánh chạy trên 13 test dưới đây đo được đúng <b>17/18</b>, chỉ thiếu "O9 True". Bộ <em>tối thiểu</em> cho 17 kết cục đó là 6 test — {} · {−1} · {100, 200} VIP SALE10 · {200} Regular WELCOME5 · {50} Guest SALE20 · {100} Guest không mã — cũng đo được 17/18. Bảy test còn lại có mặt vì đề còn đòi EP và BVA.</p>`),
-    bi(`<h3>EP / BVA of the parameters</h3><p>The same table-3.1 format, applied to the method's parameters. Each test below lists the tags it covers; the check under it is computed.</p>`,
-      `<h3>EP / BVA cho các tham số</h3><p>Dùng lại khuôn bảng 3.1 cho các tham số của method. Mỗi test bên dưới ghi các tag nó phủ; phần kiểm tra ngay dưới được tính tự động.</p>`),
+<h4>Đề yêu cầu</h4>
+<p>Hoàn thiện lớp JUnit cho <code>calculateTotalPrice</code>: EP và BVA cho các tham số đầu vào, cộng mọi nhánh để đạt 100% code coverage; mỗi test một dòng tóm tắt.</p>
+<h3>Bước 1 — các quyết định và V(G)</h3>
+<ol>
+<li><strong>O1</strong> <code>itemPrices == null || itemPrices.length == 0</code> (dòng 4)</li>
+<li><strong>O2</strong> vòng for-each (8)</li>
+<li><strong>O3</strong> <code>price &lt;= 0</code> (9)</li>
+<li><strong>O4</strong> <code>isVIP</code> (15)</li>
+<li><strong>O5</strong> <code>equalsIgnoreCase("Regular")</code> (17)</li>
+<li><strong>O6</strong> <code>discountCode != null &amp;&amp; !discountCode.isEmpty()</code> (20)</li>
+<li><strong>O7</strong> <code>equals("SALE10")</code> (21)</li>
+<li><strong>O8</strong> <code>equals("WELCOME5")</code> (23)</li>
+<li><strong>O9</strong> toán tử ba ngôi <code>finalPrice &lt; 0</code> (28)</li>
+</ol>
+<p>Chín quyết định, vậy <strong>V(G) = 9 + 1 = 10</strong>. Công cụ nào đếm mỗi <code>&amp;&amp;</code>/<code>||</code> thành một quyết định riêng (SonarQube làm vậy) sẽ báo 12.</p>
+<h3>Bước 2 — độ phủ thực sự đạt được</h3>
+<div class="pitfall co-tieu-de"><strong>Ở đây không thể đạt 100% branch coverage.</strong> Mức giảm lớn nhất là 20% + 10% = 30%, và mọi giá đều &gt; 0, nên <code>finalPrice = total × (1 − discount) ≥ 0,7 × total &gt; 0</code>: kết cục True của O9 không bao giờ xảy ra.</div>
+<ul>
+<li><strong>Tối đa</strong> — <strong>17/18 kết cục (94,4%)</strong>. Hãy nói rõ điều này trong bài và báo nhánh không tới được là dead code.</li>
+<li><strong>Đã đo</strong> — bộ đo nhánh chạy trên 13 test dưới đây đo được đúng <strong>17/18</strong>, chỉ thiếu "O9 True".</li>
+</ul>
+<h4>Kết quả — bộ tối thiểu cho 17 kết cục đó là 6 test (cũng đo được 17/18)</h4>
+<ol class="hai-cot">
+<li>{}</li>
+<li>{−1}</li>
+<li>{100, 200} VIP SALE10</li>
+<li>{200} Regular WELCOME5</li>
+<li>{50} Guest SALE20</li>
+<li>{100} Guest không mã</li>
+</ol>
+<p>Bảy test còn lại có mặt vì đề còn đòi EP và BVA.</p>`),
+    bi(`<h3>Step 3 — EP / BVA of the parameters</h3><p>The same table-3.1 format, applied to the method's parameters. Each test below lists the tags it covers; the check under it is computed.</p>`,
+      `<h3>Bước 3 — EP / BVA cho các tham số</h3><p>Dùng lại khuôn bảng 3.1 cho các tham số của method. Mỗi test bên dưới ghi các tag nó phủ; phần kiểm tra ngay dưới được tính tự động.</p>`),
     sheet('Answer — partitions and boundaries · Bài làm mẫu — phân vùng và biên', ORD_T31.html),
     sheet('Answer — test cases (itemPrices / customerType / isVIP / discountCode) · Bài làm mẫu — test case', ORD_T32.table),
     ORD_T32.check,
@@ -1333,26 +2189,78 @@ OK (13 tests)
 --- branch probe over the same 13 inputs ---
 O1..O8 outcomes hit: [F, T] each      O9 finalPrice<0 outcomes hit: [F]
 decision outcomes covered: 17/18`),
-    bi(`<p><b>JUnit 4 or 5?</b> The paper's sample mixes both styles: <code>@Test(expected = …)</code> is JUnit 4, while <code>assertThrows</code> exists in JUnit 5 and in JUnit 4.13+. The class above compiles and runs with JUnit 4.13.2. For JUnit 5, change the imports to <code>org.junit.jupiter.api.Test</code> and <code>static org.junit.jupiter.api.Assertions.*</code> and replace <code>@Test(expected = …)</code> with <code>assertThrows</code>.</p>`,
-      `<p><b>JUnit 4 hay 5?</b> Mẫu trong đề trộn cả hai: <code>@Test(expected = …)</code> là JUnit 4, còn <code>assertThrows</code> có trong JUnit 5 và JUnit 4.13 trở lên. Lớp test ở trên biên dịch và chạy được với JUnit 4.13.2. Muốn dùng JUnit 5 thì đổi import thành <code>org.junit.jupiter.api.Test</code> và <code>static org.junit.jupiter.api.Assertions.*</code>, rồi thay <code>@Test(expected = …)</code> bằng <code>assertThrows</code>.</p>`),
+    bi(`<p><strong>JUnit 4 or 5?</strong> The paper's sample mixes both styles: <code>@Test(expected = …)</code> is JUnit 4, while <code>assertThrows</code> exists in JUnit 5 and in JUnit 4.13+. The class above compiles and runs with JUnit 4.13.2. For JUnit 5, change the imports to <code>org.junit.jupiter.api.Test</code> and <code>static org.junit.jupiter.api.Assertions.*</code> and replace <code>@Test(expected = …)</code> with <code>assertThrows</code>.</p>`,
+      `<p><strong>JUnit 4 hay 5?</strong> Mẫu trong đề trộn cả hai: <code>@Test(expected = …)</code> là JUnit 4, còn <code>assertThrows</code> có trong JUnit 5 và JUnit 4.13 trở lên. Lớp test ở trên biên dịch và chạy được với JUnit 4.13.2. Muốn dùng JUnit 5 thì đổi import thành <code>org.junit.jupiter.api.Test</code> và <code>static org.junit.jupiter.api.Assertions.*</code>, rồi thay <code>@Test(expected = …)</code> bằng <code>assertThrows</code>.</p>`),
 
     /* ── Q3 ── */
     bi(`<h2>✅ Question 3 — use-case test cases for "Place an Order"</h2>
-<p><b>Use-case testing</b> (lesson 4.2.5) derives at least one test from the main success scenario and one from every alternative/exception flow. <b>Assumptions:</b> totals are shown before tax because no tax rate is given; a "new customer" is one with no previous order; the payment gateway sandbox offers a card with $0 balance and accepts 4111 1111 1111 1111 as a valid test card. The paper's alternates map to notes as follows: A2 (invalid code, the order still completes) is <b>AL</b>; A1 (empty cart) and A3 (payment failure) are <b>EX</b>; a successful retry after A3 is <b>AL</b>. The partition table and the tag check make sure every rule of the use case is hit — here the 10 cases reach 100%.</p>`,
+<h4>The task</h4>
+<p>Test cases for the use case "Place an Order" covering the normal flow, the alternative flows and the exception scenarios, each with a Note NF / AL / EX.</p>
+<h3>Step 1 — the rule of use-case testing</h3>
+<p><strong>Use-case testing</strong> (lesson 4.2.5) derives at least one test from the main success scenario and one from every alternative/exception flow.</p>
+<h4>Assumptions</h4>
+<ul>
+<li><strong>Tax</strong> — totals are shown before tax because no tax rate is given.</li>
+<li><strong>New customer</strong> — one with no previous order.</li>
+<li><strong>Payment sandbox</strong> — the gateway offers a card with $0 balance and accepts 4111 1111 1111 1111 as a valid test card.</li>
+</ul>
+<h3>Step 2 — map the paper's alternates to notes</h3>
+<ul>
+<li><strong>A2</strong> (invalid code, the order still completes) → <strong>AL</strong>.</li>
+<li><strong>A1</strong> (empty cart) and <strong>A3</strong> (payment failure) → <strong>EX</strong>.</li>
+<li><strong>A successful retry after A3</strong> → <strong>AL</strong>.</li>
+</ul>
+<h4>Result</h4>
+<p>The partition table and the tag check make sure every rule of the use case is hit — here the 10 cases reach 100%.</p>`,
       `<h2>✅ Câu 3 — test case theo use case "Place an Order"</h2>
-<p><b>Kiểm thử theo use case</b> (bài 4.2.5) rút ít nhất một test từ luồng thành công chính và một test từ mỗi luồng thay thế/ngoại lệ. <b>Giả định:</b> tổng tiền hiển thị trước thuế vì đề không cho thuế suất; "khách mới" là khách chưa có đơn nào; môi trường sandbox của cổng thanh toán có thẻ số dư $0 và nhận 4111 1111 1111 1111 là thẻ test hợp lệ. Các luồng thay thế của đề ứng với Note như sau: A2 (mã sai, đơn vẫn hoàn tất) là <b>AL</b>; A1 (giỏ trống) và A3 (thanh toán lỗi) là <b>EX</b>; thử lại thành công sau A3 là <b>AL</b>. Bảng phân vùng và phần kiểm tra tag bảo đảm mọi luật của use case đều được chạm — ở đây 10 ca đạt 100%.</p>`),
+<h4>Đề yêu cầu</h4>
+<p>Test case cho use case "Place an Order" phủ luồng chính, các luồng thay thế và tình huống ngoại lệ, mỗi ca có Note NF / AL / EX.</p>
+<h3>Bước 1 — quy tắc của kiểm thử theo use case</h3>
+<p><strong>Kiểm thử theo use case</strong> (bài 4.2.5) rút ít nhất một test từ luồng thành công chính và một test từ mỗi luồng thay thế/ngoại lệ.</p>
+<h4>Giả định</h4>
+<ul>
+<li><strong>Thuế</strong> — tổng tiền hiển thị trước thuế vì đề không cho thuế suất.</li>
+<li><strong>Khách mới</strong> — khách chưa có đơn nào.</li>
+<li><strong>Sandbox thanh toán</strong> — cổng thanh toán có thẻ số dư $0 và nhận 4111 1111 1111 1111 là thẻ test hợp lệ.</li>
+</ul>
+<h3>Bước 2 — gán luồng thay thế của đề vào Note</h3>
+<ul>
+<li><strong>A2</strong> (mã sai, đơn vẫn hoàn tất) → <strong>AL</strong>.</li>
+<li><strong>A1</strong> (giỏ trống) và <strong>A3</strong> (thanh toán lỗi) → <strong>EX</strong>.</li>
+<li><strong>Thử lại thành công sau A3</strong> → <strong>AL</strong>.</li>
+</ul>
+<h4>Kết quả</h4>
+<p>Bảng phân vùng và phần kiểm tra tag bảo đảm mọi luật của use case đều được chạm — ở đây 10 ca đạt 100%.</p>`),
     sheet('Answer — conditions and tags · Bài làm mẫu — điều kiện và tag', SHOP_T31.html),
     sheet('Answer — test case design · Bài làm mẫu — thiết kế test case', SHOP_T32.table),
     SHOP_T32.check,
     sheet('Answer — test cases in the paper\'s format (ID, description, preconditions, steps with data, expected, NF/AL/EX) · Bài làm mẫu theo đúng khuôn của đề', SHOP_T33),
     bi(`<h3>Ví dụ có lời giải · Worked example — the discount arithmetic, checked</h3>
-<p>Q2: TC09 {100, 200}, VIP + SALE10 → discount 0.20 + 0.10 = 0.30 → 300 × 0.70 = <b>210.0</b>; TC10 {200}, Regular + WELCOME5 → 0.05 + 0.05 = 0.10 → <b>180.0</b>; TC06 {0.01}, Regular → 0.01 × 0.95 = <b>0.0095</b>. Q3: A + B + C = $100, SAVE10 → <b>$90.00</b>; C = $20, WELCOME5 → <b>$19.00</b>. All the Q2 values are the real outputs of the run above.</p>
-<div class="pitfall"><b>SALE10 is not SAVE10.</b> The code in Q2 checks <code>"SALE10"</code>; the use case in Q3 says <code>SAVE10</code>. Using SAVE10 in a Q2 test would take the "unknown code" branch (+0%) and your expected value would be wrong; using SALE10 in Q3 is a keyword from the wrong question. Copy names character by character from the question you are answering.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Parameterised tests.</b> Thirteen near-identical methods are what the paper asks for, but in real projects the discount rules would be one JUnit 5 <code>@ParameterizedTest</code> with a <code>@CsvSource</code> table (items; type; vip; code; expected), one row per partition. Adding a boundary becomes adding a line, and the table doubles as documentation of the business rule. <em>Outside the syllabus because CTFL is tool-neutral; see JUnit in Action ch.2 for the syntax.</em></div>`,
+<ul>
+<li><strong>Q2 · TC09</strong> {100, 200}, VIP + SALE10 → discount 0.20 + 0.10 = 0.30 → 300 × 0.70 = <strong>210.0</strong></li>
+<li><strong>Q2 · TC10</strong> {200}, Regular + WELCOME5 → 0.05 + 0.05 = 0.10 → <strong>180.0</strong></li>
+<li><strong>Q2 · TC06</strong> {0.01}, Regular → 0.01 × 0.95 = <strong>0.0095</strong></li>
+<li><strong>Q3</strong> — A + B + C = $100, SAVE10 → <strong>$90.00</strong>; C = $20, WELCOME5 → <strong>$19.00</strong></li>
+</ul>
+<p>All the Q2 values are the real outputs of the run above.</p>
+<div class="pitfall co-tieu-de"><strong>SALE10 is not SAVE10.</strong> The code in Q2 checks <code>"SALE10"</code>; the use case in Q3 says <code>SAVE10</code>. Using SAVE10 in a Q2 test would take the "unknown code" branch (+0%) and your expected value would be wrong; using SALE10 in Q3 is a keyword from the wrong question. Copy names character by character from the question you are answering.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Parameterised tests.</strong>
+<p>Thirteen near-identical methods are what the paper asks for, but in real projects the discount rules would be one JUnit 5 <code>@ParameterizedTest</code> with a <code>@CsvSource</code> table (items; type; vip; code; expected), one row per partition.</p>
+<p>Adding a boundary becomes adding a line, and the table doubles as documentation of the business rule.</p>
+<p><em>Outside the syllabus because CTFL is tool-neutral; see JUnit in Action ch.2 for the syntax.</em></p></div>`,
       `<h3>Ví dụ có lời giải · Kiểm lại phép tính giảm giá</h3>
-<p>Q2: TC09 {100, 200}, VIP + SALE10 → giảm 0,20 + 0,10 = 0,30 → 300 × 0,70 = <b>210.0</b>; TC10 {200}, Regular + WELCOME5 → 0,05 + 0,05 = 0,10 → <b>180.0</b>; TC06 {0.01}, Regular → 0,01 × 0,95 = <b>0.0095</b>. Q3: A + B + C = $100, SAVE10 → <b>$90.00</b>; C = $20, WELCOME5 → <b>$19.00</b>. Mọi giá trị của Q2 đều là output thật của lần chạy ở trên.</p>
-<div class="pitfall"><b>SALE10 không phải SAVE10.</b> Code ở Q2 kiểm <code>"SALE10"</code>; use case ở Q3 ghi <code>SAVE10</code>. Dùng SAVE10 trong test của Q2 sẽ rơi vào nhánh "mã lạ" (+0%) và giá trị mong đợi của bạn sai; dùng SALE10 ở Q3 là mang từ khoá của câu khác sang. Hãy chép tên từng ký tự từ đúng câu hỏi bạn đang trả lời.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Test tham số hoá.</b> Đề đòi mười ba method gần giống nhau, nhưng trong dự án thật các luật giảm giá sẽ là một <code>@ParameterizedTest</code> của JUnit 5 với bảng <code>@CsvSource</code> (items; type; vip; code; expected), mỗi phân vùng một dòng. Thêm một giá trị biên chỉ là thêm một dòng, và bảng đó đồng thời là tài liệu của luật nghiệp vụ. <em>Ngoài giáo trình vì CTFL không gắn với công cụ; xem cú pháp ở JUnit in Action chương 2.</em></div>`),
+<ul>
+<li><strong>Q2 · TC09</strong> {100, 200}, VIP + SALE10 → giảm 0,20 + 0,10 = 0,30 → 300 × 0,70 = <strong>210.0</strong></li>
+<li><strong>Q2 · TC10</strong> {200}, Regular + WELCOME5 → 0,05 + 0,05 = 0,10 → <strong>180.0</strong></li>
+<li><strong>Q2 · TC06</strong> {0.01}, Regular → 0,01 × 0,95 = <strong>0.0095</strong></li>
+<li><strong>Q3</strong> — A + B + C = $100, SAVE10 → <strong>$90.00</strong>; C = $20, WELCOME5 → <strong>$19.00</strong></li>
+</ul>
+<p>Mọi giá trị của Q2 đều là output thật của lần chạy ở trên.</p>
+<div class="pitfall co-tieu-de"><strong>SALE10 không phải SAVE10.</strong> Code ở Q2 kiểm <code>"SALE10"</code>; use case ở Q3 ghi <code>SAVE10</code>. Dùng SAVE10 trong test của Q2 sẽ rơi vào nhánh "mã lạ" (+0%) và giá trị mong đợi của bạn sai; dùng SALE10 ở Q3 là mang từ khoá của câu khác sang. Hãy chép tên từng ký tự từ đúng câu hỏi bạn đang trả lời.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Test tham số hoá.</strong>
+<p>Đề đòi mười ba method gần giống nhau, nhưng trong dự án thật các luật giảm giá sẽ là một <code>@ParameterizedTest</code> của JUnit 5 với bảng <code>@CsvSource</code> (items; type; vip; code; expected), mỗi phân vùng một dòng.</p>
+<p>Thêm một giá trị biên chỉ là thêm một dòng, và bảng đó đồng thời là tài liệu của luật nghiệp vụ.</p>
+<p><em>Ngoài giáo trình vì CTFL không gắn với công cụ; xem cú pháp ở JUnit in Action chương 2.</em></p></div>`),
     books([
       ['fst4', 'Ch.5 §6 "Defect management" — defect report contents, book p.190–195 (PDF p.204–209); Ch.4 §2.5 use-case testing p.130–131, Fig. 4.3; Ch.4 §3.2 decision coverage p.136–139', 'Chương 5 §6 "Defect management" — nội dung báo cáo defect, trang sách 190–195 (PDF 204–209); Chương 4 §2.5 kiểm thử theo use case tr.130–131, Hình 4.3; Chương 4 §3.2 decision coverage tr.136–139'],
       ['sp5', '§5.1.7 use-case-based testing (PDF p.208); §5.2.2 decision testing (PDF p.218)', '§5.1.7 kiểm thử dựa trên use case (PDF tr.208); §5.2.2 decision testing (PDF tr.218)'],
@@ -1420,8 +2328,15 @@ const L4 = {
   content: [
     bi(`<span class="eyebrow">Practical Exam · Lesson PE-4 · PE SP25 (PE4/SP25.jpg) pages 1–5</span>
 <h2>SPRING25 — one project context, four questions</h2>
-<p class="lead">The newest paper in the folder wraps everything in one scenario: <b>Liger Travel</b> builds <b>TravelEase</b>, an online travel-booking site. It adds a question on <b>test strategy</b> (Chapter 5) to the familiar review, unit-test and test-case questions, and gives only 80 minutes for four questions. In the Exam room it is <b>SWT301-PE7</b> ("Practical Exam Đề 7 (PE - SP 2025)").</p>
-<div class="callout"><b>Learning objectives.</b> LO-5.2.2 test approaches and strategies (K2) · LO-3.2.4 apply a review technique (K3) · LO-4.3.1 / 4.3.2 statement and decision coverage (K2) · LO-4.2.1 / 4.2.2 EP and BVA (K3) · LO-4.2.5 use-case / process-based testing (K2).</div>
+<p class="lead">The newest paper in the folder wraps everything in one scenario: <strong>Liger Travel</strong> builds <strong>TravelEase</strong>, an online travel-booking site. It adds a question on <strong>test strategy</strong> (Chapter 5) to the familiar review, unit-test and test-case questions, and gives only 80 minutes for four questions. In the Exam room it is <strong>SWT301-PE7</strong> ("Practical Exam Đề 7 (PE - SP 2025)").</p>
+<div class="callout"><strong>Learning objectives.</strong>
+<ul>
+<li><strong>LO-5.2.2</strong> — test approaches and strategies (K2).</li>
+<li><strong>LO-3.2.4</strong> — apply a review technique (K3).</li>
+<li><strong>LO-4.3.1 / 4.3.2</strong> — statement and decision coverage (K2).</li>
+<li><strong>LO-4.2.1 / 4.2.2</strong> — EP and BVA (K3).</li>
+<li><strong>LO-4.2.5</strong> — use-case / process-based testing (K2).</li>
+</ul></div>
 <table>
 <thead><tr><th>Q</th><th>Points</th><th>Task</th><th>Budget</th></tr></thead>
 <tbody>
@@ -1433,8 +2348,15 @@ const L4 = {
 </table>`,
       `<span class="eyebrow">Thi thực hành · Bài PE-4 · PE SP25 (PE4/SP25.jpg) trang 1–5</span>
 <h2>SPRING25 — một bối cảnh dự án, bốn câu hỏi</h2>
-<p class="lead">Đề mới nhất trong thư mục gói mọi thứ vào một kịch bản: <b>Liger Travel</b> xây dựng <b>TravelEase</b>, một website đặt tour du lịch trực tuyến. Ngoài các câu quen thuộc về review, unit test và test case, đề thêm một câu về <b>chiến lược kiểm thử</b> (Chương 5), và chỉ cho 80 phút cho bốn câu. Trong Phòng thi nó là <b>SWT301-PE7</b> ("Đề thi thực hành số 7 (PE - SP 2025)").</p>
-<div class="callout"><b>Chuẩn đầu ra.</b> LO-5.2.2 cách tiếp cận và chiến lược kiểm thử (K2) · LO-3.2.4 áp dụng kỹ thuật review (K3) · LO-4.3.1 / 4.3.2 statement và decision coverage (K2) · LO-4.2.1 / 4.2.2 EP và BVA (K3) · LO-4.2.5 kiểm thử theo use case / quy trình (K2).</div>
+<p class="lead">Đề mới nhất trong thư mục gói mọi thứ vào một kịch bản: <strong>Liger Travel</strong> xây dựng <strong>TravelEase</strong>, một website đặt tour du lịch trực tuyến. Ngoài các câu quen thuộc về review, unit test và test case, đề thêm một câu về <strong>chiến lược kiểm thử</strong> (Chương 5), và chỉ cho 80 phút cho bốn câu. Trong Phòng thi nó là <strong>SWT301-PE7</strong> ("Đề thi thực hành số 7 (PE - SP 2025)").</p>
+<div class="callout"><strong>Chuẩn đầu ra.</strong>
+<ul>
+<li><strong>LO-5.2.2</strong> — cách tiếp cận và chiến lược kiểm thử (K2).</li>
+<li><strong>LO-3.2.4</strong> — áp dụng kỹ thuật review (K3).</li>
+<li><strong>LO-4.3.1 / 4.3.2</strong> — statement và decision coverage (K2).</li>
+<li><strong>LO-4.2.1 / 4.2.2</strong> — EP và BVA (K3).</li>
+<li><strong>LO-4.2.5</strong> — kiểm thử theo use case / quy trình (K2).</li>
+</ul></div>
 <table>
 <thead><tr><th>Câu</th><th>Điểm</th><th>Yêu cầu</th><th>Thời gian</th></tr></thead>
 <tbody>
@@ -1447,42 +2369,254 @@ const L4 = {
     bi(`<h2>📄 The paper page by page</h2>`, `<h2>📄 Đề thi từng trang</h2>`),
     pages('pe-sp25', [
       [1, 'Title, instructions and the project context',
-        `<p>"SWT301 SPRING25 - The final PE · Online Travel Booking Website" — 80 minutes, 4 questions, 10 points, one Word document. <b>Project context:</b> Liger Travel's new site TravelEase lets users search destinations, book flights, hotels and tour packages and pay by credit card, digital wallet or bank transfer; travel agencies get a dashboard for bookings, promotions and inquiries. New development, 12 months, 10 developers, 5 testers including 1 test lead. <b>Constraints:</b> handle high traffic (holiday seasons); search and recommendation accurate and fast; payments secure and error-free; responsive on multiple devices. Every one of these words is an input to Q1: team size and duration shape the plan, the four constraints are the top product risks.</p>`,
-        `<p>"SWT301 SPRING25 - The final PE · Online Travel Booking Website" — 80 phút, 4 câu, 10 điểm, nộp một file Word. <b>Bối cảnh dự án:</b> website mới TravelEase của Liger Travel cho người dùng tìm điểm đến, đặt vé máy bay, khách sạn và tour trọn gói, thanh toán bằng thẻ, ví điện tử hoặc chuyển khoản; các đại lý có dashboard quản lý booking, khuyến mãi và yêu cầu của khách. Phát triển mới, 12 tháng, 10 lập trình viên, 5 tester gồm 1 test lead. <b>Ràng buộc:</b> chịu tải cao (mùa lễ); tìm kiếm và gợi ý chính xác, nhanh; thanh toán an toàn và không lỗi; giao diện responsive trên nhiều thiết bị. Từng chữ ở đây là đầu vào cho Q1: quy mô đội và thời gian quyết định kế hoạch, bốn ràng buộc chính là bốn rủi ro sản phẩm lớn nhất.</p>`],
+        `<p class="y-chinh">🎯 Page 1 sets the scene — every word of the TravelEase context is an input to Q1.</p>
+<p>"SWT301 SPRING25 - The final PE · Online Travel Booking Website" — 80 minutes, 4 questions, 10 points, one Word document.</p>
+<p class="nhan">Project context</p>
+<ul>
+<li><strong>Product</strong> — Liger Travel's new site TravelEase lets users search destinations, book flights, hotels and tour packages, and pay by credit card, digital wallet or bank transfer.</li>
+<li><strong>Agencies</strong> — travel agencies get a dashboard for bookings, promotions and inquiries.</li>
+<li><strong>Project</strong> — new development, 12 months, 10 developers, 5 testers including 1 test lead.</li>
+</ul>
+<p class="nhan">Constraints</p>
+<ol>
+<li>Handle high traffic (holiday seasons).</li>
+<li>Search and recommendation accurate and fast.</li>
+<li>Payments secure and error-free.</li>
+<li>Responsive on multiple devices.</li>
+</ol>
+<p><strong>Why it matters for Q1:</strong> team size and duration shape the plan; the four constraints are the top product risks.</p>`,
+        `<p class="y-chinh">🎯 Trang 1 dựng bối cảnh — từng chữ về TravelEase đều là đầu vào cho Q1.</p>
+<p>"SWT301 SPRING25 - The final PE · Online Travel Booking Website" — 80 phút, 4 câu, 10 điểm, nộp một file Word.</p>
+<p class="nhan">Bối cảnh dự án</p>
+<ul>
+<li><strong>Sản phẩm</strong> — website mới TravelEase của Liger Travel cho người dùng tìm điểm đến, đặt vé máy bay, khách sạn và tour trọn gói, thanh toán bằng thẻ, ví điện tử hoặc chuyển khoản.</li>
+<li><strong>Đại lý</strong> — các đại lý có dashboard quản lý booking, khuyến mãi và yêu cầu của khách.</li>
+<li><strong>Dự án</strong> — phát triển mới, 12 tháng, 10 lập trình viên, 5 tester gồm 1 test lead.</li>
+</ul>
+<p class="nhan">Ràng buộc</p>
+<ol>
+<li>Chịu tải cao (mùa lễ).</li>
+<li>Tìm kiếm và gợi ý chính xác, nhanh.</li>
+<li>Thanh toán an toàn và không lỗi.</li>
+<li>Giao diện responsive trên nhiều thiết bị.</li>
+</ol>
+<p><strong>Vì sao quan trọng với Q1:</strong> quy mô đội và thời gian quyết định kế hoạch; bốn ràng buộc chính là bốn rủi ro sản phẩm lớn nhất.</p>`],
       [2, 'Question 1 — Selecting Test Strategy',
-        `<p>Choose <b>one or more</b> of the seven strategies of the CTFL syllabus (lesson 5.2): Analytical · Model-based · Methodical · Process-/Standard-compliant · Directed (consultative) · Regression-averse · Reactive (dynamic). The answer must (1) identify the most suitable strategy, (2) explain why, (3) propose how to implement it in <em>this</em> project. A list of definitions scores little; the marks are in linking each choice to a constraint of page 1.</p>`,
-        `<p>Chọn <b>một hoặc nhiều</b> trong bảy chiến lược của syllabus CTFL (bài 5.2): Analytical · Model-based · Methodical · Process-/Standard-compliant · Directed (consultative) · Regression-averse · Reactive (dynamic). Bài làm phải (1) chỉ ra chiến lược phù hợp nhất, (2) giải thích vì sao, (3) đề xuất cách triển khai trong <em>chính</em> dự án này. Liệt kê định nghĩa được rất ít điểm; điểm nằm ở việc nối từng lựa chọn với một ràng buộc ở trang 1.</p>`],
+        `<p class="y-chinh">🎯 Q1 asks you to choose and justify test strategies for <em>this</em> project — not to recite definitions.</p>
+<p class="nhan">Choose one or more of the seven CTFL strategies (lesson 5.2)</p>
+<ol class="hai-cot">
+<li>Analytical</li>
+<li>Model-based</li>
+<li>Methodical</li>
+<li>Process-/Standard-compliant</li>
+<li>Directed (consultative)</li>
+<li>Regression-averse</li>
+<li>Reactive (dynamic)</li>
+</ol>
+<p class="nhan">The answer must</p>
+<ol>
+<li>identify the most suitable strategy;</li>
+<li>explain why;</li>
+<li>propose how to implement it in <em>this</em> project.</li>
+</ol>
+<div class="pitfall">A list of definitions scores little; the marks are in linking each choice to a constraint of page 1.</div>`,
+        `<p class="y-chinh">🎯 Q1 yêu cầu chọn và biện luận chiến lược kiểm thử cho <em>chính</em> dự án này — không phải chép định nghĩa.</p>
+<p class="nhan">Chọn một hoặc nhiều trong bảy chiến lược CTFL (bài 5.2)</p>
+<ol class="hai-cot">
+<li>Analytical</li>
+<li>Model-based</li>
+<li>Methodical</li>
+<li>Process-/Standard-compliant</li>
+<li>Directed (consultative)</li>
+<li>Regression-averse</li>
+<li>Reactive (dynamic)</li>
+</ol>
+<p class="nhan">Bài làm phải</p>
+<ol>
+<li>chỉ ra chiến lược phù hợp nhất;</li>
+<li>giải thích vì sao;</li>
+<li>đề xuất cách triển khai trong <em>chính</em> dự án này.</li>
+</ol>
+<div class="pitfall">Liệt kê định nghĩa được rất ít điểm; điểm nằm ở việc nối từng lựa chọn với một ràng buộc ở trang 1.</div>`],
       [3, 'Question 2 — Code Review and Bug Identification: TravelBooking',
-        `<p>A 29-line class <b>without line numbers</b>: fields <code>String BookingId</code>, <code>double totalPrice</code>, <code>int numberOfTravelers</code>; a constructor; <code>boolean ConfirmBooking(String paymentMethod)</code> that compares <code>paymentMethod == "CreditCard"</code>, then <code>paymentMethod.equals("DigitalWallet")</code> with a 2% discount (<code>totalPrice * 0.98</code>), else <code>false</code>; <code>private boolean processPayment(double amount)</code> returning <code>amount &gt; 0</code>; and <code>getBookingDetails()</code>. The paper calls it "a Java method" though it is a class. Identify 6 errors (conventions, standards or logic), explain each and suggest a fix. Since there are no line numbers, number the lines yourself and state that line 1 is <code>public class TravelBooking {</code>.</p>`,
-        `<p>Một class 29 dòng <b>không có số dòng</b>: các trường <code>String BookingId</code>, <code>double totalPrice</code>, <code>int numberOfTravelers</code>; một constructor; <code>boolean ConfirmBooking(String paymentMethod)</code> so sánh <code>paymentMethod == "CreditCard"</code>, rồi <code>paymentMethod.equals("DigitalWallet")</code> với giảm 2% (<code>totalPrice * 0.98</code>), còn lại trả <code>false</code>; <code>private boolean processPayment(double amount)</code> trả <code>amount &gt; 0</code>; và <code>getBookingDetails()</code>. Đề gọi đây là "một method Java" dù thực ra là cả class. Tìm 6 lỗi (quy ước, chuẩn hoặc logic), giải thích và đề xuất cách sửa. Vì không có số dòng, hãy tự đánh số và ghi rõ dòng 1 là <code>public class TravelBooking {</code>.</p>`],
+        `<p class="y-chinh">🎯 Q2 = review a 29-line class printed <strong>without line numbers</strong> — so you number the lines yourself.</p>
+<p class="nhan">What the class contains</p>
+<ul>
+<li><strong>Fields</strong> — <code>String BookingId</code>, <code>double totalPrice</code>, <code>int numberOfTravelers</code>; plus a constructor.</li>
+<li><strong><code>boolean ConfirmBooking(String paymentMethod)</code></strong> — compares <code>paymentMethod == "CreditCard"</code>, then <code>paymentMethod.equals("DigitalWallet")</code> with a 2% discount (<code>totalPrice * 0.98</code>), else <code>false</code>.</li>
+<li><strong><code>private boolean processPayment(double amount)</code></strong> — returns <code>amount &gt; 0</code>.</li>
+<li><strong><code>getBookingDetails()</code></strong></li>
+</ul>
+<p class="nhan">The task</p>
+<ul>
+<li><strong>Find 6 errors</strong> — conventions, standards or logic; explain each and suggest a fix.</li>
+<li><strong>Wording</strong> — the paper calls it "a Java method" though it is a class.</li>
+<li><strong>Line numbers</strong> — number the lines yourself and state that line 1 is <code>public class TravelBooking {</code>.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Q2 = review một class 29 dòng in <strong>không có số dòng</strong> — nên bạn phải tự đánh số.</p>
+<p class="nhan">Class gồm những gì</p>
+<ul>
+<li><strong>Trường</strong> — <code>String BookingId</code>, <code>double totalPrice</code>, <code>int numberOfTravelers</code>; cộng một constructor.</li>
+<li><strong><code>boolean ConfirmBooking(String paymentMethod)</code></strong> — so sánh <code>paymentMethod == "CreditCard"</code>, rồi <code>paymentMethod.equals("DigitalWallet")</code> với giảm 2% (<code>totalPrice * 0.98</code>), còn lại trả <code>false</code>.</li>
+<li><strong><code>private boolean processPayment(double amount)</code></strong> — trả <code>amount &gt; 0</code>.</li>
+<li><strong><code>getBookingDetails()</code></strong></li>
+</ul>
+<p class="nhan">Đề yêu cầu</p>
+<ul>
+<li><strong>Tìm 6 lỗi</strong> — quy ước, chuẩn hoặc logic; giải thích và đề xuất cách sửa.</li>
+<li><strong>Câu chữ</strong> — đề gọi đây là "một method Java" dù thực ra là cả class.</li>
+<li><strong>Số dòng</strong> — tự đánh số và ghi rõ dòng 1 là <code>public class TravelBooking {</code>.</li>
+</ul>`],
       [4, 'Question 3 — calculateRewardPoints; Question 4 — Process 1 steps 1–6',
-        `<p><b>Q3:</b> <code>int calculateRewardPoints(double bookingAmount, String customerType)</code>: amount &lt; 0 → −1; "VIP" → <code>(int)(bookingAmount * 0.1)</code>; "Regular" → <code>(int)(bookingAmount * 0.05)</code>; else 0. Required: 100% statement, 100% branch, 100% EP and 100% BVA coverage; list the cases with inputs and expected outputs and explain the coverage. <b>Q4</b> begins: system test cases for two processes; Process 1 "Booking a Travel Package": log in → search a destination → select a package (flight + hotel + activities) → review details and price → enter traveller information → select a payment method and pay …</p>`,
-        `<p><b>Q3:</b> <code>int calculateRewardPoints(double bookingAmount, String customerType)</code>: amount &lt; 0 → −1; "VIP" → <code>(int)(bookingAmount * 0.1)</code>; "Regular" → <code>(int)(bookingAmount * 0.05)</code>; còn lại 0. Yêu cầu: phủ 100% statement, 100% branch, 100% EP và 100% BVA; liệt kê các ca với đầu vào và đầu ra mong đợi rồi giải thích độ phủ. <b>Q4</b> bắt đầu: test case hệ thống cho hai quy trình; Quy trình 1 "Booking a Travel Package": đăng nhập → tìm điểm đến → chọn tour (vé máy bay + khách sạn + hoạt động) → xem chi tiết và giá → nhập thông tin hành khách → chọn phương thức và thanh toán …</p>`],
+        `<p class="y-chinh">🎯 Page 4 = Q3, a four-branch reward method to unit-test, then the start of Q4 (system test cases for two processes).</p>
+<p class="nhan">Q3 — int calculateRewardPoints(double bookingAmount, String customerType)</p>
+<ul>
+<li><strong>amount &lt; 0</strong> → −1</li>
+<li><strong>"VIP"</strong> → <code>(int)(bookingAmount * 0.1)</code></li>
+<li><strong>"Regular"</strong> → <code>(int)(bookingAmount * 0.05)</code></li>
+<li><strong>anything else</strong> → 0</li>
+</ul>
+<p><strong>Required:</strong> 100% statement, 100% branch, 100% EP and 100% BVA coverage; list the cases with inputs and expected outputs and explain the coverage.</p>
+<p class="nhan">Q4 — Process 1 "Booking a Travel Package", steps 1–6</p>
+<ol>
+<li>Log in.</li>
+<li>Search a destination.</li>
+<li>Select a package (flight + hotel + activities).</li>
+<li>Review details and price.</li>
+<li>Enter traveller information.</li>
+<li>Select a payment method and pay …</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Trang 4 = Q3, một method tính điểm thưởng bốn nhánh cần unit test, rồi phần đầu Q4 (test case hệ thống cho hai quy trình).</p>
+<p class="nhan">Q3 — int calculateRewardPoints(double bookingAmount, String customerType)</p>
+<ul>
+<li><strong>amount &lt; 0</strong> → −1</li>
+<li><strong>"VIP"</strong> → <code>(int)(bookingAmount * 0.1)</code></li>
+<li><strong>"Regular"</strong> → <code>(int)(bookingAmount * 0.05)</code></li>
+<li><strong>còn lại</strong> → 0</li>
+</ul>
+<p><strong>Yêu cầu:</strong> phủ 100% statement, 100% branch, 100% EP và 100% BVA; liệt kê các ca với đầu vào và đầu ra mong đợi rồi giải thích độ phủ.</p>
+<p class="nhan">Q4 — Quy trình 1 "Booking a Travel Package", bước 1–6</p>
+<ol>
+<li>Đăng nhập.</li>
+<li>Tìm điểm đến.</li>
+<li>Chọn tour (vé máy bay + khách sạn + hoạt động).</li>
+<li>Xem chi tiết và giá.</li>
+<li>Nhập thông tin hành khách.</li>
+<li>Chọn phương thức và thanh toán …</li>
+</ol>`],
       [5, 'Question 4 — Process 1 steps 7–8, Process 2, answer requirements',
-        `<p>Process 1 ends with "System confirms the booking and sends a confirmation email" and "User receives an electronic itinerary". <b>Process 2 "Searching for Available Hotels":</b> visit the site → enter destination and travel dates → list of available hotels → apply filters (price range, rating, amenities) → results update → select a hotel → check availability for the dates → room availability and booking options. <b>Requirements:</b> at least 5 test cases per process covering normal, alternative and exception flows; format Test Case ID · Test Scenario · Preconditions (if applicable) · Test Steps · Expected Result. Plus the usual invitation to state assumptions.</p>`,
-        `<p>Quy trình 1 kết thúc bằng "Hệ thống xác nhận booking và gửi email xác nhận" và "Người dùng nhận lịch trình điện tử". <b>Quy trình 2 "Searching for Available Hotels":</b> vào website → nhập điểm đến và ngày đi → danh sách khách sạn còn phòng → áp bộ lọc (khoảng giá, hạng sao, tiện nghi) → kết quả cập nhật → chọn một khách sạn → kiểm tra phòng trống theo ngày → hiển thị phòng trống và lựa chọn đặt. <b>Yêu cầu:</b> ít nhất 5 test case cho mỗi quy trình, phủ luồng chính, luồng thay thế và ngoại lệ; khuôn Test Case ID · Test Scenario · Preconditions (nếu có) · Test Steps · Expected Result. Kèm lời mời quen thuộc: cứ nêu giả định.</p>`],
+        `<p class="y-chinh">🎯 Page 5 finishes Process 1, gives Process 2, and fixes the format of the Q4 answer.</p>
+<p class="nhan">Process 1 — the last two steps</p>
+<ul>
+<li>"System confirms the booking and sends a confirmation email"</li>
+<li>"User receives an electronic itinerary"</li>
+</ul>
+<p class="nhan">Process 2 "Searching for Available Hotels"</p>
+<ol class="hai-cot">
+<li>Visit the site</li>
+<li>Enter destination and travel dates</li>
+<li>List of available hotels</li>
+<li>Apply filters (price range, rating, amenities)</li>
+<li>Results update</li>
+<li>Select a hotel</li>
+<li>Check availability for the dates</li>
+<li>Room availability and booking options</li>
+</ol>
+<p class="nhan">Requirements</p>
+<ul>
+<li><strong>Quantity</strong> — at least 5 test cases per process, covering normal, alternative and exception flows.</li>
+<li><strong>Format</strong> — Test Case ID · Test Scenario · Preconditions (if applicable) · Test Steps · Expected Result.</li>
+<li><strong>Assumptions</strong> — the usual invitation to state them.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Trang 5 khép lại Quy trình 1, cho Quy trình 2, và quy định khuôn trả lời của Q4.</p>
+<p class="nhan">Quy trình 1 — hai bước cuối</p>
+<ul>
+<li>"Hệ thống xác nhận booking và gửi email xác nhận"</li>
+<li>"Người dùng nhận lịch trình điện tử"</li>
+</ul>
+<p class="nhan">Quy trình 2 "Searching for Available Hotels"</p>
+<ol class="hai-cot">
+<li>Vào website</li>
+<li>Nhập điểm đến và ngày đi</li>
+<li>Danh sách khách sạn còn phòng</li>
+<li>Áp bộ lọc (khoảng giá, hạng sao, tiện nghi)</li>
+<li>Kết quả cập nhật</li>
+<li>Chọn một khách sạn</li>
+<li>Kiểm tra phòng trống theo ngày</li>
+<li>Hiển thị phòng trống và lựa chọn đặt</li>
+</ol>
+<p class="nhan">Yêu cầu</p>
+<ul>
+<li><strong>Số lượng</strong> — ít nhất 5 test case cho mỗi quy trình, phủ luồng chính, luồng thay thế và ngoại lệ.</li>
+<li><strong>Khuôn</strong> — Test Case ID · Test Scenario · Preconditions (nếu có) · Test Steps · Expected Result.</li>
+<li><strong>Giả định</strong> — kèm lời mời quen thuộc: cứ nêu giả định.</li>
+</ul>`],
     ]),
 
     /* ── Q1 ── */
     bi(`<h2>✅ Question 1 — selecting the test strategy</h2>
-<p>The syllabus says real strategies are usually <b>blends</b>, with one dominant approach. Start from the risks in the context: each constraint on page 1 is a product risk (lesson 5.5), and a risk list naturally leads to an <b>analytical, risk-based</b> strategy as the backbone. Then add one supporting strategy per constraint that risk analysis alone does not cover: a load <em>model</em> for peak traffic, <em>standards</em> for payments, <em>regression</em> automation for a 12-month project with frequent releases, and <em>reactive</em> exploratory sessions for the recommendation feature, whose "accuracy" is hard to specify upfront.</p>`,
+<h4>The task</h4>
+<p>Identify the most suitable test strategy (one or more) for TravelEase, explain why, and propose how to implement it in this project.</p>
+<h3>Step 1 — start from the risks</h3>
+<p>The syllabus says real strategies are usually <strong>blends</strong>, with one dominant approach. Each constraint on page 1 is a product risk (lesson 5.5), and a risk list naturally leads to an <strong>analytical, risk-based</strong> strategy as the backbone.</p>
+<h3>Step 2 — add one supporting strategy per constraint</h3>
+<p>For what risk analysis alone does not cover:</p>
+<ul>
+<li><strong>Peak traffic</strong> → a load <em>model</em>.</li>
+<li><strong>Payments</strong> → <em>standards</em>.</li>
+<li><strong>A 12-month project with frequent releases</strong> → <em>regression</em> automation.</li>
+<li><strong>The recommendation feature</strong>, whose "accuracy" is hard to specify upfront → <em>reactive</em> exploratory sessions.</li>
+</ul>`,
       `<h2>✅ Câu 1 — chọn chiến lược kiểm thử</h2>
-<p>Syllabus nói chiến lược thực tế thường là <b>sự pha trộn</b>, trong đó có một cách tiếp cận chủ đạo. Hãy bắt đầu từ các rủi ro trong bối cảnh: mỗi ràng buộc ở trang 1 là một rủi ro sản phẩm (bài 5.5), và danh sách rủi ro dẫn tự nhiên tới chiến lược <b>analytical, dựa trên rủi ro</b> làm xương sống. Sau đó thêm cho mỗi ràng buộc một chiến lược hỗ trợ mà phân tích rủi ro không tự lo được: <em>mô hình</em> tải cho lưu lượng đỉnh, <em>tiêu chuẩn</em> cho thanh toán, tự động hoá <em>hồi quy</em> cho một dự án 12 tháng phát hành liên tục, và các buổi khám phá <em>reactive</em> cho tính năng gợi ý, vốn khó đặc tả "độ chính xác" từ đầu.</p>`),
-    sheet('Answer (Word document) — Q1 · Bài làm mẫu — Câu 1', `<p><b>Most suitable strategy: Analytical (risk-based testing)</b>, supported by Model-based, Process-/Standard-compliant, Regression-averse and Reactive testing.</p>
+<h4>Đề yêu cầu</h4>
+<p>Chỉ ra chiến lược kiểm thử phù hợp nhất (một hoặc nhiều) cho TravelEase, giải thích vì sao, và đề xuất cách triển khai trong dự án này.</p>
+<h3>Bước 1 — bắt đầu từ rủi ro</h3>
+<p>Syllabus nói chiến lược thực tế thường là <strong>sự pha trộn</strong>, trong đó có một cách tiếp cận chủ đạo. Mỗi ràng buộc ở trang 1 là một rủi ro sản phẩm (bài 5.5), và danh sách rủi ro dẫn tự nhiên tới chiến lược <strong>analytical, dựa trên rủi ro</strong> làm xương sống.</p>
+<h3>Bước 2 — thêm cho mỗi ràng buộc một chiến lược hỗ trợ</h3>
+<p>Cho những gì phân tích rủi ro không tự lo được:</p>
+<ul>
+<li><strong>Lưu lượng đỉnh</strong> → <em>mô hình</em> tải.</li>
+<li><strong>Thanh toán</strong> → <em>tiêu chuẩn</em>.</li>
+<li><strong>Dự án 12 tháng phát hành liên tục</strong> → tự động hoá <em>hồi quy</em>.</li>
+<li><strong>Tính năng gợi ý</strong>, vốn khó đặc tả "độ chính xác" từ đầu → các buổi khám phá <em>reactive</em>.</li>
+</ul>`),
+    sheet('Answer (Word document) — Q1 · Bài làm mẫu — Câu 1', `<p><strong>Most suitable strategy: Analytical (risk-based testing)</strong>, supported by Model-based, Process-/Standard-compliant, Regression-averse and Reactive testing.</p>
 ${tbl(['Strategy', 'Why it fits TravelEase', 'How we implement it'], [
-  ['<b>Analytical — risk-based (primary)</b>', 'The four constraints are the main product risks: payment errors/security, performance at holiday peaks, wrong or slow search results, broken layouts on mobile. With 5 testers for 10 developers we cannot test everything equally, so effort must follow risk.', 'Risk workshop in month 1 with the product owner, agencies and developers; score each feature likelihood × impact; payment, booking and search = high, agency dashboard = medium. High-risk items get early, deep testing (EP/BVA, decision tables, state transitions for booking status), medium items fewer cases. Re-score every sprint; report residual risk in each test report.'],
+  ['<strong>Analytical — risk-based (primary)</strong>', 'The four constraints are the main product risks: payment errors/security, performance at holiday peaks, wrong or slow search results, broken layouts on mobile. With 5 testers for 10 developers we cannot test everything equally, so effort must follow risk.', 'Risk workshop in month 1 with the product owner, agencies and developers; score each feature likelihood × impact; payment, booking and search = high, agency dashboard = medium. High-risk items get early, deep testing (EP/BVA, decision tables, state transitions for booking status), medium items fewer cases. Re-score every sprint; report residual risk in each test report.'],
   ['Model-based (performance)', '"Handle high traffic" needs a model of real usage — how many users search, book and pay per minute at peak.', 'Build an operational profile (e.g. 70% search, 20% view details, 10% book) and turn it into load, stress and spike tests with JMeter or k6 at 2–3× the expected holiday peak; response-time targets for search (e.g. p95 &lt; 2 s).'],
   ['Process-/Standard-compliant (payments)', 'Payments must be secure and error-free; card payments fall under PCI DSS, and web security has the OWASP Top 10.', 'PCI DSS and OWASP-based checklists, a security scan (OWASP ZAP) each release, penetration test before go-live, test cards and sandbox gateways for every method (card, wallet, bank transfer).'],
   ['Regression-averse', '12 months of incremental releases: every change can break booking or payment.', 'Automate the high-risk flows (search → book → pay) with Selenium/Playwright and API tests; run them in CI on every build; nightly full regression across the device matrix.'],
   ['Reactive (exploratory)', 'Recommendation "accuracy" and cross-device usability are hard to specify completely.', 'Time-boxed exploratory sessions with charters each sprint (e.g. "explore recommendations for families during Tết"), plus a device/browser matrix (methodical checklist) on real phones and BrowserStack.'],
 ])}
-<p><b>Team and plan:</b> the test lead owns the risk register, the test plan and reporting; 2 testers on booking/payment and search (functional + exploratory), 1 on performance and security, 1 on automation and the device matrix. Entry criterion for system testing: build deployed and smoke tests pass; exit criteria: no open critical/high defects in payment or booking, all high-risk tests passed, performance targets met at peak load.</p>`),
+<p><strong>Team and plan:</strong> the test lead owns the risk register, the test plan and reporting; 2 testers on booking/payment and search (functional + exploratory), 1 on performance and security, 1 on automation and the device matrix. Entry criterion for system testing: build deployed and smoke tests pass; exit criteria: no open critical/high defects in payment or booking, all high-risk tests passed, performance targets met at peak load.</p>`),
 
     /* ── Q2 ── */
     bi(`<h2>✅ Question 2 — code review of TravelBooking</h2>
-<p>The code compiles — so every error here is about conventions, design and logic, and each needs an argument. The key logic bug is <b>String comparison with ==</b>: it compares object references, not text. A run makes it concrete: with the literal <code>"CreditCard"</code> it returns <code>true</code> (both literals are the same interned object), but with the same text built at run time (as it would be when read from a form or a request) it returns <code>false</code>. The same run shows a negative price accepted by the constructor and a <code>null</code> payment method crashing with NullPointerException.</p>`,
+<h4>The task</h4>
+<p>Identify 6 errors in <code>TravelBooking</code> (conventions, standards or logic), explain each and suggest a fix.</p>
+<h3>Step 1 — it compiles, so every issue needs an argument</h3>
+<p>The code compiles — so every error here is about conventions, design and logic, and each needs an argument.</p>
+<h3>Step 2 — prove the key logic bug by running it</h3>
+<p>The key logic bug is <strong>String comparison with ==</strong>: it compares object references, not text. A run makes it concrete:</p>
+<ul>
+<li><strong>Literal <code>"CreditCard"</code></strong> → <code>true</code> (both literals are the same interned object).</li>
+<li><strong>Same text built at run time</strong> (as when read from a form or a request) → <code>false</code>.</li>
+<li><strong>Negative price</strong> → accepted by the constructor.</li>
+<li><strong><code>null</code> payment method</strong> → crashes with NullPointerException.</li>
+</ul>`,
       `<h2>✅ Câu 2 — review code TravelBooking</h2>
-<p>Code này biên dịch được — nên mọi lỗi ở đây đều thuộc về quy ước, thiết kế và logic, và lỗi nào cũng cần lập luận. Lỗi logic chính là <b>so sánh String bằng ==</b>: nó so sánh tham chiếu đối tượng, không so sánh nội dung. Chạy thử cho thấy rõ: với literal <code>"CreditCard"</code> hàm trả <code>true</code> (hai literal là cùng một đối tượng đã intern), nhưng với cùng nội dung được tạo lúc chạy (như khi đọc từ form hay request) thì trả <code>false</code>. Lần chạy đó cũng cho thấy constructor nhận giá âm và phương thức thanh toán <code>null</code> làm chương trình chết với NullPointerException.</p>`),
+<h4>Đề yêu cầu</h4>
+<p>Tìm 6 lỗi trong <code>TravelBooking</code> (quy ước, chuẩn hoặc logic), giải thích từng lỗi và đề xuất cách sửa.</p>
+<h3>Bước 1 — code biên dịch được, nên lỗi nào cũng cần lập luận</h3>
+<p>Code này biên dịch được — nên mọi lỗi ở đây đều thuộc về quy ước, thiết kế và logic, và lỗi nào cũng cần lập luận.</p>
+<h3>Bước 2 — chạy thử để chứng minh lỗi logic chính</h3>
+<p>Lỗi logic chính là <strong>so sánh String bằng ==</strong>: nó so sánh tham chiếu đối tượng, không so sánh nội dung. Chạy thử cho thấy rõ:</p>
+<ul>
+<li><strong>Literal <code>"CreditCard"</code></strong> → <code>true</code> (hai literal là cùng một đối tượng đã intern).</li>
+<li><strong>Cùng nội dung tạo lúc chạy</strong> (như khi đọc từ form hay request) → <code>false</code>.</li>
+<li><strong>Giá âm</strong> → constructor vẫn nhận.</li>
+<li><strong>Phương thức thanh toán <code>null</code></strong> → chương trình chết với NullPointerException.</li>
+</ul>`),
     numbered(SP25_Q2),
     sheet('Answer (Word document) — Q2 · Bài làm mẫu — Câu 2 (line 1 = "public class TravelBooking {")', tbl(['Issue No', 'Description', 'Line'], [
       ['1', '[Logic] <code>paymentMethod == "CreditCard"</code> compares references, not text: a value read at run time with the same text returns false. Fix: <code>"CreditCard".equals(paymentMethod)</code>.', '13'],
@@ -1512,11 +2646,51 @@ Booking ID: B1, Travelers: 2, Total: 100.00`),
 
     /* ── Q3 ── */
     bi(`<h2>✅ Question 3 — unit tests for calculateRewardPoints</h2>
-<p><b>White-box view.</b> Three decisions: D1 <code>bookingAmount &lt; 0</code>, D2 <code>customerType.equals("VIP")</code>, D3 <code>customerType.equals("Regular")</code> → <b>V(G) = 3 + 1 = 4</b>, and four returns. Every test ends at one return and each return is reached by a different combination, so <b>4 tests are the minimum</b> for 100% statement and 100% branch coverage: (−0.01, VIP) → −1, (1000, VIP) → 100, (1000, Regular) → 50, (1000, Guest) → 0 — a branch probe measured 6/6 outcomes.</p>
-<p><b>Black-box view.</b> The paper also demands 100% EP and BVA. The amount has the partition border at 0 (−0.01 invalid, 0 valid) and — easy to miss — the <b>integer truncation</b> of <code>(int)</code>: a VIP needs at least 10 to earn 1 point (9.99 → 0), a Regular customer at least 20 (19.99 → 0). The customer type has three documented partitions plus two that expose behaviour: wrong letter case ("vip" is not "VIP", 0 points) and <code>null</code>, which crashes with NullPointerException as soon as the amount is ≥ 0 — a defect to report. With a negative amount and a null type the method still returns −1, because the amount is checked first.</p>`,
+<h4>The task</h4>
+<p>Unit tests for <code>calculateRewardPoints</code> with 100% statement, branch, EP and BVA coverage; list inputs and expected outputs, and explain the coverage.</p>
+<h3>Step 1 — white-box view</h3>
+<ul>
+<li><strong>Decisions</strong> — D1 <code>bookingAmount &lt; 0</code>, D2 <code>customerType.equals("VIP")</code>, D3 <code>customerType.equals("Regular")</code> → <strong>V(G) = 3 + 1 = 4</strong>, and four returns.</li>
+<li><strong>Minimum</strong> — every test ends at one return and each return is reached by a different combination, so <strong>4 tests are the minimum</strong> for 100% statement and 100% branch coverage.</li>
+</ul>
+<ol>
+<li>(−0.01, VIP) → −1</li>
+<li>(1000, VIP) → 100</li>
+<li>(1000, Regular) → 50</li>
+<li>(1000, Guest) → 0</li>
+</ol>
+<p>A branch probe measured 6/6 outcomes.</p>
+<h3>Step 2 — black-box view</h3>
+<p>The paper also demands 100% EP and BVA.</p>
+<ul>
+<li><strong>Amount, partition border</strong> — at 0: −0.01 invalid, 0 valid.</li>
+<li><strong>Amount, integer truncation of <code>(int)</code></strong> — easy to miss: a VIP needs at least 10 to earn 1 point (9.99 → 0), a Regular customer at least 20 (19.99 → 0).</li>
+<li><strong>Customer type</strong> — three documented partitions plus two that expose behaviour: wrong letter case ("vip" is not "VIP", 0 points) and <code>null</code>, which crashes with NullPointerException as soon as the amount is ≥ 0 — a defect to report.</li>
+<li><strong>Negative amount + null type</strong> — still returns −1, because the amount is checked first.</li>
+</ul>`,
       `<h2>✅ Câu 3 — unit test cho calculateRewardPoints</h2>
-<p><b>Góc nhìn hộp trắng.</b> Ba quyết định: D1 <code>bookingAmount &lt; 0</code>, D2 <code>customerType.equals("VIP")</code>, D3 <code>customerType.equals("Regular")</code> → <b>V(G) = 3 + 1 = 4</b>, và bốn lệnh return. Mỗi test kết thúc ở một return và mỗi return ứng với một tổ hợp khác nhau, nên <b>4 test là tối thiểu</b> cho 100% statement và 100% branch coverage: (−0.01, VIP) → −1, (1000, VIP) → 100, (1000, Regular) → 50, (1000, Guest) → 0 — bộ đo nhánh đo được 6/6 kết cục.</p>
-<p><b>Góc nhìn hộp đen.</b> Đề còn đòi 100% EP và BVA. Số tiền có biên phân vùng tại 0 (−0.01 không hợp lệ, 0 hợp lệ) và — dễ bỏ sót — phép <b>cắt phần thập phân</b> của <code>(int)</code>: khách VIP cần ít nhất 10 mới được 1 điểm (9.99 → 0), khách Regular cần ít nhất 20 (19.99 → 0). Loại khách có ba phân vùng theo đặc tả cộng hai phân vùng làm lộ hành vi: sai hoa thường ("vip" không phải "VIP", 0 điểm) và <code>null</code>, làm chương trình chết với NullPointerException ngay khi số tiền ≥ 0 — một defect phải báo. Với số tiền âm và loại khách null, hàm vẫn trả −1, vì số tiền được kiểm trước.</p>`),
+<h4>Đề yêu cầu</h4>
+<p>Unit test cho <code>calculateRewardPoints</code> phủ 100% statement, branch, EP và BVA; liệt kê đầu vào, đầu ra mong đợi và giải thích độ phủ.</p>
+<h3>Bước 1 — góc nhìn hộp trắng</h3>
+<ul>
+<li><strong>Các quyết định</strong> — D1 <code>bookingAmount &lt; 0</code>, D2 <code>customerType.equals("VIP")</code>, D3 <code>customerType.equals("Regular")</code> → <strong>V(G) = 3 + 1 = 4</strong>, và bốn lệnh return.</li>
+<li><strong>Tối thiểu</strong> — mỗi test kết thúc ở một return và mỗi return ứng với một tổ hợp khác nhau, nên <strong>4 test là tối thiểu</strong> cho 100% statement và 100% branch coverage.</li>
+</ul>
+<ol>
+<li>(−0.01, VIP) → −1</li>
+<li>(1000, VIP) → 100</li>
+<li>(1000, Regular) → 50</li>
+<li>(1000, Guest) → 0</li>
+</ol>
+<p>Bộ đo nhánh đo được 6/6 kết cục.</p>
+<h3>Bước 2 — góc nhìn hộp đen</h3>
+<p>Đề còn đòi 100% EP và BVA.</p>
+<ul>
+<li><strong>Số tiền, biên phân vùng</strong> — tại 0: −0.01 không hợp lệ, 0 hợp lệ.</li>
+<li><strong>Số tiền, phép cắt phần thập phân của <code>(int)</code></strong> — dễ bỏ sót: khách VIP cần ít nhất 10 mới được 1 điểm (9.99 → 0), khách Regular cần ít nhất 20 (19.99 → 0).</li>
+<li><strong>Loại khách</strong> — ba phân vùng theo đặc tả cộng hai phân vùng làm lộ hành vi: sai hoa thường ("vip" không phải "VIP", 0 điểm) và <code>null</code>, làm chương trình chết với NullPointerException ngay khi số tiền ≥ 0 — một defect phải báo.</li>
+<li><strong>Số tiền âm + loại khách null</strong> — hàm vẫn trả −1, vì số tiền được kiểm trước.</li>
+</ul>`),
     sheet('Answer — partitions and boundaries · Bài làm mẫu — phân vùng và biên', RW_T31.html),
     sheet('Answer — test cases with inputs and expected output · Bài làm mẫu — test case', RW_T32.table),
     RW_T32.check,
@@ -1570,9 +2744,39 @@ OK (12 tests)
 
     /* ── Q4 ── */
     bi(`<h2>✅ Question 4 — system test cases for two business processes</h2>
-<p>A system test case follows the whole process end to end, through the user interface, with concrete data. For each process: one or two normal flows, two alternative flows (the user takes another route and still finishes), and two or three exception flows (invalid input, missing data, a failing external system). <b>Assumptions:</b> a test environment with sandbox payment gateways (a declined test card exists), a test mailbox for confirmation emails, and seeded hotels and packages for the destinations used; prices in VND.</p>`,
+<h4>The task</h4>
+<p>At least 5 system test cases for each process — "Booking a Travel Package" and "Searching for Available Hotels" — covering normal, alternative and exception flows.</p>
+<h3>Step 1 — what a system test case is</h3>
+<p>It follows the whole process end to end, through the user interface, with concrete data.</p>
+<h3>Step 2 — the mix for each process</h3>
+<ul>
+<li><strong>Normal</strong> — one or two flows.</li>
+<li><strong>Alternative</strong> — two flows: the user takes another route and still finishes.</li>
+<li><strong>Exception</strong> — two or three flows: invalid input, missing data, a failing external system.</li>
+</ul>
+<h4>Assumptions</h4>
+<ul>
+<li><strong>Payments</strong> — a test environment with sandbox payment gateways (a declined test card exists).</li>
+<li><strong>Email</strong> — a test mailbox for confirmation emails.</li>
+<li><strong>Data</strong> — seeded hotels and packages for the destinations used; prices in VND.</li>
+</ul>`,
       `<h2>✅ Câu 4 — test case hệ thống cho hai quy trình nghiệp vụ</h2>
-<p>Một test case hệ thống đi trọn quy trình từ đầu đến cuối, qua giao diện người dùng, với dữ liệu cụ thể. Mỗi quy trình: một hai luồng chính, hai luồng thay thế (người dùng đi đường khác nhưng vẫn hoàn tất), và hai ba luồng ngoại lệ (dữ liệu sai, thiếu dữ liệu, hệ thống bên ngoài lỗi). <b>Giả định:</b> môi trường test có cổng thanh toán sandbox (có sẵn thẻ test bị từ chối), hộp thư test để nhận email xác nhận, và dữ liệu khách sạn/tour mẫu cho các điểm đến dùng trong test; giá tính bằng VND.</p>`),
+<h4>Đề yêu cầu</h4>
+<p>Ít nhất 5 test case hệ thống cho mỗi quy trình — "Booking a Travel Package" và "Searching for Available Hotels" — phủ luồng chính, luồng thay thế và ngoại lệ.</p>
+<h3>Bước 1 — test case hệ thống là gì</h3>
+<p>Nó đi trọn quy trình từ đầu đến cuối, qua giao diện người dùng, với dữ liệu cụ thể.</p>
+<h3>Bước 2 — cơ cấu cho mỗi quy trình</h3>
+<ul>
+<li><strong>Luồng chính</strong> — một hai luồng.</li>
+<li><strong>Luồng thay thế</strong> — hai luồng: người dùng đi đường khác nhưng vẫn hoàn tất.</li>
+<li><strong>Luồng ngoại lệ</strong> — hai ba luồng: dữ liệu sai, thiếu dữ liệu, hệ thống bên ngoài lỗi.</li>
+</ul>
+<h4>Giả định</h4>
+<ul>
+<li><strong>Thanh toán</strong> — môi trường test có cổng thanh toán sandbox (có sẵn thẻ test bị từ chối).</li>
+<li><strong>Email</strong> — hộp thư test để nhận email xác nhận.</li>
+<li><strong>Dữ liệu</strong> — khách sạn/tour mẫu cho các điểm đến dùng trong test; giá tính bằng VND.</li>
+</ul>`),
     sheet('Answer — Process 1: Booking a Travel Package · Bài làm mẫu — Quy trình 1', tbl(['Test Case ID', 'Test Scenario', 'Preconditions', 'Test Steps', 'Expected Result'], [
       ['ST-BK-01 (Normal)', 'Book a package and pay by credit card', 'Registered user; package "Đà Nẵng 3 days 2 nights" (flight + hotel + activities) has seats', '1. Log in · 2. Search "Đà Nẵng", dates D+30 to D+32 · 3. Select the package · 4. Review details and price for 2 adults · 5. Enter both travellers\' names, ID numbers, dates of birth · 6. Pay with a valid test credit card', 'Booking confirmed with a booking number; confirmation email received; e-itinerary downloadable; package availability reduced by 2 seats'],
       ['ST-BK-02 (Alternative)', 'Pay with a digital wallet', 'As ST-BK-01', 'Steps 1–5 as ST-BK-01 · 6. Choose Digital wallet and approve in the wallet sandbox', 'Booking confirmed; payment method "Digital wallet" shown on the confirmation and in the email'],
@@ -1591,12 +2795,24 @@ OK (12 tests)
     ])),
     bi(`<h3>Ví dụ có lời giải · Worked example — why 9.99 and 10 are the boundaries that matter</h3>
 <p>For a VIP the points are <code>(int)(amount × 0.1)</code>. The cast drops the fraction, so the output changes from 0 to 1 exactly when amount × 0.1 reaches 1, i.e. at amount = 10: 9.99 × 0.1 = 0.999 → 0, 10 × 0.1 = 1.0 → 1. For a Regular customer the step is at 20 (19.99 × 0.05 = 0.9995 → 0). These are <em>output</em> boundaries: invisible in the parameter list, obvious once you ask "where does the result change?". The run above confirms both.</p>
-<div class="pitfall"><b>Q1 is not a definitions question.</b> Writing seven definitions of the seven strategies earns little. Pick one primary strategy, tie every choice to a named constraint of the context (traffic, search, payments, devices, team of 5, 12 months), and describe concrete implementation steps — that is what "explain" and "propose how to implement" mean.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Spike vs soak.</b> "Holiday peaks" hide two different performance risks. A <em>spike test</em> jumps from normal to 5× load in a minute (the Tết flash sale) and checks that the site degrades gracefully and recovers; a <em>soak test</em> keeps a high load for hours to find memory leaks and connection-pool exhaustion that a 10-minute load test never shows. Tools such as k6 express both as small scripts that can run in CI. <em>Outside the syllabus because CTFL names performance testing only as a test type (Chapter 2).</em></div>`,
+<div class="pitfall co-tieu-de"><strong>Q1 is not a definitions question.</strong> Writing seven definitions of the seven strategies earns little. Pick one primary strategy, tie every choice to a named constraint of the context (traffic, search, payments, devices, team of 5, 12 months), and describe concrete implementation steps — that is what "explain" and "propose how to implement" mean.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Spike vs soak.</strong> "Holiday peaks" hide two different performance risks.
+<ul>
+<li><strong>Spike test</strong> — jumps from normal to 5× load in a minute (the Tết flash sale) and checks that the site degrades gracefully and recovers.</li>
+<li><strong>Soak test</strong> — keeps a high load for hours to find memory leaks and connection-pool exhaustion that a 10-minute load test never shows.</li>
+</ul>
+<p>Tools such as k6 express both as small scripts that can run in CI.</p>
+<p><em>Outside the syllabus because CTFL names performance testing only as a test type (Chapter 2).</em></p></div>`,
       `<h3>Ví dụ có lời giải · Vì sao 9.99 và 10 mới là biên quan trọng</h3>
 <p>Với khách VIP, số điểm là <code>(int)(amount × 0.1)</code>. Phép ép kiểu bỏ phần thập phân, nên kết quả đổi từ 0 sang 1 đúng lúc amount × 0.1 chạm 1, tức amount = 10: 9.99 × 0.1 = 0.999 → 0, 10 × 0.1 = 1.0 → 1. Với khách Regular bậc thang nằm ở 20 (19.99 × 0.05 = 0.9995 → 0). Đây là các biên <em>đầu ra</em>: không thấy trong danh sách tham số, nhưng hiện ra ngay khi bạn hỏi "kết quả đổi ở đâu?". Lần chạy ở trên xác nhận cả hai.</p>
-<div class="pitfall"><b>Q1 không phải câu hỏi định nghĩa.</b> Viết bảy định nghĩa cho bảy chiến lược được rất ít điểm. Hãy chọn một chiến lược chủ đạo, gắn mỗi lựa chọn với một ràng buộc cụ thể của bối cảnh (lưu lượng, tìm kiếm, thanh toán, thiết bị, đội 5 người, 12 tháng), và mô tả các bước triển khai cụ thể — đó mới là "giải thích" và "đề xuất cách triển khai".</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Spike và soak.</b> "Mùa lễ" giấu hai rủi ro hiệu năng khác nhau. <em>Spike test</em> đẩy tải từ bình thường lên gấp 5 trong một phút (đợt flash sale Tết) và kiểm tra website xuống cấp nhẹ nhàng rồi hồi phục; <em>soak test</em> giữ tải cao nhiều giờ để tìm rò rỉ bộ nhớ và cạn connection pool mà bài load test 10 phút không bao giờ lộ ra. Công cụ như k6 viết cả hai thành script nhỏ chạy được trong CI. <em>Ngoài giáo trình vì CTFL chỉ nêu performance testing như một loại kiểm thử (Chương 2).</em></div>`),
+<div class="pitfall co-tieu-de"><strong>Q1 không phải câu hỏi định nghĩa.</strong> Viết bảy định nghĩa cho bảy chiến lược được rất ít điểm. Hãy chọn một chiến lược chủ đạo, gắn mỗi lựa chọn với một ràng buộc cụ thể của bối cảnh (lưu lượng, tìm kiếm, thanh toán, thiết bị, đội 5 người, 12 tháng), và mô tả các bước triển khai cụ thể — đó mới là "giải thích" và "đề xuất cách triển khai".</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Spike và soak.</strong> "Mùa lễ" giấu hai rủi ro hiệu năng khác nhau.
+<ul>
+<li><strong>Spike test</strong> — đẩy tải từ bình thường lên gấp 5 trong một phút (đợt flash sale Tết) và kiểm tra website xuống cấp nhẹ nhàng rồi hồi phục.</li>
+<li><strong>Soak test</strong> — giữ tải cao nhiều giờ để tìm rò rỉ bộ nhớ và cạn connection pool mà bài load test 10 phút không bao giờ lộ ra.</li>
+</ul>
+<p>Công cụ như k6 viết cả hai thành script nhỏ chạy được trong CI.</p>
+<p><em>Ngoài giáo trình vì CTFL chỉ nêu performance testing như một loại kiểm thử (Chương 2).</em></p></div>`),
     books([
       ['fst4', 'Ch.5 §2.2 "Test strategy and test approach" — book p.164–167 (PDF p.178–181); Ch.5 §5 "Risks and testing" p.183–189 (PDF 197–203); Ch.4 §2.5 use-case testing p.130–131', 'Chương 5 §2.2 "Test strategy and test approach" — trang sách 164–167 (PDF 178–181); Chương 5 §5 "Risks and testing" tr.183–189 (PDF 197–203); Chương 4 §2.5 kiểm thử theo use case tr.130–131'],
       ['sp5', '§6.2 test strategies — §6.2.2 selecting a strategy (PDF p.259), §6.2.3 concrete strategies (PDF p.262), §6.2.4 testing and risk (PDF p.263)', '§6.2 chiến lược kiểm thử — §6.2.2 chọn chiến lược (PDF tr.259), §6.2.3 các chiến lược cụ thể (PDF tr.262), §6.2.4 kiểm thử và rủi ro (PDF tr.263)'],

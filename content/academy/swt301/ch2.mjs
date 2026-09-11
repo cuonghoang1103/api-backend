@@ -27,7 +27,12 @@ const L21 = {
     bi(`<span class="eyebrow">Chapter 2 · Lesson 2.1 · SWT2 slides 1–35</span>
 <h2>Software development lifecycle models</h2>
 <p class="lead">How and when you test depends on how the software is built. This lesson compares the two families of lifecycle models — <strong>sequential</strong> (waterfall, V-model) and <strong>iterative &amp; incremental</strong> (RUP, Scrum, Kanban, spiral) — and the four characteristics of good testing that hold in <em>every</em> model.</p>
-<div class="callout"><b>Learning objectives.</b> LO-2.1.1 Explain the relationships between software development activities and test activities in the lifecycle (K2) · LO-2.1.2 Identify reasons why lifecycle models must be adapted to the context of project and product characteristics (K1). Chapter 2 carries <b>5 of 40</b> exam questions.</div>
+<div class="callout"><strong>Learning objectives.</strong>
+<ul>
+<li><strong>LO-2.1.1</strong> — Explain the relationships between software development activities and test activities in the lifecycle (K2).</li>
+<li><strong>LO-2.1.2</strong> — Identify reasons why lifecycle models must be adapted to the context of project and product characteristics (K1).</li>
+</ul>
+<p>Chapter 2 carries <strong>5 of 40</strong> exam questions.</p></div>
 <table>
 <thead><tr><th></th><th>Sequential (waterfall, V)</th><th>Iterative &amp; incremental (RUP, Scrum, Kanban, spiral)</th></tr></thead>
 <tbody>
@@ -40,7 +45,12 @@ const L21 = {
     `<span class="eyebrow">Chương 2 · Bài 2.1 · SWT2 slide 1–35</span>
 <h2>Các mô hình vòng đời phát triển phần mềm</h2>
 <p class="lead">Test thế nào và test lúc nào phụ thuộc vào cách phần mềm được làm ra. Bài này so sánh hai họ mô hình vòng đời — <strong>tuần tự</strong> (waterfall, V-model) và <strong>lặp &amp; tăng dần</strong> (RUP, Scrum, Kanban, spiral) — và bốn đặc điểm của kiểm thử tốt đúng với <em>mọi</em> mô hình.</p>
-<div class="callout"><b>Chuẩn đầu ra.</b> LO-2.1.1 Giải thích quan hệ giữa hoạt động phát triển và hoạt động kiểm thử trong vòng đời (K2) · LO-2.1.2 Nêu lý do mô hình vòng đời phải được điều chỉnh theo ngữ cảnh dự án và sản phẩm (K1). Chương 2 chiếm <b>5/40</b> câu trong đề.</div>
+<div class="callout"><strong>Chuẩn đầu ra.</strong>
+<ul>
+<li><strong>LO-2.1.1</strong> — Giải thích quan hệ giữa hoạt động phát triển và hoạt động kiểm thử trong vòng đời (K2).</li>
+<li><strong>LO-2.1.2</strong> — Nêu lý do mô hình vòng đời phải được điều chỉnh theo ngữ cảnh dự án và sản phẩm (K1).</li>
+</ul>
+<p>Chương 2 chiếm <strong>5/40</strong> câu trong đề.</p></div>
 <table>
 <thead><tr><th></th><th>Tuần tự (waterfall, V)</th><th>Lặp &amp; tăng dần (RUP, Scrum, Kanban, spiral)</th></tr></thead>
 <tbody>
@@ -52,107 +62,575 @@ const L21 = {
 </table>`),
     walkHead(D, 1, 35),
     walk(D, [
-      [1, 'Testing throughout the Software Life Cycle (cover)', `<p>Chapter 2 of the six-box map ("2 Lifecycle" highlighted).</p>`, `<p>Chương 2 trong sơ đồ sáu ô (ô "2 Lifecycle" được tô).</p>`],
-      [2, 'CONTENT', `<p>Four blocks: SDLC models (this lesson) · Test levels (2.2–2.3) · Test types (2.4) · Maintenance testing (2.5).</p>`, `<p>Bốn khối: mô hình SDLC (bài này) · Các cấp test (2.2–2.3) · Các loại test (2.4) · Kiểm thử bảo trì (2.5).</p>`],
+      [1, 'Testing throughout the Software Life Cycle (cover)',
+        `<p class="y-chinh">🎯 Cover of Chapter 2 — the second of the six boxes on the ISTQB map ("2 Lifecycle" highlighted).</p>`,
+        `<p class="y-chinh">🎯 Bìa Chương 2 — ô thứ hai trong sơ đồ sáu ô của ISTQB (ô "2 Lifecycle" được tô).</p>`],
+      [2, 'CONTENT',
+        `<p class="y-chinh">🎯 The chapter has four blocks.</p>
+<ol>
+<li><strong>SDLC models</strong> — this lesson</li>
+<li><strong>Test levels</strong> — lessons 2.2–2.3</li>
+<li><strong>Test types</strong> — lesson 2.4</li>
+<li><strong>Maintenance testing</strong> — lesson 2.5</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Chương này có bốn khối.</p>
+<ol>
+<li><strong>Mô hình SDLC</strong> — bài này</li>
+<li><strong>Các cấp test</strong> — bài 2.2–2.3</li>
+<li><strong>Các loại test</strong> — bài 2.4</li>
+<li><strong>Kiểm thử bảo trì</strong> — bài 2.5</li>
+</ol>`],
       [3, 'Software Development Lifecycle',
-        `<p>A lifecycle model describes the <strong>types of activity</strong> performed at each stage of a software project and how they relate <strong>logically and chronologically</strong>. The wheel shows the usual six: planning → analysis → design → implementation → testing &amp; integration → maintenance.</p>`,
-        `<p>Mô hình vòng đời mô tả <strong>các loại hoạt động</strong> ở từng giai đoạn của dự án phần mềm và chúng liên hệ với nhau thế nào <strong>về logic lẫn thời gian</strong>. Bánh xe có sáu bước quen thuộc: lập kế hoạch → phân tích → thiết kế → cài đặt → kiểm thử &amp; tích hợp → bảo trì.</p>`],
+        `<p class="y-chinh">🎯 A lifecycle model describes the <strong>types of activity</strong> at each stage of a software project and how they relate <strong>logically and chronologically</strong>.</p>
+<p class="nhan">The wheel — the usual six stages</p>
+<ol>
+<li>Planning</li>
+<li>Analysis</li>
+<li>Design</li>
+<li>Implementation</li>
+<li>Testing &amp; integration</li>
+<li>Maintenance</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Mô hình vòng đời mô tả <strong>các loại hoạt động</strong> ở từng giai đoạn của dự án phần mềm và chúng liên hệ với nhau <strong>về logic lẫn thời gian</strong>.</p>
+<p class="nhan">Bánh xe — sáu bước quen thuộc</p>
+<ol>
+<li>Lập kế hoạch</li>
+<li>Phân tích</li>
+<li>Thiết kế</li>
+<li>Cài đặt</li>
+<li>Kiểm thử &amp; tích hợp</li>
+<li>Bảo trì</li>
+</ol>`],
       [4, 'Characteristics of good testing (any lifecycle)',
-        `<p>Four rules that apply to every model — memorise them, a question always comes: (1) for <strong>every development activity there is a corresponding test activity</strong>; (2) each <strong>test level has objectives specific to that level</strong>; (3) test analysis and design for a level <strong>begin during the corresponding development activity</strong> (not after it); (4) testers take part in <strong>discussions to define and refine requirements and design</strong> and in reviewing work products.</p>`,
-        `<p>Bốn quy tắc đúng với mọi mô hình — phải thuộc, đề chắc chắn hỏi: (1) <strong>mỗi hoạt động phát triển có một hoạt động kiểm thử tương ứng</strong>; (2) mỗi <strong>cấp test có mục tiêu riêng của cấp đó</strong>; (3) phân tích và thiết kế test cho một cấp <strong>bắt đầu ngay trong hoạt động phát triển tương ứng</strong> (không đợi làm xong); (4) tester <strong>tham gia thảo luận để xác định, làm mịn yêu cầu và thiết kế</strong>, và review các sản phẩm công việc.</p>`],
+        `<p class="y-chinh">🎯 Four rules of good testing hold in <em>every</em> lifecycle model — memorise them, a question always comes.</p>
+<ol>
+<li><strong>Corresponding test activity</strong> — for every development activity there is a matching test activity.</li>
+<li><strong>Level-specific objectives</strong> — each test level has test objectives specific to that level.</li>
+<li><strong>Early analysis &amp; design</strong> — test analysis and design for a level begin <em>during</em> the corresponding development activity, not after it.</li>
+<li><strong>Testers in the discussion</strong> — testers help define and refine requirements and design, and review work products.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Bốn quy tắc của kiểm thử tốt đúng với <em>mọi</em> mô hình vòng đời — phải thuộc, đề chắc chắn hỏi.</p>
+<ol>
+<li><strong>Hoạt động test tương ứng</strong> — mỗi hoạt động phát triển có một hoạt động kiểm thử tương ứng.</li>
+<li><strong>Mục tiêu riêng cho từng cấp</strong> — mỗi cấp test có mục tiêu test riêng của cấp đó.</li>
+<li><strong>Phân tích &amp; thiết kế sớm</strong> — phân tích và thiết kế test cho một cấp bắt đầu <em>ngay trong</em> hoạt động phát triển tương ứng, không đợi làm xong.</li>
+<li><strong>Tester tham gia thảo luận</strong> — tester góp phần xác định, làm mịn yêu cầu và thiết kế, và review các sản phẩm công việc.</li>
+</ol>`],
       [5, 'SDLC models: sequential vs iterative & incremental',
-        `<p>The two families the syllabus names. Everything on the next slides belongs to one of them.</p>`,
-        `<p>Hai họ mô hình mà syllabus nêu tên. Mọi mô hình ở các slide sau đều thuộc một trong hai họ này.</p>`],
+        `<p class="y-chinh">🎯 The syllabus names two families of SDLC models; every model on the next slides belongs to one of them.</p>
+<ul>
+<li><strong>Sequential</strong> — waterfall, V-model (slides 6–13)</li>
+<li><strong>Iterative &amp; incremental</strong> — RUP, Scrum, Kanban, spiral (slides 14–21)</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Syllabus nêu tên hai họ mô hình SDLC; mọi mô hình ở các slide sau đều thuộc một trong hai họ này.</p>
+<ul>
+<li><strong>Tuần tự (sequential)</strong> — waterfall, V-model (slide 6–13)</li>
+<li><strong>Lặp &amp; tăng dần (iterative &amp; incremental)</strong> — RUP, Scrum, Kanban, spiral (slide 14–21)</li>
+</ul>`],
       [6, 'Sequential Development Models',
-        `<p>A linear, sequential flow: any phase should begin when the previous one is complete. In theory there is no overlap; in practice early feedback from the following phase is beneficial.</p>`,
-        `<p>Dòng chảy tuyến tính, tuần tự: pha nào cũng bắt đầu khi pha trước đã xong. Về lý thuyết không có chồng lấn; thực tế nhận phản hồi sớm từ pha sau là có lợi.</p>`],
+        `<p class="y-chinh">🎯 A sequential model is a linear flow: each phase begins when the previous one is complete.</p>
+<ul>
+<li><strong>In theory</strong> — phases do not overlap.</li>
+<li><strong>In practice</strong> — early feedback from the following phase is beneficial.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Mô hình tuần tự là dòng chảy tuyến tính: pha nào cũng bắt đầu khi pha trước đã xong.</p>
+<ul>
+<li><strong>Về lý thuyết</strong> — các pha không chồng lấn.</li>
+<li><strong>Thực tế</strong> — nhận phản hồi sớm từ pha sau là có lợi.</li>
+</ul>`],
       [7, 'Waterfall Model',
-        `<p>Requirements → design → development → testing → deployment → maintenance, one after another. <strong>Testing happens towards the end</strong>, so defects are found close to the go-live date, and feedback flowing "back up the waterfall" is difficult and expensive (the speaker notes repeat the same three points).</p>`,
-        `<p>Yêu cầu → thiết kế → phát triển → kiểm thử → triển khai → bảo trì, lần lượt từng pha. <strong>Kiểm thử diễn ra ở cuối vòng đời</strong>, nên lỗi được phát hiện sát ngày go-live, và việc đưa phản hồi "ngược lên thác nước" rất khó và tốn kém (ghi chú của thầy/cô nhắc lại đúng ba ý này).</p>`],
+        `<p class="y-chinh">🎯 In the waterfall, <strong>testing happens towards the end</strong> — so defects surface close to go-live.</p>
+<p class="nhan">The flow</p>
+<p>Requirements → design → development → testing → deployment → maintenance, one after another.</p>
+<p class="nhan">The three consequences</p>
+<ol>
+<li><strong>Sequential completion</strong> — development activities are completed one after another.</li>
+<li><strong>Late defects</strong> — testing comes late, so defects are found close to the live deployment date.</li>
+<li><strong>Costly feedback</strong> — feedback flowing "back up the waterfall" is difficult, and the cost of change is high.</li>
+</ol>
+<p class="ghi-chu">The speaker notes repeat the same three points in Vietnamese.</p>`,
+        `<p class="y-chinh">🎯 Trong waterfall, <strong>kiểm thử diễn ra ở cuối vòng đời</strong> — nên lỗi lộ ra sát ngày go-live.</p>
+<p class="nhan">Dòng chảy</p>
+<p>Yêu cầu → thiết kế → phát triển → kiểm thử → triển khai → bảo trì, lần lượt từng pha.</p>
+<p class="nhan">Ba hệ quả</p>
+<ol>
+<li><strong>Xong pha này mới tới pha kia</strong> — các hoạt động phát triển lần lượt được hoàn thành.</li>
+<li><strong>Lỗi phát hiện muộn</strong> — kiểm thử đến muộn nên lỗi được tìm ra sát ngày triển khai thật.</li>
+<li><strong>Phản hồi đắt</strong> — đưa phản hồi "ngược lên thác nước" rất khó, và chi phí thay đổi cao.</li>
+</ol>
+<p class="ghi-chu">Ghi chú của thầy/cô nhắc lại đúng ba ý này bằng tiếng Việt.</p>`],
       [8, 'V-Model: test levels',
-        `<p>The V pairs each development level on the left with a test level on the right: user requirements ↔ <strong>acceptance testing</strong>; software specifications ↔ <strong>system testing</strong>; high-level design ↔ <strong>integration testing</strong>; detailed design ↔ <strong>component testing</strong>; implementation at the bottom. Requirements and design are on the left arm, development at the bottom, testing (orange) on the right arm.</p>`,
-        `<p>Chữ V ghép mỗi mức phát triển bên trái với một cấp test bên phải: yêu cầu người dùng ↔ <strong>acceptance testing</strong>; đặc tả phần mềm ↔ <strong>system testing</strong>; thiết kế tổng thể ↔ <strong>integration testing</strong>; thiết kế chi tiết ↔ <strong>component testing</strong>; cài đặt ở đáy. Yêu cầu và thiết kế nằm nhánh trái, phát triển ở đáy, kiểm thử (màu cam) ở nhánh phải.</p>`],
+        `<p class="y-chinh">🎯 The V pairs each development level on the left with a test level on the right.</p>
+<p class="nhan">The four pairs (top to bottom)</p>
+<ol>
+<li><strong>User requirements</strong> ↔ acceptance testing</li>
+<li><strong>Software specifications</strong> ↔ system testing</li>
+<li><strong>High-level design</strong> ↔ integration testing</li>
+<li><strong>Detailed design</strong> ↔ component testing</li>
+</ol>
+<p class="nhan">Reading the picture</p>
+<ul>
+<li><strong>Left arm</strong> — requirements and design.</li>
+<li><strong>Bottom</strong> — implementation (development).</li>
+<li><strong>Right arm</strong> (orange) — testing.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Chữ V ghép mỗi mức phát triển bên trái với một cấp test bên phải.</p>
+<p class="nhan">Bốn cặp (từ trên xuống)</p>
+<ol>
+<li><strong>Yêu cầu người dùng</strong> ↔ acceptance testing</li>
+<li><strong>Đặc tả phần mềm</strong> ↔ system testing</li>
+<li><strong>Thiết kế tổng thể</strong> ↔ integration testing</li>
+<li><strong>Thiết kế chi tiết</strong> ↔ component testing</li>
+</ol>
+<p class="nhan">Đọc hình</p>
+<ul>
+<li><strong>Nhánh trái</strong> — yêu cầu và thiết kế.</li>
+<li><strong>Đáy</strong> — cài đặt (phát triển).</li>
+<li><strong>Nhánh phải</strong> (màu cam) — kiểm thử.</li>
+</ul>`],
       [9, 'V-Model: late test design',
-        `<p>If tests for every level are <strong>designed</strong> only when you reach the right arm ("Design tests?" at the bottom right), you get the waterfall's problem back: the test basis is never checked until the code exists.</p>`,
-        `<p>Nếu test cho từng cấp chỉ được <strong>thiết kế</strong> khi đã tới nhánh phải ("Design tests?" ở góc dưới phải), bạn lại gặp đúng vấn đề của waterfall: test basis không được kiểm tra cho tới khi đã có code.</p>`],
+        `<p class="y-chinh">🎯 Designing tests only on the right arm brings back the waterfall's problem.</p>
+<ul>
+<li><strong>What the slide shows</strong> — tests for every level are <strong>designed</strong> only when you reach the right arm ("Design tests?" at the bottom right).</li>
+<li><strong>Why it hurts</strong> — the test basis is never checked until the code exists.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Chỉ thiết kế test khi tới nhánh phải là rước lại đúng vấn đề của waterfall.</p>
+<ul>
+<li><strong>Slide cho thấy</strong> — test cho từng cấp chỉ được <strong>thiết kế</strong> khi đã tới nhánh phải ("Design tests?" ở góc dưới phải).</li>
+<li><strong>Vì sao có hại</strong> — test basis không được kiểm tra cho tới khi đã có code.</li>
+</ul>`],
       [10, 'V-Model: early test design',
-        `<p>The correct use of the V: <strong>design tests</strong> on the left, as soon as each requirement or design document exists, and <strong>run tests</strong> on the right. This is Principle 3 (early testing) applied to the lifecycle.</p>`,
-        `<p>Cách dùng đúng của chữ V: <strong>thiết kế test</strong> ở nhánh trái, ngay khi có từng tài liệu yêu cầu/thiết kế, và <strong>chạy test</strong> ở nhánh phải. Đó là Nguyên tắc 3 (kiểm thử sớm) áp vào vòng đời.</p>`],
+        `<p class="y-chinh">🎯 The correct use of the V: design tests on the left, run them on the right.</p>
+<ul>
+<li><strong>Design tests</strong> — on the left arm, as soon as each requirement or design document exists.</li>
+<li><strong>Run tests</strong> — on the right arm, once the code exists.</li>
+</ul>
+<p>This is Principle 3 (early testing) applied to the lifecycle.</p>`,
+        `<p class="y-chinh">🎯 Cách dùng đúng của chữ V: thiết kế test ở nhánh trái, chạy test ở nhánh phải.</p>
+<ul>
+<li><strong>Thiết kế test</strong> — ở nhánh trái, ngay khi có từng tài liệu yêu cầu/thiết kế.</li>
+<li><strong>Chạy test</strong> — ở nhánh phải, khi đã có code.</li>
+</ul>
+<p>Đó là Nguyên tắc 3 (kiểm thử sớm) áp vào vòng đời.</p>`],
       [11, 'Early test design',
-        `<p>Why it pays: test design itself finds faults; faults found early are cheaper; the most significant faults are found first; faults are prevented, not built in; it needs no extra effort, only re-scheduling test design earlier; and it may cause requirement changes (a good thing). Box: <em>early test design helps to build quality and stops fault multiplication</em>. The deck's hidden slides tell a real story — see the box after the walkthrough.</p>`,
-        `<p>Vì sao đáng làm: chính việc thiết kế test tìm ra lỗi; lỗi tìm sớm rẻ hơn; lỗi quan trọng nhất được tìm trước; lỗi được ngăn chứ không bị "xây vào"; không tốn thêm công, chỉ dời việc thiết kế test lên sớm; và có thể khiến yêu cầu phải sửa (đó là điều tốt). Khung hồng: <em>thiết kế test sớm giúp xây chất lượng và chặn lỗi nhân lên</em>. Các slide ẩn kể một câu chuyện có thật — xem khung sau phần slide.</p>`],
+        `<p class="y-chinh">🎯 Early test design helps to build quality and stops fault multiplication (the pink box).</p>
+<p class="nhan">Why it pays — six reasons</p>
+<ol>
+<li><strong>Test design finds faults</strong> — the act of designing tests exposes them.</li>
+<li><strong>Cheaper</strong> — faults found early are cheaper to fix.</li>
+<li><strong>Most significant first</strong> — the most important faults are found first.</li>
+<li><strong>Prevented, not built in</strong> — faults are stopped before they enter the code.</li>
+<li><strong>No extra effort</strong> — you only re-schedule test design earlier.</li>
+<li><strong>May change requirements</strong> — test design can force requirement changes, and that is a good thing.</li>
+</ol>
+<p class="ghi-chu">The deck's hidden slides tell a real story — see the box after the walkthrough.</p>`,
+        `<p class="y-chinh">🎯 Thiết kế test sớm giúp xây chất lượng và chặn lỗi nhân lên (khung hồng).</p>
+<p class="nhan">Vì sao đáng làm — sáu lý do</p>
+<ol>
+<li><strong>Thiết kế test tìm ra lỗi</strong> — chính việc thiết kế test làm lỗi lộ ra.</li>
+<li><strong>Rẻ hơn</strong> — lỗi tìm sớm thì sửa rẻ hơn.</li>
+<li><strong>Lỗi quan trọng nhất ra trước</strong> — những lỗi nghiêm trọng nhất được tìm trước.</li>
+<li><strong>Ngăn chứ không "xây vào"</strong> — lỗi bị chặn trước khi lọt vào code.</li>
+<li><strong>Không tốn thêm công</strong> — chỉ dời việc thiết kế test lên sớm.</li>
+<li><strong>Có thể khiến yêu cầu phải sửa</strong> — thiết kế test làm yêu cầu thay đổi, và đó là điều tốt.</li>
+</ol>
+<p class="ghi-chu">Các slide ẩn kể một câu chuyện có thật — xem khung sau phần slide.</p>`],
       [12, 'VV&T — verification, validation, testing (BS 7925-1)',
-        `<p>Formal definitions: <strong>verification</strong> = evaluating whether the products of a development phase satisfy the conditions imposed at the <em>start</em> of that phase; <strong>validation</strong> = determining correctness with respect to the <em>user needs and requirements</em>; <strong>testing</strong> = exercising software to verify it satisfies requirements, is fit for purpose and to detect faults.</p>`,
-        `<p>Định nghĩa chính thức: <strong>verification</strong> = đánh giá sản phẩm của một pha có thoả điều kiện đặt ra ở <em>đầu</em> pha đó không; <strong>validation</strong> = xác định tính đúng đắn so với <em>nhu cầu và yêu cầu của người dùng</em>; <strong>testing</strong> = chạy phần mềm để verify nó thoả yêu cầu, phù hợp mục đích và để phát hiện lỗi.</p>`],
+        `<p class="y-chinh">🎯 Three formal definitions from BS 7925-1 — verification, validation and testing are not the same thing.</p>
+<ul>
+<li><strong>Verification</strong> — evaluating whether the products of a development phase satisfy the conditions imposed at the <em>start</em> of that phase.</li>
+<li><strong>Validation</strong> — determining correctness with respect to the <em>user needs and requirements</em>.</li>
+<li><strong>Testing</strong> — exercising software to verify it satisfies specified requirements, is fit for purpose, and to detect faults.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> verification = "built it right?" (against the phase's own conditions); validation = "built the right thing?" (against the user).</p>`,
+        `<p class="y-chinh">🎯 Ba định nghĩa chính thức theo BS 7925-1 — verification, validation và testing là ba việc khác nhau.</p>
+<ul>
+<li><strong>Verification</strong> — đánh giá sản phẩm của một pha có thoả điều kiện đặt ra ở <em>đầu</em> pha đó không.</li>
+<li><strong>Validation</strong> — xác định tính đúng đắn so với <em>nhu cầu và yêu cầu của người dùng</em>.</li>
+<li><strong>Testing</strong> — chạy phần mềm để verify nó thoả yêu cầu đã đặc tả, phù hợp mục đích, và để phát hiện lỗi.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> verification = "làm có đúng không?" (so với điều kiện của chính pha đó); validation = "làm có đúng thứ cần không?" (so với người dùng).</p>`],
       [13, 'Verification, validation and testing on the V',
-        `<p>Any work product (the red box) can be <em>verified</em> against the phase that produced it (the loop), <em>validated</em> against the user's needs (arrow up) and <em>tested</em> (arrow right). On the small V: horizontal links are verification between matching levels; the green arrows climbing the right arm lead to validation at the top.</p>`,
-        `<p>Mỗi sản phẩm công việc (ô đỏ) có thể được <em>verify</em> so với pha tạo ra nó (vòng lặp), <em>validate</em> so với nhu cầu người dùng (mũi tên lên) và <em>test</em> (mũi tên sang phải). Trên chữ V nhỏ: các đường ngang là verification giữa hai mức tương ứng; mũi tên xanh leo dọc nhánh phải dẫn tới validation ở đỉnh.</p>`],
+        `<p class="y-chinh">🎯 Any work product can be verified, validated and tested — the diagram shows all three at once.</p>
+<p class="nhan">The big box ("Any")</p>
+<ul>
+<li><strong>Verification</strong> — the loop: checked against the phase that produced it.</li>
+<li><strong>Validation</strong> — the arrow up: checked against the user's needs.</li>
+<li><strong>Testing</strong> — the arrow right: exercised.</li>
+</ul>
+<p class="nhan">The small V</p>
+<ul>
+<li><strong>Horizontal links</strong> — verification between matching levels.</li>
+<li><strong>Green arrows</strong> — climbing the right arm, they lead to validation at the top.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Sản phẩm công việc nào cũng có thể được verify, validate và test — hình vẽ cả ba cùng lúc.</p>
+<p class="nhan">Ô lớn ("Any")</p>
+<ul>
+<li><strong>Verification</strong> — vòng lặp: kiểm so với pha tạo ra nó.</li>
+<li><strong>Validation</strong> — mũi tên lên: kiểm so với nhu cầu người dùng.</li>
+<li><strong>Testing</strong> — mũi tên sang phải: cho chạy thử.</li>
+</ul>
+<p class="nhan">Chữ V nhỏ</p>
+<ul>
+<li><strong>Các đường ngang</strong> — verification giữa hai mức tương ứng.</li>
+<li><strong>Mũi tên xanh</strong> — leo dọc nhánh phải, dẫn tới validation ở đỉnh.</li>
+</ul>`],
       [14, 'Incremental Development Models',
-        `<p>Requirements, design, build and test are done <strong>in pieces</strong>; features grow incrementally. Increments vary in size — some methods use large pieces, others as small as one UI change or a new query option. Working parts of the system are produced early, and each can be released to the customer.</p>`,
-        `<p>Yêu cầu, thiết kế, xây dựng và kiểm thử được làm <strong>theo từng phần</strong>; tính năng lớn dần theo từng đợt. Kích thước mỗi phần khác nhau — có phương pháp chia miếng lớn, có cái nhỏ tới mức một thay đổi trên màn hình hay một tuỳ chọn truy vấn mới. Các phần chạy được ra đời sớm và mỗi phần có thể giao cho khách hàng.</p>`],
+        `<p class="y-chinh">🎯 Incremental development builds the system <strong>in pieces</strong>: features grow increment by increment.</p>
+<ul>
+<li><strong>Every piece is a mini-project</strong> — requirements, design, build and test are done per piece.</li>
+<li><strong>Size varies</strong> — some methods use large pieces, others pieces as small as one UI-screen change or a new query option.</li>
+<li><strong>Early value</strong> — working parts of the system appear early, and each can be released to the customer.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Phát triển tăng dần xây hệ thống <strong>theo từng phần</strong>: tính năng lớn dần qua từng đợt.</p>
+<ul>
+<li><strong>Mỗi phần là một dự án nhỏ</strong> — yêu cầu, thiết kế, xây dựng và kiểm thử được làm cho từng phần.</li>
+<li><strong>Kích thước khác nhau</strong> — có phương pháp chia miếng lớn, có cái nhỏ tới mức một thay đổi trên màn hình hay một tuỳ chọn truy vấn mới.</li>
+<li><strong>Có giá trị sớm</strong> — các phần chạy được ra đời sớm, và mỗi phần có thể giao cho khách hàng.</li>
+</ul>`],
       [15, 'Iterative Development Models',
-        `<p>Start with a rough product and <strong>refine it iteratively</strong> (rework strategy). Iterations may change earlier features and the scope; officially only the final version is delivered, in practice intermediate versions go to selected customers for feedback. Each iteration delivers working software that is a growing subset of the features.</p>`,
-        `<p>Bắt đầu bằng một sản phẩm thô rồi <strong>tinh chỉnh dần qua các vòng lặp</strong> (chiến lược làm lại). Vòng lặp sau có thể sửa tính năng của vòng trước và cả phạm vi; chính thức chỉ bản cuối được giao, nhưng thực tế các bản trung gian được gửi cho một số khách hàng để lấy phản hồi. Mỗi vòng ra phần mềm chạy được, là một tập con tính năng lớn dần.</p>`],
+        `<p class="y-chinh">🎯 Iterative development starts with a rough product and <strong>refines it in iterations</strong> (a rework strategy).</p>
+<ul>
+<li><strong>Change is allowed</strong> — an iteration may change features built in earlier iterations, and the project scope.</li>
+<li><strong>Delivery</strong> — officially only the final version goes to the customer; in practice, intermediate versions go to selected customers for feedback.</li>
+<li><strong>Growing subset</strong> — each iteration delivers working software with a growing subset of the features, until the final software is delivered or development is stopped.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Phát triển lặp bắt đầu bằng một sản phẩm thô rồi <strong>tinh chỉnh dần qua các vòng lặp</strong> (chiến lược làm lại).</p>
+<ul>
+<li><strong>Được phép thay đổi</strong> — vòng sau có thể sửa tính năng đã làm ở vòng trước, và cả phạm vi dự án.</li>
+<li><strong>Bàn giao</strong> — chính thức chỉ bản cuối được giao cho khách; thực tế các bản trung gian được gửi cho một số khách hàng chọn lọc để lấy phản hồi.</li>
+<li><strong>Tập con lớn dần</strong> — mỗi vòng ra phần mềm chạy được, là tập con tính năng lớn dần, cho tới khi bản cuối được giao hoặc dự án dừng.</li>
+</ul>`],
       [16, 'Testing in incremental & iterative development',
-        `<p>High-level test planning and analysis happen at the start of the project; <strong>detailed planning, analysis, design and implementation happen at the start of each iteration</strong>. Execution involves overlapping test levels; the same tasks are done with different timing and extent. Common issues: <strong>more regression testing</strong>, defects outside the scope of the current iteration, and less thorough testing.</p>`,
-        `<p>Lập kế hoạch và phân tích test mức cao diễn ra lúc bắt đầu dự án; <strong>lập kế hoạch chi tiết, phân tích, thiết kế, triển khai test diễn ra đầu mỗi vòng lặp</strong>. Thực thi có các cấp test chồng lấn; cùng các việc nhưng khác thời điểm và mức độ. Vấn đề thường gặp: <strong>regression nhiều hơn</strong>, defect nằm ngoài phạm vi vòng hiện tại, và test kém kỹ hơn.</p>`],
+        `<p class="y-chinh">🎯 In iterative &amp; incremental models the same test tasks happen, but with different timing and extent.</p>
+<p class="nhan">When each task happens</p>
+<ul>
+<li><strong>Start of the project</strong> — high-level test planning and test analysis.</li>
+<li><strong>Start of each iteration/increment</strong> — detailed test planning, analysis, design and implementation.</li>
+<li><strong>Execution</strong> — test levels overlap.</li>
+</ul>
+<p class="nhan">Common issues</p>
+<ol>
+<li><strong>More regression testing</strong></li>
+<li><strong>Defects outside the scope</strong> of the current iteration/increment</li>
+<li><strong>Less thorough testing</strong></li>
+</ol>`,
+        `<p class="y-chinh">🎯 Trong mô hình lặp &amp; tăng dần vẫn là các việc test đó, nhưng khác thời điểm và mức độ.</p>
+<p class="nhan">Việc nào diễn ra lúc nào</p>
+<ul>
+<li><strong>Đầu dự án</strong> — lập kế hoạch và phân tích test mức cao.</li>
+<li><strong>Đầu mỗi vòng lặp/phần tăng</strong> — lập kế hoạch chi tiết, phân tích, thiết kế và triển khai test.</li>
+<li><strong>Thực thi</strong> — các cấp test chồng lấn nhau.</li>
+</ul>
+<p class="nhan">Vấn đề thường gặp</p>
+<ol>
+<li><strong>Regression nhiều hơn</strong></li>
+<li><strong>Defect nằm ngoài phạm vi</strong> của vòng/phần tăng hiện tại</li>
+<li><strong>Test kém kỹ hơn</strong></li>
+</ol>`],
       [17, 'Rational Unified Process (RUP) — the hump chart',
-        `<p>Four phases (inception, elaboration, construction, transition) across the top, workflows (business modelling, requirements, analysis &amp; design, implementation, test, deployment, configuration &amp; change management, project management, environment) down the side, iterations along the bottom. The coloured humps show how much of each workflow happens in each phase — notice that <em>test</em> is present in every phase, not only at the end.</p>`,
-        `<p>Bốn pha (inception, elaboration, construction, transition) ở trên, các luồng công việc (mô hình nghiệp vụ, yêu cầu, phân tích &amp; thiết kế, cài đặt, kiểm thử, triển khai, quản lý cấu hình &amp; thay đổi, quản lý dự án, môi trường) dọc bên trái, các vòng lặp ở dưới. Các "bướu" màu cho thấy lượng công việc của từng luồng trong từng pha — để ý luồng <em>test</em> có mặt ở mọi pha, không chỉ ở cuối.</p>`],
+        `<p class="y-chinh">🎯 The RUP "hump chart": the <em>test</em> workflow is present in every phase, not only at the end.</p>
+<p class="nhan">How to read it</p>
+<ul>
+<li><strong>Across the top</strong> — four phases: inception, elaboration, construction, transition.</li>
+<li><strong>Down the side</strong> — workflows: business modelling, requirements, analysis &amp; design, implementation, test, deployment, configuration &amp; change management, project management, environment.</li>
+<li><strong>Along the bottom</strong> — the iterations.</li>
+<li><strong>Coloured humps</strong> — how much of each workflow happens in each phase.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Biểu đồ "bướu" của RUP: luồng <em>test</em> có mặt ở mọi pha, không chỉ ở cuối.</p>
+<p class="nhan">Cách đọc</p>
+<ul>
+<li><strong>Hàng trên</strong> — bốn pha: inception, elaboration, construction, transition.</li>
+<li><strong>Cột trái</strong> — các luồng công việc: mô hình nghiệp vụ, yêu cầu, phân tích &amp; thiết kế, cài đặt, kiểm thử, triển khai, quản lý cấu hình &amp; thay đổi, quản lý dự án, môi trường.</li>
+<li><strong>Hàng dưới</strong> — các vòng lặp.</li>
+<li><strong>Các "bướu" màu</strong> — lượng công việc của từng luồng trong từng pha.</li>
+</ul>`],
       [18, 'RUP characteristics',
-        `<p>Iterative, with <strong>risk as the primary driver</strong>; quality evaluation (including testing) is continuous. Iterations are <strong>relatively long (months)</strong> and increments correspondingly large (two or three groups of related features). Compare with Scrum on the next slide.</p>`,
-        `<p>Lặp, lấy <strong>rủi ro làm động lực chính</strong> cho quyết định; đánh giá chất lượng (gồm kiểm thử) diễn ra liên tục. Vòng lặp <strong>tương đối dài (vài tháng)</strong> và mỗi phần tăng tương ứng lớn (hai, ba nhóm tính năng liên quan). So sánh với Scrum ở slide sau.</p>`],
+        `<p class="y-chinh">🎯 RUP is iterative with <strong>long iterations (months)</strong> and <strong>risk as the primary driver</strong> of decisions.</p>
+<ul>
+<li><strong>Risk-driven</strong> — risk is the main input for every decision.</li>
+<li><strong>Continuous quality evaluation</strong> — including testing, throughout development.</li>
+<li><strong>Relatively long iterations</strong> — months.</li>
+<li><strong>Large increments</strong> — e.g. two or three groups of related features.</li>
+</ul>
+<p>Compare with Scrum on the next slide.</p>`,
+        `<p class="y-chinh">🎯 RUP là mô hình lặp có <strong>vòng lặp dài (vài tháng)</strong> và lấy <strong>rủi ro làm động lực chính</strong> cho quyết định.</p>
+<ul>
+<li><strong>Dựa trên rủi ro</strong> — rủi ro là căn cứ chính cho mọi quyết định.</li>
+<li><strong>Đánh giá chất lượng liên tục</strong> — gồm cả kiểm thử, suốt quá trình phát triển.</li>
+<li><strong>Vòng lặp tương đối dài</strong> — vài tháng.</li>
+<li><strong>Phần tăng lớn</strong> — vd hai, ba nhóm tính năng liên quan.</li>
+</ul>
+<p>So sánh với Scrum ở slide sau.</p>`],
       [19, 'Scrum',
-        `<p>Product backlog → sprint planning → sprint backlog → a 1–4 week sprint with a 24-hour daily stand-up → finished work, sprint review and retrospective. Iterations are <strong>short (days to a few weeks)</strong> and increments small (a few enhancements and/or two or three features).</p>`,
-        `<p>Product backlog → họp lập kế hoạch sprint → sprint backlog → một sprint 1–4 tuần với họp đứng hằng ngày → sản phẩm hoàn thành, sprint review và retrospective. Vòng lặp <strong>ngắn (vài ngày tới vài tuần)</strong> và phần tăng nhỏ (vài cải tiến và/hoặc hai, ba tính năng).</p>`],
+        `<p class="y-chinh">🎯 Scrum uses <strong>short iterations (days to a few weeks)</strong> with correspondingly small increments.</p>
+<p class="nhan">The cycle on the picture</p>
+<ol>
+<li><strong>Product backlog</strong></li>
+<li><strong>Sprint planning</strong> → sprint backlog</li>
+<li><strong>Sprint</strong> — 1–4 weeks, with a daily stand-up every 24 hours</li>
+<li><strong>Finished work</strong> → sprint review and retrospective</li>
+</ol>
+<p class="nhan">Size of an increment</p>
+<p>A few enhancements and/or two or three new features.</p>`,
+        `<p class="y-chinh">🎯 Scrum dùng <strong>vòng lặp ngắn (vài ngày tới vài tuần)</strong> với phần tăng nhỏ tương ứng.</p>
+<p class="nhan">Chu trình trên hình</p>
+<ol>
+<li><strong>Product backlog</strong></li>
+<li><strong>Họp lập kế hoạch sprint</strong> → sprint backlog</li>
+<li><strong>Sprint</strong> — 1–4 tuần, có họp đứng mỗi 24 giờ</li>
+<li><strong>Sản phẩm hoàn thành</strong> → sprint review và retrospective</li>
+</ol>
+<p class="nhan">Kích thước phần tăng</p>
+<p>Vài cải tiến và/hoặc hai, ba tính năng mới.</p>`],
       [20, 'Kanban',
-        `<p>A board of columns (analysis, design, develop, testing, UAT &amp; SIT, deploy) fed from a prioritised queue. Kanban can run <strong>with or without fixed-length iterations</strong>, delivering one feature at a time or batching several. Its key principle is a <strong>limit on work in progress (WIP)</strong>.</p>`,
-        `<p>Bảng các cột (phân tích, thiết kế, phát triển, kiểm thử, UAT &amp; SIT, triển khai) lấy việc từ một hàng đợi đã ưu tiên. Kanban có thể chạy <strong>có hoặc không có vòng lặp độ dài cố định</strong>, giao từng tính năng một hoặc gom nhiều cái. Nguyên tắc chính là <strong>giới hạn số việc đang làm (WIP)</strong>.</p>`],
+        `<p class="y-chinh">🎯 Kanban's key principle is a <strong>limit on work in progress (WIP)</strong>.</p>
+<ul>
+<li><strong>The board</strong> — columns (analysis, design, develop, testing, UAT &amp; SIT, deploy) fed from a prioritised queue.</li>
+<li><strong>Iterations optional</strong> — runs with or without fixed-length iterations.</li>
+<li><strong>Delivery</strong> — one enhancement or feature at a time as soon as it is done, or several features grouped into one release.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Nguyên tắc chính của Kanban là <strong>giới hạn số việc đang làm (WIP)</strong>.</p>
+<ul>
+<li><strong>Bảng Kanban</strong> — các cột (phân tích, thiết kế, phát triển, kiểm thử, UAT &amp; SIT, triển khai) lấy việc từ một hàng đợi đã ưu tiên.</li>
+<li><strong>Vòng lặp là tuỳ chọn</strong> — chạy có hoặc không có vòng lặp độ dài cố định.</li>
+<li><strong>Bàn giao</strong> — từng cải tiến/tính năng một ngay khi xong, hoặc gom nhiều tính năng phát hành một lần.</li>
+</ul>`],
       [21, 'Spiral (prototyping)',
-        `<p>Each loop of the spiral: determine objectives → identify and resolve risks (prototypes) → develop and test → plan the next iteration. It creates <strong>experimental increments</strong>, some heavily reworked or even abandoned later.</p>`,
-        `<p>Mỗi vòng xoắn: xác định mục tiêu → nhận diện và xử lý rủi ro (làm prototype) → phát triển và kiểm thử → lập kế hoạch vòng sau. Mô hình này tạo ra <strong>các phần tăng thử nghiệm</strong>, có cái bị làm lại nhiều hoặc thậm chí bỏ hẳn về sau.</p>`],
+        `<p class="y-chinh">🎯 The spiral (prototyping) model creates <strong>experimental increments</strong> — some are heavily reworked or even abandoned later.</p>
+<p class="nhan">One loop of the spiral</p>
+<ol>
+<li><strong>Determine objectives</strong></li>
+<li><strong>Identify and resolve risks</strong> — build prototypes</li>
+<li><strong>Develop and test</strong></li>
+<li><strong>Plan the next iteration</strong></li>
+</ol>`,
+        `<p class="y-chinh">🎯 Mô hình xoắn ốc (prototyping) tạo ra <strong>các phần tăng thử nghiệm</strong> — có cái bị làm lại nhiều hoặc thậm chí bỏ hẳn về sau.</p>
+<p class="nhan">Một vòng xoắn</p>
+<ol>
+<li><strong>Xác định mục tiêu</strong></li>
+<li><strong>Nhận diện và xử lý rủi ro</strong> — làm prototype</li>
+<li><strong>Phát triển và kiểm thử</strong></li>
+<li><strong>Lập kế hoạch vòng sau</strong></li>
+</ol>`],
       [22, 'Agile development',
-        `<p>Typical practices: business (user) stories define functionality; an <strong>on-site customer</strong> gives continual feedback and defines/performs functional acceptance tests; pair programming and shared code ownership; component tests written <strong>before</strong> the code (TDD) and automated; simplicity — build only what is necessary; <strong>continuous integration</strong> and testing at least once a day.</p>`,
-        `<p>Thực hành điển hình: user story định nghĩa chức năng; <strong>khách hàng ngồi cùng nhóm</strong> phản hồi liên tục và xác định/thực hiện acceptance test chức năng; lập trình cặp và sở hữu code chung; component test viết <strong>trước</strong> code (TDD) và được tự động hoá; đơn giản — chỉ làm cái cần thiết; <strong>tích hợp liên tục</strong> và test ít nhất mỗi ngày một lần.</p>`],
+        `<p class="y-chinh">🎯 Six typical Agile practices — several of them put testing at the centre of development.</p>
+<ol>
+<li><strong>Business (user) stories</strong> — define the functionality.</li>
+<li><strong>On-site customer</strong> — gives continual feedback and defines/performs functional acceptance tests.</li>
+<li><strong>Pair programming &amp; shared code ownership</strong> — among the developers.</li>
+<li><strong>Test-first (TDD)</strong> — component tests are written <em>before</em> the code, and automated.</li>
+<li><strong>Simplicity</strong> — build only what is necessary, not everything we can think of.</li>
+<li><strong>Continuous integration</strong> — code integrated and tested throughout the sprint, at least once a day.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Sáu thực hành điển hình của Agile — nhiều cái đặt kiểm thử vào trung tâm việc phát triển.</p>
+<ol>
+<li><strong>User story</strong> — định nghĩa chức năng.</li>
+<li><strong>Khách hàng ngồi cùng nhóm</strong> — phản hồi liên tục và xác định/thực hiện acceptance test chức năng.</li>
+<li><strong>Lập trình cặp &amp; sở hữu code chung</strong> — giữa các developer.</li>
+<li><strong>Test trước (TDD)</strong> — component test viết <em>trước</em> code, và được tự động hoá.</li>
+<li><strong>Đơn giản</strong> — chỉ làm cái cần thiết, không làm mọi thứ nghĩ ra được.</li>
+<li><strong>Tích hợp liên tục</strong> — code được tích hợp và test suốt sprint, ít nhất mỗi ngày một lần.</li>
+</ol>`],
       [23, 'Agile: benefits for testers',
-        `<p>Focus on working software and good code quality; testing is part of — and the starting point of — development; business stakeholders are accessible so questions get answered; self-organising teams give testers more autonomy; simple designs are easier to test.</p>`,
-        `<p>Tập trung vào phần mềm chạy được và code chất lượng; kiểm thử là một phần — và là điểm khởi đầu — của phát triển; dễ tiếp cận người nghiệp vụ nên câu hỏi được giải đáp; nhóm tự tổ chức cho tester nhiều quyền tự chủ; thiết kế đơn giản dễ test hơn.</p>`],
+        `<p class="y-chinh">🎯 Five ways Agile makes life better for testers.</p>
+<ol>
+<li><strong>Working software</strong> — the focus is on software that works and on good-quality code.</li>
+<li><strong>Testing from the start</strong> — testing is part of development and its starting point.</li>
+<li><strong>Accessible business stakeholders</strong> — questions about the system get answered.</li>
+<li><strong>Self-organising teams</strong> — more autonomy for testers.</li>
+<li><strong>Simple designs</strong> — easier to test.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Năm điểm Agile giúp công việc của tester dễ chịu hơn.</p>
+<ol>
+<li><strong>Phần mềm chạy được</strong> — tập trung vào phần mềm chạy tốt và code chất lượng.</li>
+<li><strong>Test ngay từ đầu</strong> — kiểm thử là một phần, và là điểm khởi đầu, của phát triển.</li>
+<li><strong>Dễ gặp người nghiệp vụ</strong> — câu hỏi về hệ thống được giải đáp.</li>
+<li><strong>Nhóm tự tổ chức</strong> — tester có nhiều quyền tự chủ hơn.</li>
+<li><strong>Thiết kế đơn giản</strong> — dễ test hơn.</li>
+</ol>`],
       [24, 'Agile: challenges for testers',
-        `<p>A less formal, changing test basis; the misconception that testers are not needed; a different role — more like a coach; constant time pressure; and the risk of an inadequate automated regression suite. Topic 8 (Agile Tester) develops these in depth.</p>`,
-        `<p>Test basis ít hình thức và hay đổi; ngộ nhận rằng không cần tester; vai trò khác — giống huấn luyện viên hơn; áp lực thời gian liên tục; và rủi ro bộ regression tự động không đủ. Topic 8 (Agile Tester) đi sâu các ý này.</p>`],
+        `<p class="y-chinh">🎯 Five challenges Agile brings for testers.</p>
+<ol>
+<li><strong>Different test basis</strong> — less formal and subject to change.</li>
+<li><strong>Misperception</strong> — that testers are not needed.</li>
+<li><strong>Different role</strong> — the tester is more like a coach.</li>
+<li><strong>Time pressure</strong> — (usually) constant.</li>
+<li><strong>Inadequate automated regression suite</strong> — a real risk.</li>
+</ol>
+<p class="ghi-chu">Topic 8 (Agile Tester) develops these in depth.</p>`,
+        `<p class="y-chinh">🎯 Năm thách thức Agile đặt ra cho tester.</p>
+<ol>
+<li><strong>Test basis khác</strong> — ít hình thức và hay thay đổi.</li>
+<li><strong>Ngộ nhận</strong> — rằng không cần tester.</li>
+<li><strong>Vai trò khác</strong> — tester giống huấn luyện viên hơn.</li>
+<li><strong>Áp lực thời gian</strong> — (thường) liên tục.</li>
+<li><strong>Bộ regression tự động không đủ</strong> — một rủi ro có thật.</li>
+</ol>
+<p class="ghi-chu">Topic 8 (Agile Tester) đi sâu các ý này.</p>`],
       [25, 'Question — what does the SDLC describe?',
-        AE('A — The types of activities performed in software development projects', 'Slide 3 word for word. B limits it to test activities; C describes a requirements document, not a lifecycle.'),
-        AV('A — Các loại hoạt động thực hiện trong dự án phát triển phần mềm', 'Đúng từng chữ slide 3. B chỉ nói hoạt động test; C là mô tả tài liệu yêu cầu, không phải vòng đời.')],
+        `<p class="y-chinh">🎯 The SDLC describes the types of activities in a software project — slide 3 word for word.</p>
+<p class="nhan">Why the others are wrong</p>
+<ul>
+<li><strong>B</strong> — limits it to <em>test</em> activities only.</li>
+<li><strong>C</strong> — describes a requirements document, not a lifecycle.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: A — The types of activities performed in software development projects.</strong></p>`,
+        `<p class="y-chinh">🎯 SDLC mô tả các loại hoạt động trong dự án phần mềm — đúng từng chữ slide 3.</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>B</strong> — chỉ nói hoạt động <em>test</em>.</li>
+<li><strong>C</strong> — là mô tả tài liệu yêu cầu, không phải vòng đời.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: A — Các loại hoạt động thực hiện trong dự án phát triển phần mềm.</strong></p>`],
       [26, 'Question — characteristics of good testing',
-        AE('B — 1, 3, 4 correct; 2 wrong', 'Statement 2 contradicts slide 4: analysis and design for a level should begin <em>during</em> the corresponding development activity, not at its end.'),
-        AV('B — 1, 3, 4 đúng; 2 sai', 'Câu 2 trái slide 4: phân tích và thiết kế test cho một cấp phải bắt đầu <em>trong khi</em> hoạt động phát triển tương ứng diễn ra, không đợi tới cuối.')],
+        `<p class="y-chinh">🎯 Statements 1, 3 and 4 are on slide 4; statement 2 contradicts it.</p>
+<ul>
+<li><strong>1, 3, 4 — correct</strong> — level-specific objectives, a test activity for every development activity, testers in requirement/design discussions.</li>
+<li><strong>2 — wrong</strong> — analysis and design for a level should begin <em>during</em> the corresponding development activity, not at its end.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — 1, 3, 4 correct; 2 wrong.</strong></p>`,
+        `<p class="y-chinh">🎯 Câu 1, 3 và 4 có trên slide 4; câu 2 trái với slide đó.</p>
+<ul>
+<li><strong>1, 3, 4 — đúng</strong> — mục tiêu riêng cho từng cấp, mỗi hoạt động phát triển có hoạt động test tương ứng, tester tham gia thảo luận yêu cầu/thiết kế.</li>
+<li><strong>2 — sai</strong> — phân tích và thiết kế test cho một cấp phải bắt đầu <em>trong khi</em> hoạt động phát triển tương ứng diễn ra, không đợi tới cuối.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — 1, 3, 4 đúng; 2 sai.</strong></p>`],
       [27, 'Question — best definition of an incremental model',
-        AE('A — Requirements, design and testing are done in a series with added pieces', 'B describes sequential models, C the waterfall, D is nonsense ("testing added as an increment").'),
-        AV('A — Yêu cầu, thiết kế, kiểm thử được làm thành chuỗi, mỗi lần thêm một phần', 'B mô tả mô hình tuần tự, C là waterfall, D vô nghĩa ("thêm kiểm thử như một phần tăng").')],
+        `<p class="y-chinh">🎯 Incremental = requirements, design and testing repeated in a series, each time adding a piece (slide 14).</p>
+<p class="nhan">Why the others are wrong</p>
+<ul>
+<li><strong>B</strong> — "a phase begins when the previous one is complete" describes sequential models.</li>
+<li><strong>C</strong> — testing as a separate phase after development is the waterfall.</li>
+<li><strong>D</strong> — "testing added as an increment" is nonsense.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: A — Requirements, design and testing are done in a series with added pieces.</strong></p>`,
+        `<p class="y-chinh">🎯 Tăng dần = yêu cầu, thiết kế, kiểm thử lặp lại thành chuỗi, mỗi lần thêm một phần (slide 14).</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>B</strong> — "pha sau bắt đầu khi pha trước xong" là mô hình tuần tự.</li>
+<li><strong>C</strong> — kiểm thử là một pha riêng sau phát triển là waterfall.</li>
+<li><strong>D</strong> — "thêm kiểm thử như một phần tăng" là vô nghĩa.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: A — Yêu cầu, thiết kế, kiểm thử được làm thành chuỗi, mỗi lần thêm một phần.</strong></p>`],
       [28, 'Question — true statement about the V-model',
-        AE('B — The test process is integrated with the development process', 'Each development level has a matching test level. A is the waterfall view; C describes incremental models; D is only partly true of sequential models and misses the point of the V.'),
-        AV('B — Quy trình test được tích hợp với quy trình phát triển', 'Mỗi mức phát triển có một cấp test tương ứng. A là quan điểm waterfall; C mô tả mô hình tăng dần; D chỉ đúng một phần với mô hình tuần tự và bỏ lỡ ý chính của chữ V.')],
+        `<p class="y-chinh">🎯 In the V-model every development level has a matching test level — the two processes are integrated.</p>
+<p class="nhan">Why the others are wrong</p>
+<ul>
+<li><strong>A</strong> — "testing starts when the code is complete" is the waterfall view.</li>
+<li><strong>C</strong> — building in increments describes incremental models.</li>
+<li><strong>D</strong> — only partly true of sequential models, and misses the point of the V.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — The test process is integrated with the development process.</strong></p>`,
+        `<p class="y-chinh">🎯 Trong V-model mỗi mức phát triển có một cấp test tương ứng — hai quy trình được tích hợp với nhau.</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>A</strong> — "bắt đầu test khi code xong" là quan điểm waterfall.</li>
+<li><strong>C</strong> — xây theo từng phần tăng là mô hình tăng dần.</li>
+<li><strong>D</strong> — chỉ đúng một phần với mô hình tuần tự, và bỏ lỡ ý chính của chữ V.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — Quy trình test được tích hợp với quy trình phát triển.</strong></p>`],
       [29, 'Question — the waterfall model',
-        AE('D — 1 and 2 correct; 3 and 4 wrong', 'Waterfall is sequential (1) and testing begins after development (2). It is not "the best model for small organisations" (3) and it has no iterations (4).'),
-        AV('D — 1 và 2 đúng; 3 và 4 sai', 'Waterfall là tuần tự (1) và kiểm thử bắt đầu sau phát triển (2). Nó không phải "mô hình tốt nhất cho tổ chức nhỏ" (3) và không có vòng lặp (4).')],
+        `<p class="y-chinh">🎯 Waterfall is sequential, and testing starts after development — the other two statements are false.</p>
+<ul>
+<li><strong>1 — correct</strong> — waterfall is a sequential model.</li>
+<li><strong>2 — correct</strong> — test activities begin after development is finished.</li>
+<li><strong>3 — wrong</strong> — it is not "the best model for small organisations".</li>
+<li><strong>4 — wrong</strong> — it has no iterations.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: D — 1 and 2 correct; 3 and 4 wrong.</strong></p>`,
+        `<p class="y-chinh">🎯 Waterfall là tuần tự và kiểm thử bắt đầu sau phát triển — hai câu còn lại sai.</p>
+<ul>
+<li><strong>1 — đúng</strong> — waterfall là mô hình tuần tự.</li>
+<li><strong>2 — đúng</strong> — hoạt động test bắt đầu sau khi phát triển xong.</li>
+<li><strong>3 — sai</strong> — nó không phải "mô hình tốt nhất cho tổ chức nhỏ".</li>
+<li><strong>4 — sai</strong> — nó không có vòng lặp.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: D — 1 và 2 đúng; 3 và 4 sai.</strong></p>`],
       [30, 'Question — the V-model is a…',
-        AE('A — Sequential model', 'The V is a sequential model that adds early test design; it is not iterative or incremental.'),
-        AV('A — Mô hình tuần tự', 'V-model là mô hình tuần tự có thêm thiết kế test sớm; không phải lặp hay tăng dần.')],
+        `<p class="y-chinh">🎯 The V is a sequential model that adds early test design.</p>
+<ul>
+<li><strong>Sequential</strong> — one pass down the left arm and up the right; a phase starts when the previous ends.</li>
+<li><strong>Not iterative, not incremental</strong> — there are no repeated cycles and no pieces delivered one by one.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: A — Sequential model.</strong></p>`,
+        `<p class="y-chinh">🎯 V-model là mô hình tuần tự có thêm thiết kế test sớm.</p>
+<ul>
+<li><strong>Tuần tự</strong> — một lượt xuống nhánh trái rồi lên nhánh phải; pha sau bắt đầu khi pha trước xong.</li>
+<li><strong>Không lặp, không tăng dần</strong> — không có vòng lặp lại và không giao từng phần một.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: A — Mô hình tuần tự.</strong></p>`],
       [31, 'Question — where does the client see the product?',
-        AE('D — Acceptance testing', 'Acceptance is paired with user requirements; it is where the customer validates the product.'),
-        AV('D — Acceptance testing', 'Acceptance ghép với yêu cầu người dùng; đó là nơi khách hàng validate sản phẩm.')],
+        `<p class="y-chinh">🎯 The client sees the product at the top of the right arm — acceptance testing.</p>
+<ul>
+<li><strong>Pairing</strong> — acceptance testing is paired with user requirements (slide 8).</li>
+<li><strong>Purpose</strong> — it is where the customer validates the product and gives feedback on its quality.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: D — Acceptance testing.</strong></p>`,
+        `<p class="y-chinh">🎯 Khách hàng thấy sản phẩm ở đỉnh nhánh phải — acceptance testing.</p>
+<ul>
+<li><strong>Cặp ghép</strong> — acceptance testing ghép với yêu cầu người dùng (slide 8).</li>
+<li><strong>Mục đích</strong> — đó là nơi khách hàng validate sản phẩm và phản hồi về chất lượng.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: D — Acceptance testing.</strong></p>`],
       [32, 'Question — waterfall vs V-model',
-        AE('B — In the V-model the principle of early testing is applied; in waterfall it is not', 'Both are sequential (A is wrong); C is invented.'),
-        AV('B — V-model áp dụng nguyên tắc kiểm thử sớm; waterfall thì không', 'Cả hai đều tuần tự (A sai); C là bịa.')],
+        `<p class="y-chinh">🎯 The real difference: the V-model applies early testing, the waterfall does not.</p>
+<p class="nhan">Why the others are wrong</p>
+<ul>
+<li><strong>A</strong> — both models are sequential; the V is not iterative.</li>
+<li><strong>C</strong> — "one type of requirements vs two" is invented.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — In the V-model the principle of early testing is applied; in waterfall it is not.</strong></p>`,
+        `<p class="y-chinh">🎯 Khác biệt thật sự: V-model áp dụng kiểm thử sớm, waterfall thì không.</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>A</strong> — cả hai đều tuần tự; V-model không phải mô hình lặp.</li>
+<li><strong>C</strong> — "một loại yêu cầu so với hai loại" là bịa.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — V-model áp dụng nguyên tắc kiểm thử sớm; waterfall thì không.</strong></p>`],
       [33, 'Question — length of RUP iterations',
-        AE('B — Relatively long (two to three months)', 'Slide 18: RUP iterations last months; the short 1–4 week cycle is Scrum.'),
-        AV('B — Tương đối dài (hai đến ba tháng)', 'Slide 18: vòng lặp RUP kéo dài vài tháng; chu kỳ ngắn 1–4 tuần là của Scrum.')],
+        `<p class="y-chinh">🎯 RUP iterations are relatively long — months, not weeks (slide 18).</p>
+<ul>
+<li><strong>RUP</strong> — iterations last months; increments are large.</li>
+<li><strong>Option A (one to four weeks)</strong> — that is Scrum's short cycle (slide 19).</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — Relatively long (two to three months).</strong></p>`,
+        `<p class="y-chinh">🎯 Vòng lặp RUP tương đối dài — tính bằng tháng, không phải tuần (slide 18).</p>
+<ul>
+<li><strong>RUP</strong> — vòng lặp kéo dài vài tháng; phần tăng lớn.</li>
+<li><strong>Phương án A (một đến bốn tuần)</strong> — đó là chu kỳ ngắn của Scrum (slide 19).</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — Tương đối dài (hai đến ba tháng).</strong></p>`],
       [34, 'Question — Scrum',
-        AE('D — 3 correct; 1 and 2 wrong', 'A retrospective closes each sprint (3). Sprints are short, not 2–3 months (1). Testers do not own the requirements document — in Scrum the product owner owns the backlog (2).'),
-        AV('D — 3 đúng; 1 và 2 sai', 'Mỗi sprint kết thúc bằng retrospective (3). Sprint ngắn, không phải 2–3 tháng (1). Tester không chịu trách nhiệm viết tài liệu yêu cầu — trong Scrum product owner giữ backlog (2).')],
+        `<p class="y-chinh">🎯 Only the retrospective statement is true of Scrum.</p>
+<ul>
+<li><strong>1 — wrong</strong> — sprints are short (days to a few weeks), not 2–3 months.</li>
+<li><strong>2 — wrong</strong> — testers do not own the requirements document; in Scrum the product owner owns the backlog.</li>
+<li><strong>3 — correct</strong> — a retrospective closes each sprint.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: D — 3 correct; 1 and 2 wrong.</strong></p>`,
+        `<p class="y-chinh">🎯 Chỉ câu về retrospective là đúng với Scrum.</p>
+<ul>
+<li><strong>1 — sai</strong> — sprint ngắn (vài ngày tới vài tuần), không phải 2–3 tháng.</li>
+<li><strong>2 — sai</strong> — tester không chịu trách nhiệm viết tài liệu yêu cầu; trong Scrum product owner giữ backlog.</li>
+<li><strong>3 — đúng</strong> — mỗi sprint kết thúc bằng retrospective.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: D — 3 đúng; 1 và 2 sai.</strong></p>`],
       [35, 'Question — Kanban',
-        AE('C — Implemented with or without fixed-length iterations', 'Exactly slide 20. A is wrong (iterations are optional), B is wrong (activities overlap continuously on the board).'),
-        AV('C — Chạy có hoặc không có vòng lặp độ dài cố định', 'Đúng slide 20. A sai (vòng lặp là tuỳ chọn), B sai (các hoạt động chồng lên nhau liên tục trên bảng).')],
+        `<p class="y-chinh">🎯 Kanban runs with or without fixed-length iterations — exactly slide 20.</p>
+<p class="nhan">Why the others are wrong</p>
+<ul>
+<li><strong>A</strong> — iterations are optional, not fixed.</li>
+<li><strong>B</strong> — activities overlap continuously on the board.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: C — Implemented with or without fixed-length iterations.</strong></p>`,
+        `<p class="y-chinh">🎯 Kanban chạy có hoặc không có vòng lặp độ dài cố định — đúng slide 20.</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>A</strong> — vòng lặp là tuỳ chọn, không cố định.</li>
+<li><strong>B</strong> — các hoạt động chồng lên nhau liên tục trên bảng.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: C — Chạy có hoặc không có vòng lặp độ dài cố định.</strong></p>`],
     ]),
     bi(`<h3>🔒 Hidden slides: an experience report on early test design (pptx 12–13)</h3>
 <p>Source: Simon Barlow &amp; Alan Veitch, Scottish Widows, February 1996. Same kind of project, same plan of <strong>2 months development</strong>:</p>
@@ -167,7 +645,7 @@ const L21 = {
 </tbody>
 </table>
 <p>Designing tests early did not just move testing earlier — it prevented most faults from being built in (150 → 50 found in test) and none escaped to production.</p>
-<div class="pitfall"><b>V-model trap.</b> "In the V-model, testing starts when coding is finished" is false. Test <em>execution</em> for most levels comes after coding, but test <em>analysis and design</em> start on the left arm, in parallel with each development phase — that is the whole point of the V.</div>`,
+<div class="pitfall co-tieu-de"><strong>V-model trap.</strong> "In the V-model, testing starts when coding is finished" is false. Test <em>execution</em> for most levels comes after coding, but test <em>analysis and design</em> start on the left arm, in parallel with each development phase — that is the whole point of the V.</div>`,
     `<h3>🔒 Slide ẩn: báo cáo thực tế về thiết kế test sớm (pptx 12–13)</h3>
 <p>Nguồn: Simon Barlow &amp; Alan Veitch, Scottish Widows, tháng 2/1996. Cùng loại dự án, cùng kế hoạch <strong>2 tháng phát triển</strong>:</p>
 <table>
@@ -181,23 +659,33 @@ const L21 = {
 </tbody>
 </table>
 <p>Thiết kế test sớm không chỉ dời việc test lên trước — nó ngăn phần lớn lỗi bị "xây vào" (150 → 50 lỗi khi test) và không lỗi nào lọt ra production.</p>
-<div class="pitfall"><b>Bẫy V-model.</b> "Trong V-model, kiểm thử bắt đầu khi code xong" là sai. <em>Thực thi</em> test của hầu hết các cấp đến sau khi code, nhưng <em>phân tích và thiết kế</em> test bắt đầu ngay ở nhánh trái, song song với từng pha phát triển — đó là toàn bộ ý nghĩa của chữ V.</div>`),
+<div class="pitfall co-tieu-de"><strong>Bẫy V-model.</strong> "Trong V-model, kiểm thử bắt đầu khi code xong" là sai. <em>Thực thi</em> test của hầu hết các cấp đến sau khi code, nhưng <em>phân tích và thiết kế</em> test bắt đầu ngay ở nhánh trái, song song với từng pha phát triển — đó là toàn bộ ý nghĩa của chữ V.</div>`),
     bi(`<h3>Ví dụ có lời giải · Worked example — choose and adapt a lifecycle</h3>
-<p><b>Context.</b> A team of 6 builds (a) a payroll module for a bank, with a signed contract listing every calculation rule and a fixed go-live date; (b) a campus event app for students whose features will change after each user test.</p>
+<p><strong>Context.</strong> A team of 6 builds (a) a payroll module for a bank, with a signed contract listing every calculation rule and a fixed go-live date; (b) a campus event app for students whose features will change after each user test.</p>
 <ol>
-<li><b>(a) Payroll → V-model.</b> Stable, contract-defined requirements and a regulatory context favour a sequential model with formal test levels. Adapt it with early test design: acceptance tests written from the contract in week 1, a formal review of the calculation spec.</li>
-<li><b>(b) Event app → Scrum.</b> Changing needs and fast feedback favour short sprints. Adapt testing: acceptance criteria on every story, automated regression from sprint 1 (slide 24's risk), a demo to real students each sprint (validation).</li>
-<li><b>Why adapt (LO-2.1.2):</b> project goals, product type, business priorities and risks (e.g. regulation, time-to-market) all change which model fits — and models are often combined (e.g. V-model for the core, Agile for the front end).</li>
+<li><strong>(a) Payroll → V-model.</strong> Stable, contract-defined requirements and a regulatory context favour a sequential model with formal test levels. Adapt it with early test design: acceptance tests written from the contract in week 1, a formal review of the calculation spec.</li>
+<li><strong>(b) Event app → Scrum.</strong> Changing needs and fast feedback favour short sprints. Adapt testing: acceptance criteria on every story, automated regression from sprint 1 (slide 24's risk), a demo to real students each sprint (validation).</li>
+<li><strong>Why adapt (LO-2.1.2):</strong> project goals, product type, business priorities and risks (e.g. regulation, time-to-market) all change which model fits — and models are often combined (e.g. V-model for the core, Agile for the front end).</li>
 </ol>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The W-model and DevOps.</b> Paul Herzlich's <em>W-model</em> (1993) draws a second V next to the first so that every development step has an explicit <em>static</em> test step (review) as well as the dynamic one — it is the V-model with early test design made visible. Today's DevOps pipelines push the idea to its limit: every commit triggers build → unit tests → integration tests → deployment to a staging environment → automated acceptance checks, so the "right arm of the V" runs dozens of times a day. <em>Outside the syllabus because CTFL only names sequential and iterative families.</em></div>`,
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>The W-model and DevOps.</strong>
+<ul>
+<li><strong>W-model</strong> — Paul Herzlich's <em>W-model</em> (1993) draws a second V next to the first, so every development step has an explicit <em>static</em> test step (review) as well as the dynamic one. It is the V-model with early test design made visible.</li>
+<li><strong>DevOps</strong> — today's pipelines push the idea to its limit: every commit triggers build → unit tests → integration tests → deployment to a staging environment → automated acceptance checks, so the "right arm of the V" runs dozens of times a day.</li>
+</ul>
+<p class="ghi-chu">Outside the syllabus because CTFL only names sequential and iterative families.</p></div>`,
     `<h3>Ví dụ có lời giải · Chọn và điều chỉnh mô hình vòng đời</h3>
-<p><b>Bối cảnh.</b> Một nhóm 6 người làm (a) module tính lương cho ngân hàng, có hợp đồng ghi rõ mọi quy tắc tính và ngày go-live cố định; (b) app sự kiện cho sinh viên trong trường, tính năng sẽ thay đổi sau mỗi lần cho người dùng thử.</p>
+<p><strong>Bối cảnh.</strong> Một nhóm 6 người làm (a) module tính lương cho ngân hàng, có hợp đồng ghi rõ mọi quy tắc tính và ngày go-live cố định; (b) app sự kiện cho sinh viên trong trường, tính năng sẽ thay đổi sau mỗi lần cho người dùng thử.</p>
 <ol>
-<li><b>(a) Tính lương → V-model.</b> Yêu cầu ổn định, định nghĩa trong hợp đồng, bối cảnh có kiểm định nên hợp mô hình tuần tự với các cấp test chính thức. Điều chỉnh bằng thiết kế test sớm: viết acceptance test từ hợp đồng ngay tuần 1, review chính thức đặc tả tính lương.</li>
-<li><b>(b) App sự kiện → Scrum.</b> Nhu cầu thay đổi, cần phản hồi nhanh nên hợp sprint ngắn. Điều chỉnh kiểm thử: mỗi story có acceptance criteria, regression tự động từ sprint 1 (rủi ro ở slide 24), demo cho sinh viên thật mỗi sprint (validation).</li>
-<li><b>Vì sao phải điều chỉnh (LO-2.1.2):</b> mục tiêu dự án, loại sản phẩm, ưu tiên kinh doanh và rủi ro (vd kiểm định, thời gian ra thị trường) đều quyết định mô hình nào phù hợp — và các mô hình thường được kết hợp (vd V-model cho phần lõi, Agile cho phần giao diện).</li>
+<li><strong>(a) Tính lương → V-model.</strong> Yêu cầu ổn định, định nghĩa trong hợp đồng, bối cảnh có kiểm định nên hợp mô hình tuần tự với các cấp test chính thức. Điều chỉnh bằng thiết kế test sớm: viết acceptance test từ hợp đồng ngay tuần 1, review chính thức đặc tả tính lương.</li>
+<li><strong>(b) App sự kiện → Scrum.</strong> Nhu cầu thay đổi, cần phản hồi nhanh nên hợp sprint ngắn. Điều chỉnh kiểm thử: mỗi story có acceptance criteria, regression tự động từ sprint 1 (rủi ro ở slide 24), demo cho sinh viên thật mỗi sprint (validation).</li>
+<li><strong>Vì sao phải điều chỉnh (LO-2.1.2):</strong> mục tiêu dự án, loại sản phẩm, ưu tiên kinh doanh và rủi ro (vd kiểm định, thời gian ra thị trường) đều quyết định mô hình nào phù hợp — và các mô hình thường được kết hợp (vd V-model cho phần lõi, Agile cho phần giao diện).</li>
 </ol>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>W-model và DevOps.</b> <em>W-model</em> của Paul Herzlich (1993) vẽ thêm một chữ V cạnh chữ V đầu để mỗi bước phát triển có một bước test <em>tĩnh</em> (review) tường minh bên cạnh bước test động — chính là V-model có thiết kế test sớm được vẽ ra rõ ràng. Pipeline DevOps ngày nay đẩy ý tưởng tới tận cùng: mỗi commit kích hoạt build → unit test → integration test → triển khai lên staging → kiểm tra chấp nhận tự động, nên "nhánh phải của chữ V" chạy hàng chục lần mỗi ngày. <em>Ngoài giáo trình vì CTFL chỉ nêu hai họ tuần tự và lặp.</em></div>`),
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>W-model và DevOps.</strong>
+<ul>
+<li><strong>W-model</strong> — <em>W-model</em> của Paul Herzlich (1993) vẽ thêm một chữ V cạnh chữ V đầu, để mỗi bước phát triển có một bước test <em>tĩnh</em> (review) tường minh bên cạnh bước test động. Đó chính là V-model có thiết kế test sớm được vẽ ra rõ ràng.</li>
+<li><strong>DevOps</strong> — pipeline ngày nay đẩy ý tưởng tới tận cùng: mỗi commit kích hoạt build → unit test → integration test → triển khai lên staging → kiểm tra chấp nhận tự động, nên "nhánh phải của chữ V" chạy hàng chục lần mỗi ngày.</li>
+</ul>
+<p class="ghi-chu">Ngoài giáo trình vì CTFL chỉ nêu hai họ tuần tự và lặp.</p></div>`),
     books([
       ['fst4', 'Ch.2 §1 "Software development life cycle models" — pp.36–46 (PDF 50–60); Figures 2.1–2.3 waterfall/V/iterative pp.38–41', 'Chương 2 §1 "Software development life cycle models" — trang 36–46 (PDF 50–60); Hình 2.1–2.3 waterfall/V/lặp trang 38–41'],
       ['fst', '§2.1 "Software development models" — pp.35–40 (PDF 38–43)', '§2.1 "Software development models" — trang 35–40 (PDF 38–43)'],
@@ -217,7 +705,7 @@ const L22 = {
     bi(`<span class="eyebrow">Chapter 2 · Lesson 2.2 · SWT2 slides 36–74</span>
 <h2>Test levels (1): component and integration testing</h2>
 <p class="lead">A <strong>test level</strong> is a group of test activities organised and managed together — an instance of the whole test process. Every level is described by the same five attributes. This lesson covers the two lower levels, where developers are most involved, and the <strong>integration strategies</strong> (with their stubs and drivers) that are a favourite exam topic and appear in PE Question 2-style tasks.</p>
-<div class="callout"><b>Learning objective.</b> LO-2.2.1 Compare the different test levels from the perspective of objectives, test basis, test objects, typical defects and failures, and approaches and responsibilities (K2).</div>
+<div class="callout"><strong>Learning objective.</strong> LO-2.2.1 Compare the different test levels from the perspective of objectives, test basis, test objects, typical defects and failures, and approaches and responsibilities (K2).</div>
 <table>
 <thead><tr><th>Attribute</th><th>Component testing</th><th>Integration testing</th></tr></thead>
 <tbody>
@@ -231,7 +719,7 @@ const L22 = {
     `<span class="eyebrow">Chương 2 · Bài 2.2 · SWT2 slide 36–74</span>
 <h2>Cấp test (1): component testing và integration testing</h2>
 <p class="lead"><strong>Cấp test (test level)</strong> là một nhóm hoạt động kiểm thử được tổ chức và quản lý cùng nhau — một phiên bản cụ thể của cả quy trình test. Cấp nào cũng được mô tả bằng năm thuộc tính giống nhau. Bài này đi qua hai cấp thấp, nơi developer tham gia nhiều nhất, và các <strong>chiến lược tích hợp</strong> (cùng stub và driver) — chủ đề rất hay ra đề và gặp lại trong dạng câu PE về component test.</p>
-<div class="callout"><b>Chuẩn đầu ra.</b> LO-2.2.1 So sánh các cấp test theo mục tiêu, test basis, đối tượng test, lỗi điển hình, cách tiếp cận và trách nhiệm (K2).</div>
+<div class="callout"><strong>Chuẩn đầu ra.</strong> LO-2.2.1 So sánh các cấp test theo mục tiêu, test basis, đối tượng test, lỗi điển hình, cách tiếp cận và trách nhiệm (K2).</div>
 <table>
 <thead><tr><th>Thuộc tính</th><th>Component testing</th><th>Integration testing</th></tr></thead>
 <tbody>
@@ -244,121 +732,743 @@ const L22 = {
 </table>`),
     walkHead(D, 36, 74),
     walk(D, [
-      [36, 'CONTENT — Test levels', `<p>Second block of the chapter: the four test levels (this lesson and 2.3).</p>`, `<p>Khối thứ hai: bốn cấp test (bài này và bài 2.3).</p>`],
+      [36, 'CONTENT — Test levels',
+        `<p class="y-chinh">🎯 Second block of the chapter: the four test levels (this lesson and 2.3).</p>`,
+        `<p class="y-chinh">🎯 Khối thứ hai của chương: bốn cấp test (bài này và bài 2.3).</p>`],
       [37, 'Test Levels',
-        `<p>Test levels are groups of test activities organised and managed together; each level (a "test stage") is a specific instantiation of the test process of lesson 1.4, and each relates to other lifecycle activities. The pyramid: component → integration → system → acceptance.</p>`,
-        `<p>Cấp test là các nhóm hoạt động kiểm thử được tổ chức và quản lý cùng nhau; mỗi cấp ("test stage") là một phiên bản cụ thể của quy trình test ở bài 1.4, và gắn với các hoạt động khác trong vòng đời. Kim tự tháp: component → integration → system → acceptance.</p>`],
+        `<p class="y-chinh">🎯 A test level is a group of test activities organised and managed together.</p>
+<ul>
+<li><strong>An instance of the test process</strong> — each level (a "test stage") is a specific instantiation of the test process of lesson 1.4.</li>
+<li><strong>Tied to the lifecycle</strong> — each level relates to other activities in the SDLC.</li>
+</ul>
+<p class="nhan">The pyramid, bottom to top</p>
+<ol>
+<li>Component</li>
+<li>Integration</li>
+<li>System</li>
+<li>Acceptance</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Cấp test là một nhóm hoạt động kiểm thử được tổ chức và quản lý cùng nhau.</p>
+<ul>
+<li><strong>Một phiên bản của quy trình test</strong> — mỗi cấp ("test stage") là một phiên bản cụ thể của quy trình test ở bài 1.4.</li>
+<li><strong>Gắn với vòng đời</strong> — mỗi cấp liên quan tới các hoạt động khác trong SDLC.</li>
+</ul>
+<p class="nhan">Kim tự tháp, từ dưới lên</p>
+<ol>
+<li>Component</li>
+<li>Integration</li>
+<li>System</li>
+<li>Acceptance</li>
+</ol>`],
       [38, 'Test Levels: characteristics',
-        `<p>The five attributes you compare levels by: <strong>specific test objectives · test basis · test object · typical defects and failures · specific approaches and responsibilities</strong>. Every "which level…?" question is answered by matching one attribute.</p>`,
-        `<p>Năm thuộc tính dùng để so sánh các cấp: <strong>mục tiêu test riêng · test basis · đối tượng test · lỗi và failure điển hình · cách tiếp cận và trách nhiệm riêng</strong>. Mọi câu "cấp nào…?" đều giải bằng cách khớp một thuộc tính.</p>`],
+        `<p class="y-chinh">🎯 Every "which level…?" question is answered by matching one of these five attributes.</p>
+<ol>
+<li><strong>Specific test objectives</strong></li>
+<li><strong>Test basis</strong> — what you derive the test cases from</li>
+<li><strong>Test object</strong> — what is being tested</li>
+<li><strong>Typical defects and failures</strong></li>
+<li><strong>Specific approaches and responsibilities</strong></li>
+</ol>`,
+        `<p class="y-chinh">🎯 Mọi câu "cấp nào…?" đều giải bằng cách khớp một trong năm thuộc tính này.</p>
+<ol>
+<li><strong>Mục tiêu test riêng</strong></li>
+<li><strong>Test basis</strong> — căn cứ để rút ra test case</li>
+<li><strong>Đối tượng test</strong> — cái đang được test</li>
+<li><strong>Lỗi và failure điển hình</strong></li>
+<li><strong>Cách tiếp cận và trách nhiệm riêng</strong></li>
+</ol>`],
       [39, 'Test Levels: environment',
-        `<p>Every level needs a suitable environment: developers' own environment for component testing; an environment with particular external connections for system testing; a production-like environment is ideal for acceptance testing.</p>`,
-        `<p>Mỗi cấp cần môi trường phù hợp: component testing thường dùng môi trường dev của lập trình viên; system testing có thể cần môi trường có kết nối ngoài đặc biệt; acceptance testing lý tưởng là môi trường giống production.</p>`],
+        `<p class="y-chinh">🎯 Every test level needs a suitable test environment.</p>
+<ul>
+<li><strong>Component testing</strong> — developers often use their own dev environment.</li>
+<li><strong>System testing</strong> — may need an environment with particular external connections.</li>
+<li><strong>Acceptance testing</strong> — a production-like environment is ideal.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Cấp test nào cũng cần một môi trường test phù hợp.</p>
+<ul>
+<li><strong>Component testing</strong> — developer thường dùng chính môi trường dev của mình.</li>
+<li><strong>System testing</strong> — có thể cần môi trường có kết nối ngoài đặc biệt.</li>
+<li><strong>Acceptance testing</strong> — lý tưởng là môi trường giống production.</li>
+</ul>`],
       [40, 'Question — which is NOT a test level?',
-        AE('B — Functional testing', 'Functional testing is a test <em>type</em> (lesson 2.4). Component testing and system integration testing are levels.'),
-        AV('B — Functional testing', 'Functional testing là một <em>loại</em> test (bài 2.4). Component testing và system integration testing là các cấp.')],
+        `<p class="y-chinh">🎯 Functional testing is a test <em>type</em>, not a test level.</p>
+<ul>
+<li><strong>Functional testing</strong> — a test type (lesson 2.4).</li>
+<li><strong>Component testing, system integration testing</strong> — both are levels.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — Functional testing.</strong></p>`,
+        `<p class="y-chinh">🎯 Functional testing là một <em>loại</em> test, không phải cấp test.</p>
+<ul>
+<li><strong>Functional testing</strong> — một loại test (bài 2.4).</li>
+<li><strong>Component testing, system integration testing</strong> — đều là cấp test.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — Functional testing.</strong></p>`],
       [41, 'Question — statements about test levels',
-        AE('B — 1, 3, 4 correct; 2 wrong', 'Test levels are not universal (2): organisations name and combine them differently depending on context.'),
-        AV('B — 1, 3, 4 đúng; 2 sai', 'Cấp test không phải "chung cho mọi công ty" (2): mỗi tổ chức đặt tên và kết hợp khác nhau tuỳ ngữ cảnh.')],
+        `<p class="y-chinh">🎯 Statements 1, 3 and 4 come from slides 37–39; only statement 2 is false.</p>
+<ul>
+<li><strong>1 — correct</strong> — each level is an instance of the test process (slide 37).</li>
+<li><strong>2 — wrong</strong> — test levels are not universal: organisations name and combine them differently depending on context.</li>
+<li><strong>3 — correct</strong> — levels are groups of activities organised and managed together (slide 37).</li>
+<li><strong>4 — correct</strong> — every level needs a suitable environment (slide 39).</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — 1, 3, 4 correct; 2 wrong.</strong></p>`,
+        `<p class="y-chinh">🎯 Câu 1, 3 và 4 lấy từ slide 37–39; chỉ câu 2 sai.</p>
+<ul>
+<li><strong>1 — đúng</strong> — mỗi cấp là một phiên bản của quy trình test (slide 37).</li>
+<li><strong>2 — sai</strong> — cấp test không phải "chung cho mọi công ty": mỗi tổ chức đặt tên và kết hợp khác nhau tuỳ ngữ cảnh.</li>
+<li><strong>3 — đúng</strong> — cấp test là nhóm hoạt động được tổ chức và quản lý cùng nhau (slide 37).</li>
+<li><strong>4 — đúng</strong> — cấp nào cũng cần môi trường phù hợp (slide 39).</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — 1, 3, 4 đúng; 2 sai.</strong></p>`],
       [42, 'Component Testing',
-        `<p>The lowest level; components are tested <strong>in isolation</strong>, using <strong>stubs and/or drivers</strong> to replace their neighbours; the most thorough look at detail (error handling, interfaces). Also called unit, module or program testing.</p>`,
-        `<p>Cấp thấp nhất; thành phần được test <strong>cô lập</strong>, dùng <strong>stub và/hoặc driver</strong> thay cho các thành phần xung quanh; soi chi tiết kỹ nhất (xử lý lỗi, giao diện). Còn gọi là unit, module hay program testing.</p>`],
+        `<p class="y-chinh">🎯 Component testing is the lowest level: each component is tested <strong>in isolation</strong>.</p>
+<ul>
+<li><strong>Isolation</strong> — neighbours are replaced by <strong>stubs and/or drivers</strong>.</li>
+<li><strong>Most thorough look at detail</strong> — including error handling and interfaces.</li>
+<li><strong>Other names</strong> — unit, module or program testing.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Component testing là cấp thấp nhất: từng thành phần được test <strong>cô lập</strong>.</p>
+<ul>
+<li><strong>Cô lập</strong> — các thành phần xung quanh được thay bằng <strong>stub và/hoặc driver</strong>.</li>
+<li><strong>Soi chi tiết kỹ nhất</strong> — gồm cả xử lý lỗi và giao diện.</li>
+<li><strong>Tên gọi khác</strong> — unit, module hay program testing.</li>
+</ul>`],
       [43, 'Component Testing — the five attributes',
-        `<p>The table to learn: objectives (reduce risk, verify behaviours, build confidence, find and prevent defects); test basis (detailed design, code, data model, component specs); test objects (components, units, modules, code &amp; data structures, classes, database models); typical defects (incorrect functionality, data-flow problems, incorrect code or logic); approach (TDD; usually done by the developer).</p>`,
-        `<p>Bảng phải học: mục tiêu (giảm rủi ro, verify hành vi, tạo niềm tin, tìm và ngăn lỗi); test basis (thiết kế chi tiết, code, mô hình dữ liệu, đặc tả thành phần); đối tượng (component, unit, module, code &amp; cấu trúc dữ liệu, class, mô hình CSDL); lỗi điển hình (sai chức năng, lỗi luồng dữ liệu, sai code/logic); cách tiếp cận (TDD; thường do developer làm).</p>`],
+        `<p class="y-chinh">🎯 The five attributes of component testing — the table to learn.</p>
+<ul>
+<li><strong>Objectives</strong> — reduce risk; verify functional &amp; non-functional behaviours; build confidence; find defects; prevent defects.</li>
+<li><strong>Test basis</strong> — detailed design, code, data model, component specifications.</li>
+<li><strong>Test objects</strong> — components, units, modules; code &amp; data structures; classes; database models.</li>
+<li><strong>Typical defects</strong> — incorrect functionality, data-flow problems, incorrect code or logic.</li>
+<li><strong>Approach &amp; responsibility</strong> — TDD; usually done by the developer.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Năm thuộc tính của component testing — bảng phải học.</p>
+<ul>
+<li><strong>Mục tiêu</strong> — giảm rủi ro; verify hành vi chức năng &amp; phi chức năng; tạo niềm tin; tìm lỗi; ngăn lỗi.</li>
+<li><strong>Test basis</strong> — thiết kế chi tiết, code, mô hình dữ liệu, đặc tả thành phần.</li>
+<li><strong>Đối tượng test</strong> — component, unit, module; code &amp; cấu trúc dữ liệu; class; mô hình CSDL.</li>
+<li><strong>Lỗi điển hình</strong> — sai chức năng, lỗi luồng dữ liệu, sai code hoặc logic.</li>
+<li><strong>Cách tiếp cận &amp; trách nhiệm</strong> — TDD; thường do developer làm.</li>
+</ul>`],
       [44, 'Component Testing: Test-Driven Development',
-        `<p>The TDD cycle: <strong>FAIL</strong> (write an automated test that fails) → <strong>PASS</strong> (write just enough code to pass) → <strong>RE-FACTOR</strong> (clean the code, tests still pass) → repeat. Steps: develop automated test cases → build and integrate small pieces of code → run the component tests, fix issues and refactor. Chapter 9 practises it in JUnit.</p>`,
-        `<p>Chu trình TDD: <strong>FAIL</strong> (viết test tự động và thấy nó fail) → <strong>PASS</strong> (viết vừa đủ code cho test pass) → <strong>RE-FACTOR</strong> (dọn code, test vẫn pass) → lặp lại. Các bước: viết test case tự động → xây và tích hợp từng mẩu code nhỏ → chạy component test, sửa lỗi và refactor. Chương 9 thực hành bằng JUnit.</p>`],
+        `<p class="y-chinh">🎯 TDD is a loop: write a failing test, make it pass, clean the code — then repeat.</p>
+<p class="nhan">The cycle on the slide</p>
+<ol>
+<li><strong>FAIL</strong> — write an automated test and see it fail.</li>
+<li><strong>PASS</strong> — write just enough code to make it pass.</li>
+<li><strong>RE-FACTOR</strong> — clean the code; the tests still pass.</li>
+</ol>
+<p class="nhan">The steps in words</p>
+<ol>
+<li>Develop automated test cases.</li>
+<li>Build and integrate small pieces of code.</li>
+<li>Run the component tests, correct any issues and refactor the code.</li>
+</ol>
+<p class="ghi-chu">Chapter 9 practises TDD in JUnit.</p>`,
+        `<p class="y-chinh">🎯 TDD là một vòng lặp: viết test fail, cho nó pass, dọn code — rồi lặp lại.</p>
+<p class="nhan">Chu trình trên slide</p>
+<ol>
+<li><strong>FAIL</strong> — viết test tự động và thấy nó fail.</li>
+<li><strong>PASS</strong> — viết vừa đủ code cho test pass.</li>
+<li><strong>RE-FACTOR</strong> — dọn code; test vẫn pass.</li>
+</ol>
+<p class="nhan">Các bước bằng lời</p>
+<ol>
+<li>Viết test case tự động.</li>
+<li>Xây và tích hợp từng mẩu code nhỏ.</li>
+<li>Chạy component test, sửa lỗi và refactor code.</li>
+</ol>
+<p class="ghi-chu">Chương 9 thực hành TDD bằng JUnit.</p>`],
       [45, 'Component test strategy 1 (BS 7925-2)',
-        `<p>The component-testing standard BS 7925-2 asks you to document: the test design techniques and why (Section 3 of the standard); the completion criteria and why (Section 4 — e.g. 100% branch coverage); and the degree of independence of test design — author, another person, a different section, a different organisation, or non-human (tool-generated).</p>`,
-        `<p>Chuẩn component testing BS 7925-2 yêu cầu ghi lại: kỹ thuật thiết kế test và lý do (Mục 3 của chuẩn); tiêu chí hoàn thành và lý do (Mục 4 — vd 100% branch coverage); và mức độc lập khi thiết kế test — chính tác giả, người khác, bộ phận khác, tổ chức khác, hay không phải người (công cụ sinh).</p>`],
+        `<p class="y-chinh">🎯 BS 7925-2, the component-testing standard, asks your component test strategy to document three things.</p>
+<ol>
+<li><strong>Test design techniques, and why</strong> — chosen from Section 3 of the standard.</li>
+<li><strong>Completion criteria, and why</strong> — from Section 4 (e.g. 100% branch coverage).</li>
+<li><strong>Degree of independence of test design</strong> — from lowest to highest:
+<ul>
+<li>the component's author</li>
+<li>another person</li>
+<li>a person from a different section</li>
+<li>a person from a different organisation</li>
+<li>non-human (tool-generated)</li>
+</ul></li>
+</ol>`,
+        `<p class="y-chinh">🎯 Chuẩn component testing BS 7925-2 yêu cầu chiến lược component test ghi lại ba điều.</p>
+<ol>
+<li><strong>Kỹ thuật thiết kế test, và lý do</strong> — chọn từ Mục 3 của chuẩn.</li>
+<li><strong>Tiêu chí hoàn thành, và lý do</strong> — từ Mục 4 (vd 100% branch coverage).</li>
+<li><strong>Mức độc lập khi thiết kế test</strong> — từ thấp tới cao:
+<ul>
+<li>chính tác giả của thành phần</li>
+<li>một người khác</li>
+<li>người ở bộ phận khác</li>
+<li>người ở tổ chức khác</li>
+<li>không phải người (công cụ sinh)</li>
+</ul></li>
+</ol>`],
       [46, 'Component test strategy 2',
-        `<p>Also document: component integration approach and environment (isolation, top-down, bottom-up or a mixture; hardware and software), the test process and its activities (with inputs and outputs), the rule that affected activities are repeated after any fix or change, and a project component test plan with the dependencies between component tests.</p>`,
-        `<p>Ghi thêm: cách tích hợp thành phần và môi trường (cô lập, top-down, bottom-up hay kết hợp; phần cứng, phần mềm), quy trình và các hoạt động test (kèm đầu vào, đầu ra), quy tắc lặp lại các hoạt động bị ảnh hưởng sau mỗi lần sửa/thay đổi, và kế hoạch component test của dự án với các phụ thuộc giữa các component test.</p>`],
+        `<p class="y-chinh">🎯 The strategy also documents integration, environment, process and planning.</p>
+<ul>
+<li><strong>Component integration approach</strong> — isolation, top-down, bottom-up, or a mixture.</li>
+<li><strong>Environment</strong> — hardware and software.</li>
+<li><strong>Test process and activities</strong> — including the inputs and outputs of each activity.</li>
+<li><strong>Repeat rule</strong> — affected activities are repeated after any fault fix or change.</li>
+<li><strong>Project component test plan</strong> — including the dependencies between component tests.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Chiến lược còn ghi lại cách tích hợp, môi trường, quy trình và kế hoạch.</p>
+<ul>
+<li><strong>Cách tích hợp thành phần</strong> — cô lập, top-down, bottom-up, hoặc kết hợp.</li>
+<li><strong>Môi trường</strong> — phần cứng và phần mềm.</li>
+<li><strong>Quy trình và các hoạt động test</strong> — kèm đầu vào và đầu ra của từng hoạt động.</li>
+<li><strong>Quy tắc lặp lại</strong> — các hoạt động bị ảnh hưởng được làm lại sau mỗi lần sửa lỗi hay thay đổi.</li>
+<li><strong>Kế hoạch component test của dự án</strong> — kèm các phụ thuộc giữa các component test.</li>
+</ul>`],
       [47, 'Test design techniques in BS 7925-2',
-        `<p>The standard's techniques and whether each is <em>also a quality-measurement technique</em> (i.e. has a coverage measure). Black box: equivalence partitioning ✓, boundary value analysis ✓, state transition ✓, cause-effect graphing ✓, syntax testing ✗, random testing ✗. White box — all ✓: statement, branch/decision, data flow, branch condition, branch condition combination, modified condition/decision (MC/DC), LCSAJ. Chapter 4 teaches EP, BVA, decision tables and state transition in detail; Chapter 5 statement and decision coverage.</p>`,
-        `<p>Các kỹ thuật trong chuẩn và kỹ thuật nào <em>cũng là kỹ thuật đo chất lượng</em> (tức là có thước đo coverage). Black box: equivalence partitioning ✓, boundary value analysis ✓, state transition ✓, cause-effect graphing ✓, syntax testing ✗, random testing ✗. White box — đều ✓: statement, branch/decision, data flow, branch condition, branch condition combination, modified condition/decision (MC/DC), LCSAJ. Chương 4 dạy kỹ EP, BVA, decision table, state transition; Chương 5 dạy statement và decision coverage.</p>`],
+        `<p class="y-chinh">🎯 The techniques of BS 7925-2, and whether each is <em>also a quality-measurement technique</em> (i.e. has a coverage measure).</p>
+<p class="nhan">Black box</p>
+<ul>
+<li><strong>✓ Yes</strong> — equivalence partitioning, boundary value analysis, state transition testing, cause-effect graphing.</li>
+<li><strong>✗ No</strong> — syntax testing, random testing.</li>
+</ul>
+<p class="nhan">White box — all ✓</p>
+<ol class="hai-cot"><li>Statement testing</li><li>Branch / decision testing</li><li>Data flow testing</li><li>Branch condition testing</li><li>Branch condition combination testing</li><li>Modified condition/decision testing (MC/DC)</li><li>LCSAJ testing</li></ol>
+<p>The standard also says how to specify other techniques (last bullet on the left).</p>
+<p class="ghi-chu">Chapter 4 teaches EP, BVA, decision tables and state transition in detail; Chapter 5 teaches statement and decision coverage.</p>`,
+        `<p class="y-chinh">🎯 Các kỹ thuật trong BS 7925-2, và kỹ thuật nào <em>cũng là kỹ thuật đo chất lượng</em> (tức là có thước đo coverage).</p>
+<p class="nhan">Black box</p>
+<ul>
+<li><strong>✓ Có</strong> — equivalence partitioning, boundary value analysis, state transition testing, cause-effect graphing.</li>
+<li><strong>✗ Không</strong> — syntax testing, random testing.</li>
+</ul>
+<p class="nhan">White box — đều ✓</p>
+<ol class="hai-cot"><li>Statement testing</li><li>Branch / decision testing</li><li>Data flow testing</li><li>Branch condition testing</li><li>Branch condition combination testing</li><li>Modified condition/decision testing (MC/DC)</li><li>LCSAJ testing</li></ol>
+<p>Chuẩn còn nói cách đặc tả các kỹ thuật khác (gạch đầu dòng cuối bên trái).</p>
+<p class="ghi-chu">Chương 4 dạy kỹ EP, BVA, decision table và state transition; Chương 5 dạy statement và decision coverage.</p>`],
       [48, 'Question — definition of component testing',
-        AE('B — Testing components that are separately testable', 'A is integration testing, C is system testing.'),
-        AV('B — Test các thành phần có thể test riêng rẽ', 'A là integration testing, C là system testing.')],
+        `<p class="y-chinh">🎯 Component testing = testing components that are separately testable.</p>
+<p class="nhan">Why the others are wrong</p>
+<ul>
+<li><strong>A</strong> — interactions between components or systems is integration testing.</li>
+<li><strong>C</strong> — behaviour of a whole system or product is system testing.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — Testing components that are separately testable.</strong></p>`,
+        `<p class="y-chinh">🎯 Component testing = test các thành phần có thể test riêng rẽ.</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>A</strong> — tương tác giữa thành phần hoặc hệ thống là integration testing.</li>
+<li><strong>C</strong> — hành vi của cả hệ thống hay sản phẩm là system testing.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — Test các thành phần có thể test riêng rẽ.</strong></p>`],
       [49, 'Question — objective of component testing',
-        AE('A — Building confidence in the component\'s quality', 'B belongs to integration (interfaces), C to acceptance (validating the system is complete).'),
-        AV('A — Tạo niềm tin vào chất lượng của thành phần', 'B thuộc integration (giao diện), C thuộc acceptance (xác nhận hệ thống hoàn chỉnh).')],
+        `<p class="y-chinh">🎯 Building confidence in the <em>component's</em> quality is a component-testing objective (slide 43).</p>
+<p class="nhan">Why the others are wrong</p>
+<ul>
+<li><strong>B</strong> — confidence in the interfaces belongs to integration testing.</li>
+<li><strong>C</strong> — validating that the system is complete belongs to acceptance.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: A — Building confidence in the component's quality.</strong></p>`,
+        `<p class="y-chinh">🎯 Tạo niềm tin vào chất lượng của <em>thành phần</em> là mục tiêu của component testing (slide 43).</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>B</strong> — niềm tin vào giao diện thuộc integration testing.</li>
+<li><strong>C</strong> — xác nhận hệ thống hoàn chỉnh thuộc acceptance.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: A — Tạo niềm tin vào chất lượng của thành phần.</strong></p>`],
       [50, 'Question — test basis for component testing',
-        AE('C — Detailed design, code, data model', 'A is the integration basis; B (epics, user stories, state diagrams, risk reports) is the system basis.'),
-        AV('C — Thiết kế chi tiết, code, mô hình dữ liệu', 'A là test basis của integration; B (epic, user story, state diagram, báo cáo rủi ro) là của system.')],
+        `<p class="y-chinh">🎯 The component-test basis is the closest thing to the code: detailed design, code, data model (slide 43).</p>
+<p class="nhan">Why the others are wrong</p>
+<ul>
+<li><strong>A</strong> — use cases, workflows, sequence diagrams: the integration basis.</li>
+<li><strong>B</strong> — epics, user stories, state diagrams, risk reports: the system basis.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: C — Detailed design, code, data model.</strong></p>`,
+        `<p class="y-chinh">🎯 Test basis của component gần code nhất: thiết kế chi tiết, code, mô hình dữ liệu (slide 43).</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>A</strong> — use case, workflow, sequence diagram: test basis của integration.</li>
+<li><strong>B</strong> — epic, user story, state diagram, báo cáo rủi ro: test basis của system.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: C — Thiết kế chi tiết, code, mô hình dữ liệu.</strong></p>`],
       [51, 'Question — defect found in component testing',
-        AE('B — Incorrect code and logic', 'A (interface call sequencing/timing) is integration; C (control/data flows within the system) is system testing.'),
-        AV('B — Sai code và logic', 'A (thứ tự/thời điểm gọi giao diện) là integration; C (luồng điều khiển/dữ liệu trong hệ thống) là system testing.')],
+        `<p class="y-chinh">🎯 Incorrect code and logic is a typical component defect (slide 43).</p>
+<p class="nhan">Why the others are wrong</p>
+<ul>
+<li><strong>A</strong> — incorrect sequencing/timing of interface calls: integration.</li>
+<li><strong>C</strong> — incorrect control/data flows within the system: system testing.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — Incorrect code and logic.</strong></p>`,
+        `<p class="y-chinh">🎯 Sai code và logic là lỗi điển hình của component (slide 43).</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>A</strong> — sai thứ tự/thời điểm gọi giao diện: integration.</li>
+<li><strong>C</strong> — sai luồng điều khiển/dữ liệu trong hệ thống: system testing.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — Sai code và logic.</strong></p>`],
       [52, 'Question — "requirements converted to test cases before the software is developed…"',
-        AE('B — Test-driven development', 'Tests first, then code, then repeatedly testing against all tests — the definition of TDD.'),
-        AV('B — Test-driven development', 'Test trước, code sau, rồi liên tục chạy lại toàn bộ test — định nghĩa của TDD.')],
+        `<p class="y-chinh">🎯 Requirements turned into tests before the code, then repeated testing against all tests — that is TDD.</p>
+<ul>
+<li><strong>Tests first</strong> — requirements are converted to test cases before the software is fully developed.</li>
+<li><strong>Then code</strong> — development is tracked by repeatedly running all test cases.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — Test-driven development.</strong></p>`,
+        `<p class="y-chinh">🎯 Yêu cầu được đổi thành test trước khi có code, rồi liên tục chạy lại toàn bộ test — đó là TDD.</p>
+<ul>
+<li><strong>Test trước</strong> — yêu cầu được chuyển thành test case trước khi phần mềm được phát triển xong.</li>
+<li><strong>Code sau</strong> — tiến độ phát triển được theo dõi bằng cách chạy lại mọi test case.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — Test-driven development.</strong></p>`],
       [53, 'Integration Testing',
-        `<p>Integration testing focuses on <strong>interactions</strong> between components or systems. Two sub-levels: <strong>component integration</strong> (modules inside one system) and <strong>system integration</strong> (between systems, e.g. your app ↔ a payment gateway).</p>`,
-        `<p>Integration testing tập trung vào <strong>tương tác</strong> giữa các thành phần hoặc hệ thống. Hai cấp con: <strong>tích hợp thành phần</strong> (các module trong một hệ thống) và <strong>tích hợp hệ thống</strong> (giữa các hệ thống, vd app của bạn ↔ cổng thanh toán).</p>`],
+        `<p class="y-chinh">🎯 Integration testing focuses on <strong>interactions</strong> between components or systems.</p>
+<p class="nhan">Two sub-levels</p>
+<ul>
+<li><strong>Component integration</strong> — modules inside one system.</li>
+<li><strong>System integration</strong> — between systems, e.g. your app ↔ a payment gateway.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Integration testing tập trung vào <strong>tương tác</strong> giữa các thành phần hoặc hệ thống.</p>
+<p class="nhan">Hai cấp con</p>
+<ul>
+<li><strong>Tích hợp thành phần</strong> — các module trong một hệ thống.</li>
+<li><strong>Tích hợp hệ thống</strong> — giữa các hệ thống, vd app của bạn ↔ cổng thanh toán.</li>
+</ul>`],
       [54, 'Integration Testing — test the integration itself',
-        `<p>Integration tests should concentrate on the <strong>communication</strong> between modules (or systems), <strong>not</strong> on the functionality of each module — that was covered by component (or system) testing. Example: integrating Cart and Payment, test that the amount and currency Cart sends are exactly what Payment receives and that an error from Payment comes back to Cart — not whether Cart computes the total correctly.</p>`,
-        `<p>Integration test nên tập trung vào <strong>giao tiếp</strong> giữa các module (hay hệ thống), <strong>không</strong> test lại chức năng của từng module — việc đó component (hay system) testing đã làm. Ví dụ: tích hợp Giỏ hàng và Thanh toán thì test số tiền và loại tiền Giỏ hàng gửi đi đúng là cái Thanh toán nhận được, và lỗi từ Thanh toán quay về Giỏ hàng — chứ không test Giỏ hàng cộng tổng đúng hay sai.</p>`],
+        `<p class="y-chinh">🎯 Integration tests concentrate on the <strong>communication</strong>, not on what each part does on its own.</p>
+<ul>
+<li><strong>Module A + module B</strong> — test the communication between them; each module's functionality was covered by component testing.</li>
+<li><strong>System X + system Y</strong> — test the communication between the systems; each system's functionality was covered by system testing.</li>
+</ul>
+<p class="nhan">Example — Cart + Payment</p>
+<ul>
+<li><strong>Test</strong> — the amount and currency Cart sends are exactly what Payment receives, and an error from Payment comes back to Cart.</li>
+<li><strong>Do not test</strong> — whether Cart computes the total correctly.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Integration test tập trung vào <strong>giao tiếp</strong>, không test lại việc từng phần tự làm.</p>
+<ul>
+<li><strong>Module A + module B</strong> — test giao tiếp giữa hai module; chức năng của từng module component testing đã lo.</li>
+<li><strong>Hệ thống X + hệ thống Y</strong> — test giao tiếp giữa hai hệ thống; chức năng của từng hệ thống system testing đã lo.</li>
+</ul>
+<p class="nhan">Ví dụ — Giỏ hàng + Thanh toán</p>
+<ul>
+<li><strong>Nên test</strong> — số tiền và loại tiền Giỏ hàng gửi đi đúng là cái Thanh toán nhận được, và lỗi từ Thanh toán quay về Giỏ hàng.</li>
+<li><strong>Không test</strong> — Giỏ hàng cộng tổng đúng hay sai.</li>
+</ul>`],
       [55, 'Integration Testing — responsibilities & scope',
-        `<p>Component integration is often the <strong>developers'</strong> job; system integration is generally the <strong>testers'</strong>. Integration should normally be <strong>incremental</strong> to simplify defect isolation. The greater the scope of an integration step, the harder it is to isolate a defect → hence <strong>continuous integration</strong>: integrate component by component, many times a day.</p>`,
-        `<p>Tích hợp thành phần thường là việc của <strong>developer</strong>; tích hợp hệ thống thường là việc của <strong>tester</strong>. Tích hợp nên <strong>tăng dần</strong> để dễ khoanh vùng lỗi. Mỗi bước tích hợp càng lớn thì càng khó cô lập lỗi → vì thế có <strong>tích hợp liên tục (CI)</strong>: tích hợp từng thành phần một, nhiều lần mỗi ngày.</p>`],
+        `<p class="y-chinh">🎯 Integrate incrementally: the bigger the integration step, the harder it is to isolate a defect.</p>
+<p class="nhan">Who does it</p>
+<ul>
+<li><strong>Component integration</strong> — often the <strong>developers'</strong> job.</li>
+<li><strong>System integration</strong> — generally the <strong>testers'</strong> job.</li>
+</ul>
+<p class="nhan">How to do it</p>
+<ul>
+<li><strong>Incremental</strong> — simplifies defect isolation and finds defects early.</li>
+<li><strong>Continuous integration</strong> — the answer to "bigger scope = harder isolation": integrate component by component, many times a day.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Tích hợp tăng dần: mỗi bước tích hợp càng lớn thì càng khó cô lập lỗi.</p>
+<p class="nhan">Ai làm</p>
+<ul>
+<li><strong>Tích hợp thành phần</strong> — thường là việc của <strong>developer</strong>.</li>
+<li><strong>Tích hợp hệ thống</strong> — thường là việc của <strong>tester</strong>.</li>
+</ul>
+<p class="nhan">Làm thế nào</p>
+<ul>
+<li><strong>Tăng dần</strong> — dễ khoanh vùng lỗi và phát hiện lỗi sớm.</li>
+<li><strong>Tích hợp liên tục (CI)</strong> — lời giải cho "phạm vi càng lớn càng khó cô lập": tích hợp từng thành phần một, nhiều lần mỗi ngày.</li>
+</ul>`],
       [56, 'Integration Testing — the five attributes',
-        `<p>Objectives: as component testing but for <em>interfaces</em>. Test basis: software &amp; system design, sequence diagrams, interface and communication-protocol specs, use cases, workflows. Test objects: subsystems, databases, infrastructure, interfaces, APIs, microservices. Typical defects: incorrect data, incorrect timing, interface mismatch, communication failures between components, incorrect assumptions. Approaches: big-bang or incremental (top-down, bottom-up, functional).</p>`,
-        `<p>Mục tiêu: như component testing nhưng cho <em>giao diện</em>. Test basis: thiết kế phần mềm &amp; hệ thống, sequence diagram, đặc tả giao diện và giao thức, use case, workflow. Đối tượng: subsystem, CSDL, hạ tầng, giao diện, API, microservice. Lỗi điển hình: sai dữ liệu, sai thời điểm, giao diện không khớp, lỗi giao tiếp giữa thành phần, giả định sai. Cách tiếp cận: big-bang hoặc tăng dần (top-down, bottom-up, functional).</p>`],
+        `<p class="y-chinh">🎯 The five attributes of integration testing — like component testing, but aimed at the <em>interfaces</em>.</p>
+<ul>
+<li><strong>Objectives</strong> — reduce risk; verify functional &amp; non-functional behaviours of interfaces; build confidence; find defects; prevent defects.</li>
+<li><strong>Test basis</strong> — software &amp; system design, sequence diagrams, interface and communication-protocol specs, use cases, workflows.</li>
+<li><strong>Test objects</strong> — subsystems, databases, infrastructure, interfaces, APIs, microservices.</li>
+<li><strong>Typical defects</strong> — incorrect data, incorrect timing, interface mismatch, communication failures between components, incorrect assumptions.</li>
+<li><strong>Approaches</strong> — big-bang or incremental (top-down, bottom-up, functional).</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Năm thuộc tính của integration testing — giống component testing, nhưng nhắm vào <em>giao diện</em>.</p>
+<ul>
+<li><strong>Mục tiêu</strong> — giảm rủi ro; verify hành vi chức năng &amp; phi chức năng của giao diện; tạo niềm tin; tìm lỗi; ngăn lỗi.</li>
+<li><strong>Test basis</strong> — thiết kế phần mềm &amp; hệ thống, sequence diagram, đặc tả giao diện và giao thức, use case, workflow.</li>
+<li><strong>Đối tượng test</strong> — subsystem, CSDL, hạ tầng, giao diện, API, microservice.</li>
+<li><strong>Lỗi điển hình</strong> — sai dữ liệu, sai thời điểm, giao diện không khớp, lỗi giao tiếp giữa thành phần, giả định sai.</li>
+<li><strong>Cách tiếp cận</strong> — big-bang hoặc tăng dần (top-down, bottom-up, functional).</li>
+</ul>`],
       [57, 'Big-Bang Integration',
-        `<p>In theory: the components are tested, so why not combine them all at once and save time? That rests on the false assumption that there are no faults. In practice faults take longer to locate and fix, re-testing after fixes is more extensive, and the end result takes more time.</p>`,
-        `<p>Lý thuyết: các thành phần đã test rồi, sao không ghép hết một lượt cho nhanh? Điều đó dựa trên giả định sai là không còn lỗi. Thực tế: lỗi khó khoanh vùng và sửa lâu hơn, test lại sau khi sửa tốn hơn, và rốt cuộc mất nhiều thời gian hơn.</p>`],
+        `<p class="y-chinh">🎯 Big-bang integration looks faster, but in practice it takes more time.</p>
+<p class="nhan">In theory</p>
+<p>The components are already tested — why not combine them all at once and save time? That rests on the false assumption that there are no faults.</p>
+<p class="nhan">In practice</p>
+<ol>
+<li><strong>Harder debugging</strong> — faults take longer to locate and fix.</li>
+<li><strong>More re-testing</strong> — re-testing after fixes is more extensive.</li>
+<li><strong>End result</strong> — it takes more time.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Tích hợp big-bang trông nhanh hơn, nhưng thực tế lại tốn thời gian hơn.</p>
+<p class="nhan">Lý thuyết</p>
+<p>Các thành phần đã test rồi — sao không ghép hết một lượt cho nhanh? Điều đó dựa trên giả định sai là không còn lỗi.</p>
+<p class="nhan">Thực tế</p>
+<ol>
+<li><strong>Khó gỡ lỗi</strong> — lỗi khó khoanh vùng và sửa lâu hơn.</li>
+<li><strong>Test lại nhiều hơn</strong> — test lại sau khi sửa tốn hơn.</li>
+<li><strong>Kết quả</strong> — rốt cuộc mất nhiều thời gian hơn.</li>
+</ol>`],
       [58, 'Incremental Integration',
-        `<p>Build up <strong>baselines</strong>: baseline 0 = one tested component, baseline 1 = two components, baseline 2 = three, and so on — each new component is added to an already tested baseline. Advantages: easier fault location and fixing, easier recovery from problems; interfaces "should have been tested in component tests, but…" — integration is where you find out.</p>`,
-        `<p>Xây dần các <strong>baseline</strong>: baseline 0 = một thành phần đã test, baseline 1 = hai thành phần, baseline 2 = ba, v.v. — mỗi thành phần mới được thêm vào một baseline đã được test. Ưu điểm: dễ khoanh vùng và sửa lỗi, dễ phục hồi khi có sự cố; giao diện "lẽ ra đã được test ở component test, nhưng…" — tích hợp mới là lúc biết thật.</p>`],
+        `<p class="y-chinh">🎯 Incremental integration adds one component at a time to an already tested <strong>baseline</strong>.</p>
+<p class="nhan">The baselines</p>
+<ol>
+<li><strong>Baseline 0</strong> — one tested component</li>
+<li><strong>Baseline 1</strong> — two components</li>
+<li><strong>Baseline 2</strong> — three components, and so on</li>
+</ol>
+<p class="nhan">Advantages</p>
+<ul>
+<li><strong>Easier fault location and fixing</strong></li>
+<li><strong>Easier recovery</strong> from disasters or problems</li>
+<li><strong>Interfaces get checked</strong> — they "should have been tested in component tests, but…" — integration is where you find out.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Tích hợp tăng dần thêm từng thành phần một vào một <strong>baseline</strong> đã được test.</p>
+<p class="nhan">Các baseline</p>
+<ol>
+<li><strong>Baseline 0</strong> — một thành phần đã test</li>
+<li><strong>Baseline 1</strong> — hai thành phần</li>
+<li><strong>Baseline 2</strong> — ba thành phần, v.v.</li>
+</ol>
+<p class="nhan">Ưu điểm</p>
+<ul>
+<li><strong>Dễ khoanh vùng và sửa lỗi</strong></li>
+<li><strong>Dễ phục hồi</strong> khi có sự cố</li>
+<li><strong>Giao diện được kiểm thật</strong> — "lẽ ra đã được test ở component test, nhưng…" — tích hợp mới là lúc biết thật.</li>
+</ul>`],
       [59, 'Top-Down Integration',
-        `<p>Start from the top of the call tree: baseline 0 = a, 1 = a + b, 2 = a + b + c, 3 = a + b + c + d… (the pink arrow points down the tree). The integrated components call lower ones that are not integrated yet, so those are replaced by <strong>stubs</strong> that simulate the missing components.</p>`,
-        `<p>Bắt đầu từ đỉnh cây gọi: baseline 0 = a, 1 = a + b, 2 = a + b + c, 3 = a + b + c + d… (mũi tên hồng đi xuống cây). Các thành phần đã tích hợp gọi xuống thành phần bên dưới chưa tích hợp, nên chúng được thay bằng <strong>stub</strong> mô phỏng thành phần còn thiếu.</p>`],
+        `<p class="y-chinh">🎯 Top-down integration starts at the top of the call tree and replaces missing lower components with <strong>stubs</strong>.</p>
+<p class="nhan">The baselines (pink arrow points down the tree)</p>
+<ol>
+<li><strong>Baseline 0</strong> — a</li>
+<li><strong>Baseline 1</strong> — a + b</li>
+<li><strong>Baseline 2</strong> — a + b + c</li>
+<li><strong>Baseline 3</strong> — a + b + c + d (yellow on the slide), and so on</li>
+</ol>
+<p class="nhan">Why stubs</p>
+<p>The integrated components call lower-level components that are not integrated yet; <strong>stubs</strong> simulate those missing components (blue-grey boxes e, f, g, h, i, j at baseline 3).</p>`,
+        `<p class="y-chinh">🎯 Tích hợp top-down bắt đầu từ đỉnh cây gọi và thay các thành phần dưới còn thiếu bằng <strong>stub</strong>.</p>
+<p class="nhan">Các baseline (mũi tên hồng đi xuống cây)</p>
+<ol>
+<li><strong>Baseline 0</strong> — a</li>
+<li><strong>Baseline 1</strong> — a + b</li>
+<li><strong>Baseline 2</strong> — a + b + c</li>
+<li><strong>Baseline 3</strong> — a + b + c + d (tô vàng trên slide), v.v.</li>
+</ol>
+<p class="nhan">Vì sao cần stub</p>
+<p>Các thành phần đã tích hợp gọi xuống thành phần bên dưới chưa được tích hợp; <strong>stub</strong> mô phỏng các thành phần còn thiếu đó (ô xanh xám e, f, g, h, i, j ở baseline 3).</p>`],
       [60, 'Stubs',
-        `<p>A <strong>stub</strong> replaces a <em>called</em> component. Keep it simple; in order of sophistication a stub can: print "I have been called", reply with a single fixed value, compute a reply, prompt the tester for a reply, search a list of replies, or add a timing delay. ("Baan: dummy sessions" is what the Baan ERP system called them.)</p>`,
-        `<p><strong>Stub</strong> thay cho thành phần <em>được gọi</em>. Giữ nó đơn giản; theo mức phức tạp tăng dần, một stub có thể: in "tôi đã được gọi", trả về một giá trị cố định, tính ra câu trả lời, hỏi tester nhập câu trả lời, tra một danh sách câu trả lời, hoặc giả lập độ trễ. ("Baan: dummy sessions" là tên hệ ERP Baan gọi chúng.)</p>`],
+        `<p class="y-chinh">🎯 A <strong>stub</strong> replaces a <em>called</em> component during integration testing — keep it simple.</p>
+<p class="nhan">What a stub can do — from simplest to most sophisticated</p>
+<ol>
+<li><strong>Print/display its name</strong> — "I have been called".</li>
+<li><strong>Reply with a single value</strong> — fixed.</li>
+<li><strong>Compute a reply</strong> — a variety of values.</li>
+<li><strong>Prompt the tester</strong> for a reply.</li>
+<li><strong>Search a list</strong> of replies.</li>
+<li><strong>Provide a timing delay</strong>.</li>
+</ol>
+<p class="ghi-chu">"Baan: dummy sessions" is what the Baan ERP system called stubs.</p>`,
+        `<p class="y-chinh">🎯 <strong>Stub</strong> thay cho thành phần <em>được gọi</em> khi test tích hợp — giữ nó đơn giản.</p>
+<p class="nhan">Stub có thể làm gì — từ đơn giản tới phức tạp</p>
+<ol>
+<li><strong>In/hiện tên mình</strong> — "tôi đã được gọi".</li>
+<li><strong>Trả về một giá trị</strong> — cố định.</li>
+<li><strong>Tính ra câu trả lời</strong> — nhiều giá trị khác nhau.</li>
+<li><strong>Hỏi tester</strong> nhập câu trả lời.</li>
+<li><strong>Tra một danh sách</strong> câu trả lời.</li>
+<li><strong>Giả lập độ trễ</strong>.</li>
+</ol>
+<p class="ghi-chu">"Baan: dummy sessions" là tên hệ ERP Baan gọi stub.</p>`],
       [61, 'Pros & cons of top-down',
-        `<p>Advantages: the critical control structure is tested first and most often; you can demonstrate the system early (working menus). Disadvantages: needs stubs; detail is left until last; detailed output may be hard to see; the system may look more finished than it is.</p>`,
-        `<p>Ưu: cấu trúc điều khiển quan trọng được test sớm nhất và nhiều nhất; demo được hệ thống sớm (menu chạy được). Nhược: cần stub; phần chi tiết để tới cuối; khó "thấy" output chi tiết; hệ thống trông hoàn thiện hơn thực tế.</p>`],
+        `<p class="y-chinh">🎯 Top-down tests the control structure first, but leaves the detail until last.</p>
+<p class="nhan">Advantages</p>
+<ul>
+<li><strong>Critical control structure</strong> — tested first and most often.</li>
+<li><strong>Early demo</strong> — you can show the system early (working menus).</li>
+</ul>
+<p class="nhan">Disadvantages</p>
+<ul>
+<li><strong>Needs stubs</strong></li>
+<li><strong>Detail left until last</strong></li>
+<li><strong>Detailed output hard to "see"</strong> — though it should have been tested in component testing.</li>
+<li><strong>May look more finished than it is</strong></li>
+</ul>`,
+        `<p class="y-chinh">🎯 Top-down test cấu trúc điều khiển trước, nhưng để phần chi tiết tới cuối.</p>
+<p class="nhan">Ưu điểm</p>
+<ul>
+<li><strong>Cấu trúc điều khiển quan trọng</strong> — được test sớm nhất và nhiều nhất.</li>
+<li><strong>Demo sớm</strong> — cho xem hệ thống sớm (menu chạy được).</li>
+</ul>
+<p class="nhan">Nhược điểm</p>
+<ul>
+<li><strong>Cần stub</strong></li>
+<li><strong>Phần chi tiết để tới cuối</strong></li>
+<li><strong>Khó "thấy" output chi tiết</strong> — dù lẽ ra component test đã kiểm.</li>
+<li><strong>Trông hoàn thiện hơn thực tế</strong></li>
+</ul>`],
       [62, 'Bottom-up Integration',
-        `<p>Start from the leaves: baseline 0 = n, 1 = n + i, 2 = n + i + o, 3 = n + i + o + d… (the arrow points up). Nothing calls the baseline yet, so you need <strong>drivers</strong> to call it — and some baselines also need stubs (here d's other children h and j, shown in blue).</p>`,
-        `<p>Bắt đầu từ lá: baseline 0 = n, 1 = n + i, 2 = n + i + o, 3 = n + i + o + d… (mũi tên đi lên). Chưa có gì gọi baseline nên cần <strong>driver</strong> để gọi nó — và một số baseline còn cần cả stub (ở đây là h và j, các con khác của d, tô xanh).</p>`],
+        `<p class="y-chinh">🎯 Bottom-up integration starts at the leaves and needs <strong>drivers</strong> to call the baseline.</p>
+<p class="nhan">The baselines (the arrow points up)</p>
+<ol>
+<li><strong>Baseline 0</strong> — n</li>
+<li><strong>Baseline 1</strong> — n + i</li>
+<li><strong>Baseline 2</strong> — n + i + o</li>
+<li><strong>Baseline 3</strong> — n + i + o + d (yellow on the slide), and so on</li>
+</ol>
+<p class="nhan">Support software needed</p>
+<ul>
+<li><strong>Drivers</strong> — nothing calls the baseline yet, so a driver must (b, in purple, stands in as the caller of d).</li>
+<li><strong>Stubs too, for some baselines</strong> — here d's other children h and j (blue-grey).</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Tích hợp bottom-up bắt đầu từ lá và cần <strong>driver</strong> để gọi baseline.</p>
+<p class="nhan">Các baseline (mũi tên đi lên)</p>
+<ol>
+<li><strong>Baseline 0</strong> — n</li>
+<li><strong>Baseline 1</strong> — n + i</li>
+<li><strong>Baseline 2</strong> — n + i + o</li>
+<li><strong>Baseline 3</strong> — n + i + o + d (tô vàng trên slide), v.v.</li>
+</ol>
+<p class="nhan">Phần mềm hỗ trợ cần có</p>
+<ul>
+<li><strong>Driver</strong> — chưa có gì gọi baseline nên phải có driver gọi (b, tô tím, đứng thay vai trò gọi d).</li>
+<li><strong>Cả stub, ở một số baseline</strong> — ở đây là h và j, các con khác của d (xanh xám).</li>
+</ul>`],
       [63, 'Drivers',
-        `<p>A <strong>driver</strong> is test harness/scaffolding that <em>calls</em> the component under test: specially written or a general-purpose commercial tool; it invokes the baseline, sends the data it expects and receives (prints) the data it produces. Each baseline has different requirements for its driver. In JUnit terms, the test class is the driver of the class under test.</p>`,
-        `<p><strong>Driver</strong> là phần khung/giàn giáo test <em>gọi</em> thành phần đang test: viết riêng hoặc dùng công cụ thương mại đa năng; nó gọi baseline, gửi dữ liệu baseline cần và nhận (in ra) dữ liệu baseline tạo ra. Mỗi baseline cần driver khác nhau. Theo cách nói JUnit, lớp test chính là driver của lớp đang test.</p>`],
+        `<p class="y-chinh">🎯 A <strong>driver</strong> is test harness (scaffolding) that <em>calls</em> the component under test.</p>
+<ul>
+<li><strong>Where it comes from</strong> — specially written, or a general-purpose commercial tool.</li>
+<li><strong>What it does</strong> — invokes the baseline, sends any data the baseline expects, and receives (prints) any data it produces.</li>
+<li><strong>One per baseline</strong> — each baseline has different requirements for its driver.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> in JUnit terms, the test class is the driver of the class under test.</p>`,
+        `<p class="y-chinh">🎯 <strong>Driver</strong> là phần khung/giàn giáo test <em>gọi</em> thành phần đang test.</p>
+<ul>
+<li><strong>Nguồn gốc</strong> — viết riêng, hoặc dùng công cụ thương mại đa năng.</li>
+<li><strong>Nó làm gì</strong> — gọi baseline, gửi dữ liệu baseline cần, và nhận (in ra) dữ liệu baseline tạo ra.</li>
+<li><strong>Mỗi baseline một kiểu</strong> — mỗi baseline cần driver khác nhau.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> theo cách nói JUnit, lớp test chính là driver của lớp đang test.</p>`],
       [64, 'Pros & cons of bottom-up',
-        `<p>Advantages: the lowest levels are tested first and most thoroughly; good for interfaces to the external environment (hardware, network); good visibility of detail. Disadvantages: no working system until the last baseline; needs both drivers and stubs; major control problems are found last.</p>`,
-        `<p>Ưu: các tầng thấp nhất được test sớm và kỹ nhất; tốt cho giao diện với môi trường ngoài (phần cứng, mạng); thấy rõ chi tiết. Nhược: không có hệ thống chạy được cho tới baseline cuối; cần cả driver lẫn stub; lỗi điều khiển lớn bị phát hiện muộn nhất.</p>`],
+        `<p class="y-chinh">🎯 Bottom-up tests the lowest levels thoroughly, but there is no working system until the end.</p>
+<p class="nhan">Advantages</p>
+<ul>
+<li><strong>Lowest levels first</strong> — tested first and most thoroughly (though they should have been tested in unit testing).</li>
+<li><strong>External interfaces</strong> — good for testing interfaces to the external environment (hardware, network).</li>
+<li><strong>Visibility of detail</strong></li>
+</ul>
+<p class="nhan">Disadvantages</p>
+<ul>
+<li><strong>No working system</strong> until the last baseline</li>
+<li><strong>Needs both drivers and stubs</strong></li>
+<li><strong>Major control problems found last</strong></li>
+</ul>`,
+        `<p class="y-chinh">🎯 Bottom-up test kỹ các tầng thấp, nhưng tới cuối mới có hệ thống chạy được.</p>
+<p class="nhan">Ưu điểm</p>
+<ul>
+<li><strong>Tầng thấp nhất trước</strong> — được test sớm và kỹ nhất (dù lẽ ra unit test đã kiểm).</li>
+<li><strong>Giao diện với bên ngoài</strong> — tốt cho giao diện với môi trường ngoài (phần cứng, mạng).</li>
+<li><strong>Thấy rõ chi tiết</strong></li>
+</ul>
+<p class="nhan">Nhược điểm</p>
+<ul>
+<li><strong>Không có hệ thống chạy được</strong> cho tới baseline cuối</li>
+<li><strong>Cần cả driver lẫn stub</strong></li>
+<li><strong>Lỗi điều khiển lớn bị phát hiện muộn nhất</strong></li>
+</ul>`],
       [65, 'Minimum Capability Integration (functional)',
-        `<p>Integrate one complete path from the top down to a leaf first: baseline 0 = a, 1 = a + b, 2 = a + b + d, 3 = a + b + d + i… (the diagonal arrow). Needs stubs; shouldn't need drivers when done top-down.</p>`,
-        `<p>Tích hợp trọn một đường đi từ đỉnh xuống một lá trước: baseline 0 = a, 1 = a + b, 2 = a + b + d, 3 = a + b + d + i… (mũi tên chéo). Cần stub; không cần driver nếu làm từ trên xuống.</p>`],
+        `<p class="y-chinh">🎯 Minimum capability integrates one complete path from the top down to a leaf first.</p>
+<p class="nhan">The baselines (the diagonal arrow)</p>
+<ol>
+<li><strong>Baseline 0</strong> — a</li>
+<li><strong>Baseline 1</strong> — a + b</li>
+<li><strong>Baseline 2</strong> — a + b + d</li>
+<li><strong>Baseline 3</strong> — a + b + d + i, and so on (the arrow continues to n)</li>
+</ol>
+<ul>
+<li><strong>Needs stubs</strong> — the blue-grey boxes c, e, h, j, o.</li>
+<li><strong>Shouldn't need drivers</strong> — when done top-down.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Minimum capability tích hợp trọn một đường đi từ đỉnh xuống một lá trước.</p>
+<p class="nhan">Các baseline (mũi tên chéo)</p>
+<ol>
+<li><strong>Baseline 0</strong> — a</li>
+<li><strong>Baseline 1</strong> — a + b</li>
+<li><strong>Baseline 2</strong> — a + b + d</li>
+<li><strong>Baseline 3</strong> — a + b + d + i, v.v. (mũi tên đi tiếp tới n)</li>
+</ol>
+<ul>
+<li><strong>Cần stub</strong> — các ô xanh xám c, e, h, j, o.</li>
+<li><strong>Không cần driver</strong> — nếu làm từ trên xuống.</li>
+</ul>`],
       [66, 'Pros & cons of minimum capability',
-        `<p>Advantages: the control level is tested first and most often; visibility of detail; a real working partial system earliest. Disadvantage: needs stubs.</p>`,
-        `<p>Ưu: tầng điều khiển được test sớm và nhiều nhất; thấy rõ chi tiết; sớm nhất có một hệ thống thật chạy được một phần. Nhược: cần stub.</p>`],
+        `<p class="y-chinh">🎯 Minimum capability gives a real working partial system earliest — at the price of stubs.</p>
+<p class="nhan">Advantages</p>
+<ul>
+<li><strong>Control level</strong> — tested first and most often.</li>
+<li><strong>Visibility of detail</strong></li>
+<li><strong>Real working partial system earliest</strong></li>
+</ul>
+<p class="nhan">Disadvantage</p>
+<ul>
+<li><strong>Needs stubs</strong></li>
+</ul>`,
+        `<p class="y-chinh">🎯 Minimum capability sớm nhất có một hệ thống thật chạy được một phần — cái giá là phải viết stub.</p>
+<p class="nhan">Ưu điểm</p>
+<ul>
+<li><strong>Tầng điều khiển</strong> — được test sớm và nhiều nhất.</li>
+<li><strong>Thấy rõ chi tiết</strong></li>
+<li><strong>Sớm nhất có hệ thống thật chạy được một phần</strong></li>
+</ul>
+<p class="nhan">Nhược điểm</p>
+<ul>
+<li><strong>Cần stub</strong></li>
+</ul>`],
       [67, 'Thread Integration (functional)',
-        `<p>The order in which some event is processed (an interrupt, a user transaction) decides the integration order — "minimum capability in time". Advantages: critical processing first; early warning of performance problems. Disadvantage: may need complex drivers and stubs. The speaker note adds: <em>layers</em> — commonly used for big projects.</p>`,
-        `<p>Thứ tự xử lý một sự kiện (một ngắt, một giao dịch của người dùng) quyết định thứ tự tích hợp — "năng lực tối thiểu theo thời gian". Ưu: xử lý quan trọng được làm trước; sớm cảnh báo vấn đề hiệu năng. Nhược: có thể cần driver và stub phức tạp. Ghi chú của thầy/cô: tích hợp theo <em>tầng (layers)</em> — hay dùng cho dự án lớn.</p>`],
+        `<p class="y-chinh">🎯 In thread integration, the order in which an event is processed decides the integration order — "minimum capability in time".</p>
+<ul>
+<li><strong>What drives the order</strong> — the processing of some event, e.g. an interrupt or a user transaction.</li>
+<li><strong>On the picture</strong> — the thread d → e → f → g is integrated along the arrow; b and c (purple) call it, the light-blue boxes below are stubs.</li>
+</ul>
+<p class="nhan">Advantages</p>
+<ul>
+<li><strong>Critical processing first</strong></li>
+<li><strong>Early warning of performance problems</strong></li>
+</ul>
+<p class="nhan">Disadvantage</p>
+<ul>
+<li><strong>May need complex drivers and stubs</strong></li>
+</ul>
+<p class="ghi-chu">The speaker note adds: <em>layers</em> — commonly used for big projects.</p>`,
+        `<p class="y-chinh">🎯 Tích hợp theo luồng (thread): thứ tự xử lý một sự kiện quyết định thứ tự tích hợp — "năng lực tối thiểu theo thời gian".</p>
+<ul>
+<li><strong>Cái gì quyết định thứ tự</strong> — việc xử lý một sự kiện, vd một ngắt hay một giao dịch của người dùng.</li>
+<li><strong>Trên hình</strong> — luồng d → e → f → g được tích hợp dọc theo mũi tên; b và c (tô tím) gọi vào luồng, các ô xanh nhạt bên dưới là stub.</li>
+</ul>
+<p class="nhan">Ưu điểm</p>
+<ul>
+<li><strong>Xử lý quan trọng được làm trước</strong></li>
+<li><strong>Sớm cảnh báo vấn đề hiệu năng</strong></li>
+</ul>
+<p class="nhan">Nhược điểm</p>
+<ul>
+<li><strong>Có thể cần driver và stub phức tạp</strong></li>
+</ul>
+<p class="ghi-chu">Ghi chú của thầy/cô: tích hợp theo <em>tầng (layers)</em> — hay dùng cho dự án lớn.</p>`],
       [68, 'Integration Guidelines',
-        `<p>Minimise the support software (stubs/drivers) needed; integrate each component only once; each baseline should produce an easily verifiable result; integrate small numbers of components at once — one at a time for critical or fault-prone components, simple related ones together.</p>`,
-        `<p>Giảm tối đa phần mềm hỗ trợ (stub/driver) cần viết; mỗi thành phần chỉ tích hợp một lần; mỗi baseline phải cho kết quả dễ kiểm chứng; tích hợp ít thành phần mỗi lần — từng cái một với thành phần quan trọng hoặc hay lỗi, ghép chung các thành phần đơn giản liên quan.</p>`],
+        `<p class="y-chinh">🎯 Four guidelines for integration — keep the support software small and every step easy to check.</p>
+<ol>
+<li><strong>Minimise support software</strong> — as few stubs and drivers as possible.</li>
+<li><strong>Integrate each component only once</strong></li>
+<li><strong>Easily verifiable baselines</strong> — each baseline should produce a result that is easy to check.</li>
+<li><strong>Small numbers at once</strong>
+<ul>
+<li>one at a time for critical or fault-prone components</li>
+<li>simple related components together</li>
+</ul></li>
+</ol>`,
+        `<p class="y-chinh">🎯 Bốn nguyên tắc tích hợp — ít phần mềm hỗ trợ, mỗi bước dễ kiểm chứng.</p>
+<ol>
+<li><strong>Giảm tối đa phần mềm hỗ trợ</strong> — càng ít stub và driver càng tốt.</li>
+<li><strong>Mỗi thành phần chỉ tích hợp một lần</strong></li>
+<li><strong>Baseline dễ kiểm chứng</strong> — mỗi baseline phải cho kết quả dễ kiểm tra.</li>
+<li><strong>Mỗi lần ít thành phần</strong>
+<ul>
+<li>từng cái một với thành phần quan trọng hoặc hay lỗi</li>
+<li>ghép chung các thành phần đơn giản có liên quan</li>
+</ul></li>
+</ol>`],
       [69, 'Integration Planning',
-        `<p>Plan integration in the <strong>architectural design phase</strong>; the integration order then decides the <strong>build order</strong>, so components are completed in time for their baseline, and component development and integration testing run in parallel — saving time.</p>`,
-        `<p>Lập kế hoạch tích hợp ngay ở <strong>pha thiết kế kiến trúc</strong>; thứ tự tích hợp quyết định <strong>thứ tự build</strong>, nhờ đó thành phần xong kịp baseline của nó, và phát triển thành phần chạy song song với integration testing — tiết kiệm thời gian.</p>`],
+        `<p class="y-chinh">🎯 Plan integration in the <strong>architectural design phase</strong> — the integration order then drives everything else.</p>
+<ol>
+<li><strong>Integration order decides the build order</strong></li>
+<li><strong>Components are completed in time</strong> for their baseline.</li>
+<li><strong>Work runs in parallel</strong> — component development and integration testing overlap, which saves time.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Lập kế hoạch tích hợp ngay ở <strong>pha thiết kế kiến trúc</strong> — thứ tự tích hợp sẽ dẫn dắt mọi thứ còn lại.</p>
+<ol>
+<li><strong>Thứ tự tích hợp quyết định thứ tự build</strong></li>
+<li><strong>Thành phần xong kịp</strong> baseline của nó.</li>
+<li><strong>Làm song song</strong> — phát triển thành phần và integration testing chạy cùng lúc, tiết kiệm thời gian.</li>
+</ol>`],
       [70, 'Question — integration testing focuses on…',
-        AE('B — Interactions between components or systems', 'A describes early testing in general; C is component testing.'),
-        AV('B — Tương tác giữa các thành phần hoặc hệ thống', 'A nói về kiểm thử sớm nói chung; C là component testing.')],
+        `<p class="y-chinh">🎯 Integration testing focuses on interactions between components or systems (slide 53).</p>
+<p class="nhan">Why the others are wrong</p>
+<ul>
+<li><strong>A</strong> — "testing the code as early as possible" describes early testing in general.</li>
+<li><strong>C</strong> — functionality of each separately testable component is component testing.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — Interactions between components or systems.</strong></p>`,
+        `<p class="y-chinh">🎯 Integration testing tập trung vào tương tác giữa các thành phần hoặc hệ thống (slide 53).</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>A</strong> — "test code sớm nhất có thể" là kiểm thử sớm nói chung.</li>
+<li><strong>C</strong> — chức năng của từng thành phần test riêng được là component testing.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — Tương tác giữa các thành phần hoặc hệ thống.</strong></p>`],
       [71, 'Question — who does component vs system integration?',
-        AE('A — developer – tester', 'Slide 55.'),
-        AV('A — developer – tester', 'Slide 55.')],
+        `<p class="y-chinh">🎯 Component integration → developers; system integration → testers (slide 55).</p>
+<ul>
+<li><strong>Component integration testing</strong> — often the responsibility of developers.</li>
+<li><strong>System integration testing</strong> — generally the responsibility of testers.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: A — developer – tester.</strong></p>`,
+        `<p class="y-chinh">🎯 Tích hợp thành phần → developer; tích hợp hệ thống → tester (slide 55).</p>
+<ul>
+<li><strong>Component integration testing</strong> — thường là trách nhiệm của developer.</li>
+<li><strong>System integration testing</strong> — thường là trách nhiệm của tester.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: A — developer – tester.</strong></p>`],
       [72, 'Question — test basis for integration testing',
-        AE('B — Use cases, workflows, sequence diagrams', 'A is the system-test basis, C the component-test basis, D mixes system and acceptance items.'),
-        AV('B — Use case, workflow, sequence diagram', 'A là test basis của system, C của component, D trộn đối tượng system và acceptance.')],
+        `<p class="y-chinh">🎯 Use cases, workflows and sequence diagrams describe how parts interact — the integration basis (slide 56).</p>
+<p class="nhan">Why the others are wrong</p>
+<ul>
+<li><strong>A</strong> — epics, user stories, state diagrams, risk reports: the system-test basis.</li>
+<li><strong>C</strong> — detailed design, code, data model: the component-test basis.</li>
+<li><strong>D</strong> — system under test, forms, business processes: mixes system and acceptance items.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — Use cases, workflows, sequence diagrams.</strong></p>`,
+        `<p class="y-chinh">🎯 Use case, workflow và sequence diagram mô tả các phần tương tác thế nào — test basis của integration (slide 56).</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>A</strong> — epic, user story, state diagram, báo cáo rủi ro: test basis của system.</li>
+<li><strong>C</strong> — thiết kế chi tiết, code, mô hình dữ liệu: test basis của component.</li>
+<li><strong>D</strong> — hệ thống đang test, form, quy trình nghiệp vụ: trộn mục của system và acceptance.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — Use case, workflow, sequence diagram.</strong></p>`],
       [73, 'Question — defect found in integration testing',
-        AE('C — Incorrect sequencing or timing of interface calls', 'A is a component defect, B a system defect, D an acceptance (contractual/regulatory) issue.'),
-        AV('C — Sai thứ tự hoặc thời điểm gọi giao diện', 'A là lỗi component, B lỗi system, D là vấn đề acceptance (hợp đồng/quy định).')],
+        `<p class="y-chinh">🎯 Wrong sequencing or timing of interface calls is a typical integration defect (slide 56).</p>
+<p class="nhan">Why the others are wrong</p>
+<ul>
+<li><strong>A</strong> — incorrect code and logic: a component defect.</li>
+<li><strong>B</strong> — incorrect control/data flows within the system: a system defect.</li>
+<li><strong>D</strong> — not meeting contractual or regulatory requirements: an acceptance issue.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: C — Incorrect sequencing or timing of interface calls.</strong></p>`,
+        `<p class="y-chinh">🎯 Sai thứ tự hoặc thời điểm gọi giao diện là lỗi điển hình của integration (slide 56).</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>A</strong> — sai code và logic: lỗi component.</li>
+<li><strong>B</strong> — sai luồng điều khiển/dữ liệu trong hệ thống: lỗi system.</li>
+<li><strong>D</strong> — không thoả yêu cầu hợp đồng hay quy định: vấn đề của acceptance.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: C — Sai thứ tự hoặc thời điểm gọi giao diện.</strong></p>`],
       [74, 'Question — scope of integration',
-        AE('D — The greater the scope of integration, the more difficult it becomes to isolate defects', 'Exactly slide 55 — and the reason for incremental and continuous integration.'),
-        AV('D — Phạm vi tích hợp càng lớn thì càng khó cô lập lỗi', 'Đúng slide 55 — và là lý do của tích hợp tăng dần và tích hợp liên tục.')],
+        `<p class="y-chinh">🎯 The bigger the integration step, the harder it is to isolate a defect — exactly slide 55.</p>
+<ul>
+<li><strong>Why D</strong> — it is the reason for incremental and continuous integration.</li>
+<li><strong>A and B</strong> — state the rule backwards.</li>
+<li><strong>C</strong> — isolation is not "always" difficult; small steps make it easy.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: D — The greater the scope of integration, the more difficult it becomes to isolate defects.</strong></p>`,
+        `<p class="y-chinh">🎯 Bước tích hợp càng lớn thì càng khó cô lập lỗi — đúng slide 55.</p>
+<ul>
+<li><strong>Vì sao D</strong> — đó là lý do có tích hợp tăng dần và tích hợp liên tục.</li>
+<li><strong>A và B</strong> — nói ngược quy tắc.</li>
+<li><strong>C</strong> — cô lập lỗi không "luôn luôn" khó; bước nhỏ thì dễ.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: D — Phạm vi tích hợp càng lớn thì càng khó cô lập lỗi.</strong></p>`],
     ]),
     bi(`<h3>Ví dụ có lời giải · Worked example — plan the integration of the slide tree</h3>
 <p>Use the tree on slides 59–67: a calls b and c; b calls d and e; c calls f and g; d calls h, i, j; i calls n and o; f calls k; g calls l and m.</p>
@@ -371,8 +1481,15 @@ const L22 = {
 </tbody>
 </table>
 <p>How to count stubs: every component that an <em>integrated</em> component calls, but that is not yet integrated, needs a stub. How to count drivers: whenever the top of the current baseline is not the real top of the system, something must call it.</p>
-<div class="pitfall"><b>Stub vs driver — the classic trap.</b> A <strong>stub</strong> is <em>called by</em> the code under test (it stands in below it — top-down). A <strong>driver</strong> <em>calls</em> the code under test (it stands in above it — bottom-up). In unit tests with Mockito, a mocked repository is a stub/mock; the JUnit test method is the driver.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Contract testing for microservices.</b> When dozens of services integrate, a full integration environment is slow and fragile. <em>Consumer-driven contract testing</em> (e.g. Pact) lets each consumer publish the requests it makes and the responses it expects; each provider verifies it still honours every published contract in its own pipeline. It catches the "interface mismatch" defects of slide 56 without starting the whole system. <em>Outside the syllabus because CTFL stops at big-bang vs incremental.</em></div>`,
+<div class="pitfall co-tieu-de"><strong>Stub vs driver — the classic trap.</strong> A <strong>stub</strong> is <em>called by</em> the code under test (it stands in below it — top-down). A <strong>driver</strong> <em>calls</em> the code under test (it stands in above it — bottom-up). In unit tests with Mockito, a mocked repository is a stub/mock; the JUnit test method is the driver.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Contract testing for microservices.</strong>
+<p>When dozens of services integrate, a full integration environment is slow and fragile. <em>Consumer-driven contract testing</em> (e.g. Pact) splits the job in two:</p>
+<ul>
+<li><strong>Consumer</strong> — publishes the requests it makes and the responses it expects.</li>
+<li><strong>Provider</strong> — verifies, in its own pipeline, that it still honours every published contract.</li>
+</ul>
+<p>It catches the "interface mismatch" defects of slide 56 without starting the whole system.</p>
+<p class="ghi-chu">Outside the syllabus because CTFL stops at big-bang vs incremental.</p></div>`,
     `<h3>Ví dụ có lời giải · Lập kế hoạch tích hợp cho cây trên slide</h3>
 <p>Dùng cây ở slide 59–67: a gọi b và c; b gọi d và e; c gọi f và g; d gọi h, i, j; i gọi n và o; f gọi k; g gọi l và m.</p>
 <table>
@@ -384,8 +1501,15 @@ const L22 = {
 </tbody>
 </table>
 <p>Cách đếm stub: mọi thành phần mà một thành phần <em>đã tích hợp</em> gọi tới nhưng chưa được tích hợp đều cần stub. Cách đếm driver: hễ đỉnh của baseline hiện tại không phải đỉnh thật của hệ thống thì phải có thứ gì đó gọi nó.</p>
-<div class="pitfall"><b>Stub vs driver — bẫy kinh điển.</b> <strong>Stub</strong> <em>được gọi bởi</em> code đang test (đứng thay ở phía dưới — top-down). <strong>Driver</strong> <em>gọi</em> code đang test (đứng thay ở phía trên — bottom-up). Trong unit test với Mockito, repository bị mock là stub/mock; phương thức test JUnit là driver.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Contract testing cho microservice.</b> Khi hàng chục service tích hợp với nhau, dựng cả môi trường tích hợp vừa chậm vừa dễ gãy. <em>Consumer-driven contract testing</em> (vd Pact) cho mỗi bên gọi công bố các request nó gửi và response nó mong đợi; mỗi bên cung cấp tự kiểm trong pipeline của mình rằng nó vẫn giữ đúng mọi hợp đồng đã công bố. Cách này bắt được lỗi "giao diện không khớp" ở slide 56 mà không cần khởi động cả hệ thống. <em>Ngoài giáo trình vì CTFL chỉ dừng ở big-bang và tăng dần.</em></div>`),
+<div class="pitfall co-tieu-de"><strong>Stub vs driver — bẫy kinh điển.</strong> <strong>Stub</strong> <em>được gọi bởi</em> code đang test (đứng thay ở phía dưới — top-down). <strong>Driver</strong> <em>gọi</em> code đang test (đứng thay ở phía trên — bottom-up). Trong unit test với Mockito, repository bị mock là stub/mock; phương thức test JUnit là driver.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Contract testing cho microservice.</strong>
+<p>Khi hàng chục service tích hợp với nhau, dựng cả môi trường tích hợp vừa chậm vừa dễ gãy. <em>Consumer-driven contract testing</em> (vd Pact) chia việc làm hai:</p>
+<ul>
+<li><strong>Bên gọi (consumer)</strong> — công bố các request nó gửi và response nó mong đợi.</li>
+<li><strong>Bên cung cấp (provider)</strong> — tự kiểm trong pipeline của mình rằng nó vẫn giữ đúng mọi hợp đồng đã công bố.</li>
+</ul>
+<p>Cách này bắt được lỗi "giao diện không khớp" ở slide 56 mà không cần khởi động cả hệ thống.</p>
+<p class="ghi-chu">Ngoài giáo trình vì CTFL chỉ dừng ở big-bang và tăng dần.</p></div>`),
     books([
       ['fst4', 'Ch.2 §2 "Test levels" — pp.47–61 (PDF 61–75): component pp.47–50, integration pp.50–54; Figure 2.4 stubs and drivers p.49; Table 2.1 test-level characteristics p.60', 'Chương 2 §2 "Test levels" — trang 47–61 (PDF 61–75): component trang 47–50, integration trang 50–54; Hình 2.4 stub và driver trang 49; Bảng 2.1 đặc điểm các cấp test trang 60'],
       ['fst', '§2.2 "Test levels" — pp.41–45 (PDF 44–48)', '§2.2 "Test levels" — trang 41–45 (PDF 44–48)'],
@@ -432,101 +1556,470 @@ const L23 = {
     walkHead(D, 75, 105),
     walk(D, [
       [75, 'System Testing',
-        `<p>System testing focuses on the behaviour and capabilities of a <strong>whole system or product</strong>, often considering the <strong>end-to-end tasks</strong> it can perform and the <strong>non-functional behaviours</strong> it exhibits while performing them.</p>`,
-        `<p>System testing tập trung vào hành vi và năng lực của <strong>cả hệ thống hay sản phẩm</strong>, thường xét các <strong>tác vụ đầu-cuối</strong> hệ thống thực hiện được và <strong>hành vi phi chức năng</strong> nó thể hiện khi thực hiện các tác vụ đó.</p>`],
+        `<p class="y-chinh">🎯 System testing looks at the <strong>whole system or product</strong>.</p>
+<ul>
+<li><strong>Behaviour and capabilities</strong> — of the whole system, not of parts.</li>
+<li><strong>End-to-end tasks</strong> — often the tasks the system can perform from start to finish.</li>
+<li><strong>Non-functional behaviour</strong> — how the system behaves while performing those tasks.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 System testing nhìn vào <strong>cả hệ thống hay sản phẩm</strong>.</p>
+<ul>
+<li><strong>Hành vi và năng lực</strong> — của cả hệ thống, không phải từng phần.</li>
+<li><strong>Tác vụ đầu-cuối</strong> — thường xét các tác vụ hệ thống thực hiện được từ đầu tới cuối.</li>
+<li><strong>Hành vi phi chức năng</strong> — hệ thống thể hiện thế nào khi thực hiện các tác vụ đó.</li>
+</ul>`],
       [76, 'System Testing — the attributes',
-        `<p>Objectives, test basis, test objects and typical defects as in the table above. Note two items that distinguish it from integration: the basis includes <em>epics, user stories, state diagrams and risk reports</em>, and a typical failure is "the system <em>cannot complete end-to-end tasks</em>".</p>`,
-        `<p>Mục tiêu, test basis, đối tượng và lỗi điển hình như bảng ở trên. Hai điểm phân biệt với integration: test basis có <em>epic, user story, state diagram và báo cáo rủi ro</em>, và lỗi điển hình là "hệ thống <em>không hoàn thành được tác vụ đầu-cuối</em>".</p>`],
+        `<p class="y-chinh">🎯 The attributes of system testing are in the table at the top of this lesson — two items set it apart from integration.</p>
+<ul>
+<li><strong>Test basis</strong> — includes <em>epics, user stories, state diagrams and risk reports</em>.</li>
+<li><strong>Typical failure</strong> — "the system <em>cannot complete end-to-end tasks</em>".</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Các thuộc tính của system testing nằm ở bảng đầu bài — có hai điểm phân biệt nó với integration.</p>
+<ul>
+<li><strong>Test basis</strong> — có <em>epic, user story, state diagram và báo cáo rủi ro</em>.</li>
+<li><strong>Lỗi điển hình</strong> — "hệ thống <em>không hoàn thành được tác vụ đầu-cuối</em>".</li>
+</ul>`],
       [77, 'System Testing: approaches & responsibilities',
-        `<p><strong>Independent testers</strong> typically carry out system testing. Functional requirements are tested first with the most appropriate <strong>black-box techniques</strong> (e.g. decision tables); white-box techniques can assess thoroughness of elements such as menu structure or web-page navigation. The (properly controlled) environment should ideally correspond to the <strong>production environment</strong>.</p>`,
-        `<p>System testing thường do <strong>tester độc lập</strong> làm. Yêu cầu chức năng được test trước bằng <strong>kỹ thuật black-box</strong> phù hợp nhất (vd decision table); kỹ thuật white-box có thể đo độ kỹ lưỡng với các phần như cấu trúc menu hay điều hướng trang web. Môi trường (được kiểm soát tốt) lý tưởng nhất là giống <strong>môi trường production</strong>.</p>`],
+        `<p class="y-chinh">🎯 System testing is done by independent testers, black-box first, in a production-like environment.</p>
+<ul>
+<li><strong>Who</strong> — <strong>independent testers</strong> typically carry it out.</li>
+<li><strong>Black-box first</strong> — functional requirements are tested with the most appropriate black-box techniques (e.g. decision tables).</li>
+<li><strong>White-box as a check</strong> — can assess the thoroughness of elements such as menu structure or web-page navigation.</li>
+<li><strong>Environment</strong> — (properly controlled) and ideally corresponding to the <strong>production environment</strong>.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 System testing do tester độc lập làm, ưu tiên black-box, trong môi trường giống production.</p>
+<ul>
+<li><strong>Ai làm</strong> — thường là <strong>tester độc lập</strong>.</li>
+<li><strong>Black-box trước</strong> — yêu cầu chức năng được test bằng kỹ thuật black-box phù hợp nhất (vd decision table).</li>
+<li><strong>White-box để đo</strong> — có thể đo độ kỹ lưỡng với các phần như cấu trúc menu hay điều hướng trang web.</li>
+<li><strong>Môi trường</strong> — (được kiểm soát tốt) và lý tưởng là giống <strong>môi trường production</strong>.</li>
+</ul>`],
       [78, 'Question — definition of system testing',
-        AE('B — Testing the behaviour and capabilities of a whole system or product', 'A is component testing, C integration testing.'),
-        AV('B — Test hành vi và năng lực của cả hệ thống hay sản phẩm', 'A là component testing, C là integration testing.')],
+        `<p class="y-chinh">🎯 System testing = the behaviour and capabilities of a whole system or product (slide 75).</p>
+<p class="nhan">Why the others are wrong</p>
+<ul>
+<li><strong>A</strong> — separately testable components: component testing.</li>
+<li><strong>C</strong> — interactions between components or systems: integration testing.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — Testing the behaviour and capabilities of a whole system or product.</strong></p>`,
+        `<p class="y-chinh">🎯 System testing = hành vi và năng lực của cả hệ thống hay sản phẩm (slide 75).</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>A</strong> — thành phần test riêng được: component testing.</li>
+<li><strong>C</strong> — tương tác giữa thành phần hoặc hệ thống: integration testing.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — Test hành vi và năng lực của cả hệ thống hay sản phẩm.</strong></p>`],
       [79, 'Question — statements about system testing',
-        AE('C — 1 and 2 correct; 3 wrong', 'Finding defects <em>is</em> an objective of system testing. "Finding defects is often not an objective" is said about <em>acceptance</em> testing (slide 83).'),
-        AV('C — 1 và 2 đúng; 3 sai', 'Tìm lỗi <em>là</em> mục tiêu của system testing. Câu "tìm lỗi thường không phải mục tiêu" là nói về <em>acceptance</em> testing (slide 83).')],
+        `<p class="y-chinh">🎯 Statements 1 and 2 are slide 77; statement 3 belongs to acceptance testing, not system testing.</p>
+<ul>
+<li><strong>1 — correct</strong> — the environment should ideally correspond to production.</li>
+<li><strong>2 — correct</strong> — independent testers typically do system testing and rely heavily on specifications.</li>
+<li><strong>3 — wrong</strong> — finding defects <em>is</em> an objective of system testing. "Finding defects is often not an objective" is said about <em>acceptance</em> testing (slide 83).</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: C — 1 and 2 correct; 3 wrong.</strong></p>`,
+        `<p class="y-chinh">🎯 Câu 1 và 2 là slide 77; câu 3 nói về acceptance testing, không phải system testing.</p>
+<ul>
+<li><strong>1 — đúng</strong> — môi trường lý tưởng là giống production.</li>
+<li><strong>2 — đúng</strong> — system testing thường do tester độc lập làm, dựa nhiều vào đặc tả.</li>
+<li><strong>3 — sai</strong> — tìm lỗi <em>là</em> mục tiêu của system testing. Câu "tìm lỗi thường không phải mục tiêu" là nói về <em>acceptance</em> testing (slide 83).</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: C — 1 và 2 đúng; 3 sai.</strong></p>`],
       [80, 'Question — test basis of system testing',
-        AE('B — Epics and user stories, state diagrams, risk analysis reports', 'A is the component basis, C the integration basis.'),
-        AV('B — Epic và user story, state diagram, báo cáo phân tích rủi ro', 'A là test basis của component, C của integration.')],
+        `<p class="y-chinh">🎯 Epics, user stories, state diagrams and risk reports are the system-test basis (slide 76).</p>
+<p class="nhan">Why the others are wrong</p>
+<ul>
+<li><strong>A</strong> — detailed design, code, data model: the component basis.</li>
+<li><strong>C</strong> — use cases, workflows, sequence diagrams: the integration basis.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — Epics and user stories, state diagrams, risk analysis reports.</strong></p>`,
+        `<p class="y-chinh">🎯 Epic, user story, state diagram và báo cáo rủi ro là test basis của system (slide 76).</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>A</strong> — thiết kế chi tiết, code, mô hình dữ liệu: test basis của component.</li>
+<li><strong>C</strong> — use case, workflow, sequence diagram: test basis của integration.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — Epic và user story, state diagram, báo cáo phân tích rủi ro.</strong></p>`],
       [81, 'Question — test object of system testing',
-        AE('A — Applications, operating systems', 'B (reports, forms) are acceptance objects, C (APIs, microservices) integration objects.'),
-        AV('A — Ứng dụng, hệ điều hành', 'B (báo cáo, biểu mẫu) là đối tượng acceptance, C (API, microservice) là đối tượng integration.')],
+        `<p class="y-chinh">🎯 Applications and operating systems are system-test objects (slide 76).</p>
+<p class="nhan">Why the others are wrong</p>
+<ul>
+<li><strong>B</strong> — reports and forms: acceptance-test objects.</li>
+<li><strong>C</strong> — APIs and microservices: integration-test objects.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: A — Applications, operating systems.</strong></p>`,
+        `<p class="y-chinh">🎯 Ứng dụng và hệ điều hành là đối tượng của system testing (slide 76).</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>B</strong> — báo cáo, biểu mẫu: đối tượng của acceptance.</li>
+<li><strong>C</strong> — API, microservice: đối tượng của integration.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: A — Ứng dụng, hệ điều hành.</strong></p>`],
       [82, 'Acceptance Testing — definition',
-        `<p><strong>Formal testing with respect to user needs, requirements and business processes</strong>, conducted to determine whether a system satisfies the <strong>acceptance criteria</strong> and to enable users, customers or another authorised entity to decide <strong>whether to accept the system</strong> (textbook p.55). The wheel shows the usability-type qualities users judge: satisfaction, learnability, efficiency, memorability, errors.</p>`,
-        `<p><strong>Kiểm thử chính thức theo nhu cầu, yêu cầu người dùng và quy trình nghiệp vụ</strong>, nhằm xác định hệ thống có thoả <strong>tiêu chí chấp nhận</strong> hay không và để người dùng, khách hàng hoặc bên có thẩm quyền quyết định <strong>có chấp nhận hệ thống không</strong> (giáo trình trang 55). Bánh xe là các khía cạnh người dùng đánh giá: hài lòng, dễ học, hiệu quả, dễ nhớ, lỗi.</p>`],
+        `<p class="y-chinh">🎯 Acceptance testing is <strong>formal testing against user needs, requirements and business processes</strong>, to decide whether to accept the system (textbook p.55).</p>
+<ul>
+<li><strong>Against what</strong> — user needs, requirements and business processes.</li>
+<li><strong>To determine</strong> — whether the system satisfies the <strong>acceptance criteria</strong>.</li>
+<li><strong>Who decides</strong> — users, customers or another authorised entity decide <strong>whether to accept the system</strong>.</li>
+</ul>
+<p class="nhan">The wheel — what users judge</p>
+<ol class="hai-cot"><li>Satisfaction</li><li>Learnability</li><li>Efficiency</li><li>Memorability</li><li>Errors</li></ol>`,
+        `<p class="y-chinh">🎯 Acceptance testing là <strong>kiểm thử chính thức theo nhu cầu, yêu cầu người dùng và quy trình nghiệp vụ</strong>, để quyết định có chấp nhận hệ thống không (giáo trình trang 55).</p>
+<ul>
+<li><strong>So với cái gì</strong> — nhu cầu, yêu cầu người dùng và quy trình nghiệp vụ.</li>
+<li><strong>Để xác định</strong> — hệ thống có thoả <strong>tiêu chí chấp nhận</strong> không.</li>
+<li><strong>Ai quyết định</strong> — người dùng, khách hàng hoặc bên có thẩm quyền quyết định <strong>có chấp nhận hệ thống không</strong>.</li>
+</ul>
+<p class="nhan">Bánh xe — những gì người dùng đánh giá</p>
+<ol class="hai-cot"><li>Hài lòng (satisfaction)</li><li>Dễ học (learnability)</li><li>Hiệu quả (efficiency)</li><li>Dễ nhớ (memorability)</li><li>Lỗi (errors)</li></ol>`],
       [83, 'Acceptance Testing — objectives',
-        `<p>It produces information to assess readiness for deployment and use. Defects may be found, but <strong>finding defects is often not an objective</strong> — and finding a significant number of defects during acceptance may be considered a <strong>major project risk</strong> (they should have been found earlier).</p>`,
-        `<p>Nó cung cấp thông tin để đánh giá mức sẵn sàng triển khai và sử dụng. Có thể phát hiện lỗi, nhưng <strong>tìm lỗi thường không phải mục tiêu</strong> — và tìm ra nhiều lỗi ở acceptance có thể bị xem là <strong>rủi ro lớn của dự án</strong> (lẽ ra phải tìm thấy từ trước).</p>`],
+        `<p class="y-chinh">🎯 Acceptance testing measures readiness; finding defects is <strong>often not</strong> its objective.</p>
+<ul>
+<li><strong>Readiness</strong> — it produces information to assess whether the system is ready for deployment and use by the customer (end user).</li>
+<li><strong>Defects</strong> — may be found, but finding them is often not an objective.</li>
+<li><strong>Many defects = major project risk</strong> — they should have been found at earlier levels.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Acceptance testing đo mức sẵn sàng; tìm lỗi <strong>thường không phải</strong> mục tiêu của nó.</p>
+<ul>
+<li><strong>Mức sẵn sàng</strong> — cung cấp thông tin để đánh giá hệ thống đã sẵn sàng triển khai và cho khách hàng (người dùng cuối) sử dụng chưa.</li>
+<li><strong>Lỗi</strong> — có thể phát hiện, nhưng tìm lỗi thường không phải mục tiêu.</li>
+<li><strong>Nhiều lỗi = rủi ro lớn của dự án</strong> — lẽ ra chúng phải được tìm thấy ở các cấp trước.</li>
+</ul>`],
       [84, 'Acceptance Testing: UAT',
-        `<p><strong>User acceptance testing</strong>: done by <strong>end users</strong>, focused on <strong>business processes</strong>, in a real or simulated operational environment; aim: confidence that the system lets users do what they need with minimum difficulty, cost and risk.</p>`,
-        `<p><strong>User acceptance testing</strong>: do <strong>người dùng cuối</strong> làm, tập trung vào <strong>quy trình nghiệp vụ</strong>, trong môi trường vận hành thật hoặc mô phỏng; mục đích: tin rằng hệ thống giúp người dùng làm được việc họ cần với ít khó khăn, chi phí và rủi ro nhất.</p>`],
+        `<p class="y-chinh">🎯 User acceptance testing (UAT) is done by <strong>end users</strong> and focuses on <strong>business processes</strong>.</p>
+<ul>
+<li><strong>Done by</strong> — end users.</li>
+<li><strong>Focus</strong> — business processes.</li>
+<li><strong>Environment</strong> — real or simulated operational environment.</li>
+<li><strong>Aim</strong> — confidence that the system lets users do what they need with a minimum of difficulty, cost and risk.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 User acceptance testing (UAT) do <strong>người dùng cuối</strong> làm và tập trung vào <strong>quy trình nghiệp vụ</strong>.</p>
+<ul>
+<li><strong>Ai làm</strong> — người dùng cuối.</li>
+<li><strong>Trọng tâm</strong> — quy trình nghiệp vụ.</li>
+<li><strong>Môi trường</strong> — môi trường vận hành thật hoặc mô phỏng.</li>
+<li><strong>Mục đích</strong> — tin rằng hệ thống giúp người dùng làm được việc họ cần với ít khó khăn, chi phí và rủi ro nhất.</li>
+</ul>`],
       [85, 'User acceptance testing — how',
-        `<p>The final stage of validation: the customer performs or is closely involved, can run any test they wish (usually from their business processes), and gives the <strong>final sign-off</strong>. Approach: a mix of scripted and unscripted testing; sometimes a "model office" — a realistic replica of the user's workplace.</p>`,
-        `<p>Chặng validation cuối cùng: khách hàng tự làm hoặc tham gia sát sao, có thể chạy bất kỳ test nào họ muốn (thường theo quy trình nghiệp vụ của họ), và <strong>ký nghiệm thu cuối</strong>. Cách làm: kết hợp test có kịch bản và không kịch bản; đôi khi dựng "model office" — bản sao thực tế nơi làm việc của người dùng.</p>`],
+        `<p class="y-chinh">🎯 UAT is the final stage of validation, ending with the customer's <strong>final sign-off</strong>.</p>
+<p class="nhan">What it is</p>
+<ul>
+<li><strong>Customer in charge</strong> — the customer (user) performs it or is closely involved.</li>
+<li><strong>Any test they wish</strong> — usually based on their business processes.</li>
+<li><strong>Final user sign-off</strong></li>
+</ul>
+<p class="nhan">Approach</p>
+<ul>
+<li><strong>Mixed</strong> — scripted and unscripted testing.</li>
+<li><strong>"Model office"</strong> — sometimes used: a realistic replica of the user's workplace.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 UAT là chặng validation cuối cùng, kết thúc bằng việc khách hàng <strong>ký nghiệm thu cuối</strong>.</p>
+<p class="nhan">Nó là gì</p>
+<ul>
+<li><strong>Khách hàng làm chủ</strong> — khách hàng (người dùng) tự làm hoặc tham gia sát sao.</li>
+<li><strong>Test bất cứ gì họ muốn</strong> — thường theo quy trình nghiệp vụ của họ.</li>
+<li><strong>Ký nghiệm thu cuối</strong></li>
+</ul>
+<p class="nhan">Cách làm</p>
+<ul>
+<li><strong>Kết hợp</strong> — test có kịch bản và không kịch bản.</li>
+<li><strong>"Model office"</strong> — đôi khi được dùng: bản sao thực tế nơi làm việc của người dùng.</li>
+</ul>`],
       [86, 'Why customer / user involvement',
-        `<p>Users know what really happens in business situations, the complexity of business relationships, how they would do their work with the system, variants of standard tasks (e.g. country-specific), real cases, and sensible work-arounds. Benefit: they gain a <strong>detailed understanding of the new system</strong>.</p>`,
-        `<p>Người dùng biết điều thật sự diễn ra trong nghiệp vụ, độ phức tạp của các quan hệ nghiệp vụ, cách họ sẽ làm việc với hệ thống, các biến thể của tác vụ chuẩn (vd theo từng nước), ví dụ thật, và cách lách hợp lý. Lợi ích: họ có <strong>hiểu biết chi tiết về hệ thống mới</strong>.</p>`],
+        `<p class="y-chinh">🎯 Involve users because they know how the business really works.</p>
+<p class="nhan">What users know</p>
+<ol>
+<li>What really happens in business situations</li>
+<li>The complexity of business relationships</li>
+<li>How they would do their work using the system</li>
+<li>Variants of standard tasks (e.g. country-specific)</li>
+<li>Examples of real cases</li>
+<li>How to identify sensible work-arounds</li>
+</ol>
+<p class="nhan">Benefit</p>
+<p>Users gain a <strong>detailed understanding of the new system</strong>.</p>`,
+        `<p class="y-chinh">🎯 Cần người dùng tham gia vì họ biết nghiệp vụ thật sự vận hành thế nào.</p>
+<p class="nhan">Người dùng biết gì</p>
+<ol>
+<li>Điều thật sự diễn ra trong các tình huống nghiệp vụ</li>
+<li>Độ phức tạp của các quan hệ nghiệp vụ</li>
+<li>Họ sẽ làm việc với hệ thống ra sao</li>
+<li>Các biến thể của tác vụ chuẩn (vd theo từng nước)</li>
+<li>Các ví dụ thật</li>
+<li>Cách nhận ra những cách lách hợp lý</li>
+</ol>
+<p class="nhan">Lợi ích</p>
+<p>Người dùng có <strong>hiểu biết chi tiết về hệ thống mới</strong>.</p>`],
       [87, 'Acceptance Testing: OAT',
-        `<p><strong>Operational acceptance testing</strong>: by <strong>system administrators</strong>, in a simulated production environment. Focus: backups, installation/uninstallation/upgrading, disaster recovery, user management, maintenance, data loading and migration, security, performance. Aim: confidence that admins can keep the system running and recover from adverse events quickly.</p>`,
-        `<p><strong>Operational acceptance testing</strong>: do <strong>quản trị hệ thống</strong> làm, trong môi trường production mô phỏng. Trọng tâm: sao lưu, cài đặt/gỡ/nâng cấp, khắc phục thảm hoạ, quản lý người dùng, bảo trì, nạp và chuyển đổi dữ liệu, bảo mật, hiệu năng. Mục đích: tin rằng admin giữ được hệ thống chạy và phục hồi nhanh khi có sự cố.</p>`],
+        `<p class="y-chinh">🎯 Operational acceptance testing (OAT) is done by <strong>system administrators</strong>, in a simulated production environment.</p>
+<ul>
+<li><strong>Done by</strong> — system administrators.</li>
+<li><strong>Environment</strong> — simulated production environment.</li>
+<li><strong>Aim</strong> — confidence that admins can keep the system running and recover from adverse events quickly, without additional risks.</li>
+</ul>
+<p class="nhan">Focus</p>
+<ol class="hai-cot"><li>Backups</li><li>Installation, uninstallation, upgrading</li><li>Disaster recovery</li><li>User management</li><li>Maintenance</li><li>Data loading &amp; migration</li><li>Security</li><li>Performance</li></ol>`,
+        `<p class="y-chinh">🎯 Operational acceptance testing (OAT) do <strong>quản trị hệ thống</strong> làm, trong môi trường production mô phỏng.</p>
+<ul>
+<li><strong>Ai làm</strong> — quản trị hệ thống (system admin).</li>
+<li><strong>Môi trường</strong> — môi trường production mô phỏng.</li>
+<li><strong>Mục đích</strong> — tin rằng admin giữ được hệ thống chạy và phục hồi nhanh khi có sự cố, không thêm rủi ro.</li>
+</ul>
+<p class="nhan">Trọng tâm</p>
+<ol class="hai-cot"><li>Sao lưu</li><li>Cài đặt, gỡ cài đặt, nâng cấp</li><li>Khắc phục thảm hoạ</li><li>Quản lý người dùng</li><li>Bảo trì</li><li>Nạp &amp; chuyển đổi dữ liệu</li><li>Bảo mật</li><li>Hiệu năng</li></ol>`],
       [88, 'Acceptance Testing: contractual & regulatory',
-        `<p><strong>Contractual AT</strong> verifies the system satisfies its <strong>contract</strong> — by users or independent testers. <strong>Regulatory AT</strong> verifies it conforms to <strong>laws, policies and regulations</strong> — by independent testers, possibly with a representative of the regulatory body.</p>`,
-        `<p><strong>Contractual AT</strong> kiểm hệ thống thoả <strong>hợp đồng</strong> — do người dùng hoặc tester độc lập làm. <strong>Regulatory AT</strong> kiểm hệ thống tuân thủ <strong>luật, chính sách, quy định</strong> — do tester độc lập làm, có thể có đại diện cơ quan quản lý.</p>`],
+        `<p class="y-chinh">🎯 Contractual and regulatory AT check the system against the contract and against the law.</p>
+<ul>
+<li><strong>Contractual AT</strong> — verifies the system satisfies its <strong>contractual requirements</strong>; done by users or independent testers.</li>
+<li><strong>Regulatory AT</strong> — verifies the system conforms to relevant <strong>laws, policies and regulations</strong>; done by independent testers, possibly with a representative of the regulatory body.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Contractual và regulatory AT kiểm hệ thống so với hợp đồng và so với luật.</p>
+<ul>
+<li><strong>Contractual AT</strong> — kiểm hệ thống thoả <strong>yêu cầu trong hợp đồng</strong>; do người dùng hoặc tester độc lập làm.</li>
+<li><strong>Regulatory AT</strong> — kiểm hệ thống tuân thủ <strong>luật, chính sách, quy định</strong> liên quan; do tester độc lập làm, có thể có đại diện cơ quan quản lý.</li>
+</ul>`],
       [89, 'Acceptance Testing: alpha & beta',
-        `<p><strong>Alpha</strong>: operational testing at the <strong>developer's site</strong>, by roles outside the development organisation. <strong>Beta</strong> (field testing): at an <strong>external site</strong> (the users' own), by outside roles — diverse users and environments cover more combinations. Both are used by makers of commercial off-the-shelf (COTS) software to get feedback before or after release.</p>`,
-        `<p><strong>Alpha</strong>: kiểm thử vận hành tại <strong>nơi của bên phát triển</strong>, do người ngoài tổ chức phát triển làm. <strong>Beta</strong> (field testing): tại <strong>nơi bên ngoài</strong> (của chính người dùng), do người ngoài làm — người dùng và môi trường đa dạng phủ được nhiều tổ hợp hơn. Cả hai được các hãng làm phần mềm đóng gói (COTS) dùng để lấy phản hồi trước hoặc sau khi phát hành.</p>`],
+        `<p class="y-chinh">🎯 Alpha and beta differ by <strong>place</strong>: alpha at the developer's site, beta at an external site.</p>
+<ul>
+<li><strong>Alpha</strong> — simulated or actual operational testing at the <strong>developer's</strong> test environment, by roles outside the development organisation.</li>
+<li><strong>Beta (field testing)</strong> — simulated or actual operational testing at an <strong>external site</strong>, by roles outside the development organisation. Diverse users and environments cover more combinations of factors.</li>
+</ul>
+<p>Both are used by makers of commercial off-the-shelf (COTS) software to get feedback from potential or existing users before the product is put on the market (question slide 97).</p>`,
+        `<p class="y-chinh">🎯 Alpha và beta khác nhau ở <strong>địa điểm</strong>: alpha tại nơi bên phát triển, beta tại nơi bên ngoài.</p>
+<ul>
+<li><strong>Alpha</strong> — kiểm thử vận hành thật hoặc mô phỏng trong môi trường test của <strong>bên phát triển</strong>, do người ngoài tổ chức phát triển làm.</li>
+<li><strong>Beta (field testing)</strong> — kiểm thử vận hành thật hoặc mô phỏng tại <strong>nơi bên ngoài</strong>, do người ngoài tổ chức phát triển làm. Người dùng và môi trường đa dạng nên phủ được nhiều tổ hợp yếu tố hơn.</li>
+</ul>
+<p>Cả hai được các hãng làm phần mềm đóng gói (COTS) dùng để lấy phản hồi từ người dùng tiềm năng hoặc hiện tại trước khi đưa sản phẩm ra thị trường (câu hỏi slide 97).</p>`],
       [90, 'Acceptance Testing — the attributes',
-        `<p>The full table (objectives, test basis incl. operational documents, test objects incl. recovery systems and hot sites, forms and reports, typical defects) — summarised in the table at the top of this lesson. ("Hot sits" on the slide is a typo for <em>hot sites</em>: standby data centres ready to take over.)</p>`,
-        `<p>Bảng đầy đủ (mục tiêu, test basis gồm cả tài liệu vận hành, đối tượng gồm hệ thống phục hồi và hot site, biểu mẫu, báo cáo, lỗi điển hình) — đã tóm tắt ở bảng đầu bài. ("Hot sits" trên slide là lỗi chính tả của <em>hot sites</em>: trung tâm dữ liệu dự phòng sẵn sàng tiếp quản.)</p>`],
+        `<p class="y-chinh">🎯 The full attribute table of acceptance testing — summarised in the table at the top of this lesson.</p>
+<ul>
+<li><strong>Objectives</strong> — establish confidence; validate the system is complete and works as expected; verify functional &amp; non-functional behaviour as specified.</li>
+<li><strong>Test basis</strong> — business processes, user/business requirements, regulations, contracts &amp; standards, use cases, system documentation, risk reports — plus operational documents (backup &amp; recovery procedures, disaster-recovery plan, operations docs, performance targets, security standards).</li>
+<li><strong>Test objects</strong> — system under test, configuration &amp; data, recovery systems and hot sites, forms, reports.</li>
+<li><strong>Typical defects</strong> — system workflows, business rules, contract, non-functional failures (security vulnerabilities, performance inefficiency…).</li>
+</ul>
+<p class="ghi-chu">"Hot sits" on the slide is a typo for <em>hot sites</em>: standby data centres ready to take over.</p>`,
+        `<p class="y-chinh">🎯 Bảng thuộc tính đầy đủ của acceptance testing — đã tóm tắt ở bảng đầu bài.</p>
+<ul>
+<li><strong>Mục tiêu</strong> — tạo niềm tin; validate hệ thống hoàn chỉnh và chạy như mong đợi; verify hành vi chức năng &amp; phi chức năng đúng đặc tả.</li>
+<li><strong>Test basis</strong> — quy trình nghiệp vụ, yêu cầu người dùng/nghiệp vụ, quy định, hợp đồng &amp; tiêu chuẩn, use case, tài liệu hệ thống, báo cáo rủi ro — cộng tài liệu vận hành (thủ tục sao lưu &amp; phục hồi, kế hoạch khắc phục thảm hoạ, tài liệu vận hành, mục tiêu hiệu năng, tiêu chuẩn bảo mật).</li>
+<li><strong>Đối tượng test</strong> — hệ thống đang test, cấu hình &amp; dữ liệu, hệ thống phục hồi và hot site, biểu mẫu, báo cáo.</li>
+<li><strong>Lỗi điển hình</strong> — luồng công việc, luật nghiệp vụ, hợp đồng, lỗi phi chức năng (lỗ hổng bảo mật, hiệu năng kém…).</li>
+</ul>
+<p class="ghi-chu">"Hot sits" trên slide là lỗi chính tả của <em>hot sites</em>: trung tâm dữ liệu dự phòng sẵn sàng tiếp quản.</p>`],
       [91, 'Acceptance testing motto',
-        `<p>"If you don't have patience to test the system, the system will surely test your patience." Skipped acceptance testing is paid back in production incidents.</p>`,
-        `<p>"Nếu bạn không đủ kiên nhẫn để test hệ thống, hệ thống chắc chắn sẽ thử thách lòng kiên nhẫn của bạn." Bỏ qua acceptance testing thì sẽ trả giá bằng sự cố trên production.</p>`],
+        `<p class="y-chinh">🎯 "If you don't have patience to test the system, the system will surely test your patience."</p>
+<p>Skipped acceptance testing is paid back in production incidents.</p>`,
+        `<p class="y-chinh">🎯 "Nếu bạn không đủ kiên nhẫn để test hệ thống, hệ thống chắc chắn sẽ thử thách lòng kiên nhẫn của bạn."</p>
+<p>Bỏ qua acceptance testing thì sẽ trả giá bằng sự cố trên production.</p>`],
       [92, 'Question — similarity between system and acceptance testing',
-        AE('C — Both focus on the behaviour and capabilities of a whole system or product', 'Their test objects and test bases differ (see the table).'),
-        AV('C — Cả hai tập trung vào hành vi và năng lực của cả hệ thống/sản phẩm', 'Đối tượng và test basis của chúng khác nhau (xem bảng).')],
+        `<p class="y-chinh">🎯 System and acceptance testing share their focus: the whole system or product.</p>
+<ul>
+<li><strong>Same focus</strong> — behaviour and capabilities of a whole system (slides 75 and 82).</li>
+<li><strong>A and B are wrong</strong> — their test objects and test bases differ (see the table at the top).</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: C — Both focus on the behaviour and capabilities of a whole system or product.</strong></p>`,
+        `<p class="y-chinh">🎯 System và acceptance testing có chung trọng tâm: cả hệ thống hay sản phẩm.</p>
+<ul>
+<li><strong>Chung trọng tâm</strong> — hành vi và năng lực của cả hệ thống (slide 75 và 82).</li>
+<li><strong>A và B sai</strong> — đối tượng và test basis của chúng khác nhau (xem bảng đầu bài).</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: C — Cả hai tập trung vào hành vi và năng lực của cả hệ thống/sản phẩm.</strong></p>`],
       [93, 'Question — too many defects during acceptance',
-        AE('B — A bad situation: finding defects is often not an objective of acceptance testing, and many defects there may be a major project risk', 'Slide 83.'),
-        AV('B — Tình huống xấu: tìm lỗi thường không phải mục tiêu của acceptance, và nhiều lỗi ở giai đoạn này có thể là rủi ro lớn của dự án', 'Slide 83.')],
+        `<p class="y-chinh">🎯 Many defects during acceptance testing is a bad sign — a major project risk (slide 83).</p>
+<ul>
+<li><strong>Not the goal</strong> — finding defects is often not an objective of acceptance testing.</li>
+<li><strong>A warning</strong> — a significant number of defects at this level may be considered a major project risk: they should have been found earlier.</li>
+<li><strong>Why A is wrong</strong> — many defects here do not mean quality is increasing.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — A bad situation: finding defects is often not an objective of acceptance testing, and many defects there may be a major project risk.</strong></p>`,
+        `<p class="y-chinh">🎯 Nhiều lỗi trong acceptance testing là dấu hiệu xấu — rủi ro lớn của dự án (slide 83).</p>
+<ul>
+<li><strong>Không phải mục tiêu</strong> — tìm lỗi thường không phải mục tiêu của acceptance testing.</li>
+<li><strong>Một lời cảnh báo</strong> — nhiều lỗi ở cấp này có thể bị xem là rủi ro lớn của dự án: lẽ ra phải tìm thấy từ trước.</li>
+<li><strong>Vì sao A sai</strong> — nhiều lỗi ở đây không có nghĩa là chất lượng đang tăng.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — Tình huống xấu: tìm lỗi thường không phải mục tiêu của acceptance, và nhiều lỗi ở giai đoạn này có thể là rủi ro lớn của dự án.</strong></p>`],
       [94, 'Question — test basis of acceptance testing',
-        AE('A — Regulations, legal contracts and standards', 'State diagrams are a system basis, workflows an integration basis.'),
-        AV('A — Quy định, hợp đồng pháp lý và tiêu chuẩn', 'State diagram là test basis của system, workflow của integration.')],
+        `<p class="y-chinh">🎯 Regulations, legal contracts and standards are an acceptance-test basis (slide 90).</p>
+<p class="nhan">Why the others are wrong</p>
+<ul>
+<li><strong>B</strong> — state diagrams: a system-test basis.</li>
+<li><strong>C</strong> — workflows: an integration-test basis.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: A — Regulations, legal contracts and standards.</strong></p>`,
+        `<p class="y-chinh">🎯 Quy định, hợp đồng pháp lý và tiêu chuẩn là test basis của acceptance (slide 90).</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>B</strong> — state diagram: test basis của system.</li>
+<li><strong>C</strong> — workflow: test basis của integration.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: A — Quy định, hợp đồng pháp lý và tiêu chuẩn.</strong></p>`],
       [95, 'Question — a defect found in acceptance testing',
-        AE('B — Business rules are not implemented correctly', 'A (cannot complete end-to-end tasks) is the typical system-test failure; C (interface mismatch) is integration.'),
-        AV('B — Luật nghiệp vụ được cài đặt sai', 'A (không hoàn thành tác vụ đầu-cuối) là lỗi điển hình của system; C (giao diện không khớp) là integration.')],
+        `<p class="y-chinh">🎯 Business rules implemented wrongly is a typical acceptance defect (slide 90).</p>
+<p class="nhan">Why the others are wrong</p>
+<ul>
+<li><strong>A</strong> — cannot complete end-to-end tasks: the typical system-test failure.</li>
+<li><strong>C</strong> — interface mismatch: integration.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — Business rules are not implemented correctly.</strong></p>`,
+        `<p class="y-chinh">🎯 Luật nghiệp vụ cài sai là lỗi điển hình của acceptance (slide 90).</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>A</strong> — không hoàn thành được tác vụ đầu-cuối: lỗi điển hình của system.</li>
+<li><strong>C</strong> — giao diện không khớp: integration.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — Luật nghiệp vụ được cài đặt sai.</strong></p>`],
       [96, 'Question — system administrators in a simulated production environment',
-        AE('B — Operational acceptance testing', 'Slide 87.'),
-        AV('B — Operational acceptance testing', 'Slide 87.')],
+        `<p class="y-chinh">🎯 System administrators + simulated production environment = operational acceptance testing (slide 87).</p>
+<ul>
+<li><strong>UAT</strong> — end users, business processes.</li>
+<li><strong>OAT</strong> — system administrators, simulated production environment ← this one.</li>
+<li><strong>Contractual/regulatory</strong> — contract, laws and regulations.</li>
+<li><strong>Alpha/beta</strong> — outside users, at the developer's or an external site.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — Operational acceptance testing.</strong></p>`,
+        `<p class="y-chinh">🎯 Quản trị hệ thống + môi trường production mô phỏng = operational acceptance testing (slide 87).</p>
+<ul>
+<li><strong>UAT</strong> — người dùng cuối, quy trình nghiệp vụ.</li>
+<li><strong>OAT</strong> — quản trị hệ thống, môi trường production mô phỏng ← chính là nó.</li>
+<li><strong>Hợp đồng/quy định</strong> — hợp đồng, luật và quy định.</li>
+<li><strong>Alpha/beta</strong> — người dùng bên ngoài, tại nơi bên phát triển hoặc nơi bên ngoài.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — Operational acceptance testing.</strong></p>`],
       [97, 'Question — COTS vendors getting feedback before market release',
-        AE('D — Alpha and beta testing', 'Slide 89.'),
-        AV('D — Alpha và beta testing', 'Slide 89.')],
+        `<p class="y-chinh">🎯 COTS vendors collecting feedback before market release use alpha and beta testing (slide 89).</p>
+<ul>
+<li><strong>Who</strong> — developers of commercial off-the-shelf software.</li>
+<li><strong>From whom</strong> — potential or existing users, customers and/or operators.</li>
+<li><strong>When</strong> — before the product is put on the market.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: D — Alpha and beta testing.</strong></p>`,
+        `<p class="y-chinh">🎯 Hãng COTS lấy phản hồi trước khi đưa ra thị trường thì dùng alpha và beta testing (slide 89).</p>
+<ul>
+<li><strong>Ai</strong> — bên phát triển phần mềm đóng gói thương mại (COTS).</li>
+<li><strong>Lấy từ ai</strong> — người dùng, khách hàng và/hoặc người vận hành tiềm năng hoặc hiện tại.</li>
+<li><strong>Khi nào</strong> — trước khi sản phẩm được đưa ra thị trường.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: D — Alpha và beta testing.</strong></p>`],
       [98, 'Question — fitness for use by intended users',
-        AE('A — User acceptance testing', 'Validating fitness for use by intended users in a real or simulated environment is the definition of UAT.'),
-        AV('A — User acceptance testing', 'Validate mức phù hợp sử dụng bởi người dùng dự kiến trong môi trường thật/mô phỏng chính là định nghĩa UAT.')],
+        `<p class="y-chinh">🎯 Validating fitness for use by intended users in a real or simulated environment is the definition of UAT (slide 84).</p>
+<ul>
+<li><strong>Intended users</strong> — end users, not administrators (OAT) or regulators.</li>
+<li><strong>Fitness for use</strong> — can users do their work with the system?</li>
+<li><strong>Real or simulated operational environment</strong> — exactly UAT's environment.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: A — User acceptance testing.</strong></p>`,
+        `<p class="y-chinh">🎯 Validate mức phù hợp sử dụng bởi người dùng dự kiến trong môi trường thật/mô phỏng chính là định nghĩa UAT (slide 84).</p>
+<ul>
+<li><strong>Người dùng dự kiến</strong> — người dùng cuối, không phải quản trị hệ thống (OAT) hay cơ quan quản lý.</li>
+<li><strong>Phù hợp để dùng</strong> — người dùng có làm được việc của mình với hệ thống không?</li>
+<li><strong>Môi trường vận hành thật hoặc mô phỏng</strong> — đúng môi trường của UAT.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: A — User acceptance testing.</strong></p>`],
       [99, 'Question — level focused on confidence more than defects',
-        AE('D — Acceptance testing', 'Its first objective is establishing confidence; finding defects is often not an objective.'),
-        AV('D — Acceptance testing', 'Mục tiêu hàng đầu là tạo niềm tin; tìm lỗi thường không phải mục tiêu.')],
+        `<p class="y-chinh">🎯 Acceptance testing aims first at confidence; finding defects is often not an objective (slides 83 and 90).</p>
+<ul>
+<li><strong>Acceptance</strong> — first objective: establish confidence.</li>
+<li><strong>Unit, integration, system</strong> — all list "find defects" among their objectives.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: D — Acceptance testing.</strong></p>`,
+        `<p class="y-chinh">🎯 Acceptance testing nhắm trước hết vào niềm tin; tìm lỗi thường không phải mục tiêu (slide 83 và 90).</p>
+<ul>
+<li><strong>Acceptance</strong> — mục tiêu hàng đầu: tạo niềm tin.</li>
+<li><strong>Unit, integration, system</strong> — đều có "tìm lỗi" trong danh sách mục tiêu.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: D — Acceptance testing.</strong></p>`],
       [100, 'Review question — where developers are most involved',
-        AE('C — Component', 'Component testing is usually done by developers. "Compatible" and "conversion" are not test levels at all.'),
-        AV('C — Component', 'Component testing thường do developer làm. "Compatible" và "conversion" không phải cấp test.')],
+        `<p class="y-chinh">🎯 Developers are most involved in component testing (slide 43).</p>
+<ul>
+<li><strong>Component</strong> — usually done by the developer.</li>
+<li><strong>Acceptance</strong> — done by users, admins or independent testers.</li>
+<li><strong>"Compatible", "conversion"</strong> — not test levels at all.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: C — Component.</strong></p>`,
+        `<p class="y-chinh">🎯 Developer tham gia nhiều nhất ở component testing (slide 43).</p>
+<ul>
+<li><strong>Component</strong> — thường do developer làm.</li>
+<li><strong>Acceptance</strong> — do người dùng, admin hoặc tester độc lập làm.</li>
+<li><strong>"Compatible", "conversion"</strong> — không phải cấp test.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: C — Component.</strong></p>`],
       [101, 'Review question — component vs system testing',
-        AE('B', 'Component test cases come from component/design specs and data models; system test cases from requirement and functional specs and use cases. A is wrong (interfaces are integration), C is wrong (component testing also covers non-functional characteristics), D is wrong (system testing is usually done by independent testers, not users).'),
-        AV('B', 'Test case component lấy từ đặc tả thành phần/thiết kế và mô hình dữ liệu; test case system lấy từ đặc tả yêu cầu, đặc tả chức năng và use case. A sai (giao diện là việc của integration), C sai (component testing cũng test phi chức năng), D sai (system testing thường do tester độc lập làm, không phải người dùng).')],
+        `<p class="y-chinh">🎯 The true comparison is about the test basis: component tests come from component/design specs, system tests from requirement specs and use cases.</p>
+<p class="nhan">Why the others are wrong</p>
+<ul>
+<li><strong>A</strong> — "system testing verifies interfaces between components" describes integration testing.</li>
+<li><strong>C</strong> — component testing also covers non-functional characteristics.</li>
+<li><strong>D</strong> — system testing is usually done by independent testers, not by the users.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B.</strong> Component test cases come from component specifications, design specifications or data models; system test cases from requirement specifications, functional specifications or use cases.</p>`,
+        `<p class="y-chinh">🎯 So sánh đúng nằm ở test basis: test component lấy từ đặc tả thành phần/thiết kế, test system lấy từ đặc tả yêu cầu và use case.</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>A</strong> — "system testing kiểm giao diện giữa các thành phần" là mô tả integration testing.</li>
+<li><strong>C</strong> — component testing cũng test đặc tính phi chức năng.</li>
+<li><strong>D</strong> — system testing thường do tester độc lập làm, không phải người dùng.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B.</strong> Test case component lấy từ đặc tả thành phần, đặc tả thiết kế hoặc mô hình dữ liệu; test case system lấy từ đặc tả yêu cầu, đặc tả chức năng hoặc use case.</p>`],
       [102, 'Review question — (repeated in the deck)',
-        `<p>The deck shows the same question twice. Same answer: <strong>B</strong>.</p>`,
-        `<p>Bộ slide lặp lại đúng câu hỏi trước. Đáp án vẫn là <strong>B</strong>.</p>`],
+        `<p class="y-chinh">🎯 The deck shows the same question as slide 101 a second time.</p>
+<p class="dap-an">✅ <strong>Answer: B</strong> — same answer, same reasoning as slide 101.</p>`,
+        `<p class="y-chinh">🎯 Bộ slide lặp lại đúng câu hỏi của slide 101 lần thứ hai.</p>
+<p class="dap-an">✅ <strong>Đáp án: B</strong> — cùng đáp án, cùng lập luận như slide 101.</p>`],
       [103, 'Review question — use cases are a basis for…',
-        AE('B — System', 'Use cases describe end-to-end interactions — a system (and acceptance) test basis. "Load and performance" and "usability" are test types, not levels.'),
-        AV('B — System', 'Use case mô tả tương tác đầu-cuối — là test basis của system (và acceptance). "Load and performance" và "usability" là loại test, không phải cấp.')],
+        `<p class="y-chinh">🎯 Use cases describe end-to-end interactions — a system (and acceptance) test basis.</p>
+<ul>
+<li><strong>Unit</strong> — its basis is detailed design and code, not use cases.</li>
+<li><strong>"Load and performance", "usability"</strong> — test types, not levels.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — System.</strong></p>`,
+        `<p class="y-chinh">🎯 Use case mô tả tương tác đầu-cuối — là test basis của system (và acceptance).</p>
+<ul>
+<li><strong>Unit</strong> — test basis là thiết kế chi tiết và code, không phải use case.</li>
+<li><strong>"Load and performance", "usability"</strong> — là loại test, không phải cấp.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — System.</strong></p>`],
       [104, 'Review question — a well-managed test level',
-        AE('B — It has a corresponding test objective', 'Characteristic 2 of good testing (slide 4). Levels may overlap; durations and techniques vary.'),
-        AV('B — Có mục tiêu test tương ứng', 'Đặc điểm số 2 của kiểm thử tốt (slide 4). Các cấp có thể chồng nhau; thời lượng và kỹ thuật thì tuỳ.')],
+        `<p class="y-chinh">🎯 A well-managed test level has its own test objective — characteristic 2 of good testing (slide 4).</p>
+<p class="nhan">Why the others are wrong</p>
+<ul>
+<li><strong>A</strong> — there is no fixed target duration such as one month.</li>
+<li><strong>C</strong> — levels may overlap (slide 16).</li>
+<li><strong>D</strong> — a level uses whatever techniques fit, not a single one.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — It has a corresponding test objective.</strong></p>`,
+        `<p class="y-chinh">🎯 Một cấp test được quản lý tốt có mục tiêu test riêng — đặc điểm số 2 của kiểm thử tốt (slide 4).</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>A</strong> — không có thời lượng cố định kiểu một tháng.</li>
+<li><strong>C</strong> — các cấp có thể chồng nhau (slide 16).</li>
+<li><strong>D</strong> — mỗi cấp dùng kỹ thuật nào phù hợp, không phải chỉ một.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — Có mục tiêu test tương ứng.</strong></p>`],
       [105, 'Review question — where alpha testing happens',
-        AE("B — Developer's end", 'Alpha = at the developer\'s site; beta = at the users\' sites.'),
-        AV('B — Phía bên phát triển', 'Alpha = tại nơi của bên phát triển; beta = tại nơi của người dùng.')],
+        `<p class="y-chinh">🎯 Alpha testing happens at the developer's end; beta at the users' end (slide 89).</p>
+<ul>
+<li><strong>Alpha</strong> — at the developer's site, by roles outside the development organisation.</li>
+<li><strong>Beta</strong> — at the users' (external) sites.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — Developer's end.</strong></p>`,
+        `<p class="y-chinh">🎯 Alpha testing diễn ra phía bên phát triển; beta diễn ra phía người dùng (slide 89).</p>
+<ul>
+<li><strong>Alpha</strong> — tại nơi của bên phát triển, do người ngoài tổ chức phát triển làm.</li>
+<li><strong>Beta</strong> — tại nơi (bên ngoài) của người dùng.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — Phía bên phát triển.</strong></p>`],
     ]),
     bi(`<h3>🔒 Hidden slides (pptx 79–83): the older "system testing" block</h3>
-<p>The deck keeps five hidden slides from the previous syllabus: system testing as the <em>last integration step</em>; <strong>functional</strong> system testing split into requirements-based and business-process-based; <strong>non-functional</strong> requirements are "as important as functional ones, often poorly specified, and must be tested"; the list of non-functional system tests — usability, security, documentation, storage, volume, configuration/installation, reliability, backup/recovery, performance/load/stress. The same material is taught in the visible slides 108–122 (lesson 2.4).</p>
+<p>The deck keeps five hidden slides from the previous syllabus:</p>
+<ul>
+<li><strong>System testing</strong> — seen as the <em>last integration step</em>.</li>
+<li><strong>Functional system testing</strong> — split into requirements-based and business-process-based.</li>
+<li><strong>Non-functional requirements</strong> — "as important as functional ones, often poorly specified, and must be tested".</li>
+<li><strong>Non-functional system tests</strong> — usability, security, documentation, storage, volume, configuration/installation, reliability, backup/recovery, performance/load/stress.</li>
+</ul>
+<p>The same material is taught in the visible slides 108–122 (lesson 2.4).</p>
 <h3>Ví dụ có lời giải · Worked example — which acceptance test is it?</h3>
 <table>
 <thead><tr><th>Situation</th><th>Type</th></tr></thead>
@@ -538,10 +2031,23 @@ const L23 = {
 <tr><td>A game studio invites 50 players to its office for a play-test, then ships an early-access build to 5,000 players at home.</td><td>Alpha, then beta</td></tr>
 </tbody>
 </table>
-<div class="pitfall"><b>Alpha vs beta: remember the place, not the order.</b> Alpha = at the <em>developer's</em> site; beta = at the <em>users'</em> sites. Both are done by people outside the development team — so "alpha testing is done by developers" is false.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Acceptance tests as executable specifications.</b> Many teams now write acceptance criteria in Gherkin (<em>Given … When … Then …</em>) and run them with Cucumber or SpecFlow, so the business-readable criteria are also automated tests (ATDD/BDD — Chapter 9 and Topic 8). The UAT sign-off then covers exploratory checks by users, while the scripted part is already green in the pipeline. <em>Outside this chapter because CTFL treats acceptance testing as a level, not a technique.</em></div>`,
+<div class="pitfall co-tieu-de"><strong>Alpha vs beta: remember the place, not the order.</strong> Alpha = at the <em>developer's</em> site; beta = at the <em>users'</em> sites. Both are done by people outside the development team — so "alpha testing is done by developers" is false.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Acceptance tests as executable specifications.</strong>
+<ul>
+<li><strong>Write</strong> — many teams now write acceptance criteria in Gherkin (<em>Given … When … Then …</em>).</li>
+<li><strong>Run</strong> — Cucumber or SpecFlow executes them, so the business-readable criteria are also automated tests (ATDD/BDD — Chapter 9 and Topic 8).</li>
+<li><strong>Sign off</strong> — the UAT sign-off then covers exploratory checks by users; the scripted part is already green in the pipeline.</li>
+</ul>
+<p class="ghi-chu">Outside this chapter because CTFL treats acceptance testing as a level, not a technique.</p></div>`,
     `<h3>🔒 Slide ẩn (pptx 79–83): khối "system testing" bản cũ</h3>
-<p>Bộ slide giữ năm slide ẩn từ syllabus cũ: system testing là <em>bước tích hợp cuối cùng</em>; system testing <strong>chức năng</strong> chia thành dựa trên yêu cầu và dựa trên quy trình nghiệp vụ; yêu cầu <strong>phi chức năng</strong> "quan trọng không kém chức năng, thường được đặc tả kém, và bắt buộc phải test"; danh sách system test phi chức năng — usability, security, documentation, storage, volume, configuration/installation, reliability, backup/recovery, performance/load/stress. Nội dung này được dạy ở các slide hiển thị 108–122 (bài 2.4).</p>
+<p>Bộ slide giữ năm slide ẩn từ syllabus cũ:</p>
+<ul>
+<li><strong>System testing</strong> — được xem là <em>bước tích hợp cuối cùng</em>.</li>
+<li><strong>System testing chức năng</strong> — chia thành dựa trên yêu cầu và dựa trên quy trình nghiệp vụ.</li>
+<li><strong>Yêu cầu phi chức năng</strong> — "quan trọng không kém chức năng, thường được đặc tả kém, và bắt buộc phải test".</li>
+<li><strong>Các system test phi chức năng</strong> — usability, security, documentation, storage, volume, configuration/installation, reliability, backup/recovery, performance/load/stress.</li>
+</ul>
+<p>Nội dung này được dạy ở các slide hiển thị 108–122 (bài 2.4).</p>
 <h3>Ví dụ có lời giải · Đây là loại acceptance test nào?</h3>
 <table>
 <thead><tr><th>Tình huống</th><th>Loại</th></tr></thead>
@@ -553,8 +2059,14 @@ const L23 = {
 <tr><td>Studio game mời 50 người chơi tới văn phòng chơi thử, sau đó phát bản early-access cho 5.000 người chơi ở nhà.</td><td>Alpha, rồi beta</td></tr>
 </tbody>
 </table>
-<div class="pitfall"><b>Alpha vs beta: nhớ theo địa điểm, không theo thứ tự.</b> Alpha = tại nơi <em>bên phát triển</em>; beta = tại nơi <em>người dùng</em>. Cả hai đều do người ngoài nhóm phát triển làm — nên "alpha testing do developer làm" là sai.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Acceptance test như đặc tả chạy được.</b> Nhiều nhóm hiện viết acceptance criteria bằng Gherkin (<em>Given … When … Then …</em>) và chạy bằng Cucumber hay SpecFlow, nên tiêu chí người nghiệp vụ đọc được cũng chính là test tự động (ATDD/BDD — Chương 9 và Topic 8). Buổi ký UAT khi đó chỉ còn các kiểm tra khám phá của người dùng, phần có kịch bản đã xanh sẵn trong pipeline. <em>Ngoài chương này vì CTFL xem acceptance testing là một cấp, không phải một kỹ thuật.</em></div>`),
+<div class="pitfall co-tieu-de"><strong>Alpha vs beta: nhớ theo địa điểm, không theo thứ tự.</strong> Alpha = tại nơi <em>bên phát triển</em>; beta = tại nơi <em>người dùng</em>. Cả hai đều do người ngoài nhóm phát triển làm — nên "alpha testing do developer làm" là sai.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Acceptance test như đặc tả chạy được.</strong>
+<ul>
+<li><strong>Viết</strong> — nhiều nhóm hiện viết acceptance criteria bằng Gherkin (<em>Given … When … Then …</em>).</li>
+<li><strong>Chạy</strong> — Cucumber hay SpecFlow thực thi chúng, nên tiêu chí người nghiệp vụ đọc được cũng chính là test tự động (ATDD/BDD — Chương 9 và Topic 8).</li>
+<li><strong>Ký nghiệm thu</strong> — buổi ký UAT khi đó chỉ còn các kiểm tra khám phá của người dùng; phần có kịch bản đã xanh sẵn trong pipeline.</li>
+</ul>
+<p class="ghi-chu">Ngoài chương này vì CTFL xem acceptance testing là một cấp, không phải một kỹ thuật.</p></div>`),
     books([
       ['fst4', 'Ch.2 §2 "Test levels" — system testing pp.54–57, acceptance testing pp.57–61 (PDF 68–75); acceptance definition p.55', 'Chương 2 §2 "Test levels" — system testing trang 54–57, acceptance testing trang 57–61 (PDF 68–75); định nghĩa acceptance trang 55'],
       ['fst', '§2.2 "Test levels" (system & acceptance) — pp.43–45 (PDF 46–48)', '§2.2 "Test levels" (system & acceptance) — trang 43–45 (PDF 46–48)'],
@@ -574,7 +2086,12 @@ const L24 = {
     bi(`<span class="eyebrow">Chapter 2 · Lesson 2.4 · SWT2 slides 106–130</span>
 <h2>Test types</h2>
 <p class="lead">A <strong>test level</strong> says <em>where</em> in the lifecycle you test; a <strong>test type</strong> says <em>what characteristic</em> you test. There are four types, and — the key exam point — <strong>every type can be performed at every level</strong>.</p>
-<div class="callout"><b>Learning objectives.</b> LO-2.3.1 Compare functional, non-functional and white-box testing (K2) · LO-2.3.2 Recognise that functional, non-functional and white-box tests occur at any test level (K1) · LO-2.3.3 Compare the purposes of confirmation testing and regression testing (K2).</div>
+<div class="callout"><strong>Learning objectives.</strong>
+<ul>
+<li><strong>LO-2.3.1</strong> — Compare functional, non-functional and white-box testing (K2).</li>
+<li><strong>LO-2.3.2</strong> — Recognise that functional, non-functional and white-box tests occur at any test level (K1).</li>
+<li><strong>LO-2.3.3</strong> — Compare the purposes of confirmation testing and regression testing (K2).</li>
+</ul></div>
 <table>
 <thead><tr><th>Type</th><th>Tests…</th><th>Coverage measured as % of…</th><th>Typical techniques</th></tr></thead>
 <tbody>
@@ -587,7 +2104,12 @@ const L24 = {
     `<span class="eyebrow">Chương 2 · Bài 2.4 · SWT2 slide 106–130</span>
 <h2>Các loại test (test types)</h2>
 <p class="lead"><strong>Cấp test</strong> cho biết test <em>ở đâu</em> trong vòng đời; <strong>loại test</strong> cho biết test <em>đặc tính gì</em>. Có bốn loại, và — ý thi quan trọng nhất — <strong>loại nào cũng thực hiện được ở mọi cấp</strong>.</p>
-<div class="callout"><b>Chuẩn đầu ra.</b> LO-2.3.1 So sánh test chức năng, phi chức năng và white-box (K2) · LO-2.3.2 Nhận ra test chức năng, phi chức năng và white-box diễn ra ở mọi cấp (K1) · LO-2.3.3 So sánh mục đích của confirmation testing và regression testing (K2).</div>
+<div class="callout"><strong>Chuẩn đầu ra.</strong>
+<ul>
+<li><strong>LO-2.3.1</strong> — So sánh test chức năng, phi chức năng và white-box (K2).</li>
+<li><strong>LO-2.3.2</strong> — Nhận ra test chức năng, phi chức năng và white-box diễn ra ở mọi cấp (K1).</li>
+<li><strong>LO-2.3.3</strong> — So sánh mục đích của confirmation testing và regression testing (K2).</li>
+</ul></div>
 <table>
 <thead><tr><th>Loại</th><th>Test…</th><th>Coverage đo bằng % của…</th><th>Kỹ thuật điển hình</th></tr></thead>
 <tbody>
@@ -599,79 +2121,433 @@ const L24 = {
 </table>`),
     walkHead(D, 106, 130),
     walk(D, [
-      [106, 'CONTENT — Test types', `<p>Third block: test types.</p>`, `<p>Khối thứ ba: các loại test.</p>`],
+      [106, 'CONTENT — Test types',
+        `<p class="y-chinh">🎯 Third block of the chapter: test types.</p>`,
+        `<p class="y-chinh">🎯 Khối thứ ba của chương: các loại test.</p>`],
       [107, 'Test Types',
-        `<p>A test type is a group of test activities aimed at testing <strong>specific characteristics</strong> of a system or part of it, based on specific objectives. The four branches: functional testing (functions), non-functional testing (quality characteristics), white-box testing (structure/architecture), change-related testing (confirmation/regression).</p>`,
-        `<p>Loại test là một nhóm hoạt động kiểm thử nhắm vào <strong>các đặc tính cụ thể</strong> của hệ thống hoặc một phần của nó, theo mục tiêu cụ thể. Bốn nhánh: kiểm thử chức năng (chức năng), phi chức năng (đặc tính chất lượng), white-box (cấu trúc/kiến trúc), liên quan thay đổi (confirmation/regression).</p>`],
+        `<p class="y-chinh">🎯 A test type is a group of test activities aimed at <strong>specific characteristics</strong> of a system (or part of it), based on specific objectives.</p>
+<p class="nhan">The four branches</p>
+<ol>
+<li><strong>Functional testing</strong> — testing of functions.</li>
+<li><strong>Non-functional testing</strong> — testing of quality characteristics.</li>
+<li><strong>White-box testing</strong> — testing of structure/architecture.</li>
+<li><strong>Change-related testing</strong> — confirmation and regression.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Loại test là một nhóm hoạt động kiểm thử nhắm vào <strong>các đặc tính cụ thể</strong> của hệ thống (hoặc một phần của nó), theo mục tiêu cụ thể.</p>
+<p class="nhan">Bốn nhánh</p>
+<ol>
+<li><strong>Kiểm thử chức năng</strong> — kiểm các chức năng.</li>
+<li><strong>Kiểm thử phi chức năng</strong> — kiểm các đặc tính chất lượng.</li>
+<li><strong>White-box testing</strong> — kiểm cấu trúc/kiến trúc.</li>
+<li><strong>Kiểm thử liên quan thay đổi</strong> — confirmation và regression.</li>
+</ol>`],
       [108, '[1] Functional Testing',
-        `<p>The function of a system is <strong>"what" it does</strong>. Functional testing evaluates compliance with functional requirements, which may be written in business requirement specs, epics, user stories, use cases, functional specs — or be undocumented. It should be performed at <strong>all test levels</strong> (with a different focus at each) and from two perspectives: <strong>requirements-based</strong> and <strong>business-process-based</strong>.</p>`,
-        `<p>Chức năng của hệ thống là <strong>"cái" nó làm</strong>. Kiểm thử chức năng đánh giá mức tuân thủ yêu cầu chức năng — có thể viết trong đặc tả yêu cầu nghiệp vụ, epic, user story, use case, đặc tả chức năng, hoặc không được viết ra. Nó được thực hiện ở <strong>mọi cấp test</strong> (mỗi cấp một trọng tâm) và theo hai góc nhìn: <strong>dựa trên yêu cầu</strong> và <strong>dựa trên quy trình nghiệp vụ</strong>.</p>`],
+        `<p class="y-chinh">🎯 The function of a system is <strong>"what" it does</strong>; functional testing checks compliance with functional requirements.</p>
+<p class="nhan">Where functional requirements are written</p>
+<ul>
+<li>Business requirement specifications</li>
+<li>Epics and user stories</li>
+<li>Use cases</li>
+<li>Functional specifications</li>
+<li>…or they may be undocumented</li>
+</ul>
+<p class="nhan">How it is done</p>
+<ul>
+<li><strong>At all test levels</strong> — with a different focus at each level.</li>
+<li><strong>From two perspectives</strong> — requirements-based (slide 110) and business-process-based (slide 111).</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Chức năng của hệ thống là <strong>"cái" nó làm</strong>; kiểm thử chức năng kiểm mức tuân thủ yêu cầu chức năng.</p>
+<p class="nhan">Yêu cầu chức năng được viết ở đâu</p>
+<ul>
+<li>Đặc tả yêu cầu nghiệp vụ</li>
+<li>Epic và user story</li>
+<li>Use case</li>
+<li>Đặc tả chức năng</li>
+<li>…hoặc không được viết ra</li>
+</ul>
+<p class="nhan">Làm thế nào</p>
+<ul>
+<li><strong>Ở mọi cấp test</strong> — mỗi cấp một trọng tâm.</li>
+<li><strong>Theo hai góc nhìn</strong> — dựa trên yêu cầu (slide 110) và dựa trên quy trình nghiệp vụ (slide 111).</li>
+</ul>`],
       [109, 'Functional requirement & functional specification',
-        `<p>Definitions: a <strong>functional requirement</strong> specifies a function that a system or component must perform (ANSI/IEEE 729-1983); a <strong>functional specification</strong> is the document describing in detail the product's characteristics with regard to its intended capability (BS 4778-2, BS 7925-1).</p>`,
-        `<p>Định nghĩa: <strong>yêu cầu chức năng</strong> nêu một chức năng mà hệ thống hay thành phần phải thực hiện (ANSI/IEEE 729-1983); <strong>đặc tả chức năng</strong> là tài liệu mô tả chi tiết đặc điểm sản phẩm theo năng lực dự kiến của nó (BS 4778-2, BS 7925-1).</p>`],
+        `<p class="y-chinh">🎯 Two formal definitions: the requirement says <em>what function</em>, the specification describes it <em>in detail</em>.</p>
+<ul>
+<li><strong>Functional requirement</strong> — a requirement that specifies a function that a system or system component must perform (ANSI/IEEE Std 729-1983).</li>
+<li><strong>Functional specification</strong> — the document that describes in detail the characteristics of the product with regard to its intended capability (BS 4778 Part 2, BS 7925-1).</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Hai định nghĩa chính thức: yêu cầu nói <em>chức năng gì</em>, đặc tả mô tả nó <em>chi tiết</em>.</p>
+<ul>
+<li><strong>Yêu cầu chức năng</strong> — yêu cầu nêu một chức năng mà hệ thống hay thành phần phải thực hiện (ANSI/IEEE Std 729-1983).</li>
+<li><strong>Đặc tả chức năng</strong> — tài liệu mô tả chi tiết đặc điểm sản phẩm theo năng lực dự kiến của nó (BS 4778 Part 2, BS 7925-1).</li>
+</ul>`],
       [110, 'Functional testing: requirements-based',
-        `<p>Use the requirements specification as the basis: its <strong>table of contents is an initial inventory of test conditions</strong>; for each section or functional area, do a risk analysis to find the most critical areas and decide how deeply to test each one.</p>`,
-        `<p>Lấy đặc tả yêu cầu làm cơ sở: <strong>mục lục của nó là danh mục test condition ban đầu</strong>; với mỗi mục hay vùng chức năng, phân tích rủi ro để tìm vùng quan trọng nhất và quyết định test sâu tới đâu.</p>`],
+        `<p class="y-chinh">🎯 Requirements-based functional testing uses the requirements specification as the basis for identifying tests.</p>
+<ol>
+<li><strong>Start from the table of contents</strong> — it gives an initial inventory of test conditions.</li>
+<li><strong>Analyse risk per area</strong> — for each section/paragraph/topic/functional area, find the most important and critical areas.</li>
+<li><strong>Decide the depth</strong> — how deeply to test each functional area.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Kiểm thử chức năng dựa trên yêu cầu lấy đặc tả yêu cầu làm cơ sở để xác định test.</p>
+<ol>
+<li><strong>Bắt đầu từ mục lục</strong> — nó cho danh mục test condition ban đầu.</li>
+<li><strong>Phân tích rủi ro từng vùng</strong> — với mỗi mục/đoạn/chủ đề/vùng chức năng, tìm vùng quan trọng và sống còn nhất.</li>
+<li><strong>Quyết định độ sâu</strong> — test mỗi vùng chức năng sâu tới đâu.</li>
+</ol>`],
       [111, 'Functional testing: business-process-based',
-        `<p>Start from how the business uses the system: expected <strong>user profiles</strong> (what is used most often? what is business-critical?), <strong>business scenarios</strong> (typical transactions start to finish) and <strong>use cases</strong> prepared from real situations.</p>`,
-        `<p>Xuất phát từ cách doanh nghiệp dùng hệ thống: <strong>hồ sơ người dùng</strong> dự kiến (chức năng nào dùng nhiều nhất? cái gì sống còn với nghiệp vụ?), <strong>kịch bản nghiệp vụ</strong> (giao dịch điển hình từ đầu tới cuối) và <strong>use case</strong> soạn từ tình huống thật.</p>`],
+        `<p class="y-chinh">🎯 Business-process-based functional testing starts from how the business actually uses the system.</p>
+<ul>
+<li><strong>Expected user profiles</strong> — what will be used most often? What is critical to the business?</li>
+<li><strong>Business scenarios</strong> — typical business transactions, from start to finish.</li>
+<li><strong>Use cases</strong> — prepared from real situations.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Kiểm thử chức năng dựa trên quy trình nghiệp vụ xuất phát từ cách doanh nghiệp thật sự dùng hệ thống.</p>
+<ul>
+<li><strong>Hồ sơ người dùng dự kiến</strong> — chức năng nào dùng nhiều nhất? Cái gì sống còn với nghiệp vụ?</li>
+<li><strong>Kịch bản nghiệp vụ</strong> — giao dịch nghiệp vụ điển hình, từ đầu tới cuối.</li>
+<li><strong>Use case</strong> — soạn từ tình huống thật.</li>
+</ul>`],
       [112, 'Functional testing: coverage',
-        `<p><strong>Functional coverage</strong> = the extent to which a type of functional element has been exercised, as a percentage. With traceability between tests and requirements you can compute the % of requirements addressed and spot coverage gaps (the traceability matrix of lesson 1.4).</p>`,
-        `<p><strong>Functional coverage</strong> = mức độ một loại phần tử chức năng đã được test chạm tới, tính bằng phần trăm. Có truy vết giữa test và yêu cầu thì tính được % yêu cầu đã được test và thấy lỗ hổng bao phủ (bảng truy vết ở bài 1.4).</p>`],
+        `<p class="y-chinh">🎯 <strong>Functional coverage</strong> = how much of a type of functional element the tests have exercised, as a percentage.</p>
+<ul>
+<li><strong>What it measures</strong> — the extent to which some type of functional element has been exercised by tests.</li>
+<li><strong>How to compute it</strong> — with traceability between tests and functional requirements, calculate the % of requirements addressed by testing.</li>
+<li><strong>What you gain</strong> — coverage gaps become visible (the traceability matrix of lesson 1.4).</li>
+</ul>`,
+        `<p class="y-chinh">🎯 <strong>Functional coverage</strong> = test đã chạm tới bao nhiêu phần một loại phần tử chức năng, tính bằng phần trăm.</p>
+<ul>
+<li><strong>Đo cái gì</strong> — mức độ một loại phần tử chức năng đã được test chạm tới.</li>
+<li><strong>Tính thế nào</strong> — có truy vết giữa test và yêu cầu chức năng thì tính được % yêu cầu đã được test.</li>
+<li><strong>Được gì</strong> — thấy được lỗ hổng bao phủ (bảng truy vết ở bài 1.4).</li>
+</ul>`],
       [113, '[2] Non-functional Testing',
-        `<p>Tests <strong>"how well"</strong> the system behaves — usability, performance, efficiency, security, etc. — at <strong>all test levels</strong>. Expected results are defined in terms of external behaviour, so black-box techniques are used: <strong>BVA</strong> for stress conditions in performance testing; <strong>EP</strong> for classes of devices (compatibility) or user groups (usability: novice, experienced, age range, location, education). Speaker note: non-functional requirements are as important as functional ones, often poorly specified, and must be tested.</p>`,
-        `<p>Kiểm <strong>"tốt đến đâu"</strong> — khả dụng, hiệu năng, hiệu suất, bảo mật… — ở <strong>mọi cấp test</strong>. Kết quả mong đợi được định nghĩa bằng hành vi bên ngoài nên dùng kỹ thuật black-box: <strong>BVA</strong> cho điều kiện stress khi test hiệu năng; <strong>EP</strong> cho nhóm thiết bị (tương thích) hoặc nhóm người dùng (khả dụng: người mới, người thạo, độ tuổi, vùng miền, trình độ). Ghi chú của thầy/cô: yêu cầu phi chức năng quan trọng không kém chức năng, thường đặc tả kém, và bắt buộc phải test.</p>`],
+        `<p class="y-chinh">🎯 Non-functional testing checks <strong>"how well"</strong> the system behaves — at <strong>all test levels</strong>.</p>
+<ul>
+<li><strong>Characteristics</strong> — usability, performance, efficiency, security, etc.</li>
+<li><strong>Expected results</strong> — defined in terms of external behaviour, so black-box techniques are used.</li>
+</ul>
+<p class="nhan">Black-box techniques in non-functional testing</p>
+<ul>
+<li><strong>BVA</strong> — stress conditions in performance testing.</li>
+<li><strong>EP</strong> — classes of devices (compatibility testing) or user groups (usability testing: novice, experienced, age range, geographical location, educational background).</li>
+</ul>
+<p class="ghi-chu">Speaker note: non-functional requirements are as important as functional ones, often poorly specified, and must be tested.</p>`,
+        `<p class="y-chinh">🎯 Kiểm thử phi chức năng kiểm hệ thống chạy <strong>"tốt đến đâu"</strong> — ở <strong>mọi cấp test</strong>.</p>
+<ul>
+<li><strong>Đặc tính</strong> — khả dụng, hiệu năng, hiệu suất, bảo mật…</li>
+<li><strong>Kết quả mong đợi</strong> — định nghĩa bằng hành vi bên ngoài, nên dùng kỹ thuật black-box.</li>
+</ul>
+<p class="nhan">Kỹ thuật black-box trong test phi chức năng</p>
+<ul>
+<li><strong>BVA</strong> — điều kiện stress khi test hiệu năng.</li>
+<li><strong>EP</strong> — nhóm thiết bị (test tương thích) hoặc nhóm người dùng (test khả dụng: người mới, người thạo, độ tuổi, vùng miền, trình độ học vấn).</li>
+</ul>
+<p class="ghi-chu">Ghi chú của thầy/cô: yêu cầu phi chức năng quan trọng không kém chức năng, thường đặc tả kém, và bắt buộc phải test.</p>`],
       [114, 'Non-functional testing: coverage',
-        `<p>Non-functional thoroughness is measured by coverage of non-functional elements: with at least one test per major user group, you have 100% coverage of the identified groups. Traceability to non-functional requirements reveals gaps — e.g. an <em>implicit</em> requirement for accessibility for disabled users.</p>`,
-        `<p>Độ kỹ của test phi chức năng đo bằng coverage của các phần tử phi chức năng: mỗi nhóm người dùng chính có ít nhất một test thì phủ 100% các nhóm đã xác định. Truy vết tới yêu cầu phi chức năng giúp thấy lỗ hổng — vd yêu cầu <em>ngầm</em> về khả năng truy cập cho người khuyết tật.</p>`],
+        `<p class="y-chinh">🎯 Non-functional thoroughness is measured by coverage of non-functional elements.</p>
+<ul>
+<li><strong>Example</strong> — at least one test for each major user group = 100% coverage of the identified user groups.</li>
+<li><strong>Traceability</strong> — linking non-functional tests to non-functional requirements reveals coverage gaps.</li>
+<li><strong>Example of a gap</strong> — an <em>implicit</em> requirement for accessibility for disabled users.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Độ kỹ của test phi chức năng đo bằng coverage của các phần tử phi chức năng.</p>
+<ul>
+<li><strong>Ví dụ</strong> — mỗi nhóm người dùng chính có ít nhất một test = phủ 100% các nhóm người dùng đã xác định.</li>
+<li><strong>Truy vết</strong> — nối test phi chức năng với yêu cầu phi chức năng giúp thấy lỗ hổng bao phủ.</li>
+<li><strong>Ví dụ về lỗ hổng</strong> — yêu cầu <em>ngầm</em> về khả năng truy cập cho người khuyết tật.</li>
+</ul>`],
       [115, 'Performance Tests',
-        `<p><strong>Timing</strong> (response and service times, database back-up times); <strong>capacity &amp; volume</strong> (maximum amount or processing rate, number of records, graceful degradation when limits are approached); <strong>endurance</strong> (24-hour operation — robustness, memory allocation/leaks).</p>`,
-        `<p><strong>Thời gian</strong> (thời gian đáp ứng, thời gian sao lưu CSDL); <strong>dung lượng &amp; khối lượng</strong> (lượng/tốc độ xử lý tối đa, số bản ghi, suy giảm từ từ khi chạm giới hạn); <strong>độ bền</strong> (chạy 24 giờ — độ ổn định, cấp phát bộ nhớ/rò rỉ).</p>`],
+        `<p class="y-chinh">🎯 Performance tests fall into three groups: timing, capacity &amp; volume, endurance.</p>
+<ul>
+<li><strong>Timing tests</strong> — response and service times; database back-up times.</li>
+<li><strong>Capacity &amp; volume tests</strong> — maximum amount or processing rate; number of records on the system; graceful degradation as limits are approached.</li>
+<li><strong>Endurance tests</strong> (24-hour operation?) — robustness of the system; memory allocation (leaks).</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Test hiệu năng chia ba nhóm: thời gian, dung lượng &amp; khối lượng, độ bền.</p>
+<ul>
+<li><strong>Test thời gian</strong> — thời gian đáp ứng và phục vụ; thời gian sao lưu CSDL.</li>
+<li><strong>Test dung lượng &amp; khối lượng</strong> — lượng hoặc tốc độ xử lý tối đa; số bản ghi trong hệ thống; suy giảm từ từ khi chạm giới hạn.</li>
+<li><strong>Test độ bền</strong> (chạy 24 giờ?) — độ ổn định của hệ thống; cấp phát bộ nhớ (rò rỉ).</li>
+</ul>`],
       [116, 'Multi-User Tests',
-        `<p><strong>Concurrency</strong> tests (small numbers of users, large benefits — detect record-locking problems); <strong>load</strong> tests (behaviour under realistic multi-user load); <strong>stress</strong> tests (go beyond the limits to know what will happen — particularly relevant for e-commerce).</p>`,
-        `<p>Test <strong>đồng thời</strong> (ít người dùng mà lợi lớn — bắt lỗi khoá bản ghi); test <strong>tải</strong> (hành vi dưới tải nhiều người dùng thực tế); test <strong>stress</strong> (vượt giới hạn để biết điều gì xảy ra — đặc biệt quan trọng với thương mại điện tử).</p>`],
+        `<p class="y-chinh">🎯 Multi-user tests: concurrency, load and stress.</p>
+<ul>
+<li><strong>Concurrency tests</strong> — small numbers of users, large benefits; detect record-locking problems.</li>
+<li><strong>Load tests</strong> — measure system behaviour under realistic multi-user load.</li>
+<li><strong>Stress tests</strong> — go beyond the system's limits to know what will happen; particularly relevant for e-commerce.</li>
+</ul>
+<p class="ghi-chu">Source on the slide: Sue Atkins, Magic Performance Management.</p>`,
+        `<p class="y-chinh">🎯 Test nhiều người dùng: đồng thời, tải và stress.</p>
+<ul>
+<li><strong>Test đồng thời</strong> — ít người dùng mà lợi lớn; bắt lỗi khoá bản ghi.</li>
+<li><strong>Test tải</strong> — đo hành vi hệ thống dưới tải nhiều người dùng thực tế.</li>
+<li><strong>Test stress</strong> — vượt giới hạn của hệ thống để biết điều gì xảy ra; đặc biệt quan trọng với thương mại điện tử.</li>
+</ul>
+<p class="ghi-chu">Nguồn trên slide: Sue Atkins, Magic Performance Management.</p>`],
       [117, 'Usability Tests',
-        `<p>Are messages meaningful to real users? Is the interface coherent and consistent? Enough redundancy of critical information? Within the "human envelope" (7 ± 2 choices)? Feedback such as wait messages? Clear mappings (how to escape)? And the question at the bottom — <em>who should design and perform these tests?</em> Ideally real (representative) users, observed by a usability specialist.</p>`,
-        `<p>Thông báo có dễ hiểu với người dùng thật? Giao diện có nhất quán? Thông tin quan trọng có đủ dư thừa? Có nằm trong "giới hạn con người" (7 ± 2 lựa chọn)? Có phản hồi như thông báo chờ? Có đường thoát rõ ràng? Và câu hỏi cuối slide — <em>ai nên thiết kế và thực hiện các test này?</em> Lý tưởng là người dùng thật (đại diện), có chuyên gia usability quan sát.</p>`],
+        `<p class="y-chinh">🎯 Usability tests ask whether real users can work with the interface easily.</p>
+<p class="nhan">The six questions on the slide</p>
+<ol>
+<li><strong>Messages</strong> — tailored and meaningful to (real) users?</li>
+<li><strong>Interface</strong> — coherent and consistent?</li>
+<li><strong>Critical information</strong> — sufficient redundancy?</li>
+<li><strong>"Human envelope"</strong> — within 7 ± 2 choices?</li>
+<li><strong>Feedback</strong> — e.g. wait messages?</li>
+<li><strong>Clear mappings</strong> — how to escape?</li>
+</ol>
+<p class="nhan">The question at the bottom</p>
+<p><em>Who should design and perform these tests?</em> Ideally real (representative) users, observed by a usability specialist.</p>`,
+        `<p class="y-chinh">🎯 Test khả dụng hỏi người dùng thật có làm việc với giao diện một cách dễ dàng không.</p>
+<p class="nhan">Sáu câu hỏi trên slide</p>
+<ol>
+<li><strong>Thông báo</strong> — có dễ hiểu, hợp với người dùng (thật)?</li>
+<li><strong>Giao diện</strong> — có mạch lạc, nhất quán?</li>
+<li><strong>Thông tin quan trọng</strong> — có đủ dư thừa?</li>
+<li><strong>"Giới hạn con người"</strong> — trong khoảng 7 ± 2 lựa chọn?</li>
+<li><strong>Phản hồi</strong> — vd thông báo chờ?</li>
+<li><strong>Đường thoát rõ ràng</strong> — thoát ra thế nào?</li>
+</ol>
+<p class="nhan">Câu hỏi cuối slide</p>
+<p><em>Ai nên thiết kế và thực hiện các test này?</em> Lý tưởng là người dùng thật (đại diện), có chuyên gia usability quan sát.</p>`],
       [118, 'Security Tests',
-        `<p>Passwords, encryption, hardware permission devices, levels of access to information, authorisation, covert channels (hidden ways data can leak), physical security.</p>`,
-        `<p>Mật khẩu, mã hoá, thiết bị cấp quyền phần cứng, các mức truy cập thông tin, phân quyền, kênh ngầm (đường rò rỉ dữ liệu bị giấu), an ninh vật lý.</p>`],
+        `<p class="y-chinh">🎯 Seven areas of security testing.</p>
+<ol class="hai-cot"><li>Passwords</li><li>Encryption</li><li>Hardware permission devices</li><li>Levels of access to information</li><li>Authorisation</li><li>Covert channels — hidden ways data can leak</li><li>Physical security</li></ol>`,
+        `<p class="y-chinh">🎯 Bảy mảng của test bảo mật.</p>
+<ol class="hai-cot"><li>Mật khẩu</li><li>Mã hoá</li><li>Thiết bị cấp quyền phần cứng</li><li>Các mức truy cập thông tin</li><li>Phân quyền</li><li>Kênh ngầm (covert channel) — đường rò rỉ dữ liệu bị giấu</li><li>An ninh vật lý</li></ol>`],
       [119, 'Configuration and Installation',
-        `<p><strong>Configuration</strong> tests: different hardware or software environments, configuration of the system itself, conflicting upgrade paths. <strong>Installation</strong> tests: distribution media and timings; physical aspects (electromagnetic fields, heat, humidity, motion, chemicals, power supplies); uninstalling.</p>`,
-        `<p>Test <strong>cấu hình</strong>: môi trường phần cứng/phần mềm khác nhau, cấu hình của chính hệ thống, các đường nâng cấp xung đột. Test <strong>cài đặt</strong>: phương tiện phân phối và thời gian; yếu tố vật lý (trường điện từ, nhiệt, ẩm, rung, hoá chất, nguồn điện); gỡ cài đặt.</p>`],
+        `<p class="y-chinh">🎯 Configuration tests vary the environment; installation tests check getting the system on — and off — the machine.</p>
+<p class="nhan">Configuration tests</p>
+<ul>
+<li>Different hardware or software environments</li>
+<li>Configuration of the system itself</li>
+<li>Upgrade paths — which may conflict</li>
+</ul>
+<p class="nhan">Installation tests</p>
+<ul>
+<li>Distribution (CD, network, etc.) and timings</li>
+<li>Physical aspects — electromagnetic fields, heat, humidity, motion, chemicals, power supplies</li>
+<li>Uninstall (removing the installation)</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Test cấu hình thay đổi môi trường; test cài đặt kiểm việc đưa hệ thống lên — và gỡ khỏi — máy.</p>
+<p class="nhan">Test cấu hình</p>
+<ul>
+<li>Môi trường phần cứng hoặc phần mềm khác nhau</li>
+<li>Cấu hình của chính hệ thống</li>
+<li>Các đường nâng cấp — có thể xung đột</li>
+</ul>
+<p class="nhan">Test cài đặt</p>
+<ul>
+<li>Phân phối (CD, mạng…) và thời gian</li>
+<li>Yếu tố vật lý — trường điện từ, nhiệt, ẩm, rung, hoá chất, nguồn điện</li>
+<li>Gỡ cài đặt</li>
+</ul>`],
       [120, 'Reliability / Qualities',
-        `<p>"The system will be reliable" cannot be tested; turn it into a measurable target such as "2 failures per year over ten years" or a <strong>mean time between failures (MTBF)</strong>, and use reliability-growth models. Other qualities: maintainability, portability, adaptability…</p>`,
-        `<p>"Hệ thống sẽ tin cậy" thì không test được; phải biến thành chỉ tiêu đo được như "2 lần hỏng mỗi năm trong mười năm" hay <strong>thời gian trung bình giữa hai lần hỏng (MTBF)</strong>, và dùng mô hình tăng trưởng độ tin cậy. Các đặc tính khác: khả năng bảo trì, khả chuyển, khả năng thích nghi…</p>`],
+        `<p class="y-chinh">🎯 "The system will be reliable" cannot be tested — turn it into a measurable target first.</p>
+<p class="nhan">Reliability</p>
+<ul>
+<li><strong>Measurable target</strong> — e.g. "2 failures per year over ten years".</li>
+<li><strong>MTBF</strong> — mean time between failures.</li>
+<li><strong>Reliability growth models</strong> — to predict and track reliability.</li>
+</ul>
+<p class="nhan">Other qualities</p>
+<p>Maintainability, portability, adaptability, etc.</p>`,
+        `<p class="y-chinh">🎯 "Hệ thống sẽ tin cậy" thì không test được — phải biến nó thành chỉ tiêu đo được trước.</p>
+<p class="nhan">Độ tin cậy</p>
+<ul>
+<li><strong>Chỉ tiêu đo được</strong> — vd "2 lần hỏng mỗi năm trong mười năm".</li>
+<li><strong>MTBF</strong> — thời gian trung bình giữa hai lần hỏng.</li>
+<li><strong>Mô hình tăng trưởng độ tin cậy</strong> — để dự báo và theo dõi độ tin cậy.</li>
+</ul>
+<p class="nhan">Các đặc tính khác</p>
+<p>Khả năng bảo trì, khả chuyển, khả năng thích nghi…</p>`],
       [121, 'Back-up and Recovery',
-        `<p>Back-ups (computer functions and manual procedures — where are the tapes stored?) and recovery (a <em>real</em> test of the back-up; manual procedures are unfamiliar, so rehearse them regularly; documentation must be detailed, clear and thorough). The speaker notes add examples: simulate a hardware failure and restore; verify integrity of restored databases; restore a whole system or VM image; and check the <strong>RTO</strong> (recovery time objective — how fast) and <strong>RPO</strong> (recovery point objective — how much data may be lost).</p>`,
-        `<p>Sao lưu (chức năng máy và thủ tục tay — băng lưu cất ở đâu?) và phục hồi (thử <em>thật</em> bản sao lưu; thủ tục tay ít dùng nên phải diễn tập thường xuyên; tài liệu phải chi tiết, rõ ràng, đầy đủ). Ghi chú của thầy/cô cho thêm ví dụ: giả lập hỏng phần cứng rồi khôi phục; kiểm tính toàn vẹn của CSDL sau khôi phục; khôi phục cả hệ thống hay image máy ảo; và kiểm <strong>RTO</strong> (thời gian khôi phục mục tiêu — nhanh tới đâu) và <strong>RPO</strong> (điểm khôi phục mục tiêu — được phép mất bao nhiêu dữ liệu).</p>`],
+        `<p class="y-chinh">🎯 Back-up and recovery testing proves that data and systems can really be restored after a failure.</p>
+<p class="nhan">On the slide</p>
+<ul>
+<li><strong>Back-ups</strong> — computer functions and manual procedures (where are the tapes stored?).</li>
+<li><strong>Recovery</strong> — the <em>real</em> test of the back-up. Manual procedures are unfamiliar, so rehearse them regularly.</li>
+<li><strong>Documentation</strong> — must be detailed, clear and thorough.</li>
+</ul>
+<p class="nhan">Examples from the speaker notes</p>
+<ul>
+<li>Simulate a hardware failure and restore the data from a back-up.</li>
+<li>Verify the integrity and consistency of restored critical databases.</li>
+<li>Restore a whole system or application — configuration files, settings, user data.</li>
+<li>Back up and restore virtual-machine images.</li>
+<li>Check the <strong>RTO</strong> (recovery time objective — how fast) and <strong>RPO</strong> (recovery point objective — how much data may be lost).</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Test sao lưu và phục hồi chứng minh dữ liệu và hệ thống thật sự khôi phục được sau sự cố.</p>
+<p class="nhan">Trên slide</p>
+<ul>
+<li><strong>Sao lưu</strong> — chức năng máy và thủ tục tay (băng lưu cất ở đâu?).</li>
+<li><strong>Phục hồi</strong> — phép thử <em>thật</em> của bản sao lưu. Thủ tục tay ít dùng nên phải diễn tập thường xuyên.</li>
+<li><strong>Tài liệu</strong> — phải chi tiết, rõ ràng, đầy đủ.</li>
+</ul>
+<p class="nhan">Ví dụ trong ghi chú của thầy/cô</p>
+<ul>
+<li>Giả lập hỏng phần cứng rồi khôi phục dữ liệu từ bản sao lưu.</li>
+<li>Kiểm tính toàn vẹn và nhất quán của CSDL quan trọng sau khi khôi phục.</li>
+<li>Khôi phục cả hệ thống hay ứng dụng — file cấu hình, thiết lập, dữ liệu người dùng.</li>
+<li>Sao lưu và khôi phục image máy ảo.</li>
+<li>Kiểm <strong>RTO</strong> (thời gian khôi phục mục tiêu — nhanh tới đâu) và <strong>RPO</strong> (điểm khôi phục mục tiêu — được phép mất bao nhiêu dữ liệu).</li>
+</ul>`],
       [122, 'Documentation Testing',
-        `<p>Documentation <em>review</em> (accuracy against other documents, consensus on content, documents exist in the right format) and documentation <em>tests</em> (is it usable? does it work? — user manual, maintenance documentation).</p>`,
-        `<p><em>Review</em> tài liệu (khớp với tài liệu khác, thống nhất nội dung, có đủ và đúng định dạng) và <em>test</em> tài liệu (dùng được không? làm theo có chạy không? — hướng dẫn sử dụng, tài liệu bảo trì).</p>`],
+        `<p class="y-chinh">🎯 Documentation is tested in two ways: review it, and try it.</p>
+<p class="nhan">Documentation review</p>
+<ul>
+<li>Check accuracy against other documents</li>
+<li>Gain consensus about the content</li>
+<li>Documentation exists, in the right format</li>
+</ul>
+<p class="nhan">Documentation tests</p>
+<ul>
+<li>Is it usable? Does it work?</li>
+<li>Applied to the user manual and the maintenance documentation</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Tài liệu được test theo hai cách: review nó, và làm theo nó.</p>
+<p class="nhan">Review tài liệu</p>
+<ul>
+<li>Kiểm độ chính xác so với tài liệu khác</li>
+<li>Thống nhất về nội dung</li>
+<li>Tài liệu có đủ và đúng định dạng</li>
+</ul>
+<p class="nhan">Test tài liệu</p>
+<ul>
+<li>Dùng được không? Làm theo có chạy không?</li>
+<li>Áp dụng cho hướng dẫn sử dụng và tài liệu bảo trì</li>
+</ul>`],
       [123, '[3] White-box Testing',
-        `<p>Tests are derived from the <strong>internal structure or implementation</strong> — code, architecture, workflows, data flows. It can occur at any level but is mostly used in component and component-integration testing; at higher levels it is less likely, except for business-process testing where the "structure" can be business rules.</p>`,
-        `<p>Test được suy ra từ <strong>cấu trúc bên trong hay cách cài đặt</strong> — code, kiến trúc, luồng công việc, luồng dữ liệu. Có thể dùng ở mọi cấp nhưng chủ yếu ở component và component integration; ở cấp cao ít hơn, trừ test quy trình nghiệp vụ nơi "cấu trúc" có thể là các luật nghiệp vụ.</p>`],
+        `<p class="y-chinh">🎯 White-box testing derives tests from the system's <strong>internal structure or implementation</strong>.</p>
+<ul>
+<li><strong>Internal structure</strong> — code, architecture, workflows and/or data flows within the system.</li>
+<li><strong>Where it is used most</strong> — component testing and component integration testing.</li>
+<li><strong>Higher levels</strong> — less likely, except business-process testing, where the test basis (the "structure") can be business rules.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 White-box testing suy ra test từ <strong>cấu trúc bên trong hay cách cài đặt</strong> của hệ thống.</p>
+<ul>
+<li><strong>Cấu trúc bên trong</strong> — code, kiến trúc, luồng công việc và/hoặc luồng dữ liệu trong hệ thống.</li>
+<li><strong>Dùng nhiều nhất ở đâu</strong> — component testing và component integration testing.</li>
+<li><strong>Các cấp cao hơn</strong> — ít gặp hơn, trừ test quy trình nghiệp vụ, nơi test basis (phần "cấu trúc") có thể là các luật nghiệp vụ.</li>
+</ul>`],
       [124, 'White-box testing: coverage',
-        `<p><strong>Structural coverage</strong> = extent a type of structural element has been exercised, as a %. At component level: code coverage (% of statements or decision outcomes). At component-integration level: architecture-based, e.g. % of interfaces between components exercised.</p>`,
-        `<p><strong>Structural coverage</strong> = mức độ một loại phần tử cấu trúc đã được chạy tới, tính bằng %. Ở cấp component: code coverage (% câu lệnh hoặc kết quả quyết định). Ở cấp component integration: dựa trên kiến trúc, vd % giao diện giữa các thành phần đã được chạy.</p>`],
+        `<p class="y-chinh">🎯 <strong>Structural coverage</strong> = how much of a type of structural element the tests have exercised, as a percentage.</p>
+<ul>
+<li><strong>Component level</strong> — code coverage: % of executable elements, e.g. statements or decision outcomes.</li>
+<li><strong>Component-integration level</strong> — based on the architecture, e.g. % of interfaces between components exercised by tests.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 <strong>Structural coverage</strong> = test đã chạy tới bao nhiêu phần một loại phần tử cấu trúc, tính bằng phần trăm.</p>
+<ul>
+<li><strong>Cấp component</strong> — code coverage: % phần tử thực thi được, vd câu lệnh hoặc kết quả quyết định.</li>
+<li><strong>Cấp component integration</strong> — dựa trên kiến trúc, vd % giao diện giữa các thành phần đã được test chạy tới.</li>
+</ul>`],
       [125, '[4] Change-related Testing',
-        `<p>After a change, test to confirm that it <strong>corrected the defect or implemented the functionality</strong> correctly and has <strong>not caused unforeseen adverse consequences</strong>. Two sub-types: confirmation testing and regression testing.</p>`,
-        `<p>Sau một thay đổi, test để khẳng định nó <strong>đã sửa đúng lỗi hoặc cài đúng chức năng</strong> và <strong>không gây hậu quả xấu ngoài dự kiến</strong>. Hai loại con: confirmation testing và regression testing.</p>`],
+        `<p class="y-chinh">🎯 After any change, test that it worked <em>and</em> that it broke nothing.</p>
+<ul>
+<li><strong>Did it work?</strong> — the change corrected the defect or implemented the functionality correctly.</li>
+<li><strong>Did it break anything?</strong> — no unforeseen adverse consequences.</li>
+</ul>
+<p class="nhan">Two sub-types</p>
+<ol>
+<li><strong>Confirmation testing</strong> — slide 126</li>
+<li><strong>Regression testing</strong> — slides 127–128</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Sau mọi thay đổi, phải test xem nó có tác dụng <em>và</em> có làm hỏng gì không.</p>
+<ul>
+<li><strong>Có tác dụng không?</strong> — thay đổi đã sửa đúng lỗi hoặc cài đúng chức năng.</li>
+<li><strong>Có làm hỏng gì không?</strong> — không gây hậu quả xấu ngoài dự kiến.</li>
+</ul>
+<p class="nhan">Hai loại con</p>
+<ol>
+<li><strong>Confirmation testing</strong> — slide 126</li>
+<li><strong>Regression testing</strong> — slide 127–128</li>
+</ol>`],
       [126, 'Confirmation Testing',
-        `<p>After a defect is fixed, re-test: at the very least, <strong>re-execute the steps that reproduced the failure</strong> on the new version. Purpose: confirm the <em>original defect</em> is fixed. (Also called re-testing.)</p>`,
-        `<p>Sau khi sửa lỗi, test lại: tối thiểu phải <strong>chạy lại các bước đã tái hiện failure</strong> trên phiên bản mới. Mục đích: khẳng định <em>chính lỗi ban đầu</em> đã được sửa. (Còn gọi là re-testing.)</p>`],
+        `<p class="y-chinh">🎯 Confirmation testing (re-testing) checks that <em>the original defect</em> has been fixed.</p>
+<ul>
+<li><strong>When</strong> — after a defect is fixed, on the new software version.</li>
+<li><strong>Minimum</strong> — re-execute the steps that reproduced the failure(s) caused by the defect.</li>
+<li><strong>Purpose</strong> — confirm whether the original defect has been successfully fixed.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Confirmation testing (re-testing) kiểm xem <em>chính lỗi ban đầu</em> đã được sửa chưa.</p>
+<ul>
+<li><strong>Khi nào</strong> — sau khi sửa lỗi, trên phiên bản phần mềm mới.</li>
+<li><strong>Tối thiểu</strong> — chạy lại các bước đã tái hiện failure do lỗi đó gây ra.</li>
+<li><strong>Mục đích</strong> — khẳng định lỗi ban đầu đã được sửa thành công.</li>
+</ul>`],
       [127, 'Regression Testing (1)',
-        `<p>A change in one part of the code may accidentally affect other parts — and changes to the <strong>environment</strong> (OS, library, database version) count too. Regression testing runs tests to detect such unintended side-effects. (The cartoon: close one door and the flies come in through another.)</p>`,
-        `<p>Thay đổi ở một chỗ có thể vô tình ảnh hưởng chỗ khác — và thay đổi <strong>môi trường</strong> (hệ điều hành, thư viện, phiên bản CSDL) cũng tính. Regression testing chạy test để phát hiện những tác dụng phụ ngoài ý muốn đó. (Tranh vui: đóng cửa này thì ruồi bay vào cửa khác.)</p>`],
+        `<p class="y-chinh">🎯 Regression testing looks for <strong>unintended side-effects</strong> of a change.</p>
+<ul>
+<li><strong>The risk</strong> — a change in one part of the code may accidentally affect the behaviour of other parts.</li>
+<li><strong>Environment counts too</strong> — changes to the OS, a library or the database version are changes.</li>
+<li><strong>The test</strong> — run tests to detect such side-effects.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember the cartoon:</strong> the boy opens the door for one reason — and the flies come in. A change made for one purpose brings an effect nobody intended.</p>`,
+        `<p class="y-chinh">🎯 Regression testing tìm <strong>tác dụng phụ ngoài ý muốn</strong> của một thay đổi.</p>
+<ul>
+<li><strong>Rủi ro</strong> — thay đổi ở một chỗ trong code có thể vô tình ảnh hưởng hành vi của chỗ khác.</li>
+<li><strong>Môi trường cũng tính</strong> — đổi hệ điều hành, thư viện hay phiên bản CSDL đều là thay đổi.</li>
+<li><strong>Cách test</strong> — chạy test để phát hiện những tác dụng phụ đó.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ theo tranh:</strong> cậu bé mở cửa vì một lý do — và ruồi bay vào. Thay đổi làm vì một mục đích lại kéo theo một hệ quả không ai muốn.</p>`],
       [128, 'Regression Testing (2)',
-        `<p>Regression suites are run many times and evolve slowly, so they are a <strong>strong candidate for automation</strong>, which should start early in the project. Change-related testing is performed at <strong>all test levels</strong>.</p>`,
-        `<p>Bộ regression được chạy rất nhiều lần và thay đổi chậm, nên là <strong>ứng viên hàng đầu cho tự động hoá</strong>, và nên tự động hoá từ sớm. Kiểm thử liên quan thay đổi được làm ở <strong>mọi cấp test</strong>.</p>`],
+        `<p class="y-chinh">🎯 Regression testing is a strong candidate for automation — start early.</p>
+<ul>
+<li><strong>Why automate</strong> — regression suites are run many times and generally evolve slowly.</li>
+<li><strong>When</strong> — automation of these tests should start early in the project.</li>
+<li><strong>Where</strong> — change-related testing is performed at all test levels.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Regression testing là ứng viên hàng đầu cho tự động hoá — hãy bắt đầu sớm.</p>
+<ul>
+<li><strong>Vì sao tự động</strong> — bộ regression được chạy rất nhiều lần và thường thay đổi chậm.</li>
+<li><strong>Khi nào</strong> — nên tự động hoá các test này từ sớm trong dự án.</li>
+<li><strong>Ở đâu</strong> — kiểm thử liên quan thay đổi được làm ở mọi cấp test.</li>
+</ul>`],
       [129, 'Test types × test levels (functional & non-functional)',
-        `<p>The banking example proves "every type at every level". Functional: component — how compound interest is calculated; component integration — how account info from the UI reaches the business logic; system — how account holders apply for a line of credit; system integration — how the system uses an external credit-score microservice; acceptance — how a banker handles a credit application. Non-functional: time of a complex interest calculation; buffer overflow from UI data; portability of the presentation layer on browsers and mobiles; robustness if the microservice does not respond; accessibility of the banker's interface for disabled users.</p>`,
-        `<p>Ví dụ ngân hàng chứng minh "loại nào cũng có ở mọi cấp". Chức năng: component — cách tính lãi kép; component integration — thông tin tài khoản từ giao diện tới logic nghiệp vụ; system — chủ tài khoản đăng ký hạn mức tín dụng; system integration — hệ thống gọi microservice chấm điểm tín dụng bên ngoài; acceptance — nhân viên ngân hàng xử lý hồ sơ tín dụng. Phi chức năng: thời gian tính lãi phức tạp; tràn bộ đệm từ dữ liệu giao diện; khả chuyển của tầng giao diện trên trình duyệt và điện thoại; độ bền khi microservice không phản hồi; khả năng truy cập của giao diện nhân viên cho người khuyết tật.</p>`],
+        `<p class="y-chinh">🎯 The banking example proves that <strong>every test type occurs at every test level</strong> — here functional and non-functional.</p>
+<table>
+<thead><tr><th>Level</th><th>Functional</th><th>Non-functional</th></tr></thead>
+<tbody>
+<tr><td>Component</td><td>how compound interest is calculated</td><td>time to perform a complex interest calculation</td></tr>
+<tr><td>Component integration</td><td>how account info from the UI is passed to the business logic</td><td>buffer overflow from data passed from the UI to the business logic</td></tr>
+<tr><td>System</td><td>how account holders apply for a line of credit</td><td>portability of the presentation layer on browsers and mobiles</td></tr>
+<tr><td>System integration</td><td>how the system uses an external microservice to check a credit score</td><td>reliability (robustness) if the microservice does not respond</td></tr>
+<tr><td>Acceptance</td><td>how a banker handles a credit application</td><td>usability (accessibility) of the banker's interface for disabled users</td></tr>
+</tbody>
+</table>`,
+        `<p class="y-chinh">🎯 Ví dụ ngân hàng chứng minh <strong>loại test nào cũng có ở mọi cấp test</strong> — ở đây là chức năng và phi chức năng.</p>
+<table>
+<thead><tr><th>Cấp</th><th>Chức năng</th><th>Phi chức năng</th></tr></thead>
+<tbody>
+<tr><td>Component</td><td>cách tính lãi kép</td><td>thời gian thực hiện một phép tính lãi phức tạp</td></tr>
+<tr><td>Component integration</td><td>thông tin tài khoản từ giao diện được chuyển tới logic nghiệp vụ ra sao</td><td>tràn bộ đệm do dữ liệu từ giao diện chuyển sang logic nghiệp vụ</td></tr>
+<tr><td>System</td><td>chủ tài khoản đăng ký hạn mức tín dụng ra sao</td><td>khả chuyển của tầng giao diện trên trình duyệt và điện thoại</td></tr>
+<tr><td>System integration</td><td>hệ thống gọi microservice bên ngoài để chấm điểm tín dụng ra sao</td><td>độ tin cậy (độ bền) khi microservice không phản hồi</td></tr>
+<tr><td>Acceptance</td><td>nhân viên ngân hàng xử lý hồ sơ tín dụng ra sao</td><td>khả dụng (khả năng truy cập) của giao diện nhân viên cho người khuyết tật</td></tr>
+</tbody>
+</table>`],
       [130, 'Test types × test levels (white-box & change-related)',
-        `<p>White-box: 100% statement and decision coverage for financial calculation components; coverage of how each screen passes data to the next; coverage of web-page sequences in a credit application; coverage of all inquiry types sent to the credit-score service; coverage of all supported bank-to-bank file structures and value ranges. Change-related: automated component regression in the CI pipeline; confirmation tests for interface defects on check-in; re-running a whole workflow's tests if any screen changes; re-running microservice interaction tests when the service changes; re-running previously failed acceptance tests after fixes.</p>`,
-        `<p>White-box: 100% statement và decision coverage cho các thành phần tính toán tài chính; phủ cách từng màn hình chuyển dữ liệu sang màn sau; phủ chuỗi trang web khi đăng ký tín dụng; phủ mọi loại truy vấn gửi tới dịch vụ chấm điểm; phủ mọi cấu trúc file và dải giá trị chuyển tiền liên ngân hàng. Liên quan thay đổi: regression tự động cho component trong pipeline CI; confirmation test cho lỗi giao diện khi check-in bản sửa; chạy lại toàn bộ test của một luồng khi có màn hình thay đổi; chạy lại test tương tác microservice khi dịch vụ đổi; chạy lại các acceptance test từng fail sau khi sửa.</p>`],
+        `<p class="y-chinh">🎯 The same bank, now for white-box and change-related tests — again at every level.</p>
+<table>
+<thead><tr><th>Level</th><th>White-box</th><th>Change-related</th></tr></thead>
+<tbody>
+<tr><td>Component</td><td>100% statement and decision coverage for all financial calculation components</td><td>automated regression tests for each component in the CI framework and pipeline</td></tr>
+<tr><td>Component integration</td><td>coverage of how each browser screen passes data to the next screen in the business logic</td><td>confirmation tests for interface-related defects, activated as fixes are checked in</td></tr>
+<tr><td>System</td><td>coverage of web-page sequences during a credit-line application</td><td>all tests for a workflow are re-executed if any screen changes</td></tr>
+<tr><td>System integration</td><td>coverage of all possible inquiry types sent to the credit-score microservice</td><td>automated tests of the system–microservice interactions are re-executed as the service changes</td></tr>
+<tr><td>Acceptance</td><td>coverage of all supported financial data file structures and value ranges for bank-to-bank transfers</td><td>previously failed tests are re-executed after the defects are fixed</td></tr>
+</tbody>
+</table>`,
+        `<p class="y-chinh">🎯 Vẫn ngân hàng đó, giờ cho test white-box và test liên quan thay đổi — cũng có ở mọi cấp.</p>
+<table>
+<thead><tr><th>Cấp</th><th>White-box</th><th>Liên quan thay đổi</th></tr></thead>
+<tbody>
+<tr><td>Component</td><td>100% statement và decision coverage cho mọi thành phần tính toán tài chính</td><td>regression test tự động cho từng component trong framework và pipeline CI</td></tr>
+<tr><td>Component integration</td><td>phủ cách từng màn hình trình duyệt chuyển dữ liệu sang màn sau trong logic nghiệp vụ</td><td>confirmation test cho lỗi liên quan giao diện, kích hoạt khi bản sửa được check-in</td></tr>
+<tr><td>System</td><td>phủ chuỗi trang web khi đăng ký hạn mức tín dụng</td><td>chạy lại mọi test của một luồng khi có màn hình bất kỳ thay đổi</td></tr>
+<tr><td>System integration</td><td>phủ mọi loại truy vấn gửi tới microservice chấm điểm tín dụng</td><td>chạy lại test tự động về tương tác hệ thống–microservice khi dịch vụ thay đổi</td></tr>
+<tr><td>Acceptance</td><td>phủ mọi cấu trúc file dữ liệu tài chính và dải giá trị được hỗ trợ khi chuyển tiền liên ngân hàng</td><td>chạy lại các test từng fail sau khi lỗi được sửa</td></tr>
+</tbody>
+</table>`],
     ]),
     bi(`<h3>Ví dụ có lời giải · Worked example — name the type and the level</h3>
 <table>
@@ -686,8 +2562,12 @@ const L24 = {
 <tr><td>Visually impaired users try the banking app with a screen reader</td><td>non-functional (usability/accessibility)</td><td>acceptance</td></tr>
 </tbody>
 </table>
-<div class="pitfall"><b>Confirmation ≠ regression.</b> Confirmation (re-testing) asks "is <em>this</em> defect fixed?" and reruns the failing steps. Regression asks "did the change break anything <em>else</em>?" and reruns tests that used to pass. Both are change-related, both happen at every level.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>ISO/IEC 25010 — the full list of non-functional characteristics.</b> The slides list performance, usability, security, reliability, portability… ISO 25010 organises them into eight product-quality characteristics: functional suitability, performance efficiency, compatibility, usability (now "interaction capability"), reliability, security, maintainability and portability (the 2023 revision adds <em>safety</em>). Spillner's book uses this model in §2.2.1; it is the checklist professional testers use so that no "-ility" is forgotten. <em>Outside the CTFL syllabus, which only gives examples.</em></div>`,
+<div class="pitfall co-tieu-de"><strong>Confirmation ≠ regression.</strong> Confirmation (re-testing) asks "is <em>this</em> defect fixed?" and reruns the failing steps. Regression asks "did the change break anything <em>else</em>?" and reruns tests that used to pass. Both are change-related, both happen at every level.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>ISO/IEC 25010 — the full list of non-functional characteristics.</strong>
+<p>The slides list performance, usability, security, reliability, portability… ISO 25010 organises them into eight product-quality characteristics:</p>
+<ol class="hai-cot"><li>Functional suitability</li><li>Performance efficiency</li><li>Compatibility</li><li>Usability (now "interaction capability")</li><li>Reliability</li><li>Security</li><li>Maintainability</li><li>Portability</li></ol>
+<p>The 2023 revision adds <em>safety</em>. Spillner's book uses this model in §2.2.1; it is the checklist professional testers use so that no "-ility" is forgotten.</p>
+<p class="ghi-chu">Outside the CTFL syllabus, which only gives examples.</p></div>`,
     `<h3>Ví dụ có lời giải · Gọi tên loại test và cấp test</h3>
 <table>
 <thead><tr><th>Test</th><th>Loại</th><th>Cấp</th></tr></thead>
@@ -701,8 +2581,12 @@ const L24 = {
 <tr><td>Người khiếm thị dùng thử app ngân hàng bằng trình đọc màn hình</td><td>phi chức năng (khả dụng/khả năng truy cập)</td><td>acceptance</td></tr>
 </tbody>
 </table>
-<div class="pitfall"><b>Confirmation ≠ regression.</b> Confirmation (re-testing) hỏi "<em>lỗi này</em> đã sửa chưa?" và chạy lại các bước từng fail. Regression hỏi "thay đổi có làm hỏng <em>chỗ khác</em> không?" và chạy lại các test từng pass. Cả hai đều là loại liên quan thay đổi, và đều có ở mọi cấp.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>ISO/IEC 25010 — danh sách đầy đủ các đặc tính phi chức năng.</b> Slide chỉ nêu hiệu năng, khả dụng, bảo mật, tin cậy, khả chuyển… ISO 25010 xếp chúng thành tám đặc tính chất lượng sản phẩm: phù hợp chức năng, hiệu suất, tương thích, khả dụng (bản mới gọi "interaction capability"), tin cậy, bảo mật, khả năng bảo trì và khả chuyển (bản 2023 thêm <em>an toàn</em>). Sách Spillner dùng mô hình này ở §2.2.1; đây là checklist tester chuyên nghiệp dùng để không bỏ sót "-ility" nào. <em>Ngoài syllabus CTFL, vốn chỉ nêu ví dụ.</em></div>`),
+<div class="pitfall co-tieu-de"><strong>Confirmation ≠ regression.</strong> Confirmation (re-testing) hỏi "<em>lỗi này</em> đã sửa chưa?" và chạy lại các bước từng fail. Regression hỏi "thay đổi có làm hỏng <em>chỗ khác</em> không?" và chạy lại các test từng pass. Cả hai đều là loại liên quan thay đổi, và đều có ở mọi cấp.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>ISO/IEC 25010 — danh sách đầy đủ các đặc tính phi chức năng.</strong>
+<p>Slide chỉ nêu hiệu năng, khả dụng, bảo mật, tin cậy, khả chuyển… ISO 25010 xếp chúng thành tám đặc tính chất lượng sản phẩm:</p>
+<ol class="hai-cot"><li>Phù hợp chức năng</li><li>Hiệu suất</li><li>Tương thích</li><li>Khả dụng (bản mới gọi "interaction capability")</li><li>Tin cậy</li><li>Bảo mật</li><li>Khả năng bảo trì</li><li>Khả chuyển</li></ol>
+<p>Bản 2023 thêm <em>an toàn</em>. Sách Spillner dùng mô hình này ở §2.2.1; đây là checklist tester chuyên nghiệp dùng để không bỏ sót "-ility" nào.</p>
+<p class="ghi-chu">Ngoài syllabus CTFL, vốn chỉ nêu ví dụ.</p></div>`),
     books([
       ['fst4', 'Ch.2 §3 "Test types" — pp.62–68 (PDF 76–82)', 'Chương 2 §3 "Test types" — trang 62–68 (PDF 76–82)'],
       ['fst', '§2.3 "Test types: the targets of testing" — pp.46–49 (PDF 49–52)', '§2.3 "Test types: the targets of testing" — trang 46–49 (PDF 49–52)'],
@@ -722,73 +2606,271 @@ const L25 = {
     bi(`<span class="eyebrow">Chapter 2 · Lesson 2.5 · SWT2 slides 131–143</span>
 <h2>Maintenance testing and the high-level test plan</h2>
 <p class="lead">Most software spends most of its life in operation, being changed. <strong>Maintenance testing</strong> tests those changes and protects what already works. The deck ends Chapter 2 with the classic <strong>IEEE 829 test-plan outline</strong> — the skeleton of the test plan you will write in Lab 3 and the capstone project.</p>
-<div class="callout"><b>Learning objectives.</b> LO-2.4.1 Summarise triggers for maintenance testing (K2) · LO-2.4.2 Describe the role of impact analysis in maintenance testing (K2).</div>`,
+<div class="callout"><strong>Learning objectives.</strong>
+<ul>
+<li><strong>LO-2.4.1</strong> — Summarise triggers for maintenance testing (K2).</li>
+<li><strong>LO-2.4.2</strong> — Describe the role of impact analysis in maintenance testing (K2).</li>
+</ul></div>`,
     `<span class="eyebrow">Chương 2 · Bài 2.5 · SWT2 slide 131–143</span>
 <h2>Kiểm thử bảo trì và test plan tổng thể</h2>
 <p class="lead">Phần lớn phần mềm dành phần lớn đời mình trong vận hành và bị thay đổi liên tục. <strong>Kiểm thử bảo trì</strong> test các thay đổi đó và bảo vệ những gì đang chạy tốt. Bộ slide khép lại Chương 2 bằng <strong>khung test plan IEEE 829</strong> kinh điển — bộ xương của test plan bạn sẽ viết ở Lab 3 và đồ án.</p>
-<div class="callout"><b>Chuẩn đầu ra.</b> LO-2.4.1 Tóm tắt các tác nhân kích hoạt kiểm thử bảo trì (K2) · LO-2.4.2 Mô tả vai trò của phân tích tác động trong kiểm thử bảo trì (K2).</div>`),
+<div class="callout"><strong>Chuẩn đầu ra.</strong>
+<ul>
+<li><strong>LO-2.4.1</strong> — Tóm tắt các tác nhân kích hoạt kiểm thử bảo trì (K2).</li>
+<li><strong>LO-2.4.2</strong> — Mô tả vai trò của phân tích tác động trong kiểm thử bảo trì (K2).</li>
+</ul></div>`),
     walkHead(D, 131, 143),
     walk(D, [
-      [131, 'CONTENT — Maintenance testing', `<p>Last block of the chapter.</p>`, `<p>Khối cuối của chương.</p>`],
+      [131, 'CONTENT — Maintenance testing',
+        `<p class="y-chinh">🎯 Last block of the chapter: maintenance testing.</p>`,
+        `<p class="y-chinh">🎯 Khối cuối của chương: kiểm thử bảo trì.</p>`],
       [132, 'Maintenance testing',
-        `<p>Testing to <strong>preserve quality</strong>. It differs from development testing: a different sequence (development testing runs bottom-up, maintenance testing <strong>top-down</strong>), different test data (a live profile), <strong>breadth tests</strong> for overall confidence plus <strong>depth tests</strong> on the changes and critical areas — and it is predominantly <strong>regression testing</strong>.</p>`,
-        `<p>Kiểm thử để <strong>giữ gìn chất lượng</strong>. Khác kiểm thử khi phát triển: thứ tự khác (phát triển test từ dưới lên, bảo trì test <strong>từ trên xuống</strong>), dữ liệu khác (hồ sơ dữ liệu thật), <strong>test diện rộng</strong> để có niềm tin chung cộng <strong>test chiều sâu</strong> ở chỗ thay đổi và vùng quan trọng — và chủ yếu là <strong>regression testing</strong>.</p>`],
+        `<p class="y-chinh">🎯 Maintenance testing is testing to <strong>preserve quality</strong> — and it is predominantly regression testing.</p>
+<p class="nhan">How it differs from development testing</p>
+<ul>
+<li><strong>Different sequence</strong> — development testing runs bottom-up; maintenance testing runs <strong>top-down</strong>.</li>
+<li><strong>Different test data</strong> — a live profile.</li>
+<li><strong>Breadth tests</strong> — to establish overall confidence.</li>
+<li><strong>Depth tests</strong> — to investigate the changes and critical areas.</li>
+<li><strong>Predominantly regression testing</strong></li>
+</ul>`,
+        `<p class="y-chinh">🎯 Kiểm thử bảo trì là kiểm thử để <strong>giữ gìn chất lượng</strong> — và chủ yếu là regression testing.</p>
+<p class="nhan">Khác kiểm thử khi phát triển ở đâu</p>
+<ul>
+<li><strong>Thứ tự khác</strong> — phát triển test từ dưới lên; bảo trì test <strong>từ trên xuống</strong>.</li>
+<li><strong>Dữ liệu khác</strong> — hồ sơ dữ liệu thật (live profile).</li>
+<li><strong>Test diện rộng</strong> — để có niềm tin chung.</li>
+<li><strong>Test chiều sâu</strong> — soi chỗ thay đổi và vùng quan trọng.</li>
+<li><strong>Chủ yếu là regression testing</strong></li>
+</ul>`],
       [133, 'What to test in maintenance testing',
-        `<p>Triggers: <strong>modification</strong> (enhancements, corrective and emergency fixes, environment changes, patches), <strong>migration</strong> (to another platform — including data conversion), <strong>retirement</strong> (data archiving and restoring). <strong>Impact analysis</strong> asks: what could this change affect? how important is a fault there? how much should we test — the most important affected areas, the areas most likely affected, or the whole system? Answer: "it depends" — on risk.</p>`,
-        `<p>Tác nhân: <strong>sửa đổi</strong> (nâng cấp, sửa lỗi thường và khẩn cấp, thay đổi môi trường, bản vá), <strong>chuyển đổi</strong> (sang nền tảng khác — kèm chuyển đổi dữ liệu), <strong>ngừng sử dụng</strong> (lưu trữ và khôi phục dữ liệu). <strong>Phân tích tác động</strong> hỏi: thay đổi này có thể ảnh hưởng tới đâu? lỗi ở đó quan trọng tới mức nào? test bao nhiêu — vùng bị ảnh hưởng quan trọng nhất, vùng dễ bị ảnh hưởng nhất, hay cả hệ thống? Trả lời: "tuỳ" — tuỳ vào rủi ro.</p>`],
+        `<p class="y-chinh">🎯 Three triggers start maintenance testing; <strong>impact analysis</strong> decides how much to test.</p>
+<p class="nhan">Triggers</p>
+<ol>
+<li><strong>Modification</strong> — enhancements, corrective and emergency fixes, environment changes, patches.</li>
+<li><strong>Migration</strong> — to another platform, including data conversion.</li>
+<li><strong>Retirement</strong> — data archiving and restoring.</li>
+</ol>
+<p class="nhan">Impact analysis — the questions</p>
+<ul>
+<li>What could this change have an impact on?</li>
+<li>How important is a fault in the impacted area?</li>
+<li>Test what has been affected — but how much? The most important affected areas? The areas most likely to be affected? The whole system?</li>
+</ul>
+<p>The answer: "it depends" — on risk.</p>`,
+        `<p class="y-chinh">🎯 Ba tác nhân kích hoạt kiểm thử bảo trì; <strong>phân tích tác động</strong> quyết định test bao nhiêu.</p>
+<p class="nhan">Tác nhân</p>
+<ol>
+<li><strong>Sửa đổi (modification)</strong> — nâng cấp, sửa lỗi thường và khẩn cấp, thay đổi môi trường, bản vá.</li>
+<li><strong>Chuyển đổi (migration)</strong> — sang nền tảng khác, kèm chuyển đổi dữ liệu.</li>
+<li><strong>Ngừng sử dụng (retirement)</strong> — lưu trữ và khôi phục dữ liệu.</li>
+</ol>
+<p class="nhan">Phân tích tác động — các câu hỏi</p>
+<ul>
+<li>Thay đổi này có thể ảnh hưởng tới đâu?</li>
+<li>Lỗi ở vùng bị ảnh hưởng quan trọng tới mức nào?</li>
+<li>Test phần bị ảnh hưởng — nhưng bao nhiêu? Vùng bị ảnh hưởng quan trọng nhất? Vùng dễ bị ảnh hưởng nhất? Cả hệ thống?</li>
+</ul>
+<p>Câu trả lời: "tuỳ" — tuỳ vào rủi ro.</p>`],
       [134, 'Poor or missing specifications',
-        `<p>A common maintenance reality. What to do: consider what the system should do (talk with users); document your assumptions and let others review them; improve the situation by documenting what you know and find out; and track the cost of working with poor specs to build a business case for better ones.</p>`,
-        `<p>Chuyện thường ngày khi bảo trì. Cách làm: nghĩ xem hệ thống lẽ ra phải làm gì (hỏi người dùng); ghi lại giả định và cho người khác review; cải thiện dần bằng cách ghi lại những gì đã biết và tìm hiểu được; và theo dõi chi phí khi phải làm với đặc tả kém để có lý lẽ đòi đặc tả tốt hơn.</p>`],
+        `<p class="y-chinh">🎯 Poor or missing specifications are a common maintenance reality — four ways to cope.</p>
+<ol>
+<li><strong>Consider what the system should do</strong> — talk with users.</li>
+<li><strong>Document your assumptions</strong> — and give other people the opportunity to review them.</li>
+<li><strong>Improve the current situation</strong> — document what you know and what you find out.</li>
+<li><strong>Track the cost</strong> of working with poor specifications — to make a business case for better ones.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Đặc tả kém hoặc thiếu là chuyện thường ngày khi bảo trì — bốn cách xoay xở.</p>
+<ol>
+<li><strong>Nghĩ xem hệ thống lẽ ra phải làm gì</strong> — hỏi người dùng.</li>
+<li><strong>Ghi lại giả định</strong> — và cho người khác cơ hội review.</li>
+<li><strong>Cải thiện dần</strong> — ghi lại những gì đã biết và tìm hiểu được.</li>
+<li><strong>Theo dõi chi phí</strong> khi phải làm với đặc tả kém — để có lý lẽ đòi đặc tả tốt hơn.</li>
+</ol>`],
       [135, 'What should the system do?',
-        `<p>Alternatives when there is no spec: assume the current behaviour is right (except for the specific change) and use the <strong>existing system as the regression baseline</strong>; look in user manuals; ask the experts — the current users. Key sentence: <em>without a specification you cannot really test, only explore — you can validate, but not verify.</em></p>`,
-        `<p>Các cách khi không có đặc tả: coi hành vi hiện tại là đúng (trừ phần đang thay đổi) và dùng <strong>hệ thống cũ làm mốc cho regression</strong>; xem hướng dẫn sử dụng; hỏi chuyên gia — chính người dùng hiện tại. Câu then chốt: <em>không có đặc tả thì không thật sự test được mà chỉ thăm dò — có thể validate nhưng không verify được.</em></p>`],
+        `<p class="y-chinh">🎯 Without a specification you cannot really test, only explore — you can validate, but not verify.</p>
+<p class="nhan">Alternatives when there is no spec</p>
+<ul>
+<li><strong>Trust the current behaviour</strong> — assume the way the system works now is right (except for the specific change), and use the <strong>existing system as the regression baseline</strong>.</li>
+<li><strong>User manuals or guides</strong> — if they exist.</li>
+<li><strong>Ask the experts</strong> — the current users.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Không có đặc tả thì không thật sự test được mà chỉ thăm dò — có thể validate nhưng không verify được.</p>
+<p class="nhan">Các cách khi không có đặc tả</p>
+<ul>
+<li><strong>Tin hành vi hiện tại</strong> — coi cách hệ thống đang chạy là đúng (trừ phần đang thay đổi), và dùng <strong>hệ thống cũ làm mốc cho regression</strong>.</li>
+<li><strong>Hướng dẫn sử dụng</strong> — nếu có.</li>
+<li><strong>Hỏi chuyên gia</strong> — chính người dùng hiện tại.</li>
+</ul>`],
       [136, '(Before planning a set of tests)',
-        `<p>Groundwork before any test plan: set the organisational test strategy; identify the people involved (sponsors, testers, QA, development, support); examine the test basis (requirements or functional specs); set up the test organisation and infrastructure; define deliverables and the reporting structure (after TMap®, Pol &amp; van Veenendaal, 1998).</p>`,
-        `<p>Việc chuẩn bị trước mọi test plan: xác định chiến lược test của tổ chức; xác định những người liên quan (nhà tài trợ, tester, QA, phát triển, hỗ trợ); xem xét test basis (yêu cầu hoặc đặc tả chức năng); dựng tổ chức và hạ tầng test; định nghĩa sản phẩm bàn giao và cơ chế báo cáo (theo TMap®, Pol &amp; van Veenendaal, 1998).</p>`],
+        `<p class="y-chinh">🎯 Five pieces of groundwork come before any set of tests is planned.</p>
+<ol>
+<li><strong>Set the organisational test strategy</strong></li>
+<li><strong>Identify the people involved</strong> — sponsors, testers, QA, development, support, etc.</li>
+<li><strong>Examine the test basis</strong> — the requirements or functional specifications.</li>
+<li><strong>Set up the test organisation and infrastructure</strong></li>
+<li><strong>Define test deliverables and the reporting structure</strong></li>
+</ol>
+<p class="ghi-chu">Source on the slide: <em>Structured Testing, an introduction to TMap®</em>, Pol &amp; van Veenendaal, 1998.</p>`,
+        `<p class="y-chinh">🎯 Năm việc chuẩn bị phải làm trước khi lập kế hoạch cho bất kỳ bộ test nào.</p>
+<ol>
+<li><strong>Xác định chiến lược test của tổ chức</strong></li>
+<li><strong>Xác định những người liên quan</strong> — nhà tài trợ, tester, QA, phát triển, hỗ trợ…</li>
+<li><strong>Xem xét test basis</strong> — yêu cầu hoặc đặc tả chức năng.</li>
+<li><strong>Dựng tổ chức và hạ tầng test</strong></li>
+<li><strong>Định nghĩa sản phẩm bàn giao và cơ chế báo cáo</strong></li>
+</ol>
+<p class="ghi-chu">Nguồn trên slide: <em>Structured Testing, an introduction to TMap®</em>, Pol &amp; van Veenendaal, 1998.</p>`],
       [137, 'High-level test planning — questions',
-        `<p>Discussion prompts: what is the purpose of a high-level test plan (it communicates to <em>all</em> parties involved)? why have one? what should it contain — what is your standard? have you ever forgotten something important? what is <em>not</em> in a test plan (the detailed test cases — those live in test design and case specifications)?</p>`,
-        `<p>Câu hỏi gợi mở: test plan tổng thể để làm gì (nó truyền đạt tới <em>mọi</em> bên liên quan)? vì sao nên có? phải chứa gì — chuẩn của bạn là gì? bạn đã từng quên điều gì quan trọng chưa? cái gì <em>không</em> nằm trong test plan (các test case chi tiết — chúng nằm trong đặc tả thiết kế và đặc tả test case)?</p>`],
+        `<p class="y-chinh">🎯 Discussion prompts about the high-level test plan — it communicates to <em>all</em> parties involved.</p>
+<ol>
+<li>What is the purpose of a high-level test plan? Who does it communicate to? — all parties involved.</li>
+<li>Why is it a good idea to have one?</li>
+<li>What information should be in it? What is your standard for its contents?</li>
+<li>Have you ever forgotten something important?</li>
+<li>What is <em>not</em> included in a test plan? — the detailed test cases: they live in the test design and test case specifications.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Câu hỏi gợi mở về test plan tổng thể — nó truyền đạt tới <em>mọi</em> bên liên quan.</p>
+<ol>
+<li>Test plan tổng thể để làm gì? Truyền đạt tới ai? — mọi bên liên quan.</li>
+<li>Vì sao nên có nó?</li>
+<li>Nó phải chứa thông tin gì? Chuẩn nội dung của bạn là gì?</li>
+<li>Bạn đã từng quên điều gì quan trọng chưa?</li>
+<li>Cái gì <em>không</em> nằm trong test plan? — các test case chi tiết: chúng nằm trong đặc tả thiết kế test và đặc tả test case.</li>
+</ol>`],
       [138, 'High-level Test Plan (IEEE 829) — items 1–3',
-        `<p>1 <strong>Test plan identifier</strong>. 2 <strong>Introduction</strong> — software items and features to be tested; references to project authorisation, project plan, QA plan, configuration-management plan, policies and standards. 3 <strong>Test items</strong> — including version/revision, how they are transmitted, references to software documentation.</p>`,
-        `<p>1 <strong>Mã test plan</strong>. 2 <strong>Giới thiệu</strong> — phần mềm và tính năng sẽ test; tham chiếu quyết định dự án, kế hoạch dự án, kế hoạch QA, kế hoạch quản lý cấu hình, chính sách và chuẩn. 3 <strong>Hạng mục test</strong> — kèm phiên bản, cách bàn giao, tham chiếu tài liệu phần mềm.</p>`],
+        `<p class="y-chinh">🎯 The IEEE 829 high-level test plan, items 1–3 (source: ANSI/IEEE Std 829-1998).</p>
+<ol>
+<li><strong>Test plan identifier</strong></li>
+<li><strong>Introduction</strong> — software items and features to be tested; references to project authorisation, project plan, QA plan, configuration-management plan, relevant policies and standards.</li>
+<li><strong>Test items</strong> — including version/revision level; how they are transmitted (net, disc, CD…); references to software documentation.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Test plan tổng thể theo IEEE 829, mục 1–3 (nguồn: ANSI/IEEE Std 829-1998).</p>
+<ol>
+<li><strong>Mã test plan</strong></li>
+<li><strong>Giới thiệu</strong> — phần mềm và tính năng sẽ test; tham chiếu quyết định dự án, kế hoạch dự án, kế hoạch QA, kế hoạch quản lý cấu hình, chính sách và chuẩn liên quan.</li>
+<li><strong>Hạng mục test</strong> — kèm phiên bản; cách bàn giao (mạng, đĩa, CD…); tham chiếu tài liệu phần mềm.</li>
+</ol>`],
       [139, 'Items 4–5',
-        `<p>4 <strong>Features to be tested</strong> — with the test design specification/techniques. 5 <strong>Features not to be tested</strong> — and the reasons for excluding them (writing this down protects the team when someone later asks "why wasn't X tested?").</p>`,
-        `<p>4 <strong>Tính năng sẽ test</strong> — kèm đặc tả thiết kế test/kỹ thuật. 5 <strong>Tính năng không test</strong> — và lý do loại trừ (ghi ra để bảo vệ nhóm khi sau này có người hỏi "sao không test X?").</p>`],
+        `<p class="y-chinh">🎯 Items 4–5: say what you will test — and, just as important, what you will not.</p>
+<ul>
+<li><strong>4. Features to be tested</strong> — with the test design specification/techniques.</li>
+<li><strong>5. Features not to be tested</strong> — and the reasons for excluding them.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> writing down item 5 protects the team when someone later asks "why wasn't X tested?".</p>`,
+        `<p class="y-chinh">🎯 Mục 4–5: nói rõ sẽ test gì — và quan trọng không kém, sẽ không test gì.</p>
+<ul>
+<li><strong>4. Tính năng sẽ test</strong> — kèm đặc tả thiết kế test/kỹ thuật.</li>
+<li><strong>5. Tính năng không test</strong> — và lý do loại trừ.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> ghi rõ mục 5 để bảo vệ nhóm khi sau này có người hỏi "sao không test X?".</p>`],
       [140, 'Items 6–8',
-        `<p>6 <strong>Approach</strong> — activities, techniques and tools, detailed enough to estimate cost; the degree of comprehensiveness (e.g. coverage) and other completion criteria (e.g. faults); constraints (environment, staff, deadlines). 7 <strong>Item pass/fail criteria</strong>. 8 <strong>Suspension and resumption criteria</strong> — when to stop all or part of testing and which activities to repeat on resuming.</p>`,
-        `<p>6 <strong>Cách tiếp cận</strong> — hoạt động, kỹ thuật, công cụ, đủ chi tiết để ước lượng chi phí; mức độ đầy đủ (vd coverage) và tiêu chí hoàn thành khác (vd số lỗi); ràng buộc (môi trường, nhân sự, hạn chót). 7 <strong>Tiêu chí đạt/không đạt</strong> của từng hạng mục. 8 <strong>Tiêu chí tạm dừng và tiếp tục</strong> — khi nào dừng toàn bộ hay một phần việc test và phải lặp lại gì khi tiếp tục.</p>`],
+        `<p class="y-chinh">🎯 Items 6–8: how you will test, when an item passes, and when to stop and restart.</p>
+<ul>
+<li><strong>6. Approach</strong>
+<ul>
+<li>activities, techniques and tools</li>
+<li>detailed enough to estimate (cost?)</li>
+<li>degree of comprehensiveness (e.g. coverage) and other completion criteria (e.g. faults)</li>
+<li>constraints — environment, staff, deadlines</li>
+</ul></li>
+<li><strong>7. Item pass/fail criteria</strong></li>
+<li><strong>8. Suspension criteria and resumption criteria</strong> — for all or part of the testing activities; which activities must be repeated on resumption.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Mục 6–8: test thế nào, khi nào một hạng mục đạt, khi nào dừng và tiếp tục.</p>
+<ul>
+<li><strong>6. Cách tiếp cận</strong>
+<ul>
+<li>hoạt động, kỹ thuật và công cụ</li>
+<li>đủ chi tiết để ước lượng (chi phí?)</li>
+<li>mức độ đầy đủ (vd coverage) và tiêu chí hoàn thành khác (vd số lỗi)</li>
+<li>ràng buộc — môi trường, nhân sự, hạn chót</li>
+</ul></li>
+<li><strong>7. Tiêu chí đạt/không đạt</strong> của từng hạng mục</li>
+<li><strong>8. Tiêu chí tạm dừng và tiếp tục</strong> — cho toàn bộ hay một phần hoạt động test; phải lặp lại hoạt động nào khi tiếp tục.</li>
+</ul>`],
       [141, 'Item 9 — Test deliverables',
-        `<p>Test plan, test design specification, test case specification, test procedure specification, test item transmittal reports, test logs, test incident reports, test summary reports — the IEEE 829 document set.</p>`,
-        `<p>Test plan, đặc tả thiết kế test, đặc tả test case, đặc tả thủ tục test, báo cáo bàn giao hạng mục test, test log, báo cáo sự cố test, báo cáo tổng kết test — bộ tài liệu IEEE 829.</p>`],
+        `<p class="y-chinh">🎯 Item 9 lists the test deliverables — the IEEE 829 document set.</p>
+<ol class="hai-cot"><li>Test plan</li><li>Test design specification</li><li>Test case specification</li><li>Test procedure specification</li><li>Test item transmittal reports</li><li>Test logs</li><li>Test incident reports</li><li>Test summary reports</li></ol>`,
+        `<p class="y-chinh">🎯 Mục 9 liệt kê các sản phẩm bàn giao của việc test — bộ tài liệu IEEE 829.</p>
+<ol class="hai-cot"><li>Test plan</li><li>Đặc tả thiết kế test</li><li>Đặc tả test case</li><li>Đặc tả thủ tục test</li><li>Báo cáo bàn giao hạng mục test</li><li>Test log</li><li>Báo cáo sự cố test</li><li>Báo cáo tổng kết test</li></ol>`],
       [142, 'Items 10–12',
-        `<p>10 <strong>Testing tasks</strong> with inter-task dependencies and special skills. 11 <strong>Environment</strong> — physical, hardware, software, tools, mode of usage, security, office space. 12 <strong>Responsibilities</strong> — who manages, designs, prepares, executes, witnesses, checks, resolves issues, provides the environment and the software.</p>`,
-        `<p>10 <strong>Công việc test</strong> kèm phụ thuộc giữa các việc và kỹ năng đặc biệt. 11 <strong>Môi trường</strong> — vật lý, phần cứng, phần mềm, công cụ, cách dùng, bảo mật, chỗ làm việc. 12 <strong>Trách nhiệm</strong> — ai quản lý, thiết kế, chuẩn bị, thực thi, chứng kiến, kiểm tra, xử lý vấn đề, cung cấp môi trường và phần mềm.</p>`],
+        `<p class="y-chinh">🎯 Items 10–12: the tasks, the environment, and who is responsible for what.</p>
+<ul>
+<li><strong>10. Testing tasks</strong> — including inter-task dependencies and special skills.</li>
+<li><strong>11. Environment</strong> — physical, hardware, software, tools; mode of usage, security, office space.</li>
+<li><strong>12. Responsibilities</strong> — who manages, designs, prepares, executes, witnesses, checks and resolves issues; who provides the environment and the software to test.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Mục 10–12: các công việc, môi trường, và ai chịu trách nhiệm việc gì.</p>
+<ul>
+<li><strong>10. Công việc test</strong> — kèm phụ thuộc giữa các việc và kỹ năng đặc biệt.</li>
+<li><strong>11. Môi trường</strong> — vật lý, phần cứng, phần mềm, công cụ; cách dùng, bảo mật, chỗ làm việc.</li>
+<li><strong>12. Trách nhiệm</strong> — ai quản lý, thiết kế, chuẩn bị, thực thi, chứng kiến, kiểm tra và xử lý vấn đề; ai cung cấp môi trường và phần mềm để test.</li>
+</ul>`],
       [143, 'Items 13–16',
-        `<p>13 <strong>Staffing and training needs</strong>. 14 <strong>Schedule</strong> — test milestones, item transmittal milestones, extra milestones (environment ready), resources and when. 15 <strong>Risks and contingencies</strong> — a contingency plan per identified risk. 16 <strong>Approvals</strong> — names and dates.</p>`,
-        `<p>13 <strong>Nhu cầu nhân sự và đào tạo</strong>. 14 <strong>Lịch</strong> — mốc test, mốc bàn giao hạng mục, mốc bổ sung (môi trường sẵn sàng), nguồn lực và thời điểm. 15 <strong>Rủi ro và phương án dự phòng</strong> — mỗi rủi ro một phương án. 16 <strong>Phê duyệt</strong> — tên người duyệt và ngày.</p>`],
+        `<p class="y-chinh">🎯 Items 13–16: people, schedule, risks and sign-off close the plan.</p>
+<ul>
+<li><strong>13. Staffing and training needs</strong></li>
+<li><strong>14. Schedule</strong>
+<ul>
+<li>test milestones in the project schedule</li>
+<li>item transmittal milestones</li>
+<li>additional test milestones (environment ready)</li>
+<li>what resources are needed, and when</li>
+</ul></li>
+<li><strong>15. Risks and contingencies</strong> — a contingency plan for each identified risk.</li>
+<li><strong>16. Approvals</strong> — names, and when approved.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Mục 13–16: con người, lịch, rủi ro và phê duyệt khép lại bản kế hoạch.</p>
+<ul>
+<li><strong>13. Nhu cầu nhân sự và đào tạo</strong></li>
+<li><strong>14. Lịch</strong>
+<ul>
+<li>các mốc test trong lịch dự án</li>
+<li>các mốc bàn giao hạng mục</li>
+<li>các mốc test bổ sung (môi trường sẵn sàng)</li>
+<li>cần nguồn lực gì, và khi nào</li>
+</ul></li>
+<li><strong>15. Rủi ro và phương án dự phòng</strong> — mỗi rủi ro đã nhận diện có một phương án dự phòng.</li>
+<li><strong>16. Phê duyệt</strong> — tên người duyệt và ngày duyệt.</li>
+</ul>`],
     ]),
     bi(`<h3>Ví dụ có lời giải · Worked example — impact analysis for a maintenance change</h3>
-<p><b>Change.</b> A university portal changes its grade rounding from "round half up to 0.5" to "round to 0.1" (a <em>modification</em> trigger).</p>
+<p><strong>Change.</strong> A university portal changes its grade rounding from "round half up to 0.5" to "round to 0.1" (a <em>modification</em> trigger).</p>
 <ol>
-<li><b>What could it affect?</b> Search the code for the rounding function: used by the transcript page, the GPA calculator, the scholarship-ranking report and the export to the Ministry file.</li>
-<li><b>How important is a fault there?</b> GPA and scholarship ranking → high impact (money, fairness); transcript display → medium; export → high (regulatory).</li>
-<li><b>How much to test?</b> Depth tests on the rounding function (boundaries 7.94/7.95/7.96), the GPA calculator and the scholarship report; breadth regression on every page that shows grades; confirmation of the Ministry file format.</li>
-<li><b>No spec for the old ranking report?</b> Use the current production output for last semester as the regression baseline (slide 135).</li>
+<li><strong>What could it affect?</strong> Search the code for the rounding function: used by the transcript page, the GPA calculator, the scholarship-ranking report and the export to the Ministry file.</li>
+<li><strong>How important is a fault there?</strong> GPA and scholarship ranking → high impact (money, fairness); transcript display → medium; export → high (regulatory).</li>
+<li><strong>How much to test?</strong> Depth tests on the rounding function (boundaries 7.94/7.95/7.96), the GPA calculator and the scholarship report; breadth regression on every page that shows grades; confirmation of the Ministry file format.</li>
+<li><strong>No spec for the old ranking report?</strong> Use the current production output for last semester as the regression baseline (slide 135).</li>
 </ol>
-<p><b>Template to use for the plan:</b> the 16 IEEE 829 items above map onto the course's templates in <em>05.Templates</em> — Report5.1 Unit Test, Report5.2 Integration Test, Report5.3 System Test (explained in the Lab 3 section of this course).</p>
-<div class="pitfall"><b>Two statements to get right.</b> "Maintenance testing is only needed for new features" — false: fixes, environment changes, migrations and retirement also trigger it. "Impact analysis is done after the change is released" — false: it is done <em>before</em>, to decide how much regression testing is needed.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Test impact analysis in CI.</b> Large codebases cannot run every regression test on every commit. Tools such as Bazel, Gradle's test selection or Microsoft's Test Impact Analysis map each test to the code it executes (from coverage data) and run only the tests touched by the changed files — automated impact analysis. Google reports running only the affected subset of its tens of millions of tests on each change. <em>Outside the syllabus because CTFL treats impact analysis as a manual, analytical activity.</em></div>`,
+<p><strong>Template to use for the plan:</strong> the 16 IEEE 829 items above map onto the course's templates in <em>05.Templates</em> — Report5.1 Unit Test, Report5.2 Integration Test, Report5.3 System Test (explained in the Lab 3 section of this course).</p>
+<div class="pitfall co-tieu-de"><strong>Two statements to get right.</strong> "Maintenance testing is only needed for new features" — false: fixes, environment changes, migrations and retirement also trigger it. "Impact analysis is done after the change is released" — false: it is done <em>before</em>, to decide how much regression testing is needed.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Test impact analysis in CI.</strong>
+<p>Large codebases cannot run every regression test on every commit. The fix is automated impact analysis:</p>
+<ol>
+<li><strong>Map</strong> — tools such as Bazel, Gradle's test selection or Microsoft's Test Impact Analysis map each test to the code it executes (from coverage data).</li>
+<li><strong>Select</strong> — on each change, they run only the tests touched by the changed files.</li>
+</ol>
+<p>Google reports running only the affected subset of its tens of millions of tests on each change.</p>
+<p class="ghi-chu">Outside the syllabus because CTFL treats impact analysis as a manual, analytical activity.</p></div>`,
     `<h3>Ví dụ có lời giải · Phân tích tác động cho một thay đổi bảo trì</h3>
-<p><b>Thay đổi.</b> Cổng thông tin trường đổi cách làm tròn điểm từ "làm tròn tới 0,5" sang "làm tròn tới 0,1" (tác nhân <em>sửa đổi</em>).</p>
+<p><strong>Thay đổi.</strong> Cổng thông tin trường đổi cách làm tròn điểm từ "làm tròn tới 0,5" sang "làm tròn tới 0,1" (tác nhân <em>sửa đổi</em>).</p>
 <ol>
-<li><b>Có thể ảnh hưởng tới đâu?</b> Tìm hàm làm tròn trong code: được dùng ở trang bảng điểm, bộ tính GPA, báo cáo xét học bổng và file xuất nộp Bộ.</li>
-<li><b>Lỗi ở đó quan trọng tới mức nào?</b> GPA và xếp hạng học bổng → tác động cao (tiền, công bằng); hiển thị bảng điểm → trung bình; file xuất → cao (quy định).</li>
-<li><b>Test bao nhiêu?</b> Test chiều sâu ở hàm làm tròn (biên 7,94/7,95/7,96), bộ tính GPA và báo cáo học bổng; regression diện rộng mọi trang có hiển thị điểm; xác nhận định dạng file nộp Bộ.</li>
-<li><b>Báo cáo xếp hạng cũ không có đặc tả?</b> Dùng output trên production của học kỳ trước làm mốc regression (slide 135).</li>
+<li><strong>Có thể ảnh hưởng tới đâu?</strong> Tìm hàm làm tròn trong code: được dùng ở trang bảng điểm, bộ tính GPA, báo cáo xét học bổng và file xuất nộp Bộ.</li>
+<li><strong>Lỗi ở đó quan trọng tới mức nào?</strong> GPA và xếp hạng học bổng → tác động cao (tiền, công bằng); hiển thị bảng điểm → trung bình; file xuất → cao (quy định).</li>
+<li><strong>Test bao nhiêu?</strong> Test chiều sâu ở hàm làm tròn (biên 7,94/7,95/7,96), bộ tính GPA và báo cáo học bổng; regression diện rộng mọi trang có hiển thị điểm; xác nhận định dạng file nộp Bộ.</li>
+<li><strong>Báo cáo xếp hạng cũ không có đặc tả?</strong> Dùng output trên production của học kỳ trước làm mốc regression (slide 135).</li>
 </ol>
-<p><b>Mẫu dùng để viết kế hoạch:</b> 16 mục IEEE 829 ở trên tương ứng với các template trong <em>05.Templates</em> của môn — Report5.1 Unit Test, Report5.2 Integration Test, Report5.3 System Test (giải thích trong phần Lab 3 của khoá này).</p>
-<div class="pitfall"><b>Hai câu phải nắm chắc.</b> "Kiểm thử bảo trì chỉ cần khi có tính năng mới" — sai: sửa lỗi, đổi môi trường, chuyển đổi và ngừng sử dụng cũng kích hoạt nó. "Phân tích tác động làm sau khi phát hành thay đổi" — sai: làm <em>trước</em>, để quyết định cần regression bao nhiêu.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Test impact analysis trong CI.</b> Codebase lớn không thể chạy mọi regression test cho mỗi commit. Các công cụ như Bazel, test selection của Gradle hay Test Impact Analysis của Microsoft ánh xạ mỗi test tới đoạn code nó chạy qua (từ dữ liệu coverage) và chỉ chạy các test chạm tới file vừa đổi — phân tích tác động được tự động hoá. Google cho biết họ chỉ chạy tập con bị ảnh hưởng trong hàng chục triệu test mỗi khi có thay đổi. <em>Ngoài giáo trình vì CTFL xem phân tích tác động là hoạt động phân tích thủ công.</em></div>`),
+<p><strong>Mẫu dùng để viết kế hoạch:</strong> 16 mục IEEE 829 ở trên tương ứng với các template trong <em>05.Templates</em> của môn — Report5.1 Unit Test, Report5.2 Integration Test, Report5.3 System Test (giải thích trong phần Lab 3 của khoá này).</p>
+<div class="pitfall co-tieu-de"><strong>Hai câu phải nắm chắc.</strong> "Kiểm thử bảo trì chỉ cần khi có tính năng mới" — sai: sửa lỗi, đổi môi trường, chuyển đổi và ngừng sử dụng cũng kích hoạt nó. "Phân tích tác động làm sau khi phát hành thay đổi" — sai: làm <em>trước</em>, để quyết định cần regression bao nhiêu.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Test impact analysis trong CI.</strong>
+<p>Codebase lớn không thể chạy mọi regression test cho mỗi commit. Lời giải là phân tích tác động được tự động hoá:</p>
+<ol>
+<li><strong>Ánh xạ</strong> — các công cụ như Bazel, test selection của Gradle hay Test Impact Analysis của Microsoft ánh xạ mỗi test tới đoạn code nó chạy qua (từ dữ liệu coverage).</li>
+<li><strong>Chọn lọc</strong> — mỗi lần thay đổi, chỉ chạy các test chạm tới file vừa đổi.</li>
+</ol>
+<p>Google cho biết họ chỉ chạy tập con bị ảnh hưởng trong hàng chục triệu test mỗi khi có thay đổi.</p>
+<p class="ghi-chu">Ngoài giáo trình vì CTFL xem phân tích tác động là hoạt động phân tích thủ công.</p></div>`),
     books([
       ['fst4', 'Ch.2 §4 "Maintenance testing" — pp.69–71 (PDF 83–85); Chapter review p.72 (PDF 86); Sample exam questions pp.73–74 (PDF 87–88); test plan contents in Ch.5 §2 p.161 (PDF 175)', 'Chương 2 §4 "Maintenance testing" — trang 69–71 (PDF 83–85); ôn tập chương trang 72 (PDF 86); câu hỏi mẫu trang 73–74 (PDF 87–88); nội dung test plan ở Chương 5 §2 trang 161 (PDF 175)'],
       ['fst', '§2.4 "Maintenance testing" — pp.50–53 (PDF 53–56); chapter review p.54 (PDF 57)', '§2.4 "Maintenance testing" — trang 50–53 (PDF 53–56); ôn tập chương trang 54 (PDF 57)'],
@@ -844,7 +2926,7 @@ const L26 = {
 <li><strong>"Monkey test"</strong> ở dòng UAT = nhập ngẫu nhiên, không kịch bản (do người dùng hoặc công cụ) để xem có gì vỡ không — một cách tiếp cận dựa kinh nghiệm, không hình thức (Chương 6).</li>
 </ul>`),
     bi(`<h3>Ví dụ có lời giải · Worked example — use the sheet on a real requirement</h3>
-<p><b>Requirement (from the FA23 practical exam):</b> "Tên quyết định kiểm tra is a required string of 50–255 characters; the first character must not be a number; no special characters or blanks."</p>
+<p><strong>Requirement (from the FA23 practical exam):</strong> "Tên quyết định kiểm tra is a required string of 50–255 characters; the first character must not be a number; no special characters or blanks."</p>
 <table>
 <thead><tr><th>Level</th><th>What you would test</th><th>Technique</th></tr></thead>
 <tbody>
@@ -854,9 +2936,16 @@ const L26 = {
 <tr><td>UAT</td><td>a department head creates a real decision end-to-end</td><td>business-process-based</td></tr>
 </tbody>
 </table>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why FPT reports split "integration" in two.</b> CTFL has one integration level with two sub-levels; industry (and FPT Software's templates) often report them separately because different people do them: CIT by developers with API tools such as Postman, SIT by the test team against external systems. The capstone Report5 "Integration Test" template is really a CIT/SIT report. <em>Outside the syllabus, which only names the two sub-levels.</em></div>`,
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Why FPT reports split "integration" in two.</strong>
+<p>CTFL has one integration level with two sub-levels; industry (and FPT Software's templates) often report them separately because different people do them:</p>
+<ul>
+<li><strong>CIT</strong> — by developers, with API tools such as Postman.</li>
+<li><strong>SIT</strong> — by the test team, against external systems.</li>
+</ul>
+<p>The capstone Report5 "Integration Test" template is really a CIT/SIT report.</p>
+<p class="ghi-chu">Outside the syllabus, which only names the two sub-levels.</p></div>`,
     `<h3>Ví dụ có lời giải · Dùng bảng cho một yêu cầu thật</h3>
-<p><b>Yêu cầu (trong đề PE FA23):</b> "Tên quyết định kiểm tra là chuỗi bắt buộc, dài 50–255 ký tự; ký tự đầu không được là số; không có ký tự đặc biệt hay khoảng trắng."</p>
+<p><strong>Yêu cầu (trong đề PE FA23):</strong> "Tên quyết định kiểm tra là chuỗi bắt buộc, dài 50–255 ký tự; ký tự đầu không được là số; không có ký tự đặc biệt hay khoảng trắng."</p>
 <table>
 <thead><tr><th>Cấp</th><th>Test cái gì</th><th>Kỹ thuật</th></tr></thead>
 <tbody>
@@ -866,7 +2955,14 @@ const L26 = {
 <tr><td>UAT</td><td>trưởng phòng tạo một quyết định thật từ đầu tới cuối</td><td>dựa trên quy trình nghiệp vụ</td></tr>
 </tbody>
 </table>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao báo cáo ở FPT tách "integration" làm hai.</b> CTFL có một cấp integration với hai cấp con; thực tế (và template của FPT Software) thường báo cáo riêng vì do người khác nhau làm: CIT do developer làm bằng công cụ gọi API như Postman, SIT do nhóm test làm với hệ thống bên ngoài. Template Report5 "Integration Test" của đồ án thực chất là báo cáo CIT/SIT. <em>Ngoài giáo trình vì syllabus chỉ nêu tên hai cấp con.</em></div>`),
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Vì sao báo cáo ở FPT tách "integration" làm hai.</strong>
+<p>CTFL có một cấp integration với hai cấp con; thực tế (và template của FPT Software) thường báo cáo riêng vì do người khác nhau làm:</p>
+<ul>
+<li><strong>CIT</strong> — do developer làm, bằng công cụ gọi API như Postman.</li>
+<li><strong>SIT</strong> — do nhóm test làm, với hệ thống bên ngoài.</li>
+</ul>
+<p>Template Report5 "Integration Test" của đồ án thực chất là báo cáo CIT/SIT.</p>
+<p class="ghi-chu">Ngoài giáo trình vì syllabus chỉ nêu tên hai cấp con.</p></div>`),
   ].join('\n'),
 };
 

@@ -25,8 +25,16 @@ const L61 = {
   content: [
     bi(`<span class="eyebrow">Chapter 6 · Lesson 6.1 · SWT4 slides 100–108</span>
 <h2>Experience-based techniques — the tester's knowledge as the test basis</h2>
-<p class="lead">Black-box techniques take their tests from a specification, white-box techniques from the code. <strong>Experience-based</strong> techniques take them from the <strong>tester's skill, intuition and experience</strong> with similar applications, technologies and past failures. The syllabus names three: <strong>error guessing</strong>, <strong>exploratory testing</strong> and <strong>checklist-based testing</strong>. They find defects the systematic techniques miss — but their coverage is hard to measure, so they <em>complement</em> the systematic techniques rather than replace them.</p>
-<div class="callout"><b>Learning objectives.</b> LO-4.4.1 Explain error guessing (K2) · LO-4.4.2 Explain exploratory testing (K2) · LO-4.4.3 Explain checklist-based testing (K2) · and the experience-based part of LO-4.1.1 (characteristics of the three technique categories, K2). All three are K2: expect "which statement is true/best describes…" questions, not calculations.</div>
+<p class="lead">Black-box techniques take their tests from a specification, white-box techniques from the code. <strong>Experience-based</strong> techniques take them from the <strong>tester's skill, intuition and experience</strong> with similar applications, technologies and past failures.</p>
+<p>The syllabus names three: <strong>error guessing</strong>, <strong>exploratory testing</strong> and <strong>checklist-based testing</strong>. They find defects the systematic techniques miss — but their coverage is hard to measure, so they <em>complement</em> the systematic techniques rather than replace them.</p>
+<div class="callout"><strong>Learning objectives.</strong>
+<ul>
+<li>LO-4.4.1 Explain error guessing (K2)</li>
+<li>LO-4.4.2 Explain exploratory testing (K2)</li>
+<li>LO-4.4.3 Explain checklist-based testing (K2)</li>
+<li>The experience-based part of LO-4.1.1 (characteristics of the three technique categories, K2)</li>
+</ul>
+<p>All three are K2: expect "which statement is true/best describes…" questions, not calculations.</p></div>
 <h3>The three techniques side by side</h3>
 <div class="table-wrap"><table>
 <thead><tr><th></th><th>Error guessing</th><th>Exploratory testing</th><th>Checklist-based testing</th></tr></thead>
@@ -39,8 +47,16 @@ const L61 = {
 </table></div>`,
     `<span class="eyebrow">Chương 6 · Bài 6.1 · SWT4 slide 100–108</span>
 <h2>Kỹ thuật dựa kinh nghiệm — kiến thức của tester chính là test basis</h2>
-<p class="lead">Kỹ thuật black-box lấy test từ đặc tả, white-box lấy từ code. Kỹ thuật <strong>dựa kinh nghiệm</strong> lấy test từ <strong>kỹ năng, trực giác và kinh nghiệm của tester</strong> với các ứng dụng, công nghệ tương tự và những lần hỏng hóc trước đây. Syllabus nêu ba kỹ thuật: <strong>error guessing</strong> (đoán lỗi), <strong>exploratory testing</strong> (kiểm thử khám phá) và <strong>checklist-based testing</strong> (kiểm thử theo checklist). Chúng tìm được defect mà kỹ thuật hệ thống bỏ sót — nhưng coverage của chúng khó đo, nên chúng <em>bổ sung</em> cho kỹ thuật hệ thống chứ không thay thế.</p>
-<div class="callout"><b>Chuẩn đầu ra.</b> LO-4.4.1 Giải thích error guessing (K2) · LO-4.4.2 Giải thích exploratory testing (K2) · LO-4.4.3 Giải thích checklist-based testing (K2) · và phần dựa kinh nghiệm của LO-4.1.1 (đặc điểm của ba nhóm kỹ thuật, K2). Cả ba đều là K2: hãy chờ câu hỏi dạng "phát biểu nào đúng/mô tả đúng nhất…", không phải bài tính.</div>
+<p class="lead">Kỹ thuật black-box lấy test từ đặc tả, white-box lấy từ code. Kỹ thuật <strong>dựa kinh nghiệm</strong> lấy test từ <strong>kỹ năng, trực giác và kinh nghiệm của tester</strong> với các ứng dụng, công nghệ tương tự và những lần hỏng hóc trước đây.</p>
+<p>Syllabus nêu ba kỹ thuật: <strong>error guessing</strong> (đoán lỗi), <strong>exploratory testing</strong> (kiểm thử khám phá) và <strong>checklist-based testing</strong> (kiểm thử theo checklist). Chúng tìm được defect mà kỹ thuật hệ thống bỏ sót — nhưng coverage của chúng khó đo, nên chúng <em>bổ sung</em> cho kỹ thuật hệ thống chứ không thay thế.</p>
+<div class="callout"><strong>Chuẩn đầu ra.</strong>
+<ul>
+<li>LO-4.4.1 Giải thích error guessing (K2)</li>
+<li>LO-4.4.2 Giải thích exploratory testing (K2)</li>
+<li>LO-4.4.3 Giải thích checklist-based testing (K2)</li>
+<li>Phần dựa kinh nghiệm của LO-4.1.1 (đặc điểm của ba nhóm kỹ thuật, K2)</li>
+</ul>
+<p>Cả ba đều là K2: hãy chờ câu hỏi dạng "phát biểu nào đúng/mô tả đúng nhất…", không phải bài tính.</p></div>
 <h3>Ba kỹ thuật đặt cạnh nhau</h3>
 <div class="table-wrap"><table>
 <thead><tr><th></th><th>Error guessing</th><th>Exploratory testing</th><th>Checklist-based testing</th></tr></thead>
@@ -54,43 +70,270 @@ const L61 = {
     walkHead(D, 100, 108, 'Slides 101–105 carry speaker notes that are a Vietnamese translation of the slide text; they are quoted where they help.', 'Slide 101–105 có ghi chú của thầy/cô là bản dịch tiếng Việt của chính nội dung slide; bài này dẫn lại khi có ích.'),
     walk(D, [
       [100, 'CONTENTS — Experience-based Test Techniques',
-        `<p>The last block of SWT4: <strong>Experience-based Test Techniques</strong> is highlighted. After the three techniques and their questions (slides 101–108) the deck ends with "Choosing Test Techniques" (slides 109–112), which this site teaches separately as lesson 6.2. In the CTFL 2018 syllabus experience-based techniques are §4.4, and choosing techniques is part of §4.1.</p>`,
-        `<p>Khối cuối của SWT4: <strong>Experience-based Test Techniques</strong> được tô. Sau ba kỹ thuật và các câu hỏi (slide 101–108) bộ slide kết thúc bằng "Choosing Test Techniques" (slide 109–112), trang này dạy riêng thành bài 6.2. Trong syllabus CTFL 2018, kỹ thuật dựa kinh nghiệm là §4.4, còn việc chọn kỹ thuật thuộc §4.1.</p>`],
+        `<p class="y-chinh">🎯 The last block of SWT4 starts here: <strong>Experience-based Test Techniques</strong> is highlighted.</p>
+<p class="nhan">What follows in the deck</p>
+<ol>
+<li><strong>Slides 101–108</strong> — the three techniques and their questions (this lesson, 6.1).</li>
+<li><strong>Slides 109–112</strong> — "Choosing Test Techniques", taught separately on this site as lesson 6.2.</li>
+</ol>
+<p class="nhan">Where it sits in the syllabus (CTFL 2018)</p>
+<ul>
+<li><strong>§4.4</strong> — experience-based techniques.</li>
+<li><strong>§4.1</strong> — choosing techniques is part of it.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Khối cuối của SWT4 bắt đầu từ đây: <strong>Experience-based Test Techniques</strong> được tô.</p>
+<p class="nhan">Phần tiếp theo trong bộ slide</p>
+<ol>
+<li><strong>Slide 101–108</strong> — ba kỹ thuật và các câu hỏi (bài này, 6.1).</li>
+<li><strong>Slide 109–112</strong> — "Choosing Test Techniques", trang này dạy riêng thành bài 6.2.</li>
+</ol>
+<p class="nhan">Vị trí trong syllabus (CTFL 2018)</p>
+<ul>
+<li><strong>§4.4</strong> — kỹ thuật dựa kinh nghiệm.</li>
+<li><strong>§4.1</strong> — việc chọn kỹ thuật thuộc mục này.</li>
+</ul>`],
       [101, 'Experience-based techniques — definition',
-        `<p>Four statements, all exam material: (1) test cases are derived from the <strong>tester's skill and intuition</strong> and their <strong>experience with similar applications and technologies</strong>; (2) they can find tests "<strong>not easily identified by other more systematic techniques</strong>"; (3) depending on the tester's approach and experience they achieve <strong>widely varying degrees of coverage and effectiveness</strong>; (4) <strong>coverage can be difficult to assess and may be unmeasurable</strong>. The gauge picture ("Experience-based testing", needle towards Maximum) says the same thing: the result is only as good as the experience behind it.</p>
-<p>The teacher's notes are a Vietnamese rendering of these bullets; where the machine translation says "thử nghiệm" or even "xét nghiệm" (a medical test), read it simply as <em>test</em>.</p>`,
-        `<p>Bốn phát biểu, đều là kiến thức thi: (1) test case được rút ra từ <strong>kỹ năng và trực giác của tester</strong> cùng <strong>kinh nghiệm của họ với các ứng dụng và công nghệ tương tự</strong>; (2) chúng có thể tìm ra những test "<strong>không dễ nhận ra bằng các kỹ thuật hệ thống hơn</strong>"; (3) tuỳ cách làm và kinh nghiệm của tester, chúng đạt <strong>mức coverage và hiệu quả rất khác nhau</strong>; (4) <strong>coverage có thể khó đánh giá và có thể không đo được</strong>. Hình đồng hồ ("Experience-based testing", kim chỉ về phía Maximum) nói cùng một ý: kết quả chỉ tốt bằng lượng kinh nghiệm đứng sau nó.</p>
-<p>Ghi chú của thầy/cô là bản dịch tiếng Việt của các gạch đầu dòng này; chỗ nào bản dịch máy ghi "thử nghiệm" hay thậm chí "xét nghiệm" (xét nghiệm y tế), hãy hiểu đơn giản là <em>test</em>.</p>`],
+        `<p class="y-chinh">🎯 Experience-based tests come from the tester's head — they find what systematic techniques miss, but their coverage is hard to measure.</p>
+<p class="nhan">Four statements — all exam material</p>
+<ol>
+<li><strong>Source</strong> — test cases are derived from the <strong>tester's skill and intuition</strong> and their <strong>experience with similar applications and technologies</strong>.</li>
+<li><strong>Strength</strong> — they can find tests "<strong>not easily identified by other more systematic techniques</strong>".</li>
+<li><strong>Variability</strong> — depending on the tester's approach and experience they achieve <strong>widely varying degrees of coverage and effectiveness</strong>.</li>
+<li><strong>Measurement</strong> — <strong>coverage can be difficult to assess and may be unmeasurable</strong>.</li>
+</ol>
+<p class="meo">🧠 <strong>Remember:</strong> the gauge picture ("Experience-based testing", needle towards Maximum) says the same thing — the result is only as good as the experience behind it.</p>
+<p class="ghi-chu">The teacher's notes are a Vietnamese rendering of these bullets; where the machine translation says "thử nghiệm" or even "xét nghiệm" (a medical test), read it simply as <em>test</em>.</p>`,
+        `<p class="y-chinh">🎯 Test dựa kinh nghiệm lấy từ đầu của tester — tìm được cái kỹ thuật hệ thống bỏ sót, nhưng coverage thì khó đo.</p>
+<p class="nhan">Bốn phát biểu — đều là kiến thức thi</p>
+<ol>
+<li><strong>Nguồn</strong> — test case được rút ra từ <strong>kỹ năng và trực giác của tester</strong> cùng <strong>kinh nghiệm của họ với các ứng dụng và công nghệ tương tự</strong>.</li>
+<li><strong>Điểm mạnh</strong> — chúng có thể tìm ra những test "<strong>không dễ nhận ra bằng các kỹ thuật hệ thống hơn</strong>".</li>
+<li><strong>Biến thiên</strong> — tuỳ cách làm và kinh nghiệm của tester, chúng đạt <strong>mức coverage và hiệu quả rất khác nhau</strong>.</li>
+<li><strong>Đo lường</strong> — <strong>coverage có thể khó đánh giá và có thể không đo được</strong>.</li>
+</ol>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> hình đồng hồ ("Experience-based testing", kim chỉ về phía Maximum) nói cùng một ý — kết quả chỉ tốt bằng lượng kinh nghiệm đứng sau nó.</p>
+<p class="ghi-chu">Ghi chú của thầy/cô là bản dịch tiếng Việt của các gạch đầu dòng này; chỗ nào bản dịch máy ghi "thử nghiệm" hay thậm chí "xét nghiệm" (xét nghiệm y tế), hãy hiểu đơn giản là <em>test</em>.</p>`],
       [102, 'Error Guessing',
-        `<p>Error guessing is <em>not</em> random guessing. The "methodical approach" in red: <strong>create a list of possible mistakes, defects and failures → design tests that will expose those failures and the defects that caused them</strong>. This list is often called a <em>fault attack</em> list. It is built from <strong>experience</strong>, <strong>defect and failure data</strong> (e.g. the bug tracker of the previous release), or <strong>common knowledge about why software fails</strong>. The syllabus adds three sources of anticipation: how the application has worked in the past, what kinds of errors developers tend to make, and failures seen in other applications.</p>
-<p>Typical attacks: empty / null / whitespace-only input, zero and negative numbers, division by zero, maximum length + 1, special and Unicode characters, leap days and month ends, duplicate submissions (double click), time-outs. In lesson 5.2 error guessing already found two weak spots: <code>countCharacters(null)</code> throws <code>NullPointerException</code> and <code>calculateRewardPoints(100, "vip")</code> silently returns 0.</p>`,
-        `<p>Error guessing <em>không</em> phải đoán bừa. "Cách tiếp cận có phương pháp" in đỏ: <strong>lập danh sách các sai sót, defect và failure có thể xảy ra → thiết kế test làm lộ ra những failure đó và defect gây ra chúng</strong>. Danh sách này thường gọi là danh sách <em>fault attack</em> (tấn công lỗi). Nó được xây từ <strong>kinh nghiệm</strong>, <strong>dữ liệu defect và failure</strong> (vd bug tracker của bản phát hành trước), hoặc <strong>hiểu biết chung về lý do phần mềm hỏng</strong>. Syllabus thêm ba nguồn để dự đoán: ứng dụng đã chạy thế nào trong quá khứ, developer hay mắc loại lỗi gì, và failure đã gặp ở các ứng dụng khác.</p>
-<p>Các đòn tấn công điển hình: input rỗng / null / chỉ có khoảng trắng, số 0 và số âm, chia cho 0, độ dài tối đa + 1, ký tự đặc biệt và Unicode, ngày 29/2 và cuối tháng, gửi trùng (bấm đúp), hết thời gian chờ. Ở bài 5.2 error guessing đã tìm ra hai điểm yếu: <code>countCharacters(null)</code> ném <code>NullPointerException</code> và <code>calculateRewardPoints(100, "vip")</code> lặng lẽ trả về 0.</p>`],
+        `<p class="y-chinh">🎯 Error guessing is <em>not</em> random guessing: it is a methodical list of likely mistakes, turned into tests.</p>
+<p class="nhan">The "methodical approach" in red</p>
+<ol>
+<li><strong>Create a list</strong> of possible mistakes, defects and failures — often called a <em>fault attack</em> list.</li>
+<li><strong>Design tests</strong> that will expose those failures and the defects that caused them.</li>
+</ol>
+<p class="nhan">Where the list comes from (slide)</p>
+<ul>
+<li><strong>Experience</strong></li>
+<li><strong>Defect and failure data</strong> — e.g. the bug tracker of the previous release.</li>
+<li><strong>Common knowledge about why software fails</strong></li>
+</ul>
+<p class="nhan">Three sources of anticipation (syllabus)</p>
+<ul>
+<li>How the application has worked in the past.</li>
+<li>What kinds of errors developers tend to make.</li>
+<li>Failures seen in other applications.</li>
+</ul>
+<p class="nhan">Typical attacks</p>
+<ul>
+<li>Empty / null / whitespace-only input</li>
+<li>Zero and negative numbers; division by zero</li>
+<li>Maximum length + 1</li>
+<li>Special and Unicode characters</li>
+<li>Leap days and month ends</li>
+<li>Duplicate submissions (double click); time-outs</li>
+</ul>
+<p class="nhan">Already seen in lesson 5.2</p>
+<ul>
+<li><code>countCharacters(null)</code> throws <code>NullPointerException</code>.</li>
+<li><code>calculateRewardPoints(100, "vip")</code> silently returns 0.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Error guessing <em>không</em> phải đoán bừa: đó là một danh sách có phương pháp các sai sót dễ gặp, biến thành test.</p>
+<p class="nhan">"Cách tiếp cận có phương pháp" in đỏ</p>
+<ol>
+<li><strong>Lập danh sách</strong> các sai sót, defect và failure có thể xảy ra — thường gọi là danh sách <em>fault attack</em> (tấn công lỗi).</li>
+<li><strong>Thiết kế test</strong> làm lộ ra những failure đó và defect gây ra chúng.</li>
+</ol>
+<p class="nhan">Danh sách lấy từ đâu (slide)</p>
+<ul>
+<li><strong>Kinh nghiệm</strong></li>
+<li><strong>Dữ liệu defect và failure</strong> — vd bug tracker của bản phát hành trước.</li>
+<li><strong>Hiểu biết chung về lý do phần mềm hỏng</strong></li>
+</ul>
+<p class="nhan">Ba nguồn để dự đoán (syllabus)</p>
+<ul>
+<li>Ứng dụng đã chạy thế nào trong quá khứ.</li>
+<li>Developer hay mắc loại lỗi gì.</li>
+<li>Failure đã gặp ở các ứng dụng khác.</li>
+</ul>
+<p class="nhan">Các đòn tấn công điển hình</p>
+<ul>
+<li>Input rỗng / null / chỉ có khoảng trắng</li>
+<li>Số 0 và số âm; chia cho 0</li>
+<li>Độ dài tối đa + 1</li>
+<li>Ký tự đặc biệt và Unicode</li>
+<li>Ngày 29/2 và cuối tháng</li>
+<li>Gửi trùng (bấm đúp); hết thời gian chờ</li>
+</ul>
+<p class="nhan">Đã gặp ở bài 5.2</p>
+<ul>
+<li><code>countCharacters(null)</code> ném <code>NullPointerException</code>.</li>
+<li><code>calculateRewardPoints(100, "vip")</code> lặng lẽ trả về 0.</li>
+</ul>`],
       [103, 'Exploratory Testing (1) — what it is',
-        `<p>A <strong>hands-on approach</strong> with <strong>minimum planning and maximum test execution</strong>. Test design and execution happen <strong>in parallel</strong>, often without formal documentation; informal tests are <strong>designed, executed, logged and evaluated dynamically</strong> during execution; the results are used to <strong>learn more</strong> about the component or system and to <strong>create tests for the areas that may need more testing</strong>. The explorer with binoculars is the image to keep: you look, you learn, you decide where to look next.</p>
-<p>Two corrections to common misunderstandings: exploratory testing is <em>not</em> "ad hoc clicking" — the tester has a goal and keeps notes (slide 104); and it can use the other techniques inside a session (a quick EP/BVA on a field you just discovered is still exploratory testing).</p>`,
-        `<p>Một <strong>cách tiếp cận thực hành</strong> với <strong>lập kế hoạch tối thiểu và thực thi test tối đa</strong>. Thiết kế và thực thi test diễn ra <strong>song song</strong>, thường không có tài liệu chính thức; các test không chính thức được <strong>thiết kế, thực thi, ghi lại và đánh giá ngay</strong> trong lúc chạy; kết quả dùng để <strong>hiểu thêm</strong> về thành phần hay hệ thống và để <strong>tạo test cho những vùng có thể cần test thêm</strong>. Hình người cầm ống nhòm là hình cần nhớ: nhìn, học, rồi quyết định nhìn tiếp chỗ nào.</p>
-<p>Hai chỗ hay hiểu sai: exploratory testing <em>không</em> phải "bấm lung tung" — tester có mục tiêu và có ghi chép (slide 104); và trong một phiên vẫn có thể dùng các kỹ thuật khác (làm nhanh EP/BVA cho một trường vừa phát hiện vẫn là exploratory testing).</p>`],
+        `<p class="y-chinh">🎯 Exploratory testing = minimum planning, maximum execution: you design, run and learn at the same time.</p>
+<p class="nhan">The four bullets of the slide</p>
+<ol>
+<li><strong>Hands-on approach</strong> — <strong>minimum planning and maximum test execution</strong>.</li>
+<li><strong>In parallel</strong> — test design and execution happen together, often without formal documentation.</li>
+<li><strong>Dynamic</strong> — informal tests are <strong>designed, executed, logged and evaluated</strong> during execution.</li>
+<li><strong>Learning loop</strong> — the results are used to <strong>learn more</strong> about the component or system and to <strong>create tests for the areas that may need more testing</strong>.</li>
+</ol>
+<p class="meo">🧠 <strong>Remember:</strong> the explorer with binoculars — you look, you learn, you decide where to look next.</p>
+<p class="nhan">Two common misunderstandings</p>
+<ul>
+<li><strong>Not "ad hoc clicking"</strong> — the tester has a goal and keeps notes (slide 104).</li>
+<li><strong>Other techniques are allowed inside a session</strong> — a quick EP/BVA on a field you just discovered is still exploratory testing.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Exploratory testing = lập kế hoạch tối thiểu, thực thi tối đa: vừa thiết kế, vừa chạy, vừa học.</p>
+<p class="nhan">Bốn gạch đầu dòng của slide</p>
+<ol>
+<li><strong>Cách tiếp cận thực hành</strong> — <strong>lập kế hoạch tối thiểu và thực thi test tối đa</strong>.</li>
+<li><strong>Song song</strong> — thiết kế và thực thi test diễn ra cùng lúc, thường không có tài liệu chính thức.</li>
+<li><strong>Tức thời</strong> — các test không chính thức được <strong>thiết kế, thực thi, ghi lại và đánh giá</strong> ngay trong lúc chạy.</li>
+<li><strong>Vòng học</strong> — kết quả dùng để <strong>hiểu thêm</strong> về thành phần hay hệ thống và để <strong>tạo test cho những vùng có thể cần test thêm</strong>.</li>
+</ol>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> hình người cầm ống nhòm — nhìn, học, rồi quyết định nhìn tiếp chỗ nào.</p>
+<p class="nhan">Hai chỗ hay hiểu sai</p>
+<ul>
+<li><strong>Không phải "bấm lung tung"</strong> — tester có mục tiêu và có ghi chép (slide 104).</li>
+<li><strong>Trong phiên vẫn dùng được kỹ thuật khác</strong> — làm nhanh EP/BVA cho một trường vừa phát hiện vẫn là exploratory testing.</li>
+</ul>`],
       [104, 'Exploratory Testing (2) — session-based, charters, when to use',
-        `<p>Exploratory testing is sometimes structured with <strong>session-based testing</strong>: the exploration happens within a <strong>defined time-box</strong> (a session, typically 60–120 minutes of uninterrupted work) and the tester uses a <strong>test charter</strong> containing the <strong>test objectives</strong> to guide the testing. At the end the tester fills in a session sheet and is debriefed (see the worked example below). Exploratory testing is <strong>most useful when there are few or inadequate specifications or significant time pressure</strong>. The syllabus adds that it complements the formal techniques and is strongly associated with <em>reactive</em> test strategies (Chapter 5).</p>`,
-        `<p>Exploratory testing đôi khi được tổ chức theo <strong>session-based testing</strong> (kiểm thử theo phiên): việc khám phá diễn ra trong một <strong>khung thời gian xác định</strong> (một phiên, thường 60–120 phút làm liền không bị ngắt) và tester dùng một <strong>test charter</strong> chứa các <strong>mục tiêu test</strong> để định hướng. Cuối phiên tester điền phiếu phiên (session sheet) và được hỏi lại (debrief) — xem ví dụ có lời giải bên dưới. Exploratory testing <strong>hữu ích nhất khi đặc tả ít hoặc không đầy đủ, hoặc áp lực thời gian lớn</strong>. Syllabus nói thêm: nó bổ sung cho các kỹ thuật chính thức và gắn chặt với chiến lược test <em>phản ứng</em> (reactive, Chương 5).</p>`],
+        `<p class="y-chinh">🎯 Session-based testing gives exploratory testing its structure: a time-box plus a test charter.</p>
+<p class="nhan">Session-based testing</p>
+<ul>
+<li><strong>Time-box</strong> — the exploration happens within a <strong>defined time-box</strong> (a session, typically 60–120 minutes of uninterrupted work).</li>
+<li><strong>Test charter</strong> — contains the <strong>test objectives</strong> that guide the testing.</li>
+<li><strong>Afterwards</strong> — the tester fills in a session sheet and is debriefed (see the worked example below).</li>
+</ul>
+<p class="nhan">When to use it</p>
+<ul>
+<li><strong>Most useful</strong> — when there are <strong>few or inadequate specifications or significant time pressure</strong>.</li>
+<li><strong>Syllabus adds</strong> — it complements the formal techniques and is strongly associated with <em>reactive</em> test strategies (Chapter 7 on this site; syllabus Chapter 5).</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Session-based testing cho exploratory testing một cấu trúc: khung thời gian cộng test charter.</p>
+<p class="nhan">Session-based testing (kiểm thử theo phiên)</p>
+<ul>
+<li><strong>Khung thời gian</strong> — việc khám phá diễn ra trong một <strong>khung thời gian xác định</strong> (một phiên, thường 60–120 phút làm liền không bị ngắt).</li>
+<li><strong>Test charter</strong> — chứa các <strong>mục tiêu test</strong> để định hướng việc test.</li>
+<li><strong>Cuối phiên</strong> — tester điền phiếu phiên (session sheet) và được hỏi lại (debrief) — xem ví dụ có lời giải bên dưới.</li>
+</ul>
+<p class="nhan">Khi nào dùng</p>
+<ul>
+<li><strong>Hữu ích nhất</strong> — khi <strong>đặc tả ít hoặc không đầy đủ, hoặc áp lực thời gian lớn</strong>.</li>
+<li><strong>Syllabus nói thêm</strong> — nó bổ sung cho các kỹ thuật chính thức và gắn chặt với chiến lược test <em>phản ứng</em> (reactive — Chương 7 của trang này; Chương 5 của syllabus).</li>
+</ul>`],
       [105, 'Checklist-based Testing',
-        `<p>An <strong>experienced tester uses a checklist to design, implement and execute tests</strong> based on the items or test conditions in the list. During test analysis testers <strong>create a new checklist or expand an existing one</strong>, but they may also <strong>use an existing checklist without modification</strong>. Checklists are built from the <strong>experience of the tester</strong>, <strong>knowledge about what is important for the user</strong>, and an <strong>understanding of why and how software fails</strong>.</p>
-<p>From the syllabus: checklists support functional and non-functional testing (e.g. usability heuristics); because the items are high-level, two testers will do slightly different things — more variability, somewhat more coverage, less repeatability; when no detailed test cases exist, a checklist gives guidance and consistency. Do not confuse it with the <em>checklist-based reviewing</em> of Chapter 3 (LO-3.2.4): same idea, but there the checklist is used to read a document, here to run the software. The course's own UI checklist is used in the worked example below.</p>`,
-        `<p>Một <strong>tester có kinh nghiệm dùng checklist để thiết kế, triển khai và thực thi test</strong> dựa trên các mục hay điều kiện test trong danh sách. Trong lúc phân tích test, tester <strong>tạo checklist mới hoặc mở rộng checklist có sẵn</strong>, nhưng cũng có thể <strong>dùng nguyên checklist có sẵn không sửa</strong>. Checklist được xây từ <strong>kinh nghiệm của tester</strong>, <strong>hiểu biết về điều gì quan trọng với người dùng</strong>, và <strong>hiểu vì sao và bằng cách nào phần mềm hỏng</strong>.</p>
-<p>Theo syllabus: checklist hỗ trợ cả test chức năng lẫn phi chức năng (vd heuristic về khả dụng); vì các mục ở mức khái quát, hai tester sẽ làm hơi khác nhau — nhiều biến thiên hơn, coverage có phần rộng hơn, nhưng khó lặp lại hơn; khi không có test case chi tiết, checklist cho định hướng và sự nhất quán. Đừng nhầm với <em>checklist-based reviewing</em> ở Chương 3 (LO-3.2.4): cùng một ý tưởng, nhưng ở đó checklist dùng để đọc tài liệu, ở đây dùng để chạy phần mềm. Checklist UI của chính môn học được dùng trong ví dụ có lời giải bên dưới.</p>`],
+        `<p class="y-chinh">🎯 An experienced tester designs, implements and executes tests from the items of a checklist.</p>
+<p class="nhan">How the checklist is used</p>
+<ul>
+<li><strong>Basis</strong> — tests are based on the items or test conditions in the list.</li>
+<li><strong>During test analysis</strong> — testers <strong>create a new checklist or expand an existing one</strong>…</li>
+<li><strong>…or reuse</strong> — they may also <strong>use an existing checklist without modification</strong>.</li>
+</ul>
+<p class="nhan">Checklists are built from</p>
+<ol>
+<li>the <strong>experience of the tester</strong></li>
+<li><strong>knowledge about what is important for the user</strong></li>
+<li>an <strong>understanding of why and how software fails</strong></li>
+</ol>
+<p class="nhan">From the syllabus</p>
+<ul>
+<li><strong>Scope</strong> — checklists support functional and non-functional testing (e.g. usability heuristics).</li>
+<li><strong>High-level items</strong> — two testers will do slightly different things: more variability, somewhat more coverage, less repeatability.</li>
+<li><strong>No detailed test cases?</strong> — a checklist gives guidance and consistency.</li>
+</ul>
+<div class="pitfall">Do not confuse it with the <em>checklist-based reviewing</em> of Chapter 3 (LO-3.2.4): same idea, but there the checklist is used to read a document, here to run the software.</div>
+<p class="ghi-chu">The course's own UI checklist is used in the worked example below.</p>`,
+        `<p class="y-chinh">🎯 Tester có kinh nghiệm thiết kế, triển khai và thực thi test dựa trên các mục của một checklist.</p>
+<p class="nhan">Checklist được dùng thế nào</p>
+<ul>
+<li><strong>Cơ sở</strong> — test dựa trên các mục hay điều kiện test trong danh sách.</li>
+<li><strong>Trong lúc phân tích test</strong> — tester <strong>tạo checklist mới hoặc mở rộng checklist có sẵn</strong>…</li>
+<li><strong>…hoặc dùng lại</strong> — cũng có thể <strong>dùng nguyên checklist có sẵn không sửa</strong>.</li>
+</ul>
+<p class="nhan">Checklist được xây từ</p>
+<ol>
+<li><strong>kinh nghiệm của tester</strong></li>
+<li><strong>hiểu biết về điều gì quan trọng với người dùng</strong></li>
+<li><strong>hiểu vì sao và bằng cách nào phần mềm hỏng</strong></li>
+</ol>
+<p class="nhan">Theo syllabus</p>
+<ul>
+<li><strong>Phạm vi</strong> — checklist hỗ trợ cả test chức năng lẫn phi chức năng (vd heuristic về khả dụng).</li>
+<li><strong>Mục ở mức khái quát</strong> — hai tester sẽ làm hơi khác nhau: nhiều biến thiên hơn, coverage có phần rộng hơn, nhưng khó lặp lại hơn.</li>
+<li><strong>Không có test case chi tiết?</strong> — checklist cho định hướng và sự nhất quán.</li>
+</ul>
+<div class="pitfall">Đừng nhầm với <em>checklist-based reviewing</em> ở Chương 3 (LO-3.2.4): cùng một ý tưởng, nhưng ở đó checklist dùng để đọc tài liệu, ở đây dùng để chạy phần mềm.</div>
+<p class="ghi-chu">Checklist UI của chính môn học được dùng trong ví dụ có lời giải bên dưới.</p>`],
       [106, 'Question — a good reason to use experience-based testing',
-        AE('A — You can find defects that might be missed by more formal techniques', 'That is slide 101, bullet 2. B confuses the <em>tester\'s</em> experience with experienced <em>users</em>. C describes directing developers\' effort by usage (operational profiles), not a reason for this technique. D is the opposite of the truth: experience-based testing depends on human judgement and is poorly supported by tools and hard to automate.'),
-        AV('A — Tìm được defect mà các kỹ thuật chính thức hơn có thể bỏ sót', 'Đúng gạch đầu dòng 2 của slide 101. B nhầm kinh nghiệm của <em>tester</em> với <em>người dùng</em> có kinh nghiệm. C nói về việc hướng công sức của developer theo mức sử dụng (operational profile), không phải lý do dùng kỹ thuật này. D ngược với thực tế: test dựa kinh nghiệm phụ thuộc vào phán đoán của con người, ít được công cụ hỗ trợ và khó tự động hoá.')],
+        `<p class="y-chinh">🎯 The reason to use experience-based testing is slide 101, bullet 2: it finds what formal techniques miss.</p>
+<p class="nhan">Why the other options are wrong</p>
+<ul>
+<li><strong>B</strong> — confuses the <em>tester's</em> experience with experienced <em>users</em>.</li>
+<li><strong>C</strong> — describes directing developers' effort by usage (operational profiles), not a reason for this technique.</li>
+<li><strong>D</strong> — the opposite of the truth: experience-based testing depends on human judgement, is poorly supported by tools and hard to automate.</li>
+</ul>
+` + AE('A — You can find defects that might be missed by more formal techniques', 'That is slide 101, bullet 2.'),
+        `<p class="y-chinh">🎯 Lý do dùng test dựa kinh nghiệm là gạch đầu dòng 2 của slide 101: nó tìm ra cái kỹ thuật chính thức bỏ sót.</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>B</strong> — nhầm kinh nghiệm của <em>tester</em> với <em>người dùng</em> có kinh nghiệm.</li>
+<li><strong>C</strong> — nói về việc hướng công sức của developer theo mức sử dụng (operational profile), không phải lý do dùng kỹ thuật này.</li>
+<li><strong>D</strong> — ngược với thực tế: test dựa kinh nghiệm phụ thuộc vào phán đoán của con người, ít được công cụ hỗ trợ và khó tự động hoá.</li>
+</ul>
+` + AV('A — Tìm được defect mà các kỹ thuật chính thức hơn có thể bỏ sót', 'Đúng gạch đầu dòng 2 của slide 101.')],
       [107, 'Question — exploratory testing with time-boxes and charters',
-        AE('B — Session-based testing', 'Slide 104 word for word: exploratory testing within a defined time-box, guided by a test charter, is session-based testing. A "schedule-based testing" and D "formal chartering" are not ISTQB terms; C risk-based testing is a <em>strategy</em> that prioritises by risk level, not a way of running exploratory sessions.'),
-        AV('B — Session-based testing', 'Đúng nguyên văn slide 104: exploratory testing trong một khung thời gian xác định, được dẫn dắt bởi test charter, là session-based testing. A "schedule-based testing" và D "formal chartering" không phải thuật ngữ ISTQB; C risk-based testing là một <em>chiến lược</em> ưu tiên theo mức rủi ro, không phải cách chạy phiên khám phá.')],
+        `<p class="y-chinh">🎯 Time-box + test charter = session-based testing — slide 104 word for word.</p>
+<p class="nhan">Why the other options are wrong</p>
+<ul>
+<li><strong>A "schedule-based testing"</strong> and <strong>D "formal chartering"</strong> — not ISTQB terms.</li>
+<li><strong>C risk-based testing</strong> — a <em>strategy</em> that prioritises by risk level, not a way of running exploratory sessions.</li>
+</ul>
+` + AE('B — Session-based testing', 'Exploratory testing within a defined time-box, guided by a test charter (slide 104).'),
+        `<p class="y-chinh">🎯 Khung thời gian + test charter = session-based testing — đúng nguyên văn slide 104.</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>A "schedule-based testing"</strong> và <strong>D "formal chartering"</strong> — không phải thuật ngữ ISTQB.</li>
+<li><strong>C risk-based testing</strong> — là một <em>chiến lược</em> ưu tiên theo mức rủi ro, không phải cách chạy phiên khám phá.</li>
+</ul>
+` + AV('B — Session-based testing', 'Exploratory testing trong một khung thời gian xác định, được dẫn dắt bởi test charter (slide 104).')],
       [108, 'Question — what is error guessing?',
-        AE('C — A testing technique used to guess where a developer is likely to have made a mistake', 'Error guessing anticipates mistakes, defects and failures (slide 102). A is defect-metrics analysis (test monitoring, Chapter 5); B describes a development/review activity, not a test technique; D is project planning. The word "guess" in C is fine — the guess is informed by a list built from experience and defect data.'),
-        AV('C — Kỹ thuật test dùng để đoán chỗ developer nhiều khả năng đã mắc sai sót', 'Error guessing dự đoán sai sót, defect và failure (slide 102). A là phân tích số liệu defect (giám sát test, Chương 5); B mô tả một hoạt động phát triển/review, không phải kỹ thuật test; D là lập kế hoạch dự án. Chữ "đoán" ở C không có vấn đề — việc đoán dựa trên danh sách xây từ kinh nghiệm và dữ liệu lỗi.')],
+        `<p class="y-chinh">🎯 Error guessing is a <em>test</em> technique that anticipates mistakes, defects and failures (slide 102).</p>
+<p class="nhan">Why the other options are wrong</p>
+<ul>
+<li><strong>A</strong> — defect-metrics analysis (test monitoring, Chapter 7 on this site; syllabus Chapter 5).</li>
+<li><strong>B</strong> — a development/review activity, not a test technique.</li>
+<li><strong>D</strong> — project planning.</li>
+</ul>
+` + AE('C — A testing technique used to guess where a developer is likely to have made a mistake', 'The word "guess" is fine — the guess is informed by a list built from experience and defect data.'),
+        `<p class="y-chinh">🎯 Error guessing là một kỹ thuật <em>test</em> dự đoán sai sót, defect và failure (slide 102).</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>A</strong> — là phân tích số liệu defect (giám sát test, Chương 7 của trang này; Chương 5 của syllabus).</li>
+<li><strong>B</strong> — mô tả một hoạt động phát triển/review, không phải kỹ thuật test.</li>
+<li><strong>D</strong> — là lập kế hoạch dự án.</li>
+</ul>
+` + AV('C — Kỹ thuật test dùng để đoán chỗ developer nhiều khả năng đã mắc sai sót', 'Chữ "đoán" không có vấn đề — việc đoán dựa trên danh sách xây từ kinh nghiệm và dữ liệu lỗi.')],
     ]),
     bi(`<h3>Ví dụ có lời giải 1 · Error guessing — a fault-attack list for a real PE form</h3>
-<p>FA23 PE Question 3 describes the form <em>"Tạo quyết định kiểm tra"</em> (create an inspection decision): a decision name of 50–255 characters whose first character must not be a digit and which allows no special characters or blanks; "Chi tiết" up to 10,000 characters; a school chosen from a list (default "Chọn trường để kiểm tra"); at least one attached document, each with a name of 10–100 characters, a code of 3–10 characters and a size of at most 10 MB. EP/BVA give the systematic tests; error guessing adds what experience says developers get wrong:</p>
+<p>FA23 PE Question 3 describes the form <em>"Tạo quyết định kiểm tra"</em> (create an inspection decision):</p>
+<ul>
+<li><strong>Decision name</strong> — 50–255 characters; the first character must not be a digit; no special characters or blanks.</li>
+<li><strong>"Chi tiết"</strong> — up to 10,000 characters.</li>
+<li><strong>School</strong> — chosen from a list (default "Chọn trường để kiểm tra").</li>
+<li><strong>Attached documents</strong> — at least one; each with a name of 10–100 characters, a code of 3–10 characters and a size of at most 10 MB.</li>
+</ul>
+<p>EP/BVA give the systematic tests; error guessing adds what experience says developers get wrong:</p>
 <div class="table-wrap"><table>
 <thead><tr><th>#</th><th>Attack (likely mistake)</th><th>Why it often fails</th><th>Concrete test</th></tr></thead>
 <tbody>
@@ -111,7 +354,7 @@ const L61 = {
 <p>Session-based test management (SBTM, Jonathan and James Bach) gives exploratory testing the structure of slide 104. Below is a <em>sample</em> charter and session sheet for the same form — an illustration of what a tester writes, not the log of a real system.</p>
 <div class="table-wrap"><table>
 <tbody>
-<tr><th>CHARTER</th><td>Explore the <b>Create inspection decision</b> form <b>with</b> invalid, boundary and Vietnamese-text inputs and with attachments near 10 MB <b>to discover</b> validation defects and data loss.</td></tr>
+<tr><th>CHARTER</th><td>Explore the <strong>Create inspection decision</strong> form <strong>with</strong> invalid, boundary and Vietnamese-text inputs and with attachments near 10 MB <strong>to discover</strong> validation defects and data loss.</td></tr>
 <tr><th>Areas</th><td>Form fields · attachment upload · error handling · browser Chrome 128</td></tr>
 <tr><th>Tester / build / start</th><td>Student A · build 1.4.2 · 09:00, time-box 60 min (normal session)</td></tr>
 <tr><th>Task breakdown</th><td>Test design &amp; execution 65% · bug investigation &amp; reporting 25% · session set-up 10% · charter vs opportunity 85 / 15</td></tr>
@@ -121,7 +364,15 @@ const L61 = {
 <tr><th>Issues</th><td>Q1 Are Vietnamese letters "special characters"? (ask BA) · Q2 Is 10 MB = 10^7 or 2^20 × 10 bytes? · attachment removal not explored — new charter</td></tr>
 </tbody>
 </table></div>
-<p><strong>Debrief (PROOF):</strong> <em>Past</em> — what happened (4 bugs, 2 questions); <em>Results</em> — what was achieved against the charter (fields and upload covered, removal not); <em>Obstacles</em> — the test file generator was slow; <em>Outlook</em> — next session: attachment removal + edit flow; <em>Feelings</em> — confidence in validation is low. The debrief is how the test manager measures exploratory work (number of sessions, % on charter, bugs per session) — the answer to "coverage is hard to assess" on slide 101.</p>
+<p class="nhan">Debrief (PROOF)</p>
+<ol>
+<li><strong>Past</strong> — what happened (4 bugs, 2 questions).</li>
+<li><strong>Results</strong> — what was achieved against the charter (fields and upload covered, removal not).</li>
+<li><strong>Obstacles</strong> — the test file generator was slow.</li>
+<li><strong>Outlook</strong> — next session: attachment removal + edit flow.</li>
+<li><strong>Feelings</strong> — confidence in validation is low.</li>
+</ol>
+<p>The debrief is how the test manager measures exploratory work (number of sessions, % on charter, bugs per session) — the answer to "coverage is hard to assess" on slide 101.</p>
 <h3>Ví dụ có lời giải 3 · Checklist-based testing — the course's own UI checklist</h3>
 <p>The course template <em>CheckList_UT_Blackbox_UI.xlsx</em> (columns No · Large item · Medium item · Check item · Result · Note) is a ready-made checklist. Selected items from its "screen operation" and "validation" groups, applied to the same form:</p>
 <div class="table-wrap"><table>
@@ -138,10 +389,32 @@ const L61 = {
 </tbody>
 </table></div>
 <p>Notice how the checklist overlaps with the other techniques (item 16 is BVA, item 25 found the same defect as the exploratory session) and how it standardises what every tester on the team looks at. That consistency — not creativity — is what checklists are for.</p>
-<div class="pitfall"><b>Exam traps.</b> (1) "Exploratory testing = unplanned, undocumented testing" — no: session-based testing gives it a charter, a time-box and a session sheet. (2) "Experience-based testing is testing by experienced <em>users</em>" — no, it is based on the <em>tester's</em> experience (Q106 B). (3) "Coverage of experience-based techniques is measured by the checklist" — the syllabus says coverage is difficult to assess and may be unmeasurable. (4) Error guessing is not a planning, metrics or development technique (Q108).</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Heuristics that make "experience" teachable.</b> Exploratory testers use named heuristics to vary their attacks systematically: James Bach's <b>SFDPOT</b> ("San Francisco Depot": Structure, Function, Data, Platform, Operations, Time), <b>CRUD</b> for every entity, and James Whittaker's <b>tours</b> (the "money tour" through the features the sales team demos, the "back-alley tour" through the least-used features). Published bug taxonomies (Beizer; Kaner, Falk &amp; Nguyen) turn error guessing into a reusable list. And the newer CTFL v4.0 (2023) keeps the same three experience-based techniques but adds <em>collaboration-based</em> approaches — collaborative user-story writing, acceptance criteria and ATDD. <em>Outside the syllabus because CTFL 2018 only asks you to explain the three techniques, not to apply named heuristics.</em></div>`,
+<div class="pitfall co-tieu-de"><strong>Exam traps.</strong>
+<ol>
+<li>"Exploratory testing = unplanned, undocumented testing" — no: session-based testing gives it a charter, a time-box and a session sheet.</li>
+<li>"Experience-based testing is testing by experienced <em>users</em>" — no, it is based on the <em>tester's</em> experience (Q106 B).</li>
+<li>"Coverage of experience-based techniques is measured by the checklist" — the syllabus says coverage is difficult to assess and may be unmeasurable.</li>
+<li>Error guessing is not a planning, metrics or development technique (Q108).</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Heuristics that make "experience" teachable.</strong>
+<p>Exploratory testers use named heuristics to vary their attacks systematically:</p>
+<ul>
+<li><strong>SFDPOT</strong> (James Bach, "San Francisco Depot") — Structure, Function, Data, Platform, Operations, Time.</li>
+<li><strong>CRUD</strong> — for every entity.</li>
+<li><strong>Tours</strong> (James Whittaker) — the "money tour" through the features the sales team demos, the "back-alley tour" through the least-used features.</li>
+<li><strong>Bug taxonomies</strong> (Beizer; Kaner, Falk &amp; Nguyen) — turn error guessing into a reusable list.</li>
+<li><strong>CTFL v4.0 (2023)</strong> — keeps the same three experience-based techniques but adds <em>collaboration-based</em> approaches: collaborative user-story writing, acceptance criteria and ATDD.</li>
+</ul>
+<p><em>Outside the syllabus because CTFL 2018 only asks you to explain the three techniques, not to apply named heuristics.</em></p></div>`,
     `<h3>Ví dụ có lời giải 1 · Error guessing — danh sách tấn công lỗi cho một form PE thật</h3>
-<p>Câu 3 đề PE FA23 mô tả form <em>"Tạo quyết định kiểm tra"</em>: tên quyết định dài 50–255 ký tự, ký tự đầu không được là số, không cho phép ký tự đặc biệt hay khoảng trắng; "Chi tiết" tối đa 10.000 ký tự; trường kiểm tra chọn từ danh sách (mặc định "Chọn trường để kiểm tra"); ít nhất một tài liệu đính kèm, mỗi tài liệu có tên 10–100 ký tự, mã 3–10 ký tự và dung lượng tối đa 10 MB. EP/BVA cho các test có hệ thống; error guessing thêm những gì kinh nghiệm nói rằng developer hay làm sai:</p>
+<p>Câu 3 đề PE FA23 mô tả form <em>"Tạo quyết định kiểm tra"</em>:</p>
+<ul>
+<li><strong>Tên quyết định</strong> — dài 50–255 ký tự; ký tự đầu không được là số; không cho phép ký tự đặc biệt hay khoảng trắng.</li>
+<li><strong>"Chi tiết"</strong> — tối đa 10.000 ký tự.</li>
+<li><strong>Trường kiểm tra</strong> — chọn từ danh sách (mặc định "Chọn trường để kiểm tra").</li>
+<li><strong>Tài liệu đính kèm</strong> — ít nhất một; mỗi tài liệu có tên 10–100 ký tự, mã 3–10 ký tự và dung lượng tối đa 10 MB.</li>
+</ul>
+<p>EP/BVA cho các test có hệ thống; error guessing thêm những gì kinh nghiệm nói rằng developer hay làm sai:</p>
 <div class="table-wrap"><table>
 <thead><tr><th>#</th><th>Đòn tấn công (sai sót dễ gặp)</th><th>Vì sao hay hỏng</th><th>Test cụ thể</th></tr></thead>
 <tbody>
@@ -162,7 +435,7 @@ const L61 = {
 <p>Session-based test management (SBTM, của Jonathan và James Bach) cho exploratory testing đúng cấu trúc của slide 104. Dưới đây là charter và phiếu phiên <em>mẫu</em> cho cùng form đó — minh hoạ những gì một tester viết ra, không phải log của một hệ thống thật.</p>
 <div class="table-wrap"><table>
 <tbody>
-<tr><th>CHARTER</th><td>Khám phá form <b>Tạo quyết định kiểm tra</b> <b>bằng</b> input sai, input biên, chữ tiếng Việt và tệp đính kèm quanh mức 10 MB <b>để phát hiện</b> lỗi validate và mất dữ liệu.</td></tr>
+<tr><th>CHARTER</th><td>Khám phá form <strong>Tạo quyết định kiểm tra</strong> <strong>bằng</strong> input sai, input biên, chữ tiếng Việt và tệp đính kèm quanh mức 10 MB <strong>để phát hiện</strong> lỗi validate và mất dữ liệu.</td></tr>
 <tr><th>Vùng</th><td>Các trường của form · tải tệp đính kèm · xử lý lỗi · trình duyệt Chrome 128</td></tr>
 <tr><th>Tester / build / bắt đầu</th><td>Sinh viên A · build 1.4.2 · 09:00, khung 60 phút (phiên thường)</td></tr>
 <tr><th>Phân bổ thời gian</th><td>Thiết kế &amp; thực thi test 65% · điều tra &amp; báo lỗi 25% · chuẩn bị phiên 10% · đúng charter / việc phát sinh 85 / 15</td></tr>
@@ -172,7 +445,15 @@ const L61 = {
 <tr><th>Vấn đề</th><td>Q1 Chữ tiếng Việt có phải "ký tự đặc biệt"? (hỏi BA) · Q2 10 MB là 10^7 hay 2^20 × 10 byte? · chưa khám phá việc xoá tệp đính kèm — cần charter mới</td></tr>
 </tbody>
 </table></div>
-<p><strong>Debrief (PROOF):</strong> <em>Past</em> — đã xảy ra gì (4 bug, 2 câu hỏi); <em>Results</em> — đạt được gì so với charter (đã phủ các trường và tải tệp, chưa phủ việc xoá); <em>Obstacles</em> — công cụ sinh tệp test chạy chậm; <em>Outlook</em> — phiên tới: xoá tệp đính kèm + luồng sửa; <em>Feelings</em> — độ tin cậy vào phần validate đang thấp. Buổi debrief là cách test manager đo công việc khám phá (số phiên, % đúng charter, số bug mỗi phiên) — câu trả lời cho "coverage khó đánh giá" ở slide 101.</p>
+<p class="nhan">Debrief (PROOF)</p>
+<ol>
+<li><strong>Past</strong> — đã xảy ra gì (4 bug, 2 câu hỏi).</li>
+<li><strong>Results</strong> — đạt được gì so với charter (đã phủ các trường và tải tệp, chưa phủ việc xoá).</li>
+<li><strong>Obstacles</strong> — công cụ sinh tệp test chạy chậm.</li>
+<li><strong>Outlook</strong> — phiên tới: xoá tệp đính kèm + luồng sửa.</li>
+<li><strong>Feelings</strong> — độ tin cậy vào phần validate đang thấp.</li>
+</ol>
+<p>Buổi debrief là cách test manager đo công việc khám phá (số phiên, % đúng charter, số bug mỗi phiên) — câu trả lời cho "coverage khó đánh giá" ở slide 101.</p>
 <h3>Ví dụ có lời giải 3 · Checklist-based testing — checklist UI của chính môn học</h3>
 <p>Template của môn <em>CheckList_UT_Blackbox_UI.xlsx</em> (các cột No · Large item · Medium item · Check item · Result · Note) là một checklist dùng ngay được. Một số mục trong nhóm "thao tác màn hình" và "Validation", áp dụng cho cùng form:</p>
 <div class="table-wrap"><table>
@@ -189,8 +470,23 @@ const L61 = {
 </tbody>
 </table></div>
 <p>Để ý checklist chồng lấn với các kỹ thuật khác thế nào (mục 16 chính là BVA, mục 25 tìm ra đúng defect mà phiên khám phá đã thấy) và nó chuẩn hoá những gì mọi tester trong nhóm đều phải nhìn. Sự nhất quán ấy — chứ không phải óc sáng tạo — là mục đích của checklist.</p>
-<div class="pitfall"><b>Bẫy trong đề.</b> (1) "Exploratory testing = test không kế hoạch, không tài liệu" — không: session-based testing cho nó một charter, một khung thời gian và một phiếu phiên. (2) "Experience-based testing là test do <em>người dùng</em> có kinh nghiệm thực hiện" — không, nó dựa trên kinh nghiệm của <em>tester</em> (Q106 B). (3) "Coverage của kỹ thuật dựa kinh nghiệm được đo bằng checklist" — syllabus nói coverage khó đánh giá và có thể không đo được. (4) Error guessing không phải kỹ thuật lập kế hoạch, đo số liệu hay phát triển (Q108).</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Các heuristic biến "kinh nghiệm" thành thứ dạy được.</b> Tester khám phá dùng các heuristic có tên để thay đổi đòn tấn công một cách có hệ thống: <b>SFDPOT</b> của James Bach ("San Francisco Depot": Structure, Function, Data, Platform, Operations, Time), <b>CRUD</b> cho mọi thực thể, và các <b>tour</b> của James Whittaker ("money tour" đi qua những tính năng đội bán hàng hay demo, "back-alley tour" đi qua những tính năng ít ai dùng). Các bug taxonomy đã xuất bản (Beizer; Kaner, Falk &amp; Nguyen) biến error guessing thành một danh sách dùng lại được. Còn CTFL v4.0 (2023) giữ nguyên ba kỹ thuật dựa kinh nghiệm này nhưng thêm nhóm <em>collaboration-based</em> — cùng viết user story, acceptance criteria và ATDD. <em>Ngoài giáo trình vì CTFL 2018 chỉ yêu cầu giải thích ba kỹ thuật, không yêu cầu áp dụng các heuristic có tên.</em></div>`),
+<div class="pitfall co-tieu-de"><strong>Bẫy trong đề.</strong>
+<ol>
+<li>"Exploratory testing = test không kế hoạch, không tài liệu" — không: session-based testing cho nó một charter, một khung thời gian và một phiếu phiên.</li>
+<li>"Experience-based testing là test do <em>người dùng</em> có kinh nghiệm thực hiện" — không, nó dựa trên kinh nghiệm của <em>tester</em> (Q106 B).</li>
+<li>"Coverage của kỹ thuật dựa kinh nghiệm được đo bằng checklist" — syllabus nói coverage khó đánh giá và có thể không đo được.</li>
+<li>Error guessing không phải kỹ thuật lập kế hoạch, đo số liệu hay phát triển (Q108).</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Các heuristic biến "kinh nghiệm" thành thứ dạy được.</strong>
+<p>Tester khám phá dùng các heuristic có tên để thay đổi đòn tấn công một cách có hệ thống:</p>
+<ul>
+<li><strong>SFDPOT</strong> (James Bach, "San Francisco Depot") — Structure, Function, Data, Platform, Operations, Time.</li>
+<li><strong>CRUD</strong> — cho mọi thực thể.</li>
+<li><strong>Tour</strong> (James Whittaker) — "money tour" đi qua những tính năng đội bán hàng hay demo, "back-alley tour" đi qua những tính năng ít ai dùng.</li>
+<li><strong>Bug taxonomy</strong> (Beizer; Kaner, Falk &amp; Nguyen) — biến error guessing thành một danh sách dùng lại được.</li>
+<li><strong>CTFL v4.0 (2023)</strong> — giữ nguyên ba kỹ thuật dựa kinh nghiệm này nhưng thêm nhóm <em>collaboration-based</em>: cùng viết user story, acceptance criteria và ATDD.</li>
+</ul>
+<p><em>Ngoài giáo trình vì CTFL 2018 chỉ yêu cầu giải thích ba kỹ thuật, không yêu cầu áp dụng các heuristic có tên.</em></p></div>`),
     books([
       ['fst4', 'Ch.4 §4 "Experience-based test techniques" (error guessing, exploratory, checklist-based) — book pp.140–143 (PDF pp.154–157); chapter review p.143, sample questions pp.144–147', 'Chương 4 §4 "Experience-based test techniques" (error guessing, exploratory, checklist-based) — trang sách 140–143 (PDF 154–157); ôn chương trang 143, câu hỏi mẫu trang 144–147'],
       ['fst', '§4.5 "Experience-based techniques": 4.5.1 error guessing, 4.5.2 exploratory testing — pp.112–114 (PDF pp.115–117)', '§4.5 "Experience-based techniques": 4.5.1 error guessing, 4.5.2 exploratory testing — trang 112–114 (PDF 115–117)'],
@@ -210,7 +506,7 @@ const L62 = {
     bi(`<span class="eyebrow">Chapter 6 · Lesson 6.2 · SWT4 slides 109–112 (+ hidden pptx slides 114–115)</span>
 <h2>Choosing test techniques</h2>
 <p class="lead">Chapters 4–6 gave you a toolbox: EP, BVA, decision tables, state transitions, use cases, statement and decision coverage, error guessing, exploratory and checklist-based testing. The last four slides of SWT4 answer the practical question: <strong>which ones do I use here, and how formally?</strong> There is no single best technique; the choice depends on a list of factors that you must be able to recognise in a scenario.</p>
-<div class="callout"><b>Learning objectives.</b> LO-4.1.1 Explain the characteristics, commonalities and differences between black-box, white-box and experience-based test techniques (K2) — in CTFL 2018 the "choosing test techniques" factors are part of §4.1.1. Exam questions give a short scenario and ask which factor applies or which technique fits best.</div>
+<div class="callout"><strong>Learning objectives.</strong> LO-4.1.1 Explain the characteristics, commonalities and differences between black-box, white-box and experience-based test techniques (K2) — in CTFL 2018 the "choosing test techniques" factors are part of §4.1.1. Exam questions give a short scenario and ask which factor applies or which technique fits best.</div>
 <h3>The factors, grouped so you can remember them</h3>
 <div class="table-wrap"><table>
 <thead><tr><th>Group</th><th>Factors on slides 111–112</th><th>Typical consequence</th></tr></thead>
@@ -225,7 +521,7 @@ const L62 = {
     `<span class="eyebrow">Chương 6 · Bài 6.2 · SWT4 slide 109–112 (+ slide pptx ẩn 114–115)</span>
 <h2>Chọn kỹ thuật test</h2>
 <p class="lead">Chương 4–6 đã cho bạn một hộp đồ nghề: EP, BVA, decision table, state transition, use case, statement và decision coverage, error guessing, exploratory và checklist-based testing. Bốn slide cuối của SWT4 trả lời câu hỏi thực tế: <strong>ở đây mình dùng cái nào, và hình thức đến mức nào?</strong> Không có kỹ thuật nào tốt nhất cho mọi trường hợp; lựa chọn phụ thuộc vào một danh sách yếu tố mà bạn phải nhận ra được trong một tình huống.</p>
-<div class="callout"><b>Chuẩn đầu ra.</b> LO-4.1.1 Giải thích đặc điểm, điểm chung và khác biệt giữa kỹ thuật black-box, white-box và dựa kinh nghiệm (K2) — trong CTFL 2018, các yếu tố "chọn kỹ thuật test" nằm trong §4.1.1. Câu hỏi thi thường cho một tình huống ngắn và hỏi yếu tố nào áp dụng hoặc kỹ thuật nào hợp nhất.</div>
+<div class="callout"><strong>Chuẩn đầu ra.</strong> LO-4.1.1 Giải thích đặc điểm, điểm chung và khác biệt giữa kỹ thuật black-box, white-box và dựa kinh nghiệm (K2) — trong CTFL 2018, các yếu tố "chọn kỹ thuật test" nằm trong §4.1.1. Câu hỏi thi thường cho một tình huống ngắn và hỏi yếu tố nào áp dụng hoặc kỹ thuật nào hợp nhất.</div>
 <h3>Các yếu tố, gom nhóm cho dễ nhớ</h3>
 <div class="table-wrap"><table>
 <thead><tr><th>Nhóm</th><th>Yếu tố trên slide 111–112</th><th>Hệ quả điển hình</th></tr></thead>
@@ -240,34 +536,71 @@ const L62 = {
     walkHead(D, 109, 112, 'Slides 111–112 have detailed speaker notes in English; they are the best part of this section and are explained in full.', 'Slide 111–112 có ghi chú tiếng Anh rất chi tiết của thầy/cô; đó là phần giá trị nhất của mục này và được giải thích đầy đủ.'),
     walk(D, [
       [109, 'Choosing Test Techniques (section title)',
-        `<p>Section divider: the large title "Choosing Test Techniques" on a dotted background. No new content, but a signal that the question changes from "how does technique X work?" to "when is technique X the right one?".</p>`,
-        `<p>Slide chuyển mục: tiêu đề lớn "Choosing Test Techniques" trên nền chấm. Không có nội dung mới, nhưng báo hiệu câu hỏi đổi từ "kỹ thuật X hoạt động thế nào?" sang "khi nào kỹ thuật X là lựa chọn đúng?".</p>`],
+        `<p class="y-chinh">🎯 Section divider: the question changes from "how does technique X work?" to "when is technique X the right one?".</p>
+<ul>
+<li><strong>On the slide</strong> — the large title "Choosing Test Techniques" on a dotted background.</li>
+<li><strong>New content</strong> — none; slides 110–112 follow.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Slide chuyển mục: câu hỏi đổi từ "kỹ thuật X hoạt động thế nào?" sang "khi nào kỹ thuật X là lựa chọn đúng?".</p>
+<ul>
+<li><strong>Trên slide</strong> — tiêu đề lớn "Choosing Test Techniques" trên nền chấm.</li>
+<li><strong>Nội dung mới</strong> — không có; slide 110–112 theo sau.</li>
+</ul>`],
       [110, 'Choosing test techniques — formality',
-        `<p><strong>Formality</strong>: techniques can be used very informally (little or no documentation, tests in the tester's head) or very formally (every condition, case and coverage figure documented and traced). The level depends on: <strong>safety or regulatory industries</strong> (a medical device or railway signalling needs traceable, formal evidence), <strong>the maturity of the organisation</strong> (a CMMI level-5 company documents; a two-person start-up does not), <strong>the life cycle model</strong> (V-model → formal; Scrum → lighter), and the <strong>knowledge and skills of testers</strong> (experts can work informally and still be effective; beginners need the structure). Remember the pair: <em>which technique</em> (slides 111–112) and <em>how formally</em> (this slide) are two separate decisions.</p>`,
-        `<p><strong>Mức hình thức</strong>: kỹ thuật có thể được dùng rất phi hình thức (ít hoặc không có tài liệu, test nằm trong đầu tester) hoặc rất hình thức (mọi điều kiện, test case và số liệu coverage đều được ghi lại và truy vết). Mức đó phụ thuộc: <strong>ngành an toàn hoặc có quy định</strong> (thiết bị y tế hay tín hiệu đường sắt cần bằng chứng hình thức, truy vết được), <strong>độ trưởng thành của tổ chức</strong> (công ty CMMI mức 5 thì ghi chép; start-up hai người thì không), <strong>mô hình vòng đời</strong> (V-model → hình thức; Scrum → nhẹ hơn), và <strong>kiến thức, kỹ năng của tester</strong> (chuyên gia có thể làm phi hình thức mà vẫn hiệu quả; người mới cần có khung). Nhớ cặp này: <em>chọn kỹ thuật nào</em> (slide 111–112) và <em>hình thức đến đâu</em> (slide này) là hai quyết định riêng.</p>`],
+        `<p class="y-chinh">🎯 The same technique can be used very informally or very formally — four factors decide how formally.</p>
+<p class="nhan">The two ends of the scale</p>
+<ul>
+<li><strong>Very informal</strong> — little or no documentation, tests in the tester's head.</li>
+<li><strong>Very formal</strong> — every condition, case and coverage figure documented and traced.</li>
+</ul>
+<p class="nhan">The four factors on the slide</p>
+<ol>
+<li><strong>Safety or regulatory industries</strong> — a medical device or railway signalling needs traceable, formal evidence.</li>
+<li><strong>The maturity of the organisation</strong> — a CMMI level-5 company documents; a two-person start-up does not.</li>
+<li><strong>The life cycle model</strong> — V-model → formal; Scrum → lighter.</li>
+<li><strong>Knowledge and skills of testers</strong> — experts can work informally and still be effective; beginners need the structure.</li>
+</ol>
+<p class="meo">🧠 <strong>Remember the pair:</strong> <em>which technique</em> (slides 111–112) and <em>how formally</em> (this slide) are two separate decisions.</p>`,
+        `<p class="y-chinh">🎯 Cùng một kỹ thuật có thể dùng rất phi hình thức hoặc rất hình thức — bốn yếu tố quyết định hình thức đến đâu.</p>
+<p class="nhan">Hai đầu của thang đo</p>
+<ul>
+<li><strong>Rất phi hình thức</strong> — ít hoặc không có tài liệu, test nằm trong đầu tester.</li>
+<li><strong>Rất hình thức</strong> — mọi điều kiện, test case và số liệu coverage đều được ghi lại và truy vết.</li>
+</ul>
+<p class="nhan">Bốn yếu tố trên slide</p>
+<ol>
+<li><strong>Ngành an toàn hoặc có quy định</strong> — thiết bị y tế hay tín hiệu đường sắt cần bằng chứng hình thức, truy vết được.</li>
+<li><strong>Độ trưởng thành của tổ chức</strong> — công ty CMMI mức 5 thì ghi chép; start-up hai người thì không.</li>
+<li><strong>Mô hình vòng đời</strong> — V-model → hình thức; Scrum → nhẹ hơn.</li>
+<li><strong>Kiến thức, kỹ năng của tester</strong> — chuyên gia có thể làm phi hình thức mà vẫn hiệu quả; người mới cần có khung.</li>
+</ol>
+<p class="meo">🧠 <strong>Nhớ cặp này:</strong> <em>chọn kỹ thuật nào</em> (slide 111–112) và <em>hình thức đến đâu</em> (slide này) là hai quyết định riêng.</p>`],
       [111, 'Choosing test techniques — factors (1)',
-        `<p>Seven factors, each explained in the teacher's notes:</p>
+        `<p class="y-chinh">🎯 There is no single best technique: seven factors (and seven more on slide 112) decide which one fits.</p>
+<p class="nhan">Seven factors — six of them explained in the teacher's notes</p>
 <ul>
 <li><strong>Type of component/system</strong> — embedded, graphical, financial… A financial application with many calculations benefits from <em>BVA</em>.</li>
 <li><strong>Complexity</strong> — complex systems have more defects, and harder to find ones; use additional techniques. A simple numeric field → <em>EP</em>; a screen with many fields, dependencies, calculations and rules that change over time → add <em>decision tables</em>, <em>state transition</em> and <em>white-box</em> techniques.</li>
 <li><strong>Regulatory standards</strong> — the aircraft industry requires <em>EP, BVA and state transition testing</em> for high-integrity systems.</li>
-<li><strong>Customer or contractual requirements</strong> — a contract may prescribe techniques or coverage levels.</li>
+<li><strong>Customer or contractual requirements</strong> — a contract may prescribe techniques or coverage levels (the notes say nothing about this one).</li>
 <li><strong>Risk levels and risk types</strong> — the greater the risk, the more thorough and formal the testing; commercial risk driven by quality issues may make <em>exploratory testing</em> the better choice; the risk type (usability, performance, security, functionality) decides which technique can address it at all.</li>
 <li><strong>Test objectives</strong> — confidence that the system performs typical operational tasks → <em>use case testing</em>; very thorough testing → more rigorous techniques such as <em>white-box</em>.</li>
 <li><strong>Available documentation</strong> — whether it exists, how up to date it is, its content and style: if the specification already contains decision tables or state graphs, use the associated techniques.</li>
 </ul>`,
-        `<p>Bảy yếu tố, mỗi yếu tố được giải thích trong ghi chú của thầy/cô:</p>
+        `<p class="y-chinh">🎯 Không có kỹ thuật nào tốt nhất: bảy yếu tố (và thêm bảy ở slide 112) quyết định kỹ thuật nào hợp.</p>
+<p class="nhan">Bảy yếu tố — sáu yếu tố có giải thích trong ghi chú của thầy/cô</p>
 <ul>
 <li><strong>Loại thành phần/hệ thống</strong> — nhúng, đồ hoạ, tài chính… Ứng dụng tài chính có nhiều phép tính sẽ lợi từ <em>BVA</em>.</li>
 <li><strong>Độ phức tạp</strong> — hệ thống phức tạp có nhiều defect hơn, và khó tìm hơn; hãy dùng thêm kỹ thuật. Một trường số đơn giản → <em>EP</em>; một màn hình nhiều trường, phụ thuộc lẫn nhau, có tính toán và quy tắc thay đổi theo thời gian → thêm <em>decision table</em>, <em>state transition</em> và kỹ thuật <em>white-box</em>.</li>
 <li><strong>Chuẩn quy định</strong> — ngành hàng không yêu cầu <em>EP, BVA và state transition testing</em> cho hệ thống độ toàn vẹn cao.</li>
-<li><strong>Yêu cầu của khách hàng hoặc hợp đồng</strong> — hợp đồng có thể quy định kỹ thuật hoặc mức coverage.</li>
+<li><strong>Yêu cầu của khách hàng hoặc hợp đồng</strong> — hợp đồng có thể quy định kỹ thuật hoặc mức coverage (ghi chú không nói gì về yếu tố này).</li>
 <li><strong>Mức và loại rủi ro</strong> — rủi ro càng lớn, test càng phải kỹ lưỡng và hình thức; rủi ro thương mại do vấn đề chất lượng có thể khiến <em>exploratory testing</em> là lựa chọn tốt hơn; loại rủi ro (khả dụng, hiệu năng, bảo mật, chức năng) quyết định kỹ thuật nào xử lý được nó.</li>
 <li><strong>Mục tiêu test</strong> — tin rằng hệ thống làm được các tác vụ vận hành điển hình → <em>use case testing</em>; test rất kỹ lưỡng → kỹ thuật chặt chẽ hơn như <em>white-box</em>.</li>
 <li><strong>Tài liệu sẵn có</strong> — có tồn tại không, cập nhật đến đâu, nội dung và văn phong: nếu đặc tả đã có sẵn decision table hay đồ thị trạng thái, hãy dùng kỹ thuật tương ứng.</li>
 </ul>`],
       [112, 'Choosing test techniques — factors (2)',
-        `<p>Seven more factors, with the teacher's notes:</p>
+        `<p class="y-chinh">🎯 Seven more factors — about people, tools, time, process, use and defects — complete the list.</p>
+<p class="nhan">Seven more factors — the notes cover the first five</p>
 <ul>
 <li><strong>Tester knowledge and skills</strong> — experience-based techniques depend on them most.</li>
 <li><strong>Available tools</strong> — the notes put it in terms of <em>models</em>: techniques are based on models, so the models available from specification, design and implementation govern to some extent which techniques can be used (and tools support some techniques better than others, e.g. coverage tools for white-box).</li>
@@ -277,8 +610,9 @@ const L62 = {
 <li><strong>Previous experience with using the test techniques</strong> — on this or similar components.</li>
 <li><strong>Expected types of defects</strong> — boundary mistakes → BVA; wrong rule combinations → decision tables; illegal sequences → state transition.</li>
 </ul>
-<p>With slide 111 this is the full CTFL 2018 list (the syllabus lists "risk levels" and "risk types" separately — 15 items; the slide merges them into 14).</p>`,
-        `<p>Thêm bảy yếu tố, kèm ghi chú của thầy/cô:</p>
+<p class="ghi-chu">With slide 111 this is the full CTFL 2018 list (the syllabus lists "risk levels" and "risk types" separately — 15 items; the slide merges them into 14).</p>`,
+        `<p class="y-chinh">🎯 Thêm bảy yếu tố — về con người, công cụ, thời gian, quy trình, cách dùng và loại defect — cho đủ danh sách.</p>
+<p class="nhan">Thêm bảy yếu tố — ghi chú của thầy/cô nói về năm yếu tố đầu</p>
 <ul>
 <li><strong>Kiến thức và kỹ năng của tester</strong> — kỹ thuật dựa kinh nghiệm phụ thuộc vào nó nhiều nhất.</li>
 <li><strong>Công cụ sẵn có</strong> — ghi chú diễn đạt theo <em>mô hình</em>: kỹ thuật dựa trên mô hình, nên các mô hình có sẵn từ đặc tả, thiết kế và cài đặt phần nào quyết định kỹ thuật nào dùng được (và công cụ hỗ trợ kỹ thuật này tốt hơn kỹ thuật khác, vd công cụ đo coverage cho white-box).</li>
@@ -288,20 +622,24 @@ const L62 = {
 <li><strong>Kinh nghiệm dùng kỹ thuật trước đây</strong> — trên chính thành phần này hoặc thành phần tương tự.</li>
 <li><strong>Loại defect dự kiến</strong> — lỗi ở biên → BVA; sai tổ hợp quy tắc → decision table; chuỗi thao tác không hợp lệ → state transition.</li>
 </ul>
-<p>Cùng slide 111, đây là đủ danh sách CTFL 2018 (syllabus tách "mức rủi ro" và "loại rủi ro" thành hai — 15 mục; slide gộp lại thành 14).</p>`],
+<p class="ghi-chu">Cùng slide 111, đây là đủ danh sách CTFL 2018 (syllabus tách "mức rủi ro" và "loại rủi ro" thành hai — 15 mục; slide gộp lại thành 14).</p>`],
     ]),
     bi(`<h3>🔒 Hidden slides in SWT4_tim.pptx (pptx slides 114–115)</h3>
 <p>Two slides after the last visible one are hidden. They come from the <em>older</em> syllabus (CTFL 2011 / the older Graham et al. textbook, §4.6), which split the factors into two groups:</p>
 <ul>
-<li><strong>Internal factors</strong> (pptx slide 114): models used · tester knowledge/experience · likely defects · test objective · documentation · life cycle model.</li>
-<li><strong>External factors</strong> (pptx slide 115): risk · customer/contractual requirements · type of system · regulatory requirements · time and budget.</li>
+<li><strong>Internal factors</strong> (pptx slide 114):
+<ol><li>models used</li><li>tester knowledge/experience</li><li>likely defects</li><li>test objective</li><li>documentation</li><li>life cycle model</li></ol></li>
+<li><strong>External factors</strong> (pptx slide 115):
+<ol><li>risk</li><li>customer/contractual requirements</li><li>type of system</li><li>regulatory requirements</li><li>time and budget</li></ol></li>
 </ul>
 <p>Every item maps onto slides 111–112 (e.g. "likely defects" = expected types of defects, "models used" = the models behind available tools). The grouping is still a handy memory aid: <em>internal</em> = what the test team knows and has; <em>external</em> = what the project, the customer and the law impose. Older exam questions may say "which is an external factor?" — the answer will be one of the five on pptx slide 115.</p>`,
     `<h3>🔒 Slide ẩn trong file SWT4_tim.pptx (slide pptx 114–115)</h3>
 <p>Hai slide sau slide hiện cuối cùng bị ẩn. Chúng lấy từ syllabus <em>cũ</em> (CTFL 2011 / giáo trình Graham và cộng sự bản cũ, §4.6), vốn chia các yếu tố thành hai nhóm:</p>
 <ul>
-<li><strong>Yếu tố bên trong</strong> (slide pptx 114): mô hình được dùng · kiến thức/kinh nghiệm của tester · defect có khả năng xảy ra · mục tiêu test · tài liệu · mô hình vòng đời.</li>
-<li><strong>Yếu tố bên ngoài</strong> (slide pptx 115): rủi ro · yêu cầu của khách hàng/hợp đồng · loại hệ thống · yêu cầu quy định · thời gian và ngân sách.</li>
+<li><strong>Yếu tố bên trong</strong> (slide pptx 114):
+<ol><li>mô hình được dùng</li><li>kiến thức/kinh nghiệm của tester</li><li>defect có khả năng xảy ra</li><li>mục tiêu test</li><li>tài liệu</li><li>mô hình vòng đời</li></ol></li>
+<li><strong>Yếu tố bên ngoài</strong> (slide pptx 115):
+<ol><li>rủi ro</li><li>yêu cầu của khách hàng/hợp đồng</li><li>loại hệ thống</li><li>yêu cầu quy định</li><li>thời gian và ngân sách</li></ol></li>
 </ul>
 <p>Mục nào cũng khớp với slide 111–112 (vd "likely defects" = loại defect dự kiến, "models used" = mô hình đứng sau công cụ sẵn có). Cách chia nhóm vẫn là mẹo nhớ tiện: <em>bên trong</em> = những gì đội test biết và có; <em>bên ngoài</em> = những gì dự án, khách hàng và luật áp đặt. Câu hỏi thi kiểu cũ có thể hỏi "đâu là yếu tố bên ngoài?" — đáp án sẽ là một trong năm mục ở slide pptx 115.</p>`),
     bi(`<h3>Ví dụ có lời giải · "Which technique would you choose?"</h3>
@@ -330,8 +668,19 @@ const L62 = {
 </tbody>
 </table></div>
 <p>Note what the table does <em>not</em> do: it never says "we use exploratory testing for everything" or "white-box everywhere". Combining techniques is itself the syllabus answer — each technique finds a different kind of defect.</p>
-<div class="pitfall"><b>Exam traps.</b> (1) "The best technique is always the most formal one" — false; formality follows the factors on slide 110. (2) "Choose the technique the tester likes best" — tester skill is a factor, preference is not. (3) Mixing up <em>formality</em> factors (slide 110) with <em>choice</em> factors (slides 111–112): "maturity of the organisation" is a formality factor. (4) "Available documentation" cuts both ways: a state diagram suggests state transition testing, no documentation suggests exploratory testing.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>ISO/IEC/IEEE 29119-4 and defect-based selection.</b> The international standard for test techniques, ISO/IEC/IEEE 29119-4, catalogues specification-based techniques (EP, BVA, decision tables, state transitions, cause-effect graphing, pairwise, use cases…), structure-based techniques (statement, branch, decision, MC/DC, data-flow) and one experience-based technique, error guessing — and for each one defines the coverage items and how to measure them. Mature teams also select techniques <em>from their own defect data</em>: classify last year's escaped defects (boundary, rule combination, sequence, data handling…) and invest in the technique that would have caught the biggest class. <em>Outside the syllabus because CTFL 2018 asks only for the factors and the three categories, not for standards or defect-taxonomy-driven selection.</em></div>`,
+<div class="pitfall co-tieu-de"><strong>Exam traps.</strong>
+<ol>
+<li>"The best technique is always the most formal one" — false; formality follows the factors on slide 110.</li>
+<li>"Choose the technique the tester likes best" — tester skill is a factor, preference is not.</li>
+<li>Mixing up <em>formality</em> factors (slide 110) with <em>choice</em> factors (slides 111–112): "maturity of the organisation" is a formality factor.</li>
+<li>"Available documentation" cuts both ways: a state diagram suggests state transition testing, no documentation suggests exploratory testing.</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>ISO/IEC/IEEE 29119-4 and defect-based selection.</strong>
+<ul>
+<li><strong>ISO/IEC/IEEE 29119-4</strong> — the international standard for test techniques. It catalogues specification-based techniques (EP, BVA, decision tables, state transitions, cause-effect graphing, pairwise, use cases…), structure-based techniques (statement, branch, decision, MC/DC, data-flow) and one experience-based technique, error guessing — and for each one defines the coverage items and how to measure them.</li>
+<li><strong>Defect-based selection</strong> — mature teams select techniques <em>from their own defect data</em>: classify last year's escaped defects (boundary, rule combination, sequence, data handling…) and invest in the technique that would have caught the biggest class.</li>
+</ul>
+<p><em>Outside the syllabus because CTFL 2018 asks only for the factors and the three categories, not for standards or defect-taxonomy-driven selection.</em></p></div>`,
     `<h3>Ví dụ có lời giải · "Bạn sẽ chọn kỹ thuật nào?"</h3>
 <p><strong>Phần 1 — năm tình huống ngắn</strong> (kiểu câu hỏi thi). Với mỗi tình huống: yếu tố quyết định, rồi kỹ thuật.</p>
 <div class="table-wrap"><table>
@@ -358,8 +707,19 @@ const L62 = {
 </tbody>
 </table></div>
 <p>Để ý điều bảng này <em>không</em> làm: nó không bao giờ nói "dùng exploratory cho mọi thứ" hay "white-box ở mọi nơi". Kết hợp nhiều kỹ thuật chính là đáp án của syllabus — mỗi kỹ thuật tìm một loại defect khác nhau.</p>
-<div class="pitfall"><b>Bẫy trong đề.</b> (1) "Kỹ thuật tốt nhất luôn là kỹ thuật hình thức nhất" — sai; mức hình thức đi theo các yếu tố ở slide 110. (2) "Chọn kỹ thuật tester thích nhất" — kỹ năng của tester là một yếu tố, sở thích thì không. (3) Lẫn yếu tố <em>mức hình thức</em> (slide 110) với yếu tố <em>chọn kỹ thuật</em> (slide 111–112): "độ trưởng thành của tổ chức" là yếu tố hình thức. (4) "Tài liệu sẵn có" có hai chiều: có sơ đồ trạng thái thì gợi ý state transition testing, không có tài liệu thì gợi ý exploratory testing.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>ISO/IEC/IEEE 29119-4 và chọn kỹ thuật theo dữ liệu defect.</b> Chuẩn quốc tế về kỹ thuật test, ISO/IEC/IEEE 29119-4, liệt kê các kỹ thuật dựa đặc tả (EP, BVA, decision table, state transition, cause-effect graph, pairwise, use case…), dựa cấu trúc (statement, branch, decision, MC/DC, data-flow) và một kỹ thuật dựa kinh nghiệm là error guessing — và với mỗi kỹ thuật định nghĩa coverage item và cách đo. Các đội trưởng thành còn chọn kỹ thuật <em>từ chính dữ liệu defect của mình</em>: phân loại các defect lọt ra production năm trước (biên, tổ hợp quy tắc, chuỗi thao tác, xử lý dữ liệu…) rồi đầu tư vào kỹ thuật lẽ ra bắt được nhóm lớn nhất. <em>Ngoài giáo trình vì CTFL 2018 chỉ hỏi các yếu tố và ba nhóm kỹ thuật, không hỏi chuẩn hay việc chọn kỹ thuật theo phân loại defect.</em></div>`),
+<div class="pitfall co-tieu-de"><strong>Bẫy trong đề.</strong>
+<ol>
+<li>"Kỹ thuật tốt nhất luôn là kỹ thuật hình thức nhất" — sai; mức hình thức đi theo các yếu tố ở slide 110.</li>
+<li>"Chọn kỹ thuật tester thích nhất" — kỹ năng của tester là một yếu tố, sở thích thì không.</li>
+<li>Lẫn yếu tố <em>mức hình thức</em> (slide 110) với yếu tố <em>chọn kỹ thuật</em> (slide 111–112): "độ trưởng thành của tổ chức" là yếu tố hình thức.</li>
+<li>"Tài liệu sẵn có" có hai chiều: có sơ đồ trạng thái thì gợi ý state transition testing, không có tài liệu thì gợi ý exploratory testing.</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>ISO/IEC/IEEE 29119-4 và chọn kỹ thuật theo dữ liệu defect.</strong>
+<ul>
+<li><strong>ISO/IEC/IEEE 29119-4</strong> — chuẩn quốc tế về kỹ thuật test. Nó liệt kê các kỹ thuật dựa đặc tả (EP, BVA, decision table, state transition, cause-effect graph, pairwise, use case…), dựa cấu trúc (statement, branch, decision, MC/DC, data-flow) và một kỹ thuật dựa kinh nghiệm là error guessing — và với mỗi kỹ thuật định nghĩa coverage item và cách đo.</li>
+<li><strong>Chọn theo dữ liệu defect</strong> — các đội trưởng thành chọn kỹ thuật <em>từ chính dữ liệu defect của mình</em>: phân loại các defect lọt ra production năm trước (biên, tổ hợp quy tắc, chuỗi thao tác, xử lý dữ liệu…) rồi đầu tư vào kỹ thuật lẽ ra bắt được nhóm lớn nhất.</li>
+</ul>
+<p><em>Ngoài giáo trình vì CTFL 2018 chỉ hỏi các yếu tố và ba nhóm kỹ thuật, không hỏi chuẩn hay việc chọn kỹ thuật theo phân loại defect.</em></p></div>`),
     books([
       ['fst4', 'Ch.4 §1 "Categories of test techniques", incl. choosing test techniques — book pp.106–111 (PDF pp.120–125); chapter review p.143', 'Chương 4 §1 "Categories of test techniques", gồm phần chọn kỹ thuật test — trang sách 106–111 (PDF 120–125); ôn chương trang 143'],
       ['fst', '§4.6 "Choosing a test technique" — internal and external factors (the source of hidden pptx slides 114–115) — pp.114–116 (PDF pp.117–119)', '§4.6 "Choosing a test technique" — yếu tố bên trong và bên ngoài (nguồn của slide pptx ẩn 114–115) — trang 114–116 (PDF 117–119)'],

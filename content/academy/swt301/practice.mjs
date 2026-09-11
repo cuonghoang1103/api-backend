@@ -91,8 +91,15 @@ const L1 = {
 <li>The project expects a SQL Server database (tables Users, Customers, Roles, Orders, Bouquet…) — no SQL script is included, so for this course you will mostly work <em>statically</em> (reviews) and <em>design</em> tests from the code and screens, exactly as in the PE where no IDE is allowed.</li>
 <li>Before running anything, replace the hard-coded credentials with your own local ones — and never commit real ones (finding #1 in P.2).</li>
 </ol>
-<div class="callout"><b>Why the course uses it.</b> Lab 1 practises review on a small class; the PE gives you one class and one form. MystBloom lets you do the same on a real, messy codebase: review (Ch.3), black-box design (Ch.4), white-box reasoning (Ch.5), exploratory charters (Ch.6), defect reports and risk (Ch.7).</div>
-<div class="pitfall"><b>About the other files in 03.Temp.</b> The folder also contains four CV documents of real people. They are personal data, unrelated to testing, and are deliberately not used in this course.</div>`,
+<div class="callout"><strong>Why the course uses it.</strong> Lab 1 practises review on a small class; the PE gives you one class and one form. MystBloom lets you do the same on a real, messy codebase:
+<ul>
+<li><strong>Review</strong> — Ch.3</li>
+<li><strong>Black-box design</strong> — Ch.4</li>
+<li><strong>White-box reasoning</strong> — Ch.5</li>
+<li><strong>Exploratory charters</strong> — Ch.6</li>
+<li><strong>Defect reports and risk</strong> — Ch.7</li>
+</ul></div>
+<div class="pitfall co-tieu-de"><strong>About the other files in 03.Temp.</strong> The folder also contains four CV documents of real people. They are personal data, unrelated to testing, and are deliberately not used in this course.</div>`,
     `<span class="eyebrow">Dự án luyện tập · P.1</span>
 <h2>MystBloom — một ứng dụng thật để luyện tay</h2>
 <p class="lead">Trong thư mục môn, ở <em>03.Temp</em>, có trọn một project web của sinh viên tên <strong>MystBloom</strong> — cửa hàng hoa bó online. Code thật viết dưới deadline thật là tài liệu luyện tập tốt nhất cho tester: nó có lỗi thật. Bốn bài này dùng nó để luyện, trên cùng một hệ thống, mọi thứ mà PE và các Lab yêu cầu.</p>
@@ -111,8 +118,15 @@ const L1 = {
 <li>Project cần CSDL SQL Server (bảng Users, Customers, Roles, Orders, Bouquet…) — không kèm script SQL, nên trong môn này bạn chủ yếu làm <em>tĩnh</em> (review) và <em>thiết kế</em> test từ code và màn hình, đúng như PE vốn không cho dùng IDE.</li>
 <li>Trước khi chạy, thay các thông tin đăng nhập bị viết cứng bằng của riêng bạn trên máy — và không bao giờ commit thông tin thật (finding số 1 ở P.2).</li>
 </ol>
-<div class="callout"><b>Vì sao khoá học dùng nó.</b> Lab 1 luyện review trên một lớp nhỏ; PE cho bạn một lớp và một form. MystBloom cho bạn làm y như vậy trên một codebase thật, lộn xộn: review (Ch.3), thiết kế black-box (Ch.4), suy luận white-box (Ch.5), charter khám phá (Ch.6), defect report và rủi ro (Ch.7).</div>
-<div class="pitfall"><b>Về các file khác trong 03.Temp.</b> Thư mục còn có bốn file CV của người thật. Đó là dữ liệu cá nhân, không liên quan tới kiểm thử, và cố ý không được dùng trong khoá học.</div>`),
+<div class="callout"><strong>Vì sao khoá học dùng nó.</strong> Lab 1 luyện review trên một lớp nhỏ; PE cho bạn một lớp và một form. MystBloom cho bạn làm y như vậy trên một codebase thật, lộn xộn:
+<ul>
+<li><strong>Review</strong> — Ch.3</li>
+<li><strong>Thiết kế black-box</strong> — Ch.4</li>
+<li><strong>Suy luận white-box</strong> — Ch.5</li>
+<li><strong>Charter khám phá</strong> — Ch.6</li>
+<li><strong>Defect report và rủi ro</strong> — Ch.7</li>
+</ul></div>
+<div class="pitfall co-tieu-de"><strong>Về các file khác trong 03.Temp.</strong> Thư mục còn có bốn file CV của người thật. Đó là dữ liệu cá nhân, không liên quan tới kiểm thử, và cố ý không được dùng trong khoá học.</div>`),
   ].join('\n'),
 };
 
@@ -124,26 +138,50 @@ const L2 = {
   content: [
     bi(`<span class="eyebrow">Practice project · P.2 · Task 1 — static testing</span>
 <h2>Review LoginServlet and the DAOs</h2>
-<p class="lead">Take the review role of Chapter 3: read <code>controller/LoginServlet.java</code>, <code>dal/UsersDAO.java</code>, <code>dal/CustomersDAO.java</code>, <code>dal/DBContext.java</code> and <code>util/EmailUtils.java</code> with the Lab 1 checklist in hand, and log every issue as in PE Question 1 (issue · location · description). Try it yourself first (30 minutes), then compare with the log below.</p>
+<p class="lead">Take the review role of Chapter 3 and review the login code exactly as PE Question 1 asks.</p>
+<ol>
+<li><strong>Read</strong> <code>controller/LoginServlet.java</code>, <code>dal/UsersDAO.java</code>, <code>dal/CustomersDAO.java</code>, <code>dal/DBContext.java</code> and <code>util/EmailUtils.java</code> with the Lab 1 checklist in hand.</li>
+<li><strong>Log every issue</strong> as in PE Question 1 (issue · location · description).</li>
+<li><strong>Try it yourself first</strong> (30 minutes), then compare with the log below.</li>
+</ol>
 <pre><code>${esc(CODE_LOGIN)}</code></pre>
 <h3>Model review log</h3>
 <div class="table-wrap"><table>
 <thead><tr><th>#</th><th>Where</th><th>Category</th><th>Severity</th><th>Issue</th><th>Fix</th></tr></thead>
 <tbody>${findRows(false)}</tbody>
 </table></div>
-<div class="callout ok"><b>What the PE marker wants.</b> Six issues is the minimum; each must be <em>specific</em> (line or method), <em>correct</em> and <em>relevant</em> (compile errors, coding practice, logic, robustness). Findings 2, 5 and 10 are the kind examiners love: they are real logic defects visible only by reading carefully.</div>
-<div class="pitfall"><b>Do not log opinions.</b> "The code is messy" earns nothing. "Line X: magic string 'Admin' repeated in 4 places — use a constant" earns a point.</div>`,
+<div class="callout ok"><strong>What the PE marker wants.</strong>
+<ul>
+<li><strong>At least six issues</strong> — six is the minimum.</li>
+<li><strong>Specific</strong> — a line or a method.</li>
+<li><strong>Correct</strong> — a real problem, not a guess.</li>
+<li><strong>Relevant</strong> — compile errors, coding practice, logic, robustness.</li>
+</ul>
+<p>Findings 2, 5 and 10 are the kind examiners love: they are real logic defects visible only by reading carefully.</p></div>
+<div class="pitfall co-tieu-de"><strong>Do not log opinions.</strong> "The code is messy" earns nothing. "Line X: magic string 'Admin' repeated in 4 places — use a constant" earns a point.</div>`,
     `<span class="eyebrow">Dự án luyện tập · P.2 · Nhiệm vụ 1 — kiểm thử tĩnh</span>
 <h2>Review LoginServlet và các DAO</h2>
-<p class="lead">Nhận vai reviewer của Chương 3: đọc <code>controller/LoginServlet.java</code>, <code>dal/UsersDAO.java</code>, <code>dal/CustomersDAO.java</code>, <code>dal/DBContext.java</code> và <code>util/EmailUtils.java</code> với checklist của Lab 1 trong tay, rồi ghi mọi lỗi như câu 1 của đề PE (số thứ tự · vị trí · mô tả). Tự làm trước (30 phút), sau đó mới so với bảng dưới.</p>
+<p class="lead">Nhận vai reviewer của Chương 3 và review phần code đăng nhập đúng như câu 1 đề PE yêu cầu.</p>
+<ol>
+<li><strong>Đọc</strong> <code>controller/LoginServlet.java</code>, <code>dal/UsersDAO.java</code>, <code>dal/CustomersDAO.java</code>, <code>dal/DBContext.java</code> và <code>util/EmailUtils.java</code> với checklist của Lab 1 trong tay.</li>
+<li><strong>Ghi mọi lỗi</strong> như câu 1 của đề PE (số thứ tự · vị trí · mô tả).</li>
+<li><strong>Tự làm trước</strong> (30 phút), sau đó mới so với bảng dưới.</li>
+</ol>
 <pre><code>${esc(CODE_LOGIN)}</code></pre>
 <h3>Bảng review mẫu</h3>
 <div class="table-wrap"><table>
 <thead><tr><th>#</th><th>Vị trí</th><th>Nhóm</th><th>Mức độ</th><th>Lỗi</th><th>Cách sửa</th></tr></thead>
 <tbody>${findRows(true)}</tbody>
 </table></div>
-<div class="callout ok"><b>Giám khảo PE muốn gì.</b> Tối thiểu sáu lỗi; mỗi lỗi phải <em>cụ thể</em> (dòng hoặc hàm), <em>đúng</em> và <em>liên quan</em> (lỗi biên dịch, thói quen code, logic, độ bền). Lỗi số 2, 5 và 10 là loại giám khảo rất thích: lỗi logic thật, chỉ thấy khi đọc kỹ.</div>
-<div class="pitfall"><b>Đừng ghi ý kiến chung chung.</b> "Code lộn xộn" không được điểm. "Dòng X: chuỗi 'Admin' lặp ở 4 chỗ — nên dùng hằng số" thì được điểm.</div>`),
+<div class="callout ok"><strong>Giám khảo PE muốn gì.</strong>
+<ul>
+<li><strong>Ít nhất sáu lỗi</strong> — sáu là mức tối thiểu.</li>
+<li><strong>Cụ thể</strong> — chỉ ra dòng hoặc hàm.</li>
+<li><strong>Đúng</strong> — là lỗi thật, không phải phỏng đoán.</li>
+<li><strong>Liên quan</strong> — lỗi biên dịch, thói quen code, logic, độ bền.</li>
+</ul>
+<p>Lỗi số 2, 5 và 10 là loại giám khảo rất thích: lỗi logic thật, chỉ thấy khi đọc kỹ.</p></div>
+<div class="pitfall co-tieu-de"><strong>Đừng ghi ý kiến chung chung.</strong> "Code lộn xộn" không được điểm. "Dòng X: chuỗi 'Admin' lặp ở 4 chỗ — nên dùng hằng số" thì được điểm.</div>`),
   ].join('\n'),
 };
 
@@ -158,11 +196,11 @@ const L3 = {
 <p class="lead">The code has no written rules, so a tester first <em>writes the assumptions</em> down (slide 134 of SWT2: "document your assumptions") and gets them confirmed. Then apply Chapter 4.</p>
 <h3>Assumed rules (confirm with the team)</h3>
 <ul>
-<li><b>Full name</b>: required, 2–50 characters, letters and spaces only.</li>
-<li><b>Email</b>: required, valid format, not already registered.</li>
-<li><b>Phone</b>: required, exactly 10 digits starting with 0, not already registered.</li>
-<li><b>Password</b>: required, 8–32 characters, at least one letter and one digit.</li>
-<li><b>Birth date</b>: optional; if present, format yyyy-MM-dd and age 16–100.</li>
+<li><strong>Full name</strong>: required, 2–50 characters, letters and spaces only.</li>
+<li><strong>Email</strong>: required, valid format, not already registered.</li>
+<li><strong>Phone</strong>: required, exactly 10 digits starting with 0, not already registered.</li>
+<li><strong>Password</strong>: required, 8–32 characters, at least one letter and one digit.</li>
+<li><strong>Birth date</strong>: optional; if present, format yyyy-MM-dd and age 16–100.</li>
 </ul>
 <h3>Table 3.1 — test analysis (PE format)</h3>
 <div class="table-wrap"><table>
@@ -206,7 +244,7 @@ const L3 = {
 </tbody>
 </table></div>
 <p>*Ages depend on the test date: compute the birth date from today (e.g. on 2026-09-11 a 16-year-old was born on or before 2010-09-11). A good tester writes this rule into the precondition instead of a fixed date.</p>
-<p><b>Tag coverage check:</b> VP1–VP7, VB1–VB7, IP1–IP11, IB1–IB9 all appear at least once → 100% of the 34 tags. Invalid tags are tested <em>one per case</em> so a failure points to one cause.</p>
+<p><strong>Tag coverage check:</strong> VP1–VP7, VB1–VB7, IP1–IP11, IB1–IB9 all appear at least once → 100% of the 34 tags. Invalid tags are tested <em>one per case</em> so a failure points to one cause.</p>
 <h3>Decision table — login routing (from the code)</h3>
 <div class="table-wrap"><table>
 <thead><tr><th>Conditions / actions</th><th>R1</th><th>R2</th><th>R3</th><th>R4</th><th>R5</th></tr></thead>
@@ -226,11 +264,11 @@ const L3 = {
 <p class="lead">Code không có luật viết sẵn, nên tester phải <em>ghi giả định</em> ra trước (slide 134 của SWT2: "document your assumptions") và xin xác nhận. Sau đó áp dụng Chương 4.</p>
 <h3>Luật giả định (cần xác nhận với nhóm)</h3>
 <ul>
-<li><b>Họ tên</b>: bắt buộc, 2–50 ký tự, chỉ chữ cái và khoảng trắng.</li>
-<li><b>Email</b>: bắt buộc, đúng định dạng, chưa được đăng ký.</li>
-<li><b>Số điện thoại</b>: bắt buộc, đúng 10 chữ số bắt đầu bằng 0, chưa được đăng ký.</li>
-<li><b>Mật khẩu</b>: bắt buộc, 8–32 ký tự, có ít nhất một chữ cái và một chữ số.</li>
-<li><b>Ngày sinh</b>: không bắt buộc; nếu có thì định dạng yyyy-MM-dd và tuổi 16–100.</li>
+<li><strong>Họ tên</strong>: bắt buộc, 2–50 ký tự, chỉ chữ cái và khoảng trắng.</li>
+<li><strong>Email</strong>: bắt buộc, đúng định dạng, chưa được đăng ký.</li>
+<li><strong>Số điện thoại</strong>: bắt buộc, đúng 10 chữ số bắt đầu bằng 0, chưa được đăng ký.</li>
+<li><strong>Mật khẩu</strong>: bắt buộc, 8–32 ký tự, có ít nhất một chữ cái và một chữ số.</li>
+<li><strong>Ngày sinh</strong>: không bắt buộc; nếu có thì định dạng yyyy-MM-dd và tuổi 16–100.</li>
 </ul>
 <h3>Bảng 3.1 — phân tích test (định dạng PE)</h3>
 <div class="table-wrap"><table>
@@ -274,7 +312,7 @@ const L3 = {
 </tbody>
 </table></div>
 <p>*Tuổi phụ thuộc ngày chạy test: tính ngày sinh từ hôm nay (vd ngày 11/09/2026 thì người 16 tuổi sinh vào hoặc trước 11/09/2010). Tester giỏi ghi luật này vào precondition thay vì một ngày cố định.</p>
-<p><b>Kiểm tra độ phủ tag:</b> VP1–VP7, VB1–VB7, IP1–IP11, IB1–IB9 đều xuất hiện ít nhất một lần → phủ 100% trong 34 tag. Tag không hợp lệ được test <em>mỗi ca một tag</em> để khi fail thì chỉ ra đúng một nguyên nhân.</p>
+<p><strong>Kiểm tra độ phủ tag:</strong> VP1–VP7, VB1–VB7, IP1–IP11, IB1–IB9 đều xuất hiện ít nhất một lần → phủ 100% trong 34 tag. Tag không hợp lệ được test <em>mỗi ca một tag</em> để khi fail thì chỉ ra đúng một nguyên nhân.</p>
 <h3>Decision table — điều hướng khi đăng nhập (suy từ code)</h3>
 <div class="table-wrap"><table>
 <thead><tr><th>Điều kiện / hành động</th><th>R1</th><th>R2</th><th>R3</th><th>R4</th><th>R5</th></tr></thead>
@@ -313,7 +351,25 @@ const L4 = {
 </tbody>
 </table></div>
 <h3>Exploratory test charter (Chapter 6)</h3>
-<p><b>Charter:</b> explore <em>the login page</em> with <em>unusual inputs and sequences</em> to discover <em>security and robustness problems</em>. Time-box 45 minutes. Ideas: phone vs email in the same field, leading/trailing spaces, SQL-like input (<code>' OR 1=1 --</code> — safe here because of prepared statements, which is itself a useful observation), very long password, double-click on Login, back button after logout, two tabs logged in as different roles, remember-me then change password. Record: what you tried, what happened, questions, bugs.</p>
+<p><strong>Charter:</strong> explore <em>the login page</em> with <em>unusual inputs and sequences</em> to discover <em>security and robustness problems</em>. Time-box 45 minutes.</p>
+<h4>Ideas to try</h4>
+<ul>
+<li>phone vs email in the same field</li>
+<li>leading/trailing spaces</li>
+<li>SQL-like input (<code>' OR 1=1 --</code>) — safe here because of prepared statements, which is itself a useful observation</li>
+<li>a very long password</li>
+<li>double-click on Login</li>
+<li>the Back button after logout</li>
+<li>two tabs logged in as different roles</li>
+<li>remember-me, then change the password</li>
+</ul>
+<h4>Record</h4>
+<ul>
+<li>what you tried</li>
+<li>what happened</li>
+<li>questions</li>
+<li>bugs</li>
+</ul>
 <h3>Two defect reports (Chapter 7 format)</h3>
 <table>
 <thead><tr><th>Field</th><th>D-01</th><th>D-02</th></tr></thead>
@@ -327,7 +383,13 @@ const L4 = {
 <tr><td>Probable cause</td><td>switch case "Admin" redirects to the login view (LoginServlet)</td><td>UsersDAO.getUserByEmailOrPhone reads column "password" instead of "passwordHash"</td></tr>
 </tbody>
 </table>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Secret scanning.</b> Finding #1 would have been caught automatically: tools such as gitleaks, TruffleHog or GitHub secret scanning run as a static-analysis step in CI and block a commit containing strings shaped like OAuth secrets or passwords. Adding one to a pipeline is a five-minute job that prevents the most expensive kind of leak. <em>Outside the syllabus because CTFL's static-analysis examples stop at coding standards and complexity.</em></div>`,
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Secret scanning.</strong> Finding #1 would have been caught automatically.
+<ul>
+<li><strong>Tools</strong> — gitleaks, TruffleHog or GitHub secret scanning.</li>
+<li><strong>How they work</strong> — they run as a static-analysis step in CI and block a commit containing strings shaped like OAuth secrets or passwords.</li>
+<li><strong>Cost</strong> — adding one to a pipeline is a five-minute job that prevents the most expensive kind of leak.</li>
+</ul>
+<p class="ghi-chu">Outside the syllabus because CTFL's static-analysis examples stop at coding standards and complexity.</p></div>`,
     `<span class="eyebrow">Dự án luyện tập · P.4 · Nhiệm vụ 3 — kiểm thử động &amp; báo cáo</span>
 <h2>Integration test, charter khám phá và defect report</h2>
 <h3>Integration test case (kiểu Lab 3 / Report5.2)</h3>
@@ -343,7 +405,25 @@ const L4 = {
 </tbody>
 </table></div>
 <h3>Test charter khám phá (Chương 6)</h3>
-<p><b>Charter:</b> khám phá <em>trang đăng nhập</em> với <em>dữ liệu và trình tự bất thường</em> để phát hiện <em>vấn đề bảo mật và độ bền</em>. Giới hạn 45 phút. Gợi ý: số điện thoại lẫn email trong cùng một ô, khoảng trắng đầu/cuối, chuỗi giống SQL (<code>' OR 1=1 --</code> — ở đây an toàn nhờ prepared statement, và đó cũng là một quan sát có ích), mật khẩu rất dài, bấm Login hai lần liền, nút Back sau khi đăng xuất, hai tab đăng nhập hai vai trò khác nhau, remember-me rồi đổi mật khẩu. Ghi lại: đã thử gì, chuyện gì xảy ra, câu hỏi, lỗi.</p>
+<p><strong>Charter:</strong> khám phá <em>trang đăng nhập</em> với <em>dữ liệu và trình tự bất thường</em> để phát hiện <em>vấn đề bảo mật và độ bền</em>. Giới hạn 45 phút.</p>
+<h4>Gợi ý nên thử</h4>
+<ul>
+<li>số điện thoại lẫn email trong cùng một ô</li>
+<li>khoảng trắng đầu/cuối</li>
+<li>chuỗi giống SQL (<code>' OR 1=1 --</code>) — ở đây an toàn nhờ prepared statement, và đó cũng là một quan sát có ích</li>
+<li>mật khẩu rất dài</li>
+<li>bấm Login hai lần liền</li>
+<li>nút Back sau khi đăng xuất</li>
+<li>hai tab đăng nhập hai vai trò khác nhau</li>
+<li>remember-me, rồi đổi mật khẩu</li>
+</ul>
+<h4>Ghi lại</h4>
+<ul>
+<li>đã thử gì</li>
+<li>chuyện gì xảy ra</li>
+<li>câu hỏi</li>
+<li>lỗi</li>
+</ul>
 <h3>Hai defect report (định dạng Chương 7)</h3>
 <table>
 <thead><tr><th>Trường</th><th>D-01</th><th>D-02</th></tr></thead>
@@ -357,7 +437,13 @@ const L4 = {
 <tr><td>Nguyên nhân khả dĩ</td><td>nhánh case "Admin" chuyển về trang login (LoginServlet)</td><td>UsersDAO.getUserByEmailOrPhone đọc cột "password" thay vì "passwordHash"</td></tr>
 </tbody>
 </table>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Quét bí mật (secret scanning).</b> Lỗi số 1 lẽ ra đã bị bắt tự động: các công cụ như gitleaks, TruffleHog hay GitHub secret scanning chạy như một bước phân tích tĩnh trong CI và chặn commit chứa chuỗi trông giống secret OAuth hay mật khẩu. Thêm một bước như vậy vào pipeline chỉ mất năm phút mà ngăn được loại rò rỉ đắt giá nhất. <em>Ngoài giáo trình vì ví dụ phân tích tĩnh của CTFL chỉ dừng ở chuẩn code và độ phức tạp.</em></div>`),
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Quét bí mật (secret scanning).</strong> Lỗi số 1 lẽ ra đã bị bắt tự động.
+<ul>
+<li><strong>Công cụ</strong> — gitleaks, TruffleHog hay GitHub secret scanning.</li>
+<li><strong>Cách chạy</strong> — chạy như một bước phân tích tĩnh trong CI và chặn commit chứa chuỗi trông giống secret OAuth hay mật khẩu.</li>
+<li><strong>Chi phí</strong> — thêm một bước như vậy vào pipeline chỉ mất năm phút mà ngăn được loại rò rỉ đắt giá nhất.</li>
+</ul>
+<p class="ghi-chu">Ngoài giáo trình vì ví dụ phân tích tĩnh của CTFL chỉ dừng ở chuẩn code và độ phức tạp.</p></div>`),
   ].join('\n'),
 };
 

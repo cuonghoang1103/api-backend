@@ -30,7 +30,12 @@ const L71 = {
     bi(`<span class="eyebrow">Chapter 7 · Lesson 7.1 · SWT5 slides 1–24</span>
 <h2>Test organisation — who tests, and how independent are they?</h2>
 <p class="lead">The deck <em>SWT5</em> is "Chapter 5 — Test Management" of the ISTQB Foundation syllabus (on this site it is Chapter 7, because the course splits the big test-design chapter in three). The first block answers two organisational questions: <strong>how independent</strong> should the people who test be, and <strong>what does a test manager do</strong> compared with a tester?</p>
-<div class="callout"><b>Syllabus learning objectives.</b> LO-5.1.1 Explain the benefits and drawbacks of independent testing (K2) · LO-5.1.2 Identify the tasks of a test manager and tester (K1). The whole test-management chapter carries <b>9 of the 40</b> questions in the ISTQB exam (SWT0 slide 7) — the second-largest share after test techniques.</div>
+<div class="callout"><strong>Syllabus learning objectives.</strong>
+<ul>
+<li><strong>LO-5.1.1</strong> Explain the benefits and drawbacks of independent testing (K2)</li>
+<li><strong>LO-5.1.2</strong> Identify the tasks of a test manager and tester (K1)</li>
+</ul>
+The whole test-management chapter carries <strong>9 of the 40</strong> questions in the ISTQB exam (SWT0 slide 7) — the second-largest share after test techniques.</div>
 <h3>The essentials in one screen</h3>
 <table>
 <thead><tr><th>Level of independence (low → high)</th><th>Typical use</th><th>Key pro</th><th>Key con</th></tr></thead>
@@ -46,7 +51,12 @@ const L71 = {
     `<span class="eyebrow">Chương 7 · Bài 7.1 · SWT5 slide 1–24</span>
 <h2>Tổ chức kiểm thử — ai test, và độc lập tới mức nào?</h2>
 <p class="lead">Bộ slide <em>SWT5</em> là "Chapter 5 — Test Management" của syllabus ISTQB Foundation (trên trang này là Chương 7, vì môn học tách chương kỹ thuật thiết kế test rất lớn thành ba chương). Khối đầu tiên trả lời hai câu hỏi về tổ chức: người làm kiểm thử nên <strong>độc lập tới đâu</strong>, và <strong>test manager làm gì</strong> khác với tester?</p>
-<div class="callout"><b>Chuẩn đầu ra theo syllabus.</b> LO-5.1.1 Giải thích lợi ích và hạn chế của kiểm thử độc lập (K2) · LO-5.1.2 Nhận diện nhiệm vụ của test manager và tester (K1). Cả chương quản lý kiểm thử chiếm <b>9/40</b> câu trong đề ISTQB (SWT0 slide 7) — nhiều thứ hai, chỉ sau kỹ thuật thiết kế test.</div>
+<div class="callout"><strong>Chuẩn đầu ra theo syllabus.</strong>
+<ul>
+<li><strong>LO-5.1.1</strong> Giải thích lợi ích và hạn chế của kiểm thử độc lập (K2)</li>
+<li><strong>LO-5.1.2</strong> Nhận diện nhiệm vụ của test manager và tester (K1)</li>
+</ul>
+Cả chương quản lý kiểm thử chiếm <strong>9/40</strong> câu trong đề ISTQB (SWT0 slide 7) — nhiều thứ hai, chỉ sau kỹ thuật thiết kế test.</div>
 <h3>Cốt lõi trong một màn hình</h3>
 <table>
 <thead><tr><th>Mức độc lập (thấp → cao)</th><th>Thường dùng khi</th><th>Ưu điểm chính</th><th>Nhược điểm chính</th></tr></thead>
@@ -62,85 +72,595 @@ const L71 = {
     walkHead(D, 1, 24, 'The mind-map slide (3) comes back as a divider before every section (5, 26, 41, 46, 60, 75, 80, 90); after its first appearance we only note what it highlights.', 'Slide sơ đồ tư duy (3) lặp lại làm vách ngăn trước mỗi phần (5, 26, 41, 46, 60, 75, 80, 90); từ lần thứ hai chỉ ghi chú nó đang nhấn vào phần nào.'),
     walk(D, [
       [1, 'Test Management — Chapter 5 (cover)',
-        `<p>The familiar six-box map of the ISTQB syllabus with box <strong>5 Management</strong> highlighted. The teacher's note simply translates the first box ("Principles: Nguyên tắc"). Remember the numbering shift: ISTQB Chapter 5 = this site's Chapter 7; the exam questions still say "Chapter 5".</p>`,
-        `<p>Sơ đồ sáu ô quen thuộc của syllabus ISTQB, ô <strong>5 Management</strong> được tô màu. Ghi chú của thầy/cô chỉ dịch ô đầu tiên ("Principles: Nguyên tắc"). Nhớ độ lệch số chương: Chapter 5 của ISTQB = Chương 7 trên trang này; câu hỏi thi vẫn ghi "Chapter 5".</p>`],
+        `<p class="y-chinh">🎯 Chapter 5 of the ISTQB syllabus — <strong>Test Management</strong> — which is Chapter 7 on this site.</p>
+<ul>
+<li><strong>The picture</strong> — the familiar six-box map of the ISTQB syllabus, with box <strong>5 Management</strong> highlighted.</li>
+<li><strong>Teacher's note</strong> — it simply translates the first box ("Principles: Nguyên tắc").</li>
+<li><strong>Numbering shift</strong> — ISTQB Chapter 5 = this site's Chapter 7; the exam questions still say "Chapter 5".</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Chương 5 của syllabus ISTQB — <strong>Test Management</strong> — chính là Chương 7 trên trang này.</p>
+<ul>
+<li><strong>Hình trên slide</strong> — sơ đồ sáu ô quen thuộc của syllabus ISTQB, ô <strong>5 Management</strong> được tô màu.</li>
+<li><strong>Ghi chú của thầy/cô</strong> — chỉ dịch ô đầu tiên ("Principles: Nguyên tắc").</li>
+<li><strong>Độ lệch số chương</strong> — Chapter 5 của ISTQB = Chương 7 trên trang này; câu hỏi thi vẫn ghi "Chapter 5".</li>
+</ul>`],
       [2, 'CONTENT',
-        `<p>The six sections of the chapter: Test organisation · Test planning &amp; estimation · Test monitoring &amp; control · Configuration management · Risk &amp; testing · Defect management. Each becomes one lesson here (7.1 → 7.6), followed by Quiz 7.</p>`,
-        `<p>Sáu phần của chương: Tổ chức kiểm thử · Lập kế hoạch &amp; ước lượng · Giám sát &amp; kiểm soát · Quản lý cấu hình · Rủi ro &amp; kiểm thử · Quản lý defect. Mỗi phần là một bài ở đây (7.1 → 7.6), cuối cùng là Quiz 7.</p>`],
+        `<p class="y-chinh">🎯 The chapter has six sections — each one becomes one lesson here.</p>
+<ol>
+<li><strong>Test organisation</strong> — lesson 7.1</li>
+<li><strong>Test planning &amp; estimation</strong> — lesson 7.2</li>
+<li><strong>Test monitoring &amp; control</strong> — lesson 7.3</li>
+<li><strong>Configuration management</strong> — lesson 7.4</li>
+<li><strong>Risk &amp; testing</strong> — lesson 7.5</li>
+<li><strong>Defect management</strong> — lesson 7.6</li>
+</ol>
+<p>After the six lessons comes Quiz 7.</p>`,
+        `<p class="y-chinh">🎯 Chương có sáu phần — mỗi phần là một bài ở đây.</p>
+<ol>
+<li><strong>Tổ chức kiểm thử</strong> — bài 7.1</li>
+<li><strong>Lập kế hoạch &amp; ước lượng</strong> — bài 7.2</li>
+<li><strong>Giám sát &amp; kiểm soát</strong> — bài 7.3</li>
+<li><strong>Quản lý cấu hình</strong> — bài 7.4</li>
+<li><strong>Rủi ro &amp; kiểm thử</strong> — bài 7.5</li>
+<li><strong>Quản lý defect</strong> — bài 7.6</li>
+</ol>
+<p>Sau sáu bài là Quiz 7.</p>`],
       [3, 'Mind map of Chapter 5',
-        `<p>The whole chapter on one page — worth printing. From the pink centre "Chap 5 – Test Management": <strong>Test Organisation</strong> (Independence level, Test Leader (Mgt.), Tester (Execution)); <strong>Planning &amp; Estimation</strong> with three sub-branches — <em>Test Strategy</em> (Analytical, Model-based, Methodical, Process-/Standard-compliant, Directed/Consultative, Regression-averse, Reactive/Dynamic), <em>Test Effort Factors</em> (Product, Development-process, People characteristics, Test results) and <em>Estimation Techniques</em> (Metric-based → burn-down chart, defect-removal model; Expert-based → planning poker, Wideband Delphi); <strong>Monitoring &amp; Control</strong>; <strong>Configuration Mgt.</strong>; <strong>Risk &amp; Testing</strong> (Project risk &amp; product risk, Likelihood vs impact); <strong>Defect Mgt.</strong> (Steps to reproduce, Expected &amp; actual result, Severity &amp; priority, Screenshot). If you can redraw this map from memory, you know the chapter's skeleton.</p>`,
-        `<p>Cả chương trên một trang — nên in ra. Từ tâm màu hồng "Chap 5 – Test Management": <strong>Test Organisation</strong> (mức độc lập, Test Leader (quản lý), Tester (thực thi)); <strong>Planning &amp; Estimation</strong> với ba nhánh con — <em>Test Strategy</em> (Analytical, Model-based, Methodical, Process-/Standard-compliant, Directed/Consultative, Regression-averse, Reactive/Dynamic), <em>Test Effort Factors</em> (đặc điểm sản phẩm, quy trình phát triển, con người, kết quả test) và <em>Estimation Techniques</em> (Metric-based → burn-down chart, defect-removal model; Expert-based → planning poker, Wideband Delphi); <strong>Monitoring &amp; Control</strong>; <strong>Configuration Mgt.</strong>; <strong>Risk &amp; Testing</strong> (rủi ro dự án &amp; rủi ro sản phẩm, khả năng xảy ra vs tác động); <strong>Defect Mgt.</strong> (bước tái hiện, kết quả mong đợi &amp; thực tế, severity &amp; priority, ảnh chụp màn hình). Vẽ lại được sơ đồ này không cần nhìn là bạn đã nắm khung xương của chương.</p>`],
+        `<p class="y-chinh">🎯 The whole chapter on one page — worth printing and redrawing from memory.</p>
+<p>The branches grow from the pink centre "Chap 5 – Test Management":</p>
+<p class="nhan">1 · Test Organisation</p>
+<ul>
+<li>Independence level</li>
+<li>Test Leader (Mgt.)</li>
+<li>Tester (Execution)</li>
+</ul>
+<p class="nhan">2 · Planning &amp; Estimation — three sub-branches</p>
+<ul>
+<li><strong>Test Strategy</strong> — Analytical, Model-based, Methodical, Process-/Standard-compliant, Directed/Consultative, Regression-averse, Reactive/Dynamic.</li>
+<li><strong>Test Effort Factors</strong> — Product, Development-process, People characteristics, Test results.</li>
+<li><strong>Estimation Techniques</strong> — Metric-based (burn-down chart, defect-removal model) and Expert-based (planning poker, Wideband Delphi).</li>
+</ul>
+<p class="nhan">3–6 · The remaining branches</p>
+<ul>
+<li><strong>Monitoring &amp; Control</strong></li>
+<li><strong>Configuration Mgt.</strong></li>
+<li><strong>Risk &amp; Testing</strong> — Project risk &amp; product risk, Likelihood vs impact.</li>
+<li><strong>Defect Mgt.</strong> — Steps to reproduce, Expected &amp; actual result, Severity &amp; priority, Screenshot.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> if you can redraw this map from memory, you know the chapter's skeleton.</p>`,
+        `<p class="y-chinh">🎯 Cả chương trên một trang — nên in ra và tập vẽ lại không cần nhìn.</p>
+<p>Các nhánh mọc ra từ tâm màu hồng "Chap 5 – Test Management":</p>
+<p class="nhan">1 · Test Organisation</p>
+<ul>
+<li>Mức độc lập (Independence level)</li>
+<li>Test Leader (quản lý)</li>
+<li>Tester (thực thi)</li>
+</ul>
+<p class="nhan">2 · Planning &amp; Estimation — ba nhánh con</p>
+<ul>
+<li><strong>Test Strategy</strong> — Analytical, Model-based, Methodical, Process-/Standard-compliant, Directed/Consultative, Regression-averse, Reactive/Dynamic.</li>
+<li><strong>Test Effort Factors</strong> — đặc điểm sản phẩm, quy trình phát triển, con người, kết quả test.</li>
+<li><strong>Estimation Techniques</strong> — Metric-based (burn-down chart, defect-removal model) và Expert-based (planning poker, Wideband Delphi).</li>
+</ul>
+<p class="nhan">3–6 · Các nhánh còn lại</p>
+<ul>
+<li><strong>Monitoring &amp; Control</strong></li>
+<li><strong>Configuration Mgt.</strong></li>
+<li><strong>Risk &amp; Testing</strong> — rủi ro dự án &amp; rủi ro sản phẩm, khả năng xảy ra vs tác động.</li>
+<li><strong>Defect Mgt.</strong> — bước tái hiện, kết quả mong đợi &amp; thực tế, severity &amp; priority, ảnh chụp màn hình.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> vẽ lại được sơ đồ này không cần nhìn là bạn đã nắm khung xương của chương.</p>`],
       [4, 'CONTENT — Test Organisation',
-        `<p>Section 1 has two sub-topics: <strong>benefits &amp; drawbacks of independent testing</strong> (LO-5.1.1, K2 — you must be able to <em>explain</em>, so expect "which is a benefit/drawback" questions) and <strong>tasks of test managers &amp; testers</strong> (LO-5.1.2, K1 — recognise which task belongs to which role).</p>`,
-        `<p>Phần 1 có hai ý: <strong>lợi ích &amp; hạn chế của kiểm thử độc lập</strong> (LO-5.1.1, K2 — phải <em>giải thích</em> được, nên chờ câu kiểu "đâu là lợi ích/hạn chế") và <strong>nhiệm vụ của test manager &amp; tester</strong> (LO-5.1.2, K1 — nhận ra việc nào thuộc vai trò nào).</p>`],
+        `<p class="y-chinh">🎯 Section 1 has two sub-topics, with two different exam levels.</p>
+<ul>
+<li><strong>Benefits &amp; drawbacks of independent testing</strong> — LO-5.1.1, K2: you must be able to <em>explain</em>, so expect "which is a benefit/drawback" questions.</li>
+<li><strong>Tasks of test managers &amp; testers</strong> — LO-5.1.2, K1: recognise which task belongs to which role.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Phần 1 có hai ý, ứng với hai mức đề thi khác nhau.</p>
+<ul>
+<li><strong>Lợi ích &amp; hạn chế của kiểm thử độc lập</strong> — LO-5.1.1, K2: phải <em>giải thích</em> được, nên chờ câu kiểu "đâu là lợi ích/hạn chế".</li>
+<li><strong>Nhiệm vụ của test manager &amp; tester</strong> — LO-5.1.2, K1: nhận ra việc nào thuộc vai trò nào.</li>
+</ul>`],
       [5, 'Mind map (divider)',
-        `<p>The same map as slide 3, shown again as the section divider. Focus now on the top-left branch: <em>Independence level</em>, <em>Test Leader (Mgt.)</em>, <em>Tester (Execution)</em>.</p>`,
-        `<p>Lại sơ đồ của slide 3, dùng làm vách ngăn phần. Giờ tập trung vào nhánh góc trên bên trái: <em>Independence level</em>, <em>Test Leader (Mgt.)</em>, <em>Tester (Execution)</em>.</p>`],
+        `<p class="y-chinh">🎯 The map of slide 3 again, as the section divider — now look at the top-left branch.</p>
+<ul>
+<li><em>Independence level</em></li>
+<li><em>Test Leader (Mgt.)</em></li>
+<li><em>Tester (Execution)</em></li>
+</ul>`,
+        `<p class="y-chinh">🎯 Lại sơ đồ của slide 3, dùng làm vách ngăn phần — giờ nhìn nhánh góc trên bên trái.</p>
+<ul>
+<li><em>Independence level</em></li>
+<li><em>Test Leader (Mgt.)</em></li>
+<li><em>Tester (Execution)</em></li>
+</ul>`],
       [6, 'Independence Testing — faults found over time',
-        `<p>A chart of <strong>number of faults found</strong> against <strong>time</strong>, with a vertical line at "Release to end users". The yellow curve is the <em>expectation</em>: faults found rise, peak during testing, then fall so that only a trickle remains after release. The purple curve is the <em>reality</em> in many projects: after release a second hump appears — users find many defects the team missed. The teacher's notes give two common remedies: (1) have <strong>client representatives on site</strong> throughout development, (2) run <strong>test suites provided by the client</strong>. Both inject a view different from the builders' — which is exactly what independence means.</p>`,
-        `<p>Biểu đồ <strong>số lỗi tìm được</strong> theo <strong>thời gian</strong>, có vạch dọc "Release to end users" (phát hành cho người dùng). Đường vàng là <em>kỳ vọng</em>: số lỗi tìm được tăng, đạt đỉnh trong lúc test rồi giảm, sau phát hành chỉ còn lác đác. Đường tím là <em>thực tế</em> ở nhiều dự án: sau phát hành mọc thêm một "cái bướu" thứ hai — người dùng tìm ra rất nhiều defect mà nhóm bỏ sót. Ghi chú của thầy/cô nêu hai cách khắc phục thường gặp: (1) để <strong>đại diện khách hàng ngồi cùng</strong> suốt quá trình phát triển, (2) chạy <strong>bộ test do khách hàng cung cấp</strong>. Cả hai đều đưa vào một góc nhìn khác với người xây dựng — đó chính là ý nghĩa của tính độc lập.</p>`],
+        `<p class="y-chinh">🎯 Without an outside view, users find a second wave of defects after release.</p>
+<p class="nhan">Reading the chart</p>
+<ul>
+<li><strong>Axes</strong> — <strong>number of faults found</strong> against <strong>time</strong>, with a vertical line at "Release to end users".</li>
+<li><strong>Yellow curve = expectation</strong> — faults found rise, peak during testing, then fall; only a trickle remains after release.</li>
+<li><strong>Purple curve = reality</strong> in many projects — after release a second hump appears: users find many defects the team missed.</li>
+</ul>
+<p class="nhan">Two common remedies (teacher's notes)</p>
+<ol>
+<li><strong>Client representatives on site</strong> throughout development.</li>
+<li><strong>Test suites provided by the client</strong>.</li>
+</ol>
+<p>Both inject a view different from the builders' — which is exactly what independence means.</p>`,
+        `<p class="y-chinh">🎯 Thiếu góc nhìn từ bên ngoài, người dùng sẽ tìm ra "làn sóng" defect thứ hai sau phát hành.</p>
+<p class="nhan">Đọc biểu đồ</p>
+<ul>
+<li><strong>Hai trục</strong> — <strong>số lỗi tìm được</strong> theo <strong>thời gian</strong>, có vạch dọc "Release to end users" (phát hành cho người dùng).</li>
+<li><strong>Đường vàng = kỳ vọng</strong> — số lỗi tìm được tăng, đạt đỉnh trong lúc test rồi giảm; sau phát hành chỉ còn lác đác.</li>
+<li><strong>Đường tím = thực tế</strong> ở nhiều dự án — sau phát hành mọc thêm một "cái bướu" thứ hai: người dùng tìm ra rất nhiều defect mà nhóm bỏ sót.</li>
+</ul>
+<p class="nhan">Hai cách khắc phục thường gặp (ghi chú của thầy/cô)</p>
+<ol>
+<li><strong>Để đại diện khách hàng ngồi cùng</strong> suốt quá trình phát triển.</li>
+<li><strong>Chạy bộ test do khách hàng cung cấp</strong>.</li>
+</ol>
+<p>Cả hai đều đưa vào một góc nhìn khác với người xây dựng — đó chính là ý nghĩa của tính độc lập.</p>`],
       [7, 'Independence Testing — definition',
-        `<p>Two sentences straight from the syllabus. (1) <strong>A certain degree of independence</strong> makes the tester more effective at finding defects because the author and the tester have <strong>different cognitive biases</strong> — the author unconsciously tests the paths he designed; the outsider questions the assumptions. (2) Independence is <strong>not a replacement for familiarity</strong>: developers can efficiently find many defects in their own code. So the right answer is a mix, never "only independent testers". The teacher's Vietnamese note says the same.</p>`,
-        `<p>Hai câu lấy nguyên văn từ syllabus. (1) <strong>Một mức độc lập nhất định</strong> giúp tester tìm defect hiệu quả hơn vì tác giả và tester có <strong>thiên kiến nhận thức khác nhau</strong> — tác giả vô thức chỉ test các đường mình đã nghĩ ra; người ngoài thì đặt câu hỏi với chính các giả định. (2) Tính độc lập <strong>không thay thế được sự am hiểu</strong>: developer vẫn tìm được rất nhiều lỗi trong code của chính mình một cách hiệu quả. Vì vậy đáp án đúng luôn là phối hợp, không bao giờ là "chỉ tester độc lập". Ghi chú tiếng Việt của thầy/cô cũng nói đúng như vậy.</p>`],
+        `<p class="y-chinh">🎯 Some independence helps find defects — but it never replaces knowing the code.</p>
+<p class="nhan">Two sentences straight from the syllabus</p>
+<ol>
+<li><strong>A certain degree of independence</strong> makes the tester more effective at finding defects, because author and tester have <strong>different cognitive biases</strong>. The author unconsciously tests the paths he designed; the outsider questions the assumptions.</li>
+<li><strong>Independence is not a replacement for familiarity</strong> — developers can efficiently find many defects in their own code.</li>
+</ol>
+<p>So the right answer is a mix, never "only independent testers". The teacher's Vietnamese note says the same.</p>`,
+        `<p class="y-chinh">🎯 Một chút độc lập giúp tìm lỗi tốt hơn — nhưng không bao giờ thay được sự am hiểu code.</p>
+<p class="nhan">Hai câu lấy nguyên văn từ syllabus</p>
+<ol>
+<li><strong>Một mức độc lập nhất định</strong> giúp tester tìm defect hiệu quả hơn, vì tác giả và tester có <strong>thiên kiến nhận thức khác nhau</strong>. Tác giả vô thức chỉ test các đường mình đã nghĩ ra; người ngoài thì đặt câu hỏi với chính các giả định.</li>
+<li><strong>Tính độc lập không thay thế được sự am hiểu</strong> — developer vẫn tìm được rất nhiều lỗi trong code của chính mình một cách hiệu quả.</li>
+</ol>
+<p>Vì vậy đáp án đúng luôn là phối hợp, không bao giờ là "chỉ tester độc lập". Ghi chú tiếng Việt của thầy/cô cũng nói đúng như vậy.</p>`],
       [8, 'Independence Degree of Testing (inverted triangle)',
-        `<p>An inverted pink triangle with an arrow "Level of Independence" pointing up. From the bottom (least independent) to the top: <strong>Developer's sole responsibility</strong> → <strong>Tester(s) in dev team</strong> → <strong>Testers outside dev team</strong> → <strong>Internal specialised testers / test consultants</strong> → <strong>Third party outside organisation</strong>. The syllabus phrases the same ladder as: no independent testers; independent developers or testers within the development team; an independent test team inside the organisation; independent testers from the business/user community or specialists in specific test types; external testers. Exam questions like "Which is the LOWEST/HIGHEST level of independence?" are answered straight from this picture.</p>`,
-        `<p>Tam giác ngược màu hồng với mũi tên "Level of Independence" chỉ lên. Từ dưới (ít độc lập nhất) lên trên: <strong>Developer tự chịu trách nhiệm</strong> → <strong>Tester trong nhóm dev</strong> → <strong>Tester ngoài nhóm dev</strong> → <strong>Tester chuyên trách/tư vấn test nội bộ</strong> → <strong>Bên thứ ba ngoài tổ chức</strong>. Syllabus diễn đạt cùng bậc thang: không có tester độc lập; developer hoặc tester độc lập trong nhóm phát triển; nhóm test độc lập trong tổ chức; tester độc lập từ phía nghiệp vụ/người dùng hoặc chuyên gia về một loại test; tester bên ngoài. Câu hỏi "mức độc lập THẤP/CAO nhất là gì?" trả lời thẳng từ hình này.</p>`],
+        `<p class="y-chinh">🎯 Five levels of independence, from the developer alone up to a third party.</p>
+<p>An inverted pink triangle with an arrow "Level of Independence" pointing up.</p>
+<p class="nhan">From the bottom (least) to the top (most independent)</p>
+<ol>
+<li><strong>Developer's sole responsibility</strong></li>
+<li><strong>Tester(s) in dev team</strong></li>
+<li><strong>Testers outside dev team</strong></li>
+<li><strong>Internal specialised testers / test consultants</strong></li>
+<li><strong>Third party outside organisation</strong></li>
+</ol>
+<p class="nhan">The same ladder in syllabus words</p>
+<ol>
+<li>No independent testers.</li>
+<li>Independent developers or testers within the development team.</li>
+<li>An independent test team inside the organisation.</li>
+<li>Independent testers from the business/user community, or specialists in specific test types.</li>
+<li>External testers.</li>
+</ol>
+<p class="meo">🧠 <strong>Remember:</strong> questions like "Which is the LOWEST/HIGHEST level of independence?" are answered straight from this picture.</p>`,
+        `<p class="y-chinh">🎯 Năm mức độc lập, từ developer tự test lên tới bên thứ ba.</p>
+<p>Tam giác ngược màu hồng với mũi tên "Level of Independence" chỉ lên.</p>
+<p class="nhan">Từ dưới (ít nhất) lên trên (độc lập nhất)</p>
+<ol>
+<li><strong>Developer tự chịu trách nhiệm</strong></li>
+<li><strong>Tester trong nhóm dev</strong></li>
+<li><strong>Tester ngoài nhóm dev</strong></li>
+<li><strong>Tester chuyên trách/tư vấn test nội bộ</strong></li>
+<li><strong>Bên thứ ba ngoài tổ chức</strong></li>
+</ol>
+<p class="nhan">Cùng bậc thang, theo lời syllabus</p>
+<ol>
+<li>Không có tester độc lập.</li>
+<li>Developer hoặc tester độc lập trong nhóm phát triển.</li>
+<li>Nhóm test độc lập trong tổ chức.</li>
+<li>Tester độc lập từ phía nghiệp vụ/người dùng, hoặc chuyên gia về một loại test.</li>
+<li>Tester bên ngoài.</li>
+</ol>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> câu hỏi "mức độc lập THẤP/CAO nhất là gì?" trả lời thẳng từ hình này.</p>`],
       [9, 'Testing by Developers',
-        `<p><strong>Pros:</strong> they know the code best; can find problems testers might miss (internal logic, error handling); can find and fix faults cheaply — no report, no hand-over. <strong>Cons:</strong> it is difficult to destroy your own work; the tendency to "see" expected results instead of actual results (confirmation bias); the assessment is subjective. The teacher's note: this level is typical for <strong>unit (component) testing and component integration testing</strong>.</p>`,
-        `<p><strong>Ưu:</strong> hiểu code rõ nhất; tìm được vấn đề mà tester có thể bỏ sót (logic bên trong, xử lý lỗi); tìm và sửa lỗi rất rẻ — không cần báo cáo, không cần bàn giao. <strong>Nhược:</strong> khó "phá" sản phẩm của chính mình; có xu hướng "nhìn thấy" kết quả mong đợi thay vì kết quả thực tế (thiên kiến xác nhận); đánh giá mang tính chủ quan. Ghi chú của thầy/cô: mức này hay gặp ở <strong>unit (component) testing và component integration testing</strong>.</p>`],
+        `<p class="y-chinh">🎯 Level 1 — developers test their own code: cheap and knowledgeable, but not objective.</p>
+<p class="nhan">Pros</p>
+<ul>
+<li><strong>Know the code best</strong></li>
+<li><strong>Can find problems testers might miss</strong> — internal logic, error handling.</li>
+<li><strong>Find and fix faults cheaply</strong> — no report, no hand-over.</li>
+</ul>
+<p class="nhan">Cons</p>
+<ul>
+<li><strong>Difficult to destroy your own work</strong></li>
+<li><strong>Tendency to "see" expected results</strong> instead of actual results (confirmation bias).</li>
+<li><strong>Subjective assessment</strong></li>
+</ul>
+<p class="ghi-chu">Teacher's note: this level is typical for <strong>unit (component) testing and component integration testing</strong>.</p>`,
+        `<p class="y-chinh">🎯 Mức 1 — developer tự test code của mình: rẻ và hiểu sâu, nhưng thiếu khách quan.</p>
+<p class="nhan">Ưu điểm</p>
+<ul>
+<li><strong>Hiểu code rõ nhất</strong></li>
+<li><strong>Tìm được vấn đề mà tester có thể bỏ sót</strong> — logic bên trong, xử lý lỗi.</li>
+<li><strong>Tìm và sửa lỗi rất rẻ</strong> — không cần báo cáo, không cần bàn giao.</li>
+</ul>
+<p class="nhan">Nhược điểm</p>
+<ul>
+<li><strong>Khó "phá" sản phẩm của chính mình</strong></li>
+<li><strong>Có xu hướng "nhìn thấy" kết quả mong đợi</strong> thay vì kết quả thực tế (thiên kiến xác nhận).</li>
+<li><strong>Đánh giá mang tính chủ quan</strong></li>
+</ul>
+<p class="ghi-chu">Ghi chú của thầy/cô: mức này hay gặp ở <strong>unit (component) testing và component integration testing</strong>.</p>`],
       [10, 'Tester(s) in Development Team',
-        `<p><strong>Pros:</strong> an independent view of the software; dedicated to testing with no development duties; part of the team, working towards the same goal (quality). <strong>Cons:</strong> lack of respect (the "only" tester among developers); a lonely, thankless task; <strong>corruptible</strong> — peer pressure can make the tester soften bad news about teammates' code; a single view/opinion. Notes: typical in unit/integration testing and very common in <strong>Agile</strong> projects, where testers sit inside the Scrum team.</p>`,
-        `<p><strong>Ưu:</strong> có góc nhìn độc lập về phần mềm; chuyên tâm test, không phải code; là thành viên của nhóm, cùng hướng tới một mục tiêu (chất lượng). <strong>Nhược:</strong> thiếu sự tôn trọng (người tester "duy nhất" giữa đám developer); công việc cô đơn, ít được ghi nhận; <strong>dễ bị tác động</strong> — áp lực đồng nghiệp khiến tester nói nhẹ đi tin xấu về code của đồng đội; chỉ có một góc nhìn. Ghi chú: hay gặp ở unit/integration testing và rất phổ biến trong dự án <strong>Agile</strong>, nơi tester ngồi ngay trong Scrum team.</p>`],
+        `<p class="y-chinh">🎯 Level 2 — a tester inside the development team: close to the developers, but under their pressure.</p>
+<p class="nhan">Pros</p>
+<ul>
+<li><strong>Independent view</strong> of the software.</li>
+<li><strong>Dedicated to testing</strong> — no development duties.</li>
+<li><strong>Part of the team</strong> — working towards the same goal (quality).</li>
+</ul>
+<p class="nhan">Cons</p>
+<ul>
+<li><strong>Lack of respect</strong> — the "only" tester among developers.</li>
+<li><strong>A lonely, thankless task</strong></li>
+<li><strong>Corruptible</strong> — peer pressure can make the tester soften bad news about teammates' code.</li>
+<li><strong>A single view/opinion</strong></li>
+</ul>
+<p class="ghi-chu">Notes: typical in unit/integration testing, and very common in <strong>Agile</strong> projects, where testers sit inside the Scrum team.</p>`,
+        `<p class="y-chinh">🎯 Mức 2 — tester nằm trong nhóm phát triển: gần developer, nhưng cũng chịu áp lực từ họ.</p>
+<p class="nhan">Ưu điểm</p>
+<ul>
+<li><strong>Có góc nhìn độc lập</strong> về phần mềm.</li>
+<li><strong>Chuyên tâm test</strong> — không phải code.</li>
+<li><strong>Là thành viên của nhóm</strong> — cùng hướng tới một mục tiêu (chất lượng).</li>
+</ul>
+<p class="nhan">Nhược điểm</p>
+<ul>
+<li><strong>Thiếu sự tôn trọng</strong> — người tester "duy nhất" giữa đám developer.</li>
+<li><strong>Công việc cô đơn, ít được ghi nhận</strong></li>
+<li><strong>Dễ bị tác động</strong> — áp lực đồng nghiệp khiến tester nói nhẹ đi tin xấu về code của đồng đội.</li>
+<li><strong>Chỉ có một góc nhìn</strong></li>
+</ul>
+<p class="ghi-chu">Ghi chú: hay gặp ở unit/integration testing, và rất phổ biến trong dự án <strong>Agile</strong>, nơi tester ngồi ngay trong Scrum team.</p>`],
       [11, 'Tester(s) outside Development Team',
-        `<p><strong>Pros:</strong> a dedicated team just for testing; specialist testing expertise; testing is more objective and more consistent. <strong>Cons:</strong> the <strong>"over the wall" syndrome</strong> — the cartoon shows departments (marketing, design, engineering, manufacturing) each throwing the product over a wall to the next, with a wreck at the end: nobody talks, each side just hands over; the relationship may become antagonistic/confrontational; <strong>over-reliance on testers</strong> — developers test less because "QA will catch it". Notes: typical of <strong>traditional</strong> (sequential) projects, usually at system-test level.</p>`,
-        `<p><strong>Ưu:</strong> có nhóm chỉ chuyên test; chuyên môn kiểm thử sâu; kiểm thử khách quan và nhất quán hơn. <strong>Nhược:</strong> <strong>hội chứng "ném qua tường"</strong> — tranh vẽ các phòng ban (marketing, thiết kế, kỹ thuật, sản xuất) lần lượt ném sản phẩm qua bức tường cho bên kế tiếp, cuối cùng là một đống đổ nát: không ai nói chuyện với ai, chỉ bàn giao; quan hệ có thể thành đối đầu; <strong>ỷ lại vào tester</strong> — developer test ít đi vì "đã có QA bắt lỗi". Ghi chú: điển hình ở dự án <strong>truyền thống</strong> (tuần tự), thường ở cấp system test.</p>`],
+        `<p class="y-chinh">🎯 Level 3 — a separate test team: objective and consistent, but at risk of "over the wall".</p>
+<p class="nhan">Pros</p>
+<ul>
+<li><strong>A dedicated team</strong> just for testing.</li>
+<li><strong>Specialist testing expertise</strong></li>
+<li><strong>More objective and more consistent</strong> testing.</li>
+</ul>
+<p class="nhan">Cons</p>
+<ul>
+<li><strong>"Over the wall" syndrome</strong> — the cartoon shows departments (marketing, design, engineering, manufacturing) each throwing the product over a wall to the next, with a wreck at the end: nobody talks, each side just hands over.</li>
+<li><strong>Antagonistic/confrontational</strong> — the relationship may turn into a fight.</li>
+<li><strong>Over-reliance on testers</strong> — developers test less because "QA will catch it".</li>
+</ul>
+<p class="ghi-chu">Notes: typical of <strong>traditional</strong> (sequential) projects, usually at system-test level.</p>`,
+        `<p class="y-chinh">🎯 Mức 3 — nhóm test riêng: khách quan và nhất quán, nhưng dễ mắc hội chứng "ném qua tường".</p>
+<p class="nhan">Ưu điểm</p>
+<ul>
+<li><strong>Có nhóm chỉ chuyên test</strong></li>
+<li><strong>Chuyên môn kiểm thử sâu</strong></li>
+<li><strong>Kiểm thử khách quan và nhất quán hơn</strong></li>
+</ul>
+<p class="nhan">Nhược điểm</p>
+<ul>
+<li><strong>Hội chứng "ném qua tường"</strong> — tranh vẽ các phòng ban (marketing, thiết kế, kỹ thuật, sản xuất) lần lượt ném sản phẩm qua bức tường cho bên kế tiếp, cuối cùng là một đống đổ nát: không ai nói chuyện với ai, chỉ bàn giao.</li>
+<li><strong>Dễ đối đầu</strong> — quan hệ hai bên có thể thành căng thẳng.</li>
+<li><strong>Ỷ lại vào tester</strong> — developer test ít đi vì "đã có QA bắt lỗi".</li>
+</ul>
+<p class="ghi-chu">Ghi chú: điển hình ở dự án <strong>truyền thống</strong> (tuần tự), thường ở cấp system test.</p>`],
       [12, 'Internal Specialised Testers / Test Consultants',
-        `<p><strong>Pros:</strong> highly specialist expertise that supports and improves the testing done by everyone; better planning, estimation and control thanks to a broad view of testing across the organisation. <strong>Cons:</strong> someone still has to do the testing; is their level of expertise enough?; they need good people and communication skills; they have <strong>influence, not authority</strong> — they advise, they cannot order. The teacher adds with a smile: officially it is "support/consultation", in reality it is often closer to <em>invigilation</em> (checking on the teams).</p>`,
-        `<p><strong>Ưu:</strong> chuyên môn rất sâu, hỗ trợ và nâng chất lượng kiểm thử của mọi người; lập kế hoạch, ước lượng và kiểm soát tốt hơn nhờ nhìn bao quát kiểm thử trong cả tổ chức. <strong>Nhược:</strong> vẫn phải có người trực tiếp test; chuyên môn của họ có đủ không?; cần kỹ năng giao tiếp tốt; họ chỉ có <strong>ảnh hưởng, không có quyền hạn</strong> — khuyên được, không ra lệnh được. Thầy/cô đùa trong ghi chú: trên giấy là "hỗ trợ/tư vấn", thực tế nhiều khi giống <em>giám thị</em> đi kiểm tra các nhóm hơn.</p>`],
+        `<p class="y-chinh">🎯 Level 4 — internal specialists / test consultants: deep expertise, but only influence, not authority.</p>
+<p class="nhan">Pros</p>
+<ul>
+<li><strong>Highly specialist expertise</strong> — supports and improves the testing done by everyone.</li>
+<li><strong>Better planning, estimation and control</strong> — thanks to a broad view of testing across the organisation.</li>
+</ul>
+<p class="nhan">Cons</p>
+<ul>
+<li><strong>Someone still has to do the testing</strong></li>
+<li><strong>Is their level of expertise enough?</strong></li>
+<li><strong>They need good people skills</strong> — communication.</li>
+<li><strong>Influence, not authority</strong> — they advise, they cannot order.</li>
+</ul>
+<p class="ghi-chu">The teacher adds with a smile: officially it is "support/consultation", in reality it is often closer to <em>invigilation</em> (checking on the teams).</p>`,
+        `<p class="y-chinh">🎯 Mức 4 — chuyên gia/tư vấn test nội bộ: chuyên môn sâu, nhưng chỉ có ảnh hưởng, không có quyền.</p>
+<p class="nhan">Ưu điểm</p>
+<ul>
+<li><strong>Chuyên môn rất sâu</strong> — hỗ trợ và nâng chất lượng kiểm thử của mọi người.</li>
+<li><strong>Lập kế hoạch, ước lượng và kiểm soát tốt hơn</strong> — nhờ nhìn bao quát kiểm thử trong cả tổ chức.</li>
+</ul>
+<p class="nhan">Nhược điểm</p>
+<ul>
+<li><strong>Vẫn phải có người trực tiếp test</strong></li>
+<li><strong>Chuyên môn của họ có đủ không?</strong></li>
+<li><strong>Cần kỹ năng làm việc với người</strong> — giao tiếp tốt.</li>
+<li><strong>Ảnh hưởng, không phải quyền hạn</strong> — khuyên được, không ra lệnh được.</li>
+</ul>
+<p class="ghi-chu">Thầy/cô đùa trong ghi chú: trên giấy là "hỗ trợ/tư vấn", thực tế nhiều khi giống <em>giám thị</em> đi kiểm tra các nhóm hơn.</p>`],
       [13, 'Outside Organisation (3rd Party)',
-        `<p><strong>Pros:</strong> highly specialist expertise (if outsourced to a good organisation); independent of internal politics. <strong>Cons:</strong> lack of company and product knowledge; the expertise gained leaves the company when the contract ends; possibly expensive. The notes give two good scenarios: (1) <strong>non-functional testing</strong> — performance or security testing by a specialist firm that already owns the equipment, tools and procedures; (2) economics — paying per project can be cheaper than keeping permanent test staff.</p>`,
-        `<p><strong>Ưu:</strong> chuyên môn rất sâu (nếu thuê đúng đơn vị tốt); không dính tới chính trị nội bộ. <strong>Nhược:</strong> thiếu hiểu biết về công ty và sản phẩm; kinh nghiệm tích luỹ được đi ra ngoài công ty khi hết hợp đồng; có thể đắt. Ghi chú đưa hai tình huống hợp lý: (1) <strong>kiểm thử phi chức năng</strong> — test hiệu năng hay bảo mật do công ty chuyên trách làm, họ có sẵn thiết bị, công cụ và quy trình; (2) bài toán kinh tế — trả tiền theo dự án có thể rẻ hơn nuôi nhân sự test cố định.</p>`],
+        `<p class="y-chinh">🎯 Level 5 — a third-party organisation: expert and politically neutral, but outside the company.</p>
+<p class="nhan">Pros</p>
+<ul>
+<li><strong>Highly specialist expertise</strong> — if outsourced to a good organisation.</li>
+<li><strong>Independent of internal politics</strong></li>
+</ul>
+<p class="nhan">Cons</p>
+<ul>
+<li><strong>Lack of company and product knowledge</strong></li>
+<li><strong>The expertise leaves</strong> the company when the contract ends.</li>
+<li><strong>Possibly expensive</strong></li>
+</ul>
+<p class="nhan">Two good scenarios (teacher's notes)</p>
+<ol>
+<li><strong>Non-functional testing</strong> — performance or security testing by a specialist firm that already owns the equipment, tools and procedures.</li>
+<li><strong>Economics</strong> — paying per project can be cheaper than keeping permanent test staff.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Mức 5 — tổ chức bên thứ ba: chuyên sâu và trung lập, nhưng đứng ngoài công ty.</p>
+<p class="nhan">Ưu điểm</p>
+<ul>
+<li><strong>Chuyên môn rất sâu</strong> — nếu thuê đúng đơn vị tốt.</li>
+<li><strong>Không dính tới chính trị nội bộ</strong></li>
+</ul>
+<p class="nhan">Nhược điểm</p>
+<ul>
+<li><strong>Thiếu hiểu biết về công ty và sản phẩm</strong></li>
+<li><strong>Kinh nghiệm đi ra ngoài</strong> công ty khi hết hợp đồng.</li>
+<li><strong>Có thể đắt</strong></li>
+</ul>
+<p class="nhan">Hai tình huống hợp lý (ghi chú của thầy/cô)</p>
+<ol>
+<li><strong>Kiểm thử phi chức năng</strong> — test hiệu năng hay bảo mật do công ty chuyên trách làm, họ có sẵn thiết bị, công cụ và quy trình.</li>
+<li><strong>Bài toán kinh tế</strong> — trả tiền theo dự án có thể rẻ hơn nuôi nhân sự test cố định.</li>
+</ol>`],
       [14, 'Usual choices per test level',
-        `<p>Who usually tests at each level: <strong>component testing</strong> — the programmers themselves (or a "buddy", another developer); <strong>component integration testing</strong> — a "poorly defined activity": often nobody owns it clearly, so it falls between developers and testers (a warning, not a recommendation); <strong>system testing</strong> — often an independent test team; <strong>acceptance testing</strong> — the users (with technical help), mainly as a <em>demonstration for confidence</em> rather than a defect hunt. Notice how independence grows as you climb the V-model.</p>`,
-        `<p>Ai thường test ở mỗi cấp: <strong>component testing</strong> — chính lập trình viên (hoặc một "bạn cặp", developer khác); <strong>component integration testing</strong> — là "hoạt động không được định nghĩa rõ": thường không ai sở hữu hẳn nên rơi vào khoảng giữa developer và tester (đây là lời cảnh báo, không phải khuyến nghị); <strong>system testing</strong> — thường do nhóm test độc lập; <strong>acceptance testing</strong> — người dùng (có hỗ trợ kỹ thuật), chủ yếu để <em>trình diễn tạo niềm tin</em> hơn là săn lỗi. Để ý: độ độc lập tăng dần khi đi lên các cấp của mô hình chữ V.</p>`],
+        `<p class="y-chinh">🎯 Who usually tests at each level — independence grows as you climb the V-model.</p>
+<ul>
+<li><strong>Component testing</strong> — the programmers themselves (or a "buddy", another developer).</li>
+<li><strong>Component integration testing</strong> — a "poorly defined activity": often nobody owns it clearly, so it falls between developers and testers. This is a warning, not a recommendation.</li>
+<li><strong>System testing</strong> — often an independent test team.</li>
+<li><strong>Acceptance testing</strong> — the users (with technical help), mainly as a <em>demonstration for confidence</em> rather than a defect hunt.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Ai thường test ở mỗi cấp — độ độc lập tăng dần khi đi lên mô hình chữ V.</p>
+<ul>
+<li><strong>Component testing</strong> — chính lập trình viên (hoặc một "bạn cặp", developer khác).</li>
+<li><strong>Component integration testing</strong> — là "hoạt động không được định nghĩa rõ": thường không ai sở hữu hẳn nên rơi vào khoảng giữa developer và tester. Đây là lời cảnh báo, không phải khuyến nghị.</li>
+<li><strong>System testing</strong> — thường do nhóm test độc lập.</li>
+<li><strong>Acceptance testing</strong> — người dùng (có hỗ trợ kỹ thuật), chủ yếu để <em>trình diễn tạo niềm tin</em> hơn là săn lỗi.</li>
+</ul>`],
       [15, 'Pros & Cons of Independence (syllabus list)',
-        `<p>This is the exact syllabus list — learn it for LO-5.1.1. <strong>Benefits:</strong> independent testers are likely to recognise <em>different kinds of failures</em> (different backgrounds, perspectives and biases); an independent tester can <em>verify, challenge or disprove assumptions</em> made by stakeholders during specification and implementation; (slide adds) a separate budget is likely dedicated to the test team. <strong>Drawbacks:</strong> isolation from the development team (lack of collaboration, delays in feedback); developers may <em>lose a sense of responsibility for quality</em>; independent testers may be seen as a <em>bottleneck</em> or blamed for release delays; independent testers may lack some important information about the test object.</p>`,
-        `<p>Đây đúng là danh sách trong syllabus — học thuộc cho LO-5.1.1. <strong>Lợi ích:</strong> tester độc lập có khả năng nhận ra <em>những loại failure khác</em> (vì khác nền tảng, góc nhìn và thiên kiến); tester độc lập có thể <em>kiểm chứng, chất vấn hoặc bác bỏ các giả định</em> mà các bên đưa ra lúc đặc tả và cài đặt; (slide thêm) nhóm test thường có ngân sách riêng. <strong>Hạn chế:</strong> bị tách biệt khỏi nhóm phát triển (thiếu hợp tác, phản hồi chậm); developer có thể <em>mất ý thức trách nhiệm về chất lượng</em>; tester độc lập có thể bị coi là <em>nút cổ chai</em> hoặc bị đổ lỗi khi phát hành trễ; tester độc lập có thể thiếu một số thông tin quan trọng về đối tượng test.</p>`],
+        `<p class="y-chinh">🎯 The exact syllabus list of pros and cons of independence — learn it by heart for LO-5.1.1.</p>
+<p class="nhan">Benefits</p>
+<ul>
+<li><strong>Different kinds of failures</strong> — independent testers are likely to recognise them (different backgrounds, perspectives and biases).</li>
+<li><strong>Challenge assumptions</strong> — an independent tester can verify, challenge or disprove assumptions made by stakeholders during specification and implementation.</li>
+<li><strong>Separate budget</strong> (slide adds) — a budget is likely dedicated to the test team.</li>
+</ul>
+<p class="nhan">Drawbacks</p>
+<ul>
+<li><strong>Isolation</strong> from the development team — lack of collaboration, delays in feedback.</li>
+<li><strong>Developers may lose a sense of responsibility for quality</strong></li>
+<li><strong>Seen as a bottleneck</strong> — or blamed for release delays.</li>
+<li><strong>Missing information</strong> — independent testers may lack some important information about the test object.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Đúng danh sách ưu/nhược của tính độc lập trong syllabus — học thuộc cho LO-5.1.1.</p>
+<p class="nhan">Lợi ích</p>
+<ul>
+<li><strong>Nhận ra những loại failure khác</strong> — vì tester độc lập khác nền tảng, góc nhìn và thiên kiến.</li>
+<li><strong>Chất vấn giả định</strong> — tester độc lập có thể kiểm chứng, chất vấn hoặc bác bỏ các giả định mà các bên đưa ra lúc đặc tả và cài đặt.</li>
+<li><strong>Ngân sách riêng</strong> (slide thêm) — nhóm test thường có ngân sách dành riêng.</li>
+</ul>
+<p class="nhan">Hạn chế</p>
+<ul>
+<li><strong>Bị tách biệt</strong> khỏi nhóm phát triển — thiếu hợp tác, phản hồi chậm.</li>
+<li><strong>Developer có thể mất ý thức trách nhiệm về chất lượng</strong></li>
+<li><strong>Bị coi là nút cổ chai</strong> — hoặc bị đổ lỗi khi phát hành trễ.</li>
+<li><strong>Thiếu thông tin</strong> — tester độc lập có thể thiếu một số thông tin quan trọng về đối tượng test.</li>
+</ul>`],
       [16, 'So what we have seen thus far…',
-        `<p>The summary: independence is important but <strong>not a replacement for familiarity</strong>; there are different levels, each with pros and cons; <strong>test techniques</strong> give another dimension of independence — <em>independence of thought</em> (a developer who applies boundary value analysis systematically escapes some of his own biases); the <strong>test strategy should use a good mix</strong> and write down which level of independence applies where (the slide's "declaration of independence"); and the team needs a <strong>balance of skills</strong>.</p>`,
-        `<p>Tóm tắt: tính độc lập quan trọng nhưng <strong>không thay thế được sự am hiểu</strong>; có nhiều mức, mỗi mức đều có ưu và nhược; <strong>kỹ thuật thiết kế test</strong> mang lại một chiều độc lập khác — <em>độc lập trong tư duy</em> (developer áp dụng phân tích giá trị biên một cách có hệ thống sẽ thoát được một phần thiên kiến của mình); <strong>chiến lược test nên phối hợp nhiều mức</strong> và ghi rõ cấp nào dùng mức độc lập nào ("tuyên ngôn độc lập" trên slide); và nhóm cần <strong>kỹ năng cân bằng</strong>.</p>`],
+        `<p class="y-chinh">🎯 Summary of the independence block: use a good mix, never "the more the better".</p>
+<ul>
+<li><strong>Independence is important</strong> — but <strong>not a replacement for familiarity</strong>.</li>
+<li><strong>Different levels</strong> — each with pros and cons.</li>
+<li><strong>Test techniques</strong> give another dimension of independence — <em>independence of thought</em>. A developer who applies boundary value analysis systematically escapes some of his own biases.</li>
+<li><strong>The test strategy should use a good mix</strong> — and write down which level of independence applies where (the slide's "declaration of independence").</li>
+<li><strong>Balance of skills</strong> — the team needs it.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Tóm tắt khối tính độc lập: phối hợp cho khéo, không phải "càng độc lập càng tốt".</p>
+<ul>
+<li><strong>Tính độc lập quan trọng</strong> — nhưng <strong>không thay thế được sự am hiểu</strong>.</li>
+<li><strong>Có nhiều mức</strong> — mỗi mức đều có ưu và nhược.</li>
+<li><strong>Kỹ thuật thiết kế test</strong> mang lại một chiều độc lập khác — <em>độc lập trong tư duy</em>. Developer áp dụng phân tích giá trị biên một cách có hệ thống sẽ thoát được một phần thiên kiến của mình.</li>
+<li><strong>Chiến lược test nên phối hợp nhiều mức</strong> — và ghi rõ cấp nào dùng mức độc lập nào ("tuyên ngôn độc lập" trên slide).</li>
+<li><strong>Cân bằng kỹ năng</strong> — nhóm cần có điều này.</li>
+</ul>`],
       [17, 'Tasks of a Test Manager & Tester — test roles',
-        `<p>The syllabus defines exactly <strong>two</strong> roles: the <strong>test manager</strong> (also called test leader, test coordinator) with overall responsibility for the test process and leading the test activities, and the <strong>tester</strong>. The mind map calls them "Test Leader (Mgt.)" and "Tester (Execution)". In small projects one person may play both; in Agile, some test-manager tasks are done by the team itself, and tasks that span several teams stay with a test manager outside the team.</p>`,
-        `<p>Syllabus định nghĩa đúng <strong>hai</strong> vai trò: <strong>test manager</strong> (còn gọi là test leader, test coordinator) chịu trách nhiệm chung về quy trình test và dẫn dắt các hoạt động test, và <strong>tester</strong>. Sơ đồ tư duy gọi là "Test Leader (quản lý)" và "Tester (thực thi)". Dự án nhỏ một người có thể kiêm cả hai; trong Agile, một phần việc của test manager do chính nhóm đảm nhận, còn việc liên quan nhiều nhóm vẫn thuộc về test manager bên ngoài nhóm.</p>`],
+        `<p class="y-chinh">🎯 The syllabus defines exactly <strong>two</strong> test roles: the test manager and the tester.</p>
+<ul>
+<li><strong>Test manager</strong> (also test leader, test coordinator) — overall responsibility for the test process and for leading the test activities. The mind map calls it "Test Leader (Mgt.)".</li>
+<li><strong>Tester</strong> — the mind map calls it "Tester (Execution)".</li>
+</ul>
+<p class="nhan">In practice</p>
+<ul>
+<li><strong>Small projects</strong> — one person may play both roles.</li>
+<li><strong>Agile</strong> — some test-manager tasks are done by the team itself; tasks that span several teams stay with a test manager outside the team.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Syllabus định nghĩa đúng <strong>hai</strong> vai trò kiểm thử: test manager và tester.</p>
+<ul>
+<li><strong>Test manager</strong> (còn gọi là test leader, test coordinator) — chịu trách nhiệm chung về quy trình test và dẫn dắt các hoạt động test. Sơ đồ tư duy gọi là "Test Leader (quản lý)".</li>
+<li><strong>Tester</strong> — sơ đồ tư duy gọi là "Tester (thực thi)".</li>
+</ul>
+<p class="nhan">Trong thực tế</p>
+<ul>
+<li><strong>Dự án nhỏ</strong> — một người có thể kiêm cả hai.</li>
+<li><strong>Agile</strong> — một phần việc của test manager do chính nhóm đảm nhận; việc liên quan nhiều nhóm vẫn thuộc về test manager bên ngoài nhóm.</li>
+</ul>`],
       [18, 'Test Manager Tasks',
-        `<p>The red verbs are the hook: <strong>Devise</strong> test objectives, policies and strategies · <strong>Plan</strong> test activities (based on objectives, risks, organisational and project context) · <strong>Write, update, adapt and coordinate the test plan</strong> with stakeholders · <strong>Initiate</strong> analysis, design, implementation and execution of tests · <strong>Prepare and deliver</strong> test progress and test summary reports · <strong>Support</strong> the defect and configuration management system · <strong>Produce</strong> metrics for test progress and quality · <strong>Plan and support</strong> tool selection and implementation · <strong>Decide</strong> on the test environment implementation · <strong>Promote and advocate</strong> the testers · <strong>Develop</strong> testers' skills and careers. In one sentence: the manager <em>plans, monitors, controls, reports and looks after people</em>; he initiates test design but does not do it.</p>`,
-        `<p>Các động từ màu đỏ là móc để nhớ: <strong>Đề ra</strong> mục tiêu, chính sách và chiến lược test · <strong>Lập kế hoạch</strong> hoạt động test (dựa trên mục tiêu, rủi ro, bối cảnh tổ chức và dự án) · <strong>Viết, cập nhật, điều chỉnh và điều phối test plan</strong> với các bên liên quan · <strong>Khởi động</strong> việc phân tích, thiết kế, triển khai và thực thi test · <strong>Chuẩn bị và gửi</strong> báo cáo tiến độ và báo cáo tổng kết test · <strong>Hỗ trợ</strong> hệ thống quản lý defect và quản lý cấu hình · <strong>Tạo</strong> số đo về tiến độ và chất lượng · <strong>Lên kế hoạch và hỗ trợ</strong> việc chọn và triển khai công cụ · <strong>Quyết định</strong> việc dựng môi trường test · <strong>Bảo vệ, lên tiếng</strong> cho tester · <strong>Phát triển</strong> kỹ năng và sự nghiệp của tester. Một câu: manager <em>lập kế hoạch, giám sát, kiểm soát, báo cáo và chăm lo con người</em>; họ khởi động việc thiết kế test nhưng không tự làm việc đó.</p>`],
+        `<p class="y-chinh">🎯 The test manager plans, monitors, controls, reports and looks after people — he starts test design but does not do it.</p>
+<p class="nhan">The 11 tasks — the red verb is the hook</p>
+<ol>
+<li><strong>Devise</strong> test objectives, policies and strategies.</li>
+<li><strong>Plan</strong> test activities — based on objectives, risks, organisational and project context.</li>
+<li><strong>Write, update, adapt and coordinate the test plan</strong> with stakeholders.</li>
+<li><strong>Initiate</strong> analysis, design, implementation and execution of tests.</li>
+<li><strong>Prepare and deliver</strong> test progress and test summary reports.</li>
+<li><strong>Support</strong> the defect and configuration management system.</li>
+<li><strong>Produce</strong> metrics for test progress and quality.</li>
+<li><strong>Plan and support</strong> tool selection and implementation.</li>
+<li><strong>Decide</strong> on the test environment implementation.</li>
+<li><strong>Promote and advocate</strong> the testers.</li>
+<li><strong>Develop</strong> testers' skills and careers.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Test manager lập kế hoạch, giám sát, kiểm soát, báo cáo và chăm lo con người — khởi động việc thiết kế test nhưng không tự làm.</p>
+<p class="nhan">11 nhiệm vụ — động từ màu đỏ là móc để nhớ</p>
+<ol>
+<li><strong>Đề ra</strong> mục tiêu, chính sách và chiến lược test.</li>
+<li><strong>Lập kế hoạch</strong> hoạt động test — dựa trên mục tiêu, rủi ro, bối cảnh tổ chức và dự án.</li>
+<li><strong>Viết, cập nhật, điều chỉnh và điều phối test plan</strong> với các bên liên quan.</li>
+<li><strong>Khởi động</strong> việc phân tích, thiết kế, triển khai và thực thi test.</li>
+<li><strong>Chuẩn bị và gửi</strong> báo cáo tiến độ và báo cáo tổng kết test.</li>
+<li><strong>Hỗ trợ</strong> hệ thống quản lý defect và quản lý cấu hình.</li>
+<li><strong>Tạo</strong> số đo về tiến độ và chất lượng.</li>
+<li><strong>Lên kế hoạch và hỗ trợ</strong> việc chọn và triển khai công cụ.</li>
+<li><strong>Quyết định</strong> việc dựng môi trường test.</li>
+<li><strong>Bảo vệ, lên tiếng</strong> cho tester.</li>
+<li><strong>Phát triển</strong> kỹ năng và sự nghiệp của tester.</li>
+</ol>`],
       [19, 'Tester Tasks',
-        `<p><strong>Review and contribute to</strong> test plans · <strong>Assess the test basis</strong> for testability and early defect detection · <strong>Identify and document test conditions and test cases</strong>, plus traceability between test cases, test conditions and test basis · <strong>Design, set up and verify</strong> the test environment · <strong>Perform test execution</strong> (design and implement test cases, acquire and prepare test data, create the detailed test execution schedule, execute tests) · <strong>Perform test automation</strong> · <strong>Evaluate non-functional characteristics</strong> (performance, reliability, usability…) · <strong>Review tests developed by others</strong>. Note two traps: the tester <em>contributes to</em> the plan (the manager writes it), and the <em>detailed execution schedule</em> is usually made by the tester (slide 40 notes say so too).</p>`,
-        `<p><strong>Review và góp ý</strong> test plan · <strong>Đánh giá test basis</strong> về khả năng kiểm thử và phát hiện defect sớm · <strong>Xác định và ghi lại test condition, test case</strong>, cùng truy vết giữa test case, test condition và test basis · <strong>Thiết kế, dựng và kiểm tra</strong> môi trường test · <strong>Thực hiện test</strong> (thiết kế và cài đặt test case, thu thập và chuẩn bị dữ liệu test, lập lịch thực thi chi tiết, chạy test) · <strong>Tự động hoá test</strong> · <strong>Đánh giá đặc tính phi chức năng</strong> (hiệu năng, độ tin cậy, tính dễ dùng…) · <strong>Review test do người khác viết</strong>. Hai bẫy: tester <em>góp ý</em> cho plan (manager mới là người viết), và <em>lịch thực thi chi tiết</em> thường do tester lập (ghi chú slide 40 cũng nói vậy).</p>`],
+        `<p class="y-chinh">🎯 The tester analyses, designs, sets up, executes and automates — the hands-on side of testing.</p>
+<p class="nhan">The 8 tasks</p>
+<ol>
+<li><strong>Review and contribute to</strong> test plans.</li>
+<li><strong>Assess the test basis</strong> for testability and early defect detection.</li>
+<li><strong>Identify and document test conditions and test cases</strong> — plus traceability between test cases, test conditions and test basis.</li>
+<li><strong>Design, set up and verify</strong> the test environment.</li>
+<li><strong>Perform test execution</strong> — design and implement test cases, acquire and prepare test data, create the detailed test execution schedule, execute tests.</li>
+<li><strong>Perform test automation</strong></li>
+<li><strong>Evaluate non-functional characteristics</strong> — performance, reliability, usability…</li>
+<li><strong>Review tests developed by others</strong></li>
+</ol>
+<div class="pitfall co-tieu-de"><strong>Two traps.</strong> The tester only <em>contributes to</em> the plan — the manager writes it. The <em>detailed execution schedule</em> is usually made by the tester (slide 40 notes say so too).</div>`,
+        `<p class="y-chinh">🎯 Tester phân tích, thiết kế, dựng môi trường, chạy test và tự động hoá — phần "bắt tay vào làm" của kiểm thử.</p>
+<p class="nhan">8 nhiệm vụ</p>
+<ol>
+<li><strong>Review và góp ý</strong> test plan.</li>
+<li><strong>Đánh giá test basis</strong> về khả năng kiểm thử và phát hiện defect sớm.</li>
+<li><strong>Xác định và ghi lại test condition, test case</strong> — cùng truy vết giữa test case, test condition và test basis.</li>
+<li><strong>Thiết kế, dựng và kiểm tra</strong> môi trường test.</li>
+<li><strong>Thực hiện test</strong> — thiết kế và cài đặt test case, thu thập và chuẩn bị dữ liệu test, lập lịch thực thi chi tiết, chạy test.</li>
+<li><strong>Tự động hoá test</strong></li>
+<li><strong>Đánh giá đặc tính phi chức năng</strong> — hiệu năng, độ tin cậy, tính dễ dùng…</li>
+<li><strong>Review test do người khác viết</strong></li>
+</ol>
+<div class="pitfall co-tieu-de"><strong>Hai bẫy.</strong> Tester chỉ <em>góp ý</em> cho plan — manager mới là người viết. <em>Lịch thực thi chi tiết</em> thường do tester lập (ghi chú slide 40 cũng nói vậy).</div>`],
       [20, 'Skills which Test Staff Need',
-        `<p>Three areas of knowledge: the <strong>application or business domain</strong> (to know what "correct" means for users — banking, healthcare, e-commerce…), <strong>technology</strong> (architecture, databases, OS, networks, programming for automation) and <strong>testing</strong> itself (techniques, process, tools). Add the soft skills from lesson 1.5: communication, curiosity, attention to detail. A hidden slide right after this one lists specialist profiles — see the box after the walkthrough.</p>`,
-        `<p>Ba mảng kiến thức: <strong>nghiệp vụ/lĩnh vực ứng dụng</strong> (để biết thế nào là "đúng" với người dùng — ngân hàng, y tế, thương mại điện tử…), <strong>công nghệ</strong> (kiến trúc, cơ sở dữ liệu, hệ điều hành, mạng, lập trình để tự động hoá) và <strong>kiểm thử</strong> (kỹ thuật, quy trình, công cụ). Cộng thêm kỹ năng mềm ở bài 1.5: giao tiếp, tò mò, cẩn thận. Ngay sau slide này có một slide ẩn liệt kê các "hồ sơ chuyên gia" — xem khung sau phần học từng slide.</p>`],
+        `<p class="y-chinh">🎯 Test staff need knowledge in three areas: the business domain, the technology and testing itself.</p>
+<ol>
+<li><strong>Application or business domain</strong> — to know what "correct" means for users: banking, healthcare, e-commerce…</li>
+<li><strong>Technology</strong> — architecture, databases, OS, networks, programming for automation.</li>
+<li><strong>Testing</strong> — techniques, process, tools.</li>
+</ol>
+<ul>
+<li><strong>Plus soft skills</strong> from lesson 1.5 — communication, curiosity, attention to detail.</li>
+<li><strong>Hidden slide</strong> — right after this one, a hidden slide lists specialist profiles; see the box after the walkthrough.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Người làm test cần kiến thức ở ba mảng: nghiệp vụ, công nghệ và chính kiểm thử.</p>
+<ol>
+<li><strong>Nghiệp vụ/lĩnh vực ứng dụng</strong> — để biết thế nào là "đúng" với người dùng: ngân hàng, y tế, thương mại điện tử…</li>
+<li><strong>Công nghệ</strong> — kiến trúc, cơ sở dữ liệu, hệ điều hành, mạng, lập trình để tự động hoá.</li>
+<li><strong>Kiểm thử</strong> — kỹ thuật, quy trình, công cụ.</li>
+</ol>
+<ul>
+<li><strong>Cộng thêm kỹ năng mềm</strong> ở bài 1.5 — giao tiếp, tò mò, cẩn thận.</li>
+<li><strong>Slide ẩn</strong> — ngay sau slide này có một slide ẩn liệt kê các "hồ sơ chuyên gia"; xem khung sau phần học từng slide.</li>
+</ul>`],
       [21, 'Question — how tasks are divided between test manager and tester',
-        AE('B — The test manager plans, organizes and controls the testing activities, while the tester specifies and executes tests', 'That is exactly slides 18–19. A is wrong: choosing tools is a manager-supported decision and "controls" are the manager\'s job. C is wrong: deciding about automation frameworks is not the tester\'s decision (the manager plans and supports tool selection; the tester performs automation). D is wrong: specifying test cases is a tester task and prioritising their execution belongs to the tester too — the manager does not write test cases.'),
-        AV('B — Test manager lập kế hoạch, tổ chức và kiểm soát hoạt động test; tester đặc tả và thực thi test', 'Đúng như slide 18–19. A sai: chọn công cụ là việc manager lên kế hoạch và hỗ trợ, còn "kiểm soát" là việc của manager. C sai: quyết định framework tự động hoá không phải việc tester tự quyết (manager lo việc chọn công cụ; tester thực hiện tự động hoá). D sai: đặc tả test case là việc của tester — manager không viết test case.')],
+        `<p class="y-chinh">🎯 Manager = plan, organise, control; tester = specify and execute tests (slides 18–19).</p>
+<p class="nhan">Why the other options are wrong</p>
+<ul>
+<li><strong>A</strong> — choosing tools is a manager-supported decision, and "controls" are the manager's job.</li>
+<li><strong>C</strong> — deciding about automation frameworks is not the tester's decision: the manager plans and supports tool selection; the tester performs automation.</li>
+<li><strong>D</strong> — specifying test cases is a tester task, and prioritising their execution belongs to the tester too; the manager does not write test cases.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — The test manager plans, organizes and controls the testing activities, while the tester specifies and executes tests.</strong> That is exactly slides 18–19.</p>`,
+        `<p class="y-chinh">🎯 Manager = lập kế hoạch, tổ chức, kiểm soát; tester = đặc tả và thực thi test (slide 18–19).</p>
+<p class="nhan">Vì sao các phương án khác sai</p>
+<ul>
+<li><strong>A</strong> — chọn công cụ là việc manager lên kế hoạch và hỗ trợ, còn "kiểm soát" là việc của manager.</li>
+<li><strong>C</strong> — quyết định framework tự động hoá không phải việc tester tự quyết: manager lo việc chọn công cụ; tester thực hiện tự động hoá.</li>
+<li><strong>D</strong> — đặc tả test case là việc của tester, và sắp thứ tự chạy chúng cũng thuộc về tester; manager không viết test case.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — Test manager lập kế hoạch, tổ chức và kiểm soát hoạt động test; tester đặc tả và thực thi test.</strong> Đúng như slide 18–19.</p>`],
       [22, 'Question — who creates and updates the test plan?',
-        AE('B — The test manager', 'Slide 18: "Write, update, adapt and coordinate the test plan". The tester only reviews and contributes (slide 19); the project manager owns the project plan, not the test plan; the product owner provides priorities and acceptance criteria.'),
-        AV('B — Test manager', 'Slide 18: "Viết, cập nhật, điều chỉnh và điều phối test plan". Tester chỉ review và góp ý (slide 19); project manager sở hữu project plan chứ không phải test plan; product owner cung cấp độ ưu tiên và tiêu chí chấp nhận.')],
+        `<p class="y-chinh">🎯 The test plan is written and updated by the test manager (slide 18).</p>
+<ul>
+<li><strong>Test manager</strong> — slide 18: "Write, update, adapt and coordinate the test plan".</li>
+<li><strong>Tester</strong> — only reviews and contributes (slide 19).</li>
+<li><strong>Project manager</strong> — owns the project plan, not the test plan.</li>
+<li><strong>Product owner</strong> — provides priorities and acceptance criteria.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — The test manager.</strong></p>`,
+        `<p class="y-chinh">🎯 Test plan do test manager viết và cập nhật (slide 18).</p>
+<ul>
+<li><strong>Test manager</strong> — slide 18: "Viết, cập nhật, điều chỉnh và điều phối test plan".</li>
+<li><strong>Tester</strong> — chỉ review và góp ý (slide 19).</li>
+<li><strong>Project manager</strong> — sở hữu project plan, không phải test plan.</li>
+<li><strong>Product owner</strong> — cung cấp độ ưu tiên và tiêu chí chấp nhận.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — Test manager.</strong></p>`],
       [23, 'Question — a benefit of test independence',
-        AE('A — Testers have different biases than developers', 'Slide 7/15: different cognitive biases let independent testers recognise different kinds of failures. B (isolation) and C (lack of information) are listed <em>drawbacks</em>. D is wrong and even reversed: the drawback is that developers lose the sense of responsibility for quality — quality stays everybody\'s job.'),
-        AV('A — Tester có thiên kiến khác với developer', 'Slide 7/15: thiên kiến nhận thức khác nhau giúp tester độc lập nhận ra những loại failure khác. B (bị tách biệt) và C (thiếu thông tin) là <em>hạn chế</em> có trong danh sách. D sai và còn ngược: hạn chế là developer mất ý thức trách nhiệm về chất lượng — chất lượng vẫn là việc của mọi người.')],
+        `<p class="y-chinh">🎯 The benefit of independence is a different set of biases (slides 7 and 15).</p>
+<ul>
+<li><strong>A</strong> — correct: different cognitive biases let independent testers recognise different kinds of failures.</li>
+<li><strong>B</strong> (isolation) and <strong>C</strong> (lack of information) — these are listed <em>drawbacks</em>.</li>
+<li><strong>D</strong> — wrong and even reversed: the drawback is that developers lose the sense of responsibility for quality. Quality stays everybody's job.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: A — Testers have different biases than developers.</strong></p>`,
+        `<p class="y-chinh">🎯 Lợi ích của tính độc lập là một bộ thiên kiến khác (slide 7 và 15).</p>
+<ul>
+<li><strong>A</strong> — đúng: thiên kiến nhận thức khác nhau giúp tester độc lập nhận ra những loại failure khác.</li>
+<li><strong>B</strong> (bị tách biệt) và <strong>C</strong> (thiếu thông tin) — là các <em>hạn chế</em> có trong danh sách.</li>
+<li><strong>D</strong> — sai và còn ngược: hạn chế là developer mất ý thức trách nhiệm về chất lượng. Chất lượng vẫn là việc của mọi người.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: A — Tester có thiên kiến khác với developer.</strong></p>`],
       [24, 'Question — biggest problem with a developer testing his own code',
-        AE('C — Developers are not objective about their own code', 'Slide 9: "difficult to destroy own work", "tendency to see expected results", "subjective assessment". A and B are unfair generalisations (developers find many defects efficiently — slide 7). D is about schedule, not about the inherent weakness of self-testing.'),
-        AV('C — Developer không khách quan với code của chính mình', 'Slide 9: "khó phá sản phẩm của mình", "có xu hướng thấy kết quả mong đợi", "đánh giá chủ quan". A và B là quy chụp không công bằng (developer tìm được nhiều lỗi rất hiệu quả — slide 7). D nói về thời gian, không phải điểm yếu cố hữu của việc tự test.')],
+        `<p class="y-chinh">🎯 The core weakness of self-testing is the lack of objectivity (slide 9).</p>
+<ul>
+<li><strong>C</strong> — correct. Slide 9: "difficult to destroy own work", "tendency to see expected results", "subjective assessment".</li>
+<li><strong>A</strong> and <strong>B</strong> — unfair generalisations: developers find many defects efficiently (slide 7).</li>
+<li><strong>D</strong> — about schedule, not about the inherent weakness of self-testing.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: C — Developers are not objective about their own code.</strong></p>`,
+        `<p class="y-chinh">🎯 Điểm yếu cố hữu của việc tự test là thiếu khách quan (slide 9).</p>
+<ul>
+<li><strong>C</strong> — đúng. Slide 9: "khó phá sản phẩm của mình", "có xu hướng thấy kết quả mong đợi", "đánh giá chủ quan".</li>
+<li><strong>A</strong> và <strong>B</strong> — quy chụp không công bằng: developer tìm được nhiều lỗi rất hiệu quả (slide 7).</li>
+<li><strong>D</strong> — nói về thời gian, không phải điểm yếu cố hữu của việc tự test.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: C — Developer không khách quan với code của chính mình.</strong></p>`],
     ]),
     bi(`<h3>🔒 Hidden slide in SWT5_tim.pptx (not shown in class, still worth knowing)</h3>
 <ul>
-<li><strong>Skills needed in testing</strong> (pptx slide 25, right after slide 24). A team is not a group of identical testers but a mix of profiles: <em>technique specialists</em> (black-box/white-box design), <em>automators</em>, <em>database experts</em>, people with <em>business skills &amp; understanding</em>, a <em>usability expert</em>, a <em>test environment expert</em> and <em>test managers</em>. It expands slide 20 and slide 16's "balance of skills needed" — when a question asks what a good test team needs, "the right mix of skills" is the syllabus answer.</li>
+<li><strong>Skills needed in testing</strong> (pptx slide 25, right after slide 24). A team is not a group of identical testers but a mix of profiles:
+<ul>
+<li><em>technique specialists</em> (black-box/white-box design)</li>
+<li><em>automators</em></li>
+<li><em>database experts</em></li>
+<li>people with <em>business skills &amp; understanding</em></li>
+<li>a <em>usability expert</em></li>
+<li>a <em>test environment expert</em></li>
+<li><em>test managers</em></li>
+</ul>
+It expands slide 20 and slide 16's "balance of skills needed" — when a question asks what a good test team needs, "the right mix of skills" is the syllabus answer.</li>
 </ul>`,
     `<h3>🔒 Slide ẩn trong file SWT5_tim.pptx (không chiếu trên lớp nhưng vẫn nên biết)</h3>
 <ul>
-<li><strong>Skills needed in testing</strong> (slide pptx 25, ngay sau slide 24). Một nhóm test không phải là nhiều tester giống hệt nhau mà là sự phối hợp nhiều "hồ sơ": <em>chuyên gia kỹ thuật thiết kế test</em> (black-box/white-box), <em>người làm automation</em>, <em>chuyên gia cơ sở dữ liệu</em>, người có <em>kỹ năng và hiểu biết nghiệp vụ</em>, <em>chuyên gia usability</em>, <em>chuyên gia môi trường test</em> và <em>test manager</em>. Slide này mở rộng slide 20 và ý "cân bằng kỹ năng" ở slide 16 — khi đề hỏi một nhóm test tốt cần gì, đáp án theo syllabus là "đúng sự phối hợp kỹ năng".</li>
+<li><strong>Skills needed in testing</strong> (slide pptx 25, ngay sau slide 24). Một nhóm test không phải là nhiều tester giống hệt nhau mà là sự phối hợp nhiều "hồ sơ":
+<ul>
+<li><em>chuyên gia kỹ thuật thiết kế test</em> (black-box/white-box)</li>
+<li><em>người làm automation</em></li>
+<li><em>chuyên gia cơ sở dữ liệu</em></li>
+<li>người có <em>kỹ năng và hiểu biết nghiệp vụ</em></li>
+<li><em>chuyên gia usability</em></li>
+<li><em>chuyên gia môi trường test</em></li>
+<li><em>test manager</em></li>
+</ul>
+Slide này mở rộng slide 20 và ý "cân bằng kỹ năng" ở slide 16 — khi đề hỏi một nhóm test tốt cần gì, đáp án theo syllabus là "đúng sự phối hợp kỹ năng".</li>
 </ul>`),
     bi(`<h3>Ví dụ có lời giải · Worked example — choose the independence level, then split the tasks</h3>
 <p><strong>Part 1.</strong> For each situation pick the most suitable level of independence (1 = developer … 5 = third party) and justify it with a pro/con from slides 9–15.</p>
@@ -167,8 +687,20 @@ const L71 = {
 <tr><td>Coach a junior tester and plan her ISTQB training</td><td>M (develop skills and careers)</td></tr>
 </tbody>
 </table>
-<div class="pitfall"><b>Exam traps.</b> (1) "More independence is always better" — false: every level has drawbacks and independence is <em>not a replacement for familiarity</em>. (2) "With an independent test team, developers no longer need to test" — false: that <em>is</em> the listed drawback (developers lose responsibility for quality). (3) "The test manager designs the test cases" — false: the manager <em>initiates</em> analysis and design; testers do it. (4) "Isolation from developers" is always a <em>drawback</em>, never a benefit, even though it sounds like "independence".</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Independence written into law: IV&amp;V and DO-178C.</b> In safety-critical industries independence is not a matter of taste. The avionics standard <em>DO-178C</em> marks many verification objectives for the most critical software (levels A and B) as "with independence" — the person verifying must not be the person who wrote the item. NASA runs a whole <em>Independent Verification &amp; Validation</em> (IV&amp;V) facility that is technically, managerially and financially independent of the projects it checks. <em>Outside the syllabus because CTFL only asks you to weigh the pros and cons, not to apply sector-specific regulations.</em></div>`,
+<div class="pitfall co-tieu-de"><strong>Exam traps.</strong>
+<ol>
+<li>"More independence is always better" — false: every level has drawbacks and independence is <em>not a replacement for familiarity</em>.</li>
+<li>"With an independent test team, developers no longer need to test" — false: that <em>is</em> the listed drawback (developers lose responsibility for quality).</li>
+<li>"The test manager designs the test cases" — false: the manager <em>initiates</em> analysis and design; testers do it.</li>
+<li>"Isolation from developers" is always a <em>drawback</em>, never a benefit, even though it sounds like "independence".</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Independence written into law: IV&amp;V and DO-178C.</strong>
+<p>In safety-critical industries independence is not a matter of taste.</p>
+<ul>
+<li><strong>DO-178C</strong> — the avionics standard marks many verification objectives for the most critical software (levels A and B) as "with independence": the person verifying must not be the person who wrote the item.</li>
+<li><strong>NASA IV&amp;V</strong> — NASA runs a whole <em>Independent Verification &amp; Validation</em> facility that is technically, managerially and financially independent of the projects it checks.</li>
+</ul>
+<p><em>Outside the syllabus because CTFL only asks you to weigh the pros and cons, not to apply sector-specific regulations.</em></p></div>`,
     `<h3>Ví dụ có lời giải · Chọn mức độc lập rồi chia việc</h3>
 <p><strong>Phần 1.</strong> Với mỗi tình huống chọn mức độc lập phù hợp nhất (1 = developer … 5 = bên thứ ba) và giải thích bằng một ưu/nhược ở slide 9–15.</p>
 <table>
@@ -194,8 +726,20 @@ const L71 = {
 <tr><td>Kèm cặp một tester mới và lên kế hoạch cho cô ấy thi ISTQB</td><td>M (phát triển kỹ năng và sự nghiệp)</td></tr>
 </tbody>
 </table>
-<div class="pitfall"><b>Bẫy đề thi.</b> (1) "Càng độc lập càng tốt" — sai: mức nào cũng có nhược điểm và tính độc lập <em>không thay thế được sự am hiểu</em>. (2) "Có nhóm test độc lập thì developer khỏi phải test" — sai: đó <em>chính là</em> hạn chế trong danh sách (developer mất ý thức trách nhiệm về chất lượng). (3) "Test manager thiết kế test case" — sai: manager <em>khởi động</em> việc phân tích và thiết kế; tester mới làm. (4) "Bị tách biệt khỏi developer" luôn là <em>hạn chế</em>, không bao giờ là lợi ích, dù nghe có vẻ giống "độc lập".</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Khi tính độc lập thành luật: IV&amp;V và DO-178C.</b> Ở các ngành an toàn-sống-còn, độc lập không còn là chuyện tuỳ chọn. Chuẩn hàng không <em>DO-178C</em> đánh dấu nhiều mục tiêu kiểm chứng của phần mềm quan trọng nhất (mức A và B) là "with independence" — người kiểm chứng không được là người đã viết ra hạng mục đó. NASA duy trì hẳn một cơ sở <em>Independent Verification &amp; Validation</em> (IV&amp;V) độc lập về kỹ thuật, quản lý và tài chính với các dự án mà họ kiểm tra. <em>Ngoài giáo trình vì CTFL chỉ yêu cầu cân nhắc ưu/nhược, không yêu cầu áp dụng quy định của từng ngành.</em></div>`),
+<div class="pitfall co-tieu-de"><strong>Bẫy đề thi.</strong>
+<ol>
+<li>"Càng độc lập càng tốt" — sai: mức nào cũng có nhược điểm và tính độc lập <em>không thay thế được sự am hiểu</em>.</li>
+<li>"Có nhóm test độc lập thì developer khỏi phải test" — sai: đó <em>chính là</em> hạn chế trong danh sách (developer mất ý thức trách nhiệm về chất lượng).</li>
+<li>"Test manager thiết kế test case" — sai: manager <em>khởi động</em> việc phân tích và thiết kế; tester mới làm.</li>
+<li>"Bị tách biệt khỏi developer" luôn là <em>hạn chế</em>, không bao giờ là lợi ích, dù nghe có vẻ giống "độc lập".</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Khi tính độc lập thành luật: IV&amp;V và DO-178C.</strong>
+<p>Ở các ngành an toàn-sống-còn, độc lập không còn là chuyện tuỳ chọn.</p>
+<ul>
+<li><strong>DO-178C</strong> — chuẩn hàng không đánh dấu nhiều mục tiêu kiểm chứng của phần mềm quan trọng nhất (mức A và B) là "with independence": người kiểm chứng không được là người đã viết ra hạng mục đó.</li>
+<li><strong>NASA IV&amp;V</strong> — NASA duy trì hẳn một cơ sở <em>Independent Verification &amp; Validation</em> độc lập về kỹ thuật, quản lý và tài chính với các dự án mà họ kiểm tra.</li>
+</ul>
+<p><em>Ngoài giáo trình vì CTFL chỉ yêu cầu cân nhắc ưu/nhược, không yêu cầu áp dụng quy định của từng ngành.</em></p></div>`),
     books([
       ['fst4', 'Ch.5 §1 "Test organization" (independent testing, tasks of test manager and tester) — book pp.154–160 (PDF 168–174); sample questions 1–3 p.197 (PDF 211)', 'Chương 5 §1 "Test organization" (kiểm thử độc lập, nhiệm vụ test manager và tester) — trang sách 154–160 (PDF 168–174); câu hỏi mẫu 1–3 trang 197 (PDF 211)'],
       ['fst', '§5.1 "Test organization" — pp.127–131 (PDF ≈130–133)', '§5.1 "Test organization" — trang 127–131 (PDF ≈130–133)'],
@@ -215,7 +759,15 @@ const L72 = {
     bi(`<span class="eyebrow">Chapter 7 · Lesson 7.2 · SWT5 slides 25–58</span>
 <h2>Test planning &amp; estimation</h2>
 <p class="lead">This is the heaviest block of the chapter and the one with a <strong>K3</strong> objective: given priorities and dependencies you must be able to <em>build</em> a test execution schedule. Around it sit the test plan, the seven test strategies, entry and exit criteria, the factors that drive test effort and the two families of estimation techniques.</p>
-<div class="callout"><b>Learning objectives.</b> LO-5.2.1 Summarise the purpose and content of a test plan (K2) · LO-5.2.2 Differentiate between various test strategies (K2) · LO-5.2.3 Give examples of potential entry and exit criteria (K2) · LO-5.2.4 Apply knowledge of prioritisation and technical and logical dependencies to schedule test execution for a given set of test cases (<b>K3</b>) · LO-5.2.5 Identify factors that influence the effort related to testing (K1) · LO-5.2.6 Explain the difference between two estimation techniques: the metrics-based technique and the expert-based technique (K2).</div>
+<div class="callout"><strong>Learning objectives.</strong>
+<ul>
+<li><strong>LO-5.2.1</strong> Summarise the purpose and content of a test plan (K2)</li>
+<li><strong>LO-5.2.2</strong> Differentiate between various test strategies (K2)</li>
+<li><strong>LO-5.2.3</strong> Give examples of potential entry and exit criteria (K2)</li>
+<li><strong>LO-5.2.4</strong> Apply knowledge of prioritisation and technical and logical dependencies to schedule test execution for a given set of test cases (<strong>K3</strong>)</li>
+<li><strong>LO-5.2.5</strong> Identify factors that influence the effort related to testing (K1)</li>
+<li><strong>LO-5.2.6</strong> Explain the difference between two estimation techniques: the metrics-based technique and the expert-based technique (K2)</li>
+</ul></div>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Test policy</div><div class="lz-t">why the organisation tests</div><div class="lz-d">company level</div></div>
   <div class="lz-step"><div class="lz-k">→ Test strategy</div><div class="lz-t">how it tests, in general</div><div class="lz-d">one of 7 types, or a mix</div></div>
@@ -239,7 +791,15 @@ const L72 = {
     `<span class="eyebrow">Chương 7 · Bài 7.2 · SWT5 slide 25–58</span>
 <h2>Lập kế hoạch &amp; ước lượng test</h2>
 <p class="lead">Đây là khối nặng nhất của chương và là khối có mục tiêu <strong>K3</strong>: cho độ ưu tiên và các phụ thuộc, bạn phải <em>tự dựng</em> được lịch thực thi test. Xung quanh nó là test plan, bảy chiến lược test, entry và exit criteria, các yếu tố quyết định công sức test và hai họ kỹ thuật ước lượng.</p>
-<div class="callout"><b>Chuẩn đầu ra.</b> LO-5.2.1 Tóm tắt mục đích và nội dung của test plan (K2) · LO-5.2.2 Phân biệt các chiến lược test (K2) · LO-5.2.3 Nêu ví dụ entry và exit criteria (K2) · LO-5.2.4 Vận dụng độ ưu tiên và phụ thuộc kỹ thuật/logic để lập lịch thực thi cho một tập test case (<b>K3</b>) · LO-5.2.5 Nhận diện các yếu tố ảnh hưởng tới công sức test (K1) · LO-5.2.6 Giải thích khác biệt giữa hai kỹ thuật ước lượng: dựa trên số liệu (metrics-based) và dựa trên chuyên gia (expert-based) (K2).</div>
+<div class="callout"><strong>Chuẩn đầu ra.</strong>
+<ul>
+<li><strong>LO-5.2.1</strong> Tóm tắt mục đích và nội dung của test plan (K2)</li>
+<li><strong>LO-5.2.2</strong> Phân biệt các chiến lược test (K2)</li>
+<li><strong>LO-5.2.3</strong> Nêu ví dụ entry và exit criteria (K2)</li>
+<li><strong>LO-5.2.4</strong> Vận dụng độ ưu tiên và phụ thuộc kỹ thuật/logic để lập lịch thực thi cho một tập test case (<strong>K3</strong>)</li>
+<li><strong>LO-5.2.5</strong> Nhận diện các yếu tố ảnh hưởng tới công sức test (K1)</li>
+<li><strong>LO-5.2.6</strong> Giải thích khác biệt giữa hai kỹ thuật ước lượng: dựa trên số liệu (metrics-based) và dựa trên chuyên gia (expert-based) (K2)</li>
+</ul></div>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Test policy</div><div class="lz-t">vì sao tổ chức kiểm thử</div><div class="lz-d">cấp công ty</div></div>
   <div class="lz-step"><div class="lz-k">→ Test strategy</div><div class="lz-t">kiểm thử thế nào, nói chung</div><div class="lz-d">một trong 7 loại, hoặc phối hợp</div></div>
@@ -263,107 +823,839 @@ const L72 = {
     walkHead(D, 25, 58, 'Nine Question slides (50–58) close the block; slide 54 and 56 are the K3 schedule questions — both are re-solved step by step in the worked example.', 'Chín slide Question (50–58) khép lại khối này; slide 54 và 56 là câu K3 lập lịch — cả hai được giải lại từng bước trong phần ví dụ có lời giải.'),
     walk(D, [
       [25, 'CONTENT — Test Planning & Estimation',
-        `<p>Six sub-topics: test plan purpose &amp; content · test strategy &amp; test approach · entry &amp; exit criteria · test execution schedule · factors influencing test effort · test estimation techniques. They map one-to-one onto LO-5.2.1 → 5.2.6.</p>`,
-        `<p>Sáu ý: mục đích &amp; nội dung test plan · test strategy &amp; test approach · entry &amp; exit criteria · lịch thực thi test · các yếu tố ảnh hưởng công sức · kỹ thuật ước lượng. Chúng ứng đúng một-một với LO-5.2.1 → 5.2.6.</p>`],
+        `<p class="y-chinh">🎯 Planning &amp; estimation has six sub-topics, one per learning objective (LO-5.2.1 → 5.2.6).</p>
+<ol>
+<li><strong>Test plan</strong> — purpose &amp; content</li>
+<li><strong>Test strategy &amp; test approach</strong></li>
+<li><strong>Entry &amp; exit criteria</strong></li>
+<li><strong>Test execution schedule</strong></li>
+<li><strong>Factors influencing test effort</strong></li>
+<li><strong>Test estimation techniques</strong></li>
+</ol>`,
+        `<p class="y-chinh">🎯 Lập kế hoạch &amp; ước lượng gồm sáu ý, ứng đúng một-một với sáu chuẩn đầu ra (LO-5.2.1 → 5.2.6).</p>
+<ol>
+<li><strong>Test plan</strong> — mục đích &amp; nội dung</li>
+<li><strong>Test strategy &amp; test approach</strong></li>
+<li><strong>Entry &amp; exit criteria</strong></li>
+<li><strong>Lịch thực thi test</strong></li>
+<li><strong>Các yếu tố ảnh hưởng công sức test</strong></li>
+<li><strong>Kỹ thuật ước lượng</strong></li>
+</ol>`],
       [26, 'Mind map (divider) — Planning & Estimation',
-        `<p>The map again; now read the right-hand branch: <em>Test Strategy</em> (the seven types), <em>Test Effort Factors</em> (four groups) and <em>Estimation Techniques</em> (metric-based: burn-down chart, defect-removal model; expert-based: planning poker, Wideband Delphi).</p>`,
-        `<p>Lại sơ đồ; giờ đọc nhánh bên phải: <em>Test Strategy</em> (bảy loại), <em>Test Effort Factors</em> (bốn nhóm) và <em>Estimation Techniques</em> (dựa số liệu: burn-down chart, defect-removal model; dựa chuyên gia: planning poker, Wideband Delphi).</p>`],
+        `<p class="y-chinh">🎯 The map again — now read the right-hand branch.</p>
+<ul>
+<li><strong>Test Strategy</strong> — the seven types (slides 30–36)</li>
+<li><strong>Test Effort Factors</strong> — four groups (slides 42–45)</li>
+<li><strong>Estimation Techniques</strong> — metric-based (burn-down chart, defect-removal model) and expert-based (planning poker, Wideband Delphi)</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Lại sơ đồ — giờ đọc nhánh bên phải.</p>
+<ul>
+<li><strong>Test Strategy</strong> — bảy loại (slide 30–36)</li>
+<li><strong>Test Effort Factors</strong> — bốn nhóm (slide 42–45)</li>
+<li><strong>Estimation Techniques</strong> — dựa số liệu (burn-down chart, defect-removal model) và dựa chuyên gia (planning poker, Wideband Delphi)</li>
+</ul>`],
       [27, 'Purpose & Content of a Test Plan',
-        `<p>Why write a test plan? Three reasons (Rex Black's wording, used in fst4): <strong>guide thinking</strong> — writing it forces you to confront the hard questions (what not to test, which risks, which environment); <strong>means of communication</strong> — drafts and review meetings let the plan influence the project team and vice versa; <strong>change management</strong> — planning is <em>continuous</em>: feedback from test activities reveals changing risks and the plan is adjusted (a plan is a living document, often with a master test plan plus level plans). What goes in it? The syllabus lists: context and scope, objectives, risks, the approach, integration with the lifecycle, what to test and with which people and resources, the schedule, the metrics for monitoring, the budget and the level of documentation (slide 28). The classic outline is <strong>IEEE 829</strong>: identifier · introduction · test items · features to be tested · features <em>not</em> to be tested · approach · item pass/fail criteria · suspension criteria and resumption requirements · test deliverables · testing tasks · environmental needs · responsibilities · staffing and training needs · schedule · risks and contingencies · approvals.</p>`,
-        `<p>Viết test plan để làm gì? Ba lý do (cách nói của Rex Black, dùng trong fst4): <strong>định hướng tư duy</strong> — viết ra buộc bạn đối mặt với các câu hỏi khó (cái gì không test, rủi ro nào, môi trường nào); <strong>phương tiện giao tiếp</strong> — bản nháp và các buổi review cho phép plan tác động tới nhóm dự án và ngược lại; <strong>quản lý thay đổi</strong> — lập kế hoạch là việc <em>liên tục</em>: phản hồi từ các hoạt động test làm lộ rủi ro mới và plan được điều chỉnh (plan là tài liệu sống, thường có master test plan và các plan theo cấp). Bên trong có gì? Syllabus liệt kê: bối cảnh và phạm vi, mục tiêu, rủi ro, cách tiếp cận, lồng vào vòng đời, test cái gì với con người và nguồn lực nào, lịch, số đo để giám sát, ngân sách và mức chi tiết tài liệu (slide 28). Khung kinh điển là <strong>IEEE 829</strong>: mã plan · giới thiệu · hạng mục test · tính năng sẽ test · tính năng <em>không</em> test · cách tiếp cận · tiêu chí pass/fail của hạng mục · tiêu chí tạm dừng và điều kiện tiếp tục · sản phẩm bàn giao · công việc test · nhu cầu môi trường · trách nhiệm · nhân sự và đào tạo · lịch · rủi ro và phương án dự phòng · phê duyệt.</p>`],
+        `<p class="y-chinh">🎯 A test plan is a <em>living</em> document that answers: what will be tested, how, by whom, and when it is done.</p>
+<p class="nhan">Why write one — 3 reasons (Rex Black, fst4)</p>
+<ol>
+<li><strong>Guide thinking</strong> — writing it forces you to face the hard questions: what <em>not</em> to test, which risks, which environment.</li>
+<li><strong>Means of communication</strong> — drafts and review meetings let the plan influence the project team, and the team influence the plan.</li>
+<li><strong>Change management</strong> — planning is <em>continuous</em>: feedback from testing reveals new risks and the plan is adjusted. Usually one master test plan plus one plan per level.</li>
+</ol>
+<p class="nhan">What goes inside (syllabus)</p>
+<ul>
+<li>Context, scope, objectives and risks</li>
+<li>The approach, and how testing fits into the lifecycle</li>
+<li>What to test, with which people and resources</li>
+<li>Schedule, monitoring metrics, budget, level of documentation (slide 28)</li>
+</ul>
+<p class="nhan">The classic outline — IEEE 829, 16 sections</p>
+<ol class="hai-cot"><li>Test plan identifier</li><li>Introduction</li><li>Test items</li><li>Features to be tested</li><li>Features <em>not</em> to be tested</li><li>Approach</li><li>Item pass/fail criteria</li><li>Suspension criteria &amp; resumption requirements</li><li>Test deliverables</li><li>Testing tasks</li><li>Environmental needs</li><li>Responsibilities</li><li>Staffing &amp; training needs</li><li>Schedule</li><li>Risks &amp; contingencies</li><li>Approvals</li></ol>
+<p class="meo">🧠 <strong>Remember the 3 reasons as “Think · Talk · Tune”</strong>: guide thinking, communicate, adjust to change.</p>`,
+        `<p class="y-chinh">🎯 Test plan là tài liệu <em>sống</em>, trả lời: test cái gì, test thế nào, ai làm, khi nào thì xong.</p>
+<p class="nhan">Vì sao phải viết — 3 lý do (Rex Black, fst4)</p>
+<ol>
+<li><strong>Định hướng tư duy</strong> — viết ra buộc bạn đối mặt các câu hỏi khó: cái gì <em>không</em> test, rủi ro nào, môi trường nào.</li>
+<li><strong>Phương tiện giao tiếp</strong> — bản nháp và các buổi review giúp plan tác động tới nhóm dự án, và nhóm tác động ngược lại plan.</li>
+<li><strong>Quản lý thay đổi</strong> — lập kế hoạch là việc <em>liên tục</em>: phản hồi từ hoạt động test làm lộ rủi ro mới và plan được chỉnh. Thường có một master test plan cộng các plan theo từng cấp.</li>
+</ol>
+<p class="nhan">Bên trong có gì (theo syllabus)</p>
+<ul>
+<li>Bối cảnh, phạm vi, mục tiêu và rủi ro</li>
+<li>Cách tiếp cận, và cách lồng việc test vào vòng đời</li>
+<li>Test cái gì, với con người và nguồn lực nào</li>
+<li>Lịch, số đo để giám sát, ngân sách, mức chi tiết tài liệu (slide 28)</li>
+</ul>
+<p class="nhan">Khung kinh điển — IEEE 829, 16 mục</p>
+<ol class="hai-cot"><li>Mã định danh plan</li><li>Giới thiệu</li><li>Hạng mục test</li><li>Tính năng sẽ test</li><li>Tính năng <em>không</em> test</li><li>Cách tiếp cận</li><li>Tiêu chí pass/fail của hạng mục</li><li>Tiêu chí tạm dừng &amp; điều kiện tiếp tục</li><li>Sản phẩm bàn giao</li><li>Công việc test</li><li>Nhu cầu môi trường</li><li>Trách nhiệm</li><li>Nhân sự &amp; đào tạo</li><li>Lịch</li><li>Rủi ro &amp; phương án dự phòng</li><li>Phê duyệt</li></ol>
+<p class="meo">🧠 <strong>Nhớ 3 lý do bằng “Nghĩ · Nói · Nắn”</strong>: định hướng tư duy, giao tiếp, điều chỉnh theo thay đổi.</p>`],
       [28, 'Test Planning Activities',
-        `<p>Eight activities (syllabus list): determine the <strong>scope, objectives and risks</strong> of testing · define the <strong>overall approach</strong> · <strong>integrate and coordinate</strong> test activities into the software lifecycle · decide <strong>what to test</strong>, the <strong>people and resources</strong> needed and <strong>how</strong> the activities will be carried out · <strong>schedule</strong> analysis, design, implementation, execution and evaluation · select <strong>metrics</strong> for monitoring and control · <strong>budget</strong> the test activities · determine the <strong>level of detail and structure of test documentation</strong> (templates, how detailed test cases must be — this is the key to slide 55). The teacher's notes are a Vietnamese translation of the same list.</p>`,
-        `<p>Tám hoạt động (danh sách syllabus): xác định <strong>phạm vi, mục tiêu và rủi ro</strong> của kiểm thử · xác định <strong>cách tiếp cận tổng thể</strong> · <strong>lồng ghép và điều phối</strong> hoạt động test vào vòng đời phần mềm · quyết định <strong>test cái gì</strong>, cần <strong>người và nguồn lực</strong> nào, và thực hiện <strong>thế nào</strong> · <strong>lên lịch</strong> phân tích, thiết kế, triển khai, thực thi và đánh giá · chọn <strong>số đo</strong> để giám sát và kiểm soát · <strong>lập ngân sách</strong> · xác định <strong>mức chi tiết và cấu trúc tài liệu test</strong> (mẫu biểu, test case phải chi tiết tới đâu — đây là chìa khoá của slide 55). Ghi chú của thầy/cô là bản dịch tiếng Việt của đúng danh sách này.</p>`],
+        `<p class="y-chinh">🎯 Test planning consists of 8 activities — know the whole list.</p>
+<ol>
+<li>Determine the <strong>scope, objectives and risks</strong> of testing</li>
+<li>Define the <strong>overall approach</strong></li>
+<li><strong>Integrate and coordinate</strong> test activities into the software lifecycle</li>
+<li>Decide <strong>what to test</strong>, the <strong>people and resources</strong> needed, and <strong>how</strong> the work will be done</li>
+<li><strong>Schedule</strong> analysis, design, implementation, execution and evaluation</li>
+<li>Select <strong>metrics</strong> for monitoring and control</li>
+<li><strong>Budget</strong> the test activities</li>
+<li>Determine the <strong>level of detail and structure of test documentation</strong> (templates, how detailed test cases must be) — the key to slide 55</li>
+</ol>
+<p class="ghi-chu">The teacher's notes on this slide are a Vietnamese translation of the same list.</p>`,
+        `<p class="y-chinh">🎯 Lập kế hoạch test gồm 8 hoạt động — cần nhớ đủ cả danh sách.</p>
+<ol>
+<li>Xác định <strong>phạm vi, mục tiêu và rủi ro</strong> của việc test</li>
+<li>Định ra <strong>cách tiếp cận tổng thể</strong></li>
+<li><strong>Lồng ghép và điều phối</strong> hoạt động test vào vòng đời phần mềm</li>
+<li>Quyết định <strong>test cái gì</strong>, cần <strong>người và nguồn lực</strong> nào, và <strong>làm thế nào</strong></li>
+<li><strong>Lên lịch</strong> cho phân tích, thiết kế, triển khai, thực thi và đánh giá test</li>
+<li>Chọn <strong>số đo (metrics)</strong> để giám sát và kiểm soát</li>
+<li>Lập <strong>ngân sách</strong> cho hoạt động test</li>
+<li>Xác định <strong>mức chi tiết và cấu trúc tài liệu test</strong> (template, test case cần chi tiết tới đâu) — chìa khoá của slide 55</li>
+</ol>
+<p class="ghi-chu">Ghi chú của giảng viên trên slide này là bản dịch tiếng Việt của đúng danh sách trên.</p>`],
       [29, 'Test Strategy & Test Approach',
-        `<p><strong>Test strategy</strong> (organisational test strategy): documentation expressing the <em>generic</em> requirements for testing one or more projects in an organisation — how testing is to be performed — aligned with the <strong>test policy</strong>. <strong>Test approach</strong>: the <em>implementation of the strategy for a specific project</em> (glossary wording; fst4 sample question 8 asks exactly this). Then the seven major types, detailed on slides 30–36. Real projects combine several (e.g. analytical risk-based + reactive exploratory + regression-averse automation).</p>`,
-        `<p><strong>Test strategy</strong> (chiến lược test của tổ chức): tài liệu nêu các yêu cầu <em>chung</em> cho việc kiểm thử một hay nhiều dự án trong tổ chức — kiểm thử được thực hiện thế nào — và phù hợp với <strong>test policy</strong>. <strong>Test approach</strong>: <em>việc hiện thực chiến lược cho một dự án cụ thể</em> (đúng chữ trong glossary; câu hỏi mẫu 8 của fst4 hỏi đúng điều này). Sau đó là bảy loại chính, chi tiết ở slide 30–36. Dự án thật thường phối hợp nhiều loại (vd analytical theo rủi ro + reactive exploratory + regression-averse tự động hoá).</p>`],
+        `<p class="y-chinh">🎯 The strategy is organisation-wide; the approach is that strategy applied to one project.</p>
+<p class="nhan">Two definitions</p>
+<ul>
+<li><strong>Test strategy</strong> (organisational test strategy) — documentation expressing the <em>generic</em> requirements for testing one or more projects in an organisation: how testing is to be performed. It is aligned with the <strong>test policy</strong>.</li>
+<li><strong>Test approach</strong> — the <em>implementation of the strategy for a specific project</em> (glossary wording; fst4 sample question 8 asks exactly this).</li>
+</ul>
+<p class="nhan">The seven major types (slides 30–36)</p>
+<ol>
+<li>Analytical</li>
+<li>Model-based</li>
+<li>Methodical</li>
+<li>Process- / standard-compliant</li>
+<li>Directed (consultative)</li>
+<li>Regression-averse</li>
+<li>Reactive (dynamic)</li>
+</ol>
+<p>Real projects combine several — e.g. analytical risk-based + reactive exploratory + regression-averse automation.</p>`,
+        `<p class="y-chinh">🎯 Strategy là của cả tổ chức; approach là strategy đó áp vào một dự án.</p>
+<p class="nhan">Hai định nghĩa</p>
+<ul>
+<li><strong>Test strategy</strong> (chiến lược test của tổ chức) — tài liệu nêu các yêu cầu <em>chung</em> cho việc kiểm thử một hay nhiều dự án trong tổ chức: kiểm thử được thực hiện thế nào. Nó phù hợp với <strong>test policy</strong>.</li>
+<li><strong>Test approach</strong> — <em>việc hiện thực chiến lược cho một dự án cụ thể</em> (đúng chữ trong glossary; câu hỏi mẫu 8 của fst4 hỏi đúng điều này).</li>
+</ul>
+<p class="nhan">Bảy loại chính (slide 30–36)</p>
+<ol>
+<li>Analytical (phân tích)</li>
+<li>Model-based (dựa mô hình)</li>
+<li>Methodical (có phương pháp)</li>
+<li>Process- / standard-compliant (theo quy trình / tiêu chuẩn)</li>
+<li>Directed (consultative — tư vấn)</li>
+<li>Regression-averse (né hồi quy)</li>
+<li>Reactive (dynamic — phản ứng)</li>
+</ol>
+<p>Dự án thật thường phối hợp nhiều loại — vd analytical theo rủi ro + reactive exploratory + regression-averse tự động hoá.</p>`],
       [30, 'Test Strategy: Analytical',
-        `<p>Based on an <strong>analysis of some factor</strong> — requirements or risk. In <strong>risk-based</strong> testing, tests are designed and prioritised by risk level (lesson 7.5); in <strong>requirements-based</strong> testing, analysing the requirements specification drives planning, estimating and design. Characteristics: formal or informal analytical techniques, usually applied during the requirements and design stages. The notes spell out the chain: risk analysis from documents and stakeholder input → planning → estimating → designing and prioritising tests by risk. Keyword in questions: "<em>based on the level of risk</em>" → analytical.</p>`,
-        `<p>Dựa trên <strong>phân tích một yếu tố</strong> — yêu cầu hoặc rủi ro. Với <strong>risk-based</strong>, test được thiết kế và ưu tiên theo mức rủi ro (bài 7.5); với <strong>requirements-based</strong>, việc phân tích đặc tả yêu cầu dẫn dắt lập kế hoạch, ước lượng và thiết kế. Đặc điểm: dùng kỹ thuật phân tích chính thức hoặc không chính thức, thường ở giai đoạn yêu cầu và thiết kế. Ghi chú nêu rõ chuỗi: phân tích rủi ro từ tài liệu và ý kiến các bên → lập kế hoạch → ước lượng → thiết kế và ưu tiên test theo rủi ro. Từ khoá trong đề: "<em>theo mức rủi ro</em>" → analytical.</p>`],
+        `<p class="y-chinh">🎯 Analytical: tests come from an <strong>analysis of some factor</strong> — risk or requirements.</p>
+<p class="nhan">Two flavours</p>
+<ul>
+<li><strong>Risk-based</strong> — tests are designed and prioritised by risk level (lesson 7.5).</li>
+<li><strong>Requirements-based</strong> — analysing the requirements specification drives planning, estimating and design.</li>
+</ul>
+<p class="nhan">Common characteristics</p>
+<ul>
+<li>Formal or informal <strong>analytical techniques</strong>.</li>
+<li>Usually applied during the <strong>requirements and design</strong> stages.</li>
+</ul>
+<p class="nhan">The chain in the notes (risk-based)</p>
+<ol>
+<li>Risk analysis from project documents and stakeholder input</li>
+<li>Planning</li>
+<li>Estimating</li>
+<li>Designing and prioritising the tests by risk</li>
+</ol>
+<p class="meo">🧠 <strong>Remember:</strong> keyword in questions "<em>based on the level of risk</em>" → analytical.</p>`,
+        `<p class="y-chinh">🎯 Analytical: test sinh ra từ việc <strong>phân tích một yếu tố</strong> — rủi ro hoặc yêu cầu.</p>
+<p class="nhan">Hai dạng</p>
+<ul>
+<li><strong>Risk-based</strong> — test được thiết kế và ưu tiên theo mức rủi ro (bài 7.5).</li>
+<li><strong>Requirements-based</strong> — việc phân tích đặc tả yêu cầu dẫn dắt lập kế hoạch, ước lượng và thiết kế.</li>
+</ul>
+<p class="nhan">Đặc điểm chung</p>
+<ul>
+<li>Dùng <strong>kỹ thuật phân tích</strong> chính thức hoặc không chính thức.</li>
+<li>Thường ở giai đoạn <strong>yêu cầu và thiết kế</strong>.</li>
+</ul>
+<p class="nhan">Chuỗi trong ghi chú (risk-based)</p>
+<ol>
+<li>Phân tích rủi ro từ tài liệu dự án và ý kiến các bên</li>
+<li>Lập kế hoạch</li>
+<li>Ước lượng</li>
+<li>Thiết kế và ưu tiên test theo rủi ro</li>
+</ol>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> từ khoá trong đề "<em>theo mức rủi ro</em>" → analytical.</p>`],
       [31, 'Test Strategy: Model-based',
-        `<p>Tests are designed from a <strong>model</strong> of some required aspect of the product — a function, a business process, an internal structure or a non-functional characteristic. Characteristic: creating or selecting a formal/informal model of critical behaviour, again during requirements and design. Examples: <strong>business process models, state models, reliability growth models</strong> (the latter predict how failure rates fall as defects are removed). Keyword: "<em>based on a state diagram / model</em>" → model-based (slide 52, description A). Operational profiles for performance tests are also models.</p>`,
-        `<p>Test được thiết kế từ một <strong>mô hình</strong> của khía cạnh cần có của sản phẩm — một chức năng, quy trình nghiệp vụ, cấu trúc bên trong hoặc một đặc tính phi chức năng. Đặc điểm: tạo hoặc chọn một mô hình (chính thức/không chính thức) cho các hành vi quan trọng, cũng trong giai đoạn yêu cầu và thiết kế. Ví dụ: <strong>mô hình quy trình nghiệp vụ, mô hình trạng thái, mô hình tăng trưởng độ tin cậy</strong> (loại sau dự đoán tỉ lệ failure giảm thế nào khi defect được gỡ). Từ khoá: "<em>dựa trên sơ đồ trạng thái / mô hình</em>" → model-based (slide 52, mô tả A). Hồ sơ vận hành (operational profile) cho test hiệu năng cũng là mô hình.</p>`],
+        `<p class="y-chinh">🎯 Model-based: tests are designed from a <strong>model</strong> of some required aspect of the product.</p>
+<p class="nhan">What can be modelled</p>
+<ul>
+<li>A function, a business process, an internal structure, or a non-functional characteristic.</li>
+</ul>
+<p class="nhan">Common characteristic</p>
+<ul>
+<li>Creating or selecting a formal/informal <strong>model of critical behaviour</strong>, again during requirements and design.</li>
+</ul>
+<p class="nhan">Examples</p>
+<ul>
+<li><strong>Business process models</strong></li>
+<li><strong>State models</strong></li>
+<li><strong>Reliability growth models</strong> — predict how failure rates fall as defects are removed.</li>
+<li><strong>Operational profiles</strong> for performance tests are also models.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> keyword "<em>based on a state diagram / model</em>" → model-based (slide 52, description A).</p>`,
+        `<p class="y-chinh">🎯 Model-based: test được thiết kế từ một <strong>mô hình</strong> của khía cạnh cần có của sản phẩm.</p>
+<p class="nhan">Mô hình hoá cái gì</p>
+<ul>
+<li>Một chức năng, quy trình nghiệp vụ, cấu trúc bên trong, hoặc một đặc tính phi chức năng.</li>
+</ul>
+<p class="nhan">Đặc điểm chung</p>
+<ul>
+<li>Tạo hoặc chọn một <strong>mô hình cho các hành vi quan trọng</strong> (chính thức/không chính thức), cũng trong giai đoạn yêu cầu và thiết kế.</li>
+</ul>
+<p class="nhan">Ví dụ</p>
+<ul>
+<li><strong>Mô hình quy trình nghiệp vụ</strong></li>
+<li><strong>Mô hình trạng thái</strong></li>
+<li><strong>Mô hình tăng trưởng độ tin cậy</strong> — dự đoán tỉ lệ failure giảm thế nào khi defect được gỡ.</li>
+<li><strong>Hồ sơ vận hành</strong> (operational profile) cho test hiệu năng cũng là mô hình.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> từ khoá "<em>dựa trên sơ đồ trạng thái / mô hình</em>" → model-based (slide 52, mô tả A).</p>`],
       [32, 'Test Strategy: Methodical',
-        `<p>Systematic use of a <strong>predefined set of tests or test conditions</strong>: a taxonomy of common or likely failures, a list of important quality characteristics, company-wide look-and-feel standards for web pages. Characteristic: adherence to a pre-planned, systematised approach; involvement may be early or late. The notes: you may have a checklist collected over years, or you may follow an industry standard for software quality such as <strong>ISO/IEC 25010</strong> to outline the main test areas, then design and run tests methodically against that outline — hence slide 57's answer.</p>`,
-        `<p>Dùng có hệ thống một <strong>tập test hoặc test condition định sẵn</strong>: bảng phân loại các loại lỗi thường gặp, danh sách các đặc tính chất lượng quan trọng, chuẩn giao diện chung của công ty cho trang web. Đặc điểm: bám theo một cách làm đã lên sẵn, có hệ thống; có thể tham gia sớm hoặc muộn. Ghi chú: bạn có thể có một checklist tích luỹ qua nhiều năm, hoặc theo một chuẩn ngành về chất lượng phần mềm như <strong>ISO/IEC 25010</strong> để phác ra các mảng test chính, rồi thiết kế và chạy test một cách có phương pháp theo dàn ý đó — vì vậy slide 57 có đáp án như vậy.</p>`],
+        `<p class="y-chinh">🎯 Methodical: systematic use of a <strong>predefined set of tests or test conditions</strong>.</p>
+<p class="nhan">Typical predefined lists</p>
+<ul>
+<li>A <strong>taxonomy</strong> of common or likely failures</li>
+<li>A list of important <strong>quality characteristics</strong></li>
+<li>Company-wide <strong>look-and-feel standards</strong> for web pages</li>
+</ul>
+<p class="nhan">Common characteristics</p>
+<ul>
+<li>Adherence to a <strong>pre-planned, systematised</strong> approach.</li>
+<li>Involvement may be <strong>early or late</strong>.</li>
+</ul>
+<p class="nhan">What the notes add</p>
+<p>You may have a checklist collected over years, or follow an industry standard for software quality such as <strong>ISO/IEC 25010</strong> to outline the main test areas. You then design and run tests methodically against that outline — hence slide 57's answer.</p>`,
+        `<p class="y-chinh">🎯 Methodical: dùng có hệ thống một <strong>tập test hoặc test condition định sẵn</strong>.</p>
+<p class="nhan">Các danh sách định sẵn điển hình</p>
+<ul>
+<li>Bảng <strong>phân loại</strong> các loại lỗi thường gặp</li>
+<li>Danh sách các <strong>đặc tính chất lượng</strong> quan trọng</li>
+<li><strong>Chuẩn giao diện chung</strong> của công ty cho trang web</li>
+</ul>
+<p class="nhan">Đặc điểm chung</p>
+<ul>
+<li>Bám theo một cách làm <strong>đã lên sẵn, có hệ thống</strong>.</li>
+<li>Có thể tham gia <strong>sớm hoặc muộn</strong>.</li>
+</ul>
+<p class="nhan">Ghi chú bổ sung</p>
+<p>Bạn có thể có một checklist tích luỹ qua nhiều năm, hoặc theo một chuẩn ngành về chất lượng phần mềm như <strong>ISO/IEC 25010</strong> để phác ra các mảng test chính. Rồi thiết kế và chạy test một cách có phương pháp theo dàn ý đó — vì vậy slide 57 có đáp án như vậy.</p>`],
       [33, 'Test Strategy: Process- / Standard-Compliant',
-        `<p>Analysing, designing and implementing tests from <strong>external rules and standards</strong> — industry-specific standards, process documentation, or the rules of a methodology (the syllabus even counts rigorous agile rules here). Characteristics: reliance on an <em>externally developed</em> approach, often with little or no customisation; early or late involvement. The slide writes "ISO/IEC/IEEE 2911903" — a typo for <strong>ISO/IEC/IEEE 29119-3</strong> (the test documentation part of the 29119 series). The notes to slide 37 add: this is a smart choice when your team lacks time or skills to invent its own approach.</p>`,
-        `<p>Phân tích, thiết kế và cài đặt test theo <strong>quy tắc và tiêu chuẩn bên ngoài</strong> — chuẩn riêng của ngành, tài liệu quy trình, hoặc quy tắc của một phương pháp luận (syllabus xếp cả các quy tắc agile chặt chẽ vào đây). Đặc điểm: dựa vào cách làm <em>do bên ngoài xây dựng</em>, thường ít hoặc không tuỳ biến; tham gia sớm hoặc muộn. Slide ghi "ISO/IEC/IEEE 2911903" — lỗi đánh máy của <strong>ISO/IEC/IEEE 29119-3</strong> (phần tài liệu test trong bộ 29119). Ghi chú slide 37 thêm: đây là lựa chọn khôn ngoan khi nhóm thiếu thời gian hay kỹ năng để tự xây cách tiếp cận riêng.</p>`],
+        `<p class="y-chinh">🎯 Process- / standard-compliant: tests are analysed, designed and implemented from <strong>external rules and standards</strong>.</p>
+<p class="nhan">Where the rules come from</p>
+<ul>
+<li><strong>Industry-specific standards</strong></li>
+<li><strong>Process documentation</strong></li>
+<li>The rules of a <strong>methodology</strong> — the syllabus even counts rigorous agile rules here.</li>
+</ul>
+<p class="nhan">Common characteristics</p>
+<ul>
+<li>Reliance on an <em>externally developed</em> approach, often with little or no customisation.</li>
+<li>Involvement may be early or late.</li>
+</ul>
+<p class="nhan">Good to know</p>
+<ul>
+<li><strong>Typo on the slide</strong> — "ISO/IEC/IEEE 2911903" means <strong>ISO/IEC/IEEE 29119-3</strong>, the test documentation part of the 29119 series.</li>
+<li><strong>When to pick it</strong> — the notes to slide 37: a smart choice when your team lacks the time or skills to invent its own approach.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Process- / standard-compliant: phân tích, thiết kế và cài đặt test theo <strong>quy tắc và tiêu chuẩn bên ngoài</strong>.</p>
+<p class="nhan">Quy tắc lấy từ đâu</p>
+<ul>
+<li><strong>Chuẩn riêng của ngành</strong></li>
+<li><strong>Tài liệu quy trình</strong></li>
+<li>Quy tắc của một <strong>phương pháp luận</strong> — syllabus xếp cả các quy tắc agile chặt chẽ vào đây.</li>
+</ul>
+<p class="nhan">Đặc điểm chung</p>
+<ul>
+<li>Dựa vào cách làm <em>do bên ngoài xây dựng</em>, thường ít hoặc không tuỳ biến.</li>
+<li>Có thể tham gia sớm hoặc muộn.</li>
+</ul>
+<p class="nhan">Nên biết</p>
+<ul>
+<li><strong>Lỗi đánh máy trên slide</strong> — "ISO/IEC/IEEE 2911903" nghĩa là <strong>ISO/IEC/IEEE 29119-3</strong>, phần tài liệu test trong bộ 29119.</li>
+<li><strong>Khi nào nên chọn</strong> — ghi chú slide 37: lựa chọn khôn ngoan khi nhóm thiếu thời gian hay kỹ năng để tự xây cách tiếp cận riêng.</li>
+</ul>`],
       [34, 'Test Strategy: Directed (Consultative)',
-        `<p>Driven primarily by the <strong>advice, guidance or instructions</strong> of stakeholders, business-domain experts or technology experts, who may be outside the test team or even outside the organisation. Characteristics: reliance on a group of <em>non-testers</em> to guide or perform the testing; typically emphasises later test stages (acceptance). The teacher's note: useful for a start-up with little testing expertise — e.g. an external expert advises on security testing. Keyword: "<em>chosen based on the views of business domain experts</em>" → consultative.</p>`,
-        `<p>Chủ yếu dựa vào <strong>lời khuyên, hướng dẫn hoặc chỉ thị</strong> của các bên liên quan, chuyên gia nghiệp vụ hoặc chuyên gia công nghệ — có thể ở ngoài nhóm test, thậm chí ngoài tổ chức. Đặc điểm: dựa vào một nhóm <em>không phải tester</em> để định hướng hoặc thực hiện kiểm thử; thường nhấn vào các giai đoạn test muộn (acceptance). Ghi chú của thầy/cô: hữu ích cho công ty khởi nghiệp ít kinh nghiệm kiểm thử — vd một chuyên gia bên ngoài tư vấn về kiểm thử bảo mật. Từ khoá: "<em>chọn theo ý kiến chuyên gia nghiệp vụ</em>" → consultative.</p>`],
+        `<p class="y-chinh">🎯 Directed (consultative): testing is driven by the <strong>advice, guidance or instructions</strong> of people who are not testers.</p>
+<p class="nhan">Whose advice</p>
+<ul>
+<li><strong>Stakeholders</strong>, <strong>business-domain experts</strong> or <strong>technology experts</strong> — possibly outside the test team or even outside the organisation.</li>
+</ul>
+<p class="nhan">Common characteristics</p>
+<ul>
+<li>Reliance on a group of <em>non-testers</em> to guide or perform the testing.</li>
+<li>Typically emphasises the <strong>later test stages</strong> (acceptance).</li>
+</ul>
+<p class="nhan">When it helps (teacher's note)</p>
+<p>A start-up with little testing expertise — e.g. an external expert advises on security testing.</p>
+<p class="meo">🧠 <strong>Remember:</strong> keyword "<em>chosen based on the views of business domain experts</em>" → consultative.</p>`,
+        `<p class="y-chinh">🎯 Directed (consultative): việc test do <strong>lời khuyên, hướng dẫn hoặc chỉ thị</strong> của những người không phải tester dẫn dắt.</p>
+<p class="nhan">Lời khuyên của ai</p>
+<ul>
+<li><strong>Các bên liên quan</strong>, <strong>chuyên gia nghiệp vụ</strong> hoặc <strong>chuyên gia công nghệ</strong> — có thể ở ngoài nhóm test, thậm chí ngoài tổ chức.</li>
+</ul>
+<p class="nhan">Đặc điểm chung</p>
+<ul>
+<li>Dựa vào một nhóm <em>không phải tester</em> để định hướng hoặc thực hiện kiểm thử.</li>
+<li>Thường nhấn vào các <strong>giai đoạn test muộn</strong> (acceptance).</li>
+</ul>
+<p class="nhan">Khi nào hữu ích (ghi chú của thầy/cô)</p>
+<p>Công ty khởi nghiệp ít kinh nghiệm kiểm thử — vd một chuyên gia bên ngoài tư vấn về kiểm thử bảo mật.</p>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> từ khoá "<em>chọn theo ý kiến chuyên gia nghiệp vụ</em>" → consultative.</p>`],
       [35, 'Test Strategy: Regression-averse',
-        `<p>Motivated by the desire to <strong>avoid regression</strong> of existing capabilities: extensive <strong>automated regression tests</strong>, <strong>standard test suites</strong> and <strong>reuse of existing tests and test data</strong>. Characteristics: a set of (often automated) procedures that detect regression defects; early testing, sometimes post-release involvement. Best fit (slide 37 notes): a well-established application evolving slowly, where regression is the main risk. The note's Vietnamese translation "không thích hồi quy" = "averse to regression".</p>`,
-        `<p>Xuất phát từ mong muốn <strong>tránh hồi quy</strong> các chức năng đã có: dùng rộng rãi <strong>test hồi quy tự động</strong>, <strong>bộ test chuẩn</strong> và <strong>tái sử dụng test, dữ liệu test cũ</strong>. Đặc điểm: một bộ quy trình (thường tự động) để phát hiện lỗi hồi quy; test sớm, đôi khi tham gia cả sau phát hành. Hợp nhất (ghi chú slide 37): ứng dụng đã ổn định, thay đổi chậm, nơi hồi quy là rủi ro chính. Ghi chú dịch "không thích hồi quy" = "né hồi quy".</p>`],
+        `<p class="y-chinh">🎯 Regression-averse: motivated by the desire to <strong>avoid regression</strong> of existing capabilities.</p>
+<p class="nhan">What it uses</p>
+<ul>
+<li>Extensive <strong>automated regression tests</strong></li>
+<li><strong>Standard test suites</strong></li>
+<li><strong>Reuse of existing tests and test data</strong></li>
+</ul>
+<p class="nhan">Common characteristics</p>
+<ul>
+<li>A set of (often automated) procedures that <strong>detect regression defects</strong>.</li>
+<li>Early testing, sometimes also <strong>post-release</strong> involvement.</li>
+</ul>
+<p class="nhan">Best fit (slide 37 notes)</p>
+<p>A well-established application evolving slowly, where regression is the main risk.</p>
+<p class="ghi-chu">The note's Vietnamese translation "không thích hồi quy" = "averse to regression".</p>`,
+        `<p class="y-chinh">🎯 Regression-averse: xuất phát từ mong muốn <strong>tránh hồi quy</strong> các chức năng đã có.</p>
+<p class="nhan">Dùng những gì</p>
+<ul>
+<li>Dùng rộng rãi <strong>test hồi quy tự động</strong></li>
+<li><strong>Bộ test chuẩn</strong></li>
+<li><strong>Tái sử dụng test và dữ liệu test cũ</strong></li>
+</ul>
+<p class="nhan">Đặc điểm chung</p>
+<ul>
+<li>Một bộ quy trình (thường tự động) để <strong>phát hiện lỗi hồi quy</strong>.</li>
+<li>Test sớm, đôi khi tham gia cả <strong>sau phát hành</strong>.</li>
+</ul>
+<p class="nhan">Hợp nhất khi (ghi chú slide 37)</p>
+<p>Ứng dụng đã ổn định, thay đổi chậm, nơi hồi quy là rủi ro chính.</p>
+<p class="ghi-chu">Ghi chú dịch "không thích hồi quy" = "né hồi quy".</p>`],
       [36, 'Test Strategy: Reactive (Dynamic)',
-        `<p>Testing <strong>reacts</strong> to the component or system under test and to the events during execution, instead of being pre-planned like all the previous strategies. Tests are designed and implemented, and may be executed immediately, in response to knowledge gained from earlier results. <strong>Exploratory testing</strong> is the common technique (lesson on experience-based techniques). Fits when the objective is to find as many defects as possible with minimal up-front effort — e.g. at an independent test lab (slide 37 notes).</p>`,
-        `<p>Việc test <strong>phản ứng</strong> theo thành phần/hệ thống đang test và các sự kiện trong lúc chạy, thay vì được lên kế hoạch trước như tất cả các chiến lược trước. Test được thiết kế, cài đặt và có thể chạy ngay dựa trên hiểu biết thu được từ kết quả trước đó. <strong>Exploratory testing</strong> là kỹ thuật hay dùng (xem bài kỹ thuật dựa kinh nghiệm). Hợp khi mục tiêu là tìm càng nhiều defect càng tốt với ít công chuẩn bị — vd ở một phòng lab test độc lập (ghi chú slide 37).</p>`],
+        `<p class="y-chinh">🎯 Reactive (dynamic): testing <strong>reacts</strong> to the system and to events during execution instead of being pre-planned.</p>
+<ul>
+<li><strong>Not pre-planned</strong> — unlike all the previous strategies, it follows the component or system under test and what happens while tests run.</li>
+<li><strong>Design on the fly</strong> — tests are designed and implemented, and may be executed immediately, in response to knowledge gained from earlier results.</li>
+<li><strong>Exploratory testing</strong> — the common technique (lesson on experience-based techniques).</li>
+</ul>
+<p class="nhan">Best fit (slide 37 notes)</p>
+<p>The objective is to find as many defects as possible with minimal up-front effort — e.g. at an independent test lab.</p>`,
+        `<p class="y-chinh">🎯 Reactive (dynamic): việc test <strong>phản ứng</strong> theo hệ thống và sự kiện trong lúc chạy, thay vì lên kế hoạch trước.</p>
+<ul>
+<li><strong>Không lên kế hoạch trước</strong> — khác mọi chiến lược trước, nó bám theo thành phần/hệ thống đang test và những gì xảy ra lúc chạy test.</li>
+<li><strong>Thiết kế tại chỗ</strong> — test được thiết kế, cài đặt và có thể chạy ngay dựa trên hiểu biết thu được từ kết quả trước đó.</li>
+<li><strong>Exploratory testing</strong> — kỹ thuật hay dùng (xem bài kỹ thuật dựa kinh nghiệm).</li>
+</ul>
+<p class="nhan">Hợp nhất khi (ghi chú slide 37)</p>
+<p>Mục tiêu là tìm càng nhiều defect càng tốt với ít công chuẩn bị — vd ở một phòng lab test độc lập.</p>`],
       [37, 'Test Strategy & Test Approach — factors to consider',
-        `<p>The diagram: <strong>Test strategy → Test approach →</strong> {test cases, test types, test techniques} — the approach is where the strategy becomes concrete choices. Factors when choosing a strategy (the notes explain each): <strong>Risks</strong> — an old, slowly evolving application → regression-averse; a new one → risk-based analytical. <strong>Skills</strong> — a strategy must be executable; if the team lacks time and skills, a standard-compliant strategy is smart. <strong>Objectives</strong> — "find as many defects as possible with minimal up-front effort" → reactive. <strong>Regulations</strong> — satisfying regulators → a methodical strategy that proves every requirement was covered. <strong>Product</strong> — weapons systems or contract software with well-specified requirements → requirements-based analytical. <strong>Business</strong> — if a legacy system can serve as a model for the new one → model-based.</p>`,
-        `<p>Sơ đồ: <strong>Test strategy → Test approach →</strong> {test case, loại test, kỹ thuật test} — approach là nơi chiến lược biến thành các lựa chọn cụ thể. Các yếu tố khi chọn chiến lược (ghi chú giải thích từng cái): <strong>Rủi ro</strong> — ứng dụng lâu năm, thay đổi chậm → regression-averse; ứng dụng mới → analytical theo rủi ro. <strong>Kỹ năng</strong> — chiến lược phải làm được; nhóm thiếu thời gian và kỹ năng thì chọn standard-compliant là khôn. <strong>Mục tiêu</strong> — "tìm càng nhiều defect càng tốt với ít công chuẩn bị" → reactive. <strong>Quy định</strong> — phải thoả cơ quan quản lý → chiến lược methodical chứng minh mọi yêu cầu đều được phủ. <strong>Sản phẩm</strong> — hệ thống vũ khí hay phần mềm theo hợp đồng có yêu cầu rõ ràng → analytical theo yêu cầu. <strong>Kinh doanh</strong> — nếu hệ thống cũ làm mô hình được cho hệ thống mới → model-based.</p>`],
+        `<p class="y-chinh">🎯 Six factors decide which strategy fits; the approach turns that strategy into concrete choices.</p>
+<p class="nhan">The diagram</p>
+<p><strong>Test strategy → Test approach →</strong> {test cases, test types, test techniques}.</p>
+<p class="nhan">Six factors and the strategy each points to (notes)</p>
+<ol>
+<li><strong>Risks</strong> — an old, slowly evolving application → regression-averse; a new one → risk-based analytical.</li>
+<li><strong>Skills</strong> — a strategy must be executable; if the team lacks time and skills, a standard-compliant strategy is smart.</li>
+<li><strong>Objectives</strong> — "find as many defects as possible with minimal up-front effort" → reactive.</li>
+<li><strong>Regulations</strong> — satisfying regulators → a methodical strategy that proves every requirement was covered.</li>
+<li><strong>Product</strong> — weapons systems or contract software with well-specified requirements → requirements-based analytical.</li>
+<li><strong>Business</strong> — if a legacy system can serve as a model for the new one → model-based.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Sáu yếu tố quyết định chiến lược nào hợp; approach biến chiến lược đó thành các lựa chọn cụ thể.</p>
+<p class="nhan">Sơ đồ</p>
+<p><strong>Test strategy → Test approach →</strong> {test case, loại test, kỹ thuật test}.</p>
+<p class="nhan">Sáu yếu tố và chiến lược tương ứng (ghi chú)</p>
+<ol>
+<li><strong>Rủi ro</strong> — ứng dụng lâu năm, thay đổi chậm → regression-averse; ứng dụng mới → analytical theo rủi ro.</li>
+<li><strong>Kỹ năng</strong> — chiến lược phải làm được; nhóm thiếu thời gian và kỹ năng thì chọn standard-compliant là khôn.</li>
+<li><strong>Mục tiêu</strong> — "tìm càng nhiều defect càng tốt với ít công chuẩn bị" → reactive.</li>
+<li><strong>Quy định</strong> — phải thoả cơ quan quản lý → chiến lược methodical chứng minh mọi yêu cầu đều được phủ.</li>
+<li><strong>Sản phẩm</strong> — hệ thống vũ khí hay phần mềm theo hợp đồng có yêu cầu rõ ràng → analytical theo yêu cầu.</li>
+<li><strong>Kinh doanh</strong> — nếu hệ thống cũ làm mô hình được cho hệ thống mới → model-based.</li>
+</ol>`],
       [38, 'Entry Criteria (definition of ready)',
-        `<p><strong>Entry criteria</strong> — in Agile the "definition of ready" — are the <strong>preconditions</strong> for starting a test activity. Typical ones: availability of <em>testable</em> requirements, user stories and/or models; test items that have met the <em>exit criteria of the previous level</em>; the test environment; the necessary tools; test data and other resources; staff; the test object itself. The notes explain why they matter: most start-up problems turn out to be "something needed is not actually ready", and then testing gets blamed for the delay. Enforcing (or at least discussing) entry criteria makes the risk visible early.</p>`,
-        `<p><strong>Entry criteria</strong> (tiêu chí bắt đầu) — trong Agile là "definition of ready" — là <strong>điều kiện tiên quyết</strong> để bắt đầu một hoạt động test. Điển hình: có yêu cầu, user story và/hoặc mô hình <em>test được</em>; hạng mục test đã đạt <em>exit criteria của cấp trước</em>; có môi trường test; có công cụ cần thiết; có dữ liệu test và nguồn lực khác; có nhân sự; có chính đối tượng test. Ghi chú giải thích vì sao quan trọng: phần lớn rắc rối lúc khởi động hoá ra là "thứ cần thiết chưa thực sự sẵn sàng", rồi kiểm thử lại bị đổ lỗi gây trễ. Áp dụng (hoặc ít nhất bàn trước) entry criteria giúp rủi ro lộ ra sớm.</p>`],
+        `<p class="y-chinh">🎯 <strong>Entry criteria</strong> — in Agile the "definition of ready" — are the <strong>preconditions</strong> for starting a test activity.</p>
+<p class="nhan">Typical entry criteria — availability of…</p>
+<ol>
+<li><em>Testable</em> requirements, user stories and/or models</li>
+<li>Test items that have met the <em>exit criteria of the previous level</em></li>
+<li>The test environment</li>
+<li>The necessary test tools</li>
+<li>Test data and other resources</li>
+<li>Staff</li>
+<li>The test object itself</li>
+</ol>
+<p class="nhan">Why they matter (notes)</p>
+<ul>
+<li><strong>Typical start-up problem</strong> — "something needed is not actually ready", and then testing gets blamed for the delay.</li>
+<li><strong>The fix</strong> — enforcing (or at least discussing) entry criteria makes the risk visible early.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 <strong>Entry criteria</strong> (tiêu chí bắt đầu) — trong Agile là "definition of ready" — là <strong>điều kiện tiên quyết</strong> để bắt đầu một hoạt động test.</p>
+<p class="nhan">Entry criteria điển hình — đã có…</p>
+<ol>
+<li>Yêu cầu, user story và/hoặc mô hình <em>test được</em></li>
+<li>Hạng mục test đã đạt <em>exit criteria của cấp trước</em></li>
+<li>Môi trường test</li>
+<li>Công cụ test cần thiết</li>
+<li>Dữ liệu test và nguồn lực khác</li>
+<li>Nhân sự</li>
+<li>Chính đối tượng test</li>
+</ol>
+<p class="nhan">Vì sao quan trọng (ghi chú)</p>
+<ul>
+<li><strong>Rắc rối điển hình lúc khởi động</strong> — "thứ cần thiết chưa thực sự sẵn sàng", rồi kiểm thử lại bị đổ lỗi gây trễ.</li>
+<li><strong>Cách chữa</strong> — áp dụng (hoặc ít nhất bàn trước) entry criteria giúp rủi ro lộ ra sớm.</li>
+</ul>`],
       [39, 'Exit Criteria (definition of done)',
-        `<p><strong>Exit criteria</strong> — "definition of done" — define what must be achieved to declare a test level or a set of tests <strong>completed</strong>. Typical: <strong>Tests</strong> — planned tests executed; <strong>Coverage</strong> — a defined level reached; <strong>Defects</strong> — unresolved defects within an agreed limit and estimated remaining defects sufficiently low; <strong>Quality</strong> — important quality characteristics adequate; <strong>Money</strong> — the cost of finding the next defect now vs in the next level; <strong>Schedule</strong> — implications of starting or ending; <strong>Risk</strong> — the undesirable outcome of shipping too early or too late. The notes are worth remembering: in practice testing is often <em>stopped rather than finished</em> because time pressure wins; with documented exit criteria you can at least show stakeholders what was not completed, and the decision to release anyway must be taken by stakeholders and business owners who <em>review and accept the risks</em>.</p>`,
-        `<p><strong>Exit criteria</strong> (tiêu chí kết thúc) — "definition of done" — xác định phải đạt gì để tuyên bố một cấp test hoặc một tập test đã <strong>hoàn thành</strong>. Điển hình: <strong>Tests</strong> — đã chạy hết test đã lên kế hoạch; <strong>Coverage</strong> — đạt mức bao phủ đã định; <strong>Defects</strong> — số defect chưa giải quyết trong giới hạn đã thoả thuận và số defect ước tính còn lại đủ thấp; <strong>Quality</strong> — các đặc tính chất lượng quan trọng đạt yêu cầu; <strong>Money</strong> — chi phí tìm defect kế tiếp bây giờ so với ở cấp sau; <strong>Schedule</strong> — ảnh hưởng tới lịch khi bắt đầu hay kết thúc; <strong>Risk</strong> — hậu quả xấu của việc giao quá sớm hoặc quá muộn. Ghi chú rất đáng nhớ: thực tế kiểm thử thường bị <em>dừng lại chứ không phải hoàn thành</em> vì áp lực thời gian; có exit criteria viết ra thì ít nhất bạn cho các bên thấy phần nào chưa xong, và quyết định vẫn phát hành phải do các bên liên quan và chủ doanh nghiệp đưa ra sau khi <em>xem xét và chấp nhận rủi ro</em>.</p>`],
+        `<p class="y-chinh">🎯 <strong>Exit criteria</strong> — "definition of done" — define what must be achieved to declare a test level or a set of tests <strong>completed</strong>.</p>
+<p class="nhan">Seven typical exit criteria</p>
+<ol>
+<li><strong>Tests</strong> — planned tests have been executed.</li>
+<li><strong>Coverage</strong> — a defined level has been reached.</li>
+<li><strong>Defects</strong> — unresolved defects within an agreed limit, and estimated remaining defects sufficiently low.</li>
+<li><strong>Quality</strong> — important quality characteristics are adequate.</li>
+<li><strong>Money</strong> — the cost of finding the next defect now vs in the next level.</li>
+<li><strong>Schedule</strong> — implications of starting or ending testing.</li>
+<li><strong>Risk</strong> — the undesirable outcome of shipping too early or too late.</li>
+</ol>
+<p class="nhan">Worth remembering (notes)</p>
+<ul>
+<li><strong>Stopped, not finished</strong> — in practice testing is often <em>stopped rather than finished</em>, because time pressure wins.</li>
+<li><strong>Documented criteria help</strong> — you can at least show stakeholders what was not completed.</li>
+<li><strong>Who decides to release anyway</strong> — stakeholders and business owners, after they <em>review and accept the risks</em>.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 <strong>Exit criteria</strong> (tiêu chí kết thúc) — "definition of done" — xác định phải đạt gì để tuyên bố một cấp test hoặc một tập test đã <strong>hoàn thành</strong>.</p>
+<p class="nhan">Bảy exit criteria điển hình</p>
+<ol>
+<li><strong>Tests</strong> — đã chạy hết test đã lên kế hoạch.</li>
+<li><strong>Coverage</strong> — đạt mức bao phủ đã định.</li>
+<li><strong>Defects</strong> — số defect chưa giải quyết trong giới hạn đã thoả thuận, và số defect ước tính còn lại đủ thấp.</li>
+<li><strong>Quality</strong> — các đặc tính chất lượng quan trọng đạt yêu cầu.</li>
+<li><strong>Money</strong> — chi phí tìm defect kế tiếp bây giờ so với ở cấp sau.</li>
+<li><strong>Schedule</strong> — ảnh hưởng tới lịch khi bắt đầu hay kết thúc test.</li>
+<li><strong>Risk</strong> — hậu quả xấu của việc giao quá sớm hoặc quá muộn.</li>
+</ol>
+<p class="nhan">Rất đáng nhớ (ghi chú)</p>
+<ul>
+<li><strong>Dừng chứ không phải xong</strong> — thực tế kiểm thử thường bị <em>dừng lại chứ không phải hoàn thành</em>, vì áp lực thời gian thắng.</li>
+<li><strong>Có tiêu chí viết ra thì đỡ</strong> — ít nhất bạn cho các bên thấy phần nào chưa xong.</li>
+<li><strong>Ai quyết định vẫn phát hành</strong> — các bên liên quan và chủ doanh nghiệp, sau khi <em>xem xét và chấp nhận rủi ro</em>.</li>
+</ul>`],
       [40, 'Test Execution Schedule',
-        `<p>The diagram: <strong>test cases → test procedures → test suites → test execution schedule</strong>. The rule (learn it word for word): <em>ideally, test cases are ordered by their priority levels; if a test case with a higher priority depends on a test case with a lower priority, the lower-priority test case must be executed first.</em> The notes add the other factors: the priorities (from risk analysis); technical or logical dependencies between tests or suites; the type of test (confirmation tests after fixes, regression tests). Their example: several high-priority tests depend on one low-priority test that sets up essential data — the low-priority test runs first even under a strict risk-first policy. And: the schedule is usually made by the <em>tester or test team</em>, balancing efficiency, test priority and the objective of the moment. The full algorithm is in the worked example below.</p>`,
-        `<p>Sơ đồ: <strong>test case → test procedure → test suite → lịch thực thi test</strong>. Quy tắc (học thuộc từng chữ): <em>lý tưởng là sắp test case theo mức ưu tiên; nếu một test case ưu tiên cao phụ thuộc vào một test case ưu tiên thấp hơn thì test case ưu tiên thấp phải chạy trước.</em> Ghi chú bổ sung các yếu tố khác: độ ưu tiên (từ phân tích rủi ro); phụ thuộc kỹ thuật hoặc logic giữa các test/suite; loại test (confirmation test sau khi sửa, regression test). Ví dụ của thầy/cô: nhiều test ưu tiên cao cùng phụ thuộc vào một test ưu tiên thấp dùng để dựng dữ liệu cần thiết — test ưu tiên thấp phải chạy trước, kể cả khi chính sách là rủi ro-trước-tiên. Và: lịch thường do <em>tester hoặc nhóm test</em> lập, cân bằng giữa hiệu quả, độ ưu tiên và mục tiêu lúc đó. Thuật toán đầy đủ ở phần ví dụ có lời giải bên dưới.</p>`],
+        `<p class="y-chinh">🎯 Run tests by priority — but a lower-priority test that a higher-priority test depends on must run first.</p>
+<p class="nhan">The diagram</p>
+<p><strong>test cases → test procedures → test suites → test execution schedule</strong>.</p>
+<p class="nhan">The rule (learn it word for word)</p>
+<ul>
+<li><em>Ideally, test cases are ordered by their priority levels.</em></li>
+<li><em>If a test case with a higher priority depends on a test case with a lower priority, the lower-priority test case must be executed first.</em></li>
+</ul>
+<p class="nhan">Factors behind the schedule (notes)</p>
+<ol>
+<li><strong>Priorities</strong> — from risk analysis.</li>
+<li><strong>Dependencies</strong> — technical or logical, between tests or suites.</li>
+<li><strong>Type of test</strong> — confirmation tests after fixes, regression tests.</li>
+</ol>
+<p class="nhan">Example and who does it</p>
+<ul>
+<li><strong>Set-up test first</strong> — several high-priority tests depend on one low-priority test that sets up essential data: the low-priority test runs first, even under a strict risk-first policy.</li>
+<li><strong>Author</strong> — usually the <em>tester or test team</em>, balancing efficiency, test priority and the objective of the moment.</li>
+</ul>
+<p>The full algorithm is in the worked example below.</p>`,
+        `<p class="y-chinh">🎯 Chạy test theo ưu tiên — nhưng test ưu tiên thấp mà test ưu tiên cao phụ thuộc vào thì phải chạy trước.</p>
+<p class="nhan">Sơ đồ</p>
+<p><strong>test case → test procedure → test suite → lịch thực thi test</strong>.</p>
+<p class="nhan">Quy tắc (học thuộc từng chữ)</p>
+<ul>
+<li><em>Lý tưởng là sắp test case theo mức ưu tiên.</em></li>
+<li><em>Nếu một test case ưu tiên cao phụ thuộc vào một test case ưu tiên thấp hơn thì test case ưu tiên thấp phải chạy trước.</em></li>
+</ul>
+<p class="nhan">Các yếu tố quyết định lịch (ghi chú)</p>
+<ol>
+<li><strong>Độ ưu tiên</strong> — từ phân tích rủi ro.</li>
+<li><strong>Phụ thuộc</strong> — kỹ thuật hoặc logic, giữa các test/suite.</li>
+<li><strong>Loại test</strong> — confirmation test sau khi sửa, regression test.</li>
+</ol>
+<p class="nhan">Ví dụ và ai lập lịch</p>
+<ul>
+<li><strong>Test dựng dữ liệu chạy trước</strong> — nhiều test ưu tiên cao cùng phụ thuộc vào một test ưu tiên thấp dùng để dựng dữ liệu cần thiết: test ưu tiên thấp phải chạy trước, kể cả khi chính sách là rủi ro-trước-tiên.</li>
+<li><strong>Người lập</strong> — thường là <em>tester hoặc nhóm test</em>, cân bằng giữa hiệu quả, độ ưu tiên và mục tiêu lúc đó.</li>
+</ul>
+<p>Thuật toán đầy đủ ở phần ví dụ có lời giải bên dưới.</p>`],
       [41, 'Mind map (divider) — Test Effort Factors',
-        `<p>The map again, pointing now at <em>Test Effort Factors</em>: product characteristics, development-process characteristics, people characteristics, test results — slides 42–45, one group per slide.</p>`,
-        `<p>Lại sơ đồ, giờ chỉ vào <em>Test Effort Factors</em>: đặc điểm sản phẩm, đặc điểm quy trình phát triển, đặc điểm con người, kết quả test — slide 42–45, mỗi nhóm một slide.</p>`],
+        `<p class="y-chinh">🎯 The map again, now pointing at <em>Test Effort Factors</em> — four groups, one per slide (42–45).</p>
+<ol>
+<li>Product characteristics</li>
+<li>Development-process characteristics</li>
+<li>People characteristics</li>
+<li>Test results</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Lại sơ đồ, giờ chỉ vào <em>Test Effort Factors</em> — bốn nhóm, mỗi nhóm một slide (42–45).</p>
+<ol>
+<li>Đặc điểm sản phẩm</li>
+<li>Đặc điểm quy trình phát triển</li>
+<li>Đặc điểm con người</li>
+<li>Kết quả test</li>
+</ol>`],
       [42, 'Factors Influencing Test Effort — 1. Product characteristics',
-        `<p><strong>Risks</strong> of the product (higher risk → a wrong, especially under-, estimate hurts more); <strong>quality of the test basis</strong> (good documentation tells testers what correct behaviour is, so tests are defined faster); <strong>size</strong> of the product (bigger product → bigger project and team → harder to predict and manage); <strong>requirements for quality characteristics</strong> (usability, reliability, security, performance tests are expensive and slow); <strong>complexity of the product domain</strong> (avionics, oil exploration; innovative technologies "long on hyperbole and short on proven track records"); <strong>required level of detail of documentation</strong> (meticulously specified test cases cost a lot of effort) — plus, in the syllabus, legal and regulatory compliance requirements.</p>`,
-        `<p><strong>Rủi ro</strong> của sản phẩm (rủi ro cao → ước lượng sai, nhất là ước lượng thiếu, càng tai hại); <strong>chất lượng test basis</strong> (tài liệu tốt cho tester biết thế nào là đúng nên định nghĩa test nhanh hơn); <strong>kích thước</strong> sản phẩm (sản phẩm lớn → dự án và nhóm lớn → khó dự đoán và quản lý); <strong>yêu cầu về đặc tính chất lượng</strong> (test usability, độ tin cậy, bảo mật, hiệu năng vừa đắt vừa lâu); <strong>độ phức tạp của lĩnh vực</strong> (hàng không, thăm dò dầu khí; công nghệ mới "quảng cáo thì nhiều mà thành tích thì ít"); <strong>mức chi tiết tài liệu yêu cầu</strong> (test case đặc tả tỉ mỉ tốn rất nhiều công) — cộng thêm, theo syllabus, yêu cầu tuân thủ pháp lý.</p>`],
+        `<p class="y-chinh">🎯 The product itself drives test effort: six characteristics on the slide, plus one from the syllabus.</p>
+<ol>
+<li><strong>Risks</strong> of the product — higher risk → a wrong, especially an under-, estimate hurts more.</li>
+<li><strong>Quality of the test basis</strong> — good documentation tells testers what correct behaviour is, so tests are defined faster.</li>
+<li><strong>Size</strong> of the product — bigger product → bigger project and team → harder to predict and manage.</li>
+<li><strong>Requirements for quality characteristics</strong> — usability, reliability, security, performance tests are expensive and slow.</li>
+<li><strong>Complexity of the product domain</strong> — avionics, oil exploration; innovative technologies "long on hyperbole and short on proven track records".</li>
+<li><strong>Required level of detail of documentation</strong> — meticulously specified test cases cost a lot of effort.</li>
+<li><strong>Legal and regulatory compliance</strong> requirements — added in the syllabus.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Chính sản phẩm quyết định công sức test: sáu đặc điểm trên slide, cộng một đặc điểm từ syllabus.</p>
+<ol>
+<li><strong>Rủi ro</strong> của sản phẩm — rủi ro cao → ước lượng sai, nhất là ước lượng thiếu, càng tai hại.</li>
+<li><strong>Chất lượng test basis</strong> — tài liệu tốt cho tester biết thế nào là đúng nên định nghĩa test nhanh hơn.</li>
+<li><strong>Kích thước</strong> sản phẩm — sản phẩm lớn → dự án và nhóm lớn → khó dự đoán và quản lý.</li>
+<li><strong>Yêu cầu về đặc tính chất lượng</strong> — test usability, độ tin cậy, bảo mật, hiệu năng vừa đắt vừa lâu.</li>
+<li><strong>Độ phức tạp của lĩnh vực</strong> — hàng không, thăm dò dầu khí; công nghệ mới "quảng cáo thì nhiều mà thành tích thì ít".</li>
+<li><strong>Mức chi tiết tài liệu yêu cầu</strong> — test case đặc tả tỉ mỉ tốn rất nhiều công.</li>
+<li><strong>Yêu cầu tuân thủ pháp lý</strong> — syllabus bổ sung.</li>
+</ol>`],
       [43, 'Factors Influencing Test Effort — 2. Development process characteristics',
-        `<p>The <strong>stability and maturity of the organisation</strong> (mature organisations write better requirements, architecture and unit tests → less test effort later); the <strong>development model</strong> (the V-model is fragile under late change; Agile has high regression costs); the <strong>test approach</strong> (a poor approach takes longer); the <strong>tools</strong> (execution tools cut run time; debugging tools and a dedicated debugging environment shorten the cycle); the <strong>test process</strong> (a well-understood process with trained testers is optimal); <strong>time pressure</strong> — a reason to plan and re-plan intelligently, not to skip thinking.</p>`,
-        `<p><strong>Mức ổn định và trưởng thành của tổ chức</strong> (tổ chức trưởng thành viết yêu cầu, kiến trúc, unit test tốt hơn → đỡ công test về sau); <strong>mô hình phát triển</strong> (V-model dễ vỡ khi thay đổi muộn; Agile có chi phí regression cao); <strong>cách tiếp cận test</strong> (cách kém thì tốn thời gian hơn); <strong>công cụ</strong> (công cụ thực thi rút ngắn thời gian chạy; công cụ và môi trường debug riêng rút ngắn vòng lặp); <strong>quy trình test</strong> (quy trình rõ ràng và tester được đào tạo là tối ưu); <strong>áp lực thời gian</strong> — là lý do để lập kế hoạch và điều chỉnh thông minh, chứ không phải để bỏ qua suy nghĩ.</p>`],
+        `<p class="y-chinh">🎯 How the organisation develops and tests changes the effort: six process characteristics.</p>
+<ol>
+<li><strong>Stability and maturity of the organisation</strong> — mature organisations write better requirements, architecture and unit tests → less test effort later.</li>
+<li><strong>Development model</strong> — the V-model is fragile under late change; Agile has high regression costs.</li>
+<li><strong>Test approach</strong> — a poor approach takes longer.</li>
+<li><strong>Tools</strong> — execution tools cut run time; debugging tools and a dedicated debugging environment shorten the cycle.</li>
+<li><strong>Test process</strong> — a well-understood process with trained testers is optimal.</li>
+<li><strong>Time pressure</strong> — a reason to plan and re-plan intelligently, not to skip thinking.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Cách tổ chức phát triển và kiểm thử làm thay đổi công sức: sáu đặc điểm quy trình.</p>
+<ol>
+<li><strong>Mức ổn định và trưởng thành của tổ chức</strong> — tổ chức trưởng thành viết yêu cầu, kiến trúc, unit test tốt hơn → đỡ công test về sau.</li>
+<li><strong>Mô hình phát triển</strong> — V-model dễ vỡ khi thay đổi muộn; Agile có chi phí regression cao.</li>
+<li><strong>Cách tiếp cận test</strong> — cách kém thì tốn thời gian hơn.</li>
+<li><strong>Công cụ</strong> — công cụ thực thi rút ngắn thời gian chạy; công cụ và môi trường debug riêng rút ngắn vòng lặp.</li>
+<li><strong>Quy trình test</strong> — quy trình rõ ràng và tester được đào tạo là tối ưu.</li>
+<li><strong>Áp lực thời gian</strong> — là lý do để lập kế hoạch và điều chỉnh thông minh, chứ không phải để bỏ qua suy nghĩ.</li>
+</ol>`],
       [44, 'Factors Influencing Test Effort — 3. People characteristics',
-        `<p>The <strong>skills and experience</strong> of the people involved, especially with <em>similar projects and products</em> (domain knowledge), and <strong>team cohesion and leadership</strong>. A cohesive, experienced team can need half the effort of a newly assembled one on the same product.</p>`,
-        `<p><strong>Kỹ năng và kinh nghiệm</strong> của những người tham gia, nhất là với <em>dự án và sản phẩm tương tự</em> (hiểu nghiệp vụ), và <strong>sự gắn kết cùng khả năng lãnh đạo của nhóm</strong>. Một nhóm gắn bó, giàu kinh nghiệm có thể chỉ cần một nửa công sức so với nhóm mới ghép trên cùng một sản phẩm.</p>`],
+        `<p class="y-chinh">🎯 Who does the testing matters: two people characteristics.</p>
+<ul>
+<li><strong>Skills and experience</strong> of the people involved — especially with <em>similar projects and products</em> (domain knowledge).</li>
+<li><strong>Team cohesion and leadership</strong>.</li>
+</ul>
+<p>A cohesive, experienced team can need half the effort of a newly assembled one on the same product.</p>`,
+        `<p class="y-chinh">🎯 Ai làm test cũng quan trọng: hai đặc điểm con người.</p>
+<ul>
+<li><strong>Kỹ năng và kinh nghiệm</strong> của những người tham gia — nhất là với <em>dự án và sản phẩm tương tự</em> (hiểu nghiệp vụ).</li>
+<li><strong>Sự gắn kết và khả năng lãnh đạo của nhóm</strong>.</li>
+</ul>
+<p>Một nhóm gắn bó, giàu kinh nghiệm có thể chỉ cần một nửa công sức so với nhóm mới ghép trên cùng một sản phẩm.</p>`],
       [45, 'Factors Influencing Test Effort — 4. Test results',
-        `<p>The <strong>number and severity of defects found</strong> and the <strong>amount of rework required</strong>. Every defect means a report, a fix, a confirmation test and regression tests; a buggy product therefore consumes far more test effort than planned — which is why the estimate is revisited during monitoring (lesson 7.3).</p>`,
-        `<p><strong>Số lượng và mức nghiêm trọng của defect tìm được</strong> và <strong>khối lượng làm lại</strong>. Mỗi defect kéo theo một báo cáo, một bản sửa, một confirmation test và các regression test; sản phẩm nhiều lỗi vì thế ngốn công test hơn hẳn kế hoạch — nên ước lượng được xem lại trong lúc giám sát (bài 7.3).</p>`],
+        `<p class="y-chinh">🎯 What testing finds feeds back into the effort: two test-result factors.</p>
+<ul>
+<li><strong>Number and severity of defects found</strong>.</li>
+<li><strong>Amount of rework required</strong>.</li>
+</ul>
+<p class="nhan">Why it adds up</p>
+<ul>
+<li><strong>Each defect</strong> means a report, a fix, a confirmation test and regression tests.</li>
+<li><strong>A buggy product</strong> therefore consumes far more test effort than planned — which is why the estimate is revisited during monitoring (lesson 7.3).</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Những gì test tìm ra quay lại ảnh hưởng công sức: hai yếu tố kết quả test.</p>
+<ul>
+<li><strong>Số lượng và mức nghiêm trọng của defect tìm được</strong>.</li>
+<li><strong>Khối lượng làm lại</strong>.</li>
+</ul>
+<p class="nhan">Vì sao cộng dồn</p>
+<ul>
+<li><strong>Mỗi defect</strong> kéo theo một báo cáo, một bản sửa, một confirmation test và các regression test.</li>
+<li><strong>Sản phẩm nhiều lỗi</strong> vì thế ngốn công test hơn hẳn kế hoạch — nên ước lượng được xem lại trong lúc giám sát (bài 7.3).</li>
+</ul>`],
       [46, 'Mind map (divider) — Estimation Techniques',
-        `<p>The map again, now at <em>Estimation Techniques</em>: Metric-based (burn-down chart, defect-removal model) and Expert-based (planning poker, Wideband Delphi).</p>`,
-        `<p>Lại sơ đồ, giờ tới <em>Estimation Techniques</em>: Metric-based (burn-down chart, defect-removal model) và Expert-based (planning poker, Wideband Delphi).</p>`],
+        `<p class="y-chinh">🎯 The map again, now at <em>Estimation Techniques</em> — two families, two examples each.</p>
+<ul>
+<li><strong>Metric-based</strong> — burn-down chart, defect-removal model.</li>
+<li><strong>Expert-based</strong> — planning poker, Wideband Delphi.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Lại sơ đồ, giờ tới <em>Estimation Techniques</em> — hai họ, mỗi họ hai ví dụ.</p>
+<ul>
+<li><strong>Metric-based</strong> — burn-down chart, defect-removal model.</li>
+<li><strong>Expert-based</strong> — planning poker, Wideband Delphi.</li>
+</ul>`],
       [47, 'Test Estimation Techniques',
-        `<p>The two syllabus families. <strong>Metrics-based</strong>: estimate from <em>metrics of past (similar) projects</em> or from industry data. <strong>Expert-based</strong>: estimate by <em>consulting the people who will do the work</em> and other experts on the tasks. Memory hook: metrics = numbers from history; expert = judgement of people.</p>`,
-        `<p>Hai họ trong syllabus. <strong>Metrics-based</strong>: ước lượng từ <em>số liệu của các dự án (tương tự) trước đây</em> hoặc số liệu ngành. <strong>Expert-based</strong>: ước lượng bằng cách <em>hỏi ý kiến những người sẽ làm việc đó</em> và các chuyên gia khác. Mẹo nhớ: metrics = con số từ lịch sử; expert = phán đoán của con người.</p>`],
+        `<p class="y-chinh">🎯 The syllabus has two estimation families: from past data, or from people's judgement.</p>
+<ul>
+<li><strong>Metrics-based</strong> — estimate from <em>metrics of past (similar) projects</em> or from industry data.</li>
+<li><strong>Expert-based</strong> — estimate by <em>consulting the people who will do the work</em> and other experts on the tasks.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> metrics = numbers from history; expert = judgement of people.</p>`,
+        `<p class="y-chinh">🎯 Syllabus có hai họ kỹ thuật ước lượng: dựa dữ liệu quá khứ, hoặc dựa phán đoán của con người.</p>
+<ul>
+<li><strong>Metrics-based</strong> — ước lượng từ <em>số liệu của các dự án (tương tự) trước đây</em> hoặc số liệu ngành.</li>
+<li><strong>Expert-based</strong> — ước lượng bằng cách <em>hỏi ý kiến những người sẽ làm việc đó</em> và các chuyên gia khác.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> metrics = con số từ lịch sử; expert = phán đoán của con người.</p>`],
       [48, 'Metrics-based Estimation Techniques',
-        `<p>Analysis can be simple or sophisticated: a <strong>tester-to-developer ratio</strong> (top-down: "we usually have 1 tester per 4 developers"); <strong>mathematical models</strong> of historical or industry averages for key parameters — tests run per tester per day, defects found per tester per day — used to predict duration and effort of each activity (bottom-up). Examples: the <strong>burndown chart</strong> in Agile (notes: the effort actually spent is captured and fed into the team's <em>velocity</em>, which predicts how much the next sprint can take) and <strong>defect removal models</strong> in sequential development (data from previous projects on the number of defects and the time to remove them).</p>`,
-        `<p>Phân tích có thể đơn giản hoặc tinh vi: <strong>tỉ lệ tester/developer</strong> (từ trên xuống: "thường 1 tester cho 4 developer"); <strong>mô hình toán học</strong> dựa trên trung bình lịch sử hoặc của ngành cho các tham số chính — số test một tester chạy mỗi ngày, số defect một tester tìm mỗi ngày — để dự đoán thời lượng và công sức từng hoạt động (từ dưới lên). Ví dụ: <strong>burndown chart</strong> trong Agile (ghi chú: công sức thực tế được ghi lại và đưa vào <em>velocity</em> của nhóm, từ đó dự đoán sprint sau nhận được bao nhiêu việc) và <strong>defect removal model</strong> trong phát triển tuần tự (dữ liệu dự án trước về số defect và thời gian gỡ chúng).</p>`],
+        `<p class="y-chinh">🎯 Metrics-based estimation turns historical or industry numbers into an estimate — simply or with a model.</p>
+<p class="nhan">Two ways to analyse the metrics</p>
+<ul>
+<li><strong>Tester-to-developer ratio</strong> (top-down) — "we usually have 1 tester per 4 developers".</li>
+<li><strong>Mathematical models</strong> (bottom-up) — historical or industry averages for key parameters (tests run per tester per day, defects found per tester per day) predict the duration and effort of each activity.</li>
+</ul>
+<p class="nhan">Commonly used techniques</p>
+<ul>
+<li><strong>Burndown chart</strong> (Agile) — notes: the effort actually spent is captured and fed into the team's <em>velocity</em>, which predicts how much the next sprint can take.</li>
+<li><strong>Defect removal models</strong> (sequential development) — data from previous projects on the number of defects and the time to remove them.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Ước lượng metrics-based biến con số lịch sử hoặc của ngành thành ước lượng — theo cách đơn giản hoặc bằng mô hình.</p>
+<p class="nhan">Hai cách phân tích số liệu</p>
+<ul>
+<li><strong>Tỉ lệ tester/developer</strong> (từ trên xuống) — "thường 1 tester cho 4 developer".</li>
+<li><strong>Mô hình toán học</strong> (từ dưới lên) — trung bình lịch sử hoặc của ngành cho các tham số chính (số test một tester chạy mỗi ngày, số defect một tester tìm mỗi ngày) để dự đoán thời lượng và công sức từng hoạt động.</li>
+</ul>
+<p class="nhan">Kỹ thuật hay dùng</p>
+<ul>
+<li><strong>Burndown chart</strong> (Agile) — ghi chú: công sức thực tế được ghi lại và đưa vào <em>velocity</em> của nhóm, từ đó dự đoán sprint sau nhận được bao nhiêu việc.</li>
+<li><strong>Defect removal model</strong> (phát triển tuần tự) — dữ liệu dự án trước về số defect và thời gian gỡ chúng.</li>
+</ul>`],
       [49, 'Expert-based Estimation Techniques',
-        `<p>Individual contributors and experts work with experienced staff to build a <strong>work breakdown structure</strong> (WBS) — drawing on the collective wisdom of the team. <strong>Bottom-up</strong>: start at the lowest level of the breakdown and let duration, effort, dependencies and resources of each task add up. Examples: <strong>planning poker</strong> (Agile — each member estimates a story's effort from his own experience and all reveal cards at once) and <strong>Wideband Delphi</strong> (sequential — groups of experts estimate anonymously, results are aggregated, discussed and re-estimated for several rounds). Both are expert-based even though they produce numbers.</p>`,
-        `<p>Người thực hiện và chuyên gia cùng nhân viên giàu kinh nghiệm xây một <strong>cấu trúc phân rã công việc</strong> (WBS) — tận dụng trí tuệ tập thể. <strong>Từ dưới lên</strong>: bắt đầu ở mức thấp nhất của cây phân rã và cộng dồn thời lượng, công sức, phụ thuộc và nguồn lực của từng việc. Ví dụ: <strong>planning poker</strong> (Agile — mỗi thành viên ước lượng một story theo kinh nghiệm của mình rồi cùng lật bài một lúc) và <strong>Wideband Delphi</strong> (tuần tự — các nhóm chuyên gia ước lượng ẩn danh, kết quả được gộp, thảo luận rồi ước lượng lại qua nhiều vòng). Cả hai đều là expert-based dù chúng cho ra con số.</p>`],
+        `<p class="y-chinh">🎯 Expert-based estimation draws on the collective wisdom of the team, built up bottom-up from a WBS.</p>
+<p class="nhan">How it works</p>
+<ul>
+<li><strong>Work breakdown structure</strong> (WBS) — individual contributors and experts work with experienced staff to build it.</li>
+<li><strong>Bottom-up</strong> — start at the lowest level of the breakdown and let duration, effort, dependencies and resources of each task add up.</li>
+</ul>
+<p class="nhan">Commonly used techniques</p>
+<ul>
+<li><strong>Planning poker</strong> (Agile) — each member estimates a story's effort from his own experience, and all reveal cards at once.</li>
+<li><strong>Wideband Delphi</strong> (sequential) — groups of experts estimate anonymously; results are aggregated, discussed and re-estimated for several rounds.</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> both are expert-based even though they produce numbers.</p>`,
+        `<p class="y-chinh">🎯 Ước lượng expert-based tận dụng trí tuệ tập thể của nhóm, cộng dồn từ dưới lên theo một WBS.</p>
+<p class="nhan">Cách làm</p>
+<ul>
+<li><strong>Cấu trúc phân rã công việc</strong> (WBS) — người thực hiện và chuyên gia cùng nhân viên giàu kinh nghiệm xây nó.</li>
+<li><strong>Từ dưới lên</strong> — bắt đầu ở mức thấp nhất của cây phân rã và cộng dồn thời lượng, công sức, phụ thuộc và nguồn lực của từng việc.</li>
+</ul>
+<p class="nhan">Kỹ thuật hay dùng</p>
+<ul>
+<li><strong>Planning poker</strong> (Agile) — mỗi thành viên ước lượng một story theo kinh nghiệm của mình, rồi cùng lật bài một lúc.</li>
+<li><strong>Wideband Delphi</strong> (tuần tự) — các nhóm chuyên gia ước lượng ẩn danh; kết quả được gộp, thảo luận rồi ước lượng lại qua nhiều vòng.</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> cả hai đều là expert-based dù chúng cho ra con số.</p>`],
       [50, 'Question — what can affect and be part of test planning?',
-        AE('A and B — Budget limitations and test objectives', 'Budgeting and determining objectives are both on the list of planning activities (slide 28), and a budget limit shapes the whole plan. C (test log) and D (failure rate) are produced during execution and monitoring — they may trigger <em>re</em>-planning but are not part of planning. E (use cases) is test basis for analysis and design. The slide gives five options without "choose two"; if you must pick one, "test objectives" is the core part of any test plan.'),
-        AV('A và B — Giới hạn ngân sách và mục tiêu test', 'Lập ngân sách và xác định mục tiêu đều nằm trong danh sách hoạt động lập kế hoạch (slide 28), và giới hạn ngân sách định hình cả plan. C (test log) và D (tỉ lệ failure) sinh ra khi thực thi và giám sát — có thể dẫn tới lập kế hoạch <em>lại</em> nhưng không phải một phần của lập kế hoạch. E (use case) là test basis cho phân tích và thiết kế. Slide cho năm phương án mà không ghi "chọn hai"; nếu buộc chọn một, "mục tiêu test" là phần cốt lõi của mọi test plan.')],
+        `<p class="y-chinh">🎯 Only what is decided <em>during planning</em> counts — check each option against slide 28.</p>
+<ul>
+<li><strong>A (budget limitations)</strong> — budgeting is a planning activity (slide 28), and a budget limit shapes the whole plan.</li>
+<li><strong>B (test objectives)</strong> — determining objectives is also on the slide 28 list.</li>
+<li><strong>C (test log) and D (failure rate)</strong> — produced during execution and monitoring; they may trigger <em>re</em>-planning but are not part of planning.</li>
+<li><strong>E (use cases)</strong> — test basis for analysis and design.</li>
+</ul>
+<p class="ghi-chu">The slide gives five options without "choose two"; if you must pick one, "test objectives" is the core part of any test plan.</p>
+<p class="dap-an">✅ <strong>Answer: A and B — Budget limitations and test objectives.</strong></p>`,
+        `<p class="y-chinh">🎯 Chỉ tính những gì được quyết định <em>khi lập kế hoạch</em> — đối chiếu từng phương án với slide 28.</p>
+<ul>
+<li><strong>A (giới hạn ngân sách)</strong> — lập ngân sách là một hoạt động lập kế hoạch (slide 28), và giới hạn ngân sách định hình cả plan.</li>
+<li><strong>B (mục tiêu test)</strong> — xác định mục tiêu cũng nằm trong danh sách slide 28.</li>
+<li><strong>C (test log) và D (tỉ lệ failure)</strong> — sinh ra khi thực thi và giám sát; có thể dẫn tới lập kế hoạch <em>lại</em> nhưng không phải một phần của lập kế hoạch.</li>
+<li><strong>E (use case)</strong> — là test basis cho phân tích và thiết kế.</li>
+</ul>
+<p class="ghi-chu">Slide cho năm phương án mà không ghi "chọn hai"; nếu buộc chọn một, "mục tiêu test" là phần cốt lõi của mọi test plan.</p>
+<p class="dap-an">✅ <strong>Đáp án: A và B — Giới hạn ngân sách và mục tiêu test.</strong></p>`],
       [51, 'Question — typical exit criteria',
-        AE('C — Reliability measures, test cost, schedule and unresolved defects', 'Every item is on slide 39 (quality, money, schedule, defects). A and D contain the degree of tester independence and tester qualification — organisational facts, not exit criteria. B contains "availability of testable code", which is an <em>entry</em> criterion.'),
-        AV('C — Số đo độ tin cậy, chi phí test, lịch và số defect chưa giải quyết', 'Mọi mục đều có trên slide 39 (chất lượng, tiền, lịch, defect). A và D chứa mức độc lập và trình độ của tester — là thông tin tổ chức, không phải exit criteria. B chứa "có code test được", đó là <em>entry</em> criterion.')],
+        `<p class="y-chinh">🎯 The right option contains only items from slide 39 — one wrong item disqualifies an option.</p>
+<ul>
+<li><strong>C</strong> — every item is on slide 39: quality, money, schedule, defects.</li>
+<li><strong>A and D</strong> — contain the degree of tester independence and tester qualification: organisational facts, not exit criteria.</li>
+<li><strong>B</strong> — contains "availability of testable code", which is an <em>entry</em> criterion.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: C — Reliability measures, test cost, schedule and unresolved defects.</strong></p>`,
+        `<p class="y-chinh">🎯 Phương án đúng chỉ chứa các mục có trên slide 39 — lẫn một mục sai là loại.</p>
+<ul>
+<li><strong>C</strong> — mọi mục đều có trên slide 39: chất lượng, tiền, lịch, defect.</li>
+<li><strong>A và D</strong> — chứa mức độc lập và trình độ của tester: là thông tin tổ chức, không phải exit criteria.</li>
+<li><strong>B</strong> — chứa "có code test được", đó là <em>entry</em> criterion.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: C — Số đo độ tin cậy, chi phí test, lịch và số defect chưa giải quyết.</strong></p>`],
       [52, 'Question — match strategies 1–4 with descriptions A–D',
-        AE('d — 1B, 2C, 3A, 4D', 'Analytical = designed and prioritised by level of risk (B); Methodical = systematic use of a predefined set of test conditions (C); Model-based = based on a state diagram (A); Consultative = chosen from the views of business-domain experts (D).'),
-        AV('d — 1B, 2C, 3A, 4D', 'Analytical = thiết kế và ưu tiên theo mức rủi ro (B); Methodical = dùng có hệ thống một tập test condition định sẵn (C); Model-based = dựa trên sơ đồ trạng thái (A); Consultative = chọn theo ý kiến chuyên gia nghiệp vụ (D).')],
+        `<p class="y-chinh">🎯 Match each strategy by its keyword (slides 30–34).</p>
+<ol>
+<li><strong>Analytical</strong> → B — designed and prioritised by level of risk.</li>
+<li><strong>Methodical</strong> → C — systematic use of a predefined set of test conditions.</li>
+<li><strong>Model-based</strong> → A — based on a state diagram.</li>
+<li><strong>Consultative</strong> → D — chosen from the views of business-domain experts.</li>
+</ol>
+<p class="dap-an">✅ <strong>Answer: d — 1B, 2C, 3A, 4D.</strong></p>`,
+        `<p class="y-chinh">🎯 Ghép từng chiến lược theo từ khoá của nó (slide 30–34).</p>
+<ol>
+<li><strong>Analytical</strong> → B — thiết kế và ưu tiên theo mức rủi ro.</li>
+<li><strong>Methodical</strong> → C — dùng có hệ thống một tập test condition định sẵn.</li>
+<li><strong>Model-based</strong> → A — dựa trên sơ đồ trạng thái.</li>
+<li><strong>Consultative</strong> → D — chọn theo ý kiến chuyên gia nghiệp vụ.</li>
+</ol>
+<p class="dap-an">✅ <strong>Đáp án: d — 1B, 2C, 3A, 4D.</strong></p>`],
       [53, 'Question — characteristic of metrics-based estimation',
-        AE('A — Budget which was used by a previous similar test project', 'Historical data from a similar project is the definition of metrics-based. B (interviews with test managers), C (agreed with developers) and D (collected from business experts) are all consultations of people — expert-based, even when an average is computed.'),
-        AV('A — Ngân sách đã dùng cho một dự án test tương tự trước đây', 'Dữ liệu lịch sử của dự án tương tự chính là định nghĩa của metrics-based. B (phỏng vấn test manager), C (thống nhất với developer) và D (thu từ chuyên gia nghiệp vụ) đều là hỏi ý kiến con người — expert-based, kể cả khi có tính trung bình.')],
+        `<p class="y-chinh">🎯 Metrics-based means historical data; asking people is expert-based.</p>
+<ul>
+<li><strong>A</strong> — historical data from a similar project is the definition of metrics-based.</li>
+<li><strong>B</strong> (interviews with test managers), <strong>C</strong> (agreed with developers), <strong>D</strong> (collected from business experts) — all consultations of people: expert-based, even when an average is computed.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: A — Budget which was used by a previous similar test project.</strong></p>`,
+        `<p class="y-chinh">🎯 Metrics-based là dữ liệu lịch sử; hỏi ý kiến người là expert-based.</p>
+<ul>
+<li><strong>A</strong> — dữ liệu lịch sử của dự án tương tự chính là định nghĩa của metrics-based.</li>
+<li><strong>B</strong> (phỏng vấn test manager), <strong>C</strong> (thống nhất với developer), <strong>D</strong> (thu từ chuyên gia nghiệp vụ) — đều là hỏi ý kiến con người: expert-based, kể cả khi có tính trung bình.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: A — Ngân sách đã dùng cho một dự án test tương tự trước đây.</strong></p>`],
       [54, 'Question — schedule seven requirements by their dependencies',
-        AE('C — R1 → R3 → R2 → R5 → R6 → R4 → R7', 'Read the diagram: R1 → R3 and R1 → R2; R3 → R2 (the arrow from R3 goes down into the R2 box); inside the box R2 → R5 and R2 → R6; the whole R2 box → R4 and R7. So R1 has no predecessor, R3 needs R1, R2 needs R1 and R3, R5/R6 need R2, R4/R7 need the box. Only C respects all of that. A and B test a requirement twice (R1, R2) — a schedule lists each once. D runs R2 before R3, breaking R3 → R2. (Checked by script: C valid, D "R2 before its dep R3".)'),
-        AV('C — R1 → R3 → R2 → R5 → R6 → R4 → R7', 'Đọc sơ đồ: R1 → R3 và R1 → R2; R3 → R2 (mũi tên từ R3 đi xuống ô R2); trong ô, R2 → R5 và R2 → R6; cả ô R2 → R4 và R7. Vậy R1 không phụ thuộc gì, R3 cần R1, R2 cần R1 và R3, R5/R6 cần R2, R4/R7 cần cả ô. Chỉ C thoả tất cả. A và B test một yêu cầu hai lần (R1, R2) — lịch chỉ liệt kê mỗi cái một lần. D chạy R2 trước R3, vi phạm R3 → R2. (Đã kiểm bằng script: C hợp lệ, D "R2 before its dep R3".)')],
+        `<p class="y-chinh">🎯 Read every arrow first, then keep the only option that respects them all and lists each requirement once.</p>
+<p class="nhan">Step 1 — read the diagram</p>
+<ul>
+<li><strong>R1 → R3</strong> and <strong>R1 → R2</strong>.</li>
+<li><strong>R3 → R2</strong> — the arrow from R3 goes down into the R2 box.</li>
+<li><strong>Inside the box</strong> — R2 → R5 and R2 → R6.</li>
+<li><strong>The whole R2 box</strong> → R4 and R7.</li>
+</ul>
+<p class="nhan">Step 2 — what each needs</p>
+<ul>
+<li>R1 has no predecessor; R3 needs R1; R2 needs R1 and R3; R5/R6 need R2; R4/R7 need the box.</li>
+</ul>
+<p class="nhan">Step 3 — eliminate</p>
+<ul>
+<li><strong>A and B</strong> — test a requirement twice (R1, R2); a schedule lists each once.</li>
+<li><strong>D</strong> — runs R2 before R3, breaking R3 → R2.</li>
+<li><strong>C</strong> — respects all of that.</li>
+</ul>
+<p class="ghi-chu">Checked by script: C valid, D "R2 before its dep R3".</p>
+<p class="dap-an">✅ <strong>Answer: C — R1 → R3 → R2 → R5 → R6 → R4 → R7.</strong></p>`,
+        `<p class="y-chinh">🎯 Đọc hết các mũi tên trước, rồi giữ lại phương án duy nhất tôn trọng tất cả và mỗi yêu cầu chỉ xuất hiện một lần.</p>
+<p class="nhan">Bước 1 — đọc sơ đồ</p>
+<ul>
+<li><strong>R1 → R3</strong> và <strong>R1 → R2</strong>.</li>
+<li><strong>R3 → R2</strong> — mũi tên từ R3 đi xuống ô R2.</li>
+<li><strong>Trong ô</strong> — R2 → R5 và R2 → R6.</li>
+<li><strong>Cả ô R2</strong> → R4 và R7.</li>
+</ul>
+<p class="nhan">Bước 2 — mỗi yêu cầu cần gì</p>
+<ul>
+<li>R1 không phụ thuộc gì; R3 cần R1; R2 cần R1 và R3; R5/R6 cần R2; R4/R7 cần cả ô.</li>
+</ul>
+<p class="nhan">Bước 3 — loại trừ</p>
+<ul>
+<li><strong>A và B</strong> — test một yêu cầu hai lần (R1, R2); lịch chỉ liệt kê mỗi cái một lần.</li>
+<li><strong>D</strong> — chạy R2 trước R3, vi phạm R3 → R2.</li>
+<li><strong>C</strong> — thoả tất cả.</li>
+</ul>
+<p class="ghi-chu">Đã kiểm bằng script: C hợp lệ, D "R2 before its dep R3".</p>
+<p class="dap-an">✅ <strong>Đáp án: C — R1 → R3 → R2 → R5 → R6 → R4 → R7.</strong></p>`],
       [55, 'Question — where should test case guidelines be documented?',
-        AE('B — The test plan', 'Deciding "the level of detail and structure for test documentation" is a test planning activity (slide 28), and its result is written in the test plan — so inconsistent test cases mean the plan did not set that standard. The test approach (A) is the strategy applied to the project (levels, techniques), not documentation rules; a test case template (C) gives fields, not how much detail to write; the project plan (D) does not cover test documentation.'),
-        AV('B — Test plan', 'Quyết định "mức chi tiết và cấu trúc của tài liệu test" là một hoạt động lập kế hoạch (slide 28), và kết quả của nó được ghi trong test plan — test case không nhất quán nghĩa là plan chưa đặt ra chuẩn đó. Test approach (A) là chiến lược áp vào dự án (cấp, kỹ thuật), không phải quy tắc tài liệu; mẫu test case (C) cho biết các trường, không nói phải viết chi tiết tới đâu; project plan (D) không bao tài liệu test.')],
+        `<p class="y-chinh">🎯 "Level of detail and structure for test documentation" is decided in planning, so it belongs in the test plan.</p>
+<ul>
+<li><strong>B (test plan)</strong> — deciding the level of detail and structure of test documentation is a planning activity (slide 28), and its result is written in the test plan. Inconsistent test cases mean the plan did not set that standard.</li>
+<li><strong>A (test approach)</strong> — the strategy applied to the project (levels, techniques), not documentation rules.</li>
+<li><strong>C (test case template)</strong> — gives the fields, not how much detail to write.</li>
+<li><strong>D (project plan)</strong> — does not cover test documentation.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: B — The test plan.</strong></p>`,
+        `<p class="y-chinh">🎯 "Mức chi tiết và cấu trúc tài liệu test" được quyết định khi lập kế hoạch, nên nó nằm trong test plan.</p>
+<ul>
+<li><strong>B (test plan)</strong> — quyết định mức chi tiết và cấu trúc tài liệu test là một hoạt động lập kế hoạch (slide 28), và kết quả được ghi trong test plan. Test case không nhất quán nghĩa là plan chưa đặt ra chuẩn đó.</li>
+<li><strong>A (test approach)</strong> — là chiến lược áp vào dự án (cấp, kỹ thuật), không phải quy tắc tài liệu.</li>
+<li><strong>C (mẫu test case)</strong> — cho biết các trường, không nói phải viết chi tiết tới đâu.</li>
+<li><strong>D (project plan)</strong> — không bao tài liệu test.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: B — Test plan.</strong></p>`],
       [56, 'Question — best order: by risk, feedback as soon as possible',
-        AE('B — 2, 4, 5, 6, 1, 3', 'Dependencies from the table: 1 needs 6, 3 needs 1, 4 needs 2, 5 needs 4, 6 needs 2; 2 needs nothing. So 2 must be first — A (starts with 4) and D (starts with 6) are impossible. C runs 5 before 4, but 5 depends on 4. Only B is valid (script: A "3 before its dep 1; 4 before its dep 2", C "5 before its dep 4", D "6 before its dep 2", B valid). B also follows the risk rule greedily: after 2, the high-risk 4, then the medium, 10-minute 5 (quick feedback), then the chain 6 → 1 → 3 needed to reach the high-risk test 3. Note: applying the "inherit the priority of your dependants" rule strictly gives 2, 4, 6, 1, 3, 5 — not offered, so B is the answer.'),
-        AV('B — 2, 4, 5, 6, 1, 3', 'Phụ thuộc trong bảng: 1 cần 6, 3 cần 1, 4 cần 2, 5 cần 4, 6 cần 2; 2 không cần gì. Vậy 2 phải chạy đầu — A (bắt đầu bằng 4) và D (bắt đầu bằng 6) là không thể. C chạy 5 trước 4, nhưng 5 phụ thuộc 4. Chỉ B hợp lệ (script: A "3 before its dep 1; 4 before its dep 2", C "5 before its dep 4", D "6 before its dep 2", B valid). B cũng theo quy tắc rủi ro kiểu tham lam: sau 2 là 4 rủi ro cao, rồi 5 mức trung bình chỉ 10 phút (phản hồi nhanh), rồi chuỗi 6 → 1 → 3 cần thiết để tới được test rủi ro cao số 3. Lưu ý: áp chặt quy tắc "kế thừa độ ưu tiên của test phụ thuộc vào mình" sẽ ra 2, 4, 6, 1, 3, 5 — không có trong phương án, nên đáp án là B.')],
+        `<p class="y-chinh">🎯 First eliminate every order that breaks a dependency — only one survives, and it also follows the risk rule.</p>
+<p class="nhan">Step 1 — dependencies from the table</p>
+<ul>
+<li>1 needs 6 · 3 needs 1 · 4 needs 2 · 5 needs 4 · 6 needs 2 · 2 needs nothing.</li>
+<li>So <strong>2 must run first</strong>.</li>
+</ul>
+<p class="nhan">Step 2 — eliminate</p>
+<ul>
+<li><strong>A</strong> (starts with 4) — impossible. Script: "3 before its dep 1; 4 before its dep 2".</li>
+<li><strong>C</strong> — runs 5 before 4, but 5 depends on 4. Script: "5 before its dep 4".</li>
+<li><strong>D</strong> (starts with 6) — impossible. Script: "6 before its dep 2".</li>
+<li><strong>B</strong> — the only valid order (script: B valid).</li>
+</ul>
+<p class="nhan">Step 3 — B also follows the risk rule greedily</p>
+<ol>
+<li><strong>2</strong> — the only runnable test.</li>
+<li><strong>4</strong> — high risk.</li>
+<li><strong>5</strong> — medium, only 10 minutes (quick feedback).</li>
+<li><strong>6 → 1 → 3</strong> — the chain needed to reach the high-risk test 3.</li>
+</ol>
+<p class="ghi-chu">Applying the "inherit the priority of your dependants" rule strictly gives 2, 4, 6, 1, 3, 5 — not offered, so B is the answer.</p>
+<p class="dap-an">✅ <strong>Answer: B — 2, 4, 5, 6, 1, 3.</strong></p>`,
+        `<p class="y-chinh">🎯 Loại trước mọi thứ tự vi phạm phụ thuộc — chỉ còn một, và nó cũng theo quy tắc rủi ro.</p>
+<p class="nhan">Bước 1 — phụ thuộc trong bảng</p>
+<ul>
+<li>1 cần 6 · 3 cần 1 · 4 cần 2 · 5 cần 4 · 6 cần 2 · 2 không cần gì.</li>
+<li>Vậy <strong>2 phải chạy đầu</strong>.</li>
+</ul>
+<p class="nhan">Bước 2 — loại trừ</p>
+<ul>
+<li><strong>A</strong> (bắt đầu bằng 4) — không thể. Script: "3 before its dep 1; 4 before its dep 2".</li>
+<li><strong>C</strong> — chạy 5 trước 4, nhưng 5 phụ thuộc 4. Script: "5 before its dep 4".</li>
+<li><strong>D</strong> (bắt đầu bằng 6) — không thể. Script: "6 before its dep 2".</li>
+<li><strong>B</strong> — thứ tự hợp lệ duy nhất (script: B valid).</li>
+</ul>
+<p class="nhan">Bước 3 — B cũng theo quy tắc rủi ro kiểu tham lam</p>
+<ol>
+<li><strong>2</strong> — test duy nhất chạy được.</li>
+<li><strong>4</strong> — rủi ro cao.</li>
+<li><strong>5</strong> — mức trung bình, chỉ 10 phút (phản hồi nhanh).</li>
+<li><strong>6 → 1 → 3</strong> — chuỗi cần thiết để tới được test rủi ro cao số 3.</li>
+</ol>
+<p class="ghi-chu">Áp chặt quy tắc "kế thừa độ ưu tiên của test phụ thuộc vào mình" sẽ ra 2, 4, 6, 1, 3, 5 — không có trong phương án, nên đáp án là B.</p>
+<p class="dap-an">✅ <strong>Đáp án: B — 2, 4, 5, 6, 1, 3.</strong></p>`],
       [57, 'Question — strategy based on the ISO 25010 list',
-        AE('C — Methodical', 'Working systematically through a predefined list of quality characteristics is the methodical strategy (slide 32 and its notes name ISO/IEC 25010). "Regulatory" is not one of the seven names (the nearest is standard-compliant, which follows external rules for <em>how</em> to test); analytical analyses risks or requirements; reactive reacts to the running system.'),
-        AV('C — Methodical', 'Đi có hệ thống qua một danh sách đặc tính chất lượng định sẵn là chiến lược methodical (slide 32 và ghi chú của nó nêu đích danh ISO/IEC 25010). "Regulatory" không phải tên nào trong bảy loại (gần nhất là standard-compliant — theo quy tắc bên ngoài về <em>cách</em> test); analytical phân tích rủi ro hay yêu cầu; reactive phản ứng theo hệ thống đang chạy.')],
+        `<p class="y-chinh">🎯 A predefined list of quality characteristics, worked through systematically, is the methodical strategy.</p>
+<ul>
+<li><strong>C (methodical)</strong> — slide 32 and its notes name ISO/IEC 25010 explicitly.</li>
+<li><strong>A (regulatory)</strong> — not one of the seven names; the nearest is standard-compliant, which follows external rules for <em>how</em> to test.</li>
+<li><strong>B (analytical)</strong> — analyses risks or requirements.</li>
+<li><strong>D (reactive)</strong> — reacts to the running system.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: C — Methodical.</strong></p>`,
+        `<p class="y-chinh">🎯 Đi có hệ thống qua một danh sách đặc tính chất lượng định sẵn là chiến lược methodical.</p>
+<ul>
+<li><strong>C (methodical)</strong> — slide 32 và ghi chú của nó nêu đích danh ISO/IEC 25010.</li>
+<li><strong>A (regulatory)</strong> — không phải tên nào trong bảy loại; gần nhất là standard-compliant — theo quy tắc bên ngoài về <em>cách</em> test.</li>
+<li><strong>B (analytical)</strong> — phân tích rủi ro hay yêu cầu.</li>
+<li><strong>D (reactive)</strong> — phản ứng theo hệ thống đang chạy.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: C — Methodical.</strong></p>`],
       [58, 'Question — estimating another upgrade of a known ERP system',
-        AE('C — Metric-based', 'Your team tested the previous upgrade and it has been in production for years: you own reliable historical data (effort, defects, duration) for a very similar job — the ideal input for metrics-based estimation. Expert-based (B) is possible but weaker when good data exist; "effort-based" and "schedule-based" are not syllabus techniques.'),
-        AV('C — Metric-based', 'Nhóm bạn đã test bản nâng cấp trước và nó chạy thật nhiều năm: bạn có dữ liệu lịch sử đáng tin (công sức, defect, thời lượng) cho một việc rất giống — đầu vào lý tưởng của ước lượng dựa trên số liệu. Expert-based (B) vẫn dùng được nhưng yếu hơn khi đã có dữ liệu tốt; "effort-based" và "schedule-based" không phải kỹ thuật trong syllabus.')],
+        `<p class="y-chinh">🎯 You own reliable history for a very similar job — that is exactly what metrics-based estimation needs.</p>
+<ul>
+<li><strong>C (metric-based)</strong> — your team tested the previous upgrade and it has been in production for years: you have reliable historical data (effort, defects, duration) for a very similar job.</li>
+<li><strong>B (expert-based)</strong> — possible, but weaker when good data exist.</li>
+<li><strong>A (effort-based) and D (schedule-based)</strong> — not syllabus techniques.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: C — Metric-based.</strong></p>`,
+        `<p class="y-chinh">🎯 Bạn có dữ liệu lịch sử đáng tin cho một việc rất giống — đúng thứ ước lượng metrics-based cần.</p>
+<ul>
+<li><strong>C (metric-based)</strong> — nhóm bạn đã test bản nâng cấp trước và nó chạy thật nhiều năm: bạn có dữ liệu lịch sử đáng tin (công sức, defect, thời lượng) cho một việc rất giống.</li>
+<li><strong>B (expert-based)</strong> — vẫn dùng được, nhưng yếu hơn khi đã có dữ liệu tốt.</li>
+<li><strong>A (effort-based) và D (schedule-based)</strong> — không phải kỹ thuật trong syllabus.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: C — Metric-based.</strong></p>`],
     ]),
     bi(`<h3>🔒 Hidden slide in SWT5_tim.pptx (not shown in class, still worth knowing)</h3>
 <p><strong>pptx slide 60 — one more execution-schedule question</strong> (placed after slide 58). "Consider the following test cases that are used to test an accounting system. What is the proper order in which to execute these test cases?"</p>
@@ -377,7 +1669,22 @@ const L72 = {
 <tr><td>5</td><td>Report Payments</td><td>Test 4</td><td>1</td></tr>
 </tbody>
 </table>
-<p>Options: a) 5, 1, 3, 2, 4 · b) 1, 2, 4, 3, 5 · c) 1, 3, 2, 4, 5 · d) 3, 4, 5, 1, 2. <strong>Answer: b.</strong> a and d break dependencies (5 needs 4; 3 needs 1). In this question <em>3 is the highest priority</em> (paying invoices matters more than the payment report): after 1, run the priority-3 chain 2 → 4, then 3 (priority 2), then 5 (priority 1). Our script confirms: with "3 = highest" both the greedy and the inheritance rule give 1, 2, 4, 3, 5. Trap: if you assume "1 = highest", no option is ideal (the correct order would be 1, 2, 4, 5, 3) — always read the priority scale first.</p>`,
+<p class="nhan">Options</p>
+<ul>
+<li><strong>a)</strong> 5, 1, 3, 2, 4</li>
+<li><strong>b)</strong> 1, 2, 4, 3, 5</li>
+<li><strong>c)</strong> 1, 3, 2, 4, 5</li>
+<li><strong>d)</strong> 3, 4, 5, 1, 2</li>
+</ul>
+<p class="nhan">Solution</p>
+<ul>
+<li><strong>a and d</strong> — break dependencies (5 needs 4; 3 needs 1).</li>
+<li><strong>Priority scale</strong> — in this question <em>3 is the highest priority</em> (paying invoices matters more than the payment report).</li>
+<li><strong>Order</strong> — after 1, run the priority-3 chain 2 → 4, then 3 (priority 2), then 5 (priority 1).</li>
+<li><strong>Script check</strong> — with "3 = highest", both the greedy and the inheritance rule give 1, 2, 4, 3, 5.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: b — 1, 2, 4, 3, 5.</strong></p>
+<p class="meo">🧠 <strong>Remember:</strong> if you assume "1 = highest", no option is ideal (the correct order would be 1, 2, 4, 5, 3) — always read the priority scale first.</p>`,
     `<h3>🔒 Slide ẩn trong file SWT5_tim.pptx (không chiếu trên lớp nhưng vẫn nên biết)</h3>
 <p><strong>Slide pptx 60 — thêm một câu lập lịch thực thi</strong> (nằm sau slide 58). "Cho các test case dùng để test một hệ thống kế toán. Thứ tự đúng để thực thi chúng là gì?"</p>
 <table>
@@ -390,7 +1697,22 @@ const L72 = {
 <tr><td>5</td><td>Report Payments (báo cáo thanh toán)</td><td>Test 4</td><td>1</td></tr>
 </tbody>
 </table>
-<p>Phương án: a) 5, 1, 3, 2, 4 · b) 1, 2, 4, 3, 5 · c) 1, 3, 2, 4, 5 · d) 3, 4, 5, 1, 2. <strong>Đáp án: b.</strong> a và d vi phạm phụ thuộc (5 cần 4; 3 cần 1). Trong câu này <em>3 là mức ưu tiên cao nhất</em> (trả tiền hoá đơn quan trọng hơn báo cáo thanh toán): sau 1, chạy chuỗi ưu tiên 3 là 2 → 4, rồi 3 (ưu tiên 2), cuối cùng 5 (ưu tiên 1). Script xác nhận: với "3 = cao nhất", cả cách tham lam lẫn quy tắc kế thừa đều cho 1, 2, 4, 3, 5. Bẫy: nếu mặc định "1 = cao nhất" thì không phương án nào lý tưởng (thứ tự đúng khi đó là 1, 2, 4, 5, 3) — luôn đọc thang ưu tiên trước.</p>`),
+<p class="nhan">Phương án</p>
+<ul>
+<li><strong>a)</strong> 5, 1, 3, 2, 4</li>
+<li><strong>b)</strong> 1, 2, 4, 3, 5</li>
+<li><strong>c)</strong> 1, 3, 2, 4, 5</li>
+<li><strong>d)</strong> 3, 4, 5, 1, 2</li>
+</ul>
+<p class="nhan">Lời giải</p>
+<ul>
+<li><strong>a và d</strong> — vi phạm phụ thuộc (5 cần 4; 3 cần 1).</li>
+<li><strong>Thang ưu tiên</strong> — trong câu này <em>3 là mức ưu tiên cao nhất</em> (trả tiền hoá đơn quan trọng hơn báo cáo thanh toán).</li>
+<li><strong>Thứ tự</strong> — sau 1, chạy chuỗi ưu tiên 3 là 2 → 4, rồi 3 (ưu tiên 2), cuối cùng 5 (ưu tiên 1).</li>
+<li><strong>Script kiểm</strong> — với "3 = cao nhất", cả cách tham lam lẫn quy tắc kế thừa đều cho 1, 2, 4, 3, 5.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: b — 1, 2, 4, 3, 5.</strong></p>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> nếu mặc định "1 = cao nhất" thì không phương án nào lý tưởng (thứ tự đúng khi đó là 1, 2, 4, 5, 3) — luôn đọc thang ưu tiên trước.</p>`),
     bi(`<h3>Ví dụ có lời giải · Worked example 1 — build a test execution schedule (K3)</h3>
 <p>A webshop release; priority <strong>1 = highest</strong>. Arrows mean "must run after".</p>
 <table>
@@ -435,8 +1757,15 @@ Test implementation 2 3 7 -&gt; E = 3.5 SD = 0.83
 Test execution incl. re-tests 6 9 18 -&gt; E = 10 SD = 2
 total E = 20 SD(total) = 2.46 range 17.54 - 22.46</code></pre>
 <p>So the plan says "about 20 days, realistically 17.5–22.5". Adding the three tasks bottom-up is exactly slide 49's WBS idea.</p>
-<div class="pitfall"><b>Exam traps.</b> (1) Schedule questions: first eliminate every option that breaks a dependency or repeats a test — usually only one survives. (2) Check the priority scale (is 1 or 3 the highest?). (3) Planning poker and Wideband Delphi are <strong>expert-based</strong>; burndown charts and defect-removal models are <strong>metrics-based</strong>. (4) "Availability of the test environment" is an <strong>entry</strong> criterion; "number of unresolved defects" is an <strong>exit</strong> criterion. (5) The test <em>approach</em> is project-specific; the test <em>strategy</em> is organisation-wide.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The cone of uncertainty.</b> Studies by Barry Boehm and Steve McConnell show that estimates made at the idea stage can be off by a factor of 4 in either direction, narrowing to about ±10 % only near the end of design. That is why good test plans give ranges (as the three-point example does), are re-estimated at each milestone, and why metrics-based estimates must be calibrated with the organisation's <em>own</em> history, not industry averages alone. <em>Outside the syllabus because CTFL only asks you to tell the two estimation families apart.</em></div>`,
+<div class="pitfall co-tieu-de"><strong>Exam traps.</strong>
+<ol>
+<li><strong>Schedule questions</strong> — first eliminate every option that breaks a dependency or repeats a test; usually only one survives.</li>
+<li><strong>Priority scale</strong> — check it: is 1 or 3 the highest?</li>
+<li><strong>Estimation families</strong> — planning poker and Wideband Delphi are <strong>expert-based</strong>; burndown charts and defect-removal models are <strong>metrics-based</strong>.</li>
+<li><strong>Entry vs exit</strong> — "availability of the test environment" is an <strong>entry</strong> criterion; "number of unresolved defects" is an <strong>exit</strong> criterion.</li>
+<li><strong>Approach vs strategy</strong> — the test <em>approach</em> is project-specific; the test <em>strategy</em> is organisation-wide.</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>The cone of uncertainty.</strong> Studies by Barry Boehm and Steve McConnell show that estimates made at the idea stage can be off by a factor of 4 in either direction, narrowing to about ±10 % only near the end of design. That is why good test plans give ranges (as the three-point example does), are re-estimated at each milestone, and why metrics-based estimates must be calibrated with the organisation's <em>own</em> history, not industry averages alone. <em>Outside the syllabus because CTFL only asks you to tell the two estimation families apart.</em></div>`,
     `<h3>Ví dụ có lời giải · Ví dụ 1 — dựng lịch thực thi test (K3)</h3>
 <p>Một bản phát hành webshop; ưu tiên <strong>1 = cao nhất</strong>. Cột phụ thuộc nghĩa là "phải chạy sau".</p>
 <table>
@@ -481,8 +1810,15 @@ Test implementation 2 3 7 -&gt; E = 3.5 SD = 0.83
 Test execution incl. re-tests 6 9 18 -&gt; E = 10 SD = 2
 total E = 20 SD(total) = 2.46 range 17.54 - 22.46</code></pre>
 <p>Vậy plan ghi "khoảng 20 ngày, thực tế 17,5–22,5". Cộng ba việc từ dưới lên chính là ý tưởng WBS ở slide 49.</p>
-<div class="pitfall"><b>Bẫy đề thi.</b> (1) Câu lập lịch: loại trước mọi phương án vi phạm phụ thuộc hoặc lặp test — thường chỉ còn một. (2) Xem thang ưu tiên (1 hay 3 là cao nhất?). (3) Planning poker và Wideband Delphi là <strong>expert-based</strong>; burndown chart và defect-removal model là <strong>metrics-based</strong>. (4) "Có môi trường test" là <strong>entry</strong> criterion; "số defect chưa giải quyết" là <strong>exit</strong> criterion. (5) Test <em>approach</em> gắn với một dự án; test <em>strategy</em> là của cả tổ chức.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Nón bất định (cone of uncertainty).</b> Nghiên cứu của Barry Boehm và Steve McConnell cho thấy ước lượng ở giai đoạn ý tưởng có thể lệch tới 4 lần theo cả hai chiều, và chỉ thu hẹp còn khoảng ±10 % khi gần xong thiết kế. Vì thế test plan tốt đưa ra khoảng (như ví dụ ba điểm), ước lượng lại ở mỗi mốc, và ước lượng dựa số liệu phải hiệu chỉnh bằng lịch sử <em>của chính tổ chức</em>, không chỉ trung bình ngành. <em>Ngoài giáo trình vì CTFL chỉ yêu cầu phân biệt hai họ kỹ thuật ước lượng.</em></div>`),
+<div class="pitfall co-tieu-de"><strong>Bẫy đề thi.</strong>
+<ol>
+<li><strong>Câu lập lịch</strong> — loại trước mọi phương án vi phạm phụ thuộc hoặc lặp test; thường chỉ còn một.</li>
+<li><strong>Thang ưu tiên</strong> — xem kỹ: 1 hay 3 là cao nhất?</li>
+<li><strong>Họ ước lượng</strong> — planning poker và Wideband Delphi là <strong>expert-based</strong>; burndown chart và defect-removal model là <strong>metrics-based</strong>.</li>
+<li><strong>Entry hay exit</strong> — "có môi trường test" là <strong>entry</strong> criterion; "số defect chưa giải quyết" là <strong>exit</strong> criterion.</li>
+<li><strong>Approach hay strategy</strong> — test <em>approach</em> gắn với một dự án; test <em>strategy</em> là của cả tổ chức.</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Nón bất định (cone of uncertainty).</strong> Nghiên cứu của Barry Boehm và Steve McConnell cho thấy ước lượng ở giai đoạn ý tưởng có thể lệch tới 4 lần theo cả hai chiều, và chỉ thu hẹp còn khoảng ±10 % khi gần xong thiết kế. Vì thế test plan tốt đưa ra khoảng (như ví dụ ba điểm), ước lượng lại ở mỗi mốc, và ước lượng dựa số liệu phải hiệu chỉnh bằng lịch sử <em>của chính tổ chức</em>, không chỉ trung bình ngành. <em>Ngoài giáo trình vì CTFL chỉ yêu cầu phân biệt hai họ kỹ thuật ước lượng.</em></div>`),
     books([
       ['fst4', 'Ch.5 §2 "Test planning and estimation" — pp.161–175 (PDF 175–189); sample questions 4–8, 17, 19–20 pp.197–199 (PDF 211–213); exercise "Test execution schedule" Table 5.3 p.200 and solution Table 5.4 p.201 (PDF 214–215)', 'Chương 5 §2 "Test planning and estimation" — trang 161–175 (PDF 175–189); câu hỏi mẫu 4–8, 17, 19–20 trang 197–199 (PDF 211–213); bài tập "Test execution schedule" Table 5.3 trang 200 và lời giải Table 5.4 trang 201 (PDF 214–215)'],
       ['fst', '§5.2 "Test plans, estimates and strategies" — book pp.≈130–140 (PDF 133–143)', '§5.2 "Test plans, estimates and strategies" — trang sách ≈130–140 (PDF 133–143)'],
@@ -502,7 +1838,11 @@ const L73 = {
     bi(`<span class="eyebrow">Chapter 7 · Lesson 7.3 · SWT5 slides 59–73</span>
 <h2>Test monitoring &amp; control — measure, report, steer</h2>
 <p class="lead">A plan is only a guess about the future. <strong>Monitoring</strong> compares what is really happening with the plan; <strong>control</strong> is what you do about the difference. Metrics feed both, and <strong>test reports</strong> carry the information to people who decide.</p>
-<div class="callout"><b>Learning objectives.</b> LO-5.3.1 Recall metrics used for testing (K1) · LO-5.3.2 Summarise the purposes, contents and audiences for test reports (K2).</div>
+<div class="callout"><strong>Learning objectives.</strong>
+<ul>
+<li><strong>LO-5.3.1</strong> Recall metrics used for testing (K1)</li>
+<li><strong>LO-5.3.2</strong> Summarise the purposes, contents and audiences for test reports (K2)</li>
+</ul></div>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Plan</div><div class="lz-t">targets &amp; exit criteria</div><div class="lz-d">200 tests in 4 weeks, 0 open critical defects</div></div>
   <div class="lz-step"><div class="lz-k">→ Monitor</div><div class="lz-t">gather metrics</div><div class="lz-d">70 run, 52 passed, 17 defects open</div></div>
@@ -522,7 +1862,11 @@ const L73 = {
     `<span class="eyebrow">Chương 7 · Bài 7.3 · SWT5 slide 59–73</span>
 <h2>Giám sát &amp; kiểm soát test — đo, báo cáo, lái</h2>
 <p class="lead">Kế hoạch chỉ là một dự đoán về tương lai. <strong>Giám sát (monitoring)</strong> so điều đang thực sự diễn ra với kế hoạch; <strong>kiểm soát (control)</strong> là việc bạn làm với phần chênh lệch. Số đo (metrics) nuôi cả hai, còn <strong>báo cáo test</strong> mang thông tin tới người ra quyết định.</p>
-<div class="callout"><b>Chuẩn đầu ra.</b> LO-5.3.1 Nhắc lại các số đo dùng trong kiểm thử (K1) · LO-5.3.2 Tóm tắt mục đích, nội dung và đối tượng đọc của báo cáo test (K2).</div>
+<div class="callout"><strong>Chuẩn đầu ra.</strong>
+<ul>
+<li><strong>LO-5.3.1</strong> Nhắc lại các số đo dùng trong kiểm thử (K1)</li>
+<li><strong>LO-5.3.2</strong> Tóm tắt mục đích, nội dung và đối tượng đọc của báo cáo test (K2)</li>
+</ul></div>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Kế hoạch</div><div class="lz-t">mục tiêu &amp; exit criteria</div><div class="lz-d">200 test trong 4 tuần, 0 defect critical còn mở</div></div>
   <div class="lz-step"><div class="lz-k">→ Giám sát</div><div class="lz-t">thu số đo</div><div class="lz-d">chạy 70, pass 52, còn mở 17 defect</div></div>
@@ -542,50 +1886,302 @@ const L73 = {
     walkHead(D, 59, 73),
     walk(D, [
       [59, 'CONTENT — Test Monitoring & Control',
-        `<p>Section 3 has two sub-topics: <strong>metrics used in testing</strong> (LO-5.3.1, K1 — recognise them) and <strong>purpose, content and audience for test reports</strong> (LO-5.3.2, K2 — explain which content goes to whom and why).</p>`,
-        `<p>Phần 3 có hai ý: <strong>các số đo dùng trong kiểm thử</strong> (LO-5.3.1, K1 — nhận ra được) và <strong>mục đích, nội dung và đối tượng đọc của báo cáo test</strong> (LO-5.3.2, K2 — giải thích nội dung nào gửi cho ai và vì sao).</p>`],
+        `<p class="y-chinh">🎯 Section 3 has two sub-topics: metrics, and test reports.</p>
+<ul>
+<li><strong>Metrics used in testing</strong> — LO-5.3.1, K1: recognise them.</li>
+<li><strong>Purpose, content and audience for test reports</strong> — LO-5.3.2, K2: explain which content goes to whom and why.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Phần 3 có hai ý: số đo, và báo cáo test.</p>
+<ul>
+<li><strong>Các số đo dùng trong kiểm thử</strong> — LO-5.3.1, K1: nhận ra được.</li>
+<li><strong>Mục đích, nội dung và đối tượng đọc của báo cáo test</strong> — LO-5.3.2, K2: giải thích nội dung nào gửi cho ai và vì sao.</li>
+</ul>`],
       [60, 'Mind map (divider) — Test Metrics & Test Reports added',
-        `<p>The divider map again, but look closely: under <em>Monitoring &amp; Control</em> two new leaves have appeared — <strong>Test Metrics</strong> and <strong>Test Reports</strong>. They are exactly this lesson.</p>`,
-        `<p>Lại sơ đồ vách ngăn, nhưng nhìn kỹ: dưới nhánh <em>Monitoring &amp; Control</em> mọc thêm hai lá mới — <strong>Test Metrics</strong> và <strong>Test Reports</strong>. Đó chính là nội dung bài này.</p>`],
+        `<p class="y-chinh">🎯 The divider map again — but under <em>Monitoring &amp; Control</em> two new leaves have appeared.</p>
+<ul>
+<li><strong>Test Metrics</strong></li>
+<li><strong>Test Reports</strong></li>
+</ul>
+<p>They are exactly this lesson.</p>`,
+        `<p class="y-chinh">🎯 Lại sơ đồ vách ngăn — nhưng dưới nhánh <em>Monitoring &amp; Control</em> mọc thêm hai lá mới.</p>
+<ul>
+<li><strong>Test Metrics</strong></li>
+<li><strong>Test Reports</strong></li>
+</ul>
+<p>Đó chính là nội dung bài này.</p>`],
       [61, 'Test Monitoring & Control — definitions',
-        `<p><strong>Test monitoring</strong>: gather information and provide <em>feedback and visibility</em> about test activities — "where are we compared with the plan?". <strong>Test control</strong>: any <em>guiding or corrective actions</em> taken as a result of the information and metrics gathered (and possibly reported). Monitoring without control is just watching; control without monitoring is guessing. Remember from lesson 1.4 that monitoring &amp; control run <em>throughout</em> the test process, not only at the end.</p>`,
-        `<p><strong>Giám sát test</strong>: thu thập thông tin, cung cấp <em>phản hồi và khả năng nhìn thấy</em> về các hoạt động test — "ta đang ở đâu so với kế hoạch?". <strong>Kiểm soát test</strong>: mọi <em>hành động định hướng hoặc điều chỉnh</em> được thực hiện dựa trên thông tin và số đo đã thu thập (và có thể đã báo cáo). Giám sát mà không kiểm soát chỉ là đứng nhìn; kiểm soát mà không giám sát là đoán mò. Nhớ lại bài 1.4: giám sát &amp; kiểm soát diễn ra <em>xuyên suốt</em> quy trình test, không chỉ ở cuối.</p>`],
+        `<p class="y-chinh">🎯 Monitoring shows where you are against the plan; control is what you do about it.</p>
+<ul>
+<li><strong>Test monitoring</strong> — gather information and provide <em>feedback and visibility</em> about test activities: "where are we compared with the plan?".</li>
+<li><strong>Test control</strong> — any <em>guiding or corrective actions</em> taken as a result of the information and metrics gathered (and possibly reported).</li>
+</ul>
+<p>Monitoring without control is just watching; control without monitoring is guessing.</p>
+<p class="meo">🧠 <strong>Remember:</strong> from lesson 1.4 — monitoring &amp; control run <em>throughout</em> the test process, not only at the end.</p>`,
+        `<p class="y-chinh">🎯 Giám sát cho biết ta đang ở đâu so với kế hoạch; kiểm soát là việc ta làm với điều đó.</p>
+<ul>
+<li><strong>Giám sát test</strong> (monitoring) — thu thập thông tin, cung cấp <em>phản hồi và khả năng nhìn thấy</em> về các hoạt động test: "ta đang ở đâu so với kế hoạch?".</li>
+<li><strong>Kiểm soát test</strong> (control) — mọi <em>hành động định hướng hoặc điều chỉnh</em> được thực hiện dựa trên thông tin và số đo đã thu thập (và có thể đã báo cáo).</li>
+</ul>
+<p>Giám sát mà không kiểm soát chỉ là đứng nhìn; kiểm soát mà không giám sát là đoán mò.</p>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> nhớ lại bài 1.4 — giám sát &amp; kiểm soát diễn ra <em>xuyên suốt</em> quy trình test, không chỉ ở cuối.</p>`],
       [62, 'Examples of Test Control Activities',
-        `<p>The three syllabus examples: <strong>re-prioritising tests</strong> when an identified risk occurs (e.g. software delivered late); <strong>changing the test schedule</strong> because a test environment or other resource becomes (un)available; <strong>re-evaluating whether a test item meets an entry or exit criterion</strong> after rework. The teacher's note develops the first: part of the system under test will arrive after the planned start date, but market conditions fix the release date — so control means starting with the parts that <em>are</em> available and re-ordering the rest by risk.</p>`,
-        `<p>Ba ví dụ trong syllabus: <strong>xếp lại ưu tiên test</strong> khi một rủi ro đã nhận diện xảy ra (vd phần mềm giao trễ); <strong>đổi lịch test</strong> vì môi trường test hay nguồn lực khác có/không sẵn sàng; <strong>đánh giá lại một hạng mục test có đạt entry/exit criterion</strong> sau khi sửa lại. Ghi chú của thầy/cô phân tích ví dụ đầu: một phần hệ thống sẽ tới sau ngày dự định bắt đầu test, nhưng thị trường không cho lùi ngày phát hành — vậy kiểm soát nghĩa là bắt đầu test những phần <em>đã có</em> và sắp xếp lại phần còn lại theo rủi ro.</p>`],
+        `<p class="y-chinh">🎯 The syllabus gives three typical test control actions.</p>
+<ol>
+<li><strong>Re-prioritising tests</strong> — when an identified risk occurs (e.g. software delivered late).</li>
+<li><strong>Changing the test schedule</strong> — because a test environment or other resource becomes (un)available.</li>
+<li><strong>Re-evaluating whether a test item meets an entry or exit criterion</strong> — after rework.</li>
+</ol>
+<p class="nhan">The teacher's note on example 1</p>
+<p>Part of the system under test will arrive after the planned start date, but market conditions fix the release date. So control means starting with the parts that <em>are</em> available and re-ordering the rest by risk.</p>`,
+        `<p class="y-chinh">🎯 Syllabus nêu ba hành động kiểm soát test điển hình.</p>
+<ol>
+<li><strong>Xếp lại ưu tiên test</strong> — khi một rủi ro đã nhận diện xảy ra (vd phần mềm giao trễ).</li>
+<li><strong>Đổi lịch test</strong> — vì môi trường test hay nguồn lực khác có/không sẵn sàng.</li>
+<li><strong>Đánh giá lại một hạng mục test có đạt entry/exit criterion</strong> — sau khi sửa lại.</li>
+</ol>
+<p class="nhan">Ghi chú của thầy/cô về ví dụ 1</p>
+<p>Một phần hệ thống sẽ tới sau ngày dự định bắt đầu test, nhưng thị trường không cho lùi ngày phát hành. Vậy kiểm soát nghĩa là bắt đầu test những phần <em>đã có</em> và sắp xếp lại phần còn lại theo rủi ro.</p>`],
       [63, 'Metrics used in Testing — purpose',
-        `<p>Why measure? (1) <strong>Feedback</strong> on progress — time and cost against the planned schedule and budget; (2) <strong>visibility</strong> of test results and of the quality of the test object; (3) <strong>status</strong> of testing, coverage and test items against the exit criteria (are we done?); (4) <strong>data for estimating future efforts</strong>, including whether the test approach was adequate — this is where metrics-based estimation (lesson 7.2) gets its history.</p>`,
-        `<p>Đo để làm gì? (1) <strong>Phản hồi</strong> về tiến độ — thời gian và chi phí so với lịch và ngân sách; (2) <strong>nhìn thấy</strong> kết quả test và chất lượng đối tượng test; (3) <strong>trạng thái</strong> kiểm thử, độ bao phủ và hạng mục test so với exit criteria (xong chưa?); (4) <strong>dữ liệu để ước lượng lần sau</strong>, kể cả đánh giá cách tiếp cận test có phù hợp không — ước lượng dựa trên số liệu (bài 7.2) lấy lịch sử từ chính đây.</p>`],
+        `<p class="y-chinh">🎯 Metrics serve four purposes — from today's progress to tomorrow's estimates.</p>
+<ol>
+<li><strong>Feedback</strong> on progress — time and cost against the planned schedule and budget.</li>
+<li><strong>Visibility</strong> of test results and of the quality of the test object.</li>
+<li><strong>Status</strong> of testing, coverage and test items against the exit criteria — are we done?</li>
+<li><strong>Data for estimating future efforts</strong>, including whether the test approach was adequate — this is where metrics-based estimation (lesson 7.2) gets its history.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Số đo phục vụ bốn mục đích — từ tiến độ hôm nay tới ước lượng lần sau.</p>
+<ol>
+<li><strong>Phản hồi</strong> về tiến độ — thời gian và chi phí so với lịch và ngân sách.</li>
+<li><strong>Nhìn thấy</strong> kết quả test và chất lượng đối tượng test.</li>
+<li><strong>Trạng thái</strong> kiểm thử, độ bao phủ và hạng mục test so với exit criteria — xong chưa?</li>
+<li><strong>Dữ liệu để ước lượng lần sau</strong>, kể cả đánh giá cách tiếp cận test có phù hợp không — ước lượng dựa trên số liệu (bài 7.2) lấy lịch sử từ chính đây.</li>
+</ol>`],
       [64, 'Metrics used in Testing — common metrics',
-        `<p>Six families (the notes add examples): <strong>percentage of planned work done</strong> — test cases prepared, test cases implemented, test environment prepared; <strong>test execution</strong> — number of test cases run/not run, passed/failed; <strong>defects</strong> — defect density, defects found and fixed, failure rate, confirmation-test results; <strong>coverage</strong> of requirements, user stories, acceptance criteria, risks or code; <strong>task completion, resource allocation and usage, effort</strong> — status against milestones; <strong>cost of testing</strong> — including the cost/benefit of continuing to find the next defect or run the next test. Tip: preparation metrics matter before execution; execution and defect metrics matter during execution (slide 70).</p>`,
-        `<p>Sáu nhóm (ghi chú bổ sung ví dụ): <strong>phần trăm công việc đã làm so với kế hoạch</strong> — test case đã chuẩn bị, đã cài đặt, môi trường đã dựng; <strong>thực thi test</strong> — số test đã chạy/chưa chạy, pass/fail; <strong>defect</strong> — mật độ defect, số defect tìm được và đã sửa, tỉ lệ failure, kết quả confirmation test; <strong>độ bao phủ</strong> yêu cầu, user story, tiêu chí chấp nhận, rủi ro hoặc code; <strong>mức hoàn thành công việc, phân bổ và sử dụng nguồn lực, công sức</strong> — trạng thái so với mốc; <strong>chi phí kiểm thử</strong> — kể cả lợi/hại của việc tiếp tục tìm defect kế tiếp hay chạy test kế tiếp. Mẹo: số đo chuẩn bị quan trọng trước khi chạy; số đo thực thi và defect quan trọng trong lúc chạy (slide 70).</p>`],
+        `<p class="y-chinh">🎯 Common test metrics fall into six families (the notes add examples).</p>
+<ol>
+<li><strong>Percentage of planned work done</strong> — test cases prepared, test cases implemented, test environment prepared.</li>
+<li><strong>Test execution</strong> — number of test cases run/not run, passed/failed.</li>
+<li><strong>Defects</strong> — defect density, defects found and fixed, failure rate, confirmation-test results.</li>
+<li><strong>Coverage</strong> — of requirements, user stories, acceptance criteria, risks or code.</li>
+<li><strong>Task completion, resource allocation and usage, effort</strong> — status against milestones.</li>
+<li><strong>Cost of testing</strong> — including the cost/benefit of continuing to find the next defect or run the next test.</li>
+</ol>
+<p class="meo">🧠 <strong>Remember:</strong> preparation metrics matter before execution; execution and defect metrics matter during execution (slide 70).</p>`,
+        `<p class="y-chinh">🎯 Các số đo test thường dùng chia thành sáu nhóm (ghi chú bổ sung ví dụ).</p>
+<ol>
+<li><strong>Phần trăm công việc đã làm so với kế hoạch</strong> — test case đã chuẩn bị, đã cài đặt, môi trường đã dựng.</li>
+<li><strong>Thực thi test</strong> — số test đã chạy/chưa chạy, pass/fail.</li>
+<li><strong>Defect</strong> — mật độ defect, số defect tìm được và đã sửa, tỉ lệ failure, kết quả confirmation test.</li>
+<li><strong>Độ bao phủ</strong> — yêu cầu, user story, tiêu chí chấp nhận, rủi ro hoặc code.</li>
+<li><strong>Mức hoàn thành công việc, phân bổ và sử dụng nguồn lực, công sức</strong> — trạng thái so với mốc.</li>
+<li><strong>Chi phí kiểm thử</strong> — kể cả lợi/hại của việc tiếp tục tìm defect kế tiếp hay chạy test kế tiếp.</li>
+</ol>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> số đo chuẩn bị quan trọng trước khi chạy; số đo thực thi và defect quan trọng trong lúc chạy (slide 70).</p>`],
       [65, 'Test Reports — purpose',
-        `<p>A report exists to (1) <strong>communicate</strong> test results to stakeholders and (2) <strong>enlighten and influence</strong> them — analyse the information and metrics to support conclusions, recommendations and decisions. The notes list what a good report can do: estimate the number of defects still to be discovered; present the costs and benefits of delaying the release to test more; assess remaining product and project risks; give an opinion on the confidence stakeholders should have in the quality of the system under test. A report that only lists numbers without a conclusion has done half the job.</p>`,
-        `<p>Báo cáo có để (1) <strong>truyền đạt</strong> kết quả test cho các bên và (2) <strong>soi sáng và tác động</strong> tới họ — phân tích thông tin và số đo để hỗ trợ kết luận, khuyến nghị và quyết định. Ghi chú liệt kê những gì một báo cáo tốt làm được: ước tính số defect còn chưa tìm ra; trình bày lợi/hại của việc lùi ngày phát hành để test thêm; đánh giá rủi ro sản phẩm và dự án còn lại; đưa ý kiến về mức tin tưởng mà các bên nên có vào chất lượng hệ thống. Báo cáo chỉ liệt kê con số mà không có kết luận là mới làm được một nửa.</p>`],
+        `<p class="y-chinh">🎯 A test report both informs stakeholders and helps them decide.</p>
+<p class="nhan">Two purposes</p>
+<ol>
+<li><strong>Communicate</strong> test results to stakeholders.</li>
+<li><strong>Enlighten and influence</strong> them — analyse the information and metrics to support conclusions, recommendations and decisions.</li>
+</ol>
+<p class="nhan">What a good report can do (notes)</p>
+<ul>
+<li>Estimate the number of <strong>defects still to be discovered</strong>.</li>
+<li>Present the <strong>costs and benefits of delaying the release</strong> to test more.</li>
+<li>Assess the remaining <strong>product and project risks</strong>.</li>
+<li>Give an opinion on the <strong>confidence</strong> stakeholders should have in the quality of the system under test.</li>
+</ul>
+<p>A report that only lists numbers without a conclusion has done half the job.</p>`,
+        `<p class="y-chinh">🎯 Báo cáo test vừa cung cấp thông tin cho các bên, vừa giúp họ ra quyết định.</p>
+<p class="nhan">Hai mục đích</p>
+<ol>
+<li><strong>Truyền đạt</strong> kết quả test cho các bên.</li>
+<li><strong>Soi sáng và tác động</strong> tới họ — phân tích thông tin và số đo để hỗ trợ kết luận, khuyến nghị và quyết định.</li>
+</ol>
+<p class="nhan">Báo cáo tốt làm được gì (ghi chú)</p>
+<ul>
+<li>Ước tính số <strong>defect còn chưa tìm ra</strong>.</li>
+<li>Trình bày <strong>lợi/hại của việc lùi ngày phát hành</strong> để test thêm.</li>
+<li>Đánh giá <strong>rủi ro sản phẩm và dự án</strong> còn lại.</li>
+<li>Đưa ý kiến về <strong>mức tin tưởng</strong> mà các bên nên có vào chất lượng hệ thống.</li>
+</ul>
+<p>Báo cáo chỉ liệt kê con số mà không có kết luận là mới làm được một nửa.</p>`],
       [66, 'Test Reports — progress vs summary',
-        `<p><strong>Test progress report</strong>: prepared <em>during</em> a test activity and may result in test control actions. <strong>Test summary report</strong>: prepared at the <em>end</em> of a test activity or test level (and at the end of a project). Who writes them? The test manager (slide 18), with data from the testers. Glossary note: CTFL v4.0 later renamed the summary report "test completion report", matching ISO/IEC/IEEE 29119-3.</p>`,
-        `<p><strong>Test progress report</strong>: lập <em>trong lúc</em> một hoạt động test đang diễn ra và có thể dẫn tới hành động kiểm soát. <strong>Test summary report</strong>: lập khi <em>kết thúc</em> một hoạt động hoặc một cấp test (và khi kết thúc dự án). Ai viết? Test manager (slide 18), dựa trên dữ liệu của tester. Ghi chú thuật ngữ: CTFL v4.0 về sau đổi tên summary report thành "test completion report", khớp với ISO/IEC/IEEE 29119-3.</p>`],
+        `<p class="y-chinh">🎯 Two kinds of test report: progress (during) and summary (at the end).</p>
+<ul>
+<li><strong>Test progress report</strong> — prepared <em>during</em> a test activity; may result in test control actions.</li>
+<li><strong>Test summary report</strong> — prepared at the <em>end</em> of a test activity or test level (and at the end of a project).</li>
+<li><strong>Who writes them</strong> — the test manager (slide 18), with data from the testers.</li>
+</ul>
+<p class="ghi-chu">Glossary note: CTFL v4.0 later renamed the summary report "test completion report", matching ISO/IEC/IEEE 29119-3.</p>`,
+        `<p class="y-chinh">🎯 Hai loại báo cáo test: tiến độ (trong lúc làm) và tổng kết (lúc kết thúc).</p>
+<ul>
+<li><strong>Test progress report</strong> — lập <em>trong lúc</em> một hoạt động test đang diễn ra; có thể dẫn tới hành động kiểm soát.</li>
+<li><strong>Test summary report</strong> — lập khi <em>kết thúc</em> một hoạt động hoặc một cấp test (và khi kết thúc dự án).</li>
+<li><strong>Ai viết</strong> — test manager (slide 18), dựa trên dữ liệu của tester.</li>
+</ul>
+<p class="ghi-chu">Ghi chú thuật ngữ: CTFL v4.0 về sau đổi tên summary report thành "test completion report", khớp với ISO/IEC/IEEE 29119-3.</p>`],
       [67, 'Test Reports — typical progress report contents',
-        `<p>A progress report typically adds: the <strong>current status of test activities and progress against the test plan</strong>; <strong>factors impeding progress</strong> (blocked environment, late builds); <strong>testing planned for the next reporting period</strong>; and the <strong>quality of the test object</strong> so far. The notes add "relevant metrics" (defects, test cases, coverage, activity progress, resource consumption). "Testing planned for the next period" is the classic item that belongs <em>only</em> in the progress report — there is no next period after a summary (slide 71).</p>`,
-        `<p>Báo cáo tiến độ thường có thêm: <strong>trạng thái hiện tại và tiến độ so với test plan</strong>; <strong>các yếu tố cản trở tiến độ</strong> (môi trường hỏng, build về trễ); <strong>việc test dự kiến cho kỳ báo cáo tới</strong>; và <strong>chất lượng đối tượng test</strong> tới thời điểm này. Ghi chú thêm "các số đo liên quan" (defect, test case, độ bao phủ, tiến độ hoạt động, mức dùng nguồn lực). "Việc test dự kiến cho kỳ tới" là mục kinh điển <em>chỉ</em> có trong báo cáo tiến độ — sau báo cáo tổng kết thì không còn "kỳ tới" nào (slide 71).</p>`],
+        `<p class="y-chinh">🎯 A progress report looks forward: where we are, what blocks us, what comes next.</p>
+<p class="nhan">Typical progress-report contents</p>
+<ol>
+<li><strong>Current status</strong> of test activities and progress against the test plan.</li>
+<li><strong>Factors impeding progress</strong> — blocked environment, late builds.</li>
+<li><strong>Testing planned for the next reporting period</strong>.</li>
+<li><strong>Quality of the test object</strong> so far.</li>
+<li><strong>Relevant metrics</strong> (added by the notes) — defects, test cases, coverage, activity progress, resource consumption.</li>
+</ol>
+<p class="meo">🧠 <strong>Remember:</strong> "testing planned for the next period" belongs <em>only</em> in the progress report — there is no next period after a summary (slide 71).</p>`,
+        `<p class="y-chinh">🎯 Báo cáo tiến độ nhìn về phía trước: đang ở đâu, cái gì cản trở, sắp làm gì.</p>
+<p class="nhan">Nội dung điển hình của báo cáo tiến độ</p>
+<ol>
+<li><strong>Trạng thái hiện tại</strong> của hoạt động test và tiến độ so với test plan.</li>
+<li><strong>Các yếu tố cản trở tiến độ</strong> — môi trường hỏng, build về trễ.</li>
+<li><strong>Việc test dự kiến cho kỳ báo cáo tới</strong>.</li>
+<li><strong>Chất lượng đối tượng test</strong> tới thời điểm này.</li>
+<li><strong>Các số đo liên quan</strong> (ghi chú bổ sung) — defect, test case, độ bao phủ, tiến độ hoạt động, mức dùng nguồn lực.</li>
+</ol>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> "việc test dự kiến cho kỳ tới" <em>chỉ</em> có trong báo cáo tiến độ — sau báo cáo tổng kết thì không còn "kỳ tới" nào (slide 71).</p>`],
       [68, 'Test Reports — contents of both reports & audience',
-        `<p>Both kinds may include: a <strong>summary of testing performed</strong>; <strong>important events</strong>; <strong>deviations from plan</strong> (schedule, effort, duration); <strong>status of testing and product quality against the exit criteria</strong>; <strong>impeding factors</strong> (on the slide "exit criteria" and "Impeding factors" run together — a missing line break); <strong>relevant metrics</strong>; <strong>residual risks</strong>; <strong>reusable test work products</strong>. <em>Audience matters</em> — the notes: not every report has everything (a quick software update needs little), some need more (many stakeholders, legal or regulatory requirements); in Agile, progress reporting may live in task boards, defect summaries and burndown charts discussed at the daily stand-up; <strong>tailor each report</strong>: senior management wants budget and schedule, testers and developers want detailed defect types and trends.</p>`,
-        `<p>Cả hai loại đều có thể gồm: <strong>tóm tắt việc đã test</strong>; <strong>sự kiện quan trọng</strong>; <strong>chênh lệch so với kế hoạch</strong> (lịch, công sức, thời lượng); <strong>trạng thái kiểm thử và chất lượng sản phẩm so với exit criteria</strong>; <strong>các yếu tố cản trở</strong> (trên slide "exit criteria" và "Impeding factors" dính liền — thiếu một dấu xuống dòng); <strong>số đo liên quan</strong>; <strong>rủi ro còn lại</strong>; <strong>sản phẩm test tái sử dụng được</strong>. <em>Đối tượng đọc rất quan trọng</em> — ghi chú: không phải báo cáo nào cũng đủ mọi mục (một bản cập nhật nhỏ thì cần ít), có cái cần thêm (nhiều bên liên quan, yêu cầu pháp lý); trong Agile, báo cáo tiến độ có thể nằm ở task board, bảng tổng hợp defect và burndown chart được bàn trong daily stand-up; <strong>may đo báo cáo cho người đọc</strong>: lãnh đạo cần ngân sách và lịch, tester và developer cần chi tiết loại defect và xu hướng.</p>`],
+        `<p class="y-chinh">🎯 Both reports share eight content items — and each must be tailored to its audience.</p>
+<p class="nhan">Content of both progress and summary reports</p>
+<ol>
+<li><strong>Summary of testing performed</strong></li>
+<li><strong>Important events</strong></li>
+<li><strong>Deviations from plan</strong> — schedule, effort, duration</li>
+<li><strong>Status of testing and product quality against the exit criteria</strong></li>
+<li><strong>Impeding factors</strong> — on the slide "exit criteria" and "Impeding factors" run together (a missing line break)</li>
+<li><strong>Relevant metrics</strong></li>
+<li><strong>Residual risks</strong></li>
+<li><strong>Reusable test work products</strong></li>
+</ol>
+<p class="nhan">Audience matters (notes)</p>
+<ul>
+<li><strong>Not every report has everything</strong> — a quick software update needs little; some need more (many stakeholders, legal or regulatory requirements).</li>
+<li><strong>In Agile</strong> — progress reporting may live in task boards, defect summaries and burndown charts discussed at the daily stand-up.</li>
+<li><strong>Tailor each report</strong> — senior management wants budget and schedule; testers and developers want detailed defect types and trends.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Hai loại báo cáo có chung tám mục nội dung — và mỗi báo cáo phải may đo cho người đọc.</p>
+<p class="nhan">Nội dung chung của báo cáo tiến độ và tổng kết</p>
+<ol>
+<li><strong>Tóm tắt việc đã test</strong></li>
+<li><strong>Sự kiện quan trọng</strong></li>
+<li><strong>Chênh lệch so với kế hoạch</strong> — lịch, công sức, thời lượng</li>
+<li><strong>Trạng thái kiểm thử và chất lượng sản phẩm so với exit criteria</strong></li>
+<li><strong>Các yếu tố cản trở</strong> — trên slide "exit criteria" và "Impeding factors" dính liền (thiếu một dấu xuống dòng)</li>
+<li><strong>Số đo liên quan</strong></li>
+<li><strong>Rủi ro còn lại</strong></li>
+<li><strong>Sản phẩm test tái sử dụng được</strong></li>
+</ol>
+<p class="nhan">Đối tượng đọc rất quan trọng (ghi chú)</p>
+<ul>
+<li><strong>Không phải báo cáo nào cũng đủ mọi mục</strong> — một bản cập nhật nhỏ thì cần ít; có cái cần thêm (nhiều bên liên quan, yêu cầu pháp lý).</li>
+<li><strong>Trong Agile</strong> — báo cáo tiến độ có thể nằm ở task board, bảng tổng hợp defect và burndown chart được bàn trong daily stand-up.</li>
+<li><strong>May đo báo cáo cho người đọc</strong> — lãnh đạo cần ngân sách và lịch; tester và developer cần chi tiết loại defect và xu hướng.</li>
+</ul>`],
       [69, 'What actions can you take?',
-        `<p>A control cheat-sheet in three columns. <strong>What you can affect</strong> directly: resource allocation, number of test iterations, which tests go into an iteration, the entry/exit criteria applied, the release date. <strong>What you cannot affect</strong>: the number of faults <em>already</em> in the software — testing finds them, it does not create or remove them. <strong>What you can affect indirectly</strong>: the rework effort, which faults are fixed (first), the quality of fixes (e.g. by setting entry criteria for re-test: "a fix is accepted for re-test only with a passing unit test"). Use this slide when a question asks for a legitimate control action.</p>`,
-        `<p>Bảng "tủ" kiểm soát chia ba cột. <strong>Tác động trực tiếp được</strong>: phân bổ nguồn lực, số vòng test, test nào đưa vào vòng nào, entry/exit criteria áp dụng, ngày phát hành. <strong>Không tác động được</strong>: số lỗi <em>đã có sẵn</em> trong phần mềm — kiểm thử tìm ra chúng chứ không tạo ra hay xoá chúng. <strong>Tác động gián tiếp được</strong>: công sức sửa lại, lỗi nào được sửa (trước), chất lượng bản sửa (vd đặt entry criteria cho re-test: "bản sửa chỉ được nhận re-test khi có unit test pass kèm theo"). Dùng slide này khi đề hỏi đâu là hành động kiểm soát hợp lệ.</p>`],
+        `<p class="y-chinh">🎯 A control cheat-sheet in three columns: what you can affect, cannot affect, and can affect only indirectly.</p>
+<p class="nhan">What you can affect directly</p>
+<ul>
+<li>Resource allocation</li>
+<li>Number of test iterations</li>
+<li>Which tests go into an iteration</li>
+<li>The entry/exit criteria applied</li>
+<li>The release date</li>
+</ul>
+<p class="nhan">What you cannot affect</p>
+<ul>
+<li>The number of faults <em>already</em> in the software — testing finds them, it does not create or remove them.</li>
+</ul>
+<p class="nhan">What you can affect indirectly</p>
+<ul>
+<li>The rework effort</li>
+<li>Which faults are fixed (first)</li>
+<li>The quality of fixes — e.g. by setting entry criteria for re-test: "a fix is accepted for re-test only with a passing unit test".</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> use this slide when a question asks for a legitimate control action.</p>`,
+        `<p class="y-chinh">🎯 Bảng "tủ" kiểm soát chia ba cột: tác động được, không tác động được, và chỉ tác động gián tiếp.</p>
+<p class="nhan">Tác động trực tiếp được</p>
+<ul>
+<li>Phân bổ nguồn lực</li>
+<li>Số vòng test</li>
+<li>Test nào đưa vào vòng nào</li>
+<li>Entry/exit criteria áp dụng</li>
+<li>Ngày phát hành</li>
+</ul>
+<p class="nhan">Không tác động được</p>
+<ul>
+<li>Số lỗi <em>đã có sẵn</em> trong phần mềm — kiểm thử tìm ra chúng chứ không tạo ra hay xoá chúng.</li>
+</ul>
+<p class="nhan">Tác động gián tiếp được</p>
+<ul>
+<li>Công sức sửa lại</li>
+<li>Lỗi nào được sửa (trước)</li>
+<li>Chất lượng bản sửa — vd đặt entry criteria cho re-test: "bản sửa chỉ được nhận re-test khi có unit test pass kèm theo".</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> dùng slide này khi đề hỏi đâu là hành động kiểm soát hợp lệ.</p>`],
       [70, 'Question — metric most useful during test execution',
-        AE('A — Percentage of executed test cases', 'During execution you track execution and defect metrics. B, C and D are <em>preparation</em> metrics (environment preparation, test cases prepared, test-case preparation work) — useful before execution starts, not while running tests.'),
-        AV('A — Phần trăm test case đã thực thi', 'Trong lúc thực thi, ta theo dõi số đo thực thi và defect. B, C, D đều là số đo <em>chuẩn bị</em> (dựng môi trường, test case đã chuẩn bị, công chuẩn bị test case) — hữu ích trước khi chạy, không phải lúc đang chạy.')],
+        `<p class="y-chinh">🎯 During execution you track execution and defect metrics, not preparation metrics.</p>
+<ul>
+<li><strong>A</strong> — an execution metric: exactly what you watch while tests run.</li>
+<li><strong>B, C, D</strong> — <em>preparation</em> metrics (environment preparation, test cases prepared, test-case preparation work): useful before execution starts, not while running tests.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: A — Percentage of executed test cases.</strong></p>`,
+        `<p class="y-chinh">🎯 Trong lúc thực thi, ta theo dõi số đo thực thi và defect, không phải số đo chuẩn bị.</p>
+<ul>
+<li><strong>A</strong> — số đo thực thi: đúng thứ cần theo dõi khi test đang chạy.</li>
+<li><strong>B, C, D</strong> — đều là số đo <em>chuẩn bị</em> (dựng môi trường, test case đã chuẩn bị, công chuẩn bị test case): hữu ích trước khi chạy, không phải lúc đang chạy.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: A — Phần trăm test case đã thực thi.</strong></p>`],
       [71, 'Question — NOT included in a test summary report',
-        AE('A — Testing planned for the next reporting period', 'That item belongs to the <em>progress</em> report (slide 67). B (deviations), C (progress against exit criteria) and D (evaluation of the quality of the test item) are all summary-report content (slide 68; IEEE 829 "variances", "comprehensiveness assessment", "evaluation").'),
-        AV('A — Việc test dự kiến cho kỳ báo cáo tới', 'Mục đó thuộc báo cáo <em>tiến độ</em> (slide 67). B (chênh lệch), C (tiến độ so với exit criteria) và D (đánh giá chất lượng hạng mục test) đều là nội dung báo cáo tổng kết (slide 68; IEEE 829 "variances", "comprehensiveness assessment", "evaluation").')],
+        `<p class="y-chinh">🎯 "Next reporting period" only makes sense in a progress report.</p>
+<ul>
+<li><strong>A</strong> — belongs to the <em>progress</em> report (slide 67).</li>
+<li><strong>B (deviations)</strong> — summary-report content (slide 68; IEEE 829 "variances").</li>
+<li><strong>C (progress against exit criteria)</strong> — summary-report content (IEEE 829 "comprehensiveness assessment").</li>
+<li><strong>D (evaluation of the quality of the test item)</strong> — summary-report content (IEEE 829 "evaluation").</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: A — Testing planned for the next reporting period.</strong></p>`,
+        `<p class="y-chinh">🎯 "Kỳ báo cáo tới" chỉ có nghĩa trong báo cáo tiến độ.</p>
+<ul>
+<li><strong>A</strong> — thuộc báo cáo <em>tiến độ</em> (slide 67).</li>
+<li><strong>B (chênh lệch)</strong> — nội dung báo cáo tổng kết (slide 68; IEEE 829 "variances").</li>
+<li><strong>C (tiến độ so với exit criteria)</strong> — nội dung báo cáo tổng kết (IEEE 829 "comprehensiveness assessment").</li>
+<li><strong>D (đánh giá chất lượng hạng mục test)</strong> — nội dung báo cáo tổng kết (IEEE 829 "evaluation").</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: A — Việc test dự kiến cho kỳ báo cáo tới.</strong></p>`],
       [72, 'Question — when is "number of test cases executed" gathered?',
-        AE('C — Execution', 'The count exists only once tests are being run; it is <em>gathered</em> during test execution (and then used by monitoring and reporting). Planning defines which metrics to use; implementation prepares tests; reporting presents the numbers but does not collect them.'),
-        AV('C — Execution (thực thi)', 'Con số này chỉ có khi test đang được chạy; nó được <em>thu thập</em> trong lúc thực thi (rồi được giám sát và báo cáo sử dụng). Planning chọn số đo nào sẽ dùng; implementation chuẩn bị test; reporting trình bày con số chứ không thu thập nó.')],
+        `<p class="y-chinh">🎯 A count of executed tests exists only once tests run — so it is gathered during execution.</p>
+<ul>
+<li><strong>C (execution)</strong> — the count is <em>gathered</em> while tests are run, then used by monitoring and reporting.</li>
+<li><strong>A (planning)</strong> — defines which metrics to use.</li>
+<li><strong>B (implementation)</strong> — prepares the tests.</li>
+<li><strong>D (reporting)</strong> — presents the numbers but does not collect them.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: C — Execution.</strong></p>`,
+        `<p class="y-chinh">🎯 Số test đã chạy chỉ có khi test được chạy — nên nó được thu thập trong lúc thực thi.</p>
+<ul>
+<li><strong>C (execution)</strong> — con số được <em>thu thập</em> trong lúc chạy test, rồi được giám sát và báo cáo sử dụng.</li>
+<li><strong>A (planning)</strong> — chọn số đo nào sẽ dùng.</li>
+<li><strong>B (implementation)</strong> — chuẩn bị test.</li>
+<li><strong>D (reporting)</strong> — trình bày con số chứ không thu thập nó.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: C — Execution (thực thi).</strong></p>`],
       [73, 'Question — variances explained in the test summary report',
-        AE('C — Between what was planned for testing and what was actually tested', 'The summary report explains "deviations from plan" (IEEE 829 section "Variances": variances of the test items from their specifications and of the testing from the plan, with reasons). A mixes two unrelated documents; B and D are ordinary metrics, not variances that need explaining.'),
-        AV('C — Giữa những gì kế hoạch định test và những gì thực sự đã test', 'Báo cáo tổng kết giải thích "chênh lệch so với kế hoạch" (mục "Variances" của IEEE 829: chênh lệch của hạng mục test so với đặc tả và của việc test so với kế hoạch, kèm lý do). A trộn hai tài liệu không liên quan; B và D chỉ là số đo thông thường, không phải chênh lệch cần giải thích.')],
+        `<p class="y-chinh">🎯 The summary report explains deviations of the testing from the plan.</p>
+<ul>
+<li><strong>C</strong> — "deviations from plan"; IEEE 829 section "Variances": variances of the test items from their specifications and of the testing from the plan, with reasons.</li>
+<li><strong>A</strong> — mixes two unrelated documents.</li>
+<li><strong>B and D</strong> — ordinary metrics, not variances that need explaining.</li>
+</ul>
+<p class="dap-an">✅ <strong>Answer: C — Between what was planned for testing and what was actually tested.</strong></p>`,
+        `<p class="y-chinh">🎯 Báo cáo tổng kết giải thích chênh lệch giữa việc test thực tế và kế hoạch.</p>
+<ul>
+<li><strong>C</strong> — "chênh lệch so với kế hoạch"; mục "Variances" của IEEE 829: chênh lệch của hạng mục test so với đặc tả và của việc test so với kế hoạch, kèm lý do.</li>
+<li><strong>A</strong> — trộn hai tài liệu không liên quan.</li>
+<li><strong>B và D</strong> — chỉ là số đo thông thường, không phải chênh lệch cần giải thích.</li>
+</ul>
+<p class="dap-an">✅ <strong>Đáp án: C — Giữa những gì kế hoạch định test và những gì thực sự đã test.</strong></p>`],
     ]),
     bi(`<h3>What the standards put in a test report</h3>
 <div class="table-wrap"><table>
@@ -604,10 +2200,27 @@ Normal / Abnormal / Boundary share = 23/30, 5/30, 2/30 = 76.67 % / 16.67 % / 6.6
 <p><strong>Step 2 — a weekly progress snapshot.</strong> Plan: 200 system tests in 4 weeks, i.e. 100 by the end of week 2. Actual after week 2: 70 executed (52 passed, 14 failed, 4 blocked); 38 defects opened, 21 closed, 3 of the 17 open ones are critical. A script gives:</p>
 <pre><code>exec progress 35 % vs plan 50 %; pass rate of executed 74.3 %; fail 20 %; blocked 5.7 %; closure 55.3 %; still open 17
 velocity 35 TC/week -&gt; remaining 130 TC need 3.71 weeks vs 2 planned</code></pre>
-<p><strong>Step 3 — the progress report (for the project manager).</strong> Status: 35 % executed vs 50 % planned; at the current rate testing ends about 1.7 weeks late. Impeding factors: 4 tests blocked by the unavailable payment sandbox; 3 critical defects open. Quality: 20 % of executed tests fail, concentrated in checkout. Next period: finish checkout and payment tests first (highest risk), re-test the 21 fixes.</p>
-<p><strong>Step 4 — control actions (slide 69).</strong> Can affect: re-prioritise so the high-risk checkout suite runs before low-risk reports; add one tester for two weeks (resource allocation); agree with the PM that the exit criterion "0 open critical defects" stays but "100 % executed" becomes "100 % of high-risk, 80 % of the rest". Indirectly: ask developers to attach a unit test to each fix (quality of fixes). Cannot affect: how many defects are already in checkout.</p>
-<div class="pitfall"><b>Exam traps.</b> (1) "Testing planned for the next reporting period" → <em>progress</em> report only. (2) Metrics <em>during execution</em> = executed / passed / failed / defects — not "test cases prepared". (3) Test control is not a phase at the end; it happens whenever monitoring shows a deviation. (4) Changing the number of faults already in the code is never a control action.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Defect Detection Percentage (DDP).</b> Test managers judge the <em>effectiveness</em> of a test level with DDP = defects found by that level ÷ (defects found by it + defects found later, e.g. in production). If system test found 180 defects and users reported 20 more in the first three months, DDP = 180 / 200 = 90 %. Tracked over releases, DDP tells you whether your approach is "wearing out" (lesson 7.6, slide 95). <em>Outside the syllabus because it belongs to the ISTQB Advanced Test Manager module.</em></div>`,
+<p><strong>Step 3 — the progress report (for the project manager).</strong></p>
+<ul>
+<li><strong>Status</strong> — 35 % executed vs 50 % planned; at the current rate testing ends about 1.7 weeks late.</li>
+<li><strong>Impeding factors</strong> — 4 tests blocked by the unavailable payment sandbox; 3 critical defects open.</li>
+<li><strong>Quality</strong> — 20 % of executed tests fail, concentrated in checkout.</li>
+<li><strong>Next period</strong> — finish checkout and payment tests first (highest risk), re-test the 21 fixes.</li>
+</ul>
+<p><strong>Step 4 — control actions (slide 69).</strong></p>
+<ul>
+<li><strong>Can affect</strong> — re-prioritise so the high-risk checkout suite runs before low-risk reports; add one tester for two weeks (resource allocation); agree with the PM that the exit criterion "0 open critical defects" stays but "100 % executed" becomes "100 % of high-risk, 80 % of the rest".</li>
+<li><strong>Indirectly</strong> — ask developers to attach a unit test to each fix (quality of fixes).</li>
+<li><strong>Cannot affect</strong> — how many defects are already in checkout.</li>
+</ul>
+<div class="pitfall co-tieu-de"><strong>Exam traps.</strong>
+<ol>
+<li>"Testing planned for the next reporting period" → <em>progress</em> report only.</li>
+<li>Metrics <em>during execution</em> = executed / passed / failed / defects — not "test cases prepared".</li>
+<li>Test control is not a phase at the end; it happens whenever monitoring shows a deviation.</li>
+<li>Changing the number of faults already in the code is never a control action.</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Defect Detection Percentage (DDP).</strong> Test managers judge the <em>effectiveness</em> of a test level with DDP = defects found by that level ÷ (defects found by it + defects found later, e.g. in production). If system test found 180 defects and users reported 20 more in the first three months, DDP = 180 / 200 = 90 %. Tracked over releases, DDP tells you whether your approach is "wearing out" (lesson 7.6, slide 95). <em>Outside the syllabus because it belongs to the ISTQB Advanced Test Manager module.</em></div>`,
     `<h3>Chuẩn quy định gì trong báo cáo test</h3>
 <div class="table-wrap"><table>
 <thead><tr><th>IEEE 829 (1998) Test Summary Report</th><th>ISO/IEC/IEEE 29119-3 test status report</th><th>ISO/IEC/IEEE 29119-3 test completion report</th></tr></thead>
@@ -625,10 +2238,27 @@ Tỉ lệ Normal / Abnormal / Boundary = 23/30, 5/30, 2/30 = 76.67 % / 16.67 % /
 <p><strong>Bước 2 — ảnh chụp tiến độ hằng tuần.</strong> Kế hoạch: 200 system test trong 4 tuần, tức 100 test khi hết tuần 2. Thực tế sau tuần 2: chạy 70 (52 pass, 14 fail, 4 bị chặn); mở 38 defect, đóng 21, trong 17 defect còn mở có 3 critical. Script cho kết quả:</p>
 <pre><code>exec progress 35 % vs plan 50 %; pass rate of executed 74.3 %; fail 20 %; blocked 5.7 %; closure 55.3 %; still open 17
 velocity 35 TC/week -&gt; remaining 130 TC need 3.71 weeks vs 2 planned</code></pre>
-<p><strong>Bước 3 — báo cáo tiến độ (gửi project manager).</strong> Trạng thái: đã chạy 35 % so với kế hoạch 50 %; với tốc độ hiện tại sẽ trễ khoảng 1,7 tuần. Yếu tố cản trở: 4 test bị chặn vì sandbox thanh toán chưa sẵn sàng; còn 3 defect critical. Chất lượng: 20 % test đã chạy bị fail, tập trung ở phần checkout. Kỳ tới: làm xong test checkout và thanh toán trước (rủi ro cao nhất), re-test 21 bản sửa.</p>
-<p><strong>Bước 4 — hành động kiểm soát (slide 69).</strong> Tác động trực tiếp: xếp lại ưu tiên để bộ checkout rủi ro cao chạy trước phần báo cáo rủi ro thấp; thêm một tester trong hai tuần (phân bổ nguồn lực); thống nhất với PM giữ exit criterion "0 defect critical còn mở" nhưng đổi "chạy 100 %" thành "100 % test rủi ro cao, 80 % phần còn lại". Gián tiếp: yêu cầu developer gửi kèm unit test với mỗi bản sửa (chất lượng bản sửa). Không tác động được: số defect đã nằm sẵn trong checkout.</p>
-<div class="pitfall"><b>Bẫy đề thi.</b> (1) "Việc test dự kiến cho kỳ tới" → <em>chỉ</em> ở báo cáo tiến độ. (2) Số đo <em>trong lúc thực thi</em> = đã chạy / pass / fail / defect — không phải "test case đã chuẩn bị". (3) Test control không phải một giai đoạn ở cuối; nó xảy ra bất cứ khi nào giám sát thấy chênh lệch. (4) Thay đổi số lỗi đã có trong code không bao giờ là hành động kiểm soát.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Defect Detection Percentage (DDP).</b> Test manager đánh giá <em>hiệu quả</em> của một cấp test bằng DDP = số defect cấp đó tìm ra ÷ (số defect nó tìm ra + số defect tìm thấy sau đó, vd trên production). System test tìm được 180 defect và người dùng báo thêm 20 trong ba tháng đầu thì DDP = 180 / 200 = 90 %. Theo dõi qua nhiều bản phát hành, DDP cho biết cách tiếp cận của bạn có đang "mòn" đi không (bài 7.6, slide 95). <em>Ngoài giáo trình vì thuộc module ISTQB Advanced Test Manager.</em></div>`),
+<p><strong>Bước 3 — báo cáo tiến độ (gửi project manager).</strong></p>
+<ul>
+<li><strong>Trạng thái</strong> — đã chạy 35 % so với kế hoạch 50 %; với tốc độ hiện tại sẽ trễ khoảng 1,7 tuần.</li>
+<li><strong>Yếu tố cản trở</strong> — 4 test bị chặn vì sandbox thanh toán chưa sẵn sàng; còn 3 defect critical.</li>
+<li><strong>Chất lượng</strong> — 20 % test đã chạy bị fail, tập trung ở phần checkout.</li>
+<li><strong>Kỳ tới</strong> — làm xong test checkout và thanh toán trước (rủi ro cao nhất), re-test 21 bản sửa.</li>
+</ul>
+<p><strong>Bước 4 — hành động kiểm soát (slide 69).</strong></p>
+<ul>
+<li><strong>Tác động trực tiếp</strong> — xếp lại ưu tiên để bộ checkout rủi ro cao chạy trước phần báo cáo rủi ro thấp; thêm một tester trong hai tuần (phân bổ nguồn lực); thống nhất với PM giữ exit criterion "0 defect critical còn mở" nhưng đổi "chạy 100 %" thành "100 % test rủi ro cao, 80 % phần còn lại".</li>
+<li><strong>Gián tiếp</strong> — yêu cầu developer gửi kèm unit test với mỗi bản sửa (chất lượng bản sửa).</li>
+<li><strong>Không tác động được</strong> — số defect đã nằm sẵn trong checkout.</li>
+</ul>
+<div class="pitfall co-tieu-de"><strong>Bẫy đề thi.</strong>
+<ol>
+<li>"Việc test dự kiến cho kỳ tới" → <em>chỉ</em> ở báo cáo tiến độ.</li>
+<li>Số đo <em>trong lúc thực thi</em> = đã chạy / pass / fail / defect — không phải "test case đã chuẩn bị".</li>
+<li>Test control không phải một giai đoạn ở cuối; nó xảy ra bất cứ khi nào giám sát thấy chênh lệch.</li>
+<li>Thay đổi số lỗi đã có trong code không bao giờ là hành động kiểm soát.</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Defect Detection Percentage (DDP).</strong> Test manager đánh giá <em>hiệu quả</em> của một cấp test bằng DDP = số defect cấp đó tìm ra ÷ (số defect nó tìm ra + số defect tìm thấy sau đó, vd trên production). System test tìm được 180 defect và người dùng báo thêm 20 trong ba tháng đầu thì DDP = 180 / 200 = 90 %. Theo dõi qua nhiều bản phát hành, DDP cho biết cách tiếp cận của bạn có đang "mòn" đi không (bài 7.6, slide 95). <em>Ngoài giáo trình vì thuộc module ISTQB Advanced Test Manager.</em></div>`),
     books([
       ['fst4', 'Ch.5 §3 "Test monitoring and control" — pp.175–181 (PDF 189–195), incl. Figure 5.1 test case summary worksheet p.177 and Figure 5.2 total defects opened and closed chart p.178', 'Chương 5 §3 "Test monitoring and control" — trang 175–181 (PDF 189–195), gồm Figure 5.1 bảng tổng hợp test case trang 177 và Figure 5.2 biểu đồ defect mở/đóng trang 178'],
       ['fst', '§5.3 "Test progress monitoring and control" — PDF 143–149 (Figures 5.1, 5.2 on PDF 144–147)', '§5.3 "Test progress monitoring and control" — PDF 143–149 (Figure 5.1, 5.2 ở PDF 144–147)'],
@@ -648,7 +2278,7 @@ const L74 = {
     bi(`<span class="eyebrow">Chapter 7 · Lesson 7.4 · SWT5 slides 74–78</span>
 <h2>Configuration management — which version did we actually test?</h2>
 <p class="lead">A test result means nothing unless you can say <em>exactly</em> what was tested: which build, which configuration, which version of the test cases, data and environment. <strong>Configuration management (CM)</strong> is the discipline that makes that answer possible — and makes a failure reproducible months later.</p>
-<div class="callout"><b>Learning objective.</b> LO-5.4.1 Summarise how configuration management supports testing (K2).</div>
+<div class="callout"><strong>Learning objective.</strong> LO-5.4.1 Summarise how configuration management supports testing (K2).</div>
 <table>
 <thead><tr><th>CM must ensure that…</th><th>…so that testers can</th></tr></thead>
 <tbody>
@@ -660,7 +2290,7 @@ const L74 = {
     `<span class="eyebrow">Chương 7 · Bài 7.4 · SWT5 slide 74–78</span>
 <h2>Quản lý cấu hình — ta đã thực sự test phiên bản nào?</h2>
 <p class="lead">Kết quả test vô nghĩa nếu bạn không nói được <em>chính xác</em> cái gì đã được test: build nào, cấu hình nào, phiên bản test case, dữ liệu và môi trường nào. <strong>Quản lý cấu hình (configuration management — CM)</strong> là kỷ luật giúp trả lời được câu đó — và giúp tái hiện một failure kể cả nhiều tháng sau.</p>
-<div class="callout"><b>Chuẩn đầu ra.</b> LO-5.4.1 Tóm tắt cách quản lý cấu hình hỗ trợ kiểm thử (K2).</div>
+<div class="callout"><strong>Chuẩn đầu ra.</strong> LO-5.4.1 Tóm tắt cách quản lý cấu hình hỗ trợ kiểm thử (K2).</div>
 <table>
 <thead><tr><th>CM phải đảm bảo…</th><th>…để tester có thể</th></tr></thead>
 <tbody>
@@ -672,20 +2302,114 @@ const L74 = {
     walkHead(D, 74, 78),
     walk(D, [
       [74, 'CONTENT — Configuration Management',
-        `<p>The agenda with section 4 highlighted. Small slip on the slide: this CONTENT slide lists only five sections — "Defect Management" is missing (compare slide 2); nothing is removed from the chapter.</p>`,
-        `<p>Mục lục với phần 4 được tô. Một sơ suất nhỏ trên slide: slide CONTENT này chỉ có năm phần — thiếu "Defect Management" (so với slide 2); chương không hề bỏ phần đó.</p>`],
+        `<p class="y-chinh">🎯 The agenda with section 4 — Configuration Management — highlighted.</p>
+<p class="ghi-chu">Small slip on the slide: this CONTENT slide lists only five sections — "Defect Management" is missing (compare slide 2). Nothing is removed from the chapter.</p>`,
+        `<p class="y-chinh">🎯 Mục lục với phần 4 — Configuration Management — được tô.</p>
+<p class="ghi-chu">Một sơ suất nhỏ trên slide: slide CONTENT này chỉ có năm phần — thiếu "Defect Management" (so với slide 2). Chương không hề bỏ phần đó.</p>`],
       [75, 'Mind map (divider) — the teacher\'s notes on CM',
-        `<p>The divider map again; the value is in the <strong>speaker notes</strong> (Vietnamese), which give the fullest definition in the deck: configuration management covers the processes used to <strong>control, organise and track</strong> code, requirements, documents, incidents, change requests, designs, tools/compilers/libraries/patches — <em>their changes and who made them</em> (keep history in every document: who updated what, where). <strong>Testware</strong> = the artefacts produced during testing: documents, test scripts, inputs, expected results, databases, environments, and any software or utilities used in testing. CM also means versioning and storing testware, especially when it must run on several software/hardware configurations — different OS, compilers, browsers.</p>`,
-        `<p>Lại sơ đồ vách ngăn; giá trị nằm ở <strong>ghi chú của thầy/cô</strong> (tiếng Việt) — định nghĩa đầy đủ nhất trong cả bộ slide: quản lý cấu hình bao gồm các quá trình dùng để <strong>kiểm soát, sắp xếp và lưu vết</strong> code, yêu cầu, tài liệu, sự cố, thay đổi yêu cầu, thiết kế, công cụ/trình biên dịch/thư viện/patch — <em>những thay đổi của chúng và ai đã thay đổi</em> (lưu lịch sử trong mọi tài liệu: ai cập nhật, cập nhật gì, ở đâu). <strong>Testware</strong> = các đối tượng sinh ra trong quá trình kiểm thử: tài liệu, kịch bản test, đầu vào, kết quả mong đợi, cơ sở dữ liệu, môi trường, phần mềm hay tiện ích dùng khi test. CM còn là quản lý phiên bản và lưu trữ testware, nhất là khi phải chạy trên nhiều cấu hình phần mềm/phần cứng khác nhau — hệ điều hành, trình biên dịch, trình duyệt khác nhau.</p>`],
+        `<p class="y-chinh">🎯 The divider map again — the value is in the Vietnamese speaker notes, the fullest definition of CM in the deck.</p>
+<p class="nhan">Configuration management — what it controls</p>
+<p>The processes used to <strong>control, organise and track</strong>:</p>
+<ul>
+<li>Code, requirements, documents, incidents, change requests, designs</li>
+<li>Tools, compilers, libraries, patches</li>
+<li><em>Their changes and who made them</em> — keep history in every document: who updated what, where.</li>
+</ul>
+<p class="nhan">Testware — the artefacts produced during testing</p>
+<ul>
+<li>Documents, test scripts, inputs, expected results</li>
+<li>Databases, environments</li>
+<li>Any software or utilities used in testing</li>
+</ul>
+<p class="nhan">Versioning testware</p>
+<p>CM also means versioning and storing testware, especially when it must run on several software/hardware configurations — different OS, compilers, browsers.</p>`,
+        `<p class="y-chinh">🎯 Lại sơ đồ vách ngăn — giá trị nằm ở ghi chú tiếng Việt của thầy/cô, định nghĩa CM đầy đủ nhất trong cả bộ slide.</p>
+<p class="nhan">Quản lý cấu hình — kiểm soát những gì</p>
+<p>Các quá trình dùng để <strong>kiểm soát, sắp xếp và lưu vết</strong>:</p>
+<ul>
+<li>Code, yêu cầu, tài liệu, sự cố, thay đổi yêu cầu, thiết kế</li>
+<li>Công cụ, trình biên dịch, thư viện, patch</li>
+<li><em>Những thay đổi của chúng và ai đã thay đổi</em> — lưu lịch sử trong mọi tài liệu: ai cập nhật, cập nhật gì, ở đâu.</li>
+</ul>
+<p class="nhan">Testware — các đối tượng sinh ra khi kiểm thử</p>
+<ul>
+<li>Tài liệu, kịch bản test, đầu vào, kết quả mong đợi</li>
+<li>Cơ sở dữ liệu, môi trường</li>
+<li>Phần mềm hay tiện ích dùng khi test</li>
+</ul>
+<p class="nhan">Quản lý phiên bản testware</p>
+<p>CM còn là quản lý phiên bản và lưu trữ testware, nhất là khi phải chạy trên nhiều cấu hình phần mềm/phần cứng khác nhau — hệ điều hành, trình biên dịch, trình duyệt khác nhau.</p>`],
       [76, 'Problems resulting from poor configuration management',
-        `<p>Eight classic symptoms — each one is a CM failure, not a testing failure: <strong>can't reproduce a fault</strong> reported by a customer (nobody knows which build/config the customer has); <strong>can't roll back</strong> to a previous subsystem; <strong>one change overwrites another</strong> (two developers edit the same file without control); an <strong>emergency fix needs testing but the tests were already updated</strong> for the new version (testware not versioned with the code); <strong>which code changes belong to which version?</strong>; <strong>faults that were fixed re-appear</strong> (a build made from an old branch); <strong>tests worked perfectly — on the old version</strong>; <strong>"shouldn't that feature be in this version?"</strong> (no record of what a release contains). If you recognise one of these in a question, the expected answer is "better configuration management".</p>`,
-        `<p>Tám triệu chứng kinh điển — mỗi cái là lỗi của CM, không phải lỗi của kiểm thử: <strong>không tái hiện được lỗi</strong> khách hàng báo (không ai biết khách đang dùng build/cấu hình nào); <strong>không quay lui được</strong> về hệ thống con bản trước; <strong>thay đổi này ghi đè thay đổi kia</strong> (hai developer sửa cùng một file không kiểm soát); <strong>bản vá khẩn cần test nhưng test đã bị cập nhật</strong> theo phiên bản mới (testware không được quản lý phiên bản cùng code); <strong>thay đổi code nào thuộc phiên bản nào?</strong>; <strong>lỗi đã sửa lại xuất hiện</strong> (build dựng từ nhánh cũ); <strong>test chạy hoàn hảo — trên phiên bản cũ</strong>; <strong>"chẳng phải tính năng đó có trong bản này sao?"</strong> (không có ghi chép bản phát hành gồm những gì). Gặp một trong các tình huống này trong đề, đáp án mong đợi là "quản lý cấu hình tốt hơn".</p>`],
+        `<p class="y-chinh">🎯 Eight classic symptoms — each one is a CM failure, not a testing failure.</p>
+<ol>
+<li><strong>Can't reproduce a fault</strong> reported by a customer — nobody knows which build/config the customer has.</li>
+<li><strong>Can't roll back</strong> to a previous subsystem.</li>
+<li><strong>One change overwrites another</strong> — two developers edit the same file without control.</li>
+<li><strong>Emergency fix needs testing, but the tests were already updated</strong> for the new version — testware not versioned with the code.</li>
+<li><strong>Which code changes belong to which version?</strong></li>
+<li><strong>Faults that were fixed re-appear</strong> — a build made from an old branch.</li>
+<li><strong>Tests worked perfectly — on the old version.</strong></li>
+<li><strong>"Shouldn't that feature be in this version?"</strong> — no record of what a release contains.</li>
+</ol>
+<p class="meo">🧠 <strong>Remember:</strong> if you recognise one of these in a question, the expected answer is "better configuration management".</p>`,
+        `<p class="y-chinh">🎯 Tám triệu chứng kinh điển — mỗi cái là lỗi của CM, không phải lỗi của kiểm thử.</p>
+<ol>
+<li><strong>Không tái hiện được lỗi</strong> khách hàng báo — không ai biết khách đang dùng build/cấu hình nào.</li>
+<li><strong>Không quay lui được</strong> về hệ thống con bản trước.</li>
+<li><strong>Thay đổi này ghi đè thay đổi kia</strong> — hai developer sửa cùng một file không kiểm soát.</li>
+<li><strong>Bản vá khẩn cần test nhưng test đã bị cập nhật</strong> theo phiên bản mới — testware không được quản lý phiên bản cùng code.</li>
+<li><strong>Thay đổi code nào thuộc phiên bản nào?</strong></li>
+<li><strong>Lỗi đã sửa lại xuất hiện</strong> — build dựng từ nhánh cũ.</li>
+<li><strong>Test chạy hoàn hảo — trên phiên bản cũ.</strong></li>
+<li><strong>"Chẳng phải tính năng đó có trong bản này sao?"</strong> — không có ghi chép bản phát hành gồm những gì.</li>
+</ol>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> gặp một trong các tình huống này trong đề, đáp án mong đợi là "quản lý cấu hình tốt hơn".</p>`],
       [77, 'Configuration Management — purpose',
-        `<p>The syllabus definition: the purpose of CM is to <strong>establish and maintain the integrity</strong> of the component or system, the <strong>testware</strong>, and <strong>their relationships to one another</strong> through the project and product lifecycle. Three things, not one — code, tests, and the links between them. Second bullet: CM <strong>procedures and infrastructure (tools)</strong> should be identified and implemented <strong>during test planning</strong> — you cannot bolt CM on after the first confusing defect.</p>`,
-        `<p>Định nghĩa trong syllabus: mục đích của CM là <strong>thiết lập và duy trì tính toàn vẹn</strong> của thành phần hoặc hệ thống, của <strong>testware</strong>, và <strong>mối quan hệ giữa chúng</strong> suốt vòng đời dự án và sản phẩm. Ba thứ chứ không phải một — code, test, và liên kết giữa chúng. Ý thứ hai: <strong>quy trình và hạ tầng (công cụ)</strong> CM phải được xác định và triển khai <strong>ngay khi lập kế hoạch test</strong> — không thể gắn CM vào sau khi đã gặp defect rối rắm đầu tiên.</p>`],
+        `<p class="y-chinh">🎯 CM establishes and maintains the <strong>integrity</strong> of three things through the project and product lifecycle.</p>
+<p class="nhan">The three things (syllabus definition)</p>
+<ol>
+<li>The <strong>component or system</strong></li>
+<li>The <strong>testware</strong></li>
+<li><strong>Their relationships to one another</strong></li>
+</ol>
+<p>Three things, not one — code, tests, and the links between them.</p>
+<p class="nhan">When to set it up</p>
+<p>CM <strong>procedures and infrastructure (tools)</strong> should be identified and implemented <strong>during test planning</strong> — you cannot bolt CM on after the first confusing defect.</p>`,
+        `<p class="y-chinh">🎯 CM thiết lập và duy trì <strong>tính toàn vẹn</strong> của ba thứ suốt vòng đời dự án và sản phẩm.</p>
+<p class="nhan">Ba thứ đó (định nghĩa trong syllabus)</p>
+<ol>
+<li><strong>Thành phần hoặc hệ thống</strong></li>
+<li><strong>Testware</strong></li>
+<li><strong>Mối quan hệ giữa chúng</strong></li>
+</ol>
+<p>Ba thứ chứ không phải một — code, test, và liên kết giữa chúng.</p>
+<p class="nhan">Khi nào thiết lập</p>
+<p><strong>Quy trình và hạ tầng (công cụ)</strong> CM phải được xác định và triển khai <strong>ngay khi lập kế hoạch test</strong> — không thể gắn CM vào sau khi đã gặp defect rối rắm đầu tiên.</p>`],
       [78, 'Configuration Management — what it must ensure for testing',
-        `<p>The three bullets of the syllabus (see the table at the top of this lesson): all <strong>test items of the test object</strong> are uniquely identified, version-controlled, tracked for changes and related to each other; all <strong>items of testware</strong> are identified, version-controlled, tracked, related to each other <em>and to the versions of the test items</em> so that <strong>traceability</strong> can be maintained throughout the test process; all identified work products and software items are <strong>referenced unambiguously</strong> in test documentation (not "the latest build", but "build 2.3.1, commit 7f3c2a1"). Tools: Git for code and scripts, test-management tools (TestRail, Xray) for test cases, CI servers that stamp every build with an ID.</p>`,
-        `<p>Ba ý của syllabus (xem bảng đầu bài): mọi <strong>hạng mục của đối tượng test</strong> được định danh duy nhất, quản lý phiên bản, theo dõi thay đổi và liên kết với nhau; mọi <strong>thành phần testware</strong> được định danh, quản lý phiên bản, theo dõi, liên kết với nhau <em>và với phiên bản của hạng mục test</em> để giữ được <strong>truy vết</strong> suốt quy trình test; mọi sản phẩm công việc và hạng mục phần mềm đã định danh được <strong>tham chiếu không mơ hồ</strong> trong tài liệu test (không ghi "bản build mới nhất", mà ghi "build 2.3.1, commit 7f3c2a1"). Công cụ: Git cho code và script, công cụ quản lý test (TestRail, Xray) cho test case, máy chủ CI đóng dấu mã cho mỗi build.</p>`],
+        `<p class="y-chinh">🎯 To support testing, CM must ensure three things (the syllabus bullets; see the table at the top of this lesson).</p>
+<ol>
+<li><strong>Test items of the test object</strong> — uniquely identified, version-controlled, tracked for changes and related to each other.</li>
+<li><strong>Items of testware</strong> — identified, version-controlled, tracked, related to each other <em>and to the versions of the test items</em>, so that <strong>traceability</strong> can be maintained throughout the test process.</li>
+<li><strong>Unambiguous references</strong> — all identified work products and software items are referenced unambiguously in test documentation: not "the latest build", but "build 2.3.1, commit 7f3c2a1".</li>
+</ol>
+<p class="nhan">Tools</p>
+<ul>
+<li><strong>Git</strong> — for code and scripts.</li>
+<li><strong>Test-management tools</strong> (TestRail, Xray) — for test cases.</li>
+<li><strong>CI servers</strong> — stamp every build with an ID.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Để hỗ trợ kiểm thử, CM phải đảm bảo ba điều (ba ý của syllabus; xem bảng đầu bài).</p>
+<ol>
+<li><strong>Hạng mục của đối tượng test</strong> — được định danh duy nhất, quản lý phiên bản, theo dõi thay đổi và liên kết với nhau.</li>
+<li><strong>Thành phần testware</strong> — được định danh, quản lý phiên bản, theo dõi, liên kết với nhau <em>và với phiên bản của hạng mục test</em>, để giữ được <strong>truy vết</strong> suốt quy trình test.</li>
+<li><strong>Tham chiếu không mơ hồ</strong> — mọi sản phẩm công việc và hạng mục phần mềm đã định danh được tham chiếu rõ ràng trong tài liệu test: không ghi "bản build mới nhất", mà ghi "build 2.3.1, commit 7f3c2a1".</li>
+</ol>
+<p class="nhan">Công cụ</p>
+<ul>
+<li><strong>Git</strong> — cho code và script.</li>
+<li><strong>Công cụ quản lý test</strong> (TestRail, Xray) — cho test case.</li>
+<li><strong>Máy chủ CI</strong> — đóng dấu mã cho mỗi build.</li>
+</ul>`],
     ]),
     bi(`<h3>Ví dụ có lời giải · Worked example — "the bug we fixed is back"</h3>
 <p><strong>Situation.</strong> Defect BUG-311 ("discount applied twice") was fixed and passed confirmation testing on build 2.3.1. On build 2.3.3 a tester sees the same failure. The developer swears the fix is still in the code.</p>
@@ -700,8 +2424,13 @@ const L74 = {
 </table>
 <p><strong>Step 2 — diagnose.</strong> Build 2.3.3 was made from a hotfix branch created before the fix was merged: the classic "faults which were fixed re-appear" and "one change overwrites another" from slide 76. Without build IDs and commit references this would have been days of arguing "works on my machine".</p>
 <p><strong>Step 3 — report and prevent.</strong> Reopen BUG-311 with the exact build and commit (lesson 7.6), and ask for a CM rule: hotfix branches must be cut from the current release head, and every build's manifest lists the defect fixes it contains. The regression suite RS v13 must also say which builds it is valid for — testware is under CM too.</p>
-<div class="pitfall"><b>Exam traps.</b> (1) CM is <em>not</em> only version control of source code — the syllabus stresses <strong>testware</strong> and the <strong>relationships</strong> between test items and testware. (2) CM is set up <strong>during test planning</strong>, not after problems appear. (3) A fixed defect coming back in a later build points to a configuration-control failure, not to a bad test case.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Immutable artefacts and infrastructure as code.</b> Modern pipelines push CM further: each build produces an immutable artefact (a container image identified by its SHA-256 digest), the test environment itself is described in versioned files (Dockerfile, Terraform, Kubernetes manifests), and a Software Bill of Materials (SBOM) lists every library version inside the release. "Which version did we test?" becomes a single digest you can redeploy byte-for-byte. <em>Outside the syllabus because CTFL describes CM only at the level of goals, not tooling.</em></div>`,
+<div class="pitfall co-tieu-de"><strong>Exam traps.</strong>
+<ol>
+<li>CM is <em>not</em> only version control of source code — the syllabus stresses <strong>testware</strong> and the <strong>relationships</strong> between test items and testware.</li>
+<li>CM is set up <strong>during test planning</strong>, not after problems appear.</li>
+<li>A fixed defect coming back in a later build points to a configuration-control failure, not to a bad test case.</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Immutable artefacts and infrastructure as code.</strong> Modern pipelines push CM further: each build produces an immutable artefact (a container image identified by its SHA-256 digest), the test environment itself is described in versioned files (Dockerfile, Terraform, Kubernetes manifests), and a Software Bill of Materials (SBOM) lists every library version inside the release. "Which version did we test?" becomes a single digest you can redeploy byte-for-byte. <em>Outside the syllabus because CTFL describes CM only at the level of goals, not tooling.</em></div>`,
     `<h3>Ví dụ có lời giải · "Con bug đã sửa quay lại rồi"</h3>
 <p><strong>Tình huống.</strong> Defect BUG-311 ("giảm giá bị áp hai lần") đã được sửa và qua confirmation test trên build 2.3.1. Trên build 2.3.3 tester lại thấy đúng failure đó. Developer thề là bản sửa vẫn nằm trong code.</p>
 <p><strong>Bước 1 — xem hồ sơ cấu hình</strong> (đây chính là thứ CM mang lại):</p>
@@ -715,8 +2444,13 @@ const L74 = {
 </table>
 <p><strong>Bước 2 — chẩn đoán.</strong> Build 2.3.3 được dựng từ một nhánh hotfix tách ra trước khi bản sửa được merge: đúng tình huống "lỗi đã sửa lại xuất hiện" và "thay đổi này ghi đè thay đổi kia" ở slide 76. Không có mã build và tham chiếu commit thì đây sẽ là nhiều ngày cãi nhau kiểu "máy tôi chạy được mà".</p>
 <p><strong>Bước 3 — báo cáo và phòng ngừa.</strong> Mở lại BUG-311 kèm build và commit chính xác (bài 7.6), và đề nghị một quy tắc CM: nhánh hotfix phải tách từ đầu nhánh release hiện tại, và manifest của mỗi build liệt kê các defect đã sửa bên trong. Bộ regression RS v13 cũng phải ghi rõ nó hợp lệ cho những build nào — testware cũng nằm dưới CM.</p>
-<div class="pitfall"><b>Bẫy đề thi.</b> (1) CM <em>không</em> chỉ là quản lý phiên bản mã nguồn — syllabus nhấn mạnh <strong>testware</strong> và <strong>quan hệ</strong> giữa hạng mục test với testware. (2) CM được thiết lập <strong>từ lúc lập kế hoạch test</strong>, không phải sau khi có sự cố. (3) Defect đã sửa quay lại ở build sau là dấu hiệu hỏng ở khâu kiểm soát cấu hình, không phải test case tồi.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Artefact bất biến và hạ tầng dưới dạng code.</b> Pipeline hiện đại đẩy CM đi xa hơn: mỗi build sinh ra một artefact bất biến (container image định danh bằng mã băm SHA-256), bản thân môi trường test được mô tả trong các file có phiên bản (Dockerfile, Terraform, manifest Kubernetes), và một Software Bill of Materials (SBOM) liệt kê mọi phiên bản thư viện trong bản phát hành. Câu hỏi "ta đã test phiên bản nào?" thu về đúng một mã băm có thể triển khai lại y hệt từng byte. <em>Ngoài giáo trình vì CTFL chỉ mô tả CM ở mức mục tiêu, không đi vào công cụ.</em></div>`),
+<div class="pitfall co-tieu-de"><strong>Bẫy đề thi.</strong>
+<ol>
+<li>CM <em>không</em> chỉ là quản lý phiên bản mã nguồn — syllabus nhấn mạnh <strong>testware</strong> và <strong>quan hệ</strong> giữa hạng mục test với testware.</li>
+<li>CM được thiết lập <strong>từ lúc lập kế hoạch test</strong>, không phải sau khi có sự cố.</li>
+<li>Defect đã sửa quay lại ở build sau là dấu hiệu hỏng ở khâu kiểm soát cấu hình, không phải test case tồi.</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Artefact bất biến và hạ tầng dưới dạng code.</strong> Pipeline hiện đại đẩy CM đi xa hơn: mỗi build sinh ra một artefact bất biến (container image định danh bằng mã băm SHA-256), bản thân môi trường test được mô tả trong các file có phiên bản (Dockerfile, Terraform, manifest Kubernetes), và một Software Bill of Materials (SBOM) liệt kê mọi phiên bản thư viện trong bản phát hành. Câu hỏi "ta đã test phiên bản nào?" thu về đúng một mã băm có thể triển khai lại y hệt từng byte. <em>Ngoài giáo trình vì CTFL chỉ mô tả CM ở mức mục tiêu, không đi vào công cụ.</em></div>`),
     books([
       ['fst4', 'Ch.5 §4 "Configuration management" — pp.181–183 (PDF 195–197); sample question 12 p.198 (PDF 212)', 'Chương 5 §4 "Configuration management" — trang 181–183 (PDF 195–197); câu hỏi mẫu 12 trang 198 (PDF 212)'],
       ['fst', '§5.4 "Configuration management" — PDF 149–150', '§5.4 "Configuration management" — PDF 149–150'],
@@ -736,7 +2470,12 @@ const L75 = {
     bi(`<span class="eyebrow">Chapter 7 · Lesson 7.5 · SWT5 slides 79–88</span>
 <h2>Risk &amp; testing</h2>
 <p class="lead">You can never test everything (Principle 2), so you must decide <em>where</em> to spend effort. <strong>Risk</strong> is the currency of that decision: the more likely a problem and the worse its impact, the more — and the earlier — you test there. This lesson separates the two kinds of risk and shows how a product-risk analysis turns into a test plan.</p>
-<div class="callout"><b>Learning objectives.</b> LO-5.5.1 Define risk level by using likelihood and impact (K1) · LO-5.5.2 Distinguish between project and product risks (K2) · LO-5.5.3 Describe, by using examples, how product risk analysis may influence the thoroughness and scope of testing (K2).</div>
+<div class="callout"><strong>Learning objectives.</strong>
+<ul>
+<li><strong>LO-5.5.1</strong> Define risk level by using likelihood and impact (K1)</li>
+<li><strong>LO-5.5.2</strong> Distinguish between project and product risks (K2)</li>
+<li><strong>LO-5.5.3</strong> Describe, by using examples, how product risk analysis may influence the thoroughness and scope of testing (K2)</li>
+</ul></div>
 <div class="formula"><span class="lbl">Risk level</span>= Likelihood (probability the problem occurs) × Impact (the harm if it does)</div>
 <table>
 <thead><tr><th></th><th>Product (quality) risk</th><th>Project risk</th></tr></thead>
@@ -749,7 +2488,12 @@ const L75 = {
     `<span class="eyebrow">Chương 7 · Bài 7.5 · SWT5 slide 79–88</span>
 <h2>Rủi ro &amp; kiểm thử</h2>
 <p class="lead">Bạn không bao giờ test được mọi thứ (Nguyên tắc 2), nên phải quyết định dồn công sức vào <em>đâu</em>. <strong>Rủi ro</strong> là "đơn vị tiền tệ" của quyết định đó: vấn đề càng dễ xảy ra và hậu quả càng nặng thì càng phải test nhiều hơn — và sớm hơn — ở đó. Bài này tách bạch hai loại rủi ro và chỉ ra việc phân tích rủi ro sản phẩm biến thành test plan như thế nào.</p>
-<div class="callout"><b>Chuẩn đầu ra.</b> LO-5.5.1 Định nghĩa mức rủi ro bằng khả năng xảy ra và tác động (K1) · LO-5.5.2 Phân biệt rủi ro dự án và rủi ro sản phẩm (K2) · LO-5.5.3 Mô tả bằng ví dụ việc phân tích rủi ro sản phẩm ảnh hưởng tới độ kỹ lưỡng và phạm vi kiểm thử (K2).</div>
+<div class="callout"><strong>Chuẩn đầu ra.</strong>
+<ul>
+<li><strong>LO-5.5.1</strong> Định nghĩa mức rủi ro bằng khả năng xảy ra và tác động (K1)</li>
+<li><strong>LO-5.5.2</strong> Phân biệt rủi ro dự án và rủi ro sản phẩm (K2)</li>
+<li><strong>LO-5.5.3</strong> Mô tả bằng ví dụ việc phân tích rủi ro sản phẩm ảnh hưởng tới độ kỹ lưỡng và phạm vi kiểm thử (K2)</li>
+</ul></div>
 <div class="formula"><span class="lbl">Mức rủi ro</span>= Likelihood (xác suất vấn đề xảy ra) × Impact (mức thiệt hại nếu xảy ra)</div>
 <table>
 <thead><tr><th></th><th>Rủi ro sản phẩm (chất lượng)</th><th>Rủi ro dự án</th></tr></thead>
@@ -762,38 +2506,257 @@ const L75 = {
     walkHead(D, 79, 88),
     walk(D, [
       [79, 'CONTENT — Risk & Testing',
-        `<p>Section 5 has three sub-topics: <strong>risk definition</strong> (LO-5.5.1), <strong>product &amp; project risks</strong> (LO-5.5.2) and <strong>risk-based testing &amp; product quality</strong> (LO-5.5.3).</p>`,
-        `<p>Phần 5 có ba ý: <strong>định nghĩa rủi ro</strong> (LO-5.5.1), <strong>rủi ro sản phẩm &amp; dự án</strong> (LO-5.5.2) và <strong>risk-based testing &amp; chất lượng sản phẩm</strong> (LO-5.5.3).</p>`],
+        `<p class="y-chinh">🎯 Section 5 has three sub-topics, one per learning objective.</p>
+<ol>
+<li><strong>Risk definition</strong> — LO-5.5.1</li>
+<li><strong>Product &amp; project risks</strong> — LO-5.5.2</li>
+<li><strong>Risk-based testing &amp; product quality</strong> — LO-5.5.3</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Phần 5 có ba ý, mỗi ý ứng với một chuẩn đầu ra.</p>
+<ol>
+<li><strong>Định nghĩa rủi ro</strong> — LO-5.5.1</li>
+<li><strong>Rủi ro sản phẩm &amp; dự án</strong> — LO-5.5.2</li>
+<li><strong>Risk-based testing &amp; chất lượng sản phẩm</strong> — LO-5.5.3</li>
+</ol>`],
       [80, 'Mind map (divider) — Risk & Testing',
-        `<p>The map again; the bottom branch <em>Risk &amp; Testing</em> has two leaves: <strong>Project risk &amp; product risk</strong> and <strong>Likelihood vs impact</strong>. Those two leaves are the whole K1/K2 content of this section.</p>`,
-        `<p>Lại sơ đồ; nhánh dưới <em>Risk &amp; Testing</em> có hai lá: <strong>rủi ro dự án &amp; rủi ro sản phẩm</strong> và <strong>khả năng xảy ra vs tác động</strong>. Hai lá đó là toàn bộ nội dung K1/K2 của phần này.</p>`],
+        `<p class="y-chinh">🎯 The map again — the bottom branch <em>Risk &amp; Testing</em> has two leaves.</p>
+<ul>
+<li><strong>Project risk &amp; product risk</strong></li>
+<li><strong>Likelihood vs impact</strong></li>
+</ul>
+<p>Those two leaves are the whole K1/K2 content of this section.</p>`,
+        `<p class="y-chinh">🎯 Lại sơ đồ — nhánh dưới <em>Risk &amp; Testing</em> có hai lá.</p>
+<ul>
+<li><strong>Rủi ro dự án &amp; rủi ro sản phẩm</strong></li>
+<li><strong>Khả năng xảy ra vs tác động</strong></li>
+</ul>
+<p>Hai lá đó là toàn bộ nội dung K1/K2 của phần này.</p>`],
       [81, 'Risk & Testing — definition and risk level',
-        `<p><strong>Risk</strong> = the <em>possibility</em> of an event <em>in the future</em> which has <em>negative consequences</em>. Three words carry the marks: possibility (not certainty — something that already happened is an issue, not a risk), future, negative. The <strong>level of risk</strong> is determined by the <strong>likelihood</strong> of the event and its <strong>impact</strong> (the harm). Usually the two ratings are multiplied (or added) into one number — slide 87. fst4 sample question 14 ("What is a risk?" → "a bad thing that might happen") tests exactly this sentence.</p>`,
-        `<p><strong>Rủi ro</strong> = <em>khả năng</em> một sự kiện <em>trong tương lai</em> gây <em>hậu quả tiêu cực</em>. Ba chữ ăn điểm: khả năng (không chắc chắn — việc đã xảy ra rồi là vấn đề/issue, không còn là rủi ro), tương lai, tiêu cực. <strong>Mức rủi ro</strong> được xác định bởi <strong>khả năng xảy ra</strong> của sự kiện và <strong>tác động</strong> (thiệt hại) của nó. Thường hai điểm này được nhân (hoặc cộng) thành một con số — slide 87. Câu hỏi mẫu 14 của fst4 ("What is a risk?" → "một điều xấu có thể xảy ra") kiểm tra đúng câu này.</p>`],
+        `<p class="y-chinh">🎯 <strong>Risk</strong> = the <em>possibility</em> of an event <em>in the future</em> which has <em>negative consequences</em>.</p>
+<p class="nhan">Three words carry the marks</p>
+<ul>
+<li><strong>Possibility</strong> — not certainty: something that already happened is an issue, not a risk.</li>
+<li><strong>Future</strong></li>
+<li><strong>Negative</strong></li>
+</ul>
+<p class="nhan">Risk level</p>
+<ul>
+<li>Determined by the <strong>likelihood</strong> of the event and its <strong>impact</strong> (the harm).</li>
+<li>Usually the two ratings are multiplied (or added) into one number — slide 87.</li>
+</ul>
+<p class="ghi-chu">fst4 sample question 14 ("What is a risk?" → "a bad thing that might happen") tests exactly this sentence.</p>`,
+        `<p class="y-chinh">🎯 <strong>Rủi ro</strong> = <em>khả năng</em> một sự kiện <em>trong tương lai</em> gây <em>hậu quả tiêu cực</em>.</p>
+<p class="nhan">Ba chữ ăn điểm</p>
+<ul>
+<li><strong>Khả năng</strong> — không chắc chắn: việc đã xảy ra rồi là vấn đề (issue), không còn là rủi ro.</li>
+<li><strong>Tương lai</strong></li>
+<li><strong>Tiêu cực</strong></li>
+</ul>
+<p class="nhan">Mức rủi ro</p>
+<ul>
+<li>Xác định bởi <strong>khả năng xảy ra</strong> của sự kiện và <strong>tác động</strong> (thiệt hại) của nó.</li>
+<li>Thường hai điểm này được nhân (hoặc cộng) thành một con số — slide 87.</li>
+</ul>
+<p class="ghi-chu">Câu hỏi mẫu 14 của fst4 ("What is a risk?" → "một điều xấu có thể xảy ra") kiểm tra đúng câu này.</p>`],
       [82, 'Product (Quality) Risks',
-        `<p><strong>Product risk</strong>: the possibility that a work product may fail to satisfy the legitimate needs of its users and/or stakeholders. The slide's syllabus examples: software might not perform its intended functions; the architecture may not support a non-functional requirement; a computation may be wrong in some circumstances; a loop may be coded incorrectly; response times may be inadequate for a high-performance transaction system; UX feedback might not meet expectations. The notes: some authors call them <strong>quality risks</strong>; unsatisfactory software may omit a key function, be unreliable, cause financial or other damage, or have problems with a quality characteristic that is not functionality — security, reliability, usability, maintainability, performance. Test: "is it about how the <em>software</em> behaves?" → product risk.</p>`,
-        `<p><strong>Rủi ro sản phẩm</strong>: khả năng một sản phẩm công việc không thoả được nhu cầu chính đáng của người dùng và/hoặc các bên. Ví dụ theo syllabus trên slide: phần mềm có thể không làm được chức năng dự định; kiến trúc có thể không đáp ứng một yêu cầu phi chức năng; một phép tính có thể sai trong vài trường hợp; một vòng lặp có thể bị code sai; thời gian phản hồi có thể không đủ cho hệ thống xử lý giao dịch hiệu năng cao; phản hồi về trải nghiệm (UX) có thể không như kỳ vọng. Ghi chú: có tác giả gọi là <strong>rủi ro chất lượng</strong>; phần mềm không đạt có thể thiếu một chức năng then chốt, không ổn định, gây thiệt hại tài chính hoặc thiệt hại khác, hoặc có vấn đề ở một đặc tính không phải chức năng — bảo mật, độ tin cậy, tính dễ dùng, khả năng bảo trì, hiệu năng. Phép thử: "nó nói về cách <em>phần mềm</em> hoạt động?" → rủi ro sản phẩm.</p>`],
+        `<p class="y-chinh">🎯 <strong>Product risk</strong>: the possibility that a work product may fail to satisfy the legitimate needs of its users and/or stakeholders.</p>
+<p class="nhan">Examples on the slide (syllabus)</p>
+<ul>
+<li>Software might not perform its <strong>intended functions</strong>.</li>
+<li>The <strong>architecture</strong> may not support a non-functional requirement.</li>
+<li>A <strong>computation</strong> may be wrong in some circumstances.</li>
+<li>A <strong>loop</strong> may be coded incorrectly.</li>
+<li><strong>Response times</strong> may be inadequate for a high-performance transaction system.</li>
+<li><strong>UX feedback</strong> might not meet expectations.</li>
+</ul>
+<p class="nhan">What the notes add</p>
+<ul>
+<li><strong>Other name</strong> — some authors call them <strong>quality risks</strong>.</li>
+<li><strong>Unsatisfactory software may</strong> — omit a key function; be unreliable; cause financial or other damage; or have problems with a quality characteristic that is not functionality (security, reliability, usability, maintainability, performance).</li>
+</ul>
+<p class="meo">🧠 <strong>Remember:</strong> "is it about how the <em>software</em> behaves?" → product risk.</p>`,
+        `<p class="y-chinh">🎯 <strong>Rủi ro sản phẩm</strong>: khả năng một sản phẩm công việc không thoả được nhu cầu chính đáng của người dùng và/hoặc các bên.</p>
+<p class="nhan">Ví dụ trên slide (theo syllabus)</p>
+<ul>
+<li>Phần mềm có thể không làm được <strong>chức năng dự định</strong>.</li>
+<li><strong>Kiến trúc</strong> có thể không đáp ứng một yêu cầu phi chức năng.</li>
+<li>Một <strong>phép tính</strong> có thể sai trong vài trường hợp.</li>
+<li>Một <strong>vòng lặp</strong> có thể bị code sai.</li>
+<li><strong>Thời gian phản hồi</strong> có thể không đủ cho hệ thống xử lý giao dịch hiệu năng cao.</li>
+<li><strong>Phản hồi về trải nghiệm (UX)</strong> có thể không như kỳ vọng.</li>
+</ul>
+<p class="nhan">Ghi chú bổ sung</p>
+<ul>
+<li><strong>Tên khác</strong> — có tác giả gọi là <strong>rủi ro chất lượng</strong> (quality risk).</li>
+<li><strong>Phần mềm không đạt có thể</strong> — thiếu một chức năng then chốt; không ổn định; gây thiệt hại tài chính hoặc thiệt hại khác; hoặc có vấn đề ở một đặc tính không phải chức năng (bảo mật, độ tin cậy, tính dễ dùng, khả năng bảo trì, hiệu năng).</li>
+</ul>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> "nó nói về cách <em>phần mềm</em> hoạt động?" → rủi ro sản phẩm.</p>`],
       [83, 'Project Risks',
-        `<p><strong>Project risk</strong>: situations that may have a negative effect on a project's ability to achieve its objectives. The syllabus details each category: <strong>project issues</strong> — delays in delivery or task completion, inaccurate estimates, reallocation of funds, late changes causing rework; <strong>organisational issues</strong> — skills, training and staff shortages, personnel issues, business users not available; <strong>political issues</strong> — testers not communicating their needs or results, developers/testers not following up on findings, an improper attitude towards testing; <strong>technical issues</strong> — requirements poorly defined, test environment not ready on time, data conversion or migration late, weak development process, poor defect management, accumulated technical debt; <strong>supplier issues</strong> — a third party fails to deliver or goes bankrupt, contractual problems. Test: "is it about the <em>project</em> — people, time, money, tools, suppliers?" → project risk.</p>`,
-        `<p><strong>Rủi ro dự án</strong>: những tình huống có thể ảnh hưởng xấu tới khả năng đạt mục tiêu của dự án. Syllabus nêu chi tiết từng nhóm: <strong>vấn đề dự án</strong> — giao hàng hay hoàn thành việc bị trễ, ước lượng sai, bị cắt kinh phí, thay đổi muộn gây làm lại; <strong>vấn đề tổ chức</strong> — thiếu kỹ năng, đào tạo, nhân sự, vấn đề cá nhân, người dùng nghiệp vụ không có mặt; <strong>vấn đề "chính trị"</strong> — tester không nói rõ nhu cầu hay kết quả, developer/tester không theo dõi phát hiện, thái độ không đúng với kiểm thử; <strong>vấn đề kỹ thuật</strong> — yêu cầu mơ hồ, môi trường test không kịp, chuyển đổi dữ liệu trễ, quy trình phát triển yếu, quản lý defect kém, nợ kỹ thuật tích tụ; <strong>vấn đề nhà cung cấp</strong> — bên thứ ba không giao hoặc phá sản, rắc rối hợp đồng. Phép thử: "nó nói về <em>dự án</em> — người, thời gian, tiền, công cụ, nhà cung cấp?" → rủi ro dự án.</p>`],
+        `<p class="y-chinh">🎯 <strong>Project risk</strong>: situations that may have a negative effect on a project's ability to achieve its objectives.</p>
+<p class="nhan">Five categories (the syllabus details each)</p>
+<ol>
+<li><strong>Project issues</strong> — delays in delivery or task completion, inaccurate estimates, reallocation of funds, late changes causing rework.</li>
+<li><strong>Organisational issues</strong> — skills, training and staff shortages, personnel issues, business users not available.</li>
+<li><strong>Political issues</strong> — testers not communicating their needs or results, developers/testers not following up on findings, an improper attitude towards testing.</li>
+<li><strong>Technical issues</strong> — requirements poorly defined, test environment not ready on time, data conversion or migration late, weak development process, poor defect management, accumulated technical debt.</li>
+<li><strong>Supplier issues</strong> — a third party fails to deliver or goes bankrupt, contractual problems.</li>
+</ol>
+<p class="meo">🧠 <strong>Remember:</strong> "is it about the <em>project</em> — people, time, money, tools, suppliers?" → project risk.</p>`,
+        `<p class="y-chinh">🎯 <strong>Rủi ro dự án</strong>: những tình huống có thể ảnh hưởng xấu tới khả năng đạt mục tiêu của dự án.</p>
+<p class="nhan">Năm nhóm (syllabus nêu chi tiết từng nhóm)</p>
+<ol>
+<li><strong>Vấn đề dự án</strong> — giao hàng hay hoàn thành việc bị trễ, ước lượng sai, bị cắt kinh phí, thay đổi muộn gây làm lại.</li>
+<li><strong>Vấn đề tổ chức</strong> — thiếu kỹ năng, đào tạo, nhân sự, vấn đề cá nhân, người dùng nghiệp vụ không có mặt.</li>
+<li><strong>Vấn đề "chính trị"</strong> — tester không nói rõ nhu cầu hay kết quả, developer/tester không theo dõi phát hiện, thái độ không đúng với kiểm thử.</li>
+<li><strong>Vấn đề kỹ thuật</strong> — yêu cầu mơ hồ, môi trường test không kịp, chuyển đổi dữ liệu trễ, quy trình phát triển yếu, quản lý defect kém, nợ kỹ thuật tích tụ.</li>
+<li><strong>Vấn đề nhà cung cấp</strong> — bên thứ ba không giao hoặc phá sản, rắc rối hợp đồng.</li>
+</ol>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> "nó nói về <em>dự án</em> — người, thời gian, tiền, công cụ, nhà cung cấp?" → rủi ro dự án.</p>`],
       [84, 'Risk-based Testing & Product Quality — risk management options',
-        `<p><strong>Testing is one way of managing risk</strong> — it reduces the uncertainty about product risks. For any risk there are four typical options: <strong>Mitigate</strong> — act in advance to reduce the <em>likelihood</em> (e.g. extra reviews and tests of the fee calculation); <strong>Contingency</strong> — have a plan to reduce the <em>impact</em> if the risk becomes an outcome (e.g. a feature flag to switch the new payment method off); <strong>Transfer</strong> — convince another stakeholder to reduce the likelihood or accept the impact (e.g. the payment provider guarantees and tests its API, insurance, contract clauses); <strong>Ignore</strong> — do nothing, a smart choice when little can be done or the impact is low. Hook: mitigation ↓ likelihood, contingency ↓ impact.</p>`,
-        `<p><strong>Kiểm thử là một cách quản lý rủi ro</strong> — nó giảm sự không chắc chắn về rủi ro sản phẩm. Với mọi rủi ro có bốn lựa chọn điển hình: <strong>Mitigate (giảm thiểu)</strong> — hành động trước để giảm <em>khả năng xảy ra</em> (vd review và test thêm phần tính phí); <strong>Contingency (dự phòng)</strong> — có sẵn kế hoạch giảm <em>tác động</em> nếu rủi ro thành sự thật (vd feature flag để tắt phương thức thanh toán mới); <strong>Transfer (chuyển giao)</strong> — thuyết phục một bên khác giảm khả năng xảy ra hoặc chấp nhận tác động (vd nhà cung cấp cổng thanh toán cam kết và tự test API, bảo hiểm, điều khoản hợp đồng); <strong>Ignore (bỏ qua)</strong> — không làm gì, hợp lý khi chẳng làm được gì nhiều hoặc tác động thấp. Mẹo: mitigation ↓ khả năng, contingency ↓ tác động.</p>`],
+        `<p class="y-chinh">🎯 <strong>Testing is one way of managing risk</strong> — it reduces the uncertainty about product risks.</p>
+<p class="nhan">Four typical options for any risk</p>
+<ol>
+<li><strong>Mitigate</strong> — act in advance to reduce the <em>likelihood</em>. E.g. extra reviews and tests of the fee calculation.</li>
+<li><strong>Contingency</strong> — have a plan to reduce the <em>impact</em> if the risk becomes an outcome. E.g. a feature flag to switch the new payment method off.</li>
+<li><strong>Transfer</strong> — convince another stakeholder to reduce the likelihood or accept the impact. E.g. the payment provider guarantees and tests its API; insurance; contract clauses.</li>
+<li><strong>Ignore</strong> — do nothing: a smart choice when little can be done or the impact is low.</li>
+</ol>
+<p class="meo">🧠 <strong>Remember:</strong> mitigation ↓ likelihood, contingency ↓ impact.</p>`,
+        `<p class="y-chinh">🎯 <strong>Kiểm thử là một cách quản lý rủi ro</strong> — nó giảm sự không chắc chắn về rủi ro sản phẩm.</p>
+<p class="nhan">Bốn lựa chọn điển hình cho mọi rủi ro</p>
+<ol>
+<li><strong>Mitigate (giảm thiểu)</strong> — hành động trước để giảm <em>khả năng xảy ra</em>. Vd review và test thêm phần tính phí.</li>
+<li><strong>Contingency (dự phòng)</strong> — có sẵn kế hoạch giảm <em>tác động</em> nếu rủi ro thành sự thật. Vd feature flag để tắt phương thức thanh toán mới.</li>
+<li><strong>Transfer (chuyển giao)</strong> — thuyết phục một bên khác giảm khả năng xảy ra hoặc chấp nhận tác động. Vd nhà cung cấp cổng thanh toán cam kết và tự test API; bảo hiểm; điều khoản hợp đồng.</li>
+<li><strong>Ignore (bỏ qua)</strong> — không làm gì: hợp lý khi chẳng làm được gì nhiều hoặc tác động thấp.</li>
+</ol>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> mitigation ↓ khả năng, contingency ↓ tác động.</p>`],
       [85, 'Risk-based Testing & Product Quality — risk-based testing',
-        `<p><strong>Risk-based testing</strong> organises test effort to <strong>reduce the residual level of product risk</strong> when the system is delivered. It uses risk to <strong>prioritise and emphasise</strong> the appropriate tests during execution, and it <strong>starts early</strong>: identify quality risks, then use that knowledge to guide test planning, specification, preparation and execution. The syllabus lists how the analysis is used: to decide the <em>test techniques</em>; the <em>levels and types</em> of testing (e.g. security, performance); the <em>extent</em> of testing; the <em>priority</em> of tests (find critical defects as early as possible); and other activities that could reduce risk (e.g. training inexperienced designers).</p>`,
-        `<p><strong>Risk-based testing</strong> tổ chức công sức kiểm thử sao cho <strong>giảm mức rủi ro sản phẩm còn lại</strong> khi hệ thống được bàn giao. Nó dùng rủi ro để <strong>ưu tiên và nhấn mạnh</strong> các test phù hợp trong lúc thực thi, và <strong>bắt đầu sớm</strong>: nhận diện rủi ro chất lượng rồi dùng hiểu biết đó dẫn dắt lập kế hoạch, đặc tả, chuẩn bị và thực thi. Syllabus liệt kê cách dùng kết quả phân tích: chọn <em>kỹ thuật test</em>; chọn <em>cấp và loại</em> test (vd bảo mật, hiệu năng); quyết định <em>mức độ</em> kiểm thử; <em>ưu tiên</em> test (tìm defect nghiêm trọng càng sớm càng tốt); và các hoạt động khác giúp giảm rủi ro (vd đào tạo người thiết kế còn thiếu kinh nghiệm).</p>`],
+        `<p class="y-chinh">🎯 Risk-based testing organises test effort to <strong>reduce the residual level of product risk</strong> when the system is delivered.</p>
+<p class="nhan">Its three traits (slide)</p>
+<ul>
+<li><strong>Goal</strong> — lower residual product risk at delivery.</li>
+<li><strong>Prioritise and emphasise</strong> — risk decides which tests matter most during execution.</li>
+<li><strong>Starts early</strong> — identify quality risks, then use that knowledge to guide test planning, specification, preparation and execution.</li>
+</ul>
+<p class="nhan">How the analysis is used (syllabus)</p>
+<ol>
+<li>Decide the <em>test techniques</em>.</li>
+<li>Decide the <em>levels and types</em> of testing — e.g. security, performance.</li>
+<li>Decide the <em>extent</em> of testing.</li>
+<li>Set the <em>priority</em> of tests — find critical defects as early as possible.</li>
+<li>Choose other activities that could reduce risk — e.g. training inexperienced designers.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Risk-based testing tổ chức công sức kiểm thử sao cho <strong>giảm mức rủi ro sản phẩm còn lại</strong> khi hệ thống được bàn giao.</p>
+<p class="nhan">Ba đặc điểm (trên slide)</p>
+<ul>
+<li><strong>Mục tiêu</strong> — giảm rủi ro sản phẩm còn lại khi bàn giao.</li>
+<li><strong>Ưu tiên và nhấn mạnh</strong> — rủi ro quyết định test nào quan trọng nhất trong lúc thực thi.</li>
+<li><strong>Bắt đầu sớm</strong> — nhận diện rủi ro chất lượng rồi dùng hiểu biết đó dẫn dắt lập kế hoạch, đặc tả, chuẩn bị và thực thi.</li>
+</ul>
+<p class="nhan">Kết quả phân tích được dùng để (syllabus)</p>
+<ol>
+<li>Chọn <em>kỹ thuật test</em>.</li>
+<li>Chọn <em>cấp và loại</em> test — vd bảo mật, hiệu năng.</li>
+<li>Quyết định <em>mức độ</em> kiểm thử.</li>
+<li><em>Ưu tiên</em> test — tìm defect nghiêm trọng càng sớm càng tốt.</li>
+<li>Chọn các hoạt động khác giúp giảm rủi ro — vd đào tạo người thiết kế còn thiếu kinh nghiệm.</li>
+</ol>`],
       [86, 'Risk-based Testing & Product Quality — risk analysis',
-        `<p>Risk-based testing <strong>starts with risk analysis</strong>. Techniques to <em>find</em> risks: close reading of requirements, user stories and design specs; brainstorming with different stakeholders; a sequence of one-to-one or small-group sessions with business and technical experts. Ways to give the analysis <em>structure</em>: look for specific risks in particular product-risk categories; walk through the quality characteristics and sub-characteristics of <strong>ISO/IEC 25010</strong> (functional suitability, performance efficiency, compatibility, usability, reliability, security, maintainability, portability); use a checklist of typical or past risks. (The slide writes "form ISO/IEC 25010" — read "from".)</p>`,
-        `<p>Risk-based testing <strong>bắt đầu bằng phân tích rủi ro</strong>. Kỹ thuật để <em>tìm</em> rủi ro: đọc kỹ đặc tả yêu cầu, user story, thiết kế; brainstorm với nhiều bên liên quan; một chuỗi buổi làm việc một-một hoặc nhóm nhỏ với chuyên gia nghiệp vụ và kỹ thuật. Cách tạo <em>cấu trúc</em> cho việc phân tích: tìm rủi ro theo từng nhóm rủi ro sản phẩm; đi qua các đặc tính và đặc tính con của <strong>ISO/IEC 25010</strong> (phù hợp chức năng, hiệu năng, tương thích, dễ dùng, tin cậy, bảo mật, bảo trì, khả chuyển); dùng checklist các rủi ro điển hình hoặc đã gặp. (Slide viết "form ISO/IEC 25010" — đọc là "from".)</p>`],
+        `<p class="y-chinh">🎯 Risk-based testing <strong>starts with risk analysis</strong>: first find the risks, then give the search a structure.</p>
+<p class="nhan">Techniques to find risks</p>
+<ul>
+<li><strong>Close reading</strong> of requirements, user stories and design specs.</li>
+<li><strong>Brainstorming</strong> with different stakeholders.</li>
+<li><strong>A sequence of one-to-one or small-group sessions</strong> with business and technical experts.</li>
+</ul>
+<p class="nhan">Ways to give the analysis structure</p>
+<ul>
+<li>Look for specific risks in particular <strong>product-risk categories</strong>.</li>
+<li>Walk through the quality characteristics and sub-characteristics of <strong>ISO/IEC 25010</strong> — functional suitability, performance efficiency, compatibility, usability, reliability, security, maintainability, portability.</li>
+<li>Use a <strong>checklist</strong> of typical or past risks.</li>
+</ul>
+<p class="ghi-chu">The slide writes "form ISO/IEC 25010" — read "from".</p>`,
+        `<p class="y-chinh">🎯 Risk-based testing <strong>bắt đầu bằng phân tích rủi ro</strong>: trước hết tìm rủi ro, rồi tạo cấu trúc cho việc tìm.</p>
+<p class="nhan">Kỹ thuật tìm rủi ro</p>
+<ul>
+<li><strong>Đọc kỹ</strong> đặc tả yêu cầu, user story, thiết kế.</li>
+<li><strong>Brainstorm</strong> với nhiều bên liên quan.</li>
+<li><strong>Một chuỗi buổi làm việc một-một hoặc nhóm nhỏ</strong> với chuyên gia nghiệp vụ và kỹ thuật.</li>
+</ul>
+<p class="nhan">Cách tạo cấu trúc cho việc phân tích</p>
+<ul>
+<li>Tìm rủi ro theo từng <strong>nhóm rủi ro sản phẩm</strong>.</li>
+<li>Đi qua các đặc tính và đặc tính con của <strong>ISO/IEC 25010</strong> — phù hợp chức năng, hiệu năng, tương thích, dễ dùng, tin cậy, bảo mật, bảo trì, khả chuyển.</li>
+<li>Dùng <strong>checklist</strong> các rủi ro điển hình hoặc đã gặp.</li>
+</ul>
+<p class="ghi-chu">Slide viết "form ISO/IEC 25010" — đọc là "from".</p>`],
       [87, 'Risk-based Testing & Product Quality — assigning a risk level',
-        `<p>Review the collated list of risk items and assign <strong>likelihood and impact</strong> — either with all stakeholders at once, or <strong>business people rate impact, technical people rate likelihood</strong>, then merge. Scales vary: high–medium–low; 1–10 (hard to tell a 2 from a 3 or a 7 from an 8 unless each value is clearly defined); a <strong>5-point scale</strong> (very high, high, medium, low, very low) tends to work well. Then determine the <strong>risk priority number</strong> by multiplying (or adding) the two ratings. Careful with the direction: fst4 (p.189) numbers the 5-point scale with <em>1 = very high</em>, so "high likelihood × medium impact = 2 × 3 = 6" and a <em>lower</em> number means a <em>more urgent</em> risk; many companies use 5 = very high and read higher as riskier. Always read the legend of the scale.</p>`,
-        `<p>Rà danh sách rủi ro đã gom và gán <strong>khả năng xảy ra và tác động</strong> — hoặc cùng tất cả các bên một lượt, hoặc <strong>người nghiệp vụ chấm tác động, người kỹ thuật chấm khả năng</strong>, rồi gộp lại. Thang điểm khác nhau: cao–trung bình–thấp; 1–10 (khó phân biệt 2 với 3 hay 7 với 8 nếu mỗi mức không được định nghĩa rõ); thang <strong>5 mức</strong> (rất cao, cao, trung bình, thấp, rất thấp) thường hiệu quả. Sau đó tính <strong>risk priority number (RPN)</strong> bằng cách nhân (hoặc cộng) hai điểm. Cẩn thận chiều của thang: fst4 (trang 189) đánh số thang 5 mức với <em>1 = rất cao</em>, nên "khả năng cao × tác động trung bình = 2 × 3 = 6" và số <em>nhỏ hơn</em> nghĩa là rủi ro <em>gấp hơn</em>; nhiều công ty dùng 5 = rất cao và đọc số lớn là rủi ro hơn. Luôn đọc chú giải của thang.</p>`],
+        `<p class="y-chinh">🎯 Rate every risk item for likelihood and impact, then combine the two into a risk priority number.</p>
+<p class="nhan">Step 1 — who rates</p>
+<ul>
+<li><strong>All stakeholders at once</strong>, or</li>
+<li><strong>Business people rate impact, technical people rate likelihood</strong> — then merge the ratings.</li>
+</ul>
+<p class="nhan">Step 2 — pick a scale</p>
+<ul>
+<li><strong>High – medium – low</strong></li>
+<li><strong>1–10</strong> — hard to tell a 2 from a 3, or a 7 from an 8, unless each value is clearly defined.</li>
+<li><strong>5-point scale</strong> (very high, high, medium, low, very low) — tends to work well.</li>
+</ul>
+<p class="nhan">Step 3 — risk priority number</p>
+<p>Multiply (or add) the two ratings.</p>
+<div class="pitfall">Careful with the direction of the scale. fst4 (p.189) numbers the 5-point scale with <em>1 = very high</em>, so "high likelihood × medium impact = 2 × 3 = 6", and a <em>lower</em> number means a <em>more urgent</em> risk. Many companies use 5 = very high and read higher as riskier. Always read the legend of the scale.</div>`,
+        `<p class="y-chinh">🎯 Chấm từng rủi ro theo khả năng xảy ra và tác động, rồi gộp hai điểm thành risk priority number.</p>
+<p class="nhan">Bước 1 — ai chấm</p>
+<ul>
+<li><strong>Tất cả các bên cùng một lượt</strong>, hoặc</li>
+<li><strong>Người nghiệp vụ chấm tác động, người kỹ thuật chấm khả năng</strong> — rồi gộp lại.</li>
+</ul>
+<p class="nhan">Bước 2 — chọn thang điểm</p>
+<ul>
+<li><strong>Cao – trung bình – thấp</strong></li>
+<li><strong>1–10</strong> — khó phân biệt 2 với 3, hay 7 với 8, nếu mỗi mức không được định nghĩa rõ.</li>
+<li><strong>Thang 5 mức</strong> (rất cao, cao, trung bình, thấp, rất thấp) — thường hiệu quả.</li>
+</ul>
+<p class="nhan">Bước 3 — risk priority number (RPN)</p>
+<p>Nhân (hoặc cộng) hai điểm.</p>
+<div class="pitfall">Cẩn thận chiều của thang. fst4 (trang 189) đánh số thang 5 mức với <em>1 = rất cao</em>, nên "khả năng cao × tác động trung bình = 2 × 3 = 6", và số <em>nhỏ hơn</em> nghĩa là rủi ro <em>gấp hơn</em>. Nhiều công ty dùng 5 = rất cao và đọc số lớn là rủi ro hơn. Luôn đọc chú giải của thang.</div>`],
       [88, 'Risk-based Testing & Product Quality — mitigation options & the template',
-        `<p>With a risk priority number you decide the mitigation per risk: formal training for developers or rely on reviews? extensive, cursory or no testing? unit and system coverage of this risk? Capture the key information in a <strong>lightweight document</strong> — the table on the slide is fst4 <strong>Table 5.2 "A risk analysis template"</strong>: columns <em>Product risk · Likelihood · Impact · Risk priority number · Mitigation</em>, rows grouped by <em>risk category</em> (Risk category 1 → Risk 1, Risk 2 … Risk n). A spreadsheet is enough. The worked example below fills it in.</p>`,
-        `<p>Có risk priority number rồi thì quyết định cách giảm thiểu cho từng rủi ro: đào tạo bài bản cho developer hay dựa vào review? test kỹ, test lướt hay không test? unit và system test có phủ rủi ro này không? Ghi thông tin chính vào một <strong>tài liệu gọn nhẹ</strong> — bảng trên slide chính là <strong>Table 5.2 "A risk analysis template"</strong> của fst4: các cột <em>Product risk · Likelihood · Impact · Risk priority number · Mitigation</em>, các dòng nhóm theo <em>risk category</em> (Risk category 1 → Risk 1, Risk 2 … Risk n). Một bảng tính là đủ. Phần ví dụ bên dưới điền đầy bảng này.</p>`],
+        `<p class="y-chinh">🎯 The risk priority number decides the mitigation for each risk; capture it all in a lightweight document.</p>
+<p class="nhan">Questions the number answers</p>
+<ul>
+<li>Formal training for developers, or rely on reviews?</li>
+<li>Extensive, cursory or no testing?</li>
+<li>Unit and system coverage of this risk?</li>
+</ul>
+<p class="nhan">The template on the slide — fst4 Table 5.2 "A risk analysis template"</p>
+<ul>
+<li><strong>Columns</strong> — Product risk, Likelihood, Impact, Risk priority number, Mitigation.</li>
+<li><strong>Rows</strong> — grouped by <em>risk category</em>: Risk category 1 → Risk 1, Risk 2 … Risk n.</li>
+</ul>
+<p>A spreadsheet is enough. The worked example below fills it in.</p>`,
+        `<p class="y-chinh">🎯 Risk priority number quyết định cách giảm thiểu cho từng rủi ro; ghi tất cả vào một tài liệu gọn nhẹ.</p>
+<p class="nhan">Những câu con số này trả lời</p>
+<ul>
+<li>Đào tạo bài bản cho developer, hay dựa vào review?</li>
+<li>Test kỹ, test lướt hay không test?</li>
+<li>Unit và system test có phủ rủi ro này không?</li>
+</ul>
+<p class="nhan">Mẫu trên slide — Table 5.2 "A risk analysis template" của fst4</p>
+<ul>
+<li><strong>Các cột</strong> — Product risk, Likelihood, Impact, Risk priority number, Mitigation.</li>
+<li><strong>Các dòng</strong> — nhóm theo <em>risk category</em>: Risk category 1 → Risk 1, Risk 2 … Risk n.</li>
+</ul>
+<p>Một bảng tính là đủ. Phần ví dụ bên dưới điền đầy bảng này.</p>`],
     ]),
     bi(`<h3>Ví dụ có lời giải · Worked example — fill in the risk template for an e-wallet app</h3>
-<p><strong>Step 1 — identify</strong> (brainstorm + ISO 25010 walk-through): six product risks. <strong>Step 2 — rate</strong> on a 5-point scale where <strong>5 = very high</strong>; business people gave impact, developers gave likelihood. <strong>Step 3 — compute</strong> risk level = L × I and map it to an extent of testing: 15–25 extensive, 8–14 broad, 4–7 cursory, 1–3 report bugs only if seen. Script output (ch7/calc.mjs), sorted by level:</p>
+<ol>
+<li><strong>Step 1 — identify</strong> (brainstorm + ISO 25010 walk-through): six product risks.</li>
+<li><strong>Step 2 — rate</strong> on a 5-point scale where <strong>5 = very high</strong>; business people gave impact, developers gave likelihood.</li>
+<li><strong>Step 3 — compute</strong> risk level = L × I and map it to an extent of testing: 15–25 extensive, 8–14 broad, 4–7 cursory, 1–3 report bugs only if seen.</li>
+</ol>
+<p>Script output (ch7/calc.mjs), sorted by level:</p>
 <pre><code>1 R4 QR payment fails on old Android L 4 I 4 level 16 extensive | fst4 scale L 2 I 2 RPN 4
 2 R1 Transfer fee computed wrongly L 3 I 5 level 15 extensive | fst4 scale L 3 I 1 RPN 3
 3 R3 Statement PDF slow for &gt;1000 rows L 4 I 3 level 12 broad | fst4 scale L 2 I 3 RPN 6
@@ -817,12 +2780,34 @@ const L75 = {
 <tr><td>R5 Dark theme colours wrong</td><td>3</td><td>1</td><td>3</td><td>no dedicated tests; report if seen (ignore)</td></tr>
 </tbody>
 </table>
-<p><strong>Step 5 — how it changes the plan</strong> (LO-5.5.3): the analysis chose <em>techniques</em> (BVA, decision table, state transition), <em>test types</em> (compatibility, performance, security), the <em>extent</em> (extensive → report only) and the <em>execution order</em> (R4 and R1 first). Notice the last column of the script: with fst4's reversed scale (1 = very high) the RPNs come out 3, 4, 4, 6, 12, 15 — the same risks land at the top and bottom, but the middle order can differ, because multiplying reversed numbers is not a mirror image. Pick one scale per project and never mix them.</p>
-<p><strong>Project risks in the same plan</strong> (not solved by testing): "the payment sandbox may arrive late" → mitigation: request it in sprint 1; contingency: a mock payment server. "Only one tester knows the device lab" → mitigation: pair a second tester with her.</p>
-<div class="pitfall"><b>Exam traps.</b> (1) Classify by the object threatened: slow response time, wrong calculation, security hole → <strong>product</strong>; illness of a key person, late environment, supplier failure, poor communication → <strong>project</strong> (fst4 sample question 15). (2) Mitigation reduces <em>likelihood</em>, contingency reduces <em>impact</em>. (3) A risk is a <em>future possibility</em>; a problem that has already happened is not a risk. (4) Risk-based testing starts <em>early</em>, not when execution begins.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Where "risk priority number" comes from: FMEA.</b> The term is borrowed from <em>Failure Mode and Effects Analysis</em>, used in automotive and aerospace since the 1960s. FMEA rates each failure mode on <strong>three</strong> 1–10 scales — Severity × Occurrence × Detection (how hard it is to detect before it reaches the customer) — so RPN runs from 1 to 1000. Adding "detectability" is useful for testers: a risk that your tests are unlikely to catch deserves extra reviews or monitoring in production. <em>Outside the syllabus because CTFL uses only likelihood and impact.</em></div>`,
+<p><strong>Step 5 — how it changes the plan</strong> (LO-5.5.3). The analysis chose:</p>
+<ul>
+<li><strong>Techniques</strong> — BVA, decision table, state transition.</li>
+<li><strong>Test types</strong> — compatibility, performance, security.</li>
+<li><strong>Extent</strong> — extensive → report only.</li>
+<li><strong>Execution order</strong> — R4 and R1 first.</li>
+</ul>
+<p>Notice the last column of the script: with fst4's reversed scale (1 = very high) the RPNs come out 3, 4, 4, 6, 12, 15. The same risks land at the top and bottom, but the middle order can differ, because multiplying reversed numbers is not a mirror image. Pick one scale per project and never mix them.</p>
+<p><strong>Project risks in the same plan</strong> (not solved by testing):</p>
+<ul>
+<li>"The payment sandbox may arrive late" → mitigation: request it in sprint 1; contingency: a mock payment server.</li>
+<li>"Only one tester knows the device lab" → mitigation: pair a second tester with her.</li>
+</ul>
+<div class="pitfall co-tieu-de"><strong>Exam traps.</strong>
+<ol>
+<li>Classify by the object threatened: slow response time, wrong calculation, security hole → <strong>product</strong>; illness of a key person, late environment, supplier failure, poor communication → <strong>project</strong> (fst4 sample question 15).</li>
+<li>Mitigation reduces <em>likelihood</em>, contingency reduces <em>impact</em>.</li>
+<li>A risk is a <em>future possibility</em>; a problem that has already happened is not a risk.</li>
+<li>Risk-based testing starts <em>early</em>, not when execution begins.</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Where "risk priority number" comes from: FMEA.</strong> The term is borrowed from <em>Failure Mode and Effects Analysis</em>, used in automotive and aerospace since the 1960s. FMEA rates each failure mode on <strong>three</strong> 1–10 scales — Severity × Occurrence × Detection (how hard it is to detect before it reaches the customer) — so RPN runs from 1 to 1000. Adding "detectability" is useful for testers: a risk that your tests are unlikely to catch deserves extra reviews or monitoring in production. <em>Outside the syllabus because CTFL uses only likelihood and impact.</em></div>`,
     `<h3>Ví dụ có lời giải · Điền bảng rủi ro cho một ứng dụng ví điện tử</h3>
-<p><strong>Bước 1 — nhận diện</strong> (brainstorm + đi qua ISO 25010): sáu rủi ro sản phẩm. <strong>Bước 2 — chấm điểm</strong> theo thang 5 mức với <strong>5 = rất cao</strong>; người nghiệp vụ chấm tác động, developer chấm khả năng xảy ra. <strong>Bước 3 — tính</strong> mức rủi ro = L × I và quy ra mức độ kiểm thử: 15–25 test kỹ, 8–14 test rộng, 4–7 test lướt, 1–3 chỉ báo lỗi nếu gặp. Kết quả script (ch7/calc.mjs), sắp theo mức:</p>
+<ol>
+<li><strong>Bước 1 — nhận diện</strong> (brainstorm + đi qua ISO 25010): sáu rủi ro sản phẩm.</li>
+<li><strong>Bước 2 — chấm điểm</strong> theo thang 5 mức với <strong>5 = rất cao</strong>; người nghiệp vụ chấm tác động, developer chấm khả năng xảy ra.</li>
+<li><strong>Bước 3 — tính</strong> mức rủi ro = L × I và quy ra mức độ kiểm thử: 15–25 test kỹ, 8–14 test rộng, 4–7 test lướt, 1–3 chỉ báo lỗi nếu gặp.</li>
+</ol>
+<p>Kết quả script (ch7/calc.mjs), sắp theo mức:</p>
 <pre><code>1 R4 QR payment fails on old Android L 4 I 4 level 16 extensive | fst4 scale L 2 I 2 RPN 4
 2 R1 Transfer fee computed wrongly L 3 I 5 level 15 extensive | fst4 scale L 3 I 1 RPN 3
 3 R3 Statement PDF slow for &gt;1000 rows L 4 I 3 level 12 broad | fst4 scale L 2 I 3 RPN 6
@@ -846,10 +2831,27 @@ const L75 = {
 <tr><td>R5 Màu giao diện tối bị sai</td><td>3</td><td>1</td><td>3</td><td>không viết test riêng; gặp thì báo (bỏ qua)</td></tr>
 </tbody>
 </table>
-<p><strong>Bước 5 — nó thay đổi plan thế nào</strong> (LO-5.5.3): phân tích đã chọn <em>kỹ thuật</em> (BVA, bảng quyết định, chuyển trạng thái), <em>loại test</em> (tương thích, hiệu năng, bảo mật), <em>mức độ</em> (test kỹ → chỉ báo lỗi) và <em>thứ tự thực thi</em> (R4 và R1 trước). Để ý cột cuối của script: với thang ngược của fst4 (1 = rất cao) các RPN ra 3, 4, 4, 6, 12, 15 — rủi ro đầu bảng và cuối bảng vẫn thế, nhưng thứ tự ở giữa có thể khác, vì nhân các số đã đảo chiều không cho ra ảnh gương. Mỗi dự án chọn một thang và không bao giờ trộn.</p>
-<p><strong>Rủi ro dự án trong cùng plan</strong> (không giải bằng kiểm thử): "sandbox thanh toán có thể tới trễ" → giảm thiểu: yêu cầu ngay từ sprint 1; dự phòng: một server thanh toán giả (mock). "Chỉ một tester biết vận hành phòng thiết bị" → giảm thiểu: cho thêm một tester làm cặp với cô ấy.</p>
-<div class="pitfall"><b>Bẫy đề thi.</b> (1) Phân loại theo đối tượng bị đe doạ: phản hồi chậm, tính sai, lỗ hổng bảo mật → <strong>sản phẩm</strong>; người chủ chốt ốm, môi trường trễ, nhà cung cấp thất hứa, giao tiếp kém → <strong>dự án</strong> (câu hỏi mẫu 15 của fst4). (2) Mitigation giảm <em>khả năng xảy ra</em>, contingency giảm <em>tác động</em>. (3) Rủi ro là <em>khả năng trong tương lai</em>; vấn đề đã xảy ra rồi không còn là rủi ro. (4) Risk-based testing bắt đầu <em>sớm</em>, không phải khi bắt đầu chạy test.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>"Risk priority number" từ đâu ra: FMEA.</b> Thuật ngữ này mượn từ <em>Failure Mode and Effects Analysis</em>, dùng trong ô tô và hàng không từ thập niên 1960. FMEA chấm mỗi dạng hỏng trên <strong>ba</strong> thang 1–10 — Severity × Occurrence × Detection (khó phát hiện tới đâu trước khi tới tay khách hàng) — nên RPN chạy từ 1 tới 1000. Thêm "khả năng phát hiện" rất hữu ích cho tester: rủi ro mà test của bạn khó bắt được thì cần thêm review hoặc giám sát trên production. <em>Ngoài giáo trình vì CTFL chỉ dùng khả năng xảy ra và tác động.</em></div>`),
+<p><strong>Bước 5 — nó thay đổi plan thế nào</strong> (LO-5.5.3). Phân tích đã chọn:</p>
+<ul>
+<li><strong>Kỹ thuật</strong> — BVA, bảng quyết định, chuyển trạng thái.</li>
+<li><strong>Loại test</strong> — tương thích, hiệu năng, bảo mật.</li>
+<li><strong>Mức độ</strong> — test kỹ → chỉ báo lỗi.</li>
+<li><strong>Thứ tự thực thi</strong> — R4 và R1 trước.</li>
+</ul>
+<p>Để ý cột cuối của script: với thang ngược của fst4 (1 = rất cao) các RPN ra 3, 4, 4, 6, 12, 15. Rủi ro đầu bảng và cuối bảng vẫn thế, nhưng thứ tự ở giữa có thể khác, vì nhân các số đã đảo chiều không cho ra ảnh gương. Mỗi dự án chọn một thang và không bao giờ trộn.</p>
+<p><strong>Rủi ro dự án trong cùng plan</strong> (không giải bằng kiểm thử):</p>
+<ul>
+<li>"Sandbox thanh toán có thể tới trễ" → giảm thiểu: yêu cầu ngay từ sprint 1; dự phòng: một server thanh toán giả (mock).</li>
+<li>"Chỉ một tester biết vận hành phòng thiết bị" → giảm thiểu: cho thêm một tester làm cặp với cô ấy.</li>
+</ul>
+<div class="pitfall co-tieu-de"><strong>Bẫy đề thi.</strong>
+<ol>
+<li>Phân loại theo đối tượng bị đe doạ: phản hồi chậm, tính sai, lỗ hổng bảo mật → <strong>sản phẩm</strong>; người chủ chốt ốm, môi trường trễ, nhà cung cấp thất hứa, giao tiếp kém → <strong>dự án</strong> (câu hỏi mẫu 15 của fst4).</li>
+<li>Mitigation giảm <em>khả năng xảy ra</em>, contingency giảm <em>tác động</em>.</li>
+<li>Rủi ro là <em>khả năng trong tương lai</em>; vấn đề đã xảy ra rồi không còn là rủi ro.</li>
+<li>Risk-based testing bắt đầu <em>sớm</em>, không phải khi bắt đầu chạy test.</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>"Risk priority number" từ đâu ra: FMEA.</strong> Thuật ngữ này mượn từ <em>Failure Mode and Effects Analysis</em>, dùng trong ô tô và hàng không từ thập niên 1960. FMEA chấm mỗi dạng hỏng trên <strong>ba</strong> thang 1–10 — Severity × Occurrence × Detection (khó phát hiện tới đâu trước khi tới tay khách hàng) — nên RPN chạy từ 1 tới 1000. Thêm "khả năng phát hiện" rất hữu ích cho tester: rủi ro mà test của bạn khó bắt được thì cần thêm review hoặc giám sát trên production. <em>Ngoài giáo trình vì CTFL chỉ dùng khả năng xảy ra và tác động.</em></div>`),
     books([
       ['fst4', 'Ch.5 §5 "Risks and testing" — pp.183–190 (PDF 197–204), Table 5.2 "A risk analysis template" p.189 (PDF 203); sample questions 13–16 p.198 (PDF 212)', 'Chương 5 §5 "Risks and testing" — trang 183–190 (PDF 197–204), Table 5.2 "A risk analysis template" trang 189 (PDF 203); câu hỏi mẫu 13–16 trang 198 (PDF 212)'],
       ['fst', '§5.5 "Risk and testing" — PDF 150–155', '§5.5 "Risk and testing" — PDF 150–155'],
@@ -869,7 +2871,7 @@ const L76 = {
     bi(`<span class="eyebrow">Chapter 7 · Lesson 7.6 · SWT5 slides 89–101</span>
 <h2>Defect management</h2>
 <p class="lead">Finding a failure is only useful if the right person can understand it, reproduce it, decide what to do and fix it — and if managers can learn from the pile of reports. That is defect (incident) management, and it ends in the one <strong>K3</strong> objective of the chapter: <strong>write a defect report</strong>.</p>
-<div class="callout"><b>Learning objective.</b> LO-5.6.1 Write a defect report, covering a defect found during testing (K3).</div>
+<div class="callout"><strong>Learning objective.</strong> LO-5.6.1 Write a defect report, covering a defect found during testing (K3).</div>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Reported</div><div class="lz-t">tester logs it</div><div class="lz-d">steps, expected vs actual, evidence</div></div>
   <div class="lz-step"><div class="lz-k">→ Opened</div><div class="lz-t">reviewed, accepted</div><div class="lz-d">or Rejected (bad report / not a problem)</div></div>
@@ -888,7 +2890,7 @@ const L76 = {
     `<span class="eyebrow">Chương 7 · Bài 7.6 · SWT5 slide 89–101</span>
 <h2>Quản lý defect</h2>
 <p class="lead">Tìm ra failure chỉ có ích khi đúng người hiểu được nó, tái hiện được, quyết định làm gì và sửa nó — và khi người quản lý học được điều gì đó từ cả chồng báo cáo. Đó là quản lý defect (sự cố), và nó dẫn tới mục tiêu <strong>K3</strong> duy nhất còn lại của chương: <strong>viết defect report</strong>.</p>
-<div class="callout"><b>Chuẩn đầu ra.</b> LO-5.6.1 Viết defect report cho một defect tìm thấy khi kiểm thử (K3).</div>
+<div class="callout"><strong>Chuẩn đầu ra.</strong> LO-5.6.1 Viết defect report cho một defect tìm thấy khi kiểm thử (K3).</div>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Reported</div><div class="lz-t">tester ghi nhận</div><div class="lz-d">bước làm, mong đợi vs thực tế, bằng chứng</div></div>
   <div class="lz-step"><div class="lz-k">→ Opened</div><div class="lz-t">được review, chấp nhận</div><div class="lz-d">hoặc Rejected (báo cáo tồi / không phải lỗi)</div></div>
@@ -907,44 +2909,354 @@ const L76 = {
     walkHead(D, 89, 101, 'Slides 100–101 are a Goal-Question-Metric example and an exercise; both are solved with numbers after the walkthrough.', 'Slide 100–101 là một ví dụ Goal-Question-Metric và một bài tập; cả hai được giải bằng số liệu sau phần học từng slide.'),
     walk(D, [
       [89, 'CONTENT — Defect Management',
-        `<p>The agenda with section 6 highlighted: <strong>Defect Management</strong>. The slide shows no sub-topics; the syllabus has one learning objective here — writing a defect report (K3) — but the deck adds metrics, the lifecycle and GQM.</p>`,
-        `<p>Mục lục với phần 6 được tô: <strong>Defect Management</strong>. Slide không ghi ý con; syllabus chỉ có một chuẩn đầu ra ở đây — viết defect report (K3) — nhưng bộ slide thêm số đo, vòng đời và GQM.</p>`],
+        `<p class="y-chinh">🎯 The agenda with section 6 — <strong>Defect Management</strong> — highlighted.</p>
+<ul>
+<li><strong>On the slide</strong> — no sub-topics.</li>
+<li><strong>In the syllabus</strong> — one learning objective here: writing a defect report (K3).</li>
+<li><strong>In the deck</strong> — it adds metrics, the lifecycle and GQM.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Mục lục với phần 6 — <strong>Defect Management</strong> — được tô.</p>
+<ul>
+<li><strong>Trên slide</strong> — không ghi ý con.</li>
+<li><strong>Trong syllabus</strong> — chỉ một chuẩn đầu ra ở đây: viết defect report (K3).</li>
+<li><strong>Trong bộ slide</strong> — thêm số đo, vòng đời và GQM.</li>
+</ul>`],
       [90, 'Mind map (divider) — Defect Mgt.',
-        `<p>The map one last time; the bottom-left branch <em>Defect Mgt.</em> names the four things every good report must have: <strong>steps to reproduce</strong>, <strong>expected &amp; actual result</strong>, <strong>severity &amp; priority</strong>, <strong>screenshot</strong> (evidence).</p>`,
-        `<p>Sơ đồ lần cuối; nhánh dưới trái <em>Defect Mgt.</em> gọi tên bốn thứ mọi báo cáo tốt phải có: <strong>bước tái hiện</strong>, <strong>kết quả mong đợi &amp; thực tế</strong>, <strong>severity &amp; priority</strong>, <strong>ảnh chụp màn hình</strong> (bằng chứng).</p>`],
+        `<p class="y-chinh">🎯 The map one last time — the bottom-left branch <em>Defect Mgt.</em> names the four things every good report must have.</p>
+<ol>
+<li><strong>Steps to reproduce</strong></li>
+<li><strong>Expected &amp; actual result</strong></li>
+<li><strong>Severity &amp; priority</strong></li>
+<li><strong>Screenshot</strong> (evidence)</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Sơ đồ lần cuối — nhánh dưới trái <em>Defect Mgt.</em> gọi tên bốn thứ mọi báo cáo tốt phải có.</p>
+<ol>
+<li><strong>Bước tái hiện</strong></li>
+<li><strong>Kết quả mong đợi &amp; thực tế</strong></li>
+<li><strong>Severity &amp; priority</strong></li>
+<li><strong>Ảnh chụp màn hình</strong> (bằng chứng)</li>
+</ol>`],
       [91, 'Incident management — what is an incident?',
-        `<p>An <strong>incident</strong> is any event occurring during testing that requires investigation or correction — typically, <em>actual results do not match expected results</em>. Possible causes: a <strong>software fault</strong>; the <strong>test was not performed correctly</strong>; the <strong>expected results were incorrect</strong> (a defect in the test itself). So not every incident is a software defect — the syllabus calls such reports false positives. Incidents can be raised against <strong>documentation</strong> (requirements, user manual) as well as code. Terminology: older syllabi say "incident", CTFL 2018 says "defect management"; the process is the same.</p>`,
-        `<p><strong>Incident (sự cố)</strong> là mọi sự kiện xảy ra trong lúc test cần được điều tra hoặc sửa — điển hình là <em>kết quả thực tế không khớp kết quả mong đợi</em>. Nguyên nhân có thể: <strong>lỗi phần mềm</strong>; <strong>test thực hiện sai</strong>; <strong>kết quả mong đợi bị sai</strong> (lỗi nằm ở chính test). Vì vậy không phải incident nào cũng là defect phần mềm — syllabus gọi các báo cáo như vậy là false positive. Incident có thể nêu cho <strong>tài liệu</strong> (yêu cầu, hướng dẫn sử dụng) chứ không chỉ code. Thuật ngữ: syllabus cũ nói "incident", CTFL 2018 nói "defect management"; quy trình như nhau.</p>`],
+        `<p class="y-chinh">🎯 An <strong>incident</strong> is any event during testing that requires investigation or correction — typically, <em>actual results do not match expected results</em>.</p>
+<p class="nhan">Three possible causes</p>
+<ol>
+<li>A <strong>software fault</strong>.</li>
+<li>The <strong>test was not performed correctly</strong>.</li>
+<li>The <strong>expected results were incorrect</strong> — a defect in the test itself.</li>
+</ol>
+<p class="nhan">Consequences</p>
+<ul>
+<li><strong>Not every incident is a software defect</strong> — the syllabus calls such reports false positives.</li>
+<li><strong>Not only code</strong> — incidents can be raised against documentation (requirements, user manual) as well.</li>
+</ul>
+<p class="ghi-chu">Terminology: older syllabi say "incident", CTFL 2018 says "defect management"; the process is the same.</p>`,
+        `<p class="y-chinh">🎯 <strong>Incident (sự cố)</strong> là mọi sự kiện trong lúc test cần được điều tra hoặc sửa — điển hình là <em>kết quả thực tế không khớp kết quả mong đợi</em>.</p>
+<p class="nhan">Ba nguyên nhân có thể</p>
+<ol>
+<li><strong>Lỗi phần mềm</strong>.</li>
+<li><strong>Test thực hiện sai</strong>.</li>
+<li><strong>Kết quả mong đợi bị sai</strong> — lỗi nằm ở chính test.</li>
+</ol>
+<p class="nhan">Hệ quả</p>
+<ul>
+<li><strong>Không phải incident nào cũng là defect phần mềm</strong> — syllabus gọi các báo cáo như vậy là false positive.</li>
+<li><strong>Không chỉ code</strong> — incident cũng có thể nêu cho tài liệu (yêu cầu, hướng dẫn sử dụng).</li>
+</ul>
+<p class="ghi-chu">Thuật ngữ: syllabus cũ nói "incident", CTFL 2018 nói "defect management"; quy trình như nhau.</p>`],
       [92, 'Defect Report Objectives',
-        `<p>Three objectives (syllabus): provide <strong>developers and other parties</strong> with information about any adverse event — enough to identify, isolate and correct the defect; provide <strong>test managers</strong> a means of <em>tracking the quality</em> of the work product and the impact on testing (e.g. many defects → more re-testing → schedule risk); provide <strong>ideas for development and test process improvement</strong> (root-cause patterns). A report serves three audiences, not only the developer.</p>`,
-        `<p>Ba mục tiêu (syllabus): cung cấp cho <strong>developer và các bên khác</strong> thông tin về sự kiện bất thường — đủ để xác định, cô lập và sửa defect; cho <strong>test manager</strong> phương tiện <em>theo dõi chất lượng</em> sản phẩm và ảnh hưởng tới việc test (vd nhiều defect → nhiều re-test → rủi ro trễ lịch); cung cấp <strong>ý tưởng cải tiến quy trình phát triển và kiểm thử</strong> (các mẫu nguyên nhân gốc). Một báo cáo phục vụ ba đối tượng, không chỉ developer.</p>`],
+        `<p class="y-chinh">🎯 A defect report serves three audiences, not only the developer.</p>
+<ol>
+<li><strong>Developers and other parties</strong> — information about any adverse event, enough to identify, isolate and correct the defect.</li>
+<li><strong>Test managers</strong> — a means of <em>tracking the quality</em> of the work product and the impact on testing (e.g. many defects → more re-testing → schedule risk).</li>
+<li><strong>Process improvement</strong> — ideas for improving the development and test process (root-cause patterns).</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Một defect report phục vụ ba đối tượng, không chỉ developer.</p>
+<ol>
+<li><strong>Developer và các bên khác</strong> — thông tin về sự kiện bất thường, đủ để xác định, cô lập và sửa defect.</li>
+<li><strong>Test manager</strong> — phương tiện <em>theo dõi chất lượng</em> sản phẩm và ảnh hưởng tới việc test (vd nhiều defect → nhiều re-test → rủi ro trễ lịch).</li>
+<li><strong>Cải tiến quy trình</strong> — ý tưởng cải tiến quy trình phát triển và kiểm thử (các mẫu nguyên nhân gốc).</li>
+</ol>`],
       [93, 'Defect Report Components',
-        `<p>The syllabus list (red = the ones people forget least; learn them all): <strong>identifier, title, short summary, date, author/organisation, identification of the test item</strong> (configuration item and version) <strong>and environment</strong>; the <strong>development lifecycle phase(s)</strong> in which it was observed; a <strong>description</strong> enabling reproduction and resolution — steps, logs, database dumps, screenshots, recordings; <strong>expected and actual results</strong>; <strong>scope or degree of impact (severity)</strong>; <strong>urgency/priority to fix</strong>; <strong>state</strong> of the report (open, deferred, duplicate, waiting to be fixed, awaiting confirmation testing, re-opened, closed); <strong>conclusions, recommendations and approvals</strong>; <strong>global issues</strong> — other areas affected by the change; <strong>change history</strong>; <strong>references</strong>, including the test case that revealed the problem. Notice how "test item + version" ties back to configuration management (lesson 7.4).</p>`,
-        `<p>Danh sách của syllabus (màu đỏ = những mục ít bị quên nhất; hãy học hết): <strong>mã, tiêu đề, tóm tắt ngắn, ngày, người/tổ chức báo, định danh hạng mục test</strong> (configuration item và phiên bản) <strong>và môi trường</strong>; <strong>giai đoạn vòng đời</strong> phát hiện; <strong>mô tả</strong> đủ để tái hiện và xử lý — các bước, log, dump cơ sở dữ liệu, ảnh chụp, video; <strong>kết quả mong đợi và thực tế</strong>; <strong>phạm vi hay mức tác động (severity)</strong>; <strong>độ gấp/ưu tiên sửa</strong>; <strong>trạng thái</strong> báo cáo (mở, hoãn, trùng, chờ sửa, chờ confirmation test, mở lại, đóng); <strong>kết luận, khuyến nghị và phê duyệt</strong>; <strong>vấn đề tổng thể</strong> — khu vực khác có thể bị ảnh hưởng bởi thay đổi; <strong>lịch sử thay đổi</strong>; <strong>tham chiếu</strong>, gồm cả test case đã làm lộ vấn đề. Để ý "hạng mục test + phiên bản" nối thẳng về quản lý cấu hình (bài 7.4).</p>`],
+        `<p class="y-chinh">🎯 The syllabus lists eleven components of a defect report — learn them all (red on the slide = the ones people forget least).</p>
+<ol>
+<li><strong>Identifier, title, short summary, date, author/organisation, test item</strong> (configuration item and version) <strong>and environment</strong></li>
+<li><strong>Development lifecycle phase(s)</strong> in which it was observed</li>
+<li><strong>Description</strong> enabling reproduction and resolution — steps, logs, database dumps, screenshots, recordings</li>
+<li><strong>Expected and actual results</strong></li>
+<li><strong>Scope or degree of impact (severity)</strong></li>
+<li><strong>Urgency/priority to fix</strong></li>
+<li><strong>State</strong> of the report — open, deferred, duplicate, waiting to be fixed, awaiting confirmation testing, re-opened, closed</li>
+<li><strong>Conclusions, recommendations and approvals</strong></li>
+<li><strong>Global issues</strong> — other areas affected by the change</li>
+<li><strong>Change history</strong></li>
+<li><strong>References</strong> — including the test case that revealed the problem</li>
+</ol>
+<p class="meo">🧠 <strong>Remember:</strong> "test item + version" ties back to configuration management (lesson 7.4).</p>`,
+        `<p class="y-chinh">🎯 Syllabus liệt kê mười một thành phần của defect report — hãy học hết (màu đỏ trên slide = những mục ít bị quên nhất).</p>
+<ol>
+<li><strong>Mã, tiêu đề, tóm tắt ngắn, ngày, người/tổ chức báo, hạng mục test</strong> (configuration item và phiên bản) <strong>và môi trường</strong></li>
+<li><strong>Giai đoạn vòng đời</strong> phát hiện</li>
+<li><strong>Mô tả</strong> đủ để tái hiện và xử lý — các bước, log, dump cơ sở dữ liệu, ảnh chụp, video</li>
+<li><strong>Kết quả mong đợi và thực tế</strong></li>
+<li><strong>Phạm vi hay mức tác động (severity)</strong></li>
+<li><strong>Độ gấp/ưu tiên sửa</strong></li>
+<li><strong>Trạng thái</strong> báo cáo — mở, hoãn, trùng, chờ sửa, chờ confirmation test, mở lại, đóng</li>
+<li><strong>Kết luận, khuyến nghị và phê duyệt</strong></li>
+<li><strong>Vấn đề tổng thể</strong> — khu vực khác có thể bị ảnh hưởng bởi thay đổi</li>
+<li><strong>Lịch sử thay đổi</strong></li>
+<li><strong>Tham chiếu</strong> — gồm cả test case đã làm lộ vấn đề</li>
+</ol>
+<p class="meo">🧠 <strong>Mẹo nhớ:</strong> "hạng mục test + phiên bản" nối thẳng về quản lý cấu hình (bài 7.4).</p>`],
       [94, 'Step 6. Test Execution (cont.) — a defect report sample',
-        `<p>A real-looking report in a Category / Label / Value table: <strong>Bug ID</strong> #111, name "CART – Unable to add new item to my cart", reporter Jane Doe, submitted 08/05/2023; <strong>overview</strong> — summary "When my cart contains one item, I am unable to add a second item via the 'add to cart' button on a product page", URL, screenshot link; <strong>environment</strong> — Macintosh, macOS Ventura 13.3.1, Chrome 111.0.5563.146; <strong>details</strong> — steps to reproduce (add one item → go to product 123 via the search bar → add it via "add to cart" → go to cart), expected "the cart should contain 2 items", actual "the cart contains only 1 item"; <strong>tracking</strong> — severity Major, priority High. The notes define the two last fields: <em>severity</em> = how severely the defect affects functionality; <em>priority</em> = how fast we need to fix it. What is still missing compared with slide 93? The <strong>build/version</strong> of the web shop under test, a reference to the <strong>test case</strong>, and the <em>Description</em> and <em>Assigned to</em> fields are empty ("/").</p>`,
-        `<p>Một báo cáo "như thật" dạng bảng Category / Label / Value: <strong>Bug ID</strong> #111, tên "CART – Unable to add new item to my cart", người báo Jane Doe, ngày 08/05/2023; <strong>tổng quan</strong> — tóm tắt "Khi giỏ đã có một món, tôi không thêm được món thứ hai bằng nút 'add to cart' ở trang sản phẩm", URL, link ảnh chụp; <strong>môi trường</strong> — Macintosh, macOS Ventura 13.3.1, Chrome 111.0.5563.146; <strong>chi tiết</strong> — bước tái hiện (thêm một món → vào sản phẩm 123 qua ô tìm kiếm → thêm bằng "add to cart" → mở giỏ), mong đợi "giỏ có 2 món", thực tế "giỏ chỉ có 1 món"; <strong>theo dõi</strong> — severity Major, priority High. Ghi chú định nghĩa hai trường cuối: <em>severity</em> = defect ảnh hưởng chức năng nặng tới đâu; <em>priority</em> = cần sửa nhanh tới đâu. So với slide 93 còn thiếu gì? <strong>Build/phiên bản</strong> của web shop đang test, tham chiếu tới <strong>test case</strong>, và hai trường <em>Description</em>, <em>Assigned to</em> đang để trống ("/").</p>`],
+        `<p class="y-chinh">🎯 A real-looking defect report (#111) in a Category / Label / Value table — read it field by field, then spot what is missing.</p>
+<p class="nhan">What the report contains</p>
+<ul>
+<li><strong>Bug ID</strong> — #111, name "CART – Unable to add new item to my cart", reporter Jane Doe, submitted 08/05/2023.</li>
+<li><strong>Overview</strong> — summary "When my cart contains one item, I am unable to add a second item via the 'add to cart' button on a product page"; URL; screenshot link.</li>
+<li><strong>Environment</strong> — Macintosh, macOS Ventura 13.3.1, Chrome 111.0.5563.146.</li>
+<li><strong>Steps to reproduce</strong> — add one item → go to product 123 via the search bar → add it via "add to cart" → go to cart.</li>
+<li><strong>Expected / actual</strong> — "the cart should contain 2 items" / "the cart contains only 1 item".</li>
+<li><strong>Tracking</strong> — severity Major, priority High.</li>
+</ul>
+<p class="nhan">The notes define the last two fields</p>
+<ul>
+<li><strong>Severity</strong> — how severely the defect affects functionality.</li>
+<li><strong>Priority</strong> — how fast we need to fix it.</li>
+</ul>
+<p class="nhan">Still missing compared with slide 93</p>
+<ul>
+<li>The <strong>build/version</strong> of the web shop under test.</li>
+<li>A reference to the <strong>test case</strong>.</li>
+<li>The <em>Description</em>, <em>Assigned to</em> and <em>Notes</em> fields are empty ("/").</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Một defect report "như thật" (#111) dạng bảng Category / Label / Value — đọc từng trường, rồi tìm chỗ còn thiếu.</p>
+<p class="nhan">Báo cáo có những gì</p>
+<ul>
+<li><strong>Bug ID</strong> — #111, tên "CART – Unable to add new item to my cart", người báo Jane Doe, ngày 08/05/2023.</li>
+<li><strong>Tổng quan</strong> — tóm tắt "Khi giỏ đã có một món, tôi không thêm được món thứ hai bằng nút 'add to cart' ở trang sản phẩm"; URL; link ảnh chụp.</li>
+<li><strong>Môi trường</strong> — Macintosh, macOS Ventura 13.3.1, Chrome 111.0.5563.146.</li>
+<li><strong>Bước tái hiện</strong> — thêm một món → vào sản phẩm 123 qua ô tìm kiếm → thêm bằng "add to cart" → mở giỏ.</li>
+<li><strong>Mong đợi / thực tế</strong> — "giỏ có 2 món" / "giỏ chỉ có 1 món".</li>
+<li><strong>Theo dõi</strong> — severity Major, priority High.</li>
+</ul>
+<p class="nhan">Ghi chú định nghĩa hai trường cuối</p>
+<ul>
+<li><strong>Severity</strong> — defect ảnh hưởng chức năng nặng tới đâu.</li>
+<li><strong>Priority</strong> — cần sửa nhanh tới đâu.</li>
+</ul>
+<p class="nhan">So với slide 93 còn thiếu</p>
+<ul>
+<li><strong>Build/phiên bản</strong> của web shop đang test.</li>
+<li>Tham chiếu tới <strong>test case</strong>.</li>
+<li>Các trường <em>Description</em>, <em>Assigned to</em> và <em>Notes</em> đang để trống ("/").</li>
+</ul>`],
       [95, 'Use of incident metrics',
-        `<p>Four questions that defect data can answer. <strong>Top-left</strong> — defects found per week rise, peak, then fall towards zero: <em>"Is this testing approach wearing out?"</em> A falling curve may mean the product is getting better — or that the same tests no longer find anything (pesticide paradox); only new techniques tell you which. <strong>Top-right</strong> — paired bars per phase, this year's (blue) far below last year's (red): <em>"We're better than last year"</em> (the teacher jokes "hê hê" in the notes — but fewer defects found can also mean weaker testing, so compare with defects found in production). <strong>Bottom-left</strong> — a noisy weekly line with one circled spike: <em>"What happened in that week?"</em> The notes: a sudden jump often means a requirement had issues or its implementation has fundamental defects (or a big new build arrived). <strong>Bottom-right</strong> — <em>"How many faults can we expect?"</em>: from the shape of the curve and history you predict the remaining defects (the "estimated remaining defects" exit criterion).</p>`,
-        `<p>Bốn câu hỏi mà dữ liệu defect trả lời được. <strong>Trên trái</strong> — số defect tìm được mỗi tuần tăng, đạt đỉnh rồi giảm dần về 0: <em>"Cách test này có đang mòn đi?"</em> Đường đi xuống có thể nghĩa là sản phẩm tốt lên — hoặc là bộ test cũ không còn tìm được gì (pesticide paradox); chỉ dùng kỹ thuật mới mới biết là cái nào. <strong>Trên phải</strong> — cột đôi theo giai đoạn, năm nay (xanh) thấp hơn hẳn năm ngoái (đỏ): <em>"Năm nay ta giỏi hơn"</em> (thầy/cô đùa "hê hê" trong ghi chú — nhưng tìm được ít defect cũng có thể do test yếu đi, nên phải so thêm với defect lọt ra production). <strong>Dưới trái</strong> — đường theo tuần lởm chởm với một đỉnh được khoanh: <em>"Tuần đó đã xảy ra chuyện gì?"</em> Ghi chú: số lỗi tăng vọt thường do một yêu cầu có vấn đề hoặc phần cài đặt yêu cầu đó sai từ gốc (hoặc vừa nhận một build lớn). <strong>Dưới phải</strong> — <em>"Còn bao nhiêu lỗi nữa?"</em>: từ hình dạng đường cong và lịch sử có thể dự đoán số defect còn lại (chính là exit criterion "số defect ước tính còn lại").</p>`],
+        `<p class="y-chinh">🎯 Defect data answers four management questions — one per corner of the slide.</p>
+<ol>
+<li><strong>Top-left — "Is this testing approach wearing out?"</strong> Defects found per week rise, peak, then fall towards zero. A falling curve may mean the product is getting better — or that the same tests no longer find anything (pesticide paradox); only new techniques tell you which.</li>
+<li><strong>Top-right — "We're better than last year".</strong> Paired bars per phase, this year's (blue) far below last year's (red). The teacher jokes "hê hê" in the notes — but fewer defects found can also mean weaker testing, so compare with defects found in production.</li>
+<li><strong>Bottom-left — "What happened in that week?"</strong> A noisy weekly line with one circled spike. The notes: a sudden jump often means a requirement had issues or its implementation has fundamental defects (or a big new build arrived).</li>
+<li><strong>Bottom-right — "How many faults can we expect?"</strong> From the shape of the curve and history you predict the remaining defects — the "estimated remaining defects" exit criterion.</li>
+</ol>`,
+        `<p class="y-chinh">🎯 Dữ liệu defect trả lời bốn câu hỏi quản lý — mỗi góc slide một câu.</p>
+<ol>
+<li><strong>Trên trái — "Cách test này có đang mòn đi?"</strong> Số defect tìm được mỗi tuần tăng, đạt đỉnh rồi giảm dần về 0. Đường đi xuống có thể nghĩa là sản phẩm tốt lên — hoặc là bộ test cũ không còn tìm được gì (pesticide paradox); chỉ dùng kỹ thuật mới mới biết là cái nào.</li>
+<li><strong>Trên phải — "Năm nay ta giỏi hơn".</strong> Cột đôi theo giai đoạn, năm nay (xanh) thấp hơn hẳn năm ngoái (đỏ). Thầy/cô đùa "hê hê" trong ghi chú — nhưng tìm được ít defect cũng có thể do test yếu đi, nên phải so thêm với defect lọt ra production.</li>
+<li><strong>Dưới trái — "Tuần đó đã xảy ra chuyện gì?"</strong> Đường theo tuần lởm chởm với một đỉnh được khoanh. Ghi chú: số lỗi tăng vọt thường do một yêu cầu có vấn đề hoặc phần cài đặt yêu cầu đó sai từ gốc (hoặc vừa nhận một build lớn).</li>
+<li><strong>Dưới phải — "Còn bao nhiêu lỗi nữa?"</strong> Từ hình dạng đường cong và lịch sử có thể dự đoán số defect còn lại — chính là exit criterion "số defect ước tính còn lại".</li>
+</ol>`],
       [96, 'Report as quickly as possible?',
-        `<p>Two timelines (minutes). <strong>Careful report</strong>: the tester spends <strong>10</strong> writing the incident report; the developer <strong>reproduces</strong> in 5 and <strong>fixes</strong> in 20; the tester <strong>re-tests</strong> in 5 → fault fixed. Total 10 + 5 + 20 + 5 = <strong>40 min</strong>. <strong>Rushed report</strong>: the tester saves time, writing it in <strong>5</strong>; the developer spends <strong>10</strong> and <em>can't reproduce</em>, and three things can happen: "not a fault" is declared and the fault is <em>still there</em>; the report goes back to the tester to be written again (then 10 + 5 + 20 + 5 more: 55 min in total, 15 more than doing it right); or the developer guesses from insufficient information and the <em>fix is incorrect</em>. Moral: five minutes saved by the tester cost the team far more — quality of the report beats speed of reporting.</p>`,
-        `<p>Hai dòng thời gian (phút). <strong>Báo cáo cẩn thận</strong>: tester mất <strong>10</strong> để viết báo cáo; developer <strong>tái hiện</strong> trong 5 và <strong>sửa</strong> trong 20; tester <strong>test lại</strong> trong 5 → lỗi đã sửa. Tổng 10 + 5 + 20 + 5 = <strong>40 phút</strong>. <strong>Báo cáo vội</strong>: tester tiết kiệm, viết trong <strong>5</strong>; developer mất <strong>10</strong> mà <em>không tái hiện được</em>, và có ba khả năng: bị kết luận "không phải lỗi" nên lỗi <em>vẫn còn đó</em>; báo cáo quay về tester để viết lại (thêm 10 + 5 + 20 + 5: tổng 55 phút, hơn 15 phút so với làm đúng từ đầu); hoặc developer đoán mò từ thông tin thiếu và <em>sửa sai</em>. Bài học: năm phút tester tiết kiệm được khiến cả nhóm tốn hơn nhiều — chất lượng báo cáo quan trọng hơn tốc độ báo cáo.</p>`],
+        `<p class="y-chinh">🎯 Quality of the report beats speed of reporting — five minutes saved by the tester cost the team far more.</p>
+<p class="nhan">Careful report (minutes)</p>
+<ol>
+<li><strong>Tester writes</strong> the incident report — 10</li>
+<li><strong>Developer reproduces</strong> — 5</li>
+<li><strong>Developer fixes</strong> — 20</li>
+<li><strong>Tester re-tests</strong> — 5 → fault fixed</li>
+</ol>
+<p>Total 10 + 5 + 20 + 5 = <strong>40 min</strong>.</p>
+<p class="nhan">Rushed report</p>
+<p>The tester writes it in <strong>5</strong>; the developer spends <strong>10</strong> and <em>can't reproduce</em>. Three things can happen:</p>
+<ul>
+<li><strong>"Not a fault"</strong> is declared — and the fault is <em>still there</em>.</li>
+<li><strong>Back to the tester</strong> to report again — then 10 + 5 + 20 + 5 more: 55 min in total, 15 more than doing it right.</li>
+<li><strong>Insufficient information</strong> — the developer guesses and the <em>fix is incorrect</em>.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Chất lượng báo cáo quan trọng hơn tốc độ báo cáo — năm phút tester tiết kiệm được khiến cả nhóm tốn hơn nhiều.</p>
+<p class="nhan">Báo cáo cẩn thận (phút)</p>
+<ol>
+<li><strong>Tester viết</strong> báo cáo — 10</li>
+<li><strong>Developer tái hiện</strong> — 5</li>
+<li><strong>Developer sửa</strong> — 20</li>
+<li><strong>Tester test lại</strong> — 5 → lỗi đã sửa</li>
+</ol>
+<p>Tổng 10 + 5 + 20 + 5 = <strong>40 phút</strong>.</p>
+<p class="nhan">Báo cáo vội</p>
+<p>Tester viết trong <strong>5</strong>; developer mất <strong>10</strong> mà <em>không tái hiện được</em>. Có ba khả năng:</p>
+<ul>
+<li><strong>Kết luận "không phải lỗi"</strong> — và lỗi <em>vẫn còn đó</em>.</li>
+<li><strong>Quay về tester</strong> để báo cáo lại — thêm 10 + 5 + 20 + 5: tổng 55 phút, hơn 15 phút so với làm đúng từ đầu.</li>
+<li><strong>Thiếu thông tin</strong> — developer đoán mò và <em>sửa sai</em>.</li>
+</ul>`],
       [97, 'Severity versus Priority',
-        `<p><strong>Severity</strong> = the <em>impact</em> of a failure caused by this fault. <strong>Priority</strong> = the <em>urgency</em> to fix it. The two call-outs show they are independent: a <strong>minor cosmetic typo</strong> — but in the company name or a board member's name → <em>priority, not severe</em>; a <strong>crash if this feature is used</strong> — but the feature is experimental and not needed yet → <em>severe, not priority</em>. Typical scales: severity Critical/Major/Minor/Trivial; priority High/Medium/Low (or P1–P4).</p>`,
-        `<p><strong>Severity</strong> = <em>tác động</em> của failure do lỗi này gây ra. <strong>Priority</strong> = <em>độ gấp</em> phải sửa. Hai ô chú thích cho thấy chúng độc lập nhau: một <strong>lỗi chính tả nhỏ</strong> — nhưng nằm ở tên công ty hay tên thành viên HĐQT → <em>gấp, không nghiêm trọng</em>; <strong>crash khi dùng tính năng này</strong> — nhưng tính năng còn thử nghiệm, chưa cần tới → <em>nghiêm trọng, không gấp</em>. Thang thường gặp: severity Critical/Major/Minor/Trivial; priority High/Medium/Low (hoặc P1–P4).</p>`],
+        `<p class="y-chinh">🎯 Severity and priority are independent: impact of the failure vs urgency of the fix.</p>
+<ul>
+<li><strong>Severity</strong> — the <em>impact</em> of a failure caused by this fault.</li>
+<li><strong>Priority</strong> — the <em>urgency</em> to fix it.</li>
+</ul>
+<p class="nhan">The two call-outs on the slide</p>
+<ul>
+<li><strong>Minor cosmetic typo</strong> — but in the company name or a board member's name → <em>priority, not severe</em>.</li>
+<li><strong>Crash if this feature is used</strong> — but the feature is experimental and not needed yet → <em>severe, not priority</em>.</li>
+</ul>
+<p class="nhan">Typical scales</p>
+<ul>
+<li><strong>Severity</strong> — Critical / Major / Minor / Trivial.</li>
+<li><strong>Priority</strong> — High / Medium / Low (or P1–P4).</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Severity và priority độc lập nhau: tác động của failure so với độ gấp phải sửa.</p>
+<ul>
+<li><strong>Severity</strong> — <em>tác động</em> của failure do lỗi này gây ra.</li>
+<li><strong>Priority</strong> — <em>độ gấp</em> phải sửa.</li>
+</ul>
+<p class="nhan">Hai ô chú thích trên slide</p>
+<ul>
+<li><strong>Lỗi chính tả nhỏ</strong> — nhưng nằm ở tên công ty hay tên thành viên HĐQT → <em>gấp, không nghiêm trọng</em>.</li>
+<li><strong>Crash khi dùng tính năng này</strong> — nhưng tính năng còn thử nghiệm, chưa cần tới → <em>nghiêm trọng, không gấp</em>.</li>
+</ul>
+<p class="nhan">Thang thường gặp</p>
+<ul>
+<li><strong>Severity</strong> — Critical / Major / Minor / Trivial.</li>
+<li><strong>Priority</strong> — High / Medium / Low (hoặc P1–P4).</li>
+</ul>`],
       [98, 'Incident Lifecycle — tester tasks vs developer tasks',
-        `<p>From Rex Black, <em>Managing the Testing Process</em> (Microsoft Press, 1999). The pink (tester) box: <strong>1</strong> the steps to reproduce the fault; <strong>2</strong> decide whether it is a <em>test</em> fault or a <em>system</em> fault; <strong>3</strong> the external factors that influence the symptoms (notes: environment, network…). A green arrow hands over to the blue (developer) box: <strong>4</strong> the root cause of the problem; <strong>5</strong> how to repair it without introducing new problems; <strong>6</strong> changes debugged and properly component tested. The arrow returns to the tester: <strong>7</strong> is the fault fixed? (confirmation testing). This is the testing / debugging split of lesson 1.1 inside one defect's life: testers isolate, developers diagnose and repair, testers confirm.</p>`,
-        `<p>Theo Rex Black, <em>Managing the Testing Process</em> (Microsoft Press, 1999). Ô hồng (tester): <strong>1</strong> các bước tái hiện lỗi; <strong>2</strong> xác định đó là lỗi của <em>test</em> hay lỗi của <em>hệ thống</em>; <strong>3</strong> các yếu tố bên ngoài ảnh hưởng tới triệu chứng (ghi chú: môi trường, mạng…). Mũi tên xanh lá chuyển sang ô xanh (developer): <strong>4</strong> nguyên nhân gốc của vấn đề; <strong>5</strong> cách sửa mà không gây vấn đề mới; <strong>6</strong> thay đổi đã được debug và component test đầy đủ. Mũi tên quay về tester: <strong>7</strong> lỗi đã được sửa chưa? (confirmation testing). Đây chính là sự phân chia testing / debugging của bài 1.1 trong vòng đời một defect: tester cô lập, developer chẩn đoán và sửa, tester xác nhận.</p>`],
+        `<p class="y-chinh">🎯 Seven steps in one defect's life: testers isolate, developers diagnose and repair, testers confirm.</p>
+<p class="nhan">Tester tasks (pink box)</p>
+<ol>
+<li>The <strong>steps to reproduce</strong> the fault.</li>
+<li>Decide whether it is a <em>test</em> fault or a <em>system</em> fault.</li>
+<li>The <strong>external factors</strong> that influence the symptoms — notes: environment, network…</li>
+</ol>
+<p class="nhan">Developer tasks (blue box, after the green arrow)</p>
+<ol start="4">
+<li>The <strong>root cause</strong> of the problem.</li>
+<li><strong>How to repair</strong> it without introducing new problems.</li>
+<li>Changes <strong>debugged and properly component tested</strong>.</li>
+</ol>
+<p class="nhan">Back to the tester</p>
+<ol start="7">
+<li><strong>Is the fault fixed?</strong> — confirmation testing.</li>
+</ol>
+<p>This is the testing / debugging split of lesson 1.1 inside one defect's life.</p>
+<p class="ghi-chu">Source: Rex Black, <em>Managing the Testing Process</em> (Microsoft Press, 1999).</p>`,
+        `<p class="y-chinh">🎯 Bảy bước trong đời một defect: tester cô lập, developer chẩn đoán và sửa, tester xác nhận.</p>
+<p class="nhan">Việc của tester (ô hồng)</p>
+<ol>
+<li>Các <strong>bước tái hiện</strong> lỗi.</li>
+<li>Xác định đó là lỗi của <em>test</em> hay lỗi của <em>hệ thống</em>.</li>
+<li>Các <strong>yếu tố bên ngoài</strong> ảnh hưởng tới triệu chứng — ghi chú: môi trường, mạng…</li>
+</ol>
+<p class="nhan">Việc của developer (ô xanh, sau mũi tên xanh lá)</p>
+<ol start="4">
+<li><strong>Nguyên nhân gốc</strong> của vấn đề.</li>
+<li><strong>Cách sửa</strong> mà không gây vấn đề mới.</li>
+<li>Thay đổi đã được <strong>debug và component test đầy đủ</strong>.</li>
+</ol>
+<p class="nhan">Quay về tester</p>
+<ol start="7">
+<li><strong>Lỗi đã được sửa chưa?</strong> — confirmation testing.</li>
+</ol>
+<p>Đây chính là sự phân chia testing / debugging của bài 1.1 trong vòng đời một defect.</p>
+<p class="ghi-chu">Nguồn: Rex Black, <em>Managing the Testing Process</em> (Microsoft Press, 1999).</p>`],
       [99, 'Incident Lifecycle — Figure 5.3',
-        `<p>The state diagram from the textbook (fst Figure 5.3 "Incident report life cycle", reprinted as "Defect report life cycle" in fst4 p.195). Main path: <strong>Reported</strong> —<em>reviewed</em>→ <strong>Opened</strong> —<em>approved for repair</em>→ <strong>Assigned</strong> —<em>repaired</em>→ <strong>Fixed</strong> —<em>confirmed to be repaired</em>→ <strong>Closed</strong>. Side paths: Reported —<em>bad report</em>→ <strong>Rejected</strong> —<em>rewritten</em>→ Reported; Opened —<em>not a problem</em>→ Rejected; Opened —<em>declined for repair</em>→ <strong>Deferred</strong> —<em>gathered new information</em>→ <strong>Reopened</strong>; Fixed —<em>failed confirmation test</em>→ Reopened; Closed —<em>problem returned</em>→ Reopened; Reopened —<em>approved for re-repair</em>→ Assigned. The book adds: in every state except Rejected, Deferred and Closed the report has a clear <strong>owner</strong> responsible for the next transition; ideally only the owner can move it, and tools should enforce the allowed transitions.</p>`,
-        `<p>Sơ đồ trạng thái trong giáo trình (fst Figure 5.3 "Incident report life cycle", in lại thành "Defect report life cycle" ở fst4 trang 195). Đường chính: <strong>Reported</strong> —<em>được review</em>→ <strong>Opened</strong> —<em>duyệt cho sửa</em>→ <strong>Assigned</strong> —<em>đã sửa</em>→ <strong>Fixed</strong> —<em>xác nhận đã sửa</em>→ <strong>Closed</strong>. Nhánh phụ: Reported —<em>báo cáo tồi</em>→ <strong>Rejected</strong> —<em>viết lại</em>→ Reported; Opened —<em>không phải lỗi</em>→ Rejected; Opened —<em>từ chối sửa lúc này</em>→ <strong>Deferred</strong> —<em>có thông tin mới</em>→ <strong>Reopened</strong>; Fixed —<em>confirmation test fail</em>→ Reopened; Closed —<em>lỗi quay lại</em>→ Reopened; Reopened —<em>duyệt sửa lại</em>→ Assigned. Sách nói thêm: ở mọi trạng thái trừ Rejected, Deferred và Closed, báo cáo có một <strong>người sở hữu</strong> rõ ràng chịu trách nhiệm chuyển bước tiếp theo; lý tưởng là chỉ người sở hữu mới được chuyển trạng thái, và công cụ nên ép đúng các chuyển tiếp được phép.</p>`],
+        `<p class="y-chinh">🎯 The textbook state diagram: one main path from Reported to Closed, plus side paths for rejection, deferral and reopening.</p>
+<p class="ghi-chu">fst Figure 5.3 "Incident report life cycle", reprinted as "Defect report life cycle" in fst4 p.195.</p>
+<p class="nhan">Main path</p>
+<ol>
+<li><strong>Reported</strong> —<em>reviewed</em>→ <strong>Opened</strong></li>
+<li><strong>Opened</strong> —<em>approved for repair</em>→ <strong>Assigned</strong></li>
+<li><strong>Assigned</strong> —<em>repaired</em>→ <strong>Fixed</strong></li>
+<li><strong>Fixed</strong> —<em>confirmed to be repaired</em>→ <strong>Closed</strong></li>
+</ol>
+<p class="nhan">Side paths</p>
+<ul>
+<li>Reported —<em>bad report</em>→ <strong>Rejected</strong> —<em>rewritten</em>→ Reported</li>
+<li>Opened —<em>not a problem</em>→ Rejected</li>
+<li>Opened —<em>declined for repair</em>→ <strong>Deferred</strong> —<em>gathered new information</em>→ <strong>Reopened</strong></li>
+<li>Fixed —<em>failed confirmation test</em>→ Reopened</li>
+<li>Closed —<em>problem returned</em>→ Reopened</li>
+<li>Reopened —<em>approved for re-repair</em>→ Assigned</li>
+</ul>
+<p class="nhan">Owners (the book)</p>
+<p>In every state except Rejected, Deferred and Closed the report has a clear <strong>owner</strong> responsible for the next transition. Ideally only the owner can move it, and tools should enforce the allowed transitions.</p>`,
+        `<p class="y-chinh">🎯 Sơ đồ trạng thái trong giáo trình: một đường chính từ Reported tới Closed, cộng các nhánh phụ cho bị từ chối, tạm hoãn và mở lại.</p>
+<p class="ghi-chu">fst Figure 5.3 "Incident report life cycle", in lại thành "Defect report life cycle" ở fst4 trang 195.</p>
+<p class="nhan">Đường chính</p>
+<ol>
+<li><strong>Reported</strong> —<em>được review</em>→ <strong>Opened</strong></li>
+<li><strong>Opened</strong> —<em>duyệt cho sửa</em>→ <strong>Assigned</strong></li>
+<li><strong>Assigned</strong> —<em>đã sửa</em>→ <strong>Fixed</strong></li>
+<li><strong>Fixed</strong> —<em>xác nhận đã sửa</em>→ <strong>Closed</strong></li>
+</ol>
+<p class="nhan">Nhánh phụ</p>
+<ul>
+<li>Reported —<em>báo cáo tồi</em>→ <strong>Rejected</strong> —<em>viết lại</em>→ Reported</li>
+<li>Opened —<em>không phải lỗi</em>→ Rejected</li>
+<li>Opened —<em>từ chối sửa lúc này</em>→ <strong>Deferred</strong> —<em>có thông tin mới</em>→ <strong>Reopened</strong></li>
+<li>Fixed —<em>confirmation test fail</em>→ Reopened</li>
+<li>Closed —<em>lỗi quay lại</em>→ Reopened</li>
+<li>Reopened —<em>duyệt sửa lại</em>→ Assigned</li>
+</ul>
+<p class="nhan">Người sở hữu (theo sách)</p>
+<p>Ở mọi trạng thái trừ Rejected, Deferred và Closed, báo cáo có một <strong>người sở hữu</strong> rõ ràng chịu trách nhiệm chuyển bước tiếp theo. Lý tưởng là chỉ người sở hữu mới được chuyển trạng thái, và công cụ nên ép đúng các chuyển tiếp được phép.</p>`],
       [100, 'Metrics Example — GQM (Goal-Question-Metric)',
-        `<p><strong>GQM</strong> (Basili) builds metrics top-down so that you only measure what answers a question about a goal. Goal: <strong>EDD &lt; 2 defects per KLoC</strong> (the slide does not expand EDD; read it as the <em>estimated defect density</em> still in the code at delivery). Q1 size of the software? → M1.1 KLoC per module. Q2 how many defects in the code? → M2.1 estimate of the number of defects (e.g. from history). Q3 how many found? → M3.1 defects found in reviews and inspections, M3.2 defects found in subsequent tests. Q4 yield of the tests? → M4.1 defects found (M3) ÷ estimate (M2). The residual (estimate − found) ÷ KLoC is compared with the goal. Computed example below the walkthrough.</p>`,
-        `<p><strong>GQM</strong> (Basili) xây số đo từ trên xuống để chỉ đo những gì trả lời một câu hỏi về một mục tiêu. Mục tiêu: <strong>EDD &lt; 2 defect trên mỗi KLoC</strong> (slide không giải thích EDD; hiểu là <em>mật độ defect ước tính</em> còn trong code khi bàn giao). Q1 phần mềm lớn cỡ nào? → M1.1 KLoC mỗi module. Q2 code có bao nhiêu defect? → M2.1 số defect ước tính (vd từ lịch sử). Q3 đã tìm được bao nhiêu? → M3.1 defect tìm trong review và inspection, M3.2 defect tìm trong các đợt test sau. Q4 hiệu suất (yield) của test? → M4.1 số defect tìm được (M3) ÷ ước tính (M2). Phần còn lại (ước tính − đã tìm) ÷ KLoC đem so với mục tiêu. Ví dụ tính toán ở sau phần học từng slide.</p>`],
+        `<p class="y-chinh">🎯 <strong>GQM</strong> (Basili) builds metrics top-down, so you only measure what answers a question about a goal.</p>
+<p class="nhan">Goal</p>
+<p><strong>EDD &lt; 2 defects per KLoC</strong>. The slide does not expand EDD; read it as the <em>estimated defect density</em> still in the code at delivery.</p>
+<p class="nhan">Questions → metrics</p>
+<ol>
+<li><strong>Q1 Size of the software?</strong> → M1.1 KLoC per module.</li>
+<li><strong>Q2 How many defects in the code?</strong> → M2.1 estimate of the number of defects (e.g. from history).</li>
+<li><strong>Q3 How many found?</strong> → M3.1 defects found in reviews and inspections; M3.2 defects found in subsequent tests.</li>
+<li><strong>Q4 Yield of the tests?</strong> → M4.1 defects found (M3) ÷ estimate (M2).</li>
+</ol>
+<p>The residual (estimate − found) ÷ KLoC is compared with the goal. Computed example below the walkthrough.</p>`,
+        `<p class="y-chinh">🎯 <strong>GQM</strong> (Basili) xây số đo từ trên xuống, để chỉ đo những gì trả lời một câu hỏi về một mục tiêu.</p>
+<p class="nhan">Mục tiêu</p>
+<p><strong>EDD &lt; 2 defect trên mỗi KLoC</strong>. Slide không giải thích EDD; hiểu là <em>mật độ defect ước tính</em> còn trong code khi bàn giao.</p>
+<p class="nhan">Câu hỏi → số đo</p>
+<ol>
+<li><strong>Q1 Phần mềm lớn cỡ nào?</strong> → M1.1 KLoC mỗi module.</li>
+<li><strong>Q2 Code có bao nhiêu defect?</strong> → M2.1 số defect ước tính (vd từ lịch sử).</li>
+<li><strong>Q3 Đã tìm được bao nhiêu?</strong> → M3.1 defect tìm trong review và inspection; M3.2 defect tìm trong các đợt test sau.</li>
+<li><strong>Q4 Hiệu suất (yield) của test?</strong> → M4.1 số defect tìm được (M3) ÷ ước tính (M2).</li>
+</ol>
+<p>Phần còn lại (ước tính − đã tìm) ÷ KLoC đem so với mục tiêu. Ví dụ tính toán ở sau phần học từng slide.</p>`],
       [101, 'Metrics Exercise — Reger',
-        `<p>The exercise: <em>Goal — in system test, do an optimal check in minimum time based on the 3 customers for Reger</em> (Reger is the fictional company of the exercise). The slide lists the metric areas to use: <strong>priority of the processes used by customers</strong>, <strong>coverage of the processes</strong>, <strong>incidents found</strong>, <strong>severity of incidents</strong>, <strong>time planned and spent</strong>. Your job is to turn them into a GQM tree and use the numbers to steer testing — the full solution with computed data follows.</p>`,
-        `<p>Bài tập: <em>Mục tiêu — trong system test, kiểm tra tối ưu trong thời gian ngắn nhất dựa trên 3 khách hàng của Reger</em> (Reger là công ty giả định của bài). Slide liệt kê các mảng số đo phải dùng: <strong>độ ưu tiên của các quy trình khách hàng dùng</strong>, <strong>độ bao phủ các quy trình</strong>, <strong>số sự cố tìm được</strong>, <strong>mức nghiêm trọng của sự cố</strong>, <strong>thời gian dự kiến và đã dùng</strong>. Việc của bạn là biến chúng thành một cây GQM và dùng số liệu để lái việc test — lời giải đầy đủ có số liệu tính sẵn ở bên dưới.</p>`],
+        `<p class="y-chinh">🎯 An exercise: turn five metric areas into a GQM tree that steers system testing for Reger.</p>
+<p class="nhan">The goal</p>
+<p><em>In system test, do an optimal check in minimum time based on the 3 customers for Reger</em> (Reger is the fictional company of the exercise).</p>
+<p class="nhan">Metric areas to use (slide)</p>
+<ol>
+<li><strong>Priority of the processes</strong> used by customers</li>
+<li><strong>Coverage</strong> of the processes</li>
+<li><strong>Incidents found</strong></li>
+<li><strong>Severity</strong> of incidents</li>
+<li><strong>Time planned and spent</strong></li>
+</ol>
+<p>Your job is to turn them into a GQM tree and use the numbers to steer testing — the full solution with computed data follows.</p>`,
+        `<p class="y-chinh">🎯 Bài tập: biến năm mảng số đo thành một cây GQM để lái việc system test cho Reger.</p>
+<p class="nhan">Mục tiêu</p>
+<p><em>Trong system test, kiểm tra tối ưu trong thời gian ngắn nhất dựa trên 3 khách hàng của Reger</em> (Reger là công ty giả định của bài).</p>
+<p class="nhan">Các mảng số đo phải dùng (slide)</p>
+<ol>
+<li><strong>Độ ưu tiên của các quy trình</strong> khách hàng dùng</li>
+<li><strong>Độ bao phủ</strong> các quy trình</li>
+<li><strong>Số sự cố tìm được</strong></li>
+<li><strong>Mức nghiêm trọng</strong> của sự cố</li>
+<li><strong>Thời gian dự kiến và đã dùng</strong></li>
+</ol>
+<p>Việc của bạn là biến chúng thành một cây GQM và dùng số liệu để lái việc test — lời giải đầy đủ có số liệu tính sẵn ở bên dưới.</p>`],
     ]),
     bi(`<h3>Ví dụ có lời giải · Worked example 1 — write a defect report from a user's e-mail (K3)</h3>
 <p>During beta testing of a student-portal app, a user writes: <em>"I tried to register for the SWT301 exam on my phone. After I chose the slot and pressed Confirm, it spun for a long time and said 'Error 500'. When I opened the schedule later, the exam was there twice."</em> A good tester does not forward the e-mail; she reproduces, isolates and reports:</p>
@@ -967,7 +3279,15 @@ const L76 = {
 </table>
 <p>What the tester added beyond the e-mail: the exact build and environment (CM, lesson 7.4), a <em>deliberately reproduced</em> failure with a frequency, isolation (network speed is the factor — slide 98 task 3), the log evidence, the impact on other screens, and a neutral, factual tone (lesson 1.5). This mirrors the fst4 defect-report exercise (p.200, solution p.202), where the book lists exactly these missing elements for an e-mail from a car dealer.</p>
 <h3>Worked example 2 — follow DEF-2041 through Figure 5.3</h3>
-<p>Reported → (reviewed by the triage board) Opened → (approved for repair) Assigned to developer Minh → (idempotency key added) Fixed → tester re-runs TC-REG-018 on build 3.4.1: still two bookings when <em>two</em> retries happen → <strong>Reopened</strong> (failed confirmation test) → (approved for re-repair) Assigned → Fixed on 3.4.2 → confirmation test and a regression run of the other POST screens pass → <strong>Closed</strong>. Owners: tester (Reported), triage lead (Opened), developer (Assigned/Fixed), tester (Fixed → Closed/Reopened).</p>
+<ol>
+<li><strong>Reported</strong> → (reviewed by the triage board) <strong>Opened</strong></li>
+<li>→ (approved for repair) <strong>Assigned</strong> to developer Minh</li>
+<li>→ (idempotency key added) <strong>Fixed</strong></li>
+<li>→ tester re-runs TC-REG-018 on build 3.4.1: still two bookings when <em>two</em> retries happen → <strong>Reopened</strong> (failed confirmation test)</li>
+<li>→ (approved for re-repair) <strong>Assigned</strong> → <strong>Fixed</strong> on 3.4.2</li>
+<li>→ confirmation test and a regression run of the other POST screens pass → <strong>Closed</strong></li>
+</ol>
+<p><strong>Owners:</strong> tester (Reported), triage lead (Opened), developer (Assigned/Fixed), tester (Fixed → Closed/Reopened).</p>
 <h3>Worked example 3 — the GQM tree of slide 100 with numbers</h3>
 <p>History says about <strong>6 defects per KLoC</strong> are injected (M2.1 = 6 × KLoC). Script output:</p>
 <pre><code>A KLoC 12 est 72 found 60 (rev 30 test 30) yield 83.3% residual 12 EDD 1 OK
@@ -992,9 +3312,22 @@ Invoicing weight 8 cov 40% weighted gap 4.8 incidents 9 (crit/maj/min 2/3/4) sev
 Reporting weight 4 cov 100% weighted gap 0 incidents 5 (crit/maj/min 0/0/5) sev-score 5 h plan/spent 8/12 incidents/h 0.42
 Customer admin weight 4 cov 50% weighted gap 2 incidents 2 (crit/maj/min 0/1/1) sev-score 3 h plan/spent 8/4 incidents/h 0.5
 weighted coverage 68.3 % unweighted 70 % total weight 24 time plan 48 spent 40</code></pre>
-<p><strong>Reading it:</strong> Invoicing is top-weighted (8) but only 40 % covered — the largest weighted gap (4.8) — and it has the worst severity score (16) and the highest find rate (0.9 incidents/h): spend the next hours there. Reporting is low-weight yet fully covered and over budget (12 h vs 8 h): stop testing it. Weighted coverage (68.3 %) is below the naive average (70 %) precisely because the gaps sit in important processes — the unweighted number would flatter us. Exit decision: continue until Invoicing and Order entry reach ~90 % coverage with no open critical incidents; that is "optimal check in minimum time".</p>
-<div class="pitfall"><b>Exam traps.</b> (1) Severity = impact, priority = urgency — a typo in the company name is <em>low severity, high priority</em>. (2) Not every incident is a software defect: the test or its expected result may be wrong. (3) After a fix, the tester's check is <em>confirmation testing</em>; if it fails the state is <em>Reopened</em>, not "New". (4) A defect report's first reader is the developer, but test managers and process improvement are also objectives. (5) Writing fast is not the goal — reproducibility is (slide 96).</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Classifying defects so that they teach you something.</b> IEEE 1044 (classification for software anomalies) and IBM's <em>Orthogonal Defect Classification</em> tag every defect with independent attributes — defect type (assignment, checking, algorithm, interface, timing…), trigger (what kind of test revealed it), phase injected and phase found. Aggregated over a release, the pattern tells you whether to invest in better reviews, better unit tests or better requirements — slide 92's third objective done systematically. <em>Outside the syllabus because CTFL stops at writing and tracking individual reports.</em></div>`,
+<p><strong>Reading it:</strong></p>
+<ul>
+<li><strong>Invoicing</strong> — top-weighted (8) but only 40 % covered, the largest weighted gap (4.8); it also has the worst severity score (16) and the highest find rate (0.9 incidents/h). Spend the next hours there.</li>
+<li><strong>Reporting</strong> — low-weight yet fully covered and over budget (12 h vs 8 h): stop testing it.</li>
+<li><strong>Weighted coverage</strong> (68.3 %) is below the naive average (70 %) precisely because the gaps sit in important processes — the unweighted number would flatter us.</li>
+<li><strong>Exit decision</strong> — continue until Invoicing and Order entry reach ~90 % coverage with no open critical incidents; that is "optimal check in minimum time".</li>
+</ul>
+<div class="pitfall co-tieu-de"><strong>Exam traps.</strong>
+<ol>
+<li>Severity = impact, priority = urgency — a typo in the company name is <em>low severity, high priority</em>.</li>
+<li>Not every incident is a software defect: the test or its expected result may be wrong.</li>
+<li>After a fix, the tester's check is <em>confirmation testing</em>; if it fails the state is <em>Reopened</em>, not "New".</li>
+<li>A defect report's first reader is the developer, but test managers and process improvement are also objectives.</li>
+<li>Writing fast is not the goal — reproducibility is (slide 96).</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Classifying defects so that they teach you something.</strong> IEEE 1044 (classification for software anomalies) and IBM's <em>Orthogonal Defect Classification</em> tag every defect with independent attributes — defect type (assignment, checking, algorithm, interface, timing…), trigger (what kind of test revealed it), phase injected and phase found. Aggregated over a release, the pattern tells you whether to invest in better reviews, better unit tests or better requirements — slide 92's third objective done systematically. <em>Outside the syllabus because CTFL stops at writing and tracking individual reports.</em></div>`,
     `<h3>Ví dụ có lời giải · Ví dụ 1 — viết defect report từ e-mail của người dùng (K3)</h3>
 <p>Trong đợt beta test một app cổng thông tin sinh viên, một người dùng viết: <em>"Mình đăng ký thi SWT301 trên điện thoại. Chọn ca xong bấm Xác nhận thì nó quay rất lâu rồi báo 'Error 500'. Lúc sau mở lịch thì thấy môn thi xuất hiện hai lần."</em> Tester giỏi không chuyển tiếp nguyên e-mail; cô ấy tái hiện, cô lập rồi mới báo cáo:</p>
 <table>
@@ -1016,7 +3349,15 @@ weighted coverage 68.3 % unweighted 70 % total weight 24 time plan 48 spent 40</
 </table>
 <p>Tester đã thêm gì so với e-mail: build và môi trường chính xác (CM, bài 7.4), failure được <em>chủ động tái hiện</em> kèm tần suất, cô lập được yếu tố (tốc độ mạng — việc số 3 ở slide 98), bằng chứng log, ảnh hưởng tới màn hình khác, và giọng văn trung lập, dựa trên sự kiện (bài 1.5). Ví dụ này bám đúng bài tập defect report của fst4 (trang 200, lời giải trang 202), nơi sách liệt kê đúng những thông tin còn thiếu trong e-mail của một đại lý ô tô.</p>
 <h3>Ví dụ 2 — đưa DEF-2041 đi qua Figure 5.3</h3>
-<p>Reported → (hội đồng phân loại review) Opened → (duyệt cho sửa) Assigned cho developer Minh → (thêm idempotency key) Fixed → tester chạy lại TC-REG-018 trên build 3.4.1: vẫn ra hai lượt khi thử lại <em>hai</em> lần → <strong>Reopened</strong> (confirmation test fail) → (duyệt sửa lại) Assigned → Fixed ở 3.4.2 → confirmation test và một lượt regression các màn POST khác đều pass → <strong>Closed</strong>. Người sở hữu: tester (Reported), trưởng nhóm phân loại (Opened), developer (Assigned/Fixed), tester (Fixed → Closed/Reopened).</p>
+<ol>
+<li><strong>Reported</strong> → (hội đồng phân loại review) <strong>Opened</strong></li>
+<li>→ (duyệt cho sửa) <strong>Assigned</strong> cho developer Minh</li>
+<li>→ (thêm idempotency key) <strong>Fixed</strong></li>
+<li>→ tester chạy lại TC-REG-018 trên build 3.4.1: vẫn ra hai lượt khi thử lại <em>hai</em> lần → <strong>Reopened</strong> (confirmation test fail)</li>
+<li>→ (duyệt sửa lại) <strong>Assigned</strong> → <strong>Fixed</strong> ở 3.4.2</li>
+<li>→ confirmation test và một lượt regression các màn POST khác đều pass → <strong>Closed</strong></li>
+</ol>
+<p><strong>Người sở hữu:</strong> tester (Reported), trưởng nhóm phân loại (Opened), developer (Assigned/Fixed), tester (Fixed → Closed/Reopened).</p>
 <h3>Ví dụ 3 — cây GQM của slide 100 có số liệu</h3>
 <p>Lịch sử cho thấy khoảng <strong>6 defect mỗi KLoC</strong> bị đưa vào code (M2.1 = 6 × KLoC). Kết quả script:</p>
 <pre><code>A KLoC 12 est 72 found 60 (rev 30 test 30) yield 83.3% residual 12 EDD 1 OK
@@ -1041,9 +3382,22 @@ Invoicing weight 8 cov 40% weighted gap 4.8 incidents 9 (crit/maj/min 2/3/4) sev
 Reporting weight 4 cov 100% weighted gap 0 incidents 5 (crit/maj/min 0/0/5) sev-score 5 h plan/spent 8/12 incidents/h 0.42
 Customer admin weight 4 cov 50% weighted gap 2 incidents 2 (crit/maj/min 0/1/1) sev-score 3 h plan/spent 8/4 incidents/h 0.5
 weighted coverage 68.3 % unweighted 70 % total weight 24 time plan 48 spent 40</code></pre>
-<p><strong>Đọc kết quả:</strong> Invoicing (lập hoá đơn) có trọng số cao nhất (8) mà mới phủ 40 % — khoảng hụt có trọng số lớn nhất (4,8) — lại có điểm nghiêm trọng tệ nhất (16) và tốc độ tìm lỗi cao nhất (0,9 sự cố/giờ): dồn mấy giờ tới vào đó. Reporting trọng số thấp nhưng đã phủ đủ và vượt ngân sách (12 giờ so với 8): dừng test phần này. Bao phủ có trọng số (68,3 %) thấp hơn trung bình thường (70 %) chính vì chỗ hụt nằm ở quy trình quan trọng — con số không trọng số sẽ "tô hồng" cho ta. Quyết định kết thúc: tiếp tục tới khi Invoicing và Order entry đạt khoảng 90 % bao phủ và không còn sự cố critical nào mở; đó là "kiểm tra tối ưu trong thời gian ngắn nhất".</p>
-<div class="pitfall"><b>Bẫy đề thi.</b> (1) Severity = tác động, priority = độ gấp — gõ sai tên công ty là <em>severity thấp, priority cao</em>. (2) Không phải incident nào cũng là defect phần mềm: test hoặc kết quả mong đợi có thể sai. (3) Sau khi sửa, việc tester kiểm lại là <em>confirmation testing</em>; nếu fail thì trạng thái là <em>Reopened</em>, không phải "New". (4) Người đọc đầu tiên của defect report là developer, nhưng test manager và cải tiến quy trình cũng là mục tiêu. (5) Mục tiêu không phải viết nhanh — mà là tái hiện được (slide 96).</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Phân loại defect để rút ra bài học.</b> IEEE 1044 (phân loại bất thường phần mềm) và <em>Orthogonal Defect Classification</em> của IBM gắn cho mỗi defect các thuộc tính độc lập — loại defect (gán giá trị, kiểm tra điều kiện, thuật toán, giao diện, thời điểm…), trigger (loại test nào làm lộ nó), giai đoạn đưa vào và giai đoạn phát hiện. Gộp cả một bản phát hành, mẫu hình cho biết nên đầu tư vào review, unit test hay yêu cầu tốt hơn — mục tiêu thứ ba của slide 92 được làm một cách hệ thống. <em>Ngoài giáo trình vì CTFL dừng ở việc viết và theo dõi từng báo cáo.</em></div>`),
+<p><strong>Đọc kết quả:</strong></p>
+<ul>
+<li><strong>Invoicing</strong> (lập hoá đơn) — trọng số cao nhất (8) mà mới phủ 40 %, khoảng hụt có trọng số lớn nhất (4,8); lại có điểm nghiêm trọng tệ nhất (16) và tốc độ tìm lỗi cao nhất (0,9 sự cố/giờ). Dồn mấy giờ tới vào đó.</li>
+<li><strong>Reporting</strong> — trọng số thấp nhưng đã phủ đủ và vượt ngân sách (12 giờ so với 8): dừng test phần này.</li>
+<li><strong>Bao phủ có trọng số</strong> (68,3 %) thấp hơn trung bình thường (70 %) chính vì chỗ hụt nằm ở quy trình quan trọng — con số không trọng số sẽ "tô hồng" cho ta.</li>
+<li><strong>Quyết định kết thúc</strong> — tiếp tục tới khi Invoicing và Order entry đạt khoảng 90 % bao phủ và không còn sự cố critical nào mở; đó là "kiểm tra tối ưu trong thời gian ngắn nhất".</li>
+</ul>
+<div class="pitfall co-tieu-de"><strong>Bẫy đề thi.</strong>
+<ol>
+<li>Severity = tác động, priority = độ gấp — gõ sai tên công ty là <em>severity thấp, priority cao</em>.</li>
+<li>Không phải incident nào cũng là defect phần mềm: test hoặc kết quả mong đợi có thể sai.</li>
+<li>Sau khi sửa, việc tester kiểm lại là <em>confirmation testing</em>; nếu fail thì trạng thái là <em>Reopened</em>, không phải "New".</li>
+<li>Người đọc đầu tiên của defect report là developer, nhưng test manager và cải tiến quy trình cũng là mục tiêu.</li>
+<li>Mục tiêu không phải viết nhanh — mà là tái hiện được (slide 96).</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Phân loại defect để rút ra bài học.</strong> IEEE 1044 (phân loại bất thường phần mềm) và <em>Orthogonal Defect Classification</em> của IBM gắn cho mỗi defect các thuộc tính độc lập — loại defect (gán giá trị, kiểm tra điều kiện, thuật toán, giao diện, thời điểm…), trigger (loại test nào làm lộ nó), giai đoạn đưa vào và giai đoạn phát hiện. Gộp cả một bản phát hành, mẫu hình cho biết nên đầu tư vào review, unit test hay yêu cầu tốt hơn — mục tiêu thứ ba của slide 92 được làm một cách hệ thống. <em>Ngoài giáo trình vì CTFL dừng ở việc viết và theo dõi từng báo cáo.</em></div>`),
     books([
       ['fst4', 'Ch.5 §6 "Defect management" — pp.190–196 (PDF 204–210), Figure 5.3 "Defect report life cycle" p.195 (PDF 209); sample questions 11 and 18 pp.198–199; exercise "Defect report" p.200, solution p.202 (PDF 214, 216)', 'Chương 5 §6 "Defect management" — trang 190–196 (PDF 204–210), Figure 5.3 "Defect report life cycle" trang 195 (PDF 209); câu hỏi mẫu 11 và 18 trang 198–199; bài tập "Defect report" trang 200, lời giải trang 202 (PDF 214, 216)'],
       ['fst', '§5.6 "Incident management" — PDF 156–161, Figure 5.3 "Incident report life cycle" on PDF 160', '§5.6 "Incident management" — PDF 156–161, Figure 5.3 "Incident report life cycle" ở PDF 160'],

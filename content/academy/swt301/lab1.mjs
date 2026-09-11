@@ -294,97 +294,235 @@ const L1 = {
   content: [
     bi(`<span class="eyebrow">Lab 1 · Lesson 1.1 · Lab1_Review slides 1–2 · Java_Simple_Checklist_{ClassName}.xlsx</span>
 <h2>Lab 1 (part 1): review code with a checklist</h2>
-<p class="lead">Lab 1 is where Chapter 3 (static testing) becomes a skill. You get a Java class, a checklist and a defect-report format; you must find, log and fix at least ten defects <em>without running the code</em>. This lesson explains exactly what is asked and walks through every item of the checklist. Lesson 1.2 then does the complete review of the given code, Lesson 1.3 covers the static-analysis tools, and Lesson 1.4 shows how all of this is marked in PE Question 1.</p>
-<div class="callout"><b>Learning objectives.</b> LO-3.1.1 Recognise work products that static testing can examine — here source code (K1) · LO-3.2.4 Apply a review technique — <b>checklist-based reviewing</b> — to a work product to find defects (K3) · LO-3.1.2 Explain the value of static testing: defects are found before execution and are cheaper to fix (K2).</div>
+<p class="lead">Lab 1 is where Chapter 3 (static testing) becomes a skill. You get a Java class, a checklist and a defect-report format; you must find, log and fix at least ten defects <em>without running the code</em>.</p>
+<p>This lesson explains exactly what is asked and walks through every item of the checklist. The rest of Lab 1:</p>
+<ul>
+<li><strong>Lesson 1.2</strong> — the complete review of the given code.</li>
+<li><strong>Lesson 1.3</strong> — the static-analysis tools.</li>
+<li><strong>Lesson 1.4</strong> — how all of this is marked in PE Question 1.</li>
+</ul>
+<div class="callout"><strong>Learning objectives.</strong>
+<ul>
+<li><strong>LO-3.1.1</strong> — recognise work products that static testing can examine — here source code (K1).</li>
+<li><strong>LO-3.2.4</strong> — apply a review technique — <strong>checklist-based reviewing</strong> — to a work product to find defects (K3).</li>
+<li><strong>LO-3.1.2</strong> — explain the value of static testing: defects are found before execution and are cheaper to fix (K2).</li>
+</ul></div>
 <h3>The lab in one screen</h3>
 <div class="lz-flow"><span>1 · Open sourcecode.pdf (ReviewCode.java)</span><span>2 · One checklist file per class</span><span>3 · Go item by item: OK / NG</span><span>4 · Each NG → new Defect ID + line</span><span>5 · Word file: ≥ 10 defects × 6 fields</span><span>6 · Demo in class: find → log → fix</span></div>
 <table>
 <thead><tr><th>Deliverable</th><th>Exact requirement (slide 1)</th></tr></thead>
 <tbody>
-<tr><td>Checklist</td><td><em>Java_Simple_Checklist_{ClassName}.xlsx</em>, <b>one file per class</b> — so for this lab <em>Java_Simple_Checklist_ReviewCode.xlsx</em>. Every defect gets a self-made <b>Defect ID</b> in column "DefectID".</td></tr>
-<tr><td>Defect list</td><td>At least <b>10 defects per student</b>, rewritten in a Word file named <em>&lt;your number on FAP&gt;_&lt;your name&gt;_DefectList_Lab1_1</em>, each defect with the <b>6 contents</b> "as in slide 2".</td></tr>
-<tr><td>Demo</td><td>In class you show the three activities: <b>find</b> the defect, <b>log</b> it, <b>fix</b> it.</td></tr>
+<tr><td>Checklist</td><td><em>Java_Simple_Checklist_{ClassName}.xlsx</em>, <strong>one file per class</strong> — so for this lab <em>Java_Simple_Checklist_ReviewCode.xlsx</em>. Every defect gets a self-made <strong>Defect ID</strong> in column "DefectID".</td></tr>
+<tr><td>Defect list</td><td>At least <strong>10 defects per student</strong>, rewritten in a Word file named <em>&lt;your number on FAP&gt;_&lt;your name&gt;_DefectList_Lab1_1</em>, each defect with the <strong>6 contents</strong> "as in slide 2".</td></tr>
+<tr><td>Demo</td><td>In class you show the three activities: <strong>find</strong> the defect, <strong>log</strong> it, <strong>fix</strong> it.</td></tr>
 </tbody>
 </table>`,
     `<span class="eyebrow">Lab 1 · Bài 1.1 · Lab1_Review slide 1–2 · Java_Simple_Checklist_{ClassName}.xlsx</span>
 <h2>Lab 1 (phần 1): review code bằng checklist</h2>
-<p class="lead">Lab 1 là nơi Chương 3 (kiểm thử tĩnh) trở thành kỹ năng. Bạn nhận một class Java, một checklist và một mẫu báo cáo defect; phải tìm, ghi nhận và sửa ít nhất mười defect <em>mà không chạy code</em>. Bài này giải thích chính xác đề yêu cầu gì và đi qua từng mục của checklist. Bài 1.2 review trọn vẹn đoạn code được giao, Bài 1.3 nói về công cụ phân tích tĩnh, Bài 1.4 cho thấy tất cả những điều này được chấm thế nào ở Câu 1 đề PE.</p>
-<div class="callout"><b>Chuẩn đầu ra.</b> LO-3.1.1 Nhận ra các sản phẩm công việc mà kiểm thử tĩnh xem xét được — ở đây là mã nguồn (K1) · LO-3.2.4 Áp dụng một kỹ thuật review — <b>review theo checklist</b> — để tìm defect (K3) · LO-3.1.2 Giải thích giá trị của kiểm thử tĩnh: defect lộ ra trước khi chạy và sửa rẻ hơn (K2).</div>
+<p class="lead">Lab 1 là nơi Chương 3 (kiểm thử tĩnh) trở thành kỹ năng. Bạn nhận một class Java, một checklist và một mẫu báo cáo defect; phải tìm, ghi nhận và sửa ít nhất mười defect <em>mà không chạy code</em>.</p>
+<p>Bài này giải thích chính xác đề yêu cầu gì và đi qua từng mục của checklist. Phần còn lại của Lab 1:</p>
+<ul>
+<li><strong>Bài 1.2</strong> — review trọn vẹn đoạn code được giao.</li>
+<li><strong>Bài 1.3</strong> — các công cụ phân tích tĩnh.</li>
+<li><strong>Bài 1.4</strong> — tất cả những điều này được chấm thế nào ở Câu 1 đề PE.</li>
+</ul>
+<div class="callout"><strong>Chuẩn đầu ra.</strong>
+<ul>
+<li><strong>LO-3.1.1</strong> — nhận ra các sản phẩm công việc mà kiểm thử tĩnh xem xét được — ở đây là mã nguồn (K1).</li>
+<li><strong>LO-3.2.4</strong> — áp dụng một kỹ thuật review — <strong>review theo checklist</strong> — để tìm defect (K3).</li>
+<li><strong>LO-3.1.2</strong> — giải thích giá trị của kiểm thử tĩnh: defect lộ ra trước khi chạy và sửa rẻ hơn (K2).</li>
+</ul></div>
 <h3>Bài lab trong một màn hình</h3>
 <div class="lz-flow"><span>1 · Mở sourcecode.pdf (ReviewCode.java)</span><span>2 · Mỗi class một file checklist</span><span>3 · Xét từng mục: OK / NG</span><span>4 · Mỗi NG → một Defect ID + dòng</span><span>5 · File Word: ≥ 10 defect × 6 nội dung</span><span>6 · Demo trên lớp: tìm → log → sửa</span></div>
 <table>
 <thead><tr><th>Sản phẩm nộp</th><th>Yêu cầu chính xác (slide 1)</th></tr></thead>
 <tbody>
-<tr><td>Checklist</td><td><em>Java_Simple_Checklist_{ClassName}.xlsx</em>, <b>mỗi class một file</b> — với lab này là <em>Java_Simple_Checklist_ReviewCode.xlsx</em>. Mỗi defect tự đặt một <b>Defect ID</b> ghi vào cột "DefectID".</td></tr>
-<tr><td>Danh sách defect</td><td>Tối thiểu <b>10 defect mỗi sinh viên</b>, viết lại vào file Word tên <em>&lt;số thứ tự trên FAP&gt;_&lt;tên SV&gt;_DefectList_Lab1_1</em>, mỗi defect gồm <b>6 nội dung</b> "như slide 2".</td></tr>
-<tr><td>Demo</td><td>Trên lớp trình bày ba hoạt động: <b>tìm</b> lỗi, <b>log</b> lỗi, <b>sửa</b> lỗi.</td></tr>
+<tr><td>Checklist</td><td><em>Java_Simple_Checklist_{ClassName}.xlsx</em>, <strong>mỗi class một file</strong> — với lab này là <em>Java_Simple_Checklist_ReviewCode.xlsx</em>. Mỗi defect tự đặt một <strong>Defect ID</strong> ghi vào cột "DefectID".</td></tr>
+<tr><td>Danh sách defect</td><td>Tối thiểu <strong>10 defect mỗi sinh viên</strong>, viết lại vào file Word tên <em>&lt;số thứ tự trên FAP&gt;_&lt;tên SV&gt;_DefectList_Lab1_1</em>, mỗi defect gồm <strong>6 nội dung</strong> "như slide 2".</td></tr>
+<tr><td>Demo</td><td>Trên lớp trình bày ba hoạt động: <strong>tìm</strong> lỗi, <strong>log</strong> lỗi, <strong>sửa</strong> lỗi.</td></tr>
 </tbody>
 </table>`),
     walkHead('lab1-review', 1, 2),
     walk('lab1-review', [
       [1, 'Lab 1_2: Review code',
-        `<p>Content of the lab: use a checklist to review code; record the results, analyse, evaluate and fix. Exit criteria (the conditions for "done"): use <em>Java_Simple_Checklist_{ClassName}.xlsx</em> on the source code, one checklist file per class, a self-made Defect ID for every defect in the "Defect ID" column; at least 10 defects per student in a Word file; demo find / log / fix in class.</p>
-<p><b>Three small inconsistencies to be aware of</b> (ask your lecturer if in doubt): (1) the slide says the code is in <em>review_code.png</em>, but the file in the folder is <em>sourcecode.pdf</em> (same class, <code>ReviewCode.java</code>); (2) the title says "Lab 1_2" while the Word file must be named "…_Lab1_1"; (3) "6 contents as in slide 2", but slide 2 shows only <b>5</b> fields. The safest answer is to add the checklist item (or the severity) as the sixth — that is what Lesson 1.2 does.</p>
-<p><b>Why "exit criteria"?</b> It is the same term as in the test process (Chapter 1, lesson 1.4): measurable conditions that decide when an activity is finished. Here: ≥ 10 logged defects + the demo.</p>`,
-        `<p>Nội dung bài lab: dùng checklist để review code; ghi nhận kết quả, phân tích, đánh giá và sửa lỗi. Exit criteria (điều kiện "xong"): dùng <em>Java_Simple_Checklist_{ClassName}.xlsx</em> cho mã nguồn, mỗi class một file checklist, mỗi lỗi tự tạo một Defect ID ghi vào cột "Defect ID"; mỗi sinh viên ít nhất 10 lỗi trong một file Word; demo trên lớp tìm / log / sửa lỗi.</p>
-<p><b>Ba chỗ chưa khớp nên biết</b> (hỏi giảng viên nếu phân vân): (1) slide nói code nằm ở <em>review_code.png</em>, nhưng file trong thư mục là <em>sourcecode.pdf</em> (cùng class <code>ReviewCode.java</code>); (2) tiêu đề ghi "Lab 1_2" còn file Word lại đặt tên "…_Lab1_1"; (3) "6 nội dung như slide 2", nhưng slide 2 chỉ có <b>5</b> trường. An toàn nhất là thêm mục checklist (hoặc mức độ nghiêm trọng) làm nội dung thứ sáu — Bài 1.2 làm đúng như vậy.</p>
-<p><b>Vì sao gọi là "exit criteria"?</b> Đó chính là thuật ngữ trong quy trình test (Chương 1, bài 1.4): điều kiện đo được để quyết định một hoạt động đã xong. Ở đây: ≥ 10 defect đã log + buổi demo.</p>`],
+        `<p class="y-chinh">🎯 Review the class with the checklist, log at least 10 defects in a Word file, then demo find → log → fix in class.</p>
+<p class="nhan">Content of the lab</p>
+<ul>
+<li><strong>Review</strong> — use a checklist to review the code.</li>
+<li><strong>Record</strong> — write down the results, analyse, evaluate and fix.</li>
+</ul>
+<p class="nhan">Exit criteria (the conditions for "done")</p>
+<ol>
+<li><strong>Checklist</strong> — use <em>Java_Simple_Checklist_{ClassName}.xlsx</em> on the source code, one checklist file per class.</li>
+<li><strong>Defect ID</strong> — every defect gets a self-made ID in the "Defect ID" column.</li>
+<li><strong>Word file</strong> — at least 10 defects per student, named <em>&lt;FAP number&gt;_&lt;name&gt;_DefectList_Lab1_1</em>, 6 contents per defect "as in slide 2".</li>
+<li><strong>Demo</strong> — find / log / fix in class.</li>
+</ol>
+<p class="nhan">Three small inconsistencies (ask your lecturer if in doubt)</p>
+<ol>
+<li><strong>Source file</strong> — the slide says the code is in <em>review_code.png</em>, but the file in the folder is <em>sourcecode.pdf</em> (same class, <code>ReviewCode.java</code>).</li>
+<li><strong>Numbering</strong> — the title says "Lab 1_2" while the Word file must be named "…_Lab1_1".</li>
+<li><strong>Field count</strong> — "6 contents as in slide 2", but slide 2 shows only <strong>5</strong> fields. Safest: add the checklist item (or the severity) as the sixth — that is what Lesson 1.2 does.</li>
+</ol>
+<p class="nhan">Why "exit criteria"?</p>
+<p>It is the same term as in the test process (Chapter 1, lesson 1.4): measurable conditions that decide when an activity is finished. Here: ≥ 10 logged defects + the demo.</p>`,
+        `<p class="y-chinh">🎯 Review class bằng checklist, log ít nhất 10 defect vào file Word, rồi demo trên lớp tìm → log → sửa.</p>
+<p class="nhan">Nội dung bài lab</p>
+<ul>
+<li><strong>Review</strong> — dùng checklist để review code.</li>
+<li><strong>Ghi nhận</strong> — ghi kết quả, phân tích, đánh giá và sửa lỗi.</li>
+</ul>
+<p class="nhan">Exit criteria (điều kiện "xong")</p>
+<ol>
+<li><strong>Checklist</strong> — dùng <em>Java_Simple_Checklist_{ClassName}.xlsx</em> cho mã nguồn, mỗi class một file checklist.</li>
+<li><strong>Defect ID</strong> — mỗi lỗi tự tạo một mã, ghi vào cột "Defect ID".</li>
+<li><strong>File Word</strong> — mỗi sinh viên ít nhất 10 lỗi, file tên <em>&lt;số thứ tự trên FAP&gt;_&lt;tên SV&gt;_DefectList_Lab1_1</em>, mỗi defect 6 nội dung "như slide 2".</li>
+<li><strong>Demo</strong> — trên lớp: tìm / log / sửa lỗi.</li>
+</ol>
+<p class="nhan">Ba chỗ chưa khớp (hỏi giảng viên nếu phân vân)</p>
+<ol>
+<li><strong>File nguồn</strong> — slide nói code nằm ở <em>review_code.png</em>, nhưng file trong thư mục là <em>sourcecode.pdf</em> (cùng class <code>ReviewCode.java</code>).</li>
+<li><strong>Đánh số</strong> — tiêu đề ghi "Lab 1_2" còn file Word lại đặt tên "…_Lab1_1".</li>
+<li><strong>Số trường</strong> — "6 nội dung như slide 2", nhưng slide 2 chỉ có <strong>5</strong> trường. An toàn nhất: thêm mục checklist (hoặc mức độ nghiêm trọng) làm nội dung thứ sáu — Bài 1.2 làm đúng như vậy.</li>
+</ol>
+<p class="nhan">Vì sao gọi là "exit criteria"?</p>
+<p>Đó chính là thuật ngữ trong quy trình test (Chương 1, bài 1.4): điều kiện đo được để quyết định một hoạt động đã xong. Ở đây: ≥ 10 defect đã log + buổi demo.</p>`],
       [2, 'The defect report template (screenshot of 1.jpg)',
-        `<p>The slide is a screenshot of the Windows Photos app showing <em>1.jpg</em> (5101 × 39606 px — the whole FALL24 final PE paper, shown in full in Lesson 1.4). The visible part is <b>PE Question 1 (3 points)</b>: "The following Java class contains six defects related to code standards, logic, and best practices. Identify and explain each defect using the following defect report template":</p>
+        `<p class="y-chinh">🎯 This is the defect-report template of PE Question 1: five fields you fill for every defect you find.</p>
+<p class="nhan">What the screenshot shows</p>
+<ul>
+<li><strong>The file</strong> — the Windows Photos app showing <em>1.jpg</em> (5101 × 39606 px — the whole FALL24 final PE paper, shown in full in Lesson 1.4).</li>
+<li><strong>The visible part</strong> — <strong>PE Question 1 (3 points)</strong>: "The following Java class contains six defects related to code standards, logic, and best practices. Identify and explain each defect using the following defect report template".</li>
+</ul>
+<p class="nhan">The five fields, and how to fill them well</p>
 <table>
 <thead><tr><th>Field</th><th>What the paper asks</th><th>How to fill it well</th></tr></thead>
 <tbody>
 <tr><td>Defect ID</td><td>unique identifier, e.g. DF001, DF002</td><td>Sequential, never reused; the same ID appears in the checklist "DefectID" column.</td></tr>
 <tr><td>Defect Name</td><td>descriptive name such as "Naming Convention Error"</td><td>A category, not a sentence: "Null pointer dereference", "Resource leak", "String compared with ==".</td></tr>
 <tr><td>Line Number</td><td>specific line where the defect occurs</td><td>The line of the <em>defect</em> (not of its effect); give a range "76–81" for a block.</td></tr>
-<tr><td>Defect Description</td><td>a brief, one-sentence explanation</td><td>What is wrong <b>and</b> what can happen: "… is null, so line 19 throws NullPointerException."</td></tr>
+<tr><td>Defect Description</td><td>a brief, one-sentence explanation</td><td>What is wrong <strong>and</strong> what can happen: "… is null, so line 19 throws NullPointerException."</td></tr>
 <tr><td>Fixing Solution</td><td>concise description of the code change</td><td>The actual change, ideally the corrected line of code.</td></tr>
 </tbody>
 </table>
-<p>This is the same information as an ISTQB defect report (Chapter 5): identifier, title/summary, location, description of the problem, and — for a review — the recommended correction. The Lab trains exactly the answer format of the PE.</p>`,
-        `<p>Slide là ảnh chụp ứng dụng Photos của Windows đang mở <em>1.jpg</em> (5101 × 39606 px — toàn bộ đề PE cuối kỳ FALL24, xem trọn ở Bài 1.4). Phần nhìn thấy là <b>Câu 1 đề PE (3 điểm)</b>: "Class Java sau có sáu defect liên quan tới chuẩn code, logic và best practice. Hãy xác định và giải thích từng defect theo mẫu báo cáo defect sau":</p>
+<p class="nhan">Link to the theory</p>
+<ul>
+<li><strong>Same as an ISTQB defect report</strong> (Chapter 5) — identifier, title/summary, location, description of the problem, and — for a review — the recommended correction.</li>
+<li><strong>Exam rehearsal</strong> — the Lab trains exactly the answer format of the PE.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 Đây là mẫu báo cáo defect của Câu 1 đề PE: năm trường bạn điền cho mỗi defect tìm được.</p>
+<p class="nhan">Ảnh chụp cho thấy gì</p>
+<ul>
+<li><strong>File</strong> — ứng dụng Photos của Windows đang mở <em>1.jpg</em> (5101 × 39606 px — toàn bộ đề PE cuối kỳ FALL24, xem trọn ở Bài 1.4).</li>
+<li><strong>Phần nhìn thấy</strong> — <strong>Câu 1 đề PE (3 điểm)</strong>: "Class Java sau có sáu defect liên quan tới chuẩn code, logic và best practice. Hãy xác định và giải thích từng defect theo mẫu báo cáo defect sau".</li>
+</ul>
+<p class="nhan">Năm trường, và cách điền cho tốt</p>
 <table>
 <thead><tr><th>Trường</th><th>Đề yêu cầu</th><th>Cách điền tốt</th></tr></thead>
 <tbody>
 <tr><td>Defect ID</td><td>mã duy nhất, vd DF001, DF002</td><td>Đánh số tuần tự, không dùng lại; cùng mã đó ghi ở cột "DefectID" của checklist.</td></tr>
 <tr><td>Defect Name</td><td>tên mô tả, vd "Naming Convention Error"</td><td>Một nhóm lỗi, không phải một câu: "Null pointer dereference", "Resource leak", "String compared with ==".</td></tr>
 <tr><td>Line Number</td><td>dòng cụ thể nơi có defect</td><td>Dòng của <em>defect</em> (không phải nơi lộ hậu quả); với một khối ghi khoảng "76–81".</td></tr>
-<tr><td>Defect Description</td><td>một câu giải thích ngắn</td><td>Sai cái gì <b>và</b> hậu quả: "… là null nên dòng 19 ném NullPointerException."</td></tr>
+<tr><td>Defect Description</td><td>một câu giải thích ngắn</td><td>Sai cái gì <strong>và</strong> hậu quả: "… là null nên dòng 19 ném NullPointerException."</td></tr>
 <tr><td>Fixing Solution</td><td>mô tả ngắn thay đổi code để sửa</td><td>Thay đổi thật sự, tốt nhất là dòng code đã sửa.</td></tr>
 </tbody>
 </table>
-<p>Đây chính là thông tin của một defect report theo ISTQB (Chương 5): mã, tiêu đề/tóm tắt, vị trí, mô tả vấn đề, và — với review — cách sửa đề xuất. Bài Lab luyện đúng định dạng câu trả lời của đề PE.</p>`],
+<p class="nhan">Liên hệ lý thuyết</p>
+<ul>
+<li><strong>Giống defect report theo ISTQB</strong> (Chương 5) — mã, tiêu đề/tóm tắt, vị trí, mô tả vấn đề, và — với review — cách sửa đề xuất.</li>
+<li><strong>Tập dượt cho kỳ thi</strong> — bài Lab luyện đúng định dạng câu trả lời của đề PE.</li>
+</ul>`],
     ]),
     bi(`<h2>📋 The checklist file, sheet by sheet</h2>
 <p><em>Java_Simple_Checklist_{ClassName}.xlsx</em> has two sheets. Rename the file per class (e.g. <em>Java_Simple_Checklist_ReviewCode.xlsx</em>).</p>
-<h3>Sheet "Basic" — 20 items (columns # · Category · Description (EN) · Explanation (VI) · Result · DefectID · Line · Note)</h3>
-<p>For every item you write <b>Result</b> = OK (the code respects it) or NG (no good — at least one violation), and for NG the <b>DefectID</b>(s) and <b>Line</b>(s). The file ships with one example row: item 1 "Null Checks" → Result <code>NG</code>, DefectID <code>BUG_0001</code>, Line <code>27, 20,..</code> — i.e. one item may point to several lines, and you may choose your own ID style (BUG_0001 or DF001) as long as it is consistent. The last column shows where each item is violated in the Lab's <code>ReviewCode.java</code>.</p>
+<h3>Sheet "Basic" — 20 items</h3>
+<p class="nhan">The eight columns</p>
+<ul>
+<li><strong>#, Category</strong> — item number and group name.</li>
+<li><strong>Description (EN), Explanation (VI)</strong> — the rule, in English and in Vietnamese.</li>
+<li><strong>Result</strong> — OK (the code respects it) or NG (no good — at least one violation).</li>
+<li><strong>DefectID, Line</strong> — for NG: the defect ID(s) and line(s).</li>
+<li><strong>Note</strong> — a short remark.</li>
+</ul>
+<p class="nhan">The example row shipped with the file</p>
+<p>Item 1 "Null Checks" → Result <code>NG</code>, DefectID <code>BUG_0001</code>, Line <code>27, 20,..</code>. Two things follow from it:</p>
+<ul>
+<li><strong>One item, several lines</strong> — an item may point to several lines.</li>
+<li><strong>Your own ID style</strong> — BUG_0001 or DF001, as long as it is consistent.</li>
+</ul>
+<p>The last column of the table shows where each item is violated in the Lab's <code>ReviewCode.java</code>.</p>
 <div class="table-wrap"><table>
 <thead><tr><th>#</th><th>Category</th><th>What it means</th><th>Violated in ReviewCode.java</th></tr></thead>
 <tbody>${basicRows(false)}</tbody>
 </table></div>
 <h3>Sheet "Advance" — the company coding check sheet</h3>
-<p>Header: <em>Coding check sheet</em> · Function name · PIC (person in charge) · Approver · Result · DefectID · Line · Note, plus two "Check / (date)" columns — one for the author's self-check, one for the reviewer. The item numbers (2.1 … 7.19) come from a longer Japanese-style coding standard; gaps (2.5, 2.11–2.12, 2.15–2.31…) are items that were dropped from this short version. The original text is in rough Vietnamese; here it is translated.</p>
+<p class="nhan">Header fields</p>
+<ul>
+<li><strong>Coding check sheet</strong> — the title, with Function name, PIC (person in charge) and Approver.</li>
+<li><strong>Result, DefectID, Line, Note</strong> — as in the Basic sheet.</li>
+<li><strong>Two "Check / (date)" columns</strong> — one for the author's self-check, one for the reviewer.</li>
+</ul>
+<p class="nhan">About the numbering</p>
+<ul>
+<li><strong>Origin</strong> — the item numbers (2.1 … 7.19) come from a longer Japanese-style coding standard.</li>
+<li><strong>Gaps</strong> — 2.5, 2.11–2.12, 2.15–2.31… are items that were dropped from this short version.</li>
+<li><strong>Language</strong> — the original text is in rough Vietnamese; here it is translated.</li>
+</ul>
 <div class="table-wrap"><table>
 <thead><tr><th>No.</th><th>Group</th><th>Item</th></tr></thead>
 <tbody>${advRows(false)}</tbody>
 </table></div>
-<div class="callout ok"><b>How to use both sheets efficiently.</b> Do the Basic sheet first, top to bottom, reading the <em>whole</em> class once per item (that is the discipline of checklist-based reviewing: the checklist tells you what to look for, so you do not stop at the first bug you notice). Then do Advance for the finer rules. A defect may violate several items — log it <b>once</b> with one ID and reference the ID on each row.</div>`,
+<div class="callout ok"><strong>How to use both sheets efficiently.</strong>
+<ol>
+<li><strong>Basic first</strong>, top to bottom, reading the <em>whole</em> class once per item — that is the discipline of checklist-based reviewing: the checklist tells you what to look for, so you do not stop at the first bug you notice.</li>
+<li><strong>Then Advance</strong> for the finer rules.</li>
+<li><strong>One defect, one ID</strong> — a defect may violate several items: log it <strong>once</strong> with one ID and reference the ID on each row.</li>
+</ol></div>`,
     `<h2>📋 File checklist, từng sheet</h2>
 <p><em>Java_Simple_Checklist_{ClassName}.xlsx</em> có hai sheet. Đổi tên file theo từng class (vd <em>Java_Simple_Checklist_ReviewCode.xlsx</em>).</p>
-<h3>Sheet "Basic" — 20 mục (cột # · Category · Description (EN) · Explanation (VI) · Result · DefectID · Line · Note)</h3>
-<p>Với mỗi mục ghi <b>Result</b> = OK (code tuân thủ) hoặc NG (no good — có ít nhất một vi phạm); với NG ghi thêm <b>DefectID</b> và <b>Line</b>. File có sẵn một dòng mẫu: mục 1 "Null Checks" → Result <code>NG</code>, DefectID <code>BUG_0001</code>, Line <code>27, 20,..</code> — tức một mục có thể trỏ nhiều dòng, và bạn tự chọn kiểu mã (BUG_0001 hay DF001) miễn là nhất quán. Cột cuối cho biết mục đó bị vi phạm ở đâu trong <code>ReviewCode.java</code> của bài Lab.</p>
+<h3>Sheet "Basic" — 20 mục</h3>
+<p class="nhan">Tám cột</p>
+<ul>
+<li><strong>#, Category</strong> — số mục và tên nhóm.</li>
+<li><strong>Description (EN), Explanation (VI)</strong> — quy tắc, bằng tiếng Anh và tiếng Việt.</li>
+<li><strong>Result</strong> — OK (code tuân thủ) hoặc NG (no good — có ít nhất một vi phạm).</li>
+<li><strong>DefectID, Line</strong> — với NG: mã defect và số dòng.</li>
+<li><strong>Note</strong> — ghi chú ngắn.</li>
+</ul>
+<p class="nhan">Dòng mẫu có sẵn trong file</p>
+<p>Mục 1 "Null Checks" → Result <code>NG</code>, DefectID <code>BUG_0001</code>, Line <code>27, 20,..</code>. Từ đó suy ra hai điều:</p>
+<ul>
+<li><strong>Một mục, nhiều dòng</strong> — một mục có thể trỏ tới nhiều dòng code.</li>
+<li><strong>Tự chọn kiểu mã</strong> — BUG_0001 hay DF001, miễn là nhất quán.</li>
+</ul>
+<p>Cột cuối của bảng cho biết mục đó bị vi phạm ở đâu trong <code>ReviewCode.java</code> của bài Lab.</p>
 <div class="table-wrap"><table>
 <thead><tr><th>#</th><th>Nhóm</th><th>Ý nghĩa</th><th>Vi phạm trong ReviewCode.java</th></tr></thead>
 <tbody>${basicRows(true)}</tbody>
 </table></div>
 <h3>Sheet "Advance" — coding check sheet của doanh nghiệp</h3>
-<p>Tiêu đề: <em>Coding check sheet</em> · Function name · PIC (người phụ trách) · Approver (người duyệt) · Result · DefectID · Line · Note, cùng hai cột "Check / (ngày)" — một cho tác giả tự kiểm, một cho người review. Số mục (2.1 … 7.19) lấy từ một bộ coding standard kiểu Nhật dài hơn; chỗ nhảy số (2.5, 2.11–2.12, 2.15–2.31…) là các mục đã bị lược khỏi bản rút gọn này. Văn bản gốc tiếng Việt khá "thô"; dưới đây đã chuẩn hoá.</p>
+<p class="nhan">Các trường ở phần đầu</p>
+<ul>
+<li><strong>Coding check sheet</strong> — tiêu đề, kèm Function name, PIC (người phụ trách) và Approver (người duyệt).</li>
+<li><strong>Result, DefectID, Line, Note</strong> — như ở sheet Basic.</li>
+<li><strong>Hai cột "Check / (ngày)"</strong> — một cho tác giả tự kiểm, một cho người review.</li>
+</ul>
+<p class="nhan">Về cách đánh số</p>
+<ul>
+<li><strong>Nguồn gốc</strong> — số mục (2.1 … 7.19) lấy từ một bộ coding standard kiểu Nhật dài hơn.</li>
+<li><strong>Chỗ nhảy số</strong> — 2.5, 2.11–2.12, 2.15–2.31… là các mục đã bị lược khỏi bản rút gọn này.</li>
+<li><strong>Ngôn ngữ</strong> — văn bản gốc tiếng Việt khá "thô"; dưới đây đã chuẩn hoá.</li>
+</ul>
 <div class="table-wrap"><table>
 <thead><tr><th>Mục</th><th>Nhóm</th><th>Nội dung</th></tr></thead>
 <tbody>${advRows(true)}</tbody>
 </table></div>
-<div class="callout ok"><b>Dùng hai sheet cho hiệu quả.</b> Làm sheet Basic trước, từ trên xuống, đọc <em>toàn bộ</em> class một lượt cho mỗi mục (đó là kỷ luật của review theo checklist: checklist bảo bạn tìm cái gì, nên bạn không dừng lại ở con bug đầu tiên bắt gặp). Sau đó làm Advance cho các quy tắc chi tiết. Một defect có thể vi phạm nhiều mục — chỉ log <b>một lần</b> với một ID và ghi ID đó ở từng dòng mục liên quan.</div>`),
+<div class="callout ok"><strong>Dùng hai sheet cho hiệu quả.</strong>
+<ol>
+<li><strong>Basic trước</strong>, từ trên xuống, đọc <em>toàn bộ</em> class một lượt cho mỗi mục — đó là kỷ luật của review theo checklist: checklist bảo bạn tìm cái gì, nên bạn không dừng lại ở con bug đầu tiên bắt gặp.</li>
+<li><strong>Rồi tới Advance</strong> cho các quy tắc chi tiết.</li>
+<li><strong>Một defect, một ID</strong> — một defect có thể vi phạm nhiều mục: chỉ log <strong>một lần</strong> với một ID và ghi ID đó ở từng dòng mục liên quan.</li>
+</ol></div>`),
     bi(`<h3>Ví dụ có lời giải · Worked example — filling five rows of the Basic sheet</h3>
 <table>
 <thead><tr><th>#</th><th>Category</th><th>Result</th><th>DefectID</th><th>Line</th><th>Note</th></tr></thead>
@@ -396,9 +534,19 @@ const L1 = {
 <tr><td>19</td><td>equals vs ==</td><td>NG</td><td>DF003</td><td>72</td><td>name == "user"</td></tr>
 </tbody>
 </table>
-<p>Notice row 10: an <b>OK</b> is also a result. Leaving a row empty means "not checked", which a reviewer cannot distinguish from "forgot".</p>
-<div class="pitfall"><b>Trap: counting the same bug ten times.</b> Ten <code>System.out.println</code> calls are <em>one</em> defect ("console output instead of logging", lines 16, 20, 70…), not ten. Lecturers mark distinct defects. Conversely, one line can hide two different defects (line 76: hard-coded password <em>and</em> an unclosed connection) — those are two IDs.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Where do checklists like this come from?</b> Industrial coding standards — SEI CERT Oracle Coding Standard for Java, Google Java Style, the old Sun Code Conventions, MISRA for C — are long lists of numbered rules. Teams turn the rules that tools cannot check (naming meaning, design, comments) into review checklists, and delegate the mechanical ones (braces, spacing, imports) to Checkstyle/PMD so humans spend review time on logic. Studies of code inspection (Fagan 1976 and later) found checklists raise defect-detection rates mainly by <em>focusing</em> reviewers. <em>Outside the syllabus because CTFL only names checklist-based reviewing as a technique.</em></div>`,
+<p>Notice row 10: an <strong>OK</strong> is also a result. Leaving a row empty means "not checked", which a reviewer cannot distinguish from "forgot".</p>
+<div class="pitfall co-tieu-de"><strong>Trap: counting the same bug ten times.</strong>
+<ul>
+<li><strong>Many lines, one defect</strong> — ten <code>System.out.println</code> calls are <em>one</em> defect ("console output instead of logging", lines 16, 20, 70…), not ten. Lecturers mark distinct defects.</li>
+<li><strong>One line, two defects</strong> — conversely, line 76 hides a hard-coded password <em>and</em> an unclosed connection — those are two IDs.</li>
+</ul></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Where do checklists like this come from?</strong>
+<ul>
+<li><strong>Industrial coding standards</strong> — SEI CERT Oracle Coding Standard for Java, Google Java Style, the old Sun Code Conventions, MISRA for C — are long lists of numbered rules.</li>
+<li><strong>Humans vs tools</strong> — teams turn the rules that tools cannot check (naming meaning, design, comments) into review checklists, and delegate the mechanical ones (braces, spacing, imports) to Checkstyle/PMD, so humans spend review time on logic.</li>
+<li><strong>Evidence</strong> — studies of code inspection (Fagan 1976 and later) found checklists raise defect-detection rates mainly by <em>focusing</em> reviewers.</li>
+</ul>
+<p class="ghi-chu">Outside the syllabus because CTFL only names checklist-based reviewing as a technique.</p></div>`,
     `<h3>Ví dụ có lời giải · Điền năm dòng của sheet Basic</h3>
 <table>
 <thead><tr><th>#</th><th>Nhóm</th><th>Result</th><th>DefectID</th><th>Line</th><th>Ghi chú</th></tr></thead>
@@ -410,9 +558,19 @@ const L1 = {
 <tr><td>19</td><td>equals vs ==</td><td>NG</td><td>DF003</td><td>72</td><td>name == "user"</td></tr>
 </tbody>
 </table>
-<p>Để ý dòng 10: <b>OK</b> cũng là một kết quả. Để trống nghĩa là "chưa kiểm", người chấm không phân biệt được với "quên".</p>
-<div class="pitfall"><b>Bẫy: đếm một bug mười lần.</b> Mười lệnh <code>System.out.println</code> là <em>một</em> defect ("in console thay vì log", dòng 16, 20, 70…), không phải mười. Giảng viên chấm số defect khác nhau. Ngược lại, một dòng có thể chứa hai defect khác nhau (dòng 76: hard-code mật khẩu <em>và</em> connection không đóng) — đó là hai ID.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Checklist như thế này từ đâu ra?</b> Các coding standard công nghiệp — SEI CERT Oracle Coding Standard for Java, Google Java Style, Sun Code Conventions cũ, MISRA cho C — là danh sách dài các quy tắc đánh số. Các nhóm biến những quy tắc công cụ không kiểm được (ý nghĩa tên, thiết kế, comment) thành checklist review, còn phần máy móc (ngoặc, khoảng trắng, import) giao cho Checkstyle/PMD để con người dành thời gian review cho logic. Các nghiên cứu về inspection (Fagan 1976 và sau đó) cho thấy checklist tăng tỉ lệ phát hiện lỗi chủ yếu nhờ giúp người review <em>tập trung</em>. <em>Ngoài giáo trình vì CTFL chỉ nêu review theo checklist như một kỹ thuật.</em></div>`),
+<p>Để ý dòng 10: <strong>OK</strong> cũng là một kết quả. Để trống nghĩa là "chưa kiểm", người chấm không phân biệt được với "quên".</p>
+<div class="pitfall co-tieu-de"><strong>Bẫy: đếm một bug mười lần.</strong>
+<ul>
+<li><strong>Nhiều dòng, một defect</strong> — mười lệnh <code>System.out.println</code> là <em>một</em> defect ("in console thay vì log", dòng 16, 20, 70…), không phải mười. Giảng viên chấm số defect khác nhau.</li>
+<li><strong>Một dòng, hai defect</strong> — ngược lại, dòng 76 chứa cả hard-code mật khẩu <em>và</em> connection không đóng — đó là hai ID.</li>
+</ul></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Checklist như thế này từ đâu ra?</strong>
+<ul>
+<li><strong>Coding standard công nghiệp</strong> — SEI CERT Oracle Coding Standard for Java, Google Java Style, Sun Code Conventions cũ, MISRA cho C — là danh sách dài các quy tắc đánh số.</li>
+<li><strong>Người và máy chia việc</strong> — các nhóm biến những quy tắc công cụ không kiểm được (ý nghĩa tên, thiết kế, comment) thành checklist review, còn phần máy móc (ngoặc, khoảng trắng, import) giao cho Checkstyle/PMD, để con người dành thời gian review cho logic.</li>
+<li><strong>Bằng chứng</strong> — các nghiên cứu về inspection (Fagan 1976 và sau đó) cho thấy checklist tăng tỉ lệ phát hiện lỗi chủ yếu nhờ giúp người review <em>tập trung</em>.</li>
+</ul>
+<p class="ghi-chu">Ngoài giáo trình vì CTFL chỉ nêu review theo checklist như một kỹ thuật.</p></div>`),
     books([
       ['fst4', 'Ch.3 §2 "Review process" — pp.79–99 (PDF 93–113), incl. review techniques (ad hoc, checklist-based, scenario-based, role/perspective-based) and success factors; exercise p.103, solution p.105', 'Chương 3 §2 "Review process" — trang 79–99 (PDF 93–113), gồm các kỹ thuật review (ad hoc, checklist-based, scenario-based, role/perspective-based) và yếu tố thành công; bài tập trang 103, lời giải trang 105'],
       ['sp5', '§4.3 The review process (PDF 132), §4.3.2 Individual review techniques — checklist-based (PDF 137–138), §4.5 Critical success factors (PDF 150)', '§4.3 The review process (PDF 132), §4.3.2 Kỹ thuật review cá nhân — checklist-based (PDF 137–138), §4.5 Yếu tố thành công (PDF 150)'],
@@ -431,8 +589,19 @@ const L2 = {
   content: [
     bi(`<span class="eyebrow">Lab 1 · Lesson 1.2 · sourcecode.pdf pages 1–2</span>
 <h2>The complete review of ReviewCode.java</h2>
-<p class="lead">This is the answer key you can check your own Lab against. We first read the two pages of the class block by block, then log every defect in the format the Lab expects, then show the corrected class. Nothing here is guessed: the original was typed in verbatim (same 119 lines), compiled with <code>javac</code> and run; the fixed version was compiled, run and re-analysed.</p>
-<div class="callout"><b>Learning objectives.</b> LO-3.2.4 Apply checklist-based reviewing to source code (K3) · LO-5.6.1 Write a defect report (K3) · LO-3.1.3 Explain the difference between static and dynamic testing — which defects you see by reading, which only by running (K2).</div>
+<p class="lead">This is the answer key you can check your own Lab against. It goes in three steps:</p>
+<ol>
+<li><strong>Read</strong> the two pages of the class block by block.</li>
+<li><strong>Log</strong> every defect in the format the Lab expects.</li>
+<li><strong>Fix</strong> — show the corrected class.</li>
+</ol>
+<p>Nothing here is guessed: the original was typed in verbatim (same 119 lines), compiled with <code>javac</code> and run; the fixed version was compiled, run and re-analysed.</p>
+<div class="callout"><strong>Learning objectives.</strong>
+<ul>
+<li><strong>LO-3.2.4</strong> — apply checklist-based reviewing to source code (K3).</li>
+<li><strong>LO-5.6.1</strong> — write a defect report (K3).</li>
+<li><strong>LO-3.1.3</strong> — explain the difference between static and dynamic testing — which defects you see by reading, which only by running (K2).</li>
+</ul></div>
 <table>
 <thead><tr><th>Severity used below</th><th>Meaning</th><th>Count</th></tr></thead>
 <tbody>
@@ -444,8 +613,19 @@ const L2 = {
 </table>`,
     `<span class="eyebrow">Lab 1 · Bài 1.2 · sourcecode.pdf trang 1–2</span>
 <h2>Review trọn vẹn ReviewCode.java</h2>
-<p class="lead">Đây là đáp án để bạn đối chiếu bài Lab của mình. Trước tiên đọc hai trang của class theo từng khối, rồi log mọi defect theo đúng định dạng bài Lab yêu cầu, rồi đưa ra class đã sửa. Không có gì ở đây là đoán: bản gốc được gõ lại nguyên văn (đủ 119 dòng), biên dịch bằng <code>javac</code> và chạy thử; bản sửa được biên dịch, chạy và phân tích lại.</p>
-<div class="callout"><b>Chuẩn đầu ra.</b> LO-3.2.4 Áp dụng review theo checklist cho mã nguồn (K3) · LO-5.6.1 Viết defect report (K3) · LO-3.1.3 Giải thích khác biệt giữa kiểm thử tĩnh và động — lỗi nào thấy được khi đọc, lỗi nào chỉ lộ khi chạy (K2).</div>
+<p class="lead">Đây là đáp án để bạn đối chiếu bài Lab của mình. Bài đi theo ba bước:</p>
+<ol>
+<li><strong>Đọc</strong> hai trang của class theo từng khối.</li>
+<li><strong>Log</strong> mọi defect theo đúng định dạng bài Lab yêu cầu.</li>
+<li><strong>Sửa</strong> — đưa ra class đã sửa.</li>
+</ol>
+<p>Không có gì ở đây là đoán: bản gốc được gõ lại nguyên văn (đủ 119 dòng), biên dịch bằng <code>javac</code> và chạy thử; bản sửa được biên dịch, chạy và phân tích lại.</p>
+<div class="callout"><strong>Chuẩn đầu ra.</strong>
+<ul>
+<li><strong>LO-3.2.4</strong> — áp dụng review theo checklist cho mã nguồn (K3).</li>
+<li><strong>LO-5.6.1</strong> — viết defect report (K3).</li>
+<li><strong>LO-3.1.3</strong> — giải thích khác biệt giữa kiểm thử tĩnh và động — lỗi nào thấy được khi đọc, lỗi nào chỉ lộ khi chạy (K2).</li>
+</ul></div>
 <table>
 <thead><tr><th>Mức độ dùng bên dưới</th><th>Ý nghĩa</th><th>Số lượng</th></tr></thead>
 <tbody>
@@ -458,61 +638,105 @@ const L2 = {
     walkHead('lab1-source', 1, 2, 'Here the "slides" are the two pages of sourcecode.pdf; line numbers below are the ones printed on the pages.', 'Ở đây "slide" là hai trang của sourcecode.pdf; số dòng bên dưới là số in trên trang.'),
     walk('lab1-source', [
       [1, 'ReviewCode.java, lines 1–66',
-        `<p>The header shows the path <em>D:\\02.Work\\Lab211\\J1.S.P0065\\src\\controller\\ReviewCode.java</em> — a NetBeans project from LAB211, printed from the IDE. Reading it block by block:</p>
+        `<p class="y-chinh">🎯 Page 1 = lines 1–66 of <code>ReviewCode.java</code>; read it block by block and almost every block hides a defect.</p>
+<p class="nhan">Where the code comes from</p>
+<p>The header shows the path <em>D:\\02.Work\\Lab211\\J1.S.P0065\\src\\controller\\ReviewCode.java</em> — a NetBeans project from LAB211, printed from the IDE.</p>
+<p class="nhan">Block by block</p>
 <ul>
-<li><b>L1–4</b> the untouched NetBeans licence template comment (obsolete). <b>L5</b> <code>package controller;</code>. <b>L7–10</b> imports: two wildcards (<code>java.util.*</code>, <code>java.io.*</code>) and only two of the four <code>java.sql</code> types the code uses.</li>
-<li><b>L12–14</b> <code>public class ReviewCode</code> with a single huge <code>main(String args[]) throws Exception</code> — everything happens in one method, which is itself a design smell (no testable units).</li>
-<li><b>L18–21</b> <code>String name = null; if (name.equals("admin"))</code> — the first crash: a guaranteed <code>NullPointerException</code>.</li>
-<li><b>L23–24</b> opens <code>file.txt</code> and reads one byte into <code>a</code>; the stream is never closed.</li>
-<li><b>L26–28</b> constants 10 and 20, then an if/else squeezed on one line without braces.</li>
-<li><b>L30–33</b> a while loop whose increment hides inside <code>println(i++)</code>.</li>
-<li><b>L35–47</b> a list of three strings, and for each a 100-step <code>result += s + k</code> — String concatenation in a loop.</li>
-<li><b>L49–58</b> an if-else-if ladder on <code>choice</code> with magic numbers — a textbook switch.</li>
-<li><b>L60–66</b> <code>(x +y) * (x -y) / (x+y)</code> — division by a value that can be 0, ugly spacing, then two separate ifs that forget the zero case.</li>
+<li><strong>L1–4</strong> — the untouched NetBeans licence template comment (obsolete).</li>
+<li><strong>L5</strong> — <code>package controller;</code>.</li>
+<li><strong>L7–10</strong> — imports: two wildcards (<code>java.util.*</code>, <code>java.io.*</code>) and only two of the four <code>java.sql</code> types the code uses.</li>
+<li><strong>L12–14</strong> — <code>public class ReviewCode</code> with a single huge <code>main(String args[]) throws Exception</code>. Everything happens in one method, which is itself a design smell (no testable units).</li>
+<li><strong>L18–21</strong> — <code>String name = null; if (name.equals("admin"))</code>: the first crash, a guaranteed <code>NullPointerException</code>.</li>
+<li><strong>L23–24</strong> — opens <code>file.txt</code> and reads one byte into <code>a</code>; the stream is never closed.</li>
+<li><strong>L26–28</strong> — constants 10 and 20, then an if/else squeezed on one line without braces.</li>
+<li><strong>L30–33</strong> — a while loop whose increment hides inside <code>println(i++)</code>.</li>
+<li><strong>L35–47</strong> — a list of three strings, and for each a 100-step <code>result += s + k</code>: String concatenation in a loop.</li>
+<li><strong>L49–58</strong> — an if-else-if ladder on <code>choice</code> with magic numbers: a textbook switch.</li>
+<li><strong>L60–66</strong> — <code>(x +y) * (x -y) / (x+y)</code>: division by a value that can be 0, ugly spacing, then two separate ifs that forget the zero case.</li>
 </ul>`,
-        `<p>Đầu trang ghi đường dẫn <em>D:\\02.Work\\Lab211\\J1.S.P0065\\src\\controller\\ReviewCode.java</em> — một project NetBeans của LAB211, in từ IDE. Đọc theo từng khối:</p>
+        `<p class="y-chinh">🎯 Trang 1 = dòng 1–66 của <code>ReviewCode.java</code>; đọc theo từng khối thì gần như khối nào cũng giấu một defect.</p>
+<p class="nhan">Code lấy từ đâu</p>
+<p>Đầu trang ghi đường dẫn <em>D:\\02.Work\\Lab211\\J1.S.P0065\\src\\controller\\ReviewCode.java</em> — một project NetBeans của LAB211, in từ IDE.</p>
+<p class="nhan">Từng khối một</p>
 <ul>
-<li><b>L1–4</b> comment template license của NetBeans còn nguyên (rác). <b>L5</b> <code>package controller;</code>. <b>L7–10</b> import: hai import dạng * (<code>java.util.*</code>, <code>java.io.*</code>) và chỉ hai trong bốn kiểu <code>java.sql</code> mà code dùng.</li>
-<li><b>L12–14</b> <code>public class ReviewCode</code> với một <code>main(String args[]) throws Exception</code> khổng lồ — mọi thứ dồn vào một method, bản thân đã là mùi thiết kế xấu (không có đơn vị nào test được).</li>
-<li><b>L18–21</b> <code>String name = null; if (name.equals("admin"))</code> — crash đầu tiên: chắc chắn <code>NullPointerException</code>.</li>
-<li><b>L23–24</b> mở <code>file.txt</code> và đọc một byte vào <code>a</code>; luồng không bao giờ đóng.</li>
-<li><b>L26–28</b> hằng 10 và 20, rồi một if/else nhét trên một dòng không ngoặc.</li>
-<li><b>L30–33</b> vòng while mà bước tăng nấp trong <code>println(i++)</code>.</li>
-<li><b>L35–47</b> danh sách ba chuỗi, mỗi chuỗi nối <code>result += s + k</code> 100 lần — nối String trong vòng lặp.</li>
-<li><b>L49–58</b> chuỗi if-else-if trên <code>choice</code> với số ma thuật — đúng kiểu cần switch.</li>
-<li><b>L60–66</b> <code>(x +y) * (x -y) / (x+y)</code> — chia cho giá trị có thể bằng 0, khoảng trắng lộn xộn, rồi hai if rời nhau quên trường hợp bằng 0.</li>
+<li><strong>L1–4</strong> — comment template license của NetBeans còn nguyên (rác).</li>
+<li><strong>L5</strong> — <code>package controller;</code>.</li>
+<li><strong>L7–10</strong> — import: hai import dạng * (<code>java.util.*</code>, <code>java.io.*</code>) và chỉ hai trong bốn kiểu <code>java.sql</code> mà code dùng.</li>
+<li><strong>L12–14</strong> — <code>public class ReviewCode</code> với một <code>main(String args[]) throws Exception</code> khổng lồ. Mọi thứ dồn vào một method, bản thân đã là mùi thiết kế xấu (không có đơn vị nào test được).</li>
+<li><strong>L18–21</strong> — <code>String name = null; if (name.equals("admin"))</code>: crash đầu tiên, chắc chắn <code>NullPointerException</code>.</li>
+<li><strong>L23–24</strong> — mở <code>file.txt</code> và đọc một byte vào <code>a</code>; luồng không bao giờ đóng.</li>
+<li><strong>L26–28</strong> — hằng 10 và 20, rồi một if/else nhét trên một dòng không ngoặc.</li>
+<li><strong>L30–33</strong> — vòng while mà bước tăng nấp trong <code>println(i++)</code>.</li>
+<li><strong>L35–47</strong> — danh sách ba chuỗi, mỗi chuỗi nối <code>result += s + k</code> 100 lần: nối String trong vòng lặp.</li>
+<li><strong>L49–58</strong> — chuỗi if-else-if trên <code>choice</code> với số ma thuật: đúng kiểu cần switch.</li>
+<li><strong>L60–66</strong> — <code>(x +y) * (x -y) / (x+y)</code>: chia cho giá trị có thể bằng 0, khoảng trắng lộn xộn, rồi hai if rời nhau quên trường hợp bằng 0.</li>
 </ul>`],
       [2, 'ReviewCode.java, lines 67–120',
-        `<ul>
-<li><b>L69–70</b> "// temp code, to be removed later" + a debug print — left in.</li>
-<li><b>L72–74</b> <code>if (name == "user")</code> — reference comparison of Strings.</li>
-<li><b>L76</b> <code>DriverManager.getConnection("jdbc:mysql://localhost:3306/db", "root", "123456")</code> — hard-coded credentials; <b>L77–78</b> <code>Statement</code>/<code>ResultSet</code> — not imported, so the file does not even compile; <b>L79–81</b> none of the three JDBC objects is ever closed. (In the PDF these two type names are printed in italics — NetBeans' rendering of symbols it could not resolve normally comes with a red underline; on paper only the italics survive.)</li>
-<li><b>L83–89</b> <code>int result</code> summed with an index loop that calls <code>list.get(index)</code> twice, then never used.</li>
-<li><b>L91</b> <code>if (a &gt; 100) a = 50;</code> — braces missing, magic numbers, dead store.</li>
-<li><b>L93–98</b> a <code>BufferedReader</code> opened in a try without resources, <code>line</code> unused, <code>e.printStackTrace()</code> as the only handling.</li>
-<li><b>L102–110</b> a call to <code>oldMethod()</code>, which is marked <code>@Deprecated</code> without saying what replaces it.</li>
-<li><b>L112–117</b> <code>doStuff(int a, int b)</code> with the Javadoc "do something cool" — meaningless name, useless comment, never called.</li>
+        `<p class="y-chinh">🎯 Page 2 = lines 67–120: the database block (which does not even compile), dead values, and two methods nobody should keep.</p>
+<p class="nhan">Block by block</p>
+<ul>
+<li><strong>L69–70</strong> — "// temp code, to be removed later" + a debug print, left in.</li>
+<li><strong>L72–74</strong> — <code>if (name == "user")</code>: reference comparison of Strings.</li>
+<li><strong>L76</strong> — <code>DriverManager.getConnection("jdbc:mysql://localhost:3306/db", "root", "123456")</code>: hard-coded credentials.</li>
+<li><strong>L77–78</strong> — <code>Statement</code>/<code>ResultSet</code> are not imported, so the file does not even compile.</li>
+<li><strong>L79–81</strong> — none of the three JDBC objects is ever closed.</li>
+<li><strong>L83–89</strong> — <code>int result</code> summed with an index loop that calls <code>list.get(index)</code> twice, then never used.</li>
+<li><strong>L91</strong> — <code>if (a &gt; 100) a = 50;</code>: braces missing, magic numbers, dead store.</li>
+<li><strong>L93–98</strong> — a <code>BufferedReader</code> opened in a try without resources, <code>line</code> unused, <code>e.printStackTrace()</code> as the only handling.</li>
+<li><strong>L102–110</strong> — a call to <code>oldMethod()</code>, which is marked <code>@Deprecated</code> without saying what replaces it.</li>
+<li><strong>L112–117</strong> — <code>doStuff(int a, int b)</code> with the Javadoc "do something cool": meaningless name, useless comment, never called.</li>
 </ul>
-<p><b>Static vs dynamic, seen on this page.</b> Reading found all 29 defects below. Running the (import-fixed) program shows exactly <em>one</em> failure — the NPE at line 19 — because execution stops there. That is the whole argument of LO-3.1.3: static testing finds defects directly, including ones on paths that a test would never reach.</p>`,
-        `<ul>
-<li><b>L69–70</b> "// temp code, to be removed later" + một lệnh in debug — vẫn còn.</li>
-<li><b>L72–74</b> <code>if (name == "user")</code> — so sánh String theo tham chiếu.</li>
-<li><b>L76</b> <code>DriverManager.getConnection("jdbc:mysql://localhost:3306/db", "root", "123456")</code> — hard-code thông tin đăng nhập; <b>L77–78</b> <code>Statement</code>/<code>ResultSet</code> — không import nên file thậm chí không biên dịch được; <b>L79–81</b> cả ba đối tượng JDBC không bao giờ được đóng. (Trong PDF hai tên kiểu này in nghiêng — NetBeans hiển thị ký hiệu không phân giải được thường kèm gạch đỏ; khi in ra giấy chỉ còn lại chữ nghiêng.)</li>
-<li><b>L83–89</b> <code>int result</code> cộng dồn bằng vòng lặp chỉ số gọi <code>list.get(index)</code> hai lần, rồi không dùng.</li>
-<li><b>L91</b> <code>if (a &gt; 100) a = 50;</code> — thiếu ngoặc, số ma thuật, gán chết.</li>
-<li><b>L93–98</b> <code>BufferedReader</code> mở trong try không có resources, <code>line</code> không dùng, xử lý duy nhất là <code>e.printStackTrace()</code>.</li>
-<li><b>L102–110</b> gọi <code>oldMethod()</code> vốn đánh dấu <code>@Deprecated</code> mà không nói dùng gì thay.</li>
-<li><b>L112–117</b> <code>doStuff(int a, int b)</code> với Javadoc "do something cool" — tên vô nghĩa, comment vô dụng, không ai gọi.</li>
+<p class="ghi-chu">In the PDF the two type names <code>Statement</code>/<code>ResultSet</code> are printed in italics — NetBeans' rendering of symbols it could not resolve normally comes with a red underline; on paper only the italics survive.</p>
+<p class="nhan">Static vs dynamic, seen on this page</p>
+<ul>
+<li><strong>Reading</strong> found all 29 defects below.</li>
+<li><strong>Running</strong> the (import-fixed) program shows exactly <em>one</em> failure — the NPE at line 19 — because execution stops there.</li>
 </ul>
-<p><b>Tĩnh vs động, thấy ngay trên trang này.</b> Đọc code tìm ra đủ 29 defect bên dưới. Chạy chương trình (đã sửa import) chỉ lộ đúng <em>một</em> failure — NPE ở dòng 19 — vì chương trình dừng tại đó. Đó chính là lập luận của LO-3.1.3: kiểm thử tĩnh tìm defect trực tiếp, kể cả những defect nằm trên đường mà test không bao giờ chạy tới.</p>`],
+<p>That is the whole argument of LO-3.1.3: static testing finds defects directly, including ones on paths that a test would never reach.</p>`,
+        `<p class="y-chinh">🎯 Trang 2 = dòng 67–120: khối database (thậm chí không biên dịch được), các giá trị bỏ phí, và hai method không nên giữ.</p>
+<p class="nhan">Từng khối một</p>
+<ul>
+<li><strong>L69–70</strong> — "// temp code, to be removed later" + một lệnh in debug, vẫn còn.</li>
+<li><strong>L72–74</strong> — <code>if (name == "user")</code>: so sánh String theo tham chiếu.</li>
+<li><strong>L76</strong> — <code>DriverManager.getConnection("jdbc:mysql://localhost:3306/db", "root", "123456")</code>: hard-code thông tin đăng nhập.</li>
+<li><strong>L77–78</strong> — <code>Statement</code>/<code>ResultSet</code> không được import nên file thậm chí không biên dịch được.</li>
+<li><strong>L79–81</strong> — cả ba đối tượng JDBC không bao giờ được đóng.</li>
+<li><strong>L83–89</strong> — <code>int result</code> cộng dồn bằng vòng lặp chỉ số gọi <code>list.get(index)</code> hai lần, rồi không dùng.</li>
+<li><strong>L91</strong> — <code>if (a &gt; 100) a = 50;</code>: thiếu ngoặc, số ma thuật, gán chết.</li>
+<li><strong>L93–98</strong> — <code>BufferedReader</code> mở trong try không có resources, <code>line</code> không dùng, xử lý duy nhất là <code>e.printStackTrace()</code>.</li>
+<li><strong>L102–110</strong> — gọi <code>oldMethod()</code> vốn đánh dấu <code>@Deprecated</code> mà không nói dùng gì thay.</li>
+<li><strong>L112–117</strong> — <code>doStuff(int a, int b)</code> với Javadoc "do something cool": tên vô nghĩa, comment vô dụng, không ai gọi.</li>
+</ul>
+<p class="ghi-chu">Trong PDF hai tên kiểu <code>Statement</code>/<code>ResultSet</code> in nghiêng — NetBeans hiển thị ký hiệu không phân giải được thường kèm gạch đỏ; khi in ra giấy chỉ còn lại chữ nghiêng.</p>
+<p class="nhan">Tĩnh vs động, thấy ngay trên trang này</p>
+<ul>
+<li><strong>Đọc code</strong> tìm ra đủ 29 defect bên dưới.</li>
+<li><strong>Chạy</strong> chương trình (đã sửa import) chỉ lộ đúng <em>một</em> failure — NPE ở dòng 19 — vì chương trình dừng tại đó.</li>
+</ul>
+<p>Đó chính là lập luận của LO-3.1.3: kiểm thử tĩnh tìm defect trực tiếp, kể cả những defect nằm trên đường mà test không bao giờ chạy tới.</p>`],
     ]),
     bi(`<h2>🐞 The defect log (Word-file content)</h2>
 <p>Columns = the five PE fields + the checklist item and severity (B = Basic sheet item, A = Advance sheet item). Any ten of these satisfy the exit criterion; a strong submission picks the Critical and Major ones first and covers different categories.</p>
 ${defTable(false)}
 <h3>Two defects written exactly as the Word file / PE expects</h3>
+<p class="nhan">Defect 1 of 2</p>
 <ul>
-<li><b>Defect ID:</b> DF002 · <b>Defect Name:</b> Null pointer dereference · <b>Line Number:</b> 19 · <b>Defect Description:</b> <code>name</code> is initialised to null at line 18, so <code>name.equals("admin")</code> throws NullPointerException and the program stops. · <b>Fixing Solution:</b> use the null-safe form <code>if ("admin".equals(name))</code>. · <b>Checklist item / Severity:</b> Basic #1 Null Checks / Critical.</li>
-<li><b>Defect ID:</b> DF004 · <b>Defect Name:</b> Hard-coded database credentials · <b>Line Number:</b> 76 · <b>Defect Description:</b> the JDBC URL, user "root" and password "123456" are written in the source, exposing the password to everyone with access to the code and tying the program to one machine. · <b>Fixing Solution:</b> read URL/user/password from a properties file or environment variables (<code>System.getenv("DB_PASSWORD")</code>) and remove them from the repository. · <b>Checklist item / Severity:</b> Advance 2.1, Basic #18 / Critical.</li>
+<li><strong>Defect ID:</strong> DF002</li>
+<li><strong>Defect Name:</strong> Null pointer dereference</li>
+<li><strong>Line Number:</strong> 19</li>
+<li><strong>Defect Description:</strong> <code>name</code> is initialised to null at line 18, so <code>name.equals("admin")</code> throws NullPointerException and the program stops.</li>
+<li><strong>Fixing Solution:</strong> use the null-safe form <code>if ("admin".equals(name))</code>.</li>
+<li><strong>Checklist item / Severity:</strong> Basic #1 Null Checks / Critical.</li>
+</ul>
+<p class="nhan">Defect 2 of 2</p>
+<ul>
+<li><strong>Defect ID:</strong> DF004</li>
+<li><strong>Defect Name:</strong> Hard-coded database credentials</li>
+<li><strong>Line Number:</strong> 76</li>
+<li><strong>Defect Description:</strong> the JDBC URL, user "root" and password "123456" are written in the source, exposing the password to everyone with access to the code and tying the program to one machine.</li>
+<li><strong>Fixing Solution:</strong> read URL/user/password from a properties file or environment variables (<code>System.getenv("DB_PASSWORD")</code>) and remove them from the repository.</li>
+<li><strong>Checklist item / Severity:</strong> Advance 2.1, Basic #18 / Critical.</li>
 </ul>
 <h3>The evidence: compiler and run on the original</h3>
 ${RUN_ORIG}
@@ -520,14 +744,34 @@ ${RUN_ORIG}
 <p>Every change is tagged with the defect it fixes. Behaviour is kept (same outputs, now through a logger); the DB part only runs when <code>DB_URL</code> is set.</p>
 ${FIXED}
 ${RUN_FIXED}
-<p>Re-running the analysers on the fixed file: <code>javac -Xlint:all</code> 0 warnings; Eclipse ECJ with every optional warning enabled reports only its "non-externalized string" (i18n) warnings — the null, resource-leak and unused-value warnings are gone; Checkstyle (Sun rules) drops from 33 to 26 findings, all of the remaining ones pure style (line length &gt; 80, <code>final</code> parameters, Javadoc on constants, 4 magic numbers). Lesson 1.3 explains those tools.</p>`,
+<p class="nhan">Re-running the analysers on the fixed file</p>
+<ul>
+<li><strong><code>javac -Xlint:all</code></strong> — 0 warnings.</li>
+<li><strong>Eclipse ECJ</strong> (every optional warning enabled) — only its "non-externalized string" (i18n) warnings remain; the null, resource-leak and unused-value warnings are gone.</li>
+<li><strong>Checkstyle (Sun rules)</strong> — drops from 33 to 26 findings, all of the remaining ones pure style (line length &gt; 80, <code>final</code> parameters, Javadoc on constants, 4 magic numbers).</li>
+</ul>
+<p>Lesson 1.3 explains those tools.</p>`,
     `<h2>🐞 Nhật ký defect (nội dung file Word)</h2>
 <p>Các cột = năm trường của đề PE + mục checklist và mức độ (B = mục sheet Basic, A = mục sheet Advance). Mười defect bất kỳ trong bảng là đạt exit criteria; bài tốt ưu tiên các defect Critical và Major và phủ nhiều nhóm lỗi khác nhau.</p>
 ${defTable(true)}
 <h3>Hai defect viết đúng như file Word / đề PE yêu cầu</h3>
+<p class="nhan">Defect 1 / 2</p>
 <ul>
-<li><b>Defect ID:</b> DF002 · <b>Defect Name:</b> Null pointer dereference · <b>Line Number:</b> 19 · <b>Defect Description:</b> <code>name</code> được khởi tạo null ở dòng 18 nên <code>name.equals("admin")</code> ném NullPointerException và chương trình dừng. · <b>Fixing Solution:</b> dùng dạng an toàn với null <code>if ("admin".equals(name))</code>. · <b>Mục checklist / Mức độ:</b> Basic #1 Null Checks / Critical.</li>
-<li><b>Defect ID:</b> DF004 · <b>Defect Name:</b> Hard-coded database credentials · <b>Line Number:</b> 76 · <b>Defect Description:</b> URL JDBC, user "root" và mật khẩu "123456" viết thẳng trong source, lộ mật khẩu cho mọi người có quyền xem code và trói chương trình vào một máy. · <b>Fixing Solution:</b> đọc URL/user/password từ file properties hoặc biến môi trường (<code>System.getenv("DB_PASSWORD")</code>) và xoá khỏi repository. · <b>Mục checklist / Mức độ:</b> Advance 2.1, Basic #18 / Critical.</li>
+<li><strong>Defect ID:</strong> DF002</li>
+<li><strong>Defect Name:</strong> Null pointer dereference</li>
+<li><strong>Line Number:</strong> 19</li>
+<li><strong>Defect Description:</strong> <code>name</code> được khởi tạo null ở dòng 18 nên <code>name.equals("admin")</code> ném NullPointerException và chương trình dừng.</li>
+<li><strong>Fixing Solution:</strong> dùng dạng an toàn với null <code>if ("admin".equals(name))</code>.</li>
+<li><strong>Mục checklist / Mức độ:</strong> Basic #1 Null Checks / Critical.</li>
+</ul>
+<p class="nhan">Defect 2 / 2</p>
+<ul>
+<li><strong>Defect ID:</strong> DF004</li>
+<li><strong>Defect Name:</strong> Hard-coded database credentials</li>
+<li><strong>Line Number:</strong> 76</li>
+<li><strong>Defect Description:</strong> URL JDBC, user "root" và mật khẩu "123456" viết thẳng trong source, lộ mật khẩu cho mọi người có quyền xem code và trói chương trình vào một máy.</li>
+<li><strong>Fixing Solution:</strong> đọc URL/user/password từ file properties hoặc biến môi trường (<code>System.getenv("DB_PASSWORD")</code>) và xoá khỏi repository.</li>
+<li><strong>Mục checklist / Mức độ:</strong> Advance 2.1, Basic #18 / Critical.</li>
 </ul>
 <h3>Bằng chứng: biên dịch và chạy bản gốc</h3>
 ${RUN_ORIG}
@@ -535,11 +779,43 @@ ${RUN_ORIG}
 <p>Mỗi thay đổi được gắn nhãn defect mà nó sửa. Hành vi giữ nguyên (cùng kết quả, nay qua logger); phần DB chỉ chạy khi có biến <code>DB_URL</code>.</p>
 ${FIXED}
 ${RUN_FIXED}
-<p>Chạy lại các công cụ trên bản sửa: <code>javac -Xlint:all</code> 0 cảnh báo; Eclipse ECJ bật mọi cảnh báo tuỳ chọn chỉ còn cảnh báo "non-externalized string" (i18n) — các cảnh báo null, rò tài nguyên, giá trị không dùng đều hết; Checkstyle (bộ Sun) giảm từ 33 xuống 26, phần còn lại thuần phong cách (dòng &gt; 80 ký tự, tham số <code>final</code>, Javadoc cho hằng, 4 số ma thuật). Bài 1.3 giải thích các công cụ này.</p>`),
-    bi(`<div class="pitfall"><b>Traps that lose Lab / PE marks.</b> (1) Reporting the <em>symptom line</em> instead of the defect line — the NPE "happens" in <code>equals</code>, but the defect is the null at 18–19. (2) Vague descriptions: "bad code at line 60" earns nothing; "division by (x+y) throws ArithmeticException when x = -y" earns the point. (3) A fix that is not code: "handle the exception better" → write the try-with-resources. (4) Calling a style issue a logic defect — keep the name honest (Naming Convention Error vs Logic Error). (5) Missing the compile error because the PDF "looks fine": always check that every type used is imported.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Severity is not the same as priority, and CVSS for the security ones.</b> Severity describes the technical impact (Critical … Trivial); priority is the business decision of when to fix (Chapter 5). The hard-coded password (DF004) is also a classic entry in the CWE catalogue (CWE-798 "Use of Hard-coded Credentials"), and the missing close calls are CWE-772 ("Missing Release of Resource after Effective Lifetime"); security teams score such findings with CVSS. Quoting the CWE number in a defect report makes it instantly searchable. <em>Outside the syllabus because CTFL does not cover vulnerability taxonomies.</em></div>`,
-    `<div class="pitfall"><b>Những bẫy làm mất điểm Lab / PE.</b> (1) Báo <em>dòng lộ triệu chứng</em> thay vì dòng có defect — NPE "xảy ra" trong <code>equals</code>, nhưng defect là giá trị null ở dòng 18–19. (2) Mô tả mơ hồ: "code xấu ở dòng 60" không có điểm; "chia cho (x+y) ném ArithmeticException khi x = -y" mới có điểm. (3) Cách sửa không phải code: "xử lý exception tốt hơn" → hãy viết try-with-resources. (4) Gọi lỗi phong cách là lỗi logic — đặt tên cho đúng bản chất (Naming Convention Error khác Logic Error). (5) Bỏ sót lỗi biên dịch vì PDF "trông ổn": luôn kiểm tra mọi kiểu dùng tới đã được import.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Severity khác priority, và CVSS cho lỗi bảo mật.</b> Severity mô tả tác động kỹ thuật (Critical … Trivial); priority là quyết định nghiệp vụ sửa lúc nào (Chương 5). Mật khẩu hard-code (DF004) còn là mục kinh điển trong danh mục CWE (CWE-798 "Use of Hard-coded Credentials"), còn việc không đóng tài nguyên là CWE-772 ("Missing Release of Resource after Effective Lifetime"); nhóm bảo mật chấm điểm các phát hiện này bằng CVSS. Ghi số CWE trong defect report giúp tra cứu ngay lập tức. <em>Ngoài giáo trình vì CTFL không đề cập các hệ phân loại lỗ hổng.</em></div>`),
+<p class="nhan">Chạy lại các công cụ trên bản sửa</p>
+<ul>
+<li><strong><code>javac -Xlint:all</code></strong> — 0 cảnh báo.</li>
+<li><strong>Eclipse ECJ</strong> (bật mọi cảnh báo tuỳ chọn) — chỉ còn cảnh báo "non-externalized string" (i18n); các cảnh báo null, rò tài nguyên, giá trị không dùng đều hết.</li>
+<li><strong>Checkstyle (bộ Sun)</strong> — giảm từ 33 xuống 26, phần còn lại thuần phong cách (dòng &gt; 80 ký tự, tham số <code>final</code>, Javadoc cho hằng, 4 số ma thuật).</li>
+</ul>
+<p>Bài 1.3 giải thích các công cụ này.</p>`),
+    bi(`<div class="pitfall co-tieu-de"><strong>Traps that lose Lab / PE marks.</strong>
+<ol>
+<li><strong>Symptom line instead of defect line</strong> — the NPE "happens" in <code>equals</code>, but the defect is the null at 18–19.</li>
+<li><strong>Vague descriptions</strong> — "bad code at line 60" earns nothing; "division by (x+y) throws ArithmeticException when x = -y" earns the point.</li>
+<li><strong>A fix that is not code</strong> — "handle the exception better" → write the try-with-resources.</li>
+<li><strong>A style issue called a logic defect</strong> — keep the name honest (Naming Convention Error vs Logic Error).</li>
+<li><strong>Missing the compile error</strong> because the PDF "looks fine" — always check that every type used is imported.</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Severity is not the same as priority, and CVSS for the security ones.</strong>
+<ul>
+<li><strong>Severity vs priority</strong> — severity describes the technical impact (Critical … Trivial); priority is the business decision of when to fix (Chapter 5).</li>
+<li><strong>CWE numbers</strong> — the hard-coded password (DF004) is a classic entry in the CWE catalogue (CWE-798 "Use of Hard-coded Credentials"); the missing close calls are CWE-772 ("Missing Release of Resource after Effective Lifetime").</li>
+<li><strong>CVSS</strong> — security teams score such findings with CVSS. Quoting the CWE number in a defect report makes it instantly searchable.</li>
+</ul>
+<p class="ghi-chu">Outside the syllabus because CTFL does not cover vulnerability taxonomies.</p></div>`,
+    `<div class="pitfall co-tieu-de"><strong>Những bẫy làm mất điểm Lab / PE.</strong>
+<ol>
+<li><strong>Báo dòng lộ triệu chứng thay vì dòng có defect</strong> — NPE "xảy ra" trong <code>equals</code>, nhưng defect là giá trị null ở dòng 18–19.</li>
+<li><strong>Mô tả mơ hồ</strong> — "code xấu ở dòng 60" không có điểm; "chia cho (x+y) ném ArithmeticException khi x = -y" mới có điểm.</li>
+<li><strong>Cách sửa không phải code</strong> — "xử lý exception tốt hơn" → hãy viết try-with-resources.</li>
+<li><strong>Gọi lỗi phong cách là lỗi logic</strong> — đặt tên cho đúng bản chất (Naming Convention Error khác Logic Error).</li>
+<li><strong>Bỏ sót lỗi biên dịch</strong> vì PDF "trông ổn" — luôn kiểm tra mọi kiểu dùng tới đã được import.</li>
+</ol></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Severity khác priority, và CVSS cho lỗi bảo mật.</strong>
+<ul>
+<li><strong>Severity vs priority</strong> — severity mô tả tác động kỹ thuật (Critical … Trivial); priority là quyết định nghiệp vụ sửa lúc nào (Chương 5).</li>
+<li><strong>Số CWE</strong> — mật khẩu hard-code (DF004) là mục kinh điển trong danh mục CWE (CWE-798 "Use of Hard-coded Credentials"); việc không đóng tài nguyên là CWE-772 ("Missing Release of Resource after Effective Lifetime").</li>
+<li><strong>CVSS</strong> — nhóm bảo mật chấm điểm các phát hiện này bằng CVSS. Ghi số CWE trong defect report giúp tra cứu ngay lập tức.</li>
+</ul>
+<p class="ghi-chu">Ngoài giáo trình vì CTFL không đề cập các hệ phân loại lỗ hổng.</p></div>`),
     books([
       ['fst4', 'Ch.3 §1 "Static techniques and the test process" — pp.75–78 (PDF 89–92); Ch.5 §6 "Defect management" — pp.190–195 (PDF 204–209)', 'Chương 3 §1 "Static techniques and the test process" — trang 75–78 (PDF 89–92); Chương 5 §6 "Defect management" — trang 190–195 (PDF 204–209)'],
       ['sp5', '§4.1 What can we analyze and test? (PDF 130); §4.6 Differences between static and dynamic testing (PDF 153); §6.4.3 Classifying failures and defects (PDF 290)', '§4.1 What can we analyze and test? (PDF 130); §4.6 Khác biệt giữa kiểm thử tĩnh và động (PDF 153); §6.4.3 Phân loại failure và defect (PDF 290)'],
@@ -609,7 +885,13 @@ const L3 = {
     bi(`<span class="eyebrow">Lab 1 · Lesson 1.3 · Lab1_static_analysis slides 1–6</span>
 <h2>Lab 1 (part 2): static analysis with tools</h2>
 <p class="lead">Reviews are static testing done by people; <strong>static analysis</strong> is static testing done by tools. The second Lab 1 deck asks you to pick one analyser, run it on a real project, and log five <em>different kinds</em> of defect in JIRA. This lesson covers the five tools on the slides, how to install and run the relevant ones from your IDE, what their rules mean, and a real run on the Lab's <code>ReviewCode.java</code>.</p>
-<div class="callout"><b>Learning objectives.</b> LO-3.1.2 Value of static testing (K2) · LO-6.1.1 Classify test tools — static analysis tools support static testing, mostly used by developers (K2) · LO-6.1.2 Benefits and risks of tool support, e.g. many false positives if the rule set is not tuned (K1) · LO-5.6.1 Write a defect report (K3).</div>
+<div class="callout"><strong>Learning objectives.</strong>
+<ul>
+<li><strong>LO-3.1.2</strong> — value of static testing (K2).</li>
+<li><strong>LO-6.1.1</strong> — classify test tools: static analysis tools support static testing, mostly used by developers (K2).</li>
+<li><strong>LO-6.1.2</strong> — benefits and risks of tool support, e.g. many false positives if the rule set is not tuned (K1).</li>
+<li><strong>LO-5.6.1</strong> — write a defect report (K3).</li>
+</ul></div>
 <table>
 <thead><tr><th>What a tool finds well</th><th>What it cannot find</th></tr></thead>
 <tbody>
@@ -619,7 +901,13 @@ const L3 = {
     `<span class="eyebrow">Lab 1 · Bài 1.3 · Lab1_static_analysis slide 1–6</span>
 <h2>Lab 1 (phần 2): phân tích tĩnh bằng công cụ</h2>
 <p class="lead">Review là kiểm thử tĩnh do con người làm; <strong>phân tích tĩnh (static analysis)</strong> là kiểm thử tĩnh do công cụ làm. Bộ slide thứ hai của Lab 1 yêu cầu chọn một công cụ, chạy trên một dự án thật, và log năm <em>loại</em> defect khác nhau lên JIRA. Bài này nói về năm công cụ trên slide, cách cài và chạy các công cụ phù hợp trong IDE, ý nghĩa các luật, và một lần chạy thật trên <code>ReviewCode.java</code> của bài Lab.</p>
-<div class="callout"><b>Chuẩn đầu ra.</b> LO-3.1.2 Giá trị của kiểm thử tĩnh (K2) · LO-6.1.1 Phân loại công cụ test — công cụ phân tích tĩnh hỗ trợ kiểm thử tĩnh, chủ yếu do developer dùng (K2) · LO-6.1.2 Lợi ích và rủi ro của công cụ, vd quá nhiều false positive nếu không tinh chỉnh bộ luật (K1) · LO-5.6.1 Viết defect report (K3).</div>
+<div class="callout"><strong>Chuẩn đầu ra.</strong>
+<ul>
+<li><strong>LO-3.1.2</strong> — giá trị của kiểm thử tĩnh (K2).</li>
+<li><strong>LO-6.1.1</strong> — phân loại công cụ test: công cụ phân tích tĩnh hỗ trợ kiểm thử tĩnh, chủ yếu do developer dùng (K2).</li>
+<li><strong>LO-6.1.2</strong> — lợi ích và rủi ro của công cụ, vd quá nhiều false positive nếu không tinh chỉnh bộ luật (K1).</li>
+<li><strong>LO-5.6.1</strong> — viết defect report (K3).</li>
+</ul></div>
 <table>
 <thead><tr><th>Công cụ tìm tốt</th><th>Công cụ không tìm được</th></tr></thead>
 <tbody>
@@ -629,66 +917,280 @@ const L3 = {
     walkHead('lab1-static', 1, 6),
     walk('lab1-static', [
       [1, 'Lab 1: Static test',
-        `<p>Content: study the static-analysis tools on the next slides <em>or any equivalent tool of your choice</em>; apply it to the source code of your SWP project, a web-programming project, a Lab, or any code you choose; record the results, analyse, evaluate and fix. <b>Exit criteria:</b> each student tests and records <b>5 different types of defect</b> on <b>JIRA Software</b> (the link is Atlassian's product page), and demos find → log → fix in class.</p>
-<p>Read "5 different types" strictly: five null-pointer warnings are one type. Good spread: a reliability bug (null/resource), a security finding (hard-coded secret, SQL injection), a performance issue (string concatenation in a loop), a maintainability smell (dead code, duplicated code, complexity) and a convention violation (naming, braces). The worked JIRA issues at the end of this lesson follow exactly that spread.</p>`,
-        `<p>Nội dung: nghiên cứu các công cụ phân tích tĩnh trong các slide sau <em>hoặc công cụ tương đương tự chọn</em>; áp dụng cho mã nguồn dự án môn SWP, lập trình web, bài Lab, hoặc code tự chọn; ghi nhận kết quả, phân tích, đánh giá và sửa lỗi. <b>Exit criteria:</b> mỗi sinh viên test và ghi nhận <b>5 loại defect khác nhau</b> trên <b>JIRA Software</b> (link là trang sản phẩm của Atlassian), và demo trên lớp tìm → log → sửa lỗi.</p>
-<p>Hiểu "5 loại khác nhau" cho chặt: năm cảnh báo null pointer chỉ là một loại. Phân bổ tốt: một lỗi độ tin cậy (null/tài nguyên), một phát hiện bảo mật (bí mật hard-code, SQL injection), một vấn đề hiệu năng (nối chuỗi trong vòng lặp), một mùi bảo trì (code chết, code trùng lặp, độ phức tạp) và một vi phạm quy ước (đặt tên, ngoặc). Các issue JIRA mẫu ở cuối bài đi đúng cách phân bổ đó.</p>`],
+        `<p class="y-chinh">🎯 Run one static-analysis tool on real code and log 5 <em>different types</em> of defect in JIRA.</p>
+<p class="nhan">What the lab asks (slide 1)</p>
+<ol>
+<li><strong>Study a tool</strong> — one of the analysers on the next slides, <em>or any equivalent tool of your choice</em>.</li>
+<li><strong>Apply it</strong> — to the source code of your SWP project, a web-programming project, a Lab, or any code you choose.</li>
+<li><strong>Handle the results</strong> — record them, analyse, evaluate and fix.</li>
+</ol>
+<p class="nhan">Exit criteria</p>
+<ul>
+<li><strong>5 different types of defect</strong> per student, tested and recorded on <strong>JIRA Software</strong> (the link is Atlassian's product page).</li>
+<li><strong>Demo in class</strong> — find → log → fix.</li>
+</ul>
+<p class="nhan">Read "5 different types" strictly</p>
+<p>Five null-pointer warnings are <em>one</em> type. A good spread:</p>
+<ul>
+<li><strong>Reliability</strong> — a null or resource bug.</li>
+<li><strong>Security</strong> — a hard-coded secret, SQL injection.</li>
+<li><strong>Performance</strong> — string concatenation in a loop.</li>
+<li><strong>Maintainability</strong> — dead code, duplicated code, complexity.</li>
+<li><strong>Convention</strong> — naming, braces.</li>
+</ul>
+<p>The worked JIRA issues at the end of this lesson follow exactly that spread.</p>`,
+        `<p class="y-chinh">🎯 Chạy một công cụ phân tích tĩnh trên code thật và log 5 <em>loại</em> defect khác nhau lên JIRA.</p>
+<p class="nhan">Đề bài yêu cầu gì (slide 1)</p>
+<ol>
+<li><strong>Nghiên cứu công cụ</strong> — một trong các công cụ ở các slide sau, <em>hoặc công cụ tương đương tự chọn</em>.</li>
+<li><strong>Áp dụng</strong> — cho mã nguồn dự án môn SWP, lập trình web, bài Lab, hoặc code tự chọn.</li>
+<li><strong>Xử lý kết quả</strong> — ghi nhận, phân tích, đánh giá và sửa lỗi.</li>
+</ol>
+<p class="nhan">Exit criteria</p>
+<ul>
+<li><strong>5 loại defect khác nhau</strong> mỗi sinh viên, test và ghi nhận trên <strong>JIRA Software</strong> (link là trang sản phẩm của Atlassian).</li>
+<li><strong>Demo trên lớp</strong> — tìm → log → sửa lỗi.</li>
+</ul>
+<p class="nhan">Hiểu "5 loại khác nhau" cho chặt</p>
+<p>Năm cảnh báo null pointer chỉ là <em>một</em> loại. Phân bổ tốt:</p>
+<ul>
+<li><strong>Độ tin cậy</strong> — một lỗi null hoặc tài nguyên.</li>
+<li><strong>Bảo mật</strong> — bí mật hard-code, SQL injection.</li>
+<li><strong>Hiệu năng</strong> — nối chuỗi trong vòng lặp.</li>
+<li><strong>Bảo trì</strong> — code chết, code trùng lặp, độ phức tạp.</li>
+<li><strong>Quy ước</strong> — đặt tên, ngoặc.</li>
+</ul>
+<p>Các issue JIRA mẫu ở cuối bài đi đúng cách phân bổ đó.</p>`],
       [2, 'PVS-Studio (viva64.com)',
-        `<p>Screenshot of the PVS-Studio Analyzer page: "Static Code Analysis for C, C++, C# and Java", runs on 64-bit Windows, Linux and macOS, with counters "419 checked projects / 14 312 collected errors" (bugs the vendor found in open-source projects and blogs about). It is a <b>commercial</b> analyser (a free licence exists for students, open-source projects and via a trial key) with rule sets mapped to CWE, SEI CERT, MISRA and OWASP. For a Java student project it is rarely the easiest choice; it shines for C/C++ (Lab work in PRF192/PRO192 C code, embedded code).</p>`,
-        `<p>Ảnh chụp trang PVS-Studio Analyzer: "Static Code Analysis for C, C++, C# and Java", chạy trên Windows, Linux, macOS 64-bit, kèm bộ đếm "419 dự án đã kiểm / 14 312 lỗi thu thập" (lỗi hãng tìm được trong các dự án mã nguồn mở và viết blog). Đây là công cụ <b>thương mại</b> (có giấy phép miễn phí cho sinh viên, dự án mã nguồn mở và key dùng thử) với bộ luật ánh xạ sang CWE, SEI CERT, MISRA, OWASP. Với dự án Java của sinh viên nó hiếm khi là lựa chọn dễ nhất; nó mạnh với C/C++ (code C ở PRF192, code nhúng).</p>`],
+        `<p class="y-chinh">🎯 PVS-Studio is a commercial analyser for C, C++, C# and Java — strongest on C/C++.</p>
+<p class="nhan">What the screenshot shows</p>
+<ul>
+<li><strong>Tagline</strong> — "Static Code Analysis for C, C++, C# and Java"; runs on 64-bit Windows, Linux and macOS.</li>
+<li><strong>Counters</strong> — "419 checked projects / 14 312 collected errors": bugs the vendor found in open-source projects and blogs about.</li>
+</ul>
+<p class="nhan">What you should know</p>
+<ul>
+<li><strong>Commercial</strong> — a free licence exists for students, open-source projects and via a trial key.</li>
+<li><strong>Rule sets</strong> — mapped to CWE, SEI CERT, MISRA and OWASP.</li>
+<li><strong>When to pick it</strong> — rarely the easiest choice for a Java student project; it shines for C/C++ (C code in PRF192 labs, embedded code).</li>
+</ul>`,
+        `<p class="y-chinh">🎯 PVS-Studio là công cụ phân tích thương mại cho C, C++, C# và Java — mạnh nhất với C/C++.</p>
+<p class="nhan">Ảnh chụp cho thấy gì</p>
+<ul>
+<li><strong>Khẩu hiệu</strong> — "Static Code Analysis for C, C++, C# and Java"; chạy trên Windows, Linux, macOS 64-bit.</li>
+<li><strong>Bộ đếm</strong> — "419 dự án đã kiểm / 14 312 lỗi thu thập": lỗi hãng tìm được trong các dự án mã nguồn mở và viết blog.</li>
+</ul>
+<p class="nhan">Cần biết</p>
+<ul>
+<li><strong>Thương mại</strong> — có giấy phép miễn phí cho sinh viên, dự án mã nguồn mở và key dùng thử.</li>
+<li><strong>Bộ luật</strong> — ánh xạ sang CWE, SEI CERT, MISRA, OWASP.</li>
+<li><strong>Khi nào chọn</strong> — với dự án Java của sinh viên nó hiếm khi là lựa chọn dễ nhất; nó mạnh với C/C++ (code C ở các bài lab PRF192, code nhúng).</li>
+</ul>`],
       [3, 'Code Quality and Code Security | SonarQube',
-        `<p>The SonarQube home page ("Your teammate for Code Quality and Code Security", version 8.6 at the time of the screenshot) with a <b>Quality Gate: Passed</b> panel — Reliability A, 0 bugs; Security A. Two products: <b>SonarQube</b> (a server: projects are scanned in CI and results are shown on a dashboard with a quality gate that can fail the build) and <b>SonarLint</b>, now renamed <b>SonarQube for IDE</b> (a free plugin that analyses the file you are editing). Findings are classified as Bugs (reliability), Vulnerabilities / Security Hotspots, and Code Smells (maintainability), each with a severity. For Lab 1 the IDE plugin is the fastest route; for the SWP project, a SonarQube server (the free Community edition runs in Docker) gives a report you can screenshot for the demo.</p>`,
-        `<p>Trang chủ SonarQube ("Your teammate for Code Quality and Code Security", bản 8.6 lúc chụp) với khung <b>Quality Gate: Passed</b> — Reliability A, 0 bug; Security A. Hai sản phẩm: <b>SonarQube</b> (máy chủ: dự án được quét trong CI, kết quả hiện trên dashboard với quality gate có thể đánh trượt bản build) và <b>SonarLint</b>, nay đổi tên <b>SonarQube for IDE</b> (plugin miễn phí phân tích file bạn đang sửa). Phát hiện được phân loại thành Bug (độ tin cậy), Vulnerability / Security Hotspot, và Code Smell (khả năng bảo trì), mỗi cái có mức độ. Với Lab 1 plugin IDE là đường nhanh nhất; với dự án SWP, một máy chủ SonarQube (bản Community miễn phí chạy bằng Docker) cho báo cáo để chụp màn hình khi demo.</p>`],
+        `<p class="y-chinh">🎯 SonarQube comes in two forms — a CI server with a quality gate, and a free IDE plugin — and sorts findings into Bugs, Vulnerabilities and Code Smells.</p>
+<p class="nhan">What the screenshot shows</p>
+<ul>
+<li><strong>Home page</strong> — "Your teammate for Code Quality and Code Security", version 8.6 at the time of the screenshot.</li>
+<li><strong>Quality Gate: Passed</strong> panel — Reliability A, 0 bugs; Security A.</li>
+</ul>
+<p class="nhan">Two products</p>
+<ul>
+<li><strong>SonarQube</strong> — a server: projects are scanned in CI and results are shown on a dashboard with a quality gate that can fail the build.</li>
+<li><strong>SonarLint</strong>, now renamed <strong>SonarQube for IDE</strong> — a free plugin that analyses the file you are editing.</li>
+</ul>
+<p class="nhan">How findings are classified (each with a severity)</p>
+<ul>
+<li><strong>Bugs</strong> — reliability.</li>
+<li><strong>Vulnerabilities / Security Hotspots</strong> — security.</li>
+<li><strong>Code Smells</strong> — maintainability.</li>
+</ul>
+<p class="nhan">Which to use</p>
+<ul>
+<li><strong>Lab 1</strong> — the IDE plugin is the fastest route.</li>
+<li><strong>SWP project</strong> — a SonarQube server (the free Community edition runs in Docker) gives a report you can screenshot for the demo.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 SonarQube có hai dạng — máy chủ CI có quality gate và plugin IDE miễn phí — và chia phát hiện thành Bug, Vulnerability, Code Smell.</p>
+<p class="nhan">Ảnh chụp cho thấy gì</p>
+<ul>
+<li><strong>Trang chủ</strong> — "Your teammate for Code Quality and Code Security", bản 8.6 lúc chụp.</li>
+<li><strong>Khung Quality Gate: Passed</strong> — Reliability A, 0 bug; Security A.</li>
+</ul>
+<p class="nhan">Hai sản phẩm</p>
+<ul>
+<li><strong>SonarQube</strong> — máy chủ: dự án được quét trong CI, kết quả hiện trên dashboard với quality gate có thể đánh trượt bản build.</li>
+<li><strong>SonarLint</strong>, nay đổi tên <strong>SonarQube for IDE</strong> — plugin miễn phí phân tích file bạn đang sửa.</li>
+</ul>
+<p class="nhan">Phân loại phát hiện (mỗi cái có mức độ)</p>
+<ul>
+<li><strong>Bug</strong> — độ tin cậy.</li>
+<li><strong>Vulnerability / Security Hotspot</strong> — bảo mật.</li>
+<li><strong>Code Smell</strong> — khả năng bảo trì.</li>
+</ul>
+<p class="nhan">Dùng cái nào</p>
+<ul>
+<li><strong>Lab 1</strong> — plugin IDE là đường nhanh nhất.</li>
+<li><strong>Dự án SWP</strong> — một máy chủ SonarQube (bản Community miễn phí chạy bằng Docker) cho báo cáo để chụp màn hình khi demo.</li>
+</ul>`],
       [4, 'ESLint - Pluggable JavaScript linter',
-        `<p>ESLint: "Find and fix problems in your JavaScript code" — <b>Find problems</b> (built into most editors, runs in CI), <b>Fix automatically</b> (syntax-aware fixes, not text find-and-replace), <b>Customize</b> (custom parsers, e.g. TypeScript, and your own rules). Use it if your chosen project is a web front-end or a Node.js back-end: <code>npm init @eslint/config@latest</code> creates the configuration, <code>npx eslint .</code> reports, <code>npx eslint . --fix</code> repairs what is safe. Typical findings: <code>no-unused-vars</code>, <code>eqeqeq</code> (<code>==</code> instead of <code>===</code> — the JavaScript cousin of DF003), <code>no-undef</code>.</p>`,
-        `<p>ESLint: "Find and fix problems in your JavaScript code" — <b>Tìm vấn đề</b> (tích hợp sẵn trong hầu hết editor, chạy được trong CI), <b>Tự sửa</b> (sửa theo cú pháp, không phải tìm-thay văn bản), <b>Tuỳ biến</b> (parser riêng, vd TypeScript, và luật tự viết). Dùng nếu dự án bạn chọn là front-end web hoặc back-end Node.js: <code>npm init @eslint/config@latest</code> tạo cấu hình, <code>npx eslint .</code> báo lỗi, <code>npx eslint . --fix</code> tự sửa phần an toàn. Phát hiện hay gặp: <code>no-unused-vars</code>, <code>eqeqeq</code> (<code>==</code> thay vì <code>===</code> — anh em JavaScript của DF003), <code>no-undef</code>.</p>`],
+        `<p class="y-chinh">🎯 ESLint is the linter to pick when your project is JavaScript — a web front-end or a Node.js back-end.</p>
+<p class="nhan">"Find and fix problems in your JavaScript code" — three promises</p>
+<ul>
+<li><strong>Find problems</strong> — built into most editors, runs in CI.</li>
+<li><strong>Fix automatically</strong> — syntax-aware fixes, not text find-and-replace.</li>
+<li><strong>Customize</strong> — custom parsers (e.g. TypeScript) and your own rules.</li>
+</ul>
+<p class="nhan">How to run it</p>
+<ol>
+<li><code>npm init @eslint/config@latest</code> — creates the configuration.</li>
+<li><code>npx eslint .</code> — reports.</li>
+<li><code>npx eslint . --fix</code> — repairs what is safe.</li>
+</ol>
+<p class="nhan">Typical findings</p>
+<ul>
+<li><code>no-unused-vars</code></li>
+<li><code>eqeqeq</code> — <code>==</code> instead of <code>===</code>, the JavaScript cousin of DF003.</li>
+<li><code>no-undef</code></li>
+</ul>`,
+        `<p class="y-chinh">🎯 ESLint là công cụ nên chọn khi dự án của bạn là JavaScript — front-end web hoặc back-end Node.js.</p>
+<p class="nhan">"Find and fix problems in your JavaScript code" — ba lời hứa</p>
+<ul>
+<li><strong>Tìm vấn đề</strong> — tích hợp sẵn trong hầu hết editor, chạy được trong CI.</li>
+<li><strong>Tự sửa</strong> — sửa theo cú pháp, không phải tìm-thay văn bản.</li>
+<li><strong>Tuỳ biến</strong> — parser riêng (vd TypeScript) và luật tự viết.</li>
+</ul>
+<p class="nhan">Cách chạy</p>
+<ol>
+<li><code>npm init @eslint/config@latest</code> — tạo cấu hình.</li>
+<li><code>npx eslint .</code> — báo lỗi.</li>
+<li><code>npx eslint . --fix</code> — tự sửa phần an toàn.</li>
+</ol>
+<p class="nhan">Phát hiện hay gặp</p>
+<ul>
+<li><code>no-unused-vars</code></li>
+<li><code>eqeqeq</code> — <code>==</code> thay vì <code>===</code>, anh em JavaScript của DF003.</li>
+<li><code>no-undef</code></li>
+</ul>`],
       [5, 'PMD',
-        `<p>PMD, "an extensible cross-language static code analyzer" (logo: "Don't shoot the messenger"; latest version on the screenshot 6.30.0, December 2020 — today PMD 7 is current). It works on <em>source code</em> with rules grouped into categories: Best Practices, Code Style, Design, Documentation, Error Prone, Multithreading, Performance, Security. It also ships <b>CPD</b>, the copy-paste detector for duplicated code. Rule names are self-explanatory: <code>UnusedLocalVariable</code>, <code>CloseResource</code>, <code>UseEqualsToCompareStrings</code>, <code>SystemPrintln</code>, <code>AvoidPrintStackTrace</code>, <code>UseStringBufferForStringAppends</code>, <code>ControlStatementBraces</code>.</p>`,
-        `<p>PMD, "an extensible cross-language static code analyzer" (logo: "Don't shoot the messenger" — đừng bắn người đưa tin; bản mới nhất trên ảnh là 6.30.0, tháng 12/2020 — nay là PMD 7). Nó làm việc trên <em>mã nguồn</em> với luật chia nhóm: Best Practices, Code Style, Design, Documentation, Error Prone, Multithreading, Performance, Security. Kèm theo <b>CPD</b>, bộ phát hiện code sao chép. Tên luật tự giải thích: <code>UnusedLocalVariable</code>, <code>CloseResource</code>, <code>UseEqualsToCompareStrings</code>, <code>SystemPrintln</code>, <code>AvoidPrintStackTrace</code>, <code>UseStringBufferForStringAppends</code>, <code>ControlStatementBraces</code>.</p>`],
+        `<p class="y-chinh">🎯 PMD analyses <em>source code</em> with rules in eight categories, and ships CPD for duplicated code.</p>
+<p class="nhan">What the screenshot shows</p>
+<ul>
+<li><strong>Tagline</strong> — "an extensible cross-language static code analyzer"; logo: "Don't shoot the messenger".</li>
+<li><strong>Version</strong> — latest on the screenshot 6.30.0, 12 December 2020; today PMD 7 is current.</li>
+</ul>
+<p class="nhan">Rule categories</p>
+<ol class="hai-cot"><li>Best Practices</li><li>Code Style</li><li>Design</li><li>Documentation</li><li>Error Prone</li><li>Multithreading</li><li>Performance</li><li>Security</li></ol>
+<p>It also ships <strong>CPD</strong>, the copy-paste detector for duplicated code.</p>
+<p class="nhan">Rule names are self-explanatory</p>
+<ul>
+<li><code>UnusedLocalVariable</code>, <code>CloseResource</code>, <code>UseEqualsToCompareStrings</code></li>
+<li><code>SystemPrintln</code>, <code>AvoidPrintStackTrace</code></li>
+<li><code>UseStringBufferForStringAppends</code>, <code>ControlStatementBraces</code></li>
+</ul>`,
+        `<p class="y-chinh">🎯 PMD phân tích <em>mã nguồn</em> với luật chia tám nhóm, và kèm CPD để bắt code sao chép.</p>
+<p class="nhan">Ảnh chụp cho thấy gì</p>
+<ul>
+<li><strong>Khẩu hiệu</strong> — "an extensible cross-language static code analyzer"; logo: "Don't shoot the messenger" — đừng bắn người đưa tin.</li>
+<li><strong>Phiên bản</strong> — bản mới nhất trên ảnh là 6.30.0, 12/12/2020; nay là PMD 7.</li>
+</ul>
+<p class="nhan">Các nhóm luật</p>
+<ol class="hai-cot"><li>Best Practices</li><li>Code Style</li><li>Design</li><li>Documentation</li><li>Error Prone</li><li>Multithreading</li><li>Performance</li><li>Security</li></ol>
+<p>Kèm theo <strong>CPD</strong>, bộ phát hiện code sao chép.</p>
+<p class="nhan">Tên luật tự giải thích</p>
+<ul>
+<li><code>UnusedLocalVariable</code>, <code>CloseResource</code>, <code>UseEqualsToCompareStrings</code></li>
+<li><code>SystemPrintln</code>, <code>AvoidPrintStackTrace</code></li>
+<li><code>UseStringBufferForStringAppends</code>, <code>ControlStatementBraces</code></li>
+</ul>`],
       [6, 'FindBugs™ - Find Bugs in Java Programs (sourceforge.net)',
-        `<p>The FindBugs home page from the University of Maryland: static analysis to look for bugs in Java code, LGPL, "current version 3.0.1, released 6 March 2015", requires JRE 1.7+ and analyses programs compiled for Java 1.0–1.8; the list shows new bug patterns such as <code>RANGE_ARRAY_INDEX</code>. Two facts to add: FindBugs analyses <b>bytecode</b> (.class files), not source; and it is <b>abandoned</b> — it cannot read class files from modern JDKs. Its maintained successor is <b>SpotBugs</b>, with the same bug-pattern names (<code>NP_ALWAYS_NULL</code>, <code>ES_COMPARING_STRINGS_WITH_EQ</code>, <code>DMI_CONSTANT_DB_PASSWORD</code>, <code>OBL_UNSATISFIED_OBLIGATION</code>) and the FindSecBugs plugin for security. Use SpotBugs whenever the slide says FindBugs.</p>`,
-        `<p>Trang chủ FindBugs của Đại học Maryland: phân tích tĩnh tìm bug trong code Java, giấy phép LGPL, "phiên bản hiện tại 3.0.1, phát hành 6/3/2015", cần JRE 1.7+ và phân tích chương trình biên dịch cho Java 1.0–1.8; danh sách có các bug pattern mới như <code>RANGE_ARRAY_INDEX</code>. Hai điều cần bổ sung: FindBugs phân tích <b>bytecode</b> (file .class), không phải source; và nó đã <b>bị bỏ</b> — không đọc được file class của JDK hiện đại. Bản kế nhiệm được duy trì là <b>SpotBugs</b>, giữ nguyên tên bug pattern (<code>NP_ALWAYS_NULL</code>, <code>ES_COMPARING_STRINGS_WITH_EQ</code>, <code>DMI_CONSTANT_DB_PASSWORD</code>, <code>OBL_UNSATISFIED_OBLIGATION</code>) và có plugin FindSecBugs cho bảo mật. Slide ghi FindBugs thì hãy dùng SpotBugs.</p>`],
+        `<p class="y-chinh">🎯 FindBugs is abandoned — whenever the slide says FindBugs, use its successor <strong>SpotBugs</strong>.</p>
+<p class="nhan">What the screenshot shows (University of Maryland)</p>
+<ul>
+<li><strong>Purpose</strong> — static analysis to look for bugs in Java code; licence LGPL.</li>
+<li><strong>Version</strong> — "current version 3.0.1, released 6 March 2015".</li>
+<li><strong>Requirements</strong> — JRE 1.7+; analyses programs compiled for Java 1.0–1.8.</li>
+<li><strong>Release list</strong> — new bug patterns such as <code>RANGE_ARRAY_INDEX</code>.</li>
+</ul>
+<p class="nhan">Two facts to add</p>
+<ol>
+<li><strong>Bytecode, not source</strong> — FindBugs analyses .class files.</li>
+<li><strong>Abandoned</strong> — it cannot read class files from modern JDKs.</li>
+</ol>
+<p class="nhan">The successor: SpotBugs</p>
+<ul>
+<li><strong>Same bug-pattern names</strong> — <code>NP_ALWAYS_NULL</code>, <code>ES_COMPARING_STRINGS_WITH_EQ</code>, <code>DMI_CONSTANT_DB_PASSWORD</code>, <code>OBL_UNSATISFIED_OBLIGATION</code>.</li>
+<li><strong>FindSecBugs plugin</strong> — adds security rules.</li>
+</ul>`,
+        `<p class="y-chinh">🎯 FindBugs đã bị bỏ — slide ghi FindBugs thì hãy dùng bản kế nhiệm <strong>SpotBugs</strong>.</p>
+<p class="nhan">Ảnh chụp cho thấy gì (Đại học Maryland)</p>
+<ul>
+<li><strong>Mục đích</strong> — phân tích tĩnh tìm bug trong code Java; giấy phép LGPL.</li>
+<li><strong>Phiên bản</strong> — "phiên bản hiện tại 3.0.1, phát hành 6/3/2015".</li>
+<li><strong>Yêu cầu</strong> — JRE 1.7+; phân tích chương trình biên dịch cho Java 1.0–1.8.</li>
+<li><strong>Danh sách bản phát hành</strong> — các bug pattern mới như <code>RANGE_ARRAY_INDEX</code>.</li>
+</ul>
+<p class="nhan">Hai điều cần bổ sung</p>
+<ol>
+<li><strong>Bytecode, không phải source</strong> — FindBugs phân tích file .class.</li>
+<li><strong>Đã bị bỏ</strong> — không đọc được file class của JDK hiện đại.</li>
+</ol>
+<p class="nhan">Bản kế nhiệm: SpotBugs</p>
+<ul>
+<li><strong>Giữ nguyên tên bug pattern</strong> — <code>NP_ALWAYS_NULL</code>, <code>ES_COMPARING_STRINGS_WITH_EQ</code>, <code>DMI_CONSTANT_DB_PASSWORD</code>, <code>OBL_UNSATISFIED_OBLIGATION</code>.</li>
+<li><strong>Plugin FindSecBugs</strong> — thêm luật bảo mật.</li>
+</ul>`],
     ]),
     bi(`<h2>🛠️ Installing and running a Java analyser, step by step</h2>
 <table>
 <thead><tr><th>IDE / tool</th><th>Steps</th></tr></thead>
 <tbody>
-<tr><td><b>IntelliJ IDEA</b></td><td><b>SonarQube for IDE:</b> Settings → Plugins → Marketplace → search "SonarQube for IDE" (formerly SonarLint) → Install → restart. Findings appear while you type; for a whole project: right-click the project → <em>SonarQube → Analyze with SonarQube</em>. <b>PMD:</b> Marketplace plugin "PMD" (PMD for IDEA) → right-click a file → <em>Run PMD → Pre Defined → All</em>. <b>SpotBugs:</b> plugin "SpotBugs" → SpotBugs tool window → <em>Analyze Project Files</em> (compile first — it reads bytecode). <b>Checkstyle:</b> plugin "CheckStyle-IDEA" → choose "Sun Checks" or "Google Checks" in Settings → Tools → Checkstyle. Built-in: <em>Code → Inspect Code…</em> runs IntelliJ's own inspections.</td></tr>
-<tr><td><b>VS Code</b></td><td>Install "Extension Pack for Java", then "SonarQube for IDE" (SonarSource; needs a Java 17+ runtime) — issues show in the <em>Problems</em> panel with the rule key and a "Show rule description" action. "Checkstyle for Java" adds Checkstyle with Sun/Google configurations. PMD and SpotBugs are simplest from the command line or Maven (below).</td></tr>
-<tr><td><b>NetBeans</b></td><td>Built-in Java hints (Tools → Options → Editor → Hints) run on the fly; <em>Source → Inspect…</em> runs them on a file or project. Older NetBeans (8.x) also offered FindBugs inside <em>Inspect</em>; for PMD use a plugin such as EasyPmd from the plugin portal, or run PMD/SpotBugs through Maven if the project is a Maven project.</td></tr>
-<tr><td><b>Maven (any IDE)</b></td><td>Add the plugins to <em>pom.xml</em> and run <code>mvn pmd:check</code> (PMD), <code>mvn checkstyle:check</code>, <code>mvn spotbugs:check</code> (spotbugs-maven-plugin) — or <code>mvn sonar:sonar</code> against a SonarQube server with a project token. This is also how CI runs them.</td></tr>
-<tr><td><b>Command line</b></td><td>PMD 7: <code>pmd check -d src -R rulesets/java/quickstart.xml -f text</code>. Checkstyle: <code>java -jar checkstyle-&lt;ver&gt;-all.jar -c /sun_checks.xml MyFile.java</code>. Eclipse compiler warnings: <code>java -jar ecj.jar -17 -warn:all MyFile.java</code>.</td></tr>
+<tr><td><strong>IntelliJ IDEA</strong></td><td><strong>SonarQube for IDE:</strong> Settings → Plugins → Marketplace → search "SonarQube for IDE" (formerly SonarLint) → Install → restart. Findings appear while you type; for a whole project: right-click the project → <em>SonarQube → Analyze with SonarQube</em>. <strong>PMD:</strong> Marketplace plugin "PMD" (PMD for IDEA) → right-click a file → <em>Run PMD → Pre Defined → All</em>. <strong>SpotBugs:</strong> plugin "SpotBugs" → SpotBugs tool window → <em>Analyze Project Files</em> (compile first — it reads bytecode). <strong>Checkstyle:</strong> plugin "CheckStyle-IDEA" → choose "Sun Checks" or "Google Checks" in Settings → Tools → Checkstyle. Built-in: <em>Code → Inspect Code…</em> runs IntelliJ's own inspections.</td></tr>
+<tr><td><strong>VS Code</strong></td><td>Install "Extension Pack for Java", then "SonarQube for IDE" (SonarSource; needs a Java 17+ runtime) — issues show in the <em>Problems</em> panel with the rule key and a "Show rule description" action. "Checkstyle for Java" adds Checkstyle with Sun/Google configurations. PMD and SpotBugs are simplest from the command line or Maven (below).</td></tr>
+<tr><td><strong>NetBeans</strong></td><td>Built-in Java hints (Tools → Options → Editor → Hints) run on the fly; <em>Source → Inspect…</em> runs them on a file or project. Older NetBeans (8.x) also offered FindBugs inside <em>Inspect</em>; for PMD use a plugin such as EasyPmd from the plugin portal, or run PMD/SpotBugs through Maven if the project is a Maven project.</td></tr>
+<tr><td><strong>Maven (any IDE)</strong></td><td>Add the plugins to <em>pom.xml</em> and run <code>mvn pmd:check</code> (PMD), <code>mvn checkstyle:check</code>, <code>mvn spotbugs:check</code> (spotbugs-maven-plugin) — or <code>mvn sonar:sonar</code> against a SonarQube server with a project token. This is also how CI runs them.</td></tr>
+<tr><td><strong>Command line</strong></td><td>PMD 7: <code>pmd check -d src -R rulesets/java/quickstart.xml -f text</code>. Checkstyle: <code>java -jar checkstyle-&lt;ver&gt;-all.jar -c /sun_checks.xml MyFile.java</code>. Eclipse compiler warnings: <code>java -jar ecj.jar -17 -warn:all MyFile.java</code>.</td></tr>
 </tbody>
 </table>
 <h2>🔬 Worked result — real runs on ReviewCode.java</h2>
-<p><b>Honest note:</b> PMD, SpotBugs, SonarLint and PVS-Studio were not installed on the machine used to prepare this lesson, so they were <em>not</em> run. What <em>was</em> run, without installing anything: <code>javac</code> (JDK 21), the <b>Eclipse compiler ECJ 3.45</b> (the engine behind Eclipse's warnings — its jar ships inside a VS Code Java extension) and <b>Checkstyle 9.3</b> (the jar inside the "Checkstyle for Java" extension). Output, lightly trimmed:</p>
+<p><strong>Honest note:</strong> PMD, SpotBugs, SonarLint and PVS-Studio were not installed on the machine used to prepare this lesson, so they were <em>not</em> run. What <em>was</em> run, without installing anything: <code>javac</code> (JDK 21), the <strong>Eclipse compiler ECJ 3.45</strong> (the engine behind Eclipse's warnings — its jar ships inside a VS Code Java extension) and <strong>Checkstyle 9.3</strong> (the jar inside the "Checkstyle for Java" extension). Output, lightly trimmed:</p>
 ${TOOLRUN}
-<p><b>Reading the results.</b> javac -Xlint:all found only the two compile errors (it has no "unused" or null analysis, and it does not warn about a deprecated method called from its own class). ECJ found the null dereference, all five resource leaks and both dead values — the reliability core of the review. Checkstyle found the conventions. The "non-externalized string" warnings are ECJ's i18n rule (every literal should come from a resource bundle) — noise for a console exercise, which is exactly the "false positives if not tuned" risk of LO-6.1.2: switch that rule off rather than drowning in it.</p>
+<h4>Reading the results</h4>
+<ul>
+<li><strong>javac -Xlint:all</strong> — found only the two compile errors. It has no "unused" or null analysis, and it does not warn about a deprecated method called from its own class.</li>
+<li><strong>ECJ</strong> — found the null dereference, all five resource leaks and both dead values: the reliability core of the review.</li>
+<li><strong>Checkstyle</strong> — found the conventions.</li>
+<li><strong>"Non-externalized string" warnings</strong> — ECJ's i18n rule (every literal should come from a resource bundle). Noise for a console exercise, which is exactly the "false positives if not tuned" risk of LO-6.1.2: switch that rule off rather than drowning in it.</li>
+</ul>
 <h3>Which defect of Lesson 1.2 each tool reports</h3>
 <p>✔ = seen in the real runs above. PMD/SpotBugs/Sonar columns are the rules those tools would be expected to raise (from their rule documentation), <em>not</em> observed output.</p>
 ${mapTable(false)}
-<p><b>What no tool reported:</b> the division by (x+y) (DF010 — the values are constants, so the analyser sees no zero), the missing zero case (DF011), the meaningless name <code>doStuff</code> and its useless Javadoc (DF021 — Checkstyle only complains about missing @param), the debug comment (DF018). Human review still matters.</p>`,
+<p><strong>What no tool reported:</strong> the division by (x+y) (DF010 — the values are constants, so the analyser sees no zero), the missing zero case (DF011), the meaningless name <code>doStuff</code> and its useless Javadoc (DF021 — Checkstyle only complains about missing @param), the debug comment (DF018). Human review still matters.</p>`,
     `<h2>🛠️ Cài và chạy công cụ phân tích Java, từng bước</h2>
 <table>
 <thead><tr><th>IDE / công cụ</th><th>Các bước</th></tr></thead>
 <tbody>
-<tr><td><b>IntelliJ IDEA</b></td><td><b>SonarQube for IDE:</b> Settings → Plugins → Marketplace → tìm "SonarQube for IDE" (tên cũ SonarLint) → Install → khởi động lại. Phát hiện hiện ngay khi gõ; cho cả dự án: chuột phải dự án → <em>SonarQube → Analyze with SonarQube</em>. <b>PMD:</b> plugin "PMD" (PMD for IDEA) → chuột phải file → <em>Run PMD → Pre Defined → All</em>. <b>SpotBugs:</b> plugin "SpotBugs" → cửa sổ SpotBugs → <em>Analyze Project Files</em> (phải biên dịch trước — nó đọc bytecode). <b>Checkstyle:</b> plugin "CheckStyle-IDEA" → chọn "Sun Checks" hoặc "Google Checks" trong Settings → Tools → Checkstyle. Có sẵn: <em>Code → Inspect Code…</em> chạy bộ inspection của IntelliJ.</td></tr>
-<tr><td><b>VS Code</b></td><td>Cài "Extension Pack for Java", rồi "SonarQube for IDE" (SonarSource; cần Java 17+) — lỗi hiện trong panel <em>Problems</em> kèm mã luật và nút "Show rule description". "Checkstyle for Java" thêm Checkstyle với cấu hình Sun/Google. PMD và SpotBugs chạy đơn giản nhất bằng dòng lệnh hoặc Maven (bên dưới).</td></tr>
-<tr><td><b>NetBeans</b></td><td>Java hints có sẵn (Tools → Options → Editor → Hints) chạy khi gõ; <em>Source → Inspect…</em> chạy cho một file hoặc cả dự án. NetBeans cũ (8.x) có FindBugs trong <em>Inspect</em>; với PMD dùng plugin như EasyPmd trên plugin portal, hoặc chạy PMD/SpotBugs qua Maven nếu là dự án Maven.</td></tr>
-<tr><td><b>Maven (mọi IDE)</b></td><td>Thêm plugin vào <em>pom.xml</em> và chạy <code>mvn pmd:check</code> (PMD), <code>mvn checkstyle:check</code>, <code>mvn spotbugs:check</code> (spotbugs-maven-plugin) — hoặc <code>mvn sonar:sonar</code> tới máy chủ SonarQube với token dự án. CI cũng chạy chúng như vậy.</td></tr>
-<tr><td><b>Dòng lệnh</b></td><td>PMD 7: <code>pmd check -d src -R rulesets/java/quickstart.xml -f text</code>. Checkstyle: <code>java -jar checkstyle-&lt;ver&gt;-all.jar -c /sun_checks.xml MyFile.java</code>. Cảnh báo của trình biên dịch Eclipse: <code>java -jar ecj.jar -17 -warn:all MyFile.java</code>.</td></tr>
+<tr><td><strong>IntelliJ IDEA</strong></td><td><strong>SonarQube for IDE:</strong> Settings → Plugins → Marketplace → tìm "SonarQube for IDE" (tên cũ SonarLint) → Install → khởi động lại. Phát hiện hiện ngay khi gõ; cho cả dự án: chuột phải dự án → <em>SonarQube → Analyze with SonarQube</em>. <strong>PMD:</strong> plugin "PMD" (PMD for IDEA) → chuột phải file → <em>Run PMD → Pre Defined → All</em>. <strong>SpotBugs:</strong> plugin "SpotBugs" → cửa sổ SpotBugs → <em>Analyze Project Files</em> (phải biên dịch trước — nó đọc bytecode). <strong>Checkstyle:</strong> plugin "CheckStyle-IDEA" → chọn "Sun Checks" hoặc "Google Checks" trong Settings → Tools → Checkstyle. Có sẵn: <em>Code → Inspect Code…</em> chạy bộ inspection của IntelliJ.</td></tr>
+<tr><td><strong>VS Code</strong></td><td>Cài "Extension Pack for Java", rồi "SonarQube for IDE" (SonarSource; cần Java 17+) — lỗi hiện trong panel <em>Problems</em> kèm mã luật và nút "Show rule description". "Checkstyle for Java" thêm Checkstyle với cấu hình Sun/Google. PMD và SpotBugs chạy đơn giản nhất bằng dòng lệnh hoặc Maven (bên dưới).</td></tr>
+<tr><td><strong>NetBeans</strong></td><td>Java hints có sẵn (Tools → Options → Editor → Hints) chạy khi gõ; <em>Source → Inspect…</em> chạy cho một file hoặc cả dự án. NetBeans cũ (8.x) có FindBugs trong <em>Inspect</em>; với PMD dùng plugin như EasyPmd trên plugin portal, hoặc chạy PMD/SpotBugs qua Maven nếu là dự án Maven.</td></tr>
+<tr><td><strong>Maven (mọi IDE)</strong></td><td>Thêm plugin vào <em>pom.xml</em> và chạy <code>mvn pmd:check</code> (PMD), <code>mvn checkstyle:check</code>, <code>mvn spotbugs:check</code> (spotbugs-maven-plugin) — hoặc <code>mvn sonar:sonar</code> tới máy chủ SonarQube với token dự án. CI cũng chạy chúng như vậy.</td></tr>
+<tr><td><strong>Dòng lệnh</strong></td><td>PMD 7: <code>pmd check -d src -R rulesets/java/quickstart.xml -f text</code>. Checkstyle: <code>java -jar checkstyle-&lt;ver&gt;-all.jar -c /sun_checks.xml MyFile.java</code>. Cảnh báo của trình biên dịch Eclipse: <code>java -jar ecj.jar -17 -warn:all MyFile.java</code>.</td></tr>
 </tbody>
 </table>
 <h2>🔬 Kết quả có lời giải — chạy thật trên ReviewCode.java</h2>
-<p><b>Nói thật:</b> PMD, SpotBugs, SonarLint và PVS-Studio không có sẵn trên máy dùng để soạn bài, nên <em>không</em> được chạy. Những gì <em>đã</em> chạy mà không cài thêm gì: <code>javac</code> (JDK 21), <b>trình biên dịch Eclipse ECJ 3.45</b> (động cơ sinh cảnh báo của Eclipse — jar của nó nằm sẵn trong một extension Java của VS Code) và <b>Checkstyle 9.3</b> (jar trong extension "Checkstyle for Java"). Kết quả, đã rút gọn:</p>
+<p><strong>Nói thật:</strong> PMD, SpotBugs, SonarLint và PVS-Studio không có sẵn trên máy dùng để soạn bài, nên <em>không</em> được chạy. Những gì <em>đã</em> chạy mà không cài thêm gì: <code>javac</code> (JDK 21), <strong>trình biên dịch Eclipse ECJ 3.45</strong> (động cơ sinh cảnh báo của Eclipse — jar của nó nằm sẵn trong một extension Java của VS Code) và <strong>Checkstyle 9.3</strong> (jar trong extension "Checkstyle for Java"). Kết quả, đã rút gọn:</p>
 ${TOOLRUN}
-<p><b>Đọc kết quả.</b> javac -Xlint:all chỉ ra hai lỗi biên dịch (nó không phân tích biến thừa hay null, và không cảnh báo method deprecated gọi từ chính class của nó). ECJ tìm ra null dereference, cả năm chỗ rò tài nguyên và hai giá trị không dùng — phần lõi độ tin cậy của buổi review. Checkstyle tìm ra các vi phạm quy ước. Các cảnh báo "non-externalized string" là luật i18n của ECJ (mọi literal nên lấy từ resource bundle) — nhiễu với bài console, đúng rủi ro "false positive nếu không tinh chỉnh" của LO-6.1.2: hãy tắt luật đó thay vì chìm trong nó.</p>
+<h4>Đọc kết quả</h4>
+<ul>
+<li><strong>javac -Xlint:all</strong> — chỉ ra hai lỗi biên dịch. Nó không phân tích biến thừa hay null, và không cảnh báo method deprecated gọi từ chính class của nó.</li>
+<li><strong>ECJ</strong> — tìm ra null dereference, cả năm chỗ rò tài nguyên và hai giá trị không dùng: phần lõi độ tin cậy của buổi review.</li>
+<li><strong>Checkstyle</strong> — tìm ra các vi phạm quy ước.</li>
+<li><strong>Cảnh báo "non-externalized string"</strong> — luật i18n của ECJ (mọi literal nên lấy từ resource bundle). Nhiễu với bài console, đúng rủi ro "false positive nếu không tinh chỉnh" của LO-6.1.2: hãy tắt luật đó thay vì chìm trong nó.</li>
+</ul>
 <h3>Defect nào của Bài 1.2 được công cụ nào báo</h3>
 <p>✔ = thấy trong các lần chạy thật ở trên. Cột PMD/SpotBugs/Sonar là luật mà các công cụ đó <em>được dự kiến</em> sẽ báo (theo tài liệu luật của chúng), <em>không phải</em> kết quả quan sát được.</p>
 ${mapTable(true)}
-<p><b>Không công cụ nào báo:</b> phép chia cho (x+y) (DF010 — giá trị là hằng nên công cụ không thấy số 0), trường hợp bằng 0 bị bỏ (DF011), tên vô nghĩa <code>doStuff</code> và Javadoc vô dụng (DF021 — Checkstyle chỉ phàn nàn thiếu @param), comment debug (DF018). Review của con người vẫn cần thiết.</p>`),
+<p><strong>Không công cụ nào báo:</strong> phép chia cho (x+y) (DF010 — giá trị là hằng nên công cụ không thấy số 0), trường hợp bằng 0 bị bỏ (DF011), tên vô nghĩa <code>doStuff</code> và Javadoc vô dụng (DF021 — Checkstyle chỉ phàn nàn thiếu @param), comment debug (DF018). Review của con người vẫn cần thiết.</p>`),
     bi(`<h2>🧾 Logging five defect types in JIRA (worked example)</h2>
-<p>Create a Jira Software project (free plan, Scrum or Kanban template, or a "Bug tracking" template). For each finding: <em>Create</em> → Issue type <b>Bug</b> → fill the fields below. Attach a screenshot of the analyser panel as evidence; after fixing, move the issue to Done and paste the fixed code in a comment — that is your "find → log → fix" demo.</p>
+<p>Create a Jira Software project (free plan, Scrum or Kanban template, or a "Bug tracking" template). For each finding: <em>Create</em> → Issue type <strong>Bug</strong> → fill the fields below. Attach a screenshot of the analyser panel as evidence; after fixing, move the issue to Done and paste the fixed code in a comment — that is your "find → log → fix" demo.</p>
 <table>
 <thead><tr><th>Key</th><th>Summary</th><th>Type of defect</th><th>Priority</th><th>Description (steps / evidence / expected)</th></tr></thead>
 <tbody>
@@ -699,11 +1201,11 @@ ${mapTable(true)}
 <tr><td>LAB1-5</td><td>Coding-convention violations: missing braces, magic numbers, wildcard imports</td><td>Convention / maintainability</td><td>Low</td><td>Checkstyle NeedBraces (L28, L91), MagicNumber ×8, AvoidStarImport (L7–8). Expected: code conforms to the team checklist.</td></tr>
 </tbody>
 </table>
-<p>Other useful fields: <b>Environment</b> (JDK 21, IntelliJ + SonarQube for IDE), <b>Labels</b> (<code>static-analysis</code>, <code>lab1</code>), <b>Components</b> (the module), <b>Assignee</b> (yourself for the fix), <b>Affects version</b>. Keep the summary short and specific (what + where) — the same rule as Chapter 5's defect report.</p>
-<div class="pitfall"><b>Trap in the FE:</b> "Static analysis tools are mainly used by testers to execute the code" — false twice. They do <em>not</em> execute the code, and they are typically used by <b>developers</b> (before and during component and integration testing), while review tools support the whole team. Also remember: static analysis finds <em>defects</em>, not failures.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>How analysers "know" line 19 is null.</b> ECJ, SpotBugs and Sonar's symbolic execution build a <em>control-flow graph</em> of the method and propagate facts along it (data-flow analysis): after <code>name = null</code> the fact "name is null" flows to line 19 with no assignment in between, so the dereference must fail. The same machinery computes "defined but never used" (dead stores) and the def-use pairs of data-flow testing that Spillner describes. Because proving facts about arbitrary programs is undecidable (Rice's theorem), every analyser trades <em>false positives</em> against <em>false negatives</em>. <em>Outside the syllabus because CTFL 2018 only lists what static analysis finds, not how.</em></div>`,
+<p>Other useful fields: <strong>Environment</strong> (JDK 21, IntelliJ + SonarQube for IDE), <strong>Labels</strong> (<code>static-analysis</code>, <code>lab1</code>), <strong>Components</strong> (the module), <strong>Assignee</strong> (yourself for the fix), <strong>Affects version</strong>. Keep the summary short and specific (what + where) — the same rule as Chapter 5's defect report.</p>
+<div class="pitfall co-tieu-de"><strong>Trap in the FE:</strong> "Static analysis tools are mainly used by testers to execute the code" — false twice. They do <em>not</em> execute the code, and they are typically used by <strong>developers</strong> (before and during component and integration testing), while review tools support the whole team. Also remember: static analysis finds <em>defects</em>, not failures.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>How analysers "know" line 19 is null.</strong> ECJ, SpotBugs and Sonar's symbolic execution build a <em>control-flow graph</em> of the method and propagate facts along it (data-flow analysis): after <code>name = null</code> the fact "name is null" flows to line 19 with no assignment in between, so the dereference must fail. The same machinery computes "defined but never used" (dead stores) and the def-use pairs of data-flow testing that Spillner describes. Because proving facts about arbitrary programs is undecidable (Rice's theorem), every analyser trades <em>false positives</em> against <em>false negatives</em>. <em>Outside the syllabus because CTFL 2018 only lists what static analysis finds, not how.</em></div>`,
     `<h2>🧾 Log năm loại defect lên JIRA (ví dụ có lời giải)</h2>
-<p>Tạo một project Jira Software (gói miễn phí, template Scrum/Kanban hoặc "Bug tracking"). Với mỗi phát hiện: <em>Create</em> → Issue type <b>Bug</b> → điền các trường dưới đây. Đính kèm ảnh chụp panel của công cụ làm bằng chứng; sửa xong thì chuyển issue sang Done và dán code đã sửa vào comment — đó là phần demo "tìm → log → sửa" của bạn.</p>
+<p>Tạo một project Jira Software (gói miễn phí, template Scrum/Kanban hoặc "Bug tracking"). Với mỗi phát hiện: <em>Create</em> → Issue type <strong>Bug</strong> → điền các trường dưới đây. Đính kèm ảnh chụp panel của công cụ làm bằng chứng; sửa xong thì chuyển issue sang Done và dán code đã sửa vào comment — đó là phần demo "tìm → log → sửa" của bạn.</p>
 <table>
 <thead><tr><th>Key</th><th>Summary</th><th>Loại defect</th><th>Priority</th><th>Mô tả (bước / bằng chứng / mong đợi)</th></tr></thead>
 <tbody>
@@ -714,9 +1216,9 @@ ${mapTable(true)}
 <tr><td>LAB1-5</td><td>Coding-convention violations: missing braces, magic numbers, wildcard imports</td><td>Quy ước / bảo trì</td><td>Low</td><td>Checkstyle NeedBraces (L28, L91), MagicNumber ×8, AvoidStarImport (L7–8). Mong đợi: code tuân thủ checklist của nhóm.</td></tr>
 </tbody>
 </table>
-<p>Các trường hữu ích khác: <b>Environment</b> (JDK 21, IntelliJ + SonarQube for IDE), <b>Labels</b> (<code>static-analysis</code>, <code>lab1</code>), <b>Components</b> (module), <b>Assignee</b> (chính bạn để sửa), <b>Affects version</b>. Summary ngắn và cụ thể (cái gì + ở đâu) — đúng quy tắc defect report của Chương 5.</p>
-<div class="pitfall"><b>Bẫy trong đề FE:</b> "Công cụ phân tích tĩnh chủ yếu do tester dùng để chạy code" — sai hai lần. Chúng <em>không</em> chạy code, và thường do <b>developer</b> dùng (trước và trong component/integration testing), còn công cụ review hỗ trợ cả nhóm. Nhớ thêm: phân tích tĩnh tìm <em>defect</em>, không phải failure.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Công cụ "biết" dòng 19 là null bằng cách nào.</b> ECJ, SpotBugs và symbolic execution của Sonar dựng <em>đồ thị luồng điều khiển</em> của method và lan truyền các sự kiện theo nó (phân tích luồng dữ liệu): sau <code>name = null</code> sự kiện "name là null" chảy tới dòng 19 mà không có phép gán nào ở giữa, nên phép gọi chắc chắn hỏng. Cùng cơ chế đó tính ra "định nghĩa mà không dùng" (gán chết) và các cặp def-use của data-flow testing mà Spillner mô tả. Vì chứng minh tính chất của chương trình bất kỳ là bài toán không quyết định được (định lý Rice), mọi công cụ phải đánh đổi giữa <em>false positive</em> và <em>false negative</em>. <em>Ngoài giáo trình vì CTFL 2018 chỉ nêu phân tích tĩnh tìm được gì, không nêu bằng cách nào.</em></div>`),
+<p>Các trường hữu ích khác: <strong>Environment</strong> (JDK 21, IntelliJ + SonarQube for IDE), <strong>Labels</strong> (<code>static-analysis</code>, <code>lab1</code>), <strong>Components</strong> (module), <strong>Assignee</strong> (chính bạn để sửa), <strong>Affects version</strong>. Summary ngắn và cụ thể (cái gì + ở đâu) — đúng quy tắc defect report của Chương 5.</p>
+<div class="pitfall co-tieu-de"><strong>Bẫy trong đề FE:</strong> "Công cụ phân tích tĩnh chủ yếu do tester dùng để chạy code" — sai hai lần. Chúng <em>không</em> chạy code, và thường do <strong>developer</strong> dùng (trước và trong component/integration testing), còn công cụ review hỗ trợ cả nhóm. Nhớ thêm: phân tích tĩnh tìm <em>defect</em>, không phải failure.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Công cụ "biết" dòng 19 là null bằng cách nào.</strong> ECJ, SpotBugs và symbolic execution của Sonar dựng <em>đồ thị luồng điều khiển</em> của method và lan truyền các sự kiện theo nó (phân tích luồng dữ liệu): sau <code>name = null</code> sự kiện "name là null" chảy tới dòng 19 mà không có phép gán nào ở giữa, nên phép gọi chắc chắn hỏng. Cùng cơ chế đó tính ra "định nghĩa mà không dùng" (gán chết) và các cặp def-use của data-flow testing mà Spillner mô tả. Vì chứng minh tính chất của chương trình bất kỳ là bài toán không quyết định được (định lý Rice), mọi công cụ phải đánh đổi giữa <em>false positive</em> và <em>false negative</em>. <em>Ngoài giáo trình vì CTFL 2018 chỉ nêu phân tích tĩnh tìm được gì, không nêu bằng cách nào.</em></div>`),
     books([
       ['fst4', 'Ch.3 §1 "Static techniques and the test process" pp.75–78 (PDF 89–92); Ch.6 §1 "Test tool considerations" — tool classification incl. static analysis tools pp.203–221 (PDF 217–235)', 'Chương 3 §1 trang 75–78 (PDF 89–92); Chương 6 §1 "Test tool considerations" — phân loại công cụ, gồm công cụ phân tích tĩnh, trang 203–221 (PDF 217–235)'],
       ['fst', '§3.3 "Static analysis by tools" — pp.69–73 (PDF 72–76): coding standards, code metrics, code structure', '§3.3 "Static analysis by tools" — trang 69–73 (PDF 72–76): coding standard, số đo code, cấu trúc code'],
@@ -816,7 +1318,12 @@ const L4 = {
     bi(`<span class="eyebrow">Lab 1 · Lesson 1.4 · 1.jpg (SWT301 FALL24 final PE)</span>
 <h2>How Lab 1 prepares PE Question 1</h2>
 <p class="lead">Every recent SWT301 practical exam opens with a code-review question: "this class contains N defects (usually six) related to code standards, logic and best practices — identify each with a line number and a fix". It is worth 3 of the 10 points. Lab 1 is the rehearsal: same activity, same report format. The folder of Lab 1 even contains the full FALL24 paper as <em>1.jpg</em>; here it is, followed by a complete, verified answer to its Question 1.</p>
-<div class="callout"><b>Learning objectives.</b> LO-3.2.4 Apply a review technique (K3) under exam conditions · LO-5.6.1 Write defect reports (K3). The whole PE (all papers, time plan, Q2 and Q3 solutions) is covered in the PE section of this course; this lesson concentrates on Question 1.</div>
+<div class="callout"><strong>Learning objectives.</strong>
+<ul>
+<li><strong>LO-3.2.4</strong> — apply a review technique (K3) under exam conditions.</li>
+<li><strong>LO-5.6.1</strong> — write defect reports (K3).</li>
+</ul>
+The whole PE (all papers, time plan, Q2 and Q3 solutions) is covered in the PE section of this course; this lesson concentrates on Question 1.</div>
 <table>
 <thead><tr><th>Lab 1 skill</th><th>PE Question 1 counterpart</th></tr></thead>
 <tbody>
@@ -829,7 +1336,12 @@ const L4 = {
     `<span class="eyebrow">Lab 1 · Bài 1.4 · 1.jpg (đề PE cuối kỳ SWT301 FALL24)</span>
 <h2>Lab 1 chuẩn bị cho Câu 1 đề PE thế nào</h2>
 <p class="lead">Mọi đề thi thực hành SWT301 gần đây đều mở đầu bằng câu review code: "class này có N defect (thường là sáu) về chuẩn code, logic và best practice — hãy chỉ ra từng defect kèm số dòng và cách sửa". Câu này chiếm 3/10 điểm. Lab 1 chính là buổi tập dượt: cùng hoạt động, cùng mẫu báo cáo. Thư mục Lab 1 thậm chí chứa trọn đề FALL24 dưới tên <em>1.jpg</em>; dưới đây là đề, tiếp theo là lời giải đầy đủ, đã kiểm chứng, cho Câu 1.</p>
-<div class="callout"><b>Chuẩn đầu ra.</b> LO-3.2.4 Áp dụng kỹ thuật review (K3) trong điều kiện thi · LO-5.6.1 Viết defect report (K3). Toàn bộ đề PE (các đề, cách chia thời gian, lời giải Câu 2 và Câu 3) nằm trong phần PE của khoá học; bài này tập trung vào Câu 1.</div>
+<div class="callout"><strong>Chuẩn đầu ra.</strong>
+<ul>
+<li><strong>LO-3.2.4</strong> — áp dụng kỹ thuật review (K3) trong điều kiện thi.</li>
+<li><strong>LO-5.6.1</strong> — viết defect report (K3).</li>
+</ul>
+Toàn bộ đề PE (các đề, cách chia thời gian, lời giải Câu 2 và Câu 3) nằm trong phần PE của khoá học; bài này tập trung vào Câu 1.</div>
 <table>
 <thead><tr><th>Kỹ năng ở Lab 1</th><th>Tương ứng ở Câu 1 đề PE</th></tr></thead>
 <tbody>
@@ -840,18 +1352,34 @@ const L4 = {
 </tbody>
 </table>`),
     slide('lab1-img', 1, 'SWT301 FALL24 — The final PE (whole paper, blank answer space removed)',
-      `<p><b>The paper, top to bottom.</b> "SWT301 FALL24 – The final PE, duration 85 minutes". Instructions: proficiency in at least one programming language is needed; IDEs like NetBeans or IntelliJ IDEA <em>may</em> be used; the whole answer goes into <b>a single Word document</b>, no other format accepted.</p>
+      `<p class="y-chinh">🎯 The whole FALL24 final PE on one image: three questions, 85 minutes, one Word file — Question 1 is the Lab 1 skill.</p>
+<p class="nhan">Header and instructions</p>
 <ul>
-<li><b>Question 1 (3 points)</b> — the defect-report template (Lesson 1.1, slide 2) and the 35-line class <code>fileProcessor</code>: answered completely below.</li>
-<li><b>Question 2 (5 points)</b> — <code>OrderCalculator.calculateTotalPrice(double[] itemPrices, String customerType, boolean isVIP, String discountCode)</code>: design JUnit tests with EP and BVA on the inputs and 100% branch coverage; a partially completed <code>OrderCalculatorTest</code> is given (one expected-exception test, one VIP test asserting 240.0), and each test needs a one-line summary "ID; Test for …; Input parameter …; Expected result …".</li>
-<li><b>Question 3 (2 points)</b> — use case "Place an Order" of an online shopping system (main scenario of 8 steps, alternates A1 empty cart, A2 invalid discount code, A3 payment failure; products A $50, B $30, C $20; codes SAVE10 10%, WELCOME5 5% for new customers): write functional black-box test cases covering normal, alternative and exception flows, each with ID, description, preconditions, steps with test data, expected result and a note NF / AL / EX. An example TC001 is given.</li>
+<li><strong>Title</strong> — "SWT301 FALL24 – The final PE, duration 85 minutes".</li>
+<li><strong>Skills</strong> — proficiency in at least one programming language is needed.</li>
+<li><strong>Tools</strong> — IDEs like NetBeans or IntelliJ IDEA <em>may</em> be used.</li>
+<li><strong>Submission</strong> — the whole answer goes into <strong>a single Word document</strong>, no other format accepted.</li>
+</ul>
+<p class="nhan">The three questions</p>
+<ul>
+<li><strong>Question 1 (3 points)</strong> — the defect-report template (Lesson 1.1, slide 2) and the 35-line class <code>fileProcessor</code>: answered completely below.</li>
+<li><strong>Question 2 (5 points)</strong> — <code>OrderCalculator.calculateTotalPrice(double[] itemPrices, String customerType, boolean isVIP, String discountCode)</code>: design JUnit tests with EP and BVA on the inputs and 100% branch coverage; a partially completed <code>OrderCalculatorTest</code> is given (one expected-exception test, one VIP test asserting 240.0), and each test needs a one-line summary "ID; Test for …; Input parameter …; Expected result …".</li>
+<li><strong>Question 3 (2 points)</strong> — use case "Place an Order" of an online shopping system (main scenario of 8 steps, alternates A1 empty cart, A2 invalid discount code, A3 payment failure; products A $50, B $30, C $20; codes SAVE10 10%, WELCOME5 5% for new customers): write functional black-box test cases covering normal, alternative and exception flows, each with ID, description, preconditions, steps with test data, expected result and a note NF / AL / EX. An example TC001 is given.</li>
 </ul>
 <p>The image is the original 1.jpg with only the empty answer space between questions removed; no text was changed.</p>`,
-      `<p><b>Đề thi, từ trên xuống.</b> "SWT301 FALL24 – The final PE, thời gian 85 phút". Hướng dẫn: cần thành thạo ít nhất một ngôn ngữ lập trình; <em>được</em> dùng IDE như NetBeans hay IntelliJ IDEA; toàn bộ bài làm nộp trong <b>một file Word duy nhất</b>, không nhận định dạng khác.</p>
+      `<p class="y-chinh">🎯 Trọn đề PE cuối kỳ FALL24 trong một ảnh: ba câu, 85 phút, một file Word — Câu 1 chính là kỹ năng của Lab 1.</p>
+<p class="nhan">Tiêu đề và hướng dẫn</p>
 <ul>
-<li><b>Câu 1 (3 điểm)</b> — mẫu báo cáo defect (Bài 1.1, slide 2) và class 35 dòng <code>fileProcessor</code>: giải đầy đủ bên dưới.</li>
-<li><b>Câu 2 (5 điểm)</b> — <code>OrderCalculator.calculateTotalPrice(double[] itemPrices, String customerType, boolean isVIP, String discountCode)</code>: thiết kế test JUnit dùng EP và BVA cho các tham số và đạt 100% branch coverage; cho sẵn một <code>OrderCalculatorTest</code> dở dang (một test mong đợi exception, một test VIP kiểm 240.0), mỗi test cần một dòng tóm tắt "ID; Test for …; Input parameter …; Expected result …".</li>
-<li><b>Câu 3 (2 điểm)</b> — use case "Place an Order" của hệ thống mua hàng online (kịch bản chính 8 bước, nhánh phụ A1 giỏ trống, A2 mã giảm giá sai, A3 thanh toán lỗi; sản phẩm A $50, B $30, C $20; mã SAVE10 giảm 10%, WELCOME5 giảm 5% cho khách mới): viết test case chức năng black-box phủ luồng chính, luồng thay thế và ngoại lệ, mỗi case có ID, mô tả, điều kiện tiên quyết, các bước kèm dữ liệu, kết quả mong đợi và ghi chú NF / AL / EX. Có sẵn ví dụ TC001.</li>
+<li><strong>Tiêu đề</strong> — "SWT301 FALL24 – The final PE, thời gian 85 phút".</li>
+<li><strong>Kỹ năng</strong> — cần thành thạo ít nhất một ngôn ngữ lập trình.</li>
+<li><strong>Công cụ</strong> — <em>được</em> dùng IDE như NetBeans hay IntelliJ IDEA.</li>
+<li><strong>Nộp bài</strong> — toàn bộ bài làm nộp trong <strong>một file Word duy nhất</strong>, không nhận định dạng khác.</li>
+</ul>
+<p class="nhan">Ba câu hỏi</p>
+<ul>
+<li><strong>Câu 1 (3 điểm)</strong> — mẫu báo cáo defect (Bài 1.1, slide 2) và class 35 dòng <code>fileProcessor</code>: giải đầy đủ bên dưới.</li>
+<li><strong>Câu 2 (5 điểm)</strong> — <code>OrderCalculator.calculateTotalPrice(double[] itemPrices, String customerType, boolean isVIP, String discountCode)</code>: thiết kế test JUnit dùng EP và BVA cho các tham số và đạt 100% branch coverage; cho sẵn một <code>OrderCalculatorTest</code> dở dang (một test mong đợi exception, một test VIP kiểm 240.0), mỗi test cần một dòng tóm tắt "ID; Test for …; Input parameter …; Expected result …".</li>
+<li><strong>Câu 3 (2 điểm)</strong> — use case "Place an Order" của hệ thống mua hàng online (kịch bản chính 8 bước, nhánh phụ A1 giỏ trống, A2 mã giảm giá sai, A3 thanh toán lỗi; sản phẩm A $50, B $30, C $20; mã SAVE10 giảm 10%, WELCOME5 giảm 5% cho khách mới): viết test case chức năng black-box phủ luồng chính, luồng thay thế và ngoại lệ, mỗi case có ID, mô tả, điều kiện tiên quyết, các bước kèm dữ liệu, kết quả mong đợi và ghi chú NF / AL / EX. Có sẵn ví dụ TC001.</li>
 </ul>
 <p>Ảnh là 1.jpg gốc, chỉ bỏ phần giấy trắng chừa để làm bài giữa các câu; không sửa chữ nào.</p>`),
     bi(`<h2>✍️ Question 1 — the complete answer</h2>
@@ -874,17 +1402,29 @@ ${PE_RUN}
 <tr><td>DF009</td><td>Formatting / documentation</td><td>4, 14, 26</td><td>No blank line between members and no Javadoc on public methods.</td><td>One blank line between methods (checklist A7.12), add Javadoc.</td></tr>
 </tbody>
 </table></div>
-<p><b>Which six?</b> The paper announces six; DF001–DF006 are the six the class was clearly built around (two naming errors, the inverted condition, check-after-use, the close in finally, check-after-call). DF007–DF009 are valid extras — list them as "additional" so a marker who expected e.g. the exception-handling one still finds it.</p>
+<p><strong>Which six?</strong> The paper announces six; DF001–DF006 are the six the class was clearly built around (two naming errors, the inverted condition, check-after-use, the close in finally, check-after-call). DF007–DF009 are valid extras — list them as "additional" so a marker who expected e.g. the exception-handling one still finds it.</p>
 <h3>Corrected class (compiles, run output above)</h3>
 ${PE_FIX}
 <h3>A 20-minute plan for Question 1</h3>
 <ol>
-<li><b>3 min</b> — read the whole class once; paste it into the IDE if allowed and look at the red/yellow marks.</li>
-<li><b>7 min</b> — four passes with the Lab 1 checklist in your head: names (B7, A7.14–7.17) → nulls and conditions (B1, B19, logic) → exceptions and resources (B2, A2.10, A2.32) → clean-up, braces, magic numbers (B6, B11, B13).</li>
-<li><b>8 min</b> — write the table in Word, one row per defect, a code-level fix in every row.</li>
-<li><b>2 min</b> — check line numbers against the paper and that no two rows describe the same defect.</li>
+<li><strong>3 min</strong> — read the whole class once; paste it into the IDE if allowed and look at the red/yellow marks.</li>
+<li><strong>7 min</strong> — four passes with the Lab 1 checklist in your head: names (B7, A7.14–7.17) → nulls and conditions (B1, B19, logic) → exceptions and resources (B2, A2.10, A2.32) → clean-up, braces, magic numbers (B6, B11, B13).</li>
+<li><strong>8 min</strong> — write the table in Word, one row per defect, a code-level fix in every row.</li>
+<li><strong>2 min</strong> — check line numbers against the paper and that no two rows describe the same defect.</li>
 </ol>
-<p><b>Links to the other questions.</b> Question 2 is Chapter 4's EP/BVA plus Chapter 4's white-box coverage: note that the tests' example is right (<code>{100, 200}</code>, VIP, no code → 300 × 0.8 = <b>240.0</b>; VIP + "SALE10" → <b>210.0</b>; Regular + "WELCOME5" → 100 × 0.90 = <b>90.0</b> — all three computed by running the method), that a non-VIP call with <code>customerType = null</code> throws NullPointerException at the <code>equalsIgnoreCase</code> line (a boundary worth a test), and that the true branch of <code>finalPrice &lt; 0 ? 0 : finalPrice</code> is unreachable (all prices must be &gt; 0 and the discount is at most 30%), so "100% branch coverage" is impossible — say so in your answer. Question 3 is Chapter 4's use-case testing.</p>`,
+<h3>Links to the other questions</h3>
+<p><strong>Question 2</strong> is Chapter 4's EP/BVA plus Chapter 4's white-box coverage. Three things to note:</p>
+<ul>
+<li><strong>The tests' example is right</strong> — all three values computed by running the method:
+<ul>
+<li><code>{100, 200}</code>, VIP, no code → 300 × 0.8 = <strong>240.0</strong></li>
+<li>VIP + "SALE10" → <strong>210.0</strong></li>
+<li>Regular + "WELCOME5" → 100 × 0.90 = <strong>90.0</strong></li>
+</ul></li>
+<li><strong>A null customer type</strong> — a non-VIP call with <code>customerType = null</code> throws NullPointerException at the <code>equalsIgnoreCase</code> line: a boundary worth a test.</li>
+<li><strong>An unreachable branch</strong> — the true branch of <code>finalPrice &lt; 0 ? 0 : finalPrice</code> can never run (all prices must be &gt; 0 and the discount is at most 30%), so "100% branch coverage" is impossible — say so in your answer.</li>
+</ul>
+<p><strong>Question 3</strong> is Chapter 4's use-case testing.</p>`,
     `<h2>✍️ Câu 1 — lời giải đầy đủ</h2>
 <p>Class như in trên đề (số dòng theo ảnh chụp IDE):</p>
 ${PE_CODE}
@@ -905,21 +1445,33 @@ ${PE_RUN}
 <tr><td>DF009</td><td>Format / tài liệu</td><td>4, 14, 26</td><td>Không có dòng trống giữa các thành phần và không có Javadoc cho method public.</td><td>Một dòng trống giữa các method (checklist A7.12), thêm Javadoc.</td></tr>
 </tbody>
 </table></div>
-<p><b>Chọn sáu cái nào?</b> Đề nói có sáu; DF001–DF006 là sáu lỗi class rõ ràng được "cài" vào (hai lỗi đặt tên, điều kiện bị đảo, dùng trước kiểm sau, close trong finally, gọi trước kiểm sau). DF007–DF009 là lỗi hợp lệ bổ sung — ghi thành mục "additional" để nếu người chấm mong đợi chẳng hạn lỗi xử lý exception thì vẫn thấy.</p>
+<p><strong>Chọn sáu cái nào?</strong> Đề nói có sáu; DF001–DF006 là sáu lỗi class rõ ràng được "cài" vào (hai lỗi đặt tên, điều kiện bị đảo, dùng trước kiểm sau, close trong finally, gọi trước kiểm sau). DF007–DF009 là lỗi hợp lệ bổ sung — ghi thành mục "additional" để nếu người chấm mong đợi chẳng hạn lỗi xử lý exception thì vẫn thấy.</p>
 <h3>Class đã sửa (biên dịch được, kết quả chạy ở trên)</h3>
 ${PE_FIX}
 <h3>Kế hoạch 20 phút cho Câu 1</h3>
 <ol>
-<li><b>3 phút</b> — đọc toàn bộ class một lượt; nếu được dùng IDE thì dán vào và xem các gạch đỏ/vàng.</li>
-<li><b>7 phút</b> — bốn lượt quét với checklist Lab 1 trong đầu: tên (B7, A7.14–7.17) → null và điều kiện (B1, B19, logic) → exception và tài nguyên (B2, A2.10, A2.32) → dọn dẹp, ngoặc, số ma thuật (B6, B11, B13).</li>
-<li><b>8 phút</b> — viết bảng trong Word, mỗi defect một dòng, dòng nào cũng có cách sửa ở mức code.</li>
-<li><b>2 phút</b> — soát số dòng với đề và chắc chắn không có hai dòng mô tả cùng một defect.</li>
+<li><strong>3 phút</strong> — đọc toàn bộ class một lượt; nếu được dùng IDE thì dán vào và xem các gạch đỏ/vàng.</li>
+<li><strong>7 phút</strong> — bốn lượt quét với checklist Lab 1 trong đầu: tên (B7, A7.14–7.17) → null và điều kiện (B1, B19, logic) → exception và tài nguyên (B2, A2.10, A2.32) → dọn dẹp, ngoặc, số ma thuật (B6, B11, B13).</li>
+<li><strong>8 phút</strong> — viết bảng trong Word, mỗi defect một dòng, dòng nào cũng có cách sửa ở mức code.</li>
+<li><strong>2 phút</strong> — soát số dòng với đề và chắc chắn không có hai dòng mô tả cùng một defect.</li>
 </ol>
-<p><b>Liên hệ các câu khác.</b> Câu 2 là EP/BVA và coverage white-box của Chương 4: ví dụ trong đề đúng (<code>{100, 200}</code>, VIP, không mã → 300 × 0,8 = <b>240.0</b>; VIP + "SALE10" → <b>210.0</b>; Regular + "WELCOME5" → 100 × 0,90 = <b>90.0</b> — cả ba đã chạy method để tính), một lời gọi không VIP với <code>customerType = null</code> ném NullPointerException ở dòng <code>equalsIgnoreCase</code> (một giá trị biên đáng test), và nhánh đúng của <code>finalPrice &lt; 0 ? 0 : finalPrice</code> không thể tới được (mọi giá phải &gt; 0 và giảm tối đa 30%), nên "100% branch coverage" là bất khả — hãy nói rõ điều đó trong bài. Câu 3 là use-case testing của Chương 4.</p>`),
-    bi(`<div class="pitfall"><b>Exam trap: answering with the effect instead of the defect.</b> "Line 6 throws NullPointerException" is an observation; the defect is <em>why</em> — the field <code>FilePath</code> is never assigned (line 3) and the path is not validated before use (line 6/7). Name the cause, give the line of the cause, and the marker gives the point.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why try-with-resources beats a hand-written finally.</b> Since Java 7, any <code>AutoCloseable</code> declared in <code>try ( … )</code> is closed automatically in reverse order, even when the body throws, and an exception thrown by <code>close()</code> is attached as a <em>suppressed</em> exception instead of hiding the original one — which is exactly the bug class of DF005 (a failing close in finally replaces the real error). Reviewers in industry treat any manual <code>close()</code> in a finally block as a finding. <em>Outside the syllabus because CTFL is language-neutral.</em></div>`,
-    `<div class="pitfall"><b>Bẫy thi: trả lời bằng hậu quả thay vì defect.</b> "Dòng 6 ném NullPointerException" là một quan sát; defect là <em>vì sao</em> — field <code>FilePath</code> không bao giờ được gán (dòng 3) và đường dẫn không được kiểm tra trước khi dùng (dòng 6/7). Nêu nguyên nhân, ghi dòng của nguyên nhân, người chấm sẽ cho điểm.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao try-with-resources hơn finally viết tay.</b> Từ Java 7, mọi <code>AutoCloseable</code> khai báo trong <code>try ( … )</code> được đóng tự động theo thứ tự ngược, kể cả khi thân try ném lỗi, và exception do <code>close()</code> ném ra được gắn vào dạng <em>suppressed</em> thay vì che mất exception gốc — đúng loại lỗi của DF005 (close hỏng trong finally thay thế lỗi thật). Trong doanh nghiệp, người review coi mọi <code>close()</code> thủ công trong finally là một phát hiện. <em>Ngoài giáo trình vì CTFL không gắn với ngôn ngữ nào.</em></div>`),
+<h3>Liên hệ các câu khác</h3>
+<p><strong>Câu 2</strong> là EP/BVA và coverage white-box của Chương 4. Ba điều cần để ý:</p>
+<ul>
+<li><strong>Ví dụ trong đề đúng</strong> — cả ba giá trị đã chạy method để tính:
+<ul>
+<li><code>{100, 200}</code>, VIP, không mã → 300 × 0,8 = <strong>240.0</strong></li>
+<li>VIP + "SALE10" → <strong>210.0</strong></li>
+<li>Regular + "WELCOME5" → 100 × 0,90 = <strong>90.0</strong></li>
+</ul></li>
+<li><strong>customerType null</strong> — một lời gọi không VIP với <code>customerType = null</code> ném NullPointerException ở dòng <code>equalsIgnoreCase</code>: một giá trị biên đáng test.</li>
+<li><strong>Nhánh không tới được</strong> — nhánh đúng của <code>finalPrice &lt; 0 ? 0 : finalPrice</code> không bao giờ chạy (mọi giá phải &gt; 0 và giảm tối đa 30%), nên "100% branch coverage" là bất khả — hãy nói rõ điều đó trong bài.</li>
+</ul>
+<p><strong>Câu 3</strong> là use-case testing của Chương 4.</p>`),
+    bi(`<div class="pitfall co-tieu-de"><strong>Exam trap: answering with the effect instead of the defect.</strong> "Line 6 throws NullPointerException" is an observation; the defect is <em>why</em> — the field <code>FilePath</code> is never assigned (line 3) and the path is not validated before use (line 6/7). Name the cause, give the line of the cause, and the marker gives the point.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <strong>Why try-with-resources beats a hand-written finally.</strong> Since Java 7, any <code>AutoCloseable</code> declared in <code>try ( … )</code> is closed automatically in reverse order, even when the body throws, and an exception thrown by <code>close()</code> is attached as a <em>suppressed</em> exception instead of hiding the original one — which is exactly the bug class of DF005 (a failing close in finally replaces the real error). Reviewers in industry treat any manual <code>close()</code> in a finally block as a finding. <em>Outside the syllabus because CTFL is language-neutral.</em></div>`,
+    `<div class="pitfall co-tieu-de"><strong>Bẫy thi: trả lời bằng hậu quả thay vì defect.</strong> "Dòng 6 ném NullPointerException" là một quan sát; defect là <em>vì sao</em> — field <code>FilePath</code> không bao giờ được gán (dòng 3) và đường dẫn không được kiểm tra trước khi dùng (dòng 6/7). Nêu nguyên nhân, ghi dòng của nguyên nhân, người chấm sẽ cho điểm.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <strong>Vì sao try-with-resources hơn finally viết tay.</strong> Từ Java 7, mọi <code>AutoCloseable</code> khai báo trong <code>try ( … )</code> được đóng tự động theo thứ tự ngược, kể cả khi thân try ném lỗi, và exception do <code>close()</code> ném ra được gắn vào dạng <em>suppressed</em> thay vì che mất exception gốc — đúng loại lỗi của DF005 (close hỏng trong finally thay thế lỗi thật). Trong doanh nghiệp, người review coi mọi <code>close()</code> thủ công trong finally là một phát hiện. <em>Ngoài giáo trình vì CTFL không gắn với ngôn ngữ nào.</em></div>`),
     books([
       ['fst4', 'Ch.3 §2 review process pp.79–99 (PDF 93–113); Ch.4 §2 black-box pp.112–131 and §3 white-box pp.132–139 (PDF 126–153) for Questions 2–3; Ch.7 "Preparing for the exam" p.228 (PDF 242)', 'Chương 3 §2 trang 79–99 (PDF 93–113); Chương 4 §2 black-box trang 112–131 và §3 white-box trang 132–139 (PDF 126–153) cho Câu 2–3; Chương 7 "Preparing for the exam" trang 228 (PDF 242)'],
       ['junit', 'Ch.2 "Exploring core JUnit" (PDF 18): assertThrows, assertEquals with delta — needed for Question 2', 'Chương 2 "Exploring core JUnit" (PDF 18): assertThrows, assertEquals có delta — cần cho Câu 2'],

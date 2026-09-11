@@ -110,6 +110,15 @@ if (!course) {
 
 /* 3. Sections + lessons ---------------------------------------------------- */
 let secN = 0, lesNew = 0, lesUpd = 0;
+// course.syncOrder (opt-in): after seeding, make the DB order match the FILE
+// order — sections and the lessons inside them. Without it a lesson added in
+// the middle of a chapter (or a new Lab section) is APPENDED after everything
+// that already exists (e.g. after the chapter quiz / after "Final Exam"), and
+// someone has to fix sort_order by hand on prod (project_academy_ship_batch).
+// Rows that exist in the DB but are no longer in the file keep their relative
+// order and are placed after the file's rows — never deleted.
+const SYNC = !!c.syncOrder;
+const orderPlan = []; // [{ sectionId, lessonIds: [] }] in file order
 if (course) {
   const secs = spec.sections || [];
   const maxSec = await prisma.courseSection.aggregate({ where: { courseId: course.id }, _max: { sortOrder: true } });
@@ -142,6 +151,8 @@ if (course) {
       if (APPLY) await prisma.courseSection.update({ where: { id: section.id }, data: { title: s.title, description: s.description ?? null } });
     }
 
+    const plan = section ? { sectionId: section.id, lessonIds: [] } : null;
+    if (plan) orderPlan.push(plan);
     const maxLes = section ? await prisma.lesson.aggregate({ where: { sectionId: section.id }, _max: { sortOrder: true } }) : { _max: { sortOrder: -1 } };
     let lesOrder = (maxLes._max.sortOrder ?? -1) + 1;
 
@@ -167,13 +178,18 @@ if (course) {
       if (!existing) {
         const lo = lesOrder++; lesNew++;
         console.log(`      + lesson @${lo} [${lessonCore.lessonType}]: ${l.title}`);
-        if (APPLY && section) await prisma.lesson.create({
-          data: {
-            sectionId: section.id, slug: lslug, sortOrder: lo, ...lessonCore,
-            details: { create: { videoPlatform: 'EMBED', ...(quizData ? { quizData } : {}) } },
-          },
-        });
+        if (APPLY && section) {
+          const created = await prisma.lesson.create({
+            data: {
+              sectionId: section.id, slug: lslug, sortOrder: lo, ...lessonCore,
+              details: { create: { videoPlatform: 'EMBED', ...(quizData ? { quizData } : {}) } },
+            },
+            select: { id: true },
+          });
+          plan?.lessonIds.push(created.id);
+        }
       } else if (!NO_UPDATE) {
+        plan?.lessonIds.push(existing.id);
         lesUpd++;
         console.log(`      ~ lesson [${lessonCore.lessonType}]: ${l.title} (re-author)`);
         if (APPLY) {
@@ -185,11 +201,32 @@ if (course) {
           });
         }
       } else {
+        plan?.lessonIds.push(existing.id);
         console.log(`      = lesson (skip): ${l.title}`);
       }
     }
   }
 }
+
+/* 4. Optional: make DB order match file order ------------------------------ */
+// Two passes (+100000 then final) so no intermediate state ever has two rows
+// fighting for the same slot — no unique index today, but the UI sorts by it.
+async function renumber(model, ids) {
+  await prisma.$transaction(ids.map((id, i) => prisma[model].update({ where: { id }, data: { sortOrder: 100000 + i } })));
+  await prisma.$transaction(ids.map((id, i) => prisma[model].update({ where: { id }, data: { sortOrder: i } })));
+}
+if (SYNC && course && APPLY) {
+  for (const p of orderPlan) {
+    const all = await prisma.lesson.findMany({ where: { sectionId: p.sectionId }, select: { id: true }, orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }] });
+    const rest = all.map((x) => x.id).filter((id) => !p.lessonIds.includes(id));
+    await renumber('lesson', [...p.lessonIds, ...rest]);
+  }
+  const fileSecIds = orderPlan.map((p) => p.sectionId);
+  const allSec = await prisma.courseSection.findMany({ where: { courseId: course.id }, select: { id: true }, orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }] });
+  const restSec = allSec.map((x) => x.id).filter((id) => !fileSecIds.includes(id));
+  await renumber('courseSection', [...new Set(fileSecIds), ...restSec]);
+  console.log(`  ↕ syncOrder: ${fileSecIds.length} sections + their lessons renumbered to file order` + (restSec.length ? ` (${restSec.length} section(s) not in file kept after)` : ''));
+} else if (SYNC && !APPLY) console.log('  ↕ syncOrder: would renumber sections/lessons to file order');
 
 console.log(`\nsections +${secN} · lessons +${lesNew} ~${lesUpd}. ${APPLY ? 'Done.' : 'Dry-run — add --apply.'}`);
 await prisma.$disconnect();

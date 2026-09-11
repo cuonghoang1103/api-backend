@@ -3,7 +3,26 @@
  * Nội dung Academy FPTU — bám sát syllabus (60 buổi, 9 CLO, 15 topic) + chương nâng cao.
  * Song ngữ EN/VN đối xứng; luyện code → CodeLab; setup/IDE → Exp Hub.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/FER202.mjs --apply
+ *
+ * Slide-by-slide walkthroughs of the real FPTU decks (Slot 1–20, rendered to R2
+ * at images/academy/FER202/v1/…) and the 27 course exercises live in per-chapter
+ * modules under ./fer202/ and are spliced into the matching chapters below. The
+ * original concept lessons + quizzes are kept intact (slugs preserved), so no
+ * user progress is lost. course.syncOrder makes the DB order follow this file.
  */
+import ch1Extra from './fer202/ch1.mjs';
+import ch2Extra from './fer202/ch2.mjs';
+import ch3Extra from './fer202/ch3.mjs';
+import ch4Extra from './fer202/ch4.mjs';
+import ch5Extra from './fer202/ch5.mjs';
+import ch6Extra from './fer202/ch6.mjs';
+import ch7Extra from './fer202/ch7.mjs';
+import ch8Extra from './fer202/ch8.mjs';
+import ch9Extra from './fer202/ch9.mjs';
+import ch10Extra from './fer202/ch10.mjs';
+import ch11Extra from './fer202/ch11.mjs';
+import ch12Extra from './fer202/ch12.mjs';
+import advExtra from './fer202/chAdv.mjs';
 export default {
   semester: { code: 'FPTU_Hola5', name: 'Kỳ 5', ordinal: 7 },
   course: {
@@ -14,6 +33,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     shortDescription: 'Build modern front-ends with React: JSX, components, state, hooks, routing, client-server data with fetch/axios, and Redux Toolkit — from ES6 foundations to production patterns.|||Xây front-end hiện đại với React: JSX, component, state, hooks, routing, giao tiếp client-server bằng fetch/axios, và Redux Toolkit — từ nền tảng ES6 tới các mẫu thực chiến.',
     description: 'FER202 dạy phát triển web phía client bằng thư viện React. Bắt đầu từ bức tranh full-stack và ES6, đi qua JSX, component, state & props, event handling, Hooks (useState/useEffect/useContext/useReducer), React Router, code splitting với lazy/Suspense, giao tiếp client-server (fetch, promise, async/await, axios) và kết thúc bằng kiến trúc Flux/Redux với Redux Toolkit. Tiên quyết WED201c.',
     whatYouLearn: 'Dựng ứng dụng React từ đầu bằng Vite/CRA; viết JSX & component tái sử dụng; quản lý state bằng hooks; điều hướng bằng React Router; tách code với lazy/Suspense; gọi REST API bằng fetch/axios; quản lý state toàn cục bằng Redux Toolkit; và các kỹ thuật nâng cao: memo hoá, testing với Jest/RTL, TypeScript & Next.js.',
@@ -497,6 +517,7 @@ npm run dev</pre>
 </div>
 `,
         },
+        ...ch1Extra,
         {
           title: 'Chapter 1 Quiz|||Quiz chương 1',
           slug: 'fer202-1-quiz',
@@ -693,6 +714,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 </div>
 `,
         },
+        ...ch2Extra,
         {
           title: 'Chapter 2 Quiz|||Quiz chương 2',
           slug: 'fer202-2-quiz',
@@ -909,6 +931,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 </div>
 `,
         },
+        ...ch3Extra,
         {
           title: 'Chapter 3 Quiz|||Quiz chương 3',
           slug: 'fer202-3-quiz',
@@ -1043,6 +1066,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 </div>
 `,
         },
+        ...ch4Extra,
         {
           title: 'Chapter 4 Quiz|||Quiz chương 4',
           slug: 'fer202-4-quiz',
@@ -1255,6 +1279,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 </div>
 `,
         },
+        ...ch5Extra,
         {
           title: 'Chapter 5 Quiz|||Quiz chương 5',
           slug: 'fer202-5-quiz',
@@ -1377,6 +1402,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 </div>
 `,
         },
+        ...ch6Extra,
         {
           title: 'Chapter 6 Quiz|||Quiz chương 6',
           slug: 'fer202-6-quiz',
@@ -1579,6 +1605,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 </div>
 `,
         },
+        ...ch7Extra,
         {
           title: 'Chapter 7 Quiz|||Quiz chương 7',
           slug: 'fer202-7-quiz',
@@ -1785,6 +1812,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 </div>
 `,
         },
+        ...ch8Extra,
         {
           title: 'Chapter 8 Quiz|||Quiz chương 8',
           slug: 'fer202-8-quiz',
@@ -1938,6 +1966,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 </div>
 `,
         },
+        ...ch9Extra,
         {
           title: 'Chapter 9 Quiz|||Quiz chương 9',
           slug: 'fer202-9-quiz',
@@ -2044,6 +2073,7 @@ count = 1;              <span class="tok-comment">// ok</span>
 </div>
 `,
         },
+        ...ch10Extra,
         {
           title: 'Chapter 10 Quiz|||Quiz chương 10',
           slug: 'fer202-10-quiz',
@@ -2266,6 +2296,7 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
 </div>
 `,
         },
+        ...ch11Extra,
         {
           title: 'Chapter 11 Quiz|||Quiz chương 11',
           slug: 'fer202-11-quiz',
@@ -2482,6 +2513,7 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
 </div>
 `,
         },
+        ...ch12Extra,
         {
           title: 'Chapter 12 Quiz|||Quiz chương 12',
           slug: 'fer202-12-quiz',
@@ -2813,6 +2845,7 @@ npx create-next-app@latest my-app
 </div>
 `,
         },
+        ...advExtra,
         {
           title: 'Advanced A3 Quiz|||Quiz nâng cao A3',
           slug: 'fer202-a3-quiz',

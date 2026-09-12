@@ -467,6 +467,23 @@ export default function AcademyAdvisorPage() {
   return (
     <div className="min-h-screen pt-24 pb-16" style={{ background: '#050314' }}>
       <AcademyBackground />
+      {/* Style riêng cho câu trả lời markdown của CuongMini — dễ đọc, hợp tông tối */}
+      <style>{`
+        .academy-advisor-md h1,.academy-advisor-md h2,.academy-advisor-md h3{color:var(--text-primary,#e7e9f3);font-weight:700;line-height:1.3;margin:.9em 0 .35em}
+        .academy-advisor-md h1{font-size:1.15em}.academy-advisor-md h2{font-size:1.08em}.academy-advisor-md h3{font-size:1em}
+        .academy-advisor-md p{margin:.5em 0}
+        .academy-advisor-md ul,.academy-advisor-md ol{margin:.4em 0 .6em;padding-left:1.25em}
+        .academy-advisor-md li{margin:.22em 0}
+        .academy-advisor-md ul li{list-style:disc}.academy-advisor-md ol li{list-style:decimal}
+        .academy-advisor-md strong{color:var(--text-primary,#e7e9f3);font-weight:600}
+        .academy-advisor-md a{color:#22d3ee;text-decoration:underline;text-underline-offset:2px}
+        .academy-advisor-md code{background:#0b1020;border:1px solid #2a2f45;border-radius:6px;padding:.05em .35em;font-size:.9em}
+        .academy-advisor-md pre{background:#0b1020;border:1px solid #2a2f45;border-radius:10px;padding:10px 12px;overflow-x:auto;margin:.6em 0}
+        .academy-advisor-md pre code{background:none;border:0;padding:0}
+        .academy-advisor-md blockquote{border-left:3px solid rgba(139,92,246,.5);margin:.6em 0;padding:.15em .8em;color:var(--text-muted,#9aa0b4);font-size:.95em}
+        .academy-advisor-md hr{border:0;border-top:1px solid #2a2f45;margin:.8em 0}
+        .academy-advisor-md>*:first-child{margin-top:0}.academy-advisor-md>*:last-child{margin-bottom:0}
+      `}</style>
       <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         {/* Header */}
         <div className="flex flex-wrap items-center gap-3 justify-between">

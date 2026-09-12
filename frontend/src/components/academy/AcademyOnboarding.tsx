@@ -624,14 +624,26 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask', 
                         Muốn đổi thì vào mục “Đổi ngành” ngay trong Academy, bất cứ lúc nào.
                       </p>
                     </div>
-                    <button
-                      type="button"
-                      data-autofocus="true"
-                      onClick={onClose}
-                      className="w-full min-h-[52px] rounded-2xl px-4 font-semibold text-white bg-gradient-to-r from-neon-indigo to-neon-violet hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-darkcard transition"
-                    >
-                      Vào Academy
-                    </button>
+                    <p className="text-center text-sm text-text-secondary">Bạn muốn bắt đầu thế nào?</p>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <button
+                        type="button"
+                        data-autofocus="true"
+                        onClick={() => { onClose(); router.push(`/academy/so-do-mon-hoc?faculty=${facultyId ?? ''}&major=${majorId ?? ''}&combo=${comboId ?? ''}`); }}
+                        className="min-h-[64px] rounded-2xl px-4 font-semibold text-text-primary bg-darksurface border border-neon-cyan/40 hover:border-neon-cyan/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex flex-col items-center justify-center gap-0.5"
+                      >
+                        <span className="inline-flex items-center gap-1.5">🗺️ Xem sơ đồ môn học</span>
+                        <span className="text-[11px] font-normal text-text-muted">Hiểu học xong làm gì, từng môn để làm gì</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={onClose}
+                        className="min-h-[64px] rounded-2xl px-4 font-semibold text-white bg-gradient-to-r from-neon-indigo to-neon-violet hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex flex-col items-center justify-center gap-0.5"
+                      >
+                        <span>Vào học ngay</span>
+                        <span className="text-[11px] font-normal text-white/80">Xem lộ trình môn của tôi</span>
+                      </button>
+                    </div>
                   </div>
                 )}
               </motion.div>

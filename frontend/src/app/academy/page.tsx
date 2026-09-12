@@ -209,6 +209,12 @@ export default function AcademyPage() {
                     <span className="truncate">Đang lọc {shownTotal} môn của ngành</span>
                   </span>
                 )}
+                <Link
+                  href={`/academy/so-do-mon-hoc?faculty=${profile.faculty ?? ''}&major=${profile.major ?? ''}&combo=${profile.combo ?? ''}`}
+                  className="inline-flex items-center justify-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl border border-neon-cyan/40 bg-neon-cyan/10 text-neon-cyan hover:border-neon-cyan/70 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan"
+                >
+                  🗺️ Sơ đồ môn học
+                </Link>
                 <button
                   type="button"
                   onClick={() => setReopenAtMajor(true)}

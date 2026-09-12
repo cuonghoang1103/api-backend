@@ -517,7 +517,7 @@ export default {
     level: 'ADVANCED',
     language: 'Vietnamese',
     status: 'PUBLISHED',
-    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v2/PRN232.webp',
+    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/PRN232.webp',
     shortDescription: 'Build RESTful back-ends with ASP.NET Core Web API — REST, DTOs & EF Core, content negotiation, JWT security, AJAX clients, gRPC & microservices. Bilingual, with exercises.|||Xây back-end RESTful với ASP.NET Core Web API — REST, DTO & EF Core, content negotiation, bảo mật JWT, client AJAX, gRPC & microservices. Song ngữ, có bài tập.',
     description: 'Môn <strong>PRN232 — Xây ứng dụng back-end đa nền tảng với .NET</strong> (ngành Kỹ thuật phần mềm, kỳ 8). Môn back-end của nhánh .NET: dựng dịch vụ <strong>RESTful</strong> bằng ASP.NET Core Web API — model &amp; DTO, EF Core, content negotiation, binding/validation/routing, <strong>bảo mật JWT</strong>, client JavaScript/AJAX, và gRPC/microservices. Bám giáo trình FLM (8 chương, 5 CLO), song ngữ, code chạy được, mỗi chương có bài tập kèm lời giải.',
     whatYouLearn: 'REST & ASP.NET Core Web API; Model/DTO & EF Core; media formatters & content negotiation; binding, validation, attribute routing; bảo mật JWT ([Authorize]/role/policy); JavaScript client & AJAX (fetch, CORS); gRPC (Protobuf/HTTP2) & giới thiệu microservices.',

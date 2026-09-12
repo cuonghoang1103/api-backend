@@ -479,7 +479,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
-    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v2/CSD202.webp',
+    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/CSD202.webp',
     shortDescription: 'The core CS course — Big-O, linked lists, stacks/queues, recursion, sorting/searching, trees/BST, graphs & hashing, all in C++. Bilingual, with runnable code & exercises.|||Môn CS lõi — Big-O, linked list, stack/queue, đệ quy, sorting/searching, tree/BST, đồ thị & hashing, tất cả bằng C++. Song ngữ, code chạy được & bài tập.',
     description: 'Môn <strong>CSD202 — Cấu trúc dữ liệu &amp; giải thuật (C++)</strong> (ngành Kỹ thuật phần mềm, kỳ 3). Nền tảng của khoa học máy tính: <strong>Big-O</strong> → <strong>linked list</strong> → <strong>stack/queue</strong> → <strong>đệ quy, sorting &amp; searching</strong> → <strong>cây &amp; BST</strong> → <strong>đồ thị &amp; hashing</strong>, hiện thực bằng <strong>C++</strong>. Bám giáo trình FLM (9 CLO), song ngữ, code C++ chạy được và bài tập kèm lời giải. Đây cũng là nền cho phỏng vấn kỹ thuật.',
     whatYouLearn: 'OOP C++ & template; phân tích Big-O (O(1)→O(n²), best/worst/average); linked list (singly/doubly); stack (LIFO) & queue (FIFO) + ứng dụng; đệ quy; sorting (bubble/insertion/merge/quick) & searching (linear/binary); cây nhị phân, duyệt in/pre/post-order, BST (chèn/tìm/xoá, suy biến, AVL/RB); đồ thị (ma trận/danh sách kề, BFS/DFS); hashing (hàm băm, collision, chaining, unordered_map).',

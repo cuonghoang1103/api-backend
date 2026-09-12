@@ -303,7 +303,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
-    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v2/PRJ302.webp',
+    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/PRJ302.webp',
     shortDescription: 'Server-side Java web — Servlets, JSP/EL/JSTL, JDBC, sessions, the MVC pattern, JPA and using AI. Bilingual, with Java/JSP code & exercises.|||Java web phía server — Servlet, JSP/EL/JSTL, JDBC, session, mẫu MVC, JPA và dùng AI. Song ngữ, code Java/JSP & bài tập.',
     description: 'Môn <strong>PRJ302 — Phát triển ứng dụng Java web</strong> (ngành Kỹ thuật phần mềm, kỳ 4). Xây web phía server bằng Java: <strong>Servlet</strong> (request/response, deploy WAR) → <strong>JSP/EL/JSTL</strong> (view) → <strong>JDBC</strong> (database, chống SQL injection) → <strong>session &amp; cookie</strong> → <strong>MVC</strong> (Servlet controller + JSP view + DAO model) → <strong>JPA</strong> và dùng <strong>AI</strong> khi phát triển. Bám giáo trình FLM (9 CLO), song ngữ, code Java/JSP chạy được và bài tập kèm lời giải.',
     whatYouLearn: 'Cấu trúc web app & deploy (Tomcat, WAR); Servlet (HttpServlet, doGet/doPost, @WebServlet); JSP + EL (${...}) + JSTL (c:forEach/c:if); JDBC (PreparedStatement/ResultSet, chống injection); session (HttpSession) & cookie; kiến trúc MVC (controller/view/model/DAO); JPA (ánh xạ entity); dùng AI có trách nhiệm.',

@@ -385,7 +385,7 @@ export default {
     level: 'ADVANCED',
     language: 'Vietnamese',
     status: 'PUBLISHED',
-    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v2/AIL304m.webp',
+    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/AIL304m.webp',
     shortDescription: 'Deep-learning-focused ML — math foundations, neural networks, training/optimization with TensorFlow, and ML strategy. Bilingual, with Python/NumPy/Keras code & exercises.|||Học máy hướng deep learning — nền toán, mạng nơ-ron, huấn luyện/tối ưu với TensorFlow, và ML strategy. Song ngữ, có code Python/NumPy/Keras & bài tập.',
     description: 'Môn <strong>AIL304m — Machine Learning (Học máy)</strong> (ngành AI/SE combo, kỳ 4). Hướng deep learning: từ <strong>nền toán</strong> (đại số tuyến tính, giải tích, gradient descent) → <strong>mạng nơ-ron</strong> → <strong>cải thiện &amp; tối ưu</strong> (train/dev/test, bias/variance, optimizer, <strong>TensorFlow/Keras</strong>) → <strong>ML strategy</strong> (phân tích lỗi, transfer/multi-task learning). Bám giáo trình FLM (4 module, 5 CLO), song ngữ, có công thức + code Python và bài tập kèm lời giải.',
     whatYouLearn: 'Đại số tuyến tính & giải tích cho ML; gradient descent; perceptron & mạng nơ-ron (forward/backprop, ReLU/sigmoid/softmax, cross-entropy); train/dev/test & bias-variance; regularization/dropout; optimizer (SGD/momentum/Adam); TensorFlow/Keras (Sequential, compile, fit); ML strategy (error analysis, transfer & multi-task learning).',

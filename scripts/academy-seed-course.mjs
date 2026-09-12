@@ -38,8 +38,18 @@ import { pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { PrismaClient } from '@prisma/client';
 import { withSimulation } from './lib/simulation-block.mjs';
+import { readFileSync } from 'node:fs';
 
 const prisma = new PrismaClient();
+
+// Bản đồ ảnh bìa dùng chung: mã môn → URL. Chứa ảnh bìa GỐC làm tay của ~50 môn
+// đầu (đường dẫn images/<mã>-<ts>… trên R2), thứ KHÔNG khai trong từng spec .mjs.
+// Spec nào tự khai thumbnailUrl thì thắng bản đồ; bản đồ thắng null. Nhờ đó re-seed
+// KHÔNG còn xoá bìa cũ về null (bug 13/09: courseData set thẳng `?? null`).
+let COVER_MAP = {};
+try {
+  COVER_MAP = JSON.parse(readFileSync(new URL('../content/academy/covers.json', import.meta.url), 'utf8'));
+} catch { /* không có map cũng chạy được, chỉ mất fallback */ }
 const args = process.argv.slice(2);
 const has = (f) => args.includes(f);
 const val = (f, d) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] : d; };
@@ -83,11 +93,14 @@ const courseData = {
   level: c.level ?? 'BEGINNER', language: c.language ?? 'Vietnamese',
   accessType: 'FREE', isFree: true, price: 0,
   status: c.status ?? 'PUBLISHED', isPublished: (c.status ?? 'PUBLISHED') === 'PUBLISHED',
-  // Ảnh bìa: spec nào khai thumbnailUrl thì set; không khai thì để null (giữ
-  // trạng thái cũ). Trước 13/09 dòng này BỊ THIẾU nên MỌI ảnh bìa academy = null
-  // dù stub 160 môn + các môn dựng lại đều đã trỏ tới images/academy-covers/v2/.
-  thumbnailUrl: c.thumbnailUrl ?? null,
 };
+// Ảnh bìa: spec khai thumbnailUrl thì dùng; không thì tra COVER_MAP theo mã (ảnh
+// gốc làm tay của các môn cũ). CHỈ đặt khi CÓ giá trị — nếu cả hai đều trống thì
+// BỎ HẲN trường khỏi bản patch để GIỮ bìa đang có trong CSDL. (Trước đây đặt
+// `thumbnailUrl: c.thumbnailUrl ?? null` nên mỗi lần re-seed một môn không khai
+// bìa lại XOÁ bìa cũ về null — chính là lỗi "môn cũ mất ảnh bìa".)
+const cover = c.thumbnailUrl ?? COVER_MAP[c.courseCode];
+if (cover) courseData.thumbnailUrl = cover;
 if (!course) {
   console.log(`  + course ${c.courseCode} "${c.title}" [${courseData.status}]`);
   if (APPLY) course = await prisma.course.create({

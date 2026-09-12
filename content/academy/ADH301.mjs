@@ -18,7 +18,7 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
-    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v2/ADH301.webp',
+    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/ADH301.webp',
     shortDescription: 'Subject in the FPTU curriculum (combo elective) — Thiết kế mỹ thuật số, semester 7. Lessons are not written yet.|||Môn trong khung chương trình FPTU (môn của combo tự chọn) — ngành Thiết kế mỹ thuật số, kỳ 7. Bài giảng chưa được dựng.',
     description: 'Môn <strong>ADH301 — Mobility Applications Design 1</strong> thuộc khung chương trình ngành Thiết kế mỹ thuật số, kỳ 7, là môn của chuyên ngành hẹp (combo) tự chọn.<br><br>Academy đã tạo sẵn môn này để bạn tra được mã môn, tên môn và vị trí trong lộ trình. <strong>Phần bài giảng chưa được dựng</strong> — khi có, toàn bộ nội dung sẽ được xây từ chính giáo trình và slide của trường, như cách đã làm với SWT301, SWP391, SWR302, FER202 và SSG104.',
     whatYouLearn: 'Chưa có nội dung. Xem giáo trình chính thức trên FLM (flm.fpt.edu.vn) để biết chuẩn đầu ra của môn.',

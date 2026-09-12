@@ -277,7 +277,7 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
-    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v2/SWE202c.webp',
+    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/SWE202c.webp',
     shortDescription: 'The disciplined craft of building software — SDLC & Scrum, GenAI across the lifecycle, UML modeling, testing & debugging, design principles & project management. Bilingual, with exercises.|||Nghề xây phần mềm có kỷ luật — SDLC & Scrum, GenAI xuyên vòng đời, mô hình hoá UML, kiểm thử & debug, nguyên tắc thiết kế & quản lý dự án. Song ngữ, có bài tập.',
     description: 'Môn <strong>SWE202c — Nhập môn kỹ thuật phần mềm</strong> (ngành Kỹ thuật phần mềm, kỳ 3). Ghép nền tảng kinh điển với AI hiện đại: <strong>SDLC &amp; quy trình (waterfall/Scrum)</strong>, <strong>Generative AI xuyên vòng đời</strong> (sinh code/test/debug/tài liệu, có trách nhiệm), <strong>mô hình hoá UML</strong> (use case, class, sequence, state machine), <strong>kiểm thử &amp; debug</strong>, và <strong>nguyên tắc thiết kế + quản lý dự án</strong>. Bám giáo trình FLM (4 CLO), song ngữ, kèm bài tập.',
     whatYouLearn: 'SDLC & mô hình quy trình (waterfall, iterative, Agile/Scrum); GenAI trong SDLC (code/test/debug/docs, đạo đức/bảo mật/IP); UML (use case, class + multiplicity, sequence, state machine); chuẩn code & clean code; các mức test (unit→acceptance), TDD, V&V, debug hệ thống; nguyên tắc thiết kế (cohesion/coupling, SOLID, DRY) & design pattern; quản lý dự án (triple constraint, ước lượng, theo dõi, làm nhóm).',

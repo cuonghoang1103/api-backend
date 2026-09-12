@@ -291,7 +291,7 @@ export default {
     level: 'ADVANCED',
     language: 'Vietnamese',
     status: 'PUBLISHED',
-    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v2/DPL303m.webp',
+    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/DPL303m.webp',
     shortDescription: 'From CNNs for vision to Transformers for language — convolution, transfer learning, RNN/LSTM, word embeddings, attention & HuggingFace, plus ML strategy. Bilingual, with Keras/HF code & exercises.|||Từ CNN cho thị giác tới Transformer cho ngôn ngữ — convolution, transfer learning, RNN/LSTM, word embeddings, attention & HuggingFace, cùng ML strategy. Song ngữ, code Keras/HF & bài tập.',
     description: 'Môn <strong>DPL303m — Học sâu (Deep Learning)</strong> (ngành AI/SE combo, kỳ 7), nối tiếp AIL304m. Hai kiến trúc trụ cột: <strong>CNN</strong> cho ảnh (convolution/pooling, kiến trúc kinh điển, transfer learning, neural style transfer) và <strong>mô hình chuỗi</strong> cho văn bản (RNN/LSTM, word embeddings, attention, <strong>Transformer</strong>, <strong>HuggingFace</strong>), cộng <strong>ML strategy</strong> và một đồ án TensorFlow. Bám giáo trình FLM (4 CLO), song ngữ, code Keras/HuggingFace và bài tập.',
     whatYouLearn: 'CNN (convolution, pooling, LeNet/VGG/ResNet, phát hiện/nhận dạng); transfer learning & data augmentation; neural style transfer; RNN/LSTM/GRU; word embeddings (word2vec); attention & Transformer (BERT/GPT); HuggingFace (tokenizer, pipeline); ML strategy (error analysis, transfer/multi-task/end-to-end); quy trình đồ án TensorFlow end-to-end.',

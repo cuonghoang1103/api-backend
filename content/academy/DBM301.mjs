@@ -343,7 +343,7 @@ export default {
     level: 'ADVANCED',
     language: 'Vietnamese',
     status: 'PUBLISHED',
-    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v2/DBM301.webp',
+    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/DBM301.webp',
     shortDescription: 'Discover patterns in large data — preprocessing, data warehouse/OLAP, association rules (Apriori), classification & clustering, with Weka. Bilingual, with worked exercises.|||Khám phá mẫu trong dữ liệu lớn — tiền xử lý, data warehouse/OLAP, association rule (Apriori), classification & clustering, với Weka. Song ngữ, có bài tập giải sẵn.',
     description: 'Môn <strong>DBM301 — Khai phá dữ liệu (Data Mining)</strong> (ngành SE/AI combo, kỳ 7), theo sách Han &amp; Kamber. Đi từ hiểu &amp; tiền xử lý dữ liệu → data warehouse/OLAP &amp; data cube → các tác vụ lõi: <strong>association rules (Apriori), classification (decision tree/Naive Bayes), clustering (k-means/hierarchical)</strong> — với công cụ <strong>Weka</strong>. Bám giáo trình FLM (9 CLO), song ngữ, có ví dụ thuật toán tính tay và bài tập kèm lời giải.',
     whatYouLearn: 'Khái niệm data mining & KDD; kiểu thuộc tính, thống kê, độ đo khoảng cách; tiền xử lý (làm sạch, chuẩn hoá min-max/z-score, giảm chiều); data warehouse, OLAP & data cube; association rules (support/confidence/lift, Apriori); classification (decision tree/entropy, Naive Bayes, đánh giá precision/recall); clustering (k-means, hierarchical); công cụ Weka.',

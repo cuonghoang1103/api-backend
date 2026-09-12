@@ -1059,7 +1059,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
-    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v2/PRN212.webp',
+    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/PRN212.webp',
     shortDescription: 'Build cross-platform desktop apps in C# on .NET 8 — C#, OOP, LINQ, design patterns, WPF, Entity Framework Core, files & concurrency. Bilingual, exam-aligned.|||Xây ứng dụng desktop đa nền tảng bằng C# trên .NET 8 — C#, OOP, LINQ, design pattern, WPF, Entity Framework Core, file & đồng thời. Song ngữ, bám đề thi.',
     description: 'Môn <strong>PRN212 — Lập trình ứng dụng đa nền tảng cơ bản với .NET</strong> (ngành Kỹ thuật phần mềm, kỳ 5). Nội dung dựng theo giáo trình chính thức FLM (11 chương, 6 CLO), song ngữ, kèm code C#/.NET 8 chạy được và quiz mỗi chương.<br><br>Bạn sẽ đi từ nền tảng .NET & C# → OOP → Collections/Generics → Design Pattern → Delegate/Event/LINQ → WPF (XAML, MVVM, data binding) → Entity Framework Core → File I/O → XML/JSON → lập trình đồng thời (async/await). Tiên quyết: PRO192, DBI202.',
     whatYouLearn: 'C# 12 & .NET 8; OOP trong C#; Collections & Generics; Design Pattern (SOLID, Singleton, Factory, Observer/Strategy); Delegate, Event & LINQ; WPF với XAML + MVVM + data binding; Entity Framework Core (ORM, CRUD, migration); File/Stream I/O; XML & JSON; async/await & Task.',

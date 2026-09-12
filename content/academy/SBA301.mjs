@@ -344,7 +344,7 @@ export default {
     level: 'ADVANCED',
     language: 'Vietnamese',
     status: 'PUBLISHED',
-    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v2/SBA301.webp',
+    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/SBA301.webp',
     shortDescription: 'Full-stack: a React SPA talking to a Spring Boot REST API — components/hooks, fetch, CORS, JPA & MongoDB, JWT security. Bilingual, with React/Spring code & exercises.|||Full-stack: React SPA nói chuyện với API REST Spring Boot — component/hook, fetch, CORS, JPA & MongoDB, bảo mật JWT. Song ngữ, code React/Spring & bài tập.',
     description: 'Môn <strong>SBA301 — Tích hợp ứng dụng trang đơn với Spring Boot</strong> (ngành Kỹ thuật phần mềm, kỳ 7). Full-stack: một <strong>React SPA</strong> ở front-end gọi một <strong>API REST Spring Boot</strong> ở back-end. Đi từ React cơ bản (component/props/state/hook, fetch) → Spring Boot REST + <strong>CORS</strong> → nối React ↔ Spring (fetch/axios CRUD, JSON) → <strong>JPA &amp; MongoDB</strong> → <strong>bảo mật JWT end-to-end</strong>. Nối FER202 (React) và HSF302 (Spring). Bám giáo trình FLM (8 CLO), song ngữ, code chạy được và bài tập kèm lời giải.',
     whatYouLearn: 'React (component/JSX, props vs state, useState/useEffect, list & key, React Router); Spring Boot REST API + CORS cho SPA; giao tiếp client–server (fetch/axios GET/POST/PUT/DELETE, JSON, loading/lỗi, cập nhật state); Spring Data JPA (SQL) & Spring Data MongoDB (NoSQL); bảo mật JWT end-to-end (login React → token → Bearer → Spring Security phân quyền).',

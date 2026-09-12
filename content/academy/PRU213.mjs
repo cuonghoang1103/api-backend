@@ -346,7 +346,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
-    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v2/PRU213.webp',
+    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/PRU213.webp',
     shortDescription: 'Build games in Unity with C# — the editor, MonoBehaviour scripting, prefabs & physics, input & UI, animation, and shipping a small game. Bilingual, with Unity C# code & exercises.|||Làm game trong Unity với C# — editor, script MonoBehaviour, prefab & physics, input & UI, animation, và ra một game nhỏ. Song ngữ, code C# (Unity) & bài tập.',
     description: 'Môn <strong>PRU213 — Lập trình Game với C#</strong> (ngành Kỹ thuật phần mềm, kỳ 7). Dùng <strong>Unity</strong> + <strong>C#</strong>: từ editor (Scene/GameObject/Component) → viết script <strong>MonoBehaviour</strong> (Start/Update, input, Time.deltaTime) → <strong>prefab &amp; physics</strong> (Rigidbody, Collider, collision vs trigger) → <strong>input &amp; UI</strong> (Canvas, button, SceneManager) → <strong>animation, GameManager, build &amp; debug</strong>. Bám giáo trình FLM (6 CLO), song ngữ, code Unity C# chạy được và bài tập kèm lời giải.',
     whatYouLearn: 'Editor Unity (Scene/Hierarchy/Inspector/Project); GameObject/Component/Transform/Prefab; script MonoBehaviour (Start/Update, GetComponent, SerializeField, Time.deltaTime); Instantiate/Destroy; physics (Rigidbody, Collider, OnCollision/OnTrigger, tag); input (GetAxis/GetKeyDown/chuột); UI (Canvas, Text, Button onClick) & SceneManager; Animator & animation; GameManager; build & debug (NullReference, Console).',

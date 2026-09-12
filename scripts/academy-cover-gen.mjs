@@ -88,7 +88,8 @@ export async function veBia({ code, title, major = 'chung', outDir = OUT }) {
   <g filter="url(#mo)">${hat(code, vang)}</g>
   <rect x="86" y="86" width="${W - 172}" height="${H - 232}" fill="none" stroke="url(#kim)" stroke-width="3" opacity="0.85"/>
   <text x="${W / 2}" y="${H / 2 - 18}" text-anchor="middle" dominant-baseline="middle"
-        font-family="Georgia, 'Times New Roman', serif" font-size="${cỡ}" font-weight="700"
+        font-family="'Times New Roman', Charter, Georgia, serif" font-size="${cỡ}" font-weight="700"
+        font-variant-numeric="lining-nums tabular-nums"
         fill="url(#kim)" filter="url(#bong)" letter-spacing="3">${esc(code)}</text>
   ${dong.map((d, i) => `<text x="${W - 96}" y="${H - 118 + i * 34}" text-anchor="end"
         font-family="Helvetica, Arial, sans-serif" font-size="26" fill="#e9e4f5" opacity="0.92">${esc(d)}</text>`).join('\n  ')}

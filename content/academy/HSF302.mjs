@@ -395,7 +395,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
-    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v2/HSF302.webp',
+    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/HSF302.webp',
     shortDescription: 'Build Java back-ends with Spring — JPA/ORM, IoC & DI, Spring Boot, Spring Data JPA repositories, Spring MVC/REST & Thymeleaf. Bilingual, with Java/Spring code & exercises.|||Xây back-end Java với Spring — JPA/ORM, IoC & DI, Spring Boot, repository Spring Data JPA, Spring MVC/REST & Thymeleaf. Song ngữ, code Java/Spring & bài tập.',
     description: 'Môn <strong>HSF302 — Làm việc với Spring Framework</strong> (ngành Kỹ thuật phần mềm, kỳ 5). Đi từ <strong>JPA/ORM</strong> (ánh xạ entity) → lõi <strong>Spring (IoC/DI)</strong> → <strong>Spring Boot</strong> (auto-config, starter) → <strong>Spring Data JPA</strong> (repository, derived query) → <strong>Spring MVC/REST</strong> → <strong>Thymeleaf</strong> (web phía server), hướng tới ứng dụng CRUD hoàn chỉnh (kể cả JavaFX). Bám giáo trình FLM, song ngữ, code Java/Spring chạy được và bài tập kèm lời giải.',
     whatYouLearn: 'JPA/ORM & Hibernate (@Entity/@Id/quan hệ); Spring IoC & DI (bean, @Service/@Repository, constructor injection); Spring Boot (@SpringBootApplication, starter, application.properties); Spring Data JPA (JpaRepository, derived query, @Query, paging); Spring MVC & REST (@RestController, @GetMapping/@PostMapping, @PathVariable/@RequestBody, ResponseEntity, validation); Thymeleaf (th:text/th:each, form binding); giới thiệu JavaFX CRUD.',

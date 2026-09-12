@@ -438,7 +438,7 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
-    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v2/PRP201c.webp',
+    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/PRP201c.webp',
     shortDescription: 'Learn Python from scratch — basics, data structures, functions & files, data retrieval/processing (JSON/CSV/API), and SQL. Bilingual, runnable code & exercises.|||Học Python từ đầu — cơ bản, cấu trúc dữ liệu, hàm & file, truy xuất/xử lý dữ liệu (JSON/CSV/API), và SQL. Song ngữ, code chạy được & bài tập.',
     description: 'Môn <strong>PRP201c — Lập trình Python</strong> (kỳ 5). Đi từ <strong>nền tảng</strong> (biến, kiểu, điều khiển luồng) → <strong>cấu trúc dữ liệu</strong> (list/tuple/dict/set, comprehension) → <strong>hàm, module &amp; file</strong> → <strong>truy xuất/xử lý dữ liệu</strong> (CSV/JSON/API với requests) → <strong>SQL &amp; cơ sở dữ liệu</strong> (sqlite3, thiết kế bảng, chống SQL injection). Bám giáo trình FLM (4 CLO), song ngữ, code Python chạy được và bài tập kèm lời giải.',
     whatYouLearn: 'Biến/kiểu/f-string; if/for/while; list/tuple/dict/set & comprehension; hàm, module, file, try/except; đọc/ghi CSV & JSON, gọi API web (requests); SQL cơ bản (CREATE/INSERT/SELECT/WHERE/ORDER BY/JOIN) & sqlite3 với truy vấn tham số hoá.',

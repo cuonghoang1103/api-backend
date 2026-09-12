@@ -18,7 +18,7 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
-    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v2/SAP311.webp',
+    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/SAP311.webp',
     shortDescription: 'Subject in the FPTU curriculum (combo elective) — Hệ thống thông tin, semester 7. Lessons are not written yet.|||Môn trong khung chương trình FPTU (môn của combo tự chọn) — ngành Hệ thống thông tin, kỳ 7. Bài giảng chưa được dựng.',
     description: 'Môn <strong>SAP311 — SAP General 1</strong> thuộc khung chương trình ngành Hệ thống thông tin, kỳ 7, là môn của chuyên ngành hẹp (combo) tự chọn.<br><br>Academy đã tạo sẵn môn này để bạn tra được mã môn, tên môn và vị trí trong lộ trình. <strong>Phần bài giảng chưa được dựng</strong> — khi có, toàn bộ nội dung sẽ được xây từ chính giáo trình và slide của trường, như cách đã làm với SWT301, SWP391, SWR302, FER202 và SSG104.',
     whatYouLearn: 'Chưa có nội dung. Xem giáo trình chính thức trên FLM (flm.fpt.edu.vn) để biết chuẩn đầu ra của môn.',

@@ -824,7 +824,7 @@ export default {
     level: 'ADVANCED',
     language: 'Vietnamese',
     status: 'PUBLISHED',
-    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v2/PRN222.webp',
+    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/PRN222.webp',
     shortDescription: 'The web & services tier of .NET 8 — networking, async/parallel, DI, ASP.NET Core MVC, Razor Pages, Blazor, SignalR & Worker Services. Bilingual, with exercises.|||Tầng web & dịch vụ của .NET 8 — networking, async/parallel, DI, ASP.NET Core MVC, Razor Pages, Blazor, SignalR & Worker Service. Song ngữ, có bài tập.',
     description: 'Môn <strong>PRN222 — Lập trình ứng dụng đa nền tảng nâng cao với .NET</strong> (ngành Kỹ thuật phần mềm, kỳ 7). Nối tiếp PRN212, đưa bạn sang tầng web & dịch vụ của .NET 8: networking, lập trình async/parallel sâu, dependency injection, và ba cách xây web (ASP.NET Core MVC, Razor Pages, Blazor), cộng real-time (SignalR) và Worker Service. Nội dung bám giáo trình FLM (8 chương, 5 CLO), song ngữ, code chạy được, <strong>mỗi chương có bài tập kèm lời giải</strong>.',
     whatYouLearn: 'Networking (HttpClient, TCP); async/await & parallel (Task, PLINQ, cancellation); Dependency Injection (vòng đời Transient/Scoped/Singleton); ASP.NET Core MVC (routing, model binding, validation, CRUD với EF); Razor Pages; Blazor (Server & WASM, component); SignalR real-time; Worker Service (BackgroundService).',

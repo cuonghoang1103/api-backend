@@ -253,7 +253,7 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
-    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v2/IAO202.webp',
+    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/IAO202.webp',
     shortDescription: 'Think like a SOC analyst — the CIA triad, threats & attacks, Windows/Linux, network protocols & attacks, monitoring & defense. Bilingual, with a log-analysis exercise.|||Tư duy như SOC analyst — bộ ba CIA, mối đe doạ & tấn công, Windows/Linux, giao thức & tấn công mạng, giám sát & phòng thủ. Song ngữ, có bài tập phân tích log.',
     description: 'Môn <strong>IAO202 — Nhập môn An toàn thông tin</strong> (ngành CNTT, kỳ 4), theo hướng <strong>vận hành an ninh mạng (CyberOps/SOC)</strong>. Đi từ <strong>nền tảng an ninh</strong> (bộ ba CIA, mối đe doạ, malware, social engineering, defense in depth) → <strong>Windows &amp; Linux</strong> cho phân tích → <strong>giao thức mạng &amp; tấn công</strong> (TCP/IP, DoS/MITM/ARP-DNS spoofing) → <strong>giám sát &amp; phòng thủ</strong> (firewall, IDS/IPS, SIEM, AAA, ứng phó sự cố). Bám giáo trình FLM (8 CLO), song ngữ, kèm bài tập phân tích log.',
     whatYouLearn: 'Bộ ba CIA; threat/vulnerability/risk & threat actor; malware (virus/worm/trojan/ransomware) & phishing; defense in depth; vai SOC analyst & lab VM; Windows (process/Registry/Event Viewer/quyền) & Linux (shell, quyền rwx, /var/log); TCP/IP & giao thức; tấn công mạng (DoS/DDoS, MITM, ARP/DNS spoofing, port scan); firewall, IDS/IPS, SIEM/Wireshark; access control (AAA, least privilege), mã hoá, vá lỗi; vòng ứng phó sự cố.',

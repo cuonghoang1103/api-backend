@@ -15,9 +15,9 @@ import { createRequire } from 'node:module';
 
 const { default: onnxTia } = createRequire(import.meta.url)('./onnx-tia.cjs');
 
-/** Năm cặp nền × kiến trúc mà `onnxruntime-node@1.29.0` thật sự có. */
+/** Sáu cặp nền × kiến trúc mà `onnxruntime-node@1.23.2` thật sự có. */
 const THAT = [
-  ['darwin', 'arm64'], ['linux', 'x64'], ['linux', 'arm64'],
+  ['darwin', 'arm64'], ['darwin', 'x64'], ['linux', 'x64'], ['linux', 'arm64'],
   ['win32', 'x64'], ['win32', 'arm64'],
 ];
 
@@ -81,20 +81,31 @@ describe('tỉa theo nền đang dựng', () => {
     expect(conLai(napi)).toEqual(['win32/x64']);
   });
 
+  it('⭐ macOS Intel giữ được darwin/x64 — lý do cả gói bị ghim ở 1.23.2', async () => {
+    /* Từ 1.24.1 onnxruntime bỏ hẳn nhị phân này. Phép kiểm ở đây không chứng
+       minh gói còn nó (nó dựng cây giả), nhưng nó chốt rằng móc tỉa KHÔNG
+       phải là thứ làm mất nó — để lần sau ai đó thấy Intel Mac hết tách được
+       thì loại trừ được chỗ này ngay. */
+    const napi = dungCay('darwin');
+    await onnxTia(boiCanh('darwin', 'x64'));
+    expect(conLai(napi)).toEqual(['darwin/x64']);
+  });
+
   it('bản universal của macOS giữ CẢ HAI kiến trúc', async () => {
-    const napi = dungCay('darwin', [...THAT, ['darwin', 'x64']]);
+    const napi = dungCay('darwin');
     await onnxTia(boiCanh('darwin', 'universal'));
     expect(conLai(napi)).toEqual(['darwin/arm64', 'darwin/x64']);
   });
 });
 
 describe('những chỗ móc phải lên tiếng', () => {
-  it('⭐ macOS Intel: KHÔNG ném lỗi, nhưng cũng không giữ lại gì', async () => {
-    /* `onnxruntime-node@1.29` không còn nhị phân `darwin/x64`. Đó là chuyện
-       của thượng nguồn, và chặn cả bản dựng vì nó thì tệ hơn — app đã lùi êm.
-       Nhưng nó phải đi qua nhánh cảnh báo, không phải nhánh "xong việc". */
-    const napi = dungCay('darwin');
-    await expect(onnxTia(boiCanh('darwin', 'x64'))).resolves.toBeUndefined();
+  it('⭐ nền không có nhị phân: CẢNH BÁO chứ không ném', async () => {
+    /* Lưới đỡ cho ngày ai đó nâng onnxruntime lên bản đã bỏ một nền (1.24.1
+       bỏ `darwin/x64`), hoặc thêm một nền dựng mới. Chặn cả bản dựng vì nó thì
+       tệ hơn — app đã lùi êm — nhưng nó phải đi qua nhánh cảnh báo, không phải
+       nhánh "xong việc". Dựng cây THIẾU hẳn nền đích để ép vào nhánh đó. */
+    const napi = dungCay('darwin', THAT.filter(([n]) => n !== 'darwin'));
+    await expect(onnxTia(boiCanh('darwin', 'arm64'))).resolves.toBeUndefined();
     expect(conLai(napi)).toEqual([]);
   });
 

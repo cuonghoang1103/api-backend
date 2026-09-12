@@ -3,12 +3,12 @@
  * ĐÒI thấy nhị phân của nền đang dựng.
  *
  * ─── Vì sao gói này cần được tỉa ───
- * `onnxruntime-node` gói nhị phân cho MỌI nền trong cùng một gói npm: 284 MB
- * cho năm cặp nền × kiến trúc, mà một bản cài chỉ dùng đúng một cặp. Không tỉa
+ * `onnxruntime-node` gói nhị phân cho MỌI nền trong cùng một gói npm: 250 MB
+ * cho sáu cặp nền × kiến trúc, mà một bản cài chỉ dùng đúng một cặp. Không tỉa
  * thì bản cài macOS cõng theo cả nhị phân Windows lẫn Linux.
  *
- *   darwin/arm64  84 MB      win32/x64  64 MB      linux/x64   44 MB
- *   win32/arm64   69 MB      linux/arm64 24 MB
+ *   win32/arm64  65 MB   win32/x64 60 MB   darwin/x64  39 MB
+ *   darwin/arm64 35 MB   linux/x64 32 MB   linux/arm64 19 MB
  *
  * ─── Vì sao tỉa ở đây chứ không bằng mẫu lọc trong `files` ───
  * Viết được, nhưng nó dựa vào cách electron-builder khai triển macro
@@ -98,11 +98,15 @@ exports.default = async function onnxTia(context) {
   console.log(`\n  → ONNX: tỉa ${MB(daXoa)} nhị phân của nền khác, giữ ${MB(conLai)}.`);
 
   if (giuLai.length === 0) {
-    /* KHÔNG ném lỗi. `onnxruntime-node` 1.29 không còn nhị phân cho macOS
-       Intel (`darwin/x64`) — đó là chuyện của thượng nguồn, không phải cấu
-       hình sai, và chặn cả bản dựng vì nó thì tệ hơn: app đã lùi êm (nạp lười,
-       báo một câu đọc được, mọi tính năng khác chạy bình thường).
-       Nhưng nó phải NÓI RA, to, mỗi lần dựng. */
+    /* KHÔNG ném lỗi — nhánh này là LƯỚI ĐỠ, không phải đường đi thường.
+       Với bản đang ghim (1.23.2) thì cả sáu cặp nền × kiến trúc mà dự án dựng
+       đều có nhị phân, nên tới đây nghĩa là ai đó vừa nâng onnxruntime lên một
+       bản đã bỏ nền này (1.24.1 bỏ `darwin/x64`), hoặc vừa thêm một nền dựng
+       mới. Cả hai đều là chuyện của thượng nguồn chứ không phải cấu hình sai,
+       và chặn cả bản dựng vì nó thì tệ hơn: app đã lùi êm sẵn.
+
+       Nhưng nó phải NÓI RA, to, mỗi lần dựng — im lặng ở đây là cách một nền
+       mất tính năng mà không ai biết. */
     console.log(
       `  ⚠️  KHÔNG có nhị phân ONNX cho ${nen}/${arch} trong gói này.\n`
       + '      Bản cài đó sẽ chạy đủ mọi thứ TRỪ tách stem, và Xưởng Remix sẽ\n'

@@ -54,17 +54,17 @@ Bản đóng gói đã được **chạy thật** và kiểm chứng:
 ## Nhị phân ONNX làm bản cài to lên (12/09/2026)
 
 Xưởng Remix tách stem bằng `onnxruntime-node`, và gói npm đó chứa nhị phân cho
-**mọi nền trong cùng một gói** — 284 MB cho năm cặp nền × kiến trúc, trong khi
+**mọi nền trong cùng một gói** — 250 MB cho sáu cặp nền × kiến trúc, trong khi
 mỗi bản cài chỉ dùng đúng một cặp.
 
 | Nền / kiến trúc | Nhị phân |
 |---|---|
-| `darwin/arm64` | 84 MB |
-| `win32/arm64` | 69 MB |
-| `win32/x64` | 64 MB |
-| `linux/x64` | 44 MB |
-| `linux/arm64` | 24 MB |
-| `darwin/x64` | **không có** |
+| `win32/arm64` | 65 MB |
+| `win32/x64` | 60 MB |
+| `darwin/x64` | 39 MB |
+| `darwin/arm64` | 35 MB |
+| `linux/x64` | 32 MB |
+| `linux/arm64` | 19 MB |
 
 Hai thứ giữ cho bản cài không cõng hết chỗ đó:
 
@@ -75,16 +75,24 @@ Hai thứ giữ cho bản cài không cõng hết chỗ đó:
   lỗi và dừng bản dựng. Móc này có phép kiểm riêng
   (`scripts/onnx-tia.test.mjs`), vì bản thân nó chỉ chạy lúc đóng gói.
 
-⚠️ **Bảng kích thước ở trên đo từ bản 0.1.0, TRƯỚC khi có ONNX.** Ước tính bản
-macOS arm64 sẽ tăng thêm ~84 MB (khoảng 96 → 180 MB). Chưa đo lại — lần đóng
-gói tới nên cập nhật bảng đó.
+⚠️ **Bảng kích thước sản phẩm ở trên đo từ bản 0.1.0, TRƯỚC khi có ONNX.** Ước
+tính macOS arm64 tăng ~35 MB và x64 ~39 MB (96 → ~131 MB, 100 → ~139 MB). Chưa
+đo lại — lần đóng gói tới nên cập nhật bảng đó.
 
-⛔ **macOS Intel không tách stem được.** `onnxruntime-node` 1.29 bỏ hẳn nhị
-phân `darwin/x64`. App vẫn dựng, vẫn cài, vẫn chạy mọi tính năng khác; riêng
-nút Tách sẽ báo một câu nói rõ lý do. Muốn hỗ trợ lại thì phải ghim một bản
-onnxruntime cũ hơn — đổi lại là kernel cũ hơn cho *tất cả* các nền.
+### ⛔ GHIM 1.23.2 — đừng nâng nếu chưa đọc chỗ này
 
----
+`onnxruntime-node` **1.23.2 là bản cuối cùng còn nhị phân `darwin/x64`.** Từ
+1.24.1 trở đi onnxruntime bỏ hẳn macOS Intel. Đo thật bằng metadata registry:
+số tệp trong gói tụt 44 → 42 và mất 38 MB ở đúng bản đó, rồi tải 1.23.2 về đếm
+lại thư mục — sáu cặp, có `darwin/x64`.
+
+Dự án dựng **cả bản mac Intel**, nên nâng onnxruntime lên là lặng lẽ tắt tính
+năng tách stem cho toàn bộ người dùng nền đó: bản cài vẫn dựng, vẫn cài, chỉ
+có nút Tách là báo lỗi. Móc `onnx-tia.cjs` in cảnh báo to nếu chuyện đó xảy
+ra, nhưng nó chỉ nói được lúc dựng — người đọc dòng này mới là người quyết.
+
+Cái giá của việc ghim: kernel và tối ưu của onnxruntime dừng ở 1.23.2 cho
+**tất cả** các nền, không riêng macOS.
 
 ## Vì sao arm64 và x64 tách riêng, không dùng `universal`
 

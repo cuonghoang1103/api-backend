@@ -64,7 +64,7 @@
     "katex": "^0.17.0",
     "lucide-react": "^0.453.0",
     "mermaid": "^11.16.1",
-    "onnxruntime-node": "1.29.0",
+    "onnxruntime-node": "1.23.2",
     "pyodide": "^314.0.5",
     "react-hot-toast": "^2.6.0",
     "socket.io-client": "^4.8.3",

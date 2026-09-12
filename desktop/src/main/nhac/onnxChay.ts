@@ -7,18 +7,24 @@
  * trong `nhac/` chỉ biết tới kiểu `ChayModel` — một hàm.
  *
  * ─── Vì sao nạp LƯỜI bằng createRequire ───
- * `onnxruntime-node` là module GỐC. Nó CÓ trong `dependencies` (ghim đúng
- * `1.29.0`), nhưng "có trong dependencies" không đồng nghĩa với "chạy được
- * trên máy này": gói 1.29 không còn nhị phân cho macOS Intel, và một bản cài
- * hỏng cũng có thể thiếu nó. Nếu `import` thẳng ở đầu tệp thì main process
- * nạp lúc khởi động, và thiếu nhị phân sẽ làm CẢ APP không mở được — người
- * dùng chưa từng bấm vào Xưởng Remix cũng chết theo. Nạp lười thì hỏng chỉ
- * giới hạn trong đúng tính năng cần tới nó.
+ * `onnxruntime-node` là module GỐC. Nó CÓ trong `dependencies`, nhưng "có
+ * trong dependencies" không đồng nghĩa với "chạy được trên máy này": một bản
+ * cài hỏng, hay một nền mà gói không có nhị phân, đều dẫn tới cùng chỗ. Nếu
+ * `import` thẳng ở đầu tệp thì main process nạp lúc khởi động, và thiếu nhị
+ * phân sẽ làm CẢ APP không mở được — người dùng chưa từng bấm vào Xưởng Remix
+ * cũng chết theo. Nạp lười thì hỏng chỉ giới hạn trong đúng tính năng cần nó.
  *
- * Phiên bản GHIM CHÍNH XÁC, không dùng dấu ngã: đây là nhị phân gốc cộng một
- * hợp đồng tensor chưa đo được, và bộ nền mà gói hỗ trợ ĐỔI GIỮA CÁC BẢN
- * (1.29 đã bỏ hẳn `darwin/x64`). Một dải phiên bản nghĩa là `npm ci` vài tháng
- * sau có thể kéo về một gói khác hẳn mà không ai chọn.
+ * ─── ⚠️ GHIM 1.23.2, VÀ ĐỪNG NÂNG NẾU CHƯA ĐỌC HẾT ĐOẠN NÀY ───
+ * 1.23.2 là bản CUỐI CÙNG còn nhị phân `darwin/x64`. Từ 1.24.1 trở đi
+ * onnxruntime bỏ hẳn macOS Intel (đo thật: số tệp trong gói tụt 44 → 42, mất
+ * 38 MB, đúng một cặp `.node` + thư viện). App này dựng cả bản mac Intel, nên
+ * nâng lên là lặng lẽ tắt tính năng tách stem cho toàn bộ người dùng nền đó —
+ * bản cài vẫn dựng, vẫn cài, chỉ có nút Tách là báo lỗi.
+ *
+ * Ghim CHÍNH XÁC, không dấu ngã: đây là nhị phân gốc cộng một hợp đồng tensor
+ * chưa đo được, và bộ nền mà gói hỗ trợ đổi giữa các bản. Một dải phiên bản
+ * nghĩa là `npm ci` vài tháng sau kéo về một gói khác mà không ai chọn — và
+ * thứ mất đi sẽ là một nền, không phải một dòng log.
  *
  * ─── ⚠️ HỢP ĐỒNG TENSOR CHƯA ĐƯỢC ĐO, NÊN PHẢI KIỂM LÚC CHẠY ───
  * Tên đầu vào `mix`, dạng `[1, 2, mẫu]`, bốn đầu ra theo thứ tự
@@ -81,9 +87,8 @@ function napOrt(): OrtModule {
     throw new Error(
       'Không nạp được onnxruntime-node, nên phần tách stem tạm nghỉ — mọi thứ '
       + 'còn lại của app vẫn chạy bình thường.\n\n'
-      + 'Nguyên nhân hay gặp nhất: máy Mac dùng chip Intel. Bản onnxruntime '
-      + '1.29 không còn nhị phân cho nền đó, nên đây không phải lỗi cài đặt và '
-      + 'cài lại cũng không giúp được.\n\n'
+      + 'Bản cài đáng ra đã kèm sẵn nhị phân cho nền này, nên đây nhiều khả '
+      + 'năng là một bản cài thiếu tệp: tải lại bản mới nhất thường là xong.\n\n'
       + `Chi tiết: ${(loi as Error).message}`,
     );
   }

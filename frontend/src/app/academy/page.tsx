@@ -121,11 +121,23 @@ export default function AcademyPage() {
     return s;
   }, [leafActive, profile.faculty, profile.major, profile.combo]);
 
-  /** Môn hiện cho một kỳ: lọc theo ngành hẹp khi đã chọn, không thì hiện đủ. */
-  const semCourses = (semId: number): Course[] => {
+  /** Tên môn chuẩn hoá (phần tiếng Anh trước "|||") để dò mã CŨ ↔ mã MỚI cùng môn. */
+  const normTitle = (t?: string | null) => (t || '').split('|||')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+
+  /**
+   * Môn hiện cho một kỳ. Khi đã chọn ngành hẹp → lọc theo leafCodes (khung MỚI),
+   * NHƯNG cũng giữ lại mã CŨ (khoá cũ) cùng TÊN môn với một mã trong khung mới —
+   * gắn cờ isOld — để SV khoá cũ vẫn tìm được môn đã có bài (VD CSI104 cạnh CSI106),
+   * SV khoá mới thấy mã mới. Cả hai cùng một kỳ, tự chọn cái mình học.
+   */
+  const semCourses = (semId: number): { course: Course; isOld: boolean }[] => {
     const list = coursesBySemester[semId] || [];
-    if (!leafCodes) return list;
-    return list.filter((c) => leafCodes.has((c.courseCode || '').trim().toUpperCase()));
+    if (!leafCodes) return list.map((c) => ({ course: c, isOld: false }));
+    const codeOf = (c: Course) => (c.courseCode || '').trim().toUpperCase();
+    const inLeaf = list.filter((c) => leafCodes.has(codeOf(c)));
+    const leafTitles = new Set(inLeaf.map((c) => normTitle(c.title)).filter(Boolean));
+    const oldEquiv = list.filter((c) => !leafCodes.has(codeOf(c)) && normTitle(c.title) && leafTitles.has(normTitle(c.title)));
+    return [...inLeaf.map((c) => ({ course: c, isOld: false })), ...oldEquiv.map((c) => ({ course: c, isOld: true }))];
   };
   const shownTotal = useMemo(
     () => (leafCodes ? semesters.reduce((a, s) => a + semCourses(s.id).length, 0) : totalCourses),
@@ -311,9 +323,12 @@ export default function AcademyPage() {
                     </button>
                     {isOpen && (
                       <div className="border-t border-darkborder divide-y divide-darkborder/60">
-                        {courses.map((course) => (
+                        {courses.map(({ course, isOld }) => (
                           <Link key={course.id} href={`/courses/${course.slug}`} className="block px-4 py-3 hover:bg-neon-violet/10 transition">
-                            <p className="text-sm font-medium text-text-primary">{course.courseCode || 'COURSE'}</p>
+                            <p className="text-sm font-medium text-text-primary flex items-center gap-1.5">
+                              {course.courseCode || 'COURSE'}
+                              {isOld && <span className="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400 text-[10px] font-semibold border border-amber-500/30">OLD</span>}
+                            </p>
                             <p className="text-sm text-text-secondary line-clamp-2">{pickLang(course.title, locale)}</p>
                           </Link>
                         ))}
@@ -347,11 +362,11 @@ export default function AcademyPage() {
                     </div>
                   ) : (
                     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                      {courses.map((course) => (
+                      {courses.map(({ course, isOld }) => (
                         <Link
                           key={course.id}
                           href={`/courses/${course.slug}`}
-                          className="group rounded-2xl border border-darkborder bg-darkbg/70 hover:border-neon-violet/40 transition overflow-hidden"
+                          className={cn('group rounded-2xl border bg-darkbg/70 hover:border-neon-violet/40 transition overflow-hidden', isOld ? 'border-amber-500/40' : 'border-darkborder')}
                         >
                           <div className="aspect-video bg-gradient-to-br from-neon-indigo/20 via-neon-violet/10 to-transparent flex items-center justify-center overflow-hidden relative">
                             {course.thumbnailUrl ? (
@@ -364,10 +379,15 @@ export default function AcademyPage() {
                             ) : (
                               <PlayCircle className="w-12 h-12 text-white/80 group-hover:scale-110 transition-transform relative z-10" />
                             )}
+                            {isOld && (
+                              <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-amber-500/90 text-black text-[11px] font-bold shadow" title="Mã môn khoá cũ — vẫn còn bài học">
+                                OLD · khoá cũ
+                              </span>
+                            )}
                           </div>
                           <div className="p-4 space-y-3">
                             <div className="flex items-center justify-between gap-2">
-                              <span className="px-2.5 py-1 rounded-full bg-neon-violet/10 text-neon-violet text-xs font-semibold">
+                              <span className={cn('px-2.5 py-1 rounded-full text-xs font-semibold', isOld ? 'bg-amber-500/15 text-amber-400' : 'bg-neon-violet/10 text-neon-violet')}>
                                 {course.courseCode || semester.code}
                               </span>
                               <span className="text-xs text-text-muted">{course.totalLessons || 0} lessons</span>

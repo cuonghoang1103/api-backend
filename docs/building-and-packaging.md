@@ -79,6 +79,21 @@ Hai thứ giữ cho bản cài không cõng hết chỗ đó:
 tính macOS arm64 tăng ~35 MB và x64 ~39 MB (96 → ~131 MB, 100 → ~139 MB). Chưa
 đo lại — lần đóng gói tới nên cập nhật bảng đó.
 
+### ⚠️ Kiểm `git status` NGAY SAU khi đóng gói
+
+Đo thật 12/09/2026: lượt `electron-builder --dir` **đầu tiên sau khi thêm
+`onnxruntime-node`** đã ghi đè `desktop/package.json` NGUỒN — xoá sạch khối
+`scripts` (21 mục) và `devDependencies` (18 mục), chỉ chừa lại
+`dependencies`. Cây làm việc bẩn mà không có lỗi nào; nếu commit tiếp thì mọi
+lệnh `npm run` của app desktop chết.
+
+Chạy lại lần hai thì KHÔNG lặp lại, nên cơ chế chưa rõ — nghi bước
+`@electron/rebuild` ("installing native dependencies") chỉ chạy thật ở lượt
+đầu với một phụ thuộc gốc mới. Chưa đủ bằng chứng để khẳng định.
+
+Cách phòng thì không cần biết cơ chế: **sau mỗi lượt đóng gói, chạy
+`git status`**. Bẩn thì `git checkout -- desktop/package.json`.
+
 ### ⛔ GHIM 1.23.2 — đừng nâng nếu chưa đọc chỗ này
 
 `onnxruntime-node` **1.23.2 là bản cuối cùng còn nhị phân `darwin/x64`.** Từ

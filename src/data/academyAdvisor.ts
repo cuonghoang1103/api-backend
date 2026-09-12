@@ -62,8 +62,8 @@ export interface AdvisorSpec {
   salaryRange: string;
   /** Mã môn Academy tiêu biểu của hướng này (nối với môn người học đã học). */
   academyCourses: string[];
-  /** Mẫu code ngắn để so sánh cú pháp (ngôn ngữ + code). */
-  codeSample: { language: string; label: string; code: string };
+  /** Mẫu code ngắn để so sánh cú pháp (ngôn ngữ + code). Ngành phi lập trình (vd Kinh doanh) không có. */
+  codeSample?: { language: string; label: string; code: string };
   reports: AdvisorLink[];
   /** Thị trường VIỆT NAM cho hướng này (lương VNĐ/tháng). */
   vietnam: MarketStat;
@@ -79,6 +79,14 @@ export const MARKET_REPORTS: AdvisorLink[] = [
   { label: 'ITviec — Báo cáo lương & thị trường IT', url: 'https://itviec.com/blog/bao-cao-luong-it/' },
   { label: 'VietnamWorks inTECH — Lương ngành CNTT', url: 'https://www.vietnamworks.com/' },
   { label: 'Stack Overflow Developer Survey', url: 'https://survey.stackoverflow.co/' },
+];
+
+/** Báo cáo thị trường lao động & lương KHỐI KINH DOANH ở VN — nguồn THẬT, dùng chung nhiều ngành hẹp BBA. */
+export const BIZ_MARKET_REPORTS: AdvisorLink[] = [
+  { label: 'VietnamWorks — Báo cáo lương & thị trường nhân sự', url: 'https://www.vietnamworks.com/' },
+  { label: 'Navigos Group — Báo cáo lương Việt Nam', url: 'https://navigosgroup.com/' },
+  { label: 'Robert Walters — Salary Survey Việt Nam', url: 'https://www.robertwalters.com.vn/' },
+  { label: 'TopCV — Báo cáo thị trường tuyển dụng', url: 'https://www.topcv.vn/' },
 ];
 
 export const ADVISOR_SPECS: AdvisorSpec[] = [
@@ -326,6 +334,236 @@ export const ADVISOR_SPECS: AdvisorSpec[] = [
       { label: 'VNG Games', url: 'https://www.vng.com.vn/' },
       { label: 'Amanotes', url: 'https://www.amanotes.com/' },
       { label: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/' },
+    ],
+  },
+
+  // ───────────────────────── KHỐI KINH DOANH (BBA) — ngành phi lập trình, KHÔNG có codeSample ─────────────────────────
+  {
+    key: 'biz-marketing', facultyId: 'business', majorId: 'bba', comboId: 'bba_mkt',
+    nameVi: 'Marketing', icon: '📣',
+    languages: ['Digital Marketing', 'SEO/SEM', 'Google Analytics', 'Canva/Figma', 'tiếng Anh'],
+    builds: ['Kế hoạch marketing tích hợp (IMC)', 'Chiến dịch quảng cáo số (Facebook/Google Ads)', 'Nghiên cứu thị trường & insight khách hàng', 'Nội dung thương hiệu & social media'],
+    products: ['Unilever', 'Vinamilk', 'Shopee', 'Biti\'s (chiến dịch "Đi để trở về")'],
+    pros: ['Cửa vào rộng, không đòi nền toán nặng', 'Sáng tạo + đo lường bằng dữ liệu — hợp cả người thích nghệ thuật lẫn số', 'Kỹ năng dùng được ở mọi ngành có sản phẩm để bán', 'Dễ làm freelance/agency song song'],
+    cons: ['Cạnh tranh đông ở bậc fresher, dễ bị xem là "chạy quảng cáo"', 'Áp lực KPI doanh số & xu hướng đổi liên tục', 'Lương khởi điểm khiêm tốn, bứt phá phụ thuộc kết quả thật'],
+    difficulty: 2, demand: 5, salary: 3, salaryRange: '8–25 triệu (junior→mid)',
+    academyCourses: ['MKT101', 'MKT201', 'MMG301', 'DMA301', 'ECO111'],
+    reports: BIZ_MARKET_REPORTS,
+    vietnam: {
+      demand: 5, salary: 3, salaryRange: '8–25 triệu/tháng (junior→mid)',
+      note: 'VN tuyển rất nhiều nhân sự Digital Marketing cho FMCG, e-commerce và agency; vào nghề dễ nhưng cạnh tranh đông, lương bật nhanh khi chứng minh được ROI chiến dịch.',
+      sources: [
+        { label: 'VietnamWorks — Báo cáo lương', url: 'https://www.vietnamworks.com/' },
+        { label: 'TopCV — Thị trường tuyển dụng', url: 'https://www.topcv.vn/' },
+        { label: 'Navigos Group — Salary Report', url: 'https://navigosgroup.com/' },
+      ],
+    },
+    global: {
+      demand: 4, salary: 4, salaryRange: '$45k–$85k/năm (junior→mid, US/EU)',
+      note: 'Digital marketing là kỹ năng cầu cao toàn cầu và nhiều việc remote; lương tốt hơn VN đáng kể, đổi lại đòi tiếng Anh thành thạo và portfolio số liệu thuyết phục.',
+      sources: [
+        { label: 'Glassdoor', url: 'https://www.glassdoor.com/' },
+        { label: 'LinkedIn Salary', url: 'https://www.linkedin.com/salary/' },
+        { label: 'Payscale', url: 'https://www.payscale.com/' },
+      ],
+    },
+    hiring: [
+      { label: 'VietnamWorks', url: 'https://www.vietnamworks.com/' },
+      { label: 'TopCV', url: 'https://www.topcv.vn/' },
+      { label: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/' },
+      { label: 'Dentsu (agency)', url: 'https://www.dentsu.com/' },
+      { label: 'Ogilvy (agency)', url: 'https://www.ogilvy.com/' },
+      { label: 'Unilever (brand FMCG)', url: 'https://www.unilever.com.vn/' },
+    ],
+  },
+  {
+    key: 'biz-corporate-finance', facultyId: 'business', majorId: 'bba', comboId: 'bba_cf',
+    nameVi: 'Tài chính doanh nghiệp', icon: '💰',
+    languages: ['Excel/Financial Modeling', 'Định giá (Valuation)', 'Phân tích BCTC', 'Power BI', 'tiếng Anh'],
+    builds: ['Mô hình tài chính & dự phóng dòng tiền', 'Phân tích báo cáo tài chính doanh nghiệp', 'Thẩm định dự án đầu tư (NPV/IRR)', 'Kế hoạch ngân sách & quản trị vốn'],
+    products: ['Vingroup', 'FPT', 'PwC Việt Nam', 'Deloitte Việt Nam'],
+    pros: ['Nền tảng chắc để lên CFO/quản trị tài chính', 'Kỹ năng định lượng được trọng dụng ở mọi công ty lớn', 'Lộ trình chứng chỉ rõ ràng (CFA, ACCA) tăng giá trị', 'Thu nhập tốt và ổn định ở bậc mid trở lên'],
+    cons: ['Đòi tư duy con số & tỉ mỉ, sai một số là sai cả mô hình', 'Cạnh tranh vào Big4/tập đoàn khá gắt', 'Áp lực mùa quyết toán/báo cáo'],
+    difficulty: 3, demand: 4, salary: 4, salaryRange: '10–30 triệu (junior→mid)',
+    academyCourses: ['FIN202', 'FIN301', 'ACC101', 'ECO111', 'MAS201'],
+    reports: BIZ_MARKET_REPORTS,
+    vietnam: {
+      demand: 4, salary: 4, salaryRange: '10–30 triệu/tháng (junior→mid)',
+      note: 'Tập đoàn, Big4 và quỹ đầu tư VN tuyển đều nhân sự phân tích tài chính; cửa vào đòi Excel/định giá chắc và tiếng Anh, bù lại lộ trình lương rõ và bền.',
+      sources: [
+        { label: 'VietnamWorks — Báo cáo lương', url: 'https://www.vietnamworks.com/' },
+        { label: 'Robert Walters — Salary Survey', url: 'https://www.robertwalters.com.vn/' },
+        { label: 'Navigos Group — Salary Report', url: 'https://navigosgroup.com/' },
+      ],
+    },
+    global: {
+      demand: 4, salary: 5, salaryRange: '$60k–$110k/năm (junior→mid, US/EU)',
+      note: 'Corporate finance/FP&A là nhóm lương cao và cầu ổn định toàn cầu, mạnh ở tập đoàn và ngân hàng đầu tư; đường lên rất tốt nếu có CFA và kinh nghiệm mô hình hoá.',
+      sources: [
+        { label: 'Robert Half — Salary Guide', url: 'https://www.roberthalf.com/' },
+        { label: 'Glassdoor', url: 'https://www.glassdoor.com/' },
+        { label: 'Payscale', url: 'https://www.payscale.com/' },
+      ],
+    },
+    hiring: [
+      { label: 'VietnamWorks', url: 'https://www.vietnamworks.com/' },
+      { label: 'TopCV', url: 'https://www.topcv.vn/' },
+      { label: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/' },
+      { label: 'PwC Việt Nam (Big4)', url: 'https://www.pwc.com/vn/' },
+      { label: 'Deloitte Việt Nam (Big4)', url: 'https://www.deloitte.com/vn/' },
+      { label: 'Vingroup (tập đoàn)', url: 'https://www.vingroup.net/' },
+    ],
+  },
+  {
+    key: 'biz-banking-finance', facultyId: 'business', majorId: 'bba', comboId: 'bba_bf',
+    nameVi: 'Ngân hàng & Tài chính', icon: '🏦',
+    languages: ['Phân tích tín dụng', 'Sản phẩm ngân hàng', 'Excel/BCTC', 'Quản trị rủi ro', 'tiếng Anh'],
+    builds: ['Thẩm định & phân tích hồ sơ tín dụng', 'Tư vấn sản phẩm tài chính cho khách hàng', 'Báo cáo quản trị rủi ro & tuân thủ', 'Kế hoạch huy động & kinh doanh chi nhánh'],
+    products: ['Vietcombank', 'Techcombank', 'VPBank', 'BIDV'],
+    pros: ['Nhu cầu tuyển lớn và đều mỗi năm ở mọi ngân hàng', 'Lộ trình thăng tiến & phúc lợi rõ ràng', 'Nhiều vị trí cho fresher (giao dịch viên, tín dụng, QHKH)', 'Môi trường chuyên nghiệp, đào tạo bài bản'],
+    cons: ['Áp lực chỉ tiêu huy động/cho vay (KPI doanh số) rất thật', 'Giờ giấc và quy trình chặt, ít linh hoạt', 'Khối front-office cạnh tranh, dễ bào mòn'],
+    difficulty: 3, demand: 5, salary: 4, salaryRange: '9–28 triệu (junior→mid)',
+    academyCourses: ['FIN202', 'FIN301', 'BAF301', 'ACC101', 'ECO121'],
+    reports: BIZ_MARKET_REPORTS,
+    vietnam: {
+      demand: 5, salary: 4, salaryRange: '9–28 triệu/tháng (junior→mid)',
+      note: 'Ngân hàng VN tuyển hàng loạt mỗi kỳ (tín dụng, QHKH, vận hành) nên cửa vào rộng; lương gồm thưởng KPI nên chênh nhiều giữa các mảng và ngân hàng.',
+      sources: [
+        { label: 'VietnamWorks — Báo cáo lương', url: 'https://www.vietnamworks.com/' },
+        { label: 'TopCV — Thị trường tuyển dụng', url: 'https://www.topcv.vn/' },
+        { label: 'Navigos Group — Salary Report', url: 'https://navigosgroup.com/' },
+      ],
+    },
+    global: {
+      demand: 4, salary: 4, salaryRange: '$50k–$95k/năm (junior→mid, US/EU)',
+      note: 'Banking & finance toàn cầu ổn định, mảng đầu tư/rủi ro lương cao; đòi chứng chỉ và tiếng Anh, ít việc remote hơn vì gắn quy định và khách hàng bản địa.',
+      sources: [
+        { label: 'Robert Half — Salary Guide', url: 'https://www.roberthalf.com/' },
+        { label: 'Glassdoor', url: 'https://www.glassdoor.com/' },
+        { label: 'LinkedIn Salary', url: 'https://www.linkedin.com/salary/' },
+      ],
+    },
+    hiring: [
+      { label: 'VietnamWorks', url: 'https://www.vietnamworks.com/' },
+      { label: 'TopCV', url: 'https://www.topcv.vn/' },
+      { label: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/' },
+      { label: 'Vietcombank', url: 'https://www.vietcombank.com.vn/' },
+      { label: 'Techcombank', url: 'https://www.techcombank.com.vn/' },
+      { label: 'VPBank', url: 'https://www.vpbank.com.vn/' },
+    ],
+  },
+  {
+    key: 'biz-international-business', facultyId: 'business', majorId: 'bba', comboId: 'bba_ib',
+    nameVi: 'Kinh doanh quốc tế', icon: '🌐',
+    languages: ['Xuất nhập khẩu & Incoterms', 'Thanh toán quốc tế', 'Đàm phán thương mại', 'tiếng Anh (thành thạo)', 'Excel'],
+    builds: ['Kế hoạch thâm nhập thị trường nước ngoài', 'Quy trình xuất nhập khẩu & chứng từ', 'Nghiên cứu đối tác & thị trường quốc tế', 'Chiến lược thương mại xuyên biên giới'],
+    products: ['Nestlé Việt Nam', 'Samsung Việt Nam', 'Viettel Global', 'các công ty xuất nhập khẩu (FMCG, nông sản)'],
+    pros: ['Môi trường đa quốc gia, dùng tiếng Anh mỗi ngày', 'Hưởng lợi từ làn sóng FDI & xuất khẩu của VN', 'Kiến thức rộng: thương mại, logistics, marketing quốc tế', 'Cơ hội đi công tác/luân chuyển nước ngoài'],
+    cons: ['Đòi ngoại ngữ rất tốt, có khi cần ngôn ngữ 2', 'Kiến thức rộng nên dễ "biết nhiều mà không sâu"', 'Cạnh tranh vào tập đoàn đa quốc gia cao'],
+    difficulty: 3, demand: 4, salary: 4, salaryRange: '9–28 triệu (junior→mid)',
+    academyCourses: ['ECO121', 'IBC201', 'IBI301', 'MKT101', 'ENM301'],
+    reports: BIZ_MARKET_REPORTS,
+    vietnam: {
+      demand: 4, salary: 4, salaryRange: '9–28 triệu/tháng (junior→mid)',
+      note: 'VN mở cửa mạnh về FDI và xuất khẩu nên cầu về nhân sự XNK/thương mại quốc tế tăng; lợi thế nghiêng hẳn về người giỏi ngoại ngữ và hiểu chứng từ.',
+      sources: [
+        { label: 'VietnamWorks — Báo cáo lương', url: 'https://www.vietnamworks.com/' },
+        { label: 'Robert Walters — Salary Survey', url: 'https://www.robertwalters.com.vn/' },
+        { label: 'TopCV — Thị trường tuyển dụng', url: 'https://www.topcv.vn/' },
+      ],
+    },
+    global: {
+      demand: 4, salary: 4, salaryRange: '$50k–$95k/năm (junior→mid, US/EU)',
+      note: 'International business gắn với chuỗi cung ứng và thương mại toàn cầu; cầu ổn định ở tập đoàn đa quốc gia, thu nhập tốt khi lên vai trò quản lý thị trường/khu vực.',
+      sources: [
+        { label: 'Glassdoor', url: 'https://www.glassdoor.com/' },
+        { label: 'LinkedIn Salary', url: 'https://www.linkedin.com/salary/' },
+        { label: 'Payscale', url: 'https://www.payscale.com/' },
+      ],
+    },
+    hiring: [
+      { label: 'VietnamWorks', url: 'https://www.vietnamworks.com/' },
+      { label: 'TopCV', url: 'https://www.topcv.vn/' },
+      { label: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/' },
+      { label: 'Nestlé Việt Nam', url: 'https://www.nestle.com.vn/' },
+      { label: 'Samsung Việt Nam', url: 'https://www.samsung.com/vn/' },
+      { label: 'Robert Walters (tuyển cấp trung/cao)', url: 'https://www.robertwalters.com.vn/' },
+    ],
+  },
+  {
+    key: 'biz-logistics-scm', facultyId: 'business', majorId: 'bba', comboId: 'bba_gl',
+    nameVi: 'Logistics & Quản trị chuỗi cung ứng', icon: '🚚',
+    languages: ['Quản trị chuỗi cung ứng', 'Vận hành kho & vận tải', 'Excel/ERP (SAP)', 'Phân tích dữ liệu', 'tiếng Anh'],
+    builds: ['Tối ưu chuỗi cung ứng đầu-cuối', 'Kế hoạch mua hàng & quản trị tồn kho', 'Quy trình vận hành kho & giao vận', 'Dự báo nhu cầu & điều phối đơn hàng'],
+    products: ['DHL', 'Giao Hàng Nhanh (GHN)', 'Maersk', 'Gemadept'],
+    pros: ['Bùng nổ theo e-commerce & sản xuất chuyển dịch về VN', 'Kết hợp vận hành thực tế + phân tích dữ liệu', 'Cầu tuyển lớn ở cả kho, vận tải, mua hàng', 'Kỹ năng ERP/tồn kho dùng được ở mọi nhà sản xuất'],
+    cons: ['Vận hành đòi có mặt hiện trường, đôi khi theo ca', 'Áp lực cao mùa cao điểm (lễ, sale lớn)', 'Biên lợi nhuận mỏng nên tối ưu chi phí căng thẳng'],
+    difficulty: 3, demand: 5, salary: 3, salaryRange: '8–26 triệu (junior→mid)',
+    academyCourses: ['SCM302', 'OPM301', 'SCM301', 'MGT301', 'ECO111'],
+    reports: BIZ_MARKET_REPORTS,
+    vietnam: {
+      demand: 5, salary: 3, salaryRange: '8–26 triệu/tháng (junior→mid)',
+      note: 'Sự dịch chuyển sản xuất về VN và e-commerce đẩy cầu logistics/SCM lên mạnh; vị trí nhiều từ kho tới mua hàng, người biết thêm phân tích dữ liệu bứt hẳn về lương.',
+      sources: [
+        { label: 'VietnamWorks — Báo cáo lương', url: 'https://www.vietnamworks.com/' },
+        { label: 'TopCV — Thị trường tuyển dụng', url: 'https://www.topcv.vn/' },
+        { label: 'Navigos Group — Salary Report', url: 'https://navigosgroup.com/' },
+      ],
+    },
+    global: {
+      demand: 4, salary: 4, salaryRange: '$50k–$90k/năm (junior→mid, US/EU)',
+      note: 'Supply chain là nghề được săn toàn cầu sau các cú sốc đứt gãy chuỗi cung ứng; lương tốt và ổn định, mảng planning/phân tích dữ liệu được trả cao nhất.',
+      sources: [
+        { label: 'Glassdoor', url: 'https://www.glassdoor.com/' },
+        { label: 'Robert Half — Salary Guide', url: 'https://www.roberthalf.com/' },
+        { label: 'Payscale', url: 'https://www.payscale.com/' },
+      ],
+    },
+    hiring: [
+      { label: 'VietnamWorks', url: 'https://www.vietnamworks.com/' },
+      { label: 'TopCV', url: 'https://www.topcv.vn/' },
+      { label: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/' },
+      { label: 'DHL', url: 'https://www.dhl.com/' },
+      { label: 'Giao Hàng Nhanh (GHN)', url: 'https://ghn.vn/' },
+      { label: 'Maersk', url: 'https://www.maersk.com/' },
+    ],
+  },
+  {
+    key: 'biz-business-analytics', facultyId: 'business', majorId: 'bba', comboId: 'bba_ba',
+    nameVi: 'Phân tích kinh doanh (Business Analytics)', icon: '📊',
+    languages: ['SQL', 'Power BI/Tableau', 'Excel', 'Python (cơ bản)', 'Thống kê'],
+    builds: ['Dashboard & báo cáo quản trị', 'Phân tích hành vi khách hàng & doanh thu', 'Mô hình dự báo kinh doanh', 'Đề xuất ra quyết định dựa trên dữ liệu'],
+    products: ['Shopee', 'Tiki', 'các ngân hàng (phân tích khách hàng)', 'Grab (phân tích vận hành)'],
+    pros: ['Cầu nối kinh doanh & dữ liệu — cầu cao và tăng nhanh', 'Không cần lập trình sâu như data science thuần', 'Kỹ năng SQL/BI dùng được ở gần như mọi công ty', 'Lương nhỉnh hơn nhiều vị trí business truyền thống'],
+    cons: ['Phải giỏi cả số liệu lẫn kể chuyện bằng dữ liệu', 'Ranh giới với data analyst/DS đôi khi mờ', 'Đòi tự học thêm công cụ (SQL, BI, chút Python)'],
+    difficulty: 3, demand: 5, salary: 4, salaryRange: '10–30 triệu (junior→mid)',
+    academyCourses: ['MAS202', 'IBA201', 'PBA301', 'DBI202', 'ECO111'],
+    reports: BIZ_MARKET_REPORTS,
+    vietnam: {
+      demand: 5, salary: 4, salaryRange: '10–30 triệu/tháng (junior→mid)',
+      note: 'E-commerce, ngân hàng và tập đoàn VN đua nhau tuyển business/data analyst; đây là hướng "business + dữ liệu" cầu tăng nhanh nhất, người có SQL/BI vào việc rất nhanh.',
+      sources: [
+        { label: 'VietnamWorks — Báo cáo lương', url: 'https://www.vietnamworks.com/' },
+        { label: 'TopCV — Thị trường tuyển dụng', url: 'https://www.topcv.vn/' },
+        { label: 'Robert Walters — Salary Survey', url: 'https://www.robertwalters.com.vn/' },
+      ],
+    },
+    global: {
+      demand: 5, salary: 4, salaryRange: '$60k–$105k/năm (junior→mid, US/EU)',
+      note: 'Business analytics thuộc nhóm kỹ năng cầu cao nhất toàn cầu và nhiều việc remote; lương tốt, đường lên analytics manager/data lead rõ ràng khi vững SQL và storytelling.',
+      sources: [
+        { label: 'Glassdoor', url: 'https://www.glassdoor.com/' },
+        { label: 'LinkedIn Salary', url: 'https://www.linkedin.com/salary/' },
+        { label: 'Payscale', url: 'https://www.payscale.com/' },
+      ],
+    },
+    hiring: [
+      { label: 'VietnamWorks', url: 'https://www.vietnamworks.com/' },
+      { label: 'TopCV', url: 'https://www.topcv.vn/' },
+      { label: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/' },
+      { label: 'Shopee', url: 'https://careers.shopee.vn/' },
+      { label: 'Tiki', url: 'https://tuyendung.tiki.vn/' },
+      { label: 'Grab', url: 'https://www.grab.com/vn/' },
     ],
   },
 ];

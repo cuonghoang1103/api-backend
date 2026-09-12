@@ -38,7 +38,7 @@ interface AdvisorSpec {
   nameVi: string; icon: string; languages: string[]; builds: string[];
   products: string[]; pros: string[]; cons: string[];
   difficulty: number; demand: number; salary: number; salaryRange: string;
-  academyCourses: string[]; codeSample: { language: string; label: string; code: string };
+  academyCourses: string[]; codeSample?: { language: string; label: string; code: string };
   reports: AdvisorLink[];
   vietnam: MarketStat; global: MarketStat; hiring: AdvisorLink[];
 }
@@ -140,14 +140,16 @@ function SpecCard({ spec, market }: { spec: AdvisorSpec; market: Market }) {
         </div>
       </div>
 
-      <div>
-        <p className="text-xs uppercase tracking-wide text-text-muted mb-1">Cú pháp — {spec.codeSample.label}</p>
-        <div className="rounded-xl overflow-hidden border border-darkborder text-[13px]">
-          <SyntaxHighlighter language={spec.codeSample.language} style={vscDarkPlus} customStyle={{ margin: 0, background: '#0b1020', padding: '12px 14px' }}>
-            {spec.codeSample.code}
-          </SyntaxHighlighter>
+      {spec.codeSample && (
+        <div>
+          <p className="text-xs uppercase tracking-wide text-text-muted mb-1">Cú pháp — {spec.codeSample.label}</p>
+          <div className="rounded-xl overflow-hidden border border-darkborder text-[13px]">
+            <SyntaxHighlighter language={spec.codeSample.language} style={vscDarkPlus} customStyle={{ margin: 0, background: '#0b1020', padding: '12px 14px' }}>
+              {spec.codeSample.code}
+            </SyntaxHighlighter>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="grid sm:grid-cols-2 gap-3">
         <div>

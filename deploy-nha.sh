@@ -76,9 +76,13 @@ TU_LUI=true
 CHI_BUILD=false
 KHONG_DAY=false
 KHONG_HOI=false
+CHO_LUI=false
 for a in "$@"; do
     case "$a" in
         --khong-lui) TU_LUI=false ;;
+        # Cho phép deploy một commit KHÔNG chứa commit production đang chạy.
+        # Chỉ dùng khi CỐ Ý lùi (rollback). Xem chốt 0a.
+        --cho-lui) CHO_LUI=true ;;
         --chi-build) CHI_BUILD=true ;;
         # Dựng ảnh ở máy nhà rồi DỪNG — không đẩy GHCR, không tráo. Dùng để thử
         # đường build khi chưa có khoá GHCR, hoặc để xem mã có build nổi không.
@@ -193,6 +197,67 @@ if [ -n "$BAN" ]; then
     [[ "$tra_loi" =~ ^[Yy]$ ]] || { info "Dừng theo yêu cầu."; exit 0; }
 fi
 ok "Deploy commit ${SHA} (nhánh ${NHANH})"
+
+# ─── 0a. CHỐT CHỐNG LÙI PRODUCTION ─────────────────────────────────────
+#
+# Câu hỏi: commit sắp deploy có CHỨA commit mà production đang chạy không?
+# Không chứa ⇒ lượt deploy này XOÁ công việc đang chạy trên production.
+#
+# ⚠️ Đo thật 13/09/2026, và nó câm hoàn toàn. Hai phiên Claude chạy song song:
+# phiên A deploy `bc4a750c` từ `main` (bật lại shop + ví điểm) lúc 05:10;
+# phiên B deploy `bce4b8e5` từ nhánh riêng `advisor-ship` lúc 05:25. Nhánh của
+# B tách ra TRƯỚC commit của A, nên lượt tráo của B gỡ sạch mã thương mại khỏi
+# production. Không có bước nào kêu: build xanh, đẩy xanh, tráo xanh,
+# smoke-test của B sạch (nó chỉ biết các route của chính B).
+#
+# Chốt 8 ở cuối file bắt hướng NGƯỢC LẠI ("có ai tráo đè LÊN mình không") và
+# chỉ chạy SAU khi đã tráo — quá muộn. Chốt này chặn TRƯỚC khi build.
+#
+# Cách lấy commit production đang chạy: đối chiếu mã băm ảnh của container với
+# các tag `ghcr.io/...:<sha>` còn trên VPS. Không dùng `:latest` — nó luôn trỏ
+# tới lượt tráo gần nhất nên không nói được commit nào.
+if [ "$CHO_LUI" != true ]; then
+    info "Kiểm: bản sắp deploy có chứa mã production đang chạy không..."
+    SHA_PROD=$(sshvps "
+        THAT=\$(docker inspect -f '{{.Image}}' ${COMPOSE_PROJECT}_backend 2>/dev/null)
+        [ -z \"\$THAT\" ] && exit 0
+        docker images --format '{{.Repository}}:{{.Tag}} {{.ID}}' \
+            | grep '^ghcr.io/cuonghoang1103/api-backend-backend:' \
+            | grep -v ':latest ' \
+            | while read -r ten _; do
+                  TAG=\${ten##*:}
+                  ID=\$(docker image inspect -f '{{.Id}}' \"\$ten\" 2>/dev/null)
+                  [ \"\$ID\" = \"\$THAT\" ] && echo \"\$TAG\" && break
+              done" 2>/dev/null | tr -d '[:space:]')
+
+    if [ -z "$SHA_PROD" ]; then
+        # Ảnh của lượt trước có thể đã bị dọn — không đọc được thì ĐỪNG chặn,
+        # chỉ nói rõ là chốt này không chạy. Chặn nhầm còn tệ hơn không chặn.
+        warn "Không đọc được commit production đang chạy — bỏ qua chốt chống lùi."
+    elif ! git cat-file -e "${SHA_PROD}^{commit}" 2>/dev/null; then
+        warn "Production chạy commit ${SHA_PROD} nhưng kho ở đây không có commit đó."
+        warn "(phiên khác deploy từ nhánh chưa fetch?) — bỏ qua chốt chống lùi."
+    elif [ "$SHA_PROD" = "$SHA" ]; then
+        ok "Production đã chạy đúng commit này rồi (${SHA_PROD}) — deploy lại cho chắc."
+    elif git merge-base --is-ancestor "$SHA_PROD" HEAD 2>/dev/null; then
+        ok "Bản này CHỨA mã production đang chạy (${SHA_PROD}) — tiến lên, không mất gì."
+    else
+        echo ""
+        fail "⛔ DỪNG — lượt deploy này sẽ XOÁ công việc đang chạy trên production."
+        fail ""
+        fail "    production đang chạy : ${SHA_PROD}  $(git log -1 --format=%s "$SHA_PROD" 2>/dev/null | cut -c1-60)"
+        fail "    bạn sắp deploy       : ${SHA}  $(git log -1 --format=%s HEAD | cut -c1-60)"
+        fail ""
+        fail "${SHA} KHÔNG chứa ${SHA_PROD}. Những commit sau sẽ BIẾN MẤT khỏi production:"
+        git log --oneline "HEAD..${SHA_PROD}" 2>/dev/null | head -10 | sed 's/^/             /'
+        fail ""
+        fail "Gần như chắc chắn bạn đang deploy từ một nhánh tách ra trước đó."
+        fail "CÁCH SỬA (chọn một):"
+        fail "    1. Gộp vào rồi deploy lại:  git merge ${SHA_PROD}   (hoặc deploy thẳng từ main)"
+        fail "    2. CỐ Ý lùi production:     bash deploy-nha.sh --cho-lui"
+        exit 1
+    fi
+fi
 
 # ─── 0b. Đề thi: CHỐT TIỀN-DEPLOY ──────────────────────────────────────
 # `deploy.sh` có chốt này từ lâu (nó chạy exam-check TRƯỚC rsync và chặn deploy

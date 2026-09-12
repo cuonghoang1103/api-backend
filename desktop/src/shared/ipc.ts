@@ -553,6 +553,44 @@ export interface BanGiaoAmThanh {
   mime: string;
 }
 
+/** Một mảnh trên dòng thời gian mashup. */
+export interface ManhDung {
+  id: string;
+  baiId: string;
+  /** `goc` hoặc tên stem. */
+  nguon: string;
+  tuGiay: number;
+  denGiay: number;
+  datGiay: number;
+  gainDb: number;
+  vaoGiay: number;
+  raGiay: number;
+}
+
+export interface BaiTrongKho {
+  id: string;
+  ten: string;
+  giay: number;
+  duongWav: string;
+  bpm: number;
+  tong: string;
+  tongCamelot: string;
+  duong: string[];
+}
+
+export interface KetQuaDungRa {
+  duong: string;
+  ten: string;
+  giay: number;
+  daiGiay: number;
+  daDung: string[];
+  boQua: Array<{ id: string; viSao: string }>;
+  /** Đỉnh TRƯỚC hạn biên. >1 nghĩa là đã cộng quá tay. */
+  dinhTruoc: number;
+  lufs: number;
+  dinhThat: number;
+}
+
 export interface KetQuaXuatTep {
   duong: string;
   ten: string;
@@ -1296,6 +1334,27 @@ export const INVOKE_CHANNELS = {
       bit: z.union([z.literal(16), z.literal(24)]).optional(),
     }).optional(),
   }),
+  'xuongRemix:dsBai': z.object({}),
+  'xuongRemix:dungMashup': z.object({
+    bpm: z.number().min(40).max(300),
+    /* Chủ âm 0…11, `null` = không dịch tông mảnh nào. `nullable` chứ không
+       `optional`: "không muốn dịch" và "quên gửi" là hai chuyện khác nhau, và
+       gộp chúng lại thì một lỗi ở giao diện trở thành một lựa chọn hợp lệ. */
+    chuAm: z.number().int().min(0).max(11).nullable(),
+    ten: z.string().max(200).optional(),
+    tranDbtp: z.number().min(-12).max(0).optional(),
+    manh: z.array(z.object({
+      id: z.string().min(1).max(64),
+      baiId: z.string().min(1).max(64),
+      nguon: z.enum(['goc', 'drums', 'bass', 'other', 'vocals']),
+      tuGiay: z.number().min(0).max(36_000),
+      denGiay: z.number().min(0).max(36_000),
+      datGiay: z.number().min(0).max(36_000),
+      gainDb: z.number().min(-48).max(12),
+      vaoGiay: z.number().min(0).max(60),
+      raGiay: z.number().min(0).max(60),
+    })).min(1).max(200),
+  }),
   'xuongRemix:xuatTep': z.object({
     duong: z.string().min(1).max(4096),
     cai: z.object({
@@ -1747,6 +1806,11 @@ export interface DesktopBridge {
      */
     banGiao(duong: string, cai?: CaiXuat): Promise<BanGiaoAmThanh>;
     xuatTep(duong: string, cai: CaiXuat): Promise<KetQuaXuatTep>;
+    dsBai(): Promise<BaiTrongKho[]>;
+    dungMashup(bd: {
+      bpm: number; chuAm: number | null; manh: ManhDung[];
+      ten?: string; tranDbtp?: number;
+    }): Promise<KetQuaDungRa>;
     /** Dạng sóng của bài gốc và mọi stem đã tách, tóm tắt về `soCot` cột. */
     song(id: string, soCot: number): Promise<SongAmThanh>;
     /** Trộn các stem ĐÃ TÁCH thành một bản stereo. Ném nếu chưa tách. */

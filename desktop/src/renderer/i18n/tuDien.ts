@@ -1035,6 +1035,38 @@ export const TU_DIEN: Record<string, string> = {
   'TẮT': 'OFF',
   'Kéo dọc để chỉnh · giữ Shift để chỉnh nhỏ · bấm đúp để về mặc định':
     'Drag vertically · hold Shift for fine steps · double-click to reset',
+
+  // ── Dòng thời gian: ghép nhiều bài ──────────────────────
+  'Ghép nhiều bài': 'Combine several tracks',
+  'Xem lại kho bài': 'Refresh the track list',
+  'Nạp vài bài, cắt lấy đoạn hay của từng bài, rồi xếp chồng lên nhau. App tự kéo mọi mảnh về cùng một nhịp — và cùng một tông nếu bạn chọn.':
+    'Load a few tracks, cut the good part out of each, then stack them. The app pulls every clip to one tempo — and to one key if you ask it to.',
+  'Nhịp chung': 'Project tempo',
+  'Tông chung': 'Project key',
+  'Giữ nguyên': 'Leave as is',
+  'Bắt nhịp': 'Snap',
+  // 'Thu nhỏ' / 'Phóng to' đã có ở phần khác của từ điển — thêm lần nữa thì
+  // mục sau ĐÈ mục trước một cách im lặng.
+  'Dựng bản': 'Render',
+  'Đang dựng…': 'Rendering…',
+  'Các bài đang mở': 'Open tracks',
+  'Chưa có bài nào. Thả tệp nhạc ở trên rồi quay lại đây.':
+    'No tracks yet. Drop an audio file above, then come back here.',
+  'Xem lại': 'Refresh',
+  'Thêm mảnh': 'Add clip',
+  'Bấm một đường ở trên để thả mảnh đầu tiên xuống đây.':
+    'Pick a track above to drop your first clip here.',
+  'Cắt từ': 'Cut from',
+  'Cắt đến': 'Cut to',
+  'Đặt ở': 'Place at',
+  'Fade vào': 'Fade in',
+  'Fade ra': 'Fade out',
+  'Xoá mảnh': 'Delete clip',
+  'Các mảnh cộng lại vượt trần': 'The clips add up past the ceiling by',
+  'bộ hạn biên đã ghì xuống. Hạ mức vài mảnh thì sạch hơn.':
+    'the limiter pulled it back. Turning a few clips down sounds cleaner.',
+  'Bỏ qua': 'Skipped',
+  'mảnh': 'clips',
   'Xuất tệp': 'Export file',
   'Đã ghi': 'Wrote',
   'có mất dữ liệu': 'lossy',

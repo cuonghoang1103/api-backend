@@ -11,8 +11,8 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import {
-  banGiao, chinhVaXuat, donDep, donDepTatCa, masterTheoMau, napBai, napBanMau,
-  phanTich, soPhienDangMo, tenAnToan, xuatTep,
+  banGiao, chinhVaXuat, donDep, donDepTatCa, dsBaiTrongKho, dungMashup,
+  masterTheoMau, napBai, napBanMau, phanTich, soPhienDangMo, tenAnToan, xuatTep,
 } from './xuong';
 import { ghiWav } from './wav';
 
@@ -341,5 +341,115 @@ describe('xuất tệp theo định dạng đã chọn', () => {
     const bg = await banGiao(await nguon());
     expect(bg.ten).toBe('ban tron.wav');
     expect(bg.mime).toBe('audio/wav');
+  });
+});
+
+describe('dựng mashup từ nhiều bài', () => {
+  it('⭐ hai bài KHÁC NHỊP ghép được, và tệp ra dài đúng như đã xếp', async () => {
+    /* Đây là phép kiểm end-to-end duy nhất của cả đường mashup: nạp thật, đo
+       thật, kéo thật, ghi thật. `dung.test.ts` chốt phần tính; chỗ này chốt
+       phần đọc tệp, gom nguồn, và ghi ra đĩa — ba thứ mà phần tính không chạm
+       tới và cũng là ba thứ dễ sai đường dẫn nhất. */
+    const a = await napBai(goc, 'bai-a.wav', pcmThu(4), 2, FS);
+    const b = await napBai(goc, 'bai-b.wav', pcmThu(4), 2, FS);
+
+    const kq = await dungMashup(goc, {
+      bpm: 140,
+      chuAm: null,
+      manh: [
+        { id: 'm1', baiId: a.id, nguon: 'goc', tuGiay: 0, denGiay: 2, datGiay: 0,
+          gainDb: 0, vaoGiay: 0, raGiay: 0.5 },
+        { id: 'm2', baiId: b.id, nguon: 'goc', tuGiay: 1, denGiay: 3, datGiay: 1.5,
+          gainDb: -3, vaoGiay: 0.5, raGiay: 0 },
+      ],
+    }, { ten: 'thu mashup' });
+
+    expect(kq.daDung).toEqual(['m1', 'm2']);
+    expect(kq.boQua).toEqual([]);
+    expect(kq.ten).toContain('140BPM');
+    /* Mảnh 2 đặt ở 1,5s, dài 2s ở nhịp gốc rồi kéo về 140 — nên tổng phải
+       dài hơn 1,5s và ngắn hơn 4s. Kiểm khoảng chứ không kiểm con số chính
+       xác: nhịp gốc do máy dò ra, và chốt cứng nó là chốt vào phép dò chứ
+       không vào bộ dựng. */
+    expect(kq.daiGiay).toBeGreaterThan(1.5);
+    expect(kq.daiGiay).toBeLessThan(4.5);
+    await expect(fs.stat(kq.duong)).resolves.toBeTruthy();
+
+    await donDep(goc, a.id);
+    await donDep(goc, b.id);
+  });
+
+  it('⭐ tệp ra là WAV ĐỌC LẠI ĐƯỢC, không phải một đống byte', async () => {
+    const a = await napBai(goc, 'x.wav', pcmThu(3), 2, FS);
+    const kq = await dungMashup(goc, {
+      bpm: 128, chuAm: null,
+      manh: [{ id: 'm', baiId: a.id, nguon: 'goc', tuGiay: 0, denGiay: 2, datGiay: 0,
+               gainDb: 0, vaoGiay: 0.2, raGiay: 0.2 }],
+    });
+    const bg = await banGiao(kq.duong);
+    expect(bg.giay).toBeGreaterThan(1);
+    expect(kq.dinhThat).toBeLessThanOrEqual(0);
+    await donDep(goc, a.id);
+  });
+
+  it('mảnh trỏ vào stem chưa tách thì bị bỏ kèm lý do, không ném', async () => {
+    const a = await napBai(goc, 'y.wav', pcmThu(3), 2, FS);
+    const bd = {
+      bpm: 128, chuAm: null,
+      manh: [
+        { id: 'ok', baiId: a.id, nguon: 'goc', tuGiay: 0, denGiay: 1, datGiay: 0,
+          gainDb: 0, vaoGiay: 0, raGiay: 0 },
+        { id: 'hong', baiId: a.id, nguon: 'drums', tuGiay: 0, denGiay: 1, datGiay: 1,
+          gainDb: 0, vaoGiay: 0, raGiay: 0 },
+      ],
+    };
+    const kq = await dungMashup(goc, bd);
+    expect(kq.daDung).toEqual(['ok']);
+    expect(kq.boQua.map((x) => x.id)).toEqual(['hong']);
+    await donDep(goc, a.id);
+  });
+
+  it('bản dựng rỗng thì NÉM với câu nói rõ, không ghi tệp rỗng', async () => {
+    await expect(dungMashup(goc, { bpm: 128, chuAm: null, manh: [] }))
+      .rejects.toThrow(/chưa có mảnh nào/);
+  });
+
+  it('không mảnh nào dựng được thì NÉM kèm lý do của từng mảnh', async () => {
+    await expect(dungMashup(goc, {
+      bpm: 128, chuAm: null,
+      manh: [{ id: 'z', baiId: 'khong-ton-tai', nguon: 'goc', tuGiay: 0, denGiay: 1,
+               datGiay: 0, gainDb: 0, vaoGiay: 0, raGiay: 0 }],
+    })).rejects.toThrow(/Không mảnh nào dựng được/);
+  });
+
+  it('⭐ kho bài liệt kê ĐỦ nhịp và tông — thiếu là mảnh dài sai', async () => {
+    const a = await napBai(goc, 'kho-a.wav', pcmThu(3), 2, FS);
+    const ds = await dsBaiTrongKho();
+    /* Bảng phiên sống trong bộ nhớ và các phép kiểm trước để lại phiên trỏ
+       vào thư mục tạm đã xoá. Danh sách vẫn phải trả về bài LÀNH — hỏng một
+       mà mất tất là chế độ hỏng tệ nhất của một cái kho. */
+    const m = ds.find((x) => x.id === a.id);
+    expect(m).toBeTruthy();
+    expect(m!.bpm).toBeGreaterThan(0);
+    expect(m!.tong).toBeTruthy();
+    /* Chưa tách thì chỉ có `goc`; bày thêm đường không tồn tại là mời người
+       dùng dựng một mảnh chắc chắn bị bỏ. */
+    expect(m!.duong).toEqual(['goc']);
+    await donDep(goc, a.id);
+  });
+
+  it('⭐ phiên MẤT TỆP GỐC bị gỡ khỏi kho chứ không làm hỏng cả danh sách', async () => {
+    const a = await napBai(goc, 'sap-mat.wav', pcmThu(3), 2, FS);
+    const b = await napBai(goc, 'con-song.wav', pcmThu(3), 2, FS);
+    /* Xoá tệp gốc của một bài — đúng thứ xảy ra khi người dùng dọn thư mục
+       tạm, hoặc một cửa sổ khác đóng bài. */
+    await fs.rm(path.join(goc, 'nhac', 'phien', a.id, 'goc.wav'), { force: true });
+
+    const ds = await dsBaiTrongKho();
+    expect(ds.some((x) => x.id === b.id)).toBe(true);
+    expect(ds.some((x) => x.id === a.id)).toBe(false);
+    /* Và lần gọi sau nó không còn phải thử lại nữa. */
+    expect((await dsBaiTrongKho()).some((x) => x.id === a.id)).toBe(false);
+    await donDep(goc, b.id);
   });
 });

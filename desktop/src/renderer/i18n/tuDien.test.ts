@@ -84,6 +84,29 @@ describe('mọi chuỗi đã bọc t() đều dịch được', () => {
 });
 
 describe('chất lượng từ điển', () => {
+  it('⭐ KHÔNG có khoá nào lặp lại', () => {
+    /* Khoá trùng trong một object literal KHÔNG phải lỗi cú pháp: JavaScript
+       lặng lẽ giữ mục SAU và vứt mục trước. Nên phép kiểm này phải đọc MÃ
+       NGUỒN — nhìn vào `TU_DIEN` thì hai mục đã gộp làm một từ đời nào rồi,
+       và không còn gì để mà thấy.
+
+       Nó bắt được một lỗi thật ngay lần chạy đầu: `Bài đang mở` có sẵn nghĩa
+       "Open track" (nhãn khối MỘT bài), rồi một mục mới trùng khoá dịch thành
+       "Open tracks" và đè lên nó — nhãn cũ đổi nghĩa ở một trang không liên
+       quan gì, im lặng. `tsc` không thấy, vite chỉ cảnh báo giữa một rừng chữ. */
+    const ma = readFileSync(
+      new URL('./tuDien.ts', import.meta.url).pathname, 'utf8',
+    );
+    const khoa = [...ma.matchAll(/^ {2}'((?:[^'\\]|\\.)*)':/gm)].map((m) => m[1]!);
+    const dem = new Map<string, number>();
+    for (const k of khoa) dem.set(k, (dem.get(k) ?? 0) + 1);
+    const trung = [...dem].filter(([, n]) => n > 1).map(([k, n]) => `${k} (×${n})`);
+    expect(trung, 'Khoá trùng ⇒ mục sau ĐÈ mục trước, im lặng').toEqual([]);
+    /* Và chốt rằng bộ dò thật sự đọc được cái gì đó — một regex hỏng cũng cho
+       ra mảng rỗng và phép kiểm trên vẫn xanh. */
+    expect(khoa.length).toBeGreaterThan(400);
+  });
+
   it('không mục nào để rỗng hay chép y nguyên tiếng Việt', () => {
     const xau = Object.entries(TU_DIEN).filter(([vi, en]) => !en.trim() || en === vi);
     expect(xau).toEqual([]);

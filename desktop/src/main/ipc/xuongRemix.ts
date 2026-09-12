@@ -12,7 +12,8 @@ import type { MucKhoModel } from '../../shared/ipc';
 import { KHO_MODEL, napModelTuTep, taiModel, tinhTrangKho, xoaModel } from '../nhac/taiModel';
 import {
   chinhVaXuat, donDep, donDepTatCa, huyTach, masterTheoMau, napBai, napBanMau,
-  banGiao, phanTich, songBai, tach, thuMucPhien, tronStem, xuatTep,
+  banGiao, dsBaiTrongKho, dungMashup, phanTich, songBai, tach, thuMucPhien,
+  tronStem, xuatTep,
 } from '../nhac/xuong';
 import { handle } from './index';
 
@@ -142,6 +143,14 @@ export function registerXuongRemixHandlers(): void {
   /* Cùng chốt đường dẫn, và ở đây nó còn GHI — nên `duongAnToan` không chỉ
      chặn đọc trộm mà còn chặn ghi đè ra ngoài thư mục phiên. */
   handle('xuongRemix:xuatTep', ({ duong, cai }) => xuatTep(duongAnToan(duong), cai));
+
+  handle('xuongRemix:dsBai', () => dsBaiTrongKho());
+
+  handle('xuongRemix:dungMashup', ({ bpm, chuAm, manh, ten, tranDbtp }) =>
+    dungMashup(userData(), { bpm, chuAm, manh }, {
+      ...(ten === undefined ? {} : { ten }),
+      ...(tranDbtp === undefined ? {} : { tranDbtp }),
+    }));
 
   handle('xuongRemix:song', ({ id, soCot }) => songBai(id, soCot));
 

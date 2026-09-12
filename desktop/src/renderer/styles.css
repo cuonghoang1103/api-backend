@@ -11865,6 +11865,226 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   .ct-xr-bt-cot { flex: 0 0 116px; }
 }
 
+/* ══════════════════════════════════════════════════════════
+   DÒNG THỜI GIAN — ghép nhiều bài
+   ══════════════════════════════════════════════════════════ */
+
+.ct-xr-dtg { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+
+.ct-xr-dtg-thanh {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px 14px;
+  min-width: 0;
+  padding: 9px 11px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: color-mix(in srgb, var(--ct-bg) 55%, #000);
+}
+
+.ct-xr-dtg-o {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--ct-text-muted);
+}
+.ct-xr-dtg-o > span { white-space: nowrap; }
+.ct-xr-dtg-o em {
+  font-style: normal;
+  font-size: 10px;
+  color: var(--ct-text-faint);
+}
+.ct-xr-dtg-o input,
+.ct-xr-dtg-o select {
+  width: 74px;
+  padding: 3px 5px;
+  border: 1px solid var(--ct-border);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--ct-bg) 20%, #000);
+  color: var(--ct-text);
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.ct-xr-dtg-o select { width: auto; min-width: 74px; }
+
+.ct-xr-dtg-phong { display: flex; gap: 4px; }
+
+/* ── Kho bài ──────────────────────────────────────────── */
+.ct-xr-dtg-kho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.ct-xr-dtg-bai {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  /* `min-width: 0` + `max-width` để tên bài dài không đẩy tràn cả hàng — luật
+     đầu của BO-CUC.md. */
+  min-width: 0;
+  max-width: 260px;
+  padding: 6px 8px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-surface-2);
+}
+.ct-xr-dtg-bai > b {
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ct-xr-dtg-bai > code {
+  font-size: 10.5px;
+  color: var(--ct-text-faint);
+  font-variant-numeric: tabular-nums;
+}
+.ct-xr-dtg-them { display: flex; flex-wrap: wrap; gap: 3px; }
+
+/* Chip "thêm mảnh". Bản đầu dùng lại `.ct-xr-tag` — lớp của nút VUÔNG 22px ở
+   đầu dải track — nên nhãn "Nhạc nền" tràn ra khỏi ô 22px và các chip đè lên
+   nhau. Không có gì tràn ra ngoài CỘT nên bộ đo bố cục báo xanh; chỉ nhìn ảnh
+   chụp mới thấy. */
+.ct-xr-dtg-nut {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  /* `auto`, không phải bề rộng cố định — nhãn dài ngắn khác nhau. */
+  width: auto;
+  padding: 2px 6px;
+  border: 1px solid var(--ct-border);
+  border-radius: 3px;
+  background: none;
+  color: var(--ct-text-muted);
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.ct-xr-dtg-nut:hover {
+  color: var(--ct-text);
+  background: var(--ct-hover);
+}
+
+/* ── Dòng thời gian ───────────────────────────────────── */
+.ct-xr-dtg-cuon {
+  min-width: 0;
+  overflow-x: auto;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: color-mix(in srgb, var(--ct-bg) 35%, #000);
+  scrollbar-width: thin;
+}
+.ct-xr-dtg-dong { position: relative; padding: 0 0 6px; }
+
+.ct-xr-dtg-thuoc {
+  position: relative;
+  height: 18px;
+  border-bottom: 1px solid var(--ct-border);
+}
+.ct-xr-dtg-thuoc span {
+  position: absolute;
+  top: 3px;
+  /* Nhích 3px khỏi vạch để con số không đè lên chính cái vạch nó đánh dấu. */
+  padding-left: 3px;
+  font-size: 9px;
+  color: var(--ct-text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.ct-xr-dtg-rong {
+  margin: 0;
+  padding: 22px 14px;
+  font-size: 12.5px;
+  color: var(--ct-text-faint);
+}
+
+.ct-xr-dtg-lan {
+  position: relative;
+  border-bottom: 1px solid color-mix(in srgb, var(--ct-border) 60%, transparent);
+}
+.ct-xr-dtg-lan-ten {
+  position: absolute;
+  top: 3px;
+  left: 5px;
+  z-index: 2;
+  max-width: 190px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 9.5px;
+  color: var(--ct-text-faint);
+  /* Dính vào mép trái khi cuộn ngang: không có nó thì kéo sang phải một chút
+     là hết biết mảnh này của bài nào. */
+  position: sticky;
+  pointer-events: none;
+}
+.ct-xr-dtg-vach {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: color-mix(in srgb, #fff 6%, transparent);
+}
+
+.ct-xr-dtg-manh {
+  position: absolute;
+  top: 14px;
+  bottom: 4px;
+  border-radius: 3px;
+  cursor: grab;
+  overflow: hidden;
+  /* `none` để kéo mảnh trên màn cảm ứng không bị trình duyệt cướp thành cuộn. */
+  touch-action: none;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.45);
+}
+.ct-xr-dtg-manh:active { cursor: grabbing; }
+.ct-xr-dtg-manh[data-chon] {
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.45), 0 0 0 2px var(--ct-accent);
+}
+.ct-xr-dtg-manh-ten {
+  display: block;
+  padding: 2px 5px;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #10101a;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Tay nắm hai mép. 7px là hẹp nhất mà chuột còn bắt được — hẹp hơn thì người
+   dùng cứ tưởng mình đang cắt và hoá ra đang di chuyển cả mảnh. */
+.ct-xr-dtg-mep {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 7px;
+  cursor: ew-resize;
+  background: rgba(0, 0, 0, 0.28);
+}
+.ct-xr-dtg-mep.trai { left: 0; }
+.ct-xr-dtg-mep.phai { right: 0; }
+.ct-xr-dtg-mep:hover { background: rgba(0, 0, 0, 0.5); }
+
+.ct-xr-dtg-chitiet {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  min-width: 0;
+  padding: 9px 11px;
+  border: 1px solid var(--ct-accent);
+  border-radius: var(--ct-radius-sm);
+  background: color-mix(in srgb, var(--ct-accent) 8%, transparent);
+}
+.ct-xr-dtg-chitiet .ct-xr-dtg-o input { width: 82px; }
+
 .ct-xr-tron-ra {
   display: flex;
   flex-direction: column;

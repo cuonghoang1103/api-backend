@@ -36,6 +36,7 @@ import { moPhienTach } from './onnxChay';
 import { TAN_SO_MODEL, TEN_STEM, tachStem, type TenStem } from './tachStem';
 import { docWav, ghiWav, gopMono, type AmThanh } from './wav';
 import { duoiTep, maHoa, mimeCua, moTaDinhDang } from './maHoa';
+import { dungBan, khoaNguon, type BanDung, type NguonManh } from './dung';
 import type { CaiXuat } from '../../shared/dinhDangXuat';
 
 export interface BaiDaNap {
@@ -767,4 +768,159 @@ function ghiChuXuat(
     '',
     'Sinh bởi Xưởng Remix — app desktop CuongThai.',
   ].filter((dong) => dong !== '').join('\n');
+}
+
+/* ══════════════════════════════════════════════════════════
+   Dựng mashup — nhiều bài thành một
+   ══════════════════════════════════════════════════════════ */
+
+export interface BaiTrongKho {
+  id: string;
+  ten: string;
+  giay: number;
+  duongWav: string;
+  bpm: number;
+  tong: string;
+  tongCamelot: string;
+  /** Những đường dùng được: luôn có `goc`, thêm stem nếu đã tách. */
+  duong: string[];
+}
+
+/**
+ * Mọi bài đang mở, kèm nhịp và tông — nguyên liệu của bản mashup.
+ *
+ * Đo LUÔN ở đây chứ không để giao diện đo từng bài: bản dựng cần nhịp của mọi
+ * bài để tính độ dài mảnh, và một bài chưa đo là một mảnh dài sai. `phanTich`
+ * tự nhớ lại kết quả nên gọi lần hai gần như không tốn gì.
+ */
+export async function dsBaiTrongKho(): Promise<BaiTrongKho[]> {
+  const ra: BaiTrongKho[] = [];
+  for (const p of [...phien.values()]) {
+    let pt: KetQuaPhanTich;
+    try {
+      pt = await phanTich(p.id);
+    } catch (loi) {
+      /* MỘT bài hỏng không được làm chết cả danh sách.
+         Bảng phiên sống trong bộ nhớ còn tệp sống trên đĩa, nên hai thứ lệch
+         nhau được: người dùng dọn thư mục tạm, một cửa sổ khác đóng bài, đĩa
+         đầy giữa chừng. Ném ở đây thì kho bài trống trơn và mọi bài LÀNH cũng
+         biến mất theo — hỏng một, mất tất.
+
+         Không đọc nổi tệp gốc nghĩa là phiên đã chết thật, nên gỡ luôn khỏi
+         bảng: giữ lại chỉ để nó hỏng lại ở lần gọi sau. */
+      try {
+        await fs.access(p.duongWav);
+        console.warn(`[xưởng remix] bỏ qua bài ${p.id} khi liệt kê kho:`, loi);
+      } catch {
+        phien.delete(p.id);
+        console.warn(`[xưởng remix] phiên ${p.id} mất tệp gốc — gỡ khỏi kho`);
+      }
+      continue;
+    }
+    ra.push({
+      id: p.id,
+      ten: p.ten,
+      giay: p.giay,
+      duongWav: p.duongWav,
+      bpm: pt.bpm,
+      tong: pt.tong,
+      tongCamelot: pt.tongCamelot,
+      duong: ['goc', ...(p.daTach ? TEN_STEM : [])],
+    });
+  }
+  return ra;
+}
+
+/** Đường dẫn WAV của một ĐƯỜNG trong một bài. */
+function duongCua(p: Phien, nguon: string): string | null {
+  if (nguon === 'goc') return p.duongWav;
+  if (!p.daTach) return null;
+  if (!(TEN_STEM as readonly string[]).includes(nguon)) return null;
+  return path.join(p.daTach, `${nguon}.wav`);
+}
+
+export interface KetQuaDungRa {
+  duong: string;
+  ten: string;
+  giay: number;
+  /** Độ dài bản dựng, giây. */
+  daiGiay: number;
+  daDung: string[];
+  boQua: Array<{ id: string; viSao: string }>;
+  /** Đỉnh TRƯỚC hạn biên. >1 nghĩa là đã cộng quá tay và bộ hạn biên phải ghì. */
+  dinhTruoc: number;
+  lufs: number;
+  dinhThat: number;
+}
+
+/**
+ * Dựng bản mashup và ghi ra tệp.
+ *
+ * ⚠️ Mỗi ĐƯỜNG chỉ đọc từ đĩa MỘT lần dù có bao nhiêu mảnh cắt từ nó. Một bài
+ * 5 phút stereo là 106 MB trong bộ nhớ; đọc lại cho từng mảnh thì một bản dựng
+ * 20 mảnh nuốt 2 GB và app chết vì hết nhớ — mà lỗi hiện ra là "app tự thoát",
+ * không phải "hết bộ nhớ".
+ */
+export async function dungMashup(
+  userData: string,
+  bd: BanDung,
+  opts: { tranDbtp?: number; ten?: string } = {},
+): Promise<KetQuaDungRa> {
+  const batDau = Date.now();
+  if (bd.manh.length === 0) throw new Error('Bản dựng chưa có mảnh nào');
+  if (!(bd.bpm > 0)) throw new Error('Nhịp chung phải dương');
+
+  const nguon: Record<string, NguonManh> = {};
+  let tanSoMau = TAN_SO_MODEL;
+  for (const m of bd.manh) {
+    const khoa = khoaNguon(m);
+    if (nguon[khoa]) continue;                    // đọc một lần, dùng lại
+    const p = phien.get(m.baiId);
+    if (!p) continue;                             // `dungBan` sẽ báo lý do
+    const duong = duongCua(p, m.nguon);
+    if (!duong) continue;
+    let am: AmThanh;
+    try {
+      am = docWav((await fs.readFile(duong)).buffer as ArrayBuffer);
+    } catch {
+      continue;
+    }
+    const pt = await phanTich(m.baiId);
+    const cao = caoDoTuTen(pt.tong);
+    nguon[khoa] = { am, bpm: pt.bpm, chuAm: cao === null ? null : cao % 12 };
+    tanSoMau = am.tanSoMau;
+  }
+
+  const kq = dungBan(bd, nguon, tanSoMau);
+  if (kq.daDung.length === 0) {
+    const viSao = kq.boQua.map((b) => b.viSao).join(' · ') || 'không rõ';
+    throw new Error(`Không mảnh nào dựng được: ${viSao}`);
+  }
+
+  const tran = opts.tranDbtp ?? -1;
+  const am: AmThanh = { kenh: hanBien(kq.am.kenh, tran, tanSoMau), tanSoMau };
+  const do_ = doTatCa(am);
+
+  /* Ghi vào thư mục của bài ĐẦU TIÊN có mảnh dựng được. Bản dựng không có
+     phiên riêng, mà `duongAnToan` ở tầng IPC chỉ cho đọc/ghi trong cây phiên —
+     nên nó phải nằm trong đó, không thì chính app không mở lại được tệp mình
+     vừa ghi. */
+  const goc = bd.manh.find((m) => kq.daDung.includes(m.id))?.baiId ?? bd.manh[0]!.baiId;
+  const thuMuc = path.join(thuMucRa(userData, goc), 'xuat');
+  await fs.mkdir(thuMuc, { recursive: true });
+  const ten = `${tenAnToan(opts.ten ?? 'ban mashup')} ${Math.round(bd.bpm)}BPM.wav`;
+  const duong = path.join(thuMuc, ten);
+  await fs.writeFile(duong, Buffer.from(ghiWav(am)));
+
+  return {
+    duong,
+    ten,
+    giay: (Date.now() - batDau) / 1000,
+    daiGiay: (am.kenh[0]?.length ?? 0) / tanSoMau,
+    daDung: kq.daDung,
+    boQua: kq.boQua,
+    dinhTruoc: kq.dinhTruoc,
+    lufs: do_.lufs,
+    dinhThat: do_.dinhThat,
+  };
 }

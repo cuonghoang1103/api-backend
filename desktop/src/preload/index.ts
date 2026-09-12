@@ -35,6 +35,8 @@ import type {
   SettingValue,
   BaiDaNap,
   KetQuaXuatTep,
+  BaiTrongKho,
+  KetQuaDungRa,
   DownloadedTrack,
   KetQuaPhanTich,
   KetQuaTachRa,
@@ -206,6 +208,9 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('xuongRemix:banGiao', { duong, cai }) as Promise<BanGiaoAmThanh>,
     xuatTep: (duong: string, cai: CaiXuat) =>
       ipcRenderer.invoke('xuongRemix:xuatTep', { duong, cai }) as Promise<KetQuaXuatTep>,
+    dsBai: () => ipcRenderer.invoke('xuongRemix:dsBai', {}) as Promise<BaiTrongKho[]>,
+    dungMashup: (bd: Parameters<DesktopBridge['xuongRemix']['dungMashup']>[0]) =>
+      ipcRenderer.invoke('xuongRemix:dungMashup', bd) as Promise<KetQuaDungRa>,
     song: (id: string, soCot: number) =>
       ipcRenderer.invoke('xuongRemix:song', { id, soCot }) as Promise<SongAmThanh>,
     tron: (

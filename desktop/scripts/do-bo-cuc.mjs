@@ -736,6 +736,32 @@ await ctx.addInitScript((nn) => {
       return { ten: 'Bài thử rất dài để xem tên có tràn ra ngoài ô không (tron).wav',
                byte: new Uint8Array(b), giay: 254, mime: 'audio/wav' };
     })(),
+    /* Kho bài cho dòng thời gian. HAI bài khác nhịp khác tông — bản mashup
+       một bài không có gì để ghép, và cũng không dựng ra được làn thứ hai
+       (khối cao nhất của khối này). Tên dài có chủ ý. */
+    dsBai: [
+      { id: '00000000-0000-4000-8000-000000000001',
+        ten: 'Bài thử rất dài để xem tên có tràn ra ngoài ô không.mp3',
+        giay: 254, duongWav: '/tmp/x/phien/bai-thu/goc.wav',
+        bpm: 139.8, tong: 'Am', tongCamelot: '8A',
+        duong: ['goc', 'drums', 'bass', 'other', 'vocals'] },
+      { id: '00000000-0000-4000-8000-000000000002',
+        ten: 'Bài thứ hai để ghép.flac',
+        giay: 187, duongWav: '/tmp/x/phien/bai-hai/goc.wav',
+        bpm: 124.0, tong: 'F', tongCamelot: '7B',
+        duong: ['goc'] },
+    ],
+    /* Kết quả DỰNG mashup. `boQua` có một mục CÓ CHỦ Ý: dòng cảnh báo đó là
+       khối chữ dài nhất của cả phần này, và nó chỉ tồn tại khi có mảnh bị bỏ. */
+    dungMashup: {
+      duong: '/tmp/x/phien/bai-thu/xuat/ban mashup 128BPM.wav',
+      ten: 'ban mashup 128BPM.wav',
+      giay: 12.4, daiGiay: 96.5,
+      daDung: ['m1', 'm2'],
+      boQua: [{ id: 'm3', viSao: 'Phải kéo 0.33 lần — ngoài khoảng nghe được (0.5…2). '
+                              + 'Nhịp gốc dò ra 42.0 BPM; nếu con số đó sai thì sửa nó trước.' }],
+      dinhTruoc: 1.34, lufs: -7.9, dinhThat: -1.0,
+    },
     /* Kết quả XUẤT TỆP. Dòng nó dựng ra mang tên tệp DÀI + ba con số + một nút
        — hàng chữ dài nhất của cả khối chất lượng, nên nó phải được đo. */
     xuatTep: {
@@ -925,6 +951,23 @@ const CHUAN_BI = {
     await p.click('button:has-text("Xuất tệp")', { timeout: 2000 }).catch(() => {});
     await p.waitForTimeout(400);
 
+    /* Dòng thời gian: thả ba mảnh của HAI bài rồi bấm Dựng. Không thả thì cả
+       khối chỉ là một dòng chữ "bấm một đường ở trên" — làn, mảnh, thước, và
+       bảng chi tiết đều không tồn tại, tức chưa từng đi qua bộ đo. */
+    /* Chỉ số 0 và 1 là hai ĐƯỜNG của bài THỨ NHẤT (nó có 5 đường), chỉ số 5 là
+       bài THỨ HAI. Bấm ba nút đầu thì cả ba mảnh cùng một bài ⇒ chỉ một làn,
+       và làn thứ hai — thứ duy nhất chứng minh bố cục nhiều làn chịu được —
+       chưa từng được dựng. Chốt tự kiểm bên dưới bắt đúng chuyện này. */
+    for (const n of [0, 1, 5]) {
+      await p.locator('.ct-xr-dtg-nut').nth(n).click({ timeout: 2000 })
+        .catch(() => {});
+      await p.waitForTimeout(120);
+    }
+    await p.locator('.ct-xr-dtg-manh').first().click({ timeout: 2000 }).catch(() => {});
+    await p.waitForTimeout(150);
+    await p.click('button:has-text("Dựng bản")', { timeout: 2000 }).catch(() => {});
+    await p.waitForTimeout(500);
+
     /* ⚠️ TỰ KIỂM VIỆC CỦA CHÍNH BƯỚC NÀY.
        Mọi thao tác trên đều `.catch(() => {})`, nên một selector đổi tên là
        cả bước chuẩn bị im lặng không làm gì — và bộ đo vẫn báo XANH, trên một
@@ -960,6 +1003,9 @@ const CHUAN_BI = {
     /* Bàn trộn giờ là bốn cột đứng + một cột tổng, mỗi cột ba núm xoay. Đếm
        núm chứ không đếm cột: cột rỗng vẫn là một cột, còn núm thì chỉ có khi
        `NumXoay` thật sự dựng ra. 4 đường × 3 núm = 12. */
+    const soManh = await p.locator('.ct-xr-dtg-manh').count();
+    const soLanDtg = await p.locator('.ct-xr-dtg-lan').count();
+    const coChiTiet = await p.locator('.ct-xr-dtg-chitiet').count();
     const soNum = await p.locator('.ct-xr-num-o').count();
     const soCot = await p.locator('.ct-xr-bt-cot').count();
     const coCham = await p.locator('.ct-xr-cham').count();
@@ -981,13 +1027,16 @@ const CHUAN_BI = {
       );
     }
     if (!coCham || !coLuoi || !coAi || !coTron || coStem < 4 || !coNghe
-        || !coBan || soLan < 4 || soCl < 8 || soNum < 12 || soCot < 5) {
+        || !coBan || soLan < 4 || soCl < 8 || soNum < 12 || soCot < 5
+        || soManh < 3 || soLanDtg < 2 || !coChiTiet) {
       throw new Error(
         `chuẩn bị /xuong-remix KHÔNG tới được trạng thái đông `
         + `(lưới số đo: ${coLuoi}, khối chấm bài: ${coCham}, câu trả lời AI: ${coAi}, `
         + `bản trộn: ${coTron}, ô stem: ${coStem}/4, thanh nghe: ${coNghe}, `
         + `transport: ${coBan}, dải track: ${soLan}/4, nút chất lượng: ${soCl}/8, `
-        + `núm xoay: ${soNum}/12, cột bàn trộn: ${soCot}/5). `
+        + `núm xoay: ${soNum}/12, cột bàn trộn: ${soCot}/5, `
+        + `mảnh: ${soManh}/3, làn dòng thời gian: ${soLanDtg}/2, `
+        + `bảng chi tiết mảnh: ${coChiTiet}). `
         + 'Selector hay luồng trang đã đổi — sửa bước CHUAN_BI trước khi tin kết quả.',
       );
     }

@@ -25,7 +25,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   AudioWaveform, Check, Download, FolderOpen, Gauge, Loader2, Music4,
-  Scissors, Send, SlidersHorizontal, Sparkles, Trash2, Upload, X,
+  RefreshCw, Scissors, Send, SlidersHorizontal, Sparkles, Trash2, Upload, X,
 } from 'lucide-react';
 import type {
   BaiDaNap, KetQuaMasterRa, KetQuaPhanTich, KetQuaTachRa, KetQuaTronRa, KetQuaXuatRa,
@@ -40,7 +40,9 @@ import { docTraLoi, type TraLoiAi } from './traLoi';
 import { KetQuaAmThanh } from './KetQuaAmThanh';
 import { BanLamViec } from './BanLamViec';
 import { BanTron } from './BanTron';
+import { DongThoiGian } from './DongThoiGian';
 import type { MayPhatStem } from './mayPhat';
+import type { BaiTrongKho } from '../../../shared/ipc';
 import { useDich } from '../../i18n';
 import { DUOI_NHAN, giaiMaBai, laTepNhac } from './giaiMa';
 
@@ -140,6 +142,30 @@ export function XuongRemixPage() {
   const oTep = useRef<HTMLInputElement>(null);
   const oTepMau = useRef<HTMLInputElement>(null);
 
+  /* Kho bài cho dòng thời gian.
+
+     Khai TRƯỚC mọi hàm gọi nó. `useCallback` bên dưới không khai nó trong
+     danh sách phụ thuộc được nếu nó chưa tồn tại, và một callback ghi nhớ bản
+     `lamMoiKho` của lần vẽ ĐẦU TIÊN là lỗi chỉ lộ ra khi nó cần bản mới.
+
+     Xin lại mỗi khi nạp / đóng / tách xong một bài — đúng những lúc danh sách
+     hoặc số đo của nó đổi thật. */
+  const [khoBai, setKhoBai] = useState<BaiTrongKho[]>([]);
+  const [dangTaiKho, setDangTaiKho] = useState(false);
+  const lamMoiKho = useCallback(async () => {
+    if (!cau) return;
+    setDangTaiKho(true);
+    try {
+      setKhoBai(await cau.xuongRemix.dsBai());
+    } catch {
+      /* Kho hỏng KHÔNG được làm chết cả trang: mọi thứ trên một bài vẫn chạy
+         mà không cần nó. Danh sách rỗng và nút "Xem lại" là đủ. */
+      setKhoBai([]);
+    } finally {
+      setDangTaiKho(false);
+    }
+  }, [cau]);
+
   const napKho = useCallback(async () => {
     if (!cau) return;
     try {
@@ -193,9 +219,11 @@ export function XuongRemixPage() {
     setDangNap(true);
     try {
       const g = await giaiMaBai(tep);
-      const b = await cau.xuongRemix.napBai(tep.name, g.mau, g.soKenh, g.tanSoMau);
+
+  const b = await cau.xuongRemix.napBai(tep.name, g.mau, g.soKenh, g.tanSoMau);
       if (!b?.id) throw new Error(dich('Không nạp được bài — main không trả về phiên nào.'));
       setBai(b);
+      void lamMoiKho();          // bài mới ⇒ kho có thêm một dòng
       // Cùng lý do với `napKho`: thiếu `do` hay `ghep` thì đừng dựng nửa vời rồi
       // ném giữa chừng — bỏ hẳn phần phân tích, các phần khác vẫn dùng được.
       const kq = await cau.xuongRemix.phanTich(b.id);
@@ -214,6 +242,9 @@ export function XuongRemixPage() {
     setTienDo(null);
     try {
       setKetQua(await cau.xuongRemix.tach(bai.id, maModel));
+      /* Tách xong ⇒ bài đó có thêm bốn ĐƯỜNG để cắt mảnh. Không xin lại thì
+         dòng thời gian chỉ bày `goc` mãi, và người dùng tưởng tách hỏng. */
+      void lamMoiKho();
     } catch (e) {
       setLoi((e as Error).message);
     } finally {
@@ -363,6 +394,7 @@ export function XuongRemixPage() {
 
   const dongBai = useCallback(async () => {
     if (cau && bai) await cau.xuongRemix.dongBai(bai.id).catch(() => undefined);
+    void lamMoiKho();
     setBai(null);
     setPt(null);
     setKetQua(null);
@@ -993,6 +1025,25 @@ export function XuongRemixPage() {
           )}
         </section>
       )}
+
+      {/* ── Ghép nhiều bài ─────────────────────────────────
+          Đặt ở CUỐI, ngoài khối của một bài: nó nói về TẤT CẢ bài đang mở,
+          không về bài nào cả. Nhét nó vào trong khối kia thì nó biến mất khi
+          người dùng đóng bài — đúng lúc họ đang xếp mảnh của ba bài khác. */}
+      <section className="ct-panel ct-xr-chinh" aria-label={dich('Ghép nhiều bài')}>
+        <div className="ct-xr-dieu-khien">
+          <span className="ct-xr-nhan">{dich('Ghép nhiều bài')}</span>
+          <button type="button" className="ct-btn ct-btn-ghost" disabled={dangTaiKho}
+            onClick={() => void lamMoiKho()}>
+            <RefreshCw size={14} aria-hidden />
+            {dich('Xem lại kho bài')}
+          </button>
+        </div>
+        <p className="ct-muted ct-xr-nhac">
+          {dich('Nạp vài bài, cắt lấy đoạn hay của từng bài, rồi xếp chồng lên nhau. App tự kéo mọi mảnh về cùng một nhịp — và cùng một tông nếu bạn chọn.')}
+        </p>
+        <DongThoiGian kho={khoBai} dangTaiKho={dangTaiKho} onLamMoiKho={() => void lamMoiKho()} />
+      </section>
     </div>
   );
 }

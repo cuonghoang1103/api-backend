@@ -154,12 +154,15 @@ export interface AcademyOnboardingProps {
    *  thẳng màn chọn KHỐI ngành (nút "Đổi ngành" dùng cái này, vì nó đã biết
    *  người đang xem là sinh viên). */
   initialStep?: 'ask' | 'faculty';
+  /** Quay lại từ Phòng tư vấn: mở thẳng bước chọn NGÀNH HẸP với khối/ngành đã biết. */
+  presetFaculty?: string | null;
+  presetMajor?: string | null;
 }
 
 const FOCUSABLE =
   'button:not([disabled]), [href], input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])';
 
-export default function AcademyOnboarding({ open, onClose, initialStep = 'ask' }: AcademyOnboardingProps): JSX.Element | null {
+export default function AcademyOnboarding({ open, onClose, initialStep = 'ask', presetFaculty, presetMajor }: AcademyOnboardingProps): JSX.Element | null {
   const router = useRouter();
   const { save } = useAcademyProfile();
   const reduced = !!useReducedMotion();
@@ -174,14 +177,22 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask' }
   const restoreRef = useRef<HTMLElement | null>(null);
 
   // Mở lại là bắt đầu lại từ đầu — không giữ lựa chọn dở của lần trước.
+  // Ngoại lệ: quay về từ Phòng tư vấn (có preset) → mở thẳng bước chọn NGÀNH HẸP.
   useEffect(() => {
     if (!open) return;
-    setStep(initialStep);
-    setFacultyId(null);
-    setMajorId(null);
-    setComboId(null);
+    if (presetFaculty && presetMajor) {
+      setFacultyId(presetFaculty);
+      setMajorId(presetMajor);
+      setComboId(null);
+      setStep('combo');
+    } else {
+      setStep(initialStep);
+      setFacultyId(null);
+      setMajorId(null);
+      setComboId(null);
+    }
     setRemember(true);
-  }, [open, initialStep]);
+  }, [open, initialStep, presetFaculty, presetMajor]);
 
   const faculty: CatFaculty | undefined = getFaculty(facultyId);
   const major: CatMajor | undefined = getCatMajor(facultyId, majorId);
@@ -525,6 +536,21 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask' }
                       {major.combos.length} chuyên ngành hẹp. Chọn để mình hiện đúng lộ trình môn của bạn.
                     </p>
                     <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
+                      {/* Chưa biết chọn gì → vào Phòng tư vấn AI. Luôn ở TRÊN ĐẦU. */}
+                      <button
+                        type="button"
+                        data-autofocus="true"
+                        onClick={() => { onClose(); router.push(`/academy/tu-van-nganh?faculty=${facultyId ?? ''}&major=${majorId ?? ''}`); }}
+                        className="sm:col-span-2 min-h-[60px] text-left rounded-2xl p-3 bg-gradient-to-r from-neon-indigo/20 to-neon-violet/20 border border-neon-violet/40 hover:border-neon-violet/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex gap-3 items-center"
+                      >
+                        <span aria-hidden="true" className="text-2xl leading-none">✨</span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block font-semibold text-text-primary">Tôi chưa chọn ngành hẹp — gợi ý giúp tôi</span>
+                          <span className="block text-[11px] text-text-secondary mt-0.5">Vào Phòng tư vấn AI: so sánh ngành, thị trường & lương, nối với môn bạn đã học.</span>
+                        </span>
+                        <Sparkles className="w-5 h-5 text-neon-violet shrink-0" aria-hidden />
+                      </button>
+
                       {major.combos.map((c, i) => {
                         const nCourses = leafCourseCodes(facultyId, majorId, c.id).length;
                         return (

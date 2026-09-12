@@ -317,7 +317,8 @@ export type LlmPurpose =
   | 'remix_coach'         // Xưởng Remix — đọc số đo của bài rồi kèm người làm nhạc
   | 'agent_code'          // agent lập trình của app desktop — GỌI TOOL nhiều lượt
   | 'exam_tutor'          // CuongMini — AI đồng hành khi thi (Pro), đi cổng rambo như agent_code
-  | 'lab_room';           // Phòng Lab LAB211 — giảng đề, kèm code, chấm bài nộp; cổng rambo, model mạnh nhất
+  | 'lab_room'            // Phòng Lab LAB211 — giảng đề, kèm code, chấm bài nộp; cổng rambo, model mạnh nhất
+  | 'academy_advisor';    // Phòng tư vấn chọn ngành hẹp ở /academy — chat tương tác, neo vào dữ liệu curated
 
 const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   /**
@@ -395,6 +396,10 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   // Gia sư Academy (hỏi trong từng bài học): chat NHỎ (≤4000 token) nên Opus 4.8
   // KHÔNG dính rate-limit như bản giảng dài — cùng lý do codelab_coach chạy Opus.
   course_tutor: 'claude-opus-4-8',
+
+  // Tư vấn chọn ngành hẹp: người dùng đọc từng chữ, cần lời khuyên mạch lạc,
+  // biết so sánh & nối với môn học — chat tương tác nên dùng sonnet-5.
+  academy_advisor: 'claude-sonnet-5',
 
   cv_critique: 'gpt-5.6-sol',
   cv_writing: 'claude-sonnet-5',

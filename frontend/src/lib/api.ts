@@ -2168,6 +2168,22 @@ export const courseOrdersApi = {
   getMine: () => api.get<{ data: MyCourseOrder[] }>('/payments/orders/my'),
 };
 
+/** Phòng tư vấn chọn ngành hẹp ở /academy. */
+export const academyAdvisorApi = {
+  getCatalog: () =>
+    api.get<{ success: true; data: { specs: unknown[]; questions: unknown[]; reports: unknown[] } }>(
+      '/academy/advisor/catalog',
+    ),
+  ask: (payload: {
+    question: string;
+    facultyId?: string | null;
+    majorId?: string | null;
+    semester?: number;
+    completedCourses?: string[];
+    history?: { role: 'user' | 'assistant'; content: string }[];
+  }) => api.post<{ success: true; data: { answer: string } }>('/academy/advisor', payload),
+};
+
 export default api;
 
 // ─── Social Feed API ──────────────────────────────────────────────────────────

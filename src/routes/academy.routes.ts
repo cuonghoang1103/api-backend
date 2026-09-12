@@ -3,6 +3,8 @@ import { prisma } from '../config/database.js';
 import { authenticate, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { saveUserCode } from './savedCodes.routes.js';
+import { llmComplete, checkTokenQuota, isAiAvailable, aiOffReason } from '../services/interview/llm/index.js';
+import { ADVISOR_SPECS, ADVISOR_SUGGESTED_QUESTIONS, MARKET_REPORTS, type AdvisorSpec } from '../data/academyAdvisor.js';
 import type { ApiResponse } from '../types/index.js';
 
 const router = Router();
@@ -464,6 +466,107 @@ router.post('/activate-code', authenticate, async (req, res: Response<ApiRespons
       success: true,
       data: { message: 'Kich hoat thanh cong! Ban co the bat dau hoc ngay.', courseId },
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/* ─── Phòng tư vấn chọn ngành hẹp (AI) ─────────────────────────────────────
+ * `GET /advisor/catalog` (công khai): dữ liệu ngành để vẽ thẻ so sánh + biểu đồ
+ * + câu hỏi gợi ý sẵn. `POST /advisor` (đăng nhập + quota): chat AI, NEO cứng vào
+ * ADVISOR_SPECS để không bịa số liệu; số chính xác thì trỏ người dùng tới báo cáo. */
+
+router.get('/advisor/catalog', async (_req, res: Response<ApiResponse>, next) => {
+  try {
+    res.set('Cache-Control', 'public, max-age=600, stale-while-revalidate=1200');
+    res.json({ success: true, data: { specs: ADVISOR_SPECS, questions: ADVISOR_SUGGESTED_QUESTIONS, reports: MARKET_REPORTS } });
+  } catch (error) {
+    next(error);
+  }
+});
+
+function fmtAdvisorSpec(s: AdvisorSpec): string {
+  return [
+    `### ${s.nameVi}  [key: ${s.key}]`,
+    `- Ngôn ngữ/công nghệ: ${s.languages.join(', ')}`,
+    `- Làm ra được: ${s.builds.join('; ')}`,
+    `- Sản phẩm/công ty THẬT: ${s.products.join('; ')}`,
+    `- Ưu điểm: ${s.pros.join('; ')}`,
+    `- Nhược điểm: ${s.cons.join('; ')}`,
+    `- Độ khó ${s.difficulty}/5 · Nhu cầu tuyển VN ${s.demand}/5 · Lương ${s.salary}/5 (${s.salaryRange})`,
+    `- Môn Academy tiêu biểu: ${s.academyCourses.join(', ')}`,
+  ].join('\n');
+}
+
+function buildAdvisorSystem(specs: AdvisorSpec[], semester: number, completed: string[]): string {
+  const specBlock = specs.map(fmtAdvisorSpec).join('\n\n');
+  const ctx: string[] = [];
+  if (semester > 0) ctx.push(`Sinh viên đang học KỲ ${semester}.`);
+  if (completed.length) ctx.push(`Các môn Academy sinh viên ĐÃ HỌC (mã): ${completed.join(', ')}.`);
+  return [
+    'Bạn là CỐ VẤN HƯỚNG NGHIỆP chuyên nghiệp của FPT University Academy, tư vấn sinh viên CHỌN NGÀNH HẸP (chuyên ngành). Trả lời bằng TIẾNG VIỆT, thân thiện, thẳng thắn, NGẮN GỌN và có cấu trúc (markdown, gạch đầu dòng, in đậm ý chính).',
+    '',
+    'CHỈ được dựa vào CÁC SỰ THẬT dưới đây về từng ngành hẹp — TUYỆT ĐỐI KHÔNG bịa thêm con số lương/tuyển dụng. Khi người dùng cần số CHÍNH XÁC, hãy nói mức định tính rồi khuyên họ xem báo cáo (TopDev/ITviec/VietnamWorks) — không tự chế số.',
+    '',
+    'DỮ LIỆU NGÀNH HẸP (nguồn neo):',
+    specBlock,
+    '',
+    ctx.length ? 'NGỮ CẢNH SINH VIÊN:\n' + ctx.join('\n') : 'Chưa biết sinh viên học kỳ mấy — nếu cần thì hỏi lại.',
+    '',
+    'NGUYÊN TẮC TƯ VẤN:',
+    '- Nếu sinh viên chưa biết điểm mạnh của mình: gợi ý vài câu hỏi tự vấn (thích logic/toán/sáng tạo/thiết kế? thích làm sản phẩm nhìn thấy hay hệ thống ẩn?) để họ tự nhận ra.',
+    '- Khi biết môn đã học: NÓI RÕ môn nào tận dụng được sang ngành hẹp đang bàn (ví dụ đã học Java/PRO192 → nền OOP dùng tiếp cho .NET/C#, cho Android; đã học C/PRF192 → tư duy con trỏ/bộ nhớ dùng cho nhúng, game). Nêu ngành hẹp code bằng NGÔN NGỮ gì và sẽ học thêm MÔN Academy nào (dùng mã môn ở trên).',
+    '- So sánh khách quan: ưu/nhược, độ khó, nhu cầu, lương (định tính), tương lai lâu dài. Nêu sản phẩm/công ty thật để minh hoạ ngành hẹp làm ra được gì.',
+    '- Không phán "ngành này tốt nhất" tuyệt đối — gợi ý theo sở thích & thế mạnh của CHÍNH sinh viên, và khuyến khích họ tự quyết.',
+    '- Cuối câu trả lời, nếu hợp lý, gợi ý 2–3 câu hỏi tiếp theo sinh viên có thể hỏi.',
+    '- Độ dài vừa phải (không lan man). Chỉ chèn khối code khi thật sự giúp so sánh cú pháp.',
+  ].join('\n');
+}
+
+const ADVISOR_MAX_HISTORY = 8;
+router.post('/advisor', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    if (!isAiAvailable()) throw new AppError(aiOffReason() || 'AI đang tạm nghỉ, thử lại sau nhé.', 503);
+    const question = String(req.body?.question || '').trim();
+    if (!question) throw new AppError('Thiếu câu hỏi.', 400);
+    if (question.length > 2000) throw new AppError('Câu hỏi quá dài (tối đa 2000 ký tự).', 400);
+    await checkTokenQuota(req.userId);
+
+    const facultyId = String(req.body?.facultyId || '').trim();
+    const majorId = String(req.body?.majorId || '').trim();
+    const semester = Math.max(0, Math.min(9, Number(req.body?.semester) || 0));
+    const completed: string[] = Array.isArray(req.body?.completedCourses)
+      ? req.body.completedCourses.map((c: unknown) => String(c).trim().toUpperCase()).filter(Boolean).slice(0, 80)
+      : [];
+    const history: { role: 'user' | 'assistant'; content: string }[] = Array.isArray(req.body?.history)
+      ? req.body.history
+          .filter((m: { role?: string; content?: unknown }) => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
+          .map((m: { role: 'user' | 'assistant'; content: string }) => ({ role: m.role, content: String(m.content).slice(0, 4000) }))
+          .slice(-ADVISOR_MAX_HISTORY)
+      : [];
+
+    // Neo vào các ngành hẹp ĐÚNG khối/ngành đã chọn; chưa chọn thì lấy tất cả.
+    const relevant = ADVISOR_SPECS.filter((s) =>
+      (!facultyId || s.facultyId === facultyId) && (!majorId || s.majorId === majorId));
+    const specs = relevant.length ? relevant : ADVISOR_SPECS;
+
+    const system = buildAdvisorSystem(specs, semester, completed);
+    const messages = [...history, { role: 'user' as const, content: question }];
+    const result = await llmComplete({
+      step: 'generation',
+      feature: 'chat',
+      purpose: 'academy_advisor',
+      system,
+      messages,
+      maxTokens: 1800,
+      maxRetries: 2,
+      timeoutMs: 120_000,
+      userId: req.userId,
+    });
+    const answer = ((result.text || '').trim()
+      + (result.biCat ? '\n\n> ⚠️ *Trả lời hơi dài nên bị cắt. Hỏi tiếp “nói tiếp” để nghe nốt.*' : '')).trim();
+    if (!answer) throw new AppError('AI chưa trả lời được. Thử lại nhé.', 502);
+    res.json({ success: true, data: { answer } });
   } catch (error) {
     next(error);
   }

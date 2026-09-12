@@ -88,7 +88,17 @@ export default function AcademyPage() {
   const [onboardingDismissed, setOnboardingDismissed] = useState(false);
   /** "Đổi ngành" re-opens the dialog straight at the major step. */
   const [reopenAtMajor, setReopenAtMajor] = useState(false);
-  const onboardingOpen = reopenAtMajor || (needsOnboarding && !onboardingDismissed);
+  /** Quay về từ Phòng tư vấn (?tuvan=faculty.major) → mở thẳng bước chọn ngành hẹp. */
+  const [preset, setPreset] = useState<{ faculty: string; major: string } | null>(null);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const p = new URLSearchParams(window.location.search).get('tuvan');
+    if (p && p.includes('.')) {
+      const [f, m] = p.split('.');
+      if (f && m) setPreset({ faculty: f, major: m });
+    }
+  }, []);
+  const onboardingOpen = !!preset || reopenAtMajor || (needsOnboarding && !onboardingDismissed);
 
   const faculty = getFaculty(profile.faculty);
   const major = getCatMajor(profile.faculty, profile.major);
@@ -384,7 +394,13 @@ export default function AcademyPage() {
         <AcademyOnboarding
           open
           initialStep={reopenAtMajor ? 'faculty' : 'ask'}
-          onClose={() => { setReopenAtMajor(false); setOnboardingDismissed(true); }}
+          presetFaculty={preset?.faculty ?? null}
+          presetMajor={preset?.major ?? null}
+          onClose={() => {
+            setReopenAtMajor(false);
+            setOnboardingDismissed(true);
+            if (preset) { setPreset(null); if (typeof window !== 'undefined') window.history.replaceState(null, '', '/academy'); }
+          }}
         />
       )}
     </div>

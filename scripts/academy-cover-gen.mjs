@@ -34,6 +34,12 @@ const TONG = {
   ic: ['#402a10', '#241708', '#f0cf8a'], as: ['#45161a', '#280c0f', '#eec39a'],
   ra: ['#123a20', '#081f11', '#d8dc9a'], dx: ['#361452', '#1d0a2e', '#e6c5f0'],
   chung: ['#241d44', '#120e26', '#d9d3ea'],
+  // Các khối ngành ngoài CNTT — vẫn cùng họ màu tối + serif ánh kim, lệch tông
+  // để phân biệt khối: bba (kinh doanh) navy-vàng · mc (truyền thông) mận-hồng ·
+  // lang (ngôn ngữ) lam ngọc · law (luật) đồng tối · cs (khoa học máy tính) tím.
+  bba: ['#1c2b52', '#0d1730', '#e6cf92'], mc: ['#4a1530', '#2a0c1c', '#f0c0a8'],
+  lang: ['#123a44', '#08202a', '#cfe0d8'], law: ['#2a2418', '#160f08', '#e0c78a'],
+  cs: ['#241452', '#120a2e', '#c9b8f0'],
 };
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');

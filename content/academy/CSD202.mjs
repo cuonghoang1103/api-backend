@@ -470,6 +470,41 @@ const c6q = quiz('csd202-quiz-6', 'Quiz 6 — Graphs & hashing|||Quiz 6 — Đ�
   { id: 'q3', question: 'Xung đột hash xử lý bằng?', options: ['Bỏ key', 'Chaining (list mỗi bucket) hoặc open addressing', 'Sắp xếp', 'Tăng O'], correctIndex: 1, explanation: 'Chaining hoặc open addressing giải quyết collision.' },
 ]);
 
+// Muc "Tai lieu tham khao" — noi dung GOC (trich dan + link chinh thuc mien phi
+// + tro giao trinh/slide day du tren FLM). KHONG upload PDF ban quyen len CDN.
+const taiLieu = doc('csd202-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Tổng hợp tài liệu học môn: giáo trình & slide chính thức (trên FLM), sách tham khảo, tài liệu chính thức miễn phí và lộ trình tự học.',
+  [[
+    `<span class="eyebrow">CSD202 · Materials</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">Everything to study Data Structures & Algorithms (C++), in one place. The full official slides &amp; textbook are on <strong>FLM</strong> (where FPTU students access them legitimately); below are free, legal resources.</p>
+<h3>Official / free resources</h3>
+<ul>
+<li><a href="https://www.geeksforgeeks.org/data-structures/" target="_blank" rel="noopener">GeeksforGeeks — DSA</a></li>
+<li><a href="https://visualgo.net/en" target="_blank" rel="noopener">VisuAlgo — visualise algorithms</a></li>
+<li><a href="https://en.cppreference.com/" target="_blank" rel="noopener">cppreference</a></li>
+</ul>
+<h3>Reference book</h3>
+<p><em>Introduction to Algorithms — Cormen, Leiserson, Rivest, Stein (MIT Press, CLRS)</em>.</p>
+<h3>Course textbook &amp; slides</h3>
+<p>The official FPTU giáo trình &amp; lecture slides for CSD202 are on <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — sign in with your FPTU account.</p>
+<div class="callout"><span class="badge">Study path</span> Big-O → lists/stacks/queues → recursion → sorting/searching → trees/BST → graphs/hashing.</div>`,
+    `<span class="eyebrow">CSD202 · Tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Mọi thứ cần để học Cấu trúc dữ liệu & giải thuật (C++), gom về một chỗ. Slide &amp; giáo trình chính thức đầy đủ nằm trên <strong>FLM</strong> (nơi SV FPTU truy cập hợp lệ); bên dưới là nguồn miễn phí, hợp pháp.</p>
+<h3>Tài liệu chính thức / miễn phí</h3>
+<ul>
+<li><a href="https://www.geeksforgeeks.org/data-structures/" target="_blank" rel="noopener">GeeksforGeeks — DSA</a></li>
+<li><a href="https://visualgo.net/en" target="_blank" rel="noopener">VisuAlgo — visualise algorithms</a></li>
+<li><a href="https://en.cppreference.com/" target="_blank" rel="noopener">cppreference</a></li>
+</ul>
+<h3>Sách tham khảo</h3>
+<p><em>Introduction to Algorithms — Cormen, Leiserson, Rivest, Stein (MIT Press, CLRS)</em>.</p>
+<h3>Giáo trình &amp; slide của môn</h3>
+<p>Giáo trình FPTU &amp; slide bài giảng chính thức của CSD202 có trên <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — đăng nhập bằng tài khoản FPTU.</p>
+<div class="callout"><span class="badge">Lộ trình học</span> Big-O → list/stack/queue → đệ quy → sắp xếp/tìm kiếm → cây/BST → đồ thị/hashing.</div>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola3', name: 'Kỳ 3', ordinal: 5 },
   course: {
@@ -479,6 +514,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/CSD202.webp',
     shortDescription: 'The core CS course — Big-O, linked lists, stacks/queues, recursion, sorting/searching, trees/BST, graphs & hashing, all in C++. Bilingual, with runnable code & exercises.|||Môn CS lõi — Big-O, linked list, stack/queue, đệ quy, sorting/searching, tree/BST, đồ thị & hashing, tất cả bằng C++. Song ngữ, code chạy được & bài tập.',
     description: 'Môn <strong>CSD202 — Cấu trúc dữ liệu &amp; giải thuật (C++)</strong> (ngành Kỹ thuật phần mềm, kỳ 3). Nền tảng của khoa học máy tính: <strong>Big-O</strong> → <strong>linked list</strong> → <strong>stack/queue</strong> → <strong>đệ quy, sorting &amp; searching</strong> → <strong>cây &amp; BST</strong> → <strong>đồ thị &amp; hashing</strong>, hiện thực bằng <strong>C++</strong>. Bám giáo trình FLM (9 CLO), song ngữ, code C++ chạy được và bài tập kèm lời giải. Đây cũng là nền cho phỏng vấn kỹ thuật.',
@@ -486,6 +522,7 @@ export default {
     requirements: 'Đã học lập trình cơ bản (PRF/PRO) và C++ nền. Cần trình biên dịch C++ (g++/clang, hoặc IDE như Visual Studio/CLion).',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Vì sao DSA, 9 CLO, lộ trình.', lessons: [intro] },
     { title: 'Chương 1 — Big-O & C++|||Chapter 1 — Big-O & C++', description: 'OOP C++/template, phân tích độ phức tạp.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Linked list|||Chapter 2 — Linked lists', description: 'Node/con trỏ, singly/doubly, so mảng.', lessons: [c2, c2q] },

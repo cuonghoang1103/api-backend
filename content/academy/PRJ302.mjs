@@ -294,6 +294,41 @@ const c4q = quiz('prj302-quiz-4', 'Quiz 4 — MVC & JPA|||Quiz 4 — MVC & JPA',
   { id: 'q3', question: 'JPA thay thế gì?', options: ['JSP', 'JDBC/DAO viết tay (ánh xạ entity, ít boilerplate)', 'Servlet', 'Tomcat'], correctIndex: 1, explanation: 'JPA/ORM giảm code JDBC thủ công.' },
 ]);
 
+// Muc "Tai lieu tham khao" — noi dung GOC (trich dan + link chinh thuc mien phi
+// + tro giao trinh/slide day du tren FLM). KHONG upload PDF ban quyen len CDN.
+const taiLieu = doc('prj302-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Tổng hợp tài liệu học môn: giáo trình & slide chính thức (trên FLM), sách tham khảo, tài liệu chính thức miễn phí và lộ trình tự học.',
+  [[
+    `<span class="eyebrow">PRJ302 · Materials</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">Everything to study Java Web (Servlet / JSP / JDBC), in one place. The full official slides &amp; textbook are on <strong>FLM</strong> (where FPTU students access them legitimately); below are free, legal resources.</p>
+<h3>Official / free resources</h3>
+<ul>
+<li><a href="https://jakarta.ee/learn/" target="_blank" rel="noopener">Jakarta EE — official docs</a></li>
+<li><a href="https://www.baeldung.com/intro-to-servlets" target="_blank" rel="noopener">Baeldung — Servlets & JSP</a></li>
+<li><a href="https://docs.oracle.com/javase/tutorial/" target="_blank" rel="noopener">Oracle — Java tutorials</a></li>
+</ul>
+<h3>Reference book</h3>
+<p><em>Head First Servlets and JSP — Basham, Sierra, Bates (O'Reilly)</em>.</p>
+<h3>Course textbook &amp; slides</h3>
+<p>The official FPTU giáo trình &amp; lecture slides for PRJ302 are on <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — sign in with your FPTU account.</p>
+<div class="callout"><span class="badge">Study path</span> Servlet & request/response → JSP & EL → JDBC → session → MVC → JPA.</div>`,
+    `<span class="eyebrow">PRJ302 · Tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Mọi thứ cần để học Java Web (Servlet / JSP / JDBC), gom về một chỗ. Slide &amp; giáo trình chính thức đầy đủ nằm trên <strong>FLM</strong> (nơi SV FPTU truy cập hợp lệ); bên dưới là nguồn miễn phí, hợp pháp.</p>
+<h3>Tài liệu chính thức / miễn phí</h3>
+<ul>
+<li><a href="https://jakarta.ee/learn/" target="_blank" rel="noopener">Jakarta EE — official docs</a></li>
+<li><a href="https://www.baeldung.com/intro-to-servlets" target="_blank" rel="noopener">Baeldung — Servlets & JSP</a></li>
+<li><a href="https://docs.oracle.com/javase/tutorial/" target="_blank" rel="noopener">Oracle — Java tutorials</a></li>
+</ul>
+<h3>Sách tham khảo</h3>
+<p><em>Head First Servlets and JSP — Basham, Sierra, Bates (O'Reilly)</em>.</p>
+<h3>Giáo trình &amp; slide của môn</h3>
+<p>Giáo trình FPTU &amp; slide bài giảng chính thức của PRJ302 có trên <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — đăng nhập bằng tài khoản FPTU.</p>
+<div class="callout"><span class="badge">Lộ trình học</span> Servlet & request/response → JSP & EL → JDBC → session → MVC → JPA.</div>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola4', name: 'Kỳ 4', ordinal: 6 },
   course: {
@@ -303,6 +338,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/PRJ302.webp',
     shortDescription: 'Server-side Java web — Servlets, JSP/EL/JSTL, JDBC, sessions, the MVC pattern, JPA and using AI. Bilingual, with Java/JSP code & exercises.|||Java web phía server — Servlet, JSP/EL/JSTL, JDBC, session, mẫu MVC, JPA và dùng AI. Song ngữ, code Java/JSP & bài tập.',
     description: 'Môn <strong>PRJ302 — Phát triển ứng dụng Java web</strong> (ngành Kỹ thuật phần mềm, kỳ 4). Xây web phía server bằng Java: <strong>Servlet</strong> (request/response, deploy WAR) → <strong>JSP/EL/JSTL</strong> (view) → <strong>JDBC</strong> (database, chống SQL injection) → <strong>session &amp; cookie</strong> → <strong>MVC</strong> (Servlet controller + JSP view + DAO model) → <strong>JPA</strong> và dùng <strong>AI</strong> khi phát triển. Bám giáo trình FLM (9 CLO), song ngữ, code Java/JSP chạy được và bài tập kèm lời giải.',
@@ -310,6 +346,7 @@ export default {
     requirements: 'Đã học Java (PRO192) và SQL/CSDL (DBI202). Cần JDK, Apache Tomcat, một IDE (IntelliJ/Eclipse/NetBeans) và một database (MySQL).',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Java web chạy thế nào, 9 CLO, lộ trình.', lessons: [intro] },
     { title: 'Chương 1 — Servlet|||Chapter 1 — Servlets', description: 'Request/response, doGet/doPost, deploy.', lessons: [c1, c1q] },
     { title: 'Chương 2 — JSP, EL & JSTL|||Chapter 2 — JSP, EL & JSTL', description: 'View động, EL, JSTL, forward.', lessons: [c2, c2q] },

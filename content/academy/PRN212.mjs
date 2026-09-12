@@ -1050,6 +1050,41 @@ const c11q = quiz('prn212-quiz-11', 'Quiz 11 — Concurrency', 'Quiz 11 — Đ�
   { id: 'q3', question: 'Task.WhenAll(tasks) dùng để?', options: ['Chạy tuần tự', 'Chạy nhiều task đồng thời và đợi tất cả xong', 'Huỷ task', 'Đo thời gian'], correctIndex: 1, explanation: 'WhenAll chạy song song và hoàn thành khi mọi task xong.' },
 ]);
 
+// Muc "Tai lieu tham khao" — noi dung GOC (trich dan + link chinh thuc mien phi
+// + tro giao trinh/slide day du tren FLM). KHONG upload PDF ban quyen len CDN.
+const taiLieu = doc('prn212-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Tổng hợp tài liệu học môn: giáo trình & slide chính thức (trên FLM), sách tham khảo, tài liệu chính thức miễn phí và lộ trình tự học.',
+  [[
+    `<span class="eyebrow">PRN212 · Materials</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">Everything to study .NET / C# desktop programming, in one place. The full official slides &amp; textbook are on <strong>FLM</strong> (where FPTU students access them legitimately); below are free, legal resources.</p>
+<h3>Official / free resources</h3>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/csharp/" target="_blank" rel="noopener">Microsoft Learn — C# guide</a></li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/" target="_blank" rel="noopener">.NET documentation</a></li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/desktop/" target="_blank" rel="noopener">WPF / WinForms desktop docs</a></li>
+</ul>
+<h3>Reference book</h3>
+<p><em>C# in Depth — Jon Skeet (Manning)</em>.</p>
+<h3>Course textbook &amp; slides</h3>
+<p>The official FPTU giáo trình &amp; lecture slides for PRN212 are on <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — sign in with your FPTU account.</p>
+<div class="callout"><span class="badge">Study path</span> C# & OOP → collections/LINQ → WinForms/WPF UI → file & database access.</div>`,
+    `<span class="eyebrow">PRN212 · Tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Mọi thứ cần để học lập trình desktop .NET / C#, gom về một chỗ. Slide &amp; giáo trình chính thức đầy đủ nằm trên <strong>FLM</strong> (nơi SV FPTU truy cập hợp lệ); bên dưới là nguồn miễn phí, hợp pháp.</p>
+<h3>Tài liệu chính thức / miễn phí</h3>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/csharp/" target="_blank" rel="noopener">Microsoft Learn — C# guide</a></li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/" target="_blank" rel="noopener">.NET documentation</a></li>
+<li><a href="https://learn.microsoft.com/en-us/dotnet/desktop/" target="_blank" rel="noopener">WPF / WinForms desktop docs</a></li>
+</ul>
+<h3>Sách tham khảo</h3>
+<p><em>C# in Depth — Jon Skeet (Manning)</em>.</p>
+<h3>Giáo trình &amp; slide của môn</h3>
+<p>Giáo trình FPTU &amp; slide bài giảng chính thức của PRN212 có trên <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — đăng nhập bằng tài khoản FPTU.</p>
+<div class="callout"><span class="badge">Lộ trình học</span> C# & OOP → collection/LINQ → giao diện WinForms/WPF → đọc file & database.</div>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola5', name: 'Kỳ 5', ordinal: 7 },
   course: {
@@ -1059,6 +1094,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/PRN212.webp',
     shortDescription: 'Build cross-platform desktop apps in C# on .NET 8 — C#, OOP, LINQ, design patterns, WPF, Entity Framework Core, files & concurrency. Bilingual, exam-aligned.|||Xây ứng dụng desktop đa nền tảng bằng C# trên .NET 8 — C#, OOP, LINQ, design pattern, WPF, Entity Framework Core, file & đồng thời. Song ngữ, bám đề thi.',
     description: 'Môn <strong>PRN212 — Lập trình ứng dụng đa nền tảng cơ bản với .NET</strong> (ngành Kỹ thuật phần mềm, kỳ 5). Nội dung dựng theo giáo trình chính thức FLM (11 chương, 6 CLO), song ngữ, kèm code C#/.NET 8 chạy được và quiz mỗi chương.<br><br>Bạn sẽ đi từ nền tảng .NET & C# → OOP → Collections/Generics → Design Pattern → Delegate/Event/LINQ → WPF (XAML, MVVM, data binding) → Entity Framework Core → File I/O → XML/JSON → lập trình đồng thời (async/await). Tiên quyết: PRO192, DBI202.',
@@ -1066,6 +1102,7 @@ export default {
     requirements: 'Đã học PRO192 (OOP với Java) và DBI202 (cơ sở dữ liệu). Cần cài .NET 8 SDK + Visual Studio 2022 (hoặc VS Code + C# Dev Kit).',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Mục tiêu, CLO, cách đánh giá, lộ trình 11 chương.', lessons: [intro] },
     { title: 'Chương 1 — Nền tảng .NET & Visual Studio|||Chapter 1 — .NET platform & Visual Studio', description: '.NET Core vs Framework, CLR/IL, tạo & chạy project .NET 8.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Lập trình C#|||Chapter 2 — C# programming', description: 'Kiểu, chuyển kiểu, luồng điều khiển, xử lý ngoại lệ.', lessons: [c2, c2q] },

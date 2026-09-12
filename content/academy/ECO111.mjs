@@ -594,6 +594,81 @@ const c6q = quiz('eco111-quiz-4', 'Quiz 4 — Market structures|||Quiz 4 — C�
   { id: 'q3', question: 'A Nash equilibrium is a situation in which…|||Cân bằng Nash là tình huống trong đó…', options: ['all players earn the highest possible joint profit|||mọi người chơi đạt tổng lợi nhuận cao nhất có thể', 'no player can gain by changing strategy while the others keep theirs|||không người chơi nào được lợi hơn khi tự đổi chiến lược trong lúc người khác giữ nguyên', 'the government sets the price|||chính phủ ấn định giá', 'firms always cooperate|||các doanh nghiệp luôn hợp tác'], correctIndex: 1, explanation: 'In the prisoner’s dilemma the Nash equilibrium (Low, Low) is worse for both than (High, High).|||Trong thế lưỡng nan của người tù, cân bằng Nash (Thấp, Thấp) tệ hơn (Cao, Cao) với cả hai.' },
 ]);
 
+const taiLieu = doc('eco111-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">ECO111 · 📚 Resource hub</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">One hub for learning microeconomics: the official syllabus and slides, books, free official resources, video channels, tools and a self-study roadmap.</p>
+<h3>📘 Syllabus &amp; slides</h3>
+<p>Sign in to <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) with your FPTU account to read the official ECO111 syllabus and lecture slides.</p>
+<h3>📗 Books</h3>
+<ul>
+<li><a href="https://openstax.org/details/books/principles-microeconomics-3e" target="_blank" rel="noopener">Principles of Microeconomics 3e</a> — OpenStax: a free, peer-reviewed open textbook.</li>
+<li><a href="https://gregmankiw.blogspot.com/" target="_blank" rel="noopener">Principles of Microeconomics</a> — N. Gregory Mankiw (Cengage) — the classic introductory text; the link goes to the author’s blog.</li>
+</ul>
+<h3>🌐 Free official resources</h3>
+<ul>
+<li><a href="https://www.khanacademy.org/economics-finance-domain" target="_blank" rel="noopener">Khan Academy — Economics</a> — free lessons and practice on supply, demand, elasticity and market structures.</li>
+<li><a href="https://mru.org/" target="_blank" rel="noopener">Marginal Revolution University</a> — a free video course in principles of economics.</li>
+<li><a href="https://ourworldindata.org/" target="_blank" rel="noopener">Our World in Data</a> — open data and charts to test economic ideas against evidence.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@MarginalRevolutionUniversity" target="_blank" rel="noopener">Marginal Revolution University</a> — short, rigorous micro lessons.</li>
+<li><a href="https://www.youtube.com/@crashcourse" target="_blank" rel="noopener">CrashCourse</a> — the Crash Course Economics series.</li>
+<li><a href="https://www.youtube.com/@khanacademy" target="_blank" rel="noopener">Khan Academy</a> — worked examples on graphs and elasticity.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://www.google.com/sheets/about/" target="_blank" rel="noopener">Google Sheets</a> — plot supply and demand from equations and find the equilibrium.</li>
+<li><a href="https://www.microsoft.com/en-us/microsoft-365/excel" target="_blank" rel="noopener">Microsoft Excel</a> — build cost tables (FC, VC, MC, ATC) like Exercise 3.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations (exam core)</strong> — supply, demand and elasticity, following Part 1 here.</li>
+<li><strong>Practise</strong> — solve two or three equation problems a week and always draw the graph.</li>
+<li><strong>Go deeper</strong> — market structures and game theory with the MRU videos.</li>
+<li><strong>Apply</strong> — take one price change in the news and explain which curve shifted and why.</li>
+</ol>
+<div class="callout"><span class="badge">Note</span> An original hub of real links — no copyrighted slides or books are embedded. If a link moves, start from the official homepage.</div>`,
+    `<span class="eyebrow">ECO111 · 📚 Trung tâm tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Một nơi gom để học kinh tế vi mô: giáo trình &amp; slide chính thức, sách, tài liệu miễn phí chính thống, kênh video, công cụ, và lộ trình tự học.</p>
+<h3>📘 Giáo trình &amp; slide</h3>
+<p>Đăng nhập <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) bằng tài khoản FPTU để đọc giáo trình và slide bài giảng chính thức của ECO111.</p>
+<h3>📗 Sách</h3>
+<ul>
+<li><a href="https://openstax.org/details/books/principles-microeconomics-3e" target="_blank" rel="noopener">Principles of Microeconomics 3e</a> — OpenStax: giáo trình mở miễn phí, có bình duyệt.</li>
+<li><a href="https://gregmankiw.blogspot.com/" target="_blank" rel="noopener">Principles of Microeconomics</a> — N. Gregory Mankiw (Cengage) — giáo trình nhập môn kinh điển; link dẫn tới blog của tác giả.</li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li><a href="https://www.khanacademy.org/economics-finance-domain" target="_blank" rel="noopener">Khan Academy — Economics</a> — bài học và bài luyện miễn phí về cung, cầu, co giãn và cấu trúc thị trường.</li>
+<li><a href="https://mru.org/" target="_blank" rel="noopener">Marginal Revolution University</a> — khoá học video miễn phí về nguyên lý kinh tế học.</li>
+<li><a href="https://ourworldindata.org/" target="_blank" rel="noopener">Our World in Data</a> — dữ liệu mở và biểu đồ để đối chiếu ý tưởng kinh tế với bằng chứng.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@MarginalRevolutionUniversity" target="_blank" rel="noopener">Marginal Revolution University</a> — bài giảng vi mô ngắn, chặt chẽ.</li>
+<li><a href="https://www.youtube.com/@crashcourse" target="_blank" rel="noopener">CrashCourse</a> — loạt video Crash Course Economics.</li>
+<li><a href="https://www.youtube.com/@khanacademy" target="_blank" rel="noopener">Khan Academy</a> — ví dụ giải mẫu về đồ thị và độ co giãn.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://www.google.com/sheets/about/" target="_blank" rel="noopener">Google Sheets</a> — vẽ cung cầu từ phương trình và tìm điểm cân bằng.</li>
+<li><a href="https://www.microsoft.com/en-us/microsoft-365/excel" target="_blank" rel="noopener">Microsoft Excel</a> — lập bảng chi phí (FC, VC, MC, ATC) như Bài tập 3.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền tảng (lõi thi)</strong> — cung, cầu và co giãn, theo đúng Phần 1 ở đây.</li>
+<li><strong>Luyện tập</strong> — mỗi tuần giải hai, ba bài phương trình và lần nào cũng vẽ đồ thị.</li>
+<li><strong>Đào sâu</strong> — cấu trúc thị trường và lý thuyết trò chơi qua video MRU.</li>
+<li><strong>Vận dụng</strong> — lấy một biến động giá trên báo và giải thích đường nào đã dịch chuyển, vì sao.</li>
+</ol>
+<div class="callout"><span class="badge">Lưu ý</span> Đây là trung tâm liên kết nguyên gốc — không nhúng slide/sách có bản quyền. Link đổi thì vào trang chủ chính thức để tìm.</div>`,
+  ]]);
+
 export default {
   semester: { code: 'KY1', name: 'Kỳ 1', ordinal: 1 },
   course: {
@@ -603,6 +678,7 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/ECO111.webp',
     shortDescription: 'How households and firms decide and how markets work: supply and demand, elasticity, surplus, price controls and taxes, externalities and public goods, costs of production, competition, monopoly and game theory. Bilingual, with exercises and quizzes.|||Hộ gia đình và doanh nghiệp ra quyết định thế nào, thị trường vận hành ra sao: cung cầu, co giãn, thặng dư, thuế, ngoại ứng, chi phí, cạnh tranh, độc quyền, lý thuyết trò chơi. Song ngữ, có bài tập và quiz.',
     description: 'Môn <strong>ECO111 — Microeconomics (Kinh tế vi mô)</strong> (khối Quản trị Kinh doanh, kỳ 1) giúp hiểu cách <strong>hộ gia đình và doanh nghiệp ra quyết định</strong> và cách <strong>thị trường</strong> hình thành giá. Từ <strong>tư duy kinh tế</strong> (chi phí cơ hội, cận biên, lợi thế so sánh) → <strong>cung, cầu và độ co giãn</strong> → <strong>thặng dư, kiểm soát giá, thuế</strong> và thương mại → <strong>ngoại ứng, hàng hoá công</strong> và <strong>chi phí sản xuất</strong> → <strong>cạnh tranh hoàn hảo, độc quyền, cạnh tranh độc quyền, độc quyền nhóm</strong> và lý thuyết trò chơi. Bám cấu trúc giáo trình kinh tế vi mô nhập môn chuẩn, song ngữ Anh–Việt, có ví dụ số đã kiểm, bài tập kèm lời giải và quiz cuối mỗi chương.',
@@ -610,6 +686,7 @@ export default {
     requirements: 'Không cần kiến thức kinh tế trước\nĐại số phổ thông: giải phương trình bậc nhất, đọc đồ thị đường thẳng\nChuẩn bị giấy bút để vẽ đồ thị cung cầu khi học',
   },
   sections: [
+    { title: '📚 Course materials|||📚 Tài liệu tham khảo', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Course introduction|||Giới thiệu môn học', description: 'Khan hiếm, chi phí cơ hội, PPF, lợi thế so sánh.', lessons: [intro] },
     { title: 'Part 1 — Supply, demand & elasticity|||Phần 1 — Cung, cầu & độ co giãn', description: 'Luật cầu, luật cung, cân bằng, co giãn và doanh thu.', lessons: [c1, c2, c1e, c1q] },
     { title: 'Part 2 — Markets & government|||Phần 2 — Thị trường & chính phủ', description: 'Thặng dư, giá trần, giá sàn, thuế, thương mại.', lessons: [c3, c3e, c3q] },

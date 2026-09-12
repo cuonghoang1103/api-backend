@@ -607,6 +607,83 @@ const c8q = quiz('mkt101-quiz-4', 'Quiz 4 — Place & promotion|||Quiz 4 — Ph�
   { id: 'q3', question: 'Setting the promotion budget to match what competitors spend is the…|||Lập ngân sách xúc tiến bằng mức đối thủ đang chi là phương pháp…', options: ['affordable method|||theo khả năng', 'percentage-of-sales method|||theo % doanh thu', 'competitive-parity method|||ngang bằng cạnh tranh', 'objective-and-task method|||theo mục tiêu – nhiệm vụ'], correctIndex: 2, explanation: 'Competitive parity follows rivals; objective-and-task starts from what the promotion must achieve.|||Ngang bằng cạnh tranh chạy theo đối thủ; mục tiêu – nhiệm vụ bắt đầu từ việc xúc tiến phải đạt được gì.' },
 ]);
 
+const taiLieu = doc('mkt101-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">MKT101 · 📚 Resource hub</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">One hub for learning marketing: the official syllabus and slides, books, free official resources, video channels, tools and a self-study roadmap.</p>
+<h3>📘 Syllabus &amp; slides</h3>
+<p>Sign in to <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) with your FPTU account to read the official MKT101 syllabus and lecture slides.</p>
+<h3>📗 Books</h3>
+<ul>
+<li><a href="https://openstax.org/details/books/principles-marketing" target="_blank" rel="noopener">Principles of Marketing</a> — OpenStax: a free, peer-reviewed open textbook.</li>
+<li><a href="https://www.pkotler.org/" target="_blank" rel="noopener">Principles of Marketing</a> — Philip Kotler &amp; Gary Armstrong (Pearson) — the classic text; the link goes to Philip Kotler’s site.</li>
+</ul>
+<h3>🌐 Free official resources</h3>
+<ul>
+<li><a href="https://blog.hubspot.com/marketing" target="_blank" rel="noopener">HubSpot Marketing Blog</a> — free guides on content, social media and inbound marketing.</li>
+<li><a href="https://www.thinkwithgoogle.com/" target="_blank" rel="noopener">Think with Google</a> — consumer insights and marketing research from Google.</li>
+<li><a href="https://www.ama.org/" target="_blank" rel="noopener">American Marketing Association</a> — definitions, articles and professional resources.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@HubSpotMarketing" target="_blank" rel="noopener">HubSpot Marketing</a> — practical marketing tutorials.</li>
+<li><a href="https://www.youtube.com/@thinkwithgoogle" target="_blank" rel="noopener">Think with Google</a> — consumer and advertising insights.</li>
+<li><a href="https://www.youtube.com/@harvardbusinessreview" target="_blank" rel="noopener">Harvard Business Review</a> — strategy, brands and customers.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://trends.google.com/" target="_blank" rel="noopener">Google Trends</a> — see what people search for — quick market research.</li>
+<li><a href="https://analytics.google.com/" target="_blank" rel="noopener">Google Analytics</a> — measure website traffic and conversions.</li>
+<li><a href="https://www.google.com/sheets/about/" target="_blank" rel="noopener">Google Sheets</a> — segment-scoring and break-even calculations like the exercises.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations (exam core)</strong> — the marketing process, STP and the 4Ps, following the lessons here.</li>
+<li><strong>Practise</strong> — write an STP and a positioning statement for a product you use every day.</li>
+<li><strong>Go deeper</strong> — analyse one real campaign each week: target, message, channels, results.</li>
+<li><strong>Apply</strong> — draft a mini marketing plan with a budget and three KPIs.</li>
+</ol>
+<div class="callout"><span class="badge">Note</span> An original hub of real links — no copyrighted slides or books are embedded. If a link moves, start from the official homepage.</div>`,
+    `<span class="eyebrow">MKT101 · 📚 Trung tâm tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Một nơi gom để học marketing: giáo trình &amp; slide chính thức, sách, tài liệu miễn phí chính thống, kênh video, công cụ, và lộ trình tự học.</p>
+<h3>📘 Giáo trình &amp; slide</h3>
+<p>Đăng nhập <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) bằng tài khoản FPTU để đọc giáo trình và slide bài giảng chính thức của MKT101.</p>
+<h3>📗 Sách</h3>
+<ul>
+<li><a href="https://openstax.org/details/books/principles-marketing" target="_blank" rel="noopener">Principles of Marketing</a> — OpenStax: giáo trình mở miễn phí, có bình duyệt.</li>
+<li><a href="https://www.pkotler.org/" target="_blank" rel="noopener">Principles of Marketing</a> — Philip Kotler &amp; Gary Armstrong (Pearson) — giáo trình kinh điển; link dẫn tới trang của Philip Kotler.</li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li><a href="https://blog.hubspot.com/marketing" target="_blank" rel="noopener">HubSpot Marketing Blog</a> — hướng dẫn miễn phí về nội dung, mạng xã hội và inbound marketing.</li>
+<li><a href="https://www.thinkwithgoogle.com/" target="_blank" rel="noopener">Think with Google</a> — insight người tiêu dùng và nghiên cứu marketing từ Google.</li>
+<li><a href="https://www.ama.org/" target="_blank" rel="noopener">American Marketing Association</a> — định nghĩa, bài viết và tài nguyên nghề nghiệp.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@HubSpotMarketing" target="_blank" rel="noopener">HubSpot Marketing</a> — hướng dẫn marketing thực hành.</li>
+<li><a href="https://www.youtube.com/@thinkwithgoogle" target="_blank" rel="noopener">Think with Google</a> — insight người tiêu dùng và quảng cáo.</li>
+<li><a href="https://www.youtube.com/@harvardbusinessreview" target="_blank" rel="noopener">Harvard Business Review</a> — chiến lược, thương hiệu và khách hàng.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://trends.google.com/" target="_blank" rel="noopener">Google Trends</a> — xem người ta tìm kiếm gì — nghiên cứu thị trường nhanh.</li>
+<li><a href="https://analytics.google.com/" target="_blank" rel="noopener">Google Analytics</a> — đo lưu lượng và chuyển đổi của website.</li>
+<li><a href="https://www.google.com/sheets/about/" target="_blank" rel="noopener">Google Sheets</a> — chấm điểm phân khúc và tính hoà vốn như các bài tập.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền tảng (lõi thi)</strong> — quy trình marketing, STP và 4P, theo đúng các bài ở đây.</li>
+<li><strong>Luyện tập</strong> — viết STP và câu định vị cho một sản phẩm bạn dùng hằng ngày.</li>
+<li><strong>Đào sâu</strong> — mỗi tuần phân tích một chiến dịch thật: khách hàng mục tiêu, thông điệp, kênh, kết quả.</li>
+<li><strong>Vận dụng</strong> — soạn một kế hoạch marketing nhỏ kèm ngân sách và ba chỉ số KPI.</li>
+</ol>
+<div class="callout"><span class="badge">Lưu ý</span> Đây là trung tâm liên kết nguyên gốc — không nhúng slide/sách có bản quyền. Link đổi thì vào trang chủ chính thức để tìm.</div>`,
+  ]]);
+
 export default {
   semester: { code: 'KY1', name: 'Kỳ 1', ordinal: 1 },
   course: {
@@ -616,6 +693,7 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/MKT101.webp',
     shortDescription: 'Creating value for customers: the marketing process, strategy and environment, research, consumer behaviour, segmentation, targeting and positioning, products and brands, pricing, channels and integrated communications. Bilingual, with exercises and quizzes.|||Tạo giá trị cho khách hàng: quy trình marketing, chiến lược, môi trường, nghiên cứu, hành vi mua, STP, sản phẩm, thương hiệu, định giá, phân phối và truyền thông tích hợp. Song ngữ, có bài tập và quiz.',
     description: 'Môn <strong>MKT101 — Marketing Principles (Nguyên lý marketing)</strong> (khối Quản trị Kinh doanh, kỳ 1) trình bày marketing như quá trình <strong>tạo giá trị cho khách hàng để thu về giá trị</strong>. Từ <strong>quy trình marketing và các triết lý</strong> → <strong>chiến lược</strong> (BCG, Ansoff), <strong>môi trường và nghiên cứu marketing</strong> → <strong>hành vi người mua</strong> và <strong>STP</strong> (phân khúc, chọn thị trường mục tiêu, định vị) → <strong>sản phẩm, thương hiệu, vòng đời</strong> và <strong>định giá</strong> (giá trị, chi phí, hoà vốn) → <strong>kênh phân phối</strong> và <strong>truyền thông marketing tích hợp</strong>. Bám cấu trúc giáo trình marketing căn bản chuẩn, song ngữ Anh–Việt, có bài tập tình huống (giả định) kèm lời giải và quiz cuối mỗi phần.',
@@ -623,6 +701,7 @@ export default {
     requirements: 'Không cần kiến thức marketing trước\nTính toán cơ bản với phần trăm\nThói quen quan sát quảng cáo, cửa hàng và hành vi mua sắm xung quanh',
   },
   sections: [
+    { title: '📚 Course materials|||📚 Tài liệu tham khảo', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Course introduction|||Giới thiệu môn học', description: 'Marketing là gì, quy trình 5 bước, các triết lý.', lessons: [intro] },
     { title: 'Part 1 — Strategy, environment & research|||Phần 1 — Chiến lược, môi trường & nghiên cứu', description: 'BCG, Ansoff, môi trường vi mô và vĩ mô, nghiên cứu marketing.', lessons: [c1, c2, c1q] },
     { title: 'Part 2 — Customers & STP|||Phần 2 — Khách hàng & STP', description: 'Hành vi người mua, phân khúc, chọn thị trường, định vị.', lessons: [c3, c4, c4e, c4q] },

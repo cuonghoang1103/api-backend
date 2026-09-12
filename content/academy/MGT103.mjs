@@ -585,6 +585,83 @@ const c8q = quiz('mgt103-quiz-5', 'Quiz 5 — Controlling|||Quiz 5 — Kiểm so
   { id: 'q3', question: 'Actual performance is far below a standard that turns out to have been set unrealistically high. The appropriate action is to…|||Kết quả thực tế thấp xa so với một tiêu chuẩn hoá ra được đặt cao phi thực tế. Hành động phù hợp là…', options: ['punish the employees|||phạt nhân viên', 'revise the standard|||điều chỉnh lại tiêu chuẩn', 'ignore the deviation|||bỏ qua sai lệch', 'stop measuring|||ngừng đo lường'], correctIndex: 1, explanation: 'When the standard itself is the problem, correcting performance cannot fix it.|||Khi chính tiêu chuẩn là vấn đề, điều chỉnh kết quả không thể giải quyết được.' },
 ]);
 
+const taiLieu = doc('mgt103-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">MGT103 · 📚 Resource hub</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">One hub for learning management: the official syllabus and slides, books, free official resources, video channels, tools and a self-study roadmap.</p>
+<h3>📘 Syllabus &amp; slides</h3>
+<p>Sign in to <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) with your FPTU account to read the official MGT103 syllabus and lecture slides.</p>
+<h3>📗 Books</h3>
+<ul>
+<li><a href="https://openstax.org/details/books/principles-management" target="_blank" rel="noopener">Principles of Management</a> — OpenStax: a free, peer-reviewed open textbook.</li>
+<li><a href="https://www.pearson.com/" target="_blank" rel="noopener">Management</a> — Stephen P. Robbins &amp; Mary Coulter (Pearson) — the classic introductory text; search the title on the publisher site.</li>
+</ul>
+<h3>🌐 Free official resources</h3>
+<ul>
+<li><a href="https://www.mindtools.com/" target="_blank" rel="noopener">MindTools</a> — practical toolkits on planning, decision making and leadership.</li>
+<li><a href="https://hbr.org/" target="_blank" rel="noopener">Harvard Business Review</a> — articles and cases on strategy, organizing and leadership.</li>
+<li><a href="https://rework.withgoogle.com/" target="_blank" rel="noopener">Google re:Work</a> — free guides on managers, teams and goal setting.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@harvardbusinessreview" target="_blank" rel="noopener">Harvard Business Review</a> — short videos on management ideas.</li>
+<li><a href="https://www.youtube.com/@TED" target="_blank" rel="noopener">TED</a> — talks on leadership, motivation and organizations.</li>
+<li><a href="https://www.youtube.com/@simonsinek" target="_blank" rel="noopener">Simon Sinek</a> — leadership and purpose.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://trello.com/" target="_blank" rel="noopener">Trello</a> — plan and track tasks — planning and controlling in practice.</li>
+<li><a href="https://miro.com/" target="_blank" rel="noopener">Miro</a> — whiteboards for SWOT, organization charts and decision matrices.</li>
+<li><a href="https://www.notion.so/" target="_blank" rel="noopener">Notion</a> — write goals, SMART objectives and meeting notes.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations (exam core)</strong> — the four functions, roles and skills, following the lessons here.</li>
+<li><strong>Practise</strong> — write a SWOT and three SMART goals for a club or team you belong to.</li>
+<li><strong>Go deeper</strong> — read one HBR case a week and identify the POLC decisions in it.</li>
+<li><strong>Apply</strong> — lead a small project and document how you planned, organized, led and controlled it.</li>
+</ol>
+<div class="callout"><span class="badge">Note</span> An original hub of real links — no copyrighted slides or books are embedded. If a link moves, start from the official homepage.</div>`,
+    `<span class="eyebrow">MGT103 · 📚 Trung tâm tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Một nơi gom để học quản trị học: giáo trình &amp; slide chính thức, sách, tài liệu miễn phí chính thống, kênh video, công cụ, và lộ trình tự học.</p>
+<h3>📘 Giáo trình &amp; slide</h3>
+<p>Đăng nhập <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) bằng tài khoản FPTU để đọc giáo trình và slide bài giảng chính thức của MGT103.</p>
+<h3>📗 Sách</h3>
+<ul>
+<li><a href="https://openstax.org/details/books/principles-management" target="_blank" rel="noopener">Principles of Management</a> — OpenStax: giáo trình mở miễn phí, có bình duyệt.</li>
+<li><a href="https://www.pearson.com/" target="_blank" rel="noopener">Management</a> — Stephen P. Robbins &amp; Mary Coulter (Pearson) — giáo trình nhập môn kinh điển; tra tên sách trên trang nhà xuất bản.</li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li><a href="https://www.mindtools.com/" target="_blank" rel="noopener">MindTools</a> — bộ công cụ thực hành về hoạch định, ra quyết định và lãnh đạo.</li>
+<li><a href="https://hbr.org/" target="_blank" rel="noopener">Harvard Business Review</a> — bài viết và tình huống về chiến lược, tổ chức và lãnh đạo.</li>
+<li><a href="https://rework.withgoogle.com/" target="_blank" rel="noopener">Google re:Work</a> — hướng dẫn miễn phí về nhà quản lý, đội nhóm và đặt mục tiêu.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@harvardbusinessreview" target="_blank" rel="noopener">Harvard Business Review</a> — video ngắn về các ý tưởng quản trị.</li>
+<li><a href="https://www.youtube.com/@TED" target="_blank" rel="noopener">TED</a> — bài nói về lãnh đạo, động lực và tổ chức.</li>
+<li><a href="https://www.youtube.com/@simonsinek" target="_blank" rel="noopener">Simon Sinek</a> — lãnh đạo và mục đích.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://trello.com/" target="_blank" rel="noopener">Trello</a> — lập kế hoạch và theo dõi công việc — hoạch định và kiểm soát trong thực tế.</li>
+<li><a href="https://miro.com/" target="_blank" rel="noopener">Miro</a> — bảng trắng cho SWOT, sơ đồ tổ chức và ma trận quyết định.</li>
+<li><a href="https://www.notion.so/" target="_blank" rel="noopener">Notion</a> — viết mục tiêu, mục tiêu SMART và biên bản họp.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền tảng (lõi thi)</strong> — bốn chức năng, vai trò và kỹ năng, theo đúng các bài ở đây.</li>
+<li><strong>Luyện tập</strong> — viết SWOT và ba mục tiêu SMART cho câu lạc bộ hoặc nhóm bạn đang tham gia.</li>
+<li><strong>Đào sâu</strong> — mỗi tuần đọc một tình huống HBR và chỉ ra các quyết định P-O-L-C trong đó.</li>
+<li><strong>Vận dụng</strong> — dẫn dắt một dự án nhỏ và ghi lại cách bạn hoạch định, tổ chức, lãnh đạo, kiểm soát.</li>
+</ol>
+<div class="callout"><span class="badge">Lưu ý</span> Đây là trung tâm liên kết nguyên gốc — không nhúng slide/sách có bản quyền. Link đổi thì vào trang chủ chính thức để tìm.</div>`,
+  ]]);
+
 export default {
   semester: { code: 'KY1', name: 'Kỳ 1', ordinal: 1 },
   course: {
@@ -594,6 +671,7 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/MGT103.webp',
     shortDescription: 'What managers do: the four functions, roles and skills, the evolution of management thought, culture and ethics, decision making, planning and strategy, organizational structure, motivation, leadership and control. Bilingual, with case exercises and quizzes.|||Nhà quản trị làm gì: 4 chức năng, vai trò, kỹ năng, lịch sử tư tưởng, văn hoá và đạo đức, ra quyết định, chiến lược, cơ cấu tổ chức, động viên, lãnh đạo, kiểm soát. Song ngữ, có bài tập tình huống và quiz.',
     description: 'Môn <strong>MGT103 — Introduction to Management (Nhập môn quản trị)</strong> (khối Quản trị Kinh doanh, kỳ 1) giới thiệu công việc của nhà quản trị qua <strong>bốn chức năng hoạch định – tổ chức – lãnh đạo – kiểm soát</strong>. Từ <strong>vai trò, kỹ năng và lịch sử tư tưởng quản trị</strong> → <strong>môi trường, văn hoá, trách nhiệm xã hội và đạo đức</strong> → <strong>ra quyết định, hoạch định và chiến lược</strong> (SWOT, Porter, BCG) → <strong>cơ cấu và thiết kế tổ chức</strong> → <strong>động viên và lãnh đạo</strong> → <strong>kiểm soát</strong> (quy trình, thẻ điểm cân bằng). Bám cấu trúc giáo trình quản trị học nhập môn chuẩn, song ngữ Anh–Việt, có bài tập tình huống kèm lời giải mẫu và quiz cuối mỗi phần.',
@@ -601,6 +679,7 @@ export default {
     requirements: 'Không cần kiến thức quản trị trước\nKhả năng đọc hiểu tình huống và trình bày lập luận\nNên liên hệ với trải nghiệm làm việc nhóm, câu lạc bộ hoặc việc làm thêm của bản thân',
   },
   sections: [
+    { title: '📚 Course materials|||📚 Tài liệu tham khảo', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Course introduction|||Giới thiệu môn học', description: 'Nhà quản trị, POLC, vai trò, kỹ năng, lịch sử tư tưởng.', lessons: [intro] },
     { title: 'Part 1 — The management environment|||Phần 1 — Môi trường quản trị', description: 'Văn hoá, môi trường, trách nhiệm xã hội, đạo đức.', lessons: [c1, c1q] },
     { title: 'Part 2 — Planning & decision making|||Phần 2 — Hoạch định & ra quyết định', description: 'Quy trình quyết định, mục tiêu SMART, SWOT, chiến lược.', lessons: [c3, c4, c4e, c4q] },

@@ -825,6 +825,83 @@ const c8q = quiz('acc101-quiz-4', 'Quiz 4 — Cash, assets, liabilities & VAT|||
   { id: 'q3', question: 'A business on the VAT credit method has output VAT of 30 million and deductible input VAT of 22 million. VAT payable?|||Doanh nghiệp theo phương pháp khấu trừ có thuế GTGT đầu ra 30 triệu, đầu vào được khấu trừ 22 triệu. Thuế GTGT phải nộp?', options: ['52 million|||52 triệu', '8 million|||8 triệu', '30 million|||30 triệu', '22 million|||22 triệu'], correctIndex: 1, explanation: 'VAT payable = output VAT − deductible input VAT = 30 − 22 = 8 million.|||Thuế phải nộp = đầu ra − đầu vào được khấu trừ = 30 − 22 = 8 triệu.' },
 ]);
 
+const taiLieu = doc('acc101-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">ACC101 · 📚 Resource hub</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">One hub for learning financial accounting: the official syllabus and slides, books, free official resources, video channels, tools and a self-study roadmap.</p>
+<h3>📘 Syllabus &amp; slides</h3>
+<p>Sign in to <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) with your FPTU account to read the official ACC101 syllabus and lecture slides.</p>
+<h3>📗 Books</h3>
+<ul>
+<li><a href="https://openstax.org/details/books/principles-financial-accounting" target="_blank" rel="noopener">Principles of Accounting, Volume 1: Financial Accounting</a> — OpenStax (Rice University): a free, peer-reviewed open textbook covering the same ground as this course.</li>
+<li><a href="https://www.mheducation.com/" target="_blank" rel="noopener">Fundamental Accounting Principles</a> — Wild, Kwok &amp; Venkatesh — the main textbook in the FLM syllabus (McGraw Hill); search the title on the publisher site.</li>
+</ul>
+<h3>🌐 Free official resources</h3>
+<ul>
+<li><a href="https://www.accountingcoach.com/" target="_blank" rel="noopener">AccountingCoach</a> — free explanations and quizzes on debits and credits, adjusting entries, inventory and depreciation.</li>
+<li><a href="https://www.ifrs.org/" target="_blank" rel="noopener">IFRS Foundation</a> — the international standard setter (for example IAS 2 Inventories, IAS 16 Property, Plant and Equipment).</li>
+<li><a href="https://mof.gov.vn/" target="_blank" rel="noopener">Ministry of Finance of Vietnam</a> — official source for Vietnamese accounting standards (VAS), the enterprise accounting regime and tax rules — always check the version in force.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@AccountingStuff" target="_blank" rel="noopener">Accounting Stuff</a> — short, clear videos on the accounting equation, journals and statements.</li>
+<li><a href="https://www.youtube.com/@Edspira" target="_blank" rel="noopener">Edspira</a> — lecture-style videos on financial accounting topics.</li>
+<li><a href="https://www.youtube.com/@khanacademy" target="_blank" rel="noopener">Khan Academy</a> — finance and accounting basics.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://www.google.com/sheets/about/" target="_blank" rel="noopener">Google Sheets</a> — build your own journal, ledger and trial-balance templates.</li>
+<li><a href="https://www.microsoft.com/en-us/microsoft-365/excel" target="_blank" rel="noopener">Microsoft Excel</a> — depreciation schedules and inventory costing tables.</li>
+<li><a href="https://www.misa.vn/" target="_blank" rel="noopener">MISA</a> — accounting software widely used by Vietnamese firms — see the chart of accounts in practice.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations (exam core)</strong> — the accounting equation and double-entry, following Chapters 1–2 here.</li>
+<li><strong>Practise by hand</strong> — journalize, post and prepare a trial balance for ten or more transactions every week.</li>
+<li><strong>Close the cycle</strong> — adjusting and closing entries, inventory costing and depreciation schedules in a spreadsheet.</li>
+<li><strong>Read real statements</strong> — open a listed company’s annual report and trace the four statements and the VAT notes.</li>
+</ol>
+<div class="callout"><span class="badge">Note</span> An original hub of real links — no copyrighted slides or books are embedded. If a link moves, start from the official homepage.</div>`,
+    `<span class="eyebrow">ACC101 · 📚 Trung tâm tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Một nơi gom để học kế toán tài chính: giáo trình &amp; slide chính thức, sách, tài liệu miễn phí chính thống, kênh video, công cụ, và lộ trình tự học.</p>
+<h3>📘 Giáo trình &amp; slide</h3>
+<p>Đăng nhập <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) bằng tài khoản FPTU để đọc giáo trình và slide bài giảng chính thức của ACC101.</p>
+<h3>📗 Sách</h3>
+<ul>
+<li><a href="https://openstax.org/details/books/principles-financial-accounting" target="_blank" rel="noopener">Principles of Accounting, Volume 1: Financial Accounting</a> — OpenStax (Đại học Rice): giáo trình mở miễn phí, có bình duyệt, bao quát đúng phạm vi môn này.</li>
+<li><a href="https://www.mheducation.com/" target="_blank" rel="noopener">Fundamental Accounting Principles</a> — Wild, Kwok &amp; Venkatesh — giáo trình chính trong đề cương FLM (McGraw Hill); tra tên sách trên trang nhà xuất bản.</li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li><a href="https://www.accountingcoach.com/" target="_blank" rel="noopener">AccountingCoach</a> — giải thích và quiz miễn phí về Nợ/Có, bút toán điều chỉnh, hàng tồn kho, khấu hao.</li>
+<li><a href="https://www.ifrs.org/" target="_blank" rel="noopener">IFRS Foundation</a> — tổ chức ban hành chuẩn mực quốc tế (vd IAS 2 Hàng tồn kho, IAS 16 Tài sản cố định).</li>
+<li><a href="https://mof.gov.vn/" target="_blank" rel="noopener">Ministry of Finance of Vietnam</a> — nguồn chính thức về chuẩn mực kế toán Việt Nam (VAS), chế độ kế toán doanh nghiệp và quy định thuế — luôn kiểm văn bản đang có hiệu lực.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@AccountingStuff" target="_blank" rel="noopener">Accounting Stuff</a> — video ngắn, dễ hiểu về phương trình kế toán, nhật ký và báo cáo.</li>
+<li><a href="https://www.youtube.com/@Edspira" target="_blank" rel="noopener">Edspira</a> — bài giảng video về các chủ đề kế toán tài chính.</li>
+<li><a href="https://www.youtube.com/@khanacademy" target="_blank" rel="noopener">Khan Academy</a> — kiến thức nền về tài chính và kế toán.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://www.google.com/sheets/about/" target="_blank" rel="noopener">Google Sheets</a> — tự dựng mẫu sổ nhật ký, sổ cái và bảng cân đối thử.</li>
+<li><a href="https://www.microsoft.com/en-us/microsoft-365/excel" target="_blank" rel="noopener">Microsoft Excel</a> — bảng khấu hao và bảng tính giá hàng tồn kho.</li>
+<li><a href="https://www.misa.vn/" target="_blank" rel="noopener">MISA</a> — phần mềm kế toán phổ biến ở doanh nghiệp Việt Nam — xem hệ thống tài khoản vận hành thực tế.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền tảng (lõi thi)</strong> — phương trình kế toán và ghi sổ kép, theo đúng chương 1–2 ở đây.</li>
+<li><strong>Luyện bằng tay</strong> — mỗi tuần định khoản, chuyển sổ và lập bảng cân đối thử cho từ mười nghiệp vụ trở lên.</li>
+<li><strong>Khép chu trình</strong> — bút toán điều chỉnh, khoá sổ, tính giá hàng tồn kho và bảng khấu hao trên bảng tính.</li>
+<li><strong>Đọc báo cáo thật</strong> — mở báo cáo thường niên của một công ty niêm yết và lần theo bốn báo cáo cùng thuyết minh về thuế GTGT.</li>
+</ol>
+<div class="callout"><span class="badge">Lưu ý</span> Đây là trung tâm liên kết nguyên gốc — không nhúng slide/sách có bản quyền. Link đổi thì vào trang chủ chính thức để tìm.</div>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola5', name: 'Kỳ 5', ordinal: 7 },
   course: {
@@ -834,6 +911,7 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/ACC101.webp',
     shortDescription: 'The language of business: the accounting equation, debits and credits, adjusting and closing entries, inventory costing (FIFO, weighted average), bank reconciliation, receivables, depreciation, payroll and Vietnamese VAT. Bilingual, with exercises and quizzes.|||Ngôn ngữ của kinh doanh: phương trình kế toán, Nợ/Có, điều chỉnh và khoá sổ, tính giá hàng tồn kho (FIFO, bình quân), đối chiếu ngân hàng, phải thu, khấu hao, tiền lương và thuế GTGT. Song ngữ, có bài tập và quiz.',
     description: 'Môn <strong>ACC101 — Principles of Accounting (Nguyên lý kế toán)</strong> dạy nền tảng kế toán tài chính theo giáo trình Wild — <em>Fundamental Accounting Principles</em>. Từ <strong>phương trình kế toán</strong> và <strong>ghi sổ kép</strong> (Nợ/Có, nhật ký, sổ cái, bảng cân đối thử) → <strong>bút toán điều chỉnh, khoá sổ</strong> và chu trình kế toán → <strong>kế toán thương mại</strong> và <strong>tính giá hàng tồn kho</strong> → <strong>tiền, phải thu, tài sản cố định</strong> → <strong>nợ phải trả, tiền lương và thuế GTGT Việt Nam</strong>. Song ngữ Anh–Việt, bám đề cương FLM, mọi ví dụ số đều kiểm cân được, có bài tập kèm lời giải và quiz cuối mỗi chương.',
@@ -841,6 +919,7 @@ export default {
     requirements: 'Không cần kiến thức kế toán trước (môn không có môn tiên quyết)\nToán phổ thông: cộng trừ nhân chia và tỉ lệ phần trăm\nNên dùng bảng tính (Excel hoặc Google Sheets) để luyện bài tập',
   },
   sections: [
+    { title: '📚 Course materials|||📚 Tài liệu tham khảo', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Course introduction|||Giới thiệu môn học', description: 'Kế toán là gì, ai dùng, chuẩn đầu ra, lộ trình.', lessons: [intro] },
     { title: 'Chapters 1–2 — The accounting equation & double-entry|||Chương 1–2 — Phương trình kế toán & ghi sổ kép', description: 'Nguyên tắc, phương trình kế toán, 4 báo cáo, Nợ/Có, nhật ký, sổ cái, cân đối thử.', lessons: [c1, c2, c1e, c1q] },
     { title: 'Chapters 3–4 — Adjusting & the accounting cycle|||Chương 3–4 — Điều chỉnh & chu trình kế toán', description: 'Dồn tích, 5 loại bút toán điều chỉnh, khoá sổ, bảng cân đối phân loại.', lessons: [c3, c3e, c3q] },

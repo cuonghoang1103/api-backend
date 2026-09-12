@@ -565,6 +565,81 @@ const c7q = quiz('eco121-quiz-4', 'Quiz 4 — Open economy & short-run policy|||
   { id: 'q3', question: 'If MPC = 0.9, by how much can AD shift when government purchases rise by 10 (ignoring crowding out)?|||Nếu MPC = 0,9, AD có thể dịch chuyển bao nhiêu khi mua sắm chính phủ tăng 10 (bỏ qua lấn át)?', options: ['9|||9', '10|||10', '90|||90', '100|||100'], correctIndex: 3, explanation: 'Multiplier = 1 / (1 − 0.9) = 10, so 10 x 10 = 100.|||Số nhân = 1 / (1 − 0,9) = 10, nên 10 x 10 = 100.' },
 ]);
 
+const taiLieu = doc('eco121-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">ECO121 · 📚 Resource hub</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">One hub for learning macroeconomics: the official syllabus and slides, books, free official resources, video channels, tools and a self-study roadmap.</p>
+<h3>📘 Syllabus &amp; slides</h3>
+<p>Sign in to <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) with your FPTU account to read the official ECO121 syllabus and lecture slides.</p>
+<h3>📗 Books</h3>
+<ul>
+<li><a href="https://openstax.org/details/books/principles-macroeconomics-3e" target="_blank" rel="noopener">Principles of Macroeconomics 3e</a> — OpenStax: a free, peer-reviewed open textbook.</li>
+<li><a href="https://gregmankiw.blogspot.com/" target="_blank" rel="noopener">Principles of Macroeconomics</a> — N. Gregory Mankiw (Cengage) — the classic introductory text; the link goes to the author’s blog.</li>
+</ul>
+<h3>🌐 Free official resources</h3>
+<ul>
+<li><a href="https://data.worldbank.org/" target="_blank" rel="noopener">World Bank Open Data</a> — GDP, inflation, unemployment and trade data for every country.</li>
+<li><a href="https://www.sbv.gov.vn/" target="_blank" rel="noopener">State Bank of Vietnam</a> — official policy rates, exchange rates and monetary policy announcements.</li>
+<li><a href="https://ourworldindata.org/" target="_blank" rel="noopener">Our World in Data</a> — long-run charts on growth, productivity and living standards.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@MarginalRevolutionUniversity" target="_blank" rel="noopener">Marginal Revolution University</a> — macro lessons on growth, money and business cycles.</li>
+<li><a href="https://www.youtube.com/@EconomicsExplained" target="_blank" rel="noopener">Economics Explained</a> — country case studies explained with macro concepts.</li>
+<li><a href="https://www.youtube.com/@IMF" target="_blank" rel="noopener">International Monetary Fund</a> — official explainers on inflation, exchange rates and policy.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://www.google.com/sheets/about/" target="_blank" rel="noopener">Google Sheets</a> — compute real GDP, inflation and multipliers from downloaded data.</li>
+<li><a href="https://www.microsoft.com/en-us/microsoft-365/excel" target="_blank" rel="noopener">Microsoft Excel</a> — chart a country’s GDP growth and inflation over twenty years.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations (exam core)</strong> — GDP, CPI and inflation, following Part 1 here.</li>
+<li><strong>Practise</strong> — compute real GDP, inflation, the money multiplier and fiscal multipliers every week.</li>
+<li><strong>Follow the data</strong> — read one monthly CPI release and one State Bank of Vietnam policy announcement.</li>
+<li><strong>Apply</strong> — write a one-page brief on Vietnam’s current growth or inflation using official data.</li>
+</ol>
+<div class="callout"><span class="badge">Note</span> An original hub of real links — no copyrighted slides or books are embedded. If a link moves, start from the official homepage.</div>`,
+    `<span class="eyebrow">ECO121 · 📚 Trung tâm tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Một nơi gom để học kinh tế vĩ mô: giáo trình &amp; slide chính thức, sách, tài liệu miễn phí chính thống, kênh video, công cụ, và lộ trình tự học.</p>
+<h3>📘 Giáo trình &amp; slide</h3>
+<p>Đăng nhập <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) bằng tài khoản FPTU để đọc giáo trình và slide bài giảng chính thức của ECO121.</p>
+<h3>📗 Sách</h3>
+<ul>
+<li><a href="https://openstax.org/details/books/principles-macroeconomics-3e" target="_blank" rel="noopener">Principles of Macroeconomics 3e</a> — OpenStax: giáo trình mở miễn phí, có bình duyệt.</li>
+<li><a href="https://gregmankiw.blogspot.com/" target="_blank" rel="noopener">Principles of Macroeconomics</a> — N. Gregory Mankiw (Cengage) — giáo trình nhập môn kinh điển; link dẫn tới blog của tác giả.</li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li><a href="https://data.worldbank.org/" target="_blank" rel="noopener">World Bank Open Data</a> — số liệu GDP, lạm phát, thất nghiệp và thương mại của mọi quốc gia.</li>
+<li><a href="https://www.sbv.gov.vn/" target="_blank" rel="noopener">State Bank of Vietnam</a> — lãi suất điều hành, tỷ giá và thông báo chính sách tiền tệ chính thức.</li>
+<li><a href="https://ourworldindata.org/" target="_blank" rel="noopener">Our World in Data</a> — biểu đồ dài hạn về tăng trưởng, năng suất và mức sống.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@MarginalRevolutionUniversity" target="_blank" rel="noopener">Marginal Revolution University</a> — bài giảng vĩ mô về tăng trưởng, tiền tệ và chu kỳ kinh doanh.</li>
+<li><a href="https://www.youtube.com/@EconomicsExplained" target="_blank" rel="noopener">Economics Explained</a> — phân tích tình huống các quốc gia bằng khái niệm vĩ mô.</li>
+<li><a href="https://www.youtube.com/@IMF" target="_blank" rel="noopener">International Monetary Fund</a> — video giải thích chính thức về lạm phát, tỷ giá và chính sách.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://www.google.com/sheets/about/" target="_blank" rel="noopener">Google Sheets</a> — tính GDP thực, lạm phát và số nhân từ số liệu tải về.</li>
+<li><a href="https://www.microsoft.com/en-us/microsoft-365/excel" target="_blank" rel="noopener">Microsoft Excel</a> — vẽ tăng trưởng GDP và lạm phát của một nước qua hai mươi năm.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền tảng (lõi thi)</strong> — GDP, CPI và lạm phát, theo đúng Phần 1 ở đây.</li>
+<li><strong>Luyện tập</strong> — mỗi tuần tính GDP thực, lạm phát, số nhân tiền và số nhân tài khoá.</li>
+<li><strong>Theo dõi số liệu</strong> — đọc một bản công bố CPI hằng tháng và một thông báo chính sách của Ngân hàng Nhà nước.</li>
+<li><strong>Vận dụng</strong> — viết một bản tóm tắt một trang về tăng trưởng hoặc lạm phát hiện nay của Việt Nam từ số liệu chính thức.</li>
+</ol>
+<div class="callout"><span class="badge">Lưu ý</span> Đây là trung tâm liên kết nguyên gốc — không nhúng slide/sách có bản quyền. Link đổi thì vào trang chủ chính thức để tìm.</div>`,
+  ]]);
+
 export default {
   semester: { code: 'KY2', name: 'Kỳ 2', ordinal: 2 },
   course: {
@@ -574,6 +649,7 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/ECO121.webp',
     shortDescription: 'The economy as a whole: GDP and CPI, growth, saving and investment, unemployment, money and inflation, exchange rates, aggregate demand and supply, fiscal and monetary policy and the Phillips curve. Bilingual, with exercises and quizzes.|||Nền kinh tế như một tổng thể: GDP, CPI, tăng trưởng, tiết kiệm và đầu tư, thất nghiệp, tiền tệ và lạm phát, tỷ giá, tổng cầu tổng cung, chính sách tài khoá và tiền tệ. Song ngữ, có bài tập và quiz.',
     description: 'Môn <strong>ECO121 — Macroeconomics (Kinh tế vĩ mô)</strong> (khối Quản trị Kinh doanh, kỳ 2) nhìn nền kinh tế như một tổng thể. Từ <strong>đo lường</strong> (GDP, CPI, lạm phát) → <strong>dài hạn</strong> (năng suất, tăng trưởng, tiết kiệm – đầu tư, thất nghiệp) → <strong>tiền, ngân hàng, ngân hàng trung ương và lạm phát</strong> → <strong>kinh tế mở</strong> (tỷ giá, ngang giá sức mua) → <strong>tổng cầu – tổng cung</strong>, <strong>chính sách tài khoá, tiền tệ</strong> và đường Phillips. Bám cấu trúc giáo trình kinh tế vĩ mô nhập môn chuẩn, song ngữ Anh–Việt, có ví dụ số đã kiểm (số liệu minh hoạ là giả định), bài tập kèm lời giải và quiz cuối mỗi chương.',
@@ -581,6 +657,7 @@ export default {
     requirements: 'Nên học trước ECO111 — Microeconomics (cung cầu, đồ thị)\nĐại số phổ thông và tính phần trăm\nThói quen đọc tin kinh tế sẽ giúp học nhanh hơn',
   },
   sections: [
+    { title: '📚 Course materials|||📚 Tài liệu tham khảo', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Course introduction|||Giới thiệu môn học', description: 'Biến số vĩ mô, ba ý tưởng lớn, dài hạn và ngắn hạn.', lessons: [intro] },
     { title: 'Part 1 — Measuring the economy|||Phần 1 — Đo lường nền kinh tế', description: 'GDP, C + I + G + NX, GDP thực, CPI, lạm phát.', lessons: [c1, c2, c1e, c1q] },
     { title: 'Part 2 — The long run|||Phần 2 — Dài hạn', description: 'Tăng trưởng, tiết kiệm – đầu tư, thất nghiệp.', lessons: [c3, c3q] },

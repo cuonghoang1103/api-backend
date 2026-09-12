@@ -1,21 +1,22 @@
 'use client';
 
 /**
- * Phòng tư vấn chọn NGÀNH HẸP bằng AI.
+ * Phòng tư vấn chọn NGÀNH HẸP — "CuongMini Cố Vấn".
  *
- * Vào từ bước "chọn ngành hẹp" của onboarding (/academy) khi người dùng bấm
- * "Tôi chưa chọn ngành hẹp — gợi ý giúp tôi". Ở đây có:
- *  · Chat với cố vấn AI (neo vào dữ liệu ngành thật ở backend — không bịa số).
- *  · Câu hỏi GỢI Ý SẴN để bấm (khi chưa biết hỏi gì).
- *  · Chọn KỲ đang học → gửi kèm các môn đã học để AI nối kiến thức.
- *  · Thẻ SO SÁNH ngành hẹp + biểu đồ nhu cầu/lương + link báo cáo thị trường.
- *  · So sánh CÚ PHÁP code từng ngành (màu như VS Code).
- *  · Nút QUAY LẠI chỗ chọn ngành hẹp ban đầu.
+ * Vào từ bước "chọn ngành hẹp" của onboarding (/academy). Gồm:
+ *  · Chat với CuongMini (neo dữ liệu ngành thật ở backend — không bịa số).
+ *  · Câu hỏi GỢI Ý + "Câu hỏi thường gặp" (gộp từ câu người dùng đã hỏi).
+ *  · So sánh & đánh giá ngành hẹp theo 2 thị trường: 🇻🇳 Việt Nam · 🌏 Toàn cầu,
+ *    kèm nguồn thống kê thật + nơi thường tuyển (ITviec/Upwork/công ty…).
+ *  · Thảo luận: bình luận có ảnh, avatar, like, báo cáo.
  */
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ArrowLeft, Send, Sparkles, ExternalLink, GraduationCap, Bot, Loader2 } from 'lucide-react';
+import {
+  ArrowLeft, Send, Sparkles, ExternalLink, GraduationCap, Loader2, MapPin, Globe2,
+  Heart, Flag, Trash2, ImagePlus, MessageCircle, X, HelpCircle, Briefcase,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -24,28 +25,30 @@ import {
 } from 'recharts';
 import Markdown from '@/components/markdown/Markdown';
 import AcademyBackground from '@/components/academy/AcademyBackground';
-import { academyAdvisorApi } from '@/lib/api';
+import { academyAdvisorApi, fileApi, type AdvisorCommentDto } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
 import { getFaculty, getCatMajor, leafSemesterPlan } from '@/data/academyCatalog';
 
-// Dùng useSearchParams ở client → opt-out static để khỏi cần Suspense boundary.
 export const dynamic = 'force-dynamic';
 
+type AdvisorLink = { label: string; url: string };
+interface MarketStat { demand: number; salary: number; salaryRange: string; note: string; sources: AdvisorLink[]; }
 interface AdvisorSpec {
   key: string; facultyId: string; majorId: string; comboId?: string;
   nameVi: string; icon: string; languages: string[]; builds: string[];
   products: string[]; pros: string[]; cons: string[];
   difficulty: number; demand: number; salary: number; salaryRange: string;
   academyCourses: string[]; codeSample: { language: string; label: string; code: string };
-  reports: { label: string; url: string }[];
+  reports: AdvisorLink[];
+  vietnam: MarketStat; global: MarketStat; hiring: AdvisorLink[];
 }
 interface QGroup { group: string; icon: string; questions: string[]; }
 type ChatMsg = { role: 'user' | 'assistant'; content: string };
+type Market = 'vietnam' | 'global';
 
-const METERS: { key: 'difficulty' | 'demand' | 'salary'; label: string; color: string }[] = [
-  { key: 'demand', label: 'Nhu cầu tuyển (VN)', color: '#22d3ee' },
+const METERS: { key: 'demand' | 'salary'; label: string; color: string }[] = [
+  { key: 'demand', label: 'Nhu cầu tuyển', color: '#22d3ee' },
   { key: 'salary', label: 'Mặt bằng lương', color: '#a3e635' },
-  { key: 'difficulty', label: 'Độ khó', color: '#f0abfc' },
 ];
 
 function Meter({ value, color }: { value: number; color: string }) {
@@ -58,7 +61,33 @@ function Meter({ value, color }: { value: number; color: string }) {
   );
 }
 
-function SpecCard({ spec }: { spec: AdvisorSpec }) {
+function displayName(u: { fullName?: string | null; displayName?: string | null; username: string }) {
+  return u.displayName || u.fullName || u.username;
+}
+function initials(name: string) {
+  return name.trim().split(/\s+/).slice(0, 2).map((w) => w[0]?.toUpperCase() ?? '').join('') || '?';
+}
+function timeAgo(iso: string) {
+  const s = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
+  if (s < 60) return 'vừa xong';
+  if (s < 3600) return `${Math.floor(s / 60)} phút trước`;
+  if (s < 86400) return `${Math.floor(s / 3600)} giờ trước`;
+  if (s < 2592000) return `${Math.floor(s / 86400)} ngày trước`;
+  return new Date(iso).toLocaleDateString('vi-VN');
+}
+
+/* ── Avatar ─────────────────────────────────────────────────────────────── */
+function Avatar({ url, name, size = 36 }: { url?: string | null; name: string; size?: number }) {
+  if (url) return <img src={url} alt={name} className="rounded-full object-cover shrink-0" style={{ width: size, height: size }} />;
+  return (
+    <span className="rounded-full shrink-0 grid place-items-center bg-neon-violet/20 text-neon-violet font-semibold"
+      style={{ width: size, height: size, fontSize: size * 0.4 }}>{initials(name)}</span>
+  );
+}
+
+/* ── Thẻ so sánh 1 ngành hẹp (theo thị trường đang chọn) ─────────────────── */
+function SpecCard({ spec, market }: { spec: AdvisorSpec; market: Market }) {
+  const m = spec[market];
   return (
     <div className="rounded-2xl border border-darkborder bg-darkcard p-5 space-y-4">
       <div className="flex items-center gap-3">
@@ -74,13 +103,18 @@ function SpecCard({ spec }: { spec: AdvisorSpec }) {
       </div>
 
       <div className="space-y-2">
-        {METERS.map((m) => (
-          <div key={m.key} className="flex items-center justify-between gap-3">
-            <span className="text-xs text-text-muted">{m.label}</span>
-            <Meter value={spec[m.key]} color={m.color} />
+        {METERS.map((mt) => (
+          <div key={mt.key} className="flex items-center justify-between gap-3">
+            <span className="text-xs text-text-muted">{mt.label}</span>
+            <Meter value={m[mt.key]} color={mt.color} />
           </div>
         ))}
-        <p className="text-xs text-text-secondary pt-1">💰 Lương tham khảo: <span className="text-text-primary font-medium">{spec.salaryRange}</span></p>
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-xs text-text-muted">Độ khó</span>
+          <Meter value={spec.difficulty} color="#f0abfc" />
+        </div>
+        <p className="text-sm text-text-secondary pt-1">💰 <span className="text-text-primary font-semibold">{m.salaryRange}</span></p>
+        <p className="text-xs text-text-muted italic leading-relaxed">“{m.note}”</p>
       </div>
 
       <div>
@@ -115,12 +149,224 @@ function SpecCard({ spec }: { spec: AdvisorSpec }) {
         </div>
       </div>
 
-      <div>
-        <p className="text-xs uppercase tracking-wide text-text-muted mb-1">Môn Academy tiêu biểu</p>
-        <div className="flex flex-wrap gap-1.5">
-          {spec.academyCourses.map((c) => <span key={c} className="px-2 py-0.5 rounded-full bg-neon-cyan/10 text-neon-cyan text-[11px] font-mono">{c}</span>)}
+      <div className="grid sm:grid-cols-2 gap-3">
+        <div>
+          <p className="text-xs uppercase tracking-wide text-text-muted mb-1">Môn Academy tiêu biểu</p>
+          <div className="flex flex-wrap gap-1.5">
+            {spec.academyCourses.map((c) => <span key={c} className="px-2 py-0.5 rounded-full bg-neon-cyan/10 text-neon-cyan text-[11px] font-mono">{c}</span>)}
+          </div>
+        </div>
+        <div>
+          <p className="text-xs uppercase tracking-wide text-text-muted mb-1 inline-flex items-center gap-1"><Briefcase className="w-3 h-3" /> Nơi thường tuyển</p>
+          <div className="flex flex-wrap gap-1.5">
+            {spec.hiring.map((h) => (
+              <a key={h.url} href={h.url} target="_blank" rel="noopener noreferrer"
+                className="px-2 py-0.5 rounded-lg bg-darkbg border border-darkborder text-[11px] text-neon-cyan hover:border-neon-cyan/50 transition inline-flex items-center gap-1">
+                {h.label} <ExternalLink className="w-2.5 h-2.5" />
+              </a>
+            ))}
+          </div>
         </div>
       </div>
+
+      <div className="pt-1 border-t border-darkborder">
+        <p className="text-xs uppercase tracking-wide text-text-muted mb-1 mt-2">📊 Nguồn thống kê ({market === 'vietnam' ? 'Việt Nam' : 'Toàn cầu'})</p>
+        <div className="flex flex-wrap gap-1.5">
+          {m.sources.map((r) => (
+            <a key={r.url} href={r.url} target="_blank" rel="noopener noreferrer"
+              className="px-2 py-0.5 rounded-lg bg-darkbg border border-darkborder text-[11px] text-text-secondary hover:text-neon-cyan hover:border-neon-cyan/50 transition inline-flex items-center gap-1">
+              {r.label} <ExternalLink className="w-2.5 h-2.5" />
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Một bình luận ──────────────────────────────────────────────────────── */
+function CommentView({ c, currentUserId, onLike, onReport, onDelete, onReply, isReply }: {
+  c: AdvisorCommentDto; currentUserId?: number;
+  onLike: (id: number) => void; onReport: (id: number) => void; onDelete: (id: number) => void;
+  onReply?: (c: AdvisorCommentDto) => void; isReply?: boolean;
+}) {
+  const name = displayName(c.user);
+  const mine = currentUserId === c.user.id;
+  return (
+    <div className={`flex gap-3 ${isReply ? 'ml-10' : ''}`}>
+      <Avatar url={c.user.avatarUrl} name={name} size={isReply ? 30 : 38} />
+      <div className="min-w-0 flex-1">
+        <div className="rounded-2xl rounded-tl-sm bg-darkbg/70 border border-darkborder px-3.5 py-2.5">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-sm font-semibold text-text-primary">{name}</span>
+            <span className="text-xs text-text-muted">{timeAgo(c.createdAt)}</span>
+            {c.isEdited && <span className="text-[10px] text-text-muted">(đã sửa)</span>}
+          </div>
+          {c.content && <p className="text-sm text-text-secondary whitespace-pre-wrap mt-1 leading-relaxed break-words">{c.content}</p>}
+          {c.imageUrl && (
+            <a href={c.imageUrl} target="_blank" rel="noopener noreferrer" className="block mt-2">
+              <img src={c.imageUrl} alt="ảnh đính kèm" className="rounded-xl max-h-72 border border-darkborder" />
+            </a>
+          )}
+        </div>
+        <div className="flex items-center gap-4 mt-1.5 px-1 text-xs text-text-muted">
+          <button onClick={() => onLike(c.id)} className="inline-flex items-center gap-1 hover:text-neon-pink transition">
+            <Heart className="w-3.5 h-3.5" /> {c.likesCount > 0 && c.likesCount}
+          </button>
+          {!isReply && onReply && (
+            <button onClick={() => onReply(c)} className="inline-flex items-center gap-1 hover:text-neon-violet transition">
+              <MessageCircle className="w-3.5 h-3.5" /> Trả lời
+            </button>
+          )}
+          <button onClick={() => onReport(c.id)} className="inline-flex items-center gap-1 hover:text-amber-400 transition">
+            <Flag className="w-3.5 h-3.5" /> Báo cáo
+          </button>
+          {mine && (
+            <button onClick={() => onDelete(c.id)} className="inline-flex items-center gap-1 hover:text-red-400 transition">
+              <Trash2 className="w-3.5 h-3.5" /> Xoá
+            </button>
+          )}
+        </div>
+        {c.replies && c.replies.length > 0 && (
+          <div className="mt-3 space-y-3">
+            {c.replies.map((r) => (
+              <CommentView key={r.id} c={r} currentUserId={currentUserId} onLike={onLike} onReport={onReport} onDelete={onDelete} isReply />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ── Khu thảo luận (bình luận) ──────────────────────────────────────────── */
+function DiscussionSection({ facultyId, majorId }: { facultyId: string; majorId: string | null }) {
+  const router = useRouter();
+  const { isAuthenticated, user } = useAuthStore();
+  const [comments, setComments] = useState<AdvisorCommentDto[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [text, setText] = useState('');
+  const [image, setImage] = useState<{ file: File; preview: string } | null>(null);
+  const [replyTo, setReplyTo] = useState<AdvisorCommentDto | null>(null);
+  const [sending, setSending] = useState(false);
+  const fileRef = useRef<HTMLInputElement | null>(null);
+
+  const load = useCallback(() => {
+    if (!facultyId) return;
+    setLoading(true);
+    academyAdvisorApi.getComments(facultyId, majorId)
+      .then((res) => setComments(res.data.data))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [facultyId, majorId]);
+  useEffect(() => { load(); }, [load]);
+
+  const total = useMemo(() => comments.reduce((n, c) => n + 1 + (c.replies?.length ?? 0), 0), [comments]);
+
+  function pickImage(e: React.ChangeEvent<HTMLInputElement>) {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    if (!f.type.startsWith('image/')) { toast.error('Chỉ nhận file ảnh.'); return; }
+    if (f.size > 8 * 1024 * 1024) { toast.error('Ảnh tối đa 8MB.'); return; }
+    setImage({ file: f, preview: URL.createObjectURL(f) });
+  }
+
+  async function submit() {
+    if (!isAuthenticated) { toast.error('Đăng nhập để tham gia thảo luận nhé.'); router.push('/login?redirect=/academy/tu-van-nganh'); return; }
+    if (!text.trim() && !image) return;
+    setSending(true);
+    try {
+      let imageUrl: string | undefined;
+      if (image) {
+        const up = await fileApi.upload(image.file);
+        imageUrl = (up.data as { data?: { url?: string } })?.data?.url;
+      }
+      await academyAdvisorApi.postComment({
+        facultyId, majorId, content: text.trim(), imageUrl, parentId: replyTo?.id ?? null,
+      });
+      setText(''); setImage(null); setReplyTo(null);
+      load();
+      toast.success('Đã đăng bình luận.');
+    } catch (e: unknown) {
+      toast.error((e as { response?: { data?: { error?: string } } })?.response?.data?.error || 'Không đăng được, thử lại nhé.');
+    } finally {
+      setSending(false);
+    }
+  }
+
+  async function like(id: number) {
+    if (!isAuthenticated) { toast.error('Đăng nhập để thích bình luận.'); return; }
+    // optimistic
+    setComments((prev) => prev.map((c) => c.id === id ? { ...c, likesCount: c.likesCount + 1 }
+      : { ...c, replies: c.replies?.map((r) => r.id === id ? { ...r, likesCount: r.likesCount + 1 } : r) }));
+    try {
+      const res = await academyAdvisorApi.likeComment(id);
+      const n = res.data.data.likesCount;
+      setComments((prev) => prev.map((c) => c.id === id ? { ...c, likesCount: n }
+        : { ...c, replies: c.replies?.map((r) => r.id === id ? { ...r, likesCount: n } : r) }));
+    } catch { load(); }
+  }
+  async function report(id: number) {
+    if (!isAuthenticated) { toast.error('Đăng nhập để báo cáo.'); return; }
+    try { await academyAdvisorApi.reportComment(id); toast.success('Đã gửi báo cáo. Cảm ơn bạn!'); }
+    catch (e: unknown) { toast.error((e as { response?: { data?: { error?: string } } })?.response?.data?.error || 'Không gửi được báo cáo.'); }
+  }
+  async function del(id: number) {
+    try { await academyAdvisorApi.deleteComment(id); setComments((prev) => prev.filter((c) => c.id !== id).map((c) => ({ ...c, replies: c.replies?.filter((r) => r.id !== id) }))); toast.success('Đã xoá.'); }
+    catch { toast.error('Không xoá được.'); }
+  }
+
+  return (
+    <div className="rounded-2xl border border-darkborder bg-darkcard p-5 sm:p-6">
+      <h2 className="text-lg font-semibold text-text-primary flex items-center gap-2 mb-1">
+        💬 Thảo luận &amp; đánh giá <span className="text-sm font-normal text-text-muted">({total})</span>
+      </h2>
+      <p className="text-xs text-text-muted mb-4">Chia sẻ trải nghiệm, góp ý, đặt câu hỏi cho cộng đồng. Lịch sự &amp; đúng chủ đề nhé.</p>
+
+      {/* Compose */}
+      <div className="flex gap-3 mb-6">
+        <Avatar url={user?.avatarUrl} name={user ? displayName({ username: user.username ?? 'Bạn', displayName: user.displayName, fullName: user.fullName }) : 'Bạn'} size={38} />
+        <div className="flex-1 min-w-0">
+          {replyTo && (
+            <div className="mb-2 text-xs text-text-muted inline-flex items-center gap-2 bg-darkbg rounded-lg px-2 py-1">
+              Đang trả lời <span className="text-text-secondary font-medium">{displayName(replyTo.user)}</span>
+              <button onClick={() => setReplyTo(null)}><X className="w-3 h-3" /></button>
+            </div>
+          )}
+          <textarea value={text} onChange={(e) => setText(e.target.value)} rows={2}
+            placeholder={isAuthenticated ? 'Viết bình luận, đánh giá hoặc góp ý…' : 'Đăng nhập để tham gia thảo luận…'}
+            className="w-full resize-none rounded-xl bg-darkbg border border-darkborder px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
+          {image && (
+            <div className="relative inline-block mt-2">
+              <img src={image.preview} alt="xem trước" className="rounded-lg max-h-40 border border-darkborder" />
+              <button onClick={() => setImage(null)} className="absolute -top-2 -right-2 bg-darkbg border border-darkborder rounded-full p-1"><X className="w-3.5 h-3.5" /></button>
+            </div>
+          )}
+          <div className="flex items-center justify-between mt-2">
+            <button onClick={() => fileRef.current?.click()} className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-neon-cyan transition">
+              <ImagePlus className="w-4 h-4" /> Ảnh
+            </button>
+            <input ref={fileRef} type="file" accept="image/*" hidden onChange={pickImage} />
+            <button onClick={submit} disabled={sending || (!text.trim() && !image)}
+              className="inline-flex items-center gap-2 min-h-[38px] px-4 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-sm font-medium disabled:opacity-40 transition">
+              {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />} Gửi
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* List */}
+      {loading ? (
+        <div className="text-sm text-text-muted inline-flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Đang tải bình luận…</div>
+      ) : comments.length === 0 ? (
+        <p className="text-sm text-text-muted text-center py-6">Chưa có bình luận nào. Hãy là người đầu tiên chia sẻ! ✨</p>
+      ) : (
+        <div className="space-y-5">
+          {comments.map((c) => (
+            <CommentView key={c.id} c={c} currentUserId={user?.id} onLike={like} onReport={report} onDelete={del} onReply={setReplyTo} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -136,11 +382,14 @@ export default function AcademyAdvisorPage() {
   const major = getCatMajor(facultyId, majorId);
 
   const [catalog, setCatalog] = useState<{ specs: AdvisorSpec[]; questions: QGroup[] } | null>(null);
+  const [faq, setFaq] = useState<{ text: string; askCount: number }[]>([]);
+  const [market, setMarket] = useState<Market>('vietnam');
   const [semester, setSemester] = useState<number>(0);
   const [messages, setMessages] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const chatRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     academyAdvisorApi.getCatalog()
@@ -148,12 +397,16 @@ export default function AcademyAdvisorPage() {
       .catch(() => toast.error('Không tải được dữ liệu tư vấn.'));
   }, []);
 
+  const loadFaq = useCallback(() => {
+    if (!facultyId) return;
+    academyAdvisorApi.getFaq(facultyId, majorId).then((res) => setFaq(res.data.data)).catch(() => {});
+  }, [facultyId, majorId]);
+  useEffect(() => { loadFaq(); }, [loadFaq]);
+
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages, busy]);
 
-  // Ngành hẹp CỦA ĐÚNG khối đã chọn. Khối chưa có dữ liệu curated (v1 mới phủ
-  // CNTT) → rỗng: hiện chú thích trung thực, KHÔNG đổ nhầm ngành IT.
   const specs = useMemo(() => {
     const all = catalog?.specs ?? [];
     if (!facultyId) return all;
@@ -161,7 +414,6 @@ export default function AcademyAdvisorPage() {
   }, [catalog, facultyId]);
   const hasSpecData = specs.length > 0;
 
-  // Môn đã học tới KỲ đang chọn (khung ngành nền — dùng cho IT; khối khác chưa có nền chung).
   const completedCourses = useMemo(() => {
     if (!semester) return [];
     const plan = leafSemesterPlan(facultyId, majorId, null);
@@ -171,14 +423,15 @@ export default function AcademyAdvisorPage() {
   }, [facultyId, majorId, semester]);
 
   const chartData = useMemo(
-    () => specs.map((s) => ({ name: s.nameVi.split('(')[0].trim().slice(0, 16), 'Nhu cầu': s.demand, 'Lương': s.salary, icon: s.icon })),
-    [specs],
+    () => specs.map((s) => ({ name: s.nameVi.split('(')[0].trim().slice(0, 16), 'Nhu cầu': s[market].demand, 'Lương': s[market].salary })),
+    [specs, market],
   );
 
-  async function ask(question: string) {
+  const ask = useCallback(async (question: string) => {
     const q = question.trim();
     if (!q || busy) return;
-    if (!isAuthenticated) { toast.error('Đăng nhập để chat với cố vấn AI nhé.'); router.push('/login?redirect=/academy/tu-van-nganh'); return; }
+    if (!isAuthenticated) { toast.error('Đăng nhập để chat với CuongMini nhé.'); router.push('/login?redirect=/academy/tu-van-nganh'); return; }
+    chatRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     setInput('');
     const next = [...messages, { role: 'user' as const, content: q }];
     setMessages(next);
@@ -190,23 +443,24 @@ export default function AcademyAdvisorPage() {
         history: messages.slice(-8),
       });
       setMessages([...next, { role: 'assistant', content: res.data.data.answer }]);
+      setTimeout(loadFaq, 800); // câu vừa hỏi có thể xuất hiện ở FAQ
     } catch (e: unknown) {
       const msg = (e as { response?: { data?: { error?: string; message?: string } } })?.response?.data?.error
         || (e as { response?: { data?: { message?: string } } })?.response?.data?.message
-        || 'Cố vấn AI đang bận, thử lại sau nhé.';
+        || 'CuongMini đang bận, thử lại sau nhé.';
       toast.error(msg);
-      setMessages(messages); // rollback câu hỏi vừa thêm
+      setMessages(messages);
     } finally {
       setBusy(false);
     }
-  }
+  }, [busy, isAuthenticated, messages, facultyId, majorId, semester, completedCourses, faculty, major, router, loadFaq]);
 
   const backToChoose = () => router.push(`/academy?tuvan=${facultyId ?? ''}.${majorId ?? ''}`);
 
   return (
     <div className="min-h-screen pt-24 pb-16" style={{ background: '#050314' }}>
       <AcademyBackground />
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         {/* Header */}
         <div className="flex flex-wrap items-center gap-3 justify-between">
           <div className="flex items-center gap-3 min-w-0">
@@ -237,25 +491,35 @@ export default function AcademyAdvisorPage() {
               </button>
             ))}
             {semester > 0 && completedCourses.length > 0 && (
-              <span className="text-xs text-text-muted ml-1">→ đã học {completedCourses.length} môn, cố vấn sẽ nối kiến thức này cho bạn.</span>
+              <span className="text-xs text-text-muted ml-1">→ đã học {completedCourses.length} môn, CuongMini sẽ nối kiến thức này cho bạn.</span>
             )}
           </div>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
-          {/* CỘT TRÁI: so sánh ngành hẹp */}
-          <div className="space-y-6 order-2 lg:order-1">
+        <div className="grid gap-6 lg:grid-cols-[1fr_440px]">
+          {/* CỘT TRÁI: so sánh & đánh giá */}
+          <div className="space-y-6 order-2 lg:order-1 min-w-0">
             {!hasSpecData && (
               <div className="rounded-2xl border border-neon-cyan/30 bg-neon-cyan/5 p-5 text-sm text-text-secondary">
                 <p className="text-text-primary font-semibold mb-1">Dữ liệu chi tiết đang được bổ sung cho khối này 🛠️</p>
-                <p>Phần so sánh chi tiết (lương, nhu cầu, sản phẩm, cú pháp code) hiện tập trung ở khối <strong>Công nghệ thông tin</strong>. Bạn vẫn chat hỏi cố vấn AI bên phải để được tư vấn tổng quát cho khối {faculty?.nameVi ?? 'của bạn'} nhé.</p>
+                <p>Phần so sánh chi tiết (lương, nhu cầu, sản phẩm, cú pháp code) hiện tập trung ở khối <strong>Công nghệ thông tin</strong>. Bạn vẫn chat hỏi CuongMini bên phải để được tư vấn tổng quát cho khối {faculty?.nameVi ?? 'của bạn'} nhé.</p>
               </div>
             )}
             {hasSpecData && (<>
-            {/* Biểu đồ */}
+            {/* Tabs thị trường + biểu đồ */}
             <div className="rounded-2xl border border-darkborder bg-darkcard p-5">
-              <h2 className="text-lg font-semibold text-text-primary mb-1">So sánh nhu cầu &amp; lương</h2>
-              <p className="text-xs text-text-muted mb-3">Thang định tính 1–5 (thị trường VN). Số CHÍNH XÁC xem các báo cáo bên dưới mỗi ngành.</p>
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-1">
+                <h2 className="text-lg font-semibold text-text-primary">So sánh &amp; đánh giá</h2>
+                <div className="inline-flex rounded-xl border border-darkborder bg-darkbg p-0.5 text-sm">
+                  <button onClick={() => setMarket('vietnam')} className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition ${market === 'vietnam' ? 'bg-neon-violet text-white' : 'text-text-secondary hover:text-text-primary'}`}>
+                    <MapPin className="w-4 h-4" /> Việt Nam
+                  </button>
+                  <button onClick={() => setMarket('global')} className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition ${market === 'global' ? 'bg-neon-violet text-white' : 'text-text-secondary hover:text-text-primary'}`}>
+                    <Globe2 className="w-4 h-4" /> Toàn cầu
+                  </button>
+                </div>
+              </div>
+              <p className="text-xs text-text-muted mb-3">Thang định tính 1–5 cho thị trường <strong>{market === 'vietnam' ? 'Việt Nam' : 'toàn cầu'}</strong>. Số &amp; lương chính xác xem nguồn thống kê trong mỗi thẻ.</p>
               <div className="h-64 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData} margin={{ top: 16, right: 8, left: -18, bottom: 0 }}>
@@ -271,45 +535,33 @@ export default function AcademyAdvisorPage() {
 
             {/* Thẻ từng ngành */}
             <div className="grid gap-5 xl:grid-cols-2">
-              {specs.map((s) => <SpecCard key={s.key} spec={s} />)}
+              {specs.map((s) => <SpecCard key={s.key} spec={s} market={market} />)}
             </div>
-
-            {/* Báo cáo thị trường */}
-            {specs[0]?.reports?.length ? (
-              <div className="rounded-2xl border border-darkborder bg-darkcard p-5">
-                <h3 className="text-sm font-semibold text-text-primary mb-2">📈 Báo cáo thị trường &amp; lương (nguồn thật)</h3>
-                <div className="flex flex-wrap gap-2">
-                  {specs[0].reports.map((r) => (
-                    <a key={r.url} href={r.url} target="_blank" rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-darkborder bg-darkbg text-sm text-neon-cyan hover:border-neon-cyan/50 transition">
-                      {r.label} <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                  ))}
-                </div>
-              </div>
-            ) : null}
             </>)}
           </div>
 
-          {/* CỘT PHẢI: chat AI + câu hỏi gợi ý */}
-          <div className="order-1 lg:order-2 lg:sticky lg:top-24 h-fit">
-            <div className="rounded-2xl border border-neon-violet/30 bg-darkcard flex flex-col max-h-[calc(100vh-7rem)]">
-              <div className="px-4 py-3 border-b border-darkborder flex items-center gap-2">
-                <Bot className="w-5 h-5 text-neon-violet" />
-                <p className="font-semibold text-text-primary">Cố vấn AI</p>
+          {/* CỘT PHẢI: CuongMini Cố Vấn */}
+          <div ref={chatRef} className="order-1 lg:order-2 lg:sticky lg:top-24 h-fit">
+            <div className="rounded-2xl border border-neon-violet/30 bg-darkcard flex flex-col max-h-[calc(100vh-7rem)] shadow-[0_0_40px_-12px_rgba(139,92,246,0.35)]">
+              <div className="px-4 py-3.5 border-b border-darkborder flex items-center gap-2.5 bg-gradient-to-r from-neon-violet/10 to-transparent rounded-t-2xl">
+                <span className="text-xl leading-none">🤖</span>
+                <div>
+                  <p className="font-semibold text-text-primary leading-tight">CuongMini Cố Vấn</p>
+                  <p className="text-[11px] text-text-muted">Trợ lý chọn ngành hẹp · trả lời theo dữ liệu thật</p>
+                </div>
               </div>
 
-              <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[220px]">
+              <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[320px]">
                 {messages.length === 0 && (
                   <div className="text-sm text-text-secondary space-y-3">
-                    <p>Chào bạn 👋 Mình giúp bạn chọn ngành hẹp hợp với thế mạnh, thị trường và các môn bạn đã học. Bấm một câu hỏi gợi ý hoặc tự nhập nhé:</p>
+                    <p>Chào bạn 👋 Mình là <strong className="text-text-primary">CuongMini</strong>, giúp bạn chọn ngành hẹp hợp với thế mạnh, thị trường và các môn bạn đã học. Bấm một câu hỏi gợi ý hoặc tự nhập nhé:</p>
                     {(catalog?.questions ?? []).map((g) => (
                       <div key={g.group}>
                         <p className="text-xs uppercase tracking-wide text-text-muted mb-1">{g.icon} {g.group}</p>
                         <div className="space-y-1.5">
                           {g.questions.map((q) => (
                             <button key={q} onClick={() => ask(q)} disabled={busy}
-                              className="block w-full text-left px-3 py-2 rounded-xl border border-darkborder bg-darkbg/60 text-xs text-text-secondary hover:border-neon-violet/50 hover:text-text-primary transition disabled:opacity-50">
+                              className="block w-full text-left px-3 py-2 rounded-xl border border-darkborder bg-darkbg/60 text-[13px] text-text-secondary hover:border-neon-violet/50 hover:text-text-primary transition disabled:opacity-50">
                               {q}
                             </button>
                           ))}
@@ -321,14 +573,14 @@ export default function AcademyAdvisorPage() {
 
                 {messages.map((m, i) => (
                   m.role === 'user' ? (
-                    <div key={i} className="ml-6 rounded-2xl rounded-br-sm bg-neon-violet/15 border border-neon-violet/30 px-3 py-2 text-sm text-text-primary">{m.content}</div>
+                    <div key={i} className="ml-8 rounded-2xl rounded-br-sm bg-neon-violet/15 border border-neon-violet/30 px-3.5 py-2.5 text-[15px] text-text-primary">{m.content}</div>
                   ) : (
-                    <div key={i} className="mr-2 rounded-2xl rounded-bl-sm bg-darkbg/70 border border-darkborder px-3 py-2 text-sm text-text-secondary academy-advisor-md">
+                    <div key={i} className="mr-1 rounded-2xl rounded-bl-sm bg-darkbg/70 border border-darkborder px-3.5 py-2.5 text-[15px] text-text-secondary academy-advisor-md leading-relaxed">
                       <Markdown mdx={m.content} />
                     </div>
                   )
                 ))}
-                {busy && <div className="mr-2 inline-flex items-center gap-2 text-sm text-text-muted"><Loader2 className="w-4 h-4 animate-spin" /> Cố vấn đang suy nghĩ…</div>}
+                {busy && <div className="mr-2 inline-flex items-center gap-2 text-sm text-text-muted"><Loader2 className="w-4 h-4 animate-spin" /> CuongMini đang suy nghĩ…</div>}
               </div>
 
               <form onSubmit={(e) => { e.preventDefault(); ask(input); }} className="p-3 border-t border-darkborder flex items-end gap-2">
@@ -337,17 +589,37 @@ export default function AcademyAdvisorPage() {
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(input); } }}
                   rows={1}
-                  placeholder="Hỏi cố vấn… (VD: mình giỏi toán nên chọn ngành nào?)"
-                  className="flex-1 resize-none max-h-32 rounded-xl bg-darkbg border border-darkborder px-3 py-2 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
+                  placeholder="Hỏi CuongMini… (VD: mình giỏi toán nên chọn ngành nào?)"
+                  className="flex-1 resize-none max-h-32 rounded-xl bg-darkbg border border-darkborder px-3.5 py-2.5 text-[15px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
                 />
                 <button type="submit" disabled={busy || !input.trim()}
-                  className="min-h-[40px] w-10 shrink-0 inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white disabled:opacity-40 transition">
+                  className="min-h-[42px] w-11 shrink-0 inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white disabled:opacity-40 transition">
                   <Send className="w-4 h-4" />
                 </button>
               </form>
             </div>
           </div>
         </div>
+
+        {/* Câu hỏi thường gặp */}
+        {faq.length > 0 && (
+          <div className="rounded-2xl border border-darkborder bg-darkcard p-5 sm:p-6">
+            <h2 className="text-lg font-semibold text-text-primary flex items-center gap-2 mb-1"><HelpCircle className="w-5 h-5 text-neon-cyan" /> Câu hỏi thường gặp</h2>
+            <p className="text-xs text-text-muted mb-4">Gộp từ câu các bạn đã hỏi CuongMini. Bấm để hỏi lại ngay.</p>
+            <div className="grid sm:grid-cols-2 gap-2.5">
+              {faq.map((f) => (
+                <button key={f.text} onClick={() => ask(f.text)} disabled={busy}
+                  className="text-left px-4 py-3 rounded-xl border border-darkborder bg-darkbg/60 hover:border-neon-violet/50 hover:bg-darkbg transition disabled:opacity-50 group">
+                  <span className="text-sm text-text-secondary group-hover:text-text-primary">{f.text}</span>
+                  {f.askCount > 1 && <span className="ml-2 text-[11px] text-text-muted">· {f.askCount} lượt hỏi</span>}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Thảo luận */}
+        {facultyId && <DiscussionSection facultyId={facultyId} majorId={majorId} />}
       </div>
     </div>
   );

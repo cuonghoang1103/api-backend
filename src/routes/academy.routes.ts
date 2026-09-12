@@ -530,6 +530,29 @@ function buildAdvisorSystem(
   ].join('\n');
 }
 
+// Chuẩn hoá câu hỏi để gộp "Câu hỏi thường gặp": bỏ dấu câu thừa, gộp khoảng
+// trắng, hạ chữ thường — để "Ngành nào lương cao?" và "ngành nào lương cao"
+// tính là MỘT. Cắt 300 ký tự cho khớp cột.
+function normalizeQuestion(q: string): string {
+  return q.toLowerCase().replace(/[?!.,;:"'()\[\]]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 300);
+}
+
+// Ghi/đếm câu hỏi cho FAQ. Fire-and-forget: KHÔNG được để hỏng việc này làm
+// hỏng câu trả lời của AI (bọc try/catch ở nơi gọi). Chỉ ghi khi có facultyId
+// và câu hỏi đủ dài/không tục — dùng majorId='' (KHÔNG null) để unique gộp được.
+async function recordAdvisorQuestion(facultyId: string, majorId: string, question: string): Promise<void> {
+  const fac = facultyId.trim().slice(0, 64);
+  const text = question.trim().slice(0, 500);
+  const normalized = normalizeQuestion(question);
+  if (!fac || normalized.length < 8) return; // bỏ câu quá ngắn/rỗng
+  const maj = (majorId || '').trim().slice(0, 64);
+  await prisma.advisorQuestion.upsert({
+    where: { uk_adv_question: { facultyId: fac, majorId: maj, normalized } },
+    update: { askCount: { increment: 1 }, lastAskedAt: new Date() },
+    create: { facultyId: fac, majorId: maj, normalized, text },
+  });
+}
+
 const ADVISOR_MAX_HISTORY = 8;
 router.post('/advisor', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
   try {
@@ -576,7 +599,161 @@ router.post('/advisor', authenticate, async (req: any, res: Response<ApiResponse
     const answer = ((result.text || '').trim()
       + (result.biCat ? '\n\n> ⚠️ *Trả lời hơi dài nên bị cắt. Hỏi tiếp “nói tiếp” để nghe nốt.*' : '')).trim();
     if (!answer) throw new AppError('AI chưa trả lời được. Thử lại nhé.', 502);
+    // Gộp vào "Câu hỏi thường gặp" — không chặn phản hồi nếu lỗi.
+    recordAdvisorQuestion(facultyId, majorId, question).catch(() => {});
     res.json({ success: true, data: { answer } });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/* ── FAQ: câu hỏi thường gặp (công khai) ─────────────────────────────────── */
+router.get('/advisor/faq', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const facultyId = String(req.query.facultyId || '').trim().slice(0, 64);
+    const majorId = String(req.query.majorId || '').trim().slice(0, 64);
+    if (!facultyId) { res.json({ success: true, data: [] }); return; }
+    const rows = await prisma.advisorQuestion.findMany({
+      where: { facultyId, ...(majorId ? { majorId } : {}) },
+      orderBy: [{ askCount: 'desc' }, { lastAskedAt: 'desc' }],
+      take: 12,
+      select: { text: true, askCount: true },
+    });
+    res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+    res.json({ success: true, data: rows });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/* ── Bình luận / thảo luận trên trang tư vấn ─────────────────────────────── */
+const ADV_REPORT_HIDE_THRESHOLD = 5;
+const advUserSelect = { id: true, username: true, fullName: true, displayName: true, avatarUrl: true } as const;
+
+// Danh sách bình luận (công khai). Trả cây 1 cấp: bình luận gốc + replies.
+router.get('/advisor/comments', async (req, res: Response<ApiResponse>, next) => {
+  try {
+    const facultyId = String(req.query.facultyId || '').trim().slice(0, 64);
+    const majorId = String(req.query.majorId || '').trim().slice(0, 64);
+    if (!facultyId) { res.json({ success: true, data: [] }); return; }
+    const rows = await prisma.advisorComment.findMany({
+      where: { facultyId, ...(majorId ? { majorId } : {}), isHidden: false },
+      orderBy: [{ parentId: 'asc' }, { createdAt: 'desc' }],
+      take: 300,
+      include: { user: { select: advUserSelect } },
+    });
+    // Dựng cây gốc→replies ở tầng ứng dụng (đơn giản, ít truy vấn).
+    type Row = typeof rows[number];
+    const roots = rows.filter((r) => r.parentId === null);
+    const byParent = new Map<number, Row[]>();
+    for (const r of rows) if (r.parentId !== null) {
+      const arr = byParent.get(r.parentId) || []; arr.push(r); byParent.set(r.parentId, arr);
+    }
+    const shape = (r: Row) => ({
+      id: r.id, content: r.content, imageUrl: r.imageUrl, likesCount: r.likesCount,
+      isEdited: r.isEdited, createdAt: r.createdAt, parentId: r.parentId,
+      user: r.user,
+    });
+    const data = roots.map((r) => ({
+      ...shape(r),
+      replies: (byParent.get(r.id) || []).sort((a, b) => +a.createdAt - +b.createdAt).map(shape),
+    }));
+    res.json({ success: true, data });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Đăng bình luận (đăng nhập). Kèm ảnh (R2 key) và trả lời (parentId) tuỳ chọn.
+router.post('/advisor/comments', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const facultyId = String(req.body?.facultyId || '').trim().slice(0, 64);
+    if (!facultyId) throw new AppError('Thiếu khối ngành.', 400);
+    const majorId = String(req.body?.majorId || '').trim().slice(0, 64) || null;
+    const content = String(req.body?.content || '').trim();
+    const imageUrl = String(req.body?.imageUrl || '').trim().slice(0, 500) || null;
+    if (!content && !imageUrl) throw new AppError('Bình luận trống.', 400);
+    if (content.length > 4000) throw new AppError('Bình luận quá dài (tối đa 4000 ký tự).', 400);
+    const parentId = req.body?.parentId != null ? Number(req.body.parentId) : null;
+    if (parentId != null) {
+      const parent = await prisma.advisorComment.findUnique({ where: { id: parentId }, select: { id: true, parentId: true } });
+      if (!parent || parent.parentId != null) throw new AppError('Bình luận cha không hợp lệ.', 400); // chỉ cho 1 cấp trả lời
+    }
+    const created = await prisma.advisorComment.create({
+      data: { facultyId, majorId, userId: req.userId, content, imageUrl, parentId },
+      include: { user: { select: advUserSelect } },
+    });
+    res.status(201).json({ success: true, data: created });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Xoá bình luận của mình (hoặc admin).
+router.delete('/advisor/comments/:id', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const id = Number(req.params.id);
+    if (!Number.isFinite(id)) throw new AppError('ID không hợp lệ.', 400);
+    const c = await prisma.advisorComment.findUnique({ where: { id }, select: { userId: true } });
+    if (!c) throw new AppError('Không tìm thấy bình luận.', 404);
+    const isAdmin = Array.isArray(req.user?.roles) && req.user.roles.includes('ROLE_ADMIN');
+    if (c.userId !== req.userId && !isAdmin) throw new AppError('Không có quyền xoá.', 403);
+    await prisma.advisorComment.delete({ where: { id } });
+    res.json({ success: true, data: { id } });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Thích / bỏ thích (toggle).
+router.post('/advisor/comments/:id/like', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const commentId = Number(req.params.id);
+    if (!Number.isFinite(commentId)) throw new AppError('ID không hợp lệ.', 400);
+    const existing = await prisma.advisorCommentLike.findUnique({
+      where: { uk_adv_comment_like: { commentId, userId: req.userId } }, select: { id: true },
+    });
+    let liked: boolean;
+    if (existing) {
+      await prisma.$transaction([
+        prisma.advisorCommentLike.delete({ where: { id: existing.id } }),
+        prisma.advisorComment.update({ where: { id: commentId }, data: { likesCount: { decrement: 1 } } }),
+      ]);
+      liked = false;
+    } else {
+      await prisma.$transaction([
+        prisma.advisorCommentLike.create({ data: { commentId, userId: req.userId } }),
+        prisma.advisorComment.update({ where: { id: commentId }, data: { likesCount: { increment: 1 } } }),
+      ]);
+      liked = true;
+    }
+    const fresh = await prisma.advisorComment.findUnique({ where: { id: commentId }, select: { likesCount: true } });
+    res.json({ success: true, data: { liked, likesCount: Math.max(0, fresh?.likesCount ?? 0) } });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Báo cáo bình luận. Đủ ngưỡng thì ẩn khỏi danh sách công khai.
+router.post('/advisor/comments/:id/report', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const commentId = Number(req.params.id);
+    if (!Number.isFinite(commentId)) throw new AppError('ID không hợp lệ.', 400);
+    const reason = String(req.body?.reason || '').trim().slice(0, 500) || null;
+    const exists = await prisma.advisorComment.findUnique({ where: { id: commentId }, select: { id: true } });
+    if (!exists) throw new AppError('Không tìm thấy bình luận.', 404);
+    try {
+      await prisma.advisorCommentReport.create({ data: { commentId, userId: req.userId, reason } });
+    } catch {
+      throw new AppError('Bạn đã báo cáo bình luận này rồi.', 409);
+    }
+    const updated = await prisma.advisorComment.update({
+      where: { id: commentId }, data: { reportsCount: { increment: 1 } }, select: { reportsCount: true },
+    });
+    if (updated.reportsCount >= ADV_REPORT_HIDE_THRESHOLD) {
+      await prisma.advisorComment.update({ where: { id: commentId }, data: { isHidden: true } });
+    }
+    res.json({ success: true, data: { reported: true } });
   } catch (error) {
     next(error);
   }

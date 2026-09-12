@@ -11,7 +11,7 @@ import type { ManhDung } from '../../../shared/ipc';
 import {
   batNhip, catPhai, catTrai, daiTrenDong, giayMoiO, khungManh, lanTheoBai,
   soO, tiLeKeo, vachLuoi,
-} from './dongThoiGian';
+} from './hinhDong';
 
 function manh(p: Partial<ManhDung> = {}): ManhDung {
   return {

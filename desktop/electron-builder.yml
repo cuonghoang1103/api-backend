@@ -46,6 +46,23 @@ files:
   # cài của người dùng.
   - '!dist/bo-cuc'
 
+# ── onnxruntime-node: nhị phân GỐC, phải nằm NGOÀI asar ─────
+#
+# `.node` và các thư viện đi kèm KHÔNG nạp được từ trong asar — asar là một
+# kho lưu trữ, còn `dlopen` của hệ điều hành cần một tệp thật trên đĩa. Không
+# có dòng này thì bản cài vẫn dựng xanh, vẫn cài được, và Xưởng Remix báo
+# "chưa cài được onnxruntime-node" trên máy mọi người dùng.
+#
+# Chỉ mở asar cho `bin/**` (phần nhị phân); phần JavaScript của gói vẫn nằm
+# trong asar, và Electron tự nối hai bên khi `require`.
+asarUnpack:
+  - '**/node_modules/onnxruntime-node/bin/**'
+
+# Sau khi đóng gói: tỉa nhị phân của những nền KHÔNG phải nền đang dựng, rồi
+# ĐÒI thấy nhị phân của nền đang dựng. Xem `scripts/onnx-tia.cjs` để biết vì
+# sao việc này làm bằng móc chứ không bằng mẫu lọc trong `files`.
+afterPack: scripts/onnx-tia.cjs
+
 # ── macOS ──────────────────────────────────────────────────
 mac:
   category: public.app-category.productivity

@@ -7,17 +7,26 @@
  * trong `nhac/` chỉ biết tới kiểu `ChayModel` — một hàm.
  *
  * ─── Vì sao nạp LƯỜI bằng createRequire ───
- * `onnxruntime-node` là module GỐC: nó kéo theo ~200MB nhị phân riêng cho từng
- * nền và từng kiến trúc. Nếu `import` thẳng ở đầu tệp thì main process nạp nó
- * lúc khởi động, và một bản cài thiếu nhị phân sẽ làm CẢ APP không mở được —
- * người dùng chưa từng bấm vào Xưởng Remix cũng chết theo. Nạp lười thì hỏng
- * chỉ giới hạn trong đúng tính năng cần tới nó.
+ * `onnxruntime-node` là module GỐC. Nó CÓ trong `dependencies` (ghim đúng
+ * `1.29.0`), nhưng "có trong dependencies" không đồng nghĩa với "chạy được
+ * trên máy này": gói 1.29 không còn nhị phân cho macOS Intel, và một bản cài
+ * hỏng cũng có thể thiếu nó. Nếu `import` thẳng ở đầu tệp thì main process
+ * nạp lúc khởi động, và thiếu nhị phân sẽ làm CẢ APP không mở được — người
+ * dùng chưa từng bấm vào Xưởng Remix cũng chết theo. Nạp lười thì hỏng chỉ
+ * giới hạn trong đúng tính năng cần tới nó.
+ *
+ * Phiên bản GHIM CHÍNH XÁC, không dùng dấu ngã: đây là nhị phân gốc cộng một
+ * hợp đồng tensor chưa đo được, và bộ nền mà gói hỗ trợ ĐỔI GIỮA CÁC BẢN
+ * (1.29 đã bỏ hẳn `darwin/x64`). Một dải phiên bản nghĩa là `npm ci` vài tháng
+ * sau có thể kéo về một gói khác hẳn mà không ai chọn.
  *
  * ─── ⚠️ HỢP ĐỒNG TENSOR CHƯA ĐƯỢC ĐO, NÊN PHẢI KIỂM LÚC CHẠY ───
  * Tên đầu vào `mix`, dạng `[1, 2, mẫu]`, bốn đầu ra theo thứ tự
  * drums/bass/other/vocals — đọc từ tài liệu của bản xuất, KHÔNG phải đo được
- * trên máy viết mã (kho model và nhị phân onnxruntime đều bị chính sách mạng
- * chặn). Tài liệu có thể cũ, và bản xuất có thể đổi.
+ * trên máy viết mã (kho model bị chính sách mạng chặn). Đã kiểm được tới đây
+ * và không xa hơn: `require` chạy, `InferenceSession.create` và `Tensor` có
+ * thật, dựng được tensor `float32` dạng `[1, 2, n]`. Cái CHƯA kiểm là một lượt
+ * `run()` với model thật. Tài liệu có thể cũ, và bản xuất có thể đổi.
  *
  * Nên tệp này **không gõ cứng gì cả**: nó đọc chữ ký thật của model rồi tự
  * khớp, và nếu không khớp được thì ném lỗi NÓI RÕ nó thấy gì. Một model sai
@@ -70,9 +79,12 @@ function napOrt(): OrtModule {
     return nap('onnxruntime-node') as OrtModule;
   } catch (loi) {
     throw new Error(
-      'Chưa cài được onnxruntime-node. Đây là module gốc kèm nhị phân riêng cho '
-      + 'từng nền; bản cài thiếu nó thì Xưởng Remix không tách stem được, nhưng '
-      + `phần còn lại của app vẫn chạy bình thường. Chi tiết: ${(loi as Error).message}`,
+      'Không nạp được onnxruntime-node, nên phần tách stem tạm nghỉ — mọi thứ '
+      + 'còn lại của app vẫn chạy bình thường.\n\n'
+      + 'Nguyên nhân hay gặp nhất: máy Mac dùng chip Intel. Bản onnxruntime '
+      + '1.29 không còn nhị phân cho nền đó, nên đây không phải lỗi cài đặt và '
+      + 'cài lại cũng không giúp được.\n\n'
+      + `Chi tiết: ${(loi as Error).message}`,
     );
   }
 }

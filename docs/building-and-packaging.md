@@ -51,6 +51,41 @@ Bản đóng gói đã được **chạy thật** và kiểm chứng:
 
 ---
 
+## Nhị phân ONNX làm bản cài to lên (12/09/2026)
+
+Xưởng Remix tách stem bằng `onnxruntime-node`, và gói npm đó chứa nhị phân cho
+**mọi nền trong cùng một gói** — 284 MB cho năm cặp nền × kiến trúc, trong khi
+mỗi bản cài chỉ dùng đúng một cặp.
+
+| Nền / kiến trúc | Nhị phân |
+|---|---|
+| `darwin/arm64` | 84 MB |
+| `win32/arm64` | 69 MB |
+| `win32/x64` | 64 MB |
+| `linux/x64` | 44 MB |
+| `linux/arm64` | 24 MB |
+| `darwin/x64` | **không có** |
+
+Hai thứ giữ cho bản cài không cõng hết chỗ đó:
+
+- **`asarUnpack`** đưa `bin/**` ra ngoài asar. Bắt buộc, không phải để giảm
+  dung lượng: `.node` và thư viện đi kèm không `dlopen` được từ trong asar.
+- **`afterPack: scripts/onnx-tia.cjs`** xoá nhị phân của những nền khác ngay
+  sau khi đóng gói, rồi ĐÒI thấy nhị phân của nền đang dựng — thiếu thì ném
+  lỗi và dừng bản dựng. Móc này có phép kiểm riêng
+  (`scripts/onnx-tia.test.mjs`), vì bản thân nó chỉ chạy lúc đóng gói.
+
+⚠️ **Bảng kích thước ở trên đo từ bản 0.1.0, TRƯỚC khi có ONNX.** Ước tính bản
+macOS arm64 sẽ tăng thêm ~84 MB (khoảng 96 → 180 MB). Chưa đo lại — lần đóng
+gói tới nên cập nhật bảng đó.
+
+⛔ **macOS Intel không tách stem được.** `onnxruntime-node` 1.29 bỏ hẳn nhị
+phân `darwin/x64`. App vẫn dựng, vẫn cài, vẫn chạy mọi tính năng khác; riêng
+nút Tách sẽ báo một câu nói rõ lý do. Muốn hỗ trợ lại thì phải ghim một bản
+onnxruntime cũ hơn — đổi lại là kernel cũ hơn cho *tất cả* các nền.
+
+---
+
 ## Vì sao arm64 và x64 tách riêng, không dùng `universal`
 
 Bản `universal` nhét cả hai kiến trúc vào một file: ~250 MB, trong khi mỗi máy

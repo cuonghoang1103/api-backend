@@ -48,8 +48,8 @@ export default {
   <div class="lz-stage">Design for every screen</div>
   <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Responsive Design</div><div class="lz-nsub">Media queries · mobile-first · Flexbox/Grid</div></div></div>
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Capstone</div><div class="lz-nsub">Build a full responsive website</div></div></div>
-  <div class="lz-stage">Advanced · beyond the syllabus</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Accessibility · modern CSS · deploying your site</div><div class="lz-nsub">From student to real front-end</div></div></div>
+  <div class="lz-stage">Also on the syllabus</div>
+  <div class="lz-node"><div class="lz-badge">A</div><div class="lz-nbody"><div class="lz-ntitle">Accessibility &amp; publishing · existing frameworks · modern CSS</div><div class="lz-nsub">MOOC 1 M3 (session 3) · MOOC 4 M3 (session 9) — core, not extra</div></div></div>
 </div>
 <div class="callout ok">Web design is learned by building. Open your editor, write the tags, and refresh the browser constantly. This course pairs each topic with the official Coursera MOOC and hands-on practice.</div>
 <a class="link-card codelab" href="https://www.coursera.org/specializations/web-design" target="_blank" rel="noopener">
@@ -72,8 +72,8 @@ export default {
   <div class="lz-stage">Thiết kế cho mọi màn hình</div>
   <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Responsive Design</div><div class="lz-nsub">Media query · mobile-first · Flexbox/Grid</div></div></div>
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Capstone</div><div class="lz-nsub">Xây một website responsive hoàn chỉnh</div></div></div>
-  <div class="lz-stage">Nâng cao · ngoài giáo trình</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Khả năng tiếp cận · CSS hiện đại · triển khai site</div><div class="lz-nsub">Từ sinh viên tới front-end thật</div></div></div>
+  <div class="lz-stage">Cũng nằm trong giáo trình</div>
+  <div class="lz-node"><div class="lz-badge">A</div><div class="lz-nbody"><div class="lz-ntitle">Trợ năng &amp; đưa site lên mạng · dùng framework có sẵn · CSS hiện đại</div><div class="lz-nsub">MOOC 1 M3 (buổi 3) · MOOC 4 M3 (buổi 9) — nội dung chính, không phải học thêm</div></div></div>
 </div>
 <div class="callout ok">Thiết kế web học bằng cách xây. Mở trình soạn thảo, viết thẻ, và refresh trình duyệt liên tục. Môn này ghép mỗi chủ đề với MOOC Coursera chính thức và thực hành.</div>
 <a class="link-card codelab" href="https://www.coursera.org/specializations/web-design" target="_blank" rel="noopener">
@@ -97,13 +97,22 @@ export default {
 <p class="lead">WED201c has an unusual scheme: you must complete the Coursera MOOCs (with certificates) to be allowed to sit the Final Exam, and your grade combines a theory and a practical exam.</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">Credits</span><span class="v">3</span></div>
-  <div class="kv"><span class="k">Total hours</span><span class="v">150h <small>50h online + 3h offline + exams + self-study</small></span></div>
+  <div class="kv"><span class="k">Total hours</span><span class="v">150h <small>50h online + 3h offline + 1h TE + 2h PE + 94h self-study</small></span></div>
   <div class="kv"><span class="k">Prerequisite</span><span class="v">None</span></div>
   <div class="kv"><span class="k">Final Exam</span><span class="v">FE = (TE + PE) / 2</span></div>
   <div class="kv"><span class="k">Final Result</span><span class="v">FR = min(10, (TE+PE)/2 + Bonus)</span></div>
   <div class="kv"><span class="k">Pass</span><span class="v">TE ≥ 4 AND PE ≥ 4 AND FR ≥ 5</span></div>
 </div>
-<div class="callout warn">Three gates, all required: <strong>TE ≥ 4</strong>, <strong>PE ≥ 4</strong>, and <strong>FR ≥ 5</strong>. Finish the MOOCs early and on time — the completion bonus lifts your final result, and certificates are required to take the exam at all.</div>
+<h3>The two exam papers — exactly as the syllabus lists them</h3>
+<table>
+  <thead><tr><th>Paper</th><th>Weight</th><th>Completion</th><th>Duration</th><th>Question type</th><th>No. questions</th></tr></thead>
+  <tbody>
+    <tr><td><strong>TE</strong> — Theoretical Exam</td><td><strong>50%</strong></td><td>&ge; 4</td><td><strong>60&#39;</strong></td><td>Multiple choice</td><td><strong>60</strong></td></tr>
+    <tr><td><strong>PE</strong> — Practical Exam</td><td><strong>50%</strong></td><td>&ge; 4</td><td><strong>120&#39;</strong></td><td><strong>01 practical assignment</strong></td><td>1</td></tr>
+  </tbody>
+</table>
+<p>Both are taken <em>at campus</em> and cover the whole course. The 1h TE + 2h PE in the hour split above is exactly these two papers.</p>
+<div class="callout warn">Three gates, all required: <strong>TE ≥ 4</strong>, <strong>PE ≥ 4</strong>, and <strong>FR ≥ 5</strong>. And one blocker before them: <strong>&quot;Must complete all MOOCs of spec. with certification in order to take the Final Exam at Campus&quot;</strong> — no certificates, no exam. Finish the MOOCs early and on time; the completion bonus lifts your final result.</div>
 <div class="note-ct">Study at least 5 hours/week on the MOOCs, keep your progress up to date, and join the forum discussions — bonus is awarded for timely completion.</div>
 </div>
 <div class="ml-vi">
@@ -112,13 +121,22 @@ export default {
 <p class="lead">WED201c có sơ đồ điểm đặc biệt: bạn phải hoàn thành các MOOC Coursera (kèm chứng chỉ) mới được dự thi cuối kỳ, và điểm gồm một bài thi lý thuyết và một bài thi thực hành.</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">Tín chỉ</span><span class="v">3</span></div>
-  <div class="kv"><span class="k">Tổng giờ</span><span class="v">150h <small>50h online + 3h offline + thi + tự học</small></span></div>
+  <div class="kv"><span class="k">Tổng giờ</span><span class="v">150h <small>50h online + 3h offline + 1h thi TE + 2h thi PE + 94h tự học</small></span></div>
   <div class="kv"><span class="k">Tiên quyết</span><span class="v">Không</span></div>
   <div class="kv"><span class="k">Thi cuối (FE)</span><span class="v">FE = (TE + PE) / 2</span></div>
   <div class="kv"><span class="k">Kết quả (FR)</span><span class="v">FR = min(10, (TE+PE)/2 + Bonus)</span></div>
   <div class="kv"><span class="k">Qua môn</span><span class="v">TE ≥ 4 VÀ PE ≥ 4 VÀ FR ≥ 5</span></div>
 </div>
-<div class="callout warn">Ba cửa ải, đều bắt buộc: <strong>TE ≥ 4</strong>, <strong>PE ≥ 4</strong>, và <strong>FR ≥ 5</strong>. Hoàn thành MOOC sớm và đúng hạn — điểm thưởng hoàn thành nâng kết quả cuối, và chứng chỉ là điều kiện để được thi.</div>
+<h3>Hai bài thi — đúng như syllabus liệt kê</h3>
+<table>
+  <thead><tr><th>Bài</th><th>Trọng số</th><th>Điều kiện</th><th>Thời gian</th><th>Dạng câu hỏi</th><th>Số câu</th></tr></thead>
+  <tbody>
+    <tr><td><strong>TE</strong> — Thi lý thuyết</td><td><strong>50%</strong></td><td>&ge; 4</td><td><strong>60&#39;</strong></td><td>Trắc nghiệm</td><td><strong>60</strong></td></tr>
+    <tr><td><strong>PE</strong> — Thi thực hành</td><td><strong>50%</strong></td><td>&ge; 4</td><td><strong>120&#39;</strong></td><td><strong>01 bài thực hành</strong></td><td>1</td></tr>
+  </tbody>
+</table>
+<p>Cả hai thi <em>tại trường</em> và ra vào toàn bộ nội dung môn. Phần 1h TE + 2h PE trong bảng giờ ở trên chính là hai bài này.</p>
+<div class="callout warn">Ba cửa ải, đều bắt buộc: <strong>TE ≥ 4</strong>, <strong>PE ≥ 4</strong>, và <strong>FR ≥ 5</strong>. Và một chốt chặn trước đó: <strong>&quot;phải hoàn thành mọi MOOC của bộ specialization kèm chứng chỉ mới được dự thi cuối kỳ tại trường&quot;</strong> — không chứng chỉ thì không được thi. Hoàn thành MOOC sớm và đúng hạn; điểm thưởng hoàn thành nâng kết quả cuối.</div>
 <div class="note-ct">Học ít nhất 5 giờ/tuần trên MOOC, cập nhật tiến độ đều đặn, và tham gia thảo luận diễn đàn — điểm thưởng cho hoàn thành đúng hạn.</div>
 </div>
 `,
@@ -391,7 +409,7 @@ export default {
        title="Three capital letters then three digits, e.g. WED201"&gt;</pre>
 <div class="out"><b>What happens on submit:</b> the browser blocks it, focuses the first invalid field and shows the <span class="badge">title</span> text as the message. <span class="badge">required</span>, <span class="badge">min</span>, <span class="badge">max</span>, <span class="badge">minlength</span>, <span class="badge">pattern</span> and the typed inputs cover most rules.<br>
 <b>Styling the states:</b> <span class="badge">input:invalid { border-color: red; }</span> and <span class="badge">input:valid { border-color: green; }</span> give live feedback with pure CSS (lesson 2.5).<br>
-<b>Still needed in JavaScript:</b> anything comparing two fields ("passwords must match"), or checking against the server ("is this email taken?") — that is MOOC 3, lesson 3.5.</div>
+<b>Still needed in JavaScript:</b> anything comparing two fields ("passwords must match"), or checking against the server ("is this email taken?") — that is MOOC 3, lesson 3.4.</div>
 
 <div class="pitfall"><b>Client-side validation is a convenience, never a security control.</b> Anyone can open DevTools, delete the <span class="badge">required</span> attribute and submit whatever they like — or skip the page entirely and post straight to your URL. Every rule must be re-checked on the server (DBI202 constraints, PRJ301 servlets). The HTML validation exists to help honest users, not to stop dishonest ones.</div>
 
@@ -446,7 +464,7 @@ export default {
        title="Ba chữ in hoa rồi ba chữ số, ví dụ WED201"&gt;</pre>
 <div class="out"><b>Chuyện gì xảy ra khi bấm gửi:</b> trình duyệt chặn lại, đưa con trỏ vào trường sai đầu tiên và hiện chữ trong <span class="badge">title</span> làm thông báo. <span class="badge">required</span>, <span class="badge">min</span>, <span class="badge">max</span>, <span class="badge">minlength</span>, <span class="badge">pattern</span> cùng các kiểu input phủ được hầu hết luật.<br>
 <b>Tô màu theo trạng thái:</b> <span class="badge">input:invalid { border-color: red; }</span> và <span class="badge">input:valid { border-color: green; }</span> cho phản hồi tức thời bằng CSS thuần (bài 2.5).<br>
-<b>Vẫn cần JavaScript cho:</b> mọi thứ so sánh hai trường ("mật khẩu phải khớp nhau"), hoặc kiểm với máy chủ ("email này có ai dùng chưa?") — đó là MOOC 3, bài 3.5.</div>
+<b>Vẫn cần JavaScript cho:</b> mọi thứ so sánh hai trường ("mật khẩu phải khớp nhau"), hoặc kiểm với máy chủ ("email này có ai dùng chưa?") — đó là MOOC 3, bài 3.4.</div>
 
 <div class="pitfall"><b>Kiểm tra ở phía trình duyệt là tiện ích, không bao giờ là biện pháp an ninh.</b> Ai cũng mở được DevTools, xoá thuộc tính <span class="badge">required</span> rồi gửi bất cứ thứ gì họ muốn — hoặc bỏ qua hẳn trang web và gửi thẳng tới URL của bạn. Mọi luật đều phải được kiểm lại ở máy chủ (ràng buộc DBI202, servlet PRJ301). Bộ kiểm HTML sinh ra để giúp người dùng ngay thẳng, không phải để chặn người gian.</div>
 
@@ -1062,7 +1080,7 @@ student.gpa = 8.5;              <span class="tok-comment">// allowed — the bin
 <p><b>Never use <span class="badge">var</span>.</b> It ignores block scope, so a <span class="badge">var</span> declared inside an <span class="badge">if</span> leaks out of it — a source of bugs that <span class="badge">let</span> and <span class="badge">const</span> simply removed.</p>
 
 <h3>Types, and the comparison trap</h3>
-<div class="out"><b>Seven types you will meet:</b> string, number, boolean, null, undefined, object, array (technically an object).<br>
+<div class="out"><b>The types you will meet:</b> JavaScript has <b>eight</b> data types — seven primitives (<span class="badge">string</span>, <span class="badge">number</span>, <span class="badge">bigint</span>, <span class="badge">boolean</span>, <span class="badge">undefined</span>, <span class="badge">symbol</span>, <span class="badge">null</span>) plus <span class="badge">object</span>. In this course you will meet five of them — string, number, boolean, null, undefined — and object; <b>an array is not a separate type</b>, it is an object (<span class="badge">typeof [] === "object"</span>), and <span class="badge">bigint</span> / <span class="badge">symbol</span> do not appear in WED201c.<br>
 <b>The trap:</b> <span class="badge">"5" == 5</span> is <b>true</b> — the loose operator converts types before comparing. <span class="badge">"5" === 5</span> is <b>false</b>, comparing type and value.<br>
 <b>Why it matters here:</b> everything read from an input is a <em>string</em>. <span class="badge">input.value + 1</span> where the user typed 5 gives <b>"51"</b>, not 6. Convert first: <span class="badge">Number(input.value) + 1</span> or <span class="badge">parseInt(input.value, 10)</span>.<br>
 <b>Rule: always use <span class="badge">===</span> and <span class="badge">!==</span>.</b></div>
@@ -1115,7 +1133,7 @@ student.gpa = 8.5;              <span class="tok-comment">// được — cái c
 <p><b>Đừng bao giờ dùng <span class="badge">var</span>.</b> Nó bỏ qua phạm vi khối, nên một biến <span class="badge">var</span> khai trong <span class="badge">if</span> rò ra ngoài — nguồn lỗi mà <span class="badge">let</span> và <span class="badge">const</span> đã xoá sổ.</p>
 
 <h3>Kiểu dữ liệu, và cái bẫy so sánh</h3>
-<div class="out"><b>Bảy kiểu bạn sẽ gặp:</b> string, number, boolean, null, undefined, object, array (về mặt kỹ thuật là một object).<br>
+<div class="out"><b>Các kiểu bạn sẽ gặp:</b> JavaScript có <b>tám</b> kiểu dữ liệu — bảy kiểu nguyên thuỷ (<span class="badge">string</span>, <span class="badge">number</span>, <span class="badge">bigint</span>, <span class="badge">boolean</span>, <span class="badge">undefined</span>, <span class="badge">symbol</span>, <span class="badge">null</span>) cộng <span class="badge">object</span>. Trong môn này bạn gặp năm kiểu — string, number, boolean, null, undefined — và object; <b>array KHÔNG phải một kiểu riêng</b>, nó là object (<span class="badge">typeof [] === "object"</span>), còn <span class="badge">bigint</span> / <span class="badge">symbol</span> không xuất hiện ở WED201c.<br>
 <b>Cái bẫy:</b> <span class="badge">"5" == 5</span> cho <b>true</b> — toán tử lỏng tự chuyển kiểu trước khi so sánh. <span class="badge">"5" === 5</span> cho <b>false</b>, so cả kiểu lẫn giá trị.<br>
 <b>Vì sao chuyện này quan trọng ở đây:</b> mọi thứ đọc từ ô nhập đều là <em>chuỗi</em>. <span class="badge">input.value + 1</span> khi người dùng gõ 5 sẽ cho <b>"51"</b>, không phải 6. Hãy chuyển kiểu trước: <span class="badge">Number(input.value) + 1</span> hoặc <span class="badge">parseInt(input.value, 10)</span>.<br>
 <b>Quy tắc: luôn dùng <span class="badge">===</span> và <span class="badge">!==</span>.</b></div>
@@ -1564,8 +1582,8 @@ list.addEventListener(<span class="tok-string">"click"</span>, (e) =&gt; {
 
     /* ══════════════════ NÂNG CAO ══════════════════ */
     {
-      title: 'Advanced — Beyond the syllabus|||Nâng cao — Ngoài giáo trình',
-      description: 'Khả năng tiếp cận, CSS hiện đại (framework), và triển khai site lên Internet.',
+      title: 'Advanced — Frameworks & modern CSS|||Nâng cao — Framework & CSS hiện đại',
+      description: 'Dùng framework có sẵn (MOOC 4 M3, buổi 9 — nội dung chính của giáo trình) cộng CSS hiện đại và hiệu năng. Trợ năng & đưa site lên mạng nằm ở bài 1.4 (MOOC 1 M3, buổi 3).',
       lessons: [
         {
           title: 'A.1 — Modern CSS, frameworks & performance|||A.1 — CSS hiện đại, framework & hiệu năng',
@@ -1575,8 +1593,8 @@ list.addEventListener(<span class="tok-string">"click"</span>, (e) =&gt; {
           content: `
 <div class="ml-en">
 <span class="eyebrow">Advanced · Lesson A.1</span>
-<h2>What the MOOC does not reach — modern CSS and the performance budget</h2>
-<p class="lead">Accessibility and publishing are covered in lesson 1.4. This is the other half of a professional front end: CSS features newer than the course material, an honest look at frameworks, and the three numbers your site is actually measured on.</p>
+<h2>Using existing frameworks (MOOC 4 M3) — plus modern CSS and the performance budget</h2>
+<p class="lead"><strong>&quot;Use Existing Frameworks&quot; is syllabus session 9</strong> (MOOC 4, module 3) and <strong>accessibility and putting your code on the web are session 3</strong> (MOOC 1, module 3, taught in lesson 1.4) — both are core, examinable material, not extras. What this lesson adds on top is CSS newer than the MOOC recordings (custom properties, dark mode, container queries) and the three performance numbers your site is actually judged on.</p>
 
 <h3>Custom properties — variables that live in the browser</h3>
 <pre>:root {
@@ -1622,8 +1640,8 @@ body { color: var(--text); background: var(--bg); }</pre>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Nâng cao · Bài A.1</span>
-<h2>Thứ MOOC chưa chạm tới — CSS hiện đại và ngân sách hiệu năng</h2>
-<p class="lead">Trợ năng và đưa lên mạng đã nằm ở bài 1.4. Đây là nửa còn lại của một front-end chuyên nghiệp: các tính năng CSS mới hơn giáo trình, một cái nhìn thẳng thắn về framework, và ba con số mà trang của bạn thật sự bị đo.</p>
+<h2>Dùng framework có sẵn (MOOC 4 M3) — cộng CSS hiện đại và ngân sách hiệu năng</h2>
+<p class="lead"><strong>&quot;Use Existing Frameworks&quot; là buổi 9 trong giáo trình</strong> (MOOC 4, module 3) và <strong>trợ năng cùng việc đưa mã lên mạng là buổi 3</strong> (MOOC 1, module 3, dạy ở bài 1.4) — cả hai đều là nội dung chính, nằm trong phạm vi thi, không phải phần học thêm. Thứ bài này bổ sung thêm là CSS mới hơn các video MOOC (biến CSS, dark mode, container query) và ba con số hiệu năng mà trang của bạn thật sự bị đo.</p>
 
 <h3>Biến CSS — biến sống ngay trong trình duyệt</h3>
 <pre>:root {
@@ -1689,21 +1707,21 @@ body { color: var(--text); background: var(--bg); }</pre>
     /* END-SECTIONS-MARKER */
     {
       "title": "Final Exam|||Thi cuối kỳ",
-      "description": "Thi cuối kỳ gồm PE (thi thực hành) và FE (trắc nghiệm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "description": "FE = (TE + PE)/2 — TE 50%: 60 câu trắc nghiệm/60 phút; PE 50%: 01 bài thực hành/120 phút. Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
       "lessons": [
         {
-          "title": "PE — Practical Exam|||PE — Thi thực hành",
+          "title": "PE — Practical Exam (50%, 120′, 01 practical assignment)|||PE — Thi thực hành (50%, 120′, 01 bài thực hành)",
           "slug": "wed201c-final-exam-pe",
           "type": "article",
-          "description": "Khung thi thực hành (PE) của môn — format, cách chấm và cách chuẩn bị. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · PE</span>\n<h2>PE — Practical Exam</h2>\n<p class=\"lead\">The Practical Exam (PE) is a <strong>hands-on coding exam</strong>: you are given a problem or feature and must write (and usually run) working code on the machine within a time limit. It is graded on correctness, whether it runs, and good practice.</p>\n<h3>How to prepare</h3>\n<ul>\n<li>Rebuild small features from a blank file, <em>without notes</em> &mdash; copying tutorials is not enough.</li>\n<li>Practise the core pattern of this subject end-to-end until you can do it from memory.</li>\n<li>Read the requirement twice; build the smallest working version first, then extend.</li>\n<li>Test as you go; a program that runs and does 80% beats one that does not compile.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A real practical prompt bank for this subject will be added here later, in the exam room. Use the guidance above to prepare now.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · PE</span>\n<h2>PE — Thi thực hành</h2>\n<p class=\"lead\">Thi thực hành (PE) là <strong>thi code trực tiếp</strong>: bạn được giao một bài toán/tính năng và phải viết (thường là chạy) code hoạt động trên máy trong thời gian quy định. Chấm theo tính đúng, có chạy được không, và thực hành tốt.</p>\n<h3>Cách chuẩn bị</h3>\n<ul>\n<li>Dựng lại các tính năng nhỏ từ một file trống, <em>không nhìn ghi chú</em> &mdash; chép tutorial là chưa đủ.</li>\n<li>Luyện mẫu cốt lõi của môn đầu-cuối tới khi làm được từ trí nhớ.</li>\n<li>Đọc yêu cầu hai lần; dựng bản chạy được nhỏ nhất trước, rồi mở rộng.</li>\n<li>Test dọc đường; một chương trình chạy và làm được 80% hơn một chương trình không biên dịch nổi.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề thực hành thật cho môn này sẽ được thêm vào đây sau, trong trang phòng thi. Dùng hướng dẫn trên để chuẩn bị ngay từ giờ.</div>\n</div>"
+          "description": "PE theo syllabus: 50% điểm, 120 phút, 01 bài thực hành, phải ≥ 4. Cách phân bổ thời gian và chuẩn bị. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · PE</span>\n<h2>PE — Practical Exam · 50% · 120 minutes · 01 practical assignment</h2>\n<p class=\"lead\">The syllabus is precise about this paper: <strong>PE, final exam, weight 50%, completion criterion 4, duration 120&#39;, &quot;01 practical assignment&quot;</strong>, covering the whole course, taken at campus. It is <em>one</em> build task, not a set of short questions, and it is half your grade — the other half is the TE (60 multiple-choice questions in 60&#39;).</p>\n<h3>How the mark is put together</h3>\n<p><strong>FE = (TE + PE) / 2</strong> and <strong>FR = min(10, (TE + PE)/2 + Bonus)</strong>. You pass only with <strong>TE &ge; 4 AND PE &ge; 4 AND FR &ge; 5</strong>, so a brilliant theory score cannot rescue a failed practical.</p>\n<h3>What one practical assignment looks like in this subject</h3>\n<p>The CLOs say it plainly: build a site &mdash; HTML5 structure (CLO1), CSS3 styling (CLO2), JavaScript interactivity (CLO3), responsive for various devices (CLO4), all of it together (CLO5). Expect a brief plus a mock-up or a written spec, and 120 minutes to turn it into working pages.</p>\n<h3>How to prepare</h3>\n<ul>\n<li>Rebuild small pages from a blank file, <em>without notes</em> &mdash; semantic skeleton, a form, a flex/grid layout, one media query, one event handler. Copying tutorials is not enough.</li>\n<li>Budget the 120 minutes before you type: structure first, then layout, then styling, then the JavaScript, then the responsive pass. Leave 10 minutes to validate.</li>\n<li>Build the smallest working version first, then extend &mdash; a page that renders and does 80% beats an ambitious page that is broken.</li>\n<li>Check in the browser after every change, and run the W3C validator at the end (lesson 1.4).</li>\n<li>Practise on the capstone checklist in lesson 5.1; that is the closest thing to this paper.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A real practical prompt bank for this subject will be added here later, in the exam room. Use the guidance above to prepare now.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · PE</span>\n<h2>PE — Thi thực hành · 50% · 120 phút · 01 bài thực hành</h2>\n<p class=\"lead\">Syllabus ghi rõ về bài này: <strong>PE, thi cuối kỳ, trọng số 50%, điều kiện hoàn thành 4, thời gian 120&#39;, &quot;01 practical assignment&quot;</strong>, ra vào toàn bộ nội dung môn, thi tại trường. Đó là <em>một</em> bài dựng sản phẩm, không phải một loạt câu hỏi ngắn, và nó chiếm một nửa điểm môn — nửa còn lại là TE (60 câu trắc nghiệm trong 60&#39;).</p>\n<h3>Điểm được ghép thế nào</h3>\n<p><strong>FE = (TE + PE) / 2</strong> và <strong>FR = min(10, (TE + PE)/2 + Bonus)</strong>. Chỉ qua môn khi <strong>TE &ge; 4 VÀ PE &ge; 4 VÀ FR &ge; 5</strong>, nên điểm lý thuyết cao tới đâu cũng không cứu được bài thực hành trượt.</p>\n<h3>&quot;01 bài thực hành&quot; của môn này trông thế nào</h3>\n<p>Chuẩn đầu ra nói thẳng: dựng một site &mdash; cấu trúc HTML5 (CLO1), tạo kiểu bằng CSS3 (CLO2), tương tác bằng JavaScript (CLO3), responsive cho nhiều thiết bị (CLO4), và ghép tất cả lại (CLO5). Hãy chờ một đề bài kèm mock-up hoặc mô tả, và 120 phút để biến nó thành trang chạy được.</p>\n<h3>Cách chuẩn bị</h3>\n<ul>\n<li>Dựng lại các trang nhỏ từ file trống, <em>không nhìn ghi chú</em> &mdash; bộ khung ngữ nghĩa, một biểu mẫu, một bố cục flex/grid, một media query, một trình xử lý sự kiện. Chép tutorial là chưa đủ.</li>\n<li>Chia 120 phút trước khi gõ: cấu trúc trước, rồi bố cục, rồi kiểu dáng, rồi JavaScript, rồi lượt responsive. Chừa 10 phút để kiểm tra hợp lệ.</li>\n<li>Dựng bản chạy được nhỏ nhất trước rồi mở rộng &mdash; một trang hiện ra và làm được 80% hơn một trang tham vọng bị vỡ.</li>\n<li>Kiểm trong trình duyệt sau mỗi thay đổi, và chạy validator W3C ở cuối (bài 1.4).</li>\n<li>Luyện theo checklist capstone ở bài 5.1; đó là thứ gần với bài thi này nhất.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề thực hành thật cho môn này sẽ được thêm vào đây sau, trong trang phòng thi. Dùng hướng dẫn trên để chuẩn bị ngay từ giờ.</div>\n</div>"
         },
         {
-          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "title": "TE — Theoretical Exam (50%, 60 MCQ / 60′)|||TE — Thi lý thuyết (50%, 60 câu trắc nghiệm / 60′)",
           "slug": "wed201c-final-exam-fe",
           "type": "article",
           "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">In WED201c the Final Exam is <strong>FE = (TE + PE) / 2</strong> — two papers, not one. Only the <strong>TE</strong> is multiple choice: <strong>50% of the mark, 60 multiple-choice questions in 60 minutes</strong>, completion criterion 4. The other half, the <strong>PE</strong>, is <strong>01 practical assignment in 120 minutes</strong> (see the PE page next to this one). This page prepares you for the TE.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Ở WED201c, thi cuối kỳ là <strong>FE = (TE + PE) / 2</strong> — hai bài chứ không phải một. Chỉ <strong>TE</strong> mới là trắc nghiệm: <strong>50% điểm, 60 câu trắc nghiệm trong 60 phút</strong>, điều kiện hoàn thành 4. Nửa còn lại, <strong>PE</strong>, là <strong>01 bài thực hành trong 120 phút</strong> (xem trang PE ngay bên cạnh). Trang này luyện cho TE.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [

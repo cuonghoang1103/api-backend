@@ -88,10 +88,8 @@ export function BangHook({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
         <div className="ct-mcp-bang">
           <div className="ct-mcp-dau"><strong>Hook</strong></div>
           <p className="ct-mcp-chan">
-            Chạy lệnh của bạn quanh mỗi lời gọi tool. Đầu ra của <code>Sau tool</code> được
-            {' '}nối vào kết quả tool, nên agent ĐỌC ĐƯỢC — ví dụ <code>npx tsc --noEmit</code>
-            {' '}sau mỗi lần nó sửa file.
-            {soHook !== null && <> {' '}Đang có <strong>{soHook}</strong> hook.</>}
+            <Chu cau="Chạy lệnh của bạn quanh mỗi lời gọi tool. Đầu ra của `Sau tool` được nối vào kết quả tool, nên agent ĐỌC ĐƯỢC — ví dụ `npx tsc --noEmit` sau mỗi lần nó sửa file." />
+            {soHook !== null && <> {' '}<Chu cau={dichP('Đang có **{n}** hook.', { n: soHook })} /></>}
           </p>
           {/* Cảnh báo đặt Ở ĐÂY chứ không trong tài liệu: hook thiếu `khop` chạy sau
               MỌI tool, kể cả `read_file`, nên một `npm test` sẽ chạy vài chục lần
@@ -130,7 +128,7 @@ export function BangHook({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
                 disabled={khoa}
                 onClick={() => { void window.cuongthai?.agent.hookDuyetDuAn(cuocId).then(napLai); }}
               >
-                <ShieldCheck size={12} aria-hidden /> Tôi đã đọc — cho chạy
+                <ShieldCheck size={12} aria-hidden /> {dich('Tôi đã đọc — cho chạy')}
               </button>
             </div>
           )}
@@ -138,10 +136,10 @@ export function BangHook({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
           <div className="ct-hook-nut">
             <button type="button" className="ct-btn ct-btn-ghost ct-mcp-nho"
               onClick={() => { void window.cuongthai?.agent.hookMoCauHinh().then(napLai); }}>
-              <FileCode2 size={12} aria-hidden /> Mở file cấu hình
+              <FileCode2 size={12} aria-hidden /> {dich('Mở file cấu hình')}
             </button>
             <button type="button" className="ct-btn ct-btn-ghost ct-mcp-nho" onClick={() => void napLai()}>
-              <RotateCw size={12} aria-hidden /> Nạp lại
+              <RotateCw size={12} aria-hidden /> {dich('Nạp lại')}
             </button>
           </div>
 
@@ -151,7 +149,9 @@ export function BangHook({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
             <p className="ct-mcp-chan">{dich('Không tốn lượt agent nào. Chạy thật trong thư mục dự án.')}</p>
             <div className="ct-hook-thu">
               <select value={moc} onChange={(e) => datMoc(e.target.value as typeof moc)}>
-                {MOC.map((m) => <option key={m.ma} value={m.ma}>{m.ten}</option>)}
+                {/* Dịch lúc DỰNG, không phải lúc khai: `MOC` là hằng tầm mô-đun,
+                    tính một lần lúc nạp tệp ⇒ dịch ở đó là khoá cứng ngôn ngữ. */}
+                {MOC.map((m) => <option key={m.ma} value={m.ma}>{dich(m.ten)}</option>)}
               </select>
               <input
                 value={tenTool}
@@ -204,8 +204,10 @@ export function BangHook({ cuocId, khoa }: { cuocId: string; khoa: boolean }) {
             <strong className="ct-hook-tieu">{dich('Kỹ năng model đang thấy')}</strong>
             {kyNang.length === 0 ? (
               <p className="ct-mcp-trong">
-                Chưa có kỹ năng nào. Tạo <code>{dich('.claude/skills/&lt;tên&gt;/SKILL.md')}</code>,
-                {' '}phần đầu phải khai <code>description</code> — thiếu nó thì kỹ năng bị bỏ qua.
+                {/* ⚠️ `<tên>` viết THẲNG, không phải `&lt;tên&gt;`. JSX chỉ giải mã
+                    thực thể HTML trong VĂN BẢN; đây là một chuỗi JS nên React in
+                    nguyên xi — người dùng thấy đúng chữ `&lt;tên&gt;` trên màn hình. */}
+                <Chu cau="Chưa có kỹ năng nào. Tạo `.claude/skills/<tên>/SKILL.md`, phần đầu phải khai `description` — thiếu nó thì kỹ năng bị bỏ qua." />
               </p>
             ) : (
               <ul className="ct-hook-kn">

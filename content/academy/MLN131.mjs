@@ -57,8 +57,8 @@ export default {
   <div class="lz-stage">Specific issues</div>
   <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Nation & religion</div><div class="lz-nsub">Lenin's programme · Vietnam's principles</div></div></div>
   <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">The family</div><div class="lz-nsub">position · functions · building it</div></div></div>
-  <div class="lz-stage">Beyond the syllabus ★</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Applying it today · rebutting distortions</div><div class="lz-nsub">critical thinking</div></div></div>
+  <div class="lz-stage">Application &amp; defence (on the syllabus)</div>
+  <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Applying it today · rebutting distortions</div><div class="lz-nsub">the "Vận dụng…" sessions · CQ3.1</div></div></div>
 </div>
 
 <div class="callout ok"><strong>The connecting thread:</strong> <em>the historic mission of the working class.</em> Chapter 2 states it; every later chapter is a condition for fulfilling it — you cannot build socialism (Ch3) without the right democracy and state (Ch4), a firm class alliance (Ch5), and solving the questions of nation, religion and family (Ch6-7). Hold this thread and the seven chapters become one line of reasoning.</div>
@@ -85,8 +85,8 @@ export default {
   <div class="lz-stage">Vấn đề cụ thể</div>
   <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Dân tộc & tôn giáo</div><div class="lz-nsub">Cương lĩnh Lênin · nguyên tắc Việt Nam</div></div></div>
   <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Gia đình</div><div class="lz-nsub">vị trí · chức năng · xây dựng</div></div></div>
-  <div class="lz-stage">Ngoài giáo trình ★</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Vận dụng hôm nay · phản bác xuyên tạc</div><div class="lz-nsub">tư duy phản biện</div></div></div>
+  <div class="lz-stage">Vận dụng &amp; bảo vệ (trong giáo trình)</div>
+  <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Vận dụng hôm nay · phản bác xuyên tạc</div><div class="lz-nsub">các buổi "Vận dụng…" · CQ3.1</div></div></div>
 </div>
 
 <div class="callout ok"><strong>Sợi chỉ nối:</strong> <em>sứ mệnh lịch sử của giai cấp công nhân.</em> Chương 2 nêu nó; mọi chương sau là một điều kiện để hoàn thành — bạn không thể xây CNXH (Ch3) mà thiếu nền dân chủ và nhà nước đúng (Ch4), một liên minh giai cấp vững (Ch5), và giải quyết các vấn đề dân tộc, tôn giáo, gia đình (Ch6-7). Nắm sợi chỉ này thì bảy chương thành một mạch lập luận.</div>
@@ -105,12 +105,12 @@ export default {
 <h2>The grade breakdown — the Assignment (40%) carries the course</h2>
 <p class="lead">MLN131 is 70% continuous work plus a 30% final. The <strong>Assignment (40%)</strong> — usually a group essay/presentation — is the biggest component. The Final has a <strong>≥ 4 gate</strong>.</p>
 <table>
-<thead><tr><th>Component</th><th>Weight</th><th>Gate</th><th>Form</th></tr></thead>
+<thead><tr><th>Component</th><th>Parts</th><th>Weight</th><th>Completion criterion</th><th>Form / duration</th></tr></thead>
 <tbody>
-<tr><td>Participation</td><td><strong>10%</strong></td><td>—</td><td>Attendance + in-class contribution</td></tr>
-<tr><td>Progress Test</td><td><strong>20%</strong></td><td>—</td><td>1 test</td></tr>
-<tr><td>Assignment</td><td><strong>40%</strong></td><td>—</td><td>Group essay / presentation</td></tr>
-<tr><td>Final Exam</td><td><strong>30%</strong></td><td>≥ 4</td><td>60'</td></tr>
+<tr><td>Participation (on-going)</td><td>1</td><td><strong>10%</strong></td><td><strong>&gt; 0</strong></td><td>Attendance + in-class contribution</td></tr>
+<tr><td>Progress Test (on-going)</td><td>1</td><td><strong>20%</strong></td><td><strong>&gt; 0</strong></td><td>1 test, <strong>20'</strong></td></tr>
+<tr><td>Assignment (on-going)</td><td><strong>2</strong></td><td><strong>40%</strong></td><td><strong>&gt; 0</strong></td><td>"Depending on the instructor's chosen form of assessment" — typically a group essay / presentation</td></tr>
+<tr><td>Final Exam</td><td>1</td><td><strong>30%</strong></td><td><strong>≥ 4</strong></td><td><strong>60'</strong>, covers all LOs</td></tr>
 </tbody>
 </table>
 <div class="kv-grid">
@@ -118,7 +118,9 @@ export default {
 <div class="kv"><span class="k">Pass final result</span><span class="v">≥ 5.0</span></div>
 <div class="kv"><span class="k">Final exam gate</span><span class="v">≥ 4.0</span></div>
 <div class="kv"><span class="k">Attendance</span><span class="v">≥ 80% to sit the final</span></div>
+<div class="kv"><span class="k">Every on-going component</span><span class="v">must be &gt; 0</span></div>
 </div>
+<div class="callout warn"><strong>Every on-going component has a "&gt; 0" gate — a zero anywhere fails you.</strong> The syllabus (ID 13307) sets completion criterion <strong>&gt; 0</strong> on Participation, Progress Test <em>and</em> Assignment, and <strong>4</strong> on the Final Exam. It also records the Assignment as <strong>2 parts</strong> and the Progress Test as <strong>20'</strong>. Skipping any one part is not "losing its weight" — it is failing to complete the course.</div>
 <div class="out"><strong>Worked example:</strong> Participation 8, Progress Test 7, Assignment 8, Final 3.5.
 FR = 0.10·8 + 0.20·7 + 0.40·8 + 0.30·3.5 = 0.8 + 1.4 + 3.2 + 1.05 = 6.45.
 FR ≥ 5 ✓ but Final = 3.5 < 4 → <strong>FAIL</strong> on the gate. Strong coursework cannot rescue a weak final.</div>
@@ -131,12 +133,12 @@ FR ≥ 5 ✓ but Final = 3.5 < 4 → <strong>FAIL</strong> on the gate. Strong c
 <h2>Cấu trúc điểm — Bài tập (40%) gánh cả môn</h2>
 <p class="lead">MLN131 gồm 70% điểm quá trình cộng 30% thi cuối. <strong>Bài tập (40%)</strong> — thường là tiểu luận/thuyết trình nhóm — là thành phần lớn nhất. Thi cuối có <strong>cổng ≥ 4</strong>.</p>
 <table>
-<thead><tr><th>Thành phần</th><th>Trọng số</th><th>Cổng</th><th>Hình thức</th></tr></thead>
+<thead><tr><th>Thành phần</th><th>Số phần</th><th>Trọng số</th><th>Điều kiện hoàn thành</th><th>Hình thức / thời lượng</th></tr></thead>
 <tbody>
-<tr><td>Chuyên cần</td><td><strong>10%</strong></td><td>—</td><td>Điểm danh + đóng góp trên lớp</td></tr>
-<tr><td>Progress Test</td><td><strong>20%</strong></td><td>—</td><td>1 bài</td></tr>
-<tr><td>Bài tập</td><td><strong>40%</strong></td><td>—</td><td>Tiểu luận / thuyết trình nhóm</td></tr>
-<tr><td>Thi cuối kỳ</td><td><strong>30%</strong></td><td>≥ 4</td><td>60'</td></tr>
+<tr><td>Chuyên cần (on-going)</td><td>1</td><td><strong>10%</strong></td><td><strong>&gt; 0</strong></td><td>Điểm danh + đóng góp trên lớp</td></tr>
+<tr><td>Progress Test (on-going)</td><td>1</td><td><strong>20%</strong></td><td><strong>&gt; 0</strong></td><td>1 bài, <strong>20'</strong></td></tr>
+<tr><td>Bài tập (Assignment, on-going)</td><td><strong>2</strong></td><td><strong>40%</strong></td><td><strong>&gt; 0</strong></td><td>"Phụ thuộc theo hình thức kiểm tra đánh giá của giảng viên" — thường là tiểu luận / thuyết trình nhóm</td></tr>
+<tr><td>Thi cuối kỳ</td><td>1</td><td><strong>30%</strong></td><td><strong>≥ 4</strong></td><td><strong>60'</strong>, phủ toàn bộ chuẩn đầu ra</td></tr>
 </tbody>
 </table>
 <div class="kv-grid">
@@ -144,7 +146,9 @@ FR ≥ 5 ✓ but Final = 3.5 < 4 → <strong>FAIL</strong> on the gate. Strong c
 <div class="kv"><span class="k">Kết quả cuối qua</span><span class="v">≥ 5.0</span></div>
 <div class="kv"><span class="k">Cổng thi cuối</span><span class="v">≥ 4.0</span></div>
 <div class="kv"><span class="k">Điểm danh</span><span class="v">≥ 80% mới được thi</span></div>
+<div class="kv"><span class="k">Mọi thành phần thường xuyên</span><span class="v">phải &gt; 0</span></div>
 </div>
+<div class="callout warn"><strong>Mọi thành phần thường xuyên đều có chốt "&gt; 0" — bị 0 ở bất kỳ đâu là trượt.</strong> Syllabus (ID 13307) đặt điều kiện hoàn thành <strong>&gt; 0</strong> cho Chuyên cần, Progress Test <em>và</em> Assignment, và <strong>4</strong> cho Thi cuối kỳ. Syllabus cũng ghi Assignment gồm <strong>2 phần</strong> và Progress Test dài <strong>20'</strong>. Bỏ một phần không phải là "mất trọng số phần đó" — mà là không hoàn thành môn học.</div>
 <div class="out"><strong>Ví dụ có lời giải:</strong> Chuyên cần 8, Progress Test 7, Bài tập 8, Thi cuối 3.5.
 FR = 0.10·8 + 0.20·7 + 0.40·8 + 0.30·3.5 = 0.8 + 1.4 + 3.2 + 1.05 = 6.45.
 FR ≥ 5 ✓ nhưng Thi cuối = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổng. Điểm quá trình tốt không cứu được bài thi yếu.</div>
@@ -360,7 +364,7 @@ FR ≥ 5 ✓ nhưng Thi cuối = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổn
 <p class="lead">Scientific socialism did not begin with Marx. For centuries, "utopian socialists" (Thomas More, Saint-Simon, Fourier, Owen) criticized the injustice of their societies and imagined fairer ones — but they could not explain <em>the laws</em> that would bring such a society, nor identify the social force to build it.</p>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lk">Utopian socialism</span> a moral critique + a beautiful dream, but no scientific analysis of how to get there. Its value: it kept alive the idea of a just society.</div>
-  <div class="lz-layer"><span class="lz-lk">Two discoveries made it scientific</span> Marx's <em>materialist conception of history</em> and <em>the theory of surplus value</em> (from MLN122) turned socialism from a wish into a law-governed necessity.</div>
+  <div class="lz-layer"><span class="lz-lk">Three great discoveries made it scientific</span> The MOET textbook credits Marx and Engels with <strong>three</strong>: (1) the <em>materialist conception of history</em>, (2) the <em>theory of surplus value</em> (from MLN122), and (3) the theory of the <em>world-historical mission of the working class</em>. The first two supply the laws; the third names the social force that carries them out — which is why socialism stops being a wish and becomes a law-governed necessity.</div>
   <div class="lz-layer"><span class="lz-lk">Conditions of birth</span> mid-19th-century industrial capitalism + a maturing working-class movement gave the theory both its object and its social force.</div>
 </div>
 <h3>Object and method</h3>
@@ -373,7 +377,7 @@ FR ≥ 5 ✓ nhưng Thi cuối = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổn
 </tbody>
 </table>
 <div class="callout ok"><strong>"Utopian → scientific" is the exam's framing question.</strong> Be able to say: utopian socialism dreamed of justice but couldn't explain how; scientific socialism grounds the goal in historical laws and names the working class as the agent. That contrast answers a whole family of Chapter 1 questions.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The two great discoveries link the three parts.</b> Notice the bridge across your three politics courses: philosophy (MLN111) gives historical materialism; political economy (MLN122) gives surplus value; scientific socialism (MLN131) uses <em>both</em> to prove socialism is a law-governed outcome. The three parts are one integrated theory. <em>Seeing the link makes all three easier to remember.</em></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The three great discoveries link the three parts.</b> Notice the bridge across your three politics courses: philosophy (MLN111) gives historical materialism; political economy (MLN122) gives surplus value; scientific socialism (MLN131) adds the working class's world-historical mission and uses <em>all three</em> to prove socialism is a law-governed outcome. The three parts are one integrated theory. (Engels' own famous phrase speaks of <em>two</em> great discoveries — historical materialism and surplus value — because he was describing Marx's contribution to social science; the textbook you are examined on counts three, adding the working-class mission. If a question says "two", it is quoting Engels; the course answer is <strong>three</strong>.) <em>Seeing the link makes all three easier to remember.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.1</span>
@@ -381,7 +385,7 @@ FR ≥ 5 ✓ nhưng Thi cuối = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổn
 <p class="lead">Chủ nghĩa xã hội khoa học không bắt đầu từ Mác. Nhiều thế kỷ, các "nhà xã hội chủ nghĩa không tưởng" (Thomas More, Saint-Simon, Fourier, Owen) phê phán sự bất công của xã hội họ và hình dung xã hội công bằng hơn — nhưng họ không giải thích được <em>những quy luật</em> đưa tới xã hội ấy, cũng không chỉ ra lực lượng xã hội để xây dựng.</p>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lk">CNXH không tưởng</span> một sự phê phán đạo đức + một giấc mơ đẹp, nhưng không có phân tích khoa học về cách đạt tới. Giá trị của nó: giữ sống ý tưởng về một xã hội công bằng.</div>
-  <div class="lz-layer"><span class="lz-lk">Hai phát kiến làm nó thành khoa học</span> <em>quan niệm duy vật về lịch sử</em> và <em>học thuyết giá trị thặng dư</em> (từ MLN122) của Mác biến CNXH từ một ước mong thành một tất yếu có quy luật.</div>
+  <div class="lz-layer"><span class="lz-lk">BA phát kiến vĩ đại làm nó thành khoa học</span> Giáo trình Bộ GD&amp;ĐT ghi nhận <strong>ba</strong> phát kiến của C. Mác và Ph. Ăngghen: (1) <em>chủ nghĩa duy vật lịch sử</em>, (2) <em>học thuyết giá trị thặng dư</em> (từ MLN122), và (3) <em>học thuyết về sứ mệnh lịch sử toàn thế giới của giai cấp công nhân</em>. Hai phát kiến đầu cho quy luật; phát kiến thứ ba gọi tên lực lượng xã hội thực hiện quy luật ấy — nhờ vậy CNXH thôi là ước mong mà thành tất yếu có quy luật.</div>
   <div class="lz-layer"><span class="lz-lk">Điều kiện ra đời</span> chủ nghĩa tư bản công nghiệp giữa thế kỷ XIX + phong trào công nhân trưởng thành cho lý luận cả đối tượng lẫn lực lượng xã hội.</div>
 </div>
 <h3>Đối tượng và phương pháp</h3>
@@ -394,7 +398,7 @@ FR ≥ 5 ✓ nhưng Thi cuối = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổn
 </tbody>
 </table>
 <div class="callout ok"><strong>"Không tưởng → khoa học" là câu hỏi đóng khung của đề thi.</strong> Hãy nói được: CNXH không tưởng mơ về công bằng nhưng không giải thích được cách; CNXH khoa học đặt mục tiêu trên quy luật lịch sử và gọi tên giai cấp công nhân là chủ thể. Sự đối lập đó trả lời cả một nhóm câu hỏi Chương 1.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hai phát kiến lớn nối ba bộ phận.</b> Để ý cây cầu qua ba môn chính trị: triết học (MLN111) cho duy vật lịch sử; kinh tế chính trị (MLN122) cho giá trị thặng dư; chủ nghĩa xã hội khoa học (MLN131) dùng <em>cả hai</em> để chứng minh CNXH là kết cục có quy luật. Ba bộ phận là một lý luận thống nhất. <em>Thấy được mối liên kết làm cả ba dễ nhớ hơn.</em></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Ba phát kiến vĩ đại nối ba bộ phận.</b> Để ý cây cầu qua ba môn chính trị: triết học (MLN111) cho duy vật lịch sử; kinh tế chính trị (MLN122) cho giá trị thặng dư; chủ nghĩa xã hội khoa học (MLN131) thêm sứ mệnh lịch sử toàn thế giới của giai cấp công nhân và dùng <em>cả ba</em> để chứng minh CNXH là kết cục có quy luật. Ba bộ phận là một lý luận thống nhất. (Câu nói nổi tiếng của chính Ăngghen nhắc tới <em>hai</em> phát kiến vĩ đại — duy vật lịch sử và giá trị thặng dư — vì ông đang nói về đóng góp của Mác cho khoa học xã hội; còn giáo trình bạn thi đếm BA, thêm sứ mệnh lịch sử của giai cấp công nhân. Nếu một câu hỏi nói "hai", đó là trích Ăngghen; đáp án của môn là <strong>ba</strong>.) <em>Thấy được mối liên kết làm cả ba dễ nhớ hơn.</em></div>
 </div>`,
         },
       ],
@@ -431,7 +435,7 @@ FR ≥ 5 ✓ nhưng Thi cuối = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổn
 <strong>Conclusion:</strong> the mission is not chosen or willed — it flows from the working class's objective place in modern production, realized through its party and alliances.</div>
 <div class="pitfall"><strong>Don't confuse "mission" with "merit."</strong> The working class has this role because of its <em>objective position</em>, not because it is morally superior. The exam wants the objective (position in production) + subjective (party, alliance) conditions — state both.</div>
 <div class="callout ok"><strong>The Vietnamese working class.</strong> Born under French colonialism, it is small but grew with the nation's struggle; led by the Party, allied with the peasantry, it carried the revolution. Today, in the industrialization-modernization era, developing this class (in number, quality, organization) is a live policy issue — a strong essay angle.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The working class in the knowledge economy.</b> A common "distortion" claims the working class is "disappearing" as automation grows. The disciplined reply: the working class is <em>changing form</em> (more knowledge workers, services), not vanishing; wage labor without ownership of the means of production still defines it. Answering this shows the critical thinking the skills CLOs prize. <em>A contemporary rebuttal beyond the syllabus.</em></div>
+<div class="callout ok"><strong>Session 5 — on the syllabus.</strong> Session 5 is "II. Giai cấp công nhân và việc thực hiện sứ mệnh lịch sử của giai cấp công nhân hiện nay" — the working class <em>today</em> is core, examinable content of Chapter 2. <b>The working class in the knowledge economy.</b> A common "distortion" claims the working class is "disappearing" as automation grows. The disciplined reply: the working class is <em>changing form</em> (more knowledge workers, services), not vanishing; wage labor without ownership of the means of production still defines it. Answering this shows the critical thinking the skills CLOs prize. <em>A contemporary rebuttal beyond the syllabus.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
@@ -454,7 +458,7 @@ FR ≥ 5 ✓ nhưng Thi cuối = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổn
 <strong>Kết luận:</strong> sứ mệnh không phải do chọn hay muốn — nó bắt nguồn từ địa vị khách quan của giai cấp công nhân trong nền sản xuất hiện đại, được hiện thực hóa qua chính đảng và liên minh.</div>
 <div class="pitfall"><strong>Đừng nhầm "sứ mệnh" với "công lao đạo đức".</strong> Giai cấp công nhân có vai trò này vì <em>địa vị khách quan</em>, không phải vì nó cao thượng hơn về đạo đức. Đề thi muốn cả điều kiện khách quan (địa vị trong sản xuất) + chủ quan (đảng, liên minh) — nêu cả hai.</div>
 <div class="callout ok"><strong>Giai cấp công nhân Việt Nam.</strong> Ra đời dưới ách thực dân Pháp, nhỏ nhưng lớn lên cùng cuộc đấu tranh dân tộc; do Đảng lãnh đạo, liên minh với nông dân, đã đưa cách mạng đi tới. Hôm nay, thời kỳ công nghiệp hóa - hiện đại hóa, phát triển giai cấp này (về số lượng, chất lượng, tổ chức) là một vấn đề chính sách sống động — một góc tiểu luận mạnh.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Giai cấp công nhân trong nền kinh tế tri thức.</b> Một "luận điệu xuyên tạc" phổ biến cho rằng giai cấp công nhân đang "biến mất" khi tự động hóa tăng. Câu trả lời có kỷ luật: giai cấp công nhân đang <em>thay đổi hình thức</em> (nhiều lao động tri thức, dịch vụ), không biến mất; lao động làm thuê không sở hữu tư liệu sản xuất vẫn định nghĩa nó. Trả lời được thể hiện tư duy phản biện mà các CLO kỹ năng coi trọng. <em>Một phản bác đương đại ngoài syllabus.</em></div>
+<div class="callout ok"><strong>Buổi 5 — NẰM TRONG giáo trình.</strong> Buổi 5 là "II. Giai cấp công nhân và việc thực hiện sứ mệnh lịch sử của giai cấp công nhân hiện nay" — giai cấp công nhân <em>hiện nay</em> là nội dung cốt lõi, có thể ra thi của Chương 2. <b>Giai cấp công nhân trong nền kinh tế tri thức.</b> Một "luận điệu xuyên tạc" phổ biến cho rằng giai cấp công nhân đang "biến mất" khi tự động hóa tăng. Câu trả lời có kỷ luật: giai cấp công nhân đang <em>thay đổi hình thức</em> (nhiều lao động tri thức, dịch vụ), không biến mất; lao động làm thuê không sở hữu tư liệu sản xuất vẫn định nghĩa nó. Trả lời được thể hiện tư duy phản biện mà các CLO kỹ năng coi trọng. <em>Một phản bác đương đại ngoài syllabus.</em></div>
 </div>`,
           quiz: {
             timeLimitSeconds: 300,
@@ -651,7 +655,7 @@ Vietnam is building a "socialist rule-of-law state of the people, by the people,
 • It serves the people's interests (for the people).
 • It is governed by law, with the Party's leadership and the people's mastery as three linked pillars.</div>
 <div class="pitfall"><strong>Don't reduce democracy to elections.</strong> Socialist democracy includes the people's ongoing participation and <em>supervision</em> of power, plus economic and social rights — not just periodic voting. The exam wants the breadth (political + economic + social), and the class content (for the majority).</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>"Dân biết, dân bàn, dân làm, dân kiểm tra, dân giám sát, dân thụ hưởng."</b> Vietnam's practical formula for grassroots democracy — the people know, discuss, do, check, supervise, and benefit. It operationalizes "of/by/for the people" into concrete rights and is a strong, current reference for the Chapter 4 essay. <em>The living, applied form of socialist democracy.</em></div>
+<div class="callout ok"><strong>Session 14 and constructive question CQ5.6 — on the syllabus.</strong> Session 14 is "III. Dân chủ xã hội chủ nghĩa và nhà nước pháp quyền xã hội chủ nghĩa ở Việt Nam — 1. Dân chủ xã hội chủ nghĩa ở Việt Nam", and CQ5.6 asks precisely how you understand this formula. <b>"Dân biết, dân bàn, dân làm, dân kiểm tra, dân giám sát, dân thụ hưởng."</b> Vietnam's practical formula for grassroots democracy — the people know, discuss, do, check, supervise, and benefit. It operationalizes "of/by/for the people" into concrete rights and is a strong, current reference for the Chapter 4 essay. <em>The living, applied form of socialist democracy.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.1</span>
@@ -678,7 +682,7 @@ Việt Nam đang xây dựng "nhà nước pháp quyền XHCN của dân, do dâ
 • Nó phục vụ lợi ích của nhân dân (vì dân).
 • Nó được quản lý bằng pháp luật, với sự lãnh đạo của Đảng và quyền làm chủ của nhân dân là ba trụ cột gắn kết.</div>
 <div class="pitfall"><strong>Đừng rút gọn dân chủ thành bầu cử.</strong> Dân chủ XHCN bao gồm sự tham gia thường xuyên và <em>giám sát</em> quyền lực của nhân dân, cùng các quyền kinh tế và xã hội — không chỉ bỏ phiếu định kỳ. Đề thi muốn bề rộng (chính trị + kinh tế + xã hội), và nội dung giai cấp (cho đa số).</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>"Dân biết, dân bàn, dân làm, dân kiểm tra, dân giám sát, dân thụ hưởng."</b> Công thức thực tiễn của Việt Nam về dân chủ ở cơ sở — dân biết, bàn, làm, kiểm tra, giám sát, và thụ hưởng. Nó cụ thể hóa "của/do/vì dân" thành các quyền cụ thể và là một liên hệ mạnh, thời sự cho tiểu luận Chương 4. <em>Hình thức sống động, được vận dụng của dân chủ XHCN.</em></div>
+<div class="callout ok"><strong>Buổi 14 và câu hỏi kiến tạo CQ5.6 — NẰM TRONG giáo trình.</strong> Buổi 14 là "III. Dân chủ xã hội chủ nghĩa và nhà nước pháp quyền xã hội chủ nghĩa ở Việt Nam — 1. Dân chủ xã hội chủ nghĩa ở Việt Nam", và CQ5.6 hỏi đúng chủ trương này. <b>"Dân biết, dân bàn, dân làm, dân kiểm tra, dân giám sát, dân thụ hưởng."</b> Công thức thực tiễn của Việt Nam về dân chủ ở cơ sở — dân biết, bàn, làm, kiểm tra, giám sát, và thụ hưởng. Nó cụ thể hóa "của/do/vì dân" thành các quyền cụ thể và là một liên hệ mạnh, thời sự cho tiểu luận Chương 4. <em>Hình thức sống động, được vận dụng của dân chủ XHCN.</em></div>
 </div>`,
           quiz: {
             timeLimitSeconds: 300,
@@ -810,7 +814,7 @@ Việt Nam đang xây dựng "nhà nước pháp quyền XHCN của dân, do dâ
 </div>
 <div class="pitfall"><strong>Freedom of belief includes the freedom NOT to believe — and it is a right, not a concession.</strong> A common error treats religion as merely to be "tolerated." The Marxist-Leninist and Vietnamese line is to <em>respect and protect</em> freedom of belief and non-belief as a citizen's right, while separating that from superstition and from those who abuse religion politically.</div>
 <div class="callout ok"><strong>Ethnic and religious unity serves the whole.</strong> Both chapters share one aim: keep the people united. Solving the national and religious questions on principles of equality and respect strengthens the great unity bloc (Ch5 alliance + HCM202 Ch5) that the whole revolution rests on.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>"Tôn trọng và bảo đảm quyền tự do tín ngưỡng."</b> Vietnam's constitution and law guarantee freedom of belief and religion, and religions "live good lives, do good deeds, accompany the nation." Citing this current legal-policy framing — not just the abstract principle — makes a Chapter 6 essay concrete and contemporary. <em>Principle grounded in today's policy.</em></div>
+<div class="callout ok"><strong>Session 25 — on the syllabus.</strong> Session 25 is "II.2. Tôn giáo ở Việt Nam và chính sách tôn giáo của Đảng, Nhà nước ta hiện nay", so Vietnam's current religious policy is examinable content, not an extra. <b>"Tôn trọng và bảo đảm quyền tự do tín ngưỡng."</b> Vietnam's constitution and law guarantee freedom of belief and religion, and religions "live good lives, do good deeds, accompany the nation." Citing this current legal-policy framing — not just the abstract principle — makes a Chapter 6 essay concrete and contemporary. <em>Principle grounded in today's policy.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.1</span>
@@ -831,7 +835,7 @@ Việt Nam đang xây dựng "nhà nước pháp quyền XHCN của dân, do dâ
 </div>
 <div class="pitfall"><strong>Tự do tín ngưỡng bao gồm tự do KHÔNG tin — và đó là quyền, không phải sự ban ơn.</strong> Một lỗi phổ biến coi tôn giáo chỉ là thứ để "dung thứ". Đường lối Mác-Lênin và Việt Nam là <em>tôn trọng và bảo vệ</em> tự do tín ngưỡng và không tín ngưỡng như một quyền của công dân, đồng thời tách nó khỏi mê tín và khỏi những kẻ lợi dụng tôn giáo về chính trị.</div>
 <div class="callout ok"><strong>Đoàn kết dân tộc và tôn giáo phục vụ cái toàn thể.</strong> Cả hai chương chung một mục đích: giữ nhân dân đoàn kết. Giải quyết vấn đề dân tộc và tôn giáo trên nguyên tắc bình đẳng và tôn trọng củng cố khối đại đoàn kết (liên minh Ch5 + HCM202 Ch5) mà cả cuộc cách mạng dựa vào.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>"Tôn trọng và bảo đảm quyền tự do tín ngưỡng."</b> Hiến pháp và pháp luật Việt Nam bảo đảm tự do tín ngưỡng, tôn giáo, và các tôn giáo "sống tốt đời, đẹp đạo, đồng hành cùng dân tộc". Dẫn khung pháp lý - chính sách hiện hành này — không chỉ nguyên tắc trừu tượng — làm tiểu luận Chương 6 cụ thể và thời sự. <em>Nguyên tắc đặt trên chính sách hôm nay.</em></div>
+<div class="callout ok"><strong>Buổi 25 — NẰM TRONG giáo trình.</strong> Buổi 25 là "II.2. Tôn giáo ở Việt Nam và chính sách tôn giáo của Đảng, Nhà nước ta hiện nay", nên chính sách tôn giáo hiện hành là nội dung có thể ra thi, không phải phần thêm. <b>"Tôn trọng và bảo đảm quyền tự do tín ngưỡng."</b> Hiến pháp và pháp luật Việt Nam bảo đảm tự do tín ngưỡng, tôn giáo, và các tôn giáo "sống tốt đời, đẹp đạo, đồng hành cùng dân tộc". Dẫn khung pháp lý - chính sách hiện hành này — không chỉ nguyên tắc trừu tượng — làm tiểu luận Chương 6 cụ thể và thời sự. <em>Nguyên tắc đặt trên chính sách hôm nay.</em></div>
 </div>`,
           quiz: {
             timeLimitSeconds: 300,
@@ -912,7 +916,7 @@ Việt Nam đang xây dựng "nhà nước pháp quyền XHCN của dân, do dâ
 <strong>Target:</strong> a family that is "ấm no, tiến bộ, hạnh phúc, văn minh" (prosperous, progressive, happy, civilized).</div>
 <div class="pitfall"><strong>Gender equality is central, not decorative.</strong> A key mark of the new family is the <em>equal</em> status of women — overcoming the feudal "trọng nam khinh nữ" (favoring sons over daughters). Essays that describe the family but skip gender equality miss the chapter's core reform.</div>
 <div class="callout ok"><strong>Connect the whole course.</strong> The family (Ch7) shapes the "new person" that socialism needs (Ch3); a progressive, equal family produces citizens for a democratic society (Ch4) and strengthens national unity (Ch5-6). The smallest unit and the largest goal are linked.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The modern family under pressure.</b> Today's Vietnamese family faces new challenges — urbanization, migration, technology, changing roles, low birth rates. A strong Chapter 7 essay applies the theory to a real trend: how to keep the family's education and emotional functions strong while economies and lifestyles change. <em>Applying the theory to a live social trend.</em></div>
+<div class="callout ok"><strong>Session 29 — on the syllabus.</strong> Session 29 is "III. Xây dựng gia đình Việt Nam trong thời kỳ quá độ lên chủ nghĩa xã hội" — building today's Vietnamese family is core Chapter 7 content. <b>The modern family under pressure.</b> Today's Vietnamese family faces new challenges — urbanization, migration, technology, changing roles, low birth rates. A strong Chapter 7 essay applies the theory to a real trend: how to keep the family's education and emotional functions strong while economies and lifestyles change. <em>Applying the theory to a live social trend.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.1</span>
@@ -934,7 +938,7 @@ Việt Nam đang xây dựng "nhà nước pháp quyền XHCN của dân, do dâ
 <strong>Mục tiêu:</strong> một gia đình "ấm no, tiến bộ, hạnh phúc, văn minh".</div>
 <div class="pitfall"><strong>Bình đẳng giới là trung tâm, không phải trang trí.</strong> Một dấu hiệu then chốt của gia đình mới là địa vị <em>bình đẳng</em> của người phụ nữ — khắc phục "trọng nam khinh nữ" của phong kiến. Bài mô tả gia đình mà bỏ qua bình đẳng giới bỏ lỡ cuộc cải cách cốt lõi của chương.</div>
 <div class="callout ok"><strong>Nối cả môn học.</strong> Gia đình (Ch7) hình thành "con người mới" mà CNXH cần (Ch3); một gia đình tiến bộ, bình đẳng sản sinh công dân cho một xã hội dân chủ (Ch4) và củng cố đại đoàn kết (Ch5-6). Đơn vị nhỏ nhất và mục tiêu lớn nhất nối với nhau.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Gia đình hiện đại dưới áp lực.</b> Gia đình Việt Nam hôm nay đối mặt thách thức mới — đô thị hóa, di cư, công nghệ, vai trò thay đổi, mức sinh thấp. Một tiểu luận Chương 7 mạnh vận dụng lý luận vào một xu hướng thật: làm sao giữ vững chức năng giáo dục và tình cảm của gia đình khi kinh tế và lối sống đổi thay. <em>Vận dụng lý luận vào một xu hướng xã hội sống động.</em></div>
+<div class="callout ok"><strong>Buổi 29 — NẰM TRONG giáo trình.</strong> Buổi 29 là "III. Xây dựng gia đình Việt Nam trong thời kỳ quá độ lên chủ nghĩa xã hội" — xây dựng gia đình Việt Nam hôm nay là nội dung cốt lõi của Chương 7. <b>Gia đình hiện đại dưới áp lực.</b> Gia đình Việt Nam hôm nay đối mặt thách thức mới — đô thị hóa, di cư, công nghệ, vai trò thay đổi, mức sinh thấp. Một tiểu luận Chương 7 mạnh vận dụng lý luận vào một xu hướng thật: làm sao giữ vững chức năng giáo dục và tình cảm của gia đình khi kinh tế và lối sống đổi thay. <em>Vận dụng lý luận vào một xu hướng xã hội sống động.</em></div>
 </div>`,
           quiz: {
             timeLimitSeconds: 300,
@@ -1101,19 +1105,19 @@ Việt Nam đang xây dựng "nhà nước pháp quyền XHCN của dân, do dâ
     },
     /* ══════════════════ CHƯƠNG 9 — NÂNG CAO ★ (BEYOND SYLLABUS) ══════════════════ */
     {
-      title: 'Chapter 9 — Beyond the syllabus ★: applying the theory & rebutting distortions|||Chương 9 — Nâng cao ★: vận dụng lý luận & phản bác xuyên tạc',
-      description: 'Cả chương ★ ngoài giáo trình: vận dụng CNXH khoa học vào thực tiễn Việt Nam và phản bác các luận điệu xuyên tạc.',
+      title: 'Chapter 9 — Applying the theory in Vietnam & rebutting distortions|||Chương 9 — Vận dụng lý luận ở Việt Nam & phản bác xuyên tạc',
+      description: 'Vận dụng CNXH khoa học vào thực tiễn Việt Nam (các mục "Vận dụng…" của buổi 12, 14, 25, 29) và phản bác luận điệu xuyên tạc (CQ3.1) — đều là nội dung trong giáo trình.',
       lessons: [
         {
-          title: '9.1 — Applying the theory today & rebutting distortions ★|||9.1 — Vận dụng lý luận hôm nay & phản bác xuyên tạc ★',
+          title: '9.1 — Applying the theory today & rebutting distortions|||9.1 — Vận dụng lý luận hôm nay & phản bác xuyên tạc',
           slug: 'mln131-9-1-nang-cao',
           type: 'VIDEO',
           description: 'Vì sao lý luận còn giá trị, cách vận dụng vào con đường Việt Nam, và lập luận phản bác các luận điệu sai trái.',
           content: `
 <div class="ml-en">
-<span class="eyebrow">Chapter 9 · Lesson 9.1 · ★ Beyond the syllabus</span>
+<span class="eyebrow">Chapter 9 · Lesson 9.1</span>
 <h2>From learning the theory to applying and defending it</h2>
-<p class="lead">This whole chapter is <span class="badge">★ Beyond the syllabus</span> — application and critical thinking that lift an essay from "restated textbook" to a mature argument. Three themes: why the theory still matters, how Vietnam applies it, and how to rebut distortions.</p>
+<p class="lead">Three themes: why the theory still matters, how Vietnam applies it, and how to rebut distortions. This is <strong>syllabus content</strong>, not an extra: several sessions are explicitly "Vận dụng…" sessions (Vietnam's socialist democracy, session 14; religion policy, session 25; building the Vietnamese family, session 29), and the claim that "the collapse of the USSR and Eastern Europe was the collapse of socialism" is <strong>constructive question CQ3.1</strong>, which you are expected to answer. The only ★ part is the extra essay-craft advice flagged as such.</p>
 
 <h3>1 — Why scientific socialism still has value</h3>
 <div class="lz-stack">
@@ -1136,9 +1140,9 @@ Develop productive forces using markets and multiple economic sectors (a lesson 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The mark of an A: your own analysis.</b> Top essays add one genuine, specific link the textbook doesn't make — a current policy, a data point, a real trend — analyzed with the class-and-productive-forces method. Examiners tell the difference between memorized content and thought applied. Bringing scientific socialism to bear on something you actually care about separates a 9 from a 7. <em>The whole point of "vận dụng."</em></div>
 </div>
 <div class="ml-vi">
-<span class="eyebrow">Chương 9 · Bài 9.1 · ★ Ngoài giáo trình</span>
+<span class="eyebrow">Chương 9 · Bài 9.1</span>
 <h2>Từ học lý luận tới vận dụng và bảo vệ nó</h2>
-<p class="lead">Cả chương này là <span class="badge">★ Ngoài giáo trình</span> — vận dụng và tư duy phản biện nâng một tiểu luận từ "chép giáo trình" thành một lập luận chín. Ba chủ đề: vì sao lý luận còn giá trị, Việt Nam vận dụng thế nào, và cách phản bác xuyên tạc.</p>
+<p class="lead">Ba chủ đề: vì sao lý luận còn giá trị, Việt Nam vận dụng thế nào, và cách phản bác xuyên tạc. Đây là <strong>nội dung trong giáo trình</strong>, không phải phần thêm: nhiều buổi học là buổi "Vận dụng…" (dân chủ XHCN ở Việt Nam, buổi 14; chính sách tôn giáo, buổi 25; xây dựng gia đình Việt Nam, buổi 29), và luận điệu "sự tan rã của Liên Xô và Đông Âu là sự sụp đổ của chủ nghĩa xã hội" chính là <strong>câu hỏi kiến tạo CQ3.1</strong> mà bạn phải trả lời được. Chỉ phần lời khuyên viết tiểu luận có gắn nhãn ★ mới là ngoài giáo trình.</p>
 
 <h3>1 — Vì sao chủ nghĩa xã hội khoa học còn giá trị</h3>
 <div class="lz-stack">

@@ -70,8 +70,15 @@ export function sanitizeHtml(dirty: string): string {
       'a', 'img',
       'table', 'thead', 'tbody', 'tr', 'th', 'td',
       'span', 'div', 'hr',
+      // Thẻ định dạng thuần tuý, không mang thuộc tính nguy hiểm nào. Thiếu
+      // chúng thì DOMPurify lặng lẽ gỡ thẻ, giữ chữ: 11/09/2026 đếm được
+      // 13.600+ chỗ in đậm/nghiêng/số mũ biến mất trong 60 file Academy
+      // ("Keep in mind:" dính liền vào câu sau, 10<sup>20</sup> thành "1020").
+      'b', 'i', 'sup', 'sub', 'small',
     ],
-    ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'target', 'rel', 'style', 'data-language', 'language'],
+    // `start`: <ol start="4"> — danh sách đánh số tiếp từ slide trước (thiếu nó thì mọi
+    // danh sách lại đếm từ 1, SWT301 11/09/2026). Chỉ nhận số, vô hại.
+    ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'target', 'rel', 'style', 'data-language', 'language', 'start'],
     ALLOW_DATA_ATTR: false,
     ADD_ATTR: ['target'],
   });

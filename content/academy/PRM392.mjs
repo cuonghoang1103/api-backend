@@ -109,12 +109,12 @@ export default {
 <h2>The grade breakdown — where every point comes from</h2>
 <p class="lead">PRM392 mixes continuous coding work with a final exam. Two components have a hard <strong>≥ 4 gate</strong>: if you score below 4 on the Practical Exam or the Final Exam, you fail regardless of your average.</p>
 <table>
-<thead><tr><th>Component</th><th>Weight</th><th>Gate</th><th>Form</th></tr></thead>
+<thead><tr><th>Component</th><th>Parts</th><th>Weight</th><th>Completion criterion</th><th>Form / duration</th></tr></thead>
 <tbody>
-<tr><td>Practical Exam (on-going)</td><td><strong>15%</strong></td><td>≥ 4</td><td>Code an app feature live, 90'</td></tr>
-<tr><td>Progress Test ×3</td><td><strong>15%</strong></td><td>—</td><td>Short quizzes, 25' each</td></tr>
-<tr><td>Project (team)</td><td><strong>30%</strong></td><td>—</td><td>A full app + presentation</td></tr>
-<tr><td>Final Exam</td><td><strong>40%</strong></td><td>≥ 4</td><td>60', theory + code reading</td></tr>
+<tr><td>Practical Exam (on-going)</td><td>1</td><td><strong>15%</strong></td><td><strong>≥ 4</strong></td><td>Code an app feature live, <strong>90'/each</strong></td></tr>
+<tr><td>Progress Test (on-going)</td><td><strong>3</strong></td><td><strong>15%</strong></td><td><strong>&gt; 0</strong></td><td>Short tests, Option 1: <strong>25'</strong> each (Option 2 for Constructivism classes)</td></tr>
+<tr><td>Project (on-going, team)</td><td>1</td><td><strong>30%</strong></td><td><strong>&gt; 0</strong></td><td>A full app + presentation (Option 1: at home)</td></tr>
+<tr><td>Final Exam</td><td>1</td><td><strong>40%</strong></td><td><strong>≥ 4</strong></td><td><strong>60'</strong> (the syllabus does not state the question type)</td></tr>
 </tbody>
 </table>
 <div class="kv-grid">
@@ -124,7 +124,8 @@ export default {
 <div class="kv"><span class="k">Final gate</span><span class="v">≥ 4.0</span></div>
 <div class="kv"><span class="k">Attendance</span><span class="v">≥ 80% to sit the final</span></div>
 </div>
-<div class="formula"><span class="lbl">PASS</span> avg = 0.15·PE + 0.15·PT + 0.30·Project + 0.40·Final ≥ 5 &nbsp;AND&nbsp; PE ≥ 4 &nbsp;AND&nbsp; Final ≥ 4</div>
+<div class="formula"><span class="lbl">PASS</span> avg = 0.15·PE + 0.15·PT + 0.30·Project + 0.40·Final ≥ 5 &nbsp;AND&nbsp; PE ≥ 4 &nbsp;AND&nbsp; Final ≥ 4 &nbsp;AND&nbsp; PT &gt; 0 &nbsp;AND&nbsp; Project &gt; 0</div>
+<div class="callout warn"><strong>The Progress Tests and the Project are not "optional weight" — they have a &gt; 0 gate.</strong> The syllabus (ID 11637) sets a completion criterion of <strong>&gt; 0</strong> on the 3 Progress Tests and on the Project, alongside the <strong>4</strong> on the Practical Exam and the Final. Skipping the project entirely, or every progress test, means the course is not completed no matter what your weighted average says.</div>
 <div class="out"><strong>Worked example:</strong> PE = 6, PT = 7, Project = 8, Final = 3.5.
 avg = 0.15·6 + 0.15·7 + 0.30·8 + 0.40·3.5 = 0.9 + 1.05 + 2.4 + 1.4 = 5.75.
 Average ≥ 5 ✓ but Final = 3.5 < 4 → <strong>FAIL</strong> on the gate. The 40% final can sink you even with strong coursework.</div>
@@ -137,12 +138,12 @@ Average ≥ 5 ✓ but Final = 3.5 < 4 → <strong>FAIL</strong> on the gate. The
 <h2>Cấu trúc điểm — mỗi điểm đến từ đâu</h2>
 <p class="lead">PRM392 trộn công việc code liên tục với một bài thi cuối. Hai thành phần có <strong>cổng ≥ 4</strong> cứng: nếu Practical Exam hoặc Final Exam dưới 4, bạn trượt bất kể điểm trung bình.</p>
 <table>
-<thead><tr><th>Thành phần</th><th>Trọng số</th><th>Cổng</th><th>Hình thức</th></tr></thead>
+<thead><tr><th>Thành phần</th><th>Số phần</th><th>Trọng số</th><th>Điều kiện hoàn thành</th><th>Hình thức / thời lượng</th></tr></thead>
 <tbody>
-<tr><td>Practical Exam (liên tục)</td><td><strong>15%</strong></td><td>≥ 4</td><td>Code một tính năng app tại chỗ, 90'</td></tr>
-<tr><td>Progress Test ×3</td><td><strong>15%</strong></td><td>—</td><td>Quiz ngắn, 25'/lần</td></tr>
-<tr><td>Project (nhóm)</td><td><strong>30%</strong></td><td>—</td><td>Một app hoàn chỉnh + thuyết trình</td></tr>
-<tr><td>Final Exam</td><td><strong>40%</strong></td><td>≥ 4</td><td>60', lý thuyết + đọc code</td></tr>
+<tr><td>Practical Exam (liên tục)</td><td>1</td><td><strong>15%</strong></td><td><strong>≥ 4</strong></td><td>Code một tính năng app tại chỗ, <strong>90'/lượt</strong></td></tr>
+<tr><td>Progress Test (liên tục)</td><td><strong>3</strong></td><td><strong>15%</strong></td><td><strong>&gt; 0</strong></td><td>Bài kiểm tra ngắn, phương án 1: <strong>25'</strong>/bài (phương án 2 dành cho lớp Constructivism)</td></tr>
+<tr><td>Project (liên tục, nhóm)</td><td>1</td><td><strong>30%</strong></td><td><strong>&gt; 0</strong></td><td>Một app hoàn chỉnh + thuyết trình (phương án 1: làm ở nhà)</td></tr>
+<tr><td>Final Exam</td><td>1</td><td><strong>40%</strong></td><td><strong>≥ 4</strong></td><td><strong>60'</strong> (syllabus không ghi dạng câu hỏi)</td></tr>
 </tbody>
 </table>
 <div class="kv-grid">
@@ -152,7 +153,8 @@ Average ≥ 5 ✓ but Final = 3.5 < 4 → <strong>FAIL</strong> on the gate. The
 <div class="kv"><span class="k">Cổng Final</span><span class="v">≥ 4.0</span></div>
 <div class="kv"><span class="k">Điểm danh</span><span class="v">≥ 80% mới được thi cuối</span></div>
 </div>
-<div class="formula"><span class="lbl">QUA MÔN</span> tb = 0.15·PE + 0.15·PT + 0.30·Project + 0.40·Final ≥ 5 &nbsp;VÀ&nbsp; PE ≥ 4 &nbsp;VÀ&nbsp; Final ≥ 4</div>
+<div class="formula"><span class="lbl">QUA MÔN</span> tb = 0.15·PE + 0.15·PT + 0.30·Project + 0.40·Final ≥ 5 &nbsp;VÀ&nbsp; PE ≥ 4 &nbsp;VÀ&nbsp; Final ≥ 4 &nbsp;VÀ&nbsp; PT &gt; 0 &nbsp;VÀ&nbsp; Project &gt; 0</div>
+<div class="callout warn"><strong>Progress Test và Project KHÔNG phải "trọng số tuỳ chọn" — chúng có chốt &gt; 0.</strong> Syllabus (ID 11637) đặt điều kiện hoàn thành <strong>&gt; 0</strong> cho 3 bài Progress Test và cho Project, bên cạnh chốt <strong>4</strong> của Practical Exam và Final. Bỏ hẳn project, hoặc bỏ hết progress test, là không hoàn thành môn dù điểm trung bình có ra bao nhiêu.</div>
 <div class="out"><strong>Ví dụ có lời giải:</strong> PE = 6, PT = 7, Project = 8, Final = 3.5.
 tb = 0.15·6 + 0.15·7 + 0.30·8 + 0.40·3.5 = 0.9 + 1.05 + 2.4 + 1.4 = 5.75.
 Trung bình ≥ 5 ✓ nhưng Final = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổng. Final 40% có thể nhấn chìm bạn dù bài trên lớp tốt.</div>

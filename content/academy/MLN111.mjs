@@ -94,16 +94,17 @@ export default {
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.2</span>
 <h2>The grade breakdown</h2>
-<p class="lead">MLN111 follows the FPT political-theory grading pattern: ongoing work (70%) plus a final exam (30%). The largest single piece is the <strong>Assignment (40%)</strong>, so researching and writing it well largely decides your grade.</p>
+<p class="lead">MLN111 is <em>assumed</em> to follow the FPT political-theory grading pattern — ongoing work (70%) plus a final exam (30%) — but see the warning under the table: we could not obtain this subject's own syllabus. The largest single piece is the <strong>Assignment (40%)</strong>, so researching and writing it well largely decides your grade.</p>
 <table>
-<thead><tr><th>Component</th><th>Weight</th><th>Form</th></tr></thead>
+<thead><tr><th>Component</th><th>Weight (unconfirmed)</th><th>Form / duration</th></tr></thead>
 <tbody>
 <tr><td>Participation</td><td><strong>10%</strong></td><td>Attendance, in-class discussion</td></tr>
-<tr><td>Progress test</td><td><strong>20%</strong></td><td>1 test</td></tr>
-<tr><td>Assignment</td><td><strong>40%</strong></td><td>Essay/report (instructor's chosen form)</td></tr>
-<tr><td>Final exam</td><td><strong>30%</strong></td><td>Written exam</td></tr>
+<tr><td>Progress test</td><td><strong>20%</strong></td><td>1 test (20' in the sibling subjects)</td></tr>
+<tr><td>Assignment</td><td><strong>40%</strong></td><td>Essay/report, form chosen by the instructor</td></tr>
+<tr><td>Final exam</td><td><strong>30%</strong></td><td>60' in the sibling subjects. <strong>The question type is NOT verified</strong> — ask your instructor whether it is a computer-graded multiple-choice paper or a written one</td></tr>
 </tbody>
 </table>
+<div class="callout warn"><strong>⚠ Unverified — the official MLN111 syllabus is not available to us.</strong> The file published on FLM under MLN111 is a duplicate of the <em>WDP301</em> syllabus (Syllabus ID 12037, "Web Development Project"), so we have no authoritative source for this subject's weights, gates, durations, question type or CLOs. The table above is <strong>reconstructed</strong> from the common FPT political-theory pattern used by MLN122, MLN131, HCM202 and VNR202 (all four use exactly 10 / 20 / 40 / 30 with a "&gt; 0" criterion on each on-going component, a 20' progress test, a 2-part assignment, and a 60' final with completion criterion 4). It is plausible, not confirmed. <strong>Check the numbers with your instructor in week 1</strong>, and treat any figure here as provisional until then.</div>
 <div class="kv-grid">
 <div class="kv"><span class="k">Scale</span><span class="v">10</span></div>
 <div class="kv"><span class="k">Pass</span><span class="v">Final result ≥ 5 AND final exam ≥ 4</span></div>
@@ -117,16 +118,17 @@ export default {
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.2</span>
 <h2>Cấu trúc điểm</h2>
-<p class="lead">MLN111 theo khuôn chấm môn lý luận chính trị của FPT: phần thường xuyên (70%) cộng thi cuối kỳ (30%). Phần lớn nhất là <strong>Assignment (40%)</strong>, nên nghiên cứu và viết tốt quyết định phần lớn điểm.</p>
+<p class="lead">MLN111 được <em>giả định</em> theo khuôn chấm môn lý luận chính trị của FPT — phần thường xuyên (70%) cộng thi cuối kỳ (30%) — nhưng hãy đọc cảnh báo dưới bảng: chúng tôi không lấy được syllabus riêng của môn này. Phần lớn nhất là <strong>Assignment (40%)</strong>, nên nghiên cứu và viết tốt quyết định phần lớn điểm.</p>
 <table>
-<thead><tr><th>Thành phần</th><th>Trọng số</th><th>Hình thức</th></tr></thead>
+<thead><tr><th>Thành phần</th><th>Trọng số (chưa xác nhận)</th><th>Hình thức / thời lượng</th></tr></thead>
 <tbody>
 <tr><td>Tham gia (Participation)</td><td><strong>10%</strong></td><td>Điểm danh, thảo luận trên lớp</td></tr>
-<tr><td>Kiểm tra tiến độ (Progress test)</td><td><strong>20%</strong></td><td>1 bài</td></tr>
-<tr><td>Assignment</td><td><strong>40%</strong></td><td>Tiểu luận/báo cáo (theo hình thức giảng viên chọn)</td></tr>
-<tr><td>Thi cuối kỳ</td><td><strong>30%</strong></td><td>Thi viết</td></tr>
+<tr><td>Kiểm tra tiến độ (Progress test)</td><td><strong>20%</strong></td><td>1 bài (20' ở các môn cùng nhóm)</td></tr>
+<tr><td>Assignment</td><td><strong>40%</strong></td><td>Tiểu luận/báo cáo, hình thức do giảng viên chọn</td></tr>
+<tr><td>Thi cuối kỳ</td><td><strong>30%</strong></td><td>60' ở các môn cùng nhóm. <strong>DẠNG CÂU HỎI CHƯA ĐƯỢC KIỂM CHỨNG</strong> — hãy hỏi giảng viên xem là thi trắc nghiệm máy chấm hay thi viết</td></tr>
 </tbody>
 </table>
+<div class="callout warn"><strong>⚠ CHƯA KIỂM CHỨNG — chúng tôi không có syllabus MLN111 chính thức.</strong> File đăng trên FLM dưới tên MLN111 là bản sao của syllabus <em>WDP301</em> (Syllabus ID 12037, "Web Development Project"), nên không có nguồn chính thức nào cho trọng số, chốt điểm, thời lượng, dạng câu hỏi hay CLO của môn này. Bảng trên là bản <strong>dựng lại</strong> từ khuôn chung của các môn lý luận chính trị FPT — MLN122, MLN131, HCM202 và VNR202 (cả bốn đều 10 / 20 / 40 / 30, mọi thành phần thường xuyên có chốt "&gt; 0", progress test 20', assignment 2 phần, thi cuối 60' với điều kiện hoàn thành 4). Nó hợp lý, nhưng chưa được xác nhận. <strong>Hãy hỏi giảng viên xác nhận các con số ngay tuần 1</strong>, và coi mọi con số ở đây là tạm thời cho tới lúc đó.</div>
 <div class="kv-grid">
 <div class="kv"><span class="k">Thang</span><span class="v">10</span></div>
 <div class="kv"><span class="k">Qua môn</span><span class="v">Kết quả ≥ 5 VÀ thi cuối ≥ 4</span></div>
@@ -147,7 +149,8 @@ export default {
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.3</span>
 <h2>The CLOs — what you must be able to do</h2>
-<p class="lead">MLN111's outcomes map to the three parts plus thinking skills. Use them as a self-check before each assessment.</p>
+<p class="lead">Use these as a study self-check before each assessment.</p>
+<div class="callout warn"><strong>⚠ These are OUR outcomes, not the faculty's.</strong> The official MLN111 syllabus is unavailable (the file on FLM under MLN111 is a copy of the WDP301 syllabus, ID 12037), so the seven outcomes below are <strong>reconstructed</strong> from the three chapters of the MOET textbook the course follows — <em>Giáo trình Triết học Mác–Lênin</em> (hệ không chuyên lý luận chính trị) — and from the pattern of the sibling subjects. The real CLO list may be numbered and worded differently, and no CLO-to-assessment mapping is published for this subject. Get the official list from your instructor.</div>
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-lk">CLO1</span> Grasp the object, basic question and role of philosophy; the birth of Marxist philosophy. <em>→ Part 1</em></div>
 <div class="lz-layer"><span class="lz-lk">CLO2</span> Understand matter, consciousness and their relationship. <em>→ Part 2</em></div>
@@ -157,12 +160,13 @@ export default {
 <div class="lz-layer"><span class="lz-lk">CLO6</span> Form a scientific worldview & dialectical method; apply to real problems. <em>→ all</em></div>
 <div class="lz-layer"><span class="lz-lk">CLO7</span> Skills: reasoning, essay writing, presentation, responsible AI use. <em>→ assignment</em></div>
 </div>
-<div class="callout ok">The arc: <strong>how to think (foundations) → the dialectical method → how we know → how society changes</strong>. The exam tests CLO1-5; the assignment tests CLO6-7 (applying the method).</div>
+<div class="callout ok">The arc: <strong>how to think (foundations) → the dialectical method → how we know → how society changes</strong>. (Which outcome each assessment covers is <em>not</em> published for MLN111 — assume the final can draw on all of them.)</div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.3</span>
 <h2>Các CLO — bạn phải làm được gì</h2>
-<p class="lead">Chuẩn đầu ra MLN111 ánh xạ tới ba phần cộng kỹ năng tư duy. Dùng để tự soi trước mỗi đánh giá.</p>
+<p class="lead">Dùng danh sách này để tự soi trước mỗi đánh giá.</p>
+<div class="callout warn"><strong>⚠ Đây là chuẩn đầu ra do CHÚNG TÔI dựng lại, không phải của nhà trường.</strong> Syllabus MLN111 chính thức không có sẵn (file trên FLM dưới tên MLN111 là bản sao syllabus WDP301, ID 12037), nên bảy chuẩn dưới đây được <strong>dựng lại</strong> từ ba chương của giáo trình Bộ GD&amp;ĐT mà môn này theo — <em>Giáo trình Triết học Mác–Lênin</em> (hệ không chuyên lý luận chính trị) — và theo khuôn của các môn cùng nhóm. Danh sách CLO thật có thể được đánh số và diễn đạt khác, và môn này cũng không công bố bảng ánh xạ CLO–đầu điểm. Hãy xin danh sách chính thức từ giảng viên.</div>
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-lk">CLO1</span> Nắm đối tượng, vấn đề cơ bản và vai trò của triết học; sự ra đời triết học Mác. <em>→ Phần 1</em></div>
 <div class="lz-layer"><span class="lz-lk">CLO2</span> Hiểu vật chất, ý thức và quan hệ giữa chúng. <em>→ Phần 2</em></div>
@@ -172,7 +176,7 @@ export default {
 <div class="lz-layer"><span class="lz-lk">CLO6</span> Hình thành thế giới quan khoa học & phương pháp biện chứng; vận dụng vào vấn đề thực. <em>→ tất cả</em></div>
 <div class="lz-layer"><span class="lz-lk">CLO7</span> Kỹ năng: lập luận, viết luận, thuyết trình, dùng AI có trách nhiệm. <em>→ assignment</em></div>
 </div>
-<div class="callout ok">Mạch: <strong>cách tư duy (nền tảng) → phương pháp biện chứng → cách ta nhận thức → cách xã hội thay đổi</strong>. Thi kiểm CLO1-5; assignment kiểm CLO6-7 (vận dụng phương pháp).</div>
+<div class="callout ok">Mạch: <strong>cách tư duy (nền tảng) → phương pháp biện chứng → cách ta nhận thức → cách xã hội thay đổi</strong>. (Đầu điểm nào phủ chuẩn nào thì MLN111 <em>không</em> công bố — hãy giả định bài thi cuối có thể hỏi bất kỳ phần nào.)</div>
 </div>`,
         },
         {
@@ -259,6 +263,7 @@ export default {
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.5</span>
 <h2>12 đề tài assignment — vận dụng phương pháp vào thực tiễn</h2>
+<div class="callout warn"><strong>⚠ Hình thức assignment ở đây là GIẢ ĐỊNH, không có nguồn.</strong> Syllabus MLN111 chính thức không có sẵn (FLM đăng syllabus WDP301 dưới tên MLN111), nên "40%, một tiểu luận/báo cáo, tự chọn đề tài" là lấy theo các môn lý luận chính trị cùng nhóm — nơi giảng viên chọn hình thức và assignment gồm hai phần. <strong>Hãy xác nhận trọng số, số phần, hình thức và hạn nộp với giảng viên trước khi bắt tay làm</strong> — dù thế nào thì các đề tài dưới đây vẫn là bài luyện tốt.</div>
 <p class="lead">Assignment 40% thưởng cho <em>vận dụng một nguyên lý triết học vào một ca thật</em>, không phải tóm tắt giáo trình. Đây là 12 đề tài đã kiểm scope nối một khái niệm của môn với một thứ thật. Chọn một đề bạn phân tích được bằng ví dụ thật.</p>
 <table>
 <thead><tr><th>#</th><th>Đề tài</th><th>Khái niệm vận dụng</th></tr></thead>
@@ -1099,7 +1104,7 @@ CƠ SỞ HẠ TẦNG           kết cấu kinh tế (tổng hòa các quan hệ
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.1 · Exam prep</span>
 <h2>Prepare answers before the exam</h2>
-<p class="lead">The exam (30%, gate ≥4) tests CLO1-5. Below is a question bank by part, the confusing pairs you must distinguish, and the essay skeleton that earns marks.</p>
+<p class="lead">The final exam is worth 30% with a ≥ 4 gate (figures taken from the sibling political-theory subjects — see 0.2 — since the official MLN111 syllabus is unavailable, and its <strong>question type is unverified</strong>). Prepare for both formats: below is a question bank by part, the confusing pairs you must distinguish for multiple-choice items, and the essay skeleton that earns marks on written ones.</p>
 
 <h3>Question bank (by part)</h3>
 <ul>
@@ -1139,7 +1144,7 @@ CƠ SỞ HẠ TẦNG           kết cấu kinh tế (tổng hòa các quan hệ
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.1 · Ôn thi</span>
 <h2>Chuẩn bị câu trả lời trước khi thi</h2>
-<p class="lead">Bài thi (30%, cổng ≥4) kiểm CLO1-5. Dưới đây là ngân hàng câu hỏi theo phần, các cặp dễ nhầm bạn phải phân biệt, và khung viết luận ăn điểm.</p>
+<p class="lead">Bài thi cuối kỳ chiếm 30% với cổng ≥ 4 (các con số lấy theo các môn lý luận chính trị cùng nhóm — xem bài 0.2 — vì syllabus MLN111 chính thức không có sẵn, và <strong>dạng câu hỏi chưa được kiểm chứng</strong>). Hãy ôn cho cả hai hình thức: dưới đây là ngân hàng câu hỏi theo phần, các cặp dễ nhầm phải phân biệt (cho câu trắc nghiệm), và khung viết luận ăn điểm (cho câu tự luận).</p>
 
 <h3>Ngân hàng câu hỏi (theo phần)</h3>
 <ul>
@@ -1293,14 +1298,14 @@ That's dialectical materialism as a decision procedure — genuinely useful, not
     },
     {
       "title": "Final Exam|||Thi cuối kỳ",
-      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "description": "Thi cuối kỳ FE 30%. Hình thức đề CHƯA được xác nhận (thiếu syllabus MLN111 thật) — xem cảnh báo trong bài. Kèm câu tự kiểm; đề thật thêm sau khi có trang phòng thi.",
       "lessons": [
         {
-          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "title": "FE — Final exam (30%; format not yet verified)|||FE — Thi cuối kỳ (30%; hình thức CHƯA kiểm chứng)",
           "slug": "mln111-final-exam-fe",
           "type": "article",
-          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "description": "Thi cuối kỳ 30%: hình thức (trắc nghiệm hay tự luận) CHƯA kiểm chứng vì thiếu syllabus MLN111 thật. Kèm câu tự kiểm từ môn; đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final exam</h2>\n<p class=\"lead\">The final exam is worth <strong>30%</strong> and you must score at least <strong>4</strong> on it (plus a final result &ge; 5) &mdash; those figures come from the sibling political-theory subjects, because <strong>the official MLN111 syllabus is not available</strong>: the file published under MLN111 on FLM is a duplicate of the WDP301 syllabus (ID 12037).</p>\n<div class=\"callout warn\"><strong>⚠ The exam format is NOT verified.</strong> An earlier version of this page stated the final was a computer-graded multiple-choice test, while lesson 0.2 called it a written exam; neither claim had a source, and they contradicted each other. The honest position: <strong>we do not know</strong> whether your final is multiple-choice or written, nor how many questions it has. Ask your instructor in week 1 and prepare for both &mdash; know the definitions precisely (for MCQs) and be able to write a structured argument (for essays). The self-check questions below are multiple choice only because that is the format of this site's quizzes.</div>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Self-check</span> The questions below are a <strong>self-check</strong> drawn from this course. They are <em>not</em> evidence of the exam's format, which is unverified (see the warning above). Real past-exam questions will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ chiếm <strong>30%</strong> và bạn phải đạt tối thiểu <strong>4</strong> (cộng kết quả cuối &ge; 5) &mdash; các con số này lấy theo các môn lý luận chính trị cùng nhóm, vì <strong>syllabus MLN111 chính thức không có sẵn</strong>: file đăng dưới tên MLN111 trên FLM là bản sao syllabus WDP301 (ID 12037).</p>\n<div class=\"callout warn\"><strong>⚠ HÌNH THỨC THI CHƯA ĐƯỢC KIỂM CHỨNG.</strong> Bản trước của trang này ghi thi cuối kỳ là trắc nghiệm máy chấm, trong khi bài 0.2 lại ghi \"thi viết\"; cả hai đều không có nguồn và mâu thuẫn nhau. Nói thẳng: <strong>chúng tôi không biết</strong> đề của bạn là trắc nghiệm hay tự luận, cũng không biết bao nhiêu câu. Hãy hỏi giảng viên ngay tuần 1 và ôn cho cả hai &mdash; thuộc chính xác các định nghĩa (cho trắc nghiệm) và viết được một lập luận có cấu trúc (cho tự luận). Các câu tự kiểm dưới đây ở dạng trắc nghiệm chỉ vì đó là định dạng quiz của trang này.</div>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Tự kiểm</span> Các câu dưới đây là bài <strong>tự kiểm</strong> lấy từ chính môn học. Chúng <em>không</em> phải bằng chứng về format đề thi &mdash; format đó chưa được kiểm chứng (xem cảnh báo ở trên). <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [

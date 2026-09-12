@@ -2581,6 +2581,14 @@ export interface ServerPreferences {
     locale: 'vi' | 'en';
     reduceMotion: boolean;
   };
+  /** Academy onboarding (robot): FPTU student? which major? which combo?
+   *  Mirrors `academy` in the backend's userPreferences.service.ts. */
+  academy: {
+    isStudent: boolean | null;
+    major: string | null;
+    combo: string | null;
+    chosenAt: string | null;
+  };
   updatedAt: string | null;
 }
 
@@ -2596,6 +2604,7 @@ export type ServerPreferencesPatch = {
     browserPush?: boolean;
   };
   ui?: Partial<ServerPreferences['ui']>;
+  academy?: Partial<ServerPreferences['academy']>;
 };
 
 export const preferencesApi = {

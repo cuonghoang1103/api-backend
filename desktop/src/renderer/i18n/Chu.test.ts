@@ -9,6 +9,7 @@
 import { describe, expect, it } from 'vitest';
 import { tachDinhDang } from './Chu';
 import { boNguCanh } from './index';
+import { TU_DIEN } from './tuDien';
 
 describe('tách đậm và mã', () => {
   it('câu trơn ⇒ một mẩu', () => {
@@ -68,5 +69,46 @@ describe('tiền tố ngữ cảnh', () => {
 
   it('chỉ tách ở dấu `|` ĐẦU TIÊN', () => {
     expect(boNguCanh('nhom|A|B')).toBe('A|B');
+  });
+});
+
+describe('⛔ THỰC THỂ HTML trong chuỗi JS KHÔNG được giải mã', () => {
+  /*
+   * Ca thật 11/09/2026, người dùng chụp màn hình gửi lên: ô Hook hiện đúng chữ
+   *     .claude/skills/&lt;name&gt;/SKILL.md
+   * thay vì `<name>`. Mã cũ viết `{dich('.claude/skills/&lt;tên&gt;/SKILL.md')}`.
+   *
+   * JSX CÓ giải mã thực thể HTML — nhưng chỉ trong VĂN BẢN và trong THUỘC TÍNH.
+   * Trong một chuỗi JS nằm giữa `{…}` thì không ai giải mã, và React in ra đúng
+   * từng ký tự. Đây là cái bẫy: cùng một dãy ký tự, đặt ở hai chỗ khác nhau cho
+   * hai kết quả khác nhau, và `tsc` không thấy gì cả.
+   *
+   * Chốt ở đây thay vì ở BangHook.tsx: mọi câu văn xuôi đều đi qua `<Chu>`, nên
+   * canh từ điển là canh được cả app.
+   */
+  it('không mục từ điển nào chứa &lt; &gt; &amp; — phải viết ký tự thẳng', () => {
+    const xau = Object.entries(TU_DIEN)
+      .filter(([vi, en]) => /&(lt|gt|amp|quot|#\d+);/.test(vi) || /&(lt|gt|amp|quot|#\d+);/.test(en))
+      .map(([vi]) => vi);
+    expect(
+      xau,
+      'Thực thể HTML trong từ điển sẽ hiện ra NGUYÊN XI trên màn hình '
+      + '(chuỗi JS không được giải mã). Viết < > & thẳng:\n' + xau.join('\n'),
+    ).toEqual([]);
+  });
+
+  it('BỘ DÒ CÓ HOẠT ĐỘNG — nó bắt được một mục bịa', () => {
+    // Không có dòng này thì phép kiểm trên vẫn xanh kể cả khi regex sai.
+    const gia = { 'a&lt;b': 'a&lt;b' };
+    const xau = Object.entries(gia)
+      .filter(([vi, en]) => /&(lt|gt|amp|quot|#\d+);/.test(vi) || /&(lt|gt|amp|quot|#\d+);/.test(en));
+    expect(xau).toHaveLength(1);
+  });
+
+  it('`<tên>` đi qua <Chu> vẫn là `<tên>`, nằm trong mẩu MÃ', () => {
+    const mau = tachDinhDang('Tạo `.claude/skills/<tên>/SKILL.md`, rồi khai `description`.');
+    const ma = mau.filter((m) => m.loai === 'ma').map((m) => m.chu);
+    expect(ma).toContain('.claude/skills/<tên>/SKILL.md');
+    expect(mau.some((m) => m.chu.includes('&lt;'))).toBe(false);
   });
 });

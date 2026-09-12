@@ -18,6 +18,9 @@ import { BadRequestError, ForbiddenError, NotFoundError } from '../middleware/er
 import { llmComplete, checkTokenQuota, isAiAvailable, aiOffReason, circuitReopensInMs } from './interview/llm/index.js';
 import { isProEffective } from './pro.service.js';
 import { logger } from '../utils/logger.js';
+import {
+  plain, vanBanBai, quizTuDuLieuBai, vanTayBai, khoaCacheCoVanTay, TRAN_SO_CAU_QUIZ,
+} from './courseTutor.context.js';
 
 const MAX_QUESTION = 1500;
 const MAX_HISTORY = 12;
@@ -72,19 +75,21 @@ async function saveCachedAnswer(lessonId: number, cacheKey: string, lang: string
   } catch { /* ghi cache hỏng thì thôi, câu trả lời vẫn về bình thường */ }
 }
 
-/** Bóc HTML về text thuần cho ngữ cảnh (không cần đẹp, chỉ cần đọc được). */
-function plain(html: string | null | undefined, cap = 8000): string {
-  return String(html || '')
-    .replace(/<br\s*\/?>/gi, '\n')
-    .replace(/<\/(p|li|h[1-6]|pre|tr|div)>/gi, '\n')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
-    .replace(/[ \t]+/g, ' ')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim()
-    .slice(0, cap);
+/** Khoá cache THẬT = chip + vân tay nội dung bài (tiêu đề, nội dung, ghi chú,
+ *  đề quiz). Trước 11/09/2026 khoá chỉ là tên chip, nên dựng lại một bài mà
+ *  giữ id (để giữ tiến độ học viên) thì chip vẫn trả câu trả lời viết cho bài
+ *  CŨ — mãi mãi, cho mọi người. Mục cũ nằm lại trong bảng nhưng không ai đọc
+ *  tới nữa. Lỗi thì lùi về khoá trần: chậm cache một chút còn hơn chết câu trả lời. */
+async function khoaCache(lessonId: number, cacheKey: string): Promise<string> {
+  try {
+    const l = await prisma.lesson.findUnique({
+      where: { id: lessonId },
+      select: { title: true, content: true, details: { select: { teachingNotes: true, quizData: true } } },
+    });
+    return khoaCacheCoVanTay(cacheKey, vanTayBai(l?.title, l?.content, l?.details?.teachingNotes, l?.details?.quizData));
+  } catch { return cacheKey; }
 }
+
 
 async function loadLesson(lessonId: number) {
   const lesson = await prisma.lesson.findUnique({
@@ -94,7 +99,7 @@ async function loadLesson(lessonId: number) {
       title: true,
       content: true,
       lessonType: true,
-      details: { select: { teachingNotes: true } },
+      details: { select: { teachingNotes: true, quizData: true } },
       section: {
         select: {
           title: true,
@@ -241,7 +246,7 @@ export interface TutorAskOpts {
 
 // Dựng khối ngữ cảnh các câu quiz (đánh số) để "câu N" tra ra đúng câu.
 function buildQuizBlock(quizContext?: TutorAskOpts['quizContext']): string {
-  const quiz = (quizContext || []).slice(0, 25); // cắt bớt cho gọn token
+  const quiz = (quizContext || []).slice(0, TRAN_SO_CAU_QUIZ); // quiz SWT301 dài tới 50 câu
   if (!quiz.length) return '';
   const letter = (i: number) => String.fromCharCode(65 + i); // 0→A
   const lines = quiz.map((q) => {
@@ -258,7 +263,7 @@ function buildQuizBlock(quizContext?: TutorAskOpts['quizContext']): string {
 const langOf = (english?: boolean): 'en' | 'vi' => (english ? 'en' : 'vi');
 
 // Dựng system + messages một chỗ để bản STREAM và bản thường luôn giống hệt nhau.
-async function buildTutorCall(
+export async function buildTutorCall(
   lessonId: number,
   opts: TutorAskOpts,
 ): Promise<{ system: string; messages: TutorMessage[] }> {
@@ -273,16 +278,21 @@ async function buildTutorCall(
   const course = lesson.section?.course;
   const heading = [course?.courseCode, course?.title].filter(Boolean).join(' — ') || 'Khoá học';
   const L = NHAN_NGU_CANH[langOf(opts.english)];
+  const english = !!opts.english;
   const notes = lesson.details?.teachingNotes
-    ? `\n\n${L.ghiChu}\n${plain(lesson.details.teachingNotes, 3000)}` : '';
+    ? `\n\n${L.ghiChu}\n${vanBanBai(lesson.details.teachingNotes, english, 3000)}` : '';
 
-  const quizBlock = buildQuizBlock(opts.quizContext);
+  // Bài QUIZ không có chữ nào — đề nằm trong quizData. Không lấy ra ở đây thì
+  // gia sư dưới bài quiz không biết "câu 12" là câu gì (xem courseTutor.context).
+  const cauQuiz = opts.quizContext?.length ? opts.quizContext
+    : lesson.lessonType === 'QUIZ' ? quizTuDuLieuBai(lesson.details?.quizData, english) : undefined;
+  const quizBlock = buildQuizBlock(cauQuiz);
   const messages: TutorMessage[] = [
     {
       role: 'user',
       content:
         `THE LESSON\n${heading}\n${L.bai}: ${lesson.title}\n\n` +
-        `${L.noiDung}\n${plain(lesson.content, 8000) || L.trong}` +
+        `${L.noiDung}\n${vanBanBai(lesson.content, english) || L.trong}` +
         notes +
         (quizBlock ? `\n\n${quizBlock}` : ''),
     },
@@ -300,8 +310,9 @@ export async function askCourseTutor(lessonId: number, opts: TutorAskOpts): Prom
 
   // Câu hỏi gợi ý (có cacheKey) → thử cache trước; HIT thì trả ngay, khỏi tốn AI.
   // `refresh` bỏ qua bước ĐỌC này nhưng vẫn đi tới bước GHI bên dưới.
-  if (opts.cacheKey && !opts.refresh) {
-    const hit = await getCachedAnswer(lessonId, opts.cacheKey, lang);
+  const ck = opts.cacheKey ? await khoaCache(lessonId, opts.cacheKey) : undefined;
+  if (ck && !opts.refresh) {
+    const hit = await getCachedAnswer(lessonId, ck, lang);
     if (hit) return { answer: hit, cached: true };
   }
 
@@ -322,8 +333,8 @@ export async function askCourseTutor(lessonId: number, opts: TutorAskOpts): Prom
      lỗi, hoặc tệ hơn: tưởng đó là hết bài. Xem `LLMResult.biCat`. */
   const answer = ((res.text || '').trim() + (res.biCat ? '\n\n> ⚠️ *Câu trả lời chạm trần độ dài nên bị cắt ở đây. Hỏi tiếp “nói tiếp phần còn lại” để nghe nốt.*' : '')).trim();
   if (!answer) throw new BadRequestError('AI chưa trả lời được. Thử lại nhé.');
-  if (opts.cacheKey && nenLuuCache(answer, opts.english, lessonId, opts.cacheKey)) {
-    void saveCachedAnswer(lessonId, opts.cacheKey, lang, answer);
+  if (ck && nenLuuCache(answer, opts.english, lessonId, ck)) {
+    void saveCachedAnswer(lessonId, ck, lang, answer);
   }
   return { answer, cached: false };
 }
@@ -345,8 +356,9 @@ export async function streamCourseTutor(
   // Cache HIT: KHÔNG stream (không có delta) — route sẽ gửi thẳng khung 'done'
   // với answer + cached:true, frontend hiện ngay tức thì.
   // `refresh` bỏ qua bước ĐỌC này nhưng vẫn đi tới bước GHI bên dưới.
-  if (opts.cacheKey && !opts.refresh) {
-    const hit = await getCachedAnswer(lessonId, opts.cacheKey, lang);
+  const ck = opts.cacheKey ? await khoaCache(lessonId, opts.cacheKey) : undefined;
+  if (ck && !opts.refresh) {
+    const hit = await getCachedAnswer(lessonId, ck, lang);
     if (hit) return { answer: hit, cached: true };
   }
 
@@ -368,8 +380,8 @@ export async function streamCourseTutor(
      lỗi, hoặc tệ hơn: tưởng đó là hết bài. Xem `LLMResult.biCat`. */
   const answer = ((res.text || '').trim() + (res.biCat ? '\n\n> ⚠️ *Câu trả lời chạm trần độ dài nên bị cắt ở đây. Hỏi tiếp “nói tiếp phần còn lại” để nghe nốt.*' : '')).trim();
   if (!answer) throw new BadRequestError('AI chưa trả lời được. Thử lại nhé.');
-  if (opts.cacheKey && nenLuuCache(answer, opts.english, lessonId, opts.cacheKey)) {
-    void saveCachedAnswer(lessonId, opts.cacheKey, lang, answer);
+  if (ck && nenLuuCache(answer, opts.english, lessonId, ck)) {
+    void saveCachedAnswer(lessonId, ck, lang, answer);
   }
   return { answer, cached: false };
 }

@@ -51,8 +51,10 @@ export default {
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Academic Integrity</div><div class="lz-nsub">Cite sources &amp; avoid plagiarism</div></div></div>
   <div class="lz-stage">Putting it together</div>
   <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Capstone: Research &amp; Communication</div><div class="lz-nsub">Use all skills in one project</div></div></div>
-  <div class="lz-stage">Advanced · beyond the syllabus</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Note-taking · time management · ethical AI use</div><div class="lz-nsub">Habits that supercharge self-study</div></div></div>
+  <div class="lz-stage">Study habits</div>
+  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Organisation &amp; time management</div><div class="lz-nsub">MOOC 2 Module 5 — on the syllabus (session 5)</div></div></div>
+  <div class="lz-stage">Extra · beyond the syllabus</div>
+  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Note-taking systems · ethical AI use</div><div class="lz-nsub">Habits that supercharge self-study</div></div></div>
 </div>
 <div class="callout ok">Do not treat SSL101c as an easy "soft" subject to rush through. These are the exact skills that separate students who thrive from those who burn out. A few good habits learned now pay off in every semester ahead.</div>
 <a class="link-card exphub" href="/exp-hub/ssl101c-cong-cu-hoc-tap?ref=%2Fcourses%2Facademic-skills-for-university-success%2Flearn&reflabel=SSL101c%20%E2%80%94%20Academic%20Skills%20for%20University%20Success" target="_blank" rel="noopener">
@@ -106,11 +108,13 @@ export default {
   <div class="kv"><span class="k">Prerequisite</span><span class="v">None</span></div>
   <div class="kv"><span class="k">Grading scale</span><span class="v">10 <small>pass when Final Result ≥ 5.0</small></span></div>
   <div class="kv"><span class="k">Exam gate</span><span class="v">Must complete ALL MOOCs (with certificates) to sit the exam</span></div>
+  <div class="kv"><span class="k">Components</span><span class="v">One <small>Theoretical Exam (TE), final exam, 1 part, 100%, completion 4</small></span></div>
+  <div class="kv"><span class="k">Campus slots</span><span class="v">3 offline sessions <small>intro + review of MOOC 4–5; attendance is optional</small></span></div>
 </div>
 <h3>How the final result is built</h3>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Study</div><div class="lz-t">complete the 5 MOOCs on time</div><div class="lz-d">earns a Bonus</div></div>
-  <div class="lz-step"><div class="lz-k">Exam</div><div class="lz-t">Theoretical Exam (TE)</div><div class="lz-d">60 min, multiple choice, on campus</div></div>
+  <div class="lz-step"><div class="lz-k">Exam</div><div class="lz-t">Theoretical Exam (TE) — 100%</div><div class="lz-d">1 part, 60 min, multiple choice, LO1–LO5</div></div>
   <div class="lz-step"><div class="lz-k">Result</div><div class="lz-t">FR = min(10, TE + Bonus)</div><div class="lz-d">bonus lifts your score</div></div>
 </div>
 <div class="callout warn">Two conditions to pass: the exam score <strong>TE ≥ 4</strong> AND the final result <strong>FR ≥ 5</strong>. And there is a hard gate: you can only take the exam if you have <strong>completed every MOOC with its certificate</strong>. Do not leave the MOOCs to the last week — the certificates are your ticket to the exam.</div>
@@ -126,11 +130,13 @@ export default {
   <div class="kv"><span class="k">Tiên quyết</span><span class="v">Không</span></div>
   <div class="kv"><span class="k">Thang điểm</span><span class="v">10 <small>qua môn khi Kết quả cuối ≥ 5.0</small></span></div>
   <div class="kv"><span class="k">Điều kiện thi</span><span class="v">Phải hoàn thành TẤT CẢ MOOC (có chứng chỉ) mới được thi</span></div>
+  <div class="kv"><span class="k">Thành phần điểm</span><span class="v">Một <small>Thi lý thuyết (TE), final exam, 1 phần, 100%, sàn hoàn thành 4</small></span></div>
+  <div class="kv"><span class="k">Buổi tại trường</span><span class="v">3 buổi offline <small>giới thiệu + ôn MOOC 4–5; dự học là tự nguyện</small></span></div>
 </div>
 <h3>Kết quả cuối được tính thế nào</h3>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Học</div><div class="lz-t">hoàn thành 5 MOOC đúng hạn</div><div class="lz-d">kiếm điểm Thưởng (Bonus)</div></div>
-  <div class="lz-step"><div class="lz-k">Thi</div><div class="lz-t">Bài thi lý thuyết (TE)</div><div class="lz-d">60 phút, trắc nghiệm, tại trường</div></div>
+  <div class="lz-step"><div class="lz-k">Thi</div><div class="lz-t">Thi lý thuyết (TE) — 100%</div><div class="lz-d">1 phần, 60 phút, trắc nghiệm, LO1–LO5</div></div>
   <div class="lz-step"><div class="lz-k">Kết quả</div><div class="lz-t">FR = min(10, TE + Bonus)</div><div class="lz-d">điểm thưởng nâng điểm bạn</div></div>
 </div>
 <div class="callout warn">Hai điều kiện để qua: điểm thi <strong>TE ≥ 4</strong> VÀ kết quả cuối <strong>FR ≥ 5</strong>. Và có một cửa cứng: bạn chỉ được thi nếu đã <strong>hoàn thành mọi MOOC kèm chứng chỉ</strong>. Đừng để MOOC tới tuần cuối — chứng chỉ là vé vào phòng thi của bạn.</div>
@@ -155,10 +161,10 @@ export default {
     <tr><td>CLO2</td><td>Develop Problem Solving &amp; Creativity skills</td><td>Chapter 2</td></tr>
     <tr><td>CLO3</td><td>Develop Critical Thinking skills</td><td>Chapter 3</td></tr>
     <tr><td>CLO4</td><td>Develop Communication skills</td><td>Chapter 4</td></tr>
-    <tr><td>CLO5</td><td>Apply all the skills to build a Capstone Project</td><td>Chapters 5–6</td></tr>
+    <tr><td>CLO5</td><td>Apply all the skills to build a Capstone Project</td><td>Chapter 6 <small>(MOOC 5)</small></td></tr>
   </tbody>
 </table>
-<div class="note-ct">Notice these are <em>skills</em>, not facts to memorize. The exam tests your understanding of the methods; the real payoff is using them in your other courses from week one.</div>
+<div class="note-ct">Chapter 5 (academic integrity &amp; avoiding plagiarism) sits under <strong>CLO1</strong>, not CLO5 — in the syllabus it is MOOC 1 Modules 1 and 4. Notice these are <em>skills</em>, not facts to memorize. The single 60-minute multiple-choice exam covers LO1–LO5; the real payoff is using them in your other courses from week one.</div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.3</span>
@@ -171,10 +177,10 @@ export default {
     <tr><td>CLO2</td><td>Phát triển kỹ năng Giải quyết vấn đề &amp; Sáng tạo</td><td>Chương 2</td></tr>
     <tr><td>CLO3</td><td>Phát triển kỹ năng Tư duy phản biện</td><td>Chương 3</td></tr>
     <tr><td>CLO4</td><td>Phát triển kỹ năng Giao tiếp</td><td>Chương 4</td></tr>
-    <tr><td>CLO5</td><td>Áp dụng mọi kỹ năng để xây một Dự án Capstone</td><td>Chương 5–6</td></tr>
+    <tr><td>CLO5</td><td>Áp dụng mọi kỹ năng để xây một Dự án Capstone</td><td>Chương 6 <small>(MOOC 5)</small></td></tr>
   </tbody>
 </table>
-<div class="note-ct">Để ý đây là <em>kỹ năng</em>, không phải sự kiện để học thuộc. Bài thi kiểm bạn hiểu các phương pháp; phần thưởng thật là dùng chúng trong các môn khác ngay từ tuần đầu.</div>
+<div class="note-ct">Chương 5 (liêm chính học thuật &amp; tránh đạo văn) thuộc <strong>CLO1</strong>, không phải CLO5 — trong syllabus đó là MOOC 1 Module 1 và 4. Để ý đây là <em>kỹ năng</em>, không phải sự kiện để học thuộc. Một bài thi trắc nghiệm 60 phút duy nhất phủ LO1–LO5; phần thưởng thật là dùng chúng trong các môn khác ngay từ tuần đầu.</div>
 </div>
 `,
         },
@@ -200,9 +206,10 @@ export default {
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Weekly</div><div class="lz-t">≥ 5 hrs</div><div class="lz-d">watch, read, quiz — steadily</div></div>
   <div class="lz-step"><div class="lz-k">Active</div><div class="lz-t">take notes</div><div class="lz-d">don&#39;t just watch passively</div></div>
-  <div class="lz-step"><div class="lz-k">Engage</div><div class="lz-t">forums &amp; peer reviews</div><div class="lz-d">part of the grade</div></div>
+  <div class="lz-step"><div class="lz-k">Engage</div><div class="lz-t">forums &amp; peer reviews</div><div class="lz-d">needed for the certificates</div></div>
   <div class="lz-step"><div class="lz-k">Finish</div><div class="lz-t">get every certificate</div><div class="lz-d">your exam ticket + bonus</div></div>
 </div>
+<div class="callout warn">Peer-graded assignments and forum discussion do <strong>not</strong> score points in SSL101c — the FPT grade is the Theoretical Exam alone (100%) plus the on-time completion bonus. They matter because you cannot get a MOOC certificate without them, and without all five certificates you cannot sit the exam.</div>
 <div class="callout ok">Passive video-watching is the classic trap. Aim to be able to <em>explain each idea in your own words</em> after each module — that is when a skill becomes yours. The advanced lessons in this course cover note-taking and time-management systems to help.</div>
 <a class="link-card exphub" href="/exp-hub/ssl101c-cong-cu-hoc-tap?ref=%2Fcourses%2Facademic-skills-for-university-success%2Flearn&reflabel=SSL101c%20%E2%80%94%20Academic%20Skills%20for%20University%20Success" target="_blank" rel="noopener">
   <span class="lc-ico">🧰</span>
@@ -226,9 +233,10 @@ export default {
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Hàng tuần</div><div class="lz-t">≥ 5 giờ</div><div class="lz-d">xem, đọc, làm quiz — đều đặn</div></div>
   <div class="lz-step"><div class="lz-k">Chủ động</div><div class="lz-t">ghi chép</div><div class="lz-d">đừng chỉ xem thụ động</div></div>
-  <div class="lz-step"><div class="lz-k">Tham gia</div><div class="lz-t">forum &amp; chấm chéo</div><div class="lz-d">một phần của điểm</div></div>
+  <div class="lz-step"><div class="lz-k">Tham gia</div><div class="lz-t">forum &amp; chấm chéo</div><div class="lz-d">cần để lấy chứng chỉ</div></div>
   <div class="lz-step"><div class="lz-k">Hoàn tất</div><div class="lz-t">lấy mọi chứng chỉ</div><div class="lz-d">vé thi + điểm thưởng</div></div>
 </div>
+<div class="callout warn">Bài chấm chéo và thảo luận forum <strong>không</strong> tính điểm trong SSL101c — điểm của FPT chỉ là bài thi lý thuyết (100%) cộng điểm thưởng hoàn thành đúng hạn. Chúng quan trọng vì không có chúng thì không lấy được chứng chỉ MOOC, mà thiếu đủ năm chứng chỉ thì không được dự thi.</div>
 <div class="callout ok">Xem video thụ động là cái bẫy kinh điển. Hãy nhắm tới việc <em>giải thích được mỗi ý bằng lời của mình</em> sau mỗi module — đó là lúc một kỹ năng thành của bạn. Các bài nâng cao trong khóa này bàn về hệ thống ghi chép và quản lý thời gian để hỗ trợ.</div>
 <a class="link-card exphub" href="/exp-hub/ssl101c-cong-cu-hoc-tap?ref=%2Fcourses%2Facademic-skills-for-university-success%2Flearn&reflabel=SSL101c%20%E2%80%94%20Academic%20Skills%20for%20University%20Success" target="_blank" rel="noopener">
   <span class="lc-ico">🧰</span>
@@ -714,7 +722,8 @@ export default {
   <div class="lz-step"><div class="lz-k">Evidence</div><div class="lz-t">cited sources</div><div class="lz-d">from your research</div></div>
   <div class="lz-step"><div class="lz-k">Reasoning</div><div class="lz-t">why it supports the claim</div><div class="lz-d">the logical link</div></div>
 </div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The Toulmin model: add the warrant.</b> Philosopher Stephen Toulmin showed a real argument needs more than claim + evidence: it needs a <em>warrant</em> — the often-unstated principle that links the two — plus a qualifier ("usually", "probably") and a rebuttal that names the exceptions. Making the warrant explicit is exactly where weak essays are exposed and strong ones convince. <em>The lesson gives claim-evidence-reasoning; Toulmin's warrant/qualifier/rebuttal is the graduate-level upgrade examiners reward.</em></div>
+<h3>The Toulmin model — a named model for academic argumentation</h3>
+<p>MOOC 3 Module 5 (syllabus session 7) covers <em>argument structures &amp; chains</em> and <em>models for academic argumentation</em>. The best known is Toulmin's. Philosopher Stephen Toulmin showed a real argument needs more than claim + evidence: it needs a <strong>warrant</strong> — the often-unstated principle that links the two — plus a <strong>qualifier</strong> ("usually", "probably") and a <strong>rebuttal</strong> that names the exceptions. Making the warrant explicit is exactly where weak essays are exposed and strong ones convince.</p>
 <h3>Worked example · rewriting a weak paragraph</h3>
 <div class="out"><b>Weak version:</b> "Remote work is good. Many companies now let people work from home. I think it helps productivity."<br><em>What's missing:</em> the claim is vague ("good"), the evidence is unrelated to the claim (companies allowing it ≠ proof it helps), and there's no explicit reasoning connecting them.<br><br><b>Revised, step by step:</b><br><b>1. Sharpen the claim:</b> "Remote work improves individual productivity for focus-heavy tasks."<br><b>2. Attach real evidence:</b> "A 2023 Stanford study of 16,000 workers found a 13% performance increase after switching to remote work, largely from fewer distractions and a quieter environment."<br><b>3. Add the reasoning (the missing link, Toulmin's warrant):</b> "Because deep-focus tasks like writing or coding require uninterrupted blocks of time, and open offices are proven to fragment attention, removing that source of interruption directly targets the cause of lost productivity."<br><b>4. Add a qualifier:</b> "This effect is strongest for individual, focus-heavy work — collaborative tasks that need real-time discussion may see the opposite result."</div>
 <div class="note-ct">A well-structured argument is easier to write, easier to read, and easier to grade well. When stuck, outline first: one line per paragraph. If the outline flows logically, the full piece will too. This is exactly the process the capstone (Chapter 6) asks you to run end-to-end.</div>
@@ -735,7 +744,8 @@ export default {
   <div class="lz-step"><div class="lz-k">Bằng chứng</div><div class="lz-t">nguồn đã trích dẫn</div><div class="lz-d">từ nghiên cứu của bạn</div></div>
   <div class="lz-step"><div class="lz-k">Suy luận</div><div class="lz-t">vì sao nó hỗ trợ khẳng định</div><div class="lz-d">liên kết logic</div></div>
 </div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Mô hình Toulmin: thêm cơ sở lập luận (warrant).</b> Nhà triết học Stephen Toulmin chỉ ra một lập luận thật cần hơn là khẳng định + bằng chứng: nó cần một <em>warrant</em> — nguyên tắc thường ngầm ẩn nối hai thứ đó — cộng một bộ hạn định ("thường", "có lẽ") và một phản bác nêu các ngoại lệ. Làm warrant hiện rõ đúng là nơi bài luận yếu bị lộ và bài mạnh thuyết phục. <em>Bài học cho khẳng định-bằng chứng-suy luận; warrant/hạn định/phản bác của Toulmin là bản nâng cấp trình độ cao mà giám khảo tưởng thưởng.</em></div>
+<h3>Mô hình Toulmin — một mô hình lập luận học thuật có tên</h3>
+<p>MOOC 3 Module 5 (buổi 7 của syllabus) dạy <em>cấu trúc &amp; chuỗi lập luận</em> và <em>các mô hình lập luận học thuật</em>. Mô hình nổi tiếng nhất là của Toulmin. Nhà triết học Stephen Toulmin chỉ ra một lập luận thật cần hơn là khẳng định + bằng chứng: nó cần một <strong>warrant</strong> (cơ sở lập luận) — nguyên tắc thường ngầm ẩn nối hai thứ đó — cộng một <strong>bộ hạn định</strong> ("thường", "có lẽ") và một <strong>phản bác</strong> nêu các ngoại lệ. Làm warrant hiện rõ đúng là nơi bài luận yếu bị lộ và bài mạnh thuyết phục.</p>
 <h3>Ví dụ có lời giải · viết lại một đoạn văn yếu</h3>
 <div class="out"><b>Bản yếu:</b> "Làm việc từ xa là tốt. Nhiều công ty giờ cho phép làm việc tại nhà. Tôi nghĩ nó giúp tăng năng suất."<br><em>Thiếu gì:</em> khẳng định mơ hồ ("tốt"), bằng chứng không liên quan tới khẳng định (công ty cho phép ≠ chứng minh nó giúp ích), và không có suy luận rõ ràng nối hai thứ.<br><br><b>Viết lại, từng bước:</b><br><b>1. Làm rõ khẳng định:</b> "Làm việc từ xa cải thiện năng suất cá nhân cho các công việc cần tập trung sâu."<br><b>2. Gắn bằng chứng thật:</b> "Nghiên cứu năm 2023 của Stanford trên 16.000 người lao động cho thấy hiệu suất tăng 13% sau khi chuyển sang làm từ xa, chủ yếu nhờ giảm xao nhãng và môi trường yên tĩnh hơn."<br><b>3. Thêm suy luận (mắt xích còn thiếu, warrant của Toulmin):</b> "Vì công việc cần tập trung sâu như viết hay lập trình đòi hỏi những khối thời gian không bị ngắt quãng, và văn phòng mở đã được chứng minh làm phân mảnh sự chú ý, việc loại bỏ nguồn ngắt quãng đó nhắm thẳng vào nguyên nhân mất năng suất."<br><b>4. Thêm hạn định:</b> "Hiệu ứng này mạnh nhất với công việc cá nhân, cần tập trung sâu — công việc cần thảo luận thời gian thực có thể cho kết quả ngược lại."</div>
 <div class="note-ct">Một lập luận có cấu trúc tốt dễ viết hơn, dễ đọc hơn, và dễ được chấm điểm cao hơn. Khi bí, hãy lập dàn ý trước: một dòng mỗi đoạn. Nếu dàn ý trôi chảy logic, cả bài cũng vậy. Đây đúng là quy trình mà capstone (Chương 6) yêu cầu bạn chạy từ đầu đến cuối.</div>
@@ -773,7 +783,7 @@ export default {
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.1</span>
 <h2>Academic integrity — doing your work honestly</h2>
-<p class="lead"><strong>Plagiarism</strong> is presenting someone else&#39;s words, ideas or work as your own without proper credit. It is one of the most serious academic offences — and much of it is <em>accidental</em>, from sloppy note-taking. This FPT-authored module (CLO5) teaches you to avoid it with digital tools.</p>
+<p class="lead"><strong>Plagiarism</strong> is presenting someone else&#39;s words, ideas or work as your own without proper credit. It is one of the most serious academic offences — and much of it is <em>accidental</em>, from sloppy note-taking. Academic integrity, referencing and paraphrasing are <strong>MOOC 1</strong> material (Modules 1 and 4, syllabus sessions 1 and 3) and belong to <strong>CLO1 — Information &amp; Digital Literacy</strong>; the FPT guided project "How To Avoid Plagiarism with Digital Tools" is a listed course material for it.</p>
 <div class="lz-stack">
   <div class="lz-layer"><div class="lz-lt">Copying text without quotes/citation</div><div class="lz-ld">Even a single sentence copied word-for-word needs quotation marks AND a citation.</div></div>
   <div class="lz-layer"><div class="lz-lt">Paraphrasing without citation</div><div class="lz-ld">Rewording someone&#39;s idea still uses their idea — you must still cite them.</div></div>
@@ -797,7 +807,7 @@ export default {
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
 <h2>Liêm chính học thuật — làm bài một cách trung thực</h2>
-<p class="lead"><strong>Đạo văn (plagiarism)</strong> là trình bày lời, ý tưởng hoặc công trình của người khác như của mình mà không ghi công đúng cách. Đây là một trong những vi phạm học thuật nghiêm trọng nhất — và phần lớn là <em>vô tình</em>, do ghi chép cẩu thả. Module do FPT biên soạn này (CLO5) dạy bạn tránh nó bằng công cụ số.</p>
+<p class="lead"><strong>Đạo văn (plagiarism)</strong> là trình bày lời, ý tưởng hoặc công trình của người khác như của mình mà không ghi công đúng cách. Đây là một trong những vi phạm học thuật nghiêm trọng nhất — và phần lớn là <em>vô tình</em>, do ghi chép cẩu thả. Liêm chính học thuật, trích dẫn và diễn giải là nội dung <strong>MOOC 1</strong> (Module 1 và 4, buổi 1 và 3 trong syllabus) và thuộc <strong>CLO1 — Thông tin &amp; Kỹ năng số</strong>; dự án hướng dẫn của FPT "How To Avoid Plagiarism with Digital Tools" là một tài liệu được liệt kê cho CLO đó.</p>
 <div class="lz-stack">
   <div class="lz-layer"><div class="lz-lt">Chép văn bản không đặt ngoặc/trích dẫn</div><div class="lz-ld">Dù chỉ một câu chép nguyên văn cũng cần dấu ngoặc kép VÀ một trích dẫn.</div></div>
   <div class="lz-layer"><div class="lz-lt">Diễn giải mà không trích dẫn</div><div class="lz-ld">Viết lại ý của người khác vẫn dùng ý của họ — bạn vẫn phải trích dẫn họ.</div></div>
@@ -971,8 +981,8 @@ export default {
     },
     /* ══════════════════ NÂNG CAO 2 — QUẢN LÝ THỜI GIAN ══════════════════ */
     {
-      title: 'Advanced 2 — Time management & deep work|||Nâng cao 2 — Quản lý thời gian & làm việc sâu',
-      description: 'Ngoài giáo trình: quản lý thời gian tự học và tập trung sâu.',
+      title: 'Organisation & time management (MOOC 2 · Module 5)|||Tổ chức & quản lý thời gian (MOOC 2 · Module 5)',
+      description: 'Nội dung trong syllabus — buổi 5 (MOOC2 Module 5 "Organization & Time Management"): ưu tiên việc, chống trì hoãn, tập trung sâu.',
       lessons: [
         {
           title: 'N2.1 — Managing self-study time|||N2.1 — Quản lý thời gian tự học',
@@ -981,7 +991,7 @@ export default {
           description: 'Ưu tiên việc, chống trì hoãn và tập trung sâu với Pomodoro.',
           content: `
 <div class="ml-en">
-<span class="eyebrow">Advanced 2 · Lesson N2.1</span>
+<span class="eyebrow">MOOC 2 · Module 5 · Lesson N2.1</span>
 <h2>The hidden skill: managing 102 hours of self-study</h2>
 <p class="lead">This course alone expects ~100 hours of independent study. No one schedules that for you — managing your own time is the skill that quietly decides whether you thrive or drown at university.</p>
 <h3>Prioritize — not everything is equally urgent</h3>
@@ -1082,7 +1092,7 @@ export default {
           "slug": "ssl101c-final-exam-fe",
           "type": "article",
           "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam \u00b7 FE</span>\n<h2>FE \u2014 Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">SSL101c has exactly one graded component: the <strong>Theoretical Exam (TE)</strong> &mdash; 1 part, <strong>100% of the grade</strong>, <strong>60 minutes</strong>, <strong>multiple choice</strong>, covering LO1&ndash;LO5, with a completion criterion of <strong>4</strong>. Your Final Result is min(10, TE + bonus); you pass when TE &ge; 4 <em>and</em> FR &ge; 5, and you may only sit it once you hold the certificate for every MOOC. The syllabus does not state how many questions it contains.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cu\u1ed1i k\u1ef3 \u00b7 FE</span>\n<h2>FE \u2014 Thi tr\u1eafc nghi\u1ec7m cu\u1ed1i k\u1ef3</h2>\n<p class=\"lead\">SSL101c ch\u1ec9 c\u00f3 \u0111\u00fang m\u1ed9t c\u1ed9t \u0111i\u1ec3m: <strong>Thi l\u00fd thuy\u1ebft (TE)</strong> &mdash; 1 ph\u1ea7n, <strong>100% \u0111i\u1ec3m m\u00f4n</strong>, <strong>60 ph\u00fat</strong>, <strong>tr\u1eafc nghi\u1ec7m</strong>, ph\u1ee7 LO1&ndash;LO5, s\u00e0n ho\u00e0n th\u00e0nh <strong>4</strong>. K\u1ebft qu\u1ea3 cu\u1ed1i = min(10, TE + bonus); qua m\u00f4n khi TE &ge; 4 <em>v\u00e0</em> FR &ge; 5, v\u00e0 ch\u1ec9 \u0111\u01b0\u1ee3c d\u1ef1 thi khi \u0111\u00e3 c\u00f3 ch\u1ee9ng ch\u1ec9 c\u1ee7a m\u1ecdi MOOC. Syllabus kh\u00f4ng ghi b\u00e0i thi c\u00f3 bao nhi\u00eau c\u00e2u.</p>\n<h3>C\u00e1ch l\u00e0m t\u1ed1t</h3>\n<ul>\n<li>Ph\u00e2n b\u1ed5 th\u1eddi gian: chia \u0111\u1ec1u theo s\u1ed1 c\u00e2u; \u0111\u00e1nh d\u1ea5u c\u00e2u kh\u00f3, quay l\u1ea1i \u1edf cu\u1ed1i.</li>\n<li>Lo\u1ea1i ph\u01b0\u01a1ng \u00e1n sai r\u00f5 r\u00e0ng tr\u01b0\u1edbc, r\u1ed3i ch\u1ecdn trong s\u1ed1 c\u00f2n l\u1ea1i.</li>\n<li>C\u00e2u \"n\u00ean l\u00e0m g\u00ec / c\u00e1i n\u00e0o t\u1ed1t nh\u1ea5t\" &mdash; tr\u1ea3 l\u1eddi theo ph\u01b0\u01a1ng ph\u00e1p c\u1ee7a m\u00f4n, kh\u00f4ng theo c\u1ea3m t\u00ednh.</li>\n<li>\u0110\u1eebng bao gi\u1edd b\u1ecf tr\u1ed1ng b\u00e0i thi c\u00f3 c\u1ed5ng &mdash; \u0111o\u00e1n c\u00f3 suy lu\u1eadn v\u1eabn h\u01a1n \u0111\u1ec3 tr\u1ed1ng.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">C\u00e2u m\u1eabu</span> C\u00e1c c\u00e2u d\u01b0\u1edbi \u0111\u00e2y l\u00e0 <strong>c\u00e2u m\u1eabu</strong> l\u1ea5y t\u1eeb ch\u00ednh m\u00f4n h\u1ecdc \u0111\u1ec3 minh ho\u1ea1 format. <em>\u0110\u1ec1 thi th\u1eadt</em> s\u1ebd \u0111\u01b0\u1ee3c th\u00eam v\u00e0o \u0111\u00e2y sau, trong trang ph\u00f2ng thi.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [

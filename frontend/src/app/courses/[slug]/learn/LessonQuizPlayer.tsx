@@ -212,7 +212,7 @@ export default function LessonQuizPlayer({
                       {submitted && q.sampleAnswer?.trim() && (
                         <div className="rounded-xl border border-green-500/30 bg-green-500/5 p-3">
                           <p className="text-xs font-semibold text-green-400 mb-1">Đáp án mẫu:</p>
-                          <p className="text-sm text-text-secondary whitespace-pre-wrap">{unescapeText(q.sampleAnswer)}</p>
+                          <p className="text-sm text-text-secondary whitespace-pre-wrap">{unescapeText(pickLang(q.sampleAnswer, locale))}</p>
                         </div>
                       )}
                     </div>
@@ -258,7 +258,7 @@ export default function LessonQuizPlayer({
                       <Lightbulb className="w-4 h-4 text-neon-cyan shrink-0 mt-0.5" />
                       <div>
                         <p className="text-xs font-semibold text-neon-cyan mb-0.5">Giải thích</p>
-                        <p className="text-sm text-text-secondary whitespace-pre-wrap">{unescapeText(q.explanation)}</p>
+                        <p className="text-sm text-text-secondary whitespace-pre-wrap">{unescapeText(pickLang(q.explanation, locale))}</p>
                       </div>
                     </div>
                   )}

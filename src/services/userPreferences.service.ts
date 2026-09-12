@@ -83,6 +83,20 @@ export interface UserPreferences {
     locale: 'vi' | 'en';
     reduceMotion: boolean;
   };
+  /** Academy onboarding: which FPTU major (and, for SE, which combo) the
+   *  student picked, so /academy can show their own curriculum first.
+   *  `isStudent: false` = "I'm not an FPTU student" — we stop asking and
+   *  send them to /courses. `null` on both ids means "not answered yet".
+   *  Values are free-form ids validated on the client against the
+   *  curriculum table; the server only enforces shape and length so a new
+   *  combo can ship without a backend deploy. */
+  academy: {
+    isStudent: boolean | null;
+    major: string | null;
+    combo: string | null;
+    /** ISO time the student answered, for "bạn đã chọn ngành này từ …". */
+    chosenAt: string | null;
+  };
   /** ISO timestamp of the last successful write. Drives the
    *  newest-wins reconciliation on the client. */
   updatedAt: string | null;
@@ -110,11 +124,25 @@ export function defaultPreferences(): UserPreferences {
       locale: 'vi',
       reduceMotion: false,
     },
+    academy: {
+      isStudent: null,
+      major: null,
+      combo: null,
+      chosenAt: null,
+    },
     updatedAt: null,
   };
 }
 
 /* ─── Validation helpers ─────────────────────────────────────────── */
+
+/** Curriculum ids (major / combo). Kept deliberately loose — the client owns
+ *  the catalogue — but bounded so the blob can't be used as free storage. */
+function asSlug(v: unknown): string | null {
+  if (typeof v !== 'string') return null;
+  const t = v.trim();
+  return /^[a-z0-9][a-z0-9-]{0,39}$/i.test(t) ? t : null;
+}
 
 function asBool(v: unknown, fallback: boolean): boolean {
   return typeof v === 'boolean' ? v : fallback;
@@ -160,6 +188,7 @@ export function sanitize(input: unknown, base: UserPreferences): UserPreferences
     sound: { ...base.sound, enabled: { ...base.sound.enabled }, customFileName: { ...base.sound.customFileName } },
     notify: { ...base.notify, types: { ...base.notify.types } },
     ui: { ...base.ui },
+    academy: { ...base.academy },
     updatedAt: base.updatedAt,
   };
   if (!input || typeof input !== 'object') return out;
@@ -188,6 +217,17 @@ export function sanitize(input: unknown, base: UserPreferences): UserPreferences
     const u = src.ui as Record<string, unknown>;
     if (u.locale === 'vi' || u.locale === 'en') out.ui.locale = u.locale;
     if ('reduceMotion' in u) out.ui.reduceMotion = asBool(u.reduceMotion, out.ui.reduceMotion);
+  }
+
+  if (src.academy && typeof src.academy === 'object') {
+    const a = src.academy as Record<string, unknown>;
+    if ('isStudent' in a) out.academy.isStudent = typeof a.isStudent === 'boolean' ? a.isStudent : null;
+    if ('major' in a) out.academy.major = asSlug(a.major);
+    if ('combo' in a) out.academy.combo = asSlug(a.combo);
+    if ('chosenAt' in a) {
+      const t = typeof a.chosenAt === 'string' ? Date.parse(a.chosenAt) : NaN;
+      out.academy.chosenAt = Number.isNaN(t) ? null : new Date(t).toISOString();
+    }
   }
 
   // Carry the stored stamp through. Without this, reading a row back

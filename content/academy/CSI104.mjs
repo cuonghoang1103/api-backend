@@ -148,15 +148,15 @@ export default {
 <table>
   <thead><tr><th>Component</th><th>Weight</th><th>Note</th></tr></thead>
   <tbody>
-    <tr><td>Group presentation</td><td>10%</td><td>On-going, 2 parts — a team topic presented in class</td></tr>
-    <tr><td>Lab</td><td>20%</td><td>On-going, 2 labs — hands-on tasks</td></tr>
-    <tr><td>Progress test</td><td>30%</td><td>3 tests spread through the term</td></tr>
-    <tr><td>Final exam</td><td>40%</td><td>60 minutes — must score ≥ 4 to pass the course</td></tr>
+    <tr><td>Group presentation <small>on-going · 2 parts</small></td><td>10%</td><td><b>30 minutes per group</b> (Option 1); Option 2 is the Constructivism-approach variant. Completion <b>&gt; 0</b></td></tr>
+    <tr><td>Lab <small>on-going · 2 parts</small></td><td>20%</td><td><b>60–90 minutes each</b> (Option 1); Option 2 is the Constructivism-approach variant. Completion <b>&gt; 0</b></td></tr>
+    <tr><td>Progress test <small>on-going · 3 parts</small></td><td>30%</td><td><b>30 minutes each</b> (Option 1), at sessions 18, 43 and 57 — <b>PT1: LO1–LO4 · PT2: LO5–LO9 · PT3: LO10–LO12</b>. Completion <b>&gt; 0</b></td></tr>
+    <tr><td>Final exam <small>1 part</small></td><td>40%</td><td><b>60 minutes</b> — completion criterion <b>≥ 4</b>. The syllabus export shows no question type for it, so do not assume multiple choice</td></tr>
   </tbody>
 </table>
-<div class="callout warn">Two independent gates. <strong>(1)</strong> Weighted average of all components ≥ 5.0. <strong>(2)</strong> The Final exam alone ≥ 4.0. Ace the coursework but score 3 on the final and you still fail — sit the final seriously.</div>
+<div class="callout warn">Three gates. <strong>(1)</strong> Every on-going component (presentation, labs, progress tests) must be <strong>&gt; 0</strong>. <strong>(2)</strong> The Final exam alone ≥ 4.0. <strong>(3)</strong> Weighted average of all components ≥ 5.0, with ≥ 80% attendance to sit the final. Ace the coursework but score 3 on the final and you still fail — sit the final seriously.</div>
 <h3>What "on-going" means</h3>
-<p>The presentation, labs and progress tests happen <em>during</em> the term, not at the end. Miss a lab and you lose those points permanently — there is rarely a make-up. Keep a small calendar of the three progress-test weeks (around sessions 18, 43 and 57).</p>
+<p>The presentation, labs and progress tests happen <em>during</em> the term, not at the end. Miss a lab and you lose those points permanently — there is rarely a make-up. Keep a small calendar of the three progress-test weeks: sessions <b>18</b> (LO1–LO4), <b>43</b> (LO5–LO9) and <b>57</b> (LO10–LO12). Note that PT1 lands <em>before</em> the operating-systems and algorithms chapters, so it cannot ask about them.</p>
 <div class="note-ct">Because 60% of your grade is on-going, CSI104 rewards steady attendance far more than last-minute cramming. Show up, do every lab, and the final becomes easy.</div>
 </div>
 <div class="ml-vi">
@@ -175,15 +175,15 @@ export default {
 <table>
   <thead><tr><th>Thành phần</th><th>Trọng số</th><th>Ghi chú</th></tr></thead>
   <tbody>
-    <tr><td>Thuyết trình nhóm</td><td>10%</td><td>Thường xuyên, 2 phần — nhóm trình bày một chủ đề trên lớp</td></tr>
-    <tr><td>Lab</td><td>20%</td><td>Thường xuyên, 2 bài lab thực hành</td></tr>
-    <tr><td>Progress test</td><td>30%</td><td>3 bài kiểm tra rải trong kỳ</td></tr>
-    <tr><td>Thi cuối kỳ</td><td>40%</td><td>60 phút — phải đạt ≥ 4 mới qua môn</td></tr>
+    <tr><td>Thuyết trình nhóm <small>quá trình · 2 phần</small></td><td>10%</td><td><b>30 phút mỗi nhóm</b> (Option 1); Option 2 là biến thể theo hướng Constructivism. Sàn hoàn thành <b>&gt; 0</b></td></tr>
+    <tr><td>Lab <small>quá trình · 2 phần</small></td><td>20%</td><td><b>60–90 phút mỗi bài</b> (Option 1); Option 2 là biến thể theo hướng Constructivism. Sàn hoàn thành <b>&gt; 0</b></td></tr>
+    <tr><td>Progress test <small>quá trình · 3 phần</small></td><td>30%</td><td><b>30 phút mỗi bài</b> (Option 1), ở buổi 18, 43 và 57 — <b>PT1: LO1–LO4 · PT2: LO5–LO9 · PT3: LO10–LO12</b>. Sàn hoàn thành <b>&gt; 0</b></td></tr>
+    <tr><td>Thi cuối kỳ <small>1 phần</small></td><td>40%</td><td><b>60 phút</b> — sàn hoàn thành <b>≥ 4</b>. Bản xuất syllabus không ghi dạng câu hỏi, nên đừng mặc định là trắc nghiệm</td></tr>
   </tbody>
 </table>
-<div class="callout warn">Hai cửa độc lập. <strong>(1)</strong> Trung bình có trọng số mọi cột ≥ 5.0. <strong>(2)</strong> Riêng bài thi cuối kỳ ≥ 4.0. Điểm quá trình cao nhưng thi cuối được 3 thì vẫn rớt — hãy thi cuối kỳ nghiêm túc.</div>
+<div class="callout warn">Ba cửa. <strong>(1)</strong> Mọi cột điểm quá trình (thuyết trình, lab, progress test) phải <strong>&gt; 0</strong>. <strong>(2)</strong> Riêng bài thi cuối kỳ ≥ 4.0. <strong>(3)</strong> Trung bình có trọng số mọi cột ≥ 5,0, kèm điều kiện dự ≥ 80% số buổi mới được thi. Điểm quá trình cao nhưng thi cuối được 3 thì vẫn rớt — hãy thi cuối kỳ nghiêm túc.</div>
 <h3>"Thường xuyên" nghĩa là gì</h3>
-<p>Thuyết trình, lab và progress test diễn ra <em>trong</em> kỳ, không dồn cuối kỳ. Vắng một buổi lab là mất điểm đó vĩnh viễn — hiếm khi có thi lại. Ghi vào lịch ba tuần có progress test (khoảng buổi 18, 43 và 57).</p>
+<p>Thuyết trình, lab và progress test diễn ra <em>trong</em> kỳ, không dồn cuối kỳ. Vắng một buổi lab là mất điểm đó vĩnh viễn — hiếm khi có thi lại. Ghi vào lịch ba tuần có progress test: buổi <b>18</b> (LO1–LO4), <b>43</b> (LO5–LO9) và <b>57</b> (LO10–LO12). Lưu ý PT1 rơi <em>trước</em> chương hệ điều hành và thuật toán, nên nó không thể hỏi về hai phần đó.</p>
 <div class="note-ct">Vì 60% điểm là quá trình, CSI104 thưởng cho việc đi học đều hơn nhiều so với "cày" phút chót. Cứ đến lớp, làm đủ mọi lab, thì bài thi cuối trở nên nhẹ nhàng.</div>
 </div>
 `,
@@ -385,7 +385,7 @@ export default {
           title: '1.2 — Computer generations & the subsystems|||1.2 — Các thế hệ máy tính & các phân hệ',
           slug: 'csi104-1-2-the-he-phan-he',
           type: 'VIDEO',
-          description: 'Từ đèn chân không tới vi mạch, và năm phân hệ vật lý của một máy tính.',
+          description: 'Từ đèn chân không tới máy tính đa phương tiện, và ba phân hệ phần cứng của một máy tính.',
           content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.2</span>
@@ -394,23 +394,22 @@ export default {
 <table>
   <thead><tr><th>Gen</th><th>Era</th><th>Core technology</th><th>Feel of it</th></tr></thead>
   <tbody>
-    <tr><td>1st</td><td>1940s–50s</td><td>Vacuum tubes</td><td>Room-sized, hot, fragile</td></tr>
-    <tr><td>2nd</td><td>late 50s–60s</td><td>Transistors</td><td>Smaller, more reliable</td></tr>
-    <tr><td>3rd</td><td>1960s–70s</td><td>Integrated circuits (ICs)</td><td>Many transistors on one chip</td></tr>
-    <tr><td>4th</td><td>1970s–now</td><td>Microprocessors (VLSI)</td><td>A whole CPU on one chip → the PC</td></tr>
-    <tr><td>5th</td><td>now &amp; ahead</td><td>AI, parallel &amp; quantum</td><td>Machines that "learn" and scale</td></tr>
+    <tr><td>1st</td><td>1950–1959</td><td>Vacuum tubes</td><td>Room-sized, hot, fragile</td></tr>
+    <tr><td>2nd</td><td>1959–1965</td><td>Transistors</td><td>Smaller, cheaper, more reliable</td></tr>
+    <tr><td>3rd</td><td>1965–1975</td><td>Integrated circuits (ICs)</td><td>Many transistors on one chip; the minicomputer</td></tr>
+    <tr><td>4th</td><td>1975–1985</td><td>Microprocessors (LSI/VLSI)</td><td>A whole CPU on one chip → the desktop computer and computer networks</td></tr>
+    <tr><td>5th</td><td>1985–present</td><td>Portable and multimedia computing</td><td>Laptops and palmtops, CD-ROM/DVD, multimedia, virtual reality</td></tr>
   </tbody>
 </table>
-<h3>The five physical subsystems</h3>
-<p>Where the Von Neumann model gives <em>logical</em> roles, a real computer is built from these <strong>physical</strong> parts:</p>
+<h3>The three hardware subsystems (CLO1)</h3>
+<p>Where the Von Neumann model gives <em>logical</em> roles, the textbook divides real computer <strong>hardware</strong> into three subsystems, joined by a fourth thing that is not a subsystem but the wiring between them:</p>
 <div class="lz-map">
-  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">CPU</div><div class="lz-nsub">The brain — Control Unit + ALU + registers</div></div></div>
-  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Main memory (RAM)</div><div class="lz-nsub">Fast, temporary working space; lost on power-off</div></div></div>
-  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Secondary storage</div><div class="lz-nsub">Disk/SSD — slow but permanent</div></div></div>
-  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Input devices</div><div class="lz-nsub">Keyboard, mouse, camera, mic</div></div></div>
-  <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Output devices</div><div class="lz-nsub">Screen, speaker, printer</div></div></div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Central processing unit (CPU)</div><div class="lz-nsub">Control Unit + ALU + registers — fetches, decodes and executes instructions</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Main memory</div><div class="lz-nsub">The addressable words holding the running program and its data; volatile — lost on power-off</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Input/output subsystem</div><div class="lz-nsub">Everything that moves data in or out: <b>input devices</b> (keyboard, mouse, camera), <b>output devices</b> (screen, speaker, printer) and <b>non-volatile storage</b> (disk, SSD, optical)</div></div></div>
+  <div class="lz-node"><div class="lz-badge">+</div><div class="lz-nbody"><div class="lz-ntitle">Subsystem interconnection</div><div class="lz-nsub">The <b>buses</b> — shared data, address and control lines that connect the three subsystems</div></div></div>
 </div>
-<p>Everything is wired together by a <strong>bus</strong> — a set of shared electrical lines carrying data, addresses and control signals between subsystems.</p>
+<div class="pitfall">A common slip: listing storage, input and output as three separate subsystems and answering &ldquo;five&rdquo;. In this course the answer is <b>three subsystems — CPU, main memory and the I/O subsystem — connected by the subsystem interconnection</b>. Secondary storage is part of the I/O subsystem, because to the CPU a disk is just another device it reads from and writes to.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Moore’s Law and its end.</b> Gordon Moore observed in 1965 that the transistor count on a chip roughly doubles every ~2 years — the engine behind every generation jump. Around 2005 clock speeds hit a "power wall" and stopped rising, so gains shifted from faster cores to more cores: a 2004 CPU ran ~3 GHz on one core, while a 2024 chip is similar per-core but packs 8–16 cores. <em>The syllabus lists generations by technology, not the physics-and-economics law that actually drove them.</em></div>
 <div class="note-ct">Notice the two-layer memory story: RAM is fast but forgets when power is off; the disk is slow but remembers. Chapter 1.4 explains why we need both, and Chapter 5 (the OS) explains who juggles them.</div>
 </div>
@@ -421,23 +420,23 @@ export default {
 <table>
   <thead><tr><th>Thế hệ</th><th>Thời kỳ</th><th>Công nghệ lõi</th><th>Cảm giác</th></tr></thead>
   <tbody>
-    <tr><td>1</td><td>1940s–50s</td><td>Đèn chân không</td><td>To bằng cả phòng, nóng, dễ hỏng</td></tr>
-    <tr><td>2</td><td>cuối 50s–60s</td><td>Bóng bán dẫn (transistor)</td><td>Nhỏ hơn, tin cậy hơn</td></tr>
-    <tr><td>3</td><td>1960s–70s</td><td>Vi mạch tích hợp (IC)</td><td>Nhiều transistor trên một chip</td></tr>
-    <tr><td>4</td><td>1970s–nay</td><td>Vi xử lý (VLSI)</td><td>Cả CPU trên một chip → máy PC</td></tr>
-    <tr><td>5</td><td>hiện tại &amp; tương lai</td><td>AI, song song &amp; lượng tử</td><td>Máy biết "học" và mở rộng</td></tr>
+    <tr><td>1</td><td>1950–1959</td><td>Đèn chân không</td><td>To bằng cả phòng, nóng, dễ hỏng</td></tr>
+    <tr><td>2</td><td>1959–1965</td><td>Bóng bán dẫn (transistor)</td><td>Nhỏ hơn, rẻ hơn, tin cậy hơn</td></tr>
+    <tr><td>3</td><td>1965–1975</td><td>Vi mạch tích hợp (IC)</td><td>Nhiều transistor trên một chip; máy tính mini</td></tr>
+    <tr><td>4</td><td>1975–1985</td><td>Vi xử lý (LSI/VLSI)</td><td>Cả CPU trên một chip → máy để bàn và mạng máy tính</td></tr>
+    <tr><td>5</td><td>1985–nay</td><td>Máy tính di động &amp; đa phương tiện</td><td>Laptop và palmtop, CD-ROM/DVD, đa phương tiện, thực tại ảo</td></tr>
   </tbody>
 </table>
-<h3>Năm phân hệ vật lý</h3>
-<p>Trong khi mô hình Von Neumann cho các vai trò <em>logic</em>, một máy tính thật được ghép từ các bộ phận <strong>vật lý</strong> này:</p>
+<h3>Ba phân hệ phần cứng (CLO1)</h3>
+<p>Trong khi mô hình Von Neumann cho các vai trò <em>logic</em>, giáo trình chia <strong>phần cứng</strong> của một máy tính thật thành ba phân hệ, cộng thêm một thứ không phải phân hệ mà là dây nối giữa chúng:</p>
 <div class="lz-map">
-  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">CPU</div><div class="lz-nsub">Bộ não — Control Unit + ALU + thanh ghi</div></div></div>
-  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Bộ nhớ chính (RAM)</div><div class="lz-nsub">Nhanh, tạm thời; mất khi tắt điện</div></div></div>
-  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Bộ nhớ ngoài</div><div class="lz-nsub">Đĩa/SSD — chậm nhưng lưu vĩnh viễn</div></div></div>
-  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Thiết bị vào</div><div class="lz-nsub">Bàn phím, chuột, camera, micro</div></div></div>
-  <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Thiết bị ra</div><div class="lz-nsub">Màn hình, loa, máy in</div></div></div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Bộ xử lý trung tâm (CPU)</div><div class="lz-nsub">Control Unit + ALU + thanh ghi — nạp, giải mã và thực thi lệnh</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Bộ nhớ chính</div><div class="lz-nsub">Các ô nhớ có địa chỉ giữ chương trình đang chạy và dữ liệu của nó; khả biến — mất khi tắt điện</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Phân hệ vào/ra (I/O)</div><div class="lz-nsub">Mọi thứ đưa dữ liệu vào hoặc ra: <b>thiết bị vào</b> (bàn phím, chuột, camera), <b>thiết bị ra</b> (màn hình, loa, máy in) và <b>bộ nhớ không khả biến</b> (đĩa, SSD, đĩa quang)</div></div></div>
+  <div class="lz-node"><div class="lz-badge">+</div><div class="lz-nbody"><div class="lz-ntitle">Liên kết các phân hệ</div><div class="lz-nsub">Các <b>bus</b> — đường dữ liệu, địa chỉ và điều khiển dùng chung nối ba phân hệ lại</div></div></div>
 </div>
-<p>Tất cả được nối với nhau bằng <strong>bus</strong> — một bộ đường điện dùng chung mang dữ liệu, địa chỉ và tín hiệu điều khiển giữa các phân hệ.</p>
+<div class="pitfall">Lỗi hay gặp: kể bộ nhớ ngoài, thiết bị vào và thiết bị ra thành ba phân hệ riêng rồi trả lời &ldquo;năm&rdquo;. Ở môn này đáp án là <b>ba phân hệ — CPU, bộ nhớ chính và phân hệ vào/ra — nối với nhau bằng liên kết các phân hệ</b>. Bộ nhớ ngoài thuộc phân hệ vào/ra, vì với CPU thì cái đĩa cũng chỉ là một thiết bị để đọc và ghi.</div>
+<p>Bus là <strong>một bộ đường điện dùng chung</strong> mang dữ liệu, địa chỉ và tín hiệu điều khiển giữa các phân hệ — đó chính là &ldquo;liên kết các phân hệ&rdquo; trong ô thứ tư ở trên.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Định luật Moore và điểm dừng của nó.</b> Năm 1965 Gordon Moore nhận xét số transistor trên chip xấp xỉ gấp đôi mỗi ~2 năm — động cơ đằng sau mỗi bước nhảy thế hệ. Khoảng 2005 xung nhịp chạm "bức tường công suất" và ngừng tăng, nên cải thiện chuyển từ nhân nhanh hơn sang nhiều nhân hơn: CPU 2004 chạy ~3 GHz một nhân, chip 2024 mỗi nhân tương đương nhưng có 8–16 nhân. <em>Giáo trình liệt kê các thế hệ theo công nghệ, không nói tới định luật vật lý–kinh tế đã thực sự thúc đẩy chúng.</em></div>
 <div class="note-ct">Để ý câu chuyện hai tầng bộ nhớ: RAM nhanh nhưng quên khi tắt điện; đĩa chậm nhưng nhớ. Bài 1.4 giải thích vì sao cần cả hai, và Chương 5 (hệ điều hành) giải thích ai là người điều phối chúng.</div>
 </div>
@@ -606,7 +605,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">CISC vs RISC</div><div class="lz-ld">CISC (e.g. x86) has many complex instructions; RISC (e.g. ARM) has few simple ones done very fast — the chip in your phone is RISC.</div></div>
   <div class="lz-layer"><div class="lz-lt">Single-core vs multi-core</div><div class="lz-ld">Modern CPUs pack several cores so multiple instruction cycles run truly in parallel.</div></div>
 </div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Interrupts and DMA handle slow devices.</b> Rather than wasting cycles constantly asking a device "are you ready?" (polling), modern systems let the device raise an interrupt when done, freeing the CPU to work meanwhile. Big transfers use DMA (Direct Memory Access) so data moves between device and RAM without the CPU copying each byte. <em>The syllabus covers I/O devices, not the interrupt/DMA mechanisms an OS relies on.</em></div>
+<div class="note-ct"><b>Interrupts and DMA handle slow devices</b> — the three methods of I/O (programmed, interrupt-driven and DMA) are session 7, &ldquo;1.6 Input/Output subsystems&rdquo;. Rather than wasting cycles constantly asking a device "are you ready?" (polling), modern systems let the device raise an interrupt when done, freeing the CPU to work meanwhile. Big transfers use DMA (Direct Memory Access) so data moves between device and RAM without the CPU copying each byte. These are the mechanisms the OS in Chapter 5 relies on.</div>
 <div class="note-ct">Chapter recap: a computer = CPU (control + ALU + registers) + memory hierarchy + I/O, all tied by a bus, all following the stored-program Von Neumann idea. Everything else in CSI104 runs <em>on top of</em> this machine — hold this picture as you read on.</div>
 </div>
 <div class="ml-vi">
@@ -629,7 +628,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">CISC vs RISC</div><div class="lz-ld">CISC (vd x86) có nhiều lệnh phức tạp; RISC (vd ARM) có ít lệnh đơn giản làm rất nhanh — con chip trong điện thoại bạn là RISC.</div></div>
   <div class="lz-layer"><div class="lz-lt">Một nhân vs đa nhân</div><div class="lz-ld">CPU hiện đại gói nhiều nhân để nhiều chu trình lệnh chạy thật sự song song.</div></div>
 </div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Ngắt (interrupt) và DMA xử lý thiết bị chậm.</b> Thay vì phí nhịp liên tục hỏi thiết bị "sẵn sàng chưa?" (polling), hệ thống hiện đại để thiết bị phát tín hiệu ngắt khi xong, giải phóng CPU làm việc khác. Truyền dữ liệu lớn dùng DMA (truy cập bộ nhớ trực tiếp) để dữ liệu chạy giữa thiết bị và RAM mà CPU không phải chép từng byte. <em>Giáo trình nói về thiết bị I/O, không nói cơ chế ngắt/DMA mà hệ điều hành dựa vào.</em></div>
+<div class="note-ct"><b>Ngắt (interrupt) và DMA xử lý thiết bị chậm</b> — ba phương pháp vào/ra (programmed, interrupt-driven và DMA) là buổi 7, &ldquo;1.6 Input/Output subsystems&rdquo;. Thay vì phí nhịp liên tục hỏi thiết bị "sẵn sàng chưa?" (polling), hệ thống hiện đại để thiết bị phát tín hiệu ngắt khi xong, giải phóng CPU làm việc khác. Truyền dữ liệu lớn dùng DMA (truy cập bộ nhớ trực tiếp) để dữ liệu chạy giữa thiết bị và RAM mà CPU không phải chép từng byte. Đây chính là các cơ chế mà hệ điều hành ở Chương 5 dựa vào.</div>
 <div class="note-ct">Tóm tắt chương: máy tính = CPU (điều khiển + ALU + thanh ghi) + phân cấp bộ nhớ + I/O, nối bằng bus, tuân theo ý tưởng chương-trình-lưu-trong-bộ-nhớ của Von Neumann. Mọi thứ khác trong CSI104 chạy <em>bên trên</em> cỗ máy này — hãy giữ bức tranh này khi đọc tiếp.</div>
 </div>
 `,
@@ -740,7 +739,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Group</div><div class="lz-t">1101 = D · 1110 = E</div><div class="lz-d">each nibble → 1 hex digit</div></div>
   <div class="lz-step"><div class="lz-k">Hex</div><div class="lz-t">DE</div><div class="lz-d">done — no arithmetic needed</div></div>
 </div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Fractions convert too — by repeated multiplication.</b> Whole numbers use divide-by-base; the fractional part uses the mirror method: multiply by the base and read the integer parts top-down. Example: 0.625 → ×2 = 1.25 (1), ×2 = 0.5 (0), ×2 = 1.0 (1) → 0.101 in binary. Many decimals never terminate in binary (0.1 loops forever), the seed of floating-point error. <em>The syllabus focuses on integer conversion; fractional conversion explains the rounding bugs in 3.1.</em></div>
+<div class="note-ct"><b>Fractions convert too — by repeated multiplication</b> (session 10, &ldquo;2.3 Conversion&rdquo;; the textbook converts the fractional part as well as the integer part). Whole numbers use divide-by-base; the fractional part uses the mirror method: multiply by the base and read the integer parts top-down. Example: 0.625 → ×2 = 1.25 (1), ×2 = 0.5 (0), ×2 = 1.0 (1) → 0.101 in binary. Many decimals never terminate in binary (0.1 loops forever), the seed of floating-point error. Fractional conversion is also what explains the rounding behaviour in lesson 3.1.</div>
 <div class="pitfall">When grouping bits, pad from the <strong>left</strong> so the group count is complete. 11010 for hex becomes 0001 1010 → 1A, not 1 1010. Forgetting to pad is the #1 conversion mistake.</div>
 <div class="note-ct">Always sanity-check with a converter after doing it by hand — but do it by hand first. The exam has no converter, and understanding the method is the point.</div>
 <a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-279" target="_blank" rel="noopener">
@@ -767,7 +766,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Gom</div><div class="lz-t">1101 = D · 1110 = E</div><div class="lz-d">mỗi nhóm 4 bit → 1 chữ số hex</div></div>
   <div class="lz-step"><div class="lz-k">Hex</div><div class="lz-t">DE</div><div class="lz-d">xong — không cần tính toán</div></div>
 </div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Phần thập phân cũng chuyển được — bằng nhân liên tiếp.</b> Số nguyên chia cho cơ số; phần lẻ dùng cách ngược lại: nhân với cơ số rồi đọc phần nguyên từ trên xuống. Ví dụ: 0.625 → ×2 = 1.25 (1), ×2 = 0.5 (0), ×2 = 1.0 (1) → 0.101 nhị phân. Nhiều số thập phân không bao giờ dừng trong nhị phân (0.1 lặp mãi), đó là mầm của sai số dấu phẩy động. <em>Giáo trình tập trung chuyển số nguyên; chuyển phần lẻ giải thích lỗi làm tròn ở bài 3.1.</em></div>
+<div class="note-ct"><b>Phần thập phân cũng chuyển được — bằng nhân liên tiếp</b> (buổi 10, &ldquo;2.3 Conversion&rdquo;; giáo trình đổi cả phần thập phân chứ không chỉ phần nguyên). Số nguyên chia cho cơ số; phần lẻ dùng cách ngược lại: nhân với cơ số rồi đọc phần nguyên từ trên xuống. Ví dụ: 0.625 → ×2 = 1.25 (1), ×2 = 0.5 (0), ×2 = 1.0 (1) → 0.101 nhị phân. Nhiều số thập phân không bao giờ dừng trong nhị phân (0.1 lặp mãi), đó là mầm của sai số dấu phẩy động. Chuyển phần lẻ cũng là thứ giải thích hành vi làm tròn ở bài 3.1.</div>
 <div class="pitfall">Khi gom bit, đệm thêm 0 từ <strong>bên trái</strong> cho đủ nhóm. 11010 sang hex thành 0001 1010 → 1A, không phải 1 1010. Quên đệm là lỗi chuyển đổi số một.</div>
 <div class="note-ct">Luôn kiểm lại bằng công cụ chuyển sau khi làm tay — nhưng làm tay trước đã. Bài thi không có công cụ, và hiểu phương pháp mới là mục tiêu.</div>
 <a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-279" target="_blank" rel="noopener">
@@ -804,7 +803,7 @@ export default {
 <h3>Overflow — when the answer will not fit</h3>
 <p>A computer stores numbers in a fixed number of bits (say 8). If a result needs a 9th bit, that bit is lost — the value <strong>wraps around</strong>. This is <em>overflow</em>, and it is a real source of bugs.</p>
 <div class="callout warn">In 8-bit unsigned storage, 255 + 1 does not give 256 — it wraps to 0. The famous "Gandhi becomes hyper-aggressive" video-game bug and many security holes come from exactly this kind of overflow.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Two’s complement makes subtraction free.</b> Instead of a separate subtract circuit, computers store negatives in two’s complement (invert the bits, add 1), so a − b becomes a + (−b) using the very same adder. Example in 8-bit: −5 is 11111011; adding 7 (00000111) gives 00000010 = 2, correct with no special case. Overflow is detected when the sign bit flips the wrong way. <em>Intro teaches unsigned addition; signed representation is the key exam-and-real-world subtlety.</em></div>
+<div class="note-ct"><b>Two&rsquo;s complement makes subtraction free</b> — storing integers in two&rsquo;s complement is core textbook material (session 13, &ldquo;3.1 Storing numbers&rdquo;) and its arithmetic is session 16. Instead of a separate subtract circuit, computers store negatives in two’s complement (invert the bits, add 1), so a − b becomes a + (−b) using the very same adder. Example in 8-bit: −5 is 11111011; adding 7 (00000111) gives 00000010 = 2, correct with no special case. Overflow is detected when the sign bit flips the wrong way. Signed representation is a standard exam item, not an optional extra.</div>
 <div class="note-ct">This is why Chapter 3 matters: the <em>meaning</em> of a bit pattern (how many bits, signed or unsigned, integer or float) decides what arithmetic is correct. The bits alone do not tell you.</div>
 </div>
 <div class="ml-vi">
@@ -820,7 +819,7 @@ export default {
 <h3>Tràn số (overflow) — khi kết quả không vừa</h3>
 <p>Máy tính lưu số trong một số bit cố định (ví dụ 8). Nếu kết quả cần bit thứ 9, bit đó bị mất — giá trị <strong>quay vòng</strong>. Đó là <em>tràn số</em>, và là nguồn lỗi thật sự.</p>
 <div class="callout warn">Trong lưu trữ 8-bit không dấu, 255 + 1 không cho 256 — nó quay về 0. Lỗi game "Gandhi bỗng hung hãn" nổi tiếng và nhiều lỗ hổng bảo mật đến từ đúng kiểu tràn số này.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Bù hai (two’s complement) khiến phép trừ thành miễn phí.</b> Thay vì mạch trừ riêng, máy lưu số âm ở dạng bù hai (đảo bit rồi cộng 1), nên a − b thành a + (−b) dùng đúng bộ cộng đó. Ví dụ 8-bit: −5 là 11111011; cộng 7 (00000111) ra 00000010 = 2, đúng mà không cần trường hợp đặc biệt. Tràn số được phát hiện khi bit dấu lật sai. <em>Nhập môn dạy cộng số không dấu; biểu diễn có dấu mới là điểm tinh tế của bài thi lẫn thực tế.</em></div>
+<div class="note-ct"><b>Bù hai (two&rsquo;s complement) khiến phép trừ thành miễn phí</b> — lưu số nguyên ở dạng bù hai là nội dung cốt lõi của giáo trình (buổi 13, &ldquo;3.1 Storing numbers&rdquo;) và số học của nó là buổi 16. Thay vì mạch trừ riêng, máy lưu số âm ở dạng bù hai (đảo bit rồi cộng 1), nên a − b thành a + (−b) dùng đúng bộ cộng đó. Ví dụ 8-bit: −5 là 11111011; cộng 7 (00000111) ra 00000010 = 2, đúng mà không cần trường hợp đặc biệt. Tràn số được phát hiện khi bit dấu lật sai. Biểu diễn có dấu là một mục thi tiêu chuẩn, không phải phần thêm tuỳ chọn.</div>
 <div class="note-ct">Đây là lý do Chương 3 quan trọng: <em>ý nghĩa</em> của một mẫu bit (bao nhiêu bit, có dấu hay không, số nguyên hay thực) quyết định phép toán nào đúng. Riêng các bit không nói cho bạn điều đó.</div>
 </div>
 `,
@@ -878,7 +877,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Exponent</div><div class="lz-ld">how far to shift the binary point (the scale)</div></div>
   <div class="lz-layer"><div class="lz-lt">Mantissa / fraction</div><div class="lz-ld">the significant digits</div></div>
 </div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>IEEE 754 is the standard behind every float.</b> Floating point is not ad-hoc: the IEEE 754 standard fixes the layout (sign, exponent, mantissa) so a 32-bit float carries ~7 decimal digits and a 64-bit double ~15–16. It even reserves bit patterns for +/- infinity and NaN ("not a number", produced by 0/0), which lets hardware signal errors without crashing. <em>The syllabus explains the sign-exponent-mantissa idea; the named standard and its special values are more advanced.</em></div>
+<div class="note-ct"><b>IEEE 754 is the standard behind every float</b> — the textbook&rsquo;s &ldquo;storing reals&rdquo; section (session 13) covers normalisation, the Excess representation of the exponent and the IEEE standards by name. Floating point is not ad-hoc: the IEEE 754 standard fixes the layout (sign, exponent, mantissa) so a 32-bit float carries ~7 decimal digits and a 64-bit double ~15–16. It even reserves bit patterns for +/- infinity and NaN ("not a number", produced by 0/0), which lets hardware signal errors without crashing. The reserved patterns for infinity and NaN are what let hardware signal an error without crashing.</div>
 <div class="pitfall">Floating point is <strong>approximate</strong>. Many decimals (like 0.1) have no exact binary form, so 0.1 + 0.2 can print 0.30000000000000004. Never compare floats with == in code — this surprises every new programmer.</div>
 <div class="note-ct">Same bits, different meaning: 11111011 is 251 as unsigned but −5 as signed two&#39;s complement. The type declared in your program tells the computer which reading to use.</div>
 </div>
@@ -898,7 +897,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Số mũ (exponent)</div><div class="lz-ld">dịch dấu phẩy nhị phân bao xa (tỷ lệ)</div></div>
   <div class="lz-layer"><div class="lz-lt">Phần định trị (mantissa)</div><div class="lz-ld">các chữ số có nghĩa</div></div>
 </div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>IEEE 754 là chuẩn đằng sau mọi số thực.</b> Dấu phẩy động không tuỳ tiện: chuẩn IEEE 754 cố định bố cục (dấu, số mũ, phần định trị) nên float 32-bit giữ ~7 chữ số thập phân và double 64-bit ~15–16. Nó còn dành riêng mẫu bit cho +/- vô cực và NaN ("không phải số", sinh từ 0/0), cho phần cứng báo lỗi mà không sập. <em>Giáo trình giải thích ý dấu–mũ–định trị; chuẩn có tên và các giá trị đặc biệt thì nâng cao hơn.</em></div>
+<div class="note-ct"><b>IEEE 754 là chuẩn đằng sau mọi số thực</b> — mục &ldquo;storing reals&rdquo; của giáo trình (buổi 13) trình bày chuẩn hoá (normalization), biểu diễn Excess cho số mũ và gọi thẳng tên các chuẩn IEEE. Dấu phẩy động không tuỳ tiện: chuẩn IEEE 754 cố định bố cục (dấu, số mũ, phần định trị) nên float 32-bit giữ ~7 chữ số thập phân và double 64-bit ~15–16. Nó còn dành riêng mẫu bit cho +/- vô cực và NaN ("không phải số", sinh từ 0/0), cho phần cứng báo lỗi mà không sập. Các mẫu bit dành riêng cho vô cực và NaN là thứ cho phép phần cứng báo lỗi mà không sập.</div>
 <div class="pitfall">Dấu phẩy động là <strong>gần đúng</strong>. Nhiều số thập phân (như 0.1) không có dạng nhị phân chính xác, nên 0.1 + 0.2 có thể in ra 0.30000000000000004. Đừng bao giờ so sánh số thực bằng == trong code — điều này làm mọi lập trình viên mới bất ngờ.</div>
 <div class="note-ct">Cùng bit, khác nghĩa: 11111011 là 251 nếu không dấu nhưng là −5 nếu có dấu bù hai. Kiểu dữ liệu khai báo trong chương trình cho máy biết đọc theo cách nào.</div>
 </div>
@@ -1036,7 +1035,7 @@ export default {
 <div class="out"><b>Left shift:</b> 0011 (3) &lt;&lt; 1 = 0110 (6)<br><b>Right shift:</b> 1000 (8) &gt;&gt; 1 = 0100 (4)</div>
 <h3>Arithmetic operations recap</h3>
 <p>Chapter 3 together shows the ALU\'s full toolkit: <strong>arithmetic</strong> (add, subtract via two&#39;s complement, and shift-based multiply/divide) and <strong>logic</strong> (AND, OR, NOT, XOR). Every high-level operation you write eventually reduces to these primitive bit operations.</p>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Logical vs arithmetic right-shift.</b> Shifting left by n multiplies by 2^n; shifting right divides by 2^n — but for signed numbers a logical shift fills zeros (wrong for negatives) while an arithmetic shift copies the sign bit to keep the value negative. Example: −8 &gt;&gt; 1 must give −4, which only an arithmetic shift produces. <em>Intro treats shift as one operation; the signed/unsigned split is the subtlety compilers must respect.</em></div>
+<div class="note-ct"><b>Logical vs arithmetic right-shift</b> — session 16 covers shift operations in all three forms: logical, circular (rotate) and arithmetic. Shifting left by n multiplies by 2^n; shifting right divides by 2^n — but for signed numbers a logical shift fills zeros (wrong for negatives) while an arithmetic shift copies the sign bit to keep the value negative. Example: −8 &gt;&gt; 1 must give −4, which only an arithmetic shift produces. The signed/unsigned split is the subtlety compilers must respect.</div>
 <div class="note-ct">Exam contrast (CQ5.4): an <strong>arithmetic</strong> operation changes the numeric value following math rules (add, multiply). A <strong>shift</strong> just relocates bits — though a shift <em>happens to</em> multiply or divide by a power of two, which is why compilers replace slow multiplications by fast shifts.</div>
 </div>
 <div class="ml-vi">
@@ -1053,7 +1052,7 @@ export default {
 <div class="out"><b>Dịch trái:</b> 0011 (3) &lt;&lt; 1 = 0110 (6)<br><b>Dịch phải:</b> 1000 (8) &gt;&gt; 1 = 0100 (4)</div>
 <h3>Tóm tắt phép số học</h3>
 <p>Chương 3 gộp lại cho thấy đầy đủ bộ công cụ của ALU: <strong>số học</strong> (cộng, trừ qua bù hai, và nhân/chia dựa trên dịch) và <strong>logic</strong> (AND, OR, NOT, XOR). Mọi phép bậc cao bạn viết rốt cuộc rút về các phép bit nguyên thủy này.</p>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Dịch phải logic vs dịch phải số học.</b> Dịch trái n bit là nhân 2^n; dịch phải n bit là chia 2^n — nhưng với số có dấu, dịch logic điền số 0 (sai với số âm) còn dịch số học chép lại bit dấu để giữ giá trị âm. Ví dụ: −8 &gt;&gt; 1 phải ra −4, điều chỉ dịch số học làm được. <em>Nhập môn coi dịch là một phép; phân biệt có dấu/không dấu mới là điểm tinh tế trình biên dịch phải tôn trọng.</em></div>
+<div class="note-ct"><b>Dịch phải logic vs dịch phải số học</b> — buổi 16 dạy phép dịch ở cả ba dạng: logic, vòng (circular/rotate) và số học. Dịch trái n bit là nhân 2^n; dịch phải n bit là chia 2^n — nhưng với số có dấu, dịch logic điền số 0 (sai với số âm) còn dịch số học chép lại bit dấu để giữ giá trị âm. Ví dụ: −8 &gt;&gt; 1 phải ra −4, điều chỉ dịch số học làm được. Phân biệt có dấu/không dấu là điểm tinh tế mà trình biên dịch phải tôn trọng.</div>
 <div class="note-ct">So sánh bài thi (CQ5.4): phép <strong>số học</strong> đổi giá trị số theo quy tắc toán (cộng, nhân). Phép <strong>dịch</strong> chỉ dời bit — dù dịch <em>tình cờ</em> nhân hoặc chia cho lũy thừa của hai, đó là lý do trình biên dịch thay phép nhân chậm bằng phép dịch nhanh.</div>
 </div>
 `,
@@ -1154,15 +1153,18 @@ export default {
 <h2>Why networking is built in layers</h2>
 <p class="lead">Sending data across the world is hugely complex. Engineers tame it with <strong>layering</strong>: split the job into stacked layers, each solving one problem and talking only to the layers directly above and below. This is CLO4.</p>
 <p>Think of posting a letter: you write it (content), put it in an envelope with an address (addressing), the post office routes it (delivery), a truck carries it (physical). Each step is independent — you do not care which truck is used.</p>
-<h3>The TCP/IP model — 4 layers</h3>
+<h3>The TCP/IP protocol suite — 5 layers</h3>
+<p>The course textbook (Forouzan, <em>Foundations of Computer Science</em>) presents the TCP/IP suite as <strong>five</strong> layers. CLO4 is &ldquo;list the layers in networking&rdquo;, so learn this list and this count.</p>
 <div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">4 · Application</div><div class="lz-ld">The apps you use: HTTP (web), SMTP (email), DNS. Speaks in messages a program understands.</div></div>
-  <div class="lz-layer"><div class="lz-lt">3 · Transport (TCP / UDP)</div><div class="lz-ld">Splits data into segments, ensures reliable, in-order delivery (TCP) or fast best-effort (UDP). Uses port numbers.</div></div>
-  <div class="lz-layer"><div class="lz-lt">2 · Internet / Network (IP)</div><div class="lz-ld">Adds IP addresses and routes packets across networks, hop by hop, toward the destination.</div></div>
-  <div class="lz-layer"><div class="lz-lt">1 · Network Access / Link</div><div class="lz-ld">The actual wire/Wi-Fi and hardware (MAC) addresses — moves bits between neighboring devices.</div></div>
+  <div class="lz-layer"><div class="lz-lt">5 · Application</div><div class="lz-ld">The apps you use: HTTP (web), SMTP (email), DNS, FTP. Speaks in messages a program understands.</div></div>
+  <div class="lz-layer"><div class="lz-lt">4 · Transport (TCP / UDP)</div><div class="lz-ld">Splits data into segments, ensures reliable, in-order delivery (TCP) or fast best-effort (UDP). Uses port numbers.</div></div>
+  <div class="lz-layer"><div class="lz-lt">3 · Network (IP)</div><div class="lz-ld">Adds IP addresses and routes packets (datagrams) across networks, hop by hop, toward the destination.</div></div>
+  <div class="lz-layer"><div class="lz-lt">2 · Data-link</div><div class="lz-ld">Hardware (MAC) addresses and frames &mdash; moves a frame across <em>one</em> link, between neighbouring devices.</div></div>
+  <div class="lz-layer"><div class="lz-lt">1 · Physical</div><div class="lz-ld">The actual wire, fibre or Wi-Fi radio &mdash; individual bits as signals.</div></div>
 </div>
+<div class="pitfall">Some books collapse the bottom two into one &ldquo;network access / link&rdquo; layer and count <b>4</b>. In CSI104 the answer is <b>5</b>: application, transport, network, data-link, physical. The OSI model splits the top differently again and counts 7.</div>
 <p>As data goes <strong>down</strong> the stack at the sender, each layer wraps it in its own header (<em>encapsulation</em>). At the receiver it travels <strong>up</strong>, each layer peeling its header off.</p>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The TCP three-way handshake.</b> Before any data flows, TCP sets up a reliable connection with three messages: SYN, SYN-ACK, ACK — roughly "can you hear me? / yes, can you? / yes". Only then does it number the bytes so lost ones can be re-sent in order. The academic OSI model splits the same job into 7 layers, versus TCP/IP’s 4. <em>Intro names the layers; the handshake and the OSI mapping are deeper protocol detail.</em></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The TCP three-way handshake.</b> Before any data flows, TCP sets up a reliable connection with three messages: SYN, SYN-ACK, ACK — roughly "can you hear me? / yes, can you? / yes". Only then does it number the bytes so lost ones can be re-sent in order. The academic OSI model splits the same job into 7 layers, versus the suite&#39;s 5. <em>Intro names the layers; the handshake and the OSI mapping are deeper protocol detail.</em></div>
 <div class="note-ct">Exam point (CQ6.2): <strong>TCP</strong> guarantees your data arrives complete and in order (used for web, email); <strong>IP</strong> handles addressing and routing each packet. TCP/IP is a <em>suite</em> — many protocols working as a team, one per layer.</div>
 </div>
 <div class="ml-vi">
@@ -1170,15 +1172,18 @@ export default {
 <h2>Vì sao mạng được xây theo tầng</h2>
 <p class="lead">Gửi dữ liệu đi khắp thế giới là cực kỳ phức tạp. Kỹ sư thuần hoá nó bằng <strong>phân tầng</strong>: chia công việc thành các tầng chồng lên nhau, mỗi tầng giải một vấn đề và chỉ nói chuyện với tầng ngay trên và ngay dưới. Đây là CLO4.</p>
 <p>Hãy hình dung gửi một lá thư: bạn viết thư (nội dung), bỏ vào phong bì có địa chỉ (đánh địa chỉ), bưu điện định tuyến (giao), xe tải chở đi (vật lý). Mỗi bước độc lập — bạn không cần quan tâm dùng xe nào.</p>
-<h3>Mô hình TCP/IP — 4 tầng</h3>
+<h3>Bộ giao thức TCP/IP — 5 tầng</h3>
+<p>Giáo trình của môn (Forouzan, <em>Foundations of Computer Science</em>) trình bày bộ TCP/IP gồm <strong>năm</strong> tầng. CLO4 là &ldquo;liệt kê các tầng trong mạng&rdquo;, nên hãy thuộc đúng danh sách và đúng con số này.</p>
 <div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">4 · Ứng dụng (Application)</div><div class="lz-ld">Các app bạn dùng: HTTP (web), SMTP (email), DNS. Nói bằng thông điệp mà chương trình hiểu.</div></div>
-  <div class="lz-layer"><div class="lz-lt">3 · Giao vận (Transport — TCP / UDP)</div><div class="lz-ld">Chia dữ liệu thành segment, đảm bảo giao tin cậy, đúng thứ tự (TCP) hoặc nhanh, cố-gắng-hết-sức (UDP). Dùng số cổng (port).</div></div>
-  <div class="lz-layer"><div class="lz-lt">2 · Internet / Mạng (IP)</div><div class="lz-ld">Thêm địa chỉ IP và định tuyến gói qua các mạng, từng chặng một, tới đích.</div></div>
-  <div class="lz-layer"><div class="lz-lt">1 · Truy cập mạng / Liên kết</div><div class="lz-ld">Dây/Wi-Fi thực tế và địa chỉ phần cứng (MAC) — chuyển bit giữa các thiết bị kề nhau.</div></div>
+  <div class="lz-layer"><div class="lz-lt">5 · Ứng dụng (Application)</div><div class="lz-ld">Các app bạn dùng: HTTP (web), SMTP (email), DNS, FTP. Nói bằng thông điệp mà chương trình hiểu.</div></div>
+  <div class="lz-layer"><div class="lz-lt">4 · Giao vận (Transport — TCP / UDP)</div><div class="lz-ld">Chia dữ liệu thành segment, đảm bảo giao tin cậy, đúng thứ tự (TCP) hoặc nhanh, cố-gắng-hết-sức (UDP). Dùng số cổng (port).</div></div>
+  <div class="lz-layer"><div class="lz-lt">3 · Mạng (Network — IP)</div><div class="lz-ld">Thêm địa chỉ IP và định tuyến gói (datagram) qua các mạng, từng chặng một, tới đích.</div></div>
+  <div class="lz-layer"><div class="lz-lt">2 · Liên kết dữ liệu (Data-link)</div><div class="lz-ld">Địa chỉ phần cứng (MAC) và khung (frame) &mdash; chuyển một khung qua <em>một</em> liên kết, giữa hai thiết bị kề nhau.</div></div>
+  <div class="lz-layer"><div class="lz-lt">1 · Vật lý (Physical)</div><div class="lz-ld">Dây, cáp quang hoặc sóng Wi-Fi thực tế &mdash; từng bit ở dạng tín hiệu.</div></div>
 </div>
+<div class="pitfall">Một số sách gộp hai tầng dưới cùng thành một tầng &ldquo;truy cập mạng / liên kết&rdquo; và đếm ra <b>4</b>. Ở CSI104 đáp án là <b>5</b>: ứng dụng, giao vận, mạng, liên kết dữ liệu, vật lý. Mô hình OSI lại chia phần trên khác nữa và đếm ra 7.</div>
 <p>Khi dữ liệu đi <strong>xuống</strong> ngăn xếp ở bên gửi, mỗi tầng bọc nó bằng phần đầu (header) riêng (<em>đóng gói — encapsulation</em>). Ở bên nhận nó đi <strong>lên</strong>, mỗi tầng bóc header của mình ra.</p>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Bắt tay ba bước của TCP.</b> Trước khi truyền dữ liệu, TCP thiết lập kết nối tin cậy bằng ba thông điệp: SYN, SYN-ACK, ACK — đại khái "nghe thấy tôi không? / có, còn bạn? / có". Chỉ khi đó nó mới đánh số các byte để byte mất được gửi lại đúng thứ tự. Mô hình học thuật OSI chia cùng công việc thành 7 tầng, so với 4 tầng của TCP/IP. <em>Nhập môn kể tên các tầng; bắt tay và ánh xạ sang OSI là chi tiết giao thức sâu hơn.</em></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Bắt tay ba bước của TCP.</b> Trước khi truyền dữ liệu, TCP thiết lập kết nối tin cậy bằng ba thông điệp: SYN, SYN-ACK, ACK — đại khái "nghe thấy tôi không? / có, còn bạn? / có". Chỉ khi đó nó mới đánh số các byte để byte mất được gửi lại đúng thứ tự. Mô hình học thuật OSI chia cùng công việc thành 7 tầng, so với 5 tầng của bộ TCP/IP. <em>Nhập môn kể tên các tầng; bắt tay và ánh xạ sang OSI là chi tiết giao thức sâu hơn.</em></div>
 <div class="note-ct">Điểm thi (CQ6.2): <strong>TCP</strong> đảm bảo dữ liệu tới đủ và đúng thứ tự (dùng cho web, email); <strong>IP</strong> lo đánh địa chỉ và định tuyến từng gói. TCP/IP là một <em>bộ giao thức</em> — nhiều giao thức làm việc như một đội, mỗi tầng một giao thức.</div>
 </div>
 `,
@@ -1332,7 +1337,7 @@ export default {
 <p>On top sits the <strong>user interface</strong> — either a command line (type commands) or a graphical desktop (windows, icons, mouse). The UI is how <em>you</em> ask the managers to do things.</p>
 <h3>A process vs a program</h3>
 <p>A <strong>program</strong> is the file on disk (passive). A <strong>process</strong> is that program actually running in memory (active), with its own state and resources. Opening the same app twice creates two processes from one program.</p>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Virtual memory: RAM that isn’t really there.</b> The memory manager gives each process its own private address space and can pretend there is more RAM than exists by paging idle data out to disk — which is why you can open more apps than your RAM "should" allow, until heavy paging causes slow "thrashing". The process manager must also avoid deadlock, where processes wait on each other forever. <em>The syllabus lists the four managers; virtual memory and deadlock are their advanced mechanisms.</em></div>
+<div class="note-ct"><b>Virtual memory: RAM that isn&rsquo;t really there</b> — the memory manager (monoprogramming, multiprogramming, paging, demand paging and demand segmentation, i.e. virtual memory) is session 20, and the process manager with deadlock and starvation is part of sessions 21&ndash;23. The memory manager gives each process its own private address space and can pretend there is more RAM than exists by paging idle data out to disk — which is why you can open more apps than your RAM "should" allow, until heavy paging causes slow "thrashing". The process manager must also avoid deadlock, where processes wait on each other forever. Heavy paging is what produces the slow &ldquo;thrashing&rdquo; you feel when too many apps are open.</div>
 <div class="callout ok">Multitasking illusion: your laptop feels like it runs 20 apps at once, but a single core runs just one instruction stream at a time. The process manager switches between them thousands of times a second — too fast for you to notice.</div>
 <a class="link-card codelab" href="/code-lab/linux-bash?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-483" target="_blank" rel="noopener">
   <span class="lc-ico">🐧</span>
@@ -1353,7 +1358,7 @@ export default {
 <p>Trên cùng là <strong>giao diện người dùng</strong> — hoặc dòng lệnh (gõ lệnh) hoặc màn hình đồ hoạ (cửa sổ, biểu tượng, chuột). UI là cách <em>bạn</em> nhờ các quản lý làm việc.</p>
 <h3>Tiến trình vs chương trình</h3>
 <p>Một <strong>chương trình</strong> là tệp trên đĩa (bị động). Một <strong>tiến trình (process)</strong> là chương trình đó đang thực sự chạy trong bộ nhớ (chủ động), có trạng thái và tài nguyên riêng. Mở cùng một app hai lần tạo hai tiến trình từ một chương trình.</p>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Bộ nhớ ảo: RAM không thật sự tồn tại.</b> Quản lý bộ nhớ cho mỗi tiến trình một không gian địa chỉ riêng và có thể giả vờ có nhiều RAM hơn thực tế bằng cách đẩy dữ liệu nhàn rỗi ra đĩa (paging) — vì thế bạn mở được nhiều app hơn mức RAM "cho phép", cho tới khi paging quá nhiều gây "thrashing" ì ạch. Quản lý tiến trình còn phải tránh deadlock, khi các tiến trình chờ nhau mãi mãi. <em>Giáo trình liệt kê bốn người quản lý; bộ nhớ ảo và deadlock là cơ chế nâng cao của chúng.</em></div>
+<div class="note-ct"><b>Bộ nhớ ảo: RAM không thật sự tồn tại</b> — trình quản lý bộ nhớ (monoprogramming, multiprogramming, phân trang, demand paging và demand segmentation, tức bộ nhớ ảo) là buổi 20, còn trình quản lý tiến trình cùng deadlock và starvation nằm trong buổi 21&ndash;23. Quản lý bộ nhớ cho mỗi tiến trình một không gian địa chỉ riêng và có thể giả vờ có nhiều RAM hơn thực tế bằng cách đẩy dữ liệu nhàn rỗi ra đĩa (paging) — vì thế bạn mở được nhiều app hơn mức RAM "cho phép", cho tới khi paging quá nhiều gây "thrashing" ì ạch. Quản lý tiến trình còn phải tránh deadlock, khi các tiến trình chờ nhau mãi mãi. Phân trang quá nhiều chính là thứ tạo ra hiện tượng &ldquo;thrashing&rdquo; ì ạch khi mở quá nhiều ứng dụng.</div>
 <div class="callout ok">Ảo giác đa nhiệm: laptop của bạn có vẻ chạy 20 app cùng lúc, nhưng một nhân chỉ chạy một luồng lệnh tại một thời điểm. Quản lý tiến trình chuyển giữa chúng hàng nghìn lần mỗi giây — nhanh đến mức bạn không nhận ra.</div>
 <a class="link-card codelab" href="/code-lab/linux-bash?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-483" target="_blank" rel="noopener">
   <span class="lc-ico">🐧</span>
@@ -1587,14 +1592,14 @@ export default {
     },
     /* ══════════════════ PROGRESS TEST 1 ══════════════════ */
     {
-      title: 'Progress Test 1 (review CLO1–6)|||Progress Test 1 (ôn CLO1–6)',
-      description: 'Bài ôn tổng hợp giữa kỳ: tổ chức máy tính, hệ đếm, dữ liệu, mạng, hệ điều hành, thuật toán.',
+      title: 'Progress Test 1 — LO1–LO4 (session 18)|||Progress Test 1 — LO1–LO4 (buổi 18)',
+      description: 'Ôn tổ chức máy tính, hệ đếm, biểu diễn & xử lý dữ liệu, mạng. Syllabus đặt PT1 ở buổi 18 — TRƯỚC hệ điều hành (buổi 19) và thuật toán (buổi 24) — nên phạm vi chỉ là LO1–LO4.',
       lessons: [
         {
-          title: 'Progress Test 1 — mixed review|||Progress Test 1 — ôn tổng hợp',
+          title: 'Progress Test 1 — mixed review (Chapters 1–4)|||Progress Test 1 — ôn tổng hợp (Chương 1–4)',
           slug: 'csi104-progress-test-1',
           type: 'QUIZ',
-          description: 'Trộn câu hỏi từ chương 1–6, giống dạng progress test trên lớp.',
+          description: 'Trộn câu hỏi chương 1–4 (LO1–LO4) — đúng phạm vi PT1 thật ở buổi 18: mô hình Von Neumann & các phân hệ, hệ đếm & chuyển cơ số, lưu trữ và xử lý dữ liệu, mạng & các tầng.',
           quiz: {
             timeLimitSeconds: 600,
             questions: [
@@ -1602,8 +1607,8 @@ export default {
               { question: 'Binary 1101 in decimal is:|||Nhị phân 1101 trong thập phân là:', options: ['11', '12', '13', '14'], correctIndex: 2, points: 1 },
               { question: 'The letter "A" is stored using which encoding value in ASCII?|||Chữ "A" được lưu bằng giá trị mã hoá nào trong ASCII?', options: ['65', '97', '48', '256'], correctIndex: 0, points: 1 },
               { question: 'Which layer of TCP/IP handles addressing and routing?|||Tầng nào của TCP/IP lo đánh địa chỉ và định tuyến?', options: ['Application|||Ứng dụng', 'Transport|||Giao vận', 'Internet (IP)', 'Link|||Liên kết'], correctIndex: 2, points: 1 },
-              { question: 'The OS component that shares CPU time among programs is the…|||Thành phần OS chia thời gian CPU giữa các chương trình là…', options: ['file manager|||quản lý tệp', 'process manager|||quản lý tiến trình', 'device manager|||quản lý thiết bị', 'user interface|||giao diện người dùng'], correctIndex: 1, points: 1 },
-              { question: 'Which is a valid representation of an algorithm?|||Cái nào là một cách biểu diễn thuật toán hợp lệ?', options: ['A flowchart|||Một lưu đồ', 'A JPEG image|||Một ảnh JPEG', 'A hard disk|||Một ổ cứng', 'An IP address|||Một địa chỉ IP'], correctIndex: 0, points: 1 },
+              { question: 'In 8-bit two\u2019s complement, the number -5 is stored as:|||Trong bù hai 8 bit, số -5 được lưu là:', options: ['11111011', '00000101', '10000101', '11111010'], correctIndex: 0, points: 1 },
+              { question: 'How many layers does the TCP/IP protocol suite have?|||Bộ giao thức TCP/IP có bao nhiêu tầng?', options: ['3', '4', '5', '7'], correctIndex: 2, points: 1 },
               { question: 'Cache memory exists mainly to…|||Bộ nhớ cache tồn tại chủ yếu để…', options: ['store files permanently|||lưu tệp vĩnh viễn', 'bridge the speed gap between CPU and RAM|||bắc cầu chênh lệch tốc độ giữa CPU và RAM', 'connect to the Internet|||kết nối Internet', 'replace the hard disk|||thay ổ cứng'], correctIndex: 1, points: 1 },
               { question: 'Shifting binary 0011 left by one position gives:|||Dịch nhị phân 0011 sang trái một vị trí cho:', options: ['0001 (1)', '0110 (6)', '0011 (3)', '1100 (12)'], correctIndex: 1, points: 1 },
             ],
@@ -1769,16 +1774,17 @@ export default {
   <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Testing</div><div class="lz-nsub">Verify it works and fix defects</div></div></div>
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Maintenance</div><div class="lz-nsub">Fix, improve &amp; adapt after release</div></div></div>
 </div>
-<h3>Two families of process (CQ12.2)</h3>
+<h3>The two development process models (CQ12.2)</h3>
+<p>The textbook names <strong>two</strong> common models for arranging these phases: the <strong>waterfall model</strong> and the <strong>incremental model</strong>. That pair is the expected exam answer.</p>
 <table>
-  <thead><tr><th>Waterfall</th><th>Agile / iterative</th></tr></thead>
+  <thead><tr><th>Waterfall model</th><th>Incremental model</th></tr></thead>
   <tbody>
-    <tr><td>Do each phase fully, in order, once</td><td>Repeat short cycles, delivering working pieces</td></tr>
-    <tr><td>Simple, but rigid — late changes are costly</td><td>Flexible — welcomes changing requirements</td></tr>
-    <tr><td>Good when requirements are fixed</td><td>Dominant in modern industry (Scrum)</td></tr>
+    <tr><td>Do each phase fully, in order, once; you never go back up</td><td>Build the system as a series of increments: a rudimentary version first, then repeat the phases to add features to it</td></tr>
+    <tr><td>Simple and easy to manage, but rigid — a wrong requirement is only discovered at the end, and late changes are costly</td><td>Each increment is a working system the user can try, so mistakes surface early and the next increment corrects them</td></tr>
+    <tr><td>Good when the requirements are fully known and fixed up front</td><td>Good when requirements are unclear or expected to change</td></tr>
   </tbody>
 </table>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Waterfall vs Agile — two shapes of the same lifecycle.</b> The classic model runs the phases once in strict order (Waterfall); if the requirements were wrong, you find out too late. Agile instead repeats the whole cycle in short iterations (sprints of 1–4 weeks), delivering a small working slice each time and adapting — which is how most modern teams, including real startups, actually build software. <em>Intro lists the phases; how they are arranged (Waterfall vs Agile) is software-engineering (SWE201c) depth.</em></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Agile is the industry&#39;s incremental model.</b> Beyond the two models above, most modern teams use Agile: the whole cycle repeats in short iterations (sprints of 1–4 weeks), each delivering a small working slice, with the plan adapted after every one. It is an incremental model taken to its limit, plus a set of team practices (stand-ups, backlogs, retrospectives). <em>Beyond syllabus because the textbook names waterfall and incremental; Agile by name and its practices are SWE201c depth.</em></div>
 <div class="note-ct">Notice the parallel to algorithms: analysis = understand the problem, design = plan the solution, implementation = write it, testing = check it. It is the same problem-solving mindset scaled up to whole teams and products.</div>
 </div>
 <div class="ml-vi">
@@ -1793,16 +1799,17 @@ export default {
   <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Kiểm thử</div><div class="lz-nsub">Xác minh nó chạy đúng và sửa lỗi</div></div></div>
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Bảo trì</div><div class="lz-nsub">Sửa, cải tiến &amp; thích nghi sau khi phát hành</div></div></div>
 </div>
-<h3>Hai họ quy trình (CQ12.2)</h3>
+<h3>Hai mô hình quy trình phát triển (CQ12.2)</h3>
+<p>Giáo trình gọi tên <strong>hai</strong> mô hình phổ biến để sắp xếp các giai đoạn này: <strong>mô hình thác nước (waterfall)</strong> và <strong>mô hình tăng dần (incremental)</strong>. Đó là cặp đáp án bài thi mong đợi.</p>
 <table>
-  <thead><tr><th>Thác nước (Waterfall)</th><th>Agile / lặp</th></tr></thead>
+  <thead><tr><th>Mô hình thác nước (waterfall)</th><th>Mô hình tăng dần (incremental)</th></tr></thead>
   <tbody>
-    <tr><td>Làm từng giai đoạn trọn vẹn, theo thứ tự, một lần</td><td>Lặp các chu kỳ ngắn, giao từng phần chạy được</td></tr>
-    <tr><td>Đơn giản, nhưng cứng nhắc — đổi muộn rất tốn</td><td>Linh hoạt — chào đón yêu cầu thay đổi</td></tr>
-    <tr><td>Tốt khi yêu cầu cố định</td><td>Chiếm ưu thế trong công nghiệp hiện đại (Scrum)</td></tr>
+    <tr><td>Làm từng giai đoạn trọn vẹn, theo thứ tự, một lần; không quay ngược lên</td><td>Dựng hệ thống thành chuỗi các bản tăng dần: bản thô trước, rồi lặp lại các giai đoạn để thêm tính năng vào đó</td></tr>
+    <tr><td>Đơn giản, dễ quản lý, nhưng cứng nhắc — yêu cầu sai chỉ lộ ra ở cuối, và đổi muộn rất tốn</td><td>Mỗi bản tăng dần là một hệ thống chạy được để người dùng thử, nên sai sót lộ sớm và bản sau sửa lại</td></tr>
+    <tr><td>Tốt khi yêu cầu đã biết đầy đủ và cố định từ đầu</td><td>Tốt khi yêu cầu còn mơ hồ hoặc dự kiến sẽ thay đổi</td></tr>
   </tbody>
 </table>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Thác nước vs Agile — hai hình dạng của cùng một vòng đời.</b> Mô hình cổ điển chạy các giai đoạn một lần theo thứ tự chặt (Waterfall); nếu yêu cầu sai, bạn phát hiện quá muộn. Agile thì lặp lại cả vòng trong các chu kỳ ngắn (sprint 1–4 tuần), mỗi lần giao một lát chạy được nhỏ rồi thích nghi — đó là cách hầu hết đội hiện đại, kể cả startup thật, thực sự làm phần mềm. <em>Nhập môn liệt kê các giai đoạn; cách sắp xếp chúng (Waterfall vs Agile) là chiều sâu của công nghệ phần mềm (SWE201c).</em></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Agile là mô hình tăng dần của công nghiệp.</b> Ngoài hai mô hình ở trên, hầu hết đội hiện đại dùng Agile: cả vòng đời lặp lại trong các chu kỳ ngắn (sprint 1–4 tuần), mỗi lần giao một lát chạy được nhỏ, và kế hoạch được điều chỉnh sau mỗi vòng. Đó là mô hình tăng dần đẩy tới cực hạn, cộng thêm một bộ thực hành đội nhóm (stand-up, backlog, retrospective). <em>Ngoài giáo trình vì sách gọi tên waterfall và incremental; Agile và các thực hành của nó là chiều sâu của SWE201c.</em></div>
 <div class="note-ct">Để ý sự song song với thuật toán: phân tích = hiểu bài toán, thiết kế = lập kế hoạch lời giải, cài đặt = viết ra, kiểm thử = kiểm lại. Vẫn là tư duy giải quyết vấn đề đó, nhưng nâng lên quy mô cả đội ngũ và sản phẩm.</div>
 </div>
 `,
@@ -2117,8 +2124,8 @@ export default {
     },
     /* ══════════════════ PROGRESS TEST 2 ══════════════════ */
     {
-      title: 'Progress Test 2 (review CLO7–9)|||Progress Test 2 (ôn CLO7–9)',
-      description: 'Ôn giữa–cuối kỳ: ngôn ngữ lập trình, công nghệ phần mềm, cấu trúc dữ liệu.',
+      title: 'Progress Test 2 — LO5–LO9 (session 43)|||Progress Test 2 — LO5–LO9 (buổi 43)',
+      description: 'Ôn ngôn ngữ lập trình, công nghệ phần mềm, cấu trúc dữ liệu — và ôn lại cả hệ điều hành (LO5) cùng thuật toán (LO6). Syllabus: PT2 ở buổi 43, kiểm LO5, LO6, LO7, LO8, LO9.',
       lessons: [
         {
           title: 'Progress Test 2 — mixed review|||Progress Test 2 — ôn tổng hợp',
@@ -2330,7 +2337,7 @@ export default {
 <h3>What makes a good design? (CQ17.3)</h3>
 <p>Good relational design avoids storing the same fact in many places (a process called <strong>normalization</strong>). If a student changes their name, you should update it in exactly one row — not hunt through the whole database. Redundancy causes update anomalies and inconsistency.</p>
 <p>The relational model also provides <strong>data independence</strong> (CQ17.2): apps ask for data by table/column names using SQL, without knowing how it is physically stored.</p>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Normalization has named levels.</b> Good design is formalized into normal forms: 1NF (atomic values, no repeating groups), then 2NF and 3NF (every non-key column depends on the whole key and nothing but the key). Foreign keys link tables so a JOIN can recombine them, and the whole relational model rests on set theory and relational algebra. <em>Intro mentions avoiding redundancy; the numbered normal forms and their theory are DBI202 depth.</em></div>
+<div class="note-ct"><b>Normalization has named levels</b> — database design, including normalisation, is session 51 (&ldquo;11.5 Database design&rdquo;) and CLO11 is about operations within a relational database. Good design is formalized into normal forms: 1NF (atomic values, no repeating groups), then 2NF and 3NF (every non-key column depends on the whole key and nothing but the key). Foreign keys link tables so a JOIN can recombine them, and the whole relational model rests on set theory and relational algebra. DBI202 takes the theory further, but the numbered normal forms start here.</div>
 <div class="note-ct">One relational query can join tables to answer rich questions ("list all students enrolled in CSI104"). This power — describing <em>what</em> you want, not <em>how</em> to fetch it — is why SQL has lasted 50 years and is worth learning well in DBI202.</div>
 <a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-406" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
@@ -2351,7 +2358,7 @@ export default {
 <h3>Thiết kế tốt là gì? (CQ17.3)</h3>
 <p>Thiết kế quan hệ tốt tránh lưu cùng một sự kiện ở nhiều nơi (một quá trình gọi là <strong>chuẩn hoá — normalization</strong>). Nếu một sinh viên đổi tên, bạn nên cập nhật ở đúng một hàng — không phải lùng khắp CSDL. Dư thừa gây bất thường khi cập nhật và mâu thuẫn.</p>
 <p>Mô hình quan hệ cũng cho <strong>độc lập dữ liệu</strong> (CQ17.2): app hỏi dữ liệu theo tên bảng/cột bằng SQL, mà không cần biết nó lưu vật lý ra sao.</p>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Chuẩn hoá có các mức được đặt tên.</b> Thiết kế tốt được hình thức hoá thành các dạng chuẩn (normal form): 1NF (giá trị nguyên tử, không nhóm lặp), rồi 2NF và 3NF (mọi cột không khoá phụ thuộc vào toàn bộ khoá và chỉ khoá). Khoá ngoại nối các bảng để phép JOIN ghép lại, và toàn bộ mô hình quan hệ dựa trên lý thuyết tập hợp và đại số quan hệ. <em>Nhập môn nhắc tránh dư thừa; các dạng chuẩn đánh số và lý thuyết của chúng là chiều sâu của DBI202.</em></div>
+<div class="note-ct"><b>Chuẩn hoá có các mức được đặt tên</b> — thiết kế CSDL, gồm cả chuẩn hoá, là buổi 51 (&ldquo;11.5 Database design&rdquo;) và CLO11 nói về các thao tác bên trong một CSDL quan hệ. Thiết kế tốt được hình thức hoá thành các dạng chuẩn (normal form): 1NF (giá trị nguyên tử, không nhóm lặp), rồi 2NF và 3NF (mọi cột không khoá phụ thuộc vào toàn bộ khoá và chỉ khoá). Khoá ngoại nối các bảng để phép JOIN ghép lại, và toàn bộ mô hình quan hệ dựa trên lý thuyết tập hợp và đại số quan hệ. DBI202 đi sâu hơn về lý thuyết, nhưng các dạng chuẩn đánh số bắt đầu từ đây.</div>
 <div class="note-ct">Một truy vấn quan hệ có thể nối (join) các bảng để trả lời câu hỏi phong phú ("liệt kê mọi sinh viên đăng ký CSI104"). Sức mạnh này — mô tả <em>cái gì</em> bạn muốn, không phải <em>làm sao</em> lấy — là lý do SQL trụ vững 50 năm và đáng học kỹ ở DBI202.</div>
 <a class="link-card codelab" href="/code-lab/sql?ref=%2Fcourses%2Fintroduction-to-computer-science%2Flearn&reflabel=CSI104%20%E2%80%94%20Introduction%20to%20Computer%20Science#module-406" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
@@ -2485,7 +2492,7 @@ export default {
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.3</span>
 <h2>Being a responsible computing professional</h2>
-<p class="lead">Technical power comes with responsibility. As a future engineer you will handle other people&#39;s data and build systems that affect real lives — ethics is part of the job (CQ18.3).</p>
+<p class="lead">Technical power comes with responsibility. As a future engineer you will handle other people&#39;s data and build systems that affect real lives — ethics is part of the job. (CQ18.3 asks about <em>other aspects of security</em> &mdash; integrity, authentication and digital signatures &mdash; so do not cite it for ethics; ethics is session 54, &ldquo;12.3 Ethical principles&rdquo;.)</p>
 <h3>Privacy</h3>
 <p>Every app you build may collect personal data. <strong>Privacy</strong> means collecting only what is needed, protecting it, and being honest about its use. Laws (like GDPR) now enforce this; good engineers respected it before the law required it.</p>
 <h3>Types of hackers</h3>
@@ -2507,7 +2514,7 @@ export default {
 <div class="ml-vi">
 <span class="eyebrow">Chương 12 · Bài 12.3</span>
 <h2>Trở thành người làm nghề máy tính có trách nhiệm</h2>
-<p class="lead">Quyền lực kỹ thuật đi kèm trách nhiệm. Là một kỹ sư tương lai, bạn sẽ xử lý dữ liệu của người khác và xây hệ thống ảnh hưởng tới cuộc sống thật — đạo đức là một phần của nghề (CQ18.3).</p>
+<p class="lead">Quyền lực kỹ thuật đi kèm trách nhiệm. Là một kỹ sư tương lai, bạn sẽ xử lý dữ liệu của người khác và xây hệ thống ảnh hưởng tới cuộc sống thật — đạo đức là một phần của nghề. (CQ18.3 hỏi về <em>các khía cạnh khác của bảo mật</em> &mdash; toàn vẹn, xác thực và chữ ký số &mdash; nên đừng trích nó cho phần đạo đức; đạo đức là buổi 54, &ldquo;12.3 Ethical principles&rdquo;.)</p>
 <h3>Quyền riêng tư</h3>
 <p>Mọi app bạn xây có thể thu thập dữ liệu cá nhân. <strong>Quyền riêng tư</strong> nghĩa là chỉ thu những gì cần, bảo vệ nó, và trung thực về việc sử dụng. Luật (như GDPR) giờ cưỡng chế điều này; kỹ sư tốt đã tôn trọng nó trước cả khi luật yêu cầu.</p>
 <h3>Các loại hacker</h3>
@@ -2548,8 +2555,8 @@ export default {
     },
     /* ══════════════════ PROGRESS TEST 3 ══════════════════ */
     {
-      title: 'Progress Test 3 (review CLO10–12)|||Progress Test 3 (ôn CLO10–12)',
-      description: 'Ôn cuối kỳ: cấu trúc tệp, cơ sở dữ liệu, bảo mật & đạo đức.',
+      title: 'Progress Test 3 — LO10–LO12 (session 57)|||Progress Test 3 — LO10–LO12 (buổi 57)',
+      description: 'Ôn cuối kỳ: cấu trúc tệp & cách truy cập, cơ sở dữ liệu quan hệ, bảo mật & đạo đức. Syllabus: PT3 ở buổi 57, kiểm LO10, LO11, LO12.',
       lessons: [
         {
           title: 'Progress Test 3 — mixed review|||Progress Test 3 — ôn tổng hợp',
@@ -2833,15 +2840,15 @@ export default {
       ],
     },
     {
-      "title": "Final Exam|||Thi cuối kỳ",
-      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "title": "Final Exam (FE)|||Thi cuối kỳ (FE)",
+      "description": "Thi cuối kỳ: 1 phần, 60 phút, 40%, sàn 4. Syllabus KHÔNG ghi dạng câu hỏi. Khung ôn theo 12 CLO + câu mẫu.",
       "lessons": [
         {
-          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "title": "FE — 60-minute final exam (format not stated in the syllabus)|||FE — thi cuối kỳ 60 phút (syllabus không ghi dạng đề)",
           "slug": "csi104-final-exam-fe",
           "type": "article",
-          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "description": "Sự thật về bài thi cuối CSI104 và khung ôn theo từng CLO, kèm câu mẫu.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam \u00b7 FE</span>\n<h2>FE \u2014 the 60-minute final exam</h2>\n<p class=\"lead\">The CSI104 final exam is <strong>1 part, 60 minutes, 40% of the grade</strong>, with a completion criterion of <strong>4</strong> \u2014 score below 4 on it and you fail the subject whatever your presentation, lab and progress-test marks are. The syllabus export does <strong>not</strong> state a question type, so do not assume multiple choice; be ready to define, convert and explain in your own words as well as to recognise an answer.</p>\n<h3>What it can ask \u2014 the twelve CLOs</h3>\n<table>\n  <thead><tr><th>CLO</th><th>Be able to state or do</th></tr></thead>\n  <tbody>\n    <tr><td>LO1</td><td>The Von Neumann model, and the <b>three hardware subsystems</b> (CPU, main memory, I/O subsystem) plus the subsystem interconnection, with each one&#39;s role</td></tr>\n    <tr><td>LO2</td><td>Convert between decimal, binary, octal and hexadecimal &mdash; integers and fractions, in both directions</td></tr>\n    <tr><td>LO3</td><td>How data is stored as bit patterns: unsigned, sign-and-magnitude, two&#39;s complement, floating point (normalisation, Excess exponent, IEEE), text (ASCII/Unicode), images, audio, video; logical, shift and arithmetic operations</td></tr>\n    <tr><td>LO4</td><td>LAN vs WAN, and the <b>five layers</b> of the TCP/IP suite (application, transport, network, data-link, physical) with what each does</td></tr>\n    <tr><td>LO5</td><td>What an operating system is, and its four managers: user interface, memory manager, process manager, device/file manager</td></tr>\n    <tr><td>LO6</td><td>Define an algorithm; the three constructs (sequence, decision, repetition); flowcharts and pseudocode; linear vs binary search</td></tr>\n    <tr><td>LO7</td><td>How a high-level program becomes machine language: the translation process, compilers vs interpreters, and the programming paradigms</td></tr>\n    <tr><td>LO8</td><td>The software lifecycle phases, and the <b>two development process models</b> &mdash; waterfall and incremental; analysis, design, implementation, testing</td></tr>\n    <tr><td>LO9</td><td>Arrays, records and linked lists &mdash; structure, operations and when each is appropriate; stacks, queues, trees, graphs</td></tr>\n    <tr><td>LO10</td><td>Text vs binary files, and the access methods (sequential, random/direct, indexed)</td></tr>\n    <tr><td>LO11</td><td>Operations within a relational database: the relational model, the operations on relations, database architecture and design</td></tr>\n    <tr><td>LO12</td><td>The security goals (confidentiality, integrity, availability), attacks and services, and ethical principles and privacy</td></tr>\n  </tbody>\n</table>\n<h3>How to prepare</h3>\n<ul>\n<li><b>Learn the counted lists exactly.</b> Three hardware subsystems, five network layers, four OS managers, three algorithm constructs, two process models, three CIA goals. Counting questions are the cheapest marks and the easiest to lose.</li>\n<li><b>Practise conversions by hand</b> until decimal &harr; binary &harr; hex is automatic in both directions, fractions included.</li>\n<li><b>Answer from this course&#39;s textbook,</b> not from a half-remembered internet article &mdash; where books differ (the number of TCP/IP layers is the classic case), the textbook&#39;s answer is the one that scores.</li>\n<li><b>Revise across all twelve LOs.</b> The three progress tests each covered a block; the final can draw on any of them.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course, to rehearse recall across the twelve CLOs. They are not past-exam questions and the real exam may not be in this format.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cu\u1ed1i k\u1ef3 \u00b7 FE</span>\n<h2>FE \u2014 b\u00e0i thi cu\u1ed1i k\u1ef3 60 ph\u00fat</h2>\n<p class=\"lead\">Thi cu\u1ed1i k\u1ef3 CSI104 l\u00e0 <strong>1 ph\u1ea7n, 60 ph\u00fat, 40% \u0111i\u1ec3m m\u00f4n</strong>, s\u00e0n ho\u00e0n th\u00e0nh <strong>4</strong> \u2014 d\u01b0\u1edbi 4 \u1edf b\u00e0i n\u00e0y l\u00e0 tr\u01b0\u1ee3t m\u00f4n b\u1ea5t k\u1ec3 \u0111i\u1ec3m thuy\u1ebft tr\u00ecnh, lab v\u00e0 progress test. B\u1ea3n xu\u1ea5t syllabus <strong>kh\u00f4ng</strong> ghi d\u1ea1ng c\u00e2u h\u1ecfi, n\u00ean \u0111\u1eebng m\u1eb7c \u0111\u1ecbnh l\u00e0 tr\u1eafc nghi\u1ec7m; h\u00e3y s\u1eb5n s\u00e0ng \u0111\u1ecbnh ngh\u0129a, chuy\u1ec3n \u0111\u1ed5i v\u00e0 gi\u1ea3i th\u00edch b\u1eb1ng l\u1eddi c\u1ee7a m\u00ecnh, ch\u1ee9 kh\u00f4ng ch\u1ec9 nh\u1eadn ra \u0111\u00e1p \u00e1n.</p>\n<h3>N\u00f3 c\u00f3 th\u1ec3 h\u1ecfi g\u00ec \u2014 m\u01b0\u1eddi hai CLO</h3>\n<table>\n  <thead><tr><th>CLO</th><th>Ph\u1ea3i n\u00f3i \u0111\u01b0\u1ee3c ho\u1eb7c l\u00e0m \u0111\u01b0\u1ee3c</th></tr></thead>\n  <tbody>\n    <tr><td>LO1</td><td>M\u00f4 h\u00ecnh Von Neumann, v\u00e0 <b>ba ph\u00e2n h\u1ec7 ph\u1ea7n c\u1ee9ng</b> (CPU, b\u1ed9 nh\u1edb ch\u00ednh, ph\u00e2n h\u1ec7 v\u00e0o/ra) c\u00f9ng li\u00ean k\u1ebft c\u00e1c ph\u00e2n h\u1ec7, k\u00e8m vai tr\u00f2 t\u1eebng c\u00e1i</td></tr>\n    <tr><td>LO2</td><td>Chuy\u1ec3n \u0111\u1ed5i gi\u1eefa th\u1eadp ph\u00e2n, nh\u1ecb ph\u00e2n, b\u00e1t ph\u00e2n v\u00e0 th\u1eadp l\u1ee5c &mdash; c\u1ea3 ph\u1ea7n nguy\u00ean l\u1eabn ph\u1ea7n l\u1ebb, c\u1ea3 hai chi\u1ec1u</td></tr>\n    <tr><td>LO3</td><td>D\u1eef li\u1ec7u \u0111\u01b0\u1ee3c l\u01b0u th\u00e0nh m\u1eabu bit ra sao: kh\u00f4ng d\u1ea5u, d\u1ea5u-v\u00e0-\u0111\u1ed9-l\u1edbn, b\u00f9 hai, d\u1ea5u ph\u1ea9y \u0111\u1ed9ng (chu\u1ea9n ho\u00e1, s\u1ed1 m\u0169 Excess, IEEE), v\u0103n b\u1ea3n (ASCII/Unicode), \u1ea3nh, \u00e2m thanh, video; ph\u00e9p logic, ph\u00e9p d\u1ecbch v\u00e0 ph\u00e9p s\u1ed1 h\u1ecdc</td></tr>\n    <tr><td>LO4</td><td>LAN v\u1edbi WAN, v\u00e0 <b>n\u0103m t\u1ea7ng</b> c\u1ee7a b\u1ed9 TCP/IP (\u1ee9ng d\u1ee5ng, giao v\u1eadn, m\u1ea1ng, li\u00ean k\u1ebft d\u1eef li\u1ec7u, v\u1eadt l\u00fd) c\u00f9ng vi\u1ec7c c\u1ee7a t\u1eebng t\u1ea7ng</td></tr>\n    <tr><td>LO5</td><td>H\u1ec7 \u0111i\u1ec1u h\u00e0nh l\u00e0 g\u00ec, v\u00e0 b\u1ed1n tr\u00ecnh qu\u1ea3n l\u00fd: giao di\u1ec7n ng\u01b0\u1eddi d\u00f9ng, qu\u1ea3n l\u00fd b\u1ed9 nh\u1edb, qu\u1ea3n l\u00fd ti\u1ebfn tr\u00ecnh, qu\u1ea3n l\u00fd thi\u1ebft b\u1ecb/t\u1ec7p</td></tr>\n    <tr><td>LO6</td><td>\u0110\u1ecbnh ngh\u0129a thu\u1eadt to\u00e1n; ba c\u1ea5u tr\u00fac (tu\u1ea7n t\u1ef1, r\u1ebd nh\u00e1nh, l\u1eb7p); l\u01b0u \u0111\u1ed3 v\u00e0 m\u00e3 gi\u1ea3; t\u00ecm tuy\u1ebfn t\u00ednh v\u1edbi t\u00ecm nh\u1ecb ph\u00e2n</td></tr>\n    <tr><td>LO7</td><td>Ch\u01b0\u01a1ng tr\u00ecnh b\u1eadc cao th\u00e0nh ng\u00f4n ng\u1eef m\u00e1y ra sao: qu\u00e1 tr\u00ecnh d\u1ecbch, tr\u00ecnh bi\u00ean d\u1ecbch v\u1edbi tr\u00ecnh th\u00f4ng d\u1ecbch, v\u00e0 c\u00e1c m\u00f4 th\u1ee9c l\u1eadp tr\u00ecnh</td></tr>\n    <tr><td>LO8</td><td>C\u00e1c giai \u0111o\u1ea1n v\u00f2ng \u0111\u1eddi ph\u1ea7n m\u1ec1m, v\u00e0 <b>hai m\u00f4 h\u00ecnh quy tr\u00ecnh ph\u00e1t tri\u1ec3n</b> &mdash; th\u00e1c n\u01b0\u1edbc v\u00e0 t\u0103ng d\u1ea7n; ph\u00e2n t\u00edch, thi\u1ebft k\u1ebf, c\u00e0i \u0111\u1eb7t, ki\u1ec3m th\u1eed</td></tr>\n    <tr><td>LO9</td><td>M\u1ea3ng, b\u1ea3n ghi v\u00e0 danh s\u00e1ch li\u00ean k\u1ebft &mdash; c\u1ea5u tr\u00fac, ph\u00e9p to\u00e1n v\u00e0 khi n\u00e0o n\u00ean d\u00f9ng c\u00e1i n\u00e0o; ng\u0103n x\u1ebfp, h\u00e0ng \u0111\u1ee3i, c\u00e2y, \u0111\u1ed3 th\u1ecb</td></tr>\n    <tr><td>LO10</td><td>T\u1ec7p v\u0103n b\u1ea3n v\u1edbi t\u1ec7p nh\u1ecb ph\u00e2n, v\u00e0 c\u00e1c c\u00e1ch truy c\u1eadp (tu\u1ea7n t\u1ef1, ng\u1eabu nhi\u00ean/tr\u1ef1c ti\u1ebfp, c\u00f3 ch\u1ec9 m\u1ee5c)</td></tr>\n    <tr><td>LO11</td><td>C\u00e1c thao t\u00e1c b\u00ean trong m\u1ed9t CSDL quan h\u1ec7: m\u00f4 h\u00ecnh quan h\u1ec7, c\u00e1c ph\u00e9p tr\u00ean quan h\u1ec7, ki\u1ebfn tr\u00fac v\u00e0 thi\u1ebft k\u1ebf CSDL</td></tr>\n    <tr><td>LO12</td><td>C\u00e1c m\u1ee5c ti\u00eau b\u1ea3o m\u1eadt (b\u00ed m\u1eadt, to\u00e0n v\u1eb9n, s\u1eb5n s\u00e0ng), c\u00e1c ki\u1ec3u t\u1ea5n c\u00f4ng v\u00e0 d\u1ecbch v\u1ee5 b\u1ea3o m\u1eadt, c\u00e1c nguy\u00ean t\u1eafc \u0111\u1ea1o \u0111\u1ee9c v\u00e0 quy\u1ec1n ri\u00eang t\u01b0</td></tr>\n  </tbody>\n</table>\n<h3>\u00d4n th\u1ebf n\u00e0o</h3>\n<ul>\n<li><b>Thu\u1ed9c ch\u00ednh x\u00e1c c\u00e1c danh s\u00e1ch c\u00f3 s\u1ed1 \u0111\u1ebfm.</b> Ba ph\u00e2n h\u1ec7 ph\u1ea7n c\u1ee9ng, n\u0103m t\u1ea7ng m\u1ea1ng, b\u1ed1n tr\u00ecnh qu\u1ea3n l\u00fd c\u1ee7a OS, ba c\u1ea5u tr\u00fac thu\u1eadt to\u00e1n, hai m\u00f4 h\u00ecnh quy tr\u00ecnh, ba m\u1ee5c ti\u00eau CIA. C\u00e2u h\u1ecfi \u0111\u1ebfm l\u00e0 \u0111i\u1ec3m r\u1ebb nh\u1ea5t v\u00e0 c\u0169ng d\u1ec5 m\u1ea5t nh\u1ea5t.</li>\n<li><b>Luy\u1ec7n chuy\u1ec3n c\u01a1 s\u1ed1 b\u1eb1ng tay</b> t\u1edbi khi th\u1eadp ph\u00e2n &harr; nh\u1ecb ph\u00e2n &harr; th\u1eadp l\u1ee5c th\u00e0nh ph\u1ea3n x\u1ea1 \u1edf c\u1ea3 hai chi\u1ec1u, k\u1ec3 c\u1ea3 ph\u1ea7n l\u1ebb.</li>\n<li><b>Tr\u1ea3 l\u1eddi theo gi\u00e1o tr\u00ecnh c\u1ee7a m\u00f4n,</b> kh\u00f4ng theo m\u1ed9t b\u00e0i b\u00e1o m\u1ea1ng nh\u1edb mang m\u00e1ng &mdash; ch\u1ed7 c\u00e1c s\u00e1ch kh\u00e1c nhau (s\u1ed1 t\u1ea7ng TCP/IP l\u00e0 ca kinh \u0111i\u1ec3n), \u0111\u00e1p \u00e1n c\u1ee7a gi\u00e1o tr\u00ecnh m\u1edbi l\u00e0 \u0111\u00e1p \u00e1n \u0111\u01b0\u1ee3c \u0111i\u1ec3m.</li>\n<li><b>\u00d4n tr\u1ea3i \u0111\u1ec1u m\u01b0\u1eddi hai LO.</b> Ba progress test m\u1ed7i b\u00e0i ph\u1ee7 m\u1ed9t kh\u1ed1i; b\u00e0i thi cu\u1ed1i c\u00f3 th\u1ec3 l\u1ea5y t\u1eeb b\u1ea5t k\u1ef3 kh\u1ed1i n\u00e0o.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">C\u00e2u m\u1eabu</span> C\u00e1c c\u00e2u d\u01b0\u1edbi \u0111\u00e2y l\u00e0 <strong>c\u00e2u m\u1eabu</strong> l\u1ea5y t\u1eeb ch\u00ednh m\u00f4n h\u1ecdc, \u0111\u1ec3 \u00f4n tr\u1ea3i \u0111\u1ec1u m\u01b0\u1eddi hai CLO. \u0110\u00e2y kh\u00f4ng ph\u1ea3i \u0111\u1ec1 thi th\u1eadt v\u00e0 \u0111\u1ec1 th\u1eadt c\u00f3 th\u1ec3 kh\u00f4ng \u1edf d\u1ea1ng n\u00e0y.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [

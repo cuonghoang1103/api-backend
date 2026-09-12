@@ -105,12 +105,12 @@ export default {
 <h2>The grade breakdown — the Assignment (40%) is where the marks are</h2>
 <p class="lead">HCM202 is 70% continuous work plus a 30% final. The <strong>Assignment (40%)</strong> — usually group work + an essay/presentation — is the single biggest component. The Final has a <strong>≥ 4 gate</strong>, and <em>every component must be greater than zero</em>.</p>
 <table>
-<thead><tr><th>Component</th><th>Weight</th><th>Gate</th><th>Form</th></tr></thead>
+<thead><tr><th>Component</th><th>Parts</th><th>Weight</th><th>Gate</th><th>Form / duration</th></tr></thead>
 <tbody>
-<tr><td>Participation</td><td><strong>10%</strong></td><td>&gt; 0</td><td>Attendance + in-class contribution</td></tr>
-<tr><td>Progress Test</td><td><strong>20%</strong></td><td>&gt; 0</td><td>1 test, 20'</td></tr>
-<tr><td>Assignment</td><td><strong>40%</strong></td><td>&gt; 0</td><td>Group work / essay / presentation</td></tr>
-<tr><td>Final Exam</td><td><strong>30%</strong></td><td>≥ 4</td><td>60'</td></tr>
+<tr><td>Participation (on-going)</td><td>1</td><td><strong>10%</strong></td><td>&gt; 0</td><td>Attendance + in-class contribution</td></tr>
+<tr><td>Progress Test (on-going)</td><td>1</td><td><strong>20%</strong></td><td>&gt; 0</td><td>1 test, <strong>20'</strong></td></tr>
+<tr><td>Assignment (on-going)</td><td><strong>2</strong></td><td><strong>40%</strong></td><td>&gt; 0</td><td>"Depending on the instructor's chosen form of assessment" — typically group work / essay / presentation</td></tr>
+<tr><td>Final Exam</td><td>1</td><td><strong>30%</strong></td><td>≥ 4</td><td><strong>60'</strong>, covers all LOs</td></tr>
 </tbody>
 </table>
 <div class="kv-grid">
@@ -124,7 +124,7 @@ export default {
 FR = 0.10·8 + 0.20·7 + 0.40·8 + 0.30·3.5 = 0.8 + 1.4 + 3.2 + 1.05 = 6.45.
 FR ≥ 5 ✓ but Final = 3.5 < 4 → <strong>FAIL</strong> on the gate. Even strong coursework can't rescue a weak final.</div>
 <div class="callout warn"><strong>The Assignment carries the course.</strong> At 40%, a well-researched, well-argued essay/presentation is the surest way to a high grade — and it's under your control, unlike the timed final. Start it early, cite sources properly, and rehearse the presentation.</div>
-<div class="pitfall"><strong>"Every component > 0" is a real trap.</strong> Skipping the assignment or the progress test — scoring a literal zero on any one — fails you regardless of the others. Submit something for every component.</div>
+<div class="pitfall"><strong>"Every component > 0" is a real trap, and the Assignment is TWO parts.</strong> The syllabus (ID 14332) records the 40% Assignment as <strong>2 parts</strong> — expect two deliverables, not one — and sets a "&gt; 0" completion criterion on Participation, Progress Test and Assignment alike. Scoring a literal zero on any one fails you regardless of the others. Submit something for every part.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Turn the essay into evidence-based argument.</b> The strongest HCM202 essays don't just restate the textbook — they take a position, support it with quotations from Hồ Chí Minh Toàn tập and Party documents, and connect to a current issue (anti-corruption, national unity, culture). Argument + primary sources + contemporary application is the formula graders reward. <em>Not spelled out in the rubric but the difference between 7 and 9.</em></div>
 </div>
 <div class="ml-vi">
@@ -132,12 +132,12 @@ FR ≥ 5 ✓ but Final = 3.5 < 4 → <strong>FAIL</strong> on the gate. Even str
 <h2>Cấu trúc điểm — Bài tập (40%) là nơi có điểm</h2>
 <p class="lead">HCM202 gồm 70% điểm quá trình cộng 30% thi cuối. <strong>Bài tập (40%)</strong> — thường là làm nhóm + tiểu luận/thuyết trình — là thành phần lớn nhất. Thi cuối có <strong>cổng ≥ 4</strong>, và <em>mọi thành phần phải lớn hơn không</em>.</p>
 <table>
-<thead><tr><th>Thành phần</th><th>Trọng số</th><th>Cổng</th><th>Hình thức</th></tr></thead>
+<thead><tr><th>Thành phần</th><th>Số phần</th><th>Trọng số</th><th>Cổng</th><th>Hình thức / thời lượng</th></tr></thead>
 <tbody>
-<tr><td>Chuyên cần</td><td><strong>10%</strong></td><td>&gt; 0</td><td>Điểm danh + đóng góp trên lớp</td></tr>
-<tr><td>Progress Test</td><td><strong>20%</strong></td><td>&gt; 0</td><td>1 bài, 20'</td></tr>
-<tr><td>Bài tập</td><td><strong>40%</strong></td><td>&gt; 0</td><td>Làm nhóm / tiểu luận / thuyết trình</td></tr>
-<tr><td>Thi cuối kỳ</td><td><strong>30%</strong></td><td>≥ 4</td><td>60'</td></tr>
+<tr><td>Chuyên cần (on-going)</td><td>1</td><td><strong>10%</strong></td><td>&gt; 0</td><td>Điểm danh + đóng góp trên lớp</td></tr>
+<tr><td>Progress Test (on-going)</td><td>1</td><td><strong>20%</strong></td><td>&gt; 0</td><td>1 bài, <strong>20'</strong></td></tr>
+<tr><td>Bài tập (Assignment, on-going)</td><td><strong>2</strong></td><td><strong>40%</strong></td><td>&gt; 0</td><td>"Phụ thuộc theo hình thức kiểm tra đánh giá của giảng viên" — thường là làm nhóm / tiểu luận / thuyết trình</td></tr>
+<tr><td>Thi cuối kỳ</td><td>1</td><td><strong>30%</strong></td><td>≥ 4</td><td><strong>60'</strong>, phủ toàn bộ chuẩn đầu ra</td></tr>
 </tbody>
 </table>
 <div class="kv-grid">
@@ -151,7 +151,7 @@ FR ≥ 5 ✓ but Final = 3.5 < 4 → <strong>FAIL</strong> on the gate. Even str
 FR = 0.10·8 + 0.20·7 + 0.40·8 + 0.30·3.5 = 0.8 + 1.4 + 3.2 + 1.05 = 6.45.
 FR ≥ 5 ✓ nhưng Thi cuối = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổng. Điểm quá trình tốt cũng không cứu được bài thi yếu.</div>
 <div class="callout warn"><strong>Bài tập gánh cả môn.</strong> Với 40%, một tiểu luận/thuyết trình nghiên cứu kỹ, lập luận tốt là cách chắc nhất để điểm cao — và nó nằm trong tầm kiểm soát của bạn, khác bài thi tính giờ. Bắt đầu sớm, trích nguồn đàng hoàng, và tập thuyết trình.</div>
-<div class="pitfall"><strong>"Mọi thành phần > 0" là cái bẫy thật.</strong> Bỏ bài tập hoặc progress test — bị điểm 0 tuyệt đối ở bất kỳ cột nào — là trượt bất kể các cột khác. Nộp một cái gì đó cho mọi thành phần.</div>
+<div class="pitfall"><strong>"Mọi thành phần > 0" là cái bẫy thật, và Assignment có HAI phần.</strong> Syllabus (ID 14332) ghi Assignment 40% là <strong>2 phần</strong> — hãy chờ hai sản phẩm phải nộp, không phải một — và đặt điều kiện "&gt; 0" cho cả Chuyên cần, Progress Test lẫn Assignment. Bị 0 tuyệt đối ở bất kỳ cột nào là trượt bất kể các cột khác. Nộp một cái gì đó cho MỌI phần.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Biến tiểu luận thành lập luận dựa trên bằng chứng.</b> Tiểu luận HCM202 mạnh nhất không chỉ chép lại giáo trình — nó nêu một quan điểm, chống lưng bằng trích dẫn từ Hồ Chí Minh Toàn tập và văn kiện Đảng, và nối với một vấn đề hiện nay (phòng chống tham nhũng, đại đoàn kết, văn hóa). Lập luận + nguồn gốc + vận dụng đương đại là công thức người chấm thưởng. <em>Rubric không ghi rõ nhưng là ranh giới giữa 7 và 9.</em></div>
 </div>`,
         },
@@ -324,7 +324,7 @@ FR ≥ 5 ✓ nhưng Thi cuối = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổn
 <div class="kv"><span class="k">Assignment</span><span class="v">thesis + primary sources + application</span></div>
 <div class="kv"><span class="k">Final</span><span class="v">chapter summaries + the connecting thread + past questions</span></div>
 </div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The exam loves "analyze and apply", not "list".</b> Many HCM202 exam questions ask you to <em>prove</em>, <em>analyze the creativity of</em>, or <em>apply</em> an idea — not merely list it. Prepare by practicing the 47 constructive questions in the syllabus (see Chapter 7), each answered as: state the view → explain why → give evidence → apply today. <em>This answer pattern reliably lifts exam and essay scores.</em></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The exam loves "analyze and apply", not "list".</b> Many HCM202 exam questions ask you to <em>prove</em>, <em>analyze the creativity of</em>, or <em>apply</em> an idea — not merely list it. Prepare by practicing the syllabus's <strong>47 constructive questions</strong> — read them in full on FLM (Syllabus ID 14332, "Constructive question(s)"); Chapter 7 gives a condensed selection of them grouped by chapter, not all 47 — each answered as: state the view → explain why → give evidence → apply today. <em>This answer pattern reliably lifts exam and essay scores.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.6</span>
@@ -356,7 +356,7 @@ FR ≥ 5 ✓ nhưng Thi cuối = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổn
 <div class="kv"><span class="k">Bài tập</span><span class="v">luận đề + nguồn gốc + vận dụng</span></div>
 <div class="kv"><span class="k">Thi cuối</span><span class="v">tóm tắt chương + sợi chỉ nối + đề cũ</span></div>
 </div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đề thi thích "phân tích và vận dụng", không thích "liệt kê".</b> Nhiều câu thi HCM202 yêu cầu <em>chứng minh</em>, <em>phân tích tính sáng tạo</em>, hoặc <em>vận dụng</em> một ý — không chỉ liệt kê. Chuẩn bị bằng cách luyện 47 câu hỏi tư duy trong syllabus (xem Chương 7), mỗi câu trả lời theo: nêu quan điểm → giải thích vì sao → dẫn chứng → vận dụng hôm nay. <em>Mẫu trả lời này đều đặn nâng điểm thi và tiểu luận.</em></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đề thi thích "phân tích và vận dụng", không thích "liệt kê".</b> Nhiều câu thi HCM202 yêu cầu <em>chứng minh</em>, <em>phân tích tính sáng tạo</em>, hoặc <em>vận dụng</em> một ý — không chỉ liệt kê. Chuẩn bị bằng cách luyện <strong>47 câu hỏi kiến tạo</strong> của syllabus — đọc đầy đủ trên FLM (Syllabus ID 14332, mục "Constructive question(s)"); Chương 7 chỉ đưa một tuyển tập rút gọn theo chương, KHÔNG phải đủ 47 câu — mỗi câu trả lời theo: nêu quan điểm → giải thích vì sao → dẫn chứng → vận dụng hôm nay. <em>Mẫu trả lời này đều đặn nâng điểm thi và tiểu luận.</em></div>
 </div>`,
         },
       ],
@@ -375,7 +375,8 @@ FR ≥ 5 ✓ nhưng Thi cuối = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổn
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.1</span>
 <h2>A precise definition — every word carries weight</h2>
-<p class="lead">The official definition (13th Party Congress) reads: <em>"Ho Chi Minh Ideology is a comprehensive and profound system of views on the fundamental issues of the Vietnamese revolution, the result of the creative application and development of Marxism-Leninism to the concrete conditions of Vietnam, inheriting and developing the nation's fine values and absorbing the quintessence of human culture."</em></p>
+<p class="lead">The official definition, adopted by the <strong>11th National Party Congress (2011)</strong> and reproduced in the MOET textbook, reads: <em>"Ho Chi Minh Ideology is a comprehensive and profound system of views on the fundamental issues of the Vietnamese revolution, the result of the creative application and development of Marxism-Leninism to the concrete conditions of Vietnam, inheriting and developing the nation's fine values and absorbing the quintessence of human culture; it is an immensely great and precious spiritual asset of the Party and the nation, forever lighting the way for the Vietnamese revolution's cause of victory."</em></p>
+<div class="callout warn"><strong>Get the Congress right, and do not cut the last clause.</strong> This definition is the <strong>11th</strong> Congress (2011), not the 13th — a standard MCQ distractor. The closing clause ("an immensely great and precious spiritual asset … forever lighting the way") is the part constructive question CQ1.1 asks you to explain, so quote the definition in full.</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lk">A system</span> comprehensive &amp; profound — not scattered sayings, but organized views on the core questions of the revolution.</div>
   <div class="lz-layer"><span class="lz-lk">Creative Marxism-Leninism</span> the theoretical core, applied and <em>developed</em> for Vietnam's actual conditions — not copied mechanically.</div>
@@ -396,7 +397,8 @@ FR ≥ 5 ✓ nhưng Thi cuối = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổn
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.1</span>
 <h2>Một định nghĩa chính xác — từng chữ đều có sức nặng</h2>
-<p class="lead">Định nghĩa chính thức (Đại hội XIII) viết: <em>"Tư tưởng Hồ Chí Minh là một hệ thống quan điểm toàn diện và sâu sắc về những vấn đề cơ bản của cách mạng Việt Nam, kết quả của sự vận dụng và phát triển sáng tạo chủ nghĩa Mác-Lênin vào điều kiện cụ thể của nước ta, kế thừa và phát triển các giá trị truyền thống tốt đẹp của dân tộc, tiếp thu tinh hoa văn hóa nhân loại."</em></p>
+<p class="lead">Định nghĩa chính thức, được <strong>Đại hội đại biểu toàn quốc lần thứ XI (2011)</strong> thông qua và in trong giáo trình Bộ GD&amp;ĐT, viết: <em>"Tư tưởng Hồ Chí Minh là một hệ thống quan điểm toàn diện và sâu sắc về những vấn đề cơ bản của cách mạng Việt Nam, kết quả của sự vận dụng và phát triển sáng tạo chủ nghĩa Mác-Lênin vào điều kiện cụ thể của nước ta, kế thừa và phát triển các giá trị truyền thống tốt đẹp của dân tộc, tiếp thu tinh hoa văn hóa nhân loại; là tài sản tinh thần vô cùng to lớn và quý giá của Đảng và dân tộc ta, mãi mãi soi đường cho sự nghiệp cách mạng của nhân dân ta giành thắng lợi."</em></p>
+<div class="callout warn"><strong>Nhớ đúng Đại hội, và ĐỪNG cắt vế cuối.</strong> Định nghĩa này là của Đại hội <strong>XI</strong> (2011), không phải Đại hội XIII — đây là phương án nhiễu kinh điển trong đề trắc nghiệm. Vế cuối ("tài sản tinh thần vô cùng to lớn và quý giá… mãi mãi soi đường") chính là phần câu hỏi kiến tạo CQ1.1 yêu cầu bạn phân tích, nên hãy trích định nghĩa ĐẦY ĐỦ.</div>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-lk">Một hệ thống</span> toàn diện &amp; sâu sắc — không phải câu nói rời rạc, mà là quan điểm có tổ chức về những vấn đề cốt lõi của cách mạng.</div>
   <div class="lz-layer"><span class="lz-lk">Mác-Lênin sáng tạo</span> là hạt nhân lý luận, được vận dụng và <em>phát triển</em> cho điều kiện thực tế Việt Nam — không sao chép máy móc.</div>
@@ -594,7 +596,7 @@ FR ≥ 5 ✓ nhưng Thi cuối = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổn
 <strong>Point 3 — they are one path:</strong> independence is the first step; socialism is the direction that makes independence meaningful and secure.
 <strong>Conclusion:</strong> the two are a single, continuous revolutionary path — this is Ho Chi Minh's central creative contribution.</div>
 <div class="callout ok"><strong>This is the exam's favorite thesis.</strong> If you can argue "independence + socialism are inseparable" with these three points and a quotation, you can answer a large fraction of possible exam and essay questions — because Chapters 4, 5 and 6 are all ways of realizing it.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Applying it today.</b> The modern application (đổi mới, market economy with socialist orientation) is exactly this thesis in practice: keep national independence and socialist direction while developing the economy. Essays that connect the historical thesis to Vietnam's current path (independence + development + socialist orientation) show the "vận dụng" the syllabus prizes. <em>The bridge from theory to the present.</em></div>
+<div class="callout ok"><strong>Session 12 — "Vận dụng" is on the syllabus.</strong> <b>Applying it today.</b> Session 12 of the syllabus is exactly "IV. Vận dụng tư tưởng Hồ Chí Minh về độc lập dân tộc gắn liền với chủ nghĩa xã hội trong sự nghiệp cách mạng Việt Nam hiện nay", so this is examinable content, not an extra. The modern application (đổi mới, market economy with socialist orientation) is exactly this thesis in practice: keep national independence and socialist direction while developing the economy. Essays that connect the historical thesis to Vietnam's current path (independence + development + socialist orientation) show the "vận dụng" the syllabus prizes. <em>The bridge from theory to the present.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.2</span>
@@ -612,7 +614,7 @@ FR ≥ 5 ✓ nhưng Thi cuối = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổn
 <strong>Ý 3 — chúng là một con đường:</strong> độc lập là bước đầu; CNXH là phương hướng làm cho độc lập có ý nghĩa và được bảo đảm.
 <strong>Kết luận:</strong> hai điều là một con đường cách mạng thống nhất, liên tục — đây là đóng góp sáng tạo trung tâm của Hồ Chí Minh.</div>
 <div class="callout ok"><strong>Đây là luận điểm được ưa chuộng nhất trong đề thi.</strong> Nếu bạn lập luận được "độc lập + CNXH không thể tách rời" bằng ba ý này và một trích dẫn, bạn trả lời được phần lớn câu thi và tiểu luận có thể ra — vì Chương 4, 5 và 6 đều là cách hiện thực hóa nó.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vận dụng hôm nay.</b> Sự vận dụng hiện đại (đổi mới, kinh tế thị trường định hướng xã hội chủ nghĩa) chính là luận điểm này trong thực tiễn: giữ độc lập dân tộc và định hướng xã hội chủ nghĩa trong khi phát triển kinh tế. Tiểu luận nối luận điểm lịch sử với con đường hiện nay của Việt Nam (độc lập + phát triển + định hướng XHCN) thể hiện sự "vận dụng" mà syllabus coi trọng. <em>Cây cầu từ lý luận tới hiện tại.</em></div>
+<div class="callout ok"><strong>Buổi 12 — "Vận dụng" NẰM TRONG giáo trình.</strong> <b>Vận dụng hôm nay.</b> Buổi 12 của syllabus chính là "IV. Vận dụng tư tưởng Hồ Chí Minh về độc lập dân tộc gắn liền với chủ nghĩa xã hội trong sự nghiệp cách mạng Việt Nam hiện nay", nên đây là nội dung có thể ra thi, không phải phần thêm. Sự vận dụng hiện đại (đổi mới, kinh tế thị trường định hướng xã hội chủ nghĩa) chính là luận điểm này trong thực tiễn: giữ độc lập dân tộc và định hướng xã hội chủ nghĩa trong khi phát triển kinh tế. Tiểu luận nối luận điểm lịch sử với con đường hiện nay của Việt Nam (độc lập + phát triển + định hướng XHCN) thể hiện sự "vận dụng" mà syllabus coi trọng. <em>Cây cầu từ lý luận tới hiện tại.</em></div>
 </div>`,
           quiz: {
             timeLimitSeconds: 300,
@@ -700,7 +702,7 @@ FR ≥ 5 ✓ nhưng Thi cuối = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổn
 4. He warned early against "the diseases" of officials: đặc quyền (privilege), tham ô (embezzlement), lãng phí (waste), quan liêu (bureaucracy).
 <strong>Conclusion:</strong> keeping the Party clean is a survival condition, not a moral extra — the theme behind today's anti-corruption drive.</div>
 <div class="callout ok"><strong>Party = the fusion of THREE elements in Vietnam.</strong> Classic Marxism says a party = Marxism + workers' movement. Ho Chi Minh added the <em>patriotic movement</em> — a frequent exam point, because it explains why the Party could unite the whole nation, not just workers.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Anti-corruption as applied Ho Chi Minh thought.</b> The current "blazing furnace" anti-corruption campaign is explicitly framed as building a clean, strong Party per Ho Chi Minh's teaching — strengthening the people's trust in the regime and the law. Connecting his warnings about the "diseases" of cadres to today's campaign is a strong, current essay angle. <em>The living application of Chapter 4.</em></div>
+<div class="callout ok"><strong>Sessions 17-18 — on the syllabus.</strong> Session 17 is "III. Vận dụng tư tưởng Hồ Chí Minh vào công tác xây dựng Đảng và xây dựng nhà nước" and session 18 is "3. Phòng, chống tham nhũng góp phần củng cố niềm tin của nhân dân vào chế độ và pháp luật". <b>Anti-corruption as applied Ho Chi Minh thought.</b> The current "blazing furnace" anti-corruption campaign is explicitly framed as building a clean, strong Party per Ho Chi Minh's teaching — strengthening the people's trust in the regime and the law. Connecting his warnings about the "diseases" of cadres to today's campaign is a strong, current essay angle. <em>The living application of Chapter 4.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.1</span>
@@ -719,7 +721,7 @@ FR ≥ 5 ✓ nhưng Thi cuối = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổn
 4. Người sớm cảnh báo "những căn bệnh" của cán bộ: đặc quyền, tham ô, lãng phí, quan liêu.
 <strong>Kết luận:</strong> giữ Đảng trong sạch là điều kiện sống còn, không phải chuyện đạo đức phụ thêm — chủ đề đằng sau cuộc phòng chống tham nhũng hôm nay.</div>
 <div class="callout ok"><strong>Đảng = sự kết hợp BA yếu tố ở Việt Nam.</strong> Chủ nghĩa Mác cổ điển nói một đảng = chủ nghĩa Mác + phong trào công nhân. Hồ Chí Minh thêm <em>phong trào yêu nước</em> — một ý thi thường gặp, vì nó giải thích vì sao Đảng có thể đoàn kết cả dân tộc, không chỉ công nhân.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Phòng chống tham nhũng là tư tưởng Hồ Chí Minh được vận dụng.</b> Cuộc đấu tranh "lò nóng" phòng chống tham nhũng hiện nay được nêu rõ là xây dựng Đảng trong sạch, vững mạnh theo lời dạy của Hồ Chí Minh — củng cố niềm tin của nhân dân vào chế độ và pháp luật. Nối cảnh báo của Người về "những căn bệnh" của cán bộ với cuộc đấu tranh hôm nay là một góc tiểu luận mạnh, thời sự. <em>Sự vận dụng sống động của Chương 4.</em></div>
+<div class="callout ok"><strong>Buổi 17-18 — NẰM TRONG giáo trình.</strong> Buổi 17 là "III. Vận dụng tư tưởng Hồ Chí Minh vào công tác xây dựng Đảng và xây dựng nhà nước", buổi 18 là "3. Phòng, chống tham nhũng góp phần củng cố niềm tin của nhân dân vào chế độ và pháp luật". <b>Phòng chống tham nhũng là tư tưởng Hồ Chí Minh được vận dụng.</b> Cuộc đấu tranh "lò nóng" phòng chống tham nhũng hiện nay được nêu rõ là xây dựng Đảng trong sạch, vững mạnh theo lời dạy của Hồ Chí Minh — củng cố niềm tin của nhân dân vào chế độ và pháp luật. Nối cảnh báo của Người về "những căn bệnh" của cán bộ với cuộc đấu tranh hôm nay là một góc tiểu luận mạnh, thời sự. <em>Sự vận dụng sống động của Chương 4.</em></div>
 </div>`,
         },
         {
@@ -855,7 +857,7 @@ Question: "When defining the subject of national unity, why did Ho Chi Minh not 
 3. Anyone with a drop of patriotism could join the bloc; the worker-peasant alliance is the core, but not the whole.
 Conclusion: breadth (the whole people) built on a firm core (worker-peasant-intellectual) maximizes strength — the essence of "đại" (great) unity.</div>
 <div class="callout ok"><strong>Core + breadth.</strong> The exam loves the distinction: the <em>core</em> is the worker-peasant-intellectual alliance under Party leadership; the <em>breadth</em> is every patriot. Great unity = a firm core plus the widest possible circle. State both.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>"Dân vận khéo thì việc gì cũng thành công."</b> "Skillful mass mobilization makes any task succeed." Unity is not automatic — it is <em>built</em> through patient dân vận (mass work): explaining, listening, and winning hearts. Modern application: building national consensus and the bloc today (e.g. in development, disaster response) still rests on this skill. <em>The practical craft behind the principle.</em></div>
+<div class="callout ok"><strong>Session 23 — on the syllabus.</strong> "III. Vận dụng tư tưởng Hồ Chí Minh về đại đoàn kết toàn dân tộc và đoàn kết quốc tế trong giai đoạn hiện nay" is session 23, so the "today" application below is core content. <b>"Dân vận khéo thì việc gì cũng thành công."</b> "Skillful mass mobilization makes any task succeed." Unity is not automatic — it is <em>built</em> through patient dân vận (mass work): explaining, listening, and winning hearts. Modern application: building national consensus and the bloc today (e.g. in development, disaster response) still rests on this skill. <em>The practical craft behind the principle.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
@@ -875,7 +877,7 @@ Câu hỏi: "Khi xác định chủ thể của khối đại đoàn kết dân 
 3. Bất cứ ai có một chút lòng yêu nước đều có thể tham gia khối; liên minh công-nông là nòng cốt, nhưng không phải toàn bộ.
 Kết luận: bề rộng (toàn dân) dựng trên một nòng cốt vững (công-nông-trí) tối đa hóa sức mạnh — bản chất của đoàn kết "đại".</div>
 <div class="callout ok"><strong>Nòng cốt + bề rộng.</strong> Đề thi thích sự phân biệt: <em>nòng cốt</em> là liên minh công-nông-trí dưới sự lãnh đạo của Đảng; <em>bề rộng</em> là mọi người yêu nước. Đại đoàn kết = một nòng cốt vững cộng vòng tròn rộng nhất có thể. Nêu cả hai.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>"Dân vận khéo thì việc gì cũng thành công."</b> Đoàn kết không tự có — nó được <em>xây dựng</em> qua công tác dân vận kiên trì: giải thích, lắng nghe, và thu phục lòng người. Vận dụng hiện đại: xây dựng đồng thuận dân tộc và khối đại đoàn kết hôm nay (vd trong phát triển, ứng phó thiên tai) vẫn dựa trên kỹ năng này. <em>Nghệ thuật thực hành đằng sau nguyên tắc.</em></div>
+<div class="callout ok"><strong>Buổi 23 — NẰM TRONG giáo trình.</strong> "III. Vận dụng tư tưởng Hồ Chí Minh về đại đoàn kết toàn dân tộc và đoàn kết quốc tế trong giai đoạn hiện nay" là buổi 23, nên phần vận dụng "hôm nay" dưới đây là nội dung cốt lõi. <b>"Dân vận khéo thì việc gì cũng thành công."</b> Đoàn kết không tự có — nó được <em>xây dựng</em> qua công tác dân vận kiên trì: giải thích, lắng nghe, và thu phục lòng người. Vận dụng hiện đại: xây dựng đồng thuận dân tộc và khối đại đoàn kết hôm nay (vd trong phát triển, ứng phó thiên tai) vẫn dựa trên kỹ năng này. <em>Nghệ thuật thực hành đằng sau nguyên tắc.</em></div>
 </div>`,
           quiz: {
             timeLimitSeconds: 240,
@@ -1051,12 +1053,13 @@ This is exactly the "học tập và làm theo" (study-and-follow) that CLO10 as
           title: '7.1 — Question bank by chapter + the 4-step answer method|||7.1 — Ngân hàng câu hỏi theo chương + khung trả lời 4 bước',
           slug: 'hcm202-7-1-on-thi',
           type: 'article',
-          description: 'Câu hỏi ôn theo từng chương (từ 47 câu tư duy của syllabus) và khung trả lời "nêu – vì sao – dẫn chứng – vận dụng".',
+          description: 'Tuyển tập rút gọn theo chương từ 47 câu hỏi kiến tạo của syllabus (đọc bản đầy đủ trên FLM) + khung trả lời "nêu – vì sao – dẫn chứng – vận dụng".',
           content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.1</span>
 <h2>Answer every question the same reliable way, and know the bank</h2>
-<p class="lead">HCM202 exams and essays reward <em>analysis and application</em>, not listing. Almost any question can be answered well with a single 4-step method — and the syllabus itself gives 47 constructive questions to practice on.</p>
+<p class="lead">HCM202 exams and essays reward <em>analysis and application</em>, not listing. Almost any question can be answered well with a single 4-step method.</p>
+<div class="callout warn"><strong>Where the real question bank lives.</strong> The syllabus (ID 14332) lists <strong>47 constructive questions</strong>, tied to specific sessions (CQ1.1 … CQ8.x). The bank below is a <em>condensed selection</em> of them, regrouped by chapter — it is not the full 47. Open the syllabus on FLM and work through the complete list as well; exam and assignment prompts are drawn from it.</div>
 <h3>The 4-step answer method</h3>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">1 State</div><div class="lz-t">the view</div><div class="lz-d">what Ho Chi Minh held</div></div>
@@ -1084,7 +1087,8 @@ Q: "Why does Ho Chi Minh consider unity the key to success?"
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.1</span>
 <h2>Trả lời mọi câu hỏi theo cùng một cách đáng tin, và thuộc ngân hàng</h2>
-<p class="lead">Thi và tiểu luận HCM202 thưởng <em>phân tích và vận dụng</em>, không phải liệt kê. Gần như câu nào cũng trả lời tốt được bằng một khung 4 bước — và chính syllabus cho 47 câu hỏi tư duy để luyện.</p>
+<p class="lead">Thi và tiểu luận HCM202 thưởng <em>phân tích và vận dụng</em>, không phải liệt kê. Gần như câu nào cũng trả lời tốt được bằng một khung 4 bước.</p>
+<div class="callout warn"><strong>Ngân hàng câu hỏi thật nằm ở đâu.</strong> Syllabus (ID 14332) liệt kê <strong>47 câu hỏi kiến tạo</strong>, gắn với từng buổi cụ thể (CQ1.1 … CQ8.x). Ngân hàng dưới đây là một <em>tuyển tập rút gọn</em> của chúng, gom lại theo chương — KHÔNG phải đủ 47 câu. Hãy mở syllabus trên FLM và làm hết danh sách đầy đủ; đề thi và đề assignment lấy từ đó.</div>
 <h3>Khung trả lời 4 bước</h3>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">1 Nêu</div><div class="lz-t">quan điểm</div><div class="lz-d">Hồ Chí Minh chủ trương gì</div></div>
@@ -1159,19 +1163,19 @@ Câu: "Vì sao Hồ Chí Minh coi đoàn kết là then chốt của thành côn
     },
     /* ══════════════════ CHƯƠNG 8 — NÂNG CAO ★ (BEYOND SYLLABUS) ══════════════════ */
     {
-      title: 'Chapter 8 — Beyond the syllabus ★: timeless value, following & rebutting distortions|||Chương 8 — Nâng cao ★: giá trị thời đại, học & làm theo, phản bác xuyên tạc',
-      description: 'Cả chương ★ ngoài giáo trình: giá trị thời đại của tư tưởng, học tập & làm theo tấm gương, và cách phản bác các luận điệu xuyên tạc.',
+      title: 'Chapter 8 — On-syllabus applications: value of the ideology, learning-and-following & rebutting distortions|||Chương 8 — Vận dụng theo giáo trình: giá trị tư tưởng Hồ Chí Minh, học & làm theo, phản bác xuyên tạc',
+      description: 'Ba nội dung NẰM TRONG giáo trình: giá trị tư tưởng Hồ Chí Minh (buổi 6, Chương II mục III), học tập & làm theo (CLO10), và phản bác luận điệu xuyên tạc (câu hỏi kiến tạo CQ2.5).',
       lessons: [
         {
-          title: '8.1 — Timeless value, learning-and-following & rebutting distortions ★|||8.1 — Giá trị thời đại, học & làm theo & phản bác xuyên tạc ★',
+          title: '8.1 — Value of Ho Chi Minh thought, learning-and-following & rebutting distortions|||8.1 — Giá trị tư tưởng Hồ Chí Minh, học & làm theo & phản bác xuyên tạc',
           slug: 'hcm202-8-1-nang-cao',
           type: 'VIDEO',
-          description: 'Ba chủ đề vận dụng: vì sao tư tưởng còn nguyên giá trị, biến tư tưởng thành hành động, và lập luận phản bác luận điệu sai trái.',
+          description: 'Ba chủ đề vận dụng nằm trong giáo trình: giá trị tư tưởng Hồ Chí Minh (buổi 6), biến tư tưởng thành hành động (CLO10), và lập luận phản bác luận điệu sai trái (CQ2.5).',
           content: `
 <div class="ml-en">
-<span class="eyebrow">Chapter 8 · Lesson 8.1 · ★ Beyond the syllabus</span>
+<span class="eyebrow">Chapter 8 · Lesson 8.1</span>
 <h2>From knowing the ideology to living it — and defending it</h2>
-<p class="lead">This whole chapter is <span class="badge">★ Beyond the syllabus</span> — application and critical thinking that lift an essay from "restated textbook" to a mature argument. Three themes: why the ideology still matters, how to follow it in practice, and how to rebut distortions.</p>
+<p class="lead">Three themes: the value of Ho Chi Minh thought, how to follow it in practice, and how to rebut distortions. All three are <strong>on the syllabus</strong>, not extras: "Giá trị tư tưởng Hồ Chí Minh" is <strong>session 6</strong> (Chapter II, part III — for the Vietnamese revolution and for humanity's progress); "học tập và làm theo tư tưởng, đạo đức, phong cách Hồ Chí Minh" is <strong>CLO10</strong>; and refuting the claim that the ideology is outdated is a <strong>syllabus constructive question (CQ2.5)</strong>. Treat this chapter as examinable.</p>
 
 <h3>1 — Why the ideology retains its value today</h3>
 <div class="lz-stack">
@@ -1197,9 +1201,9 @@ Idea: "serve the people."      →  Habit: volunteer / community work; use your 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The mark of an A: your own connection.</b> Top essays add one genuine, specific link the textbook doesn't make — a current policy, a personal experience, a data point — analyzed through Ho Chi Minh's method. Examiners can tell the difference between memorized content and thought applied. Bringing the ideology to bear on something you actually care about is what separates a 9 from a 7. <em>The whole point of "vận dụng."</em></div>
 </div>
 <div class="ml-vi">
-<span class="eyebrow">Chương 8 · Bài 8.1 · ★ Ngoài giáo trình</span>
+<span class="eyebrow">Chương 8 · Bài 8.1</span>
 <h2>Từ hiểu tư tưởng tới sống với nó — và bảo vệ nó</h2>
-<p class="lead">Cả chương này là <span class="badge">★ Ngoài giáo trình</span> — vận dụng và tư duy phản biện nâng một tiểu luận từ "chép lại giáo trình" thành một lập luận chín. Ba chủ đề: vì sao tư tưởng còn giá trị, cách làm theo trong thực tiễn, và cách phản bác xuyên tạc.</p>
+<p class="lead">Ba chủ đề: giá trị tư tưởng Hồ Chí Minh, cách làm theo trong thực tiễn, và cách phản bác xuyên tạc. Cả ba đều <strong>NẰM TRONG giáo trình</strong>, không phải phần thêm: "Giá trị tư tưởng Hồ Chí Minh" là <strong>buổi 6</strong> (Chương II, mục III — đối với cách mạng Việt Nam và đối với sự phát triển tiến bộ của nhân loại); "học tập và làm theo tư tưởng, đạo đức, phong cách Hồ Chí Minh" là <strong>CLO10</strong>; và phản bác luận điệu "tư tưởng Hồ Chí Minh đã lỗi thời" là một <strong>câu hỏi kiến tạo của syllabus (CQ2.5)</strong>. Hãy coi chương này là nội dung có thể ra thi.</p>
 
 <h3>1 — Vì sao tư tưởng còn nguyên giá trị hôm nay</h3>
 <div class="lz-stack">

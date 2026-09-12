@@ -1497,6 +1497,14 @@ aside ::-webkit-scrollbar-thumb:hover {
   font-size: 0.86rem;
 }
 
+/* Trang tiếng Anh: nhãn tiếng Anh. Khung đã tự mang tiêu đề (<strong> mở đầu —
+   "Exam traps.", "Bẫy đề thi.") gắn thêm .co-tieu-de để khỏi hiện HAI tiêu đề;
+   tiêu đề của chính nó được tô cùng màu nhãn. (SWT301, 11/09/2026) */
+.rich-content .ml-en .pitfall::before { content: "⚠️ Common trap"; }
+.rich-content .pitfall.co-tieu-de::before { display: none; }
+.rich-content .pitfall.co-tieu-de > strong:first-child,
+.rich-content .pitfall.co-tieu-de > p:first-child > strong:first-child { color: #e0554b; }
+
 /* --- CuongThai note (áp dụng thực tế) --- */
 .rich-content .note-ct {
   border: 1px solid rgba(99, 102, 241, 0.4);
@@ -6005,3 +6013,58 @@ html.theme-dark .chat-studio {
   .lr-float, .lr-halo, .lr-sweep, .lr-pop { animation: none !important; }
   .lr-halo { opacity: .45; }
 }
+
+
+/* ─── Lời giảng dưới mỗi ảnh slide (Academy SWT301, 11/09/2026) ─────────────
+ * Trước đây lời giảng là MỘT đoạn văn liền ngay dưới ảnh (965/1161 khối), học
+ * viên phàn nàn "tất cả nằm trên một dòng, rất khó đọc". Khung này tách lời
+ * giảng khỏi ảnh bằng viền nhấn bên trái, và cho các phần một nhịp cố định:
+ *   .y-chinh  🎯 ý chính một câu      .nhan   nhãn mục nhỏ (IN HOA)
+ *   ul/ol     từng ý một dòng         .meo    🧠 mẹo nhớ / ví dụ đời thường
+ *   .dap-an   ✅ đáp án slide Question .pitfall bẫy thi (dùng lại khối có sẵn)
+ *   ol.hai-cot danh sách dài chia hai cột (một cột trên màn hẹp)
+ */
+.rich-content .giang {
+  margin: 0.4rem 0 2.25rem;
+  padding: 0.9rem 1.15rem;
+  border-left: 3px solid var(--accent-color, #6366f1);
+  border-radius: 0 0.65rem 0.65rem 0;
+  background: var(--bg-surface-active, rgba(255, 255, 255, 0.04));
+  line-height: 1.7;
+}
+.rich-content .giang > :first-child { margin-top: 0; }
+.rich-content .giang > :last-child { margin-bottom: 0; }
+.rich-content .giang p { margin: 0.6rem 0; }
+.rich-content .giang ul,
+.rich-content .giang ol { margin: 0.35rem 0 0.75rem; padding-left: 1.35rem; }
+.rich-content .giang li { margin: 0.32rem 0; padding-left: 0.15rem; }
+.rich-content .giang li::marker { color: var(--accent-color, #6366f1); font-weight: 600; }
+.rich-content .giang ol.hai-cot { columns: 2; column-gap: 2.25rem; }
+.rich-content .giang ol.hai-cot li { break-inside: avoid; }
+@media (max-width: 640px) { .rich-content .giang ol.hai-cot { columns: 1; } }
+.rich-content .giang .y-chinh {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 1.02em;
+}
+/* Nhãn mục dùng được cả NGOÀI khung .giang (intro, ví dụ giải). `.trich-slide .nhan`
+   phía trên cụ thể hơn nên vẫn giữ kiểu riêng của nó. */
+.rich-content .nhan,
+.rich-content .giang .nhan {
+  margin: 1rem 0 0.3rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-color, #6366f1);
+}
+.rich-content .meo,
+.rich-content .dap-an {
+  margin: 0.85rem 0 0.4rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: 0.5rem;
+}
+.rich-content .meo { background: rgba(47, 158, 107, 0.10); }
+.rich-content .dap-an { background: rgba(47, 158, 107, 0.14); border: 1px solid rgba(47, 158, 107, 0.35); }
+.rich-content .ghi-chu { font-size: 0.88em; color: var(--text-muted, var(--text-secondary)); }
+.rich-content .giang .pitfall { margin: 0.85rem 0 0.4rem; }

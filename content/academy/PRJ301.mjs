@@ -1,7 +1,7 @@
 /**
  * PRJ301 — Java Web Application Development (Phát triển ứng dụng Java web). Kỳ 4.
  * Bám syllabus FPTU (sylID 13165, 9 CLO). Tiên quyết: DBI202, PRO192.
- * Servlet/JSP, scope, JDBC, MVC, JPA, AI. Tomcat 9 + NetBeans 13 + SQL Server 2019.
+ * Servlet/JSP, scope, JDBC, MVC, JPA, AI. Tomcat 10+ + NetBeans 13 + SQL Server 2019.
  * Song ngữ EN/VN. Code Java/JSP <pre>+.tok-*. Ví dụ giải từng bước + ★ ngoài giáo trình.
  * Deep-link CodeLab java-core + sql + spring-boot; setup → Exp Hub.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/PRJ301.mjs --apply
@@ -18,8 +18,8 @@ export default {
     shortDescription: 'Build real Java web applications from the ground up: how HTTP works, Servlets and JSP, the four scopes, JDBC to a database, the MVC pattern, and JPA. The course where PRO192 (Java) and DBI202 (databases) finally combine into a working website.|||Xây ứng dụng Java web thật từ gốc: HTTP hoạt động ra sao, Servlet và JSP, bốn scope, JDBC tới cơ sở dữ liệu, mẫu MVC, và JPA. Môn học nơi PRO192 (Java) và DBI202 (CSDL) cuối cùng kết hợp thành một website chạy được.',
     description: 'Môn phát triển ứng dụng web bằng Java. Học các công nghệ lõi: Servlet & JSP, phạm vi chia sẻ trạng thái (page/request/session/application), kết nối cơ sở dữ liệu bằng JDBC, kiến trúc MVC (Model-View-Controller), JPA (ánh xạ đối tượng-quan hệ), và ứng dụng AI trong web Java. Đây là môn tổng hợp PRO192 (Java) và DBI202 (CSDL) thành một website hoàn chỉnh. Tiên quyết: DBI202 và PRO192.',
     whatYouLearn: 'Cách web hoạt động (HTTP request/response); Servlet (vòng đời, doGet/doPost, tham số); JSP, EL & JSTL; bốn phạm vi page/request/session/application; JDBC & mẫu DAO kết nối SQL Server; kiến trúc MVC với Servlet làm Controller; JPA & EntityManager; bảo mật cơ bản (SQL injection, session); và tích hợp AI trong ứng dụng Java web.',
-    requirements: 'Tiên quyết: đạt DBI202 (SQL, thiết kế CSDL) và PRO192 (Java OOP). Cần cài Tomcat 9+, NetBeans 13+ (hoặc IntelliJ), JDK 8+, và SQL Server 2019+.',
-    documentsNote: 'Giáo trình: Nicholas S. Williams — Professional Java for Web Applications (Wrox); Oracle JDBC & Servlet Filters docs. Công cụ: Tomcat 9+, NetBeans 13+, JDK 8+, SQL Server 2019+. Luyện: track Code Lab Java Core + SQL + Spring Boot. Kèm file syllabus gốc PRJ301.pdf.',
+    requirements: 'Tiên quyết: đạt DBI202 (SQL, thiết kế CSDL) và PRO192 (Java OOP). Cần cài Tomcat 10 trở lên (đúng theo syllabus buổi 2 — Tomcat 10+ dùng namespace jakarta.*, không phải javax.*), NetBeans 13+ (hoặc IntelliJ), JDK 8+, và SQL Server 2019+.',
+    documentsNote: 'Giáo trình: Nicholas S. Williams — Professional Java for Web Applications (Wrox); Oracle JDBC & Servlet Filters docs. Công cụ: Tomcat 10+ (syllabus buổi 2: "Servlet container: Tomcat 10 or higher"), NetBeans 13+, JDK 8+, SQL Server 2019+. Luyện: track Code Lab Java Core + SQL + Spring Boot. Kèm file syllabus gốc PRJ301.pdf.',
   },
   sections: [
     /* ══════════════════ MỤC 0 ══════════════════ */
@@ -50,8 +50,9 @@ export default {
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">JDBC &amp; the DAO pattern</div><div class="lz-nsub">Talking to SQL Server safely</div></div></div>
   <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">The MVC architecture</div><div class="lz-nsub">Controller · Model · View — the core</div></div></div>
   <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">JPA — object-relational mapping</div><div class="lz-nsub">Entities instead of raw SQL</div></div></div>
-  <div class="lz-stage">Advanced · beyond the syllabus</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Web security · AI in Java web · toward Spring Boot</div><div class="lz-nsub">From coursework to industry</div></div></div>
+  <div class="lz-stage">Core: AI (CLO9) · then beyond</div>
+  <div class="lz-node"><div class="lz-badge">10</div><div class="lz-nbody"><div class="lz-ntitle">AI in a Java web application</div><div class="lz-nsub">CLO9 · sessions 3, 8, 15 and 51 — examinable, not extra</div></div></div>
+  <div class="lz-node"><div class="lz-badge">A</div><div class="lz-nbody"><div class="lz-ntitle">Web security · toward Spring Boot</div><div class="lz-nsub">From coursework to industry</div></div></div>
 </div>
 <div class="callout ok">Web development is learned by building and refreshing the browser. Every chapter links to hands-on Java and SQL practice — type the code, deploy to Tomcat, and watch it run.</div>
 <a class="link-card codelab" href="/code-lab/java-core?ref=%2Fcourses%2Fjava-web-application-development%2Flearn&reflabel=PRJ301%20%E2%80%94%20Java%20Web%20Application%20Development#module-249" target="_blank" rel="noopener">
@@ -76,8 +77,9 @@ export default {
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">JDBC &amp; mẫu DAO</div><div class="lz-nsub">Nói chuyện với SQL Server an toàn</div></div></div>
   <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Kiến trúc MVC</div><div class="lz-nsub">Controller · Model · View — cốt lõi</div></div></div>
   <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">JPA — ánh xạ đối tượng-quan hệ</div><div class="lz-nsub">Entity thay cho SQL thô</div></div></div>
-  <div class="lz-stage">Nâng cao · ngoài giáo trình</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Bảo mật web · AI trong Java web · hướng Spring Boot</div><div class="lz-nsub">Từ bài tập tới công nghiệp</div></div></div>
+  <div class="lz-stage">Chính: AI (CLO9) · rồi mới tới học thêm</div>
+  <div class="lz-node"><div class="lz-badge">10</div><div class="lz-nbody"><div class="lz-ntitle">AI trong ứng dụng Java web</div><div class="lz-nsub">CLO9 · buổi 3, 8, 15 và 51 — nằm trong phạm vi thi, không phải học thêm</div></div></div>
+  <div class="lz-node"><div class="lz-badge">A</div><div class="lz-nbody"><div class="lz-ntitle">Bảo mật web · hướng Spring Boot</div><div class="lz-nsub">Từ bài tập tới công nghiệp</div></div></div>
 </div>
 <div class="callout ok">Phát triển web học bằng cách xây và refresh trình duyệt. Mỗi chương link tới luyện Java và SQL thực hành — gõ code, deploy lên Tomcat, và xem nó chạy.</div>
 <a class="link-card codelab" href="/code-lab/java-core?ref=%2Fcourses%2Fjava-web-application-development%2Flearn&reflabel=PRJ301%20%E2%80%94%20Java%20Web%20Application%20Development#module-249" target="_blank" rel="noopener">
@@ -110,18 +112,19 @@ export default {
 
 <h3>The seven graded components (official syllabus)</h3>
 <table>
-  <thead><tr><th>Component</th><th>Weight</th><th>Duration / note</th></tr></thead>
+  <thead><tr><th>Component</th><th>Weight</th><th>Completion criterion</th><th>Duration / note</th></tr></thead>
   <tbody>
-    <tr><td><b>Assignment</b></td><td><b>30%</b></td><td>5 weeks — the big project, usually a full MVC web app</td></tr>
-    <tr><td><b>Practical Exam (PE)</b></td><td><b>30%</b></td><td>85 minutes on the machine</td></tr>
-    <tr><td>Progress Test 1</td><td>5%</td><td>30 minutes</td></tr>
-    <tr><td>Progress Test 2</td><td>5%</td><td>30 minutes</td></tr>
-    <tr><td>Workshop 1</td><td>5%</td><td>1 week</td></tr>
-    <tr><td>Workshop 2</td><td>5%</td><td>1 week</td></tr>
-    <tr><td>Final Exam (FE)</td><td>20%</td><td>60 minutes, multiple choice</td></tr>
+    <tr><td><b>Assignment</b></td><td><b>30%</b></td><td>&gt; 0</td><td>5 weeks — the big project, usually a full MVC web app</td></tr>
+    <tr><td><b>Practical Exam (PE)</b></td><td><b>30%</b></td><td>&gt; 0</td><td>85 minutes on the machine <small>(on-going, not the final)</small></td></tr>
+    <tr><td>Progress Test 1</td><td>5%</td><td>&gt; 0</td><td>30 minutes</td></tr>
+    <tr><td>Progress Test 2</td><td>5%</td><td>&gt; 0</td><td>30 minutes</td></tr>
+    <tr><td>Workshop 1</td><td>5%</td><td>&gt; 0</td><td>1 week</td></tr>
+    <tr><td>Workshop 2</td><td>5%</td><td>&gt; 0</td><td>1 week</td></tr>
+    <tr><td>Final Exam (FE)</td><td>20%</td><td><b>&ge; 4</b></td><td>60 minutes <small>(the syllabus states no question count)</small></td></tr>
   </tbody>
 </table>
 <div class="out"><b>Read the numbers:</b> Assignment + Practical Exam = <b>60%</b>, and both are graded on code that must run. The written final is 20%. Nobody has ever passed PRJ301 by reading about Servlets.</div>
+<div class="callout warn"><b>An average of 5.0 is not the whole rule.</b> The syllabus attaches a completion criterion to every component: the six on-going ones must each be <strong>&gt; 0</strong> — skip a workshop or a progress test and you are blocked however high the rest — and the <strong>Final Exam must reach 4</strong>. Plus <strong>≥ 80% attendance</strong> of contact hours to be accepted to the final examination.</div>
 
 <div class="callout warn">The <strong>Practical Exam (85 min)</strong> asks you to build a small MVC web feature — a form, a Servlet, a database query, a JSP page — that actually runs on Tomcat. The only preparation that works is building many small web apps yourself. Do the labs. The syllabus schedules eight "Practice Classwork" blocks (sessions 9–10, 19–20, 25–26, 35–36, 40, 44, 48, 52) precisely so that you arrive at the PE having built the pattern eight times.</div>
 <div class="note-ct">Because the prerequisites are DBI202 and PRO192, PRJ301 assumes you can already write Java classes and SQL queries. If either is shaky, revise it first — this course adds the web layer on top.</div>
@@ -141,18 +144,19 @@ export default {
 
 <h3>Bảy cột điểm (theo syllabus chính thức)</h3>
 <table>
-  <thead><tr><th>Thành phần</th><th>Trọng số</th><th>Thời lượng / ghi chú</th></tr></thead>
+  <thead><tr><th>Thành phần</th><th>Trọng số</th><th>Điều kiện hoàn thành</th><th>Thời lượng / ghi chú</th></tr></thead>
   <tbody>
-    <tr><td><b>Assignment</b> <small>(bài tập lớn)</small></td><td><b>30%</b></td><td>5 tuần — đồ án lớn, thường là một app web MVC đầy đủ</td></tr>
-    <tr><td><b>Thi thực hành (PE)</b></td><td><b>30%</b></td><td>85 phút ngồi máy</td></tr>
-    <tr><td>Progress Test 1</td><td>5%</td><td>30 phút</td></tr>
-    <tr><td>Progress Test 2</td><td>5%</td><td>30 phút</td></tr>
-    <tr><td>Workshop 1</td><td>5%</td><td>1 tuần</td></tr>
-    <tr><td>Workshop 2</td><td>5%</td><td>1 tuần</td></tr>
-    <tr><td>Thi cuối kỳ (FE)</td><td>20%</td><td>60 phút, trắc nghiệm</td></tr>
+    <tr><td><b>Assignment</b> <small>(bài tập lớn)</small></td><td><b>30%</b></td><td>&gt; 0</td><td>5 tuần — đồ án lớn, thường là một app web MVC đầy đủ</td></tr>
+    <tr><td><b>Thi thực hành (PE)</b></td><td><b>30%</b></td><td>&gt; 0</td><td>85 phút ngồi máy <small>(là cột quá trình, không phải thi cuối)</small></td></tr>
+    <tr><td>Progress Test 1</td><td>5%</td><td>&gt; 0</td><td>30 phút</td></tr>
+    <tr><td>Progress Test 2</td><td>5%</td><td>&gt; 0</td><td>30 phút</td></tr>
+    <tr><td>Workshop 1</td><td>5%</td><td>&gt; 0</td><td>1 tuần</td></tr>
+    <tr><td>Workshop 2</td><td>5%</td><td>&gt; 0</td><td>1 tuần</td></tr>
+    <tr><td>Thi cuối kỳ (FE)</td><td>20%</td><td><b>≥ 4</b></td><td>60 phút <small>(syllabus không nêu số câu)</small></td></tr>
   </tbody>
 </table>
 <div class="out"><b>Đọc kỹ các con số:</b> Assignment + Thi thực hành = <b>60%</b>, và cả hai đều chấm trên code phải chạy được. Bài thi viết chỉ 20%. Chưa từng có ai qua PRJ301 bằng cách đọc về Servlet.</div>
+<div class="callout warn"><b>Trung bình 5.0 chưa phải toàn bộ luật.</b> Syllabus gắn điều kiện hoàn thành cho từng cột: sáu cột quá trình mỗi cột phải <strong>&gt; 0</strong> — bỏ một workshop hay một progress test là bị chặn dù các cột khác cao tới đâu — và <strong>Thi cuối kỳ phải đạt 4</strong>. Cộng thêm <strong>dự ≥ 80%</strong> số giờ trên lớp mới đủ điều kiện dự thi cuối kỳ.</div>
 
 <div class="callout warn"><strong>Thi thực hành (85 phút)</strong> yêu cầu bạn xây một chức năng web MVC nhỏ — một form, một Servlet, một truy vấn CSDL, một trang JSP — chạy thật trên Tomcat. Cách chuẩn bị duy nhất hiệu quả là tự xây nhiều app web nhỏ. Hãy làm các lab. Syllabus xếp tám khối "Practice Classwork" (buổi 9–10, 19–20, 25–26, 35–36, 40, 44, 48, 52) chính là để bạn bước vào PE sau khi đã dựng cái mẫu đó tám lần.</div>
 <div class="note-ct">Vì tiên quyết là DBI202 và PRO192, PRJ301 giả định bạn đã viết được lớp Java và truy vấn SQL. Nếu cái nào còn yếu, ôn lại trước — môn này thêm tầng web lên trên.</div>
@@ -163,7 +167,7 @@ export default {
           title: '0.3 — Set up Tomcat, NetBeans & SQL Server|||0.3 — Cài Tomcat, NetBeans & SQL Server',
           slug: 'prj301-cai-dat',
           type: 'VIDEO',
-          description: 'Bộ công cụ đúng theo môn: JDK + Tomcat 9 (server) + NetBeans 13 (IDE) + SQL Server 2019.',
+          description: 'Bộ công cụ đúng theo môn: JDK + Tomcat 10+ (server) + NetBeans 13 (IDE) + SQL Server 2019.',
           content: `
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.3</span>
@@ -171,11 +175,24 @@ export default {
 <p class="lead">A Java web app needs more pieces than a console app: a <strong>server</strong> (Tomcat) to run your Servlets, an <strong>IDE</strong> (NetBeans) wired to it, a <strong>JDK</strong>, and a <strong>database</strong> (SQL Server, from DBI202).</p>
 <div class="lz-flow">
   <div class="lz-step">Install JDK 8+</div>
-  <div class="lz-step">Install Tomcat 9+ (the web server)</div>
+  <div class="lz-step">Install <b>Tomcat 10 or higher</b> (the web server — this is what the syllabus specifies)</div>
   <div class="lz-step">Install NetBeans 13+ &amp; connect Tomcat</div>
   <div class="lz-step">Have SQL Server 2019+ ready</div>
 </div>
 <div class="note-ct">A "server" here just means a program that listens for browser requests and runs your code. Tomcat is a <em>Servlet container</em> — it turns each HTTP request into a call to your Servlet.</div>
+<div class="callout warn"><b>Tomcat 9 or Tomcat 10? It changes every import you write.</b> Jakarta EE 9 renamed the whole Servlet namespace, and the two are <em>not</em> interchangeable:
+<table>
+  <thead><tr><th></th><th>Tomcat 9 (Java EE 8)</th><th>Tomcat 10+ (Jakarta EE 9+) — what the syllabus specifies</th></tr></thead>
+  <tbody>
+    <tr><td>Servlet imports</td><td><span class="badge">javax.servlet.*</span></td><td><span class="badge">jakarta.servlet.*</span></td></tr>
+    <tr><td>JSTL taglib URI</td><td><span class="badge">http://java.sun.com/jsp/jstl/core</span></td><td><span class="badge">jakarta.tags.core</span></td></tr>
+    <tr><td>JSTL jars</td><td>jstl-1.2.jar</td><td>jakarta.servlet.jsp.jstl-api + its Glassfish impl (JSTL 3.0)</td></tr>
+    <tr><td>JPA properties</td><td><span class="badge">javax.persistence.jdbc.url</span></td><td><span class="badge">jakarta.persistence.jdbc.url</span></td></tr>
+    <tr><td>persistence.xml</td><td>version 2.2, <span class="badge">javax.persistence</span> schema</td><td>version 3.0, <span class="badge">jakarta.persistence</span> schema</td></tr>
+  </tbody>
+</table>
+<b>How to read the rest of this course:</b> the code listings use the older <span class="badge">javax</span> spelling, because that is what most PRJ301 class material and past papers still show. If your server is Tomcat 10+ as the syllabus requires, translate every <span class="badge">javax.servlet</span> to <span class="badge">jakarta.servlet</span> and every <span class="badge">javax.persistence</span> to <span class="badge">jakarta.persistence</span>, and use the new taglib URIs. <b>A single wrong namespace compiles fine and then 404s</b> — the container simply never sees your Servlet. Ask your instructor which version the lab machines and the Practical Exam run on, and match it exactly.</div>
+
 <a class="link-card exphub" href="/exp-hub/prj301-cai-dat-tomcat?ref=%2Fcourses%2Fjava-web-application-development%2Flearn&reflabel=PRJ301%20%E2%80%94%20Java%20Web%20Application%20Development" target="_blank" rel="noopener">
   <span class="lc-ico">🛠️</span>
   <span class="lc-body"><span class="lc-title">Install Tomcat, NetBeans &amp; SQL Server</span><span class="lc-sub">Step-by-step with official download links — on Exp Hub.</span></span>
@@ -188,11 +205,24 @@ export default {
 <p class="lead">Một app Java web cần nhiều mảnh hơn app console: một <strong>server</strong> (Tomcat) để chạy Servlet, một <strong>IDE</strong> (NetBeans) nối với nó, một <strong>JDK</strong>, và một <strong>cơ sở dữ liệu</strong> (SQL Server, từ DBI202).</p>
 <div class="lz-flow">
   <div class="lz-step">Cài JDK 8+</div>
-  <div class="lz-step">Cài Tomcat 9+ (web server)</div>
+  <div class="lz-step">Cài <b>Tomcat 10 trở lên</b> (web server — đúng bản syllabus quy định)</div>
   <div class="lz-step">Cài NetBeans 13+ &amp; nối Tomcat</div>
   <div class="lz-step">Chuẩn bị SQL Server 2019+</div>
 </div>
 <div class="note-ct">"Server" ở đây chỉ nghĩa là một chương trình lắng nghe yêu cầu từ trình duyệt và chạy code của bạn. Tomcat là một <em>Servlet container</em> — nó biến mỗi HTTP request thành một lời gọi tới Servlet của bạn.</div>
+<div class="callout warn"><b>Tomcat 9 hay Tomcat 10? Nó đổi mọi dòng import bạn viết.</b> Jakarta EE 9 đổi tên toàn bộ namespace của Servlet, và hai bên <em>không</em> thay thế được cho nhau:
+<table>
+  <thead><tr><th></th><th>Tomcat 9 (Java EE 8)</th><th>Tomcat 10+ (Jakarta EE 9+) — bản syllabus quy định</th></tr></thead>
+  <tbody>
+    <tr><td>Import Servlet</td><td><span class="badge">javax.servlet.*</span></td><td><span class="badge">jakarta.servlet.*</span></td></tr>
+    <tr><td>URI taglib JSTL</td><td><span class="badge">http://java.sun.com/jsp/jstl/core</span></td><td><span class="badge">jakarta.tags.core</span></td></tr>
+    <tr><td>Jar JSTL</td><td>jstl-1.2.jar</td><td>jakarta.servlet.jsp.jstl-api + bản cài đặt Glassfish (JSTL 3.0)</td></tr>
+    <tr><td>Thuộc tính JPA</td><td><span class="badge">javax.persistence.jdbc.url</span></td><td><span class="badge">jakarta.persistence.jdbc.url</span></td></tr>
+    <tr><td>persistence.xml</td><td>version 2.2, schema <span class="badge">javax.persistence</span></td><td>version 3.0, schema <span class="badge">jakarta.persistence</span></td></tr>
+  </tbody>
+</table>
+<b>Cách đọc phần còn lại của khoá:</b> các đoạn code dùng lối viết cũ <span class="badge">javax</span>, vì phần lớn tài liệu lớp PRJ301 và đề cũ vẫn ghi như vậy. Nếu server của bạn là Tomcat 10+ đúng như syllabus yêu cầu, hãy đổi mọi <span class="badge">javax.servlet</span> thành <span class="badge">jakarta.servlet</span>, mọi <span class="badge">javax.persistence</span> thành <span class="badge">jakarta.persistence</span>, và dùng URI taglib mới. <b>Chỉ một namespace sai là biên dịch vẫn trót lọt rồi trả 404</b> — container đơn giản là không hề thấy Servlet của bạn. Hãy hỏi giảng viên máy phòng lab và bài thi thực hành chạy bản nào, rồi khớp đúng bản đó.</div>
+
 <a class="link-card exphub" href="/exp-hub/prj301-cai-dat-tomcat?ref=%2Fcourses%2Fjava-web-application-development%2Flearn&reflabel=PRJ301%20%E2%80%94%20Java%20Web%20Application%20Development" target="_blank" rel="noopener">
   <span class="lc-ico">🛠️</span>
   <span class="lc-body"><span class="lc-title">Cài Tomcat, NetBeans &amp; SQL Server</span><span class="lc-sub">Từng bước kèm link tải chính chủ — trên Exp Hub.</span></span>
@@ -1042,13 +1072,23 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
 </div>
 <div class="out"><b>Worked example:</b> a Servlet does <span class="badge">req.setAttribute("user", account)</span> and the session also holds a different <span class="badge">"user"</span>. In the JSP, <span class="badge">\${user}</span> finds the <em>request</em> one first. To be explicit — and you should be — write <span class="badge">\${sessionScope.user}</span>. Name collisions across scopes cause bugs that look impossible until you know this order.</div>
 
-<h3>EL functions and static fields</h3>
+<h3>EL functions (the fn: library) and static fields</h3>
 <pre>&lt;%@ taglib prefix=<span class="tok-string">"fn"</span> uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/functions"</span> %&gt;
 
 \${fn:length(products)}                <span class="tok-comment">// size of a list</span>
 \${fn:toUpperCase(user.name)}
 \${fn:contains(title, 'java')}
 \${fn:substring(desc, 0, 100)}...</pre>
+
+<p><strong>Static fields (syllabus session 37).</strong> Plain EL 2.x cannot see a class's static members at all — <span class="badge">\${Integer.MAX_VALUE}</span> resolves to nothing and prints an empty string, which is exactly the silent failure described in the trap below. Two ways to reach them:</p>
+<pre><span class="tok-comment">// 1. EL 3.0+ (Tomcat 8+): import the class, then use the :: static reference</span>
+&lt;%@ page import=<span class="tok-string">"com.app.Status"</span> %&gt;
+\${Status.ACTIVE}                      <span class="tok-comment">// EL 3.0 static field reference</span>
+
+<span class="tok-comment">// 2. Portable and always safe: expose it as a normal attribute from the Servlet</span>
+req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
+\${ACTIVE}                             <span class="tok-comment">// in the JSP</span></pre>
+<p>Option 2 is what the Practical Exam expects: EL reads <em>attributes</em>, so the controller's job is to put every value the view needs into a scope first.</p>
 
 <div class="pitfall"><b>Trap:</b> EL swallows errors by design. A typo — <span class="badge">\${user.nmae}</span> — or a null object prints an empty string rather than throwing, so a blank page gives you no clue. Debug in this order: (1) did the Servlet actually <span class="badge">setAttribute</span> under exactly that name? (2) is the scope the one you think? (3) does the getter exist and is it public? Nine times out of ten it is the getter or a typo in the attribute name.</div>
 
@@ -1104,13 +1144,23 @@ ctx.<span class="tok-function">log</span>(<span class="tok-string">"Application 
 </div>
 <div class="out"><b>Ví dụ có lời giải:</b> một Servlet làm <span class="badge">req.setAttribute("user", account)</span> trong khi session cũng đang giữ một <span class="badge">"user"</span> khác. Trong JSP, <span class="badge">\${user}</span> tìm thấy cái ở <em>request</em> trước. Muốn tường minh — và bạn nên tường minh — thì viết <span class="badge">\${sessionScope.user}</span>. Trùng tên giữa các phạm vi gây ra những lỗi trông như bất khả cho tới khi bạn biết thứ tự này.</div>
 
-<h3>Hàm EL và trường tĩnh</h3>
+<h3>Hàm EL (thư viện fn:) và trường tĩnh</h3>
 <pre>&lt;%@ taglib prefix=<span class="tok-string">"fn"</span> uri=<span class="tok-string">"http://java.sun.com/jsp/jstl/functions"</span> %&gt;
 
 \${fn:length(products)}                <span class="tok-comment">// số phần tử của một list</span>
 \${fn:toUpperCase(user.name)}
 \${fn:contains(title, 'java')}
 \${fn:substring(desc, 0, 100)}...</pre>
+
+<p><strong>Trường tĩnh (buổi 37 của syllabus).</strong> EL 2.x thuần không nhìn thấy thành viên static của một lớp — <span class="badge">\${Integer.MAX_VALUE}</span> không phân giải được và in ra chuỗi rỗng, đúng kiểu lỗi im lặng mô tả ở phần bẫy bên dưới. Hai cách chạm tới chúng:</p>
+<pre><span class="tok-comment">// 1. EL 3.0+ (Tomcat 8+): import lớp rồi dùng tham chiếu static</span>
+&lt;%@ page import=<span class="tok-string">"com.app.Status"</span> %&gt;
+\${Status.ACTIVE}                      <span class="tok-comment">// tham chiếu trường tĩnh của EL 3.0</span>
+
+<span class="tok-comment">// 2. Cách khả chuyển và luôn an toàn: đẩy nó ra thành một attribute bình thường từ Servlet</span>
+req.setAttribute(<span class="tok-string">"ACTIVE"</span>, Status.ACTIVE);
+\${ACTIVE}                             <span class="tok-comment">// trong JSP</span></pre>
+<p>Cách 2 là thứ bài thi thực hành mong đợi: EL đọc <em>attribute</em>, nên việc của controller là đặt sẵn mọi giá trị mà view cần vào một scope.</p>
 
 <div class="pitfall"><b>Bẫy:</b> EL nuốt lỗi theo đúng thiết kế. Một lỗi gõ nhầm — <span class="badge">\${user.nmae}</span> — hay một đối tượng null sẽ in ra chuỗi rỗng thay vì ném ngoại lệ, nên một trang trắng chẳng cho bạn manh mối nào. Hãy gỡ lỗi theo thứ tự: (1) Servlet có thực sự <span class="badge">setAttribute</span> đúng cái tên đó không? (2) phạm vi có đúng như bạn nghĩ không? (3) getter có tồn tại và có public không? Chín trên mười lần là do getter hoặc gõ nhầm tên thuộc tính.</div>
 
@@ -1839,7 +1889,7 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
 
 <div class="pitfall"><b>Trap:</b> a database utility class that opens a connection and never closes it, called from every request. Connections are a finite server resource; leaking them means the app runs beautifully for twenty minutes of testing and then hangs with "connection pool exhausted" — usually during a demo. Use try-with-resources everywhere, and remember that closing a <span class="badge">Connection</span> also closes its statements and result sets.</div>
 
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Credentials do not belong in a .java file.</b> The <span class="badge">DBContext</span> class students write always contains the server password in plain text, and then goes to GitHub. Better, and easy: put the URL, user and password in <span class="badge">context-param</span> entries in web.xml (Lesson 2.3), or in a <span class="badge">db.properties</span> file loaded at startup, and keep that file out of version control. Best is a JNDI DataSource (Lesson 5.5), where the credentials live in Tomcat's configuration and your code never sees them at all.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Credentials do not belong in a .java file.</b> The <span class="badge">DBContext</span> class students write always contains the server password in plain text, and then goes to GitHub. Better, and easy: put the URL, user and password in <span class="badge">context-param</span> entries in web.xml (Lesson 2.3), or in a <span class="badge">db.properties</span> file loaded at startup, and keep that file out of version control. Best is a JNDI DataSource (Lesson 5.4), where the credentials live in Tomcat's configuration and your code never sees them at all.</div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.2</span>
@@ -1902,7 +1952,7 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
 
 <div class="pitfall"><b>Bẫy:</b> một lớp tiện ích CSDL mở kết nối rồi không bao giờ đóng, lại bị gọi ở mọi request. Kết nối là tài nguyên hữu hạn của server; rò rỉ chúng nghĩa là app chạy đẹp suốt hai mươi phút test rồi treo cứng với lỗi "connection pool exhausted" — thường là ngay giữa buổi demo. Hãy dùng try-with-resources ở mọi nơi, và nhớ rằng đóng một <span class="badge">Connection</span> cũng đóng luôn các statement và result set của nó.</div>
 
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Thông tin đăng nhập không thuộc về một file .java.</b> Cái lớp <span class="badge">DBContext</span> mà sinh viên nào cũng viết luôn chứa mật khẩu server dạng văn bản thô, rồi đi thẳng lên GitHub. Cách tốt hơn mà lại dễ: đặt URL, user và password vào các mục <span class="badge">context-param</span> trong web.xml (Bài 2.3), hoặc vào một file <span class="badge">db.properties</span> nạp lúc khởi động, và giữ file đó ngoài hệ quản lý phiên bản. Tốt nhất là dùng JNDI DataSource (Bài 5.5), khi đó thông tin đăng nhập nằm trong cấu hình của Tomcat và code của bạn không hề nhìn thấy nó.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Thông tin đăng nhập không thuộc về một file .java.</b> Cái lớp <span class="badge">DBContext</span> mà sinh viên nào cũng viết luôn chứa mật khẩu server dạng văn bản thô, rồi đi thẳng lên GitHub. Cách tốt hơn mà lại dễ: đặt URL, user và password vào các mục <span class="badge">context-param</span> trong web.xml (Bài 2.3), hoặc vào một file <span class="badge">db.properties</span> nạp lúc khởi động, và giữ file đó ngoài hệ quản lý phiên bản. Tốt nhất là dùng JNDI DataSource (Bài 5.4), khi đó thông tin đăng nhập nằm trong cấu hình của Tomcat và code của bạn không hề nhìn thấy nó.</div>
 </div>
 `,
         },
@@ -3838,19 +3888,19 @@ input.addEventListener('input', () =&gt; {
 
     /* ══════════════════ NÂNG CAO ══════════════════ */
     {
-      title: 'Advanced — Beyond the syllabus|||Nâng cao — Ngoài giáo trình',
-      description: 'Toàn bộ chương này là học thêm: bảo mật web, tích hợp AI trong Java web (CLO9), và bước tới Spring Boot.',
+      title: 'Advanced — Security, operations & Spring Boot|||Nâng cao — Bảo mật, vận hành & Spring Boot',
+      description: 'Học thêm SAU môn: bảo mật web, ghi log/trang lỗi, và bước tới Spring Boot. (AI trong Java web KHÔNG phải học thêm — đó là CLO9, buổi 3, 8, 15, 51, dạy ở chương 10.)',
       lessons: [
         {
-          title: 'A.1 — Web security, AI integration & Spring Boot|||A.1 — Bảo mật web, tích hợp AI & Spring Boot',
+          title: 'A.1 — Web security, operations & Spring Boot|||A.1 — Bảo mật web, vận hành & Spring Boot',
           slug: 'prj301-nang-cao',
           type: 'VIDEO',
-          description: 'Các lỗ hổng web thường gặp (XSS/CSRF/session), tích hợp AI trong app Java (CLO9), và vì sao ngành dùng Spring Boot.',
+          description: 'Các lỗ hổng web thường gặp (XSS/CSRF/session), ghi log & trang lỗi, và vì sao ngành dùng Spring Boot. Phần AI (CLO9) nằm ở chương 10.',
           content: `
 <div class="ml-en">
 <span class="eyebrow">Advanced · Lesson A.1</span>
-<h2><span class="badge">★ Beyond the syllabus</span> From coursework to industry</h2>
-<p class="lead">You can now build a working MVC web app. This section adds the professional layer: keeping it secure, using AI (a CLO in the modern syllabus), and the framework you will actually use at work.</p>
+<h2>From coursework to industry</h2>
+<p class="lead">You can now build a working MVC web app. This section adds the professional layer that the syllabus does not schedule: keeping the app secure, making it diagnosable in production, and the framework you will actually use at work. <strong>Using AI is not in this section</strong> — it is <strong>CLO9</strong> and syllabus sessions 3, 8, 15 and 51, taught as core material in Chapter 10.</p>
 
 <h3>Web security essentials</h3>
 <div class="lz-stack">
@@ -3878,8 +3928,8 @@ input.addEventListener('input', () =&gt; {
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Nâng cao · Bài A.1</span>
-<h2><span class="badge">★ Ngoài giáo trình</span> Từ bài tập tới công nghiệp</h2>
-<p class="lead">Giờ bạn xây được một app web MVC chạy được. Phần này thêm tầng chuyên nghiệp: giữ nó an toàn, dùng AI (một CLO trong syllabus hiện đại), và framework bạn thực sự dùng khi đi làm.</p>
+<h2>Từ bài tập tới công nghiệp</h2>
+<p class="lead">Giờ bạn xây được một app web MVC chạy được. Phần này thêm tầng chuyên nghiệp mà syllabus không xếp buổi: giữ app an toàn, làm nó chẩn đoán được khi chạy thật, và framework bạn thực sự dùng khi đi làm. <strong>Phần dùng AI không nằm ở đây</strong> — đó là <strong>CLO9</strong> và các buổi 3, 8, 15, 51 của syllabus, dạy như nội dung chính ở chương 10.</p>
 
 <h3>Cốt lõi bảo mật web</h3>
 <div class="lz-stack">
@@ -3921,8 +3971,8 @@ input.addEventListener('input', () =&gt; {
               { question: 'Saving uploads inside the deployed app folder is wrong because…|||Lưu file tải lên bên trong thư mục app đã triển khai là sai vì…', options: ['it is too slow|||nó quá chậm', 'the files are lost on the next redeploy|||các file mất sạch ở lần deploy lại kế tiếp', 'Tomcat forbids it|||Tomcat cấm', 'it needs a database|||nó cần cơ sở dữ liệu'], correctIndex: 1, points: 1 },
               { question: 'When the browser POSTs a JSON body, req.getParameter()…|||Khi trình duyệt POST một thân JSON, req.getParameter()…', options: ['parses the JSON|||phân tích JSON giúp bạn', 'returns null — you must read the request body|||trả về null — bạn phải đọc thân request', 'throws|||ném ngoại lệ', 'returns the whole body|||trả về cả thân request'], correctIndex: 1, points: 1 },
               { question: 'The AI API key must be stored…|||Khoá API của AI phải được lưu…', options: ['in the JavaScript on the page|||trong JavaScript trên trang', 'server-side only (e.g. a context-param)|||chỉ phía server (vd một context-param)', 'in a cookie|||trong một cookie', 'in the JSP|||trong JSP'], correctIndex: 1, points: 1 },
-              { question: 'Executing AI-generated SQL directly is unsafe; the safer design is… (beyond-syllabus)|||Thực thi thẳng SQL do AI sinh ra là không an toàn; thiết kế an toàn hơn là… (ngoài giáo trình)', options: ['checking the string starts with SELECT|||kiểm chuỗi có bắt đầu bằng SELECT không', 'letting the AI choose among pre-written parameterised queries|||để AI chọn trong số các truy vấn tham số hoá viết sẵn', 'running it as sa|||chạy nó bằng tài khoản sa', 'logging it first|||ghi log nó trước đã'], correctIndex: 1, points: 1 },
-              { question: 'Prompt injection differs from SQL injection because… (beyond-syllabus)|||Prompt injection khác SQL injection ở chỗ… (ngoài giáo trình)', options: ['it is harmless|||nó vô hại', 'there is no parameterised query for natural language — instruction and data share one channel|||không có truy vấn tham số hoá cho ngôn ngữ tự nhiên — chỉ dẫn và dữ liệu dùng chung một kênh', 'it only affects JSP|||nó chỉ ảnh hưởng JSP', 'PreparedStatement stops it|||PreparedStatement chặn được nó'], correctIndex: 1, points: 1 },
+              { question: 'Executing AI-generated SQL directly is unsafe; the safer design is…|||Thực thi thẳng SQL do AI sinh ra là không an toàn; thiết kế an toàn hơn là…', options: ['checking the string starts with SELECT|||kiểm chuỗi có bắt đầu bằng SELECT không', 'letting the AI choose among pre-written parameterised queries|||để AI chọn trong số các truy vấn tham số hoá viết sẵn', 'running it as sa|||chạy nó bằng tài khoản sa', 'logging it first|||ghi log nó trước đã'], correctIndex: 1, points: 1 },
+              { question: 'Prompt injection differs from SQL injection because…|||Prompt injection khác SQL injection ở chỗ…', options: ['it is harmless|||nó vô hại', 'there is no parameterised query for natural language — instruction and data share one channel|||không có truy vấn tham số hoá cho ngôn ngữ tự nhiên — chỉ dẫn và dữ liệu dùng chung một kênh', 'it only affects JSP|||nó chỉ ảnh hưởng JSP', 'PreparedStatement stops it|||PreparedStatement chặn được nó'], correctIndex: 1, points: 1 },
             ],
           },
         },
@@ -3948,21 +3998,21 @@ input.addEventListener('input', () =&gt; {
     /* END-SECTIONS-MARKER */
     {
       "title": "Final Exam|||Thi cuối kỳ",
-      "description": "Thi cuối kỳ gồm PE (thi thực hành) và FE (trắc nghiệm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "description": "PE 30% (85 phút, cột QUÁ TRÌNH) và FE 20% (60 phút, phải ≥ 4). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
       "lessons": [
         {
-          "title": "PE — Practical Exam|||PE — Thi thực hành",
+          "title": "PE — Practical Exam (30%, 85 minutes, on-going)|||PE — Thi thực hành (30%, 85 phút, cột quá trình)",
           "slug": "prj301-final-exam-pe",
           "type": "article",
-          "description": "Khung thi thực hành (PE) của môn — format, cách chấm và cách chuẩn bị. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · PE</span>\n<h2>PE — Practical Exam</h2>\n<p class=\"lead\">The Practical Exam (PE) is a <strong>hands-on coding exam</strong>: you are given a problem or feature and must write (and usually run) working code on the machine within a time limit. It is graded on correctness, whether it runs, and good practice.</p>\n<h3>How to prepare</h3>\n<ul>\n<li>Rebuild small features from a blank file, <em>without notes</em> &mdash; copying tutorials is not enough.</li>\n<li>Practise the core pattern of this subject end-to-end until you can do it from memory.</li>\n<li>Read the requirement twice; build the smallest working version first, then extend.</li>\n<li>Test as you go; a program that runs and does 80% beats one that does not compile.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A real practical prompt bank for this subject will be added here later, in the exam room. Use the guidance above to prepare now.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · PE</span>\n<h2>PE — Thi thực hành</h2>\n<p class=\"lead\">Thi thực hành (PE) là <strong>thi code trực tiếp</strong>: bạn được giao một bài toán/tính năng và phải viết (thường là chạy) code hoạt động trên máy trong thời gian quy định. Chấm theo tính đúng, có chạy được không, và thực hành tốt.</p>\n<h3>Cách chuẩn bị</h3>\n<ul>\n<li>Dựng lại các tính năng nhỏ từ một file trống, <em>không nhìn ghi chú</em> &mdash; chép tutorial là chưa đủ.</li>\n<li>Luyện mẫu cốt lõi của môn đầu-cuối tới khi làm được từ trí nhớ.</li>\n<li>Đọc yêu cầu hai lần; dựng bản chạy được nhỏ nhất trước, rồi mở rộng.</li>\n<li>Test dọc đường; một chương trình chạy và làm được 80% hơn một chương trình không biên dịch nổi.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề thực hành thật cho môn này sẽ được thêm vào đây sau, trong trang phòng thi. Dùng hướng dẫn trên để chuẩn bị ngay từ giờ.</div>\n</div>"
+          "description": "PE theo syllabus: 30% điểm, 85 phút ngồi máy, là cột QUÁ TRÌNH (điều kiện > 0), không phải một phần của thi cuối kỳ. Cách chuẩn bị; đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · PE</span>\n<h2>PE — Practical Exam (30%, 85 minutes)</h2>\n<p class=\"lead\">The Practical Exam is a <strong>hands-on coding exam</strong>: you build a small working web feature on the machine under time. The syllabus fixes the numbers: <strong>weight 30%</strong>, <strong>85 minutes</strong> (Option 1), completion criterion <strong>&gt; 0</strong>. Note it is listed as an <strong>on-going</strong> assessment, <em>not</em> part of the final exam — the final exam is the separate 20% written paper. Together with the 30% Assignment it means <strong>60% of PRJ301 is graded on code that must run</strong>.</p>\n<h3>How to prepare</h3>\n<ul>\n<li>Rebuild small features from a blank file, <em>without notes</em> &mdash; copying tutorials is not enough.</li>\n<li>Practise the core pattern of this subject end-to-end until you can do it from memory.</li>\n<li>Read the requirement twice; build the smallest working version first, then extend.</li>\n<li>Test as you go; a program that runs and does 80% beats one that does not compile.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A real practical prompt bank for this subject will be added here later, in the exam room. Use the guidance above to prepare now.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · PE</span>\n<h2>PE — Thi thực hành (30%, 85 phút)</h2>\n<p class=\"lead\">Thi thực hành là <strong>thi code trực tiếp</strong>: bạn dựng một chức năng web nhỏ chạy được ngay trên máy, có bấm giờ. Syllabus chốt các con số: <strong>trọng số 30%</strong>, <strong>85 phút</strong> (Option 1), điều kiện hoàn thành <strong>&gt; 0</strong>. Lưu ý nó được xếp là cột <strong>quá trình</strong>, <em>không</em> phải một phần của thi cuối kỳ — thi cuối kỳ là bài viết 20% riêng. Cộng với Assignment 30%, tức <strong>60% điểm PRJ301 chấm trên code phải chạy được</strong>.</p>\n<h3>Cách chuẩn bị</h3>\n<ul>\n<li>Dựng lại các tính năng nhỏ từ một file trống, <em>không nhìn ghi chú</em> &mdash; chép tutorial là chưa đủ.</li>\n<li>Luyện mẫu cốt lõi của môn đầu-cuối tới khi làm được từ trí nhớ.</li>\n<li>Đọc yêu cầu hai lần; dựng bản chạy được nhỏ nhất trước, rồi mở rộng.</li>\n<li>Test dọc đường; một chương trình chạy và làm được 80% hơn một chương trình không biên dịch nổi.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề thực hành thật cho môn này sẽ được thêm vào đây sau, trong trang phòng thi. Dùng hướng dẫn trên để chuẩn bị ngay từ giờ.</div>\n</div>"
         },
         {
           "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
           "slug": "prj301-final-exam-fe",
           "type": "article",
           "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam of PRJ301 is a written paper worth <strong>20% of the mark</strong>, lasting <strong>60 minutes</strong>, with completion criterion <strong>4</strong> — you must reach 4 on it even if the Assignment and Practical Exam went perfectly. The syllabus gives <strong>no question count and no question format</strong>, so the multiple-choice samples below show the content to master, not a guaranteed format; ask your instructor. The other 80% (and the two components that carry 60% of it) is in <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Thi cuối kỳ PRJ301 là bài viết chiếm <strong>20% điểm</strong>, kéo dài <strong>60 phút</strong>, điều kiện hoàn thành <strong>4</strong> — phải đạt 4 dù Assignment và thi thực hành có hoàn hảo tới đâu. Syllabus <strong>không nêu số câu và không nêu dạng câu hỏi</strong>, nên các câu trắc nghiệm mẫu dưới đây minh hoạ nội dung cần nắm chứ không phải một dạng đề chắc chắn; hãy hỏi giảng viên. 80% còn lại (trong đó hai cột chiếm 60%) xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [

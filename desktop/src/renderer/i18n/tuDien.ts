@@ -294,7 +294,13 @@ export const TU_DIEN: Record<string, string> = {
   'Tên tool để thử khớp': 'Tool name to test the match against',
   'tên tool giả, vd edit_file': 'a sample tool name, e.g. edit_file',
   'Kỹ năng model đang thấy': 'Skills the model can see',
-  '.claude/skills/&lt;tên&gt;/SKILL.md': '.claude/skills/&lt;name&gt;/SKILL.md',
+  'Sau tool': 'After tool',
+  'Trước tool': 'Before tool',
+  'Xong lượt': 'Turn done',
+  'Tôi đã đọc — cho chạy': 'I have read them — allow',
+  'Đang có **{n}** hook.': '**{n}** hook(s) configured.',
+  'Chạy lệnh của bạn quanh mỗi lời gọi tool. Đầu ra của `Sau tool` được nối vào kết quả tool, nên agent ĐỌC ĐƯỢC — ví dụ `npx tsc --noEmit` sau mỗi lần nó sửa file.': 'Run your own commands around every tool call. The output of `After tool` is appended to the tool result, so the agent CAN READ IT — e.g. `npx tsc --noEmit` after each time it edits a file.',
+  'Chưa có kỹ năng nào. Tạo `.claude/skills/<tên>/SKILL.md`, phần đầu phải khai `description` — thiếu nó thì kỹ năng bị bỏ qua.': 'No skills yet. Create `.claude/skills/<name>/SKILL.md`; its front matter must declare a `description` — without one the skill is ignored.',
 
   // ── Bảng lệnh, trình duyệt, đính kèm ────────────────────
   'Bảng chạy lệnh': 'Command runner',

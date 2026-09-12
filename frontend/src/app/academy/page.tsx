@@ -3,13 +3,64 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import type { Course, Semester } from '@/types';
-import { BookOpen, ChevronDown, ChevronRight, GraduationCap, Layers3, PlayCircle, Search, X } from 'lucide-react';
+import { BookOpen, ChevronDown, ChevronRight, GraduationCap, Layers3, PlayCircle, RefreshCw, Search, Sparkles, X } from 'lucide-react';
 import { toast } from 'sonner';
 import AcademyBackground from '@/components/academy/AcademyBackground';
+import AcademyOnboarding from '@/components/academy/AcademyOnboarding';
 import { SafeImage } from '@/components/ui/SafeImage';
 import { useSemesters, useCoursesBySemesters } from '@/hooks/useAcademyQueries';
+import { useAcademyProfile } from '@/hooks/useAcademyProfile';
+import { getCombo, getMajor, relevantCourseCodes } from '@/data/fptuCurriculum';
 import { useTranslation } from '@/context/LocaleContext';
 import { pickLang } from '@/lib/utils';
+
+/**
+ * One card of the personalised "Môn của ngành bạn" strip. It deliberately
+ * mirrors the card used inside the semester accordion below (same link target
+ * `/courses/<slug>`, same chrome) and only adds the provenance badge — "Combo
+ * <tên>" or "Chuyên ngành" — so a student can tell at a glance WHY a course is
+ * at the top of their page. `CourseCard` is not reused here: it links to
+ * `/academy/courses/<slug>` and has no slot for that badge.
+ */
+function PersonalCourseCard({ course, badge }: { course: Course; badge: string }) {
+  const { locale } = useTranslation();
+  return (
+    <Link
+      href={`/courses/${course.slug}`}
+      className="group rounded-2xl border border-darkborder bg-darkbg/70 hover:border-neon-violet/40 transition overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-violet"
+    >
+      <div className="aspect-video bg-gradient-to-br from-neon-indigo/20 via-neon-violet/10 to-transparent flex items-center justify-center overflow-hidden relative">
+        {course.thumbnailUrl ? (
+          <SafeImage
+            src={course.thumbnailUrl}
+            alt={pickLang(course.title, locale)}
+            label={pickLang(course.title, locale)}
+            className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
+          />
+        ) : (
+          <PlayCircle className="w-12 h-12 text-white/80 group-hover:scale-110 transition-transform relative z-10" />
+        )}
+        <span className="absolute top-3 left-3 max-w-[calc(100%-1.5rem)] truncate px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-sm border border-neon-cyan/30 text-neon-cyan text-xs font-semibold">
+          {badge}
+        </span>
+      </div>
+      <div className="p-4 space-y-3">
+        <div className="flex items-center justify-between gap-2">
+          <span className="px-2.5 py-1 rounded-full bg-neon-violet/10 text-neon-violet text-xs font-semibold">
+            {course.courseCode || 'COURSE'}
+          </span>
+          <span className="text-xs text-text-muted">{course.totalLessons || 0} lessons</span>
+        </div>
+        <h4 className="text-lg font-semibold text-text-primary line-clamp-2">{pickLang(course.title, locale)}</h4>
+        <p className="text-sm text-text-secondary line-clamp-3">{pickLang(course.shortDescription || course.description, locale) || 'Khóa học theo cấu trúc chương và bài giảng.'}</p>
+        <div className="flex items-center justify-between text-sm text-text-muted pt-1">
+          <span className="flex items-center gap-1"><BookOpen className="w-4 h-4" /> {course.totalLessons || 0} bài</span>
+          <span className="text-neon-violet group-hover:text-neon-indigo">Vào học</span>
+        </div>
+      </div>
+    </Link>
+  );
+}
 
 export default function AcademyPage() {
   const { locale } = useTranslation();
@@ -74,6 +125,47 @@ export default function AcademyPage() {
       .slice(0, 12);
   }, [query, allCourses]);
 
+  // ── Personalisation (ngành / combo FPTU) ────────────────────────────────
+  // The robot asks once; after that the answer only REORDERS this page — the
+  // full 9-semester accordion below stays exactly as it was, so nothing a
+  // student might need is ever hidden by their own answer.
+  const { profile, needsOnboarding } = useAcademyProfile();
+  /** Dismissing the robot without answering must not re-open it on every
+   *  render — `needsOnboarding` stays true until an answer is saved. */
+  const [onboardingDismissed, setOnboardingDismissed] = useState(false);
+  /** "Đổi ngành" re-opens the dialog straight at the major step. */
+  const [reopenAtMajor, setReopenAtMajor] = useState(false);
+  const onboardingOpen = reopenAtMajor || (needsOnboarding && !onboardingDismissed);
+
+  const major = getMajor(profile.major);
+  const combo = getCombo(profile.major, profile.combo);
+  /** `isStudent === false` = "không phải sinh viên FPTU": show nothing at all,
+   *  the page must behave exactly as it did before onboarding existed. */
+  const isStudent = profile.isStudent === true;
+
+  const coursesByCode = useMemo(() => {
+    const map = new Map<string, Course>();
+    allCourses.forEach((c) => {
+      const key = (c.courseCode || '').trim().toUpperCase();
+      if (key && !map.has(key)) map.set(key, c);
+    });
+    return map;
+  }, [allCourses]);
+
+  /** Only courses that REALLY exist in the loaded Academy data — a code with
+   *  no course behind it is dropped, never rendered as an empty placeholder. */
+  const personal = useMemo(() => {
+    if (!isStudent || !major) return null;
+    const codes = relevantCourseCodes(major.id, combo?.id ?? null);
+    const pick = (list: string[]) => list
+      .map((code) => coursesByCode.get(code.trim().toUpperCase()))
+      .filter((c): c is Course => Boolean(c));
+    return { comboCourses: pick(codes.combo), majorCourses: pick(codes.major) };
+  }, [isStudent, major, combo, coursesByCode]);
+
+  const showPersonalSection = !!personal
+    && (personal.comboCourses.length > 0 || personal.majorCourses.length > 0 || !!combo);
+
   const toggleSemester = (semesterId: number) => {
     setExpanded((prev) => prev.includes(semesterId)
       ? prev.filter((item) => item !== semesterId)
@@ -114,6 +206,41 @@ export default function AcademyPage() {
               </div>
             </div>
           </div>
+
+          {/* "Ngành của bạn" — only for a visitor who said they ARE an FPTU
+              student AND picked a major. Someone who answered "không phải sinh
+              viên" sees nothing here at all. */}
+          {isStudent && major && (
+            <div className="relative z-10 mt-6 rounded-2xl border border-neon-violet/30 bg-darkbg/80 p-4 sm:p-5">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+                <span aria-hidden className="text-3xl leading-none">{major.icon}</span>
+                <div className="min-w-0 flex-1 basis-40">
+                  <p className="text-xs uppercase tracking-wide text-text-muted">Ngành của bạn</p>
+                  <p className="text-lg font-semibold text-text-primary break-words">{major.nameVi}</p>
+                  <p className="text-xs text-text-muted break-words">{major.name}</p>
+                </div>
+                {combo && (
+                  <span className="inline-flex items-center gap-1.5 max-w-full px-3 py-1.5 rounded-full border border-neon-cyan/30 bg-neon-cyan/10 text-neon-cyan text-sm">
+                    <span aria-hidden>{combo.icon}</span>
+                    <span className="truncate">Combo {combo.nameVi}</span>
+                  </span>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setReopenAtMajor(true)}
+                  className="inline-flex items-center justify-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl border border-darkborder bg-darkcard text-text-primary hover:border-neon-violet/50 hover:text-neon-violet transition focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-violet"
+                >
+                  <RefreshCw className="w-4 h-4" aria-hidden /> Đổi ngành
+                </button>
+              </div>
+              {!major.hasOwnCourses && (
+                <p className="mt-3 text-sm text-text-secondary">
+                  Academy đã có <span className="text-text-primary">đầy đủ các môn đại cương dùng chung</span> cho mọi
+                  sinh viên FPTU — bạn học được ngay bên dưới. Riêng phần môn chuyên ngành {major.nameVi} đang được xây dựng.
+                </p>
+              )}
+            </div>
+          )}
         </section>
 
         {/* Course-code search — kept OUTSIDE the hero card because the hero
@@ -167,6 +294,44 @@ export default function AcademyPage() {
             </div>
           )}
         </div>
+
+        {/* Personalised ORDERING, never hiding: the student's own combo/major
+            courses are lifted to the top; the complete 9-semester accordion
+            still follows below, untouched. */}
+        {showPersonalSection && personal && major && (
+          <section className="rounded-2xl border border-neon-violet/25 bg-darkcard p-5">
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <div className="min-w-0">
+                <h2 className="text-2xl font-heading font-bold text-text-primary flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-neon-violet shrink-0" aria-hidden /> Môn của ngành bạn
+                </h2>
+                <p className="text-text-muted text-sm mt-1">
+                  Các môn Academy đang có cho {major.nameVi}{combo ? ` · combo ${combo.nameVi}` : ''}. Toàn bộ 9 kỳ vẫn ở ngay bên dưới.
+                </p>
+              </div>
+              <span className="px-3 py-1 rounded-full border border-neon-violet/30 bg-neon-violet/10 text-neon-violet text-sm">
+                {personal.comboCourses.length + personal.majorCourses.length} môn
+              </span>
+            </div>
+
+            {combo && personal.comboCourses.length === 0 && (
+              <p className="rounded-2xl border border-dashed border-darkborder px-4 py-3 text-sm text-text-secondary mb-4">
+                Combo {combo.nameVi} chưa có môn nào trong Academy — các môn chung bên dưới vẫn dùng được.
+              </p>
+            )}
+
+            {(personal.comboCourses.length > 0 || personal.majorCourses.length > 0) && (
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                {personal.comboCourses.map((course) => (
+                  <PersonalCourseCard key={`combo-${course.id}`} course={course} badge={`Combo ${combo?.nameVi ?? ''}`.trim()} />
+                ))}
+                {personal.majorCourses.map((course) => (
+                  <PersonalCourseCard key={`major-${course.id}`} course={course} badge="Chuyên ngành" />
+                ))}
+              </div>
+            )}
+          </section>
+        )}
 
         <section className="grid gap-6 lg:grid-cols-[320px_1fr]">
           {/* A sticky column MUST cap its own height and scroll internally.
@@ -277,6 +442,14 @@ export default function AcademyPage() {
           </div>
         </section>
       </div>
+
+      {onboardingOpen && (
+        <AcademyOnboarding
+          open
+          initialStep={reopenAtMajor ? 'major' : 'ask'}
+          onClose={() => { setReopenAtMajor(false); setOnboardingDismissed(true); }}
+        />
+      )}
     </div>
   );
 }

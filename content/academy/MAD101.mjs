@@ -117,13 +117,13 @@ export default {
 <table>
   <thead><tr><th>Component</th><th>Weight</th><th>Note</th></tr></thead>
   <tbody>
-    <tr><td>Progress Test</td><td>30%</td><td>3 quizzes (30 min each): PT1 logic/sets/counting, PT2 complexity/number theory/induction, PT3 graphs/trees</td></tr>
-    <tr><td>Assignments / Exercises</td><td>20%</td><td>2 problem-set assignments</td></tr>
-    <tr><td>Programming Assignment</td><td>10%</td><td>Implement an algorithm (complexity/number theory/graph/tree)</td></tr>
-    <tr><td>Final Exam</td><td>40%</td><td>60 minutes — must score ≥ 4 to pass</td></tr>
+    <tr><td>Progress Test <small>quiz · 3 parts</small></td><td>30%</td><td>30 minutes each — <b>PT1: LO1, LO2, LO6</b> · <b>PT2: LO3, LO4, LO5, LO6</b> · <b>PT3: LO7, LO8</b></td></tr>
+    <tr><td>Assignments / Exercises <small>on-going · 2 parts</small></td><td>20%</td><td>At home / in class — A1: LO1, LO2, LO6 · A2: LO3, LO4, LO5</td></tr>
+    <tr><td>Programming Assignment <small>on-going · 1 part</small></td><td>10%</td><td>At home / in class — LO3, LO4, LO7, LO8</td></tr>
+    <tr><td>Final Exam <small>1 part</small></td><td>40%</td><td>60 minutes — completion criterion <b>≥ 4</b></td></tr>
   </tbody>
 </table>
-<div class="callout warn">Two gates: weighted average ≥ 5.0 AND the final exam ≥ 4.0. Discrete math is cumulative and proof-based — you cannot memorize your way through. Do every exercise and the small programming assignment; they teach exactly what the final tests.</div>
+<div class="callout warn">Three gates: every on-going component (progress tests, assignments, programming assignment) must be <strong>&gt; 0</strong>, the final exam must be <strong>≥ 4</strong>, and the weighted average must be <strong>≥ 5.0</strong>. You also need <strong>≥ 80% attendance</strong> to sit the final. Discrete math is cumulative and proof-based — you cannot memorize your way through. Do every exercise and the small programming assignment; they teach exactly what the final tests.</div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.2</span>
@@ -141,13 +141,13 @@ export default {
 <table>
   <thead><tr><th>Thành phần</th><th>Trọng số</th><th>Ghi chú</th></tr></thead>
   <tbody>
-    <tr><td>Progress Test</td><td>30%</td><td>3 quiz (30 phút/bài): PT1 logic/tập hợp/đếm, PT2 độ phức tạp/số học/quy nạp, PT3 đồ thị/cây</td></tr>
-    <tr><td>Bài tập / Assignment</td><td>20%</td><td>2 assignment bộ bài</td></tr>
-    <tr><td>Programming Assignment</td><td>10%</td><td>Cài đặt một thuật toán (độ phức tạp/số học/đồ thị/cây)</td></tr>
-    <tr><td>Thi cuối kỳ</td><td>40%</td><td>60 phút — phải đạt ≥ 4 mới qua môn</td></tr>
+    <tr><td>Progress Test <small>quiz · 3 phần</small></td><td>30%</td><td>30 phút mỗi bài — <b>PT1: LO1, LO2, LO6</b> · <b>PT2: LO3, LO4, LO5, LO6</b> · <b>PT3: LO7, LO8</b></td></tr>
+    <tr><td>Bài tập / Assignment <small>quá trình · 2 phần</small></td><td>20%</td><td>Ở nhà / trên lớp — A1: LO1, LO2, LO6 · A2: LO3, LO4, LO5</td></tr>
+    <tr><td>Programming Assignment <small>quá trình · 1 phần</small></td><td>10%</td><td>Ở nhà / trên lớp — LO3, LO4, LO7, LO8</td></tr>
+    <tr><td>Thi cuối kỳ <small>1 phần</small></td><td>40%</td><td>60 phút — sàn hoàn thành <b>≥ 4</b></td></tr>
   </tbody>
 </table>
-<div class="callout warn">Hai cửa: trung bình có trọng số ≥ 5.0 VÀ thi cuối ≥ 4.0. Toán rời rạc tích luỹ và dựa trên chứng minh — không thể học thuộc mà qua. Làm mọi bài tập và bài programming nhỏ; chúng dạy đúng thứ bài thi cuối kiểm.</div>
+<div class="callout warn">Ba cửa: mọi cột điểm quá trình (progress test, assignment, programming assignment) phải <strong>&gt; 0</strong>, thi cuối phải <strong>≥ 4</strong>, và trung bình có trọng số phải <strong>≥ 5,0</strong>. Ngoài ra cần <strong>dự ≥ 80% số buổi</strong> mới được thi cuối. Toán rời rạc tích luỹ và dựa trên chứng minh — không thể học thuộc mà qua. Làm mọi bài tập và bài programming nhỏ; chúng dạy đúng thứ bài thi cuối kiểm.</div>
 </div>
 `,
         },
@@ -360,7 +360,7 @@ p=F, q=F: (F ∧ T)=F, F→F = <b>T</b></div>
 De Morgan on the left: (¬p ∧ ¬q) ∨ (¬p ∧ q)<br>
 Factor out ¬p (distributive): ¬p ∧ (¬q ∨ q)<br>
 ¬q ∨ q ≡ T, and ¬p ∧ T ≡ ¬p  ⟹  <b>¬p</b>.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Quantifier order is not free.</b> ∀x ∃y Loves(x,y) ("everyone loves someone") is very different from ∃y ∀x Loves(x,y) ("someone is loved by everyone"). Swapping ∀ and ∃ changes the meaning — a classic bug in program specs and math proofs. The order in which quantifiers appear is part of the statement, not decoration.</div>
+<div class="note-ct"><b>Quantifier order is not free</b> (nested quantifiers — Rosen 1.5, syllabus sessions 5–6). ∀x ∃y Loves(x,y) ("everyone loves someone") is very different from ∃y ∀x Loves(x,y) ("someone is loved by everyone"). Swapping ∀ and ∃ changes the meaning — a classic bug in program specs and math proofs. The order in which quantifiers appear is part of the statement, not decoration.</div>
 <div class="callout ok">Quantifiers are everywhere in computer science: database queries ("find all users where…"), loop conditions ("for every element…"), and program specifications ("there exists an index such that…"). Predicate logic is how we state precisely what a program must do.</div>
 </div>
 <div class="ml-vi">
@@ -383,7 +383,7 @@ Factor out ¬p (distributive): ¬p ∧ (¬q ∨ q)<br>
 De Morgan vế trái: (¬p ∧ ¬q) ∨ (¬p ∧ q)<br>
 Đặt ¬p làm nhân tử chung (phân phối): ¬p ∧ (¬q ∨ q)<br>
 ¬q ∨ q ≡ T, và ¬p ∧ T ≡ ¬p  ⟹  <b>¬p</b>.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Thứ tự lượng từ không tuỳ tiện.</b> ∀x ∃y Yêu(x,y) ("ai cũng yêu một người nào đó") rất khác ∃y ∀x Yêu(x,y) ("có một người được mọi người yêu"). Đổi chỗ ∀ và ∃ làm đổi nghĩa — một lỗi kinh điển trong đặc tả chương trình và chứng minh toán. Thứ tự các lượng từ là một phần của mệnh đề, không phải trang trí.</div>
+<div class="note-ct"><b>Thứ tự lượng từ không tuỳ tiện</b> (lượng từ lồng nhau — Rosen 1.5, buổi 5–6 của syllabus). ∀x ∃y Yêu(x,y) ("ai cũng yêu một người nào đó") rất khác ∃y ∀x Yêu(x,y) ("có một người được mọi người yêu"). Đổi chỗ ∀ và ∃ làm đổi nghĩa — một lỗi kinh điển trong đặc tả chương trình và chứng minh toán. Thứ tự các lượng từ là một phần của mệnh đề, không phải trang trí.</div>
 <div class="callout ok">Lượng từ có ở khắp khoa học máy tính: truy vấn CSDL ("tìm mọi user mà…"), điều kiện vòng lặp ("với mọi phần tử…"), và đặc tả chương trình ("tồn tại một chỉ số sao cho…"). Logic vị từ là cách ta phát biểu chính xác chương trình phải làm gì.</div>
 </div>
 `,
@@ -439,7 +439,7 @@ De Morgan vế trái: (¬p ∧ ¬q) ∨ (¬p ∧ q)<br>
 <h3>Ví dụ có lời giải · Worked example</h3>
 <div class="out"><b>Inclusion–exclusion.</b> In a class, 18 study Java, 15 study Python, 7 study both. How many study at least one?<br>
 |J ∪ P| = 18 + 15 − 7 = <b>26</b>. (Adding 18+15 double-counts the 7 who do both, so subtract them once.)</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The Cartesian product builds tables.</b> A×B is the set of all ordered pairs (a, b) with a∈A, b∈B, and |A×B| = |A|·|B|. A <em>relation</em> is just a subset of A×B — which is exactly what a database table is (rows drawn from a product of column domains). Set theory is the formal ground under DBI202's relational model.</div>
+<div class="note-ct"><b>The Cartesian product builds tables</b> (Rosen 2.1, syllabus session 9). A×B is the set of all ordered pairs (a, b) with a∈A, b∈B, and |A×B| = |A|·|B|. A <em>relation</em> is just a subset of A×B — which is exactly what a database table is (rows drawn from a product of column domains). Set theory is the formal ground under DBI202's relational model.</div>
 <div class="note-ct">Notice set operations mirror the logic connectives: union ≈ OR, intersection ≈ AND, complement ≈ NOT. That is no accident — a set is defined by a predicate ("the set of x where P(x)"), so set algebra and logic algebra are two views of the same thing. SQL queries are set operations in disguise.</div>
 </div>
 <div class="ml-vi">
@@ -464,7 +464,7 @@ De Morgan vế trái: (¬p ∧ ¬q) ∨ (¬p ∧ q)<br>
 <h3>Ví dụ có lời giải · Giải từng bước</h3>
 <div class="out"><b>Bao hàm–loại trừ.</b> Trong một lớp, 18 người học Java, 15 học Python, 7 học cả hai. Bao nhiêu người học ít nhất một môn?<br>
 |J ∪ P| = 18 + 15 − 7 = <b>26</b>. (Cộng 18+15 đếm trùng 7 người học cả hai, nên trừ đi một lần.)</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Tích Descartes dựng nên bảng.</b> A×B là tập mọi cặp có thứ tự (a, b) với a∈A, b∈B, và |A×B| = |A|·|B|. Một <em>quan hệ (relation)</em> chỉ là một tập con của A×B — đúng là một bảng CSDL (các hàng lấy từ tích của các miền cột). Lý thuyết tập hợp là nền hình thức dưới mô hình quan hệ của DBI202.</div>
+<div class="note-ct"><b>Tích Descartes dựng nên bảng</b> (Rosen 2.1, buổi 9 của syllabus). A×B là tập mọi cặp có thứ tự (a, b) với a∈A, b∈B, và |A×B| = |A|·|B|. Một <em>quan hệ (relation)</em> chỉ là một tập con của A×B — đúng là một bảng CSDL (các hàng lấy từ tích của các miền cột). Lý thuyết tập hợp là nền hình thức dưới mô hình quan hệ của DBI202.</div>
 <div class="note-ct">Để ý các phép tập hợp phản chiếu các phép nối logic: hợp ≈ OR, giao ≈ AND, phần bù ≈ NOT. Không phải ngẫu nhiên — một tập được định nghĩa bởi một vị từ ("tập các x mà P(x)"), nên đại số tập hợp và đại số logic là hai góc nhìn của cùng một thứ. Truy vấn SQL là phép tập hợp trá hình.</div>
 </div>
 `,
@@ -539,8 +539,8 @@ De Morgan vế trái: (¬p ∧ ¬q) ∨ (¬p ∧ q)<br>
     },
     /* ══════════════════ PROGRESS TEST 1 ══════════════════ */
     {
-      title: 'Progress Test 1 (Logic & Sets — CLO1–2)|||Progress Test 1 (Logic & Tập hợp — CLO1–2)',
-      description: 'Ôn: logic mệnh đề/vị từ, tập hợp, hàm & dãy.',
+      title: 'Progress Test 1 — LO1, LO2, LO6 (logic, sets, counting)|||Progress Test 1 — LO1, LO2, LO6 (logic, tập hợp, đếm)',
+      description: 'Ôn logic mệnh đề/vị từ, tập hợp, hàm & dãy — VÀ nguyên lý đếm cơ bản. Syllabus dạy đếm (Rosen 6.1) ở buổi 15–16, trước PT1 ở buổi 18, và ghi rõ PT1 kiểm LO1, LO2, LO6; nội dung đếm nằm ở Chương 6 của khoá này, hãy đọc trước.',
       lessons: [
         {
           title: 'Progress Test 1 — review|||Progress Test 1 — ôn tổng hợp',
@@ -602,7 +602,7 @@ for i in 1..n:          ← runs n times<br>
 &nbsp;&nbsp;for j in 1..n:      ← n times each<br>
 &nbsp;&nbsp;&nbsp;&nbsp;sum += A[i][j]   ← O(1) work<br>
 Total = n · n · O(1) = <b>O(n²)</b>. A single loop before it (O(n)) is dominated and dropped.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>O is only half the story.</b> Big-O is an <em>upper</em> bound, so technically O(n²) is a correct (loose) bound for a linear algorithm. Ω gives a lower bound and Θ a tight one — saying "this is Θ(n log n)" means it is both no better and no worse. The deepest open question in CS, <b>P vs NP</b>, is exactly about whether some problems whose answers are fast to <em>check</em> are also fast to <em>solve</em>.</div>
+<div class="note-ct"><b>O is only half the story</b> (growth of functions — Rosen 3.2, syllabus session 20). Big-O is an <em>upper</em> bound, so technically O(n²) is a correct (loose) bound for a linear algorithm. Ω gives a lower bound and Θ a tight one — saying "this is Θ(n log n)" means it is both no better and no worse. The deepest open question in CS, <b>P vs NP</b>, is exactly about whether some problems whose answers are fast to <em>check</em> are also fast to <em>solve</em>.</div>
 <div class="callout ok">Big-O is why algorithm choice matters more than hardware. An O(n log n) sort finishes a million items in moments; an O(n²) sort on the same data does a trillion operations. This is the exact idea you met in CSI104&#39;s advanced lesson — here you learn to derive it formally.</div>
 <a class="link-card codelab" href="/algorithms?ref=%2Fcourses%2Fdiscrete-mathematics%2Flearn&reflabel=MAD101%20%E2%80%94%20Discrete%20Mathematics" target="_blank" rel="noopener">
   <span class="lc-ico">🧭</span>
@@ -641,7 +641,7 @@ for i in 1..n:          ← chạy n lần<br>
 &nbsp;&nbsp;for j in 1..n:      ← mỗi lần n lần<br>
 &nbsp;&nbsp;&nbsp;&nbsp;sum += A[i][j]   ← việc O(1)<br>
 Tổng = n · n · O(1) = <b>O(n²)</b>. Một vòng lặp đơn trước đó (O(n)) bị trội hơn và bị bỏ.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>O chỉ là một nửa câu chuyện.</b> Big-O là chặn <em>trên</em>, nên về kỹ thuật O(n²) là một chặn đúng (lỏng) cho thuật toán tuyến tính. Ω cho chặn dưới và Θ cho chặn chặt — nói "cái này Θ(n log n)" nghĩa là nó không tốt hơn cũng không tệ hơn. Câu hỏi mở sâu nhất của CS, <b>P vs NP</b>, đúng là về việc liệu vài bài toán có đáp án <em>kiểm</em> nhanh thì có <em>giải</em> nhanh không.</div>
+<div class="note-ct"><b>O chỉ là một nửa câu chuyện</b> (sự tăng của hàm — Rosen 3.2, buổi 20 của syllabus). Big-O là chặn <em>trên</em>, nên về kỹ thuật O(n²) là một chặn đúng (lỏng) cho thuật toán tuyến tính. Ω cho chặn dưới và Θ cho chặn chặt — nói "cái này Θ(n log n)" nghĩa là nó không tốt hơn cũng không tệ hơn. Câu hỏi mở sâu nhất của CS, <b>P vs NP</b>, đúng là về việc liệu vài bài toán có đáp án <em>kiểm</em> nhanh thì có <em>giải</em> nhanh không.</div>
 <div class="callout ok">Big-O là lý do chọn thuật toán quan trọng hơn phần cứng. Một sort O(n log n) xong một triệu phần tử trong khoảnh khắc; một sort O(n²) trên cùng dữ liệu làm một nghìn tỷ phép. Đây đúng ý tưởng bạn gặp ở bài nâng cao CSI104 — ở đây bạn học suy ra nó một cách hình thức.</div>
 <a class="link-card codelab" href="/algorithms?ref=%2Fcourses%2Fdiscrete-mathematics%2Flearn&reflabel=MAD101%20%E2%80%94%20Discrete%20Mathematics" target="_blank" rel="noopener">
   <span class="lc-ico">🧭</span>
@@ -698,7 +698,7 @@ Tổng = n · n · O(1) = <b>O(n²)</b>. Một vòng lặp đơn trước đó (
 <h3>Ví dụ có lời giải · Worked examples</h3>
 <div class="out"><b>Example 1 — lcm via gcd.</b> lcm(48, 18) = 48·18 / gcd(48,18) = 864 / 6 = <b>144</b>.</div>
 <div class="out"><b>Example 2 — modular multiply.</b> Compute (7 · 8) mod 5. Reduce first: 7≡2, 8≡3 (mod 5) → 2·3 = 6 ≡ <b>1</b> (mod 5). (Same as 56 mod 5 = 1.)</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Fast modular exponentiation powers RSA.</b> Computing aᵏ mod m by multiplying a k times is hopeless when k has hundreds of digits. Square-and-multiply does it in O(log k) steps by squaring repeatedly and reducing mod m each time. Together with Fermat's little theorem (aᵖ⁻¹ ≡ 1 mod p for prime p), this is the arithmetic that makes public-key cryptography actually run.</div>
+<div class="note-ct"><b>Fast modular exponentiation powers RSA</b> (integers &amp; algorithms — Rosen 4.2, syllabus sessions 26–28; a constructive question asks for 7³³³ mod 555 by square-and-multiply). Computing aᵏ mod m by multiplying a k times is hopeless when k has hundreds of digits. Square-and-multiply does it in O(log k) steps by squaring repeatedly and reducing mod m each time. Together with Fermat's little theorem (aᵖ⁻¹ ≡ 1 mod p for prime p), this is the arithmetic that makes public-key cryptography actually run.</div>
 <div class="note-ct">The mod operator is everywhere in code: hash tables use <code>key mod tableSize</code> to pick a slot; a checksum uses mod to detect errors; a circular buffer wraps with mod. This "small" chapter quietly powers security and data structures alike.</div>
 </div>
 <div class="ml-vi">
@@ -719,7 +719,7 @@ Tổng = n · n · O(1) = <b>O(n²)</b>. Một vòng lặp đơn trước đó (
 <h3>Ví dụ có lời giải · Giải từng bước</h3>
 <div class="out"><b>Ví dụ 1 — lcm qua gcd.</b> lcm(48, 18) = 48·18 / gcd(48,18) = 864 / 6 = <b>144</b>.</div>
 <div class="out"><b>Ví dụ 2 — nhân mô-đun.</b> Tính (7 · 8) mod 5. Rút gọn trước: 7≡2, 8≡3 (mod 5) → 2·3 = 6 ≡ <b>1</b> (mod 5). (Bằng 56 mod 5 = 1.)</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Luỹ thừa mô-đun nhanh vận hành RSA.</b> Tính aᵏ mod m bằng cách nhân a k lần là vô vọng khi k có hàng trăm chữ số. Bình-phương-rồi-nhân làm trong O(log k) bước bằng cách bình phương liên tục và rút gọn mod m mỗi lần. Cùng với định lý nhỏ Fermat (aᵖ⁻¹ ≡ 1 mod p với p nguyên tố), đây là số học làm mã hoá khoá công khai thực sự chạy được.</div>
+<div class="note-ct"><b>Luỹ thừa mô-đun nhanh vận hành RSA</b> (số nguyên &amp; thuật toán — Rosen 4.2, buổi 26–28 của syllabus; một câu hỏi kiến tạo yêu cầu tính 7³³³ mod 555 bằng bình-phương-rồi-nhân). Tính aᵏ mod m bằng cách nhân a k lần là vô vọng khi k có hàng trăm chữ số. Bình-phương-rồi-nhân làm trong O(log k) bước bằng cách bình phương liên tục và rút gọn mod m mỗi lần. Cùng với định lý nhỏ Fermat (aᵖ⁻¹ ≡ 1 mod p với p nguyên tố), đây là số học làm mã hoá khoá công khai thực sự chạy được.</div>
 <div class="note-ct">Phép mod có khắp nơi trong code: bảng băm dùng <code>key mod tableSize</code> để chọn ô; một checksum dùng mod để phát hiện lỗi; một circular buffer quay vòng bằng mod. Chương "nhỏ" này âm thầm vận hành cả bảo mật lẫn cấu trúc dữ liệu.</div>
 </div>
 `,
@@ -775,7 +775,7 @@ Tổng = n · n · O(1) = <b>O(n²)</b>. Một vòng lặp đơn trước đó (
 <b>Base (n=1):</b> 1 = 1² ✓.<br>
 <b>Step:</b> assume 1+3+…+(2k−1) = k². Then adding the next odd number (2k+1):<br>
 k² + (2k+1) = (k+1)²  ✓ — exactly P(k+1). Done.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Strong &amp; structural induction.</b> Ordinary induction assumes only P(k); <em>strong</em> induction assumes P(1)…P(k) all at once — needed to prove things like "every integer &gt; 1 has a prime factorization." <em>Structural</em> induction proves properties of recursively-built objects (trees, lists, grammars) by induction on their structure — the tool you will use to reason about data structures in CSD201.</div>
+<div class="note-ct"><b>Strong &amp; structural induction</b> (Rosen 5.2 and 5.3 — syllabus sessions 30 and 31–32). Ordinary induction assumes only P(k); <em>strong</em> induction assumes P(1)…P(k) all at once — needed to prove things like "every integer &gt; 1 has a prime factorization." <em>Structural</em> induction proves properties of recursively-built objects (trees, lists, grammars) by induction on their structure — the tool you will use to reason about data structures in CSD201.</div>
 <div class="callout ok">Recursion in code (a function calling itself) will feel natural once you see it as a recursive definition. And to prove a recursive function is correct, you use induction. MAD101 gives you the theory that makes recursion trustworthy — vital for CSD201.</div>
 </div>
 <div class="ml-vi">
@@ -800,7 +800,7 @@ k² + (2k+1) = (k+1)²  ✓ — exactly P(k+1). Done.</div>
 <b>Cơ sở (n=1):</b> 1 = 1² ✓.<br>
 <b>Bước:</b> giả sử 1+3+…+(2k−1) = k². Khi đó cộng số lẻ kế tiếp (2k+1):<br>
 k² + (2k+1) = (k+1)²  ✓ — đúng là P(k+1). Xong.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Quy nạp mạnh &amp; quy nạp cấu trúc.</b> Quy nạp thường chỉ giả sử P(k); quy nạp <em>mạnh</em> giả sử P(1)…P(k) cùng lúc — cần để chứng minh những điều như "mọi số nguyên &gt; 1 đều có phân tích thừa số nguyên tố." Quy nạp <em>cấu trúc</em> chứng minh tính chất của các đối tượng dựng đệ quy (cây, danh sách, văn phạm) bằng quy nạp trên cấu trúc của chúng — công cụ bạn sẽ dùng để lập luận về cấu trúc dữ liệu ở CSD201.</div>
+<div class="note-ct"><b>Quy nạp mạnh &amp; quy nạp cấu trúc</b> (Rosen 5.2 và 5.3 — buổi 30 và 31–32 của syllabus). Quy nạp thường chỉ giả sử P(k); quy nạp <em>mạnh</em> giả sử P(1)…P(k) cùng lúc — cần để chứng minh những điều như "mọi số nguyên &gt; 1 đều có phân tích thừa số nguyên tố." Quy nạp <em>cấu trúc</em> chứng minh tính chất của các đối tượng dựng đệ quy (cây, danh sách, văn phạm) bằng quy nạp trên cấu trúc của chúng — công cụ bạn sẽ dùng để lập luận về cấu trúc dữ liệu ở CSD201.</div>
 <div class="callout ok">Đệ quy trong code (một hàm gọi chính nó) sẽ thấy tự nhiên khi bạn nhìn nó như một định nghĩa đệ quy. Và để chứng minh một hàm đệ quy đúng, bạn dùng quy nạp. MAD101 cho bạn lý thuyết làm đệ quy đáng tin — thiết yếu cho CSD201.</div>
 </div>
 `,
@@ -825,8 +825,8 @@ k² + (2k+1) = (k+1)²  ✓ — đúng là P(k+1). Xong.</div>
     },
     /* ══════════════════ PROGRESS TEST 2 ══════════════════ */
     {
-      title: 'Progress Test 2 (Complexity, Number Theory, Induction — CLO3–5)|||Progress Test 2 (Độ phức tạp, Số học, Quy nạp — CLO3–5)',
-      description: 'Ôn: Big-O, số học mô-đun, quy nạp & đệ quy.',
+      title: 'Progress Test 2 — LO3, LO4, LO5, LO6 (complexity, number theory, induction, counting)|||Progress Test 2 — LO3, LO4, LO5, LO6 (độ phức tạp, số học, quy nạp, đếm)',
+      description: 'Ôn Big-O, số học mô-đun, quy nạp & đệ quy — và LO6 lần nữa (hệ thức truy hồi, Rosen 8.1 & 8.3, buổi 35–36). Syllabus ghi PT2 ở buổi 38 kiểm LO3, LO4, LO5, LO6.',
       lessons: [
         {
           title: 'Progress Test 2 — review|||Progress Test 2 — ôn tổng hợp',
@@ -966,7 +966,7 @@ k² + (2k+1) = (k+1)²  ✓ — đúng là P(k+1). Xong.</div>
 <h3>Ví dụ có lời giải · Worked example</h3>
 <div class="out"><b>Handshaking.</b> A graph has 5 vertices each of degree 4. How many edges?<br>
 Σ deg = 5·4 = 20 = 2E → <b>E = 10</b> edges. (This is exactly K₅, the complete graph on 5 vertices: C(5,2)=10.)</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>How you store a graph decides the speed.</b> An <em>adjacency matrix</em> (n×n of 0/1) checks "is there an edge?" in O(1) but wastes O(n²) memory; an <em>adjacency list</em> uses O(n+E) memory and iterates neighbors faster — which is why Dijkstra on sparse road maps uses lists. Also famous: an <b>Euler path</b> (walk every edge once) exists iff at most two vertices have odd degree, while the <b>Hamiltonian path</b> (visit every vertex once) is NP-hard — two questions that sound alike but differ enormously in difficulty.</div>
+<div class="note-ct"><b>How you store a graph decides the speed</b> (representing graphs — Rosen 10.3, syllabus sessions 41–42; Euler &amp; Hamilton paths — Rosen 10.5, sessions 45–46). An <em>adjacency matrix</em> (n×n of 0/1) checks "is there an edge?" in O(1) but wastes O(n²) memory; an <em>adjacency list</em> uses O(n+E) memory and iterates neighbors faster — which is why Dijkstra on sparse road maps uses lists. Also famous: an <b>Euler path</b> (walk every edge once) exists iff at most two vertices have odd degree, while the <b>Hamiltonian path</b> (visit every vertex once) is NP-hard — two questions that sound alike but differ enormously in difficulty.</div>
 <div class="callout ok">Every time Google Maps finds your route, a Dijkstra-style algorithm runs on a weighted graph of roads. Learning it here means you understand the math behind navigation, network routing and even social-network analysis.</div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdiscrete-mathematics%2Flearn&reflabel=MAD101%20%E2%80%94%20Discrete%20Mathematics#module-508" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -996,7 +996,7 @@ k² + (2k+1) = (k+1)²  ✓ — đúng là P(k+1). Xong.</div>
 <h3>Ví dụ có lời giải · Giải từng bước</h3>
 <div class="out"><b>Bắt tay.</b> Một đồ thị có 5 đỉnh, mỗi đỉnh bậc 4. Có bao nhiêu cạnh?<br>
 Σ deg = 5·4 = 20 = 2E → <b>E = 10</b> cạnh. (Đúng là K₅, đồ thị đầy đủ trên 5 đỉnh: C(5,2)=10.)</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Cách lưu đồ thị quyết định tốc độ.</b> <em>Ma trận kề</em> (n×n gồm 0/1) kiểm "có cạnh không?" trong O(1) nhưng tốn O(n²) bộ nhớ; <em>danh sách kề</em> dùng O(n+E) bộ nhớ và duyệt hàng xóm nhanh hơn — đó là lý do Dijkstra trên bản đồ đường thưa dùng danh sách. Nổi tiếng nữa: <b>đường Euler</b> (đi mọi cạnh đúng một lần) tồn tại khi và chỉ khi tối đa hai đỉnh bậc lẻ, còn <b>đường Hamilton</b> (thăm mọi đỉnh đúng một lần) là NP-khó — hai câu hỏi nghe giống nhau nhưng khác nhau khổng lồ về độ khó.</div>
+<div class="note-ct"><b>Cách lưu đồ thị quyết định tốc độ</b> (biểu diễn đồ thị — Rosen 10.3, buổi 41–42; đường Euler &amp; Hamilton — Rosen 10.5, buổi 45–46). <em>Ma trận kề</em> (n×n gồm 0/1) kiểm "có cạnh không?" trong O(1) nhưng tốn O(n²) bộ nhớ; <em>danh sách kề</em> dùng O(n+E) bộ nhớ và duyệt hàng xóm nhanh hơn — đó là lý do Dijkstra trên bản đồ đường thưa dùng danh sách. Nổi tiếng nữa: <b>đường Euler</b> (đi mọi cạnh đúng một lần) tồn tại khi và chỉ khi tối đa hai đỉnh bậc lẻ, còn <b>đường Hamilton</b> (thăm mọi đỉnh đúng một lần) là NP-khó — hai câu hỏi nghe giống nhau nhưng khác nhau khổng lồ về độ khó.</div>
 <div class="callout ok">Mỗi khi Google Maps tìm tuyến của bạn, một thuật toán kiểu Dijkstra chạy trên đồ thị có trọng số của các con đường. Học nó ở đây nghĩa là bạn hiểu toán học đằng sau định vị, định tuyến mạng và cả phân tích mạng xã hội.</div>
 <a class="link-card codelab" href="/code-lab/data-structures-algorithms?ref=%2Fcourses%2Fdiscrete-mathematics%2Flearn&reflabel=MAD101%20%E2%80%94%20Discrete%20Mathematics#module-508" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -1115,8 +1115,8 @@ k² + (2k+1) = (k+1)²  ✓ — đúng là P(k+1). Xong.</div>
     },
     /* ══════════════════ PROGRESS TEST 3 ══════════════════ */
     {
-      title: 'Progress Test 3 (Counting, Graphs & Trees — CLO6–8)|||Progress Test 3 (Đếm, Đồ thị & Cây — CLO6–8)',
-      description: 'Ôn: đếm & tổ hợp, đồ thị & đường đi ngắn nhất, cây & MST.',
+      title: 'Progress Test 3 — LO7, LO8 (graphs & trees)|||Progress Test 3 — LO7, LO8 (đồ thị & cây)',
+      description: 'Ôn đồ thị & đường đi ngắn nhất, cây & cây khung nhỏ nhất. Syllabus ghi PT3 ở buổi 60 kiểm LO7 và LO8; phần đếm đã được kiểm ở PT1 và PT2.',
       lessons: [
         {
           title: 'Progress Test 3 — review|||Progress Test 3 — ôn tổng hợp',
@@ -1184,15 +1184,15 @@ k² + (2k+1) = (k+1)²  ✓ — đúng là P(k+1). Xong.</div>
       ],
     },
     {
-      "title": "Final Exam|||Thi cuối kỳ",
-      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "title": "Final Exam (FE)|||Thi cu\u1ed1i k\u1ef3 (FE)",
+      "description": "Thi cu\u1ed1i k\u1ef3: 1 ph\u1ea7n, 60 ph\u00fat, 40%, s\u00e0n 4. Syllabus KH\u00d4NG ghi d\u1ea1ng c\u00e2u h\u1ecfi. Khung \u00f4n theo 8 CLO + c\u00e2u m\u1eabu.",
       "lessons": [
         {
-          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "title": "FE \u2014 60-minute final exam (format not stated in the syllabus)|||FE \u2014 thi cu\u1ed1i k\u1ef3 60 ph\u00fat (syllabus kh\u00f4ng ghi d\u1ea1ng \u0111\u1ec1)",
           "slug": "mad101-final-exam-fe",
           "type": "article",
-          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "description": "S\u1ef1 th\u1eadt v\u1ec1 b\u00e0i thi cu\u1ed1i MAD101 v\u00e0 khung \u00f4n theo t\u1eebng CLO, k\u00e8m c\u00e2u m\u1eabu.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam \u00b7 FE</span>\n<h2>FE \u2014 the 60-minute final exam</h2>\n<p class=\"lead\">The MAD101 final exam is <strong>1 part, 60 minutes, 40% of the grade</strong>, with a completion criterion of <strong>4</strong> \u2014 below 4 on this paper and you fail the subject whatever your progress tests and assignments look like. The syllabus export does <strong>not</strong> state a question type, so do not assume multiple choice: prepare to <em>write</em> proofs and computations, not just to pick an option.</p>\n<h3>What it can ask \u2014 the eight CLOs</h3>\n<table>\n  <thead><tr><th>CLO</th><th>Be able to do, on paper, in a few minutes</th></tr></thead>\n  <tbody>\n    <tr><td>LO1</td><td>Truth tables; logical equivalences (De Morgan, contrapositive, p &rarr; q &equiv; &not;p &or; q); predicates and nested quantifiers; a short proof using rules of inference</td></tr>\n    <tr><td>LO2</td><td>Set operations and identities; injective / surjective / bijective; compositions and inverses; sequences and closed-form summations</td></tr>\n    <tr><td>LO3</td><td>Read an algorithm written in pseudocode and give its complexity; prove a Big-O bound from the definition; compare growth rates; state &Omega; and &Theta;</td></tr>\n    <tr><td>LO4</td><td>div and mod; Euclidean algorithm for gcd, and lcm; primes and factorisation; base conversion; modular exponentiation by square-and-multiply; a classical cipher</td></tr>\n    <tr><td>LO5</td><td>A full induction proof (basis, hypothesis, step); strong induction; structural induction; write and trace a recursive algorithm</td></tr>\n    <tr><td>LO6</td><td>Product and sum rules; permutations and combinations; set up and solve a recurrence relation, including the divide-and-conquer form</td></tr>\n    <tr><td>LO7</td><td>Graph terminology and degree/handshaking; adjacency matrix and list; connectivity; Euler and Hamilton paths; Dijkstra by hand</td></tr>\n    <tr><td>LO8</td><td>Tree properties (n vertices &rarr; n&minus;1 edges); traversals (pre/in/post-order); spanning trees; Prim and Kruskal by hand</td></tr>\n  </tbody>\n</table>\n<h3>How to prepare</h3>\n<ul>\n<li><b>Write proofs out in full.</b> Induction and inference marks come from the structure \u2014 state the basis, state the hypothesis, show the step. A correct conclusion with no structure scores badly.</li>\n<li><b>Rehearse the by-hand algorithms</b> \u2014 Euclid, square-and-multiply, Dijkstra, Prim, Kruskal \u2014 with a table laid out the same way every time. Consistent bookkeeping is what keeps them fast and error-free.</li>\n<li><b>Do the arithmetic twice.</b> A gcd, a modulus or a binomial coefficient miscomputed early poisons the whole answer; recomputing takes seconds.</li>\n<li><b>Cover all eight LOs.</b> The progress tests split them (PT1: LO1, LO2, LO6 \u00b7 PT2: LO3, LO4, LO5, LO6 \u00b7 PT3: LO7, LO8); the final can draw on any of them.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course, to rehearse recall across the eight CLOs. They are not past-exam questions and the real exam may not be in this format.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cu\u1ed1i k\u1ef3 \u00b7 FE</span>\n<h2>FE \u2014 b\u00e0i thi cu\u1ed1i k\u1ef3 60 ph\u00fat</h2>\n<p class=\"lead\">Thi cu\u1ed1i k\u1ef3 MAD101 l\u00e0 <strong>1 ph\u1ea7n, 60 ph\u00fat, 40% \u0111i\u1ec3m m\u00f4n</strong>, s\u00e0n ho\u00e0n th\u00e0nh <strong>4</strong> \u2014 d\u01b0\u1edbi 4 \u1edf b\u00e0i n\u00e0y l\u00e0 tr\u01b0\u1ee3t m\u00f4n b\u1ea5t k\u1ec3 progress test v\u00e0 assignment t\u1ed1t \u0111\u1ebfn \u0111\u00e2u. B\u1ea3n xu\u1ea5t syllabus <strong>kh\u00f4ng</strong> ghi d\u1ea1ng c\u00e2u h\u1ecfi, n\u00ean \u0111\u1eebng m\u1eb7c \u0111\u1ecbnh l\u00e0 tr\u1eafc nghi\u1ec7m: h\u00e3y luy\u1ec7n <em>vi\u1ebft</em> ch\u1ee9ng minh v\u00e0 t\u00ednh to\u00e1n, kh\u00f4ng ch\u1ec9 ch\u1ecdn ph\u01b0\u01a1ng \u00e1n.</p>\n<h3>N\u00f3 c\u00f3 th\u1ec3 h\u1ecfi g\u00ec \u2014 t\u00e1m CLO</h3>\n<table>\n  <thead><tr><th>CLO</th><th>Ph\u1ea3i l\u00e0m \u0111\u01b0\u1ee3c tr\u00ean gi\u1ea5y, trong v\u00e0i ph\u00fat</th></tr></thead>\n  <tbody>\n    <tr><td>LO1</td><td>B\u1ea3ng ch\u00e2n tr\u1ecb; c\u00e1c t\u01b0\u01a1ng \u0111\u01b0\u01a1ng logic (De Morgan, ph\u1ea3n \u0111\u1ea3o, p &rarr; q &equiv; &not;p &or; q); v\u1ecb t\u1eeb v\u00e0 l\u01b0\u1ee3ng t\u1eeb l\u1ed3ng nhau; m\u1ed9t ch\u1ee9ng minh ng\u1eafn b\u1eb1ng quy t\u1eafc suy lu\u1eadn</td></tr>\n    <tr><td>LO2</td><td>Ph\u00e9p to\u00e1n v\u00e0 \u0111\u1eb3ng th\u1ee9c t\u1eadp h\u1ee3p; \u0111\u01a1n \u00e1nh / to\u00e0n \u00e1nh / song \u00e1nh; h\u1ee3p th\u00e0nh v\u00e0 h\u00e0m ng\u01b0\u1ee3c; d\u00e3y v\u00e0 t\u1ed5ng d\u1ea1ng \u0111\u00f3ng</td></tr>\n    <tr><td>LO3</td><td>\u0110\u1ecdc m\u1ed9t thu\u1eadt to\u00e1n vi\u1ebft b\u1eb1ng m\u00e3 gi\u1ea3 v\u00e0 cho \u0111\u1ed9 ph\u1ee9c t\u1ea1p; ch\u1ee9ng minh m\u1ed9t ch\u1eb7n Big-O t\u1eeb \u0111\u1ecbnh ngh\u0129a; so s\u00e1nh t\u1ed1c \u0111\u1ed9 t\u0103ng; ph\u00e1t bi\u1ec3u &Omega; v\u00e0 &Theta;</td></tr>\n    <tr><td>LO4</td><td>div v\u00e0 mod; thu\u1eadt to\u00e1n Euclid t\u00ecm gcd, v\u00e0 lcm; s\u1ed1 nguy\u00ean t\u1ed1 v\u00e0 ph\u00e2n t\u00edch th\u1eeba s\u1ed1; \u0111\u1ed5i c\u01a1 s\u1ed1; lu\u1ef9 th\u1eeba m\u00f4-\u0111un b\u1eb1ng b\u00ecnh-ph\u01b0\u01a1ng-r\u1ed3i-nh\u00e2n; m\u1ed9t m\u00e3 c\u1ed5 \u0111i\u1ec3n</td></tr>\n    <tr><td>LO5</td><td>M\u1ed9t ch\u1ee9ng minh quy n\u1ea1p \u0111\u1ea7y \u0111\u1ee7 (c\u01a1 s\u1edf, gi\u1ea3 thi\u1ebft, b\u01b0\u1edbc); quy n\u1ea1p m\u1ea1nh; quy n\u1ea1p c\u1ea5u tr\u00fac; vi\u1ebft v\u00e0 ch\u1ea1y tay m\u1ed9t thu\u1eadt to\u00e1n \u0111\u1ec7 quy</td></tr>\n    <tr><td>LO6</td><td>Quy t\u1eafc nh\u00e2n v\u00e0 c\u1ed9ng; ch\u1ec9nh h\u1ee3p v\u00e0 t\u1ed5 h\u1ee3p; l\u1eadp v\u00e0 gi\u1ea3i h\u1ec7 th\u1ee9c truy h\u1ed3i, k\u1ec3 c\u1ea3 d\u1ea1ng chia-\u0111\u1ec3-tr\u1ecb</td></tr>\n    <tr><td>LO7</td><td>Thu\u1eadt ng\u1eef \u0111\u1ed3 th\u1ecb v\u00e0 b\u1eadc/b\u1eaft tay; ma tr\u1eadn k\u1ec1 v\u00e0 danh s\u00e1ch k\u1ec1; t\u00ednh li\u00ean th\u00f4ng; \u0111\u01b0\u1eddng Euler v\u00e0 Hamilton; ch\u1ea1y tay Dijkstra</td></tr>\n    <tr><td>LO8</td><td>T\u00ednh ch\u1ea5t c\u00e2y (n \u0111\u1ec9nh &rarr; n&minus;1 c\u1ea1nh); c\u00e1c ph\u00e9p duy\u1ec7t (tr\u01b0\u1edbc/gi\u1eefa/sau); c\u00e2y khung; ch\u1ea1y tay Prim v\u00e0 Kruskal</td></tr>\n  </tbody>\n</table>\n<h3>\u00d4n th\u1ebf n\u00e0o</h3>\n<ul>\n<li><b>Vi\u1ebft ch\u1ee9ng minh \u0111\u1ea7y \u0111\u1ee7.</b> \u0110i\u1ec3m c\u1ee7a quy n\u1ea1p v\u00e0 suy lu\u1eadn n\u1eb1m \u1edf c\u1ea5u tr\u00fac \u2014 n\u00eau c\u01a1 s\u1edf, n\u00eau gi\u1ea3 thi\u1ebft, ch\u1ec9 ra b\u01b0\u1edbc. K\u1ebft lu\u1eadn \u0111\u00fang m\u00e0 kh\u00f4ng c\u00f3 c\u1ea5u tr\u00fac th\u00ec \u0111i\u1ec3m th\u1ea5p.</li>\n<li><b>Luy\u1ec7n c\u00e1c thu\u1eadt to\u00e1n ch\u1ea1y tay</b> \u2014 Euclid, b\u00ecnh-ph\u01b0\u01a1ng-r\u1ed3i-nh\u00e2n, Dijkstra, Prim, Kruskal \u2014 v\u1edbi m\u1ed9t b\u1ea3ng k\u1ebb theo \u0111\u00fang m\u1ed9t ki\u1ec3u m\u1ed7i l\u1ea7n. Ghi s\u1ed5 nh\u1ea5t qu\u00e1n l\u00e0 th\u1ee9 gi\u1eef cho ch\u00fang nhanh v\u00e0 kh\u00f4ng sai.</li>\n<li><b>T\u00ednh hai l\u1ea7n.</b> M\u1ed9t gcd, m\u1ed9t s\u1ed1 d\u01b0 hay m\u1ed9t h\u1ec7 s\u1ed1 nh\u1ecb th\u1ee9c sai t\u1eeb \u0111\u1ea7u s\u1ebd h\u1ecfng c\u1ea3 b\u00e0i; t\u00ednh l\u1ea1i ch\u1ec9 m\u1ea5t v\u00e0i gi\u00e2y.</li>\n<li><b>Ph\u1ee7 \u0111\u1ee7 t\u00e1m LO.</b> C\u00e1c progress test chia ch\u00fang ra (PT1: LO1, LO2, LO6 \u00b7 PT2: LO3, LO4, LO5, LO6 \u00b7 PT3: LO7, LO8); b\u00e0i thi cu\u1ed1i c\u00f3 th\u1ec3 l\u1ea5y t\u1eeb b\u1ea5t k\u1ef3 LO n\u00e0o.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">C\u00e2u m\u1eabu</span> C\u00e1c c\u00e2u d\u01b0\u1edbi \u0111\u00e2y l\u00e0 <strong>c\u00e2u m\u1eabu</strong> l\u1ea5y t\u1eeb ch\u00ednh m\u00f4n h\u1ecdc, \u0111\u1ec3 \u00f4n tr\u1ea3i \u0111\u1ec1u t\u00e1m CLO. \u0110\u00e2y kh\u00f4ng ph\u1ea3i \u0111\u1ec1 thi th\u1eadt v\u00e0 \u0111\u1ec1 th\u1eadt c\u00f3 th\u1ec3 kh\u00f4ng \u1edf d\u1ea1ng n\u00e0y.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [

@@ -437,8 +437,8 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask' }
                             <span className="block text-xs text-text-muted">{m.name}</span>
                             <span className={cn('block mt-1 text-[11px]', m.combos.length > 0 ? 'text-neon-cyan' : 'text-text-muted')}>
                               {m.combos.length > 0
-                                ? `${m.combos.length} combo · Academy có đầy đủ môn`
-                                : 'Môn chung đầy đủ · phần chuyên ngành đang xây dựng'}
+                                ? `${m.combos.length} combo · đủ lộ trình 9 kỳ`
+                                : 'Đủ lộ trình 9 kỳ · trường chưa công bố combo'}
                             </span>
                           </span>
                         </button>
@@ -459,8 +459,8 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask' }
                 {step === 'combo' && major && (
                   <div>
                     <p className="text-sm text-text-secondary text-center">
-                      Ngành <span className="text-text-primary font-semibold">{major.nameVi}</span> chia thành{' '}
-                      {major.combos.length} combo, bắt đầu từ kỳ 5. Chưa chọn cũng không sao.
+                      Ngành <span className="text-text-primary font-semibold">{major.nameVi}</span> có{' '}
+                      {major.combos.length} combo theo khung {major.curriculumCode}. Chưa chọn cũng không sao.
                     </p>
                     <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
                       {major.combos.map((c, i) => (
@@ -474,12 +474,18 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask' }
                           <span aria-hidden="true" className="text-2xl leading-none mt-0.5">{c.icon}</span>
                           <span className="min-w-0 flex-1">
                             <span className="block font-semibold text-text-primary">{c.nameVi}</span>
-                            <span className="block text-[11px] text-text-secondary mt-0.5">
-                              Kỳ 5: <span className="font-mono text-neon-cyan">{c.gateway.code}</span> — {c.gateway.name}
+                            <span className="block text-[11px] text-text-secondary mt-1 space-y-0.5">
+                              {Object.keys(c.bySemester)
+                                .map(Number)
+                                .sort((x, y) => x - y)
+                                .map((sem) => (
+                                  <span key={sem} className="block">
+                                    <span className="text-text-muted">Kỳ {sem}:</span>{' '}
+                                    <span className="font-mono text-neon-cyan">{c.bySemester[sem].join(', ')}</span>
+                                  </span>
+                                ))}
                             </span>
-                            {c.gateway.prereq && (
-                              <span className="block text-[11px] text-text-muted">Cần học trước: {c.gateway.prereq}</span>
-                            )}
+                            {c.note && <span className="block text-[11px] text-text-muted mt-0.5">{c.note}</span>}
                             <span
                               className={cn(
                                 'inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full text-[11px] border',

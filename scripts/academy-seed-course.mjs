@@ -38,8 +38,18 @@ import { pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { PrismaClient } from '@prisma/client';
 import { withSimulation } from './lib/simulation-block.mjs';
+import { readFileSync } from 'node:fs';
 
 const prisma = new PrismaClient();
+
+// Bản đồ ảnh bìa dùng chung: mã môn → URL. Chứa ảnh bìa GỐC làm tay của ~50 môn
+// đầu (đường dẫn images/<mã>-<ts>… trên R2), thứ KHÔNG khai trong từng spec .mjs.
+// Spec nào tự khai thumbnailUrl thì thắng bản đồ; bản đồ thắng null. Nhờ đó re-seed
+// KHÔNG còn xoá bìa cũ về null (bug 13/09: courseData set thẳng `?? null`).
+let COVER_MAP = {};
+try {
+  COVER_MAP = JSON.parse(readFileSync(new URL('../content/academy/covers.json', import.meta.url), 'utf8'));
+} catch { /* không có map cũng chạy được, chỉ mất fallback */ }
 const args = process.argv.slice(2);
 const has = (f) => args.includes(f);
 const val = (f, d) => { const i = args.indexOf(f); return i >= 0 ? args[i + 1] : d; };
@@ -84,6 +94,13 @@ const courseData = {
   accessType: 'FREE', isFree: true, price: 0,
   status: c.status ?? 'PUBLISHED', isPublished: (c.status ?? 'PUBLISHED') === 'PUBLISHED',
 };
+// Ảnh bìa: spec khai thumbnailUrl thì dùng; không thì tra COVER_MAP theo mã (ảnh
+// gốc làm tay của các môn cũ). CHỈ đặt khi CÓ giá trị — nếu cả hai đều trống thì
+// BỎ HẲN trường khỏi bản patch để GIỮ bìa đang có trong CSDL. (Trước đây đặt
+// `thumbnailUrl: c.thumbnailUrl ?? null` nên mỗi lần re-seed một môn không khai
+// bìa lại XOÁ bìa cũ về null — chính là lỗi "môn cũ mất ảnh bìa".)
+const cover = c.thumbnailUrl ?? COVER_MAP[c.courseCode];
+if (cover) courseData.thumbnailUrl = cover;
 if (!course) {
   console.log(`  + course ${c.courseCode} "${c.title}" [${courseData.status}]`);
   if (APPLY) course = await prisma.course.create({
@@ -236,6 +253,21 @@ if (SYNC && course && APPLY) {
   await renumber('courseSection', [...new Set(fileSecIds), ...restSec]);
   console.log(`  ↕ syncOrder: ${fileSecIds.length} sections + their lessons renumbered to file order` + (restSec.length ? ` (${restSec.length} section(s) not in file kept after)` : ''));
 } else if (SYNC && !APPLY) console.log('  ↕ syncOrder: would renumber sections/lessons to file order');
+
+/* 5. Đồng bộ số liệu khoá (totalLessons/totalDurationSeconds) --------------- */
+// Thẻ ở /academy và endpoint danh sách (course.routes.ts ?gon=1) hiển thị CỘT
+// `course.totalLessons` đã lưu, KHÔNG đếm lại (cố ý, để tránh join bảng bài mỗi
+// lần liệt kê). Cột đó do syncCourseStats() trong route giữ đồng bộ — nhưng
+// seeder này không đi qua route, nên nếu không tự cập nhật thì mọi môn seed để
+// `total_lessons` = 0 (mặc định) và thẻ báo "0 bài" dù đã có bài. Đếm lại y hệt
+// syncCourseStats: tổng số bài + tổng thời lượng video của mọi section.
+if (APPLY && course) {
+  const secs = await prisma.courseSection.findMany({ where: { courseId: course.id }, include: { lessons: { select: { videoDurationSeconds: true } } } });
+  const totalLessons = secs.reduce((s, x) => s + x.lessons.length, 0);
+  const totalDurationSeconds = secs.reduce((s, x) => s + x.lessons.reduce((a, l) => a + (l.videoDurationSeconds || 0), 0), 0);
+  await prisma.course.update({ where: { id: course.id }, data: { totalLessons, totalDurationSeconds } });
+  console.log(`  ∑ stats: total_lessons=${totalLessons} · duration=${totalDurationSeconds}s`);
+}
 
 console.log(`\nsections +${secN} · lessons +${lesNew} ~${lesUpd}. ${APPLY ? 'Done.' : 'Dry-run — add --apply.'}`);
 await prisma.$disconnect();

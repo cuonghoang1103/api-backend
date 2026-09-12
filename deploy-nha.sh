@@ -826,8 +826,24 @@ fi
 
 # ─── 7. Dọn ─────────────────────────────────────────────────────────────
 # VPS giờ KHÔNG build nữa nên không có cache build; chỉ còn ảnh cũ cần dọn.
-info "Dọn ảnh cũ trên VPS..."
-sshvps "docker image prune -f >/dev/null 2>&1; df -h / | tail -1" | sed 's/^/         /'
+# ⚠️ 13/09/2026 — Ảnh của các lần deploy trước đều CÓ TAG (ghcr:<SHA cũ>) nên
+# `prune -f` (chỉ dangling) KHÔNG dọn nổi → dồn ~20GB, lấp ổ chứa Postgres →
+# Postgres chết → API 502 toàn bộ (đã xảy ra thật).
+#
+# ⚠️⚠️ ĐỪNG dùng `prune -af` mù ở đây! Nó xoá luôn tag `ghcr:${SHA}` HIỆN TẠI,
+# mà (1) bước "Kiểm lại container" ngay dưới ĐỌC đúng tag đó (dòng ~938) → verify
+# false-FAIL "KHONG_DOC_DUOC" mọi deploy, và (2) lệnh rollback tay in ở dưới cũng
+# retag từ `ghcr:${SHA}` → mất tag là mất đường rollback nhanh. (Đã dính 13/09.)
+#
+# Cách đúng: chỉ xoá các `ghcr:<SHA CŨ>` — GIỮ SHA hiện tại + latest. Reclaim đủ
+# đĩa (mỗi commit khác lớp app), không đụng ảnh verify/rollback cần.
+info "Dọn ảnh deploy CŨ trên VPS (giữ ${SHA} + latest)..."
+sshvps "
+  docker images 'ghcr.io/cuonghoang1103/api-backend-*' --format '{{.Repository}}:{{.Tag}}' \
+    | grep -v '<none>' | grep -vE ':(${SHA}|latest)\$' \
+    | xargs -r docker rmi >/dev/null 2>&1
+  docker image prune -f >/dev/null 2>&1
+  df -h / | tail -1" | sed 's/^/         /'
 info "Dọn thư mục build cũ ở máy nhà (giữ 3 bản gần nhất)..."
 sshnha "cd ${THU_MUC_NHA} 2>/dev/null && ls -1t | tail -n +4 | xargs -r rm -rf" 2>/dev/null || true
 

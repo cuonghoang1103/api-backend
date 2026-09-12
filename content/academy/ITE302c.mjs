@@ -61,8 +61,8 @@ export default {
   <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Communicating about Ethics</div><div class="lz-nsub">Diverse stakeholders · crisis &amp; media</div></div></div>
   <div class="lz-stage">Institutionalising it</div>
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Governance &amp; Code of Ethics</div><div class="lz-nsub">ACM/IEEE codes · GDPR · AI governance</div></div></div>
-  <div class="lz-stage">Advanced · beyond the syllabus</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Modern AI ethics · landmark case studies</div><div class="lz-nsub">Generative-AI harms, deepfakes · Cambridge Analytica, Therac-25, Dieselgate</div></div></div>
+  <div class="lz-stage">Session 12 · Ethics of AI (required MOOC)</div>
+  <div class="lz-node"><div class="lz-badge">6·7</div><div class="lz-nbody"><div class="lz-ntitle">Modern AI ethics · landmark case studies</div><div class="lz-nsub">Ethics, AI &amp; responsibility · issues &amp; challenges · case studies, examples &amp; frameworks</div></div></div>
 </div>
 <div class="callout ok">The most effective way to study this course: for every framework and rule, <strong>argue a real case out loud</strong> — pick a side, then argue the other side. Ethics is a reasoning skill, not a set of facts to memorise; the 60-question exam rewards students who can <em>apply</em> a principle, not just recite it.</div>
 <a class="link-card exphub" href="/exp-hub?ref=%2Fcourses%2Fit-and-data-ethics%2Flearn&reflabel=ITE302c" target="_blank" rel="noopener">
@@ -96,8 +96,8 @@ export default {
   <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Truyền đạt về đạo đức</div><div class="lz-nsub">Nhiều bên liên quan · khủng hoảng &amp; truyền thông</div></div></div>
   <div class="lz-stage">Thể chế hoá</div>
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Quản trị &amp; bộ quy tắc đạo đức</div><div class="lz-nsub">Bộ quy tắc ACM/IEEE · GDPR · quản trị AI</div></div></div>
-  <div class="lz-stage">Nâng cao · ngoài giáo trình</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Đạo đức AI hiện đại · các vụ án kinh điển</div><div class="lz-nsub">Tác hại AI tạo sinh, deepfake · Cambridge Analytica, Therac-25, Dieselgate</div></div></div>
+  <div class="lz-stage">Buổi 12 · Ethics of AI (MOOC bắt buộc)</div>
+  <div class="lz-node"><div class="lz-badge">6·7</div><div class="lz-nbody"><div class="lz-ntitle">Đạo đức AI hiện đại · các vụ án kinh điển</div><div class="lz-nsub">Đạo đức, AI &amp; trách nhiệm · vấn đề &amp; thách thức · các vụ án, ví dụ &amp; khung đạo đức</div></div></div>
 </div>
 <div class="callout ok">Cách học hiệu quả nhất môn này: với mỗi khung và mỗi quy tắc, hãy <strong>tranh luận một ca thật thành lời</strong> — chọn một phe, rồi cãi lại cho phe kia. Đạo đức là kỹ năng lập luận, không phải một mớ dữ kiện để thuộc lòng; đề 60 câu thưởng cho sinh viên biết <em>áp dụng</em> nguyên lý, không chỉ đọc thuộc.</div>
 <a class="link-card exphub" href="/exp-hub?ref=%2Fcourses%2Fit-and-data-ethics%2Flearn&reflabel=ITE302c" target="_blank" rel="noopener">
@@ -178,8 +178,8 @@ export default {
 <table>
   <thead><tr><th>CLO</th><th>You will be able to</th><th>Chapter</th></tr></thead>
   <tbody>
-    <tr><td>CLO1</td><td>Apply ethical principles, frameworks, regulations and standards used in data-driven technologies</td><td>1</td></tr>
-    <tr><td>CLO2</td><td>Detect and mitigate ethical risks in the design, development and deployment of data-driven technology</td><td>2–3</td></tr>
+    <tr><td>CLO1</td><td>Apply ethical principles, frameworks, regulations and standards used in data-driven technologies</td><td>1 <small>(regulations &amp; standards: 5.2)</small></td></tr>
+    <tr><td>CLO2</td><td>Detect and mitigate ethical risks in the design, development and deployment of data-driven technology</td><td>2–3 <small>(safety &amp; security risks: 7.1)</small></td></tr>
     <tr><td>CLO3</td><td>Communicate effectively with diverse stakeholders about ethical safeguards, risks and mitigations</td><td>4</td></tr>
     <tr><td>CLO4</td><td>Create, implement and evaluate the organisational policies and governance structure ethics requires</td><td>5</td></tr>
   </tbody>
@@ -199,8 +199,8 @@ export default {
 <table>
   <thead><tr><th>CLO</th><th>Bạn sẽ làm được</th><th>Chương</th></tr></thead>
   <tbody>
-    <tr><td>CLO1</td><td>Áp dụng nguyên lý, khung, quy định và chuẩn đạo đức dùng trong công nghệ dữ liệu</td><td>1</td></tr>
-    <tr><td>CLO2</td><td>Phát hiện &amp; giảm thiểu rủi ro đạo đức trong thiết kế, phát triển và triển khai công nghệ dữ liệu</td><td>2–3</td></tr>
+    <tr><td>CLO1</td><td>Áp dụng nguyên lý, khung, quy định và chuẩn đạo đức dùng trong công nghệ dữ liệu</td><td>1 <small>(quy định &amp; chuẩn: 5.2)</small></td></tr>
+    <tr><td>CLO2</td><td>Phát hiện &amp; giảm thiểu rủi ro đạo đức trong thiết kế, phát triển và triển khai công nghệ dữ liệu</td><td>2–3 <small>(rủi ro an toàn &amp; bảo mật: 7.1)</small></td></tr>
     <tr><td>CLO3</td><td>Truyền đạt hiệu quả với nhiều bên liên quan về biện pháp bảo vệ, rủi ro và cách giảm thiểu</td><td>4</td></tr>
     <tr><td>CLO4</td><td>Tạo, triển khai &amp; đánh giá chính sách tổ chức và cấu trúc quản trị mà đạo đức đòi hỏi</td><td>5</td></tr>
   </tbody>
@@ -233,10 +233,10 @@ export default {
   <div class="lz-layer"><div class="lz-lt">4 · Communicate Effectively about Ethical Challenges</div><div class="lz-ld">Diverse stakeholders, DEI communication, crisis &amp; media management</div></div>
   <div class="lz-layer"><div class="lz-lt">5 · Create &amp; Lead an Ethical Data-Driven Organization</div><div class="lz-ld">Ethical culture, governance, code of ethics, organisational policy</div></div>
 </div>
-<h3>Also required &amp; recommended</h3>
+<h3>Also required — session 12</h3>
 <ul>
-  <li><strong>Ethics of Artificial Intelligence</strong> (additional required MOOC): AI &amp; responsibility, case studies, issues &amp; challenges, governance.</li>
-  <li><strong>Preparing for Your CertNexus Certification Exam</strong>: exam-readiness practice.</li>
+  <li><strong>Preparing for Your CertNexus Certification Exam</strong>: part of the CertNexus specialization; its certificate is one of those that gate the final exam.</li>
+  <li><strong>Ethics of Artificial Intelligence</strong> (additional required MOOC, its own certificate is listed in StudentTasks): ethics, AI &amp; responsibility; case studies, examples &amp; ethical frameworks; issues &amp; challenges; governance &amp; policies. This is the source of Chapters 6–7.</li>
 </ul>
 <a class="link-card dl" href="https://www.coursera.org/specializations/certified-ethical-emerging-technologist" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -267,10 +267,10 @@ export default {
   <div class="lz-layer"><div class="lz-lt">4 · Communicate Effectively about Ethical Challenges</div><div class="lz-ld">Nhiều bên liên quan, truyền thông DEI, xử lý khủng hoảng &amp; báo chí</div></div>
   <div class="lz-layer"><div class="lz-lt">5 · Create &amp; Lead an Ethical Data-Driven Organization</div><div class="lz-ld">Văn hoá đạo đức, quản trị, bộ quy tắc đạo đức, chính sách tổ chức</div></div>
 </div>
-<h3>Cũng bắt buộc &amp; khuyến nghị</h3>
+<h3>Cũng bắt buộc — buổi 12</h3>
 <ul>
-  <li><strong>Ethics of Artificial Intelligence</strong> (MOOC bắt buộc bổ sung): AI &amp; trách nhiệm, các vụ án, vấn đề &amp; thách thức, quản trị.</li>
-  <li><strong>Preparing for Your CertNexus Certification Exam</strong>: luyện sẵn sàng cho kỳ thi.</li>
+  <li><strong>Preparing for Your CertNexus Certification Exam</strong>: nằm trong bộ specialization CertNexus; chứng chỉ của nó là một trong các chứng chỉ chốt chặn dự thi.</li>
+  <li><strong>Ethics of Artificial Intelligence</strong> (MOOC bắt buộc bổ sung, có chứng chỉ riêng ghi trong StudentTasks): đạo đức, AI &amp; trách nhiệm; các vụ án, ví dụ &amp; khung đạo đức; vấn đề &amp; thách thức; quản trị &amp; chính sách. Đây là nguồn của Chương 6–7.</li>
 </ul>
 <a class="link-card dl" href="https://www.coursera.org/specializations/certified-ethical-emerging-technologist" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -1066,8 +1066,8 @@ export default {
 
     /* ══════════════════ CHƯƠNG 6 — NÂNG CAO: ĐẠO ĐỨC AI HIỆN ĐẠI ══════════════════ */
     {
-      title: 'Chapter 6 — Advanced: Modern AI Ethics|||Chương 6 — Nâng cao: Đạo đức AI hiện đại',
-      description: 'Ngoài giáo trình: tác hại của AI tạo sinh & LLM, deepfake, và vấn đề căn chỉnh (alignment).',
+      title: 'Chapter 6 — Ethics of AI: Modern AI Ethics|||Chương 6 — Ethics of AI: Đạo đức AI hiện đại',
+      description: 'Buổi 12 — MOOC bắt buộc "Ethics of Artificial Intelligence" (vấn đề & thách thức): tác hại của AI tạo sinh & LLM, deepfake, và vấn đề căn chỉnh (alignment).',
       lessons: [
         {
           title: '6.1 — Generative AI harms, deepfakes & alignment|||6.1 — Tác hại AI tạo sinh, deepfake & căn chỉnh',
@@ -1076,7 +1076,7 @@ export default {
           description: 'Các rủi ro đạo đức đặc thù của mô hình tạo sinh: ảo giác, deepfake, bản quyền, và alignment.',
           content: `
 <div class="ml-en">
-<span class="eyebrow">Chapter 6 · Lesson 6.1 · Beyond the syllabus</span>
+<span class="eyebrow">Chapter 6 · Lesson 6.1 · Ethics of AI (session 12)</span>
 <h2>The new frontier — generative AI</h2>
 <p class="lead">The frameworks you learned apply to any technology, but generative AI (large language models, image and video generators) creates <strong>new categories of harm</strong> the classic cases didn't anticipate. A modern ethics professional must know them.</p>
 <div class="lz-stack">
@@ -1089,7 +1089,7 @@ export default {
 <h3>The alignment problem</h3>
 <p><strong>Alignment</strong> asks: how do we make an AI system reliably do what we actually intend — including our unstated values — rather than optimising a literal proxy in harmful ways? A system told to "maximise engagement" may learn that outrage works best; one told to "be helpful" may become sycophantic or help with harmful requests. The gap between <em>what we asked for</em> and <em>what we meant</em> is where much AI harm lives.</p>
 <div class="pitfall"><strong>Misconception:</strong> "If the AI is very capable, it will naturally do the right thing." Capability and values are independent. A more powerful system pursuing a slightly wrong objective causes <em>more</em> harm, not less — competence without alignment amplifies mistakes. This is why safety and ethics work must scale <em>with</em> capability, not lag behind it.</p></div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The "right to explanation" meets the black box, hard.</b> Generative models are the ultimate black box — even their creators can't fully explain a specific output. That collides directly with GDPR Article 22 and with accountability: if you deploy an LLM to make or shape decisions about people, "we can't explain why it said that" is not a defence, it's a liability. The ethical use of generative AI in high-stakes settings requires guardrails, human oversight, and honest disclosure of limits — the whole toolkit of this course applied to the hardest case.</div>
+<div class="callout"><span class="badge">★ Going deeper</span> <b>The "right to explanation" meets the black box, hard.</b> Generative models are the ultimate black box — even their creators can't fully explain a specific output. That collides directly with GDPR Article 22 and with accountability: if you deploy an LLM to make or shape decisions about people, "we can't explain why it said that" is not a defence, it's a liability. The ethical use of generative AI in high-stakes settings requires guardrails, human oversight, and honest disclosure of limits — the whole toolkit of this course applied to the hardest case.</div>
 <h3>Ví dụ có lời giải · Worked case analysis</h3>
 <p><b>Situation.</b> A health startup ships a generative-AI chatbot that answers medical questions. It sometimes states dangerous advice with full confidence, carries no disclaimer, and was trained partly on scraped copyrighted forum posts.</p>
 <ol>
@@ -1101,7 +1101,7 @@ export default {
 </ol>
 </div>
 <div class="ml-vi">
-<span class="eyebrow">Chương 6 · Bài 6.1 · Ngoài giáo trình</span>
+<span class="eyebrow">Chương 6 · Bài 6.1 · Ethics of AI (buổi 12)</span>
 <h2>Biên giới mới — AI tạo sinh</h2>
 <p class="lead">Các khung bạn học áp cho mọi công nghệ, nhưng AI tạo sinh (mô hình ngôn ngữ lớn, bộ tạo ảnh và video) tạo ra <strong>những loại tổn hại mới</strong> mà các vụ kinh điển chưa lường. Một chuyên gia đạo đức hiện đại phải biết chúng.</p>
 <div class="lz-stack">
@@ -1114,7 +1114,7 @@ export default {
 <h3>Vấn đề căn chỉnh (alignment)</h3>
 <p><strong>Alignment</strong> hỏi: làm sao khiến một hệ thống AI làm đúng điều ta thật sự chủ ý — kể cả các giá trị không nói ra — thay vì tối ưu một đại diện theo nghĩa đen theo cách gây hại? Một hệ thống được bảo "tối đa tương tác" có thể học rằng phẫn nộ hiệu quả nhất; một hệ thống được bảo "hãy hữu ích" có thể thành nịnh bợ hoặc giúp cả yêu cầu gây hại. Khoảng cách giữa <em>điều ta yêu cầu</em> và <em>điều ta muốn</em> là nơi phần nhiều tổn hại AI trú.</p>
 <div class="pitfall"><strong>Ngộ nhận:</strong> "Nếu AI rất giỏi, nó tự nhiên sẽ làm điều đúng." Năng lực và giá trị độc lập với nhau. Một hệ thống mạnh hơn theo đuổi một mục tiêu hơi sai gây <em>nhiều</em> tổn hại hơn, không phải ít — giỏi mà không căn chỉnh sẽ khuếch đại sai lầm. Đó là lý do công tác an toàn và đạo đức phải mở rộng <em>cùng</em> năng lực, không đi sau nó.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>"Quyền được giải thích" đụng chiếc hộp đen, rất mạnh.</b> Mô hình tạo sinh là hộp đen tột cùng — ngay cả người tạo ra cũng không giải thích đầy đủ một đầu ra cụ thể. Điều đó va thẳng với Điều 22 GDPR và với trách nhiệm giải trình: nếu bạn triển khai một LLM để ra hay định hình quyết định về con người, "bọn tôi không giải thích được vì sao nó nói thế" không phải biện hộ, mà là trách nhiệm pháp lý. Dùng AI tạo sinh có đạo đức trong bối cảnh hệ trọng đòi hỏi rào chắn, giám sát của con người, và công khai trung thực về giới hạn — cả bộ công cụ của môn này áp vào ca khó nhất.</div>
+<div class="callout"><span class="badge">★ Đào sâu</span> <b>"Quyền được giải thích" đụng chiếc hộp đen, rất mạnh.</b> Mô hình tạo sinh là hộp đen tột cùng — ngay cả người tạo ra cũng không giải thích đầy đủ một đầu ra cụ thể. Điều đó va thẳng với Điều 22 GDPR và với trách nhiệm giải trình: nếu bạn triển khai một LLM để ra hay định hình quyết định về con người, "bọn tôi không giải thích được vì sao nó nói thế" không phải biện hộ, mà là trách nhiệm pháp lý. Dùng AI tạo sinh có đạo đức trong bối cảnh hệ trọng đòi hỏi rào chắn, giám sát của con người, và công khai trung thực về giới hạn — cả bộ công cụ của môn này áp vào ca khó nhất.</div>
 <h3>Ví dụ có lời giải · Phân tích tình huống từng bước</h3>
 <p><b>Tình huống.</b> Một startup y tế ra mắt chatbot AI tạo sinh trả lời câu hỏi y khoa. Đôi khi nó nói lời khuyên nguy hiểm với vẻ đầy tự tin, không kèm cảnh báo, và được huấn luyện một phần trên bài diễn đàn có bản quyền bị cào về.</p>
 <ol>
@@ -1148,8 +1148,8 @@ export default {
 
     /* ══════════════════ CHƯƠNG 7 — NÂNG CAO: CÁC VỤ ÁN KINH ĐIỂN ══════════════════ */
     {
-      title: 'Chapter 7 — Advanced: Landmark Case Studies|||Chương 7 — Nâng cao: Các vụ án kinh điển',
-      description: 'Ngoài giáo trình: Therac-25, Volkswagen Dieselgate và Cambridge Analytica — mổ xẻ theo khung đạo đức.',
+      title: 'Chapter 7 — Ethics of AI: Landmark Case Studies|||Chương 7 — Ethics of AI: Các vụ án kinh điển',
+      description: 'Buổi 12 — MOOC bắt buộc "Ethics of Artificial Intelligence" (case studies, examples & ethical frameworks): Therac-25, Volkswagen Dieselgate và Cambridge Analytica — mổ xẻ theo khung đạo đức.',
       lessons: [
         {
           title: '7.1 — Therac-25, Dieselgate & Cambridge Analytica|||7.1 — Therac-25, Dieselgate & Cambridge Analytica',
@@ -1158,7 +1158,7 @@ export default {
           description: 'Ba vụ án bắt buộc biết: an toàn phần mềm, gian lận có chủ đích, và lạm dụng dữ liệu — phân tích từng vụ.',
           content: `
 <div class="ml-en">
-<span class="eyebrow">Chapter 7 · Lesson 7.1 · Beyond the syllabus</span>
+<span class="eyebrow">Chapter 7 · Lesson 7.1 · Ethics of AI (session 12)</span>
 <h2>Three cases every technologist must know</h2>
 <p class="lead">Principles stick when they're attached to stories. These three are the field's cautionary classics — each illustrates a different failure mode, and each is analysed with the frameworks from Chapter 1.</p>
 <h3>Ví dụ có lời giải · Therac-25 — when a software bug kills</h3>
@@ -1173,10 +1173,10 @@ export default {
 <div class="out"><b>What happened.</b> Around 2014–2018, personal data of up to ~87 million Facebook users was harvested (via a personality-quiz app that also scraped friends' data) and used to build psychographic profiles for targeted political advertising.<br><br>
 <b>Why it's a landmark.</b> The textbook case of <em>consent and purpose-limitation failure</em> at scale: data given for one purpose (a quiz) was repurposed for another (political manipulation), and most affected users never consented at all.<br><br>
 <b>Framework read.</b> Violates purpose limitation and informed consent (Ch3), fails the contract test (no one agreed their data would micro-target their politics), and treats people as means to an electoral end (deontology). It's the case that pushed data ethics and GDPR-style regulation into public consciousness.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The pattern across all three.</b> Therac-25 = negligence; Dieselgate = intent; Cambridge Analytica = misuse of consented data. Different failures, one common thread: <em>a technically capable team did harm because ethical review, accountability, and the freedom to say "no" were missing.</em> Everything in this course — frameworks, bias detection, mitigation, communication, governance — exists so that you are the person who catches the next one before it ships.</div>
+<div class="callout"><span class="badge">★ Going deeper</span> <b>The pattern across all three.</b> Therac-25 = negligence; Dieselgate = intent; Cambridge Analytica = misuse of consented data. Different failures, one common thread: <em>a technically capable team did harm because ethical review, accountability, and the freedom to say "no" were missing.</em> Everything in this course — frameworks, bias detection, mitigation, communication, governance — exists so that you are the person who catches the next one before it ships.</div>
 </div>
 <div class="ml-vi">
-<span class="eyebrow">Chương 7 · Bài 7.1 · Ngoài giáo trình</span>
+<span class="eyebrow">Chương 7 · Bài 7.1 · Ethics of AI (buổi 12)</span>
 <h2>Ba vụ án mọi người làm công nghệ phải biết</h2>
 <p class="lead">Nguyên lý bám chặt khi gắn với câu chuyện. Ba vụ này là những bài học cảnh tỉnh kinh điển của ngành — mỗi vụ minh hoạ một kiểu thất bại khác nhau, và mỗi vụ được mổ xẻ bằng các khung ở Chương 1.</p>
 <h3>Ví dụ có lời giải · Therac-25 — khi một lỗi phần mềm giết người</h3>
@@ -1191,7 +1191,7 @@ export default {
 <div class="out"><b>Chuyện gì đã xảy ra.</b> Khoảng 2014–2018, dữ liệu cá nhân của tới ~87 triệu người dùng Facebook bị thu gom (qua một app trắc nghiệm tính cách cũng vét luôn dữ liệu bạn bè) và dùng để dựng hồ sơ tâm lý cho quảng cáo chính trị nhắm mục tiêu.<br><br>
 <b>Vì sao là vụ kinh điển.</b> Ca sách giáo khoa về <em>thất bại đồng thuận và giới hạn mục đích</em> ở quy mô lớn: dữ liệu cho một mục đích (một bài trắc nghiệm) bị tái dùng cho mục đích khác (thao túng chính trị), và phần lớn người bị ảnh hưởng chưa hề đồng thuận.<br><br>
 <b>Đọc theo khung.</b> Vi phạm giới hạn mục đích và đồng thuận hiểu biết (Ch3), trượt bài kiểm khế ước (không ai đồng ý dữ liệu của mình được dùng để nhắm vi mô vào lá phiếu), và coi con người là phương tiện cho một mục đích bầu cử (nghĩa vụ luận). Đây là vụ đẩy đạo đức dữ liệu và quy định kiểu GDPR vào ý thức công chúng.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Dạng thức chung của cả ba vụ.</b> Therac-25 = tắc trách; Dieselgate = cố ý; Cambridge Analytica = lạm dụng dữ liệu đã đồng thuận. Các thất bại khác nhau, một sợi chỉ chung: <em>một nhóm giỏi kỹ thuật đã gây hại vì thiếu review đạo đức, thiếu trách nhiệm giải trình, và thiếu tự do để nói "không."</em> Mọi thứ trong môn này — khung, phát hiện thiên kiến, giảm thiểu, truyền đạt, quản trị — tồn tại để bạn là người chặn được vụ tiếp theo trước khi nó ra mắt.</div>
+<div class="callout"><span class="badge">★ Đào sâu</span> <b>Dạng thức chung của cả ba vụ.</b> Therac-25 = tắc trách; Dieselgate = cố ý; Cambridge Analytica = lạm dụng dữ liệu đã đồng thuận. Các thất bại khác nhau, một sợi chỉ chung: <em>một nhóm giỏi kỹ thuật đã gây hại vì thiếu review đạo đức, thiếu trách nhiệm giải trình, và thiếu tự do để nói "không."</em> Mọi thứ trong môn này — khung, phát hiện thiên kiến, giảm thiểu, truyền đạt, quản trị — tồn tại để bạn là người chặn được vụ tiếp theo trước khi nó ra mắt.</div>
 </div>
 `,
         },
@@ -1215,21 +1215,21 @@ export default {
     },
     {
       "title": "Final Exam|||Thi cuối kỳ",
-      "description": "Thi cuối kỳ gồm PE (thi thực hành) và FE (trắc nghiệm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "description": "Môn chỉ có MỘT đầu điểm: TE 100% — 60 câu máy chấm, 60 phút, điều kiện hoàn thành 4. Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
       "lessons": [
         {
-          "title": "PE — Practical Exam|||PE — Thi thực hành",
+          "title": "No Practical Exam — ITE302c is 100% Theory Exam|||Không có thi thực hành — ITE302c 100% là thi lý thuyết",
           "slug": "ite302c-final-exam-pe",
           "type": "article",
-          "description": "Khung thi thực hành (PE) của môn — format, cách chấm và cách chuẩn bị. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · PE</span>\n<h2>PE — Practical Exam</h2>\n<p class=\"lead\">The Practical Exam (PE) is a <strong>writing / report exam</strong>: you are given a prompt (an essay question, a document, or a plan) and must produce a well-structured, well-argued piece within a time limit. It is graded on structure, argument, use of evidence, and clarity.</p>\n<h3>How to prepare</h3>\n<ul>\n<li>Practise the structure: thesis &rarr; evidence &rarr; analysis &rarr; conclusion.</li>\n<li>Prepare a few strong examples / sources you can cite quickly.</li>\n<li>Plan before you write: 2 minutes outlining saves ten minutes rewriting.</li>\n<li>Argue a clear position &mdash; do not just summarize.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A real practical prompt bank for this subject will be added here later, in the exam room. Use the guidance above to prepare now.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · PE</span>\n<h2>PE — Thi thực hành</h2>\n<p class=\"lead\">Thi thực hành (PE) là <strong>thi viết / báo cáo</strong>: bạn được giao một đề (câu hỏi luận, một tài liệu, hoặc một kế hoạch) và phải viết một bài có cấu trúc, lập luận tốt trong thời gian quy định. Chấm theo cấu trúc, lập luận, dùng bằng chứng, và sự rõ ràng.</p>\n<h3>Cách chuẩn bị</h3>\n<ul>\n<li>Luyện cấu trúc: luận đề &rarr; bằng chứng &rarr; phân tích &rarr; kết luận.</li>\n<li>Chuẩn bị vài ví dụ / nguồn mạnh có thể trích nhanh.</li>\n<li>Lập dàn ý trước khi viết: 2 phút dàn ý tiết kiệm mười phút viết lại.</li>\n<li>Lập luận một quan điểm rõ &mdash; đừng chỉ tóm tắt.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề thực hành thật cho môn này sẽ được thêm vào đây sau, trong trang phòng thi. Dùng hướng dẫn trên để chuẩn bị ngay từ giờ.</div>\n</div>"
+          "description": "Vì sao môn này KHÔNG có PE: syllabus chỉ có 1 thành phần điểm — TE 100%. Học gì thay vào đó.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · no PE</span>\n<h2>ITE302c has no Practical Exam</h2>\n<p class=\"lead\">This page exists to correct a common expectation: <strong>ITE302c has no Practical Exam (PE) and no on-going assessment at all.</strong> The official syllabus (ID 12637) lists exactly <strong>1 assessment</strong>: the Final Theory Exam (TE), weight <strong>100%</strong>, 60 computer-gradable questions, 60 minutes, completion criterion 4.</p>\n<h3>What the syllabus actually says</h3>\n<table>\n  <thead><tr><th>Component</th><th>Type</th><th>Weight</th><th>Completion</th><th>Duration</th><th>Format</th></tr></thead>\n  <tbody>\n    <tr><td>TE</td><td>Final exam</td><td>100%</td><td>&ge; 4</td><td>60'</td><td>Computer gradable · 60 questions</td></tr>\n  </tbody>\n</table>\n<p>The study time is spent online, not in a practical lab: <em>150h = 128h online + 3h offline + 1h TE + 18h self-study</em>. The &quot;practical&quot; work of this subject is finishing the Coursera MOOCs and collecting the certificates &mdash; that is a <strong>gate</strong>, not a graded component.</p>\n<h3>The two things you must actually do</h3>\n<ul>\n<li><strong>Get every certificate.</strong> CertNexus <em>Certified Ethical Emerging Technologist</em> Professional Certificate <em>and</em> the <em>Ethics of Artificial Intelligence</em> certificate. Without them you are <strong>barred from the final exam</strong> &mdash; no certificate, no exam, no grade.</li>\n<li><strong>Finish them before the course deadline</strong> to earn the <strong>+1 bonus point</strong>. The pass rule is <strong>Final TE &ge; 4.0 AND (Final TE + bonus) &ge; 5.0</strong>, so the bonus can carry a 4.0&ndash;4.9 over the line, but it can never rescue a score below 4.</li>\n</ul>\n<div class=\"callout warn\">Because 100% of the mark rides on one 60-minute test, there is no on-going score to cushion a bad day. Treat the MOOC quizzes and the chapter quizzes in this course as your rehearsal &mdash; they are the only practice you get.</div>\n<div class=\"note-ct\">Preparing: the TE tests <em>application</em>, not definitions &mdash; &quot;given this scenario, which framework / which bias / which mitigation / whose responsibility?&quot; Work the chapter quizzes, then <em>Lesson E &mdash; FE</em> on this page's sibling for the format and pacing advice.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · không có PE</span>\n<h2>ITE302c KHÔNG có thi thực hành</h2>\n<p class=\"lead\">Trang này để đính chính một hiểu nhầm phổ biến: <strong>ITE302c không có thi thực hành (PE) và cũng không có điểm quá trình nào cả.</strong> Syllabus chính thức (ID 12637) chỉ liệt kê đúng <strong>1 đầu điểm</strong>: Thi lý thuyết cuối kỳ (TE), trọng số <strong>100%</strong>, 60 câu máy chấm, 60 phút, điều kiện hoàn thành 4.</p>\n<h3>Syllabus ghi chính xác điều gì</h3>\n<table>\n  <thead><tr><th>Thành phần</th><th>Loại</th><th>Trọng số</th><th>Điều kiện</th><th>Thời gian</th><th>Hình thức</th></tr></thead>\n  <tbody>\n    <tr><td>TE</td><td>Thi cuối kỳ</td><td>100%</td><td>&ge; 4</td><td>60'</td><td>Máy chấm · 60 câu</td></tr>\n  </tbody>\n</table>\n<p>Thời lượng học nằm ở online, không ở phòng lab: <em>150h = 128h online + 3h offline + 1h thi TE + 18h tự học</em>. Phần &quot;thực hành&quot; của môn chính là hoàn thành các MOOC Coursera và lấy chứng chỉ &mdash; đó là <strong>chốt chặn dự thi</strong>, không phải một đầu điểm.</p>\n<h3>Hai việc bạn thật sự phải làm</h3>\n<ul>\n<li><strong>Lấy đủ mọi chứng chỉ.</strong> Chứng chỉ nghề CertNexus <em>Certified Ethical Emerging Technologist</em> <em>và</em> chứng chỉ khoá <em>Ethics of Artificial Intelligence</em>. Thiếu là <strong>bị cấm thi cuối kỳ</strong> &mdash; không chứng chỉ, không thi, không điểm.</li>\n<li><strong>Xong trước hạn của lớp</strong> để được <strong>+1 điểm thưởng</strong>. Quy tắc qua môn là <strong>TE cuối &ge; 4.0 VÀ (TE cuối + thưởng) &ge; 5.0</strong>, nên điểm thưởng kéo được mức 4.0&ndash;4.9 qua vạch, nhưng không bao giờ cứu được điểm dưới 4.</li>\n</ul>\n<div class=\"callout warn\">Vì 100% điểm dồn vào một bài 60 phút, không có điểm quá trình nào đỡ cho một ngày làm bài tệ. Hãy coi quiz của MOOC và quiz từng chương trong khoá này là buổi tổng duyệt &mdash; đó là toàn bộ phần luyện tập bạn có.</div>\n<div class=\"note-ct\">Ôn thi: TE kiểm tra <em>khả năng áp dụng</em>, không phải định nghĩa &mdash; &quot;cho tình huống này, dùng khung nào / thiên kiến nào / giảm thiểu ra sao / trách nhiệm của ai?&quot; Làm hết quiz các chương, rồi xem bài <em>FE</em> ngay bên cạnh để nắm format và cách phân bổ thời gian.</div>\n</div>"
         },
         {
           "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
           "slug": "ite302c-final-exam-fe",
           "type": "article",
           "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam of ITE302c is the <strong>Theory Exam (TE)</strong> and it is the subject&rsquo;s <strong>only</strong> assessment: <strong>100% of the mark</strong>, <strong>60 computer-gradable questions in 60 minutes</strong>, completion criterion <strong>TE &ge; 4</strong> (see <em>Lesson 0.2 — Grading</em>). You may only sit it once every MOOC certificate is in hand.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Thi cuối kỳ của ITE302c chính là <strong>thi lý thuyết (TE)</strong> và là đầu điểm <strong>duy nhất</strong> của môn: <strong>100% điểm</strong>, <strong>60 câu máy chấm trong 60 phút</strong>, điều kiện hoàn thành <strong>TE &ge; 4</strong> (xem <em>Bài 0.2 — Thang điểm</em>). Chỉ được dự thi khi đã có đủ chứng chỉ MOOC.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [

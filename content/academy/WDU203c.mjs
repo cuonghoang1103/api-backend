@@ -22,8 +22,8 @@ export default {
     language: 'Vietnamese',
     status: 'PUBLISHED',
     shortDescription: 'Design products people love: learn UX research (interviews, user testing, surveys, analytics) and UX design (ideation, sketching, wireframes, prototypes) the Michigan/Coursera way, then run a full multi-phase capstone.|||Thiết kế sản phẩm người dùng yêu thích: học nghiên cứu UX (phỏng vấn, kiểm thử người dùng, khảo sát, analytics) và thiết kế UX (ý tưởng, phác thảo, wireframe, prototype) theo Michigan/Coursera, rồi chạy một đồ án capstone nhiều pha.',
-    description: 'WDU203c (UI/UX Design — Thiết kế trải nghiệm người dùng) dạy bạn cách tạo ra sản phẩm số vừa dễ dùng vừa đáng yêu, dựa trên bộ chuyên đề UX của Đại học Michigan trên Coursera (6 khoá). Môn học tích hợp HAI nửa của nghề: UX RESEARCH (hiểu người dùng thật — phỏng vấn định tính, quan sát, kiểm thử khả dụng, khảo sát định lượng, phân tích hành vi, A/B test) và UX DESIGN (biến hiểu biết thành giải pháp — phác ý tưởng, sketch, kịch bản, storyboard, wireframe, prototype từ thấp đến cao độ trung thực). Bạn đi qua trọn vòng thiết kế lấy người dùng làm trung tâm (double diamond): khám phá nhu cầu → định nghĩa vấn đề → phát triển giải pháp → kiểm thử với người thật → lặp lại. Cuối môn là một đồ án CAPSTONE nhiều pha: bạn tự chọn một sản phẩm, nghiên cứu người dùng, thiết kế, prototype, kiểm thử và viết báo cáo. Đánh giá 100% qua bài thi trắc nghiệm cuối kỳ (TE), nhưng ĐIỀU KIỆN dự thi là hoàn thành cả 6 MOOC và lấy chứng chỉ Specialization — nên môn này ăn điểm bằng việc HỌC ĐỀU và HIỂU quy trình, không phải nhồi phút chót.',
-    whatYouLearn: 'Phân biệt UX vs UI, UX research vs UX design; quy trình thiết kế lấy người dùng làm trung tâm (double diamond); nguyên tắc nhận thức (Gestalt, mental model, affordance) và 10 heuristic của Nielsen + đánh giá heuristic; phỏng vấn định tính đúng cách + quan sát + affinity wall; thiết kế và điều phối một buổi kiểm thử khả dụng (think-aloud) + viết báo cáo; sinh ý tưởng, sketch, scenario, storyboard, wireframe và prototype lo→hi fidelity; nghiên cứu ở quy mô lớn: khảo sát tránh 3 loại lỗi (coverage/nonresponse/measurement), behavioral analytics, remote testing, A/B & preference testing; và chạy một đồ án UX nhiều pha từ nghiên cứu tới báo cáo cuối. Kèm chuẩn ngoài giáo trình: WCAG accessibility, design system/design token, và các chỉ số UX (SUS, HEART, SUPR-Q).',
+    description: 'WDU203c (UI/UX Design — Thiết kế trải nghiệm người dùng) dạy bạn cách tạo ra sản phẩm số vừa dễ dùng vừa đáng yêu, dựa trên bộ chuyên đề UX của Đại học Michigan trên Coursera (6 khoá). Môn học tích hợp HAI nửa của nghề: UX RESEARCH (hiểu người dùng thật — phỏng vấn định tính, quan sát, kiểm thử khả dụng, khảo sát định lượng, phân tích hành vi, A/B test) và UX DESIGN (biến hiểu biết thành giải pháp — phác ý tưởng, sketch, kịch bản, storyboard, wireframe, prototype từ thấp đến cao độ trung thực). Bạn đi qua trọn vòng thiết kế lấy người dùng làm trung tâm (UCD): khám phá nhu cầu → định nghĩa vấn đề → phát triển giải pháp → kiểm thử với người thật → lặp lại. Cuối môn là một đồ án CAPSTONE nhiều pha: bạn tự chọn một sản phẩm, nghiên cứu người dùng, thiết kế, prototype, kiểm thử và viết báo cáo. Đánh giá 100% qua bài thi trắc nghiệm cuối kỳ (TE), nhưng ĐIỀU KIỆN dự thi là hoàn thành cả 6 MOOC và lấy chứng chỉ Specialization — nên môn này ăn điểm bằng việc HỌC ĐỀU và HIỂU quy trình, không phải nhồi phút chót.',
+    whatYouLearn: 'Phân biệt UX vs UI, UX research vs UX design; quy trình thiết kế lấy người dùng làm trung tâm (UCD); nguyên tắc nhận thức (Gestalt, mental model, affordance) và 10 heuristic của Nielsen + đánh giá heuristic; phỏng vấn định tính đúng cách + quan sát + affinity wall; thiết kế và điều phối một buổi kiểm thử khả dụng (think-aloud) + viết báo cáo; sinh ý tưởng, sketch, scenario, storyboard, wireframe và prototype lo→hi fidelity; nghiên cứu ở quy mô lớn: khảo sát tránh 3 loại lỗi (coverage/nonresponse/measurement), behavioral analytics, remote testing, A/B & preference testing; và chạy một đồ án UX nhiều pha từ nghiên cứu tới báo cáo cuối. Kèm chuẩn ngoài giáo trình: WCAG accessibility, design system/design token, và các chỉ số UX (SUS, HEART, SUPR-Q).',
     requirements: 'Không có môn tiên quyết. Cần: tài khoản Coursera (đăng ký qua FPT để học 6 MOOC Michigan UX Specialization), một công cụ thiết kế (Figma — miễn phí, có gói Education), một công cụ vẽ sơ đồ/affinity (Miro/FigJam), và người dùng thật để phỏng vấn/kiểm thử (5 người là đủ cho mỗi vòng). Nên có laptop, tai nghe có mic để phỏng vấn từ xa.',
     documentsNote: 'Tài nguyên chính: Michigan "User Experience Research and Design" Specialization trên Coursera (6 khoá) — introtoux-principles-and-processes • understanding-user-needs • evaluating-designs-with-users • ux-design-concept-wireframe • ux-research-at-scale • user-experience-capstone. Sách tham khảo: The Design of Everyday Things (Don Norman) • Don\'t Make Me Think (Steve Krug) • Rocket Surgery Made Easy (Krug) • 100 Things Every Designer Needs to Know About People (Susan Weinschenk). Công cụ cài đặt & template → Exp Hub. Đây là môn thiết kế — vừa học vừa làm đồ án UX thật.',
   },
@@ -38,13 +38,13 @@ export default {
           slug: 'wdu203c-gioi-thieu',
           type: 'VIDEO',
           isFreePreview: true,
-          description: 'Bức tranh toàn cảnh: môn tích hợp UX Research + UX Design theo bộ Michigan UX, đi trọn vòng double diamond và kết thúc bằng capstone.',
+          description: 'Bức tranh toàn cảnh: môn tích hợp UX Research + UX Design theo bộ Michigan UX, đi trọn vòng thiết kế lấy người dùng làm trung tâm (UCD) và kết thúc bằng capstone.',
           content: `
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.1</span>
 <h2>WDU203c — you design for real people, then prove it with real users</h2>
 <p class="lead">WDU203c (UI/UX Design) teaches you to build digital products that are both <strong>usable</strong> and <strong>enjoyable</strong>. It follows the University of Michigan <strong>"User Experience Research and Design"</strong> specialization on Coursera — six courses that integrate the two halves of the job: <strong>UX Research</strong> (understanding real users) and <strong>UX Design</strong> (turning that understanding into screens people can actually use).</p>
-<p>UX is <strong>not</strong> just making things pretty. A beautiful screen that confuses users is bad UX. The discipline is a repeatable loop: <em>discover what people need → define the real problem → develop candidate designs → test them with real users → iterate</em>. This loop is often drawn as the <strong>Double Diamond</strong>.</p>
+<p>UX is <strong>not</strong> just making things pretty. A beautiful screen that confuses users is bad UX. The discipline is a repeatable loop — the <strong>user-centred design (UCD) cycle</strong> the Michigan specialization teaches: <em>understand users → design a candidate solution → prototype it → evaluate with real users → iterate</em>.</p>
 
 <h3>The whole course in one map</h3>
 <div class="lz-map">
@@ -63,7 +63,8 @@ export default {
   <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Accessibility · design systems · UX metrics</div><div class="lz-nsub">WCAG · design tokens · SUS/HEART</div></div></div>
 </div>
 
-<h3>The Double Diamond — how designers avoid solving the wrong problem</h3>
+<h3>★ Beyond the syllabus — the Double Diamond as a mental aid</h3>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The Double Diamond is the UK Design Council's model, not Michigan's.</b> It is a handy picture of "diverge then converge, twice", and we use it in this course as a teaching aid only. The six Michigan courses in the syllabus talk about the <em>user-centred design cycle</em> (understand → design → prototype → evaluate). <em>Do not expect Double-Diamond stage names in the TE.</em></div>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Diverge</div><div class="lz-t">Discover</div><div class="lz-d">research widely, gather needs</div></div>
   <div class="lz-step"><div class="lz-k">Converge</div><div class="lz-t">Define</div><div class="lz-d">frame the real problem</div></div>
@@ -79,7 +80,7 @@ export default {
 <span class="eyebrow">Mục 0 · Bài 0.1</span>
 <h2>WDU203c — bạn thiết kế cho người thật, rồi chứng minh bằng người dùng thật</h2>
 <p class="lead">WDU203c (UI/UX Design) dạy bạn xây sản phẩm số vừa <strong>dễ dùng</strong> vừa <strong>đáng yêu</strong>. Môn theo bộ chuyên đề <strong>"User Experience Research and Design"</strong> của Đại học Michigan trên Coursera — sáu khoá tích hợp hai nửa của nghề: <strong>UX Research</strong> (hiểu người dùng thật) và <strong>UX Design</strong> (biến hiểu biết đó thành màn hình người ta thực sự dùng được).</p>
-<p>UX <strong>không</strong> chỉ là làm cho đẹp. Một màn hình đẹp nhưng khiến người dùng bối rối là UX tồi. Bộ môn này là một vòng lặp lặp lại được: <em>khám phá người ta cần gì → định nghĩa vấn đề thật → phát triển các phương án → kiểm thử với người thật → lặp lại</em>. Vòng lặp này thường được vẽ thành <strong>Double Diamond (Kim cương đôi)</strong>.</p>
+<p>UX <strong>không</strong> chỉ là làm cho đẹp. Một màn hình đẹp nhưng khiến người dùng bối rối là UX tồi. Bộ môn này là một vòng lặp lặp lại được — <strong>vòng thiết kế lấy người dùng làm trung tâm (UCD)</strong> mà bộ chuyên đề Michigan dạy: <em>hiểu người dùng → thiết kế phương án → dựng prototype → đánh giá với người thật → lặp lại</em>.</p>
 
 <h3>Cả môn học trong một bản đồ</h3>
 <div class="lz-map">
@@ -98,7 +99,8 @@ export default {
   <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Accessibility · design system · chỉ số UX</div><div class="lz-nsub">WCAG · design token · SUS/HEART</div></div></div>
 </div>
 
-<h3>Double Diamond — cách nhà thiết kế tránh giải sai vấn đề</h3>
+<h3>★ Ngoài giáo trình — Double Diamond như một công cụ ghi nhớ</h3>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Double Diamond là mô hình của UK Design Council, không phải của Michigan.</b> Nó là bức tranh tiện lợi cho "mở rồi đóng, hai lần", và trong môn này chúng tôi chỉ dùng nó làm công cụ dạy. Sáu khoá Michigan trong syllabus nói về <em>vòng thiết kế lấy người dùng làm trung tâm</em> (hiểu → thiết kế → prototype → đánh giá). <em>Đừng chờ tên các pha Double Diamond xuất hiện trong đề TE.</em></div>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Mở</div><div class="lz-t">Khám phá</div><div class="lz-d">nghiên cứu rộng, gom nhu cầu</div></div>
   <div class="lz-step"><div class="lz-k">Đóng</div><div class="lz-t">Định nghĩa</div><div class="lz-d">khung lại vấn đề thật</div></div>
@@ -203,7 +205,7 @@ export default {
 <tr><td>CLO8</td><td>Design and run an integrated multi-phase UX project</td><td>Ch 6 (capstone)</td></tr>
 </tbody>
 </table>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Two axes, not eight items.</b> Notice the CLOs cluster on two axes: <em>research</em> (1, 3, 4, 7) and <em>design</em> (2, 5, 6), with 8 integrating both. If you always ask "is this a research skill or a design skill, and where in the double diamond does it sit?" the eight outcomes collapse into one mental model. <em>This grouping is our teaching aid, not in the syllabus.</em></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Two axes, not eight items.</b> Notice the CLOs cluster on two axes: <em>research</em> (1, 3, 4, 7) and <em>design</em> (2, 5, 6), with 8 integrating both. If you always ask "is this a research skill or a design skill, and where in the UCD cycle does it sit?" the eight outcomes collapse into one mental model. <em>This grouping is our teaching aid, not in the syllabus.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.3</span>
@@ -222,7 +224,7 @@ export default {
 <tr><td>CLO8</td><td>Thiết kế và chạy một dự án UX tích hợp nhiều pha</td><td>Ch 6 (capstone)</td></tr>
 </tbody>
 </table>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hai trục, không phải tám mục.</b> Để ý các CLO gom trên hai trục: <em>nghiên cứu</em> (1, 3, 4, 7) và <em>thiết kế</em> (2, 5, 6), với 8 tích hợp cả hai. Nếu luôn hỏi "đây là kỹ năng nghiên cứu hay thiết kế, và nằm ở đâu trên double diamond?" thì tám chuẩn đầu ra thu về một mô hình tư duy. <em>Cách gom này là công cụ dạy của chúng tôi, không có trong syllabus.</em></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hai trục, không phải tám mục.</b> Để ý các CLO gom trên hai trục: <em>nghiên cứu</em> (1, 3, 4, 7) và <em>thiết kế</em> (2, 5, 6), với 8 tích hợp cả hai. Nếu luôn hỏi "đây là kỹ năng nghiên cứu hay thiết kế, và nằm ở đâu trong vòng UCD?" thì tám chuẩn đầu ra thu về một mô hình tư duy. <em>Cách gom này là công cụ dạy của chúng tôi, không có trong syllabus.</em></div>
 </div>`,
         },
         {
@@ -988,7 +990,7 @@ export default {
 4. Open Present mode → now a user can tap through the real flow.
 5. Give a tester the task "book tomorrow 3pm" and watch — no code written.</div>
 <div class="pitfall"><strong>Don't over-polish too early.</strong> A hi-fi prototype tempts users to comment on colors while ignoring a broken flow, and it's expensive to change — so people defend it instead of fixing it (sunk-cost). Match fidelity to the question: testing "is the flow right?" → lo-fi is better <em>and</em> cheaper.</div>
-<div class="callout ok"><strong>Prototype = a question, not a product.</strong> Every prototype should be built to answer one thing ("can users find checkout?"). Build only enough to answer it, test, throw it away, and build the next. This is the develop→test loop of the double diamond in action.</div>
+<div class="callout ok"><strong>Prototype = a question, not a product.</strong> Every prototype should be built to answer one thing ("can users find checkout?"). Build only enough to answer it, test, throw it away, and build the next. This is the design→prototype→evaluate loop of the user-centred design cycle in action.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Wireflow.</b> A <em>wireflow</em> combines wireframes with a flowchart — showing each screen AND the decisions/branches between them (what happens on error, on empty state). It communicates dynamic behavior that static wireframes miss, and is invaluable for handing off to developers. <em>A practitioner artifact beyond the syllabus.</em></div>
 </div>
 <div class="ml-vi">
@@ -1008,7 +1010,7 @@ export default {
 4. Mở chế độ Present → giờ người dùng có thể chạm qua luồng thật.
 5. Giao người test nhiệm vụ "đặt 15h mai" và quan sát — không viết dòng code nào.</div>
 <div class="pitfall"><strong>Đừng đánh bóng quá sớm.</strong> Một prototype hi-fi dụ người dùng bình luận về màu sắc trong khi bỏ qua luồng hỏng, và nó tốn kém để đổi — nên người ta bênh nó thay vì sửa (chi phí chìm). Khớp fidelity với câu hỏi: test "luồng có đúng không?" → lo-fi tốt hơn <em>và</em> rẻ hơn.</div>
-<div class="callout ok"><strong>Prototype = một câu hỏi, không phải sản phẩm.</strong> Mỗi prototype nên được dựng để trả lời một thứ ("người dùng có tìm ra checkout?"). Chỉ dựng đủ để trả lời nó, test, vứt đi, và dựng cái tiếp. Đây là vòng phát-triển→kiểm-thử của double diamond đang chạy.</div>
+<div class="callout ok"><strong>Prototype = một câu hỏi, không phải sản phẩm.</strong> Mỗi prototype nên được dựng để trả lời một thứ ("người dùng có tìm ra checkout?"). Chỉ dựng đủ để trả lời nó, test, vứt đi, và dựng cái tiếp. Đây là vòng thiết kế→prototype→đánh giá của quy trình UCD đang chạy.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Wireflow.</b> Một <em>wireflow</em> kết hợp wireframe với sơ đồ luồng — hiện mỗi màn VÀ các quyết định/nhánh giữa chúng (xảy ra gì khi lỗi, khi trạng thái rỗng). Nó truyền đạt hành vi động mà wireframe tĩnh bỏ lỡ, và cực quý khi bàn giao cho lập trình viên. <em>Một tạo tác của người hành nghề ngoài syllabus.</em></div>
 </div>`,
           quiz: {
@@ -1237,7 +1239,7 @@ export default {
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.1</span>
 <h2>Put it all together: one project, every skill (CLO8)</h2>
-<p class="lead">The capstone integrates the whole course into a single multi-phase project. You pick a problem and walk the double diamond end to end — research, define, design, prototype, test, report. It is graded on process rigor, not on shipping a real app.</p>
+<p class="lead">The capstone integrates the whole course into a single multi-phase project. You pick a problem and walk the user-centred design cycle end to end — research, define, design, prototype, test, report. It is graded on process rigor, not on shipping a real app.</p>
 <h3>The five milestones</h3>
 <div class="lz-map">
   <div class="lz-stage">M1 · Discover</div>
@@ -1269,7 +1271,7 @@ export default {
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.1</span>
 <h2>Ghép tất cả lại: một dự án, mọi kỹ năng (CLO8)</h2>
-<p class="lead">Capstone tích hợp cả môn vào một dự án nhiều pha. Bạn chọn một vấn đề và đi trọn double diamond từ đầu tới cuối — nghiên cứu, định nghĩa, thiết kế, prototype, kiểm thử, báo cáo. Nó được chấm theo độ chặt chẽ quy trình, không theo việc ra mắt một app thật.</p>
+<p class="lead">Capstone tích hợp cả môn vào một dự án nhiều pha. Bạn chọn một vấn đề và đi trọn vòng UCD từ đầu tới cuối — nghiên cứu, định nghĩa, thiết kế, prototype, kiểm thử, báo cáo. Nó được chấm theo độ chặt chẽ quy trình, không theo việc ra mắt một app thật.</p>
 <h3>Năm milestone</h3>
 <div class="lz-map">
   <div class="lz-stage">M1 · Khám phá</div>
@@ -1323,7 +1325,7 @@ export default {
   <div class="lz-layer"><span class="lz-lk">CLO4 Testing</span> Why test the design, not the user? Why ~5 users? Why must the moderator stay quiet? Formative vs summative?</div>
   <div class="lz-layer"><span class="lz-lk">CLO6 Prototype</span> Match fidelity to the question — why not always hi-fi? What makes a prototype "interactive/testable"?</div>
   <div class="lz-layer"><span class="lz-lk">CLO7 Scale</span> What does analytics tell you vs not? How does an A/B test decide? Why check significance?</div>
-  <div class="lz-layer"><span class="lz-lk">CLO8 Process</span> Order the double diamond stages. Why does the report need a pivot backed by evidence?</div>
+  <div class="lz-layer"><span class="lz-lk">CLO8 Process</span> Order the user-centred design cycle (understand → design → prototype → evaluate) and the five capstone milestones. Why does the report need a pivot backed by evidence?</div>
 </div>
 <h3>Compare-table — the terms students confuse</h3>
 <table>
@@ -1341,6 +1343,7 @@ export default {
 <h3>Exam-day time strategy</h3>
 <div class="formula"><span class="lbl">PACING</span> 50 questions ÷ 60 min ≈ 72 sec/question &nbsp;·&nbsp; flag &amp; skip hard ones, return at the end</div>
 <div class="callout ok"><strong>The judgment-question reflex:</strong> when an item asks "what should the team do next?", the UX-correct answer usually <em>gathers evidence from users</em> (test, interview, observe) rather than assumes or decides from opinion. When unsure between two options, pick the more user-evidence-based one.</div>
+<div class="callout warn"><strong>Do not study the syllabus "Constructive questions" list.</strong> The eight constructive questions printed in the official WDU203c syllabus (ID 13164) are an editing error: they are copied verbatim from the discrete-mathematics syllabus MAD101 — "manipulate logical expressions and use logic for inference", "operations on sets, functions and sequences", "modular arithmetic", "induction and recursive definition", "counting problems", "shortest paths in a weighted graph", "structure of a tree". None of them has anything to do with UI/UX, and none of them can appear on this TE, which covers CLO1–CLO8 only. Revise from the CLO bank above instead (and it is worth reporting the error to the faculty).</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Lock the bonus = lower the bar.</b> Recall from 0.2: finishing all six MOOCs early gives +1, dropping your needed exam score from 5.0 to 4.0. The single highest-value exam-prep action is not more revision — it is finishing the certificate on time. <em>Strategy, not content, but it wins the course.</em></div>
 </div>
 <div class="ml-vi">
@@ -1354,7 +1357,7 @@ export default {
   <div class="lz-layer"><span class="lz-lk">CLO4 Kiểm thử</span> Vì sao test thiết kế, không phải người dùng? Vì sao ~5 người? Vì sao người điều phối phải im? Formative vs summative?</div>
   <div class="lz-layer"><span class="lz-lk">CLO6 Prototype</span> Khớp fidelity với câu hỏi — vì sao không luôn hi-fi? Điều gì làm prototype "tương tác/kiểm thử được"?</div>
   <div class="lz-layer"><span class="lz-lk">CLO7 Quy mô</span> Analytics cho biết gì vs không? A/B test quyết định thế nào? Vì sao kiểm ý nghĩa?</div>
-  <div class="lz-layer"><span class="lz-lk">CLO8 Quy trình</span> Sắp thứ tự các pha double diamond. Vì sao báo cáo cần một bước xoay hướng có bằng chứng?</div>
+  <div class="lz-layer"><span class="lz-lk">CLO8 Quy trình</span> Sắp thứ tự vòng thiết kế lấy người dùng làm trung tâm (hiểu → thiết kế → prototype → đánh giá) và năm milestone capstone. Vì sao báo cáo cần một bước xoay hướng có bằng chứng?</div>
 </div>
 <h3>Bảng so sánh — các thuật ngữ sinh viên hay nhầm</h3>
 <table>
@@ -1372,6 +1375,7 @@ export default {
 <h3>Chiến lược thời gian ngày thi</h3>
 <div class="formula"><span class="lbl">NHỊP ĐỘ</span> 50 câu ÷ 60 phút ≈ 72 giây/câu &nbsp;·&nbsp; đánh dấu &amp; bỏ câu khó, quay lại ở cuối</div>
 <div class="callout ok"><strong>Phản xạ câu phán đoán:</strong> khi câu hỏi hỏi "đội nên làm gì tiếp?", đáp án đúng-UX thường <em>thu thập bằng chứng từ người dùng</em> (test, phỏng vấn, quan sát) chứ không giả định hay quyết theo ý kiến. Khi phân vân giữa hai lựa chọn, chọn cái dựa trên bằng chứng người dùng hơn.</div>
+<div class="callout warn"><strong>ĐỪNG ôn theo mục "Constructive questions" trong syllabus.</strong> Tám câu hỏi kiến tạo in trong syllabus WDU203c chính thức (ID 13164) là một lỗi biên tập: chúng được chép nguyên văn từ syllabus toán rời rạc MAD101 — "biến đổi biểu thức logic và dùng logic để suy luận", "các phép toán trên tập hợp, hàm và dãy", "số học đồng dư", "quy nạp và định nghĩa đệ quy", "bài toán đếm", "đường đi ngắn nhất trên đồ thị có trọng số", "cấu trúc của cây". Không câu nào liên quan tới UI/UX, và không câu nào có thể ra trong bài TE này — đề chỉ trải CLO1–CLO8. Hãy ôn theo ngân hàng CLO ở trên (và nên báo lỗi này cho nhà trường).</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Khoá điểm thưởng = hạ ngưỡng.</b> Nhớ từ bài 0.2: xong sớm cả sáu MOOC cho +1, kéo điểm thi bạn cần từ 5.0 xuống 4.0. Hành động ôn thi giá trị nhất không phải ôn thêm — mà là hoàn thành chứng chỉ đúng hạn. <em>Chiến lược, không phải nội dung, nhưng thắng cả môn.</em></div>
 </div>`,
           quiz: {
@@ -1399,12 +1403,12 @@ export default {
               },
               {
                 id: 'q3', points: 1,
-                question: 'Correct order of the double diamond stages:|||Thứ tự đúng các pha double diamond:',
+                question: 'Correct order of the user-centred design cycle taught in this course:|||Thứ tự đúng của vòng thiết kế lấy người dùng làm trung tâm được dạy trong môn này:',
                 options: [
-                  'Deliver → Develop → Define → Discover|||Giao → Phát triển → Định nghĩa → Khám phá',
-                  'Discover → Define → Develop → Deliver|||Khám phá → Định nghĩa → Phát triển → Giao',
-                  'Define → Discover → Deliver → Develop|||Định nghĩa → Khám phá → Giao → Phát triển',
-                  'Develop → Deliver → Discover → Define|||Phát triển → Giao → Khám phá → Định nghĩa',
+                  'Prototype → evaluate with users → understand users → design|||Dựng prototype → đánh giá với người dùng → hiểu người dùng → thiết kế',
+                  'Understand users → design a solution → prototype → evaluate with users → iterate|||Hiểu người dùng → thiết kế phương án → dựng prototype → đánh giá với người dùng → lặp lại',
+                  'Design → understand users → evaluate with users → prototype|||Thiết kế → hiểu người dùng → đánh giá với người dùng → dựng prototype',
+                  'Evaluate with users → prototype → design → understand users|||Đánh giá với người dùng → dựng prototype → thiết kế → hiểu người dùng',
                 ], correctIndex: 1,
               },
               {

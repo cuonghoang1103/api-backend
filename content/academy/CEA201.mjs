@@ -67,8 +67,10 @@ export default {
   <div class="lz-node"><div class="lz-badge">13</div><div class="lz-nbody"><div class="lz-ntitle">RISC</div><div class="lz-nsub">RISC vs CISC · register windows</div></div></div>
   <div class="lz-node"><div class="lz-badge">14</div><div class="lz-nbody"><div class="lz-ntitle">ILP &amp; Superscalar</div><div class="lz-nsub">Doing several instructions at once</div></div></div>
   <div class="lz-node"><div class="lz-badge">15</div><div class="lz-nbody"><div class="lz-ntitle">Parallel Processing &amp; Multicore</div><div class="lz-nsub">SMP · cache coherence · GPUs</div></div></div>
-  <div class="lz-stage">Advanced · beyond the syllabus</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">MARIE assembly · pipeline hazards · modern CPU security</div><div class="lz-nsub">Hands-on &amp; deeper connections</div></div></div>
+  <div class="lz-stage">Practical assembly (syllabus sessions 39&ndash;44)</div>
+  <div class="lz-node"><div class="lz-badge">16</div><div class="lz-nbody"><div class="lz-ntitle">Hands-on assembly with MARIE</div><div class="lz-nsub">Six of the sixty sessions; the MARIE simulator is a listed course material</div></div></div>
+  <div class="lz-stage">Extra · beyond the syllabus</div>
+  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Inside a modern CPU · CPU security</div><div class="lz-nsub">Deeper connections</div></div></div>
 </div>
 <p>CEA201 pairs with <span class="badge">CSI104</span> in semester 1 and is the hardware backbone for <span class="badge">OSG202</span> (Operating Systems), <span class="badge">IOT102</span> and any low-level or performance work later. Where PRF192 taught you to write code, CEA201 shows you the machine that runs it.</p>
 <div class="callout ok">Study tip: this course is full of numbers (cache sizes, clock cycles, address bits). Do not memorize them — understand the <strong>trade-offs</strong> behind them. Every design choice in hardware answers "faster, smaller, or cheaper — pick two".</div>
@@ -146,12 +148,12 @@ export default {
 <table>
   <thead><tr><th>Component</th><th>Weight</th><th>Note</th></tr></thead>
   <tbody>
-    <tr><td>Assignment</td><td>20%</td><td>On-going, 2 parts — a report or a small project/simulation at home (All CLOs)</td></tr>
-    <tr><td>Exercises</td><td>40%</td><td>On-going, 4 parts — done at home throughout the term</td></tr>
-    <tr><td>Final exam</td><td>40%</td><td>60 minutes, multiple choice — must score ≥ 4 to pass the course</td></tr>
+    <tr><td>Assignment <small>on-going · 2 parts</small></td><td>20%</td><td>At home, All CLOs — &ldquo;Option 1: write a report, or develop…&rdquo; / &ldquo;Option 2: follow the lecturer&#39;s proposal&rdquo;; completion <b>&gt; 0</b></td></tr>
+    <tr><td>Exercises <small>on-going · 4 parts</small></td><td>40%</td><td>Done at home <b>and presented in class</b>, All CLOs — the stated question type is &ldquo;<b>apply AI to answer and explore</b> the…&rdquo;, so AI-assisted exploration is part of the task, not a shortcut around it; completion <b>&gt; 0</b></td></tr>
+    <tr><td>Final exam <small>1 part</small></td><td>40%</td><td>60 minutes, <b>multiple choice</b> — completion criterion <b>≥ 4</b></td></tr>
   </tbody>
 </table>
-<div class="callout warn">Two gates as always: <strong>(1)</strong> weighted average ≥ 5.0 and <strong>(2)</strong> the final exam alone ≥ 4.0. With 60% on-going, if you actually do the exercises and assignment you enter the final with a strong cushion — but you still cannot skip the final.</div>
+<div class="callout warn">Three gates: <strong>(1)</strong> every on-going component &gt; 0, <strong>(2)</strong> the final exam alone ≥ 4.0 and <strong>(3)</strong> weighted average ≥ 5.0 (plus ≥ 80% attendance to sit the final). With 60% on-going, if you actually do the exercises and assignment you enter the final with a strong cushion — but you still cannot skip the final.</div>
 <div class="note-ct">The final is multiple choice, which rewards broad, precise understanding of concepts and terminology (exactly what the chapter quizzes here drill). The assignment often involves a simulator (MARIE) or a written report — start it early, do not leave it to the last week.</div>
 </div>
 <div class="ml-vi">
@@ -170,12 +172,12 @@ export default {
 <table>
   <thead><tr><th>Thành phần</th><th>Trọng số</th><th>Ghi chú</th></tr></thead>
   <tbody>
-    <tr><td>Assignment</td><td>20%</td><td>Thường xuyên, 2 phần — báo cáo hoặc dự án/mô phỏng nhỏ làm ở nhà (mọi CLO)</td></tr>
-    <tr><td>Exercises (bài tập)</td><td>40%</td><td>Thường xuyên, 4 phần — làm ở nhà suốt kỳ</td></tr>
-    <tr><td>Thi cuối kỳ</td><td>40%</td><td>60 phút, trắc nghiệm — phải đạt ≥ 4 mới qua môn</td></tr>
+    <tr><td>Assignment <small>quá trình · 2 phần</small></td><td>20%</td><td>Làm ở nhà, mọi CLO — &ldquo;Option 1: viết báo cáo, hoặc phát triển…&rdquo; / &ldquo;Option 2: theo đề xuất của giảng viên&rdquo;; sàn hoàn thành <b>&gt; 0</b></td></tr>
+    <tr><td>Exercises (bài tập) <small>quá trình · 4 phần</small></td><td>40%</td><td>Làm ở nhà <b>và trình bày tại lớp</b>, mọi CLO — dạng đề ghi rõ là &ldquo;<b>áp dụng AI để trả lời và khám phá</b>…&rdquo;, nên dùng AI là một phần của bài, không phải lối tắt né bài; sàn hoàn thành <b>&gt; 0</b></td></tr>
+    <tr><td>Thi cuối kỳ <small>1 phần</small></td><td>40%</td><td>60 phút, <b>trắc nghiệm</b> — sàn hoàn thành <b>≥ 4</b></td></tr>
   </tbody>
 </table>
-<div class="callout warn">Hai cửa như thường lệ: <strong>(1)</strong> trung bình có trọng số ≥ 5.0 và <strong>(2)</strong> riêng thi cuối ≥ 4.0. Với 60% là quá trình, nếu bạn thực sự làm bài tập và assignment thì vào thi cuối với lợi thế lớn — nhưng vẫn không được bỏ thi cuối.</div>
+<div class="callout warn">Ba cửa: <strong>(1)</strong> mọi cột điểm quá trình &gt; 0, <strong>(2)</strong> riêng thi cuối ≥ 4.0 và <strong>(3)</strong> trung bình có trọng số ≥ 5,0 (cộng điều kiện dự ≥ 80% số buổi mới được thi). Với 60% là quá trình, nếu bạn thực sự làm bài tập và assignment thì vào thi cuối với lợi thế lớn — nhưng vẫn không được bỏ thi cuối.</div>
 <div class="note-ct">Thi cuối là trắc nghiệm, thưởng cho hiểu rộng và chính xác về khái niệm và thuật ngữ (đúng thứ mà quiz các chương ở đây rèn). Assignment thường dùng simulator (MARIE) hoặc viết báo cáo — bắt đầu sớm, đừng để tuần cuối.</div>
 </div>
 `,
@@ -241,7 +243,7 @@ export default {
 <h2>Materials, tools &amp; how to study</h2>
 <h3>Textbooks</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">Computer Organization and Architecture: Design for Performance — William Stallings (9e)</div><div class="lz-ld">The spine of the course. Every chapter here follows Stallings, with the same names. Comes with a rich instructor/student website of animations.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Computer Organization and Architecture: Design for Performance — William Stallings (9e)</div><div class="lz-ld">The spine of the course. Every chapter here follows Stallings, with the same names &mdash; but <b>not the same numbers</b>: this course numbers its chapters 1&ndash;15, while the syllabus and Stallings run to 18. Chapter 9 here is Stallings 11 (Boolean algebra), 10 is 12, 11 is 13, 12 is 14, 13 is 15, 14 is 16, 15 is 17&ndash;18 &mdash; so &ldquo;Exercises of chapter 12&rdquo; in the syllabus means chapter 10 here. Comes with a rich instructor/student website of animations.</div></div>
   <div class="lz-layer"><div class="lz-lt">Computer Architecture: A Quantitative Approach — Hennessy &amp; Patterson</div><div class="lz-ld">A deeper reference for performance and parallelism; only the intro chapters are needed at this level.</div></div>
 </div>
 <h3>Simulators you will actually use (CLO10)</h3>
@@ -269,7 +271,7 @@ export default {
 <h2>Tài liệu, công cụ &amp; cách học</h2>
 <h3>Giáo trình</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">Computer Organization and Architecture: Design for Performance — William Stallings (9e)</div><div class="lz-ld">Xương sống của môn. Mọi chương ở đây bám Stallings, cùng tên. Kèm website giảng viên/sinh viên nhiều hoạt hình minh hoạ.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Computer Organization and Architecture: Design for Performance — William Stallings (9e)</div><div class="lz-ld">Xương sống của môn. Mọi chương ở đây bám Stallings, cùng tên &mdash; nhưng <b>không cùng số</b>: khoá này đánh số chương 1&ndash;15, còn syllabus và Stallings chạy tới 18. Chương 9 ở đây là Stallings 11 (đại số Boole), 10 là 12, 11 là 13, 12 là 14, 13 là 15, 14 là 16, 15 là 17&ndash;18 &mdash; nên &ldquo;Exercises of chapter 12&rdquo; trong syllabus tức là chương 10 ở đây. Kèm website giảng viên/sinh viên nhiều hoạt hình minh hoạ.</div></div>
   <div class="lz-layer"><div class="lz-lt">Computer Architecture: A Quantitative Approach — Hennessy &amp; Patterson</div><div class="lz-ld">Tham khảo sâu về hiệu năng và song song; ở mức này chỉ cần các chương mở đầu.</div></div>
 </div>
 <h3>Simulator bạn sẽ thật sự dùng (CLO10)</h3>
@@ -769,7 +771,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Write-through</div><div class="lz-t">update cache + RAM</div><div class="lz-d">simple, always consistent, slower</div></div>
   <div class="lz-step"><div class="lz-k">Write-back</div><div class="lz-t">update cache only</div><div class="lz-d">write to RAM later; faster, needs a dirty bit</div></div>
 </div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Write policy is the other half of cache design.</b> Mapping decides where a block goes; write policy decides when memory is updated. Write-through writes memory on every store (simple, always coherent, but slow); write-back sets a dirty bit and writes only on eviction (fast, fewer memory writes, but needs coherence tracking). Modern caches use write-back with write-allocate. <em>Replacement is taught, but the write path is the half that dominates real cache traffic and multicore coherence.</em></div>
+<div class="note-ct"><b>Write policy is the other half of cache design</b> &mdash; and it is on the syllabus: Stallings 4.3 &ldquo;Elements of cache design&rdquo;, sessions 13&ndash;14. Mapping decides where a block goes; write policy decides when memory is updated. Write-through writes memory on every store (simple, always coherent, but slow); write-back sets a dirty bit and writes only on eviction (fast, fewer memory writes, but needs coherence tracking). Modern caches use write-back with write-allocate. The write path is the half that dominates real cache traffic and multicore coherence.</div>
 <div class="note-ct">Exam framing: direct = fast but rigid; associative = flexible but costly; set-associative = the practical middle ground. This "simple-vs-flexible" tension repeats everywhere in architecture. Try the ParaCacheSimulator (Exp Hub) to watch hits, misses and evictions happen.</div>
 </div>
 <div class="ml-vi">
@@ -788,7 +790,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Write-through</div><div class="lz-t">cập nhật cache + RAM</div><div class="lz-d">đơn giản, luôn nhất quán, chậm hơn</div></div>
   <div class="lz-step"><div class="lz-k">Write-back</div><div class="lz-t">chỉ cập nhật cache</div><div class="lz-d">ghi RAM sau; nhanh hơn, cần bit "dirty"</div></div>
 </div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Chính sách ghi là nửa còn lại của thiết kế cache.</b> Ánh xạ quyết định block đi đâu; chính sách ghi quyết định khi nào bộ nhớ được cập nhật. Write-through ghi bộ nhớ ở mỗi lần store (đơn giản, luôn nhất quán, nhưng chậm); write-back đặt bit dirty và chỉ ghi khi bị đuổi (nhanh, ít ghi bộ nhớ hơn, nhưng cần theo dõi nhất quán). Cache hiện đại dùng write-back kèm write-allocate. <em>Thay thế thì được dạy, nhưng đường ghi mới là nửa chi phối lưu lượng cache thực và nhất quán đa nhân.</em></div>
+<div class="note-ct"><b>Chính sách ghi là nửa còn lại của thiết kế cache</b> &mdash; và nó nằm trong syllabus: Stallings 4.3 &ldquo;Elements of cache design&rdquo;, buổi 13&ndash;14. Ánh xạ quyết định block đi đâu; chính sách ghi quyết định khi nào bộ nhớ được cập nhật. Write-through ghi bộ nhớ ở mỗi lần store (đơn giản, luôn nhất quán, nhưng chậm); write-back đặt bit dirty và chỉ ghi khi bị đuổi (nhanh, ít ghi bộ nhớ hơn, nhưng cần theo dõi nhất quán). Cache hiện đại dùng write-back kèm write-allocate. Đường ghi là nửa chi phối lưu lượng cache thực và nhất quán đa nhân.</div>
 <div class="note-ct">Khung thi: direct = nhanh nhưng cứng; associative = linh hoạt nhưng tốn; set-associative = trung gian thực tế. Căng thẳng "đơn giản-vs-linh hoạt" này lặp lại khắp kiến trúc. Thử ParaCacheSimulator (Exp Hub) để xem hit, miss và eviction diễn ra.</div>
 </div>
 `,
@@ -889,7 +891,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Read</div><div class="lz-t">recompute check</div><div class="lz-d">compare with stored</div></div>
   <div class="lz-step"><div class="lz-k">Mismatch</div><div class="lz-t">locate &amp; fix the bit</div><div class="lz-d">ECC corrects automatically</div></div>
 </div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Hamming distance, SECDED and chipkill.</b> Correcting one bit needs a code with Hamming distance 3; adding one more parity bit gives distance 4 = SECDED (single-error-correct, double-error-detect), the standard for server ECC memory. Beyond that, chipkill-class schemes spread a word across chips so the system survives an entire DRAM chip failing. <em>The book shows Hamming&#39;s construction but not the distance theory or how servers scale it up.</em></div>
+<div class="note-ct"><b>Hamming distance and SEC-DED</b> &mdash; Stallings 5.2 &ldquo;Error correction&rdquo; (session 16) presents the SEC-DED code itself. Correcting one bit needs a code with Hamming distance 3; adding one more parity bit gives distance 4 = SECDED (single-error-correct, double-error-detect), the standard for server ECC memory. Beyond that, chipkill-class schemes spread a word across chips so the system survives an entire DRAM chip failing. Chipkill-class schemes go one step further than the book, spreading a word across chips so the system survives an entire DRAM chip failing.</div>
 <div class="note-ct">The idea of adding redundant bits to detect/correct errors reappears everywhere: RAID disks (Chapter 6), network packets, QR codes. It is the same principle — trade a little extra storage for reliability. Servers use ECC RAM precisely because a silent bit-flip in a bank or hospital system is unacceptable.</div>
 </div>
 <div class="ml-vi">
@@ -907,7 +909,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Đọc</div><div class="lz-t">tính lại bit kiểm</div><div class="lz-d">so với bản đã lưu</div></div>
   <div class="lz-step"><div class="lz-k">Lệch</div><div class="lz-t">định vị &amp; sửa bit</div><div class="lz-d">ECC sửa tự động</div></div>
 </div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Khoảng cách Hamming, SECDED và chipkill.</b> Sửa một bit cần mã có khoảng cách Hamming 3; thêm một bit chẵn lẻ nữa cho khoảng cách 4 = SECDED (sửa một lỗi, phát hiện hai lỗi), chuẩn cho bộ nhớ ECC máy chủ. Xa hơn, các sơ đồ kiểu chipkill trải một từ ra nhiều chip để hệ thống vẫn sống khi nguyên một chip DRAM hỏng. <em>Sách trình bày cách dựng mã Hamming nhưng không nói lý thuyết khoảng cách hay cách máy chủ mở rộng nó.</em></div>
+<div class="note-ct"><b>Khoảng cách Hamming và SEC-DED</b> &mdash; Stallings 5.2 &ldquo;Error correction&rdquo; (buổi 16) trình bày chính mã SEC-DED. Sửa một bit cần mã có khoảng cách Hamming 3; thêm một bit chẵn lẻ nữa cho khoảng cách 4 = SECDED (sửa một lỗi, phát hiện hai lỗi), chuẩn cho bộ nhớ ECC máy chủ. Xa hơn, các sơ đồ kiểu chipkill trải một từ ra nhiều chip để hệ thống vẫn sống khi nguyên một chip DRAM hỏng. <em>Sách trình bày cách dựng mã Hamming nhưng không nói lý thuyết khoảng cách hay cách máy chủ mở rộng nó.</em></div>
 <div class="note-ct">Ý tưởng thêm bit dư để phát hiện/sửa lỗi xuất hiện khắp nơi: đĩa RAID (Chương 6), gói mạng, mã QR. Vẫn nguyên lý đó — đổi một ít lưu trữ thêm lấy độ tin cậy. Máy chủ dùng RAM ECC chính vì một lỗi lật bit im lặng trong hệ thống ngân hàng hay bệnh viện là không chấp nhận được.</div>
 </div>
 `,
@@ -957,7 +959,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Transfer time</div><div class="lz-t">read the data</div><div class="lz-d">once positioned</div></div>
 </div>
 <p>Seek and rotation are measured in <em>milliseconds</em> — millions of times slower than the CPU&#39;s nanoseconds. This enormous gap is exactly why we have RAM caching disk, and cache caching RAM: the whole memory hierarchy exists to hide slow storage.</p>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The access-time formula and zoned recording.</b> Disk access time = seek time + rotational latency + transfer time. Average rotational latency is half a revolution, so a 7200 RPM drive (8.33 ms per turn) averages about 4.17 ms just waiting for the sector to arrive. Zoned bit recording packs more sectors on the longer outer tracks to keep bit density roughly constant across the platter. <em>The qualitative description implies these delays; the formula lets you actually compute why disks feel slow.</em></div>
+<div class="note-ct"><b>The access-time formula and zoned recording</b> &mdash; Stallings 6.1 &ldquo;Disk performance parameters&rdquo;, session 19; a constructive question asks you to define seek time, rotational delay, access time and transfer time. Disk access time = seek time + rotational latency + transfer time. Average rotational latency is half a revolution, so a 7200 RPM drive (8.33 ms per turn) averages about 4.17 ms just waiting for the sector to arrive. Zoned bit recording packs more sectors on the longer outer tracks to keep bit density roughly constant across the platter. The formula is what lets you actually compute why a disk feels slow: transfer time T = b / (r&middot;N) for b bytes, r revolutions per second and N bytes per track.</div>
 <div class="note-ct">This mechanical latency is why programs feel slow when they "hit the disk" (loading, swapping) and fast when data is already in RAM. It is also why SSDs (next lesson), with no moving parts, transformed computing.</div>
 </div>
 <div class="ml-vi">
@@ -976,7 +978,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Transfer time</div><div class="lz-t">đọc dữ liệu</div><div class="lz-d">khi đã định vị xong</div></div>
 </div>
 <p>Seek và quay đo bằng <em>mili-giây</em> — chậm hơn nano-giây của CPU hàng triệu lần. Khoảng cách khổng lồ này chính là lý do có RAM cache cho đĩa, và cache cache cho RAM: cả phân cấp bộ nhớ tồn tại để che lưu trữ chậm.</p>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Công thức thời gian truy cập và ghi theo vùng.</b> Thời gian truy cập đĩa = thời gian seek + độ trễ quay + thời gian truyền. Độ trễ quay trung bình là nửa vòng, nên ổ 7200 RPM (8,33 ms mỗi vòng) trung bình mất khoảng 4,17 ms chỉ để chờ sector tới. Ghi bit theo vùng (zoned bit recording) nhồi nhiều sector hơn vào các track ngoài dài hơn để giữ mật độ bit gần như không đổi khắp đĩa. <em>Mô tả định tính ngụ ý các độ trễ này; công thức mới cho phép tính thật vì sao đĩa cảm giác chậm.</em></div>
+<div class="note-ct"><b>Công thức thời gian truy cập và ghi theo vùng</b> &mdash; Stallings 6.1 &ldquo;Disk performance parameters&rdquo;, buổi 19; một câu hỏi kiến tạo yêu cầu định nghĩa seek time, rotational delay, access time và transfer time. Thời gian truy cập đĩa = thời gian seek + độ trễ quay + thời gian truyền. Độ trễ quay trung bình là nửa vòng, nên ổ 7200 RPM (8,33 ms mỗi vòng) trung bình mất khoảng 4,17 ms chỉ để chờ sector tới. Ghi bit theo vùng (zoned bit recording) nhồi nhiều sector hơn vào các track ngoài dài hơn để giữ mật độ bit gần như không đổi khắp đĩa. <em>Mô tả định tính ngụ ý các độ trễ này; công thức mới cho phép tính thật vì sao đĩa cảm giác chậm.</em></div>
 <div class="note-ct">Độ trễ cơ học này là lý do chương trình cảm thấy chậm khi "đụng đĩa" (nạp, swap) và nhanh khi dữ liệu đã ở RAM. Nó cũng là lý do SSD (bài kế), không có bộ phận chuyển động, đã biến đổi ngành máy tính.</div>
 </div>
 `,
@@ -999,7 +1001,7 @@ export default {
 </div>
 <div class="formula"><span class="lbl">Usable capacity</span>RAID 0 (n disks): n × size · RAID 1 (mirrored pair): 1 × size · RAID 5 (n disks): (n − 1) × size</div>
 <h3>Worked example · RAID 5 capacity</h3>
-<div class="out"><b>Given:</b> 5 disks of 2 TB each in RAID 5.<br><b>Usable capacity</b> = (n − 1) × size = (5 − 1) × 2 TB = <b>8 TB</b> (one disk&#39;s worth is spent on distributed parity, not a spare copy).<br><b>Compare:</b> the same 5 disks in RAID 1 (mirrored pairs) would give only half the raw total, and in RAID 0 the full 10 TB — but one dead disk loses everything.</div>
+<div class="out"><b>Given:</b> 5 disks of 2 TB each in RAID 5.<br><b>Usable capacity</b> = (n − 1) × size = (5 − 1) × 2 TB = <b>8 TB</b> (one disk&#39;s worth is spent on distributed parity, not a spare copy).<br><b>Compare:</b> RAID 0 across all 5 gives the full 10 TB — but one dead disk loses everything. RAID 1 mirrors in pairs, so 5 disks cannot all be paired: four of them give 2 pairs = <b>4 TB</b> usable and the fifth is left over (usually as a hot spare).</div>
 <h3>SSD &amp; flash — storage with no moving parts</h3>
 <p>A <strong>solid-state drive (SSD)</strong> stores data in <strong>flash memory</strong> (non-volatile semiconductor cells), with no platters or heads. No seek time, no rotation → dramatically faster and more rugged than a hard disk. The trade-off: higher cost per GB and limited write endurance per cell.</p>
 <div class="lz-flow">
@@ -1022,7 +1024,7 @@ export default {
 </div>
 <div class="formula"><span class="lbl">Dung lượng khả dụng</span>RAID 0 (n đĩa): n × dung lượng · RAID 1 (nhân đôi): 1 × dung lượng · RAID 5 (n đĩa): (n − 1) × dung lượng</div>
 <h3>Ví dụ có lời giải · Dung lượng RAID 5</h3>
-<div class="out"><b>Đề bài:</b> 5 đĩa, mỗi đĩa 2 TB, chạy RAID 5.<br><b>Dung lượng khả dụng</b> = (n − 1) × dung lượng = (5 − 1) × 2 TB = <b>8 TB</b> (dung lượng 1 đĩa dùng cho parity rải đều, không phải bản sao dự phòng).<br><b>So sánh:</b> cùng 5 đĩa đó chạy RAID 1 (nhân đôi cặp) chỉ được nửa tổng dung lượng thô, còn RAID 0 được đủ 10 TB — nhưng 1 đĩa chết là mất sạch.</div>
+<div class="out"><b>Đề bài:</b> 5 đĩa, mỗi đĩa 2 TB, chạy RAID 5.<br><b>Dung lượng khả dụng</b> = (n − 1) × dung lượng = (5 − 1) × 2 TB = <b>8 TB</b> (dung lượng 1 đĩa dùng cho parity rải đều, không phải bản sao dự phòng).<br><b>So sánh:</b> RAID 0 trên cả 5 đĩa cho đủ 10 TB — nhưng 1 đĩa chết là mất sạch. RAID 1 nhân đôi theo cặp, nên 5 đĩa không ghép cặp hết được: 4 đĩa cho 2 cặp = <b>4 TB</b> dùng được, đĩa thứ 5 dôi ra (thường để làm hot spare).</div>
 <h3>SSD &amp; flash — lưu trữ không bộ phận chuyển động</h3>
 <p>Một <strong>ổ thể rắn (SSD)</strong> lưu dữ liệu trong <strong>bộ nhớ flash</strong> (ô bán dẫn không bay hơi), không có đĩa hay đầu đọc. Không seek time, không quay → nhanh và bền hơn hẳn đĩa cứng. Đánh đổi: giá trên mỗi GB cao hơn và số lần ghi mỗi ô có giới hạn.</p>
 <div class="lz-flow">
@@ -1163,7 +1165,7 @@ export default {
   <span class="lc-body"><span class="lc-title">See scheduling &amp; memory live</span><span class="lc-sub">Inspect processes and memory from the shell — the Linux "Process Management" module.</span></span>
   <span class="lc-cta">PRACTICE →</span>
 </a>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The TLB makes virtual memory fast.</b> Every virtual access needs a page-table lookup, so the CPU caches recent translations in a Translation Lookaside Buffer (TLB), a small associative cache of page mappings. A TLB miss triggers a page-table walk &mdash; up to four memory accesses on x86-64 &mdash; which is why TLB reach and huge pages matter for performance. <em>Virtual memory is explained conceptually, but the TLB that keeps it from being catastrophically slow is a hardware detail usually omitted.</em></div>
+<div class="note-ct"><b>The TLB makes virtual memory fast</b> &mdash; a constructive question for this session asks exactly: &ldquo;What is virtual memory? What is the purpose of a translation lookaside buffer?&rdquo; Every virtual access needs a page-table lookup, so the CPU caches recent translations in a Translation Lookaside Buffer (TLB), a small associative cache of page mappings. A TLB miss triggers a page-table walk &mdash; up to four memory accesses on x86-64 &mdash; which is why TLB reach and huge pages matter for performance. Without it every virtual access would cost a page-table walk, so the TLB is not an optional detail &mdash; it is what keeps virtual memory from being catastrophically slow.</div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.1</span>
@@ -1186,7 +1188,7 @@ export default {
   <span class="lc-body"><span class="lc-title">Xem lập lịch &amp; bộ nhớ trực tiếp</span><span class="lc-sub">Soi tiến trình và bộ nhớ từ shell — module Linux "Process Management".</span></span>
   <span class="lc-cta">LUYỆN TẬP →</span>
 </a>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>TLB làm bộ nhớ ảo nhanh.</b> Mỗi truy cập ảo cần tra bảng trang, nên CPU lưu các bản dịch gần đây trong Translation Lookaside Buffer (TLB), một cache kết hợp nhỏ chứa ánh xạ trang. Một lần miss TLB kích hoạt duyệt bảng trang &mdash; tới bốn lần truy cập bộ nhớ trên x86-64 &mdash; nên tầm phủ TLB và huge page rất quan trọng cho hiệu năng. <em>Bộ nhớ ảo được giải thích về mặt khái niệm, nhưng TLB, thứ giữ nó khỏi chậm thảm hại, là chi tiết phần cứng thường bị bỏ.</em></div>
+<div class="note-ct"><b>TLB làm bộ nhớ ảo nhanh</b> &mdash; một câu hỏi kiến tạo của buổi này hỏi đúng: &ldquo;Bộ nhớ ảo là gì? Translation lookaside buffer dùng để làm gì?&rdquo; Mỗi truy cập ảo cần tra bảng trang, nên CPU lưu các bản dịch gần đây trong Translation Lookaside Buffer (TLB), một cache kết hợp nhỏ chứa ánh xạ trang. Một lần miss TLB kích hoạt duyệt bảng trang &mdash; tới bốn lần truy cập bộ nhớ trên x86-64 &mdash; nên tầm phủ TLB và huge page rất quan trọng cho hiệu năng. <em>Bộ nhớ ảo được giải thích về mặt khái niệm, nhưng TLB, thứ giữ nó khỏi chậm thảm hại, là chi tiết phần cứng thường bị bỏ.</em></div>
 </div>
 `,
         },
@@ -1395,7 +1397,7 @@ export default {
   <span class="lc-body"><span class="lc-title">Write real instructions in MARIE</span><span class="lc-sub">Type LOAD/ADD/STORE and single-step them — MARIE setup on the tools guide.</span></span>
   <span class="lc-cta">EXP HUB →</span>
 </a>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Fixed vs variable-length encoding, and endianness.</b> Opcode and operands must be packed into bits, and the layout is a trade-off: RISC uses fixed-length encodings (e.g. 32-bit) for easy, parallel decode, while x86 uses variable length (1 to 15 bytes) for code density at the cost of a harder decoder. How multi-byte operands are laid out (big-endian vs little-endian) is decided at this same level. <em>The book names the fields but not the encoding trade-off (density vs decodability) that shapes every ISA.</em></div>
+<div class="note-ct"><b>Fixed vs variable-length encoding, and endianness</b> &mdash; Stallings 13.3 &ldquo;Instruction formats&rdquo; (instruction length, bit allocation, variable-length instructions) is session 38. Opcode and operands must be packed into bits, and the layout is a trade-off: RISC uses fixed-length encodings (e.g. 32-bit) for easy, parallel decode, while x86 uses variable length (1 to 15 bytes) for code density at the cost of a harder decoder. How multi-byte operands are laid out (big-endian vs little-endian) is decided at this same level. The density-versus-decodability trade-off is what shapes every ISA.</div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.1</span>
@@ -1421,7 +1423,7 @@ export default {
   <span class="lc-body"><span class="lc-title">Viết lệnh thật trong MARIE</span><span class="lc-sub">Gõ LOAD/ADD/STORE và chạy từng bước — cài đặt MARIE ở guide công cụ.</span></span>
   <span class="lc-cta">EXP HUB →</span>
 </a>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Mã hóa dài cố định vs biến đổi, và endianness.</b> Opcode và toán hạng phải được nhồi vào bit, và cách bố trí là một đánh đổi: RISC dùng mã hóa dài cố định (ví dụ 32-bit) để giải mã dễ và song song, còn x86 dùng dài biến đổi (1 tới 15 byte) để nén mã, đổi lấy bộ giải mã phức tạp hơn. Cách xếp toán hạng nhiều byte (big-endian vs little-endian) cũng được quyết ngay ở mức này. <em>Sách nêu tên các trường nhưng không nói đánh đổi mã hóa (mật độ vs dễ giải mã) chi phối mọi ISA.</em></div>
+<div class="note-ct"><b>Mã hóa dài cố định vs biến đổi, và endianness</b> &mdash; Stallings 13.3 &ldquo;Instruction formats&rdquo; (độ dài lệnh, phân bổ bit, lệnh dài thay đổi) là buổi 38. Opcode và toán hạng phải được nhồi vào bit, và cách bố trí là một đánh đổi: RISC dùng mã hóa dài cố định (ví dụ 32-bit) để giải mã dễ và song song, còn x86 dùng dài biến đổi (1 tới 15 byte) để nén mã, đổi lấy bộ giải mã phức tạp hơn. Cách xếp toán hạng nhiều byte (big-endian vs little-endian) cũng được quyết ngay ở mức này. <em>Sách nêu tên các trường nhưng không nói đánh đổi mã hóa (mật độ vs dễ giải mã) chi phối mọi ISA.</em></div>
 </div>
 `,
         },
@@ -1604,7 +1606,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Control hazard</div><div class="lz-ld">A branch changes which instruction comes next, but the pipeline already fetched the wrong ones. Fixed with branch prediction.</div></div>
   <div class="lz-layer"><div class="lz-lt">Structural hazard</div><div class="lz-ld">Two stages need the same hardware resource at once.</div></div>
 </div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Hazards are why real CPI exceeds 1.</b> The ideal pipeline speedup ignores hazards: data hazards (an instruction needs a result not yet written), control hazards (branches change the next address), and structural hazards (two stages want the same resource). Forwarding (bypassing) feeds a result straight to a later stage before write-back, and branch prediction hides control hazards, but stalls still push real CPI above 1. <em>The clean N-stage speedup formula omits the hazards that make actual pipelines fall short of it.</em></div>
+<div class="note-ct"><b>Hazards are why real CPI exceeds 1</b> &mdash; pipelining and its hazards are Stallings 14.4, session 49. The ideal pipeline speedup ignores hazards: data hazards (an instruction needs a result not yet written), control hazards (branches change the next address), and structural hazards (two stages want the same resource). Forwarding (bypassing) feeds a result straight to a later stage before write-back, and branch prediction hides control hazards, but stalls still push real CPI above 1. The ideal figure comes from the timing formula T<sub>k,n</sub> = [k + (n &minus; 1)]&tau; for k stages and n instructions, giving speed-up S = n&middot;k / [k + (n &minus; 1)] &rarr; k for large n; hazards are what make a real pipeline fall short of it.</div>
 <div class="callout ok">Pipelining is one of the biggest ideas that made CPUs fast without raising the clock. Its main enemy is the branch (if/loop): a mispredicted branch flushes the pipeline. That is why modern CPUs invest heavily in <strong>branch prediction</strong> — the topic of the advanced chapter.</div>
 </div>
 <div class="ml-vi">
@@ -1623,7 +1625,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Control hazard (nghẽn điều khiển)</div><div class="lz-ld">Một lệnh nhảy đổi lệnh kế, nhưng pipeline đã nạp nhầm lệnh. Sửa bằng dự đoán nhảy (branch prediction).</div></div>
   <div class="lz-layer"><div class="lz-lt">Structural hazard (nghẽn tài nguyên)</div><div class="lz-ld">Hai giai đoạn cần cùng một tài nguyên phần cứng cùng lúc.</div></div>
 </div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hazard là lý do CPI thực lớn hơn 1.</b> Tăng tốc pipeline lý tưởng bỏ qua hazard: hazard dữ liệu (một lệnh cần kết quả chưa ghi xong), hazard điều khiển (rẽ nhánh đổi địa chỉ kế tiếp), và hazard cấu trúc (hai chặng cùng cần một tài nguyên). Forwarding (bypassing) chuyển kết quả thẳng tới chặng sau trước khi ghi lại, và dự đoán nhánh che hazard điều khiển, nhưng các lần khựng vẫn đẩy CPI thực lên trên 1. <em>Công thức tăng tốc N chặng gọn gàng bỏ qua các hazard khiến pipeline thực không đạt được nó.</em></div>
+<div class="note-ct"><b>Hazard là lý do CPI thực lớn hơn 1</b> &mdash; pipelining và các hazard của nó là Stallings 14.4, buổi 49. Tăng tốc pipeline lý tưởng bỏ qua hazard: hazard dữ liệu (một lệnh cần kết quả chưa ghi xong), hazard điều khiển (rẽ nhánh đổi địa chỉ kế tiếp), và hazard cấu trúc (hai chặng cùng cần một tài nguyên). Forwarding (bypassing) chuyển kết quả thẳng tới chặng sau trước khi ghi lại, và dự đoán nhánh che hazard điều khiển, nhưng các lần khựng vẫn đẩy CPI thực lên trên 1. <em>Công thức tăng tốc N chặng gọn gàng bỏ qua các hazard khiến pipeline thực không đạt được nó.</em></div>
 <div class="callout ok">Pipeline là một trong những ý tưởng lớn nhất giúp CPU nhanh mà không tăng clock. Kẻ thù chính của nó là lệnh nhảy (if/loop): một dự đoán nhảy sai xả sạch pipeline. Đó là lý do CPU hiện đại đầu tư mạnh vào <strong>dự đoán nhảy</strong> — chủ đề của chương nâng cao.</div>
 </div>
 `,
@@ -1818,7 +1820,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Result</div><div class="lz-t">all cores agree</div><div class="lz-d">correctness preserved</div></div>
 </div>
 <div class="callout ok">Remember Amdahl&#39;s law from Chapter 2: adding cores only helps the parts of a program that can run in parallel. This is why writing correct, efficient parallel software is hard and valuable — the hardware gives you cores, but your algorithm must expose the parallelism.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>MESI and memory consistency models.</b> Coherence is usually implemented with a snooping protocol like MESI, giving each cache line one of four states (Modified, Exclusive, Shared, Invalid). Separately, a memory consistency model &mdash; x86-TSO versus ARM&#39;s weaker ordering &mdash; defines what reorderings of loads and stores another core may observe, which is why lock-free code must insert memory barriers. <em>Coherence is introduced, but MESI and consistency models are what concurrent and lock-free programming actually stand on.</em></div>
+<div class="note-ct"><b>MESI and memory consistency models</b> &mdash; session 55 is literally &ldquo;17.3 Cache coherence and the MESI protocol&rdquo;. Coherence is usually implemented with a snooping protocol like MESI, giving each cache line one of four states (Modified, Exclusive, Shared, Invalid). Separately, a memory consistency model &mdash; x86-TSO versus ARM&#39;s weaker ordering &mdash; defines what reorderings of loads and stores another core may observe, which is why lock-free code must insert memory barriers. Consistency models are the part that goes beyond CEA201, and they are what concurrent and lock-free programming actually stand on.</div>
 <div class="note-ct">Course wrap-up: you have travelled from architecture vs organization, through performance, the memory hierarchy, I/O and the OS interface, down to digital logic, up through instruction sets, the pipelined processor, RISC, superscalar ILP, and finally multicore. You now understand the machine beneath every line of code you will ever write.</div>
 </div>
 <div class="ml-vi">
@@ -1838,7 +1840,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Kết quả</div><div class="lz-t">mọi nhân thống nhất</div><div class="lz-d">giữ đúng đắn</div></div>
 </div>
 <div class="callout ok">Nhớ định luật Amdahl ở Chương 2: thêm nhân chỉ giúp phần chương trình chạy song song được. Đây là lý do viết phần mềm song song đúng và hiệu quả vừa khó vừa giá trị — phần cứng cho bạn các nhân, nhưng thuật toán của bạn phải bộc lộ được song song.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>MESI và mô hình nhất quán bộ nhớ.</b> Nhất quán thường được hiện thực bằng giao thức snooping như MESI, cho mỗi dòng cache một trong bốn trạng thái (Modified, Exclusive, Shared, Invalid). Riêng biệt, một mô hình nhất quán bộ nhớ &mdash; x86-TSO so với thứ tự yếu hơn của ARM &mdash; định nghĩa những sắp xếp lại của load và store mà nhân khác có thể thấy, nên mã lock-free phải chèn hàng rào bộ nhớ (memory barrier). <em>Nhất quán được giới thiệu, nhưng MESI và mô hình nhất quán mới là nền tảng thực của lập trình đồng thời và lock-free.</em></div>
+<div class="note-ct"><b>MESI và mô hình nhất quán bộ nhớ</b> &mdash; buổi 55 đúng nghĩa là &ldquo;17.3 Cache coherence and the MESI protocol&rdquo;. Nhất quán thường được hiện thực bằng giao thức snooping như MESI, cho mỗi dòng cache một trong bốn trạng thái (Modified, Exclusive, Shared, Invalid). Riêng biệt, một mô hình nhất quán bộ nhớ &mdash; x86-TSO so với thứ tự yếu hơn của ARM &mdash; định nghĩa những sắp xếp lại của load và store mà nhân khác có thể thấy, nên mã lock-free phải chèn hàng rào bộ nhớ (memory barrier). <em>Nhất quán được giới thiệu, nhưng MESI và mô hình nhất quán mới là nền tảng thực của lập trình đồng thời và lock-free.</em></div>
 <div class="note-ct">Tổng kết môn: bạn đã đi từ kiến trúc vs tổ chức, qua hiệu năng, phân cấp bộ nhớ, I/O và giao diện OS, xuống logic số, lên qua tập lệnh, bộ xử lý pipeline, RISC, ILP superscalar, và cuối cùng là đa nhân. Giờ bạn hiểu cỗ máy bên dưới mọi dòng code bạn sẽ viết.</div>
 </div>
 `,
@@ -1862,8 +1864,8 @@ export default {
     },
     /* ══════════════════ NÂNG CAO 1 — HỢP NGỮ MARIE ══════════════════ */
     {
-      title: 'Advanced 1 — Hands-on assembly with MARIE|||Nâng cao 1 — Thực hành hợp ngữ với MARIE',
-      description: 'Ngoài giáo trình — CLO10: viết và chạy một chương trình hợp ngữ thật.',
+      title: 'Practical Assembly Language with MARIE (sessions 39–44)|||Thực hành hợp ngữ với MARIE (buổi 39–44)',
+      description: 'Trong syllabus: 6 buổi "Practical Assembly Language" (39–44), MARIE simulator là tài liệu được liệt kê, CLO7 & CLO10 — viết và chạy một chương trình hợp ngữ thật.',
       lessons: [
         {
           title: 'N1.1 — Write & run a MARIE program|||N1.1 — Viết & chạy một chương trình MARIE',
@@ -1872,9 +1874,10 @@ export default {
           description: 'Từ LOAD/ADD/STORE tới thấy chu trình lệnh chạy từng bước.',
           content: `
 <div class="ml-en">
-<span class="eyebrow">Advanced 1 · Lesson N1.1</span>
+<span class="eyebrow">Practical Assembly · Lesson N1.1</span>
 <h2>Seeing the CPU run — MARIE assembly</h2>
-<p class="lead">MARIE is a tiny teaching computer whose whole instruction set fits on one page. Writing a program in it makes every abstract idea from this course concrete: registers, the instruction cycle, addressing, opcodes (CLO10).</p>
+<p class="lead">MARIE is a tiny teaching computer whose whole instruction set fits on one page. Writing a program in it makes every abstract idea from this course concrete: registers, the instruction cycle, addressing, opcodes (CLO7, CLO10).</p>
+<div class="note-ct">This is core syllabus material, not an optional extra: sessions <b>39&ndash;44</b> are &ldquo;Practical Assembly Language&rdquo; &mdash; six of the sixty sessions &mdash; and the <b>MARIE simulator</b> is one of the course&#39;s listed materials, alongside ParaCacheSimulator.</div>
 <h3>A first program — add two numbers</h3>
 <pre><span class="tok-comment">/ Add X and Y, store the sum in Z</span>
 <span class="tok-function">Load</span> X      <span class="tok-comment">/ AC = value at X</span>
@@ -2032,7 +2035,7 @@ Z, <span class="tok-function">DEC</span> 0</pre>
           "slug": "cea201-final-exam-fe",
           "type": "article",
           "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam \u00b7 FE</span>\n<h2>FE \u2014 Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for CEA201 is a <strong>multiple-choice test</strong>: 1 part, <strong>60 minutes</strong>, <strong>40% of the grade</strong>, with a completion criterion of <strong>4</strong>. The syllabus does not state how many questions it contains &mdash; pace yourself off the clock on the day rather than off an assumed count. The other 60% is on-going work: 2 assignments (20%) and 4 exercise sets done at home and <em>presented in class</em> (40%).</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cu\u1ed1i k\u1ef3 \u00b7 FE</span>\n<h2>FE \u2014 Thi tr\u1eafc nghi\u1ec7m cu\u1ed1i k\u1ef3</h2>\n<p class=\"lead\">B\u00e0i thi cu\u1ed1i k\u1ef3 (FE) c\u1ee7a CEA201 l\u00e0 <strong>thi tr\u1eafc nghi\u1ec7m</strong>: 1 ph\u1ea7n, <strong>60 ph\u00fat</strong>, <strong>40% \u0111i\u1ec3m m\u00f4n</strong>, s\u00e0n ho\u00e0n th\u00e0nh <strong>4</strong>. Syllabus kh\u00f4ng ghi b\u00e0i thi c\u00f3 bao nhi\u00eau c\u00e2u &mdash; h\u00e3y canh gi\u1edd ngay t\u1ea1i ph\u00f2ng thi thay v\u00ec d\u1ef1a v\u00e0o m\u1ed9t con s\u1ed1 ph\u1ecfng \u0111o\u00e1n. 60% c\u00f2n l\u1ea1i l\u00e0 \u0111i\u1ec3m qu\u00e1 tr\u00ecnh: 2 assignment (20%) v\u00e0 4 b\u1ed9 b\u00e0i t\u1eadp l\u00e0m \u1edf nh\u00e0 r\u1ed3i <em>tr\u00ecnh b\u00e0y t\u1ea1i l\u1edbp</em> (40%).</p>\n<h3>C\u00e1ch l\u00e0m t\u1ed1t</h3>\n<ul>\n<li>Ph\u00e2n b\u1ed5 th\u1eddi gian: chia \u0111\u1ec1u theo s\u1ed1 c\u00e2u; \u0111\u00e1nh d\u1ea5u c\u00e2u kh\u00f3, quay l\u1ea1i \u1edf cu\u1ed1i.</li>\n<li>Lo\u1ea1i ph\u01b0\u01a1ng \u00e1n sai r\u00f5 r\u00e0ng tr\u01b0\u1edbc, r\u1ed3i ch\u1ecdn trong s\u1ed1 c\u00f2n l\u1ea1i.</li>\n<li>C\u00e2u \"n\u00ean l\u00e0m g\u00ec / c\u00e1i n\u00e0o t\u1ed1t nh\u1ea5t\" &mdash; tr\u1ea3 l\u1eddi theo ph\u01b0\u01a1ng ph\u00e1p c\u1ee7a m\u00f4n, kh\u00f4ng theo c\u1ea3m t\u00ednh.</li>\n<li>\u0110\u1eebng bao gi\u1edd b\u1ecf tr\u1ed1ng b\u00e0i thi c\u00f3 c\u1ed5ng &mdash; \u0111o\u00e1n c\u00f3 suy lu\u1eadn v\u1eabn h\u01a1n \u0111\u1ec3 tr\u1ed1ng.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">C\u00e2u m\u1eabu</span> C\u00e1c c\u00e2u d\u01b0\u1edbi \u0111\u00e2y l\u00e0 <strong>c\u00e2u m\u1eabu</strong> l\u1ea5y t\u1eeb ch\u00ednh m\u00f4n h\u1ecdc \u0111\u1ec3 minh ho\u1ea1 format. <em>\u0110\u1ec1 thi th\u1eadt</em> s\u1ebd \u0111\u01b0\u1ee3c th\u00eam v\u00e0o \u0111\u00e2y sau, trong trang ph\u00f2ng thi.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [

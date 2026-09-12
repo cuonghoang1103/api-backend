@@ -55,7 +55,7 @@ export default {
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Socialist-oriented market economy</div><div class="lz-nsub">nature · characteristics · economic-interest relations</div></div></div>
   <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Industrialization & integration</div><div class="lz-nsub">CNH-HĐH · international economic integration</div></div></div>
   <div class="lz-stage">Exam prep &amp; beyond ★</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Question bank + modern links</div><div class="lz-nsub">digital economy · Resolutions 57/68 · comparison</div></div></div>
+  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Question bank + modern links</div><div class="lz-nsub">digital economy · comparison (Resolutions 57/68 are official syllabus materials, not ★)</div></div></div>
 </div>
 
 <div class="callout ok"><strong>How to actually pass and enjoy it:</strong> don't memorize definitions blindly. For every concept, ask "what real thing does this explain?" — link surplus value to a real company's profit, monopoly to a real tech giant. Examiners reward <em>understanding + real-world connection</em>, and it makes the theory stick.</div>
@@ -81,7 +81,7 @@ export default {
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Kinh tế thị trường định hướng XHCN</div><div class="lz-nsub">bản chất · đặc trưng · quan hệ lợi ích kinh tế</div></div></div>
   <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Công nghiệp hóa & hội nhập</div><div class="lz-nsub">CNH-HĐH · hội nhập kinh tế quốc tế</div></div></div>
   <div class="lz-stage">Ôn thi &amp; ngoài giáo trình ★</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Ngân hàng câu hỏi + liên hệ hiện đại</div><div class="lz-nsub">kinh tế số · Nghị quyết 57/68 · so sánh</div></div></div>
+  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Ngân hàng câu hỏi + liên hệ hiện đại</div><div class="lz-nsub">kinh tế số · so sánh (Nghị quyết 57/68 là tài liệu chính thức của syllabus, KHÔNG phải ★)</div></div></div>
 </div>
 
 <div class="callout ok"><strong>Cách thực sự qua môn và thấy hay:</strong> đừng học thuộc định nghĩa một cách mù quáng. Với mỗi khái niệm, hãy hỏi "cái này giải thích thứ thật nào?" — liên hệ giá trị thặng dư với lợi nhuận một công ty thật, độc quyền với một gã khổng lồ công nghệ thật. Giám khảo thưởng cho <em>sự hiểu + liên hệ thực tiễn</em>, và điều đó khiến lý thuyết bám chắc.</div>
@@ -100,14 +100,15 @@ export default {
 <h2>The grade breakdown — know where points come from</h2>
 <p class="lead">MLN122 splits into ongoing work (70%) and a final exam (30%). The biggest single piece is the <strong>Assignment (40%)</strong> — so how you research and write it largely decides your grade.</p>
 <table>
-<thead><tr><th>Component</th><th>Weight</th><th>Form</th></tr></thead>
+<thead><tr><th>Component</th><th>Parts</th><th>Weight</th><th>Completion criterion</th><th>Duration / form</th></tr></thead>
 <tbody>
-<tr><td>Participation</td><td><strong>10%</strong></td><td>Attendance, in-class discussion</td></tr>
-<tr><td>Progress test</td><td><strong>20%</strong></td><td>1 test (~20 min)</td></tr>
-<tr><td>Assignment</td><td><strong>40%</strong></td><td>Essay/report (instructor's chosen form)</td></tr>
-<tr><td>Final exam</td><td><strong>30%</strong></td><td>~60 min</td></tr>
+<tr><td>Participation (on-going)</td><td>1</td><td><strong>10%</strong></td><td><strong>&gt; 0</strong></td><td>Attendance, in-class discussion</td></tr>
+<tr><td>Progress test (on-going)</td><td>1</td><td><strong>20%</strong></td><td><strong>&gt; 0</strong></td><td><strong>20'</strong></td></tr>
+<tr><td>Assignment (on-going)</td><td><strong>2</strong></td><td><strong>40%</strong></td><td><strong>&gt; 0</strong></td><td>"Depending on the instructor's chosen form of assessment"</td></tr>
+<tr><td>Final exam</td><td>1</td><td><strong>30%</strong></td><td><strong>≥ 4</strong></td><td><strong>60'</strong>, covers all LOs</td></tr>
 </tbody>
 </table>
+<div class="callout warn"><strong>Every on-going component has a &gt; 0 gate, and the Assignment is TWO parts.</strong> The syllabus (ID 13304) sets the completion criterion "&gt; 0" on Participation, Progress test and Assignment alike — scoring zero on any one of them means the course is not completed, however good the rest is. And the 40% Assignment is recorded as <strong>2 parts</strong>: expect two submissions/deliverables, not one, in the form your instructor announces.</div>
 <div class="kv-grid">
 <div class="kv"><span class="k">Scale</span><span class="v">10</span></div>
 <div class="kv"><span class="k">Pass</span><span class="v">Final result ≥ 5 AND final exam ≥ 4</span></div>
@@ -123,14 +124,15 @@ export default {
 <h2>Cấu trúc điểm — biết điểm đến từ đâu</h2>
 <p class="lead">MLN122 chia thành phần thường xuyên (70%) và thi cuối kỳ (30%). Phần lớn nhất là <strong>Assignment (40%)</strong> — nên cách bạn nghiên cứu và viết nó quyết định phần lớn điểm.</p>
 <table>
-<thead><tr><th>Thành phần</th><th>Trọng số</th><th>Hình thức</th></tr></thead>
+<thead><tr><th>Thành phần</th><th>Số phần</th><th>Trọng số</th><th>Điều kiện hoàn thành</th><th>Thời lượng / hình thức</th></tr></thead>
 <tbody>
-<tr><td>Tham gia (Participation)</td><td><strong>10%</strong></td><td>Điểm danh, thảo luận trên lớp</td></tr>
-<tr><td>Kiểm tra tiến độ (Progress test)</td><td><strong>20%</strong></td><td>1 bài (~20 phút)</td></tr>
-<tr><td>Assignment</td><td><strong>40%</strong></td><td>Tiểu luận/báo cáo (theo hình thức giảng viên chọn)</td></tr>
-<tr><td>Thi cuối kỳ</td><td><strong>30%</strong></td><td>~60 phút</td></tr>
+<tr><td>Tham gia (Participation, on-going)</td><td>1</td><td><strong>10%</strong></td><td><strong>&gt; 0</strong></td><td>Điểm danh, thảo luận trên lớp</td></tr>
+<tr><td>Kiểm tra tiến độ (Progress test, on-going)</td><td>1</td><td><strong>20%</strong></td><td><strong>&gt; 0</strong></td><td><strong>20'</strong></td></tr>
+<tr><td>Assignment (on-going)</td><td><strong>2</strong></td><td><strong>40%</strong></td><td><strong>&gt; 0</strong></td><td>"Phụ thuộc theo hình thức kiểm tra đánh giá của giảng viên"</td></tr>
+<tr><td>Thi cuối kỳ</td><td>1</td><td><strong>30%</strong></td><td><strong>≥ 4</strong></td><td><strong>60'</strong>, bao phủ toàn bộ chuẩn đầu ra</td></tr>
 </tbody>
 </table>
+<div class="callout warn"><strong>Mọi thành phần thường xuyên đều có chốt &gt; 0, và Assignment có HAI phần.</strong> Syllabus (ID 13304) đặt điều kiện hoàn thành "&gt; 0" cho cả Participation, Progress test lẫn Assignment — bị 0 ở bất kỳ cái nào là không hoàn thành môn, dù các phần khác tốt đến đâu. Và Assignment 40% được ghi là <strong>2 phần</strong>: hãy chờ hai lần nộp/hai sản phẩm, không phải một, theo hình thức giảng viên công bố.</div>
 <div class="kv-grid">
 <div class="kv"><span class="k">Thang</span><span class="v">10</span></div>
 <div class="kv"><span class="k">Qua môn</span><span class="v">Kết quả ≥ 5 VÀ thi cuối ≥ 4</span></div>
@@ -155,15 +157,16 @@ export default {
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-lk">CLO1</span> Grasp the formation, object, method and functions of political economy. <em>→ Ch1</em></div>
 <div class="lz-layer"><span class="lz-lk">CLO2</span> Understand & analyze Marx's views on commodities, money, market. <em>→ Ch2</em></div>
-<div class="lz-layer"><span class="lz-lk">CLO3</span> Understand surplus value, capital & accumulation. <em>→ Ch3</em></div>
-<div class="lz-layer"><span class="lz-lk">CLO4</span> Understand competition & monopoly and their modern forms. <em>→ Ch4</em></div>
-<div class="lz-layer"><span class="lz-lk">CLO5</span> Grasp the socialist-oriented market economy & economic-interest relations in Vietnam. <em>→ Ch5</em></div>
-<div class="lz-layer"><span class="lz-lk">CLO6</span> Analyze industrialization–modernization & international economic integration. <em>→ Ch6</em></div>
-<div class="lz-layer"><span class="lz-lk">CLO7</span> Build revolutionary ethics & a firm political standpoint; see the scientific value. <em>→ all</em></div>
-<div class="lz-layer"><span class="lz-lk">CLO8</span> Form analytical thinking to identify the essence of economic-interest relations. <em>→ all</em></div>
-<div class="lz-layer"><span class="lz-lk">CLO9</span> Skills: reasoning, essay writing, presentation, responsible AI use. <em>→ assignment</em></div>
+<div class="lz-layer"><span class="lz-lk">CLO3</span> Understand competition & monopoly in the market economy, and the new forms of monopoly. <em>→ Ch4</em></div>
+<div class="lz-layer"><span class="lz-lk">CLO4</span> Correctly understand the nature of the socialist-oriented market economy & economic-interest relations in Vietnam. <em>→ Ch5</em></div>
+<div class="lz-layer"><span class="lz-lk">CLO5</span> Analyze & evaluate Vietnam's industrialization–modernization and international economic integration. <em>→ Ch6</em></div>
+<div class="lz-layer"><span class="lz-lk">CLO6</span> Build revolutionary ethics & a firm political standpoint; see the scientific value of the subject. <em>→ all</em></div>
+<div class="lz-layer"><span class="lz-lk">CLO7</span> Form analytical thinking to identify the essence of economic-interest relations. <em>→ all</em></div>
+<div class="lz-layer"><span class="lz-lk">CLO8</span> Be equipped with the core knowledge of Marxist–Leninist political economy in today's development context. <em>→ all</em></div>
+<div class="lz-layer"><span class="lz-lk">CLO9</span> Skills: reasoning, essay writing, presentation, responsible AI use and creativity in producing the assignment. <em>→ assignment</em></div>
 </div>
-<div class="callout ok">The arc: <strong>foundations → market → capitalism's core → monopoly → Vietnam → integration</strong>, plus cross-cutting analysis and communication skills (CLO7-9). The exam tests CLO1-6; the assignment tests CLO8-9.</div>
+<div class="callout warn"><strong>Note on Chapter 3 (surplus value).</strong> The syllabus's nine CLOs have <em>no</em> outcome dedicated to surplus value, capital and accumulation — CLO3 is already competition &amp; monopoly. That is a gap in the CLO list, not in the course: Chapter 3 is one of the six syllabus chapters (sessions 9–14) and it is examined. Study it as part of CLO2 (Marx's views on the market economy) and CLO8 (core knowledge of the subject).</div>
+<div class="callout ok">The arc: <strong>foundations → market → capitalism's core → monopoly → Vietnam → integration</strong>, plus cross-cutting attitude, analysis and communication outcomes (CLO6-9). The syllabus does not publish a CLO-to-assessment map: the final exam is stated as covering "All" learning outcomes.</div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.3</span>
@@ -172,15 +175,16 @@ export default {
 <div class="lz-stack">
 <div class="lz-layer"><span class="lz-lk">CLO1</span> Nắm sự hình thành, đối tượng, phương pháp và chức năng của kinh tế chính trị. <em>→ Ch1</em></div>
 <div class="lz-layer"><span class="lz-lk">CLO2</span> Hiểu & phân tích quan điểm của Marx về hàng hóa, tiền tệ, thị trường. <em>→ Ch2</em></div>
-<div class="lz-layer"><span class="lz-lk">CLO3</span> Hiểu giá trị thặng dư, tư bản & tích lũy. <em>→ Ch3</em></div>
-<div class="lz-layer"><span class="lz-lk">CLO4</span> Hiểu cạnh tranh & độc quyền và các biểu hiện hiện đại. <em>→ Ch4</em></div>
-<div class="lz-layer"><span class="lz-lk">CLO5</span> Nắm kinh tế thị trường định hướng XHCN & quan hệ lợi ích kinh tế ở Việt Nam. <em>→ Ch5</em></div>
-<div class="lz-layer"><span class="lz-lk">CLO6</span> Phân tích công nghiệp hóa–hiện đại hóa & hội nhập kinh tế quốc tế. <em>→ Ch6</em></div>
-<div class="lz-layer"><span class="lz-lk">CLO7</span> Xây phẩm chất đạo đức cách mạng & lập trường chính trị vững; thấy giá trị khoa học. <em>→ tất cả</em></div>
-<div class="lz-layer"><span class="lz-lk">CLO8</span> Hình thành tư duy phân tích, nhận diện bản chất các quan hệ lợi ích kinh tế. <em>→ tất cả</em></div>
-<div class="lz-layer"><span class="lz-lk">CLO9</span> Kỹ năng: lập luận, viết luận, thuyết trình, ứng dụng AI có trách nhiệm. <em>→ assignment</em></div>
+<div class="lz-layer"><span class="lz-lk">CLO3</span> Hiểu được cạnh tranh và độc quyền trong nền kinh tế thị trường, cũng như những biểu hiện mới của độc quyền. <em>→ Ch4</em></div>
+<div class="lz-layer"><span class="lz-lk">CLO4</span> Hiểu đúng bản chất kinh tế thị trường định hướng XHCN & các quan hệ lợi ích kinh tế ở Việt Nam. <em>→ Ch5</em></div>
+<div class="lz-layer"><span class="lz-lk">CLO5</span> Phân tích, đánh giá quá trình công nghiệp hóa, hiện đại hóa và hội nhập kinh tế quốc tế của Việt Nam. <em>→ Ch6</em></div>
+<div class="lz-layer"><span class="lz-lk">CLO6</span> Xây phẩm chất đạo đức cách mạng & lập trường chính trị vững; thấy giá trị khoa học của môn học. <em>→ tất cả</em></div>
+<div class="lz-layer"><span class="lz-lk">CLO7</span> Hình thành tư duy, kỹ năng phân tích, nhận diện bản chất các quan hệ lợi ích kinh tế. <em>→ tất cả</em></div>
+<div class="lz-layer"><span class="lz-lk">CLO8</span> Được trang bị kiến thức cốt lõi của Kinh tế chính trị Mác – Lênin trong bối cảnh phát triển hiện nay. <em>→ tất cả</em></div>
+<div class="lz-layer"><span class="lz-lk">CLO9</span> Kỹ năng: lập luận, soạn bài viết, thuyết trình, ứng dụng AI có trách nhiệm và sáng tạo khi làm assignment. <em>→ assignment</em></div>
 </div>
-<div class="callout ok">Mạch: <strong>nền tảng → thị trường → lõi CNTB → độc quyền → Việt Nam → hội nhập</strong>, cộng kỹ năng phân tích và giao tiếp xuyên suốt (CLO7-9). Thi kiểm CLO1-6; assignment kiểm CLO8-9.</div>
+<div class="callout warn"><strong>Lưu ý về Chương 3 (giá trị thặng dư).</strong> Chín CLO của syllabus KHÔNG có chuẩn đầu ra nào riêng cho giá trị thặng dư, tư bản và tích lũy — CLO3 đã là cạnh tranh &amp; độc quyền. Đó là chỗ thiếu của danh sách CLO, không phải của môn học: Chương 3 là một trong sáu chương của syllabus (buổi 9–14) và vẫn ra thi. Hãy học nó như một phần của CLO2 (quan điểm của Marx về nền kinh tế thị trường) và CLO8 (kiến thức cốt lõi của môn).</div>
+<div class="callout ok">Mạch: <strong>nền tảng → thị trường → lõi CNTB → độc quyền → Việt Nam → hội nhập</strong>, cộng các chuẩn về thái độ, phân tích và giao tiếp xuyên suốt (CLO6-9). Syllabus không công bố bảng ánh xạ CLO–đầu điểm: bài thi cuối kỳ được ghi là bao phủ "All" chuẩn đầu ra.</div>
 </div>`,
         },
         {
@@ -971,7 +975,7 @@ export default {
 
 <h3>Key characteristics</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lk">Ownership</span> Multiple sectors; state economy plays the leading role, private economy an important driver (Resolution 68).</div>
+<div class="lz-layer"><span class="lz-lk">Ownership</span> Multiple sectors; the state economy plays the leading role, and Resolution 68-NQ/TW (2025) names the private economy <strong>"the most important driving force"</strong> ("một động lực quan trọng nhất") of the national economy.</div>
 <div class="lz-layer"><span class="lz-lk">Distribution</span> Mainly by labor and efficiency, plus via welfare — balancing growth with equity.</div>
 <div class="lz-layer"><span class="lz-lk">Management</span> Market mechanism + state regulation under Party leadership.</div>
 <div class="lz-layer"><span class="lz-lk">Goal</span> "Rich people, strong country, democratic, equitable, civilized."</div>
@@ -997,7 +1001,7 @@ export default {
 
 <h3>Các đặc trưng chính</h3>
 <div class="lz-stack">
-<div class="lz-layer"><span class="lz-lk">Sở hữu</span> Nhiều thành phần; kinh tế nhà nước giữ vai trò chủ đạo, kinh tế tư nhân là một động lực quan trọng (Nghị quyết 68).</div>
+<div class="lz-layer"><span class="lz-lk">Sở hữu</span> Nhiều thành phần; kinh tế nhà nước giữ vai trò chủ đạo, còn Nghị quyết 68-NQ/TW (2025) xác định kinh tế tư nhân là <strong>"một động lực quan trọng nhất"</strong> của nền kinh tế quốc gia.</div>
 <div class="lz-layer"><span class="lz-lk">Phân phối</span> Chủ yếu theo lao động và hiệu quả, cộng qua phúc lợi — cân bằng tăng trưởng với công bằng.</div>
 <div class="lz-layer"><span class="lz-lk">Quản lý</span> Cơ chế thị trường + điều tiết nhà nước dưới sự lãnh đạo của Đảng.</div>
 <div class="lz-layer"><span class="lz-lk">Mục tiêu</span> "Dân giàu, nước mạnh, dân chủ, công bằng, văn minh."</div>
@@ -1222,18 +1226,19 @@ export default {
     /* ══════════════════ CHƯƠNG 8 — NÂNG CAO ★ ══════════════════ */
     {
       title: 'Chapter 8 — Beyond the syllabus ★: political economy in the digital age|||Chương 8 — Ngoài giáo trình ★: kinh tế chính trị trong thời đại số',
-      description: 'Chương NÂNG CAO ngoài giáo trình: vận dụng lý thuyết vào kinh tế số, dữ liệu như tư liệu sản xuất, và các Nghị quyết 57/68.',
+      description: 'Chương NÂNG CAO: vận dụng lý thuyết vào kinh tế số và dữ liệu như tư liệu sản xuất (ngoài giáo trình), kèm phần Nghị quyết 57/68 — phần này NẰM TRONG danh mục tài liệu chính thức của môn.',
       lessons: [
         {
           title: '8.1 ★ — Data, platforms & the digital economy|||8.1 ★ — Dữ liệu, nền tảng & kinh tế số',
           slug: 'mln122-8-1-kinh-te-so',
           type: 'VIDEO',
-          description: 'Dữ liệu như yếu tố sản xuất mới, kinh tế nền tảng qua lăng kính giá trị thặng dư & độc quyền, và Nghị quyết 57/68.',
+          description: 'Dữ liệu như yếu tố sản xuất mới và kinh tế nền tảng qua lăng kính giá trị thặng dư & độc quyền (ngoài giáo trình) + Nghị quyết 57/68 (tài liệu chính thức, có thể ra thi).',
           content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.1 · ★ Beyond the syllabus</span>
 <h2>150-year-old theory meets the digital economy</h2>
 <p class="lead"><span class="badge">★ Beyond the syllabus</span> This chapter applies the whole course to today's economy — data, platforms, AI. It's the sharpest way to prove you <em>understand</em> the theory rather than memorized it, and it's assignment gold.</p>
+<div class="callout warn"><strong>One part of this chapter is NOT beyond the syllabus.</strong> The section "Vietnam's response — Resolutions 57 &amp; 68" below covers two <em>official materials</em> of MLN122 (items 7-8 of the syllabus materials list). Treat it as core, examinable content; only the data/platform analysis around it is ★.</div>
 
 <h3>Data as a new factor of production</h3>
 <p>Classical factors were land, labor, capital. Today <strong>data</strong> acts as a new "means of production" — it is collected, processed and used to create value. This stretches the commodity/value theory of Ch2: data has near-zero reproduction cost yet enormous value in aggregate, raising fresh questions about who owns and profits from it.</p>
@@ -1245,10 +1250,11 @@ export default {
 <div class="lz-layer"><span class="lz-lk">Value (Ch2)</span> "Free" services are paid for with data & attention — value in a disguised form.</div>
 </div>
 
-<h3>Vietnam's response — Resolutions 57 & 68</h3>
+<h3>Vietnam's response — Resolutions 57 &amp; 68 <em>(on the syllabus, not ★)</em></h3>
+<div class="callout warn"><strong>These two resolutions are official course materials.</strong> Resolution <strong>57-NQ/TW (22/12/2024)</strong> and Resolution <strong>68-NQ/TW (04/5/2025)</strong> are items 7 and 8 of the MLN122 materials list in the syllabus (ID 13304). Despite sitting in this ★ chapter, they are examinable, required reading — learn their exact wording.</div>
 <ul>
-<li><strong>Resolution 57-NQ/TW (2024):</strong> breakthrough in science, technology & innovation — the modern content of CNH-HĐH (digital transformation as the path to leapfrog).</li>
-<li><strong>Resolution 68-NQ/TW (2025):</strong> developing the private economy as an important driver — refining the socialist-oriented model's ownership structure.</li>
+<li><strong>Resolution 57-NQ/TW (22/12/2024):</strong> breakthrough in the development of science, technology, innovation and national digital transformation — the modern content of CNH-HĐH.</li>
+<li><strong>Resolution 68-NQ/TW (04/5/2025):</strong> on developing the private economy, which it defines as <strong>"the most important driving force"</strong> of the national economy ("một động lực quan trọng nhất của nền kinh tế quốc gia") — note the superlative: "an important driving force" is the older, weaker formulation and a classic MCQ trap.</li>
 </ul>
 
 <div class="out"><strong>Worked example — a full-theory analysis:</strong> take a ride-hailing platform. Apply Ch2 (the "service" as commodity, price vs value), Ch3 (surplus from drivers' labor, the platform's take-rate as m/v analog), Ch4 (network-effect monopoly, Lenin's concentration), Ch5 (how Vietnam's state should harmonize platform–driver–consumer interests). That single case exercises five chapters — an A-grade assignment.</div>
@@ -1261,6 +1267,7 @@ export default {
 <span class="eyebrow">Chương 8 · Bài 8.1 · ★ Ngoài giáo trình</span>
 <h2>Lý thuyết 150 năm tuổi gặp kinh tế số</h2>
 <p class="lead"><span class="badge">★ Ngoài giáo trình</span> Chương này vận dụng cả môn vào kinh tế hôm nay — dữ liệu, nền tảng, AI. Đây là cách sắc nhất để chứng minh bạn <em>hiểu</em> lý thuyết chứ không học thuộc, và là vàng cho assignment.</p>
+<div class="callout warn"><strong>Một phần của chương này KHÔNG phải "ngoài giáo trình".</strong> Mục "Việt Nam đáp lại — Nghị quyết 57 &amp; 68" bên dưới trình bày hai <em>tài liệu chính thức</em> của MLN122 (mục 7-8 trong danh sách tài liệu của syllabus). Hãy coi đó là nội dung cốt lõi, có thể ra thi; chỉ phần phân tích dữ liệu/nền tảng quanh nó mới là ★.</div>
 
 <h3>Dữ liệu như một yếu tố sản xuất mới</h3>
 <p>Các yếu tố cổ điển là đất đai, lao động, tư bản. Ngày nay <strong>dữ liệu</strong> đóng vai một "tư liệu sản xuất" mới — được thu thập, xử lý và dùng để tạo giá trị. Điều này kéo giãn lý thuyết hàng hóa/giá trị ở Ch2: dữ liệu có chi phí nhân bản gần bằng 0 nhưng giá trị khổng lồ ở tổng thể, đặt ra câu hỏi mới về ai sở hữu và hưởng lợi từ nó.</p>
@@ -1272,10 +1279,11 @@ export default {
 <div class="lz-layer"><span class="lz-lk">Giá trị (Ch2)</span> Dịch vụ "miễn phí" được trả bằng dữ liệu & sự chú ý — giá trị ở dạng ngụy trang.</div>
 </div>
 
-<h3>Việt Nam đáp lại — Nghị quyết 57 & 68</h3>
+<h3>Việt Nam đáp lại — Nghị quyết 57 &amp; 68 <em>(NẰM TRONG giáo trình, không phải ★)</em></h3>
+<div class="callout warn"><strong>Hai nghị quyết này là tài liệu chính thức của môn.</strong> Nghị quyết <strong>57-NQ/TW (22/12/2024)</strong> và Nghị quyết <strong>68-NQ/TW (04/5/2025)</strong> là mục 7 và 8 trong danh sách tài liệu MLN122 của syllabus (ID 13304). Dù nằm trong chương ★ này, chúng là tài liệu bắt buộc và có thể ra thi — hãy nhớ đúng câu chữ.</div>
 <ul>
-<li><strong>Nghị quyết 57-NQ/TW (2024):</strong> đột phá phát triển khoa học, công nghệ & đổi mới sáng tạo — nội dung hiện đại của CNH-HĐH (chuyển đổi số là con đường đi tắt).</li>
-<li><strong>Nghị quyết 68-NQ/TW (2025):</strong> phát triển kinh tế tư nhân như một động lực quan trọng — tinh chỉnh cơ cấu sở hữu của mô hình định hướng XHCN.</li>
+<li><strong>Nghị quyết 57-NQ/TW (22/12/2024):</strong> đột phá phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số quốc gia — nội dung hiện đại của CNH-HĐH.</li>
+<li><strong>Nghị quyết 68-NQ/TW (04/5/2025):</strong> về phát triển kinh tế tư nhân, xác định kinh tế tư nhân là <strong>"một động lực quan trọng nhất"</strong> của nền kinh tế quốc gia — để ý cấp so sánh: "một động lực quan trọng" là cách nói cũ, yếu hơn, và là bẫy trắc nghiệm kinh điển.</li>
 </ul>
 
 <div class="out"><strong>Ví dụ có lời giải — một phân tích vận dụng toàn lý thuyết:</strong> lấy một nền tảng gọi xe. Vận dụng Ch2 ("dịch vụ" như hàng hóa, giá cả vs giá trị), Ch3 (thặng dư từ lao động tài xế, tỷ lệ ăn chia của nền tảng như tương tự m/v), Ch4 (độc quyền hiệu ứng mạng, tập trung kiểu Lenin), Ch5 (nhà nước Việt Nam nên hài hòa lợi ích nền tảng–tài xế–người tiêu dùng thế nào). Một ca duy nhất luyện năm chương — một assignment điểm A.</div>
@@ -1318,6 +1326,16 @@ export default {
                 ], correctIndex: 1,
               },
               {
+                id: 'q5', points: 1,
+                question: 'Resolution 68-NQ/TW (2025) defines the private economy as:|||Nghị quyết 68-NQ/TW (2025) xác định kinh tế tư nhân là:',
+                options: [
+                  'A temporary component to be abolished|||Một thành phần tạm thời sẽ bị xoá bỏ',
+                  'The most important driving force of the national economy|||Một động lực quan trọng nhất của nền kinh tế quốc gia',
+                  'A secondary sector under state control|||Một khu vực thứ yếu do nhà nước kiểm soát',
+                  'Identical to the state economy|||Đồng nhất với kinh tế nhà nước',
+                ], correctIndex: 1,
+              },
+              {
                 id: 'q4', points: 1,
                 question: '(Beyond syllabus) The deepest sign of understanding the theory is:|||(Ngoài giáo trình) Dấu hiệu sâu nhất của việc hiểu lý thuyết là:',
                 options: [
@@ -1334,14 +1352,14 @@ export default {
     },
     {
       "title": "Final Exam|||Thi cuối kỳ",
-      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "description": "Thi cuối kỳ FE: 30%, 60', điều kiện hoàn thành 4, bao phủ toàn bộ chuẩn đầu ra. Khung + câu tự kiểm; đề thật thêm sau khi có trang phòng thi.",
       "lessons": [
         {
-          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "title": "FE — Final Exam (30%, 60', pass mark 4)|||FE — Thi cuối kỳ (30%, 60', điểm qua 4)",
           "slug": "mln122-final-exam-fe",
           "type": "article",
-          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "description": "Thông số FE theo syllabus (30%, 1 phần, 60', hoàn thành 4, phủ toàn bộ LO) + câu tự kiểm từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam</h2>\n<p class=\"lead\">The syllabus (ID 13304) records the MLN122 final exam as: <strong>weight 30%, 1 part, duration 60', completion criterion 4</strong>, covering <strong>all</strong> learning outcomes. You also need a final result &ge; 5 overall. The syllabus does <em>not</em> publish the number of questions or the question type &mdash; in practice FPT runs this subject's final as a computer-graded multiple-choice test, but confirm the format with your instructor for your term rather than assuming it.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi cuối kỳ</h2>\n<p class=\"lead\">Syllabus (ID 13304) ghi bài thi cuối kỳ MLN122 là: <strong>trọng số 30%, 1 phần, thời lượng 60', điều kiện hoàn thành 4</strong>, bao phủ <strong>toàn bộ</strong> chuẩn đầu ra. Ngoài ra kết quả cuối phải &ge; 5. Syllabus <em>không</em> công bố số câu hay dạng câu hỏi &mdash; trên thực tế FPT thường tổ chức thi trắc nghiệm máy chấm cho môn này, nhưng hãy hỏi giảng viên xác nhận hình thức của kỳ bạn học thay vì mặc định.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [
@@ -1384,12 +1402,12 @@ export default {
               {
                 "id": "q4",
                 "points": 1,
-                "question": "(Beyond syllabus) Compared to mainstream micro/macro, political economy emphasizes:|||(Ngoài giáo trình) So với kinh tế vi/vĩ mô chính thống, kinh tế chính trị nhấn mạnh:",
+                "question": "Resolution 68-NQ/TW (2025), an official material of this subject, defines the private economy as:|||Nghị quyết 68-NQ/TW (2025), một tài liệu chính thức của môn, xác định kinh tế tư nhân là:",
                 "options": [
-                  "Only mathematical curves|||Chỉ đường cong toán học",
-                  "Who benefits and the social relations behind the numbers|||Ai được lợi và quan hệ xã hội sau các con số",
-                  "Only stock prices|||Chỉ giá cổ phiếu",
-                  "Nothing different|||Không gì khác"
+                  "A temporary component to be abolished|||Một thành phần tạm thời sẽ bị xoá bỏ",
+                  "The most important driving force of the national economy|||Một động lực quan trọng nhất của nền kinh tế quốc gia",
+                  "A sector banned from strategic industries|||Một khu vực bị cấm ở các ngành chiến lược",
+                  "Identical to the state economy|||Đồng nhất với kinh tế nhà nước"
                 ],
                 "correctIndex": 1
               },

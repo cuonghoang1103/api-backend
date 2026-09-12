@@ -18,9 +18,9 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
-    shortDescription: 'The course most students fail first time — not because it is hard, but because it is a typing-under-pressure exam. This guide drives you through 54 real FPTU lab briefs, the standard architecture, the grader traps, and an exam survival plan.|||Môn nhiều SV trượt lần đầu nhất — không phải vì khó, mà vì là kỳ thi gõ code dưới áp lực. Khóa này dẫn bạn qua 54 đề lab FPTU thật, kiến trúc chuẩn, các bẫy người chấm, và kế hoạch sống sót kỳ thi.',
-    description: 'Môn thực hành lập trình Java, tiên quyết PRO192. Không có bài giảng lý thuyết — 60 session là luyện tập + mentor review. Điểm đến từ các assignment làm tại phòng lab và kỳ thi thực hành (Practical Exam): bạn nhận một đề, phải viết chương trình Java CHẠY ĐƯỢC và khớp output mẫu trong thời gian giới hạn. Đây là môn ~80% sinh viên trượt lần đầu vì tưởng "biết Java là qua" — thực tế cần GÕ THÀNH THẠO dưới áp lực. Khóa học dạy sâu kiến trúc chuẩn FPTU và kỹ năng, rồi dẫn bạn luyện qua 54 đề thật trên Code Lab.',
-    whatYouLearn: 'Kiến trúc chuẩn FPTU (entity/bo/controller/ui/utils-Validator) và biết KHI NÀO thêm tầng; nhập liệu an toàn với Validator; xuất đúng định dạng khớp màn hình chấm; sắp xếp & tìm kiếm; validation & ngoại lệ theo Guidelines; xử lý ngày giờ (bẫy lenient); CRUD + Collections + Comparator; OOP trong entity; đọc/ghi tệp (text/serialize/CSV/zip); kịch bản thi thực hành + quản lý thời gian; sổ tay lỗi 60 giây; các bẫy người chấm; vấn đáp "đổi yêu cầu"; CheckStyle & code convention.',
+    shortDescription: 'A course many students retake — not because it is hard, but because it is typing under pressure. This guide drives you through 54 real FPTU lab briefs, the standard architecture, the review traps, and a plan for working to time.|||Môn nhiều sinh viên phải học lại — không phải vì khó, mà vì phải gõ code dưới áp lực. Khóa này dẫn bạn qua 54 đề lab FPTU thật, kiến trúc chuẩn, các bẫy khi bị review, và kế hoạch làm bài đúng giờ.',
+    description: 'Môn thực hành lập trình Java, tiên quyết PRO192. Không có bài giảng lý thuyết — 60 session là 4 buổi định hướng rồi Practice xen kẽ Mentor review. Syllabus LAB211 liệt kê 0 thành phần đánh giá: không thi lý thuyết, không thi cuối kỳ, không trọng số, không điểm qua; quy tắc chấm nằm ở tài liệu mentor và FLM của từng kỳ. Cái syllabus có quy định là: mỗi assignment phải làm LIÊN TỤC trong thời gian quy định, và phải dự ≥80% slot. Vì vậy thứ quyết định là GÕ THÀNH THẠO dưới áp lực: chương trình Java CHẠY ĐƯỢC, khớp output mẫu, xong trong một buổi. Khóa học dạy sâu kiến trúc chuẩn FPTU và kỹ năng, rồi dẫn bạn luyện qua 54 đề thật trên Code Lab.',
+    whatYouLearn: 'Kiến trúc chuẩn FPTU (entity/bo/controller/ui/utils-Validator) và biết KHI NÀO thêm tầng; nhập liệu an toàn với Validator; xuất đúng định dạng khớp màn hình chấm; sắp xếp & tìm kiếm; validation & ngoại lệ theo Guidelines; xử lý ngày giờ (bẫy lenient); CRUD + Collections + Comparator; OOP trong entity; đọc/ghi tệp (text/serialize/CSV/zip); kịch bản làm bài trong một buổi + quản lý thời gian; sổ tay lỗi 60 giây; các bẫy khi bị review; vấn đáp "đổi yêu cầu"; CheckStyle & code convention.',
     requirements: 'Tiên quyết: đạt PRO192 (vững lớp/đối tượng, kế thừa, đa hình, ngoại lệ, collections trong Java). Cần cài JDK 8 + NetBeans 8.0.2 + plugin CheckStyle.',
     documentsNote: 'Học liệu FPT: Lab Room Regulations, Mentor Guide, Evaluation Templates. Công cụ bắt buộc: NetBeans 8.0.2, JDK8, plugin CheckStyle, JavaDoc. Luyện tập chính: track Code Lab "LAB211" — 54 đề lab gốc FPTU đã có lời giải kiểm chạy thật + 4 module tra cứu + AI coach. Kèm file syllabus gốc LAB211.pdf.',
   },
@@ -28,7 +28,7 @@ export default {
     /* ══════════════════ MỤC 0 — GIỚI THIỆU & HƯỚNG DẪN HỌC ══════════════════ */
     {
       title: 'Section 0 — Introduction & Study Guide|||Mục 0 — Giới thiệu môn học & Hướng dẫn học',
-      description: 'Đọc trước tiên: môn học là gì, tại sao 80% trượt và cách thoát, điều kiện qua môn, công cụ, và cách dùng khóa học này.',
+      description: 'Đọc trước tiên: môn học là gì, syllabus nói gì về đánh giá, vì sao sinh viên trượt và cách thoát, công cụ, và cách dùng khóa học này.',
       lessons: [
         {
           title: '0.1 — About LAB211 & the study map|||0.1 — Giới thiệu LAB211 & bản đồ học',
@@ -40,12 +40,12 @@ export default {
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.1</span>
 <h2>About LAB211 — OOP with Java Lab</h2>
-<p class="lead">PRO192 taught you to <em>think</em> in objects. LAB211 makes you <strong>fast</strong> at it. There are no lectures here — the official syllabus is 60 sessions of <strong>Practice</strong> and <strong>Mentor review</strong>, nothing else. You are graded on one thing: given a fresh problem, can you write a Java console program that <strong>compiles, runs, and prints exactly the expected output</strong> — inside a time limit, alone.</p>
-<p>That is why LAB211 is the course most students fail the first time. It is not conceptually hard. It punishes anyone who "understands Java" but has never built 40 small programs end to end. The cure is simple and this course delivers it: a lot of guided, deliberate practice on <strong>real FPTU lab briefs</strong>.</p>
+<p class="lead">PRO192 taught you to <em>think</em> in objects. LAB211 makes you <strong>fast</strong> at it. There are no lectures here — the official syllabus is 4 orientation sessions and then 56 sessions of <strong>Practice</strong> alternating with <strong>Mentor review</strong>, nothing else. It also lists <strong>no assessment at all</strong> — no exam, no weights, no pass mark (see Lesson 0.2). What it does demand is one thing: given a fresh problem, can you write a Java console program that <strong>compiles, runs, and prints exactly the expected output</strong> — inside a defined time, alone.</p>
+<p>That is why LAB211 is a course many students end up retaking. It is not conceptually hard. It punishes anyone who "understands Java" but has never built 40 small programs end to end. The cure is simple and this course delivers it: a lot of guided, deliberate practice on <strong>real FPTU lab briefs</strong>.</p>
 <h3>The study map</h3>
 <div class="lz-map">
   <div class="lz-stage">Set the stage</div>
-  <div class="lz-node"><div class="lz-badge">0</div><div class="lz-nbody"><div class="lz-ntitle">Why you fail &amp; how not to</div><div class="lz-nsub">Grading · the exam · the plan · tools</div></div></div>
+  <div class="lz-node"><div class="lz-badge">0</div><div class="lz-nbody"><div class="lz-ntitle">How you are judged &amp; why students fail</div><div class="lz-nsub">What the syllabus says · the plan · tools</div></div></div>
   <div class="lz-stage">Non-negotiable foundations</div>
   <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Standard FPTU architecture</div><div class="lz-nsub">entity · bo · controller · ui · Validator</div></div></div>
   <div class="lz-stage">Build fluency on real briefs</div>
@@ -53,8 +53,8 @@ export default {
   <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Validation · dates · numbers</div><div class="lz-nsub">Message-by-the-spec · lenient trap</div></div></div>
   <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">CRUD · Collections · Comparator</div><div class="lz-nsub">The backbone of LAB211</div></div></div>
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">OOP entities &amp; File I/O</div><div class="lz-nsub">Inheritance · serialize · CSV · zip</div></div></div>
-  <div class="lz-stage">Pass the exam</div>
-  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Practical Exam survival</div><div class="lz-nsub">Time plan · error handbook · grader traps · viva</div></div></div>
+  <div class="lz-stage">Finish inside the clock</div>
+  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Surviving a timed lab sitting</div><div class="lz-nsub">Time plan · error handbook · review traps · viva</div></div></div>
   <div class="lz-stage">Beyond the syllabus</div>
   <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">CheckStyle · cost of algorithms · write your own brief</div><div class="lz-nsub">The habits that guarantee a pass</div></div></div>
 </div>
@@ -81,7 +81,7 @@ export default {
   <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Validation · ngày · số</div><div class="lz-nsub">Thông báo theo đề · bẫy lenient</div></div></div>
   <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">CRUD · Collections · Comparator</div><div class="lz-nsub">Xương sống của LAB211</div></div></div>
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">OOP trong entity &amp; Tệp</div><div class="lz-nsub">Kế thừa · serialize · CSV · zip</div></div></div>
-  <div class="lz-stage">Qua kỳ thi</div>
+  <div class="lz-stage">Làm xong trong giờ</div>
   <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Sống sót thi thực hành</div><div class="lz-nsub">Kế hoạch thời gian · sổ tay lỗi · bẫy chấm · vấn đáp</div></div></div>
   <div class="lz-stage">Ngoài giáo trình</div>
   <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">CheckStyle · chi phí thuật toán · tự ra đề</div><div class="lz-nsub">Thói quen đảm bảo qua môn</div></div></div>
@@ -96,31 +96,33 @@ export default {
 `,
         },
         {
-          title: '0.2 — Why 80% fail, and how not to|||0.2 — Vì sao 80% trượt, và cách để không trượt',
+          title: '0.2 — How LAB211 is judged, and why students fail|||0.2 — LAB211 được đánh giá thế nào, và vì sao sinh viên trượt',
           slug: 'lab211-vi-sao-truot',
           type: 'VIDEO',
           isFreePreview: true,
-          description: 'Cấu trúc điểm, cách chấm thực hành, năm nguyên nhân trượt thật, và chiến lược thoát.',
+          description: 'Syllabus nói gì (và KHÔNG nói gì) về điểm, cách chấm thực hành, năm nguyên nhân trượt thật, và chiến lược thoát.',
           content: `
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.2</span>
-<h2>Why 80% fail — and how not to</h2>
-<p class="lead">Read this lesson twice. It is the difference between passing and re-taking. LAB211 is graded almost entirely on <strong>working code produced under time pressure</strong>, and it fails students for predictable, avoidable reasons.</p>
-<h3>How you are graded</h3>
-<p>The syllabus lists no theory exam. Your grade comes from practical work: assignments completed in the lab within a fixed time, mentor reviews, and a final <strong>Practical Exam (PE)</strong>. In the PE you receive a brief, and a marker runs your program with a fixed keystroke script and compares your console output, line by line, with the expected screen in the brief. You pass the subject when your average reaches <strong>5.0</strong>.</p>
+<h2>How LAB211 is judged — and why students fail</h2>
+<p class="lead">Read this lesson twice. LAB211 is judged almost entirely on <strong>working code produced under time pressure</strong>, and it fails students for predictable, avoidable reasons.</p>
+<h3>What the syllabus actually says about grading</h3>
+<p>Be clear about this, because it is unusual: the LAB211 syllabus (ID 10021) lists <strong>“0 assessment(s)”</strong>. There is <strong>no assessment table, no component weights, no scoring scale and no MinAvgMarkToPass field</strong> — and no final exam of any kind, written or practical. Every other subject's syllabus has that table; this one does not.</p>
+<p>What the syllabus <em>does</em> state is the shape of the work: 60 sessions that alternate <strong>Practice</strong> and <strong>Mentor review</strong>, the rule that <q>each assignment must be completed continuously in the defined time</q>, and the requirement to attend <strong>at least 80% of contact slots “in order to be accepted to the final results”</strong>. The grading rules themselves live in the mentor-only materials (<em>Mentor guide for Lab</em>, <em>Evaluation Templates</em>) and on the FLM.</p>
+<div class="callout warn"><span class="badge">Where the real numbers are</span> Because the syllabus publishes none, take the weights, the pass mark and the exact exam arrangement for <em>your</em> term from the FLM course page and from your mentor in the first slots. Anything you read elsewhere — including the exam walkthrough later in this course — is <strong>common practice, not an official rule</strong>.</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Credits</span><span class="v">3</span></div>
-  <div class="kv"><span class="k">Total hours</span><span class="v">150h <small>45h lab + 105h self-study</small></span></div>
+  <div class="kv"><span class="k">Total hours</span><span class="v">150h <small>45h contact + 105h self-study</small></span></div>
   <div class="kv"><span class="k">Prerequisite</span><span class="v">Pass PRO192</span></div>
-  <div class="kv"><span class="k">Format</span><span class="v">60 sessions <small>Practice + Mentor review, no lectures</small></span></div>
-  <div class="kv"><span class="k">Eligibility</span><span class="v">Attend ≥ 80% of slots</span></div>
-  <div class="kv"><span class="k">Pass mark</span><span class="v">Average ≥ 5.0</span></div>
+  <div class="kv"><span class="k">Format</span><span class="v">60 sessions <small>4 Orientation, then 28 Practice + 28 Mentor review</small></span></div>
+  <div class="kv"><span class="k">Eligibility</span><span class="v">Attend ≥ 80% of contact slots</span></div>
+  <div class="kv"><span class="k">Assessment in syllabus</span><span class="v">None listed <small>no exam, no weights, no pass mark</small></span></div>
 </div>
 <h3>The five real reasons students fail</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><b>1 · "I understand it" is not "I can type it."</b> You read the solution, it makes sense, you move on. In the exam your fingers are slow and you run out of time. Fluency only comes from writing programs yourself, many times.</div>
-  <div class="lz-layer"><b>2 · Output does not match to the character.</b> The marker compares screens exactly. A missing space in <span class="badge">%-15s</span>, a wrong label, <span class="badge">"Area: "</span> vs <span class="badge">"Area:"</span> — all count as wrong even if the logic is perfect.</div>
-  <div class="lz-layer"><b>3 · The program crashes on bad input.</b> No input validation → the marker types a letter where a number is expected → <span class="badge">InputMismatchException</span> → zero for that run.</div>
+  <div class="lz-layer"><b>1 · "I understand it" is not "I can type it."</b> You read the solution, it makes sense, you move on. In a timed lab slot your fingers are slow and you run out of time. Fluency only comes from writing programs yourself, many times.</div>
+  <div class="lz-layer"><b>2 · Output does not match to the character.</b> Your reviewer compares screens exactly. A missing space in <span class="badge">%-15s</span>, a wrong label, <span class="badge">"Area: "</span> vs <span class="badge">"Area:"</span> — all count as wrong even if the logic is perfect.</div>
+  <div class="lz-layer"><b>3 · The program crashes on bad input.</b> No input validation → the reviewer types a letter where a number is expected → <span class="badge">InputMismatchException</span> → zero for that run.</div>
   <div class="lz-layer"><b>4 · It does not compile / does not run.</b> One missing <span class="badge">import</span>, one unclosed brace, and the whole file scores nothing. Compiling is not optional; it is the gate.</div>
   <div class="lz-layer"><b>5 · Panic and no plan.</b> Students freeze at a blank NetBeans project. Without a fixed order of attack, 60 minutes vanish on the first feature.</div>
 </div>
@@ -135,23 +137,25 @@ export default {
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.2</span>
-<h2>Vì sao 80% trượt — và cách để không trượt</h2>
-<p class="lead">Đọc bài này hai lần. Nó là ranh giới giữa qua môn và học lại. LAB211 gần như chấm hoàn toàn trên <strong>code chạy được viết dưới áp lực thời gian</strong>, và nó đánh trượt sinh viên vì những lý do đoán trước được, tránh được.</p>
-<h3>Bạn được chấm thế nào</h3>
-<p>Syllabus không có thi lý thuyết. Điểm đến từ thực hành: assignment làm tại phòng lab trong thời gian cố định, mentor review, và kỳ <strong>thi thực hành (Practical Exam - PE)</strong> cuối. Trong PE bạn nhận một đề, người chấm chạy chương trình của bạn với một kịch bản gõ phím cố định rồi so output console của bạn, TỪNG DÒNG, với màn hình mẫu trong đề. Bạn qua môn khi điểm trung bình đạt <strong>5.0</strong>.</p>
+<h2>LAB211 được đánh giá thế nào — và vì sao sinh viên trượt</h2>
+<p class="lead">Đọc bài này hai lần. LAB211 gần như đánh giá hoàn toàn trên <strong>code chạy được viết dưới áp lực thời gian</strong>, và nó đánh trượt sinh viên vì những lý do đoán trước được, tránh được.</p>
+<h3>Syllabus thực sự nói gì về điểm</h3>
+<p>Phải nói rõ vì đây là trường hợp bất thường: syllabus LAB211 (ID 10021) ghi <strong>“0 assessment(s)”</strong>. <strong>Không có bảng đánh giá, không trọng số thành phần, không thang điểm, không có trường MinAvgMarkToPass</strong> — và không có kỳ thi cuối kỳ nào, dù lý thuyết hay thực hành. Mọi môn khác đều có bảng đó; môn này thì không.</p>
+<p>Cái syllabus <em>có</em> nói là hình dạng công việc: 60 session xen kẽ <strong>Practice</strong> và <strong>Mentor review</strong>, quy định <q>mỗi assignment phải được hoàn thành liên tục trong thời gian quy định</q>, và yêu cầu dự <strong>tối thiểu 80% slot “để được chấp nhận vào kết quả cuối cùng”</strong>. Bản thân quy tắc chấm nằm trong tài liệu chỉ dành cho mentor (<em>Mentor guide for Lab</em>, <em>Evaluation Templates</em>) và trên FLM.</p>
+<div class="callout warn"><span class="badge">Số thật nằm ở đâu</span> Vì syllabus không công bố, hãy lấy trọng số, điểm qua và cách tổ chức thi của <em>kỳ bạn học</em> từ trang FLM của môn và từ mentor trong những slot đầu. Mọi thứ bạn đọc ở chỗ khác — kể cả phần hướng dẫn thi ở cuối khóa này — là <strong>thông lệ phổ biến, không phải quy định chính thức</strong>.</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">Tín chỉ</span><span class="v">3</span></div>
-  <div class="kv"><span class="k">Tổng giờ</span><span class="v">150h <small>45h lab + 105h tự học</small></span></div>
+  <div class="kv"><span class="k">Tổng giờ</span><span class="v">150h <small>45h trên lớp + 105h tự học</small></span></div>
   <div class="kv"><span class="k">Tiên quyết</span><span class="v">Đạt PRO192</span></div>
-  <div class="kv"><span class="k">Hình thức</span><span class="v">60 session <small>Practice + Mentor review, không lecture</small></span></div>
-  <div class="kv"><span class="k">Điều kiện dự thi</span><span class="v">Dự ≥ 80% slot</span></div>
-  <div class="kv"><span class="k">Điểm qua</span><span class="v">Trung bình ≥ 5.0</span></div>
+  <div class="kv"><span class="k">Hình thức</span><span class="v">60 session <small>4 Orientation, rồi 28 Practice + 28 Mentor review</small></span></div>
+  <div class="kv"><span class="k">Điều kiện</span><span class="v">Dự ≥ 80% slot</span></div>
+  <div class="kv"><span class="k">Đánh giá trong syllabus</span><span class="v">Không liệt kê <small>không thi, không trọng số, không điểm qua</small></span></div>
 </div>
 <h3>Năm lý do thật khiến sinh viên trượt</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><b>1 · "Hiểu rồi" khác "gõ được".</b> Bạn đọc lời giải, thấy hợp lý, rồi bỏ qua. Trong phòng thi tay bạn chậm và hết giờ. Phản xạ chỉ đến từ việc TỰ viết chương trình, nhiều lần.</div>
-  <div class="lz-layer"><b>2 · Output lệch tới từng ký tự.</b> Người chấm so màn hình y hệt. Thiếu một dấu cách ở <span class="badge">%-15s</span>, sai một nhãn, <span class="badge">"Area: "</span> vs <span class="badge">"Area:"</span> — đều bị tính sai dù logic hoàn hảo.</div>
-  <div class="lz-layer"><b>3 · Chương trình sập với dữ liệu xấu.</b> Không validate → người chấm gõ chữ vào chỗ cần số → <span class="badge">InputMismatchException</span> → 0 điểm lần chạy đó.</div>
+  <div class="lz-layer"><b>1 · "Hiểu rồi" khác "gõ được".</b> Bạn đọc lời giải, thấy hợp lý, rồi bỏ qua. Trong một slot lab bấm giờ, tay bạn chậm và hết giờ. Phản xạ chỉ đến từ việc TỰ viết chương trình, nhiều lần.</div>
+  <div class="lz-layer"><b>2 · Output lệch tới từng ký tự.</b> Người review so màn hình y hệt. Thiếu một dấu cách ở <span class="badge">%-15s</span>, sai một nhãn, <span class="badge">"Area: "</span> vs <span class="badge">"Area:"</span> — đều bị tính sai dù logic hoàn hảo.</div>
+  <div class="lz-layer"><b>3 · Chương trình sập với dữ liệu xấu.</b> Không validate → người review gõ chữ vào chỗ cần số → <span class="badge">InputMismatchException</span> → 0 điểm lần chạy đó.</div>
   <div class="lz-layer"><b>4 · Không biên dịch / không chạy được.</b> Thiếu một <span class="badge">import</span>, thiếu một ngoặc, cả file 0 điểm. Biên dịch được không phải tùy chọn; nó là cửa ải.</div>
   <div class="lz-layer"><b>5 · Hoảng và không có kế hoạch.</b> Sinh viên đơ trước project NetBeans trống. Không có thứ tự tấn công cố định, 60 phút bốc hơi ở chức năng đầu tiên.</div>
 </div>
@@ -248,7 +252,7 @@ export default {
   <div class="lz-step">Add the CheckStyle plugin</div>
   <div class="lz-step">Create a Java Application &amp; run "Hello"</div>
 </div>
-<div class="callout warn">CheckStyle is in the official tool list for a reason — clean, convention-following code is part of your grade. Set it up now so bad naming and formatting are flagged while you practise, not in the exam.</div>
+<div class="callout warn">CheckStyle is one of the tools the syllabus requires (with NetBeans 8.0.2, JDK8 and JavaDoc). The syllabus does not say it carries marks — but a mentor reads your code in every review slot, so set it up now and let it flag bad naming and formatting while you practise.</div>
 <p>The full step-by-step install guide, with official download links for each tool, is on Exp Hub:</p>
 <a class="link-card exphub" href="/exp-hub/lab211-cai-dat-netbeans?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🛠️</span>
@@ -266,7 +270,7 @@ export default {
   <div class="lz-step">Thêm plugin CheckStyle</div>
   <div class="lz-step">Tạo Java Application &amp; chạy "Hello"</div>
 </div>
-<div class="callout warn">CheckStyle nằm trong danh sách công cụ chính thức là có lý do — code sạch, theo convention là một phần điểm của bạn. Cài ngay để lỗi đặt tên và định dạng bị bắt khi luyện, không phải trong phòng thi.</div>
+<div class="callout warn">CheckStyle là một trong những công cụ syllabus yêu cầu (cùng NetBeans 8.0.2, JDK8 và JavaDoc). Syllabus KHÔNG nói nó có điểm — nhưng mentor đọc code của bạn ở mọi buổi review, nên hãy cài ngay để lỗi đặt tên và định dạng bị bắt khi luyện.</div>
 <p>Hướng dẫn cài từng bước, kèm link tải chính chủ cho từng công cụ, ở Exp Hub:</p>
 <a class="link-card exphub" href="/exp-hub/lab211-cai-dat-netbeans?ref=%2Fcourses%2Foop-with-java-lab%2Flearn&reflabel=LAB211%20%E2%80%94%20OOP%20with%20Java%20Lab" target="_blank" rel="noopener">
   <span class="lc-ico">🛠️</span>
@@ -1360,19 +1364,19 @@ students.<span class="tok-function">sort</span>(
     },
     /* ══════════════════ PHẦN 6 — LUYỆN THI THỰC HÀNH (CHỐNG TRƯỢT) ══════════════════ */
     {
-      title: 'Part 6 — Practical Exam survival|||Phần 6 — Sống sót kỳ thi thực hành',
-      description: 'Cốt lõi chống trượt: kịch bản thi + quản lý thời gian, sổ tay lỗi 60 giây, các bẫy người chấm, và vấn đáp "đổi yêu cầu".',
+      title: 'Part 6 — Surviving a timed lab assignment|||Phần 6 — Sống sót một buổi lab bấm giờ',
+      description: 'Syllabus quy định mỗi assignment phải làm LIÊN TỤC trong thời gian quy định — đây là cách sống sót buổi đó: kịch bản làm bài + quản lý thời gian, sổ tay lỗi 60 giây, các bẫy khi bị review, và vấn đáp "đổi yêu cầu".',
       lessons: [
         {
-          title: '6.1 — Exam plan & time management|||6.1 — Kịch bản thi & quản lý thời gian',
+          title: '6.1 — Working to time in one sitting|||6.1 — Làm xong trong một buổi: kịch bản & quản lý thời gian',
           slug: 'lab211-ke-hoach-thi',
           type: 'VIDEO',
-          description: 'Thứ tự tấn công cố định và cách chia thời gian để không cháy giờ ở chức năng đầu tiên.',
+          description: 'Thứ tự tấn công cố định và cách chia thời gian để không cháy giờ ở chức năng đầu tiên — dùng cho mọi buổi lab bấm giờ.',
           content: `
 <div class="ml-en">
 <span class="eyebrow">Part 6 · Lesson 6.1</span>
-<h2>The exam plan — a fixed order of attack</h2>
-<p class="lead">In the Practical Exam you get a brief and a time limit, alone. The students who pass do not write faster — they follow a rehearsed order so no minute is wasted deciding what to do.</p>
+<h2>Working to time — a fixed order of attack</h2>
+<p class="lead">The syllabus rule is blunt: <q>each assignment must be completed continuously in the defined time</q>. So every lab sitting is the same shape &mdash; a brief, a clock, and you alone. The students who finish do not write faster; they follow a rehearsed order so no minute is wasted deciding what to do.</p>
 <div class="lz-flow">
   <div class="lz-step">0–5 min · read the brief twice, underline every message &amp; format</div>
   <div class="lz-step">5–10 min · create the project, entity + Validator (from memory)</div>
@@ -1387,12 +1391,12 @@ students.<span class="tok-function">sort</span>(
   <div class="lz-layer"><b>If stuck, move on.</b> A working 80% beats a broken 100% that will not run.</div>
 </div>
 <div class="callout danger">The number one time-sink is one feature you cannot get perfect. Set a personal timer; when it rings, leave it working-but-imperfect and secure the rest. You are graded on total working output, not heroics.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Comment out a broken feature to save the build.</b> If one method refuses to compile with minutes left, wrap it in a block comment and its menu case too; the other four features then still compile, run and score. A submission that does not compile at all scores nothing. <em>Why beyond the syllabus: triage-by-commenting is an exam survival tactic, not a programming topic the syllabus lists.</em></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Comment out a broken feature to save the build.</b> If one method refuses to compile with minutes left, wrap it in a block comment and its menu case too; the other four features then still compile, run and score. A submission that does not compile at all scores nothing. <em>Why beyond the syllabus: triage-by-commenting is a survival tactic for a timed sitting, not a programming topic the syllabus lists.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Phần 6 · Bài 6.1</span>
-<h2>Kịch bản thi — thứ tự tấn công cố định</h2>
-<p class="lead">Trong kỳ thi thực hành bạn nhận một đề và một mốc thời gian, tự làm. Sinh viên qua môn không viết nhanh hơn — họ theo một thứ tự đã diễn tập nên không phí phút nào để quyết làm gì.</p>
+<h2>Làm xong trong một buổi — thứ tự tấn công cố định</h2>
+<p class="lead">Syllabus quy định thẳng: <q>mỗi assignment phải hoàn thành liên tục trong thời gian quy định</q>. Nên mọi buổi lab đều cùng một hình dạng — một đề, một đồng hồ, và bạn tự làm. Sinh viên làm xong không viết nhanh hơn; họ theo một thứ tự đã diễn tập nên không phí phút nào để quyết làm gì.</p>
 <div class="lz-flow">
   <div class="lz-step">0–5 phút · đọc đề hai lần, gạch chân mọi thông báo &amp; định dạng</div>
   <div class="lz-step">5–10 phút · tạo project, entity + Validator (từ trí nhớ)</div>
@@ -1407,7 +1411,7 @@ students.<span class="tok-function">sort</span>(
   <div class="lz-layer"><b>Bí thì bỏ qua.</b> Một 80% chạy được hơn một 100% hỏng không chạy.</div>
 </div>
 <div class="callout danger">Kẻ ngốn thời gian số một là một chức năng bạn không thể làm hoàn hảo. Đặt hẹn giờ riêng; khi nó reo, để nó chạy-được-nhưng-chưa-hoàn-hảo và giữ chắc phần còn lại. Bạn được chấm trên tổng output chạy được, không phải sự anh hùng.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Comment tắt một chức năng hỏng để cứu bản build.</b> Nếu một hàm không chịu biên dịch khi còn vài phút, bọc nó trong một khối comment và cả case menu của nó; bốn chức năng còn lại khi đó vẫn biên dịch, chạy và ăn điểm. Bài nộp hoàn toàn không biên dịch được thì 0 điểm. <em>Vì sao ngoài syllabus: phân loại-bằng-comment là chiến thuật sống sót thi, không phải chủ đề lập trình syllabus liệt kê.</em></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Comment tắt một chức năng hỏng để cứu bản build.</b> Nếu một hàm không chịu biên dịch khi còn vài phút, bọc nó trong một khối comment và cả case menu của nó; bốn chức năng còn lại khi đó vẫn biên dịch, chạy và ăn điểm. Bài nộp hoàn toàn không biên dịch được thì 0 điểm. <em>Vì sao ngoài syllabus: phân loại-bằng-comment là chiến thuật sống sót một buổi bấm giờ, không phải chủ đề lập trình syllabus liệt kê.</em></div>
 </div>
 `,
         },
@@ -1450,7 +1454,7 @@ students.<span class="tok-function">sort</span>(
 <div class="ml-vi">
 <span class="eyebrow">Phần 6 · Bài 6.2</span>
 <h2>Sổ tay lỗi 60 giây</h2>
-<p class="lead">CLO3 là "debug bằng công cụ phổ biến". Trong phòng thi, một dòng lỗi đỏ không phải thảm họa — nó là thông báo nói chính xác cần sửa gì, <em>nếu</em> bạn đọc được nhanh. Đây là những lỗi bạn thật sự gặp.</p>
+<p class="lead">CLO3 là "debug bằng công cụ phổ biến". Trong một buổi bấm giờ, một dòng lỗi đỏ không phải thảm họa — nó là thông báo nói chính xác cần sửa gì, <em>nếu</em> bạn đọc được nhanh. Đây là những lỗi bạn thật sự gặp.</p>
 <table>
   <thead><tr><th>Thông báo</th><th>Nguyên nhân thật</th><th>Cách sửa</th></tr></thead>
   <tbody>
@@ -1606,12 +1610,12 @@ students.<span class="tok-function">sort</span>(
           title: '7.1 — CheckStyle & clean code|||7.1 — CheckStyle & code sạch',
           slug: 'lab211-checkstyle',
           type: 'VIDEO',
-          description: 'Plugin bắt buộc trong danh sách công cụ — code theo convention là một phần điểm.',
+          description: 'Plugin nằm trong danh sách công cụ bắt buộc của syllabus — code theo convention để qua mắt mentor ở buổi review.',
           content: `
 <div class="ml-en">
 <span class="eyebrow">Part 7 · Lesson 7.1</span>
 <h2>CheckStyle &amp; clean code</h2>
-<p class="lead">CheckStyle is in the official tool list, which means naming and formatting are part of your grade. It is easy points — and it catches sloppy code while you practise, not in the exam.</p>
+<p class="lead">CheckStyle is in the syllabus tool list, alongside NetBeans 8.0.2, JDK8 and JavaDoc. The syllabus does not attach marks to it &mdash; but a mentor reads your code at every review slot, and conventional naming and formatting are the cheapest way to make that reading go well.</p>
 <div class="lz-stack">
   <div class="lz-layer"><b>Naming.</b> Classes <span class="badge">PascalCase</span>, methods/variables <span class="badge">camelCase</span>, constants <span class="badge">UPPER_SNAKE</span>. No <span class="badge">x1</span>, <span class="badge">aa</span>, <span class="badge">temp2</span>.</div>
   <div class="lz-layer"><b>Formatting.</b> Consistent indentation, braces on every if/for, no 200-character lines.</div>
@@ -1629,7 +1633,7 @@ students.<span class="tok-function">sort</span>(
 <div class="ml-vi">
 <span class="eyebrow">Phần 7 · Bài 7.1</span>
 <h2>CheckStyle &amp; code sạch</h2>
-<p class="lead">CheckStyle nằm trong danh sách công cụ chính thức, nghĩa là đặt tên và định dạng là một phần điểm của bạn. Đó là điểm dễ — và nó bắt code cẩu thả khi bạn luyện, không phải trong phòng thi.</p>
+<p class="lead">CheckStyle nằm trong danh sách công cụ của syllabus, cùng NetBeans 8.0.2, JDK8 và JavaDoc. Syllabus KHÔNG gắn điểm cho nó &mdash; nhưng mentor đọc code của bạn ở mọi buổi review, và đặt tên/định dạng theo convention là cách rẻ nhất để buổi đọc đó suôn sẻ.</p>
 <div class="lz-stack">
   <div class="lz-layer"><b>Đặt tên.</b> Lớp <span class="badge">PascalCase</span>, hàm/biến <span class="badge">camelCase</span>, hằng <span class="badge">UPPER_SNAKE</span>. Không <span class="badge">x1</span>, <span class="badge">aa</span>, <span class="badge">temp2</span>.</div>
   <div class="lz-layer"><b>Định dạng.</b> Thụt lề nhất quán, ngoặc cho mọi if/for, không dòng 200 ký tự.</div>
@@ -1732,7 +1736,7 @@ students.<span class="tok-function">sort</span>(
   <div class="lz-step">Tự chấm: nhãn, validate, biên dịch, mọi lựa chọn menu</div>
   <div class="lz-step">Cho AI coach đổi một yêu cầu &amp; bảo vệ câu trả lời</div>
 </div>
-<div class="callout ok">Làm điều này ba lần trong tuần cuối trước thi. Kết hợp với 54 đề đã giải, bạn bước vào phòng thi khi đã thấy mọi hình dạng kỳ thi có thể mang.</div>
+<div class="callout ok">Làm điều này ba lần trong tuần cuối trước buổi lab lớn. Kết hợp với 54 đề đã giải, bạn bước vào phòng lab khi đã thấy mọi hình dạng một đề có thể mang.</div>
 <h3>Kế hoạch qua môn, một dòng</h3>
 <div class="lz-stack">
   <div class="lz-layer"><b>Tự giải đề thật, dễ → khó · validate &amp; khớp output mỗi lần · diễn tập kỳ thi dưới đồng hồ · bảo vệ code khi vấn đáp.</b> Đó là toàn bộ phương pháp — và là lý do sinh viên chịu làm thì qua, còn sinh viên đọc lời giải thì không.</div>
@@ -1754,7 +1758,7 @@ students.<span class="tok-function">sort</span>(
           quiz: {
             timeLimitSeconds: 300,
             questions: [
-              { question: 'CheckStyle matters in LAB211 because…|||CheckStyle quan trọng trong LAB211 vì…', options: ['it compiles your code|||nó biên dịch code', 'clean naming/formatting is part of the grade|||đặt tên/định dạng sạch là một phần điểm', 'it runs the program|||nó chạy chương trình', 'it is optional|||nó tùy chọn'], correctIndex: 1, points: 1 },
+              { question: 'CheckStyle matters in LAB211 because…|||CheckStyle quan trọng trong LAB211 vì…', options: ['it compiles your code|||nó biên dịch code', 'the syllabus requires it as a tool and a mentor reads your code every review slot|||syllabus bắt buộc nó và mentor đọc code của bạn ở mọi buổi review', 'it runs the program|||nó chạy chương trình', 'it replaces testing|||nó thay cho việc test'], correctIndex: 1, points: 1 },
               { question: 'Doubling n on an O(n²) algorithm multiplies the work by about…|||Gấp đôi n trên thuật toán O(n²) nhân công việc lên khoảng…', options: ['2×', '4×', 'no change|||không đổi', '10×'], correctIndex: 1, points: 1 },
               { question: 'When defending an algorithm choice, you should present…|||Khi bảo vệ lựa chọn thuật toán, bạn nên trình bày…', options: ['hard-coded timing numbers|||số đo thời gian ghi cứng', 'deterministic operation counts|||số phép toán tất định', 'your opinion|||ý kiến của bạn', 'the file size|||kích thước file'], correctIndex: 1, points: 1 },
               { question: 'The single-line pass method is…|||Phương pháp qua môn một dòng là…', options: ['read every solution twice|||đọc mọi lời giải hai lần', 'solve real briefs yourself, validate & match output, rehearse, defend|||tự giải đề thật, validate & khớp output, diễn tập, bảo vệ', 'memorise the API|||học thuộc API', 'attend every slot only|||chỉ dự đủ slot'], correctIndex: 1, points: 1 },
@@ -1765,98 +1769,98 @@ students.<span class="tok-function">sort</span>(
     },
     /* END-SECTIONS-MARKER */
     {
-      "title": "Final Exam|||Thi cuối kỳ",
-      "description": "Thi cuối kỳ gồm PE (thi thực hành) và FE (trắc nghiệm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "title": "Assessment — what LAB211 really judges|||Đánh giá — LAB211 thực sự chấm cái gì",
+      "description": "Syllabus LAB211 liệt kê 0 assessment: không thi lý thuyết, không thi cuối kỳ, không trọng số, không điểm qua. Hai bài dưới nói rõ cái gì thực sự được đánh giá (assignment tại lab + mentor review) và cái gì chỉ là thông lệ.",
       "lessons": [
         {
-          "title": "PE — Practical Exam|||PE — Thi thực hành",
+          "title": "Lab assignments & mentor review — what is really assessed|||Bài lab & mentor review — cái thực sự được đánh giá",
           "slug": "lab211-final-exam-pe",
           "type": "article",
-          "description": "Khung thi thực hành (PE) của môn — format, cách chấm và cách chuẩn bị. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · PE</span>\n<h2>PE — Practical Exam</h2>\n<p class=\"lead\">The Practical Exam (PE) is a <strong>hands-on coding exam</strong>: you are given a problem or feature and must write (and usually run) working code on the machine within a time limit. It is graded on correctness, whether it runs, and good practice.</p>\n<h3>How to prepare</h3>\n<ul>\n<li>Rebuild small features from a blank file, <em>without notes</em> &mdash; copying tutorials is not enough.</li>\n<li>Practise the core pattern of this subject end-to-end until you can do it from memory.</li>\n<li>Read the requirement twice; build the smallest working version first, then extend.</li>\n<li>Test as you go; a program that runs and does 80% beats one that does not compile.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A real practical prompt bank for this subject will be added here later, in the exam room. Use the guidance above to prepare now.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · PE</span>\n<h2>PE — Thi thực hành</h2>\n<p class=\"lead\">Thi thực hành (PE) là <strong>thi code trực tiếp</strong>: bạn được giao một bài toán/tính năng và phải viết (thường là chạy) code hoạt động trên máy trong thời gian quy định. Chấm theo tính đúng, có chạy được không, và thực hành tốt.</p>\n<h3>Cách chuẩn bị</h3>\n<ul>\n<li>Dựng lại các tính năng nhỏ từ một file trống, <em>không nhìn ghi chú</em> &mdash; chép tutorial là chưa đủ.</li>\n<li>Luyện mẫu cốt lõi của môn đầu-cuối tới khi làm được từ trí nhớ.</li>\n<li>Đọc yêu cầu hai lần; dựng bản chạy được nhỏ nhất trước, rồi mở rộng.</li>\n<li>Test dọc đường; một chương trình chạy và làm được 80% hơn một chương trình không biên dịch nổi.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề thực hành thật cho môn này sẽ được thêm vào đây sau, trong trang phòng thi. Dùng hướng dẫn trên để chuẩn bị ngay từ giờ.</div>\n</div>"
+          "description": "Syllabus LAB211 không có kỳ thi nào. Bài này nói rõ cái gì thực sự được đánh giá (assignment làm liên tục tại lab + mentor review + 80% điểm danh) và cách chuẩn bị.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Assessment · Lab work</span>\n<h2>What is really assessed: lab assignments &amp; mentor review</h2>\n<p class=\"lead\">LAB211 has <strong>no exam in its syllabus</strong> &mdash; not a written one, not a practical one. The syllabus (ID 10021) ends with the line <strong>&ldquo;0 assessment(s)&rdquo;</strong>: no assessment table, no component weights, no scoring scale, no pass mark. What it does define is the work itself, and that is what you are judged on.</p>\n<h3>The three things the syllabus does state</h3>\n<div class=\"lz-stack\">\n  <div class=\"lz-layer\"><b>1 &middot; Assignments, completed continuously in the defined time.</b> The Description says it in one sentence: <q>Each assignment must be completed continuosly in the defined time.</q> You sit down in the lab room, you get a brief, and the program is expected to be finished in that sitting &mdash; not taken home and polished.</div>\n  <div class=\"lz-layer\"><b>2 &middot; 28 Practice slots alternating with 28 Mentor review slots.</b> Every piece of practice is followed by a review slot. The review is where a mentor looks at the program you wrote and decides whether it counts.</div>\n  <div class=\"lz-layer\"><b>3 &middot; At least 80% attendance</b> &mdash; literally, &ldquo;in order to be accepted to the final results&rdquo;. Miss more than a fifth of the contact slots and the rest of your work does not matter.</div>\n</div>\n<div class=\"callout warn\"><span class=\"badge\">Not in the syllabus</span> Weights, a pass mark, a question bank, a fixed exam duration &mdash; none of these are published for LAB211. The mentor-only materials (<em>Mentor guide for Lab</em>, <em>Evaluation Templates</em>) hold the marking rules, and your term's arrangement is on the FLM. Ask your mentor in the first slots; do not assume a number you read online.</div>\n<h3>How a lab assignment is judged in practice</h3>\n<p>This is the common practice at FU lab rooms, described here so you can prepare &mdash; treat it as <em>how it usually goes</em>, not as a rule from the syllabus:</p>\n<ul>\n<li>You are given a brief with a <strong>sample screen</strong>: the exact prompts, labels and formatting the program must print.</li>\n<li>Your mentor compiles and runs your program, types the sample inputs, and compares the console output with that screen. A missing space in <span class=\"badge\">%-15s</span> or <span class=\"badge\">\"Area: \"</span> vs <span class=\"badge\">\"Area:\"</span> reads as wrong even when the logic is right.</li>\n<li>Bad input is tried. A program that dies on <span class=\"badge\">InputMismatchException</span> loses the run it was supposed to survive.</li>\n<li>Code that does not compile earns nothing at all &mdash; compiling is the gate, not a bonus.</li>\n<li>You are then asked about your own code, and often asked to <strong>change a requirement on the spot</strong>. Lesson 6.4 rehearses exactly that.</li>\n</ul>\n<h3>How to prepare for it</h3>\n<ul>\n<li>Work the way the assignment rule forces you to: <strong>one sitting, one finished program</strong>. Pick a brief from Part 8, set a timer, no notes.</li>\n<li>Rebuild the standard layered architecture (Part 1) from a blank project until structure costs you zero thinking time.</li>\n<li>Always validate input and copy output labels character for character (Lessons 1.2, 1.3, 6.3).</li>\n<li>Before each mentor review, be able to explain <em>why</em> every class exists and to modify one requirement live (Lesson 6.4).</li>\n<li>Attend. 80% is a hard gate and the cheapest mark in the subject.</li>\n</ul>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Đánh giá · Bài lab</span>\n<h2>Cái thực sự được đánh giá: assignment tại lab &amp; mentor review</h2>\n<p class=\"lead\">LAB211 <strong>không có kỳ thi nào trong syllabus</strong> &mdash; không thi viết, cũng không thi thực hành. Syllabus (ID 10021) kết thúc bằng dòng <strong>&ldquo;0 assessment(s)&rdquo;</strong>: không bảng đánh giá, không trọng số, không thang điểm, không điểm qua. Cái nó có định nghĩa là chính công việc, và đó là thứ bạn bị đánh giá.</p>\n<h3>Ba điều syllabus có nói</h3>\n<div class=\"lz-stack\">\n  <div class=\"lz-layer\"><b>1 &middot; Assignment phải làm liên tục trong thời gian quy định.</b> Phần Description viết đúng một câu: <q>Each assignment must be completed continuosly in the defined time.</q> Bạn ngồi vào phòng lab, nhận đề, và chương trình phải xong ngay trong buổi đó &mdash; không mang về nhà gọt giũa.</div>\n  <div class=\"lz-layer\"><b>2 &middot; 28 slot Practice xen kẽ 28 slot Mentor review.</b> Mỗi lần luyện đều có một buổi review theo sau. Buổi review là lúc mentor xem chương trình bạn viết và quyết định nó có được tính hay không.</div>\n  <div class=\"lz-layer\"><b>3 &middot; Dự tối thiểu 80% slot</b> &mdash; nguyên văn: &ldquo;để được chấp nhận vào kết quả cuối cùng&rdquo;. Vắng quá một phần năm số slot thì mọi thứ còn lại không còn ý nghĩa.</div>\n</div>\n<div class=\"callout warn\"><span class=\"badge\">Không có trong syllabus</span> Trọng số, điểm qua, ngân hàng đề, thời lượng thi cố định &mdash; LAB211 không công bố thứ nào. Quy tắc chấm nằm trong tài liệu chỉ dành cho mentor (<em>Mentor guide for Lab</em>, <em>Evaluation Templates</em>), còn cách tổ chức của kỳ bạn học nằm trên FLM. Hỏi mentor trong những slot đầu; đừng tin một con số đọc được trên mạng.</div>\n<h3>Một bài lab thường được chấm thế nào trên thực tế</h3>\n<p>Đây là thông lệ phổ biến ở phòng lab FU, mô tả để bạn chuẩn bị &mdash; hãy coi là <em>thường diễn ra như vậy</em>, không phải quy định của syllabus:</p>\n<ul>\n<li>Bạn nhận đề kèm <strong>màn hình mẫu</strong>: đúng từng dòng nhắc, nhãn và định dạng chương trình phải in ra.</li>\n<li>Mentor biên dịch và chạy chương trình, gõ dữ liệu mẫu, rồi so output console với màn hình đó. Thiếu một dấu cách trong <span class=\"badge\">%-15s</span> hay <span class=\"badge\">\"Area: \"</span> vs <span class=\"badge\">\"Area:\"</span> đều bị đọc là sai dù logic đúng.</li>\n<li>Dữ liệu xấu sẽ được thử. Chương trình chết vì <span class=\"badge\">InputMismatchException</span> là mất lần chạy lẽ ra phải sống sót.</li>\n<li>Code không biên dịch được thì không có điểm nào &mdash; biên dịch là cửa ải, không phải điểm cộng.</li>\n<li>Sau đó bạn bị hỏi về chính code của mình, và thường bị yêu cầu <strong>đổi một yêu cầu ngay tại chỗ</strong>. Bài 6.4 tập đúng việc đó.</li>\n</ul>\n<h3>Chuẩn bị thế nào</h3>\n<ul>\n<li>Luyện đúng như quy định assignment ép bạn: <strong>một buổi, một chương trình hoàn chỉnh</strong>. Chọn một đề ở Phần 8, bấm giờ, không nhìn ghi chú.</li>\n<li>Dựng lại kiến trúc phân tầng chuẩn (Phần 1) từ project trống tới khi cấu trúc không tốn giây suy nghĩ nào.</li>\n<li>Luôn validate input và chép nhãn output tới từng ký tự (Bài 1.2, 1.3, 6.3).</li>\n<li>Trước mỗi buổi mentor review, phải giải thích được <em>vì sao</em> mỗi lớp tồn tại và sửa được một yêu cầu ngay tại chỗ (Bài 6.4).</li>\n<li>Đi học đầy đủ. 80% là cửa cứng và là điểm rẻ nhất của môn.</li>\n</ul>\n</div>"
         },
         {
-          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "title": "No written final exam in this subject|||Môn này không có thi cuối kỳ",
           "slug": "lab211-final-exam-fe",
           "type": "article",
-          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "description": "Syllabus LAB211 ghi \"0 assessment(s)\": không thi trắc nghiệm, không trọng số, không điểm qua. Sự thật + tự kiểm.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Assessment · No theory exam</span>\n<h2>There is no written final exam in LAB211</h2>\n<p class=\"lead\">If you came here looking for a multiple-choice final: <strong>LAB211 does not have one</strong>. The syllabus (ID 10021, Decision 808/QĐ-ĐHFPT, 03/08/2023) lists <strong>&ldquo;0 assessment(s)&rdquo;</strong> and <strong>0 constructive questions</strong>. There is no final exam row, no duration, no weight and no pass mark anywhere in it &mdash; the field other syllabi use for the pass mark (<em>MinAvgMarkToPass</em>) is simply absent.</p>\n<div class=\"callout\"><span class=\"badge\">Why this page exists</span> It used to describe a computer-graded multiple-choice final. That was wrong, so it now says what the syllabus says. Do not revise for a theory exam that is not there &mdash; put the hours into writing programs instead.</div>\n<h3>What the syllabus gives you instead</h3>\n<table class=\"tbl\">\n<thead><tr><th>Field</th><th>LAB211</th></tr></thead>\n<tbody>\n<tr><td>Assessments listed</td><td><strong>None</strong> &mdash; &ldquo;0 assessment(s)&rdquo;</td></tr>\n<tr><td>Constructive questions</td><td><strong>0</strong></td></tr>\n<tr><td>Scoring scale / pass mark</td><td>Not stated (no <em>MinAvgMarkToPass</em> field)</td></tr>\n<tr><td>Sessions</td><td>4 Orientation + 28 Practice + 28 Mentor review</td></tr>\n<tr><td>Attendance</td><td>≥ 80% of contact slots, to be accepted to the final results</td></tr>\n<tr><td>Assignment rule</td><td>Each assignment completed continuously in the defined time</td></tr>\n<tr><td>Where the marking rules live</td><td>Mentor guide for Lab and Evaluation Templates (mentors only) + your term's FLM page</td></tr>\n</tbody>\n</table>\n<h3>So what should you do with this slot in your revision plan?</h3>\n<ul>\n<li><strong>Ask, do not guess.</strong> In the first Orientation slots, ask your mentor how the term is graded and write the answer down. That is the only authoritative source for LAB211.</li>\n<li><strong>Revise by typing.</strong> Every hour you would have spent on flashcards goes into a brief from Part 8, solved from a blank project with a timer.</li>\n<li><strong>Rehearse the review, not the exam.</strong> The recurring event in this subject is the mentor review (28 of them). Lesson 6.4 &mdash; the &ldquo;change a requirement&rdquo; viva &mdash; is the closest thing LAB211 has to an exam rehearsal.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Self-check</span> The questions below check that you have the facts of this subject straight &mdash; they are not a sample of any real exam, because there is none.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Đánh giá · Không có thi lý thuyết</span>\n<h2>LAB211 không có bài thi cuối kỳ nào</h2>\n<p class=\"lead\">Nếu bạn vào đây tìm đề trắc nghiệm cuối kỳ: <strong>LAB211 không có</strong>. Syllabus (ID 10021, Quyết định 808/QĐ-ĐHFPT ngày 03/08/2023) ghi <strong>&ldquo;0 assessment(s)&rdquo;</strong> và <strong>0 câu hỏi kiến tạo</strong>. Không có dòng thi cuối kỳ, không thời lượng, không trọng số, không điểm qua &mdash; trường mà các syllabus khác dùng để ghi điểm qua (<em>MinAvgMarkToPass</em>) ở đây đơn giản là không tồn tại.</p>\n<div class=\"callout\"><span class=\"badge\">Vì sao có trang này</span> Trước đây trang này mô tả một bài thi trắc nghiệm máy chấm. Điều đó sai, nên giờ nó nói đúng thứ syllabus nói. Đừng ôn cho một kỳ thi lý thuyết không tồn tại &mdash; hãy đổ số giờ đó vào việc viết chương trình.</div>\n<h3>Thay vào đó syllabus cho bạn cái gì</h3>\n<table class=\"tbl\">\n<thead><tr><th>Mục</th><th>LAB211</th></tr></thead>\n<tbody>\n<tr><td>Thành phần đánh giá</td><td><strong>Không có</strong> &mdash; &ldquo;0 assessment(s)&rdquo;</td></tr>\n<tr><td>Câu hỏi kiến tạo</td><td><strong>0</strong></td></tr>\n<tr><td>Thang điểm / điểm qua</td><td>Không nêu (không có trường <em>MinAvgMarkToPass</em>)</td></tr>\n<tr><td>Số session</td><td>4 Orientation + 28 Practice + 28 Mentor review</td></tr>\n<tr><td>Điểm danh</td><td>≥ 80% số slot, để được chấp nhận vào kết quả cuối cùng</td></tr>\n<tr><td>Quy định assignment</td><td>Mỗi assignment làm liên tục trong thời gian quy định</td></tr>\n<tr><td>Quy tắc chấm nằm ở đâu</td><td>Mentor guide for Lab và Evaluation Templates (chỉ mentor) + trang FLM của kỳ bạn học</td></tr>\n</tbody>\n</table>\n<h3>Vậy dùng chỗ trống này trong kế hoạch ôn thế nào?</h3>\n<ul>\n<li><strong>Hỏi, đừng đoán.</strong> Trong các slot Orientation đầu tiên, hỏi mentor kỳ này chấm ra sao và ghi lại. Đó là nguồn duy nhất có thẩm quyền cho LAB211.</li>\n<li><strong>Ôn bằng cách gõ.</strong> Mỗi giờ lẽ ra dành cho thẻ ghi nhớ hãy đổ vào một đề ở Phần 8, giải từ project trống, có bấm giờ.</li>\n<li><strong>Diễn tập buổi review, không phải kỳ thi.</strong> Sự kiện lặp lại của môn này là mentor review (28 buổi). Bài 6.4 &mdash; vấn đáp &ldquo;đổi yêu cầu&rdquo; &mdash; là thứ gần với diễn tập thi nhất mà LAB211 có.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Tự kiểm</span> Các câu dưới kiểm tra bạn nắm đúng sự thật về môn này &mdash; chúng không phải mẫu của bài thi nào, vì không có bài thi nào.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [
               {
-                "id": "q1",
-                "points": 1,
-                "question": "LAB211 is graded mainly on…|||LAB211 chấm chủ yếu dựa trên…",
-                "options": [
-                  "a written theory exam|||một bài thi lý thuyết viết",
-                  "working code produced under time pressure|||code chạy được viết dưới áp lực thời gian",
-                  "attendance only|||chỉ điểm danh",
-                  "group presentations|||thuyết trình nhóm"
-                ],
-                "correctIndex": 1
+                            "id": "q1",
+                            "points": 1,
+                            "question": "How many assessment components does the LAB211 syllabus list?|||Syllabus LAB211 liệt kê bao nhiêu thành phần đánh giá?",
+                            "options": [
+                                          "none — it lists \"0 assessment(s)\"|||không có — nó ghi \"0 assessment(s)\"",
+                                          "four|||bốn",
+                                          "five|||năm",
+                                          "one final exam only|||chỉ một bài thi cuối kỳ"
+                            ],
+                            "correctIndex": 0
               },
               {
-                "id": "q2",
-                "points": 1,
-                "question": "The prerequisite for LAB211 is…|||Tiên quyết của LAB211 là…",
-                "options": [
-                  "PRF192",
-                  "PRO192",
-                  "CSD201",
-                  "none|||không có"
-                ],
-                "correctIndex": 1
+                            "id": "q2",
+                            "points": 1,
+                            "question": "The pass mark for LAB211 is…|||Điểm qua môn LAB211 là…",
+                            "options": [
+                                          "5.0, stated in the syllabus|||5,0, ghi trong syllabus",
+                                          "4.0, stated in the syllabus|||4,0, ghi trong syllabus",
+                                          "not stated in the syllabus — ask the mentor or the FLM|||không có trong syllabus — hỏi mentor hoặc FLM",
+                                          "decided by the student|||do sinh viên tự chọn"
+                            ],
+                            "correctIndex": 2
               },
               {
-                "id": "q3",
-                "points": 1,
-                "question": "The single biggest cause of failing is…|||Nguyên nhân trượt lớn nhất là…",
-                "options": [
-                  "not memorising theory|||không thuộc lý thuyết",
-                  "reading solutions instead of writing them|||đọc lời giải thay vì tự viết",
-                  "using NetBeans|||dùng NetBeans",
-                  "validating input|||validate input"
-                ],
-                "correctIndex": 1
+                            "id": "q3",
+                            "points": 1,
+                            "question": "The prerequisite for LAB211 is…|||Tiên quyết của LAB211 là…",
+                            "options": [
+                                          "PRF192",
+                                          "PRO192",
+                                          "CSD201",
+                                          "none|||không có"
+                            ],
+                            "correctIndex": 1
               },
               {
-                "id": "q4",
-                "points": 1,
-                "question": "The marker compares your program by…|||Người chấm so chương trình của bạn bằng cách…",
-                "options": [
-                  "reading your code style only|||chỉ đọc phong cách code",
-                  "running it and comparing console output line by line|||chạy nó và so output console từng dòng",
-                  "counting your comments|||đếm số comment",
-                  "checking file size|||kiểm kích thước file"
-                ],
-                "correctIndex": 1
+                            "id": "q4",
+                            "points": 1,
+                            "question": "The syllabus rule about assignments says each one must be…|||Quy định của syllabus về assignment nói mỗi bài phải…",
+                            "options": [
+                                          "completed continuously in the defined time|||hoàn thành liên tục trong thời gian quy định",
+                                          "submitted within a week|||nộp trong vòng một tuần",
+                                          "done in pairs|||làm theo cặp",
+                                          "presented as slides|||trình bày bằng slide"
+                            ],
+                            "correctIndex": 0
               },
               {
-                "id": "q5",
-                "points": 1,
-                "question": "The correct study loop puts \"read the reference solution\"…|||Vòng lặp học đúng đặt \"đọc lời giải tham khảo\"…",
-                "options": [
-                  "first, before trying|||đầu tiên, trước khi thử",
-                  "after you have solved it yourself|||sau khi bạn đã tự giải",
-                  "instead of writing code|||thay cho việc viết code",
-                  "never|||không bao giờ"
-                ],
-                "correctIndex": 1
+                            "id": "q5",
+                            "points": 1,
+                            "question": "The 60 sessions of LAB211 are…|||60 session của LAB211 là…",
+                            "options": [
+                                          "lectures and seminars|||bài giảng và seminar",
+                                          "4 orientation, then Practice alternating with Mentor review|||4 buổi định hướng, rồi Practice xen kẽ Mentor review",
+                                          "all self-study|||toàn bộ tự học",
+                                          "30 lectures and 30 exams|||30 bài giảng và 30 buổi thi"
+                            ],
+                            "correctIndex": 1
               },
               {
-                "id": "q6",
-                "points": 1,
-                "question": "The exercises on the track are ordered by…|||Các đề trên track được xếp theo…",
-                "options": [
-                  "alphabet|||bảng chữ cái",
-                  "lines of code (real difficulty)|||số dòng code (độ khó thật)",
-                  "random|||ngẫu nhiên",
-                  "date added|||ngày thêm"
-                ],
-                "correctIndex": 1
+                            "id": "q6",
+                            "points": 1,
+                            "question": "Attendance below 80% of contact slots means…|||Dự dưới 80% số slot nghĩa là…",
+                            "options": [
+                                          "a one-point penalty|||bị trừ một điểm",
+                                          "you are not accepted to the final results|||bạn không được chấp nhận vào kết quả cuối cùng",
+                                          "nothing, attendance is optional|||không sao, điểm danh là tùy chọn",
+                                          "you repeat one session|||bạn học lại một buổi"
+                            ],
+                            "correctIndex": 1
               }
-            ]
+]
           }
         }
       ]

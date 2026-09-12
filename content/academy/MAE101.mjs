@@ -53,8 +53,10 @@ export default {
   <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Determinants &amp; Inverse</div><div class="lz-nsub">Cramer&#39;s rule · diagonalization</div></div></div>
   <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Vectors &amp; Linear Transformations</div><div class="lz-nsub">In R² and R³</div></div></div>
   <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Vector Spaces</div><div class="lz-nsub">Subspaces · basis · dimension</div></div></div>
-  <div class="lz-stage">Advanced · beyond the syllabus</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Compute with Maxima/Python · why this math powers ML &amp; graphics</div><div class="lz-nsub">Hands-on &amp; real-world connections</div></div></div>
+  <div class="lz-stage">Computational tools (listed course materials)</div>
+  <div class="lz-node"><div class="lz-badge">10</div><div class="lz-nbody"><div class="lz-ntitle">Compute with Maxima &amp; Python</div><div class="lz-nsub">Maxima is a listed tool; &ldquo;Linear transformation with Python&rdquo; is a listed Coursera project</div></div></div>
+  <div class="lz-stage">Extra · beyond the syllabus</div>
+  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Why this math powers ML &amp; graphics</div><div class="lz-nsub">Real-world connections</div></div></div>
 </div>
 <div class="callout ok">Math is not a spectator sport. Reading a solved example feels easy, but you only learn by <strong>working problems yourself</strong>. Cover the solution, try it, then check. Every chapter here has a quiz — use it to test that you can actually <em>do</em> the math, not just recognize it.</div>
 <a class="link-card exphub" href="/exp-hub/mae101-cong-cu-hoc-tap?ref=%2Fcourses%2Fmathematics-for-engineering%2Flearn&reflabel=MAE101%20%E2%80%94%20Mathematics%20for%20Engineering" target="_blank" rel="noopener">
@@ -116,12 +118,12 @@ export default {
 <table>
   <thead><tr><th>Component</th><th>Weight</th><th>Note</th></tr></thead>
   <tbody>
-    <tr><td>Assignments / Exercises</td><td>30%</td><td>On-going, 3 parts — practice problem sets</td></tr>
-    <tr><td>Progress Test</td><td>30%</td><td>3 tests: PT1 (calculus), PT2 (matrices), PT3 (vector spaces)</td></tr>
-    <tr><td>Final Exam</td><td>40%</td><td>60 minutes — must score ≥ 4 to pass the course</td></tr>
+    <tr><td>Assignments / Exercises <small>on-going · 3 parts</small></td><td>30%</td><td><b>3 hours</b> each — practice problem sets; completion criterion <b>&gt; 0</b></td></tr>
+    <tr><td>Progress Test <small>on-going · 3 parts</small></td><td>30%</td><td><b>Test 1: 40 minutes · Tests 2 and 3: 30 minutes</b>. PT1 (session 22) covers LO1&ndash;LO4, PT2 (session 41) LO5&ndash;LO7, PT3 (session 60) LO8&ndash;LO9; completion criterion <b>&gt; 0</b></td></tr>
+    <tr><td>Final Exam <small>1 part</small></td><td>40%</td><td><b>60 minutes</b> — completion criterion <b>≥ 4</b>. The syllabus export shows no question type for it, so do not assume multiple choice</td></tr>
   </tbody>
 </table>
-<div class="callout warn">Two gates: weighted average ≥ 5.0 AND the final exam alone ≥ 4.0. Math builds cumulatively — if you fall behind on limits, derivatives will feel impossible. Do the exercises every week; you cannot cram calculus the night before.</div>
+<div class="callout warn">Three gates: every on-going component must be <strong>&gt; 0</strong>, the final exam alone must be <strong>≥ 4</strong>, and the weighted average must be <strong>≥ 5.0</strong> (plus ≥ 80% attendance to sit the final). Math builds cumulatively — if you fall behind on limits, derivatives will feel impossible. Do the exercises every week; you cannot cram calculus the night before.</div>
 <div class="note-ct">The three progress tests match the course structure exactly: PT1 covers Part I calculus (Chapters 1–4), PT2 covers matrices (Chapters 5–7), PT3 covers vector spaces (Chapters 8–9). Treat each as a checkpoint and revise that block before it.</div>
 </div>
 <div class="ml-vi">
@@ -140,12 +142,12 @@ export default {
 <table>
   <thead><tr><th>Thành phần</th><th>Trọng số</th><th>Ghi chú</th></tr></thead>
   <tbody>
-    <tr><td>Bài tập / Assignment</td><td>30%</td><td>Thường xuyên, 3 phần — bộ bài luyện tập</td></tr>
-    <tr><td>Progress Test</td><td>30%</td><td>3 bài: PT1 (giải tích), PT2 (ma trận), PT3 (không gian vector)</td></tr>
-    <tr><td>Thi cuối kỳ</td><td>40%</td><td>60 phút — phải đạt ≥ 4 mới qua môn</td></tr>
+    <tr><td>Bài tập / Assignment <small>quá trình · 3 phần</small></td><td>30%</td><td><b>3 giờ</b> mỗi bài — bộ bài luyện tập; sàn hoàn thành <b>&gt; 0</b></td></tr>
+    <tr><td>Progress Test <small>quá trình · 3 phần</small></td><td>30%</td><td><b>Bài 1: 40 phút · Bài 2 và 3: 30 phút</b>. PT1 (buổi 22) phủ LO1&ndash;LO4, PT2 (buổi 41) LO5&ndash;LO7, PT3 (buổi 60) LO8&ndash;LO9; sàn hoàn thành <b>&gt; 0</b></td></tr>
+    <tr><td>Thi cuối kỳ <small>1 phần</small></td><td>40%</td><td><b>60 phút</b> — sàn hoàn thành <b>≥ 4</b>. Bản xuất syllabus không ghi dạng câu hỏi của bài này, nên đừng mặc định là trắc nghiệm</td></tr>
   </tbody>
 </table>
-<div class="callout warn">Hai cửa: trung bình có trọng số ≥ 5.0 VÀ riêng bài thi cuối ≥ 4.0. Toán xây tích luỹ — nếu bạn hụt phần giới hạn, đạo hàm sẽ thấy bất khả thi. Làm bài tập mỗi tuần; không thể "cày" giải tích đêm trước thi.</div>
+<div class="callout warn">Ba cửa: mọi cột điểm quá trình phải <strong>&gt; 0</strong>, riêng bài thi cuối phải <strong>≥ 4</strong>, và trung bình có trọng số phải <strong>≥ 5,0</strong> (cộng điều kiện dự ≥ 80% số buổi mới được thi cuối). Toán xây tích luỹ — nếu bạn hụt phần giới hạn, đạo hàm sẽ thấy bất khả thi. Làm bài tập mỗi tuần; không thể "cày" giải tích đêm trước thi.</div>
 <div class="note-ct">Ba progress test khớp đúng cấu trúc môn: PT1 phủ Phần I giải tích (Chương 1–4), PT2 phủ ma trận (Chương 5–7), PT3 phủ không gian vector (Chương 8–9). Coi mỗi bài là một cột mốc và ôn khối đó trước khi thi.</div>
 </div>
 `,
@@ -202,16 +204,18 @@ export default {
           title: '0.4 — Materials, tools & how to study|||0.4 — Tài liệu, công cụ & cách học',
           slug: 'mae101-tai-lieu',
           type: 'VIDEO',
-          description: 'Giáo trình Stewart/Nicholson, Maxima/GeoGebra và cách học toán hiệu quả.',
+          description: 'Giáo trình chính Calculus 1&2 (OpenStax) + Nicholson, các sách tham khảo, Maxima/GeoGebra và cách học toán hiệu quả.',
           content: `
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.4</span>
 <h2>Materials, tools &amp; how to study math</h2>
 <h3>Textbooks</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">Essential Calculus — James Stewart</div><div class="lz-ld">The standard for Part I (limits, derivatives, integrals). Clear, with thousands of practice problems — the exercises are the point.</div></div>
-  <div class="lz-layer"><div class="lz-lt">Linear Algebra with Applications — W. Keith Nicholson</div><div class="lz-ld">The reference for Part II (systems, matrices, vector spaces).</div></div>
-  <div class="lz-layer"><div class="lz-lt">Calculus for Engineers — Donald Trim</div><div class="lz-ld">Engineering-flavored examples and applications.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Calculus 1 &amp; Calculus 2 <span class="badge">main text, Part I</span></div><div class="lz-ld">The syllabus numbers every calculus session by these two volumes — s.13 &ldquo;4.9 Newton&#39;s Method&rdquo;, s.15 &ldquo;1.1 Approximating Areas&rdquo;, s.20 &ldquo;3.7 Improper Integrals&rdquo;. That numbering is the OpenStax <em>Calculus</em> Volume 1 / Volume 2, which is free online. Use these when you want to follow the session list section by section.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Linear Algebra with Applications — W. Keith Nicholson <span class="badge">main text, Part II</span></div><div class="lz-ld">The syllabus numbers Part II by this book (1.1&ndash;5.4): s.25 Gaussian elimination, s.35 &ldquo;3.1 Properties of Determinants&rdquo;, s.50 &ldquo;4.5 An Application in Computer Graphics&rdquo;, s.58 &ldquo;5.4 Rank, Nullity and Linear Systems&rdquo;.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Essential Calculus — James Stewart <span class="badge">reference</span></div><div class="lz-ld">A listed reference, not the numbering source. Clear, with thousands of practice problems — the exercises are the point.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Calculus for Engineers — Donald Trim · Calculus — Grossman <span class="badge">references</span></div><div class="lz-ld">Engineering-flavored examples and applications.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Coursera FPT guided project — &ldquo;Linear transformation with Python&rdquo;</div><div class="lz-ld">A listed course material, alongside Maxima (computerized tool), the PowerPoint slides, Video Skillbuilder and Animation CD.</div></div>
 </div>
 <h3>Free computational tools</h3>
 <ul>
@@ -238,9 +242,11 @@ export default {
 <h2>Tài liệu, công cụ &amp; cách học toán</h2>
 <h3>Giáo trình</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">Essential Calculus — James Stewart</div><div class="lz-ld">Chuẩn cho Phần I (giới hạn, đạo hàm, tích phân). Rõ ràng, hàng nghìn bài luyện — bài tập mới là điểm mấu chốt.</div></div>
-  <div class="lz-layer"><div class="lz-lt">Linear Algebra with Applications — W. Keith Nicholson</div><div class="lz-ld">Tham khảo cho Phần II (hệ phương trình, ma trận, không gian vector).</div></div>
-  <div class="lz-layer"><div class="lz-lt">Calculus for Engineers — Donald Trim</div><div class="lz-ld">Ví dụ và ứng dụng thiên về kỹ thuật.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Calculus 1 &amp; Calculus 2 <span class="badge">giáo trình chính, Phần I</span></div><div class="lz-ld">Syllabus đánh số mọi buổi giải tích theo hai cuốn này — buổi 13 &ldquo;4.9 Newton&#39;s Method&rdquo;, buổi 15 &ldquo;1.1 Approximating Areas&rdquo;, buổi 20 &ldquo;3.7 Improper Integrals&rdquo;. Cách đánh số đó là của OpenStax <em>Calculus</em> Volume 1 / Volume 2, miễn phí trên mạng. Dùng hai cuốn này khi bạn muốn bám theo danh sách buổi học từng mục.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Linear Algebra with Applications — W. Keith Nicholson <span class="badge">giáo trình chính, Phần II</span></div><div class="lz-ld">Syllabus đánh số Phần II theo cuốn này (1.1&ndash;5.4): buổi 25 khử Gauss, buổi 35 &ldquo;3.1 Properties of Determinants&rdquo;, buổi 50 &ldquo;4.5 An Application in Computer Graphics&rdquo;, buổi 58 &ldquo;5.4 Rank, Nullity and Linear Systems&rdquo;.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Essential Calculus — James Stewart <span class="badge">tham khảo</span></div><div class="lz-ld">Là tài liệu tham khảo được liệt kê, không phải nguồn đánh số. Rõ ràng, hàng nghìn bài luyện — bài tập mới là điểm mấu chốt.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Calculus for Engineers — Donald Trim · Calculus — Grossman <span class="badge">tham khảo</span></div><div class="lz-ld">Ví dụ và ứng dụng thiên về kỹ thuật.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Dự án hướng dẫn Coursera FPT — &ldquo;Linear transformation with Python&rdquo;</div><div class="lz-ld">Là tài liệu môn học được liệt kê, cùng với Maxima (công cụ tính), slide PowerPoint, Video Skillbuilder và Animation CD.</div></div>
 </div>
 <h3>Công cụ tính toán miễn phí</h3>
 <ul>
@@ -447,7 +453,7 @@ export default {
 <div class="out"><b>Example 1 — f(x) = x³.</b> f′(x) = lim<sub>h→0</sub> [(x+h)³ − x³]/h = lim<sub>h→0</sub> [3x²h + 3xh² + h³]/h = lim<sub>h→0</sub> (3x² + 3xh + h²) = <b>3x²</b>.</div>
 <div class="out"><b>Example 2 — f(x) = √x.</b> f′(x) = lim<sub>h→0</sub> [√(x+h) − √x]/h. Multiply by the conjugate → lim<sub>h→0</sub> 1/(√(x+h)+√x) = <b>1/(2√x)</b>.</div>
 <div class="pitfall"><b>Trap:</b> the average rate of change (a slope between two points) is not the same as the derivative (the instantaneous rate at one point). The derivative is the <em>limit</em> of the average rate as the two points merge.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Differentiable ⟹ continuous, but not the reverse.</b> If f′(a) exists, f must be continuous at a. The converse fails: f(x) = |x| is continuous at 0 but has a sharp corner there, so f′(0) does not exist (left slope −1 ≠ right slope +1). Smoothness is strictly stronger than continuity — a distinction the intro slides rarely make explicit.</div>
+<div class="note-ct"><b>Differentiable ⟹ continuous, but not the reverse</b> (session 4; a constructive question asks for three conditions under which a function has no derivative). If f′(a) exists, f must be continuous at a. The converse fails: f(x) = |x| is continuous at 0 but has a sharp corner there, so f′(0) does not exist (left slope −1 ≠ right slope +1). Smoothness is strictly stronger than continuity — a distinction the intro slides rarely make explicit.</div>
 <div class="note-ct">A function is <em>differentiable</em> at a point if this limit exists. It fails at sharp corners, jumps, and vertical tangents — where there is no single well-defined slope.</div>
 </div>
 <div class="ml-vi">
@@ -471,7 +477,7 @@ export default {
 <div class="out"><b>Ví dụ 1 — f(x) = x³.</b> f′(x) = lim<sub>h→0</sub> [(x+h)³ − x³]/h = lim<sub>h→0</sub> [3x²h + 3xh² + h³]/h = lim<sub>h→0</sub> (3x² + 3xh + h²) = <b>3x²</b>.</div>
 <div class="out"><b>Ví dụ 2 — f(x) = √x.</b> f′(x) = lim<sub>h→0</sub> [√(x+h) − √x]/h. Nhân với liên hợp → lim<sub>h→0</sub> 1/(√(x+h)+√x) = <b>1/(2√x)</b>.</div>
 <div class="pitfall"><b>Bẫy:</b> tốc độ thay đổi trung bình (độ dốc giữa hai điểm) khác với đạo hàm (tốc độ tức thời tại một điểm). Đạo hàm là <em>giới hạn</em> của tốc độ trung bình khi hai điểm nhập lại.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Khả vi ⟹ liên tục, nhưng không ngược lại.</b> Nếu f′(a) tồn tại thì f phải liên tục tại a. Chiều ngược sai: f(x) = |x| liên tục tại 0 nhưng có góc nhọn ở đó, nên f′(0) không tồn tại (độ dốc trái −1 ≠ độ dốc phải +1). Tính trơn mạnh hơn hẳn tính liên tục — điều mà slide nhập môn ít khi nói rõ.</div>
+<div class="note-ct"><b>Khả vi ⟹ liên tục, nhưng không ngược lại</b> (buổi 4; một câu hỏi kiến tạo yêu cầu nêu ba điều kiện khiến một hàm không có đạo hàm). Nếu f′(a) tồn tại thì f phải liên tục tại a. Chiều ngược sai: f(x) = |x| liên tục tại 0 nhưng có góc nhọn ở đó, nên f′(0) không tồn tại (độ dốc trái −1 ≠ độ dốc phải +1). Tính trơn mạnh hơn hẳn tính liên tục — điều mà slide nhập môn ít khi nói rõ.</div>
 <div class="note-ct">Một hàm <em>khả vi</em> tại một điểm nếu giới hạn này tồn tại. Nó thất bại tại góc nhọn, chỗ nhảy, và tiếp tuyến thẳng đứng — nơi không có một độ dốc xác định duy nhất.</div>
 </div>
 `,
@@ -519,7 +525,7 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
 
 <div class="pitfall"><b>Trap:</b> the product rule is NOT (f·g)′ = f′·g′ — that is wrong. You must keep both cross-terms: f′g + fg′. Same for the quotient: mind the minus sign and the g² denominator.</div>
 
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Logarithmic differentiation — for nasty products/powers.</b> To differentiate something like y = xˣ or a big product, take ln of both sides first: ln y = x·ln x, then differentiate implicitly: y′/y = ln x + 1, so y′ = xˣ(ln x + 1). This trick turns products into sums and powers into products (via log laws), making otherwise-impossible derivatives routine — a tool the basic slides skip but every engineer uses.</div>
+<div class="note-ct"><b>Logarithmic differentiation — for nasty products/powers</b> (session 7; a constructive question asks you to use logarithmic differentiation to find a derivative). To differentiate something like y = xˣ or a big product, take ln of both sides first: ln y = x·ln x, then differentiate implicitly: y′/y = ln x + 1, so y′ = xˣ(ln x + 1). This trick turns products into sums and powers into products (via log laws), making otherwise-impossible derivatives routine — a tool the basic slides skip but every engineer uses.</div>
 <div class="note-ct">Higher derivatives just repeat the process: f″(x) is the derivative of f′(x). The second derivative measures how the rate itself is changing (acceleration, concavity) — you will use it in Chapter 3.</div>
 </div>
 <div class="ml-vi">
@@ -559,7 +565,7 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
 
 <div class="pitfall"><b>Bẫy:</b> quy tắc tích KHÔNG phải (f·g)′ = f′·g′ — đó là sai. Phải giữ cả hai số hạng chéo: f′g + fg′. Tương tự với thương: chú ý dấu trừ và mẫu g².</div>
 
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đạo hàm logarit — cho tích/luỹ thừa hóc búa.</b> Để lấy đạo hàm thứ như y = xˣ hay một tích lớn, lấy ln hai vế trước: ln y = x·ln x, rồi lấy đạo hàm ẩn: y′/y = ln x + 1, nên y′ = xˣ(ln x + 1). Mẹo này biến tích thành tổng và luỹ thừa thành tích (qua luật log), làm những đạo hàm tưởng bất khả thi thành thường ngày — công cụ slide cơ bản bỏ qua nhưng mọi kỹ sư đều dùng.</div>
+<div class="note-ct"><b>Đạo hàm logarit — cho tích/luỹ thừa hóc búa</b> (buổi 7; một câu hỏi kiến tạo yêu cầu dùng đạo hàm logarit để tìm đạo hàm). Để lấy đạo hàm thứ như y = xˣ hay một tích lớn, lấy ln hai vế trước: ln y = x·ln x, rồi lấy đạo hàm ẩn: y′/y = ln x + 1, nên y′ = xˣ(ln x + 1). Mẹo này biến tích thành tổng và luỹ thừa thành tích (qua luật log), làm những đạo hàm tưởng bất khả thi thành thường ngày — công cụ slide cơ bản bỏ qua nhưng mọi kỹ sư đều dùng.</div>
 <div class="note-ct">Đạo hàm cấp cao chỉ lặp lại quá trình: f″(x) là đạo hàm của f′(x). Đạo hàm cấp hai đo chính tốc độ đang thay đổi ra sao (gia tốc, độ lồi/lõm) — bạn sẽ dùng nó ở Chương 3.</div>
 </div>
 `,
@@ -676,7 +682,7 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
 <h3>Ví dụ có lời giải · Worked examples</h3>
 <div class="out"><b>Example 1 — pen against a wall.</b> 100 m of fence makes three sides of a rectangle (a wall is the fourth). Let width x, length 100 − 2x. Area A = x(100 − 2x) = 100x − 2x².<br>A′ = 100 − 4x = 0 → x = 25. A″ = −4 &lt; 0 → maximum. Best pen: 25 × 50, area <b>1250 m²</b>.</div>
 <div class="out"><b>Example 2 — closed interval.</b> Max/min of f(x) = x³ − 3x on [0, 2]. Critical point in (0,2): x=1. Evaluate f(0)=0, f(1)=−2, f(2)=2 → <b>max = 2 at x=2</b> (an endpoint), <b>min = −2 at x=1</b>.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The Extreme Value Theorem.</b> A function continuous on a closed interval [a,b] is guaranteed to attain both a maximum and a minimum on it. That is why the closed-interval method always works — and why you must check the endpoints, not just where f′=0 (Example 2's maximum was at an endpoint, not a critical point).</div>
+<div class="note-ct"><b>The Extreme Value Theorem</b> (session 10, &ldquo;4.3 Maxima and Minima&rdquo;). A function continuous on a closed interval [a,b] is guaranteed to attain both a maximum and a minimum on it. That is why the closed-interval method always works — and why you must check the endpoints, not just where f′=0 (Example 2's maximum was at an endpoint, not a critical point).</div>
 <div class="callout ok">Optimization is where calculus earns its keep in engineering and economics: minimize cost, maximize strength, optimize a design. The recipe is always the same — model it, differentiate, set to zero, and verify it is the extremum you want.</div>
 </div>
 <div class="ml-vi">
@@ -696,7 +702,7 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
 <h3>Ví dụ có lời giải · Giải từng bước</h3>
 <div class="out"><b>Ví dụ 1 — chuồng dựa vào tường.</b> 100 m hàng rào làm ba cạnh của hình chữ nhật (tường là cạnh thứ tư). Gọi chiều rộng x, chiều dài 100 − 2x. Diện tích A = x(100 − 2x) = 100x − 2x².<br>A′ = 100 − 4x = 0 → x = 25. A″ = −4 &lt; 0 → cực đại. Chuồng tốt nhất: 25 × 50, diện tích <b>1250 m²</b>.</div>
 <div class="out"><b>Ví dụ 2 — khoảng đóng.</b> Tìm max/min của f(x) = x³ − 3x trên [0, 2]. Điểm tới hạn trong (0,2): x=1. Tính f(0)=0, f(1)=−2, f(2)=2 → <b>max = 2 tại x=2</b> (điểm đầu mút), <b>min = −2 tại x=1</b>.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Định lý giá trị cực trị (Extreme Value Theorem).</b> Một hàm liên tục trên khoảng đóng [a,b] chắc chắn đạt cả giá trị lớn nhất lẫn nhỏ nhất trên nó. Đó là lý do phương pháp khoảng đóng luôn đúng — và vì sao bạn phải kiểm điểm đầu mút, không chỉ chỗ f′=0 (cực đại ở Ví dụ 2 nằm ở đầu mút, không phải điểm tới hạn).</div>
+<div class="note-ct"><b>Định lý giá trị cực trị (Extreme Value Theorem)</b> (buổi 10, &ldquo;4.3 Maxima and Minima&rdquo;). Một hàm liên tục trên khoảng đóng [a,b] chắc chắn đạt cả giá trị lớn nhất lẫn nhỏ nhất trên nó. Đó là lý do phương pháp khoảng đóng luôn đúng — và vì sao bạn phải kiểm điểm đầu mút, không chỉ chỗ f′=0 (cực đại ở Ví dụ 2 nằm ở đầu mút, không phải điểm tới hạn).</div>
 <div class="callout ok">Tối ưu là nơi giải tích chứng tỏ giá trị trong kỹ thuật và kinh tế: tối thiểu chi phí, tối đa độ bền, tối ưu thiết kế. Công thức luôn như nhau — mô hình hoá, lấy đạo hàm, đặt bằng 0, và xác nhận đó là cực trị bạn muốn.</div>
 </div>
 `,
@@ -757,7 +763,7 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
 
 <div class="pitfall"><b>Trap:</b> the power rule ∫xⁿ = xⁿ⁺¹/(n+1) fails at n = −1 (division by zero). For ∫(1/x) the answer is ln|x|, not x⁰/0. And never forget <b>+ C</b> on an indefinite integral.</div>
 
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Integration by substitution (reverse chain rule).</b> When an integrand contains a function and its derivative, substitute u = inner function. E.g. ∫ 2x·(x²+1)⁵ dx: let u = x²+1, du = 2x dx → ∫ u⁵ du = u⁶/6 + C = (x²+1)⁶/6 + C. Substitution is the single most useful integration technique — it undoes the chain rule, just as the chain rule was the most-used derivative rule.</div>
+<div class="note-ct"><b>Integration by substitution (reverse chain rule)</b> — session 18, &ldquo;1.5 Substitution&rdquo;; lesson 4.2 works it in full. When an integrand contains a function and its derivative, substitute u = inner function. E.g. ∫ 2x·(x²+1)⁵ dx: let u = x²+1, du = 2x dx → ∫ u⁵ du = u⁶/6 + C = (x²+1)⁶/6 + C. Substitution is the single most useful integration technique — it undoes the chain rule, just as the chain rule was the most-used derivative rule.</div>
 <div class="callout ok">The Fundamental Theorem is one of the deepest results in mathematics: it links the two halves of calculus. Finding area (integration) becomes running differentiation backwards. That is why knowing your derivative rules makes integration possible.</div>
 </div>
 <div class="ml-vi">
@@ -787,7 +793,7 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
 
 <div class="pitfall"><b>Bẫy:</b> quy tắc luỹ thừa ∫xⁿ = xⁿ⁺¹/(n+1) thất bại tại n = −1 (chia cho 0). Với ∫(1/x) đáp án là ln|x|, không phải x⁰/0. Và đừng bao giờ quên <b>+ C</b> ở tích phân bất định.</div>
 
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Tích phân đổi biến (chain rule ngược).</b> Khi biểu thức dưới dấu tích phân chứa một hàm và đạo hàm của nó, đặt u = hàm bên trong. Vd ∫ 2x·(x²+1)⁵ dx: đặt u = x²+1, du = 2x dx → ∫ u⁵ du = u⁶/6 + C = (x²+1)⁶/6 + C. Đổi biến là kỹ thuật tích phân hữu dụng nhất — nó "gỡ" quy tắc dây chuyền, đúng như dây chuyền là quy tắc đạo hàm dùng nhiều nhất.</div>
+<div class="note-ct"><b>Tích phân đổi biến (chain rule ngược)</b> — buổi 18, &ldquo;1.5 Substitution&rdquo;; bài 4.2 làm đầy đủ. Khi biểu thức dưới dấu tích phân chứa một hàm và đạo hàm của nó, đặt u = hàm bên trong. Vd ∫ 2x·(x²+1)⁵ dx: đặt u = x²+1, du = 2x dx → ∫ u⁵ du = u⁶/6 + C = (x²+1)⁶/6 + C. Đổi biến là kỹ thuật tích phân hữu dụng nhất — nó "gỡ" quy tắc dây chuyền, đúng như dây chuyền là quy tắc đạo hàm dùng nhiều nhất.</div>
 <div class="callout ok">Định lý cơ bản là một trong những kết quả sâu nhất của toán học: nó nối hai nửa của giải tích. Tìm diện tích (tích phân) trở thành chạy ngược phép đạo hàm. Đó là lý do nắm vững quy tắc đạo hàm làm cho tích phân khả thi.</div>
 </div>
 `,
@@ -924,7 +930,7 @@ f′(x) = 5(3x² + 1)⁴ · 6x = <b>30x(3x² + 1)⁴</b>.</div>
 <div class="out"><b>Solve</b> x + 2y = 5,  3x − y = 1.<br>
 Augmented [1 2 | 5 ; 3 −1 | 1]. Do R2 → R2 − 3R1: [0 −7 | −14].<br>
 −7y = −14 → y = 2. Back-substitute: x + 2(2) = 5 → x = 1. Solution: <b>(x, y) = (1, 2)</b>.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Rank decides everything (Rouché–Capelli).</b> The <em>rank</em> is the number of pivots. A system Ax = b is consistent iff rank(A) = rank([A|b]); it has a unique solution iff that rank also equals the number of unknowns, otherwise infinitely many. In numerical software, elimination is packaged as <b>LU decomposition</b> (A = L·U) so a factored matrix solves many right-hand sides fast — the industrial version of what you just did by hand.</div>
+<div class="note-ct"><b>Rank decides everything (Rouché–Capelli)</b> — rank is asked for at session 25 (carry a matrix to row-echelon form, find the rank) and is the whole of session 57, &ldquo;Rank of a Matrix&rdquo;. The <em>rank</em> is the number of pivots. A system Ax = b is consistent iff rank(A) = rank([A|b]); it has a unique solution iff that rank also equals the number of unknowns, otherwise infinitely many. In numerical software, elimination is packaged as <b>LU decomposition</b> (A = L·U) so a factored matrix solves many right-hand sides fast — the industrial version of what you just did by hand.</div>
 <div class="note-ct">A system can have one solution, infinitely many (a free variable), or none (a contradiction row like [0 0 | 5]). Echelon form makes which case you are in obvious. This one algorithm underlies almost everything in linear algebra.</div>
 </div>
 <div class="ml-vi">
@@ -956,7 +962,7 @@ Augmented [1 2 | 5 ; 3 −1 | 1]. Do R2 → R2 − 3R1: [0 −7 | −14].<br>
 <div class="out"><b>Giải</b> x + 2y = 5,  3x − y = 1.<br>
 Ma trận bổ sung [1 2 | 5 ; 3 −1 | 1]. Làm R2 → R2 − 3R1: [0 −7 | −14].<br>
 −7y = −14 → y = 2. Thế ngược: x + 2(2) = 5 → x = 1. Nghiệm: <b>(x, y) = (1, 2)</b>.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hạng (rank) quyết định tất cả (Rouché–Capelli).</b> <em>Hạng</em> là số trụ (pivot). Hệ Ax = b có nghiệm khi và chỉ khi rank(A) = rank([A|b]); có nghiệm duy nhất khi hạng đó cũng bằng số ẩn, ngược lại vô số nghiệm. Trong phần mềm số, phép khử được đóng gói thành <b>phân rã LU</b> (A = L·U) để một ma trận đã phân rã giải nhanh nhiều vế phải — phiên bản công nghiệp của điều bạn vừa làm bằng tay.</div>
+<div class="note-ct"><b>Hạng (rank) quyết định tất cả (Rouché–Capelli)</b> — hạng được hỏi ngay ở buổi 25 (đưa ma trận về dạng bậc thang rồi tìm hạng) và là toàn bộ buổi 57, &ldquo;Rank of a Matrix&rdquo;. <em>Hạng</em> là số trụ (pivot). Hệ Ax = b có nghiệm khi và chỉ khi rank(A) = rank([A|b]); có nghiệm duy nhất khi hạng đó cũng bằng số ẩn, ngược lại vô số nghiệm. Trong phần mềm số, phép khử được đóng gói thành <b>phân rã LU</b> (A = L·U) để một ma trận đã phân rã giải nhanh nhiều vế phải — phiên bản công nghiệp của điều bạn vừa làm bằng tay.</div>
 <div class="note-ct">Một hệ có thể có một nghiệm, vô số nghiệm (một biến tự do), hoặc vô nghiệm (một hàng mâu thuẫn như [0 0 | 5]). Dạng bậc thang làm rõ bạn đang ở trường hợp nào. Một thuật toán này là nền cho gần như mọi thứ trong đại số tuyến tính.</div>
 </div>
 `,
@@ -1100,7 +1106,7 @@ AB = [2 1; 1 1], nhưng BA = [1 1; 1 2]. Khác nhau — nhân ma trận không g
 <div class="out"><b>Example 1 — a 3×3 determinant.</b> det[2 0 1; 1 3 2; 1 0 1] = 2(3·1 − 2·0) − 0(…) + 1(1·0 − 3·1) = 2·3 + 1·(−3) = <b>3</b>.</div>
 <div class="out"><b>Example 2 — Cramer's rule.</b> Solve x + 2y = 5, 3x − y = 1. A = [1 2; 3 −1], det A = −7.<br>
 x = det[5 2; 1 −1]/(−7) = (−5−2)/(−7) = <b>1</b>.  y = det[1 5; 3 1]/(−7) = (1−15)/(−7) = <b>2</b>. (Matches Lesson 5.1.)</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Determinant identities that save work.</b> det(AB) = det(A)·det(B); det(Aᵀ) = det(A); swapping two rows flips the sign; adding a multiple of one row to another leaves det unchanged. These let you compute a big determinant by reducing to triangular form (then det = product of the diagonal) — far faster than cofactor expansion for large matrices.</div>
+<div class="note-ct"><b>Determinant identities that save work</b> (session 35, &ldquo;3.1 Properties of Determinants&rdquo;). det(AB) = det(A)·det(B); det(Aᵀ) = det(A); swapping two rows flips the sign; adding a multiple of one row to another leaves det unchanged. These let you compute a big determinant by reducing to triangular form (then det = product of the diagonal) — far faster than cofactor expansion for large matrices.</div>
 <div class="note-ct">The determinant ties the whole chapter together: it decides invertibility, powers Cramer&#39;s rule, and measures how a transformation scales space. A zero determinant means the transformation squashes space into a lower dimension — information is lost, so it cannot be undone (no inverse).</div>
 </div>
 <div class="ml-vi">
@@ -1125,7 +1131,7 @@ x = det[5 2; 1 −1]/(−7) = (−5−2)/(−7) = <b>1</b>.  y = det[1 5; 3 1]/(
 <div class="out"><b>Ví dụ 1 — định thức 3×3.</b> det[2 0 1; 1 3 2; 1 0 1] = 2(3·1 − 2·0) − 0(…) + 1(1·0 − 3·1) = 2·3 + 1·(−3) = <b>3</b>.</div>
 <div class="out"><b>Ví dụ 2 — quy tắc Cramer.</b> Giải x + 2y = 5, 3x − y = 1. A = [1 2; 3 −1], det A = −7.<br>
 x = det[5 2; 1 −1]/(−7) = (−5−2)/(−7) = <b>1</b>.  y = det[1 5; 3 1]/(−7) = (1−15)/(−7) = <b>2</b>. (Khớp Bài 5.1.)</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Các đẳng thức định thức giúp đỡ tay.</b> det(AB) = det(A)·det(B); det(Aᵀ) = det(A); đổi chỗ hai hàng làm đổi dấu; cộng bội một hàng vào hàng khác giữ nguyên det. Nhờ đó bạn tính một định thức lớn bằng cách đưa về dạng tam giác (khi đó det = tích đường chéo) — nhanh hơn nhiều so với khai triển cofactor cho ma trận lớn.</div>
+<div class="note-ct"><b>Các đẳng thức định thức giúp đỡ tay</b> (buổi 35, &ldquo;3.1 Properties of Determinants&rdquo;). det(AB) = det(A)·det(B); det(Aᵀ) = det(A); đổi chỗ hai hàng làm đổi dấu; cộng bội một hàng vào hàng khác giữ nguyên det. Nhờ đó bạn tính một định thức lớn bằng cách đưa về dạng tam giác (khi đó det = tích đường chéo) — nhanh hơn nhiều so với khai triển cofactor cho ma trận lớn.</div>
 <div class="note-ct">Định thức buộc cả chương lại: nó quyết định tính khả nghịch, vận hành quy tắc Cramer, và đo cách một biến đổi co giãn không gian. Định thức bằng 0 nghĩa là biến đổi ép không gian xuống chiều thấp hơn — thông tin bị mất, nên không hoàn tác được (không có nghịch đảo).</div>
 </div>
 `,
@@ -1260,7 +1266,7 @@ Kiểm: trace = 4 = 3+1 ✓, det = 3 = 3·1 ✓.</div>
 <h3>Ví dụ có lời giải · Worked examples</h3>
 <div class="out"><b>Example 1 — angle between vectors.</b> a = (1, 0), b = (1, 1). cos θ = (1·1+0·1)/(1·√2) = 1/√2 → <b>θ = 45°</b>.</div>
 <div class="out"><b>Example 2 — cross product (a normal vector).</b> (1,0,0) × (0,1,0) = (0·0−0·1, 0·0−1·0, 1·1−0·0) = <b>(0, 0, 1)</b> — perpendicular to both, as expected.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Projection — the workhorse of graphics &amp; ML.</b> The projection of a onto b is proj_b(a) = ((a·b)/(b·b))·b — the "shadow" of a along b's direction. It underlies least-squares fitting, lighting in 3D engines, and Gram–Schmidt orthogonalization. The dot product you just learned is the one operation all of these are built on.</div>
+<div class="note-ct"><b>Projection — the workhorse of graphics &amp; ML</b> (session 44, &ldquo;4.2 Projections&rdquo;). The projection of a onto b is proj_b(a) = ((a·b)/(b·b))·b — the "shadow" of a along b's direction. It underlies least-squares fitting, lighting in 3D engines, and Gram–Schmidt orthogonalization. The dot product you just learned is the one operation all of these are built on.</div>
 <div class="note-ct">Vectors are the bridge from numbers to geometry. A point on screen, the direction a character faces, an RGB color, or a data sample are all vectors — which is why linear algebra runs computer graphics, games and machine learning.</div>
 </div>
 <div class="ml-vi">
@@ -1282,7 +1288,7 @@ Kiểm: trace = 4 = 3+1 ✓, det = 3 = 3·1 ✓.</div>
 <h3>Ví dụ có lời giải · Giải từng bước</h3>
 <div class="out"><b>Ví dụ 1 — góc giữa hai vector.</b> a = (1, 0), b = (1, 1). cos θ = (1·1+0·1)/(1·√2) = 1/√2 → <b>θ = 45°</b>.</div>
 <div class="out"><b>Ví dụ 2 — tích có hướng (vector pháp tuyến).</b> (1,0,0) × (0,1,0) = (0·0−0·1, 0·0−1·0, 1·1−0·0) = <b>(0, 0, 1)</b> — vuông góc với cả hai, đúng như mong đợi.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Phép chiếu — con ngựa thồ của đồ hoạ &amp; ML.</b> Chiếu của a lên b là proj_b(a) = ((a·b)/(b·b))·b — "cái bóng" của a dọc theo hướng b. Nó là nền của khớp bình phương tối thiểu, chiếu sáng trong engine 3D, và trực giao hoá Gram–Schmidt. Tích vô hướng bạn vừa học là phép duy nhất mà tất cả những thứ này dựng trên.</div>
+<div class="note-ct"><b>Phép chiếu — con ngựa thồ của đồ hoạ &amp; ML</b> (buổi 44, &ldquo;4.2 Projections&rdquo;). Chiếu của a lên b là proj_b(a) = ((a·b)/(b·b))·b — "cái bóng" của a dọc theo hướng b. Nó là nền của khớp bình phương tối thiểu, chiếu sáng trong engine 3D, và trực giao hoá Gram–Schmidt. Tích vô hướng bạn vừa học là phép duy nhất mà tất cả những thứ này dựng trên.</div>
 <div class="note-ct">Vector là cầu nối từ số tới hình học. Một điểm trên màn hình, hướng nhân vật quay mặt, một màu RGB, hay một mẫu dữ liệu đều là vector — đó là lý do đại số tuyến tính vận hành đồ hoạ máy tính, game và machine learning.</div>
 </div>
 `,
@@ -1313,7 +1319,7 @@ Kiểm: trace = 4 = 3+1 ✓, det = 3 = 3·1 ✓.</div>
 <h3>Ví dụ có lời giải · Worked examples</h3>
 <div class="out"><b>Example 1 — apply a rotation.</b> Rotate (2, 0) by 90° with R = [0 −1; 1 0]: R·(2,0) = (0·2 + (−1)·0, 1·2 + 0·0) = <b>(0, 2)</b>. The point swings up onto the y-axis.</div>
 <div class="out"><b>Example 2 — compose scale then rotate.</b> Scale by 2 (S = [2 0; 0 2]) then rotate 90° (R above). Combined = R·S = [0 −2; 2 0]. Apply to (1, 0): <b>(0, 2)</b> — scaled to length 2 and turned 90°.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Homogeneous coordinates — how translation sneaks in.</b> A pure matrix can rotate and scale but cannot <em>translate</em> (move the origin), because T(0) = 0 always. Graphics engines fix this by adding a dimension: a 2D point (x, y) becomes (x, y, 1), and a 3×3 matrix can then encode translation too. Every game and GPU pipeline uses this trick — the reason "model-view-projection" matrices are 4×4.</div>
+<div class="note-ct"><b>Homogeneous coordinates — how translation sneaks in</b> (session 50, &ldquo;4.5 An Application in Computer Graphics&rdquo; — Nicholson 4.5 uses exactly this). A pure matrix can rotate and scale but cannot <em>translate</em> (move the origin), because T(0) = 0 always. Graphics engines fix this by adding a dimension: a 2D point (x, y) becomes (x, y, 1), and a 3×3 matrix can then encode translation too. Every game and GPU pipeline uses this trick — the reason "model-view-projection" matrices are 4×4.</div>
 <div class="callout ok">Every time a game rotates a model, a photo app scales an image, or a neural network layer transforms data, it multiplies vectors by a matrix. This chapter is the mathematical heart of computer graphics and deep learning.</div>
 <a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fmathematics-for-engineering%2Flearn&reflabel=MAE101%20%E2%80%94%20Mathematics%20for%20Engineering#module-256" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -1341,7 +1347,7 @@ Kiểm: trace = 4 = 3+1 ✓, det = 3 = 3·1 ✓.</div>
 <h3>Ví dụ có lời giải · Giải từng bước</h3>
 <div class="out"><b>Ví dụ 1 — áp một phép xoay.</b> Xoay (2, 0) đi 90° với R = [0 −1; 1 0]: R·(2,0) = (0·2 + (−1)·0, 1·2 + 0·0) = <b>(0, 2)</b>. Điểm đu lên trục y.</div>
 <div class="out"><b>Ví dụ 2 — hợp co giãn rồi xoay.</b> Co giãn 2 lần (S = [2 0; 0 2]) rồi xoay 90° (R ở trên). Kết hợp = R·S = [0 −2; 2 0]. Áp lên (1, 0): <b>(0, 2)</b> — được kéo dài tới độ dài 2 và xoay 90°.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Toạ độ thuần nhất (homogeneous) — cách phép tịnh tiến len vào.</b> Một ma trận thuần có thể xoay và co giãn nhưng không thể <em>tịnh tiến</em> (dời gốc), vì T(0) = 0 luôn đúng. Engine đồ hoạ khắc phục bằng cách thêm một chiều: điểm 2D (x, y) thành (x, y, 1), và một ma trận 3×3 khi đó mã hoá được cả tịnh tiến. Mọi game và pipeline GPU dùng mẹo này — lý do các ma trận "model-view-projection" là 4×4.</div>
+<div class="note-ct"><b>Toạ độ thuần nhất (homogeneous) — cách phép tịnh tiến len vào</b> (buổi 50, &ldquo;4.5 An Application in Computer Graphics&rdquo; — Nicholson 4.5 dùng đúng cách này). Một ma trận thuần có thể xoay và co giãn nhưng không thể <em>tịnh tiến</em> (dời gốc), vì T(0) = 0 luôn đúng. Engine đồ hoạ khắc phục bằng cách thêm một chiều: điểm 2D (x, y) thành (x, y, 1), và một ma trận 3×3 khi đó mã hoá được cả tịnh tiến. Mọi game và pipeline GPU dùng mẹo này — lý do các ma trận "model-view-projection" là 4×4.</div>
 <div class="callout ok">Mỗi khi một game xoay một mô hình, một app ảnh co giãn tấm hình, hay một tầng mạng nơ-ron biến đổi dữ liệu, nó nhân vector với một ma trận. Chương này là trái tim toán học của đồ hoạ máy tính và deep learning.</div>
 <a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fmathematics-for-engineering%2Flearn&reflabel=MAE101%20%E2%80%94%20Mathematics%20for%20Engineering#module-256" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
@@ -1403,7 +1409,7 @@ Kiểm: trace = 4 = 3+1 ✓, det = 3 = 3·1 ✓.</div>
 <h3>Ví dụ có lời giải · Worked examples</h3>
 <div class="out"><b>Example 1 — dependent.</b> (1, 2) and (2, 4): det[1 2; 2 4] = 4 − 4 = 0 → <b>dependent</b> (the second is 2× the first; they span only a line).</div>
 <div class="out"><b>Example 2 — independent basis.</b> (1, 0) and (1, 1): det[1 1; 0 1] = 1 ≠ 0 → <b>independent</b>, and being 2 independent vectors in R² they form a <b>basis</b>.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The Rank–Nullity Theorem.</b> For a matrix A with n columns: rank(A) + nullity(A) = n, where rank = dim of the column space (independent output directions) and nullity = dim of the null space (solutions of Ax = 0). It is the accounting identity behind every "how many free variables?" question in Chapter 5 — the deep link between solving systems and the structure of vector spaces.</div>
+<div class="note-ct"><b>The Rank–Nullity Theorem</b> (session 58, &ldquo;5.4 Rank, Nullity and Linear Systems&rdquo;). For a matrix A with n columns: rank(A) + nullity(A) = n, where rank = dim of the column space (independent output directions) and nullity = dim of the null space (solutions of Ax = 0). It is the accounting identity behind every "how many free variables?" question in Chapter 5 — the deep link between solving systems and the structure of vector spaces.</div>
 <div class="note-ct">Dimension is the count of "independent directions" in a space. This is why R² is a plane (2 directions) and R³ is space (3 directions). Course complete: you now command both calculus (change) and linear algebra (structure) — the two mathematical languages of engineering.</div>
 </div>
 <div class="ml-vi">
@@ -1429,7 +1435,7 @@ Kiểm: trace = 4 = 3+1 ✓, det = 3 = 3·1 ✓.</div>
 <h3>Ví dụ có lời giải · Giải từng bước</h3>
 <div class="out"><b>Ví dụ 1 — phụ thuộc.</b> (1, 2) và (2, 4): det[1 2; 2 4] = 4 − 4 = 0 → <b>phụ thuộc</b> (cái thứ hai bằng 2× cái đầu; chúng chỉ span một đường thẳng).</div>
 <div class="out"><b>Ví dụ 2 — cơ sở độc lập.</b> (1, 0) và (1, 1): det[1 1; 0 1] = 1 ≠ 0 → <b>độc lập</b>, và là 2 vector độc lập trong R² nên chúng tạo thành một <b>cơ sở</b>.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Định lý Hạng–Số khuyết (Rank–Nullity).</b> Với ma trận A có n cột: rank(A) + nullity(A) = n, trong đó rank = số chiều không gian cột (số hướng đầu ra độc lập) và nullity = số chiều không gian nghiệm (nghiệm của Ax = 0). Đây là đẳng thức "kế toán" đứng sau mọi câu hỏi "bao nhiêu biến tự do?" ở Chương 5 — mối liên hệ sâu giữa giải hệ và cấu trúc của không gian vector.</div>
+<div class="note-ct"><b>Định lý Hạng–Số khuyết (Rank–Nullity)</b> (buổi 58, &ldquo;5.4 Rank, Nullity and Linear Systems&rdquo;). Với ma trận A có n cột: rank(A) + nullity(A) = n, trong đó rank = số chiều không gian cột (số hướng đầu ra độc lập) và nullity = số chiều không gian nghiệm (nghiệm của Ax = 0). Đây là đẳng thức "kế toán" đứng sau mọi câu hỏi "bao nhiêu biến tự do?" ở Chương 5 — mối liên hệ sâu giữa giải hệ và cấu trúc của không gian vector.</div>
 <div class="note-ct">Số chiều là số "hướng độc lập" trong một không gian. Đó là lý do R² là mặt phẳng (2 hướng) và R³ là không gian (3 hướng). Hoàn thành môn: giờ bạn nắm cả giải tích (sự thay đổi) lẫn đại số tuyến tính (cấu trúc) — hai ngôn ngữ toán học của kỹ thuật.</div>
 </div>
 `,
@@ -1477,8 +1483,8 @@ Kiểm: trace = 4 = 3+1 ✓, det = 3 = 3·1 ✓.</div>
     },
     /* ══════════════════ NÂNG CAO 1 — TÍNH BẰNG MAXIMA/PYTHON ══════════════════ */
     {
-      title: 'Advanced 1 — Computing with Maxima & Python|||Nâng cao 1 — Tính bằng Maxima & Python',
-      description: 'Ngoài giáo trình: dùng công cụ để tính và kiểm giải tích/ma trận.',
+      title: 'Computational tools — Maxima & Python|||Công cụ tính toán — Maxima & Python',
+      description: 'Công cụ được liệt kê trong syllabus (Maxima; dự án Coursera FPT "Linear transformation with Python"): dùng để tính và kiểm bài giải tích/ma trận.',
       lessons: [
         {
           title: 'N1.1 — Let the computer do the algebra|||N1.1 — Để máy tính lo phần đại số',
@@ -1592,15 +1598,15 @@ v = np.array([1, 0])
       ],
     },
     {
-      "title": "Final Exam|||Thi cuối kỳ",
-      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "title": "Final Exam (FE)|||Thi cu\u1ed1i k\u1ef3 (FE)",
+      "description": "Thi cu\u1ed1i k\u1ef3: 1 ph\u1ea7n, 60 ph\u00fat, 40%, s\u00e0n 4. Syllabus KH\u00d4NG ghi d\u1ea1ng c\u00e2u h\u1ecfi. Khung \u00f4n theo 9 CLO + c\u00e2u m\u1eabu.",
       "lessons": [
         {
-          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "title": "FE \u2014 60-minute final exam (format not stated in the syllabus)|||FE \u2014 thi cu\u1ed1i k\u1ef3 60 ph\u00fat (syllabus kh\u00f4ng ghi d\u1ea1ng \u0111\u1ec1)",
           "slug": "mae101-final-exam-fe",
           "type": "article",
-          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "description": "S\u1ef1 th\u1eadt v\u1ec1 b\u00e0i thi cu\u1ed1i MAE101 v\u00e0 khung \u00f4n theo t\u1eebng CLO, k\u00e8m c\u00e2u m\u1eabu.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam \u00b7 FE</span>\n<h2>FE \u2014 the 60-minute final exam</h2>\n<p class=\"lead\">The MAE101 final exam is <strong>1 part, 60 minutes, 40% of the grade</strong>, with a completion criterion of <strong>4</strong> \u2014 score below 4 on it and you fail the subject whatever your on-going marks are. The syllabus export does <strong>not</strong> state a question type for it, so do not assume it is multiple choice: prepare to <em>produce</em> answers, not to recognise them.</p>\n<h3>What it can ask \u2014 the nine CLOs</h3>\n<table>\n  <thead><tr><th>CLO</th><th>Be able to do, on paper, in a few minutes</th></tr></thead>\n  <tbody>\n    <tr><td>CLO1</td><td>Domain, range, zeros; evaluate a limit (including one-sided and at infinity); test continuity at a point</td></tr>\n    <tr><td>CLO2</td><td>Derivative from the definition; product / quotient / chain rules; implicit and logarithmic differentiation; exp, log and trig derivatives</td></tr>\n    <tr><td>CLO3</td><td>Critical points, increasing/decreasing, concavity, asymptotes, sketch the graph; related rates; an applied optimisation word problem; Newton&#39;s method; linear approximation</td></tr>\n    <tr><td>CLO4</td><td>Riemann sum, definite integral by the Fundamental Theorem, substitution (changing the bounds), integration by parts, an improper integral, area between two curves</td></tr>\n    <tr><td>CLO5</td><td>Gaussian elimination to row-echelon form; classify a system (unique / infinitely many / none) and give the general solution with parameters; rank</td></tr>\n    <tr><td>CLO6</td><td>Matrix addition, scalar multiple, transpose, product; matrix of a matrix transformation; verify AB &ne; BA</td></tr>\n    <tr><td>CLO7</td><td>Determinant by cofactor expansion and by row reduction; inverse via the adjugate or row reduction; Cramer&#39;s rule; eigenvalues, eigenvectors and diagonalisation A = PDP&#8315;&sup1;</td></tr>\n    <tr><td>CLO8</td><td>Vector algebra in R&sup3;: dot product, length, angle, projection, cross product, lines and planes, areas and volumes</td></tr>\n    <tr><td>CLO9</td><td>Show a set is a subspace; find a basis and the dimension of a span or a null space; test linear independence; rank&ndash;nullity</td></tr>\n  </tbody>\n</table>\n<h3>How to prepare</h3>\n<ul>\n<li><b>Work problems by hand under time.</b> 60 minutes for the whole of calculus plus linear algebra means you must be fluent, not merely able. Use Maxima only to <em>check</em> an answer you have already produced.</li>\n<li><b>Show the method.</b> If the exam asks for working, a correct answer with no derivation may score less than a clean derivation with an arithmetic slip.</li>\n<li><b>Rehearse the long procedures</b> \u2014 Gaussian elimination, diagonalisation, integration by parts \u2014 until the layout is automatic. Those are where the minutes disappear.</li>\n<li><b>Check cheaply.</b> Differentiate your antiderivative. Multiply A by its inverse. Substitute the eigenvector back into Av = &lambda;v. Each check costs seconds.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course, to rehearse recall across the nine CLOs. They are not past-exam questions and the real exam may not be in this format.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cu\u1ed1i k\u1ef3 \u00b7 FE</span>\n<h2>FE \u2014 b\u00e0i thi cu\u1ed1i k\u1ef3 60 ph\u00fat</h2>\n<p class=\"lead\">Thi cu\u1ed1i k\u1ef3 MAE101 l\u00e0 <strong>1 ph\u1ea7n, 60 ph\u00fat, 40% \u0111i\u1ec3m m\u00f4n</strong>, s\u00e0n ho\u00e0n th\u00e0nh <strong>4</strong> \u2014 d\u01b0\u1edbi 4 \u1edf b\u00e0i n\u00e0y l\u00e0 tr\u01b0\u1ee3t m\u00f4n b\u1ea5t k\u1ec3 \u0111i\u1ec3m qu\u00e1 tr\u00ecnh. B\u1ea3n xu\u1ea5t syllabus <strong>kh\u00f4ng</strong> ghi d\u1ea1ng c\u00e2u h\u1ecfi, n\u00ean \u0111\u1eebng m\u1eb7c \u0111\u1ecbnh l\u00e0 tr\u1eafc nghi\u1ec7m: h\u00e3y luy\u1ec7n \u0111\u1ec3 <em>l\u00e0m ra</em> \u0111\u00e1p \u00e1n, kh\u00f4ng ph\u1ea3i \u0111\u1ec3 nh\u1eadn ra \u0111\u00e1p \u00e1n.</p>\n<h3>N\u00f3 c\u00f3 th\u1ec3 h\u1ecfi g\u00ec \u2014 ch\u00edn CLO</h3>\n<table>\n  <thead><tr><th>CLO</th><th>Ph\u1ea3i l\u00e0m \u0111\u01b0\u1ee3c tr\u00ean gi\u1ea5y, trong v\u00e0i ph\u00fat</th></tr></thead>\n  <tbody>\n    <tr><td>CLO1</td><td>T\u1eadp x\u00e1c \u0111\u1ecbnh, t\u1eadp gi\u00e1 tr\u1ecb, nghi\u1ec7m; t\u00ednh gi\u1edbi h\u1ea1n (k\u1ec3 c\u1ea3 m\u1ed9t ph\u00eda v\u00e0 \u1edf v\u00f4 c\u1ef1c); x\u00e9t t\u00ednh li\u00ean t\u1ee5c t\u1ea1i m\u1ed9t \u0111i\u1ec3m</td></tr>\n    <tr><td>CLO2</td><td>\u0110\u1ea1o h\u00e0m theo \u0111\u1ecbnh ngh\u0129a; quy t\u1eafc t\u00edch / th\u01b0\u01a1ng / d\u00e2y chuy\u1ec1n; \u0111\u1ea1o h\u00e0m \u1ea9n v\u00e0 \u0111\u1ea1o h\u00e0m logarit; \u0111\u1ea1o h\u00e0m h\u00e0m m\u0169, log, l\u01b0\u1ee3ng gi\u00e1c</td></tr>\n    <tr><td>CLO3</td><td>\u0110i\u1ec3m t\u1edbi h\u1ea1n, \u0111\u1ed3ng bi\u1ebfn/ngh\u1ecbch bi\u1ebfn, l\u1ed3i l\u00f5m, ti\u1ec7m c\u1eadn, v\u1ebd \u0111\u1ed3 th\u1ecb; t\u1ed1c \u0111\u1ed9 li\u00ean quan; m\u1ed9t b\u00e0i to\u00e1n t\u1ed1i \u01b0u \u1ee9ng d\u1ee5ng; ph\u01b0\u01a1ng ph\u00e1p Newton; x\u1ea5p x\u1ec9 tuy\u1ebfn t\u00ednh</td></tr>\n    <tr><td>CLO4</td><td>T\u1ed5ng Riemann, t\u00edch ph\u00e2n x\u00e1c \u0111\u1ecbnh b\u1eb1ng \u0111\u1ecbnh l\u00fd c\u01a1 b\u1ea3n, \u0111\u1ed5i bi\u1ebfn (\u0111\u1ed5i lu\u00f4n c\u1eadn), t\u00edch ph\u00e2n t\u1eebng ph\u1ea7n, t\u00edch ph\u00e2n suy r\u1ed9ng, di\u1ec7n t\u00edch gi\u1eefa hai \u0111\u01b0\u1eddng</td></tr>\n    <tr><td>CLO5</td><td>Kh\u1eed Gauss v\u1ec1 d\u1ea1ng b\u1eadc thang; ph\u00e2n lo\u1ea1i h\u1ec7 (duy nh\u1ea5t / v\u00f4 s\u1ed1 / v\u00f4 nghi\u1ec7m) v\u00e0 vi\u1ebft nghi\u1ec7m t\u1ed5ng qu\u00e1t c\u00f3 tham s\u1ed1; h\u1ea1ng</td></tr>\n    <tr><td>CLO6</td><td>C\u1ed9ng ma tr\u1eadn, nh\u00e2n v\u00f4 h\u01b0\u1edbng, chuy\u1ec3n v\u1ecb, nh\u00e2n ma tr\u1eadn; ma tr\u1eadn c\u1ee7a m\u1ed9t ph\u00e9p bi\u1ebfn \u0111\u1ed5i; ki\u1ec3m AB &ne; BA</td></tr>\n    <tr><td>CLO7</td><td>\u0110\u1ecbnh th\u1ee9c b\u1eb1ng khai tri\u1ec3n cofactor v\u00e0 b\u1eb1ng bi\u1ebfn \u0111\u1ed5i h\u00e0ng; ngh\u1ecbch \u0111\u1ea3o b\u1eb1ng ma tr\u1eadn ph\u1ee5 h\u1ee3p ho\u1eb7c bi\u1ebfn \u0111\u1ed5i h\u00e0ng; quy t\u1eafc Cramer; gi\u00e1 tr\u1ecb ri\u00eang, vector ri\u00eang v\u00e0 ch\u00e9o ho\u00e1 A = PDP&#8315;&sup1;</td></tr>\n    <tr><td>CLO8</td><td>\u0110\u1ea1i s\u1ed1 vector trong R&sup3;: t\u00edch v\u00f4 h\u01b0\u1edbng, \u0111\u1ed9 d\u00e0i, g\u00f3c, ph\u00e9p chi\u1ebfu, t\u00edch c\u00f3 h\u01b0\u1edbng, \u0111\u01b0\u1eddng th\u1eb3ng v\u00e0 m\u1eb7t ph\u1eb3ng, di\u1ec7n t\u00edch v\u00e0 th\u1ec3 t\u00edch</td></tr>\n    <tr><td>CLO9</td><td>Ch\u1ee9ng minh m\u1ed9t t\u1eadp l\u00e0 kh\u00f4ng gian con; t\u00ecm c\u01a1 s\u1edf v\u00e0 s\u1ed1 chi\u1ec1u c\u1ee7a m\u1ed9t span hay kh\u00f4ng gian nghi\u1ec7m; x\u00e9t \u0111\u1ed9c l\u1eadp tuy\u1ebfn t\u00ednh; h\u1ea1ng&ndash;s\u1ed1 khuy\u1ebft</td></tr>\n  </tbody>\n</table>\n<h3>\u00d4n th\u1ebf n\u00e0o</h3>\n<ul>\n<li><b>L\u00e0m b\u00e0i b\u1eb1ng tay, c\u00f3 b\u1ea5m gi\u1edd.</b> 60 ph\u00fat cho c\u1ea3 gi\u1ea3i t\u00edch l\u1eabn \u0111\u1ea1i s\u1ed1 tuy\u1ebfn t\u00ednh ngh\u0129a l\u00e0 ph\u1ea3i th\u00e0nh th\u1ea1o, kh\u00f4ng ch\u1ec9 &ldquo;l\u00e0m \u0111\u01b0\u1ee3c&rdquo;. Ch\u1ec9 d\u00f9ng Maxima \u0111\u1ec3 <em>ki\u1ec3m</em> \u0111\u00e1p \u00e1n b\u1ea1n \u0111\u00e3 t\u1ef1 l\u00e0m ra.</li>\n<li><b>Tr\u00ecnh b\u00e0y c\u00e1ch l\u00e0m.</b> N\u1ebfu \u0111\u1ec1 y\u00eau c\u1ea7u l\u1eddi gi\u1ea3i, m\u1ed9t \u0111\u00e1p s\u1ed1 \u0111\u00fang kh\u00f4ng k\u00e8m bi\u1ebfn \u0111\u1ed5i c\u00f3 th\u1ec3 b\u1ecb \u0111i\u1ec3m th\u1ea5p h\u01a1n m\u1ed9t l\u1eddi gi\u1ea3i s\u1ea1ch ch\u1ec9 sai m\u1ed9t ph\u00e9p t\u00ednh.</li>\n<li><b>Luy\u1ec7n c\u00e1c quy tr\u00ecnh d\u00e0i</b> \u2014 kh\u1eed Gauss, ch\u00e9o ho\u00e1, t\u00edch ph\u00e2n t\u1eebng ph\u1ea7n \u2014 t\u1edbi khi c\u00e1ch tr\u00ecnh b\u00e0y th\u00e0nh ph\u1ea3n x\u1ea1. Th\u1eddi gian m\u1ea5t ch\u00ednh \u1edf \u0111\u00f3.</li>\n<li><b>Ki\u1ec3m r\u1ebb.</b> L\u1ea5y \u0111\u1ea1o h\u00e0m nguy\u00ean h\u00e0m v\u1eeba t\u00ecm. Nh\u00e2n A v\u1edbi ngh\u1ecbch \u0111\u1ea3o c\u1ee7a n\u00f3. Th\u1ebf vector ri\u00eang l\u1ea1i v\u00e0o Av = &lambda;v. M\u1ed7i ph\u00e9p ki\u1ec3m ch\u1ec9 t\u1ed1n v\u00e0i gi\u00e2y.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">C\u00e2u m\u1eabu</span> C\u00e1c c\u00e2u d\u01b0\u1edbi \u0111\u00e2y l\u00e0 <strong>c\u00e2u m\u1eabu</strong> l\u1ea5y t\u1eeb ch\u00ednh m\u00f4n h\u1ecdc, \u0111\u1ec3 \u00f4n tr\u1ea3i \u0111\u1ec1u ch\u00edn CLO. \u0110\u00e2y kh\u00f4ng ph\u1ea3i \u0111\u1ec1 thi th\u1eadt v\u00e0 \u0111\u1ec1 th\u1eadt c\u00f3 th\u1ec3 kh\u00f4ng \u1edf d\u1ea1ng n\u00e0y.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [

@@ -53,10 +53,21 @@ export default {
   <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Liberation & reunion</div><div class="lz-nsub">vs France (Điện Biên Phủ 1954) · vs USA (1975)</div></div></div>
   <div class="lz-stage">1975-now · Socialism & Doi Moi</div>
   <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Transition & renewal</div><div class="lz-nsub">crisis · 6th Congress 1986 · ~40 years of Doi Moi</div></div></div>
-  <div class="lz-stage">Beyond the syllabus ★</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">The leadership lessons · applying them today</div><div class="lz-nsub">why the Party succeeded</div></div></div>
+  <div class="lz-stage">Summing up (on the syllabus)</div>
+  <div class="lz-node"><div class="lz-badge">∑</div><div class="lz-nbody"><div class="lz-ntitle">The leadership lessons · applying them today</div><div class="lz-nsub">sessions 9, 13, 18, 28 · rebutting distortions (CLO8)</div></div></div>
 </div>
 
+<div class="callout warn"><strong>Chapter numbers: this course counts one higher than the syllabus.</strong> The official syllabus (ID 13686) has an <em>introductory chapter</em> plus <strong>three</strong> numbered chapters; this course gives the introduction its own numbered chapter, so every later number shifts by one. Always read exam and assignment prompts by the syllabus numbering:
+<table>
+<thead><tr><th>Syllabus</th><th>Era</th><th>This course</th></tr></thead>
+<tbody>
+<tr><td><strong>Chương nhập môn</strong></td><td>object, purpose, method</td><td>Chapter 1</td></tr>
+<tr><td><strong>Chương 1</strong></td><td>1930-1945 · founding &amp; rise to power</td><td>Chapter 2</td></tr>
+<tr><td><strong>Chương 2</strong></td><td>1945-1975 · two resistance wars</td><td>Chapter 3</td></tr>
+<tr><td><strong>Chương 3</strong></td><td>1975-2018 · transition to socialism &amp; Doi Moi</td><td>Chapter 4</td></tr>
+</tbody>
+</table>
+So a prompt that says "Chương 2" means the <strong>two resistance wars (1945-1975)</strong>, not the founding of the Party.</div>
 <div class="callout ok"><strong>The connecting thread:</strong> <em>correct leadership at each turning point.</em> The exam and essays reward students who explain <em>why</em> the Party made the choice it did (a correct line, seizing the opportunity, uniting the people) — not those who only recite what happened. Every chapter is a case study in leadership under different conditions.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>History as method, not just memory.</b> The professional way to study this course is to treat each event as: <em>situation → the Party's line → the result → the lesson.</em> That four-part frame turns a wall of dates into a set of transferable leadership lessons — exactly what CLO "scientific historical thinking" asks for. <em>This frame is our teaching aid.</em></div>
@@ -77,10 +88,21 @@ export default {
   <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Giải phóng & thống nhất</div><div class="lz-nsub">chống Pháp (Điện Biên Phủ 1954) · chống Mỹ (1975)</div></div></div>
   <div class="lz-stage">1975-nay · CNXH & Đổi mới</div>
   <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Quá độ & đổi mới</div><div class="lz-nsub">khủng hoảng · Đại hội VI 1986 · ~40 năm đổi mới</div></div></div>
-  <div class="lz-stage">Ngoài giáo trình ★</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Bài học lãnh đạo · vận dụng hôm nay</div><div class="lz-nsub">vì sao Đảng thành công</div></div></div>
+  <div class="lz-stage">Tổng kết (trong giáo trình)</div>
+  <div class="lz-node"><div class="lz-badge">∑</div><div class="lz-nbody"><div class="lz-ntitle">Bài học lãnh đạo · vận dụng hôm nay</div><div class="lz-nsub">buổi 9, 13, 18, 28 · phản bác xuyên tạc (CLO8)</div></div></div>
 </div>
 
+<div class="callout warn"><strong>Số chương: khoá học này đánh số CAO HƠN syllabus một đơn vị.</strong> Syllabus chính thức (ID 13686) có một <em>chương nhập môn</em> cộng <strong>ba</strong> chương được đánh số; khoá học này cho chương nhập môn một số riêng, nên mọi số sau đó lệch một. Hãy luôn đọc đề thi và đề assignment theo cách đánh số của syllabus:
+<table>
+<thead><tr><th>Syllabus</th><th>Thời kỳ</th><th>Khoá học này</th></tr></thead>
+<tbody>
+<tr><td><strong>Chương nhập môn</strong></td><td>đối tượng, mục đích, phương pháp</td><td>Chương 1</td></tr>
+<tr><td><strong>Chương 1</strong></td><td>1930-1945 · Đảng ra đời &amp; giành chính quyền</td><td>Chương 2</td></tr>
+<tr><td><strong>Chương 2</strong></td><td>1945-1975 · hai cuộc kháng chiến</td><td>Chương 3</td></tr>
+<tr><td><strong>Chương 3</strong></td><td>1975-2018 · quá độ lên CNXH &amp; Đổi mới</td><td>Chương 4</td></tr>
+</tbody>
+</table>
+Vậy một đề ghi "Chương 2" là nói về <strong>hai cuộc kháng chiến (1945-1975)</strong>, không phải sự ra đời của Đảng.</div>
 <div class="callout ok"><strong>Sợi chỉ nối:</strong> <em>sự lãnh đạo đúng đắn ở mỗi bước ngoặt.</em> Bài thi và tiểu luận thưởng sinh viên giải thích được <em>vì sao</em> Đảng lựa chọn như vậy (một đường lối đúng, chớp thời cơ, đoàn kết nhân dân) — không phải người chỉ đọc lại việc đã xảy ra. Mỗi chương là một nghiên cứu tình huống về lãnh đạo trong điều kiện khác nhau.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Lịch sử là phương pháp, không chỉ là trí nhớ.</b> Cách học chuyên nghiệp môn này là coi mỗi sự kiện là: <em>bối cảnh → đường lối của Đảng → kết quả → bài học.</em> Khung bốn phần đó biến một bức tường ngày tháng thành một bộ bài học lãnh đạo chuyển được — chính là "tư duy khoa học về lịch sử" mà CLO yêu cầu. <em>Khung này là công cụ dạy của chúng tôi.</em></div>
@@ -97,12 +119,12 @@ export default {
 <h2>The grade breakdown — the Assignment (40%) carries the course</h2>
 <p class="lead">VNR202 is 70% continuous work plus a 30% final. The <strong>Assignment (40%)</strong> — a group essay/report — is the biggest component. The Final has a <strong>≥ 4 gate</strong>, and <em>every on-going component must be greater than zero</em>.</p>
 <table>
-<thead><tr><th>Component</th><th>Weight</th><th>Gate</th><th>Form</th></tr></thead>
+<thead><tr><th>Component</th><th>Parts</th><th>Weight</th><th>Completion criterion</th><th>Form / duration</th></tr></thead>
 <tbody>
-<tr><td>Participation</td><td><strong>10%</strong></td><td>&gt; 0</td><td>Attendance + contribution</td></tr>
-<tr><td>Progress Test</td><td><strong>20%</strong></td><td>&gt; 0</td><td>1 test</td></tr>
-<tr><td>Assignment</td><td><strong>40%</strong></td><td>&gt; 0</td><td>Group essay / report</td></tr>
-<tr><td>Final Exam</td><td><strong>30%</strong></td><td>≥ 4</td><td>60'</td></tr>
+<tr><td>Participation (on-going)</td><td>1</td><td><strong>10%</strong></td><td><strong>&gt; 0</strong></td><td>Attendance + contribution</td></tr>
+<tr><td>Progress Test (on-going)</td><td>1</td><td><strong>20%</strong></td><td><strong>&gt; 0</strong></td><td>1 test, <strong>20'</strong></td></tr>
+<tr><td>Assignment (on-going)</td><td><strong>2</strong></td><td><strong>40%</strong></td><td><strong>&gt; 0</strong></td><td>"Depending on the instructor's chosen form of assessment" — typically a group essay / report</td></tr>
+<tr><td>Final Exam</td><td>1</td><td><strong>30%</strong></td><td><strong>≥ 4</strong></td><td><strong>60'</strong>, covers all LOs</td></tr>
 </tbody>
 </table>
 <div class="kv-grid">
@@ -115,7 +137,7 @@ export default {
 <div class="out"><strong>Worked example:</strong> Participation 8, Progress Test 7, Assignment 8, Final 3.5.
 FR = 0.10·8 + 0.20·7 + 0.40·8 + 0.30·3.5 = 0.8 + 1.4 + 3.2 + 1.05 = 6.45.
 FR ≥ 5 ✓ but Final = 3.5 < 4 → <strong>FAIL</strong> on the gate. Strong coursework cannot rescue a weak final.</div>
-<div class="callout warn"><strong>The Assignment is your safest points.</strong> At 40%, a well-researched report — often a summary of the lessons of ~40 years of Doi Moi, or a specific period — is the surest route to a high grade. Use primary sources (Party documents), argue, and rehearse the presentation.</div>
+<div class="callout warn"><strong>The Assignment is TWO parts, and every on-going component has a &gt; 0 gate.</strong> The syllabus (ID 13686) records the 40% Assignment as <strong>2 parts</strong> (form chosen by the instructor), the Progress Test as <strong>20'</strong>, and a completion criterion of <strong>&gt; 0</strong> on all three on-going components. <strong>The Assignment is your safest points.</strong> At 40%, a well-researched report — often a summary of the lessons of ~40 years of Doi Moi, or a specific period — is the surest route to a high grade. Use primary sources (Party documents), argue, and rehearse the presentation.</div>
 <div class="pitfall"><strong>"Every component > 0" is a real trap.</strong> A literal zero on the assignment or progress test fails you regardless of the rest. Submit something for every component, and keep attendance ≥ 80% to unlock the final.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Turn dates into an argument.</b> The strongest history essays don't narrate — they argue a thesis (e.g. "the correct line, not luck, decided the August Revolution") supported by events and Party documents, and connect to a lesson for today. Argument + evidence + lesson is the formula. <em>The difference between a 7 and a 9.</em></div>
 </div>
@@ -124,12 +146,12 @@ FR ≥ 5 ✓ but Final = 3.5 < 4 → <strong>FAIL</strong> on the gate. Strong c
 <h2>Cấu trúc điểm — Bài tập (40%) gánh cả môn</h2>
 <p class="lead">VNR202 gồm 70% điểm quá trình cộng 30% thi cuối. <strong>Bài tập (40%)</strong> — tiểu luận/báo cáo nhóm — là thành phần lớn nhất. Thi cuối có <strong>cổng ≥ 4</strong>, và <em>mọi thành phần quá trình phải lớn hơn không</em>.</p>
 <table>
-<thead><tr><th>Thành phần</th><th>Trọng số</th><th>Cổng</th><th>Hình thức</th></tr></thead>
+<thead><tr><th>Thành phần</th><th>Số phần</th><th>Trọng số</th><th>Điều kiện hoàn thành</th><th>Hình thức / thời lượng</th></tr></thead>
 <tbody>
-<tr><td>Chuyên cần</td><td><strong>10%</strong></td><td>&gt; 0</td><td>Điểm danh + đóng góp</td></tr>
-<tr><td>Progress Test</td><td><strong>20%</strong></td><td>&gt; 0</td><td>1 bài</td></tr>
-<tr><td>Bài tập</td><td><strong>40%</strong></td><td>&gt; 0</td><td>Tiểu luận / báo cáo nhóm</td></tr>
-<tr><td>Thi cuối kỳ</td><td><strong>30%</strong></td><td>≥ 4</td><td>60'</td></tr>
+<tr><td>Chuyên cần (on-going)</td><td>1</td><td><strong>10%</strong></td><td><strong>&gt; 0</strong></td><td>Điểm danh + đóng góp</td></tr>
+<tr><td>Progress Test (on-going)</td><td>1</td><td><strong>20%</strong></td><td><strong>&gt; 0</strong></td><td>1 bài, <strong>20'</strong></td></tr>
+<tr><td>Bài tập (Assignment, on-going)</td><td><strong>2</strong></td><td><strong>40%</strong></td><td><strong>&gt; 0</strong></td><td>"Phụ thuộc theo hình thức kiểm tra đánh giá của giảng viên" — thường là tiểu luận / báo cáo nhóm</td></tr>
+<tr><td>Thi cuối kỳ</td><td>1</td><td><strong>30%</strong></td><td><strong>≥ 4</strong></td><td><strong>60'</strong>, phủ toàn bộ chuẩn đầu ra</td></tr>
 </tbody>
 </table>
 <div class="kv-grid">
@@ -143,7 +165,7 @@ FR ≥ 5 ✓ but Final = 3.5 < 4 → <strong>FAIL</strong> on the gate. Strong c
 FR = 0.10·8 + 0.20·7 + 0.40·8 + 0.30·3.5 = 0.8 + 1.4 + 3.2 + 1.05 = 6.45.
 FR ≥ 5 ✓ nhưng Thi cuối = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổng. Điểm quá trình tốt không cứu được bài thi yếu.</div>
 <div class="callout warn"><strong>Bài tập là điểm chắc nhất của bạn.</strong> Với 40%, một báo cáo nghiên cứu kỹ — thường là tổng kết bài học của gần 40 năm đổi mới, hoặc một giai đoạn cụ thể — là con đường chắc nhất tới điểm cao. Dùng nguồn gốc (văn kiện Đảng), lập luận, và tập thuyết trình.</div>
-<div class="pitfall"><strong>"Mọi thành phần > 0" là cái bẫy thật.</strong> Điểm 0 tuyệt đối ở bài tập hoặc progress test là trượt bất kể các cột khác. Nộp một cái gì đó cho mọi thành phần, và giữ điểm danh ≥ 80% để mở khóa thi cuối.</div>
+<div class="pitfall"><strong>"Mọi thành phần > 0" là cái bẫy thật, và Assignment có HAI phần.</strong> Syllabus (ID 13686) ghi Assignment 40% gồm <strong>2 phần</strong> và Progress Test dài <strong>20'</strong>. Điểm 0 tuyệt đối ở bài tập hoặc progress test là trượt bất kể các cột khác. Nộp một cái gì đó cho mọi thành phần, và giữ điểm danh ≥ 80% để mở khóa thi cuối.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Biến ngày tháng thành một lập luận.</b> Tiểu luận lịch sử mạnh nhất không thuật lại — nó lập luận một luận đề (vd "đường lối đúng, không phải may mắn, quyết định Cách mạng Tháng Tám") chống lưng bằng sự kiện và văn kiện Đảng, và nối với một bài học cho hôm nay. Lập luận + bằng chứng + bài học là công thức. <em>Ranh giới giữa 7 và 9.</em></div>
 </div>`,
         },
@@ -339,7 +361,7 @@ FR ≥ 5 ✓ nhưng Thi cuối = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổn
     },
     /* ══════════════════ CHƯƠNG 1 — NHẬP MÔN ══════════════════ */
     {
-      title: 'Chapter 1 — Introduction: object, purpose & method|||Chương 1 — Nhập môn: đối tượng, mục đích & phương pháp',
+      title: 'Chapter 1 of this course = syllabus Chương nhập môn — object, purpose & method|||Chương 1 của khoá học = Chương nhập môn trong syllabus — đối tượng, mục đích & phương pháp',
       description: 'Đối tượng, mục đích, nhiệm vụ, phương pháp nghiên cứu và ý nghĩa của việc học lịch sử Đảng.',
       lessons: [
         {
@@ -387,7 +409,7 @@ FR ≥ 5 ✓ nhưng Thi cuối = 3.5 < 4 → <strong>TRƯỢT</strong> ở cổn
     },
     /* ══════════════════ CHƯƠNG 2 — 1930-1945 ══════════════════ */
     {
-      title: 'Chapter 2 — Founding & the rise to power (1930-1945)|||Chương 2 — Đảng ra đời & giành chính quyền (1930-1945)',
+      title: 'Chapter 2 of this course = syllabus Chương 1 — Founding & the rise to power (1930-1945)|||Chương 2 của khoá học = Chương 1 trong syllabus — Đảng ra đời & giành chính quyền (1930-1945)',
       description: 'Đảng Cộng sản Việt Nam ra đời năm 1930, các cao trào cách mạng, và thắng lợi Cách mạng Tháng Tám 1945.',
       lessons: [
         {
@@ -533,7 +555,7 @@ Chủ nghĩa Mác-Lênin + phong trào công nhân + phong trào yêu nước.
     },
     /* ══════════════════ CHƯƠNG 3 — HAI CUỘC KHÁNG CHIẾN 1945-1975 ══════════════════ */
     {
-      title: 'Chapter 3 — Two resistance wars: liberation & reunion (1945-1975)|||Chương 3 — Hai cuộc kháng chiến: giải phóng & thống nhất (1945-1975)',
+      title: 'Chapter 3 of this course = syllabus Chương 2 — Two resistance wars: liberation & reunion (1945-1975)|||Chương 3 của khoá học = Chương 2 trong syllabus — Hai cuộc kháng chiến: giải phóng & thống nhất (1945-1975)',
       description: 'Đảng lãnh đạo kháng chiến chống Pháp (1945-1954) và chống Mỹ (1954-1975), hoàn thành giải phóng dân tộc và thống nhất đất nước.',
       lessons: [
         {
@@ -590,7 +612,7 @@ Sau nhiều năm xây dựng lực lượng và làm suy yếu địch, Việt N
 </div>
 <div class="out"><strong>The climax — the 1975 Spring Offensive:</strong>
 After sustained struggle and correctly judging that the decisive moment had come, the Party launched the general offensive and uprising of Spring 1975, culminating in the Hồ Chí Minh Campaign that liberated Saigon on 30 April 1975.
-<strong>Significance:</strong> it completed national liberation and reunited the country after 21 years — opening the era of the whole country advancing to socialism (Chapter 4).</div>
+<strong>Significance:</strong> it completed national liberation and reunited the country after 21 years — opening the era of the whole country advancing to socialism (syllabus Chương 3 = this course's Chapter 4).</div>
 <div class="callout ok"><strong>The lesson: strategic creativity + correct timing (again).</strong> The dual-strategy line was a creative solution to a divided country; the 1975 offensive was, like August 1945, a case of seizing the decisive moment. The same two threads — a correct, creative line and correct timing — run through both wars.</div>
 <div class="pitfall"><strong>Don't treat the North and South as separate wars.</strong> The exam wants the <em>relationship</em>: the two strategies were interdependent parts of one revolution with one goal (reunion). Describing them in isolation misses the creativity of the line.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The rear-front principle.</b> "Building the North to support the South" is a classic instance of the strategic principle that a strong, stable rear base decides a long war. The same logic — stable base, sustained supply, patient buildup — applies to any long struggle, including economic development. <em>A transferable strategic idea.</em></div>
@@ -606,7 +628,7 @@ After sustained struggle and correctly judging that the decisive moment had come
 </div>
 <div class="out"><strong>Đỉnh cao — cuộc Tổng tiến công mùa Xuân 1975:</strong>
 Sau đấu tranh bền bỉ và đánh giá đúng rằng thời điểm quyết định đã tới, Đảng phát động tổng tiến công và nổi dậy mùa Xuân 1975, đỉnh cao là Chiến dịch Hồ Chí Minh giải phóng Sài Gòn ngày 30/4/1975.
-<strong>Ý nghĩa:</strong> hoàn thành giải phóng dân tộc và thống nhất đất nước sau 21 năm — mở ra thời kỳ cả nước tiến lên chủ nghĩa xã hội (Chương 4).</div>
+<strong>Ý nghĩa:</strong> hoàn thành giải phóng dân tộc và thống nhất đất nước sau 21 năm — mở ra thời kỳ cả nước tiến lên chủ nghĩa xã hội (Chương 3 của syllabus = Chương 4 của khoá học).</div>
 <div class="callout ok"><strong>Bài học: sáng tạo chiến lược + thời điểm đúng (một lần nữa).</strong> Đường lối hai chiến lược là một giải pháp sáng tạo cho một đất nước bị chia cắt; cuộc tổng tiến công 1975, như tháng Tám 1945, là một trường hợp chớp thời điểm quyết định. Cùng hai sợi chỉ — một đường lối đúng, sáng tạo và thời điểm đúng — xuyên suốt cả hai cuộc chiến.</div>
 <div class="pitfall"><strong>Đừng coi miền Bắc và miền Nam là hai cuộc chiến riêng.</strong> Đề thi muốn <em>mối quan hệ</em>: hai chiến lược là những bộ phận phụ thuộc lẫn nhau của một cuộc cách mạng với một mục tiêu (thống nhất). Mô tả chúng tách rời bỏ lỡ sự sáng tạo của đường lối.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Nguyên lý hậu phương – tiền tuyến.</b> "Xây dựng miền Bắc để chi viện miền Nam" là một minh họa kinh điển của nguyên lý chiến lược rằng một hậu phương vững, ổn định quyết định một cuộc chiến lâu dài. Cùng lô-gíc — hậu phương ổn định, chi viện bền bỉ, tích lũy kiên nhẫn — áp dụng cho mọi cuộc đấu tranh lâu dài, kể cả phát triển kinh tế. <em>Một ý chiến lược chuyển được.</em></div>
@@ -663,7 +685,7 @@ Sau đấu tranh bền bỉ và đánh giá đúng rằng thời điểm quyết
     },
     /* ══════════════════ CHƯƠNG 4 — QUÁ ĐỘ CNXH & ĐỔI MỚI 1975-NAY ══════════════════ */
     {
-      title: 'Chapter 4 — Socialism & Doi Moi (1975-now)|||Chương 4 — Quá độ lên CNXH & Đổi mới (1975-nay)',
+      title: 'Chapter 4 of this course = syllabus Chương 3 — Socialism & Doi Moi (1975-2018)|||Chương 4 của khoá học = Chương 3 trong syllabus — Quá độ lên CNXH & Đổi mới (1975-2018)',
       description: 'Cả nước quá độ lên CNXH sau 1975, khủng hoảng, bước ngoặt Đại hội VI (1986) khởi xướng đổi mới và thành tựu gần 40 năm.',
       lessons: [
         {
@@ -877,19 +899,19 @@ Sau đấu tranh bền bỉ và đánh giá đúng rằng thời điểm quyết
     },
     /* ══════════════════ CHƯƠNG 6 — NÂNG CAO ★ (BEYOND SYLLABUS) ══════════════════ */
     {
-      title: 'Chapter 6 — Beyond the syllabus ★: the leadership lessons|||Chương 6 — Nâng cao ★: những bài học lãnh đạo',
-      description: 'Cả chương ★ ngoài giáo trình: tổng kết những bài học kinh nghiệm lớn về sự lãnh đạo của Đảng và vận dụng hôm nay.',
+      title: 'Chapter 6 — The leadership lessons (on the syllabus) & rebutting distortions|||Chương 6 — Những bài học lãnh đạo (trong giáo trình) & phản bác xuyên tạc',
+      description: 'Tổng kết những bài học kinh nghiệm lớn về sự lãnh đạo của Đảng (buổi 9, 13, 18, 28 đều là các mục "ý nghĩa lịch sử và kinh nghiệm") và phản bác xuyên tạc (CLO8) — nội dung trong giáo trình.',
       lessons: [
         {
-          title: '6.1 — The great leadership lessons & applying them ★|||6.1 — Những bài học lãnh đạo lớn & vận dụng ★',
+          title: '6.1 — The great leadership lessons & applying them|||6.1 — Những bài học lãnh đạo lớn & vận dụng',
           slug: 'vnr202-6-1-nang-cao',
           type: 'VIDEO',
           description: 'Tổng kết bài học lớn (đường lối, nhân dân, đoàn kết, xây dựng Đảng, thời cơ) và cách phản bác xuyên tạc lịch sử.',
           content: `
 <div class="ml-en">
-<span class="eyebrow">Chapter 6 · Lesson 6.1 · ★ Beyond the syllabus</span>
+<span class="eyebrow">Chapter 6 · Lesson 6.1</span>
 <h2>What the whole history teaches — and how to defend it</h2>
-<p class="lead">This whole chapter is <span class="badge">★ Beyond the syllabus</span> — the synthesis and critical thinking that turn a chronology into wisdom. The course's real payoff is a set of leadership lessons, plus the ability to rebut distortions of history.</p>
+<p class="lead">The course's real payoff is a set of leadership lessons, plus the ability to rebut distortions of history — and both are <strong>on the syllabus</strong>, not extras. Four sessions are devoted to exactly this summing-up: <strong>session 9</strong> ("Tính chất, ý nghĩa và kinh nghiệm của Cách mạng Tháng Tám năm 1945"), <strong>session 13</strong> ("Ý nghĩa lịch sử và kinh nghiệm của Đảng trong lãnh đạo kháng chiến chống thực dân Pháp"), <strong>session 18</strong> ("Ý nghĩa lịch sử và kinh nghiệm lãnh đạo của Đảng thời kỳ 1954-1975") and <strong>session 28</strong> ("Thành tựu, kinh nghiệm của công cuộc đổi mới"); rebutting wrong views of the Party's history is <strong>CLO8</strong>. Expect these in the exam and the assignment.</p>
 
 <h3>1 — The great leadership lessons (the course's synthesis)</h3>
 <div class="lz-stack">
@@ -917,9 +939,9 @@ These are exactly the connections a high-scoring essay makes from history to the
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The mark of an A: your own connection.</b> Top essays take one lesson and apply it to a real, current issue — a policy, a challenge, your own field — analyzed with the situation→line→result→lesson method. Examiners tell memorized narration from applied thought. Bringing the Party's leadership lessons to bear on something you actually care about separates a 9 from a 7. <em>The whole point of studying history for its lessons.</em></div>
 </div>
 <div class="ml-vi">
-<span class="eyebrow">Chương 6 · Bài 6.1 · ★ Ngoài giáo trình</span>
+<span class="eyebrow">Chương 6 · Bài 6.1</span>
 <h2>Toàn bộ lịch sử dạy điều gì — và cách bảo vệ nó</h2>
-<p class="lead">Cả chương này là <span class="badge">★ Ngoài giáo trình</span> — sự tổng hợp và tư duy phản biện biến một biên niên thành trí tuệ. Cái được thật của môn học là một bộ bài học lãnh đạo, cộng với khả năng phản bác những xuyên tạc lịch sử.</p>
+<p class="lead">Cái được thật của môn học là một bộ bài học lãnh đạo, cộng với khả năng phản bác những xuyên tạc lịch sử — và cả hai đều <strong>NẰM TRONG giáo trình</strong>, không phải phần thêm. Bốn buổi học dành hẳn cho phần tổng kết này: <strong>buổi 9</strong> ("Tính chất, ý nghĩa và kinh nghiệm của Cách mạng Tháng Tám năm 1945"), <strong>buổi 13</strong> ("Ý nghĩa lịch sử và kinh nghiệm của Đảng trong lãnh đạo kháng chiến chống thực dân Pháp"), <strong>buổi 18</strong> ("Ý nghĩa lịch sử và kinh nghiệm lãnh đạo của Đảng thời kỳ 1954-1975") và <strong>buổi 28</strong> ("Thành tựu, kinh nghiệm của công cuộc đổi mới"); phản bác các quan điểm sai trái về lịch sử Đảng là <strong>CLO8</strong>. Hãy chờ những nội dung này trong bài thi và assignment.</p>
 
 <h3>1 — Những bài học lãnh đạo lớn (sự tổng hợp của môn học)</h3>
 <div class="lz-stack">

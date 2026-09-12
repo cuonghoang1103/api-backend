@@ -53,8 +53,8 @@ export default {
   <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Hypothesis testing</div><div class="lz-nsub">z-test · t-test · p-value</div></div></div>
   <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Two-sample inference</div><div class="lz-nsub">Two means · two proportions · paired t</div></div></div>
   <div class="lz-node"><div class="lz-badge">10</div><div class="lz-nbody"><div class="lz-ntitle">Regression &amp; correlation</div><div class="lz-nsub">r · slope · R² · ANOVA · tests on β</div></div></div>
-  <div class="lz-stage">Advanced · beyond the syllabus</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Statistics in Python/Excel</div><div class="lz-nsub">The computer project</div></div></div>
+  <div class="lz-stage">The computer project — 15% of your grade</div>
+  <div class="lz-node"><div class="lz-badge">A</div><div class="lz-nbody"><div class="lz-ntitle">Statistics with software (Excel + DDXL / Maxima)</div><div class="lz-nsub">CLO7–CLO9 · 5 hours · open · required by the syllabus</div></div></div>
 </div>
 <div class="callout ok">Statistics is learned by computing. Every lesson lists the complete formula set, explains each symbol, and works a full example — then check it in Excel or Python.</div>
 <a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-256" target="_blank" rel="noopener">
@@ -83,8 +83,8 @@ export default {
   <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Kiểm định giả thuyết</div><div class="lz-nsub">z-test · t-test · p-value</div></div></div>
   <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Suy luận hai mẫu</div><div class="lz-nsub">Hai trung bình · hai tỷ lệ · mẫu cặp</div></div></div>
   <div class="lz-node"><div class="lz-badge">10</div><div class="lz-nbody"><div class="lz-ntitle">Hồi quy &amp; tương quan</div><div class="lz-nsub">r · hệ số góc · R² · ANOVA · kiểm định β</div></div></div>
-  <div class="lz-stage">Nâng cao · ngoài giáo trình</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Thống kê trong Python/Excel</div><div class="lz-nsub">Computer project</div></div></div>
+  <div class="lz-stage">Computer project — 15% điểm môn</div>
+  <div class="lz-node"><div class="lz-badge">A</div><div class="lz-nbody"><div class="lz-ntitle">Thống kê bằng phần mềm (Excel + DDXL / Maxima)</div><div class="lz-nsub">CLO7–CLO9 · 5 giờ · đề mở · syllabus BẮT BUỘC</div></div></div>
 </div>
 <div class="callout ok">Thống kê học bằng cách tính. Mỗi bài liệt kê BỘ CÔNG THỨC ĐẦY ĐỦ, giải nghĩa từng ký hiệu, và giải một ví dụ trọn vẹn — rồi kiểm bằng Excel hoặc Python.</div>
 <a class="link-card codelab" href="/code-lab/python?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability#module-256" target="_blank" rel="noopener">
@@ -115,16 +115,16 @@ export default {
 </div>
 <h3>Grade structure</h3>
 <table>
-  <thead><tr><th>Component</th><th>Weight</th></tr></thead>
+  <thead><tr><th>Component</th><th>Weight</th><th>Completion criterion</th><th>Format</th></tr></thead>
   <tbody>
-    <tr><td>3 Progress Tests</td><td>30%</td></tr>
-    <tr><td>2 Assignments</td><td>20%</td></tr>
-    <tr><td>1 Computer Project</td><td>15%</td></tr>
-    <tr><td>Final Examination</td><td>35%</td></tr>
+    <tr><td>3 Progress Tests</td><td>30%</td><td>&gt; 0</td><td>30&#39; each · MC or a short answer · all LOs</td></tr>
+    <tr><td>2 Assignments</td><td>20%</td><td>&gt; 0</td><td>3 hours · open · LO1–LO6</td></tr>
+    <tr><td>1 Computer Project</td><td>15%</td><td>&gt; 0</td><td>5 hours · open · LO7–LO9 (the statistical-software outcomes)</td></tr>
+    <tr><td>Final Examination</td><td>35%</td><td><b>&ge; 4</b></td><td>60&#39; · computer gradable</td></tr>
   </tbody>
 </table>
-<div class="callout warn">Completion rule: every on-going component must be &gt; 0 and the Final Result ≥ 5. Do not skip a progress test or assignment — a zero in one component can block you even with a good final.</div>
-<div class="note-ct">You are allowed a formula sheet and calculator in most assessments — but you must know <em>which</em> formula applies and <em>how</em> to use it. That judgment is exactly what this course drills.</div>
+<div class="callout warn">Completion rule, in full: <strong>every on-going assessment component &gt; 0</strong>, <strong>Final Result &ge; 5</strong>, <strong>AND Final Exam Score &ge; 4</strong>. Three conditions, not two — a strong on-going record cannot carry a final below 4, and a zero in one on-going component blocks you even with a good final. You also need <strong>&ge; 80% attendance</strong> to be accepted to the final examination.</div>
+<div class="note-ct">What you may bring into each assessment (formula sheet, calculator) is <strong>not specified in the syllabus</strong> — ask your instructor for each component rather than assuming. What the syllabus does make clear is the skill being tested: knowing <em>which</em> formula applies and <em>how</em> to use it. That judgment is what this course drills.</div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.2</span>
@@ -139,16 +139,16 @@ export default {
 </div>
 <h3>Cấu trúc điểm</h3>
 <table>
-  <thead><tr><th>Cột điểm</th><th>Trọng số</th></tr></thead>
+  <thead><tr><th>Cột điểm</th><th>Trọng số</th><th>Điều kiện hoàn thành</th><th>Hình thức</th></tr></thead>
   <tbody>
-    <tr><td>3 Progress Test</td><td>30%</td></tr>
-    <tr><td>2 Assignment</td><td>20%</td></tr>
-    <tr><td>1 Computer Project</td><td>15%</td></tr>
-    <tr><td>Thi cuối kỳ</td><td>35%</td></tr>
+    <tr><td>3 Progress Test</td><td>30%</td><td>&gt; 0</td><td>30&#39;/bài · trắc nghiệm hoặc trả lời ngắn · mọi LO</td></tr>
+    <tr><td>2 Assignment</td><td>20%</td><td>&gt; 0</td><td>3 giờ · đề mở · LO1–LO6</td></tr>
+    <tr><td>1 Computer Project</td><td>15%</td><td>&gt; 0</td><td>5 giờ · đề mở · LO7–LO9 (các chuẩn đầu ra về phần mềm thống kê)</td></tr>
+    <tr><td>Thi cuối kỳ</td><td>35%</td><td><b>≥ 4</b></td><td>60&#39; · máy chấm</td></tr>
   </tbody>
 </table>
-<div class="callout warn">Luật hoàn thành: mọi cột on-going phải &gt; 0 và Kết quả cuối ≥ 5. Đừng bỏ một progress test hay assignment nào — một điểm 0 ở một cột có thể chặn bạn dù thi cuối tốt.</div>
-<div class="note-ct">Hầu hết bài kiểm cho phép mang bảng công thức và máy tính — nhưng bạn phải biết công thức <em>nào</em> áp dụng và <em>cách</em> dùng nó. Đúng phán đoán đó là điều môn này rèn.</div>
+<div class="callout warn">Luật hoàn thành, đầy đủ: <strong>mọi cột quá trình &gt; 0</strong>, <strong>Kết quả cuối ≥ 5</strong>, <strong>VÀ điểm thi cuối kỳ ≥ 4</strong>. Ba điều kiện chứ không phải hai — điểm quá trình đẹp không gánh nổi bài thi cuối dưới 4, và một điểm 0 ở một cột quá trình là chặn dù thi cuối tốt. Ngoài ra phải dự <strong>≥ 80% số buổi</strong> mới đủ điều kiện dự thi cuối kỳ.</div>
+<div class="note-ct">Được mang gì vào từng bài kiểm (bảng công thức, máy tính) <strong>không được syllabus quy định</strong> — hãy hỏi giảng viên cho từng cột thay vì suy đoán. Thứ syllabus nói rõ là kỹ năng bị kiểm: biết công thức <em>nào</em> áp dụng và <em>cách</em> dùng nó. Đúng phán đoán đó là điều môn này rèn.</div>
 </div>
 `,
         },
@@ -284,7 +284,7 @@ P(at least one 6) = 1 − 125/216 = <b>91/216 ≈ 0.421</b>.</div>
 <div class="out"><b>Example 4 (conditional).</b> In a class, 60% pass Math (M), 40% pass both Math and English (M∩E). Among those who passed Math, what fraction passed English?<br>
 P(E | M) = P(E ∩ M) / P(M) = 0.40 / 0.60 = <b>0.667</b> (about two-thirds).</div>
 
-<div class="pitfall"><b>Trap:</b> do not confuse <b>independent</b> (can happen together, one does not affect the other) with <b>mutually exclusive</b> (cannot happen together, A ∩ B = 0). They are opposites, not synonyms.</div>
+<div class="pitfall"><b>Trap:</b> do not confuse <b>independent</b> (P(A∩B) = P(A)P(B) — knowing one happened does not change the other) with <b>mutually exclusive</b> (P(A∩B) = 0 — they cannot both happen). They are <em>different</em> properties, not synonyms and not opposites. The precise link: if P(A) &gt; 0 and P(B) &gt; 0, mutually exclusive events are necessarily <b>dependent</b> — A happening tells you B did not. The only way to be both is for one of them to have probability 0.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Counting with permutations &amp; combinations.</b> When outcomes are equally likely but numerous, you count them with:</p>
 <div class="formula"><span class="lbl">Permutation (order matters)</span>ₙPᵣ = n! / (n − r)!</div>
@@ -337,7 +337,7 @@ P(ít nhất một lần 6) = 1 − 125/216 = <b>91/216 ≈ 0.421</b>.</div>
 <div class="out"><b>Ví dụ 4 (có điều kiện).</b> Một lớp: 60% đậu Toán (M), 40% đậu cả Toán và Anh (M∩E). Trong số đậu Toán, bao nhiêu phần đậu Anh?<br>
 P(E | M) = P(E ∩ M) / P(M) = 0.40 / 0.60 = <b>0.667</b> (khoảng hai phần ba).</div>
 
-<div class="pitfall"><b>Bẫy:</b> đừng nhầm <b>độc lập</b> (có thể cùng xảy ra, cái này không ảnh hưởng cái kia) với <b>xung khắc</b> (không thể cùng xảy ra, A ∩ B = 0). Chúng đối lập, không đồng nghĩa.</div>
+<div class="pitfall"><b>Bẫy:</b> đừng nhầm <b>độc lập</b> (P(A∩B) = P(A)P(B) — biết cái này xảy ra không làm đổi cái kia) với <b>xung khắc</b> (P(A∩B) = 0 — không thể cùng xảy ra). Đó là hai tính chất <em>khác nhau</em>, không đồng nghĩa mà cũng không đối lập. Liên hệ chính xác: nếu P(A) &gt; 0 và P(B) &gt; 0 thì hai biến cố xung khắc nhất thiết <b>phụ thuộc</b> — A xảy ra cho biết B đã không xảy ra. Chỉ khi một trong hai có xác suất 0 thì mới vừa xung khắc vừa độc lập.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đếm bằng chỉnh hợp &amp; tổ hợp.</b> Khi các kết quả đồng khả năng nhưng nhiều, ta đếm bằng:</p>
 <div class="formula"><span class="lbl">Chỉnh hợp (thứ tự quan trọng)</span>ₙPᵣ = n! / (n − r)!</div>
@@ -425,7 +425,7 @@ Vậy dù dương tính trên một xét nghiệm "chính xác 99%", bạn chỉ
               { question: 'For "at least one" problems, the quickest tool is usually…|||Với bài "ít nhất một", công cụ nhanh nhất thường là…', options: ['the multiplication rule|||quy tắc nhân', 'the complement, 1 − P(none)|||biến cố đối, 1 − P(không cái nào)', 'Bayes', 'conditional probability|||xác suất có điều kiện'], correctIndex: 1, points: 1 },
               { question: 'P(A|B) is defined as…|||P(A|B) được định nghĩa là…', options: ['P(A)·P(B)', 'P(A∩B) / P(B)', 'P(A) + P(B)', 'P(B) / P(A)'], correctIndex: 1, points: 1 },
               { question: 'After a positive on a 99%-accurate test for a rare (1%) disease, the chance of being sick is only ~17% because…|||Sau dương tính trên xét nghiệm chính xác 99% cho bệnh hiếm (1%), khả năng mắc chỉ ~17% vì…', options: ['the test is broken|||xét nghiệm hỏng', 'the low base rate makes most positives false alarms|||tỷ lệ nền thấp khiến hầu hết dương tính là báo động giả', 'Bayes is wrong|||Bayes sai', 'the sample is small|||mẫu nhỏ'], correctIndex: 1, points: 1 },
-              { question: 'Independent and mutually exclusive events are…|||Biến cố độc lập và xung khắc là…', options: ['the same thing|||cùng một thứ', 'opposite ideas (independent can co-occur; exclusive cannot)|||ý đối lập (độc lập có thể cùng xảy ra; xung khắc không)', 'both impossible|||đều bất khả', 'only for dice|||chỉ cho xúc xắc'], correctIndex: 1, points: 1 },
+              { question: 'Independent and mutually exclusive events are…|||Biến cố độc lập và xung khắc là…', options: ['the same thing|||cùng một thứ', 'different properties: if both have positive probability, mutually exclusive events are dependent|||hai tính chất khác nhau: nếu cả hai có xác suất dương thì biến cố xung khắc là phụ thuộc', 'both impossible|||đều bất khả', 'only for dice|||chỉ cho xúc xắc'], correctIndex: 1, points: 1 },
             ],
           },
         },
@@ -819,7 +819,7 @@ Thời gian chờ trung bình E(X) = 1/3 giờ = <b>20 phút</b>.</div>
 <div class="formula"><span class="lbl">Condition and parameters</span>Valid when <b>np &gt; 5</b> AND <b>n(1 − p) &gt; 5</b><br>Then B(n, p) ≈ N( μ = np , σ² = np(1 − p) )</div>
 
 <h3>2. Poisson → Normal</h3>
-<div class="formula"><span class="lbl">Condition and parameters</span>Valid when <b>λ &gt; 5</b><br>Then Poisson(λ) ≈ N( μ = λ , σ² = λ )</div>
+<div class="formula"><span class="lbl">Condition and parameters</span>Usable when <b>λ &ge; 10</b> (some books relax this to λ &gt; 5; the larger λ, the better the fit)<br>Then Poisson(λ) ≈ N( μ = λ , σ² = λ )</div>
 
 <h3>3. The continuity correction — ±0.5</h3>
 <p>A binomial variable takes whole numbers; a normal one takes any real value. To bridge that gap, expand each whole number into an interval of width 1 by shifting the boundary by <b>0.5</b>.</p>
@@ -865,7 +865,7 @@ z = (19.5 − 16)/4 = 0.875 → P = 1 − Φ(0.875) ≈ 1 − 0.8092 = <b>0.1908
 <div class="formula"><span class="lbl">Điều kiện và tham số</span>Hợp lệ khi <b>np &gt; 5</b> VÀ <b>n(1 − p) &gt; 5</b><br>Khi đó B(n, p) ≈ N( μ = np , σ² = np(1 − p) )</div>
 
 <h3>2. Poisson → Chuẩn</h3>
-<div class="formula"><span class="lbl">Điều kiện và tham số</span>Hợp lệ khi <b>λ &gt; 5</b><br>Khi đó Poisson(λ) ≈ N( μ = λ , σ² = λ )</div>
+<div class="formula"><span class="lbl">Điều kiện và tham số</span>Dùng được khi <b>λ ≥ 10</b> (một số sách nới tới λ &gt; 5; λ càng lớn xấp xỉ càng khớp)<br>Khi đó Poisson(λ) ≈ N( μ = λ , σ² = λ )</div>
 
 <h3>3. Hiệu chỉnh liên tục — ±0.5</h3>
 <p>Biến nhị thức nhận giá trị nguyên; biến chuẩn nhận mọi số thực. Để nối khoảng cách đó, hãy mở rộng mỗi số nguyên thành một khoảng rộng 1 bằng cách dịch biên đi <b>0.5</b>.</p>
@@ -1051,6 +1051,7 @@ Key: 6 | 3 means 63</pre>
 Min = <b>52</b> · Max = <b>93</b><br>
 Q2 (median) = average of the 10th and 11th values = (70 + 71)/2 = <b>70.5</b><br>
 Q1 = median of the lower 10 = (63 + 65)/2 = <b>64</b> · Q3 = median of the upper 10 = (77 + 78)/2 = <b>77.5</b><br>
+<b>⚠ Which quartile rule?</b> The &quot;median of each half&quot; rule used here is the one behind most box-plot software. <b>Montgomery 6.4 uses the (n+1)/4 position rule instead</b>: Q1 sits at position 21/4 = 5.25 → 63 + 0.25(65 − 63) = <b>63.5</b>, and Q3 at 3(21)/4 = 15.75 → 77 + 0.75(78 − 77) = <b>77.75</b>, giving IQR = 14.25. Both are &quot;correct&quot;; they are different conventions. <b>In an exam, use the textbook&#39;s (n+1)/4 rule unless the question says otherwise</b> — the numbers below follow the software convention, so expect small differences against a Montgomery answer key.<br>
 <b>IQR = Q3 − Q1 = 77.5 − 64 = 13.5</b><br>
 <b>Outlier fences:</b> lower = Q1 − 1.5 × IQR = 64 − 20.25 = 43.75 · upper = Q3 + 1.5 × IQR = 77.5 + 20.25 = <b>97.75</b><br>
 No value falls outside [43.75, 97.75] → <b>no outliers</b>; the whiskers therefore reach the true min and max.<br>
@@ -1127,6 +1128,7 @@ Chú giải: 6 | 3 nghĩa là 63</pre>
 Min = <b>52</b> · Max = <b>93</b><br>
 Q2 (trung vị) = trung bình giá trị thứ 10 và 11 = (70 + 71)/2 = <b>70,5</b><br>
 Q1 = trung vị của 10 giá trị dưới = (63 + 65)/2 = <b>64</b> · Q3 = trung vị của 10 giá trị trên = (77 + 78)/2 = <b>77,5</b><br>
+<b>⚠ Dùng quy tắc tứ phân vị nào?</b> Quy tắc &quot;trung vị của mỗi nửa&quot; dùng ở đây là quy tắc nằm sau phần lớn phần mềm vẽ box plot. <b>Montgomery 6.4 lại dùng quy tắc vị trí (n+1)/4</b>: Q1 ở vị trí 21/4 = 5,25 → 63 + 0,25(65 − 63) = <b>63,5</b>, Q3 ở 3(21)/4 = 15,75 → 77 + 0,75(78 − 77) = <b>77,75</b>, cho IQR = 14,25. Cả hai đều &quot;đúng&quot;, chỉ khác quy ước. <b>Vào phòng thi hãy dùng quy tắc (n+1)/4 của giáo trình trừ khi đề nói khác</b> — các số dưới đây theo quy ước phần mềm, nên sẽ lệch chút ít so với đáp án kiểu Montgomery.<br>
 <b>IQR = Q3 − Q1 = 77,5 − 64 = 13,5</b><br>
 <b>Ngưỡng ngoại lai:</b> dưới = Q1 − 1,5 × IQR = 64 − 20,25 = 43,75 · trên = Q3 + 1,5 × IQR = 77,5 + 20,25 = <b>97,75</b><br>
 Không giá trị nào nằm ngoài [43,75; 97,75] → <b>không có ngoại lai</b>; do đó hai râu vươn tới đúng min và max.<br>
@@ -1556,7 +1558,7 @@ Conclusion: there is significant evidence the machine is not filling to 500ml.</
 
 <div class="pitfall"><b>Trap:</b> "fail to reject H₀" is NOT "H₀ is proven true" — only "not enough evidence against it". And statistical significance ≠ practical importance: with a huge n, a tiny meaningless difference can be "significant".</div>
 
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Type I &amp; II errors and power.</b> Two ways to be wrong: <b>Type I</b> (probability α) = rejecting a true H₀ (a false alarm); <b>Type II</b> (probability β) = failing to reject a false H₀ (a miss). <b>Power</b> = 1 − β = the chance of correctly detecting a real effect. Lowering α (fewer false alarms) raises β (more misses) — a fundamental trade-off; only more data raises power without that cost. Understanding β and power is what separates a real analyst, and it is a common viva question.</div>
+<div class="callout"><span class="badge">Montgomery 9.1 · sessions 41–44</span> <b>Type I &amp; II errors and power.</b> Two ways to be wrong: <b>Type I</b> (probability α) = rejecting a true H₀ (a false alarm); <b>Type II</b> (probability β) = failing to reject a false H₀ (a miss). <b>Power</b> = 1 − β = the chance of correctly detecting a real effect. Lowering α (fewer false alarms) raises β (more misses) — a fundamental trade-off; only more data raises power without that cost. Understanding β and power is what separates a real analyst, and it is a common viva question.</div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.1</span>
@@ -1597,7 +1599,7 @@ Kết luận: có bằng chứng ý nghĩa rằng máy không rót đúng 500ml.
 
 <div class="pitfall"><b>Bẫy:</b> "không bác bỏ được H₀" KHÔNG phải "H₀ được chứng minh đúng" — chỉ là "chưa đủ bằng chứng chống lại nó". Và ý nghĩa thống kê ≠ ý nghĩa thực tế: với n rất lớn, một khác biệt nhỏ vô nghĩa vẫn có thể "ý nghĩa".</div>
 
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Sai lầm loại I & II và sức mạnh.</b> Hai cách sai: <b>Loại I</b> (xác suất α) = bác bỏ H₀ đúng (báo động giả); <b>Loại II</b> (xác suất β) = không bác bỏ H₀ sai (bỏ sót). <b>Sức mạnh (power)</b> = 1 − β = khả năng phát hiện đúng một hiệu ứng thật. Giảm α (ít báo động giả) làm tăng β (nhiều bỏ sót) — một đánh đổi cơ bản; chỉ có thêm dữ liệu mới tăng power mà không phải trả giá đó. Hiểu β và power tách một nhà phân tích thật, và là câu vấn đáp phổ biến.</div>
+<div class="callout"><span class="badge">Montgomery 9.1 · buổi 41–44</span> <b>Sai lầm loại I & II và sức mạnh.</b> Hai cách sai: <b>Loại I</b> (xác suất α) = bác bỏ H₀ đúng (báo động giả); <b>Loại II</b> (xác suất β) = không bác bỏ H₀ sai (bỏ sót). <b>Sức mạnh (power)</b> = 1 − β = khả năng phát hiện đúng một hiệu ứng thật. Giảm α (ít báo động giả) làm tăng β (nhiều bỏ sót) — một đánh đổi cơ bản; chỉ có thêm dữ liệu mới tăng power mà không phải trả giá đó. Hiểu β và power tách một nhà phân tích thật, và là câu vấn đáp phổ biến.</div>
 </div>
 `,
         },
@@ -1647,7 +1649,7 @@ Kết luận: có bằng chứng ý nghĩa rằng máy không rót đúng 500ml.
 
 <h3>Case 3 — σ unknown and clearly unequal → Welch</h3>
 <div class="formula"><span class="lbl">Welch (unequal variances)</span>SE = √( s₁²/n₁ + s₂²/n₂ )<br>(x̄₁ − x̄₂) ± t<sub>α/2, df</sub> · SE, with df from the Welch–Satterthwaite formula</div>
-<div class="note-ct">Welch does not pool: each sample keeps its own variance. The degrees of freedom come out as a messy non-integer number, which exams usually give you or round down — you are not expected to compute the Welch–Satterthwaite expression by hand.</div>
+<div class="note-ct">Welch does not pool: each sample keeps its own variance. The degrees of freedom come out as a messy non-integer number, normally rounded <em>down</em> to be conservative. Montgomery 10.2 (Case 2) does compute ν from the Welch–Satterthwaite expression in its own examples and exercises, so be ready to evaluate it — many exam papers hand you ν instead, but do not count on that.</div>
 
 <h3>The decision table</h3>
 <table>
@@ -1697,7 +1699,7 @@ This is the fastest sanity check in the whole chapter, and it is exactly equival
 
 <h3>Trường hợp 3 — chưa biết σ và rõ ràng khác nhau → Welch</h3>
 <div class="formula"><span class="lbl">Welch (phương sai không bằng nhau)</span>SE = √( s₁²/n₁ + s₂²/n₂ )<br>(x̄₁ − x̄₂) ± t<sub>α/2, df</sub> · SE, với df từ công thức Welch–Satterthwaite</div>
-<div class="note-ct">Welch không gộp: mỗi mẫu giữ phương sai riêng của nó. Bậc tự do ra một số lẻ không nguyên, mà đề thi thường cho sẵn hoặc làm tròn xuống — bạn không được kỳ vọng tính biểu thức Welch–Satterthwaite bằng tay.</div>
+<div class="note-ct">Welch không gộp: mỗi mẫu giữ phương sai riêng của nó. Bậc tự do ra một số lẻ không nguyên, thường làm tròn <em>xuống</em> cho an toàn. Montgomery 10.2 (Trường hợp 2) có tính ν bằng công thức Welch–Satterthwaite ngay trong ví dụ và bài tập của sách, nên hãy sẵn sàng tính nó — nhiều đề cho sẵn ν, nhưng đừng trông chờ.</div>
 
 <h3>Bảng quyết định</h3>
 <table>
@@ -1814,6 +1816,7 @@ Khoảng không chứa 0, khớp với kết luận bác bỏ ở trên.</div>
 <span class="eyebrow">Chapter 9 · Lesson 9.3</span>
 <h2>When the two samples are not independent</h2>
 <p class="lead">Lesson 9.1 assumed two <em>separate</em> groups. But often the same subject is measured twice — before and after a treatment, left hand and right hand, two methods on the same specimen. Those measurements are paired, and treating them as independent throws away the design.</p>
+<div class="callout"><b>Scope note.</b> The paired t-test is <strong>Montgomery 10.4</strong>, and the MAS291 syllabus session list for chapter 10 covers only <strong>10.1, 10.2 and 10.6</strong> — so this lesson sits <em>outside</em> the listed sessions. It is kept because it is the standard companion to 10.1/10.2, it is in the textbook you already own, and recognising a paired design is what stops you applying the two-sample formula to data that is not independent. Treat it as strongly recommended background rather than guaranteed exam material, and confirm with your instructor before relying on it.</div>
 
 <h3>The method: reduce two samples to one</h3>
 <div class="formula"><span class="lbl">Step 1 — build the difference column</span>d<sub>i</sub> = x₁ᵢ − x₂ᵢ     for each pair i</div>
@@ -1863,6 +1866,7 @@ s<sub>d</sub>² = 6/(5−1) = 1.5 → s<sub>d</sub> = 1.2247<br>
 <span class="eyebrow">Chương 9 · Bài 9.3</span>
 <h2>Khi hai mẫu không độc lập</h2>
 <p class="lead">Bài 9.1 giả định hai nhóm <em>tách biệt</em>. Nhưng thường cùng một đối tượng được đo hai lần — trước và sau khi can thiệp, tay trái và tay phải, hai phương pháp trên cùng một mẫu vật. Những phép đo đó ghép thành cặp, và coi chúng như độc lập là vứt bỏ chính thiết kế thí nghiệm.</p>
+<div class="callout"><b>Ghi chú phạm vi.</b> Kiểm định t mẫu cặp là <strong>Montgomery 10.4</strong>, trong khi danh sách buổi học của syllabus MAS291 cho chương 10 chỉ có <strong>10.1, 10.2 và 10.6</strong> — nên bài này nằm <em>ngoài</em> các buổi được liệt kê. Vẫn giữ lại vì nó là người bạn đồng hành chuẩn mực của 10.1/10.2, có sẵn trong giáo trình bạn đang dùng, và nhận ra thiết kế ghép cặp chính là thứ ngăn bạn áp công thức hai mẫu vào dữ liệu không độc lập. Hãy coi đây là kiến thức nền rất nên biết chứ không phải nội dung chắc chắn ra thi, và hỏi lại giảng viên trước khi trông cậy vào nó.</div>
 
 <h3>Phương pháp: rút hai mẫu về một mẫu</h3>
 <div class="formula"><span class="lbl">Bước 1 — lập cột hiệu</span>d<sub>i</sub> = x₁ᵢ − x₂ᵢ     cho từng cặp i</div>
@@ -2126,8 +2130,8 @@ CI 95% cho mức giảm trung bình: 3 ± 2.776 × 0.5477 = 3 ± 1.52 = <b>(1.48
 
     /* ══════════════════ NÂNG CAO ══════════════════ */
     {
-      title: 'Advanced — Beyond the syllabus|||Nâng cao — Ngoài giáo trình',
-      description: 'Toàn bộ chương này là học thêm: dùng phần mềm thống kê thật (Excel/Python) và tư duy hướng khoa học dữ liệu.',
+      title: 'The computer project — statistics with software|||Computer project — thống kê bằng phần mềm',
+      description: 'Cột điểm 15% của syllabus (CLO7–CLO9, 5 giờ, đề mở). Công cụ syllabus nêu là Excel + add-on DDXL và Maxima; Python ở đây là phần mở rộng tự chọn.',
       lessons: [
         {
           title: 'A.1 — Statistics in Excel & Python (the computer project)|||A.1 — Thống kê trong Excel & Python (computer project)',
@@ -2137,8 +2141,8 @@ CI 95% cho mức giảm trung bình: 3 ± 2.776 × 0.5477 = 3 ± 1.52 = <b>(1.48
           content: `
 <div class="ml-en">
 <span class="eyebrow">Advanced · Lesson A.1</span>
-<h2><span class="badge">★ Beyond the syllabus</span> Doing real statistics with software</h2>
-<p class="lead">The syllabus requires a <strong>computer project (15%)</strong> and at least one statistical tool. This whole section is the practical skill that makes you employable: let the computer do the arithmetic so you focus on the thinking.</p>
+<h2>Doing real statistics with software — the computer project (15%)</h2>
+<p class="lead">This is <strong>core, graded work, not an extra</strong>: the syllabus lists a <strong>Computer Project, on-going, weight 15%, completion criterion &gt; 0, 5 hours, open</strong>, mapped to <strong>CLO7–CLO9</strong>, and requires you to &quot;use at least one statistical software (Excel, Maxima) for problem solving&quot;. The tools it names are <strong>Excel with the DDXL add-ons</strong> and <strong>Maxima</strong> — check with your instructor before submitting in anything else. The <strong>Python</strong> column below is an optional extension this course adds because the same functions carry into data science; it is not the syllabus tool.</p>
 <a class="link-card exphub" href="/exp-hub/mas291-cong-cu-thong-ke?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability" target="_blank" rel="noopener">
   <span class="lc-ico">🛠️</span>
   <span class="lc-body"><span class="lc-title">Set up Python &amp; Excel for statistics</span><span class="lc-sub">Install guide + Excel↔Python function map — on Exp Hub.</span></span>
@@ -2167,8 +2171,8 @@ stats.<span class="tok-function">ttest_1samp</span>(data, 5)  <span class="tok-c
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Nâng cao · Bài A.1</span>
-<h2><span class="badge">★ Ngoài giáo trình</span> Làm thống kê thật bằng phần mềm</h2>
-<p class="lead">Syllabus yêu cầu một <strong>computer project (15%)</strong> và ít nhất một công cụ thống kê. Cả phần này là kỹ năng thực hành làm bạn dễ xin việc: để máy tính lo số học để bạn tập trung vào tư duy.</p>
+<h2>Làm thống kê thật bằng phần mềm — computer project (15%)</h2>
+<p class="lead">Đây là <strong>nội dung chính có chấm điểm, không phải học thêm</strong>: syllabus liệt kê <strong>Computer Project, on-going, trọng số 15%, điều kiện hoàn thành &gt; 0, 5 giờ, đề mở</strong>, gắn với <strong>CLO7–CLO9</strong>, và yêu cầu &quot;use at least one statistical software (Excel, Maxima) for problem solving&quot;. Công cụ syllabus nêu tên là <strong>Excel kèm add-on DDXL</strong> và <strong>Maxima</strong> — hãy hỏi giảng viên trước khi nộp bằng công cụ khác. Cột <strong>Python</strong> dưới đây là phần mở rộng tự chọn của khoá này vì cùng bộ hàm đó đi tiếp sang khoa học dữ liệu; nó không phải công cụ của syllabus.</p>
 <a class="link-card exphub" href="/exp-hub/mas291-cong-cu-thong-ke?ref=%2Fcourses%2Fstatistics-and-probability%2Flearn&reflabel=MAS291%20%E2%80%94%20Statistics%20and%20Probability" target="_blank" rel="noopener">
   <span class="lc-ico">🛠️</span>
   <span class="lc-body"><span class="lc-title">Cài Python &amp; Excel cho thống kê</span><span class="lc-sub">Hướng dẫn cài + bảng ánh xạ hàm Excel↔Python — trên Exp Hub.</span></span>
@@ -2680,7 +2684,7 @@ r = 61,01/√(437,5 × 8,532) = 61,01/61,11 = <b>0,9984</b> → R² = <b>0,9967<
 
 <h3>Part A — probability (questions 1–6)</h3>
 <div class="out"><b>1.</b> Two dice are rolled. P(sum = 8)? → favourable pairs (2,6)(3,5)(4,4)(5,3)(6,2) = 5 of 36 → <b>5/36 ≈ 0.139</b><br>
-<b>2.</b> P(A) = 0.5, P(B) = 0.4, P(A ∩ B) = 0.2. Are A and B independent? → P(A)P(B) = 0.20 = P(A ∩ B) ✓ → <b>yes, independent</b>. (Note they are <em>not</em> mutually exclusive, since P(A ∩ B) ≠ 0 — the two concepts are unrelated.)<br>
+<b>2.</b> P(A) = 0.5, P(B) = 0.4, P(A ∩ B) = 0.2. Are A and B independent? → P(A)P(B) = 0.20 = P(A ∩ B) ✓ → <b>yes, independent</b>. (Note they are <em>not</em> mutually exclusive, since P(A ∩ B) ≠ 0. In fact they could not be both: with P(A), P(B) &gt; 0, mutually exclusive always implies dependent.)<br>
 <b>3.</b> With the same values, P(A ∪ B)? → 0.5 + 0.4 − 0.2 = <b>0.7</b><br>
 <b>4.</b> P(A | B) with the same values? → 0.2/0.4 = <b>0.5</b> — equal to P(A), which is exactly what independence means.<br>
 <b>5.</b> A test is 95% accurate for a disease affecting 1% of people. A person tests positive. P(actually ill)? → P(pos) = 0.01(0.95) + 0.99(0.05) = 0.0095 + 0.0495 = 0.059 → P(ill | pos) = 0.0095/0.059 = <b>0.161</b>. Only 16% — the base rate dominates, which is why mass screening for rare diseases produces mostly false positives.<br>
@@ -2721,7 +2725,7 @@ r = 61,01/√(437,5 × 8,532) = 61,01/61,11 = <b>0,9984</b> → R² = <b>0,9967<
 
 <h3>Phần A — xác suất (câu 1–6)</h3>
 <div class="out"><b>1.</b> Gieo hai con xúc xắc. P(tổng bằng 8)? → các cặp thuận lợi (2,6)(3,5)(4,4)(5,3)(6,2) = 5 trên 36 → <b>5/36 ≈ 0,139</b><br>
-<b>2.</b> P(A) = 0,5; P(B) = 0,4; P(A ∩ B) = 0,2. A và B có độc lập không? → P(A)P(B) = 0,20 = P(A ∩ B) ✓ → <b>có, độc lập</b>. (Lưu ý chúng <em>không</em> xung khắc, vì P(A ∩ B) ≠ 0 — hai khái niệm này không liên quan gì tới nhau.)<br>
+<b>2.</b> P(A) = 0,5; P(B) = 0,4; P(A ∩ B) = 0,2. A và B có độc lập không? → P(A)P(B) = 0,20 = P(A ∩ B) ✓ → <b>có, độc lập</b>. (Lưu ý chúng <em>không</em> xung khắc, vì P(A ∩ B) ≠ 0. Thật ra chúng không thể vừa độc lập vừa xung khắc: khi P(A), P(B) &gt; 0 thì xung khắc luôn kéo theo phụ thuộc.)<br>
 <b>3.</b> Vẫn số liệu đó, P(A ∪ B)? → 0,5 + 0,4 − 0,2 = <b>0,7</b><br>
 <b>4.</b> Vẫn số liệu đó, P(A | B)? → 0,2/0,4 = <b>0,5</b> — đúng bằng P(A), và đó chính là ý nghĩa của tính độc lập.<br>
 <b>5.</b> Một xét nghiệm chính xác 95% cho một bệnh mà 1% dân số mắc. Một người xét nghiệm dương tính. P(thật sự mắc bệnh)? → P(dương) = 0,01(0,95) + 0,99(0,05) = 0,0095 + 0,0495 = 0,059 → P(mắc | dương) = 0,0095/0,059 = <b>0,161</b>. Chỉ 16% — tỉ lệ nền áp đảo, và đó là lý do sàng lọc đại trà cho bệnh hiếm sinh ra chủ yếu là dương tính giả.<br>
@@ -2868,11 +2872,12 @@ Var(X) = E(X²) − [E(X)]² = 3,7 − 1,7² = 3,7 − 2,89 = <b>0,81</b> · σ 
           title: 'PT2 — Descriptive stats, sampling & CI (5 solved)|||PT2 — Thống kê mô tả, phân phối mẫu & khoảng tin cậy (5 câu có lời giải)',
           slug: 'mas291-pt2-luyen-de',
           type: 'VIDEO',
-          description: 'Năm câu bao chương 4, 6, 7: tóm tắt số liệu, CLT, khoảng tin cậy, cỡ mẫu, xấp xỉ chuẩn.',
+          description: 'Năm câu ôn cho Progress Test 2 (buổi 34). Syllabus gọi phạm vi là "Chapters 4, 6, and 7" của Montgomery = phân phối liên tục, thống kê mô tả/lấy mẫu, khoảng tin cậy — tương ứng chương 4–7 của khoá này.',
           content: `
 <div class="ml-en">
 <span class="eyebrow">Self-test · PT2</span>
-<h2>Five questions covering chapters 4, 6 and 7</h2>
+<h2>Five questions for Progress Test 2</h2>
+<div class="callout"><b>Read the chapter numbers carefully.</b> The syllabus sets PT2&#39;s scope (session 33) as &quot;Solve questions and problems for <b>Chapters 4, 6, and 7</b>&quot; — those are <b>Montgomery</b> chapter numbers: 4 = continuous distributions, 6 = descriptive statistics, 7 = sampling distributions &amp; point estimation. In <em>this course&#39;s</em> numbering that is chapters 4, 5 and 6, and the confidence-interval questions below come from Montgomery chapter 8 (this course&#39;s chapter 7), which PT2 also reaches in practice. The five questions here deliberately span that whole descriptive &rarr; sampling &rarr; interval arc.</div>
 
 <h3>Question 1 — every summary measure at once</h3>
 <div class="out"><b>Sample: 12, 15, 15, 18, 20. Find the mean, median, mode, sample variance and standard deviation.</b><br>
@@ -2917,7 +2922,8 @@ z = (106 − 100)/3 = <b>2.00</b> → P(x̄ &gt; 106) = 1 − Φ(2.00) = 1 − 0
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Tự kiểm tra · PT2</span>
-<h2>Năm câu bao chương 4, 6 và 7</h2>
+<h2>Năm câu ôn cho Progress Test 2</h2>
+<div class="callout"><b>Đọc kỹ số hiệu chương.</b> Syllabus đặt phạm vi PT2 (buổi 33) là &quot;Solve questions and problems for <b>Chapters 4, 6, and 7</b>&quot; — đó là số chương của <b>Montgomery</b>: 4 = phân phối liên tục, 6 = thống kê mô tả, 7 = phân phối mẫu &amp; ước lượng điểm. Theo cách đánh số <em>của khoá này</em> thì đó là chương 4, 5 và 6, còn các câu khoảng tin cậy dưới đây thuộc Montgomery chương 8 (chương 7 của khoá này), phần mà PT2 trên thực tế cũng chạm tới. Năm câu ở đây cố ý trải suốt mạch mô tả &rarr; lấy mẫu &rarr; khoảng tin cậy.</div>
 
 <h3>Câu 1 — tất cả đại lượng tóm tắt trong một câu</h3>
 <div class="out"><b>Mẫu: 12, 15, 15, 18, 20. Tính trung bình, trung vị, mốt, phương sai mẫu và độ lệch chuẩn.</b><br>
@@ -2966,11 +2972,12 @@ z = (106 − 100)/3 = <b>2,00</b> → P(x̄ &gt; 106) = 1 − Φ(2,00) = 1 − 0
           title: 'PT3 — Testing, two samples & regression (5 solved)|||PT3 — Kiểm định, hai mẫu & hồi quy (5 câu có lời giải)',
           slug: 'mas291-pt3-luyen-de',
           type: 'VIDEO',
-          description: 'Năm câu bao chương 8–11: kiểm định t, giá trị p, hai trung bình, mẫu cặp, hồi quy tuyến tính.',
+          description: 'Năm câu ôn cho Progress Test 3 (buổi 60): kiểm định t, giá trị p, hai trung bình, mẫu cặp, hồi quy tuyến tính — Montgomery chương 9–11 (chương 8–10 của khoá này).',
           content: `
 <div class="ml-en">
 <span class="eyebrow">Self-test · PT3</span>
-<h2>Five questions covering chapters 8–11</h2>
+<h2>Five questions for Progress Test 3</h2>
+<div class="callout"><b>Chapter numbers again.</b> PT3 (session 60) closes the course, so its material is Montgomery <b>chapters 9, 10 and 11</b> — hypothesis testing, inference for two samples, and simple linear regression — which are <b>chapters 8, 9 and 10 in this course</b>. Confidence intervals (Montgomery 8) were PT2&#39;s ground and are not re-tested here; question 4 uses the paired design, which is Montgomery 10.4 and <b>not</b> in the syllabus session list (see lesson 9.3).</div>
 
 <h3>Question 1 — a one-sample t test, with the p-value</h3>
 <div class="out"><b>Test H₀: μ = 100 against H₁: μ ≠ 100, with n = 25, x̄ = 103.5, s = 7, α = 0.05. Conclude, and bound the p-value.</b><br>
@@ -3019,7 +3026,8 @@ r = S<sub>xy</sub>/√(S<sub>xx</sub>S<sub>yy</sub>) = 6/√60 = 6/7.746 = <b>0.
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Tự kiểm tra · PT3</span>
-<h2>Năm câu bao chương 8–11</h2>
+<h2>Năm câu ôn cho Progress Test 3</h2>
+<div class="callout"><b>Lại là chuyện số hiệu chương.</b> PT3 (buổi 60) khép lại môn học, nên phạm vi là Montgomery <b>chương 9, 10 và 11</b> — kiểm định giả thuyết, suy luận hai mẫu, và hồi quy tuyến tính đơn — tức <b>chương 8, 9 và 10 của khoá này</b>. Khoảng tin cậy (Montgomery 8) là đất của PT2 và không kiểm lại ở đây; câu 4 dùng thiết kế mẫu cặp, vốn là Montgomery 10.4 và <b>không</b> nằm trong danh sách buổi học của syllabus (xem bài 9.3).</div>
 
 <h3>Câu 1 — kiểm định t một mẫu, kèm giá trị p</h3>
 <div class="out"><b>Kiểm định H₀: μ = 100 với H₁: μ ≠ 100, biết n = 25, x̄ = 103,5, s = 7, α = 0,05. Kết luận và chặn giá trị p.</b><br>
@@ -3074,14 +3082,14 @@ r = S<sub>xy</sub>/√(S<sub>xx</sub>S<sub>yy</sub>) = 6/√60 = 6/7,746 = <b>0,
     /* END-SECTIONS-MARKER */
     {
       "title": "Final Exam|||Thi cuối kỳ",
-      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "description": "Thi cuối kỳ: 35% điểm, 60 phút, máy chấm, PHẢI đạt ≥ 4. Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
       "lessons": [
         {
           "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
           "slug": "mas291-final-exam-fe",
           "type": "article",
-          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "description": "Thi cuối kỳ: 35%, 60 phút, máy chấm, điều kiện hoàn thành ≥ 4. Câu mẫu từ môn; đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (35%, 60 minutes, computer gradable)</h2>\n<p class=\"lead\">The syllabus gives these facts for the final: <strong>weight 35%</strong>, <strong>duration 60 minutes</strong>, <strong>computer gradable</strong>, <strong>completion criterion 4</strong>. It does <strong>not</strong> state a question count. The pass rule has three parts, not one: <strong>every on-going component &gt; 0</strong>, <strong>Final Result ≥ 5</strong>, <strong>and Final Exam Score ≥ 4</strong> — so a final below 4 fails the subject no matter how good the other 65% was. Full breakdown in <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi cuối kỳ (35%, 60 phút, máy chấm)</h2>\n<p class=\"lead\">Syllabus cho các dữ kiện sau về bài thi cuối: <strong>trọng số 35%</strong>, <strong>thời gian 60 phút</strong>, <strong>máy chấm</strong>, <strong>điều kiện hoàn thành 4</strong>. Syllabus <strong>không</strong> nêu số câu. Luật qua môn có ba vế chứ không phải một: <strong>mọi cột quá trình &gt; 0</strong>, <strong>Kết quả cuối ≥ 5</strong>, <strong>và điểm thi cuối ≥ 4</strong> — nên thi cuối dưới 4 là trượt môn dù 65% còn lại đẹp tới đâu. Chi tiết đầy đủ ở <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [
@@ -3151,7 +3159,7 @@ r = S<sub>xy</sub>/√(S<sub>xx</sub>S<sub>yy</sub>) = 6/√60 = 6/7,746 = <b>0,
                 "question": "Independent and mutually exclusive events are…|||Biến cố độc lập và xung khắc là…",
                 "options": [
                   "the same thing|||cùng một thứ",
-                  "opposite ideas (independent can co-occur; exclusive cannot)|||ý đối lập (độc lập có thể cùng xảy ra; xung khắc không)",
+                  "different properties: if both have positive probability, mutually exclusive events are dependent|||hai tính chất khác nhau: nếu cả hai có xác suất dương thì biến cố xung khắc là phụ thuộc",
                   "both impossible|||đều bất khả",
                   "only for dice|||chỉ cho xúc xắc"
                 ],

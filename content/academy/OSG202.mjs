@@ -19,7 +19,7 @@ export default {
     description: 'Môn hệ điều hành theo giáo trình Tanenbaum. Học OS quản lý CPU, bộ nhớ, tệp, thiết bị và xử lý deadlock ra sao; kèm thực hành Linux và lập trình shell/C. Là nền cho mọi việc hệ thống, DevOps và low-level.',
     whatYouLearn: 'Vai trò & cấu trúc OS; tiến trình, luồng, lập lịch CPU & đồng bộ hoá; quản lý bộ nhớ, phân trang & bộ nhớ ảo; hệ thống tệp; hệ thống I/O; deadlock (phát hiện/tránh/ngăn); dùng Linux & lệnh shell thành thạo; lập trình shell/C cơ bản.',
     requirements: 'Không có môn tiên quyết. Nên có CSI104/CEA201 để hiểu phần cứng. Cần một môi trường Linux (WSL trên Windows, hoặc máy ảo VirtualBox).',
-    documentsNote: 'Giáo trình: Modern Operating Systems — Andrew S. Tanenbaum. Công cụ: Linux (WSL / Ubuntu trên VirtualBox), terminal/shell, GCC. Kèm file syllabus gốc OSG202.pdf.',
+    documentsNote: 'Học liệu syllabus liệt kê (5): (1) Modern Operating Systems — Andrew S. Tanenbaum, Pearson (bản 4th/3rd/2nd) — giáo trình chính; (2) Connecting with Computer Science — Anderson, Ferro, Hilton; (3) Understanding Operating Systems — McHoes & Flynn, Cengage; (4) khoá http://courses.knox.edu/cs226/; (5) ghi chú AI (notegpt.io). Công cụ syllabus yêu cầu: Internet, máy chủ/máy để bàn Linux, trình mô phỏng MARIE, công cụ AI (ChatGPT/Copilot/Gamma) và phần mềm mô phỏng khác. Thực hành thêm: Linux (WSL / Ubuntu trên VirtualBox), terminal/shell, GCC. Kèm file syllabus gốc OSG202.pdf.',
   },
   sections: [
     /* ══════════════════ MỤC 0 — GIỚI THIỆU & HƯỚNG DẪN HỌC ══════════════════ */
@@ -50,8 +50,8 @@ export default {
   <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Deadlock</div><div class="lz-nsub">Detect · avoid · prevent</div></div></div>
   <div class="lz-stage">Hands-on</div>
   <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Linux &amp; the Shell</div><div class="lz-nsub">Commands · scripting · using an OS for real</div></div></div>
-  <div class="lz-stage">Advanced · beyond the syllabus</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Concurrency pitfalls · containers &amp; modern OS</div><div class="lz-nsub">From theory to today&#39;s systems</div></div></div>
+  <div class="lz-stage">Presentation topic (20% of the grade)</div>
+  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Virtualization &amp; the cloud · containers &amp; modern OS</div><div class="lz-nsub">Tanenbaum Ch.7 — one of the official presentation topics (sessions 27, 55–59)</div></div></div>
 </div>
 <p>OSG202 builds directly on <span class="badge">CEA201</span> (the hardware the OS manages) and prepares you for <span class="badge">NWC203c</span>, <span class="badge">IOT102</span>, DevOps and any systems work. Its Linux skills pair perfectly with the CodeLab Linux track.</p>
 <div class="callout ok">This course has two halves: <strong>concepts</strong> (how the OS works, tested by MCQ exams) and <strong>practice</strong> (Linux/shell, tested by labs). Do both — read the theory and actually type commands in a real Linux terminal.</div>
@@ -77,8 +77,8 @@ export default {
   <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Deadlock (bế tắc)</div><div class="lz-nsub">Phát hiện · tránh · ngăn</div></div></div>
   <div class="lz-stage">Thực hành</div>
   <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Linux &amp; Shell</div><div class="lz-nsub">Lệnh · scripting · dùng OS thật</div></div></div>
-  <div class="lz-stage">Nâng cao · ngoài giáo trình</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Bẫy đồng thời · container &amp; OS hiện đại</div><div class="lz-nsub">Từ lý thuyết tới hệ thống hôm nay</div></div></div>
+  <div class="lz-stage">Chủ đề thuyết trình (20% điểm)</div>
+  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Ảo hoá &amp; đám mây · container &amp; OS hiện đại</div><div class="lz-nsub">Tanenbaum Ch.7 — một trong các chủ đề thuyết trình chính thức (session 27, 55–59)</div></div></div>
 </div>
 <p>OSG202 xây trực tiếp trên <span class="badge">CEA201</span> (phần cứng mà OS quản lý) và chuẩn bị cho <span class="badge">NWC203c</span>, <span class="badge">IOT102</span>, DevOps và mọi việc hệ thống. Kỹ năng Linux của nó khớp hoàn hảo với track Linux của CodeLab.</p>
 <div class="callout ok">Môn này có hai nửa: <strong>khái niệm</strong> (OS hoạt động ra sao, thi trắc nghiệm) và <strong>thực hành</strong> (Linux/shell, chấm qua lab). Làm cả hai — đọc lý thuyết và thực sự gõ lệnh trong terminal Linux thật.</div>
@@ -108,17 +108,18 @@ export default {
   <div class="kv"><span class="k">Grading scale</span><span class="v">10 <small>pass when average ≥ 5.0</small></span></div>
   <div class="kv"><span class="k">Exam eligibility</span><span class="v">Attend ≥ 80% of sessions</span></div>
 </div>
-<h3>Grade structure</h3>
+<h3>Grade structure — the four components, exactly as the syllabus lists them</h3>
 <table>
-  <thead><tr><th>Component</th><th>Weight</th><th>Note</th></tr></thead>
+  <thead><tr><th>Component</th><th>Type</th><th>Parts</th><th>Weight</th><th>Completion</th><th>Duration</th><th>CLO</th><th>Question type</th></tr></thead>
   <tbody>
-    <tr><td>Lab</td><td>20%</td><td>4 labs — hands-on Linux/shell (LO7–10)</td></tr>
-    <tr><td>Presentation</td><td>20%</td><td>Group presentation on an OS topic / case study</td></tr>
-    <tr><td>Progress Test</td><td>20%</td><td>2 multiple-choice tests (concepts)</td></tr>
-    <tr><td>Final Exam</td><td>40%</td><td>60 min multiple choice — must score ≥ 4 to pass</td></tr>
+    <tr><td>Lab</td><td>on-going</td><td>4</td><td>20%</td><td>&gt; 0</td><td>in lab session</td><td>LO7, LO8, LO9, LO10</td><td>practical exercises</td></tr>
+    <tr><td>Presentation</td><td>on-going</td><td>1</td><td>20%</td><td>&gt; 0</td><td>~20&#39;/group</td><td>LO1–LO6, LO11</td><td>use presentation slides</td></tr>
+    <tr><td>Progress test</td><td>on-going</td><td>2</td><td>20%</td><td>&gt; 0</td><td>10&#39;–30&#39; each</td><td>LO1–LO6</td><td>multiple choice</td></tr>
+    <tr><td>Final exam</td><td>final exam</td><td>1</td><td>40%</td><td>&ge; 4</td><td>60&#39;</td><td>LO1–LO6</td><td>multiple choice</td></tr>
   </tbody>
 </table>
-<div class="callout warn">Two gates: weighted average ≥ 5.0 AND final ≥ 4.0. The exams are multiple choice on concepts (processes, memory, deadlock…), so precise understanding of terminology wins — exactly what the chapter quizzes drill. The 40% of labs+presentation rewards real Linux practice.</div>
+<p><strong>The syllabus does not publish a question count</strong> for the progress tests or the final — only the durations above and the question type. Take the exact paper size for your term from the FLM.</p>
+<div class="callout warn">Three gates, not two. (1) Attend ≥ 80% of sessions to be allowed to sit the final. (2) Every on-going component has completion criterion <strong>&gt; 0</strong> — a zero on the labs, the presentation or a progress test fails the subject on its own. (3) Final exam ≥ <strong>4.0</strong> and weighted average ≥ <strong>5.0</strong>. Note where the marks are: the concept exams are 60% and both are multiple choice, while labs + presentation are the other 40% and cannot be revised for at the last minute.</div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.2</span>
@@ -131,17 +132,18 @@ export default {
   <div class="kv"><span class="k">Thang điểm</span><span class="v">10 <small>qua môn khi trung bình ≥ 5.0</small></span></div>
   <div class="kv"><span class="k">Điều kiện dự thi</span><span class="v">Dự ≥ 80% số buổi</span></div>
 </div>
-<h3>Cấu trúc điểm</h3>
+<h3>Cấu trúc điểm — bốn thành phần, đúng như syllabus liệt kê</h3>
 <table>
-  <thead><tr><th>Thành phần</th><th>Trọng số</th><th>Ghi chú</th></tr></thead>
+  <thead><tr><th>Thành phần</th><th>Loại</th><th>Số phần</th><th>Trọng số</th><th>Điều kiện hoàn thành</th><th>Thời lượng</th><th>CLO</th><th>Dạng câu hỏi</th></tr></thead>
   <tbody>
-    <tr><td>Lab</td><td>20%</td><td>4 bài lab — thực hành Linux/shell (LO7–10)</td></tr>
-    <tr><td>Thuyết trình</td><td>20%</td><td>Thuyết trình nhóm về một chủ đề OS / case study</td></tr>
-    <tr><td>Progress Test</td><td>20%</td><td>2 bài trắc nghiệm (khái niệm)</td></tr>
-    <tr><td>Thi cuối kỳ</td><td>40%</td><td>60 phút trắc nghiệm — phải đạt ≥ 4 mới qua môn</td></tr>
+    <tr><td>Lab</td><td>on-going</td><td>4</td><td>20%</td><td>&gt; 0</td><td>trong buổi lab</td><td>LO7, LO8, LO9, LO10</td><td>bài thực hành</td></tr>
+    <tr><td>Thuyết trình</td><td>on-going</td><td>1</td><td>20%</td><td>&gt; 0</td><td>~20&#39;/nhóm</td><td>LO1–LO6, LO11</td><td>dùng slide thuyết trình</td></tr>
+    <tr><td>Progress test</td><td>on-going</td><td>2</td><td>20%</td><td>&gt; 0</td><td>10&#39;–30&#39; mỗi bài</td><td>LO1–LO6</td><td>trắc nghiệm</td></tr>
+    <tr><td>Thi cuối kỳ</td><td>final exam</td><td>1</td><td>40%</td><td>&ge; 4</td><td>60&#39;</td><td>LO1–LO6</td><td>trắc nghiệm</td></tr>
   </tbody>
 </table>
-<div class="callout warn">Hai cửa: trung bình có trọng số ≥ 5.0 VÀ thi cuối ≥ 4.0. Bài thi là trắc nghiệm về khái niệm (tiến trình, bộ nhớ, deadlock…), nên hiểu chính xác thuật ngữ là thắng — đúng thứ quiz các chương rèn. 40% lab+thuyết trình thưởng cho thực hành Linux thật.</div>
+<p><strong>Syllabus KHÔNG công bố số câu</strong> cho progress test hay bài thi cuối — chỉ có thời lượng và dạng câu hỏi ở trên. Số câu thật của kỳ bạn học lấy trên FLM.</p>
+<div class="callout warn">Ba cửa, không phải hai. (1) Dự ≥ 80% số buổi mới được thi cuối kỳ. (2) Mọi thành phần on-going có điều kiện hoàn thành <strong>&gt; 0</strong> — một điểm 0 ở lab, thuyết trình hay một progress test là tự nó đánh trượt môn. (3) Thi cuối ≥ <strong>4,0</strong> và trung bình có trọng số ≥ <strong>5,0</strong>. Để ý điểm nằm ở đâu: hai bài thi khái niệm chiếm 60% và đều là trắc nghiệm, còn lab + thuyết trình là 40% còn lại và không thể ôn gấp vào phút chót.</div>
 </div>
 `,
         },
@@ -200,15 +202,20 @@ export default {
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.4</span>
 <h2>Materials, tools &amp; how to study</h2>
-<h3>Textbook</h3>
+<h3>The five materials the syllabus lists</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">Modern Operating Systems — Andrew S. Tanenbaum</div><div class="lz-ld">The classic OS textbook. Every chapter here follows it: processes, memory, files, I/O, deadlock, plus case studies of UNIX/Linux and Windows.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Modern Operating Systems — Andrew S. Tanenbaum (Pearson, 4th / 3rd / 2nd ed.)</div><div class="lz-ld"><b>Main material.</b> The classic OS textbook. Every chapter here follows it: processes, memory, files, I/O, deadlock, plus the case studies of UNIX/Linux/Android and Windows that the presentation topics come from.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Connecting with Computer Science — Anderson, Ferro, Hilton</div><div class="lz-ld">Gentler background reading for the chapter 1 material (what an OS is, the hardware it manages).</div></div>
+  <div class="lz-layer"><div class="lz-lt">Understanding Operating Systems — McHoes &amp; Flynn (Cengage)</div><div class="lz-ld">A second angle on the same six chapters; useful when Tanenbaum's treatment of a topic does not land.</div></div>
+  <div class="lz-layer"><div class="lz-lt">http://courses.knox.edu/cs226/</div><div class="lz-ld">The online course the syllabus links, with slides and exercises.</div></div>
+  <div class="lz-layer"><div class="lz-lt">AI notes (notegpt.io)</div><div class="lz-ld">Listed as a material — and CLO11 is explicitly &ldquo;using AI tools to explore OS components&rdquo;, assessed through the presentation.</div></div>
 </div>
-<h3>Get a real Linux environment</h3>
+<h3>The tools the syllabus requires</h3>
 <ul>
-  <li><strong>WSL</strong> (Windows Subsystem for Linux) — the easiest way to run Ubuntu inside Windows.</li>
-  <li><strong>VirtualBox + Ubuntu</strong> — a full virtual machine, great for experimenting safely.</li>
-  <li>macOS/Linux users already have a Unix terminal.</li>
+  <li><strong>A Linux server or desktop.</strong> <strong>WSL</strong> (Windows Subsystem for Linux) is the easiest way to run Ubuntu inside Windows; <strong>VirtualBox + Ubuntu</strong> gives a full virtual machine to experiment in safely; macOS/Linux users already have a Unix terminal.</li>
+  <li><strong>The MARIE simulator</strong> — the simple accumulator machine used to see instruction fetch/execute and interrupts concretely (chapter 1, hardware review).</li>
+  <li><strong>AI tools</strong> — ChatGPT, Copilot, Gamma — plus any other simulation software, for CLO11 and for building the presentation.</li>
+  <li>Internet access.</li>
 </ul>
 <h3>How to study a two-part course</h3>
 <div class="lz-flow">
@@ -232,15 +239,20 @@ export default {
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.4</span>
 <h2>Tài liệu, công cụ &amp; cách học</h2>
-<h3>Giáo trình</h3>
+<h3>Năm học liệu syllabus liệt kê</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">Modern Operating Systems — Andrew S. Tanenbaum</div><div class="lz-ld">Giáo trình OS kinh điển. Mọi chương ở đây bám nó: tiến trình, bộ nhớ, tệp, I/O, deadlock, cùng case study UNIX/Linux và Windows.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Modern Operating Systems — Andrew S. Tanenbaum (Pearson, bản 4th / 3rd / 2nd)</div><div class="lz-ld"><b>Học liệu chính.</b> Giáo trình OS kinh điển. Mọi chương ở đây bám nó: tiến trình, bộ nhớ, tệp, I/O, deadlock, cùng các case study UNIX/Linux/Android và Windows — chính là nguồn của các chủ đề thuyết trình.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Connecting with Computer Science — Anderson, Ferro, Hilton</div><div class="lz-ld">Đọc nền nhẹ nhàng hơn cho phần chương 1 (OS là gì, phần cứng nó quản lý).</div></div>
+  <div class="lz-layer"><div class="lz-lt">Understanding Operating Systems — McHoes &amp; Flynn (Cengage)</div><div class="lz-ld">Một góc nhìn thứ hai cho đúng sáu chương đó; hữu ích khi cách trình bày của Tanenbaum chưa vào.</div></div>
+  <div class="lz-layer"><div class="lz-lt">http://courses.knox.edu/cs226/</div><div class="lz-ld">Khoá học trực tuyến syllabus dẫn tới, có slide và bài tập.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Ghi chú AI (notegpt.io)</div><div class="lz-ld">Được liệt kê là học liệu — và CLO11 nói thẳng là &ldquo;dùng công cụ AI để khám phá các thành phần OS&rdquo;, chấm qua bài thuyết trình.</div></div>
 </div>
-<h3>Có một môi trường Linux thật</h3>
+<h3>Công cụ syllabus yêu cầu</h3>
 <ul>
-  <li><strong>WSL</strong> (Windows Subsystem for Linux) — cách dễ nhất chạy Ubuntu bên trong Windows.</li>
-  <li><strong>VirtualBox + Ubuntu</strong> — một máy ảo đầy đủ, tuyệt để thử nghiệm an toàn.</li>
-  <li>Người dùng macOS/Linux đã sẵn có terminal Unix.</li>
+  <li><strong>Máy chủ hoặc máy để bàn Linux.</strong> <strong>WSL</strong> (Windows Subsystem for Linux) là cách dễ nhất chạy Ubuntu trong Windows; <strong>VirtualBox + Ubuntu</strong> cho một máy ảo đầy đủ để thử nghiệm an toàn; người dùng macOS/Linux đã sẵn có terminal Unix.</li>
+  <li><strong>Trình mô phỏng MARIE</strong> — máy tích luỹ đơn giản, dùng để thấy tận mắt chu trình nạp/thực thi lệnh và ngắt (chương 1, ôn phần cứng).</li>
+  <li><strong>Công cụ AI</strong> — ChatGPT, Copilot, Gamma — cùng các phần mềm mô phỏng khác, phục vụ CLO11 và làm bài thuyết trình.</li>
+  <li>Kết nối Internet.</li>
 </ul>
 <h3>Cách học một môn hai phần</h3>
 <div class="lz-flow">
@@ -900,7 +912,7 @@ Waiting: P1 = 0−0 = 0 · P2 = 7−2 = 5 · P3 = 11−4 = 7 · P4 = 12−5 = 7<
 <div class="out">At t=0 only P1 has arrived → run it to 7. At t=7 the queue holds P2(4), P3(1), P4(4) → pick the shortest, P3.<br>
 <b>Gantt:</b> | P1 0–7 | P3 7–8 | P2 8–12 | P4 12–16 |<br>
 Waiting: P1 = 0 · P3 = 8−1−4 = 3 · P2 = 8−2 = 6 · P4 = 12−5 = 7<br>
-<b>Average waiting = (0+6+3+7)/4 = 4.0</b> — provably the minimum for non-preemptive scheduling.<br>
+<b>Average waiting = (0+6+3+7)/4 = 4.0</b> — SJF minimises the average waiting time <em>when every job is available at the same instant</em>; with staggered arrivals like this one it is a good heuristic, not a proven optimum (SRTF below beats it).<br>
 <b>The catch:</b> it needs the burst time in advance, which the OS never knows. Real systems <em>estimate</em> it with an exponential average of past bursts.</div>
 
 <h3>3 · SRTF — shortest remaining time first (preemptive SJF)</h3>
@@ -910,11 +922,16 @@ Waiting: P1 = 16−0−7 = 9 · P2 = 7−2−4 = 1 · P3 = 5−4−1 = 0 · P4 =
 <b>Average waiting = (9+1+0+2)/4 = 3.0</b> — the best of all six, at the price of more context switches and possible <b>starvation</b> of the long P1.</div>
 
 <h3>4 · Round Robin, quantum = 3</h3>
-<div class="out">Ready queue evolves as processes arrive during each slice.<br>
-<b>Gantt:</b> | P1 0–3 | P2 3–6 | P3 6–7 | P4 7–10 | P1 10–13 | P2 13–14 | P4 14–15 | P1 15–16 |<br>
-Finish times: P3 = 7, P2 = 14, P4 = 15, P1 = 16<br>
-Waiting: P1 = 16−0−7 = 9 · P2 = 14−2−4 = 8 · P3 = 7−4−1 = 2 · P4 = 15−5−4 = 6<br>
-<b>Average waiting = 6.25</b> — worse on average, but <b>response time is excellent</b>: every process runs within one round. That is the trade interactive systems want.<br>
+<div class="out">The ready queue is FIFO. A process preempted at time <i>t</i> re-joins the <b>back</b> of the queue — <em>after</em> everything that arrived up to and including <i>t</i>. Getting that ordering right is the whole exercise.<br>
+t=0 queue [P1] → run <b>P1 0–3</b> (4 left). P2 arrived at t=2, so at t=3 the queue is [P2, P1].<br>
+Run <b>P2 3–6</b> (1 left). P3 (t=4) and P4 (t=5) arrived during that slice → queue [P1, P3, P4, P2].<br>
+Run <b>P1 6–9</b> (1 left) → queue [P3, P4, P2, P1].<br>
+Run <b>P3 9–10</b> — finished (burst 1) → queue [P4, P2, P1].<br>
+Run <b>P4 10–13</b> (1 left) → queue [P2, P1, P4]. Then <b>P2 13–14</b> finished, <b>P1 14–15</b> finished, <b>P4 15–16</b> finished.<br>
+<b>Gantt:</b> | P1 0–3 | P2 3–6 | P1 6–9 | P3 9–10 | P4 10–13 | P2 13–14 | P1 14–15 | P4 15–16 |<br>
+Finish times: P3 = 10, P2 = 14, P1 = 15, P4 = 16<br>
+Waiting: P1 = 15−0−7 = 8 · P2 = 14−2−4 = 8 · P3 = 10−4−1 = 5 · P4 = 16−5−4 = 7<br>
+<b>Average waiting = (8+8+5+7)/4 = 7.0</b> — the worst average of the six, but <b>response time is excellent</b>: every process gets the CPU within one round (responses 0, 1, 5, 5 — nobody waits behind a whole long burst). That is the trade interactive systems want.<br>
 <b>Choosing the quantum:</b> too large → it degenerates into FCFS; too small → context-switch overhead dominates. Rule of thumb: 80% of bursts should finish within one quantum; typical values are 10–100 ms.</div>
 
 <h3>5 · Priority (non-preemptive) and 6 · MLFQ</h3>
@@ -928,7 +945,7 @@ Gantt: | P1 0–7 | P2 7–11 | P4 11–15 | P3 15–16 | → waiting = (0 + 5 +
 <tr><td>FCFS</td><td>4.75</td><td>no</td><td>no</td><td>batch, simplicity</td></tr>
 <tr><td>SJF</td><td>4.00</td><td>no</td><td>possible</td><td>known short jobs</td></tr>
 <tr><td><b>SRTF</b></td><td><b>3.00</b></td><td>yes</td><td>possible</td><td>minimising average wait</td></tr>
-<tr><td>RR (q=3)</td><td>6.25</td><td>yes</td><td><b>no</b></td><td>interactive systems</td></tr>
+<tr><td>RR (q=3)</td><td>7.00</td><td>yes</td><td><b>no</b></td><td>interactive systems</td></tr>
 <tr><td>Priority</td><td>5.50</td><td>either</td><td>yes (use ageing)</td><td>real-time, importance</td></tr>
 <tr><td>MLFQ</td><td>adaptive</td><td>yes</td><td>no (with boosting)</td><td><b>general purpose</b></td></tr>
 </tbody></table>
@@ -962,7 +979,7 @@ Chờ: P1 = 0−0 = 0 · P2 = 7−2 = 5 · P3 = 11−4 = 7 · P4 = 12−5 = 7<br
 <div class="out">Tại t=0 chỉ P1 đã đến → chạy tới 7. Tại t=7 hàng đợi có P2(4), P3(1), P4(4) → chọn ngắn nhất là P3.<br>
 <b>Gantt:</b> | P1 0–7 | P3 7–8 | P2 8–12 | P4 12–16 |<br>
 Chờ: P1 = 0 · P3 = 8−1−4 = 3 · P2 = 8−2 = 6 · P4 = 12−5 = 7<br>
-<b>Chờ trung bình = (0+6+3+7)/4 = 4,0</b> — chứng minh được là nhỏ nhất trong lớp không chiếm quyền.<br>
+<b>Chờ trung bình = (0+6+3+7)/4 = 4,0</b> — SJF tối tiểu thời gian chờ trung bình <em>khi mọi việc đều sẵn sàng cùng một lúc</em>; với các thời điểm đến lệch nhau như ở đây nó chỉ là heuristic tốt, không phải tối ưu đã chứng minh (SRTF bên dưới còn tốt hơn).<br>
 <b>Chỗ vướng:</b> nó cần biết trước thời gian chạy, thứ mà OS không bao giờ biết. Hệ thống thật <em>ước lượng</em> bằng trung bình mũ của các lần chạy trước.</div>
 
 <h3>3 · SRTF — thời gian còn lại ngắn nhất trước (SJF có chiếm quyền)</h3>
@@ -972,11 +989,16 @@ Chờ: P1 = 16−0−7 = 9 · P2 = 7−2−4 = 1 · P3 = 5−4−1 = 0 · P4 = 1
 <b>Chờ trung bình = (9+1+0+2)/4 = 3,0</b> — tốt nhất trong sáu cách, đổi lại nhiều lần chuyển ngữ cảnh hơn và nguy cơ <b>đói tài nguyên</b> cho P1 dài.</div>
 
 <h3>4 · Round Robin, lượng tử = 3</h3>
-<div class="out">Hàng đợi sẵn sàng biến động khi các tiến trình đến trong từng lát thời gian.<br>
-<b>Gantt:</b> | P1 0–3 | P2 3–6 | P3 6–7 | P4 7–10 | P1 10–13 | P2 13–14 | P4 14–15 | P1 15–16 |<br>
-Thời điểm kết thúc: P3 = 7, P2 = 14, P4 = 15, P1 = 16<br>
-Chờ: P1 = 16−0−7 = 9 · P2 = 14−2−4 = 8 · P3 = 7−4−1 = 2 · P4 = 15−5−4 = 6<br>
-<b>Chờ trung bình = 6,25</b> — trung bình thì tệ hơn, nhưng <b>thời gian đáp ứng rất tốt</b>: mọi tiến trình đều được chạy trong vòng một lượt. Đó đúng là thứ hệ tương tác cần.<br>
+<div class="out">Hàng đợi sẵn sàng là FIFO. Tiến trình bị chiếm quyền tại thời điểm <i>t</i> quay lại <b>cuối</b> hàng đợi — <em>sau</em> mọi tiến trình đã đến tính tới và bao gồm <i>t</i>. Xếp đúng thứ tự đó chính là toàn bộ bài tập.<br>
+t=0 hàng đợi [P1] → chạy <b>P1 0–3</b> (còn 4). P2 đến lúc t=2, nên tại t=3 hàng đợi là [P2, P1].<br>
+Chạy <b>P2 3–6</b> (còn 1). P3 (t=4) và P4 (t=5) đến trong lát đó → hàng đợi [P1, P3, P4, P2].<br>
+Chạy <b>P1 6–9</b> (còn 1) → hàng đợi [P3, P4, P2, P1].<br>
+Chạy <b>P3 9–10</b> — xong (chạy 1) → hàng đợi [P4, P2, P1].<br>
+Chạy <b>P4 10–13</b> (còn 1) → hàng đợi [P2, P1, P4]. Rồi <b>P2 13–14</b> xong, <b>P1 14–15</b> xong, <b>P4 15–16</b> xong.<br>
+<b>Gantt:</b> | P1 0–3 | P2 3–6 | P1 6–9 | P3 9–10 | P4 10–13 | P2 13–14 | P1 14–15 | P4 15–16 |<br>
+Thời điểm kết thúc: P3 = 10, P2 = 14, P1 = 15, P4 = 16<br>
+Chờ: P1 = 15−0−7 = 8 · P2 = 14−2−4 = 8 · P3 = 10−4−1 = 5 · P4 = 16−5−4 = 7<br>
+<b>Chờ trung bình = (8+8+5+7)/4 = 7,0</b> — trung bình tệ nhất trong sáu cách, nhưng <b>thời gian đáp ứng rất tốt</b>: mọi tiến trình đều được CPU trong vòng một lượt (đáp ứng 0, 1, 5, 5 — không ai phải chờ hết một lượt chạy dài). Đó đúng là thứ hệ tương tác cần.<br>
 <b>Chọn lượng tử:</b> quá lớn → suy biến thành FCFS; quá nhỏ → chi phí chuyển ngữ cảnh lấn át. Kinh nghiệm: 80% các lần chạy nên kết thúc gọn trong một lượng tử; giá trị điển hình 10–100 mili-giây.</div>
 
 <h3>5 · Ưu tiên (không chiếm quyền) và 6 · MLFQ</h3>
@@ -990,7 +1012,7 @@ Gantt: | P1 0–7 | P2 7–11 | P4 11–15 | P3 15–16 | → chờ = (0 + 5 + 1
 <tr><td>FCFS</td><td>4,75</td><td>không</td><td>không</td><td>xử lý theo lô, cần đơn giản</td></tr>
 <tr><td>SJF</td><td>4,00</td><td>không</td><td>có thể</td><td>biết trước việc ngắn</td></tr>
 <tr><td><b>SRTF</b></td><td><b>3,00</b></td><td>có</td><td>có thể</td><td>tối tiểu thời gian chờ trung bình</td></tr>
-<tr><td>RR (q=3)</td><td>6,25</td><td>có</td><td><b>không</b></td><td>hệ tương tác</td></tr>
+<tr><td>RR (q=3)</td><td>7,00</td><td>có</td><td><b>không</b></td><td>hệ tương tác</td></tr>
 <tr><td>Ưu tiên</td><td>5,50</td><td>tuỳ bản</td><td>có (phải lão hoá)</td><td>thời gian thực, phân biệt tầm quan trọng</td></tr>
 <tr><td>MLFQ</td><td>thích nghi</td><td>có</td><td>không (nếu có nâng bậc)</td><td><b>đa dụng</b></td></tr>
 </tbody></table>
@@ -1183,7 +1205,7 @@ To eat, a philosopher needs BOTH the fork on the left and the one on the right.<
 
 <div class="pitfall"><b>A solution that avoids deadlock can still starve someone.</b> If two neighbours alternate perfectly, the philosopher between them may never eat, even though the system never freezes. Deadlock-freedom and starvation-freedom are separate properties, and the exam asks about both.</div>
 
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Monitors and channels: making the mistakes impossible instead of forbidden.</b> Semaphores are error-prone because correctness depends on the programmer placing every <span class="badge">down</span> and <span class="badge">up</span> exactly right — one swapped line deadlocks. A <b>monitor</b> (Hoare, 1974) moves the lock into the language: the compiler guarantees only one thread is inside, and <span class="badge">wait</span>/<span class="badge">notify</span> handle the conditions — Java's <span class="badge">synchronized</span> is a monitor. Go goes further with the slogan "do not communicate by sharing memory; share memory by communicating": a channel <em>is</em> a bounded buffer, so the producer–consumer solution above is one line, <span class="badge">ch &lt;- item</span>, with no semaphores to misorder. <em>Beyond syllabus because the course teaches the mechanism, while language design has been trying to remove the need for the mechanism ever since.</em></div>
+<div class="callout"><span class="badge">Syllabus §2.3 · session 12</span> <b>Monitors and channels: making the mistakes impossible instead of forbidden.</b> Semaphores are error-prone because correctness depends on the programmer placing every <span class="badge">down</span> and <span class="badge">up</span> exactly right — one swapped line deadlocks. A <b>monitor</b> (Hoare, 1974) moves the lock into the language: the compiler guarantees only one thread is inside, and <span class="badge">wait</span>/<span class="badge">notify</span> handle the conditions — Java's <span class="badge">synchronized</span> is a monitor. Go goes further with the slogan "do not communicate by sharing memory; share memory by communicating": a channel <em>is</em> a bounded buffer, so the producer–consumer solution above is one line, <span class="badge">ch &lt;- item</span>, with no semaphores to misorder. <em>Monitors are part of Tanenbaum §2.3 Interprocess Communication (session 12) and can be asked about directly; channels are the same idea carried into a modern language.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.6</span>
@@ -1245,7 +1267,7 @@ Muốn ăn, mỗi triết gia cần CẢ chiếc bên trái lẫn chiếc bên p
 
 <div class="pitfall"><b>Một lời giải tránh được khoá chết vẫn có thể bỏ đói ai đó.</b> Nếu hai người hàng xóm luân phiên hoàn hảo, triết gia ở giữa họ có thể không bao giờ được ăn, dù hệ thống chẳng bao giờ đứng hình. Không-khoá-chết và không-đói-tài-nguyên là hai tính chất riêng biệt, và đề thi hỏi cả hai.</div>
 
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Monitor và channel: làm cho sai lầm trở nên bất khả thay vì bị cấm.</b> Semaphore dễ sai vì tính đúng đắn phụ thuộc vào việc lập trình viên đặt từng lệnh <span class="badge">down</span> và <span class="badge">up</span> chính xác — đảo một dòng là khoá chết. <b>Monitor</b> (Hoare, 1974) đưa cái khoá vào trong ngôn ngữ: trình biên dịch đảm bảo chỉ một luồng ở bên trong, còn <span class="badge">wait</span>/<span class="badge">notify</span> lo phần điều kiện — từ khoá <span class="badge">synchronized</span> của Java chính là một monitor. Go còn đi xa hơn với khẩu hiệu "đừng giao tiếp bằng cách dùng chung bộ nhớ; hãy dùng chung bộ nhớ bằng cách giao tiếp": một channel <em>chính là</em> bộ đệm có giới hạn, nên lời giải sản xuất–tiêu thụ ở trên rút còn một dòng <span class="badge">ch &lt;- item</span>, không còn semaphore nào để đặt sai thứ tự. <em>Ngoài giáo trình vì môn học dạy cơ chế, còn ngành thiết kế ngôn ngữ thì từ đó tới nay vẫn đang cố xoá bỏ nhu cầu dùng cơ chế ấy.</em></div>
+<div class="callout"><span class="badge">Syllabus §2.3 · session 12</span> <b>Monitor và channel: làm cho sai lầm trở nên bất khả thay vì bị cấm.</b> Semaphore dễ sai vì tính đúng đắn phụ thuộc vào việc lập trình viên đặt từng lệnh <span class="badge">down</span> và <span class="badge">up</span> chính xác — đảo một dòng là khoá chết. <b>Monitor</b> (Hoare, 1974) đưa cái khoá vào trong ngôn ngữ: trình biên dịch đảm bảo chỉ một luồng ở bên trong, còn <span class="badge">wait</span>/<span class="badge">notify</span> lo phần điều kiện — từ khoá <span class="badge">synchronized</span> của Java chính là một monitor. Go còn đi xa hơn với khẩu hiệu "đừng giao tiếp bằng cách dùng chung bộ nhớ; hãy dùng chung bộ nhớ bằng cách giao tiếp": một channel <em>chính là</em> bộ đệm có giới hạn, nên lời giải sản xuất–tiêu thụ ở trên rút còn một dòng <span class="badge">ch &lt;- item</span>, không còn semaphore nào để đặt sai thứ tự. <em>Monitor thuộc Tanenbaum §2.3 Interprocess Communication (session 12) và có thể bị hỏi trực tiếp; channel là chính ý tưởng đó mang vào một ngôn ngữ hiện đại.</em></div>
 </div>
 `,
         },
@@ -1299,7 +1321,7 @@ Muốn ăn, mỗi triết gia cần CẢ chiếc bên trái lẫn chiếc bên p
 </div>
 <h3>Virtual memory bigger than RAM</h3>
 <p>Because not all pages are needed at once, inactive pages can be stored on disk (in the <strong>swap</strong> area). A program can use more virtual memory than the physical RAM exists — the OS shuffles pages between RAM and disk as needed.</p>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The TLB is what makes paging fast.</b> Every memory access needs a page-table lookup — but walking a multi-level page table on each load would be ruinously slow. Hardware solves it with the <strong>TLB (Translation Lookaside Buffer)</strong>, a tiny cache of recent virtual-to-physical translations right inside the MMU. TLB hits make paging nearly free; a context switch that flushes the TLB is one hidden reason switching processes is expensive. <em>Tanenbaum shows the page table, but the TLB is what makes paging fast enough to be usable at all.</em></div>
+<div class="callout"><span class="badge">Syllabus §3.3 · session 25</span> <b>The TLB is what makes paging fast.</b> Every memory access needs a page-table lookup — but walking a multi-level page table on each load would be ruinously slow. Hardware solves it with the <strong>TLB (Translation Lookaside Buffer)</strong>, a tiny cache of recent virtual-to-physical translations right inside the MMU. TLB hits make paging nearly free; a context switch that flushes the TLB is one hidden reason switching processes is expensive. <em>The TLB is core §3.3 Virtual Memory material — lesson 3.3 teaches it in full, with the effective-access-time calculation the progress test asks for.</em></div>
 <div class="callout ok">This is why you can run many big apps on 8 GB of RAM: the OS keeps only the actively-used pages in RAM and parks the rest on disk. Paging is one of the most elegant ideas in operating systems — it gives isolation, protection and the illusion of huge memory all at once.</div>
 </div>
 <div class="ml-vi">
@@ -1315,7 +1337,7 @@ Muốn ăn, mỗi triết gia cần CẢ chiếc bên trái lẫn chiếc bên p
 </div>
 <h3>Bộ nhớ ảo lớn hơn RAM</h3>
 <p>Vì không phải mọi trang đều cần cùng lúc, các trang không hoạt động có thể lưu trên đĩa (trong vùng <strong>swap</strong>). Một chương trình dùng được nhiều bộ nhớ ảo hơn RAM vật lý có — OS xáo các trang giữa RAM và đĩa khi cần.</p>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>TLB là thứ làm phân trang nhanh.</b> Mỗi lần truy cập bộ nhớ đều cần tra bảng trang — nhưng duyệt một bảng trang nhiều tầng ở mỗi lần nạp sẽ chậm khủng khiếp. Phần cứng giải bằng <strong>TLB (Translation Lookaside Buffer)</strong>, một cache nhỏ chứa các bản dịch ảo→vật lý gần đây ngay trong MMU. TLB trúng làm phân trang gần như miễn phí; một context switch làm xả TLB là một lý do ẩn khiến chuyển tiến trình tốn kém. <em>Tanenbaum trình bày bảng trang, nhưng chính TLB mới làm phân trang đủ nhanh để dùng được.</em></div>
+<div class="callout"><span class="badge">Syllabus §3.3 · session 25</span> <b>TLB là thứ làm phân trang nhanh.</b> Mỗi lần truy cập bộ nhớ đều cần tra bảng trang — nhưng duyệt một bảng trang nhiều tầng ở mỗi lần nạp sẽ chậm khủng khiếp. Phần cứng giải bằng <strong>TLB (Translation Lookaside Buffer)</strong>, một cache nhỏ chứa các bản dịch ảo→vật lý gần đây ngay trong MMU. TLB trúng làm phân trang gần như miễn phí; một context switch làm xả TLB là một lý do ẩn khiến chuyển tiến trình tốn kém. <em>TLB là nội dung cốt lõi của §3.3 Bộ nhớ ảo — bài 3.3 dạy đầy đủ, kèm phép tính thời gian truy cập hiệu dụng mà progress test hay hỏi.</em></div>
 <div class="callout ok">Đây là lý do bạn chạy được nhiều app lớn trên 8 GB RAM: OS chỉ giữ các trang đang dùng trong RAM và gửi phần còn lại lên đĩa. Phân trang là một trong những ý tưởng thanh lịch nhất của hệ điều hành — nó cho cô lập, bảo vệ và ảo giác bộ nhớ khổng lồ cùng một lúc.</div>
 </div>
 `,
@@ -1351,7 +1373,7 @@ Muốn ăn, mỗi triết gia cần CẢ chiếc bên trái lẫn chiếc bên p
 <h3>Worked example · FIFO vs LRU on the same reference string</h3>
 <div class="out"><b>Given:</b> reference string 7, 0, 1, 2, 0, 3, 0, 4, 2, 3, with 3 frames.<br><b>FIFO</b> (evict the oldest-loaded): 7→[7] fault · 0→[7,0] fault · 1→[7,0,1] fault · 2→evict 7 (oldest)→[0,1,2] fault · 0→hit (already in) · 3→evict 0→[1,2,3] fault · 0→evict 1→[2,3,0] fault · 4→evict 2→[3,0,4] fault · 2→evict 3→[0,4,2] fault · 3→evict 0→[4,2,3] fault → <b>9 faults</b>.<br><b>LRU</b> (evict least-recently-used): 7→fault · 0→fault · 1→fault · 2→evict 7 (LRU)→fault · 0→hit, refresh 0's recency · 3→evict 1 (now LRU, not 7)→fault · 0→hit · 4→evict 2 (LRU)→fault · 2→evict 3 (LRU)→fault · 3→evict 0 (LRU)→fault → <b>8 faults</b>.<br><b>Reading the result:</b> LRU beats FIFO by one fault here because it kept page 0 in memory (recently reused) instead of evicting it purely by age — exactly the locality bet FIFO ignores.</div>
 <div class="pitfall">If a system has too little RAM for its workload, it spends all its time swapping pages in and out instead of doing real work — this is <strong>thrashing</strong>. The machine grinds to a halt even though the CPU is "busy." Adding RAM or running fewer programs fixes it.</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Belady's anomaly — more RAM, more faults.</b> You would expect adding frames to always reduce page faults, but with <strong>FIFO</strong> replacement that is not guaranteed: <strong>Belady's anomaly</strong> is a real reference string where adding a frame <em>increases</em> the number of faults. LRU and other "stack algorithms" are provably immune — a deep reason production kernels approximate LRU with the <em>clock</em> algorithm and never use FIFO. <em>A counter-intuitive theorem the syllabus rarely proves, yet it explains why FIFO is abandoned in practice.</em></div>
+<div class="callout"><span class="badge">Syllabus §3.4 · session 26</span> <b>Belady's anomaly — more RAM, more faults.</b> You would expect adding frames to always reduce page faults, but with <strong>FIFO</strong> replacement that is not guaranteed: <strong>Belady's anomaly</strong> is a real reference string where adding a frame <em>increases</em> the number of faults. LRU and other "stack algorithms" are provably immune — a deep reason production kernels approximate LRU with the <em>clock</em> algorithm and never use FIFO. <em>Belady's anomaly belongs to §3.4 Page Replacement (session 26) — it is examinable, and it explains why FIFO is abandoned in practice.</em></div>
 <div class="note-ct">Notice the deep parallel with CEA201&#39;s cache: RAM caches the disk, cache caches RAM. Page replacement (LRU) and cache replacement are the same idea at different levels of the memory hierarchy.</div>
 </div>
 <div class="ml-vi">
@@ -1372,7 +1394,7 @@ Muốn ăn, mỗi triết gia cần CẢ chiếc bên trái lẫn chiếc bên p
 <h3>Ví dụ có lời giải · FIFO vs LRU trên cùng chuỗi tham chiếu</h3>
 <div class="out"><b>Đề bài:</b> chuỗi tham chiếu 7, 0, 1, 2, 0, 3, 0, 4, 2, 3, với 3 khung.<br><b>FIFO</b> (đẩy trang nạp lâu nhất): 7→[7] lỗi · 0→[7,0] lỗi · 1→[7,0,1] lỗi · 2→đẩy 7 (cũ nhất)→[0,1,2] lỗi · 0→trúng (đã có) · 3→đẩy 0→[1,2,3] lỗi · 0→đẩy 1→[2,3,0] lỗi · 4→đẩy 2→[3,0,4] lỗi · 2→đẩy 3→[0,4,2] lỗi · 3→đẩy 0→[4,2,3] lỗi → <b>9 lỗi trang</b>.<br><b>LRU</b> (đẩy trang lâu không dùng nhất): 7→lỗi · 0→lỗi · 1→lỗi · 2→đẩy 7 (LRU)→lỗi · 0→trúng, làm mới độ "gần đây" của 0 · 3→đẩy 1 (giờ là LRU, không phải 7)→lỗi · 0→trúng · 4→đẩy 2 (LRU)→lỗi · 2→đẩy 3 (LRU)→lỗi · 3→đẩy 0 (LRU)→lỗi → <b>8 lỗi trang</b>.<br><b>Đọc kết quả:</b> LRU thắng FIFO 1 lỗi ở đây vì nó giữ trang 0 trong bộ nhớ (vừa dùng lại) thay vì đẩy nó chỉ vì tuổi — đúng cái cược cục bộ mà FIFO bỏ qua.</div>
 <div class="pitfall">Nếu một hệ thống có quá ít RAM cho khối lượng công việc, nó dành hết thời gian swap trang ra/vào thay vì làm việc thật — đây là <strong>thrashing</strong>. Máy đứng hình dù CPU "bận." Thêm RAM hoặc chạy ít chương trình hơn để chữa.</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Nghịch lý Belady — thêm RAM, nhiều lỗi hơn.</b> Bạn sẽ nghĩ thêm khung luôn giảm lỗi trang, nhưng với thay trang <strong>FIFO</strong> điều đó không được bảo đảm: <strong>nghịch lý Belady (Belady's anomaly)</strong> là một chuỗi tham chiếu thật mà thêm một khung lại <em>làm tăng</em> số lỗi trang. LRU và các "thuật toán ngăn xếp" khác miễn nhiễm điều này (chứng minh được) — một lý do sâu vì sao kernel thật xấp xỉ LRU bằng thuật toán <em>clock</em> và không bao giờ dùng FIFO. <em>Một định lý phản trực giác syllabus hiếm khi chứng minh, nhưng nó giải thích vì sao FIFO bị bỏ trong thực tế.</em></div>
+<div class="callout"><span class="badge">Syllabus §3.4 · session 26</span> <b>Nghịch lý Belady — thêm RAM, nhiều lỗi hơn.</b> Bạn sẽ nghĩ thêm khung luôn giảm lỗi trang, nhưng với thay trang <strong>FIFO</strong> điều đó không được bảo đảm: <strong>nghịch lý Belady (Belady's anomaly)</strong> là một chuỗi tham chiếu thật mà thêm một khung lại <em>làm tăng</em> số lỗi trang. LRU và các "thuật toán ngăn xếp" khác miễn nhiễm điều này (chứng minh được) — một lý do sâu vì sao kernel thật xấp xỉ LRU bằng thuật toán <em>clock</em> và không bao giờ dùng FIFO. <em>Nghịch lý Belady thuộc §3.4 Thay trang (session 26) — nó nằm trong phạm vi thi, và giải thích vì sao FIFO bị bỏ trong thực tế.</em></div>
 <div class="note-ct">Để ý song song sâu với cache CEA201: RAM cache cho đĩa, cache cache cho RAM. Thay trang (LRU) và thay cache là cùng một ý tưởng ở các tầng khác nhau của phân cấp bộ nhớ.</div>
 </div>
 `,
@@ -1634,7 +1656,7 @@ So với hoàn toàn không có TLB: mọi lần truy cập đều tốn 200 ns.
     <tr><td>Indexed (inode)</td><td>An index block lists all the file&#39;s blocks. Used by Unix/Linux — fast and flexible.</td></tr>
   </tbody>
 </table>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Journaling — surviving a crash mid-write.</b> If the power dies during a write, block and inode updates can leave the file system half-updated and corrupt. Modern file systems (ext4, NTFS, XFS) add a <strong>journal</strong>: they first log what they are about to do, then perform it, so after a crash the OS replays or discards incomplete entries. <em>That is why <code>fsck</code> on a modern disk finishes in seconds instead of scanning the whole drive — crash consistency, which the syllabus's allocation methods do not address.</em></div>
+<div class="callout"><span class="badge">Syllabus §4.3 · session 35</span> <b>Journaling — surviving a crash mid-write.</b> If the power dies during a write, block and inode updates can leave the file system half-updated and corrupt. Modern file systems (ext4, NTFS, XFS) add a <strong>journal</strong>: they first log what they are about to do, then perform it, so after a crash the OS replays or discards incomplete entries. <em>That is why <code>fsck</code> on a modern disk finishes in seconds instead of scanning the whole drive. Journaling file systems are part of §4.3 File-system implementation (session 35), so this is examinable material, not an extra.</em></div>
 <div class="note-ct">In Linux, each file has an <strong>inode</strong> holding its metadata and block pointers. The file system also tracks free space (which blocks are available). Run <code>ls -l</code> to see file metadata, and <code>df</code> to see free space — theory made visible.</div>
 </div>
 <div class="ml-vi">
@@ -1656,7 +1678,7 @@ So với hoàn toàn không có TLB: mọi lần truy cập đều tốn 200 ns.
     <tr><td>Chỉ mục (inode)</td><td>Một khối chỉ mục liệt kê mọi khối của tệp. Unix/Linux dùng — nhanh và linh hoạt.</td></tr>
   </tbody>
 </table>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Nhật ký (journaling) — sống sót khi mất điện giữa lúc ghi.</b> Nếu mất điện lúc đang ghi, cập nhật khối và inode có thể để hệ thống tệp dở dang và hỏng. Hệ thống tệp hiện đại (ext4, NTFS, XFS) thêm một <strong>nhật ký (journal)</strong>: chúng ghi trước việc sắp làm vào log, rồi mới thực hiện, nên sau sự cố OS có thể phát lại hoặc bỏ các mục dở. <em>Đó là lý do <code>fsck</code> trên đĩa hiện đại xong trong vài giây thay vì quét cả ổ — tính nhất quán khi sự cố, điều các phương pháp cấp phát trong syllabus không đề cập.</em></div>
+<div class="callout"><span class="badge">Syllabus §4.3 · session 35</span> <b>Nhật ký (journaling) — sống sót khi mất điện giữa lúc ghi.</b> Nếu mất điện lúc đang ghi, cập nhật khối và inode có thể để hệ thống tệp dở dang và hỏng. Hệ thống tệp hiện đại (ext4, NTFS, XFS) thêm một <strong>nhật ký (journal)</strong>: chúng ghi trước việc sắp làm vào log, rồi mới thực hiện, nên sau sự cố OS có thể phát lại hoặc bỏ các mục dở. <em>Đó là lý do <code>fsck</code> trên đĩa hiện đại xong trong vài giây thay vì quét cả ổ. Hệ thống tệp có nhật ký thuộc §4.3 Cài đặt hệ thống tệp (session 35), nên đây là nội dung thi, không phải phần thêm.</em></div>
 <div class="note-ct">Trong Linux, mỗi tệp có một <strong>inode</strong> giữ metadata và con trỏ khối của nó. Hệ thống tệp cũng theo dõi chỗ trống (khối nào còn dùng được). Chạy <code>ls -l</code> để thấy metadata tệp, và <code>df</code> để thấy chỗ trống — lý thuyết được nhìn thấy.</div>
 </div>
 `,
@@ -1714,7 +1736,7 @@ ln -s file.txt soft.txt   <span class="tok-comment"># a small file whose content
 
 <div class="pitfall"><b>Running out of i-nodes while the disk shows free space.</b> The i-node table is fixed at format time, so a partition full of tiny files can exhaust it: <span class="badge">df -h</span> shows 40% free while <span class="badge">df -i</span> shows 100% used, and every write fails with "No space left on device". The only fixes are deleting files or reformatting with more i-nodes — which is why mail and cache partitions are formatted with a higher i-node density.</div>
 
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Journaling: how a file system survives a power cut.</b> Updating a file touches several structures — the i-node, the data block, the free-block bitmap, the directory. A crash between them leaves the file system inconsistent, and the old repair (<span class="badge">fsck</span>) scanned the entire disk, taking hours on a large volume. A <b>journal</b> writes the intended changes to a small log first, then applies them; after a crash the OS replays or discards the log in seconds. ext4, NTFS and XFS all do this, and <span class="badge">data=ordered</span> versus <span class="badge">data=journal</span> is the trade between speed and how much data is protected. <em>Beyond syllabus because the course covers structure but not crash consistency, which is the property users actually notice.</em></div>
+<div class="callout"><span class="badge">Syllabus §4.3 · session 35</span> <b>Journaling: how a file system survives a power cut.</b> Updating a file touches several structures — the i-node, the data block, the free-block bitmap, the directory. A crash between them leaves the file system inconsistent, and the old repair (<span class="badge">fsck</span>) scanned the entire disk, taking hours on a large volume. A <b>journal</b> writes the intended changes to a small log first, then applies them; after a crash the OS replays or discards the log in seconds. ext4, NTFS and XFS all do this, and <span class="badge">data=ordered</span> versus <span class="badge">data=journal</span> is the trade between speed and how much data is protected. <em>Crash consistency is part of §4.3–4.4 (session 35), alongside the allocation methods above — expect it in the same question.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.2</span>
@@ -1763,7 +1785,7 @@ ln -s file.txt soft.txt   <span class="tok-comment"># một tệp nhỏ mà nộ
 
 <div class="pitfall"><b>Hết i-node trong khi đĩa vẫn báo còn chỗ.</b> Bảng i-node bị ấn định lúc định dạng, nên một phân vùng đầy tệp tí hon có thể làm cạn nó: <span class="badge">df -h</span> báo còn trống 40% trong khi <span class="badge">df -i</span> báo đã dùng 100%, và mọi lệnh ghi đều lỗi "No space left on device". Cách chữa duy nhất là xoá bớt tệp hoặc định dạng lại với nhiều i-node hơn — vì thế các phân vùng chứa mail và cache thường được định dạng với mật độ i-node cao hơn.</div>
 
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Nhật ký hoá: cách một hệ thống tệp sống sót qua cúp điện.</b> Cập nhật một tệp đụng vào nhiều cấu trúc — i-node, khối dữ liệu, bản đồ bit khối trống, thư mục. Sập nguồn ở giữa để lại hệ thống tệp mâu thuẫn, và cách sửa cũ (<span class="badge">fsck</span>) phải quét cả đĩa, mất hàng giờ với ổ lớn. <b>Nhật ký</b> ghi các thay đổi dự định vào một bản log nhỏ trước rồi mới áp dụng; sau sự cố, OS phát lại hoặc huỷ bản log trong vài giây. ext4, NTFS và XFS đều làm vậy, và <span class="badge">data=ordered</span> so với <span class="badge">data=journal</span> là phép đánh đổi giữa tốc độ và mức độ dữ liệu được bảo vệ. <em>Ngoài giáo trình vì môn học nói về cấu trúc chứ không nói về tính nhất quán sau sự cố, thứ mà người dùng thật sự cảm nhận được.</em></div>
+<div class="callout"><span class="badge">Syllabus §4.3 · session 35</span> <b>Nhật ký hoá: cách một hệ thống tệp sống sót qua cúp điện.</b> Cập nhật một tệp đụng vào nhiều cấu trúc — i-node, khối dữ liệu, bản đồ bit khối trống, thư mục. Sập nguồn ở giữa để lại hệ thống tệp mâu thuẫn, và cách sửa cũ (<span class="badge">fsck</span>) phải quét cả đĩa, mất hàng giờ với ổ lớn. <b>Nhật ký</b> ghi các thay đổi dự định vào một bản log nhỏ trước rồi mới áp dụng; sau sự cố, OS phát lại hoặc huỷ bản log trong vài giây. ext4, NTFS và XFS đều làm vậy, và <span class="badge">data=ordered</span> so với <span class="badge">data=journal</span> là phép đánh đổi giữa tốc độ và mức độ dữ liệu được bảo vệ. <em>Tính nhất quán sau sự cố thuộc §4.3–4.4 (session 35), cùng chỗ với các phương pháp cấp phát ở trên — hãy chờ nó trong cùng một câu hỏi.</em></div>
 </div>
 `,
         },
@@ -2345,8 +2367,8 @@ name=<span class="tok-string">"OSG202"</span>              <span class="tok-comm
     },
     /* ══════════════════ NÂNG CAO 1 — OS HIỆN ĐẠI (CAPSTONE) ══════════════════ */
     {
-      title: 'Advanced 1 — Virtualization, containers & modern OS|||Nâng cao 1 — Ảo hoá, container & OS hiện đại',
-      description: 'Ngoài giáo trình — bài tổng kết: OS mở rộng thành cloud và Docker ra sao.',
+      title: 'Advanced 1 — Virtualization & the cloud (presentation topic)|||Nâng cao 1 — Ảo hoá & đám mây (chủ đề thuyết trình)',
+      description: 'Tanenbaum Ch.7 — một trong ba chủ đề thuyết trình chính thức của syllabus (session 27 chọn đề, 55–59 trình bày, 20% điểm): OS mở rộng thành cloud và Docker ra sao.',
       lessons: [
         {
           title: 'N1.1 — From OS concepts to the cloud|||N1.1 — Từ khái niệm OS tới đám mây',
@@ -2357,7 +2379,7 @@ name=<span class="tok-string">"OSG202"</span>              <span class="tok-comm
 <div class="ml-en">
 <span class="eyebrow">Advanced 1 · Lesson N1.1</span>
 <h2>The OS ideas that power the cloud</h2>
-<p class="lead">Everything in OSG202 — processes, memory isolation, scheduling, file systems — scales up into the technology running the modern internet. This capstone connects your OS knowledge to virtualization, containers and the cloud.</p>
+<p class="lead">Everything in OSG202 — processes, memory isolation, scheduling, file systems — scales up into the technology running the modern internet. This lesson connects your OS knowledge to virtualization, containers and the cloud. It is not an extra: <strong>Tanenbaum Ch.7 &ldquo;Virtualization and the Cloud&rdquo; is one of the three official presentation topics</strong> (with Ch.10 UNIX/Linux/Android and Ch.11 Windows), chosen in session 27 and presented in sessions 55–59 for <strong>20% of your grade</strong>.</p>
 <div class="lz-stack">
   <div class="lz-layer"><div class="lz-lt">Virtual machines</div><div class="lz-ld">One physical machine runs several complete OSes at once, each isolated. A <em>hypervisor</em> does for whole operating systems what the OS does for processes — resource management, one level up.</div></div>
   <div class="lz-layer"><div class="lz-lt">Containers (Docker)</div><div class="lz-ld">A lighter isolation: containers share one Linux kernel but each gets its own isolated processes, files and network. Built directly from OS features (namespaces &amp; cgroups). This Academy runs in containers.</div></div>
@@ -2374,7 +2396,7 @@ name=<span class="tok-string">"OSG202"</span>              <span class="tok-comm
 <div class="ml-vi">
 <span class="eyebrow">Nâng cao 1 · Bài N1.1</span>
 <h2>Các ý tưởng OS vận hành đám mây</h2>
-<p class="lead">Mọi thứ trong OSG202 — tiến trình, cô lập bộ nhớ, lập lịch, hệ thống tệp — mở rộng thành công nghệ chạy internet hiện đại. Bài tổng kết này nối kiến thức OS của bạn với ảo hoá, container và đám mây.</p>
+<p class="lead">Mọi thứ trong OSG202 — tiến trình, cô lập bộ nhớ, lập lịch, hệ thống tệp — mở rộng thành công nghệ chạy internet hiện đại. Bài này nối kiến thức OS của bạn với ảo hoá, container và đám mây. Đây không phải phần thêm: <strong>Chương 7 &ldquo;Virtualization and the Cloud&rdquo; của Tanenbaum là một trong ba chủ đề thuyết trình chính thức</strong> (cùng Ch.10 UNIX/Linux/Android và Ch.11 Windows), chọn ở session 27 và trình bày ở session 55–59, chiếm <strong>20% điểm</strong>.</p>
 <div class="lz-stack">
   <div class="lz-layer"><div class="lz-lt">Máy ảo (VM)</div><div class="lz-ld">Một máy vật lý chạy nhiều OS hoàn chỉnh cùng lúc, mỗi cái cô lập. Một <em>hypervisor</em> làm cho cả các hệ điều hành điều mà OS làm cho tiến trình — quản lý tài nguyên, thêm một tầng.</div></div>
   <div class="lz-layer"><div class="lz-lt">Container (Docker)</div><div class="lz-ld">Cô lập nhẹ hơn: container chia sẻ một kernel Linux nhưng mỗi cái có tiến trình, tệp và mạng cô lập riêng. Xây trực tiếp từ tính năng OS (namespace &amp; cgroups). Academy này chạy trong container.</div></div>
@@ -2394,14 +2416,14 @@ name=<span class="tok-string">"OSG202"</span>              <span class="tok-comm
     },
     {
       "title": "Final Exam|||Thi cuối kỳ",
-      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "description": "Thi cuối kỳ FE: trắc nghiệm máy chấm, 60 phút, 40% điểm môn, phải đạt ≥4/10, thi LO1–LO6. Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
       "lessons": [
         {
-          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "title": "FE — Final Exam (multiple choice, 60 min, 40%)|||FE — Thi cuối kỳ (trắc nghiệm, 60 phút, 40%)",
           "slug": "osg202-final-exam-fe",
           "type": "article",
-          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "description": "Số liệu thật của syllabus cho bài thi cuối OSG202: 40%, 60 phút, trắc nghiệm, phải đạt ≥4, thi LO1–LO6 + câu mẫu.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (multiple choice, 60 minutes, 40%)</h2>\n<p class=\"lead\">These are the syllabus's own numbers for the OSG202 final, not a guess:</p>\n<table>\n<thead><tr><th>Field</th><th>Value (syllabus ID 13166)</th></tr></thead>\n<tbody>\n<tr><td>Weight</td><td><strong>40%</strong> of the subject</td></tr>\n<tr><td>Duration</td><td><strong>60 minutes</strong></td></tr>\n<tr><td>Question type</td><td><strong>Multiple choice</strong>, computer-marked</td></tr>\n<tr><td>Parts</td><td>1</td></tr>\n<tr><td>Completion criterion</td><td>Score <strong>&ge; 4</strong>/10 &mdash; below that you fail the subject whatever your average</td></tr>\n<tr><td>Learning outcomes examined</td><td><strong>LO1&ndash;LO6</strong>: OS concepts, process management, memory management, file systems, I/O systems, deadlock</td></tr>\n<tr><td>Number of questions</td><td>Not published in the syllabus &mdash; check the FLM for your term</td></tr>\n</tbody>\n</table>\n<div class=\"callout warn\"><span class=\"badge\">What is NOT examined here</span> LO7&ndash;LO10 (Linux, shell commands, shell language, C on Linux) are assessed by the <strong>4 labs</strong>, and LO11 (AI tools) by the <strong>presentation</strong>. So the final is a pure concepts paper &mdash; chapters 1&ndash;6 of Tanenbaum, no terminal, no code to write.</div>\n<h3>What 60 minutes of LO1&ndash;LO6 actually contains</h3>\n<ul>\n<li><b>Definitions and distinctions</b> &mdash; process vs thread, mode switch vs context switch, internal vs external fragmentation, deadlock vs starvation vs livelock. Lessons 1.1&ndash;1.4, 2.1&ndash;2.2, 6.1.</li>\n<li><b>Calculations.</b> Scheduling Gantt charts and average waiting time (lesson 2.4), address translation and effective access time with a TLB (lesson 3.3), page-fault counts for FIFO/LRU/OPT (lesson 3.2), disk-arm movement totals (lesson 5.2), Banker's safe sequence (lesson 6.2). These are the items that separate grades &mdash; do them with a pen, not by reading.</li>\n<li><b>Mechanism questions</b> &mdash; what a system call does step by step, what the i-node points at, what the four Coffman conditions are and which one each prevention strategy breaks.</li>\n</ul>\n<h3>How to spend the 60 minutes</h3>\n<ul>\n<li>Answer every definition item first; bank the certain marks before any calculation.</li>\n<li>Do calculations on paper &mdash; a Gantt chart drawn in the margin catches the \"waiting = turnaround &minus; burst\" trap that the pitfall box in lesson 2.4 warns about.</li>\n<li>Eliminate clearly wrong options, then choose. Never leave a gated paper blank.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. Real past papers are added in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi cuối kỳ (trắc nghiệm, 60 phút, 40%)</h2>\n<p class=\"lead\">Đây là số liệu của chính syllabus cho bài thi cuối OSG202, không phải phỏng đoán:</p>\n<table>\n<thead><tr><th>Mục</th><th>Giá trị (syllabus ID 13166)</th></tr></thead>\n<tbody>\n<tr><td>Trọng số</td><td><strong>40%</strong> điểm môn</td></tr>\n<tr><td>Thời lượng</td><td><strong>60 phút</strong></td></tr>\n<tr><td>Dạng câu hỏi</td><td><strong>Trắc nghiệm</strong>, máy chấm</td></tr>\n<tr><td>Số phần</td><td>1</td></tr>\n<tr><td>Điều kiện hoàn thành</td><td>Đạt <strong>&ge; 4</strong>/10 &mdash; dưới mức đó là trượt môn dù trung bình bao nhiêu</td></tr>\n<tr><td>Chuẩn đầu ra được thi</td><td><strong>LO1&ndash;LO6</strong>: khái niệm OS, quản lý tiến trình, quản lý bộ nhớ, hệ thống tệp, hệ thống I/O, deadlock</td></tr>\n<tr><td>Số câu</td><td>Syllabus không công bố &mdash; xem FLM của kỳ bạn học</td></tr>\n</tbody>\n</table>\n<div class=\"callout warn\"><span class=\"badge\">Cái KHÔNG thi ở đây</span> LO7&ndash;LO10 (Linux, lệnh shell, ngôn ngữ shell, C trên Linux) được chấm qua <strong>4 bài lab</strong>, còn LO11 (công cụ AI) qua <strong>thuyết trình</strong>. Nên bài thi cuối thuần khái niệm &mdash; chương 1&ndash;6 của Tanenbaum, không terminal, không phải viết code.</div>\n<h3>60 phút LO1&ndash;LO6 thật sự gồm những gì</h3>\n<ul>\n<li><b>Định nghĩa và phân biệt</b> &mdash; tiến trình vs luồng, chuyển chế độ vs chuyển ngữ cảnh, phân mảnh trong vs ngoài, deadlock vs đói tài nguyên vs livelock. Bài 1.1&ndash;1.4, 2.1&ndash;2.2, 6.1.</li>\n<li><b>Bài tính.</b> Biểu đồ Gantt lập lịch và thời gian chờ trung bình (bài 2.4), dịch địa chỉ và thời gian truy cập hiệu dụng với TLB (bài 3.3), đếm lỗi trang FIFO/LRU/OPT (bài 3.2), tổng quãng di chuyển đầu đọc đĩa (bài 5.2), dãy an toàn Banker (bài 6.2). Đây là phần phân loại điểm &mdash; hãy làm bằng bút, đừng chỉ đọc.</li>\n<li><b>Câu về cơ chế</b> &mdash; một system call diễn ra từng bước ra sao, i-node trỏ vào đâu, bốn điều kiện Coffman là gì và mỗi chiến lược phòng ngừa phá điều kiện nào.</li>\n</ul>\n<h3>Tiêu 60 phút thế nào</h3>\n<ul>\n<li>Làm hết câu định nghĩa trước; gom điểm chắc trước khi đụng câu tính.</li>\n<li>Tính trên giấy &mdash; vẽ Gantt ra lề bắt được cái bẫy \"chờ = hoàn thành &minus; thời gian chạy\" mà ô cảnh báo ở bài 2.4 đã nhắc.</li>\n<li>Loại phương án sai rõ ràng rồi mới chọn. Đừng bao giờ bỏ trống bài thi có cổng điểm.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính khóa học để minh hoạ format. Đề thi thật được thêm trong trang phòng thi.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [

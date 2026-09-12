@@ -113,7 +113,7 @@ export default {
   <thead><tr><th>Component</th><th>Weight</th><th>Note</th></tr></thead>
   <tbody>
     <tr><td>Theory Exam (TE)</td><td>50%</td><td>60 min, 50 computer-graded questions</td></tr>
-    <tr><td>Practical Exam (PE)</td><td>50%</td><td>120 min, hands-on networking tasks</td></tr>
+    <tr><td>Practical Exam (PE)</td><td>50%</td><td>120 min <small>the syllabus states the duration only &mdash; it leaves the question type and the number of questions blank</small></td></tr>
   </tbody>
 </table>
 <div class="callout warn">Three conditions to pass: <strong>TE ≥ 4</strong> AND <strong>PE ≥ 4</strong> AND <strong>Final Result ≥ 5</strong>, where FR = min(10, (TE + PE)/2 + bonus). Completing every MOOC on time gives +1 bonus point and is required to even sit the exam — do not leave the courses to the last week.</div>
@@ -134,7 +134,7 @@ export default {
   <thead><tr><th>Thành phần</th><th>Trọng số</th><th>Ghi chú</th></tr></thead>
   <tbody>
     <tr><td>Thi lý thuyết (TE)</td><td>50%</td><td>60 phút, 50 câu chấm máy</td></tr>
-    <tr><td>Thi thực hành (PE)</td><td>50%</td><td>120 phút, bài mạng thực hành</td></tr>
+    <tr><td>Thi thực hành (PE)</td><td>50%</td><td>120 phút <small>syllabus chỉ ghi thời lượng &mdash; bỏ trống dạng câu hỏi và số câu</small></td></tr>
   </tbody>
 </table>
 <div class="callout warn">Ba điều kiện để qua: <strong>TE ≥ 4</strong> VÀ <strong>PE ≥ 4</strong> VÀ <strong>Kết quả cuối ≥ 5</strong>, với FR = min(10, (TE + PE)/2 + bonus). Hoàn thành mọi MOOC đúng hạn cho +1 điểm thưởng và là bắt buộc để được dự thi — đừng để các khoá tới tuần cuối.</div>
@@ -164,7 +164,7 @@ export default {
     <tr><td>CLO8</td><td>Explain address prefixes/masks &amp; the TCP handshake</td><td>Chapters 5–6</td></tr>
   </tbody>
 </table>
-<div class="note-ct">The Practical Exam tests real skills (subnetting, tools), so the concepts must become hands-on. Use Packet Tracer and Wireshark (tools guide) to turn each CLO into something you can actually do.</div>
+<div class="note-ct">Both halves of the grade are exams, and both have a completion floor of 4 &mdash; TE &ge; 4 <em>and</em> PE &ge; 4 <em>and</em> FR &ge; 5. The syllabus names the TE precisely (60&prime;, 50 computer-graded questions over LO1&ndash;LO8) and leaves the PE format unstated, so prepare for every CLO as something you can both answer and do. Use Packet Tracer and Wireshark (tools guide) to turn each CLO into something you can actually perform.</div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.3</span>
@@ -183,7 +183,7 @@ export default {
     <tr><td>CLO8</td><td>Giải thích tiền tố/mask địa chỉ &amp; bắt tay TCP</td><td>Chương 5–6</td></tr>
   </tbody>
 </table>
-<div class="note-ct">Thi thực hành kiểm kỹ năng thật (subnetting, công cụ), nên các khái niệm phải trở nên thực hành. Dùng Packet Tracer và Wireshark (guide công cụ) để biến mỗi CLO thành thứ bạn làm được.</div>
+<div class="note-ct">Cả hai nửa điểm đều là bài thi, và cả hai đều có sàn 4 điểm &mdash; TE &ge; 4 <em>và</em> PE &ge; 4 <em>và</em> FR &ge; 5. Syllabus mô tả TE rất rõ (60&prime;, 50 câu chấm máy, phủ LO1&ndash;LO8) và không nói gì về dạng của PE, nên hãy chuẩn bị mọi CLO theo cả hai hướng: trả lời được và làm được. Dùng Packet Tracer và Wireshark (guide công cụ) để biến mỗi CLO thành thứ bạn thực sự thao tác được.</div>
 </div>
 `,
         },
@@ -209,7 +209,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Layer</div><div class="lz-t">know where you are</div><div class="lz-d">which of the 5 layers?</div></div>
   <div class="lz-step"><div class="lz-k">Trace</div><div class="lz-t">follow the packet</div><div class="lz-d">down the stack &amp; up</div></div>
   <div class="lz-step"><div class="lz-k">See it</div><div class="lz-t">use Wireshark</div><div class="lz-d">watch real packets</div></div>
-  <div class="lz-step"><div class="lz-k">Practice</div><div class="lz-t">subnetting by hand</div><div class="lz-d">for the practical exam</div></div>
+  <div class="lz-step"><div class="lz-k">Practice</div><div class="lz-t">subnetting by hand</div><div class="lz-d">masks &amp; prefixes = CLO8</div></div>
 </div>
 <div class="callout ok">Two things make networking click: always identifying the layer, and seeing packets for real with Wireshark. Read about TCP&#39;s handshake, then capture one and watch the SYN, SYN-ACK, ACK actually happen. Abstract becomes concrete.</div>
 <a class="link-card exphub" href="/exp-hub/nwc203c-cong-cu-hoc-tap?ref=%2Fcourses%2Fcomputer-networking%2Flearn&reflabel=NWC203c%20%E2%80%94%20Computer%20Networking" target="_blank" rel="noopener">
@@ -234,7 +234,7 @@ export default {
   <div class="lz-step"><div class="lz-k">Tầng</div><div class="lz-t">biết bạn ở đâu</div><div class="lz-d">tầng nào trong 5 tầng?</div></div>
   <div class="lz-step"><div class="lz-k">Lần theo</div><div class="lz-t">đi theo gói tin</div><div class="lz-d">xuống ngăn xếp &amp; lên</div></div>
   <div class="lz-step"><div class="lz-k">Thấy nó</div><div class="lz-t">dùng Wireshark</div><div class="lz-d">xem gói tin thật</div></div>
-  <div class="lz-step"><div class="lz-k">Luyện</div><div class="lz-t">subnetting bằng tay</div><div class="lz-d">cho thi thực hành</div></div>
+  <div class="lz-step"><div class="lz-k">Luyện</div><div class="lz-t">subnetting bằng tay</div><div class="lz-d">mask &amp; tiền tố = CLO8</div></div>
 </div>
 <div class="callout ok">Hai điều làm mạng "thấm": luôn xác định tầng, và thấy gói tin thật bằng Wireshark. Đọc về bắt tay TCP, rồi bắt một cái và xem SYN, SYN-ACK, ACK thực sự diễn ra. Trừu tượng thành cụ thể.</div>
 <a class="link-card exphub" href="/exp-hub/nwc203c-cong-cu-hoc-tap?ref=%2Fcourses%2Fcomputer-networking%2Flearn&reflabel=NWC203c%20%E2%80%94%20Computer%20Networking" target="_blank" rel="noopener">
@@ -604,9 +604,11 @@ Data <span class="badge">1011011</span> has five 1s (odd) → parity bit <b>1</b
 
 <h3>2 · Internet checksum — 16 bits, cheap in software</h3>
 <div class="out"><b>Algorithm:</b> treat the data as 16-bit words, add them in one's-complement arithmetic (any carry out of bit 16 is added back at the bottom), then invert the result.<br>
-<b>Worked example.</b> Two words: <span class="badge">1101 0011 1010 0110</span> and <span class="badge">1010 1100 0111 0100</span>.<br>
-Sum = 1 0111 1111 0001 1010 → carry out → add it back: 0111 1111 0001 1010 + 1 = <b>0111 1111 0001 1011</b><br>
-Invert → checksum = <b>1000 0000 1110 0100</b>.<br>
+<b>Worked example.</b> Two words: <span class="badge">1101 0011 1010 0110</span> (0xD3A6) and <span class="badge">1010 1100 0111 0100</span> (0xAC74).<br>
+<b>Step 1 — add the two 16-bit words.</b> 0xD3A6 + 0xAC74 = <b>1</b> 1000 0000 0001 1010 (0x1801A). That is 17 bits, so a carry came out of bit 16.<br>
+<b>Step 2 — wrap the carry round (one&#39;s-complement addition).</b> Drop the carry and add it back at the bottom: 1000 0000 0001 1010 + 1 = <b>1000 0000 0001 1011</b> (0x801B).<br>
+<b>Step 3 — invert every bit.</b> Checksum = <b>0111 1111 1110 0100</b> (0x7FE4).<br>
+<b>Verify:</b> 0x801B + 0x7FE4 = 0xFFFF — sixteen 1s, exactly what the receiver must get.<br>
 <b>At the receiver:</b> add every word <em>including</em> the checksum; the result must be all 1s. Any other value means an error.<br>
 <b>Used by:</b> IP, TCP and UDP headers. <b>Weak:</b> it cannot detect a reordering of words, or two errors that cancel. That is acceptable because the link layer already ran a CRC — the checksum only guards against errors introduced inside routers.</div>
 
@@ -614,28 +616,35 @@ Invert → checksum = <b>1000 0000 1110 0100</b>.<br>
 <p>Treat the bit string as a polynomial and divide by a standard generator; the remainder is the CRC. Division is done with XOR, so no borrows and no carries.</p>
 <div class="out"><b>Worked example.</b> Data <span class="badge">1101011011</span>, generator <span class="badge">10011</span> (5 bits → append 4 zeros).<br>
 <b>Step 1 — append 4 zeros:</b> 1101011011<b>0000</b><br>
-<b>Step 2 — divide by XOR:</b><br>
-<pre>11010110110000 ÷ 10011
-10011
------
- 10011 10110000
- 10011
- -----
- 00000 10110000   → bring down until the leading bit is 1
-       10110000
-       10011
-       -----
-        01010 000
-         1010000
-         10011  → leading 0, shift
-          010000
-           10000
-           10011
-           -----
-           00011  ← remainder = 4 bits</pre>
-<b>Step 3 — the CRC is the remainder 1110</b> (worked to four bits; the exact digits depend on carrying the division through).<br>
+<b>Step 2 — divide by XOR.</b> Keep a 5-bit window. If its leading bit is 1, XOR the generator into it; if the leading bit is 0, write a 0 in the quotient and just bring the next bit down.<br>
+<pre>dividend 1101011011 0000   generator 10011   (XOR: no carries, no borrows)
+
+  11010            the first 5 bits
+  10011   XOR
+  -----
+  01001            bring down bit 6 (1)   -> 10011
+  10011   XOR
+  -----
+  00000            bring down bit 7 (1)   -> 00001   leading 0: shift on
+                   bring down bit 8 (0)   -> 00010   leading 0: shift on
+                   bring down bit 9 (1)   -> 00101   leading 0: shift on
+                   bring down bit 10 (1)  -> 01011   leading 0: shift on
+                   bring down bit 11 (0)  -> 10110
+  10110
+  10011   XOR
+  -----
+  00101            bring down bit 12 (0)  -> 01010   leading 0: shift on
+                   bring down bit 13 (0)  -> 10100
+  10100
+  10011   XOR
+  -----
+  00111            bring down bit 14 (0)  -> 01110
+                   no bits left
+
+  remainder = 1110</pre>
+<b>Step 3 — the CRC is the remainder <span class="badge">1110</span></b> — always 4 bits, because a degree-4 generator (5 bits long) leaves a remainder of degree &lt; 4.<br>
 <b>Step 4 — transmit</b> data + CRC = <span class="badge">1101011011 1110</span>.<br>
-<b>At the receiver:</b> divide the whole received string by the same generator. Remainder <b>0</b> → accept; anything else → discard the frame. There is no repair at this layer — the data link layer simply drops it and lets ARQ (lesson 3.2) retransmit.</div>
+<b>At the receiver:</b> divide the whole received string by the same generator. Run <b>11010110111110 ÷ 10011</b> through the same windows and the last remainder is <b>0000</b> → accept. Anything else → discard the frame. There is no repair at this layer — the data link layer simply drops it and lets ARQ (lesson 3.2) retransmit.</div>
 
 <h3>What a CRC actually guarantees</h3>
 <table><thead><tr><th>Error type</th><th>Detected?</th></tr></thead><tbody>
@@ -665,9 +674,11 @@ Dữ liệu <span class="badge">1011011</span> có năm bit 1 (lẻ) → bit par
 
 <h3>2 · Checksum Internet — 16 bit, rẻ khi tính bằng phần mềm</h3>
 <div class="out"><b>Thuật toán:</b> coi dữ liệu là các từ 16 bit, cộng chúng theo số học bù một (bit nhớ tràn khỏi bit 16 được cộng ngược vào đáy), rồi đảo kết quả.<br>
-<b>Ví dụ có lời giải.</b> Hai từ: <span class="badge">1101 0011 1010 0110</span> và <span class="badge">1010 1100 0111 0100</span>.<br>
-Tổng = 1 0111 1111 0001 1010 → có bit tràn → cộng ngược vào: 0111 1111 0001 1010 + 1 = <b>0111 1111 0001 1011</b><br>
-Đảo bit → checksum = <b>1000 0000 1110 0100</b>.<br>
+<b>Ví dụ có lời giải.</b> Hai từ: <span class="badge">1101 0011 1010 0110</span> (0xD3A6) và <span class="badge">1010 1100 0111 0100</span> (0xAC74).<br>
+<b>Bước 1 — cộng hai từ 16 bit.</b> 0xD3A6 + 0xAC74 = <b>1</b> 1000 0000 0001 1010 (0x1801A). Đó là 17 bit, nghĩa là có bit nhớ tràn khỏi bit 16.<br>
+<b>Bước 2 — cộng bit tràn ngược vào đáy (số học bù một).</b> Bỏ bit tràn rồi cộng lại ở đáy: 1000 0000 0001 1010 + 1 = <b>1000 0000 0001 1011</b> (0x801B).<br>
+<b>Bước 3 — đảo mọi bit.</b> Checksum = <b>0111 1111 1110 0100</b> (0x7FE4).<br>
+<b>Kiểm lại:</b> 0x801B + 0x7FE4 = 0xFFFF — mười sáu bit 1, đúng thứ bên nhận phải thấy.<br>
 <b>Ở bên nhận:</b> cộng mọi từ <em>kể cả</em> checksum; kết quả phải toàn bit 1. Giá trị khác nghĩa là có lỗi.<br>
 <b>Được dùng bởi:</b> tiêu đề IP, TCP và UDP. <b>Yếu ở chỗ:</b> không phát hiện được việc đảo thứ tự các từ, hay hai lỗi triệt tiêu nhau. Điều đó chấp nhận được vì tầng liên kết đã chạy CRC — checksum chỉ canh những lỗi phát sinh bên trong bộ định tuyến.</div>
 
@@ -675,28 +686,35 @@ Tổng = 1 0111 1111 0001 1010 → có bit tràn → cộng ngược vào: 0111 
 <p>Coi chuỗi bit như một đa thức và chia cho một đa thức sinh chuẩn; phần dư chính là CRC. Phép chia thực hiện bằng XOR, nên không có nhớ và không có mượn.</p>
 <div class="out"><b>Ví dụ có lời giải.</b> Dữ liệu <span class="badge">1101011011</span>, đa thức sinh <span class="badge">10011</span> (5 bit → thêm 4 số 0).<br>
 <b>Bước 1 — thêm 4 số 0:</b> 1101011011<b>0000</b><br>
-<b>Bước 2 — chia bằng XOR:</b><br>
-<pre>11010110110000 ÷ 10011
-10011
------
- 10011 10110000
- 10011
- -----
- 00000 10110000   → hạ bit xuống tới khi bit dẫn đầu là 1
-       10110000
-       10011
-       -----
-        01010 000
-         1010000
-         10011  → bit dẫn đầu là 0, dịch tiếp
-          010000
-           10000
-           10011
-           -----
-           00011  ← phần dư = 4 bit</pre>
-<b>Bước 3 — CRC chính là phần dư 1110</b> (làm tới bốn bit; các chữ số chính xác phụ thuộc việc chạy hết phép chia).<br>
+<b>Bước 2 — chia bằng XOR.</b> Giữ một cửa sổ 5 bit. Nếu bit dẫn đầu là 1 thì XOR đa thức sinh vào; nếu bit dẫn đầu là 0 thì ghi 0 vào thương và chỉ hạ bit kế tiếp xuống.<br>
+<pre>bị chia 1101011011 0000   đa thức sinh 10011   (XOR: không nhớ, không mượn)
+
+  11010            5 bit đầu
+  10011   XOR
+  -----
+  01001            hạ bit 6 (1)   -> 10011
+  10011   XOR
+  -----
+  00000            hạ bit 7 (1)   -> 00001   dẫn đầu 0: dịch tiếp
+                   hạ bit 8 (0)   -> 00010   dẫn đầu 0: dịch tiếp
+                   hạ bit 9 (1)   -> 00101   dẫn đầu 0: dịch tiếp
+                   hạ bit 10 (1)  -> 01011   dẫn đầu 0: dịch tiếp
+                   hạ bit 11 (0)  -> 10110
+  10110
+  10011   XOR
+  -----
+  00101            hạ bit 12 (0)  -> 01010   dẫn đầu 0: dịch tiếp
+                   hạ bit 13 (0)  -> 10100
+  10100
+  10011   XOR
+  -----
+  00111            hạ bit 14 (0)  -> 01110
+                   hết bit
+
+  phần dư = 1110</pre>
+<b>Bước 3 — CRC chính là phần dư <span class="badge">1110</span></b> — luôn 4 bit, vì đa thức sinh bậc 4 (dài 5 bit) để lại phần dư bậc &lt; 4.<br>
 <b>Bước 4 — truyền đi</b> dữ liệu + CRC = <span class="badge">1101011011 1110</span>.<br>
-<b>Ở bên nhận:</b> chia toàn bộ chuỗi nhận được cho cùng đa thức sinh. Phần dư <b>0</b> → chấp nhận; khác 0 → vứt bỏ khung. Ở tầng này không có sửa lỗi — tầng liên kết dữ liệu đơn giản bỏ khung đi và để ARQ (bài 3.2) phát lại.</div>
+<b>Ở bên nhận:</b> chia toàn bộ chuỗi nhận được cho cùng đa thức sinh. Chạy <b>11010110111110 ÷ 10011</b> qua đúng các cửa sổ trên thì phần dư cuối là <b>0000</b> → chấp nhận. Khác 0 → vứt bỏ khung. Ở tầng này không có sửa lỗi — tầng liên kết dữ liệu đơn giản bỏ khung đi và để ARQ (bài 3.2) phát lại.</div>
 
 <h3>CRC thật sự đảm bảo điều gì</h3>
 <table><thead><tr><th>Loại lỗi</th><th>Phát hiện được?</th></tr></thead><tbody>
@@ -902,16 +920,16 @@ T<sub>khung</sub> = 1000 bit / 10⁶ bps = <b>1 ms</b> · khứ hồi = 2 × 20 
         },
       ],
     },
-    /* ══════════════════ PROGRESS TEST 1 ══════════════════ */
+    /* ══════════════════ CHỐT KIỂM GIỮA MÔN (tự ôn — NWC203c KHÔNG có progress test) ══════════════════ */
     {
-      title: 'Progress Test 1 (Layers, Errors, Data Link — CLO1–4)|||Progress Test 1 (Tầng, Lỗi, Data Link — CLO1–4)',
-      description: 'Ôn: phân tầng, kiểm soát lỗi, data link & LAN.',
+      title: 'Checkpoint — self-review of Chapters 1–3 (CLO1–CLO4)|||Chốt kiểm — tự ôn Chương 1–3 (CLO1–CLO4)',
+      description: 'Ôn phân tầng, kiểm soát lỗi, data link & LAN. Lưu ý: NWC203c KHÔNG có progress test — điểm môn chỉ gồm TE 50% + PE 50%; đây là bài tự kiểm của Academy.',
       lessons: [
         {
-          title: 'Progress Test 1 — review|||Progress Test 1 — ôn tổng hợp',
+          title: 'Checkpoint 1 — mixed review of Chapters 1–3|||Chốt kiểm 1 — ôn trộn Chương 1–3',
           slug: 'nwc203c-progress-test-1',
           type: 'QUIZ',
-          description: 'Trộn câu hỏi từ chương 1–3.',
+          description: 'Trộn câu hỏi chương 1–3. Bài tự kiểm, không phải bài thi của trường: NWC203c chỉ chấm TE (60 phút, 50 câu chấm máy) và PE (120 phút).',
           quiz: {
             timeLimitSeconds: 300,
             questions: [
@@ -1169,7 +1187,7 @@ A nghe thấy 3 và cập nhật thành 4. B thành 5. A thành 6… khoảng c�
 <p>An IP address splits into a <strong>network prefix</strong> (which network) and a <strong>host part</strong> (which device on it). The <strong>subnet mask</strong> marks where the split is (CLO8). This hierarchy is what lets routers find networks efficiently — you route toward a network, then to the host.</p>
 <div class="out"><b>192.168.1.10 / 24</b><br>Mask 255.255.255.0 → first 24 bits = network (192.168.1), last 8 bits = host (.10)<br>This network holds hosts .1 to .254</div>
 <h3>Subnetting &amp; CIDR</h3>
-<p><strong>Subnetting</strong> divides one big network into smaller ones by moving the mask boundary — essential for organizing and conserving addresses. Modern notation is <strong>CIDR</strong> (e.g. /24), giving the number of network bits directly. This is a core Practical Exam skill.</p>
+<p><strong>Subnetting</strong> divides one big network into smaller ones by moving the mask boundary — essential for organizing and conserving addresses. Modern notation is <strong>CIDR</strong> (e.g. /24), giving the number of network bits directly. This is syllabus session 10 (&ldquo;IP addressing&rdquo;) and CLO8 — &ldquo;the role of address prefixes and the uses of masks&rdquo;.</p>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Address</div><div class="lz-t">32 bits (IPv4)</div><div class="lz-d">four octets</div></div>
   <div class="lz-step"><div class="lz-k">Mask</div><div class="lz-t">splits network/host</div><div class="lz-d">e.g. /24</div></div>
@@ -1179,8 +1197,8 @@ A nghe thấy 3 và cập nhật thành 4. B thành 5. A thành 6… khoảng c�
 <h3>Worked example · from one IP/CIDR, find everything</h3>
 <div class="out"><b>Given:</b> a host has address 172.16.20.130 /27.<br><b>Step 1 — host bits.</b> /27 = 27 network bits, so host bits = 32 − 27 = 5 → block size = 2⁵ = 32.<br><b>Step 2 — which block does .130 fall in?</b> Blocks of 32 in the last octet: 0, 32, 64, 96, 128, 160… → 130 falls in the 128–159 block.<br><b>Step 3 — network address</b> = 172.16.20.<b>128</b> (the start of the block).<br><b>Step 4 — broadcast address</b> = next block start − 1 = 172.16.20.160 − 1 = 172.16.20.<b>159</b>.<br><b>Step 5 — usable host range</b> = 172.16.20.129 to 172.16.20.158 (network and broadcast excluded).<br><b>Step 6 — usable hosts</b> = 2⁵ − 2 = <b>30</b> hosts.</div>
 <div class="pitfall">The #1 exam mistake: forgetting to <strong>subtract 2</strong> for the network and broadcast addresses (a /27 block has 32 total addresses but only 30 are assignable to hosts), and confusing the <em>network address</em> (all-host-bits-zero, unusable) with the <em>first usable host</em> (network address + 1).</div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Worked example — splitting a /24 into four subnets.</b> Take 192.168.1.0/24 (256 addresses) and borrow 2 host bits to make four /26 subnets. Each block holds 2⁶ = 64 addresses, of which 62 are usable (minus the network and broadcast address): 192.168.1.0/26 (hosts .1–.62), .64/26 (.65–.126), .128/26 (.129–.190), .192/26 (.193–.254). <em>The syllabus explains the mask concept; the practical exam makes you compute exactly these boundaries by hand.</em></div>
-<div class="note-ct">The IP hierarchy mirrors a postal system: the network prefix is the city/postcode (routers use it to get close), and the host part is the street address (the final local network delivers it). Practice subnetting by hand — it is heavily tested in the practical exam.</div>
+<div class="out"><b>Second worked example — splitting a /24 into four subnets.</b> Take 192.168.1.0/24 (256 addresses) and borrow 2 host bits to make four /26 subnets. Each block holds 2⁶ = 64 addresses, of which 62 are usable (minus the network and broadcast address): 192.168.1.0/26 (hosts .1–.62), .64/26 (.65–.126), .128/26 (.129–.190), .192/26 (.193–.254).</div>
+<div class="note-ct">The IP hierarchy mirrors a postal system: the network prefix is the city/postcode (routers use it to get close), and the host part is the street address (the final local network delivers it). Practise moving the mask boundary by hand until the block sizes 128 / 64 / 32 / 16 / 8 / 4 are automatic — masks and prefixes are CLO8, and half the grade is a 60-minute, 50-question computer-graded theory exam.</div>
 <a class="link-card codelab" href="/code-lab/linux-bash?ref=%2Fcourses%2Fcomputer-networking%2Flearn&reflabel=NWC203c%20%E2%80%94%20Computer%20Networking#module-484" target="_blank" rel="noopener">
   <span class="lc-ico">🐧</span>
   <span class="lc-body"><span class="lc-title">Explore networking from the shell</span><span class="lc-sub">ip, ping, traceroute — the "Networking, SSH &amp; Remote" module.</span></span>
@@ -1195,7 +1213,7 @@ A nghe thấy 3 và cập nhật thành 4. B thành 5. A thành 6… khoảng c�
 <p>Một địa chỉ IP chia thành <strong>tiền tố mạng (network prefix)</strong> (mạng nào) và <strong>phần host</strong> (thiết bị nào trên đó). <strong>Subnet mask</strong> đánh dấu chỗ chia (CLO8). Phân cấp này cho router tìm mạng hiệu quả — bạn định tuyến tới một mạng, rồi tới host.</p>
 <div class="out"><b>192.168.1.10 / 24</b><br>Mask 255.255.255.0 → 24 bit đầu = mạng (192.168.1), 8 bit cuối = host (.10)<br>Mạng này chứa host .1 tới .254</div>
 <h3>Chia mạng con (subnetting) &amp; CIDR</h3>
-<p><strong>Subnetting</strong> chia một mạng lớn thành các mạng nhỏ bằng cách dời ranh giới mask — thiết yếu để tổ chức và tiết kiệm địa chỉ. Ký hiệu hiện đại là <strong>CIDR</strong> (vd /24), cho số bit mạng trực tiếp. Đây là kỹ năng cốt lõi của Thi thực hành.</p>
+<p><strong>Subnetting</strong> chia một mạng lớn thành các mạng nhỏ bằng cách dời ranh giới mask — thiết yếu để tổ chức và tiết kiệm địa chỉ. Ký hiệu hiện đại là <strong>CIDR</strong> (vd /24), cho số bit mạng trực tiếp. Đây là buổi 10 của syllabus (&ldquo;IP addressing&rdquo;) và CLO8 — &ldquo;vai trò của tiền tố địa chỉ và cách dùng mask&rdquo;.</p>
 <div class="lz-flow">
   <div class="lz-step"><div class="lz-k">Địa chỉ</div><div class="lz-t">32 bit (IPv4)</div><div class="lz-d">bốn octet</div></div>
   <div class="lz-step"><div class="lz-k">Mask</div><div class="lz-t">chia mạng/host</div><div class="lz-d">vd /24</div></div>
@@ -1205,8 +1223,8 @@ A nghe thấy 3 và cập nhật thành 4. B thành 5. A thành 6… khoảng c�
 <h3>Ví dụ có lời giải · từ một IP/CIDR, tìm mọi thứ</h3>
 <div class="out"><b>Đề bài:</b> một host có địa chỉ 172.16.20.130 /27.<br><b>Bước 1 — số bit host.</b> /27 = 27 bit mạng, nên bit host = 32 − 27 = 5 → kích thước khối = 2⁵ = 32.<br><b>Bước 2 — .130 rơi vào khối nào?</b> Các khối 32 ở octet cuối: 0, 32, 64, 96, 128, 160… → 130 rơi vào khối 128–159.<br><b>Bước 3 — địa chỉ mạng</b> = 172.16.20.<b>128</b> (đầu khối).<br><b>Bước 4 — địa chỉ broadcast</b> = đầu khối kế tiếp − 1 = 172.16.20.160 − 1 = 172.16.20.<b>159</b>.<br><b>Bước 5 — dải host dùng được</b> = 172.16.20.129 đến 172.16.20.158 (loại địa chỉ mạng và broadcast).<br><b>Bước 6 — số host dùng được</b> = 2⁵ − 2 = <b>30</b> host.</div>
 <div class="pitfall">Lỗi #1 khi thi: quên <strong>trừ 2</strong> cho địa chỉ mạng và broadcast (khối /27 có 32 địa chỉ nhưng chỉ 30 gán được cho host), và nhầm <em>địa chỉ mạng</em> (toàn bit host = 0, không dùng được) với <em>host dùng được đầu tiên</em> (địa chỉ mạng + 1).</div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Ví dụ có số — chia một /24 thành bốn mạng con.</b> Lấy 192.168.1.0/24 (256 địa chỉ) và mượn 2 bit host để tạo bốn mạng /26. Mỗi khối chứa 2⁶ = 64 địa chỉ, trong đó 62 dùng được (trừ địa chỉ mạng và địa chỉ broadcast): 192.168.1.0/26 (host .1–.62), .64/26 (.65–.126), .128/26 (.129–.190), .192/26 (.193–.254). <em>Giáo trình giải thích khái niệm mask; thi thực hành bắt bạn tính đúng các ranh giới này bằng tay.</em></div>
-<div class="note-ct">Phân cấp IP phản chiếu hệ thống bưu chính: tiền tố mạng là thành phố/mã bưu chính (router dùng để tới gần), và phần host là địa chỉ đường phố (mạng cục bộ cuối giao tới nơi). Luyện subnetting bằng tay — nó bị kiểm nhiều ở thi thực hành.</div>
+<div class="out"><b>Ví dụ có số thứ hai — chia một /24 thành bốn mạng con.</b> Lấy 192.168.1.0/24 (256 địa chỉ) và mượn 2 bit host để tạo bốn mạng /26. Mỗi khối chứa 2⁶ = 64 địa chỉ, trong đó 62 dùng được (trừ địa chỉ mạng và địa chỉ broadcast): 192.168.1.0/26 (host .1–.62), .64/26 (.65–.126), .128/26 (.129–.190), .192/26 (.193–.254).</div>
+<div class="note-ct">Phân cấp IP phản chiếu hệ thống bưu chính: tiền tố mạng là thành phố/mã bưu chính (router dùng để tới gần), và phần host là địa chỉ đường phố (mạng cục bộ cuối giao tới nơi). Hãy luyện dời ranh giới mask bằng tay tới khi các kích thước khối 128 / 64 / 32 / 16 / 8 / 4 thành phản xạ — mask và tiền tố là CLO8, và một nửa số điểm là bài thi lý thuyết 60 phút, 50 câu chấm máy.</div>
 <a class="link-card codelab" href="/code-lab/linux-bash?ref=%2Fcourses%2Fcomputer-networking%2Flearn&reflabel=NWC203c%20%E2%80%94%20Computer%20Networking#module-484" target="_blank" rel="noopener">
   <span class="lc-ico">🐧</span>
   <span class="lc-body"><span class="lc-title">Khám phá mạng từ shell</span><span class="lc-sub">ip, ping, traceroute — module "Networking, SSH &amp; Remote".</span></span>
@@ -1276,7 +1294,7 @@ Block = 256 − 224 = 32 → boundaries at 0, 32, 64, <b>96</b>, 128…<br>
 
 <div class="pitfall"><b>The first and last address of every subnet are unusable.</b> Assigning a host 192.168.10.64 as a plain address inside a /24 works, but inside a /26 it is a <em>network address</em> and the host will not communicate. This is the single most common configuration mistake — and the exam always includes one address that is a network or broadcast address in disguise.</div>
 
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>IPv6 has no subnetting arithmetic, because it has no scarcity.</b> Every LAN gets a /64 — 18 quintillion addresses — regardless of whether it holds 3 devices or 3,000, and hosts configure themselves with SLAAC instead of DHCP. All the effort above exists purely because IPv4's 4.3 billion addresses ran out in 2011. The transition is slow because NAT (lesson 5.3) made IPv4 tolerable, which is the classic pattern: a good enough workaround delays the real fix by decades. <em>Beyond syllabus because the course teaches IPv4 subnetting in depth, while the protocol designed to replace it removes the whole problem.</em></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>IPv6 has no subnetting arithmetic, because it has no scarcity.</b> Every LAN gets a /64 — 18 quintillion addresses — regardless of whether it holds 3 devices or 3,000, and hosts configure themselves with SLAAC instead of DHCP. All the effort above exists purely because IPv4's 4.3 billion addresses ran out in 2011. The transition is slow because NAT made IPv4 tolerable, which is the classic pattern: a good enough workaround delays the real fix by decades. <em>Beyond syllabus because the course teaches IPv4 subnetting in depth, while the protocol designed to replace it removes the whole problem.</em></div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.2</span>
@@ -1333,7 +1351,7 @@ Cỡ khối = 256 − 224 = 32 → các mốc ở 0, 32, 64, <b>96</b>, 128…<b
 
 <div class="pitfall"><b>Địa chỉ đầu và cuối của mọi mạng con đều không dùng được.</b> Gán cho một máy địa chỉ 192.168.10.64 trong một mạng /24 thì chạy, nhưng trong /26 nó là <em>địa chỉ mạng</em> và máy đó sẽ không liên lạc được. Đây là lỗi cấu hình phổ biến nhất — và đề thi luôn cài sẵn một địa chỉ thực chất là địa chỉ mạng hoặc quảng bá trá hình.</div>
 
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>IPv6 không có phép tính chia mạng con, vì nó không khan hiếm.</b> Mỗi mạng LAN được cấp một /64 — 18 tỉ tỉ địa chỉ — bất kể nó chứa 3 thiết bị hay 3.000, và máy tự cấu hình bằng SLAAC thay vì DHCP. Toàn bộ công sức ở trên tồn tại thuần tuý vì 4,3 tỉ địa chỉ IPv4 đã cạn từ năm 2011. Quá trình chuyển đổi chậm chạp vì NAT (bài 5.3) đã làm IPv4 vẫn "chịu được", và đó là khuôn mẫu kinh điển: một giải pháp chắp vá đủ tốt trì hoãn bản sửa thật sự hàng chục năm. <em>Ngoài giáo trình vì môn học dạy chia mạng con IPv4 rất kỹ, trong khi giao thức sinh ra để thay thế nó lại xoá bỏ toàn bộ bài toán.</em></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>IPv6 không có phép tính chia mạng con, vì nó không khan hiếm.</b> Mỗi mạng LAN được cấp một /64 — 18 tỉ tỉ địa chỉ — bất kể nó chứa 3 thiết bị hay 3.000, và máy tự cấu hình bằng SLAAC thay vì DHCP. Toàn bộ công sức ở trên tồn tại thuần tuý vì 4,3 tỉ địa chỉ IPv4 đã cạn từ năm 2011. Quá trình chuyển đổi chậm chạp vì NAT đã làm IPv4 vẫn "chịu được", và đó là khuôn mẫu kinh điển: một giải pháp chắp vá đủ tốt trì hoãn bản sửa thật sự hàng chục năm. <em>Ngoài giáo trình vì môn học dạy chia mạng con IPv4 rất kỹ, trong khi giao thức sinh ra để thay thế nó lại xoá bỏ toàn bộ bài toán.</em></div>
 </div>
 `,
         },
@@ -1404,7 +1422,7 @@ Cỡ khối = 256 − 224 = 32 → các mốc ở 0, 32, 64, <b>96</b>, 128…<b
     <tr><td>More overhead</td><td>Less overhead, may lose packets</td></tr>
   </tbody>
 </table>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>How TCP actually finds the right speed — slow-start &amp; AIMD.</b> TCP does not know the network&#39;s capacity, so it probes: it starts with a tiny window and <em>doubles</em> it each round-trip (slow-start), then switches to adding one segment per round-trip. On packet loss it halves the window — the famous "AIMD sawtooth" (Additive Increase, Multiplicative Decrease). This gentle back-off is what lets millions of flows share a link fairly. <em>The syllabus just says TCP "slows down on loss"; AIMD is the exact rule, and the reason your download speed visibly ramps up then dips.</em></div>
+<div class="note-ct"><b>Flow control is only half of TCP&#39;s speed control.</b> The receiver window above protects the <em>receiver</em>; it says nothing about whether the <em>network</em> in between can carry that rate. TCP therefore keeps a second window, the congestion window, and sends the smaller of the two. Finding the right congestion window — slow-start and AIMD — is CLO6 (&ldquo;congestion control inside the network&rdquo;) and is the whole of lesson 6.2.</div>
 <div class="note-ct">The handshake and reliability you see here are exactly what happens (invisibly) every time you load a web page. Ports (like 80 for HTTP, 443 for HTTPS) let one machine run many services at once — the transport layer&#39;s addressing on top of IP&#39;s.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/tcp-ip-advanced" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -1434,7 +1452,7 @@ Cỡ khối = 256 − 224 = 32 → các mốc ở 0, 32, 64, <b>96</b>, 128…<b
     <tr><td>Chi phí cao hơn</td><td>Chi phí thấp hơn, có thể mất gói</td></tr>
   </tbody>
 </table>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>TCP thực sự tìm đúng tốc độ ra sao — slow-start &amp; AIMD.</b> TCP không biết dung lượng mạng, nên nó dò: bắt đầu với cửa sổ rất nhỏ và <em>nhân đôi</em> mỗi vòng khứ hồi (slow-start), rồi chuyển sang cộng thêm một segment mỗi vòng. Khi mất gói nó giảm nửa cửa sổ — "răng cưa AIMD" nổi tiếng (Additive Increase, Multiplicative Decrease). Kiểu lùi nhẹ nhàng này giúp hàng triệu luồng chia sẻ một liên kết công bằng. <em>Giáo trình chỉ nói TCP "chậm lại khi mất gói"; AIMD là quy tắc chính xác, và là lý do tốc độ tải của bạn tăng dần rồi tụt xuống thấy rõ.</em></div>
+<div class="note-ct"><b>Điều khiển luồng mới là một nửa cơ chế điều tốc của TCP.</b> Cửa sổ nhận ở trên bảo vệ <em>bên nhận</em>; nó không nói gì về việc <em>mạng</em> ở giữa có cõng nổi tốc độ đó hay không. Vì thế TCP giữ thêm một cửa sổ thứ hai — cửa sổ tắc nghẽn — và gửi theo cái nhỏ hơn trong hai cái. Việc tìm đúng cửa sổ tắc nghẽn — slow-start và AIMD — chính là CLO6 (&ldquo;điều khiển tắc nghẽn bên trong mạng&rdquo;) và là toàn bộ bài 6.2.</div>
 <div class="note-ct">Bắt tay và độ tin cậy bạn thấy ở đây đúng là điều xảy ra (vô hình) mỗi khi bạn tải một trang web. Cổng (port, như 80 cho HTTP, 443 cho HTTPS) cho một máy chạy nhiều dịch vụ cùng lúc — đánh địa chỉ của tầng giao vận trên nền IP.</div>
 <a class="link-card dl" href="https://www.coursera.org/learn/tcp-ip-advanced" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
@@ -1621,15 +1639,15 @@ RTT 9: 1 → 2 · RTT 10: 2 → 4 · RTT 11: 4 → 8 · RTT 12: 8 → 10 (ssthre
       ],
     },
     {
-      "title": "Final Exam|||Thi cuối kỳ",
-      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "title": "Final exams — TE & PE|||Thi cuối kỳ — TE & PE",
+      "description": "Hai bài thi cuối kỳ của NWC203c: TE (60', 50 câu chấm máy) và PE (120', syllabus không nêu hình thức). Kèm câu mẫu luyện format TE.",
       "lessons": [
         {
-          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "title": "Final exams — TE (theory, 50 MCQ) & PE (practical)|||Thi cuối kỳ — TE (lý thuyết, 50 câu) & PE (thực hành)",
           "slug": "nwc203c-final-exam-fe",
           "type": "article",
-          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "description": "Hình thức thật của TE và PE, điều kiện qua môn, và cách luyện cho từng bài. Kèm câu mẫu.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final exams \u00b7 TE + PE</span>\n<h2>The two final exams \u2014 TE and PE</h2>\n<p class=\"lead\">NWC203c has no progress test, no assignment and no lab mark. <strong>The whole grade is two final exams</strong>, each worth 50%, and you must reach 4 on <em>both</em>.</p>\n<table>\n  <thead><tr><th>Exam</th><th>Weight</th><th>Duration</th><th>Format</th><th>Completion</th></tr></thead>\n  <tbody>\n    <tr><td><b>TE</b> &mdash; Theory Exam</td><td>50%</td><td>60&prime;</td><td><b>50 computer-gradable questions</b>, over all studied content</td><td>&ge; 4</td></tr>\n    <tr><td><b>PE</b> &mdash; Practical Exam</td><td>50%</td><td>120&prime;</td><td>The syllabus gives the duration only &mdash; it states no question type and no number of questions. Ask your lecturer for the format used in your term.</td><td>&ge; 4</td></tr>\n  </tbody>\n</table>\n<p><b>Final Result</b> = min(10, (TE + PE)/2 + bonus). Completing every MOOC of the Coursera <em>Computer Communications</em> specialization before the deadline gives <b>+1 bonus</b>, and the certificates are also the gate: without them you are not allowed to sit the exams. You pass when <b>TE &ge; 4</b> and <b>PE &ge; 4</b> and <b>FR &ge; 5</b>.</p>\n<h3>Preparing for the TE</h3>\n<ul>\n<li>50 questions in 60 minutes is about <b>72 seconds per question</b>. Flag anything that needs pen-and-paper arithmetic and come back to it.</li>\n<li>It covers all studied content &mdash; that is CLO1 to CLO8, from the layered model through to the TCP handshake. Breadth beats depth.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest. Never leave a computer-graded item blank.</li>\n</ul>\n<h3>Preparing for the PE</h3>\n<p>Because the format is not specified, prepare by making every CLO something you can <em>perform</em>, not only recognise. Rehearse each of these until you can do it on blank paper in a few minutes:</p>\n<ul>\n<li>Compute an Internet checksum and a CRC remainder by hand (lesson 2.2), and check your own answer.</li>\n<li>Compute ARQ efficiency for stop-and-wait, Go-Back-N and Selective Repeat, and size a sequence-number field (lesson 3.2).</li>\n<li>Run Dijkstra and Bellman&ndash;Ford on a small weighted graph and produce the routing table (lesson 4.2).</li>\n<li>Subnet and VLSM: from an address and a prefix, give network address, broadcast, usable range and host count; split a block for departments of different sizes (lessons 5.1&ndash;5.2).</li>\n<li>Read an encapsulation trace and name the header added at each layer (lesson 1.2); narrate a TCP three-way handshake and a congestion-window trace (lessons 6.1&ndash;6.2).</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course, to rehearse the TE format. They are not past-exam questions.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cu\u1ed1i k\u1ef3 \u00b7 TE + PE</span>\n<h2>Hai b\u00e0i thi cu\u1ed1i k\u1ef3 &mdash; TE v\u00e0 PE</h2>\n<p class=\"lead\">NWC203c kh\u00f4ng c\u00f3 progress test, kh\u00f4ng c\u00f3 assignment, kh\u00f4ng c\u00f3 \u0111i\u1ec3m lab. <strong>To\u00e0n b\u1ed9 \u0111i\u1ec3m m\u00f4n l\u00e0 hai b\u00e0i thi cu\u1ed1i k\u1ef3</strong>, m\u1ed7i b\u00e0i 50%, v\u00e0 b\u1ea1n ph\u1ea3i \u0111\u1ea1t 4 \u1edf <em>c\u1ea3 hai</em>.</p>\n<table>\n  <thead><tr><th>B\u00e0i thi</th><th>Tr\u1ecdng s\u1ed1</th><th>Th\u1eddi l\u01b0\u1ee3ng</th><th>H\u00ecnh th\u1ee9c</th><th>S\u00e0n ho\u00e0n th\u00e0nh</th></tr></thead>\n  <tbody>\n    <tr><td><b>TE</b> &mdash; Thi l\u00fd thuy\u1ebft</td><td>50%</td><td>60&prime;</td><td><b>50 c\u00e2u ch\u1ea5m m\u00e1y</b>, ph\u1ee7 to\u00e0n b\u1ed9 n\u1ed9i dung \u0111\u00e3 h\u1ecdc</td><td>&ge; 4</td></tr>\n    <tr><td><b>PE</b> &mdash; Thi th\u1ef1c h\u00e0nh</td><td>50%</td><td>120&prime;</td><td>Syllabus ch\u1ec9 ghi th\u1eddi l\u01b0\u1ee3ng &mdash; kh\u00f4ng ghi d\u1ea1ng c\u00e2u h\u1ecfi, kh\u00f4ng ghi s\u1ed1 c\u00e2u. H\u00e3y h\u1ecfi gi\u1ea3ng vi\u00ean h\u00ecnh th\u1ee9c \u00e1p d\u1ee5ng cho k\u1ef3 c\u1ee7a b\u1ea1n.</td><td>&ge; 4</td></tr>\n  </tbody>\n</table>\n<p><b>K\u1ebft qu\u1ea3 cu\u1ed1i</b> = min(10, (TE + PE)/2 + bonus). Ho\u00e0n th\u00e0nh m\u1ecdi MOOC c\u1ee7a b\u1ed9 Coursera <em>Computer Communications</em> tr\u01b0\u1edbc h\u1ea1n cho <b>+1 \u0111i\u1ec3m th\u01b0\u1edfng</b>, v\u00e0 ch\u1ee9ng ch\u1ec9 c\u0169ng l\u00e0 c\u1eeda v\u00e0o: thi\u1ebfu ch\u1ee9ng ch\u1ec9 th\u00ec kh\u00f4ng \u0111\u01b0\u1ee3c d\u1ef1 thi. Qua m\u00f4n khi <b>TE &ge; 4</b> V\u00c0 <b>PE &ge; 4</b> V\u00c0 <b>FR &ge; 5</b>.</p>\n<h3>Chu\u1ea9n b\u1ecb cho TE</h3>\n<ul>\n<li>50 c\u00e2u trong 60 ph\u00fat, t\u1ee9c kho\u1ea3ng <b>72 gi\u00e2y m\u1ed9t c\u00e2u</b>. C\u00e2u n\u00e0o c\u1ea7n t\u00ednh gi\u1ea5y b\u00fat th\u00ec \u0111\u00e1nh d\u1ea5u, quay l\u1ea1i sau.</li>\n<li>Ph\u1ee7 to\u00e0n b\u1ed9 n\u1ed9i dung \u0111\u00e3 h\u1ecdc &mdash; t\u1ee9c CLO1 t\u1edbi CLO8, t\u1eeb m\u00f4 h\u00ecnh ph\u00e2n t\u1ea7ng t\u1edbi b\u1eaft tay TCP. R\u1ed9ng quan tr\u1ecdng h\u01a1n s\u00e2u.</li>\n<li>Lo\u1ea1i ph\u01b0\u01a1ng \u00e1n sai r\u00f5 tr\u01b0\u1edbc r\u1ed3i ch\u1ecdn trong ph\u1ea7n c\u00f2n l\u1ea1i. \u0110\u1eebng b\u1ecf tr\u1ed1ng c\u00e2u ch\u1ea5m m\u00e1y n\u00e0o.</li>\n</ul>\n<h3>Chu\u1ea9n b\u1ecb cho PE</h3>\n<p>V\u00ec h\u00ecnh th\u1ee9c kh\u00f4ng \u0111\u01b0\u1ee3c n\u00eau, h\u00e3y chu\u1ea9n b\u1ecb theo h\u01b0\u1edbng bi\u1ebfn m\u1ed7i CLO th\u00e0nh th\u1ee9 b\u1ea1n <em>l\u00e0m \u0111\u01b0\u1ee3c</em>, kh\u00f4ng ch\u1ec9 nh\u1eadn ra. Luy\u1ec7n t\u1eebng m\u1ee5c d\u01b0\u1edbi \u0111\u00e2y t\u1edbi khi l\u00e0m \u0111\u01b0\u1ee3c tr\u00ean gi\u1ea5y tr\u1eafng trong v\u00e0i ph\u00fat:</p>\n<ul>\n<li>T\u00ednh checksum Internet v\u00e0 ph\u1ea7n d\u01b0 CRC b\u1eb1ng tay (b\u00e0i 2.2), r\u1ed3i t\u1ef1 ki\u1ec3m l\u1ea1i \u0111\u00e1p \u00e1n.</li>\n<li>T\u00ednh hi\u1ec7u su\u1ea5t ARQ cho stop-and-wait, Go-Back-N v\u00e0 Selective Repeat, v\u00e0 ch\u1ecdn \u0111\u1ed9 r\u1ed9ng tr\u01b0\u1eddng s\u1ed1 th\u1ee9 t\u1ef1 (b\u00e0i 3.2).</li>\n<li>Ch\u1ea1y Dijkstra v\u00e0 Bellman&ndash;Ford tr\u00ean m\u1ed9t \u0111\u1ed3 th\u1ecb c\u00f3 tr\u1ecdng s\u1ed1 nh\u1ecf v\u00e0 l\u1eadp b\u1ea3ng \u0111\u1ecbnh tuy\u1ebfn (b\u00e0i 4.2).</li>\n<li>Subnet v\u00e0 VLSM: t\u1eeb m\u1ed9t \u0111\u1ecba ch\u1ec9 v\u00e0 ti\u1ec1n t\u1ed1, cho \u0111\u1ecba ch\u1ec9 m\u1ea1ng, broadcast, d\u1ea3i d\u00f9ng \u0111\u01b0\u1ee3c v\u00e0 s\u1ed1 host; chia m\u1ed9t kh\u1ed1i cho c\u00e1c ph\u00f2ng ban kh\u00e1c c\u1ee1 (b\u00e0i 5.1&ndash;5.2).</li>\n<li>\u0110\u1ecdc m\u1ed9t v\u1ec7t \u0111\u00f3ng g\u00f3i v\u00e0 g\u1ecdi t\u00ean header m\u00e0 m\u1ed7i t\u1ea7ng th\u00eam v\u00e0o (b\u00e0i 1.2); k\u1ec3 l\u1ea1i b\u1eaft tay ba b\u01b0\u1edbc c\u1ee7a TCP v\u00e0 m\u1ed9t v\u1ec7t c\u1eeda s\u1ed5 t\u1eafc ngh\u1ebdn (b\u00e0i 6.1&ndash;6.2).</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">C\u00e2u m\u1eabu</span> C\u00e1c c\u00e2u d\u01b0\u1edbi \u0111\u00e2y l\u00e0 <strong>c\u00e2u m\u1eabu</strong> l\u1ea5y t\u1eeb ch\u00ednh m\u00f4n h\u1ecdc, \u0111\u1ec3 luy\u1ec7n \u0111\u00fang format c\u1ee7a TE. \u0110\u00e2y kh\u00f4ng ph\u1ea3i \u0111\u1ec1 thi th\u1eadt.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [

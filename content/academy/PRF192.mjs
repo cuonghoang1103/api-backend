@@ -136,14 +136,14 @@ export default {
 <table>
   <thead><tr><th>Component</th><th>Weight</th><th>Note</th></tr></thead>
   <tbody>
-    <tr><td>Assignment</td><td>15%</td><td>Take-home assignment (CLO2–9)</td></tr>
-    <tr><td>Practical Exam</td><td>30%</td><td>Hands-on exam on a computer, 85 min (CLO2–8)</td></tr>
-    <tr><td>Progress Test ×2</td><td>15%</td><td>2 mid-course tests, 20–40 min</td></tr>
-    <tr><td>Workshop ×5</td><td>10%</td><td>In-class practice across 5 workshops</td></tr>
-    <tr><td><strong>Final Exam</strong></td><td><strong>30%</strong></td><td>Multiple choice, 60 min (CLO1–9)</td></tr>
+    <tr><td>Assignment <small>on-going · 1 part</small></td><td>15%</td><td>At home (CLO2–CLO9) — &ldquo;Option 1: a problem…&rdquo;</td></tr>
+    <tr><td>Practical Exam <small>on-going · 1 part</small></td><td>30%</td><td><b>85 min</b> (CLO2–CLO8) — &ldquo;preferable to be m[achine-graded]…&rdquo;</td></tr>
+    <tr><td>Progress Test <small>on-going · 2 parts</small></td><td>15%</td><td><b>20–40 min</b> each, assessing <b>CLO1, CLO5, CLO6, CLO9</b> — &ldquo;Option 1: essay or…&rdquo;</td></tr>
+    <tr><td>Workshop <small>on-going · 5 parts</small></td><td>10%</td><td>In the classroom (CLO1–CLO9) — &ldquo;Option 1: practical…&rdquo;</td></tr>
+    <tr><td><strong>Final Exam</strong> <small>1 part</small></td><td><strong>30%</strong></td><td><b>Multiple choice, 60 min</b> (CLO1–CLO9) — completion criterion <b>4</b></td></tr>
   </tbody>
 </table>
-<div class="callout warn">Two <strong>hard blockers</strong> even with a high coursework score: (1) missing more than 20% of sessions = <strong>barred from the exam</strong>; (2) the <strong>Final Exam must be ≥ 4.0</strong> to count as a pass.</div>
+<div class="callout warn">Three <strong>hard blockers</strong> even with a high coursework score: (1) missing more than 20% of sessions = <strong>barred from the exam</strong>; (2) the <strong>Final Exam must be ≥ 4.0</strong>; (3) <strong>every on-going component must be &gt; 0</strong> — a zero on the assignment, the practical exam, either progress test or the workshop block fails the subject on its own, however high the weighted average is.</div>
 <div class="note-ct">Practical Exam (30%) and Final (30%) make up 60% — both are taken <strong>live on a computer / as multiple choice</strong>, so rote learning won't help. The safe strategy: finish every Workshop and the practice on CodeLab so your hands get used to typing code and you're fast on exam day.</div>
 </div>
 <div class="ml-vi">
@@ -164,15 +164,15 @@ export default {
 <table>
   <thead><tr><th>Thành phần</th><th>Trọng số</th><th>Ghi chú</th></tr></thead>
   <tbody>
-    <tr><td>Assignment</td><td>15%</td><td>Bài tập lớn làm ở nhà (CLO2–9)</td></tr>
-    <tr><td>Practical Exam</td><td>30%</td><td>Thi thực hành trên máy, 85 phút (CLO2–8)</td></tr>
-    <tr><td>Progress Test ×2</td><td>15%</td><td>2 bài kiểm tra giữa chặng, 20–40 phút</td></tr>
-    <tr><td>Workshop ×5</td><td>10%</td><td>Thực hành tại lớp qua 5 workshop</td></tr>
-    <tr><td><strong>Final Exam</strong></td><td><strong>30%</strong></td><td>Trắc nghiệm, 60 phút (CLO1–9)</td></tr>
+    <tr><td>Assignment <small>quá trình · 1 phần</small></td><td>15%</td><td>Làm ở nhà (CLO2–CLO9) — &ldquo;Option 1: a problem…&rdquo;</td></tr>
+    <tr><td>Practical Exam <small>quá trình · 1 phần</small></td><td>30%</td><td><b>85 phút</b> (CLO2–CLO8) — &ldquo;preferable to be m[achine-graded]…&rdquo;</td></tr>
+    <tr><td>Progress Test <small>quá trình · 2 phần</small></td><td>15%</td><td><b>20–40 phút</b> mỗi bài, kiểm <b>CLO1, CLO5, CLO6, CLO9</b> — &ldquo;Option 1: essay or…&rdquo;</td></tr>
+    <tr><td>Workshop <small>quá trình · 5 phần</small></td><td>10%</td><td>Làm tại lớp (CLO1–CLO9) — &ldquo;Option 1: practical…&rdquo;</td></tr>
+    <tr><td><strong>Final Exam</strong> <small>1 phần</small></td><td><strong>30%</strong></td><td><b>Trắc nghiệm, 60 phút</b> (CLO1–CLO9) — sàn hoàn thành <b>4</b></td></tr>
   </tbody>
 </table>
 
-<div class="callout warn">Hai điều kiện <strong>chặn cứng</strong> dù điểm quá trình cao: (1) vắng quá 20% buổi = <strong>cấm thi</strong>; (2) điểm <strong>Final Exam phải ≥ 4.0</strong> thì mới được tính qua môn.</div>
+<div class="callout warn">Ba điều kiện <strong>chặn cứng</strong> dù điểm quá trình cao: (1) vắng quá 20% buổi = <strong>cấm thi</strong>; (2) điểm <strong>Final Exam phải ≥ 4.0</strong>; (3) <strong>mọi cột điểm quá trình phải &gt; 0</strong> — một con 0 ở assignment, practical exam, một trong hai progress test hay khối workshop là tự trượt môn, dù trung bình có trọng số cao tới đâu.</div>
 
 <div class="note-ct">Practical Exam (30%) và Final (30%) chiếm 60% — đều thi <strong>trực tiếp trên máy/trắc nghiệm</strong>, không học vẹt được. Cách ăn chắc: làm hết Workshop và bài luyện ở CodeLab để tay quen gõ code, khi thi mới nhanh.</div>
 </div>
@@ -513,7 +513,7 @@ gcc hello.c -o hello
   <tbody>
     <tr><td>How it runs</td><td>Translates everything to an .exe first, then runs</td><td>Reads &amp; runs line by line at execution</td></tr>
     <tr><td>Speed</td><td>Fast</td><td>Slower</td></tr>
-    <tr><td>Errors</td><td>Catches syntax errors at compile time</td><td>Only reports when it reaches the faulty line</td></tr>
+    <tr><td>Errors</td><td>Catches every syntax error at compile time; the program never runs until they are fixed</td><td>Also parses the whole file first — a syntax error stops it before the first line runs. What surfaces only when execution reaches the faulty line is a <em>runtime</em> error (bad name, wrong type, division by zero)</td></tr>
   </tbody>
 </table>
 <div class="callout">C is a <strong>compiled</strong> language. So every time you change the code you must recompile (Compile/Build) before running — with practice you'll use the <kbd>F9</kbd>/<kbd>F11</kbd> shortcuts in DevC++.</div>
@@ -536,7 +536,7 @@ gcc hello.c -o hello
   <tbody>
     <tr><td>Cách chạy</td><td>Dịch toàn bộ ra file .exe trước, rồi chạy</td><td>Đọc &amp; chạy từng dòng khi thực thi</td></tr>
     <tr><td>Tốc độ</td><td>Nhanh</td><td>Chậm hơn</td></tr>
-    <tr><td>Báo lỗi</td><td>Bắt lỗi cú pháp ngay lúc dịch</td><td>Chỉ báo khi chạy tới dòng lỗi</td></tr>
+    <tr><td>Báo lỗi</td><td>Bắt mọi lỗi cú pháp ngay lúc dịch; chưa sửa xong thì chương trình không chạy</td><td>Cũng phân tích cả file trước — lỗi cú pháp làm nó dừng trước khi chạy dòng đầu tiên. Thứ chỉ lộ ra khi chạy tới dòng lỗi là lỗi <em>thời gian chạy</em> (sai tên, sai kiểu, chia cho 0)</td></tr>
   </tbody>
 </table>
 <div class="callout">C là ngôn ngữ <strong>biên dịch</strong>. Vì vậy mỗi lần sửa code, bạn phải biên dịch lại (Compile/Build) rồi mới chạy — quen tay dần sẽ dùng phím tắt <kbd>F9</kbd>/<kbd>F11</kbd> trong DevC++.</div>
@@ -1640,7 +1640,7 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <table>
   <thead><tr><th>math.h</th><th>ctype.h</th></tr></thead>
   <tbody>
-    <tr><td><code>sqrt, pow, abs, ceil, floor</code></td><td><code>isdigit, isalpha, toupper, tolower</code></td></tr>
+    <tr><td><code>sqrt, pow, fabs, ceil, floor</code></td><td><code>isdigit, isalpha, toupper, tolower</code></td></tr>
   </tbody>
 </table>
 <h3>Formatted output</h3>
@@ -1650,6 +1650,7 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
   <li><code>%5d</code> — integer right-aligned in 5 columns (alignment).</li>
   <li><code>%-10s</code> — string left-aligned in 10 columns.</li>
 </ul>
+<div class="pitfall"><b>Absolute value lives in two headers, and they are not interchangeable.</b> <code>fabs()</code> (and <code>fabsf</code>, <code>fabsl</code>) returns a <code>double</code> and is declared in <code>&lt;math.h&gt;</code>. The integer <code>abs()</code> (and <code>labs</code>, <code>llabs</code>) is declared in <code>&lt;stdlib.h&gt;</code> — see lesson 7.1. Calling <code>abs(-2.7)</code> converts the argument to <code>int</code> and gives <b>2</b>, not 2.7. Header questions are a classic exam trap: <code>abs</code> &rarr; stdlib.h, <code>fabs</code> &rarr; math.h.</div>
 <div class="note-ct">Column alignment with <code>%5d</code>, <code>%-10s</code> is very useful for printing neat data tables — used a lot in the student-manager Workshop.</div>
 </div>
 <div class="ml-vi">
@@ -1662,7 +1663,7 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 <table>
   <thead><tr><th>math.h</th><th>ctype.h</th></tr></thead>
   <tbody>
-    <tr><td><code>sqrt, pow, abs, ceil, floor</code></td><td><code>isdigit, isalpha, toupper, tolower</code></td></tr>
+    <tr><td><code>sqrt, pow, fabs, ceil, floor</code></td><td><code>isdigit, isalpha, toupper, tolower</code></td></tr>
   </tbody>
 </table>
 <h3>Nhập/xuất định dạng</h3>
@@ -1672,15 +1673,16 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
   <li><code>%5d</code> — số nguyên căn phải trong 5 ô (canh cột).</li>
   <li><code>%-10s</code> — chuỗi căn trái trong 10 ô.</li>
 </ul>
+<div class="pitfall"><b>Giá trị tuyệt đối nằm ở hai header, và chúng không thay nhau được.</b> <code>fabs()</code> (cùng <code>fabsf</code>, <code>fabsl</code>) trả về <code>double</code> và được khai báo trong <code>&lt;math.h&gt;</code>. Còn <code>abs()</code> cho số nguyên (cùng <code>labs</code>, <code>llabs</code>) khai báo trong <code>&lt;stdlib.h&gt;</code> — xem bài 7.1. Gọi <code>abs(-2.7)</code> sẽ ép tham số về <code>int</code> và cho <b>2</b>, không phải 2,7. Câu hỏi về header là bẫy thi kinh điển: <code>abs</code> &rarr; stdlib.h, <code>fabs</code> &rarr; math.h.</div>
 <div class="note-ct">Canh cột bằng <code>%5d</code>, <code>%-10s</code> cực hữu ích khi in bảng dữ liệu đẹp — dùng nhiều ở Workshop quản lý sinh viên.</div>
 </div>
 `,
         },
         {
-          title: 'Progress Test 1 (review CLO1–6)|||Progress Test 1 (ôn CLO1–6)',
+          title: 'Progress Test 1 — CLO1, CLO5, CLO6, CLO9 (session 36)|||Progress Test 1 — CLO1, CLO5, CLO6, CLO9 (buổi 36)',
           slug: 'prf192-progress-test-1',
           type: 'QUIZ',
-          description: 'Bài kiểm tra giữa chặng — chương 1 đến 7.',
+          description: 'Ôn chương 1–7. Lưu ý syllabus: cả hai progress test cộng lại 15%, mỗi bài 20–40 phút, kiểm CLO1, CLO5, CLO6, CLO9, và dạng đề là "Option 1: essay or…" — nên hãy luyện cả viết giải thích, không chỉ chọn đáp án.',
           quiz: {
             timeLimitSeconds: 1200,
             questions: [
@@ -2229,10 +2231,10 @@ a[0] = 10;               <span class="tok-comment">// dùng như mảng bình th
 `,
         },
         {
-          title: 'Progress Test 2 (review CLO7–9)|||Progress Test 2 (ôn CLO7–9)',
+          title: 'Progress Test 2 — CLO1, CLO5, CLO6, CLO9 (session 58)|||Progress Test 2 — CLO1, CLO5, CLO6, CLO9 (buổi 58)',
           slug: 'prf192-progress-test-2',
           type: 'QUIZ',
-          description: 'Bài kiểm tra giữa chặng — mảng, struct, chuỗi, file.',
+          description: 'Ôn mảng, struct, chuỗi, file. Syllabus ghi progress test kiểm CLO1, CLO5, CLO6, CLO9 (chương trình & cách chạy, con trỏ, thư viện C, file) và dạng đề là "Option 1: essay or…" — luyện viết giải thích, không chỉ chọn đáp án.',
           quiz: {
             timeLimitSeconds: 1200,
             questions: [
@@ -2585,22 +2587,22 @@ fp(5);                        <span class="tok-comment">// gọi qua con trỏ h
       ],
     },
     {
-      "title": "Final Exam|||Thi cuối kỳ",
-      "description": "Thi cuối kỳ gồm PE (thi thực hành) và FE (trắc nghiệm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "title": "Exams — PE & FE|||Các bài thi — PE & FE",
+      "description": "PE (thi thực hành 85 phút, 30%, cột điểm QUÁ TRÌNH, CLO2–CLO8) và FE (thi cuối kỳ trắc nghiệm 60 phút, 30%, CLO1–CLO9, sàn 4). Khung ôn + câu mẫu.",
       "lessons": [
         {
-          "title": "PE — Practical Exam|||PE — Thi thực hành",
+          "title": "PE — Practical Exam (85 min, 30%, CLO2–CLO8)|||PE — Thi thực hành (85 phút, 30%, CLO2–CLO8)",
           "slug": "prf192-final-exam-pe",
           "type": "article",
-          "description": "Khung thi thực hành (PE) của môn — format, cách chấm và cách chuẩn bị. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · PE</span>\n<h2>PE — Practical Exam</h2>\n<p class=\"lead\">The Practical Exam (PE) is a <strong>hands-on coding exam</strong>: you are given a problem or feature and must write (and usually run) working code on the machine within a time limit. It is graded on correctness, whether it runs, and good practice.</p>\n<h3>How to prepare</h3>\n<ul>\n<li>Rebuild small features from a blank file, <em>without notes</em> &mdash; copying tutorials is not enough.</li>\n<li>Practise the core pattern of this subject end-to-end until you can do it from memory.</li>\n<li>Read the requirement twice; build the smallest working version first, then extend.</li>\n<li>Test as you go; a program that runs and does 80% beats one that does not compile.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A real practical prompt bank for this subject will be added here later, in the exam room. Use the guidance above to prepare now.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · PE</span>\n<h2>PE — Thi thực hành</h2>\n<p class=\"lead\">Thi thực hành (PE) là <strong>thi code trực tiếp</strong>: bạn được giao một bài toán/tính năng và phải viết (thường là chạy) code hoạt động trên máy trong thời gian quy định. Chấm theo tính đúng, có chạy được không, và thực hành tốt.</p>\n<h3>Cách chuẩn bị</h3>\n<ul>\n<li>Dựng lại các tính năng nhỏ từ một file trống, <em>không nhìn ghi chú</em> &mdash; chép tutorial là chưa đủ.</li>\n<li>Luyện mẫu cốt lõi của môn đầu-cuối tới khi làm được từ trí nhớ.</li>\n<li>Đọc yêu cầu hai lần; dựng bản chạy được nhỏ nhất trước, rồi mở rộng.</li>\n<li>Test dọc đường; một chương trình chạy và làm được 80% hơn một chương trình không biên dịch nổi.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề thực hành thật cho môn này sẽ được thêm vào đây sau, trong trang phòng thi. Dùng hướng dẫn trên để chuẩn bị ngay từ giờ.</div>\n</div>"
+          "description": "Sự thật về PE theo syllabus (cột điểm quá trình, 85 phút, 30%, CLO2–CLO8) và cách chuẩn bị.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Practical Exam \u00b7 PE</span>\n<h2>PE \u2014 the 85-minute practical exam</h2>\n<p class=\"lead\">The PE is not part of the final exam: the syllabus lists it as an <strong>on-going</strong> component, <strong>1 part, 30% of the grade, 85 minutes</strong>, assessing <strong>CLO2&ndash;CLO8</strong>, with a completion criterion of <strong>&gt; 0</strong>. Its question type is given as &ldquo;preferable to be m[achine-graded]&rdquo;, i.e. you write C that is run and judged by its output.</p>\n<h3>What CLO2&ndash;CLO8 means you must be able to write</h3>\n<ul>\n<li><b>CLO2</b> &mdash; declarations, data types, expressions, casting, <code>scanf</code>/<code>printf</code> with the right specifiers.</li>\n<li><b>CLO3</b> &mdash; <code>if</code>/<code>switch</code>, <code>for</code>/<code>while</code>/<code>do-while</code>, clean indentation and naming.</li>\n<li><b>CLO4</b> &mdash; split the work into functions: prototype, definition, call, parameters and return value, a menu loop.</li>\n<li><b>CLO5</b> &mdash; pointers: <code>&amp;</code> and <code>*</code>, passing by address so a function can modify the caller&#39;s variable, <code>malloc</code>/<code>free</code>.</li>\n<li><b>CLO6</b> &mdash; the standard library: <code>stdlib.h</code> (<code>rand</code>, <code>srand</code>, <code>atoi</code>, <code>abs</code>), <code>math.h</code> (<code>sqrt</code>, <code>pow</code>, <code>fabs</code>), <code>ctype.h</code>, <code>time.h</code>.</li>\n<li><b>CLO7</b> &mdash; 1-D and 2-D arrays, linear search, selection sort, <code>struct</code>, an array of structs.</li>\n<li><b>CLO8</b> &mdash; strings: <code>char</code> arrays and the terminating <code>&#39;\\0&#39;</code>, <code>string.h</code> (<code>strlen</code>, <code>strcpy</code>, <code>strcmp</code>, <code>strcat</code>), an array of strings.</li>\n</ul>\n<p>Note what is <em>not</em> in that range: CLO1 (how a program runs) and CLO9 (files) are assessed by the progress tests, the workshops, the assignment and the final exam instead.</p>\n<h3>How to prepare</h3>\n<ul>\n<li>Rebuild small programs from a blank file, <em>without notes</em> &mdash; copying tutorials is not enough. The five workshops are the exact rehearsal for this.</li>\n<li>Practise the student-manager pattern end-to-end from memory: an array of structs, a menu loop, add / list / search / sort / delete as separate functions.</li>\n<li>Read the requirement twice; compile the smallest working version first, then extend. A program that runs and does 80% beats one that does not compile.</li>\n<li>Check your I/O format against the requirement exactly &mdash; machine grading compares output text.</li>\n<li>85 minutes is short. Type your skeleton (<code>#include</code>, <code>main</code>, the struct, the menu) from muscle memory so the time goes on the logic.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A real practical prompt bank for this subject will be added here later, in the exam room. Use the guidance above to prepare now.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi th\u1ef1c h\u00e0nh \u00b7 PE</span>\n<h2>PE \u2014 b\u00e0i thi th\u1ef1c h\u00e0nh 85 ph\u00fat</h2>\n<p class=\"lead\">PE kh\u00f4ng thu\u1ed9c thi cu\u1ed1i k\u1ef3: syllabus x\u1ebfp n\u00f3 l\u00e0 c\u1ed9t \u0111i\u1ec3m <strong>qu\u00e1 tr\u00ecnh</strong>, <strong>1 ph\u1ea7n, 30% \u0111i\u1ec3m m\u00f4n, 85 ph\u00fat</strong>, ki\u1ec3m <strong>CLO2&ndash;CLO8</strong>, s\u00e0n ho\u00e0n th\u00e0nh <strong>&gt; 0</strong>. D\u1ea1ng \u0111\u1ec1 ghi l\u00e0 &ldquo;preferable to be m[achine-graded]&rdquo;, t\u1ee9c b\u1ea1n vi\u1ebft C v\u00e0 b\u00e0i \u0111\u01b0\u1ee3c ch\u1ea1y r\u1ed3i ch\u1ea5m theo k\u1ebft qu\u1ea3 in ra.</p>\n<h3>CLO2&ndash;CLO8 ngh\u0129a l\u00e0 b\u1ea1n ph\u1ea3i vi\u1ebft \u0111\u01b0\u1ee3c g\u00ec</h3>\n<ul>\n<li><b>CLO2</b> &mdash; khai b\u00e1o, ki\u1ec3u d\u1eef li\u1ec7u, bi\u1ec3u th\u1ee9c, \u00e9p ki\u1ec3u, <code>scanf</code>/<code>printf</code> \u0111\u00fang ch\u1ec9 \u0111\u1ecbnh.</li>\n<li><b>CLO3</b> &mdash; <code>if</code>/<code>switch</code>, <code>for</code>/<code>while</code>/<code>do-while</code>, th\u1ee5t l\u1ec1 v\u00e0 \u0111\u1eb7t t\u00ean s\u1ea1ch s\u1ebd.</li>\n<li><b>CLO4</b> &mdash; chia vi\u1ec7c th\u00e0nh h\u00e0m: prototype, \u0111\u1ecbnh ngh\u0129a, l\u1eddi g\u1ecdi, tham s\u1ed1 v\u00e0 gi\u00e1 tr\u1ecb tr\u1ea3 v\u1ec1, v\u00f2ng l\u1eb7p menu.</li>\n<li><b>CLO5</b> &mdash; con tr\u1ecf: <code>&amp;</code> v\u00e0 <code>*</code>, truy\u1ec1n theo \u0111\u1ecba ch\u1ec9 \u0111\u1ec3 h\u00e0m s\u1eeda \u0111\u01b0\u1ee3c bi\u1ebfn c\u1ee7a n\u01a1i g\u1ecdi, <code>malloc</code>/<code>free</code>.</li>\n<li><b>CLO6</b> &mdash; th\u01b0 vi\u1ec7n chu\u1ea9n: <code>stdlib.h</code> (<code>rand</code>, <code>srand</code>, <code>atoi</code>, <code>abs</code>), <code>math.h</code> (<code>sqrt</code>, <code>pow</code>, <code>fabs</code>), <code>ctype.h</code>, <code>time.h</code>.</li>\n<li><b>CLO7</b> &mdash; m\u1ea3ng 1 chi\u1ec1u v\u00e0 2 chi\u1ec1u, t\u00ecm ki\u1ebfm tuy\u1ebfn t\u00ednh, s\u1eafp x\u1ebfp ch\u1ecdn, <code>struct</code>, m\u1ea3ng struct.</li>\n<li><b>CLO8</b> &mdash; chu\u1ed7i: m\u1ea3ng <code>char</code> v\u00e0 k\u00fd t\u1ef1 k\u1ebft th\u00fac <code>&#39;\\0&#39;</code>, <code>string.h</code> (<code>strlen</code>, <code>strcpy</code>, <code>strcmp</code>, <code>strcat</code>), m\u1ea3ng chu\u1ed7i.</li>\n</ul>\n<p>\u0110\u1ec3 \u00fd th\u1ee9 <em>kh\u00f4ng</em> n\u1eb1m trong d\u1ea3i \u0111\u00f3: CLO1 (ch\u01b0\u01a1ng tr\u00ecnh ch\u1ea1y ra sao) v\u00e0 CLO9 (file) \u0111\u01b0\u1ee3c ki\u1ec3m b\u1eb1ng progress test, workshop, assignment v\u00e0 thi cu\u1ed1i k\u1ef3.</p>\n<h3>C\u00e1ch chu\u1ea9n b\u1ecb</h3>\n<ul>\n<li>D\u1ef1ng l\u1ea1i c\u00e1c ch\u01b0\u01a1ng tr\u00ecnh nh\u1ecf t\u1eeb m\u1ed9t file tr\u1ed1ng, <em>kh\u00f4ng nh\u00ecn ghi ch\u00fa</em> &mdash; ch\u00e9p tutorial l\u00e0 ch\u01b0a \u0111\u1ee7. N\u0103m workshop ch\u00ednh l\u00e0 bu\u1ed5i t\u1ed5ng duy\u1ec7t cho b\u00e0i n\u00e0y.</li>\n<li>Luy\u1ec7n m\u1eabu qu\u1ea3n l\u00fd sinh vi\u00ean \u0111\u1ea7u-cu\u1ed1i t\u1eeb tr\u00ed nh\u1edb: m\u1ea3ng struct, v\u00f2ng l\u1eb7p menu, th\u00eam / li\u1ec7t k\u00ea / t\u00ecm / s\u1eafp x\u1ebfp / xo\u00e1 th\u00e0nh c\u00e1c h\u00e0m ri\u00eang.</li>\n<li>\u0110\u1ecdc y\u00eau c\u1ea7u hai l\u1ea7n; bi\u00ean d\u1ecbch b\u1ea3n ch\u1ea1y \u0111\u01b0\u1ee3c nh\u1ecf nh\u1ea5t tr\u01b0\u1edbc r\u1ed3i m\u1edf r\u1ed9ng. Ch\u01b0\u01a1ng tr\u00ecnh ch\u1ea1y v\u00e0 l\u00e0m \u0111\u01b0\u1ee3c 80% h\u01a1n ch\u01b0\u01a1ng tr\u00ecnh kh\u00f4ng bi\u00ean d\u1ecbch n\u1ed5i.</li>\n<li>\u0110\u1ed1i chi\u1ebfu \u0111\u1ecbnh d\u1ea1ng nh\u1eadp/xu\u1ea5t v\u1edbi \u0111\u1ec1 th\u1eadt ch\u00ednh x\u00e1c &mdash; ch\u1ea5m m\u00e1y so t\u1eebng d\u00f2ng ch\u1eef in ra.</li>\n<li>85 ph\u00fat l\u00e0 ng\u1eafn. H\u00e3y g\u00f5 khung s\u1eb5n (<code>#include</code>, <code>main</code>, struct, menu) b\u1eb1ng ph\u1ea3n x\u1ea1 \u0111\u1ec3 th\u1eddi gian d\u1ed3n cho ph\u1ea7n logic.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">C\u00e2u m\u1eabu</span> Ng\u00e2n h\u00e0ng \u0111\u1ec1 th\u1ef1c h\u00e0nh th\u1eadt cho m\u00f4n n\u00e0y s\u1ebd \u0111\u01b0\u1ee3c th\u00eam v\u00e0o \u0111\u00e2y sau, trong trang ph\u00f2ng thi. D\u00f9ng h\u01b0\u1edbng d\u1eabn tr\u00ean \u0111\u1ec3 chu\u1ea9n b\u1ecb ngay t\u1eeb gi\u1edd.</div>\n</div>"
         },
         {
-          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "title": "FE — Final Exam (multiple choice, 60 min, 30%, CLO1–CLO9)|||FE — Thi cuối kỳ (trắc nghiệm, 60 phút, 30%, CLO1–CLO9)",
           "slug": "prf192-final-exam-fe",
           "type": "article",
           "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam \u00b7 FE</span>\n<h2>FE \u2014 Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for PRF192 is a <strong>multiple-choice test</strong>: 1 part, <strong>60 minutes</strong>, <strong>30% of the grade</strong>, covering CLO1&ndash;CLO9, with a completion criterion of <strong>4</strong>. The syllabus does not state how many questions it contains &mdash; do not plan your pacing around a number nobody published; pace yourself off the clock on the day. Remember the other 30% is the 85-minute Practical Exam, so writing code by hand matters as much as recognising it.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cu\u1ed1i k\u1ef3 \u00b7 FE</span>\n<h2>FE \u2014 Thi tr\u1eafc nghi\u1ec7m cu\u1ed1i k\u1ef3</h2>\n<p class=\"lead\">B\u00e0i thi cu\u1ed1i k\u1ef3 (FE) c\u1ee7a PRF192 l\u00e0 <strong>thi tr\u1eafc nghi\u1ec7m</strong>: 1 ph\u1ea7n, <strong>60 ph\u00fat</strong>, <strong>30% \u0111i\u1ec3m m\u00f4n</strong>, ph\u1ee7 CLO1&ndash;CLO9, s\u00e0n ho\u00e0n th\u00e0nh <strong>4</strong>. Syllabus kh\u00f4ng ghi b\u00e0i thi c\u00f3 bao nhi\u00eau c\u00e2u &mdash; \u0111\u1eebng chia th\u1eddi gian theo m\u1ed9t con s\u1ed1 kh\u00f4ng ai c\u00f4ng b\u1ed1; h\u00e3y canh theo \u0111\u1ed3ng h\u1ed3 ngay t\u1ea1i ph\u00f2ng thi. Nh\u1edb r\u1eb1ng 30% c\u00f2n l\u1ea1i l\u00e0 Practical Exam 85 ph\u00fat, n\u00ean vi\u1ebft code b\u1eb1ng tay quan tr\u1ecdng ngang v\u1edbi nh\u1eadn ra code \u0111\u00fang.</p>\n<h3>C\u00e1ch l\u00e0m t\u1ed1t</h3>\n<ul>\n<li>Ph\u00e2n b\u1ed5 th\u1eddi gian: chia \u0111\u1ec1u theo s\u1ed1 c\u00e2u; \u0111\u00e1nh d\u1ea5u c\u00e2u kh\u00f3, quay l\u1ea1i \u1edf cu\u1ed1i.</li>\n<li>Lo\u1ea1i ph\u01b0\u01a1ng \u00e1n sai r\u00f5 r\u00e0ng tr\u01b0\u1edbc, r\u1ed3i ch\u1ecdn trong s\u1ed1 c\u00f2n l\u1ea1i.</li>\n<li>C\u00e2u \"n\u00ean l\u00e0m g\u00ec / c\u00e1i n\u00e0o t\u1ed1t nh\u1ea5t\" &mdash; tr\u1ea3 l\u1eddi theo ph\u01b0\u01a1ng ph\u00e1p c\u1ee7a m\u00f4n, kh\u00f4ng theo c\u1ea3m t\u00ednh.</li>\n<li>\u0110\u1eebng bao gi\u1edd b\u1ecf tr\u1ed1ng b\u00e0i thi c\u00f3 c\u1ed5ng &mdash; \u0111o\u00e1n c\u00f3 suy lu\u1eadn v\u1eabn h\u01a1n \u0111\u1ec3 tr\u1ed1ng.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">C\u00e2u m\u1eabu</span> C\u00e1c c\u00e2u d\u01b0\u1edbi \u0111\u00e2y l\u00e0 <strong>c\u00e2u m\u1eabu</strong> l\u1ea5y t\u1eeb ch\u00ednh m\u00f4n h\u1ecdc \u0111\u1ec3 minh ho\u1ea1 format. <em>\u0110\u1ec1 thi th\u1eadt</em> s\u1ebd \u0111\u01b0\u1ee3c th\u00eam v\u00e0o \u0111\u00e2y sau, trong trang ph\u00f2ng thi.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [

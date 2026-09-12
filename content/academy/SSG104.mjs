@@ -18,7 +18,7 @@ export default {
     description: 'Môn kỹ năng mềm nền tảng về giao tiếp và làm việc nhóm. Học lý thuyết nhóm & tâm lý nhóm, giao tiếp hiệu quả, lãnh đạo, quản lý xung đột, thuyết trình thuyết phục và viết văn bản công việc. Nhiều bài tập nhóm và một dự án nhóm.',
     whatYouLearn: 'Phân biệt nhóm & đội, tâm lý nhóm & các giai đoạn phát triển; giao tiếp lời & phi lời, lắng nghe; lý thuyết lãnh đạo & quyền lực trong nhóm; nhận diện & quản lý xung đột; thuyết trình thuyết phục; viết email/thư/đề xuất/báo cáo; tổ chức cuộc họp; tư duy phản biện & sáng tạo; kỹ năng nghề nghiệp.',
     requirements: 'Không có môn tiên quyết. Sẵn sàng làm việc nhóm và thuyết trình — phần lớn điểm là hoạt động nhóm và dự án nhóm.',
-    documentsNote: 'Tài liệu: Problem Solving in Teams and Groups (Cameron Piercy) · Business Communication for Success · Working in Groups (Pearson). Kèm file syllabus gốc SSG104.pdf.',
+    documentsNote: 'Sáu học liệu syllabus liệt kê: Problem Solving in Teams and Groups (Cameron W. Piercy, University of Kansas Libraries, 2019) · College Success (Lumen Learning) · Business Communication for Success (University of Minnesota, 2015, bản 2) · Working in Groups (bản 7, Pearson 2017) · Business Communication (bản 7, Thomson South-Western 2008) · slide PowerPoint của lớp. Công cụ: Internet. Kèm file syllabus gốc SSG104.pdf.',
   },
   sections: [
     /* ══════════════════ MỤC 0 — GIỚI THIỆU & HƯỚNG DẪN HỌC ══════════════════ */
@@ -49,8 +49,8 @@ export default {
   <div class="lz-stage">Communicating professionally</div>
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Persuasive Presentations</div><div class="lz-nsub">Present with impact</div></div></div>
   <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Business Writing &amp; Meetings</div><div class="lz-nsub">Email · report · running meetings</div></div></div>
-  <div class="lz-stage">Advanced · beyond the syllabus</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Putting it together · career &amp; the group project</div><div class="lz-nsub">Applying every skill for real</div></div></div>
+  <div class="lz-stage">Core syllabus · Session V + the 30% Group Project</div>
+  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Career exploration &amp; the group project</div><div class="lz-nsub">Sessions 45–51 (career, CLO11) and 15–21, 43–44, 54–60 (Group Project, 30%)</div></div></div>
 </div>
 <p>SSG104 complements <span class="badge">SSL101c</span> (study skills) and prepares you for every group project ahead — <span class="badge">PRJ301</span>, <span class="badge">SWP391</span> and beyond. These skills matter in interviews, internships and your whole professional life.</p>
 <div class="callout ok">Do not underestimate a "soft" subject. Technical brilliance is wasted if you cannot explain your idea, work with your team, or present your work convincingly. These skills often decide who gets promoted — and they are learned by practicing, not just reading.</div>
@@ -76,8 +76,8 @@ export default {
   <div class="lz-stage">Giao tiếp chuyên nghiệp</div>
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Thuyết trình thuyết phục</div><div class="lz-nsub">Trình bày có sức nặng</div></div></div>
   <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Viết công việc &amp; Họp</div><div class="lz-nsub">Email · báo cáo · điều hành họp</div></div></div>
-  <div class="lz-stage">Nâng cao · ngoài giáo trình</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Ghép lại · nghề nghiệp &amp; dự án nhóm</div><div class="lz-nsub">Áp dụng mọi kỹ năng thực tế</div></div></div>
+  <div class="lz-stage">Cốt lõi syllabus · Session V + Dự án nhóm 30%</div>
+  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Khám phá nghề nghiệp &amp; dự án nhóm</div><div class="lz-nsub">Session 45–51 (nghề nghiệp, CLO11) và 15–21, 43–44, 54–60 (Dự án nhóm, 30%)</div></div></div>
 </div>
 <p>SSG104 bổ trợ <span class="badge">SSL101c</span> (kỹ năng học) và chuẩn bị cho mọi dự án nhóm phía trước — <span class="badge">PRJ301</span>, <span class="badge">SWP391</span> và xa hơn. Các kỹ năng này quan trọng trong phỏng vấn, thực tập và cả đời làm nghề.</p>
 <div class="callout ok">Đừng đánh giá thấp một môn "mềm". Tài năng kỹ thuật vô ích nếu bạn không giải thích được ý tưởng, không làm việc được với đội, hay không trình bày công việc một cách thuyết phục. Các kỹ năng này thường quyết định ai được thăng tiến — và học bằng thực hành, không chỉ đọc.</div>
@@ -107,19 +107,21 @@ export default {
   <div class="kv"><span class="k">Grading scale</span><span class="v">10 <small>pass when average ≥ 5.0</small></span></div>
   <div class="kv"><span class="k">Exam eligibility</span><span class="v">Attend ≥ 80% of slots</span></div>
 </div>
-<h3>Grade structure</h3>
+<h3>Grade structure — the six components, exactly as the syllabus lists them</h3>
 <table>
-  <thead><tr><th>Component</th><th>Weight</th><th>Note</th></tr></thead>
+  <thead><tr><th>Component</th><th>Type</th><th>Parts</th><th>Weight</th><th>Completion</th><th>Duration</th><th>CLO</th></tr></thead>
   <tbody>
-    <tr><td>Activity</td><td>15%</td><td>3 in-class activities (5% each)</td></tr>
-    <tr><td>Group Assignment</td><td>20%</td><td>2 assignments (10% each)</td></tr>
-    <tr><td>Group Project</td><td>30%</td><td>3 parts: proposal, product, presentation/report (10% each)</td></tr>
-    <tr><td>Participation</td><td>10%</td><td>Engagement throughout the term</td></tr>
-    <tr><td>Quiz</td><td>5%</td><td>One short quiz on concepts</td></tr>
-    <tr><td>Final Exam</td><td>20%</td><td>30 min — must score ≥ 4 to pass</td></tr>
+    <tr><td>Activity</td><td>on-going</td><td>3</td><td>15% <small>(5% each)</small></td><td>&gt; 0</td><td>40&ndash;60&#39; each</td><td>CLO1, 2, 3, 5, 6, 7&hellip;</td></tr>
+    <tr><td>Group assignment</td><td>on-going</td><td>2</td><td>20% <small>(10% each)</small></td><td>&gt; 0</td><td>60&ndash;90&#39; each</td><td>CLO8&ndash;CLO12</td></tr>
+    <tr><td>Group Project</td><td>on-going</td><td>3</td><td>30% <small>(10% each)</small></td><td>&gt; 0</td><td>Week 1 &ndash; Week 10</td><td>CLO3, 4, 5, 7, 8, 9&hellip;</td></tr>
+    <tr><td>Participation</td><td>on-going</td><td>1</td><td>10%</td><td>&gt; 0</td><td>&mdash;</td><td>CLO12</td></tr>
+    <tr><td>Quiz</td><td>on-going</td><td>1</td><td>5%</td><td>&gt; 0</td><td>30&#39;</td><td>CLO1, 2, 3, 6, 7</td></tr>
+    <tr><td>Final exam</td><td>final exam</td><td>1</td><td>20%</td><td>&ge; 4</td><td><strong>30&#39;</strong></td><td><strong>All LOs</strong></td></tr>
   </tbody>
 </table>
-<div class="callout warn">Two gates: weighted average ≥ 5.0 AND the final ≥ 4.0. With 80% on-going and much of it group-based, <strong>showing up and contributing to your team is the grade.</strong> Do your share of every group task — your teammates and your marks depend on it.</div>
+<p>The three Group-Project parts are the proposal, the product and the presentation/report. <strong>The syllabus publishes no question count and no question type</strong> for the Quiz or the Final Exam &mdash; only the 30-minute duration of each, and that the final covers <em>all</em> twelve learning outcomes.</p>
+<div class="callout warn">Three gates, not two. (1) Attend ≥ 80% of slots to be allowed to sit the final. (2) <strong>Every one of the five on-going components has completion criterion &gt; 0</strong> &mdash; a zero on the Activities, a Group Assignment, any Group-Project part, Participation or the Quiz fails the subject by itself. (3) The syllabus's own pass line: <em>&ldquo;Final exam ≥ 4, Grade Average ≥ 5/10&rdquo;</em>. With 80% on-going and most of it group-based, <strong>showing up and contributing to your team is the grade.</strong> Do your share of every group task &mdash; your teammates and your marks depend on it.</div>
+<div class="callout">Note the shape of the final: <strong>30 minutes, covering all 12 CLOs</strong>. That is a fast, broad paper &mdash; it rewards knowing every chapter's vocabulary, not deep knowledge of one.</div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Mục 0 · Bài 0.2</span>
@@ -132,19 +134,21 @@ export default {
   <div class="kv"><span class="k">Thang điểm</span><span class="v">10 <small>qua môn khi trung bình ≥ 5.0</small></span></div>
   <div class="kv"><span class="k">Điều kiện dự thi</span><span class="v">Dự ≥ 80% số buổi</span></div>
 </div>
-<h3>Cấu trúc điểm</h3>
+<h3>Cấu trúc điểm — sáu thành phần, đúng như syllabus liệt kê</h3>
 <table>
-  <thead><tr><th>Thành phần</th><th>Trọng số</th><th>Ghi chú</th></tr></thead>
+  <thead><tr><th>Thành phần</th><th>Loại</th><th>Số phần</th><th>Trọng số</th><th>Điều kiện hoàn thành</th><th>Thời lượng</th><th>CLO</th></tr></thead>
   <tbody>
-    <tr><td>Hoạt động (Activity)</td><td>15%</td><td>3 hoạt động trên lớp (5% mỗi cái)</td></tr>
-    <tr><td>Bài tập nhóm</td><td>20%</td><td>2 bài (10% mỗi cái)</td></tr>
-    <tr><td>Dự án nhóm</td><td>30%</td><td>3 phần: đề xuất, sản phẩm, thuyết trình/báo cáo (10% mỗi phần)</td></tr>
-    <tr><td>Tham gia (Participation)</td><td>10%</td><td>Tích cực suốt kỳ</td></tr>
-    <tr><td>Quiz</td><td>5%</td><td>Một quiz ngắn về khái niệm</td></tr>
-    <tr><td>Thi cuối kỳ</td><td>20%</td><td>30 phút — phải đạt ≥ 4 mới qua môn</td></tr>
+    <tr><td>Hoạt động (Activity)</td><td>on-going</td><td>3</td><td>15% <small>(5% mỗi cái)</small></td><td>&gt; 0</td><td>40&ndash;60&#39; mỗi hoạt động</td><td>CLO1, 2, 3, 5, 6, 7&hellip;</td></tr>
+    <tr><td>Bài tập nhóm (Group asm)</td><td>on-going</td><td>2</td><td>20% <small>(10% mỗi bài)</small></td><td>&gt; 0</td><td>60&ndash;90&#39; mỗi bài</td><td>CLO8&ndash;CLO12</td></tr>
+    <tr><td>Dự án nhóm</td><td>on-going</td><td>3</td><td>30% <small>(10% mỗi phần)</small></td><td>&gt; 0</td><td>Tuần 1 &ndash; Tuần 10</td><td>CLO3, 4, 5, 7, 8, 9&hellip;</td></tr>
+    <tr><td>Tham gia (Participation)</td><td>on-going</td><td>1</td><td>10%</td><td>&gt; 0</td><td>&mdash;</td><td>CLO12</td></tr>
+    <tr><td>Quiz</td><td>on-going</td><td>1</td><td>5%</td><td>&gt; 0</td><td>30&#39;</td><td>CLO1, 2, 3, 6, 7</td></tr>
+    <tr><td>Thi cuối kỳ</td><td>final exam</td><td>1</td><td>20%</td><td>&ge; 4</td><td><strong>30&#39;</strong></td><td><strong>Toàn bộ LO</strong></td></tr>
   </tbody>
 </table>
-<div class="callout warn">Hai cửa: trung bình có trọng số ≥ 5.0 VÀ thi cuối ≥ 4.0. Với 80% là quá trình và phần lớn dựa vào nhóm, <strong>đi học và đóng góp cho đội chính là điểm.</strong> Làm phần của mình trong mọi việc nhóm — bạn cùng nhóm và điểm của bạn phụ thuộc vào đó.</div>
+<p>Ba phần của Dự án nhóm là đề xuất, sản phẩm và thuyết trình/báo cáo. <strong>Syllabus KHÔNG công bố số câu và dạng câu hỏi</strong> cho Quiz hay bài thi cuối — chỉ có thời lượng 30 phút mỗi bài, và việc bài thi cuối phủ <em>toàn bộ</em> mười hai chuẩn đầu ra.</p>
+<div class="callout warn">Ba cửa, không phải hai. (1) Dự ≥ 80% số slot mới được thi cuối kỳ. (2) <strong>Cả năm thành phần quá trình đều có điều kiện hoàn thành &gt; 0</strong> — một điểm 0 ở Hoạt động, một Bài tập nhóm, một phần của Dự án nhóm, Tham gia hay Quiz là tự nó đánh trượt môn. (3) Dòng điều kiện qua môn của chính syllabus: <em>&ldquo;Final exam ≥ 4, Grade Average ≥ 5/10&rdquo;</em>. Với 80% là quá trình và phần lớn dựa vào nhóm, <strong>đi học và đóng góp cho đội chính là điểm.</strong> Làm phần của mình trong mọi việc nhóm — bạn cùng nhóm và điểm của bạn phụ thuộc vào đó.</div>
+<div class="callout">Để ý hình dạng bài thi cuối: <strong>30 phút, phủ cả 12 CLO</strong>. Đó là một đề nhanh và rộng — nó thưởng cho việc nắm thuật ngữ của MỌI chương, chứ không phải hiểu sâu một chương.</div>
 </div>
 `,
         },
@@ -167,7 +171,7 @@ export default {
     <tr><td>CLO7</td><td>Understand &amp; manage conflict in groups</td><td>Chapter 4</td></tr>
     <tr><td>CLO9</td><td>Present a persuasive message professionally</td><td>Chapter 5</td></tr>
     <tr><td>CLO4, CLO10</td><td>Apply business writing; organize a meeting</td><td>Chapter 6</td></tr>
-    <tr><td>CLO3, CLO11–12</td><td>Critical/creative thinking; career skills; apply it all</td><td>Advanced + Project</td></tr>
+    <tr><td>CLO3, CLO11–12</td><td>Critical/creative thinking (sessions 10–17); career skills (sessions 45–51); apply it all (Group Project)</td><td>Session V lesson + Project</td></tr>
   </tbody>
 </table>
 <div class="note-ct">Almost every CLO is "apply" or "demonstrate" — you prove them by doing, in the group project and presentations. Read the concepts here, then practice them with your team.</div>
@@ -185,7 +189,7 @@ export default {
     <tr><td>CLO7</td><td>Hiểu &amp; quản lý xung đột trong nhóm</td><td>Chương 4</td></tr>
     <tr><td>CLO9</td><td>Trình bày một thông điệp thuyết phục chuyên nghiệp</td><td>Chương 5</td></tr>
     <tr><td>CLO4, CLO10</td><td>Áp dụng viết công việc; tổ chức một cuộc họp</td><td>Chương 6</td></tr>
-    <tr><td>CLO3, CLO11–12</td><td>Tư duy phản biện/sáng tạo; kỹ năng nghề; áp dụng tất cả</td><td>Nâng cao + Dự án</td></tr>
+    <tr><td>CLO3, CLO11–12</td><td>Tư duy phản biện/sáng tạo (session 10–17); kỹ năng nghề (session 45–51); áp dụng tất cả (Dự án nhóm)</td><td>Bài Phần V + Dự án</td></tr>
   </tbody>
 </table>
 <div class="note-ct">Gần như mọi CLO là "áp dụng" hoặc "thể hiện" — bạn chứng minh chúng bằng cách làm, trong dự án nhóm và thuyết trình. Đọc khái niệm ở đây, rồi thực hành với đội.</div>
@@ -203,9 +207,12 @@ export default {
 <h2>Materials &amp; how to study</h2>
 <h3>Materials</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">Problem Solving in Teams and Groups — Cameron Piercy</div><div class="lz-ld">Open textbook on how groups work and solve problems together.</div></div>
-  <div class="lz-layer"><div class="lz-lt">Business Communication for Success</div><div class="lz-ld">Practical guide to professional writing and speaking.</div></div>
-  <div class="lz-layer"><div class="lz-lt">Working in Groups (Pearson)</div><div class="lz-ld">The theory of teams, leadership and conflict.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Problem Solving in Teams and Groups — Cameron W. Piercy (University of Kansas Libraries, 2019)</div><div class="lz-ld">Open textbook on how groups work and solve problems together — cooperation, group psychology, social comparison (sessions 4–8).</div></div>
+  <div class="lz-layer"><div class="lz-lt">College Success — Lumen Learning</div><div class="lz-ld">Open textbook; the source for the career-exploration sessions (45–51): career development, résumé, cover letter, interviews.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Business Communication for Success — University of Minnesota (2015, 2nd ed.)</div><div class="lz-ld">Practical guide to professional writing and speaking — proposals, reports, letters, meetings.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Working in Groups — 7th ed., Pearson 2017</div><div class="lz-ld">The theory of teams, leadership and conflict.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Business Communication — 7th ed., Thomson South-Western 2008</div><div class="lz-ld">A second business-writing reference listed by the syllabus.</div></div>
+  <div class="lz-layer"><div class="lz-lt">PowerPoint slides</div><div class="lz-ld">The class slide deck, listed as a material in its own right.</div></div>
 </div>
 <h3>Tools that help teamwork</h3>
 <ul>
@@ -231,9 +238,12 @@ export default {
 <h2>Tài liệu &amp; cách học</h2>
 <h3>Tài liệu</h3>
 <div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">Problem Solving in Teams and Groups — Cameron Piercy</div><div class="lz-ld">Giáo trình mở về cách nhóm hoạt động và giải quyết vấn đề cùng nhau.</div></div>
-  <div class="lz-layer"><div class="lz-lt">Business Communication for Success</div><div class="lz-ld">Hướng dẫn thực hành viết và nói chuyên nghiệp.</div></div>
-  <div class="lz-layer"><div class="lz-lt">Working in Groups (Pearson)</div><div class="lz-ld">Lý thuyết về đội, lãnh đạo và xung đột.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Problem Solving in Teams and Groups — Cameron W. Piercy (University of Kansas Libraries, 2019)</div><div class="lz-ld">Giáo trình mở về cách nhóm hoạt động và giải quyết vấn đề cùng nhau — hợp tác, tâm lý nhóm, so sánh xã hội (session 4–8).</div></div>
+  <div class="lz-layer"><div class="lz-lt">College Success — Lumen Learning</div><div class="lz-ld">Giáo trình mở; nguồn cho phần khám phá nghề nghiệp (session 45–51): phát triển nghề, CV, thư xin việc, phỏng vấn.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Business Communication for Success — University of Minnesota (2015, bản 2)</div><div class="lz-ld">Hướng dẫn thực hành viết và nói chuyên nghiệp — đề xuất, báo cáo, thư, họp.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Working in Groups — bản 7, Pearson 2017</div><div class="lz-ld">Lý thuyết về đội, lãnh đạo và xung đột.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Business Communication — bản 7, Thomson South-Western 2008</div><div class="lz-ld">Tài liệu viết công việc thứ hai mà syllabus liệt kê.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Slide PowerPoint</div><div class="lz-ld">Bộ slide của lớp, được liệt kê là một học liệu riêng.</div></div>
 </div>
 <h3>Công cụ hỗ trợ làm nhóm</h3>
 <ul>
@@ -425,7 +435,7 @@ export default {
     <tr><td>Reward / Coercive</td><td>Ability to give rewards or penalties</td></tr>
   </tbody>
 </table>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Match your style to the person, not your preference.</b> Hersey and Blanchard&#39;s <em>Situational Leadership</em> model says the best style depends on a follower&#39;s competence and commitment for a given task: direct a nervous beginner, coach a learner, support a capable-but-unsure member, and delegate to an expert. Great leaders switch styles within one team, sometimes within one hour. <em>The syllabus lists fixed styles (autocratic/democratic/laissez-faire) as if you pick one; real leadership is fluid and person-specific.</em></div>
+<div class="callout"><span class="badge">Syllabus CLO6 · sessions 23–24</span> <b>Match your style to the person, not your preference.</b> Hersey and Blanchard&#39;s <em>Situational Leadership</em> model says the best style depends on a follower&#39;s competence and commitment for a given task: direct a nervous beginner, coach a learner, support a capable-but-unsure member, and delegate to an expert. Great leaders switch styles within one team, sometimes within one hour. <em>This is core material, not an extra: CLO6 is &ldquo;understand leadership theories and the model of leadership effectiveness&rdquo;, and Situational Leadership is one of those models. The autocratic / democratic / laissez-faire trio above is a common textbook classification, not a list the syllabus itself prescribes &mdash; so learn the theories (trait, behavioural, contingency, transformational) alongside it.</em></div>
 <div class="callout ok">The most respected leaders rely on <strong>expert</strong> and <strong>referent</strong> power — earned through competence and trust — rather than just position or coercion. In a student group project, the real leader is often whoever the team trusts, not whoever was assigned the role.</div>
 </div>
 <div class="ml-vi">
@@ -448,7 +458,7 @@ export default {
     <tr><td>Thưởng / Cưỡng chế</td><td>Khả năng cho thưởng hoặc phạt</td></tr>
   </tbody>
 </table>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Chọn phong cách theo người, không theo sở thích của bạn.</b> Mô hình <em>Lãnh đạo tình huống</em> của Hersey và Blanchard nói phong cách tốt nhất tuỳ vào năng lực và cam kết của người theo với một nhiệm vụ cụ thể: chỉ dẫn người mới đang lo lắng, kèm cặp người đang học, hỗ trợ người có khả năng nhưng chưa chắc, và uỷ quyền cho chuyên gia. Lãnh đạo giỏi đổi phong cách trong cùng một đội, đôi khi trong cùng một giờ. <em>Syllabus liệt kê các phong cách cố định (độc đoán/dân chủ/thả lỏng) như thể bạn chọn một; lãnh đạo thật thì linh hoạt và tuỳ từng người.</em></div>
+<div class="callout"><span class="badge">Syllabus CLO6 · session 23–24</span> <b>Chọn phong cách theo người, không theo sở thích của bạn.</b> Mô hình <em>Lãnh đạo tình huống</em> của Hersey và Blanchard nói phong cách tốt nhất tuỳ vào năng lực và cam kết của người theo với một nhiệm vụ cụ thể: chỉ dẫn người mới đang lo lắng, kèm cặp người đang học, hỗ trợ người có khả năng nhưng chưa chắc, và uỷ quyền cho chuyên gia. Lãnh đạo giỏi đổi phong cách trong cùng một đội, đôi khi trong cùng một giờ. <em>Đây là nội dung cốt lõi, không phải phần thêm: CLO6 là &ldquo;hiểu các lý thuyết lãnh đạo và mô hình hiệu quả lãnh đạo&rdquo;, và Lãnh đạo tình huống chính là một trong các mô hình đó. Bộ ba độc đoán / dân chủ / thả lỏng ở trên là cách phân loại phổ biến trong sách giáo khoa, KHÔNG phải danh sách syllabus quy định &mdash; nên hãy học kèm cả các lý thuyết (đặc điểm, hành vi, ngẫu nhiên, chuyển hoá).</em></div>
 <div class="callout ok">Các lãnh đạo được tôn trọng nhất dựa vào quyền lực <strong>chuyên môn</strong> và <strong>tham chiếu</strong> — giành được qua năng lực và tin tưởng — hơn là chỉ vị trí hay cưỡng chế. Trong một dự án nhóm sinh viên, lãnh đạo thật thường là người đội tin tưởng, không phải người được giao vai trò.</div>
 </div>
 `,
@@ -500,7 +510,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Compromising</div><div class="lz-ld">Both sides give a little. A quick, fair-enough middle ground.</div></div>
   <div class="lz-layer"><div class="lz-lt">Collaborating</div><div class="lz-ld">Work together for a win-win that satisfies everyone. The ideal — but takes time &amp; trust.</div></div>
 </div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Even &quot;good&quot; conflict has a ceiling.</b> A large meta-analysis by De Dreu and Weingart found that <em>both</em> relationship and task conflict tend to hurt team performance and satisfaction — the hoped-for benefit of task conflict is smaller and more fragile than people assume. A little debate about ideas helps; too much of any conflict, or conflict that turns personal, drags a team down. <em>The syllabus says task conflict &quot;can produce better decisions&quot;; the research adds the crucial caveat that the effect is weak and easily tips negative.</em></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Even &quot;good&quot; conflict has a ceiling.</b> A large meta-analysis by De Dreu and Weingart found that <em>both</em> relationship and task conflict tend to hurt team performance and satisfaction — the hoped-for benefit of task conflict is smaller and more fragile than people assume. A little debate about ideas helps; too much of any conflict, or conflict that turns personal, drags a team down. <em>The lead paragraph above &mdash; this course&#39;s own wording, not a line from the syllabus &mdash; says task conflict &ldquo;can produce better decisions&rdquo;. The research adds the crucial caveat: the effect is weak and easily tips negative.</em></div>
 <div class="callout ok">There is no single right style — but <strong>collaborating</strong> (win-win) is usually best for a team you will keep working with. When your group project hits a disagreement, focus on the shared goal, listen actively (Chapter 2), and look for a solution everyone can support.</div>
 </div>
 <div class="ml-vi">
@@ -522,7 +532,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Thoả hiệp (compromising)</div><div class="lz-ld">Cả hai bên nhường một chút. Một điểm giữa nhanh, đủ công bằng.</div></div>
   <div class="lz-layer"><div class="lz-lt">Hợp tác (collaborating)</div><div class="lz-ld">Làm việc cùng nhau cho một win-win thoả mãn tất cả. Lý tưởng — nhưng cần thời gian &amp; tin tưởng.</div></div>
 </div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Ngay cả xung đột &quot;tốt&quot; cũng có trần.</b> Một phân tích tổng hợp lớn của De Dreu và Weingart phát hiện <em>cả</em> xung đột quan hệ lẫn xung đột công việc đều có xu hướng làm hại hiệu suất và sự hài lòng của đội — lợi ích kỳ vọng của xung đột công việc nhỏ và mong manh hơn ta tưởng. Một chút tranh luận về ý tưởng thì tốt; quá nhiều xung đột bất kỳ loại nào, hay xung đột hoá cá nhân, đều kéo đội xuống. <em>Syllabus nói xung đột công việc &quot;có thể tạo quyết định tốt hơn&quot;; nghiên cứu bổ sung cảnh báo quan trọng rằng hiệu ứng đó yếu và dễ trượt sang tiêu cực.</em></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Ngay cả xung đột &quot;tốt&quot; cũng có trần.</b> Một phân tích tổng hợp lớn của De Dreu và Weingart phát hiện <em>cả</em> xung đột quan hệ lẫn xung đột công việc đều có xu hướng làm hại hiệu suất và sự hài lòng của đội — lợi ích kỳ vọng của xung đột công việc nhỏ và mong manh hơn ta tưởng. Một chút tranh luận về ý tưởng thì tốt; quá nhiều xung đột bất kỳ loại nào, hay xung đột hoá cá nhân, đều kéo đội xuống. <em>Đoạn mở đầu ở trên &mdash; câu chữ của chính khóa học này, không phải một dòng trong syllabus &mdash; nói xung đột công việc &ldquo;có thể tạo quyết định tốt hơn&rdquo;. Nghiên cứu bổ sung cảnh báo quan trọng: hiệu ứng đó yếu và dễ trượt sang tiêu cực.</em></div>
 <div class="callout ok">Không có phong cách đúng duy nhất — nhưng <strong>hợp tác</strong> (win-win) thường tốt nhất cho một đội bạn sẽ tiếp tục làm cùng. Khi dự án nhóm gặp bất đồng, tập trung vào mục tiêu chung, lắng nghe chủ động (Chương 2), và tìm một giải pháp mọi người ủng hộ được.</div>
 </div>
 `,
@@ -572,7 +582,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Voice</div><div class="lz-ld">Speak clearly, vary your pace, pause for emphasis. Avoid a monotone.</div></div>
   <div class="lz-layer"><div class="lz-lt">Slides</div><div class="lz-ld">Visual aids, not a script. Few words, clear images — you are the presentation, not the slides.</div></div>
 </div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Reading your slides aloud makes people understand less.</b> Cognitive-load research (Richard Mayer&#39;s <em>redundancy principle</em>) shows that when a slide is full of text and you read the same words, the audience&#39;s brain must process the same message twice through competing channels — comprehension drops. Put a few words or one image on the slide, then <em>speak</em> the detail. <em>The syllabus says &quot;few words, clear images&quot; as a style tip; the science explains why text-heavy slides actively sabotage your message.</em></div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Reading your slides aloud makes people understand less.</b> Cognitive-load research (Richard Mayer&#39;s <em>redundancy principle</em>) shows that when a slide is full of text and you read the same words, the audience&#39;s brain must process the same message twice through competing channels — comprehension drops. Put a few words or one image on the slide, then <em>speak</em> the detail. <em>&ldquo;Few words, clear images&rdquo; is the usual presentation advice &mdash; it is not a line in the syllabus. The science above explains why text-heavy slides actively sabotage your message.</em></div>
 <div class="callout ok">Handling nerves: everyone feels them. The cure is <strong>preparation and practice</strong> — rehearse out loud, know your opening cold, and remember the audience wants you to succeed. Persuasion comes from clarity and genuine belief, not tricks.</div>
 </div>
 <div class="ml-vi">
@@ -592,7 +602,7 @@ export default {
   <div class="lz-layer"><div class="lz-lt">Giọng nói</div><div class="lz-ld">Nói rõ, thay đổi nhịp độ, ngừng để nhấn mạnh. Tránh giọng đều đều.</div></div>
   <div class="lz-layer"><div class="lz-lt">Slide</div><div class="lz-ld">Hỗ trợ hình ảnh, không phải kịch bản. Ít chữ, hình rõ — bạn là bài thuyết trình, không phải slide.</div></div>
 </div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đọc slide thành tiếng khiến người ta hiểu ít hơn.</b> Nghiên cứu tải nhận thức (<em>nguyên tắc dư thừa</em> của Richard Mayer) cho thấy khi một slide đầy chữ và bạn đọc đúng những chữ đó, não người nghe phải xử lý cùng một thông điệp hai lần qua các kênh cạnh tranh — khả năng hiểu giảm. Hãy đặt vài chữ hoặc một hình lên slide, rồi <em>nói</em> phần chi tiết. <em>Syllabus nói &quot;ít chữ, hình rõ&quot; như một mẹo phong cách; khoa học giải thích vì sao slide dày chữ chủ động phá hoại thông điệp của bạn.</em></div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đọc slide thành tiếng khiến người ta hiểu ít hơn.</b> Nghiên cứu tải nhận thức (<em>nguyên tắc dư thừa</em> của Richard Mayer) cho thấy khi một slide đầy chữ và bạn đọc đúng những chữ đó, não người nghe phải xử lý cùng một thông điệp hai lần qua các kênh cạnh tranh — khả năng hiểu giảm. Hãy đặt vài chữ hoặc một hình lên slide, rồi <em>nói</em> phần chi tiết. <em>&ldquo;Ít chữ, hình rõ&rdquo; là lời khuyên thuyết trình thông thường &mdash; nó KHÔNG phải một dòng trong syllabus. Phần khoa học ở trên giải thích vì sao slide dày chữ chủ động phá hoại thông điệp của bạn.</em></div>
 <div class="callout ok">Làm chủ nỗi lo: ai cũng có. Cách chữa là <strong>chuẩn bị và luyện tập</strong> — tập nói thành tiếng, thuộc lòng phần mở, và nhớ người nghe muốn bạn thành công. Thuyết phục đến từ sự rõ ràng và niềm tin thật, không phải mánh khoé.</div>
 </div>
 `,
@@ -684,8 +694,8 @@ export default {
     },
     /* ══════════════════ NÂNG CAO 1 — GHÉP LẠI & NGHỀ NGHIỆP (CAPSTONE) ══════════════════ */
     {
-      title: 'Advanced 1 — Putting it all together: teamwork & career|||Nâng cao 1 — Ghép lại: làm nhóm & nghề nghiệp',
-      description: 'Ngoài giáo trình — bài tổng kết: dùng mọi kỹ năng trong dự án nhóm và sự nghiệp.',
+      title: 'Session V — Career exploration & the group project|||Phần V — Khám phá nghề nghiệp & dự án nhóm',
+      description: 'CỐT LÕI của syllabus, không phải phần nâng cao: Khám phá nghề nghiệp là Session V (session 45–51, CLO11) và Dự án nhóm chiếm 30% điểm (session 15–21, 43–44, 54–60). Bài tổng kết dùng mọi kỹ năng đã học vào hai phần đó.',
       lessons: [
         {
           title: 'N1.1 — The group project & your career|||N1.1 — Dự án nhóm & sự nghiệp của bạn',
@@ -694,9 +704,9 @@ export default {
           description: 'Áp dụng tất cả kỹ năng vào dự án nhóm, và vì sao chúng theo bạn cả đời.',
           content: `
 <div class="ml-en">
-<span class="eyebrow">Advanced 1 · Lesson N1.1</span>
+<span class="eyebrow">Session V · Lesson N1.1</span>
 <h2>Every skill, applied at once</h2>
-<p class="lead">The group project (CLO12) is where everything in SSG104 comes together. It is not busywork — it is a rehearsal for your entire career, because professional software is built exactly this way: teams, roles, meetings, conflict, presentations and reports.</p>
+<p class="lead">The group project (CLO12) is where everything in SSG104 comes together. It is <strong>30% of your grade</strong> in three graded parts — proposal, product, presentation/report — running from week 1 to week 10, and it is not busywork: it is a rehearsal for your entire career, because professional software is built exactly this way: teams, roles, meetings, conflict, presentations and reports. Career exploration (CLO11) is equally core &mdash; the syllabus gives it seven whole sessions, 45&ndash;51: career development, résumés, cover letters, and job-interview preparation, examined through Group Assignment 2 (a mock interview).</p>
 <div class="lz-map">
   <div class="lz-stage">Running a group project well</div>
   <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Form the team (Ch 1)</div><div class="lz-nsub">Set a shared goal, assign roles, expect a storming phase</div></div></div>
@@ -711,9 +721,9 @@ export default {
 <div class="note-ct">Congratulations on completing SSG104 — and Semester 2. You can now work effectively in a team, communicate clearly in speech and writing, lead and resolve conflict, and present persuasively. Combined with your technical courses, these people skills are what turn a good student into a valued professional. Use them in every project from here on.</div>
 </div>
 <div class="ml-vi">
-<span class="eyebrow">Nâng cao 1 · Bài N1.1</span>
+<span class="eyebrow">Phần V · Bài N1.1</span>
 <h2>Mọi kỹ năng, áp dụng cùng lúc</h2>
-<p class="lead">Dự án nhóm (CLO12) là nơi mọi thứ trong SSG104 ghép lại. Nó không phải việc cho có — mà là một buổi diễn tập cho cả sự nghiệp của bạn, vì phần mềm chuyên nghiệp được xây đúng theo cách này: đội, vai trò, họp, xung đột, thuyết trình và báo cáo.</p>
+<p class="lead">Dự án nhóm (CLO12) là nơi mọi thứ trong SSG104 ghép lại. Nó chiếm <strong>30% điểm môn</strong>, gồm ba phần được chấm — đề xuất, sản phẩm, thuyết trình/báo cáo — kéo dài từ tuần 1 tới tuần 10, và nó không phải việc cho có: đây là buổi diễn tập cho cả sự nghiệp của bạn, vì phần mềm chuyên nghiệp được xây đúng theo cách này: đội, vai trò, họp, xung đột, thuyết trình và báo cáo. Khám phá nghề nghiệp (CLO11) cũng là cốt lõi &mdash; syllabus dành hẳn bảy session, 45&ndash;51: phát triển nghề nghiệp, CV, thư xin việc và chuẩn bị phỏng vấn, kiểm qua Bài tập nhóm 2 (phỏng vấn mô phỏng).</p>
 <div class="lz-map">
   <div class="lz-stage">Chạy một dự án nhóm tốt</div>
   <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Lập đội (Ch 1)</div><div class="lz-nsub">Đặt mục tiêu chung, chia vai trò, lường trước pha bão tố</div></div></div>
@@ -733,14 +743,14 @@ export default {
     },
     {
       "title": "Final Exam|||Thi cuối kỳ",
-      "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "description": "Thi cuối kỳ FE: 30 phút, 20% điểm môn, phải đạt ≥4/10, phủ TOÀN BỘ 12 CLO. Syllabus không nêu dạng câu hỏi hay số câu — bài dưới nói rõ cái gì chính thức, cái gì không.",
       "lessons": [
         {
-          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "title": "FE — Final Exam (30 min, 20%, all 12 CLOs)|||FE — Thi cuối kỳ (30 phút, 20%, cả 12 CLO)",
           "slug": "ssg104-final-exam-fe",
           "type": "article",
-          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "description": "Syllabus cho gì (30 phút, 20%, ≥4, toàn bộ LO) và KHÔNG cho gì (format, số câu). Lộ trình quét 12 CLO + câu mẫu.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Assessment · FE</span>\n<h2>FE — Final Exam (30 minutes, 20%, all 12 CLOs, gate 4/10)</h2>\n<p class=\"lead\">What the SSG104 syllabus states about the final &mdash; and what it deliberately leaves open:</p>\n<table>\n<thead><tr><th>Field</th><th>Value (syllabus ID 11845)</th></tr></thead>\n<tbody>\n<tr><td>Category / type</td><td>Final exam</td></tr>\n<tr><td>Parts</td><td>1</td></tr>\n<tr><td>Weight</td><td><strong>20%</strong> &mdash; the other 80% is on-going work</td></tr>\n<tr><td>Duration</td><td><strong>30 minutes</strong></td></tr>\n<tr><td>Completion criterion</td><td><strong>&ge; 4</strong>/10 (the syllabus's pass line is &ldquo;Final exam ≥ 4, Grade Average ≥ 5/10&rdquo;)</td></tr>\n<tr><td>Learning outcomes examined</td><td><strong>All LOs</strong> &mdash; every one of CLO1&ndash;CLO12</td></tr>\n<tr><td>Question type</td><td><strong>Not stated in the syllabus</strong></td></tr>\n<tr><td>Number of questions</td><td><strong>Not stated in the syllabus</strong></td></tr>\n</tbody>\n</table>\n<div class=\"callout warn\"><span class=\"badge\">Correction</span> This page used to say the FE is &ldquo;a computer-graded multiple-choice test&rdquo; and to send you to Lesson 0.2 for a question count. Neither is in the syllabus &mdash; the assessment table gives only the five values above. Confirm the format with your lecturer or on the FLM; use the sample below to practise the <em>content</em>, not to predict the paper.</div>\n<h3>Thirty minutes, twelve outcomes &mdash; what that means for revision</h3>\n<p>This is the broadest, shortest paper you will sit. It cannot go deep, so it rewards knowing the key term and the key distinction from <em>every</em> part of the subject. Sweep the whole map:</p>\n<ul>\n<li><b>CLO1&ndash;CLO2 &mdash; groups &amp; their psychology.</b> Group vs team, Tuckman's stages, cooperation, groupthink, social comparison. Sessions 3&ndash;8; lesson 1.1.</li>\n<li><b>CLO3 &mdash; critical &amp; creative thinking.</b> Patterns of thought, Bloom's taxonomy, brainstorming rules, critical-thinking steps. Sessions 10&ndash;17.</li>\n<li><b>CLO4 &mdash; business writing.</b> Email, letter, memo, proposal (with its executive summary), report types. Sessions 13&ndash;14, 39&ndash;42; lesson 6.1.</li>\n<li><b>CLO5&ndash;CLO6 &mdash; leaders &amp; leadership theories.</b> Power in teams, the effectiveness models, choosing a style per person. Sessions 22&ndash;24; lesson 3.1.</li>\n<li><b>CLO7 &mdash; conflict.</b> Sources, the Thomas&ndash;Kilmann modes, negotiation, stress. Sessions 26&ndash;28; lesson 4.1.</li>\n<li><b>CLO8&ndash;CLO9 &mdash; verbal/nonverbal and persuasive presenting.</b> Listening, nonverbal channels, structure and delivery. Sessions 31&ndash;34; lessons 2.1, 5.1.</li>\n<li><b>CLO10 &mdash; meetings.</b> Before / during / after, the chair's role, disruptive behaviours. Sessions 37&ndash;38; lesson 6.1.</li>\n<li><b>CLO11&ndash;CLO12 &mdash; career skills and applying teamwork.</b> Career development, résumé, cover letter, interview types. Sessions 45&ndash;51; lesson N1.1.</li>\n</ul>\n<h3>In the room</h3>\n<ul>\n<li>Thirty minutes is tight: answer in one pass, flag at most two items, come back only if time remains.</li>\n<li>For &ldquo;which is best / what should you do&rdquo; items, answer by the model the subject teaches (Tuckman, Thomas&ndash;Kilmann, the meeting cycle), not by instinct.</li>\n<li>Never leave a gated paper blank &mdash; 4/10 is a hard floor, and an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course, for content practice. Real past papers are added in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Đánh giá · FE</span>\n<h2>FE — Thi cuối kỳ (30 phút, 20%, cả 12 CLO, cổng 4/10)</h2>\n<p class=\"lead\">Syllabus SSG104 nói gì về bài thi cuối &mdash; và nó cố tình để ngỏ điều gì:</p>\n<table>\n<thead><tr><th>Mục</th><th>Giá trị (syllabus ID 11845)</th></tr></thead>\n<tbody>\n<tr><td>Loại</td><td>Final exam</td></tr>\n<tr><td>Số phần</td><td>1</td></tr>\n<tr><td>Trọng số</td><td><strong>20%</strong> &mdash; 80% còn lại là điểm quá trình</td></tr>\n<tr><td>Thời lượng</td><td><strong>30 phút</strong></td></tr>\n<tr><td>Điều kiện hoàn thành</td><td><strong>&ge; 4</strong>/10 (dòng điều kiện qua môn của syllabus: &ldquo;Final exam ≥ 4, Grade Average ≥ 5/10&rdquo;)</td></tr>\n<tr><td>Chuẩn đầu ra được thi</td><td><strong>Toàn bộ LO</strong> &mdash; cả CLO1&ndash;CLO12</td></tr>\n<tr><td>Dạng câu hỏi</td><td><strong>Syllabus không nêu</strong></td></tr>\n<tr><td>Số câu</td><td><strong>Syllabus không nêu</strong></td></tr>\n</tbody>\n</table>\n<div class=\"callout warn\"><span class=\"badge\">Đính chính</span> Trang này trước đây nói FE là &ldquo;bài trắc nghiệm máy chấm&rdquo; và bảo bạn xem Bài 0.2 để biết số câu. Cả hai đều không có trong syllabus &mdash; bảng đánh giá chỉ cho năm giá trị ở trên. Hãy xác nhận format với giảng viên hoặc trên FLM; dùng phần câu mẫu bên dưới để luyện <em>nội dung</em>, không phải để đoán đề.</div>\n<h3>Ba mươi phút, mười hai chuẩn đầu ra — nghĩa là ôn thế nào</h3>\n<p>Đây là đề rộng nhất và ngắn nhất bạn sẽ làm. Nó không thể đào sâu, nên nó thưởng cho việc nắm đúng thuật ngữ và đúng sự phân biệt cốt lõi ở <em>mọi</em> phần của môn. Hãy quét cả bản đồ:</p>\n<ul>\n<li><b>CLO1&ndash;CLO2 &mdash; nhóm &amp; tâm lý nhóm.</b> Nhóm vs đội, các giai đoạn Tuckman, hợp tác, tư duy bầy đàn, so sánh xã hội. Session 3&ndash;8; bài 1.1.</li>\n<li><b>CLO3 &mdash; tư duy phản biện &amp; sáng tạo.</b> Các kiểu tư duy, thang Bloom, luật brainstorming, các bước tư duy phản biện. Session 10&ndash;17.</li>\n<li><b>CLO4 &mdash; viết công việc.</b> Email, thư, memo, đề xuất (kèm tóm tắt điều hành), các loại báo cáo. Session 13&ndash;14, 39&ndash;42; bài 6.1.</li>\n<li><b>CLO5&ndash;CLO6 &mdash; nhà lãnh đạo &amp; lý thuyết lãnh đạo.</b> Quyền lực trong nhóm, các mô hình hiệu quả, chọn phong cách theo từng người. Session 22&ndash;24; bài 3.1.</li>\n<li><b>CLO7 &mdash; xung đột.</b> Nguồn gốc, năm chế độ Thomas&ndash;Kilmann, đàm phán, căng thẳng. Session 26&ndash;28; bài 4.1.</li>\n<li><b>CLO8&ndash;CLO9 &mdash; lời/phi lời và thuyết trình thuyết phục.</b> Lắng nghe, các kênh phi lời, cấu trúc và cách trình bày. Session 31&ndash;34; bài 2.1, 5.1.</li>\n<li><b>CLO10 &mdash; họp.</b> Trước / trong / sau, vai trò người chủ trì, hành vi gây rối. Session 37&ndash;38; bài 6.1.</li>\n<li><b>CLO11&ndash;CLO12 &mdash; kỹ năng nghề nghiệp và áp dụng làm nhóm.</b> Phát triển nghề, CV, thư xin việc, các dạng phỏng vấn. Session 45&ndash;51; bài N1.1.</li>\n</ul>\n<h3>Trong phòng thi</h3>\n<ul>\n<li>Ba mươi phút là rất chặt: làm một lượt dứt điểm, đánh dấu nhiều nhất hai câu, còn giờ mới quay lại.</li>\n<li>Câu &ldquo;cái nào tốt nhất / nên làm gì&rdquo; hãy trả lời theo mô hình môn dạy (Tuckman, Thomas&ndash;Kilmann, vòng đời cuộc họp), không theo bản năng.</li>\n<li>Đừng bao giờ bỏ trống bài có cổng điểm &mdash; 4/10 là sàn cứng, và đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính khóa học, để luyện nội dung. Đề thi thật được thêm ở trang phòng thi.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [

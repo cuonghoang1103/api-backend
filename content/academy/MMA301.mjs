@@ -3,7 +3,7 @@
  * Bám syllabus FPTU (sylID 12848, 13 CLO, 60 buổi). Tiên quyết: FER202. 3 tín chỉ.
  * Môn CODE MOBILE: React Native + Expo. Coursera 2-course + Expo docs + tích hợp Gemini AI.
  * Grading: Assignment 10% + Practical Exam 20% + Progress Test 10% + Project 20% + Final Exam 40% (>=4), avg >=5.
- *   Có FINAL PROJECT DEFENSE (buổi 60) → ngân hàng vấn đáp.
+ *   Có FINAL PROJECT DEFENSE (buổi 55–60) → ngân hàng vấn đáp.
  * Chuẩn CHUYÊN NGHIỆP như SWP391: thang điểm, checklist, anti-fail/high-mark, ngân hàng câu hỏi thi + vấn đáp theo CLO,
  *   ngân hàng đề tài app + rubric, kịch bản demo, code snippet bank.
  * Song ngữ EN/VN đối xứng. Ví dụ có lời giải + ★ ngoài giáo trình.
@@ -23,7 +23,7 @@ export default {
     status: 'PUBLISHED',
     shortDescription: 'Build real iOS & Android apps with React Native and Expo: components & navigation, styling, hooks & Redux, FlatList, SQLite/Firebase, push notifications, Gemini AI, debugging and publishing — one codebase, two platforms.|||Xây app iOS & Android thật với React Native và Expo: component & điều hướng, styling, hooks & Redux, FlatList, SQLite/Firebase, push notification, Gemini AI, debug và phát hành — một codebase, hai nền tảng.',
     description: 'MMA301 là môn PHÁT TRIỂN ỨNG DỤNG DI ĐỘNG ĐA NỀN TẢNG của Kỳ 7, dạy React Native + Expo để xây một app chạy trên CẢ iOS và Android từ một codebase JavaScript/TypeScript. Bạn đi từ nền tảng (React Native là gì, cách hoạt động, cài môi trường, chạy trên simulator/emulator) → component & styling (View/Text/Image, Flexbox, StyleSheet) → điều hướng (React Navigation, nhiều màn hình) & xử lý input/touch → quản lý state (hooks + Redux) & hiển thị danh sách (FlatList/SectionList) → dữ liệu (SQLite, Firebase Realtime Database, AsyncStorage) & push notification (FCM/Expo) → tích hợp Gemini AI → debug & phát hành bằng Expo. Có Project + Practical Exam + Final Project Defense nên phần lớn điểm là app THẬT chạy được. Tiên quyết: FER202 (React). Đây là nền cho đồ án mobile PRM392 và mọi vai trò mobile sau này.',
-    whatYouLearn: 'Hiểu React Native là gì và cách bridge sang native; cài môi trường Expo và chạy app trên iOS simulator / Android emulator / thiết bị thật; dùng core component (View, Text, Image, ScrollView, TextInput) và style bằng StyleSheet + Flexbox; điều hướng nhiều màn hình với React Navigation (stack, tab); xử lý input người dùng và sự kiện touch; quản lý state với useState/useEffect và Redux (Toolkit); hiển thị danh sách hiệu quả với FlatList/SectionList; lưu dữ liệu bằng AsyncStorage, SQLite và Firebase Realtime Database; gửi push notification (Firebase FCM / Expo Notifications); tích hợp Gemini AI vào app; debug bằng React Native DevTools; và build + phát hành app bằng Expo EAS.',
+    whatYouLearn: 'Hiểu React Native là gì và cách nó gọi sang native theo Kiến trúc Mới (JSI/Fabric/TurboModules — mặc định từ RN 0.76 / Expo SDK 52; "bridge" bất đồng bộ là kiến trúc cũ); cài môi trường Expo và chạy app trên iOS simulator / Android emulator / thiết bị thật; dùng core component (View, Text, Image, ScrollView, TextInput) và style bằng StyleSheet + Flexbox; điều hướng nhiều màn hình với React Navigation (stack, tab); xử lý input người dùng và sự kiện touch; quản lý state với useState/useEffect và Redux (Toolkit); hiển thị danh sách hiệu quả với FlatList/SectionList; lưu dữ liệu bằng AsyncStorage, SQLite và Firebase Realtime Database; gửi push notification (Firebase FCM / Expo Notifications); tích hợp Gemini AI vào app; debug bằng React Native DevTools; và build + phát hành app bằng Expo EAS.',
     requirements: 'Tiên quyết: FER202 (React). Cần: Node.js LTS, Visual Studio Code, Expo Go (app trên điện thoại thật để chạy thử nhanh nhất), và tuỳ chọn Android Studio (emulator) / Xcode (iOS simulator, chỉ trên macOS). Nên biết React (component, props, state, hooks) và JavaScript ES6.',
     documentsNote: 'Giáo trình & tài liệu: Coursera — "React Native: Developing Android and iOS Apps" và "Mobile App Notifications, Databases, & Publishing" • Expo docs (docs.expo.dev) • React Navigation docs • Firebase docs. Công cụ AI hỗ trợ (được phép, dùng có trách nhiệm): ChatGPT, Gemini, V0 by Vercel. Luyện tập trực tiếp trên Code Lab: track React Native, Expo, React (deep-link theo từng bài). Cài đặt môi trường → Exp Hub. Kèm file syllabus gốc MMA301.pdf.',
   },
@@ -48,10 +48,11 @@ export default {
 <h3>How React Native works</h3>
 <div class="lz-flow">
   <div class="lz-step"><b>Your JS/TSX</b><span>React components (View, Text…)</span></div>
-  <div class="lz-step"><b>The bridge</b><span>translates to native UI calls</span></div>
-  <div class="lz-step"><b>Native views</b><span>real iOS UIView / Android View — not a webview</span></div>
+  <div class="lz-step"><b>JSI + TurboModules</b><span>JavaScript holds direct references to native objects — calls are synchronous</span></div>
+  <div class="lz-step"><b>Fabric renderer → native views</b><span>real iOS UIView / Android View — not a webview</span></div>
 </div>
 <p>Unlike a web app in a wrapper, React Native renders <strong>real native components</strong>, so your app looks and feels native on each platform.</p>
+<div class="callout warn"><strong>"The bridge" is the old architecture — know the difference.</strong> Until 2024, every JS→native call was serialised to JSON and sent asynchronously across a component literally called <em>the bridge</em>. Since <strong>React Native 0.76 / Expo SDK 52</strong> the <strong>New Architecture</strong> — <b>JSI</b> (direct references), <b>TurboModules</b> (lazily loaded native modules) and <b>Fabric</b> (the new renderer) — is the <em>default</em>, and the bridge is legacy. Older tutorials still draw the bridge; if you are asked "how does React Native work", say the New Architecture and mention what it replaced.</div>
 <h3>Your journey — from component to published app</h3>
 <div class="lz-map">
   <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">RN foundations &amp; styling</div><div class="lz-nsub">Expo setup · core components · Flexbox · StyleSheet</div></div></div>
@@ -78,10 +79,11 @@ export default {
 <h3>React Native hoạt động thế nào</h3>
 <div class="lz-flow">
   <div class="lz-step"><b>JS/TSX của bạn</b><span>component React (View, Text…)</span></div>
-  <div class="lz-step"><b>Cầu nối (bridge)</b><span>dịch sang lời gọi UI native</span></div>
-  <div class="lz-step"><b>View native</b><span>UIView iOS / View Android thật — không phải webview</span></div>
+  <div class="lz-step"><b>JSI + TurboModules</b><span>JavaScript giữ tham chiếu trực tiếp tới đối tượng native — gọi đồng bộ</span></div>
+  <div class="lz-step"><b>Bộ render Fabric → view native</b><span>UIView iOS / View Android thật — không phải webview</span></div>
 </div>
 <p>Khác một web app bọc trong khung, React Native render <strong>component native thật</strong>, nên app trông và cảm giác native trên mỗi nền tảng.</p>
+<div class="callout warn"><strong>"Bridge" là kiến trúc CŨ — phải biết khác nhau chỗ nào.</strong> Tới 2024, mọi lời gọi JS→native đều bị tuần tự hoá thành JSON rồi gửi bất đồng bộ qua một thành phần tên đúng là <em>the bridge</em>. Từ <strong>React Native 0.76 / Expo SDK 52</strong>, <strong>Kiến trúc Mới</strong> — <b>JSI</b> (tham chiếu trực tiếp), <b>TurboModules</b> (module native nạp lười) và <b>Fabric</b> (bộ render mới) — là <em>mặc định</em>, còn bridge là di sản. Nhiều hướng dẫn cũ vẫn vẽ cái bridge; nếu bị hỏi "React Native hoạt động thế nào", hãy trả lời theo Kiến trúc Mới và nói rõ nó thay thế cái gì.</div>
 <h3>Hành trình của bạn — từ component tới app đã phát hành</h3>
 <div class="lz-map">
   <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Nền tảng RN &amp; styling</div><div class="lz-nsub">cài Expo · core component · Flexbox · StyleSheet</div></div></div>
@@ -121,14 +123,14 @@ export default {
   <thead><tr><th>Component</th><th>Weight</th><th>Format</th><th>Gate</th></tr></thead>
   <tbody>
     <tr><td>Assignment (×2)</td><td>10%</td><td>Coding tasks, in tutorials &amp; at home</td><td>submit on time</td></tr>
-    <tr><td>Practical Exam</td><td>20%</td><td>Build/extend an app feature live, 85 min</td><td>—</td></tr>
+    <tr><td>Practical Exam</td><td>20%</td><td>85 min — <b>on-going</b>, sat during the term, not in the final exam period. The syllabus gives only the duration; expect hands-on React Native work against the CLOs.</td><td>completion &gt; 0</td></tr>
     <tr><td>Progress Test (×2)</td><td>10%</td><td>Short tests, 20–40 min</td><td>—</td></tr>
     <tr><td>Project</td><td>20%</td><td>A full mobile app + Final Project Defense</td><td>—</td></tr>
-    <tr><td>Final Exam</td><td>40%</td><td>Theory + applied, 60 min</td><td><b>≥ 4</b></td></tr>
+    <tr><td>Final Exam</td><td>40%</td><td>60 min — the only component of type "Final exam". <b>The question type is cut off in the published syllabus export</b>, so prepare both theory and applied work across CLO1–CLO13.</td><td><b>≥ 4</b></td></tr>
   </tbody>
 </table>
 <div class="formula"><span class="lbl">TO PASS</span> Final Exam ≥ 4 &nbsp;AND&nbsp; weighted average ≥ 5</div>
-<div class="callout warn">The <strong>Final Project Defense</strong> (session 60) is a live oral: you demo your app and answer questions about your code and decisions. It is not enough that the app runs — you must explain <em>why</em> you built it that way. We prepare a defense question bank in Chapter 6.</div>
+<div class="callout warn">The <strong>Final Project Defense</strong> runs across <strong>sessions 55–60</strong> (six slots, so teams are heard on different days — check which slot is yours). It is a live oral: you demo your app and answer questions about your code and decisions. It is not enough that the app runs — you must explain <em>why</em> you built it that way. We prepare a defense question bank in Chapter 6.</div>
 <div class="out"><b>Worked example:</b> Student has Assignment 8, Practical 7, Project 8, but Final Exam 3.5. The <b>Final ≥4 gate fails them</b> despite a high average. Lesson: the 40% Final Exam is where most of the risk sits — protect it.</div>
 <div class="pitfall">Missing more than 20% of contact slots bars you from the final exam entirely. And the Final Exam's ≥4 gate means you cannot coast on project marks alone — study the theory too.</div>
 </div>
@@ -146,14 +148,14 @@ export default {
   <thead><tr><th>Thành phần</th><th>Trọng số</th><th>Hình thức</th><th>Cổng</th></tr></thead>
   <tbody>
     <tr><td>Assignment (×2)</td><td>10%</td><td>Bài code, ở tutorial &amp; ở nhà</td><td>nộp đúng hạn</td></tr>
-    <tr><td>Practical Exam</td><td>20%</td><td>Xây/mở rộng một tính năng app tại chỗ, 85 phút</td><td>—</td></tr>
+    <tr><td>Practical Exam</td><td>20%</td><td>85 phút — <b>on-going</b>, thi trong kỳ chứ không phải trong đợt thi cuối. Syllabus chỉ ghi thời lượng; hãy chuẩn bị làm React Native trực tiếp theo các CLO.</td><td>hoàn thành &gt; 0</td></tr>
     <tr><td>Progress Test (×2)</td><td>10%</td><td>Test ngắn, 20–40 phút</td><td>—</td></tr>
     <tr><td>Project</td><td>20%</td><td>Một app di động đầy đủ + Final Project Defense</td><td>—</td></tr>
-    <tr><td>Final Exam</td><td>40%</td><td>Lý thuyết + áp dụng, 60 phút</td><td><b>≥ 4</b></td></tr>
+    <tr><td>Final Exam</td><td>40%</td><td>60 phút — thành phần DUY NHẤT thuộc loại "Final exam". <b>Ô dạng câu hỏi bị cắt trong bản syllabus công bố</b>, nên hãy ôn cả lý thuyết lẫn phần áp dụng trên CLO1–CLO13.</td><td><b>≥ 4</b></td></tr>
   </tbody>
 </table>
 <div class="formula"><span class="lbl">ĐỂ ĐẬU</span> Final Exam ≥ 4 &nbsp;VÀ&nbsp; trung bình có trọng số ≥ 5</div>
-<div class="callout warn"><strong>Final Project Defense</strong> (buổi 60) là một buổi vấn đáp trực tiếp: bạn demo app và trả lời câu hỏi về code và quyết định của mình. App chạy được là chưa đủ — bạn phải giải thích <em>vì sao</em> bạn làm như vậy. Chúng ta chuẩn bị ngân hàng câu hỏi vấn đáp ở Chương 6.</div>
+<div class="callout warn"><strong>Final Project Defense</strong> trải từ <strong>buổi 55 đến buổi 60</strong> (sáu ca, nên các nhóm bảo vệ vào ngày khác nhau — hãy hỏi ca của nhóm mình). Đây là buổi vấn đáp trực tiếp: bạn demo app và trả lời câu hỏi về code và quyết định của mình. App chạy được là chưa đủ — bạn phải giải thích <em>vì sao</em> bạn làm như vậy. Chúng ta chuẩn bị ngân hàng câu hỏi vấn đáp ở Chương 6.</div>
 <div class="out"><b>Ví dụ có lời giải:</b> Sinh viên có Assignment 8, Practical 7, Project 8, nhưng Final Exam 3.5. <b>Cổng Final ≥4 làm rớt</b> dù trung bình cao. Bài học: Final Exam 40% là nơi rủi ro lớn nhất — bảo vệ nó.</div>
 <div class="pitfall">Vắng quá 20% số buổi là bị cấm thi cuối kỳ hoàn toàn. Và cổng ≥4 của Final Exam nghĩa là bạn không thể chỉ dựa điểm project — hãy học cả lý thuyết.</div>
 </div>`,
@@ -818,7 +820,8 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
   renderSectionHeader={({ section }) =&gt; &lt;Text&gt;{section.title}&lt;/Text&gt;}
 /&gt;</pre>
 <em>SectionList is FlatList with headers — perfect for grouped data (contacts by letter, items by category).</em></div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>FlatList has performance props most students never touch.</b> <code>initialNumToRender</code>, <code>windowSize</code>, <code>getItemLayout</code> and a memoised <code>renderItem</code> keep long lists at 60fps. And use <code>ListEmptyComponent</code> for a friendly empty state and <code>onEndReached</code> for infinite scroll. Knowing these turns a laggy list into a native-smooth one — the exact polish that impresses at the project defense.</div>
+<div class="callout ok"><b>On the syllabus — session 21, "Implement Infinite Scrolling".</b> Paging a long list is examinable list work, not an extra: <code>onEndReached</code> fires when the user nears the bottom, <code>onEndReachedThreshold</code> decides how near, <code>ListFooterComponent</code> shows the spinner while the next page loads, and an <code>isLoading</code> guard stops one scroll from firing three fetches. Append the new page to <code>data</code> rather than replacing it. <code>ListEmptyComponent</code> (the friendly empty state) belongs to the same session's list skills.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>FlatList has performance props most students never touch.</b> <code>initialNumToRender</code>, <code>windowSize</code>, <code>getItemLayout</code> and a memoised <code>renderItem</code> keep long lists at 60fps. Knowing these turns a laggy list into a native-smooth one — the exact polish that impresses at the project defense.</div>
 <div class="pitfall">A missing or non-unique <code>keyExtractor</code> causes wrong rows to update, flicker, or lose scroll position. Every item needs a stable, unique key — never the array index if the list can reorder.</div>
 </div>
 <div class="ml-vi">
@@ -846,7 +849,8 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
   renderSectionHeader={({ section }) =&gt; &lt;Text&gt;{section.title}&lt;/Text&gt;}
 /&gt;</pre>
 <em>SectionList là FlatList có header — hoàn hảo cho dữ liệu nhóm (danh bạ theo chữ cái, mục theo danh mục).</em></div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>FlatList có các props hiệu năng hầu hết sinh viên không chạm.</b> <code>initialNumToRender</code>, <code>windowSize</code>, <code>getItemLayout</code> và một <code>renderItem</code> đã memo giữ danh sách dài ở 60fps. Và dùng <code>ListEmptyComponent</code> cho trạng thái rỗng thân thiện và <code>onEndReached</code> cho cuộn vô hạn. Biết những cái này biến một danh sách giật thành mượt native — đúng sự chỉn chu gây ấn tượng ở buổi vấn đáp project.</div>
+<div class="callout ok"><b>CÓ trong giáo trình — buổi 21, "Implement Infinite Scrolling".</b> Phân trang danh sách dài là kỹ năng có thể ra thi, không phải phần thêm: <code>onEndReached</code> kích hoạt khi người dùng gần chạm đáy, <code>onEndReachedThreshold</code> quyết định "gần" là bao nhiêu, <code>ListFooterComponent</code> hiện vòng xoay trong lúc tải trang kế, và một cờ <code>isLoading</code> chặn một cú cuộn bắn ba lần tải. Hãy NỐI trang mới vào <code>data</code> thay vì thay thế. <code>ListEmptyComponent</code> (trạng thái rỗng thân thiện) thuộc cùng nhóm kỹ năng danh sách của buổi này.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>FlatList có các props hiệu năng hầu hết sinh viên không chạm.</b> <code>initialNumToRender</code>, <code>windowSize</code>, <code>getItemLayout</code> và một <code>renderItem</code> đã memo giữ danh sách dài ở 60fps. Biết những cái này biến một danh sách giật thành mượt native — đúng sự chỉn chu gây ấn tượng ở buổi vấn đáp project.</div>
 <div class="pitfall">Một <code>keyExtractor</code> thiếu hoặc không duy nhất làm sai hàng cập nhật, nhấp nháy, hoặc mất vị trí cuộn. Mỗi mục cần một key ổn định, duy nhất — đừng dùng chỉ số mảng nếu danh sách có thể sắp lại.</div>
 </div>`,
         },
@@ -1091,11 +1095,14 @@ dispatch(<span class="tok-function">addItem</span>({ id: <span class="tok-number
   <div class="lz-layer"><b>Error boundaries</b> — catch a crashing component so the whole app does not white-screen.</div>
 </div>
 <h3>Publishing with Expo EAS</h3>
-<div class="out"><pre><span class="tok-comment"># build a real installable app (Android/iOS)</span>
+<div class="out"><pre><span class="tok-comment"># default Android build → .aab (Android App Bundle), the format Google Play requires</span>
 npx eas build --platform android
+<span class="tok-comment"># an INSTALLABLE .apk needs a profile in eas.json:</span>
+<span class="tok-comment">#   "preview": { "android": { "buildType": "apk" } }</span>
+npx eas build --platform android --profile preview
 <span class="tok-comment"># submit to a store, or share the build link for testing</span>
 npx eas submit</pre>
-<em>EAS (Expo Application Services) builds a real .apk/.ipa in the cloud and can submit to the Play Store / App Store — no local native toolchain needed.</em></div>
+<em>EAS (Expo Application Services) builds in the cloud, so you need no local native toolchain. Note the trap of syllabus session 30 ("Creating Android APK Files"): a plain <code>eas build --platform android</code> produces an <strong>.aab</strong>, which the Play Store wants but which you <strong>cannot install on a phone</strong>. For a file testers can side-load you must add a profile with <code>"buildType": "apk"</code>.</em></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Read the error message before changing code.</b> React Native's red error screen names the file and line and often the exact problem ("undefined is not an object"). Students who guess-and-change waste hours; students who read the stack trace fix in minutes. Add a <code>console.log</code> right before the failing line to inspect the actual value. Disciplined debugging — read, hypothesise, verify — is a skill the "use DevTools" lesson names but does not teach as a method.</div>
 <div class="pitfall">Publishing needs app metadata (icon, name, splash, version) and, for the stores, developer accounts and signing. Do not leave this to the last day — a first EAS build has setup steps that take time to get right.</div>
 </div>
@@ -1111,11 +1118,14 @@ npx eas submit</pre>
   <div class="lz-layer"><b>Error boundaries</b> — bắt một component crash để cả app không trắng màn.</div>
 </div>
 <h3>Phát hành với Expo EAS</h3>
-<div class="out"><pre><span class="tok-comment"># build mot app cai dat duoc that (Android/iOS)</span>
+<div class="out"><pre><span class="tok-comment"># build Android mac dinh -> .aab (Android App Bundle), dinh dang Google Play doi</span>
 npx eas build --platform android
+<span class="tok-comment"># muon .apk CAI DUOC thi phai them profile trong eas.json:</span>
+<span class="tok-comment">#   "preview": { "android": { "buildType": "apk" } }</span>
+npx eas build --platform android --profile preview
 <span class="tok-comment"># nop len store, hoac chia se link build de test</span>
 npx eas submit</pre>
-<em>EAS (Expo Application Services) build một .apk/.ipa thật trên cloud và có thể nộp lên Play Store / App Store — không cần bộ công cụ native cục bộ.</em></div>
+<em>EAS (Expo Application Services) build trên cloud nên bạn không cần bộ công cụ native cục bộ. Chú ý cái bẫy của buổi 30 trong syllabus ("Creating Android APK Files"): lệnh <code>eas build --platform android</code> trần tạo ra <strong>.aab</strong> — thứ Play Store cần nhưng <strong>không cài thẳng vào máy được</strong>. Muốn một file người test tự cài được thì phải thêm profile có <code>"buildType": "apk"</code>.</em></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đọc thông báo lỗi trước khi đổi code.</b> Màn lỗi đỏ của React Native nêu tên file và dòng và thường chính xác vấn đề ("undefined is not an object"). Sinh viên đoán-rồi-đổi phí hàng giờ; sinh viên đọc stack trace sửa trong vài phút. Thêm một <code>console.log</code> ngay trước dòng lỗi để soi giá trị thật. Debug có kỷ luật — đọc, giả thuyết, kiểm chứng — là một kỹ năng mà bài "dùng DevTools" gọi tên nhưng không dạy như một phương pháp.</div>
 <div class="pitfall">Phát hành cần metadata app (icon, tên, splash, version) và, với store, tài khoản developer và ký. Đừng để tới ngày cuối — một EAS build đầu tiên có các bước setup cần thời gian làm đúng.</div>
 </div>`,
@@ -1223,15 +1233,15 @@ npx eas submit</pre>
 </div>`,
         },
         {
-          title: '6.2 — Exam prep: PE, FE & CLO question bank|||6.2 — Ôn thi: PE, FE & ngân hàng câu hỏi theo CLO',
+          title: '6.2 — Exam prep: Practical Exam, Final Exam & CLO question bank|||6.2 — Ôn thi: Practical Exam, Final Exam & ngân hàng câu hỏi theo CLO',
           slug: 'mma301-6-2-exam-question-bank',
           type: 'VIDEO',
           description: 'Chiến lược Practical Exam + Final Exam, bộ khung code nhớ sẵn, và ngân hàng câu hỏi theo CLO.',
           content: `
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.2</span>
-<h2>Preparing for the PE &amp; Final Exam</h2>
-<p class="lead">The Final Exam (40%) has a ≥4 gate and mixes theory with applied questions. The Practical Exam (85 min) asks you to build a feature live. Rehearse both.</p>
+<h2>Preparing for the Practical Exam &amp; the Final Exam</h2>
+<p class="lead">The <strong>Final Exam</strong> (40%, 60 min) is the only component with a ≥4 gate; its question type is not published in the syllabus, so revise theory <em>and</em> applied work. The <strong>Practical Exam</strong> (20%, 85 min) is an <em>on-going</em> component sat during the term — expect hands-on React Native. Rehearse both.</p>
 <h3>The starter snippet — memorise this screen</h3>
 <div class="out"><pre><span class="tok-keyword">import</span> { useState } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">import</span> { View, Text, TextInput, Pressable, FlatList } <span class="tok-keyword">from</span> <span class="tok-string">'react-native'</span>;
@@ -1275,8 +1285,8 @@ npx eas submit</pre>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.2</span>
-<h2>Chuẩn bị PE &amp; Final Exam</h2>
-<p class="lead">Final Exam (40%) có cổng ≥4 và trộn lý thuyết với câu áp dụng. Practical Exam (85 phút) yêu cầu bạn xây một tính năng tại chỗ. Tập cả hai.</p>
+<h2>Chuẩn bị Practical Exam &amp; Final Exam</h2>
+<p class="lead"><strong>Final Exam</strong> (40%, 60 phút) là thành phần duy nhất có cổng ≥4; syllabus không công bố dạng câu hỏi, nên hãy ôn cả lý thuyết <em>lẫn</em> phần áp dụng. <strong>Practical Exam</strong> (20%, 85 phút) là thành phần <em>on-going</em> thi trong kỳ — hãy chuẩn bị làm React Native trực tiếp. Tập cả hai.</p>
 <h3>Snippet khởi đầu — học thuộc màn này</h3>
 <div class="out"><pre><span class="tok-keyword">import</span> { useState } <span class="tok-keyword">from</span> <span class="tok-string">'react'</span>;
 <span class="tok-keyword">import</span> { View, Text, TextInput, Pressable, FlatList } <span class="tok-keyword">from</span> <span class="tok-string">'react-native'</span>;
@@ -1342,7 +1352,7 @@ npx eas submit</pre>
     /* ══════════════════ CHƯƠNG 7 (NÂNG CAO ★) — PERFORMANCE & ARCHITECTURE ══════════════════ */
     {
       title: 'Chapter 7 (Advanced) — Performance, architecture & offline-first|||Chương 7 (Nâng cao) — Hiệu năng, kiến trúc & offline-first',
-      description: 'Ngoài giáo trình: tối ưu hiệu năng (list, memo, animation), kiến trúc sạch, và thiết kế offline-first.',
+      description: 'Đo hiệu năng bằng React DevTools Profiler CÓ trong giáo trình (buổi 27). Phần còn lại nằm ngoài: memo hoá, animation native, kiến trúc sạch và thiết kế offline-first.',
       lessons: [
         {
           title: '7.1 — Performance & clean architecture|||7.1 — Hiệu năng & kiến trúc sạch',
@@ -1351,8 +1361,9 @@ npx eas submit</pre>
           description: 'Tránh re-render thừa (memo/useCallback), list mượt, animation native, và tổ chức code sạch.',
           content: `
 <div class="ml-en">
-<span class="eyebrow">Chapter 7 · Lesson 7.1 · ★ Beyond the syllabus</span>
+<span class="eyebrow">Chapter 7 · Lesson 7.1</span>
 <h2>Making the app fast &amp; maintainable</h2>
+<p class="note"><b>Syllabus status:</b> performance <em>profiling</em> is on the syllabus &mdash; session 27, "Performance Profiling" with React DevTools. The memoisation patterns and the folder structure below go beyond it.</p>
 <p class="lead">A working app and a <em>smooth</em> app are different. These techniques keep the UI at 60fps and the codebase easy to grow — the polish that impresses at defense and matters on the job.</p>
 <h3>Avoid needless re-renders</h3>
 <div class="lz-stack">
@@ -1370,12 +1381,13 @@ npx eas submit</pre>
   components/       <span class="tok-comment">// shared UI</span>
   services/         <span class="tok-comment">// api, storage</span></pre>
 <em>Grouping by feature keeps related code together and lets the app grow without a tangled folder of 50 mixed files.</em></div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Measure before optimising.</b> Do not guess where the app is slow — use the performance monitor (shake → Show Perf Monitor) or the React DevTools Profiler to find the actual bottleneck. Often it is one un-memoised list row re-rendering thousands of times. Optimising the wrong thing wastes effort; measuring first is the professional habit that separates real performance work from cargo-cult tweaks.</div>
+<div class="callout ok"><b>On the syllabus — session 27, "Performance Profiling". Measure before optimising.</b> Do not guess where the app is slow — use the performance monitor (shake → Show Perf Monitor) or the React DevTools Profiler to find the actual bottleneck. Often it is one un-memoised list row re-rendering thousands of times. Optimising the wrong thing wastes effort; measuring first is the professional habit that separates real performance work from cargo-cult tweaks.</div>
 <div class="pitfall">Do not sprinkle <code>React.memo</code> and <code>useCallback</code> everywhere "for performance" — they add complexity and can even slow things down. Apply them where a profiler shows a real re-render problem, not preemptively.</div>
 </div>
 <div class="ml-vi">
-<span class="eyebrow">Chương 7 · Bài 7.1 · ★ Ngoài giáo trình</span>
+<span class="eyebrow">Chương 7 · Bài 7.1</span>
 <h2>Làm app nhanh &amp; dễ bảo trì</h2>
+<p class="note"><b>Vị trí trong giáo trình:</b> <em>đo hiệu năng (profiling)</em> CÓ trong syllabus &mdash; buổi 27, "Performance Profiling" với React DevTools. Các kỹ thuật memo hoá và cách tổ chức thư mục bên dưới thì nằm ngoài.</p>
 <p class="lead">Một app chạy được và một app <em>mượt</em> là khác nhau. Những kỹ thuật này giữ UI ở 60fps và codebase dễ lớn — sự chỉn chu gây ấn tượng ở vấn đáp và quan trọng khi đi làm.</p>
 <h3>Tránh re-render thừa</h3>
 <div class="lz-stack">
@@ -1393,7 +1405,7 @@ npx eas submit</pre>
   components/       <span class="tok-comment">// UI dung chung</span>
   services/         <span class="tok-comment">// api, storage</span></pre>
 <em>Gom theo tính năng giữ code liên quan cùng nhau và cho app lớn mà không rối một thư mục 50 file trộn lẫn.</em></div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đo trước khi tối ưu.</b> Đừng đoán chỗ app chậm — dùng performance monitor (lắc máy → Show Perf Monitor) hoặc React DevTools Profiler để tìm điểm nghẽn thật. Thường là một hàng list không-memo re-render hàng nghìn lần. Tối ưu sai chỗ phí công; đo trước là thói quen chuyên nghiệp tách công việc hiệu năng thật khỏi các chỉnh sửa cargo-cult.</div>
+<div class="callout ok"><b>CÓ trong giáo trình — buổi 27, "Performance Profiling". Đo trước khi tối ưu.</b> Đừng đoán chỗ app chậm — dùng performance monitor (lắc máy → Show Perf Monitor) hoặc React DevTools Profiler để tìm điểm nghẽn thật. Thường là một hàng list không-memo re-render hàng nghìn lần. Tối ưu sai chỗ phí công; đo trước là thói quen chuyên nghiệp tách công việc hiệu năng thật khỏi các chỉnh sửa cargo-cult.</div>
 <div class="pitfall">Đừng rải <code>React.memo</code> và <code>useCallback</code> khắp nơi "cho hiệu năng" — chúng thêm phức tạp và có thể còn làm chậm. Áp chúng nơi profiler cho thấy một vấn đề re-render thật, không phải phòng bị trước.</div>
 </div>`,
         },
@@ -1466,22 +1478,22 @@ npx eas submit</pre>
       ],
     },
     {
-      "title": "Final Exam|||Thi cuối kỳ",
-      "description": "Thi cuối kỳ gồm PE (thi thực hành) và FE (trắc nghiệm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "title": "Exams — the on-going Practical Exam (20%) and the Final Exam (40%)|||Các bài thi — Practical Exam on-going (20%) và Final Exam (40%)",
+      "description": "Practical Exam KHÔNG phải thi cuối kỳ: nó là thành phần on-going, 20%, 85 phút, không có cổng ≥4. Bài thi cuối kỳ duy nhất là Final Exam 40%, 60 phút, cổng ≥ 4.",
       "lessons": [
         {
-          "title": "PE — Practical Exam|||PE — Thi thực hành",
+          "title": "Practical Exam — 20%, 85 minutes, on-going (not a final)|||Practical Exam — 20%, 85 phút, on-going (không phải thi cuối kỳ)",
           "slug": "mma301-final-exam-pe",
           "type": "article",
-          "description": "Khung thi thực hành (PE) của môn — format, cách chấm và cách chuẩn bị. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · PE</span>\n<h2>PE — Practical Exam</h2>\n<p class=\"lead\">The Practical Exam (PE) is a <strong>hands-on coding exam</strong>: you are given a problem or feature and must write (and usually run) working code on the machine within a time limit. It is graded on correctness, whether it runs, and good practice.</p>\n<h3>How to prepare</h3>\n<ul>\n<li>Rebuild small features from a blank file, <em>without notes</em> &mdash; copying tutorials is not enough.</li>\n<li>Practise the core pattern of this subject end-to-end until you can do it from memory.</li>\n<li>Read the requirement twice; build the smallest working version first, then extend.</li>\n<li>Test as you go; a program that runs and does 80% beats one that does not compile.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A real practical prompt bank for this subject will be added here later, in the exam room. Use the guidance above to prepare now.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · PE</span>\n<h2>PE — Thi thực hành</h2>\n<p class=\"lead\">Thi thực hành (PE) là <strong>thi code trực tiếp</strong>: bạn được giao một bài toán/tính năng và phải viết (thường là chạy) code hoạt động trên máy trong thời gian quy định. Chấm theo tính đúng, có chạy được không, và thực hành tốt.</p>\n<h3>Cách chuẩn bị</h3>\n<ul>\n<li>Dựng lại các tính năng nhỏ từ một file trống, <em>không nhìn ghi chú</em> &mdash; chép tutorial là chưa đủ.</li>\n<li>Luyện mẫu cốt lõi của môn đầu-cuối tới khi làm được từ trí nhớ.</li>\n<li>Đọc yêu cầu hai lần; dựng bản chạy được nhỏ nhất trước, rồi mở rộng.</li>\n<li>Test dọc đường; một chương trình chạy và làm được 80% hơn một chương trình không biên dịch nổi.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề thực hành thật cho môn này sẽ được thêm vào đây sau, trong trang phòng thi. Dùng hướng dẫn trên để chuẩn bị ngay từ giờ.</div>\n</div>"
+          "description": "Practical Exam của MMA301 là thành phần on-going (loại \"on-going\", hoàn thành > 0), 85 phút, phủ toàn bộ CLO. Syllabus không công bố dạng đề — bài này nói rõ điều đó và hướng dẫn luyện.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Assessment · Practical Exam</span>\n<h2>The Practical Exam is an on-going component, not a final</h2>\n<p class=\"lead\">In the MMA301 syllabus (sylID 12848) the Practical Exam has <strong>Type = on-going</strong>, <strong>weight 20%</strong>, <strong>completion criterion &gt; 0</strong> and <strong>duration 85'</strong>, and it is mapped to the whole CLO set. Only one row in the assessment table has Type = <em>Final exam</em>: the 40% paper, described in the next lesson. So the PE is sat <strong>during the term</strong>, and it has <strong>no &ge; 4 gate</strong> &mdash; unlike the Final Exam.</p>\n<div class=\"callout warn\"><strong>Correction.</strong> This page previously presented the PE as one half of a two-part final exam. It is not. Knowing this changes how you plan: the PE cannot fail you on its own, but it also arrives far earlier than the exam period, so it has to be prepared during the course.</div>\n<table>\n<thead><tr><th>Field</th><th>Value in the syllabus</th></tr></thead>\n<tbody>\n<tr><td>Type</td><td><strong>on-going</strong></td></tr>\n<tr><td>Parts / weight</td><td>1 / <strong>20%</strong></td></tr>\n<tr><td>Completion criterion</td><td>&gt; 0 (no minimum mark gate)</td></tr>\n<tr><td>Duration</td><td><strong>85 minutes</strong></td></tr>\n<tr><td>CLOs</td><td>The full list (CLO1&ndash;CLO13 as printed, truncated in the export)</td></tr>\n<tr><td>Question type</td><td>not printed in the export &mdash; the syllabus gives only the duration</td></tr>\n</tbody>\n</table>\n\n<h3>What 85 minutes of React Native realistically asks for</h3>\n<p>The CLO list attached to this component is the practical half of the subject, so prepare to <em>write and run</em> code, not to describe it:</p>\n<ul>\n<li>Scaffold or extend an Expo app and get it running (CLO3).</li>\n<li>Build a screen from core components with StyleSheet + Flexbox (CLO4, CLO5).</li>\n<li>Add navigation between screens and pass params (CLO4).</li>\n<li>Hold state with hooks (and Redux where asked) and wire a controlled form (CLO6).</li>\n<li>Render data with FlatList/SectionList, including the empty and loading states (CLO7).</li>\n<li>Persist or fetch data &mdash; AsyncStorage, a local database, or a remote source (CLO9, CLO11).</li>\n<li>Debug what you broke, fast, using Fast Refresh, LogBox and DevTools (CLO8).</li>\n</ul>\n\n<h3>Rehearsal plan</h3>\n<ol>\n<li>Practise from a blank <code>npx create-expo-app</code> to a working two-screen app with a list and a form in under 60 minutes. Do it three times; the third is the one that counts.</li>\n<li>Keep a personal snippet bank (navigator setup, FlatList skeleton, AsyncStorage read/write) &mdash; recall speed is most of the mark.</li>\n<li>Build something that <em>runs</em> before you make anything pretty. A running partial app scores; a beautiful app that will not start does not.</li>\n<li>Check your device/emulator setup the day before. Setup problems eat exam minutes.</li>\n</ol>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A prompt bank for the practical will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Đánh giá · Practical Exam</span>\n<h2>Practical Exam là thành phần on-going, không phải thi cuối kỳ</h2>\n<p class=\"lead\">Trong syllabus MMA301 (sylID 12848), Practical Exam có <strong>Loại = on-going</strong>, <strong>trọng số 20%</strong>, <strong>mốc hoàn thành &gt; 0</strong> và <strong>thời lượng 85 phút</strong>, gắn với toàn bộ danh sách CLO. Chỉ một dòng trong bảng đánh giá có Loại = <em>Final exam</em>: bài 40%, nói ở bài kế tiếp. Vậy PE thi <strong>trong kỳ</strong>, và <strong>không có cổng &ge; 4</strong> &mdash; khác Final Exam.</p>\n<div class=\"callout warn\"><strong>Đính chính.</strong> Trang này trước đây trình bày PE như một nửa của bài thi cuối kỳ hai phần. Không phải. Biết đúng điều này làm đổi cách lên kế hoạch: PE một mình không làm bạn trượt, nhưng nó cũng tới sớm hơn đợt thi rất nhiều, nên phải luyện ngay trong quá trình học.</div>\n<table>\n<thead><tr><th>Trường</th><th>Giá trị trong syllabus</th></tr></thead>\n<tbody>\n<tr><td>Loại</td><td><strong>on-going</strong></td></tr>\n<tr><td>Số phần / trọng số</td><td>1 / <strong>20%</strong></td></tr>\n<tr><td>Mốc hoàn thành</td><td>&gt; 0 (không có ngưỡng điểm tối thiểu)</td></tr>\n<tr><td>Thời lượng</td><td><strong>85 phút</strong></td></tr>\n<tr><td>CLO</td><td>Toàn bộ danh sách (CLO1&ndash;CLO13 như in, bị cắt trong bản xuất)</td></tr>\n<tr><td>Dạng câu hỏi</td><td>không in trong bản xuất &mdash; syllabus chỉ ghi thời lượng</td></tr>\n</tbody>\n</table>\n\n<h3>85 phút React Native thực tế đòi gì</h3>\n<p>Danh sách CLO gắn với thành phần này là nửa thực hành của môn, nên hãy chuẩn bị <em>viết và chạy</em> code, không phải mô tả code:</p>\n<ul>\n<li>Dựng hoặc mở rộng một app Expo và cho nó chạy được (CLO3).</li>\n<li>Xây một màn hình từ core component với StyleSheet + Flexbox (CLO4, CLO5).</li>\n<li>Thêm điều hướng giữa các màn hình và truyền params (CLO4).</li>\n<li>Giữ state bằng hooks (và Redux khi đề yêu cầu) và nối một form có kiểm soát (CLO6).</li>\n<li>Hiển thị dữ liệu bằng FlatList/SectionList, kể cả trạng thái rỗng và đang tải (CLO7).</li>\n<li>Lưu hoặc lấy dữ liệu &mdash; AsyncStorage, một CSDL cục bộ, hoặc một nguồn từ xa (CLO9, CLO11).</li>\n<li>Debug nhanh thứ bạn vừa làm hỏng, bằng Fast Refresh, LogBox và DevTools (CLO8).</li>\n</ul>\n\n<h3>Kế hoạch tổng duyệt</h3>\n<ol>\n<li>Luyện từ <code>npx create-expo-app</code> trắng tới một app hai màn hình có danh sách và form chạy được trong dưới 60 phút. Làm ba lần; lần thứ ba mới là lần tính.</li>\n<li>Giữ một kho snippet riêng (cấu hình navigator, khung FlatList, đọc/ghi AsyncStorage) &mdash; tốc độ nhớ lại chiếm phần lớn điểm.</li>\n<li>Làm cho nó <em>chạy</em> trước khi làm cho nó đẹp. Một app chạy được dù chưa đủ tính năng vẫn có điểm; một app đẹp mà không khởi động được thì không.</li>\n<li>Kiểm thiết bị/emulator từ hôm trước. Trục trặc môi trường ăn mất phút thi.</li>\n</ol>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề thực hành sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>"
         },
         {
-          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "title": "Final Exam — 40%, 60 minutes, the ≥ 4 gate|||Final Exam — 40%, 60 phút, cổng ≥ 4",
           "slug": "mma301-final-exam-fe",
           "type": "article",
-          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "description": "Bài thi cuối kỳ duy nhất của MMA301: 40%, 60 phút, mốc hoàn thành 4. Syllabus KHÔNG in dạng câu hỏi — ôn cả lý thuyết lẫn áp dụng trên CLO1–CLO13. Kèm câu luyện.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam</span>\n<h2>The one component that can fail you on its own</h2>\n<p class=\"lead\">The syllabus lists exactly one row with Type = <strong>Final exam</strong>: <strong>40%, 1 part, completion criterion 4, 60 minutes</strong>, mapped across the CLO set. It is the single biggest weight in MMA301 and the only component with a minimum-mark gate &mdash; you pass only with <strong>Final Exam &ge; 4 AND weighted average &ge; 5</strong>, and you are admitted only with <strong>&ge; 80% attendance</strong>.</p>\n<div class=\"callout warn\"><strong>Correction.</strong> This page previously stated the final was &ldquo;a computer-graded multiple-choice test&rdquo;. The syllabus' question-type column for this row is cut off in the published export, so the format is <em>not published</em>. Prepare for both recall and applied reasoning rather than betting on MCQ technique.</div>\n\n<h3>What 60 minutes can cover</h3>\n<table>\n<thead><tr><th>CLO group</th><th>Likely to be asked about</th><th>Revise with</th></tr></thead>\n<tbody>\n<tr><td>CLO1, CLO2 &mdash; what RN is, how it works</td><td>Native components vs webview; the New Architecture (JSI, Fabric, TurboModules) and what the old bridge did; Expo vs bare RN</td><td>0.1</td></tr>\n<tr><td>CLO3&ndash;CLO5 &mdash; build, components, styling</td><td>Core components and their web equivalents; StyleSheet; Flexbox main/cross axis</td><td>1.1, 1.2, 2.2</td></tr>\n<tr><td>CLO6, CLO7 &mdash; state and lists</td><td>useState/useEffect, Redux slice/selector/dispatch, FlatList props, keyExtractor, infinite scrolling</td><td>3.1, 3.2</td></tr>\n<tr><td>CLO8 &mdash; debugging</td><td>Fast Refresh, LogBox, DevTools inspect and the Profiler, error boundaries</td><td>5.2, 7.1</td></tr>\n<tr><td>CLO9, CLO11 &mdash; data</td><td>AsyncStorage vs a local database vs a remote/Firebase source; what to store where</td><td>4.1</td></tr>\n<tr><td>CLO10, CLO12 &mdash; Gemini and notifications</td><td>Calling a model API safely (never ship the key in the app), local vs push notifications</td><td>5.1, 4.2</td></tr>\n<tr><td>CLO13 &mdash; publishing</td><td>EAS build and submit; .aab by default vs an .apk profile; app metadata and signing</td><td>5.2</td></tr>\n</tbody>\n</table>\n\n<h3>Exam-room technique</h3>\n<ul>\n<li>60 minutes is short: answer everything once, quickly, then go back. An unanswered question is a guaranteed zero against a &ge; 4 gate.</li>\n<li>For &ldquo;which component / which API would you use&rdquo; items, answer with the course's own choice (FlatList over ScrollView for long lists, AsyncStorage for small key-value data), not with a library you read about elsewhere.</li>\n<li>If a question asks for code, correct structure earns more than perfect syntax &mdash; write the props and the shape even if you cannot recall an exact option name.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Practice</span> The items below are practice questions drawn from this course. Real past-exam questions will be added later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ</span>\n<h2>Thành phần duy nhất có thể một mình làm bạn trượt</h2>\n<p class=\"lead\">Syllabus chỉ liệt kê đúng một dòng có Loại = <strong>Final exam</strong>: <strong>40%, 1 phần, mốc hoàn thành 4, 60 phút</strong>, trải trên toàn bộ CLO. Đây là trọng số lớn nhất của MMA301 và là thành phần duy nhất có ngưỡng điểm tối thiểu &mdash; bạn chỉ đậu khi <strong>Final Exam &ge; 4 VÀ trung bình có trọng số &ge; 5</strong>, và chỉ được dự thi khi <strong>điểm danh &ge; 80%</strong>.</p>\n<div class=\"callout warn\"><strong>Đính chính.</strong> Trang này trước đây khẳng định bài cuối là &ldquo;thi trắc nghiệm máy chấm&rdquo;. Cột dạng câu hỏi của dòng này bị cắt trong bản syllabus công bố, nên format <em>không được công bố</em>. Hãy ôn cả phần ghi nhớ lẫn phần suy luận áp dụng, đừng đặt cược vào kỹ thuật làm trắc nghiệm.</div>\n\n<h3>60 phút có thể hỏi những gì</h3>\n<table>\n<thead><tr><th>Nhóm CLO</th><th>Khả năng bị hỏi</th><th>Ôn ở</th></tr></thead>\n<tbody>\n<tr><td>CLO1, CLO2 &mdash; RN là gì, hoạt động thế nào</td><td>Component native khác webview; Kiến trúc Mới (JSI, Fabric, TurboModules) và cái bridge cũ làm gì; Expo khác bare RN</td><td>0.1</td></tr>\n<tr><td>CLO3&ndash;CLO5 &mdash; dựng app, component, style</td><td>Core component và tương đương bên web; StyleSheet; Flexbox trục chính/trục phụ</td><td>1.1, 1.2, 2.2</td></tr>\n<tr><td>CLO6, CLO7 &mdash; state và danh sách</td><td>useState/useEffect, slice/selector/dispatch của Redux, props FlatList, keyExtractor, cuộn vô hạn</td><td>3.1, 3.2</td></tr>\n<tr><td>CLO8 &mdash; debug</td><td>Fast Refresh, LogBox, DevTools inspect và Profiler, error boundary</td><td>5.2, 7.1</td></tr>\n<tr><td>CLO9, CLO11 &mdash; dữ liệu</td><td>AsyncStorage với CSDL cục bộ với nguồn từ xa/Firebase; cái gì lưu ở đâu</td><td>4.1</td></tr>\n<tr><td>CLO10, CLO12 &mdash; Gemini và thông báo</td><td>Gọi API model an toàn (không bao giờ ship khoá trong app), thông báo cục bộ khác push</td><td>5.1, 4.2</td></tr>\n<tr><td>CLO13 &mdash; phát hành</td><td>EAS build và submit; mặc định ra .aab so với profile .apk; metadata app và ký</td><td>5.2</td></tr>\n</tbody>\n</table>\n\n<h3>Kỹ thuật trong phòng thi</h3>\n<ul>\n<li>60 phút là ngắn: trả lời hết một lượt thật nhanh rồi quay lại. Câu bỏ trống là 0 chắc chắn, trong khi có cổng &ge; 4.</li>\n<li>Câu &ldquo;dùng component / API nào&rdquo; hãy trả lời theo lựa chọn của chính môn (FlatList thay ScrollView cho danh sách dài, AsyncStorage cho dữ liệu khoá-giá trị nhỏ), đừng theo thư viện đọc được ở chỗ khác.</li>\n<li>Nếu đề đòi code, cấu trúc đúng được điểm nhiều hơn cú pháp hoàn hảo &mdash; cứ viết đúng props và hình dạng dù không nhớ chính xác tên một tuỳ chọn.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Luyện tập</span> Các câu dưới đây là câu luyện lấy từ chính môn học. Đề thi thật sẽ được thêm sau, trong trang phòng thi.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [

@@ -158,11 +158,25 @@ export default {
 <p class="lead">From the official JPD123 syllabus. The prerequisite is JPD113 — this course assumes you already read kana fluently and know the A1.1 patterns.</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">Credits</span><span class="v">3</span></div>
-  <div class="kv"><span class="k">Total hours</span><span class="v">150h <small>45h class (20 sessions) + exam + self-study</small></span></div>
+  <div class="kv"><span class="k">Total hours</span><span class="v">150h <small>45h class (20 sessions) + 1h exam + 104h self-study</small></span></div>
   <div class="kv"><span class="k">Prerequisite</span><span class="v">JPD113</span></div>
   <div class="kv"><span class="k">Grading scale</span><span class="v">10 <small>pass when average ≥ 5.0</small></span></div>
   <div class="kv"><span class="k">Targets</span><span class="v">~300 words · 40 kanji · everyday conversation</span></div>
 </div>
+<h3>The five graded components (official syllabus)</h3>
+<table>
+  <thead><tr><th>Component</th><th>Parts</th><th>Weight</th><th>Completion criterion</th></tr></thead>
+  <tbody>
+    <tr><td>Kiểm tra nhỏ — small tests</td><td>2</td><td><b>40%</b></td><td>&gt; 0</td></tr>
+    <tr><td>Tham gia giờ học tại giảng đường — classroom participation</td><td>1</td><td><b>15%</b></td><td>&gt; 0</td></tr>
+    <tr><td><b>Thi cuối kỳ — final exam</b></td><td>2</td><td><b>45%</b></td><td><b>4</b></td></tr>
+    <tr><td>&nbsp;&nbsp;↳ Thi cuối kỳ: Nói — <b>speaking</b></td><td>1</td><td>30%</td><td>&gt; 0</td></tr>
+    <tr><td>&nbsp;&nbsp;↳ Thi cuối kỳ: Từ vựng, ngữ pháp, chữ Hán, đọc hiểu — <b>written</b> (vocabulary, grammar, kanji, reading)</td><td>1</td><td>15%</td><td>&gt; 0</td></tr>
+  </tbody>
+</table>
+<p>The two small tests are the ones scheduled in the syllabus as <em>Test 1</em> (session 31 — multiple choice on vocabulary, kanji and grammar of lessons 4–5) and <em>Test 2</em> (session 58 — same format for lessons 6–7).</p>
+<div class="callout warn">Two hard rules. <strong>Attendance:</strong> &quot;Tham dự tối thiểu 80% số giờ học trên lớp mới đủ điều kiện tham gia thi kì thi cuối môn&quot; — under 80% of class hours and you are not allowed to sit the final at all. <strong>The final exam has completion criterion 4</strong>: the combined 45% final must reach 4, and every on-going component must be above 0, on top of the overall average of 5.0.</div>
+<div class="note-ct">Where the marks really are: <strong>speaking alone is 30%</strong> — twice the written final. Rehearsing the conversations out loud is not extra practice in this subject, it is the single biggest component after the two small tests.</div>
 <h3>How to learn grammar (the A1.2 shift)</h3>
 <div class="lz-stack">
   <div class="lz-layer"><b>Learn patterns, not translations.</b> Japanese grammar attaches to the end of words. Drill the <em>shape</em> of a pattern (verb + ます) with many examples until it feels natural.</div>
@@ -182,11 +196,25 @@ export default {
 <p class="lead">Từ syllabus chính thức JPD123. Tiên quyết là JPD113 — môn này giả định bạn đã đọc kana thành thạo và biết các mẫu câu A1.1.</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">Tín chỉ</span><span class="v">3</span></div>
-  <div class="kv"><span class="k">Tổng giờ</span><span class="v">150h <small>45h lớp (20 session) + thi + tự học</small></span></div>
+  <div class="kv"><span class="k">Tổng giờ</span><span class="v">150h <small>45h lớp (20 session) + 1h thi + 104h tự học</small></span></div>
   <div class="kv"><span class="k">Tiên quyết</span><span class="v">JPD113</span></div>
   <div class="kv"><span class="k">Thang điểm</span><span class="v">10 <small>qua khi trung bình ≥ 5.0</small></span></div>
   <div class="kv"><span class="k">Mục tiêu</span><span class="v">~300 từ · 40 kanji · hội thoại đời thường</span></div>
 </div>
+<h3>Năm cột điểm (theo syllabus chính thức)</h3>
+<table>
+  <thead><tr><th>Thành phần</th><th>Số lần</th><th>Trọng số</th><th>Điều kiện hoàn thành</th></tr></thead>
+  <tbody>
+    <tr><td>Kiểm tra nhỏ (small test)</td><td>2</td><td><b>40%</b></td><td>&gt; 0</td></tr>
+    <tr><td>Tham gia giờ học tại giảng đường</td><td>1</td><td><b>15%</b></td><td>&gt; 0</td></tr>
+    <tr><td><b>Thi cuối kỳ</b></td><td>2</td><td><b>45%</b></td><td><b>4</b></td></tr>
+    <tr><td>&nbsp;&nbsp;↳ Thi cuối kỳ: <b>Nói</b></td><td>1</td><td>30%</td><td>&gt; 0</td></tr>
+    <tr><td>&nbsp;&nbsp;↳ Thi cuối kỳ: <b>Từ vựng, ngữ pháp, chữ Hán, đọc hiểu</b></td><td>1</td><td>15%</td><td>&gt; 0</td></tr>
+  </tbody>
+</table>
+<p>Hai bài kiểm tra nhỏ chính là <em>Test 1</em> (buổi 31 — trắc nghiệm từ vựng, chữ Hán, ngữ pháp bài 4–5) và <em>Test 2</em> (buổi 58 — cùng dạng, bài 6–7) trong lịch syllabus.</p>
+<div class="callout warn">Hai luật cứng. <strong>Chuyên cần:</strong> &quot;Tham dự tối thiểu 80% số giờ học trên lớp mới đủ điều kiện tham gia thi kì thi cuối môn&quot; — dưới 80% là không được dự thi cuối kỳ. <strong>Thi cuối kỳ có điều kiện hoàn thành 4</strong>: phần thi cuối 45% phải đạt 4, và mọi cột quá trình phải trên 0, cộng thêm trung bình chung ≥ 5.0.</div>
+<div class="note-ct">Điểm thật sự nằm ở đâu: <strong>riêng phần Nói đã 30%</strong> — gấp đôi bài viết cuối kỳ. Luyện nói thành tiếng các đoạn hội thoại không phải là luyện thêm ở môn này, đó là cột điểm lớn nhất sau hai bài kiểm tra nhỏ.</div>
 <h3>Cách học ngữ pháp (bước chuyển A1.2)</h3>
 <div class="lz-stack">
   <div class="lz-layer"><b>Học mẫu, không học bản dịch.</b> Ngữ pháp tiếng Nhật gắn vào cuối từ. Luyện <em>hình dạng</em> một mẫu (động từ + ます) với nhiều ví dụ tới khi thấy tự nhiên.</div>
@@ -219,7 +247,7 @@ export default {
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.1</span>
 <h2>Verbs — saying what you do</h2>
-<p class="lead">Japanese sentences end with the verb, and the polite way to say a verb is the <strong>ます-form</strong>. The beauty: its conjugations are perfectly regular — learn the four endings once and they work for every verb.</p>
+<p class="lead">Japanese sentences end with the verb, and the polite way to say a verb is the <strong>ます-form</strong>. The beauty: <em>once you have the ます-stem</em>, the four endings are perfectly regular and work for every verb, irregulars included. What is <strong>not</strong> regular is getting to that stem from the dictionary form — that depends on the verb group (see 7.2).</p>
 <h3>The four polite forms</h3>
 <table>
   <thead><tr><th></th><th>Present/Future</th><th>Past</th></tr></thead>
@@ -244,7 +272,7 @@ Notice the verb (holding tense &amp; negation) sits at the very end.</div>
 <b>A (yes):</b> はい、べんきょうします。   <b>A (no):</b> いいえ、べんきょうしません。<br>
 Note: the answer simply reuses the verb in the matching form — there is no "do/does" helper like in English.</div>
 
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The three verb groups &amp; the dictionary form.</b> The ます-form is polite, but every verb also has a plain "dictionary form" (たべる, のむ) — the form you look up and the base for all advanced grammar. Verbs fall into three groups (る-verbs, う-verbs, and two irregulars する/くる) that determine how they conjugate. A1.2 focuses on ます, but knowing the dictionary form and the groups exists is what makes the て-form (Chapter 6) and all of A2 grammar click instead of feeling random.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The three verb groups &amp; the dictionary form.</b> The ます-form is polite, but every verb also has a plain "dictionary form" (たべる, のむ) — the form you look up and the base for all advanced grammar. Verbs fall into three groups (る-verbs, う-verbs, and two irregulars する/くる) that determine how they conjugate. A1.2 focuses on ます, but knowing the dictionary form and the groups exists is what makes the て-form (Chapter 7) and all of A2 grammar click instead of feeling random.</div>
 <a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a12%2Flearn&reflabel=JPD123%20%E2%80%94%20Elementary%20Japanese%20A1.2" target="_blank" rel="noopener">
   <span class="lc-ico">📖</span>
   <span class="lc-body"><span class="lc-title">Drill verb conjugation</span><span class="lc-sub">ます/ません/ました patterns on My Language.</span></span>
@@ -254,7 +282,7 @@ Note: the answer simply reuses the verb in the matching form — there is no "do
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.1</span>
 <h2>Động từ — nói mình làm gì</h2>
-<p class="lead">Câu tiếng Nhật kết thúc bằng động từ, và cách lịch sự để nói một động từ là <strong>thể ます</strong>. Cái hay: cách chia của nó hoàn toàn đều — học bốn đuôi một lần và chúng chạy cho mọi động từ.</p>
+<p class="lead">Câu tiếng Nhật kết thúc bằng động từ, và cách lịch sự để nói một động từ là <strong>thể ます</strong>. Cái hay: <em>một khi đã có gốc ます</em>, bốn đuôi hoàn toàn đều và chạy cho mọi động từ, kể cả bất quy tắc. Thứ <strong>không</strong> đều là cách đi từ thể từ điển tới gốc đó — nó phụ thuộc nhóm động từ (xem 7.2).</p>
 <h3>Bốn thể lịch sự</h3>
 <table>
   <thead><tr><th></th><th>Hiện tại/Tương lai</th><th>Quá khứ</th></tr></thead>
@@ -279,7 +307,7 @@ Note: the answer simply reuses the verb in the matching form — there is no "do
 <b>Đáp (có):</b> はい、べんきょうします。   <b>Đáp (không):</b> いいえ、べんきょうしません。<br>
 Chú ý: câu trả lời chỉ dùng lại động từ ở thể tương ứng — không có trợ động từ "do/does" như tiếng Anh.</div>
 
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Ba nhóm động từ &amp; thể từ điển.</b> Thể ます là lịch sự, nhưng mọi động từ còn có một "thể từ điển" thể ngắn (たべる, のむ) — thể bạn tra từ điển và là gốc cho mọi ngữ pháp nâng cao. Động từ chia thành ba nhóm (động từ る, động từ う, và hai bất quy tắc する/くる) quyết định cách chia. A1.2 tập trung vào ます, nhưng biết thể từ điển và các nhóm tồn tại là điều làm thể て (Chương 6) và toàn bộ ngữ pháp A2 "thấm" thay vì thấy ngẫu nhiên.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Ba nhóm động từ &amp; thể từ điển.</b> Thể ます là lịch sự, nhưng mọi động từ còn có một "thể từ điển" thể ngắn (たべる, のむ) — thể bạn tra từ điển và là gốc cho mọi ngữ pháp nâng cao. Động từ chia thành ba nhóm (động từ る, động từ う, và hai bất quy tắc する/くる) quyết định cách chia. A1.2 tập trung vào ます, nhưng biết thể từ điển và các nhóm tồn tại là điều làm thể て (Chương 7) và toàn bộ ngữ pháp A2 "thấm" thay vì thấy ngẫu nhiên.</div>
 <a class="link-card codelab" href="/language/ja/grammar?ref=%2Fcourses%2Felementary-japanese-1-a12%2Flearn&reflabel=JPD123%20%E2%80%94%20Elementary%20Japanese%20A1.2" target="_blank" rel="noopener">
   <span class="lc-ico">📖</span>
   <span class="lc-body"><span class="lc-title">Luyện chia động từ</span><span class="lc-sub">Mẫu ます/ません/ました trên My Language.</span></span>
@@ -355,7 +383,7 @@ Chú ý: câu trả lời chỉ dùng lại động từ ở thể tương ứng
               { question: 'The particle that marks the direct object (the thing acted on) is…|||Trợ từ đánh dấu tân ngữ trực tiếp (vật bị tác động) là…', options: ['へ', 'を', 'で', 'に'], correctIndex: 1, points: 1 },
               { question: 'To say the place where an action happens (study at the library), use…|||Để nói nơi một hành động xảy ra (học ở thư viện), dùng…', options: ['に', 'で', 'へ', 'を'], correctIndex: 1, points: 1 },
               { question: 'A point in time (wake up AT 7) is marked with…|||Một thời điểm (thức dậy LÚC 7 giờ) được đánh dấu bằng…', options: ['を', 'に', 'で', 'は'], correctIndex: 1, points: 1 },
-              { question: 'The ます-form conjugations are notable for being… (beyond-syllabus insight)|||Cách chia thể ます đáng chú ý vì… (gợi ý ngoài giáo trình)', options: ['completely irregular|||hoàn toàn bất quy tắc', 'perfectly regular across all verbs|||hoàn toàn đều với mọi động từ', 'only for one verb|||chỉ cho một động từ', 'never used|||không bao giờ dùng'], correctIndex: 1, points: 1 },
+              { question: 'Once you have the ます-stem, the four ます-form endings are…|||Một khi đã có gốc ます, bốn đuôi của thể ます là…', options: ['different for every verb group|||khác nhau theo từng nhóm động từ', 'the same for every verb, irregulars included|||giống nhau với mọi động từ, kể cả bất quy tắc', 'only used with する|||chỉ dùng với する', 'never used in speech|||không bao giờ dùng khi nói'], correctIndex: 1, points: 1 },
             ],
           },
         },
@@ -862,7 +890,7 @@ B: いいですね。見<b>ましょう</b>。(Hay đấy. Cùng xem nào!)</div
 <p class="lead">Japanese does not simply say "three books." It picks a <strong>counter word</strong> (助数詞) that matches the <em>shape or category</em> of the thing, and the sounds shift with rendaku. Together with the complete clock, this is the everyday numeracy A1.2 expects — and it is the single topic beginners most often skip and later regret.</p>
 
 <h3>The generic counter — つ (1–10)</h3>
-<p>When you do not know the specific counter, the native <b>つ</b> series works for most physical objects up to ten — a reliable fallback.</p>
+<p>When you do not know the specific counter, the native <b>つ</b> series (ひとつ, ふたつ … ここのつ, とお) works for most physical objects <b>from 1 to 10</b> — a reliable fallback. From 11 on there is no つ form; you go back to the Sino-Japanese numbers (じゅういち…).</p>
 <div class="formula"><span class="lbl">ひとつ・ふたつ… (generic things)</span>1 ひとつ  2 ふたつ  3 みっつ  4 よっつ  5 いつつ<br>6 むっつ  7 ななつ  8 やっつ  9 ここのつ  10 とお</div>
 
 <h3>Specific counters (助数詞)</h3>
@@ -893,7 +921,7 @@ Q: なんじに はじまりますか。 ("What time does it start?")  A: <b>く
 
 <div class="pitfall"><b>Trap — the counter reshapes the number.</b> The number is not read the same before every counter: 3 alone is さん, but "3 bottles" is さん<b>ぼん</b> and "3 cups" is さん<b>ばい</b>. The 1 / 6 / 8 / 10 group especially triggers a small tsu (っ) and rendaku. No rule removes the memorising — only repetition does.</div>
 
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why does Japanese need so many counters?</b> Counters classify nouns by shape and category — a feature Japanese shares with Chinese and other Asian languages but not English. There are hundreds (～台 for machines, ～匹 for small animals, ～階 for floors), yet daily life runs on about a dozen. When stuck, the generic つ series (up to 9) is an accepted fallback for most objects — the one safety net worth memorising first.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why does Japanese need so many counters?</b> Counters classify nouns by shape and category — a feature Japanese shares with Chinese and other Asian languages but not English. There are hundreds (～台 for machines, ～匹 for small animals, ～階 for floors), yet daily life runs on about a dozen. When stuck, the generic つ series (1–10: ひとつ … とお) is an accepted fallback for most objects — the one safety net worth memorising first.</div>
 <a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a12%2Flearn&reflabel=JPD123%20%E2%80%94%20Elementary%20Japanese%20A1.2" target="_blank" rel="noopener">
   <span class="lc-ico">🔢</span>
   <span class="lc-body"><span class="lc-title">Drill counters &amp; time</span><span class="lc-sub">Number &amp; counter vocabulary SRS on My Language.</span></span>
@@ -906,7 +934,7 @@ Q: なんじに はじまりますか。 ("What time does it start?")  A: <b>く
 <p class="lead">Tiếng Nhật không chỉ nói "ba quyển sách." Nó chọn một <strong>trợ số đếm (助数詞)</strong> khớp với <em>hình dạng hoặc loại</em> của vật, và âm đọc đổi theo rendaku (biến âm). Cùng với đồng hồ đầy đủ, đây là kỹ năng số học đời thường mà A1.2 mong đợi — và là chủ đề người mới hay bỏ qua nhất rồi sau tiếc.</p>
 
 <h3>Trợ số chung — つ (1–10)</h3>
-<p>Khi chưa biết trợ số cụ thể, chuỗi bản ngữ <b>つ</b> dùng được cho hầu hết đồ vật tới mười — một cách dự phòng đáng tin.</p>
+<p>Khi chưa biết trợ số cụ thể, chuỗi bản ngữ <b>つ</b> (ひとつ, ふたつ … ここのつ, とお) dùng được cho hầu hết đồ vật <b>từ 1 tới 10</b> — một cách dự phòng đáng tin. Từ 11 trở đi không có dạng つ; phải quay về số Hán-Nhật (じゅういち…).</p>
 <div class="formula"><span class="lbl">ひとつ・ふたつ… (vật chung)</span>1 ひとつ  2 ふたつ  3 みっつ  4 よっつ  5 いつつ<br>6 むっつ  7 ななつ  8 やっつ  9 ここのつ  10 とお</div>
 
 <h3>Trợ số cụ thể (助数詞)</h3>
@@ -937,7 +965,7 @@ Hỏi: なんじに はじまりますか。 ("Mấy giờ bắt đầu?")  Đá
 
 <div class="pitfall"><b>Bẫy — trợ số làm đổi âm của số.</b> Số không đọc giống nhau trước mọi trợ số: 3 đứng một mình là さん, nhưng "3 chai" là さん<b>ぼん</b> và "3 cốc" là さん<b>ばい</b>. Nhóm 1 / 6 / 8 / 10 đặc biệt gây tsu nhỏ (っ) và biến âm. Không luật nào bỏ được việc học thuộc — chỉ luyện lặp mới xong.</div>
 
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao tiếng Nhật cần nhiều trợ số đến vậy?</b> Trợ số phân loại danh từ theo hình dạng và loại — đặc điểm tiếng Nhật chia sẻ với tiếng Trung và nhiều ngôn ngữ châu Á nhưng tiếng Anh thì không. Có hàng trăm cái (～台 cho máy móc, ～匹 cho động vật nhỏ, ～階 cho tầng lầu), nhưng đời thường chạy bằng khoảng một tá. Khi bí, chuỗi つ chung (tới 9) là cách dự phòng được chấp nhận cho hầu hết đồ vật — cái lưới an toàn đầu tiên đáng thuộc.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao tiếng Nhật cần nhiều trợ số đến vậy?</b> Trợ số phân loại danh từ theo hình dạng và loại — đặc điểm tiếng Nhật chia sẻ với tiếng Trung và nhiều ngôn ngữ châu Á nhưng tiếng Anh thì không. Có hàng trăm cái (～台 cho máy móc, ～匹 cho động vật nhỏ, ～階 cho tầng lầu), nhưng đời thường chạy bằng khoảng một tá. Khi bí, chuỗi つ chung (1–10: ひとつ … とお) là cách dự phòng được chấp nhận cho hầu hết đồ vật — cái lưới an toàn đầu tiên đáng thuộc.</div>
 <a class="link-card codelab" href="/language/ja/vocab?ref=%2Fcourses%2Felementary-japanese-1-a12%2Flearn&reflabel=JPD123%20%E2%80%94%20Elementary%20Japanese%20A1.2" target="_blank" rel="noopener">
   <span class="lc-ico">🔢</span>
   <span class="lc-body"><span class="lc-title">Luyện trợ số &amp; giờ</span><span class="lc-sub">Từ vựng số &amp; trợ số SRS trên My Language.</span></span>
@@ -1935,7 +1963,8 @@ Khi từ để hỏi làm chủ ngữ, nó đi với が — không bao giờ v�
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.1</span>
 <h2>Kanji for actions &amp; time</h2>
-<p class="lead">A1.2 adds about 40 more kanji, now including many that appear inside the verbs and time words you just learned. Seeing 行きます written 行きます (not just いきます) is the goal — real Japanese mixes kanji and kana.</p>
+<p class="lead">The syllabus target for JPD123 is &quot;cách viết và đọc của khoảng hơn 40 chữ Hán&quot; — <strong>reading and writing about 40+ kanji</strong>, many of them inside the verbs and time words you just learned. Seeing 行きます written 行きます (not just いきます) is the goal — real Japanese mixes kanji and kana.</p>
+<div class="callout warn">This lesson shows <strong>five representative kanji</strong>, not the full 40. The complete lists are the 第4課–第7課 kanji sections of <em>漢字たまご</em> (the course kanji book) and the kanji in lessons 4–7 of the main textbook — the same range the two small tests (sessions 31 and 58) and the written final draw from. Work through those lists alongside this lesson.</div>
 <table>
   <thead><tr><th>Kanji</th><th>Meaning</th><th>In a word</th></tr></thead>
   <tbody>
@@ -1958,7 +1987,8 @@ Khi từ để hỏi làm chủ ngữ, nó đi với が — không bao giờ v�
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.1</span>
 <h2>Kanji cho hành động &amp; thời gian</h2>
-<p class="lead">A1.2 thêm khoảng 40 kanji nữa, giờ gồm nhiều chữ xuất hiện bên trong các động từ và từ thời gian bạn vừa học. Thấy 行きます viết là 行きます (không chỉ いきます) là mục tiêu — tiếng Nhật thật trộn kanji và kana.</p>
+<p class="lead">Mục tiêu của syllabus JPD123 là &quot;cách viết và đọc của khoảng hơn 40 chữ Hán&quot; — <strong>đọc và viết khoảng 40+ chữ Hán</strong>, nhiều chữ nằm ngay trong các động từ và từ chỉ thời gian bạn vừa học. Thấy 行きます viết là 行きます (không chỉ いきます) là mục tiêu — tiếng Nhật thật trộn kanji và kana.</p>
+<div class="callout warn">Bài này chỉ nêu <strong>năm chữ tiêu biểu</strong>, không phải đủ 40. Danh sách đầy đủ nằm ở phần chữ Hán 第4課–第7課 của <em>漢字たまご</em> (sách kanji của môn) và kanji trong bài 4–7 của giáo trình chính — đúng phạm vi mà hai bài kiểm tra nhỏ (buổi 31, 58) và bài viết cuối kỳ lấy đề. Hãy học các danh sách đó song song với bài này.</div>
 <table>
   <thead><tr><th>Kanji</th><th>Nghĩa</th><th>Trong một từ</th></tr></thead>
   <tbody>
@@ -2061,21 +2091,21 @@ Khi từ để hỏi làm chủ ngữ, nó đi với が — không bao giờ v�
     /* END-SECTIONS-MARKER */
     {
       "title": "Final Exam|||Thi cuối kỳ",
-      "description": "Thi cuối kỳ gồm PE (thi thực hành) và FE (trắc nghiệm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "description": "Thi cuối kỳ 45% = Nói 30% + Viết (từ vựng, ngữ pháp, chữ Hán, đọc hiểu) 15%, phải đạt ≥ 4. Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
       "lessons": [
         {
-          "title": "PE — Practical Exam|||PE — Thi thực hành",
+          "title": "Thi cuối kỳ: Nói — speaking part of the final (30%)|||Thi cuối kỳ: Nói — phần nói của bài thi cuối (30%)",
           "slug": "jpd123-final-exam-pe",
           "type": "article",
-          "description": "Khung thi thực hành (PE) của môn — format, cách chấm và cách chuẩn bị. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · PE</span>\n<h2>PE — Practical Exam</h2>\n<p class=\"lead\">The Practical Exam (PE) for this subject is a <strong>speaking exam (kaiwa)</strong>: you talk with the examiner &mdash; self-introduction, a short conversation, or a brief presentation on a given topic &mdash; graded on pronunciation, grammar, vocabulary, fluency and responsiveness.</p>\n<h3>How to prepare</h3>\n<ul>\n<li>Practise speaking aloud daily; record yourself and check pronunciation.</li>\n<li>Memorize set phrases for greetings, self-introduction, and asking/answering.</li>\n<li>Prepare 3&ndash;5 common topics and be able to speak ~1 minute on each.</li>\n<li>When you do not understand, ask politely to repeat (&laquo;mou ichido onegaishimasu&raquo;) &mdash; do not freeze.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A real practical prompt bank for this subject will be added here later, in the exam room. Use the guidance above to prepare now.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · PE</span>\n<h2>PE — Thi thực hành</h2>\n<p class=\"lead\">Thi thực hành (PE) của môn này là <strong>thi nói (kaiwa / speaking)</strong>: bạn nói chuyện với giám khảo &mdash; tự giới thiệu, một đoạn hội thoại ngắn, hoặc thuyết trình ngắn về một chủ đề cho sẵn &mdash; chấm theo phát âm, ngữ pháp, từ vựng, độ trôi chảy và khả năng phản hồi.</p>\n<h3>Cách chuẩn bị</h3>\n<ul>\n<li>Luyện nói to mỗi ngày; tự ghi âm và kiểm phát âm.</li>\n<li>Thuộc mẫu câu chào hỏi, tự giới thiệu, và hỏi/đáp.</li>\n<li>Chuẩn bị 3&ndash;5 chủ đề quen và nói được ~1 phút mỗi chủ đề.</li>\n<li>Khi không hiểu, lịch sự xin nhắc lại (&laquo;mou ichido onegaishimasu&raquo;) &mdash; đừng đơ.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề thực hành thật cho môn này sẽ được thêm vào đây sau, trong trang phòng thi. Dùng hướng dẫn trên để chuẩn bị ngay từ giờ.</div>\n</div>"
+          "description": "Môn KHÔNG có \"PE\": đây là cột \"Thi cuối kỳ: Nói\" — 30% điểm, nửa phần nói của bài thi cuối 45%. Cách chuẩn bị. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · speaking part (30%)</span>\n<h2>Thi cuối kỳ: Nói — the speaking half of the final (30%)</h2>\n<p class=\"lead\">JPD123 has <strong>no component called &quot;PE&quot;</strong>. What this page prepares you for is the syllabus component <strong>&quot;Thi cuối kỳ: Nói&quot; — the speaking part of the final exam, weight 30%</strong>, one of the two parts that make up the 45% final (the other is the written paper: vocabulary, grammar, kanji, reading — 15%).</p>\n<div class=\"callout warn\"><b>It is the single biggest exam component in the subject</b> — twice the written paper. The combined final (45%) carries completion criterion <strong>4</strong>, so a weak speaking score can fail you on its own.</div>\n<h3>What the speaking test asks of you</h3>\n<p>The course objectives say it directly: introduce your home town (food, climate, people), talk with a friend about plans and routines, invite someone to an activity and agree on details, describe a situation around you and make a simple request or suggestion. Those are the tasks the conversation is built from — all of them from lessons 4–7 of the textbook.</p>\n<h3>How to prepare</h3>\n<ul>\n<li>Practise speaking aloud daily; record yourself and check pronunciation and pitch.</li>\n<li>Memorise set phrases for greeting, self-introduction, inviting (&#12414;&#12379;&#12435;&#12363;/&#12414;&#12375;&#12423;&#12358;), and asking/answering.</li>\n<li>Prepare 3&ndash;5 of the course topics and be able to speak ~1 minute on each: your home town, your daily routine, what you want to do, comparing two things.</li>\n<li>Drill the &#12390;-form and &#12390;&#12356;&#12414;&#12377; out loud (Chapter 7) &mdash; they carry most of what you will need to say about ongoing actions.</li>\n<li>When you do not understand, ask politely to repeat (&laquo;&#12418;&#12358;&#19968;&#24230;&#12362;&#39000;&#12356;&#12375;&#12414;&#12377;&raquo;) &mdash; do not freeze; responsiveness is graded.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A real prompt bank for this subject will be added here later, in the exam room. Use the guidance above to prepare now.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · phần Nói (30%)</span>\n<h2>Thi cuối kỳ: Nói — nửa phần nói của bài thi cuối (30%)</h2>\n<p class=\"lead\">JPD123 <strong>không có cột điểm nào tên là &quot;PE&quot;</strong>. Thứ trang này luyện cho bạn là cột <strong>&quot;Thi cuối kỳ: Nói&quot; — phần nói của bài thi cuối kỳ, trọng số 30%</strong>, một trong hai phần hợp thành bài thi cuối 45% (phần kia là bài viết: từ vựng, ngữ pháp, chữ Hán, đọc hiểu — 15%).</p>\n<div class=\"callout warn\"><b>Đây là cột điểm thi lớn nhất của môn</b> — gấp đôi bài viết. Bài thi cuối gộp (45%) có điều kiện hoàn thành <strong>4</strong>, nên riêng phần nói yếu cũng đủ làm trượt.</div>\n<h3>Phần thi nói hỏi gì</h3>\n<p>Mục tiêu môn học nói thẳng: giới thiệu quê hương mình (món ăn, khí hậu, con người), nói chuyện với bạn về dự định và việc thường làm, mời/rủ bạn tham gia một hoạt động rồi trao đổi thống nhất, mô tả tình hình xung quanh và nhờ vả/đề xuất đơn giản. Đó chính là các nhiệm vụ dựng nên đoạn hội thoại — tất cả đều từ bài 4–7 của giáo trình.</p>\n<h3>Cách chuẩn bị</h3>\n<ul>\n<li>Luyện nói to mỗi ngày; tự ghi âm và kiểm phát âm, trọng âm cao thấp.</li>\n<li>Thuộc mẫu câu chào hỏi, tự giới thiệu, rủ rê (&#12414;&#12379;&#12435;&#12363;/&#12414;&#12375;&#12423;&#12358;), và hỏi/đáp.</li>\n<li>Chuẩn bị 3&ndash;5 chủ đề của môn và nói được ~1 phút mỗi chủ đề: quê hương, một ngày của bạn, điều bạn muốn làm, so sánh hai thứ.</li>\n<li>Luyện thể &#12390; và &#12390;&#12356;&#12414;&#12377; thành tiếng (Chương 7) &mdash; chúng gánh phần lớn những gì bạn cần nói về hành động đang diễn ra.</li>\n<li>Khi không hiểu, lịch sự xin nhắc lại (&laquo;&#12418;&#12358;&#19968;&#24230;&#12362;&#39000;&#12356;&#12375;&#12414;&#12377;&raquo;) &mdash; đừng đơ; khả năng phản hồi cũng được chấm.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề thật cho môn này sẽ được thêm vào đây sau, trong trang phòng thi. Dùng hướng dẫn trên để chuẩn bị ngay từ giờ.</div>\n</div>"
         },
         {
-          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "title": "Thi cuối kỳ: Từ vựng, ngữ pháp, chữ Hán, đọc hiểu (15%)|||Thi cuối kỳ: Từ vựng, ngữ pháp, chữ Hán, đọc hiểu (15%)",
           "slug": "jpd123-final-exam-fe",
           "type": "article",
-          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "description": "Bài viết cuối kỳ: từ vựng, ngữ pháp, chữ Hán, đọc hiểu — 15% điểm. Câu mẫu từ môn; đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>Thi cuối kỳ: T&#7915; v&#7921;ng, ng&#7919; ph&#225;p, ch&#7919; H&#225;n, &#273;&#7885;c hi&#7875;u</h2>\n<p class=\"lead\">This is the <strong>written half</strong> of the final exam: <strong>vocabulary, grammar, kanji and reading comprehension &mdash; 15% of the mark</strong>. The other half is the speaking test (30%); together they are the 45% final, which carries completion criterion <strong>4</strong>. <strong>The syllabus does not state the format of this written paper</strong> &mdash; it says &quot;Tr&#7855;c nghi&#7879;m&quot; (multiple choice) only for the two small tests (session 31 and session 58) &mdash; so the sample items below show the <em>content</em> you must master, not a guaranteed question type. See <em>Lesson 0.2 &mdash; Grading</em> for all five components.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>Thi cu&#7889;i k&#7923;: T&#7915; v&#7921;ng, ng&#7919; ph&#225;p, ch&#7919; H&#225;n, &#273;&#7885;c hi&#7875;u</h2>\n<p class=\"lead\">Đây là <strong>nửa bài viết</strong> của kỳ thi cuối: <strong>từ vựng, ngữ pháp, chữ Hán, đọc hiểu — 15% điểm</strong>. Nửa kia là phần thi nói (30%); cộng lại là bài thi cuối 45%, có điều kiện hoàn thành <strong>4</strong>. <strong>Syllabus không nêu hình thức của bài viết này</strong> — chữ &quot;Trắc nghiệm&quot; chỉ được ghi cho hai bài kiểm tra nhỏ (buổi 31 và buổi 58) — nên các câu mẫu dưới đây minh hoạ <em>nội dung</em> phải nắm, không phải một dạng đề chắc chắn. Đủ năm cột điểm: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [
@@ -2142,7 +2172,7 @@ Khi từ để hỏi làm chủ ngữ, nó đi với が — không bao giờ v�
               {
                 "id": "q6",
                 "points": 1,
-                "question": "The ます-form conjugations are notable for being… (beyond-syllabus insight)|||Cách chia thể ます đáng chú ý vì… (gợi ý ngoài giáo trình)",
+                "question": "Once you have the ます-stem, the four ます-form endings are…|||Một khi đã có gốc ます, bốn đuôi của thể ます là…",
                 "options": [
                   "completely irregular|||hoàn toàn bất quy tắc",
                   "perfectly regular across all verbs|||hoàn toàn đều với mọi động từ",

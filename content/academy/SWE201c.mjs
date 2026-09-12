@@ -54,8 +54,8 @@ export default {
   <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Software testing</div><div class="lz-nsub">7 principles · levels · types · techniques</div></div></div>
   <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Requirements &amp; user stories</div><div class="lz-nsub">FR/NFR · SMART · INVEST · story mapping</div></div></div>
   <div class="lz-node"><div class="lz-badge">E</div><div class="lz-nbody"><div class="lz-ntitle">Exam preparation</div><div class="lz-nsub">PE templates · FE vocabulary</div></div></div>
-  <div class="lz-stage">Advanced · beyond the syllabus</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">DevOps &amp; CI/CD · choosing a methodology</div><div class="lz-nsub">How industry actually ships today</div></div></div>
+  <div class="lz-stage">Deployment &amp; method choice</div>
+  <div class="lz-node"><div class="lz-badge">A</div><div class="lz-nbody"><div class="lz-ntitle">DevOps &amp; CI/CD · choosing a methodology</div><div class="lz-nsub">Session 12 "Quality in Testing and Deployment" · CLO1 in practice</div></div></div>
 </div>
 <div class="callout ok">This course is concept-heavy, not code-heavy. Learn it by connecting each idea to your own project experience — and by completing the official Coursera MOOCs, which are part of your grade.</div>
 <a class="link-card codelab" href="https://www.coursera.org/specializations/software-development-lifecycle" target="_blank" rel="noopener">
@@ -84,8 +84,8 @@ export default {
   <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Kiểm thử phần mềm</div><div class="lz-nsub">7 nguyên tắc · mức · loại · kỹ thuật</div></div></div>
   <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Yêu cầu &amp; User Story</div><div class="lz-nsub">FR/NFR · SMART · INVEST · story mapping</div></div></div>
   <div class="lz-node"><div class="lz-badge">E</div><div class="lz-nbody"><div class="lz-ntitle">Luyện thi</div><div class="lz-nsub">Khung trả lời PE · từ vựng FE</div></div></div>
-  <div class="lz-stage">Nâng cao · ngoài giáo trình</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">DevOps &amp; CI/CD · chọn phương pháp</div><div class="lz-nsub">Cách ngành thực sự ship hôm nay</div></div></div>
+  <div class="lz-stage">Triển khai &amp; chọn phương pháp</div>
+  <div class="lz-node"><div class="lz-badge">A</div><div class="lz-nbody"><div class="lz-ntitle">DevOps &amp; CI/CD · chọn phương pháp</div><div class="lz-nsub">Buổi 12 "Quality in Testing and Deployment" · CLO1 trong thực tế</div></div></div>
 </div>
 <div class="callout ok">Môn này nặng khái niệm, không nặng code. Học nó bằng cách nối mỗi ý tưởng với kinh nghiệm project của chính bạn — và bằng cách hoàn thành các MOOC Coursera chính thức, vốn là một phần điểm.</div>
 <a class="link-card codelab" href="https://www.coursera.org/specializations/software-development-lifecycle" target="_blank" rel="noopener">
@@ -110,10 +110,19 @@ export default {
 <div class="kv-grid">
   <div class="kv"><span class="k">Credits</span><span class="v">3</span></div>
   <div class="kv"><span class="k">Total hours</span><span class="v">150h <small>62h online + 3h offline + exams + self-study</small></span></div>
-  <div class="kv"><span class="k">Prerequisite</span><span class="v">PRO192</span></div>
-  <div class="kv"><span class="k">Final</span><span class="v">FE = Theory (TE) + Practical (PE)</span></div>
+  <div class="kv"><span class="k">Prerequisite</span><span class="v">PRO192 <small>not applied to BIT_AI, BIT_IC, BIT_AS and BA programs</small></span></div>
+  <div class="kv"><span class="k">Final</span><span class="v">FE = Theory (TE) + Practical (PE) = 100%</span></div>
   <div class="kv"><span class="k">Pass</span><span class="v">TE ≥ 4 AND PE ≥ 4 AND FR ≥ 5</span></div>
 </div>
+<h3>The two assessments — exactly as the syllabus lists them</h3>
+<table>
+  <thead><tr><th>Component</th><th>Weight</th><th>Completion</th><th>Duration</th><th>Question type</th><th>No. questions</th></tr></thead>
+  <tbody>
+    <tr><td><strong>TE</strong> — Final Theory Exam</td><td><strong>60%</strong></td><td>&ge; 4</td><td><strong>60&#39;</strong></td><td>Computer gradable</td><td><strong>50</strong></td></tr>
+    <tr><td><strong>PE</strong> — Final Practical Exam</td><td><strong>40%</strong></td><td>&ge; 4</td><td><strong>120&#39;</strong></td><td>—<small> (the syllabus states no format)</small></td><td>—</td></tr>
+  </tbody>
+</table>
+<p>Both cover &quot;all studied contents&quot;. Time allocation: <em>150h = 62h online + 3h offline + 1h TE + 2h PE + 82h self-study</em> — note the exam hours match the 60&#39; + 120&#39; above.</p>
 <div class="callout warn">Three gates, all required: <strong>TE ≥ 4</strong>, <strong>PE ≥ 4</strong>, and <strong>FR ≥ 5</strong>, where FR = min(10, weighted TE + weighted PE + bonus). Finish all MOOCs before the deadline to earn the bonus point — and you cannot take the exam without the certificates.</div>
 <div class="note-ct">The practical part tests whether you can apply a methodology (e.g. plan a sprint, write user stories, review for quality), not write code — so study the processes, not just the definitions.</div>
 </div>
@@ -124,10 +133,19 @@ export default {
 <div class="kv-grid">
   <div class="kv"><span class="k">Tín chỉ</span><span class="v">3</span></div>
   <div class="kv"><span class="k">Tổng giờ</span><span class="v">150h <small>62h online + 3h offline + thi + tự học</small></span></div>
-  <div class="kv"><span class="k">Tiên quyết</span><span class="v">PRO192</span></div>
-  <div class="kv"><span class="k">Thi cuối</span><span class="v">FE = Lý thuyết (TE) + Thực hành (PE)</span></div>
+  <div class="kv"><span class="k">Tiên quyết</span><span class="v">PRO192 <small>không áp dụng cho các chương trình BIT_AI, BIT_IC, BIT_AS và BA</small></span></div>
+  <div class="kv"><span class="k">Thi cuối</span><span class="v">FE = Lý thuyết (TE) + Thực hành (PE) = 100%</span></div>
   <div class="kv"><span class="k">Qua môn</span><span class="v">TE ≥ 4 VÀ PE ≥ 4 VÀ FR ≥ 5</span></div>
 </div>
+<h3>Hai đầu điểm — đúng như syllabus liệt kê</h3>
+<table>
+  <thead><tr><th>Thành phần</th><th>Trọng số</th><th>Điều kiện</th><th>Thời gian</th><th>Dạng câu hỏi</th><th>Số câu</th></tr></thead>
+  <tbody>
+    <tr><td><strong>TE</strong> — Thi lý thuyết cuối kỳ</td><td><strong>60%</strong></td><td>&ge; 4</td><td><strong>60&#39;</strong></td><td>Máy chấm</td><td><strong>50</strong></td></tr>
+    <tr><td><strong>PE</strong> — Thi thực hành cuối kỳ</td><td><strong>40%</strong></td><td>&ge; 4</td><td><strong>120&#39;</strong></td><td>—<small> (syllabus không nêu hình thức)</small></td><td>—</td></tr>
+  </tbody>
+</table>
+<p>Cả hai đều ra vào &quot;toàn bộ nội dung đã học&quot;. Phân bổ giờ: <em>150h = 62h online + 3h offline + 1h thi TE + 2h thi PE + 82h tự học</em> — chú ý số giờ thi khớp đúng 60&#39; + 120&#39; ở trên.</p>
 <div class="callout warn">Ba cửa ải, đều bắt buộc: <strong>TE ≥ 4</strong>, <strong>PE ≥ 4</strong>, và <strong>FR ≥ 5</strong>, với FR = min(10, TE có trọng số + PE có trọng số + bonus). Hoàn thành tất cả MOOC trước hạn để được điểm thưởng — và bạn không thể dự thi nếu không có chứng chỉ.</div>
 <div class="note-ct">Phần thực hành kiểm bạn có áp dụng được một phương pháp (vd lập kế hoạch sprint, viết user story, review chất lượng) hay không, không phải viết code — nên hãy học các quy trình, không chỉ định nghĩa.</div>
 </div>
@@ -207,7 +225,7 @@ export default {
 </div>
 <div class="pitfall"><b>Waterfall's fatal flaw:</b> it assumes you know all requirements correctly at the start. In reality, customers change their minds and misunderstand what they asked for. A year of building the wrong thing — discovered only at delivery — is the classic Waterfall disaster that agile set out to prevent.</div>
 
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Waterfall is not "wrong" — context decides.</b> It is fashionable to mock Waterfall, but for projects with fixed, safety-critical, heavily-regulated requirements (aircraft firmware, medical devices, a bridge's control system) its up-front rigor and documentation are exactly right — you cannot "iterate" a plane crash. The professional skill is not "always be agile" but <em>matching the method to the project</em>, which is Chapter 6's theme.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Waterfall is not "wrong" — context decides.</b> It is fashionable to mock Waterfall, but for projects with fixed, safety-critical, heavily-regulated requirements (aircraft firmware, medical devices, a bridge's control system) its up-front rigor and documentation are exactly right — you cannot "iterate" a plane crash. The professional skill is not "always be agile" but <em>matching the method to the project</em> — the theme of A.1 and of the nine-model comparison in R.1.</div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
@@ -220,7 +238,7 @@ export default {
 </div>
 <div class="pitfall"><b>Khuyết tật chí mạng của Waterfall:</b> nó giả định bạn biết đúng mọi yêu cầu ngay từ đầu. Thực tế, khách hàng đổi ý và hiểu sai điều họ yêu cầu. Một năm xây nhầm thứ — chỉ phát hiện lúc bàn giao — là thảm họa Waterfall kinh điển mà agile sinh ra để ngăn.</div>
 
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Waterfall không "sai" — bối cảnh quyết định.</b> Chê Waterfall là mốt, nhưng với dự án có yêu cầu cố định, an toàn-trọng yếu, chịu quản lý chặt (firmware máy bay, thiết bị y tế, hệ điều khiển cầu) thì sự nghiêm ngặt và tài liệu từ đầu của nó đúng là phù hợp — bạn không thể "lặp lại" một vụ rơi máy bay. Kỹ năng chuyên nghiệp không phải "luôn agile" mà là <em>khớp phương pháp với dự án</em>, chủ đề của Chương 6.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Waterfall không "sai" — bối cảnh quyết định.</b> Chê Waterfall là mốt, nhưng với dự án có yêu cầu cố định, an toàn-trọng yếu, chịu quản lý chặt (firmware máy bay, thiết bị y tế, hệ điều khiển cầu) thì sự nghiêm ngặt và tài liệu từ đầu của nó đúng là phù hợp — bạn không thể "lặp lại" một vụ rơi máy bay. Kỹ năng chuyên nghiệp không phải "luôn agile" mà là <em>khớp phương pháp với dự án</em> — chủ đề của bài A.1 và bảng so sánh 9 mô hình ở R.1.</div>
 </div>
 `,
         },
@@ -272,7 +290,7 @@ export default {
     <tr><td>Risk</td><td>Wasted effort if overbuilt</td><td>Poor early decisions get locked in</td></tr>
   </tbody>
 </table>
-<div class="pitfall"><b>The exam trap:</b> the correct pair is <b>Throwaway ↔ Evolutionary</b>. "Exploratory" is <em>not</em> the counterpart of throwaway — if it appears as an option, it is a distractor. Another frequent error is managers deciding to ship a throwaway prototype because "it already works"; it was never engineered to be maintained, and that decision creates permanent technical debt.</div>
+<div class="pitfall"><b>The exam trap:</b> in this course the pair to learn is <b>Throwaway ↔ Evolutionary</b>. Careful, though: Sommerville splits <em>incremental/evolutionary development</em> into <b>exploratory development</b> and <b>throw-away prototyping</b>, so "exploratory" is a real term and can be the correct option — do not reject it on sight; read which pairing the question is about. Another frequent error is managers deciding to ship a throwaway prototype because "it already works"; it was never engineered to be maintained, and that decision creates permanent technical debt.</div>
 
 <h3>Where these three fit</h3>
 <table>
@@ -327,7 +345,7 @@ export default {
     <tr><td>Rủi ro</td><td>Lãng phí công sức nếu làm quá tay</td><td>Quyết định sai lúc đầu bị khóa lại vĩnh viễn</td></tr>
   </tbody>
 </table>
-<div class="pitfall"><b>Bẫy thi:</b> cặp đôi đúng là <b>Throwaway ↔ Evolutionary</b>. "Exploratory" <em>không phải</em> là cặp của throwaway — nếu nó xuất hiện trong phương án thì đó là mồi nhử. Lỗi thường gặp khác là quản lý quyết định đem chính nguyên mẫu throwaway đi triển khai vì "nó chạy được rồi"; nó vốn không được thiết kế để bảo trì, và quyết định đó tạo ra nợ kỹ thuật vĩnh viễn.</div>
+<div class="pitfall"><b>Bẫy thi:</b> trong môn này cặp cần nhớ là <b>Throwaway ↔ Evolutionary</b>. Nhưng cẩn thận: Sommerville chia <em>phát triển tăng dần/tiến hoá</em> thành <b>exploratory development</b> và <b>throw-away prototyping</b>, nên "exploratory" là thuật ngữ thật và có thể là phương án đúng — đừng loại nó theo phản xạ, hãy đọc xem câu hỏi đang hỏi về cách phân đôi nào. Lỗi thường gặp khác là quản lý quyết định đem chính nguyên mẫu throwaway đi triển khai vì "nó chạy được rồi"; nó vốn không được thiết kế để bảo trì, và quyết định đó tạo ra nợ kỹ thuật vĩnh viễn.</div>
 
 <h3>Ba mô hình này lấp chỗ nào</h3>
 <table>
@@ -444,9 +462,10 @@ export default {
 <div class="lz-stack">
   <div class="lz-layer"><b>Product Owner</b> — owns the <em>what</em> and <em>why</em>: manages the product backlog, prioritises features by value.</div>
   <div class="lz-layer"><b>Scrum Master</b> — a servant-leader who removes blockers and protects the process (not a "boss").</div>
-  <div class="lz-layer"><b>Development Team</b> — self-organising, cross-functional; owns the <em>how</em> and builds the increment.</div>
+  <div class="lz-layer"><b>Developers</b> <small>(called the "Development Team" before the 2020 Scrum Guide)</small> — self-managing, cross-functional; own the <em>how</em> and build the increment.</div>
 </div>
 <h3>The events (the sprint rhythm)</h3>
+<p>The 2020 Scrum Guide counts <strong>five</strong> events: the <em>Sprint</em> itself is the container that holds the other four listed below.</p>
 <div class="lz-flow">
   <div class="lz-step">Sprint Planning — pick backlog items for this sprint</div>
   <div class="lz-step">Daily Scrum — 15-min sync: done / doing / blockers</div>
@@ -456,7 +475,7 @@ export default {
 <h3>XP — engineering discipline</h3>
 <p><strong>Extreme Programming (XP)</strong> complements Scrum with <em>technical</em> practices: <span class="badge">pair programming</span> (two devs, one keyboard), <span class="badge">test-driven development</span> (write the test first), <span class="badge">continuous integration</span>, and <span class="badge">refactoring</span>. Scrum organises the team; XP keeps the code healthy.</p>
 
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Velocity &amp; story points — estimating without lying.</b> Teams size work in relative <em>story points</em>, not hours, and track how many they finish per sprint (their <b>velocity</b>). Why relative? Humans are terrible at absolute time estimates but decent at "this is about twice as hard as that". Velocity then forecasts realistic delivery. Misusing velocity as a productivity target (pressuring teams to inflate points) is a classic anti-pattern — a nuance real Scrum Masters must understand.</div>
+<div class="callout"><span class="badge">Session 5 · Requirements &amp; Planning</span> <b>Velocity &amp; story points — estimating without lying.</b> Teams size work in relative <em>story points</em>, not hours, and track how many they finish per sprint (their <b>velocity</b>). Why relative? Humans are terrible at absolute time estimates but decent at "this is about twice as hard as that". Velocity then forecasts realistic delivery. Misusing velocity as a productivity target (pressuring teams to inflate points) is a classic anti-pattern — a nuance real Scrum Masters must understand.</div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.1</span>
@@ -466,9 +485,10 @@ export default {
 <div class="lz-stack">
   <div class="lz-layer"><b>Product Owner</b> — sở hữu cái <em>gì</em> và <em>vì sao</em>: quản lý product backlog, ưu tiên tính năng theo giá trị.</div>
   <div class="lz-layer"><b>Scrum Master</b> — một lãnh đạo-phục vụ gỡ vật cản và bảo vệ quy trình (không phải "sếp").</div>
-  <div class="lz-layer"><b>Development Team</b> — tự tổ chức, đa chức năng; sở hữu cái <em>làm thế nào</em> và xây increment.</div>
+  <div class="lz-layer"><b>Developers</b> <small>(trước Scrum Guide 2020 gọi là "Development Team")</small> — tự quản, đa chức năng; sở hữu cái <em>làm thế nào</em> và xây increment.</div>
 </div>
 <h3>Các buổi họp (nhịp sprint)</h3>
+<p>Scrum Guide 2020 đếm <strong>năm</strong> sự kiện: bản thân <em>Sprint</em> là cái khung chứa bốn sự kiện liệt kê dưới đây.</p>
 <div class="lz-flow">
   <div class="lz-step">Sprint Planning — chọn item backlog cho sprint này</div>
   <div class="lz-step">Daily Scrum — đồng bộ 15 phút: xong / đang làm / vướng</div>
@@ -478,7 +498,7 @@ export default {
 <h3>XP — kỷ luật kỹ thuật</h3>
 <p><strong>Extreme Programming (XP)</strong> bổ trợ Scrum bằng các thực hành <em>kỹ thuật</em>: <span class="badge">pair programming</span> (hai dev, một bàn phím), <span class="badge">test-driven development</span> (viết test trước), <span class="badge">continuous integration</span>, và <span class="badge">refactoring</span>. Scrum tổ chức đội; XP giữ code khỏe mạnh.</p>
 
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Velocity &amp; story point — ước lượng mà không nói dối.</b> Đội đo công việc bằng <em>story point</em> tương đối, không phải giờ, và theo dõi làm xong bao nhiêu mỗi sprint (<b>velocity</b>). Vì sao tương đối? Con người ước lượng thời gian tuyệt đối rất tệ nhưng khá ổn với "cái này khó gấp đôi cái kia". Velocity khi đó dự báo thời điểm giao thực tế. Lạm dụng velocity như một chỉ tiêu năng suất (ép đội thổi phồng điểm) là một anti-pattern kinh điển — sắc thái mà Scrum Master thật phải hiểu.</div>
+<div class="callout"><span class="badge">Buổi 5 · Requirements &amp; Planning</span> <b>Velocity &amp; story point — ước lượng mà không nói dối.</b> Đội đo công việc bằng <em>story point</em> tương đối, không phải giờ, và theo dõi làm xong bao nhiêu mỗi sprint (<b>velocity</b>). Vì sao tương đối? Con người ước lượng thời gian tuyệt đối rất tệ nhưng khá ổn với "cái này khó gấp đôi cái kia". Velocity khi đó dự báo thời điểm giao thực tế. Lạm dụng velocity như một chỉ tiêu năng suất (ép đội thổi phồng điểm) là một anti-pattern kinh điển — sắc thái mà Scrum Master thật phải hiểu.</div>
 </div>
 `,
         },
@@ -683,7 +703,7 @@ export default {
 <h3>Secure software</h3>
 <p>Security is not a feature you add last; it is a mindset applied at every phase — from threat-modelling in design to validating input in code (recall SQL injection from PRJ301). The idea of <strong>"shift left"</strong>: move security and testing <em>earlier</em>, because (per Chapter 1's cost curve) a flaw found early is far cheaper than a breach in production.</p>
 
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Technical debt — the interest you pay for shortcuts.</b> When a team ships quick-and-dirty code to hit a deadline, they take on <b>technical debt</b>: like a loan, it lets you go faster now but charges "interest" later as every future change becomes harder in the messy code. Some debt is a smart, deliberate trade-off; unmanaged debt eventually stops a project dead. Naming and managing technical debt — deciding when to "pay it down" via refactoring — is one of the most valuable judgments a senior engineer makes.</div>
+<div class="callout"><span class="badge">Session 11 · Quality in Implementation</span> <b>Technical debt — the interest you pay for shortcuts.</b> When a team ships quick-and-dirty code to hit a deadline, they take on <b>technical debt</b>: like a loan, it lets you go faster now but charges "interest" later as every future change becomes harder in the messy code. Some debt is a smart, deliberate trade-off; unmanaged debt eventually stops a project dead. Naming and managing technical debt — deciding when to "pay it down" via refactoring — is one of the most valuable judgments a senior engineer makes.</div>
 <a class="link-card codelab" href="https://www.coursera.org/learn/engineering-practices-secure-software-quality" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
   <span class="lc-body"><span class="lc-title">MOOC: Engineering Practices for Quality Software</span><span class="lc-sub">University of Minnesota on Coursera.</span></span>
@@ -703,7 +723,7 @@ export default {
 <h3>Phần mềm bảo mật</h3>
 <p>Bảo mật không phải một tính năng bạn thêm cuối cùng; nó là một tư duy áp ở mọi pha — từ mô hình hóa mối đe dọa khi thiết kế tới validate input khi code (nhớ SQL injection ở PRJ301). Ý tưởng <strong>"shift left"</strong>: đưa bảo mật và kiểm thử <em>sớm hơn</em>, vì (theo đường cong chi phí ở Chương 1) một lỗ hổng tìm sớm rẻ hơn nhiều so với một vụ rò rỉ ở production.</p>
 
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Nợ kỹ thuật (technical debt) — tiền lãi bạn trả cho việc đi tắt.</b> Khi một đội ship code nhanh-và-ẩu để kịp hạn, họ vay <b>nợ kỹ thuật</b>: như một khoản vay, nó cho bạn đi nhanh bây giờ nhưng tính "lãi" sau này khi mọi thay đổi tương lai thành khó hơn trong đống code lộn xộn. Một số nợ là đánh đổi khôn ngoan, có chủ đích; nợ không quản lý cuối cùng làm dự án chết đứng. Đặt tên và quản lý nợ kỹ thuật — quyết định khi nào "trả nợ" bằng refactoring — là một trong những phán đoán giá trị nhất mà một kỹ sư senior đưa ra.</div>
+<div class="callout"><span class="badge">Buổi 11 · Quality in Implementation</span> <b>Nợ kỹ thuật (technical debt) — tiền lãi bạn trả cho việc đi tắt.</b> Khi một đội ship code nhanh-và-ẩu để kịp hạn, họ vay <b>nợ kỹ thuật</b>: như một khoản vay, nó cho bạn đi nhanh bây giờ nhưng tính "lãi" sau này khi mọi thay đổi tương lai thành khó hơn trong đống code lộn xộn. Một số nợ là đánh đổi khôn ngoan, có chủ đích; nợ không quản lý cuối cùng làm dự án chết đứng. Đặt tên và quản lý nợ kỹ thuật — quyết định khi nào "trả nợ" bằng refactoring — là một trong những phán đoán giá trị nhất mà một kỹ sư senior đưa ra.</div>
 <a class="link-card codelab" href="https://www.coursera.org/learn/engineering-practices-secure-software-quality" target="_blank" rel="noopener">
   <span class="lc-ico">🎓</span>
   <span class="lc-body"><span class="lc-title">MOOC: Engineering Practices for Quality Software</span><span class="lc-sub">Đại học Minnesota trên Coursera.</span></span>
@@ -1487,8 +1507,8 @@ Notice Release 1 touches <em>every</em> activity — the reader can complete the
 
     /* ══════════════════ NÂNG CAO ══════════════════ */
     {
-      title: 'Advanced — Beyond the syllabus|||Nâng cao — Ngoài giáo trình',
-      description: 'Toàn bộ chương này là học thêm: DevOps & CI/CD, và cách chọn đúng phương pháp cho một dự án.',
+      title: 'Advanced — Deployment & choosing a methodology|||Nâng cao — Triển khai & chọn phương pháp',
+      description: 'DevOps & CI/CD — phần "Quality in Testing and Deployment" của buổi 12 — và cách chọn đúng phương pháp cho một dự án (CLO1).',
       lessons: [
         {
           title: 'A.1 — DevOps, CI/CD & choosing a methodology|||A.1 — DevOps, CI/CD & chọn phương pháp',
@@ -1497,9 +1517,9 @@ Notice Release 1 touches <em>every</em> activity — the reader can complete the
           description: 'DevOps xóa ranh giới dev-ops; CI/CD tự động build/test/deploy; và khung quyết định chọn Waterfall/Agile/Lean.',
           content: `
 <div class="ml-en">
-<span class="eyebrow">Advanced · Lesson A.1</span>
-<h2><span class="badge">★ Beyond the syllabus</span> How software actually ships today</h2>
-<p class="lead">The methodologies you learned are the foundation; this is where the modern industry has taken them.</p>
+<span class="eyebrow">Advanced · Lesson A.1 · Session 12 — Quality in Testing and Deployment</span>
+<h2>How software actually ships today — DevOps &amp; CI/CD</h2>
+<p class="lead">Deployment is the last stage of the MOOC &quot;Engineering Practices for Building Quality Software&quot; (syllabus session 12, <em>Quality in Testing and Deployment</em>) — so DevOps and CI/CD are examinable, not optional extras. The second half of this lesson, choosing a methodology, is CLO1 itself.</p>
 <h3>DevOps &amp; CI/CD</h3>
 <p><strong>DevOps</strong> tears down the old wall between developers (who write code) and operations (who run it), making one team responsible end-to-end. Its engine is <strong>CI/CD</strong>:</p>
 <div class="lz-stack">
@@ -1519,12 +1539,12 @@ Notice Release 1 touches <em>every</em> activity — the reader can complete the
   </tbody>
 </table>
 
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>There is no "best" methodology — only the best fit.</b> The mark of an engineer (versus a fan of one method) is refusing dogma. Real organisations blend approaches: Scrum for the rhythm, XP for code health, Lean thinking to cut waste, DevOps to ship. The genuine CLO1 skill — "compare and contrast methodologies and recommend improvements" — is exactly this judgment: reading a team's context and prescribing what fits, not what is fashionable.</div>
+<div class="callout"><span class="badge">CLO1</span> <b>There is no "best" methodology — only the best fit.</b> The mark of an engineer (versus a fan of one method) is refusing dogma. Real organisations blend approaches: Scrum for the rhythm, XP for code health, Lean thinking to cut waste, DevOps to ship. The genuine CLO1 skill — "compare and contrast methodologies and recommend improvements" — is exactly this judgment: reading a team's context and prescribing what fits, not what is fashionable.</div>
 </div>
 <div class="ml-vi">
-<span class="eyebrow">Nâng cao · Bài A.1</span>
-<h2><span class="badge">★ Ngoài giáo trình</span> Phần mềm thực sự được ship thế nào hôm nay</h2>
-<p class="lead">Các phương pháp bạn học là nền tảng; đây là nơi ngành hiện đại đã đưa chúng tới.</p>
+<span class="eyebrow">Nâng cao · Bài A.1 · Buổi 12 — Quality in Testing and Deployment</span>
+<h2>Phần mềm thực sự được ship thế nào hôm nay — DevOps &amp; CI/CD</h2>
+<p class="lead">Triển khai là chặng cuối của MOOC &quot;Engineering Practices for Building Quality Software&quot; (buổi 12 trong syllabus, <em>Quality in Testing and Deployment</em>) — nên DevOps và CI/CD nằm trong phạm vi thi, không phải phần thêm tuỳ chọn. Nửa sau của bài, chọn phương pháp, chính là CLO1.</p>
 <h3>DevOps &amp; CI/CD</h3>
 <p><strong>DevOps</strong> phá bỏ bức tường cũ giữa lập trình viên (viết code) và vận hành (chạy nó), làm một đội chịu trách nhiệm đầu-cuối. Động cơ của nó là <strong>CI/CD</strong>:</p>
 <div class="lz-stack">
@@ -1544,7 +1564,7 @@ Notice Release 1 touches <em>every</em> activity — the reader can complete the
   </tbody>
 </table>
 
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Không có phương pháp "tốt nhất" — chỉ có cái phù hợp nhất.</b> Dấu hiệu của một kỹ sư (khác một fan của một phương pháp) là từ chối giáo điều. Tổ chức thật pha trộn cách tiếp cận: Scrum cho nhịp, XP cho sức khỏe code, tư duy Lean để cắt lãng phí, DevOps để ship. Kỹ năng CLO1 thật sự — "so sánh &amp; đối chiếu phương pháp và đề xuất cải tiến" — chính là phán đoán này: đọc bối cảnh một đội và kê đơn cái phù hợp, không phải cái đang mốt.</div>
+<div class="callout"><span class="badge">CLO1</span> <b>Không có phương pháp "tốt nhất" — chỉ có cái phù hợp nhất.</b> Dấu hiệu của một kỹ sư (khác một fan của một phương pháp) là từ chối giáo điều. Tổ chức thật pha trộn cách tiếp cận: Scrum cho nhịp, XP cho sức khỏe code, tư duy Lean để cắt lãng phí, DevOps để ship. Kỹ năng CLO1 thật sự — "so sánh &amp; đối chiếu phương pháp và đề xuất cải tiến" — chính là phán đoán này: đọc bối cảnh một đội và kê đơn cái phù hợp, không phải cái đang mốt.</div>
 </div>
 `,
         },
@@ -1560,8 +1580,8 @@ Notice Release 1 touches <em>every</em> activity — the reader can complete the
               { question: 'The Daily Scrum is…|||Daily Scrum là…', options: ['a detailed design meeting|||một buổi thiết kế chi tiết', 'a short 15-minute sync on progress and blockers|||một buổi đồng bộ ngắn 15 phút về tiến độ và vướng mắc', 'a code review|||một buổi review code', 'the sprint demo|||buổi demo sprint'], correctIndex: 1, points: 1 },
               { question: 'Test-driven development (an XP practice) means…|||Test-driven development (một thực hành XP) nghĩa là…', options: ['testing only at the end|||chỉ test ở cuối', 'writing the test before the code|||viết test trước khi viết code', 'never testing|||không bao giờ test', 'pair programming|||pair programming'], correctIndex: 1, points: 1 },
               { question: 'A core goal of Lean is to…|||Mục tiêu cốt lõi của Lean là…', options: ['add more documentation|||thêm nhiều tài liệu', 'eliminate waste (anything not adding customer value)|||loại bỏ lãng phí (thứ không thêm giá trị cho khách hàng)', 'lengthen the schedule|||kéo dài lịch', 'avoid testing|||tránh kiểm thử'], correctIndex: 1, points: 1 },
-              { question: 'Technical debt refers to… (beyond-syllabus)|||Nợ kỹ thuật ám chỉ… (ngoài giáo trình)', options: ['money owed to a vendor|||tiền nợ nhà cung cấp', 'the future cost of shortcuts taken in the code|||chi phí tương lai của việc đi tắt trong code', 'a testing tool|||một công cụ kiểm thử', 'a Scrum role|||một vai trò Scrum'], correctIndex: 1, points: 1 },
-              { question: 'The best methodology for a project is… (beyond-syllabus)|||Phương pháp tốt nhất cho một dự án là… (ngoài giáo trình)', options: ['always Agile|||luôn là Agile', 'the one that fits the project\'s context|||cái phù hợp với bối cảnh dự án', 'always Waterfall|||luôn là Waterfall', 'whichever is newest|||cái nào mới nhất'], correctIndex: 1, points: 1 },
+              { question: 'Technical debt refers to…|||Nợ kỹ thuật ám chỉ…', options: ['money owed to a vendor|||tiền nợ nhà cung cấp', 'the future cost of shortcuts taken in the code|||chi phí tương lai của việc đi tắt trong code', 'a testing tool|||một công cụ kiểm thử', 'a Scrum role|||một vai trò Scrum'], correctIndex: 1, points: 1 },
+              { question: 'The best methodology for a project is…|||Phương pháp tốt nhất cho một dự án là…', options: ['always Agile|||luôn là Agile', 'the one that fits the project\'s context|||cái phù hợp với bối cảnh dự án', 'always Waterfall|||luôn là Waterfall', 'whichever is newest|||cái nào mới nhất'], correctIndex: 1, points: 1 },
             ],
           },
         },
@@ -1604,7 +1624,7 @@ Notice Release 1 touches <em>every</em> activity — the reader can complete the
 <h3>The three-axis selection criteria the exam expects</h3>
 <div class="lz-stack">
   <div class="lz-layer"><b>1. Project characteristics.</b> Are the requirements stable? How big is it? How high is the risk? How hard is the deadline? Stable + regulated → Waterfall/V. Changing + deadline → Scrum. Unclear + risky + large → Spiral. Steady stream of small items → Kanban.</div>
-  <div class="lz-layer"><b>2. Team characteristics.</b> Size (Scrum wants 3–9), experience (XP and RAD need seniors; Waterfall tolerates juniors following a spec), and location (Agile assumes rich communication; distributed teams need more written artefacts).</div>
+  <div class="lz-layer"><b>2. Team characteristics.</b> Size (the 2020 Scrum Guide says the whole Scrum Team is "typically 10 or fewer people"; older material says 3–9 Developers), experience (XP and RAD need seniors; Waterfall tolerates juniors following a spec), and location (Agile assumes rich communication; distributed teams need more written artefacts).</div>
   <div class="lz-layer"><b>3. Customer involvement.</b> Available weekly → Agile works. Available only at the start and the end → Waterfall is honest about that reality. A customer who cannot commit time is the single most common reason a Scrum adoption fails.</div>
 </div>
 
@@ -1645,7 +1665,7 @@ Notice Release 1 touches <em>every</em> activity — the reader can complete the
 <h3>Ba trục tiêu chí lựa chọn mà đề thi mong đợi</h3>
 <div class="lz-stack">
   <div class="lz-layer"><b>1. Đặc điểm dự án.</b> Yêu cầu có ổn định không? Quy mô bao lớn? Rủi ro cao không? Hạn chót cứng tới đâu? Ổn định + có quy định → Thác nước/chữ V. Hay đổi + có hạn chót → Scrum. Mơ hồ + rủi ro + lớn → Xoắn ốc. Dòng việc nhỏ đều đặn → Kanban.</div>
-  <div class="lz-layer"><b>2. Đặc điểm đội ngũ.</b> Quy mô (Scrum muốn 3–9 người), kinh nghiệm (XP và RAD cần người giỏi; Thác nước chịu được người mới làm theo đặc tả), và vị trí địa lý (Agile giả định giao tiếp dày đặc; đội phân tán cần nhiều tài liệu viết hơn).</div>
+  <div class="lz-layer"><b>2. Đặc điểm đội ngũ.</b> Quy mô (Scrum Guide 2020 nói cả Scrum Team "thường 10 người trở xuống"; tài liệu cũ ghi 3–9 Developer), kinh nghiệm (XP và RAD cần người giỏi; Thác nước chịu được người mới làm theo đặc tả), và vị trí địa lý (Agile giả định giao tiếp dày đặc; đội phân tán cần nhiều tài liệu viết hơn).</div>
   <div class="lz-layer"><b>3. Mức tham gia của khách hàng.</b> Rảnh hằng tuần → Agile chạy được. Chỉ gặp lúc đầu và lúc cuối → Thác nước trung thực với thực tế đó. Khách hàng không cam kết được thời gian là nguyên nhân số một khiến một lần áp dụng Scrum thất bại.</div>
 </div>
 
@@ -1892,7 +1912,7 @@ Hai thứ này độc lập với nhau, nên tồn tại đủ bốn tổ hợp:
 <h3>Mock FE — 20 questions</h3>
 <div class="out"><b>1.</b> Which model is best when requirements are stable and a full audit trail is required? → <b>Waterfall / V-Model</b><br>
 <b>2.</b> In Scrum, who orders the Product Backlog? → <b>the Product Owner</b><br>
-<b>3.</b> Maximum recommended Scrum team size (developers)? → <b>9</b><br>
+<b>3.</b> Recommended Scrum team size? → <b>the 2020 Scrum Guide: "typically 10 or fewer people" for the whole Scrum Team</b> (older sources: 3–9 Developers)<br>
 <b>4.</b> Which event is about the <em>process</em> rather than the product? → <b>the Retrospective</b><br>
 <b>5.</b> "The system shall respond within 2 seconds" is a … requirement. → <b>non-functional</b><br>
 <b>6.</b> Who performs unit testing? → <b>the developer</b><br>
@@ -2069,6 +2089,7 @@ Release 1 must touch every activity so the user journey works end to end. See Le
 <span class="eyebrow">Luyện thi · Bài E.1</span>
 <h2>Bài PE: từng câu muốn gì ở bạn</h2>
 <p class="lead">Bài thi thực hành là dạng viết mở dựa trên một tình huống cho sẵn. Điểm đến từ <em>cấu trúc và lập luận</em>, không phải từ độ dài. Dưới đây là kỳ vọng của từng dạng câu.</p>
+<div class="callout warn"><b>Ghi chú nguồn.</b> Syllabus chỉ ghi <strong>PE = 40% điểm, 120 phút, toàn bộ nội dung đã học</strong>; không nêu số câu, dạng câu hay trọng số từng câu. Sáu dạng và các trọng số trong bảng là <strong>cấu trúc ôn tập của riêng khoá học này</strong>, dựng để phủ hết các CLO — không phải khung đề chính thức. Hãy dùng như một kế hoạch ôn; đừng tin chắc đề thật có đúng sáu câu theo thứ tự này.</div>
 <table>
   <thead><tr><th>Câu</th><th>Chủ đề</th><th>Trọng số thường gặp</th></tr></thead>
   <tbody>
@@ -2147,7 +2168,7 @@ Release 1 phải chạm tới mọi activity để hành trình người dùng c
 · Requirements are <em>expected to change</em> → an iterative model, so Waterfall is ruled out (its cost of change rises steeply after the requirements phase).<br>
 · The customer is <em>available weekly</em> → satisfies Scrum's need for a Product Owner; without that availability Scrum degrades badly.<br>
 · A <em>fixed 4-month deadline</em> → sprints deliver a shippable increment every 2 weeks, so the team can cut scope rather than miss the date (fixed time, variable scope).<br>
-· Team of 6, co-located → within Scrum's recommended 3–9 and daily stand-ups are cheap.<br>
+· Team of 6, co-located → comfortably inside the "10 or fewer" the Scrum Guide recommends, and daily stand-ups are cheap.<br>
 · 2 new graduates → sprint reviews and pairing give the feedback they need faster than a document hand-off would.<br>
 <b>Why not the alternatives:</b> Waterfall — requirements are not stable. V-Model — same problem, plus it is heavier on documentation than a start-up can afford. Spiral — its risk-driven prototyping suits large, high-risk systems; here the risk is modest and the timeline short. Kanban — a good fallback if the work were an unpredictable stream of support tickets, but the fixed launch date favours the rhythm of sprints.<br>
 <b>Marking:</b> naming a model 0.5 · at least three justifications drawn from the scenario 1.0 · rejecting at least one alternative with a reason 0.5.</div>
@@ -2234,7 +2255,7 @@ recommend     compare        subscription   instalments    live tracking  loyalt
 · Yêu cầu <em>được dự báo sẽ thay đổi</em> → cần mô hình lặp, nên loại Waterfall (chi phí thay đổi của nó tăng vọt sau giai đoạn phân tích yêu cầu).<br>
 · Khách hàng <em>rảnh hằng tuần</em> → đáp ứng nhu cầu có Product Owner của Scrum; thiếu điều này thì Scrum xuống cấp rất nhanh.<br>
 · <em>Hạn chót cố định 4 tháng</em> → sprint giao được sản phẩm dùng được sau mỗi 2 tuần, nên đội có thể cắt phạm vi thay vì trễ hạn (cố định thời gian, linh hoạt phạm vi).<br>
-· Đội 6 người, ngồi cùng chỗ → nằm trong khuyến nghị 3–9 người của Scrum và họp đứng hằng ngày rất rẻ.<br>
+· Đội 6 người, ngồi cùng chỗ → thoải mái nằm trong mức "10 người trở xuống" mà Scrum Guide khuyến nghị, và họp đứng hằng ngày rất rẻ.<br>
 · 2 người mới tốt nghiệp → sprint review và lập trình cặp cho họ phản hồi nhanh hơn nhiều so với bàn giao bằng tài liệu.<br>
 <b>Vì sao không chọn phương án khác:</b> Waterfall — yêu cầu không ổn định. V-Model — cùng vấn đề đó, lại nặng tài liệu hơn mức một start-up kham nổi. Spiral — kiểu tạo nguyên mẫu theo rủi ro của nó hợp với hệ thống lớn, rủi ro cao; ở đây rủi ro vừa phải và thời gian ngắn. Kanban — sẽ là lựa chọn tốt nếu công việc là dòng phiếu hỗ trợ khó đoán, nhưng hạn ra mắt cố định thì nhịp sprint hợp hơn.<br>
 <b>Thang chấm:</b> gọi tên mô hình 0,5 · ít nhất ba luận cứ rút từ tình huống 1,0 · loại ít nhất một phương án khác kèm lý do 0,5.</div>
@@ -2319,9 +2340,9 @@ gợi ý        so sánh       mua định kỳ   trả góp       theo dõi tr�
           description: 'Từ vựng chuyên ngành hay ra trong FE, chuỗi Error → Fault → Failure, Agile Manifesto đầy đủ và các cặp khái niệm dễ nhầm.',
           content: `
 <div class="ml-en">
-<span class="eyebrow">Exam prep · Lesson E.2</span>
+<span class="eyebrow">Exam prep · Lesson E.3</span>
 <h2>FE: the vocabulary decides your score</h2>
-<p class="lead">The final exam is multiple choice, and most lost marks come from not knowing a term rather than not understanding a concept. Here are the terms that recur, grouped so they are easier to hold.</p>
+<p class="lead">The TE half of the final (60%, 50 computer-gradable questions in 60 minutes) is multiple choice, and most lost marks come from not knowing a term rather than not understanding a concept. Here are the terms that recur, grouped so they are easier to hold.</p>
 
 <h3>Core terms</h3>
 <table>
@@ -2366,7 +2387,7 @@ Crucially: a fault only becomes a failure <b>if it is executed under the right c
   <tbody>
     <tr><td>Iterative vs Incremental</td><td>Iterative = <em>refine</em> the same thing repeatedly; Incremental = <em>add</em> new pieces each time</td></tr>
     <tr><td>Verification vs Validation</td><td>Building it right vs building the right thing (Lesson 8.1)</td></tr>
-    <tr><td>Throwaway vs Evolutionary prototype</td><td>Discarded afterwards vs kept and grown — "exploratory" is NOT the pair (Lesson 2.2)</td></tr>
+    <tr><td>Throwaway vs Evolutionary prototype</td><td>Discarded afterwards vs kept and grown. In Sommerville the pair is <em>exploratory development</em> vs <em>throw-away prototyping</em> — both terms are real (Lesson 2.2)</td></tr>
     <tr><td>Implementation vs Deployment</td><td>Writing/building the software vs putting it into the live environment</td></tr>
     <tr><td>Retest vs Regression</td><td>Re-run failed cases vs re-run passed cases (Lesson 8.3)</td></tr>
     <tr><td>Smoke vs Sanity</td><td>Wide-and-shallow vs narrow-and-deep (Lesson 8.3)</td></tr>
@@ -2377,9 +2398,9 @@ Crucially: a fault only becomes a failure <b>if it is executed under the right c
 <div class="callout"><span class="badge">★ Study method</span> Build this into a two-column self-test: cover the right-hand column and say each distinction aloud. Almost every FE question on these topics is a single distinction dressed in a sentence, so being able to state the difference in one line is exactly the skill being examined. Combine this with the seven testing principles (Lesson 8.1) and the INVEST/SMART acronyms (Chapter 9) and you have covered the bulk of the recallable content.</div>
 </div>
 <div class="ml-vi">
-<span class="eyebrow">Luyện thi · Bài E.2</span>
+<span class="eyebrow">Luyện thi · Bài E.3</span>
 <h2>FE: từ vựng quyết định điểm số</h2>
-<p class="lead">Bài thi cuối kỳ là trắc nghiệm, và phần lớn điểm mất đi đến từ việc không biết một thuật ngữ chứ không phải không hiểu khái niệm. Đây là các thuật ngữ lặp lại nhiều, gom nhóm cho dễ nhớ.</p>
+<p class="lead">Nửa TE của bài thi cuối (60%, 50 câu máy chấm trong 60 phút) là trắc nghiệm, và phần lớn điểm mất đi đến từ việc không biết một thuật ngữ chứ không phải không hiểu khái niệm. Đây là các thuật ngữ lặp lại nhiều, gom nhóm cho dễ nhớ.</p>
 
 <h3>Thuật ngữ cốt lõi</h3>
 <table>
@@ -2424,7 +2445,7 @@ Crucially: a fault only becomes a failure <b>if it is executed under the right c
   <tbody>
     <tr><td>Iterative vs Incremental</td><td>Iterative = <em>tinh chỉnh</em> lặp lại cùng một thứ; Incremental = <em>thêm</em> mảnh mới mỗi lần</td></tr>
     <tr><td>Verification vs Validation</td><td>Xây đúng cách vs xây đúng thứ cần xây (bài 8.1)</td></tr>
-    <tr><td>Nguyên mẫu Throwaway vs Evolutionary</td><td>Vứt đi sau đó vs giữ lại và bồi đắp — "exploratory" KHÔNG phải là cặp của nó (bài 2.2)</td></tr>
+    <tr><td>Nguyên mẫu Throwaway vs Evolutionary</td><td>Vứt đi sau đó vs giữ lại và bồi đắp. Ở Sommerville cặp này là <em>exploratory development</em> vs <em>throw-away prototyping</em> — cả hai thuật ngữ đều thật (bài 2.2)</td></tr>
     <tr><td>Implementation vs Deployment</td><td>Viết/xây dựng phần mềm vs đưa nó vào môi trường chạy thật</td></tr>
     <tr><td>Retest vs Regression</td><td>Chạy lại case đã trượt vs chạy lại case đã đạt (bài 8.3)</td></tr>
     <tr><td>Smoke vs Sanity</td><td>Rộng-mà-nông vs hẹp-mà-sâu (bài 8.3)</td></tr>
@@ -2445,11 +2466,11 @@ Crucially: a fault only becomes a failure <b>if it is executed under the right c
       "description": "Thi cuối kỳ FE (trắc nghiệm, máy chấm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
       "lessons": [
         {
-          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "title": "FE — Theory Exam (TE, 60%, 50 MCQ / 60′)|||FE — Thi lý thuyết (TE, 60%, 50 câu trắc nghiệm / 60′)",
           "slug": "swe201c-final-exam-fe",
           "type": "article",
-          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "description": "Khung phần TE (60%, 50 câu máy chấm, 60 phút) + vài câu mẫu từ môn. PE 40%/120 phút xem E.1–E.3. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">In SWE201c the final is made of <strong>two separate papers</strong>: the <strong>Theory Exam (TE) — 60% of the mark, 50 computer-gradable questions in 60 minutes</strong>, and the <strong>Practical Exam (PE) — 40%, 120 minutes</strong>, which is a written/applied paper, not multiple choice. <strong>Only the TE is the computer-graded multiple-choice test this page prepares you for.</strong> Both must reach 4, and FR must reach 5 (see <em>Lesson 0.2 — Grading</em>); for the PE go to <em>E.1–E.3 — Exam preparation</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Thi cuối kỳ SWE201c gồm <strong>hai bài riêng</strong>: <strong>thi lý thuyết (TE) — 60% điểm, 50 câu máy chấm trong 60 phút</strong>, và <strong>thi thực hành (PE) — 40%, 120 phút</strong>, là bài viết/vận dụng chứ không phải trắc nghiệm. <strong>Chỉ TE mới là bài trắc nghiệm máy chấm mà trang này luyện.</strong> Cả hai đều phải ≥ 4 và FR ≥ 5 (xem <em>Bài 0.2 — Thang điểm</em>); phần PE xem <em>E.1–E.3 — Luyện thi</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [

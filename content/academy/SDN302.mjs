@@ -60,8 +60,9 @@ export default {
   <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">REST API in MVC</div><div class="lz-nsub">routes → controllers → services → models · EJS/Handlebars</div></div></div>
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Auth &amp; security</div><div class="lz-nsub">bcrypt · sessions · Passport · JWT · HTTPS · CORS · uploads</div></div></div>
   <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Integrate React &amp; deploy</div><div class="lz-nsub">connect front-end · hosting · BaaS</div></div></div>
+  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">NestJS &amp; Hono</div><div class="lz-nsub">sessions 49–56 · CLO2 · both are prescribed frameworks</div></div></div>
   <div class="lz-stage">Advanced · beyond the syllabus</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">NestJS · Hono · production hardening</div><div class="lz-nsub">frameworks &amp; real-world robustness</div></div></div>
+  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Aggregation pipeline · production hardening</div><div class="lz-nsub">real-world robustness</div></div></div>
 </div>
 <a class="link-card codelab" href="/code-lab/rest-apis?ref=%2Fcourses%2Fserver-side-development-nodejs-express-mongodb%2Flearn&reflabel=SDN302#module-526" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
@@ -91,8 +92,9 @@ export default {
   <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">REST API theo MVC</div><div class="lz-nsub">routes → controllers → services → models · EJS/Handlebars</div></div></div>
   <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Xác thực &amp; bảo mật</div><div class="lz-nsub">bcrypt · session · Passport · JWT · HTTPS · CORS · upload</div></div></div>
   <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Tích hợp React &amp; triển khai</div><div class="lz-nsub">nối front-end · hosting · BaaS</div></div></div>
+  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">NestJS &amp; Hono</div><div class="lz-nsub">buổi 49–56 · CLO2 · cả hai đều là framework bắt buộc</div></div></div>
   <div class="lz-stage">Nâng cao · ngoài giáo trình</div>
-  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">NestJS · Hono · gia cố production</div><div class="lz-nsub">framework &amp; độ bền thực chiến</div></div></div>
+  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Aggregation pipeline · gia cố production</div><div class="lz-nsub">độ bền thực chiến</div></div></div>
 </div>
 <a class="link-card codelab" href="/code-lab/rest-apis?ref=%2Fcourses%2Fserver-side-development-nodejs-express-mongodb%2Flearn&reflabel=SDN302#module-526" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
@@ -122,10 +124,10 @@ export default {
   <thead><tr><th>Component</th><th>Weight</th><th>Format</th><th>Gate</th></tr></thead>
   <tbody>
     <tr><td>Assignment (×4)</td><td>20%</td><td>Coding tasks, done in tutorials &amp; at home</td><td>submit on time</td></tr>
-    <tr><td>Practical Exam</td><td>25%</td><td>Build/extend an API live, 85 min</td><td><b>≥ 4</b></td></tr>
+    <tr><td>Practical Exam</td><td>25%</td><td>85 min — typed <b>on-going</b> in the syllabus, so it is sat during the term, not in the exam period. The question type is not printed; expect hands-on API work.</td><td><b>≥ 4</b></td></tr>
     <tr><td>Progress Test (×3)</td><td>15%</td><td>Short tests, 20–40 min (PT1 CLO1-5,8 · PT2 CLO6 · PT3 CLO7)</td><td>—</td></tr>
     <tr><td>Project</td><td>15%</td><td>A full server-side app + presentation</td><td>—</td></tr>
-    <tr><td>Final Exam</td><td>25%</td><td>Theory + applied, 60 min</td><td><b>≥ 4</b></td></tr>
+    <tr><td>Final Exam</td><td>25%</td><td>60 min — the only row typed <b>Final exam</b>. Its question type is not printed in the syllabus, so revise theory <em>and</em> applied work.</td><td><b>≥ 4</b></td></tr>
   </tbody>
 </table>
 <div class="formula"><span class="lbl">TO PASS</span> Practical Exam ≥ 4 &nbsp;AND&nbsp; Final Exam ≥ 4 &nbsp;AND&nbsp; weighted average ≥ 5</div>
@@ -147,10 +149,10 @@ export default {
   <thead><tr><th>Thành phần</th><th>Trọng số</th><th>Hình thức</th><th>Cổng</th></tr></thead>
   <tbody>
     <tr><td>Assignment (×4)</td><td>20%</td><td>Bài code, làm ở tutorial &amp; ở nhà</td><td>nộp đúng hạn</td></tr>
-    <tr><td>Practical Exam</td><td>25%</td><td>Xây/mở rộng một API tại chỗ, 85 phút</td><td><b>≥ 4</b></td></tr>
+    <tr><td>Practical Exam</td><td>25%</td><td>85 phút — syllabus xếp loại <b>on-going</b>, nghĩa là thi trong kỳ chứ không phải đợt thi cuối. Dạng câu hỏi không được in; hãy chuẩn bị làm API trực tiếp.</td><td><b>≥ 4</b></td></tr>
     <tr><td>Progress Test (×3)</td><td>15%</td><td>Test ngắn, 20–40 phút (PT1 CLO1-5,8 · PT2 CLO6 · PT3 CLO7)</td><td>—</td></tr>
     <tr><td>Project</td><td>15%</td><td>Một app server-side đầy đủ + thuyết trình</td><td>—</td></tr>
-    <tr><td>Final Exam</td><td>25%</td><td>Lý thuyết + áp dụng, 60 phút</td><td><b>≥ 4</b></td></tr>
+    <tr><td>Final Exam</td><td>25%</td><td>60 phút — dòng DUY NHẤT thuộc loại <b>Final exam</b>. Dạng câu hỏi không được in trong syllabus, nên hãy ôn cả lý thuyết <em>lẫn</em> phần áp dụng.</td><td><b>≥ 4</b></td></tr>
   </tbody>
 </table>
 <div class="formula"><span class="lbl">ĐỂ ĐẬU</span> Practical Exam ≥ 4 &nbsp;VÀ&nbsp; Final Exam ≥ 4 &nbsp;VÀ&nbsp; trung bình có trọng số ≥ 5</div>
@@ -1193,7 +1195,7 @@ passport.<span class="tok-function">use</span>(<span class="tok-keyword">new</sp
 </div>`,
         },
         {
-          title: '5.2 — JWT, HTTPS, CORS & file uploads|||5.2 — JWT, HTTPS, CORS & upload file',
+          title: '5.2 — JWT, HTTPS, CORS & file upload/download|||5.2 — JWT, HTTPS, CORS & upload/download file',
           slug: 'sdn302-5-2-jwt-cors',
           type: 'VIDEO',
           description: 'Token-based auth với JWT, HTTPS an toàn, bật CORS cho client React, và upload file bằng Multer.',
@@ -1229,6 +1231,35 @@ app.<span class="tok-function">use</span>(<span class="tok-function">cors</span>
 app.<span class="tok-function">post</span>(<span class="tok-string">'/upload'</span>, upload.<span class="tok-function">single</span>(<span class="tok-string">'file'</span>), (req, res) =&gt; {
   res.<span class="tok-function">json</span>({ file: req.file.filename });
 });</pre></div>
+<h3>File downloads (syllabus sessions 35&ndash;36)</h3>
+<div class="out"><pre><span class="tok-comment">// 1. serve an uploads folder as static files</span>
+app.<span class="tok-function">use</span>(<span class="tok-string">'/files'</span>, express.<span class="tok-function">static</span>(<span class="tok-string">'uploads'</span>));
+
+<span class="tok-comment">// 2. force a download, with a friendly filename</span>
+<span class="tok-keyword">const</span> path = <span class="tok-function">require</span>(<span class="tok-string">'path'</span>);
+app.<span class="tok-function">get</span>(<span class="tok-string">'/download/:name'</span>, (req, res) =&gt; {
+  <span class="tok-keyword">const</span> safe = path.<span class="tok-function">basename</span>(req.params.name);        <span class="tok-comment">// strips ../ path traversal</span>
+  res.<span class="tok-function">download</span>(path.<span class="tok-function">join</span>(__dirname, <span class="tok-string">'uploads'</span>, safe), <span class="tok-string">'report.pdf'</span>);
+});</pre>
+<em><code>express.static</code> lets the browser <em>render</em> the file; <code>res.download</code> sets <code>Content-Disposition: attachment</code> so it is <em>saved</em> instead. Always run the requested name through <code>path.basename</code> &mdash; raw user input in a file path is a path-traversal hole.</em></div>
+
+<h3>HTTPS &mdash; key, certificate and the HTTP&rarr;HTTPS redirect (syllabus sessions 31&ndash;32)</h3>
+<div class="out"><pre><span class="tok-comment"># a self-signed key + certificate, for local development only</span>
+openssl req -x509 -newkey rsa:2048 -nodes -keyout key.pem -out cert.pem -days 365</pre>
+<pre><span class="tok-keyword">const</span> https = <span class="tok-function">require</span>(<span class="tok-string">'https'</span>);
+<span class="tok-keyword">const</span> fs = <span class="tok-function">require</span>(<span class="tok-string">'fs'</span>);
+
+https.<span class="tok-function">createServer</span>({
+  key:  fs.<span class="tok-function">readFileSync</span>(<span class="tok-string">'key.pem'</span>),
+  cert: fs.<span class="tok-function">readFileSync</span>(<span class="tok-string">'cert.pem'</span>),
+}, app).<span class="tok-function">listen</span>(<span class="tok-number">443</span>);
+
+<span class="tok-comment">// send every plain HTTP request to HTTPS</span>
+<span class="tok-function">require</span>(<span class="tok-string">'http'</span>).<span class="tok-function">createServer</span>((req, res) =&gt; {
+  res.<span class="tok-function">writeHead</span>(<span class="tok-number">301</span>, { Location: <span class="tok-string">'https://'</span> + req.headers.host + req.url });
+  res.<span class="tok-function">end</span>();
+}).<span class="tok-function">listen</span>(<span class="tok-number">80</span>);</pre>
+<em>HTTPS encrypts the <em>whole</em> request &mdash; including the <code>Authorization</code> header carrying the JWT above, which travels in clear text over plain HTTP. A self-signed certificate is fine for development (the browser will warn); in production the certificate comes from a CA and is usually terminated by the hosting platform or a reverse proxy, so your Node app keeps listening on plain HTTP behind it.</em></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Keep the JWT secret in an environment variable, never in code.</b> A signing secret committed to Git is a full account-forgery key for anyone who reads the repo. Load it from <code>process.env.JWT_SECRET</code> (via a <code>.env</code> file that is git-ignored). This env-not-code discipline for secrets is the single most common real-world back-end mistake — and it is not on the syllabus.</div>
 <div class="pitfall">Do not put sensitive data (passwords, roles you do not want visible) inside the JWT <em>payload</em> — it is only base64-encoded, not encrypted. Anyone can decode and read it; only the signature is protected.</div>
 </div>
@@ -1263,6 +1294,35 @@ app.<span class="tok-function">use</span>(<span class="tok-function">cors</span>
 app.<span class="tok-function">post</span>(<span class="tok-string">'/upload'</span>, upload.<span class="tok-function">single</span>(<span class="tok-string">'file'</span>), (req, res) =&gt; {
   res.<span class="tok-function">json</span>({ file: req.file.filename });
 });</pre></div>
+<h3>Tải file xuống (buổi 35&ndash;36 của giáo trình)</h3>
+<div class="out"><pre><span class="tok-comment">// 1. phuc vu thu muc uploads nhu file tinh</span>
+app.<span class="tok-function">use</span>(<span class="tok-string">'/files'</span>, express.<span class="tok-function">static</span>(<span class="tok-string">'uploads'</span>));
+
+<span class="tok-comment">// 2. ep trinh duyet TAI XUONG, kem ten file than thien</span>
+<span class="tok-keyword">const</span> path = <span class="tok-function">require</span>(<span class="tok-string">'path'</span>);
+app.<span class="tok-function">get</span>(<span class="tok-string">'/download/:name'</span>, (req, res) =&gt; {
+  <span class="tok-keyword">const</span> safe = path.<span class="tok-function">basename</span>(req.params.name);        <span class="tok-comment">// cat bo ../ path traversal</span>
+  res.<span class="tok-function">download</span>(path.<span class="tok-function">join</span>(__dirname, <span class="tok-string">'uploads'</span>, safe), <span class="tok-string">'report.pdf'</span>);
+});</pre>
+<em><code>express.static</code> để trình duyệt <em>hiển thị</em> file; <code>res.download</code> đặt <code>Content-Disposition: attachment</code> nên file được <em>lưu về máy</em>. Luôn cho tên file người dùng gửi lên đi qua <code>path.basename</code> &mdash; nhét thẳng input người dùng vào đường dẫn là lỗ path traversal.</em></div>
+
+<h3>HTTPS &mdash; khoá, chứng chỉ và chuyển hướng HTTP&rarr;HTTPS (buổi 31&ndash;32 của giáo trình)</h3>
+<div class="out"><pre><span class="tok-comment"># khoa + chung chi tu ky, CHI dung cho may local</span>
+openssl req -x509 -newkey rsa:2048 -nodes -keyout key.pem -out cert.pem -days 365</pre>
+<pre><span class="tok-keyword">const</span> https = <span class="tok-function">require</span>(<span class="tok-string">'https'</span>);
+<span class="tok-keyword">const</span> fs = <span class="tok-function">require</span>(<span class="tok-string">'fs'</span>);
+
+https.<span class="tok-function">createServer</span>({
+  key:  fs.<span class="tok-function">readFileSync</span>(<span class="tok-string">'key.pem'</span>),
+  cert: fs.<span class="tok-function">readFileSync</span>(<span class="tok-string">'cert.pem'</span>),
+}, app).<span class="tok-function">listen</span>(<span class="tok-number">443</span>);
+
+<span class="tok-comment">// day moi request HTTP thuong sang HTTPS</span>
+<span class="tok-function">require</span>(<span class="tok-string">'http'</span>).<span class="tok-function">createServer</span>((req, res) =&gt; {
+  res.<span class="tok-function">writeHead</span>(<span class="tok-number">301</span>, { Location: <span class="tok-string">'https://'</span> + req.headers.host + req.url });
+  res.<span class="tok-function">end</span>();
+}).<span class="tok-function">listen</span>(<span class="tok-number">80</span>);</pre>
+<em>HTTPS mã hoá <em>toàn bộ</em> request &mdash; kể cả header <code>Authorization</code> mang JWT ở trên, thứ đi dạng chữ thường trên HTTP trần. Chứng chỉ tự ký đủ dùng khi phát triển (trình duyệt sẽ cảnh báo); ở production chứng chỉ do CA cấp và thường được nền tảng hosting hoặc reverse proxy kết thúc, nên app Node của bạn vẫn nghe HTTP thường ở phía sau.</em></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Giữ JWT secret trong biến môi trường, không bao giờ trong code.</b> Một secret ký commit vào Git là chìa khoá giả mạo tài khoản cho bất kỳ ai đọc repo. Nạp nó từ <code>process.env.JWT_SECRET</code> (qua một tệp <code>.env</code> đã git-ignore). Kỷ luật secret-để-env-không-trong-code này là lỗi back-end thực tế phổ biến nhất — và không có trong giáo trình.</div>
 <div class="pitfall">Đừng đặt dữ liệu nhạy cảm (mật khẩu, vai trò bạn không muốn lộ) trong <em>payload</em> JWT — nó chỉ base64-encode, không mã hoá. Ai cũng decode và đọc được; chỉ chữ ký được bảo vệ.</div>
 </div>`,
@@ -1399,7 +1459,7 @@ app.<span class="tok-function">post</span>(<span class="tok-string">'/upload'</s
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.1</span>
 <h2>The three assessments &amp; how to beat them</h2>
-<p class="lead">Two gates decide your fate: the Practical Exam (85 min, build an endpoint live, ≥4) and the Final Exam (60 min, theory + applied, ≥4). Progress Tests map to specific CLOs. Prepare each deliberately.</p>
+<p class="lead">Two gates decide your fate: the <strong>Practical Exam</strong> (on-going, 85 min, ≥4) and the <strong>Final Exam</strong> (60 min, ≥4). Neither question type is printed in the syllabus, so prepare to write code <em>and</em> to explain it. Progress Tests map to specific CLOs. Prepare each deliberately.</p>
 <h3>Practical Exam strategy (85 min)</h3>
 <div class="lz-flow">
   <div class="lz-step"><b>0–10 min</b><span>type your memorised starter: connect Mongoose, schema, router, error handler</span></div>
@@ -1457,7 +1517,7 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.1</span>
 <h2>Ba bài đánh giá &amp; cách vượt qua</h2>
-<p class="lead">Hai cổng quyết định số phận: Practical Exam (85 phút, xây endpoint tại chỗ, ≥4) và Final Exam (60 phút, lý thuyết + áp dụng, ≥4). Progress Test ánh xạ CLO cụ thể. Ôn từng cái có chủ đích.</p>
+<p class="lead">Hai cổng quyết định số phận: <strong>Practical Exam</strong> (on-going, 85 phút, ≥4) và <strong>Final Exam</strong> (60 phút, ≥4). Syllabus không in dạng câu hỏi của cả hai, nên hãy chuẩn bị vừa viết code vừa giải thích được. Progress Test ánh xạ CLO cụ thể. Ôn từng cái có chủ đích.</p>
 <h3>Chiến lược Practical Exam (85 phút)</h3>
 <div class="lz-flow">
   <div class="lz-step"><b>0–10 phút</b><span>gõ starter đã thuộc: nối Mongoose, schema, router, error handler</span></div>
@@ -1535,8 +1595,8 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
 
     /* ══════════════════ CHƯƠNG 8 (NÂNG CAO ★) — FRAMEWORKS & PRODUCTION ══════════════════ */
     {
-      title: 'Chapter 8 (Advanced) — NestJS, Hono & production hardening|||Chương 8 (Nâng cao) — NestJS, Hono & gia cố production',
-      description: 'Ngoài giáo trình: framework hiện đại (NestJS/Hono), aggregation pipeline, và gia cố API cho production.',
+      title: 'Chapter 8 — NestJS & Hono (syllabus sessions 49–56) + production hardening|||Chương 8 — NestJS & Hono (buổi 49–56 của giáo trình) + gia cố production',
+      description: 'NestJS (buổi 49–54) và Hono (buổi 55–56) là NỘI DUNG CHÍNH THỨC của giáo trình, thuộc CLO2 và nằm trong danh mục tài liệu. Phần ngoài giáo trình ở chương này chỉ là aggregation pipeline và gia cố API cho production.',
       lessons: [
         {
           title: '8.1 — NestJS, Hono & the aggregation pipeline|||8.1 — NestJS, Hono & aggregation pipeline',
@@ -1545,9 +1605,10 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
           description: 'Vì sao có framework có cấu trúc như NestJS, edge framework Hono, và MongoDB aggregation.',
           content: `
 <div class="ml-en">
-<span class="eyebrow">Chapter 8 · Lesson 8.1 · ★ Beyond the syllabus</span>
-<h2>Beyond Express: NestJS, Hono &amp; aggregation</h2>
-<p class="lead">Express is minimal — you impose structure yourself. Larger teams often want structure built in. Two modern frameworks and one powerful MongoDB feature round out your toolkit.</p>
+<span class="eyebrow">Chapter 8 · Lesson 8.1</span>
+<h2>NestJS, Hono &amp; aggregation</h2>
+<div class="callout ok"><b>These frameworks are on the syllabus, not extras.</b> CLO2 reads "Understand Express, <b>NestJS and Hono</b> framework"; sessions <b>49–54</b> are NestJS (intro, installing, first program, techniques ×2, security) and <b>55–56</b> are Hono (intro &amp; install, first program); both nestjs.com and hono.dev are listed course materials. Only the aggregation pipeline at the end of this lesson is beyond the syllabus.</div>
+<p class="lead">Express is minimal — you impose structure yourself. Larger teams often want structure built in. The two frameworks below are the syllabus' answer to that, and one powerful MongoDB feature rounds out the toolkit.</p>
 <h3>NestJS — opinionated structure</h3>
 <p>NestJS layers TypeScript, dependency injection, and a module/controller/service architecture on top of Express. It enforces the MVC layering you did by hand — useful when many developers share a large codebase.</p>
 <div class="out"><pre><span class="tok-comment">// A NestJS controller — decorators declare routes</span>
@@ -1566,13 +1627,14 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
   { $sort: { total: -<span class="tok-number">1</span> } }
 ]);</pre>
 <em>Aggregation does grouping, joining (<code>$lookup</code>) and computing inside MongoDB — far faster than pulling all data into Node and looping.</em></div>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Frameworks trade freedom for guardrails.</b> Express gives you total freedom (and total responsibility for structure); NestJS gives you strong conventions (and less freedom). Neither is "better" — the right choice depends on team size and how much structure you want enforced. Understanding this trade-off, rather than memorising one framework, is what lets you pick tools wisely across a career.</div>
+<div class="callout"><b>Frameworks trade freedom for guardrails.</b> Express gives you total freedom (and total responsibility for structure); NestJS gives you strong conventions (and less freedom). Neither is "better" — the right choice depends on team size and how much structure you want enforced. Understanding this trade-off, rather than memorising one framework, is what lets you pick tools wisely across a career.</div>
 <div class="pitfall">Do not reach for NestJS on a tiny project just because it is "advanced" — its structure is overhead you do not need for a 3-resource API. Match the tool's weight to the project's size.</div>
 </div>
 <div class="ml-vi">
-<span class="eyebrow">Chương 8 · Bài 8.1 · ★ Ngoài giáo trình</span>
-<h2>Vượt Express: NestJS, Hono &amp; aggregation</h2>
-<p class="lead">Express tối giản — bạn tự áp cấu trúc. Nhóm lớn thường muốn cấu trúc có sẵn. Hai framework hiện đại và một tính năng MongoDB mạnh bổ sung cho bộ công cụ của bạn.</p>
+<span class="eyebrow">Chương 8 · Bài 8.1</span>
+<h2>NestJS, Hono &amp; aggregation</h2>
+<div class="callout ok"><b>Hai framework này NẰM TRONG giáo trình, không phải phần thêm.</b> CLO2 ghi "Understand Express, <b>NestJS and Hono</b> framework"; buổi <b>49–54</b> là NestJS (giới thiệu, cài đặt, chương trình đầu, kỹ thuật ×2, bảo mật) và buổi <b>55–56</b> là Hono (giới thiệu &amp; cài, chương trình đầu); cả nestjs.com lẫn hono.dev đều nằm trong danh mục tài liệu môn học. Chỉ phần aggregation pipeline ở cuối bài này mới là ngoài giáo trình.</div>
+<p class="lead">Express tối giản — bạn tự áp cấu trúc. Nhóm lớn thường muốn cấu trúc có sẵn. Hai framework dưới đây chính là câu trả lời của giáo trình cho điều đó, cộng thêm một tính năng MongoDB mạnh.</p>
 <h3>NestJS — cấu trúc có định hướng</h3>
 <p>NestJS phủ TypeScript, dependency injection, và kiến trúc module/controller/service lên trên Express. Nó thực thi phân lớp MVC mà bạn làm bằng tay — hữu ích khi nhiều dev chia sẻ một codebase lớn.</p>
 <div class="out"><pre><span class="tok-comment">// Mot controller NestJS — decorator khai bao route</span>
@@ -1591,7 +1653,7 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
   { $sort: { total: -<span class="tok-number">1</span> } }
 ]);</pre>
 <em>Aggregation làm gom nhóm, join (<code>$lookup</code>) và tính toán bên trong MongoDB — nhanh hơn nhiều so với kéo hết dữ liệu vào Node và lặp.</em></div>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Framework đánh đổi tự do lấy lan can bảo vệ.</b> Express cho bạn tự do hoàn toàn (và trách nhiệm hoàn toàn về cấu trúc); NestJS cho bạn quy ước mạnh (và ít tự do hơn). Không cái nào "tốt hơn" — lựa chọn đúng tuỳ quy mô nhóm và mức cấu trúc bạn muốn thực thi. Hiểu sự đánh đổi này, thay vì học thuộc một framework, là điều giúp bạn chọn công cụ khôn ngoan suốt sự nghiệp.</div>
+<div class="callout"><b>Framework đánh đổi tự do lấy lan can bảo vệ.</b> Express cho bạn tự do hoàn toàn (và trách nhiệm hoàn toàn về cấu trúc); NestJS cho bạn quy ước mạnh (và ít tự do hơn). Không cái nào "tốt hơn" — lựa chọn đúng tuỳ quy mô nhóm và mức cấu trúc bạn muốn thực thi. Hiểu sự đánh đổi này, thay vì học thuộc một framework, là điều giúp bạn chọn công cụ khôn ngoan suốt sự nghiệp.</div>
 <div class="pitfall">Đừng vớ NestJS cho một project bé chỉ vì nó "nâng cao" — cấu trúc của nó là gánh nặng bạn không cần cho một API 3 tài nguyên. Khớp trọng lượng công cụ với quy mô project.</div>
 </div>`,
         },
@@ -1656,22 +1718,22 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
       ],
     },
     {
-      "title": "Final Exam|||Thi cuối kỳ",
-      "description": "Thi cuối kỳ gồm PE (thi thực hành) và FE (trắc nghiệm). Khung + câu mẫu; đề thật thêm sau khi có trang phòng thi.",
+      "title": "Exams — the on-going Practical Exam (25%) and the Final Exam (25%)|||Các bài thi — Practical Exam on-going (25%) và Final Exam (25%)",
+      "description": "Practical Exam KHÔNG phải thi cuối kỳ: syllabus xếp nó loại on-going, 25%, 85 phút, cổng ≥ 4, thi trong kỳ. Bài thi cuối kỳ là Final Exam 25%, 60 phút, cũng cổng ≥ 4.",
       "lessons": [
         {
-          "title": "PE — Practical Exam|||PE — Thi thực hành",
+          "title": "Practical Exam — 25%, 85 minutes, on-going, gate ≥ 4|||Practical Exam — 25%, 85 phút, on-going, cổng ≥ 4",
           "slug": "sdn302-final-exam-pe",
           "type": "article",
-          "description": "Khung thi thực hành (PE) của môn — format, cách chấm và cách chuẩn bị. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · PE</span>\n<h2>PE — Practical Exam</h2>\n<p class=\"lead\">The Practical Exam (PE) is a <strong>hands-on coding exam</strong>: you are given a problem or feature and must write (and usually run) working code on the machine within a time limit. It is graded on correctness, whether it runs, and good practice.</p>\n<h3>How to prepare</h3>\n<ul>\n<li>Rebuild small features from a blank file, <em>without notes</em> &mdash; copying tutorials is not enough.</li>\n<li>Practise the core pattern of this subject end-to-end until you can do it from memory.</li>\n<li>Read the requirement twice; build the smallest working version first, then extend.</li>\n<li>Test as you go; a program that runs and does 80% beats one that does not compile.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A real practical prompt bank for this subject will be added here later, in the exam room. Use the guidance above to prepare now.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · PE</span>\n<h2>PE — Thi thực hành</h2>\n<p class=\"lead\">Thi thực hành (PE) là <strong>thi code trực tiếp</strong>: bạn được giao một bài toán/tính năng và phải viết (thường là chạy) code hoạt động trên máy trong thời gian quy định. Chấm theo tính đúng, có chạy được không, và thực hành tốt.</p>\n<h3>Cách chuẩn bị</h3>\n<ul>\n<li>Dựng lại các tính năng nhỏ từ một file trống, <em>không nhìn ghi chú</em> &mdash; chép tutorial là chưa đủ.</li>\n<li>Luyện mẫu cốt lõi của môn đầu-cuối tới khi làm được từ trí nhớ.</li>\n<li>Đọc yêu cầu hai lần; dựng bản chạy được nhỏ nhất trước, rồi mở rộng.</li>\n<li>Test dọc đường; một chương trình chạy và làm được 80% hơn một chương trình không biên dịch nổi.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề thực hành thật cho môn này sẽ được thêm vào đây sau, trong trang phòng thi. Dùng hướng dẫn trên để chuẩn bị ngay từ giờ.</div>\n</div>"
+          "description": "Practical Exam của SDN302 là thành phần on-going (thi trong kỳ) 85 phút với cổng ≥ 4. Syllabus không in dạng đề — bài này nêu đúng những gì syllabus nói và cách luyện code API dưới áp lực thời gian.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Assessment · Practical Exam</span>\n<h2>The Practical Exam is on-going &mdash; and it can fail you on its own</h2>\n<p class=\"lead\">In the SDN302 syllabus (sylID 12175) the Practical Exam is typed <strong>on-going</strong>, not <em>Final exam</em>: <strong>1 part, 25%, completion criterion 4, 85 minutes</strong>. So it is sat <strong>during the term</strong>, yet it carries a <strong>&ge; 4 gate</strong> exactly like the final. Two of the five components can fail you alone &mdash; this one and the Final Exam.</p>\n<div class=\"callout warn\"><strong>Correction.</strong> This section previously presented the exams as &ldquo;a final made of a PE and an FE&rdquo;. The syllabus has one row typed <em>Final exam</em> (25%, 60') and four on-going rows, of which the Practical Exam is one. Plan for it in mid-term, not in the exam period.</div>\n<table>\n<thead><tr><th>Field</th><th>Value in the syllabus</th></tr></thead>\n<tbody>\n<tr><td>Type</td><td><strong>on-going</strong></td></tr>\n<tr><td>Parts / weight</td><td>1 / <strong>25%</strong></td></tr>\n<tr><td>Completion criterion</td><td><strong>4</strong></td></tr>\n<tr><td>Duration</td><td><strong>85 minutes</strong></td></tr>\n<tr><td>Question type</td><td>not printed in the published export</td></tr>\n</tbody>\n</table>\n\n<h3>What 85 minutes of Node/Express/MongoDB realistically asks for</h3>\n<p>The other on-going components (4 assignments, 3 progress tests, 1 project) span all eight CLOs, and the practical is the place where you must make code <em>run</em>:</p>\n<ul>\n<li>Start an Express app, connect Mongoose to a database, and confirm both are alive (CLO1, CLO3, CLO4).</li>\n<li>Define a schema with validation, then a router with the five CRUD routes (CLO5).</li>\n<li>Return the right status codes &mdash; 201 on create, 404 when the id does not exist, 400 on bad input.</li>\n<li>Populate a reference (comments with their author) and filter or search a collection (CLO5).</li>\n<li>Hash a password with bcrypt, issue or verify a token, protect one route (CLO6).</li>\n<li>Render one EJS or Handlebars view if the task asks for server-side output (CLO8).</li>\n</ul>\n\n<h3>Rehearsal plan</h3>\n<ol>\n<li>Type the skeleton from memory: <code>express()</code> + <code>express.json()</code> + <code>mongoose.connect</code> + one schema + one router + an error handler. Target: under 10 minutes, no searching.</li>\n<li>Then rehearse the task on top of it &mdash; a new resource, from empty folder to a working <code>GET</code>/<code>POST</code> in Postman, three times.</li>\n<li>Test as you go with Postman or <code>curl</code>. A route you never called is a route you do not know works.</li>\n<li>Get <em>something</em> running early. A partially complete API that responds scores; a complete one that crashes on start does not.</li>\n</ol>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A practical prompt bank for this subject will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Đánh giá · Practical Exam</span>\n<h2>Practical Exam là thành phần on-going &mdash; và một mình nó cũng làm bạn trượt được</h2>\n<p class=\"lead\">Trong syllabus SDN302 (sylID 12175), Practical Exam được xếp loại <strong>on-going</strong>, không phải <em>Final exam</em>: <strong>1 phần, 25%, mốc hoàn thành 4, 85 phút</strong>. Nghĩa là nó thi <strong>trong kỳ</strong>, nhưng vẫn mang <strong>cổng &ge; 4</strong> y như bài cuối. Trong năm thành phần, có hai thành phần một mình làm bạn trượt được &mdash; bài này và Final Exam.</p>\n<div class=\"callout warn\"><strong>Đính chính.</strong> Mục này trước đây trình bày các bài thi như &ldquo;một kỳ thi cuối gồm PE và FE&rdquo;. Syllabus chỉ có một dòng loại <em>Final exam</em> (25%, 60'), còn lại bốn dòng on-going, trong đó có Practical Exam. Hãy lên kế hoạch cho nó từ giữa kỳ, không phải đợt thi cuối.</div>\n<table>\n<thead><tr><th>Trường</th><th>Giá trị trong syllabus</th></tr></thead>\n<tbody>\n<tr><td>Loại</td><td><strong>on-going</strong></td></tr>\n<tr><td>Số phần / trọng số</td><td>1 / <strong>25%</strong></td></tr>\n<tr><td>Mốc hoàn thành</td><td><strong>4</strong></td></tr>\n<tr><td>Thời lượng</td><td><strong>85 phút</strong></td></tr>\n<tr><td>Dạng câu hỏi</td><td>không in trong bản xuất công bố</td></tr>\n</tbody>\n</table>\n\n<h3>85 phút Node/Express/MongoDB thực tế đòi gì</h3>\n<p>Các thành phần on-going khác (4 assignment, 3 progress test, 1 project) trải khắp tám CLO, còn bài thực hành là nơi bạn buộc phải làm cho code <em>chạy</em>:</p>\n<ul>\n<li>Khởi động một app Express, nối Mongoose vào CSDL, và xác nhận cả hai còn sống (CLO1, CLO3, CLO4).</li>\n<li>Định nghĩa schema có validation, rồi một router với năm route CRUD (CLO5).</li>\n<li>Trả đúng mã trạng thái &mdash; 201 khi tạo, 404 khi id không tồn tại, 400 khi dữ liệu vào sai.</li>\n<li>Populate một tham chiếu (comment kèm tác giả) và lọc hoặc tìm trong một collection (CLO5).</li>\n<li>Băm mật khẩu bằng bcrypt, phát hoặc verify token, bảo vệ một route (CLO6).</li>\n<li>Render một view EJS hoặc Handlebars nếu đề yêu cầu xuất từ server (CLO8).</li>\n</ul>\n\n<h3>Kế hoạch tổng duyệt</h3>\n<ol>\n<li>Gõ bộ khung từ trí nhớ: <code>express()</code> + <code>express.json()</code> + <code>mongoose.connect</code> + một schema + một router + một error handler. Mục tiêu: dưới 10 phút, không tra cứu.</li>\n<li>Rồi luyện phần nhiệm vụ đặt lên trên &mdash; một tài nguyên mới, từ thư mục trống tới <code>GET</code>/<code>POST</code> chạy được trong Postman, ba lần.</li>\n<li>Vừa làm vừa test bằng Postman hoặc <code>curl</code>. Một route bạn chưa gọi lần nào là một route bạn không biết nó chạy.</li>\n<li>Làm cho <em>một thứ gì đó</em> chạy sớm. Một API chưa đủ tính năng nhưng phản hồi được thì có điểm; một API đầy đủ mà chết ngay khi khởi động thì không.</li>\n</ol>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề thực hành của môn sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>"
         },
         {
-          "title": "FE — Final Exam (Multiple Choice)|||FE — Thi trắc nghiệm cuối kỳ",
+          "title": "Final Exam — 25%, 60 minutes, gate ≥ 4|||Final Exam — 25%, 60 phút, cổng ≥ 4",
           "slug": "sdn302-final-exam-fe",
           "type": "article",
-          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
-          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam · FE</span>\n<h2>FE — Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for this subject is a <strong>computer-graded multiple-choice test</strong>. For the exact number of questions, duration, weight and pass mark, see <em>Lesson 0.2 — Grading</em>.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ · FE</span>\n<h2>FE — Thi trắc nghiệm cuối kỳ</h2>\n<p class=\"lead\">Bài thi cuối kỳ (FE) của môn này là <strong>thi trắc nghiệm, máy chấm</strong>. Số câu, thời gian, trọng số và điểm qua cụ thể: xem <em>Bài 0.2 — Thang điểm</em>.</p>\n<h3>Cách làm tốt</h3>\n<ul>\n<li>Phân bổ thời gian: chia đều theo số câu; đánh dấu câu khó, quay lại ở cuối.</li>\n<li>Loại phương án sai rõ ràng trước, rồi chọn trong số còn lại.</li>\n<li>Câu \"nên làm gì / cái nào tốt nhất\" &mdash; trả lời theo phương pháp của môn, không theo cảm tính.</li>\n<li>Đừng bao giờ bỏ trống bài thi có cổng &mdash; đoán có suy luận vẫn hơn để trống.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính môn học để minh hoạ format. <em>Đề thi thật</em> sẽ được thêm vào đây sau, trong trang phòng thi.</div>\n</div>",
+          "description": "Bài thi cuối kỳ duy nhất của SDN302: 25%, 60 phút, mốc hoàn thành 4. Syllabus KHÔNG in dạng câu hỏi — ôn cả lý thuyết lẫn áp dụng trên CLO1–CLO8. Kèm câu luyện.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam</span>\n<h2>The one row typed &ldquo;Final exam&rdquo;</h2>\n<p class=\"lead\">The syllabus gives the final exam <strong>1 part, 25%, completion criterion 4, 60 minutes</strong>. Its <strong>question type is not printed</strong> in the published export &mdash; so do not prepare as if it were pure multiple choice. Revise definitions <em>and</em> the ability to read and reason about code.</p>\n<div class=\"callout warn\"><strong>Correction.</strong> This page previously stated the final was &ldquo;a computer-graded multiple-choice test&rdquo;. The syllabus does not say so. What it does say: 25%, 60 minutes, &ge; 4 to pass, and &ge; 80% attendance to be admitted.</div>\n\n<h3>What 60 minutes has to cover &mdash; all eight CLOs</h3>\n<table>\n<thead><tr><th>CLO</th><th>Typical question shape</th><th>Revise with</th></tr></thead>\n<tbody>\n<tr><td>CLO1 &mdash; Node, modules, API, HTTP server</td><td>Event loop ordering, blocking vs non-blocking, what <code>http.createServer</code> does, request/response anatomy</td><td>1.1, 1.2</td></tr>\n<tr><td>CLO2 &mdash; Express, <b>NestJS, Hono</b></td><td>Routing and middleware order; what NestJS adds over Express (modules, DI, decorators); what Hono is for (edge runtimes)</td><td>2.1, 2.2, 8.1</td></tr>\n<tr><td>CLO3 &mdash; Express Generator</td><td>What <code>npx express-generator</code> scaffolds and why the folders are laid out that way</td><td>2.1</td></tr>\n<tr><td>CLO4 &mdash; MongoDB</td><td>Document vs relational, CRUD operators, embed vs reference</td><td>3.1</td></tr>\n<tr><td>CLO5 &mdash; REST, Mongoose, population</td><td>Method-to-intent mapping, status codes, schema validation, <code>.populate()</code></td><td>3.2, 4.1</td></tr>\n<tr><td>CLO6 &mdash; authentication</td><td>bcrypt vs plain hashing, sessions/cookies vs JWT, what belongs in a token payload, HTTPS</td><td>5.1, 5.2</td></tr>\n<tr><td>CLO7 &mdash; Backend as a Service</td><td>What a BaaS provides (auth, database, storage, rules) and when to choose it over your own server</td><td>6.1</td></tr>\n<tr><td>CLO8 &mdash; EJS &amp; Handlebars</td><td>Server-rendered views vs a JSON API; template syntax and when each is appropriate</td><td>4.2</td></tr>\n</tbody>\n</table>\n\n<h3>Technique</h3>\n<ul>\n<li>60 minutes over eight CLOs means breadth beats depth &mdash; make sure you can say something correct about every CLO rather than everything about three.</li>\n<li>Answer &ldquo;which approach&rdquo; questions with the course's own choice and give the reason in one clause (&ldquo;JWT, because the server stays stateless&rdquo;).</li>\n<li>For code-reading items, trace the request path: which middleware runs, in what order, and what the response would actually be.</li>\n<li>Never leave a blank &mdash; the &ge; 4 gate makes an unanswered item expensive.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Practice</span> The items below are practice questions drawn from this course. Real past-exam questions will be added later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cuối kỳ</span>\n<h2>Dòng duy nhất mang loại &ldquo;Final exam&rdquo;</h2>\n<p class=\"lead\">Syllabus ghi bài thi cuối kỳ <strong>1 phần, 25%, mốc hoàn thành 4, 60 phút</strong>. <strong>Dạng câu hỏi không được in</strong> trong bản xuất công bố &mdash; nên đừng ôn như thể nó thuần trắc nghiệm. Hãy ôn cả định nghĩa <em>lẫn</em> khả năng đọc và suy luận trên code.</p>\n<div class=\"callout warn\"><strong>Đính chính.</strong> Trang này trước đây khẳng định bài cuối là &ldquo;thi trắc nghiệm máy chấm&rdquo;. Syllabus không nói vậy. Thứ nó có nói: 25%, 60 phút, &ge; 4 mới qua, và điểm danh &ge; 80% mới được dự thi.</div>\n\n<h3>60 phút phải phủ những gì &mdash; cả tám CLO</h3>\n<table>\n<thead><tr><th>CLO</th><th>Dạng câu hỏi thường gặp</th><th>Ôn ở</th></tr></thead>\n<tbody>\n<tr><td>CLO1 &mdash; Node, module, API, HTTP server</td><td>Thứ tự event loop, blocking với non-blocking, <code>http.createServer</code> làm gì, cấu tạo request/response</td><td>1.1, 1.2</td></tr>\n<tr><td>CLO2 &mdash; Express, <b>NestJS, Hono</b></td><td>Thứ tự routing và middleware; NestJS thêm gì so với Express (module, DI, decorator); Hono dùng cho gì (edge runtime)</td><td>2.1, 2.2, 8.1</td></tr>\n<tr><td>CLO3 &mdash; Express Generator</td><td><code>npx express-generator</code> dựng ra gì và vì sao thư mục xếp như vậy</td><td>2.1</td></tr>\n<tr><td>CLO4 &mdash; MongoDB</td><td>Document khác quan hệ, các toán tử CRUD, nhúng khác tham chiếu</td><td>3.1</td></tr>\n<tr><td>CLO5 &mdash; REST, Mongoose, population</td><td>Ánh xạ method với ý định, mã trạng thái, validation trong schema, <code>.populate()</code></td><td>3.2, 4.1</td></tr>\n<tr><td>CLO6 &mdash; xác thực</td><td>bcrypt khác hash trần, session/cookie khác JWT, cái gì được đặt trong payload token, HTTPS</td><td>5.1, 5.2</td></tr>\n<tr><td>CLO7 &mdash; Backend as a Service</td><td>BaaS cung cấp gì (auth, CSDL, lưu trữ, rules) và khi nào chọn nó thay vì tự dựng server</td><td>6.1</td></tr>\n<tr><td>CLO8 &mdash; EJS &amp; Handlebars</td><td>View render ở server khác API JSON; cú pháp template và khi nào dùng cái nào</td><td>4.2</td></tr>\n</tbody>\n</table>\n\n<h3>Kỹ thuật làm bài</h3>\n<ul>\n<li>60 phút cho tám CLO nghĩa là rộng thắng sâu &mdash; hãy chắc bạn nói được điều gì đó đúng về MỌI CLO, thay vì nói hết mọi thứ về ba CLO.</li>\n<li>Câu &ldquo;chọn cách nào&rdquo; hãy trả lời theo lựa chọn của chính môn kèm lý do gói trong một mệnh đề (&ldquo;JWT, vì server giữ stateless&rdquo;).</li>\n<li>Câu đọc code thì lần theo đường đi của request: middleware nào chạy, theo thứ tự nào, và response thực tế sẽ là gì.</li>\n<li>Đừng bỏ trống câu nào &mdash; có cổng &ge; 4 thì một câu bỏ trống rất đắt.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Luyện tập</span> Các câu dưới đây là câu luyện lấy từ chính môn học. Đề thi thật sẽ được thêm sau, trong trang phòng thi.</div>\n</div>",
           "quiz": {
             "timeLimitSeconds": 360,
             "questions": [

@@ -21,7 +21,7 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'Xưởng Remix — tách giọng, đo nhịp và tông, chấm bài',
   description:
-    'Công cụ làm nhạc remix trong app desktop CuongThai: tách giọng hát khỏi bản gốc bằng AI chạy ngay trên máy, đo BPM và tông giọng, kéo nhịp đổi tông, master theo một bản mẫu, rồi xuất stem kéo thẳng vào FL Studio.',
+    'Công cụ làm nhạc remix trong app desktop CuongThai: tách giọng hát khỏi bản gốc bằng AI chạy ngay trên máy, đo BPM và tông giọng, trộn lại có duck theo kick, master theo một bản mẫu, rồi xuất stem kéo thẳng vào FL Studio.',
   alternates: { canonical: 'https://cuongthai.com/xuong-remix' },
 };
 
@@ -43,21 +43,26 @@ const BUOC = [
   },
   {
     so: '4',
+    ten: 'Trộn lại bốn stem',
+    chi: 'Bộ tách để lọt một ít tiếng trầm sang giọng hát và nhạc nền; cộng bốn đường lại thì chúng chồng lên nhau thành một khối đục. App chắn trầm từng stem, cân lại mức, rồi ghì cả bài xuống mỗi cú trống cái — nhịp thở đặc trưng của nhạc sàn. Cú ghì bám vào những cú trống DÒ ĐƯỢC trong stem trống, nên đoạn break không có trống thì nó cũng không thở.',
+  },
+  {
+    so: '5',
     ten: 'Kéo nhịp, đổi tông, xuất bộ tệp',
     chi: 'Đặt BPM đích và số nửa cung cần dịch, app kéo giãn từng stem mà không đổi cao độ (và ngược lại). Xuất ra một thư mục gồm các stem đã chỉnh, một tệp MIDI mẫu vinahouse và một ghi chú nêu đúng những gì đã làm.',
   },
   {
-    so: '5',
+    so: '6',
     ten: 'Master theo một bản mẫu',
     chi: 'Chọn một bài bạn muốn bản của mình nghe giống. App đo bản mẫu rồi ép bài của bạn về đúng độ to, phổ tần và độ rộng stereo của nó, và chấm bài trước — sau để bạn thấy đã đổi những gì.',
   },
   {
-    so: '6',
+    so: '7',
     ten: 'Hỏi AI về chính bảng số đo',
     chi: 'AI đọc ĐÚNG bảng số đo ở trên — nó không nghe được bài của bạn — rồi giải thích các con số và chỉ việc cần làm tiếp. Con số nào nó nêu ra mà bảng đo không có sẽ bị đánh dấu ngay dưới câu trả lời, để bạn biết chỗ cần đối chiếu. Phần này cần đăng nhập vì nó chạy qua máy chủ.',
   },
   {
-    so: '7',
+    so: '8',
     ten: 'Kéo sang FL Studio',
     chi: 'Bấm Mở thư mục là ra ngay bốn tệp WAV 32-bit float, đặt tên sẵn. Kéo vào FL Studio, LMMS hay bất cứ phần mềm nào bạn dùng rồi bắt đầu dựng beat.',
   },

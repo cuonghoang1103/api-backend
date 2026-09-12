@@ -664,7 +664,21 @@ await ctx.addInitScript((nn) => {
         coRoi: false, byteThat: 0 },
     ],
     napBai: { id: '00000000-0000-4000-8000-000000000001', ten: 'Bài thử rất dài để xem tên có tràn ra ngoài ô không.mp3', giay: 254, soKenh: 2 },
-    napBanMau: { ten: 'DJ Tilo - Nonstop 2026.mp3', lufs: -6.8, dinhThat: -0.9, daiDong: 6.1, rongStereo: 0.42 },
+    napBanMau: { ten: 'DJ Tilo - Nonstop 2026.mp3', lufs: -6.8, dinhThat: -0.9, daiDong: 6.1,
+                 rongStereo: 0.42,
+                 dai: { 31.5: -24.0, 63: -9.8, 125: -8.9, 250: -12.1, 500: -15.0,
+                        1000: -17.2, 2000: -19.4, 4000: -21.0, 8000: -23.2, 16000: -33.8 } },
+    /* Kết quả TÁCH. Thiếu nó thì `ketQua` là null, và cả danh sách stem LẪN
+       bàn trộn không bao giờ được dựng ra — hai khối rộng nhất của trang chưa
+       từng đi qua bộ đo một lần nào (phát hiện 12/09/2026, khi thêm bàn trộn). */
+    tach: {
+      thuMuc: '/tmp/x/phien/bai-thu',
+      tep: {
+        drums: '/tmp/x/phien/bai-thu/drums.wav', bass: '/tmp/x/phien/bai-thu/bass.wav',
+        other: '/tmp/x/phien/bai-thu/other.wav', vocals: '/tmp/x/phien/bai-thu/vocals.wav',
+      },
+      giay: 214,
+    },
     master: {
       duong: '/tmp/x/Bài thử (master).wav', tenBanMau: 'DJ Tilo - Nonstop 2026.mp3',
       chinhDb: 4.2, lufsTruoc: -13.6, lufsSau: -6.9, dinhThatSau: -1.0, giay: 8.4,
@@ -679,6 +693,15 @@ await ctx.addInitScript((nn) => {
         'Ảnh stereo hẹp hơn bản mẫu — nới phần cao ra hai bên, giữ trầm ở giữa.',
       ],
       chamSau: ['Thiếu 3.2 dB ở 16 kHz so với bản mẫu.'],
+    },
+    /* Bản trộn. `nguonKick: 'nhip'` CÓ CHỦ Ý: đó là nhánh có cảnh báo, tức là
+       khối chữ dài nhất của phần này. Trả 'trong' thì dòng cảnh báo chưa từng
+       được đo lần nào — cùng lý do câu trả lời AI giả mang sẵn hai cảnh báo. */
+    tron: {
+      duong: '/tmp/x/Bài thử rất dài để xem tên có tràn không (tron).wav',
+      soKick: 0, nguonKick: 'nhip', hoiPhuc: 0.386,
+      daTron: ['drums', 'bass', 'other', 'vocals'],
+      lufs: -8.1, dinhThat: -1.0, giay: 6.2,
     },
     phanTich: {
       bpm: 139.8, bpmTinCay: 0.72,
@@ -807,6 +830,14 @@ const CHUAN_BI = {
     await p.waitForTimeout(500);
     await p.click('button:has-text("Mổ xẻ bài này")', { timeout: 2000 }).catch(() => {});
     await p.waitForTimeout(500);
+    /* Tách stem — mở ra danh sách 4 stem VÀ bàn trộn. Cả hai chỉ tồn tại sau
+       bước này, nên trước 12/09/2026 chúng chưa từng được đo. */
+    await p.click('button:has-text("Tách 4 stem")', { timeout: 2000 }).catch(() => {});
+    await p.waitForTimeout(600);
+    /* Bàn trộn: bốn hàng × bốn thanh trượt. Không bấm "Trộn lại" thì khối kết
+       quả (mang dòng cảnh báo dài nhất của phần này) không được dựng ra. */
+    await p.click('button:has-text("Trộn lại")', { timeout: 2000 }).catch(() => {});
+    await p.waitForTimeout(500);
 
     /* ⚠️ TỰ KIỂM VIỆC CỦA CHÍNH BƯỚC NÀY.
        Mọi thao tác trên đều `.catch(() => {})`, nên một selector đổi tên là
@@ -817,10 +848,13 @@ const CHUAN_BI = {
     const coCham = await p.locator('.ct-xr-cham').count();
     const coLuoi = await p.locator('.ct-xr-luoi').count();
     const coAi = await p.locator('.ct-xr-tra-loi').count();
-    if (!coCham || !coLuoi || !coAi) {
+    const coTron = await p.locator('.ct-xr-tron-ra').count();
+    const coStem = await p.locator('.ct-xr-stem-o').count();
+    if (!coCham || !coLuoi || !coAi || !coTron || coStem < 4) {
       throw new Error(
         `chuẩn bị /xuong-remix KHÔNG tới được trạng thái đông `
-        + `(lưới số đo: ${coLuoi}, khối chấm bài: ${coCham}, câu trả lời AI: ${coAi}). `
+        + `(lưới số đo: ${coLuoi}, khối chấm bài: ${coCham}, câu trả lời AI: ${coAi}, `
+        + `bản trộn: ${coTron}, ô stem: ${coStem}/4). `
         + 'Selector hay luồng trang đã đổi — sửa bước CHUAN_BI trước khi tin kết quả.',
       );
     }

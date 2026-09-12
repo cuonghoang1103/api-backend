@@ -12,7 +12,7 @@ import type { MucKhoModel } from '../../shared/ipc';
 import { KHO_MODEL, taiModel, tinhTrangKho, xoaModel } from '../nhac/taiModel';
 import {
   chinhVaXuat, donDep, donDepTatCa, huyTach, masterTheoMau, napBai, napBanMau,
-  phanTich, tach, thuMucPhien,
+  phanTich, tach, thuMucPhien, tronStem,
 } from '../nhac/xuong';
 import { handle } from './index';
 
@@ -107,6 +107,16 @@ export function registerXuongRemixHandlers(): void {
     masterTheoMau(userData(), id, {
       ...(tranDbtp === undefined ? {} : { tranDbtp }),
       ...(khongKhopPho === undefined ? {} : { khongKhopPho }),
+    }));
+
+  /* `stem` đi thẳng vào `tron()` sau khi zod đã chặn từng con số. Không ép
+     kiểu thêm ở đây: `tron()` tự lấp mọi trường thiếu bằng mặc định của stem
+     đó, nên một object rỗng vẫn ra bản trộn đúng. */
+  handle('xuongRemix:tron', ({ id, stem, nenTong, tranDbtp }) =>
+    tronStem(userData(), id, {
+      ...(stem === undefined ? {} : { stem }),
+      ...(nenTong === undefined ? {} : { nenTong }),
+      ...(tranDbtp === undefined ? {} : { tranDbtp }),
     }));
 
   handle('xuongRemix:moThuMuc', async ({ duong }) => {

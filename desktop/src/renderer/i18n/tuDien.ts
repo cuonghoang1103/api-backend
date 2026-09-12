@@ -877,6 +877,30 @@ export const TU_DIEN: Record<string, string> = {
   'Những con số này KHÔNG có trong bảng đo:': 'These numbers are NOT in the measurements:',
   'AI có thể đã tự nghĩ ra — đối chiếu lại trước khi làm theo.':
     'The AI may have invented them — check before acting on them.',
+  /* ── Bàn trộn stem (GĐ 6) ── */
+  'Trộn lại bốn stem': 'Mix the four stems',
+  'Dọn phần trầm rò sang các stem khác, cân lại mức, và ghì cả bài xuống mỗi cú trống cái — nhịp thở đặc trưng của nhạc sàn. Xong là ra một tệp stereo để nghe thử hoặc kéo vào DAW.':
+    'Clean the low end that bled into the other stems, rebalance the levels, and duck the whole track on every kick — the breathing that makes dance music move. Out comes one stereo file to audition or drag into a DAW.',
+  'Mức': 'Level',
+  'Chắn trầm': 'High-pass',
+  'Duck theo kick': 'Duck on kick',
+  'tắt': 'off',
+  'Nén tổng': 'Bus compressor',
+  'Trộn lại': 'Mix',
+  'Đang trộn…': 'Mixing…',
+  'Về mặc định': 'Reset',
+  'Bám theo': 'Locked to',
+  'cú trống cái dò được trong stem trống.': 'kicks detected in the drums stem.',
+  'Không dò ra cú trống nào, nên duck bám theo lưới nhịp — nó sẽ thở đều cả ở đoạn không có trống.':
+    'No kicks were detected, so the duck follows the tempo grid — it will keep breathing through breakdowns that have no drums.',
+  'Không có gì để duck bám vào.': 'There is nothing for the duck to lock onto.',
+  'Hồi trong': 'Recovers in',
+  'độ to': 'loudness',
+  /* `đỉnh thật` đã có ở khối chấm bài phía dưới — dùng lại, đừng khai thêm:
+     khoá trùng thì bản sau đè bản trước, im lặng. (`Độ to` viết hoa cũng đã
+     có, nhưng nó là NHÃN của một ô số đo; ở đây là giữa câu, nên cần khoá
+     viết thường riêng.) */
+
   'Master theo bản mẫu': 'Match a reference master',
   'Chọn một bài bạn muốn bản của mình nghe giống. App đo nó rồi ép bài của bạn về đúng mức to, phổ tần và độ rộng stereo của nó.':
     'Pick a track you want yours to sound like. The app measures it, then pulls your track to its loudness, frequency balance and stereo width.',

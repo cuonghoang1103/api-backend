@@ -11257,6 +11257,93 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 
 .ct-xr-nhac { margin: 0; font-size: 12.5px; }
 
+/* ── Bàn trộn stem ───────────────────────────────────────
+   Bốn hàng, mỗi hàng bốn ô điều khiển. Ở cột hẹp thì mỗi hàng tự xuống
+   thành khối dọc — dùng `@container` chứ KHÔNG `@media`: thanh bên đóng/mở
+   làm cột nội dung hẹp đi mà bề rộng cửa sổ không đổi, và `@media` không
+   thấy chuyện đó. Xem BO-CUC.md. */
+.ct-xr-tron-bang {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.ct-xr-tron-hang {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-surface-2);
+}
+.ct-xr-tron-hang.tat { opacity: 0.5; }
+
+.ct-xr-tron-ten {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 104px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.ct-xr-tron-ten input { accent-color: var(--ct-accent); cursor: pointer; }
+
+.ct-xr-tron-num {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* `min-width: 0` để ô co được, `flex: 1 1 168px` để nó xuống dòng thay vì
+     đẩy hàng tràn ngang — hai luật đầu của BO-CUC.md. */
+  flex: 1 1 168px;
+  min-width: 0;
+  font-size: 12px;
+}
+.ct-xr-tron-num > span { white-space: nowrap; }
+.ct-xr-tron-num input[type='range'] {
+  flex: 1 1 60px;
+  min-width: 0;
+  accent-color: var(--ct-accent);
+}
+.ct-xr-tron-num code {
+  min-width: 58px;
+  text-align: right;
+  font-size: 11.5px;
+  color: var(--ct-text-faint);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ct-xr-tron-ra {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 11px 13px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-surface-2);
+  font-size: 13px;
+}
+.ct-xr-tron-ra > p { margin: 0; }
+.ct-xr-tron-tep {
+  min-width: 0;
+  font-size: 11.5px;
+  color: var(--ct-text-faint);
+  overflow-wrap: anywhere;
+}
+
+@container xr (max-width: 700px) {
+  /* Nhãn và con số ở hai đầu một dòng riêng, thanh trượt chiếm cả bề ngang:
+     nhồi bốn ô vào một hàng dưới 700px thì thanh trượt còn chưa tới 40px và
+     không kéo được nữa. */
+  .ct-xr-tron-num { flex: 1 1 100%; flex-wrap: wrap; }
+  .ct-xr-tron-num input[type='range'] { flex: 1 1 100%; order: 3; }
+  .ct-xr-tron-num code { margin-left: auto; }
+}
+
 .ct-xr .ct-actions { flex-wrap: wrap; }
 
 /* ── Xưởng Remix: chỉnh nhịp & tông ───────────────────── */

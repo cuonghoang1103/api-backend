@@ -26,7 +26,9 @@ import path from 'node:path';
 import { chamBai, doTatCa, type KetQuaDo } from './amLuong';
 import { ghepDuoc, maCamelot, tenTong, type Tong } from './camelot';
 import { chinhBai, tiLeTuBpm } from './keoGian';
-import { doDacTinh, master, type DacTinh } from './master';
+import { doDacTinh, hanBien, master, type DacTinh } from './master';
+import { CAI_MAC_DINH, tron, type CaiDatMotPhan, type CaiDatStem } from './tron';
+import type { TuyChonNen } from './nen';
 import { caoDoTuTen, mauVinahouse, vietMidi } from './midi';
 import { doNhip, doTong } from './nhipVaTong';
 import { moPhienTach } from './onnxChay';
@@ -391,6 +393,92 @@ export async function chinhVaXuat(
   tep.push(tenDoc);
 
   return { thuMuc, tep, bpmDich, nuaCung, giay: (Date.now() - batDau) / 1000 };
+}
+
+/* ══════════════════════════════════════════════════════════
+   Trộn stem — chắn trầm, cân mức, duck theo kick
+   ══════════════════════════════════════════════════════════ */
+
+export interface KetQuaTronRa {
+  duong: string;
+  /** Số cú kick cú duck bám vào, và chúng đến từ đâu. */
+  soKick: number;
+  nguonKick: 'trong' | 'nhip' | 'khong';
+  hoiPhuc: number;
+  daTron: TenStem[];
+  lufs: number;
+  dinhThat: number;
+  giay: number;
+}
+
+/**
+ * Trộn các stem đã tách thành một bản stereo rồi ghi ra đĩa.
+ *
+ * ─── ⚠️ PHẢI HẠN BIÊN SAU KHI CỘNG ───
+ * Bốn stem cộng lại gần như CHẮC CHẮN vượt 0 dBFS: mỗi stem giữ nguyên mức nó
+ * có trong bản gốc, mà bản gốc vốn đã được master sát trần. Ghi thẳng ra WAV
+ * 32-bit float thì không nghe thấy gì (float chứa được quá 1,0), nhưng lúc
+ * người dùng kéo vào DAW hay nén sang MP3 thì nó vỡ tiếng — và lỗi hiện ra ở
+ * một chỗ cách đây ba bước, nên rất khó đổ đúng chỗ.
+ *
+ * Dùng lại đúng bộ hạn biên của `master.ts`: nó có chứng minh không bao giờ
+ * vượt trần, thay vì làm mượt bằng trung bình trượt rồi hy vọng.
+ */
+export async function tronStem(
+  userData: string,
+  id: string,
+  opts: {
+    stem?: Partial<Record<TenStem, CaiDatMotPhan>>;
+    nenTong?: TuyChonNen | null;
+    tranDbtp?: number;
+  } = {},
+): Promise<KetQuaTronRa> {
+  const p = layPhien(id);
+  if (!p.daTach) throw new Error('Chưa tách stem. Tách xong mới trộn lại được.');
+
+  const batDau = Date.now();
+  const pt = await phanTich(id);
+
+  const nguon: Partial<Record<TenStem, AmThanh>> = {};
+  for (const ten of TEN_STEM) {
+    try {
+      nguon[ten] = docWav((await fs.readFile(path.join(p.daTach, `${ten}.wav`))).buffer as ArrayBuffer);
+    } catch {
+      // Model chỉ-giọng-hát không sinh đủ bốn stem; trộn những gì có.
+    }
+  }
+  if (Object.keys(nguon).length === 0) throw new Error('Không đọc được stem nào trong thư mục đã tách');
+
+  const kq = tron(nguon, {
+    ...(opts.stem ? { stem: opts.stem } : {}),
+    ...(pt.bpm > 0 ? { bpm: pt.bpm } : {}),
+    ...(opts.nenTong === undefined ? {} : { nenTong: opts.nenTong }),
+  });
+
+  const tran = opts.tranDbtp ?? -1;
+  const am: AmThanh = { kenh: hanBien(kq.kenh, tran, kq.tanSoMau), tanSoMau: kq.tanSoMau };
+  const do_ = doTatCa(am);
+
+  const thuMuc = path.join(thuMucRa(userData, id), 'xuat');
+  await fs.mkdir(thuMuc, { recursive: true });
+  const duong = path.join(thuMuc, `${tenAnToan(p.ten)} (tron).wav`);
+  await fs.writeFile(duong, Buffer.from(ghiWav(am)));
+
+  return {
+    duong,
+    soKick: kq.soKick,
+    nguonKick: kq.nguonKick,
+    hoiPhuc: kq.hoiPhuc,
+    daTron: kq.daTron,
+    lufs: do_.lufs,
+    dinhThat: do_.dinhThat,
+    giay: (Date.now() - batDau) / 1000,
+  };
+}
+
+/** Thiết lập trộn mặc định — giao diện lấy nó làm điểm xuất phát. */
+export function caiTronMacDinh(): Record<TenStem, CaiDatStem> {
+  return { ...CAI_MAC_DINH };
 }
 
 /* ══════════════════════════════════════════════════════════

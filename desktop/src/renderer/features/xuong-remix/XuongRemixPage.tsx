@@ -24,13 +24,17 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  AudioWaveform, Check, Download, FolderOpen, Gauge, Loader2, Music4, Scissors,
-  Send, SlidersHorizontal, Sparkles, Trash2, Upload, X,
+  AudioWaveform, Check, Download, FolderOpen, Gauge, Layers, Loader2, Music4,
+  Scissors, Send, SlidersHorizontal, Sparkles, Trash2, Upload, X,
 } from 'lucide-react';
 import type {
-  BaiDaNap, KetQuaMasterRa, KetQuaPhanTich, KetQuaTachRa, KetQuaXuatRa, MucKhoModel,
-  TienDoXuong, TomTatBanMau,
+  BaiDaNap, KetQuaMasterRa, KetQuaPhanTich, KetQuaTachRa, KetQuaTronRa, KetQuaXuatRa,
+  MucKhoModel, TienDoXuong, TomTatBanMau,
+  CaiDatStemTron as CaiTron,
 } from '../../../shared/ipc';
+/* Bảng mặc định của bàn trộn đến từ tệp DÙNG CHUNG với main, không chép lại ở
+   đây: giao diện phải hiện đúng những con số bộ trộn sẽ dùng. */
+import { TRON_MAC_DINH } from '../../../shared/tronMacDinh';
 import { useSession } from '../../auth/session';
 import { docTraLoi, type TraLoiAi } from './traLoi';
 import { useDich } from '../../i18n';
@@ -45,6 +49,7 @@ const STEM = [
 ] as const;
 
 const DAI_TAM = [31.5, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
+
 
 function giayThanhPhut(g: number): string {
   const p = Math.floor(g / 60);
@@ -67,6 +72,18 @@ function tenTep(duong: string | undefined): string {
   if (!duong) return '—';
   const cat = Math.max(duong.lastIndexOf('/'), duong.lastIndexOf('\\'));
   return duong.slice(cat + 1);
+}
+
+/**
+ * Thư mục chứa một tệp — để nút "Mở thư mục" mở đúng THƯ MỤC.
+ *
+ * `shell.openPath` trên một TỆP thì mở tệp bằng ứng dụng mặc định, không hiện
+ * thư mục ra. Nút ghi "Mở thư mục" mà lại bật trình phát nhạc lên là nói một
+ * đằng làm một nẻo. Cắt theo cả hai dấu phân cách, cùng lý do như `tenTep`.
+ */
+function thuMucCua(duong: string): string {
+  const cat = Math.max(duong.lastIndexOf('/'), duong.lastIndexOf('\\'));
+  return cat > 0 ? duong.slice(0, cat) : duong;
 }
 
 /** dB có thể là -Infinity khi im lặng — đừng in ra chữ "-Infinity". */
@@ -95,6 +112,10 @@ export function XuongRemixPage() {
   const [dangTai, setDangTai] = useState<string | null>(null);
   const [tienDo, setTienDo] = useState<TienDoXuong | null>(null);
   const [ketQua, setKetQua] = useState<KetQuaTachRa | null>(null);
+  const [caiTron, setCaiTron] = useState<Record<string, CaiTron>>(TRON_MAC_DINH);
+  const [nenTong, setNenTong] = useState(true);
+  const [tronRa, setTronRa] = useState<KetQuaTronRa | null>(null);
+  const [dangTron, setDangTron] = useState(false);
   const [loi, setLoi] = useState<string | null>(null);
   const [keo, setKeo] = useState(false);
   /* 140 là nhịp của vinahouse — đích mặc định đúng cho gần như mọi lần dùng.
@@ -253,6 +274,32 @@ export function XuongRemixPage() {
     }
   }, [cau, bai, tranDbtp]);
 
+  const chayTron = useCallback(async () => {
+    if (!cau || !bai) return;
+    setLoi(null);
+    setDangTron(true);
+    try {
+      setTronRa(await cau.xuongRemix.tron(
+        bai.id,
+        caiTron,
+        /* Nén tổng nhẹ tay: bản trộn còn đi qua bộ hạn biên ở main, và còn
+           được master sau đó. Nén mạnh ở đây là ép hai lần. */
+        nenTong ? { nguong: -14, tiLe: 2.5, tanCong: 0.01, nhaRa: 0.12 } : undefined,
+      ));
+    } catch (e) {
+      setLoi((e as Error).message);
+    } finally {
+      setDangTron(false);
+    }
+  }, [cau, bai, caiTron, nenTong]);
+
+  const doiTron = useCallback((ma: string, thay: Partial<CaiTron>) => {
+    setCaiTron((cu) => ({ ...cu, [ma]: { ...(cu[ma] ?? TRON_MAC_DINH[ma]!), ...thay } }));
+    // Thiết lập đổi thì bản trộn cũ không còn đúng nữa — đừng để nó nằm lại
+    // trên màn hình như thể vừa trộn xong.
+    setTronRa(null);
+  }, []);
+
   const hoiAi = useCallback(async (tuDo: boolean) => {
     if (!api || !bai || !pt) return;
     setLoi(null);
@@ -291,6 +338,7 @@ export function XuongRemixPage() {
     setBai(null);
     setPt(null);
     setKetQua(null);
+    setTronRa(null);
     setXuatRa(null);
     setBanMau(null);
     setMasterRa(null);
@@ -684,7 +732,7 @@ export function XuongRemixPage() {
 
               {masterRa && (
                 <button type="button" className="ct-btn-ghost"
-                  onClick={() => void cau.xuongRemix.moThuMuc(masterRa.duong.slice(0, Math.max(masterRa.duong.lastIndexOf('/'), masterRa.duong.lastIndexOf('\\'))))}>
+                  onClick={() => void cau.xuongRemix.moThuMuc(thuMucCua(masterRa.duong))}>
                   <FolderOpen size={14} aria-hidden />
                   {dich('Mở thư mục')}
                 </button>
@@ -825,6 +873,111 @@ export function XuongRemixPage() {
               <p className="ct-muted ct-xr-nhac">
                 {dich('Xong trong')} {ketQua.giay.toFixed(0)}s. {dich('Tệp WAV 32-bit float — kéo thẳng vào FL Studio được.')}
               </p>
+            </div>
+          )}
+
+          {/* ── Bàn trộn ─────────────────────────────────── */}
+          {ketQua && (
+            <div className="ct-xr-chinh">
+              <span className="ct-xr-nhan">{dich('Trộn lại bốn stem')}</span>
+              <p className="ct-muted ct-xr-nhac">
+                {dich('Dọn phần trầm rò sang các stem khác, cân lại mức, và ghì cả bài xuống mỗi cú trống cái — nhịp thở đặc trưng của nhạc sàn. Xong là ra một tệp stereo để nghe thử hoặc kéo vào DAW.')}
+              </p>
+
+              <div className="ct-xr-tron-bang">
+                {STEM.map((st) => {
+                  const c = caiTron[st.ma] ?? TRON_MAC_DINH[st.ma]!;
+                  return (
+                    <div key={st.ma} className={`ct-xr-tron-hang${c.bat ? '' : ' tat'}`}>
+                      <label className="ct-xr-tron-ten">
+                        <input
+                          type="checkbox"
+                          checked={c.bat}
+                          onChange={(e) => doiTron(st.ma, { bat: e.target.checked })}
+                        />
+                        <b>{dich(st.nhan)}</b>
+                      </label>
+
+                      <label className="ct-xr-tron-num">
+                        <span className="ct-muted">{dich('Mức')}</span>
+                        <input
+                          type="range" min={-24} max={6} step={0.5} value={c.gainDb}
+                          disabled={!c.bat}
+                          onChange={(e) => doiTron(st.ma, { gainDb: Number(e.target.value) })}
+                        />
+                        <code>{c.gainDb > 0 ? '+' : ''}{c.gainDb.toFixed(1)} dB</code>
+                      </label>
+
+                      <label className="ct-xr-tron-num">
+                        <span className="ct-muted">{dich('Chắn trầm')}</span>
+                        <input
+                          type="range" min={0} max={200} step={10} value={c.chanTramHz}
+                          disabled={!c.bat}
+                          onChange={(e) => doiTron(st.ma, { chanTramHz: Number(e.target.value) })}
+                        />
+                        <code>{c.chanTramHz === 0 ? dich('tắt') : `${c.chanTramHz} Hz`}</code>
+                      </label>
+
+                      <label className="ct-xr-tron-num">
+                        <span className="ct-muted">{dich('Duck theo kick')}</span>
+                        <input
+                          type="range" min={0} max={100} step={5} value={Math.round(c.duck * 100)}
+                          disabled={!c.bat}
+                          onChange={(e) => doiTron(st.ma, { duck: Number(e.target.value) / 100 })}
+                        />
+                        <code>{Math.round(c.duck * 100)}%</code>
+                      </label>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="ct-xr-dieu-khien">
+                <label className="ct-xr-tron-ten">
+                  <input type="checkbox" checked={nenTong}
+                    onChange={(e) => { setNenTong(e.target.checked); setTronRa(null); }} />
+                  <span>{dich('Nén tổng')}</span>
+                </label>
+                <button type="button" className="ct-btn" disabled={dangTron}
+                  onClick={() => void chayTron()}>
+                  {dangTron ? <Loader2 size={14} className="ct-xoay" aria-hidden />
+                            : <Layers size={14} aria-hidden />}
+                  {dangTron ? dich('Đang trộn…') : dich('Trộn lại')}
+                </button>
+                <button type="button" className="ct-btn-ghost"
+                  onClick={() => { setCaiTron(TRON_MAC_DINH); setTronRa(null); }}>
+                  {dich('Về mặc định')}
+                </button>
+              </div>
+
+              {tronRa && (
+                <div className="ct-xr-tron-ra">
+                  {/* Nguồn của cú duck là thứ PHẢI nói ra: lưới nhịp đều tăm
+                      tắp nên nó vẫn thở ở đoạn break không có trống, và người
+                      dùng cần biết để tự tắt duck ở đó. */}
+                  <p>
+                    {tronRa.nguonKick === 'trong'
+                      && `${dich('Bám theo')} ${tronRa.soKick} ${dich('cú trống cái dò được trong stem trống.')}`}
+                    {tronRa.nguonKick === 'nhip'
+                      && `⚠️ ${dich('Không dò ra cú trống nào, nên duck bám theo lưới nhịp — nó sẽ thở đều cả ở đoạn không có trống.')}`}
+                    {tronRa.nguonKick === 'khong' && `⚠️ ${dich('Không có gì để duck bám vào.')}`}
+                  </p>
+                  <p className="ct-muted ct-xr-nhac">
+                    {dich('Hồi trong')} {(tronRa.hoiPhuc * 1000).toFixed(0)} ms ·{' '}
+                    {dich('độ to')} {tronRa.lufs.toFixed(1)} LUFS ·{' '}
+                    {dich('đỉnh thật')} {tronRa.dinhThat.toFixed(1)} dBTP ·{' '}
+                    {tronRa.giay.toFixed(1)}s
+                  </p>
+                  <div className="ct-xr-dieu-khien">
+                    <code className="ct-xr-tron-tep">{tenTep(tronRa.duong)}</code>
+                    <button type="button" className="ct-btn-ghost"
+                      onClick={() => void cau.xuongRemix.moThuMuc(thuMucCua(tronRa.duong))}>
+                      <FolderOpen size={14} aria-hidden />
+                      {dich('Mở thư mục')}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </section>

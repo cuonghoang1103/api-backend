@@ -399,6 +399,36 @@ export const masterSchema = z.object({
 });
 
 /**
+ * Trộn stem: chắn trầm, cân mức, duck theo kick.
+ *
+ * Trần từng con số ở đây không phải để chặn kẻ xấu (renderer là mã của chính
+ * app) mà để chặn NGƯỜI DÙNG gõ nhầm: `gainDb: 400` cho ra một tệp toàn tiếng
+ * vỡ, và `chanTramHz: 20000` cho ra một tệp im lặng — cả hai đều nghe như
+ * "app hỏng" chứ không như "tôi gõ sai".
+ */
+export const tronSchema = z.object({
+  id: z.string().uuid(),
+  stem: z.record(
+    z.enum(['drums', 'bass', 'other', 'vocals']),
+    z.object({
+      bat: z.boolean().optional(),
+      gainDb: z.number().min(-48).max(12).optional(),
+      chanTramHz: z.number().min(0).max(500).optional(),
+      duck: z.number().min(0).max(1).optional(),
+    }),
+  ).optional(),
+  /** Nén tổng sau khi cộng. Bỏ trống là tắt. */
+  nenTong: z.object({
+    nguong: z.number().min(-60).max(0),
+    tiLe: z.number().min(1).max(20),
+    tanCong: z.number().min(0).max(0.5).optional(),
+    nhaRa: z.number().min(0.001).max(2).optional(),
+    bu: z.number().min(-12).max(24).optional(),
+  }).optional(),
+  tranDbtp: z.number().min(-24).max(0).optional(),
+});
+
+/**
  * Chỉnh nhịp / tông rồi xuất bộ tệp.
  *
  * Trần nằm ở đây CHỈ là hàng rào đầu tiên. Main còn chặn lần nữa theo tỉ lệ
@@ -487,6 +517,36 @@ export interface TomTatBanMau {
   rongStereo: number;
   /** Mức mỗi dải quãng tám, dB. Khoá là tần số trung tâm. */
   dai: Record<number, number>;
+}
+
+/** Thiết lập một stem trong bàn trộn. */
+export interface CaiDatStemTron {
+  /** Tắt là bỏ hẳn stem khỏi bản trộn (bản karaoke = tắt `vocals`). */
+  bat: boolean;
+  /** Chỉnh mức, dB. */
+  gainDb: number;
+  /** Chắn trầm dưới tần số này, Hz. 0 là tắt. */
+  chanTramHz: number;
+  /** Ghì sâu bao nhiêu mỗi cú kick, 0…1. 0 là không duck. */
+  duck: number;
+}
+
+/* Bảng mặc định của bàn trộn nằm ở `shared/tronMacDinh.ts` — tệp đó không
+   kéo theo zod, nên renderer nạp được mà không phình gói. */
+
+
+export interface KetQuaTronRa {
+  duong: string;
+  /** Số cú kick cú duck bám vào. 0 nghĩa là không có gì để bám — giao diện phải nói. */
+  soKick: number;
+  /** `trong` = dò từ stem trống thật; `nhip` = suy từ lưới BPM; `khong` = không duck. */
+  nguonKick: 'trong' | 'nhip' | 'khong';
+  /** Thời gian hồi thật sự đã dùng, giây. Suy từ nhịp nếu người dùng không ép. */
+  hoiPhuc: number;
+  daTron: string[];
+  lufs: number;
+  dinhThat: number;
+  giay: number;
 }
 
 export interface KetQuaMasterRa {
@@ -1191,6 +1251,7 @@ export const INVOKE_CHANNELS = {
   'xuongRemix:chinhVaXuat': chinhXuatSchema,
   'xuongRemix:napBanMau': banMauSchema,
   'xuongRemix:master': masterSchema,
+  'xuongRemix:tron': tronSchema,
 
   /* Đường dẫn tệp trong repo mẫu gốc. Tiến trình chính còn kiểm lại lần nữa —
      xem `duongAnToan()` — nên schema này chỉ là hàng rào đầu tiên. */
@@ -1618,6 +1679,13 @@ export interface DesktopBridge {
       id: string, ten: string, mau: Uint8Array, soKenh: number, tanSoMau: number,
     ): Promise<TomTatBanMau>;
     master(id: string, tranDbtp?: number, khongKhopPho?: boolean): Promise<KetQuaMasterRa>;
+    /** Trộn các stem ĐÃ TÁCH thành một bản stereo. Ném nếu chưa tách. */
+    tron(
+      id: string,
+      stem?: Record<string, Partial<CaiDatStemTron>>,
+      nenTong?: { nguong: number; tiLe: number; tanCong?: number; nhaRa?: number; bu?: number },
+      tranDbtp?: number,
+    ): Promise<KetQuaTronRa>;
   };
   /**
    * Agent lập trình — CHỈ tài khoản Pro (máy chủ chặn, không phải app).

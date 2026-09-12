@@ -22,6 +22,7 @@
  */
 import { cuaSoHann, phoBienDo } from './fft';
 import type { AmThanh } from './wav';
+import { loc, type HeSo } from './loc';
 
 export interface KetQuaDo {
   /** Độ to tích hợp, đơn vị LUFS. `-Infinity` khi im lặng hoàn toàn. */
@@ -40,22 +41,9 @@ export interface KetQuaDo {
 
 /* ── Bộ lọc hai cực ───────────────────────────────────────── */
 
-interface HeSo { b0: number; b1: number; b2: number; a1: number; a2: number }
-
-/** Lọc xuôi một lần. Dùng dạng trực tiếp II chuyển vị — ít sai số tích luỹ nhất. */
-function loc(x: Float32Array, h: HeSo): Float32Array {
-  const y = new Float32Array(x.length);
-  let z1 = 0;
-  let z2 = 0;
-  for (let i = 0; i < x.length; i++) {
-    const v = x[i]!;
-    const ra = h.b0 * v + z1;
-    z1 = h.b1 * v - h.a1 * ra + z2;
-    z2 = h.b2 * v - h.a2 * ra;
-    y[i] = ra;
-  }
-  return y;
-}
+/* Dùng chung `loc()`/`HeSo` với `loc.ts` — MỘT bản cài đặt phương trình sai
+   phân cho cả bộ đo lẫn EQ khi trộn. Hai bản chép nhau thì một hôm sẽ có bản
+   được sửa và bản kia không, và triệu chứng là LUFS lệch so với tiếng thật. */
 
 /**
  * Hai tầng của bộ lọc K, dựng từ tham số analog trong BS.1770-4.

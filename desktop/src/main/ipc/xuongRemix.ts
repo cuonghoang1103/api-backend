@@ -11,7 +11,7 @@ import path from 'node:path';
 import type { MucKhoModel } from '../../shared/ipc';
 import { KHO_MODEL, taiModel, tinhTrangKho, xoaModel } from '../nhac/taiModel';
 import {
-  donDep, donDepTatCa, huyTach, napBai, phanTich, tach, thuMucPhien,
+  chinhVaXuat, donDep, donDepTatCa, huyTach, napBai, phanTich, tach, thuMucPhien,
 } from '../nhac/xuong';
 import { handle } from './index';
 
@@ -92,6 +92,12 @@ export function registerXuongRemixHandlers(): void {
     }));
 
   handle('xuongRemix:xoaModel', ({ maModel }) => xoaModel(userData(), maModel));
+
+  handle('xuongRemix:chinhVaXuat', ({ id, bpmDich, nuaCung }) =>
+    chinhVaXuat(userData(), id, {
+      ...(bpmDich === undefined ? {} : { bpmDich }),
+      ...(nuaCung === undefined ? {} : { nuaCung }),
+    }));
 
   handle('xuongRemix:moThuMuc', async ({ duong }) => {
     const loi = await shell.openPath(duongAnToan(duong));

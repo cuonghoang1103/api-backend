@@ -380,6 +380,19 @@ export const tachSchema = z.object({
 
 export const maModelSchema = z.object({ maModel: z.string().min(1).max(64) });
 
+/**
+ * Chỉnh nhịp / tông rồi xuất bộ tệp.
+ *
+ * Trần nằm ở đây CHỈ là hàng rào đầu tiên. Main còn chặn lần nữa theo tỉ lệ
+ * kéo THẬT (nhịp gốc / nhịp đích), vì 60 và 200 BPM đều hợp lệ về con số mà
+ * kéo từ cái này sang cái kia thì WSOLA không còn nghe được.
+ */
+export const chinhXuatSchema = z.object({
+  id: z.string().uuid(),
+  bpmDich: z.number().min(40).max(300).optional(),
+  nuaCung: z.number().int().min(-12).max(12).optional(),
+});
+
 export interface DownloadedTrack {
   trackId: number;
   ext: string;
@@ -436,6 +449,15 @@ export interface KetQuaTachRa {
   /** Đường dẫn tệp WAV từng stem, khoá là `drums` | `bass` | `other` | `vocals`. */
   tep: Record<string, string>;
   /** Thời gian tách, giây — hiện ra để người dùng ước lần sau. */
+  giay: number;
+}
+
+export interface KetQuaXuatRa {
+  thuMuc: string;
+  /** Tên tệp trong thư mục, không kèm đường dẫn. */
+  tep: string[];
+  bpmDich: number;
+  nuaCung: number;
   giay: number;
 }
 
@@ -1124,6 +1146,7 @@ export const INVOKE_CHANNELS = {
   'xuongRemix:xoaModel': maModelSchema,
   /** Mở thư mục stem trong Finder/Explorer để kéo thẳng vào FL Studio. */
   'xuongRemix:moThuMuc': z.object({ duong: z.string().min(1).max(4096) }),
+  'xuongRemix:chinhVaXuat': chinhXuatSchema,
 
   /* Đường dẫn tệp trong repo mẫu gốc. Tiến trình chính còn kiểm lại lần nữa —
      xem `duongAnToan()` — nên schema này chỉ là hàng rào đầu tiên. */
@@ -1546,6 +1569,7 @@ export interface DesktopBridge {
     taiModel(maModel: string): Promise<string>;
     xoaModel(maModel: string): Promise<void>;
     moThuMuc(duong: string): Promise<void>;
+    chinhVaXuat(id: string, bpmDich?: number, nuaCung?: number): Promise<KetQuaXuatRa>;
   };
   /**
    * Agent lập trình — CHỈ tài khoản Pro (máy chủ chặn, không phải app).

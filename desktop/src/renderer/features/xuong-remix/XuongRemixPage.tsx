@@ -24,10 +24,11 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  AudioWaveform, Download, FolderOpen, Loader2, Music4, Scissors, Trash2, Upload, X,
+  AudioWaveform, Download, FolderOpen, Gauge, Loader2, Music4, Scissors, Trash2,
+  Upload, X,
 } from 'lucide-react';
 import type {
-  BaiDaNap, KetQuaPhanTich, KetQuaTachRa, MucKhoModel, TienDoXuong,
+  BaiDaNap, KetQuaPhanTich, KetQuaTachRa, KetQuaXuatRa, MucKhoModel, TienDoXuong,
 } from '../../../shared/ipc';
 import { useDich } from '../../i18n';
 import { DUOI_NHAN, giaiMaBai, laTepNhac } from './giaiMa';
@@ -92,6 +93,12 @@ export function XuongRemixPage() {
   const [ketQua, setKetQua] = useState<KetQuaTachRa | null>(null);
   const [loi, setLoi] = useState<string | null>(null);
   const [keo, setKeo] = useState(false);
+  /* 140 là nhịp của vinahouse — đích mặc định đúng cho gần như mọi lần dùng.
+     Nhịp DÒ RA của bài hiện riêng ngay cạnh, để so chứ không để thay. */
+  const [bpmDich, setBpmDich] = useState(140);
+  const [nuaCung, setNuaCung] = useState(0);
+  const [dangXuat, setDangXuat] = useState(false);
+  const [xuatRa, setXuatRa] = useState<KetQuaXuatRa | null>(null);
   const oTep = useRef<HTMLInputElement>(null);
 
   const napKho = useCallback(async () => {
@@ -122,6 +129,7 @@ export function XuongRemixPage() {
     if (!cau) return;
     setLoi(null);
     setKetQua(null);
+    setXuatRa(null);
     setPt(null);
     setDangNap(true);
     try {
@@ -138,7 +146,7 @@ export function XuongRemixPage() {
     } finally {
       setDangNap(false);
     }
-  }, [cau]);
+  }, [cau, dich]);
 
   const tach = useCallback(async () => {
     if (!cau || !bai) return;
@@ -170,11 +178,25 @@ export function XuongRemixPage() {
     }
   }, [cau, napKho]);
 
+  const xuat = useCallback(async () => {
+    if (!cau || !bai) return;
+    setLoi(null);
+    setDangXuat(true);
+    try {
+      setXuatRa(await cau.xuongRemix.chinhVaXuat(bai.id, bpmDich, nuaCung));
+    } catch (e) {
+      setLoi((e as Error).message);
+    } finally {
+      setDangXuat(false);
+    }
+  }, [cau, bai, bpmDich, nuaCung]);
+
   const dongBai = useCallback(async () => {
     if (cau && bai) await cau.xuongRemix.dongBai(bai.id).catch(() => undefined);
     setBai(null);
     setPt(null);
     setKetQua(null);
+    setXuatRa(null);
     setLoi(null);
   }, [cau, bai]);
 
@@ -452,6 +474,80 @@ export function XuongRemixPage() {
               </span>
             </div>
           )}
+
+          {/* ── Chỉnh nhịp & tông, rồi xuất ─────────────── */}
+          <div className="ct-xr-chinh">
+            <span className="ct-xr-nhan">{dich('Chỉnh nhịp và tông rồi xuất')}</span>
+            <div className="ct-xr-dieu-khien">
+              <label className="ct-xr-o-nhap" htmlFor="xr-bpm">
+                <span>{dich('Nhịp đích')}</span>
+                <input
+                  id="xr-bpm"
+                  type="number"
+                  min={40}
+                  max={300}
+                  step={1}
+                  value={bpmDich}
+                  onChange={(e) => setBpmDich(Number(e.target.value) || 0)}
+                />
+                <small>BPM</small>
+              </label>
+
+              <label className="ct-xr-o-nhap" htmlFor="xr-tong">
+                <span>{dich('Dịch tông')}</span>
+                <input
+                  id="xr-tong"
+                  type="number"
+                  min={-12}
+                  max={12}
+                  step={1}
+                  value={nuaCung}
+                  onChange={(e) => setNuaCung(Math.max(-12, Math.min(12, Number(e.target.value) || 0)))}
+                />
+                <small>{dich('nửa cung')}</small>
+              </label>
+
+              {pt && pt.bpm > 0 && (
+                <span className="ct-muted ct-xr-nhac">
+                  <Gauge size={13} aria-hidden />
+                  {' '}{dich('bài đang ở')} <b>{pt.bpm}</b> BPM
+                  {' · '}{dich('kéo')} <b>{(pt.bpm / Math.max(1, bpmDich)).toFixed(3)}×</b>
+                </span>
+              )}
+            </div>
+
+            <div className="ct-actions">
+              <button type="button" className="ct-btn ct-btn-ghost" disabled={dangXuat}
+                onClick={() => void xuat()}>
+                {dangXuat ? <Loader2 size={14} className="ct-xoay" aria-hidden /> : <Download size={14} aria-hidden />}
+                {dangXuat ? dich('Đang chỉnh…') : dich('Chỉnh và xuất')}
+              </button>
+              {xuatRa && (
+                <button type="button" className="ct-btn-ghost"
+                  onClick={() => void cau.xuongRemix.moThuMuc(xuatRa.thuMuc)}>
+                  <FolderOpen size={14} aria-hidden />
+                  {dich('Mở thư mục')}
+                </button>
+              )}
+            </div>
+
+            <p className="ct-muted ct-xr-nhac">
+              {ketQua
+                ? dich('Sẽ chỉnh cả bốn stem đã tách.')
+                : dich('Chưa tách stem thì chỉnh thẳng bản gốc — vẫn dùng được để đánh nối.')}
+              {' '}
+              {dich('Kèm một tệp MIDI mẫu vinahouse đúng tông của bài.')}
+            </p>
+
+            {xuatRa && (
+              <div className="ct-xr-xuat-ra">
+                {xuatRa.tep.map((t) => <code key={t}>{t}</code>)}
+                <span className="ct-muted ct-xr-nhac">
+                  {dich('Xong trong')} {xuatRa.giay.toFixed(1)}s
+                </span>
+              </div>
+            )}
+          </div>
 
           {ketQua && (
             <div className="ct-xr-stem">

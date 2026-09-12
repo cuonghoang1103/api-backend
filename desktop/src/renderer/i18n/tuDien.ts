@@ -862,6 +862,19 @@ export const TU_DIEN: Record<string, string> = {
   'Bỏ thay đổi này': 'Discard this change',
   // ── Xưởng Remix ─────────────────────────────────────────
   'Xưởng Remix': 'Remix Studio',
+  'Chỉnh nhịp và tông rồi xuất': 'Adjust tempo and key, then export',
+  'Nhịp đích': 'Target tempo',
+  'Dịch tông': 'Shift key',
+  'nửa cung': 'semitones',
+  'bài đang ở': 'track is at',
+  'kéo': 'stretch',
+  'Chỉnh và xuất': 'Adjust and export',
+  'Đang chỉnh…': 'Adjusting…',
+  'Sẽ chỉnh cả bốn stem đã tách.': 'All four separated stems will be adjusted.',
+  'Chưa tách stem thì chỉnh thẳng bản gốc — vẫn dùng được để đánh nối.':
+    'With no stems yet, the original is adjusted directly — still useful for mixing between tracks.',
+  'Kèm một tệp MIDI mẫu vinahouse đúng tông của bài.':
+    'Includes a vinahouse MIDI template in the track\u2019s own key.',
   'Không nạp được bài — main không trả về phiên nào.':
     'The track could not be loaded — the main process returned no session.',
   'Xưởng Remix chỉ chạy trong app desktop': 'Remix Studio only runs in the desktop app',

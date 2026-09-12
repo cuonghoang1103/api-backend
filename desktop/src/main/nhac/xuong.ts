@@ -25,6 +25,8 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { doTatCa, type KetQuaDo } from './amLuong';
 import { ghepDuoc, maCamelot, tenTong, type Tong } from './camelot';
+import { chinhBai, tiLeTuBpm } from './keoGian';
+import { caoDoTuTen, mauVinahouse, vietMidi } from './midi';
 import { doNhip, doTong } from './nhipVaTong';
 import { moPhienTach } from './onnxChay';
 import { TAN_SO_MODEL, TEN_STEM, tachStem, type TenStem } from './tachStem';
@@ -66,6 +68,10 @@ interface Phien {
   giay: number;
   soKenh: number;
   huy: AbortController | null;
+  /** Kết quả phân tích, nhớ lại sau lần đo đầu. */
+  pt: KetQuaPhanTich | null;
+  /** Thư mục stem đã tách, `null` khi chưa tách. */
+  daTach: string | null;
 }
 
 const phien = new Map<string, Phien>();
@@ -119,7 +125,9 @@ export async function napBai(
   const duongWav = path.join(thuMuc, 'goc.wav');
   await fs.writeFile(duongWav, Buffer.from(ghiWav({ kenh, tanSoMau })));
 
-  const p: Phien = { id, ten, duongWav, giay: soMau / tanSoMau, soKenh, huy: null };
+  const p: Phien = {
+    id, ten, duongWav, giay: soMau / tanSoMau, soKenh, huy: null, pt: null, daTach: null,
+  };
   phien.set(id, p);
   return { id, ten, giay: p.giay, soKenh };
 }
@@ -138,14 +146,19 @@ async function docBai(p: Phien): Promise<AmThanh> {
 
 /** Phân tích: nhịp, tông, và toàn bộ phép đo để chấm bài. */
 export async function phanTich(id: string): Promise<KetQuaPhanTich> {
-  const am = await docBai(layPhien(id));
+  const p = layPhien(id);
+  /* Nhớ lại: đo một bài 5 phút mất ~2 giây (FFT trên cả bài, hai lượt), và
+     bước xuất ở dưới cần lại đúng con số này. Đo lại mỗi lần chỉ để ra cùng
+     một đáp án là bắt người dùng chờ hai lần cho một việc. */
+  if (p.pt) return p.pt;
+  const am = await docBai(p);
   const mono = gopMono(am);
 
   const nhip = doNhip(mono, am.tanSoMau);
   const t = doTong(mono, am.tanSoMau);
   const tong: Tong = { chuAm: t.chuAm, the: t.the };
 
-  return {
+  const kq: KetQuaPhanTich = {
     bpm: Math.round(nhip.bpm * 10) / 10,
     bpmTinCay: nhip.tinCay,
     tong: tenTong(tong),
@@ -156,6 +169,8 @@ export async function phanTich(id: string): Promise<KetQuaPhanTich> {
     ghep: ghepDuoc(tong).slice(1).map((g) => ({ ma: g.ma, vi: g.vi })),
     do: doTatCa(am),
   };
+  p.pt = kq;
+  return kq;
 }
 
 export interface KetQuaTachRa {
@@ -199,6 +214,7 @@ export async function tach(
       await fs.writeFile(duong, Buffer.from(ghiWav(kq.stem[ten])));
       tep[ten] = duong;
     }
+    p.daTach = thuMuc;
     return { thuMuc, tep, giay: (Date.now() - batDau) / 1000 };
   } finally {
     p.huy = null;
@@ -248,4 +264,153 @@ export async function donDepTatCa(userData: string): Promise<number> {
 /** Số phiên đang mở — dùng trong phép kiểm và khi cần soi trạng thái. */
 export function soPhienDangMo(): number {
   return phien.size;
+}
+
+/* ══════════════════════════════════════════════════════════
+   Chỉnh nhịp / tông rồi xuất bộ tệp sẵn sàng kéo vào FL Studio
+   ══════════════════════════════════════════════════════════ */
+
+export interface KetQuaXuat {
+  thuMuc: string;
+  /** Tên tệp trong thư mục, không kèm đường dẫn — để hiện lên giao diện. */
+  tep: string[];
+  bpmDich: number;
+  nuaCung: number;
+  giay: number;
+}
+
+/**
+ * Tên thư mục an toàn dựng từ tên bài người dùng đặt.
+ *
+ * ⚠️ Chuỗi này ĐẾN TỪ RENDERER (tên tệp người dùng thả vào). Ghép thẳng vào
+ * đường dẫn là mở cửa cho `..`, và đây là chỗ DUY NHẤT trong Xưởng Remix mà
+ * chuỗi của renderer chạm tới tên tệp — mọi chỗ khác dùng UUID do main sinh.
+ *
+ * Giữ lại chữ có dấu tiếng Việt: tên bài là thứ người dùng đọc để tìm lại thư
+ * mục, bỏ dấu đi chỉ làm họ khó tìm hơn.
+ */
+export function tenAnToan(ten: string): string {
+  const sach = ten
+    .replace(/\.[a-z0-9]{1,5}$/i, '')   // bỏ đuôi tệp
+    .replace(/[/\\:*?"<>|]/g, ' ')      // ký tự cấm trên Windows lẫn POSIX
+    .replace(/\.+/g, ' ')               // chặn mọi dạng ".."
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 80);
+  return sach || 'bai-khong-ten';
+}
+
+/**
+ * Kéo nhịp và/hoặc đổi tông cho mọi stem, rồi xuất ra một thư mục.
+ *
+ * Chưa tách stem thì chỉnh thẳng bản gốc — người dùng có thể chỉ muốn kéo cả
+ * bài về 140 BPM để đánh nối, không cần tách gì cả.
+ */
+export async function chinhVaXuat(
+  userData: string,
+  id: string,
+  opts: { bpmDich?: number; nuaCung?: number } = {},
+): Promise<KetQuaXuat> {
+  const p = layPhien(id);
+  const batDau = Date.now();
+  const pt = await phanTich(id);
+
+  const nuaCung = Math.round(opts.nuaCung ?? 0);
+  if (nuaCung < -12 || nuaCung > 12) throw new Error('Chỉ đổi tông trong khoảng 12 nửa cung');
+
+  const bpmDich = opts.bpmDich ?? pt.bpm;
+  if (!(bpmDich > 0)) throw new Error('BPM đích phải dương');
+
+  /* Nhịp gốc dò được có thể sai (tin cậy thấp). Sai thì tỉ lệ kéo sai theo,
+     nên chặn những tỉ lệ mà WSOLA không còn nghe được — thà báo lỗi nói rõ
+     nguyên nhân còn hơn trả về một tệp nghe như băng cối hỏng. */
+  const tiLeNhip = pt.bpm > 0 ? tiLeTuBpm(pt.bpm, bpmDich) : 1;
+  if (tiLeNhip < 0.5 || tiLeNhip > 2) {
+    throw new Error(
+      `Tỉ lệ kéo ${tiLeNhip.toFixed(2)} lần nằm ngoài khoảng nghe được. `
+      + `Nhịp gốc dò ra ${pt.bpm} BPM — nếu con số đó sai thì sửa nó trước.`,
+    );
+  }
+
+  const nguon: Array<{ ten: string; duong: string }> = p.daTach
+    ? TEN_STEM.map((t) => ({ ten: t, duong: path.join(p.daTach as string, `${t}.wav`) }))
+    : [{ ten: 'goc', duong: p.duongWav }];
+
+  const nhan = `${tenAnToan(p.ten)} ${Math.round(bpmDich)}BPM ${pt.tong}`;
+  const thuMuc = path.join(thuMucRa(userData, id), 'xuat', nhan);
+  await fs.mkdir(thuMuc, { recursive: true });
+
+  const tep: string[] = [];
+  for (const n of nguon) {
+    let am: AmThanh;
+    try {
+      am = docWav((await fs.readFile(n.duong)).buffer as ArrayBuffer);
+    } catch {
+      continue; // stem này chưa có thì bỏ qua, đừng làm hỏng cả lượt xuất
+    }
+    const kenh = chinhBai(am.kenh, { tiLeNhip, nuaCung });
+    const tenTep = `${n.ten}.wav`;
+    await fs.writeFile(
+      path.join(thuMuc, tenTep),
+      Buffer.from(ghiWav({ kenh, tanSoMau: am.tanSoMau })),
+    );
+    tep.push(tenTep);
+  }
+
+  /* Mẫu MIDI theo đúng tông của bài. `caoDoTuTen` đọc chữ cái đầu của tên tông
+     ("Am" thành La), nên bass ra đúng nốt chứ không mặc định Đô. */
+  const chuAm = caoDoTuTen(pt.tong) ?? 60;
+  const tenMidi = 'mau-vinahouse.mid';
+  await fs.writeFile(
+    path.join(thuMuc, tenMidi),
+    vietMidi(mauVinahouse(chuAm + nuaCung), bpmDich, nhan),
+  );
+  tep.push(tenMidi);
+
+  const tenDoc = 'doc-truoc-khi-keo.txt';
+  await fs.writeFile(path.join(thuMuc, tenDoc), ghiChuXuat(p.ten, pt, bpmDich, nuaCung), 'utf8');
+  tep.push(tenDoc);
+
+  return { thuMuc, tep, bpmDich, nuaCung, giay: (Date.now() - batDau) / 1000 };
+}
+
+/** Tệp ghi chú đi kèm. Người dùng mở nó trước khi kéo vào DAW. */
+function ghiChuXuat(
+  tenBai: string,
+  pt: KetQuaPhanTich,
+  bpmDich: number,
+  nuaCung: number,
+): string {
+  const d = (v: number) => (Number.isFinite(v) ? v.toFixed(1) : '-');
+  const pc = (v: number) => `${(v * 100).toFixed(0)}%`;
+  return [
+    tenBai,
+    '='.repeat(Math.min(60, Math.max(3, tenBai.length))),
+    '',
+    `Nhịp gốc       ${pt.bpm} BPM   (tin cậy ${pc(pt.bpmTinCay)})`,
+    `Nhịp đã chỉnh  ${bpmDich} BPM`,
+    `Tông           ${pt.tong}   Camelot ${pt.tongCamelot}   (tin cậy ${pc(pt.tongTinCay)})`,
+    nuaCung === 0 ? 'Không đổi tông' : `Đã dịch ${nuaCung > 0 ? '+' : ''}${nuaCung} nửa cung`,
+    pt.tongTinCay < 0.3 && pt.tongNhi
+      ? `  CẢNH BÁO: máy KHÔNG chắc về tông. Đáp án xếp nhì: ${pt.tongNhi}. Nghe lại trước khi tin.`
+      : '',
+    '',
+    `Ghép hoà âm được với: ${pt.ghep.map((g) => g.ma).join('  ')}`,
+    '',
+    'Số đo bản gốc',
+    `  Độ to        ${d(pt.do.lufs)} LUFS`,
+    `  Đỉnh thật    ${d(pt.do.dinhThat)} dBTP`,
+    `  Dải động     ${d(pt.do.daiDong)} LU`,
+    `  Rộng stereo  ${pc(pt.do.rongStereo)}`,
+    '',
+    'Tệp trong thư mục này',
+    '  *.wav              stem đã chỉnh nhịp/tông, 32-bit float',
+    '  mau-vinahouse.mid  khung trống + bass ĐÚNG TÔNG — điểm bắt đầu, không phải bài',
+    '',
+    'Kéo thẳng cả thư mục vào FL Studio. Tệp .mid mở ra là bốn ô nhịp mẫu: kick',
+    'mọi phách, clap phách 2 và 4, hat lệch phách, và bass nằm ở khe GIỮA các kick',
+    '(cố ý — bass trùng kick thì cả hai đều mất lực).',
+    '',
+    'Sinh bởi Xưởng Remix — app desktop CuongThai.',
+  ].filter((dong) => dong !== '').join('\n');
 }

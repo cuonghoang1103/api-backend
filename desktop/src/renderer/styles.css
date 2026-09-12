@@ -10978,6 +10978,9 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 }
 .ct-xr-x:hover { background: var(--ct-hover); }
 
+/* Hai nút (Tải về · Chọn tệp) cạnh nhau, và tự xuống dòng ở cột hẹp. */
+.ct-xr-model-nut { display: flex; flex-wrap: wrap; gap: 8px; flex-shrink: 0; }
+
 /* ── Model ───────────────────────────────────────────── */
 .ct-xr-kho { display: flex; flex-direction: column; gap: 9px; min-width: 0; }
 

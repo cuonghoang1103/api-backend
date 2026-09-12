@@ -187,6 +187,8 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('xuongRemix:khoModel') as Promise<MucKhoModel[]>,
     taiModel: (maModel: string) =>
       ipcRenderer.invoke('xuongRemix:taiModel', { maModel }) as Promise<string>,
+    chonTepModel: (maModel: string) =>
+      ipcRenderer.invoke('xuongRemix:chonTepModel', { maModel }) as Promise<{ byte: number } | null>,
     xoaModel: (maModel: string) =>
       ipcRenderer.invoke('xuongRemix:xoaModel', { maModel }) as Promise<void>,
     moThuMuc: (duong: string) =>

@@ -883,6 +883,9 @@ export const TU_DIEN: Record<string, string> = {
   'Những con số này KHÔNG có trong bảng đo:': 'These numbers are NOT in the measurements:',
   'AI có thể đã tự nghĩ ra — đối chiếu lại trước khi làm theo.':
     'The AI may have invented them — check before acting on them.',
+  'Chọn tệp .onnx': 'Pick an .onnx file',
+  'Đã tải sẵn tệp .onnx? Trỏ app vào nó.': 'Already downloaded the .onnx? Point the app at it.',
+
   /* ── Nghe thử & đẩy lên bàn DJ (khâu 08) ── */
   'Nghe thử': 'Audition',
   'Đẩy lên bàn DJ': 'Send to the DJ deck',

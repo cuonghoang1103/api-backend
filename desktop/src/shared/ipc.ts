@@ -573,11 +573,13 @@ export interface MucKhoModel {
   ma: string;
   ten: string;
   moTa: string;
-  /** Kích thước công bố, byte. */
-  byte: number;
+  /** ƯỚC TÍNH, chỉ để hiện trước khi tải. Không phải con số đo được. */
+  byteUocTinh: number;
   coRoi: boolean;
   /** Số byte thật trên đĩa; 0 khi chưa tải. */
   byteThat: number;
+  /** Có đường tải đã kiểm chứng không. `false` = chỉ chọn tệp từ máy. */
+  coNguonTai: boolean;
 }
 
 export interface TienDoXuong {
@@ -1252,6 +1254,8 @@ export const INVOKE_CHANNELS = {
   'xuongRemix:khoModel': null,
   'xuongRemix:taiModel': maModelSchema,
   'xuongRemix:xoaModel': maModelSchema,
+  /* Mở hộp thoại hệ thống để người dùng trỏ vào tệp .onnx họ tự tải. */
+  'xuongRemix:chonTepModel': maModelSchema,
   /** Mở thư mục stem trong Finder/Explorer để kéo thẳng vào FL Studio. */
   'xuongRemix:moThuMuc': z.object({ duong: z.string().min(1).max(4096) }),
   'xuongRemix:chinhVaXuat': chinhXuatSchema,
@@ -1682,6 +1686,8 @@ export interface DesktopBridge {
     khoModel(): Promise<MucKhoModel[]>;
     taiModel(maModel: string): Promise<string>;
     xoaModel(maModel: string): Promise<void>;
+    /** Mở hộp thoại chọn tệp .onnx. Trả `null` khi người dùng bấm huỷ. */
+    chonTepModel(maModel: string): Promise<{ byte: number } | null>;
     moThuMuc(duong: string): Promise<void>;
     chinhVaXuat(id: string, bpmDich?: number, nuaCung?: number): Promise<KetQuaXuatRa>;
     napBanMau(

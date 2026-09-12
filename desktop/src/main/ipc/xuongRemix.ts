@@ -6,10 +6,10 @@
  * không làm được: biết `userData` ở đâu, bắn sự kiện tiến độ ra cửa sổ, và
  * canh cửa cho `shell.openPath`.
  */
-import { BrowserWindow, app, shell } from 'electron';
+import { BrowserWindow, app, dialog, shell } from 'electron';
 import path from 'node:path';
 import type { MucKhoModel } from '../../shared/ipc';
-import { KHO_MODEL, taiModel, tinhTrangKho, xoaModel } from '../nhac/taiModel';
+import { KHO_MODEL, napModelTuTep, taiModel, tinhTrangKho, xoaModel } from '../nhac/taiModel';
 import {
   chinhVaXuat, donDep, donDepTatCa, huyTach, masterTheoMau, napBai, napBanMau,
   banGiao, phanTich, tach, thuMucPhien, tronStem,
@@ -75,9 +75,10 @@ export function registerXuongRemixHandlers(): void {
         ma: m.ma,
         ten: m.ten,
         moTa: m.moTa,
-        byte: m.byte,
+        byteUocTinh: m.byteUocTinh,
         coRoi: t?.coRoi ?? false,
         byteThat: t?.byte ?? 0,
+        coNguonTai: m.url !== null,
       };
     });
   });
@@ -93,6 +94,20 @@ export function registerXuongRemixHandlers(): void {
     }));
 
   handle('xuongRemix:xoaModel', ({ maModel }) => xoaModel(userData(), maModel));
+
+  /* Hộp thoại chạy ở MAIN, không ở renderer: renderer không được cấp quyền đọc
+     đĩa, và đây là chỗ duy nhất người dùng chỉ định một tệp ngoài thư mục
+     phiên. `napModelTuTep` kiểm nội dung trước khi nhận. */
+  handle('xuongRemix:chonTepModel', async ({ maModel }) => {
+    const { canceled, filePaths } = await dialog.showOpenDialog({
+      title: 'Chọn tệp model .onnx',
+      properties: ['openFile'],
+      filters: [{ name: 'Model ONNX', extensions: ['onnx'] }],
+    });
+    if (canceled || !filePaths[0]) return null;
+    const { byte } = await napModelTuTep(userData(), maModel, filePaths[0]);
+    return { byte };
+  });
 
   handle('xuongRemix:chinhVaXuat', ({ id, bpmDich, nuaCung }) =>
     chinhVaXuat(userData(), id, {

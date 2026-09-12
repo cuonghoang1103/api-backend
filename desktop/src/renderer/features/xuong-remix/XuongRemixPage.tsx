@@ -219,6 +219,16 @@ export function XuongRemixPage() {
     }
   }, [cau, bai, maModel]);
 
+  const chonTepModel = useCallback(async (ma: string) => {
+    if (!cau) return;
+    setLoi(null);
+    try {
+      if (await cau.xuongRemix.chonTepModel(ma)) await napKho();
+    } catch (e) {
+      setLoi((e as Error).message);
+    }
+  }, [cau, napKho]);
+
   const taiModel = useCallback(async (ma: string) => {
     if (!cau) return;
     setLoi(null);
@@ -406,24 +416,44 @@ export function XuongRemixPage() {
                   <b>{m.ten}</b>
                   <span className="ct-muted">{m.moTa}</span>
                   <span className="ct-xr-model-so">
+                    {/* Chưa tải thì con số chỉ là ƯỚC TÍNH — phải nói ra. Bản
+                        đầu hiện "166 MB" trơn cạnh "316 MB" đã tải, trông như
+                        hai số đo cùng loại, mà một cái là người viết mã gõ vào. */}
                     {m.coRoi
                       ? `${dich('đã tải')} · ${goiGB(m.byteThat)}`
-                      : `${dich('chưa tải')} · ${goiGB(m.byte)}`}
+                      : `${dich('chưa tải')} · ~${goiGB(m.byteUocTinh)}`}
                   </span>
                 </span>
               </label>
               {!m.coRoi && (
-                <button
-                  type="button"
-                  className="ct-btn ct-btn-ghost"
-                  disabled={dangTai !== null}
-                  onClick={() => void taiModel(m.ma)}
-                >
-                  {dangTai === m.ma
-                    ? <Loader2 size={14} className="ct-xoay" aria-hidden />
-                    : <Download size={14} aria-hidden />}
-                  {dangTai === m.ma ? dich('taimodel|Đang tải…') : dich('Tải về')}
-                </button>
+                <div className="ct-xr-model-nut">
+                  {/* Chỉ mời tải khi đường tải đã được KIỂM CHỨNG. Model nào
+                      chưa có đường tin được thì đừng bày nút Tải về ra rồi để
+                      nó trả 404 — thà nói thẳng là phải tự tải. */}
+                  {m.coNguonTai && (
+                    <button
+                      type="button"
+                      className="ct-btn ct-btn-ghost"
+                      disabled={dangTai !== null}
+                      onClick={() => void taiModel(m.ma)}
+                    >
+                      {dangTai === m.ma
+                        ? <Loader2 size={14} className="ct-xoay" aria-hidden />
+                        : <Download size={14} aria-hidden />}
+                      {dangTai === m.ma ? dich('taimodel|Đang tải…') : dich('Tải về')}
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    className="ct-btn ct-btn-ghost"
+                    disabled={dangTai !== null}
+                    onClick={() => void chonTepModel(m.ma)}
+                    title={dich('Đã tải sẵn tệp .onnx? Trỏ app vào nó.')}
+                  >
+                    <FolderOpen size={14} aria-hidden />
+                    {dich('Chọn tệp .onnx')}
+                  </button>
+                </div>
               )}
               {m.coRoi && (
                 <button

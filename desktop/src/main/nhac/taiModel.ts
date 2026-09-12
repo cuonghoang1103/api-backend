@@ -35,9 +35,25 @@ import path from 'node:path';
 export interface NguonModel {
   ma: string;
   ten: string;
-  url: string;
-  /** Kích thước công bố, byte. Dùng để ước tiến độ và chặn tệp cụt. */
-  byte: number;
+  /**
+   * Nơi tải về. `null` = KHÔNG có nguồn nào đã kiểm chứng — giao diện chỉ mời
+   * người dùng tự chọn tệp `.onnx` trên máy.
+   *
+   * ⚠️ Để `null` còn hơn đoán một URL. Ngày 12/09/2026 tệp này chứa hai URL
+   * dựng theo trí nhớ; một cái trả 404 ngay trên máy người dùng, cái kia tải
+   * về được nhưng kích thước lệch hẳn con số khai ở đây. Một URL sai không
+   * hỏng lúc dựng, không hỏng lúc kiểm — nó hỏng đúng lúc người dùng bấm.
+   */
+  url: string | null;
+  /**
+   * ƯỚC TÍNH kích thước, byte. CHỈ dùng để vẽ thanh tiến độ khi máy chủ không
+   * khai `content-length`, và để hiện một con số gần đúng trước khi tải.
+   *
+   * KHÔNG được dùng làm điều kiện đúng/sai: nó là con số người viết mã gõ vào,
+   * không phải thứ đo được. Đúng cái nhầm đó đã làm bản 4 stem hiện "1,26 GB"
+   * trong khi tệp thật là 316 MB.
+   */
+  byteUocTinh: number;
   /** SHA-256 của nhà phát hành. `null` = chưa ghim được, xem ghi chú đầu tệp. */
   vanTay: string | null;
   moTa: string;
@@ -55,19 +71,44 @@ export const KHO_MODEL: readonly NguonModel[] = [
     ma: 'htdemucs-4stem',
     ten: 'HT-Demucs · 4 stem',
     url: 'https://huggingface.co/StemSplitio/htdemucs-onnx/resolve/main/htdemucs.onnx',
-    byte: 1_260_000_000,
+    /* 316 MB là con số ĐO ĐƯỢC trên máy người dùng 12/09/2026 (trước đó ghi
+       1,26 GB — sai). Khớp với htdemucs ~83,6 triệu tham số ở fp32. */
+    byteUocTinh: 316_000_000,
     vanTay: null,
     moTa: 'Trống, bass, nhạc nền, giọng hát. Bản đầy đủ — chọn cái này để remix sâu.',
   },
   {
     ma: 'htdemucs-vocals',
     ten: 'HT-Demucs · chỉ giọng hát',
-    url: 'https://huggingface.co/StemSplitio/htdemucs-onnx/resolve/main/htdemucs_vocals_fp16.onnx',
-    byte: 166_000_000,
+    /* URL cũ trả 404 trên máy người dùng: tên tệp là do người viết mã đoán,
+       không tra được (máy dựng bị chặn khỏi kho model). Để `null` cho tới khi
+       có ai đó DÁN VÀO một đường đã mở thử bằng trình duyệt. */
+    url: null,
+    byteUocTinh: 166_000_000,
     vanTay: null,
-    moTa: 'Chỉ tách giọng, nhẹ hơn 7,6 lần. Đủ cho phần lớn bản remix vinahouse.',
+    moTa: 'Chỉ tách giọng, nhẹ hơn. Chưa có đường tải đã kiểm — tự tải về rồi chọn tệp.',
   },
 ];
+
+/**
+ * Nội dung nhận về có phải một model không.
+ *
+ * Bắt ba thứ hay bị nhầm là model: trang HTML báo lỗi, con trỏ Git LFS (một
+ * tệp CHỮ vài trăm byte trông y như đã tải xong), và tệp rỗng. Không có chốt
+ * này thì cả ba đi thẳng xuống onnxruntime và nó báo lỗi protobuf — cách xa
+ * nguyên nhân thật, và người dùng sẽ đi ngờ bộ tách stem.
+ *
+ * KHÔNG kiểm sâu hơn: ONNX là protobuf, không có chữ ký đầu tệp để đối chiếu.
+ * Phép kiểm thật là lượt mở phiên đầu tiên, và `docHopDong` ở đó đã nói rõ nó
+ * thấy gì.
+ */
+export function laModel(dau: Buffer): string | null {
+  if (dau.length === 0) return 'tệp rỗng';
+  const chu = dau.subarray(0, 200).toString('latin1');
+  if (/^\s*<(!doctype|html|\?xml)/i.test(chu)) return 'máy chủ trả về một trang HTML, không phải model';
+  if (chu.startsWith('version https://git-lfs')) return 'đây là con trỏ Git LFS, không phải model — cần đường tải bản thật';
+  return null;
+}
 
 export function thuMucModel(userData: string): string {
   return path.join(userData, 'nhac', 'model');
@@ -94,7 +135,15 @@ export async function tinhTrangKho(userData: string): Promise<TinhTrang[]> {
     const duongDan = duongModel(userData, m.ma);
     try {
       const st = await fs.stat(duongDan);
-      return { ma: m.ma, coRoi: st.size > 0, byte: st.size, duongDan };
+      /* ⚠️ "khác rỗng" KHÔNG phải là "tải xong".
+         Bản đầu chỉ kiểm `st.size > 0`, nên một trang HTML báo lỗi hay một con
+         trỏ Git LFS vài trăm byte cũng hiện là "đã tải · 0 MB" và nút Tách
+         sáng lên. Người dùng bấm, onnxruntime báo lỗi protobuf, và chỗ hỏng
+         nằm cách nguyên nhân ba bước. Đọc thật 200 byte đầu để loại chúng. */
+      const tep = await fs.open(duongDan, 'r');
+      const dem = Buffer.allocUnsafe(Math.min(200, st.size));
+      try { await tep.read(dem, 0, dem.length, 0); } finally { await tep.close(); }
+      return { ma: m.ma, coRoi: laModel(dem) === null, byte: st.size, duongDan };
     } catch {
       return { ma: m.ma, coRoi: false, byte: 0, duongDan };
     }
@@ -141,6 +190,13 @@ async function taiThat(userData: string, ma: string, opts: TuyChonTai): Promise<
   await fs.mkdir(thuMucModel(userData), { recursive: true });
   const tam = `${dich}.part`;
 
+  if (!nguon.url) {
+    throw new Error(
+      `Model "${nguon.ten}" chưa có đường tải nào đã kiểm chứng. `
+      + 'Tải tệp .onnx về bằng trình duyệt rồi bấm "Chọn tệp .onnx" để trỏ app vào nó.',
+    );
+  }
+
   const res = await fetch(nguon.url, opts.huy ? { signal: opts.huy } : {});
   if (!res.ok) {
     throw new Error(`Tải model hỏng: HTTP ${res.status} ${res.statusText} — ${nguon.url}`);
@@ -148,13 +204,23 @@ async function taiThat(userData: string, ma: string, opts: TuyChonTai): Promise<
   if (!res.body) throw new Error('Máy chủ không trả nội dung');
 
   const khai = Number(res.headers.get('content-length') ?? 0);
-  const tong = khai > 0 ? khai : nguon.byte;
+  const tong = khai > 0 ? khai : nguon.byteUocTinh;
+  /* Gom cho ĐỦ 200 byte đầu, không lấy mỗi mẩu đầu tiên: mẩu mạng có thể chỉ
+     vài byte, và `<!DOCTYP` cụt thì không mẫu nào khớp. Phép kiểm bắt được
+     đúng lỗi này ngay lần chạy đầu. */
+  const dauMau: Buffer[] = [];
+  let dauSo = 0;
 
   const bam = createHash('sha256');
   const tep = await fs.open(tam, 'w');
   let daNhan = 0;
   try {
     for await (const buf of res.body) {
+      if (dauSo < 200) {
+        const lay = Buffer.from(buf.subarray(0, 200 - dauSo));
+        dauMau.push(lay);
+        dauSo += lay.length;
+      }
       bam.update(buf);
       await tep.write(buf);
       daNhan += buf.byteLength;
@@ -175,6 +241,14 @@ async function taiThat(userData: string, ma: string, opts: TuyChonTai): Promise<
   if (khai > 0 && daNhan !== khai) {
     await fs.rm(tam, { force: true });
     throw new Error(`Tải thiếu: nhận ${daNhan} byte, máy chủ khai ${khai} byte`);
+  }
+
+  /* Mã HTTP 200 không có nghĩa là nhận được model: nhiều kho trả một trang
+     HTML kèm 200, và Git LFS trả một con trỏ dạng chữ. */
+  const sai = laModel(Buffer.concat(dauMau));
+  if (sai) {
+    await fs.rm(tam, { force: true });
+    throw new Error(`Tải về không phải model: ${sai} — ${nguon.url}`);
   }
 
   const vanTay = bam.digest('hex');
@@ -216,6 +290,56 @@ export async function kiemVanTay(userData: string, ma: string): Promise<boolean>
     await tep.close();
   }
   return bam.digest('hex') === mong;
+}
+
+/**
+ * Nhận một tệp `.onnx` NGƯỜI DÙNG TỰ TẢI và đặt nó vào đúng chỗ.
+ *
+ * ─── Vì sao đường này phải tồn tại ───
+ * Đường tải sẵn phụ thuộc một URL do người viết mã gõ vào, và người viết mã ở
+ * đây không mở được kho model để đối chiếu. Ngày 12/09/2026 điều đó đã thành
+ * một cái 404 ngay trên máy người dùng. Có đường này thì một URL sai chỉ còn
+ * là bất tiện, không phải là tính năng chết: người dùng tự tải bằng trình
+ * duyệt — nơi họ NHÌN THẤY tệp có thật hay không — rồi trỏ app vào.
+ *
+ * Chép chứ không tạo liên kết: tệp nguồn có thể nằm trong Downloads và bị dọn.
+ */
+export async function napModelTuTep(
+  userData: string, ma: string, tepNguon: string,
+): Promise<{ duongDan: string; byte: number }> {
+  if (!KHO_MODEL.some((m) => m.ma === ma)) throw new Error(`Không biết model "${ma}"`);
+
+  const st = await fs.stat(tepNguon);
+  if (!st.isFile()) throw new Error('Đó không phải một tệp');
+
+  const f = await fs.open(tepNguon, 'r');
+  const dem = Buffer.allocUnsafe(Math.min(200, st.size));
+  try { await f.read(dem, 0, dem.length, 0); } finally { await f.close(); }
+  const sai = laModel(dem);
+  if (sai) throw new Error(`Tệp này không phải model: ${sai}`);
+
+  await fs.mkdir(thuMucModel(userData), { recursive: true });
+  const dich = duongModel(userData, ma);
+  const tam = `${dich}.part`;
+  await fs.copyFile(tepNguon, tam);
+
+  /* Ghi vân tay của chính bản vừa chép, y như đường tải: những lần mở sau
+     `kiemVanTay` bắt được đĩa hỏng hay đồng bộ đám mây cắt xén. */
+  const bam = createHash('sha256');
+  const doc = await fs.open(tam, 'r');
+  try {
+    const buf = Buffer.allocUnsafe(1 << 20);
+    for (;;) {
+      const { bytesRead } = await doc.read(buf, 0, buf.length, null);
+      if (bytesRead === 0) break;
+      bam.update(buf.subarray(0, bytesRead));
+    }
+  } finally {
+    await doc.close();
+  }
+  await fs.writeFile(duongVanTay(userData, ma), bam.digest('hex'), 'utf8');
+  await fs.rename(tam, dich);
+  return { duongDan: dich, byte: st.size };
 }
 
 /** Xoá một model để lấy lại đĩa. */

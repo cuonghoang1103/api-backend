@@ -389,39 +389,89 @@ const c6q = quiz('hsf302-quiz-6', 'Quiz 6 — Thymeleaf|||Quiz 6 — Thymeleaf',
 // Mục "Tài liệu tham khảo" — nội dung GỐC do mình soạn: trích dẫn sách + link
 // nguồn chính thức miễn phí + trỏ giáo trình/slide đầy đủ trên FLM. KHÔNG upload
 // PDF có bản quyền lên CDN công khai.
-const taiLieu = doc('hsf302-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
-  'Tổng hợp tài liệu học môn: giáo trình & slide chính thức (trên FLM), sách tham khảo, tài liệu chính thức miễn phí và lộ trình tự học.',
+const taiLieu = doc('hsf302-0-0-tai-lieu', '📚 Materials & resource hub|||📚 Trung tâm tài liệu môn học',
+  'Trung tâm tài liệu: giáo trình & slide chính thức (FLM), sách (kèm link), tài liệu chính thức miễn phí, video YouTube, công cụ học/thực hành, và lộ trình tự học đầy đủ (trường + nâng cao thực tế).',
   [[
-    `<span class="eyebrow">HSF302 · Materials</span>
-<h2>Course materials &amp; references</h2>
-<p class="lead">Everything to study this course, in one place. The full official lecture slides &amp; textbook are on <strong>FLM</strong> (where FPTU students access them legitimately); below are free, legal resources to go deeper on each topic.</p>
-<h3>Official documentation (free)</h3>
+    `<span class="eyebrow">HSF302 · Resource hub</span>
+<h2>Materials &amp; resource hub</h2>
+<p class="lead">Everything to master Spring in one place — enough to pass the exam with a high score AND to use Spring confidently at work. The full official FPTU slides &amp; textbook are on FLM; below is a curated, legal, mostly-free resource set.</p>
+<h3>📘 Official course textbook &amp; slides</h3>
+<p>Sign in to <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> with your FPTU account → the HSF302 giáo trình + full lecture slides are there (official source for exam scope).</p>
+<h3>📗 Reference books (with links)</h3>
 <ul>
-<li><a href="https://spring.io/projects/spring-boot" target="_blank" rel="noopener">Spring Boot — official reference</a></li>
-<li><a href="https://docs.spring.io/spring-framework/reference/" target="_blank" rel="noopener">Spring Framework — reference docs</a></li>
-<li><a href="https://spring.io/guides" target="_blank" rel="noopener">Spring Guides — hands-on tutorials</a></li>
-<li><a href="https://www.baeldung.com/spring-tutorial" target="_blank" rel="noopener">Baeldung — Spring tutorials</a></li>
+<li><em>Spring Start Here</em> — Laurentiu Spilca (Manning): <a href="https://www.manning.com/books/spring-start-here" target="_blank" rel="noopener">manning.com/books/spring-start-here</a> — best for beginners.</li>
+<li><em>Spring in Action</em> (6th ed.) — Craig Walls (Manning): <a href="https://www.manning.com/books/spring-in-action-sixth-edition" target="_blank" rel="noopener">manning.com/books/spring-in-action-sixth-edition</a> — the classic.</li>
 </ul>
-<h3>Reference book</h3>
-<p><em>Spring in Action</em> — Craig Walls (Manning): a well-structured, widely used book covering this course's topics.</p>
-<h3>Course textbook &amp; slides</h3>
-<p>The official FPTU giáo trình and lecture slides for HSF302 are on <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — sign in with your FPTU account.</p>
-<div class="callout"><span class="badge">Study path</span> Intro → Ch.1 JPA/ORM → IoC/DI → Spring Boot → Spring Data → MVC/REST → Thymeleaf. Build a small CRUD app alongside — that's when Spring clicks.</div>`,
-    `<span class="eyebrow">HSF302 · Tài liệu</span>
-<h2>Tài liệu tham khảo môn học</h2>
-<p class="lead">Mọi thứ cần để học môn, gom về một chỗ. Slide bài giảng &amp; giáo trình chính thức đầy đủ nằm trên <strong>FLM</strong> (nơi sinh viên FPTU truy cập hợp lệ); bên dưới là các nguồn miễn phí, hợp pháp để học sâu từng chủ đề.</p>
-<h3>Tài liệu chính thức (miễn phí)</h3>
+<h3>🌐 Official docs (free)</h3>
 <ul>
-<li><a href="https://spring.io/projects/spring-boot" target="_blank" rel="noopener">Spring Boot — tài liệu chính thức</a></li>
-<li><a href="https://docs.spring.io/spring-framework/reference/" target="_blank" rel="noopener">Spring Framework — reference docs</a></li>
-<li><a href="https://spring.io/guides" target="_blank" rel="noopener">Spring Guides — hướng dẫn thực hành</a></li>
-<li><a href="https://www.baeldung.com/spring-tutorial" target="_blank" rel="noopener">Baeldung — hướng dẫn Spring</a></li>
+<li>Spring Boot reference — <a href="https://spring.io/projects/spring-boot" target="_blank" rel="noopener">spring.io/projects/spring-boot</a></li>
+<li>Spring Framework reference — <a href="https://docs.spring.io/spring-framework/reference/" target="_blank" rel="noopener">docs.spring.io/spring-framework/reference</a></li>
+<li>Spring Data JPA — <a href="https://spring.io/projects/spring-data-jpa" target="_blank" rel="noopener">spring.io/projects/spring-data-jpa</a></li>
+<li>Spring Guides (hands-on) — <a href="https://spring.io/guides" target="_blank" rel="noopener">spring.io/guides</a></li>
+<li>Baeldung tutorials — <a href="https://www.baeldung.com/spring-tutorial" target="_blank" rel="noopener">baeldung.com/spring-tutorial</a></li>
 </ul>
-<h3>Sách tham khảo</h3>
-<p><em>Spring in Action</em> — Craig Walls (Manning): sách cấu trúc rõ, phổ biến, bao trọn các chủ đề của môn.</p>
-<h3>Giáo trình &amp; slide của môn</h3>
-<p>Giáo trình FPTU và slide bài giảng chính thức của HSF302 có trên <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — đăng nhập bằng tài khoản FPTU.</p>
-<div class="callout"><span class="badge">Lộ trình học</span> Giới thiệu → Ch.1 JPA/ORM → IoC/DI → Spring Boot → Spring Data → MVC/REST → Thymeleaf. Vừa học vừa dựng một app CRUD nhỏ — Spring sẽ "sáng" ra.</div>`,
+<h3>▶️ Learn on YouTube</h3>
+<ul>
+<li>Spring Developer (official) — <a href="https://www.youtube.com/@SpringSourceDev" target="_blank" rel="noopener">youtube.com/@SpringSourceDev</a></li>
+<li>Amigoscode — <a href="https://www.youtube.com/@amigoscode" target="_blank" rel="noopener">youtube.com/@amigoscode</a></li>
+<li>Java Brains — <a href="https://www.youtube.com/@Java.Brains" target="_blank" rel="noopener">youtube.com/@Java.Brains</a></li>
+<li>Telusko — <a href="https://www.youtube.com/@Telusko" target="_blank" rel="noopener">youtube.com/@Telusko</a></li>
+</ul>
+<h3>🛠️ Tools for study &amp; practice</h3>
+<ul>
+<li>Spring Initializr (bootstrap a project) — <a href="https://start.spring.io" target="_blank" rel="noopener">start.spring.io</a></li>
+<li>IntelliJ IDEA (IDE) — <a href="https://www.jetbrains.com/idea/" target="_blank" rel="noopener">jetbrains.com/idea</a></li>
+<li>Postman (test REST APIs) — <a href="https://www.postman.com/downloads/" target="_blank" rel="noopener">postman.com/downloads</a></li>
+<li>DBeaver (database client) — <a href="https://dbeaver.io" target="_blank" rel="noopener">dbeaver.io</a></li>
+</ul>
+<h3>🎯 Self-study roadmap (school → job)</h3>
+<ol>
+<li><strong>Foundation (exam core):</strong> JPA/ORM entity mapping &amp; relationships → IoC/DI &amp; beans → Spring Boot auto-config → Spring Data JPA repositories → Spring MVC/REST → Thymeleaf. This is the assessed scope — master it for a high grade.</li>
+<li><strong>Practice:</strong> build ONE CRUD app end-to-end (entity → repository → service → REST controller → Thymeleaf page). Repetition is what makes Spring click.</li>
+<li><strong>Go deeper (real world):</strong> validation &amp; exception handling, DTO/mapping, pagination &amp; sorting, transactions (@Transactional), Spring Security (auth/JWT), testing (JUnit + MockMvc), and connecting a real DB (MySQL/PostgreSQL).</li>
+<li><strong>Job-ready:</strong> package with Maven/Gradle, profiles &amp; application.yml, Docker, deploy; understand REST best practices &amp; API docs (Swagger/OpenAPI).</li>
+</ol>
+<div class="callout"><span class="badge">Tip</span> Follow the official docs + one YouTube series while building the CRUD app; use Baeldung as a per-topic reference. That combo covers both the exam and practical skills.</div>`,
+    `<span class="eyebrow">HSF302 · Trung tâm tài liệu</span>
+<h2>Trung tâm tài liệu môn học</h2>
+<p class="lead">Gom mọi thứ để học chắc Spring — đủ để thi điểm cao VÀ dùng được khi đi làm. Giáo trình &amp; slide chính thức đầy đủ nằm trên FLM; bên dưới là bộ tài liệu chọn lọc, hợp pháp, phần lớn miễn phí.</p>
+<h3>📘 Giáo trình &amp; slide chính thức</h3>
+<p>Đăng nhập <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> bằng tài khoản FPTU → có giáo trình HSF302 + slide bài giảng đầy đủ (nguồn chính thức, đúng phạm vi thi).</p>
+<h3>📗 Sách tham khảo (kèm link)</h3>
+<ul>
+<li><em>Spring Start Here</em> — Laurentiu Spilca (Manning): <a href="https://www.manning.com/books/spring-start-here" target="_blank" rel="noopener">manning.com/books/spring-start-here</a> — hợp người mới.</li>
+<li><em>Spring in Action</em> (bản 6) — Craig Walls (Manning): <a href="https://www.manning.com/books/spring-in-action-sixth-edition" target="_blank" rel="noopener">manning.com/books/spring-in-action-sixth-edition</a> — kinh điển.</li>
+</ul>
+<h3>🌐 Tài liệu chính thức (miễn phí)</h3>
+<ul>
+<li>Spring Boot — <a href="https://spring.io/projects/spring-boot" target="_blank" rel="noopener">spring.io/projects/spring-boot</a></li>
+<li>Spring Framework reference — <a href="https://docs.spring.io/spring-framework/reference/" target="_blank" rel="noopener">docs.spring.io/spring-framework/reference</a></li>
+<li>Spring Data JPA — <a href="https://spring.io/projects/spring-data-jpa" target="_blank" rel="noopener">spring.io/projects/spring-data-jpa</a></li>
+<li>Spring Guides (thực hành) — <a href="https://spring.io/guides" target="_blank" rel="noopener">spring.io/guides</a></li>
+<li>Baeldung — <a href="https://www.baeldung.com/spring-tutorial" target="_blank" rel="noopener">baeldung.com/spring-tutorial</a></li>
+</ul>
+<h3>▶️ Học qua YouTube</h3>
+<ul>
+<li>Spring Developer (chính thức) — <a href="https://www.youtube.com/@SpringSourceDev" target="_blank" rel="noopener">youtube.com/@SpringSourceDev</a></li>
+<li>Amigoscode — <a href="https://www.youtube.com/@amigoscode" target="_blank" rel="noopener">youtube.com/@amigoscode</a></li>
+<li>Java Brains — <a href="https://www.youtube.com/@Java.Brains" target="_blank" rel="noopener">youtube.com/@Java.Brains</a></li>
+<li>Telusko — <a href="https://www.youtube.com/@Telusko" target="_blank" rel="noopener">youtube.com/@Telusko</a></li>
+</ul>
+<h3>🛠️ Công cụ học &amp; thực hành</h3>
+<ul>
+<li>Spring Initializr (tạo project) — <a href="https://start.spring.io" target="_blank" rel="noopener">start.spring.io</a></li>
+<li>IntelliJ IDEA (IDE) — <a href="https://www.jetbrains.com/idea/" target="_blank" rel="noopener">jetbrains.com/idea</a></li>
+<li>Postman (test REST API) — <a href="https://www.postman.com/downloads/" target="_blank" rel="noopener">postman.com/downloads</a></li>
+<li>DBeaver (client CSDL) — <a href="https://dbeaver.io" target="_blank" rel="noopener">dbeaver.io</a></li>
+</ul>
+<h3>🎯 Lộ trình tự học (trường → đi làm)</h3>
+<ol>
+<li><strong>Nền tảng (lõi thi):</strong> JPA/ORM ánh xạ entity &amp; quan hệ → IoC/DI &amp; bean → Spring Boot auto-config → Spring Data JPA repository → Spring MVC/REST → Thymeleaf. Đây là phạm vi được chấm — nắm chắc để điểm cao.</li>
+<li><strong>Luyện tập:</strong> dựng MỘT app CRUD trọn vẹn (entity → repository → service → REST controller → trang Thymeleaf). Lặp lại là cách Spring "sáng" ra.</li>
+<li><strong>Đào sâu (thực tế):</strong> validation &amp; xử lý ngoại lệ, DTO/mapping, phân trang &amp; sắp xếp, giao dịch (@Transactional), Spring Security (auth/JWT), kiểm thử (JUnit + MockMvc), nối DB thật (MySQL/PostgreSQL).</li>
+<li><strong>Sẵn sàng đi làm:</strong> đóng gói Maven/Gradle, profile &amp; application.yml, Docker, triển khai; hiểu chuẩn REST &amp; tài liệu API (Swagger/OpenAPI).</li>
+</ol>
+<div class="callout"><span class="badge">Mẹo</span> Vừa xem tài liệu chính thức + một series YouTube vừa dựng app CRUD; dùng Baeldung tra theo chủ đề. Bộ ba đó phủ cả bài thi lẫn kỹ năng thực tế.</div>`,
   ]]);
 
 export default {

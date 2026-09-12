@@ -10,9 +10,9 @@ import AcademyOnboarding from '@/components/academy/AcademyOnboarding';
 import { SafeImage } from '@/components/ui/SafeImage';
 import { useSemesters, useCoursesBySemesters } from '@/hooks/useAcademyQueries';
 import { useAcademyProfile } from '@/hooks/useAcademyProfile';
-import { getCombo, getMajor, relevantCourseCodes } from '@/data/fptuCurriculum';
+import { getCombo, getMajor, isPlaceholderCode, placeholderLabel, relevantCourseCodes, semesterPlan, subjectName } from '@/data/fptuCurriculum';
 import { useTranslation } from '@/context/LocaleContext';
-import { pickLang } from '@/lib/utils';
+import { cn, pickLang } from '@/lib/utils';
 
 /**
  * One card of the personalised "Môn của ngành bạn" strip. It deliberately
@@ -233,12 +233,12 @@ export default function AcademyPage() {
                   <RefreshCw className="w-4 h-4" aria-hidden /> Đổi ngành
                 </button>
               </div>
-              {!major.hasOwnCourses && (
-                <p className="mt-3 text-sm text-text-secondary">
-                  Academy đã có <span className="text-text-primary">đầy đủ các môn đại cương dùng chung</span> cho mọi
-                  sinh viên FPTU — bạn học được ngay bên dưới. Riêng phần môn chuyên ngành {major.nameVi} đang được xây dựng.
-                </p>
+              {major.comboNote && (
+                <p className="mt-3 text-sm text-text-secondary">{major.comboNote}</p>
               )}
+              <p className="mt-2 text-xs text-text-muted">
+                Khung {major.curriculumCode} · {major.credits} tín chỉ · nguồn: FLM (View Curriculum, curid {major.curriculumId}).
+              </p>
             </div>
           )}
         </section>
@@ -310,7 +310,7 @@ export default function AcademyPage() {
                 </p>
               </div>
               <span className="px-3 py-1 rounded-full border border-neon-violet/30 bg-neon-violet/10 text-neon-violet text-sm">
-                {personal.comboCourses.length + personal.majorCourses.length} môn
+                {personal.comboCourses.length + personal.majorCourses.length} môn đã có bài
               </span>
             </div>
 
@@ -320,16 +320,75 @@ export default function AcademyPage() {
               </p>
             )}
 
-            {(personal.comboCourses.length > 0 || personal.majorCourses.length > 0) && (
+            {/* Thẻ lớn CHỈ dành cho môn của combo — đó là thứ riêng của người
+                học này. Mọi môn khác trong khung nằm ở lộ trình 9 kỳ ngay dưới:
+                một ngành có ~40 môn, dựng 40 thẻ ảnh lớn thì lộ trình bị đẩy
+                xuống quá xa và trang nặng vô ích. */}
+            {personal.comboCourses.length > 0 && (
               <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {personal.comboCourses.map((course) => (
                   <PersonalCourseCard key={`combo-${course.id}`} course={course} badge={`Combo ${combo?.nameVi ?? ''}`.trim()} />
                 ))}
-                {personal.majorCourses.map((course) => (
-                  <PersonalCourseCard key={`major-${course.id}`} course={course} badge="Chuyên ngành" />
-                ))}
               </div>
             )}
+
+            {/* Lộ trình 9 kỳ ĐÚNG khung của ngành (và combo) sinh viên chọn.
+                Mã nào Academy đã có thì bấm vào học được; mã chưa có vẫn hiện
+                TÊN THẬT của môn (bảng SUBJECT_NAMES lấy từ FAP + FLM) thay vì
+                giấu đi — sinh viên cần biết kỳ đó trường dạy gì, kể cả khi
+                Academy chưa dựng bài. Ô giữ chỗ combo chỉ hiện khi người học
+                chưa chọn combo. */}
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold text-text-primary flex items-center gap-2">
+                <Layers3 className="w-4 h-4 text-neon-cyan shrink-0" aria-hidden />
+                Lộ trình 9 kỳ của {major.nameVi}
+                {combo ? <span className="text-neon-cyan">· combo {combo.nameVi}</span> : null}
+              </h3>
+              <p className="text-xs text-text-muted mt-1">
+                Theo khung {major.curriculumCode} của trường. Môn có viền sáng là Academy đã dựng bài — bấm vào học ngay.
+              </p>
+
+              <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                {semesterPlan(major.id, combo?.id ?? null).map(({ semester, codes }) => (
+                  <div key={semester} className="rounded-2xl border border-darkborder bg-darkbg/60 p-3">
+                    <p className="text-xs uppercase tracking-wide text-text-muted mb-2">
+                      {semester === 0 ? 'Trước kỳ 1 (chuẩn bị)' : `Kỳ ${semester}`}
+                    </p>
+                    <ul className="space-y-1.5">
+                      {codes.map((code) => {
+                        const course = coursesByCode.get(code.trim().toUpperCase());
+                        const slot = isPlaceholderCode(code);
+                        if (course) {
+                          return (
+                            <li key={code}>
+                              <Link
+                                href={`/courses/${course.slug}`}
+                                className="flex items-baseline gap-2 rounded-lg px-2 py-1 border border-neon-violet/30 bg-neon-violet/[0.07] hover:border-neon-violet/70 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-violet"
+                              >
+                                <span className="font-mono text-xs text-neon-violet shrink-0">{code}</span>
+                                <span className="text-xs text-text-primary truncate">
+                                  {pickLang(course.title, locale)}
+                                </span>
+                              </Link>
+                            </li>
+                          );
+                        }
+                        return (
+                          <li key={code} className="flex items-baseline gap-2 px-2 py-1">
+                            <span className={cn('font-mono text-xs shrink-0', slot ? 'text-text-muted' : 'text-text-secondary')}>
+                              {code}
+                            </span>
+                            <span className="text-xs text-text-muted truncate">
+                              {slot ? placeholderLabel(code) : (subjectName(code) ?? 'Chưa có trong Academy')}
+                            </span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
           </section>
         )}
 

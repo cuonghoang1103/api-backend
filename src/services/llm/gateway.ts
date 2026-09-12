@@ -314,6 +314,7 @@ export type LlmPurpose =
   | 'news_bulletin'       // bản tin công nghệ chạy nền mỗi sáng
   | 'doc_ocr'             // chép đề/bài giảng từ ẢNH ra chữ + công thức
   | 'robot_voice'         // robot Maker Lab — độ trễ quan trọng ngang độ thông minh
+  | 'remix_coach'         // Xưởng Remix — đọc số đo của bài rồi kèm người làm nhạc
   | 'agent_code'          // agent lập trình của app desktop — GỌI TOOL nhiều lượt
   | 'exam_tutor'          // CuongMini — AI đồng hành khi thi (Pro), đi cổng rambo như agent_code
   | 'lab_room';           // Phòng Lab LAB211 — giảng đề, kèm code, chấm bài nộp; cổng rambo, model mạnh nhất
@@ -411,6 +412,18 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   doc_ocr: 'claude-opus-4-8',
   news_bulletin: 'gpt-5.4-mini',
   robot_voice: 'gpt-5.4-mini',
+
+  /**
+   * Kèm cặp trong Xưởng Remix — sonnet-5, theo đúng luật "việc TƯƠNG TÁC".
+   *
+   * Không lấy model rẻ: đây là việc người dùng đọc từng chữ rồi đi sửa bản mix
+   * theo. Cũng không lấy opus: mỗi lượt chỉ vài trăm token vào (số đo đã tính
+   * sẵn ở app desktop, model không phải tự phân tích âm thanh) và người dùng
+   * hỏi liên tục — opus đắt gấp 2,5 lần cho một việc không cần tới nó.
+   *
+   * Đổi mà không cần deploy: `LLM_MODEL_REMIX_COACH`.
+   */
+  remix_coach: 'claude-sonnet-5',
 
   /**
    * Agent gọi tool — bài học cũ về `gpt-5.5` chậm gấp 4 KHÔNG áp dụng nữa (bộ

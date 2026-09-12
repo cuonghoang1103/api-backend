@@ -594,7 +594,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /** Which product spent the tokens. `step` only picks a model tier, so without
  *  this the Interview grader and the My Language tutor were the same row. */
-export type LLMFeature = 'interview' | 'language' | 'cv' | 'chat' | 'bulk_gen' | 'exphub' | 'codelab' | 'news' | 'voice' | 'exam' | 'agent';
+export type LLMFeature = 'interview' | 'language' | 'cv' | 'chat' | 'bulk_gen' | 'exphub' | 'codelab' | 'news' | 'voice' | 'exam' | 'agent' | 'remix';
 
 /**
  * Không ai ngồi chờ những lời gọi này: chúng chạy theo cron hoặc theo một

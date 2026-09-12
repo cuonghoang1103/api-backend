@@ -51,6 +51,64 @@ Bản đóng gói đã được **chạy thật** và kiểm chứng:
 
 ---
 
+## Nhị phân ONNX làm bản cài to lên (12/09/2026)
+
+Xưởng Remix tách stem bằng `onnxruntime-node`, và gói npm đó chứa nhị phân cho
+**mọi nền trong cùng một gói** — 250 MB cho sáu cặp nền × kiến trúc, trong khi
+mỗi bản cài chỉ dùng đúng một cặp.
+
+| Nền / kiến trúc | Nhị phân |
+|---|---|
+| `win32/arm64` | 65 MB |
+| `win32/x64` | 60 MB |
+| `darwin/x64` | 39 MB |
+| `darwin/arm64` | 35 MB |
+| `linux/x64` | 32 MB |
+| `linux/arm64` | 19 MB |
+
+Hai thứ giữ cho bản cài không cõng hết chỗ đó:
+
+- **`asarUnpack`** đưa `bin/**` ra ngoài asar. Bắt buộc, không phải để giảm
+  dung lượng: `.node` và thư viện đi kèm không `dlopen` được từ trong asar.
+- **`afterPack: scripts/onnx-tia.cjs`** xoá nhị phân của những nền khác ngay
+  sau khi đóng gói, rồi ĐÒI thấy nhị phân của nền đang dựng — thiếu thì ném
+  lỗi và dừng bản dựng. Móc này có phép kiểm riêng
+  (`scripts/onnx-tia.test.mjs`), vì bản thân nó chỉ chạy lúc đóng gói.
+
+⚠️ **Bảng kích thước sản phẩm ở trên đo từ bản 0.1.0, TRƯỚC khi có ONNX.** Ước
+tính macOS arm64 tăng ~35 MB và x64 ~39 MB (96 → ~131 MB, 100 → ~139 MB). Chưa
+đo lại — lần đóng gói tới nên cập nhật bảng đó.
+
+### ⚠️ Kiểm `git status` NGAY SAU khi đóng gói
+
+Đo thật 12/09/2026: lượt `electron-builder --dir` **đầu tiên sau khi thêm
+`onnxruntime-node`** đã ghi đè `desktop/package.json` NGUỒN — xoá sạch khối
+`scripts` (21 mục) và `devDependencies` (18 mục), chỉ chừa lại
+`dependencies`. Cây làm việc bẩn mà không có lỗi nào; nếu commit tiếp thì mọi
+lệnh `npm run` của app desktop chết.
+
+Chạy lại lần hai thì KHÔNG lặp lại, nên cơ chế chưa rõ — nghi bước
+`@electron/rebuild` ("installing native dependencies") chỉ chạy thật ở lượt
+đầu với một phụ thuộc gốc mới. Chưa đủ bằng chứng để khẳng định.
+
+Cách phòng thì không cần biết cơ chế: **sau mỗi lượt đóng gói, chạy
+`git status`**. Bẩn thì `git checkout -- desktop/package.json`.
+
+### ⛔ GHIM 1.23.2 — đừng nâng nếu chưa đọc chỗ này
+
+`onnxruntime-node` **1.23.2 là bản cuối cùng còn nhị phân `darwin/x64`.** Từ
+1.24.1 trở đi onnxruntime bỏ hẳn macOS Intel. Đo thật bằng metadata registry:
+số tệp trong gói tụt 44 → 42 và mất 38 MB ở đúng bản đó, rồi tải 1.23.2 về đếm
+lại thư mục — sáu cặp, có `darwin/x64`.
+
+Dự án dựng **cả bản mac Intel**, nên nâng onnxruntime lên là lặng lẽ tắt tính
+năng tách stem cho toàn bộ người dùng nền đó: bản cài vẫn dựng, vẫn cài, chỉ
+có nút Tách là báo lỗi. Móc `onnx-tia.cjs` in cảnh báo to nếu chuyện đó xảy
+ra, nhưng nó chỉ nói được lúc dựng — người đọc dòng này mới là người quyết.
+
+Cái giá của việc ghim: kernel và tối ưu của onnxruntime dừng ở 1.23.2 cho
+**tất cả** các nền, không riêng macOS.
+
 ## Vì sao arm64 và x64 tách riêng, không dùng `universal`
 
 Bản `universal` nhét cả hai kiến trúc vào một file: ~250 MB, trong khi mỗi máy

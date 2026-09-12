@@ -518,6 +518,46 @@ await ctx.route('**/api/v1/**', async (tuyen) => {
   const duong = new URL(tuyen.request().url()).pathname;
   const cach = tuyen.request().method();
 
+  /* ── Xưởng Remix: AI kèm cặp ──
+     Câu trả lời giả CỐ Ý mang cả hai cảnh báo (số lạ + bị cắt): chúng là hai
+     khối chữ dài nhất của phần này, và chỉ hiện khi model trả về đúng cờ đó.
+     Trả một câu sạch thì hai khối ấy chưa từng được đo lần nào. */
+  if (/\/xuong-remix\/trang-thai$/.test(duong)) {
+    await tuyen.fulfill({
+      status: 200, contentType: 'application/json',
+      body: JSON.stringify({ success: true, data: { sanSang: true, model: 'claude-sonnet-5' } }),
+    });
+    return;
+  }
+  if (/\/xuong-remix\/kem-cap$/.test(duong) && cach === 'POST') {
+    await tuyen.fulfill({
+      status: 200, contentType: 'application/json',
+      body: JSON.stringify({ success: true, data: {
+        traLoi: [
+          '- Bài đang ở -9.4 LUFS, còn thấp hơn mức phát hành của nhạc sàn — nén thêm rồi nâng.',
+          '- Dải 8000 Hz đang -31.5 dB, mỏng so với phần trầm ở 63 Hz (-14.2 dB). Nâng phần cao lên.',
+          '- Đỉnh thật 0.8 dBTP là ĐÃ VƯỢT 0 — hạ trần bộ hạn biên xuống -1 dBTP trước khi xuất.',
+          '- Tin cậy tông chỉ 18%, nên nghe lại bằng tai trước khi dịch tông cả bài.',
+        ].join('\n'),
+        model: 'claude-sonnet-5',
+        soLa: ['200', '3500'],
+        biCat: true,
+      } }),
+    });
+    return;
+  }
+
+  /* Đẩy bài lên kho Remix (khâu 08). Trả 200 để khối "đã lên kho" hiện ra —
+     đó là dòng chữ dài nhất của phần này, và nó chỉ tồn tại sau một lượt đẩy
+     thành công. */
+  if (/\/music\/tracks$/.test(duong) && cach === 'POST') {
+    await tuyen.fulfill({
+      status: 200, contentType: 'application/json',
+      body: JSON.stringify({ success: true, data: { id: 4242, title: 'Bài thử' } }),
+    });
+    return;
+  }
+
   /* ── Sổ tay: GHI được, không chỉ ĐỌC ──
      Tạo/xoá là hai thao tác người dùng báo hỏng nhiều nhất, và cả hai chỉ đo
      được nếu lần gọi `/notes/tree` KẾ TIẾP phản ánh thay đổi. Mock chỉ-đọc thì
@@ -582,11 +622,33 @@ await ctx.addInitScript((nn) => {
      để `ctx.route` phía Node trả lời, thay vì mang một bản sao bảng dữ liệu
      thứ hai vào trong trang. Người gọi mong nhận payload TRẦN, nên bóc
      envelope ở đây. Đường không có mock vẫn trả về hình dạng rỗng cũ. */
+  /*
+   * ⚠️ PHẢI CHUYỂN TIẾP `method` VÀ `body` (sửa 12/09/2026).
+   *
+   * Bản đầu chỉ nhận đối số thứ NHẤT và luôn `fetch` bằng GET. Hậu quả: mọi
+   * lời gọi GHI của trang native — `api.request(d, { method: 'POST', body })`
+   * — âm thầm biến thành GET, không khớp mock nào (mock POST kiểm cả
+   * `cach === 'POST'`), rơi xuống máy chủ tĩnh, 404, rồi hàm này nuốt lỗi và
+   * trả `RONG` như thể mọi thứ bình thường. Trang nhận một object SAI HÌNH
+   * DẠNG, và Xưởng Remix nổ ở `traLoiAi.soLa.length` — React 18 gỡ cả cây,
+   * nên bộ đo nhìn thấy `#root` TRỐNG mà `pageerror` thì đã bay mất từ lúc
+   * nào. Mất một buổi đi tìm ở `useSession`, trong khi lỗi nằm ở BỘ ĐO.
+   *
+   * Nói rộng hơn: trước hôm nay KHÔNG một đường ghi nào của trang native từng
+   * được bộ đo chạm tới. Xem [[feedback_verify_the_checker_before_the_content]].
+   */
   const RONG = { data: [], items: [], results: [] };
-  window.__giaApi = async (duong) => {
+  window.__giaApi = async (duong, tuyChon) => {
     try {
       const d = String(duong ?? '');
-      const r = await fetch(`/api/v1${d.startsWith('/') ? d : `/${d}`}`);
+      const o = tuyChon ?? {};
+      const r = await fetch(`/api/v1${d.startsWith('/') ? d : `/${d}`}`, {
+        method: o.method ?? 'GET',
+        /* Giống `client.ts`: chỉ đặt Content-Type khi CÓ thân, và
+           `JSON.stringify` nó — mock đọc `postData()` mong chuỗi JSON. */
+        headers: o.body === undefined ? {} : { 'Content-Type': 'application/json' },
+        ...(o.body === undefined ? {} : { body: JSON.stringify(o.body) }),
+      });
       if (!r.ok) return RONG;
       return (await r.json()).data ?? RONG;
     } catch { return RONG; }
@@ -600,6 +662,88 @@ await ctx.addInitScript((nn) => {
                soViecConLai: 20, models: [], mucNoLuc: [] },
     getAll: nn ? { ngonNgu: nn } : {},
     listDownloaded: [], usage: { count: 0, totalBytes: 0 },
+    /* Xưởng Remix. Trạng thái RỖNG của trang này chỉ có một vùng thả tệp — tức
+       là gần như không có gì để đo. Trạng thái ĐÔNG mới là chỗ dễ vỡ: lưới 4 ô
+       số đo, dải chip hoà âm, và mười cột phổ có nhãn. `CHUAN_BI` ở dưới thả
+       một tệp WAV dựng tại chỗ để đưa trang tới đó. */
+    khoModel: [
+      { ma: 'htdemucs-4stem', ten: 'HT-Demucs · 4 stem', byte: 1260000000,
+        moTa: 'Trống, bass, nhạc nền, giọng hát. Bản đầy đủ — chọn cái này để remix sâu.',
+        coRoi: true, byteThat: 1260000000 },
+      { ma: 'htdemucs-vocals', ten: 'HT-Demucs · chỉ giọng hát', byte: 166000000,
+        moTa: 'Chỉ tách giọng, nhẹ hơn 7,6 lần. Đủ cho phần lớn bản remix vinahouse.',
+        coRoi: false, byteThat: 0 },
+    ],
+    napBai: { id: '00000000-0000-4000-8000-000000000001', ten: 'Bài thử rất dài để xem tên có tràn ra ngoài ô không.mp3', giay: 254, soKenh: 2 },
+    napBanMau: { ten: 'DJ Tilo - Nonstop 2026.mp3', lufs: -6.8, dinhThat: -0.9, daiDong: 6.1,
+                 rongStereo: 0.42,
+                 dai: { 31.5: -24.0, 63: -9.8, 125: -8.9, 250: -12.1, 500: -15.0,
+                        1000: -17.2, 2000: -19.4, 4000: -21.0, 8000: -23.2, 16000: -33.8 } },
+    /* Bản giao cho khâu 08. Dựng một WAV THẬT (im lặng, 0,4 giây) chứ không
+       trả mảng rỗng: thẻ <audio> với nguồn hỏng vẽ ra một thanh điều khiển
+       khác hẳn thanh bình thường, và lúc đó bộ đo đang đo một thứ người dùng
+       không bao giờ thấy. */
+    banGiao: (() => {
+      /* 95 giây chứ không phải nửa giây: thẻ <audio> chỉ hiện ĐỘ DÀI khi nó
+         giải mã được thật, và một tệp 0,4 giây hiện "0:00" y hệt lúc giải mã
+         HỎNG. Dài đủ để đồng hồ đọc ra "1:35" thì con số ấy trở thành bằng
+         chứng rằng cả đường Uint8Array → File → blob: → <audio> chạy được,
+         chứ không chỉ là "thanh điều khiển có vẽ ra". */
+      const fs = 8000, n = fs * 95;
+      const b = new ArrayBuffer(44 + n * 2);
+      const v = new DataView(b);
+      const chu = (i, t) => { for (let k = 0; k < t.length; k++) v.setUint8(i + k, t.charCodeAt(k)); };
+      chu(0, 'RIFF'); v.setUint32(4, 36 + n * 2, true); chu(8, 'WAVE'); chu(12, 'fmt ');
+      v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+      v.setUint32(24, fs, true); v.setUint32(28, fs * 2, true); v.setUint16(32, 2, true);
+      v.setUint16(34, 16, true); chu(36, 'data'); v.setUint32(40, n * 2, true);
+      return { ten: 'Bài thử rất dài để xem tên có tràn ra ngoài ô không (tron).wav',
+               byte: new Uint8Array(b), giay: 254 };
+    })(),
+    /* Kết quả TÁCH. Thiếu nó thì `ketQua` là null, và cả danh sách stem LẪN
+       bàn trộn không bao giờ được dựng ra — hai khối rộng nhất của trang chưa
+       từng đi qua bộ đo một lần nào (phát hiện 12/09/2026, khi thêm bàn trộn). */
+    tach: {
+      thuMuc: '/tmp/x/phien/bai-thu',
+      tep: {
+        drums: '/tmp/x/phien/bai-thu/drums.wav', bass: '/tmp/x/phien/bai-thu/bass.wav',
+        other: '/tmp/x/phien/bai-thu/other.wav', vocals: '/tmp/x/phien/bai-thu/vocals.wav',
+      },
+      giay: 214,
+    },
+    master: {
+      duong: '/tmp/x/Bài thử (master).wav', tenBanMau: 'DJ Tilo - Nonstop 2026.mp3',
+      chinhDb: 4.2, lufsTruoc: -13.6, lufsSau: -6.9, dinhThatSau: -1.0, giay: 8.4,
+      /* Danh sách nhận xét DÀI có chủ ý: đây là chỗ dễ vỡ nhất của khối chấm
+         bài — hai cột chữ cạnh nhau ở cửa sổ hẹp. Để một hai dòng thì bộ đo
+         báo xanh mà chưa hề chạm tới tình huống thật. */
+      chamTruoc: [
+        'Bài bạn nhỏ hơn bản mẫu 6.7 LU — cần nén và nâng thêm.',
+        'Thiếu 8.3 dB ở 8 kHz so với bản mẫu.',
+        'Thiếu 5.1 dB ở 4 kHz so với bản mẫu.',
+        'Thừa 4.4 dB ở 63 Hz so với bản mẫu.',
+        'Ảnh stereo hẹp hơn bản mẫu — nới phần cao ra hai bên, giữ trầm ở giữa.',
+      ],
+      chamSau: ['Thiếu 3.2 dB ở 16 kHz so với bản mẫu.'],
+    },
+    /* Bản trộn. `nguonKick: 'nhip'` CÓ CHỦ Ý: đó là nhánh có cảnh báo, tức là
+       khối chữ dài nhất của phần này. Trả 'trong' thì dòng cảnh báo chưa từng
+       được đo lần nào — cùng lý do câu trả lời AI giả mang sẵn hai cảnh báo. */
+    tron: {
+      duong: '/tmp/x/Bài thử rất dài để xem tên có tràn không (tron).wav',
+      soKick: 0, nguonKick: 'nhip', hoiPhuc: 0.386,
+      daTron: ['drums', 'bass', 'other', 'vocals'],
+      lufs: -8.1, dinhThat: -1.0, giay: 6.2,
+    },
+    phanTich: {
+      bpm: 139.8, bpmTinCay: 0.72,
+      tong: 'Am', tongCamelot: '8A', tongTinCay: 0.18, tongNhi: 'C',
+      ghep: [{ ma: '8B', vi: 'Trưởng/thứ song song' }, { ma: '9A', vi: 'Lên một quãng năm' },
+             { ma: '7A', vi: 'Xuống một quãng năm' }, { ma: '10A', vi: 'Lên hai bậc' }],
+      do: { lufs: -9.4, dinhMau: -0.2, dinhThat: 0.8, daiDong: 9.2, rongStereo: 0.31,
+            dai: { 31.5: -28.1, 63: -14.2, 125: -12.8, 250: -15.4, 500: -18.1,
+                   1000: -20.3, 2000: -22.7, 4000: -26.1, 8000: -31.5, 16000: -42.9 } },
+    },
     dsCuocDangMo: [],
     /* Danh sách việc đã lưu, NHIỀU DỰ ÁN.
        Để rỗng thì thanh bên chỉ hiện "Chưa có việc nào được lưu" — tức là mọi
@@ -676,7 +820,97 @@ const choNoiDung = async (p) => {
   ).catch(() => { /* hết giờ thì cứ đo — để phép kiểm nói ra, đừng giấu */ });
 };
 
+/**
+ * WAV 44,1 kHz stereo 1 giây, dựng bằng tay.
+ *
+ * Trang Xưởng Remix giải mã tệp bằng `decodeAudioData` của chính Chromium, nên
+ * phải là âm thanh THẬT — một bộ đệm rỗng sẽ bị từ chối và trang đứng ở trạng
+ * thái rỗng, đúng thứ ta đang cố thoát khỏi.
+ */
+function wavThu() {
+  const fs = 44100, n = fs, soKenh = 2;
+  const buf = Buffer.alloc(44 + n * soKenh * 2);
+  buf.write('RIFF', 0); buf.writeUInt32LE(36 + n * soKenh * 2, 4); buf.write('WAVE', 8);
+  buf.write('fmt ', 12); buf.writeUInt32LE(16, 16); buf.writeUInt16LE(1, 20);
+  buf.writeUInt16LE(soKenh, 22); buf.writeUInt32LE(fs, 24);
+  buf.writeUInt32LE(fs * soKenh * 2, 28); buf.writeUInt16LE(soKenh * 2, 32);
+  buf.writeUInt16LE(16, 34); buf.write('data', 36); buf.writeUInt32LE(n * soKenh * 2, 40);
+  for (let i = 0; i < n; i++) {
+    const v = Math.round(Math.sin((2 * Math.PI * 220 * i) / fs) * 12000);
+    buf.writeInt16LE(v, 44 + i * 4);
+    buf.writeInt16LE(v, 44 + i * 4 + 2);
+  }
+  return buf;
+}
+
 const CHUAN_BI = {
+  /* Đưa Xưởng Remix tới trạng thái ĐÔNG: nạp một bài rồi mới đo.
+     Trạng thái rỗng chỉ có vùng thả tệp — đo nó là đo một trang trắng. */
+  '/xuong-remix': async (p) => {
+    await p.setInputFiles('#xuong-remix-tep', {
+      name: 'bai-thu.wav', mimeType: 'audio/wav', buffer: wavThu(),
+    }).catch(() => {});
+    await p.waitForTimeout(900);
+    /* Nạp thêm BẢN MẪU rồi bấm Master: khối chấm bài là hai cột chữ cạnh nhau,
+       chỉ tồn tại sau hai thao tác, và nó là phần dễ vỡ nhất của cả trang ở
+       cửa sổ hẹp. Không lái tới đây thì bộ đo không bao giờ nhìn thấy nó. */
+    await p.setInputFiles('#xuong-remix-tep-mau', {
+      name: 'ban-mau.wav', mimeType: 'audio/wav', buffer: wavThu(),
+    }).catch(() => {});
+    await p.waitForTimeout(700);
+    await p.click('button:has-text("Master")', { timeout: 2000 }).catch(() => {});
+    await p.waitForTimeout(500);
+    await p.click('button:has-text("Mổ xẻ bài này")', { timeout: 2000 }).catch(() => {});
+    await p.waitForTimeout(500);
+    /* Tách stem — mở ra danh sách 4 stem VÀ bàn trộn. Cả hai chỉ tồn tại sau
+       bước này, nên trước 12/09/2026 chúng chưa từng được đo. */
+    await p.click('button:has-text("Tách 4 stem")', { timeout: 2000 }).catch(() => {});
+    await p.waitForTimeout(600);
+    /* Bàn trộn: bốn hàng × bốn thanh trượt. Không bấm "Trộn lại" thì khối kết
+       quả (mang dòng cảnh báo dài nhất của phần này) không được dựng ra. */
+    await p.click('button:has-text("Trộn lại")', { timeout: 2000 }).catch(() => {});
+    await p.waitForTimeout(500);
+    /* Khâu 08: thanh nghe thử, ô tên bài, và khối "đã lên kho" chỉ tồn tại
+       sau hai cú bấm này. Thanh <audio> của Chromium có bề rộng tối thiểu
+       riêng, nên nó đúng là thứ dễ làm tràn cột hẹp nhất của cả trang. */
+    await p.click('button:has-text("Nghe thử")', { timeout: 2000 }).catch(() => {});
+    await p.waitForTimeout(300);
+    await p.click('button:has-text("Đẩy lên bàn DJ")', { timeout: 2000 }).catch(() => {});
+    await p.waitForTimeout(600);
+
+    /* ⚠️ TỰ KIỂM VIỆC CỦA CHÍNH BƯỚC NÀY.
+       Mọi thao tác trên đều `.catch(() => {})`, nên một selector đổi tên là
+       cả bước chuẩn bị im lặng không làm gì — và bộ đo vẫn báo XANH, trên một
+       trang chỉ có vùng thả tệp. Đúng cái bẫy đã ghi ở đầu tệp này (09/09/2026:
+       "chốt viết xong, chạy xanh, mà chưa từng chạy một lần nào").
+       Ném lỗi ở đây thì nó thành đỏ ngay, kèm lý do. */
+    const coCham = await p.locator('.ct-xr-cham').count();
+    const coLuoi = await p.locator('.ct-xr-luoi').count();
+    const coAi = await p.locator('.ct-xr-tra-loi').count();
+    const coTron = await p.locator('.ct-xr-tron-ra').count();
+    const coStem = await p.locator('.ct-xr-stem-o').count();
+    const coNghe = await p.locator('.ct-xr-nghe').count();
+    /* Không chỉ đếm thẻ: đọc `duration` để chắc trình duyệt GIẢI MÃ được.
+       Thẻ <audio> với nguồn hỏng vẫn tồn tại trong DOM và vẫn vẽ ra thanh
+       điều khiển, nên đếm thẻ là phép kiểm gần như luôn xanh. */
+    const dai = coNghe
+      ? await p.locator('.ct-xr-nghe').first().evaluate((e) => e.duration).catch(() => 0)
+      : 0;
+    if (coNghe && !(dai > 1)) {
+      throw new Error(
+        `thẻ nghe thử có mặt nhưng KHÔNG giải mã được (duration=${dai}). `
+        + 'Đường Uint8Array → File → blob: đã hỏng ở đâu đó.',
+      );
+    }
+    if (!coCham || !coLuoi || !coAi || !coTron || coStem < 4 || !coNghe) {
+      throw new Error(
+        `chuẩn bị /xuong-remix KHÔNG tới được trạng thái đông `
+        + `(lưới số đo: ${coLuoi}, khối chấm bài: ${coCham}, câu trả lời AI: ${coAi}, `
+        + `bản trộn: ${coTron}, ô stem: ${coStem}/4, thanh nghe: ${coNghe}). `
+        + 'Selector hay luồng trang đã đổi — sửa bước CHUAN_BI trước khi tin kết quả.',
+      );
+    }
+  },
   /* Mở bảng chọn hoạt động trên dải 24 giờ. Nó từng bị khối "Đi nhanh" vẽ đè
      (lỗi tầng xếp, 07/09/2026) — mà bộ đo chỉ nhìn trang lúc TĨNH thì không
      bao giờ thấy, vì bảng đó chỉ tồn tại sau một cú bấm. */
@@ -1141,6 +1375,10 @@ const DUONG = JSON.parse(process.env.CT_TRANG ?? 'null')
       /* Mười cây cuối (22/08/2026). Đo GỐC của từng cây, cộng bốn đường TĨNH
          từng đụng ĐỘNG — nếu bảng tra xếp sai thứ tự thì chúng mở ra trang
          chi tiết rỗng chứ không phải trang danh sách, và chỉ nhìn mới biết. */
+      /* Xưởng Remix — trang dày đặc nút và một lưới 4 ô số đo, đúng loại dễ vỡ
+         nhất ở cột hẹp 860px. Bộ đo chỉ thấy trạng thái RỖNG (chưa nạp bài);
+         phần bảng số đo và dải phổ phải kiểm bằng tay với một bài thật. */
+      '/xuong-remix',
       '/maker-lab', '/creator', '/projects', '/exp-hub',
       '/finance', '/forum', '/saved', '/profile',
       '/projects/search', '/finance/debts/calendar'];

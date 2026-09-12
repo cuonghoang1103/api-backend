@@ -139,6 +139,9 @@ export default defineConfig({
    */
   test: {
     root: path.resolve(__dirname),
-    include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+    /* `scripts/**` cũng có phép kiểm: những móc dựng ở đó chỉ chạy lúc đóng
+       gói ba nền, tức là chỗ KHÓ thử nhất và cũng là chỗ hỏng đắt nhất — một
+       móc sai làm bản cài thiếu nhị phân mà vẫn dựng xanh. */
+    include: ['src/**/*.test.ts', 'src/**/*.test.tsx', 'scripts/**/*.test.mjs'],
   },
 });

@@ -866,4 +866,144 @@ export const TU_DIEN: Record<string, string> = {
     '**{n}** changes need your attention — the app can’t resend them on its own.',
   'Gửi lỗi (tự thử lại)': 'Failed to send (retrying)',
   'Bỏ thay đổi này': 'Discard this change',
+  // ── Xưởng Remix ─────────────────────────────────────────
+  'Xưởng Remix': 'Remix Studio',
+  'AI kèm cặp': 'AI coach',
+  'Máy chủ chưa cắm khoá cổng AI, nên phần này tạm nghỉ. Mọi thứ còn lại của Xưởng Remix vẫn chạy bình thường.':
+    'The server has no AI gateway key, so this part is resting. Everything else in Remix Studio works as usual.',
+  'AI đọc ĐÚNG bảng số đo ở trên — nó không nghe được bài của bạn. Nên nó giải thích số liệu và chỉ việc cần làm, chứ không nhận xét về giai điệu.':
+    'The AI reads exactly the measurements above — it cannot hear your track. So it explains the numbers and names the next move; it does not judge your melody.',
+  'Mổ xẻ bài này': 'Break this track down',
+  'Hỏi một câu — ví dụ: làm sao cho drop mạnh hơn?': 'Ask something — for example: how do I make the drop hit harder?',
+  'Hỏi': 'Ask',
+  'Câu trả lời bị cắt giữa chừng vì chạm trần độ dài. Hỏi lại một câu hẹp hơn để nhận đủ.':
+    'The answer was cut off at the length limit. Ask something narrower to get the whole thing.',
+  'Máy chủ trả về câu trả lời rỗng. Thử hỏi lại một câu hẹp hơn.':
+    'The server returned an empty answer. Try asking something narrower.',
+  'Những con số này KHÔNG có trong bảng đo:': 'These numbers are NOT in the measurements:',
+  'AI có thể đã tự nghĩ ra — đối chiếu lại trước khi làm theo.':
+    'The AI may have invented them — check before acting on them.',
+  /* ── Nghe thử & đẩy lên bàn DJ (khâu 08) ── */
+  'Nghe thử': 'Audition',
+  'Đẩy lên bàn DJ': 'Send to the DJ deck',
+  'Đang đẩy lên…': 'Uploading…',
+  'Tên bài khi lên bàn DJ': 'Track name on the deck',
+  'Đã lên kho Remix. Mở trang Nhạc rồi chọn bài này ở danh sách của bàn DJ.':
+    'Added to the Remix library. Open the Music page and pick it from the deck list.',
+  'Mở trang Nhạc': 'Open Music',
+  'Cần đăng nhập để đẩy bài lên.': 'You need to sign in to upload.',
+  'Máy chủ trả về': 'The server returned',
+  'Mất kết nối khi đang đẩy lên.': 'Connection lost during upload.',
+
+  /* ── Bàn trộn stem (GĐ 6) ── */
+  'Trộn lại bốn stem': 'Mix the four stems',
+  'Dọn phần trầm rò sang các stem khác, cân lại mức, và ghì cả bài xuống mỗi cú trống cái — nhịp thở đặc trưng của nhạc sàn. Xong là ra một tệp stereo để nghe thử hoặc kéo vào DAW.':
+    'Clean the low end that bled into the other stems, rebalance the levels, and duck the whole track on every kick — the breathing that makes dance music move. Out comes one stereo file to audition or drag into a DAW.',
+  'Mức': 'Level',
+  'Chắn trầm': 'High-pass',
+  'Duck theo kick': 'Duck on kick',
+  'tắt': 'off',
+  'Nén tổng': 'Bus compressor',
+  'Trộn lại': 'Mix',
+  'Đang trộn…': 'Mixing…',
+  'Về mặc định': 'Reset',
+  'Bám theo': 'Locked to',
+  'cú trống cái dò được trong stem trống.': 'kicks detected in the drums stem.',
+  'Không dò ra cú trống nào, nên duck bám theo lưới nhịp — nó sẽ thở đều cả ở đoạn không có trống.':
+    'No kicks were detected, so the duck follows the tempo grid — it will keep breathing through breakdowns that have no drums.',
+  'Không có gì để duck bám vào.': 'There is nothing for the duck to lock onto.',
+  'Hồi trong': 'Recovers in',
+  'độ to': 'loudness',
+  /* `đỉnh thật` đã có ở khối chấm bài phía dưới — dùng lại, đừng khai thêm:
+     khoá trùng thì bản sau đè bản trước, im lặng. (`Độ to` viết hoa cũng đã
+     có, nhưng nó là NHÃN của một ô số đo; ở đây là giữa câu, nên cần khoá
+     viết thường riêng.) */
+
+  'Master theo bản mẫu': 'Match a reference master',
+  'Chọn một bài bạn muốn bản của mình nghe giống. App đo nó rồi ép bài của bạn về đúng mức to, phổ tần và độ rộng stereo của nó.':
+    'Pick a track you want yours to sound like. The app measures it, then pulls your track to its loudness, frequency balance and stereo width.',
+  'Chọn bản mẫu': 'Choose a reference',
+  'Đổi bản mẫu': 'Change reference',
+  'Trần đỉnh': 'Peak ceiling',
+  'Đang master…': 'Mastering…',
+  'dải động': 'dynamic range',
+  'Trước khi master': 'Before',
+  'Sau khi master': 'After',
+  'đã sát bản mẫu': 'already close to the reference',
+  'Đây không thay được tai người. Nó khớp bốn con số; nó không biết bản mix của bạn có đục ở quãng trung hay không.':
+    'This does not replace your ears. It matches four numbers; it cannot tell whether your mix is muddy in the mids.',
+  'Chỉnh nhịp và tông rồi xuất': 'Adjust tempo and key, then export',
+  'Nhịp đích': 'Target tempo',
+  'Dịch tông': 'Shift key',
+  'nửa cung': 'semitones',
+  'bài đang ở': 'track is at',
+  'kéo': 'stretch',
+  'Chỉnh và xuất': 'Adjust and export',
+  'Đang chỉnh…': 'Adjusting…',
+  'Sẽ chỉnh cả bốn stem đã tách.': 'All four separated stems will be adjusted.',
+  'Chưa tách stem thì chỉnh thẳng bản gốc — vẫn dùng được để đánh nối.':
+    'With no stems yet, the original is adjusted directly — still useful for mixing between tracks.',
+  'Kèm một tệp MIDI mẫu vinahouse đúng tông của bài.':
+    'Includes a vinahouse MIDI template in the track\u2019s own key.',
+  'Không nạp được bài — main không trả về phiên nào.':
+    'The track could not be loaded — the main process returned no session.',
+  'Xưởng Remix chỉ chạy trong app desktop': 'Remix Studio only runs in the desktop app',
+  'Trang này cần đọc ghi tệp trên máy, thứ mà trình duyệt không cho phép.':
+    'This page needs to read and write files on your machine, which a browser will not allow.',
+  'Tách giọng, đo nhịp và tông, chấm bài — rồi kéo thẳng sang FL Studio.':
+    'Split vocals, measure tempo and key, grade your mix — then drag straight into FL Studio.',
+  'Model tách stem': 'Stem separation model',
+  'Tải về': 'Download',
+  // 'Đang tải…' đã có ở trên với nghĩa *Loading…* (đang nạp dữ liệu). Ở đây là
+  // *Downloading…* (đang kéo tệp model về). Cùng khoá thì TypeScript báo trùng và
+  // chọn bừa một nghĩa thì một trong hai chỗ sai — đúng ca mà tiền tố ngữ cảnh lo.
+  'taimodel|Đang tải…': 'Downloading…',
+  'Xoá model để lấy lại đĩa': 'Delete the model to free up disk space',
+  'Kéo một bài nhạc vào đây': 'Drop a track here',
+  'mp3 · m4a · wav · flac · ogg — bài nào cũng được':
+    'mp3 · m4a · wav · flac · ogg — any track works',
+  'Không đọc được định dạng này. Thử mp3, m4a, wav hay flac.':
+    'That format cannot be read. Try mp3, m4a, wav or flac.',
+  'Đang đọc bài…': 'Reading track…',
+  'Chọn tệp': 'Choose a file',
+  'Bài đang mở': 'Open track',
+  'Đóng bài và xoá tệp tạm': 'Close the track and delete its temporary files',
+  'Nhịp': 'Tempo',
+  'Tông': 'Key',
+  'Độ to': 'Loudness',
+  'Dải động': 'Dynamic range',
+  'đỉnh thật': 'true peak',
+  'rộng stereo': 'stereo width',
+  'đáng tin': 'reliable',
+  'tạm': 'so-so',
+  'nên nghe lại': 'check by ear',
+  'Máy không chắc về tông. Đáp án xếp nhì là':
+    'The key detection is not confident. Its runner-up is',
+  ' — hai tông này dùng chung bộ nốt nên thuật toán hay nhầm. Nghe thử trước khi kéo cả bài theo.':
+    ' — these two keys share the same notes, which is exactly where this method slips. Listen before you shift the whole track.',
+  'Ghép hoà âm được với': 'Mixes harmonically with',
+  'Phổ tần': 'Frequency spectrum',
+  'Phổ tần theo dải quãng tám': 'Frequency spectrum by octave band',
+  'Tách 4 stem': 'Split into 4 stems',
+  'Đang tách…': 'Splitting…',
+  'Mở thư mục': 'Open folder',
+  'Phải tải model trước khi tách. Chọn một model ở trên rồi bấm Tải về.':
+    'Download a model before splitting. Pick one above and press Download.',
+  'khúc': 'chunk',
+  'Xong trong': 'Finished in',
+  'Tệp WAV 32-bit float — kéo thẳng vào FL Studio được.':
+    '32-bit float WAV files — drag them straight into FL Studio.',
+  // Nhãn stem: gọi qua biến (`dich(s.nhan)`) nên bộ quét của tuDien.test.ts
+  // KHÔNG thấy chúng. Thiếu ở đây thì không có phép kiểm nào đỏ, mà giao diện
+  // tiếng Anh vẫn hiện tiếng Việt — im lặng, đúng thứ phép kiểm kia sinh ra để
+  // chặn. Nên phải tự nhớ thêm vào.
+  'Giọng hát': 'Vocals',
+  'Trống': 'Drums',
+  // 'Bass' giống hệt ở hai thứ tiếng ⇒ KHÔNG đưa vào từ điển: `dich()` rơi về
+  // nguyên văn là đúng, và mục chép y nguyên bị tuDien.test.ts từ chối.
+  'Nhạc nền': 'Backing',
+  'Thứ bạn cần nhất cho một bản remix': 'What a remix needs most',
+  'Dựng fill và chuyển đoạn': 'For fills and transitions',
+  'Thường bỏ đi, thay bằng bass vinahouse': 'Usually dropped for a vinahouse bass',
+  'Đàn, kèn, và mọi thứ còn lại': 'Keys, horns and everything else',
 };

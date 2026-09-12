@@ -100,6 +100,8 @@ const aiRoutes = (await import(path.join(__dirname, 'routes', 'ai.routes.js'))).
 // Agent lập trình của app desktop — giao thức gọi tool nhiều lượt, khác hẳn
 // /ai/chat nên ở router riêng.
 const agentRoutes = (await import(path.join(__dirname, 'routes', 'agent.routes.js'))).default;
+// Xưởng Remix — AI kèm cặp, đọc số đo do app desktop tính sẵn.
+const xuongRemixRoutes = (await import(path.join(__dirname, 'routes', 'xuongRemix.routes.js'))).default;
 const adminRoutes = (await import(path.join(__dirname, 'routes', 'admin.routes.js'))).default;
 const skillRoutes = (await import(path.join(__dirname, 'routes', 'skill.routes.js'))).default;
 const projectRoutes = (await import(path.join(__dirname, 'routes', 'project.routes.js'))).default;
@@ -516,6 +518,7 @@ app.use('/api/v1/music/play-counts', musicPlayCountsRoutes);
 app.use('/api/v1/music', musicLyricsRoutes);
 app.use('/api/v1/ai', aiRoutes);
 app.use('/api/v1/agent', agentRoutes);
+app.use('/api/v1/xuong-remix', xuongRemixRoutes);
 app.use('/api/v1/admin/embed-jobs', embedJobsRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/skills', skillRoutes);

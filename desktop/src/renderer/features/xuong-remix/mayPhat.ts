@@ -44,8 +44,14 @@ export interface TrangThaiPhat {
 interface Duong {
   buffer: AudioBuffer;
   gain: GainNode;
+  /** Đo SAU gain, nên tắt tiếng là kim rơi về 0 — đúng thứ mắt chờ thấy. */
+  do: AnalyserNode;
+  dem: Float32Array<ArrayBuffer>;
   nguon: AudioBufferSourceNode | null;
 }
+
+/** Khoá của đồng hồ tổng trong bảng `dinh()`. */
+export const KHOA_TONG = '__tong';
 
 /**
  * Một máy phát cho nhiều đường tiếng cùng độ dài.
@@ -57,6 +63,8 @@ interface Duong {
 export class MayPhatStem {
   private ctx: AudioContext | null = null;
   private duong = new Map<TenDuong, Duong>();
+  private doTong: AnalyserNode | null = null;
+  private demTong = new Float32Array(0) as Float32Array<ArrayBuffer>;
   /** Mốc `ctx.currentTime` lúc bắt đầu phát, và vị trí bài lúc đó. */
   private mocCtx = 0;
   private mocBai = 0;
@@ -78,9 +86,43 @@ export class MayPhatStem {
     const ctx = this.moCtx();
     const buffer = await ctx.decodeAudioData(wav.slice().buffer);
     const gain = ctx.createGain();
-    gain.connect(ctx.destination);
-    this.duong.set(ten, { buffer, gain, nguon: null });
+    /* nguồn → gain → đo → đo tổng → loa.
+       Cửa đo nằm SAU gain: đồng hồ phải chỉ thứ đi ra loa, không phải thứ đi
+       vào. Đặt trước gain thì tắt tiếng một đường mà kim của nó vẫn nhảy. */
+    const doNode = ctx.createAnalyser();
+    /* 1024 mẫu ≈ 23 ms ở 44,1 kHz — ngắn hơn một khung hình 60 Hz, nên không
+       khung nào bỏ sót đỉnh. Lấy to hơn thì kim ì, nhỏ hơn thì tốn công đọc. */
+    doNode.fftSize = 1024;
+    gain.connect(doNode);
+    doNode.connect(this.moDoTong());
+    this.duong.set(ten, {
+      buffer,
+      gain,
+      do: doNode,
+      dem: new Float32Array(doNode.fftSize) as Float32Array<ArrayBuffer>,
+      nguon: null,
+    });
     this.dai = Math.max(this.dai, buffer.duration);
+  }
+
+  /**
+   * Đỉnh hiện thời của từng đường, 0…1, cộng một mục `KHOA_TONG` cho tổng.
+   *
+   * ĐỈNH chứ không RMS: đồng hồ của bàn trộn có việc duy nhất là báo sắp chạm
+   * trần, mà cái chạm trần là đỉnh. RMS của một bản master nén chặt nằm im
+   * quanh một chỗ và không nói được gì.
+   */
+  dinh(): Record<string, number> {
+    const ra: Record<string, number> = {};
+    for (const [ten, d] of this.duong) {
+      d.do.getFloatTimeDomainData(d.dem);
+      ra[ten] = dinhCua(d.dem);
+    }
+    if (this.doTong) {
+      this.doTong.getFloatTimeDomainData(this.demTong);
+      ra[KHOA_TONG] = dinhCua(this.demTong);
+    }
+    return ra;
   }
 
   /** Đóng mọi thứ và trả lại bộ nhớ. Bốn stem 5 phút là ~424 MB. */
@@ -88,6 +130,8 @@ export class MayPhatStem {
     this.dungHet();
     this.duong.clear();
     this.dai = 0;
+    this.doTong = null;
+    this.demTong = new Float32Array(0) as Float32Array<ArrayBuffer>;
     const ctx = this.ctx;
     this.ctx = null;
     if (ctx) await ctx.close().catch(() => undefined);
@@ -170,4 +214,26 @@ export class MayPhatStem {
     this.ctx ??= new AudioContext();
     return this.ctx;
   }
+
+  private moDoTong(): AnalyserNode {
+    if (!this.doTong) {
+      const ctx = this.moCtx();
+      const a = ctx.createAnalyser();
+      a.fftSize = 1024;
+      a.connect(ctx.destination);
+      this.doTong = a;
+      this.demTong = new Float32Array(a.fftSize) as Float32Array<ArrayBuffer>;
+    }
+    return this.doTong;
+  }
+}
+
+/** Biên độ lớn nhất trong một khối mẫu. */
+export function dinhCua(mau: Float32Array): number {
+  let m = 0;
+  for (let i = 0; i < mau.length; i++) {
+    const v = mau[i]! < 0 ? -mau[i]! : mau[i]!;
+    if (v > m) m = v;
+  }
+  return m;
 }

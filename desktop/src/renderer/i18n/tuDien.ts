@@ -1025,6 +1025,16 @@ export const TU_DIEN: Record<string, string> = {
   'Chất lượng bản cuối': 'Output quality',
   'Để gửi đi và đi diễn': 'To send and to play out',
   'Để lưu trữ và mix tiếp': 'To archive and to keep mixing',
+
+  // ── Bàn trộn kiểu bàn mixer ─────────────────────────────
+  // 'Duck' giống hệt ở hai thứ tiếng ⇒ KHÔNG đưa vào từ điển, y như 'Bass' ở
+  // trên: `dich()` rơi về nguyên văn là đúng, và mục chép y nguyên bị
+  // tuDien.test.ts từ chối.
+  'Tổng': 'Master',
+  'BẬT': 'ON',
+  'TẮT': 'OFF',
+  'Kéo dọc để chỉnh · giữ Shift để chỉnh nhỏ · bấm đúp để về mặc định':
+    'Drag vertically · hold Shift for fine steps · double-click to reset',
   'Xuất tệp': 'Export file',
   'Đã ghi': 'Wrote',
   'có mất dữ liệu': 'lossy',

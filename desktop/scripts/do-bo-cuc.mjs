@@ -957,6 +957,11 @@ const CHUAN_BI = {
     }
 
     const soCl = await p.locator('.ct-xr-cl-nut').count();
+    /* Bàn trộn giờ là bốn cột đứng + một cột tổng, mỗi cột ba núm xoay. Đếm
+       núm chứ không đếm cột: cột rỗng vẫn là một cột, còn núm thì chỉ có khi
+       `NumXoay` thật sự dựng ra. 4 đường × 3 núm = 12. */
+    const soNum = await p.locator('.ct-xr-num-o').count();
+    const soCot = await p.locator('.ct-xr-bt-cot').count();
     const coCham = await p.locator('.ct-xr-cham').count();
     const coLuoi = await p.locator('.ct-xr-luoi').count();
     const coAi = await p.locator('.ct-xr-tra-loi').count();
@@ -976,12 +981,13 @@ const CHUAN_BI = {
       );
     }
     if (!coCham || !coLuoi || !coAi || !coTron || coStem < 4 || !coNghe
-        || !coBan || soLan < 4 || soCl < 8) {
+        || !coBan || soLan < 4 || soCl < 8 || soNum < 12 || soCot < 5) {
       throw new Error(
         `chuẩn bị /xuong-remix KHÔNG tới được trạng thái đông `
         + `(lưới số đo: ${coLuoi}, khối chấm bài: ${coCham}, câu trả lời AI: ${coAi}, `
         + `bản trộn: ${coTron}, ô stem: ${coStem}/4, thanh nghe: ${coNghe}, `
-        + `transport: ${coBan}, dải track: ${soLan}/4, nút chất lượng: ${soCl}/8). `
+        + `transport: ${coBan}, dải track: ${soLan}/4, nút chất lượng: ${soCl}/8, `
+        + `núm xoay: ${soNum}/12, cột bàn trộn: ${soCot}/5). `
         + 'Selector hay luồng trang đã đổi — sửa bước CHUAN_BI trước khi tin kết quả.',
       );
     }

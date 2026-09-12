@@ -23,6 +23,7 @@ import type { KetQuaPhanTich, SongAmThanh } from '../../../shared/ipc';
 import { useDich } from '../../i18n';
 import { MayPhatStem } from './mayPhat';
 import { Song } from './Song';
+import { DongHoMuc } from './DongHoMuc';
 
 /** Thứ tự dải trên bàn: giống thứ tự người ta xếp track trong DAW. */
 const DAI = [
@@ -38,11 +39,21 @@ const SO_COT = 1400;
 interface Props {
   id: string;
   giay: number;
+  /**
+   * Ô để TRANG giữ máy phát.
+   *
+   * Máy phát sinh ra ở đây, nhưng bàn trộn ở dưới cũng cần nó — đồng hồ mức
+   * của nó đọc chính tiếng đang phát. Cho trang giữ cái ô thì hai khối dùng
+   * chung MỘT máy phát; dựng máy thứ hai thì hai bản nhạc chạy chồng nhau.
+   */
+  mayRef: React.MutableRefObject<MayPhatStem | null>;
   pt: KetQuaPhanTich | null;
   /** Đường WAV bản gốc — thứ nghe được khi chưa tách. */
   tepGoc: string;
   /** Đường dẫn WAV từng stem. Rỗng khi chưa tách. */
   tepStem: Record<string, string>;
+  /** Đỉnh hiện thời của một đường; `null` khi không có gì đang phát. */
+  docDinh: (ma: string) => number | null;
 }
 
 function dongHo(giay: number): string {
@@ -52,7 +63,7 @@ function dongHo(giay: number): string {
   return `${p}:${String(s).padStart(2, '0')}.${t}`;
 }
 
-export function BanLamViec({ id, giay, pt, tepGoc, tepStem }: Props) {
+export function BanLamViec({ id, giay, pt, tepGoc, tepStem, mayRef, docDinh }: Props) {
   const { dich } = useDich();
   const cau = window.cuongthai;
 
@@ -65,7 +76,6 @@ export function BanLamViec({ id, giay, pt, tepGoc, tepStem }: Props) {
   const [muc, setMuc] = useState<Record<string, number>>({});
   const [loi, setLoi] = useState<string | null>(null);
 
-  const mayRef = useRef<MayPhatStem | null>(null);
   const khungRef = useRef(0);
 
   /* Dạng sóng: xin ngay, và xin lại khi có thêm stem. Vài KB, không đáng chờ. */
@@ -84,7 +94,7 @@ export function BanLamViec({ id, giay, pt, tepGoc, tepStem }: Props) {
 
   /* Máy phát sống theo PHIÊN, không theo lần vẽ. Đóng bài là trả lại ~424 MB —
      không đóng thì mở vài bài liên tiếp là app phình ra và không bao giờ xẹp. */
-  useEffect(() => () => { void mayRef.current?.dong(); mayRef.current = null; }, [id]);
+  useEffect(() => () => { void mayRef.current?.dong(); mayRef.current = null; }, [id, mayRef]);
 
   const napTieng = useCallback(async (): Promise<MayPhatStem | null> => {
     if (mayRef.current?.coTieng) return mayRef.current;
@@ -116,7 +126,7 @@ export function BanLamViec({ id, giay, pt, tepGoc, tepStem }: Props) {
     } finally {
       setDangNapTieng(false);
     }
-  }, [cau, tepGoc, tepStem, dich]);
+  }, [cau, tepGoc, tepStem, dich, mayRef]);
 
   const nhipVe = useCallback(() => {
     const may = mayRef.current;
@@ -128,7 +138,7 @@ export function BanLamViec({ id, giay, pt, tepGoc, tepStem }: Props) {
     } else if (t.viTri >= t.giay) {
       setDangPhat(false);
     }
-  }, []);
+  }, [mayRef]);
 
   const bamPhat = useCallback(async () => {
     const may = mayRef.current?.coTieng ? mayRef.current : await napTieng();
@@ -151,17 +161,17 @@ export function BanLamViec({ id, giay, pt, tepGoc, tepStem }: Props) {
     if (!may) return;
     if (may.trangThai().dangPhat) void may.phat(0);
     else may.dung();
-  }, []);
+  }, [mayRef]);
 
   const nhay = useCallback((ti: number) => {
     setViTri(ti);
     const may = mayRef.current;
     if (may?.trangThai().dangPhat) void may.phat(ti * may.giay);
-  }, []);
+  }, [mayRef]);
 
   /* Mọi thay đổi mức/tắt/solo phải tới máy phát NGAY, kể cả lúc đang chạy —
      đó là điểm khác biệt giữa một bàn trộn và một cái biểu mẫu. */
-  useEffect(() => { mayRef.current?.datMuc(dungCai(muc, tat), solo); }, [muc, tat, solo]);
+  useEffect(() => { mayRef.current?.datMuc(dungCai(muc, tat), solo); }, [muc, tat, solo, mayRef]);
   useEffect(() => () => cancelAnimationFrame(khungRef.current), []);
 
   const coStem = Object.keys(tepStem).length > 0;
@@ -223,6 +233,11 @@ export function BanLamViec({ id, giay, pt, tepGoc, tepStem }: Props) {
                   value={Math.round((muc[d.ma] ?? 1) * 100)}
                   aria-label={`${dich('Mức')} ${dich(d.nhan)}`}
                   onChange={(e) => setMuc((m) => ({ ...m, [d.ma]: Number(e.target.value) / 100 }))} />
+                {/* Đồng hồ nằm luôn trong đầu dải: nhìn dạng sóng biết đoạn nào
+                    to, nhìn đồng hồ biết NGAY GIÂY NÀY đường nào đang kêu — hai
+                    câu hỏi khác nhau, và câu thứ hai là câu người ta hỏi khi
+                    đang bấm tắt/mở từng đường. */}
+                <DongHoMuc huong="ngang" doc={() => docDinh(d.ma)} />
               </div>
               <Song min={song?.min[d.ma]} max={song?.max[d.ma]} viTri={viTri}
                 mau={d.mau} cao={56} onNhay={nhay} />

@@ -7,7 +7,8 @@
 // cuongthai.com KHÔNG đi qua đây: backend gọi thẳng rambo bằng key chính như
 // cũ, không trần, không chờ. Cả cửa sổ 5 giờ của gói max5 vẫn là của web.
 //
-// Canh làm đúng hai việc:
+// Canh làm ba việc (việc thứ ba — nắn yêu cầu cho vừa giới hạn ngầm của
+// rambo — nằm ở sua-yeu-cau.mjs):
 //
 // 1. ƯU TIÊN WEB. Mỗi phút hỏi rambo key chính đã dùng bao nhiêu phần trăm
 //    cửa sổ 5 giờ. Chạm NGUONG_NHUONG (mặc định 70%) thì mọi key con bị trả
@@ -28,6 +29,7 @@ import http from 'node:http';
 import { readFileSync, writeFileSync, renameSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { Readable } from 'node:stream';
+import { nanYeuCau } from './sua-yeu-cau.mjs';
 
 const env = process.env;
 
@@ -295,10 +297,18 @@ async function chuyenTiep(req, res) {
 
   const batDau = Date.now();
   let model = '?';
+  let ghiChu = '';
   try {
-    model = JSON.parse(body.toString('utf8')).model || '?';
+    const j = JSON.parse(body.toString('utf8'));
+    model = j.model || '?';
+    // Rambo cắt ngầm khối >~12k ký tự và bỏ tin nhắn cũ quá ~58 — xem sua-yeu-cau.mjs.
+    const nan = nanYeuCau(j);
+    if (nan.ghiChu) {
+      body = Buffer.from(JSON.stringify(nan.body));
+      ghiChu = ` · ${nan.ghiChu}`;
+    }
   } catch {
-    /* count_tokens hay body lạ — chỉ để ghi log */
+    /* body không phải JSON — chuyển nguyên, để rambo tự trả lỗi */
   }
 
   let r;
@@ -319,7 +329,7 @@ async function chuyenTiep(req, res) {
   if (!r.body) return res.end();
   const luong = Readable.fromWeb(r.body);
   luong.on('error', () => res.destroy());
-  luong.on('end', () => ghi(`${model} ${r.status} ${Date.now() - batDau}ms ${Math.round(body.length / 1024)}KB`));
+  luong.on('end', () => ghi(`${model} ${r.status} ${Date.now() - batDau}ms ${Math.round(body.length / 1024)}KB${ghiChu}`));
   luong.pipe(res);
 }
 

@@ -7,6 +7,34 @@
  * Công cụ mô hình hoá → Exp Hub (draw.io / Jira / Visual Paradigm). Tiên quyết: SWE201c.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/SWR302.mjs --apply
  */
+import ch1Extra from './swr302/ch1.mjs';
+import ch2Extra from './swr302/ch2.mjs';
+import ch3Section from './swr302/ch3.mjs';
+import ch4Section from './swr302/ch4.mjs';
+import ch5Section from './swr302/ch5.mjs';
+import ch6Section from './swr302/ch6.mjs';
+import ch7Extra from './swr302/ch7.mjs';
+import ch8Extra from './swr302/ch8.mjs';
+import ch9Section from './swr302/ch9.mjs';
+import ch10Extra from './swr302/ch10.mjs';
+import ch11Extra from './swr302/ch11.mjs';
+import ch12Extra from './swr302/ch12.mjs';
+import ch13Extra from './swr302/ch13.mjs';
+import ch14Extra from './swr302/ch14.mjs';
+import ch17Extra from './swr302/ch17.mjs';
+import ch27Extra from './swr302/ch27.mjs';
+import ch28Extra from './swr302/ch28.mjs';
+import ch29Extra from './swr302/ch29.mjs';
+import ch18Section from './swr302/ch18.mjs';
+import ch19Section from './swr302/ch19.mjs';
+import ch15Extra from './swr302/ch15.mjs';
+import ch20Extra from './swr302/ch20.mjs';
+import ch16Extra from './swr302/ch16.mjs';
+import ch21Section from './swr302/ch21.mjs';
+import ch22Section from './swr302/ch22.mjs';
+import ch30Section from './swr302/ch30.mjs';
+import ch31Section from './swr302/ch31.mjs';
+import ch32Section from './swr302/ch32.mjs';
 export default {
   semester: { code: 'FPTU_Hola5', name: 'Kỳ 5', ordinal: 7 },
   course: {
@@ -17,6 +45,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     shortDescription: 'The engineering of software requirements: elicit, analyze, specify, validate and manage what a system must do. Functional vs non-functional requirements, stakeholders, use cases & user stories, the SRS (IEEE 830), traceability and change control.|||Kỹ nghệ yêu cầu phần mềm: khai thác, phân tích, đặc tả, thẩm định và quản lý những gì hệ thống phải làm. Yêu cầu chức năng vs phi chức năng, stakeholder, use case & user story, tài liệu SRS (IEEE 830), truy vết và kiểm soát thay đổi.',
     description: 'Môn học nền tảng về Requirements Engineering (RE) theo hướng mô hình hoá, dựa trên giáo trình kinh điển "Software Requirements" của Karl Wiegers. Bạn học trọn vòng đời yêu cầu — từ khai thác (elicitation) qua phân tích, đặc tả (SRS), thẩm định, tới quản lý thay đổi và truy vết — cùng các kỹ thuật mô hình use case, user story, domain model, DFD. Đây là bước chuyển từ "viết code" sang "hiểu đúng bài toán trước khi code". Tiên quyết: SWE201c.',
     whatYouLearn: 'Phân biệt yêu cầu chức năng/phi chức năng và ba tầng business–user–system; xác định stakeholder & user class, làm việc với product champion; chọn và thực hiện kỹ thuật elicitation (phỏng vấn, workshop, quan sát, bảng hỏi, prototyping); mô hình hoá yêu cầu bằng use case, user story, domain model, data dictionary, DFD; viết SRS chuẩn IEEE 830 với yêu cầu rõ–đủ–nhất quán–kiểm chứng được; thẩm định bằng review và acceptance criteria; quản lý yêu cầu: baseline, versioning, change control, ma trận truy vết; áp dụng requirements trong Agile và cho hệ thống AI/ML.',
@@ -410,6 +439,7 @@ export default {
 </div>
 `,
         },
+        ...ch1Extra,
         {
           title: 'Quiz 1 — Essentials of Software Requirements|||Quiz 1 — Cơ bản về yêu cầu phần mềm',
           slug: 'swr302-quiz-1',
@@ -494,6 +524,7 @@ export default {
 </div>
 `,
         },
+        ...ch2Extra,
         {
           title: 'Quiz 2 — Customer\'s perspective|||Quiz 2 — Góc nhìn khách hàng',
           slug: 'swr302-quiz-2',
@@ -514,6 +545,10 @@ export default {
     },
 
     /* ══════════════════ CHƯƠNG 3 — KỸ THUẬT KHAI THÁC YÊU CẦU ══════════════════ */
+    ch3Section,
+    ch4Section,
+    ch5Section,
+    ch6Section,
     {
       title: 'Chapter 3 — Requirements elicitation techniques|||Chương 3 — Kỹ thuật khai thác yêu cầu',
       description: 'Phỏng vấn, workshop, quan sát, bảng hỏi, prototyping; lập kế hoạch và các cạm bẫy elicitation.',
@@ -687,6 +722,7 @@ export default {
 </div>
 `,
         },
+        ...ch7Extra,
         {
           title: 'Quiz 3 — Elicitation techniques|||Quiz 3 — Kỹ thuật khai thác',
           slug: 'swr302-quiz-3',
@@ -902,6 +938,9 @@ export default {
 </div>
 `,
         },
+        ...ch8Extra,
+        ...ch12Extra,
+        ...ch13Extra,
         {
           title: 'Quiz 4 — Analysis & modeling|||Quiz 4 — Phân tích & mô hình hoá',
           slug: 'swr302-quiz-4',
@@ -923,6 +962,7 @@ export default {
     },
 
     /* ══════════════════ CHƯƠNG 5 — ĐẶC TẢ YÊU CẦU (SRS) ══════════════════ */
+    ch9Section,
     {
       title: 'Chapter 5 — Specification: writing the SRS|||Chương 5 — Đặc tả: viết tài liệu SRS',
       description: 'Cấu trúc SRS chuẩn IEEE 830; đặc tính của yêu cầu tốt; biến câu mơ hồ thành yêu cầu kiểm chứng được.',
@@ -1030,6 +1070,9 @@ export default {
 </div>
 `,
         },
+        ...ch10Extra,
+        ...ch11Extra,
+        ...ch14Extra,
         {
           title: 'Quiz 5 — Specification & the SRS|||Quiz 5 — Đặc tả & tài liệu SRS',
           slug: 'swr302-quiz-5',
@@ -1157,6 +1200,7 @@ Then  &lt;một kết quả quan sát được&gt;</pre>
 </div>
 `,
         },
+        ...ch17Extra,
         {
           title: 'Quiz 6 — Validation|||Quiz 6 — Thẩm định',
           slug: 'swr302-quiz-6',
@@ -1302,6 +1346,9 @@ Then  &lt;một kết quả quan sát được&gt;</pre>
 </div>
 `,
         },
+        ...ch27Extra,
+        ...ch28Extra,
+        ...ch29Extra,
         {
           title: 'Quiz 7 — Requirements management|||Quiz 7 — Quản lý yêu cầu',
           slug: 'swr302-quiz-7',
@@ -1321,6 +1368,10 @@ Then  &lt;một kết quả quan sát được&gt;</pre>
         },
       ],
     },
+
+    /* ══════════════════ REUSE & BEYOND (book Ch.18, Ch.19) ══════════════════ */
+    ch18Section,
+    ch19Section,
 
     /* ══════════════════ CHƯƠNG 8 — TỪ YÊU CẦU TỚI THIẾT KẾ OO & PROTOTYPING ══════════════════ */
     {
@@ -1402,6 +1453,7 @@ Then  &lt;một kết quả quan sát được&gt;</pre>
 </div>
 `,
         },
+        ...ch15Extra,
         {
           title: 'Quiz 8 — OO design & prototyping|||Quiz 8 — Thiết kế OO & prototyping',
           slug: 'swr302-quiz-8',
@@ -1532,6 +1584,7 @@ Then  &lt;một kết quả quan sát được&gt;</pre>
 </div>
 `,
         },
+        ...ch20Extra,
         {
           title: 'Quiz 9 — Agile requirements|||Quiz 9 — Yêu cầu Agile',
           slug: 'swr302-quiz-9',
@@ -1701,6 +1754,7 @@ Then  &lt;một kết quả quan sát được&gt;</pre>
 </div>
 `,
         },
+        ...ch16Extra,
         {
           title: 'Quiz 10 — Prioritization & AI/ML requirements|||Quiz 10 — Ưu tiên & yêu cầu AI/ML',
           slug: 'swr302-quiz-10',
@@ -1849,5 +1903,12 @@ Then  &lt;một kết quả quan sát được&gt;</pre>
         }
       ]
     },
+
+    /* ══════════════════ ADVANCED TOPICS (book Ch.21, 22, 30, 31, 32) ══════════════════ */
+    ch21Section,
+    ch22Section,
+    ch30Section,
+    ch31Section,
+    ch32Section,
   ],
 };

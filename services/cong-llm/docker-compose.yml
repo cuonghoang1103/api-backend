@@ -1,0 +1,94 @@
+# ─── Cổng key con LLM — New API + canh, đứng trước key rambo ───────────────
+#
+# Chạy TÁCH HẲN khỏi stack chính (project `cong-llm`, không phải
+# `cuonghoangdev`): deploy-nha.sh không biết tới nó, nó cũng không đụng tới
+# backend/frontend/postgres. Hỏng cả cụm này thì chỉ key con chết —
+# cuongthai.com vẫn gọi rambo thẳng như cũ.
+#
+# Triển khai: bash services/cong-llm/trien-khai.sh (từ máy local).
+# Chỉ nhập mạng `cuonghoangdev_backend` để nginx của stack chính gọi được
+# `cuonghoangdev_newapi` theo tên.
+#
+# Bí mật: /opt/cuonghoangdev/.env (key rambo, dùng chung với backend) +
+# /opt/cong-llm/.env (bí mật riêng của cụm này, trien-khai.sh tự sinh lần đầu).
+
+name: cong-llm
+
+services:
+  newapi:
+    # Ghim phiên bản: New API ra bản rc gần như mỗi ngày, `latest` mà đổi API
+    # quản trị là canh không nạp lại hạn mức được nữa.
+    image: calciumion/new-api:v1.0.0-rc.37
+    container_name: cuonghoangdev_newapi
+    restart: unless-stopped
+    environment:
+      TZ: Asia/Ho_Chi_Minh
+      SESSION_SECRET: ${CONG_LLM_SESSION_SECRET:?thiếu CONG_LLM_SESSION_SECRET trong /opt/cong-llm/.env}
+      # Opus nghĩ lâu giữa hai mẩu chữ; mặc định 120s cắt ngang lượt dài.
+      STREAMING_TIMEOUT: "300"
+    volumes:
+      # SQLite + log. Bind ra host để dựng lại container không mất key con.
+      - /opt/cong-llm/data:/data
+    ports:
+      # Giao diện quản trị CHỈ nghe trên 127.0.0.1 của VPS — vào bằng SSH tunnel:
+      #   ssh -L 3300:127.0.0.1:3300 root@<vps>  rồi mở http://localhost:3300
+      # Ra Internet chỉ có /llm/v1/* qua nginx (không lộ /api quản trị).
+      - "127.0.0.1:3300:3000"
+    networks:
+      - web
+    deploy:
+      resources:
+        limits:
+          # Đo thật lúc rảnh: 35MB. Chừa cho SQLite + nhiều luồng stream.
+          memory: 384M
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/api/status >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  canh:
+    image: node:22-alpine
+    container_name: cuonghoangdev_canh_llm
+    restart: unless-stopped
+    command: ["node", "/app/canh.mjs"]
+    environment:
+      AGENT_GATEWAY_BASE_URL: ${AGENT_GATEWAY_BASE_URL:?thiếu AGENT_GATEWAY_BASE_URL trong /opt/cuonghoangdev/.env}
+      AGENT_GATEWAY_API_KEY: ${AGENT_GATEWAY_API_KEY:?thiếu AGENT_GATEWAY_API_KEY trong /opt/cuonghoangdev/.env}
+      CANH_KHOA_NOI_BO: ${CONG_LLM_KHOA_NOI_BO:?thiếu CONG_LLM_KHOA_NOI_BO}
+      NEWAPI_URL: http://cuonghoangdev_newapi:3000
+      NEWAPI_USER: ${CONG_LLM_ADMIN_USER:-quantri}
+      NEWAPI_PASS: ${CONG_LLM_ADMIN_PASS:?thiếu CONG_LLM_ADMIN_PASS}
+      CANH_URL: http://cuonghoangdev_canh_llm:8080
+      KEY_CON: ${CONG_LLM_KEY_CON:-opencode-1,opencode-2,web-phu-1}
+      # Key chính đã dùng ≥70% cửa sổ 5h ⇒ đóng key con; <60% (tức cửa sổ
+      # mới) mới mở lại. 30% cuối mỗi cửa sổ là của riêng web.
+      NGUONG_NHUONG: ${CONG_LLM_NGUONG_NHUONG:-0.7}
+      NGUONG_MO_LAI: ${CONG_LLM_NGUONG_MO_LAI:-0.6}
+      TZ: Asia/Ho_Chi_Minh
+    volumes:
+      # Mount cả THƯ MỤC, không mount từng file: file đơn bị gắn theo inode,
+      # thay file bằng tar/mv là container vẫn đọc bản cũ (xem CLAUDE.md,
+      # sự cố nginx 25/08/2026).
+      - ./canh:/app:ro
+      - /opt/cong-llm/state:/state
+    networks:
+      - web
+    depends_on:
+      - newapi
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://localhost:8080/suc-khoe',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))\""]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+networks:
+  web:
+    external: true
+    name: cuonghoangdev_backend

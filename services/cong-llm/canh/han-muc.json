@@ -1,0 +1,6 @@
+{
+  "_ghi_chu": "Hạn mức MỖI key con cho MỖI cửa sổ 5h của rambo, tính bằng USD quy đổi theo bảng giá Anthropic (New API: 500.000 quota = 1 USD). Canh nạp lại mỗi lần cửa sổ rambo reset. Key đặt 'không giới hạn' trong giao diện New API thì canh bỏ qua. Sửa file này rồi restart canh là có hiệu lực từ cửa sổ kế tiếp — không cần deploy lại.",
+  "_uoc_luong": "10 USD ≈ 280 lượt OpenCode trên Sonnet 5 với ngữ cảnh ~100k đã cache (≈0,035 USD/lượt), hoặc ≈110 lượt trên Opus. Ước lượng thô, chưa đo trên rambo.",
+  "mac_dinh_usd": 10,
+  "theo_ten": {}
+}

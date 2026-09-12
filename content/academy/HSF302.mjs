@@ -386,6 +386,44 @@ const c6q = quiz('hsf302-quiz-6', 'Quiz 6 — Thymeleaf|||Quiz 6 — Thymeleaf',
   { id: 'q3', question: 'Dữ liệu truyền từ controller sang view qua?', options: ['ResponseEntity', 'Model (addAttribute)', '@RequestBody', 'application.properties'], correctIndex: 1, explanation: 'Model.addAttribute đưa dữ liệu để template đọc bằng ${...}.' },
 ]);
 
+// Mục "Tài liệu tham khảo" — nội dung GỐC do mình soạn: trích dẫn sách + link
+// nguồn chính thức miễn phí + trỏ giáo trình/slide đầy đủ trên FLM. KHÔNG upload
+// PDF có bản quyền lên CDN công khai.
+const taiLieu = doc('hsf302-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Tổng hợp tài liệu học môn: giáo trình & slide chính thức (trên FLM), sách tham khảo, tài liệu chính thức miễn phí và lộ trình tự học.',
+  [[
+    `<span class="eyebrow">HSF302 · Materials</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">Everything to study this course, in one place. The full official lecture slides &amp; textbook are on <strong>FLM</strong> (where FPTU students access them legitimately); below are free, legal resources to go deeper on each topic.</p>
+<h3>Official documentation (free)</h3>
+<ul>
+<li><a href="https://spring.io/projects/spring-boot" target="_blank" rel="noopener">Spring Boot — official reference</a></li>
+<li><a href="https://docs.spring.io/spring-framework/reference/" target="_blank" rel="noopener">Spring Framework — reference docs</a></li>
+<li><a href="https://spring.io/guides" target="_blank" rel="noopener">Spring Guides — hands-on tutorials</a></li>
+<li><a href="https://www.baeldung.com/spring-tutorial" target="_blank" rel="noopener">Baeldung — Spring tutorials</a></li>
+</ul>
+<h3>Reference book</h3>
+<p><em>Spring in Action</em> — Craig Walls (Manning): a well-structured, widely used book covering this course's topics.</p>
+<h3>Course textbook &amp; slides</h3>
+<p>The official FPTU giáo trình and lecture slides for HSF302 are on <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — sign in with your FPTU account.</p>
+<div class="callout"><span class="badge">Study path</span> Intro → Ch.1 JPA/ORM → IoC/DI → Spring Boot → Spring Data → MVC/REST → Thymeleaf. Build a small CRUD app alongside — that's when Spring clicks.</div>`,
+    `<span class="eyebrow">HSF302 · Tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Mọi thứ cần để học môn, gom về một chỗ. Slide bài giảng &amp; giáo trình chính thức đầy đủ nằm trên <strong>FLM</strong> (nơi sinh viên FPTU truy cập hợp lệ); bên dưới là các nguồn miễn phí, hợp pháp để học sâu từng chủ đề.</p>
+<h3>Tài liệu chính thức (miễn phí)</h3>
+<ul>
+<li><a href="https://spring.io/projects/spring-boot" target="_blank" rel="noopener">Spring Boot — tài liệu chính thức</a></li>
+<li><a href="https://docs.spring.io/spring-framework/reference/" target="_blank" rel="noopener">Spring Framework — reference docs</a></li>
+<li><a href="https://spring.io/guides" target="_blank" rel="noopener">Spring Guides — hướng dẫn thực hành</a></li>
+<li><a href="https://www.baeldung.com/spring-tutorial" target="_blank" rel="noopener">Baeldung — hướng dẫn Spring</a></li>
+</ul>
+<h3>Sách tham khảo</h3>
+<p><em>Spring in Action</em> — Craig Walls (Manning): sách cấu trúc rõ, phổ biến, bao trọn các chủ đề của môn.</p>
+<h3>Giáo trình &amp; slide của môn</h3>
+<p>Giáo trình FPTU và slide bài giảng chính thức của HSF302 có trên <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — đăng nhập bằng tài khoản FPTU.</p>
+<div class="callout"><span class="badge">Lộ trình học</span> Giới thiệu → Ch.1 JPA/ORM → IoC/DI → Spring Boot → Spring Data → MVC/REST → Thymeleaf. Vừa học vừa dựng một app CRUD nhỏ — Spring sẽ "sáng" ra.</div>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola5', name: 'Kỳ 5', ordinal: 7 },
   course: {
@@ -395,6 +433,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/HSF302.webp',
     shortDescription: 'Build Java back-ends with Spring — JPA/ORM, IoC & DI, Spring Boot, Spring Data JPA repositories, Spring MVC/REST & Thymeleaf. Bilingual, with Java/Spring code & exercises.|||Xây back-end Java với Spring — JPA/ORM, IoC & DI, Spring Boot, repository Spring Data JPA, Spring MVC/REST & Thymeleaf. Song ngữ, code Java/Spring & bài tập.',
     description: 'Môn <strong>HSF302 — Làm việc với Spring Framework</strong> (ngành Kỹ thuật phần mềm, kỳ 5). Đi từ <strong>JPA/ORM</strong> (ánh xạ entity) → lõi <strong>Spring (IoC/DI)</strong> → <strong>Spring Boot</strong> (auto-config, starter) → <strong>Spring Data JPA</strong> (repository, derived query) → <strong>Spring MVC/REST</strong> → <strong>Thymeleaf</strong> (web phía server), hướng tới ứng dụng CRUD hoàn chỉnh (kể cả JavaFX). Bám giáo trình FLM, song ngữ, code Java/Spring chạy được và bài tập kèm lời giải.',
@@ -402,6 +441,7 @@ export default {
     requirements: 'Đã học Java (PRO192/CSD201) và SQL/CSDL (DBI202). Cần JDK 17+, Maven/Gradle, một IDE (IntelliJ IDEA / Eclipse / VS Code) và một database (MySQL/H2).',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, lộ trình tự học.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Vì sao Spring, CLO, lộ trình.', lessons: [intro] },
     { title: 'Chương 1 — JPA & ORM|||Chapter 1 — JPA & ORM', description: 'Entity mapping, quan hệ.', lessons: [c1, c1q] },
     { title: 'Chương 2 — IoC & DI|||Chapter 2 — IoC & DI', description: 'Bean, stereotype, constructor injection.', lessons: [c2, c2q] },

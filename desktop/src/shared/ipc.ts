@@ -534,6 +534,12 @@ export interface CaiDatStemTron {
 /* Bảng mặc định của bàn trộn nằm ở `shared/tronMacDinh.ts` — tệp đó không
    kéo theo zod, nên renderer nạp được mà không phình gói. */
 
+/** Một tệp kết quả đã đọc về renderer, dạng WAV 16-bit sẵn sàng nghe và đẩy lên. */
+export interface BanGiaoAmThanh {
+  ten: string;
+  byte: Uint8Array;
+  giay: number;
+}
 
 export interface KetQuaTronRa {
   duong: string;
@@ -1252,6 +1258,9 @@ export const INVOKE_CHANNELS = {
   'xuongRemix:napBanMau': banMauSchema,
   'xuongRemix:master': masterSchema,
   'xuongRemix:tron': tronSchema,
+  /* Đọc một tệp kết quả về renderer để NGHE THỬ và ĐẨY LÊN thư viện. Main còn
+     kiểm lại đường dẫn bằng `duongAnToan()` — schema này chỉ là hàng rào đầu. */
+  'xuongRemix:banGiao': z.object({ duong: z.string().min(1).max(4096) }),
 
   /* Đường dẫn tệp trong repo mẫu gốc. Tiến trình chính còn kiểm lại lần nữa —
      xem `duongAnToan()` — nên schema này chỉ là hàng rào đầu tiên. */
@@ -1679,6 +1688,13 @@ export interface DesktopBridge {
       id: string, ten: string, mau: Uint8Array, soKenh: number, tanSoMau: number,
     ): Promise<TomTatBanMau>;
     master(id: string, tranDbtp?: number, khongKhopPho?: boolean): Promise<KetQuaMasterRa>;
+    /**
+     * Đọc một tệp kết quả (bản trộn, bản master) về renderer.
+     *
+     * Trả WAV 16-bit — nhỏ bằng nửa bản trên đĩa, và đã qua hạn biên nên
+     * không mất gì. Renderer dùng nó để nghe thử và để đẩy lên thư viện.
+     */
+    banGiao(duong: string): Promise<BanGiaoAmThanh>;
     /** Trộn các stem ĐÃ TÁCH thành một bản stereo. Ném nếu chưa tách. */
     tron(
       id: string,

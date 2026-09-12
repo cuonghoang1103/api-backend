@@ -170,6 +170,80 @@ export function ghiWav(am: AmThanh): ArrayBuffer {
 }
 
 /**
+ * Ghi WAV 16-bit PCM, có rắc nhiễu (dither).
+ *
+ * ─── Khi nào dùng bản này thay cho bản float ───
+ * Khi tệp là BẢN GIAO, không phải bản trung gian: bản trộn hay bản master đã
+ * đi qua bộ hạn biên nên chắc chắn nằm trong ±1, và nó sắp được nghe hoặc
+ * được đẩy lên máy chủ. 16-bit nhỏ đúng một nửa, và một bản 5 phút là 53 MB
+ * thay vì 106 MB — chênh lệch ấy là thật khi đẩy lên bằng mạng nhà.
+ *
+ * ─── ⚠️ VÌ SAO PHẢI RẮC NHIỄU ───
+ * Làm tròn thẳng float xuống 16-bit sinh ra sai số BÁM THEO tín hiệu, không
+ * phải nhiễu ngẫu nhiên — tai nghe ra nó như một lớp méo bẩn bám lấy đuôi
+ * tiếng vang và những đoạn nhỏ dần, rõ nhất đúng ở chỗ nhạc êm. Cộng một
+ * lượng nhiễu tam giác (TPDF) bằng ±1 bậc lượng tử trước khi làm tròn thì sai
+ * số trở thành nhiễu nền TRẮNG, độc lập với tín hiệu: to hơn về mặt con số,
+ * nhưng tai không bám vào được, nên nghe SẠCH hơn. Đây là chuyện đã ngã ngũ
+ * từ lâu trong ngành, không phải lựa chọn thẩm mỹ.
+ *
+ * Nhiễu TPDF dựng bằng hiệu hai số ngẫu nhiên đều — đó chính là định nghĩa
+ * của phân phối tam giác.
+ */
+export function ghiWav16(am: AmThanh): ArrayBuffer {
+  const soKenh = am.kenh.length;
+  if (soKenh === 0) throw new Error('ghiWav16: không có kênh nào');
+  const soMau = am.kenh[0]!.length;
+  for (const k of am.kenh) {
+    if (k.length !== soMau) throw new Error('ghiWav16: các kênh lệch độ dài');
+  }
+
+  const byteDuLieu = soMau * soKenh * 2;
+  const buf = new ArrayBuffer(44 + byteDuLieu);
+  const v = new DataView(buf);
+  const chu = (i: number, s: string) => {
+    for (let k = 0; k < s.length; k++) v.setUint8(i + k, s.charCodeAt(k));
+  };
+
+  chu(0, 'RIFF');
+  v.setUint32(4, 36 + byteDuLieu, true);
+  chu(8, 'WAVE');
+  chu(12, 'fmt ');
+  v.setUint32(16, 16, true);
+  v.setUint16(20, 1, true);        // 1 = PCM nguyên
+  v.setUint16(22, soKenh, true);
+  v.setUint32(24, am.tanSoMau, true);
+  v.setUint32(28, am.tanSoMau * soKenh * 2, true);
+  v.setUint16(32, soKenh * 2, true);
+  v.setUint16(34, 16, true);
+  chu(36, 'data');
+  v.setUint32(40, byteDuLieu, true);
+
+  /* ⚠️ NHÂN 32768, KHÔNG PHẢI 32767 — phải khớp với trình ĐỌC.
+     `docWav` chia 16-bit cho 32768 (đó là quy ước đúng: dải số nguyên có dấu
+     là −32768…+32767, và toàn thang ứng với 32768). Bản đầu ở đây nhân 32767,
+     tức lệch hệ số 1/32768 so với lúc đọc lại — nghe không ra (−0,00026 dB)
+     nhưng nó là sai số HỆ THỐNG cộng thêm vào mọi mẫu, và phép kiểm vòng tròn
+     phải nới ngưỡng ra để chịu nó. Nới ngưỡng để chiều một lỗi là cách đánh
+     mất chính phép kiểm đó. */
+  const BAC = 1 / 32768;
+  let i = 44;
+  for (let n = 0; n < soMau; n++) {
+    for (let c = 0; c < soKenh; c++) {
+      const nhieu = (Math.random() - Math.random()) * BAC;
+      /* Chặn theo SỐ NGUYÊN sau khi làm tròn: nhiễu có thể đẩy một mẫu đang
+         sát trần lên 32768, mà `setInt16` cắt cụt hai byte thấp nên 32768
+         thành −32768 — một mẫu lật dấu, nghe ra là tiếng "tách" rất rõ, và
+         chỉ xảy ra ở bài master sát trần, tức gần như mọi bài nhạc sàn. */
+      const q = Math.round((am.kenh[c]![n]! + nhieu) * 32768);
+      v.setInt16(i, Math.max(-32768, Math.min(32767, q)), true);
+      i += 2;
+    }
+  }
+  return buf;
+}
+
+/**
  * Trộn nhiều kênh thành một (mono).
  *
  * Dò nhịp và dò tông đều làm trên mono: hai kênh gần như cùng nội dung, tính

@@ -7,7 +7,7 @@
  * bằng byte dựng tay.
  */
 import { describe, expect, it } from 'vitest';
-import { docWav, ghiWav, gopMono, type AmThanh } from './wav';
+import { docWav, ghiWav, ghiWav16, gopMono, type AmThanh } from './wav';
 
 /** Dựng một tệp WAV PCM số nguyên bằng tay, để kiểm trình đọc bằng byte thật. */
 function dungWavPcm(bit: 8 | 16 | 24 | 32, mau: number[][], tanSoMau = 44100): ArrayBuffer {
@@ -128,6 +128,59 @@ describe('ghi WAV', () => {
   it('các kênh lệch độ dài thì từ chối ghi', () => {
     const xau: AmThanh = { tanSoMau: 44100, kenh: [new Float32Array(4), new Float32Array(5)] };
     expect(() => ghiWav(xau)).toThrow(/lệch độ dài/);
+  });
+});
+
+describe('ghi WAV 16-bit (bản giao)', () => {
+  const am = (kenh: Float32Array[]): AmThanh => ({ kenh, tanSoMau: 44100 });
+
+  it('đọc lại được, đúng số kênh và số mẫu', () => {
+    const goc = am([Float32Array.from([0, 0.5, -0.5, 0.25]), Float32Array.from([0.1, 0.2, 0.3, 0.4])]);
+    const lai = docWav(ghiWav16(goc));
+    expect(lai.kenh.length).toBe(2);
+    expect(lai.kenh[0]!.length).toBe(4);
+    expect(lai.tanSoMau).toBe(44100);
+  });
+
+  it('sai số nằm trong một bậc lượng tử — nhiễu rắc vào không được làm lệch tiếng', () => {
+    const n = 4096;
+    const k = new Float32Array(n);
+    for (let i = 0; i < n; i++) k[i] = 0.7 * Math.sin((2 * Math.PI * 440 * i) / 44100);
+    const lai = docWav(ghiWav16(am([k])));
+    for (let i = 0; i < n; i++) {
+      /* Trần 1,55 bậc = 1 bậc nhiễu TPDF + 0,5 bậc làm tròn, gần như không
+         còn dư địa. Cố ý siết chặt: nới ra 2 bậc thì phép kiểm này vẫn XANH
+         khi trình ghi nhân 32767 còn trình đọc chia 32768 — đúng lỗi đã có
+         thật ở bản đầu. Ngưỡng lỏng là ngưỡng chiều lỗi. */
+      expect(Math.abs(lai.kenh[0]![i]! - k[i]!)).toBeLessThan(1.55 / 32768);
+    }
+  });
+
+  it('⭐ mẫu sát trần KHÔNG được lật dấu', () => {
+    /* Nhiễu cộng vào có thể đẩy một mẫu 0,99999 vượt qua 1,0; `Math.round`
+       của 32768 tràn thành −32768. Một mẫu đổi dấu nghe ra là tiếng "tách"
+       rất rõ, và nó chỉ xảy ra ở những bài master sát trần — tức là gần như
+       mọi bài nhạc sàn. Chạy nhiều mẫu vì nhiễu là ngẫu nhiên. */
+    const n = 20000;
+    const k = new Float32Array(n).fill(0.99999);
+    const lai = docWav(ghiWav16(am([k])));
+    for (let i = 0; i < n; i++) expect(lai.kenh[0]![i]!).toBeGreaterThan(0.9);
+  });
+
+  it('nhỏ đúng một nửa bản float', () => {
+    const k = new Float32Array(1000);
+    expect(ghiWav16(am([k])).byteLength).toBe(44 + 1000 * 2);
+    expect(ghiWav(am([k])).byteLength).toBe(44 + 1000 * 4);
+  });
+
+  it('khai đúng PCM nguyên 16 bit trong khối fmt', () => {
+    const v = new DataView(ghiWav16(am([new Float32Array(8)])));
+    expect(v.getUint16(20, true)).toBe(1);    // 1 = PCM, không phải 3 = float
+    expect(v.getUint16(34, true)).toBe(16);
+  });
+
+  it('kênh lệch độ dài thì báo lỗi thay vì ghi ra tệp hỏng', () => {
+    expect(() => ghiWav16(am([new Float32Array(4), new Float32Array(5)]))).toThrow(/lệch/);
   });
 });
 

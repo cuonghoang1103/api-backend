@@ -547,6 +547,17 @@ await ctx.route('**/api/v1/**', async (tuyen) => {
     return;
   }
 
+  /* Đẩy bài lên kho Remix (khâu 08). Trả 200 để khối "đã lên kho" hiện ra —
+     đó là dòng chữ dài nhất của phần này, và nó chỉ tồn tại sau một lượt đẩy
+     thành công. */
+  if (/\/music\/tracks$/.test(duong) && cach === 'POST') {
+    await tuyen.fulfill({
+      status: 200, contentType: 'application/json',
+      body: JSON.stringify({ success: true, data: { id: 4242, title: 'Bài thử' } }),
+    });
+    return;
+  }
+
   /* ── Sổ tay: GHI được, không chỉ ĐỌC ──
      Tạo/xoá là hai thao tác người dùng báo hỏng nhiều nhất, và cả hai chỉ đo
      được nếu lần gọi `/notes/tree` KẾ TIẾP phản ánh thay đổi. Mock chỉ-đọc thì
@@ -668,6 +679,27 @@ await ctx.addInitScript((nn) => {
                  rongStereo: 0.42,
                  dai: { 31.5: -24.0, 63: -9.8, 125: -8.9, 250: -12.1, 500: -15.0,
                         1000: -17.2, 2000: -19.4, 4000: -21.0, 8000: -23.2, 16000: -33.8 } },
+    /* Bản giao cho khâu 08. Dựng một WAV THẬT (im lặng, 0,4 giây) chứ không
+       trả mảng rỗng: thẻ <audio> với nguồn hỏng vẽ ra một thanh điều khiển
+       khác hẳn thanh bình thường, và lúc đó bộ đo đang đo một thứ người dùng
+       không bao giờ thấy. */
+    banGiao: (() => {
+      /* 95 giây chứ không phải nửa giây: thẻ <audio> chỉ hiện ĐỘ DÀI khi nó
+         giải mã được thật, và một tệp 0,4 giây hiện "0:00" y hệt lúc giải mã
+         HỎNG. Dài đủ để đồng hồ đọc ra "1:35" thì con số ấy trở thành bằng
+         chứng rằng cả đường Uint8Array → File → blob: → <audio> chạy được,
+         chứ không chỉ là "thanh điều khiển có vẽ ra". */
+      const fs = 8000, n = fs * 95;
+      const b = new ArrayBuffer(44 + n * 2);
+      const v = new DataView(b);
+      const chu = (i, t) => { for (let k = 0; k < t.length; k++) v.setUint8(i + k, t.charCodeAt(k)); };
+      chu(0, 'RIFF'); v.setUint32(4, 36 + n * 2, true); chu(8, 'WAVE'); chu(12, 'fmt ');
+      v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+      v.setUint32(24, fs, true); v.setUint32(28, fs * 2, true); v.setUint16(32, 2, true);
+      v.setUint16(34, 16, true); chu(36, 'data'); v.setUint32(40, n * 2, true);
+      return { ten: 'Bài thử rất dài để xem tên có tràn ra ngoài ô không (tron).wav',
+               byte: new Uint8Array(b), giay: 254 };
+    })(),
     /* Kết quả TÁCH. Thiếu nó thì `ketQua` là null, và cả danh sách stem LẪN
        bàn trộn không bao giờ được dựng ra — hai khối rộng nhất của trang chưa
        từng đi qua bộ đo một lần nào (phát hiện 12/09/2026, khi thêm bàn trộn). */
@@ -838,6 +870,13 @@ const CHUAN_BI = {
        quả (mang dòng cảnh báo dài nhất của phần này) không được dựng ra. */
     await p.click('button:has-text("Trộn lại")', { timeout: 2000 }).catch(() => {});
     await p.waitForTimeout(500);
+    /* Khâu 08: thanh nghe thử, ô tên bài, và khối "đã lên kho" chỉ tồn tại
+       sau hai cú bấm này. Thanh <audio> của Chromium có bề rộng tối thiểu
+       riêng, nên nó đúng là thứ dễ làm tràn cột hẹp nhất của cả trang. */
+    await p.click('button:has-text("Nghe thử")', { timeout: 2000 }).catch(() => {});
+    await p.waitForTimeout(300);
+    await p.click('button:has-text("Đẩy lên bàn DJ")', { timeout: 2000 }).catch(() => {});
+    await p.waitForTimeout(600);
 
     /* ⚠️ TỰ KIỂM VIỆC CỦA CHÍNH BƯỚC NÀY.
        Mọi thao tác trên đều `.catch(() => {})`, nên một selector đổi tên là
@@ -850,11 +889,24 @@ const CHUAN_BI = {
     const coAi = await p.locator('.ct-xr-tra-loi').count();
     const coTron = await p.locator('.ct-xr-tron-ra').count();
     const coStem = await p.locator('.ct-xr-stem-o').count();
-    if (!coCham || !coLuoi || !coAi || !coTron || coStem < 4) {
+    const coNghe = await p.locator('.ct-xr-nghe').count();
+    /* Không chỉ đếm thẻ: đọc `duration` để chắc trình duyệt GIẢI MÃ được.
+       Thẻ <audio> với nguồn hỏng vẫn tồn tại trong DOM và vẫn vẽ ra thanh
+       điều khiển, nên đếm thẻ là phép kiểm gần như luôn xanh. */
+    const dai = coNghe
+      ? await p.locator('.ct-xr-nghe').first().evaluate((e) => e.duration).catch(() => 0)
+      : 0;
+    if (coNghe && !(dai > 1)) {
+      throw new Error(
+        `thẻ nghe thử có mặt nhưng KHÔNG giải mã được (duration=${dai}). `
+        + 'Đường Uint8Array → File → blob: đã hỏng ở đâu đó.',
+      );
+    }
+    if (!coCham || !coLuoi || !coAi || !coTron || coStem < 4 || !coNghe) {
       throw new Error(
         `chuẩn bị /xuong-remix KHÔNG tới được trạng thái đông `
         + `(lưới số đo: ${coLuoi}, khối chấm bài: ${coCham}, câu trả lời AI: ${coAi}, `
-        + `bản trộn: ${coTron}, ô stem: ${coStem}/4). `
+        + `bản trộn: ${coTron}, ô stem: ${coStem}/4, thanh nghe: ${coNghe}). `
         + 'Selector hay luồng trang đã đổi — sửa bước CHUAN_BI trước khi tin kết quả.',
       );
     }

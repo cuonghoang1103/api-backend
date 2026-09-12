@@ -11180,6 +11180,37 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   background: color-mix(in srgb, var(--ct-warn) 9%, transparent);
 }
 
+/* `data-tone` để cùng một khung dùng cho ba loại tin: cảnh báo (mặc định),
+   xong việc, và lỗi. Ba khung riêng chỉ là ba bản sao của cùng một hộp. */
+.ct-xr-ngo[data-tone='ok'] {
+  border-left-color: var(--ct-ok);
+  background: color-mix(in srgb, var(--ct-ok) 9%, transparent);
+}
+.ct-xr-ngo[data-tone='loi'] {
+  border-left-color: var(--ct-err);
+  background: color-mix(in srgb, var(--ct-err) 9%, transparent);
+}
+
+/* ── Nghe thử & đẩy lên bàn DJ ───────────────────────── */
+.ct-xr-giao {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+}
+.ct-xr-nghe {
+  /* Trình phát của Chromium có bề rộng tối thiểu riêng và KHÔNG tự co: để
+     nguyên thì ở cột 860px nó đẩy cả khối tràn ngang. `width: 100%` cộng
+     `min-width: 0` là hai thứ duy nhất ghì được nó. */
+  width: 100%;
+  min-width: 0;
+  height: 34px;
+}
+.ct-xr-giao-ten { flex-wrap: wrap; white-space: normal; }
+/* Ô tên bài là chữ, không phải con số — cần cả dòng, khác mọi ô nhập khác
+   của trang này (chúng rộng 5,5ch cho vừa "140" hay "-1.0"). */
+.ct-xr-giao-ten input { width: auto; flex: 1 1 200px; text-align: left; }
+
 /* ── Chip ghép hoà âm ────────────────────────────────── */
 .ct-xr-chip-hang { display: flex; flex-wrap: wrap; gap: 7px; min-width: 0; }
 .ct-xr-chip {

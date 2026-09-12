@@ -33,7 +33,7 @@ import { caoDoTuTen, mauVinahouse, vietMidi } from './midi';
 import { doNhip, doTong } from './nhipVaTong';
 import { moPhienTach } from './onnxChay';
 import { TAN_SO_MODEL, TEN_STEM, tachStem, type TenStem } from './tachStem';
-import { docWav, ghiWav, gopMono, type AmThanh } from './wav';
+import { docWav, ghiWav, ghiWav16, gopMono, type AmThanh } from './wav';
 
 export interface BaiDaNap {
   id: string;
@@ -473,6 +473,46 @@ export async function tronStem(
     lufs: do_.lufs,
     dinhThat: do_.dinhThat,
     giay: (Date.now() - batDau) / 1000,
+  };
+}
+
+export interface BanGiao {
+  /** Tên tệp, không kèm đường dẫn — giao diện đặt tên bài từ nó. */
+  ten: string;
+  /** Nội dung WAV 16-bit. */
+  byte: Uint8Array;
+  giay: number;
+}
+
+/** Trần đọc: tệp lớn hơn thế này gần như chắc chắn là chọn nhầm, không phải bài nhạc. */
+const TRAN_DOC = 400 * 1024 * 1024;
+
+/**
+ * Đọc một tệp kết quả rồi trả về BẢN GIAO 16-bit cho renderer.
+ *
+ * ─── Vì sao main đọc mà renderer mới là bên nghe và bên đẩy lên ───
+ * Đúng cách phân vai `ipc/music.ts` đã ghi: "renderer tải, main chỉ ghi". Máy
+ * chủ nhận tệp qua HTTP kèm token, mà token thì nằm ở renderer; đẩy việc gọi
+ * mạng xuống main nghĩa là chuyển token xuống theo, và mọi thứ đó chỉ để làm
+ * lại một đường tải lên đã chạy tốt sẵn (`TaiNhacLen`, có cả thanh tiến độ).
+ *
+ * ─── Vì sao đổi sang 16-bit ở đây ───
+ * Tệp trên đĩa là float 32-bit vì nó còn phải đi qua các bước xử lý. Bản này
+ * thì đi thẳng tới tai người và tới máy chủ: nó đã qua bộ hạn biên nên chắc
+ * chắn nằm trong ±1, và 16-bit nhỏ đúng một nửa. Một bản 5 phút là 53 MB thay
+ * vì 106 MB — chênh lệch thật khi đẩy lên bằng mạng nhà, và cũng là chênh
+ * lệch thật khi nó đi qua cầu IPC.
+ */
+export async function banGiao(duong: string): Promise<BanGiao> {
+  const tt = await fs.stat(duong);
+  if (tt.size > TRAN_DOC) throw new Error('Tệp quá lớn, không đọc nổi vào bộ nhớ');
+
+  const am = docWav((await fs.readFile(duong)).buffer as ArrayBuffer);
+  const soMau = am.kenh[0]?.length ?? 0;
+  return {
+    ten: path.basename(duong),
+    byte: new Uint8Array(ghiWav16(am)),
+    giay: soMau / am.tanSoMau,
   };
 }
 

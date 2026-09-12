@@ -37,6 +37,7 @@ import type {
 import { TRON_MAC_DINH } from '../../../shared/tronMacDinh';
 import { useSession } from '../../auth/session';
 import { docTraLoi, type TraLoiAi } from './traLoi';
+import { KetQuaAmThanh } from './KetQuaAmThanh';
 import { useDich } from '../../i18n';
 import { DUOI_NHAN, giaiMaBai, laTepNhac } from './giaiMa';
 
@@ -375,7 +376,7 @@ export function XuongRemixPage() {
       {loi && (
         <div className="ct-xr-loi" role="alert">
           <span>{loi}</span>
-          <button type="button" className="ct-btn-ghost ct-xr-x" onClick={() => setLoi(null)}
+          <button type="button" className="ct-xr-x" onClick={() => setLoi(null)}
             aria-label={dich('Đóng')}>
             <X size={14} aria-hidden />
           </button>
@@ -427,7 +428,7 @@ export function XuongRemixPage() {
               {m.coRoi && (
                 <button
                   type="button"
-                  className="ct-btn-ghost ct-xr-x"
+                  className="ct-xr-x"
                   title={dich('Xoá model để lấy lại đĩa')}
                   onClick={() => void cau.xuongRemix.xoaModel(m.ma).then(napKho)}
                 >
@@ -502,7 +503,7 @@ export function XuongRemixPage() {
                 {giayThanhPhut(bai.giay)} · {bai.soKenh === 1 ? 'mono' : 'stereo'}
               </span>
             </div>
-            <button type="button" className="ct-btn-ghost ct-xr-x" onClick={() => void dongBai()}
+            <button type="button" className="ct-xr-x" onClick={() => void dongBai()}
               title={dich('Đóng bài và xoá tệp tạm')}>
               <X size={14} aria-hidden />
             </button>
@@ -589,13 +590,13 @@ export function XuongRemixPage() {
               {dangTach ? dich('Đang tách…') : dich('Tách 4 stem')}
             </button>
             {dangTach && (
-              <button type="button" className="ct-btn-ghost"
+              <button type="button" className="ct-btn ct-btn-ghost"
                 onClick={() => void cau.xuongRemix.huyTach(bai.id)}>
                 {dich('Huỷ')}
               </button>
             )}
             {ketQua && (
-              <button type="button" className="ct-btn-ghost"
+              <button type="button" className="ct-btn ct-btn-ghost"
                 onClick={() => void cau.xuongRemix.moThuMuc(ketQua.thuMuc)}>
                 <FolderOpen size={14} aria-hidden />
                 {dich('Mở thư mục')}
@@ -669,7 +670,7 @@ export function XuongRemixPage() {
                 {dangXuat ? dich('Đang chỉnh…') : dich('Chỉnh và xuất')}
               </button>
               {xuatRa && (
-                <button type="button" className="ct-btn-ghost"
+                <button type="button" className="ct-btn ct-btn-ghost"
                   onClick={() => void cau.xuongRemix.moThuMuc(xuatRa.thuMuc)}>
                   <FolderOpen size={14} aria-hidden />
                   {dich('Mở thư mục')}
@@ -731,7 +732,7 @@ export function XuongRemixPage() {
               </button>
 
               {masterRa && (
-                <button type="button" className="ct-btn-ghost"
+                <button type="button" className="ct-btn ct-btn-ghost"
                   onClick={() => void cau.xuongRemix.moThuMuc(thuMucCua(masterRa.duong))}>
                   <FolderOpen size={14} aria-hidden />
                   {dich('Mở thư mục')}
@@ -783,6 +784,7 @@ export function XuongRemixPage() {
                 <p className="ct-muted ct-xr-nhac">
                   ⚠️ {dich('Đây không thay được tai người. Nó khớp bốn con số; nó không biết bản mix của bạn có đục ở quãng trung hay không.')}
                 </p>
+                <KetQuaAmThanh duong={masterRa.duong} bpm={pt?.bpm} camelot={pt?.tongCamelot} />
               </div>
             )}
           </div>
@@ -944,7 +946,7 @@ export function XuongRemixPage() {
                             : <Layers size={14} aria-hidden />}
                   {dangTron ? dich('Đang trộn…') : dich('Trộn lại')}
                 </button>
-                <button type="button" className="ct-btn-ghost"
+                <button type="button" className="ct-btn ct-btn-ghost"
                   onClick={() => { setCaiTron(TRON_MAC_DINH); setTronRa(null); }}>
                   {dich('Về mặc định')}
                 </button>
@@ -970,12 +972,13 @@ export function XuongRemixPage() {
                   </p>
                   <div className="ct-xr-dieu-khien">
                     <code className="ct-xr-tron-tep">{tenTep(tronRa.duong)}</code>
-                    <button type="button" className="ct-btn-ghost"
+                    <button type="button" className="ct-btn ct-btn-ghost"
                       onClick={() => void cau.xuongRemix.moThuMuc(thuMucCua(tronRa.duong))}>
                       <FolderOpen size={14} aria-hidden />
                       {dich('Mở thư mục')}
                     </button>
                   </div>
+                  <KetQuaAmThanh duong={tronRa.duong} bpm={pt?.bpm} camelot={pt?.tongCamelot} />
                 </div>
               )}
             </div>

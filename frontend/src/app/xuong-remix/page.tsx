@@ -63,6 +63,11 @@ const BUOC = [
   },
   {
     so: '8',
+    ten: 'Nghe thử, rồi đẩy thẳng lên bàn DJ',
+    chi: 'Bản trộn và bản master nghe được ngay trong app, không phải mở thư mục tìm tệp. Ưng rồi thì bấm một nút để đẩy nó lên kho Remix — bài xuất hiện luôn trong danh sách của bàn DJ hai mâm ở trang Nhạc, kèm nhịp và tông ngay trong tên để lúc đứng đánh còn biết ghép với bài nào.',
+  },
+  {
+    so: '9',
     ten: 'Kéo sang FL Studio',
     chi: 'Bấm Mở thư mục là ra ngay bốn tệp WAV 32-bit float, đặt tên sẵn. Kéo vào FL Studio, LMMS hay bất cứ phần mềm nào bạn dùng rồi bắt đầu dựng beat.',
   },

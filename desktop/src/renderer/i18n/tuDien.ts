@@ -877,6 +877,18 @@ export const TU_DIEN: Record<string, string> = {
   'Những con số này KHÔNG có trong bảng đo:': 'These numbers are NOT in the measurements:',
   'AI có thể đã tự nghĩ ra — đối chiếu lại trước khi làm theo.':
     'The AI may have invented them — check before acting on them.',
+  /* ── Nghe thử & đẩy lên bàn DJ (khâu 08) ── */
+  'Nghe thử': 'Audition',
+  'Đẩy lên bàn DJ': 'Send to the DJ deck',
+  'Đang đẩy lên…': 'Uploading…',
+  'Tên bài khi lên bàn DJ': 'Track name on the deck',
+  'Đã lên kho Remix. Mở trang Nhạc rồi chọn bài này ở danh sách của bàn DJ.':
+    'Added to the Remix library. Open the Music page and pick it from the deck list.',
+  'Mở trang Nhạc': 'Open Music',
+  'Cần đăng nhập để đẩy bài lên.': 'You need to sign in to upload.',
+  'Máy chủ trả về': 'The server returned',
+  'Mất kết nối khi đang đẩy lên.': 'Connection lost during upload.',
+
   /* ── Bàn trộn stem (GĐ 6) ── */
   'Trộn lại bốn stem': 'Mix the four stems',
   'Dọn phần trầm rò sang các stem khác, cân lại mức, và ghì cả bài xuống mỗi cú trống cái — nhịp thở đặc trưng của nhạc sàn. Xong là ra một tệp stereo để nghe thử hoặc kéo vào DAW.':

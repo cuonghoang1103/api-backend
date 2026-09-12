@@ -185,8 +185,8 @@ function SpecCard({ spec, market }: { spec: AdvisorSpec; market: Market }) {
 }
 
 /* ── Một bình luận ──────────────────────────────────────────────────────── */
-function CommentView({ c, currentUserId, onLike, onReport, onDelete, onReply, isReply }: {
-  c: AdvisorCommentDto; currentUserId?: number;
+function CommentView({ c, currentUserId, liked, likedIds, onLike, onReport, onDelete, onReply, isReply }: {
+  c: AdvisorCommentDto; currentUserId?: number; liked?: boolean; likedIds?: Set<number>;
   onLike: (id: number) => void; onReport: (id: number) => void; onDelete: (id: number) => void;
   onReply?: (c: AdvisorCommentDto) => void; isReply?: boolean;
 }) {
@@ -210,8 +210,8 @@ function CommentView({ c, currentUserId, onLike, onReport, onDelete, onReply, is
           )}
         </div>
         <div className="flex items-center gap-4 mt-1.5 px-1 text-xs text-text-muted">
-          <button onClick={() => onLike(c.id)} className="inline-flex items-center gap-1 hover:text-neon-pink transition">
-            <Heart className="w-3.5 h-3.5" /> {c.likesCount > 0 && c.likesCount}
+          <button onClick={() => onLike(c.id)} className={`inline-flex items-center gap-1 transition ${liked ? 'text-neon-pink' : 'hover:text-neon-pink'}`}>
+            <Heart className={`w-3.5 h-3.5 ${liked ? 'fill-current' : ''}`} /> {c.likesCount > 0 && c.likesCount}
           </button>
           {!isReply && onReply && (
             <button onClick={() => onReply(c)} className="inline-flex items-center gap-1 hover:text-neon-violet transition">
@@ -230,7 +230,7 @@ function CommentView({ c, currentUserId, onLike, onReport, onDelete, onReply, is
         {c.replies && c.replies.length > 0 && (
           <div className="mt-3 space-y-3">
             {c.replies.map((r) => (
-              <CommentView key={r.id} c={r} currentUserId={currentUserId} onLike={onLike} onReport={onReport} onDelete={onDelete} isReply />
+              <CommentView key={r.id} c={r} currentUserId={currentUserId} liked={likedIds?.has(r.id)} likedIds={likedIds} onLike={onLike} onReport={onReport} onDelete={onDelete} isReply />
             ))}
           </div>
         )}
@@ -249,6 +249,7 @@ function DiscussionSection({ facultyId, majorId }: { facultyId: string; majorId:
   const [image, setImage] = useState<{ file: File; preview: string } | null>(null);
   const [replyTo, setReplyTo] = useState<AdvisorCommentDto | null>(null);
   const [sending, setSending] = useState(false);
+  const [likedIds, setLikedIds] = useState<Set<number>>(new Set());
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   const load = useCallback(() => {
@@ -296,14 +297,18 @@ function DiscussionSection({ facultyId, majorId }: { facultyId: string; majorId:
 
   async function like(id: number) {
     if (!isAuthenticated) { toast.error('Đăng nhập để thích bình luận.'); return; }
-    // optimistic
-    setComments((prev) => prev.map((c) => c.id === id ? { ...c, likesCount: c.likesCount + 1 }
-      : { ...c, replies: c.replies?.map((r) => r.id === id ? { ...r, likesCount: r.likesCount + 1 } : r) }));
+    const wasLiked = likedIds.has(id);
+    const delta = wasLiked ? -1 : 1;
+    // optimistic: đổi trạng thái + số đếm theo hướng toggle
+    setLikedIds((prev) => { const n = new Set(prev); if (wasLiked) n.delete(id); else n.add(id); return n; });
+    setComments((prev) => prev.map((c) => c.id === id ? { ...c, likesCount: Math.max(0, c.likesCount + delta) }
+      : { ...c, replies: c.replies?.map((r) => r.id === id ? { ...r, likesCount: Math.max(0, r.likesCount + delta) } : r) }));
     try {
       const res = await academyAdvisorApi.likeComment(id);
-      const n = res.data.data.likesCount;
-      setComments((prev) => prev.map((c) => c.id === id ? { ...c, likesCount: n }
-        : { ...c, replies: c.replies?.map((r) => r.id === id ? { ...r, likesCount: n } : r) }));
+      const { liked, likesCount } = res.data.data;
+      setLikedIds((prev) => { const n = new Set(prev); if (liked) n.add(id); else n.delete(id); return n; });
+      setComments((prev) => prev.map((c) => c.id === id ? { ...c, likesCount }
+        : { ...c, replies: c.replies?.map((r) => r.id === id ? { ...r, likesCount } : r) }));
     } catch { load(); }
   }
   async function report(id: number) {
@@ -363,7 +368,7 @@ function DiscussionSection({ facultyId, majorId }: { facultyId: string; majorId:
       ) : (
         <div className="space-y-5">
           {comments.map((c) => (
-            <CommentView key={c.id} c={c} currentUserId={user?.id} onLike={like} onReport={report} onDelete={del} onReply={setReplyTo} />
+            <CommentView key={c.id} c={c} currentUserId={user?.id} liked={likedIds.has(c.id)} likedIds={likedIds} onLike={like} onReport={report} onDelete={del} onReply={setReplyTo} />
           ))}
         </div>
       )}

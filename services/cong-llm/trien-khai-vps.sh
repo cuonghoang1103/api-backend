@@ -70,6 +70,17 @@ cho_khoe cuonghoangdev_canh_llm
 # Chạy lại mỗi lần cũng được — chỉ bổ sung cái còn thiếu.
 docker exec cuonghoangdev_canh_llm node /app/khoi-tao.mjs
 
+# Bộ gác tự chữa: cron mỗi phút, restart container "unhealthy" (tối đa 3 lần/giờ).
+# Trỏ vào /opt/cong-llm/app nên mỗi lần triển khai tự dùng bản mới nhất.
+chmod 755 "$GOC/app/tu-chua.sh"
+cat > /etc/cron.d/cong-llm-tu-chua <<'CRON'
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+* * * * * root /opt/cong-llm/app/tu-chua.sh
+CRON
+chmod 644 /etc/cron.d/cong-llm-tu-chua
+echo "✓ bộ gác tự chữa đã cài (/etc/cron.d/cong-llm-tu-chua, log $GOC/tu-chua.log)"
+
 echo "── trạng thái canh"
 docker exec cuonghoangdev_canh_llm wget -qO- http://localhost:8080/suc-khoe; echo
 docker logs --tail 5 cuonghoangdev_canh_llm

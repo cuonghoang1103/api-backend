@@ -36,6 +36,20 @@ Chạy lại bao nhiêu lần cũng được. Script **không** đụng backend/
 Khối `location ^~ /llm/v1/` trong `nginx/nginx.conf` thì đi đường chuẩn: chỉ
 có hiệu lực sau lần `deploy-nha.sh` kế tiếp (bước 6c).
 
+## Chống phá và tự chữa
+
+- **nginx `/llm/v1`**: mỗi IP tối đa 10 request/giây (dồn được 20) và
+  **20 kết nối cùng lúc**. Vượt thì trả 429. Thử 40 request dồn một lúc thì
+  20 được qua, 20 bị chặn.
+- **Dò key**: key con dài 48 ký tự ngẫu nhiên, sai key thì New API trả 401 ngay.
+- **Lộ key**: thiệt hại có trần — tối đa hạn mức key đó mỗi cửa sổ, và không
+  bao giờ vượt quá 70% cửa sổ (phần còn lại là của web).
+- **Tự chữa** (`tu-chua.sh`, cron mỗi phút): container "unhealthy" thì
+  restart. Docker tự làm việc này chỉ khi tiến trình CHẾT, còn treo thì không.
+  Tối đa 3 lần mỗi giờ, quá thì dừng và ghi ⛔ vào `/opt/cong-llm/tu-chua.log`.
+  Container bị dừng tay thì không đụng tới.
+- **Chưa có**: chống DDoS lưu lượng lớn. Tên miền trỏ thẳng IP VPS, không qua Cloudflare.
+
 ## Lấy key con, xem log, đổi hạn mức
 
 Giao diện quản trị **không** mở ra Internet. Vào bằng SSH tunnel:

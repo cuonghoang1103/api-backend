@@ -15,11 +15,19 @@ import { useSemesters, useCoursesBySemesters } from '@/hooks/useAcademyQueries';
 import { getFaculty, getCatMajor, getCatCombo, leafSemesterPlan } from '@/data/academyCatalog';
 import { phaseOf, careerFor, COURSE_HINTS } from '@/data/academyRoadmap';
 import { useTranslation } from '@/context/LocaleContext';
-import { pickLang } from '@/lib/utils';
+import { pickLang, cn } from '@/lib/utils';
 import { isPlaceholderCode, subjectName } from '@/data/fptuCurriculum';
 import type { Course } from '@/types';
 
 export const dynamic = 'force-dynamic';
+
+/** Tầng của tháp môn học: nền tảng ở ĐÁY (rộng nhất) → chuyên sâu ở ĐỈNH. */
+const PYRAMID = [
+  { key: 'advanced', label: 'Chuyên sâu & Đồ án', sems: [7, 8, 9], color: '#a3e635', w: 'sm:w-[48%]' },
+  { key: 'ojt', label: 'Thực tập (OJT)', sems: [6], color: '#f59e0b', w: 'sm:w-[66%]' },
+  { key: 'core', label: 'Cốt lõi chuyên ngành', sems: [3, 4, 5], color: '#8b5cf6', w: 'sm:w-[84%]' },
+  { key: 'foundation', label: 'Nền tảng', sems: [1, 2], color: '#22d3ee', w: 'sm:w-full' },
+] as const;
 
 export default function CourseRoadmapPage() {
   const router = useRouter();
@@ -49,6 +57,21 @@ export default function CourseRoadmapPage() {
     () => leafSemesterPlan(facultyId, majorId, comboId).filter((s) => s.semester >= 1 && s.codes.length),
     [facultyId, majorId, comboId],
   );
+
+  // Project OJT (INT6xx) — CHỈ cho SE + Node.JS/C#. Dùng cho tháp & Kỳ 6.
+  const projectCodes = useMemo(
+    () => ((majorId === 'se' && (comboId === 'react-nodejs' || comboId === 'dotnet'))
+      ? [...coursesByCode.keys()].filter((k) => /^INT6\d\d$/.test(k)).sort()
+      : []),
+    [majorId, comboId, coursesByCode],
+  );
+  const isProject = (code: string) => projectCodes.includes(code.trim().toUpperCase());
+
+  const phaseGroups = useMemo(() => PYRAMID.map((ph) => {
+    let codes = plan.filter((s) => (ph.sems as readonly number[]).includes(s.semester)).flatMap((s) => s.codes).filter((c) => !isPlaceholderCode(c));
+    if (ph.key === 'ojt') codes = [...codes, ...projectCodes];
+    return { ...ph, codes: [...new Set(codes)] };
+  }), [plan, projectCodes]);
 
   const [selected, setSelected] = useState<string | null>(null);
   const selCourse = selected ? coursesByCode.get(selected.trim().toUpperCase()) : undefined;
@@ -102,6 +125,48 @@ export default function CourseRoadmapPage() {
           </p>
         </div>
 
+        {/* THÁP môn học — nhìn tổng quan tầm quan trọng theo tầng */}
+        {plan.length > 0 && (
+          <div className="rounded-3xl border border-darkborder bg-darkcard p-5 sm:p-8">
+            <h2 className="text-lg font-bold text-text-primary">🔺 Tháp môn học — tầm quan trọng theo tầng</h2>
+            <p className="text-xs text-text-muted mt-1">Nền tảng ở <strong className="text-text-secondary">đáy</strong> (rộng nhất — học chắc, đỡ cả chương trình) → chuyên sâu &amp; đồ án ở <strong className="text-text-secondary">đỉnh</strong>. Bấm một môn để xem môn đó cho bạn gì &amp; đóng góp gì cho nghề.</p>
+            <div className="mt-6 flex flex-col items-center gap-2.5" style={{ perspective: '1200px' }}>
+              {phaseGroups.map((ph) => (
+                <div key={ph.key} className={cn('w-full', ph.w)}>
+                  <div
+                    className="rounded-2xl px-3 py-3 text-center"
+                    style={{
+                      background: `linear-gradient(180deg, ${ph.color}2e, ${ph.color}0f)`,
+                      border: `1px solid ${ph.color}66`,
+                      boxShadow: `0 12px 26px -12px ${ph.color}70, inset 0 1px 0 ${ph.color}55`,
+                    }}
+                  >
+                    <p className="text-[11px] font-bold uppercase tracking-wide" style={{ color: ph.color }}>{ph.label}</p>
+                    <div className="mt-2 flex flex-wrap justify-center gap-1.5">
+                      {ph.codes.length === 0 ? <span className="text-[11px] text-text-muted">—</span> : ph.codes.map((code) => {
+                        const c = coursesByCode.get(code.trim().toUpperCase());
+                        const proj = isProject(code);
+                        return (
+                          <button
+                            key={code}
+                            onClick={() => setSelected(code)}
+                            title={c ? pickLang(c.title, locale) : code}
+                            className={cn('px-2 py-1 rounded-lg text-[11px] font-semibold border transition hover:brightness-125 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan',
+                              proj ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' : 'bg-black/30 text-text-primary border-white/10 hover:border-white/25')}
+                          >
+                            {proj && '🚀 '}{code}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="mt-4 text-center text-xs text-text-muted">Chi tiết đầy đủ theo từng kỳ ở ngay bên dưới ↓</p>
+          </div>
+        )}
+
         {plan.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-darkborder p-8 text-center text-text-secondary">
             Chưa có khung lộ trình cho lựa chọn này. Hãy chọn ngành hẹp cụ thể rồi quay lại.
@@ -113,7 +178,7 @@ export default function CourseRoadmapPage() {
             <div className="space-y-6">
               {plan.map(({ semester, codes }) => {
                 const ph = phaseOf(semester);
-                const real = codes.filter((c) => !isPlaceholderCode(c));
+                const real = [...codes.filter((c) => !isPlaceholderCode(c)), ...(semester === 6 ? projectCodes : [])];
                 return (
                   <div key={semester} className="relative">
                     <span className="absolute -left-4 sm:-left-6 top-1.5 w-3.5 h-3.5 rounded-full ring-4 ring-[#050314]" style={{ background: ph.color }} aria-hidden />
@@ -128,17 +193,19 @@ export default function CourseRoadmapPage() {
                       {real.map((code) => {
                         const c = coursesByCode.get(code.trim().toUpperCase());
                         const name = c ? pickLang(c.title, locale) : (subjectName(code) ?? code);
+                        const proj = isProject(code);
                         return (
                           <button
                             key={code}
                             onClick={() => setSelected(code)}
                             className="text-left rounded-xl border bg-darkcard p-3 hover:bg-white/[0.04] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan"
-                            style={{ borderColor: `${ph.color}44` }}
+                            style={{ borderColor: proj ? '#10b98166' : `${ph.color}44` }}
                           >
                             <div className="flex items-center justify-between gap-2">
-                              <span className="font-mono text-xs font-semibold" style={{ color: ph.color }}>{code}</span>
-                              {c ? <span className="text-[10px] px-1.5 py-0.5 rounded bg-neon-green/10 text-neon-green border border-neon-green/30">có bài</span>
-                                 : <span className="text-[10px] text-text-muted">khung</span>}
+                              <span className="font-mono text-xs font-semibold" style={{ color: proj ? '#34d399' : ph.color }}>{proj && '🚀 '}{code}</span>
+                              {proj ? <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">PROJECT</span>
+                                : c ? <span className="text-[10px] px-1.5 py-0.5 rounded bg-neon-green/10 text-neon-green border border-neon-green/30">có bài</span>
+                                : <span className="text-[10px] text-text-muted">khung</span>}
                             </div>
                             <p className="text-sm text-text-primary mt-1 line-clamp-2">{name}</p>
                           </button>

@@ -130,14 +130,28 @@ export default function AcademyPage() {
    * gắn cờ isOld — để SV khoá cũ vẫn tìm được môn đã có bài (VD CSI104 cạnh CSI106),
    * SV khoá mới thấy mã mới. Cả hai cùng một kỳ, tự chọn cái mình học.
    */
-  const semCourses = (semId: number): { course: Course; isOld: boolean }[] => {
+  // Project OJT (INT601–INT610) — dự án gợi ý cho kỳ Thực tập, KHÔNG nằm trong
+  // khung giáo trình nên bị leafCodes lọc mất; luôn hiện lại (khối IT), gắn cờ project.
+  const isProjectCode = (c: Course) => /^INT6\d\d$/i.test((c.courseCode || '').trim());
+  const semCourses = (semId: number): { course: Course; isOld: boolean; isProject: boolean }[] => {
     const list = coursesBySemester[semId] || [];
-    if (!leafCodes) return list.map((c) => ({ course: c, isOld: false }));
+    if (!leafCodes) return list.map((c) => ({ course: c, isOld: false, isProject: isProjectCode(c) }));
     const codeOf = (c: Course) => (c.courseCode || '').trim().toUpperCase();
     const inLeaf = list.filter((c) => leafCodes.has(codeOf(c)));
     const leafTitles = new Set(inLeaf.map((c) => normTitle(c.title)).filter(Boolean));
     const oldEquiv = list.filter((c) => !leafCodes.has(codeOf(c)) && normTitle(c.title) && leafTitles.has(normTitle(c.title)));
-    return [...inLeaf.map((c) => ({ course: c, isOld: false })), ...oldEquiv.map((c) => ({ course: c, isOld: true }))];
+    // Project chỉ hiện cho SE (CNTT) + combo Node.JS hoặc C#/.NET (đúng loại project
+    // web/app/API này) — không đổ vào ngành/combo khác.
+    const showProjects = profile.faculty === 'it' && profile.major === 'se'
+      && (profile.combo === 'react-nodejs' || profile.combo === 'dotnet');
+    const projects = showProjects
+      ? list.filter((c) => isProjectCode(c) && !leafCodes.has(codeOf(c)))
+      : [];
+    return [
+      ...inLeaf.map((c) => ({ course: c, isOld: false, isProject: isProjectCode(c) })),
+      ...oldEquiv.map((c) => ({ course: c, isOld: true, isProject: false })),
+      ...projects.map((c) => ({ course: c, isOld: false, isProject: true })),
+    ];
   };
   const shownTotal = useMemo(
     () => (leafCodes ? semesters.reduce((a, s) => a + semCourses(s.id).length, 0) : totalCourses),
@@ -329,11 +343,12 @@ export default function AcademyPage() {
                     </button>
                     {isOpen && (
                       <div className="border-t border-darkborder divide-y divide-darkborder/60">
-                        {courses.map(({ course, isOld }) => (
+                        {courses.map(({ course, isOld, isProject }) => (
                           <Link key={course.id} href={`/courses/${course.slug}`} className="block px-4 py-3 hover:bg-neon-violet/10 transition">
                             <p className="text-sm font-medium text-text-primary flex items-center gap-1.5">
                               {course.courseCode || 'COURSE'}
                               {isOld && <span className="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400 text-[10px] font-semibold border border-amber-500/30">OLD</span>}
+                              {isProject && <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 text-[10px] font-semibold border border-emerald-500/30">🚀 PROJECT</span>}
                             </p>
                             <p className="text-sm text-text-secondary line-clamp-2">{pickLang(course.title, locale)}</p>
                           </Link>
@@ -368,11 +383,11 @@ export default function AcademyPage() {
                     </div>
                   ) : (
                     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                      {courses.map(({ course, isOld }) => (
+                      {courses.map(({ course, isOld, isProject }) => (
                         <Link
                           key={course.id}
                           href={`/courses/${course.slug}`}
-                          className={cn('group rounded-2xl border bg-darkbg/70 hover:border-neon-violet/40 transition overflow-hidden', isOld ? 'border-amber-500/40' : 'border-darkborder')}
+                          className={cn('group rounded-2xl border bg-darkbg/70 hover:border-neon-violet/40 transition overflow-hidden', isProject ? 'border-emerald-500/40' : isOld ? 'border-amber-500/40' : 'border-darkborder')}
                         >
                           <div className="aspect-video bg-gradient-to-br from-neon-indigo/20 via-neon-violet/10 to-transparent flex items-center justify-center overflow-hidden relative">
                             {course.thumbnailUrl ? (
@@ -385,7 +400,12 @@ export default function AcademyPage() {
                             ) : (
                               <PlayCircle className="w-12 h-12 text-white/80 group-hover:scale-110 transition-transform relative z-10" />
                             )}
-                            {isOld && (
+                            {isProject && (
+                              <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-emerald-500/90 text-black text-[11px] font-bold shadow" title="Dự án gợi ý cho kỳ thực tập — không phải môn trong giáo trình">
+                                🚀 PROJECT
+                              </span>
+                            )}
+                            {isOld && !isProject && (
                               <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-amber-500/90 text-black text-[11px] font-bold shadow" title="Mã môn khoá cũ — vẫn còn bài học">
                                 OLD · khoá cũ
                               </span>
@@ -393,7 +413,7 @@ export default function AcademyPage() {
                           </div>
                           <div className="p-4 space-y-3">
                             <div className="flex items-center justify-between gap-2">
-                              <span className={cn('px-2.5 py-1 rounded-full text-xs font-semibold', isOld ? 'bg-amber-500/15 text-amber-400' : 'bg-neon-violet/10 text-neon-violet')}>
+                              <span className={cn('px-2.5 py-1 rounded-full text-xs font-semibold', isProject ? 'bg-emerald-500/15 text-emerald-400' : isOld ? 'bg-amber-500/15 text-amber-400' : 'bg-neon-violet/10 text-neon-violet')}>
                                 {course.courseCode || semester.code}
                               </span>
                               <span className="text-xs text-text-muted">{course.totalLessons || 0} lessons</span>

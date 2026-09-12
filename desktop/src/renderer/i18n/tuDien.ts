@@ -860,4 +860,67 @@ export const TU_DIEN: Record<string, string> = {
     '**{n}** changes need your attention — the app can’t resend them on its own.',
   'Gửi lỗi (tự thử lại)': 'Failed to send (retrying)',
   'Bỏ thay đổi này': 'Discard this change',
+  // ── Xưởng Remix ─────────────────────────────────────────
+  'Xưởng Remix': 'Remix Studio',
+  'Không nạp được bài — main không trả về phiên nào.':
+    'The track could not be loaded — the main process returned no session.',
+  'Xưởng Remix chỉ chạy trong app desktop': 'Remix Studio only runs in the desktop app',
+  'Trang này cần đọc ghi tệp trên máy, thứ mà trình duyệt không cho phép.':
+    'This page needs to read and write files on your machine, which a browser will not allow.',
+  'Tách giọng, đo nhịp và tông, chấm bài — rồi kéo thẳng sang FL Studio.':
+    'Split vocals, measure tempo and key, grade your mix — then drag straight into FL Studio.',
+  'Model tách stem': 'Stem separation model',
+  'Tải về': 'Download',
+  // 'Đang tải…' đã có ở trên với nghĩa *Loading…* (đang nạp dữ liệu). Ở đây là
+  // *Downloading…* (đang kéo tệp model về). Cùng khoá thì TypeScript báo trùng và
+  // chọn bừa một nghĩa thì một trong hai chỗ sai — đúng ca mà tiền tố ngữ cảnh lo.
+  'taimodel|Đang tải…': 'Downloading…',
+  'Xoá model để lấy lại đĩa': 'Delete the model to free up disk space',
+  'Kéo một bài nhạc vào đây': 'Drop a track here',
+  'mp3 · m4a · wav · flac · ogg — bài nào cũng được':
+    'mp3 · m4a · wav · flac · ogg — any track works',
+  'Không đọc được định dạng này. Thử mp3, m4a, wav hay flac.':
+    'That format cannot be read. Try mp3, m4a, wav or flac.',
+  'Đang đọc bài…': 'Reading track…',
+  'Chọn tệp': 'Choose a file',
+  'Bài đang mở': 'Open track',
+  'Đóng bài và xoá tệp tạm': 'Close the track and delete its temporary files',
+  'Nhịp': 'Tempo',
+  'Tông': 'Key',
+  'Độ to': 'Loudness',
+  'Dải động': 'Dynamic range',
+  'đỉnh thật': 'true peak',
+  'rộng stereo': 'stereo width',
+  'đáng tin': 'reliable',
+  'tạm': 'so-so',
+  'nên nghe lại': 'check by ear',
+  'Máy không chắc về tông. Đáp án xếp nhì là':
+    'The key detection is not confident. Its runner-up is',
+  ' — hai tông này dùng chung bộ nốt nên thuật toán hay nhầm. Nghe thử trước khi kéo cả bài theo.':
+    ' — these two keys share the same notes, which is exactly where this method slips. Listen before you shift the whole track.',
+  'Ghép hoà âm được với': 'Mixes harmonically with',
+  'Phổ tần': 'Frequency spectrum',
+  'Phổ tần theo dải quãng tám': 'Frequency spectrum by octave band',
+  'Tách 4 stem': 'Split into 4 stems',
+  'Đang tách…': 'Splitting…',
+  'Mở thư mục': 'Open folder',
+  'Phải tải model trước khi tách. Chọn một model ở trên rồi bấm Tải về.':
+    'Download a model before splitting. Pick one above and press Download.',
+  'khúc': 'chunk',
+  'Xong trong': 'Finished in',
+  'Tệp WAV 32-bit float — kéo thẳng vào FL Studio được.':
+    '32-bit float WAV files — drag them straight into FL Studio.',
+  // Nhãn stem: gọi qua biến (`dich(s.nhan)`) nên bộ quét của tuDien.test.ts
+  // KHÔNG thấy chúng. Thiếu ở đây thì không có phép kiểm nào đỏ, mà giao diện
+  // tiếng Anh vẫn hiện tiếng Việt — im lặng, đúng thứ phép kiểm kia sinh ra để
+  // chặn. Nên phải tự nhớ thêm vào.
+  'Giọng hát': 'Vocals',
+  'Trống': 'Drums',
+  // 'Bass' giống hệt ở hai thứ tiếng ⇒ KHÔNG đưa vào từ điển: `dich()` rơi về
+  // nguyên văn là đúng, và mục chép y nguyên bị tuDien.test.ts từ chối.
+  'Nhạc nền': 'Backing',
+  'Thứ bạn cần nhất cho một bản remix': 'What a remix needs most',
+  'Dựng fill và chuyển đoạn': 'For fills and transitions',
+  'Thường bỏ đi, thay bằng bass vinahouse': 'Usually dropped for a vinahouse bass',
+  'Đàn, kèn, và mọi thứ còn lại': 'Keys, horns and everything else',
 };

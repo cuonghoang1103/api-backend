@@ -335,6 +335,51 @@ export const saveAudioSchema = z.object({
   ext: z.enum(['mp3', 'm4a', 'webm', 'ogg', 'wav', 'flac']),
 });
 
+/* ─────────────────────────────────────────────────────────────
+ * Xưởng Remix
+ * ─────────────────────────────────────────────────────────────
+ *
+ * Renderer giải mã nhạc bằng bộ giải mã của Chromium và lấy mẫu lại về
+ * 44,1 kHz bằng `OfflineAudioContext`, rồi gửi PCM thô sang ĐÚNG MỘT LẦN.
+ * Main ghi ngay ra WAV tạm và trả về một `id`; mọi việc sau đó (phân tích,
+ * tách stem) chỉ truyền `id`.
+ *
+ * Vì sao không gửi thẳng tệp mp3: main không có bộ giải mã, và cõng ffmpeg
+ * vào bản cài là +70MB mỗi nền cho một việc renderer đã làm được sẵn.
+ *
+ * Vì sao không truyền PCM mỗi lần gọi: một bài 5 phút là ~106MB. Truyền một
+ * lần thì tốn vài trăm mili giây; truyền lại cho từng việc thì mỗi lần bấm
+ * nút là một lần đợi.
+ */
+export const napBaiSchema = z.object({
+  /** Tên hiện lên giao diện. Main KHÔNG dùng nó để đặt tên tệp. */
+  ten: z.string().min(1).max(300),
+  /**
+   * PCM float32 little-endian, xen kẽ theo mẫu (L,R,L,R…).
+   *
+   * Trần 400MB ≈ 19 phút stereo ở 44,1 kHz — đủ cho một bản nhạc dài hoặc một
+   * đoạn set, và chặn được việc một renderer bị chiếm cố làm main hết RAM.
+   */
+  mau: z.instanceof(Uint8Array)
+    .refine((b) => b.byteLength <= 400 * 1024 * 1024, 'Bài quá dài')
+    .refine((b) => b.byteLength % 4 === 0, 'PCM float32 phải chia hết cho 4'),
+  soKenh: z.number().int().min(1).max(8),
+  tanSoMau: z.number().int().positive(),
+});
+
+/** `id` phiên do main sinh bằng randomUUID — renderer chỉ trả lại y nguyên. */
+export const phienIdSchema = z.object({ id: z.string().uuid() });
+
+export const tachSchema = z.object({
+  id: z.string().uuid(),
+  /** Mã model trong `KHO_MODEL`; main đối chiếu, không nhận đường dẫn tự do. */
+  maModel: z.string().min(1).max(64),
+  /** Số luồng CPU. Máy nhà còn chạy bốn dịch vụ GPU khác nên phải hạ được. */
+  soLuong: z.number().int().min(1).max(64).optional(),
+});
+
+export const maModelSchema = z.object({ maModel: z.string().min(1).max(64) });
+
 export interface DownloadedTrack {
   trackId: number;
   ext: string;
@@ -345,6 +390,72 @@ export interface DownloadedTrack {
 export interface MusicUsage {
   count: number;
   totalBytes: number;
+}
+
+/* ── Xưởng Remix ─────────────────────────────────────────────
+   Khai lại ở đây thay vì import từ `main/nhac/*`: shared/ipc.ts được cả
+   preload và renderer nạp, mà hai chỗ đó không được kéo theo mã của main —
+   preload chạy trong hộp cát, và bundle renderer sẽ phình thêm cả bộ FFT. */
+
+export interface BaiDaNap {
+  id: string;
+  ten: string;
+  giay: number;
+  soKenh: number;
+}
+
+/** Mọi phép đo của một bài. Xem `main/nhac/amLuong.ts` để biết cách tính. */
+export interface KetQuaDoBai {
+  lufs: number;
+  dinhMau: number;
+  dinhThat: number;
+  daiDong: number;
+  rongStereo: number;
+  /** Mức mỗi dải quãng tám, dB. Khoá là tần số trung tâm. */
+  dai: Record<number, number>;
+}
+
+export interface KetQuaPhanTich {
+  bpm: number;
+  /** 0..1. Thấp nghĩa là bài không có nhịp rõ — giao diện phải nói ra. */
+  bpmTinCay: number;
+  tong: string;
+  tongCamelot: string;
+  /**
+   * 0..1. Dò tông chỉ đúng khoảng một nửa số lần, nên con số này KHÔNG được
+   * giấu đi: giao diện phải hiện nó và cho sửa tay.
+   */
+  tongTinCay: number;
+  tongNhi: string | null;
+  ghep: Array<{ ma: string; vi: string }>;
+  do: KetQuaDoBai;
+}
+
+export interface KetQuaTachRa {
+  thuMuc: string;
+  /** Đường dẫn tệp WAV từng stem, khoá là `drums` | `bass` | `other` | `vocals`. */
+  tep: Record<string, string>;
+  /** Thời gian tách, giây — hiện ra để người dùng ước lần sau. */
+  giay: number;
+}
+
+export interface MucKhoModel {
+  ma: string;
+  ten: string;
+  moTa: string;
+  /** Kích thước công bố, byte. */
+  byte: number;
+  coRoi: boolean;
+  /** Số byte thật trên đĩa; 0 khi chưa tải. */
+  byteThat: number;
+}
+
+export interface TienDoXuong {
+  id: string;
+  viec: 'tach' | 'taiModel';
+  xong: number;
+  tong: number;
+  ghiChu?: string;
 }
 
 /** Nội dung một mẫu AI, lấy từ repo gốc qua tiến trình chính. */
@@ -1003,6 +1114,17 @@ export const INVOKE_CHANNELS = {
   'music:usage': null,
   'music:clearAll': null,
 
+  'xuongRemix:napBai': napBaiSchema,
+  'xuongRemix:phanTich': phienIdSchema,
+  'xuongRemix:tach': tachSchema,
+  'xuongRemix:huyTach': phienIdSchema,
+  'xuongRemix:dongBai': phienIdSchema,
+  'xuongRemix:khoModel': null,
+  'xuongRemix:taiModel': maModelSchema,
+  'xuongRemix:xoaModel': maModelSchema,
+  /** Mở thư mục stem trong Finder/Explorer để kéo thẳng vào FL Studio. */
+  'xuongRemix:moThuMuc': z.object({ duong: z.string().min(1).max(4096) }),
+
   /* Đường dẫn tệp trong repo mẫu gốc. Tiến trình chính còn kiểm lại lần nữa —
      xem `duongAnToan()` — nên schema này chỉ là hàng rào đầu tiên. */
   'mau:noiDung': z.object({ duong: z.string().min(1).max(300) }),
@@ -1189,6 +1311,15 @@ export const EVENT_CHANNELS = [
    * rồi gọi `browser.mo` — và `web_mo` chờ tới khi thấy trình duyệt đã mở.
    */
   'agent:moWeb',
+  /**
+   * Tiến độ Xưởng Remix — tách stem và tải model.
+   *
+   * Phải là SỰ KIỆN chứ không phải giá trị trả về: tách một bài 5 phút trên CPU
+   * mất vài phút và chia thành ~50 khúc. Không bắn tiến độ thì người dùng nhìn
+   * một vòng quay bất động rồi kết luận app treo — và họ đóng app đúng lúc nó
+   * đang chạy đúng.
+   */
+  'xuongRemix:tienDo',
   /** Thông báo đẩy tới CỬA SỔ ROBOT nổi (tin nhắn, nhạc, agent xong việc). */
   'robot:tin',
   /**
@@ -1397,6 +1528,24 @@ export interface DesktopBridge {
     deleteAudio(trackId: number): Promise<void>;
     usage(): Promise<MusicUsage>;
     clearAll(): Promise<void>;
+  };
+  /**
+   * Xưởng Remix — tách stem, phân tích nhịp/tông, chấm bài theo bản mẫu.
+   *
+   * `tach()` là hàm chạy LÂU: vài phút cho một bài 5 phút trên CPU. Tiến độ đi
+   * qua sự kiện `xuongRemix:tienDo`, không qua giá trị trả về, nên renderer
+   * phải gắn listener TRƯỚC khi gọi.
+   */
+  xuongRemix: {
+    napBai(ten: string, mau: Uint8Array, soKenh: number, tanSoMau: number): Promise<BaiDaNap>;
+    phanTich(id: string): Promise<KetQuaPhanTich>;
+    tach(id: string, maModel: string, soLuong?: number): Promise<KetQuaTachRa>;
+    huyTach(id: string): Promise<boolean>;
+    dongBai(id: string): Promise<void>;
+    khoModel(): Promise<MucKhoModel[]>;
+    taiModel(maModel: string): Promise<string>;
+    xoaModel(maModel: string): Promise<void>;
+    moThuMuc(duong: string): Promise<void>;
   };
   /**
    * Agent lập trình — CHỈ tài khoản Pro (máy chủ chặn, không phải app).

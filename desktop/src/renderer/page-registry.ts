@@ -31,6 +31,7 @@ import { DienDanPage } from './features/forum/DienDanPage';
 import { DaLuuPage } from './features/saved/DaLuuPage';
 import { TrangCaNhanPage } from './features/profile/TrangCaNhanPage';
 import { MusicPage } from './features/music/MusicPage';
+import { XuongRemixPage } from './features/xuong-remix/XuongRemixPage';
 import { NotesPage } from './features/notes/NotesPage';
 import { ProPage } from './features/pro/ProPage';
 import { TechTrendsWebPage } from './features/tech-trends/TechTrendsWebPage';
@@ -54,6 +55,7 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/chat': ChatPage,
   '/cv': CvWebPage,
   '/music': MusicPage,
+  '/xuong-remix': XuongRemixPage,
   '/notes': NotesPage,
   '/pro': ProPage,
   '/tech-trends': TechTrendsWebPage,

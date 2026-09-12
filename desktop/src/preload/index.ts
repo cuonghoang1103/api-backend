@@ -33,7 +33,11 @@ import type {
   EventChannel,
   SettingKey,
   SettingValue,
+  BaiDaNap,
   DownloadedTrack,
+  KetQuaPhanTich,
+  KetQuaTachRa,
+  MucKhoModel,
   MusicUsage,
   NoiDungMau,
   NoteFileInfo,
@@ -55,6 +59,7 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'agent:event',
   'browser:trangThai',
   'agent:moWeb',
+  'xuongRemix:tienDo',
   'robot:tin',
   'robot:coDoi',
   'robot:tat',
@@ -157,6 +162,29 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('music:deleteAudio', { trackId }) as Promise<void>,
     usage: () => ipcRenderer.invoke('music:usage') as Promise<MusicUsage>,
     clearAll: () => ipcRenderer.invoke('music:clearAll') as Promise<void>,
+  },
+
+  /* Xưởng Remix. `tach` chạy vài phút — tiến độ đi qua sự kiện
+     `xuongRemix:tienDo`, phải gắn listener TRƯỚC khi gọi. */
+  xuongRemix: {
+    napBai: (ten: string, mau: Uint8Array, soKenh: number, tanSoMau: number) =>
+      ipcRenderer.invoke('xuongRemix:napBai', { ten, mau, soKenh, tanSoMau }) as Promise<BaiDaNap>,
+    phanTich: (id: string) =>
+      ipcRenderer.invoke('xuongRemix:phanTich', { id }) as Promise<KetQuaPhanTich>,
+    tach: (id: string, maModel: string, soLuong?: number) =>
+      ipcRenderer.invoke('xuongRemix:tach', { id, maModel, soLuong }) as Promise<KetQuaTachRa>,
+    huyTach: (id: string) =>
+      ipcRenderer.invoke('xuongRemix:huyTach', { id }) as Promise<boolean>,
+    dongBai: (id: string) =>
+      ipcRenderer.invoke('xuongRemix:dongBai', { id }) as Promise<void>,
+    khoModel: () =>
+      ipcRenderer.invoke('xuongRemix:khoModel') as Promise<MucKhoModel[]>,
+    taiModel: (maModel: string) =>
+      ipcRenderer.invoke('xuongRemix:taiModel', { maModel }) as Promise<string>,
+    xoaModel: (maModel: string) =>
+      ipcRenderer.invoke('xuongRemix:xoaModel', { maModel }) as Promise<void>,
+    moThuMuc: (duong: string) =>
+      ipcRenderer.invoke('xuongRemix:moThuMuc', { duong }) as Promise<void>,
   },
 
   /* Bảng chạy lệnh — xem `main/ipc/terminal.ts` để biết vì sao nó KHÔNG phải

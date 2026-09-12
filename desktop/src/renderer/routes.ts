@@ -22,6 +22,7 @@
  */
 import type { LucideIcon } from 'lucide-react';
 import {
+  AudioWaveform,
   Binary,
   Bookmark,
   BookOpen,
@@ -127,6 +128,8 @@ export const ROUTES: readonly RouteDef[] = [
     keywords: ['maker', 'robot', 'odin', 'esp32', 'phan cung'] },
   { path: '/creator', label: 'Xưởng nội dung', icon: Sparkles, group: 'lam',
     keywords: ['creator', 'studio', 'kich ban', 'video', 'xuong'] },
+  { path: '/xuong-remix', label: 'Xưởng Remix', icon: AudioWaveform, group: 'lam',
+    keywords: ['remix', 'dj', 'tach stem', 'vocal', 'bpm', 'vinahouse', 'nhac'] },
   { path: '/projects', label: 'Dự án', icon: Briefcase, group: 'lam',
     keywords: ['projects', 'du an'] },
   { path: '/repos', label: 'Kho mã', icon: Library, group: 'lam',

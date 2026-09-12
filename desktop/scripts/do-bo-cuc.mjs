@@ -600,6 +600,28 @@ await ctx.addInitScript((nn) => {
                soViecConLai: 20, models: [], mucNoLuc: [] },
     getAll: nn ? { ngonNgu: nn } : {},
     listDownloaded: [], usage: { count: 0, totalBytes: 0 },
+    /* Xưởng Remix. Trạng thái RỖNG của trang này chỉ có một vùng thả tệp — tức
+       là gần như không có gì để đo. Trạng thái ĐÔNG mới là chỗ dễ vỡ: lưới 4 ô
+       số đo, dải chip hoà âm, và mười cột phổ có nhãn. `CHUAN_BI` ở dưới thả
+       một tệp WAV dựng tại chỗ để đưa trang tới đó. */
+    khoModel: [
+      { ma: 'htdemucs-4stem', ten: 'HT-Demucs · 4 stem', byte: 1260000000,
+        moTa: 'Trống, bass, nhạc nền, giọng hát. Bản đầy đủ — chọn cái này để remix sâu.',
+        coRoi: true, byteThat: 1260000000 },
+      { ma: 'htdemucs-vocals', ten: 'HT-Demucs · chỉ giọng hát', byte: 166000000,
+        moTa: 'Chỉ tách giọng, nhẹ hơn 7,6 lần. Đủ cho phần lớn bản remix vinahouse.',
+        coRoi: false, byteThat: 0 },
+    ],
+    napBai: { id: '00000000-0000-4000-8000-000000000001', ten: 'Bài thử rất dài để xem tên có tràn ra ngoài ô không.mp3', giay: 254, soKenh: 2 },
+    phanTich: {
+      bpm: 139.8, bpmTinCay: 0.72,
+      tong: 'Am', tongCamelot: '8A', tongTinCay: 0.18, tongNhi: 'C',
+      ghep: [{ ma: '8B', vi: 'Trưởng/thứ song song' }, { ma: '9A', vi: 'Lên một quãng năm' },
+             { ma: '7A', vi: 'Xuống một quãng năm' }, { ma: '10A', vi: 'Lên hai bậc' }],
+      do: { lufs: -9.4, dinhMau: -0.2, dinhThat: 0.8, daiDong: 9.2, rongStereo: 0.31,
+            dai: { 31.5: -28.1, 63: -14.2, 125: -12.8, 250: -15.4, 500: -18.1,
+                   1000: -20.3, 2000: -22.7, 4000: -26.1, 8000: -31.5, 16000: -42.9 } },
+    },
     dsCuocDangMo: [],
     /* Danh sách việc đã lưu, NHIỀU DỰ ÁN.
        Để rỗng thì thanh bên chỉ hiện "Chưa có việc nào được lưu" — tức là mọi
@@ -676,7 +698,38 @@ const choNoiDung = async (p) => {
   ).catch(() => { /* hết giờ thì cứ đo — để phép kiểm nói ra, đừng giấu */ });
 };
 
+/**
+ * WAV 44,1 kHz stereo 1 giây, dựng bằng tay.
+ *
+ * Trang Xưởng Remix giải mã tệp bằng `decodeAudioData` của chính Chromium, nên
+ * phải là âm thanh THẬT — một bộ đệm rỗng sẽ bị từ chối và trang đứng ở trạng
+ * thái rỗng, đúng thứ ta đang cố thoát khỏi.
+ */
+function wavThu() {
+  const fs = 44100, n = fs, soKenh = 2;
+  const buf = Buffer.alloc(44 + n * soKenh * 2);
+  buf.write('RIFF', 0); buf.writeUInt32LE(36 + n * soKenh * 2, 4); buf.write('WAVE', 8);
+  buf.write('fmt ', 12); buf.writeUInt32LE(16, 16); buf.writeUInt16LE(1, 20);
+  buf.writeUInt16LE(soKenh, 22); buf.writeUInt32LE(fs, 24);
+  buf.writeUInt32LE(fs * soKenh * 2, 28); buf.writeUInt16LE(soKenh * 2, 32);
+  buf.writeUInt16LE(16, 34); buf.write('data', 36); buf.writeUInt32LE(n * soKenh * 2, 40);
+  for (let i = 0; i < n; i++) {
+    const v = Math.round(Math.sin((2 * Math.PI * 220 * i) / fs) * 12000);
+    buf.writeInt16LE(v, 44 + i * 4);
+    buf.writeInt16LE(v, 44 + i * 4 + 2);
+  }
+  return buf;
+}
+
 const CHUAN_BI = {
+  /* Đưa Xưởng Remix tới trạng thái ĐÔNG: nạp một bài rồi mới đo.
+     Trạng thái rỗng chỉ có vùng thả tệp — đo nó là đo một trang trắng. */
+  '/xuong-remix': async (p) => {
+    await p.setInputFiles('#xuong-remix-tep', {
+      name: 'bai-thu.wav', mimeType: 'audio/wav', buffer: wavThu(),
+    }).catch(() => {});
+    await p.waitForTimeout(900);
+  },
   /* Mở bảng chọn hoạt động trên dải 24 giờ. Nó từng bị khối "Đi nhanh" vẽ đè
      (lỗi tầng xếp, 07/09/2026) — mà bộ đo chỉ nhìn trang lúc TĨNH thì không
      bao giờ thấy, vì bảng đó chỉ tồn tại sau một cú bấm. */
@@ -1141,6 +1194,10 @@ const DUONG = JSON.parse(process.env.CT_TRANG ?? 'null')
       /* Mười cây cuối (22/08/2026). Đo GỐC của từng cây, cộng bốn đường TĨNH
          từng đụng ĐỘNG — nếu bảng tra xếp sai thứ tự thì chúng mở ra trang
          chi tiết rỗng chứ không phải trang danh sách, và chỉ nhìn mới biết. */
+      /* Xưởng Remix — trang dày đặc nút và một lưới 4 ô số đo, đúng loại dễ vỡ
+         nhất ở cột hẹp 860px. Bộ đo chỉ thấy trạng thái RỖNG (chưa nạp bài);
+         phần bảng số đo và dải phổ phải kiểm bằng tay với một bài thật. */
+      '/xuong-remix',
       '/maker-lab', '/creator', '/projects', '/exp-hub',
       '/finance', '/forum', '/saved', '/profile',
       '/projects/search', '/finance/debts/calendar'];

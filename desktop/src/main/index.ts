@@ -95,6 +95,12 @@ async function bootstrap(): Promise<void> {
   mainWindow = createMainWindow();
   watchNetwork();
 
+  /* Dọn tệp tạm của Xưởng Remix còn sót từ lần chạy trước. Bảng phiên nằm
+     trong bộ nhớ, nên đóng app giữa chừng là mất đường tìm lại các thư mục cũ
+     — mỗi bài vài trăm MB nằm im trên đĩa mà không gì trỏ tới. KHÔNG chờ nó:
+     dọn đĩa không được phép làm chậm lúc mở app. */
+  void import('./ipc/xuongRemix').then((m) => m.donDepLucKhoiDong());
+
   // Robot nổi — bật sau cửa sổ chính. Nó là cửa sổ hệ điều hành RIÊNG, sống
   // chừng nào app chưa thoát hẳn, kể cả khi cửa sổ chính đã đóng.
   const { moRobot, cuaSoChinh, dongRobot, robotTheoTieuDiem } = await import('./robotNoi');

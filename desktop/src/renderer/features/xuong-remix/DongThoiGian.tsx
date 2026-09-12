@@ -18,7 +18,7 @@
  * so với cái giá của việc kéo một thứ không bám tay.
  *
  * ─── Bắt nhịp theo GIÂY, không theo điểm ảnh ───
- * Xem chú thích trong `dongThoiGian.ts`. Bắt theo điểm ảnh thì cùng một thao
+ * Xem chú thích trong `hinhDong.ts`. Bắt theo điểm ảnh thì cùng một thao
  * tác ra hai kết quả khác nhau tuỳ mức phóng to.
  */
 import { useCallback, useMemo, useRef, useState } from 'react';
@@ -29,7 +29,7 @@ import { KetQuaAmThanh } from './KetQuaAmThanh';
 import {
   batNhip, catPhai, catTrai, daiTrenDong, giayMoiO, khungManh, lanTheoBai,
   soO, tiLeKeo, vachLuoi,
-} from './dongThoiGian';
+} from './hinhDong';
 
 /** Màu theo ĐƯỜNG, giống bàn làm việc và bàn trộn. */
 const MAU: Record<string, string> = {

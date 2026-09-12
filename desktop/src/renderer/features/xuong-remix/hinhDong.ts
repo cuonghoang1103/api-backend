@@ -1,6 +1,14 @@
 /**
  * Phần TÍNH của dòng thời gian: đổi giây ↔ điểm ảnh, bắt nhịp, hình mảnh.
  *
+ * ⚠️ Tên tệp CỐ Ý không phải `dongThoiGian.ts`. Nó từng mang tên đó, nằm cạnh
+ * `DongThoiGian.tsx` — chỉ khác nhau một chữ hoa. Trên Linux đó là hai tệp;
+ * trên macOS và Windows đó là MỘT, nên `import { DongThoiGian } from
+ * './DongThoiGian'` rơi vào tệp này và lượt dựng chết:
+ *     "DongThoiGian" is not exported by ".../dongThoiGian.ts"
+ * Cả `tsc`, 1210 phép kiểm, `vite build` lẫn bộ đo bố cục đều xanh — tất cả
+ * chạy trên Linux. Chốt chặn nằm ở `src/tenTepDungHoa.test.ts`.
+ *
  * Tách khỏi phần vẽ vì đây là chỗ một lỗi đi thẳng vào bản nhạc: kéo một mảnh
  * lệch nửa ô thì bản mashup lệch nhịp, mà trên màn hình nó vẫn nằm "trông như
  * đúng chỗ". Ở dạng hàm thuần thì chốt được từng con số.

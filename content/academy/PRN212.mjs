@@ -1054,7 +1054,7 @@ const c11q = quiz('prn212-quiz-11', 'Quiz 11 — Concurrency', 'Quiz 11 — Đ�
 // + tro giao trinh/slide day du tren FLM). KHONG upload PDF ban quyen len CDN.
 const doc = (slug, title, description, pairs) => ({
   title, slug, type: 'DOCUMENT', description,
-  content: pairs.map(([en, vi]) => bi(en, vi)),
+  content: pairs.map(([en, vi]) => bi(en, vi)).join('\n'),
 });
 const taiLieu = doc('prn212-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
   'Tổng hợp tài liệu học môn: giáo trình & slide chính thức (trên FLM), sách tham khảo, tài liệu chính thức miễn phí và lộ trình tự học.',

@@ -591,6 +591,21 @@ export interface KetQuaDungRa {
   dinhThat: number;
 }
 
+export interface MauNhac {
+  id: string;
+  tep: string;
+  duong: string;
+  byte: number;
+  ten: string;
+  giayPhep: string;
+  tacGia: string;
+  nguon: string;
+  url: string;
+  themLuc: number;
+  /** `false` = KHÔNG BIẾT giấy phép, không phải "được dùng thoải mái". */
+  coGiayPhep: boolean;
+}
+
 export interface KetQuaXuatTep {
   duong: string;
   ten: string;
@@ -1335,6 +1350,18 @@ export const INVOKE_CHANNELS = {
     }).optional(),
   }),
   'xuongRemix:dsBai': z.object({}),
+  'xuongRemix:dsMau': z.object({}),
+  /* Không nhận đường dẫn từ renderer: main tự mở hộp thoại. Renderer chỉ nói
+     "người dùng muốn thêm mẫu" và kèm giấy phép họ đã khai. */
+  'xuongRemix:themMau': z.object({
+    giayPhep: z.enum(['cc0', 'cc-by', 'cc-by-sa', 'cc-by-nc', 'cong-cong', 'tu-thu', 'khac']),
+    ten: z.string().max(200).optional(),
+    tacGia: z.string().max(200).optional(),
+    nguon: z.string().max(200).optional(),
+    url: z.string().max(2048).optional(),
+  }),
+  'xuongRemix:xoaMau': z.object({ tep: z.string().min(1).max(300) }),
+  'xuongRemix:napMau': z.object({ tep: z.string().min(1).max(300) }),
   'xuongRemix:dungMashup': z.object({
     bpm: z.number().min(40).max(300),
     /* Chủ âm 0…11, `null` = không dịch tông mảnh nào. `nullable` chứ không
@@ -1807,6 +1834,14 @@ export interface DesktopBridge {
     banGiao(duong: string, cai?: CaiXuat): Promise<BanGiaoAmThanh>;
     xuatTep(duong: string, cai: CaiXuat): Promise<KetQuaXuatTep>;
     dsBai(): Promise<BaiTrongKho[]>;
+    dsMau(): Promise<MauNhac[]>;
+    /** Mở hộp thoại chọn tệp. `null` khi người dùng huỷ. */
+    themMau(meta: {
+      giayPhep: string; ten?: string; tacGia?: string; nguon?: string; url?: string;
+    }): Promise<MauNhac[] | null>;
+    xoaMau(tep: string): Promise<void>;
+    /** Đọc một mẫu về renderer để nạp nó thành một bài trong xưởng. */
+    napMau(tep: string): Promise<BanGiaoAmThanh>;
     dungMashup(bd: {
       bpm: number; chuAm: number | null; manh: ManhDung[];
       ten?: string; tranDbtp?: number;

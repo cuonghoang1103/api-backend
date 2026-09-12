@@ -8,7 +8,9 @@
  */
 import { BrowserWindow, app, dialog, shell } from 'electron';
 import path from 'node:path';
-import type { MucKhoModel } from '../../shared/ipc';
+import fsp from 'node:fs/promises';
+import type { MauNhac, MucKhoModel } from '../../shared/ipc';
+import { dsMau, themMau, thuMucKho, xoaMau } from '../nhac/khoMau';
 import { KHO_MODEL, napModelTuTep, taiModel, tinhTrangKho, xoaModel } from '../nhac/taiModel';
 import {
   chinhVaXuat, donDep, donDepTatCa, huyTach, masterTheoMau, napBai, napBanMau,
@@ -145,6 +147,51 @@ export function registerXuongRemixHandlers(): void {
   handle('xuongRemix:xuatTep', ({ duong, cai }) => xuatTep(duongAnToan(duong), cai));
 
   handle('xuongRemix:dsBai', () => dsBaiTrongKho());
+
+  handle('xuongRemix:dsMau', () => dsMau(userData()));
+
+  /* Hộp thoại chạy ở MAIN — renderer không được cấp quyền đọc đĩa, và đây là
+     chỗ duy nhất của kho mẫu mà một đường dẫn ngoài thư mục app đi vào. Nhận
+     NHIỀU tệp một lượt: người ta tải cả một gói loop về rồi thêm cả nắm, và
+     giấy phép của cả nắm đó thường giống nhau. */
+  handle('xuongRemix:themMau', async (meta) => {
+    const { canceled, filePaths } = await dialog.showOpenDialog({
+      title: 'Chọn tệp nhạc để thêm vào kho mẫu',
+      properties: ['openFile', 'multiSelections'],
+      filters: [{ name: 'Tệp nhạc', extensions: ['wav', 'mp3', 'flac', 'm4a', 'aac', 'ogg', 'opus', 'aif', 'aiff'] }],
+    });
+    if (canceled || filePaths.length === 0) return null;
+    const ra: MauNhac[] = [];
+    for (const t of filePaths) {
+      /* Một tệp hỏng không được làm hỏng cả nắm — người dùng chọn 20 tệp thì
+         19 tệp lành phải vào được kho. */
+      try {
+        ra.push(await themMau(userData(), t, meta));
+      } catch (loi) {
+        console.warn('[kho mẫu] bỏ qua', t, loi);
+      }
+    }
+    return ra;
+  });
+
+  handle('xuongRemix:xoaMau', ({ tep }) => xoaMau(userData(), tep));
+
+  /* Đọc mẫu về renderer để nó nạp thành một BÀI trong xưởng. Đi qua `banGiao`
+     nên nó cũng được đổi sang WAV 16-bit — nhưng `banGiao` chỉ đọc WAV, mà kho
+     mẫu nhận cả mp3/flac. Nên ở đây trả BYTE THÔ và để renderer giải mã bằng
+     Chromium, đúng phân vai "renderer giải mã, main tính toán" của `wav.ts`. */
+  handle('xuongRemix:napMau', async ({ tep }) => {
+    const an = path.basename(tep);
+    const duong = path.join(thuMucKho(userData()), an);
+    const tt = await fsp.stat(duong);
+    if (tt.size > 300 * 1024 * 1024) throw new Error('Mẫu quá lớn');
+    return {
+      ten: an,
+      byte: new Uint8Array(await fsp.readFile(duong)),
+      giay: 0,          // renderer đo được sau khi giải mã
+      mime: 'application/octet-stream',
+    };
+  });
 
   handle('xuongRemix:dungMashup', ({ bpm, chuAm, manh, ten, tranDbtp }) =>
     dungMashup(userData(), { bpm, chuAm, manh }, {

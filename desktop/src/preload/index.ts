@@ -37,6 +37,7 @@ import type {
   KetQuaXuatTep,
   BaiTrongKho,
   KetQuaDungRa,
+  MauNhac,
   DownloadedTrack,
   KetQuaPhanTich,
   KetQuaTachRa,
@@ -209,6 +210,13 @@ const bridge: DesktopBridge = {
     xuatTep: (duong: string, cai: CaiXuat) =>
       ipcRenderer.invoke('xuongRemix:xuatTep', { duong, cai }) as Promise<KetQuaXuatTep>,
     dsBai: () => ipcRenderer.invoke('xuongRemix:dsBai', {}) as Promise<BaiTrongKho[]>,
+    dsMau: () => ipcRenderer.invoke('xuongRemix:dsMau', {}) as Promise<MauNhac[]>,
+    themMau: (meta: Parameters<DesktopBridge['xuongRemix']['themMau']>[0]) =>
+      ipcRenderer.invoke('xuongRemix:themMau', meta) as Promise<MauNhac[] | null>,
+    xoaMau: (tep: string) =>
+      ipcRenderer.invoke('xuongRemix:xoaMau', { tep }) as Promise<void>,
+    napMau: (tep: string) =>
+      ipcRenderer.invoke('xuongRemix:napMau', { tep }) as Promise<BanGiaoAmThanh>,
     dungMashup: (bd: Parameters<DesktopBridge['xuongRemix']['dungMashup']>[0]) =>
       ipcRenderer.invoke('xuongRemix:dungMashup', bd) as Promise<KetQuaDungRa>,
     song: (id: string, soCot: number) =>

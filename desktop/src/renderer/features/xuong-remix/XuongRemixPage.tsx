@@ -41,6 +41,7 @@ import { KetQuaAmThanh } from './KetQuaAmThanh';
 import { BanLamViec } from './BanLamViec';
 import { BanTron } from './BanTron';
 import { DongThoiGian } from './DongThoiGian';
+import { KhoMau } from './KhoMau';
 import type { MayPhatStem } from './mayPhat';
 import type { BaiTrongKho } from '../../../shared/ipc';
 import { useDich } from '../../i18n';
@@ -234,6 +235,21 @@ export function XuongRemixPage() {
       setDangNap(false);
     }
   }, [cau, dich]);
+
+  /**
+   * Nạp một mẫu trong kho thành một BÀI trong xưởng.
+   *
+   * Đi qua đúng đường `nap` đã có chứ không dựng một đường nạp thứ hai:
+   * đường kia đã lo giải mã, lấy mẫu lại về 44,1 kHz, đo nhịp và tông, và làm
+   * mới kho bài. Một đường thứ hai là một chỗ nữa để quên một trong bốn việc.
+   */
+  const dungMau = useCallback(async (tep: string, ten: string) => {
+    if (!cau) return;
+    const bg = await cau.xuongRemix.napMau(tep);
+    /* `slice()` để lấy một ArrayBuffer riêng: mảng qua cầu IPC có thể là khung
+       nhìn lên một bộ đệm lớn hơn. */
+    await nap(new File([bg.byte.slice().buffer], ten || bg.ten));
+  }, [cau, nap]);
 
   const tach = useCallback(async () => {
     if (!cau || !bai) return;
@@ -1042,6 +1058,7 @@ export function XuongRemixPage() {
         <p className="ct-muted ct-xr-nhac">
           {dich('Nạp vài bài, cắt lấy đoạn hay của từng bài, rồi xếp chồng lên nhau. App tự kéo mọi mảnh về cùng một nhịp — và cùng một tông nếu bạn chọn.')}
         </p>
+        <KhoMau onDung={dungMau} />
         <DongThoiGian kho={khoBai} dangTaiKho={dangTaiKho} onLamMoiKho={() => void lamMoiKho()} />
       </section>
     </div>

@@ -1091,4 +1091,27 @@ export const TU_DIEN: Record<string, string> = {
     'The format nothing ever refuses. Big, but guaranteed to open.',
   'Nguyên xi thứ xưởng tính ra. Dùng khi còn phải chỉnh tiếp trong FL Studio.':
     'Exactly what the workshop computed. Use it when there is still work to do in FL Studio.',
+
+  // ── Kho mẫu có giấy phép ────────────────────────────────
+  'Ba nguồn này cho phép remix — nhưng mỗi bài một giấy phép, đọc nhãn trên chính trang đó. Tải về rồi khai giấy phép ở đây; app giữ nó cạnh tệp để sáu tháng sau bạn còn biết bài nào đem đi diễn được.':
+    'These three allow remixing — but the licence is per track, so read the label on the page itself. Download, then record the licence here; the app keeps it next to the file so that six months from now you still know what you may play out.',
+  'Đường dẫn': 'Link',
+  'Chọn tệp để thêm': 'Pick files to add',
+  'Kho mẫu còn trống.': 'The sample library is empty.',
+  'mất tệp giấy phép': 'licence file missing',
+  'Dùng bài này': 'Use this one',
+  'Xoá khỏi kho': 'Remove from the library',
+  // 'Giấy phép' / 'Tác giả' / 'Nguồn' ĐÃ CÓ ở phần khác của từ điển — thêm
+  // lần nữa thì mục sau đè mục trước, im lặng. Phép kiểm khoá trùng bắt được.
+  // Nhãn giấy phép và mô tả nguồn đi qua biến (`dich(g.ten)`) nên bộ quét
+  // KHÔNG thấy — cùng chỗ hụt với nhãn stem. Phải tự nhớ.
+  'Phạm vi công cộng': 'Public domain',
+  'Tự thu': 'Recorded it myself',
+  'Chưa rõ': 'Unknown',
+  'A cappella và stem đăng lên ĐỂ người khác remix':
+    'A cappellas and stems posted FOR other people to remix',
+  'Sample, loop, one-shot — phần lớn CC0 hoặc CC BY':
+    'Samples, loops and one-shots — mostly CC0 or CC BY',
+  'Nhạc trọn bài, phần lớn công cộng hoặc CC':
+    'Full tracks, mostly public domain or CC',
 };

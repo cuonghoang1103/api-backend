@@ -11865,6 +11865,91 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   .ct-xr-bt-cot { flex: 0 0 116px; }
 }
 
+/* ── Kho mẫu có giấy phép ─────────────────────────────── */
+.ct-xr-km { display: flex; flex-direction: column; gap: 9px; min-width: 0; }
+
+.ct-xr-km-nguon { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; }
+
+.ct-xr-km-trang {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  flex: 1 1 210px;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-surface-2);
+  color: var(--ct-text-muted);
+  text-align: left;
+  cursor: pointer;
+}
+.ct-xr-km-trang:hover { border-color: var(--ct-accent); color: var(--ct-text); }
+.ct-xr-km-trang b { font-size: 12.5px; color: var(--ct-text); }
+.ct-xr-km-trang span { font-size: 11px; }
+.ct-xr-km-trang svg { align-self: flex-end; margin-top: -12px; opacity: 0.6; }
+
+.ct-xr-km-them {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px 12px;
+  min-width: 0;
+  padding: 9px 11px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: color-mix(in srgb, var(--ct-bg) 55%, #000);
+}
+.ct-xr-km-them .ct-xr-dtg-o input { width: 130px; }
+/* Ô đường dẫn co giãn: URL dài hơn hẳn ba ô kia, và ép nó bằng 130px thì
+   người dùng không đọc lại được thứ mình vừa dán. */
+.ct-xr-km-url { flex: 1 1 220px; min-width: 0; }
+.ct-xr-km-url input { flex: 1 1 auto; width: auto !important; min-width: 0; }
+
+.ct-xr-km-ds {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 7px;
+  min-width: 0;
+}
+.ct-xr-km-o {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-surface-2);
+}
+/* Viền cảnh báo cho thứ KHÔNG diễn được. Nó phải nhìn ra ở một cái liếc, chứ
+   không phải đọc chữ mới biết — cả cái kho này tồn tại vì câu hỏi đó. */
+.ct-xr-km-o[data-canh] { border-color: color-mix(in srgb, var(--ct-warn) 55%, transparent); }
+.ct-xr-km-o > b {
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ct-xr-km-o > code { font-size: 10.5px; color: var(--ct-text-faint); }
+
+.ct-xr-km-gp {
+  align-self: flex-start;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--ct-warn) 20%, transparent);
+  color: var(--ct-warn);
+}
+.ct-xr-km-gp[data-dien] {
+  background: color-mix(in srgb, var(--ct-ok) 18%, transparent);
+  color: var(--ct-ok);
+}
+
+.ct-xr-km-nut { display: flex; align-items: center; gap: 5px; margin-top: 3px; }
+
 /* ══════════════════════════════════════════════════════════
    DÒNG THỜI GIAN — ghép nhiều bài
    ══════════════════════════════════════════════════════════ */

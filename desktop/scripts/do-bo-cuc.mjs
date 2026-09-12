@@ -736,6 +736,18 @@ await ctx.addInitScript((nn) => {
       return { ten: 'Bài thử rất dài để xem tên có tràn ra ngoài ô không (tron).wav',
                byte: new Uint8Array(b), giay: 254, mime: 'audio/wav' };
     })(),
+    /* Kho MẪU. Một mẫu CÓ giấy phép và một mẫu MẤT tệp giấy phép: nhánh cảnh
+       báo (viền vàng + chữ "mất tệp giấy phép") chỉ tồn tại ở mẫu thứ hai, và
+       nó là dòng dài nhất của cả ô. */
+    dsMau: [
+      { id: 'k1', tep: 'Giọng nữ 128 BPM.wav', duong: '/tmp/x/kho-mau/a.wav',
+        byte: 18_400_000, ten: 'Giọng nữ 128 BPM · a cappella', giayPhep: 'cc-by',
+        tacGia: 'Một Ai Đó Trên ccMixter', nguon: 'ccMixter',
+        url: 'https://ccmixter.org/files/x/12345', themLuc: 1757000000000, coGiayPhep: true },
+      { id: 'k2', tep: 'loop khong ro nguon.mp3', duong: '/tmp/x/kho-mau/b.mp3',
+        byte: 2_100_000, ten: 'loop khong ro nguon', giayPhep: 'khac',
+        tacGia: '', nguon: '', url: '', themLuc: 1756000000000, coGiayPhep: false },
+    ],
     /* Kho bài cho dòng thời gian. HAI bài khác nhịp khác tông — bản mashup
        một bài không có gì để ghép, và cũng không dựng ra được làn thứ hai
        (khối cao nhất của khối này). Tên dài có chủ ý. */
@@ -1003,6 +1015,8 @@ const CHUAN_BI = {
     /* Bàn trộn giờ là bốn cột đứng + một cột tổng, mỗi cột ba núm xoay. Đếm
        núm chứ không đếm cột: cột rỗng vẫn là một cột, còn núm thì chỉ có khi
        `NumXoay` thật sự dựng ra. 4 đường × 3 núm = 12. */
+    const soMau = await p.locator('.ct-xr-km-o').count();
+    const coCanh = await p.locator('.ct-xr-km-o[data-canh]').count();
     const soManh = await p.locator('.ct-xr-dtg-manh').count();
     const soLanDtg = await p.locator('.ct-xr-dtg-lan').count();
     const coChiTiet = await p.locator('.ct-xr-dtg-chitiet').count();
@@ -1028,7 +1042,7 @@ const CHUAN_BI = {
     }
     if (!coCham || !coLuoi || !coAi || !coTron || coStem < 4 || !coNghe
         || !coBan || soLan < 4 || soCl < 8 || soNum < 12 || soCot < 5
-        || soManh < 3 || soLanDtg < 2 || !coChiTiet) {
+        || soManh < 3 || soLanDtg < 2 || !coChiTiet || soMau < 2 || !coCanh) {
       throw new Error(
         `chuẩn bị /xuong-remix KHÔNG tới được trạng thái đông `
         + `(lưới số đo: ${coLuoi}, khối chấm bài: ${coCham}, câu trả lời AI: ${coAi}, `
@@ -1036,7 +1050,8 @@ const CHUAN_BI = {
         + `transport: ${coBan}, dải track: ${soLan}/4, nút chất lượng: ${soCl}/8, `
         + `núm xoay: ${soNum}/12, cột bàn trộn: ${soCot}/5, `
         + `mảnh: ${soManh}/3, làn dòng thời gian: ${soLanDtg}/2, `
-        + `bảng chi tiết mảnh: ${coChiTiet}). `
+        + `bảng chi tiết mảnh: ${coChiTiet}, mẫu: ${soMau}/2, `
+        + `mẫu cảnh báo: ${coCanh}). `
         + 'Selector hay luồng trang đã đổi — sửa bước CHUAN_BI trước khi tin kết quả.',
       );
     }

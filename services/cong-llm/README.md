@@ -69,20 +69,30 @@ export CUONG_LLM_KEY=sk-...
 ```
 
 Trong OpenCode, gõ `/models` là thấy đủ 6 model của rambo. Ngữ cảnh khai
-950k token (Haiku 4.5 chỉ có 200k).
+**180k**: rambo từ chối mọi lượt quá 190k token (xem bên dưới). Khai sát
+dưới mức đó thì OpenCode tự nén hội thoại trước khi đụng trần.
 
-## Những điều đã đo, và chưa đo
+## Giới hạn NGẦM của rambo — đo thật 13/09/2026
 
-Đã thử trọn đường OpenCode 1.18 → nginx → New API → canh → rambo giả ở máy local:
-- stream chạy đúng
-- hạn mức trừ đúng theo giá model
-- tới ngưỡng thì cổng đóng, và OpenCode hiện đúng câu lý do sau ~70 giây (thử lại 5 lần)
-- key đã cạn được bật lại khi cửa sổ mới bắt đầu
-- nginx vẫn nạp được config khi New API vắng mặt (lúc đó riêng `/llm` trả 502)
+Đo bằng mã đặt ở đầu và cuối văn bản, gọi thẳng rambo:
 
-Chưa đo trên rambo thật:
-- rambo có nhận ngữ cảnh **trên 200k** không
-- `usedTokens` của rambo đếm token vào hay chỉ token ra (trang của họ đọc
-  `usedTokens ?? outputTokens`)
+| Giới hạn | Rambo làm gì | canh xử lý |
+|---|---|---|
+| Mỗi **khối** nội dung ~12.000 ký tự (~3.200 token) | **cắt ngầm**. Tin nhắn hay kết quả tool 40k / 200k / 1,2 triệu ký tự đều chỉ còn ~3.200 token | chia khối > 8.000 ký tự thành nhiều khối (`sua-yeu-cau.mjs`) |
+| Chỉ giữ **~58 tin nhắn** cuối | **bỏ ngầm** tin cũ, kể cả yêu cầu gốc | quá 56 tin thì gộp các lượt cũ thành một khối lịch sử |
+| **190k token** mỗi lượt | trả 400 `Request context is too large for the 190K input limit` | không xử lý — OpenCode khai 180k |
+| `max_tokens` | bỏ qua; luôn bật thinking | — |
+
+Sau khi canh nắn yêu cầu, qua key con thật:
+- khối 40k: đúng ✓
+- kết quả tool 40k: đúng ✓
+- 80 cặp tin nhắn: thấy đủ 80
+- một tin nhắn ~170k token: thấy cả mã đầu lẫn mã cuối, trong 35 giây
+
+Rambo tính hạn mức là `usedTokens = token ra + token vào × 0,25`, trần 2.000.000
+mỗi cửa sổ 5 giờ. Cửa sổ bắt đầu từ lượt gọi đầu tiên.
+
+⚠️ **Hai giới hạn đầu cũng đang đè lên các tính năng AI của cuongthai.com**,
+vì backend gọi rambo thẳng, không qua canh.
 
 Mức 10 USD/cửa sổ là **ước lượng**. Nên chỉnh lại sau vài ngày, dựa vào log của New API.

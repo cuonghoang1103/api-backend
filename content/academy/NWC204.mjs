@@ -217,6 +217,85 @@ const c3q = quiz('nwc204-quiz-3', 'Quiz 3 — Devices & troubleshooting|||Quiz 3
   { id: 'q3', question: 'Kiểm host có tới được không dùng lệnh?', options: ['ping', 'hostname', 'no shutdown', 'enable secret'], correctIndex: 0, explanation: 'ping kiểm khả năng tới (tầng 3); traceroute xem đường đi.' },
 ]);
 
+const taiLieu = doc('nwc204-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">NWC204 · 📚 Resource hub</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">One hub for learning computer networking on a CCNA foundation: the official syllabus &amp; slides, books, free official courses, video channels, tools, and a self-study roadmap.</p>
+<h3>📘 Syllabus &amp; slides</h3>
+<p>Sign in to <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) with your FPTU account to read the official NWC204 syllabus and lecture slides.</p>
+<h3>📗 Books</h3>
+<ul>
+<li><a href="https://www.ciscopress.com/store/ccna-200-301-official-cert-guide-library-9780135792735" target="_blank" rel="noopener">CCNA 200-301 Official Cert Guide</a> — Wendell Odom, Cisco Press: the standard exam companion.</li>
+<li><a href="https://gaia.cs.umass.edu/kurose_ross/index.php" target="_blank" rel="noopener">Computer Networking: A Top-Down Approach</a> — Kurose &amp; Ross: the classic university text (free companion site).</li>
+</ul>
+<h3>🌐 Free official courses</h3>
+<ul>
+<li><a href="https://www.netacad.com/courses/networking" target="_blank" rel="noopener">Cisco Networking Academy</a> — free CCNA/Networking Basics courses.</li>
+<li><a href="https://www.netacad.com/courses/packet-tracer" target="_blank" rel="noopener">Packet Tracer course</a> — free network simulator + guided labs.</li>
+<li><a href="https://www.cisco.com/c/en/us/support/index.html" target="_blank" rel="noopener">Cisco docs &amp; support</a> — IOS configuration references.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@JeremysITLab" target="_blank" rel="noopener">Jeremy's IT Lab</a> — a full, free CCNA course.</li>
+<li><a href="https://www.youtube.com/@PracticalNetworking" target="_blank" rel="noopener">Practical Networking</a> — clear fundamentals (how packets flow).</li>
+<li><a href="https://www.youtube.com/@NetworkChuck" target="_blank" rel="noopener">NetworkChuck</a> — approachable networking &amp; CCNA topics.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://www.netacad.com/courses/packet-tracer" target="_blank" rel="noopener">Cisco Packet Tracer</a> — build &amp; configure virtual routers/switches.</li>
+<li><a href="https://www.wireshark.org/" target="_blank" rel="noopener">Wireshark</a> — capture &amp; inspect real packets.</li>
+<li><a href="https://www.gns3.com/" target="_blank" rel="noopener">GNS3</a> — network emulation with real device images.</li>
+<li><a href="https://www.putty.org/" target="_blank" rel="noopener">PuTTY</a> — SSH/console into devices.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations (exam core)</strong> — OSI/TCP-IP, protocols, IPv4 &amp; subnetting, following the lessons here.</li>
+<li><strong>Practice in a lab</strong> — build topologies in Packet Tracer; configure IPs, a switch, and SSH.</li>
+<li><strong>Go deeper</strong> — VLANs, routing, NAT, troubleshooting; capture traffic in Wireshark to see it live.</li>
+<li><strong>Job-ready</strong> — drill subnetting to speed, and target the CCNA 200-301 exam.</li>
+</ol>
+<div class="callout"><span class="badge">Note</span> An original hub of real links — no copyrighted slides or books are embedded. If a link moves, start from the official homepage.</div>`,
+    `<span class="eyebrow">NWC204 · 📚 Trung tâm tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Một nơi gom để học mạng máy tính trên nền CCNA: giáo trình &amp; slide chính thức, sách, khoá học miễn phí chính thống, kênh video, công cụ, và lộ trình tự học.</p>
+<h3>📘 Giáo trình &amp; slide</h3>
+<p>Đăng nhập <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) bằng tài khoản FPTU để đọc giáo trình và slide bài giảng chính thức của NWC204.</p>
+<h3>📗 Sách</h3>
+<ul>
+<li><a href="https://www.ciscopress.com/store/ccna-200-301-official-cert-guide-library-9780135792735" target="_blank" rel="noopener">CCNA 200-301 Official Cert Guide</a> — Wendell Odom, Cisco Press: sách luyện thi chuẩn.</li>
+<li><a href="https://gaia.cs.umass.edu/kurose_ross/index.php" target="_blank" rel="noopener">Computer Networking: A Top-Down Approach</a> — Kurose &amp; Ross: giáo trình đại học kinh điển (trang phụ trợ miễn phí).</li>
+</ul>
+<h3>🌐 Khoá học chính thức miễn phí</h3>
+<ul>
+<li><a href="https://www.netacad.com/courses/networking" target="_blank" rel="noopener">Cisco Networking Academy</a> — khoá CCNA/Networking Basics miễn phí.</li>
+<li><a href="https://www.netacad.com/courses/packet-tracer" target="_blank" rel="noopener">Khoá Packet Tracer</a> — trình mô phỏng mạng miễn phí + lab có hướng dẫn.</li>
+<li><a href="https://www.cisco.com/c/en/us/support/index.html" target="_blank" rel="noopener">Tài liệu &amp; hỗ trợ Cisco</a> — tham chiếu cấu hình IOS.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@JeremysITLab" target="_blank" rel="noopener">Jeremy's IT Lab</a> — một khoá CCNA đầy đủ, miễn phí.</li>
+<li><a href="https://www.youtube.com/@PracticalNetworking" target="_blank" rel="noopener">Practical Networking</a> — nền tảng rõ ràng (gói tin đi thế nào).</li>
+<li><a href="https://www.youtube.com/@NetworkChuck" target="_blank" rel="noopener">NetworkChuck</a> — chủ đề mạng &amp; CCNA dễ tiếp cận.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://www.netacad.com/courses/packet-tracer" target="_blank" rel="noopener">Cisco Packet Tracer</a> — dựng &amp; cấu hình router/switch ảo.</li>
+<li><a href="https://www.wireshark.org/" target="_blank" rel="noopener">Wireshark</a> — bắt &amp; soi gói tin thật.</li>
+<li><a href="https://www.gns3.com/" target="_blank" rel="noopener">GNS3</a> — mô phỏng mạng với image thiết bị thật.</li>
+<li><a href="https://www.putty.org/" target="_blank" rel="noopener">PuTTY</a> — SSH/console vào thiết bị.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền tảng (lõi thi)</strong> — OSI/TCP-IP, giao thức, IPv4 &amp; subnetting, theo đúng các bài ở đây.</li>
+<li><strong>Luyện trong lab</strong> — dựng topology trong Packet Tracer; cấu hình IP, một switch, và SSH.</li>
+<li><strong>Đào sâu</strong> — VLAN, định tuyến, NAT, xử lý sự cố; bắt traffic bằng Wireshark để thấy tận mắt.</li>
+<li><strong>Sẵn sàng đi làm</strong> — luyện subnetting cho nhanh, và hướng tới kỳ thi CCNA 200-301.</li>
+</ol>
+<div class="callout"><span class="badge">Lưu ý</span> Đây là trung tâm liên kết nguyên gốc — không nhúng slide/sách có bản quyền. Link đổi thì vào trang chủ chính thức để tìm.</div>`,
+  ]]);
+
 export default {
   semester: { code: 'KY2', name: 'Kỳ 2', ordinal: 2 },
   course: {
@@ -226,6 +305,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/NWC204.webp',
     shortDescription: 'Networking on a CCNA foundation — OSI/TCP-IP models, TCP/UDP & protocols, Ethernet/LAN/switching, IPv4 addressing & subnetting, router/switch config, security & troubleshooting. Bilingual, with CLI & exercises.|||Mạng nền CCNA — mô hình OSI/TCP-IP, TCP/UDP & giao thức, Ethernet/LAN/switch, địa chỉ IPv4 & subnetting, cấu hình router/switch, bảo mật & xử lý sự cố. Song ngữ, có CLI & bài tập.',
     description: 'Môn <strong>NWC204 — Computer Networking</strong> (kỳ 2), dựa trên môn CCNA đầu tiên. Từ <strong>mô hình &amp; giao thức</strong> (OSI/TCP-IP, đóng gói, TCP vs UDP, DNS/DHCP/HTTP, cổng) → <strong>Ethernet, LAN &amp; địa chỉ IP</strong> (MAC/switch/VLAN, IPv4, subnet mask, private/public/NAT, IPv6) → <strong>router/switch, bảo mật &amp; xử lý sự cố</strong> (cấu hình IOS, SSH, ping/traceroute/show, gỡ lỗi theo tầng). Bám giáo trình FLM, song ngữ, có ví dụ CLI, bài tập subnetting và quiz. Chuẩn bị cho bài thi thực hành kiểu CCNA.',
@@ -233,6 +313,7 @@ export default {
     requirements: 'Kiến thức máy tính cơ bản. Nên thực hành trên Cisco Packet Tracer (miễn phí) để cấu hình router/switch.',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Mạng, OSI & TCP/IP.', lessons: [intro] },
     { title: 'Chương 1 — Mô hình & giao thức|||Chapter 1 — Models & protocols', description: 'OSI/TCP-IP, TCP/UDP, DNS/DHCP.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Ethernet, LAN & IP|||Chapter 2 — Ethernet, LAN & IP', description: 'MAC/switch/VLAN, IPv4, subnetting.', lessons: [c2, c2e, c2q] },

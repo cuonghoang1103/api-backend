@@ -255,6 +255,87 @@ const c5q = quiz('prc392c-quiz-5', 'Quiz 5 — Data lake & architecture|||Quiz 5
   { id: 'q3', question: 'Nguyên tắc IAM nên áp dụng?', options: ['Cấp full quyền cho tiện', 'Quyền tối thiểu (least privilege) + dùng role', 'Nhúng cứng access key vào mã', 'Dùng chung một user'], correctIndex: 1, explanation: 'Least privilege + role, không nhúng khoá.' },
 ]);
 
+const taiLieu = doc('prc392c-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">PRC392c · Resource hub</span>
+<h2>📚 Course materials &amp; references</h2>
+<p class="lead">Everything you need to study AWS cloud computing beyond this course: the official FLM syllabus &amp; slides, reference books, free official docs, YouTube channels, tools, and a 4-step self-study roadmap. Every link is real and free to open.</p>
+<h3>📘 Official syllabus &amp; slides</h3>
+<div class="callout"><span class="badge">FLM</span> Log in to <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> with your FPTU account — the full syllabus and lecture slides for PRC392c are there.</div>
+<h3>📗 Reference books</h3>
+<ul>
+<li><a href="https://www.wiley.com/en-us/AWS+Certified+Cloud+Practitioner+Study+Guide%3A+CLF+C02+Exam%2C+2nd+Edition-p-9781394235636" target="_blank" rel="noopener">AWS Certified Cloud Practitioner Study Guide (CLF-C02)</a> — Ben Piper &amp; David Clinton (Sybex/Wiley).</li>
+<li><a href="https://www.manning.com/books/amazon-web-services-in-action-third-edition" target="_blank" rel="noopener">Amazon Web Services in Action (3rd ed.)</a> — Michael &amp; Andreas Wittig (Manning).</li>
+</ul>
+<h3>🌐 Free official documentation</h3>
+<ul>
+<li><a href="https://docs.aws.amazon.com/" target="_blank" rel="noopener">AWS Documentation</a> — every service, free.</li>
+<li><a href="https://aws.amazon.com/training/" target="_blank" rel="noopener">AWS Training</a> — official learning paths.</li>
+<li><a href="https://skillbuilder.aws/" target="_blank" rel="noopener">AWS Skill Builder</a> — free digital courses &amp; labs.</li>
+<li><a href="https://aws.amazon.com/architecture/well-architected/" target="_blank" rel="noopener">AWS Well-Architected Framework</a>.</li>
+</ul>
+<h3>▶️ YouTube channels</h3>
+<ul>
+<li><a href="https://www.youtube.com/@amazonwebservices" target="_blank" rel="noopener">Amazon Web Services (official)</a> — service deep-dives &amp; re:Invent talks.</li>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp</a> — full-length AWS certification courses.</li>
+<li><a href="https://www.youtube.com/@beabetterdev" target="_blank" rel="noopener">Be A Better Dev</a> — practical AWS tutorials.</li>
+<li><a href="https://www.youtube.com/@StephaneMaarek" target="_blank" rel="noopener">Stephane Maarek</a> — AWS certification prep.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://console.aws.amazon.com/" target="_blank" rel="noopener">AWS Management Console</a> — the web control panel for every service.</li>
+<li><a href="https://aws.amazon.com/cli/" target="_blank" rel="noopener">AWS CLI</a> — drive AWS from the terminal.</li>
+<li><a href="https://aws.amazon.com/free/" target="_blank" rel="noopener">AWS Free Tier</a> — practice for free (mind the limits).</li>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VS Code</a> — editor with the AWS Toolkit extension.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations (exam core)</strong> — master compute (EC2/Lambda), storage (S3/EBS), databases (RDS/DynamoDB), VPC/IAM and Well-Architected in this course; do every quiz.</li>
+<li><strong>Small projects</strong> — on the Free Tier, launch an EC2 web server, host a static site on S3, and create an RDS/DynamoDB table by hand.</li>
+<li><strong>Go deeper</strong> — build a small architecture (VPC + EC2 + RDS behind a load balancer), lock it down with IAM, and drive it from the AWS CLI.</li>
+<li><strong>Job-ready</strong> — sit the <a href="https://aws.amazon.com/certification/certified-cloud-practitioner/" target="_blank" rel="noopener">AWS Certified Cloud Practitioner</a> exam and put a reference architecture on GitHub; that combination is what employers read.</li>
+</ol>`,
+    `<span class="eyebrow">PRC392c · Trung tâm tài liệu</span>
+<h2>📚 Tài liệu tham khảo môn học</h2>
+<p class="lead">Mọi thứ để học điện toán đám mây AWS vượt ra ngoài môn này: giáo trình &amp; slide chính thức trên FLM, sách tham khảo, tài liệu chính thức miễn phí, kênh YouTube, công cụ, và lộ trình tự học 4 bước. Mọi link đều thật và mở được miễn phí.</p>
+<h3>📘 Giáo trình &amp; slide chính thức</h3>
+<div class="callout"><span class="badge">FLM</span> Đăng nhập <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> bằng tài khoản FPTU — có giáo trình và slide đầy đủ cho PRC392c.</div>
+<h3>📗 Sách tham khảo</h3>
+<ul>
+<li><a href="https://www.wiley.com/en-us/AWS+Certified+Cloud+Practitioner+Study+Guide%3A+CLF+C02+Exam%2C+2nd+Edition-p-9781394235636" target="_blank" rel="noopener">AWS Certified Cloud Practitioner Study Guide (CLF-C02)</a> — Ben Piper &amp; David Clinton (Sybex/Wiley).</li>
+<li><a href="https://www.manning.com/books/amazon-web-services-in-action-third-edition" target="_blank" rel="noopener">Amazon Web Services in Action (3rd ed.)</a> — Michael &amp; Andreas Wittig (Manning).</li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li><a href="https://docs.aws.amazon.com/" target="_blank" rel="noopener">AWS Documentation</a> — mọi dịch vụ, miễn phí.</li>
+<li><a href="https://aws.amazon.com/training/" target="_blank" rel="noopener">AWS Training</a> — lộ trình học chính thức.</li>
+<li><a href="https://skillbuilder.aws/" target="_blank" rel="noopener">AWS Skill Builder</a> — khoá học số &amp; lab miễn phí.</li>
+<li><a href="https://aws.amazon.com/architecture/well-architected/" target="_blank" rel="noopener">AWS Well-Architected Framework</a>.</li>
+</ul>
+<h3>▶️ Kênh YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@amazonwebservices" target="_blank" rel="noopener">Amazon Web Services (chính thức)</a> — deep-dive dịch vụ &amp; talk re:Invent.</li>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp</a> — khoá luyện chứng chỉ AWS dài đầy đủ.</li>
+<li><a href="https://www.youtube.com/@beabetterdev" target="_blank" rel="noopener">Be A Better Dev</a> — hướng dẫn AWS thực chiến.</li>
+<li><a href="https://www.youtube.com/@StephaneMaarek" target="_blank" rel="noopener">Stephane Maarek</a> — luyện chứng chỉ AWS.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://console.aws.amazon.com/" target="_blank" rel="noopener">AWS Management Console</a> — bảng điều khiển web cho mọi dịch vụ.</li>
+<li><a href="https://aws.amazon.com/cli/" target="_blank" rel="noopener">AWS CLI</a> — điều khiển AWS từ terminal.</li>
+<li><a href="https://aws.amazon.com/free/" target="_blank" rel="noopener">AWS Free Tier</a> — thực hành miễn phí (để ý hạn mức).</li>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VS Code</a> — trình soạn thảo kèm extension AWS Toolkit.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền tảng (lõi thi)</strong> — nắm chắc compute (EC2/Lambda), storage (S3/EBS), database (RDS/DynamoDB), VPC/IAM và Well-Architected trong môn này; làm hết mọi quiz.</li>
+<li><strong>Project nhỏ</strong> — trên Free Tier, khởi chạy một web server EC2, host trang tĩnh trên S3, và tự tạo bảng RDS/DynamoDB.</li>
+<li><strong>Đào sâu</strong> — dựng một kiến trúc nhỏ (VPC + EC2 + RDS sau load balancer), siết bằng IAM, và điều khiển bằng AWS CLI.</li>
+<li><strong>Sẵn sàng đi làm</strong> — thi <a href="https://aws.amazon.com/certification/certified-cloud-practitioner/" target="_blank" rel="noopener">AWS Certified Cloud Practitioner</a> và đưa một kiến trúc mẫu lên GitHub; sự kết hợp đó là thứ nhà tuyển dụng đọc.</li>
+</ol>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola4', name: 'Kỳ 4', ordinal: 6 },
   course: {
@@ -264,6 +345,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/PRC392c.webp',
     shortDescription: 'Cloud computing on AWS — compute (EC2/Lambda), storage (S3/EBS), databases (RDS/DynamoDB), networking & the Well-Architected Framework, data lakes (Glue/Athena) and exam strategy. Bilingual, with CLI examples & quizzes.|||Điện toán đám mây trên AWS — compute (EC2/Lambda), lưu trữ (S3/EBS), CSDL (RDS/DynamoDB), mạng & Well-Architected, data lake (Glue/Athena) và chiến lược thi. Song ngữ, có ví dụ CLI & quiz.',
     description: 'Môn <strong>PRC392c — Cloud Computing (AWS)</strong> (kỳ 4). Từ khái niệm đám mây (IaaS/PaaS/SaaS, trách nhiệm chia sẻ) đến các dịch vụ lõi của AWS: <strong>Compute</strong> (EC2, Lambda, Auto Scaling) → <strong>Storage</strong> (S3, EBS, storage class) → <strong>Database</strong> (RDS, DynamoDB) → <strong>Networking &amp; kiến trúc</strong> (VPC, IAM, CloudFront, Well-Architected 6 trụ) → <strong>Data lake &amp; phân tích</strong> (Glue, Athena, QuickSight) và <strong>chiến lược làm bài thi</strong>. Song ngữ, có ví dụ AWS CLI/SQL và quiz mỗi chương. Nền cho chứng chỉ AWS Cloud Practitioner / Solutions Architect Associate.',
@@ -271,6 +353,7 @@ export default {
     requirements: 'Hiểu cơ bản về web/mạng và một chút SQL. Không cần kinh nghiệm AWS trước. Nên có tài khoản AWS Free Tier để thực hành.',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Đám mây, mô hình dịch vụ, vì sao AWS.', lessons: [intro] },
     { title: 'Chương 1 — Compute (EC2 & Lambda)|||Chapter 1 — Compute', description: 'Máy ảo, serverless, auto scaling.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Storage (S3 & EBS)|||Chapter 2 — Storage', description: 'Object vs block, storage class.', lessons: [c2, c2q] },

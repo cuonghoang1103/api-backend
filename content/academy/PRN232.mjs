@@ -508,6 +508,92 @@ const c7q = quiz('prn232-quiz-7', 'Quiz 7 — gRPC & microservices|||Quiz 7 — 
   { id: 'q3', question: 'Dịch vụ .NET mới nên ưu tiên?', options: ['WCF', 'ASP.NET Core Web API hoặc gRPC', 'Chỉ WCF', 'SOAP thuần'], correctIndex: 1, explanation: 'WCF là di sản; dịch vụ mới dùng Web API/gRPC.' },
 ]);
 
+const taiLieu = doc('prn232-0-0-tai-lieu',
+  '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">PRN232 · Lesson 0.0 · Resources</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">One hub for everything you need to master PRN232 beyond these lessons: the official FLM syllabus &amp; slides, reference books, free primary documentation, video channels, tools, and a four-step self-study path.</p>
+<div class="callout"><span class="badge">Official</span> Log in to <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn">flm.fpt.edu.vn</a>) with your FPTU account — the full syllabus and every lecture slide live there, and they define exactly what the exam covers.</div>
+<h3>📘 Official syllabus &amp; slides</h3>
+<ul>
+<li><strong>FLM — flm.fpt.edu.vn</strong>: sign in with your FPTU account for the complete syllabus, session plan, CLOs and all lecture slides — the authoritative, in-scope source of truth.</li>
+</ul>
+<h3>📗 Reference books</h3>
+<ul>
+<li><em>ASP.NET Core in Action (3rd ed.)</em> — Andrew Lock (Manning): <a href="https://www.manning.com/books/asp-net-core-in-action-third-edition">manning.com/books/asp-net-core-in-action-third-edition</a></li>
+<li><em>.NET Microservices: Architecture for Containerized .NET Applications</em> — free official e-book (Microsoft): <a href="https://learn.microsoft.com/dotnet/architecture/microservices/">learn.microsoft.com/dotnet/architecture/microservices</a></li>
+</ul>
+<h3>🌐 Free primary documentation</h3>
+<ul>
+<li>ASP.NET Core Web API: <a href="https://learn.microsoft.com/aspnet/core/web-api">learn.microsoft.com/aspnet/core/web-api</a></li>
+<li>Entity Framework Core: <a href="https://learn.microsoft.com/ef/core">learn.microsoft.com/ef/core</a></li>
+<li>Security &amp; auth: <a href="https://learn.microsoft.com/aspnet/core/security">learn.microsoft.com/aspnet/core/security</a> · gRPC: <a href="https://learn.microsoft.com/aspnet/core/grpc">learn.microsoft.com/aspnet/core/grpc</a></li>
+</ul>
+<h3>▶️ YouTube channels</h3>
+<ul>
+<li>Microsoft Developer: <a href="https://www.youtube.com/@MicrosoftDeveloper">youtube.com/@MicrosoftDeveloper</a></li>
+<li>.NET: <a href="https://www.youtube.com/@dotnet">youtube.com/@dotnet</a></li>
+<li>Nick Chapsas: <a href="https://www.youtube.com/@nickchapsas">youtube.com/@nickchapsas</a></li>
+<li>freeCodeCamp: <a href="https://www.youtube.com/@freecodecamp">youtube.com/@freecodecamp</a></li>
+</ul>
+<h3>🛠️ Tools for study &amp; practice</h3>
+<ul>
+<li>Visual Studio 2022: <a href="https://visualstudio.microsoft.com/">visualstudio.microsoft.com</a></li>
+<li>.NET SDK: <a href="https://dotnet.microsoft.com/download">dotnet.microsoft.com/download</a></li>
+<li>Postman (test REST endpoints): <a href="https://www.postman.com/">postman.com</a></li>
+<li>JetBrains Rider: <a href="https://www.jetbrains.com/rider/">jetbrains.com/rider</a></li>
+</ul>
+<h3>🎯 A four-step self-study path</h3>
+<ol>
+<li><strong>Foundations / exam core</strong> — internalise REST, HTTP verbs and status codes, controllers vs. DTOs, and the EF Core CRUD cycle; these carry most of the theory exam.</li>
+<li><strong>Practice on a small project</strong> — build one resource end-to-end (GET/POST/PUT/DELETE) with DTOs, validation and proper 201/400/404 responses, tested in Postman.</li>
+<li><strong>Go deeper on real-world concerns</strong> — add JWT authentication and role/policy authorization, CORS for a JS/AJAX client, and paging/filtering; then try a gRPC service.</li>
+<li><strong>Job-ready</strong> — split into small services, document with Swagger/OpenAPI, and be able to explain content negotiation, security and your API design in an interview.</li>
+</ol>`,
+    `<span class="eyebrow">PRN232 · Bài 0.0 · Tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Một nơi gom đủ thứ để học PRN232 vượt ngoài các bài trong khoá: giáo trình &amp; slide chính thức trên FLM, sách tham khảo, tài liệu gốc miễn phí, kênh video, công cụ, và lộ trình tự học 4 bước.</p>
+<div class="callout"><span class="badge">Chính thức</span> Đăng nhập <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn">flm.fpt.edu.vn</a>) bằng tài khoản FPTU — có giáo trình + slide đầy đủ, đúng phạm vi thi.</div>
+<h3>📘 Giáo trình &amp; slide chính thức</h3>
+<ul>
+<li><strong>FLM — flm.fpt.edu.vn</strong>: đăng nhập bằng tài khoản FPTU để lấy giáo trình đầy đủ, lịch buổi, CLO và toàn bộ slide bài giảng — nguồn chuẩn, đúng phạm vi thi.</li>
+</ul>
+<h3>📗 Sách tham khảo</h3>
+<ul>
+<li><em>ASP.NET Core in Action (tái bản 3)</em> — Andrew Lock (Manning): <a href="https://www.manning.com/books/asp-net-core-in-action-third-edition">manning.com/books/asp-net-core-in-action-third-edition</a></li>
+<li><em>.NET Microservices: Architecture for Containerized .NET Applications</em> — e-book chính thức miễn phí (Microsoft): <a href="https://learn.microsoft.com/dotnet/architecture/microservices/">learn.microsoft.com/dotnet/architecture/microservices</a></li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li>ASP.NET Core Web API: <a href="https://learn.microsoft.com/aspnet/core/web-api">learn.microsoft.com/aspnet/core/web-api</a></li>
+<li>Entity Framework Core: <a href="https://learn.microsoft.com/ef/core">learn.microsoft.com/ef/core</a></li>
+<li>Bảo mật &amp; xác thực: <a href="https://learn.microsoft.com/aspnet/core/security">learn.microsoft.com/aspnet/core/security</a> · gRPC: <a href="https://learn.microsoft.com/aspnet/core/grpc">learn.microsoft.com/aspnet/core/grpc</a></li>
+</ul>
+<h3>▶️ Kênh YouTube</h3>
+<ul>
+<li>Microsoft Developer: <a href="https://www.youtube.com/@MicrosoftDeveloper">youtube.com/@MicrosoftDeveloper</a></li>
+<li>.NET: <a href="https://www.youtube.com/@dotnet">youtube.com/@dotnet</a></li>
+<li>Nick Chapsas: <a href="https://www.youtube.com/@nickchapsas">youtube.com/@nickchapsas</a></li>
+<li>freeCodeCamp: <a href="https://www.youtube.com/@freecodecamp">youtube.com/@freecodecamp</a></li>
+</ul>
+<h3>🛠️ Công cụ học &amp; thực hành</h3>
+<ul>
+<li>Visual Studio 2022: <a href="https://visualstudio.microsoft.com/">visualstudio.microsoft.com</a></li>
+<li>.NET SDK: <a href="https://dotnet.microsoft.com/download">dotnet.microsoft.com/download</a></li>
+<li>Postman (thử endpoint REST): <a href="https://www.postman.com/">postman.com</a></li>
+<li>JetBrains Rider: <a href="https://www.jetbrains.com/rider/">jetbrains.com/rider</a></li>
+</ul>
+<h3>🎯 Lộ trình tự học 4 bước</h3>
+<ol>
+<li><strong>Nền tảng / lõi thi</strong> — thuộc REST, HTTP verb và status code, phân biệt controller với DTO, và vòng CRUD của EF Core; phần này gánh phần lớn bài lý thuyết.</li>
+<li><strong>Luyện qua project nhỏ</strong> — làm một resource đầu-cuối (GET/POST/PUT/DELETE) với DTO, validation và trả đúng 201/400/404, kiểm bằng Postman.</li>
+<li><strong>Đào sâu thực tế</strong> — thêm xác thực JWT và phân quyền role/policy, CORS cho client JS/AJAX, và phân trang/lọc; rồi thử một dịch vụ gRPC.</li>
+<li><strong>Sẵn sàng đi làm</strong> — tách thành các dịch vụ nhỏ, mô tả bằng Swagger/OpenAPI, và trình bày được content negotiation, bảo mật cùng thiết kế API khi phỏng vấn.</li>
+</ol>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola8', name: 'Kỳ 8', ordinal: 10 },
   course: {
@@ -517,6 +603,7 @@ export default {
     level: 'ADVANCED',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/PRN232.webp',
     shortDescription: 'Build RESTful back-ends with ASP.NET Core Web API — REST, DTOs & EF Core, content negotiation, JWT security, AJAX clients, gRPC & microservices. Bilingual, with exercises.|||Xây back-end RESTful với ASP.NET Core Web API — REST, DTO & EF Core, content negotiation, bảo mật JWT, client AJAX, gRPC & microservices. Song ngữ, có bài tập.',
     description: 'Môn <strong>PRN232 — Xây ứng dụng back-end đa nền tảng với .NET</strong> (ngành Kỹ thuật phần mềm, kỳ 8). Môn back-end của nhánh .NET: dựng dịch vụ <strong>RESTful</strong> bằng ASP.NET Core Web API — model &amp; DTO, EF Core, content negotiation, binding/validation/routing, <strong>bảo mật JWT</strong>, client JavaScript/AJAX, và gRPC/microservices. Bám giáo trình FLM (8 chương, 5 CLO), song ngữ, code chạy được, mỗi chương có bài tập kèm lời giải.',
@@ -524,6 +611,7 @@ export default {
     requirements: 'Đã học PRN212, PRN222. Cần .NET 8 SDK + Visual Studio 2022; nên biết SQL cơ bản (DBI202).',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Mục tiêu, 5 CLO, cách đánh giá, lộ trình.', lessons: [intro] },
     { title: 'Chương 1 — Web API & REST|||Chapter 1 — Web API & REST', description: 'REST, HTTP verb, controller ControllerBase.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Models, DTO & EF Core|||Chapter 2 — Models, DTO & EF Core', description: 'DTO, CRUD, 201 CreatedAtAction, OData.', lessons: [c2, c2e, c2q] },

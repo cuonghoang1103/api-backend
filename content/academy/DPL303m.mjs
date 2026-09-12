@@ -282,6 +282,92 @@ const m3q = quiz('dpl303m-quiz-3', 'Quiz M3 — Strategy & project|||Quiz M3 —
   { id: 'q3', question: 'Với ít dữ liệu, nên?', options: ['Train từ đầu mạng lớn', 'Transfer learning từ mô hình pretrained', 'Bỏ dev set', 'Tăng learning rate cực lớn'], correctIndex: 1, explanation: 'Transfer learning tận dụng mô hình đã học tập lớn → hiệu quả khi ít dữ liệu.' },
 ]);
 
+const taiLieu = doc('dpl303m-0-0-tai-lieu',
+  '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">DPL303m · Lesson 0.0 · Resources</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">One hub for everything you need to master DPL303m beyond these lessons: the official FLM syllabus &amp; slides, reference books, free primary documentation, video channels, tools, and a four-step self-study path.</p>
+<div class="callout"><span class="badge">Official</span> Log in to <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn">flm.fpt.edu.vn</a>) with your FPTU account — the full syllabus and every lecture slide live there, and they define exactly what the exam covers.</div>
+<h3>📘 Official syllabus &amp; slides</h3>
+<ul>
+<li><strong>FLM — flm.fpt.edu.vn</strong>: sign in with your FPTU account for the complete syllabus, session plan, CLOs and all lecture slides — the authoritative, in-scope source of truth.</li>
+</ul>
+<h3>📗 Reference books</h3>
+<ul>
+<li><em>Deep Learning with Python (2nd ed.)</em> — François Chollet (Manning): <a href="https://www.manning.com/books/deep-learning-with-python-second-edition">manning.com/books/deep-learning-with-python-second-edition</a></li>
+<li><em>Dive into Deep Learning</em> — Zhang, Lipton, Li, Smola (free, interactive): <a href="https://d2l.ai/">d2l.ai</a> · deeper theory: <em>Deep Learning</em> — Goodfellow et al. (free): <a href="https://www.deeplearningbook.org/">deeplearningbook.org</a></li>
+</ul>
+<h3>🌐 Free primary documentation</h3>
+<ul>
+<li>PyTorch tutorials: <a href="https://pytorch.org/tutorials/">pytorch.org/tutorials</a></li>
+<li>TensorFlow: <a href="https://www.tensorflow.org/">tensorflow.org</a> · Keras: <a href="https://keras.io/">keras.io</a></li>
+<li>HuggingFace docs: <a href="https://huggingface.co/docs">huggingface.co/docs</a></li>
+</ul>
+<h3>▶️ YouTube channels</h3>
+<ul>
+<li>Andrej Karpathy: <a href="https://www.youtube.com/@AndrejKarpathy">youtube.com/@AndrejKarpathy</a></li>
+<li>sentdex: <a href="https://www.youtube.com/@sentdex">youtube.com/@sentdex</a></li>
+<li>Nicholas Renotte: <a href="https://www.youtube.com/@NicholasRenotte">youtube.com/@NicholasRenotte</a></li>
+<li>3Blue1Brown (neural-net intuition): <a href="https://www.youtube.com/@3blue1brown">youtube.com/@3blue1brown</a></li>
+</ul>
+<h3>🛠️ Tools for study &amp; practice</h3>
+<ul>
+<li>Google Colab (free GPU notebooks): <a href="https://colab.research.google.com/">colab.research.google.com</a></li>
+<li>Jupyter: <a href="https://jupyter.org/">jupyter.org</a></li>
+<li>HuggingFace (models &amp; datasets): <a href="https://huggingface.co/">huggingface.co</a></li>
+<li>Kaggle (datasets &amp; competitions): <a href="https://www.kaggle.com/">kaggle.com</a></li>
+</ul>
+<h3>🎯 A four-step self-study path</h3>
+<ol>
+<li><strong>Foundations / exam core</strong> — be solid on convolution/pooling and how a CNN sees images, and on sequences (RNN/LSTM) and the attention idea behind Transformers.</li>
+<li><strong>Practice on a small project</strong> — train an image classifier in Keras with transfer learning, then fine-tune a HuggingFace text model; use Colab's free GPU.</li>
+<li><strong>Go deeper on real-world concerns</strong> — apply ML strategy (error analysis, data augmentation, train/dev/test splits) and read the loss/metric curves to decide what to fix.</li>
+<li><strong>Job-ready</strong> — take one dataset end-to-end into a small TensorFlow project, publish the notebook, and be able to explain your architecture and trade-offs.</li>
+</ol>`,
+    `<span class="eyebrow">DPL303m · Bài 0.0 · Tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Một nơi gom đủ thứ để học DPL303m vượt ngoài các bài trong khoá: giáo trình &amp; slide chính thức trên FLM, sách tham khảo, tài liệu gốc miễn phí, kênh video, công cụ, và lộ trình tự học 4 bước.</p>
+<div class="callout"><span class="badge">Chính thức</span> Đăng nhập <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn">flm.fpt.edu.vn</a>) bằng tài khoản FPTU — có giáo trình + slide đầy đủ, đúng phạm vi thi.</div>
+<h3>📘 Giáo trình &amp; slide chính thức</h3>
+<ul>
+<li><strong>FLM — flm.fpt.edu.vn</strong>: đăng nhập bằng tài khoản FPTU để lấy giáo trình đầy đủ, lịch buổi, CLO và toàn bộ slide bài giảng — nguồn chuẩn, đúng phạm vi thi.</li>
+</ul>
+<h3>📗 Sách tham khảo</h3>
+<ul>
+<li><em>Deep Learning with Python (tái bản 2)</em> — François Chollet (Manning): <a href="https://www.manning.com/books/deep-learning-with-python-second-edition">manning.com/books/deep-learning-with-python-second-edition</a></li>
+<li><em>Dive into Deep Learning</em> — Zhang, Lipton, Li, Smola (miễn phí, tương tác): <a href="https://d2l.ai/">d2l.ai</a> · lý thuyết sâu: <em>Deep Learning</em> — Goodfellow và cộng sự (miễn phí): <a href="https://www.deeplearningbook.org/">deeplearningbook.org</a></li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li>PyTorch tutorials: <a href="https://pytorch.org/tutorials/">pytorch.org/tutorials</a></li>
+<li>TensorFlow: <a href="https://www.tensorflow.org/">tensorflow.org</a> · Keras: <a href="https://keras.io/">keras.io</a></li>
+<li>Tài liệu HuggingFace: <a href="https://huggingface.co/docs">huggingface.co/docs</a></li>
+</ul>
+<h3>▶️ Kênh YouTube</h3>
+<ul>
+<li>Andrej Karpathy: <a href="https://www.youtube.com/@AndrejKarpathy">youtube.com/@AndrejKarpathy</a></li>
+<li>sentdex: <a href="https://www.youtube.com/@sentdex">youtube.com/@sentdex</a></li>
+<li>Nicholas Renotte: <a href="https://www.youtube.com/@NicholasRenotte">youtube.com/@NicholasRenotte</a></li>
+<li>3Blue1Brown (trực giác mạng nơ-ron): <a href="https://www.youtube.com/@3blue1brown">youtube.com/@3blue1brown</a></li>
+</ul>
+<h3>🛠️ Công cụ học &amp; thực hành</h3>
+<ul>
+<li>Google Colab (notebook GPU miễn phí): <a href="https://colab.research.google.com/">colab.research.google.com</a></li>
+<li>Jupyter: <a href="https://jupyter.org/">jupyter.org</a></li>
+<li>HuggingFace (model &amp; dataset): <a href="https://huggingface.co/">huggingface.co</a></li>
+<li>Kaggle (dataset &amp; cuộc thi): <a href="https://www.kaggle.com/">kaggle.com</a></li>
+</ul>
+<h3>🎯 Lộ trình tự học 4 bước</h3>
+<ol>
+<li><strong>Nền tảng / lõi thi</strong> — vững convolution/pooling và cách CNN nhìn ảnh, cùng mô hình chuỗi (RNN/LSTM) và ý tưởng attention đứng sau Transformer.</li>
+<li><strong>Luyện qua project nhỏ</strong> — huấn luyện một bộ phân loại ảnh bằng Keras với transfer learning, rồi fine-tune một model văn bản của HuggingFace; dùng GPU miễn phí của Colab.</li>
+<li><strong>Đào sâu thực tế</strong> — áp dụng ML strategy (error analysis, data augmentation, chia train/dev/test) và đọc đường loss/metric để quyết định sửa gì.</li>
+<li><strong>Sẵn sàng đi làm</strong> — đưa một dataset đầu-cuối vào một đồ án TensorFlow nhỏ, công bố notebook, và trình bày được kiến trúc cùng đánh đổi của mình.</li>
+</ol>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola7', name: 'Kỳ 7', ordinal: 9 },
   course: {
@@ -291,6 +377,7 @@ export default {
     level: 'ADVANCED',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/DPL303m.webp',
     shortDescription: 'From CNNs for vision to Transformers for language — convolution, transfer learning, RNN/LSTM, word embeddings, attention & HuggingFace, plus ML strategy. Bilingual, with Keras/HF code & exercises.|||Từ CNN cho thị giác tới Transformer cho ngôn ngữ — convolution, transfer learning, RNN/LSTM, word embeddings, attention & HuggingFace, cùng ML strategy. Song ngữ, code Keras/HF & bài tập.',
     description: 'Môn <strong>DPL303m — Học sâu (Deep Learning)</strong> (ngành AI/SE combo, kỳ 7), nối tiếp AIL304m. Hai kiến trúc trụ cột: <strong>CNN</strong> cho ảnh (convolution/pooling, kiến trúc kinh điển, transfer learning, neural style transfer) và <strong>mô hình chuỗi</strong> cho văn bản (RNN/LSTM, word embeddings, attention, <strong>Transformer</strong>, <strong>HuggingFace</strong>), cộng <strong>ML strategy</strong> và một đồ án TensorFlow. Bám giáo trình FLM (4 CLO), song ngữ, code Keras/HuggingFace và bài tập.',
@@ -298,6 +385,7 @@ export default {
     requirements: 'Đã học AIL304m (Machine Learning). Cần Python + TensorFlow/Keras + transformers (HuggingFace); nên dùng GPU (Google Colab).',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Nối tiếp AIL304m, 4 CLO, lộ trình.', lessons: [intro] },
     { title: 'Module 1 — CNN (thị giác)|||Module 1 — CNN (vision)', description: 'Convolution/pooling, transfer learning, style transfer.', lessons: [m1, m1b, m1q] },
     { title: 'Module 2 — Chuỗi & Transformer|||Module 2 — Sequences & Transformers', description: 'RNN/LSTM, embeddings, attention, HuggingFace.', lessons: [m2, m2b, m2e, m2q] },

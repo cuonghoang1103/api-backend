@@ -334,6 +334,85 @@ const c10q = quiz('dbm301-quiz-10', 'Quiz 10 — Clustering|||Quiz 10 — Phân 
   { id: 'q3', question: 'Phân cụm phân cấp tạo ra?', options: ['Confusion matrix', 'Dendrogram (cắt để lấy số cụm)', 'Decision tree', 'Data cube'], correctIndex: 1, explanation: 'Agglomerative tạo dendrogram; cắt ở mức để lấy k cụm.' },
 ]);
 
+const taiLieu = doc('dbm301-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">DBM301 · Resource hub</span>
+<h2>📚 Course materials &amp; references</h2>
+<p class="lead">Everything you need to study Data Mining beyond this course: the official FLM syllabus &amp; slides, reference books, free official docs, YouTube channels, tools, and a 4-step self-study roadmap. Every link is real and free to open.</p>
+<h3>📘 Official syllabus &amp; slides</h3>
+<div class="callout"><span class="badge">FLM</span> Log in to <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> with your FPTU account — the full syllabus and lecture slides for DBM301 are there.</div>
+<h3>📗 Reference books</h3>
+<ul>
+<li><a href="https://www.sciencedirect.com/book/9780123814791/data-mining-concepts-and-techniques" target="_blank" rel="noopener">Data Mining: Concepts and Techniques</a> — Jiawei Han, Micheline Kamber &amp; Jian Pei (Morgan Kaufmann) — the classic KDD text.</li>
+<li><a href="https://www-users.cse.umn.edu/~kumar001/dmbook/index.php" target="_blank" rel="noopener">Introduction to Data Mining</a> — Tan, Steinbach, Karpatne &amp; Kumar — companion slides free online.</li>
+</ul>
+<h3>🌐 Free official documentation</h3>
+<ul>
+<li><a href="https://scikit-learn.org/stable/" target="_blank" rel="noopener">scikit-learn — user guide &amp; API</a> (classification, clustering, preprocessing).</li>
+<li><a href="https://ml.cms.waikato.ac.nz/weka/" target="_blank" rel="noopener">Weka</a> — the data-mining workbench &amp; docs.</li>
+<li><a href="https://pandas.pydata.org/docs/" target="_blank" rel="noopener">pandas documentation</a> — data wrangling.</li>
+</ul>
+<h3>▶️ YouTube channels</h3>
+<ul>
+<li><a href="https://www.youtube.com/@statquest" target="_blank" rel="noopener">StatQuest with Josh Starmer</a> — decision trees, Naive Bayes, clustering explained clearly.</li>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp</a> — full-length data-mining / ML courses.</li>
+<li><a href="https://www.youtube.com/@sentdex" target="_blank" rel="noopener">sentdex</a> — hands-on Python data analysis.</li>
+<li><a href="https://www.youtube.com/@dataschool" target="_blank" rel="noopener">Data School</a> — pandas &amp; scikit-learn workflows.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://ml.cms.waikato.ac.nz/weka/" target="_blank" rel="noopener">Weka</a> — GUI mining without code (Apriori, J48, k-means).</li>
+<li><a href="https://orangedatamining.com/" target="_blank" rel="noopener">Orange</a> — visual data-mining workflows.</li>
+<li><a href="https://colab.research.google.com/" target="_blank" rel="noopener">Google Colab</a> — free notebooks for scikit-learn / pandas.</li>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VS Code</a> — editor with the Python extension.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations (exam core)</strong> — nail data types, preprocessing, association rules, classification and clustering in this course; do every quiz.</li>
+<li><strong>Small projects</strong> — run Apriori and a decision tree on a real dataset (UCI / Kaggle) in Weka, then reproduce it in scikit-learn.</li>
+<li><strong>Go deeper</strong> — read Han &amp; Kamber chapters against your data; compare k-means vs hierarchical clustering and evaluate with proper metrics.</li>
+<li><strong>Job-ready</strong> — build one end-to-end mining project (clean → mine → evaluate → visualize) and publish it as a portfolio notebook.</li>
+</ol>`,
+    `<span class="eyebrow">DBM301 · Trung tâm tài liệu</span>
+<h2>📚 Tài liệu tham khảo môn học</h2>
+<p class="lead">Mọi thứ để học Data Mining vượt ra ngoài môn này: giáo trình &amp; slide chính thức trên FLM, sách tham khảo, tài liệu chính thức miễn phí, kênh YouTube, công cụ, và lộ trình tự học 4 bước. Mọi link đều thật và mở được miễn phí.</p>
+<h3>📘 Giáo trình &amp; slide chính thức</h3>
+<div class="callout"><span class="badge">FLM</span> Đăng nhập <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> bằng tài khoản FPTU — có giáo trình và slide đầy đủ cho DBM301.</div>
+<h3>📗 Sách tham khảo</h3>
+<ul>
+<li><a href="https://www.sciencedirect.com/book/9780123814791/data-mining-concepts-and-techniques" target="_blank" rel="noopener">Data Mining: Concepts and Techniques</a> — Jiawei Han, Micheline Kamber &amp; Jian Pei (Morgan Kaufmann) — sách kinh điển về KDD.</li>
+<li><a href="https://www-users.cse.umn.edu/~kumar001/dmbook/index.php" target="_blank" rel="noopener">Introduction to Data Mining</a> — Tan, Steinbach, Karpatne &amp; Kumar — slide đi kèm miễn phí.</li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li><a href="https://scikit-learn.org/stable/" target="_blank" rel="noopener">scikit-learn — user guide &amp; API</a> (phân loại, phân cụm, tiền xử lý).</li>
+<li><a href="https://ml.cms.waikato.ac.nz/weka/" target="_blank" rel="noopener">Weka</a> — bộ công cụ data mining &amp; tài liệu.</li>
+<li><a href="https://pandas.pydata.org/docs/" target="_blank" rel="noopener">Tài liệu pandas</a> — xử lý dữ liệu.</li>
+</ul>
+<h3>▶️ Kênh YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@statquest" target="_blank" rel="noopener">StatQuest with Josh Starmer</a> — decision tree, Naive Bayes, phân cụm giải thích rõ ràng.</li>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp</a> — khoá data mining / ML dài đầy đủ.</li>
+<li><a href="https://www.youtube.com/@sentdex" target="_blank" rel="noopener">sentdex</a> — phân tích dữ liệu Python thực chiến.</li>
+<li><a href="https://www.youtube.com/@dataschool" target="_blank" rel="noopener">Data School</a> — quy trình pandas &amp; scikit-learn.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://ml.cms.waikato.ac.nz/weka/" target="_blank" rel="noopener">Weka</a> — khai phá bằng giao diện, không cần code (Apriori, J48, k-means).</li>
+<li><a href="https://orangedatamining.com/" target="_blank" rel="noopener">Orange</a> — luồng data mining trực quan.</li>
+<li><a href="https://colab.research.google.com/" target="_blank" rel="noopener">Google Colab</a> — notebook miễn phí cho scikit-learn / pandas.</li>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VS Code</a> — trình soạn thảo kèm extension Python.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền tảng (lõi thi)</strong> — nắm chắc kiểu dữ liệu, tiền xử lý, luật kết hợp, phân loại và phân cụm trong môn này; làm hết mọi quiz.</li>
+<li><strong>Project nhỏ</strong> — chạy Apriori và một decision tree trên tập dữ liệu thật (UCI / Kaggle) bằng Weka, rồi tái hiện bằng scikit-learn.</li>
+<li><strong>Đào sâu</strong> — đọc các chương Han &amp; Kamber song song với dữ liệu của bạn; so k-means với hierarchical clustering và đánh giá bằng metric đúng.</li>
+<li><strong>Sẵn sàng đi làm</strong> — dựng một project khai phá end-to-end (làm sạch → khai phá → đánh giá → trực quan hoá) và công bố dưới dạng notebook portfolio.</li>
+</ol>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola7', name: 'Kỳ 7', ordinal: 9 },
   course: {
@@ -343,6 +422,7 @@ export default {
     level: 'ADVANCED',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/DBM301.webp',
     shortDescription: 'Discover patterns in large data — preprocessing, data warehouse/OLAP, association rules (Apriori), classification & clustering, with Weka. Bilingual, with worked exercises.|||Khám phá mẫu trong dữ liệu lớn — tiền xử lý, data warehouse/OLAP, association rule (Apriori), classification & clustering, với Weka. Song ngữ, có bài tập giải sẵn.',
     description: 'Môn <strong>DBM301 — Khai phá dữ liệu (Data Mining)</strong> (ngành SE/AI combo, kỳ 7), theo sách Han &amp; Kamber. Đi từ hiểu &amp; tiền xử lý dữ liệu → data warehouse/OLAP &amp; data cube → các tác vụ lõi: <strong>association rules (Apriori), classification (decision tree/Naive Bayes), clustering (k-means/hierarchical)</strong> — với công cụ <strong>Weka</strong>. Bám giáo trình FLM (9 CLO), song ngữ, có ví dụ thuật toán tính tay và bài tập kèm lời giải.',
@@ -350,6 +430,7 @@ export default {
     requirements: 'Nên biết thống kê cơ bản và SQL (DBI202). Cài Weka (miễn phí) để thực hành.',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Data mining là gì, KDD, 9 CLO, lộ trình.', lessons: [intro] },
     { title: 'Chương 1–2 — Dữ liệu & khái niệm|||Chapter 1–2 — Data & concepts', description: 'Kiểu thuộc tính, thống kê, khoảng cách.', lessons: [c1, c1q] },
     { title: 'Chương 3 — Tiền xử lý|||Chapter 3 — Preprocessing', description: 'Làm sạch, chuẩn hoá, giảm chiều.', lessons: [c3, c3e, c3q] },

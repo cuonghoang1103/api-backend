@@ -208,6 +208,83 @@ const c3q = quiz('fgu301-quiz-3', 'Quiz 3 — Animation & UI|||Quiz 3 — Hoạt
   { id: 'q3', question: 'Gắn hành động khi bấm nút từ code dùng?', options: ['button.onClick.AddListener(...)', 'Update()', 'SetTrigger', 'AddForce'], correctIndex: 0, explanation: 'onClick.AddListener đăng ký callback cho Button.' },
 ]);
 
+const taiLieu = doc('fgu301-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">FGU301 · 📚 Resource hub</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">One hub for everything you need to learn Unity game development: the official syllabus &amp; slides, books, free official docs, video channels, tools, and a self-study roadmap.</p>
+<h3>📘 Syllabus &amp; slides</h3>
+<p>Sign in to <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) with your FPTU account to read the official FGU301 syllabus and lecture slides.</p>
+<h3>📗 Books</h3>
+<ul>
+<li><a href="https://www.manning.com/books/unity-in-action-third-edition" target="_blank" rel="noopener">Unity in Action (3rd ed.)</a> — Joseph Hocking, Manning: project-driven Unity + C#.</li>
+<li><a href="https://www.packtpub.com/en-us/product/learning-c-by-developing-games-with-unity-9781837636877" target="_blank" rel="noopener">Learning C# by Developing Games with Unity</a> — Harrison Ferrone, Packt.</li>
+</ul>
+<h3>🌐 Free official docs</h3>
+<ul>
+<li><a href="https://docs.unity3d.com/Manual/index.html" target="_blank" rel="noopener">Unity Manual</a> — the engine, editor and workflows.</li>
+<li><a href="https://docs.unity3d.com/ScriptReference/" target="_blank" rel="noopener">Scripting API</a> — every class/method (Transform, Rigidbody, Input…).</li>
+<li><a href="https://learn.unity.com/" target="_blank" rel="noopener">Unity Learn</a> — free official tutorials &amp; pathways.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@Brackeys" target="_blank" rel="noopener">Brackeys</a> — the classic beginner Unity series.</li>
+<li><a href="https://www.youtube.com/@CodeMonkeyUnity" target="_blank" rel="noopener">Code Monkey</a> — practical Unity/C# patterns.</li>
+<li><a href="https://www.youtube.com/@unity" target="_blank" rel="noopener">Unity</a> — the official channel.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://unity.com/download" target="_blank" rel="noopener">Unity Hub + Editor</a> — install &amp; manage engine versions.</li>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio / VS Code</a> — your C# editor.</li>
+<li><a href="https://www.blender.org/" target="_blank" rel="noopener">Blender</a> — free 3D models for your scenes.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations (exam core)</strong> — editor, GameObject/Component, Transform, MonoBehaviour, following the lessons here.</li>
+<li><strong>Practice on a project</strong> — build one small game (roll-a-ball, a 2D platformer) end to end.</li>
+<li><strong>Go deeper</strong> — physics, Animator, prefabs, UI; read the Manual for each system you touch.</li>
+<li><strong>Job-ready</strong> — polish one portfolio game and publish a WebGL/PC build.</li>
+</ol>
+<div class="callout"><span class="badge">Note</span> An original hub of real links — no copyrighted slides or books are embedded. If a link moves, start from the official homepage.</div>`,
+    `<span class="eyebrow">FGU301 · 📚 Trung tâm tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Một nơi gom mọi thứ để học phát triển game Unity: giáo trình &amp; slide chính thức, sách, tài liệu miễn phí chính thống, kênh video, công cụ, và lộ trình tự học.</p>
+<h3>📘 Giáo trình &amp; slide</h3>
+<p>Đăng nhập <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) bằng tài khoản FPTU để đọc giáo trình và slide bài giảng chính thức của FGU301.</p>
+<h3>📗 Sách</h3>
+<ul>
+<li><a href="https://www.manning.com/books/unity-in-action-third-edition" target="_blank" rel="noopener">Unity in Action (bản 3)</a> — Joseph Hocking, Manning: học Unity + C# qua dự án.</li>
+<li><a href="https://www.packtpub.com/en-us/product/learning-c-by-developing-games-with-unity-9781837636877" target="_blank" rel="noopener">Learning C# by Developing Games with Unity</a> — Harrison Ferrone, Packt.</li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li><a href="https://docs.unity3d.com/Manual/index.html" target="_blank" rel="noopener">Unity Manual</a> — engine, trình soạn và quy trình làm việc.</li>
+<li><a href="https://docs.unity3d.com/ScriptReference/" target="_blank" rel="noopener">Scripting API</a> — mọi class/method (Transform, Rigidbody, Input…).</li>
+<li><a href="https://learn.unity.com/" target="_blank" rel="noopener">Unity Learn</a> — hướng dẫn &amp; lộ trình chính thức, miễn phí.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@Brackeys" target="_blank" rel="noopener">Brackeys</a> — bộ Unity nhập môn kinh điển.</li>
+<li><a href="https://www.youtube.com/@CodeMonkeyUnity" target="_blank" rel="noopener">Code Monkey</a> — mẫu code Unity/C# thực dụng.</li>
+<li><a href="https://www.youtube.com/@unity" target="_blank" rel="noopener">Unity</a> — kênh chính thức.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://unity.com/download" target="_blank" rel="noopener">Unity Hub + Editor</a> — cài &amp; quản lý phiên bản engine.</li>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio / VS Code</a> — trình soạn C#.</li>
+<li><a href="https://www.blender.org/" target="_blank" rel="noopener">Blender</a> — model 3D miễn phí cho scene.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền tảng (lõi thi)</strong> — trình soạn, GameObject/Component, Transform, MonoBehaviour, theo đúng các bài ở đây.</li>
+<li><strong>Luyện qua project</strong> — làm trọn một game nhỏ (roll-a-ball, platformer 2D) từ đầu đến cuối.</li>
+<li><strong>Đào sâu</strong> — vật lý, Animator, prefab, UI; đọc Manual cho từng hệ thống bạn chạm tới.</li>
+<li><strong>Sẵn sàng đi làm</strong> — hoàn thiện một game portfolio và xuất bản build WebGL/PC.</li>
+</ol>
+<div class="callout"><span class="badge">Lưu ý</span> Đây là trung tâm liên kết nguyên gốc — không nhúng slide/sách có bản quyền. Link đổi thì vào trang chủ chính thức để tìm.</div>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola5', name: 'Kỳ 5', ordinal: 7 },
   course: {
@@ -217,6 +294,7 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/FGU301.webp',
     shortDescription: 'Build 2D/3D games in Unity — the editor, GameObject/Component model, transform & scripting, physics (Rigidbody/Collider), animation (Animator) and UI (Canvas). Bilingual, with C# scripts & quizzes.|||Dựng game 2D/3D trong Unity — trình soạn, mô hình GameObject/Component, transform & script, vật lý (Rigidbody/Collider), hoạt ảnh (Animator) và UI (Canvas). Song ngữ, có script C# & quiz.',
     description: 'Môn <strong>FGU301 — Fundamental Game Development</strong> (kỳ 5) dạy tạo <strong>game 2D/3D trong Unity</strong>. Từ <strong>mô hình GameObject–Component</strong> và trình soạn → <strong>Transform &amp; vòng đời MonoBehaviour</strong> (Start/Update, Time.deltaTime, điều khiển nhập) → <strong>vật lý</strong> (Rigidbody, Collider, collision vs trigger) → <strong>hoạt ảnh</strong> (Animator state machine) &amp; <strong>UI</strong> (Canvas, Button). Bám giáo trình FLM, song ngữ, script C# thả vào GameObject và quiz mỗi chương.',
@@ -224,6 +302,7 @@ export default {
     requirements: 'C# cơ bản. Cần cài Unity Hub + Unity Editor.',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Unity, GameObject–Component.', lessons: [intro] },
     { title: 'Chương 1 — Trình soạn & script|||Chapter 1 — Editor & scripting', description: 'Cửa sổ Unity, Transform, MonoBehaviour.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Vật lý|||Chapter 2 — Physics', description: 'Rigidbody, Collider, trigger.', lessons: [c2, c2q] },

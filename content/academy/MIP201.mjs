@@ -239,6 +239,85 @@ const c4q = quiz('mip201-quiz-4', 'Quiz 4 — RTOS|||Quiz 4 — RTOS', [
   { id: 'q3', question: 'Ngắt báo cho một task "có dữ liệu, dậy xử lý đi" thường dùng?', options: ['Mutex', 'Semaphore (give/take)', 'HAL_Delay', 'GPIO'], correctIndex: 1, explanation: 'Semaphore đồng bộ sự kiện giữa ngắt và task.' },
 ]);
 
+const taiLieu = doc('mip201-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">MIP201 · 📚 Resource hub</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">One hub for learning microcontroller programming on STM32/ARM Cortex-M: the official syllabus &amp; slides, books, free official docs, video channels, tools, and a self-study roadmap.</p>
+<h3>📘 Syllabus &amp; slides</h3>
+<p>Sign in to <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) with your FPTU account to read the official MIP201 syllabus and lecture slides.</p>
+<h3>📗 Books</h3>
+<ul>
+<li><a href="https://leanpub.com/mastering-stm32" target="_blank" rel="noopener">Mastering STM32</a> — Carmine Noviello: HAL, CubeIDE, peripherals in depth.</li>
+<li><a href="https://www.oreilly.com/library/view/making-embedded-systems/9781449308889/" target="_blank" rel="noopener">Making Embedded Systems</a> — Elecia White: how to think like an embedded engineer.</li>
+</ul>
+<h3>🌐 Free official docs</h3>
+<ul>
+<li><a href="https://www.st.com/en/development-tools/stm32cubeide.html" target="_blank" rel="noopener">STM32CubeIDE</a> — official IDE, downloads &amp; docs.</li>
+<li><a href="https://www.st.com/content/st_com/en/support/learning/stm32-education.html" target="_blank" rel="noopener">STM32 Education (ST)</a> — free courses, HAL &amp; peripheral guides.</li>
+<li><a href="https://developer.arm.com/documentation" target="_blank" rel="noopener">Arm Developer</a> — Cortex-M architecture &amp; reference.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@PhilsLab" target="_blank" rel="noopener">Phil's Lab</a> — STM32 &amp; embedded firmware, hands-on.</li>
+<li><a href="https://www.youtube.com/@ControllersTech" target="_blank" rel="noopener">ControllersTech</a> — STM32 HAL peripheral tutorials.</li>
+<li><a href="https://www.youtube.com/@digikey" target="_blank" rel="noopener">DigiKey</a> — embedded &amp; RTOS explainer series.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://www.st.com/en/development-tools/stm32cubeide.html" target="_blank" rel="noopener">STM32CubeIDE</a> — edit, build &amp; flash.</li>
+<li><a href="https://www.st.com/en/development-tools/stm32cubemx.html" target="_blank" rel="noopener">STM32CubeMX</a> — pin/clock/peripheral configurator.</li>
+<li><a href="https://www.putty.org/" target="_blank" rel="noopener">PuTTY / a serial terminal</a> — read UART debug output.</li>
+<li><a href="https://www.saleae.com/" target="_blank" rel="noopener">Logic analyzer (Saleae/PulseView)</a> — inspect SPI/I2C/UART lines.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations (exam core)</strong> — super-loop, GPIO, ADC, following the lessons here.</li>
+<li><strong>Practice on hardware</strong> — blink, read a button with debounce, read a sensor on a Nucleo board.</li>
+<li><strong>Go deeper</strong> — interrupts, timers/PWM, UART/SPI/I2C, then an RTOS with tasks and a mutex.</li>
+<li><strong>Job-ready</strong> — build one complete embedded project (sensor + display or motor) and write clean, interrupt-driven firmware.</li>
+</ol>
+<div class="callout"><span class="badge">Note</span> An original hub of real links — no copyrighted slides or books are embedded. If a link moves, start from the official homepage.</div>`,
+    `<span class="eyebrow">MIP201 · 📚 Trung tâm tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Một nơi gom để học lập trình vi điều khiển trên STM32/ARM Cortex-M: giáo trình &amp; slide chính thức, sách, tài liệu miễn phí chính thống, kênh video, công cụ, và lộ trình tự học.</p>
+<h3>📘 Giáo trình &amp; slide</h3>
+<p>Đăng nhập <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) bằng tài khoản FPTU để đọc giáo trình và slide bài giảng chính thức của MIP201.</p>
+<h3>📗 Sách</h3>
+<ul>
+<li><a href="https://leanpub.com/mastering-stm32" target="_blank" rel="noopener">Mastering STM32</a> — Carmine Noviello: HAL, CubeIDE, ngoại vi rất sâu.</li>
+<li><a href="https://www.oreilly.com/library/view/making-embedded-systems/9781449308889/" target="_blank" rel="noopener">Making Embedded Systems</a> — Elecia White: tư duy như kỹ sư nhúng.</li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li><a href="https://www.st.com/en/development-tools/stm32cubeide.html" target="_blank" rel="noopener">STM32CubeIDE</a> — IDE chính thức, tải &amp; tài liệu.</li>
+<li><a href="https://www.st.com/content/st_com/en/support/learning/stm32-education.html" target="_blank" rel="noopener">STM32 Education (ST)</a> — khoá học miễn phí, hướng dẫn HAL &amp; ngoại vi.</li>
+<li><a href="https://developer.arm.com/documentation" target="_blank" rel="noopener">Arm Developer</a> — kiến trúc &amp; tham chiếu Cortex-M.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@PhilsLab" target="_blank" rel="noopener">Phil's Lab</a> — STM32 &amp; firmware nhúng, thực hành.</li>
+<li><a href="https://www.youtube.com/@ControllersTech" target="_blank" rel="noopener">ControllersTech</a> — hướng dẫn ngoại vi STM32 HAL.</li>
+<li><a href="https://www.youtube.com/@digikey" target="_blank" rel="noopener">DigiKey</a> — loạt bài giải thích nhúng &amp; RTOS.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://www.st.com/en/development-tools/stm32cubeide.html" target="_blank" rel="noopener">STM32CubeIDE</a> — soạn, build &amp; nạp.</li>
+<li><a href="https://www.st.com/en/development-tools/stm32cubemx.html" target="_blank" rel="noopener">STM32CubeMX</a> — cấu hình chân/clock/ngoại vi.</li>
+<li><a href="https://www.putty.org/" target="_blank" rel="noopener">PuTTY / terminal nối tiếp</a> — đọc debug qua UART.</li>
+<li><a href="https://www.saleae.com/" target="_blank" rel="noopener">Logic analyzer (Saleae/PulseView)</a> — soi đường SPI/I2C/UART.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền tảng (lõi thi)</strong> — super-loop, GPIO, ADC, theo đúng các bài ở đây.</li>
+<li><strong>Luyện trên phần cứng</strong> — nháy LED, đọc nút có chống dội, đọc cảm biến trên board Nucleo.</li>
+<li><strong>Đào sâu</strong> — ngắt, timer/PWM, UART/SPI/I2C, rồi RTOS với task và mutex.</li>
+<li><strong>Sẵn sàng đi làm</strong> — làm trọn một dự án nhúng (cảm biến + màn hình hoặc động cơ) và viết firmware sạch, chạy theo ngắt.</li>
+</ol>
+<div class="callout"><span class="badge">Lưu ý</span> Đây là trung tâm liên kết nguyên gốc — không nhúng slide/sách có bản quyền. Link đổi thì vào trang chủ chính thức để tìm.</div>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola7', name: 'Kỳ 7', ordinal: 9 },
   course: {
@@ -248,6 +327,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/MIP201.webp',
     shortDescription: 'Embedded C on ARM Cortex-M (STM32 HAL/CubeIDE) — GPIO & ADC, interrupts, timers & PWM, serial comms (UART/SPI/I2C), and an RTOS (tasks/mutex/semaphore). Bilingual, with embedded C & quizzes.|||C nhúng trên ARM Cortex-M (STM32 HAL/CubeIDE) — GPIO & ADC, ngắt, timer & PWM, giao tiếp nối tiếp (UART/SPI/I2C), và RTOS (task/mutex/semaphore). Song ngữ, có C nhúng & quiz.',
     description: 'Môn <strong>MIP201 — Microcontroller Programming</strong> (kỳ 7) dạy <strong>C nhúng trên ARM Cortex-M</strong> với thư viện <strong>STM32 HAL</strong> và <strong>STM32CubeIDE</strong>, board Nucleo. Từ <strong>GPIO &amp; ADC</strong> (super-loop, đọc/ghi chân, chống dội, đọc analog) → <strong>ngắt, timer &amp; PWM</strong> (phản ứng tức thì, điều khiển độ sáng/tốc độ) → <strong>giao tiếp nối tiếp</strong> (UART, SPI, I2C) → <strong>RTOS</strong> (task/thread, scheduler, mutex, semaphore). Bám giáo trình FLM, song ngữ, code C nhúng thật và quiz mỗi chương.',
@@ -255,6 +335,7 @@ export default {
     requirements: 'Biết C cơ bản (con trỏ, kiểu). Nên có board STM32 Nucleo-F401RE/F411RE (hoặc dùng mô phỏng) + STM32CubeIDE.',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'MCU, ARM Cortex-M, HAL/CubeIDE.', lessons: [intro] },
     { title: 'Chương 1 — GPIO & ADC|||Chapter 1 — GPIO & ADC', description: 'Super-loop, vào/ra số, analog, debounce.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Ngắt, timer & PWM|||Chapter 2 — Interrupts, timers & PWM', description: 'Phản ứng tức thì, duty cycle.', lessons: [c2, c2q] },

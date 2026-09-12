@@ -815,6 +815,92 @@ const c8q = quiz('prn222-quiz-8', 'Quiz 8 — Worker Service', 'Quiz 8 — Worke
   { id: 'q3', question: 'BackgroundService có vòng đời DI nào?', options: ['Transient', 'Scoped', 'Singleton (tạo scope thủ công nếu cần Scoped)', 'Không đăng ký'], correctIndex: 2, explanation: 'Là Singleton; muốn dùng service Scoped thì tự tạo scope trong vòng lặp.' },
 ]);
 
+const taiLieu = doc('prn222-0-0-tai-lieu',
+  '📚 Course materials & references', '📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">PRN222 · Lesson 0.0 · Resources</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">One hub for everything you need to master PRN222 beyond these lessons: the official FLM syllabus &amp; slides, reference books, free primary documentation, video channels, tools, and a four-step self-study path.</p>
+<div class="callout"><span class="badge">Official</span> Log in to <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn">flm.fpt.edu.vn</a>) with your FPTU account — the full syllabus and every lecture slide live there, and they define exactly what the exam covers.</div>
+<h3>📘 Official syllabus &amp; slides</h3>
+<ul>
+<li><strong>FLM — flm.fpt.edu.vn</strong>: sign in with your FPTU account for the complete syllabus, session plan, CLOs and all lecture slides — the authoritative, in-scope source of truth.</li>
+</ul>
+<h3>📗 Reference books</h3>
+<ul>
+<li><em>C# in Depth (4th ed.)</em> — Jon Skeet (Manning): <a href="https://www.manning.com/books/c-sharp-in-depth-fourth-edition">manning.com/books/c-sharp-in-depth-fourth-edition</a></li>
+<li><em>Architecting Modern Web Applications with ASP.NET Core and Azure</em> — free official e-book (Microsoft): <a href="https://learn.microsoft.com/dotnet/architecture/modern-web-apps-azure/">learn.microsoft.com/dotnet/architecture/modern-web-apps-azure</a></li>
+</ul>
+<h3>🌐 Free primary documentation</h3>
+<ul>
+<li>ASP.NET Core: <a href="https://learn.microsoft.com/aspnet/core">learn.microsoft.com/aspnet/core</a></li>
+<li>C# language guide: <a href="https://learn.microsoft.com/dotnet/csharp">learn.microsoft.com/dotnet/csharp</a></li>
+<li>Blazor: <a href="https://learn.microsoft.com/aspnet/core/blazor">learn.microsoft.com/aspnet/core/blazor</a> · SignalR: <a href="https://learn.microsoft.com/aspnet/core/signalr">learn.microsoft.com/aspnet/core/signalr</a></li>
+</ul>
+<h3>▶️ YouTube channels</h3>
+<ul>
+<li>Microsoft Developer: <a href="https://www.youtube.com/@MicrosoftDeveloper">youtube.com/@MicrosoftDeveloper</a></li>
+<li>.NET: <a href="https://www.youtube.com/@dotnet">youtube.com/@dotnet</a></li>
+<li>Nick Chapsas: <a href="https://www.youtube.com/@nickchapsas">youtube.com/@nickchapsas</a></li>
+<li>IAmTimCorey: <a href="https://www.youtube.com/@IAmTimCorey">youtube.com/@IAmTimCorey</a></li>
+</ul>
+<h3>🛠️ Tools for study &amp; practice</h3>
+<ul>
+<li>Visual Studio 2022: <a href="https://visualstudio.microsoft.com/">visualstudio.microsoft.com</a></li>
+<li>.NET SDK: <a href="https://dotnet.microsoft.com/download">dotnet.microsoft.com/download</a></li>
+<li>JetBrains Rider: <a href="https://www.jetbrains.com/rider/">jetbrains.com/rider</a></li>
+<li>Postman (exercise your APIs): <a href="https://www.postman.com/">postman.com</a></li>
+</ul>
+<h3>🎯 A four-step self-study path</h3>
+<ol>
+<li><strong>Foundations / exam core</strong> — lock in async/await &amp; parallel programming, dependency injection and the request pipeline; they underpin every chapter and most theory questions.</li>
+<li><strong>Practice on a small project</strong> — build one CRUD app three ways (MVC, Razor Pages, Blazor) over the same EF Core model so you feel each style's trade-offs first-hand.</li>
+<li><strong>Go deeper on real-world concerns</strong> — add SignalR real-time updates and a background Worker Service; handle validation, error handling, logging and configuration properly.</li>
+<li><strong>Job-ready</strong> — ship the group project end-to-end with authentication, then be able to defend your architecture out loud in an interview.</li>
+</ol>`,
+    `<span class="eyebrow">PRN222 · Bài 0.0 · Tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Một nơi gom đủ thứ để học PRN222 vượt ngoài các bài trong khoá: giáo trình &amp; slide chính thức trên FLM, sách tham khảo, tài liệu gốc miễn phí, kênh video, công cụ, và lộ trình tự học 4 bước.</p>
+<div class="callout"><span class="badge">Chính thức</span> Đăng nhập <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn">flm.fpt.edu.vn</a>) bằng tài khoản FPTU — có giáo trình + slide đầy đủ, đúng phạm vi thi.</div>
+<h3>📘 Giáo trình &amp; slide chính thức</h3>
+<ul>
+<li><strong>FLM — flm.fpt.edu.vn</strong>: đăng nhập bằng tài khoản FPTU để lấy giáo trình đầy đủ, lịch buổi, CLO và toàn bộ slide bài giảng — nguồn chuẩn, đúng phạm vi thi.</li>
+</ul>
+<h3>📗 Sách tham khảo</h3>
+<ul>
+<li><em>C# in Depth (tái bản 4)</em> — Jon Skeet (Manning): <a href="https://www.manning.com/books/c-sharp-in-depth-fourth-edition">manning.com/books/c-sharp-in-depth-fourth-edition</a></li>
+<li><em>Architecting Modern Web Applications with ASP.NET Core and Azure</em> — e-book chính thức miễn phí (Microsoft): <a href="https://learn.microsoft.com/dotnet/architecture/modern-web-apps-azure/">learn.microsoft.com/dotnet/architecture/modern-web-apps-azure</a></li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li>ASP.NET Core: <a href="https://learn.microsoft.com/aspnet/core">learn.microsoft.com/aspnet/core</a></li>
+<li>Hướng dẫn ngôn ngữ C#: <a href="https://learn.microsoft.com/dotnet/csharp">learn.microsoft.com/dotnet/csharp</a></li>
+<li>Blazor: <a href="https://learn.microsoft.com/aspnet/core/blazor">learn.microsoft.com/aspnet/core/blazor</a> · SignalR: <a href="https://learn.microsoft.com/aspnet/core/signalr">learn.microsoft.com/aspnet/core/signalr</a></li>
+</ul>
+<h3>▶️ Kênh YouTube</h3>
+<ul>
+<li>Microsoft Developer: <a href="https://www.youtube.com/@MicrosoftDeveloper">youtube.com/@MicrosoftDeveloper</a></li>
+<li>.NET: <a href="https://www.youtube.com/@dotnet">youtube.com/@dotnet</a></li>
+<li>Nick Chapsas: <a href="https://www.youtube.com/@nickchapsas">youtube.com/@nickchapsas</a></li>
+<li>IAmTimCorey: <a href="https://www.youtube.com/@IAmTimCorey">youtube.com/@IAmTimCorey</a></li>
+</ul>
+<h3>🛠️ Công cụ học &amp; thực hành</h3>
+<ul>
+<li>Visual Studio 2022: <a href="https://visualstudio.microsoft.com/">visualstudio.microsoft.com</a></li>
+<li>.NET SDK: <a href="https://dotnet.microsoft.com/download">dotnet.microsoft.com/download</a></li>
+<li>JetBrains Rider: <a href="https://www.jetbrains.com/rider/">jetbrains.com/rider</a></li>
+<li>Postman (thử API của bạn): <a href="https://www.postman.com/">postman.com</a></li>
+</ul>
+<h3>🎯 Lộ trình tự học 4 bước</h3>
+<ol>
+<li><strong>Nền tảng / lõi thi</strong> — nắm chắc async/await &amp; song song, dependency injection và pipeline xử lý request; đây là gốc của mọi chương và phần lớn câu lý thuyết.</li>
+<li><strong>Luyện qua project nhỏ</strong> — làm một app CRUD bằng cả ba cách (MVC, Razor Pages, Blazor) trên cùng một model EF Core để tự cảm nhận ưu/nhược mỗi kiểu.</li>
+<li><strong>Đào sâu thực tế</strong> — thêm cập nhật real-time bằng SignalR và một Worker Service chạy nền; xử lý validation, lỗi, logging và cấu hình cho đúng.</li>
+<li><strong>Sẵn sàng đi làm</strong> — hoàn thiện đồ án nhóm đầu-cuối kèm xác thực, và tự trình bày được kiến trúc của mình khi phỏng vấn.</li>
+</ol>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola7', name: 'Kỳ 7', ordinal: 9 },
   course: {
@@ -824,6 +910,7 @@ export default {
     level: 'ADVANCED',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/PRN222.webp',
     shortDescription: 'The web & services tier of .NET 8 — networking, async/parallel, DI, ASP.NET Core MVC, Razor Pages, Blazor, SignalR & Worker Services. Bilingual, with exercises.|||Tầng web & dịch vụ của .NET 8 — networking, async/parallel, DI, ASP.NET Core MVC, Razor Pages, Blazor, SignalR & Worker Service. Song ngữ, có bài tập.',
     description: 'Môn <strong>PRN222 — Lập trình ứng dụng đa nền tảng nâng cao với .NET</strong> (ngành Kỹ thuật phần mềm, kỳ 7). Nối tiếp PRN212, đưa bạn sang tầng web & dịch vụ của .NET 8: networking, lập trình async/parallel sâu, dependency injection, và ba cách xây web (ASP.NET Core MVC, Razor Pages, Blazor), cộng real-time (SignalR) và Worker Service. Nội dung bám giáo trình FLM (8 chương, 5 CLO), song ngữ, code chạy được, <strong>mỗi chương có bài tập kèm lời giải</strong>.',
@@ -831,6 +918,7 @@ export default {
     requirements: 'Đã học PRN212 (C#/.NET desktop). Cần .NET 8 SDK + Visual Studio 2022 (hoặc VS Code + C# Dev Kit).',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Mục tiêu, 5 CLO, cách đánh giá, lộ trình 8 chương.', lessons: [intro] },
     { title: 'Chương 1 — Lập trình mạng|||Chapter 1 — Networking', description: 'HttpClient, TCP client/server.', lessons: [c1, c1e, c1q] },
     { title: 'Chương 2 — Async & Parallel|||Chapter 2 — Async & Parallel', description: 'async/await, Task, PLINQ, cancellation.', lessons: [c2, c2e, c2q] },

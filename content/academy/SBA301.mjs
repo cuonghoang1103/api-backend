@@ -335,6 +335,89 @@ const c4q = quiz('sba301-quiz-4', 'Quiz 4 — JPA/Mongo & JWT|||Quiz 4 — JPA/M
   { id: 'q3', question: 'Vì sao SPA dùng JWT thay session server?', options: ['Nhanh hơn', 'SPA/stateless dễ gắn token mỗi request; không dựa session server', 'Bắt buộc bởi React', 'Để đẹp'], correctIndex: 1, explanation: 'Token tự chứa, hợp kiến trúc SPA + API tách rời, stateless.' },
 ]);
 
+const taiLieu = doc('sba301-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">SBA301 · Resource hub</span>
+<h2>📚 Course materials &amp; references</h2>
+<p class="lead">A curated hub for self-study: the official FLM syllabus &amp; slides, books, free authoritative docs for React and Spring Boot, YouTube channels, tools, and a step-by-step roadmap. Every link is real and opens in a new tab.</p>
+<div class="callout"><span class="badge">FLM</span> Log in to <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> with your FPTU account to read the official syllabus and lecture slides for this course.</div>
+<h3>📘 Syllabus &amp; slides</h3>
+<ul>
+<li><strong>FLM (flm.fpt.edu.vn)</strong> — the source of truth for SBA301: the 8 CLOs, per-session slides, and assessment scheme. Read the slide of a topic first, then use the sources below to build the full-stack app.</li>
+</ul>
+<h3>📗 Books</h3>
+<ul>
+<li><a href="https://www.roadtoreact.com/" target="_blank" rel="noopener">The Road to React — Robin Wieruch</a>: a practical, project-based path through modern React (hooks, data fetching).</li>
+<li><a href="https://www.manning.com/books/spring-start-here" target="_blank" rel="noopener">Spring Start Here — Laurentiu Spilca (Manning)</a>: a gentle, hands-on introduction to Spring &amp; Spring Boot.</li>
+</ul>
+<h3>🌐 Free official docs</h3>
+<ul>
+<li><a href="https://react.dev/" target="_blank" rel="noopener">react.dev</a>: the official React docs — components, hooks, and the interactive tutorial.</li>
+<li><a href="https://spring.io/guides" target="_blank" rel="noopener">spring.io/guides</a>: short official guides (REST service, CORS, data access, security).</li>
+<li><a href="https://spring.io/projects/spring-boot" target="_blank" rel="noopener">Spring Boot reference</a>: the authoritative reference for auto-configuration and starters.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@NetNinja" target="_blank" rel="noopener">The Net Ninja</a> — clear React &amp; full-stack series.</li>
+<li><a href="https://www.youtube.com/@amigoscode" target="_blank" rel="noopener">Amigoscode</a> — Spring Boot &amp; full-stack tutorials.</li>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp</a> — full-length React and Spring Boot courses.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://nodejs.org/" target="_blank" rel="noopener">Node.js</a> — runtime &amp; npm for the React front-end.</li>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a> — editor for the React side.</li>
+<li><a href="https://www.jetbrains.com/idea/" target="_blank" rel="noopener">IntelliJ IDEA</a> — IDE for the Spring Boot back-end.</li>
+<li><a href="https://www.postman.com/" target="_blank" rel="noopener">Postman</a> — test your REST API before wiring the SPA.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations for the exam</strong> — master React (components/props/state, hooks, fetch) and Spring Boot REST + CORS from the FLM slides.</li>
+<li><strong>Practise on a project</strong> — build a CRUD SPA: a React front-end calling a Spring Boot API, tested first in Postman.</li>
+<li><strong>Go deeper in practice</strong> — add Spring Data JPA (SQL) and MongoDB, then secure the app end-to-end with JWT.</li>
+<li><strong>Job-ready</strong> — deploy the full-stack app, handle loading/error states cleanly, and explain the client–server data flow.</li>
+</ol>`,
+    `<span class="eyebrow">SBA301 · Trung tâm tài liệu</span>
+<h2>📚 Tài liệu tham khảo môn học</h2>
+<p class="lead">Trung tâm tài liệu để tự học: giáo trình &amp; slide chính thức trên FLM, sách, tài liệu uy tín miễn phí cho React và Spring Boot, kênh YouTube, công cụ, và lộ trình từng bước. Mọi link đều thật và mở ở tab mới.</p>
+<div class="callout"><span class="badge">FLM</span> Đăng nhập <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> bằng tài khoản FPTU để đọc giáo trình và slide bài giảng chính thức của môn.</div>
+<h3>📘 Giáo trình &amp; slide</h3>
+<ul>
+<li><strong>FLM (flm.fpt.edu.vn)</strong> — nguồn chuẩn của SBA301: 8 CLO, slide từng buổi, và cách đánh giá. Đọc slide của một chủ đề trước, rồi dùng các nguồn dưới để dựng app full-stack.</li>
+</ul>
+<h3>📗 Sách</h3>
+<ul>
+<li><a href="https://www.roadtoreact.com/" target="_blank" rel="noopener">The Road to React — Robin Wieruch</a>: lộ trình React hiện đại theo dự án (hook, gọi dữ liệu).</li>
+<li><a href="https://www.manning.com/books/spring-start-here" target="_blank" rel="noopener">Spring Start Here — Laurentiu Spilca (Manning)</a>: nhập môn Spring &amp; Spring Boot dễ hiểu, thực hành.</li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li><a href="https://react.dev/" target="_blank" rel="noopener">react.dev</a>: tài liệu React chính thức — component, hook, và tutorial tương tác.</li>
+<li><a href="https://spring.io/guides" target="_blank" rel="noopener">spring.io/guides</a>: các guide chính thức ngắn (REST service, CORS, truy cập dữ liệu, security).</li>
+<li><a href="https://spring.io/projects/spring-boot" target="_blank" rel="noopener">Spring Boot reference</a>: tài liệu chuẩn về auto-configuration và starter.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@NetNinja" target="_blank" rel="noopener">The Net Ninja</a> — series React &amp; full-stack mạch lạc.</li>
+<li><a href="https://www.youtube.com/@amigoscode" target="_blank" rel="noopener">Amigoscode</a> — hướng dẫn Spring Boot &amp; full-stack.</li>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp</a> — khoá dài về React và Spring Boot.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://nodejs.org/" target="_blank" rel="noopener">Node.js</a> — runtime &amp; npm cho front-end React.</li>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a> — trình soạn cho phía React.</li>
+<li><a href="https://www.jetbrains.com/idea/" target="_blank" rel="noopener">IntelliJ IDEA</a> — IDE cho back-end Spring Boot.</li>
+<li><a href="https://www.postman.com/" target="_blank" rel="noopener">Postman</a> — test API REST trước khi nối SPA.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền tảng để thi</strong> — nắm chắc React (component/props/state, hook, fetch) và Spring Boot REST + CORS từ slide FLM.</li>
+<li><strong>Luyện trên project</strong> — dựng một SPA CRUD: front-end React gọi API Spring Boot, test trước bằng Postman.</li>
+<li><strong>Đào sâu thực tế</strong> — thêm Spring Data JPA (SQL) và MongoDB, rồi bảo mật app end-to-end bằng JWT.</li>
+<li><strong>Sẵn sàng đi làm</strong> — triển khai app full-stack, xử lý loading/lỗi gọn gàng, và giải thích được luồng dữ liệu client–server.</li>
+</ol>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola7', name: 'Kỳ 7', ordinal: 9 },
   course: {
@@ -344,6 +427,7 @@ export default {
     level: 'ADVANCED',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/SBA301.webp',
     shortDescription: 'Full-stack: a React SPA talking to a Spring Boot REST API — components/hooks, fetch, CORS, JPA & MongoDB, JWT security. Bilingual, with React/Spring code & exercises.|||Full-stack: React SPA nói chuyện với API REST Spring Boot — component/hook, fetch, CORS, JPA & MongoDB, bảo mật JWT. Song ngữ, code React/Spring & bài tập.',
     description: 'Môn <strong>SBA301 — Tích hợp ứng dụng trang đơn với Spring Boot</strong> (ngành Kỹ thuật phần mềm, kỳ 7). Full-stack: một <strong>React SPA</strong> ở front-end gọi một <strong>API REST Spring Boot</strong> ở back-end. Đi từ React cơ bản (component/props/state/hook, fetch) → Spring Boot REST + <strong>CORS</strong> → nối React ↔ Spring (fetch/axios CRUD, JSON) → <strong>JPA &amp; MongoDB</strong> → <strong>bảo mật JWT end-to-end</strong>. Nối FER202 (React) và HSF302 (Spring). Bám giáo trình FLM (8 CLO), song ngữ, code chạy được và bài tập kèm lời giải.',
@@ -351,6 +435,7 @@ export default {
     requirements: 'Nên đã học React (FER202) và Spring (HSF302), hoặc quen JavaScript + Java. Cần Node.js (React), JDK + Spring Boot, và MySQL/MongoDB.',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Kiến trúc full-stack, 8 CLO, lộ trình.', lessons: [intro] },
     { title: 'Chương 1 — React cơ bản|||Chapter 1 — React essentials', description: 'Component, props/state, hook, fetch.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Spring Boot REST + CORS|||Chapter 2 — Spring Boot REST + CORS', description: 'REST API, CORS cho SPA, JPA.', lessons: [c2, c2q] },

@@ -172,6 +172,79 @@ const c3q = quiz('jis401-quiz-3', 'Quiz 3 — Communication|||Quiz 3 — Giao ti
   { id: 'q3', question: 'Điều khách hàng Nhật coi trọng nhất trong giao tiếp?', options: ['Nói nhanh', 'Rõ ràng, khiêm nhường, kịp thời (báo cáo/xác nhận sớm)', 'Dùng nhiều từ Anh', 'Không cần lịch sự'], correctIndex: 1, explanation: 'Giao tiếp chủ động, đúng lễ nghi là giá trị cốt lõi.' },
 ]);
 
+const taiLieu = doc('jis401-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">JIS401 · Materials</span>
+<h2>Course materials &amp; resource hub</h2>
+<p class="lead">Everything to learn software-industry Japanese — the development process, roles &amp; documents, and project communication with keigo — in one place. The full official slides &amp; textbook live on <strong>FLM</strong>; below are free, legal resources.</p>
+<h3>📘 Textbook &amp; slides</h3>
+<p>The official FPTU giáo trình &amp; lecture slides for JIS401 are on <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — sign in with your FPTU account.</p>
+<h3>📗 Reference books</h3>
+<ul>
+<li><a href="https://www.japantimes.co.jp/books/" target="_blank" rel="noopener"><em>Nihongo So-matome / Shin Kanzen Master</em> — business &amp; JLPT N2 grammar</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Honorific_speech_in_Japanese" target="_blank" rel="noopener">Keigo (敬語) — honorific speech reference</a></li>
+</ul>
+<h3>🌐 Official / free documentation</h3>
+<ul>
+<li><a href="https://www.jlpt.jp/e/" target="_blank" rel="noopener">JLPT — official test site (levels &amp; can-do)</a></li>
+<li><a href="https://nihongo-e-na.com/eng/" target="_blank" rel="noopener">Nihongo e-na — curated free Japanese-learning sites</a></li>
+<li><a href="https://www.weblio.jp/" target="_blank" rel="noopener">Weblio — Japanese dictionary &amp; business/IT terms</a></li>
+</ul>
+<h3>▶️ YouTube channels</h3>
+<ul>
+<li><a href="https://www.youtube.com/@JapanesePod101" target="_blank" rel="noopener">JapanesePod101</a> — business Japanese &amp; keigo</li>
+<li><a href="https://www.youtube.com/@Nihongonomori2013" target="_blank" rel="noopener">日本語の森 (Nihongo no Mori)</a> — JLPT grammar in Japanese</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://apps.ankiweb.net/" target="_blank" rel="noopener">Anki</a> — spaced-repetition flashcards for software vocabulary</li>
+<li><a href="https://jisho.org/" target="_blank" rel="noopener">Jisho.org</a> — Japanese–English dictionary (kanji lookup)</li>
+<li><a href="https://ja.wikipedia.org/" target="_blank" rel="noopener">Japanese Wikipedia</a> — read real 仕様書-style technical Japanese</li>
+</ul>
+<div class="callout"><span class="badge">Self-study path</span>
+<ol>
+<li><strong>Foundation / exam core</strong> — development-process terms (要件定義→設計→実装→テスト) and 工程 vocabulary.</li>
+<li><strong>Practice</strong> — drill roles (PM/SE/PG/BrSE) &amp; document names (仕様書/議事録) in Anki with example sentences.</li>
+<li><strong>Go deeper</strong> — write short progress reports (進捗) and confirmations (確認); read a real spec both ways.</li>
+<li><strong>Job-ready</strong> — keigo (敬語) and business email for communicating with a Japanese client (お客様).</li>
+</ol></div>`,
+    `<span class="eyebrow">JIS401 · Tài liệu</span>
+<h2>Trung tâm tài liệu tham khảo</h2>
+<p class="lead">Mọi thứ để học Tiếng Nhật ngành phần mềm — quy trình phát triển, vai trò &amp; tài liệu, giao tiếp dự án với kính ngữ — gom về một chỗ. Slide &amp; giáo trình chính thức đầy đủ nằm trên <strong>FLM</strong>; bên dưới là nguồn miễn phí, hợp pháp.</p>
+<h3>📘 Giáo trình &amp; slide</h3>
+<p>Giáo trình FPTU &amp; slide bài giảng chính thức của JIS401 có trên <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — đăng nhập bằng tài khoản FPTU.</p>
+<h3>📗 Sách tham khảo</h3>
+<ul>
+<li><a href="https://www.japantimes.co.jp/books/" target="_blank" rel="noopener"><em>Nihongo So-matome / Shin Kanzen Master</em> — ngữ pháp thương mại &amp; JLPT N2</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Honorific_speech_in_Japanese" target="_blank" rel="noopener">Kính ngữ (敬語) — tra cứu thể tôn kính/khiêm nhường</a></li>
+</ul>
+<h3>🌐 Tài liệu chính thức / miễn phí</h3>
+<ul>
+<li><a href="https://www.jlpt.jp/e/" target="_blank" rel="noopener">JLPT — trang thi chính thức (cấp độ &amp; can-do)</a></li>
+<li><a href="https://nihongo-e-na.com/eng/" target="_blank" rel="noopener">Nihongo e-na — tuyển tập trang học tiếng Nhật miễn phí</a></li>
+<li><a href="https://www.weblio.jp/" target="_blank" rel="noopener">Weblio — từ điển Nhật &amp; thuật ngữ thương mại/IT</a></li>
+</ul>
+<h3>▶️ Kênh YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@JapanesePod101" target="_blank" rel="noopener">JapanesePod101</a> — tiếng Nhật thương mại &amp; kính ngữ</li>
+<li><a href="https://www.youtube.com/@Nihongonomori2013" target="_blank" rel="noopener">日本語の森 (Nihongo no Mori)</a> — ngữ pháp JLPT bằng tiếng Nhật</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://apps.ankiweb.net/" target="_blank" rel="noopener">Anki</a> — thẻ ghi nhớ lặp lại ngắt quãng cho từ vựng phần mềm</li>
+<li><a href="https://jisho.org/" target="_blank" rel="noopener">Jisho.org</a> — từ điển Nhật–Anh (tra kanji)</li>
+<li><a href="https://ja.wikipedia.org/" target="_blank" rel="noopener">Wikipedia tiếng Nhật</a> — đọc tiếng Nhật kỹ thuật kiểu 仕様書 thật</li>
+</ul>
+<div class="callout"><span class="badge">Lộ trình tự học</span>
+<ol>
+<li><strong>Nền / lõi thi</strong> — từ vựng pha phát triển (要件定義→設計→実装→テスト) và thuật ngữ 工程.</li>
+<li><strong>Luyện tập</strong> — nhồi vai trò (PM/SE/PG/BrSE) &amp; tên tài liệu (仕様書/議事録) trong Anki kèm câu mẫu.</li>
+<li><strong>Đào sâu thực tế</strong> — viết báo cáo tiến độ (進捗) và xác nhận (確認); đọc một bản spec thật cả hai chiều.</li>
+<li><strong>Sẵn sàng đi làm</strong> — kính ngữ (敬語) và email công việc để giao tiếp với khách Nhật (お客様).</li>
+</ol></div>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola8', name: 'Kỳ 8', ordinal: 10 },
   course: {
@@ -181,6 +254,7 @@ export default {
     level: 'ADVANCED',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/JIS401.webp',
     shortDescription: 'Software-industry Japanese — the development process (要件定義→設計→実装→テスト), roles (PM/SE/PG/BrSE) & documents (仕様書), and project communication with keigo. Bilingual, with terms + romaji & quizzes.|||Tiếng Nhật ngành phần mềm — quy trình phát triển (yêu cầu→thiết kế→hiện thực→test), vai trò (PM/SE/PG/BrSE) & tài liệu (仕様書), giao tiếp dự án với kính ngữ. Song ngữ, có thuật ngữ + romaji & quiz.',
     description: 'Môn <strong>JIS401 — Japanese in Software</strong> (kỳ 8), tự chọn định hướng CNTT sau OJT, xây <strong>vốn từ tiếng Nhật ngành phần mềm</strong>. Gồm <strong>quy trình phát triển (工程)</strong> (要件定義/設計/実装/テスト/リリース/保守, waterfall vs agile) → <strong>vai trò &amp; tài liệu</strong> (PM/SE/PG/BrSE, 仕様書/設計書/議事録) → <strong>giao tiếp dự án</strong> (báo cáo tiến độ, xác nhận, email, kính ngữ). Bám giáo trình FLM, song ngữ (tiếng Việt), có thuật ngữ Nhật (kanji/kana + romaji), câu mẫu và quiz mỗi chương.',
@@ -188,6 +262,7 @@ export default {
     requirements: 'Đã học phần lớn tiếng Nhật (khoảng N3) + có kiến thức phần mềm cơ bản (đã qua OJT là lý tưởng).',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Tiếng Nhật chuyên sâu ngành phần mềm.', lessons: [intro] },
     { title: 'Chương 1 — Quy trình phát triển|||Chapter 1 — Development process', description: '要件定義→設計→実装→テスト.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Vai trò & tài liệu|||Chapter 2 — Roles & documents', description: 'PM/SE/PG/BrSE, 仕様書.', lessons: [c2, c2q] },

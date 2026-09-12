@@ -175,6 +175,79 @@ const c3q = quiz('jit401-quiz-3', 'Quiz 3 — Security & workplace|||Quiz 3 — 
   { id: 'q3', question: '「パスワード」(pasuwaado) là?', options: ['Mật khẩu (password)', 'Máy chủ', 'Bảo mật', 'Sao lưu'], correctIndex: 0, explanation: 'pasuwaado = password = mật khẩu.' },
 ]);
 
+const taiLieu = doc('jit401-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">JIT401 · Materials</span>
+<h2>Course materials &amp; resource hub</h2>
+<p class="lead">Everything to learn IT Japanese — technical vocabulary and reading for working at Japanese tech firms — in one place. The full official slides &amp; textbook live on <strong>FLM</strong>; below are free, legal resources.</p>
+<h3>📘 Textbook &amp; slides</h3>
+<p>The official FPTU giáo trình &amp; lecture slides for JIT401 are on <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — sign in with your FPTU account.</p>
+<h3>📗 Reference books</h3>
+<ul>
+<li><a href="https://www.japantimes.co.jp/books/" target="_blank" rel="noopener"><em>Nihongo So-matome</em> / <em>Shin Kanzen Master</em> — JLPT N3–N2 grammar &amp; vocabulary</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Katakana" target="_blank" rel="noopener">Katakana loanwords in IT — reference overview</a></li>
+</ul>
+<h3>🌐 Official / free documentation</h3>
+<ul>
+<li><a href="https://www.jlpt.jp/e/" target="_blank" rel="noopener">JLPT — official test site (levels &amp; can-do)</a></li>
+<li><a href="https://nihongo-e-na.com/eng/" target="_blank" rel="noopener">Nihongo e-na — curated free Japanese-learning sites</a></li>
+<li><a href="https://www.weblio.jp/" target="_blank" rel="noopener">Weblio — Japanese dictionary &amp; IT terms</a></li>
+</ul>
+<h3>▶️ YouTube channels</h3>
+<ul>
+<li><a href="https://www.youtube.com/@JapanesePod101" target="_blank" rel="noopener">JapanesePod101</a> — vocabulary &amp; listening</li>
+<li><a href="https://www.youtube.com/@Nihongonomori2013" target="_blank" rel="noopener">日本語の森 (Nihongo no Mori)</a> — JLPT grammar in Japanese</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://apps.ankiweb.net/" target="_blank" rel="noopener">Anki</a> — spaced-repetition flashcards for IT vocabulary</li>
+<li><a href="https://jisho.org/" target="_blank" rel="noopener">Jisho.org</a> — Japanese–English dictionary (kanji lookup)</li>
+<li><a href="https://ja.wikipedia.org/" target="_blank" rel="noopener">Japanese Wikipedia</a> — read real IT articles in Japanese</li>
+</ul>
+<div class="callout"><span class="badge">Self-study path</span>
+<ol>
+<li><strong>Foundation / exam core</strong> — core IT katakana loanwords and kanji compounds (computers, networks).</li>
+<li><strong>Practice</strong> — drill terms in Anki and read short technical sentences aloud until fluent.</li>
+<li><strong>Go deeper</strong> — programming, data &amp; security vocabulary; translate real IT docs both ways.</li>
+<li><strong>Job-ready</strong> — workplace communication (報連相 hou-ren-sou) and polite forms for a Japanese IT team.</li>
+</ol></div>`,
+    `<span class="eyebrow">JIT401 · Tài liệu</span>
+<h2>Trung tâm tài liệu tham khảo</h2>
+<p class="lead">Mọi thứ để học Tiếng Nhật CNTT — từ vựng kỹ thuật và đọc hiểu để làm việc tại công ty IT Nhật — gom về một chỗ. Slide &amp; giáo trình chính thức đầy đủ nằm trên <strong>FLM</strong>; bên dưới là nguồn miễn phí, hợp pháp.</p>
+<h3>📘 Giáo trình &amp; slide</h3>
+<p>Giáo trình FPTU &amp; slide bài giảng chính thức của JIT401 có trên <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — đăng nhập bằng tài khoản FPTU.</p>
+<h3>📗 Sách tham khảo</h3>
+<ul>
+<li><a href="https://www.japantimes.co.jp/books/" target="_blank" rel="noopener"><em>Nihongo So-matome</em> / <em>Shin Kanzen Master</em> — ngữ pháp &amp; từ vựng JLPT N3–N2</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Katakana" target="_blank" rel="noopener">Từ mượn katakana trong IT — tổng quan tra cứu</a></li>
+</ul>
+<h3>🌐 Tài liệu chính thức / miễn phí</h3>
+<ul>
+<li><a href="https://www.jlpt.jp/e/" target="_blank" rel="noopener">JLPT — trang thi chính thức (cấp độ &amp; can-do)</a></li>
+<li><a href="https://nihongo-e-na.com/eng/" target="_blank" rel="noopener">Nihongo e-na — tuyển tập trang học tiếng Nhật miễn phí</a></li>
+<li><a href="https://www.weblio.jp/" target="_blank" rel="noopener">Weblio — từ điển Nhật &amp; thuật ngữ IT</a></li>
+</ul>
+<h3>▶️ Kênh YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@JapanesePod101" target="_blank" rel="noopener">JapanesePod101</a> — từ vựng &amp; nghe</li>
+<li><a href="https://www.youtube.com/@Nihongonomori2013" target="_blank" rel="noopener">日本語の森 (Nihongo no Mori)</a> — ngữ pháp JLPT bằng tiếng Nhật</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://apps.ankiweb.net/" target="_blank" rel="noopener">Anki</a> — thẻ ghi nhớ lặp lại ngắt quãng cho từ vựng IT</li>
+<li><a href="https://jisho.org/" target="_blank" rel="noopener">Jisho.org</a> — từ điển Nhật–Anh (tra kanji)</li>
+<li><a href="https://ja.wikipedia.org/" target="_blank" rel="noopener">Wikipedia tiếng Nhật</a> — đọc bài IT thật bằng tiếng Nhật</li>
+</ul>
+<div class="callout"><span class="badge">Lộ trình tự học</span>
+<ol>
+<li><strong>Nền / lõi thi</strong> — từ mượn katakana và từ ghép kanji IT cốt lõi (máy tính, mạng).</li>
+<li><strong>Luyện tập</strong> — nhồi từ trong Anki và đọc to câu kỹ thuật ngắn đến khi trôi chảy.</li>
+<li><strong>Đào sâu thực tế</strong> — từ vựng lập trình, dữ liệu &amp; bảo mật; dịch tài liệu IT thật cả hai chiều.</li>
+<li><strong>Sẵn sàng đi làm</strong> — giao tiếp công việc (報連相 hou-ren-sou) và thể lịch sự với đội IT Nhật.</li>
+</ol></div>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola8', name: 'Kỳ 8', ordinal: 10 },
   course: {
@@ -184,6 +257,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/JIT401.webp',
     shortDescription: 'IT Japanese for working at Japanese tech firms — IT knowledge in Japanese (computers, networks, programming, data, security) plus the vocabulary to read and translate IT docs. Bilingual, with terms + romaji & quizzes.|||Tiếng Nhật CNTT để làm việc tại công ty IT Nhật — kiến thức IT bằng tiếng Nhật (máy tính, mạng, lập trình, dữ liệu, bảo mật) cùng từ vựng để đọc-dịch tài liệu IT. Song ngữ, có thuật ngữ + romaji & quiz.',
     description: 'Môn <strong>JIT401 — Information Technology Japanese</strong> (kỳ 8) giúp sinh viên Nhật ngữ làm việc tại <strong>công ty IT Nhật Bản</strong>. Hai trục: (1) kiến thức IT diễn đạt bằng tiếng Nhật — <strong>máy tính &amp; mạng</strong> → <strong>lập trình &amp; dữ liệu</strong> (biến, hàm, CSDL, giải thuật) → <strong>bảo mật &amp; giao tiếp công việc</strong> (hou-ren-sou); và (2) từ vựng, thuật ngữ, cách diễn đạt để đọc-hiểu-dịch tài liệu IT. Bám giáo trình FLM, song ngữ (tiếng Việt), có thuật ngữ Nhật (kanji/kana + romaji), câu mẫu và quiz mỗi chương.',
@@ -191,6 +265,7 @@ export default {
     requirements: 'Đã có tiếng Nhật cơ bản (khoảng N4-N3) và biết kana. Không bắt buộc nền IT sâu.',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Làm việc tại công ty IT Nhật.', lessons: [intro] },
     { title: 'Chương 1 — Máy tính & mạng|||Chapter 1 — Computers & networks', description: 'Thuật ngữ phần cứng/mạng.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Lập trình & dữ liệu|||Chapter 2 — Programming & data', description: 'Biến/hàm/CSDL/giải thuật.', lessons: [c2, c2q] },

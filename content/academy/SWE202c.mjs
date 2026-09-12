@@ -268,6 +268,89 @@ const m3q = quiz('swe202c-quiz-3', 'Quiz M3 — Quality, design & PM|||Quiz M3 �
   { id: 'q3', question: 'Tam giác ràng buộc dự án gồm?', options: ['Scope, time, cost', 'Code, test, deploy', 'UML, Scrum, Git', 'Actor, use case, class'], correctIndex: 0, explanation: 'Triple constraint: phạm vi–thời gian–chi phí ở mức chất lượng.' },
 ]);
 
+const taiLieu = doc('swe202c-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">SWE202c · Resource hub</span>
+<h2>📚 Course materials &amp; references</h2>
+<p class="lead">A curated hub for self-study: the official FLM syllabus &amp; slides, books, free authoritative docs, YouTube channels, tools, and a step-by-step roadmap. Every link is real and opens in a new tab.</p>
+<div class="callout"><span class="badge">FLM</span> Log in to <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> with your FPTU account to read the official syllabus and lecture slides for this course.</div>
+<h3>📘 Syllabus &amp; slides</h3>
+<ul>
+<li><strong>FLM (flm.fpt.edu.vn)</strong> — the source of truth for SWE202c: learning outcomes, per-session slides, and the assessment scheme. Read the slide of a topic first, then use the sources below to go deeper.</li>
+</ul>
+<h3>📗 Books</h3>
+<ul>
+<li><a href="https://software-engineering-book.com/" target="_blank" rel="noopener">Software Engineering — Ian Sommerville</a>: the classic textbook on the lifecycle, requirements, design, and testing.</li>
+<li><a href="https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/" target="_blank" rel="noopener">The Pragmatic Programmer — Hunt &amp; Thomas</a>: timeless engineering habits (DRY, orthogonality, testing) that make code maintainable.</li>
+</ul>
+<h3>🌐 Free official docs</h3>
+<ul>
+<li><a href="https://www.geeksforgeeks.org/software-engineering/" target="_blank" rel="noopener">GeeksforGeeks — Software Engineering</a>: SDLC models, UML, testing, design principles, all in one place.</li>
+<li><a href="https://martinfowler.com/" target="_blank" rel="noopener">martinfowler.com</a>: authoritative essays on refactoring, design, and agile practices.</li>
+<li><a href="https://agilemanifesto.org/" target="_blank" rel="noopener">Agile Manifesto</a> and <a href="https://scrumguides.org/" target="_blank" rel="noopener">The Scrum Guide</a>: the primary sources for Agile/Scrum.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp</a> — full-length software engineering &amp; Git courses.</li>
+<li><a href="https://www.youtube.com/@Fireship" target="_blank" rel="noopener">Fireship</a> — fast, concept-dense explainers of modern dev practice.</li>
+<li><a href="https://www.youtube.com/@ByteByteGo" target="_blank" rel="noopener">ByteByteGo</a> — system design &amp; engineering fundamentals.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a> — editor for code and diagrams.</li>
+<li><a href="https://github.com/" target="_blank" rel="noopener">Git &amp; GitHub</a> — version control and collaboration.</li>
+<li><a href="https://www.drawio.com/" target="_blank" rel="noopener">draw.io</a> — free UML &amp; architecture diagrams.</li>
+<li><a href="https://www.atlassian.com/software/jira" target="_blank" rel="noopener">Jira</a> — backlog, sprints, and issue tracking.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations for the exam</strong> — master the SDLC models, Scrum roles/events, and UML diagram types from the FLM slides.</li>
+<li><strong>Practise on a project</strong> — model a small system in draw.io (use case + class + sequence), then implement one feature end-to-end on GitHub.</li>
+<li><strong>Go deeper in practice</strong> — apply design principles (SOLID, cohesion/coupling) and write unit tests; read Fowler on refactoring.</li>
+<li><strong>Job-ready</strong> — run a mini-project as a Scrum team on Jira with branches and pull requests, then explain your design decisions.</li>
+</ol>`,
+    `<span class="eyebrow">SWE202c · Trung tâm tài liệu</span>
+<h2>📚 Tài liệu tham khảo môn học</h2>
+<p class="lead">Trung tâm tài liệu để tự học: giáo trình &amp; slide chính thức trên FLM, sách, tài liệu uy tín miễn phí, kênh YouTube, công cụ, và lộ trình từng bước. Mọi link đều thật và mở ở tab mới.</p>
+<div class="callout"><span class="badge">FLM</span> Đăng nhập <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> bằng tài khoản FPTU để đọc giáo trình và slide bài giảng chính thức của môn.</div>
+<h3>📘 Giáo trình &amp; slide</h3>
+<ul>
+<li><strong>FLM (flm.fpt.edu.vn)</strong> — nguồn chuẩn của SWE202c: chuẩn đầu ra, slide từng buổi, và cách đánh giá. Đọc slide của một chủ đề trước, rồi dùng các nguồn dưới để đào sâu.</li>
+</ul>
+<h3>📗 Sách</h3>
+<ul>
+<li><a href="https://software-engineering-book.com/" target="_blank" rel="noopener">Software Engineering — Ian Sommerville</a>: sách kinh điển về vòng đời, yêu cầu, thiết kế, kiểm thử.</li>
+<li><a href="https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/" target="_blank" rel="noopener">The Pragmatic Programmer — Hunt &amp; Thomas</a>: những thói quen kỹ thuật bền vững (DRY, trực giao, kiểm thử) giúp code dễ bảo trì.</li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li><a href="https://www.geeksforgeeks.org/software-engineering/" target="_blank" rel="noopener">GeeksforGeeks — Software Engineering</a>: mô hình SDLC, UML, kiểm thử, nguyên tắc thiết kế gọn trong một nơi.</li>
+<li><a href="https://martinfowler.com/" target="_blank" rel="noopener">martinfowler.com</a>: các bài viết uy tín về refactoring, thiết kế, và thực hành agile.</li>
+<li><a href="https://agilemanifesto.org/" target="_blank" rel="noopener">Agile Manifesto</a> và <a href="https://scrumguides.org/" target="_blank" rel="noopener">The Scrum Guide</a>: nguồn gốc chính thức về Agile/Scrum.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp</a> — khoá dài về kỹ thuật phần mềm &amp; Git.</li>
+<li><a href="https://www.youtube.com/@Fireship" target="_blank" rel="noopener">Fireship</a> — video ngắn, đậm đặc khái niệm về thực hành hiện đại.</li>
+<li><a href="https://www.youtube.com/@ByteByteGo" target="_blank" rel="noopener">ByteByteGo</a> — thiết kế hệ thống &amp; nền tảng kỹ thuật.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a> — trình soạn code và sơ đồ.</li>
+<li><a href="https://github.com/" target="_blank" rel="noopener">Git &amp; GitHub</a> — quản lý phiên bản và cộng tác.</li>
+<li><a href="https://www.drawio.com/" target="_blank" rel="noopener">draw.io</a> — vẽ UML &amp; kiến trúc miễn phí.</li>
+<li><a href="https://www.atlassian.com/software/jira" target="_blank" rel="noopener">Jira</a> — backlog, sprint, và theo dõi công việc.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền tảng để thi</strong> — nắm chắc các mô hình SDLC, vai/sự kiện Scrum, và các loại sơ đồ UML từ slide FLM.</li>
+<li><strong>Luyện trên project</strong> — mô hình hoá một hệ nhỏ trên draw.io (use case + class + sequence), rồi hiện thực một tính năng trọn vẹn trên GitHub.</li>
+<li><strong>Đào sâu thực tế</strong> — áp nguyên tắc thiết kế (SOLID, cohesion/coupling) và viết unit test; đọc Fowler về refactoring.</li>
+<li><strong>Sẵn sàng đi làm</strong> — chạy một mini-project theo nhóm Scrum trên Jira với branch và pull request, rồi giải thích được các quyết định thiết kế.</li>
+</ol>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola3', name: 'Kỳ 3', ordinal: 5 },
   course: {
@@ -277,6 +360,7 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/SWE202c.webp',
     shortDescription: 'The disciplined craft of building software — SDLC & Scrum, GenAI across the lifecycle, UML modeling, testing & debugging, design principles & project management. Bilingual, with exercises.|||Nghề xây phần mềm có kỷ luật — SDLC & Scrum, GenAI xuyên vòng đời, mô hình hoá UML, kiểm thử & debug, nguyên tắc thiết kế & quản lý dự án. Song ngữ, có bài tập.',
     description: 'Môn <strong>SWE202c — Nhập môn kỹ thuật phần mềm</strong> (ngành Kỹ thuật phần mềm, kỳ 3). Ghép nền tảng kinh điển với AI hiện đại: <strong>SDLC &amp; quy trình (waterfall/Scrum)</strong>, <strong>Generative AI xuyên vòng đời</strong> (sinh code/test/debug/tài liệu, có trách nhiệm), <strong>mô hình hoá UML</strong> (use case, class, sequence, state machine), <strong>kiểm thử &amp; debug</strong>, và <strong>nguyên tắc thiết kế + quản lý dự án</strong>. Bám giáo trình FLM (4 CLO), song ngữ, kèm bài tập.',
@@ -284,6 +368,7 @@ export default {
     requirements: 'Nên biết lập trình cơ bản (một ngôn ngữ bất kỳ). Không cần nền kỹ thuật phần mềm trước.',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Vì sao "kỹ thuật", 4 CLO, lộ trình 3 module.', lessons: [intro] },
     { title: 'Module 1 — SDLC & GenAI|||Module 1 — SDLC & GenAI', description: 'Vòng đời, waterfall/Scrum, GenAI xuyên SDLC.', lessons: [m1, m1b, m1q] },
     { title: 'Module 2 — Mô hình hoá UML|||Module 2 — UML modeling', description: 'Use case, class, sequence, state machine.', lessons: [m2, m2b, m2e, m2q] },

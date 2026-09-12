@@ -286,6 +286,89 @@ const c4q = quiz('csd203-quiz-4', 'Quiz 4 — Tree/graph/hash|||Quiz 4 — Cây/
   { id: 'q3', question: 'Two-sum dùng dict đạt độ phức tạp?', options: ['O(n²)', 'O(n)', 'O(log n)', 'O(1)'], correctIndex: 1, explanation: 'Dùng dict để tra phần bù O(1) → tổng O(n).' },
 ]);
 
+const taiLieu = doc('csd203-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">CSD203 · Resource hub</span>
+<h2>📚 Course materials &amp; references</h2>
+<p class="lead">A curated hub for self-study: the official FLM syllabus &amp; slides, books, free authoritative DSA references, YouTube channels, tools, and a step-by-step roadmap. Every link is real and opens in a new tab.</p>
+<div class="callout"><span class="badge">FLM</span> Log in to <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> with your FPTU account to read the official syllabus and lecture slides for this course.</div>
+<h3>📘 Syllabus &amp; slides</h3>
+<ul>
+<li><strong>FLM (flm.fpt.edu.vn)</strong> — the source of truth for CSD203: learning outcomes, per-session slides, and assessment scheme. Read the slide of a topic first, then use the sources below to practise.</li>
+</ul>
+<h3>📗 Books</h3>
+<ul>
+<li><a href="https://runestone.academy/ns/books/published/pythonds/index.html" target="_blank" rel="noopener">Problem Solving with Algorithms and Data Structures using Python</a>: a free, interactive textbook that matches this course exactly.</li>
+<li><a href="https://www.manning.com/books/grokking-algorithms-second-edition" target="_blank" rel="noopener">Grokking Algorithms — Aditya Bhargava (Manning)</a>: an illustrated, beginner-friendly take on Big-O, sorting, graphs, and hashing.</li>
+</ul>
+<h3>🌐 Free official docs</h3>
+<ul>
+<li><a href="https://www.geeksforgeeks.org/data-structures/" target="_blank" rel="noopener">GeeksforGeeks — Data Structures</a>: explanations and code for every structure in the syllabus.</li>
+<li><a href="https://visualgo.net/" target="_blank" rel="noopener">VisuAlgo</a>: animated visualizations of sorting, trees, graphs, and hashing.</li>
+<li><a href="https://docs.python.org/3/" target="_blank" rel="noopener">Python docs</a>: the official reference for list, dict, set, and the collections module (deque, Counter).</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@NeetCode" target="_blank" rel="noopener">NeetCode</a> — clear, pattern-based DSA and interview problems in Python.</li>
+<li><a href="https://www.youtube.com/@abdul_bari" target="_blank" rel="noopener">Abdul Bari</a> — thorough algorithm lectures with intuition.</li>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp</a> — full-length Python DSA courses.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://www.python.org/" target="_blank" rel="noopener">Python 3</a> — the language and interpreter for the course.</li>
+<li><a href="https://colab.research.google.com/" target="_blank" rel="noopener">Google Colab</a> — run Python in the browser, no install.</li>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a> — editor with a debugger to step through code.</li>
+<li><a href="https://leetcode.com/" target="_blank" rel="noopener">LeetCode</a> — practise problems to cement each structure.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations for the exam</strong> — master Big-O and the cost of list/dict/set operations from the FLM slides.</li>
+<li><strong>Practise by coding</strong> — implement stacks/queues, recursion, sorting, and searching yourself, then check them on VisuAlgo.</li>
+<li><strong>Go deeper in practice</strong> — build a BST and a graph (BFS/DFS), and solve two-sum with a hash set in O(n).</li>
+<li><strong>Job-ready</strong> — drill LeetCode patterns and explain the time/space trade-off of each solution out loud.</li>
+</ol>`,
+    `<span class="eyebrow">CSD203 · Trung tâm tài liệu</span>
+<h2>📚 Tài liệu tham khảo môn học</h2>
+<p class="lead">Trung tâm tài liệu để tự học: giáo trình &amp; slide chính thức trên FLM, sách, tài liệu DSA uy tín miễn phí, kênh YouTube, công cụ, và lộ trình từng bước. Mọi link đều thật và mở ở tab mới.</p>
+<div class="callout"><span class="badge">FLM</span> Đăng nhập <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> bằng tài khoản FPTU để đọc giáo trình và slide bài giảng chính thức của môn.</div>
+<h3>📘 Giáo trình &amp; slide</h3>
+<ul>
+<li><strong>FLM (flm.fpt.edu.vn)</strong> — nguồn chuẩn của CSD203: chuẩn đầu ra, slide từng buổi, và cách đánh giá. Đọc slide của một chủ đề trước, rồi dùng các nguồn dưới để luyện.</li>
+</ul>
+<h3>📗 Sách</h3>
+<ul>
+<li><a href="https://runestone.academy/ns/books/published/pythonds/index.html" target="_blank" rel="noopener">Problem Solving with Algorithms and Data Structures using Python</a>: sách tương tác miễn phí, bám sát đúng môn này.</li>
+<li><a href="https://www.manning.com/books/grokking-algorithms-second-edition" target="_blank" rel="noopener">Grokking Algorithms — Aditya Bhargava (Manning)</a>: cách tiếp cận minh hoạ, dễ cho người mới về Big-O, sorting, đồ thị, hashing.</li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li><a href="https://www.geeksforgeeks.org/data-structures/" target="_blank" rel="noopener">GeeksforGeeks — Data Structures</a>: giải thích và code cho mọi cấu trúc trong giáo trình.</li>
+<li><a href="https://visualgo.net/" target="_blank" rel="noopener">VisuAlgo</a>: minh hoạ động cho sorting, cây, đồ thị, và hashing.</li>
+<li><a href="https://docs.python.org/3/" target="_blank" rel="noopener">Python docs</a>: tài liệu chính thức về list, dict, set, và module collections (deque, Counter).</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@NeetCode" target="_blank" rel="noopener">NeetCode</a> — DSA và bài phỏng vấn theo pattern bằng Python, rõ ràng.</li>
+<li><a href="https://www.youtube.com/@abdul_bari" target="_blank" rel="noopener">Abdul Bari</a> — bài giảng thuật toán kỹ và có trực giác.</li>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp</a> — khoá dài về DSA bằng Python.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://www.python.org/" target="_blank" rel="noopener">Python 3</a> — ngôn ngữ và trình thông dịch cho môn học.</li>
+<li><a href="https://colab.research.google.com/" target="_blank" rel="noopener">Google Colab</a> — chạy Python trên trình duyệt, không cần cài.</li>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a> — trình soạn có debugger để chạy từng bước.</li>
+<li><a href="https://leetcode.com/" target="_blank" rel="noopener">LeetCode</a> — luyện bài để khắc sâu từng cấu trúc.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền tảng để thi</strong> — nắm chắc Big-O và chi phí thao tác list/dict/set từ slide FLM.</li>
+<li><strong>Luyện bằng code</strong> — tự hiện thực stack/queue, đệ quy, sorting, và searching, rồi đối chiếu trên VisuAlgo.</li>
+<li><strong>Đào sâu thực tế</strong> — dựng một BST và một đồ thị (BFS/DFS), và giải two-sum bằng hash set trong O(n).</li>
+<li><strong>Sẵn sàng đi làm</strong> — luyện pattern LeetCode và nói to được đánh đổi thời gian/bộ nhớ của từng lời giải.</li>
+</ol>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola3', name: 'Kỳ 3', ordinal: 5 },
   course: {
@@ -295,6 +378,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/CSD203.webp',
     shortDescription: 'Core CS in Python — Big-O, lists/linked lists, stacks/queues, recursion, sorting/searching, trees/BST, graphs & hashing (dict/set). Bilingual, with runnable code & exercises.|||CS lõi bằng Python — Big-O, list/linked list, stack/queue, đệ quy, sorting/searching, tree/BST, đồ thị & hashing (dict/set). Song ngữ, code chạy được & bài tập.',
     description: 'Môn <strong>CSD203 — Cấu trúc dữ liệu &amp; giải thuật với Python</strong> (ngành CNTT, kỳ 3). Nền tảng khoa học máy tính bằng <strong>Python</strong>: <strong>Big-O</strong> → <strong>list/linked list</strong> → <strong>stack/queue</strong> (deque) → <strong>đệ quy</strong> → <strong>sorting &amp; searching</strong> (Timsort, binary search) → <strong>cây &amp; BST</strong> → <strong>đồ thị (BFS/DFS) &amp; hashing (dict/set)</strong>. Bám giáo trình FLM, song ngữ, code Python chạy được và bài tập kèm lời giải. Nền cho phỏng vấn kỹ thuật.',
@@ -302,6 +386,7 @@ export default {
     requirements: 'Đã biết Python cơ bản (PRF/PRP). Cần Python 3 (hoặc Google Colab).',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Vì sao DSA, chủ đề, lộ trình.', lessons: [intro] },
     { title: 'Chương 1 — Big-O & list|||Chapter 1 — Big-O & lists', description: 'Big-O, list/dict/set & chi phí.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Stack, queue & đệ quy|||Chapter 2 — Stacks, queues & recursion', description: 'list/deque, LIFO/FIFO, đệ quy.', lessons: [c2, c2q] },

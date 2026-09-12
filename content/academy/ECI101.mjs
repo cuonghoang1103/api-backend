@@ -168,6 +168,77 @@ const c3q = quiz('eci101-quiz-3', 'Quiz 3 — Amp/supply/oscillator|||Quiz 3 —
   { id: 'q3', question: 'Mạch tạo dạng sóng tuần hoàn mà KHÔNG cần tín hiệu vào là?', options: ['Mạch chỉnh lưu', 'Mạch dao động (oscillator)', 'Bộ chia áp', 'Diode', ], correctIndex: 1, explanation: 'Oscillator sinh sóng từ nguồn DC nhờ hồi tiếp + mạng định tần.' },
 ]);
 
+const taiLieu = doc('eci101-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">ECI101 · Materials</span>
+<h2>Course materials &amp; resource hub</h2>
+<p class="lead">Everything to learn Electronic Components and Circuits — passives, diodes &amp; transistors, amplifiers and power supplies — in one place. The full official slides &amp; textbook live on <strong>FLM</strong>; below are free, legal resources.</p>
+<h3>📘 Textbook &amp; slides</h3>
+<p>The official FPTU giáo trình &amp; lecture slides for ECI101 are on <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — sign in with your FPTU account.</p>
+<h3>📗 Reference books</h3>
+<ul>
+<li><a href="https://www.artofelectronics.net/" target="_blank" rel="noopener"><em>The Art of Electronics</em> — Horowitz &amp; Hill</a></li>
+<li><a href="https://en.wikipedia.org/wiki/The_Art_of_Electronics" target="_blank" rel="noopener"><em>The Art of Electronics</em> — overview &amp; contents</a></li>
+</ul>
+<h3>🌐 Official / free documentation</h3>
+<ul>
+<li><a href="https://www.allaboutcircuits.com/" target="_blank" rel="noopener">All About Circuits — textbook &amp; tutorials</a></li>
+<li><a href="https://www.electronics-tutorials.ws/" target="_blank" rel="noopener">Electronics Tutorials (electronics-tutorials.ws)</a></li>
+</ul>
+<h3>▶️ YouTube channels</h3>
+<ul>
+<li><a href="https://www.youtube.com/@ElectroBOOM" target="_blank" rel="noopener">ElectroBOOM</a> — electronics explained (with sparks)</li>
+<li><a href="https://www.youtube.com/@greatscottlab" target="_blank" rel="noopener">GreatScott!</a> — practical component &amp; circuit projects</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://www.falstad.com/circuit/" target="_blank" rel="noopener">Falstad Circuit Simulator</a> — animated circuit sim in the browser</li>
+<li><a href="https://www.multisim.com/" target="_blank" rel="noopener">Multisim Live</a> — online SPICE circuit simulation</li>
+<li><a href="https://www.tinkercad.com/circuits" target="_blank" rel="noopener">Tinkercad Circuits</a> — breadboard &amp; Arduino simulation</li>
+</ul>
+<div class="callout"><span class="badge">Self-study path</span>
+<ol>
+<li><strong>Foundation / exam core</strong> — voltage/current/resistance, Ohm's &amp; Kirchhoff's laws, R/L/C and voltage dividers.</li>
+<li><strong>Practice</strong> — analyse simple circuits and simulate them on Falstad until the maths matches the meter.</li>
+<li><strong>Go deeper</strong> — diodes (rectifiers), transistors (switch &amp; amplify), op-amps and power supplies.</li>
+<li><strong>Job-ready</strong> — read datasheets, build real circuits on a breadboard, and debug with a multimeter.</li>
+</ol></div>`,
+    `<span class="eyebrow">ECI101 · Tài liệu</span>
+<h2>Trung tâm tài liệu tham khảo</h2>
+<p class="lead">Mọi thứ để học Linh kiện &amp; mạch điện tử — linh kiện thụ động, diode &amp; transistor, khuếch đại và bộ nguồn — gom về một chỗ. Slide &amp; giáo trình chính thức đầy đủ nằm trên <strong>FLM</strong>; bên dưới là nguồn miễn phí, hợp pháp.</p>
+<h3>📘 Giáo trình &amp; slide</h3>
+<p>Giáo trình FPTU &amp; slide bài giảng chính thức của ECI101 có trên <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — đăng nhập bằng tài khoản FPTU.</p>
+<h3>📗 Sách tham khảo</h3>
+<ul>
+<li><a href="https://www.artofelectronics.net/" target="_blank" rel="noopener"><em>The Art of Electronics</em> — Horowitz &amp; Hill</a></li>
+<li><a href="https://en.wikipedia.org/wiki/The_Art_of_Electronics" target="_blank" rel="noopener"><em>The Art of Electronics</em> — tổng quan &amp; mục lục</a></li>
+</ul>
+<h3>🌐 Tài liệu chính thức / miễn phí</h3>
+<ul>
+<li><a href="https://www.allaboutcircuits.com/" target="_blank" rel="noopener">All About Circuits — giáo trình &amp; hướng dẫn</a></li>
+<li><a href="https://www.electronics-tutorials.ws/" target="_blank" rel="noopener">Electronics Tutorials (electronics-tutorials.ws)</a></li>
+</ul>
+<h3>▶️ Kênh YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@ElectroBOOM" target="_blank" rel="noopener">ElectroBOOM</a> — điện tử giảng vui (kèm tia lửa)</li>
+<li><a href="https://www.youtube.com/@greatscottlab" target="_blank" rel="noopener">GreatScott!</a> — dự án linh kiện &amp; mạch thực tế</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://www.falstad.com/circuit/" target="_blank" rel="noopener">Falstad Circuit Simulator</a> — mô phỏng mạch động trên trình duyệt</li>
+<li><a href="https://www.multisim.com/" target="_blank" rel="noopener">Multisim Live</a> — mô phỏng mạch SPICE trực tuyến</li>
+<li><a href="https://www.tinkercad.com/circuits" target="_blank" rel="noopener">Tinkercad Circuits</a> — mô phỏng breadboard &amp; Arduino</li>
+</ul>
+<div class="callout"><span class="badge">Lộ trình tự học</span>
+<ol>
+<li><strong>Nền / lõi thi</strong> — điện áp/dòng/trở, định luật Ohm &amp; Kirchhoff, R/L/C và mạch chia áp.</li>
+<li><strong>Luyện tập</strong> — phân tích mạch đơn giản và mô phỏng trên Falstad đến khi tính khớp đồng hồ đo.</li>
+<li><strong>Đào sâu thực tế</strong> — diode (chỉnh lưu), transistor (khoá &amp; khuếch đại), op-amp và bộ nguồn.</li>
+<li><strong>Sẵn sàng đi làm</strong> — đọc datasheet, ráp mạch thật trên breadboard, debug bằng đồng hồ vạn năng.</li>
+</ol></div>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola5', name: 'Kỳ 5', ordinal: 7 },
   course: {
@@ -177,6 +248,7 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/ECI101.webp',
     shortDescription: 'How electronic circuits work — Ohm/Kirchhoff laws, passive components (R/L/C), diodes (rectification), transistors (switch & amplify), amplifiers, power supplies & oscillators, simulated in Multisim. Bilingual, with worked examples & quizzes.|||Mạch điện tử hoạt động thế nào — định luật Ohm/Kirchhoff, linh kiện thụ động (R/L/C), diode (chỉnh lưu), transistor (khoá & khuếch đại), khuếch đại, nguồn & dao động, mô phỏng Multisim. Song ngữ, có ví dụ & quiz.',
     description: 'Môn <strong>ECI101 — Introduction to Electronic Components and Circuits</strong> (kỳ 5) giúp hiểu <strong>mạch điện tử hoạt động thế nào</strong>. Từ <strong>đại lượng nền &amp; định luật</strong> (áp/dòng/trở, Ohm, Kirchhoff, bộ chia áp) → <strong>linh kiện thụ động</strong> (điện trở, tụ, cuộn cảm) → <strong>diode</strong> (chỉnh lưu AC→DC) → <strong>transistor</strong> (khoá &amp; khuếch đại) → <strong>khuếch đại (op-amp), bộ nguồn &amp; dao động</strong>. Bám giáo trình FLM, song ngữ, có ví dụ tính toán và mô phỏng Multisim, quiz mỗi chương.',
@@ -184,6 +256,7 @@ export default {
     requirements: 'Toán/vật lý phổ thông (điện cơ bản). Nên cài Multisim hoặc dùng mô phỏng mạch trực tuyến (Falstad).',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Điện tử, áp/dòng/trở, Ohm.', lessons: [intro] },
     { title: 'Chương 1 — Thụ động & định luật|||Chapter 1 — Passives & laws', description: 'R/L/C, Ohm, Kirchhoff, chia áp.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Diode & transistor|||Chapter 2 — Diodes & transistors', description: 'Chỉnh lưu, khoá & khuếch đại.', lessons: [c2, c2q] },

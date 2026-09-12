@@ -337,6 +337,92 @@ const c5q = quiz('pru213-quiz-5', 'Quiz 5 — Animation & debug|||Quiz 5 — Ani
   { id: 'q3', question: 'Công cụ đầu tiên để debug logic?', options: ['Xoá script', 'Console + Debug.Log', 'Build lại', 'Đổi máy'], correctIndex: 1, explanation: 'Debug.Log giá trị và đọc Console/stack trace.' },
 ]);
 
+const taiLieu = doc('pru213-0-0-tai-lieu',
+  '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">PRU213 · Lesson 0.0 · Resources</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">One hub for everything you need to master PRU213 beyond these lessons: the official FLM syllabus &amp; slides, reference books, free primary documentation, video channels, tools, and a four-step self-study path.</p>
+<div class="callout"><span class="badge">Official</span> Log in to <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn">flm.fpt.edu.vn</a>) with your FPTU account — the full syllabus and every lecture slide live there, and they define exactly what the exam covers.</div>
+<h3>📘 Official syllabus &amp; slides</h3>
+<ul>
+<li><strong>FLM — flm.fpt.edu.vn</strong>: sign in with your FPTU account for the complete syllabus, session plan, CLOs and all lecture slides — the authoritative, in-scope source of truth.</li>
+</ul>
+<h3>📗 Reference books</h3>
+<ul>
+<li><em>Unity in Action (3rd ed.)</em> — Joe Hocking (Manning): <a href="https://www.manning.com/books/unity-in-action-third-edition">manning.com/books/unity-in-action-third-edition</a></li>
+<li><em>Game Programming Patterns</em> — Robert Nystrom (free, read online): <a href="https://gameprogrammingpatterns.com/">gameprogrammingpatterns.com</a></li>
+</ul>
+<h3>🌐 Free primary documentation</h3>
+<ul>
+<li>Unity Manual: <a href="https://docs.unity3d.com/Manual/index.html">docs.unity3d.com/Manual</a></li>
+<li>Unity Scripting API: <a href="https://docs.unity3d.com/ScriptReference/">docs.unity3d.com/ScriptReference</a></li>
+<li>Unity Learn (free courses): <a href="https://learn.unity.com/">learn.unity.com</a> · C#: <a href="https://learn.microsoft.com/dotnet/csharp">learn.microsoft.com/dotnet/csharp</a></li>
+</ul>
+<h3>▶️ YouTube channels</h3>
+<ul>
+<li>Brackeys: <a href="https://www.youtube.com/@Brackeys">youtube.com/@Brackeys</a></li>
+<li>Code Monkey: <a href="https://www.youtube.com/@CodeMonkeyUnity">youtube.com/@CodeMonkeyUnity</a></li>
+<li>Unity (official): <a href="https://www.youtube.com/@unity">youtube.com/@unity</a></li>
+<li>Sebastian Lague: <a href="https://www.youtube.com/@SebastianLague">youtube.com/@SebastianLague</a></li>
+</ul>
+<h3>🛠️ Tools for study &amp; practice</h3>
+<ul>
+<li>Unity Hub + Unity Editor (LTS): <a href="https://unity.com/download">unity.com/download</a></li>
+<li>Visual Studio 2022: <a href="https://visualstudio.microsoft.com/">visualstudio.microsoft.com</a></li>
+<li>JetBrains Rider: <a href="https://www.jetbrains.com/rider/">jetbrains.com/rider</a></li>
+<li>Unity Asset Store (free assets): <a href="https://assetstore.unity.com/">assetstore.unity.com</a></li>
+</ul>
+<h3>🎯 A four-step self-study path</h3>
+<ol>
+<li><strong>Foundations / exam core</strong> — get fluent in the editor (Scene/GameObject/Component) and MonoBehaviour lifecycle (Start/Update, Time.deltaTime, GetComponent); everything else builds on these.</li>
+<li><strong>Practice on a small project</strong> — make one tiny playable game: move a player with input, spawn objects with Instantiate, and detect hits with colliders/triggers.</li>
+<li><strong>Go deeper on real-world concerns</strong> — add a UI (Canvas, buttons, score), scene switching with SceneManager, animation with the Animator, and a GameManager for state.</li>
+<li><strong>Job-ready</strong> — build and debug a finished small game (fix NullReference errors via the Console), then be able to walk through your GameObject/Component design.</li>
+</ol>`,
+    `<span class="eyebrow">PRU213 · Bài 0.0 · Tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Một nơi gom đủ thứ để học PRU213 vượt ngoài các bài trong khoá: giáo trình &amp; slide chính thức trên FLM, sách tham khảo, tài liệu gốc miễn phí, kênh video, công cụ, và lộ trình tự học 4 bước.</p>
+<div class="callout"><span class="badge">Chính thức</span> Đăng nhập <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn">flm.fpt.edu.vn</a>) bằng tài khoản FPTU — có giáo trình + slide đầy đủ, đúng phạm vi thi.</div>
+<h3>📘 Giáo trình &amp; slide chính thức</h3>
+<ul>
+<li><strong>FLM — flm.fpt.edu.vn</strong>: đăng nhập bằng tài khoản FPTU để lấy giáo trình đầy đủ, lịch buổi, CLO và toàn bộ slide bài giảng — nguồn chuẩn, đúng phạm vi thi.</li>
+</ul>
+<h3>📗 Sách tham khảo</h3>
+<ul>
+<li><em>Unity in Action (tái bản 3)</em> — Joe Hocking (Manning): <a href="https://www.manning.com/books/unity-in-action-third-edition">manning.com/books/unity-in-action-third-edition</a></li>
+<li><em>Game Programming Patterns</em> — Robert Nystrom (miễn phí, đọc online): <a href="https://gameprogrammingpatterns.com/">gameprogrammingpatterns.com</a></li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li>Unity Manual: <a href="https://docs.unity3d.com/Manual/index.html">docs.unity3d.com/Manual</a></li>
+<li>Unity Scripting API: <a href="https://docs.unity3d.com/ScriptReference/">docs.unity3d.com/ScriptReference</a></li>
+<li>Unity Learn (khoá miễn phí): <a href="https://learn.unity.com/">learn.unity.com</a> · C#: <a href="https://learn.microsoft.com/dotnet/csharp">learn.microsoft.com/dotnet/csharp</a></li>
+</ul>
+<h3>▶️ Kênh YouTube</h3>
+<ul>
+<li>Brackeys: <a href="https://www.youtube.com/@Brackeys">youtube.com/@Brackeys</a></li>
+<li>Code Monkey: <a href="https://www.youtube.com/@CodeMonkeyUnity">youtube.com/@CodeMonkeyUnity</a></li>
+<li>Unity (chính thức): <a href="https://www.youtube.com/@unity">youtube.com/@unity</a></li>
+<li>Sebastian Lague: <a href="https://www.youtube.com/@SebastianLague">youtube.com/@SebastianLague</a></li>
+</ul>
+<h3>🛠️ Công cụ học &amp; thực hành</h3>
+<ul>
+<li>Unity Hub + Unity Editor (LTS): <a href="https://unity.com/download">unity.com/download</a></li>
+<li>Visual Studio 2022: <a href="https://visualstudio.microsoft.com/">visualstudio.microsoft.com</a></li>
+<li>JetBrains Rider: <a href="https://www.jetbrains.com/rider/">jetbrains.com/rider</a></li>
+<li>Unity Asset Store (asset miễn phí): <a href="https://assetstore.unity.com/">assetstore.unity.com</a></li>
+</ul>
+<h3>🎯 Lộ trình tự học 4 bước</h3>
+<ol>
+<li><strong>Nền tảng / lõi thi</strong> — thành thạo editor (Scene/GameObject/Component) và vòng đời MonoBehaviour (Start/Update, Time.deltaTime, GetComponent); mọi thứ khác dựng trên đây.</li>
+<li><strong>Luyện qua project nhỏ</strong> — làm một game nhỏ chơi được: di chuyển nhân vật bằng input, sinh vật thể bằng Instantiate, và bắt va chạm bằng collider/trigger.</li>
+<li><strong>Đào sâu thực tế</strong> — thêm UI (Canvas, nút, điểm), chuyển scene bằng SceneManager, animation bằng Animator, và một GameManager giữ trạng thái.</li>
+<li><strong>Sẵn sàng đi làm</strong> — build và debug một game nhỏ hoàn chỉnh (sửa lỗi NullReference qua Console), rồi trình bày được thiết kế GameObject/Component của mình.</li>
+</ol>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola7', name: 'Kỳ 7', ordinal: 9 },
   course: {
@@ -346,6 +432,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/PRU213.webp',
     shortDescription: 'Build games in Unity with C# — the editor, MonoBehaviour scripting, prefabs & physics, input & UI, animation, and shipping a small game. Bilingual, with Unity C# code & exercises.|||Làm game trong Unity với C# — editor, script MonoBehaviour, prefab & physics, input & UI, animation, và ra một game nhỏ. Song ngữ, code C# (Unity) & bài tập.',
     description: 'Môn <strong>PRU213 — Lập trình Game với C#</strong> (ngành Kỹ thuật phần mềm, kỳ 7). Dùng <strong>Unity</strong> + <strong>C#</strong>: từ editor (Scene/GameObject/Component) → viết script <strong>MonoBehaviour</strong> (Start/Update, input, Time.deltaTime) → <strong>prefab &amp; physics</strong> (Rigidbody, Collider, collision vs trigger) → <strong>input &amp; UI</strong> (Canvas, button, SceneManager) → <strong>animation, GameManager, build &amp; debug</strong>. Bám giáo trình FLM (6 CLO), song ngữ, code Unity C# chạy được và bài tập kèm lời giải.',
@@ -353,6 +440,7 @@ export default {
     requirements: 'Đã biết C# (PRO192/PRN212). Cần cài Unity Hub + Unity Editor (LTS) và một IDE (Visual Studio / Rider / VS Code).',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Unity hoạt động thế nào, 6 CLO, lộ trình.', lessons: [intro] },
     { title: 'Chương 1 — Editor Unity|||Chapter 1 — Unity editor', description: 'Scene/GameObject/Component/Transform/Prefab.', lessons: [c1, c1q] },
     { title: 'Chương 2 — C# scripting|||Chapter 2 — C# scripting', description: 'MonoBehaviour, Start/Update, input, deltaTime.', lessons: [c2, c2q] },

@@ -244,6 +244,91 @@ const c4q = quiz('iao202-quiz-4', 'Quiz 4 — Monitoring & defense|||Quiz 4 — 
   { id: 'q3', question: 'Thứ tự đúng của vòng ứng phó sự cố?', options: ['Recover → Detect → Contain', 'Detect → Contain → Eradicate → Recover', 'Contain → Recover → Detect', 'Chỉ Recover'], correctIndex: 1, explanation: 'Phát hiện → ngăn chặn → diệt trừ → khôi phục (→ rút kinh nghiệm).' },
 ]);
 
+const taiLieu = doc('iao202-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">IAO202 · Resource hub</span>
+<h2>📚 Course materials &amp; references</h2>
+<p class="lead">A curated hub for self-study: the official FLM syllabus &amp; slides, books, free authoritative security references, YouTube channels, tools, and a step-by-step roadmap. Every link is real and opens in a new tab.</p>
+<div class="callout"><span class="badge">FLM</span> Log in to <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> with your FPTU account to read the official syllabus and lecture slides for this course.</div>
+<h3>📘 Syllabus &amp; slides</h3>
+<ul>
+<li><strong>FLM (flm.fpt.edu.vn)</strong> — the source of truth for IAO202: the 8 CLOs, per-session slides, and assessment scheme. Read the slide of a topic first, then use the sources below to go deeper.</li>
+</ul>
+<h3>📗 Books</h3>
+<ul>
+<li><a href="https://www.cl.cam.ac.uk/~rja14/book.html" target="_blank" rel="noopener">Security Engineering — Ross Anderson</a>: a comprehensive classic, with the full text available free online.</li>
+<li><a href="https://nostarch.com/how-cybersecurity-really-works" target="_blank" rel="noopener">How Cybersecurity Really Works — Sam Grubb (No Starch)</a>: a beginner-friendly tour of threats and defenses.</li>
+</ul>
+<h3>🌐 Free official docs</h3>
+<ul>
+<li><a href="https://owasp.org/" target="_blank" rel="noopener">OWASP</a>: the Top 10 and practical application-security guidance.</li>
+<li><a href="https://www.cisa.gov/" target="_blank" rel="noopener">CISA</a>: US agency advisories, alerts, and best-practice guidance.</li>
+<li><a href="https://csrc.nist.gov/" target="_blank" rel="noopener">NIST CSRC</a>: the Cybersecurity Framework and control catalogs.</li>
+<li><a href="https://attack.mitre.org/" target="_blank" rel="noopener">MITRE ATT&amp;CK</a>: a knowledge base of real adversary tactics &amp; techniques.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@professormesser" target="_blank" rel="noopener">Professor Messer</a> — free Security+ course covering the fundamentals.</li>
+<li><a href="https://www.youtube.com/@NetworkChuck" target="_blank" rel="noopener">NetworkChuck</a> — hands-on networking &amp; security labs.</li>
+<li><a href="https://www.youtube.com/@Computerphile" target="_blank" rel="noopener">Computerphile</a> — clear explainers on cryptography &amp; security concepts.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://www.wireshark.org/" target="_blank" rel="noopener">Wireshark</a> — capture and analyze network traffic.</li>
+<li><a href="https://www.virtualbox.org/" target="_blank" rel="noopener">VirtualBox</a> — build a safe VM lab for Windows/Linux.</li>
+<li><a href="https://nmap.org/" target="_blank" rel="noopener">Nmap</a> — network discovery and port scanning.</li>
+<li><a href="https://www.kali.org/" target="_blank" rel="noopener">Kali Linux</a> — a security-testing distribution with bundled tools.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations for the exam</strong> — master the CIA triad, threat/vulnerability/risk, malware types, and defense in depth from the FLM slides.</li>
+<li><strong>Practise in a lab</strong> — build a VirtualBox lab, explore Windows Event Viewer and Linux /var/log, and read them for signs of activity.</li>
+<li><strong>Go deeper in practice</strong> — capture traffic in Wireshark, study a DoS/MITM/spoofing scenario, and map it to MITRE ATT&amp;CK.</li>
+<li><strong>Job-ready</strong> — think like a SOC analyst: correlate logs, follow an incident-response cycle, and justify defenses (firewall, IDS/IPS, AAA).</li>
+</ol>`,
+    `<span class="eyebrow">IAO202 · Trung tâm tài liệu</span>
+<h2>📚 Tài liệu tham khảo môn học</h2>
+<p class="lead">Trung tâm tài liệu để tự học: giáo trình &amp; slide chính thức trên FLM, sách, tài liệu an ninh uy tín miễn phí, kênh YouTube, công cụ, và lộ trình từng bước. Mọi link đều thật và mở ở tab mới.</p>
+<div class="callout"><span class="badge">FLM</span> Đăng nhập <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> bằng tài khoản FPTU để đọc giáo trình và slide bài giảng chính thức của môn.</div>
+<h3>📘 Giáo trình &amp; slide</h3>
+<ul>
+<li><strong>FLM (flm.fpt.edu.vn)</strong> — nguồn chuẩn của IAO202: 8 CLO, slide từng buổi, và cách đánh giá. Đọc slide của một chủ đề trước, rồi dùng các nguồn dưới để đào sâu.</li>
+</ul>
+<h3>📗 Sách</h3>
+<ul>
+<li><a href="https://www.cl.cam.ac.uk/~rja14/book.html" target="_blank" rel="noopener">Security Engineering — Ross Anderson</a>: sách kinh điển toàn diện, có toàn văn miễn phí trên mạng.</li>
+<li><a href="https://nostarch.com/how-cybersecurity-really-works" target="_blank" rel="noopener">How Cybersecurity Really Works — Sam Grubb (No Starch)</a>: giới thiệu mối đe doạ và phòng thủ dễ tiếp cận cho người mới.</li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li><a href="https://owasp.org/" target="_blank" rel="noopener">OWASP</a>: Top 10 và hướng dẫn bảo mật ứng dụng thực dụng.</li>
+<li><a href="https://www.cisa.gov/" target="_blank" rel="noopener">CISA</a>: cảnh báo, khuyến nghị và thực hành tốt của cơ quan Mỹ.</li>
+<li><a href="https://csrc.nist.gov/" target="_blank" rel="noopener">NIST CSRC</a>: Cybersecurity Framework và bộ kiểm soát.</li>
+<li><a href="https://attack.mitre.org/" target="_blank" rel="noopener">MITRE ATT&amp;CK</a>: kho tri thức về chiến thuật &amp; kỹ thuật tấn công thật.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@professormesser" target="_blank" rel="noopener">Professor Messer</a> — khoá Security+ miễn phí về nền tảng.</li>
+<li><a href="https://www.youtube.com/@NetworkChuck" target="_blank" rel="noopener">NetworkChuck</a> — lab mạng &amp; an ninh thực hành.</li>
+<li><a href="https://www.youtube.com/@Computerphile" target="_blank" rel="noopener">Computerphile</a> — giải thích rõ về mã hoá &amp; khái niệm an ninh.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://www.wireshark.org/" target="_blank" rel="noopener">Wireshark</a> — bắt và phân tích lưu lượng mạng.</li>
+<li><a href="https://www.virtualbox.org/" target="_blank" rel="noopener">VirtualBox</a> — dựng lab máy ảo an toàn cho Windows/Linux.</li>
+<li><a href="https://nmap.org/" target="_blank" rel="noopener">Nmap</a> — dò mạng và quét cổng.</li>
+<li><a href="https://www.kali.org/" target="_blank" rel="noopener">Kali Linux</a> — bản Linux kiểm thử an ninh kèm sẵn công cụ.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền tảng để thi</strong> — nắm chắc bộ ba CIA, threat/vulnerability/risk, các loại malware, và defense in depth từ slide FLM.</li>
+<li><strong>Luyện trong lab</strong> — dựng lab VirtualBox, khám phá Event Viewer (Windows) và /var/log (Linux), đọc chúng để tìm dấu vết.</li>
+<li><strong>Đào sâu thực tế</strong> — bắt gói trong Wireshark, học một kịch bản DoS/MITM/spoofing, và ánh xạ vào MITRE ATT&amp;CK.</li>
+<li><strong>Sẵn sàng đi làm</strong> — tư duy như SOC analyst: đối chiếu log, theo vòng ứng phó sự cố, và lý giải các phòng thủ (firewall, IDS/IPS, AAA).</li>
+</ol>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola4', name: 'Kỳ 4', ordinal: 6 },
   course: {
@@ -253,6 +338,7 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/IAO202.webp',
     shortDescription: 'Think like a SOC analyst — the CIA triad, threats & attacks, Windows/Linux, network protocols & attacks, monitoring & defense. Bilingual, with a log-analysis exercise.|||Tư duy như SOC analyst — bộ ba CIA, mối đe doạ & tấn công, Windows/Linux, giao thức & tấn công mạng, giám sát & phòng thủ. Song ngữ, có bài tập phân tích log.',
     description: 'Môn <strong>IAO202 — Nhập môn An toàn thông tin</strong> (ngành CNTT, kỳ 4), theo hướng <strong>vận hành an ninh mạng (CyberOps/SOC)</strong>. Đi từ <strong>nền tảng an ninh</strong> (bộ ba CIA, mối đe doạ, malware, social engineering, defense in depth) → <strong>Windows &amp; Linux</strong> cho phân tích → <strong>giao thức mạng &amp; tấn công</strong> (TCP/IP, DoS/MITM/ARP-DNS spoofing) → <strong>giám sát &amp; phòng thủ</strong> (firewall, IDS/IPS, SIEM, AAA, ứng phó sự cố). Bám giáo trình FLM (8 CLO), song ngữ, kèm bài tập phân tích log.',
@@ -260,6 +346,7 @@ export default {
     requirements: 'Nên biết mạng cơ bản và dùng máy tính thành thạo. Cần VirtualBox/VMware để dựng lab máy ảo an toàn.',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'CIA triad, vai SOC analyst, 8 CLO, lộ trình.', lessons: [intro] },
     { title: 'Chương 1 — Nền tảng an ninh|||Chapter 1 — Security fundamentals', description: 'Threat/vuln/risk, malware, phishing, defense in depth.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Windows & Linux|||Chapter 2 — Windows & Linux', description: 'Process, quyền, log cho phân tích.', lessons: [c2, c2q] },

@@ -187,6 +187,85 @@ const c3q = quiz('gdc301-quiz-3', 'Quiz 3 — Level/character/narrative|||Quiz 3
   { id: 'q3', question: '"Environmental storytelling" là?', options: ['Cutscene dài', 'Thế giới tự phô lịch sử/câu chuyện mà không cần lời thoại', 'Bảng điểm', 'Menu'], correctIndex: 1, explanation: 'Kể chuyện qua môi trường, không cần chữ.' },
 ]);
 
+const taiLieu = doc('gdc301-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">GDC301 · 📚 Resource hub</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">One hub for learning game design: the official syllabus &amp; slides, books, free design writing, video channels, tools, and a self-study roadmap.</p>
+<h3>📘 Syllabus &amp; slides</h3>
+<p>Sign in to <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) with your FPTU account to read the official GDC301 syllabus and lecture slides.</p>
+<h3>📗 Books</h3>
+<ul>
+<li><a href="https://www.routledge.com/The-Art-of-Game-Design-A-Book-of-Lenses-Third-Edition/Schell/p/book/9781138632059" target="_blank" rel="noopener">The Art of Game Design: A Book of Lenses</a> — Jesse Schell: the field's standard reference.</li>
+<li><a href="https://www.oreilly.com/library/view/a-theory-of/9781449363208/" target="_blank" rel="noopener">A Theory of Fun for Game Design</a> — Raph Koster: why games are fun.</li>
+</ul>
+<h3>🌐 Free official / reputable design writing</h3>
+<ul>
+<li><a href="https://www.gamedeveloper.com/design" target="_blank" rel="noopener">Game Developer — Design</a> — postmortems &amp; design articles (formerly Gamasutra).</li>
+<li><a href="https://gdcvault.com/free" target="_blank" rel="noopener">GDC Vault (free talks)</a> — conference talks from working designers.</li>
+<li><a href="https://www.raphkoster.com/games/" target="_blank" rel="noopener">Raph Koster's writing</a> — deep essays on game grammar &amp; systems.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@GMTK" target="_blank" rel="noopener">Game Maker's Toolkit</a> — clear design analysis.</li>
+<li><a href="https://www.youtube.com/@Gdconf" target="_blank" rel="noopener">GDC</a> — free recorded design talks.</li>
+<li><a href="https://www.youtube.com/@DesignDoc" target="_blank" rel="noopener">Design Doc</a> — mechanics &amp; systems breakdowns.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://www.notion.com/" target="_blank" rel="noopener">Notion / Google Docs</a> — write your GDD.</li>
+<li><a href="https://miro.com/" target="_blank" rel="noopener">Miro / FigJam</a> — diagram systems &amp; loops.</li>
+<li><a href="https://twinery.org/" target="_blank" rel="noopener">Twine</a> — prototype narrative &amp; branching.</li>
+<li><a href="https://machinations.io/" target="_blank" rel="noopener">Machinations</a> — model &amp; balance game economies.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations (exam core)</strong> — MDA, core loops, design pillars, GDD, following the lessons here.</li>
+<li><strong>Practice by designing</strong> — write a one-page GDD and a systems diagram for a small game idea.</li>
+<li><strong>Go deeper</strong> — economy, balance, level/character/narrative; analyze a game you love with MDA.</li>
+<li><strong>Job-ready</strong> — assemble a small design portfolio (GDDs, teardowns) and prototype one idea.</li>
+</ol>
+<div class="callout"><span class="badge">Note</span> An original hub of real links — no copyrighted slides or books are embedded. If a link moves, start from the official homepage.</div>`,
+    `<span class="eyebrow">GDC301 · 📚 Trung tâm tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Một nơi gom để học thiết kế game: giáo trình &amp; slide chính thức, sách, bài viết thiết kế miễn phí, kênh video, công cụ, và lộ trình tự học.</p>
+<h3>📘 Giáo trình &amp; slide</h3>
+<p>Đăng nhập <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) bằng tài khoản FPTU để đọc giáo trình và slide bài giảng chính thức của GDC301.</p>
+<h3>📗 Sách</h3>
+<ul>
+<li><a href="https://www.routledge.com/The-Art-of-Game-Design-A-Book-of-Lenses-Third-Edition/Schell/p/book/9781138632059" target="_blank" rel="noopener">The Art of Game Design: A Book of Lenses</a> — Jesse Schell: sách tham khảo chuẩn của ngành.</li>
+<li><a href="https://www.oreilly.com/library/view/a-theory-of/9781449363208/" target="_blank" rel="noopener">A Theory of Fun for Game Design</a> — Raph Koster: vì sao game vui.</li>
+</ul>
+<h3>🌐 Bài viết thiết kế miễn phí / uy tín</h3>
+<ul>
+<li><a href="https://www.gamedeveloper.com/design" target="_blank" rel="noopener">Game Developer — Design</a> — postmortem &amp; bài viết thiết kế (tiền thân Gamasutra).</li>
+<li><a href="https://gdcvault.com/free" target="_blank" rel="noopener">GDC Vault (talk miễn phí)</a> — bài nói của các nhà thiết kế đang làm nghề.</li>
+<li><a href="https://www.raphkoster.com/games/" target="_blank" rel="noopener">Bài viết của Raph Koster</a> — tiểu luận sâu về ngữ pháp game &amp; hệ thống.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@GMTK" target="_blank" rel="noopener">Game Maker's Toolkit</a> — phân tích thiết kế rõ ràng.</li>
+<li><a href="https://www.youtube.com/@Gdconf" target="_blank" rel="noopener">GDC</a> — talk thiết kế thu sẵn, miễn phí.</li>
+<li><a href="https://www.youtube.com/@DesignDoc" target="_blank" rel="noopener">Design Doc</a> — mổ xẻ cơ chế &amp; hệ thống.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://www.notion.com/" target="_blank" rel="noopener">Notion / Google Docs</a> — viết GDD.</li>
+<li><a href="https://miro.com/" target="_blank" rel="noopener">Miro / FigJam</a> — vẽ sơ đồ hệ thống &amp; loop.</li>
+<li><a href="https://twinery.org/" target="_blank" rel="noopener">Twine</a> — prototype narrative &amp; nhánh rẽ.</li>
+<li><a href="https://machinations.io/" target="_blank" rel="noopener">Machinations</a> — mô hình &amp; cân bằng kinh tế game.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền tảng (lõi thi)</strong> — MDA, core loop, design pillar, GDD, theo đúng các bài ở đây.</li>
+<li><strong>Luyện bằng thiết kế</strong> — viết một GDD một trang và sơ đồ hệ thống cho một ý tưởng game nhỏ.</li>
+<li><strong>Đào sâu</strong> — kinh tế, cân bằng, level/nhân vật/narrative; phân tích một game bạn thích bằng MDA.</li>
+<li><strong>Sẵn sàng đi làm</strong> — dựng portfolio thiết kế nhỏ (GDD, teardown) và prototype một ý tưởng.</li>
+</ol>
+<div class="callout"><span class="badge">Lưu ý</span> Đây là trung tâm liên kết nguyên gốc — không nhúng slide/sách có bản quyền. Link đổi thì vào trang chủ chính thức để tìm.</div>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola7', name: 'Kỳ 7', ordinal: 9 },
   course: {
@@ -196,6 +275,7 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/GDC301.webp',
     shortDescription: 'Think like a game designer — MDA, core loops & design pillars; systems, economy, balance & the GDD; level, character, combat & narrative design. A design course (little code), bilingual, with exercises.|||Tư duy như nhà thiết kế game — MDA, core loop & design pillar; hệ thống, kinh tế, cân bằng & GDD; thiết kế màn chơi, nhân vật, combat & narrative. Môn thiết kế (ít code), song ngữ, có bài tập.',
     description: 'Môn <strong>GDC301 — Game Design Fundamentals: From Concept to Creation</strong> (kỳ 7) dạy <strong>tư duy thiết kế game</strong> trước khi code. Từ các <strong>khung nền tảng</strong> (MDA, core loop, design pillar) → <strong>thiết kế hệ thống</strong> (progression, economy nguồn/bể, balance, GDD) → <strong>thiết kế màn chơi, nhân vật, combat &amp; narrative</strong>. Bám giáo trình FLM, song ngữ, có ví dụ mẫu và bài tập thiết kế (viết GDD một trang). Đây là môn thiết kế — sản phẩm là tài liệu &amp; prototype, không phải code.',
@@ -203,6 +283,7 @@ export default {
     requirements: 'Không cần lập trình. Thích chơi &amp; phân tích game là đủ.',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Thiết kế vs lập trình game.', lessons: [intro] },
     { title: 'Chương 1 — MDA, loop & pillar|||Chapter 1 — MDA, loops & pillars', description: 'Khung phân tích & định hướng.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Hệ thống, kinh tế & GDD|||Chapter 2 — Systems, economy & GDD', description: 'Progression, source/sink, balance, GDD.', lessons: [c2, c2e, c2q] },

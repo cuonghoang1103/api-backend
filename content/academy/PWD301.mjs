@@ -370,6 +370,85 @@ const c4q = quiz('pwd301-quiz-4', 'Quiz 4 — REST & deploy|||Quiz 4 — REST & 
   { id: 'q3', question: 'Trên production, debug=True nên?', options: ['Bật để dễ sửa', 'TẮT — nó lộ console chạy mã', 'Không quan trọng', 'Chỉ bật ban đêm'], correctIndex: 1, explanation: 'debug=True lộ debugger chạy mã tuỳ ý → luôn tắt ở prod.' },
 ]);
 
+const taiLieu = doc('pwd301-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">PWD301 · Resource hub</span>
+<h2>📚 Course materials &amp; references</h2>
+<p class="lead">Everything you need to study Python web development with Flask beyond this course: the official FLM syllabus &amp; slides, reference books, free official docs, YouTube channels, tools, and a 4-step self-study roadmap. Every link is real and free to open.</p>
+<h3>📘 Official syllabus &amp; slides</h3>
+<div class="callout"><span class="badge">FLM</span> Log in to <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> with your FPTU account — the full syllabus and lecture slides for PWD301 are there.</div>
+<h3>📗 Reference books</h3>
+<ul>
+<li><a href="https://www.oreilly.com/library/view/flask-web-development/9781491991725/" target="_blank" rel="noopener">Flask Web Development (2nd ed.)</a> — Miguel Grinberg (O'Reilly).</li>
+<li><a href="https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world" target="_blank" rel="noopener">The Flask Mega-Tutorial</a> — Miguel Grinberg — the definitive free step-by-step series.</li>
+</ul>
+<h3>🌐 Free official documentation</h3>
+<ul>
+<li><a href="https://flask.palletsprojects.com/" target="_blank" rel="noopener">Flask documentation</a> — including the official tutorial.</li>
+<li><a href="https://jinja.palletsprojects.com/" target="_blank" rel="noopener">Jinja2 templates</a>.</li>
+<li><a href="https://docs.sqlalchemy.org/" target="_blank" rel="noopener">SQLAlchemy documentation</a> — the ORM.</li>
+</ul>
+<h3>▶️ YouTube channels</h3>
+<ul>
+<li><a href="https://www.youtube.com/@coreyms" target="_blank" rel="noopener">Corey Schafer</a> — the classic complete Flask series.</li>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp</a> — full-length Flask &amp; Python web courses.</li>
+<li><a href="https://www.youtube.com/@prettyprinted" target="_blank" rel="noopener">Pretty Printed</a> — focused Flask how-tos.</li>
+<li><a href="https://www.youtube.com/@TechWithTim" target="_blank" rel="noopener">Tech With Tim</a> — Flask projects for beginners.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VS Code</a> — editor with the Python extension.</li>
+<li><a href="https://www.postman.com/" target="_blank" rel="noopener">Postman</a> — test your REST API routes.</li>
+<li><a href="https://flask.palletsprojects.com/en/stable/cli/" target="_blank" rel="noopener">Flask CLI</a> — run &amp; debug the dev server.</li>
+<li><a href="https://git-scm.com/" target="_blank" rel="noopener">Git</a> — version control &amp; deploy.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations (exam core)</strong> — master routing, Jinja2 templates, forms, SQLAlchemy and auth in this course; do every quiz.</li>
+<li><strong>Small projects</strong> — build a CRUD app (blog or to-do) with login and a database; wire up templates and flash messages.</li>
+<li><strong>Go deeper</strong> — follow the Flask Mega-Tutorial, add a REST API with jsonify, and write pytest tests for your routes.</li>
+<li><strong>Job-ready</strong> — deploy one Flask app (gunicorn + a host) and put it on GitHub with a README; that live project is what employers read.</li>
+</ol>`,
+    `<span class="eyebrow">PWD301 · Trung tâm tài liệu</span>
+<h2>📚 Tài liệu tham khảo môn học</h2>
+<p class="lead">Mọi thứ để học lập trình web Python với Flask vượt ra ngoài môn này: giáo trình &amp; slide chính thức trên FLM, sách tham khảo, tài liệu chính thức miễn phí, kênh YouTube, công cụ, và lộ trình tự học 4 bước. Mọi link đều thật và mở được miễn phí.</p>
+<h3>📘 Giáo trình &amp; slide chính thức</h3>
+<div class="callout"><span class="badge">FLM</span> Đăng nhập <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> bằng tài khoản FPTU — có giáo trình và slide đầy đủ cho PWD301.</div>
+<h3>📗 Sách tham khảo</h3>
+<ul>
+<li><a href="https://www.oreilly.com/library/view/flask-web-development/9781491991725/" target="_blank" rel="noopener">Flask Web Development (2nd ed.)</a> — Miguel Grinberg (O'Reilly).</li>
+<li><a href="https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world" target="_blank" rel="noopener">The Flask Mega-Tutorial</a> — Miguel Grinberg — loạt bài từng bước miễn phí kinh điển.</li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li><a href="https://flask.palletsprojects.com/" target="_blank" rel="noopener">Tài liệu Flask</a> — có cả tutorial chính thức.</li>
+<li><a href="https://jinja.palletsprojects.com/" target="_blank" rel="noopener">Template Jinja2</a>.</li>
+<li><a href="https://docs.sqlalchemy.org/" target="_blank" rel="noopener">Tài liệu SQLAlchemy</a> — ORM.</li>
+</ul>
+<h3>▶️ Kênh YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@coreyms" target="_blank" rel="noopener">Corey Schafer</a> — loạt Flask đầy đủ kinh điển.</li>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp</a> — khoá Flask &amp; web Python dài đầy đủ.</li>
+<li><a href="https://www.youtube.com/@prettyprinted" target="_blank" rel="noopener">Pretty Printed</a> — hướng dẫn Flask tập trung.</li>
+<li><a href="https://www.youtube.com/@TechWithTim" target="_blank" rel="noopener">Tech With Tim</a> — project Flask cho người mới.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VS Code</a> — trình soạn thảo kèm extension Python.</li>
+<li><a href="https://www.postman.com/" target="_blank" rel="noopener">Postman</a> — kiểm thử các route REST API.</li>
+<li><a href="https://flask.palletsprojects.com/en/stable/cli/" target="_blank" rel="noopener">Flask CLI</a> — chạy &amp; gỡ lỗi dev server.</li>
+<li><a href="https://git-scm.com/" target="_blank" rel="noopener">Git</a> — quản lý phiên bản &amp; triển khai.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền tảng (lõi thi)</strong> — nắm chắc routing, template Jinja2, form, SQLAlchemy và xác thực trong môn này; làm hết mọi quiz.</li>
+<li><strong>Project nhỏ</strong> — dựng một app CRUD (blog hoặc to-do) có đăng nhập và cơ sở dữ liệu; nối template và flash message.</li>
+<li><strong>Đào sâu</strong> — theo Flask Mega-Tutorial, thêm REST API với jsonify, và viết test pytest cho các route.</li>
+<li><strong>Sẵn sàng đi làm</strong> — triển khai một app Flask (gunicorn + một host) và đưa lên GitHub kèm README; project chạy thật đó là thứ nhà tuyển dụng đọc.</li>
+</ol>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola4', name: 'Kỳ 4', ordinal: 6 },
   course: {
@@ -379,6 +458,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/PWD301.webp',
     shortDescription: 'Build web apps in Python with Flask — routing, Jinja2 templates, forms, database (SQLAlchemy), authentication & sessions, RESTful JSON APIs, testing & deploy. Bilingual, with runnable code & exercises.|||Dựng web bằng Python với Flask — routing, template Jinja2, form, CSDL (SQLAlchemy), xác thực & session, API JSON RESTful, kiểm thử & triển khai. Song ngữ, code chạy được & bài tập.',
     description: 'Môn <strong>PWD301 — Python Web Development</strong> (kỳ 4) dạy dựng ứng dụng web bằng Python với <strong>Flask</strong>. Đi từ <strong>route &amp; view</strong> → <strong>template Jinja2</strong> → <strong>form &amp; kiểm tra hợp lệ</strong> → <strong>cơ sở dữ liệu với SQLAlchemy</strong> (ORM, CRUD) → <strong>xác thực &amp; session</strong> (băm mật khẩu, login_required) → <strong>API RESTful trả JSON</strong> → <strong>kiểm thử (pytest), build &amp; triển khai</strong> (gunicorn, biến môi trường, tắt debug). Bám giáo trình FLM, song ngữ, code chạy được và bài tập kèm lời giải.',
@@ -386,6 +466,7 @@ export default {
     requirements: 'Đã biết Python cơ bản (PRF/PRP) và HTML cơ bản. Chút SQL là lợi thế. Cần Python 3 + pip.',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Web hoạt động ra sao, vì sao Flask.', lessons: [intro] },
     { title: 'Chương 1 — Flask & routing|||Chapter 1 — Flask & routing', description: 'App, route tĩnh/động, method.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Template & form|||Chapter 2 — Templates & forms', description: 'Jinja2, xử lý form, flash.', lessons: [c2, c2q] },

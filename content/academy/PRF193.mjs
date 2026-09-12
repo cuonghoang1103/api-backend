@@ -321,6 +321,81 @@ const c5q = quiz('prf193-quiz-5', 'Quiz 5 — OOP, memory & files|||Quiz 5 — O
   { id: 'q3', question: 'Ghi ra file trong C++ dùng?', options: ['cin', 'ofstream', 'ifstream', 'cout'], correctIndex: 1, explanation: 'ofstream để ghi, ifstream để đọc file.' },
 ]);
 
+const taiLieu = doc('prf193-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">PRF193 · Materials</span>
+<h2>Course materials &amp; resource hub</h2>
+<p class="lead">Everything to learn Programming Fundamentals in <strong>C/C++</strong>, gathered in one place. The full official slides &amp; textbook live on <strong>FLM</strong>; below are free, legal resources you can open right now.</p>
+<h3>📘 Textbook &amp; slides</h3>
+<p>The official FPTU giáo trình &amp; lecture slides for PRF193 are on <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — sign in with your FPTU account.</p>
+<h3>📗 Reference books</h3>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/The_C_Programming_Language" target="_blank" rel="noopener"><em>The C Programming Language</em> — Kernighan &amp; Ritchie (K&amp;R)</a></li>
+<li><a href="https://www.stroustrup.com/programming.html" target="_blank" rel="noopener"><em>Programming: Principles and Practice Using C++</em> — Bjarne Stroustrup</a></li>
+</ul>
+<h3>🌐 Official / free documentation</h3>
+<ul>
+<li><a href="https://en.cppreference.com/w/c" target="_blank" rel="noopener">cppreference — C language reference</a></li>
+<li><a href="https://learn.microsoft.com/en-us/cpp/" target="_blank" rel="noopener">Microsoft Learn — C/C++ docs</a></li>
+<li><a href="https://www.geeksforgeeks.org/c-programming-language/" target="_blank" rel="noopener">GeeksforGeeks — C Programming Language</a></li>
+</ul>
+<h3>▶️ YouTube channels</h3>
+<ul>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp.org</a> — full-length C/C++ courses</li>
+<li><a href="https://www.youtube.com/@nesoacademy" target="_blank" rel="noopener">Neso Academy</a> — structured C programming series</li>
+<li><a href="https://www.youtube.com/@TheCherno" target="_blank" rel="noopener">The Cherno</a> — modern C++ in depth</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a> — editor + C/C++ extension</li>
+<li><a href="https://www.onlinegdb.com/" target="_blank" rel="noopener">OnlineGDB</a> — compile &amp; debug C/C++ in the browser</li>
+<li><a href="https://godbolt.org/" target="_blank" rel="noopener">Compiler Explorer (godbolt)</a> — see the assembly your code compiles to</li>
+</ul>
+<div class="callout"><span class="badge">Self-study path</span>
+<ol>
+<li><strong>Foundation / exam core</strong> — variables &amp; types, operators, if/switch, loops; write &amp; run your first programs.</li>
+<li><strong>Practice</strong> — solve small problems on arrays, strings, functions &amp; recursion until they feel automatic.</li>
+<li><strong>Go deeper</strong> — pointers, dynamic memory (new/delete), OOP in C++, and files on real mini-projects.</li>
+<li><strong>Job-ready</strong> — clean code, debugging with GDB, and computational thinking to tackle unseen problems.</li>
+</ol></div>`,
+    `<span class="eyebrow">PRF193 · Tài liệu</span>
+<h2>Trung tâm tài liệu tham khảo</h2>
+<p class="lead">Mọi thứ để học Cơ sở lập trình bằng <strong>C/C++</strong>, gom về một chỗ. Slide &amp; giáo trình chính thức đầy đủ nằm trên <strong>FLM</strong>; bên dưới là nguồn miễn phí, hợp pháp, mở được ngay.</p>
+<h3>📘 Giáo trình &amp; slide</h3>
+<p>Giáo trình FPTU &amp; slide bài giảng chính thức của PRF193 có trên <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — đăng nhập bằng tài khoản FPTU.</p>
+<h3>📗 Sách tham khảo</h3>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/The_C_Programming_Language" target="_blank" rel="noopener"><em>The C Programming Language</em> — Kernighan &amp; Ritchie (K&amp;R)</a></li>
+<li><a href="https://www.stroustrup.com/programming.html" target="_blank" rel="noopener"><em>Programming: Principles and Practice Using C++</em> — Bjarne Stroustrup</a></li>
+</ul>
+<h3>🌐 Tài liệu chính thức / miễn phí</h3>
+<ul>
+<li><a href="https://en.cppreference.com/w/c" target="_blank" rel="noopener">cppreference — tra cứu ngôn ngữ C</a></li>
+<li><a href="https://learn.microsoft.com/en-us/cpp/" target="_blank" rel="noopener">Microsoft Learn — tài liệu C/C++</a></li>
+<li><a href="https://www.geeksforgeeks.org/c-programming-language/" target="_blank" rel="noopener">GeeksforGeeks — C Programming Language</a></li>
+</ul>
+<h3>▶️ Kênh YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp.org</a> — khoá C/C++ đầy đủ</li>
+<li><a href="https://www.youtube.com/@nesoacademy" target="_blank" rel="noopener">Neso Academy</a> — series lập trình C bài bản</li>
+<li><a href="https://www.youtube.com/@TheCherno" target="_blank" rel="noopener">The Cherno</a> — C++ hiện đại chuyên sâu</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a> — trình soạn + extension C/C++</li>
+<li><a href="https://www.onlinegdb.com/" target="_blank" rel="noopener">OnlineGDB</a> — biên dịch &amp; debug C/C++ trên trình duyệt</li>
+<li><a href="https://godbolt.org/" target="_blank" rel="noopener">Compiler Explorer (godbolt)</a> — xem mã máy do code biên dịch ra</li>
+</ul>
+<div class="callout"><span class="badge">Lộ trình tự học</span>
+<ol>
+<li><strong>Nền / lõi thi</strong> — biến &amp; kiểu, toán tử, if/switch, vòng lặp; viết &amp; chạy chương trình đầu tiên.</li>
+<li><strong>Luyện tập</strong> — giải bài nhỏ về mảng, chuỗi, hàm &amp; đệ quy đến khi thành phản xạ.</li>
+<li><strong>Đào sâu thực tế</strong> — con trỏ, bộ nhớ động (new/delete), OOP C++, file qua mini-project.</li>
+<li><strong>Sẵn sàng đi làm</strong> — code sạch, debug bằng GDB, tư duy tính toán để giải bài chưa gặp.</li>
+</ol></div>`,
+  ]]);
+
 export default {
   semester: { code: 'KY1', name: 'Kỳ 1', ordinal: 1 },
   course: {
@@ -330,6 +405,7 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/PRF193.webp',
     shortDescription: 'Your first programming course in C/C++ — variables, control flow, arrays & pointers, functions & recursion, OOP, memory & files. Bilingual, with runnable code & exercises.|||Môn lập trình đầu tiên bằng C/C++ — biến, điều khiển luồng, mảng & con trỏ, hàm & đệ quy, OOP, bộ nhớ & file. Song ngữ, code chạy được & bài tập.',
     description: 'Môn <strong>PRF193 — Cơ sở lập trình (với C/C++)</strong> (kỳ 1, môn nhập môn). Học tư duy lập trình và viết chương trình thật bằng <strong>C/C++</strong>: biến &amp; kiểu → <strong>điều khiển luồng</strong> (if/switch/loop) → <strong>mảng, chuỗi &amp; con trỏ</strong> → <strong>hàm &amp; đệ quy</strong> → <strong>OOP, bộ nhớ động &amp; file</strong>, cùng <strong>tư duy tính toán</strong> và công cụ AI. Bám giáo trình FLM (6 CLO), song ngữ, code C/C++ chạy được và bài tập kèm lời giải.',
@@ -337,6 +413,7 @@ export default {
     requirements: 'Không cần nền lập trình trước. Cần trình biên dịch C++ (g++/clang, hoặc IDE như Visual Studio/Code::Blocks).',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Tư duy tính toán, 6 CLO, lộ trình.', lessons: [intro] },
     { title: 'Chương 1 — C/C++ cơ bản|||Chapter 1 — Basics', description: 'Biến, kiểu, nhập/xuất, toán tử.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Điều khiển luồng|||Chapter 2 — Control flow', description: 'if/switch, for/while/do-while.', lessons: [c2, c2q] },

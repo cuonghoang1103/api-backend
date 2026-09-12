@@ -170,6 +170,79 @@ const c3q = quiz('dcd301-quiz-3', 'Quiz 3 — Sequential & HDL|||Quiz 3 — Tu�
   { id: 'q3', question: 'HDL (Verilog/VHDL) dùng để?', options: ['Chạy như phần mềm tuần tự', 'MÔ TẢ phần cứng ở mức RTL để tổng hợp lên FPGA/IC', 'Đo điện', 'Vẽ UI'], correctIndex: 1, explanation: 'HDL mô tả mạch song song, kiểm bằng testbench, synth lên FPGA.' },
 ]);
 
+const taiLieu = doc('dcd301-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">DCD301 · Materials</span>
+<h2>Course materials &amp; resource hub</h2>
+<p class="lead">Everything to learn Digital Circuit Design — logic, combinational &amp; sequential circuits, and HDL (Verilog/VHDL) — in one place. The full official slides &amp; textbook live on <strong>FLM</strong>; below are free, legal resources.</p>
+<h3>📘 Textbook &amp; slides</h3>
+<p>The official FPTU giáo trình &amp; lecture slides for DCD301 are on <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — sign in with your FPTU account.</p>
+<h3>📗 Reference books</h3>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Digital_Design_(Mano_book)" target="_blank" rel="noopener"><em>Digital Design</em> — M. Morris Mano &amp; Michael Ciletti</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Verilog" target="_blank" rel="noopener"><em>Verilog HDL</em> — Samir Palnitkar (overview)</a></li>
+</ul>
+<h3>🌐 Official / free documentation</h3>
+<ul>
+<li><a href="https://nandland.com/" target="_blank" rel="noopener">Nandland — FPGA &amp; digital logic tutorials</a></li>
+<li><a href="https://hdlbits.01xz.net/wiki/Main_Page" target="_blank" rel="noopener">HDLBits — practice Verilog online</a></li>
+<li><a href="https://www.chipverify.com/" target="_blank" rel="noopener">ChipVerify — Verilog &amp; SystemVerilog reference</a></li>
+</ul>
+<h3>▶️ YouTube channels</h3>
+<ul>
+<li><a href="https://www.youtube.com/@nesoacademy" target="_blank" rel="noopener">Neso Academy</a> — digital electronics &amp; logic design</li>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp.org</a> — full digital logic / FPGA courses</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://www.edaplayground.com/" target="_blank" rel="noopener">EDA Playground</a> — simulate Verilog/VHDL in the browser</li>
+<li><a href="https://github.com/logisim-evolution/logisim-evolution" target="_blank" rel="noopener">Logisim-evolution</a> — draw &amp; simulate logic circuits</li>
+<li><a href="https://hdlbits.01xz.net/wiki/Main_Page" target="_blank" rel="noopener">HDLBits</a> — graded Verilog exercises</li>
+</ul>
+<div class="callout"><span class="badge">Self-study path</span>
+<ol>
+<li><strong>Foundation / exam core</strong> — number systems, logic gates, Boolean algebra &amp; K-map minimisation.</li>
+<li><strong>Practice</strong> — build truth tables and combinational blocks (MUX, decoder, adders) on Logisim.</li>
+<li><strong>Go deeper</strong> — flip-flops, counters &amp; registers, then describe them in Verilog/VHDL with a testbench.</li>
+<li><strong>Job-ready</strong> — synthesise RTL to an FPGA and reason about timing/clocking.</li>
+</ol></div>`,
+    `<span class="eyebrow">DCD301 · Tài liệu</span>
+<h2>Trung tâm tài liệu tham khảo</h2>
+<p class="lead">Mọi thứ để học Thiết kế mạch số — logic, mạch tổ hợp &amp; tuần tự, và HDL (Verilog/VHDL) — gom về một chỗ. Slide &amp; giáo trình chính thức đầy đủ nằm trên <strong>FLM</strong>; bên dưới là nguồn miễn phí, hợp pháp.</p>
+<h3>📘 Giáo trình &amp; slide</h3>
+<p>Giáo trình FPTU &amp; slide bài giảng chính thức của DCD301 có trên <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — đăng nhập bằng tài khoản FPTU.</p>
+<h3>📗 Sách tham khảo</h3>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Digital_Design_(Mano_book)" target="_blank" rel="noopener"><em>Digital Design</em> — M. Morris Mano &amp; Michael Ciletti</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Verilog" target="_blank" rel="noopener"><em>Verilog HDL</em> — Samir Palnitkar (tổng quan)</a></li>
+</ul>
+<h3>🌐 Tài liệu chính thức / miễn phí</h3>
+<ul>
+<li><a href="https://nandland.com/" target="_blank" rel="noopener">Nandland — hướng dẫn FPGA &amp; logic số</a></li>
+<li><a href="https://hdlbits.01xz.net/wiki/Main_Page" target="_blank" rel="noopener">HDLBits — luyện Verilog trực tuyến</a></li>
+<li><a href="https://www.chipverify.com/" target="_blank" rel="noopener">ChipVerify — tra cứu Verilog &amp; SystemVerilog</a></li>
+</ul>
+<h3>▶️ Kênh YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@nesoacademy" target="_blank" rel="noopener">Neso Academy</a> — điện tử số &amp; thiết kế logic</li>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp.org</a> — khoá logic số / FPGA đầy đủ</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://www.edaplayground.com/" target="_blank" rel="noopener">EDA Playground</a> — mô phỏng Verilog/VHDL trên trình duyệt</li>
+<li><a href="https://github.com/logisim-evolution/logisim-evolution" target="_blank" rel="noopener">Logisim-evolution</a> — vẽ &amp; mô phỏng mạch logic</li>
+<li><a href="https://hdlbits.01xz.net/wiki/Main_Page" target="_blank" rel="noopener">HDLBits</a> — bài tập Verilog có chấm</li>
+</ul>
+<div class="callout"><span class="badge">Lộ trình tự học</span>
+<ol>
+<li><strong>Nền / lõi thi</strong> — hệ đếm, cổng logic, đại số Boole &amp; rút gọn K-map.</li>
+<li><strong>Luyện tập</strong> — lập bảng chân trị và mạch tổ hợp (MUX, decoder, adder) trên Logisim.</li>
+<li><strong>Đào sâu thực tế</strong> — flip-flop, bộ đếm &amp; thanh ghi, rồi mô tả bằng Verilog/VHDL kèm testbench.</li>
+<li><strong>Sẵn sàng đi làm</strong> — tổng hợp RTL lên FPGA và tư duy về timing/clock.</li>
+</ol></div>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola7', name: 'Kỳ 7', ordinal: 9 },
   course: {
@@ -179,6 +252,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/DCD301.webp',
     shortDescription: 'Digital hardware from the ground up — number systems, logic gates, Boolean algebra, combinational (MUX/adders) & sequential (flip-flops/counters) circuits, HDL (Verilog/VHDL) & FPGA. Bilingual, with truth tables & quizzes.|||Phần cứng số từ gốc — hệ đếm, cổng logic, đại số Boole, mạch tổ hợp (MUX/cộng) & tuần tự (flip-flop/đếm), HDL (Verilog/VHDL) & FPGA. Song ngữ, có bảng chân trị & quiz.',
     description: 'Môn <strong>DCD301 — Digital Circuit Design</strong> (kỳ 7) cho nền vững về <strong>thiết kế mạch số</strong> — thứ dựng nên mọi máy tính. Từ <strong>hệ đếm, cổng logic, đại số Boole &amp; rút gọn (K-map)</strong> → <strong>mạch tổ hợp</strong> (MUX, decoder, half/full adder, so sánh) → <strong>mạch tuần tự</strong> (flip-flop, thanh ghi, thanh ghi dịch, bộ đếm) → <strong>HDL (Verilog/VHDL), RTL, testbench &amp; FPGA</strong>. Bám giáo trình FLM, song ngữ, có bảng chân trị, ví dụ HDL và quiz mỗi chương.',
@@ -186,6 +260,7 @@ export default {
     requirements: 'Toán rời rạc/logic cơ bản là lợi thế. Không cần kinh nghiệm phần cứng trước. Có thể dùng phần mềm mô phỏng (Logisim/EDA Playground).',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Mạch số là nền của máy tính.', lessons: [intro] },
     { title: 'Chương 1 — Cổng logic & đại số Boole|||Chapter 1 — Gates & Boolean', description: 'Hệ đếm, cổng, K-map.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Mạch tổ hợp|||Chapter 2 — Combinational', description: 'MUX, decoder, adder.', lessons: [c2, c2q] },

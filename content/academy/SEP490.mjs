@@ -156,6 +156,89 @@ const c3q = quiz('sep490-quiz-3', 'Quiz 3 — Build, test & release|||Quiz 3 —
   { id: 'q3', question: 'Đồ án capstone được chấm chủ yếu trên?', options: ['Chỉ số dòng code', 'Hệ thống chạy được + tài liệu + buổi bảo vệ', 'Số commit', 'Đẹp UI duy nhất'], correctIndex: 1, explanation: 'Sản phẩm hoàn chỉnh, có tài liệu, bảo vệ được.' },
 ]);
 
+const taiLieu = doc('sep490-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">SEP490 · Resource hub</span>
+<h2>📚 Course materials &amp; references</h2>
+<p class="lead">A curated hub for running your capstone: the official FLM syllabus &amp; slides, books, free authoritative process references, YouTube channels, tools, and a step-by-step roadmap. Every link is real and opens in a new tab.</p>
+<div class="callout"><span class="badge">FLM</span> Log in to <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> with your FPTU account to read the official syllabus, milestones, and document templates for this course.</div>
+<h3>📘 Syllabus &amp; slides</h3>
+<ul>
+<li><strong>FLM (flm.fpt.edu.vn)</strong> — the source of truth for SEP490: capstone milestones, deliverables, document templates (SRS, design), and the defense rubric. Read it first, then use the sources below.</li>
+</ul>
+<h3>📗 Books</h3>
+<ul>
+<li><a href="https://www.oreilly.com/library/view/user-story-mapping/9781491904893/" target="_blank" rel="noopener">User Story Mapping — Jeff Patton (O'Reilly)</a>: turn a fuzzy idea into a shared backlog the team can build.</li>
+<li><a href="https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/" target="_blank" rel="noopener">The Pragmatic Programmer — Hunt &amp; Thomas</a>: engineering habits that keep a team project maintainable under pressure.</li>
+</ul>
+<h3>🌐 Free official docs</h3>
+<ul>
+<li><a href="https://www.atlassian.com/agile" target="_blank" rel="noopener">Atlassian Agile Coach</a>: practical guides to Scrum, sprints, backlogs, and Git workflows.</li>
+<li><a href="https://www.pmi.org/" target="_blank" rel="noopener">PMI</a>: project-management standards, scope, and planning fundamentals.</li>
+<li><a href="https://scrumguides.org/" target="_blank" rel="noopener">The Scrum Guide</a>: the primary source for roles, events, and artifacts.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@Atlassian" target="_blank" rel="noopener">Atlassian</a> — Jira, Agile, and team workflow tutorials.</li>
+<li><a href="https://www.youtube.com/@ContinuousDelivery" target="_blank" rel="noopener">Continuous Delivery (Dave Farley)</a> — software process, testing, and delivery done well.</li>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp</a> — full-length Git, project, and deployment courses.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://www.atlassian.com/software/jira" target="_blank" rel="noopener">Jira</a> — backlog, sprints, and milestone tracking.</li>
+<li><a href="https://github.com/" target="_blank" rel="noopener">GitHub</a> — branches, pull requests, and code review.</li>
+<li><a href="https://www.figma.com/" target="_blank" rel="noopener">Figma</a> — wireframes and UI/UX design.</li>
+<li><a href="https://www.drawio.com/" target="_blank" rel="noopener">draw.io</a> — architecture diagrams and ERDs.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations for the project</strong> — scope the idea, form the team/roles, and write the SRS with use cases/user stories from the FLM templates.</li>
+<li><strong>Design</strong> — model the architecture, the ERD (with normalization), and UI wireframes in Figma/draw.io before coding.</li>
+<li><strong>Build with process</strong> — run Scrum sprints on Jira, use Git branches + pull requests, and test unit/integration/UAT traceable to requirements.</li>
+<li><strong>Release &amp; defend</strong> — deploy, write the documentation, and rehearse the defense explaining your decisions and trade-offs.</li>
+</ol>`,
+    `<span class="eyebrow">SEP490 · Trung tâm tài liệu</span>
+<h2>📚 Tài liệu tham khảo môn học</h2>
+<p class="lead">Trung tâm tài liệu để chạy đồ án: giáo trình &amp; slide chính thức trên FLM, sách, tài liệu quy trình uy tín miễn phí, kênh YouTube, công cụ, và lộ trình từng bước. Mọi link đều thật và mở ở tab mới.</p>
+<div class="callout"><span class="badge">FLM</span> Đăng nhập <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> bằng tài khoản FPTU để đọc giáo trình, các mốc, và mẫu tài liệu (SRS, thiết kế) của môn.</div>
+<h3>📘 Giáo trình &amp; slide</h3>
+<ul>
+<li><strong>FLM (flm.fpt.edu.vn)</strong> — nguồn chuẩn của SEP490: các mốc capstone, sản phẩm bàn giao, mẫu tài liệu (SRS, thiết kế), và rubric bảo vệ. Đọc trước, rồi dùng các nguồn dưới.</li>
+</ul>
+<h3>📗 Sách</h3>
+<ul>
+<li><a href="https://www.oreilly.com/library/view/user-story-mapping/9781491904893/" target="_blank" rel="noopener">User Story Mapping — Jeff Patton (O'Reilly)</a>: biến ý tưởng mơ hồ thành backlog chung để cả nhóm cùng xây.</li>
+<li><a href="https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/" target="_blank" rel="noopener">The Pragmatic Programmer — Hunt &amp; Thomas</a>: thói quen kỹ thuật giữ dự án nhóm dễ bảo trì khi áp lực.</li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li><a href="https://www.atlassian.com/agile" target="_blank" rel="noopener">Atlassian Agile Coach</a>: hướng dẫn thực dụng về Scrum, sprint, backlog, và luồng Git.</li>
+<li><a href="https://www.pmi.org/" target="_blank" rel="noopener">PMI</a>: chuẩn quản lý dự án, phạm vi, và nền tảng lập kế hoạch.</li>
+<li><a href="https://scrumguides.org/" target="_blank" rel="noopener">The Scrum Guide</a>: nguồn gốc về vai, sự kiện, và tạo phẩm.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@Atlassian" target="_blank" rel="noopener">Atlassian</a> — hướng dẫn Jira, Agile, và luồng làm việc nhóm.</li>
+<li><a href="https://www.youtube.com/@ContinuousDelivery" target="_blank" rel="noopener">Continuous Delivery (Dave Farley)</a> — quy trình phần mềm, kiểm thử, và phát hành đúng cách.</li>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp</a> — khoá dài về Git, dự án, và triển khai.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://www.atlassian.com/software/jira" target="_blank" rel="noopener">Jira</a> — backlog, sprint, và theo dõi mốc.</li>
+<li><a href="https://github.com/" target="_blank" rel="noopener">GitHub</a> — branch, pull request, và review code.</li>
+<li><a href="https://www.figma.com/" target="_blank" rel="noopener">Figma</a> — wireframe và thiết kế UI/UX.</li>
+<li><a href="https://www.drawio.com/" target="_blank" rel="noopener">draw.io</a> — sơ đồ kiến trúc và ERD.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền cho đồ án</strong> — chốt phạm vi, lập nhóm/vai, và viết SRS với use case/user story theo mẫu FLM.</li>
+<li><strong>Thiết kế</strong> — mô hình kiến trúc, ERD (kèm chuẩn hoá), và wireframe UI trên Figma/draw.io trước khi code.</li>
+<li><strong>Xây có quy trình</strong> — chạy sprint Scrum trên Jira, dùng Git branch + pull request, và test unit/integration/UAT truy được về yêu cầu.</li>
+<li><strong>Phát hành &amp; bảo vệ</strong> — triển khai, viết tài liệu, và tập bảo vệ giải thích các quyết định và đánh đổi.</li>
+</ol>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola9', name: 'Kỳ 9', ordinal: 11 },
   course: {
@@ -165,6 +248,7 @@ export default {
     level: 'ADVANCED',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/SEP490.webp',
     shortDescription: 'Run a real software project end-to-end — requirements, design (architecture/ERD/UI), build with process & Git, testing (unit/integration/UAT), release & defense. Bilingual, with checklists & quizzes.|||Chạy một dự án phần mềm trọn vẹn — yêu cầu, thiết kế (kiến trúc/ERD/UI), xây dựng có quy trình & Git, kiểm thử (unit/integration/UAT), phát hành & bảo vệ. Song ngữ, có checklist & quiz.',
     description: 'Môn <strong>SEP490 — SE Capstone Project</strong> (kỳ 9) cho trải nghiệm một <strong>dự án phần mềm thật</strong> theo nhóm, qua toàn bộ vòng đời: <strong>khởi động &amp; yêu cầu</strong> (phạm vi, vai trò, kế hoạch, SRS, use case/user story) → <strong>thiết kế</strong> (kiến trúc, ERD/chuẩn hoá, wireframe UI) → <strong>lập trình, kiểm thử &amp; phát hành</strong> (Agile/Scrum, Git branch/PR, unit/integration/UAT, triển khai, tài liệu, bảo vệ). Bám giáo trình FLM, song ngữ, có checklist và mẫu tài liệu, quiz mỗi chương. Đây là môn quy trình &amp; đồ án.',
@@ -172,6 +256,7 @@ export default {
     requirements: 'Đã hoàn thành phần lớn chương trình SE (lập trình, CSDL, KTPM, kiểm thử). Làm theo nhóm; cần tài khoản Git.',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Capstone là gì, khác môn thường.', lessons: [intro] },
     { title: 'Chương 1 — Khởi động & yêu cầu|||Chapter 1 — Kickoff & requirements', description: 'Phạm vi, nhóm, SRS, use case.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Thiết kế|||Chapter 2 — Design', description: 'Kiến trúc, ERD, wireframe.', lessons: [c2, c2q] },

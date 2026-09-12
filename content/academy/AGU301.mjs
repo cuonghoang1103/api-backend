@@ -196,6 +196,85 @@ const c3q = quiz('agu301-quiz-3', 'Quiz 3 — Networking & performance|||Quiz 3 
   { id: 'q3', question: 'Cách đúng để quyết định tối ưu chỗ nào?', options: ['Đoán rồi sửa', 'Đo bằng Profiler rồi tối ưu chỗ thật sự chậm', 'Tối ưu mọi dòng', 'Xoá tính năng'], correctIndex: 1, explanation: 'Đo trước; tránh tối ưu sớm.' },
 ]);
 
+const taiLieu = doc('agu301-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">AGU301 · 📚 Resource hub</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">One hub for professional Unity development: the official syllabus &amp; slides, books, free official docs, video channels, tools, and a self-study roadmap.</p>
+<h3>📘 Syllabus &amp; slides</h3>
+<p>Sign in to <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) with your FPTU account to read the official AGU301 syllabus and lecture slides.</p>
+<h3>📗 Books</h3>
+<ul>
+<li><a href="https://gameprogrammingpatterns.com/" target="_blank" rel="noopener">Game Programming Patterns</a> — Robert Nystrom: patterns for game code (free to read online).</li>
+<li><a href="https://www.packtpub.com/en-us/product/hands-on-game-development-patterns-with-unity-2021-9781800200814" target="_blank" rel="noopener">Hands-On Game Development Patterns with Unity 2021</a> — David Baron, Packt.</li>
+</ul>
+<h3>🌐 Free official docs</h3>
+<ul>
+<li><a href="https://docs.unity3d.com/Manual/index.html" target="_blank" rel="noopener">Unity Manual</a> — engine internals, scripting, performance.</li>
+<li><a href="https://docs-multiplayer.unity3d.com/" target="_blank" rel="noopener">Unity Netcode for GameObjects</a> — official multiplayer docs.</li>
+<li><a href="https://learn.unity.com/" target="_blank" rel="noopener">Unity Learn</a> — free official tutorials &amp; pathways.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@Tarodev" target="_blank" rel="noopener">Tarodev</a> — clean architecture &amp; patterns in Unity.</li>
+<li><a href="https://www.youtube.com/@Jasonaweimann" target="_blank" rel="noopener">Jason Weimann</a> — SOLID, patterns, multiplayer.</li>
+<li><a href="https://www.youtube.com/@unity" target="_blank" rel="noopener">Unity</a> — the official channel.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://unity.com/download" target="_blank" rel="noopener">Unity Hub + Editor</a> — with the Netcode for GameObjects package.</li>
+<li><a href="https://docs.unity3d.com/Manual/Profiler.html" target="_blank" rel="noopener">Unity Profiler</a> — measure frame budget, GC, draw calls.</li>
+<li><a href="https://www.jetbrains.com/rider/" target="_blank" rel="noopener">JetBrains Rider / Visual Studio</a> — refactoring-grade C# IDE.</li>
+<li><a href="https://git-scm.com/" target="_blank" rel="noopener">Git</a> — version control for larger projects.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations (exam core)</strong> — SOLID and the core patterns, following the lessons here.</li>
+<li><strong>Practice on a project</strong> — refactor a small game to apply one pattern (Command, State) cleanly.</li>
+<li><strong>Go deeper</strong> — add multiplayer with Netcode/Relay and profile the frame budget under load.</li>
+<li><strong>Job-ready</strong> — ship one performant, well-architected game and document your design choices.</li>
+</ol>
+<div class="callout"><span class="badge">Note</span> An original hub of real links — no copyrighted slides or books are embedded. If a link moves, start from the official homepage.</div>`,
+    `<span class="eyebrow">AGU301 · 📚 Trung tâm tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Một nơi gom để phát triển Unity chuyên nghiệp: giáo trình &amp; slide chính thức, sách, tài liệu miễn phí chính thống, kênh video, công cụ, và lộ trình tự học.</p>
+<h3>📘 Giáo trình &amp; slide</h3>
+<p>Đăng nhập <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a>) bằng tài khoản FPTU để đọc giáo trình và slide bài giảng chính thức của AGU301.</p>
+<h3>📗 Sách</h3>
+<ul>
+<li><a href="https://gameprogrammingpatterns.com/" target="_blank" rel="noopener">Game Programming Patterns</a> — Robert Nystrom: mẫu thiết kế cho code game (đọc online miễn phí).</li>
+<li><a href="https://www.packtpub.com/en-us/product/hands-on-game-development-patterns-with-unity-2021-9781800200814" target="_blank" rel="noopener">Hands-On Game Development Patterns with Unity 2021</a> — David Baron, Packt.</li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li><a href="https://docs.unity3d.com/Manual/index.html" target="_blank" rel="noopener">Unity Manual</a> — nội bộ engine, script, hiệu năng.</li>
+<li><a href="https://docs-multiplayer.unity3d.com/" target="_blank" rel="noopener">Unity Netcode for GameObjects</a> — tài liệu multiplayer chính thức.</li>
+<li><a href="https://learn.unity.com/" target="_blank" rel="noopener">Unity Learn</a> — hướng dẫn &amp; lộ trình chính thức, miễn phí.</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@Tarodev" target="_blank" rel="noopener">Tarodev</a> — kiến trúc sạch &amp; pattern trong Unity.</li>
+<li><a href="https://www.youtube.com/@Jasonaweimann" target="_blank" rel="noopener">Jason Weimann</a> — SOLID, pattern, multiplayer.</li>
+<li><a href="https://www.youtube.com/@unity" target="_blank" rel="noopener">Unity</a> — kênh chính thức.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://unity.com/download" target="_blank" rel="noopener">Unity Hub + Editor</a> — kèm gói Netcode for GameObjects.</li>
+<li><a href="https://docs.unity3d.com/Manual/Profiler.html" target="_blank" rel="noopener">Unity Profiler</a> — đo ngân sách khung, GC, draw call.</li>
+<li><a href="https://www.jetbrains.com/rider/" target="_blank" rel="noopener">JetBrains Rider / Visual Studio</a> — IDE C# mạnh về refactor.</li>
+<li><a href="https://git-scm.com/" target="_blank" rel="noopener">Git</a> — quản lý phiên bản cho dự án lớn.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền tảng (lõi thi)</strong> — SOLID và các pattern cốt lõi, theo đúng các bài ở đây.</li>
+<li><strong>Luyện qua project</strong> — refactor một game nhỏ để áp một pattern (Command, State) cho gọn.</li>
+<li><strong>Đào sâu</strong> — thêm multiplayer bằng Netcode/Relay và profile ngân sách khung khi tải nặng.</li>
+<li><strong>Sẵn sàng đi làm</strong> — hoàn thiện một game hiệu năng tốt, kiến trúc rõ và ghi lại lựa chọn thiết kế.</li>
+</ol>
+<div class="callout"><span class="badge">Lưu ý</span> Đây là trung tâm liên kết nguyên gốc — không nhúng slide/sách có bản quyền. Link đổi thì vào trang chủ chính thức để tìm.</div>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola7', name: 'Kỳ 7', ordinal: 9 },
   course: {
@@ -205,6 +284,7 @@ export default {
     level: 'ADVANCED',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/AGU301.webp',
     shortDescription: 'Professional Unity — SOLID principles, advanced design patterns (Command/Strategy/Factory/Decorator/State), multiplayer with Netcode/Relay, and performance optimization. Bilingual, with C# & quizzes.|||Unity chuyên nghiệp — nguyên tắc SOLID, design pattern nâng cao (Command/Strategy/Factory/Decorator/State), multiplayer với Netcode/Relay, và tối ưu hiệu năng. Song ngữ, có C# & quiz.',
     description: 'Môn <strong>AGU301 — Advanced Game Development</strong> (kỳ 7), nối tiếp PRU221m/FGU301, nâng từ "game chạy được" lên "chuyên nghiệp, hiệu năng cao". Gồm <strong>SOLID</strong> (5 nguyên tắc cho mã module) → <strong>design pattern nâng cao</strong> (Command, Strategy, Factory, State, Decorator) → <strong>multiplayer</strong> (Unity Netcode: server-authoritative, NetworkVariable, RPC, Relay) → <strong>tối ưu hiệu năng</strong> (Profiler, ngân sách khung, GC/draw call, pooling). Bám giáo trình FLM, song ngữ, code C# và quiz mỗi chương.',
@@ -212,6 +292,7 @@ export default {
     requirements: 'Đã học PRU221m/FGU301 hoặc thành thạo C# + Unity cơ bản. Cần Unity + gói Netcode for GameObjects.',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Từ chạy được tới chuyên nghiệp.', lessons: [intro] },
     { title: 'Chương 1 — SOLID|||Chapter 1 — SOLID principles', description: '5 nguyên tắc cho mã sạch.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Design pattern nâng cao|||Chapter 2 — Advanced patterns', description: 'Command/Strategy/Factory/State/Decorator.', lessons: [c2, c2q] },

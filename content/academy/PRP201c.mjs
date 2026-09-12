@@ -429,6 +429,85 @@ const c6q = quiz('prp201c-quiz-6', 'Quiz 6 — SQL & DB|||Quiz 6 — SQL & CSDL'
   { id: 'q3', question: 'SELECT ... WHERE price < 200000 ORDER BY name làm gì?', options: ['Xoá hàng', 'Lọc giá < 200000 và sắp theo tên', 'Thêm cột', 'Tạo bảng'], correctIndex: 1, explanation: 'WHERE lọc, ORDER BY sắp xếp kết quả.' },
 ]);
 
+const taiLieu = doc('prp201c-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">PRP201c · Resource hub</span>
+<h2>📚 Course materials &amp; references</h2>
+<p class="lead">Everything you need to study Python beyond this course: the official FLM syllabus &amp; slides, reference books, free official docs, YouTube channels, tools, and a 4-step self-study roadmap. Every link is real and free to open.</p>
+<h3>📘 Official syllabus &amp; slides</h3>
+<div class="callout"><span class="badge">FLM</span> Log in to <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> with your FPTU account — the full syllabus and lecture slides for PRP201c are there.</div>
+<h3>📗 Reference books</h3>
+<ul>
+<li><a href="https://nostarch.com/python-crash-course-3rd-edition" target="_blank" rel="noopener">Python Crash Course (3rd ed.)</a> — Eric Matthes (No Starch Press).</li>
+<li><a href="https://automatetheboringstuff.com/" target="_blank" rel="noopener">Automate the Boring Stuff with Python</a> — Al Sweigart — full text free online.</li>
+</ul>
+<h3>🌐 Free official documentation</h3>
+<ul>
+<li><a href="https://docs.python.org/3/tutorial/" target="_blank" rel="noopener">The Python Tutorial (docs.python.org)</a> — the official starting point.</li>
+<li><a href="https://docs.python.org/3/" target="_blank" rel="noopener">Python 3 documentation</a> — language &amp; standard library reference.</li>
+<li><a href="https://peps.python.org/pep-0008/" target="_blank" rel="noopener">PEP 8 — style guide</a>.</li>
+</ul>
+<h3>▶️ YouTube channels</h3>
+<ul>
+<li><a href="https://www.youtube.com/@coreyms" target="_blank" rel="noopener">Corey Schafer</a> — the clearest Python tutorials on YouTube.</li>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp</a> — full-length Python courses.</li>
+<li><a href="https://www.youtube.com/@programmingwithmosh" target="_blank" rel="noopener">Programming with Mosh</a> — beginner-friendly Python.</li>
+<li><a href="https://www.youtube.com/@sentdex" target="_blank" rel="noopener">sentdex</a> — practical Python projects.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://www.python.org/downloads/" target="_blank" rel="noopener">Python (python.org)</a> — the official interpreter.</li>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VS Code</a> — editor with the Python extension.</li>
+<li><a href="https://www.jetbrains.com/pycharm/" target="_blank" rel="noopener">PyCharm</a> — full Python IDE (free Community edition).</li>
+<li><a href="https://colab.research.google.com/" target="_blank" rel="noopener">Google Colab</a> — run Python in the browser, nothing to install.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations (exam core)</strong> — master variables, control flow, data structures, functions and files in this course; do every quiz.</li>
+<li><strong>Small projects</strong> — build 2–3 small scripts (a to-do CLI, a CSV parser, a small game) to make the syntax automatic.</li>
+<li><strong>Go deeper</strong> — read Automate the Boring Stuff, learn modules/exceptions well, and practice on <a href="https://exercism.org/tracks/python" target="_blank" rel="noopener">Exercism</a> or LeetCode.</li>
+<li><strong>Job-ready</strong> — ship one real project (API client, data script, small web app) on GitHub with a README; that portfolio is what employers read.</li>
+</ol>`,
+    `<span class="eyebrow">PRP201c · Trung tâm tài liệu</span>
+<h2>📚 Tài liệu tham khảo môn học</h2>
+<p class="lead">Mọi thứ để học Python vượt ra ngoài môn này: giáo trình &amp; slide chính thức trên FLM, sách tham khảo, tài liệu chính thức miễn phí, kênh YouTube, công cụ, và lộ trình tự học 4 bước. Mọi link đều thật và mở được miễn phí.</p>
+<h3>📘 Giáo trình &amp; slide chính thức</h3>
+<div class="callout"><span class="badge">FLM</span> Đăng nhập <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> bằng tài khoản FPTU — có giáo trình và slide đầy đủ cho PRP201c.</div>
+<h3>📗 Sách tham khảo</h3>
+<ul>
+<li><a href="https://nostarch.com/python-crash-course-3rd-edition" target="_blank" rel="noopener">Python Crash Course (3rd ed.)</a> — Eric Matthes (No Starch Press).</li>
+<li><a href="https://automatetheboringstuff.com/" target="_blank" rel="noopener">Automate the Boring Stuff with Python</a> — Al Sweigart — đọc toàn văn miễn phí trực tuyến.</li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li><a href="https://docs.python.org/3/tutorial/" target="_blank" rel="noopener">The Python Tutorial (docs.python.org)</a> — điểm khởi đầu chính thức.</li>
+<li><a href="https://docs.python.org/3/" target="_blank" rel="noopener">Tài liệu Python 3</a> — tham chiếu ngôn ngữ &amp; thư viện chuẩn.</li>
+<li><a href="https://peps.python.org/pep-0008/" target="_blank" rel="noopener">PEP 8 — quy ước code</a>.</li>
+</ul>
+<h3>▶️ Kênh YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@coreyms" target="_blank" rel="noopener">Corey Schafer</a> — hướng dẫn Python rõ ràng nhất trên YouTube.</li>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp</a> — khoá Python dài đầy đủ.</li>
+<li><a href="https://www.youtube.com/@programmingwithmosh" target="_blank" rel="noopener">Programming with Mosh</a> — Python dễ cho người mới.</li>
+<li><a href="https://www.youtube.com/@sentdex" target="_blank" rel="noopener">sentdex</a> — project Python thực chiến.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://www.python.org/downloads/" target="_blank" rel="noopener">Python (python.org)</a> — trình thông dịch chính thức.</li>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VS Code</a> — trình soạn thảo kèm extension Python.</li>
+<li><a href="https://www.jetbrains.com/pycharm/" target="_blank" rel="noopener">PyCharm</a> — IDE Python đầy đủ (bản Community miễn phí).</li>
+<li><a href="https://colab.research.google.com/" target="_blank" rel="noopener">Google Colab</a> — chạy Python trên trình duyệt, không cần cài đặt.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền tảng (lõi thi)</strong> — nắm chắc biến, điều khiển luồng, cấu trúc dữ liệu, hàm và file trong môn này; làm hết mọi quiz.</li>
+<li><strong>Project nhỏ</strong> — viết 2–3 script nhỏ (CLI to-do, bộ đọc CSV, một trò chơi nhỏ) để cú pháp trở thành phản xạ.</li>
+<li><strong>Đào sâu</strong> — đọc Automate the Boring Stuff, học kỹ module/ngoại lệ, luyện trên <a href="https://exercism.org/tracks/python" target="_blank" rel="noopener">Exercism</a> hoặc LeetCode.</li>
+<li><strong>Sẵn sàng đi làm</strong> — hoàn thiện một project thật (client API, script dữ liệu, web app nhỏ) trên GitHub kèm README; portfolio đó là thứ nhà tuyển dụng đọc.</li>
+</ol>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola5', name: 'Kỳ 5', ordinal: 7 },
   course: {
@@ -438,6 +517,7 @@ export default {
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/PRP201c.webp',
     shortDescription: 'Learn Python from scratch — basics, data structures, functions & files, data retrieval/processing (JSON/CSV/API), and SQL. Bilingual, runnable code & exercises.|||Học Python từ đầu — cơ bản, cấu trúc dữ liệu, hàm & file, truy xuất/xử lý dữ liệu (JSON/CSV/API), và SQL. Song ngữ, code chạy được & bài tập.',
     description: 'Môn <strong>PRP201c — Lập trình Python</strong> (kỳ 5). Đi từ <strong>nền tảng</strong> (biến, kiểu, điều khiển luồng) → <strong>cấu trúc dữ liệu</strong> (list/tuple/dict/set, comprehension) → <strong>hàm, module &amp; file</strong> → <strong>truy xuất/xử lý dữ liệu</strong> (CSV/JSON/API với requests) → <strong>SQL &amp; cơ sở dữ liệu</strong> (sqlite3, thiết kế bảng, chống SQL injection). Bám giáo trình FLM (4 CLO), song ngữ, code Python chạy được và bài tập kèm lời giải.',
@@ -445,6 +525,7 @@ export default {
     requirements: 'Không cần nền lập trình trước. Cần cài Python 3 (hoặc dùng Google Colab); gói requests qua pip.',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Vì sao Python, 4 CLO, lộ trình.', lessons: [intro] },
     { title: 'Chương 1 — Python cơ bản|||Chapter 1 — Basics', description: 'Biến, kiểu, nhập/xuất, thụt lề.', lessons: [c1, c1q] },
     { title: 'Chương 2 — Điều khiển luồng|||Chapter 2 — Control flow', description: 'if/elif/else, for, while, break/continue.', lessons: [c2, c2q] },

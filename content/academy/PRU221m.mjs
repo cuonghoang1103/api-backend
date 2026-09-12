@@ -281,6 +281,92 @@ const c4q = quiz('pru221m-quiz-4', 'Quiz 4 — Design patterns|||Quiz 4 — Desi
   { id: 'q3', question: 'Thay mớ boolean điều khiển nhân vật (Idle/Run/Attack) bằng?', options: ['State pattern (máy trạng thái)', 'Nhiều if lồng', 'Singleton', 'Dictionary'], correctIndex: 0, explanation: 'State pattern: mỗi trạng thái Enter/Update/Exit rõ ràng.' },
 ]);
 
+const taiLieu = doc('pru221m-0-0-tai-lieu',
+  '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">PRU221m · Lesson 0.0 · Resources</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">One hub for everything you need to master PRU221m beyond these lessons: the official FLM syllabus &amp; slides, reference books, free primary documentation, video channels, tools, and a four-step self-study path.</p>
+<div class="callout"><span class="badge">Official</span> Log in to <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn">flm.fpt.edu.vn</a>) with your FPTU account — the full syllabus and every lecture slide live there, and they define exactly what the exam covers.</div>
+<h3>📘 Official syllabus &amp; slides</h3>
+<ul>
+<li><strong>FLM — flm.fpt.edu.vn</strong>: sign in with your FPTU account for the complete syllabus, session plan, CLOs and all lecture slides — the authoritative, in-scope source of truth.</li>
+</ul>
+<h3>📗 Reference books</h3>
+<ul>
+<li><em>Game Programming Patterns</em> — Robert Nystrom (free, read online): <a href="https://gameprogrammingpatterns.com/">gameprogrammingpatterns.com</a></li>
+<li><em>Unity in Action (3rd ed.)</em> — Joe Hocking (Manning): <a href="https://www.manning.com/books/unity-in-action-third-edition">manning.com/books/unity-in-action-third-edition</a></li>
+</ul>
+<h3>🌐 Free primary documentation</h3>
+<ul>
+<li>Unity Manual: <a href="https://docs.unity3d.com/Manual/index.html">docs.unity3d.com/Manual</a></li>
+<li>Unity Scripting API: <a href="https://docs.unity3d.com/ScriptReference/">docs.unity3d.com/ScriptReference</a></li>
+<li>C# programming guide (OOP, collections, events): <a href="https://learn.microsoft.com/dotnet/csharp">learn.microsoft.com/dotnet/csharp</a></li>
+</ul>
+<h3>▶️ YouTube channels</h3>
+<ul>
+<li>Jason Weimann (OOP &amp; patterns in Unity): <a href="https://www.youtube.com/@Jasonweimann">youtube.com/@Jasonweimann</a></li>
+<li>Code Monkey: <a href="https://www.youtube.com/@CodeMonkeyUnity">youtube.com/@CodeMonkeyUnity</a></li>
+<li>Brackeys: <a href="https://www.youtube.com/@Brackeys">youtube.com/@Brackeys</a></li>
+<li>Unity (official): <a href="https://www.youtube.com/@unity">youtube.com/@unity</a></li>
+</ul>
+<h3>🛠️ Tools for study &amp; practice</h3>
+<ul>
+<li>Unity Hub + Unity Editor (LTS): <a href="https://unity.com/download">unity.com/download</a></li>
+<li>Visual Studio 2022: <a href="https://visualstudio.microsoft.com/">visualstudio.microsoft.com</a></li>
+<li>JetBrains Rider: <a href="https://www.jetbrains.com/rider/">jetbrains.com/rider</a></li>
+<li>Refactoring.Guru (design patterns reference): <a href="https://refactoring.guru/design-patterns">refactoring.guru/design-patterns</a></li>
+</ul>
+<h3>🎯 A four-step self-study path</h3>
+<ol>
+<li><strong>Foundations / exam core</strong> — solidify inheritance &amp; polymorphism (abstract/virtual/override, interfaces) and know when each fits; this is the backbone of every later pattern.</li>
+<li><strong>Practice on a small project</strong> — model an enemy family with a base class + interfaces, save/load state with JSON &amp; PlayerPrefs, and decouple systems with C# events.</li>
+<li><strong>Go deeper on real-world concerns</strong> — pick the right collection (List/Dictionary/HashSet/Queue/Stack) by cost, then apply Singleton, Observer, State and Object Pool where they actually help.</li>
+<li><strong>Job-ready</strong> — refactor a messy prototype into clean, testable systems, and be able to justify each pattern (and its trade-offs) in an interview.</li>
+</ol>`,
+    `<span class="eyebrow">PRU221m · Bài 0.0 · Tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Một nơi gom đủ thứ để học PRU221m vượt ngoài các bài trong khoá: giáo trình &amp; slide chính thức trên FLM, sách tham khảo, tài liệu gốc miễn phí, kênh video, công cụ, và lộ trình tự học 4 bước.</p>
+<div class="callout"><span class="badge">Chính thức</span> Đăng nhập <strong>FLM</strong> (<a href="https://flm.fpt.edu.vn">flm.fpt.edu.vn</a>) bằng tài khoản FPTU — có giáo trình + slide đầy đủ, đúng phạm vi thi.</div>
+<h3>📘 Giáo trình &amp; slide chính thức</h3>
+<ul>
+<li><strong>FLM — flm.fpt.edu.vn</strong>: đăng nhập bằng tài khoản FPTU để lấy giáo trình đầy đủ, lịch buổi, CLO và toàn bộ slide bài giảng — nguồn chuẩn, đúng phạm vi thi.</li>
+</ul>
+<h3>📗 Sách tham khảo</h3>
+<ul>
+<li><em>Game Programming Patterns</em> — Robert Nystrom (miễn phí, đọc online): <a href="https://gameprogrammingpatterns.com/">gameprogrammingpatterns.com</a></li>
+<li><em>Unity in Action (tái bản 3)</em> — Joe Hocking (Manning): <a href="https://www.manning.com/books/unity-in-action-third-edition">manning.com/books/unity-in-action-third-edition</a></li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li>Unity Manual: <a href="https://docs.unity3d.com/Manual/index.html">docs.unity3d.com/Manual</a></li>
+<li>Unity Scripting API: <a href="https://docs.unity3d.com/ScriptReference/">docs.unity3d.com/ScriptReference</a></li>
+<li>Hướng dẫn C# (OOP, collection, event): <a href="https://learn.microsoft.com/dotnet/csharp">learn.microsoft.com/dotnet/csharp</a></li>
+</ul>
+<h3>▶️ Kênh YouTube</h3>
+<ul>
+<li>Jason Weimann (OOP &amp; pattern trong Unity): <a href="https://www.youtube.com/@Jasonweimann">youtube.com/@Jasonweimann</a></li>
+<li>Code Monkey: <a href="https://www.youtube.com/@CodeMonkeyUnity">youtube.com/@CodeMonkeyUnity</a></li>
+<li>Brackeys: <a href="https://www.youtube.com/@Brackeys">youtube.com/@Brackeys</a></li>
+<li>Unity (chính thức): <a href="https://www.youtube.com/@unity">youtube.com/@unity</a></li>
+</ul>
+<h3>🛠️ Công cụ học &amp; thực hành</h3>
+<ul>
+<li>Unity Hub + Unity Editor (LTS): <a href="https://unity.com/download">unity.com/download</a></li>
+<li>Visual Studio 2022: <a href="https://visualstudio.microsoft.com/">visualstudio.microsoft.com</a></li>
+<li>JetBrains Rider: <a href="https://www.jetbrains.com/rider/">jetbrains.com/rider</a></li>
+<li>Refactoring.Guru (tra cứu design pattern): <a href="https://refactoring.guru/design-patterns">refactoring.guru/design-patterns</a></li>
+</ul>
+<h3>🎯 Lộ trình tự học 4 bước</h3>
+<ol>
+<li><strong>Nền tảng / lõi thi</strong> — nắm chắc kế thừa &amp; đa hình (abstract/virtual/override, interface) và biết khi nào dùng cái nào; đây là xương sống của mọi pattern về sau.</li>
+<li><strong>Luyện qua project nhỏ</strong> — mô hình hoá một họ kẻ địch bằng lớp cha + interface, lưu/tải trạng thái bằng JSON &amp; PlayerPrefs, và tách rời hệ thống bằng C# event.</li>
+<li><strong>Đào sâu thực tế</strong> — chọn đúng collection (List/Dictionary/HashSet/Queue/Stack) theo chi phí, rồi áp dụng Singleton, Observer, State và Object Pool vào chỗ thật sự cần.</li>
+<li><strong>Sẵn sàng đi làm</strong> — refactor một prototype lộn xộn thành hệ thống sạch, dễ kiểm thử, và biện minh được từng pattern (cùng đánh đổi của nó) khi phỏng vấn.</li>
+</ol>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola8', name: 'Kỳ 8', ordinal: 10 },
   course: {
@@ -290,6 +376,7 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/PRU221m.webp',
     shortDescription: 'Advanced C# OOP for Unity — inheritance & polymorphism, file I/O (JSON/PlayerPrefs), event handling, data structures and design patterns (Singleton/Observer/State/Object Pool). Bilingual, with Unity C# & quizzes.|||C# OOP nâng cao cho Unity — kế thừa & đa hình, file I/O (JSON/PlayerPrefs), xử lý sự kiện, cấu trúc dữ liệu và design pattern (Singleton/Observer/State/Object Pool). Song ngữ, có C# Unity & quiz.',
     description: 'Môn <strong>PRU221m — OOP for Unity Games</strong> (kỳ 8), nối tiếp PRU211m, nâng kỹ năng viết game <strong>bền hơn bằng thiết kế hướng đối tượng tốt hơn</strong>: <strong>kế thừa &amp; đa hình</strong> (abstract/virtual/interface, họ kẻ địch) → <strong>file I/O</strong> (lưu/tải JSON, PlayerPrefs) → <strong>xử lý sự kiện</strong> (C# event, tách rời hệ thống) → <strong>cấu trúc dữ liệu</strong> (List/Dictionary/HashSet/Queue/Stack và chi phí) → <strong>design pattern</strong> (Singleton, Observer, State, Object Pool). Bám giáo trình FLM, song ngữ, code C# trong bối cảnh Unity và quiz mỗi chương.',
@@ -297,6 +384,7 @@ export default {
     requirements: 'Đã học PRU211m (C# cho Unity cơ bản) hoặc tương đương. Cần Unity + Visual Studio/Rider.',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Vì sao OOP nâng cao trong game.', lessons: [intro] },
     { title: 'Chương 1 — Kế thừa & đa hình|||Chapter 1 — Inheritance & polymorphism', description: 'abstract/virtual/interface, họ thực thể.', lessons: [c1, c1q] },
     { title: 'Chương 2 — File I/O & sự kiện|||Chapter 2 — File I/O & events', description: 'JSON/PlayerPrefs, C# event.', lessons: [c2, c2q] },

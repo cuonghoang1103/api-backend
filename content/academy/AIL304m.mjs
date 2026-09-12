@@ -376,6 +376,85 @@ const m4q = quiz('ail304m-quiz-4', 'Quiz M4 — ML strategy|||Quiz M4 — ML str
   { id: 'q3', question: 'Vì sao tập dev/test phải khớp phân bố production?', options: ['Cho công bằng', 'Nếu không, ta tối ưu sai mục tiêu so với dữ liệu thật', 'Để nhanh hơn', 'Bắt buộc bởi TensorFlow'], correctIndex: 1, explanation: 'Dev/test lệch phân bố thật khiến cải thiện trên dev không chuyển thành cải thiện thật.' },
 ]);
 
+const taiLieu = doc('ail304m-0-0-tai-lieu', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+  'Trung tâm tài liệu: giáo trình & slide (FLM), sách (kèm link), tài liệu chính thức miễn phí, YouTube, công cụ, lộ trình tự học.',
+  [[
+    `<span class="eyebrow">AIL304m · Resource hub</span>
+<h2>📚 Course materials &amp; references</h2>
+<p class="lead">Everything you need to study Machine Learning beyond this course: the official FLM syllabus &amp; slides, reference books, free official docs, YouTube channels, tools, and a 4-step self-study roadmap. Every link is real and free to open.</p>
+<h3>📘 Official syllabus &amp; slides</h3>
+<div class="callout"><span class="badge">FLM</span> Log in to <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> with your FPTU account — the full syllabus and lecture slides for AIL304m are there.</div>
+<h3>📗 Reference books</h3>
+<ul>
+<li><a href="https://www.oreilly.com/library/view/hands-on-machine-learning/9781098125967/" target="_blank" rel="noopener">Hands-On Machine Learning with Scikit-Learn, Keras &amp; TensorFlow</a> — Aurélien Géron (O'Reilly).</li>
+<li><a href="https://www.deeplearningbook.org/" target="_blank" rel="noopener">Deep Learning</a> — Ian Goodfellow, Yoshua Bengio &amp; Aaron Courville (MIT Press) — full text free online.</li>
+</ul>
+<h3>🌐 Free official documentation</h3>
+<ul>
+<li><a href="https://www.tensorflow.org/learn" target="_blank" rel="noopener">TensorFlow — learn &amp; tutorials</a></li>
+<li><a href="https://scikit-learn.org/stable/" target="_blank" rel="noopener">scikit-learn — user guide &amp; API</a></li>
+<li><a href="https://keras.io/" target="_blank" rel="noopener">Keras documentation</a></li>
+</ul>
+<h3>▶️ YouTube channels</h3>
+<ul>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp</a> — full-length ML/DL courses.</li>
+<li><a href="https://www.youtube.com/@sentdex" target="_blank" rel="noopener">sentdex</a> — practical Python ML tutorials.</li>
+<li><a href="https://www.youtube.com/@3blue1brown" target="_blank" rel="noopener">3Blue1Brown</a> — visual intuition for neural networks &amp; calculus.</li>
+<li><a href="https://www.youtube.com/@statquest" target="_blank" rel="noopener">StatQuest with Josh Starmer</a> — ML concepts explained simply.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://colab.research.google.com/" target="_blank" rel="noopener">Google Colab</a> — free GPU notebooks, nothing to install.</li>
+<li><a href="https://jupyter.org/" target="_blank" rel="noopener">Jupyter</a> — local interactive notebooks.</li>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VS Code</a> — editor with the Python extension.</li>
+<li><a href="https://www.kaggle.com/" target="_blank" rel="noopener">Kaggle</a> — datasets, notebooks &amp; competitions.</li>
+</ul>
+<h3>🎯 Self-study roadmap</h3>
+<ol>
+<li><strong>Foundations (exam core)</strong> — master the math (linear algebra, gradient descent) and the neural-network basics in this course; do every quiz.</li>
+<li><strong>Small projects</strong> — reproduce a classifier end-to-end (e.g. MNIST or Titanic) in a Colab notebook with scikit-learn / Keras.</li>
+<li><strong>Go deeper</strong> — read Géron's chapters against real datasets; tune bias/variance, regularization and optimizers on your own data.</li>
+<li><strong>Job-ready</strong> — enter a Kaggle competition, publish a notebook, and write up your results; that portfolio is what employers read.</li>
+</ol>`,
+    `<span class="eyebrow">AIL304m · Trung tâm tài liệu</span>
+<h2>📚 Tài liệu tham khảo môn học</h2>
+<p class="lead">Mọi thứ để học Machine Learning vượt ra ngoài môn này: giáo trình &amp; slide chính thức trên FLM, sách tham khảo, tài liệu chính thức miễn phí, kênh YouTube, công cụ, và lộ trình tự học 4 bước. Mọi link đều thật và mở được miễn phí.</p>
+<h3>📘 Giáo trình &amp; slide chính thức</h3>
+<div class="callout"><span class="badge">FLM</span> Đăng nhập <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">flm.fpt.edu.vn</a> bằng tài khoản FPTU — có giáo trình và slide đầy đủ cho AIL304m.</div>
+<h3>📗 Sách tham khảo</h3>
+<ul>
+<li><a href="https://www.oreilly.com/library/view/hands-on-machine-learning/9781098125967/" target="_blank" rel="noopener">Hands-On Machine Learning with Scikit-Learn, Keras &amp; TensorFlow</a> — Aurélien Géron (O'Reilly).</li>
+<li><a href="https://www.deeplearningbook.org/" target="_blank" rel="noopener">Deep Learning</a> — Ian Goodfellow, Yoshua Bengio &amp; Aaron Courville (MIT Press) — đọc toàn văn miễn phí trực tuyến.</li>
+</ul>
+<h3>🌐 Tài liệu chính thức miễn phí</h3>
+<ul>
+<li><a href="https://www.tensorflow.org/learn" target="_blank" rel="noopener">TensorFlow — học &amp; hướng dẫn</a></li>
+<li><a href="https://scikit-learn.org/stable/" target="_blank" rel="noopener">scikit-learn — user guide &amp; API</a></li>
+<li><a href="https://keras.io/" target="_blank" rel="noopener">Tài liệu Keras</a></li>
+</ul>
+<h3>▶️ Kênh YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@freecodecamp" target="_blank" rel="noopener">freeCodeCamp</a> — khoá ML/DL dài đầy đủ.</li>
+<li><a href="https://www.youtube.com/@sentdex" target="_blank" rel="noopener">sentdex</a> — hướng dẫn ML bằng Python thực chiến.</li>
+<li><a href="https://www.youtube.com/@3blue1brown" target="_blank" rel="noopener">3Blue1Brown</a> — trực giác hình ảnh về mạng nơ-ron &amp; giải tích.</li>
+<li><a href="https://www.youtube.com/@statquest" target="_blank" rel="noopener">StatQuest with Josh Starmer</a> — khái niệm ML giải thích đơn giản.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://colab.research.google.com/" target="_blank" rel="noopener">Google Colab</a> — notebook GPU miễn phí, không cần cài đặt.</li>
+<li><a href="https://jupyter.org/" target="_blank" rel="noopener">Jupyter</a> — notebook tương tác chạy cục bộ.</li>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VS Code</a> — trình soạn thảo kèm extension Python.</li>
+<li><a href="https://www.kaggle.com/" target="_blank" rel="noopener">Kaggle</a> — tập dữ liệu, notebook &amp; cuộc thi.</li>
+</ul>
+<h3>🎯 Lộ trình tự học</h3>
+<ol>
+<li><strong>Nền tảng (lõi thi)</strong> — nắm chắc phần toán (đại số tuyến tính, gradient descent) và nền mạng nơ-ron trong môn này; làm hết mọi quiz.</li>
+<li><strong>Project nhỏ</strong> — tái hiện một bộ phân loại end-to-end (vd MNIST hoặc Titanic) trong notebook Colab bằng scikit-learn / Keras.</li>
+<li><strong>Đào sâu</strong> — đọc các chương sách Géron song song với dữ liệu thật; tinh chỉnh bias/variance, regularization và optimizer trên dữ liệu của bạn.</li>
+<li><strong>Sẵn sàng đi làm</strong> — tham gia một cuộc thi Kaggle, công bố notebook, và viết lại kết quả; portfolio đó là thứ nhà tuyển dụng đọc.</li>
+</ol>`,
+  ]]);
+
 export default {
   semester: { code: 'FPTU_Hola4', name: 'Kỳ 4', ordinal: 6 },
   course: {
@@ -385,6 +464,7 @@ export default {
     level: 'ADVANCED',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/AIL304m.webp',
     shortDescription: 'Deep-learning-focused ML — math foundations, neural networks, training/optimization with TensorFlow, and ML strategy. Bilingual, with Python/NumPy/Keras code & exercises.|||Học máy hướng deep learning — nền toán, mạng nơ-ron, huấn luyện/tối ưu với TensorFlow, và ML strategy. Song ngữ, có code Python/NumPy/Keras & bài tập.',
     description: 'Môn <strong>AIL304m — Machine Learning (Học máy)</strong> (ngành AI/SE combo, kỳ 4). Hướng deep learning: từ <strong>nền toán</strong> (đại số tuyến tính, giải tích, gradient descent) → <strong>mạng nơ-ron</strong> → <strong>cải thiện &amp; tối ưu</strong> (train/dev/test, bias/variance, optimizer, <strong>TensorFlow/Keras</strong>) → <strong>ML strategy</strong> (phân tích lỗi, transfer/multi-task learning). Bám giáo trình FLM (4 module, 5 CLO), song ngữ, có công thức + code Python và bài tập kèm lời giải.',
@@ -392,6 +472,7 @@ export default {
     requirements: 'Nên biết Python cơ bản và toán phổ thông (đạo hàm, vector). Cần môi trường Python + NumPy + TensorFlow (hoặc Google Colab).',
   },
   sections: [
+    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Giáo trình & slide trên FLM, sách, tài liệu chính thức, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
     { title: 'Giới thiệu môn học|||Course introduction', description: 'Mục tiêu, 5 CLO, ML là gì, lộ trình 4 module.', lessons: [intro] },
     { title: 'Module 1 — Toán cho ML|||Module 1 — Math for ML', description: 'Đại số tuyến tính, gradient descent, perceptron.', lessons: [m1a, m1b, m1e, m1q] },
     { title: 'Module 2 — Mạng nơ-ron|||Module 2 — Neural networks', description: 'Forward prop, activation, loss, backprop.', lessons: [m2, m2q] },

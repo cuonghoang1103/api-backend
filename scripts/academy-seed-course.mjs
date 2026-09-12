@@ -83,6 +83,10 @@ const courseData = {
   level: c.level ?? 'BEGINNER', language: c.language ?? 'Vietnamese',
   accessType: 'FREE', isFree: true, price: 0,
   status: c.status ?? 'PUBLISHED', isPublished: (c.status ?? 'PUBLISHED') === 'PUBLISHED',
+  // Ảnh bìa: spec nào khai thumbnailUrl thì set; không khai thì để null (giữ
+  // trạng thái cũ). Trước 13/09 dòng này BỊ THIẾU nên MỌI ảnh bìa academy = null
+  // dù stub 160 môn + các môn dựng lại đều đã trỏ tới images/academy-covers/v2/.
+  thumbnailUrl: c.thumbnailUrl ?? null,
 };
 if (!course) {
   console.log(`  + course ${c.courseCode} "${c.title}" [${courseData.status}]`);

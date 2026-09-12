@@ -11,9 +11,10 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import {
-  chinhVaXuat, donDep, donDepTatCa, masterTheoMau, napBai, napBanMau, phanTich,
-  soPhienDangMo, tenAnToan,
+  banGiao, chinhVaXuat, donDep, donDepTatCa, masterTheoMau, napBai, napBanMau,
+  phanTich, soPhienDangMo, tenAnToan, xuatTep,
 } from './xuong';
+import { ghiWav } from './wav';
 
 const FS = 44100;
 let goc = '';
@@ -272,5 +273,73 @@ describe('dọn dẹp', () => {
 
   it('dọn khi chưa có gì thì trả 0, không nổ', async () => {
     await expect(donDepTatCa(goc)).resolves.toBe(0);
+  });
+});
+
+describe('xuất tệp theo định dạng đã chọn', () => {
+  /** Một WAV float thật trên đĩa — đúng thứ mọi bước của xưởng đẻ ra. */
+  async function nguon(ten = 'ban tron.wav'): Promise<string> {
+    const n = FS;
+    const l = new Float32Array(n);
+    const r = new Float32Array(n);
+    for (let i = 0; i < n; i++) {
+      l[i] = 0.4 * Math.sin((2 * Math.PI * 220 * i) / FS);
+      r[i] = 0.4 * Math.sin((2 * Math.PI * 330 * i) / FS);
+    }
+    const d = path.join(goc, ten);
+    await fs.writeFile(d, Buffer.from(ghiWav({ kenh: [l, r], tanSoMau: FS })));
+    return d;
+  }
+
+  it('⭐ ghi ra tệp MP3 THẬT cạnh bản gốc, và bản gốc còn nguyên', async () => {
+    const g = await nguon();
+    const truoc = (await fs.stat(g)).size;
+    const kq = await xuatTep(g, { dinhDang: 'mp3', kbps: 320 });
+
+    expect(kq.ten).toBe('ban tron.mp3');
+    expect(kq.moTa).toBe('MP3 320 kbps');
+    const b = await fs.readFile(kq.duong);
+    expect(b[0]).toBe(0xff);
+    expect(kq.byte).toBe(b.length);
+    /* Bản WAV float là thứ master/xuất-stem/trộn-lại đọc vào. Đè nó là cắt cụt
+       đường làm việc, và người dùng chỉ biết ở bước sau. */
+    expect((await fs.stat(g)).size).toBe(truoc);
+  });
+
+  it('⭐ xuất WAV từ nguồn WAV thì KHÔNG đè lên chính nó', async () => {
+    /* Đuôi trùng nhau ⇒ đường đích trùng đường nguồn. Không chặn thì ta ghi
+       bản 16-bit đè lên bản float, tức là làm hỏng đúng cái tệp gốc — im lặng,
+       và không lấy lại được. */
+    const g = await nguon();
+    const kq = await xuatTep(g, { dinhDang: 'wav16' });
+    expect(kq.duong).not.toBe(g);
+    expect(kq.ten).toContain('WAV 16-bit');
+    await expect(fs.stat(g)).resolves.toBeTruthy();
+    await expect(fs.stat(kq.duong)).resolves.toBeTruthy();
+  });
+
+  it('FLAC ra tệp có chữ ký đúng và nhỏ hơn nguồn float', async () => {
+    const g = await nguon();
+    const kq = await xuatTep(g, { dinhDang: 'flac', bit: 16 });
+    const b = await fs.readFile(kq.duong);
+    expect(b.subarray(0, 4).toString('latin1')).toBe('fLaC');
+    expect(kq.byte).toBeLessThan((await fs.stat(g)).size);
+  });
+
+  it('⭐ bản giao mang ĐÚNG đuôi và MIME của định dạng đã chọn', async () => {
+    /* Giao một khối MP3 mang tên `.wav` thì máy chủ lưu sai đuôi và bàn DJ tải
+       về một tệp không mở nổi — mà mọi bước trước đó đều xanh. */
+    const g = await nguon();
+    const bg = await banGiao(g, { dinhDang: 'mp3', kbps: 192 });
+    expect(bg.ten).toBe('ban tron.mp3');
+    expect(bg.mime).toBe('audio/mpeg');
+    expect(bg.byte[0]).toBe(0xff);
+    expect(bg.giay).toBeCloseTo(1, 2);
+  });
+
+  it('bản giao mặc định vẫn là WAV 16-bit như trước', async () => {
+    const bg = await banGiao(await nguon());
+    expect(bg.ten).toBe('ban tron.wav');
+    expect(bg.mime).toBe('audio/wav');
   });
 });

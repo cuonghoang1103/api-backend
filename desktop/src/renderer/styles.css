@@ -11374,6 +11374,95 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   color: var(--ct-text-faint);
 }
 
+/* ── Chọn chất lượng bản cuối ─────────────────────────── */
+.ct-xr-cl {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: color-mix(in srgb, var(--ct-bg) 45%, #000);
+}
+.ct-xr-cl-dau {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+}
+.ct-xr-cl-nay {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 12px;
+  color: var(--ct-text-muted);
+  white-space: nowrap;
+}
+
+.ct-xr-cl-nhom {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+.ct-xr-cl-nhan {
+  flex: 0 0 auto;
+  width: 108px;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ct-text-faint);
+}
+
+/* XUỐNG DÒNG chứ không cuộn ngang. Bản đầu cuộn, và ở bề rộng thật của cột
+   (~550px) thì nhóm NGUYÊN VẸN nằm hẳn ngoài màn hình — không thấy, không có
+   dấu hiệu gì là còn nữa. Chia hai nhóm rồi thì mỗi hàng chỉ bốn nút, xuống
+   dòng cùng lắm thành hai hàng. */
+.ct-xr-cl-hang {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+
+.ct-xr-cl-nut {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  flex: 0 0 auto;
+  padding: 5px 9px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: transparent;
+  color: var(--ct-text-muted);
+  cursor: pointer;
+  line-height: 1.25;
+}
+.ct-xr-cl-nut:hover:not(:disabled) { border-color: var(--ct-accent); }
+.ct-xr-cl-nut:disabled { opacity: 0.5; cursor: default; }
+.ct-xr-cl-nut b { font-size: 12px; white-space: nowrap; }
+.ct-xr-cl-nut span {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 10px;
+  color: var(--ct-text-faint);
+}
+.ct-xr-cl-nut[data-chon] {
+  border-color: var(--ct-accent);
+  background: color-mix(in srgb, var(--ct-accent) 16%, transparent);
+  color: var(--ct-text);
+}
+
+.ct-xr-cl-vi {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ct-text-muted);
+}
+/* Hai nhãn này là thứ người dùng dựa vào để quyết định — chúng phải khác màu
+   nhau đủ để nhận ra mà không cần đọc. */
+.ct-xr-cl-canh { color: #fbbf24; font-weight: 600; }
+.ct-xr-cl-nguyen { color: #4ade80; font-weight: 600; }
+
 /* ── Dải track ───────────────────────────────────────── */
 .ct-xr-track {
   display: flex;
@@ -11465,6 +11554,12 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   box-shadow: 0 0 4px var(--ct-warn);
   pointer-events: none;
   will-change: transform;
+}
+
+/* Hẹp thì nhãn nhóm lên trên chứ không ép cột nút xuống còn hai cái. */
+@container xr (max-width: 560px) {
+  .ct-xr-cl-nhom { flex-direction: column; align-items: stretch; gap: 4px; }
+  .ct-xr-cl-nhan { width: auto; }
 }
 
 @container xr (max-width: 640px) {

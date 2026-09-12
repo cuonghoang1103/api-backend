@@ -41,6 +41,18 @@ export default defineConfig({
          * của chính nó — một bản sao nằm sai chỗ có thể dò trượt.
          */
         'electron-updater',
+        /**
+         * Hai bộ mã hoá âm thanh: để NGOÀI bundle.
+         *
+         * `libflacjs` là libFLAC dịch sang asm.js — một tệp 1 MB mà rollup
+         * không có lý do gì phải phân tích. `@breezystack/lamejs` thì bắt
+         * buộc: nó là ESM thuần, nạp bằng `import()` động, và chỉ khi để
+         * external thì rollup mới GIỮ NGUYÊN `import()` trong bản dựng CJS
+         * thay vì đổi thành `require()` — mà `require()` gói đó trả `{}`
+         * (xem chú thích trong `nhac/maHoa.ts`).
+         */
+        'libflacjs',
+        '@breezystack/lamejs',
         ...builtinModules,
         ...builtinModules.map((m) => `node:${m}`),
       ],

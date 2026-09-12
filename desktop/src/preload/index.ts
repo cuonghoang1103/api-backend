@@ -34,6 +34,7 @@ import type {
   SettingKey,
   SettingValue,
   BaiDaNap,
+  KetQuaXuatTep,
   DownloadedTrack,
   KetQuaPhanTich,
   KetQuaTachRa,
@@ -53,6 +54,7 @@ import type {
   StoredSession,
   UpdateStatus,
 } from '../shared/ipc';
+import type { CaiXuat } from '../shared/dinhDangXuat';
 
 /**
  * Danh sách trắng sự kiện, viết thẳng thành chuỗi (không import hằng dùng
@@ -200,8 +202,10 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('xuongRemix:napBanMau', { id, ten, mau, soKenh, tanSoMau }) as Promise<TomTatBanMau>,
     master: (id: string, tranDbtp?: number, khongKhopPho?: boolean) =>
       ipcRenderer.invoke('xuongRemix:master', { id, tranDbtp, khongKhopPho }) as Promise<KetQuaMasterRa>,
-    banGiao: (duong: string) =>
-      ipcRenderer.invoke('xuongRemix:banGiao', { duong }) as Promise<BanGiaoAmThanh>,
+    banGiao: (duong: string, cai?: CaiXuat) =>
+      ipcRenderer.invoke('xuongRemix:banGiao', { duong, cai }) as Promise<BanGiaoAmThanh>,
+    xuatTep: (duong: string, cai: CaiXuat) =>
+      ipcRenderer.invoke('xuongRemix:xuatTep', { duong, cai }) as Promise<KetQuaXuatTep>,
     song: (id: string, soCot: number) =>
       ipcRenderer.invoke('xuongRemix:song', { id, soCot }) as Promise<SongAmThanh>,
     tron: (

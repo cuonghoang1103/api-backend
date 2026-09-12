@@ -734,8 +734,15 @@ await ctx.addInitScript((nn) => {
       v.setUint32(24, fs, true); v.setUint32(28, fs * 2, true); v.setUint16(32, 2, true);
       v.setUint16(34, 16, true); chu(36, 'data'); v.setUint32(40, n * 2, true);
       return { ten: 'Bài thử rất dài để xem tên có tràn ra ngoài ô không (tron).wav',
-               byte: new Uint8Array(b), giay: 254 };
+               byte: new Uint8Array(b), giay: 254, mime: 'audio/wav' };
     })(),
+    /* Kết quả XUẤT TỆP. Dòng nó dựng ra mang tên tệp DÀI + ba con số + một nút
+       — hàng chữ dài nhất của cả khối chất lượng, nên nó phải được đo. */
+    xuatTep: {
+      duong: '/tmp/x/phien/bai-thu/Bài thử rất dài để xem tên có tràn ra ngoài ô không (tron).mp3',
+      ten: 'Bài thử rất dài để xem tên có tràn ra ngoài ô không (tron).mp3',
+      byte: 10_180_224, moTa: 'MP3 320 kbps', giay: 21.7,
+    },
     /* Kết quả TÁCH. Thiếu nó thì `ketQua` là null, và cả danh sách stem LẪN
        bàn trộn không bao giờ được dựng ra — hai khối rộng nhất của trang chưa
        từng đi qua bộ đo một lần nào (phát hiện 12/09/2026, khi thêm bàn trộn). */
@@ -913,6 +920,10 @@ const CHUAN_BI = {
     await p.waitForTimeout(300);
     await p.click('button:has-text("Đẩy lên bàn DJ")', { timeout: 2000 }).catch(() => {});
     await p.waitForTimeout(600);
+    /* Khối chất lượng: tám nút cuộn ngang + một dòng "đã ghi" mang tên tệp
+       dài. Không bấm Xuất thì dòng đó không tồn tại. */
+    await p.click('button:has-text("Xuất tệp")', { timeout: 2000 }).catch(() => {});
+    await p.waitForTimeout(400);
 
     /* ⚠️ TỰ KIỂM VIỆC CỦA CHÍNH BƯỚC NÀY.
        Mọi thao tác trên đều `.catch(() => {})`, nên một selector đổi tên là
@@ -945,6 +956,7 @@ const CHUAN_BI = {
       );
     }
 
+    const soCl = await p.locator('.ct-xr-cl-nut').count();
     const coCham = await p.locator('.ct-xr-cham').count();
     const coLuoi = await p.locator('.ct-xr-luoi').count();
     const coAi = await p.locator('.ct-xr-tra-loi').count();
@@ -964,12 +976,12 @@ const CHUAN_BI = {
       );
     }
     if (!coCham || !coLuoi || !coAi || !coTron || coStem < 4 || !coNghe
-        || !coBan || soLan < 4) {
+        || !coBan || soLan < 4 || soCl < 8) {
       throw new Error(
         `chuẩn bị /xuong-remix KHÔNG tới được trạng thái đông `
         + `(lưới số đo: ${coLuoi}, khối chấm bài: ${coCham}, câu trả lời AI: ${coAi}, `
         + `bản trộn: ${coTron}, ô stem: ${coStem}/4, thanh nghe: ${coNghe}, `
-        + `transport: ${coBan}, dải track: ${soLan}/4). `
+        + `transport: ${coBan}, dải track: ${soLan}/4, nút chất lượng: ${soCl}/8). `
         + 'Selector hay luồng trang đã đổi — sửa bước CHUAN_BI trước khi tin kết quả.',
       );
     }
@@ -978,7 +990,10 @@ const CHUAN_BI = {
        trang, nên ảnh chụp `fullPage` chỉ ra phần đáy — mà `.ct-content` cuộn
        riêng nên `fullPage` không cứu được. Bàn làm việc nằm trên cùng, tức là
        thứ duy nhất KHÔNG bao giờ lọt vào ảnh, đúng lúc nó là thứ cần nhìn. */
-    await p.evaluate(() => { document.querySelector('.ct-content')?.scrollTo(0, 0); });
+    await p.evaluate((sel) => {
+      if (sel) document.querySelector(sel)?.scrollIntoView({ block: 'start' });
+      else document.querySelector('.ct-content')?.scrollTo(0, 0);
+    }, process.env.CT_CUON ?? '');
     await p.waitForTimeout(200);
   },
   /* Mở bảng chọn hoạt động trên dải 24 giờ. Nó từng bị khối "Đi nhanh" vẽ đè

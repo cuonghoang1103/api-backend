@@ -34,7 +34,9 @@ import { caoDoTuTen, mauVinahouse, vietMidi } from './midi';
 import { doNhip, doTong } from './nhipVaTong';
 import { moPhienTach } from './onnxChay';
 import { TAN_SO_MODEL, TEN_STEM, tachStem, type TenStem } from './tachStem';
-import { docWav, ghiWav, ghiWav16, gopMono, type AmThanh } from './wav';
+import { docWav, ghiWav, gopMono, type AmThanh } from './wav';
+import { duoiTep, maHoa, mimeCua, moTaDinhDang } from './maHoa';
+import type { CaiXuat } from '../../shared/dinhDangXuat';
 
 export interface BaiDaNap {
   id: string;
@@ -522,11 +524,13 @@ export async function songBai(id: string, soCot: number): Promise<SongRa> {
 }
 
 export interface BanGiao {
-  /** Tên tệp, không kèm đường dẫn — giao diện đặt tên bài từ nó. */
+  /** Tên tệp KÈM đuôi của định dạng đã chọn — giao diện đặt tên bài từ nó. */
   ten: string;
-  /** Nội dung WAV 16-bit. */
+  /** Nội dung đã mã hoá theo `cai`. */
   byte: Uint8Array;
   giay: number;
+  /** Kiểu MIME khớp với `byte`, để renderer dựng `File` cho đúng. */
+  mime: string;
 }
 
 /** Trần đọc: tệp lớn hơn thế này gần như chắc chắn là chọn nhầm, không phải bài nhạc. */
@@ -541,23 +545,74 @@ const TRAN_DOC = 400 * 1024 * 1024;
  * mạng xuống main nghĩa là chuyển token xuống theo, và mọi thứ đó chỉ để làm
  * lại một đường tải lên đã chạy tốt sẵn (`TaiNhacLen`, có cả thanh tiến độ).
  *
- * ─── Vì sao đổi sang 16-bit ở đây ───
+ * ─── Vì sao KHÔNG giao nguyên tệp float 32-bit ───
  * Tệp trên đĩa là float 32-bit vì nó còn phải đi qua các bước xử lý. Bản này
- * thì đi thẳng tới tai người và tới máy chủ: nó đã qua bộ hạn biên nên chắc
- * chắn nằm trong ±1, và 16-bit nhỏ đúng một nửa. Một bản 5 phút là 53 MB thay
- * vì 106 MB — chênh lệch thật khi đẩy lên bằng mạng nhà, và cũng là chênh
- * lệch thật khi nó đi qua cầu IPC.
+ * thì đi thẳng tới tai người và tới máy chủ, nên nó được mã hoá lại theo đúng
+ * thứ người dùng chọn ở khối "chất lượng". Mặc định WAV 16-bit: đã qua bộ hạn
+ * biên nên chắc chắn nằm trong ±1, và nhỏ đúng một nửa (53 MB thay vì 106 MB
+ * cho bài 5 phút) — chênh lệch thật cả khi đẩy lên lẫn khi đi qua cầu IPC.
+ * Chọn MP3 320 thì con số đó xuống 12 MB.
  */
-export async function banGiao(duong: string): Promise<BanGiao> {
+export async function banGiao(
+  duong: string,
+  cai: CaiXuat = { dinhDang: 'wav16' },
+): Promise<BanGiao> {
   const tt = await fs.stat(duong);
   if (tt.size > TRAN_DOC) throw new Error('Tệp quá lớn, không đọc nổi vào bộ nhớ');
 
   const am = docWav((await fs.readFile(duong)).buffer as ArrayBuffer);
   const soMau = am.kenh[0]?.length ?? 0;
+  /* Tên phải mang đuôi của định dạng THẬT. Giao một khối MP3 tên `.wav` thì
+     máy chủ lưu sai đuôi, và bàn DJ tải về một tệp không mở nổi. */
+  const goc = path.basename(duong).replace(/\.[^.]+$/, '');
   return {
-    ten: path.basename(duong),
-    byte: new Uint8Array(ghiWav16(am)),
+    ten: `${goc}.${duoiTep(cai)}`,
+    byte: new Uint8Array(await maHoa(am, cai)),
     giay: soMau / am.tanSoMau,
+    mime: mimeCua(cai),
+  };
+}
+
+export interface KetQuaXuatTep {
+  duong: string;
+  ten: string;
+  /** Cỡ tệp THẬT trên đĩa. Bảng `CHON_XUAT` chỉ ước tính; đây là con số đo được. */
+  byte: number;
+  moTa: string;
+  giay: number;
+}
+
+/**
+ * Mã hoá một tệp kết quả ra định dạng người dùng chọn, ghi cạnh bản gốc.
+ *
+ * Ghi CẠNH chứ không đè: bản WAV float là thứ mọi bước sau (master, xuất stem,
+ * trộn lại) đọc vào. Đè nó bằng một bản MP3 là cắt cụt đường làm việc, và
+ * người dùng chỉ phát hiện ở bước sau khi thứ họ nhận về nghe tệ hơn.
+ */
+export async function xuatTep(duongNguon: string, cai: CaiXuat): Promise<KetQuaXuatTep> {
+  const batDau = Date.now();
+  const tt = await fs.stat(duongNguon);
+  if (tt.size > TRAN_DOC) throw new Error('Tệp quá lớn, không đọc nổi vào bộ nhớ');
+
+  const am = docWav((await fs.readFile(duongNguon)).buffer as ArrayBuffer);
+  const byte = await maHoa(am, cai);
+
+  const thuMuc = path.dirname(duongNguon);
+  const goc = path.basename(duongNguon).replace(/\.[^.]+$/, '');
+  let ten = `${goc}.${duoiTep(cai)}`;
+  /* Xuất WAV từ một nguồn WAV thì tên trùng, và ta sẽ đè lên chính bản gốc.
+     Gắn thêm mô tả vào tên để hai tệp cùng tồn tại. */
+  if (path.join(thuMuc, ten) === duongNguon) {
+    ten = `${goc} (${moTaDinhDang(cai).replace(/[^\p{L}\p{N} .-]/gu, '')}).${duoiTep(cai)}`;
+  }
+  const duong = path.join(thuMuc, ten);
+  await fs.writeFile(duong, Buffer.from(byte));
+
+  return {
+    duong, ten,
+    byte: byte.byteLength,
+    moTa: moTaDinhDang(cai),
+    giay: (Date.now() - batDau) / 1000,
   };
 }
 

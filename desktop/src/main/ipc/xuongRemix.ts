@@ -12,7 +12,7 @@ import type { MucKhoModel } from '../../shared/ipc';
 import { KHO_MODEL, napModelTuTep, taiModel, tinhTrangKho, xoaModel } from '../nhac/taiModel';
 import {
   chinhVaXuat, donDep, donDepTatCa, huyTach, masterTheoMau, napBai, napBanMau,
-  banGiao, phanTich, songBai, tach, thuMucPhien, tronStem,
+  banGiao, phanTich, songBai, tach, thuMucPhien, tronStem, xuatTep,
 } from '../nhac/xuong';
 import { handle } from './index';
 
@@ -137,7 +137,11 @@ export function registerXuongRemixHandlers(): void {
   /* CÙNG chốt đường dẫn với `moThuMuc`: chuỗi này đến từ renderer, và ở đây
      nó mở một tệp để đọc. `duongAnToan` giới hạn trong thư mục phiên của
      Xưởng Remix, nên không đọc trộm được gì ngoài kết quả của chính nó. */
-  handle('xuongRemix:banGiao', ({ duong }) => banGiao(duongAnToan(duong)));
+  handle('xuongRemix:banGiao', ({ duong, cai }) => banGiao(duongAnToan(duong), cai));
+
+  /* Cùng chốt đường dẫn, và ở đây nó còn GHI — nên `duongAnToan` không chỉ
+     chặn đọc trộm mà còn chặn ghi đè ra ngoài thư mục phiên. */
+  handle('xuongRemix:xuatTep', ({ duong, cai }) => xuatTep(duongAnToan(duong), cai));
 
   handle('xuongRemix:song', ({ id, soCot }) => songBai(id, soCot));
 

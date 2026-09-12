@@ -10,6 +10,7 @@
  * Quy ước tên kênh: `<miền>:<hành động>`. Miền trùng với file handler.
  */
 import { z } from 'zod';
+import type { CaiXuat } from './dinhDangXuat';
 
 // ─────────────────────────────────────────────────────────────
 // Schema payload — main kiểm MỌI thứ đi vào bằng những cái này
@@ -547,6 +548,17 @@ export interface SongAmThanh {
 export interface BanGiaoAmThanh {
   ten: string;
   byte: Uint8Array;
+  giay: number;
+  /** Kiểu MIME khớp với `byte` — renderer dựng `File` theo nó. */
+  mime: string;
+}
+
+export interface KetQuaXuatTep {
+  duong: string;
+  ten: string;
+  /** Cỡ THẬT trên đĩa, byte. Bảng `CHON_XUAT` chỉ ước tính. */
+  byte: number;
+  moTa: string;
   giay: number;
 }
 
@@ -1273,7 +1285,25 @@ export const INVOKE_CHANNELS = {
   'xuongRemix:tron': tronSchema,
   /* Đọc một tệp kết quả về renderer để NGHE THỬ và ĐẨY LÊN thư viện. Main còn
      kiểm lại đường dẫn bằng `duongAnToan()` — schema này chỉ là hàng rào đầu. */
-  'xuongRemix:banGiao': z.object({ duong: z.string().min(1).max(4096) }),
+  /* Lược đồ `CaiXuat`. `kbps` và `bit` để `optional` chứ không đặt mặc định ở
+     đây: mặc định thật nằm trong `maHoa()`, và hai chỗ cùng đặt mặc định là
+     hai chỗ để chúng lệch nhau. */
+  'xuongRemix:banGiao': z.object({
+    duong: z.string().min(1).max(4096),
+    cai: z.object({
+      dinhDang: z.enum(['wav', 'wav16', 'mp3', 'flac']),
+      kbps: z.union([z.literal(128), z.literal(192), z.literal(256), z.literal(320)]).optional(),
+      bit: z.union([z.literal(16), z.literal(24)]).optional(),
+    }).optional(),
+  }),
+  'xuongRemix:xuatTep': z.object({
+    duong: z.string().min(1).max(4096),
+    cai: z.object({
+      dinhDang: z.enum(['wav', 'wav16', 'mp3', 'flac']),
+      kbps: z.union([z.literal(128), z.literal(192), z.literal(256), z.literal(320)]).optional(),
+      bit: z.union([z.literal(16), z.literal(24)]).optional(),
+    }),
+  }),
   /* Dạng sóng để VẼ. `soCot` chặn trên 4000: đó đã là hơn số điểm ảnh ngang
      của mọi màn hình, và cao hơn nữa chỉ tốn công tính chứ không thấy thêm. */
   'xuongRemix:song': z.object({
@@ -1715,7 +1745,8 @@ export interface DesktopBridge {
      * Trả WAV 16-bit — nhỏ bằng nửa bản trên đĩa, và đã qua hạn biên nên
      * không mất gì. Renderer dùng nó để nghe thử và để đẩy lên thư viện.
      */
-    banGiao(duong: string): Promise<BanGiaoAmThanh>;
+    banGiao(duong: string, cai?: CaiXuat): Promise<BanGiaoAmThanh>;
+    xuatTep(duong: string, cai: CaiXuat): Promise<KetQuaXuatTep>;
     /** Dạng sóng của bài gốc và mọi stem đã tách, tóm tắt về `soCot` cột. */
     song(id: string, soCot: number): Promise<SongAmThanh>;
     /** Trộn các stem ĐÃ TÁCH thành một bản stereo. Ném nếu chưa tách. */

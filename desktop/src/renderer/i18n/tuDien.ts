@@ -1020,4 +1020,33 @@ export const TU_DIEN: Record<string, string> = {
   'Tắt tiếng đường này': 'Mute this track',
   'tông': 'key',
   'Không đọc được tệp tiếng nào để nghe.': 'No audio file could be read for playback.',
+
+  // ── Chất lượng bản cuối ─────────────────────────────────
+  'Chất lượng bản cuối': 'Output quality',
+  'Để gửi đi và đi diễn': 'To send and to play out',
+  'Để lưu trữ và mix tiếp': 'To archive and to keep mixing',
+  'Xuất tệp': 'Export file',
+  'Đã ghi': 'Wrote',
+  'có mất dữ liệu': 'lossy',
+  'nguyên vẹn': 'lossless',
+  // Câu "vì sao" của từng lựa chọn đi qua biến (`dich(dangChon.viSao)`) nên bộ
+  // quét của tuDien.test.ts KHÔNG thấy chúng — cùng chỗ hụt với nhãn stem ở
+  // trên. Thiếu ở đây thì bản tiếng Anh hiện tiếng Việt mà không phép kiểm nào
+  // đỏ, nên phải tự nhớ.
+  'Chuẩn để đi diễn và gửi cho người khác. Nhỏ gấp 9 lần WAV, tai gần như không phân biệt được.':
+    'The standard for gigs and for sending to people. Nine times smaller than WAV, and all but indistinguishable by ear.',
+  'Nhẹ hơn chút, vẫn thừa cho loa sàn và tai nghe thường.':
+    'A little lighter, still more than enough for club speakers and everyday headphones.',
+  'Gửi qua mạng chậm, hoặc nghe thử nhanh. Nghe kỹ trên tai nghe tốt thì thấy phần cao mỏng đi.':
+    'For slow connections or a quick listen. On good headphones the top end thins out.',
+  'Chỉ để gửi bản nháp. Đừng đem đi diễn — cymbal và hi-hat vỡ rõ.':
+    'Drafts only. Do not play this out — cymbals and hi-hats break up audibly.',
+  'Không mất một chút dữ liệu nào, mà chỉ bằng nửa WAV. Chọn cái này để lưu trữ hoặc đưa cho người mix tiếp.':
+    'Not one bit lost, at half the size of WAV. Pick this to archive, or to hand on to whoever mixes next.',
+  'Cũng không mất dữ liệu, ở độ sâu của đĩa CD. Rekordbox, Serato và Traktor đều đọc được.':
+    'Also lossless, at CD bit depth. Rekordbox, Serato and Traktor all read it.',
+  'Định dạng không bao giờ từ chối ở đâu cả. To, nhưng chắc chắn mở được.':
+    'The format nothing ever refuses. Big, but guaranteed to open.',
+  'Nguyên xi thứ xưởng tính ra. Dùng khi còn phải chỉnh tiếp trong FL Studio.':
+    'Exactly what the workshop computed. Use it when there is still work to do in FL Studio.',
 };

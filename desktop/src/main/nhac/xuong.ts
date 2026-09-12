@@ -403,6 +403,8 @@ export interface TomTatBanMau {
   dinhThat: number;
   daiDong: number;
   rongStereo: number;
+  /** Mức mỗi dải quãng tám, dB. Trợ lý AI cần nó để so phổ với bài của bạn. */
+  dai: Record<number, number>;
 }
 
 /**
@@ -433,6 +435,7 @@ export function napBanMau(
     dinhThat: kq.dinhThat,
     daiDong: kq.daiDong,
     rongStereo: kq.rongStereo,
+    dai: kq.dai,
   };
 }
 

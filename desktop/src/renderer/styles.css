@@ -11370,3 +11370,49 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   color: var(--ct-ok);
   background: color-mix(in srgb, var(--ct-ok) 13%, transparent);
 }
+
+/* ── Xưởng Remix: AI kèm cặp ──────────────────────────── */
+.ct-xr-hoi {
+  display: flex;
+  /* Ô nhập + nút. Ở cột hẹp phải cho xuống dòng, nếu không ô nhập bị nén còn
+     vài chục pixel và không gõ nổi. */
+  flex-wrap: wrap;
+  gap: 9px;
+  min-width: 0;
+}
+.ct-xr-hoi input {
+  flex: 1 1 16rem;
+  min-width: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-surface-2);
+  color: var(--ct-text);
+  font: inherit;
+  font-size: 13.5px;
+}
+.ct-xr-hoi input:focus-visible {
+  outline: 2px solid var(--ct-accent);
+  outline-offset: 1px;
+}
+
+.ct-xr-tra-loi {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--ct-border);
+  border-left: 2px solid var(--ct-accent);
+  border-radius: 0 var(--ct-radius-sm) var(--ct-radius-sm) 0;
+  background: var(--ct-surface-2);
+}
+/* Câu trả lời giữ nguyên xuống dòng của model — nó trả về gạch đầu dòng. */
+.ct-xr-tra-loi > p:first-child {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.ct-xr-tra-loi .ct-xr-nhac { align-self: flex-end; font-size: 11px; }

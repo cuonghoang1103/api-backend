@@ -939,6 +939,7 @@ for route in \
     ai/chat/folders \
     notes-databases \
     music/tracks \
+    xuong-remix/trang-thai \
     courses \
     hub/folders \
     snippets \

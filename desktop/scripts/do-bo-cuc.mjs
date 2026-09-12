@@ -518,6 +518,35 @@ await ctx.route('**/api/v1/**', async (tuyen) => {
   const duong = new URL(tuyen.request().url()).pathname;
   const cach = tuyen.request().method();
 
+  /* ── Xưởng Remix: AI kèm cặp ──
+     Câu trả lời giả CỐ Ý mang cả hai cảnh báo (số lạ + bị cắt): chúng là hai
+     khối chữ dài nhất của phần này, và chỉ hiện khi model trả về đúng cờ đó.
+     Trả một câu sạch thì hai khối ấy chưa từng được đo lần nào. */
+  if (/\/xuong-remix\/trang-thai$/.test(duong)) {
+    await tuyen.fulfill({
+      status: 200, contentType: 'application/json',
+      body: JSON.stringify({ success: true, data: { sanSang: true, model: 'claude-sonnet-5' } }),
+    });
+    return;
+  }
+  if (/\/xuong-remix\/kem-cap$/.test(duong) && cach === 'POST') {
+    await tuyen.fulfill({
+      status: 200, contentType: 'application/json',
+      body: JSON.stringify({ success: true, data: {
+        traLoi: [
+          '- Bài đang ở -9.4 LUFS, còn thấp hơn mức phát hành của nhạc sàn — nén thêm rồi nâng.',
+          '- Dải 8000 Hz đang -31.5 dB, mỏng so với phần trầm ở 63 Hz (-14.2 dB). Nâng phần cao lên.',
+          '- Đỉnh thật 0.8 dBTP là ĐÃ VƯỢT 0 — hạ trần bộ hạn biên xuống -1 dBTP trước khi xuất.',
+          '- Tin cậy tông chỉ 18%, nên nghe lại bằng tai trước khi dịch tông cả bài.',
+        ].join('\n'),
+        model: 'claude-sonnet-5',
+        soLa: ['200', '3500'],
+        biCat: true,
+      } }),
+    });
+    return;
+  }
+
   /* ── Sổ tay: GHI được, không chỉ ĐỌC ──
      Tạo/xoá là hai thao tác người dùng báo hỏng nhiều nhất, và cả hai chỉ đo
      được nếu lần gọi `/notes/tree` KẾ TIẾP phản ánh thay đổi. Mock chỉ-đọc thì
@@ -582,11 +611,33 @@ await ctx.addInitScript((nn) => {
      để `ctx.route` phía Node trả lời, thay vì mang một bản sao bảng dữ liệu
      thứ hai vào trong trang. Người gọi mong nhận payload TRẦN, nên bóc
      envelope ở đây. Đường không có mock vẫn trả về hình dạng rỗng cũ. */
+  /*
+   * ⚠️ PHẢI CHUYỂN TIẾP `method` VÀ `body` (sửa 12/09/2026).
+   *
+   * Bản đầu chỉ nhận đối số thứ NHẤT và luôn `fetch` bằng GET. Hậu quả: mọi
+   * lời gọi GHI của trang native — `api.request(d, { method: 'POST', body })`
+   * — âm thầm biến thành GET, không khớp mock nào (mock POST kiểm cả
+   * `cach === 'POST'`), rơi xuống máy chủ tĩnh, 404, rồi hàm này nuốt lỗi và
+   * trả `RONG` như thể mọi thứ bình thường. Trang nhận một object SAI HÌNH
+   * DẠNG, và Xưởng Remix nổ ở `traLoiAi.soLa.length` — React 18 gỡ cả cây,
+   * nên bộ đo nhìn thấy `#root` TRỐNG mà `pageerror` thì đã bay mất từ lúc
+   * nào. Mất một buổi đi tìm ở `useSession`, trong khi lỗi nằm ở BỘ ĐO.
+   *
+   * Nói rộng hơn: trước hôm nay KHÔNG một đường ghi nào của trang native từng
+   * được bộ đo chạm tới. Xem [[feedback_verify_the_checker_before_the_content]].
+   */
   const RONG = { data: [], items: [], results: [] };
-  window.__giaApi = async (duong) => {
+  window.__giaApi = async (duong, tuyChon) => {
     try {
       const d = String(duong ?? '');
-      const r = await fetch(`/api/v1${d.startsWith('/') ? d : `/${d}`}`);
+      const o = tuyChon ?? {};
+      const r = await fetch(`/api/v1${d.startsWith('/') ? d : `/${d}`}`, {
+        method: o.method ?? 'GET',
+        /* Giống `client.ts`: chỉ đặt Content-Type khi CÓ thân, và
+           `JSON.stringify` nó — mock đọc `postData()` mong chuỗi JSON. */
+        headers: o.body === undefined ? {} : { 'Content-Type': 'application/json' },
+        ...(o.body === undefined ? {} : { body: JSON.stringify(o.body) }),
+      });
       if (!r.ok) return RONG;
       return (await r.json()).data ?? RONG;
     } catch { return RONG; }
@@ -754,6 +805,8 @@ const CHUAN_BI = {
     await p.waitForTimeout(700);
     await p.click('button:has-text("Master")', { timeout: 2000 }).catch(() => {});
     await p.waitForTimeout(500);
+    await p.click('button:has-text("Mổ xẻ bài này")', { timeout: 2000 }).catch(() => {});
+    await p.waitForTimeout(500);
 
     /* ⚠️ TỰ KIỂM VIỆC CỦA CHÍNH BƯỚC NÀY.
        Mọi thao tác trên đều `.catch(() => {})`, nên một selector đổi tên là
@@ -763,10 +816,11 @@ const CHUAN_BI = {
        Ném lỗi ở đây thì nó thành đỏ ngay, kèm lý do. */
     const coCham = await p.locator('.ct-xr-cham').count();
     const coLuoi = await p.locator('.ct-xr-luoi').count();
-    if (!coCham || !coLuoi) {
+    const coAi = await p.locator('.ct-xr-tra-loi').count();
+    if (!coCham || !coLuoi || !coAi) {
       throw new Error(
         `chuẩn bị /xuong-remix KHÔNG tới được trạng thái đông `
-        + `(lưới số đo: ${coLuoi}, khối chấm bài: ${coCham}). `
+        + `(lưới số đo: ${coLuoi}, khối chấm bài: ${coCham}, câu trả lời AI: ${coAi}). `
         + 'Selector hay luồng trang đã đổi — sửa bước CHUAN_BI trước khi tin kết quả.',
       );
     }

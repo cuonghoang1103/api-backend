@@ -862,6 +862,21 @@ export const TU_DIEN: Record<string, string> = {
   'Bỏ thay đổi này': 'Discard this change',
   // ── Xưởng Remix ─────────────────────────────────────────
   'Xưởng Remix': 'Remix Studio',
+  'AI kèm cặp': 'AI coach',
+  'Máy chủ chưa cắm khoá cổng AI, nên phần này tạm nghỉ. Mọi thứ còn lại của Xưởng Remix vẫn chạy bình thường.':
+    'The server has no AI gateway key, so this part is resting. Everything else in Remix Studio works as usual.',
+  'AI đọc ĐÚNG bảng số đo ở trên — nó không nghe được bài của bạn. Nên nó giải thích số liệu và chỉ việc cần làm, chứ không nhận xét về giai điệu.':
+    'The AI reads exactly the measurements above — it cannot hear your track. So it explains the numbers and names the next move; it does not judge your melody.',
+  'Mổ xẻ bài này': 'Break this track down',
+  'Hỏi một câu — ví dụ: làm sao cho drop mạnh hơn?': 'Ask something — for example: how do I make the drop hit harder?',
+  'Hỏi': 'Ask',
+  'Câu trả lời bị cắt giữa chừng vì chạm trần độ dài. Hỏi lại một câu hẹp hơn để nhận đủ.':
+    'The answer was cut off at the length limit. Ask something narrower to get the whole thing.',
+  'Máy chủ trả về câu trả lời rỗng. Thử hỏi lại một câu hẹp hơn.':
+    'The server returned an empty answer. Try asking something narrower.',
+  'Những con số này KHÔNG có trong bảng đo:': 'These numbers are NOT in the measurements:',
+  'AI có thể đã tự nghĩ ra — đối chiếu lại trước khi làm theo.':
+    'The AI may have invented them — check before acting on them.',
   'Master theo bản mẫu': 'Match a reference master',
   'Chọn một bài bạn muốn bản của mình nghe giống. App đo nó rồi ép bài của bạn về đúng mức to, phổ tần và độ rộng stereo của nó.':
     'Pick a track you want yours to sound like. The app measures it, then pulls your track to its loudness, frequency balance and stereo width.',

@@ -25,12 +25,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   AudioWaveform, Check, Download, FolderOpen, Gauge, Loader2, Music4, Scissors,
-  SlidersHorizontal, Trash2, Upload, X,
+  Send, SlidersHorizontal, Sparkles, Trash2, Upload, X,
 } from 'lucide-react';
 import type {
   BaiDaNap, KetQuaMasterRa, KetQuaPhanTich, KetQuaTachRa, KetQuaXuatRa, MucKhoModel,
   TienDoXuong, TomTatBanMau,
 } from '../../../shared/ipc';
+import { useSession } from '../../auth/session';
+import { docTraLoi, type TraLoiAi } from './traLoi';
 import { useDich } from '../../i18n';
 import { DUOI_NHAN, giaiMaBai, laTepNhac } from './giaiMa';
 
@@ -81,6 +83,7 @@ function mucTin(t: number): { chu: string; mau: 'ok' | 'vua' | 'kem' } {
 
 export function XuongRemixPage() {
   const { dich } = useDich();
+  const { api } = useSession();
   const cau = window.cuongthai;
 
   const [bai, setBai] = useState<BaiDaNap | null>(null);
@@ -105,6 +108,10 @@ export function XuongRemixPage() {
   const [tranDbtp, setTranDbtp] = useState(-1);
   const [dangMaster, setDangMaster] = useState(false);
   const [masterRa, setMasterRa] = useState<KetQuaMasterRa | null>(null);
+  const [aiSanSang, setAiSanSang] = useState<boolean | null>(null);
+  const [cauHoi, setCauHoi] = useState('');
+  const [dangHoi, setDangHoi] = useState(false);
+  const [traLoiAi, setTraLoiAi] = useState<TraLoiAi | null>(null);
   const oTep = useRef<HTMLInputElement>(null);
   const oTepMau = useRef<HTMLInputElement>(null);
 
@@ -125,6 +132,23 @@ export function XuongRemixPage() {
 
   useEffect(() => { void napKho(); }, [napKho]);
 
+  /* Hỏi máy chủ xem cổng LLM đã cắm khoá chưa.
+     Route này CỐ Ý không cần đăng nhập: chặn ở đó thì app chỉ nhận 401 và
+     không phân biệt được "chưa đăng nhập" với "máy chủ chưa cắm khoá" — hai
+     thứ cần hai câu nhắc khác hẳn nhau. */
+  useEffect(() => {
+    let con = true;
+    void (async () => {
+      try {
+        const r = await api?.request<{ sanSang?: boolean }>('/api/v1/xuong-remix/trang-thai');
+        if (con) setAiSanSang(r?.sanSang === true);
+      } catch {
+        if (con) setAiSanSang(false);
+      }
+    })();
+    return () => { con = false; };
+  }, [api]);
+
   /* Gắn listener tiến độ MỘT LẦN cho cả trang, không gắn lúc bấm nút: `tach()`
      không trả về cho tới khi xong, nên gắn sau khi gọi là bỏ lỡ toàn bộ. */
   useEffect(() => {
@@ -139,6 +163,7 @@ export function XuongRemixPage() {
     setXuatRa(null);
     setBanMau(null);
     setMasterRa(null);
+    setTraLoiAi(null);
     setPt(null);
     setDangNap(true);
     try {
@@ -228,6 +253,39 @@ export function XuongRemixPage() {
     }
   }, [cau, bai, tranDbtp]);
 
+  const hoiAi = useCallback(async (tuDo: boolean) => {
+    if (!api || !bai || !pt) return;
+    setLoi(null);
+    setDangHoi(true);
+    try {
+      const soDo = {
+        ten: bai.ten, giay: bai.giay,
+        bpm: pt.bpm, bpmTinCay: pt.bpmTinCay,
+        tong: pt.tong, tongCamelot: pt.tongCamelot, tongTinCay: pt.tongTinCay,
+        lufs: pt.do.lufs, dinhThat: pt.do.dinhThat, daiDong: pt.do.daiDong,
+        rongStereo: pt.do.rongStereo, dai: pt.do.dai,
+      };
+      const tl = docTraLoi(await api.request<unknown>('/api/v1/xuong-remix/kem-cap', {
+        method: 'POST',
+        body: {
+          bai: soDo,
+          /* Bản mẫu KHÔNG có nhịp và tông — app chỉ đo mức to và phổ của nó.
+             Gửi 0 thì máy chủ tự bỏ dòng đó đi thay vì in "nhịp 0 BPM". */
+          ...(banMau ? { banMau: { ...banMau, giay: 0, bpm: 0, bpmTinCay: 0,
+                                   tong: '', tongCamelot: '', tongTinCay: 0 } } : {}),
+          ...(masterRa ? { chenh: masterRa.chamTruoc } : {}),
+          ...(tuDo && cauHoi.trim() ? { cauHoi: cauHoi.trim() } : {}),
+        },
+      }));
+      if (tl) setTraLoiAi(tl);
+      else setLoi(dich('Máy chủ trả về câu trả lời rỗng. Thử hỏi lại một câu hẹp hơn.'));
+    } catch (e) {
+      setLoi((e as Error).message);
+    } finally {
+      setDangHoi(false);
+    }
+  }, [api, bai, pt, banMau, masterRa, cauHoi, dich]);
+
   const dongBai = useCallback(async () => {
     if (cau && bai) await cau.xuongRemix.dongBai(bai.id).catch(() => undefined);
     setBai(null);
@@ -236,6 +294,7 @@ export function XuongRemixPage() {
     setXuatRa(null);
     setBanMau(null);
     setMasterRa(null);
+    setTraLoiAi(null);
     setLoi(null);
   }, [cau, bai]);
 
@@ -679,6 +738,74 @@ export function XuongRemixPage() {
               </div>
             )}
           </div>
+
+          {/* ── AI kèm cặp ──────────────────────────────── */}
+          {pt && (
+            <div className="ct-xr-chinh">
+              <span className="ct-xr-nhan">{dich('AI kèm cặp')}</span>
+
+              {aiSanSang === false ? (
+                <p className="ct-muted ct-xr-nhac">
+                  {dich('Máy chủ chưa cắm khoá cổng AI, nên phần này tạm nghỉ. Mọi thứ còn lại của Xưởng Remix vẫn chạy bình thường.')}
+                </p>
+              ) : (
+                <>
+                  <p className="ct-muted ct-xr-nhac">
+                    {dich('AI đọc ĐÚNG bảng số đo ở trên — nó không nghe được bài của bạn. Nên nó giải thích số liệu và chỉ việc cần làm, chứ không nhận xét về giai điệu.')}
+                  </p>
+
+                  <div className="ct-xr-dieu-khien">
+                    <button type="button" className="ct-btn ct-btn-ghost" disabled={dangHoi}
+                      onClick={() => void hoiAi(false)}>
+                      {dangHoi ? <Loader2 size={14} className="ct-xoay" aria-hidden /> : <Sparkles size={14} aria-hidden />}
+                      {dich('Mổ xẻ bài này')}
+                    </button>
+                  </div>
+
+                  <form
+                    className="ct-xr-hoi"
+                    onSubmit={(e) => { e.preventDefault(); void hoiAi(true); }}
+                  >
+                    <input
+                      id="xr-cau-hoi"
+                      type="text"
+                      maxLength={500}
+                      value={cauHoi}
+                      placeholder={dich('Hỏi một câu — ví dụ: làm sao cho drop mạnh hơn?')}
+                      onChange={(e) => setCauHoi(e.target.value)}
+                      disabled={dangHoi}
+                    />
+                    <button type="submit" className="ct-btn" disabled={dangHoi || !cauHoi.trim()}>
+                      <Send size={14} aria-hidden />
+                      {dich('Hỏi')}
+                    </button>
+                  </form>
+
+                  {traLoiAi && (
+                    <div className="ct-xr-tra-loi">
+                      <p>{traLoiAi.traLoi}</p>
+
+                      {traLoiAi.biCat && (
+                        <p className="ct-xr-ngo">
+                          {dich('Câu trả lời bị cắt giữa chừng vì chạm trần độ dài. Hỏi lại một câu hẹp hơn để nhận đủ.')}
+                        </p>
+                      )}
+
+                      {traLoiAi.soLa.length > 0 && (
+                        <p className="ct-xr-ngo">
+                          ⚠️ {dich('Những con số này KHÔNG có trong bảng đo:')}{' '}
+                          <b>{traLoiAi.soLa.join(', ')}</b>.{' '}
+                          {dich('AI có thể đã tự nghĩ ra — đối chiếu lại trước khi làm theo.')}
+                        </p>
+                      )}
+
+                      <span className="ct-muted ct-xr-nhac">{traLoiAi.model}</span>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          )}
 
           {ketQua && (
             <div className="ct-xr-stem">

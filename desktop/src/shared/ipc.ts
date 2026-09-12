@@ -485,6 +485,8 @@ export interface TomTatBanMau {
   dinhThat: number;
   daiDong: number;
   rongStereo: number;
+  /** Mức mỗi dải quãng tám, dB. Khoá là tần số trung tâm. */
+  dai: Record<number, number>;
 }
 
 export interface KetQuaMasterRa {

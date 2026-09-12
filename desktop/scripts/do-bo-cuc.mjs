@@ -666,15 +666,51 @@ await ctx.addInitScript((nn) => {
        là gần như không có gì để đo. Trạng thái ĐÔNG mới là chỗ dễ vỡ: lưới 4 ô
        số đo, dải chip hoà âm, và mười cột phổ có nhãn. `CHUAN_BI` ở dưới thả
        một tệp WAV dựng tại chỗ để đưa trang tới đó. */
+    /* ⚠️ KHOÁ PHẢI KHỚP `MucKhoModel` trong `shared/ipc.ts`.
+       Bản trước còn gọi là `byte` (tên cũ, đã đổi thành `byteUocTinh` lúc thêm
+       lối chọn tệp tay) và thiếu hẳn `coNguonTai`. Hậu quả đúng kiểu bộ đo dối:
+       ô model hiện `~NaN MB` — một trạng thái app THẬT không bao giờ tạo ra —
+       còn nút `Tải về` thì chưa từng được dựng lần nào, nên hàng HAI NÚT cạnh
+       nhau (hàng rộng nhất của cả khối) chưa từng đi qua phép đo. Thấy được
+       nhờ nhìn ảnh chụp, không phép kiểm nào đỏ. */
     khoModel: [
-      { ma: 'htdemucs-4stem', ten: 'HT-Demucs · 4 stem', byte: 1260000000,
+      { ma: 'htdemucs-4stem', ten: 'HT-Demucs · 4 stem', byteUocTinh: 316000000,
         moTa: 'Trống, bass, nhạc nền, giọng hát. Bản đầy đủ — chọn cái này để remix sâu.',
-        coRoi: true, byteThat: 1260000000 },
-      { ma: 'htdemucs-vocals', ten: 'HT-Demucs · chỉ giọng hát', byte: 166000000,
+        coRoi: true, byteThat: 1260000000, coNguonTai: true },
+      /* `coNguonTai: true` cho model này để hàng hai nút được đo. Production
+         hiện để `null` cho nó (chưa có đường tải kiểm chứng được), nhưng model
+         4 stem lúc CHƯA tải dựng ra đúng hàng ấy — nên đây là trạng thái thật
+         của giao diện, chỉ là gắn vào dòng khác cho tiện đo. */
+      { ma: 'htdemucs-vocals', ten: 'HT-Demucs · chỉ giọng hát', byteUocTinh: 166000000,
         moTa: 'Chỉ tách giọng, nhẹ hơn 7,6 lần. Đủ cho phần lớn bản remix vinahouse.',
-        coRoi: false, byteThat: 0 },
+        coRoi: false, byteThat: 0, coNguonTai: true },
     ],
-    napBai: { id: '00000000-0000-4000-8000-000000000001', ten: 'Bài thử rất dài để xem tên có tràn ra ngoài ô không.mp3', giay: 254, soKenh: 2 },
+    napBai: { id: '00000000-0000-4000-8000-000000000001', ten: 'Bài thử rất dài để xem tên có tràn ra ngoài ô không.mp3', giay: 254, soKenh: 2,
+              duongWav: '/tmp/x/phien/bai-thu/goc.wav' },
+    /* Dạng sóng cho bàn làm việc. Dựng số THẬT chứ không mảng rỗng: canvas
+       nhận mảng rỗng thì vẽ ra một dải trống, tức là bộ đo nhìn năm ô trắng
+       và không bao giờ thấy dải sóng cao lên chạm mép hàng. Biên độ đi theo
+       một đường bao có to có nhỏ, giống bố cục một bài nhạc, để chỗ dày nhất
+       của dải đúng là chỗ được đo. */
+    song: (() => {
+      const N = 1400;
+      const min = {}, max = {};
+      for (const [k, he] of [['goc', 1], ['drums', 0.85], ['bass', 0.7],
+                             ['other', 0.55], ['vocals', 0.45]]) {
+        const a = new Float32Array(N), b = new Float32Array(N);
+        for (let i = 0; i < N; i++) {
+          const t = i / N;
+          /* Đường bao: vào nhỏ, giữa to, cuối nhỏ dần — cộng một nhịp nhanh
+             để dải không phải một khối đặc. */
+          const bao = (0.25 + 0.75 * Math.sin(Math.PI * t)) * (0.7 + 0.3 * Math.sin(t * 90));
+          const v = Math.min(0.98, he * bao);
+          b[i] = v;
+          a[i] = -v * 0.92;   // sóng thật không đối xứng
+        }
+        min[k] = a; max[k] = b;
+      }
+      return { min, max, giay: 254 };
+    })(),
     napBanMau: { ten: 'DJ Tilo - Nonstop 2026.mp3', lufs: -6.8, dinhThat: -0.9, daiDong: 6.1,
                  rongStereo: 0.42,
                  dai: { 31.5: -24.0, 63: -9.8, 125: -8.9, 250: -12.1, 500: -15.0,
@@ -698,8 +734,53 @@ await ctx.addInitScript((nn) => {
       v.setUint32(24, fs, true); v.setUint32(28, fs * 2, true); v.setUint16(32, 2, true);
       v.setUint16(34, 16, true); chu(36, 'data'); v.setUint32(40, n * 2, true);
       return { ten: 'Bài thử rất dài để xem tên có tràn ra ngoài ô không (tron).wav',
-               byte: new Uint8Array(b), giay: 254 };
+               byte: new Uint8Array(b), giay: 254, mime: 'audio/wav' };
     })(),
+    /* Kho MẪU. Một mẫu CÓ giấy phép và một mẫu MẤT tệp giấy phép: nhánh cảnh
+       báo (viền vàng + chữ "mất tệp giấy phép") chỉ tồn tại ở mẫu thứ hai, và
+       nó là dòng dài nhất của cả ô. */
+    dsMau: [
+      { id: 'k1', tep: 'Giọng nữ 128 BPM.wav', duong: '/tmp/x/kho-mau/a.wav',
+        byte: 18_400_000, ten: 'Giọng nữ 128 BPM · a cappella', giayPhep: 'cc-by',
+        tacGia: 'Một Ai Đó Trên ccMixter', nguon: 'ccMixter',
+        url: 'https://ccmixter.org/files/x/12345', themLuc: 1757000000000, coGiayPhep: true },
+      { id: 'k2', tep: 'loop khong ro nguon.mp3', duong: '/tmp/x/kho-mau/b.mp3',
+        byte: 2_100_000, ten: 'loop khong ro nguon', giayPhep: 'khac',
+        tacGia: '', nguon: '', url: '', themLuc: 1756000000000, coGiayPhep: false },
+    ],
+    /* Kho bài cho dòng thời gian. HAI bài khác nhịp khác tông — bản mashup
+       một bài không có gì để ghép, và cũng không dựng ra được làn thứ hai
+       (khối cao nhất của khối này). Tên dài có chủ ý. */
+    dsBai: [
+      { id: '00000000-0000-4000-8000-000000000001',
+        ten: 'Bài thử rất dài để xem tên có tràn ra ngoài ô không.mp3',
+        giay: 254, duongWav: '/tmp/x/phien/bai-thu/goc.wav',
+        bpm: 139.8, tong: 'Am', tongCamelot: '8A',
+        duong: ['goc', 'drums', 'bass', 'other', 'vocals'] },
+      { id: '00000000-0000-4000-8000-000000000002',
+        ten: 'Bài thứ hai để ghép.flac',
+        giay: 187, duongWav: '/tmp/x/phien/bai-hai/goc.wav',
+        bpm: 124.0, tong: 'F', tongCamelot: '7B',
+        duong: ['goc'] },
+    ],
+    /* Kết quả DỰNG mashup. `boQua` có một mục CÓ CHỦ Ý: dòng cảnh báo đó là
+       khối chữ dài nhất của cả phần này, và nó chỉ tồn tại khi có mảnh bị bỏ. */
+    dungMashup: {
+      duong: '/tmp/x/phien/bai-thu/xuat/ban mashup 128BPM.wav',
+      ten: 'ban mashup 128BPM.wav',
+      giay: 12.4, daiGiay: 96.5,
+      daDung: ['m1', 'm2'],
+      boQua: [{ id: 'm3', viSao: 'Phải kéo 0.33 lần — ngoài khoảng nghe được (0.5…2). '
+                              + 'Nhịp gốc dò ra 42.0 BPM; nếu con số đó sai thì sửa nó trước.' }],
+      dinhTruoc: 1.34, lufs: -7.9, dinhThat: -1.0,
+    },
+    /* Kết quả XUẤT TỆP. Dòng nó dựng ra mang tên tệp DÀI + ba con số + một nút
+       — hàng chữ dài nhất của cả khối chất lượng, nên nó phải được đo. */
+    xuatTep: {
+      duong: '/tmp/x/phien/bai-thu/Bài thử rất dài để xem tên có tràn ra ngoài ô không (tron).mp3',
+      ten: 'Bài thử rất dài để xem tên có tràn ra ngoài ô không (tron).mp3',
+      byte: 10_180_224, moTa: 'MP3 320 kbps', giay: 21.7,
+    },
     /* Kết quả TÁCH. Thiếu nó thì `ketQua` là null, và cả danh sách stem LẪN
        bàn trộn không bao giờ được dựng ra — hai khối rộng nhất của trang chưa
        từng đi qua bộ đo một lần nào (phát hiện 12/09/2026, khi thêm bàn trộn). */
@@ -877,6 +958,27 @@ const CHUAN_BI = {
     await p.waitForTimeout(300);
     await p.click('button:has-text("Đẩy lên bàn DJ")', { timeout: 2000 }).catch(() => {});
     await p.waitForTimeout(600);
+    /* Khối chất lượng: tám nút cuộn ngang + một dòng "đã ghi" mang tên tệp
+       dài. Không bấm Xuất thì dòng đó không tồn tại. */
+    await p.click('button:has-text("Xuất tệp")', { timeout: 2000 }).catch(() => {});
+    await p.waitForTimeout(400);
+
+    /* Dòng thời gian: thả ba mảnh của HAI bài rồi bấm Dựng. Không thả thì cả
+       khối chỉ là một dòng chữ "bấm một đường ở trên" — làn, mảnh, thước, và
+       bảng chi tiết đều không tồn tại, tức chưa từng đi qua bộ đo. */
+    /* Chỉ số 0 và 1 là hai ĐƯỜNG của bài THỨ NHẤT (nó có 5 đường), chỉ số 5 là
+       bài THỨ HAI. Bấm ba nút đầu thì cả ba mảnh cùng một bài ⇒ chỉ một làn,
+       và làn thứ hai — thứ duy nhất chứng minh bố cục nhiều làn chịu được —
+       chưa từng được dựng. Chốt tự kiểm bên dưới bắt đúng chuyện này. */
+    for (const n of [0, 1, 5]) {
+      await p.locator('.ct-xr-dtg-nut').nth(n).click({ timeout: 2000 })
+        .catch(() => {});
+      await p.waitForTimeout(120);
+    }
+    await p.locator('.ct-xr-dtg-manh').first().click({ timeout: 2000 }).catch(() => {});
+    await p.waitForTimeout(150);
+    await p.click('button:has-text("Dựng bản")', { timeout: 2000 }).catch(() => {});
+    await p.waitForTimeout(500);
 
     /* ⚠️ TỰ KIỂM VIỆC CỦA CHÍNH BƯỚC NÀY.
        Mọi thao tác trên đều `.catch(() => {})`, nên một selector đổi tên là
@@ -884,6 +986,42 @@ const CHUAN_BI = {
        trang chỉ có vùng thả tệp. Đúng cái bẫy đã ghi ở đầu tệp này (09/09/2026:
        "chốt viết xong, chạy xanh, mà chưa từng chạy một lần nào").
        Ném lỗi ở đây thì nó thành đỏ ngay, kèm lý do. */
+    const coBan = await p.locator('.ct-xr-transport').count();
+    const soLan = await p.locator('.ct-xr-lan').count();
+    /* ⚠️ ĐẾM THẺ CANVAS LÀ PHÉP KIỂM LUÔN XANH.
+       `<canvas>` tồn tại trong DOM kể cả khi nó rộng 0 điểm ảnh, kể cả khi
+       chưa vẽ gì — y hệt cái bẫy thẻ <audio> ngay dưới đây. Nếu CSS không cho
+       nó bề rộng thì `Song.tsx` thoát sớm ở `if (rong === 0) return`, dải sóng
+       trắng trơn, và bộ đo vẫn báo đủ 4 dải. Nên phải ĐỌC ĐIỂM ẢNH: đếm số
+       điểm không trong suốt trên dải đầu tiên. */
+    const soDiem = soLan
+      ? await p.locator('.ct-xr-song-canvas').first().evaluate((o) => {
+        const g = o.getContext('2d');
+        if (!g || o.width === 0 || o.height === 0) return 0;
+        const d = g.getImageData(0, 0, o.width, o.height).data;
+        let n = 0;
+        for (let i = 3; i < d.length; i += 4) if (d[i] > 0) n++;
+        return n;
+      }).catch(() => 0)
+      : 0;
+    if (soLan && soDiem < 500) {
+      throw new Error(
+        `dải sóng có thẻ canvas nhưng gần như KHÔNG vẽ gì (${soDiem} điểm ảnh). `
+        + 'Hoặc CSS không cho canvas bề rộng, hoặc dữ liệu dạng sóng rỗng.',
+      );
+    }
+
+    const soCl = await p.locator('.ct-xr-cl-nut').count();
+    /* Bàn trộn giờ là bốn cột đứng + một cột tổng, mỗi cột ba núm xoay. Đếm
+       núm chứ không đếm cột: cột rỗng vẫn là một cột, còn núm thì chỉ có khi
+       `NumXoay` thật sự dựng ra. 4 đường × 3 núm = 12. */
+    const soMau = await p.locator('.ct-xr-km-o').count();
+    const coCanh = await p.locator('.ct-xr-km-o[data-canh]').count();
+    const soManh = await p.locator('.ct-xr-dtg-manh').count();
+    const soLanDtg = await p.locator('.ct-xr-dtg-lan').count();
+    const coChiTiet = await p.locator('.ct-xr-dtg-chitiet').count();
+    const soNum = await p.locator('.ct-xr-num-o').count();
+    const soCot = await p.locator('.ct-xr-bt-cot').count();
     const coCham = await p.locator('.ct-xr-cham').count();
     const coLuoi = await p.locator('.ct-xr-luoi').count();
     const coAi = await p.locator('.ct-xr-tra-loi').count();
@@ -902,14 +1040,31 @@ const CHUAN_BI = {
         + 'Đường Uint8Array → File → blob: đã hỏng ở đâu đó.',
       );
     }
-    if (!coCham || !coLuoi || !coAi || !coTron || coStem < 4 || !coNghe) {
+    if (!coCham || !coLuoi || !coAi || !coTron || coStem < 4 || !coNghe
+        || !coBan || soLan < 4 || soCl < 8 || soNum < 12 || soCot < 5
+        || soManh < 3 || soLanDtg < 2 || !coChiTiet || soMau < 2 || !coCanh) {
       throw new Error(
         `chuẩn bị /xuong-remix KHÔNG tới được trạng thái đông `
         + `(lưới số đo: ${coLuoi}, khối chấm bài: ${coCham}, câu trả lời AI: ${coAi}, `
-        + `bản trộn: ${coTron}, ô stem: ${coStem}/4, thanh nghe: ${coNghe}). `
+        + `bản trộn: ${coTron}, ô stem: ${coStem}/4, thanh nghe: ${coNghe}, `
+        + `transport: ${coBan}, dải track: ${soLan}/4, nút chất lượng: ${soCl}/8, `
+        + `núm xoay: ${soNum}/12, cột bàn trộn: ${soCot}/5, `
+        + `mảnh: ${soManh}/3, làn dòng thời gian: ${soLanDtg}/2, `
+        + `bảng chi tiết mảnh: ${coChiTiet}, mẫu: ${soMau}/2, `
+        + `mẫu cảnh báo: ${coCanh}). `
         + 'Selector hay luồng trang đã đổi — sửa bước CHUAN_BI trước khi tin kết quả.',
       );
     }
+
+    /* Cuộn về ĐẦU sau khi chuẩn bị xong. Chuỗi thao tác trên kết thúc ở cuối
+       trang, nên ảnh chụp `fullPage` chỉ ra phần đáy — mà `.ct-content` cuộn
+       riêng nên `fullPage` không cứu được. Bàn làm việc nằm trên cùng, tức là
+       thứ duy nhất KHÔNG bao giờ lọt vào ảnh, đúng lúc nó là thứ cần nhìn. */
+    await p.evaluate((sel) => {
+      if (sel) document.querySelector(sel)?.scrollIntoView({ block: 'start' });
+      else document.querySelector('.ct-content')?.scrollTo(0, 0);
+    }, process.env.CT_CUON ?? '');
+    await p.waitForTimeout(200);
   },
   /* Mở bảng chọn hoạt động trên dải 24 giờ. Nó từng bị khối "Đi nhanh" vẽ đè
      (lỗi tầng xếp, 07/09/2026) — mà bộ đo chỉ nhìn trang lúc TĨNH thì không

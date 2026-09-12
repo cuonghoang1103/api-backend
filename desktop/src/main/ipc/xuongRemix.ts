@@ -6,13 +6,16 @@
  * không làm được: biết `userData` ở đâu, bắn sự kiện tiến độ ra cửa sổ, và
  * canh cửa cho `shell.openPath`.
  */
-import { BrowserWindow, app, shell } from 'electron';
+import { BrowserWindow, app, dialog, shell } from 'electron';
 import path from 'node:path';
-import type { MucKhoModel } from '../../shared/ipc';
-import { KHO_MODEL, taiModel, tinhTrangKho, xoaModel } from '../nhac/taiModel';
+import fsp from 'node:fs/promises';
+import type { MauNhac, MucKhoModel } from '../../shared/ipc';
+import { dsMau, themMau, thuMucKho, xoaMau } from '../nhac/khoMau';
+import { KHO_MODEL, napModelTuTep, taiModel, tinhTrangKho, xoaModel } from '../nhac/taiModel';
 import {
   chinhVaXuat, donDep, donDepTatCa, huyTach, masterTheoMau, napBai, napBanMau,
-  banGiao, phanTich, tach, thuMucPhien, tronStem,
+  banGiao, dsBaiTrongKho, dungMashup, phanTich, songBai, tach, thuMucPhien,
+  tronStem, xuatTep,
 } from '../nhac/xuong';
 import { handle } from './index';
 
@@ -75,9 +78,10 @@ export function registerXuongRemixHandlers(): void {
         ma: m.ma,
         ten: m.ten,
         moTa: m.moTa,
-        byte: m.byte,
+        byteUocTinh: m.byteUocTinh,
         coRoi: t?.coRoi ?? false,
         byteThat: t?.byte ?? 0,
+        coNguonTai: m.url !== null,
       };
     });
   });
@@ -93,6 +97,20 @@ export function registerXuongRemixHandlers(): void {
     }));
 
   handle('xuongRemix:xoaModel', ({ maModel }) => xoaModel(userData(), maModel));
+
+  /* Hộp thoại chạy ở MAIN, không ở renderer: renderer không được cấp quyền đọc
+     đĩa, và đây là chỗ duy nhất người dùng chỉ định một tệp ngoài thư mục
+     phiên. `napModelTuTep` kiểm nội dung trước khi nhận. */
+  handle('xuongRemix:chonTepModel', async ({ maModel }) => {
+    const { canceled, filePaths } = await dialog.showOpenDialog({
+      title: 'Chọn tệp model .onnx',
+      properties: ['openFile'],
+      filters: [{ name: 'Model ONNX', extensions: ['onnx'] }],
+    });
+    if (canceled || !filePaths[0]) return null;
+    const { byte } = await napModelTuTep(userData(), maModel, filePaths[0]);
+    return { byte };
+  });
 
   handle('xuongRemix:chinhVaXuat', ({ id, bpmDich, nuaCung }) =>
     chinhVaXuat(userData(), id, {
@@ -122,7 +140,66 @@ export function registerXuongRemixHandlers(): void {
   /* CÙNG chốt đường dẫn với `moThuMuc`: chuỗi này đến từ renderer, và ở đây
      nó mở một tệp để đọc. `duongAnToan` giới hạn trong thư mục phiên của
      Xưởng Remix, nên không đọc trộm được gì ngoài kết quả của chính nó. */
-  handle('xuongRemix:banGiao', ({ duong }) => banGiao(duongAnToan(duong)));
+  handle('xuongRemix:banGiao', ({ duong, cai }) => banGiao(duongAnToan(duong), cai));
+
+  /* Cùng chốt đường dẫn, và ở đây nó còn GHI — nên `duongAnToan` không chỉ
+     chặn đọc trộm mà còn chặn ghi đè ra ngoài thư mục phiên. */
+  handle('xuongRemix:xuatTep', ({ duong, cai }) => xuatTep(duongAnToan(duong), cai));
+
+  handle('xuongRemix:dsBai', () => dsBaiTrongKho());
+
+  handle('xuongRemix:dsMau', () => dsMau(userData()));
+
+  /* Hộp thoại chạy ở MAIN — renderer không được cấp quyền đọc đĩa, và đây là
+     chỗ duy nhất của kho mẫu mà một đường dẫn ngoài thư mục app đi vào. Nhận
+     NHIỀU tệp một lượt: người ta tải cả một gói loop về rồi thêm cả nắm, và
+     giấy phép của cả nắm đó thường giống nhau. */
+  handle('xuongRemix:themMau', async (meta) => {
+    const { canceled, filePaths } = await dialog.showOpenDialog({
+      title: 'Chọn tệp nhạc để thêm vào kho mẫu',
+      properties: ['openFile', 'multiSelections'],
+      filters: [{ name: 'Tệp nhạc', extensions: ['wav', 'mp3', 'flac', 'm4a', 'aac', 'ogg', 'opus', 'aif', 'aiff'] }],
+    });
+    if (canceled || filePaths.length === 0) return null;
+    const ra: MauNhac[] = [];
+    for (const t of filePaths) {
+      /* Một tệp hỏng không được làm hỏng cả nắm — người dùng chọn 20 tệp thì
+         19 tệp lành phải vào được kho. */
+      try {
+        ra.push(await themMau(userData(), t, meta));
+      } catch (loi) {
+        console.warn('[kho mẫu] bỏ qua', t, loi);
+      }
+    }
+    return ra;
+  });
+
+  handle('xuongRemix:xoaMau', ({ tep }) => xoaMau(userData(), tep));
+
+  /* Đọc mẫu về renderer để nó nạp thành một BÀI trong xưởng. Đi qua `banGiao`
+     nên nó cũng được đổi sang WAV 16-bit — nhưng `banGiao` chỉ đọc WAV, mà kho
+     mẫu nhận cả mp3/flac. Nên ở đây trả BYTE THÔ và để renderer giải mã bằng
+     Chromium, đúng phân vai "renderer giải mã, main tính toán" của `wav.ts`. */
+  handle('xuongRemix:napMau', async ({ tep }) => {
+    const an = path.basename(tep);
+    const duong = path.join(thuMucKho(userData()), an);
+    const tt = await fsp.stat(duong);
+    if (tt.size > 300 * 1024 * 1024) throw new Error('Mẫu quá lớn');
+    return {
+      ten: an,
+      byte: new Uint8Array(await fsp.readFile(duong)),
+      giay: 0,          // renderer đo được sau khi giải mã
+      mime: 'application/octet-stream',
+    };
+  });
+
+  handle('xuongRemix:dungMashup', ({ bpm, chuAm, manh, ten, tranDbtp }) =>
+    dungMashup(userData(), { bpm, chuAm, manh }, {
+      ...(ten === undefined ? {} : { ten }),
+      ...(tranDbtp === undefined ? {} : { tranDbtp }),
+    }));
+
+  handle('xuongRemix:song', ({ id, soCot }) => songBai(id, soCot));
 
   handle('xuongRemix:moThuMuc', async ({ duong }) => {
     const loi = await shell.openPath(duongAnToan(duong));

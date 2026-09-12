@@ -883,6 +883,9 @@ export const TU_DIEN: Record<string, string> = {
   'Những con số này KHÔNG có trong bảng đo:': 'These numbers are NOT in the measurements:',
   'AI có thể đã tự nghĩ ra — đối chiếu lại trước khi làm theo.':
     'The AI may have invented them — check before acting on them.',
+  'Chọn tệp .onnx': 'Pick an .onnx file',
+  'Đã tải sẵn tệp .onnx? Trỏ app vào nó.': 'Already downloaded the .onnx? Point the app at it.',
+
   /* ── Nghe thử & đẩy lên bàn DJ (khâu 08) ── */
   'Nghe thử': 'Audition',
   'Đẩy lên bàn DJ': 'Send to the DJ deck',
@@ -1006,4 +1009,109 @@ export const TU_DIEN: Record<string, string> = {
   'Dựng fill và chuyển đoạn': 'For fills and transitions',
   'Thường bỏ đi, thay bằng bass vinahouse': 'Usually dropped for a vinahouse bass',
   'Đàn, kèn, và mọi thứ còn lại': 'Keys, horns and everything else',
+
+  // ── Bàn làm việc (transport + dải track) ────────────────
+  // `Bản gốc` cũng đi qua biến `dich(d.nhan)` như các nhãn stem ở trên, nên
+  // bộ quét không thấy. Cùng lý do, cùng cách chữa: nhớ bằng tay.
+  'Bản gốc': 'Original',
+  'Phát': 'Play',
+  'Về đầu': 'Back to start',
+  'Chỉ nghe đường này': 'Solo this track',
+  'Tắt tiếng đường này': 'Mute this track',
+  'tông': 'key',
+  'Không đọc được tệp tiếng nào để nghe.': 'No audio file could be read for playback.',
+
+  // ── Chất lượng bản cuối ─────────────────────────────────
+  'Chất lượng bản cuối': 'Output quality',
+  'Để gửi đi và đi diễn': 'To send and to play out',
+  'Để lưu trữ và mix tiếp': 'To archive and to keep mixing',
+
+  // ── Bàn trộn kiểu bàn mixer ─────────────────────────────
+  // 'Duck' giống hệt ở hai thứ tiếng ⇒ KHÔNG đưa vào từ điển, y như 'Bass' ở
+  // trên: `dich()` rơi về nguyên văn là đúng, và mục chép y nguyên bị
+  // tuDien.test.ts từ chối.
+  'Tổng': 'Master',
+  'BẬT': 'ON',
+  'TẮT': 'OFF',
+  'Kéo dọc để chỉnh · giữ Shift để chỉnh nhỏ · bấm đúp để về mặc định':
+    'Drag vertically · hold Shift for fine steps · double-click to reset',
+
+  // ── Dòng thời gian: ghép nhiều bài ──────────────────────
+  'Ghép nhiều bài': 'Combine several tracks',
+  'Xem lại kho bài': 'Refresh the track list',
+  'Nạp vài bài, cắt lấy đoạn hay của từng bài, rồi xếp chồng lên nhau. App tự kéo mọi mảnh về cùng một nhịp — và cùng một tông nếu bạn chọn.':
+    'Load a few tracks, cut the good part out of each, then stack them. The app pulls every clip to one tempo — and to one key if you ask it to.',
+  'Nhịp chung': 'Project tempo',
+  'Tông chung': 'Project key',
+  'Giữ nguyên': 'Leave as is',
+  'Bắt nhịp': 'Snap',
+  // 'Thu nhỏ' / 'Phóng to' đã có ở phần khác của từ điển — thêm lần nữa thì
+  // mục sau ĐÈ mục trước một cách im lặng.
+  'Dựng bản': 'Render',
+  'Đang dựng…': 'Rendering…',
+  'Các bài đang mở': 'Open tracks',
+  'Chưa có bài nào. Thả tệp nhạc ở trên rồi quay lại đây.':
+    'No tracks yet. Drop an audio file above, then come back here.',
+  'Xem lại': 'Refresh',
+  'Thêm mảnh': 'Add clip',
+  'Bấm một đường ở trên để thả mảnh đầu tiên xuống đây.':
+    'Pick a track above to drop your first clip here.',
+  'Cắt từ': 'Cut from',
+  'Cắt đến': 'Cut to',
+  'Đặt ở': 'Place at',
+  'Fade vào': 'Fade in',
+  'Fade ra': 'Fade out',
+  'Xoá mảnh': 'Delete clip',
+  'Các mảnh cộng lại vượt trần': 'The clips add up past the ceiling by',
+  'bộ hạn biên đã ghì xuống. Hạ mức vài mảnh thì sạch hơn.':
+    'the limiter pulled it back. Turning a few clips down sounds cleaner.',
+  'Bỏ qua': 'Skipped',
+  'mảnh': 'clips',
+  'Xuất tệp': 'Export file',
+  'Đã ghi': 'Wrote',
+  'có mất dữ liệu': 'lossy',
+  'nguyên vẹn': 'lossless',
+  // Câu "vì sao" của từng lựa chọn đi qua biến (`dich(dangChon.viSao)`) nên bộ
+  // quét của tuDien.test.ts KHÔNG thấy chúng — cùng chỗ hụt với nhãn stem ở
+  // trên. Thiếu ở đây thì bản tiếng Anh hiện tiếng Việt mà không phép kiểm nào
+  // đỏ, nên phải tự nhớ.
+  'Chuẩn để đi diễn và gửi cho người khác. Nhỏ gấp 9 lần WAV, tai gần như không phân biệt được.':
+    'The standard for gigs and for sending to people. Nine times smaller than WAV, and all but indistinguishable by ear.',
+  'Nhẹ hơn chút, vẫn thừa cho loa sàn và tai nghe thường.':
+    'A little lighter, still more than enough for club speakers and everyday headphones.',
+  'Gửi qua mạng chậm, hoặc nghe thử nhanh. Nghe kỹ trên tai nghe tốt thì thấy phần cao mỏng đi.':
+    'For slow connections or a quick listen. On good headphones the top end thins out.',
+  'Chỉ để gửi bản nháp. Đừng đem đi diễn — cymbal và hi-hat vỡ rõ.':
+    'Drafts only. Do not play this out — cymbals and hi-hats break up audibly.',
+  'Không mất một chút dữ liệu nào, mà chỉ bằng nửa WAV. Chọn cái này để lưu trữ hoặc đưa cho người mix tiếp.':
+    'Not one bit lost, at half the size of WAV. Pick this to archive, or to hand on to whoever mixes next.',
+  'Cũng không mất dữ liệu, ở độ sâu của đĩa CD. Rekordbox, Serato và Traktor đều đọc được.':
+    'Also lossless, at CD bit depth. Rekordbox, Serato and Traktor all read it.',
+  'Định dạng không bao giờ từ chối ở đâu cả. To, nhưng chắc chắn mở được.':
+    'The format nothing ever refuses. Big, but guaranteed to open.',
+  'Nguyên xi thứ xưởng tính ra. Dùng khi còn phải chỉnh tiếp trong FL Studio.':
+    'Exactly what the workshop computed. Use it when there is still work to do in FL Studio.',
+
+  // ── Kho mẫu có giấy phép ────────────────────────────────
+  'Ba nguồn này cho phép remix — nhưng mỗi bài một giấy phép, đọc nhãn trên chính trang đó. Tải về rồi khai giấy phép ở đây; app giữ nó cạnh tệp để sáu tháng sau bạn còn biết bài nào đem đi diễn được.':
+    'These three allow remixing — but the licence is per track, so read the label on the page itself. Download, then record the licence here; the app keeps it next to the file so that six months from now you still know what you may play out.',
+  'Đường dẫn': 'Link',
+  'Chọn tệp để thêm': 'Pick files to add',
+  'Kho mẫu còn trống.': 'The sample library is empty.',
+  'mất tệp giấy phép': 'licence file missing',
+  'Dùng bài này': 'Use this one',
+  'Xoá khỏi kho': 'Remove from the library',
+  // 'Giấy phép' / 'Tác giả' / 'Nguồn' ĐÃ CÓ ở phần khác của từ điển — thêm
+  // lần nữa thì mục sau đè mục trước, im lặng. Phép kiểm khoá trùng bắt được.
+  // Nhãn giấy phép và mô tả nguồn đi qua biến (`dich(g.ten)`) nên bộ quét
+  // KHÔNG thấy — cùng chỗ hụt với nhãn stem. Phải tự nhớ.
+  'Phạm vi công cộng': 'Public domain',
+  'Tự thu': 'Recorded it myself',
+  'Chưa rõ': 'Unknown',
+  'A cappella và stem đăng lên ĐỂ người khác remix':
+    'A cappellas and stems posted FOR other people to remix',
+  'Sample, loop, one-shot — phần lớn CC0 hoặc CC BY':
+    'Samples, loops and one-shots — mostly CC0 or CC BY',
+  'Nhạc trọn bài, phần lớn công cộng hoặc CC':
+    'Full tracks, mostly public domain or CC',
 };

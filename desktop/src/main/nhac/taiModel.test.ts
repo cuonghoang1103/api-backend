@@ -12,10 +12,13 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import {
-  KHO_MODEL, kiemVanTay, taiModel, thuMucModel, tinhTrangKho, xoaModel,
+  KHO_MODEL, kiemVanTay, napModelTuTep, taiModel, thuMucModel, tinhTrangKho, xoaModel,
 } from './taiModel';
 
-const MA = 'htdemucs-vocals';
+/* Phải là model CÓ đường tải: `htdemucs-vocals` để `url: null` từ 12/09/2026
+   (đường cũ trả 404 thật trên máy người dùng). Xem `KHO_MODEL`. */
+const MA = 'htdemucs-4stem';
+const MA_KHONG_NGUON = 'htdemucs-vocals';
 let goc = '';
 
 beforeEach(async () => {
@@ -49,8 +52,13 @@ describe('kho model', () => {
       expect(m.ma).toBeTruthy();
       expect(m.ten).toBeTruthy();
       expect(m.moTa.length).toBeGreaterThan(10);
-      expect(m.url).toMatch(/^https:\/\//);
-      expect(m.byte).toBeGreaterThan(0);
+      /* ⚠️ Phép kiểm này chỉ nói HÌNH DẠNG đúng, KHÔNG nói URL có thật.
+         Cả hai URL bản đầu đều qua được nó, rồi một cái trả 404 trên máy
+         người dùng (12/09/2026). Không có cách nào kiểm URL ở đây — máy dựng
+         bị chặn khỏi kho model — nên đường đã kiểm chứng thì để chuỗi, đường
+         chưa kiểm thì PHẢI để `null` chứ không phải để một chuỗi trông hợp lý. */
+      if (m.url !== null) expect(m.url).toMatch(/^https:\/\//);
+      expect(m.byteUocTinh).toBeGreaterThan(0);
     }
   });
 
@@ -158,5 +166,62 @@ describe('xoá model', () => {
 
   it('xoá thứ chưa có thì im lặng, không nổ', async () => {
     await expect(xoaModel(goc, MA)).resolves.toBeUndefined();
+  });
+});
+
+describe('những thứ TRÔNG như model mà không phải', () => {
+  /* Cả ba đều có thật ngoài đời, và cả ba đều đi lọt qua bản đầu của tệp này:
+     nó chỉ hỏi "tệp có khác rỗng không". Người dùng thấy "đã tải", bấm Tách,
+     rồi nhận một lỗi protobuf cách nguyên nhân ba bước. */
+
+  it('⭐ trang HTML trả kèm mã 200 thì phải bị TỪ CHỐI', async () => {
+    const html = new TextEncoder().encode('<!DOCTYPE html><html><body>404</body></html>');
+    vi.stubGlobal('fetch', fetchGia(html));
+    await expect(taiModel(goc, MA)).rejects.toThrow(/HTML/i);
+  });
+
+  it('⭐ con trỏ Git LFS cũng bị TỪ CHỐI', async () => {
+    /* Kho dùng LFS mà tải sai đường thì nhận về đúng ba dòng CHỮ này — vài
+       trăm byte, trông hệt một tệp đã tải xong. */
+    const troc = new TextEncoder().encode(
+      'version https://git-lfs.github.com/spec/v1\noid sha256:abc\nsize 316000000\n',
+    );
+    vi.stubGlobal('fetch', fetchGia(troc));
+    await expect(taiModel(goc, MA)).rejects.toThrow(/LFS/i);
+  });
+
+  it('⭐ model KHÔNG có đường tải đã kiểm thì nói thẳng, không bịa một URL', async () => {
+    vi.stubGlobal('fetch', fetchGia(noiDungMau()));
+    await expect(taiModel(goc, MA_KHONG_NGUON)).rejects.toThrow(/Chọn tệp \.onnx/);
+  });
+
+  it('⭐ tệp rác trên đĩa KHÔNG được tính là "đã tải"', async () => {
+    /* Đây là chỗ giao diện lấy trạng thái nút Tách. Tính nhầm là mời người
+       dùng bấm vào một model không tồn tại. */
+    await fs.mkdir(thuMucModel(goc), { recursive: true });
+    await fs.writeFile(path.join(thuMucModel(goc), `${MA}.onnx`), '<html>oops</html>');
+    const tt = await tinhTrangKho(goc);
+    expect(tt.find((x) => x.ma === MA)?.coRoi).toBe(false);
+  });
+});
+
+describe('nhận model từ tệp người dùng tự tải', () => {
+  it('chép vào đúng chỗ và tính là đã tải', async () => {
+    const thu = await fs.mkdtemp(path.join(os.tmpdir(), 'onnx-tay-'));
+    const nguon = path.join(thu, 'htdemucs.onnx');
+    await fs.writeFile(nguon, Buffer.from(noiDungMau()));
+
+    const { byte } = await napModelTuTep(goc, MA, nguon);
+    expect(byte).toBeGreaterThan(0);
+    expect((await tinhTrangKho(goc)).find((x) => x.ma === MA)?.coRoi).toBe(true);
+  });
+
+  it('⭐ tệp sai loại bị từ chối NGAY, không chép vào kho', async () => {
+    const thu = await fs.mkdtemp(path.join(os.tmpdir(), 'onnx-tay-'));
+    const nguon = path.join(thu, 'nham.onnx');
+    await fs.writeFile(nguon, '<!DOCTYPE html><html></html>');
+
+    await expect(napModelTuTep(goc, MA, nguon)).rejects.toThrow(/HTML/i);
+    expect((await tinhTrangKho(goc)).find((x) => x.ma === MA)?.coRoi).toBe(false);
   });
 });

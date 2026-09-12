@@ -10978,6 +10978,9 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 }
 .ct-xr-x:hover { background: var(--ct-hover); }
 
+/* Hai nút (Tải về · Chọn tệp) cạnh nhau, và tự xuống dòng ở cột hẹp. */
+.ct-xr-model-nut { display: flex; flex-wrap: wrap; gap: 8px; flex-shrink: 0; }
+
 /* ── Model ───────────────────────────────────────────── */
 .ct-xr-kho { display: flex; flex-direction: column; gap: 9px; min-width: 0; }
 
@@ -11288,64 +11291,884 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 
 .ct-xr-nhac { margin: 0; font-size: 12.5px; }
 
-/* ── Bàn trộn stem ───────────────────────────────────────
-   Bốn hàng, mỗi hàng bốn ô điều khiển. Ở cột hẹp thì mỗi hàng tự xuống
-   thành khối dọc — dùng `@container` chứ KHÔNG `@media`: thanh bên đóng/mở
-   làm cột nội dung hẹp đi mà bề rộng cửa sổ không đổi, và `@media` không
-   thấy chuyện đó. Xem BO-CUC.md. */
-.ct-xr-tron-bang {
+/* ══════════════════════════════════════════════════════════
+   BÀN LÀM VIỆC — transport + dải track
+   ══════════════════════════════════════════════════════════
+   Ngôn ngữ hình ở đây khác phần còn lại của app CÓ CHỦ Ý: nền sâu hơn, viền
+   cứng hơn, số dùng font mono có vạch canh cột. Đây là chỗ người ta nhìn vào
+   dạng sóng và nghe, nên nó phải đọc như một thiết bị chứ không như một biểu
+   mẫu — mà thiết bị âm thanh nào cũng tối hơn và đặc hơn phần mềm quanh nó.
+   ══════════════════════════════════════════════════════════ */
+
+.ct-xr-ban {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   min-width: 0;
 }
-.ct-xr-tron-hang {
+
+/* ── Transport ───────────────────────────────────────── */
+.ct-xr-transport {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 8px 16px;
+  flex-wrap: wrap;
+  gap: 8px 14px;
   min-width: 0;
   padding: 10px 12px;
   border: 1px solid var(--ct-border);
   border-radius: var(--ct-radius-sm);
-  background: var(--ct-surface-2);
+  /* Đậm hơn `--ct-surface-2` một bậc: thanh transport là thứ neo cả bàn, và
+     nó phải nổi lên khỏi các dải track chứ không chìm cùng. */
+  background: color-mix(in srgb, var(--ct-bg) 55%, #000);
 }
-.ct-xr-tron-hang.tat { opacity: 0.5; }
 
-.ct-xr-tron-ten {
-  display: flex;
+.ct-xr-nut-phat {
+  display: inline-flex;
   align-items: center;
-  gap: 7px;
-  min-width: 104px;
-  font-size: 13px;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 999px;
+  background: var(--ct-accent);
+  color: #fff;
   cursor: pointer;
 }
-.ct-xr-tron-ten input { accent-color: var(--ct-accent); cursor: pointer; }
+.ct-xr-nut-phat:hover:not(:disabled) { filter: brightness(1.1); }
+.ct-xr-nut-phat:disabled { opacity: 0.55; cursor: default; }
 
-.ct-xr-tron-num {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  /* `min-width: 0` để ô co được, `flex: 1 1 168px` để nó xuống dòng thay vì
-     đẩy hàng tràn ngang — hai luật đầu của BO-CUC.md. */
-  flex: 1 1 168px;
-  min-width: 0;
-  font-size: 12px;
+/* Đồng hồ kiểu MÀN HÌNH LED: chữ nằm trong một ô lõm tối, phát sáng nhẹ.
+   Không phải để trang trí — đây là con số duy nhất trên thanh transport đổi
+   liên tục, và cho nó một cái nền riêng thì mắt tìm lại được nó ngay mà không
+   phải quét cả hàng. */
+.ct-xr-dongho {
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--ct-bg) 10%, #000);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, #fff 8%, transparent);
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: #86efac;
+  text-shadow: 0 0 8px rgba(134, 239, 172, 0.45);
+  white-space: nowrap;
 }
-.ct-xr-tron-num > span { white-space: nowrap; }
-.ct-xr-tron-num input[type='range'] {
-  flex: 1 1 60px;
+/* Tổng thời lượng là con số ĐỨNG YÊN — nó không được sáng như con số đang
+   chạy, nếu không mắt phải phân biệt hai thứ giống hệt nhau. */
+.ct-xr-dongho.ct-muted {
+  background: none;
+  box-shadow: none;
+  color: var(--ct-text-faint);
+  text-shadow: none;
+  font-size: 13px;
+  padding-inline: 2px;
+}
+
+/* Khoảng đẩy giữa đồng hồ và cụm số đo. Là phần tử rỗng chứ không phải
+   `margin-left: auto` trên `.ct-xr-tp-so`: thanh này `flex-wrap`, và khi nó
+   xuống dòng thì `auto` đẩy cụm số ra tận mép phải của DÒNG MỚI, tách rời
+   khỏi đồng hồ. Một ô co giãn được thì tự xẹp về 0 lúc ấy. */
+.ct-xr-tp-day {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Nhịp và tông: con số to, đơn vị nhỏ bên dưới — cách mọi máy đo bày số. */
+.ct-xr-tp-so {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.1;
+  flex-shrink: 0;
+}
+.ct-xr-tp-so b {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+.ct-xr-tp-so span {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ct-text-faint);
+}
+
+/* ── Chọn chất lượng bản cuối ─────────────────────────── */
+.ct-xr-cl {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: color-mix(in srgb, var(--ct-bg) 45%, #000);
+}
+.ct-xr-cl-dau {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+}
+.ct-xr-cl-nay {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 12px;
+  color: var(--ct-text-muted);
+  white-space: nowrap;
+}
+
+.ct-xr-cl-nhom {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+.ct-xr-cl-nhan {
+  flex: 0 0 auto;
+  width: 108px;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ct-text-faint);
+}
+
+/* XUỐNG DÒNG chứ không cuộn ngang. Bản đầu cuộn, và ở bề rộng thật của cột
+   (~550px) thì nhóm NGUYÊN VẸN nằm hẳn ngoài màn hình — không thấy, không có
+   dấu hiệu gì là còn nữa. Chia hai nhóm rồi thì mỗi hàng chỉ bốn nút, xuống
+   dòng cùng lắm thành hai hàng. */
+.ct-xr-cl-hang {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+
+.ct-xr-cl-nut {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  flex: 0 0 auto;
+  padding: 5px 9px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: transparent;
+  color: var(--ct-text-muted);
+  cursor: pointer;
+  line-height: 1.25;
+}
+.ct-xr-cl-nut:hover:not(:disabled) { border-color: var(--ct-accent); }
+.ct-xr-cl-nut:disabled { opacity: 0.5; cursor: default; }
+.ct-xr-cl-nut b { font-size: 12px; white-space: nowrap; }
+.ct-xr-cl-nut span {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 10px;
+  color: var(--ct-text-faint);
+}
+.ct-xr-cl-nut[data-chon] {
+  border-color: var(--ct-accent);
+  background: color-mix(in srgb, var(--ct-accent) 16%, transparent);
+  color: var(--ct-text);
+}
+
+.ct-xr-cl-vi {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ct-text-muted);
+}
+/* Hai nhãn này là thứ người dùng dựa vào để quyết định — chúng phải khác màu
+   nhau đủ để nhận ra mà không cần đọc. */
+.ct-xr-cl-canh { color: #fbbf24; font-weight: 600; }
+.ct-xr-cl-nguyen { color: #4ade80; font-weight: 600; }
+
+/* ── Dải track ───────────────────────────────────────── */
+.ct-xr-track {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.ct-xr-lan {
+  display: grid;
+  /* Đầu dải rộng cố định để dạng sóng của MỌI dải bắt đầu ở cùng một cột —
+     lệch một chút là mắt không so được hai stem với nhau nữa, mà so chúng
+     chính là việc người ta làm ở đây. */
+  grid-template-columns: 168px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+  padding: 6px 10px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: color-mix(in srgb, var(--ct-bg) 40%, #000);
+}
+.ct-xr-lan.cam { opacity: 0.4; }
+
+.ct-xr-lan-dau > .ct-xr-dh { grid-column: 1 / -1; }
+
+.ct-xr-lan-dau {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 8px;
+  align-items: center;
+  min-width: 0;
+}
+.ct-xr-lan-dau > b {
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ct-xr-lan-dau input[type='range'] {
+  grid-column: 1 / -1;
+  width: 100%;
   min-width: 0;
   accent-color: var(--ct-accent);
 }
-.ct-xr-tron-num code {
-  min-width: 58px;
-  text-align: right;
-  font-size: 11.5px;
+
+.ct-xr-lan-nut { display: flex; gap: 4px; }
+.ct-xr-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid var(--ct-border);
+  border-radius: 3px;
+  background: none;
+  color: var(--ct-text-faint);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.ct-xr-tag:hover { color: var(--ct-text); }
+.ct-xr-tag[data-bat='1'] {
+  color: #fff;
+  background: var(--ct-accent);
+  border-color: var(--ct-accent);
+}
+
+/* ── Dạng sóng ───────────────────────────────────────── */
+.ct-xr-song {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 3px;
+  /* Nền tối hơn cả dải: dạng sóng là thứ sáng nhất trong ô, và tương phản đó
+     là toàn bộ lý do ô này tồn tại. */
+  background: color-mix(in srgb, var(--ct-bg) 20%, #000);
+}
+.ct-xr-song[data-bam='1'] { cursor: pointer; }
+.ct-xr-song-canvas { display: block; width: 100%; height: 100%; }
+
+/* Con trỏ phát: dịch bằng `transform` nên trình duyệt chạy nó trên GPU và
+   không tính lại bố cục 60 lần một giây. */
+.ct-xr-song-troc {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 1px;
+  background: var(--ct-warn);
+  box-shadow: 0 0 4px var(--ct-warn);
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* Hẹp thì nhãn nhóm lên trên chứ không ép cột nút xuống còn hai cái. */
+@container xr (max-width: 560px) {
+  .ct-xr-cl-nhom { flex-direction: column; align-items: stretch; gap: 4px; }
+  .ct-xr-cl-nhan { width: auto; }
+}
+
+@container xr (max-width: 640px) {
+  /* Đầu dải xuống dòng riêng: dưới 640px thì 168px cộng dạng sóng còn chưa
+     tới 300px, và một dạng sóng 300px không đọc được gì. */
+  .ct-xr-lan { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ══════════════════════════════════════════════════════════
+   BÀN TRỘN — bốn đường DỌC, núm xoay, đồng hồ mức
+   ══════════════════════════════════════════════════════════
+   Bản trước là một bảng bốn hàng × bốn thanh trượt ngang. Nó cao 400px, và
+   nó bắt mắt đọc theo HÀNG trong khi người mix nhạc so theo CỘT ("mức trống
+   so với mức bass"). Bản này xếp mỗi đường thành một cột, đúng hình của một
+   bàn mixer — và thêm cái mà bảng cũ không có: đồng hồ mức.
+
+   Dùng `@container` chứ KHÔNG `@media`: thanh bên đóng/mở làm cột nội dung
+   hẹp đi mà bề rộng cửa sổ không đổi, `@media` không thấy chuyện đó. Xem
+   BO-CUC.md. */
+
+.ct-xr-bt {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.ct-xr-bt-day {
+  display: flex;
+  gap: 6px;
+  min-width: 0;
+  overflow-x: auto;
+  padding: 10px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  /* Nền tối hơn cả trang: thiết bị âm thanh nào cũng đặc và tối hơn phần mềm
+     quanh nó, và ở đây nó còn làm cái đồng hồ sáng lên. */
+  background: color-mix(in srgb, var(--ct-bg) 40%, #000);
+  scrollbar-width: thin;
+}
+
+/* LƯỚI chứ không flex-column: hàng núm là `1fr`, nên đồng hồ và nút của MỌI
+   cột nằm đúng cùng một độ cao — kể cả cột Tổng, thứ không có núm nào. Với
+   flex-column thì cột Tổng ngắn hơn và đồng hồ của nó trôi lên cao hơn bốn
+   đồng hồ kia, mà so bốn-với-tổng chính là việc của cái bàn này. */
+.ct-xr-bt-cot {
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  justify-items: center;
+  align-items: start;
+  gap: 8px;
+  flex: 1 1 116px;
+  min-width: 104px;
+  padding: 8px 6px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: color-mix(in srgb, var(--ct-bg) 72%, #000);
+}
+.ct-xr-bt-cot[data-tat] { opacity: 0.45; }
+
+.ct-xr-bt-ten {
+  width: 100%;
+  padding: 3px 0;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  /* Vạch màu của đường — cùng màu với dải track ở bàn làm việc, nên mắt nối
+     được hai khối với nhau mà không phải đọc chữ. */
+  color: var(--mau, var(--ct-text));
+  box-shadow: inset 0 -2px 0 var(--mau, var(--ct-border));
+}
+
+.ct-xr-bt-num {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.ct-xr-bt-num-tong { justify-content: flex-start; }
+
+.ct-xr-bt-bat {
+  width: 100%;
+  align-self: end;
+  padding: 4px 0;
+  border: 1px solid var(--ct-border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ct-text-faint);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+.ct-xr-bt-bat:hover { border-color: var(--ct-accent); }
+.ct-xr-bt-bat[data-bat] {
+  border-color: color-mix(in srgb, var(--ct-ok) 60%, transparent);
+  background: color-mix(in srgb, var(--ct-ok) 18%, transparent);
+  color: var(--ct-ok);
+}
+.ct-xr-bt-nen[data-bat] {
+  border-color: color-mix(in srgb, var(--ct-accent) 70%, transparent);
+  background: color-mix(in srgb, var(--ct-accent) 22%, transparent);
+  color: var(--ct-accent-text);
+}
+
+/* Thang dB đặt CẠNH đồng hồ tổng, cùng chiều cao với nó.
+   Bản đầu cho nó `height: 0` để "không chiếm chỗ" — và hai con số đầu tiên
+   đổ chồng lên nhau ở đáy cột rồi tràn ra ngoài viền. Chiều cao 0 không làm
+   nội dung biến mất, nó chỉ làm nội dung tràn. */
+.ct-xr-bt-do {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 3px;
+}
+.ct-xr-bt-thang {
+  position: relative;
+  width: 17px;
+  height: 132px;
+  font-size: 8px;
+  line-height: 1;
   color: var(--ct-text-faint);
   font-variant-numeric: tabular-nums;
+}
+.ct-xr-bt-thang span {
+  position: absolute;
+  left: 0;
+  /* `bottom` do React đặt theo `viTriNac()`; dịch xuống nửa dòng để con số
+     nằm ngang tầm cái vạch nó nói tới, chứ không nằm bên trên. */
+  transform: translateY(50%);
   white-space: nowrap;
 }
+
+.ct-xr-bt-meo { font-size: 11px; }
+
+/* ── Núm xoay ─────────────────────────────────────────── */
+.ct-xr-num {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+.ct-xr-num-o {
+  width: 44px;
+  height: 44px;
+  /* `none` để kéo dọc trên màn cảm ứng không bị trình duyệt cướp thành cuộn
+     trang — không có nó thì núm gần như không chỉnh được bằng ngón tay. */
+  touch-action: none;
+  cursor: ns-resize;
+  border-radius: 50%;
+}
+.ct-xr-num-o:focus-visible { outline: 2px solid var(--ct-accent); outline-offset: 2px; }
+.ct-xr-num[data-tat] .ct-xr-num-o { cursor: default; opacity: 0.4; }
+.ct-xr-num-o svg { display: block; width: 100%; height: 100%; }
+
+/* Rãnh phải SÁNG HƠN nền cột, không tối hơn. Bản đầu trộn `--ct-border` với
+   đen và nó chìm hẳn vào panel: chỉ còn cung màu lơ lửng, mắt không biết núm
+   quay được tới đâu. Rãnh chính là thứ nói ra "còn bao nhiêu dư địa". */
+.ct-xr-num-ranh {
+  fill: none;
+  stroke: color-mix(in srgb, #fff 13%, transparent);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+.ct-xr-num-cung {
+  fill: none;
+  stroke: var(--ct-accent);
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+/* Mặt núm SÁNG hơn nền cột, viền trên sáng viền dưới tối — đó là toàn bộ
+   thủ thuật làm một hình tròn phẳng trông như một cái núm bấm được. Bản đầu
+   tô tối hơn panel và nó thành một cái lỗ. */
+.ct-xr-num-mat {
+  fill: url(#ct-xr-num-cap);
+  stroke: color-mix(in srgb, #fff 16%, transparent);
+  stroke-width: 1.5;
+}
+/* Vạch chỉ TRẮNG, không theo màu đường: nó nằm trên mặt núm tối, và màu của
+   đường đã nói ở cung bên ngoài rồi. Trắng thì đọc được ở mọi màu. */
+.ct-xr-num-kim {
+  stroke: #f4f4f8;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+}
+.ct-xr-num-o[data-keo] .ct-xr-num-mat { fill: color-mix(in srgb, var(--ct-bg) 10%, #000); }
+
+.ct-xr-num-nhan {
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ct-text-faint);
+}
+.ct-xr-num-so {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 10.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ct-text-muted);
+}
+
+/* ── Đồng hồ mức ──────────────────────────────────────── */
+/* Nền hiện SẴN lưới LED mờ. Đồng hồ im mà là một dải đen trơn thì trông như
+   một cái lỗ chứ không như một thiết bị đang chờ tín hiệu — và người dùng
+   không biết dải sẽ mọc lên tới đâu. */
+.ct-xr-dh {
+  position: relative;
+  overflow: hidden;
+  border-radius: 3px;
+  background:
+    repeating-linear-gradient(to top,
+      color-mix(in srgb, #fff 6%, transparent) 0 3px, transparent 3px 4px),
+    color-mix(in srgb, var(--ct-bg) 12%, #000);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, #fff 9%, transparent);
+}
+.ct-xr-dh[data-huong='doc'] { width: 16px; height: 132px; }
+.ct-xr-dh[data-huong='ngang'] {
+  width: 100%;
+  height: 6px;
+  background:
+    repeating-linear-gradient(to right,
+      color-mix(in srgb, #fff 6%, transparent) 0 3px, transparent 3px 4px),
+    color-mix(in srgb, var(--ct-bg) 12%, #000);
+}
+
+/* Dải sáng. Cao/rộng 100% rồi bị `scale` bóp lại từ đầu tương ứng, nên
+   `transform` là thứ duy nhất đổi mỗi khung — chạy trên GPU, không bắt trình
+   duyệt tính lại bố cục 60 lần một giây. */
+.ct-xr-dh-thanh {
+  position: absolute;
+  inset: 0;
+  transform-origin: bottom;
+  /* Xanh dưới → hổ phách → đỏ ở 6 dB trên cùng, tức đúng vùng nên tránh.
+     `repeating-linear-gradient` chồng lên tạo vạch LED. */
+  background:
+    repeating-linear-gradient(to top,
+      transparent 0 3px, rgba(0, 0, 0, 0.55) 3px 4px),
+    linear-gradient(to top,
+      #22c55e 0%, #4ade80 62%, #facc15 82%, #f97316 91%, #ef4444 100%);
+}
+.ct-xr-dh[data-huong='ngang'] .ct-xr-dh-thanh {
+  transform-origin: left;
+  background:
+    repeating-linear-gradient(to right,
+      transparent 0 3px, rgba(0, 0, 0, 0.55) 3px 4px),
+    linear-gradient(to right,
+      #22c55e 0%, #4ade80 62%, #facc15 82%, #f97316 91%, #ef4444 100%);
+}
+
+/* Vạch giữ đỉnh: đứng yên ~0,9 giây rồi mới rơi, nên cú đỉnh chớp nhoáng —
+   đúng cái làm méo tiếng — vẫn kịp lọt vào mắt. */
+.ct-xr-dh-dinh {
+  position: absolute;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+}
+.ct-xr-dh[data-huong='doc'] .ct-xr-dh-dinh { left: 0; right: 0; bottom: 0; height: 2px; }
+.ct-xr-dh[data-huong='ngang'] .ct-xr-dh-dinh { top: 0; bottom: 0; left: 0; width: 2px; }
+
+/* Cột TỔNG dính vào mép phải khi dãy phải trượt ngang.
+   Không dính thì ở cửa sổ hẹp nó là cột ĐẦU TIÊN bị đẩy ra ngoài — mà đồng hồ
+   tổng lại là thứ đáng nhìn nhất của cả cái bàn (bốn đường cộng lại có chạm
+   trần không). Bàn mixer thật cũng ghim master ở mép phải, không cho nó trôi. */
+.ct-xr-bt-tong {
+  position: sticky;
+  right: 0;
+  z-index: 1;
+  background: color-mix(in srgb, var(--ct-bg) 72%, #000);
+  /* Bóng ở mép trái vừa tách nó khỏi cột bị trượt xuống dưới, vừa là dấu hiệu
+     duy nhất báo rằng dãy còn trượt được. */
+  box-shadow: -10px 0 12px -6px rgba(0, 0, 0, 0.6);
+}
+
+@container xr (max-width: 620px) {
+  /* Hẹp thì đường trượt ngang thay vì bóp cột xuống dưới 104px — dưới mức đó
+     núm chồng lên nhau và không còn chỉnh được. */
+  .ct-xr-bt-cot { flex: 0 0 116px; }
+}
+
+/* ── Kho mẫu có giấy phép ─────────────────────────────── */
+.ct-xr-km { display: flex; flex-direction: column; gap: 9px; min-width: 0; }
+
+.ct-xr-km-nguon { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; }
+
+.ct-xr-km-trang {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  flex: 1 1 210px;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-surface-2);
+  color: var(--ct-text-muted);
+  text-align: left;
+  cursor: pointer;
+}
+.ct-xr-km-trang:hover { border-color: var(--ct-accent); color: var(--ct-text); }
+.ct-xr-km-trang b { font-size: 12.5px; color: var(--ct-text); }
+.ct-xr-km-trang span { font-size: 11px; }
+.ct-xr-km-trang svg { align-self: flex-end; margin-top: -12px; opacity: 0.6; }
+
+.ct-xr-km-them {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px 12px;
+  min-width: 0;
+  padding: 9px 11px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: color-mix(in srgb, var(--ct-bg) 55%, #000);
+}
+.ct-xr-km-them .ct-xr-dtg-o input { width: 130px; }
+/* Ô đường dẫn co giãn: URL dài hơn hẳn ba ô kia, và ép nó bằng 130px thì
+   người dùng không đọc lại được thứ mình vừa dán. */
+.ct-xr-km-url { flex: 1 1 220px; min-width: 0; }
+.ct-xr-km-url input { flex: 1 1 auto; width: auto !important; min-width: 0; }
+
+.ct-xr-km-ds {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 7px;
+  min-width: 0;
+}
+.ct-xr-km-o {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-surface-2);
+}
+/* Viền cảnh báo cho thứ KHÔNG diễn được. Nó phải nhìn ra ở một cái liếc, chứ
+   không phải đọc chữ mới biết — cả cái kho này tồn tại vì câu hỏi đó. */
+.ct-xr-km-o[data-canh] { border-color: color-mix(in srgb, var(--ct-warn) 55%, transparent); }
+.ct-xr-km-o > b {
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ct-xr-km-o > code { font-size: 10.5px; color: var(--ct-text-faint); }
+
+.ct-xr-km-gp {
+  align-self: flex-start;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  background: color-mix(in srgb, var(--ct-warn) 20%, transparent);
+  color: var(--ct-warn);
+}
+.ct-xr-km-gp[data-dien] {
+  background: color-mix(in srgb, var(--ct-ok) 18%, transparent);
+  color: var(--ct-ok);
+}
+
+.ct-xr-km-nut { display: flex; align-items: center; gap: 5px; margin-top: 3px; }
+
+/* ══════════════════════════════════════════════════════════
+   DÒNG THỜI GIAN — ghép nhiều bài
+   ══════════════════════════════════════════════════════════ */
+
+.ct-xr-dtg { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+
+.ct-xr-dtg-thanh {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px 14px;
+  min-width: 0;
+  padding: 9px 11px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: color-mix(in srgb, var(--ct-bg) 55%, #000);
+}
+
+.ct-xr-dtg-o {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--ct-text-muted);
+}
+.ct-xr-dtg-o > span { white-space: nowrap; }
+.ct-xr-dtg-o em {
+  font-style: normal;
+  font-size: 10px;
+  color: var(--ct-text-faint);
+}
+.ct-xr-dtg-o input,
+.ct-xr-dtg-o select {
+  width: 74px;
+  padding: 3px 5px;
+  border: 1px solid var(--ct-border);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--ct-bg) 20%, #000);
+  color: var(--ct-text);
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.ct-xr-dtg-o select { width: auto; min-width: 74px; }
+
+.ct-xr-dtg-phong { display: flex; gap: 4px; }
+
+/* ── Kho bài ──────────────────────────────────────────── */
+.ct-xr-dtg-kho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.ct-xr-dtg-bai {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  /* `min-width: 0` + `max-width` để tên bài dài không đẩy tràn cả hàng — luật
+     đầu của BO-CUC.md. */
+  min-width: 0;
+  max-width: 260px;
+  padding: 6px 8px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-surface-2);
+}
+.ct-xr-dtg-bai > b {
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ct-xr-dtg-bai > code {
+  font-size: 10.5px;
+  color: var(--ct-text-faint);
+  font-variant-numeric: tabular-nums;
+}
+.ct-xr-dtg-them { display: flex; flex-wrap: wrap; gap: 3px; }
+
+/* Chip "thêm mảnh". Bản đầu dùng lại `.ct-xr-tag` — lớp của nút VUÔNG 22px ở
+   đầu dải track — nên nhãn "Nhạc nền" tràn ra khỏi ô 22px và các chip đè lên
+   nhau. Không có gì tràn ra ngoài CỘT nên bộ đo bố cục báo xanh; chỉ nhìn ảnh
+   chụp mới thấy. */
+.ct-xr-dtg-nut {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  /* `auto`, không phải bề rộng cố định — nhãn dài ngắn khác nhau. */
+  width: auto;
+  padding: 2px 6px;
+  border: 1px solid var(--ct-border);
+  border-radius: 3px;
+  background: none;
+  color: var(--ct-text-muted);
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.ct-xr-dtg-nut:hover {
+  color: var(--ct-text);
+  background: var(--ct-hover);
+}
+
+/* ── Dòng thời gian ───────────────────────────────────── */
+.ct-xr-dtg-cuon {
+  min-width: 0;
+  overflow-x: auto;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: color-mix(in srgb, var(--ct-bg) 35%, #000);
+  scrollbar-width: thin;
+}
+.ct-xr-dtg-dong { position: relative; padding: 0 0 6px; }
+
+.ct-xr-dtg-thuoc {
+  position: relative;
+  height: 18px;
+  border-bottom: 1px solid var(--ct-border);
+}
+.ct-xr-dtg-thuoc span {
+  position: absolute;
+  top: 3px;
+  /* Nhích 3px khỏi vạch để con số không đè lên chính cái vạch nó đánh dấu. */
+  padding-left: 3px;
+  font-size: 9px;
+  color: var(--ct-text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.ct-xr-dtg-rong {
+  margin: 0;
+  padding: 22px 14px;
+  font-size: 12.5px;
+  color: var(--ct-text-faint);
+}
+
+.ct-xr-dtg-lan {
+  position: relative;
+  border-bottom: 1px solid color-mix(in srgb, var(--ct-border) 60%, transparent);
+}
+.ct-xr-dtg-lan-ten {
+  position: absolute;
+  top: 3px;
+  left: 5px;
+  z-index: 2;
+  max-width: 190px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 9.5px;
+  color: var(--ct-text-faint);
+  /* Dính vào mép trái khi cuộn ngang: không có nó thì kéo sang phải một chút
+     là hết biết mảnh này của bài nào. */
+  position: sticky;
+  pointer-events: none;
+}
+.ct-xr-dtg-vach {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: color-mix(in srgb, #fff 6%, transparent);
+}
+
+.ct-xr-dtg-manh {
+  position: absolute;
+  top: 14px;
+  bottom: 4px;
+  border-radius: 3px;
+  cursor: grab;
+  overflow: hidden;
+  /* `none` để kéo mảnh trên màn cảm ứng không bị trình duyệt cướp thành cuộn. */
+  touch-action: none;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.45);
+}
+.ct-xr-dtg-manh:active { cursor: grabbing; }
+.ct-xr-dtg-manh[data-chon] {
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.45), 0 0 0 2px var(--ct-accent);
+}
+.ct-xr-dtg-manh-ten {
+  display: block;
+  padding: 2px 5px;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #10101a;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Tay nắm hai mép. 7px là hẹp nhất mà chuột còn bắt được — hẹp hơn thì người
+   dùng cứ tưởng mình đang cắt và hoá ra đang di chuyển cả mảnh. */
+.ct-xr-dtg-mep {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 7px;
+  cursor: ew-resize;
+  background: rgba(0, 0, 0, 0.28);
+}
+.ct-xr-dtg-mep.trai { left: 0; }
+.ct-xr-dtg-mep.phai { right: 0; }
+.ct-xr-dtg-mep:hover { background: rgba(0, 0, 0, 0.5); }
+
+.ct-xr-dtg-chitiet {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  min-width: 0;
+  padding: 9px 11px;
+  border: 1px solid var(--ct-accent);
+  border-radius: var(--ct-radius-sm);
+  background: color-mix(in srgb, var(--ct-accent) 8%, transparent);
+}
+.ct-xr-dtg-chitiet .ct-xr-dtg-o input { width: 82px; }
 
 .ct-xr-tron-ra {
   display: flex;
@@ -11364,15 +12187,6 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   font-size: 11.5px;
   color: var(--ct-text-faint);
   overflow-wrap: anywhere;
-}
-
-@container xr (max-width: 700px) {
-  /* Nhãn và con số ở hai đầu một dòng riêng, thanh trượt chiếm cả bề ngang:
-     nhồi bốn ô vào một hàng dưới 700px thì thanh trượt còn chưa tới 40px và
-     không kéo được nữa. */
-  .ct-xr-tron-num { flex: 1 1 100%; flex-wrap: wrap; }
-  .ct-xr-tron-num input[type='range'] { flex: 1 1 100%; order: 3; }
-  .ct-xr-tron-num code { margin-left: auto; }
 }
 
 .ct-xr .ct-actions { flex-wrap: wrap; }

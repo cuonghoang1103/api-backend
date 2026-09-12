@@ -34,6 +34,10 @@ import type {
   SettingKey,
   SettingValue,
   BaiDaNap,
+  KetQuaXuatTep,
+  BaiTrongKho,
+  KetQuaDungRa,
+  MauNhac,
   DownloadedTrack,
   KetQuaPhanTich,
   KetQuaTachRa,
@@ -41,6 +45,7 @@ import type {
   KetQuaMasterRa,
   KetQuaTronRa,
   BanGiaoAmThanh,
+  SongAmThanh,
   CaiDatStemTron,
   TomTatBanMau,
   MucKhoModel,
@@ -52,6 +57,7 @@ import type {
   StoredSession,
   UpdateStatus,
 } from '../shared/ipc';
+import type { CaiXuat } from '../shared/dinhDangXuat';
 
 /**
  * Danh sách trắng sự kiện, viết thẳng thành chuỗi (không import hằng dùng
@@ -187,6 +193,8 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('xuongRemix:khoModel') as Promise<MucKhoModel[]>,
     taiModel: (maModel: string) =>
       ipcRenderer.invoke('xuongRemix:taiModel', { maModel }) as Promise<string>,
+    chonTepModel: (maModel: string) =>
+      ipcRenderer.invoke('xuongRemix:chonTepModel', { maModel }) as Promise<{ byte: number } | null>,
     xoaModel: (maModel: string) =>
       ipcRenderer.invoke('xuongRemix:xoaModel', { maModel }) as Promise<void>,
     moThuMuc: (duong: string) =>
@@ -197,8 +205,22 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('xuongRemix:napBanMau', { id, ten, mau, soKenh, tanSoMau }) as Promise<TomTatBanMau>,
     master: (id: string, tranDbtp?: number, khongKhopPho?: boolean) =>
       ipcRenderer.invoke('xuongRemix:master', { id, tranDbtp, khongKhopPho }) as Promise<KetQuaMasterRa>,
-    banGiao: (duong: string) =>
-      ipcRenderer.invoke('xuongRemix:banGiao', { duong }) as Promise<BanGiaoAmThanh>,
+    banGiao: (duong: string, cai?: CaiXuat) =>
+      ipcRenderer.invoke('xuongRemix:banGiao', { duong, cai }) as Promise<BanGiaoAmThanh>,
+    xuatTep: (duong: string, cai: CaiXuat) =>
+      ipcRenderer.invoke('xuongRemix:xuatTep', { duong, cai }) as Promise<KetQuaXuatTep>,
+    dsBai: () => ipcRenderer.invoke('xuongRemix:dsBai', {}) as Promise<BaiTrongKho[]>,
+    dsMau: () => ipcRenderer.invoke('xuongRemix:dsMau', {}) as Promise<MauNhac[]>,
+    themMau: (meta: Parameters<DesktopBridge['xuongRemix']['themMau']>[0]) =>
+      ipcRenderer.invoke('xuongRemix:themMau', meta) as Promise<MauNhac[] | null>,
+    xoaMau: (tep: string) =>
+      ipcRenderer.invoke('xuongRemix:xoaMau', { tep }) as Promise<void>,
+    napMau: (tep: string) =>
+      ipcRenderer.invoke('xuongRemix:napMau', { tep }) as Promise<BanGiaoAmThanh>,
+    dungMashup: (bd: Parameters<DesktopBridge['xuongRemix']['dungMashup']>[0]) =>
+      ipcRenderer.invoke('xuongRemix:dungMashup', bd) as Promise<KetQuaDungRa>,
+    song: (id: string, soCot: number) =>
+      ipcRenderer.invoke('xuongRemix:song', { id, soCot }) as Promise<SongAmThanh>,
     tron: (
       id: string,
       stem?: Record<string, Partial<CaiDatStemTron>>,

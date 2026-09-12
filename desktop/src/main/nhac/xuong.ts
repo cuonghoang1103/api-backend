@@ -27,19 +27,29 @@ import { chamBai, doTatCa, type KetQuaDo } from './amLuong';
 import { ghepDuoc, maCamelot, tenTong, type Tong } from './camelot';
 import { chinhBai, tiLeTuBpm } from './keoGian';
 import { doDacTinh, hanBien, master, type DacTinh } from './master';
+import { dangSong, phangHoa } from './dangSong';
 import { CAI_MAC_DINH, tron, type CaiDatMotPhan, type CaiDatStem } from './tron';
 import type { TuyChonNen } from './nen';
 import { caoDoTuTen, mauVinahouse, vietMidi } from './midi';
 import { doNhip, doTong } from './nhipVaTong';
 import { moPhienTach } from './onnxChay';
 import { TAN_SO_MODEL, TEN_STEM, tachStem, type TenStem } from './tachStem';
-import { docWav, ghiWav, ghiWav16, gopMono, type AmThanh } from './wav';
+import { docWav, ghiWav, gopMono, type AmThanh } from './wav';
+import { duoiTep, maHoa, mimeCua, moTaDinhDang } from './maHoa';
+import { dungBan, khoaNguon, type BanDung, type NguonManh } from './dung';
+import type { CaiXuat } from '../../shared/dinhDangXuat';
 
 export interface BaiDaNap {
   id: string;
   ten: string;
   giay: number;
   soKenh: number;
+  /**
+   * Đường WAV bản gốc. Bàn làm việc cần nó để nút Phát có tiếng NGAY, trước
+   * khi tách — tách một bài 5 phút mất vài phút, mà trong lúc đó người ta vẫn
+   * muốn nghe và nhìn dạng sóng.
+   */
+  duongWav: string;
 }
 
 export interface KetQuaPhanTich {
@@ -129,7 +139,7 @@ export async function napBai(
     huy: null, pt: null, daTach: null, banMau: null,
   };
   phien.set(id, p);
-  return { id, ten, giay: p.giay, soKenh };
+  return { id, ten, giay: p.giay, soKenh, duongWav };
 }
 
 /**
@@ -476,12 +486,52 @@ export async function tronStem(
   };
 }
 
+export interface SongRa {
+  /** Khoá là `goc` hoặc tên stem. Mỗi giá trị là hai mảng cùng độ dài. */
+  min: Record<string, Float32Array>;
+  max: Record<string, Float32Array>;
+  giay: number;
+}
+
+/**
+ * Dạng sóng của bài gốc và của từng stem đã tách, đã tóm tắt về `soCot` cột.
+ *
+ * Đọc lại từ đĩa mỗi lần thay vì nhớ sẵn: bàn làm việc chỉ xin lại khi đổi bề
+ * rộng cửa sổ, và nhớ 5 mảng envelope cho mỗi phiên đang mở thì lại là một
+ * chỗ rò bộ nhớ nữa. Đọc một tệp WAV mất ~0,2 giây.
+ */
+export async function songBai(id: string, soCot: number): Promise<SongRa> {
+  const p = layPhien(id);
+  const min: Record<string, Float32Array> = {};
+  const max: Record<string, Float32Array> = {};
+
+  const them = async (ten: string, duong: string) => {
+    try {
+      const am = docWav((await fs.readFile(duong)).buffer as ArrayBuffer);
+      const ph = phangHoa(dangSong(am.kenh, soCot));
+      min[ten] = ph.min;
+      max[ten] = ph.max;
+    } catch {
+      /* Stem chưa tách, hay tệp hỏng: bỏ qua đúng dải đó. Ném ở đây thì cả
+         bàn làm việc không vẽ được gì chỉ vì một stem thiếu. */
+    }
+  };
+
+  await them('goc', p.duongWav);
+  if (p.daTach) {
+    for (const ten of TEN_STEM) await them(ten, path.join(p.daTach, `${ten}.wav`));
+  }
+  return { min, max, giay: p.giay };
+}
+
 export interface BanGiao {
-  /** Tên tệp, không kèm đường dẫn — giao diện đặt tên bài từ nó. */
+  /** Tên tệp KÈM đuôi của định dạng đã chọn — giao diện đặt tên bài từ nó. */
   ten: string;
-  /** Nội dung WAV 16-bit. */
+  /** Nội dung đã mã hoá theo `cai`. */
   byte: Uint8Array;
   giay: number;
+  /** Kiểu MIME khớp với `byte`, để renderer dựng `File` cho đúng. */
+  mime: string;
 }
 
 /** Trần đọc: tệp lớn hơn thế này gần như chắc chắn là chọn nhầm, không phải bài nhạc. */
@@ -496,23 +546,74 @@ const TRAN_DOC = 400 * 1024 * 1024;
  * mạng xuống main nghĩa là chuyển token xuống theo, và mọi thứ đó chỉ để làm
  * lại một đường tải lên đã chạy tốt sẵn (`TaiNhacLen`, có cả thanh tiến độ).
  *
- * ─── Vì sao đổi sang 16-bit ở đây ───
+ * ─── Vì sao KHÔNG giao nguyên tệp float 32-bit ───
  * Tệp trên đĩa là float 32-bit vì nó còn phải đi qua các bước xử lý. Bản này
- * thì đi thẳng tới tai người và tới máy chủ: nó đã qua bộ hạn biên nên chắc
- * chắn nằm trong ±1, và 16-bit nhỏ đúng một nửa. Một bản 5 phút là 53 MB thay
- * vì 106 MB — chênh lệch thật khi đẩy lên bằng mạng nhà, và cũng là chênh
- * lệch thật khi nó đi qua cầu IPC.
+ * thì đi thẳng tới tai người và tới máy chủ, nên nó được mã hoá lại theo đúng
+ * thứ người dùng chọn ở khối "chất lượng". Mặc định WAV 16-bit: đã qua bộ hạn
+ * biên nên chắc chắn nằm trong ±1, và nhỏ đúng một nửa (53 MB thay vì 106 MB
+ * cho bài 5 phút) — chênh lệch thật cả khi đẩy lên lẫn khi đi qua cầu IPC.
+ * Chọn MP3 320 thì con số đó xuống 12 MB.
  */
-export async function banGiao(duong: string): Promise<BanGiao> {
+export async function banGiao(
+  duong: string,
+  cai: CaiXuat = { dinhDang: 'wav16' },
+): Promise<BanGiao> {
   const tt = await fs.stat(duong);
   if (tt.size > TRAN_DOC) throw new Error('Tệp quá lớn, không đọc nổi vào bộ nhớ');
 
   const am = docWav((await fs.readFile(duong)).buffer as ArrayBuffer);
   const soMau = am.kenh[0]?.length ?? 0;
+  /* Tên phải mang đuôi của định dạng THẬT. Giao một khối MP3 tên `.wav` thì
+     máy chủ lưu sai đuôi, và bàn DJ tải về một tệp không mở nổi. */
+  const goc = path.basename(duong).replace(/\.[^.]+$/, '');
   return {
-    ten: path.basename(duong),
-    byte: new Uint8Array(ghiWav16(am)),
+    ten: `${goc}.${duoiTep(cai)}`,
+    byte: new Uint8Array(await maHoa(am, cai)),
     giay: soMau / am.tanSoMau,
+    mime: mimeCua(cai),
+  };
+}
+
+export interface KetQuaXuatTep {
+  duong: string;
+  ten: string;
+  /** Cỡ tệp THẬT trên đĩa. Bảng `CHON_XUAT` chỉ ước tính; đây là con số đo được. */
+  byte: number;
+  moTa: string;
+  giay: number;
+}
+
+/**
+ * Mã hoá một tệp kết quả ra định dạng người dùng chọn, ghi cạnh bản gốc.
+ *
+ * Ghi CẠNH chứ không đè: bản WAV float là thứ mọi bước sau (master, xuất stem,
+ * trộn lại) đọc vào. Đè nó bằng một bản MP3 là cắt cụt đường làm việc, và
+ * người dùng chỉ phát hiện ở bước sau khi thứ họ nhận về nghe tệ hơn.
+ */
+export async function xuatTep(duongNguon: string, cai: CaiXuat): Promise<KetQuaXuatTep> {
+  const batDau = Date.now();
+  const tt = await fs.stat(duongNguon);
+  if (tt.size > TRAN_DOC) throw new Error('Tệp quá lớn, không đọc nổi vào bộ nhớ');
+
+  const am = docWav((await fs.readFile(duongNguon)).buffer as ArrayBuffer);
+  const byte = await maHoa(am, cai);
+
+  const thuMuc = path.dirname(duongNguon);
+  const goc = path.basename(duongNguon).replace(/\.[^.]+$/, '');
+  let ten = `${goc}.${duoiTep(cai)}`;
+  /* Xuất WAV từ một nguồn WAV thì tên trùng, và ta sẽ đè lên chính bản gốc.
+     Gắn thêm mô tả vào tên để hai tệp cùng tồn tại. */
+  if (path.join(thuMuc, ten) === duongNguon) {
+    ten = `${goc} (${moTaDinhDang(cai).replace(/[^\p{L}\p{N} .-]/gu, '')}).${duoiTep(cai)}`;
+  }
+  const duong = path.join(thuMuc, ten);
+  await fs.writeFile(duong, Buffer.from(byte));
+
+  return {
+    duong, ten,
+    byte: byte.byteLength,
+    moTa: moTaDinhDang(cai),
+    giay: (Date.now() - batDau) / 1000,
   };
 }
 
@@ -667,4 +768,159 @@ function ghiChuXuat(
     '',
     'Sinh bởi Xưởng Remix — app desktop CuongThai.',
   ].filter((dong) => dong !== '').join('\n');
+}
+
+/* ══════════════════════════════════════════════════════════
+   Dựng mashup — nhiều bài thành một
+   ══════════════════════════════════════════════════════════ */
+
+export interface BaiTrongKho {
+  id: string;
+  ten: string;
+  giay: number;
+  duongWav: string;
+  bpm: number;
+  tong: string;
+  tongCamelot: string;
+  /** Những đường dùng được: luôn có `goc`, thêm stem nếu đã tách. */
+  duong: string[];
+}
+
+/**
+ * Mọi bài đang mở, kèm nhịp và tông — nguyên liệu của bản mashup.
+ *
+ * Đo LUÔN ở đây chứ không để giao diện đo từng bài: bản dựng cần nhịp của mọi
+ * bài để tính độ dài mảnh, và một bài chưa đo là một mảnh dài sai. `phanTich`
+ * tự nhớ lại kết quả nên gọi lần hai gần như không tốn gì.
+ */
+export async function dsBaiTrongKho(): Promise<BaiTrongKho[]> {
+  const ra: BaiTrongKho[] = [];
+  for (const p of [...phien.values()]) {
+    let pt: KetQuaPhanTich;
+    try {
+      pt = await phanTich(p.id);
+    } catch (loi) {
+      /* MỘT bài hỏng không được làm chết cả danh sách.
+         Bảng phiên sống trong bộ nhớ còn tệp sống trên đĩa, nên hai thứ lệch
+         nhau được: người dùng dọn thư mục tạm, một cửa sổ khác đóng bài, đĩa
+         đầy giữa chừng. Ném ở đây thì kho bài trống trơn và mọi bài LÀNH cũng
+         biến mất theo — hỏng một, mất tất.
+
+         Không đọc nổi tệp gốc nghĩa là phiên đã chết thật, nên gỡ luôn khỏi
+         bảng: giữ lại chỉ để nó hỏng lại ở lần gọi sau. */
+      try {
+        await fs.access(p.duongWav);
+        console.warn(`[xưởng remix] bỏ qua bài ${p.id} khi liệt kê kho:`, loi);
+      } catch {
+        phien.delete(p.id);
+        console.warn(`[xưởng remix] phiên ${p.id} mất tệp gốc — gỡ khỏi kho`);
+      }
+      continue;
+    }
+    ra.push({
+      id: p.id,
+      ten: p.ten,
+      giay: p.giay,
+      duongWav: p.duongWav,
+      bpm: pt.bpm,
+      tong: pt.tong,
+      tongCamelot: pt.tongCamelot,
+      duong: ['goc', ...(p.daTach ? TEN_STEM : [])],
+    });
+  }
+  return ra;
+}
+
+/** Đường dẫn WAV của một ĐƯỜNG trong một bài. */
+function duongCua(p: Phien, nguon: string): string | null {
+  if (nguon === 'goc') return p.duongWav;
+  if (!p.daTach) return null;
+  if (!(TEN_STEM as readonly string[]).includes(nguon)) return null;
+  return path.join(p.daTach, `${nguon}.wav`);
+}
+
+export interface KetQuaDungRa {
+  duong: string;
+  ten: string;
+  giay: number;
+  /** Độ dài bản dựng, giây. */
+  daiGiay: number;
+  daDung: string[];
+  boQua: Array<{ id: string; viSao: string }>;
+  /** Đỉnh TRƯỚC hạn biên. >1 nghĩa là đã cộng quá tay và bộ hạn biên phải ghì. */
+  dinhTruoc: number;
+  lufs: number;
+  dinhThat: number;
+}
+
+/**
+ * Dựng bản mashup và ghi ra tệp.
+ *
+ * ⚠️ Mỗi ĐƯỜNG chỉ đọc từ đĩa MỘT lần dù có bao nhiêu mảnh cắt từ nó. Một bài
+ * 5 phút stereo là 106 MB trong bộ nhớ; đọc lại cho từng mảnh thì một bản dựng
+ * 20 mảnh nuốt 2 GB và app chết vì hết nhớ — mà lỗi hiện ra là "app tự thoát",
+ * không phải "hết bộ nhớ".
+ */
+export async function dungMashup(
+  userData: string,
+  bd: BanDung,
+  opts: { tranDbtp?: number; ten?: string } = {},
+): Promise<KetQuaDungRa> {
+  const batDau = Date.now();
+  if (bd.manh.length === 0) throw new Error('Bản dựng chưa có mảnh nào');
+  if (!(bd.bpm > 0)) throw new Error('Nhịp chung phải dương');
+
+  const nguon: Record<string, NguonManh> = {};
+  let tanSoMau = TAN_SO_MODEL;
+  for (const m of bd.manh) {
+    const khoa = khoaNguon(m);
+    if (nguon[khoa]) continue;                    // đọc một lần, dùng lại
+    const p = phien.get(m.baiId);
+    if (!p) continue;                             // `dungBan` sẽ báo lý do
+    const duong = duongCua(p, m.nguon);
+    if (!duong) continue;
+    let am: AmThanh;
+    try {
+      am = docWav((await fs.readFile(duong)).buffer as ArrayBuffer);
+    } catch {
+      continue;
+    }
+    const pt = await phanTich(m.baiId);
+    const cao = caoDoTuTen(pt.tong);
+    nguon[khoa] = { am, bpm: pt.bpm, chuAm: cao === null ? null : cao % 12 };
+    tanSoMau = am.tanSoMau;
+  }
+
+  const kq = dungBan(bd, nguon, tanSoMau);
+  if (kq.daDung.length === 0) {
+    const viSao = kq.boQua.map((b) => b.viSao).join(' · ') || 'không rõ';
+    throw new Error(`Không mảnh nào dựng được: ${viSao}`);
+  }
+
+  const tran = opts.tranDbtp ?? -1;
+  const am: AmThanh = { kenh: hanBien(kq.am.kenh, tran, tanSoMau), tanSoMau };
+  const do_ = doTatCa(am);
+
+  /* Ghi vào thư mục của bài ĐẦU TIÊN có mảnh dựng được. Bản dựng không có
+     phiên riêng, mà `duongAnToan` ở tầng IPC chỉ cho đọc/ghi trong cây phiên —
+     nên nó phải nằm trong đó, không thì chính app không mở lại được tệp mình
+     vừa ghi. */
+  const goc = bd.manh.find((m) => kq.daDung.includes(m.id))?.baiId ?? bd.manh[0]!.baiId;
+  const thuMuc = path.join(thuMucRa(userData, goc), 'xuat');
+  await fs.mkdir(thuMuc, { recursive: true });
+  const ten = `${tenAnToan(opts.ten ?? 'ban mashup')} ${Math.round(bd.bpm)}BPM.wav`;
+  const duong = path.join(thuMuc, ten);
+  await fs.writeFile(duong, Buffer.from(ghiWav(am)));
+
+  return {
+    duong,
+    ten,
+    giay: (Date.now() - batDau) / 1000,
+    daiGiay: (am.kenh[0]?.length ?? 0) / tanSoMau,
+    daDung: kq.daDung,
+    boQua: kq.boQua,
+    dinhTruoc: kq.dinhTruoc,
+    lufs: do_.lufs,
+    dinhThat: do_.dinhThat,
+  };
 }

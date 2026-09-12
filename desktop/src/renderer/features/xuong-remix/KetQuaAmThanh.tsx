@@ -20,11 +20,14 @@
  * hình đứng im rồi bấm lại lần nữa.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Headphones, Loader2, Upload } from 'lucide-react';
+import { Download, Headphones, Loader2, Upload } from 'lucide-react';
 import { useSession } from '../../auth/session';
 import { useAppState } from '../../app-state';
 import { useDich } from '../../i18n';
 import { tachTen } from '../music/TaiNhacLen';
+import { ChonChatLuong } from './ChonChatLuong';
+import { CHON_XUAT_MAC_DINH, timChonXuat } from '../../../shared/dinhDangXuat';
+import type { KetQuaXuatTep } from '../../../shared/ipc';
 
 interface Props {
   /** Đường dẫn tệp kết quả trên đĩa. Main kiểm lại nó nằm trong thư mục phiên. */
@@ -63,6 +66,9 @@ export function KetQuaAmThanh({ duong, bpm, camelot }: Props) {
   const [phanTram, setPhanTram] = useState<number | null>(null);
   const [xong, setXong] = useState(false);
   const [loi, setLoi] = useState<string | null>(null);
+  const [maCl, setMaCl] = useState(CHON_XUAT_MAC_DINH);
+  const [dangXuat, setDangXuat] = useState(false);
+  const [daXuat, setDaXuat] = useState<KetQuaXuatTep | null>(null);
 
   /* Blob 53 MB mỗi bản. Không thu hồi thì đổi thiết lập rồi trộn lại vài lượt
      là app giữ vài trăm MB không bao giờ trả lại — và người dùng chỉ thấy
@@ -80,7 +86,11 @@ export function KetQuaAmThanh({ duong, bpm, camelot }: Props) {
     setTep(null);
     setXong(false);
     setLoi(null);
-  }, [duong]);
+    setDaXuat(null);
+    /* `maCl` nằm trong danh sách phụ thuộc vì tệp đã đọc mang ĐỊNH DẠNG CŨ.
+       Giữ lại thì người dùng đổi sang MP3 320 rồi bấm Đẩy lên, và bản lên
+       máy chủ vẫn là WAV — im lặng, đúng thứ họ vừa cố đổi. */
+  }, [duong, maCl]);
 
   const doc = useCallback(async (): Promise<File | null> => {
     if (tep) return tep;
@@ -88,11 +98,11 @@ export function KetQuaAmThanh({ duong, bpm, camelot }: Props) {
     setDangDoc(true);
     setLoi(null);
     try {
-      const bg = await cau.xuongRemix.banGiao(duong);
+      const bg = await cau.xuongRemix.banGiao(duong, timChonXuat(maCl).cai);
       /* `slice()` để lấy đúng một ArrayBuffer riêng: mảng qua cầu IPC có thể
          là khung nhìn lên một bộ đệm lớn hơn, và đưa thẳng vào Blob thì kèm
          theo cả phần thừa. */
-      const f = new File([bg.byte.slice().buffer], bg.ten, { type: 'audio/wav' });
+      const f = new File([bg.byte.slice().buffer], bg.ten, { type: bg.mime });
       setTep(f);
       setGiay(bg.giay);
       setTen(tenGoiY(bg.ten, bpm, camelot));
@@ -103,7 +113,7 @@ export function KetQuaAmThanh({ duong, bpm, camelot }: Props) {
     } finally {
       setDangDoc(false);
     }
-  }, [cau, duong, tep, bpm, camelot]);
+  }, [cau, duong, tep, bpm, camelot, maCl]);
 
   const batNghe = useCallback(async () => {
     const f = await doc();
@@ -157,10 +167,32 @@ export function KetQuaAmThanh({ duong, bpm, camelot }: Props) {
     }
   }, [doc, api, ten, giay, dich]);
 
-  const dangChay = dangDoc || phanTram !== null;
+  /**
+   * Ghi ra đĩa, cạnh bản gốc.
+   *
+   * Không đi qua `doc()`: `doc()` kéo cả tệp qua cầu IPC về renderer để nghe
+   * và để đẩy lên, mà ở đây tệp chỉ cần đi từ đĩa ra đĩa. Với FLAC 24-bit của
+   * một bài 5 phút thì đó là 60 MB không có lý do gì phải chạy qua renderer.
+   */
+  const xuat = useCallback(async () => {
+    if (!cau) return;
+    setDangXuat(true);
+    setLoi(null);
+    try {
+      setDaXuat(await cau.xuongRemix.xuatTep(duong, timChonXuat(maCl).cai));
+    } catch (e) {
+      setLoi((e as Error).message);
+    } finally {
+      setDangXuat(false);
+    }
+  }, [cau, duong, maCl]);
+
+  const dangChay = dangDoc || dangXuat || phanTram !== null;
 
   return (
     <div className="ct-xr-giao">
+      <ChonChatLuong ma={maCl} onChon={setMaCl} giay={giay || undefined} tat={dangChay} />
+
       <div className="ct-xr-dieu-khien">
         <button type="button" className="ct-btn ct-btn-ghost" disabled={dangChay} onClick={() => void batNghe()}>
           {dangDoc ? <Loader2 size={14} className="ct-xoay" aria-hidden /> : <Headphones size={14} aria-hidden />}
@@ -170,7 +202,24 @@ export function KetQuaAmThanh({ duong, bpm, camelot }: Props) {
           {phanTram !== null ? <Loader2 size={14} className="ct-xoay" aria-hidden /> : <Upload size={14} aria-hidden />}
           {phanTram !== null ? `${dich('Đang đẩy lên…')} ${phanTram}%` : dich('Đẩy lên bàn DJ')}
         </button>
+        <button type="button" className="ct-btn ct-btn-ghost" disabled={dangChay} onClick={() => void xuat()}>
+          {dangXuat ? <Loader2 size={14} className="ct-xoay" aria-hidden /> : <Download size={14} aria-hidden />}
+          {dich('Xuất tệp')}
+        </button>
       </div>
+
+      {daXuat && (
+        <p className="ct-xr-ngo" data-tone="ok">
+          ✓ {dich('Đã ghi')} <b>{daXuat.ten}</b>{' '}
+          <span className="ct-muted">
+            {daXuat.moTa} · {(daXuat.byte / 1e6).toFixed(1)} MB · {daXuat.giay.toFixed(1)}s
+          </span>{' '}
+          <button type="button" className="ct-linklike"
+            onClick={() => void cau?.xuongRemix.moThuMuc(daXuat.duong)}>
+            {dich('Mở thư mục')}
+          </button>
+        </p>
+      )}
 
       {nghe && (
         // eslint-disable-next-line jsx-a11y/media-has-caption

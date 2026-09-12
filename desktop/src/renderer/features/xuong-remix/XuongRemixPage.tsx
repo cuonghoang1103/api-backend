@@ -24,8 +24,8 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  AudioWaveform, Check, Download, FolderOpen, Gauge, Layers, Loader2, Music4,
-  Scissors, Send, SlidersHorizontal, Sparkles, Trash2, Upload, X,
+  AudioWaveform, Check, Download, FolderOpen, Gauge, Loader2, Music4,
+  RefreshCw, Scissors, Send, SlidersHorizontal, Sparkles, Trash2, Upload, X,
 } from 'lucide-react';
 import type {
   BaiDaNap, KetQuaMasterRa, KetQuaPhanTich, KetQuaTachRa, KetQuaTronRa, KetQuaXuatRa,
@@ -38,6 +38,12 @@ import { TRON_MAC_DINH } from '../../../shared/tronMacDinh';
 import { useSession } from '../../auth/session';
 import { docTraLoi, type TraLoiAi } from './traLoi';
 import { KetQuaAmThanh } from './KetQuaAmThanh';
+import { BanLamViec } from './BanLamViec';
+import { BanTron } from './BanTron';
+import { DongThoiGian } from './DongThoiGian';
+import { KhoMau } from './KhoMau';
+import type { MayPhatStem } from './mayPhat';
+import type { BaiTrongKho } from '../../../shared/ipc';
 import { useDich } from '../../i18n';
 import { DUOI_NHAN, giaiMaBai, laTepNhac } from './giaiMa';
 
@@ -137,6 +143,30 @@ export function XuongRemixPage() {
   const oTep = useRef<HTMLInputElement>(null);
   const oTepMau = useRef<HTMLInputElement>(null);
 
+  /* Kho bài cho dòng thời gian.
+
+     Khai TRƯỚC mọi hàm gọi nó. `useCallback` bên dưới không khai nó trong
+     danh sách phụ thuộc được nếu nó chưa tồn tại, và một callback ghi nhớ bản
+     `lamMoiKho` của lần vẽ ĐẦU TIÊN là lỗi chỉ lộ ra khi nó cần bản mới.
+
+     Xin lại mỗi khi nạp / đóng / tách xong một bài — đúng những lúc danh sách
+     hoặc số đo của nó đổi thật. */
+  const [khoBai, setKhoBai] = useState<BaiTrongKho[]>([]);
+  const [dangTaiKho, setDangTaiKho] = useState(false);
+  const lamMoiKho = useCallback(async () => {
+    if (!cau) return;
+    setDangTaiKho(true);
+    try {
+      setKhoBai(await cau.xuongRemix.dsBai());
+    } catch {
+      /* Kho hỏng KHÔNG được làm chết cả trang: mọi thứ trên một bài vẫn chạy
+         mà không cần nó. Danh sách rỗng và nút "Xem lại" là đủ. */
+      setKhoBai([]);
+    } finally {
+      setDangTaiKho(false);
+    }
+  }, [cau]);
+
   const napKho = useCallback(async () => {
     if (!cau) return;
     try {
@@ -190,9 +220,11 @@ export function XuongRemixPage() {
     setDangNap(true);
     try {
       const g = await giaiMaBai(tep);
-      const b = await cau.xuongRemix.napBai(tep.name, g.mau, g.soKenh, g.tanSoMau);
+
+  const b = await cau.xuongRemix.napBai(tep.name, g.mau, g.soKenh, g.tanSoMau);
       if (!b?.id) throw new Error(dich('Không nạp được bài — main không trả về phiên nào.'));
       setBai(b);
+      void lamMoiKho();          // bài mới ⇒ kho có thêm một dòng
       // Cùng lý do với `napKho`: thiếu `do` hay `ghep` thì đừng dựng nửa vời rồi
       // ném giữa chừng — bỏ hẳn phần phân tích, các phần khác vẫn dùng được.
       const kq = await cau.xuongRemix.phanTich(b.id);
@@ -204,6 +236,21 @@ export function XuongRemixPage() {
     }
   }, [cau, dich]);
 
+  /**
+   * Nạp một mẫu trong kho thành một BÀI trong xưởng.
+   *
+   * Đi qua đúng đường `nap` đã có chứ không dựng một đường nạp thứ hai:
+   * đường kia đã lo giải mã, lấy mẫu lại về 44,1 kHz, đo nhịp và tông, và làm
+   * mới kho bài. Một đường thứ hai là một chỗ nữa để quên một trong bốn việc.
+   */
+  const dungMau = useCallback(async (tep: string, ten: string) => {
+    if (!cau) return;
+    const bg = await cau.xuongRemix.napMau(tep);
+    /* `slice()` để lấy một ArrayBuffer riêng: mảng qua cầu IPC có thể là khung
+       nhìn lên một bộ đệm lớn hơn. */
+    await nap(new File([bg.byte.slice().buffer], ten || bg.ten));
+  }, [cau, nap]);
+
   const tach = useCallback(async () => {
     if (!cau || !bai) return;
     setLoi(null);
@@ -211,6 +258,9 @@ export function XuongRemixPage() {
     setTienDo(null);
     try {
       setKetQua(await cau.xuongRemix.tach(bai.id, maModel));
+      /* Tách xong ⇒ bài đó có thêm bốn ĐƯỜNG để cắt mảnh. Không xin lại thì
+         dòng thời gian chỉ bày `goc` mãi, và người dùng tưởng tách hỏng. */
+      void lamMoiKho();
     } catch (e) {
       setLoi((e as Error).message);
     } finally {
@@ -218,6 +268,16 @@ export function XuongRemixPage() {
       setTienDo(null);
     }
   }, [cau, bai, maModel]);
+
+  const chonTepModel = useCallback(async (ma: string) => {
+    if (!cau) return;
+    setLoi(null);
+    try {
+      if (await cau.xuongRemix.chonTepModel(ma)) await napKho();
+    } catch (e) {
+      setLoi((e as Error).message);
+    }
+  }, [cau, napKho]);
 
   const taiModel = useCallback(async (ma: string) => {
     if (!cau) return;
@@ -294,6 +354,20 @@ export function XuongRemixPage() {
     }
   }, [cau, bai, caiTron, nenTong]);
 
+  /* Máy phát của bàn làm việc, giữ ở TRANG vì bàn trộn cũng đọc nó. */
+  const mayRef = useRef<MayPhatStem | null>(null);
+  /* Nhớ theo KHUNG HÌNH. Năm cái đồng hồ đều hỏi trong cùng một khung, mà mỗi
+     lượt `dinh()` là năm lần đọc AnalyserNode — không nhớ lại thì mỗi khung
+     đọc 25 lần cho 5 con số. 8ms là nửa khung ở 60Hz. */
+  const nhoDinh = useRef<{ luc: number; gia: Record<string, number> }>({ luc: 0, gia: {} });
+  const docDinh = useCallback((ma: string): number | null => {
+    const may = mayRef.current;
+    if (!may?.coTieng || !may.trangThai().dangPhat) return null;
+    const nay = performance.now();
+    if (nay - nhoDinh.current.luc > 8) nhoDinh.current = { luc: nay, gia: may.dinh() };
+    return nhoDinh.current.gia[ma] ?? 0;
+  }, []);
+
   const doiTron = useCallback((ma: string, thay: Partial<CaiTron>) => {
     setCaiTron((cu) => ({ ...cu, [ma]: { ...(cu[ma] ?? TRON_MAC_DINH[ma]!), ...thay } }));
     // Thiết lập đổi thì bản trộn cũ không còn đúng nữa — đừng để nó nằm lại
@@ -336,6 +410,7 @@ export function XuongRemixPage() {
 
   const dongBai = useCallback(async () => {
     if (cau && bai) await cau.xuongRemix.dongBai(bai.id).catch(() => undefined);
+    void lamMoiKho();
     setBai(null);
     setPt(null);
     setKetQua(null);
@@ -406,24 +481,44 @@ export function XuongRemixPage() {
                   <b>{m.ten}</b>
                   <span className="ct-muted">{m.moTa}</span>
                   <span className="ct-xr-model-so">
+                    {/* Chưa tải thì con số chỉ là ƯỚC TÍNH — phải nói ra. Bản
+                        đầu hiện "166 MB" trơn cạnh "316 MB" đã tải, trông như
+                        hai số đo cùng loại, mà một cái là người viết mã gõ vào. */}
                     {m.coRoi
                       ? `${dich('đã tải')} · ${goiGB(m.byteThat)}`
-                      : `${dich('chưa tải')} · ${goiGB(m.byte)}`}
+                      : `${dich('chưa tải')} · ~${goiGB(m.byteUocTinh)}`}
                   </span>
                 </span>
               </label>
               {!m.coRoi && (
-                <button
-                  type="button"
-                  className="ct-btn ct-btn-ghost"
-                  disabled={dangTai !== null}
-                  onClick={() => void taiModel(m.ma)}
-                >
-                  {dangTai === m.ma
-                    ? <Loader2 size={14} className="ct-xoay" aria-hidden />
-                    : <Download size={14} aria-hidden />}
-                  {dangTai === m.ma ? dich('taimodel|Đang tải…') : dich('Tải về')}
-                </button>
+                <div className="ct-xr-model-nut">
+                  {/* Chỉ mời tải khi đường tải đã được KIỂM CHỨNG. Model nào
+                      chưa có đường tin được thì đừng bày nút Tải về ra rồi để
+                      nó trả 404 — thà nói thẳng là phải tự tải. */}
+                  {m.coNguonTai && (
+                    <button
+                      type="button"
+                      className="ct-btn ct-btn-ghost"
+                      disabled={dangTai !== null}
+                      onClick={() => void taiModel(m.ma)}
+                    >
+                      {dangTai === m.ma
+                        ? <Loader2 size={14} className="ct-xoay" aria-hidden />
+                        : <Download size={14} aria-hidden />}
+                      {dangTai === m.ma ? dich('taimodel|Đang tải…') : dich('Tải về')}
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    className="ct-btn ct-btn-ghost"
+                    disabled={dangTai !== null}
+                    onClick={() => void chonTepModel(m.ma)}
+                    title={dich('Đã tải sẵn tệp .onnx? Trỏ app vào nó.')}
+                  >
+                    <FolderOpen size={14} aria-hidden />
+                    {dich('Chọn tệp .onnx')}
+                  </button>
+                </div>
               )}
               {m.coRoi && (
                 <button
@@ -508,6 +603,21 @@ export function XuongRemixPage() {
               <X size={14} aria-hidden />
             </button>
           </div>
+
+          {/* ── BÀN LÀM VIỆC ──────────────────────────────
+              Đặt NGAY dưới tên bài, trên mọi thứ khác: khi làm nhạc thì nghe
+              và nhìn dạng sóng là công việc, số đo chỉ là thiết lập. Bản
+              trước xếp ngược lại — mở trang ra là một bảng số, và không có
+              chỗ nào bấm để nghe. */}
+          <BanLamViec
+            id={bai.id}
+            giay={bai.giay}
+            pt={pt}
+            tepGoc={bai.duongWav}
+            tepStem={ketQua?.tep ?? {}}
+            mayRef={mayRef}
+            docDinh={docDinh}
+          />
 
           {pt && (
             <>
@@ -886,71 +996,17 @@ export function XuongRemixPage() {
                 {dich('Dọn phần trầm rò sang các stem khác, cân lại mức, và ghì cả bài xuống mỗi cú trống cái — nhịp thở đặc trưng của nhạc sàn. Xong là ra một tệp stereo để nghe thử hoặc kéo vào DAW.')}
               </p>
 
-              <div className="ct-xr-tron-bang">
-                {STEM.map((st) => {
-                  const c = caiTron[st.ma] ?? TRON_MAC_DINH[st.ma]!;
-                  return (
-                    <div key={st.ma} className={`ct-xr-tron-hang${c.bat ? '' : ' tat'}`}>
-                      <label className="ct-xr-tron-ten">
-                        <input
-                          type="checkbox"
-                          checked={c.bat}
-                          onChange={(e) => doiTron(st.ma, { bat: e.target.checked })}
-                        />
-                        <b>{dich(st.nhan)}</b>
-                      </label>
-
-                      <label className="ct-xr-tron-num">
-                        <span className="ct-muted">{dich('Mức')}</span>
-                        <input
-                          type="range" min={-24} max={6} step={0.5} value={c.gainDb}
-                          disabled={!c.bat}
-                          onChange={(e) => doiTron(st.ma, { gainDb: Number(e.target.value) })}
-                        />
-                        <code>{c.gainDb > 0 ? '+' : ''}{c.gainDb.toFixed(1)} dB</code>
-                      </label>
-
-                      <label className="ct-xr-tron-num">
-                        <span className="ct-muted">{dich('Chắn trầm')}</span>
-                        <input
-                          type="range" min={0} max={200} step={10} value={c.chanTramHz}
-                          disabled={!c.bat}
-                          onChange={(e) => doiTron(st.ma, { chanTramHz: Number(e.target.value) })}
-                        />
-                        <code>{c.chanTramHz === 0 ? dich('tắt') : `${c.chanTramHz} Hz`}</code>
-                      </label>
-
-                      <label className="ct-xr-tron-num">
-                        <span className="ct-muted">{dich('Duck theo kick')}</span>
-                        <input
-                          type="range" min={0} max={100} step={5} value={Math.round(c.duck * 100)}
-                          disabled={!c.bat}
-                          onChange={(e) => doiTron(st.ma, { duck: Number(e.target.value) / 100 })}
-                        />
-                        <code>{Math.round(c.duck * 100)}%</code>
-                      </label>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className="ct-xr-dieu-khien">
-                <label className="ct-xr-tron-ten">
-                  <input type="checkbox" checked={nenTong}
-                    onChange={(e) => { setNenTong(e.target.checked); setTronRa(null); }} />
-                  <span>{dich('Nén tổng')}</span>
-                </label>
-                <button type="button" className="ct-btn" disabled={dangTron}
-                  onClick={() => void chayTron()}>
-                  {dangTron ? <Loader2 size={14} className="ct-xoay" aria-hidden />
-                            : <Layers size={14} aria-hidden />}
-                  {dangTron ? dich('Đang trộn…') : dich('Trộn lại')}
-                </button>
-                <button type="button" className="ct-btn ct-btn-ghost"
-                  onClick={() => { setCaiTron(TRON_MAC_DINH); setTronRa(null); }}>
-                  {dich('Về mặc định')}
-                </button>
-              </div>
+              <BanTron
+                cai={caiTron}
+                macDinh={TRON_MAC_DINH}
+                onDoi={doiTron}
+                onVeMacDinh={() => { setCaiTron(TRON_MAC_DINH); setTronRa(null); }}
+                nenTong={nenTong}
+                onNenTong={(v) => { setNenTong(v); setTronRa(null); }}
+                onTron={() => void chayTron()}
+                dangTron={dangTron}
+                docDinh={docDinh}
+              />
 
               {tronRa && (
                 <div className="ct-xr-tron-ra">
@@ -985,6 +1041,26 @@ export function XuongRemixPage() {
           )}
         </section>
       )}
+
+      {/* ── Ghép nhiều bài ─────────────────────────────────
+          Đặt ở CUỐI, ngoài khối của một bài: nó nói về TẤT CẢ bài đang mở,
+          không về bài nào cả. Nhét nó vào trong khối kia thì nó biến mất khi
+          người dùng đóng bài — đúng lúc họ đang xếp mảnh của ba bài khác. */}
+      <section className="ct-panel ct-xr-chinh" aria-label={dich('Ghép nhiều bài')}>
+        <div className="ct-xr-dieu-khien">
+          <span className="ct-xr-nhan">{dich('Ghép nhiều bài')}</span>
+          <button type="button" className="ct-btn ct-btn-ghost" disabled={dangTaiKho}
+            onClick={() => void lamMoiKho()}>
+            <RefreshCw size={14} aria-hidden />
+            {dich('Xem lại kho bài')}
+          </button>
+        </div>
+        <p className="ct-muted ct-xr-nhac">
+          {dich('Nạp vài bài, cắt lấy đoạn hay của từng bài, rồi xếp chồng lên nhau. App tự kéo mọi mảnh về cùng một nhịp — và cùng một tông nếu bạn chọn.')}
+        </p>
+        <KhoMau onDung={dungMau} />
+        <DongThoiGian kho={khoBai} dangTaiKho={dangTaiKho} onLamMoiKho={() => void lamMoiKho()} />
+      </section>
     </div>
   );
 }

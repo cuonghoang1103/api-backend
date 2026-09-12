@@ -10,6 +10,7 @@
  * Quy ước tên kênh: `<miền>:<hành động>`. Miền trùng với file handler.
  */
 import { z } from 'zod';
+import type { CaiXuat } from './dinhDangXuat';
 
 // ─────────────────────────────────────────────────────────────
 // Schema payload — main kiểm MỌI thứ đi vào bằng những cái này
@@ -463,6 +464,8 @@ export interface BaiDaNap {
   ten: string;
   giay: number;
   soKenh: number;
+  /** Đường WAV bản gốc — bàn làm việc nghe nó khi bài chưa được tách. */
+  duongWav: string;
 }
 
 /** Mọi phép đo của một bài. Xem `main/nhac/amLuong.ts` để biết cách tính. */
@@ -535,9 +538,80 @@ export interface CaiDatStemTron {
    kéo theo zod, nên renderer nạp được mà không phình gói. */
 
 /** Một tệp kết quả đã đọc về renderer, dạng WAV 16-bit sẵn sàng nghe và đẩy lên. */
+/** Dạng sóng đã tóm tắt. Khoá là `goc` hoặc tên stem. */
+export interface SongAmThanh {
+  min: Record<string, Float32Array>;
+  max: Record<string, Float32Array>;
+  giay: number;
+}
+
 export interface BanGiaoAmThanh {
   ten: string;
   byte: Uint8Array;
+  giay: number;
+  /** Kiểu MIME khớp với `byte` — renderer dựng `File` theo nó. */
+  mime: string;
+}
+
+/** Một mảnh trên dòng thời gian mashup. */
+export interface ManhDung {
+  id: string;
+  baiId: string;
+  /** `goc` hoặc tên stem. */
+  nguon: string;
+  tuGiay: number;
+  denGiay: number;
+  datGiay: number;
+  gainDb: number;
+  vaoGiay: number;
+  raGiay: number;
+}
+
+export interface BaiTrongKho {
+  id: string;
+  ten: string;
+  giay: number;
+  duongWav: string;
+  bpm: number;
+  tong: string;
+  tongCamelot: string;
+  duong: string[];
+}
+
+export interface KetQuaDungRa {
+  duong: string;
+  ten: string;
+  giay: number;
+  daiGiay: number;
+  daDung: string[];
+  boQua: Array<{ id: string; viSao: string }>;
+  /** Đỉnh TRƯỚC hạn biên. >1 nghĩa là đã cộng quá tay. */
+  dinhTruoc: number;
+  lufs: number;
+  dinhThat: number;
+}
+
+export interface MauNhac {
+  id: string;
+  tep: string;
+  duong: string;
+  byte: number;
+  ten: string;
+  giayPhep: string;
+  tacGia: string;
+  nguon: string;
+  url: string;
+  themLuc: number;
+  /** `false` = KHÔNG BIẾT giấy phép, không phải "được dùng thoải mái". */
+  coGiayPhep: boolean;
+}
+
+export interface KetQuaXuatTep {
+  duong: string;
+  ten: string;
+  /** Cỡ THẬT trên đĩa, byte. Bảng `CHON_XUAT` chỉ ước tính. */
+  byte: number;
+  moTa: string;
   giay: number;
 }
 
@@ -573,11 +647,13 @@ export interface MucKhoModel {
   ma: string;
   ten: string;
   moTa: string;
-  /** Kích thước công bố, byte. */
-  byte: number;
+  /** ƯỚC TÍNH, chỉ để hiện trước khi tải. Không phải con số đo được. */
+  byteUocTinh: number;
   coRoi: boolean;
   /** Số byte thật trên đĩa; 0 khi chưa tải. */
   byteThat: number;
+  /** Có đường tải đã kiểm chứng không. `false` = chỉ chọn tệp từ máy. */
+  coNguonTai: boolean;
 }
 
 export interface TienDoXuong {
@@ -1252,6 +1328,8 @@ export const INVOKE_CHANNELS = {
   'xuongRemix:khoModel': null,
   'xuongRemix:taiModel': maModelSchema,
   'xuongRemix:xoaModel': maModelSchema,
+  /* Mở hộp thoại hệ thống để người dùng trỏ vào tệp .onnx họ tự tải. */
+  'xuongRemix:chonTepModel': maModelSchema,
   /** Mở thư mục stem trong Finder/Explorer để kéo thẳng vào FL Studio. */
   'xuongRemix:moThuMuc': z.object({ duong: z.string().min(1).max(4096) }),
   'xuongRemix:chinhVaXuat': chinhXuatSchema,
@@ -1260,7 +1338,64 @@ export const INVOKE_CHANNELS = {
   'xuongRemix:tron': tronSchema,
   /* Đọc một tệp kết quả về renderer để NGHE THỬ và ĐẨY LÊN thư viện. Main còn
      kiểm lại đường dẫn bằng `duongAnToan()` — schema này chỉ là hàng rào đầu. */
-  'xuongRemix:banGiao': z.object({ duong: z.string().min(1).max(4096) }),
+  /* Lược đồ `CaiXuat`. `kbps` và `bit` để `optional` chứ không đặt mặc định ở
+     đây: mặc định thật nằm trong `maHoa()`, và hai chỗ cùng đặt mặc định là
+     hai chỗ để chúng lệch nhau. */
+  'xuongRemix:banGiao': z.object({
+    duong: z.string().min(1).max(4096),
+    cai: z.object({
+      dinhDang: z.enum(['wav', 'wav16', 'mp3', 'flac']),
+      kbps: z.union([z.literal(128), z.literal(192), z.literal(256), z.literal(320)]).optional(),
+      bit: z.union([z.literal(16), z.literal(24)]).optional(),
+    }).optional(),
+  }),
+  'xuongRemix:dsBai': z.object({}),
+  'xuongRemix:dsMau': z.object({}),
+  /* Không nhận đường dẫn từ renderer: main tự mở hộp thoại. Renderer chỉ nói
+     "người dùng muốn thêm mẫu" và kèm giấy phép họ đã khai. */
+  'xuongRemix:themMau': z.object({
+    giayPhep: z.enum(['cc0', 'cc-by', 'cc-by-sa', 'cc-by-nc', 'cong-cong', 'tu-thu', 'khac']),
+    ten: z.string().max(200).optional(),
+    tacGia: z.string().max(200).optional(),
+    nguon: z.string().max(200).optional(),
+    url: z.string().max(2048).optional(),
+  }),
+  'xuongRemix:xoaMau': z.object({ tep: z.string().min(1).max(300) }),
+  'xuongRemix:napMau': z.object({ tep: z.string().min(1).max(300) }),
+  'xuongRemix:dungMashup': z.object({
+    bpm: z.number().min(40).max(300),
+    /* Chủ âm 0…11, `null` = không dịch tông mảnh nào. `nullable` chứ không
+       `optional`: "không muốn dịch" và "quên gửi" là hai chuyện khác nhau, và
+       gộp chúng lại thì một lỗi ở giao diện trở thành một lựa chọn hợp lệ. */
+    chuAm: z.number().int().min(0).max(11).nullable(),
+    ten: z.string().max(200).optional(),
+    tranDbtp: z.number().min(-12).max(0).optional(),
+    manh: z.array(z.object({
+      id: z.string().min(1).max(64),
+      baiId: z.string().min(1).max(64),
+      nguon: z.enum(['goc', 'drums', 'bass', 'other', 'vocals']),
+      tuGiay: z.number().min(0).max(36_000),
+      denGiay: z.number().min(0).max(36_000),
+      datGiay: z.number().min(0).max(36_000),
+      gainDb: z.number().min(-48).max(12),
+      vaoGiay: z.number().min(0).max(60),
+      raGiay: z.number().min(0).max(60),
+    })).min(1).max(200),
+  }),
+  'xuongRemix:xuatTep': z.object({
+    duong: z.string().min(1).max(4096),
+    cai: z.object({
+      dinhDang: z.enum(['wav', 'wav16', 'mp3', 'flac']),
+      kbps: z.union([z.literal(128), z.literal(192), z.literal(256), z.literal(320)]).optional(),
+      bit: z.union([z.literal(16), z.literal(24)]).optional(),
+    }),
+  }),
+  /* Dạng sóng để VẼ. `soCot` chặn trên 4000: đó đã là hơn số điểm ảnh ngang
+     của mọi màn hình, và cao hơn nữa chỉ tốn công tính chứ không thấy thêm. */
+  'xuongRemix:song': z.object({
+    id: z.string().uuid(),
+    soCot: z.number().int().min(16).max(4000),
+  }),
 
   /* Đường dẫn tệp trong repo mẫu gốc. Tiến trình chính còn kiểm lại lần nữa —
      xem `duongAnToan()` — nên schema này chỉ là hàng rào đầu tiên. */
@@ -1682,6 +1817,8 @@ export interface DesktopBridge {
     khoModel(): Promise<MucKhoModel[]>;
     taiModel(maModel: string): Promise<string>;
     xoaModel(maModel: string): Promise<void>;
+    /** Mở hộp thoại chọn tệp .onnx. Trả `null` khi người dùng bấm huỷ. */
+    chonTepModel(maModel: string): Promise<{ byte: number } | null>;
     moThuMuc(duong: string): Promise<void>;
     chinhVaXuat(id: string, bpmDich?: number, nuaCung?: number): Promise<KetQuaXuatRa>;
     napBanMau(
@@ -1694,7 +1831,23 @@ export interface DesktopBridge {
      * Trả WAV 16-bit — nhỏ bằng nửa bản trên đĩa, và đã qua hạn biên nên
      * không mất gì. Renderer dùng nó để nghe thử và để đẩy lên thư viện.
      */
-    banGiao(duong: string): Promise<BanGiaoAmThanh>;
+    banGiao(duong: string, cai?: CaiXuat): Promise<BanGiaoAmThanh>;
+    xuatTep(duong: string, cai: CaiXuat): Promise<KetQuaXuatTep>;
+    dsBai(): Promise<BaiTrongKho[]>;
+    dsMau(): Promise<MauNhac[]>;
+    /** Mở hộp thoại chọn tệp. `null` khi người dùng huỷ. */
+    themMau(meta: {
+      giayPhep: string; ten?: string; tacGia?: string; nguon?: string; url?: string;
+    }): Promise<MauNhac[] | null>;
+    xoaMau(tep: string): Promise<void>;
+    /** Đọc một mẫu về renderer để nạp nó thành một bài trong xưởng. */
+    napMau(tep: string): Promise<BanGiaoAmThanh>;
+    dungMashup(bd: {
+      bpm: number; chuAm: number | null; manh: ManhDung[];
+      ten?: string; tranDbtp?: number;
+    }): Promise<KetQuaDungRa>;
+    /** Dạng sóng của bài gốc và mọi stem đã tách, tóm tắt về `soCot` cột. */
+    song(id: string, soCot: number): Promise<SongAmThanh>;
     /** Trộn các stem ĐÃ TÁCH thành một bản stereo. Ném nếu chưa tách. */
     tron(
       id: string,

@@ -254,5 +254,20 @@ if (SYNC && course && APPLY) {
   console.log(`  ↕ syncOrder: ${fileSecIds.length} sections + their lessons renumbered to file order` + (restSec.length ? ` (${restSec.length} section(s) not in file kept after)` : ''));
 } else if (SYNC && !APPLY) console.log('  ↕ syncOrder: would renumber sections/lessons to file order');
 
+/* 5. Đồng bộ số liệu khoá (totalLessons/totalDurationSeconds) --------------- */
+// Thẻ ở /academy và endpoint danh sách (course.routes.ts ?gon=1) hiển thị CỘT
+// `course.totalLessons` đã lưu, KHÔNG đếm lại (cố ý, để tránh join bảng bài mỗi
+// lần liệt kê). Cột đó do syncCourseStats() trong route giữ đồng bộ — nhưng
+// seeder này không đi qua route, nên nếu không tự cập nhật thì mọi môn seed để
+// `total_lessons` = 0 (mặc định) và thẻ báo "0 bài" dù đã có bài. Đếm lại y hệt
+// syncCourseStats: tổng số bài + tổng thời lượng video của mọi section.
+if (APPLY && course) {
+  const secs = await prisma.courseSection.findMany({ where: { courseId: course.id }, include: { lessons: { select: { videoDurationSeconds: true } } } });
+  const totalLessons = secs.reduce((s, x) => s + x.lessons.length, 0);
+  const totalDurationSeconds = secs.reduce((s, x) => s + x.lessons.reduce((a, l) => a + (l.videoDurationSeconds || 0), 0), 0);
+  await prisma.course.update({ where: { id: course.id }, data: { totalLessons, totalDurationSeconds } });
+  console.log(`  ∑ stats: total_lessons=${totalLessons} · duration=${totalDurationSeconds}s`);
+}
+
 console.log(`\nsections +${secN} · lessons +${lesNew} ~${lesUpd}. ${APPLY ? 'Done.' : 'Dry-run — add --apply.'}`);
 await prisma.$disconnect();

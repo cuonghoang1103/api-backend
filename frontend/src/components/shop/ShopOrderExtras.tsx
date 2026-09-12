@@ -1,9 +1,17 @@
 'use client';
 
-import { useState } from 'react';
-import { Download, KeyRound, Eye, EyeOff, Truck, PackageCheck, Package, Clock, CheckCircle2, Copy } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
+import {
+  Download, KeyRound, Eye, EyeOff, Truck, PackageCheck, Package, Clock, CheckCircle2, Copy,
+  LifeBuoy, FileText, RotateCcw, Loader2, AlertTriangle, X,
+} from 'lucide-react';
 import { toast } from 'sonner';
-import type { OrderResponse } from '@/lib/api/shop';
+import {
+  requestKeyReplacement, getMyKeyReplacements, downloadInvoice, getReorderItems,
+  type OrderResponse, type KeyReplacementRow, type ReorderRow,
+} from '@/lib/api/shop';
+import { useCartStore } from '@/store/cartStore';
 
 // Physical shipping lifecycle shown as a timeline.
 const SHIP_STEPS: Array<{ key: string; label: string; icon: typeof Package }> = [
@@ -54,7 +62,13 @@ function ShippingTimeline({ order }: { order: OrderResponse }) {
   );
 }
 
-function DigitalDelivery({ order }: { order: OrderResponse }) {
+function DigitalDelivery({
+  order, yeuCau, onDoiKey,
+}: {
+  order: OrderResponse;
+  yeuCau: KeyReplacementRow[];
+  onDoiKey: (itemId: number, productName: string) => void;
+}) {
   const [revealed, setRevealed] = useState<Record<number, boolean>>({});
   const digitalItems = (order.items || []).filter((it) => it.fileUrl || it.digitalContent);
   if (digitalItems.length === 0) return null;
@@ -94,7 +108,42 @@ function DigitalDelivery({ order }: { order: OrderResponse }) {
                   {revealed[it.id] ? 'Ẩn' : 'Xem tài khoản / mã'}
                 </button>
               )}
+              {/* Đổi key hỏng — trạng thái của yêu cầu hiện ngay trên nút, để
+                  người mua không gửi lại yêu cầu thứ hai vì tưởng chưa gửi. */}
+              {(() => {
+                const yc = yeuCau.find((y) => y.orderItemId === it.id);
+                if (yc?.status === 'PENDING') {
+                  return (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-medium">
+                      <Clock className="w-3.5 h-3.5" /> Đang chờ admin xử lý
+                    </span>
+                  );
+                }
+                if (yc?.status === 'APPROVED') {
+                  return (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-medium">
+                      <CheckCircle2 className="w-3.5 h-3.5" /> Đã cấp key mới
+                    </span>
+                  );
+                }
+                return (
+                  <button
+                    onClick={() => onDoiKey(it.id, it.productName)}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-darkcard border border-darkborder text-text-muted text-xs font-medium hover:border-amber-500/40 hover:text-amber-300 transition-colors"
+                  >
+                    <LifeBuoy className="w-3.5 h-3.5" /> Key không dùng được?
+                  </button>
+                );
+              })()}
             </div>
+            {(() => {
+              const yc = yeuCau.find((y) => y.orderItemId === it.id);
+              return yc?.status === 'REJECTED' && yc.adminNote ? (
+                <p className="mt-2 text-xs text-red-300/90 bg-red-500/10 border border-red-500/25 rounded-lg p-2.5">
+                  Yêu cầu đổi key bị từ chối: {yc.adminNote}
+                </p>
+              ) : null;
+            })()}
             {it.digitalContent && revealed[it.id] && (
               <div className="mt-2 relative">
                 <pre className="text-xs text-text-primary bg-darkcard border border-darkborder rounded-lg p-3 whitespace-pre-wrap break-words font-mono">{it.digitalContent}</pre>
@@ -114,18 +163,211 @@ function DigitalDelivery({ order }: { order: OrderResponse }) {
   );
 }
 
+/** Hộp thoại mô tả lỗi key. Bắt buộc ≥10 ký tự — backend cũng chặn. */
+function HopThoaiDoiKey({
+  moFor, onDong, onGui, dangGui,
+}: {
+  moFor: { itemId: number; productName: string } | null;
+  onDong: () => void;
+  onGui: (lyDo: string) => void;
+  dangGui: boolean;
+}) {
+  const [lyDo, setLyDo] = useState('');
+  useEffect(() => { if (moFor) setLyDo(''); }, [moFor]);
+  if (!moFor) return null;
+  const du = lyDo.trim().length >= 10;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70" onClick={onDong}>
+      <div
+        className="w-full max-w-md bg-darkcard border border-darkborder rounded-2xl p-5"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-start justify-between gap-3 mb-3">
+          <div className="min-w-0">
+            <h3 className="font-semibold text-text-primary">Yêu cầu đổi key</h3>
+            <p className="text-xs text-text-muted mt-0.5 break-words">{moFor.productName}</p>
+          </div>
+          <button onClick={onDong} className="text-text-muted hover:text-text-primary flex-shrink-0" aria-label="Đóng">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+        <label className="block text-xs text-text-muted mb-1.5">
+          Mô tả lỗi bạn gặp (càng cụ thể càng được xử lý nhanh)
+        </label>
+        <textarea
+          value={lyDo}
+          onChange={(e) => setLyDo(e.target.value)}
+          rows={4}
+          maxLength={2000}
+          placeholder="VD: Đăng nhập báo sai mật khẩu, đã thử 3 lần, ảnh chụp lỗi gửi qua chat hỗ trợ…"
+          className="w-full bg-darkbg border border-darkborder rounded-xl px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted/60 focus:border-neon-violet outline-none resize-none"
+        />
+        <div className="flex items-center justify-between mt-1.5 mb-4">
+          <span className={`text-xs ${du ? 'text-text-muted' : 'text-amber-400'}`}>
+            {du ? 'Đủ thông tin' : `Cần thêm ${10 - lyDo.trim().length} ký tự`}
+          </span>
+          <span className="text-xs text-text-muted">{lyDo.length}/2000</span>
+        </div>
+        <div className="flex items-start gap-2 text-xs text-text-muted bg-darkbg rounded-lg p-3 mb-4">
+          <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+          <span>Admin sẽ kiểm tra và cấp key mới từ kho nếu hợp lệ. Key cũ sẽ bị vô hiệu hoá.</span>
+        </div>
+        <button
+          onClick={() => onGui(lyDo.trim())}
+          disabled={!du || dangGui}
+          className="w-full py-3 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        >
+          {dangGui ? <><Loader2 className="w-4 h-4 animate-spin" /> Đang gửi…</> : 'Gửi yêu cầu'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 /**
- * Post-purchase extras for a shop order: digital delivery (file / account-key)
- * and, for physical orders, the shipping status timeline. Renders nothing for
- * unpaid orders (the backend only releases deliverables once PAID).
+ * Phần sau bán của một đơn shop: hàng số đã giao, timeline vận chuyển, đổi
+ * key hỏng, tải hoá đơn và mua lại.
+ *
+ * Không hiện gì với đơn CHƯA thanh toán — backend cũng chỉ nhả nội dung số
+ * khi đơn đã PAID, đây chỉ là lớp thứ hai.
  */
 export default function ShopOrderExtras({ order }: { order?: OrderResponse | null }) {
-  if (!order || order.status !== 'PAID') return null;
+  const [yeuCau, setYeuCau] = useState<KeyReplacementRow[]>([]);
+  const [hopThoai, setHopThoai] = useState<{ itemId: number; productName: string } | null>(null);
+  const [dangGui, setDangGui] = useState(false);
+  const [dangTaiHd, setDangTaiHd] = useState(false);
+  const [dangMuaLai, setDangMuaLai] = useState(false);
+  const addShopItem = useCartStore((s) => s.addShopItem);
+
+  const orderCode = order?.orderCode;
+  const daTra = order?.status === 'PAID';
+
+  const napYeuCau = useCallback(async () => {
+    if (!daTra) return;
+    try {
+      const r = await getMyKeyReplacements();
+      setYeuCau(r.data ?? []);
+    } catch { /* không lấy được thì nút đổi key vẫn bấm được, backend sẽ chặn trùng */ }
+  }, [daTra]);
+
+  useEffect(() => { napYeuCau(); }, [napYeuCau]);
+
+  if (!order || !daTra) return null;
   const isPhysical = order.orderType === 'PHYSICAL' || order.orderType === 'MIXED';
+  const cuaDon = yeuCau.filter((y) => y.orderCode === orderCode);
+
+  const guiDoiKey = async (lyDo: string) => {
+    if (!hopThoai || !orderCode) return;
+    setDangGui(true);
+    try {
+      await requestKeyReplacement(orderCode, hopThoai.itemId, lyDo);
+      toast.success('Đã gửi yêu cầu. Admin sẽ xử lý sớm nhất.');
+      setHopThoai(null);
+      await napYeuCau();
+    } catch (e) {
+      let msg = 'Không gửi được yêu cầu.';
+      try { msg = (JSON.parse((e as Error).message) as { message?: string }).message ?? msg; } catch { /* không phải JSON */ }
+      toast.error(msg);
+    } finally {
+      setDangGui(false);
+    }
+  };
+
+  const taiHoaDon = async () => {
+    if (!orderCode) return;
+    setDangTaiHd(true);
+    try {
+      await downloadInvoice(orderCode);
+    } catch {
+      toast.error('Không tải được hoá đơn. Vui lòng thử lại.');
+    } finally {
+      setDangTaiHd(false);
+    }
+  };
+
+  /**
+   * Mua lại: lấy trạng thái HIỆN TẠI của từng sản phẩm rồi mới nạp vào giỏ.
+   * Nạp thẳng theo giá cũ là bán sai giá; bỏ qua hàng đã gỡ bán là để người
+   * mua đi tới checkout rồi mới nhận lỗi.
+   */
+  const muaLai = async () => {
+    if (!orderCode) return;
+    setDangMuaLai(true);
+    try {
+      const r = await getReorderItems(orderCode);
+      const rows: ReorderRow[] = r.data ?? [];
+      const duocMua = rows.filter((x) => x.duHang && x.productId !== null);
+      const boQua = rows.length - duocMua.length;
+
+      for (const x of duocMua) {
+        for (let i = 0; i < x.quantity; i++) {
+          addShopItem({
+            id: String(x.productId),
+            name: x.name,
+            slug: x.slug ?? '',
+            price: x.giaMoi ?? x.giaCu,
+            thumbnail: x.image ?? '',
+          } as Parameters<typeof addShopItem>[0]);
+        }
+      }
+
+      if (duocMua.length === 0) {
+        toast.error('Không sản phẩm nào trong đơn này còn bán.');
+        return;
+      }
+      const doiGia = duocMua.filter((x) => x.doiGia).length;
+      toast.success(
+        `Đã thêm ${duocMua.length} sản phẩm vào giỏ.` +
+        (doiGia > 0 ? ` ${doiGia} sản phẩm đã đổi giá.` : '') +
+        (boQua > 0 ? ` ${boQua} sản phẩm bỏ qua (hết hàng hoặc ngừng bán).` : ''),
+      );
+    } catch {
+      toast.error('Không nạp lại được đơn này.');
+    } finally {
+      setDangMuaLai(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
-      <DigitalDelivery order={order} />
+      <DigitalDelivery
+        order={order}
+        yeuCau={cuaDon}
+        onDoiKey={(itemId, productName) => setHopThoai({ itemId, productName })}
+      />
       {isPhysical && <ShippingTimeline order={order} />}
+
+      <div className="flex flex-wrap gap-2">
+        <button
+          onClick={taiHoaDon}
+          disabled={dangTaiHd}
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-darkbg border border-darkborder text-text-secondary text-xs font-medium hover:border-neon-violet/40 transition-colors disabled:opacity-60"
+        >
+          {dangTaiHd ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <FileText className="w-3.5 h-3.5" />}
+          Tải hoá đơn PDF
+        </button>
+        <button
+          onClick={muaLai}
+          disabled={dangMuaLai}
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-darkbg border border-darkborder text-text-secondary text-xs font-medium hover:border-neon-violet/40 transition-colors disabled:opacity-60"
+        >
+          {dangMuaLai ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RotateCcw className="w-3.5 h-3.5" />}
+          Mua lại
+        </button>
+        <Link
+          href="/cart"
+          className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-darkbg border border-darkborder text-text-muted text-xs font-medium hover:border-neon-violet/40 transition-colors"
+        >
+          Xem giỏ hàng
+        </Link>
+      </div>
+
+      <HopThoaiDoiKey
+        moFor={hopThoai}
+        onDong={() => setHopThoai(null)}
+        onGui={guiDoiKey}
+        dangGui={dangGui}
+      />
     </div>
   );
 }

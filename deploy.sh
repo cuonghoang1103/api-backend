@@ -950,6 +950,11 @@ for route in \
     finance/wallets \
     interview/tracks \
     pro/status \
+    pro/plans \
+    wallet \
+    wallet/topup/tiers \
+    shop/key-replacements \
+    payments/bank-transfer/config \
     cv/profile \
     tech-trends/articles \
     voice \

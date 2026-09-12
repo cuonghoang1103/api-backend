@@ -206,6 +206,16 @@ export function startCronJobs(): void {
       if (count > 0) {
         logger.info('cron expired stale PENDING orders', { count, ttlMinutes });
       }
+
+      // ─── Đơn shop / nạp ví / gói Pro + lượt chuyển khoản (13/09/2026) ──
+      // Ba loại đơn này mang `expiresAt` riêng (đặt lúc tạo đơn) chứ không
+      // dùng chung TTL của khoá học, nên chúng tự biết khi nào hết hạn —
+      // ở đây chỉ quét và lật trạng thái.
+      const { donDonQuaHan } = await import('./billing.service.js');
+      const { hetHanLuotCu } = await import('./bankTransfer.service.js');
+      await donDonQuaHan();
+      const ckHetHan = await hetHanLuotCu();
+      if (ckHetHan > 0) logger.info('cron hết hạn lượt chuyển khoản chưa nhận', { count: ckHetHan });
     } catch (err) {
       logger.error('cron order cleanup failed', { error: (err as Error).message });
     }
@@ -380,7 +390,7 @@ export function startCronJobs(): void {
   'Notes trash retention daily @ 03:30 Vietnam (30 days)',
   'Weekly re-embed @ Sun 02:00 Vietnam',
   'Hourly health check',
-  `Stale PENDING order cleanup every 15 min (TTL ${ttlMinutes}m)`,
+  `Stale PENDING order cleanup every 15 min (course TTL ${ttlMinutes}m; shop/nạp ví/Pro + chuyển khoản theo expiresAt riêng)`,
   `Dashboard archive daily @ 04:00 Vietnam (archive ${archiveDays}d, purge ${purgeDays}d, completed-expiry ${COMPLETED_TASK_RETENTION_DAYS}d)`,
   'Orphaned upload cleanup every 4 hours (24h TTL, 50/batch)',
   // Nói đúng trạng thái THẬT. Dòng này từng ghi cứng "bulletin 07:30 VN" kể cả

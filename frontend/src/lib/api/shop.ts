@@ -107,6 +107,14 @@ export interface CreateOrderRequest {
   items: CreateOrderItem[];
   discountCode?: string;
   notes?: string;
+  /**
+   * Khoá chống-bấm-hai-lần. Sinh MỘT lần cho mỗi ý định đặt hàng và gửi
+   * kèm mọi lần thử lại. Backend có UNIQUE(userId, key) nên lần gửi thứ
+   * hai trả lại ĐÚNG đơn cũ thay vì tạo đơn mới.
+   *
+   * ⚠️ Sinh khoá mới ở mỗi lần bấm là vô hiệu hoá chốt này.
+   */
+  idempotencyKey?: string;
 }
 
 export interface OrderItemResponse {
@@ -657,4 +665,127 @@ export function mapProductFromBackend(bp: ProductResponse) {
     createdAt: bp.createdAt,
     tags: [],
   };
+}
+
+
+// ═══════════════════════════════════════════════════════════════════════
+// Thanh toán bằng ví · chuyển khoản · tự phục vụ sau bán (13/09/2026)
+// ═══════════════════════════════════════════════════════════════════════
+
+export interface BankTransferPayload {
+  refCode: string;
+  amountVnd: number;
+  status: string;
+  expiresAt: string | null;
+  bank: { name: string | null; bin: string | null; accountNo: string | null; accountName: string | null };
+  noiDungChuyenKhoan: string;
+  qrString: string;
+  note: string | null;
+}
+
+/** Thanh toán một đơn PENDING bằng điểm trong ví. */
+export async function payShopOrderWithPoints(
+  orderCode: string,
+): Promise<ApiResponse<{ order: OrderResponse; balance: number }>> {
+  return request(`/shop/orders/${orderCode}/pay-with-points`, { method: 'POST' });
+}
+
+/** Sinh (hoặc lấy lại) thông tin chuyển khoản cho một đơn PENDING. */
+export async function createShopBankTransfer(
+  orderCode: string,
+): Promise<ApiResponse<BankTransferPayload>> {
+  return request('/payments/bank-transfer/shop', {
+    method: 'POST',
+    body: JSON.stringify({ orderCode }),
+  });
+}
+
+export async function getBankTransferConfig(): Promise<
+  ApiResponse<{
+    enabled: boolean; bankName: string | null; bankBin: string | null;
+    accountNo: string | null; accountName: string | null; ttlMinutes: number; note: string | null;
+  }>
+> {
+  return request('/payments/bank-transfer/config');
+}
+
+export async function getBankTransferStatus(
+  refCode: string,
+): Promise<ApiResponse<{ refCode: string; status: string; amountVnd: number; confirmedAt: string | null; adminNote: string | null }>> {
+  return request(`/payments/bank-transfer/${refCode}`);
+}
+
+/** Số dư ví — dùng ở checkout để biết có trả bằng điểm được không. */
+export async function getWalletBalance(): Promise<
+  ApiResponse<{ balance: number; totalEarned: number; totalSpent: number; pointsPerVnd: number }>
+> {
+  return request('/wallet');
+}
+
+export interface KeyReplacementRow {
+  id: number;
+  orderCode: string;
+  orderItemId: number;
+  productName: string;
+  reason: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  adminNote: string | null;
+  createdAt: string;
+  resolvedAt: string | null;
+}
+
+export async function requestKeyReplacement(
+  orderCode: string,
+  itemId: number,
+  reason: string,
+): Promise<ApiResponse<{ id: number; status: string }>> {
+  return request(`/shop/orders/${orderCode}/items/${itemId}/key-replacement`, {
+    method: 'POST',
+    body: JSON.stringify({ reason }),
+  });
+}
+
+export async function getMyKeyReplacements(): Promise<ApiResponse<KeyReplacementRow[]>> {
+  return request('/shop/key-replacements');
+}
+
+export interface ReorderRow {
+  productId: number | null;
+  name: string;
+  slug: string | null;
+  image: string | null;
+  quantity: number;
+  giaCu: number;
+  giaMoi: number | null;
+  doiGia: boolean;
+  conBan: boolean;
+  tonKho: number;
+  duHang: boolean;
+}
+
+export async function getReorderItems(orderCode: string): Promise<ApiResponse<ReorderRow[]>> {
+  return request(`/shop/orders/${orderCode}/reorder`);
+}
+
+/**
+ * Tải hoá đơn PDF.
+ *
+ * Dùng fetch thẳng chứ không qua `request()` vì đáp trả là PDF nhị phân,
+ * `res.json()` sẽ nổ. Trình duyệt tự lưu file qua một thẻ <a download> tạm.
+ */
+export async function downloadInvoice(orderCode: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/shop/orders/${orderCode}/invoice`, {
+    credentials: 'include',
+  });
+  if (!res.ok) throw new Error(await res.text().catch(() => `HTTP ${res.status}`));
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `hoa-don-${orderCode}.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  // Nhả URL sau một nhịp — thu hồi ngay lập tức làm hỏng lượt tải ở Safari.
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
 }

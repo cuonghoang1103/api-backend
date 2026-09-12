@@ -355,6 +355,15 @@ model User {
   deletionRequests AccountDeletionRequest[] @relation("DeletionRequester")
   deletionReviews  AccountDeletionRequest[] @relation("DeletionReviewer")
 
+  // ─── Ví điểm · gói Pro trả phí (13/09/2026) ──────────────────────
+  // pointAccount là 1-1 (một ví cho mỗi người, tạo lười); phần còn lại
+  // là lịch sử. Xem mục 30 cuối file.
+  pointAccount      PointAccount?
+  pointTransactions PointTransaction[]
+  topupOrders       TopupOrder[]
+  proOrders         ProOrder[]
+  keyReplacements   KeyReplacementRequest[]
+
   @@index([email], name: "idx_users_email")
   @@map("users")
 }
@@ -1683,15 +1692,26 @@ model ShopOrder {
   refundedAt        DateTime? @map("refunded_at")
   refundedBy        Int?      @map("refunded_by")
   notes             String?   @db.Text
+  // ─── Thêm 13/09/2026 ────────────────────────────────────────────
+  // Số điểm đã trừ từ ví cho đơn này (0 = trả hoàn toàn bằng tiền).
+  pointsUsed        Int       @default(0) @map("points_used")
+  // Đơn chưa trả hết hạn sau ngần này thì không cho trả nữa. Chặn cảnh
+  // người mua mở tab hôm qua, hôm nay bấm trả, trong khi giá/tồn đã đổi.
+  expiresAt         DateTime? @map("expires_at")
+  // Khoá client sinh, chặn double-click đẻ ra hai đơn giống hệt.
+  idempotencyKey    String?   @map("idempotency_key") @db.VarChar(64)
   createdAt         DateTime  @default(now()) @map("created_at")
   updatedAt         DateTime  @updatedAt @map("updated_at")
 
-  user  User?           @relation(fields: [userId], references: [id])
-  items ShopOrderItem[]
+  user            User?                   @relation(fields: [userId], references: [id])
+  items           ShopOrderItem[]
+  keyReplacements KeyReplacementRequest[]
 
+  @@unique([userId, idempotencyKey], name: "uk_shop_order_idempotency")
   @@index([userId], name: "idx_orders_user")
   @@index([status], name: "idx_orders_status")
   @@index([createdAt(sort: Desc)], name: "idx_orders_created")
+  @@index([status, createdAt(sort: Desc)], name: "idx_orders_status_created")
   @@map("shop_orders")
 }
 
@@ -8648,4 +8668,308 @@ model LichThi {
 
   @@index([userId, ngay], map: "idx_lich_thi_user_ngay")
   @@map("lich_thi")
+}
+
+// ============================================================
+// 30. VÍ ĐIỂM · GÓI PRO TRẢ PHÍ · CHUYỂN KHOẢN ĐỐI SOÁT
+// ------------------------------------------------------------
+// Thêm 13/09/2026. Ba khối gắn với nhau:
+//
+//  1. VÍ ĐIỂM — người dùng nạp tiền thật, nhận ĐIỂM theo tỉ lệ
+//     CỐ ĐỊNH 1 điểm = 1 VND (xem POINTS_PER_VND ở points.service.ts).
+//     Điểm KHÔNG quy đổi ngược ra tiền, KHÔNG chuyển cho người khác,
+//     KHÔNG hết hạn. Số dư là `PointAccount.balance`, còn mọi thay đổi
+//     đều PHẢI đi qua một dòng `PointTransaction` — sổ cái là nguồn sự
+//     thật, `balance` chỉ là bản tổng hợp để đọc nhanh. Không bao giờ
+//     ghi `balance` mà không ghi kèm một dòng sổ trong CÙNG transaction.
+//
+//  2. GÓI PRO — `ProPlan` là bảng giá (1/3/6/12 tháng), `ProOrder` là
+//     một lượt mua. Trả xong → `grantProToUser(days, 'PURCHASE')`, cộng
+//     dồn lên hạn cũ nếu còn hạn.
+//
+//  3. CHUYỂN KHOẢN ĐỐI SOÁT TAY — cổng dự phòng khi PayOS chết.
+//     `BankTransfer` giữ mã tham chiếu duy nhất mà người mua phải ghi
+//     vào nội dung chuyển khoản; admin bấm xác nhận thì đơn mới được
+//     giao. `PaymentSetting` giữ thông tin tài khoản nhận (một hàng duy
+//     nhất, sửa trong trang quản trị — KHÔNG hardcode trong mã).
+//
+// Tiền VND lưu Int (đồng, không có phần lẻ) — Decimal chỉ dùng cho các
+// bảng cũ đã trót dùng. Điểm cũng là Int. Không có float ở bất cứ đâu.
+// ============================================================
+
+/// Số dư điểm của một người dùng. Một hàng cho mỗi người, tạo lười
+/// (lazy) lần đầu người đó chạm tới ví.
+model PointAccount {
+  id     Int @id @default(autoincrement())
+  userId Int @unique(map: "uk_point_account_user") @map("user_id")
+
+  /// Điểm khả dụng. LUÔN bằng tổng `amount` của mọi PointTransaction
+  /// của người này — bất biến này được kiểm bằng `npm run points:audit`.
+  balance Int @default(0)
+
+  /// Cộng dồn để hiển thị/đối soát, không tham gia tính toán số dư.
+  totalEarned Int @default(0) @map("total_earned")
+  totalSpent  Int @default(0) @map("total_spent")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("point_accounts")
+}
+
+/// Sổ cái điểm — CHỈ THÊM, không bao giờ sửa/xoá một dòng đã ghi.
+/// Muốn đảo một giao dịch thì ghi một dòng ngược dấu (kind=REFUND).
+model PointTransaction {
+  id     Int @id @default(autoincrement())
+  userId Int @map("user_id")
+
+  /// Dương = cộng điểm, âm = trừ điểm. Không bao giờ bằng 0.
+  amount       Int
+  /// Số dư NGAY SAU giao dịch này — chụp lại để dựng lại lịch sử mà
+  /// không phải cộng dồn cả sổ.
+  balanceAfter Int @map("balance_after")
+
+  /// TOPUP | BONUS | SPEND | REFUND | ADMIN_ADJUST | EXPIRE
+  kind String @db.VarChar(24)
+
+  /// Trỏ tới chứng từ gốc: TOPUP_ORDER | SHOP_ORDER | PRO_ORDER | COURSE_ORDER
+  refKind String? @map("ref_kind") @db.VarChar(24)
+  refId   Int?    @map("ref_id")
+
+  description String @db.VarChar(255)
+
+  /// Chốt chống-ghi-hai-lần. Mọi lối vào cộng/trừ điểm PHẢI truyền khoá
+  /// này (vd `topup:42`, `shop:1337`); UNIQUE ở DB là thứ thật sự chặn,
+  /// không phải câu `if` trong mã — webhook cổng thanh toán gọi lại
+  /// nhiều lần là chuyện bình thường, không phải ngoại lệ.
+  idempotencyKey String? @unique(map: "uk_point_tx_idem") @map("idempotency_key") @db.VarChar(120)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)], name: "idx_point_tx_user_created")
+  @@index([refKind, refId], name: "idx_point_tx_ref")
+  @@map("point_transactions")
+}
+
+/// Mốc nạp dựng sẵn + % thưởng. Admin sửa được, không cần deploy.
+model TopupTier {
+  id           Int     @id @default(autoincrement())
+  amountVnd    Int     @map("amount_vnd")
+  /// % điểm thưởng cộng thêm (0 = không thưởng). 10 nghĩa là +10%.
+  bonusPercent Int     @default(0) @map("bonus_percent")
+  label        String? @db.VarChar(80)
+  popular      Boolean @default(false)
+  active       Boolean @default(true)
+  sortOrder    Int     @default(0) @map("sort_order")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("point_topup_tiers")
+}
+
+/// Một lượt nạp tiền vào ví. PENDING cho tới khi cổng/admin xác nhận.
+model TopupOrder {
+  id        Int    @id @default(autoincrement())
+  orderCode String @unique(map: "uk_topup_order_code") @db.VarChar(50)
+  userId    Int    @map("user_id")
+
+  amountVnd    Int @map("amount_vnd")
+  /// Điểm gốc (= amountVnd) và điểm thưởng, tách ra để hoá đơn nói rõ.
+  basePoints   Int @map("base_points")
+  bonusPoints  Int @default(0) @map("bonus_points")
+  totalPoints  Int @map("total_points")
+  /// Chụp lại % thưởng lúc tạo đơn — mốc thưởng đổi sau đó không được
+  /// làm thay đổi đơn đã tạo.
+  bonusPercent Int @default(0) @map("bonus_percent")
+
+  /// PENDING | PAID | CANCELLED | FAILED | EXPIRED
+  status        String    @default("PENDING") @db.VarChar(20)
+  /// PAYOS | BANK_TRANSFER
+  paymentMethod String    @default("PAYOS") @map("payment_method") @db.VarChar(30)
+  paymentId     String?   @map("payment_id") @db.VarChar(120)
+  paidAt        DateTime? @map("paid_at")
+  /// Quá hạn thì không cho trả nữa (dọn bằng job, xem expireStaleOrders).
+  expiresAt     DateTime? @map("expires_at")
+
+  /// Khoá do client sinh, chặn double-click tạo hai đơn. Unique THEO
+  /// NGƯỜI để hai người vô tình trùng UUID không đạp nhau.
+  idempotencyKey String? @map("idempotency_key") @db.VarChar(64)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, idempotencyKey], name: "uk_topup_idempotency")
+  @@index([userId, status], name: "idx_topup_user_status")
+  @@index([status, createdAt(sort: Desc)], name: "idx_topup_status_created")
+  @@map("point_topup_orders")
+}
+
+/// Bảng giá Pro. Giá lưu VND; `months` quyết định số ngày được cộng.
+model ProPlan {
+  id   Int    @id @default(autoincrement())
+  code String @unique(map: "uk_pro_plan_code") @db.VarChar(30)
+  name String @db.VarChar(120)
+
+  months           Int
+  priceVnd         Int  @map("price_vnd")
+  /// Giá gốc để gạch ngang trên UI (null = không khuyến mãi).
+  originalPriceVnd Int? @map("original_price_vnd")
+
+  description String? @db.Text
+  badge       String? @db.VarChar(40)
+  popular     Boolean @default(false)
+  active      Boolean @default(true)
+  sortOrder   Int     @default(0) @map("sort_order")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  orders ProOrder[]
+
+  @@map("pro_plans")
+}
+
+/// Một lượt mua gói Pro. Trả bằng ĐIỂM hoặc bằng cổng thanh toán.
+model ProOrder {
+  id        Int    @id @default(autoincrement())
+  orderCode String @unique(map: "uk_pro_order_code") @db.VarChar(50)
+  userId    Int    @map("user_id")
+  planId    Int?   @map("plan_id")
+
+  /// Chụp lại lúc mua — đổi bảng giá sau đó không được sửa đơn cũ.
+  planCode   String @map("plan_code") @db.VarChar(30)
+  planName   String @map("plan_name") @db.VarChar(120)
+  months     Int
+  amountVnd  Int    @map("amount_vnd")
+  /// Số điểm đã trừ (khi trả bằng ví). 0 nghĩa là trả bằng cổng.
+  pointsUsed Int    @default(0) @map("points_used")
+
+  /// PENDING | PAID | CANCELLED | FAILED | EXPIRED | REFUNDED
+  status        String    @default("PENDING") @db.VarChar(20)
+  /// POINTS | PAYOS | BANK_TRANSFER
+  paymentMethod String    @default("POINTS") @map("payment_method") @db.VarChar(30)
+  paymentId     String?   @map("payment_id") @db.VarChar(120)
+  paidAt        DateTime? @map("paid_at")
+  expiresAt     DateTime? @map("expires_at")
+
+  /// Số ngày Pro thực cấp (chụp lại để đối soát khi months đổi nghĩa).
+  grantedDays Int?    @map("granted_days")
+  /// Chốt: true sau khi đã cộng hạn Pro. Webhook gọi lại không cộng lần hai.
+  granted     Boolean @default(false)
+
+  idempotencyKey String? @map("idempotency_key") @db.VarChar(64)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan ProPlan? @relation(fields: [planId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, idempotencyKey], name: "uk_pro_order_idempotency")
+  @@index([userId, status], name: "idx_pro_order_user_status")
+  @@index([status, createdAt(sort: Desc)], name: "idx_pro_order_status_created")
+  @@index([planId], name: "idx_pro_order_plan")
+  @@map("pro_subscription_orders")
+}
+
+/// Thông tin tài khoản nhận chuyển khoản + cấu hình đối soát.
+/// MỘT hàng duy nhất (id = 1), sửa trong trang quản trị.
+model PaymentSetting {
+  id Int @id @default(1)
+
+  bankTransferEnabled Boolean @default(false) @map("bank_transfer_enabled")
+  /// Mã BIN ngân hàng theo chuẩn VietQR (vd "970436" = Vietcombank).
+  bankBin             String? @map("bank_bin") @db.VarChar(20)
+  bankName            String? @map("bank_name") @db.VarChar(120)
+  bankAccountNo       String? @map("bank_account_no") @db.VarChar(40)
+  bankAccountName     String? @map("bank_account_name") @db.VarChar(120)
+  /// Số phút người mua có để chuyển khoản trước khi đơn hết hạn.
+  transferTtlMinutes  Int     @default(60) @map("transfer_ttl_minutes")
+  /// Ghi chú hiện trên trang hướng dẫn chuyển khoản.
+  note                String? @db.Text
+
+  updatedBy Int?     @map("updated_by")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("payment_settings")
+}
+
+/// Một lượt chuyển khoản chờ đối soát. `refCode` là thứ người mua PHẢI
+/// ghi vào nội dung chuyển khoản — admin dò theo nó.
+model BankTransfer {
+  id      Int    @id @default(autoincrement())
+  refCode String @unique(map: "uk_bank_transfer_ref") @map("ref_code") @db.VarChar(40)
+
+  /// SHOP | COURSE | TOPUP | PRO — đơn nào đang chờ khoản này.
+  orderKind String @map("order_kind") @db.VarChar(20)
+  orderId   Int    @map("order_id")
+  /// Mã đơn dạng chữ, để admin tra cứu không cần join.
+  orderCode String @map("order_code") @db.VarChar(50)
+
+  userId    Int? @map("user_id")
+  amountVnd Int  @map("amount_vnd")
+
+  /// AWAITING | CONFIRMED | REJECTED | EXPIRED
+  status String @default("AWAITING") @db.VarChar(20)
+
+  /// Ảnh biên lai người mua tải lên (không bắt buộc).
+  proofUrl  String? @map("proof_url") @db.VarChar(500)
+  buyerNote String? @map("buyer_note") @db.VarChar(500)
+
+  adminNote   String?   @map("admin_note") @db.VarChar(500)
+  confirmedBy Int?      @map("confirmed_by")
+  confirmedAt DateTime? @map("confirmed_at")
+  expiresAt   DateTime? @map("expires_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([status, createdAt(sort: Desc)], name: "idx_bank_transfer_status_created")
+  @@index([orderKind, orderId], name: "idx_bank_transfer_order")
+  @@index([userId], name: "idx_bank_transfer_user")
+  @@map("bank_transfer_payments")
+}
+
+/// Yêu cầu đổi key/tài khoản số bị hỏng. Duyệt thì hệ thống tự lấy một
+/// key AVAILABLE khác trong kho, gắn cho người mua và thu hồi key cũ.
+model KeyReplacementRequest {
+  id          Int @id @default(autoincrement())
+  userId      Int @map("user_id")
+  orderId     Int @map("order_id")
+  orderItemId Int @map("order_item_id")
+
+  /// Chụp lại để admin đọc mà không phải join.
+  orderCode   String @map("order_code") @db.VarChar(50)
+  productName String @map("product_name") @db.VarChar(255)
+
+  reason String @db.Text
+
+  /// PENDING | APPROVED | REJECTED
+  status String @default("PENDING") @db.VarChar(20)
+
+  /// Key cũ bị thu hồi và key mới được cấp (nếu duyệt).
+  oldKeyId Int? @map("old_key_id")
+  newKeyId Int? @map("new_key_id")
+
+  adminNote  String?   @map("admin_note") @db.VarChar(500)
+  resolvedBy Int?      @map("resolved_by")
+  resolvedAt DateTime? @map("resolved_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  order ShopOrder @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([status, createdAt(sort: Desc)], name: "idx_key_repl_status_created")
+  @@index([userId], name: "idx_key_repl_user")
+  @@index([orderItemId], name: "idx_key_repl_item")
+  @@map("product_key_replacement_requests")
 }

@@ -5017,6 +5017,319 @@ export const proAdminApi = {
   revoke: (userId: number) => api.post<{ data: ProStatus }>('/admin/pro/revoke', { userId }),
 };
 
+// ═════════════════════════════════════════════════════════════════════════
+// VÍ ĐIỂM · GÓI PRO TRẢ PHÍ · CHUYỂN KHOẢN (13/09/2026)
+// ═════════════════════════════════════════════════════════════════════════
+
+/**
+ * Khoá chống-bấm-hai-lần cho MỘT ý định mua.
+ *
+ * Sinh một lần khi người dùng bắt đầu thao tác, gửi kèm mọi lần thử lại.
+ * Backend có UNIQUE(userId, idempotencyKey) nên lần gửi thứ hai trả về
+ * ĐÚNG đơn cũ thay vì tạo đơn mới. Không có nó thì mạng chậm + người dùng
+ * bấm lại = hai đơn, và họ trả tiền hai lần.
+ */
+export function newIdempotencyKey(): string {
+  try {
+    if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) return crypto.randomUUID();
+  } catch { /* Safari cũ / ngữ cảnh không bảo mật — rơi xuống dưới */ }
+  return `k-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+}
+
+export interface WalletBalance {
+  balance: number;
+  totalEarned: number;
+  totalSpent: number;
+  pointsPerVnd: number;
+}
+
+export interface PointTx {
+  id: number;
+  amount: number;
+  balanceAfter: number;
+  kind: 'TOPUP' | 'BONUS' | 'SPEND' | 'REFUND' | 'ADMIN_ADJUST';
+  refKind: string | null;
+  refId: number | null;
+  description: string;
+  createdAt: string;
+}
+
+export interface TopupTier {
+  id: number;
+  amountVnd: number;
+  bonusPercent: number;
+  basePoints: number;
+  bonusPoints: number;
+  totalPoints: number;
+  label: string | null;
+  popular: boolean;
+}
+
+export interface TopupOrder {
+  id: number;
+  orderCode: string;
+  amountVnd: number;
+  basePoints: number;
+  bonusPoints: number;
+  totalPoints: number;
+  bonusPercent: number;
+  status: 'PENDING' | 'PAID' | 'CANCELLED' | 'FAILED' | 'EXPIRED';
+  paymentMethod: string;
+  paidAt: string | null;
+  expiresAt: string | null;
+  createdAt: string;
+}
+
+export interface BankTransferInfo {
+  refCode: string;
+  amountVnd: number;
+  status: string;
+  expiresAt: string | null;
+  bank: { name: string | null; bin: string | null; accountNo: string | null; accountName: string | null };
+  noiDungChuyenKhoan: string;
+  qrString: string;
+  note: string | null;
+}
+
+export const walletApi = {
+  balance: () => api.get<{ data: WalletBalance }>('/wallet'),
+  transactions: (page = 0, size = 20) =>
+    api.get<{ data: PointTx[]; pagination: { total: number; totalPages: number } }>(
+      `/wallet/transactions?page=${page}&size=${size}`,
+    ),
+  tiers: () =>
+    api.get<{ data: { tiers: TopupTier[]; minVnd: number; maxVnd: number; payosAvailable: boolean } }>(
+      '/wallet/topup/tiers',
+    ),
+  createTopup: (amountVnd: number, paymentMethod: 'PAYOS' | 'BANK_TRANSFER', idempotencyKey: string) =>
+    api.post<{ data: { order: TopupOrder; bank: BankTransferInfo | null } }>('/wallet/topup', {
+      amountVnd, paymentMethod, idempotencyKey,
+    }),
+  getTopup: (orderCode: string) => api.get<{ data: TopupOrder }>(`/wallet/topup/${orderCode}`),
+  listTopups: (page = 0, size = 20) =>
+    api.get<{ data: TopupOrder[] }>(`/wallet/topup?page=${page}&size=${size}`),
+  cancelTopup: (orderCode: string) => api.post(`/wallet/topup/${orderCode}/cancel`),
+  /** Sinh link PayOS cho một đơn nạp đang PENDING. */
+  payosLink: (orderCode: string) =>
+    api.post<{ data: { checkoutUrl: string; qrCode: string; orderCode: string } }>(
+      '/payments/payos/topup/create', { orderCode },
+    ),
+};
+
+export interface ProPlan {
+  id: number;
+  code: string;
+  name: string;
+  months: number;
+  priceVnd: number;
+  originalPriceVnd: number | null;
+  pricePerMonthVnd: number;
+  savingPercent: number;
+  description: string | null;
+  badge: string | null;
+  popular: boolean;
+  pointsRequired: number;
+}
+
+export interface ProOrder {
+  id: number;
+  orderCode: string;
+  planCode?: string;
+  planName: string;
+  months: number;
+  amountVnd: number;
+  pointsUsed: number;
+  status: string;
+  paymentMethod: string;
+  paidAt?: string | null;
+  createdAt?: string;
+  expiresAt?: string | null;
+}
+
+export const proBillingApi = {
+  plans: () =>
+    api.get<{ data: { plans: ProPlan[]; payosAvailable: boolean; pointsPerVnd: number } }>('/pro/plans'),
+  createOrder: (planCode: string, paymentMethod: 'POINTS' | 'PAYOS' | 'BANK_TRANSFER', idempotencyKey: string) =>
+    api.post<{
+      data: { order: ProOrder; granted: boolean; bank: BankTransferInfo | null; status: ProStatus | null };
+    }>('/pro/orders', { planCode, paymentMethod, idempotencyKey }),
+  myOrders: () => api.get<{ data: ProOrder[] }>('/pro/orders'),
+  getOrder: (orderCode: string) => api.get<{ data: ProOrder & { granted: boolean } }>(`/pro/orders/${orderCode}`),
+  cancelOrder: (orderCode: string) => api.post(`/pro/orders/${orderCode}/cancel`),
+  payosLink: (orderCode: string) =>
+    api.post<{ data: { checkoutUrl: string; qrCode: string; orderCode: string } }>(
+      '/payments/payos/pro/create', { orderCode },
+    ),
+};
+
+export const bankTransferApi = {
+  config: () =>
+    api.get<{
+      data: {
+        enabled: boolean; bankName: string | null; bankBin: string | null;
+        accountNo: string | null; accountName: string | null; ttlMinutes: number; note: string | null;
+      };
+    }>('/payments/bank-transfer/config'),
+  forShopOrder: (orderCode: string) =>
+    api.post<{ data: BankTransferInfo }>('/payments/bank-transfer/shop', { orderCode }),
+  status: (refCode: string) =>
+    api.get<{ data: { refCode: string; status: string; amountVnd: number; confirmedAt: string | null; adminNote: string | null } }>(
+      `/payments/bank-transfer/${refCode}`,
+    ),
+};
+
+// ─── Tự phục vụ sau bán ───────────────────────────────────────────────
+
+export interface KeyReplacement {
+  id: number;
+  orderCode: string;
+  orderItemId: number;
+  productName: string;
+  reason: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  adminNote: string | null;
+  createdAt: string;
+  resolvedAt: string | null;
+}
+
+export interface ReorderItem {
+  productId: number | null;
+  name: string;
+  slug: string | null;
+  image: string | null;
+  quantity: number;
+  giaCu: number;
+  giaMoi: number | null;
+  doiGia: boolean;
+  conBan: boolean;
+  tonKho: number;
+  duHang: boolean;
+}
+
+export const shopSelfServiceApi = {
+  payWithPoints: (orderCode: string) =>
+    api.post<{ data: { order: unknown; balance: number } }>(`/shop/orders/${orderCode}/pay-with-points`),
+  requestKeyReplacement: (orderCode: string, itemId: number, reason: string) =>
+    api.post<{ data: { id: number; status: string } }>(
+      `/shop/orders/${orderCode}/items/${itemId}/key-replacement`, { reason },
+    ),
+  myKeyReplacements: () => api.get<{ data: KeyReplacement[] }>('/shop/key-replacements'),
+  reorder: (orderCode: string) => api.get<{ data: ReorderItem[] }>(`/shop/orders/${orderCode}/reorder`),
+  /** Hoá đơn PDF — trả về Blob, KHÔNG phải JSON. */
+  invoiceUrl: (orderCode: string) => `/shop/orders/${orderCode}/invoice`,
+  downloadInvoice: (orderCode: string) =>
+    api.get<Blob>(`/shop/orders/${orderCode}/invoice`, { responseType: 'blob' }),
+};
+
+// ─── Quản trị thương mại ──────────────────────────────────────────────
+
+export interface CommerceDashboard {
+  khoang: { tuNgay: string; denNgay: string; soNgay: number };
+  tomTat: {
+    homNay: { tienThat: number; tongGiaTri: number };
+    bayNgay: { tienThat: number; tongGiaTri: number };
+    baMuoiNgay: { tienThat: number; tongGiaTri: number };
+    napViBaMuoiNgay: number;
+    diemDangLuuHanh: number;
+    canXuLy: { donChoThanhToan: number; chuyenKhoanChoDuyet: number; yeuCauDoiKey: number };
+  };
+  theoNgay: Array<{
+    ngay: string; tienThat: number; tieuDiem: number;
+    shop: number; course: number; pro: number; topup: number; soDon: number;
+  }>;
+  sanPhamBanChay: Array<{ name: string; slug: string | null; image: string | null; soLuong: number; doanhThu: number }>;
+  thanhToan: { tongDon: number; daTra: number; dangCho: number; huy: number; tiLeHoanTat: number; tiLeBo: number };
+}
+
+export interface PaymentSettings {
+  id: number;
+  bankTransferEnabled: boolean;
+  bankBin: string | null;
+  bankName: string | null;
+  bankAccountNo: string | null;
+  bankAccountName: string | null;
+  transferTtlMinutes: number;
+  note: string | null;
+}
+
+export interface BankTransferRow {
+  id: number;
+  refCode: string;
+  orderKind: string;
+  orderId: number;
+  orderCode: string;
+  userId: number | null;
+  amountVnd: number;
+  status: string;
+  buyerNote: string | null;
+  adminNote: string | null;
+  confirmedAt: string | null;
+  expiresAt: string | null;
+  createdAt: string;
+}
+
+export const commerceAdminApi = {
+  dashboard: (days = 30) => api.get<{ data: CommerceDashboard }>(`/admin/commerce/dashboard?days=${days}`),
+  getSettings: () => api.get<{ data: PaymentSettings }>('/admin/commerce/payment-settings'),
+  saveSettings: (data: Partial<PaymentSettings>) =>
+    api.put<{ data: PaymentSettings }>('/admin/commerce/payment-settings', data),
+  listTransfers: (params: { status?: string; q?: string; page?: number; size?: number } = {}) => {
+    const qs = new URLSearchParams();
+    if (params.status) qs.set('status', params.status);
+    if (params.q) qs.set('q', params.q);
+    qs.set('page', String(params.page ?? 0));
+    qs.set('size', String(params.size ?? 30));
+    return api.get<{ data: BankTransferRow[]; pagination: { total: number; totalPages: number } }>(
+      `/admin/commerce/bank-transfers?${qs}`,
+    );
+  },
+  confirmTransfer: (refCode: string, note?: string) =>
+    api.post<{ data: { refCode: string; fulfillment: string } }>(
+      `/admin/commerce/bank-transfers/${refCode}/confirm`, { note },
+    ),
+  rejectTransfer: (refCode: string, note?: string) =>
+    api.post(`/admin/commerce/bank-transfers/${refCode}/reject`, { note }),
+  listKeyReplacements: (status?: string) =>
+    api.get<{ data: Array<KeyReplacement & { user: { id: number; username: string; fullName: string | null; email: string } }> }>(
+      `/admin/commerce/key-replacements${status ? `?status=${status}` : ''}`,
+    ),
+  approveKeyReplacement: (id: number, note?: string) =>
+    api.post<{ data: { newKeyId: number; oldKeyId: number | null } }>(
+      `/admin/commerce/key-replacements/${id}/approve`, { note },
+    ),
+  rejectKeyReplacement: (id: number, note?: string) =>
+    api.post(`/admin/commerce/key-replacements/${id}/reject`, { note }),
+};
+
+export const walletAdminApi = {
+  listTiers: () => api.get<{ data: Array<TopupTier & { active: boolean; sortOrder: number }> }>('/admin/wallet/tiers'),
+  createTier: (d: { amountVnd: number; bonusPercent?: number; label?: string | null; popular?: boolean; active?: boolean; sortOrder?: number }) =>
+    api.post('/admin/wallet/tiers', d),
+  updateTier: (id: number, d: Record<string, unknown>) => api.put(`/admin/wallet/tiers/${id}`, d),
+  deleteTier: (id: number) => api.delete(`/admin/wallet/tiers/${id}`),
+  listTopups: (status?: string, page = 0) =>
+    api.get<{ data: TopupOrder[] }>(`/admin/wallet/topups?page=${page}${status ? `&status=${status}` : ''}`),
+  adjust: (userId: number, points: number, reason: string) =>
+    api.post<{ data: { balance: number } }>('/admin/wallet/adjust', { userId, points, reason }),
+  userWallet: (userId: number) =>
+    api.get<{ data: { wallet: unknown; transactions: PointTx[]; audit: { khop: boolean; balance: number; tongSoCai: number } } }>(
+      `/admin/wallet/users/${userId}`,
+    ),
+  audit: () =>
+    api.get<{ data: { tongSoVi: number; soViLech: number; chiTietLech: Array<{ userId: number; balance: number; tongSoCai: number }> } }>(
+      '/admin/wallet/audit',
+    ),
+};
+
+export const proPlanAdminApi = {
+  list: () => api.get<{ data: Array<ProPlan & { active: boolean; sortOrder: number }> }>('/admin/pro/plans'),
+  create: (d: Record<string, unknown>) => api.post('/admin/pro/plans', d),
+  update: (id: number, d: Record<string, unknown>) => api.put(`/admin/pro/plans/${id}`, d),
+  deactivate: (id: number) => api.delete(`/admin/pro/plans/${id}`),
+  orders: (status?: string, page = 0) =>
+    api.get<{ data: ProOrder[] }>(`/admin/pro/orders?page=${page}${status ? `&status=${status}` : ''}`),
+};
+
 // ─────────────────────────────────────────────────────────────────────────
 // Voice Hub — admin creator channel (Vlog / Reaction / Kinh nghiệm code /
 // Podcast-voice / Tutorial). Public read + auth comments/likes; admin CRUD.

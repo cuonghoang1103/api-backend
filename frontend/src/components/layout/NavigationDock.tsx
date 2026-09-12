@@ -111,6 +111,7 @@ const ALL_DOCK_ITEMS: DockItem[] = [
   // Shop (feature-flagged)
   { href: '/shop', label: 'Shop', icon: ShoppingBag, section: 'shop' },
   { href: '/my-orders', label: 'Orders', icon: Receipt, section: 'shop' },
+  { href: '/wallet', label: 'Ví điểm', icon: Wallet, section: 'shop' },
   // Account (custom-rendered block below adds Admin / Profile / Settings / Logout)
   { href: '/pro', label: 'Update Pro', icon: Crown, section: 'account' },
 ];
@@ -121,6 +122,8 @@ const ALL_DOCK_ITEMS: DockItem[] = [
 const DOCK_ITEMS: DockItem[] = ALL_DOCK_ITEMS.filter((it) => {
   if (it.href === '/shop') return SHOP_ENABLED;
   if (it.href === '/my-orders') return CART_ENABLED;
+  // Ví điểm chỉ có nghĩa khi còn chỗ tiêu điểm (shop hoặc khoá học trả phí).
+  if (it.href === '/wallet') return CART_ENABLED;
   if (it.href === '/interview') return INTERVIEW_ENABLED;
   if (it.href === '/cv') return CV_BUILDER_ENABLED;
   return true;

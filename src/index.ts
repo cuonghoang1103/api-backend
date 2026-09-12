@@ -172,6 +172,12 @@ const interviewAdminRoutes = interviewModule.adminRouter;
 const proModule = await import(path.join(__dirname, 'routes', 'pro.routes.js'));
 const proRoutes = proModule.default;
 const proAdminRoutes = proModule.adminRouter;
+// Quản trị thương mại — đối soát chuyển khoản, đổi key, doanh thu (13/09/2026)
+const commerceAdminRoutes = (await import(path.join(__dirname, 'routes', 'commerceAdmin.routes.js'))).default;
+// Ví điểm — nạp tiền, sổ cái, điều chỉnh của admin (13/09/2026)
+const walletModule = await import(path.join(__dirname, 'routes', 'wallet.routes.js'));
+const walletRoutes = walletModule.default;
+const walletAdminRoutes = walletModule.adminRouter;
 // CV Builder — honest IT-focused CV builder (master profile CRUD + later AI)
 const cvModule = await import(path.join(__dirname, 'routes', 'cvBuilder.routes.js'));
 const cvRoutes = cvModule.default;
@@ -592,6 +598,9 @@ app.use('/api/v1/interview', interviewRoutes);
 app.use('/api/v1/admin/interview', interviewAdminRoutes);
 app.use('/api/v1/pro', proRoutes);
 app.use('/api/v1/admin/pro', proAdminRoutes);
+app.use('/api/v1/wallet', walletRoutes);
+app.use('/api/v1/admin/wallet', walletAdminRoutes);
+app.use('/api/v1/admin/commerce', commerceAdminRoutes);
 // Public CV router FIRST — the main cv router applies `authenticate` to
 // everything under it, so the two opt-in public paths must be matched before
 // it. Off by default; see services/cv/publicCv.service.ts.

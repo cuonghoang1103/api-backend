@@ -7,9 +7,12 @@
  * Academy access — see the gating call-sites (canAccessMusic, resolveEngineMode,
  * streamChat, assertCanAccessCourseContent).
  *
- * Admins are ALWAYS effectively Pro (highest tier), no code needed. A ProCode is
- * a global redeemable code (unlike per-course CourseCode) that an admin creates;
- * a user redeems it, or an admin grants Pro directly.
+ * Admins are ALWAYS effectively Pro (highest tier), no code needed. Pro is
+ * obtained three ways, recorded in `proSource`:
+ *   CODE     — user redeems a ProCode an admin created
+ *   ADMIN    — an admin grants it directly
+ *   PURCHASE — user bought a ProPlan (ví điểm / PayOS / chuyển khoản),
+ *              see billing.service.ts. Added 13/09/2026.
  *
  * `proExpiresAt = null` while `isPro = true` means a LIFETIME membership.
  */
@@ -100,7 +103,7 @@ export const isProForDisplay = isProEffective;
  * time-limited membership adds days onto the later of now / current expiry; a
  * lifetime membership stays lifetime.
  */
-export async function grantProToUser(userId: number, durationDays: number | null, source: 'CODE' | 'ADMIN'): Promise<ProStatus> {
+export async function grantProToUser(userId: number, durationDays: number | null, source: 'CODE' | 'ADMIN' | 'PURCHASE'): Promise<ProStatus> {
   const u = await prisma.user.findUnique({ where: { id: userId }, select: { isPro: true, proExpiresAt: true, proSince: true } });
   if (!u) throw new NotFoundError('User không tồn tại');
 

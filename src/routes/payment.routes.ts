@@ -39,6 +39,10 @@ import { logger } from '../utils/logger.js';
 import { config } from '../config/env.js';
 import { createPayosLink, getPayosLink, getPayosStatus, verifyPayosWebhook, isPayosConfigured } from '../config/payos.js';
 import { markShopOrderPaidAndFulfill, PAYOS_SHOP_ORDER_OFFSET } from '../services/shopFulfillment.js';
+import { phanLoai, maPayos } from '../services/payosOrderCodes.js';
+import { capNhatDonNapDaTra, capNhatDonProDaTra } from '../services/billing.service.js';
+import { taoChuyenKhoan, layCauHinhCongKhai } from '../services/bankTransfer.service.js';
+import { topupLimiter, proOrderLimiter } from '../middleware/orderRateLimit.js';
 import {
   buildCoursePaymentUrl,
   buildVnpayPaymentUrl,
@@ -656,7 +660,9 @@ router.post('/create-qr', orderCreateLimiter, authenticate, async (req: Request,
 // ─── PayOS (primary course payment gateway) ─────────────────
 // Reusable: mark a course order PAID and enroll the buyer. Atomic
 // PENDING→PAID guard makes it idempotent (safe under webhook retries).
-async function markCourseOrderPaidAndEnroll(orderId: number, meta: { txnNo?: string; payDate?: Date; amountPaid?: number }): Promise<'paid' | 'already' | 'notfound' | 'amount_mismatch'> {
+// Xuất ra ngoài để đường ĐỐI SOÁT CHUYỂN KHOẢN gọi lại đúng hàm này thay
+// vì tự viết một đường ghi danh thứ hai. Một luồng giao hàng, không hai.
+export async function markCourseOrderPaidAndEnroll(orderId: number, meta: { txnNo?: string; payDate?: Date; amountPaid?: number }): Promise<'paid' | 'already' | 'notfound' | 'amount_mismatch'> {
   const order = await prisma.courseOrder.findUnique({ where: { id: orderId } });
   if (!order) return 'notfound';
   if (order.status === 'PAID') return 'already';
@@ -809,32 +815,40 @@ router.post('/payos/webhook', async (req: Request, res: Response) => {
 
     const data = body.data;
     const payosCode = Number(data.orderCode);
-    const isShop = payosCode >= PAYOS_SHOP_ORDER_OFFSET;
     if (payosCode) {
       const paid = String(data.code) === '00';
-      if (isShop) {
-        const shopOrderId = payosCode - PAYOS_SHOP_ORDER_OFFSET;
+      const txnNo = String(data.reference || data.paymentLinkId || '');
+      const amountPaid = Number(data.amount);
+      // Bốn loại đơn nằm trên bốn dải mã rời nhau — xem payosOrderCodes.ts.
+      const { loai, id } = phanLoai(payosCode);
+
+      if (loai === 'SHOP') {
         if (paid) {
-          await markShopOrderPaidAndFulfill(shopOrderId, {
-            txnNo: String(data.reference || data.paymentLinkId || ''),
-            payDate: new Date(),
-            amountPaid: Number(data.amount),
-            method: 'PAYOS',
-          });
-          logger.info('payos webhook shop PAID', { shopOrderId, ref: data.reference });
+          await markShopOrderPaidAndFulfill(id, { txnNo, payDate: new Date(), amountPaid, method: 'PAYOS' });
+          logger.info('payos webhook shop PAID', { shopOrderId: id, ref: data.reference });
         } else {
-          const o = await prisma.shopOrder.findUnique({ where: { id: shopOrderId }, select: { id: true, status: true } });
+          const o = await prisma.shopOrder.findUnique({ where: { id }, select: { id: true, status: true } });
           if (o && o.status === 'PENDING') await prisma.shopOrder.update({ where: { id: o.id }, data: { status: 'CANCELLED', paymentStatus: 'FAILED' } });
         }
+      } else if (loai === 'TOPUP') {
+        if (paid) {
+          const kq = await capNhatDonNapDaTra(id, { paymentId: txnNo, amountPaid, method: 'PAYOS' });
+          logger.info('payos webhook topup', { topupOrderId: id, ketQua: kq });
+        } else {
+          await prisma.topupOrder.updateMany({ where: { id, status: 'PENDING' }, data: { status: 'FAILED' } });
+        }
+      } else if (loai === 'PRO') {
+        if (paid) {
+          const kq = await capNhatDonProDaTra(id, { paymentId: txnNo, amountPaid, method: 'PAYOS' });
+          logger.info('payos webhook pro', { proOrderId: id, ketQua: kq });
+        } else {
+          await prisma.proOrder.updateMany({ where: { id, status: 'PENDING' }, data: { status: 'FAILED' } });
+        }
       } else if (paid) {
-        await markCourseOrderPaidAndEnroll(payosCode, {
-          txnNo: String(data.reference || data.paymentLinkId || ''),
-          payDate: new Date(),
-          amountPaid: Number(data.amount),
-        });
-        logger.info('payos webhook PAID', { orderId: payosCode, ref: data.reference });
+        await markCourseOrderPaidAndEnroll(id, { txnNo, payDate: new Date(), amountPaid });
+        logger.info('payos webhook PAID', { orderId: id, ref: data.reference });
       } else {
-        const o = await prisma.courseOrder.findUnique({ where: { id: payosCode }, select: { id: true, status: true } });
+        const o = await prisma.courseOrder.findUnique({ where: { id }, select: { id: true, status: true } });
         if (o && o.status === 'PENDING') await prisma.courseOrder.update({ where: { id: o.id }, data: { status: 'FAILED' } });
       }
     }
@@ -1643,6 +1657,143 @@ router.post(
     }
   },
 );
+
+// ═══════════════════════════════════════════════════════════════════════
+// PayOS cho NẠP VÍ và MUA GÓI PRO (13/09/2026)
+// ═══════════════════════════════════════════════════════════════════════
+//
+// Cùng hình dạng với /payos/shop/create: đơn PENDING đã có sẵn, ở đây chỉ
+// sinh link thanh toán. Việc cộng điểm / cấp Pro nằm ở webhook, KHÔNG ở
+// đây — người dùng đóng tab giữa chừng thì tiền vẫn về đúng chỗ.
+
+/** Body: { orderCode } → { checkoutUrl, qrCode, orderCode } */
+router.post('/payos/topup/create', topupLimiter, authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    if (!isPayosConfigured()) throw new AppError('PayOS chua duoc cau hinh', 503, 'PAYOS_NOT_CONFIGURED');
+    const orderCode = String((req.body as { orderCode?: unknown })?.orderCode || '');
+    const order = await prisma.topupOrder.findUnique({ where: { orderCode } });
+    if (!order) throw new AppError('Don nap khong ton tai', 404);
+    if (order.userId !== req.userId!) throw new AppError('Ban khong co quyen thanh toan don nay', 403);
+    if (order.status !== 'PENDING') throw new AppError(`Don nap da o trang thai ${order.status}`, 409);
+    if (order.expiresAt && order.expiresAt < new Date()) throw new AppError('Don nap da het han, vui long tao don moi', 409);
+
+    const payosCode = maPayos('TOPUP', order.id);
+    const returnUrl = `${config.frontendUrl}/wallet?topup=${encodeURIComponent(order.orderCode)}`;
+    const cancelUrl = `${config.frontendUrl}/wallet?topup=${encodeURIComponent(order.orderCode)}&cancel=1`;
+
+    let link;
+    try {
+      link = await createPayosLink({
+        orderCode: payosCode,
+        amount: order.amountVnd,
+        description: `Nap vi #${order.id}`,
+        returnUrl,
+        cancelUrl,
+      });
+    } catch (e) {
+      if ((e as Error & { payosCode?: string })?.payosCode === '231') link = await getPayosLink(payosCode);
+      if (!link) throw e;
+    }
+
+    await prisma.topupOrder.update({ where: { id: order.id }, data: { paymentMethod: 'PAYOS' } });
+    res.json({ success: true, data: { checkoutUrl: link.checkoutUrl, qrCode: link.qrCode, orderCode: order.orderCode } });
+  } catch (error) { next(error); }
+});
+
+/** Body: { orderCode } → { checkoutUrl, qrCode, orderCode } */
+router.post('/payos/pro/create', proOrderLimiter, authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    if (!isPayosConfigured()) throw new AppError('PayOS chua duoc cau hinh', 503, 'PAYOS_NOT_CONFIGURED');
+    const orderCode = String((req.body as { orderCode?: unknown })?.orderCode || '');
+    const order = await prisma.proOrder.findUnique({ where: { orderCode } });
+    if (!order) throw new AppError('Don khong ton tai', 404);
+    if (order.userId !== req.userId!) throw new AppError('Ban khong co quyen thanh toan don nay', 403);
+    if (order.status !== 'PENDING') throw new AppError(`Don da o trang thai ${order.status}`, 409);
+    if (order.expiresAt && order.expiresAt < new Date()) throw new AppError('Don da het han, vui long tao don moi', 409);
+
+    const payosCode = maPayos('PRO', order.id);
+    const returnUrl = `${config.frontendUrl}/pro?order=${encodeURIComponent(order.orderCode)}`;
+    const cancelUrl = `${config.frontendUrl}/pro?order=${encodeURIComponent(order.orderCode)}&cancel=1`;
+
+    let link;
+    try {
+      link = await createPayosLink({
+        orderCode: payosCode,
+        amount: order.amountVnd,
+        description: `Goi Pro #${order.id}`,
+        returnUrl,
+        cancelUrl,
+      });
+    } catch (e) {
+      if ((e as Error & { payosCode?: string })?.payosCode === '231') link = await getPayosLink(payosCode);
+      if (!link) throw e;
+    }
+
+    await prisma.proOrder.update({ where: { id: order.id }, data: { paymentMethod: 'PAYOS' } });
+    res.json({ success: true, data: { checkoutUrl: link.checkoutUrl, qrCode: link.qrCode, orderCode: order.orderCode } });
+  } catch (error) { next(error); }
+});
+
+// ═══════════════════════════════════════════════════════════════════════
+// CHUYỂN KHOẢN NGÂN HÀNG — cổng dự phòng (13/09/2026)
+// ═══════════════════════════════════════════════════════════════════════
+
+/** Thông tin tài khoản nhận + trạng thái bật/tắt. CÔNG KHAI. */
+router.get('/bank-transfer/config', async (_req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    res.json({ success: true, data: await layCauHinhCongKhai() });
+  } catch (error) { next(error); }
+});
+
+/**
+ * Tạo (hoặc lấy lại) lượt chuyển khoản cho một đơn SHOP đang PENDING.
+ * Body: { orderCode }
+ */
+router.post('/bank-transfer/shop', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const orderCode = String((req.body as { orderCode?: unknown })?.orderCode || '');
+    const order = await prisma.shopOrder.findUnique({ where: { orderCode } });
+    if (!order) throw new AppError('Don hang khong ton tai', 404);
+    if (order.userId !== null && order.userId !== req.userId!) throw new AppError('Ban khong co quyen thanh toan don nay', 403);
+    if (order.status !== 'PENDING') throw new AppError(`Don hang da o trang thai ${order.status}`, 409);
+
+    // Gắn đơn cho người đang đăng nhập nếu nó còn mồ côi, để /orders/my thấy.
+    if (order.userId === null && req.userId) {
+      await prisma.shopOrder.update({ where: { id: order.id }, data: { userId: req.userId } });
+    }
+    await prisma.shopOrder.update({ where: { id: order.id }, data: { paymentMethod: 'BANK_TRANSFER' } });
+
+    res.json({
+      success: true,
+      data: await taoChuyenKhoan({
+        orderKind: 'SHOP',
+        orderId: order.id,
+        orderCode: order.orderCode,
+        userId: req.userId!,
+        amountVnd: Math.round(Number(order.total)),
+      }),
+    });
+  } catch (error) { next(error); }
+});
+
+/** Tra trạng thái một lượt chuyển khoản theo mã tham chiếu. */
+router.get('/bank-transfer/:refCode', authenticate, async (req: Request, res: Response<ApiResponse>, next) => {
+  try {
+    const row = await prisma.bankTransfer.findUnique({ where: { refCode: String(req.params.refCode).toUpperCase() } });
+    if (!row) throw new AppError('Khong tim thay luot chuyen khoan', 404);
+    if (row.userId !== null && row.userId !== req.userId!) throw new AppError('Khong tim thay luot chuyen khoan', 404);
+    res.json({
+      success: true,
+      data: {
+        refCode: row.refCode, status: row.status, amountVnd: row.amountVnd,
+        orderKind: row.orderKind, orderCode: row.orderCode,
+        expiresAt: row.expiresAt?.toISOString() ?? null,
+        confirmedAt: row.confirmedAt?.toISOString() ?? null,
+        adminNote: row.adminNote,
+      },
+    });
+  } catch (error) { next(error); }
+});
 
 export default router;
 

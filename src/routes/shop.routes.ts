@@ -5,9 +5,17 @@ import { prisma } from '../config/database.js';
 import { authenticate, optionalAuth, requireAdmin } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import type { ApiResponse } from '../types/index.js';
-import { reconcilePayosShopOrder, PAYOS_SHOP_ORDER_OFFSET } from '../services/shopFulfillment.js';
+import { reconcilePayosShopOrder, PAYOS_SHOP_ORDER_OFFSET, markShopOrderPaidAndFulfill } from '../services/shopFulfillment.js';
+import { shopOrderLimiter, keyReplacementLimiter } from '../middleware/orderRateLimit.js';
+import { truDiem, hoanDiem, laySoDu } from '../services/points.service.js';
+import { logger } from '../utils/logger.js';
 
 const router = Router();
+
+// Đơn chưa thanh toán sống bao lâu (phút). Hết hạn thì không trả được nữa —
+// chặn cảnh người mua mở tab hôm qua, hôm nay bấm trả trong khi giá và tồn
+// kho đã đổi. Dọn định kỳ bằng `donDonQuaHan()` ở billing.service.ts.
+const ORDER_TTL_MINUTES = parseInt(process.env.SHOP_ORDER_TTL_MINUTES || '60', 10);
 
 // Flat shipping fee for physical goods, waived over a threshold. Env-overridable.
 const SHIPPING_FLAT_FEE = Number(process.env.SHIPPING_FLAT_FEE ?? 30000);
@@ -1027,30 +1035,88 @@ router.get('/discount/:code', async (req, res: Response<ApiResponse>, next) => {
 });
 
 // ─── POST /api/v1/shop/orders ────────────────────────
-router.post('/orders', async (req, res: Response<ApiResponse>, next) => {
+/**
+ * ─── POST /api/v1/shop/orders ─────────────────────────────────────────
+ * Tạo đơn hàng. BẮT BUỘC ĐĂNG NHẬP (đổi ngày 13/09/2026).
+ *
+ * Trước đây đây là route mở cho khách vãng lai. Bỏ đi vì hai lý do:
+ *  - bất kỳ ai cũng bơm được đơn PENDING rác vào DB production;
+ *  - đơn không gắn tài khoản thì người mua không có đường nào tự xem lại
+ *    key đã mua hay yêu cầu đổi key hỏng — toàn bộ phần tự phục vụ sau
+ *    bán đều cần biết đơn này của ai.
+ *
+ * Body: { buyerName, buyerEmail, buyerPhone?, buyerAddress?, shippingProvince?,
+ *         items: [{ productId, quantity }], discountCode?, idempotencyKey? }
+ *
+ * BỐN CHỐT CHỐNG LỖI TIỀN BẠC:
+ *  1. GIÁ luôn đọc từ DB, không bao giờ nhận từ client.
+ *  2. `idempotencyKey` + UNIQUE(user, key) ở DB → bấm mua hai lần chỉ ra
+ *     một đơn. Bộ giới hạn tốc độ KHÔNG thay thế được chốt này: hai cú
+ *     bấm cách nhau 200ms vẫn nằm gọn trong hạn mức.
+ *  3. Sản phẩm đã TẮT hoặc HẾT HÀNG bị từ chối ngay khi tạo đơn — trước
+ *     đây chỉ `findUnique` nên đặt được cả hàng đã gỡ bán.
+ *  4. Đơn có hạn (`expiresAt`); quá hạn thì không trả được nữa.
+ */
+router.post('/orders', authenticate, shopOrderLimiter, async (req: any, res: Response<ApiResponse>, next) => {
   try {
+    const userId = req.userId as number;
     const { buyerName, buyerEmail, buyerPhone, buyerAddress, shippingProvince, items, discountCode } = req.body;
+    const idempotencyKey = req.body?.idempotencyKey ? String(req.body.idempotencyKey).slice(0, 64) : null;
 
     if (!buyerName || !buyerEmail || !items?.length) {
-      throw new AppError('Missing required fields', 400);
+      throw new AppError('Thiếu thông tin bắt buộc', 400);
+    }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(buyerEmail))) {
+      throw new AppError('Email không hợp lệ', 400);
+    }
+    if (items.length > 50) throw new AppError('Một đơn tối đa 50 dòng sản phẩm', 400);
+
+    // ── Chốt 2: cùng khoá → trả lại ĐÚNG đơn cũ, không đẻ đơn thứ hai ──
+    if (idempotencyKey) {
+      const cu = await prisma.shopOrder.findUnique({
+        where: { uk_shop_order_idempotency: { userId, idempotencyKey } },
+        include: { items: true },
+      });
+      if (cu) { res.status(200).json({ success: true, data: cu }); return; }
     }
 
-    // Calculate totals
+    // Gộp các dòng trùng productId trước khi tính — client gửi cùng một
+    // sản phẩm ở hai dòng thì phải cộng số lượng lại rồi mới đối chiếu
+    // tồn kho, chứ không kiểm từng dòng riêng (mỗi dòng đều "đủ hàng"
+    // nhưng tổng thì vượt).
+    const gop = new Map<number, number>();
+    for (const it of items) {
+      const pid = Number(it.productId);
+      const qty = Number(it.quantity);
+      if (!Number.isInteger(pid) || pid <= 0) throw new AppError('productId không hợp lệ', 400);
+      if (!Number.isInteger(qty) || qty < 1 || qty > 1000) throw new AppError('Số lượng không hợp lệ', 400);
+      gop.set(pid, (gop.get(pid) ?? 0) + qty);
+    }
+
     let subtotal = 0;
     const orderItems = [];
     let hasPhysical = false;
     let hasDigital = false;
 
-    for (const item of items) {
-      // Validate quantity — a client-controlled multiplier. Reject
-      // non-positive / non-integer / absurd values (negative would flip the
-      // total negative; huge would DoS / oversell).
-      const qty = Number(item.quantity);
-      if (!Number.isInteger(qty) || qty < 1 || qty > 1000) {
-        throw new AppError('So luong khong hop le', 400);
+    for (const [productId, qty] of gop) {
+      const product = await prisma.product.findUnique({ where: { id: productId } });
+      if (!product) throw new AppError(`Sản phẩm #${productId} không tồn tại`, 404);
+
+      // ── Chốt 3 ──
+      if (!product.active) {
+        throw new AppError(`"${product.name}" đã ngừng bán`, 409, 'PRODUCT_INACTIVE');
       }
-      const product = await prisma.product.findUnique({ where: { id: item.productId } });
-      if (!product) throw new AppError(`Product ${item.productId} not found`, 404);
+      if (product.stockQuantity < qty) {
+        throw new AppError(
+          product.stockQuantity <= 0
+            ? `"${product.name}" đã hết hàng`
+            : `"${product.name}" chỉ còn ${product.stockQuantity} sản phẩm`,
+          409,
+          'OUT_OF_STOCK',
+        );
+      }
+
+      // ── Chốt 1: giá LẤY TỪ DB ──
       const itemTotal = Number(product.price) * qty;
       subtotal += itemTotal;
       const pType = normalizeProductType(product.type);
@@ -1063,33 +1129,31 @@ router.post('/orders', async (req, res: Response<ApiResponse>, next) => {
         quantity: qty,
         total: itemTotal,
         productType: pType,
-        // The digital deliverable (fileUrl / digitalContent) is copied onto the
-        // item ONLY at fulfillment (payment) — never on an unpaid order, or the
-        // owner could read it before paying.
+        // Hàng số chỉ được gắn vào dòng đơn LÚC THANH TOÁN XONG — gắn sớm
+        // là chính chủ đơn đọc được key trước khi trả tiền.
         fileUrl: null,
         digitalContent: null,
       });
     }
 
-    // Physical goods require a delivery address.
     if (hasPhysical && !String(buyerAddress || '').trim()) {
-      throw new AppError('Vui long nhap dia chi giao hang cho san pham vat ly', 400);
+      throw new AppError('Vui lòng nhập địa chỉ giao hàng cho sản phẩm vật lý', 400);
     }
     const orderType = hasPhysical && hasDigital ? 'MIXED' : hasPhysical ? 'PHYSICAL' : 'DIGITAL';
 
     let discountAmount = 0;
     if (discountCode) {
-      const discount = await prisma.discountCode.findUnique({ where: { code: discountCode } });
+      const discount = await prisma.discountCode.findUnique({ where: { code: String(discountCode) } });
       const now = new Date();
       const usable = discount
         && discount.active
         && (!discount.startsAt || discount.startsAt <= now)
         && (!discount.expiresAt || discount.expiresAt > now)
         && (discount.maxUses === null || discount.usedCount < discount.maxUses)
-        && (discount.userId === null); // shop coupons must be public (not user-scoped)
+        && (discount.userId === null); // mã của shop phải là mã công khai
       if (usable && discount) {
         if (discount.minOrderAmount && subtotal < Number(discount.minOrderAmount)) {
-          throw new AppError(`Minimum order amount is ${discount.minOrderAmount}`, 400);
+          throw new AppError(`Đơn tối thiểu ${Number(discount.minOrderAmount).toLocaleString('vi-VN')}đ mới dùng được mã này`, 400);
         }
         if (discount.discountType === 'PERCENT') {
           discountAmount = subtotal * Number(discount.discountValue) / 100;
@@ -1097,43 +1161,141 @@ router.post('/orders', async (req, res: Response<ApiResponse>, next) => {
             discountAmount = Number(discount.maxDiscountAmount);
           }
         } else {
-          // FIXED — never exceed the subtotal, or the total goes negative.
+          // FIXED — không bao giờ vượt quá tiền hàng, kẻo tổng thành số âm.
           discountAmount = Math.min(Number(discount.discountValue), subtotal);
         }
       }
     }
 
-    // Clamp so a discount can never make the goods total negative, then add
-    // shipping (physical only, waived over the free-ship threshold).
     const goodsTotal = Math.max(0, subtotal - discountAmount);
     const shippingFee = computeShippingFee(hasPhysical, goodsTotal);
     const total = goodsTotal + shippingFee;
     const orderCode = `ORD-${Date.now()}-${nanoid(6).toUpperCase()}`;
 
-    const order = await prisma.shopOrder.create({
-      data: {
-        orderCode,
-        buyerName,
-        buyerEmail,
-        buyerPhone,
-        buyerAddress,
-        shippingProvince: shippingProvince?.trim() || null,
-        subtotal,
-        discountAmount,
-        discountCode,
-        shippingFee,
-        total,
-        orderType,
-        // Digital-only orders are "fulfilled" the moment they're paid; physical
-        // orders start their shipping lifecycle at PROCESSING (set on payment).
-        fulfillmentStatus: 'PENDING',
-        status: 'PENDING',
-        items: { create: orderItems },
-      },
-      include: { items: true },
+    try {
+      const order = await prisma.shopOrder.create({
+        data: {
+          orderCode,
+          userId,
+          buyerName: String(buyerName).slice(0, 255),
+          buyerEmail: String(buyerEmail).slice(0, 255),
+          buyerPhone: buyerPhone ? String(buyerPhone).slice(0, 50) : null,
+          buyerAddress: buyerAddress ? String(buyerAddress) : null,
+          shippingProvince: shippingProvince?.trim() || null,
+          subtotal,
+          discountAmount,
+          discountCode: discountCode ? String(discountCode) : null,
+          shippingFee,
+          total,
+          orderType,
+          fulfillmentStatus: 'PENDING',
+          status: 'PENDING',
+          // ── Chốt 4 ──
+          expiresAt: new Date(Date.now() + ORDER_TTL_MINUTES * 60_000),
+          idempotencyKey,
+          items: { create: orderItems },
+        },
+        include: { items: true },
+      });
+
+      res.status(201).json({ success: true, data: order });
+    } catch (e) {
+      // Cuộc đua double-click: lượt thua đọc lại đơn của lượt thắng thay vì
+      // ném lỗi vào mặt người dùng — với họ, cú bấm đã thành công.
+      if ((e as { code?: string })?.code === 'P2002' && idempotencyKey) {
+        const cu = await prisma.shopOrder.findUnique({
+          where: { uk_shop_order_idempotency: { userId, idempotencyKey } },
+          include: { items: true },
+        });
+        if (cu) { res.status(200).json({ success: true, data: cu }); return; }
+      }
+      throw e;
+    }
+  } catch (error) { next(error); }
+});
+
+/**
+ * ─── POST /api/v1/shop/orders/:code/pay-with-points ───────────────────
+ * Thanh toán một đơn PENDING bằng ví điểm.
+ *
+ * Trừ điểm và giao hàng nằm trong CÙNG một transaction ở tầng dưới:
+ * `truDiem` ném lỗi khi không đủ → không có gì được ghi. Ngược lại, nếu
+ * đã trừ điểm thì `markShopOrderPaidAndFulfill` chạy ngay sau đó với
+ * `amountPaid` đúng bằng tổng đơn nên chốt đối chiếu số tiền vẫn đúng.
+ */
+router.post('/orders/:code/pay-with-points', authenticate, shopOrderLimiter, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const userId = req.userId as number;
+    const order = await prisma.shopOrder.findUnique({ where: { orderCode: String(req.params.code) } });
+    if (!order) throw new AppError('Đơn hàng không tồn tại', 404);
+    if (order.userId !== userId) throw new AppError('Đơn hàng không tồn tại', 404);
+    if (order.status !== 'PENDING') throw new AppError(`Đơn đang ở trạng thái ${order.status}`, 409);
+    if (order.expiresAt && order.expiresAt < new Date()) {
+      throw new AppError('Đơn đã hết hạn thanh toán, vui lòng đặt lại', 409, 'ORDER_EXPIRED');
+    }
+
+    const canTra = Math.round(Number(order.total));
+    if (!(canTra > 0)) throw new AppError('Giá trị đơn hàng không hợp lệ', 400);
+
+    // Trừ điểm TRƯỚC, giao hàng SAU. Thứ tự ngược lại (giao trước) thì hàng
+    // đã ra khỏi kho mà có thể không thu được điểm — tệ hơn nhiều.
+    //
+    // `applied` cho biết lượt trừ này có THẬT SỰ xảy ra không. Gọi lại cùng
+    // một đơn (người dùng bấm hai lần, mạng gửi lại) thì khoá `shop:<id>`
+    // trả về applied=false và KHÔNG trừ thêm lần nữa.
+    const viTru = await truDiem({
+      userId,
+      points: canTra,
+      kind: 'SPEND',
+      refKind: 'SHOP_ORDER',
+      refId: order.id,
+      description: `Thanh toán đơn ${order.orderCode}`,
+      idempotencyKey: `shop:${order.id}`,
     });
 
-    res.status(201).json({ success: true, data: order });
+    await prisma.shopOrder.update({
+      where: { id: order.id },
+      data: { paymentMethod: 'POINTS', pointsUsed: canTra },
+    });
+
+    const kq = await markShopOrderPaidAndFulfill(order.id, {
+      txnNo: `POINTS:${order.id}`,
+      payDate: new Date(),
+      amountPaid: canTra,
+      method: 'POINTS',
+    });
+
+    // ── Đường cứu tiền ────────────────────────────────────────────────
+    // Hai tình huống phải HOÀN ĐIỂM NGAY, đều là lúc điểm đã trừ thật
+    // (`applied`) nhưng đơn không phải do lượt này thanh toán:
+    //
+    //  - `already`: một cách trả khác (webhook PayOS về đúng lúc, admin xác
+    //    nhận chuyển khoản) đã thanh toán đơn này trước. Người mua vừa bị
+    //    tính tiền hai lần — trả lại điểm.
+    //  - `notfound` / `amount_mismatch`: giao hàng không chạy. Giữ điểm lại
+    //    là giữ tiền của người ta mà không đưa hàng.
+    //
+    // `hoanDiem` idempotent theo chính đơn này nên gọi lại không hoàn hai lần.
+    if (viTru.applied && kq !== 'paid') {
+      await hoanDiem(userId, canTra, 'SHOP_ORDER', order.id, `Hoàn điểm đơn ${order.orderCode} (không giao được)`);
+      await prisma.shopOrder.update({ where: { id: order.id }, data: { pointsUsed: 0 } });
+      logger.error('[shop] đã trừ điểm nhưng đơn KHÔNG do lượt này thanh toán — đã hoàn điểm', {
+        orderCode: order.orderCode, userId, diem: canTra, ketQua: kq,
+      });
+      throw new AppError(
+        kq === 'already'
+          ? 'Đơn này đã được thanh toán bằng cách khác. Điểm đã được hoàn lại vào ví của bạn.'
+          : 'Không giao được đơn hàng. Điểm đã được hoàn lại vào ví của bạn.',
+        409,
+        'ORDER_ALREADY_PAID',
+      );
+    }
+
+    const daGiao = await prisma.shopOrder.findUnique({
+      where: { id: order.id },
+      include: { items: true },
+    });
+    res.json({ success: true, data: { order: daGiao, balance: await laySoDu(userId) } });
   } catch (error) { next(error); }
 });
 
@@ -1275,6 +1437,162 @@ router.get('/orders/:code', optionalAuth, async (req: any, res: Response<ApiResp
         })),
       },
     });
+  } catch (error) { next(error); }
+});
+
+// ═══════════════════════════════════════════════════════════════════════
+// TỰ PHỤC VỤ SAU BÁN (13/09/2026)
+// ═══════════════════════════════════════════════════════════════════════
+
+/**
+ * ─── POST /api/v1/shop/orders/:code/items/:itemId/key-replacement ─────
+ * Yêu cầu đổi key/tài khoản hỏng.
+ *
+ * Chỉ mở cho: chính chủ · đơn đã PAID · dòng hàng là HÀNG SỐ · chưa có
+ * yêu cầu nào đang chờ cho đúng dòng đó. Bốn điều kiện đều cần: thiếu cái
+ * cuối thì người mua gửi mười yêu cầu và admin duyệt nhầm thành mười key.
+ */
+router.post(
+  '/orders/:code/items/:itemId/key-replacement',
+  authenticate,
+  keyReplacementLimiter,
+  async (req: any, res: Response<ApiResponse>, next) => {
+    try {
+      const userId = req.userId as number;
+      const lyDo = String(req.body?.reason ?? '').trim();
+      if (lyDo.length < 10) {
+        throw new AppError('Vui lòng mô tả lỗi gặp phải (ít nhất 10 ký tự) để admin kiểm tra nhanh hơn', 400);
+      }
+      if (lyDo.length > 2000) throw new AppError('Mô tả quá dài (tối đa 2000 ký tự)', 400);
+
+      const order = await prisma.shopOrder.findUnique({
+        where: { orderCode: String(req.params.code) },
+        include: { items: true },
+      });
+      if (!order || order.userId !== userId) throw new AppError('Đơn hàng không tồn tại', 404);
+      if (order.status !== 'PAID') throw new AppError('Chỉ đơn đã thanh toán mới yêu cầu đổi key được', 409);
+
+      const item = order.items.find((i) => i.id === Number(req.params.itemId));
+      if (!item) throw new AppError('Dòng sản phẩm không thuộc đơn này', 404);
+      if (item.productType !== 'DIGITAL') throw new AppError('Chỉ hàng số mới có key để đổi', 400);
+
+      const dangCho = await prisma.keyReplacementRequest.findFirst({
+        where: { orderItemId: item.id, status: 'PENDING' },
+      });
+      if (dangCho) {
+        throw new AppError('Bạn đã có một yêu cầu đang chờ xử lý cho sản phẩm này', 409, 'REQUEST_PENDING');
+      }
+
+      const yc = await prisma.keyReplacementRequest.create({
+        data: {
+          userId,
+          orderId: order.id,
+          orderItemId: item.id,
+          orderCode: order.orderCode,
+          productName: item.productName,
+          reason: lyDo,
+        },
+      });
+      logger.info('[shop] yêu cầu đổi key', { requestId: yc.id, userId, orderCode: order.orderCode });
+      res.status(201).json({ success: true, data: { id: yc.id, status: yc.status, createdAt: yc.createdAt } });
+    } catch (error) { next(error); }
+  },
+);
+
+/** ─── GET /api/v1/shop/key-replacements — yêu cầu của chính mình ───── */
+router.get('/key-replacements', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const rows = await prisma.keyReplacementRequest.findMany({
+      where: { userId: req.userId },
+      orderBy: { createdAt: 'desc' },
+      take: 100,
+    });
+    res.json({
+      success: true,
+      data: rows.map((r) => ({
+        id: r.id,
+        orderCode: r.orderCode,
+        orderItemId: r.orderItemId,
+        productName: r.productName,
+        reason: r.reason,
+        status: r.status,
+        // Ghi chú của admin CÓ hiển thị cho người mua — họ cần biết vì sao bị
+        // từ chối, nếu không thì họ gửi lại y hệt.
+        adminNote: r.adminNote,
+        createdAt: r.createdAt.toISOString(),
+        resolvedAt: r.resolvedAt?.toISOString() ?? null,
+      })),
+    });
+  } catch (error) { next(error); }
+});
+
+/**
+ * ─── GET /api/v1/shop/orders/:code/reorder ────────────────────────────
+ * "Mua lại": trả về danh sách sản phẩm của đơn cũ kèm trạng thái HIỆN TẠI
+ * (còn bán không, giá bao nhiêu, còn hàng không).
+ *
+ * KHÔNG tự nạp thẳng vào giỏ ở backend — giỏ hàng nằm ở trình duyệt. Và
+ * quan trọng hơn: giá có thể đã đổi từ lần mua trước, nên người mua phải
+ * nhìn thấy giá mới trước khi bấm, không bị nạp âm thầm theo giá cũ.
+ */
+router.get('/orders/:code/reorder', authenticate, async (req: any, res: Response<ApiResponse>, next) => {
+  try {
+    const order = await prisma.shopOrder.findUnique({
+      where: { orderCode: String(req.params.code) },
+      include: { items: true },
+    });
+    if (!order || order.userId !== req.userId) throw new AppError('Đơn hàng không tồn tại', 404);
+
+    const ra = await Promise.all(
+      order.items.map(async (it) => {
+        const sp = it.productSlug
+          ? await prisma.product.findUnique({ where: { slug: it.productSlug } })
+          : await prisma.product.findFirst({ where: { name: it.productName } });
+        const giaCu = Math.round(Number(it.price));
+        const giaMoi = sp ? Math.round(Number(sp.price)) : null;
+        return {
+          productId: sp?.id ?? null,
+          name: it.productName,
+          slug: it.productSlug,
+          image: it.productImage,
+          quantity: it.quantity,
+          giaCu,
+          giaMoi,
+          doiGia: giaMoi !== null && giaMoi !== giaCu,
+          conBan: !!sp?.active,
+          tonKho: sp?.stockQuantity ?? 0,
+          duHang: !!sp?.active && (sp?.stockQuantity ?? 0) >= it.quantity,
+        };
+      }),
+    );
+    res.json({ success: true, data: ra });
+  } catch (error) { next(error); }
+});
+
+/**
+ * ─── GET /api/v1/shop/orders/:code/invoice ────────────────────────────
+ * Hoá đơn PDF cho một đơn ĐÃ THANH TOÁN.
+ *
+ * Dựng bằng pdfkit ở backend (font Unicode để hiện được tiếng Việt có dấu).
+ * KHÔNG in nội dung số (key/tài khoản) lên hoá đơn — hoá đơn hay bị chuyển
+ * tiếp cho kế toán, người thân, hoặc tải lên nhóm chat.
+ */
+router.get('/orders/:code/invoice', authenticate, async (req: any, res, next) => {
+  try {
+    const order = await prisma.shopOrder.findUnique({
+      where: { orderCode: String(req.params.code) },
+      include: { items: true },
+    });
+    if (!order || order.userId !== req.userId) throw new AppError('Đơn hàng không tồn tại', 404);
+    if (order.status !== 'PAID') throw new AppError('Chỉ đơn đã thanh toán mới xuất được hoá đơn', 409);
+
+    const { taoHoaDonPdf } = await import('../services/invoicePdf.service.js');
+    const pdf = await taoHoaDonPdf(order);
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="hoa-don-${order.orderCode}.pdf"`);
+    res.setHeader('Content-Length', String(pdf.length));
+    res.end(pdf);
   } catch (error) { next(error); }
 });
 

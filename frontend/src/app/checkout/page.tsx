@@ -1,17 +1,23 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
   ArrowLeft, ShieldCheck, CreditCard, Tag,
   CheckCircle, XCircle, AlertCircle, Package,
-  BookOpen, Loader2,
+  BookOpen, Loader2, Wallet, Landmark, Copy, Check,
 } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
 import { motion } from 'framer-motion';
 import { useCartStore } from '@/store/cartStore';
-import { createOrder as apiCreateOrder, validateDiscount, createShopPayos, getShippingConfig } from '@/lib/api/shop';
+import {
+  createOrder as apiCreateOrder, validateDiscount, createShopPayos, getShippingConfig,
+  payShopOrderWithPoints, createShopBankTransfer, getBankTransferConfig, getWalletBalance,
+  type BankTransferPayload,
+} from '@/lib/api/shop';
+import { useAuthStore } from '@/store/authStore';
 import type { BuyerInfo } from '@/types';
 import { toast } from 'sonner';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -25,11 +31,12 @@ function formatPrice(price: number): string {
 }
 
 type CheckoutStep = 'info' | 'payment';
+type PayMethod = 'PAYOS' | 'POINTS' | 'BANK_TRANSFER';
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { t } = useTranslation();
-  const { items, getTotalPrice } = useCartStore();
+  const { items, getTotalPrice, clearCart } = useCartStore();
 
   const [mounted, setMounted] = useState(false);
   const [step, setStep] = useState<CheckoutStep>('info');
@@ -42,6 +49,40 @@ export default function CheckoutPage() {
   const [couponError, setCouponError] = useState('');
   const [couponLoading, setCouponLoading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // ── Chống bấm hai lần / tạo trùng đơn ────────────────────────────────
+  //
+  // Ba lớp, mỗi lớp bắt một tình huống khác nhau:
+  //
+  //  1. `isProcessing` khoá nút — chặn cú bấm thứ hai của người dùng.
+  //     KHÔNG đủ: React đặt state bất đồng bộ, hai cú bấm cách nhau vài
+  //     mili giây vẫn lọt cả hai qua trước khi nút kịp đổi trạng thái.
+  //  2. `submitLock` là một ref — đổi NGAY LẬP TỨC, không đợi render. Đây
+  //     mới là thứ chặn được cú đúp thật sự.
+  //  3. `idempotencyKey` chặn ở phía server: mạng chậm, người dùng tải lại
+  //     trang rồi bấm lại, hoặc trình duyệt tự gửi lại request — cùng khoá
+  //     thì backend trả về ĐÚNG đơn cũ. Đây là lớp duy nhất sống sót qua
+  //     việc tải lại trang.
+  const submitLock = useRef(false);
+  const idempotencyKey = useRef<string>('');
+  if (!idempotencyKey.current) {
+    idempotencyKey.current =
+      typeof crypto !== 'undefined' && 'randomUUID' in crypto
+        ? crypto.randomUUID()
+        : `ck-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+  }
+
+  // Đơn đã tạo ở backend. Giữ lại để lần thử thanh toán thứ hai KHÔNG tạo
+  // đơn mới — người mua đổi ý từ PayOS sang chuyển khoản vẫn là một đơn.
+  const [backendOrderCode, setBackendOrderCode] = useState<string | null>(null);
+
+  const [payMethod, setPayMethod] = useState<PayMethod>('PAYOS');
+  const [walletBalance, setWalletBalance] = useState<number | null>(null);
+  const [bankEnabled, setBankEnabled] = useState(false);
+  const [bankInfo, setBankInfo] = useState<BankTransferPayload | null>(null);
+  const [copied, setCopied] = useState<string | null>(null);
+
+  const { isAuthenticated } = useAuthStore();
 
   const [buyerInfo, setBuyerInfo] = useState<BuyerInfo>({
     fullName: '',
@@ -57,7 +98,19 @@ export default function CheckoutPage() {
   useEffect(() => {
     setMounted(true);
     getShippingConfig().then(setShipCfg).catch(() => {});
+    // Cấu hình chuyển khoản là CÔNG KHAI — gọi được kể cả khi chưa đăng nhập.
+    getBankTransferConfig()
+      .then((r) => setBankEnabled(!!r.data?.enabled))
+      .catch(() => setBankEnabled(false));
   }, []);
+
+  // Số dư ví chỉ có nghĩa khi đã đăng nhập.
+  useEffect(() => {
+    if (!isAuthenticated) { setWalletBalance(null); return; }
+    getWalletBalance()
+      .then((r) => setWalletBalance(r.data?.balance ?? 0))
+      .catch(() => setWalletBalance(null));
+  }, [isAuthenticated]);
 
   useEffect(() => {
     if (mounted && items.length === 0) {
@@ -148,10 +201,17 @@ export default function CheckoutPage() {
     }
   };
 
-  // Create the backend order from the current cart + buyer info. The backend
-  // recomputes prices/discount authoritatively — the client total is display
-  // only.
-  const createBackendOrder = async () => {
+  /**
+   * Tạo đơn ở backend — hoặc trả lại đơn đã tạo trước đó.
+   *
+   * Backend TỰ TÍNH LẠI giá, giảm giá và phí ship từ DB. Con số hiển thị ở
+   * đây chỉ để người dùng xem; sửa giá trong DevTools không đổi được số tiền
+   * thật phải trả.
+   */
+  const createBackendOrder = async (): Promise<string> => {
+    // Đã có đơn rồi thì dùng lại — đổi cách thanh toán không đẻ đơn mới.
+    if (backendOrderCode) return backendOrderCode;
+
     const orderItems = shopItems.map((item) => ({
       productId: parseInt(item.product.id),
       productName: item.product.name,
@@ -169,34 +229,94 @@ export default function CheckoutPage() {
       shippingProvince: province || undefined,
       items: orderItems,
       discountCode: appliedCoupon?.code,
+      idempotencyKey: idempotencyKey.current,
     });
-    return res.data;
+    const code = res.data.orderCode;
+    setBackendOrderCode(code);
+    try {
+      sessionStorage.setItem(`shop_buyer_${code}`, JSON.stringify(buyerInfo));
+    } catch { /* sessionStorage có thể bị chặn — hoá đơn vẫn ra, chỉ thiếu thông tin người mua */ }
+    return code;
   };
 
-  // PayOS flow (primary): create the order → get the hosted checkout link →
-  // redirect. PayOS returns to /shop/payment-return which confirms + clears
-  // the cart + offers the invoice. Buyer info is stashed so the return page
-  // can print it on the invoice.
-  const handlePayosPayment = async () => {
+  /** Dịch lỗi backend sang câu người dùng hiểu được. */
+  const thongBaoLoi = (err: unknown): string => {
+    const raw = err instanceof Error ? err.message : String(err ?? '');
+    // `request()` ném nguyên body JSON — bóc lấy `message` nếu có.
+    let msg = raw;
+    try {
+      const parsed = JSON.parse(raw) as { message?: string; code?: string };
+      if (parsed?.message) msg = parsed.message;
+    } catch { /* không phải JSON — dùng nguyên văn */ }
+    if (/401|unauthor/i.test(raw)) return 'Bạn cần đăng nhập để đặt hàng.';
+    return msg || t('checkout.paymentError');
+  };
+
+  /**
+   * Bọc mọi lối thanh toán: khoá ref TRƯỚC (đồng bộ), mở lại ở finally.
+   * Mọi nút trả tiền đều phải đi qua đây — thêm một nút mới mà quên bọc là
+   * mở lại đúng cái lỗ bấm-hai-lần vừa bịt.
+   */
+  const chayThanhToan = useCallback(async (viec: () => Promise<void>) => {
+    if (submitLock.current) return;
+    submitLock.current = true;
     setIsProcessing(true);
     try {
-      const backendOrder = await createBackendOrder();
-      try {
-        sessionStorage.setItem(
-          `shop_buyer_${backendOrder.orderCode}`,
-          JSON.stringify(buyerInfo),
-        );
-      } catch { /* sessionStorage may be unavailable — invoice still works without buyer PII */ }
-      const res = await createShopPayos(backendOrder.orderCode);
+      await viec();
+    } catch (err) {
+      toast.error(thongBaoLoi(err));
+    } finally {
+      submitLock.current = false;
+      setIsProcessing(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /** PayOS (mặc định): tạo đơn → lấy link → chuyển hướng sang cổng. */
+  const handlePayosPayment = () =>
+    chayThanhToan(async () => {
+      const code = await createBackendOrder();
+      const res = await createShopPayos(code);
       const checkoutUrl = res.data?.checkoutUrl;
       if (!checkoutUrl) throw new Error('Không tạo được liên kết thanh toán');
+      // KHÔNG mở khoá trước khi rời trang: người dùng bấm lại trong lúc
+      // trình duyệt đang chuyển hướng sẽ tạo thêm một lượt thanh toán.
       window.location.href = checkoutUrl;
-    } catch (err) {
-      const message = err instanceof Error ? err.message : t('checkout.paymentError');
-      setIsProcessing(false);
-      toast.error(message);
+      await new Promise(() => {}); // giữ khoá cho tới khi trang thật sự rời đi
+    });
+
+  /** Ví điểm: trừ điểm và giao hàng ngay, không rời trang. */
+  const handlePointsPayment = () =>
+    chayThanhToan(async () => {
+      const code = await createBackendOrder();
+      const res = await payShopOrderWithPoints(code);
+      setWalletBalance(res.data.balance);
+      clearCart();
+      toast.success('Thanh toán bằng ví thành công!');
+      router.push(`/shop/payment-return?orderCode=${encodeURIComponent(code)}`);
+    });
+
+  /** Chuyển khoản: tạo đơn + sinh mã QR, rồi chờ admin đối soát. */
+  const handleBankTransfer = () =>
+    chayThanhToan(async () => {
+      const code = await createBackendOrder();
+      const res = await createShopBankTransfer(code);
+      setBankInfo(res.data);
+      // KHÔNG xoá giỏ ở đây — tiền chưa về. Xoá khi đơn chuyển sang PAID.
+      toast.success('Đã tạo yêu cầu chuyển khoản. Quét mã QR để thanh toán.');
+    });
+
+  const chep = async (chu: string, nhan: string) => {
+    try {
+      await navigator.clipboard.writeText(chu);
+      setCopied(nhan);
+      setTimeout(() => setCopied(null), 1800);
+    } catch {
+      toast.error('Trình duyệt không cho chép tự động — vui lòng chọn và chép tay.');
     }
   };
+
+  const duDiem = walletBalance !== null && walletBalance >= total;
 
   return (
     <div className="min-h-screen bg-darkbg pt-20">
@@ -367,38 +487,194 @@ export default function CheckoutPage() {
                 <h2 className="font-heading font-bold text-text-primary text-lg mb-6">
                   {t('checkout.paymentMethod')}
                 </h2>
-                <div className="bg-darkbg rounded-xl border border-darkborder p-4 mb-6">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 rounded-lg bg-neon-violet/20 flex items-center justify-center">
-                      <CreditCard className="w-5 h-5 text-neon-violet" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-text-primary">Thanh toán qua PayOS</p>
-                      <p className="text-xs text-text-muted">Quét mã QR ngân hàng / ví — an toàn, tự động xác nhận</p>
+
+                {/* Chưa đăng nhập thì dừng ở đây — backend bắt buộc đăng nhập
+                    mới đặt được đơn (đổi 13/09/2026). Nói trước còn hơn để
+                    người dùng bấm rồi nhận lỗi 401. */}
+                {!isAuthenticated && (
+                  <div className="mb-6 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4">
+                    <div className="flex items-start gap-3">
+                      <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+                      <div className="text-sm">
+                        <p className="font-semibold text-amber-300">Cần đăng nhập để đặt hàng</p>
+                        <p className="text-text-muted mt-1">
+                          Đơn hàng được gắn với tài khoản để bạn xem lại mã/tài khoản đã mua,
+                          tải hoá đơn và yêu cầu đổi key khi cần.
+                        </p>
+                        <Link
+                          href={`/login?redirect=${encodeURIComponent('/checkout')}`}
+                          className="inline-block mt-3 px-4 py-2 rounded-lg bg-amber-500 text-black text-sm font-semibold hover:bg-amber-400 transition-colors"
+                        >
+                          Đăng nhập / Đăng ký
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-text-muted bg-darkcard rounded-lg p-3">
-                    <AlertCircle className="w-4 h-4 text-neon-violet flex-shrink-0" />
-                    <span>Bạn sẽ được chuyển sang cổng PayOS. Sau khi thanh toán, hệ thống tự động xác nhận và gửi sản phẩm.</span>
-                  </div>
+                )}
+
+                {/* ── Chọn cách thanh toán ── */}
+                <div className="space-y-3 mb-6">
+                  {([
+                    {
+                      id: 'PAYOS' as const,
+                      icon: CreditCard,
+                      ten: 'Thanh toán qua PayOS',
+                      mo: 'Quét mã QR ngân hàng / ví — tự động xác nhận ngay',
+                      dung: true,
+                      ghi: null as string | null,
+                    },
+                    {
+                      id: 'POINTS' as const,
+                      icon: Wallet,
+                      ten: 'Ví điểm',
+                      mo:
+                        walletBalance === null
+                          ? 'Đăng nhập để xem số dư'
+                          : `Số dư: ${walletBalance.toLocaleString('vi-VN')} điểm`,
+                      dung: isAuthenticated && duDiem,
+                      ghi:
+                        walletBalance !== null && !duDiem
+                          ? `Thiếu ${(total - walletBalance).toLocaleString('vi-VN')} điểm — nạp thêm ở trang Ví`
+                          : null,
+                    },
+                    {
+                      id: 'BANK_TRANSFER' as const,
+                      icon: Landmark,
+                      ten: 'Chuyển khoản ngân hàng',
+                      mo: 'Quét VietQR — admin xác nhận rồi giao hàng',
+                      dung: bankEnabled,
+                      ghi: bankEnabled ? null : 'Hiện chưa mở',
+                    },
+                  ]).map((c) => {
+                    const chon = payMethod === c.id;
+                    return (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => c.dung && setPayMethod(c.id)}
+                        disabled={!c.dung || isProcessing}
+                        className={`w-full text-left rounded-xl border p-4 transition-all ${
+                          chon
+                            ? 'border-neon-violet bg-neon-violet/10'
+                            : 'border-darkborder bg-darkbg hover:border-neon-violet/40'
+                        } ${!c.dung ? 'opacity-45 cursor-not-allowed' : ''}`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                            chon ? 'bg-neon-violet/25' : 'bg-darkcard'
+                          }`}>
+                            <c.icon className={`w-5 h-5 ${chon ? 'text-neon-violet' : 'text-text-muted'}`} />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm font-semibold text-text-primary">{c.ten}</p>
+                            <p className="text-xs text-text-muted mt-0.5 break-words">{c.mo}</p>
+                            {c.ghi && <p className="text-xs text-amber-400/90 mt-1">{c.ghi}</p>}
+                          </div>
+                          {chon && <CheckCircle className="w-5 h-5 text-neon-violet flex-shrink-0" />}
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
-                <button
-                  onClick={handlePayosPayment}
-                  disabled={isProcessing}
-                  className="w-full mb-3 py-4 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-bold rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-60"
-                >
-                  {isProcessing ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Đang chuyển tới cổng thanh toán…
-                    </>
-                  ) : (
-                    <>
-                      <ShieldCheck className="w-4 h-4" />
-                      Thanh toán {formatPrice(total)}
-                    </>
-                  )}
-                </button>
+
+                {/* ── Khối chuyển khoản: hiện SAU khi đã tạo mã ── */}
+                {bankInfo && payMethod === 'BANK_TRANSFER' && (
+                  <div className="mb-6 rounded-xl border border-neon-violet/30 bg-darkbg p-5">
+                    <p className="text-sm font-semibold text-text-primary mb-4">
+                      Quét mã để chuyển khoản
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-5 items-center sm:items-start">
+                      <div className="bg-white p-3 rounded-xl flex-shrink-0">
+                        <QRCodeSVG value={bankInfo.qrString} size={168} level="M" />
+                      </div>
+                      <div className="flex-1 w-full space-y-2.5 text-sm">
+                        {[
+                          { nhan: 'Ngân hàng', gt: bankInfo.bank.name ?? '—', chep: false },
+                          { nhan: 'Số tài khoản', gt: bankInfo.bank.accountNo ?? '—', chep: true },
+                          { nhan: 'Chủ tài khoản', gt: bankInfo.bank.accountName ?? '—', chep: false },
+                          { nhan: 'Số tiền', gt: `${bankInfo.amountVnd.toLocaleString('vi-VN')} đ`, chep: true },
+                          { nhan: 'Nội dung', gt: bankInfo.noiDungChuyenKhoan, chep: true },
+                        ].map((d) => (
+                          <div key={d.nhan} className="flex items-center justify-between gap-3">
+                            <span className="text-text-muted text-xs flex-shrink-0">{d.nhan}</span>
+                            <span className="flex items-center gap-2 min-w-0">
+                              <span className="font-mono text-text-primary truncate">{d.gt}</span>
+                              {d.chep && (
+                                <button
+                                  type="button"
+                                  onClick={() => chep(d.nhan === 'Số tiền' ? String(bankInfo.amountVnd) : d.gt, d.nhan)}
+                                  className="text-text-muted hover:text-neon-violet transition-colors flex-shrink-0"
+                                  aria-label={`Chép ${d.nhan}`}
+                                >
+                                  {copied === d.nhan
+                                    ? <Check className="w-3.5 h-3.5 text-green-400" />
+                                    : <Copy className="w-3.5 h-3.5" />}
+                                </button>
+                              )}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="mt-4 flex items-start gap-2 text-xs text-text-muted bg-darkcard rounded-lg p-3">
+                      <AlertCircle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+                      <span>
+                        <b className="text-amber-300">Ghi ĐÚNG nội dung “{bankInfo.noiDungChuyenKhoan}”</b> khi
+                        chuyển — đây là thứ duy nhất để đối chiếu đơn của bạn. Sai nội dung thì đơn không
+                        tự khớp và phải liên hệ hỗ trợ.
+                        {bankInfo.expiresAt && (
+                          <> Mã có hiệu lực tới {new Date(bankInfo.expiresAt).toLocaleString('vi-VN')}.</>
+                        )}
+                      </span>
+                    </div>
+                    <Link
+                      href="/my-orders"
+                      className="mt-4 block text-center py-3 rounded-xl bg-darkcard border border-darkborder text-sm text-text-primary hover:border-neon-violet/40 transition-colors"
+                    >
+                      Đã chuyển — xem trạng thái đơn
+                    </Link>
+                  </div>
+                )}
+
+                {!bankInfo && (
+                  <div className="flex items-center gap-2 text-xs text-text-muted bg-darkbg border border-darkborder rounded-lg p-3 mb-6">
+                    <ShieldCheck className="w-4 h-4 text-neon-violet flex-shrink-0" />
+                    <span>
+                      Giá và tổng tiền được máy chủ tính lại từ dữ liệu gốc trước khi thu tiền —
+                      số hiển thị ở đây chỉ để bạn đối chiếu.
+                    </span>
+                  </div>
+                )}
+
+                {!bankInfo && (
+                  <button
+                    onClick={
+                      payMethod === 'POINTS' ? handlePointsPayment
+                      : payMethod === 'BANK_TRANSFER' ? handleBankTransfer
+                      : handlePayosPayment
+                    }
+                    disabled={isProcessing || !isAuthenticated || (payMethod === 'POINTS' && !duDiem)}
+                    className="w-full mb-3 py-4 bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-bold rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {isProcessing ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        {payMethod === 'POINTS' ? 'Đang trừ điểm…'
+                          : payMethod === 'BANK_TRANSFER' ? 'Đang tạo mã chuyển khoản…'
+                          : 'Đang chuyển tới cổng thanh toán…'}
+                      </>
+                    ) : (
+                      <>
+                        <ShieldCheck className="w-4 h-4" />
+                        {payMethod === 'POINTS'
+                          ? `Trả ${total.toLocaleString('vi-VN')} điểm`
+                          : payMethod === 'BANK_TRANSFER'
+                          ? `Tạo mã chuyển khoản ${formatPrice(total)}`
+                          : `Thanh toán ${formatPrice(total)}`}
+                      </>
+                    )}
+                  </button>
+                )}
                 <button
                   onClick={() => setStep('info')}
                   disabled={isProcessing}

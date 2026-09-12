@@ -2,9 +2,10 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, Shield, Clock, Star, ShoppingBag } from 'lucide-react';
+import { Zap, Shield, Clock, ShoppingBag, Gauge, Wallet, Plus, ArrowRight, PackageCheck } from 'lucide-react';
 import Link from 'next/link';
-import { Gauge } from 'lucide-react';
+import { walletApi } from '@/lib/api';
+import { useAuthStore } from '@/store/authStore';
 import ProductCard from '@/components/shop/ProductCard';
 import { Skeleton } from '@/components/ui/Skeleton';
 import ProductFilter from '@/components/shop/ProductFilter';
@@ -25,6 +26,8 @@ export default function ShopPage() {
   const [sort, setSort] = useState<SortOption>('featured');
   const [mounted, setMounted] = useState(false);
   const [categories, setCategories] = useState<CategoryResponse[]>([]);
+  const [soDu, setSoDu] = useState<number | null>(null);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
   useEffect(() => {
     setMounted(true);
@@ -32,7 +35,14 @@ export default function ShopPage() {
       fetchProducts();
     }
     getCategories().then(setCategories).catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Số dư ví — chỉ có nghĩa khi đã đăng nhập; lỗi thì im lặng, dải ví ẩn đi.
+  useEffect(() => {
+    if (!isAuthenticated) { setSoDu(null); return; }
+    walletApi.balance().then((r) => setSoDu(r.data.data.balance)).catch(() => setSoDu(null));
+  }, [isAuthenticated]);
 
   // Dynamic category chips: "Tất cả" + admin-managed categories, filtered by
   // category NAME (which is what the mapped product carries).
@@ -154,23 +164,45 @@ export default function ShopPage() {
               {t('shop.page.subtitle')}
             </p>
 
-            {/* Trust badges */}
-            <div className="flex flex-wrap items-center justify-center gap-6 mt-8">
+            {/* Ba điều người mua thật sự cần biết trước khi trả tiền —
+                thay cho bốn huy hiệu chung chung kiểu "chất lượng đảm bảo". */}
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 mt-8">
               {[
-                { icon: Shield, textKey: 'shop.page.securePayment' },
-                { icon: Clock, textKey: 'shop.page.instantDelivery' },
-                { icon: Star, textKey: 'shop.page.qualityGuaranteed' },
-                { icon: Zap, textKey: 'shop.page.lifetimeUpdates' },
-              ].map(({ icon: Icon, textKey }) => (
-                <div key={textKey} className="flex items-center gap-2 text-text-muted text-sm">
-                  <Icon className="w-4 h-4 text-neon-violet" />
-                  {t(textKey)}
+                { icon: Zap, chinh: 'Giao ngay sau thanh toán', phu: 'Hàng số về tài khoản tức thì' },
+                { icon: Shield, chinh: 'Mỗi người một key riêng', phu: 'Không dùng chung, không trùng' },
+                { icon: PackageCheck, chinh: 'Key hỏng đổi được', phu: 'Gửi yêu cầu ngay trong đơn' },
+              ].map(({ icon: Icon, chinh, phu }) => (
+                <div key={chinh} className="flex items-center gap-2.5 text-left">
+                  <div className="w-9 h-9 rounded-xl bg-neon-violet/10 border border-neon-violet/20 flex items-center justify-center flex-shrink-0">
+                    <Icon className="w-4 h-4 text-neon-violet" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-text-primary leading-tight">{chinh}</p>
+                    <p className="text-xs text-text-muted leading-tight mt-0.5">{phu}</p>
+                  </div>
                 </div>
               ))}
             </div>
 
-            {/* Check-usage CTA */}
-            <div className="mt-8">
+            {/* Dải ví — chỉ hiện khi đã đăng nhập. Đặt ở đây vì đây là lúc
+                người mua quan tâm tới số dư nhất. */}
+            {soDu !== null && (
+              <Link
+                href="/wallet"
+                className="mt-8 inline-flex items-center gap-3 px-4 py-2.5 rounded-2xl border border-neon-violet/25 bg-gradient-to-r from-neon-violet/10 to-transparent hover:border-neon-violet/50 transition-colors group"
+              >
+                <Wallet className="w-4 h-4 text-neon-violet flex-shrink-0" />
+                <span className="text-sm text-text-muted">
+                  Ví của bạn: <b className="text-text-primary tabular-nums">{soDu.toLocaleString('vi-VN')}</b> điểm
+                </span>
+                <span className="inline-flex items-center gap-1 text-xs text-neon-violet font-medium">
+                  <Plus className="w-3 h-3" /> Nạp
+                  <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                </span>
+              </Link>
+            )}
+
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <Link
                 href="/shop/check-usage"
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90"
@@ -178,6 +210,13 @@ export default function ShopPage() {
               >
                 <Gauge className="w-4 h-4" />
                 Kiểm tra usage / limit của API key
+              </Link>
+              <Link
+                href="/my-orders"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-text-secondary bg-darkcard border border-darkborder hover:border-neon-violet/40 transition-colors"
+              >
+                <Clock className="w-4 h-4" />
+                Đơn đã mua
               </Link>
             </div>
           </motion.div>

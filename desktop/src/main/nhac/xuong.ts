@@ -23,9 +23,10 @@
 import { randomUUID } from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { doTatCa, type KetQuaDo } from './amLuong';
+import { chamBai, doTatCa, type KetQuaDo } from './amLuong';
 import { ghepDuoc, maCamelot, tenTong, type Tong } from './camelot';
 import { chinhBai, tiLeTuBpm } from './keoGian';
+import { doDacTinh, master, type DacTinh } from './master';
 import { caoDoTuTen, mauVinahouse, vietMidi } from './midi';
 import { doNhip, doTong } from './nhipVaTong';
 import { moPhienTach } from './onnxChay';
@@ -72,6 +73,14 @@ interface Phien {
   pt: KetQuaPhanTich | null;
   /** Thư mục stem đã tách, `null` khi chưa tách. */
   daTach: string | null;
+  /**
+   * Bản mẫu để master theo, nếu người dùng đã nạp.
+   *
+   * Chỉ giữ ĐẶC TÍNH (phổ trung bình + bốn con số), không giữ âm thanh. Một
+   * bản mẫu 5 phút là 106 MB mà thứ ta cần từ nó chỉ là vài KB — và người dùng
+   * có thể mở nhiều bài cùng lúc.
+   */
+  banMau: { ten: string; dt: DacTinh; do: KetQuaDo } | null;
 }
 
 const phien = new Map<string, Phien>();
@@ -105,9 +114,30 @@ export async function napBai(
   }
   if (soKenh < 1 || soKenh > 8) throw new Error(`Số kênh lạ: ${soKenh}`);
 
-  /* `mau.buffer` có thể là bộ đệm LỚN HƠN khung nhìn (Node hay tái dùng bộ
-     đệm cho payload IPC). Bỏ qua `byteOffset`/`byteLength` là đọc nhầm sang dữ
-     liệu của người khác — ra nhiễu ở đầu bài, không ra lỗi. */
+  const { kenh } = bocPcm(mau, soKenh, tanSoMau);
+  const soMau = kenh[0]!.length;
+  const id = randomUUID();
+  const thuMuc = thuMucRa(userData, id);
+  await fs.mkdir(thuMuc, { recursive: true });
+  const duongWav = path.join(thuMuc, 'goc.wav');
+  await fs.writeFile(duongWav, Buffer.from(ghiWav({ kenh, tanSoMau })));
+
+  const p: Phien = {
+    id, ten, duongWav, giay: soMau / tanSoMau, soKenh,
+    huy: null, pt: null, daTach: null, banMau: null,
+  };
+  phien.set(id, p);
+  return { id, ten, giay: p.giay, soKenh };
+}
+
+/**
+ * Bóc PCM xen kẽ từ renderer thành các kênh rời.
+ *
+ * ⚠️ `mau.buffer` có thể là bộ đệm LỚN HƠN khung nhìn — Node hay tái dùng bộ
+ * đệm cho payload IPC. Bỏ qua `byteOffset`/`byteLength` là đọc nhầm sang dữ
+ * liệu của người khác, và triệu chứng là nhiễu ở đầu bài chứ không phải lỗi.
+ */
+function bocPcm(mau: Uint8Array, soKenh: number, tanSoMau: number): AmThanh {
   const so = new Float32Array(mau.buffer, mau.byteOffset, mau.byteLength / 4);
   const soMau = Math.floor(so.length / soKenh);
   if (soMau === 0) throw new Error('Bài rỗng');
@@ -118,18 +148,7 @@ export async function napBai(
     for (let i = 0; i < soMau; i++) k[i] = so[i * soKenh + c]!;
     kenh.push(k);
   }
-
-  const id = randomUUID();
-  const thuMuc = thuMucRa(userData, id);
-  await fs.mkdir(thuMuc, { recursive: true });
-  const duongWav = path.join(thuMuc, 'goc.wav');
-  await fs.writeFile(duongWav, Buffer.from(ghiWav({ kenh, tanSoMau })));
-
-  const p: Phien = {
-    id, ten, duongWav, giay: soMau / tanSoMau, soKenh, huy: null, pt: null, daTach: null,
-  };
-  phien.set(id, p);
-  return { id, ten, giay: p.giay, soKenh };
+  return { kenh, tanSoMau };
 }
 
 function layPhien(id: string): Phien {
@@ -372,6 +391,110 @@ export async function chinhVaXuat(
   tep.push(tenDoc);
 
   return { thuMuc, tep, bpmDich, nuaCung, giay: (Date.now() - batDau) / 1000 };
+}
+
+/* ══════════════════════════════════════════════════════════
+   Master theo bản mẫu — và chấm bài
+   ══════════════════════════════════════════════════════════ */
+
+export interface TomTatBanMau {
+  ten: string;
+  lufs: number;
+  dinhThat: number;
+  daiDong: number;
+  rongStereo: number;
+}
+
+/**
+ * Nạp một bản mẫu để master theo. Thường là một bài của DJ bạn muốn giống.
+ *
+ * Chỉ ĐO rồi vứt âm thanh đi — thứ cần từ bản mẫu là đường phổ trung bình và
+ * bốn con số, tổng cộng vài KB. Giữ cả 106 MB âm thanh chỉ để dùng lại mấy con
+ * số đó là tốn bộ nhớ cho không.
+ */
+export function napBanMau(
+  id: string,
+  ten: string,
+  mau: Uint8Array,
+  soKenh: number,
+  tanSoMau: number,
+): TomTatBanMau {
+  const p = layPhien(id);
+  if (tanSoMau !== TAN_SO_MODEL) {
+    throw new Error(`Bản mẫu phải ở ${TAN_SO_MODEL} Hz, nhận ${tanSoMau} Hz.`);
+  }
+  const am = bocPcm(mau, soKenh, tanSoMau);
+  const dt = doDacTinh(am);
+  const kq = doTatCa(am);
+  p.banMau = { ten, dt, do: kq };
+  return {
+    ten,
+    lufs: kq.lufs,
+    dinhThat: kq.dinhThat,
+    daiDong: kq.daiDong,
+    rongStereo: kq.rongStereo,
+  };
+}
+
+export interface KetQuaMasterRa {
+  duong: string;
+  tenBanMau: string;
+  /** Đã nâng/hạ bao nhiêu dB trước bước hạn biên. */
+  chinhDb: number;
+  lufsTruoc: number;
+  lufsSau: number;
+  dinhThatSau: number;
+  /** Chênh lệch so với bản mẫu TRƯỚC khi master — đây là phần "chấm bài". */
+  chamTruoc: string[];
+  /** Và SAU khi master, để thấy nó đã kéo gần được tới đâu. */
+  chamSau: string[];
+  giay: number;
+}
+
+/**
+ * Master bài đang mở theo bản mẫu đã nạp, rồi ghi ra đĩa.
+ *
+ * ⚠️ Master là việc làm trên một bản mix ĐÃ XONG, không phải trên stem. Luồng
+ * đúng: dựng xong bản remix trong FL Studio, xuất ra, nạp bản ĐÓ vào đây làm
+ * bài chính, nạp một bài của DJ bạn thích làm bản mẫu, rồi bấm master.
+ *
+ * Trả kèm chênh lệch TRƯỚC và SAU để người dùng thấy nó đã làm gì — một con số
+ * "đã master xong" không dạy được ai điều gì.
+ */
+export async function masterTheoMau(
+  userData: string,
+  id: string,
+  opts: { tranDbtp?: number; khongKhopPho?: boolean } = {},
+): Promise<KetQuaMasterRa> {
+  const p = layPhien(id);
+  if (!p.banMau) throw new Error('Chưa nạp bản mẫu. Chọn một bài để master theo trước đã.');
+
+  const batDau = Date.now();
+  const am = await docBai(p);
+  const truoc = doTatCa(am);
+
+  const kq = master(am, p.banMau.dt, {
+    ...(opts.tranDbtp === undefined ? {} : { tranDbtp: opts.tranDbtp }),
+    ...(opts.khongKhopPho === undefined ? {} : { khongKhopPho: opts.khongKhopPho }),
+  });
+  const sau = doTatCa(kq.am);
+
+  const thuMuc = path.join(thuMucRa(userData, id), 'xuat');
+  await fs.mkdir(thuMuc, { recursive: true });
+  const duong = path.join(thuMuc, `${tenAnToan(p.ten)} (master).wav`);
+  await fs.writeFile(duong, Buffer.from(ghiWav(kq.am)));
+
+  return {
+    duong,
+    tenBanMau: p.banMau.ten,
+    chinhDb: kq.chinhDb,
+    lufsTruoc: truoc.lufs,
+    lufsSau: sau.lufs,
+    dinhThatSau: kq.dinhThatSau,
+    chamTruoc: chamBai(truoc, p.banMau.do).nhanXet,
+    chamSau: chamBai(sau, p.banMau.do).nhanXet,
+    giay: (Date.now() - batDau) / 1000,
+  };
 }
 
 /** Tệp ghi chú đi kèm. Người dùng mở nó trước khi kéo vào DAW. */

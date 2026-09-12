@@ -24,11 +24,12 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  AudioWaveform, Download, FolderOpen, Gauge, Loader2, Music4, Scissors, Trash2,
-  Upload, X,
+  AudioWaveform, Check, Download, FolderOpen, Gauge, Loader2, Music4, Scissors,
+  SlidersHorizontal, Trash2, Upload, X,
 } from 'lucide-react';
 import type {
-  BaiDaNap, KetQuaPhanTich, KetQuaTachRa, KetQuaXuatRa, MucKhoModel, TienDoXuong,
+  BaiDaNap, KetQuaMasterRa, KetQuaPhanTich, KetQuaTachRa, KetQuaXuatRa, MucKhoModel,
+  TienDoXuong, TomTatBanMau,
 } from '../../../shared/ipc';
 import { useDich } from '../../i18n';
 import { DUOI_NHAN, giaiMaBai, laTepNhac } from './giaiMa';
@@ -99,7 +100,13 @@ export function XuongRemixPage() {
   const [nuaCung, setNuaCung] = useState(0);
   const [dangXuat, setDangXuat] = useState(false);
   const [xuatRa, setXuatRa] = useState<KetQuaXuatRa | null>(null);
+  const [banMau, setBanMau] = useState<TomTatBanMau | null>(null);
+  const [dangNapMau, setDangNapMau] = useState(false);
+  const [tranDbtp, setTranDbtp] = useState(-1);
+  const [dangMaster, setDangMaster] = useState(false);
+  const [masterRa, setMasterRa] = useState<KetQuaMasterRa | null>(null);
   const oTep = useRef<HTMLInputElement>(null);
+  const oTepMau = useRef<HTMLInputElement>(null);
 
   const napKho = useCallback(async () => {
     if (!cau) return;
@@ -130,6 +137,8 @@ export function XuongRemixPage() {
     setLoi(null);
     setKetQua(null);
     setXuatRa(null);
+    setBanMau(null);
+    setMasterRa(null);
     setPt(null);
     setDangNap(true);
     try {
@@ -191,12 +200,42 @@ export function XuongRemixPage() {
     }
   }, [cau, bai, bpmDich, nuaCung]);
 
+  const napMau = useCallback(async (tep: File) => {
+    if (!cau || !bai) return;
+    setLoi(null);
+    setDangNapMau(true);
+    setMasterRa(null);
+    try {
+      const g = await giaiMaBai(tep);
+      setBanMau(await cau.xuongRemix.napBanMau(bai.id, tep.name, g.mau, g.soKenh, g.tanSoMau));
+    } catch (e) {
+      setLoi((e as Error).message);
+    } finally {
+      setDangNapMau(false);
+    }
+  }, [cau, bai]);
+
+  const chayMaster = useCallback(async () => {
+    if (!cau || !bai) return;
+    setLoi(null);
+    setDangMaster(true);
+    try {
+      setMasterRa(await cau.xuongRemix.master(bai.id, tranDbtp));
+    } catch (e) {
+      setLoi((e as Error).message);
+    } finally {
+      setDangMaster(false);
+    }
+  }, [cau, bai, tranDbtp]);
+
   const dongBai = useCallback(async () => {
     if (cau && bai) await cau.xuongRemix.dongBai(bai.id).catch(() => undefined);
     setBai(null);
     setPt(null);
     setKetQua(null);
     setXuatRa(null);
+    setBanMau(null);
+    setMasterRa(null);
     setLoi(null);
   }, [cau, bai]);
 
@@ -545,6 +584,98 @@ export function XuongRemixPage() {
                 <span className="ct-muted ct-xr-nhac">
                   {dich('Xong trong')} {xuatRa.giay.toFixed(1)}s
                 </span>
+              </div>
+            )}
+          </div>
+
+          {/* ── Master theo bản mẫu ─────────────────────── */}
+          <div className="ct-xr-chinh">
+            <span className="ct-xr-nhan">{dich('Master theo bản mẫu')}</span>
+
+            <p className="ct-muted ct-xr-nhac">
+              {dich('Chọn một bài bạn muốn bản của mình nghe giống. App đo nó rồi ép bài của bạn về đúng mức to, phổ tần và độ rộng stereo của nó.')}
+            </p>
+
+            <div className="ct-xr-dieu-khien">
+              <button type="button" className="ct-btn ct-btn-ghost" disabled={dangNapMau}
+                onClick={() => oTepMau.current?.click()}>
+                {dangNapMau ? <Loader2 size={14} className="ct-xoay" aria-hidden /> : <SlidersHorizontal size={14} aria-hidden />}
+                {banMau ? dich('Đổi bản mẫu') : dich('Chọn bản mẫu')}
+              </button>
+
+              <label className="ct-xr-o-nhap" htmlFor="xr-tran">
+                <span>{dich('Trần đỉnh')}</span>
+                <input
+                  id="xr-tran"
+                  type="number"
+                  min={-24}
+                  max={0}
+                  step={0.5}
+                  value={tranDbtp}
+                  onChange={(e) => setTranDbtp(Math.max(-24, Math.min(0, Number(e.target.value) || 0)))}
+                />
+                <small>dBTP</small>
+              </label>
+
+              <button type="button" className="ct-btn" disabled={dangMaster || !banMau}
+                onClick={() => void chayMaster()}>
+                {dangMaster ? <Loader2 size={14} className="ct-xoay" aria-hidden /> : <Check size={14} aria-hidden />}
+                {dangMaster ? dich('Đang master…') : 'Master'}
+              </button>
+
+              {masterRa && (
+                <button type="button" className="ct-btn-ghost"
+                  onClick={() => void cau.xuongRemix.moThuMuc(masterRa.duong.slice(0, Math.max(masterRa.duong.lastIndexOf('/'), masterRa.duong.lastIndexOf('\\'))))}>
+                  <FolderOpen size={14} aria-hidden />
+                  {dich('Mở thư mục')}
+                </button>
+              )}
+            </div>
+
+            <input
+              ref={oTepMau}
+              id="xuong-remix-tep-mau"
+              type="file"
+              accept={DUOI_NHAN.map((d) => `.${d}`).join(',')}
+              hidden
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) void napMau(f);
+                e.target.value = '';
+              }}
+            />
+
+            {banMau && (
+              <p className="ct-muted ct-xr-nhac">
+                <b>{banMau.ten}</b>{' — '}
+                {soDb(banMau.lufs)} LUFS · {dich('đỉnh thật')} {soDb(banMau.dinhThat)} dBTP
+                {' · '}{dich('dải động')} {soDb(banMau.daiDong)} LU
+                {' · '}{dich('rộng stereo')} {(banMau.rongStereo * 100).toFixed(0)}%
+              </p>
+            )}
+
+            {masterRa && (
+              <div className="ct-xr-cham">
+                <div className="ct-xr-cham-cot">
+                  <span className="ct-xr-cham-dau" data-ben="truoc">{dich('Trước khi master')}</span>
+                  {masterRa.chamTruoc.length === 0
+                    ? <span className="ct-muted">{dich('đã sát bản mẫu')}</span>
+                    : masterRa.chamTruoc.map((n) => <span key={n}>{n}</span>)}
+                </div>
+                <div className="ct-xr-cham-cot">
+                  <span className="ct-xr-cham-dau" data-ben="sau">{dich('Sau khi master')}</span>
+                  {masterRa.chamSau.length === 0
+                    ? <span className="ct-muted">{dich('đã sát bản mẫu')}</span>
+                    : masterRa.chamSau.map((n) => <span key={n}>{n}</span>)}
+                </div>
+                <p className="ct-muted ct-xr-nhac">
+                  {soDb(masterRa.lufsTruoc)} → <b>{soDb(masterRa.lufsSau)}</b> LUFS
+                  {' · '}{dich('đỉnh thật')} {soDb(masterRa.dinhThatSau)} dBTP
+                  {' · '}{masterRa.giay.toFixed(1)}s
+                </p>
+                <p className="ct-muted ct-xr-nhac">
+                  ⚠️ {dich('Đây không thay được tai người. Nó khớp bốn con số; nó không biết bản mix của bạn có đục ở quãng trung hay không.')}
+                </p>
               </div>
             )}
           </div>

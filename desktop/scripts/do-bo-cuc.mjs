@@ -613,6 +613,22 @@ await ctx.addInitScript((nn) => {
         coRoi: false, byteThat: 0 },
     ],
     napBai: { id: '00000000-0000-4000-8000-000000000001', ten: 'Bài thử rất dài để xem tên có tràn ra ngoài ô không.mp3', giay: 254, soKenh: 2 },
+    napBanMau: { ten: 'DJ Tilo - Nonstop 2026.mp3', lufs: -6.8, dinhThat: -0.9, daiDong: 6.1, rongStereo: 0.42 },
+    master: {
+      duong: '/tmp/x/Bài thử (master).wav', tenBanMau: 'DJ Tilo - Nonstop 2026.mp3',
+      chinhDb: 4.2, lufsTruoc: -13.6, lufsSau: -6.9, dinhThatSau: -1.0, giay: 8.4,
+      /* Danh sách nhận xét DÀI có chủ ý: đây là chỗ dễ vỡ nhất của khối chấm
+         bài — hai cột chữ cạnh nhau ở cửa sổ hẹp. Để một hai dòng thì bộ đo
+         báo xanh mà chưa hề chạm tới tình huống thật. */
+      chamTruoc: [
+        'Bài bạn nhỏ hơn bản mẫu 6.7 LU — cần nén và nâng thêm.',
+        'Thiếu 8.3 dB ở 8 kHz so với bản mẫu.',
+        'Thiếu 5.1 dB ở 4 kHz so với bản mẫu.',
+        'Thừa 4.4 dB ở 63 Hz so với bản mẫu.',
+        'Ảnh stereo hẹp hơn bản mẫu — nới phần cao ra hai bên, giữ trầm ở giữa.',
+      ],
+      chamSau: ['Thiếu 3.2 dB ở 16 kHz so với bản mẫu.'],
+    },
     phanTich: {
       bpm: 139.8, bpmTinCay: 0.72,
       tong: 'Am', tongCamelot: '8A', tongTinCay: 0.18, tongNhi: 'C',
@@ -729,6 +745,31 @@ const CHUAN_BI = {
       name: 'bai-thu.wav', mimeType: 'audio/wav', buffer: wavThu(),
     }).catch(() => {});
     await p.waitForTimeout(900);
+    /* Nạp thêm BẢN MẪU rồi bấm Master: khối chấm bài là hai cột chữ cạnh nhau,
+       chỉ tồn tại sau hai thao tác, và nó là phần dễ vỡ nhất của cả trang ở
+       cửa sổ hẹp. Không lái tới đây thì bộ đo không bao giờ nhìn thấy nó. */
+    await p.setInputFiles('#xuong-remix-tep-mau', {
+      name: 'ban-mau.wav', mimeType: 'audio/wav', buffer: wavThu(),
+    }).catch(() => {});
+    await p.waitForTimeout(700);
+    await p.click('button:has-text("Master")', { timeout: 2000 }).catch(() => {});
+    await p.waitForTimeout(500);
+
+    /* ⚠️ TỰ KIỂM VIỆC CỦA CHÍNH BƯỚC NÀY.
+       Mọi thao tác trên đều `.catch(() => {})`, nên một selector đổi tên là
+       cả bước chuẩn bị im lặng không làm gì — và bộ đo vẫn báo XANH, trên một
+       trang chỉ có vùng thả tệp. Đúng cái bẫy đã ghi ở đầu tệp này (09/09/2026:
+       "chốt viết xong, chạy xanh, mà chưa từng chạy một lần nào").
+       Ném lỗi ở đây thì nó thành đỏ ngay, kèm lý do. */
+    const coCham = await p.locator('.ct-xr-cham').count();
+    const coLuoi = await p.locator('.ct-xr-luoi').count();
+    if (!coCham || !coLuoi) {
+      throw new Error(
+        `chuẩn bị /xuong-remix KHÔNG tới được trạng thái đông `
+        + `(lưới số đo: ${coLuoi}, khối chấm bài: ${coCham}). `
+        + 'Selector hay luồng trang đã đổi — sửa bước CHUAN_BI trước khi tin kết quả.',
+      );
+    }
   },
   /* Mở bảng chọn hoạt động trên dải 24 giờ. Nó từng bị khối "Đi nhanh" vẽ đè
      (lỗi tầng xếp, 07/09/2026) — mà bộ đo chỉ nhìn trang lúc TĨNH thì không

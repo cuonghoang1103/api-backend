@@ -11,7 +11,8 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import {
-  chinhVaXuat, donDep, donDepTatCa, napBai, phanTich, soPhienDangMo, tenAnToan,
+  chinhVaXuat, donDep, donDepTatCa, masterTheoMau, napBai, napBanMau, phanTich,
+  soPhienDangMo, tenAnToan,
 } from './xuong';
 
 const FS = 44100;
@@ -177,6 +178,74 @@ describe('chỉnh và xuất', () => {
   it('⛔ đổi tông quá 12 nửa cung thì từ chối', async () => {
     const b = await napBai(goc, 'thu.mp3', pcmThu(2), 2, FS);
     await expect(chinhVaXuat(goc, b.id, { nuaCung: 24 })).rejects.toThrow(/12 nửa cung/);
+  });
+});
+
+describe('master theo bản mẫu', () => {
+  /** PCM stereo của một "bài" có phổ định trước. */
+  function pcmPho(giay: number, phan: Array<[number, number]>): Uint8Array {
+    const n = Math.round(giay * FS);
+    const f = new Float32Array(n * 2);
+    for (const [hz, a] of phan) {
+      for (let i = 0; i < n; i++) {
+        const v = a * Math.sin((2 * Math.PI * hz * i) / FS);
+        f[i * 2] = f[i * 2]! + v;
+        f[i * 2 + 1] = f[i * 2 + 1]! + v * 0.9;
+      }
+    }
+    return new Uint8Array(f.buffer);
+  }
+
+  const duc: Array<[number, number]> = [[80, 0.30], [1000, 0.05], [6000, 0.01]];
+  const sang: Array<[number, number]> = [[80, 0.10], [1000, 0.18], [6000, 0.16]];
+
+  it('nạp bản mẫu rồi trả tóm tắt đo được', async () => {
+    const b = await napBai(goc, 'cua-toi.wav', pcmPho(3, duc), 2, FS);
+    const tt = napBanMau(b.id, 'tilo.mp3', pcmPho(3, sang), 2, FS);
+    expect(tt.ten).toBe('tilo.mp3');
+    expect(Number.isFinite(tt.lufs)).toBe(true);
+    expect(tt.rongStereo).toBeGreaterThan(0);
+  });
+
+  it('⛔ chưa nạp bản mẫu thì nói rõ phải làm gì', async () => {
+    const b = await napBai(goc, 'cua-toi.wav', pcmPho(2, duc), 2, FS);
+    await expect(masterTheoMau(goc, b.id)).rejects.toThrow(/Chưa nạp bản mẫu/);
+  });
+
+  it('⭐ master xong thì chênh lệch với bản mẫu GIẢM đi', async () => {
+    const b = await napBai(goc, 'cua-toi.wav', pcmPho(3, duc), 2, FS);
+    napBanMau(b.id, 'tilo.mp3', pcmPho(3, sang), 2, FS);
+    const kq = await masterTheoMau(goc, b.id);
+
+    // Đây là câu hỏi thật của tính năng, và cũng chính là phần "chấm bài":
+    // danh sách nhận xét phải NGẮN đi sau khi master.
+    expect(kq.chamTruoc.length).toBeGreaterThan(0);
+    expect(kq.chamSau.length).toBeLessThan(kq.chamTruoc.length);
+  });
+
+  it('ghi ra tệp và giữ đỉnh dưới trần', async () => {
+    const b = await napBai(goc, 'Bài Của Tôi.wav', pcmPho(3, duc), 2, FS);
+    napBanMau(b.id, 'tilo.mp3', pcmPho(3, sang), 2, FS);
+    const kq = await masterTheoMau(goc, b.id, { tranDbtp: -1 });
+
+    expect(path.basename(kq.duong)).toContain('master');
+    expect((await fs.stat(kq.duong)).size).toBeGreaterThan(0);
+    expect(kq.dinhThatSau).toBeLessThanOrEqual(-1 + 0.25);
+  });
+
+  it('báo cả mức to trước và sau', async () => {
+    const b = await napBai(goc, 'cua-toi.wav', pcmPho(3, duc), 2, FS);
+    napBanMau(b.id, 'tilo.mp3', pcmPho(3, sang), 2, FS);
+    const kq = await masterTheoMau(goc, b.id);
+    expect(Number.isFinite(kq.lufsTruoc)).toBe(true);
+    expect(Number.isFinite(kq.lufsSau)).toBe(true);
+    expect(kq.tenBanMau).toBe('tilo.mp3');
+  });
+
+  it('⛔ bản mẫu sai tần số mẫu thì từ chối', async () => {
+    const b = await napBai(goc, 'cua-toi.wav', pcmPho(2, duc), 2, FS);
+    expect(() => napBanMau(b.id, 'x.mp3', pcmPho(2, sang), 2, 48000))
+      .toThrow(/44100 Hz/);
   });
 });
 

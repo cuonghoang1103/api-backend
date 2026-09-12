@@ -11,7 +11,8 @@ import path from 'node:path';
 import type { MucKhoModel } from '../../shared/ipc';
 import { KHO_MODEL, taiModel, tinhTrangKho, xoaModel } from '../nhac/taiModel';
 import {
-  chinhVaXuat, donDep, donDepTatCa, huyTach, napBai, phanTich, tach, thuMucPhien,
+  chinhVaXuat, donDep, donDepTatCa, huyTach, masterTheoMau, napBai, napBanMau,
+  phanTich, tach, thuMucPhien,
 } from '../nhac/xuong';
 import { handle } from './index';
 
@@ -97,6 +98,15 @@ export function registerXuongRemixHandlers(): void {
     chinhVaXuat(userData(), id, {
       ...(bpmDich === undefined ? {} : { bpmDich }),
       ...(nuaCung === undefined ? {} : { nuaCung }),
+    }));
+
+  handle('xuongRemix:napBanMau', ({ id, ten, mau, soKenh, tanSoMau }) =>
+    napBanMau(id, ten, mau, soKenh, tanSoMau));
+
+  handle('xuongRemix:master', ({ id, tranDbtp, khongKhopPho }) =>
+    masterTheoMau(userData(), id, {
+      ...(tranDbtp === undefined ? {} : { tranDbtp }),
+      ...(khongKhopPho === undefined ? {} : { khongKhopPho }),
     }));
 
   handle('xuongRemix:moThuMuc', async ({ duong }) => {

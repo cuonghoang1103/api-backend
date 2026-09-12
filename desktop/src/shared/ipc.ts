@@ -380,6 +380,24 @@ export const tachSchema = z.object({
 
 export const maModelSchema = z.object({ maModel: z.string().min(1).max(64) });
 
+/** Bản mẫu để master theo. Main chỉ ĐO rồi vứt âm thanh, không lưu lại. */
+export const banMauSchema = z.object({
+  id: z.string().uuid(),
+  ten: z.string().min(1).max(300),
+  mau: z.instanceof(Uint8Array)
+    .refine((b) => b.byteLength <= 400 * 1024 * 1024, 'Bản mẫu quá dài')
+    .refine((b) => b.byteLength % 4 === 0, 'PCM float32 phải chia hết cho 4'),
+  soKenh: z.number().int().min(1).max(8),
+  tanSoMau: z.number().int().positive(),
+});
+
+export const masterSchema = z.object({
+  id: z.string().uuid(),
+  /** Trần đỉnh thật, dBTP. −1 là mức an toàn cho mọi nền tảng nén. */
+  tranDbtp: z.number().min(-24).max(0).optional(),
+  khongKhopPho: z.boolean().optional(),
+});
+
 /**
  * Chỉnh nhịp / tông rồi xuất bộ tệp.
  *
@@ -458,6 +476,28 @@ export interface KetQuaXuatRa {
   tep: string[];
   bpmDich: number;
   nuaCung: number;
+  giay: number;
+}
+
+export interface TomTatBanMau {
+  ten: string;
+  lufs: number;
+  dinhThat: number;
+  daiDong: number;
+  rongStereo: number;
+}
+
+export interface KetQuaMasterRa {
+  duong: string;
+  tenBanMau: string;
+  chinhDb: number;
+  lufsTruoc: number;
+  lufsSau: number;
+  dinhThatSau: number;
+  /** Nhận xét so với bản mẫu TRƯỚC khi master — phần "chấm bài". */
+  chamTruoc: string[];
+  /** Và SAU khi master, để thấy nó kéo gần được tới đâu. */
+  chamSau: string[];
   giay: number;
 }
 
@@ -1147,6 +1187,8 @@ export const INVOKE_CHANNELS = {
   /** Mở thư mục stem trong Finder/Explorer để kéo thẳng vào FL Studio. */
   'xuongRemix:moThuMuc': z.object({ duong: z.string().min(1).max(4096) }),
   'xuongRemix:chinhVaXuat': chinhXuatSchema,
+  'xuongRemix:napBanMau': banMauSchema,
+  'xuongRemix:master': masterSchema,
 
   /* Đường dẫn tệp trong repo mẫu gốc. Tiến trình chính còn kiểm lại lần nữa —
      xem `duongAnToan()` — nên schema này chỉ là hàng rào đầu tiên. */
@@ -1570,6 +1612,10 @@ export interface DesktopBridge {
     xoaModel(maModel: string): Promise<void>;
     moThuMuc(duong: string): Promise<void>;
     chinhVaXuat(id: string, bpmDich?: number, nuaCung?: number): Promise<KetQuaXuatRa>;
+    napBanMau(
+      id: string, ten: string, mau: Uint8Array, soKenh: number, tanSoMau: number,
+    ): Promise<TomTatBanMau>;
+    master(id: string, tranDbtp?: number, khongKhopPho?: boolean): Promise<KetQuaMasterRa>;
   };
   /**
    * Agent lập trình — CHỈ tài khoản Pro (máy chủ chặn, không phải app).

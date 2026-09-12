@@ -92,6 +92,24 @@ export function fft(re: Float64Array, im: Float64Array): void {
 }
 
 /**
+ * FFT ngược, tại chỗ.
+ *
+ * Không viết lại vòng lặp: đảo dấu phần ảo, chạy FFT xuôi, đảo dấu lại, rồi
+ * chia cho n. Đây là đồng nhất thức chuẩn, và nó có một cái lợi thật chứ không
+ * chỉ ngắn — hai chiều dùng CHUNG một bộ mã, nên không thể có chuyện chiều
+ * xuôi đúng mà chiều ngược sai (hay ngược lại) vì hai bản cài đặt lệch nhau.
+ */
+export function fftNguoc(re: Float64Array, im: Float64Array): void {
+  const n = re.length;
+  for (let i = 0; i < n; i++) im[i] = -im[i]!;
+  fft(re, im);
+  for (let i = 0; i < n; i++) {
+    re[i] = re[i]! / n;
+    im[i] = -im[i]! / n;
+  }
+}
+
+/**
  * Phổ biên độ của một khung đã nhân cửa sổ. Trả về `n/2 + 1` ô (tới Nyquist).
  *
  * Nhận `Float32Array` vì âm thanh vào ở dạng đó, tính bằng `Float64Array` vì

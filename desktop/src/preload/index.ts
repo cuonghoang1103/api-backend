@@ -38,6 +38,8 @@ import type {
   KetQuaPhanTich,
   KetQuaTachRa,
   KetQuaXuatRa,
+  KetQuaMasterRa,
+  TomTatBanMau,
   MucKhoModel,
   MusicUsage,
   NoiDungMau,
@@ -188,6 +190,10 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('xuongRemix:moThuMuc', { duong }) as Promise<void>,
     chinhVaXuat: (id: string, bpmDich?: number, nuaCung?: number) =>
       ipcRenderer.invoke('xuongRemix:chinhVaXuat', { id, bpmDich, nuaCung }) as Promise<KetQuaXuatRa>,
+    napBanMau: (id: string, ten: string, mau: Uint8Array, soKenh: number, tanSoMau: number) =>
+      ipcRenderer.invoke('xuongRemix:napBanMau', { id, ten, mau, soKenh, tanSoMau }) as Promise<TomTatBanMau>,
+    master: (id: string, tranDbtp?: number, khongKhopPho?: boolean) =>
+      ipcRenderer.invoke('xuongRemix:master', { id, tranDbtp, khongKhopPho }) as Promise<KetQuaMasterRa>,
   },
 
   /* Bảng chạy lệnh — xem `main/ipc/terminal.ts` để biết vì sao nó KHÔNG phải

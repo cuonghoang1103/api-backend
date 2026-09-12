@@ -862,6 +862,19 @@ export const TU_DIEN: Record<string, string> = {
   'Bỏ thay đổi này': 'Discard this change',
   // ── Xưởng Remix ─────────────────────────────────────────
   'Xưởng Remix': 'Remix Studio',
+  'Master theo bản mẫu': 'Match a reference master',
+  'Chọn một bài bạn muốn bản của mình nghe giống. App đo nó rồi ép bài của bạn về đúng mức to, phổ tần và độ rộng stereo của nó.':
+    'Pick a track you want yours to sound like. The app measures it, then pulls your track to its loudness, frequency balance and stereo width.',
+  'Chọn bản mẫu': 'Choose a reference',
+  'Đổi bản mẫu': 'Change reference',
+  'Trần đỉnh': 'Peak ceiling',
+  'Đang master…': 'Mastering…',
+  'dải động': 'dynamic range',
+  'Trước khi master': 'Before',
+  'Sau khi master': 'After',
+  'đã sát bản mẫu': 'already close to the reference',
+  'Đây không thay được tai người. Nó khớp bốn con số; nó không biết bản mix của bạn có đục ở quãng trung hay không.':
+    'This does not replace your ears. It matches four numbers; it cannot tell whether your mix is muddy in the mids.',
   'Chỉnh nhịp và tông rồi xuất': 'Adjust tempo and key, then export',
   'Nhịp đích': 'Target tempo',
   'Dịch tông': 'Shift key',

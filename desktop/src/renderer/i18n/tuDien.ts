@@ -1009,4 +1009,15 @@ export const TU_DIEN: Record<string, string> = {
   'Dựng fill và chuyển đoạn': 'For fills and transitions',
   'Thường bỏ đi, thay bằng bass vinahouse': 'Usually dropped for a vinahouse bass',
   'Đàn, kèn, và mọi thứ còn lại': 'Keys, horns and everything else',
+
+  // ── Bàn làm việc (transport + dải track) ────────────────
+  // `Bản gốc` cũng đi qua biến `dich(d.nhan)` như các nhãn stem ở trên, nên
+  // bộ quét không thấy. Cùng lý do, cùng cách chữa: nhớ bằng tay.
+  'Bản gốc': 'Original',
+  'Phát': 'Play',
+  'Về đầu': 'Back to start',
+  'Chỉ nghe đường này': 'Solo this track',
+  'Tắt tiếng đường này': 'Mute this track',
+  'tông': 'key',
+  'Không đọc được tệp tiếng nào để nghe.': 'No audio file could be read for playback.',
 };

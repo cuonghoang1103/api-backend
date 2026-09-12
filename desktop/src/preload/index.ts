@@ -41,6 +41,7 @@ import type {
   KetQuaMasterRa,
   KetQuaTronRa,
   BanGiaoAmThanh,
+  SongAmThanh,
   CaiDatStemTron,
   TomTatBanMau,
   MucKhoModel,
@@ -201,6 +202,8 @@ const bridge: DesktopBridge = {
       ipcRenderer.invoke('xuongRemix:master', { id, tranDbtp, khongKhopPho }) as Promise<KetQuaMasterRa>,
     banGiao: (duong: string) =>
       ipcRenderer.invoke('xuongRemix:banGiao', { duong }) as Promise<BanGiaoAmThanh>,
+    song: (id: string, soCot: number) =>
+      ipcRenderer.invoke('xuongRemix:song', { id, soCot }) as Promise<SongAmThanh>,
     tron: (
       id: string,
       stem?: Record<string, Partial<CaiDatStemTron>>,

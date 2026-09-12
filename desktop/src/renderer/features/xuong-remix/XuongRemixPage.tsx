@@ -38,6 +38,7 @@ import { TRON_MAC_DINH } from '../../../shared/tronMacDinh';
 import { useSession } from '../../auth/session';
 import { docTraLoi, type TraLoiAi } from './traLoi';
 import { KetQuaAmThanh } from './KetQuaAmThanh';
+import { BanLamViec } from './BanLamViec';
 import { useDich } from '../../i18n';
 import { DUOI_NHAN, giaiMaBai, laTepNhac } from './giaiMa';
 
@@ -538,6 +539,19 @@ export function XuongRemixPage() {
               <X size={14} aria-hidden />
             </button>
           </div>
+
+          {/* ── BÀN LÀM VIỆC ──────────────────────────────
+              Đặt NGAY dưới tên bài, trên mọi thứ khác: khi làm nhạc thì nghe
+              và nhìn dạng sóng là công việc, số đo chỉ là thiết lập. Bản
+              trước xếp ngược lại — mở trang ra là một bảng số, và không có
+              chỗ nào bấm để nghe. */}
+          <BanLamViec
+            id={bai.id}
+            giay={bai.giay}
+            pt={pt}
+            tepGoc={bai.duongWav}
+            tepStem={ketQua?.tep ?? {}}
+          />
 
           {pt && (
             <>

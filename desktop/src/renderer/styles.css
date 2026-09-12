@@ -11291,6 +11291,188 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 
 .ct-xr-nhac { margin: 0; font-size: 12.5px; }
 
+/* ══════════════════════════════════════════════════════════
+   BÀN LÀM VIỆC — transport + dải track
+   ══════════════════════════════════════════════════════════
+   Ngôn ngữ hình ở đây khác phần còn lại của app CÓ CHỦ Ý: nền sâu hơn, viền
+   cứng hơn, số dùng font mono có vạch canh cột. Đây là chỗ người ta nhìn vào
+   dạng sóng và nghe, nên nó phải đọc như một thiết bị chứ không như một biểu
+   mẫu — mà thiết bị âm thanh nào cũng tối hơn và đặc hơn phần mềm quanh nó.
+   ══════════════════════════════════════════════════════════ */
+
+.ct-xr-ban {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+/* ── Transport ───────────────────────────────────────── */
+.ct-xr-transport {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  /* Đậm hơn `--ct-surface-2` một bậc: thanh transport là thứ neo cả bàn, và
+     nó phải nổi lên khỏi các dải track chứ không chìm cùng. */
+  background: color-mix(in srgb, var(--ct-bg) 55%, #000);
+}
+
+.ct-xr-nut-phat {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 999px;
+  background: var(--ct-accent);
+  color: #fff;
+  cursor: pointer;
+}
+.ct-xr-nut-phat:hover:not(:disabled) { filter: brightness(1.1); }
+.ct-xr-nut-phat:disabled { opacity: 0.55; cursor: default; }
+
+.ct-xr-dongho {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Khoảng đẩy giữa đồng hồ và cụm số đo. Là phần tử rỗng chứ không phải
+   `margin-left: auto` trên `.ct-xr-tp-so`: thanh này `flex-wrap`, và khi nó
+   xuống dòng thì `auto` đẩy cụm số ra tận mép phải của DÒNG MỚI, tách rời
+   khỏi đồng hồ. Một ô co giãn được thì tự xẹp về 0 lúc ấy. */
+.ct-xr-tp-day {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Nhịp và tông: con số to, đơn vị nhỏ bên dưới — cách mọi máy đo bày số. */
+.ct-xr-tp-so {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  line-height: 1.1;
+  flex-shrink: 0;
+}
+.ct-xr-tp-so b {
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+.ct-xr-tp-so span {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ct-text-faint);
+}
+
+/* ── Dải track ───────────────────────────────────────── */
+.ct-xr-track {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.ct-xr-lan {
+  display: grid;
+  /* Đầu dải rộng cố định để dạng sóng của MỌI dải bắt đầu ở cùng một cột —
+     lệch một chút là mắt không so được hai stem với nhau nữa, mà so chúng
+     chính là việc người ta làm ở đây. */
+  grid-template-columns: 168px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+  padding: 6px 10px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: color-mix(in srgb, var(--ct-bg) 40%, #000);
+}
+.ct-xr-lan.cam { opacity: 0.4; }
+
+.ct-xr-lan-dau {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 8px;
+  align-items: center;
+  min-width: 0;
+}
+.ct-xr-lan-dau > b {
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ct-xr-lan-dau input[type='range'] {
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+  accent-color: var(--ct-accent);
+}
+
+.ct-xr-lan-nut { display: flex; gap: 4px; }
+.ct-xr-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid var(--ct-border);
+  border-radius: 3px;
+  background: none;
+  color: var(--ct-text-faint);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.ct-xr-tag:hover { color: var(--ct-text); }
+.ct-xr-tag[data-bat='1'] {
+  color: #fff;
+  background: var(--ct-accent);
+  border-color: var(--ct-accent);
+}
+
+/* ── Dạng sóng ───────────────────────────────────────── */
+.ct-xr-song {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 3px;
+  /* Nền tối hơn cả dải: dạng sóng là thứ sáng nhất trong ô, và tương phản đó
+     là toàn bộ lý do ô này tồn tại. */
+  background: color-mix(in srgb, var(--ct-bg) 20%, #000);
+}
+.ct-xr-song[data-bam='1'] { cursor: pointer; }
+.ct-xr-song-canvas { display: block; width: 100%; height: 100%; }
+
+/* Con trỏ phát: dịch bằng `transform` nên trình duyệt chạy nó trên GPU và
+   không tính lại bố cục 60 lần một giây. */
+.ct-xr-song-troc {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 1px;
+  background: var(--ct-warn);
+  box-shadow: 0 0 4px var(--ct-warn);
+  pointer-events: none;
+  will-change: transform;
+}
+
+@container xr (max-width: 640px) {
+  /* Đầu dải xuống dòng riêng: dưới 640px thì 168px cộng dạng sóng còn chưa
+     tới 300px, và một dạng sóng 300px không đọc được gì. */
+  .ct-xr-lan { grid-template-columns: minmax(0, 1fr); }
+}
+
 /* ── Bàn trộn stem ───────────────────────────────────────
    Bốn hàng, mỗi hàng bốn ô điều khiển. Ở cột hẹp thì mỗi hàng tự xuống
    thành khối dọc — dùng `@container` chứ KHÔNG `@media`: thanh bên đóng/mở

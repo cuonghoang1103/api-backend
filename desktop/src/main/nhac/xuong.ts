@@ -27,6 +27,7 @@ import { chamBai, doTatCa, type KetQuaDo } from './amLuong';
 import { ghepDuoc, maCamelot, tenTong, type Tong } from './camelot';
 import { chinhBai, tiLeTuBpm } from './keoGian';
 import { doDacTinh, hanBien, master, type DacTinh } from './master';
+import { dangSong, phangHoa } from './dangSong';
 import { CAI_MAC_DINH, tron, type CaiDatMotPhan, type CaiDatStem } from './tron';
 import type { TuyChonNen } from './nen';
 import { caoDoTuTen, mauVinahouse, vietMidi } from './midi';
@@ -40,6 +41,12 @@ export interface BaiDaNap {
   ten: string;
   giay: number;
   soKenh: number;
+  /**
+   * Đường WAV bản gốc. Bàn làm việc cần nó để nút Phát có tiếng NGAY, trước
+   * khi tách — tách một bài 5 phút mất vài phút, mà trong lúc đó người ta vẫn
+   * muốn nghe và nhìn dạng sóng.
+   */
+  duongWav: string;
 }
 
 export interface KetQuaPhanTich {
@@ -129,7 +136,7 @@ export async function napBai(
     huy: null, pt: null, daTach: null, banMau: null,
   };
   phien.set(id, p);
-  return { id, ten, giay: p.giay, soKenh };
+  return { id, ten, giay: p.giay, soKenh, duongWav };
 }
 
 /**
@@ -474,6 +481,44 @@ export async function tronStem(
     dinhThat: do_.dinhThat,
     giay: (Date.now() - batDau) / 1000,
   };
+}
+
+export interface SongRa {
+  /** Khoá là `goc` hoặc tên stem. Mỗi giá trị là hai mảng cùng độ dài. */
+  min: Record<string, Float32Array>;
+  max: Record<string, Float32Array>;
+  giay: number;
+}
+
+/**
+ * Dạng sóng của bài gốc và của từng stem đã tách, đã tóm tắt về `soCot` cột.
+ *
+ * Đọc lại từ đĩa mỗi lần thay vì nhớ sẵn: bàn làm việc chỉ xin lại khi đổi bề
+ * rộng cửa sổ, và nhớ 5 mảng envelope cho mỗi phiên đang mở thì lại là một
+ * chỗ rò bộ nhớ nữa. Đọc một tệp WAV mất ~0,2 giây.
+ */
+export async function songBai(id: string, soCot: number): Promise<SongRa> {
+  const p = layPhien(id);
+  const min: Record<string, Float32Array> = {};
+  const max: Record<string, Float32Array> = {};
+
+  const them = async (ten: string, duong: string) => {
+    try {
+      const am = docWav((await fs.readFile(duong)).buffer as ArrayBuffer);
+      const ph = phangHoa(dangSong(am.kenh, soCot));
+      min[ten] = ph.min;
+      max[ten] = ph.max;
+    } catch {
+      /* Stem chưa tách, hay tệp hỏng: bỏ qua đúng dải đó. Ném ở đây thì cả
+         bàn làm việc không vẽ được gì chỉ vì một stem thiếu. */
+    }
+  };
+
+  await them('goc', p.duongWav);
+  if (p.daTach) {
+    for (const ten of TEN_STEM) await them(ten, path.join(p.daTach, `${ten}.wav`));
+  }
+  return { min, max, giay: p.giay };
 }
 
 export interface BanGiao {

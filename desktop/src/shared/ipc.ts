@@ -463,6 +463,8 @@ export interface BaiDaNap {
   ten: string;
   giay: number;
   soKenh: number;
+  /** Đường WAV bản gốc — bàn làm việc nghe nó khi bài chưa được tách. */
+  duongWav: string;
 }
 
 /** Mọi phép đo của một bài. Xem `main/nhac/amLuong.ts` để biết cách tính. */
@@ -535,6 +537,13 @@ export interface CaiDatStemTron {
    kéo theo zod, nên renderer nạp được mà không phình gói. */
 
 /** Một tệp kết quả đã đọc về renderer, dạng WAV 16-bit sẵn sàng nghe và đẩy lên. */
+/** Dạng sóng đã tóm tắt. Khoá là `goc` hoặc tên stem. */
+export interface SongAmThanh {
+  min: Record<string, Float32Array>;
+  max: Record<string, Float32Array>;
+  giay: number;
+}
+
 export interface BanGiaoAmThanh {
   ten: string;
   byte: Uint8Array;
@@ -1265,6 +1274,12 @@ export const INVOKE_CHANNELS = {
   /* Đọc một tệp kết quả về renderer để NGHE THỬ và ĐẨY LÊN thư viện. Main còn
      kiểm lại đường dẫn bằng `duongAnToan()` — schema này chỉ là hàng rào đầu. */
   'xuongRemix:banGiao': z.object({ duong: z.string().min(1).max(4096) }),
+  /* Dạng sóng để VẼ. `soCot` chặn trên 4000: đó đã là hơn số điểm ảnh ngang
+     của mọi màn hình, và cao hơn nữa chỉ tốn công tính chứ không thấy thêm. */
+  'xuongRemix:song': z.object({
+    id: z.string().uuid(),
+    soCot: z.number().int().min(16).max(4000),
+  }),
 
   /* Đường dẫn tệp trong repo mẫu gốc. Tiến trình chính còn kiểm lại lần nữa —
      xem `duongAnToan()` — nên schema này chỉ là hàng rào đầu tiên. */
@@ -1701,6 +1716,8 @@ export interface DesktopBridge {
      * không mất gì. Renderer dùng nó để nghe thử và để đẩy lên thư viện.
      */
     banGiao(duong: string): Promise<BanGiaoAmThanh>;
+    /** Dạng sóng của bài gốc và mọi stem đã tách, tóm tắt về `soCot` cột. */
+    song(id: string, soCot: number): Promise<SongAmThanh>;
     /** Trộn các stem ĐÃ TÁCH thành một bản stereo. Ném nếu chưa tách. */
     tron(
       id: string,

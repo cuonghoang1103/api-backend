@@ -12,7 +12,7 @@ import type { MucKhoModel } from '../../shared/ipc';
 import { KHO_MODEL, napModelTuTep, taiModel, tinhTrangKho, xoaModel } from '../nhac/taiModel';
 import {
   chinhVaXuat, donDep, donDepTatCa, huyTach, masterTheoMau, napBai, napBanMau,
-  banGiao, phanTich, tach, thuMucPhien, tronStem,
+  banGiao, phanTich, songBai, tach, thuMucPhien, tronStem,
 } from '../nhac/xuong';
 import { handle } from './index';
 
@@ -138,6 +138,8 @@ export function registerXuongRemixHandlers(): void {
      nó mở một tệp để đọc. `duongAnToan` giới hạn trong thư mục phiên của
      Xưởng Remix, nên không đọc trộm được gì ngoài kết quả của chính nó. */
   handle('xuongRemix:banGiao', ({ duong }) => banGiao(duongAnToan(duong)));
+
+  handle('xuongRemix:song', ({ id, soCot }) => songBai(id, soCot));
 
   handle('xuongRemix:moThuMuc', async ({ duong }) => {
     const loi = await shell.openPath(duongAnToan(duong));

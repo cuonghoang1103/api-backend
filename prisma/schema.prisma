@@ -175,6 +175,9 @@ model User {
   techTrendArticles           TechTrendArticle[]     @relation("TechTrendAuthor")
   techTrendComments           TechTrendComment[]
   techTrendCommentLikes       TechTrendCommentLike[]
+  advisorComments             AdvisorComment[]
+  advisorCommentLikes         AdvisorCommentLike[]
+  advisorCommentReports       AdvisorCommentReport[]
   gamePlays                   GamePlay[]
   announcements               Announcement[]         @relation("AnnouncementAuthor")
 
@@ -3547,6 +3550,88 @@ model TechTrendCommentLike {
   @@index([commentId], name: "idx_tt_comment_likes_comment")
   @@index([userId], name: "idx_tt_comment_likes_user")
   @@map("tech_trend_comment_likes")
+}
+
+// ============================================================
+// Academy Advisor — thảo luận (bình luận) + FAQ (2026-09-13)
+// ============================================================
+// Bình luận công khai trên trang Tư vấn chọn ngành, phân theo
+// KHỐI/NGÀNH (facultyId/majorId là chuỗi slug, KHÔNG khoá ngoại —
+// khối/ngành sống trong dữ liệu tĩnh frontend, không có bảng).
+// Mỗi bình luận có thể kèm 1 ảnh (R2 key), like, và báo cáo. Khi
+// reportsCount vượt ngưỡng → isHidden=true để ẩn khỏi danh sách
+// công khai (admin xử lý sau). AdvisorQuestion gộp câu hỏi đã hỏi
+// AI để dựng "Câu hỏi thường gặp" theo tần suất.
+model AdvisorComment {
+  id           Int      @id @default(autoincrement())
+  facultyId    String   @map("faculty_id") @db.VarChar(64)
+  majorId      String?  @map("major_id") @db.VarChar(64)
+  userId       Int      @map("user_id")
+  parentId     Int?     @map("parent_id")
+  content      String   @db.Text
+  imageUrl     String?  @map("image_url") @db.VarChar(500)
+  likesCount   Int      @default(0) @map("likes_count")
+  reportsCount Int      @default(0) @map("reports_count")
+  isHidden     Boolean  @default(false) @map("is_hidden")
+  isEdited     Boolean  @default(false) @map("is_edited")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  user    User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent  AdvisorComment?        @relation("AdvisorCommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies AdvisorComment[]       @relation("AdvisorCommentReplies")
+  likes   AdvisorCommentLike[]
+  reports AdvisorCommentReport[]
+
+  @@index([facultyId, majorId, createdAt(sort: Desc)], name: "idx_adv_comments_scope_time")
+  @@index([parentId], name: "idx_adv_comments_parent")
+  @@index([userId], name: "idx_adv_comments_user")
+  @@map("advisor_comments")
+}
+
+model AdvisorCommentLike {
+  id        Int      @id @default(autoincrement())
+  commentId Int      @map("comment_id")
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  comment AdvisorComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId], name: "uk_adv_comment_like")
+  @@index([commentId], name: "idx_adv_comment_likes_comment")
+  @@index([userId], name: "idx_adv_comment_likes_user")
+  @@map("advisor_comment_likes")
+}
+
+model AdvisorCommentReport {
+  id        Int      @id @default(autoincrement())
+  commentId Int      @map("comment_id")
+  userId    Int      @map("user_id")
+  reason    String?  @db.VarChar(500)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  comment AdvisorComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  user    User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([commentId, userId], name: "uk_adv_comment_report")
+  @@index([commentId], name: "idx_adv_comment_reports_comment")
+  @@map("advisor_comment_reports")
+}
+
+model AdvisorQuestion {
+  id          Int      @id @default(autoincrement())
+  facultyId   String   @map("faculty_id") @db.VarChar(64)
+  majorId     String?  @map("major_id") @db.VarChar(64)
+  normalized  String   @map("normalized") @db.VarChar(300)
+  text        String   @db.VarChar(500)
+  askCount    Int      @default(1) @map("ask_count")
+  lastAskedAt DateTime @default(now()) @map("last_asked_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@unique([facultyId, majorId, normalized], name: "uk_adv_question")
+  @@index([facultyId, majorId, askCount(sort: Desc)], name: "idx_adv_questions_scope_count")
+  @@map("advisor_questions")
 }
 
 // ============================================================

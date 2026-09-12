@@ -2184,7 +2184,33 @@ export const academyAdvisorApi = {
     completedCourses?: string[];
     history?: { role: 'user' | 'assistant'; content: string }[];
   }) => api.post<{ success: true; data: { answer: string } }>('/academy/advisor', payload),
+
+  // FAQ — câu hỏi thường gặp (gộp từ câu người dùng đã hỏi AI).
+  getFaq: (facultyId: string, majorId?: string | null) =>
+    api.get<{ success: true; data: { text: string; askCount: number }[] }>(
+      '/academy/advisor/faq', { params: { facultyId, majorId: majorId || undefined } },
+    ),
+
+  // Bình luận / thảo luận.
+  getComments: (facultyId: string, majorId?: string | null) =>
+    api.get<{ success: true; data: AdvisorCommentDto[] }>(
+      '/academy/advisor/comments', { params: { facultyId, majorId: majorId || undefined } },
+    ),
+  postComment: (payload: { facultyId: string; majorId?: string | null; content: string; imageUrl?: string | null; parentId?: number | null }) =>
+    api.post<{ success: true; data: AdvisorCommentDto }>('/academy/advisor/comments', payload),
+  deleteComment: (id: number) => api.delete<{ success: true }>(`/academy/advisor/comments/${id}`),
+  likeComment: (id: number) =>
+    api.post<{ success: true; data: { liked: boolean; likesCount: number } }>(`/academy/advisor/comments/${id}/like`),
+  reportComment: (id: number, reason?: string) =>
+    api.post<{ success: true; data: { reported: boolean } }>(`/academy/advisor/comments/${id}/report`, { reason }),
 };
+
+export interface AdvisorCommentUser { id: number; username: string; fullName?: string | null; displayName?: string | null; avatarUrl?: string | null }
+export interface AdvisorCommentDto {
+  id: number; content: string; imageUrl?: string | null; likesCount: number;
+  isEdited: boolean; createdAt: string; parentId: number | null;
+  user: AdvisorCommentUser; replies?: AdvisorCommentDto[];
+}
 
 export default api;
 

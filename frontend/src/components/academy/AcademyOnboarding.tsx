@@ -33,13 +33,22 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowLeft, Check, GraduationCap, Hammer, Sparkles, X } from 'lucide-react';
+import { ArrowLeft, Check, GraduationCap, Sparkles, X } from 'lucide-react';
 
-import { FPTU_MAJORS, getCombo, getMajor, type FptuCombo, type FptuMajor } from '@/data/fptuCurriculum';
+import {
+  CATALOG,
+  getFaculty,
+  getCatMajor,
+  getCatCombo,
+  leafCourseCodes,
+  type CatFaculty,
+  type CatMajor,
+  type CatCombo,
+} from '@/data/academyCatalog';
 import { useAcademyProfile } from '@/hooks/useAcademyProfile';
 import { cn } from '@/lib/utils';
 
-type Step = 'ask' | 'major' | 'combo' | 'done';
+type Step = 'ask' | 'faculty' | 'major' | 'combo' | 'done';
 type Mood = 'curious' | 'happy' | 'celebrate';
 
 /* ------------------------------------------------------------------ robot */
@@ -141,10 +150,10 @@ function RobotMascot({ mood, reduced, compact }: { mood: Mood; reduced: boolean;
 export interface AcademyOnboardingProps {
   open: boolean;
   onClose: () => void;
-  /** 'ask' = bắt đầu từ câu "bạn có phải sinh viên FPTU?"; 'major' = vào
-   *  thẳng màn chọn ngành (nút "Đổi ngành" dùng cái này, vì nó đã biết
+  /** 'ask' = bắt đầu từ câu "bạn có phải sinh viên FPTU?"; 'faculty' = vào
+   *  thẳng màn chọn KHỐI ngành (nút "Đổi ngành" dùng cái này, vì nó đã biết
    *  người đang xem là sinh viên). */
-  initialStep?: 'ask' | 'major';
+  initialStep?: 'ask' | 'faculty';
 }
 
 const FOCUSABLE =
@@ -156,6 +165,7 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask' }
   const reduced = !!useReducedMotion();
 
   const [step, setStep] = useState<Step>(initialStep);
+  const [facultyId, setFacultyId] = useState<string | null>(null);
   const [majorId, setMajorId] = useState<string | null>(null);
   const [comboId, setComboId] = useState<string | null>(null);
   const [remember, setRemember] = useState(true);
@@ -167,36 +177,46 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask' }
   useEffect(() => {
     if (!open) return;
     setStep(initialStep);
+    setFacultyId(null);
     setMajorId(null);
     setComboId(null);
     setRemember(true);
   }, [open, initialStep]);
 
-  const major: FptuMajor | undefined = getMajor(majorId);
-  const combo: FptuCombo | undefined = getCombo(majorId, comboId);
+  const faculty: CatFaculty | undefined = getFaculty(facultyId);
+  const major: CatMajor | undefined = getCatMajor(facultyId, majorId);
+  const combo: CatCombo | undefined = getCatCombo(facultyId, majorId, comboId);
   const hasComboStep = (major?.combos.length ?? 0) > 0;
 
-  const totalSteps = majorId ? (hasComboStep ? 3 : 2) : 3;
-  const currentStep = step === 'ask' ? 1 : step === 'major' ? 2 : step === 'combo' ? 3 : totalSteps;
+  // Bốn màn: ask → faculty → major → (combo). Ngành không có ngành hẹp thì 3 bước.
+  const totalSteps = majorId ? (hasComboStep ? 4 : 3) : 4;
+  const currentStep = step === 'ask' ? 1 : step === 'faculty' ? 2 : step === 'major' ? 3 : step === 'combo' ? 4 : totalSteps;
 
   const mood: Mood = step === 'done' ? 'celebrate' : step === 'combo' ? 'happy' : 'curious';
 
   /** Chỉ ghi khi hộp "lưu ghi nhớ" còn tick. Bỏ tick = không gọi save() lần nào. */
   const persist = useCallback(
-    (next: { isStudent: boolean; major: string | null; combo: string | null }) => {
+    (next: { isStudent: boolean; faculty: string | null; major: string | null; combo: string | null }) => {
       if (remember) save(next);
     },
     [remember, save],
   );
 
   const handleNotStudent = useCallback(() => {
-    persist({ isStudent: false, major: null, combo: null });
+    persist({ isStudent: false, faculty: null, major: null, combo: null });
     onClose();
     router.push('/courses');
   }, [persist, onClose, router]);
 
+  const handlePickFaculty = useCallback((f: CatFaculty) => {
+    setFacultyId(f.id);
+    setMajorId(null);
+    setComboId(null);
+    setStep('major');
+  }, []);
+
   const handlePickMajor = useCallback(
-    (m: FptuMajor) => {
+    (m: CatMajor) => {
       setMajorId(m.id);
       if (m.combos.length > 0) {
         setComboId(null);
@@ -205,19 +225,19 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask' }
       }
       // Ngành không có ngành hẹp → vào thẳng.
       setComboId(null);
-      persist({ isStudent: true, major: m.id, combo: null });
+      persist({ isStudent: true, faculty: facultyId, major: m.id, combo: null });
       setStep('done');
     },
-    [persist],
+    [persist, facultyId],
   );
 
   const handlePickCombo = useCallback(
     (id: string | null) => {
       setComboId(id);
-      persist({ isStudent: true, major: majorId, combo: id });
+      persist({ isStudent: true, faculty: facultyId, major: majorId, combo: id });
       setStep('done');
     },
-    [persist, majorId],
+    [persist, facultyId, majorId],
   );
 
   /** Esc / nền / ✕ — đóng mà KHÔNG lưu gì. */
@@ -281,8 +301,9 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask' }
   const headings: Record<Step, string> = useMemo(
     () => ({
       ask: 'Bạn có phải sinh viên FPT University không?',
+      faculty: 'Bạn học khối ngành nào?',
       major: 'Bạn học ngành nào?',
-      combo: 'Chọn ngành hẹp (combo)',
+      combo: 'Chọn ngành hẹp (chuyên ngành)',
       done: 'Xong rồi!',
     }),
     [],
@@ -344,7 +365,7 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask' }
             {/* Robot + tiêu đề */}
             <div className="flex flex-col items-center text-center">
               <motion.div {...robotMotion}>
-                <RobotMascot mood={mood} reduced={reduced} compact={step === 'major' || step === 'combo'} />
+                <RobotMascot mood={mood} reduced={reduced} compact={step === 'faculty' || step === 'major' || step === 'combo'} />
               </motion.div>
 
               {/* Chỉ báo bước */}
@@ -398,7 +419,7 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask' }
                       <button
                         type="button"
                         data-autofocus="true"
-                        onClick={() => setStep('major')}
+                        onClick={() => setStep('faculty')}
                         className="min-h-[56px] rounded-2xl px-4 py-3 font-semibold text-white bg-gradient-to-r from-neon-indigo to-neon-violet hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-darkcard transition"
                       >
                         <span className="inline-flex items-center justify-center gap-2">
@@ -417,32 +438,34 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask' }
                   </div>
                 )}
 
-                {step === 'major' && (
+                {step === 'faculty' && (
                   <div>
                     <p className="text-sm text-text-secondary text-center">
-                      FPTU có 8 ngành trong khối Công nghệ thông tin. Chọn ngành của bạn:
+                      FPTU có nhiều khối ngành. Chọn khối của bạn để mình lọc đúng lộ trình:
                     </p>
                     <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
-                      {FPTU_MAJORS.map((m, i) => (
-                        <button
-                          key={m.id}
-                          type="button"
-                          data-autofocus={i === 0 ? 'true' : undefined}
-                          onClick={() => handlePickMajor(m)}
-                          className="min-h-[64px] text-left rounded-2xl p-3 bg-darksurface border border-darkborder hover:border-neon-violet/60 hover:bg-white/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex gap-3 items-start"
-                        >
-                          <span aria-hidden="true" className="text-2xl leading-none mt-0.5">{m.icon}</span>
-                          <span className="min-w-0">
-                            <span className="block font-semibold text-text-primary">{m.nameVi}</span>
-                            <span className="block text-xs text-text-muted">{m.name}</span>
-                            <span className={cn('block mt-1 text-[11px]', m.combos.length > 0 ? 'text-neon-cyan' : 'text-text-muted')}>
-                              {m.combos.length > 0
-                                ? `${m.combos.length} combo · đủ lộ trình 9 kỳ`
-                                : 'Đủ lộ trình 9 kỳ · trường chưa công bố combo'}
+                      {CATALOG.map((f, i) => {
+                        const nMajors = f.majors.length;
+                        const nSpecs = f.majors.reduce((a, mj) => a + mj.combos.length, 0);
+                        return (
+                          <button
+                            key={f.id}
+                            type="button"
+                            data-autofocus={i === 0 ? 'true' : undefined}
+                            onClick={() => handlePickFaculty(f)}
+                            className="min-h-[64px] text-left rounded-2xl p-3 bg-darksurface border border-darkborder hover:border-neon-violet/60 hover:bg-white/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex gap-3 items-start"
+                          >
+                            <span aria-hidden="true" className="text-2xl leading-none mt-0.5">{f.icon}</span>
+                            <span className="min-w-0">
+                              <span className="block font-semibold text-text-primary">{f.nameVi}</span>
+                              <span className="block text-xs text-text-muted">{f.name}</span>
+                              <span className="block mt-1 text-[11px] text-neon-cyan">
+                                {nMajors > 1 ? `${nMajors} ngành · ` : ''}{nSpecs} chuyên ngành hẹp
+                              </span>
                             </span>
-                          </span>
-                        </button>
-                      ))}
+                          </button>
+                        );
+                      })}
                     </div>
                     <div className="mt-4">
                       <button
@@ -456,72 +479,92 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask' }
                   </div>
                 )}
 
-                {step === 'combo' && major && (
+                {step === 'major' && faculty && (
                   <div>
                     <p className="text-sm text-text-secondary text-center">
-                      Ngành <span className="text-text-primary font-semibold">{major.nameVi}</span> có{' '}
-                      {major.combos.length} combo theo khung {major.curriculumCode}. Chưa chọn cũng không sao.
+                      Khối <span className="text-text-primary font-semibold">{faculty.nameVi}</span>. Chọn ngành của bạn:
                     </p>
                     <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
-                      {major.combos.map((c, i) => (
+                      {faculty.majors.map((m, i) => (
                         <button
-                          key={c.id}
+                          key={m.id}
                           type="button"
                           data-autofocus={i === 0 ? 'true' : undefined}
-                          onClick={() => handlePickCombo(c.id)}
-                          className="min-h-[76px] text-left rounded-2xl p-3 bg-darksurface border border-darkborder hover:border-neon-violet/60 hover:bg-white/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex gap-3 items-start"
+                          onClick={() => handlePickMajor(m)}
+                          className="min-h-[64px] text-left rounded-2xl p-3 bg-darksurface border border-darkborder hover:border-neon-violet/60 hover:bg-white/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex gap-3 items-start"
                         >
-                          <span aria-hidden="true" className="text-2xl leading-none mt-0.5">{c.icon}</span>
-                          <span className="min-w-0 flex-1">
-                            <span className="block font-semibold text-text-primary">{c.nameVi}</span>
-                            <span className="block text-[11px] text-text-secondary mt-1 space-y-0.5">
-                              {Object.keys(c.bySemester)
-                                .map(Number)
-                                .sort((x, y) => x - y)
-                                .map((sem) => (
-                                  <span key={sem} className="block">
-                                    <span className="text-text-muted">Kỳ {sem}:</span>{' '}
-                                    <span className="font-mono text-neon-cyan">{c.bySemester[sem].join(', ')}</span>
-                                  </span>
-                                ))}
-                            </span>
-                            {c.note && <span className="block text-[11px] text-text-muted mt-0.5">{c.note}</span>}
-                            <span
-                              className={cn(
-                                'inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full text-[11px] border',
-                                c.academyCourses.length > 0
-                                  ? 'bg-neon-green/10 text-neon-green border-neon-green/30'
-                                  : 'bg-white/5 text-text-muted border-darkborder',
-                              )}
-                            >
-                              {c.academyCourses.length > 0 ? (
-                                <>
-                                  <Check className="w-3 h-3" /> Đã có {c.academyCourses.length} môn trong Academy
-                                </>
-                              ) : (
-                                <>
-                                  <Hammer className="w-3 h-3" /> Đang xây dựng
-                                </>
-                              )}
+                          <span aria-hidden="true" className="text-2xl leading-none mt-0.5">{m.icon}</span>
+                          <span className="min-w-0">
+                            <span className="block font-semibold text-text-primary">{m.nameVi}</span>
+                            <span className="block text-xs text-text-muted">{m.name}</span>
+                            <span className={cn('block mt-1 text-[11px]', m.combos.length > 0 ? 'text-neon-cyan' : 'text-text-muted')}>
+                              {m.combos.length > 0
+                                ? `${m.combos.length} chuyên ngành hẹp · lộ trình 9 kỳ`
+                                : 'Đủ lộ trình 9 kỳ · trường chưa công bố chuyên ngành'}
                             </span>
                           </span>
                         </button>
                       ))}
-
-                      {/* Sinh viên năm nhất chưa chọn combo — ép chọn là bịa hộ họ. */}
+                    </div>
+                    <div className="mt-4">
                       <button
                         type="button"
-                        onClick={() => handlePickCombo(null)}
-                        className="min-h-[76px] text-left rounded-2xl p-3 bg-transparent border border-dashed border-darkborder hover:border-neon-cyan/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex gap-3 items-start"
+                        onClick={() => setStep('faculty')}
+                        className="min-h-[44px] inline-flex items-center gap-2 px-3 rounded-xl text-sm text-text-secondary hover:text-text-primary hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition"
                       >
-                        <span aria-hidden="true" className="text-2xl leading-none mt-0.5">🕓</span>
-                        <span className="min-w-0">
-                          <span className="block font-semibold text-text-primary">Chưa chọn / để sau</span>
-                          <span className="block text-[11px] text-text-muted mt-0.5">
-                            Chưa tới kỳ 5 thì chọn cái này. Bạn vẫn thấy đủ môn chung, đổi lại lúc nào cũng được.
-                          </span>
-                        </span>
+                        <ArrowLeft className="w-4 h-4" /> Chọn khối khác
                       </button>
+                    </div>
+                  </div>
+                )}
+
+                {step === 'combo' && major && (
+                  <div>
+                    <p className="text-sm text-text-secondary text-center">
+                      Ngành <span className="text-text-primary font-semibold">{major.nameVi}</span> có{' '}
+                      {major.combos.length} chuyên ngành hẹp. Chọn để mình hiện đúng lộ trình môn của bạn.
+                    </p>
+                    <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
+                      {major.combos.map((c, i) => {
+                        const nCourses = leafCourseCodes(facultyId, majorId, c.id).length;
+                        return (
+                          <button
+                            key={c.id}
+                            type="button"
+                            data-autofocus={i === 0 ? 'true' : undefined}
+                            onClick={() => handlePickCombo(c.id)}
+                            className="min-h-[64px] text-left rounded-2xl p-3 bg-darksurface border border-darkborder hover:border-neon-violet/60 hover:bg-white/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex gap-3 items-start"
+                          >
+                            <span aria-hidden="true" className="text-2xl leading-none mt-0.5">{c.icon}</span>
+                            <span className="min-w-0 flex-1">
+                              <span className="block font-semibold text-text-primary">{c.nameVi}</span>
+                              {c.name !== c.nameVi && <span className="block text-xs text-text-muted">{c.name}</span>}
+                              <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full text-[11px] border bg-neon-cyan/10 text-neon-cyan border-neon-cyan/30">
+                                <Check className="w-3 h-3" /> {nCourses > 0 ? `${nCourses} môn · lộ trình 9 kỳ` : 'Đang cập nhật khung'}
+                              </span>
+                            </span>
+                          </button>
+                        );
+                      })}
+
+                      {/* "Để sau" chỉ có nghĩa với khối IT (ngành có khung nền, chưa
+                          chọn combo vẫn thấy môn chung). Khối khác mỗi chuyên ngành là
+                          một khung riêng nên buộc chọn mới lọc được. */}
+                      {facultyId === 'it' && (
+                        <button
+                          type="button"
+                          onClick={() => handlePickCombo(null)}
+                          className="min-h-[64px] text-left rounded-2xl p-3 bg-transparent border border-dashed border-darkborder hover:border-neon-cyan/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex gap-3 items-start"
+                        >
+                          <span aria-hidden="true" className="text-2xl leading-none mt-0.5">🕓</span>
+                          <span className="min-w-0">
+                            <span className="block font-semibold text-text-primary">Chưa chọn / để sau</span>
+                            <span className="block text-[11px] text-text-muted mt-0.5">
+                              Chưa tới kỳ chọn chuyên ngành thì chọn cái này. Đổi lại lúc nào cũng được.
+                            </span>
+                          </span>
+                        </button>
+                      )}
                     </div>
                     <div className="mt-4">
                       <button

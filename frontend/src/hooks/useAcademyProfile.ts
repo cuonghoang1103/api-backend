@@ -32,12 +32,14 @@ import { useAuthStore } from '@/store/authStore';
 
 export interface AcademyProfile {
   isStudent: boolean | null;
+  /** Khối ngành: 'it' | 'business' | 'communication' | 'language' | 'cs'. */
+  faculty: string | null;
   major: string | null;
   combo: string | null;
   chosenAt: string | null;
 }
 
-const EMPTY: AcademyProfile = { isStudent: null, major: null, combo: null, chosenAt: null };
+const EMPTY: AcademyProfile = { isStudent: null, faculty: null, major: null, combo: null, chosenAt: null };
 const LS_KEY = 'cuong-academy-profile-v1';
 
 interface State { profile: AcademyProfile; ready: boolean }
@@ -65,9 +67,12 @@ function readLocal(): AcademyProfile {
     const raw = window.localStorage.getItem(LS_KEY);
     if (!raw) return EMPTY;
     const p = JSON.parse(raw) as Partial<AcademyProfile>;
+    const major = typeof p.major === 'string' ? p.major : null;
     return {
       isStudent: typeof p.isStudent === 'boolean' ? p.isStudent : null,
-      major: typeof p.major === 'string' ? p.major : null,
+      // Migrate: profile cũ (chỉ IT, chưa có faculty) mà đã có major → khối 'it'.
+      faculty: typeof p.faculty === 'string' ? p.faculty : (major ? 'it' : null),
+      major,
       combo: typeof p.combo === 'string' ? p.combo : null,
       chosenAt: typeof p.chosenAt === 'string' ? p.chosenAt : null,
     };
@@ -111,10 +116,11 @@ export function useAcademyProfile() {
     (async () => {
       try {
         const res = await preferencesApi.get();
-        const remote = res.data?.data?.preferences?.academy;
+        const remote = res.data?.data?.preferences?.academy as Partial<AcademyProfile> | undefined;
         if (!alive || !remote) return;
         const win = newer(state.profile, {
           isStudent: remote.isStudent ?? null,
+          faculty: remote.faculty ?? (remote.major ? 'it' : null),
           major: remote.major ?? null,
           combo: remote.combo ?? null,
           chosenAt: remote.chosenAt ?? null,

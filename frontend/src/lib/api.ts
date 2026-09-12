@@ -2178,6 +2178,8 @@ export const academyAdvisorApi = {
     question: string;
     facultyId?: string | null;
     majorId?: string | null;
+    facultyName?: string;
+    majorName?: string;
     semester?: number;
     completedCourses?: string[];
     history?: { role: 'user' | 'assistant'; content: string }[];

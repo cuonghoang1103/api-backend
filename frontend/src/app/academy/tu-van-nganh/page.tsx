@@ -152,12 +152,14 @@ export default function AcademyAdvisorPage() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages, busy]);
 
-  // Các ngành hẹp liên quan đúng khối/ngành đã chọn (không thì tất cả).
+  // Ngành hẹp CỦA ĐÚNG khối đã chọn. Khối chưa có dữ liệu curated (v1 mới phủ
+  // CNTT) → rỗng: hiện chú thích trung thực, KHÔNG đổ nhầm ngành IT.
   const specs = useMemo(() => {
     const all = catalog?.specs ?? [];
-    const rel = all.filter((s) => (!facultyId || s.facultyId === facultyId) && (!majorId || s.majorId === majorId));
-    return rel.length ? rel : all;
-  }, [catalog, facultyId, majorId]);
+    if (!facultyId) return all;
+    return all.filter((s) => s.facultyId === facultyId);
+  }, [catalog, facultyId]);
+  const hasSpecData = specs.length > 0;
 
   // Môn đã học tới KỲ đang chọn (khung ngành nền — dùng cho IT; khối khác chưa có nền chung).
   const completedCourses = useMemo(() => {
@@ -184,6 +186,7 @@ export default function AcademyAdvisorPage() {
     try {
       const res = await academyAdvisorApi.ask({
         question: q, facultyId, majorId, semester, completedCourses,
+        facultyName: faculty?.nameVi, majorName: major?.nameVi,
         history: messages.slice(-8),
       });
       setMessages([...next, { role: 'assistant', content: res.data.data.answer }]);
@@ -242,6 +245,13 @@ export default function AcademyAdvisorPage() {
         <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
           {/* CỘT TRÁI: so sánh ngành hẹp */}
           <div className="space-y-6 order-2 lg:order-1">
+            {!hasSpecData && (
+              <div className="rounded-2xl border border-neon-cyan/30 bg-neon-cyan/5 p-5 text-sm text-text-secondary">
+                <p className="text-text-primary font-semibold mb-1">Dữ liệu chi tiết đang được bổ sung cho khối này 🛠️</p>
+                <p>Phần so sánh chi tiết (lương, nhu cầu, sản phẩm, cú pháp code) hiện tập trung ở khối <strong>Công nghệ thông tin</strong>. Bạn vẫn chat hỏi cố vấn AI bên phải để được tư vấn tổng quát cho khối {faculty?.nameVi ?? 'của bạn'} nhé.</p>
+              </div>
+            )}
+            {hasSpecData && (<>
             {/* Biểu đồ */}
             <div className="rounded-2xl border border-darkborder bg-darkcard p-5">
               <h2 className="text-lg font-semibold text-text-primary mb-1">So sánh nhu cầu &amp; lương</h2>
@@ -278,6 +288,7 @@ export default function AcademyAdvisorPage() {
                 </div>
               </div>
             ) : null}
+            </>)}
           </div>
 
           {/* CỘT PHẢI: chat AI + câu hỏi gợi ý */}

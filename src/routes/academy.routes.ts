@@ -498,18 +498,25 @@ function fmtAdvisorSpec(s: AdvisorSpec): string {
   ].join('\n');
 }
 
-function buildAdvisorSystem(specs: AdvisorSpec[], semester: number, completed: string[]): string {
-  const specBlock = specs.map(fmtAdvisorSpec).join('\n\n');
+function buildAdvisorSystem(
+  specs: AdvisorSpec[], semester: number, completed: string[],
+  facultyName: string, majorName: string,
+): string {
   const ctx: string[] = [];
+  if (facultyName) ctx.push(`Sinh viên thuộc khối "${facultyName}"${majorName ? `, ngành "${majorName}"` : ''}.`);
   if (semester > 0) ctx.push(`Sinh viên đang học KỲ ${semester}.`);
   if (completed.length) ctx.push(`Các môn Academy sinh viên ĐÃ HỌC (mã): ${completed.join(', ')}.`);
+  // Khối chưa có dữ liệu ngành hẹp curated (v1 mới phủ khối CNTT): tư vấn TỔNG
+  // QUÁT & trung thực, không bịa và không lấy dữ liệu ngành IT áp cho khối khác.
+  const groundBlock = specs.length
+    ? 'DỮ LIỆU NGÀNH HẸP (nguồn neo — CHỈ được dựa vào đây, KHÔNG bịa số):\n' + specs.map(fmtAdvisorSpec).join('\n\n')
+    : 'LƯU Ý: Academy CHƯA có dữ liệu chi tiết (lương/nhu cầu/sản phẩm) cho các ngành hẹp của khối này — dữ liệu chi tiết hiện tập trung ở khối Công nghệ thông tin. Hãy nói THẲNG điều đó, tư vấn TỔNG QUÁT dựa trên hiểu biết chung, KHÔNG bịa con số cụ thể, và khuyên sinh viên xem báo cáo thị trường + hỏi thầy cô/khoa để có số chính xác.';
   return [
     'Bạn là CỐ VẤN HƯỚNG NGHIỆP chuyên nghiệp của FPT University Academy, tư vấn sinh viên CHỌN NGÀNH HẸP (chuyên ngành). Trả lời bằng TIẾNG VIỆT, thân thiện, thẳng thắn, NGẮN GỌN và có cấu trúc (markdown, gạch đầu dòng, in đậm ý chính).',
     '',
-    'CHỈ được dựa vào CÁC SỰ THẬT dưới đây về từng ngành hẹp — TUYỆT ĐỐI KHÔNG bịa thêm con số lương/tuyển dụng. Khi người dùng cần số CHÍNH XÁC, hãy nói mức định tính rồi khuyên họ xem báo cáo (TopDev/ITviec/VietnamWorks) — không tự chế số.',
+    'TUYỆT ĐỐI KHÔNG bịa thêm con số lương/tuyển dụng. Khi người dùng cần số CHÍNH XÁC, hãy nói mức định tính rồi khuyên họ xem báo cáo (TopDev/ITviec/VietnamWorks).',
     '',
-    'DỮ LIỆU NGÀNH HẸP (nguồn neo):',
-    specBlock,
+    groundBlock,
     '',
     ctx.length ? 'NGỮ CẢNH SINH VIÊN:\n' + ctx.join('\n') : 'Chưa biết sinh viên học kỳ mấy — nếu cần thì hỏi lại.',
     '',
@@ -545,12 +552,15 @@ router.post('/advisor', authenticate, async (req: any, res: Response<ApiResponse
           .slice(-ADVISOR_MAX_HISTORY)
       : [];
 
-    // Neo vào các ngành hẹp ĐÚNG khối/ngành đã chọn; chưa chọn thì lấy tất cả.
-    const relevant = ADVISOR_SPECS.filter((s) =>
-      (!facultyId || s.facultyId === facultyId) && (!majorId || s.majorId === majorId));
-    const specs = relevant.length ? relevant : ADVISOR_SPECS;
+    // Neo vào các ngành hẹp ĐÚNG khối đã chọn. KHÔNG lấy dữ liệu khối khác làm nền
+    // cho một khối chưa có dữ liệu (tránh đổ nhầm ngành IT cho SV Kinh doanh).
+    const specs = facultyId
+      ? ADVISOR_SPECS.filter((s) => s.facultyId === facultyId && (!majorId || s.majorId === majorId))
+      : ADVISOR_SPECS;
+    const facultyName = String(req.body?.facultyName || '').trim().slice(0, 80);
+    const majorName = String(req.body?.majorName || '').trim().slice(0, 80);
 
-    const system = buildAdvisorSystem(specs, semester, completed);
+    const system = buildAdvisorSystem(specs, semester, completed, facultyName, majorName);
     const messages = [...history, { role: 'user' as const, content: question }];
     const result = await llmComplete({
       step: 'generation',

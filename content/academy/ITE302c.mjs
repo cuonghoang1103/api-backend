@@ -1,5 +1,5 @@
 /**
- * ITE302c — IT & Data Ethics (Đạo đức trong CNTT & dữ liệu). Kỳ 5.
+ * ITE302c — Ethics in IT (Đạo đức trong CNTT). Kỳ 5. Tên theo FLM (sylID 12637) và FAP.
  * Môn KHÁI NIỆM (không code). Dựa trên bộ Coursera "Certified Ethical Emerging
  * Technologist" (CertNexus, 5 MOOC) + khoá "Ethics of Artificial Intelligence".
  * Song ngữ EN/VN realtime (khối .ml-en / .ml-vi, tiêu đề EN|||VI).
@@ -13,7 +13,7 @@ export default {
     academyType: 'FPT',
     courseCode: 'ITE302c',
     slug: 'it-and-data-ethics',
-    title: 'IT & Data Ethics',
+    title: 'Ethics in IT',
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
@@ -38,7 +38,7 @@ export default {
           content: `
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.1</span>
-<h2>About ITE302c — IT &amp; Data Ethics</h2>
+<h2>About ITE302c — Ethics in IT</h2>
 <p class="lead">Every system you build makes decisions <em>about people</em> — who gets a loan, whose CV is read, what news someone sees. ITE302c is where you learn to answer the question code alone can't: not "does it work?" but <strong>"should we do it, and is it fair?"</strong> This is a <strong>concept</strong> course — no programming — taught through frameworks and real cases.</p>
 <p>The subject is built on the CertNexus <strong>Certified Ethical Emerging Technologist</strong> path plus <strong>Ethics of Artificial Intelligence</strong>. Organisations and governments now hire ethics specialists to reduce risk and guide responsible technology — the exact skill set this course certifies.</p>
 <h3>By the end of this course you will be able to</h3>

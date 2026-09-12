@@ -5,9 +5,32 @@
  * Sơ đồ .lz-map/.lz-flow/.lz-stack. Công cụ cộng tác → Exp Hub.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/SSG104.mjs --apply
  */
+import { b1l1 } from './ssg104/b1-l1.mjs';
+import { b1l2 } from './ssg104/b1-l2.mjs';
+import { b1l3 } from './ssg104/b1-l3.mjs';
+import { b1l4 } from './ssg104/b1-l4.mjs';
+import { b2l56 } from './ssg104/b2-l5-6.mjs';
+import { b2l7 } from './ssg104/b2-l7.mjs';
+import { b2l7c } from './ssg104/b2-l7-cont.mjs';
+import { b2l8 } from './ssg104/b2-l8.mjs';
+import { b3l9 } from './ssg104/b3-l9.mjs';
+import { b3l1011 } from './ssg104/b3-l10-11.mjs';
+import { b3l12 } from './ssg104/b3-l12.mjs';
+import { b3l13 } from './ssg104/b3-l13.mjs';
+import { b4l14 } from './ssg104/b4-l14.mjs';
+import { b4l15 } from './ssg104/b4-l15.mjs';
+import { b4l16 } from './ssg104/b4-l16.mjs';
+import { b4l17 } from './ssg104/b4-l17.mjs';
+import { b4l18 } from './ssg104/b4-l18.mjs';
+import { b4l19 } from './ssg104/b4-l19.mjs';
+import { b5l20 } from './ssg104/b5-l20.mjs';
+import { b5l2122 } from './ssg104/b5-l21-22.mjs';
+import { b5l23 } from './ssg104/b5-l23.mjs';
+
 export default {
   semester: { code: 'KY2', name: 'Kỳ 2', ordinal: 2 },
   course: {
+    syncOrder: true,
     courseCode: 'SSG104',
     slug: 'communication-and-in-group-working-skills',
     title: 'Communication and In-Group Working Skills',
@@ -265,6 +288,188 @@ export default {
 </a>
 </div>
 `,
+        },
+      ],
+    },
+    /* ══════════════════ Buổi 1 — Tổng quan nhóm & đội (học theo từng slide) ══════════════════ */
+    {
+      title: 'Session I — Group & Team Overview (slide by slide)|||Buổi 1 — Tổng quan nhóm & đội (học theo từng slide)',
+      description: 'Bốn bài đầu của giáo trình, đi hết 103 slide gốc của lớp: định nghĩa nhóm/đội, hợp tác, tâm lý học nhóm, so sánh xã hội.',
+      lessons: [
+        {
+          title: 'S1.1 — Defining Teams and Groups (41 slides)|||B1.1 — Định nghĩa nhóm và đội (41 slide)',
+          slug: 'ssg104-b1-l1-nhom-doi',
+          type: 'VIDEO',
+          description: 'Bài 1 của buổi 1, đi hết 41 slide của thầy cô: nhóm vs đội, 7 đặc điểm, 5 mô hình đội, 4 activity trên lớp.',
+          content: b1l1,
+        },
+        {
+          title: 'S1.2 — Cooperation (12 slides)|||B1.2 — Hợp tác (12 slide)',
+          slug: 'ssg104-b1-l2-hop-tac',
+          type: 'VIDEO',
+          description: 'Thế lưỡng nan của người tù, ba định hướng giá trị xã hội, năm yếu tố tình huống ảnh hưởng tới hợp tác.',
+          content: b1l2,
+        },
+        {
+          title: 'S1.3 — The Psychology of Groups (22 slides)|||B1.3 — Tâm lý học nhóm (22 slide)',
+          slug: 'ssg104-b1-l3-tam-ly-nhom',
+          type: 'VIDEO',
+          description: 'Nhu cầu thuộc về, Tuckman 5 giai đoạn, social loafing, phân cực nhóm, hiệu ứng tri thức chung, groupthink.',
+          content: b1l3,
+        },
+        {
+          title: 'S1.4 — Social Comparison (28 slides)|||B1.4 — So sánh xã hội (28 slide)',
+          slug: 'ssg104-b1-l4-so-sanh-xa-hoi',
+          type: 'VIDEO',
+          description: 'So sánh lên/xuống, mô hình SEM của Tesser, bốn yếu tố tình huống, hiệu ứng ao làng và Dunning-Kruger.',
+          content: b1l4,
+        },
+      ],
+    },
+    /* ══════════════════ Buổi 2 — Tư duy & phân tích (học theo từng slide) ══════════════════ */
+    {
+      title: 'Session II — Thinking & Analysis (slide by slide)|||Buổi 2 — Tư duy & phân tích (học theo từng slide)',
+      description: 'Thang Bloom, tư duy sáng tạo, đề xuất kinh doanh (hai phần) và tư duy phản biện — 98 slide.',
+      lessons: [
+        {
+          title: 'S2.1 — Patterns of Thought & Creative Thinking (36 slides)|||B2.1 — Lối tư duy & tư duy sáng tạo (36 slide)',
+          slug: 'ssg104-b2-l5-6-tu-duy',
+          type: 'VIDEO',
+          description: 'Thang Bloom sáu bậc, sáng tạo như một kỹ năng, bốn ngộ nhận, và vòng brainstorming sáu bước.',
+          content: b2l56,
+        },
+        {
+          title: 'S2.2 — Business Proposal, part 1 (20 slides)|||B2.2 — Đề xuất kinh doanh, phần 1 (20 slide)',
+          slug: 'ssg104-b2-l7-de-xuat',
+          type: 'VIDEO',
+          description: 'Mười mục truyền thống của một đề xuất, executive summary, ethos/pathos/logos. Đây là hướng dẫn cho Dự án nhóm phần 1.',
+          content: b2l7,
+        },
+        {
+          title: 'S2.3 — Business Proposal, part 2 (18 slides)|||B2.3 — Đề xuất kinh doanh, phần 2 (18 slide)',
+          slug: 'ssg104-b2-l7-de-xuat-2',
+          type: 'VIDEO',
+          description: 'Tiến độ có mốc ngày, kế hoạch marketing, hai bảng tài chính mẫu, đề xuất được mời vs tự gửi.',
+          content: b2l7c,
+        },
+        {
+          title: 'S2.4 — Critical Thinking Skills (24 slides)|||B2.4 — Kỹ năng tư duy phản biện (24 slide)',
+          slug: 'ssg104-b2-l8-phan-bien',
+          type: 'VIDEO',
+          description: 'Bảng LÀ / KHÔNG PHẢI, sáu câu hỏi logic, bảng kiểm giải quyết vấn đề, bốn chiến lược đánh giá thông tin.',
+          content: b2l8,
+        },
+      ],
+    },
+    /* ══════════════════ Buổi 3 — Lý thuyết nhóm & đội (học theo từng slide) ══════════════════ */
+    {
+      title: 'Session III — Group & Team Theory (slide by slide)|||Buổi 3 — Lý thuyết nhóm & đội (học theo từng slide)',
+      description: 'Quyền lực, lãnh đạo và đội đa văn hoá, xung đột và thương lượng, xử lý căng thẳng — 113 slide.',
+      lessons: [
+        {
+          title: 'S3.1 — Power in Teams and Groups (31 slides)|||B3.1 — Quyền lực trong nhóm và đội (31 slide)',
+          slug: 'ssg104-b3-l9-quyen-luc',
+          type: 'VIDEO',
+          description: 'Ba dạng quyền lực của Starhawk, năm nền tảng quyền lực, ai dễ bị tác động, và cách dùng quyền lực có đạo đức.',
+          content: b3l9,
+        },
+        {
+          title: 'S3.2 — Leadership & Working in Diverse Teams (36 slides)|||B3.2 — Lãnh đạo & làm việc trong đội đa dạng (36 slide)',
+          slug: 'ssg104-b3-l10-11-lanh-dao',
+          type: 'VIDEO',
+          description: 'Lãnh đạo vs quản lý, lãnh đạo được chỉ định vs nổi lên, và sáu chiều văn hoá Hofstede.',
+          content: b3l1011,
+        },
+        {
+          title: 'S3.3 — Conflict and Cohesion in Groups (24 slides)|||B3.3 — Xung đột và gắn kết trong nhóm (24 slide)',
+          slug: 'ssg104-b3-l12-xung-dot',
+          type: 'VIDEO',
+          description: 'Ba điều kiện của xung đột, năm loại, mô hình bốn giai đoạn, bốn chiến lược phòng ngừa và chín chiến lược giảm thiểu.',
+          content: b3l12,
+        },
+        {
+          title: 'S3.4 — Handling stress in groups (22 slides)|||B3.4 — Xử lý căng thẳng trong nhóm (22 slide)',
+          slug: 'ssg104-b3-l13-cang-thang',
+          type: 'VIDEO',
+          description: 'Stress tích cực và tiêu cực, triệu chứng, stress mạn tính, sáu hướng tự chăm sóc và khi nào cần tìm trợ giúp.',
+          content: b3l13,
+        },
+      ],
+    },
+    /* ══════════════════ Buổi 4 — Nhóm & đội trong hành động (học theo từng slide) ══════════════════ */
+    {
+      title: 'Session IV — Groups & Teams in Action (slide by slide)|||Buổi 4 — Nhóm & đội trong hành động (học theo từng slide)',
+      description: 'Phi ngôn ngữ, thuyết trình thuyết phục, cuộc họp, viết chuyên nghiệp, email/thư, báo cáo — 124 slide.',
+      lessons: [
+        {
+          title: 'S4.1 — Nonverbal delivery (23 slides)|||B4.1 — Trình bày phi ngôn ngữ (23 slide)',
+          slug: 'ssg104-b4-l14-phi-ngon-ngu',
+          type: 'VIDEO',
+          description: 'Tám loại giao tiếp phi ngôn ngữ, tam giác sân khấu, cử chỉ ba bước, bốn tiêu chí cho công cụ trực quan.',
+          content: b4l14,
+        },
+        {
+          title: 'S4.2 — Persuasive presentation (20 slides)|||B4.2 — Thuyết trình thuyết phục (20 slide)',
+          slug: 'ssg104-b4-l15-thuyet-phuc',
+          type: 'VIDEO',
+          description: 'Thuyết phục vs tạo động lực, mười một điều cấm về đạo đức, và cấu trúc elevator speech.',
+          content: b4l15,
+        },
+        {
+          title: 'S4.3 — Groups and meetings (21 slides)|||B4.3 — Nhóm và cuộc họp (21 slide)',
+          slug: 'ssg104-b4-l16-cuoc-hop',
+          type: 'VIDEO',
+          description: 'Sáu thành phần chương trình họp, bảng kiểm cho người dự, tám kiểu điều hành hỏng, mười lăm nguyên tắc điều hành.',
+          content: b4l16,
+        },
+        {
+          title: 'S4.4 — Professional writing (23 slides)|||B4.4 — Viết chuyên nghiệp (23 slide)',
+          slug: 'ssg104-b4-l17-viet-chuyen-nghiep',
+          type: 'VIDEO',
+          description: 'Ba thiên kiến, mười hai điểm chuẩn bị, bốn nhóm rà tổng quát, sáu mục kiểm cụ thể, mười hai điểm rà văn phong.',
+          content: b4l17,
+        },
+        {
+          title: 'S4.5 — Business email & letter (21 slides)|||B4.5 — Email & thư công việc (21 slide)',
+          slug: 'ssg104-b4-l18-email-thu',
+          type: 'VIDEO',
+          description: 'Mười ba quy tắc viết email, memo (nội bộ) khác thư (đối ngoại), mười lăm phần của một bức thư chuẩn.',
+          content: b4l18,
+        },
+        {
+          title: 'S4.6 — Writing a report (16 slides)|||B4.6 — Viết báo cáo (16 slide)',
+          slug: 'ssg104-b4-l19-bao-cao',
+          type: 'VIDEO',
+          description: 'Mười tám loại báo cáo, mười thành phần chung, và bảng kiểm chất lượng mười bốn điểm cho báo cáo nhóm.',
+          content: b4l19,
+        },
+      ],
+    },
+    /* ══════════════════ Buổi 5 — Khám phá nghề nghiệp (học theo từng slide) ══════════════════ */
+    {
+      title: 'Session V — Career Exploration (slide by slide)|||Buổi 5 — Khám phá nghề nghiệp (học theo từng slide)',
+      description: 'Phát triển nghề nghiệp, CV và thư xin việc, chuẩn bị phỏng vấn — 66 slide. Nuôi cho Group Assignment 2.',
+      lessons: [
+        {
+          title: 'S5.1 — Career development & career skills (16 slides)|||B5.1 — Phát triển nghề nghiệp & kỹ năng nghề (16 slide)',
+          slug: 'ssg104-b5-l20-nghe-nghiep',
+          type: 'VIDEO',
+          description: 'Năm giai đoạn phát triển nghề nghiệp, bản đồ bốn bước, PDCA, và bảy nguồn tìm việc.',
+          content: b5l20,
+        },
+        {
+          title: 'S5.2 — Résumé & Cover Letter (31 slides)|||B5.2 — CV & thư xin việc (31 slide)',
+          slug: 'ssg104-b5-l21-22-cv',
+          type: 'VIDEO',
+          description: 'Bốn định dạng CV, chín điều tuyệt đối không đưa vào hồ sơ, công thức AIDA và khung ba đoạn của thư xin việc.',
+          content: b5l2122,
+        },
+        {
+          title: 'S5.3 — Job Interview Preparation (19 slides)|||B5.3 — Chuẩn bị phỏng vấn xin việc (19 slide)',
+          slug: 'ssg104-b5-l23-phong-van',
+          type: 'VIDEO',
+          description: 'Bảy kiểu phỏng vấn, câu hỏi truyền thống và theo hành vi, bốn câu hỏi KHÔNG được phép hỏi, và chín câu bạn sẽ gặp.',
+          content: b5l23,
         },
       ],
     },

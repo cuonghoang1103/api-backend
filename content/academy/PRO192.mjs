@@ -25,6 +25,89 @@ export default {
     documentsNote: 'Giáo trình: Core Java Vol 1 & 2 (Cay Horstmann) · Java 8 Specification (Oracle) · học liệu OOP using Java do FU biên soạn. Công cụ: JDK 8+, NetBeans. Kèm file syllabus gốc PRO192.pdf.',
   },
   sections: [
+    /* ══════════════════ 📚 TÀI LIỆU THAM KHẢO ══════════════════ */
+    {
+      title: '📚 Tài liệu tham khảo|||📚 Course materials & references',
+      description: 'Sách chính Core Java, Java 8 Spec, học liệu FU trên FLM; công cụ JDK/NetBeans; lộ trình tự học.',
+      lessons: [
+        {
+          title: '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+          slug: 'pro192-tai-lieu-tham-khao',
+          type: 'DOCUMENT',
+          isFreePreview: true,
+          description: 'Sách chính Core Java (Horstmann) + Java 8 Spec + học liệu FU trên FLM, công cụ JDK/NetBeans, luyện code & lộ trình tự học.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">PRO192 · 📚 Reference hub</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">Everything for Object-Oriented Programming in Java — one place. The official FPTU textbook and lecture slides live on <strong>FLM</strong>; below are the main book, the language spec, and free, legal resources.</p>
+<h3>📘 Main textbook (syllabus)</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><div class="lz-lt">Core Java Volume 1 &amp; 2 — Cay Horstmann (Pearson, 11th ed.)</div><div class="lz-ld">The definitive practical Java reference and the syllabus's main book. Volume 1 covers everything in this course; Volume 2 goes further (I/O, streams).</div></div>
+  <div class="lz-layer"><div class="lz-lt">The Java Language Specification, Java SE 8 (Oracle)</div><div class="lz-ld">The authoritative rule book. This subject targets <strong>Java 8</strong> — check syntax here when in doubt.</div></div>
+  <div class="lz-layer"><div class="lz-lt">FU "OOP using Java" materials</div><div class="lz-ld">The course-aligned learning resource, on FLM.</div></div>
+</div>
+<h3>🌐 Free official / legal resources</h3>
+<ul>
+<li><a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — official PRO192 syllabus, slides &amp; textbook (log in with your FPTU account).</li>
+<li><a href="https://dev.java/learn/" target="_blank" rel="noopener">dev.java — Learn Java</a> — Oracle's official tutorials.</li>
+<li><a href="https://docs.oracle.com/javase/8/docs/api/" target="_blank" rel="noopener">Java 8 API documentation</a> — every class and method (String, ArrayList, HashMap…).</li>
+</ul>
+<h3>🛠️ Tools you need</h3>
+<ul>
+<li><a href="https://www.oracle.com/java/technologies/downloads/" target="_blank" rel="noopener">JDK (Java Development Kit) 8+</a> — the compiler (<code>javac</code>) and runtime (<code>java</code>).</li>
+<li><a href="https://netbeans.apache.org/" target="_blank" rel="noopener">Apache NetBeans</a> — the IDE this course uses (build/run/debug built in).</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@coding.with.john" target="_blank" rel="noopener">Coding with John</a> — short, clear Java/OOP explanations.</li>
+<li><a href="https://www.youtube.com/@BroCodez" target="_blank" rel="noopener">Bro Code — Java</a> — full beginner Java course.</li>
+</ul>
+<div class="callout"><span class="badge">Self-study path</span>
+<ol>
+<li><strong>Foundation (exam core)</strong> — install JDK + NetBeans, then Java syntax, classes &amp; the four OOP pillars.</li>
+<li><strong>Practice at the keyboard</strong> — retype every example and run it; 40% of the grade is you writing working Java.</li>
+<li><strong>Go deeper</strong> — abstract classes &amp; interfaces, exceptions, object arrays, collections, file I/O.</li>
+<li><strong>Job-ready</strong> — build one complete menu-driven program (entity + manager + file save) end to end.</li>
+</ol></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">PRO192 · 📚 Trung tâm tài liệu</span>
+<h2>Tài liệu tham khảo môn học</h2>
+<p class="lead">Mọi thứ để học Lập trình hướng đối tượng bằng Java — gom về một chỗ. Giáo trình &amp; slide chính thức của FPTU nằm trên <strong>FLM</strong>; bên dưới là sách chính, bản đặc tả ngôn ngữ, và nguồn miễn phí hợp pháp.</p>
+<h3>📘 Sách chính (theo syllabus)</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><div class="lz-lt">Core Java Volume 1 &amp; 2 — Cay Horstmann (Pearson, bản 11)</div><div class="lz-ld">Tài liệu Java thực hành chuẩn mực và là sách chính của syllabus. Volume 1 phủ toàn bộ môn này; Volume 2 đi xa hơn (I/O, stream).</div></div>
+  <div class="lz-layer"><div class="lz-lt">The Java Language Specification, Java SE 8 (Oracle)</div><div class="lz-ld">Cuốn luật gốc. Môn này nhắm <strong>Java 8</strong> — nghi ngờ cú pháp thì tra ở đây.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Học liệu "OOP using Java" của FU</div><div class="lz-ld">Tài nguyên học bám sát môn, trên FLM.</div></div>
+</div>
+<h3>🌐 Tài liệu chính thức / miễn phí</h3>
+<ul>
+<li><a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — syllabus, slide &amp; giáo trình PRO192 chính thức (đăng nhập tài khoản FPTU).</li>
+<li><a href="https://dev.java/learn/" target="_blank" rel="noopener">dev.java — Learn Java</a> — hướng dẫn chính thức của Oracle.</li>
+<li><a href="https://docs.oracle.com/javase/8/docs/api/" target="_blank" rel="noopener">Tài liệu API Java 8</a> — mọi lớp &amp; phương thức (String, ArrayList, HashMap…).</li>
+</ul>
+<h3>🛠️ Công cụ bạn cần</h3>
+<ul>
+<li><a href="https://www.oracle.com/java/technologies/downloads/" target="_blank" rel="noopener">JDK (Java Development Kit) 8+</a> — trình biên dịch (<code>javac</code>) và runtime (<code>java</code>).</li>
+<li><a href="https://netbeans.apache.org/" target="_blank" rel="noopener">Apache NetBeans</a> — IDE mà môn này dùng (build/run/debug tích hợp).</li>
+</ul>
+<h3>▶️ YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@coding.with.john" target="_blank" rel="noopener">Coding with John</a> — giải thích Java/OOP ngắn gọn, rõ.</li>
+<li><a href="https://www.youtube.com/@BroCodez" target="_blank" rel="noopener">Bro Code — Java</a> — khoá Java cho người mới đầy đủ.</li>
+</ul>
+<div class="callout"><span class="badge">Lộ trình tự học</span>
+<ol>
+<li><strong>Nền (lõi thi)</strong> — cài JDK + NetBeans, rồi cú pháp Java, lớp &amp; bốn trụ cột OOP.</li>
+<li><strong>Luyện ở bàn phím</strong> — gõ lại mọi ví dụ và chạy; 40% điểm là bạn viết Java chạy được.</li>
+<li><strong>Đào sâu</strong> — abstract class &amp; interface, ngoại lệ, mảng đối tượng, collections, đọc/ghi tệp.</li>
+<li><strong>Sẵn sàng đi làm</strong> — làm trọn một chương trình theo menu (entity + lớp quản lý + lưu tệp) đầu-cuối.</li>
+</ol></div>
+</div>`,
+        },
+      ],
+    },
     /* ══════════════════ MỤC 0 — GIỚI THIỆU & HƯỚNG DẪN HỌC ══════════════════ */
     {
       title: 'Section 0 — Introduction & Study Guide|||Mục 0 — Giới thiệu môn học & Hướng dẫn học',

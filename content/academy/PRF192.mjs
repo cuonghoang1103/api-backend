@@ -21,6 +21,97 @@ export default {
     documentsNote: 'Giáo trình: Foundations of Programming Using C (Evan Weaver) • The C Programming Language (Kernighan & Ritchie). Công cụ: DevC++ 6.3 hoặc VS Code + GCC. Kèm file syllabus gốc PRF192.pdf.',
   },
   sections: [
+    /* ══════════════════ 📚 TÀI LIỆU THAM KHẢO ══════════════════ */
+    {
+      title: '📚 Tài liệu tham khảo|||📚 Course materials & references',
+      description: 'Trung tâm tài liệu: giáo trình chính (Evan Weaver, K&R), MOOC, cppreference, YouTube, công cụ DevC++/VS Code + GCC và lộ trình tự học.',
+      lessons: [
+        {
+          title: '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
+          slug: 'prf192-tai-lieu-tham-khao',
+          type: 'DOCUMENT',
+          isFreePreview: true,
+          description: 'Sách chính (Evan Weaver) + K&R, MOOC intro2c.sdds.ca, tài liệu chuẩn C (cppreference), YouTube, công cụ DevC++/VS Code, lộ trình tự học.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">PRF192 · Materials</span>
+<h2>Course materials &amp; references</h2>
+<p class="lead">Everything you need to learn <strong>Programming Fundamentals in C</strong> in one place. The full FPTU slides &amp; official syllabus live on <strong>FLM</strong>; below are free, legal resources.</p>
+<h3>📘 Textbooks &amp; slides</h3>
+<p>Official FPTU textbook &amp; lecture slides for PRF192 are on <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — sign in with your FPTU account.</p>
+<ul>
+<li><strong>Foundations of Programming Using C</strong> — Evan Weaver <em>(the main textbook, free)</em>.</li>
+<li><strong>The C Programming Language</strong> — Kernighan &amp; Ritchie ("K&amp;R", the classic reference; read it gradually).</li>
+<li>MOOC: <a href="https://intro2c.sdds.ca" target="_blank" rel="noopener"><em>Introduction to C</em> — intro2c.sdds.ca</a> (Chris Szalwinski, Seneca College).</li>
+</ul>
+<h3>🌐 Free reference docs</h3>
+<ul>
+<li><a href="https://en.cppreference.com/w/c" target="_blank" rel="noopener">cppreference — C standard library</a> (the authoritative function reference).</li>
+<li><a href="https://www.learn-c.org/" target="_blank" rel="noopener">learn-c.org</a> — interactive C tutorial in the browser.</li>
+<li><a href="https://beej.us/guide/bgc/" target="_blank" rel="noopener">Beej's Guide to C Programming</a> — friendly, thorough, free.</li>
+</ul>
+<h3>▶️ YouTube channels</h3>
+<ul>
+<li><a href="https://www.youtube.com/@NesoAcademy" target="_blank" rel="noopener">Neso Academy</a> — a full, structured C programming course.</li>
+<li><a href="https://www.youtube.com/@BroCodez" target="_blank" rel="noopener">Bro Code — C</a> — the whole language in one friendly walkthrough.</li>
+<li><a href="https://www.youtube.com/@mycodeschool" target="_blank" rel="noopener">mycodeschool</a> — C &amp; data structures, drawn out step by step.</li>
+</ul>
+<h3>🛠️ Tools</h3>
+<ul>
+<li><a href="https://www.embarcadero.com/free-tools/dev-cpp" target="_blank" rel="noopener">Embarcadero Dev-C++ 6.3</a> — the IDE FPTU uses (compiler + editor in one).</li>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VS Code</a> + the <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools" target="_blank" rel="noopener">C/C++ extension</a> + <a href="https://gcc.gnu.org/" target="_blank" rel="noopener">GCC</a> (MinGW-w64 on Windows) — the professional long-term setup.</li>
+<li><a href="https://www.onlinegdb.com/online_c_compiler" target="_blank" rel="noopener">OnlineGDB</a> — compile &amp; run C in the browser, no install.</li>
+</ul>
+<div class="callout"><span class="badge">Self-study path</span>
+<ol>
+<li><strong>Foundation / exam core</strong> — program structure, variables &amp; types, expressions, <code>if</code>/loops (CLO1–CLO3).</li>
+<li><strong>Practice</strong> — retype every example and run it; solve the auto-graded exercises on CodeLab.</li>
+<li><strong>Go deeper</strong> — functions, pointers &amp; memory, arrays/structs, strings, files (CLO4–CLO9).</li>
+<li><strong>Job-ready</strong> — build a small end-to-end C program (a menu-driven manager) and debug it cleanly.</li>
+</ol></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">PRF192 · Tài liệu</span>
+<h2>Trung tâm tài liệu tham khảo</h2>
+<p class="lead">Mọi thứ để học <strong>Cơ sở lập trình bằng C</strong> gom về một chỗ. Slide &amp; giáo trình chính thức đầy đủ nằm trên <strong>FLM</strong>; bên dưới là nguồn miễn phí, hợp pháp.</p>
+<h3>📘 Giáo trình &amp; slide</h3>
+<p>Giáo trình FPTU &amp; slide bài giảng chính thức của PRF192 có trên <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — đăng nhập bằng tài khoản FPTU.</p>
+<ul>
+<li><strong>Foundations of Programming Using C</strong> — Evan Weaver <em>(giáo trình chính, miễn phí)</em>.</li>
+<li><strong>The C Programming Language</strong> — Kernighan &amp; Ritchie ("K&amp;R", kinh điển; nên đọc dần).</li>
+<li>MOOC: <a href="https://intro2c.sdds.ca" target="_blank" rel="noopener"><em>Introduction to C</em> — intro2c.sdds.ca</a> (Chris Szalwinski, Seneca College).</li>
+</ul>
+<h3>🌐 Tài liệu tra cứu miễn phí</h3>
+<ul>
+<li><a href="https://en.cppreference.com/w/c" target="_blank" rel="noopener">cppreference — thư viện chuẩn C</a> (tra cứu hàm chính xác nhất).</li>
+<li><a href="https://www.learn-c.org/" target="_blank" rel="noopener">learn-c.org</a> — học C tương tác ngay trên trình duyệt.</li>
+<li><a href="https://beej.us/guide/bgc/" target="_blank" rel="noopener">Beej's Guide to C Programming</a> — dễ đọc, đầy đủ, miễn phí.</li>
+</ul>
+<h3>▶️ Kênh YouTube</h3>
+<ul>
+<li><a href="https://www.youtube.com/@NesoAcademy" target="_blank" rel="noopener">Neso Academy</a> — khoá C đầy đủ, có cấu trúc.</li>
+<li><a href="https://www.youtube.com/@BroCodez" target="_blank" rel="noopener">Bro Code — C</a> — trọn ngôn ngữ trong một video dễ theo.</li>
+<li><a href="https://www.youtube.com/@mycodeschool" target="_blank" rel="noopener">mycodeschool</a> — C &amp; cấu trúc dữ liệu, vẽ từng bước.</li>
+</ul>
+<h3>🛠️ Công cụ</h3>
+<ul>
+<li><a href="https://www.embarcadero.com/free-tools/dev-cpp" target="_blank" rel="noopener">Embarcadero Dev-C++ 6.3</a> — IDE trường dùng (gộp trình biên dịch + soạn thảo).</li>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VS Code</a> + <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools" target="_blank" rel="noopener">tiện ích C/C++</a> + <a href="https://gcc.gnu.org/" target="_blank" rel="noopener">GCC</a> (MinGW-w64 trên Windows) — bộ công cụ chuyên nghiệp, dùng lâu dài.</li>
+<li><a href="https://www.onlinegdb.com/online_c_compiler" target="_blank" rel="noopener">OnlineGDB</a> — biên dịch &amp; chạy C trên trình duyệt, không cần cài.</li>
+</ul>
+<div class="callout"><span class="badge">Lộ trình tự học</span>
+<ol>
+<li><strong>Nền / lõi thi</strong> — cấu trúc chương trình, biến &amp; kiểu, biểu thức, <code>if</code>/vòng lặp (CLO1–CLO3).</li>
+<li><strong>Luyện tập</strong> — gõ lại mọi ví dụ và chạy thử; làm bài chấm tự động trên CodeLab.</li>
+<li><strong>Đào sâu</strong> — hàm, con trỏ &amp; bộ nhớ, mảng/struct, chuỗi, tệp (CLO4–CLO9).</li>
+<li><strong>Sẵn sàng đi làm</strong> — viết trọn một chương trình C nhỏ (quản lý theo menu) và debug sạch.</li>
+</ol></div>
+<div class="callout"><span class="badge">Lưu ý</span> Đây là trung tâm liên kết nguyên gốc — không nhúng slide/sách có bản quyền. Link đổi thì vào FLM hoặc trang chủ chính thức để tìm.</div>
+</div>
+`,
+        },
+      ],
+    },
     /* ══════════════════ MỤC 0 — GIỚI THIỆU & HƯỚNG DẪN HỌC ══════════════════ */
     {
       title: 'Section 0 — Introduction & Study Guide|||Mục 0 — Giới thiệu môn học & Hướng dẫn học',

@@ -19,6 +19,13 @@ export interface SocialAuthor {
   fullName: string | null;
   displayName?: string | null;
   avatarUrl: string | null;
+  /**
+   * Thành viên PRO còn hạn. Máy chủ TÍNH SẴN (isPro && chưa hết hạn) —
+   * client không nhận `proExpiresAt` và không tự suy ra, vì lệch giờ giữa
+   * máy người dùng và máy chủ sẽ làm huy hiệu sai quanh lúc hết hạn.
+   * Vắng mặt ở payload cũ ⇒ coi như false.
+   */
+  isPro?: boolean;
 }
 
 export interface SocialMedia {

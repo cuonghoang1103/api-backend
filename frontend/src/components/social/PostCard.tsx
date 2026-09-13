@@ -41,6 +41,7 @@ import { REACTION_META, REACTION_PICKER_ORDER, WOW_META, EMPTY_REACTION_BREAKDOW
 import { socialKeys, type SocialFeedResponse } from '@/hooks/useSocialQueries';
 import { formatRelative } from '@/lib/formatDate';
 import { toast } from 'sonner';
+import ProAvatarRing, { ProTag } from '@/components/common/ProAvatarRing';
 
 const VISIBILITY_META: Record<string, { icon: any; label: string; color: string }> = {
   PUBLIC: { icon: Globe, label: 'Công khai', color: '#94a3b8' },
@@ -3210,6 +3211,10 @@ function CommentItem({
     ? commentUser.avatarUrl
     : `https://api.dicebear.com/7.x/avataaars/svg?seed=${commentUsername}`;
   const display = commentUser.displayName || commentUser.fullName || commentUser.username || 'Người dùng';
+  // Cờ Pro do backend tính (isPro && chưa hết hạn) — xem `tacGiaCongKhai`
+  // trong social.service.ts. Ở đây KHÔNG tự suy ra từ ngày hết hạn: client
+  // và máy chủ lệch giờ thì huy hiệu sẽ nhấp nháy sai quanh lúc hết hạn.
+  const commentPro = Boolean((commentUser as { isPro?: boolean }).isPro);
 
   // Reply input state. We track per-comment whether the input
   // is open, what the user has typed, and whether the
@@ -3306,23 +3311,28 @@ function CommentItem({
       data-comment-id={comment.id}
       className="flex gap-2.5 group"
     >
-      <Link
-        href={commentUserId === (useAuthStore.getState().user as any)?.id ? '/profile' : `/profile/${commentUserId ?? ''}`}
-        className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full transition-transform hover:scale-110"
-      >
-        <SmartImage src={avatar} alt={display} loading="lazy" decoding="async" width={32} height={32} className="h-8 w-8 flex-shrink-0 rounded-full object-cover" />
-      </Link>
+      <ProAvatarRing isPro={commentPro} size="sm">
+        <Link
+          href={commentUserId === (useAuthStore.getState().user as any)?.id ? '/profile' : `/profile/${commentUserId ?? ''}`}
+          className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full transition-transform hover:scale-110 block"
+        >
+          <SmartImage src={avatar} alt={display} loading="lazy" decoding="async" width={32} height={32} className="h-8 w-8 flex-shrink-0 rounded-full object-cover" />
+        </Link>
+      </ProAvatarRing>
       <div className="flex-1 min-w-0">
         <div
           className="inline-block max-w-full rounded-2xl px-3 py-2"
           style={{ background: 'var(--bg-surface)', border: '1px solid var(--border-light)' }}
         >
-          <Link
-            href={commentUserId === (useAuthStore.getState().user as any)?.id ? '/profile' : `/profile/${commentUserId ?? ''}`}
-            className="text-xs font-semibold text-text-primary hover:underline"
-          >
-            {display}
-          </Link>
+          <span className="inline-flex items-center gap-1.5 flex-wrap">
+            <Link
+              href={commentUserId === (useAuthStore.getState().user as any)?.id ? '/profile' : `/profile/${commentUserId ?? ''}`}
+              className="text-xs font-semibold text-text-primary hover:underline"
+            >
+              {display}
+            </Link>
+            <ProTag isPro={commentPro} />
+          </span>
           {comment.content ? (
             <p className="mt-0.5 text-sm break-words" style={{ color: 'var(--text-primary)' }}>
               {renderContent()}

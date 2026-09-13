@@ -13,6 +13,7 @@ import { useSocialStore } from '@/store/socialStore';
 import { formatRelative } from '@/lib/formatDate';
 import { socialApi } from '@/lib/api';
 import { linkifyToNodes } from '@/lib/linkify';
+import ProAvatarRing, { ProTag } from '@/components/common/ProAvatarRing';
 
 export default function VideoCommentsSheet({
   post, onClose, onCommentAdded,
@@ -101,20 +102,26 @@ export default function VideoCommentsSheet({
               <p className="py-8 text-center text-sm text-white/40">Chưa có bình luận — hãy là người đầu tiên.</p>
             )}
             {comments.map((c) => {
-              const u = (c as { user?: { displayName?: string; fullName?: string; username?: string; avatarUrl?: string | null } }).user ?? {};
+              const u = (c as { user?: { displayName?: string; fullName?: string; username?: string; avatarUrl?: string | null; isPro?: boolean } }).user ?? {};
               const display = u.displayName || u.fullName || u.username || 'Người dùng';
+              const pro = Boolean(u.isPro);
               return (
                 <div key={c.id} className="flex items-start gap-2.5">
-                  <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-white/10 text-xs font-bold text-white/70">
-                    {u.avatarUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={u.avatarUrl} alt={display} className="h-full w-full object-cover" />
-                    ) : (
-                      display.charAt(0).toUpperCase()
-                    )}
-                  </div>
+                  <ProAvatarRing isPro={pro} size="sm">
+                    <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-white/10 text-xs font-bold text-white/70">
+                      {u.avatarUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={u.avatarUrl} alt={display} className="h-full w-full object-cover" />
+                      ) : (
+                        display.charAt(0).toUpperCase()
+                      )}
+                    </div>
+                  </ProAvatarRing>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-xs font-semibold text-white/90">{display}</p>
+                    <p className="flex items-center gap-1.5 text-xs font-semibold text-white/90">
+                      <span className="truncate">{display}</span>
+                      <ProTag isPro={pro} />
+                    </p>
                     <p className="break-words text-sm text-white/80">{linkifyToNodes(c.content)}</p>
                     <p className="mt-0.5 text-[10px] text-white/40">{formatRelative(c.createdAt)}</p>
                   </div>

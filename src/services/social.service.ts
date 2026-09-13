@@ -20,6 +20,37 @@ import { deleteByUrls } from '../storage/uploadService.js';
 import { getAcceptedFriendIds } from './friend.service.js';
 import { logger } from '../utils/logger.js';
 
+// ─── Huy hiệu PRO trên bình luận (13/09/2026) ─────────────────────────────
+//
+// Bình luận trước đây không mang thông tin Pro nào, nên "Huy hiệu PRO" trong
+// bảng quyền lợi thực chất chưa hiện ở đâu cả.
+//
+// Lấy `isPro` + `proExpiresAt` thay vì gọi `isProEffective()` cho từng bình
+// luận: một trang có thể có 20 bình luận + 60 phản hồi, tức 80 truy vấn phụ
+// chỉ để vẽ một cái viền. Hai cột này đi kèm ngay trong `select` sẵn có nên
+// KHÔNG tốn thêm một vòng nào.
+//
+// ⚠️ CỐ Ý không tính admin ở đây. `isProEffective()` trả true cho admin,
+// nhưng admin đã có huy hiệu riêng; gộp vào thì mọi bình luận của chủ web
+// đều đeo nhãn PRO và nhãn đó mất ý nghĩa "người đã trả tiền".
+const CHON_TAC_GIA = {
+  id: true, username: true, fullName: true, avatarUrl: true,
+  isPro: true, proExpiresAt: true,
+} as const;
+
+/** Pro CÒN HẠN hay không. `proExpiresAt = null` khi isPro = vĩnh viễn. */
+function proConHan(u: { isPro?: boolean | null; proExpiresAt?: Date | null } | null | undefined): boolean {
+  if (!u?.isPro) return false;
+  return !u.proExpiresAt || u.proExpiresAt > new Date();
+}
+
+/** Bỏ cột nội bộ, chỉ để lại cờ `isPro` cho client. */
+function tacGiaCongKhai<T extends { isPro?: boolean | null; proExpiresAt?: Date | null }>(u: T | null | undefined) {
+  if (!u) return u;
+  const { proExpiresAt: _bo, ...con } = u as T & { proExpiresAt?: Date | null };
+  return { ...con, isPro: proConHan(u) };
+}
+
 // ─── Access control: post visibility ─────────────────────────────
 //
 // SECURITY: post `visibility` (PUBLIC | FRIENDS | PRIVATE) MUST be
@@ -648,7 +679,7 @@ export async function updatePost(postId: number, userId: number, data: {
     data,
     include: {
       author: {
-        select: { id: true, username: true, fullName: true, avatarUrl: true },
+        select: CHON_TAC_GIA,
       },
       media: { orderBy: { sortOrder: 'asc' } },
       postMusic: { include: { song: true } },
@@ -1409,7 +1440,7 @@ export async function createComment(input: CommentInput) {
     },
     include: {
       user: {
-        select: { id: true, username: true, fullName: true, avatarUrl: true },
+        select: CHON_TAC_GIA,
       },
       _count: {
         select: { likes: true },
@@ -1430,6 +1461,9 @@ export async function createComment(input: CommentInput) {
 
   return {
     ...comment,
+    // Bình luận vừa tạo cũng phải mang cờ Pro, nếu không thì bình luận của
+    // chính mình hiện KHÔNG viền cho tới khi tải lại trang — nhìn như lỗi.
+    user: tacGiaCongKhai(comment.user),
     likesCount: comment._count.likes,
     isLiked: false,
     repliesCount: comment.repliesCount,
@@ -1476,7 +1510,7 @@ export async function getComments(
   ...(cursor != null ? { cursor: { id: cursor }, skip: 1 } : {}),
     include: {
       user: {
-        select: { id: true, username: true, fullName: true, avatarUrl: true },
+        select: CHON_TAC_GIA,
       },
       _count: { select: { likes: true } },
       replies: {
@@ -1484,7 +1518,7 @@ export async function getComments(
         take: REPLIES_FETCH_LIMIT,
         include: {
           user: {
-            select: { id: true, username: true, fullName: true, avatarUrl: true },
+            select: CHON_TAC_GIA,
           },
           _count: { select: { likes: true } },
           likes: viewerLike,
@@ -1518,7 +1552,7 @@ export async function getComments(
     isEdited: c.isEdited,
     createdAt: c.createdAt,
     updatedAt: c.updatedAt,
-    user: c.user,
+    user: tacGiaCongKhai(c.user),
     // viewerLike is scoped to the current user, so a non-empty array
     // means THIS viewer liked it (fixes the old bug where any like
     // made isLiked=true for everyone).
@@ -1537,7 +1571,7 @@ export async function getComments(
       isEdited: r.isEdited,
       createdAt: r.createdAt,
       updatedAt: r.updatedAt,
-      user: r.user,
+      user: tacGiaCongKhai(r.user),
       isLiked: Array.isArray(r.likes) && r.likes.length > 0,
     })),
   }));
@@ -1578,7 +1612,7 @@ export async function getCommentReplies(
     take: limit + 1,
     include: {
       user: {
-        select: { id: true, username: true, fullName: true, avatarUrl: true },
+        select: CHON_TAC_GIA,
       },
       _count: { select: { likes: true } },
       likes: { select: { userId: true } },
@@ -1603,7 +1637,7 @@ export async function getCommentReplies(
     isEdited: r.isEdited,
     createdAt: r.createdAt,
     updatedAt: r.updatedAt,
-    user: r.user,
+    user: tacGiaCongKhai(r.user),
     isLiked: (r.likes as any[]).some((l: any) => l.userId !== undefined),
   }));
 
@@ -1649,7 +1683,7 @@ export async function updateComment(commentId: number, userId: number, content: 
     data: { content, isEdited: true },
     include: {
       user: {
-        select: { id: true, username: true, fullName: true, avatarUrl: true },
+        select: CHON_TAC_GIA,
       },
       _count: { select: { likes: true } },
     },
@@ -1709,7 +1743,7 @@ export async function getSavedPosts(userId: number, folder?: string, cursor?: nu
       post: {
         include: {
           author: {
-            select: { id: true, username: true, fullName: true, avatarUrl: true },
+            select: CHON_TAC_GIA,
           },
           media: {
             orderBy: { sortOrder: 'asc' as const },

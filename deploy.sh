@@ -955,6 +955,7 @@ for route in \
     wallet/topup/tiers \
     shop/key-replacements \
     payments/bank-transfer/config \
+    llm-keys/info \
     cv/profile \
     tech-trends/articles \
     voice \

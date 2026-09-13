@@ -366,6 +366,7 @@ model User {
   topupOrders       TopupOrder[]
   proOrders         ProOrder[]
   keyReplacements   KeyReplacementRequest[]
+  llmKeyRequests    LlmKeyRequest[]
 
   @@index([email], name: "idx_users_email")
   @@map("users")
@@ -9057,4 +9058,53 @@ model KeyReplacementRequest {
   @@index([userId], name: "idx_key_repl_user")
   @@index([orderItemId], name: "idx_key_repl_item")
   @@map("product_key_replacement_requests")
+}
+
+// ============================================================
+// 31. XIN KEY OPENCODE (cổng key con LLM) — 13/09/2026
+// ------------------------------------------------------------
+// Người dùng Pro xin một key con để dùng AI trong OpenCode trên máy họ.
+// Đơn nằm ở PENDING cho tới khi admin duyệt; chưa duyệt thì người dùng
+// KHÔNG thấy key nào.
+//
+// ⚠️ Admin DÁN key vào lúc duyệt, hệ thống không tự tạo. Cụm New API
+// (`services/cong-llm/`) chạy ở mạng docker riêng, backend không gọi tới
+// được — và giao diện quản trị của nó cố ý chỉ mở qua SSH tunnel. Admin
+// vốn đã phải vào đó để đặt hạn mức cho key, nên dán thêm một lần không
+// tốn công, mà đổi lại không phải nhét token quản trị của New API vào
+// backend.
+//
+// ⚠️ `keyValue` là BÍ MẬT THẬT. Chỉ trả về cho ĐÚNG chủ đơn, và không bao
+// giờ ghi vào log. Cột `keyHien` là bản che để hiện ở danh sách admin.
+// ============================================================
+
+model LlmKeyRequest {
+  id     Int @id @default(autoincrement())
+  userId Int @map("user_id")
+
+  /// Người dùng tự khai dùng để làm gì — admin đọc trước khi duyệt.
+  reason String @db.Text
+
+  /// PENDING | APPROVED | REJECTED | REVOKED
+  status String @default("PENDING") @db.VarChar(20)
+
+  /// Key con thật, admin dán lúc duyệt. Null khi chưa duyệt.
+  keyValue String? @map("key_value") @db.VarChar(200)
+  /// Bản che (vd "sk-…a1b2") để hiện ở danh sách mà không lộ key.
+  keyHien  String? @map("key_hien") @db.VarChar(40)
+  /// Hạn mức admin đặt cho key này ở New API, chép lại để hiển thị.
+  quotaUsd Int?    @map("quota_usd")
+
+  adminNote  String?   @map("admin_note") @db.VarChar(500)
+  resolvedBy Int?      @map("resolved_by")
+  resolvedAt DateTime? @map("resolved_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([status, createdAt(sort: Desc)], name: "idx_llm_key_req_status_created")
+  @@index([userId], name: "idx_llm_key_req_user")
+  @@map("llm_key_requests")
 }

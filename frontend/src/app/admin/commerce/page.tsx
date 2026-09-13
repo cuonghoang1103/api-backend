@@ -19,7 +19,7 @@ import {
 } from 'recharts';
 import {
   TrendingUp, Wallet, ShoppingBag, Crown, Loader2, RefreshCw, AlertCircle,
-  Landmark, KeyRound, Clock, Check, X, Settings, ArrowLeft, Info,
+  Landmark, KeyRound, Clock, Check, X, Settings, ArrowLeft, Info, Terminal,
 } from 'lucide-react';
 import {
   commerceAdminApi,
@@ -30,7 +30,7 @@ const dongVN = (n: number) => `${Math.round(n).toLocaleString('vi-VN')} đ`;
 const gonVN = (n: number) =>
   n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)}tr` : n >= 1_000 ? `${Math.round(n / 1_000)}k` : String(n);
 
-type Tab = 'doanhthu' | 'chuyenkhoan' | 'doikey' | 'caidat';
+type Tab = 'doanhthu' | 'chuyenkhoan' | 'doikey' | 'llmkey' | 'caidat';
 
 export default function AdminCommercePage() {
   const [tab, setTab] = useState<Tab>('doanhthu');
@@ -108,6 +108,7 @@ export default function AdminCommercePage() {
             { id: 'doanhthu' as const, ten: 'Doanh thu', Icon: TrendingUp, badge: 0 },
             { id: 'chuyenkhoan' as const, ten: 'Chuyển khoản', Icon: Landmark, badge: canXuLy?.chuyenKhoanChoDuyet ?? 0 },
             { id: 'doikey' as const, ten: 'Đổi key', Icon: KeyRound, badge: canXuLy?.yeuCauDoiKey ?? 0 },
+            { id: 'llmkey' as const, ten: 'Key OpenCode', Icon: Terminal, badge: 0 },
             { id: 'caidat' as const, ten: 'Cài đặt', Icon: Settings, badge: 0 },
           ]).map((t) => (
             <button
@@ -128,6 +129,7 @@ export default function AdminCommercePage() {
         {tab === 'doanhthu' && <TabDoanhThu data={data} dangTai={dangTai} />}
         {tab === 'chuyenkhoan' && <TabChuyenKhoan onXong={nap} />}
         {tab === 'doikey' && <TabDoiKey onXong={nap} />}
+        {tab === 'llmkey' && <TabKeyOpenCode />}
         {tab === 'caidat' && <TabCaiDat />}
       </div>
     </div>
@@ -501,6 +503,183 @@ function TabDoiKey({ onXong }: { onXong: () => void }) {
               {r.adminNote && <p className="text-xs text-text-muted mt-2">Ghi chú admin: {r.adminNote}</p>}
             </div>
           ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ═══════════════════ KEY OPENCODE (cổng key con LLM) ═══════════════════
+
+interface DonKeyAdmin {
+  id: number;
+  user: { id: number; username: string; fullName: string | null; email: string } | null;
+  reason: string;
+  status: string;
+  keyHien: string | null;
+  quotaUsd: number | null;
+  adminNote: string | null;
+  createdAt: string;
+  resolvedAt: string | null;
+}
+
+function TabKeyOpenCode() {
+  const [rows, setRows] = useState<DonKeyAdmin[]>([]);
+  const [dangTai, setDangTai] = useState(true);
+  const [loc, setLoc] = useState('PENDING');
+  const [dangLam, setDangLam] = useState<number | null>(null);
+  const [moDuyet, setMoDuyet] = useState<DonKeyAdmin | null>(null);
+  const [keyDan, setKeyDan] = useState('');
+  const [quota, setQuota] = useState('10');
+
+  const nap = useCallback(async () => {
+    setDangTai(true);
+    try {
+      const r = await fetch(`/api/v1/admin/llm-keys${loc ? `?status=${loc}` : ''}`, { credentials: 'include' });
+      const j = await r.json();
+      setRows(j.data ?? []);
+    } catch { toast.error('Không tải được danh sách.'); }
+    finally { setDangTai(false); }
+  }, [loc]);
+
+  useEffect(() => { nap(); }, [nap]);
+
+  const duyet = async () => {
+    if (!moDuyet || keyDan.trim().length < 12) return;
+    setDangLam(moDuyet.id);
+    try {
+      const r = await fetch(`/api/v1/admin/llm-keys/${moDuyet.id}/approve`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: keyDan.trim(), quotaUsd: Number(quota) || null }),
+      });
+      if (!r.ok) throw new Error((await r.json().catch(() => ({}))).message ?? 'Lỗi');
+      toast.success('Đã cấp key cho người dùng.');
+      setMoDuyet(null); setKeyDan('');
+      await nap();
+    } catch (e) { toast.error(e instanceof Error ? e.message : 'Không duyệt được.'); }
+    finally { setDangLam(null); }
+  };
+
+  const hanhDong = async (id: number, viec: 'reject' | 'revoke') => {
+    const note = window.prompt(
+      viec === 'reject' ? 'Lý do từ chối (người dùng đọc được):' : 'Lý do thu hồi:',
+      viec === 'reject' ? 'Không đủ căn cứ' : 'Đã thu hồi',
+    );
+    if (note === null) return;
+    setDangLam(id);
+    try {
+      const r = await fetch(`/api/v1/admin/llm-keys/${id}/${viec}`, {
+        method: 'POST', credentials: 'include',
+        headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ note }),
+      });
+      const j = await r.json();
+      if (!r.ok) throw new Error(j.message ?? 'Lỗi');
+      // Thu hồi chỉ đổi trạng thái phía web — nói rõ để admin còn đi khoá thật.
+      toast.success(j.data?.nhacNho ?? 'Xong.', { duration: viec === 'revoke' ? 8000 : 4000 });
+      await nap();
+    } catch (e) { toast.error(e instanceof Error ? e.message : 'Không xử lý được.'); }
+    finally { setDangLam(null); }
+  };
+
+  return (
+    <div>
+      <div className="rounded-xl border border-blue-500/25 bg-blue-500/[0.07] p-4 flex items-start gap-3 mb-4">
+        <Info className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
+        <p className="text-xs text-text-muted leading-relaxed">
+          Duyệt đơn thì <b className="text-blue-300">tạo key ở New API trước</b> (đặt hạn mức ở đó),
+          rồi dán key vào form duyệt. Hệ thống không tự tạo key — cụm New API chạy ở mạng riêng và
+          giao diện quản trị của nó cố ý chỉ mở qua SSH tunnel.
+        </p>
+      </div>
+
+      <div className="flex gap-2 mb-4 overflow-x-auto">
+        {[{ v: 'PENDING', n: 'Chờ duyệt' }, { v: 'APPROVED', n: 'Đã cấp' }, { v: 'REJECTED', n: 'Từ chối' }, { v: 'REVOKED', n: 'Đã thu hồi' }, { v: '', n: 'Tất cả' }].map((f) => (
+          <button key={f.v} onClick={() => setLoc(f.v)}
+            className={`px-3 py-1.5 rounded-lg text-sm whitespace-nowrap transition-colors ${
+              loc === f.v ? 'bg-neon-violet text-white' : 'bg-darkcard border border-darkborder text-text-muted hover:text-text-primary'
+            }`}>{f.n}</button>
+        ))}
+      </div>
+
+      {dangTai ? (
+        <div className="flex justify-center py-16"><Loader2 className="w-6 h-6 animate-spin text-neon-violet" /></div>
+      ) : rows.length === 0 ? (
+        <p className="text-text-muted text-center py-16">Không có đơn nào.</p>
+      ) : (
+        <div className="space-y-2.5">
+          {rows.map((r) => (
+            <div key={r.id} className="bg-darkcard border border-darkborder rounded-xl p-4">
+              <div className="flex flex-wrap items-start justify-between gap-3 mb-2">
+                <div className="min-w-0">
+                  <p className="font-semibold text-text-primary break-words">
+                    {r.user?.fullName || r.user?.username || `user #${r.id}`}
+                    <span className="text-xs text-text-muted font-normal"> · {r.user?.email}</span>
+                  </p>
+                  <p className="text-xs text-text-muted mt-1">
+                    {new Date(r.createdAt).toLocaleString('vi-VN')}
+                    {r.keyHien && <> · key <code className="text-text-secondary">{r.keyHien}</code></>}
+                    {r.quotaUsd != null && <> · {r.quotaUsd} USD/chu kỳ</>}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  {r.status === 'PENDING' ? (
+                    <>
+                      <button onClick={() => { setMoDuyet(r); setKeyDan(''); }} disabled={dangLam === r.id}
+                        className="px-3 py-1.5 rounded-lg bg-green-500/15 border border-green-500/30 text-green-400 text-sm hover:bg-green-500/25 disabled:opacity-50 inline-flex items-center gap-1.5">
+                        <Check className="w-3.5 h-3.5" /> Duyệt &amp; dán key
+                      </button>
+                      <button onClick={() => hanhDong(r.id, 'reject')} disabled={dangLam === r.id}
+                        className="px-3 py-1.5 rounded-lg bg-red-500/15 border border-red-500/30 text-red-400 text-sm hover:bg-red-500/25 disabled:opacity-50">
+                        Từ chối
+                      </button>
+                    </>
+                  ) : r.status === 'APPROVED' ? (
+                    <button onClick={() => hanhDong(r.id, 'revoke')} disabled={dangLam === r.id}
+                      className="px-3 py-1.5 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-400 text-sm hover:bg-amber-500/25 disabled:opacity-50">
+                      Thu hồi
+                    </button>
+                  ) : (
+                    <span className="px-2 py-1 rounded text-xs font-semibold bg-red-500/20 text-red-300">
+                      {r.status === 'REJECTED' ? 'Từ chối' : 'Đã thu hồi'}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <p className="text-sm text-text-secondary bg-darkbg rounded-lg p-3 whitespace-pre-wrap break-words">{r.reason}</p>
+              {r.adminNote && <p className="text-xs text-text-muted mt-2">Ghi chú admin: {r.adminNote}</p>}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {moDuyet && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70" onClick={() => setMoDuyet(null)}>
+          <div className="w-full max-w-md bg-darkcard border border-darkborder rounded-2xl p-5" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-start justify-between gap-3 mb-4">
+              <div className="min-w-0">
+                <h3 className="font-semibold text-text-primary">Cấp key</h3>
+                <p className="text-xs text-text-muted mt-0.5 truncate">{moDuyet.user?.email}</p>
+              </div>
+              <button onClick={() => setMoDuyet(null)} className="text-text-muted hover:text-text-primary shrink-0" aria-label="Đóng">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <label className="block text-xs text-text-muted mb-1.5">Key con (dán từ New API)</label>
+            <input value={keyDan} onChange={(e) => setKeyDan(e.target.value)} placeholder="sk-..."
+              className="w-full bg-darkbg border border-darkborder rounded-xl px-3 py-2.5 text-sm font-mono text-text-primary focus:border-neon-violet outline-none" />
+            <label className="block text-xs text-text-muted mb-1.5 mt-3">Hạn mức (USD / chu kỳ)</label>
+            <input value={quota} onChange={(e) => setQuota(e.target.value.replace(/\D/g, ''))} inputMode="numeric"
+              className="w-full bg-darkbg border border-darkborder rounded-xl px-3 py-2.5 text-sm text-text-primary tabular-nums focus:border-neon-violet outline-none" />
+            <p className="text-xs text-text-muted mt-2 mb-4">
+              Chỉ để hiển thị cho người dùng — hạn mức THẬT do New API áp.
+            </p>
+            <button onClick={duyet} disabled={keyDan.trim().length < 12 || dangLam === moDuyet.id}
+              className="w-full py-3 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+              {dangLam === moDuyet.id ? <><Loader2 className="w-4 h-4 animate-spin" /> Đang cấp…</> : 'Cấp key'}
+            </button>
+          </div>
         </div>
       )}
     </div>

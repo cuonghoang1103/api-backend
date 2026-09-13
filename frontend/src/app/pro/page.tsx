@@ -463,6 +463,22 @@ export default function ProPage() {
                   </span>
                 </Link>
               )}
+              {/* Lối vào trang xin key + hướng dẫn cắm OpenCode. Không có link
+                  này thì người mua đọc xong quyền lợi mà không biết đi đâu. */}
+              {g.ten.startsWith('AI Code') && (
+                <Link
+                  href="/llm-key"
+                  className="mb-3 flex items-center gap-3 rounded-xl border border-emerald-400/25 bg-emerald-500/[0.07] p-3 hover:border-emerald-400/55 transition-colors group"
+                >
+                  <KeyRound className="w-4 h-4 text-emerald-300 shrink-0" />
+                  <span className="text-xs text-slate-300 flex-1 min-w-0">
+                    Muốn dùng AI trong <b className="text-white">terminal</b>? Xin key + xem hướng dẫn cắm OpenCode.
+                  </span>
+                  <span className="text-xs font-semibold text-emerald-300 whitespace-nowrap group-hover:underline">
+                    Xin key →
+                  </span>
+                </Link>
+              )}
               <div className="grid sm:grid-cols-2 gap-3">
                 {g.items.map((b) => {
                   const Icon = b.icon;

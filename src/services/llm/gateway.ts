@@ -414,7 +414,7 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
    * một ký hiệu sai là hỏng cả bài toán. Ở đây tiết kiệm vài xu đổi lấy một đề
    * thi sai là lỗ.
    */
-  doc_ocr: 'claude-opus-4-8',
+  doc_ocr: 'gpt-5.6-sol',
   news_bulletin: 'gpt-5.4-mini',
   robot_voice: 'gpt-5.4-mini',
 

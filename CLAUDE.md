@@ -436,8 +436,21 @@ Phân hiện tại: việc chạy nền + việc máy đọc (`cv_parse`, `exphu
 opus 39%). Việc tương tác (`chat_pro`, `exam_grade`, `language_tutor`,
 `codelab_coach`, `cv_writing`) và **`agent_code`** → giữ **`claude-sonnet-5`**.
 
-⛔ **`doc_ocr` KHÔNG hạ.** Model rẻ rụng mũi tên vector `AB` → `|AB|`, và một
-ký hiệu sai là hỏng cả bài toán.
+⛔ **`doc_ocr` KHÔNG hạ xuống model RẺ.** Model rẻ rụng mũi tên vector
+`AB` → `|AB|`, và một ký hiệu sai là hỏng cả bài toán.
+
+**Cập nhật 14/09/2026 — `doc_ocr` = `gpt-5.6-sol`, KHÔNG còn `claude-opus-4-8`.**
+Đây KHÔNG mâu thuẫn với dòng trên: `gpt-5.6-sol` không phải model rẻ, và nó là
+**model GPT DUY NHẤT của cổng thật sự NHÌN được ảnh** (đo bằng ảnh 1×1 px:
+`gpt-5.5` / `gpt-5.6-terra` / `gpt-5.4-mini` nhận ảnh, không báo lỗi, rồi BỊA
+kích thước). Lý do đổi: `doc_ocr` nằm trong `VIEC_CHI_OPENAI` nên nó KHÔNG BAO
+GIỜ đi được cổng rambo (gói trả trọn) — nó ở lại modelapi vĩnh viễn, mà ở đó
+`claude-opus-4-8` có giá **3,3× so với mua thẳng của hãng** (người dùng cho
+biết 14/09). Trả 3,3× vĩnh viễn cho một chênh lệch chưa ai đo được là sai chỗ.
+
+⚠️ Phần CHƯA đo: `gpt-5.6-sol` so với `claude-opus-4-8` trên đúng việc đọc ký
+hiệu toán trong ảnh. Nếu thấy công thức bị đọc sai thì đây là chỗ đầu tiên cần
+nhìn, và vặn lại bằng env `LLM_MODEL_DOC_OCR=claude-opus-4-8` (không cần deploy).
 
 ⚠️ **`Upstream stream ended without a terminal response event` là lỗi TẢI,
 không phải tính chất của model.** 18/08 thấy `gpt-5.6-terra` trả lỗi đó ngay

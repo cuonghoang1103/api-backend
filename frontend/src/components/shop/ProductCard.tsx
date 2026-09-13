@@ -24,12 +24,25 @@ function calcDiscount(original: number | undefined, current: number): number {
 }
 // The card feature checklist comes from the product description, one item per
 // line (admins write features line-by-line). Strip common bullet markers.
+/** Số dòng tính năng MỌI thẻ đều chừa chỗ — xem chú thích ở khối danh sách. */
+const SO_DONG_TINH_NANG = 3;
+
 function featureLines(desc: string | undefined): string[] {
   return (desc || '')
+    // Mô tả sản phẩm được soạn bằng HTML (`<br>`, `<strong>`), nên tách theo
+    // `\n` thôi là cả đoạn dính thành MỘT dòng dài rồi bị `line-clamp-1` cắt
+    // — thẻ trông như chỉ có một tính năng duy nhất.
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/(p|div|li)>/gi, '\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
     .split(/\r?\n/)
     .map((l) => l.replace(/^\s*(?:[-•*]|✅|✓)\s*/, '').trim())
-    .filter(Boolean)
-    .slice(0, 4);
+    // "Tính năng:" là tiêu đề của đoạn, không phải một tính năng — để lại thì
+    // nó chiếm mất một trong ba dòng ít ỏi.
+    .filter((l) => l && !/^t[ií]nh n[ăa]ng\s*:?$/i.test(l))
+    .slice(0, SO_DONG_TINH_NANG);
 }
 
 export default function ProductCard({ product, index = 0 }: ProductCardProps) {
@@ -40,7 +53,13 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
   const discount = calcDiscount(product.originalPrice, product.price);
   const features = featureLines(product.description);
   const isPhysical = product.productType === 'PHYSICAL';
-  const outOfStock = isPhysical && product.stock <= 0;
+  // ⚠️ Trước 14/09/2026 điều kiện là `isPhysical && stock <= 0`, tức HÀNG SỐ
+  // KHÔNG BAO GIỜ báo hết hàng. Với sản phẩm bán key (tồn kho = số key còn
+  // trong kho) thì đó là: kho cạn, thẻ vẫn mời mua, nút "Mua ngay" vẫn bấm
+  // được, và người dùng chỉ biết khi thanh toán xong mà không nhận được gì.
+  // Backend đã chặn ở lúc đặt đơn (206700ea), nhưng để người ta bấm rồi mới
+  // chặn là một trải nghiệm tệ, không phải một chốt an toàn.
+  const outOfStock = product.stock <= 0;
   const href = `/shop/${product.slug}`;
 
   const buyNow = (e: React.MouseEvent) => {
@@ -122,20 +141,27 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
             </div>
           )}
 
-          {/* Feature checklist */}
-          {features.length > 0 && (
-            <ul className="mt-3 space-y-1.5">
-              {features.map((f, i) => (
-                <li key={i} className="flex items-start gap-2 text-xs text-text-secondary">
-                  <Check className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-emerald-400" />
-                  <span className="line-clamp-1">{f}</span>
-                </li>
-              ))}
-            </ul>
-          )}
+          {/* ── Danh sách tính năng ──
+              CHỪA CHỖ CỐ ĐỊNH cho đúng 3 dòng, kể cả khi sản phẩm chỉ có 1.
+              Không có `min-h` thì thẻ nào mô tả dài hơn sẽ cao hơn, và vì lưới
+              kéo mọi thẻ trong một hàng bằng nhau, nút "Xem sản phẩm" của các
+              thẻ nằm ở những độ cao khác nhau — đúng chỗ người dùng chỉ ra
+              14/09/2026 ("sao các sản phẩm không đồng đều vậy").
+              `mt-auto` ở khối giá bên dưới mới là thứ ghim đáy; `min-h` ở đây
+              để phần chữ cũng thẳng hàng chứ không chỉ mỗi cái nút. */}
+          <ul className="mt-3 space-y-1.5" style={{ minHeight: `${SO_DONG_TINH_NANG * 1.375}rem` }}>
+            {features.map((f, i) => (
+              <li key={i} className="flex items-start gap-2 text-xs text-text-secondary">
+                <Check className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-emerald-400" />
+                <span className="line-clamp-1">{f}</span>
+              </li>
+            ))}
+          </ul>
 
-          {/* Price */}
-          <div className="mt-4 flex items-end gap-2">
+          {/* Price — `mt-auto` đẩy cả khối giá + nút xuống ĐÁY thẻ, nên mọi
+              thẻ trong cùng một hàng có nút thẳng hàng nhau bất kể mô tả dài
+              ngắn thế nào. */}
+          <div className="mt-auto flex items-end gap-2 pt-4">
             <span className="text-xl font-heading font-bold text-neon-violet">{formatPrice(product.price)}</span>
             {product.originalPrice && product.originalPrice > product.price && (
               <span className="mb-0.5 text-xs text-text-muted line-through">{formatPrice(product.originalPrice)}</span>

@@ -145,8 +145,8 @@ export default function LlmKeyPage() {
       <div className="min-h-screen bg-darkbg pt-24 px-4">
         <div className="max-w-md mx-auto text-center bg-darkcard border border-darkborder rounded-2xl p-8">
           <Terminal className="w-12 h-12 text-neon-violet mx-auto mb-4" />
-          <h1 className="text-xl font-heading font-bold text-text-primary mb-2">AI trên terminal</h1>
-          <p className="text-text-muted text-sm mb-6">Đăng nhập để xin key dùng OpenCode trên máy bạn.</p>
+          <h1 className="text-xl font-heading font-bold text-text-primary mb-2">CuongMini trên Terminal</h1>
+          <p className="text-text-muted text-sm mb-6">Đăng nhập để xin key dùng CuongMini trong OpenCode.</p>
           <Link href="/login?redirect=/llm-key" className="inline-block px-6 py-3 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold">
             Đăng nhập
           </Link>
@@ -156,18 +156,36 @@ export default function LlmKeyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-darkbg pt-20">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex items-start justify-between gap-4 mb-8 flex-wrap">
-          <div className="min-w-0">
-            <h1 className="text-2xl md:text-3xl font-heading font-bold text-text-primary">AI trên terminal</h1>
-            <p className="text-text-muted text-sm mt-1">
-              Dùng AI ngay trong OpenCode trên máy bạn — code bằng terminal, không cần mở trình duyệt.
+    <div className="relative min-h-screen bg-darkbg pt-20 overflow-hidden">
+      <NenTerminal />
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <Link href="/" className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-neon-violet mb-6">
+          <ArrowLeft className="w-4 h-4" /> Trang chủ
+        </Link>
+
+        {/* Hero — dựng như một khung terminal thật. Hình thức nói ngay công
+            dụng trước khi người dùng đọc chữ nào. */}
+        <div className="mb-8 rounded-2xl border border-darkborder bg-darkcard/70 backdrop-blur overflow-hidden">
+          <div className="flex items-center gap-2 px-4 py-2.5 border-b border-darkborder bg-darkbg/60">
+            <span className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500/70" />
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/70" />
+            <span className="ml-2 text-[11px] font-mono text-text-muted">~/du-an — opencode</span>
+          </div>
+          <div className="px-5 py-6 sm:px-7 sm:py-8">
+            <h1 className="text-2xl md:text-3xl font-heading font-bold text-text-primary tracking-tight">
+              CuongMini trên Terminal
+            </h1>
+            <p className="text-text-secondary text-sm md:text-base mt-2.5 max-w-2xl leading-relaxed">
+              Dùng CuongMini ngay trong OpenCode trên máy bạn — đọc và sửa mã bằng terminal,
+              không cần mở trình duyệt.
+            </p>
+            <p className="mt-4 font-mono text-sm">
+              <span className="text-emerald-400">$</span>{' '}
+              <span className="text-text-muted">opencode</span>{' '}
+              <span className="inline-block w-2 h-4 align-middle bg-neon-violet/80 animate-pulse" />
             </p>
           </div>
-          <Link href="/" className="flex items-center gap-2 text-sm text-text-muted hover:text-neon-violet flex-shrink-0">
-            <ArrowLeft className="w-4 h-4" /> Trang chủ
-          </Link>
         </div>
 
         {dangTai ? (
@@ -412,6 +430,46 @@ export default function LlmKeyPage() {
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+/**
+ * Nền cho trang terminal — tối, kỹ thuật, không tranh chấp với nội dung.
+ *
+ * Dùng lại đúng nguyên tắc của nền gian hàng: hai quầng sáng rất mờ trôi
+ * chậm + một lưới mảnh mờ dần. Toàn bộ là CSS transform/opacity nên chạy
+ * trên luồng hợp thành. `prefers-reduced-motion` thì đứng yên.
+ */
+function NenTerminal() {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      <style>{`
+        @keyframes lkTroi {
+          0%,100% { transform: translate3d(-5%, -3%, 0) scale(1); }
+          50%     { transform: translate3d(4%, 3%, 0)  scale(1.1); }
+        }
+        .lk-quang { animation: lkTroi 28s ease-in-out infinite; }
+        @media (prefers-reduced-motion: reduce) { .lk-quang { animation: none !important; } }
+      `}</style>
+      <div
+        className="lk-quang absolute -top-48 left-1/4 h-[560px] w-[560px] rounded-full"
+        style={{ background: 'radial-gradient(circle, rgba(16,185,129,0.10), transparent 62%)', filter: 'blur(110px)' }}
+      />
+      <div
+        className="lk-quang absolute -bottom-52 right-1/5 h-[520px] w-[520px] rounded-full"
+        style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.13), transparent 62%)', filter: 'blur(120px)', animationDelay: '-9s' }}
+      />
+      <div
+        className="absolute inset-0 opacity-[0.13]"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(148,163,184,.14) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,.14) 1px, transparent 1px)',
+          backgroundSize: '52px 52px',
+          maskImage: 'linear-gradient(to bottom, black, transparent 58%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, black, transparent 58%)',
+        }}
+      />
     </div>
   );
 }

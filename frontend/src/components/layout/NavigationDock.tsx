@@ -669,7 +669,7 @@ export default function NavigationDock() {
                       <DockRowLink
                         href="/llm-key"
                         Icon={Terminal}
-                        label="AI trên terminal"
+                        label="CuongMini trên Terminal"
                         isActive={pathname === '/llm-key'}
                         isHovered={hoveredHref === '/llm-key'}
                         scale={1}

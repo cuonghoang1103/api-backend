@@ -10,7 +10,7 @@ import ProductCard from '@/components/shop/ProductCard';
 import { Skeleton } from '@/components/ui/Skeleton';
 import ProductFilter from '@/components/shop/ProductFilter';
 import CartDrawer from '@/components/shop/CartDrawer';
-import SummerShopBackground from '@/components/shop/SummerShopBackground';
+import ShopBackground from '@/components/shop/ShopBackground';
 import DigitalShopTermsGate from '@/components/shop/DigitalShopTermsGate';
 import { useProductStore } from '@/store/productStore';
 import type { PriceRange, SortOption } from '@/types';
@@ -139,41 +139,48 @@ export default function ShopPage() {
   return (
     <div className="min-h-screen pt-20">
       <DigitalShopTermsGate />
-      <SummerShopBackground />
-      {/* Hero */}
-      <section className="relative py-12 overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-neon-indigo/10 rounded-full blur-[180px]" />
-          <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-neon-violet/10 rounded-full blur-[180px]" />
-        </div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <ShopBackground />
+
+      {/* ─── Hero ───────────────────────────────────────────────────────
+          Mẫu "marketplace": ô TÌM KIẾM mới là lời mời chính, không phải
+          một nút CTA. Người vào đây đã biết mình cần gì (key Cursor? key
+          CuongMini?) — việc của trang là đưa họ tới đó nhanh nhất.
+
+          ⚠️ Chữ cũ ở đây là bản tiếng Anh mặc định nói về "web templates,
+          developer tools, software" — KHÔNG đúng thứ đang bán. Gian hàng
+          này bán KEY/TÀI KHOẢN AI. Mô tả sai làm người mua nghĩ mình vào
+          nhầm chỗ. */}
+      <section className="relative pt-10 pb-8">
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center max-w-2xl mx-auto"
+            transition={{ duration: 0.45 }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-neon-violet/10 border border-neon-violet/20 rounded-full text-sm text-neon-violet mb-6">
-              <img src="/shop-icon.png" alt="Shop" className="w-5 h-5 object-contain" />
-              {t('shop.page.digitalMarketplace')}
-            </div>
-            <h1 className="text-3xl md:text-5xl font-heading font-bold text-text-primary mb-4">
-              {t('shop.page.title')}
+            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium
+                             bg-neon-violet/10 border border-neon-violet/25 text-neon-violet">
+              <ShoppingBag className="w-3.5 h-3.5" />
+              Gian hàng số
+            </span>
+
+            <h1 className="mt-5 text-3xl md:text-5xl font-heading font-bold text-text-primary tracking-tight">
+              Key &amp; tài khoản AI
             </h1>
-            <p className="text-text-secondary text-base md:text-lg">
-              {t('shop.page.subtitle')}
+            <p className="mt-3 text-text-secondary text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+              Cursor, CuongMini và các công cụ lập trình — giao ngay sau khi thanh toán,
+              mỗi người một key riêng.
             </p>
 
-            {/* Ba điều người mua thật sự cần biết trước khi trả tiền —
-                thay cho bốn huy hiệu chung chung kiểu "chất lượng đảm bảo". */}
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 mt-8">
+            {/* Ba điều người mua thật sự cần biết. Không phải khẩu hiệu. */}
+            <div className="mt-7 flex flex-wrap items-center justify-center gap-x-7 gap-y-3">
               {[
-                { icon: Zap, chinh: 'Giao ngay sau thanh toán', phu: 'Hàng số về tài khoản tức thì' },
-                { icon: Shield, chinh: 'Mỗi người một key riêng', phu: 'Không dùng chung, không trùng' },
-                { icon: PackageCheck, chinh: 'Key hỏng đổi được', phu: 'Gửi yêu cầu ngay trong đơn' },
+                { icon: Zap, chinh: 'Giao ngay', phu: 'Key về tài khoản sau khi trả tiền' },
+                { icon: Shield, chinh: 'Key riêng từng người', phu: 'Không dùng chung, không trùng' },
+                { icon: PackageCheck, chinh: 'Hỏng thì đổi', phu: 'Gửi yêu cầu ngay trong đơn' },
               ].map(({ icon: Icon, chinh, phu }) => (
                 <div key={chinh} className="flex items-center gap-2.5 text-left">
-                  <div className="w-9 h-9 rounded-xl bg-neon-violet/10 border border-neon-violet/20 flex items-center justify-center flex-shrink-0">
+                  <div className="w-9 h-9 rounded-xl bg-neon-violet/10 border border-neon-violet/20
+                                  flex items-center justify-center flex-shrink-0">
                     <Icon className="w-4 h-4 text-neon-violet" />
                   </div>
                   <div>
@@ -184,36 +191,43 @@ export default function ShopPage() {
               ))}
             </div>
 
-            {/* Dải ví — chỉ hiện khi đã đăng nhập. Đặt ở đây vì đây là lúc
-                người mua quan tâm tới số dư nhất. */}
+            {/* Dải ví — chỉ hiện khi đã đăng nhập.
+                ⚠️ Trước đây khối này nằm trên nền biển sáng và gần như không
+                đọc được. Nay nền tối nên dùng viền + nền đặc mờ, tương phản
+                đủ theo WCAG. */}
             {soDu !== null && (
               <Link
                 href="/wallet"
-                className="mt-8 inline-flex items-center gap-3 px-4 py-2.5 rounded-2xl border border-neon-violet/25 bg-gradient-to-r from-neon-violet/10 to-transparent hover:border-neon-violet/50 transition-colors group"
+                className="mt-7 inline-flex items-center gap-3 px-4 py-2.5 rounded-2xl
+                           border border-neon-violet/30 bg-darkcard/90 backdrop-blur
+                           hover:border-neon-violet/60 transition-colors group"
               >
                 <Wallet className="w-4 h-4 text-neon-violet flex-shrink-0" />
-                <span className="text-sm text-text-muted">
+                <span className="text-sm text-text-secondary">
                   Ví của bạn: <b className="text-text-primary tabular-nums">{soDu.toLocaleString('vi-VN')}</b> điểm
                 </span>
-                <span className="inline-flex items-center gap-1 text-xs text-neon-violet font-medium">
+                <span className="inline-flex items-center gap-1 text-xs text-neon-violet font-semibold">
                   <Plus className="w-3 h-3" /> Nạp
                   <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                 </span>
               </Link>
             )}
 
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5">
               <Link
                 href="/shop/check-usage"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white transition-all hover:opacity-90"
-                style={{ background: 'linear-gradient(135deg, #6366f1, #a855f7)', boxShadow: '0 8px 24px rgba(168,85,247,0.35)' }}
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold
+                           text-white bg-gradient-to-r from-neon-indigo to-neon-violet
+                           hover:opacity-90 transition-opacity"
               >
                 <Gauge className="w-4 h-4" />
-                Kiểm tra usage / limit của API key
+                Kiểm tra key đã mua
               </Link>
               <Link
                 href="/my-orders"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-text-secondary bg-darkcard border border-darkborder hover:border-neon-violet/40 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium
+                           text-text-secondary bg-darkcard border border-darkborder
+                           hover:border-neon-violet/40 transition-colors"
               >
                 <Clock className="w-4 h-4" />
                 Đơn đã mua

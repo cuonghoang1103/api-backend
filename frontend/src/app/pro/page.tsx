@@ -147,14 +147,14 @@ const NHOM_QUYEN: Array<{ ten: string; mo: string; mau: string; items: Quyen[] }
       },
       {
         icon: KeyRound,
-        title: 'API key dùng AI ngay trên terminal',
+        title: 'CuongMini trên Terminal — API key riêng',
         // ⚠️ Mô tả PHẢI nói rõ hai giới hạn thật, nếu không là quảng cáo sai:
         //   1. web được ưu tiên — `canh` đóng key con khi key chính chạm 70%
         //      cửa sổ 5 giờ (services/cong-llm/canh/canh.mjs);
         //   2. mỗi key có hạn mức riêng mỗi cửa sổ (canh/han-muc.json).
         // Người mua thấy "API key" mà tưởng vô hạn rồi bị 429 giữa việc thì
         // đó là lỗi của câu quảng cáo, không phải của hệ thống.
-        desc: 'Xin cấp key riêng để dùng AI trong OpenCode trên máy của bạn — code bằng terminal, không cần mở trình duyệt. Mỗi key có hạn mức riêng theo chu kỳ; khi web đang tải nặng, key cá nhân tạm nhường lượt cho web.',
+        desc: 'Xin cấp key riêng để dùng CuongMini trong OpenCode trên máy của bạn — code bằng terminal, không cần mở trình duyệt. Mỗi key có hạn mức riêng theo chu kỳ; khi web đang tải nặng, key cá nhân tạm nhường lượt cho web.',
         badge: 'Chỉ Pro',
       },
       {

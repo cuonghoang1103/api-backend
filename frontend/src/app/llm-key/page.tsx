@@ -48,6 +48,50 @@ function conLaiChu(iso: string | null | undefined): string | null {
 
 const API = '/api/v1';
 
+/**
+ * Hướng dẫn cắm OpenCode theo HỆ ĐIỀU HÀNH.
+ *
+ * Vì sao phải tách: bản cũ chỉ đưa `export CUONG_LLM_KEY=…` và `~/.zshrc` —
+ * đúng trên macOS/Linux và VÔ NGHĨA trên Windows (PowerShell không có
+ * `export`, cũng không có `.zshrc`). Người dùng Windows dán vào là báo lỗi
+ * ngay bước 2 rồi nghĩ key hỏng.
+ *
+ * OpenCode chạy trên CẢ BA hệ: nó là gói npm, cần Node. Chỉ hai thứ khác
+ * nhau — cách đặt biến môi trường và đường dẫn file cấu hình.
+ */
+type MaHDH = 'macos' | 'windows' | 'linux';
+
+const HE_DIEU_HANH: { ma: MaHDH; ten: string }[] = [
+  { ma: 'macos', ten: 'macOS' },
+  { ma: 'windows', ten: 'Windows' },
+  { ma: 'linux', ten: 'Linux' },
+];
+
+/** Lệnh đặt biến môi trường GIỮ ĐƯỢC sau khi đóng terminal, cho từng hệ. */
+function lenhDatKey(hdh: MaHDH, key: string): { lenh: string; ghiChu: string } {
+  if (hdh === 'windows') {
+    return {
+      // PowerShell. `setx` của cmd.exe cắt giá trị ở 1024 ký tự và không cập
+      // nhật phiên đang mở — dùng .NET API cho chắc.
+      lenh: `[Environment]::SetEnvironmentVariable("CUONG_LLM_KEY", "${key}", "User")`,
+      ghiChu: 'Chạy trong PowerShell, rồi MỞ LẠI terminal. Chỉ dùng cho phiên hiện tại thì: $env:CUONG_LLM_KEY="…"',
+    };
+  }
+  return {
+    lenh: `export CUONG_LLM_KEY="${key}"`,
+    ghiChu: hdh === 'macos'
+      ? 'Thêm dòng này vào ~/.zshrc (macOS mặc định dùng zsh) để lần sau khỏi gõ lại.'
+      : 'Thêm dòng này vào ~/.bashrc hoặc ~/.zshrc để lần sau khỏi gõ lại.',
+  };
+}
+
+/** Đường dẫn file cấu hình TOÀN CỤC của OpenCode. */
+function duongDanCauHinh(hdh: MaHDH): string {
+  return hdh === 'windows'
+    ? '%USERPROFILE%\\.config\\opencode\\opencode.json'
+    : '~/.config/opencode/opencode.json';
+}
+
 async function goi<T>(path: string, init?: RequestInit): Promise<T> {
   const r = await fetch(`${API}${path}`, {
     credentials: 'include',
@@ -66,7 +110,10 @@ async function goi<T>(path: string, init?: RequestInit): Promise<T> {
 export default function LlmKeyPage() {
   // Xem hooks/useDaDangNhap.ts — `isAuthenticated` một mình KHÔNG đủ.
   const { daDangNhap: isAuthenticated, sanSang } = useDaDangNhap();
-  const [info, setInfo] = useState<{ baseUrl: string; models: string[]; isPro: boolean } | null>(null);
+  const [info, setInfo] = useState<{
+    baseUrl: string; models: string[]; isPro: boolean;
+    contextToken?: number; outputToken?: number;
+  } | null>(null);
   const [dons, setDons] = useState<DonKey[]>([]);
   const [dangTai, setDangTai] = useState(true);
   const [lyDo, setLyDo] = useState('');
@@ -74,6 +121,7 @@ export default function LlmKeyPage() {
   const [hienKey, setHienKey] = useState(false);
   const [chep, setChep] = useState<string | null>(null);
   const [hanMuc, setHanMuc] = useState<{ conLai?: number; tong?: number } | null>(null);
+  const [heDieuHanh, setHeDieuHanh] = useState<MaHDH>('macos');
   const khoaGui = useRef(false);
 
   const nap = useCallback(async () => {
@@ -147,7 +195,13 @@ export default function LlmKeyPage() {
           name: 'Cổng Cường',
           options: { baseURL: info?.baseUrl ?? 'https://api.cuongthai.com/llm/v1', apiKey: '{env:CUONG_LLM_KEY}' },
           models: Object.fromEntries(
-            (info?.models ?? []).map((m) => [m, { limit: { context: 180000, output: 32000 } }]),
+            // Con số do BACKEND quyết (`LLM_KEY_CONTEXT_TOKEN`), không cứng ở
+            // đây: đo lại trần thật của cổng là đổi env, không phải dựng lại
+            // frontend. 180k là mức an toàn đang dùng khi chưa đo xong.
+            (info?.models ?? []).map((m) => [
+              m,
+              { limit: { context: info?.contextToken ?? 180_000, output: info?.outputToken ?? 32_000 } },
+            ]),
           ),
         },
       },
@@ -328,9 +382,31 @@ export default function LlmKeyPage() {
 
             {/* ─── Hướng dẫn ─── */}
             <div className="rounded-2xl border border-darkborder bg-darkcard p-5">
-              <h2 className="font-semibold text-text-primary mb-4 flex items-center gap-2">
+              <h2 className="font-semibold text-text-primary mb-1 flex items-center gap-2">
                 <Terminal className="w-4 h-4 text-neon-violet" /> Cắm vào OpenCode
               </h2>
+              <p className="text-xs text-text-muted mb-4">
+                Chạy được trên cả <strong className="text-text-secondary">Windows, macOS và Linux</strong> — OpenCode là
+                gói npm, chỉ cần Node 18 trở lên. Hai bước khác nhau giữa các hệ nằm ngay dưới, chọn đúng hệ của bạn.
+              </p>
+
+              {/* Chọn hệ điều hành — chỉ đổi bước 2 và bước 3 */}
+              <div className="flex gap-1.5 mb-4 p-1 rounded-xl bg-darkbg border border-darkborder w-fit">
+                {HE_DIEU_HANH.map((h) => (
+                  <button
+                    key={h.ma}
+                    onClick={() => setHeDieuHanh(h.ma)}
+                    aria-pressed={heDieuHanh === h.ma}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                      heDieuHanh === h.ma
+                        ? 'bg-gradient-to-r from-neon-indigo to-neon-violet text-white'
+                        : 'text-text-muted hover:text-text-secondary'
+                    }`}
+                  >
+                    {h.ten}
+                  </button>
+                ))}
+              </div>
 
               <ol className="space-y-4 text-sm">
                 <li>
@@ -341,26 +417,30 @@ export default function LlmKeyPage() {
                       {chep === 'cai' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     </button>
                   </div>
+                  <p className="text-xs text-text-muted mt-1.5">Giống nhau trên cả ba hệ điều hành.</p>
                 </li>
 
                 <li>
                   <p className="text-text-primary font-medium mb-1.5">2. Đặt key vào biến môi trường</p>
                   <div className="flex items-center gap-2 bg-darkbg border border-darkborder rounded-lg px-3 py-2">
                     <code className="flex-1 min-w-0 text-xs font-mono text-text-secondary truncate">
-                      export CUONG_LLM_KEY=&quot;{key ? (hienKey ? key : 'sk-…') : 'key-cua-ban'}&quot;
+                      {lenhDatKey(heDieuHanh, key ? (hienKey ? key : 'sk-…') : 'key-cua-ban').lenh}
                     </code>
-                    <button onClick={() => chepChu(`export CUONG_LLM_KEY="${key ?? 'key-cua-ban'}"`, 'env')} className="text-text-muted hover:text-neon-violet shrink-0" aria-label="Chép lệnh">
+                    <button onClick={() => chepChu(lenhDatKey(heDieuHanh, key ?? 'key-cua-ban').lenh, 'env')} className="text-text-muted hover:text-neon-violet shrink-0" aria-label="Chép lệnh">
                       {chep === 'env' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                     </button>
                   </div>
-                  <p className="text-xs text-text-muted mt-1.5">
-                    Thêm dòng này vào <code className="text-text-secondary">~/.zshrc</code> để lần sau khỏi gõ lại.
-                  </p>
+                  <p className="text-xs text-text-muted mt-1.5">{lenhDatKey(heDieuHanh, '').ghiChu}</p>
                 </li>
 
                 <li>
                   <p className="text-text-primary font-medium mb-1.5">
-                    3. Tạo <code className="text-text-secondary">~/.config/opencode/opencode.json</code>
+                    3. Tạo <code className="text-text-secondary">{duongDanCauHinh(heDieuHanh)}</code>
+                  </p>
+                  <p className="text-xs text-text-muted mb-1.5">
+                    Không muốn đụng thư mục hệ thống thì đặt file tên{' '}
+                    <code className="text-text-secondary">opencode.json</code> ngay trong thư mục dự án — cách này giống
+                    hệt nhau trên cả ba hệ.
                   </p>
                   <div className="relative">
                     <pre className="bg-darkbg border border-darkborder rounded-lg p-3 text-xs font-mono text-text-secondary overflow-x-auto max-h-72">
@@ -406,7 +486,7 @@ export default function LlmKeyPage() {
               <div className="flex items-start gap-3">
                 <AlertCircle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
                 <div className="text-sm space-y-2 min-w-0">
-                  <p className="font-semibold text-amber-300">Hai giới hạn cần biết trước</p>
+                  <p className="font-semibold text-amber-300">Ba điều cần biết trước</p>
                   <p className="text-text-muted">
                     <b className="text-text-primary">Web được ưu tiên.</b> Khi cuongthai.com đang dùng nhiều,
                     key cá nhân tạm nhường lượt và trả lỗi 429 kèm lý do. Hết chu kỳ là mở lại — không phải
@@ -415,6 +495,14 @@ export default function LlmKeyPage() {
                   <p className="text-text-muted">
                     <b className="text-text-primary">Mỗi key có hạn mức riêng</b> theo từng chu kỳ, nạp lại
                     khi chu kỳ mới bắt đầu.
+                  </p>
+                  <p className="text-text-muted">
+                    <b className="text-text-primary">
+                      Ngữ cảnh khai {Math.round((info?.contextToken ?? 180_000) / 1000)}k token.
+                    </b>{' '}
+                    Đây là mức OpenCode dùng để quyết định lúc nào nén hội thoại lại, đặt theo con số cổng đã
+                    phục vụ được ổn định — khai cao hơn thứ cổng chịu nổi thì OpenCode ngừng nén và yêu cầu bị
+                    từ chối giữa chừng. Cần nhiều hơn thì nhắn admin, chúng tôi đo lại và nâng.
                   </p>
                 </div>
               </div>

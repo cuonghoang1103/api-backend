@@ -99,7 +99,10 @@ const s = {
   soLuotBiChan: 0,
 };
 
-let luu = { cuaSoDaDatLai: null };
+// `keyThat`: id token → key THẬT (48 ký tự). Ghi xuống đĩa vì New API chặn
+// dồn dập trên chính route lấy key — mất bộ nhớ tạm sau mỗi lần khởi động
+// lại là 33 lượt gọi dồn một lúc, và bị chặn đúng lúc cần nhất.
+let luu = { cuaSoDaDatLai: null, keyThat: {} };
 try {
   luu = { ...luu, ...JSON.parse(readFileSync(STATE_FILE, 'utf8')) };
 } catch {
@@ -213,6 +216,32 @@ async function quanTri(duong, { method = 'GET', body } = {}) {
   return d.data;
 }
 
+/**
+ * Key THẬT của một token con.
+ *
+ * ⚠️ `GET /api/token/` trả `key` đã CHE: 18 ký tự, cùng 4 ký tự đầu với key
+ * thật nhưng giữa bị thay. Key thật dài 48 ký tự và chỉ lấy được qua
+ * `POST /api/token/:id/key`. Đo thật 14/09/2026 trên rc.37.
+ *
+ * Đây là loại lỗi không kêu một tiếng nào: `gopViVoiWeb` từng gửi
+ * `sk-<18 ký tự che>` sang web, web không tìm thấy key nào khớp nên trả về
+ * bản đồ rỗng, và canh `return` sớm — không lỗi, không log, ví chung không
+ * bao giờ gộp. Nhìn từ ngoài y hệt "chưa ai dùng key".
+ *
+ * Nhớ theo id vì key của một token không đổi; 33 token thì chỉ tốn 33 lượt
+ * gọi sau mỗi lần khởi động lại, thay vì 33 lượt MỖI PHÚT.
+ */
+async function layKeyThat(id) {
+  const co = luu.keyThat?.[id];
+  if (co) return co;
+  const d = await quanTri(`/api/token/${id}/key`, { method: 'POST' });
+  const k = typeof d === 'string' ? d : d?.key;
+  if (typeof k !== 'string' || k.length < 32) return null;
+  luu.keyThat = { ...(luu.keyThat || {}), [id]: k };
+  luuTrangThai();
+  return k;
+}
+
 function docHanMuc() {
   const j = JSON.parse(readFileSync(HAN_MUC_FILE, 'utf8'));
   return { macDinh: Number(j.mac_dinh_usd), theoTen: j.theo_ten || {} };
@@ -246,8 +275,23 @@ async function gopViVoiWeb() {
     const coQuota = tatCa.filter((t) => !t.unlimited_quota && t.key);
     if (coQuota.length === 0) return;
 
-    // New API trả `key` không kèm tiền tố; backend lưu key ĐẦY ĐỦ ("sk-...").
-    const day = coQuota.map((t) => `sk-${t.key}`);
+    // Key trong danh sách đã bị CHE (xem `layKeyThat`) — phải lấy key thật,
+    // nếu không thì web không khớp được key nào và cả bước gộp thành vô hiệu.
+    // Mỗi nhịp chỉ đi hỏi TỐI ĐA 5 key chưa biết. New API chặn dồn dập trên
+    // route này; hỏi cả 33 cái một lúc là bị 429 và không lấy được cái nào.
+    // Key đã biết thì đọc từ đĩa, nên sau vài phút là đủ cả.
+    let conDuocHoi = 5;
+    const thatCuaToken = new Map();
+    for (const t of coQuota) {
+      let k = luu.keyThat?.[t.id] || null;
+      if (!k && conDuocHoi > 0) {
+        conDuocHoi--;
+        k = await layKeyThat(t.id).catch(() => null);
+      }
+      if (k) thatCuaToken.set(t.id, `sk-${k}`);
+    }
+    if (thatCuaToken.size === 0) { ghi('không lấy được key thật nào từ New API — bỏ lượt gộp ví'); return; }
+    const day = [...thatCuaToken.values()];
     const r = await fetch(`${WEB_API_URL}/api/v1/internal/ai-code-usage`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-internal-token': WEB_INTERNAL_TOKEN },
@@ -263,7 +307,8 @@ async function gopViVoiWeb() {
     let mo = 0;
     let datHan = 0;
     for (const t of coQuota) {
-      const tin = web[`sk-${t.key}`];
+      const khoaThat = thatCuaToken.get(t.id);
+      const tin = khoaThat ? web[khoaThat] : null;
       if (!tin) continue;
 
       // ── Hạn của GÓI (key bán ở shop) ──────────────────────────────────

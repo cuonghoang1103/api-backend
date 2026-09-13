@@ -33,6 +33,26 @@ export const MODEL_OPENCODE = [
 
 const BASE_URL = process.env.LLM_KEY_BASE_URL || 'https://api.cuongthai.com/llm/v1';
 
+/**
+ * Trần ngữ cảnh KHAI trong `opencode.json`.
+ *
+ * ⚠️ Con số này KHÔNG phải giới hạn của cổng — nó là thứ OpenCode dùng để
+ * quyết định lúc nào nén hội thoại lại. Khai cao hơn thứ cổng phục vụ được
+ * thì OpenCode ngừng nén và gửi lên những yêu cầu cổng từ chối; khai thấp
+ * thì phí ngữ cảnh. Nên nó phải bám theo phép ĐO, không phải theo quảng cáo.
+ *
+ * Đã đo được (13/09/2026, ghi ở `services/cong-llm/canh/sua-yeu-cau.mjs`):
+ * rambo cắt ngầm MỖI KHỐI nội dung ở ~12.000 ký tự và chỉ giữ ~58 tin nhắn
+ * cuối; canh nắn quanh cả hai. 400k ký tự chia 5 tin nhắn đi qua trọn vẹn =
+ * 143.718 token. Trần THẬT trên 143k thì chưa ai đo.
+ *
+ * Để trong env chứ không cứng trong mã frontend: đo xong là đổi một biến ở
+ * `/opt/cuonghoangdev/.env` rồi khởi động lại backend, không phải dựng lại
+ * cả frontend.
+ */
+const CONTEXT_TOKEN = Number(process.env.LLM_KEY_CONTEXT_TOKEN || 180_000);
+const OUTPUT_TOKEN = Number(process.env.LLM_KEY_OUTPUT_TOKEN || 32_000);
+
 /** "sk-abcdef…1234" — đủ để nhận ra key nào, không đủ để dùng. */
 function cheKey(key: string): string {
   const k = key.trim();
@@ -84,6 +104,8 @@ router.get('/info', async (req: Request, res: Response<ApiResponse>, next) => {
       data: {
         baseUrl: BASE_URL,
         models: MODEL_OPENCODE,
+        contextToken: Number.isFinite(CONTEXT_TOKEN) && CONTEXT_TOKEN > 0 ? CONTEXT_TOKEN : 180_000,
+        outputToken: Number.isFinite(OUTPUT_TOKEN) && OUTPUT_TOKEN > 0 ? OUTPUT_TOKEN : 32_000,
         isPro: await isProEffective(req.userId).catch(() => false),
       },
     });

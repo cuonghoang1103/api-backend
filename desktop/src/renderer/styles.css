@@ -7091,7 +7091,13 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   display: flex; flex-direction: column; gap: 3px;
 }
 
-.ct-tn-tin { display: flex; flex-direction: column; align-items: flex-start; max-width: 78%; }
+/* `width: fit-content` để hộp CO LẠI vừa bong bóng. Không có nó thì hộp luôn
+   rộng đúng 78% khung, và menu neo `left: 100%` rơi ra tận mép phải màn hình —
+   cách bong bóng ngắn cả trăm pixel (đo thật 14/09, ảnh chụp trang /messages). */
+.ct-tn-tin {
+  display: flex; flex-direction: column; align-items: flex-start;
+  width: fit-content; max-width: 78%; position: relative;
+}
 .ct-tn-tin[data-toi='true'] { align-self: flex-end; align-items: flex-end; }
 .ct-tn-bong {
   padding: 8px 12px;
@@ -12460,3 +12466,141 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   .ct-homnay-ds li { gap: 8px; }
   .ct-homnay-gio { min-width: 40px; }
 }
+
+/* ══ MENU TUỲ CHỌN CỦA TIN NHẮN ══════════════════════════════════════════
+   `.ct-tn-tin` xếp theo CỘT, nên menu là phần tử anh em sẽ rơi xuống dưới
+   bong bóng. Neo tuyệt đối ra mép NGOÀI thay vì đổi hướng flex — đổi hướng
+   là kéo theo cả giờ gửi và ảnh, và chúng đang nằm đúng chỗ. */
+.ct-tn-menu-boc { position: absolute; top: 1px; }
+/* Tin của mình nằm bên phải ⇒ menu ra mép TRÁI, và ngược lại. Dùng
+   `right: 100%` chứ không `width: calc(100% + n)` — xem
+   [[feedback_right_100_phan_tram_trong_khoi_co_vua]]. */
+.ct-tn-tin[data-toi='true'] .ct-tn-menu-boc { right: 100%; margin-right: 4px; }
+.ct-tn-tin[data-toi='false'] .ct-tn-menu-boc { left: 100%; margin-left: 4px; }
+
+.ct-tn-menu-nut {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ct-text-faint);
+  cursor: pointer;
+  /* Ẩn cho tới khi rê chuột vào hàng — 24 nút ba chấm xếp dọc màn hình là
+     nhiễu, và chúng cạnh tranh chú ý với chính nội dung tin nhắn. */
+  opacity: 0;
+  transition: opacity 0.12s ease, background 0.12s ease;
+}
+.ct-tn-tin:hover .ct-tn-menu-nut,
+.ct-tn-menu-nut:focus-visible,
+.ct-tn-menu-nut[aria-expanded='true'] { opacity: 1; }
+.ct-tn-menu-nut:hover { background: var(--ct-hover); color: var(--ct-text); }
+
+.ct-tn-menu {
+  position: absolute;
+  top: 26px;
+  z-index: 30;
+  min-width: 168px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 4px;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-surface);
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.28);
+}
+/* Mở RA XA bong bóng, không đè lên nó.
+   Tin của mình nằm bên phải ⇒ nút ở mép TRÁI bong bóng ⇒ menu bung sang TRÁI.
+   Tin người kia thì ngược lại. Đặt nhầm chiều là menu phủ kín đúng câu mà
+   người dùng đang muốn chép (đo thật 14/09, ảnh chụp /messages). */
+.ct-tn-menu[data-toi='true'] { right: 0; }
+.ct-tn-menu[data-toi='false'] { left: 0; }
+.ct-tn-menu button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 9px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--ct-text);
+  font-size: 12.5px;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.ct-tn-menu button:hover { background: var(--ct-hover); }
+.ct-tn-menu button[data-canh] { color: var(--ct-warn); }
+.ct-tn-menu button[data-hong] { color: var(--ct-err); }
+
+/* Báo "đã chép" ngay tại nút. Thiếu nó thì bấm xong màn hình không đổi gì và
+   người dùng bấm lại lần nữa cho chắc. */
+.ct-tn-menu-xong,
+.ct-tn-menu-loi {
+  position: absolute;
+  top: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.ct-tn-menu-xong { background: color-mix(in srgb, var(--ct-ok) 16%, var(--ct-surface)); color: var(--ct-ok); }
+.ct-tn-menu-loi { background: color-mix(in srgb, var(--ct-err) 16%, var(--ct-surface)); color: var(--ct-err); }
+.ct-tn-tin[data-toi='true'] .ct-tn-menu-xong,
+.ct-tn-tin[data-toi='true'] .ct-tn-menu-loi { right: 28px; }
+.ct-tn-tin[data-toi='false'] .ct-tn-menu-xong,
+.ct-tn-tin[data-toi='false'] .ct-tn-menu-loi { left: 28px; }
+
+/* ── Chọn nhiều tin ── */
+.ct-tn-tin[data-chon='true'] .ct-tn-bong {
+  outline: 2px solid var(--ct-accent);
+  outline-offset: 2px;
+}
+.ct-tn-o-chon {
+  position: absolute;
+  top: 6px;
+  color: var(--ct-accent);
+}
+.ct-tn-tin[data-toi='true'] .ct-tn-o-chon { right: 100%; margin-right: 6px; }
+.ct-tn-tin[data-toi='false'] .ct-tn-o-chon { left: 100%; margin-left: 6px; }
+
+.ct-tn-thanh-chon,
+.ct-tn-dang-traloi {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--ct-border);
+  background: var(--ct-surface-2);
+  font-size: 12px;
+}
+.ct-tn-dang-traloi > div {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  /* `min-width: 0` để câu dài CẮT chứ không đẩy nút X ra khỏi khung. */
+  min-width: 0;
+  flex: 1;
+}
+.ct-tn-dang-traloi strong { font-size: 11.5px; color: var(--ct-accent); }
+.ct-tn-dang-traloi span {
+  font-size: 11.5px;
+  color: var(--ct-text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ct-tn-dang-traloi > button {
+  border: 0; background: transparent; color: var(--ct-text-faint);
+  cursor: pointer; flex: none; display: inline-flex; padding: 4px;
+}
+.ct-tn-dang-traloi > button:hover { color: var(--ct-text); }
+.ct-tn-thanh-chon > span { margin-right: auto; color: var(--ct-text-dim); }

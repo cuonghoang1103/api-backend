@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Trash2, FileText, Download, X, Check, CheckCheck, Undo2, Reply } from 'lucide-react';
+import { Trash2, FileText, Download, Check, CheckCheck, Undo2, Reply, Copy, CopyCheck, ImageDown, MoreHorizontal } from 'lucide-react';
 import { motion } from 'framer-motion';
 import type { MessagingMessage } from '@/lib/api';
 import { useAuthStore } from '@/store/authStore';
@@ -10,6 +10,8 @@ import { format, formatDistanceToNow } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import { linkifyToNodes } from '@/lib/linkify';
+import { chuMotTin, chepDuoc } from '@/lib/tinNhan/chep';
+import { chepAnhVaoClipboard, tenAnhTuUrl } from '@/lib/tinNhan/anh';
 import ReactionBar from './ReactionBar';
 import toast from 'react-hot-toast';
 
@@ -41,6 +43,7 @@ export default function MessageBubble({
   isOwn,
   showSender = false,
   onReply,
+  onChonNhieu,
 }: {
   message: MessagingMessage;
   isOwn: boolean;
@@ -48,8 +51,18 @@ export default function MessageBubble({
   canDelete?: boolean;
   onDelete?: () => void;
   onReply?: (message: MessagingMessage) => void;
+  onChonNhieu?: () => void;
 }) {
   const [showMenu, setShowMenu] = useState(false);
+  /* Ảnh ĐẦU TIÊN của tin, nếu có. Menu chỉ thao tác trên một ảnh: tin nhiều
+     ảnh thì "chép ảnh" không còn nghĩa rõ ràng, và mỗi ảnh vốn đã mở được
+     riêng bằng cách bấm thẳng vào nó. */
+  const anhDauTien = (() => {
+    const a = message.attachments?.find((x) => x.mimeType.startsWith('image/'));
+    if (a) return resolveUrl(a.url);
+    if (message.mediaUrl && message.mediaKind !== 'sticker') return resolveUrl(message.mediaUrl);
+    return null;
+  })();
   const auth = useAuthStore();
   const store = useMessagingStore();
   // Only admins get clickable order codes (→ jump to the order in admin). For
@@ -382,9 +395,13 @@ export default function MessageBubble({
               <button
                 onClick={() => setShowMenu((s) => !s)}
                 className="opacity-0 transition-opacity group-hover:opacity-100"
-                aria-label="Tuỳ chọn"
+                aria-label="Tuỳ chọn tin nhắn"
+                aria-expanded={showMenu}
               >
-                <X className="h-3 w-3" />
+                {/* Trước đây chỗ này vẽ dấu <X/>. Nút mở menu mà mang hình dấu
+                    nhân thì người ta đọc là "đóng" hoặc "xoá" — và không ai
+                    bấm vào để tìm mục Chép. */}
+                <MoreHorizontal className="h-3.5 w-3.5" />
               </button>
               {showMenu && (
                 <div
@@ -393,6 +410,56 @@ export default function MessageBubble({
                     isOwn ? 'right-0' : 'left-0',
                   )}
                 >
+                  {chepDuoc(message) && (
+                    <button
+                      onClick={async () => {
+                        setShowMenu(false);
+                        await navigator.clipboard.writeText(chuMotTin(message));
+                        toast.success('Đã chép');
+                      }}
+                      className="flex items-center gap-1.5 rounded px-2 py-1 text-[11px] font-medium text-slate-200 hover:bg-white/10"
+                    >
+                      <Copy className="h-3 w-3" />
+                      Chép chữ
+                    </button>
+                  )}
+                  {anhDauTien && (
+                    <button
+                      onClick={async () => {
+                        setShowMenu(false);
+                        try {
+                          await chepAnhVaoClipboard(anhDauTien);
+                          toast.success('Đã chép ảnh');
+                        } catch (e) {
+                          toast.error((e as Error).message);
+                        }
+                      }}
+                      className="flex items-center gap-1.5 rounded px-2 py-1 text-[11px] font-medium text-slate-200 hover:bg-white/10"
+                    >
+                      <ImageDown className="h-3 w-3" />
+                      Chép ảnh
+                    </button>
+                  )}
+                  {anhDauTien && (
+                    <a
+                      href={anhDauTien}
+                      download={tenAnhTuUrl(anhDauTien)}
+                      onClick={() => setShowMenu(false)}
+                      className="flex items-center gap-1.5 rounded px-2 py-1 text-[11px] font-medium text-slate-200 hover:bg-white/10"
+                    >
+                      <Download className="h-3 w-3" />
+                      Tải ảnh
+                    </a>
+                  )}
+                  {onChonNhieu && (
+                    <button
+                      onClick={() => { setShowMenu(false); onChonNhieu(); }}
+                      className="flex items-center gap-1.5 rounded px-2 py-1 text-[11px] font-medium text-slate-200 hover:bg-white/10"
+                    >
+                      <CopyCheck className="h-3 w-3" />
+                      Chọn nhiều tin
+                    </button>
+                  )}
                   {onReply && (
                     <button
                       onClick={() => { setShowMenu(false); onReply(message); }}

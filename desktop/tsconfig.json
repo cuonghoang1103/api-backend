@@ -37,6 +37,9 @@
       "@/lib/lich/*": [
         "../frontend/src/lib/lich/*"
       ],
+      "@/lib/tinNhan/*": [
+        "../frontend/src/lib/tinNhan/*"
+      ],
       "@/lib/anhTuyetDoi": [
         "../frontend/src/lib/anhTuyetDoi.ts"
       ],

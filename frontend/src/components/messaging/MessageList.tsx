@@ -4,8 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
 import MessageBubble from './MessageBubble';
+import { chuNhieuTin } from '@/lib/tinNhan/chep';
 import TypingIndicator from './TypingIndicator';
-import { AlertCircle, ChevronDown, Loader2, RefreshCcw } from 'lucide-react';
+import { AlertCircle, ChevronDown, Copy, Loader2, RefreshCcw } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import toast from 'react-hot-toast';
 import { format } from 'date-fns';
 import type { MessagingMessage } from '@/lib/api';
 
@@ -19,6 +22,32 @@ export default function MessageList() {
   // Messenger-style "jump to latest" FAB — appears once the user has
   // scrolled a screenful away from the newest message.
   const [showJump, setShowJump] = useState(false);
+  /* Chế độ chọn nhiều tin để chép một lượt. Trạng thái nằm ở DANH SÁCH chứ
+     không ở từng bong bóng — nó là trạng thái của cả khung hội thoại. */
+  const [dangChon, setDangChon] = useState(false);
+  const [daChon, setDaChon] = useState<Set<number>>(new Set());
+
+  const doiChon = (id: number) => setDaChon((c) => {
+    const m = new Set(c);
+    if (m.has(id)) m.delete(id); else m.add(id);
+    return m;
+  });
+
+  const chepDaChon = async () => {
+    /* Chép theo ĐÚNG thứ tự hiện trên màn hình, không theo thứ tự bấm chọn —
+       một đoạn hội thoại chép ra mà đảo lộn thứ tự thì vô dụng. */
+    const all = groups.flatMap((g) => g.items).filter((m) => daChon.has(m.id));
+    const chu = chuNhieuTin(all, (sid) => (sid === auth.user?.id
+      ? 'Bạn'
+      : (all.find((m) => m.senderId === sid)?.sender?.displayName
+        ?? all.find((m) => m.senderId === sid)?.sender?.username
+        ?? 'Người kia')));
+    if (chu === '') return;
+    await navigator.clipboard.writeText(chu);
+    toast.success(`Đã chép ${all.length} tin`);
+    setDangChon(false);
+    setDaChon(new Set());
+  };
   const handleScroll = () => {
     const el = scrollRef.current;
     if (!el) return;
@@ -160,6 +189,27 @@ export default function MessageList() {
             const showSender =
               m.senderId !== auth.user?.id &&
               (!prev || prev.senderId !== m.senderId);
+            if (dangChon) {
+              /* Ở chế độ chọn, bấm vào ĐÂU trên hàng cũng chọn — bắt nhắm
+                 đúng một ô vuông nhỏ là chỗ người ta bấm trượt nhiều nhất. */
+              return (
+                <button
+                  key={m.id}
+                  type="button"
+                  onClick={() => doiChon(m.id)}
+                  className={cn(
+                    'block w-full rounded-lg px-1 text-left transition-colors',
+                    daChon.has(m.id) ? 'bg-cyan-500/15 ring-1 ring-cyan-400/40' : 'hover:bg-white/[0.04]',
+                  )}
+                >
+                  <MessageBubble
+                    message={m}
+                    isOwn={m.senderId === auth.user?.id}
+                    showSender={showSender}
+                  />
+                </button>
+              );
+            }
             return (
               <MessageBubble
                 key={m.id}
@@ -167,6 +217,7 @@ export default function MessageList() {
                 isOwn={m.senderId === auth.user?.id}
                 showSender={showSender}
                 onReply={handleReply}
+                onChonNhieu={() => { setDangChon(true); setDaChon(new Set([m.id])); }}
               />
             );
           })}
@@ -175,6 +226,27 @@ export default function MessageList() {
 
       {typingUserIds.length > 0 && <TypingIndicator />}
     </div>
+
+    {dangChon && (
+      <div className="absolute inset-x-0 bottom-0 z-20 flex items-center gap-2 border-t border-white/10 bg-[#0a0a14]/95 px-3 py-2 backdrop-blur">
+        <span className="mr-auto text-[11px] text-text-muted">Đã chọn {daChon.size} tin</span>
+        <button
+          type="button"
+          disabled={daChon.size === 0}
+          onClick={() => void chepDaChon()}
+          className="flex items-center gap-1.5 rounded-lg bg-cyan-500/20 px-3 py-1.5 text-[11px] font-medium text-cyan-200 hover:bg-cyan-500/30 disabled:opacity-40"
+        >
+          <Copy className="h-3 w-3" /> Chép
+        </button>
+        <button
+          type="button"
+          onClick={() => { setDangChon(false); setDaChon(new Set()); }}
+          className="rounded-lg px-3 py-1.5 text-[11px] text-text-muted hover:bg-white/10"
+        >
+          Huỷ
+        </button>
+      </div>
+    )}
 
     {/* Messenger-style jump-to-latest FAB */}
     {showJump && (

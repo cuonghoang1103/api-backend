@@ -23,13 +23,15 @@
  * khi người dùng đi chỗ khác. Đổi sang socket sau vẫn được, không đụng giao diện.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ArrowLeft, CloudOff, MessageSquare, Phone, RefreshCw, Send } from 'lucide-react';
+import { ArrowLeft, CheckSquare, CloudOff, Copy, MessageSquare, Phone, RefreshCw, Reply, Send, Square, X } from 'lucide-react';
 import { useAppState } from '../../app-state';
 import { useSession } from '../../auth/session';
 import KhungGoi from './KhungGoi';
 import { laySocket } from '../../realtime/socket';
 import { OfflineUnavailableError, swr } from '../../offline/cache';
 import { useDich } from '../../i18n';
+import { chuNhieuTin } from '@/lib/tinNhan/chep';
+import { MenuTinNhan } from './MenuTinNhan';
 
 interface NguoiKia {
   id: number;
@@ -80,7 +82,7 @@ function gioNgan(iso: string): string {
 }
 
 export function MessagesPage() {
-  const { dich } = useDich();
+  const { dich, dichP } = useDich();
   const { online } = useAppState();
   const { api, userId } = useSession();
   /** Bộ đếm bấm nút gọi — xem ghi chú ở `KhungGoi`. */
@@ -171,6 +173,51 @@ export function MessagesPage() {
     if (el) el.scrollTop = el.scrollHeight;
   }, [tin]);
 
+  /* Tin đang trả lời, và chế độ chọn nhiều. Cả hai đều là trạng thái của
+     KHUNG HỘI THOẠI chứ không của từng bong bóng, nên nằm ở đây. */
+  const [traLoi, datTraLoi] = useState<TinNhan | null>(null);
+  const [dangChon, datDangChon] = useState(false);
+  const [daChon, datDaChon] = useState<Set<number>>(new Set());
+
+  /* Đổi cuộc thì bỏ hết: trả lời một tin ở cuộc A rồi gửi sang cuộc B là gửi
+     nhầm chỗ, còn tập đã chọn thì mang id của cuộc cũ. */
+  useEffect(() => { datTraLoi(null); datDangChon(false); datDaChon(new Set()); }, [dangMo]);
+
+  const doiChon = (id: number) => datDaChon((c) => {
+    const m = new Set(c);
+    if (m.has(id)) m.delete(id); else m.add(id);
+    return m;
+  });
+
+  const chepDaChon = async () => {
+    // Chép theo ĐÚNG thứ tự hiện trên màn hình, không theo thứ tự bấm chọn.
+    const ds2 = tin.filter((t) => daChon.has(t.id));
+    const chu = chuNhieuTin(ds2, (sid) => (sid === userId
+      ? dich('Bạn')
+      : ten(cuocDangMo?.peer)));
+    if (chu === '') return;
+    await navigator.clipboard.writeText(chu);
+    datDangChon(false);
+    datDaChon(new Set());
+  };
+
+  const thuHoi = async (t: TinNhan) => {
+    if (!api) return;
+    try {
+      await api.request(`/api/v1/messages/messages/${t.id}/recall`, { method: 'POST' });
+      await napTin(dangMo!);
+    } catch (e) { datLoi(e instanceof Error ? e.message : String(e)); }
+  };
+
+  const xoaTin = async (t: TinNhan) => {
+    if (!api) return;
+    if (!window.confirm(dich('Xoá tin nhắn này? Chỉ mình bạn không thấy nó nữa.'))) return;
+    try {
+      await api.request(`/api/v1/messages/messages/${t.id}`, { method: 'DELETE' });
+      await napTin(dangMo!);
+    } catch (e) { datLoi(e instanceof Error ? e.message : String(e)); }
+  };
+
   const gui = async () => {
     const chu = nhap.trim();
     if (!chu || !api || dangMo === null || dangGui) return;
@@ -184,7 +231,11 @@ export function MessagesPage() {
     datTin((c) => [...c, tam]);
     datNhap('');
     try {
-      await api.request(`/api/v1/messages/threads/${dangMo}/messages`, { method: 'POST', body: { content: chu } });
+      await api.request(`/api/v1/messages/threads/${dangMo}/messages`, {
+        method: 'POST',
+        body: { content: chu, ...(traLoi ? { parentMessageId: traLoi.id } : {}) },
+      });
+      datTraLoi(null);
       await napTin(dangMo);
       void napDs();
     } catch (e) {
@@ -302,16 +353,73 @@ export function MessagesPage() {
                     );
                   }
                   return (
-                    <div key={t.id} className="ct-tn-tin" data-toi={cuaToi} title={new Date(t.createdAt).toLocaleString('vi-VN')}>
+                    <div
+                      key={t.id}
+                      className="ct-tn-tin"
+                      data-toi={cuaToi}
+                      data-chon={dangChon && daChon.has(t.id)}
+                      title={new Date(t.createdAt).toLocaleString('vi-VN')}
+                      /* Ở chế độ chọn nhiều, bấm vào ĐÂU trên hàng cũng chọn —
+                         bắt nhắm đúng một ô vuông nhỏ là chỗ người ta bấm trượt
+                         nhiều nhất. */
+                      onClick={dangChon ? () => doiChon(t.id) : undefined}
+                    >
+                      {dangChon && (
+                        <span className="ct-tn-o-chon" aria-hidden>
+                          {daChon.has(t.id) ? <CheckSquare size={15} /> : <Square size={15} />}
+                        </span>
+                      )}
                       <div className="ct-tn-bong">
                         {t.mediaUrl && <img src={t.mediaUrl} alt="" loading="lazy" />}
                         {t.content && <p>{t.content}</p>}
                       </div>
                       <span className="ct-tn-gio">{gioNgan(t.createdAt)}</span>
+                      {/* Menu ẩn hẳn khi đang chọn nhiều: hai cách tương tác
+                          chồng lên nhau trên cùng một hàng thì cú bấm nào cũng
+                          mơ hồ. */}
+                      {!dangChon && (
+                        <MenuTinNhan
+                          tin={t}
+                          cuaToi={cuaToi}
+                          viec={{
+                            traLoi: () => datTraLoi(t),
+                            chonNhieu: () => { datDangChon(true); datDaChon(new Set([t.id])); },
+                            thuHoi: cuaToi ? () => void thuHoi(t) : undefined,
+                            xoa: cuaToi ? () => void xoaTin(t) : undefined,
+                          }}
+                        />
+                      )}
                     </div>
                   );
                 })}
               </div>
+
+              {dangChon && (
+                <div className="ct-tn-thanh-chon">
+                  <span>{dichP('Đã chọn {n} tin', { n: daChon.size })}</span>
+                  <button type="button" className="ct-btn ct-btn-chinh ct-mcp-nho"
+                    disabled={daChon.size === 0} onClick={() => void chepDaChon()}>
+                    <Copy size={13} aria-hidden /> {dich('Chép')}
+                  </button>
+                  <button type="button" className="ct-btn ct-btn-ghost ct-mcp-nho"
+                    onClick={() => { datDangChon(false); datDaChon(new Set()); }}>
+                    {dich('Huỷ')}
+                  </button>
+                </div>
+              )}
+
+              {traLoi && (
+                <div className="ct-tn-dang-traloi">
+                  <Reply size={13} aria-hidden />
+                  <div>
+                    <strong>{traLoi.senderId === userId ? dich('Bạn') : ten(cuocDangMo?.peer)}</strong>
+                    <span>{traLoi.content || dich('[ảnh]')}</span>
+                  </div>
+                  <button type="button" onClick={() => datTraLoi(null)} aria-label={dich('Bỏ trả lời')}>
+                    <X size={14} aria-hidden />
+                  </button>
+                </div>
+              )}
 
               <div className="ct-tn-soan">
                 <input

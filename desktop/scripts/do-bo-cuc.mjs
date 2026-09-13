@@ -277,9 +277,22 @@ const BANG = [
         durationSec: 300 + i, tags: ['a'], viewCount: 100 * i, likeCount: i, commentCount: i,
         publishedAt: '2026-08-13T09:00:00Z', series: null, author: nguoi(1) })),
       pagination: { page: 1, size: 12, total: 30, totalPages: 3 } })],
+    /* ⚠️ Mẫu này phải đứng TRƯỚC `/messages/threads`, nếu không nó bị nuốt:
+       `/\/messages\/threads/` khớp luôn cả `/messages/threads/1/messages` và
+       trả về DANH SÁCH CUỘC cho chỗ đang chờ danh sách TIN. Hậu quả: mở một
+       cuộc ra thì khung tin trống trơn, và bộ đo vẫn báo xanh vì trang không
+       tràn — nó chỉ không đo được gì cả. */
+    [/\/messages\/threads\/\d+\/messages/, () => [
+      { id: 901, threadId: 1, senderId: 2, content: 'Chào bạn, hôm nay học mấy giờ?', createdAt: '2026-08-20T03:05:00Z', sender: nguoi(2) },
+      { id: 902, threadId: 1, senderId: 1, content: 'Slot 2 nhé, phòng BE-210.', createdAt: '2026-08-20T03:06:00Z', sender: nguoi(1) },
+      { id: 903, threadId: 1, senderId: 2, content: 'Mình gửi bạn đoạn này:\nnpm install\nnpm run dev\n\nChạy thử xem sao.', createdAt: '2026-08-20T03:07:00Z', sender: nguoi(2) },
+      { id: 904, threadId: 1, senderId: 1, content: 'Ok để mình thử.', createdAt: '2026-08-20T03:08:00Z', sender: nguoi(1) },
+    ]],
+    /* `peer` chứ không `participants` — đó là tên trường app desktop đọc. */
     [/\/messages\/threads/, () => mang(5, (i) => ({ id: i, type: 'USER', title: `Cuộc trò chuyện ${i}`,
-        lastMessage: { content: 'Tin nhắn gần nhất', createdAt: '2026-08-20T00:00:00Z' },
-        unreadCount: i % 2, participants: [nguoi(1), nguoi(i + 1)], updatedAt: '2026-08-20T00:00:00Z' }))],
+        lastMessage: { content: 'Tin nhắn gần nhất', senderId: 2, createdAt: '2026-08-20T00:00:00Z' },
+        unreadCount: i % 2, peer: nguoi(i + 1), participants: [nguoi(1), nguoi(i + 1)],
+        lastMessageAt: '2026-08-20T00:00:00Z', updatedAt: '2026-08-20T00:00:00Z' }))],
     [/\/friends|\/users/, () => mang(6, (i) => nguoi(i))],
     /* `/feed/posts` trả về MỘT MẢNG, không phải `{posts:[…]}` — trang gọi
        `ds.map` thẳng trên `data`. Trả sai hình dạng thì trang hiện thẻ lỗi,
@@ -1069,6 +1082,19 @@ const CHUAN_BI = {
   /* Mở bảng chọn hoạt động trên dải 24 giờ. Nó từng bị khối "Đi nhanh" vẽ đè
      (lỗi tầng xếp, 07/09/2026) — mà bộ đo chỉ nhìn trang lúc TĨNH thì không
      bao giờ thấy, vì bảng đó chỉ tồn tại sau một cú bấm. */
+  /* Trang tin nhắn: mở một cuộc ra thì mới có bong bóng để đo. `CT_MENU=1`
+     bật luôn menu tuỳ chọn của một tin — nó ẩn cho tới khi rê chuột, nên ảnh
+     chụp trang lúc tĩnh KHÔNG BAO GIỜ thấy nó. */
+  '/messages': async (p) => {
+    await p.click('.ct-tn-cuoc', { timeout: 3000 }).catch(() => {});
+    await p.waitForTimeout(500);
+    if (process.env.CT_MENU) {
+      const hang = p.locator('.ct-tn-tin').nth(2);
+      await hang.hover({ timeout: 2000 }).catch(() => {});
+      await hang.locator('.ct-tn-menu-nut').click({ timeout: 2000 }).catch(() => {});
+      await p.waitForTimeout(300);
+    }
+  },
   '/dashboard': async (p) => {
     /* `CT_LICH=1` ⇒ đo BẢNG SOẠN LỊCH thay vì trang nền. Nó là một lớp phủ
        `position: fixed`, nên nó che trang — không đo chung một lượt được.

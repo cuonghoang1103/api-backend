@@ -101,7 +101,10 @@ test('có khoá của nhóm thì dùng ĐÚNG model đã phân, không lùi', ()
     // `chat_max` là việc đã cố ý chuyển sang GPT. Có khoá mà vẫn ra Claude
     // nghĩa là lưới đỡ đang nuốt luôn cấu hình thật.
     assert.equal(modelFor('chat_max'), 'gpt-5.6-sol');
-    assert.equal(modelFor('cv_parse'), 'gpt-5.4-mini');
+    // Chiều ngược lại cũng phải đúng: `cv_parse` đã nâng lên Opus 4.8 (14/09,
+    // người dùng yêu cầu ưu tiên chính xác). Có khoá nhóm GPT trong env KHÔNG
+    // được kéo nó về model GPT — đó mới là bằng chứng cấu hình thắng lưới đỡ.
+    assert.equal(modelFor('cv_parse'), 'claude-opus-4-8');
   } finally {
     if (cu === undefined) delete process.env.LLM_GATEWAY_API_KEY_GPT;
     else process.env.LLM_GATEWAY_API_KEY_GPT = cu;
@@ -178,6 +181,47 @@ test('Phòng Lab đi cổng rambo, và KHÔNG lùi sang modelapi khi cầu dao m
     // thì nó không bao giờ tới rambo, dù `RAMBO_PURPOSES_CO_DINH` có nó.
     assert.ok(RAMBO_PURPOSES_CO_DINH.has('lab_room'));
   } finally {
+    for (const [t, gt] of luu) {
+      if (gt === undefined) delete process.env[t];
+      else process.env[t] = gt;
+    }
+  }
+});
+
+test('lùi về modelapi thì DÙNG ĐÚNG OPUS 4.8, và khoá đi theo model lùi', () => {
+  // Người dùng chốt 14/09/2026: "cổng dự phòng đừng giới hạn, cần chất lượng
+  // + chính xác để học và làm việc thật". Hạ model lúc rambo sập nghĩa là
+  // đúng lúc hệ thống yếu nhất thì câu trả lời cũng tệ nhất.
+  const luu = ['AGENT_GATEWAY_BASE_URL', 'AGENT_GATEWAY_API_KEY', 'LLM_GATEWAY_API_KEY_GPT', 'LLM_MODELAPI_DU_PHONG']
+    .map((t) => [t, process.env[t]] as const);
+  process.env.AGENT_GATEWAY_BASE_URL = 'https://rambo.ai.vn/api/claude';
+  process.env.AGENT_GATEWAY_API_KEY = 'sk-gia-lap-rambo';
+  process.env.LLM_GATEWAY_API_KEY_GPT = 'sk-gia-lap-nhom-gpt';
+  delete process.env.LLM_MODELAPI_DU_PHONG;
+  baoRamboHong();
+  try {
+    assert.ok(ramboDangNghi(), 'cầu dao đáng lẽ đang mở — mọi phép kiểm dưới vô nghĩa');
+
+    // `chat_max` là việc bản đồ phân cho model GPT. Lúc lùi nó vẫn phải được
+    // Opus, không được tụt xuống model rẻ hơn.
+    assert.equal(modelFor('chat_max'), 'claude-opus-4-8', 'đường lùi đang hạ chất lượng');
+
+    // ⭐ Chỗ dễ sai nhất: KHOÁ phải theo model THẬT SỰ GỬI ĐI, không theo bản
+    // đồ. `chat_max` mang nhãn GPT; nếu khoá vẫn chọn theo nhãn thì ta gửi
+    // model `claude-*` kèm khoá nhóm GPT ⇒ cổng trả 401/503, và lỗi đó chỉ nổ
+    // đúng lúc rambo đang sập.
+    const ep = endpointFor('chat_max');
+    assert.equal(ep.label, 'cong', 'chat_max phải lùi về modelapi khi cầu dao mở');
+    assert.notEqual(ep.key, 'sk-gia-lap-nhom-gpt', 'khoá đi theo BẢN ĐỒ chứ không theo model lùi ⇒ lệch nhóm');
+
+    // KIỂM BỘ KIỂM: lúc cầu dao ĐÓNG thì chính việc đó phải lấy khoá nhóm GPT.
+    // Thiếu dòng này thì khẳng định trên vẫn xanh kể cả khi khoá nhóm không
+    // bao giờ được chọn cho bất cứ việc nào.
+    baoRamboOk();
+    delete process.env.AGENT_GATEWAY_API_KEY; // tắt rambo để rơi về cổng chung
+    assert.equal(endpointFor('chat_max').key, 'sk-gia-lap-nhom-gpt', 'khoá theo nhóm model không còn hoạt động');
+  } finally {
+    baoRamboOk();
     for (const [t, gt] of luu) {
       if (gt === undefined) delete process.env[t];
       else process.env[t] = gt;

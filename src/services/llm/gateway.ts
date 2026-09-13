@@ -401,9 +401,9 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   // biết so sánh & nối với môn học — chat tương tác nên dùng sonnet-5.
   academy_advisor: 'claude-sonnet-5',
 
-  cv_critique: 'gpt-5.6-sol',
-  cv_writing: 'claude-sonnet-5',
-  cv_parse: 'gpt-5.4-mini',
+  cv_critique: 'claude-opus-4-8',
+  cv_writing: 'claude-opus-4-8',
+  cv_parse: 'claude-opus-4-8',
 
   exam_grade: 'claude-sonnet-5',
   exphub_doc: 'gpt-5.4-mini',
@@ -599,6 +599,7 @@ let ramboHongToi = 0;
 /** Nơi gọi báo: lượt vừa rồi qua rambo đã hỏng ⇒ cho cổng nghỉ một lát. */
 export function baoRamboHong(): void {
   ramboHongToi = Date.now() + RAMBO_NGHI_MS;
+  batDauDo();
 }
 
 /** Rambo vừa trả lời được ⇒ mở cầu dao ngay, không phải chờ hết hạn nghỉ. */
@@ -608,6 +609,68 @@ export function baoRamboOk(): void {
 
 export function ramboDangNghi(): boolean {
   return Date.now() < ramboHongToi;
+}
+
+/**
+ * ============================================================
+ * MŨI DÒ: RAMBO SỐNG LẠI LÀ VỀ NGAY
+ * ============================================================
+ *
+ * Người dùng chốt 14/09/2026: *"cổng rambo hoạt động lại liền phải chuyển về
+ * rambo liền, đỡ tốn tiền thật ở cổng kia"*. Trước đợt này việc quay về phụ
+ * thuộc vào MAY RỦI: cầu dao chỉ đóng khi (a) hết `RAMBO_NGHI_MS`, hoặc (b)
+ * có ai đó tình cờ dùng `agent_code`/`exam_tutor`/`lab_room` — ba việc luôn
+ * đi rambo kể cả lúc cầu dao mở — và lượt đó thành công.
+ *
+ * Nghĩa là ban đêm, khi không ai mở app desktop, mọi tính năng khác nằm lại
+ * modelapi ĐÚNG BẰNG `RAMBO_NGHI_MS` dù rambo đã khoẻ từ lâu — và đó là tiền
+ * thật, vì modelapi tính tiền còn rambo là gói đã trả trọn.
+ *
+ * Nên: hỏng thì tự hẹn giờ gõ cửa rambo, gõ được là đóng cầu dao ngay.
+ *
+ * ⚠️ Ba điều kiện để mũi dò này không thành một cái bẫy mới:
+ *  1. CHỈ một mũi dò tại một thời điểm (`dangDo`) — không thì mỗi lượt gọi
+ *     hỏng lại đẻ thêm một vòng lặp, và chúng nhân lên theo tải.
+ *  2. `unref()` để nó KHÔNG giữ tiến trình sống — thiếu cái này thì backend
+ *     không thoát nổi lúc deploy, và container bị giết cứng sau timeout.
+ *  3. Gõ cửa phải RẺ và có hạn giờ: `max_tokens: 1`, một chữ, `AbortSignal`
+ *     15s. Rambo lúc sập trả lời sau ~40 giây (đo 14/09), nên không đặt hạn
+ *     giờ thì mỗi nhịp dò treo 40s và ta lại đang tự đo bằng đồng hồ hỏng.
+ */
+const DO_LAI_MS = Math.max(10_000, Number(process.env.RAMBO_DO_LAI_MS) || 30_000);
+let dangDo = false;
+
+async function goCuaRambo(): Promise<boolean> {
+  const ep = congAgent();
+  if (!ep) return false;
+  try {
+    const r = await fetch(`${ep.root}/v1/messages`, {
+      method: 'POST',
+      headers: { 'x-api-key': ep.key ?? '', 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-haiku-4-5', max_tokens: 1, messages: [{ role: 'user', content: 'ok' }] }),
+      signal: AbortSignal.timeout(15_000),
+    });
+    return r.ok;
+  } catch {
+    return false;
+  }
+}
+
+function batDauDo(): void {
+  if (dangDo) return;
+  dangDo = true;
+  const nhip = setInterval(() => {
+    if (!ramboDangNghi()) { clearInterval(nhip); dangDo = false; return; }
+    void goCuaRambo().then((ok) => {
+      if (!ok) return;
+      clearInterval(nhip);
+      dangDo = false;
+      baoRamboOk();
+      logger.info('[llm] rambo đã sống lại — đóng cầu dao, quay về cổng chính ngay');
+    });
+  }, DO_LAI_MS);
+  // Không giữ tiến trình sống chỉ vì một cái hẹn giờ.
+  (nhip as unknown as { unref?: () => void }).unref?.();
 }
 
 /**
@@ -650,7 +713,19 @@ export function endpointFor(purpose: LlmPurpose): LlmEndpoint {
   // `endpointFor` để biết việc này có chạy ở máy nhà không ⇒ gọi vòng vô tận,
   // và nó nổ bằng "Maximum call stack size exceeded" — một câu chẳng nhắc gì
   // tới model hay khoá. Đã dính thật 18/08 và chỉ lộ ra khi CHẠY.
-  return { root: gatewayRoot(), key: gatewayKeyFor(modelCong(purpose)), local: false, label: 'cong' };
+  //
+  // ⚠️⚠️ LÚC LÙI THÌ KHOÁ PHẢI THEO MODEL LÙI, KHÔNG THEO `PURPOSE_MODEL`.
+  // Khi cầu dao rambo mở, `modelFor()` bỏ qua `PURPOSE_MODEL` và trả về
+  // `MODELAPI_DU_PHONG`. Nếu khoá ở đây vẫn chọn theo `PURPOSE_MODEL` thì hai
+  // bên lệch NHÓM: ví dụ `chat_max` (bản đồ nói `gpt-5.6-sol`) sẽ lấy khoá
+  // nhóm GPT nhưng gửi lên model `claude-opus-4-8` ⇒ cổng trả 401/503, và lỗi
+  // đó CHỈ hiện ra đúng lúc rambo đang sập — tức lúc tệ nhất, và lúc khó đối
+  // chứng nhất. Lệch này đã âm thầm tồn tại từ 07/09 theo chiều ngược lại
+  // (việc dùng model `claude-*` lấy khoá nhóm CLAUDE rồi gửi `gpt-5.6-sol`).
+  const modelSeDung = ramboDangNghi()
+    ? (process.env[`LLM_MODEL_${purpose.toUpperCase()}`]?.trim() || MODELAPI_DU_PHONG)
+    : modelCong(purpose);
+  return { root: gatewayRoot(), key: gatewayKeyFor(modelSeDung), local: false, label: 'cong' };
 }
 
 /**
@@ -855,9 +930,22 @@ function modelCong(purpose: LlmPurpose): string {
  */
 const RAMBO_MODEL_MANH = 'claude-opus-4-8';
 const RAMBO_MODEL_HANG_LOAT = 'claude-sonnet-5';
-const RAMBO_VIEC_HANG_LOAT = new Set<LlmPurpose>([
-  'codelab_bulk', 'language_bulk', 'exphub_doc', 'news_bulletin', 'cv_parse',
-]);
+/**
+ * ⚠️ THU HẸP 14/09/2026. Trước đây danh sách này gồm cả `codelab_bulk`,
+ * `language_bulk`, `exphub_doc`, `cv_parse` — tức bài tập Code Lab, nội dung
+ * học ngoại ngữ và việc đọc CV đều chạy model yếu hơn.
+ *
+ * Người dùng chốt: *"mấy tính năng như AI giải thích, AI hướng dẫn học từng
+ * bài, review code… cứ dùng opus 4.8 không giới hạn, vì nó cần độ chính xác +
+ * chất lượng"*. Đó chính là những thứ nằm trong danh sách cũ — chúng SINH RA
+ * thứ người học đọc, nên chất lượng ở đó là chất lượng của cả khoá học.
+ *
+ * Còn lại đúng `news_bulletin`: nó mặc định TẮT (`TECH_NEWS_AUTOPOST=false`),
+ * chạy hàng loạt không ai chờ, và lý do giữ model nhanh là THỜI GIAN chứ
+ * không phải tiền — đo 19/08: opus-4-8 mất 4.706ms tới mẩu đầu, sonnet-5 chỉ
+ * 2.460ms; nhân với hàng nghìn mục là nhiều giờ đồng hồ.
+ */
+const RAMBO_VIEC_HANG_LOAT = new Set<LlmPurpose>(['news_bulletin']);
 
 /**
  * Model dùng khi PHẢI lùi về modelapi. Người dùng chỉ định `gpt-5.6-sol`.
@@ -873,8 +961,33 @@ const RAMBO_VIEC_HANG_LOAT = new Set<LlmPurpose>([
  * đường lùi mới thật sự có tác dụng:
  *     LLM_MODELAPI_DU_PHONG=claude-sonnet-5
  * Vặn được ngay trên VPS, không cần deploy.
+ *
+ * ─── ĐO LẠI 14/09/2026 — GHI CHÚ 07/09 Ở TRÊN ĐÃ CŨ ───
+ * modelapi có HAI khoá, mỗi khoá một nhóm, và `GET /v1/models` chỉ liệt kê
+ * nhóm của khoá đó (đo thật, hai danh sách rời nhau hoàn toàn):
+ *   • `OPENAI_COMPAT_API_KEY` → nhóm CLAUDE: claude-opus-4-8 · claude-opus-4-7
+ *     · claude-opus-4-6 · claude-sonnet-5 · claude-sonnet-4-6 · claude-fable-5(-1)
+ *   • `LLM_GATEWAY_API_KEY_GPT` → nhóm GPT: gpt-6-astra · gpt-5.6-sol/terra/luna
+ *     · gpt-5.5 · gpt-5.4 · codex-auto-review
+ * `LLM_GATEWAY_API_KEY` đang TRỐNG trên production, nên khoá "mặc định" mà
+ * `gatewayKey()` trả về chính là khoá nhóm CLAUDE.
+ *
+ * ⚠️ Đo bằng khoá SAI thì ra 401 và trông y như "kênh đã đóng" — tôi đã tự
+ * mắc đúng bẫy đó ngày 14/09 khi gửi `LLM_GATEWAY_API_KEY` (rỗng) thay vì đi
+ * đúng chuỗi dự phòng của `gatewayKey()`. Muốn đo tay thì phải dùng ĐÚNG chuỗi
+ * đó, đừng đọc một tên biến rồi tin.
+ *
+ * Đo thật, cùng một câu hỏi, 3 lượt mỗi model:
+ *   claude-opus-4-8 (modelapi)  12,0 · 7,2 · 8,1s   → TB 9,1s
+ *   gpt-5.6-sol     (modelapi)   6,2 · 5,6 · 5,2s   → TB 5,7s
+ *
+ * ⇒ Đường lùi để **`claude-opus-4-8`**: người dùng chốt 14/09/2026 *"cổng dự
+ * phòng đừng giới hạn, cần chất lượng + chính xác để học và làm việc thật"*.
+ * Chậm hơn 1,6× là cái giá chấp nhận được để câu trả lời lúc rambo sập KHÔNG
+ * tụt hạng so với lúc bình thường. Trần chống spam đã nằm ở quota mỗi người
+ * (`checkTokenQuota`), không phải ở việc hạ model.
  */
-const MODELAPI_DU_PHONG = process.env.LLM_MODELAPI_DU_PHONG?.trim() || 'gpt-5.6-sol';
+const MODELAPI_DU_PHONG = process.env.LLM_MODELAPI_DU_PHONG?.trim() || 'claude-opus-4-8';
 
 export function modelFor(purpose: LlmPurpose, ep?: LlmEndpoint): string {
   const env = process.env[`LLM_MODEL_${purpose.toUpperCase()}`]?.trim();

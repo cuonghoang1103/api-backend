@@ -697,7 +697,21 @@ done
 # đường công khai còn đi qua nginx/Cloudflare nên một lần chớp mạng cũng thành
 # "000" và đánh hỏng cả bản deploy vốn không sao.
 info "Smoke-test các route lõi..."
-DS_ROUTE=$(awk '/^for route in \\$/{f=1;next} f{l=$0; e=(l ~ /;[[:space:]]*do[[:space:]]*$/); sub(/;[[:space:]]*do[[:space:]]*$/,"",l); gsub(/[[:space:]\\]/,"",l); if(l!="")print l; if(e)exit}' deploy.sh | tr '\n' ' ')
+# ⚠️ Đọc danh sách route từ `deploy.sh` CỦA ĐÚNG COMMIT ĐANG DEPLOY
+# (`git show ${SHA}:deploy.sh`), KHÔNG phải file trong cây làm việc.
+#
+# Đo thật 13/09/2026: tôi thêm route `llm-keys/info` vào `deploy.sh` cùng lúc
+# viết route đó, rồi một lượt deploy của commit CŨ HƠN chạy trước. Nó đọc
+# `deploy.sh` ở cây làm việc — đã có route mới — nhưng ảnh nó vừa tráo thì
+# chưa có route ấy. Smoke-test báo 404 và đánh hỏng một bản deploy hoàn toàn
+# lành. Production vẫn chạy đúng, nhưng bước push và ghi mốc bị bỏ.
+#
+# Đọc từ commit thì danh sách route LUÔN khớp với ảnh vừa tráo — đó mới là
+# thứ smoke-test cần kiểm.
+BOC_ROUTE='/^for route in \\$/{f=1;next} f{l=$0; e=(l ~ /;[[:space:]]*do[[:space:]]*$/); sub(/;[[:space:]]*do[[:space:]]*$/,"",l); gsub(/[[:space:]\\]/,"",l); if(l!="")print l; if(e)exit}'
+DS_ROUTE=$(git show "${SHA}:deploy.sh" 2>/dev/null | awk "$BOC_ROUTE" | tr '\n' ' ')
+# Commit không có deploy.sh (hiếm) thì lùi về file trong cây làm việc.
+[ -z "$(echo "$DS_ROUTE" | tr -d '[:space:]')" ] && DS_ROUTE=$(awk "$BOC_ROUTE" deploy.sh | tr '\n' ' ')
 SO_ROUTE=$(echo "$DS_ROUTE" | wc -w | tr -d ' ')
 if [ "${SO_ROUTE:-0}" -lt 10 ]; then
     warn "Không đọc được danh sách route từ deploy.sh (chỉ thấy ${SO_ROUTE}) — dùng danh sách rút gọn."

@@ -1053,7 +1053,7 @@ const taiLieu = doc('ibi101-0-0-tai-lieu', '📚 Course materials & references||
 <li><a href="https://www.wto.org/" target="_blank" rel="noopener">World Trade Organization</a> — trade rules, agreements and statistics.</li>
 <li><a href="https://wits.worldbank.org/" target="_blank" rel="noopener">World Integrated Trade Solution (World Bank)</a> — tariff and trade-flow data by country and product.</li>
 <li><a href="https://trungtamwto.vn/" target="_blank" rel="noopener">WTO and Integration Center (VCCI)</a> — Vietnamese-language information on Vietnam’s FTAs.</li>
-<li><a href="https://www.hofstede-insights.com/" target="_blank" rel="noopener">Hofstede Insights</a> — a country-comparison tool for cultural dimensions.</li>
+<li><a href="https://www.theculturefactor.com/country-comparison-tool" target="_blank" rel="noopener">The Culture Factor (formerly Hofstede Insights)</a> — a country-comparison tool for cultural dimensions.</li>
 </ul>
 <h3>▶️ YouTube</h3>
 <ul>
@@ -1089,7 +1089,7 @@ const taiLieu = doc('ibi101-0-0-tai-lieu', '📚 Course materials & references||
 <li><a href="https://www.wto.org/" target="_blank" rel="noopener">World Trade Organization</a> — quy tắc thương mại, hiệp định và số liệu thống kê.</li>
 <li><a href="https://wits.worldbank.org/" target="_blank" rel="noopener">World Integrated Trade Solution (World Bank)</a> — số liệu thuế quan và dòng thương mại theo nước và mặt hàng.</li>
 <li><a href="https://trungtamwto.vn/" target="_blank" rel="noopener">WTO and Integration Center (VCCI)</a> — thông tin tiếng Việt về các FTA của Việt Nam.</li>
-<li><a href="https://www.hofstede-insights.com/" target="_blank" rel="noopener">Hofstede Insights</a> — công cụ so sánh các chiều văn hoá giữa các quốc gia.</li>
+<li><a href="https://www.theculturefactor.com/country-comparison-tool" target="_blank" rel="noopener">The Culture Factor (trước đây là Hofstede Insights)</a> — công cụ so sánh các chiều văn hoá giữa các quốc gia.</li>
 </ul>
 <h3>▶️ YouTube</h3>
 <ul>

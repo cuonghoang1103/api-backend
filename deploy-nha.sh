@@ -337,9 +337,14 @@ sshnha "mkdir -p ${THU_MUC_NHA} && [ -d \$HOME/${KHO_TUONG_DOI} ] || git init --
 # `--push-option=cho-lui` là đường thoát hiểm của hook pre-receive trên kho
 # trần (xem scripts/chot-deploy-may-nha/). Chỉ truyền khi người chạy CỐ Ý xin
 # lùi; bình thường hook sẽ chặn nếu bản này không chứa mã đang chạy trên prod.
+# ⚠️ KHÔNG viết `"${MANG[@]}"` cho một mảng RỖNG: script chạy `set -u`, và
+# bash 3.2 (bản macOS vẫn ship tới nay) coi đó là "unbound variable" rồi chết
+# ngay. Đo thật 13/09/2026 — deploy dừng ở đúng dòng này. Dạng
+# `${MANG[@]+"${MANG[@]}"}` nở ra thành KHÔNG GÌ CẢ khi mảng rỗng và an toàn
+# trên mọi bản bash.
 TUY_CHON_DAY=()
 [ "$CHO_LUI" = true ] && TUY_CHON_DAY=(--push-option=cho-lui)
-if ! git push --quiet --force "${TUY_CHON_DAY[@]}" "${MAY_NHA}:${KHO_TUONG_DOI}" "HEAD:refs/heads/deploy"; then
+if ! git push --quiet --force ${TUY_CHON_DAY[@]+"${TUY_CHON_DAY[@]}"} "${MAY_NHA}:${KHO_TUONG_DOI}" "HEAD:refs/heads/deploy"; then
     lui_ve_vps "Đẩy mã sang máy nhà thất bại"
 fi
 if ! sshnha "rm -rf ${DICH} && mkdir -p ${DICH} && git --git-dir=\$HOME/${KHO_TUONG_DOI} archive ${SHA} | tar x -C ${DICH}"; then

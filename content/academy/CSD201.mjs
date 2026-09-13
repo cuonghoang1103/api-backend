@@ -15,6 +15,8 @@ export default {
     level: 'INTERMEDIATE',
     language: 'Vietnamese',
     status: 'PUBLISHED',
+    syncOrder: true,
+    pruneSections: true,
     shortDescription: 'The toolbox every programmer builds on: arrays, linked lists, stacks, queues, trees, graphs, hashing — and the algorithms that traverse, sort and search them. Learn to pick the right structure and prove why, in Java.|||Bộ đồ nghề mọi lập trình viên dựa vào: mảng, danh sách liên kết, ngăn xếp, hàng đợi, cây, đồ thị, băm — và các thuật toán duyệt, sắp xếp, tìm kiếm chúng. Học cách chọn đúng cấu trúc và chứng minh vì sao, bằng Java.',
     description: 'Môn nền tảng của khoa học máy tính: cách tổ chức dữ liệu trong bộ nhớ và các thuật toán vận hành trên chúng. Học mảng, danh sách liên kết, ngăn xếp, hàng đợi, cây nhị phân tìm kiếm, đồ thị, bảng băm; phân tích độ phức tạp (Big-O); các thuật toán sắp xếp, tìm kiếm, duyệt; và biết chọn cấu trúc/thuật toán phù hợp cho bài toán thực tế. Cài đặt bằng Java. Tiên quyết: PRO192.',
     whatYouLearn: 'Phân tích độ phức tạp Big-O; mảng & danh sách liên kết (đơn/vòng/đôi); ngăn xếp, hàng đợi, deque, hàng đợi ưu tiên; đệ quy; cây, cây nhị phân, cây nhị phân tìm kiếm (BST); đồ thị & thuật toán duyệt (BFS/DFS); các thuật toán sắp xếp cơ bản & nâng cao (quick/merge/heap sort); bảng băm & xử lý va chạm; xử lý văn bản (Huffman, LZW, RLE); và cách chọn cấu trúc/thuật toán tối ưu.',
@@ -27,6 +29,101 @@ export default {
       title: 'Section 0 — Introduction & Study Guide|||Mục 0 — Giới thiệu môn học & Hướng dẫn học',
       description: 'Đọc trước tiên: môn học là gì, điều kiện qua môn, chuẩn đầu ra, công cụ và cách học.',
       lessons: [
+        {
+          title: '0.0 — 📚 Course materials & the 8 learning outcomes|||0.0 — 📚 Tài liệu tham khảo & 8 chuẩn đầu ra',
+          slug: 'csd201-tai-lieu-tham-khao',
+          type: 'VIDEO',
+          isFreePreview: true,
+          description: 'Sách chính (Goodrich), công cụ (JDK/Eclipse), trang trực quan hoá (VisuAlgo, Algorithm Visualizer), NeetCode, và 8 CLO của môn.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Lesson 0.0</span>
+<h2>📚 Course materials &amp; references</h2>
+<p class="lead">Everything CSD201 asks of you traces back to one textbook and eight learning outcomes. Read this page first: it names the single source of truth, the tools you install, and the visualisers that make abstract structures click.</p>
+<h3>Reference materials</h3>
+<table>
+  <thead><tr><th>Type</th><th>Resource</th><th>Use it for</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Main textbook</strong></td><td>Goodrich, Tamassia &amp; Goldwasser — <em>Data Structures and Algorithms in Java</em>, Wiley, 6th ed. (2014)</td><td>The syllabus&#39; primary book. Every structure and Big-O in this course follows its treatment.</td></tr>
+    <tr><td>Tool — JDK</td><td>JDK 8 or newer (Temurin/Oracle)</td><td>Compile and run every Java structure you build.</td></tr>
+    <tr><td>Tool — IDE</td><td><strong>Eclipse</strong> (syllabus default) · IntelliJ / NetBeans / VS Code also fine</td><td>Write, debug and step through code — watch the call stack grow during recursion.</td></tr>
+    <tr><td>Visualiser</td><td><strong>VisuAlgo</strong> (visualgo.net)</td><td>Animate BST, AVL, heap, hashing, graph and sorting operations step by step.</td></tr>
+    <tr><td>Visualiser</td><td>Algorithm Visualizer (this site, /algorithms)</td><td>Watch sorts, searches and structures animate — paired with every topic here.</td></tr>
+    <tr><td>Video course</td><td><strong>NeetCode</strong> (neetcode.io) — DS&amp;A + patterns</td><td>Interview-grade explanations of the same structures, plus problem patterns.</td></tr>
+  </tbody>
+</table>
+<div class="lz-refs">
+  <a class="link-card codelab" href="https://visualgo.net/en" target="_blank" rel="noopener">
+    <span class="lc-ico">🧭</span>
+    <span class="lc-body"><span class="lc-title">VisuAlgo — visualgo.net</span><span class="lc-sub">Animated data structures &amp; algorithms.</span></span>
+    <span class="lc-cta">MỞ →</span>
+  </a>
+  <a class="link-card codelab" href="https://neetcode.io/" target="_blank" rel="noopener">
+    <span class="lc-ico">🎬</span>
+    <span class="lc-body"><span class="lc-title">NeetCode — neetcode.io</span><span class="lc-sub">DS&amp;A explanations &amp; interview patterns.</span></span>
+    <span class="lc-cta">MỞ →</span>
+  </a>
+</div>
+<h3>The 8 learning outcomes (CLO) — the whole course, one line each</h3>
+<div class="clo-list">
+  <div class="clo-item"><span class="badge">CLO1</span> <b>Lists</b> — arrays &amp; dynamic arrays, singly / circularly / doubly linked lists; ArrayList vs LinkedList.</div>
+  <div class="clo-item"><span class="badge">CLO2</span> <b>Stacks &amp; Queues</b> — stack (LIFO), queue (FIFO), deque, priority queue, and their applications.</div>
+  <div class="clo-item"><span class="badge">CLO3</span> <b>Recursion</b> — factorial, binary search, linear / binary / multiple recursion, tail recursion, recursion vs iteration.</div>
+  <div class="clo-item"><span class="badge">CLO4</span> <b>Trees</b> — general &amp; binary trees, pre/in/post-order traversal, BST insert/delete/search, balanced/AVL, heaps.</div>
+  <div class="clo-item"><span class="badge">CLO5</span> <b>Graphs</b> — edge list / adjacency list / matrix, BFS/DFS, Dijkstra, MST (Prim/Kruskal), Euler, Hamilton, colouring.</div>
+  <div class="clo-item"><span class="badge">CLO6</span> <b>Sorting</b> — selection/insertion/bubble/quick/merge/heap, plus linear-time bucket &amp; radix; complexity comparison.</div>
+  <div class="clo-item"><span class="badge">CLO7</span> <b>Hashing</b> — hash tables, hash functions, collision handling (open addressing, chaining), load factor &amp; rehash.</div>
+  <div class="clo-item"><span class="badge">CLO8</span> <b>Text processing</b> — pattern matching (brute force, KMP) and compression (Huffman, LZW, run-length).</div>
+</div>
+<h3>Grading at a glance</h3>
+<p>Four components: <strong>Progress Test 20%</strong> (PT1 covers CLO1–4, PT2 covers CLO5–8), <strong>Assignment 20%</strong>, <strong>Practical Exam 30%</strong> (85&#39;), <strong>Final Exam 30%</strong> (60&#39;, 50 multiple-choice). Full rules and completion gates are in lesson 0.2.</p>
+<div class="callout ok">One book, eight outcomes, two visualisers. Keep VisuAlgo open in a second tab while you read — <em>seeing</em> a rotation or a rehash beats any paragraph describing it.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bài 0.0</span>
+<h2>📚 Tài liệu tham khảo</h2>
+<p class="lead">Mọi thứ CSD201 đòi hỏi đều quy về một cuốn sách và tám chuẩn đầu ra. Đọc trang này trước tiên: nó nêu nguồn sự thật duy nhất, các công cụ bạn cài, và những trang trực quan hoá giúp cấu trúc trừu tượng trở nên rõ ràng.</p>
+<h3>Tài liệu &amp; nguồn học</h3>
+<table>
+  <thead><tr><th>Loại</th><th>Nguồn</th><th>Dùng để</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Sách chính</strong></td><td>Goodrich, Tamassia &amp; Goldwasser — <em>Data Structures and Algorithms in Java</em>, Wiley, tái bản 6 (2014)</td><td>Sách chính của syllabus. Mọi cấu trúc và Big-O trong môn bám theo cách trình bày của nó.</td></tr>
+    <tr><td>Công cụ — JDK</td><td>JDK 8 trở lên (Temurin/Oracle)</td><td>Biên dịch và chạy mọi cấu trúc Java bạn tự dựng.</td></tr>
+    <tr><td>Công cụ — IDE</td><td><strong>Eclipse</strong> (mặc định theo syllabus) · IntelliJ / NetBeans / VS Code đều được</td><td>Viết, gỡ lỗi, chạy từng bước — nhìn call stack lớn dần khi đệ quy.</td></tr>
+    <tr><td>Trực quan hoá</td><td><strong>VisuAlgo</strong> (visualgo.net)</td><td>Chạy hoạt hình BST, AVL, heap, băm, đồ thị và sắp xếp từng bước.</td></tr>
+    <tr><td>Trực quan hoá</td><td>Algorithm Visualizer (trang này, /algorithms)</td><td>Xem sắp xếp, tìm kiếm, cấu trúc chạy — ghép với mọi chủ đề ở đây.</td></tr>
+    <tr><td>Khoá video</td><td><strong>NeetCode</strong> (neetcode.io) — DS&amp;A + mẫu bài</td><td>Giải thích cùng các cấu trúc ở tầm phỏng vấn, kèm mẫu giải bài.</td></tr>
+  </tbody>
+</table>
+<div class="lz-refs">
+  <a class="link-card codelab" href="https://visualgo.net/en" target="_blank" rel="noopener">
+    <span class="lc-ico">🧭</span>
+    <span class="lc-body"><span class="lc-title">VisuAlgo — visualgo.net</span><span class="lc-sub">Cấu trúc &amp; giải thuật dạng hoạt hình.</span></span>
+    <span class="lc-cta">MỞ →</span>
+  </a>
+  <a class="link-card codelab" href="https://neetcode.io/" target="_blank" rel="noopener">
+    <span class="lc-ico">🎬</span>
+    <span class="lc-body"><span class="lc-title">NeetCode — neetcode.io</span><span class="lc-sub">Giải thích DS&amp;A &amp; mẫu bài phỏng vấn.</span></span>
+    <span class="lc-cta">MỞ →</span>
+  </a>
+</div>
+<h3>8 chuẩn đầu ra (CLO) — cả môn học, mỗi dòng một CLO</h3>
+<div class="clo-list">
+  <div class="clo-item"><span class="badge">CLO1</span> <b>Danh sách</b> — mảng &amp; mảng động, danh sách liên kết đơn / vòng / đôi; ArrayList vs LinkedList.</div>
+  <div class="clo-item"><span class="badge">CLO2</span> <b>Ngăn xếp &amp; Hàng đợi</b> — stack (LIFO), queue (FIFO), deque, hàng đợi ưu tiên, và ứng dụng.</div>
+  <div class="clo-item"><span class="badge">CLO3</span> <b>Đệ quy</b> — giai thừa, tìm nhị phân, đệ quy tuyến tính / nhị phân / bội, đệ quy đuôi, đệ quy vs lặp.</div>
+  <div class="clo-item"><span class="badge">CLO4</span> <b>Cây</b> — cây tổng quát &amp; nhị phân, duyệt pre/in/post-order, BST chèn/xoá/tìm, cân bằng/AVL, heap.</div>
+  <div class="clo-item"><span class="badge">CLO5</span> <b>Đồ thị</b> — edge list / danh sách kề / ma trận, BFS/DFS, Dijkstra, cây khung (Prim/Kruskal), Euler, Hamilton, tô màu.</div>
+  <div class="clo-item"><span class="badge">CLO6</span> <b>Sắp xếp</b> — selection/insertion/bubble/quick/merge/heap, thêm bucket &amp; radix tuyến tính; so sánh độ phức tạp.</div>
+  <div class="clo-item"><span class="badge">CLO7</span> <b>Băm</b> — bảng băm, hàm băm, xử lý va chạm (open addressing, chaining), hệ số tải &amp; rehash.</div>
+  <div class="clo-item"><span class="badge">CLO8</span> <b>Xử lý văn bản</b> — so khớp mẫu (vét cạn, KMP) và nén (Huffman, LZW, run-length).</div>
+</div>
+<h3>Cấu trúc điểm nhìn nhanh</h3>
+<p>Bốn thành phần: <strong>Progress Test 20%</strong> (PT1 phủ CLO1–4, PT2 phủ CLO5–8), <strong>Assignment 20%</strong>, <strong>Thi thực hành (PE) 30%</strong> (85&#39;), <strong>Thi cuối kỳ 30%</strong> (60&#39;, 50 câu trắc nghiệm). Luật đầy đủ và các cửa hoàn thành ở bài 0.2.</p>
+<div class="callout ok">Một cuốn sách, tám chuẩn đầu ra, hai trang trực quan hoá. Mở VisuAlgo ở tab thứ hai khi đọc — <em>thấy</em> một phép xoay hay một lần rehash hơn mọi đoạn văn mô tả nó.</div>
+</div>
+`,
+        },
         {
           title: '0.1 — About CSD201 & the course map|||0.1 — Giới thiệu CSD201 & bản đồ môn học',
           slug: 'csd201-gioi-thieu',
@@ -712,8 +809,8 @@ so 1,2 → lấy 1 · so 4,2 → lấy 2 · so 4,3 → lấy 3 · so 4,9 → l�
 `,
         },
         {
-          title: 'Quiz 1 — Lists & Linked Lists|||Quiz 1 — Danh sách & Liên kết',
-          slug: 'csd201-quiz-1',
+          title: 'Quiz — Chapter 1: Lists & Linked Lists|||Quiz — Chương 1: Danh sách & Liên kết',
+          slug: 'csd201-quiz-ch1',
           type: 'QUIZ',
           description: 'Kiểm tra mảng vs danh sách liên kết.',
           quiz: {
@@ -1107,6 +1204,20 @@ pq.<span class="tok-function">poll</span>();   <span class="tok-comment">// → 
 </a>
 </div>
 `,
+        },
+        {
+          title: 'Quiz — Chapter 2: Stacks, Queues & Priority Queues|||Quiz — Chương 2: Ngăn xếp, Hàng đợi & Hàng đợi ưu tiên',
+          slug: 'csd201-quiz-ch2',
+          type: 'QUIZ',
+          description: 'Kiểm tra stack (LIFO), queue (FIFO), deque và hàng đợi ưu tiên.',
+          quiz: {
+            timeLimitSeconds: 300,
+            questions: [
+              { question: 'A stack removes…|||Ngăn xếp lấy ra…', options: ['the oldest item (FIFO)|||phần tử cũ nhất (FIFO)', 'the most recently added item (LIFO)|||phần tử thêm gần nhất (LIFO)', 'the smallest item|||phần tử nhỏ nhất', 'a random item|||phần tử ngẫu nhiên'], correctIndex: 1, points: 1 },
+              { question: 'A binary min-heap gives insert and remove-min in…|||Heap nhị phân min cho chèn và lấy-min trong…', options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'], correctIndex: 1, points: 1 },
+              { question: 'A deque (double-ended queue) lets you…|||Deque (hàng đợi hai đầu) cho phép bạn…', options: ['only push at one end|||chỉ thêm ở một đầu', 'add and remove at both ends in O(1)|||thêm và xoá ở cả hai đầu trong O(1)', 'sort automatically|||tự sắp xếp', 'index by key|||truy cập theo khoá'], correctIndex: 1, points: 1 },
+            ],
+          },
         },
       ],
     },
@@ -1502,18 +1613,16 @@ a = 1, b = 2 → n<sup>log₂1</sup> = n⁰ = 1. f(n) = 1 → bằng nhau → <b
 `,
         },
         {
-          title: 'Quiz 2 — Stacks, Queues & Recursion|||Quiz 2 — Ngăn xếp, Hàng đợi & Đệ quy',
-          slug: 'csd201-quiz-2',
+          title: 'Quiz — Chapter 3: Recursion|||Quiz — Chương 3: Đệ quy',
+          slug: 'csd201-quiz-ch3',
           type: 'QUIZ',
-          description: 'Kiểm tra stack/queue/heap/đệ quy.',
+          description: 'Kiểm tra đệ quy: ca cơ sở, đệ quy bội, đệ quy đuôi và độ phức tạp.',
           quiz: {
             timeLimitSeconds: 300,
             questions: [
-              { question: 'A stack removes…|||Ngăn xếp lấy ra…', options: ['the oldest item (FIFO)|||phần tử cũ nhất (FIFO)', 'the most recently added item (LIFO)|||phần tử thêm gần nhất (LIFO)', 'the smallest item|||phần tử nhỏ nhất', 'a random item|||phần tử ngẫu nhiên'], correctIndex: 1, points: 1 },
-              { question: 'A binary min-heap gives insert/remove-min in…|||Heap nhị phân min cho chèn/lấy-min trong…', options: ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'], correctIndex: 1, points: 1 },
-              { question: 'BFS (breadth-first search) naturally uses a…|||BFS (tìm theo chiều rộng) tự nhiên dùng…', options: ['stack|||ngăn xếp', 'queue|||hàng đợi', 'heap', 'tree|||cây'], correctIndex: 1, points: 1 },
+              { question: 'Every correct recursion must have…|||Mọi đệ quy đúng đều phải có…', options: ['a loop inside|||một vòng lặp bên trong', 'at least one base case that stops it|||ít nhất một ca cơ sở để dừng', 'exactly two calls|||đúng hai lời gọi', 'a global variable|||một biến toàn cục'], correctIndex: 1, points: 1 },
               { question: 'Naive recursive Fibonacci is O(2ⁿ) because it…|||Fibonacci đệ quy ngây thơ là O(2ⁿ) vì nó…', options: ['uses too much memory|||dùng quá nhiều bộ nhớ', 'recomputes the same subproblems repeatedly|||tính lại cùng bài toán con nhiều lần', 'has no base case|||không có ca cơ sở', 'uses a loop|||dùng vòng lặp'], correctIndex: 1, points: 1 },
-              { question: 'Memoisation improves recursion by…|||Ghi nhớ cải thiện đệ quy bằng cách…', options: ['removing the base case|||bỏ ca cơ sở', 'caching results so each subproblem is computed once|||cache kết quả để mỗi bài toán con tính một lần', 'making it iterative|||biến nó thành lặp', 'using more stack|||dùng nhiều stack hơn'], correctIndex: 1, points: 1 },
+              { question: 'A tail-recursive call can be turned into a loop because…|||Một lời gọi đệ quy đuôi có thể biến thành vòng lặp vì…', options: ['it has no base case|||nó không có ca cơ sở', 'nothing happens after the recursive call returns|||không có gì xảy ra sau khi lời gọi đệ quy trả về', 'it calls itself twice|||nó tự gọi hai lần', 'it uses a heap|||nó dùng heap'], correctIndex: 1, points: 1 },
             ],
           },
         },
@@ -2158,8 +2267,8 @@ i = 0 → a[0] = 9, con là −2 và 5 → đổi với −2 → [−2, 9, 5, �
 `,
         },
         {
-          title: 'Quiz 3 — Trees & BST|||Quiz 3 — Cây & BST',
-          slug: 'csd201-quiz-3',
+          title: 'Quiz — Chapter 4: Trees & BST|||Quiz — Chương 4: Cây & BST',
+          slug: 'csd201-quiz-ch4',
           type: 'QUIZ',
           description: 'Kiểm tra cây, duyệt cây và BST.',
           quiz: {
@@ -2919,6 +3028,20 @@ C —— D      cạnh: A-B, A-C, A-D, B-D, C-D</div>
 </div>
 `,
         },
+        {
+          title: 'Quiz — Chapter 5: Graphs|||Quiz — Chương 5: Đồ thị',
+          slug: 'csd201-quiz-ch5',
+          type: 'QUIZ',
+          description: 'Kiểm tra biểu diễn đồ thị, BFS/DFS, Dijkstra và cây khung nhỏ nhất.',
+          quiz: {
+            timeLimitSeconds: 300,
+            questions: [
+              { question: 'An adjacency list uses space…|||Danh sách kề dùng không gian…', options: ['O(V²)', 'O(V+E)', 'O(1)', 'O(E²)'], correctIndex: 1, points: 1 },
+              { question: 'BFS finds the shortest path in…|||BFS tìm đường ngắn nhất trong…', options: ['a weighted graph|||đồ thị có trọng số', 'an unweighted graph|||đồ thị không trọng số', 'any graph|||đồ thị bất kỳ', 'a tree only|||chỉ cây'], correctIndex: 1, points: 1 },
+              { question: 'Dijkstra\'s algorithm requires that edge weights are…|||Thuật toán Dijkstra đòi hỏi trọng số cạnh phải…', options: ['integers|||là số nguyên', 'non-negative|||không âm', 'all equal|||đều bằng nhau', 'sorted|||đã sắp'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
       ],
     },
 
@@ -3520,17 +3643,16 @@ tổng tiền tố → [2, 2, 4, 7, 7, 8] (count[v] = số khoá ≤ v)<br>
 `,
         },
         {
-          title: 'Quiz 4 — Graphs & Sorting|||Quiz 4 — Đồ thị & Sắp xếp',
-          slug: 'csd201-quiz-4',
+          title: 'Quiz — Chapter 6: Sorting|||Quiz — Chương 6: Sắp xếp',
+          slug: 'csd201-quiz-ch6',
           type: 'QUIZ',
-          description: 'Kiểm tra đồ thị và sắp xếp.',
+          description: 'Kiểm tra sắp xếp: độ phức tạp, tính ổn định, quick/merge/heap và sắp xếp tuyến tính.',
           quiz: {
             timeLimitSeconds: 300,
             questions: [
-              { question: 'BFS finds the shortest path in…|||BFS tìm đường ngắn nhất trong…', options: ['a weighted graph|||đồ thị có trọng số', 'an unweighted graph|||đồ thị không trọng số', 'any graph|||đồ thị bất kỳ', 'a tree only|||chỉ cây'], correctIndex: 1, points: 1 },
-              { question: 'An adjacency list uses space…|||Danh sách kề dùng không gian…', options: ['O(V²)', 'O(V+E)', 'O(1)', 'O(E²)'], correctIndex: 1, points: 1 },
               { question: 'Merge sort is preferred when you need…|||Merge sort được ưu tiên khi bạn cần…', options: ['minimum memory|||bộ nhớ tối thiểu', 'stability and guaranteed O(n log n)|||ổn định và đảm bảo O(n log n)', 'O(n) time|||thời gian O(n)', 'in-place sorting|||sắp xếp tại chỗ'], correctIndex: 1, points: 1 },
               { question: 'Quick sort\'s worst case is O(n²) when…|||Trường hợp xấu nhất của quick sort là O(n²) khi…', options: ['the array is empty|||mảng rỗng', 'the pivot is consistently bad|||chốt liên tục tệ', 'it is stable|||nó ổn định', 'n is even|||n chẵn'], correctIndex: 1, points: 1 },
+              { question: 'Radix sort can beat O(n log n) because it…|||Radix sort có thể vượt O(n log n) vì nó…', options: ['compares elements faster|||so sánh phần tử nhanh hơn', 'does not compare — it distributes by digit/bucket|||không so sánh — nó phân phối theo chữ số/bucket', 'uses recursion|||dùng đệ quy', 'sorts in place|||sắp tại chỗ'], correctIndex: 1, points: 1 },
             ],
           },
         },
@@ -3909,6 +4031,20 @@ Công dành cho rehash = 12 + 24 + 48 + 96 + 192 + 384 + 768 = <b>1.524 lần ch
 </div>
 `,
         },
+        {
+          title: 'Quiz — Chapter 7: Hashing|||Quiz — Chương 7: Băm',
+          slug: 'csd201-quiz-ch7',
+          type: 'QUIZ',
+          description: 'Kiểm tra bảng băm, hàm băm, xử lý va chạm và hệ số tải/rehash.',
+          quiz: {
+            timeLimitSeconds: 300,
+            questions: [
+              { question: 'A hash table gives average-case lookup of…|||Bảng băm cho tra cứu trung bình…', options: ['O(n)', 'O(1)', 'O(log n)', 'O(n²)'], correctIndex: 1, points: 1 },
+              { question: 'Separate chaining handles collisions by…|||Chaining tách rời xử lý va chạm bằng cách…', options: ['ignoring them|||bỏ qua', 'storing colliding entries in a list at the bucket|||lưu các mục va chạm trong một danh sách tại bucket', 'resizing to O(1)|||resize về O(1)', 'sorting the table|||sắp bảng'], correctIndex: 1, points: 1 },
+              { question: 'Rehashing is triggered when…|||Rehash được kích hoạt khi…', options: ['the table is empty|||bảng rỗng', 'the load factor exceeds a threshold|||hệ số tải vượt ngưỡng', 'a key is deleted|||một khoá bị xoá', 'two keys are equal|||hai khoá bằng nhau'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
       ],
     },
 
@@ -4249,6 +4385,20 @@ w="A", kế 'B' → "AB" đã có → w="AB", kế 'A' → "ABA" đã có → w=
 </div>
 `,
         },
+        {
+          title: 'Quiz — Chapter 8: Text Processing|||Quiz — Chương 8: Xử lý văn bản',
+          slug: 'csd201-quiz-ch8',
+          type: 'QUIZ',
+          description: 'Kiểm tra so khớp mẫu (vét cạn, KMP) và nén (Huffman, LZW, RLE).',
+          quiz: {
+            timeLimitSeconds: 300,
+            questions: [
+              { question: 'Huffman coding builds its code tree using a…|||Mã Huffman dựng cây mã bằng…', options: ['stack|||ngăn xếp', 'priority queue (heap)|||hàng đợi ưu tiên (heap)', 'hash map', 'graph|||đồ thị'], correctIndex: 1, points: 1 },
+              { question: 'KMP beats brute-force matching by…|||KMP hơn so khớp vét cạn nhờ…', options: ['comparing from the right|||so từ phải sang', 'using a failure function to skip re-checks, giving O(n+m)|||dùng hàm thất bại để bỏ qua so lại, đạt O(n+m)', 'hashing the pattern|||băm mẫu', 'sorting the text|||sắp văn bản'], correctIndex: 1, points: 1 },
+              { question: 'Run-length encoding (RLE) compresses best when the data has…|||Mã hoá độ dài chạy (RLE) nén tốt nhất khi dữ liệu có…', options: ['high randomness|||độ ngẫu nhiên cao', 'long runs of the same symbol|||các đoạn dài lặp cùng ký hiệu', 'many distinct symbols|||nhiều ký hiệu khác nhau', 'already-compressed content|||nội dung đã nén'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
       ],
     },
 
@@ -4460,8 +4610,8 @@ Lần find <em>kế tiếp</em> trên bất kỳ nút nào trong số đó chỉ
 `,
         },
         {
-          title: 'Quiz 5 — Hashing, Text & Advanced|||Quiz 5 — Băm, Văn bản & Nâng cao',
-          slug: 'csd201-quiz-5',
+          title: 'Quiz — Cumulative review: Hashing, Text & Advanced|||Quiz — Tổng ôn: Băm, Văn bản & Nâng cao',
+          slug: 'csd201-quiz-advanced',
           type: 'QUIZ',
           description: 'Kiểm tra băm, nén và chủ đề nâng cao.',
           quiz: {

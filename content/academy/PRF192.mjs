@@ -1266,6 +1266,7 @@ export default {
     language: 'Vietnamese',
     status: 'PUBLISHED',
     syncOrder: true,
+    pruneSections: true,
     thumbnailUrl: 'https://media.cuongthai.com/images/prf192-1781716106298-116ce9c6.jfif',
     shortDescription: 'Intro to programming in C (FLM syllabus, 9 CLOs): program structure, variables/types & expressions, loops, functions, pointers & memory, standard library, arrays & structs, strings, files. Bilingual, runnable C & quizzes.|||Nhập môn lập trình C (giáo trình FLM, 9 CLO): cấu trúc chương trình, biến/kiểu & biểu thức, vòng lặp, hàm, con trỏ & bộ nhớ, thư viện chuẩn, mảng & struct, chuỗi, tệp. Song ngữ, code C chạy được & quiz.',
     description: 'Môn <strong>PRF192 — Programming Fundamentals</strong> (kỳ 1) là môn lập trình đầu tiên của ngành, dạy bằng ngôn ngữ <strong>C</strong> theo hướng lập trình thủ tục, bám sát 9 CLO của giáo trình FLM. Từ <strong>hệ thống máy tính &amp; cấu trúc chương trình</strong> (CLO1) → <strong>biến, kiểu, bộ nhớ, nhập/xuất &amp; biểu thức</strong> (CLO2) → <strong>rẽ nhánh &amp; vòng lặp</strong> (CLO3) → <strong>module &amp; hàm</strong> (CLO4) → <strong>con trỏ</strong> (CLO5) → <strong>thư viện chuẩn</strong> (CLO6) → <strong>mảng &amp; struct</strong> (CLO7) → <strong>chuỗi</strong> (CLO8) → <strong>tệp tin</strong> (CLO9), kèm phần chuyên sâu về con trỏ/bộ nhớ và gỡ lỗi. Sách chính: <em>Foundations of Programming Using C</em> (Evan Weaver) + K&amp;R. Song ngữ, code C chạy được, quiz mỗi chương. Là tiên quyết của PRO192 và LAB211.',

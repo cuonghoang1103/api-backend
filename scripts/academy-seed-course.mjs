@@ -135,6 +135,12 @@ let secN = 0, lesNew = 0, lesUpd = 0;
 // Rows that exist in the DB but are no longer in the file keep their relative
 // order and are placed after the file's rows — never deleted.
 const SYNC = !!c.syncOrder;
+// course.pruneSections (opt-in): khi VIẾT LẠI một môn (đổi cấu trúc chương/slug),
+// XOÁ hẳn các section & lesson còn trong DB nhưng KHÔNG còn trong file — thay vì
+// giữ lại (mặc định). Không có cờ này thì viết lại đổi slug sẽ để chương CŨ nằm
+// mồ côi cạnh chương MỚI → course hiển thị trùng lặp. Cascade xoá cả tiến độ của
+// các bài đã bỏ (chấp nhận được vì cấu trúc đổi hẳn). CHỈ bật cho môn cố ý viết lại.
+const PRUNE = !!c.pruneSections;
 const orderPlan = []; // [{ sectionId, lessonIds: [] }] in file order
 if (course) {
   const secs = spec.sections || [];
@@ -242,16 +248,29 @@ async function renumber(model, ids) {
   await prisma.$transaction(ids.map((id, i) => prisma[model].update({ where: { id }, data: { sortOrder: i } })));
 }
 if (SYNC && course && APPLY) {
+  let prunedLes = 0;
   for (const p of orderPlan) {
     const all = await prisma.lesson.findMany({ where: { sectionId: p.sectionId }, select: { id: true }, orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }] });
     const rest = all.map((x) => x.id).filter((id) => !p.lessonIds.includes(id));
-    await renumber('lesson', [...p.lessonIds, ...rest]);
+    if (PRUNE && rest.length) {
+      await prisma.lesson.deleteMany({ where: { id: { in: rest } } }); // cascade: detail/progress
+      prunedLes += rest.length;
+      await renumber('lesson', p.lessonIds);
+    } else {
+      await renumber('lesson', [...p.lessonIds, ...rest]);
+    }
   }
   const fileSecIds = orderPlan.map((p) => p.sectionId);
   const allSec = await prisma.courseSection.findMany({ where: { courseId: course.id }, select: { id: true }, orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }] });
   const restSec = allSec.map((x) => x.id).filter((id) => !fileSecIds.includes(id));
-  await renumber('courseSection', [...new Set(fileSecIds), ...restSec]);
-  console.log(`  ↕ syncOrder: ${fileSecIds.length} sections + their lessons renumbered to file order` + (restSec.length ? ` (${restSec.length} section(s) not in file kept after)` : ''));
+  if (PRUNE && restSec.length) {
+    await prisma.courseSection.deleteMany({ where: { id: { in: restSec } } }); // cascade: lessons→detail/progress
+    await renumber('courseSection', [...new Set(fileSecIds)]);
+    console.log(`  ✂ pruneSections: xoá ${restSec.length} section + ${prunedLes} lesson mồ côi (không còn trong file); ${fileSecIds.length} section theo đúng thứ tự file`);
+  } else {
+    await renumber('courseSection', [...new Set(fileSecIds), ...restSec]);
+    console.log(`  ↕ syncOrder: ${fileSecIds.length} sections + their lessons renumbered to file order` + (restSec.length ? ` (${restSec.length} section(s) not in file kept after)` : '') + (prunedLes ? ` · ✂ ${prunedLes} lesson mồ côi đã xoá` : ''));
+  }
 } else if (SYNC && !APPLY) console.log('  ↕ syncOrder: would renumber sections/lessons to file order');
 
 /* 5. Đồng bộ số liệu khoá (totalLessons/totalDurationSeconds) --------------- */

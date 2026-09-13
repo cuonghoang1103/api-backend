@@ -1116,6 +1116,29 @@ router.post('/orders', authenticate, shopOrderLimiter, async (req: any, res: Res
         );
       }
 
+      // ── Chốt 3b: hàng SỐ phải có thứ để giao ──
+      // Đo thật 14/09/2026: 9 sản phẩm đang mở bán với tồn kho 20–329 mà kho
+      // key RỖNG và `digitalContent` cũng rỗng. Khách trả tiền xong nhận về
+      // một dòng đơn TRỐNG, không lỗi, không cảnh báo — `stockQuantity` là
+      // con số nhập tay, nó không biết gì về việc có hàng thật hay không.
+      // Chặn ở đây thay vì lúc giao: lúc giao thì tiền đã vào rồi.
+      if (normalizeProductType(product.type) !== 'PHYSICAL') {
+        const coKho = await prisma.productKey.count({
+          where: { productId: product.id, status: 'AVAILABLE' },
+        });
+        const coSanChung = Boolean((product.digitalContent || '').trim() || (product.fileUrl || '').trim());
+        if (coKho < qty && !coSanChung) {
+          logger.error('[shop] chặn đơn: hàng số không có gì để giao', {
+            productId: product.id, name: product.name, qty, coKho, stockQuantity: product.stockQuantity,
+          });
+          throw new AppError(
+            `"${product.name}" tạm hết hàng, vui lòng quay lại sau`,
+            409,
+            'OUT_OF_STOCK',
+          );
+        }
+      }
+
       // ── Chốt 1: giá LẤY TỪ DB ──
       const itemTotal = Number(product.price) * qty;
       subtotal += itemTotal;

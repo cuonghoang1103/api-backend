@@ -1373,7 +1373,21 @@ router.post('/check-usage', async (req, res: Response<ApiResponse>, next) => {
 
     const providerUrl = process.env.CHECK_USAGE_API_URL;
     if (!providerUrl) {
-      res.json({ success: true, data: { configured: false, message: 'Tính năng kiểm tra đang được cấu hình. Vui lòng quay lại sau.' } });
+      // ⚠️ Câu cũ ở đây là "Tính năng kiểm tra đang được cấu hình. Vui lòng
+      // quay lại sau." — và nó đã nói câu đó với MỌI key, đúng hay sai, kể từ
+      // ngày route này ra đời, vì `CHECK_USAGE_API_URL` chưa bao giờ được cắm.
+      // Một câu hứa hẹn cho một thứ không ai đang làm thì tệ hơn là nói thật.
+      //
+      // Việc kiểm hạn mức key CuongMini giờ có chỗ chạy thật: /kiem-tra-key,
+      // hỏi thẳng `GET /llm/han-muc` của canh — nơi thật sự nạp lại quota.
+      res.json({
+        success: true,
+        data: {
+          configured: false,
+          moved: '/kiem-tra-key',
+          message: 'Công cụ kiểm tra đã chuyển sang trang "Kiểm tra hạn mức key" trong menu tài khoản.',
+        },
+      });
       return;
     }
     try {

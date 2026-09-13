@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import {
-  Home, BookOpen, FolderOpen, Music, MessagesSquare,
+  Gauge, Home, BookOpen, FolderOpen, Music, MessagesSquare,
   LayoutDashboard, Shield, BookMarked, Receipt,
   Sparkles, FileCode2, LogOut, User, Settings,
   GraduationCap, ShoppingBag, Layers, ChevronRight,
@@ -674,6 +674,22 @@ export default function NavigationDock() {
                         isHovered={hoveredHref === '/llm-key'}
                         scale={1}
                         onHover={() => setHoveredHref('/llm-key')}
+                        onLeave={() => setHoveredHref(null)}
+                      />
+                      {/* Kiểm tra hạn mức key — dán key, xem còn bao nhiêu.
+                          Trước đây việc này nằm ở /shop/check-usage, mà route
+                          đó CHƯA BAO GIỜ chạy (nó chờ một nhà cung cấp ngoài
+                          chưa ai cắm, nên mọi key đều nhận "đang được cấu
+                          hình"). Và bắt người đã mua hàng quay lại gian hàng
+                          để tra cứu là bắt họ đi nhầm chỗ. */}
+                      <DockRowLink
+                        href="/kiem-tra-key"
+                        Icon={Gauge}
+                        label="Kiểm tra hạn mức key"
+                        isActive={pathname === '/kiem-tra-key'}
+                        isHovered={hoveredHref === '/kiem-tra-key'}
+                        scale={1}
+                        onHover={() => setHoveredHref('/kiem-tra-key')}
                         onLeave={() => setHoveredHref(null)}
                       />
                       {/* Admin Dashboard - only for admins */}

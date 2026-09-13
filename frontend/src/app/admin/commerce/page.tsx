@@ -530,7 +530,11 @@ function TabKeyOpenCode() {
   const [dangLam, setDangLam] = useState<number | null>(null);
   const [moDuyet, setMoDuyet] = useState<DonKeyAdmin | null>(null);
   const [keyDan, setKeyDan] = useState('');
-  const [quota, setQuota] = useState('10');
+  // 60$ là bậc thấp nhất đang bán ở /shop (Cơ bản). Mặc định 10$ cũ là con số
+  // của thời còn cấp tay, không khớp gói nào.
+  const [quota, setQuota] = useState('60');
+  /** Mở ô dán key thủ công. Mặc định ĐÓNG: đường chính giờ là tự tạo. */
+  const [danTay, setDanTay] = useState(false);
 
   const nap = useCallback(async () => {
     setDangTai(true);
@@ -544,19 +548,33 @@ function TabKeyOpenCode() {
 
   useEffect(() => { nap(); }, [nap]);
 
+  /** Đủ điều kiện bấm: hoặc có hạn mức để tự tạo, hoặc có key dán tay. */
+  const duyetDuoc = danTay ? keyDan.trim().length >= 12 : Number(quota) > 0;
+
   const duyet = async () => {
-    if (!moDuyet || keyDan.trim().length < 12) return;
+    if (!moDuyet || !duyetDuoc) return;
     setDangLam(moDuyet.id);
     try {
+      // KHÔNG gửi trường `key` khi không dán tay — backend hiểu "không có key"
+      // là "tự tạo giúp tôi". Gửi chuỗi rỗng thì nó lại coi là key không hợp lệ.
       const r = await fetch(`/api/v1/admin/llm-keys/${moDuyet.id}/approve`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key: keyDan.trim(), quotaUsd: Number(quota) || null }),
+        body: JSON.stringify({
+          quotaUsd: Number(quota) || null,
+          ...(danTay && keyDan.trim() ? { key: keyDan.trim() } : {}),
+        }),
       });
-      if (!r.ok) throw new Error((await r.json().catch(() => ({}))).message ?? 'Lỗi');
-      toast.success('Đã cấp key cho người dùng.');
-      setMoDuyet(null); setKeyDan('');
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(j.message ?? 'Lỗi');
+      toast.success(
+        j.data?.tuTao
+          ? `Đã tạo key mới ở New API (${quota}$/chu kỳ) và cấp cho người dùng.`
+          : 'Đã cấp key cho người dùng.',
+        { duration: 6000 },
+      );
+      setMoDuyet(null); setKeyDan(''); setDanTay(false);
       await nap();
     } catch (e) { toast.error(e instanceof Error ? e.message : 'Không duyệt được.'); }
     finally { setDangLam(null); }
@@ -588,9 +606,10 @@ function TabKeyOpenCode() {
       <div className="rounded-xl border border-blue-500/25 bg-blue-500/[0.07] p-4 flex items-start gap-3 mb-4">
         <Info className="w-4 h-4 text-blue-400 flex-shrink-0 mt-0.5" />
         <p className="text-xs text-text-muted leading-relaxed">
-          Duyệt đơn thì <b className="text-blue-300">tạo key ở New API trước</b> (đặt hạn mức ở đó),
-          rồi dán key vào form duyệt. Hệ thống không tự tạo key — cụm New API chạy ở mạng riêng và
-          giao diện quản trị của nó cố ý chỉ mở qua SSH tunnel.
+          Bấm <b className="text-blue-300">Duyệt</b> rồi chọn hạn mức — hệ thống <b className="text-blue-300">tự tạo
+          key ở New API</b>, đặt hạn mức, và cấp cho người dùng. Không cần SSH, không cần dán tay.
+          <br />
+          Vẫn còn ô dán key thủ công trong hộp thoại, dùng khi cấp key cũ hoặc lúc cụm cấp key bảo trì.
         </p>
       </div>
 
@@ -666,18 +685,65 @@ function TabKeyOpenCode() {
                 <X className="w-4 h-4" />
               </button>
             </div>
-            <label className="block text-xs text-text-muted mb-1.5">Key con (dán từ New API)</label>
-            <input value={keyDan} onChange={(e) => setKeyDan(e.target.value)} placeholder="sk-..."
-              className="w-full bg-darkbg border border-darkborder rounded-xl px-3 py-2.5 text-sm font-mono text-text-primary focus:border-neon-violet outline-none" />
-            <label className="block text-xs text-text-muted mb-1.5 mt-3">Hạn mức (USD / chu kỳ)</label>
+            {/* Lý do người dùng xin — đọc trước khi quyết, đừng bắt đóng hộp
+                thoại ra xem lại. */}
+            {moDuyet.reason && (
+              <p className="text-xs text-text-muted bg-darkbg border border-darkborder rounded-xl px-3 py-2.5 mb-4 max-h-24 overflow-y-auto whitespace-pre-line">
+                {moDuyet.reason}
+              </p>
+            )}
+
+            <label className="block text-xs text-text-muted mb-1.5">Hạn mức (USD mỗi chu kỳ 5 giờ)</label>
+            {/* Ba bậc đang bán ở /shop. Gõ tay vẫn được, nhưng gõ tay là chỗ
+                dễ lệch với bảng giá nhất. */}
+            <div className="flex gap-2 mb-2">
+              {[
+                { usd: '60', ten: 'Cơ bản' },
+                { usd: '100', ten: 'Tiêu chuẩn' },
+                { usd: '150', ten: 'Chuyên sâu' },
+              ].map((b) => (
+                <button
+                  key={b.usd}
+                  onClick={() => setQuota(b.usd)}
+                  className={`flex-1 px-2 py-2 rounded-lg text-xs transition-colors ${
+                    quota === b.usd
+                      ? 'bg-neon-violet text-white font-semibold'
+                      : 'bg-darkbg border border-darkborder text-text-muted hover:text-text-primary'
+                  }`}
+                >
+                  {b.usd}$ · {b.ten}
+                </button>
+              ))}
+            </div>
             <input value={quota} onChange={(e) => setQuota(e.target.value.replace(/\D/g, ''))} inputMode="numeric"
               className="w-full bg-darkbg border border-darkborder rounded-xl px-3 py-2.5 text-sm text-text-primary tabular-nums focus:border-neon-violet outline-none" />
-            <p className="text-xs text-text-muted mt-2 mb-4">
-              Chỉ để hiển thị cho người dùng — hạn mức THẬT do New API áp.
+            <p className="text-xs text-text-muted mt-2">
+              Đây là hạn mức THẬT: hệ thống ghi nó vào New API và nạp lại mỗi chu kỳ.
             </p>
-            <button onClick={duyet} disabled={keyDan.trim().length < 12 || dangLam === moDuyet.id}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
-              {dangLam === moDuyet.id ? <><Loader2 className="w-4 h-4 animate-spin" /> Đang cấp…</> : 'Cấp key'}
+
+            {/* Đường lùi — đóng sẵn, vì đường chính giờ là tự tạo. */}
+            <button
+              onClick={() => setDanTay((v) => !v)}
+              className="mt-4 text-xs text-text-muted hover:text-neon-violet underline underline-offset-2"
+            >
+              {danTay ? '← Quay lại: để hệ thống tự tạo key' : 'Tôi muốn dán key thủ công →'}
+            </button>
+            {danTay && (
+              <>
+                <label className="block text-xs text-text-muted mb-1.5 mt-3">Key con (dán từ New API)</label>
+                <input value={keyDan} onChange={(e) => setKeyDan(e.target.value)} placeholder="sk-..."
+                  className="w-full bg-darkbg border border-darkborder rounded-xl px-3 py-2.5 text-sm font-mono text-text-primary focus:border-neon-violet outline-none" />
+                <p className="text-xs text-amber-300/80 mt-2">
+                  Dán tay thì hạn mức ở trên chỉ để HIỂN THỊ — bạn phải tự đặt hạn mức cho key đó trong New API.
+                </p>
+              </>
+            )}
+
+            <button onClick={duyet} disabled={!duyetDuoc || dangLam === moDuyet.id}
+              className="mt-4 w-full py-3 rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+              {dangLam === moDuyet.id
+                ? <><Loader2 className="w-4 h-4 animate-spin" /> Đang cấp…</>
+                : danTay ? 'Cấp key đã dán' : `Tạo key ${quota}$ và cấp`}
             </button>
           </div>
         </div>

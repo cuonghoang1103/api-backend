@@ -420,7 +420,7 @@ export const oopPillarsScenario: Scenario = {
     course: 'object-oriented-programming',
     subject: 'PRO192',
     code: '4.2',
-    slug: 'pro192-4-2-da-hinh',
+    slug: 'pro192-3-2-ke-thua-da-hinh',
     title: { vi: 'Đa hình', en: 'Polymorphism' },
   },
   nodes: [],

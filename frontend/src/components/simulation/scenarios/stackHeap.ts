@@ -371,7 +371,7 @@ export const stackHeapScenario: Scenario = {
     course: 'object-oriented-programming',
     subject: 'PRO192',
     code: '2.1',
-    slug: 'pro192-2-1-lop-doi-tuong',
+    slug: 'pro192-2-1-cu-phap-java',
     title: { vi: 'Trường, phương thức & constructor', en: 'Fields, methods & constructors' },
   },
   nodes: [],

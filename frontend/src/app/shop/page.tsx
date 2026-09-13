@@ -44,10 +44,23 @@ export default function ShopPage() {
     walletApi.balance().then((r) => setSoDu(r.data.data.balance)).catch(() => setSoDu(null));
   }, [isAuthenticated]);
 
-  // Dynamic category chips: "Tất cả" + admin-managed categories, filtered by
-  // category NAME (which is what the mapped product carries).
+  // Nút lọc: "Tất cả" + các danh mục CÒN HÀNG.
+  //
+  // ⚠️ Bỏ danh mục rỗng là cố ý. Trước 14/09/2026 mọi danh mục đều thành một
+  // nút, kể cả danh mục không còn sản phẩm nào đang bán — sau khi tắt 10 sản
+  // phẩm Cursor thì có 7 nút mà chỉ 1 nút ra hàng, sáu nút kia dẫn tới trang
+  // trắng. Người mua không có cách nào biết trước và nó trông y như web hỏng.
+  //
+  // Đếm lấy từ API (`soSanPham`, chỉ tính sản phẩm active). Không đếm từ mảng
+  // `products` đang hiển thị: mảng đó đã bị bộ lọc giá/tìm kiếm cắt bớt, nên
+  // gõ một từ khoá là các nút tự biến mất — lọc lại chính cái bộ lọc.
   const categoryOptions = useMemo(
-    () => [{ value: 'all', label: 'Tất cả' }, ...categories.map((c) => ({ value: c.name, label: c.name }))],
+    () => [
+      { value: 'all', label: 'Tất cả' },
+      ...categories
+        .filter((c) => (c.soSanPham ?? 1) > 0)
+        .map((c) => ({ value: c.name, label: c.name })),
+    ],
     [categories],
   );
 
@@ -167,7 +180,7 @@ export default function ShopPage() {
               Key &amp; tài khoản AI
             </h1>
             <p className="mt-3 text-text-secondary text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
-              Cursor, CuongMini và các công cụ lập trình — giao ngay sau khi thanh toán,
+              Key CuongMini cho OpenCode và credit API — giao ngay sau khi thanh toán,
               mỗi người một key riêng.
             </p>
 

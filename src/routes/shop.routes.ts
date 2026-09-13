@@ -198,10 +198,24 @@ function serializeProduct(product: SerializableProduct, admin = false) {
 // ─── GET /api/v1/shop/categories ─────────────────────
 router.get('/categories', async (_req, res: Response<ApiResponse>, next) => {
   try {
+    // Kèm SỐ SẢN PHẨM ĐANG BÁN của từng danh mục.
+    //
+    // Vì sao cần: trang /shop dựng một nút lọc cho MỖI danh mục, kể cả danh
+    // mục rỗng. Đo thật 14/09/2026 sau khi tắt 10 sản phẩm Cursor: 7 nút lọc
+    // mà chỉ 1 có hàng — bấm sáu nút kia ra trang trắng. Người dùng không có
+    // cách nào biết trước, và nó trông y như web hỏng.
+    //
+    // Trả về SỐ thay vì tự lọc ở đây: trang bán hàng ẩn nút rỗng, còn nơi nào
+    // cần đủ danh mục (gán danh mục cho sản phẩm mới) vẫn thấy hết. Lọc ngầm
+    // ở tầng API là loại quyết định mà nơi gọi sau này không đoán được.
     const categories = await prisma.productCategory.findMany({
       orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
+      include: { _count: { select: { products: { where: { active: true } } } } },
     });
-    res.json({ success: true, data: categories });
+    res.json({
+      success: true,
+      data: categories.map(({ _count, ...c }) => ({ ...c, soSanPham: _count.products })),
+    });
   } catch (error) { next(error); }
 });
 

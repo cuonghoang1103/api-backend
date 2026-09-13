@@ -76,6 +76,8 @@ export interface CategoryResponse {
   slug: string;
   description?: string;
   sortOrder: number;
+  /** Số sản phẩm ĐANG BÁN trong danh mục. Trang /shop ẩn nút lọc khi = 0. */
+  soSanPham?: number;
 }
 
 export interface DiscountValidateResponse {

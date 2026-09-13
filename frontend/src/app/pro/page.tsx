@@ -14,7 +14,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import {
   Crown, Music, Bot, GraduationCap, ClipboardCheck, BadgeCheck, Sparkles, Loader2, Check, ArrowLeft,
   Wallet, CreditCard, Landmark, Copy, AlertCircle, Terminal, Gauge, BookOpen, Languages,
-  FileText, Newspaper, Headphones, Zap,
+  FileText, Newspaper, Headphones, Zap, Smartphone,
 } from 'lucide-react';
 import { proApi, proBillingApi, walletApi, newIdempotencyKey, type ProPlan, type BankTransferInfo } from '@/lib/api';
 import { usePro } from '@/hooks/usePro';
@@ -47,6 +47,79 @@ const dongVN = (n: number) => `${n.toLocaleString('vi-VN')} đ`;
  *   musicAccess.service.ts ····························· Trang nhạc
  *   interview/llm/index.ts:862-863 ····················· Trần token
  */
+/**
+ * Link tải app di động. ĐỂ TRỐNG cho tới khi app thật sự lên chợ.
+ *
+ * ⚠️ Trống thì nút hiện dạng "sắp có" và KHÔNG bấm được. Cố ý: một nút dẫn
+ * tới trang 404 trên chính trang bán hàng còn tệ hơn là nói thẳng chưa có.
+ * Có link rồi thì chỉ cần điền vào đây, không phải sửa gì khác.
+ */
+const LINK_APP = {
+  ios: '',      // https://apps.apple.com/app/idXXXXXXXXX
+  android: '',  // https://play.google.com/store/apps/details?id=...
+};
+
+/** Logo Apple — vẽ nội tuyến, không tải ảnh ngoài (nhanh + không phụ thuộc CDN). */
+function LogoApple({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+      <path d="M17.05 12.54c-.02-2.2 1.8-3.26 1.88-3.31-1.03-1.5-2.62-1.7-3.19-1.73-1.36-.14-2.65.8-3.34.8-.69 0-1.75-.78-2.88-.76-1.48.02-2.85.86-3.61 2.18-1.54 2.67-.39 6.62 1.11 8.79.73 1.06 1.6 2.25 2.75 2.21 1.1-.05 1.52-.71 2.85-.71 1.33 0 1.71.71 2.88.69 1.19-.02 1.94-1.08 2.67-2.15.84-1.23 1.19-2.42 1.21-2.48-.03-.01-2.32-.89-2.34-3.53M14.88 5.66c.61-.74 1.02-1.77.91-2.8-.88.04-1.94.59-2.57 1.32-.56.65-1.05 1.7-.92 2.7.98.08 1.98-.5 2.58-1.22" />
+    </svg>
+  );
+}
+
+/** Logo Google Play — bốn cánh, vẽ nội tuyến. */
+function LogoGooglePlay({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
+      <path fill="#34A853" d="M3.6 2.2 13.8 12 3.6 21.8c-.37-.25-.6-.7-.6-1.28V3.48c0-.58.23-1.03.6-1.28" />
+      <path fill="#4285F4" d="M17.2 8.4 13.8 12 3.6 2.2c.32-.22.75-.26 1.2-.02L17.2 8.4" />
+      <path fill="#FBBC04" d="M17.2 15.6 4.8 21.82c-.45.24-.88.2-1.2-.02L13.8 12l3.4 3.6" />
+      <path fill="#EA4335" d="M21 12c0 .5-.28.97-.85 1.29l-2.95 1.48-3.4-2.77 3.4-3.6 2.95 1.48c.57.32.85.79.85 2.12" />
+    </svg>
+  );
+}
+
+/** Hai nút tải app. Chưa có link ⇒ nút "sắp có", không bấm được. */
+function NutTaiApp() {
+  const nut = [
+    { ten: 'App Store', phu: 'cho iPhone · iPad', link: LINK_APP.ios, Logo: LogoApple, mauChu: 'text-white' },
+    { ten: 'Google Play', phu: 'cho Android', link: LINK_APP.android, Logo: LogoGooglePlay, mauChu: 'text-white' },
+  ];
+  return (
+    <div className="mb-3 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+      {nut.map(({ ten, phu, link, Logo, mauChu }) => {
+        const noiDung = (
+          <>
+            <Logo className={`w-6 h-6 shrink-0 ${ten === 'App Store' ? mauChu : ''}`} />
+            <span className="min-w-0 text-left">
+              <span className="block text-[10px] leading-none text-slate-400">
+                {link ? 'Tải trên' : 'Sắp có trên'}
+              </span>
+              <span className="block text-sm font-semibold text-white leading-tight truncate">{ten}</span>
+              <span className="block text-[10px] text-slate-500 leading-none mt-0.5">{phu}</span>
+            </span>
+          </>
+        );
+        const lop =
+          'flex items-center gap-3 rounded-xl border px-3 py-2.5 transition-colors ' +
+          (link
+            ? 'border-white/15 bg-black/40 hover:border-white/35'
+            : 'border-white/10 bg-black/20 opacity-60 cursor-default');
+        return link ? (
+          <a key={ten} href={link} target="_blank" rel="noopener noreferrer" className={lop}>
+            {noiDung}
+          </a>
+        ) : (
+          <div key={ten} className={lop} title="Chưa phát hành">
+            {noiDung}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 interface Quyen {
   icon: typeof Crown;
   title: string;
@@ -76,6 +149,18 @@ const NHOM_QUYEN: Array<{ ten: string; mo: string; mau: string; items: Quyen[] }
         icon: Bot,
         title: 'Chọn model theo việc',
         desc: 'Sonnet 5 (mặc định, rẻ nhất), Opus 4.8 cho việc khó, hoặc GPT khi cần ý kiến thứ hai. Nhãn ghi rõ giá đo thật của từng model.',
+      },
+    ],
+  },
+  {
+    ten: 'Ứng dụng di động',
+    mo: 'iOS · Android — cùng một tài khoản Pro',
+    mau: 'from-slate-500/20 to-zinc-500/10',
+    items: [
+      {
+        icon: Smartphone,
+        title: 'Mọi tính năng Pro trên điện thoại',
+        desc: 'Đăng nhập cùng tài khoản là có đủ quyền Pro trên app — không phải mua riêng, không giới hạn số thiết bị.',
       },
     ],
   },
@@ -351,6 +436,7 @@ export default function ProPage() {
               </div>
               {/* AI Code chỉ chạy trên app desktop — người mua Pro vì nó cần
                   biết lấy app ở đâu, nếu không họ trả tiền rồi đi tìm. */}
+              {g.ten === 'Ứng dụng di động' && <NutTaiApp />}
               {g.ten.startsWith('AI Code') && (
                 <Link
                   href="/download"

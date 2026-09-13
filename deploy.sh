@@ -956,6 +956,7 @@ for route in \
     shop/key-replacements \
     payments/bank-transfer/config \
     llm-keys/info \
+    admin/thong-bao/dem \
     cv/profile \
     tech-trends/articles \
     voice \

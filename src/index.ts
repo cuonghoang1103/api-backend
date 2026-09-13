@@ -178,6 +178,8 @@ const internalRoutes = (await import(path.join(__dirname, 'routes', 'internal.ro
 const llmKeyModule = await import(path.join(__dirname, 'routes', 'llmKey.routes.js'));
 const llmKeyRoutes = llmKeyModule.default;
 const llmKeyAdminRoutes = llmKeyModule.adminRouter;
+// Hộp thư admin — mọi việc cần admin biết đổ về một chỗ (14/09/2026)
+const adminThongBaoRoutes = (await import(path.join(__dirname, 'routes', 'adminThongBao.routes.js'))).default;
 // Quản trị thương mại — đối soát chuyển khoản, đổi key, doanh thu (13/09/2026)
 const commerceAdminRoutes = (await import(path.join(__dirname, 'routes', 'commerceAdmin.routes.js'))).default;
 // Ví điểm — nạp tiền, sổ cái, điều chỉnh của admin (13/09/2026)
@@ -610,6 +612,7 @@ app.use('/api/v1/admin/commerce', commerceAdminRoutes);
 app.use('/api/v1/internal', internalRoutes);
 app.use('/api/v1/llm-keys', llmKeyRoutes);
 app.use('/api/v1/admin/llm-keys', llmKeyAdminRoutes);
+app.use('/api/v1/admin/thong-bao', adminThongBaoRoutes);
 // Public CV router FIRST — the main cv router applies `authenticate` to
 // everything under it, so the two opt-in public paths must be matched before
 // it. Off by default; see services/cv/publicCv.service.ts.

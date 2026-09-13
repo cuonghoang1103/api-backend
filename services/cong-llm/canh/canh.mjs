@@ -102,7 +102,7 @@ const s = {
 // `keyThat`: id token → key THẬT (48 ký tự). Ghi xuống đĩa vì New API chặn
 // dồn dập trên chính route lấy key — mất bộ nhớ tạm sau mỗi lần khởi động
 // lại là 33 lượt gọi dồn một lúc, và bị chặn đúng lúc cần nhất.
-let luu = { cuaSoDaDatLai: null, keyThat: {} };
+let luu = { cuaSoDaDatLai: null, keyThat: {}, hanMucThem: {} };
 try {
   luu = { ...luu, ...JSON.parse(readFileSync(STATE_FILE, 'utf8')) };
 } catch {
@@ -242,9 +242,80 @@ async function layKeyThat(id) {
   return k;
 }
 
+/**
+ * Hạn mức mỗi key con.
+ *
+ * Hai nguồn, gộp lại:
+ *  1. `han-muc.json` — thứ người ta sửa tay rồi restart canh;
+ *  2. `luu.hanMucThem` trong state — thứ do `POST /tao-key` ghi vào khi admin
+ *     duyệt đơn trên web.
+ *
+ * ⚠️ Vì sao không ghi thẳng vào `han-muc.json`: thư mục `./canh` được gắn
+ * READ-ONLY vào container (`- ./canh:/app:ro` trong docker-compose). Ghi vào
+ * đó sẽ ném EROFS. Mà `/state` thì gắn ghi được và sống qua mọi lần dựng lại.
+ *
+ * Thiếu bước này thì key admin vừa cấp sẽ KHÔNG được `datLaiHanMuc()` nạp lại
+ * ở cửa sổ kế tiếp — nó rơi về `mac_dinh_usd` (10 USD), tức người dùng được
+ * cấp 60$ nhưng 5 giờ sau chỉ còn 10$. Im lặng, không lỗi.
+ */
 function docHanMuc() {
   const j = JSON.parse(readFileSync(HAN_MUC_FILE, 'utf8'));
-  return { macDinh: Number(j.mac_dinh_usd), theoTen: j.theo_ten || {} };
+  return {
+    macDinh: Number(j.mac_dinh_usd),
+    theoTen: { ...(j.theo_ten || {}), ...(luu.hanMucThem || {}) },
+  };
+}
+
+/**
+ * Tạo một key con mới ở New API. Dùng cho luồng "admin bấm Duyệt trên web".
+ *
+ * Trước 14/09/2026 admin phải: mở SSH tunnel → vào giao diện New API → tạo
+ * token → đặt hạn mức → copy key → dán vào form duyệt. Năm bước tay cho mỗi
+ * đơn, và nếu quên bước đặt hạn mức thì key chạy bằng mặc định mà không ai
+ * thấy.
+ *
+ * ⚠️ Đặt hạn mức PHẢI ghi vào cả hai chỗ: `remain_quota` (số dùng được NGAY)
+ * và bảng hạn mức (số nạp lại mỗi cửa sổ). Chỉ ghi cái đầu thì key chạy đúng
+ * đúng một cửa sổ rồi tụt về mặc định.
+ */
+async function taoKeyCon(ten, quotaUsd) {
+  const usd = Number(quotaUsd);
+  if (!ten || !/^[A-Za-z0-9_-]{3,60}$/.test(ten)) throw new Error('tên key không hợp lệ');
+  if (!Number.isFinite(usd) || usd <= 0 || usd > 100_000) throw new Error('hạn mức không hợp lệ');
+
+  const dsCu = await quanTri('/api/token/?p=1&page_size=100');
+  if ((dsCu?.items || []).some((t) => t.name === ten)) throw new Error(`key tên "${ten}" đã tồn tại`);
+
+  await quanTri('/api/token/', {
+    method: 'POST',
+    body: {
+      name: ten,
+      remain_quota: Math.round(usd * QUOTA_MOT_USD),
+      unlimited_quota: false,
+      expired_time: -1,
+      model_limits_enabled: false,
+      model_limits: '',
+    },
+  });
+
+  // Nhớ hạn mức TRƯỚC khi trả key về: trả key xong mới ghi mà tiến trình chết
+  // giữa chừng thì người dùng cầm một key không ai biết hạn mức của nó.
+  luu.hanMucThem = { ...(luu.hanMucThem || {}), [ten]: usd };
+  luuTrangThai();
+
+  // New API trả key ĐÃ CHE trong danh sách — phải lấy key thật (xem layKeyThat).
+  for (let trang = 1; trang <= 20; trang++) {
+    const d = await quanTri(`/api/token/?p=${trang}&page_size=100`);
+    const items = d?.items || [];
+    const t = items.find((x) => x.name === ten);
+    if (t) {
+      const that = await layKeyThat(t.id);
+      if (!that) throw new Error('tạo được key nhưng không lấy được giá trị thật');
+      return { id: t.id, ten, quotaUsd: usd, key: `sk-${that}` };
+    }
+    if (items.length < 100) break;
+  }
+  throw new Error('tạo xong nhưng không tìm lại được key vừa tạo');
 }
 
 /**
@@ -612,6 +683,33 @@ http
           soLuotBiChan: s.soLuotBiChan,
         }),
       );
+    }
+    // Web gọi vào đây khi admin bấm "Duyệt" ở đơn xin key. Khoá là
+    // CANH_KHOA_NOI_BO — cùng khoá New API dùng để gọi canh, và cụm này chỉ
+    // nghe trong mạng docker nội bộ, không ra Internet.
+    if (req.method === 'POST' && req.url === '/tao-key') {
+      const nhan = String(req.headers['x-khoa-noi-bo'] || '');
+      if (!KHOA_NOI_BO || nhan !== KHOA_NOI_BO) {
+        return traJson(res, 404, { loi: 'không có đường này' });
+      }
+      return docBody(req)
+        // `docBody` trả BUFFER (nó vốn dùng để chuyển tiếp nguyên si sang
+        // rambo), không phải object đã parse — quên chỗ này thì `b?.ten` là
+        // undefined và lỗi hiện ra là "tên key không hợp lệ", chẳng nhắc gì
+        // tới JSON.
+        .then((buf) => {
+          let b;
+          try { b = JSON.parse(buf.toString('utf8') || '{}'); } catch { throw new Error('body không phải JSON'); }
+          return taoKeyCon(b?.ten, b?.quotaUsd);
+        })
+        .then((kq) => {
+          ghi(`đã tạo key con "${kq.ten}" (${kq.quotaUsd} USD/cửa sổ) theo yêu cầu của web`);
+          traJson(res, 200, kq);
+        })
+        .catch((e) => {
+          ghi('tạo key con hỏng:', e.message);
+          if (!res.headersSent) traJson(res, 400, { loi: e.message });
+        });
     }
     if (req.method === 'POST' && req.url.startsWith('/v1/')) {
       return chuyenTiep(req, res).catch((e) => {

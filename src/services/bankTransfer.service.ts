@@ -19,6 +19,7 @@
  * tự động nếu chưa bàn kỹ.
  */
 import { nanoid } from 'nanoid';
+import { baoAdmin } from './thongBaoAdmin.service.js';
 import { prisma } from '../config/database.js';
 import { BadRequestError, NotFoundError } from '../middleware/errorHandler.js';
 
@@ -198,6 +199,21 @@ export async function taoChuyenKhoan(input: TaoChuyenKhoanInput) {
         expiresAt: new Date(Date.now() + cauHinh.transferTtlMinutes * 60_000),
       },
     }));
+
+  // Chỉ báo khi VỪA TẠO, không báo lại cho lượt xem lại mã QR — người mua bấm
+  // vào trang thanh toán bao nhiêu lần thì `dangCho` cũng trả về cùng một dòng.
+  if (!dangCho) {
+    void baoAdmin({
+      loai: 'CHUYEN_KHOAN_CHO_DUYET',
+      mucDo: 'can_xu_ly',
+      tieuDe: `Chờ xác nhận chuyển khoản — ${row.refCode}`,
+      noiDung: `${row.amountVnd.toLocaleString('vi-VN')}đ · ${input.orderKind} ${input.orderCode ?? ''}`.trim(),
+      duongDan: '/admin/commerce?tab=chuyen-khoan',
+      userId: input.userId ?? null,
+      entityId: row.id,
+      khoaChongTrung: `CHUYEN_KHOAN:${row.id}`,
+    });
+  }
 
   return {
     refCode: row.refCode,

@@ -286,6 +286,11 @@ export function initSocketServer(httpServer: HttpServer): IOServer {
     socket.join(`user:${user.id}`);
     if (user.roles.includes('ADMIN')) {
       socket.join(`admin:${user.id}`);
+      // Phòng CHUNG cho mọi admin. `admin:<id>` chỉ tới đúng một người, nên
+      // hộp thư admin (`thongBaoAdmin.service.ts`) không có chỗ nào để bắn
+      // "có việc mới" mà không phải tự đi liệt kê từng admin đang online —
+      // và một lần quên thì chuông im lặng đúng kiểu khó thấy nhất.
+      socket.join('admin');
     }
 
     // AUTO-JOIN all thread rooms this user is a participant in.

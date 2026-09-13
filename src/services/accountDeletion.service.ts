@@ -29,6 +29,7 @@
  */
 
 import { prisma } from '../config/database.js';
+import { baoAdmin } from './thongBaoAdmin.service.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { anonymizeAccount } from './dataRights.service.js';
 import { emailService } from './email.service.js';
@@ -102,6 +103,15 @@ export async function requestDeletion(userId: number, reason: unknown) {
       emailAtRequest: user.email,
     },
     select: PUBLIC_SELECT,
+  });
+
+  void baoAdmin({
+    loai: 'XOA_TAI_KHOAN',
+    mucDo: 'can_xu_ly',
+    tieuDe: 'Có yêu cầu xoá tài khoản',
+    duongDan: '/admin/deletion-requests',
+    entityId: row.id,
+    khoaChongTrung: `XOA_TAI_KHOAN:${row.id}`,
   });
 
   // Best-effort admin alert — never let a mail failure block the request.

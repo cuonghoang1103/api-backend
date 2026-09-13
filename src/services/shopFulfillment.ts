@@ -8,6 +8,7 @@ import { logger } from '../utils/logger.js';
 import { getPayosStatus, isPayosConfigured } from '../config/payos.js';
 import { emailService } from './email.service.js';
 import { goiTheoSlug } from './shop/goiKeyTerminal.js';
+import { baoAdmin } from './thongBaoAdmin.service.js';
 
 // PayOS `orderCode` must be a single positive integer that is unique across
 // the WHOLE merchant. Course orders use `CourseOrder.id` directly (small
@@ -195,6 +196,30 @@ export async function markShopOrderPaidAndFulfill(
   if (flippedOk) {
     logger.info('shop order fulfilled', {
       orderCode: order.orderCode, shopOrderId: order.id, method: meta.method, txnNo: meta.txnNo, orderType: order.orderType,
+    });
+    // ── Báo admin ──
+    // Gọi NGOÀI `$transaction` (giao dịch đã đóng ở trên): nằm trong đó thì
+    // nó giữ kết nối suốt thời gian chờ mạng Telegram, và nếu giao dịch bị
+    // cuộn lại thì tin đã trót gửi cho một đơn không tồn tại.
+    // `khoaChongTrung` vì webhook PayOS gọi lại nhiều lần cho cùng một đơn.
+    const hang = order.items.map((it) => `${it.productName} ×${it.quantity}`).join(', ');
+    void baoAdmin({
+      loai: 'DA_THANH_TOAN',
+      mucDo: oversoldItems.length > 0 || trungKey.length > 0 ? 'can_xu_ly' : 'thuong',
+      tieuDe: oversoldItems.length > 0
+        ? `⚠️ Đã thu tiền NHƯNG thiếu hàng — ${order.orderCode}`
+        : `Thanh toán thành công — ${order.orderCode}`,
+      noiDung: [
+        `${Number(order.total).toLocaleString('vi-VN')}đ · ${meta.method ?? 'không rõ'}`,
+        hang,
+        order.buyerName ? `Khách: ${order.buyerName}` : null,
+        oversoldItems.length > 0 ? `THIẾU: ${oversoldItems.join('; ')}` : null,
+        trungKey.length > 0 ? `KEY TRÙNG: ${trungKey.join('; ')}` : null,
+      ].filter(Boolean).join('\n'),
+      duongDan: '/admin/orders',
+      userId: order.userId ?? null,
+      entityId: order.id,
+      khoaChongTrung: `DA_THANH_TOAN:shop:${order.id}`,
     });
     // Confirmation email (best-effort — never block/undo fulfillment on failure).
     try {

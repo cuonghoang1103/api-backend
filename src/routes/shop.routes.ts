@@ -9,6 +9,7 @@ import { reconcilePayosShopOrder, PAYOS_SHOP_ORDER_OFFSET, markShopOrderPaidAndF
 import { shopOrderLimiter, keyReplacementLimiter } from '../middleware/orderRateLimit.js';
 import { truDiem, hoanDiem, laySoDu } from '../services/points.service.js';
 import { logger } from '../utils/logger.js';
+import { baoAdmin } from '../services/thongBaoAdmin.service.js';
 
 const router = Router();
 
@@ -1221,6 +1222,23 @@ router.post('/orders', authenticate, shopOrderLimiter, async (req: any, res: Res
         include: { items: true },
       });
 
+      // Báo admin có đơn mới. `mucDo` thường: đơn CHƯA trả tiền thì chưa cần
+      // làm gì — trừ chuyển khoản tay, thứ phải chờ admin xác nhận.
+      void baoAdmin({
+        loai: 'DON_MOI',
+        mucDo: 'thuong',
+        tieuDe: `Đơn mới chờ thanh toán — ${orderCode}`,
+        noiDung: [
+          `${total.toLocaleString('vi-VN')}đ`,
+          orderItems.map((it) => `${it.productName} ×${it.quantity}`).join(', '),
+          buyerName ? `Khách: ${String(buyerName)}` : null,
+        ].filter(Boolean).join('\n'),
+        duongDan: '/admin/orders',
+        userId: userId ?? null,
+        entityId: order.id,
+        khoaChongTrung: `DON_MOI:${order.id}`,
+      });
+
       res.status(201).json({ success: true, data: order });
     } catch (e) {
       // Cuộc đua double-click: lượt thua đọc lại đơn của lượt thắng thay vì
@@ -1515,6 +1533,17 @@ router.post(
           productName: item.productName,
           reason: lyDo,
         },
+      });
+
+      void baoAdmin({
+        loai: 'DOI_KEY',
+        mucDo: 'can_xu_ly',
+        tieuDe: 'Khách báo key hỏng, xin đổi',
+        noiDung: 'Vào mục Đổi key để xem đơn hàng và lý do.',
+        duongDan: '/admin/commerce?tab=doi-key',
+        userId: req.userId ?? null,
+        entityId: yc.id,
+        khoaChongTrung: `DOI_KEY:${yc.id}`,
       });
       logger.info('[shop] yêu cầu đổi key', { requestId: yc.id, userId, orderCode: order.orderCode });
       res.status(201).json({ success: true, data: { id: yc.id, status: yc.status, createdAt: yc.createdAt } });

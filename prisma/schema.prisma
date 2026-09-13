@@ -9118,3 +9118,130 @@ model LlmKeyRequest {
   @@index([keyValue], map: "idx_llm_key_req_key")
   @@map("llm_key_requests")
 }
+
+// ============================================================
+// APPLE IN-APP PURCHASE
+//
+// Apple là MỘT CÁCH TRẢ TIỀN NỮA cho đúng gói Pro đã bán trên web, không
+// phải một hệ Pro thứ hai. Việc cấp quyền vẫn đi qua `grantProToUser()` —
+// cùng hàm mà đổi mã, admin cấp tay, ví điểm, VietQR và PayOS đang gọi — nên
+// hạn cộng dồn giống hệt và web đọc được ngay mà không cần đồng bộ gì.
+// ============================================================
+
+/// Ràng MỘT lượt mua của Apple vào ĐÚNG MỘT tài khoản CuongThai, vĩnh viễn.
+///
+/// ⛔ Vì sao phải là bảng riêng với khoá chính, chứ không phải một cột trong
+/// bảng giao dịch: `originalTransactionId` định danh LƯỢT MUA, còn mỗi lần
+/// gia hạn lại sinh một `transactionId` MỚI dùng chung lượt mua đó. Nếu đặt
+/// UNIQUE lên `original_transaction_id` trong bảng giao dịch thì gói tự gia
+/// hạn sẽ đâm khoá ngay lần gia hạn đầu.
+///
+/// Còn không ràng gì cả thì một người mua một lần rồi đăng nhập năm tài khoản
+/// khác nhau, mỗi tài khoản nhận Pro một lượt. Khoá chính ở đây khiến điều đó
+/// KHÔNG THỂ xảy ra ở tầng cơ sở dữ liệu, không phụ thuộc vào việc mã ứng
+/// dụng có nhớ kiểm hay không.
+model AppleIapLink {
+  originalTransactionId String   @id @map("original_transaction_id") @db.VarChar(64)
+  userId                Int      @map("user_id")
+  /// `appAccountToken` app gửi kèm lúc mua — Apple trả lại nguyên trong giao
+  /// dịch. Dùng để quy được chủ sở hữu cả khi lượt mua tới qua thông báo máy
+  /// chủ (lúc đó không có phiên đăng nhập nào để hỏi).
+  appAccountToken       String?  @map("app_account_token") @db.VarChar(64)
+  firstSeenAt           DateTime @default(now()) @map("first_seen_at")
+
+  giaoDich AppleIapTransaction[]
+
+  @@index([userId], map: "ix_apple_iap_link_user")
+  @@map("apple_iap_links")
+}
+
+/// Một giao dịch đã xác minh chữ ký và đã cấp Pro.
+///
+/// `transactionId` là khoá duy nhất ⇒ gửi lại cùng một JWS bao nhiêu lần cũng
+/// chỉ cấp Pro MỘT lần. Cần thiết thật sự: StoreKit gửi lại giao dịch chưa
+/// `finish()` ở mỗi lần mở app, và `Transaction.updates` cũng phát lại.
+model AppleIapTransaction {
+  id                    Int       @id @default(autoincrement())
+  transactionId         String    @unique(map: "uk_apple_iap_transaction") @map("transaction_id") @db.VarChar(64)
+  originalTransactionId String    @map("original_transaction_id") @db.VarChar(64)
+  userId                Int       @map("user_id")
+  productId             String    @map("product_id") @db.VarChar(64)
+  /// Số ngày đã cộng cho lượt này. Lưu lại vì bảng giá đổi được, còn sổ sách
+  /// thì phải giữ đúng con số lúc bán.
+  grantedDays           Int       @map("granted_days")
+  purchaseDate          DateTime  @map("purchase_date")
+  /// Chỉ gói tự gia hạn mới có.
+  expiresDate           DateTime? @map("expires_date")
+  /// "Sandbox" hoặc "Production". ⚠️ Giữ lại để không bao giờ lẫn: giao dịch
+  /// Sandbox KHÔNG được cấp Pro thật trên production.
+  environment           String    @map("environment") @db.VarChar(16)
+  /// Apple hoàn tiền / thu hồi. Có giá trị ⇒ đã gỡ Pro tương ứng.
+  revokedAt             DateTime? @map("revoked_at")
+  revocationReason      Int?      @map("revocation_reason")
+  /// Payload đã giải mã, giữ nguyên để đối soát về sau.
+  rawPayload            Json      @map("raw_payload")
+  /// Lúc Pro thực sự được cấp. `null` = đã ghi nhận nhưng CHƯA cấp — người
+  /// dùng đã trả tiền mà chưa có quyền. Lưới cứu quét đúng cột này.
+  grantedAt             DateTime? @map("granted_at")
+  createdAt             DateTime  @default(now()) @map("created_at")
+
+  link AppleIapLink @relation(fields: [originalTransactionId], references: [originalTransactionId], onDelete: Cascade)
+
+  @@index([userId], map: "ix_apple_iap_txn_user")
+  @@index([originalTransactionId], map: "ix_apple_iap_txn_original")
+  @@map("apple_iap_transactions")
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// 32. HỘP THƯ ADMIN — mọi việc cần admin biết đổ về MỘT chỗ
+// ═══════════════════════════════════════════════════════════════════════
+//
+// Vì sao cần: sidebar /admin đang có 43 mục, và những thứ CẦN XỬ LÝ nằm rải
+// rác trong đó — đơn xin key thì lẫn trong một tab của /admin/commerce. Người
+// dùng nói đúng nguyên văn: "xin duyệt key nãy tôi phải mò mãi mới thấy".
+// Không có chỗ nào trả lời được câu "bây giờ có gì đang chờ tôi?".
+//
+// Đây KHÔNG dùng lại `SocialNotification`: bảng đó bắt buộc có `senderId` trỏ
+// tới một User (thanh toán thành công thì "người gửi" là ai?), `type` giới hạn
+// VARCHAR(20) với danh sách cố định, và cái chuông của nó là chuông MẠNG XÃ
+// HỘI của người dùng — trộn việc vận hành vào đó là làm hỏng cả hai.
+//
+// Thông báo ở đây là CHUNG cho mọi admin, không theo từng người: web này một
+// admin, và "đơn đã xử lý" thì mọi admin đều nên thấy là đã xong.
+model AdminNotification {
+  id Int @id @default(autoincrement())
+
+  /// XIN_KEY · DON_MOI · DA_THANH_TOAN · CHUYEN_KHOAN_CHO_DUYET · DOI_KEY
+  /// BAO_CAO · XOA_TAI_KHOAN · NAP_DIEM · MUA_PRO · KHAC
+  loai    String  @db.VarChar(32)
+  tieuDe  String  @map("tieu_de") @db.VarChar(200)
+  noiDung String? @map("noi_dung") @db.Text
+
+  /// Đường dẫn trong /admin — bấm vào là tới ĐÚNG chỗ xử lý, không phải mò.
+  duongDan String? @map("duong_dan") @db.VarChar(300)
+
+  /// `can_xu_ly` = có việc phải làm (đếm riêng, hiện số đỏ).
+  /// `thuong`    = chỉ để biết (đơn đã thanh toán xong, có người nạp điểm…).
+  mucDo String @default("thuong") @map("muc_do") @db.VarChar(16)
+
+  /// Người gây ra sự kiện. KHÔNG đặt khoá ngoại: xoá tài khoản thì thông báo
+  /// vẫn phải còn, nếu không thì đúng những ca đáng điều tra nhất lại biến mất.
+  userId   Int? @map("user_id")
+  entityId Int? @map("entity_id")
+
+  /// Chặn trùng khi webhook thanh toán gọi lại nhiều lần. Ví dụ
+  /// "DA_THANH_TOAN:shop:1234". Null = sự kiện không cần chống trùng.
+  khoaChongTrung String? @unique(map: "uk_admin_notif_khoa") @map("khoa_chong_trung") @db.VarChar(120)
+
+  daDoc  Boolean   @default(false) @map("da_doc")
+  docLuc DateTime? @map("doc_luc")
+  /// Khác `daDoc`: đọc rồi vẫn có thể CHƯA xử lý xong.
+  daXuLy Boolean   @default(false) @map("da_xu_ly")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([daDoc, createdAt(sort: Desc)], name: "idx_admin_notif_chua_doc")
+  @@index([mucDo, daXuLy], name: "idx_admin_notif_can_xu_ly")
+  @@index([createdAt(sort: Desc)], name: "idx_admin_notif_thoi_gian")
+  @@map("admin_notifications")
+}

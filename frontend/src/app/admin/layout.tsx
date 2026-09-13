@@ -1,10 +1,11 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import ChuongAdmin from '@/components/admin/ChuongAdmin';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
-  LayoutDashboard, FileText, Users, UserX, Code2, Sparkles,
+  Bell, LayoutDashboard, FileText, Users, UserX, Code2, Sparkles,
   LogOut, Menu, X, ChevronRight, Shield,
   MessageSquare, BarChart3, BookOpen, ShoppingBag, Tag, Receipt, Music, GraduationCap, Database, Zap,
  CreditCard, Github, Search, TrendingUp, AlertTriangle, Gamepad2,
@@ -12,6 +13,7 @@ import {
 
 const adminNav = [
  { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { label: 'Thông báo & việc chờ', href: '/admin/thong-bao', icon: Bell },
  // Content Studio — distinct amber entry in the admin
  // sidebar. Sits at the top of the nav (right below
  // Dashboard) so the creator workflow is the first thing
@@ -277,6 +279,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               </p>
             </div>
           </div>
+          {/* Hộp thư admin — xem components/admin/ChuongAdmin.tsx để biết vì
+              sao nó nằm ở LAYOUT chứ không ở một trang: việc cần xử lý phải
+              thấy được từ bất cứ đâu trong /admin, không phải đi mò. */}
+          <ChuongAdmin />
         </header>
 
         <main className="flex-1 overflow-y-auto p-6">

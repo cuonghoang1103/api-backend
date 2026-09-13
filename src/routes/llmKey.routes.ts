@@ -19,6 +19,8 @@ import { keyReplacementLimiter } from '../middleware/orderRateLimit.js';
 import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../middleware/errorHandler.js';
 import { logger } from '../utils/logger.js';
 import { isProEffective } from '../services/pro.service.js';
+import { baoAdmin } from '../services/thongBaoAdmin.service.js';
+import { coTheTuTaoKey, taoKeyConQuaCanh } from '../services/taoKeyTerminal.js';
 import type { ApiResponse } from '../types/index.js';
 
 /** Sáu model cổng rambo đang phục vụ — app/trang hướng dẫn đọc từ đây. */
@@ -163,6 +165,17 @@ router.post('/request', keyReplacementLimiter, async (req: Request, res: Respons
       data: { userId: req.userId!, reason },
     });
     logger.info('[llm-key] đơn xin key mới', { requestId: don.id, userId: req.userId });
+    // Không `await`: đơn đã ghi xong rồi, báo hỏng không được làm hỏng việc chính.
+    void baoAdmin({
+      loai: 'XIN_KEY',
+      mucDo: 'can_xu_ly',
+      tieuDe: 'Có người xin cấp key OpenCode',
+      noiDung: reason.slice(0, 300),
+      duongDan: '/admin/commerce?tab=llm-keys',
+      userId: req.userId ?? null,
+      entityId: don.id,
+      khoaChongTrung: `XIN_KEY:${don.id}`,
+    });
     res.status(201).json({ success: true, data: choChuDon(don) });
   } catch (err) { next(err); }
 });
@@ -214,9 +227,7 @@ adminRouter.get('/', async (req: Request, res: Response<ApiResponse>, next) => {
 adminRouter.post('/:id/approve', async (req: Request, res: Response<ApiResponse>, next) => {
   try {
     const id = Number(req.params.id);
-    const key = String((req.body as { key?: unknown })?.key ?? '').trim();
-    if (!key) throw new BadRequestError('Thiếu key — tạo key ở New API rồi dán vào đây.');
-    if (key.length < 12 || /\s/.test(key)) throw new BadRequestError('Key trông không hợp lệ (quá ngắn hoặc có khoảng trắng).');
+    const keyDan = String((req.body as { key?: unknown })?.key ?? '').trim();
 
     const don = await prisma.llmKeyRequest.findUnique({ where: { id } });
     if (!don) throw new NotFoundError('Đơn không tồn tại');
@@ -224,6 +235,33 @@ adminRouter.post('/:id/approve', async (req: Request, res: Response<ApiResponse>
 
     const quotaRaw = (req.body as { quotaUsd?: unknown })?.quotaUsd;
     const quotaUsd = quotaRaw == null ? null : Math.max(0, Math.floor(Number(quotaRaw) || 0));
+
+    // ── Lấy key: TỰ TẠO nếu admin không dán sẵn ──────────────────────────
+    //
+    // Admin dán key thì tôn trọng lựa chọn đó (key cũ, key ngoài hệ thống,
+    // hoặc lúc cụm cong-llm đang bảo trì). Không dán thì tự tạo ở New API.
+    //
+    // ⚠️ Tạo key TRƯỚC khi đổi trạng thái đơn. Làm ngược lại thì đơn đã
+    // APPROVED mà khâu tạo key hỏng ⇒ người dùng thấy "đã duyệt" nhưng không
+    // có key, và đơn không còn PENDING để duyệt lại — kẹt cứng, phải sửa tay
+    // trong CSDL.
+    let key = keyDan;
+    if (!key) {
+      if (!coTheTuTaoKey()) {
+        throw new BadRequestError(
+          'Chưa cắm CANH_KHOA_NOI_BO nên hệ thống không tự tạo key được. Tạo key ở New API rồi dán vào đây.',
+        );
+      }
+      if (!quotaUsd || quotaUsd <= 0) {
+        throw new BadRequestError('Nhập hạn mức USD cho mỗi chu kỳ 5 giờ (ví dụ 60) rồi bấm Duyệt.');
+      }
+      // Tên gắn với ID ĐƠN nên không bao giờ trùng, và tra ngược được: nhìn
+      // tên key trong New API là biết nó thuộc đơn nào.
+      const vuaTao = await taoKeyConQuaCanh(`web-don-${id}`, quotaUsd);
+      if (!vuaTao) throw new BadRequestError('Không tự tạo key được. Dán key thủ công.');
+      key = vuaTao.key;
+    }
+    if (key.length < 12 || /\s/.test(key)) throw new BadRequestError('Key trông không hợp lệ (quá ngắn hoặc có khoảng trắng).');
 
     // Chốt tranh chấp: hai admin bấm cùng lúc thì chỉ một lượt ăn.
     const hit = await prisma.llmKeyRequest.updateMany({
@@ -241,8 +279,14 @@ adminRouter.post('/:id/approve', async (req: Request, res: Response<ApiResponse>
     if (hit.count === 0) throw new ConflictError('Đơn vừa được người khác xử lý');
 
     // ⚠️ KHÔNG log `key`.
-    logger.info('[llm-key] duyệt cấp key', { requestId: id, userId: don.userId, adminId: req.userId, quotaUsd });
-    res.json({ success: true, data: { id, status: 'APPROVED', keyHien: cheKey(key) } });
+    logger.info('[llm-key] duyệt cấp key', {
+      requestId: id, userId: don.userId, adminId: req.userId, quotaUsd, tuTao: !keyDan,
+    });
+    // Đơn đã xử lý ⇒ gạch khỏi hộp thư admin, khỏi phải bấm hai lần.
+    void prisma.adminNotification
+      .updateMany({ where: { khoaChongTrung: `XIN_KEY:${id}` }, data: { daXuLy: true, daDoc: true, docLuc: new Date() } })
+      .catch(() => {});
+    res.json({ success: true, data: { id, status: 'APPROVED', keyHien: cheKey(key), tuTao: !keyDan } });
   } catch (err) { next(err); }
 });
 

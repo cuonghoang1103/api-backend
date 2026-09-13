@@ -35,6 +35,7 @@ import { authenticate, optionalAuth } from '../middleware/auth.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { prisma } from '../config/database.js';
 import { logger } from '../utils/logger.js';
+import { baoAdmin } from '../services/thongBaoAdmin.service.js';
 import {
   createPost,
   getPostById,
@@ -1479,6 +1480,14 @@ router.post(
 
       await prisma.postReport.create({
         data: { postId, reporterId, reason: reason as string, details },
+      });
+
+      void baoAdmin({
+        loai: 'BAO_CAO',
+        mucDo: 'can_xu_ly',
+        tieuDe: 'Có báo cáo vi phạm bài viết',
+        duongDan: '/admin/reports',
+        userId: req.userId ?? null,
       });
 
       res.json({ success: true, data: { reported: true }, message: 'Report submitted' });

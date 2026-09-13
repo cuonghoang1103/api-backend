@@ -7,8 +7,9 @@
 // cuongthai.com KHÔNG đi qua đây: backend gọi thẳng rambo bằng key chính như
 // cũ, không trần, không chờ. Cả cửa sổ 5 giờ của gói max5 vẫn là của web.
 //
-// Canh làm ba việc (việc thứ ba — nắn yêu cầu cho vừa giới hạn ngầm của
-// rambo — nằm ở sua-yeu-cau.mjs):
+// Canh làm bốn việc (việc thứ ba — nắn yêu cầu cho vừa giới hạn ngầm của
+// rambo — nằm ở sua-yeu-cau.mjs; việc thứ tư — `GET /han-muc` cho người cầm
+// key con tự kiểm — ở gần cuối file):
 //
 // 1. ƯU TIÊN WEB. Mỗi phút hỏi rambo key chính đã dùng bao nhiêu phần trăm
 //    cửa sổ 5 giờ. Chạm NGUONG_NHUONG (mặc định 70%) thì mọi key con bị trả
@@ -333,9 +334,118 @@ async function chuyenTiep(req, res) {
   luong.pipe(res);
 }
 
+// ─── Kiểm hạn mức cho NGƯỜI CẦM KEY CON ─────────────────────────────────
+//
+//   curl -s https://api.cuongthai.com/llm/han-muc -H "Authorization: Bearer $CUONG_LLM_KEY"
+//
+// Gộp hai thứ mà người dùng OpenCode cần mà không nơi nào khác cho xem cùng lúc:
+// key con còn bao nhiêu trong cửa sổ này (New API biết), và cổng có đang đóng
+// vì web đã dùng gần hết key chính không (chỉ canh biết). Thiếu vế sau thì một
+// key còn 9 USD vẫn nhận 429, và người dùng không có cách nào hiểu vì sao.
+//
+// Xác thực bằng chính key con: New API `GET /api/usage/token/` chạy TokenAuth.
+// Đo thật trên New API rc.37 (13/09/2026):
+//   • PHẢI có dấu `/` cuối — thiếu thì 301 sang trang HTML, không phải JSON
+//   • trả `name`, `total_available` (= remain_quota), `total_used` (= used_quota
+//     CỘNG DỒN từ lúc tạo key, KHÔNG theo cửa sổ), đơn vị 500.000 = 1 USD
+// Vì `total_used` cộng dồn, số đã dùng TRONG CỬA SỔ NÀY = hạn mức của key
+// (`han-muc.json`, đúng số canh nạp lúc reset) − số còn lại.
+function traJson(res, status, d) {
+  res.writeHead(status, { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' });
+  res.end(`${JSON.stringify(d, null, 2)}\n`);
+}
+
+function usd(quota) {
+  return Math.round((Number(quota) / QUOTA_MOT_USD) * 100) / 100;
+}
+
+function gioPhut(phut) {
+  if (phut == null) return null;
+  const g = Math.floor(phut / 60);
+  return g ? `${g} giờ ${phut % 60} phút` : `${phut} phút`;
+}
+
+function trangThaiCong() {
+  const ph = phutConLai();
+  return {
+    dangMo: !s.dangNhuong,
+    lyDo: s.dangNhuong ? s.lyDo : '',
+    keyChinhDaDung: s.tiLe == null ? null : `${Math.round(s.tiLe * 100)}%`,
+    dongKhiKeyChinhToi: `${Math.round(NGUONG_NHUONG * 100)}%`,
+    cuaSoResetSau: gioPhut(ph),
+    resetLuc: s.hetCuaSoLuc
+      ? new Date(s.hetCuaSoLuc).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })
+      : null,
+  };
+}
+
+async function hanMucKey(req, res) {
+  const key = String(req.headers['x-api-key'] || (req.headers.authorization || '').replace(/^Bearer\s+/i, '')).trim();
+  if (!key) {
+    return traJson(res, 401, { loi: 'Thiếu key con. Gửi kèm header: Authorization: Bearer $CUONG_LLM_KEY' });
+  }
+  let d;
+  try {
+    const r = await fetch(`${NEWAPI_URL}/api/usage/token/`, {
+      headers: { authorization: `Bearer ${key}` },
+      signal: AbortSignal.timeout(10_000),
+    });
+    d = await r.json().catch(() => ({}));
+  } catch (e) {
+    return traJson(res, 502, { loi: `Không hỏi được New API: ${e.message}`, cong: trangThaiCong() });
+  }
+  if (d?.code !== true || !d.data) {
+    // Câu của New API có thể kèm key bị che một phần — không trả nguyên văn.
+    return traJson(res, 401, { loi: 'Key con không hợp lệ, đã bị xoá, hoặc đang bị khoá trong New API.' });
+  }
+  const t = d.data;
+  const cuaSoNay = t.unlimited_quota
+    ? { khongGioiHan: true }
+    : (() => {
+        let hanMucUsd = null;
+        try {
+          const bang = docHanMuc();
+          hanMucUsd = Number(t.name in bang.theoTen ? bang.theoTen[t.name] : bang.macDinh);
+        } catch {
+          /* thiếu han-muc.json: vẫn trả được số còn lại */
+        }
+        // Có thể ÂM: New API cho lượt cuối đi trọn rồi mới trừ theo số token
+        // thật (đo: còn 1,00 USD, một lượt 2,25 USD vẫn qua ⇒ còn −1,25).
+        const conLaiThat = usd(t.total_available);
+        const daDungUsd = hanMucUsd == null ? null : Math.max(0, Math.round((hanMucUsd - conLaiThat) * 100) / 100);
+        return {
+          hanMucUsd,
+          daDungUsd,
+          conLaiUsd: Math.max(0, conLaiThat),
+          ...(conLaiThat < 0 ? { vuotUsd: -conLaiThat } : {}),
+          daDung: hanMucUsd ? `${Math.min(100, Math.round((daDungUsd / hanMucUsd) * 100))}%` : null,
+          hetHanMuc: Number(t.total_available) <= 0,
+        };
+      })();
+  const cong = trangThaiCong();
+  const dung = cuaSoNay.hetHanMuc
+    ? `Key đã hết hạn mức cửa sổ này — tự nạp lại khi cửa sổ reset${cong.cuaSoResetSau ? ` (sau ~${cong.cuaSoResetSau})` : ''}.`
+    : !cong.dangMo
+      ? `Cổng đang đóng: ${cong.lyDo}.`
+      : 'Dùng được.';
+  return traJson(res, 200, {
+    key: t.name,
+    ketLuan: dung,
+    cuaSoNay,
+    cong,
+    ghiChu: 'USD là số QUY ĐỔI theo giá Anthropic để chia phần, không phải tiền thật. Hạn mức nạp lại mỗi lần cửa sổ 5 giờ của key chính reset.',
+  });
+}
+
 // ─── Máy chủ ─────────────────────────────────────────────────────────────
 http
   .createServer((req, res) => {
+    if (req.method === 'GET' && (req.url === '/han-muc' || req.url.startsWith('/han-muc?'))) {
+      return hanMucKey(req, res).catch((e) => {
+        ghi('lỗi kiểm hạn mức:', e.message);
+        if (!res.headersSent) traJson(res, 500, { loi: 'lỗi nội bộ của canh' });
+      });
+    }
     if (req.method === 'GET' && req.url === '/suc-khoe') {
       res.writeHead(200, { 'content-type': 'application/json' });
       return res.end(

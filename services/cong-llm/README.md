@@ -86,6 +86,52 @@ Trong OpenCode, gõ `/models` là thấy đủ 6 model của rambo. Ngữ cảnh
 **180k**: rambo từ chối mọi lượt quá 190k token (xem bên dưới). Khai sát
 dưới mức đó thì OpenCode tự nén hội thoại trước khi đụng trần.
 
+### Kiểm hạn mức key
+
+```bash
+curl -s https://api.cuongthai.com/llm/han-muc -H "Authorization: Bearer $CUONG_LLM_KEY"
+```
+
+Lệnh này cho biết key con còn bao nhiêu trong cửa sổ hiện tại, cổng đang mở
+hay đóng, và bao lâu nữa thì reset:
+
+```json
+{
+  "key": "opencode-1",
+  "ketLuan": "Dùng được.",
+  "cuaSoNay": { "hanMucUsd": 10, "daDungUsd": 2.25, "conLaiUsd": 7.75, "daDung": "23%", "hetHanMuc": false },
+  "cong": {
+    "dangMo": true, "lyDo": "", "keyChinhDaDung": "41%", "dongKhiKeyChinhToi": "70%",
+    "cuaSoResetSau": "2 giờ 13 phút", "resetLuc": "09:23 13-09"
+  }
+}
+```
+
+Dòng `ketLuan` là câu trả lời ngắn. Có ba khả năng:
+
+| `ketLuan` | Nghĩa là | Làm gì |
+|---|---|---|
+| `Dùng được.` | Key còn hạn mức, cổng đang mở | Dùng tiếp |
+| `Key đã hết hạn mức cửa sổ này…` | Key đã tiêu hết phần của cửa sổ này | Chờ tới `resetLuc`, hạn mức tự nạp lại |
+| `Cổng đang đóng: key chính đã dùng …%` | Web đã dùng quá 70% key chính, phần còn lại để dành cho web. **Mọi** key con đều bị khoá, kể cả key còn hạn mức | Chờ tới `resetLuc` |
+
+⚠️ **Key hết hạn mức thì OpenCode báo `401 Invalid token`**, trông giống hệt
+key sai. Nếu đang dùng bình thường mà giữa chừng gặp 401, chạy lệnh trên
+trước khi đi tìm lỗi cấu hình. Lỗi do cổng đóng thì khác: 429 kèm câu
+`Cổng key con đang tạm đóng…`.
+
+Vài điều về các con số (đo trên New API rc.37, 13/09/2026):
+- `USD` là số **quy đổi** theo giá Anthropic để chia phần giữa các key,
+  không phải tiền thật. Một lượt Opus 200k token vào / 50k ra tốn 2,25 USD.
+- Lượt cuối được chạy trọn rồi mới trừ theo số token thật, nên có thể vượt
+  hạn mức một chút. Khi đó `conLaiUsd` là 0 và phần vượt nằm ở `vuotUsd`.
+- Đừng dùng `/llm/v1/dashboard/billing/*` để xem hạn mức. Hai đường đó
+  cộng dồn từ lúc tạo key, không tính theo cửa sổ.
+
+Đường này đi thẳng tới canh (không qua New API, xem khối `location =
+/llm/han-muc` trong `nginx/nginx.conf`). Nó chỉ hoạt động sau khi đã chạy cả
+`trien-khai.sh` (cập nhật canh) lẫn `deploy-nha.sh` (cập nhật nginx).
+
 ## Giới hạn NGẦM của rambo — đo thật 13/09/2026
 
 Đo bằng mã đặt ở đầu và cuối văn bản, gọi thẳng rambo:
@@ -106,7 +152,7 @@ Sau khi canh nắn yêu cầu, qua key con thật:
 Rambo tính hạn mức là `usedTokens = token ra + token vào × 0,25`, trần 2.000.000
 mỗi cửa sổ 5 giờ. Cửa sổ bắt đầu từ lượt gọi đầu tiên.
 
-⚠️ **Hai giới hạn đầu cũng đang đè lên các tính năng AI của cuongthai.com**,
-vì backend gọi rambo thẳng, không qua canh.
+Backend cuongthai.com gọi rambo thẳng, không qua canh, nên nó tự nắn yêu cầu
+bằng bản TypeScript của cùng cách này: `src/services/llm/nanRambo.ts`.
 
 Mức 10 USD/cửa sổ là **ước lượng**. Nên chỉnh lại sau vài ngày, dựa vào log của New API.

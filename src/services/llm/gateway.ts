@@ -401,9 +401,9 @@ const PURPOSE_MODEL: Record<LlmPurpose, string> = {
   // biết so sánh & nối với môn học — chat tương tác nên dùng sonnet-5.
   academy_advisor: 'claude-sonnet-5',
 
-  cv_critique: 'claude-opus-4-8',
-  cv_writing: 'claude-opus-4-8',
-  cv_parse: 'claude-opus-4-8',
+  cv_critique: 'gpt-5.6-sol',
+  cv_writing: 'gpt-5.6-sol',
+  cv_parse: 'gpt-5.6-sol',
 
   exam_grade: 'claude-sonnet-5',
   exphub_doc: 'gpt-5.4-mini',
@@ -981,13 +981,23 @@ const RAMBO_VIEC_HANG_LOAT = new Set<LlmPurpose>(['news_bulletin']);
  *   claude-opus-4-8 (modelapi)  12,0 · 7,2 · 8,1s   → TB 9,1s
  *   gpt-5.6-sol     (modelapi)   6,2 · 5,6 · 5,2s   → TB 5,7s
  *
- * ⇒ Đường lùi để **`claude-opus-4-8`**: người dùng chốt 14/09/2026 *"cổng dự
- * phòng đừng giới hạn, cần chất lượng + chính xác để học và làm việc thật"*.
- * Chậm hơn 1,6× là cái giá chấp nhận được để câu trả lời lúc rambo sập KHÔNG
- * tụt hạng so với lúc bình thường. Trần chống spam đã nằm ở quota mỗi người
- * (`checkTokenQuota`), không phải ở việc hạ model.
+ * ⇒ Đường lùi giữ **`gpt-5.6-sol`**.
+ *
+ * Tôi đã định đổi sang `claude-opus-4-8` cho "khỏi tụt chất lượng", và người
+ * dùng bác lại bằng một dữ kiện tôi không có: **trên CHÍNH cổng này,
+ * claude-opus-4-8 có giá 3,3× so với mua thẳng của hãng**, còn `gpt-5.6-sol`
+ * thì rẻ hơn VÀ ổn định nhất trong các model ở đây.
+ *
+ * Nên "đừng giới hạn cổng dự phòng" không suy ra "dùng model đắt nhất": ở một
+ * cổng bán lại có hệ số như vậy, chọn model đắt là trả thêm 3,3× cho một
+ * chênh lệch chất lượng mà chưa ai đo được — trong khi RAMBO (gói đã trả
+ * trọn, dùng bao nhiêu cũng thế) mới là nơi đáng xài opus thoải mái.
+ *
+ * ⚠️ Bài học chung cho chỗ này: giá của một model KHÔNG suy ra được từ tên nó
+ * hay từ bảng giá của hãng — nó là hệ số của từng cổng bán lại. Muốn đổi model
+ * ở đây thì phải biết hệ số, đừng suy từ "model nào mạnh hơn".
  */
-const MODELAPI_DU_PHONG = process.env.LLM_MODELAPI_DU_PHONG?.trim() || 'claude-opus-4-8';
+const MODELAPI_DU_PHONG = process.env.LLM_MODELAPI_DU_PHONG?.trim() || 'gpt-5.6-sol';
 
 export function modelFor(purpose: LlmPurpose, ep?: LlmEndpoint): string {
   const env = process.env[`LLM_MODEL_${purpose.toUpperCase()}`]?.trim();

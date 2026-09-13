@@ -33,6 +33,8 @@ export default function robots(): MetadataRoute.Robots {
           '/profile',        // user-only profile
           '/my-courses',     // user-only
           '/my-orders',      // user-only
+          '/wallet',         // ví điểm — số dư riêng của từng người
+          '/llm-key',        // key API riêng — không bao giờ để lập chỉ mục
           '/messages',       // private messaging
           '/cart',           // session-bound cart
           '/checkout',       // checkout flow

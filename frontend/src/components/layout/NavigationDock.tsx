@@ -13,7 +13,7 @@ import {
   Gamepad2, Users, PlayCircle, Megaphone, Briefcase, Crown,
   FileText, Newspaper, Radio, Code2, Binary, Map as MapIcon, ClipboardCheck,
   Waypoints, Blocks, CircuitBoard,
-  AudioLines, ScanText,
+  AudioLines, ScanText, Terminal
 } from 'lucide-react';
 import { useMessagingStore } from '@/store/messagingStore';
 import { useAuthStore } from '@/store/authStore';
@@ -114,6 +114,10 @@ const ALL_DOCK_ITEMS: DockItem[] = [
   { href: '/wallet', label: 'Ví điểm', icon: Wallet, section: 'shop' },
   // Account (custom-rendered block below adds Admin / Profile / Settings / Logout)
   { href: '/pro', label: 'Update Pro', icon: Crown, section: 'account' },
+  // Xin key + hướng dẫn cắm OpenCode. Hiện cho MỌI người (không chỉ Pro):
+  // trang tự hiện lời mời nâng cấp nếu chưa Pro, nên nó vừa là lối vào
+  // vừa là một chỗ giới thiệu tính năng.
+  { href: '/llm-key', label: 'AI trên terminal', icon: Terminal, section: 'account' },
 ];
 
 // Commerce entry points are hidden while the shop/checkout is disabled

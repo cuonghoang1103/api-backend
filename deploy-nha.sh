@@ -334,7 +334,12 @@ DICH="${THU_MUC_NHA}/${SHA}"
 sshnha "mkdir -p ${THU_MUC_NHA} && [ -d \$HOME/${KHO_TUONG_DOI} ] || git init --bare -q \$HOME/${KHO_TUONG_DOI}" \
     || lui_ve_vps "Không tạo được kho git ở máy nhà"
 # Nhánh tạm `deploy` — chỉ là chỗ neo để object không bị dọn; ép ghi đè mỗi lần.
-if ! git push --quiet --force "${MAY_NHA}:${KHO_TUONG_DOI}" "HEAD:refs/heads/deploy"; then
+# `--push-option=cho-lui` là đường thoát hiểm của hook pre-receive trên kho
+# trần (xem scripts/chot-deploy-may-nha/). Chỉ truyền khi người chạy CỐ Ý xin
+# lùi; bình thường hook sẽ chặn nếu bản này không chứa mã đang chạy trên prod.
+TUY_CHON_DAY=()
+[ "$CHO_LUI" = true ] && TUY_CHON_DAY=(--push-option=cho-lui)
+if ! git push --quiet --force "${TUY_CHON_DAY[@]}" "${MAY_NHA}:${KHO_TUONG_DOI}" "HEAD:refs/heads/deploy"; then
     lui_ve_vps "Đẩy mã sang máy nhà thất bại"
 fi
 if ! sshnha "rm -rf ${DICH} && mkdir -p ${DICH} && git --git-dir=\$HOME/${KHO_TUONG_DOI} archive ${SHA} | tar x -C ${DICH}"; then
@@ -1030,6 +1035,21 @@ if echo "$KQ_CHOT" | grep -q 'LECH\|KHONG_DOC_DUOC'; then
     exit 1
 fi
 ok "Container đang chạy ĐÚNG ảnh ${SHA} (đã so mã băm, không phải tin lời log)"
+
+# ─── Ghi mốc "ĐÃ LÊN PRODUCTION" ───────────────────────────────────────
+#
+# Đặt Ở ĐÂY, sau khi đã đối chiếu mã băm container — không phải sau bước
+# tráo. Tráo xong mà container chạy ảnh khác (bị phiên kia tráo đè) thì mốc
+# này SAI, và hook pre-receive sẽ lấy nó làm chuẩn để chặn nhầm người khác.
+#
+# `refs/heads/da-len-prod` là thứ hook trên kho trần đọc để biết production
+# đang chạy gì. Hỏng bước này KHÔNG được làm hỏng deploy — ảnh đã lên rồi;
+# chỉ cảnh báo là chốt sẽ dùng mốc cũ hơn (chặt hơn, không nguy hiểm).
+if git push --quiet --force "${MAY_NHA}:${KHO_TUONG_DOI}" "HEAD:refs/heads/da-len-prod" 2>/dev/null; then
+    ok "Đã ghi mốc 'đã lên production' = ${SHA} (chốt chống lùi dùng mốc này)"
+else
+    warn "Không ghi được mốc 'đã lên production' — chốt sẽ dùng mốc cũ hơn."
+fi
 
 echo ""
 ok "XONG — production đang chạy commit ${SHA}"

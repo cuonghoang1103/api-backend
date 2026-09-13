@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+# ═══════════════════════════════════════════════════════════════════════
+# CHỐT CHỐNG LÙI PRODUCTION — hook pre-receive của kho trần ở MÁY NHÀ
+# ═══════════════════════════════════════════════════════════════════════
+#
+# Từ chối mọi lượt deploy mà commit của nó KHÔNG CHỨA commit đang chạy trên
+# production. Không chứa ⇒ lượt đó xoá công việc đang chạy.
+#
+# ⚠️ Vì sao hook chứ không phải kiểm trong `deploy-nha.sh`:
+#
+# Đo thật 13/09/2026 — BA lần trong một buổi sáng. Nhiều phiên Claude chạy
+# song song, mỗi phiên ở một git worktree riêng, mỗi worktree có BẢN COPY
+# `deploy-nha.sh` CỦA CHÍNH NÓ. Thêm chốt vào script chỉ bảo vệ được những
+# nhánh đã có chốt đó; nhánh tách ra từ trước thì chạy bản script cũ và đi
+# thẳng qua. Đúng cái đã xảy ra: chốt thêm lúc 07:0x, lượt deploy lúc 07:04
+# từ nhánh `se-ship` vẫn gỡ sạch shop + ví khỏi production.
+#
+# Hook nằm ở KHO TRẦN, ngoài mọi worktree. Mọi phiên đều phải đi qua nó, bất
+# kể họ chạy bản script nào, kể cả gõ `git push` bằng tay.
+#
+# ─── Lấy "production đang chạy cái gì" ở đâu ───────────────────────────
+#
+# `refs/heads/da-len-prod` — ref đánh dấu, `deploy-nha.sh` chỉ đẩy nó SAU KHI
+# đã tráo container xong và đã đối chiếu mã băm. Nên nó là thứ THẬT SỰ đang
+# chạy, khác với `refs/heads/deploy` (thứ ai đó vừa đẩy lên để build, có thể
+# build hỏng và không bao giờ tới production).
+#
+# Chưa có ref đánh dấu (lần chạy đầu) thì lùi về `oldrev` của chính ref đang
+# đẩy. Thà chặt hơn cần thiết một lượt còn hơn để lọt.
+#
+# ─── Mở cửa khi CỐ Ý lùi ───────────────────────────────────────────────
+#   git push --push-option=cho-lui …      (deploy-nha.sh --cho-lui tự truyền)
+# Cần `receive.advertisePushOptions=true` — trình cài đặt đã bật sẵn.
+
+set -uo pipefail
+
+REF_DANH_DAU="refs/heads/da-len-prod"
+REF_CAN_GAC="refs/heads/deploy"
+RONG="0000000000000000000000000000000000000000"
+
+# ── Người đẩy có xin lùi không ──
+CHO_LUI=false
+n="${GIT_PUSH_OPTION_COUNT:-0}"
+for ((i = 0; i < n; i++)); do
+    v="GIT_PUSH_OPTION_$i"
+    [ "${!v:-}" = "cho-lui" ] && CHO_LUI=true
+done
+
+while read -r oldrev newrev refname; do
+    # Chỉ gác đúng nhánh deploy. Mọi ref khác (kể cả ref đánh dấu) đi tự do —
+    # gác ref đánh dấu sẽ khoá chính bước ghi nhận deploy thành công.
+    [ "$refname" = "$REF_CAN_GAC" ] || continue
+    [ "$newrev" = "$RONG" ] && continue            # xoá nhánh — không phải việc của chốt này
+
+    # Mốc phải-chứa: ưu tiên thứ THẬT SỰ đang chạy.
+    MOC=""
+    NGUON=""
+    if git rev-parse --verify --quiet "$REF_DANH_DAU" >/dev/null 2>&1; then
+        MOC=$(git rev-parse "$REF_DANH_DAU")
+        NGUON="đang chạy trên production"
+    elif [ "$oldrev" != "$RONG" ]; then
+        MOC="$oldrev"
+        NGUON="lượt deploy gần nhất (chưa có ref đánh dấu)"
+    fi
+
+    [ -z "$MOC" ] && continue                       # kho mới tinh — cho qua
+    # Commit mốc có thể đã bị dọn khỏi kho; không đọc được thì ĐỪNG chặn.
+    git cat-file -e "${MOC}^{commit}" 2>/dev/null || continue
+    git merge-base --is-ancestor "$MOC" "$newrev" 2>/dev/null && continue   # tiến lên — OK
+
+    if [ "$CHO_LUI" = true ]; then
+        echo "" >&2
+        echo "⚠️  CHỐT: bản này KHÔNG chứa ${MOC:0:8} (${NGUON})." >&2
+        echo "    Đã cho qua vì có --cho-lui. Production sẽ LÙI." >&2
+        echo "" >&2
+        continue
+    fi
+
+    # ── TỪ CHỐI ──
+    {
+        echo ""
+        echo "╔══════════════════════════════════════════════════════════════════╗"
+        echo "║  ⛔  TỪ CHỐI DEPLOY — lượt này sẽ XOÁ việc đang chạy trên prod   ║"
+        echo "╚══════════════════════════════════════════════════════════════════╝"
+        echo ""
+        echo "  ${NGUON} : ${MOC:0:8}  $(git log -1 --format=%s "$MOC" 2>/dev/null | cut -c1-52)"
+        echo "  bạn đang đẩy       : ${newrev:0:8}  $(git log -1 --format=%s "$newrev" 2>/dev/null | cut -c1-52)"
+        echo ""
+        echo "  Bản bạn đẩy KHÔNG chứa commit kia. Những commit sau sẽ BIẾN MẤT"
+        echo "  khỏi production nếu lượt này đi tiếp:"
+        echo ""
+        git log --oneline "${newrev}..${MOC}" 2>/dev/null | head -12 | sed 's/^/      /'
+        echo ""
+        echo "  Gần như chắc chắn bạn đang deploy từ một nhánh tách ra trước đó."
+        echo ""
+        echo "  CÁCH SỬA — chọn một:"
+        echo "      1. Gộp vào rồi deploy lại:"
+        echo "           git fetch && git merge ${MOC:0:8}"
+        echo "         (hoặc đơn giản nhất: chuyển sang main rồi deploy từ main)"
+        echo ""
+        echo "      2. CỐ Ý lùi production (rollback):"
+        echo "           bash deploy-nha.sh --cho-lui"
+        echo ""
+    } >&2
+    exit 1
+done
+
+exit 0

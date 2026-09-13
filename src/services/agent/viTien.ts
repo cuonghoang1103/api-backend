@@ -32,6 +32,7 @@
  */
 import { prisma } from '../../config/database.js';
 import { logger } from '../../utils/logger.js';
+import { xemKeyTerminal, tranRiengCuaNguoi } from './keyTerminal.js';
 
 /** Hai mảng AI được đo riêng. */
 export type MangAI = 'code' | 'chat';
@@ -64,8 +65,12 @@ export function soGioViTien(): number {
 
 export interface ViTien {
   mang: MangAI;
-  /** Đã tiêu trong cửa sổ, USD. */
+  /** Đã tiêu trong cửa sổ, USD. GỒM cả phần đi qua key terminal (mảng 'code'). */
   daTieu: number;
+  /** Phần đã tiêu qua key terminal (OpenCode). 0 nếu không có key. */
+  daTieuTerminal?: number;
+  /** Trần này là trần RIÊNG theo gói đã mua, hay trần chung của web. */
+  tranRieng?: boolean;
   tran: number;
   conLai: number;
   /** 0–100, để vẽ thanh đo. */
@@ -109,8 +114,20 @@ function rong(mang: MangAI, tran: number, soGio: number, miemTran: boolean): ViT
  * `quota.ts` và `llm/budget.ts`.
  */
 export async function xemViTien(userId: number, mang: MangAI): Promise<ViTien> {
-  const tran = tranTienCuaSo();
   const soGio = soGioViTien();
+
+  // ── Trần RIÊNG theo gói đã mua (14/09/2026) ────────────────────────────
+  // Người mua gói key terminal có trần riêng (60/100/150 USD mỗi cửa sổ) ghi
+  // trong đơn key. Không có gói ⇒ dùng trần chung của web như cũ.
+  //
+  // CHỈ áp cho mảng 'code': gói bán ra là gói AI Code / terminal, không dính
+  // tới AI Chat. Áp nhầm sang chat là lặng lẽ nới trần một mảng không ai mua.
+  let tran = tranTienCuaSo();
+  let tranRieng = false;
+  if (mang === 'code') {
+    const rieng = await tranRiengCuaNguoi(userId);
+    if (rieng != null && rieng > 0) { tran = rieng; tranRieng = true; }
+  }
 
   let miemTran = false;
   try {
@@ -121,6 +138,15 @@ export async function xemViTien(userId: number, mang: MangAI): Promise<ViTien> {
   }
 
   if (tran <= 0) return rong(mang, tran, soGio, miemTran);
+
+  // ── Phần đã tiêu qua KEY TERMINAL ──────────────────────────────────────
+  // Hỏi New API (cùng mạng docker). Hỏng thì trả 0 — xem keyTerminal.ts.
+  // Cộng vào CÙNG một ví với phần app desktop, nên dùng hết ở đường nào thì
+  // đường kia cũng cạn theo. Đó chính là "dùng chung hạn mức".
+  let terminalUsd = 0;
+  if (mang === 'code') {
+    terminalUsd = (await xemKeyTerminal(userId)).daTieuUsd;
+  }
 
   const gio = Date.now();
   const khoa = `${userId}:${mang}`;
@@ -156,14 +182,18 @@ export async function xemViTien(userId: number, mang: MangAI): Promise<ViTien> {
     }
   }
 
+  const tong = usd + terminalUsd;
+
   return {
     mang,
-    daTieu: usd,
+    daTieu: tong,
+    daTieuTerminal: terminalUsd,
+    tranRieng,
     tran,
-    conLai: Math.max(0, tran - usd),
-    phanTram: Math.min(100, Math.round((usd / tran) * 100)),
+    conLai: Math.max(0, tran - tong),
+    phanTram: Math.min(100, Math.round((tong / tran) * 100)),
     soGio,
-    canVi: !miemTran && usd >= tran,
+    canVi: !miemTran && tong >= tran,
     miemTran,
     hoiLucNao: cu ? new Date(cu.getTime() + ms) : null,
     hoiHetLuc: moi ? new Date(moi.getTime() + ms) : null,
@@ -176,9 +206,12 @@ export function loiCanViTien(v: ViTien): string {
   const gio = v.hoiLucNao
     ? v.hoiLucNao.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
     : null;
+  const tach = v.daTieuTerminal && v.daTieuTerminal > 0
+    ? ` (trong đó ~$${v.daTieuTerminal.toFixed(2)} qua key terminal)`
+    : '';
   return (
     `Bạn đã dùng hết ngân sách ${ten} trong ${v.soGio} giờ qua `
-    + `(~$${v.daTieu.toFixed(2)} / $${v.tran}). `
+    + `(~$${v.daTieu.toFixed(2)} / $${v.tran})${tach}. `
     + (gio ? `Hạn mức bắt đầu hồi lại từ ${gio}. ` : '')
     + `Đây là ví RIÊNG của tài khoản bạn — người khác không bị ảnh hưởng, `
     + `và ${v.mang === 'code' ? 'AI Chat' : 'AI Code'} vẫn dùng được bình thường.`

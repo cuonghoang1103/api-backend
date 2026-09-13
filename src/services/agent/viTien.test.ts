@@ -52,7 +52,10 @@ test('admin KHÔNG bị chặn nhưng VẪN được đếm', () => {
    * người duy nhất sửa được lại là người duy nhất không nhìn thấy — cùng lý do
    * đã ghi ở `quota.ts` cho trần token.
    */
-  assert.match(nguon, /canVi: !miemTran && usd >= tran/);
+  // `tong` = phần app desktop + phần key terminal (gộp ví 14/09/2026).
+  // Khớp lỏng hơn một chút để đổi tên biến không làm đỏ phép kiểm, nhưng
+  // VẪN chốt đúng hai điều cần bảo vệ: có `!miemTran`, và so với `tran`.
+  assert.match(nguon, /canVi: !miemTran && \w+ >= tran/);
   assert.ok(
     !/miemTran[\s\S]{0,300}daTieu: 0[\s\S]{0,100}usd/.test(nguon),
     'đang giấu số liệu của admin',
@@ -86,4 +89,28 @@ test('câu báo nói RÕ đây là ví riêng, và mảng kia vẫn dùng đư�
   const than = nguon.slice(i);
   assert.match(than, /ví RIÊNG của tài khoản bạn/);
   assert.match(than, /vẫn dùng được bình thường/);
+});
+
+test('gộp ví: phần key terminal PHẢI được cộng vào cùng một ví', () => {
+  /*
+   * Người mua gói key terminal dùng CHUNG hạn mức với AI Code trên app.
+   * Thiếu phép cộng này thì họ có HAI ví riêng và được gấp đôi thứ đã trả
+   * tiền — đúng lỗi đã sửa ngày 14/09/2026.
+   */
+  assert.match(nguon, /const tong = usd \+ terminalUsd/);
+  assert.match(nguon, /daTieu: tong/);
+  assert.match(nguon, /conLai: Math\.max\(0, tran - tong\)/);
+});
+
+test('gộp ví: New API hỏng ⇒ phần terminal = 0, KHÔNG chặn người dùng', () => {
+  // Cùng nguyên tắc với CSDL hỏng: đồng hồ đo hỏng không được tự khoá cửa.
+  const kt = readFileSync(new URL('./keyTerminal.ts', import.meta.url), 'utf8');
+  assert.match(kt, /catch[\s\S]{0,200}daTieuUsd: 0/);
+  assert.ok(!/throw new/.test(kt), 'keyTerminal KHÔNG được ném lỗi ra ngoài');
+});
+
+test('gộp ví: trần riêng CHỈ áp cho mảng code, không đụng AI Chat', () => {
+  // Gói bán ra là gói AI Code/terminal. Áp nhầm sang chat là lặng lẽ nới
+  // trần một mảng không ai mua.
+  assert.match(nguon, /if \(mang === 'code'\)[\s\S]{0,200}tranRiengCuaNguoi/);
 });

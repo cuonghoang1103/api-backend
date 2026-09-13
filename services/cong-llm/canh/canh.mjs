@@ -54,6 +54,16 @@ const NEWAPI_URL = (env.NEWAPI_URL || 'http://cuonghoangdev_newapi:3000').replac
 const NEWAPI_USER = env.NEWAPI_USER || 'quantri';
 const NEWAPI_PASS = env.NEWAPI_PASS;
 
+// ─── Nối với ví AI Code của web (14/09/2026) ────────────────────────────
+// Người mua gói key terminal dùng CHUNG một hạn mức với AI Code trên app
+// desktop. canh hỏi backend web "người này đã tiêu bao nhiêu ở app" rồi cộng
+// với phần đã tiêu qua key, chạm trần thì KHOÁ key.
+//
+// Thiếu WEB_API_URL hoặc WEB_INTERNAL_TOKEN ⇒ bỏ hẳn bước này, canh chạy y
+// như trước. Không chặn nhầm khi chưa cấu hình xong.
+const WEB_API_URL = (env.WEB_API_URL || '').replace(/\/+$/, '');
+const WEB_INTERNAL_TOKEN = env.WEB_INTERNAL_TOKEN || '';
+
 const HAN_MUC_FILE = env.HAN_MUC_FILE || new URL('./han-muc.json', import.meta.url).pathname;
 const STATE_FILE = env.STATE_FILE || '/state/canh.json';
 const CONG = Number(env.CONG) || 8080;
@@ -154,6 +164,9 @@ async function doHanMuc() {
   }
   capNhatCong();
   if (s.lanDoCuoi && !s.loiDoCuoi && laCuaSoMoi()) await datLaiHanMuc();
+  // Sau khi đã nạp lại (nếu là cửa sổ mới) mới gộp ví — ngược thứ tự thì ta
+  // khoá key dựa trên quota của cửa sổ CŨ.
+  await gopViVoiWeb();
 }
 
 // Mốc hết cửa sổ tính bằng "bây giờ + còn lại" nên nhích vài giây giữa hai
@@ -203,6 +216,77 @@ async function quanTri(duong, { method = 'GET', body } = {}) {
 function docHanMuc() {
   const j = JSON.parse(readFileSync(HAN_MUC_FILE, 'utf8'));
   return { macDinh: Number(j.mac_dinh_usd), theoTen: j.theo_ten || {} };
+}
+
+/**
+ * Cộng hai đường rồi khoá key đã tiêu hết phần chung.
+ *
+ * ⚠️ KHÔNG ghi đè `remain_quota`. New API TRỪ DẦN cột đó mỗi lượt gọi; ghi
+ * đè nó mỗi phút là xoá mất phần terminal vừa dùng, và hai bên đánh nhau trên
+ * cùng một con số. Thay vào đó chỉ bật/tắt `status` — thứ New API không tự sửa.
+ *
+ *   đã tiêu terminal = hạn mức nạp đầu cửa sổ − remain_quota hiện tại
+ *   đã tiêu app      = hỏi backend web
+ *   tổng ≥ hạn mức   ⇒ status = 2 (disabled)
+ *   tổng < hạn mức   ⇒ mở lại nếu đang bị chính ta khoá
+ *
+ * Cửa sổ mới thì `datLaiHanMuc()` nạp lại quota và bật lại key như cũ.
+ */
+async function gopViVoiWeb() {
+  if (!WEB_API_URL || !WEB_INTERNAL_TOKEN) return;
+  try {
+    const bang = docHanMuc();
+    const tatCa = [];
+    for (let trang = 1; trang <= 20; trang++) {
+      const d = await quanTri(`/api/token/?p=${trang}&page_size=100`);
+      const items = d?.items || [];
+      tatCa.push(...items);
+      if (items.length < 100) break;
+    }
+    const coQuota = tatCa.filter((t) => !t.unlimited_quota && t.key);
+    if (coQuota.length === 0) return;
+
+    // New API trả `key` không kèm tiền tố; backend lưu key ĐẦY ĐỦ ("sk-...").
+    const day = coQuota.map((t) => `sk-${t.key}`);
+    const r = await fetch(`${WEB_API_URL}/api/v1/internal/ai-code-usage`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-internal-token': WEB_INTERNAL_TOKEN },
+      body: JSON.stringify({ keys: day }),
+      signal: AbortSignal.timeout(8_000),
+    });
+    if (!r.ok) { ghi('hỏi ví AI Code của web hỏng:', r.status); return; }
+    const j = await r.json().catch(() => null);
+    const web = j?.data || {};
+    if (Object.keys(web).length === 0) return;
+
+    let khoa = 0;
+    let mo = 0;
+    for (const t of coQuota) {
+      const tin = web[`sk-${t.key}`];
+      if (!tin) continue;
+      const hanMuc = Number(tin.tranUsd ?? (t.name in bang.theoTen ? bang.theoTen[t.name] : bang.macDinh));
+      if (!Number.isFinite(hanMuc) || hanMuc <= 0) continue;
+
+      const conLaiUsd = Number(t.remain_quota || 0) / QUOTA_MOT_USD;
+      const terminalUsd = Math.max(0, hanMuc - conLaiUsd);
+      const tong = terminalUsd + Number(tin.daTieuUsd || 0);
+
+      if (tong >= hanMuc && t.status === 1) {
+        await quanTri('/api/token/?status_only=true', { method: 'PUT', body: { id: t.id, status: 2 } });
+        khoa++;
+      } else if (tong < hanMuc && t.status === 2) {
+        // Chỉ mở lại key mà CHÍNH TA đã khoá vì cạn ví. Key admin khoá tay
+        // trong giao diện cũng mang status 2 — không phân biệt được, nên chỉ
+        // mở khi ví đã thật sự còn chỗ, và ghi log để còn lần theo.
+        await quanTri('/api/token/?status_only=true', { method: 'PUT', body: { id: t.id, status: 1 } });
+        mo++;
+      }
+    }
+    if (khoa || mo) ghi(`gộp ví AI Code: khoá ${khoa} key cạn hạn mức, mở lại ${mo}`);
+  } catch (e) {
+    // Hỏng thì thôi — nhịp sau thử lại. Không được để một lỗi đo làm chết canh.
+    ghi('gộp ví AI Code hỏng (sẽ thử lại nhịp sau):', e.message);
+  }
 }
 
 let dangDatLai = false;

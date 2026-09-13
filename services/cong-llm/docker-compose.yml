@@ -66,6 +66,16 @@ services:
       # mới) mới mở lại. 30% cuối mỗi cửa sổ là của riêng web.
       NGUONG_NHUONG: ${CONG_LLM_NGUONG_NHUONG:-0.7}
       NGUONG_MO_LAI: ${CONG_LLM_NGUONG_MO_LAI:-0.6}
+      # ─── Gộp ví với AI Code của web (14/09/2026) ─────────────────────
+      # Người mua gói key terminal dùng CHUNG hạn mức với AI Code trên app
+      # desktop. canh hỏi backend web số đã tiêu ở app rồi cộng với phần đã
+      # tiêu qua key; chạm trần thì khoá key tới khi cửa sổ reset.
+      #
+      # ⚠️ Để TRỐNG cả hai ⇒ canh bỏ hẳn bước gộp và chạy y như trước. Cố ý:
+      # cấu hình dở dang không được phép khoá nhầm key của người đã trả tiền.
+      # `WEB_INTERNAL_TOKEN` phải TRÙNG với `INTERNAL_API_TOKEN` của backend.
+      WEB_API_URL: ${CONG_LLM_WEB_API_URL:-http://cuonghoangdev_backend:3001}
+      WEB_INTERNAL_TOKEN: ${INTERNAL_API_TOKEN:-}
       TZ: Asia/Ho_Chi_Minh
     volumes:
       # Mount cả THƯ MỤC, không mount từng file: file đơn bị gắn theo inode,

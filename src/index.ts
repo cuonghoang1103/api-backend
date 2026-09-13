@@ -172,6 +172,8 @@ const interviewAdminRoutes = interviewModule.adminRouter;
 const proModule = await import(path.join(__dirname, 'routes', 'pro.routes.js'));
 const proRoutes = proModule.default;
 const proAdminRoutes = proModule.adminRouter;
+// Lối nội bộ cho cụm cong-llm (canh) hỏi số đã tiêu ở AI Code (14/09/2026)
+const internalRoutes = (await import(path.join(__dirname, 'routes', 'internal.routes.js'))).default;
 // Xin key OpenCode (cổng key con LLM) — người dùng xin, admin duyệt (13/09/2026)
 const llmKeyModule = await import(path.join(__dirname, 'routes', 'llmKey.routes.js'));
 const llmKeyRoutes = llmKeyModule.default;
@@ -605,6 +607,7 @@ app.use('/api/v1/admin/pro', proAdminRoutes);
 app.use('/api/v1/wallet', walletRoutes);
 app.use('/api/v1/admin/wallet', walletAdminRoutes);
 app.use('/api/v1/admin/commerce', commerceAdminRoutes);
+app.use('/api/v1/internal', internalRoutes);
 app.use('/api/v1/llm-keys', llmKeyRoutes);
 app.use('/api/v1/admin/llm-keys', llmKeyAdminRoutes);
 // Public CV router FIRST — the main cv router applies `authenticate` to

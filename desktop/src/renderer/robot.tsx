@@ -19,6 +19,10 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { OdinRobot } from './features/odin/OdinRobot';
+/* ⚠️ Cửa sổ robot là một ENTRY RIÊNG (`robot.html`), không đi qua
+   `AppStateProvider` — nơi cửa sổ chính gọi `datNgonNgu`. Không tự gọi ở đây
+   thì đổi ngôn ngữ trong Cài đặt xong, mọi cửa sổ đổi trừ con robot. */
+import { datNgonNgu, dich, dichP } from './i18n';
 import type { OdinMood } from './features/odin/useOdin';
 import { batDauThu, ngungPhat, phatBase64, type BoThu } from './features/odin/nghePhat';
 import './features/odin/odin.css';
@@ -248,6 +252,7 @@ function Robot() {
   const [nacCo, datNacCo] = useState(0);
   useEffect(() => {
     void window.cuongthai?.settings.getAll().then((t) => {
+      datNgonNgu(t.ngonNgu === 'en' ? 'en' : 'vi');
       const n = typeof t.odinCo === 'number' ? t.odinCo : 0;
       datNacCo(n);
       void window.cuongthai?.robot.datCo(n);
@@ -255,6 +260,15 @@ function Robot() {
   }, []);
   /* Menu chuột phải đổi cỡ ở MAIN, nên renderer phải nghe lại — không thì
      nhãn "%" trên thanh nút vẫn hiện số cũ trong khi cửa sổ đã co. */
+  /* Đổi ngôn ngữ ở Cài đặt ⇒ áp ngay, không đợi dựng lại cửa sổ. `datNgonNgu`
+     bắn cho mọi `useDich` đang nghe, còn `datNn` ép chính cửa sổ này vẽ lại —
+     mấy chỗ dùng `dich()` thẳng (không qua hook) không tự biết. */
+  const [, datNn] = useState(0);
+  useEffect(() => window.cuongthai?.on('app:doiNgonNgu', (p) => {
+    datNgonNgu((p as { ngonNgu?: string }).ngonNgu === 'en' ? 'en' : 'vi');
+    datNn((v) => v + 1);
+  }), []);
+
   useEffect(() => window.cuongthai?.on('robot:coDoi', (p) => {
     const n = (p as { nac?: number }).nac;
     if (typeof n === 'number') datNacCo(n);
@@ -402,7 +416,7 @@ function Robot() {
           thì trước đây chỉ có con quay trên nút micro — quá nhỏ và quá xa
           tầm mắt. */}
       {!tin && !rong && tt === 'nghi' && (
-        <div className="rb-bong" data-loai="cho">Chờ tớ suy nghĩ xíu nhé…</div>
+        <div className="rb-bong" data-loai="cho">{dich('Chờ tớ suy nghĩ xíu nhé…')}</div>
       )}
       {/* Việc AI Code đang chạy. `data-loai="viec"` để nó nhạt hơn thông báo
           thật — nó là nền cảnh, không phải thứ đòi bạn phản ứng. */}
@@ -426,7 +440,7 @@ function Robot() {
           type="button"
           className="rb-bong"
           data-loai={tin.loai}
-          title="Bấm để đọc đầy đủ trong AI Chat"
+          title={dich('Bấm để đọc đầy đủ trong AI Chat')}
           onClick={(e) => { e.stopPropagation(); bamDup(); }}
           onDoubleClick={(e) => e.stopPropagation()}
         >
@@ -487,9 +501,9 @@ function Robot() {
           khung chat. `no-drag` để chúng không bị vùng kéo nuốt mất cú bấm. */}
       {keoDuoc && (
         <div className="rb-co">
-          <button type="button" onClick={() => doiNac(1)} disabled={nacCo >= 3} title="Nhỏ hơn">−</button>
+          <button type="button" onClick={() => doiNac(1)} disabled={nacCo >= 3} title={dich('Nhỏ hơn')}>−</button>
           <span>{['100%', '82%', '66%', '52%'][nacCo]}</span>
-          <button type="button" onClick={() => doiNac(-1)} disabled={nacCo <= 0} title="To hơn">+</button>
+          <button type="button" onClick={() => doiNac(-1)} disabled={nacCo <= 0} title={dich('To hơn')}>+</button>
         </div>
       )}
 
@@ -502,8 +516,8 @@ function Robot() {
             type="button"
             className="odin-mic rb-dung"
             onClick={() => { ngungPhat(); datTt('im'); }}
-            title="Đang đọc — bấm để dừng"
-            aria-label="Dừng đọc"
+            title={dich('Đang đọc — bấm để dừng')}
+            aria-label={dich('Dừng đọc')}
           >
             <span className="odin-wave" aria-hidden><i /><i /><i /><i /></span>
           </button>
@@ -516,8 +530,8 @@ function Robot() {
             onPointerDown={() => void batDauNoi()}
             onPointerUp={thaTayNoi}
             onPointerLeave={thaTayNoi}
-            title={tt === 'nghi' ? 'Đang nghĩ…' : 'Giữ để nói'}
-            aria-label="Giữ để nói"
+            title={tt === 'nghi' ? dich('Đang nghĩ…') : dich('Giữ để nói')}
+            aria-label={dich('Giữ để nói')}
           >
             {tt === 'nghi'
               ? <span className="rb-xoay" />
@@ -535,16 +549,51 @@ function Robot() {
 }
 
 /**
- * Khung chat mini.
+ * ============================================================
+ * KHUNG CHAT MINI
+ * ============================================================
  *
- * CỐ Ý mỏng: nó gửi câu hỏi và hiện câu trả lời, hết. Mọi thứ nặng hơn (đính
- * kèm, thư mục, lịch sử, hộp cát) nằm ở app chính, và nút "Mở đầy đủ" đưa
- * người dùng sang đó. Nhồi cả app vào một cửa sổ 380px là làm hỏng cả hai.
+ * Bản trước CỐ Ý mỏng: gửi một câu, hiện một câu, hết — và nó nói thẳng với
+ * người dùng "cần đính kèm hay lịch sử thì mở đầy đủ". Nhưng "mở đầy đủ" nghĩa
+ * là rời việc đang làm để sang một cửa sổ khác, đúng cái việc mà khung nổi
+ * sinh ra để KHỎI phải làm. Người dùng báo đúng chuyện đó.
+ *
+ * Giờ nó đủ: chọn bậc model, mở lịch sử và chat tiếp phiên cũ, dán ảnh vào hỏi.
+ *
+ * ⚠️ Mọi lời gọi máy chủ vẫn đi qua MAIN. Cửa sổ này chạy ở origin `app://`,
+ * không giữ phiên đăng nhập và vướng CORS — xem `robot:hoi` bên `ipc/robot.ts`.
  */
+
+/** Ba bậc, khớp `CHAT_MODELS` bên máy chủ. */
+const BAC = [
+  { id: 'cuongmini-max', ten: 'CuongMini Max' },
+  { id: 'cuongmini-pro', ten: 'CuongMini Pro' },
+  { id: 'cuongmini-3.11', ten: 'CuongMini 3.11' },
+] as const;
+
+/* Mặc định là MAX theo yêu cầu người dùng. An toàn cả khi chưa Pro: máy chủ
+   tự rơi về bậc mặc định kèm `reason: 'pro_required'`, và khung này NÓI RA
+   điều đó thay vì im lặng — im lặng thì người ta tưởng Max chẳng khác gì. */
+const BAC_MAC_DINH = 'cuongmini-max';
+const KHOA_BAC = 'ct-robot-bac';
+
+/** Trần ảnh: khớp lược đồ IPC (4 ảnh, 8MB mỗi ảnh). */
+const TOI_DA_ANH = 4;
+
+interface Luot { toi: boolean; chu: string; anh?: string[] }
+
 function KhungChat({ onDong }: { onDong: () => void }) {
   const [nhap, datNhap] = useState('');
-  const [luot, datLuot] = useState<Array<{ toi: boolean; chu: string }>>([]);
+  const [luot, datLuot] = useState<Luot[]>([]);
   const [dangCho, datDangCho] = useState(false);
+  const [bac, datBac] = useState<string>(() => {
+    try { return localStorage.getItem(KHOA_BAC) ?? BAC_MAC_DINH; } catch { return BAC_MAC_DINH; }
+  });
+  const [anh, datAnh] = useState<string[]>([]);
+  const [phienId, datPhienId] = useState<string | null>(null);
+  const [moSu, datMoSu] = useState(false);
+  const [su, datSu] = useState<Array<{ id: string; ten: string; luc: string; so: number }>>([]);
+  const [bao, datBao] = useState<string | null>(null);
   const cuonRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -552,15 +601,92 @@ function KhungChat({ onDong }: { onDong: () => void }) {
     if (el) el.scrollTop = el.scrollHeight;
   }, [luot, dangCho]);
 
-  const gui = async (): Promise<void> => {
-    const t = nhap.trim();
-    if (!t || dangCho) return;
-    datNhap('');
-    datLuot((c) => [...c, { toi: true, chu: t }]);
+  const doiBac = (id: string) => {
+    datBac(id);
+    try { localStorage.setItem(KHOA_BAC, id); } catch { /* chế độ riêng tư */ }
+  };
+
+  const themAnh = (ds: File[]): void => {
+    const con = TOI_DA_ANH - anh.length;
+    if (con <= 0) { datBao(dichP('Tối đa {n} ảnh một lượt.', { n: TOI_DA_ANH })); return; }
+    for (const f of ds.slice(0, con)) {
+      const doc = new FileReader();
+      doc.onload = () => {
+        const u = typeof doc.result === 'string' ? doc.result : '';
+        if (u.startsWith('data:image/')) datAnh((c) => [...c, u].slice(0, TOI_DA_ANH));
+      };
+      doc.readAsDataURL(f);
+    }
+  };
+
+  /* Dán ảnh bằng Ctrl/Cmd+V ngay trong ô nhập. Đây là cách người dùng nêu tên
+     thẳng ("copy paste"), và nó cũng là cách nhanh nhất: chụp màn hình xong
+     dán luôn, không qua bước lưu file. */
+  const nhanDan = (e: React.ClipboardEvent<HTMLInputElement>): void => {
+    const tep = [...e.clipboardData.items]
+      .filter((x) => x.kind === 'file' && x.type.startsWith('image/'))
+      .map((x) => x.getAsFile())
+      .filter((x): x is File => x !== null);
+    if (tep.length === 0) return;
+    e.preventDefault();
+    themAnh(tep);
+  };
+
+  const moLichSu = async (): Promise<void> => {
+    datMoSu((v) => !v);
+    if (su.length === 0) {
+      const r = await window.cuongthai?.robot.phienDs();
+      datSu(r?.ds ?? []);
+    }
+  };
+
+  const chonPhien = async (id: string): Promise<void> => {
+    datMoSu(false);
     datDangCho(true);
     try {
-      const r = await window.cuongthai?.robot.hoi(t);
-      datLuot((c) => [...c, { toi: false, chu: r?.chu ?? 'Không nhận được trả lời.' }]);
+      const r = await window.cuongthai?.robot.phienDoc(id);
+      datLuot(r?.luot ?? []);
+      datPhienId(id);
+      datBao(null);
+    } finally {
+      datDangCho(false);
+    }
+  };
+
+  const cuocMoi = (): void => {
+    datLuot([]);
+    datPhienId(null);
+    datAnh([]);
+    datBao(null);
+    datMoSu(false);
+  };
+
+  const gui = async (): Promise<void> => {
+    const t = nhap.trim();
+    if ((!t && anh.length === 0) || dangCho) return;
+    const keo = anh;
+    datNhap('');
+    datAnh([]);
+    datBao(null);
+    datLuot((c) => [...c, { toi: true, chu: t || dich('(ảnh)'), anh: keo }]);
+    datDangCho(true);
+    try {
+      const r = await window.cuongthai?.robot.hoi(t || dich('Xem ảnh này giúp mình.'), {
+        model: bac,
+        phienId,
+        ...(keo.length ? { anh: keo } : {}),
+      });
+      datLuot((c) => [...c, { toi: false, chu: r?.chu ?? dich('Không nhận được trả lời.') }]);
+      if (r?.phienId) datPhienId(r.phienId);
+      if (r?.roiBac) {
+        /* Máy chủ hạ bậc trong im lặng khi chưa Pro. Nói ra, và nói LÝ DO —
+           "đã dùng bậc thấp hơn" mà không nói vì sao thì người dùng đi bấm lại
+           đúng bậc ấy lần nữa. */
+        const t2 = BAC.find((b) => b.id === r.roiBac!.thanh)?.ten ?? r.roiBac.thanh;
+        datBao(r.roiBac.lyDo === 'pro_required'
+          ? dichP('Bậc này cần gói Pro — đã trả lời bằng {t}.', { t: t2 })
+          : dichP('Đã trả lời bằng {t}.', { t: t2 }));
+      }
     } catch (err) {
       datLuot((c) => [...c, { toi: false, chu: `Lỗi: ${(err as Error).message}` }]);
     } finally {
@@ -571,41 +697,91 @@ function KhungChat({ onDong }: { onDong: () => void }) {
   return (
     <div className="rb-chat">
       <div className="rb-chat-dau">
-        <strong>Trợ lý</strong>
+        <strong>{dich('Trợ lý')}</strong>
+        {/* Bậc model ngay trên thanh: đổi bậc là việc làm GIỮA cuộc trò chuyện
+            (câu này khó, nâng lên Max), không phải việc cài đặt một lần. */}
+        <select
+          className="rb-bac"
+          value={bac}
+          onChange={(e) => doiBac(e.target.value)}
+          title={dich('Bậc model')}
+        >
+          {BAC.map((b) => <option key={b.id} value={b.id}>{b.ten}</option>)}
+        </select>
         <div className="rb-chat-nut">
+          <button type="button" onClick={() => void moLichSu()} title={dich('Lịch sử trò chuyện')}>{dich('Lịch sử')}</button>
+          <button type="button" onClick={cuocMoi} title={dich('Bắt đầu cuộc mới')}>{dich('Mới')}</button>
           <button
             type="button"
             onClick={() => void window.cuongthai?.robot.moChinh('/chat')}
-            title="Mở trang AI Chat đầy đủ"
+            title={dich('Mở trang AI Chat')}
           >
-            Mở đầy đủ
+            {dich('Đầy đủ')}
           </button>
-          <button type="button" onClick={onDong} title="Thu gọn">✕</button>
+          <button type="button" onClick={onDong} title={dich('Thu gọn')}>✕</button>
         </div>
       </div>
 
+      {moSu && (
+        <div className="rb-su">
+          {su.length === 0
+            ? <p className="rb-chat-trong">{dich('Chưa có cuộc nào.')}</p>
+            : su.map((x) => (
+              <button key={x.id} type="button" onClick={() => void chonPhien(x.id)} data-dang={x.id === phienId}>
+                <span>{x.ten}</span>
+                <em>{x.so}</em>
+              </button>
+            ))}
+        </div>
+      )}
+
       <div className="rb-chat-than" ref={cuonRef}>
-        {luot.length === 0 && (
-          <p className="rb-chat-trong">Hỏi nhanh một câu. Cần đính kèm hay lịch sử thì mở đầy đủ.</p>
+        {luot.length === 0 && !moSu && (
+          <p className="rb-chat-trong">
+            {dich('Hỏi nhanh một câu, dán ảnh vào cũng được. Bấm Lịch sử để mở lại cuộc cũ.')}
+          </p>
         )}
         {luot.map((l, i) => (
-          <div key={i} className={l.toi ? 'rb-toi' : 'rb-may'}>{l.chu}</div>
+          <div key={i} className={l.toi ? 'rb-toi' : 'rb-may'}>
+            {l.anh?.map((u, k) => <img key={k} src={u} alt="" className="rb-anh" />)}
+            {l.chu}
+          </div>
         ))}
-        {dangCho && <div className="rb-may rb-cho">Chờ tớ suy nghĩ xíu nhé…</div>}
+        {dangCho && <div className="rb-may rb-cho">{dich('Chờ tớ suy nghĩ xíu nhé…')}</div>}
       </div>
+
+      {bao && <p className="rb-bao">{bao}</p>}
+
+      {anh.length > 0 && (
+        <div className="rb-anh-cho">
+          {anh.map((u, i) => (
+            <span key={i}>
+              <img src={u} alt="" />
+              <button type="button" onClick={() => datAnh((c) => c.filter((_, k) => k !== i))} aria-label={dich('Bỏ ảnh')}>✕</button>
+            </span>
+          ))}
+        </div>
+      )}
 
       <div className="rb-chat-soan">
         <input
           value={nhap}
-          placeholder="Nhắn nhanh…"
+          placeholder={dich('Nhắn nhanh, dán ảnh được…')}
           onChange={(e) => datNhap(e.target.value)}
+          onPaste={nhanDan}
           onKeyDown={(e) => {
             // Bộ gõ tiếng Việt dùng Enter để chốt chữ đang gõ.
             if (e.nativeEvent.isComposing) return;
             if (e.key === 'Enter') { e.preventDefault(); void gui(); }
           }}
         />
-        <button type="button" onClick={() => void gui()} disabled={!nhap.trim() || dangCho}>Gửi</button>
+        <button
+          type="button"
+          onClick={() => void gui()}
+          disabled={(!nhap.trim() && anh.length === 0) || dangCho}
+        >
+          {dich('Gửi')}
+        </button>
       </div>
     </div>
   );

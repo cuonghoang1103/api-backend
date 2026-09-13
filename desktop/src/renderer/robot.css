@@ -459,3 +459,109 @@ button.rb-bong:hover { border-color: rgba(167, 139, 250, 0.75); }
   pointer-events: none;
   animation: none;
 }
+
+/* ══ CHAT MINI: bậc model · lịch sử · ảnh ════════════════════════════════
+   Khung này rộng ~380px. Mọi thứ thêm vào đây phải CO được, nếu không nó đẩy
+   nút đóng ra ngoài mép cửa sổ và người dùng không thu gọn được nữa. */
+.rb-bac {
+  -webkit-app-region: no-drag;
+  min-width: 0;
+  max-width: 132px;
+  padding: 3px 6px;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: #d8d8e4;
+  font-size: 11px;
+  cursor: pointer;
+}
+.rb-bac:focus { outline: 1px solid #7c7cf0; }
+.rb-bac option { background: #16161f; color: #e8e8f0; }
+
+/* Tiêu đề co lại nhường chỗ cho ô chọn bậc; hàng nút luôn giữ nguyên. */
+.rb-chat-dau > strong { flex: none; }
+.rb-chat-dau { gap: 6px; }
+.rb-chat-nut { margin-left: auto; }
+.rb-chat-nut button { padding: 3px 7px; font-size: 10.5px; white-space: nowrap; }
+
+/* ── Lịch sử ── */
+.rb-su {
+  -webkit-app-region: no-drag;
+  max-height: 190px;
+  overflow-y: auto;
+  padding: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+.rb-su button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #d2d2e0;
+  font-size: 11.5px;
+  text-align: left;
+  cursor: pointer;
+}
+.rb-su button:hover { background: rgba(255, 255, 255, 0.07); }
+.rb-su button[data-dang='true'] { background: rgba(124, 124, 240, 0.18); color: #fff; }
+.rb-su button > span {
+  /* `min-width: 0` để tiêu đề dài CẮT chứ không đẩy con số ra khỏi khung. */
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.rb-su button > em { flex: none; font-style: normal; font-size: 10px; color: #7a7a8c; }
+
+/* ── Ảnh ── */
+.rb-anh {
+  display: block;
+  max-width: 100%;
+  max-height: 150px;
+  border-radius: 9px;
+  margin-bottom: 5px;
+}
+.rb-anh-cho {
+  -webkit-app-region: no-drag;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 7px 12px 0;
+}
+.rb-anh-cho span { position: relative; display: inline-flex; }
+.rb-anh-cho img {
+  width: 46px; height: 46px; object-fit: cover;
+  border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.16);
+}
+.rb-anh-cho button {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 17px;
+  height: 17px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #2a2a38;
+  color: #d8d8e4;
+  font-size: 10px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* Câu báo khi máy chủ hạ bậc. Đứng NGAY TRÊN ô nhập, không lẫn vào dòng chảy
+   hội thoại — nó nói về công cụ, không phải là lời của trợ lý. */
+.rb-bao {
+  margin: 0;
+  padding: 6px 12px;
+  font-size: 10.5px;
+  line-height: 1.45;
+  color: #e2b44f;
+  background: rgba(226, 180, 79, 0.1);
+}

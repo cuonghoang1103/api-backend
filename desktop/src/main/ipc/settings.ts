@@ -1,3 +1,4 @@
+import { BrowserWindow } from 'electron';
 /**
  * Đọc/ghi cấu hình người dùng. Khoá bị giới hạn bằng enum ở shared/ipc.ts nên
  * renderer không thể tự bịa khoá mới để dùng file cấu hình làm kho lưu trữ tuỳ ý.
@@ -36,5 +37,16 @@ export function registerSettingsHandlers(): void {
       throw new Error(`Khoá "${key}" chỉ đổi được bằng hộp thoại chọn thư mục.`);
     }
     setSetting(key, value);
+
+    /* Đổi NGÔN NGỮ thì báo cho mọi cửa sổ.
+     *
+     * ⚠️ Cửa sổ robot nổi là một entry riêng và nó đọc thiết đặt đúng MỘT LẦN
+     * lúc mở. Không báo thì đổi sang tiếng Anh xong, cả app đổi trừ con robot —
+     * và nó là cửa sổ sống lâu nhất, hiếm khi được dựng lại. */
+    if (key === 'ngonNgu') {
+      for (const w of BrowserWindow.getAllWindows()) {
+        if (!w.isDestroyed()) w.webContents.send('app:doiNgonNgu', { ngonNgu: String(value) });
+      }
+    }
   });
 }

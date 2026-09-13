@@ -74,6 +74,7 @@ const ALLOWED_EVENTS: readonly EventChannel[] = [
   'xuongRemix:tienDo',
   'robot:tin',
   'robot:coDoi',
+  'app:doiNgonNgu',
   'robot:tat',
   'robot:viec',
   'oauth:xong',
@@ -376,7 +377,18 @@ const bridge: DesktopBridge = {
     hutMep: () => ipcRenderer.invoke('robot:hutMep') as Promise<void>,
     moChinh: (duongDan: string) =>
       ipcRenderer.invoke('robot:moChinh', { duongDan }) as Promise<void>,
-    hoi: (chu: string) => ipcRenderer.invoke('robot:hoi', { chu }) as Promise<{ chu: string }>,
+    hoi: (chu: string, them?: { model?: string; phienId?: string | null; anh?: string[] }) =>
+      ipcRenderer.invoke('robot:hoi', { chu, ...them }) as Promise<{
+        chu: string;
+        phienId: string | null;
+        roiBac: { thanh: string; lyDo: string } | null;
+      }>,
+    phienDs: () => ipcRenderer.invoke('robot:phienDs', null) as Promise<{
+      ds: Array<{ id: string; ten: string; luc: string; so: number }>;
+    }>,
+    phienDoc: (phienId: string) => ipcRenderer.invoke('robot:phienDoc', { phienId }) as Promise<{
+      luot: Array<{ toi: boolean; chu: string }>;
+    }>,
     noi: (tiengBase64: string) => ipcRenderer.invoke('robot:noi', { tiengBase64 }) as Promise<{
       cauHoi: string; traLoi: string; cau: string[];
     }>,

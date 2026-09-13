@@ -62,6 +62,7 @@ export function dinhChuaBoc(ma) {
    * 14/09/2026 ở `SoanLich.tsx`). Nới điều kiện để bắt nó thì mọi đoạn JSX có
    * con bên trong đều thành dương tính giả, nên chỗ này cố ý ĐẾM THIẾU thay vì
    * đếm thừa — một bộ dò kêu oan là bộ dò bị tắt đi. Số thật cao hơn số in ra.
+   */
   for (const m of sach.matchAll(/>([^<>{}]+)</g)) {
     const chu = m[1].trim();
     // Chữ hiện ra màn hình gần như không bao giờ mang `;` hay `=`. Có chúng thì

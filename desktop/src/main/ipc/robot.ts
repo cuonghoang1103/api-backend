@@ -96,10 +96,64 @@ export function registerRobotHandlers(): void {
    * Gọi từ MAIN chứ không từ cửa sổ robot: renderer của robot chạy ở origin
    * `app://` và mọi lời gọi từ đó phải qua CORS, trong khi main thì không.
    */
-  handle('robot:hoi', async ({ chu }) => {
+  handle('robot:hoi', async ({ chu, model, phienId, anh }) => {
     const phien = readStoredSession();
-    if (!phien) return { chu: 'Chưa đăng nhập. Mở app chính để đăng nhập trước.' };
-    return { chu: await hoiTroLy(phien.sessionToken, chu, false) };
+    if (!phien) {
+      return { chu: 'Chưa đăng nhập. Mở app chính để đăng nhập trước.', phienId: null, roiBac: null };
+    }
+    return hoiTroLy(phien.sessionToken, chu, false, {
+      model, phienId: phienId ?? undefined, anh,
+    });
+  });
+
+  /**
+   * Danh sách phiên chat, để mở lịch sử NGAY trong khung mini.
+   *
+   * Trước bản này khung mini nói thẳng "cần lịch sử thì mở đầy đủ" — mà mở đầy
+   * đủ nghĩa là rời việc đang làm để sang một cửa sổ khác, đúng thứ khung nổi
+   * sinh ra để khỏi phải làm.
+   */
+  handle('robot:phienDs', async () => {
+    const phien = readStoredSession();
+    if (!phien) return { ds: [] };
+    try {
+      const r = await fetch(`${API_ORIGIN}/api/v1/ai/chat/sessions`, {
+        headers: { Authorization: `Bearer ${phien.sessionToken}` },
+      });
+      if (!r.ok) return { ds: [] };
+      const j = await r.json() as { data?: Array<{ id: string; title?: string | null; updatedAt?: string; _count?: { messages?: number } }> };
+      return {
+        ds: (j.data ?? []).slice(0, 40).map((x) => ({
+          id: x.id,
+          ten: (x.title ?? '').trim() || 'Cuộc chưa đặt tên',
+          luc: x.updatedAt ?? '',
+          so: x._count?.messages ?? 0,
+        })),
+      };
+    } catch { return { ds: [] }; }
+  });
+
+  /** Nạp một phiên cũ để chat tiếp ngay trong khung mini. */
+  handle('robot:phienDoc', async ({ phienId }) => {
+    const phien = readStoredSession();
+    if (!phien) return { luot: [] };
+    try {
+      const r = await fetch(`${API_ORIGIN}/api/v1/ai/chat/history/${encodeURIComponent(phienId)}`, {
+        headers: { Authorization: `Bearer ${phien.sessionToken}` },
+      });
+      if (!r.ok) return { luot: [] };
+      const j = await r.json() as { data?: Array<{ role?: string; content?: string }> };
+      /* Chọn một phiên cũ thì MỌI lượt hỏi sau phải rơi vào đúng phiên đó —
+         nếu không, người dùng thấy lịch sử nhưng câu trả lời lại đi vào một
+         cuộc khác, và lần sau mở lại vẫn không thấy gì. */
+      phienNoi = phienId;
+      return {
+        luot: (j.data ?? []).map((m) => ({
+          toi: m.role === 'user',
+          chu: (m.content ?? '').trim(),
+        })).filter((m) => m.chu !== ''),
+      };
+    } catch { return { luot: [] }; }
   });
 
   /**
@@ -134,7 +188,7 @@ export function registerRobotHandlers(): void {
       if (!cauHoi) return { cauHoi: '', traLoi: 'Mình chưa nghe rõ. Bạn nói lại giúp nhé.', cau: [] };
 
       // ── 2. Nghĩ ──
-      const traLoi = await hoiTroLy(token, cauHoi, true);
+      const traLoi = (await hoiTroLy(token, cauHoi, true)).chu;
 
       // ── 3. Trả về CÂU, không trả tiếng ──
       //
@@ -240,7 +294,31 @@ function ngonNguHienTai(): 'vi' | 'en' {
  *   lỗi 18/08/2026: bong bóng robot hiện nguyên một bài so sánh Spring Boot
  *   với Node.js kèm cả khối ```javascript, che gần hết màn hình.
  */
-async function hoiTroLy(token: string, chu: string, laLoiNoi: boolean): Promise<string> {
+export interface ThemHoi {
+  /** Bậc model người dùng chọn trong khung mini. */
+  model?: string | undefined;
+  /** Phiên họ đang mở. Thiếu thì dùng phiên hiện hành của khung. */
+  phienId?: string | undefined;
+  /** Ảnh dán vào, dạng data URL. Chỉ bậc Pro/Max dùng được. */
+  anh?: string[] | undefined;
+}
+
+export interface KetQuaHoi {
+  chu: string;
+  phienId: string | null;
+  /**
+   * Bậc bị rơi xuống, kèm lý do — hoặc `null` nếu chạy đúng bậc đã chọn.
+   *
+   * ⚠️ Máy chủ rơi bậc trong IM LẶNG khi người dùng chưa Pro (`pro_required`).
+   * Không nói ra thì họ chọn Max, nhận câu trả lời của bậc mặc định, và kết
+   * luận là Max chẳng khác gì — trong khi thứ cần biết là "cái này cần Pro".
+   */
+  roiBac: { thanh: string; lyDo: string } | null;
+}
+
+async function hoiTroLy(
+  token: string, chu: string, laLoiNoi: boolean, them: ThemHoi = {},
+): Promise<KetQuaHoi> {
     // Chưa có phiên thì tạo. Hỏng thì KHÔNG chặn đường: mất lịch sử còn hơn
     // mất câu trả lời — người dùng đang chờ nghe, không đang xem lịch sử.
     if (!phienNoi) {
@@ -254,6 +332,9 @@ async function hoiTroLy(token: string, chu: string, laLoiNoi: boolean): Promise<
         .catch(() => null);
     }
 
+    // Phiên người dùng chỉ định (họ vừa mở một cuộc cũ) thắng phiên hiện hành.
+    if (them.phienId) phienNoi = them.phienId;
+
     try {
       const res = await fetch(`${API_ORIGIN}/api/v1/ai/chat`, {
         method: 'POST',
@@ -263,14 +344,19 @@ async function hoiTroLy(token: string, chu: string, laLoiNoi: boolean): Promise<
           ngonNgu: ngonNguHienTai(),
           ...(phienNoi ? { sessionId: phienNoi } : {}),
           ...(laLoiNoi ? { voice: true } : {}),
+          ...(them.model ? { model: them.model } : {}),
+          ...(them.anh?.length ? { images: them.anh } : {}),
         }),
       });
-      if (!res.ok || !res.body) return `Máy chủ trả về ${res.status}.`;
+      if (!res.ok || !res.body) {
+        return { chu: `Máy chủ trả về ${res.status}.`, phienId: phienNoi, roiBac: null };
+      }
 
       // Đọc hết SSE rồi mới trả — khung mini không chảy chữ.
       const giaiMa = new TextDecoder();
       let dem = '';
       let ra = '';
+      let roiBac: KetQuaHoi['roiBac'] = null;
       for await (const mau of res.body as unknown as AsyncIterable<Uint8Array>) {
         dem += giaiMa.decode(mau, { stream: true });
         const dong = dem.split('\n');
@@ -278,14 +364,24 @@ async function hoiTroLy(token: string, chu: string, laLoiNoi: boolean): Promise<
         for (const d of dong) {
           if (!d.startsWith('data: ')) continue;
           try {
-            const e = JSON.parse(d.slice(6)) as { type?: string; text?: string; error?: string };
+            const e = JSON.parse(d.slice(6)) as {
+              type?: string; text?: string; error?: string;
+              effective?: string; fellBack?: boolean; reason?: string;
+            };
             if (e.type === 'chunk' && e.text) ra += e.text;
             if (e.type === 'error' && e.error) ra += `\n[lỗi] ${e.error}`;
+            if (e.type === 'model' && e.fellBack && e.effective) {
+              roiBac = { thanh: e.effective, lyDo: e.reason ?? '' };
+            }
           } catch { /* khung lạ — bỏ qua, app cũ không được vỡ vì khung mới */ }
         }
       }
-      return ra.trim() || '(không có nội dung)';
+      return { chu: ra.trim() || '(không có nội dung)', phienId: phienNoi, roiBac };
     } catch (err) {
-      return `Không gọi được máy chủ: ${(err as Error).message}`;
+      return {
+        chu: `Không gọi được máy chủ: ${(err as Error).message}`,
+        phienId: phienNoi,
+        roiBac: null,
+      };
     }
 }

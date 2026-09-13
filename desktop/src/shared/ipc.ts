@@ -1493,7 +1493,23 @@ export const INVOKE_CHANNELS = {
     bong: z.object({ rong: z.number(), cao: z.number() }).optional(),
   }),
   'robot:moChinh': z.object({ duongDan: z.string().min(1).max(200) }),
-  'robot:hoi': z.object({ chu: z.string().min(1).max(4000) }),
+  /**
+   * Hỏi nhanh từ khung chat mini.
+   *
+   * ⚠️ Ảnh đi dạng data URL và trần 8MB/ảnh, tối đa 4 ảnh — khớp với thứ
+   * `/api/v1/ai/chat` nhận. Trần ở ĐÂY chứ không chỉ ở máy chủ: gửi 40MB qua
+   * IPC rồi mới bị từ chối là người dùng ngồi chờ một vòng vô ích.
+   */
+  'robot:hoi': z.object({
+    chu: z.string().min(1).max(4000),
+    model: z.string().min(1).max(60).optional(),
+    phienId: z.string().min(1).max(120).nullable().optional(),
+    anh: z.array(z.string().min(16).max(8_000_000)).max(4).optional(),
+  }),
+  /** Danh sách phiên chat để mở lịch sử ngay trong khung mini. */
+  'robot:phienDs': z.null(),
+  /** Nạp lại một phiên cũ để chat tiếp. */
+  'robot:phienDoc': z.object({ phienId: z.string().min(1).max(120) }),
   /**
    * Nói với robot nổi. Tiếng thu được gửi lên dạng base64.
    *
@@ -1603,6 +1619,14 @@ export const EVENT_CHANNELS = [
    * nguyên — và người dùng thấy hai con robot khác cỡ nhau.
    */
   'robot:coDoi',
+  /**
+   * Vừa đổi NGÔN NGỮ trong Cài đặt.
+   *
+   * Cùng lý do với `robot:coDoi`: cửa sổ robot là entry riêng và nó đọc thiết
+   * đặt đúng một lần lúc mở. Không bắn tin thì đổi sang tiếng Anh xong cả app
+   * đổi trừ con robot — mà nó lại là cửa sổ sống lâu nhất, hiếm khi dựng lại.
+   */
+  'app:doiNgonNgu',
   /** Người dùng vừa tắt robot từ menu chuột phải. */
   'robot:tat',
   /**
@@ -2089,7 +2113,13 @@ export interface DesktopBridge {
     /** Hút lại vào mép ngay (sau khi đổi cỡ từ menu). */
     hutMep(): Promise<void>;
     /** Hỏi nhanh một câu, trả về câu trả lời đã hoàn chỉnh (không chảy chữ). */
-    hoi(chu: string): Promise<{ chu: string }>;
+    hoi(chu: string, them?: { model?: string; phienId?: string | null; anh?: string[] }): Promise<{
+      chu: string;
+      phienId: string | null;
+      roiBac: { thanh: string; lyDo: string } | null;
+    }>;
+    phienDs(): Promise<{ ds: Array<{ id: string; ten: string; luc: string; so: number }> }>;
+    phienDoc(phienId: string): Promise<{ luot: Array<{ toi: boolean; chu: string }> }>;
     /**
      * Nói một câu với robot. Nhận vào tiếng đã thu (base64), trả về câu nghe
      * được, câu trả lời, và tiếng đọc (base64) — hoặc `null` nếu người dùng

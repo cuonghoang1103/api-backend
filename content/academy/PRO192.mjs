@@ -1,1257 +1,12 @@
 /**
- * PRO192 — Object-Oriented Programming (Java, NetBeans). Kỳ 2. Tiên quyết: PRF192.
- * Bám giáo trình FLM (syl 12038): sách CHÍNH Core Java Vol 1&2 — Cay Horstmann
- * (Pearson 11th) + Java 8 Spec (Oracle) + học liệu FU; công cụ NetBeans/JDK.
- * KHUNG CHUẨN FLM 8 chương / 9 CLO:
- *  1 Introduction · 2 Basic Java language · 3 OOP · 4 Abstract class & Interface
- *  5 Error & Exception · 6 Array of Objects · 7 Collections · 8 File I/O.
- * Song ngữ EN/VI (khối .ml-en / .ml-vi). Code Java: <pre><code class="language-java">.
- * Giữ NGUYÊN slug/courseCode/semester/thumb(v3); syncOrder: true.
- * ⚠️ code: KHÔNG backtick, KHÔNG ${ }; escape & → &amp;, < → &lt;, > → &gt;.
+ * PRO192 — Object-Oriented Programming (Lập trình hướng đối tượng, Java). Kỳ 2.
+ * Bám syllabus FPTU (9 CLO, Java + NetBeans) + giáo trình Core Java (Horstmann)
+ * + chương nâng cao. Tiên quyết: PRF192.
+ * Song ngữ EN/VN realtime (khối .ml-en / .ml-vi, tiêu đề EN|||VI).
+ * Code Java dùng <pre> + .tok-* + .out; sơ đồ .lz-map/.lz-flow/.lz-stack.
+ * Luyện code → CodeLab track java-core; cài đặt JDK/NetBeans → Exp Hub.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/PRO192.mjs --apply
  */
-const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}</div>`;
-const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
-const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức chương.', quiz: { timeLimitSeconds: 360, questions } });
-
-/* ════════════════════ 📚 TÀI LIỆU THAM KHẢO ════════════════════ */
-const taiLieu = doc('pro192-tai-lieu-tham-khao', '📚 Course materials & references|||📚 Tài liệu tham khảo môn học',
-  'Sách chính Core Java (Horstmann) + Java 8 Spec + học liệu FU trên FLM, công cụ JDK/NetBeans, luyện code & lộ trình tự học.',
-  [[
-    `<span class="eyebrow">PRO192 · 📚 Reference hub</span>
-<h2>Course materials &amp; references</h2>
-<p class="lead">Everything for Object-Oriented Programming in Java — one place. The official FPTU textbook and lecture slides live on <strong>FLM</strong>; below are the main book, the language spec, and free, legal resources.</p>
-<h3>📘 Main textbook (syllabus)</h3>
-<div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">Core Java Volume 1 &amp; 2 — Cay Horstmann (Pearson, 11th ed.)</div><div class="lz-ld">The definitive practical Java reference and the syllabus's main book. Volume 1 covers everything in this course; Volume 2 goes further (I/O, streams).</div></div>
-  <div class="lz-layer"><div class="lz-lt">The Java Language Specification, Java SE 8 (Oracle)</div><div class="lz-ld">The authoritative rule book. This subject targets <strong>Java 8</strong> — check syntax here when in doubt.</div></div>
-  <div class="lz-layer"><div class="lz-lt">FU "OOP using Java" materials</div><div class="lz-ld">The course-aligned learning resource, on FLM.</div></div>
-</div>
-<h3>🌐 Free official / legal resources</h3>
-<ul>
-<li><a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — official PRO192 syllabus, slides &amp; textbook (log in with your FPTU account).</li>
-<li><a href="https://dev.java/learn/" target="_blank" rel="noopener">dev.java — Learn Java</a> — Oracle's official tutorials.</li>
-<li><a href="https://docs.oracle.com/javase/8/docs/api/" target="_blank" rel="noopener">Java 8 API documentation</a> — every class and method (String, ArrayList, HashMap…).</li>
-</ul>
-<h3>🛠️ Tools you need</h3>
-<ul>
-<li><a href="https://www.oracle.com/java/technologies/downloads/" target="_blank" rel="noopener">JDK (Java Development Kit) 8+</a> — the compiler (<code>javac</code>) and runtime (<code>java</code>).</li>
-<li><a href="https://netbeans.apache.org/" target="_blank" rel="noopener">Apache NetBeans</a> — the IDE this course uses (build/run/debug built in).</li>
-</ul>
-<h3>▶️ YouTube</h3>
-<ul>
-<li><a href="https://www.youtube.com/@coding.with.john" target="_blank" rel="noopener">Coding with John</a> — short, clear Java/OOP explanations.</li>
-<li><a href="https://www.youtube.com/@BroCodez" target="_blank" rel="noopener">Bro Code — Java</a> — full beginner Java course.</li>
-</ul>
-<div class="callout"><span class="badge">Self-study path</span>
-<ol>
-<li><strong>Foundation (exam core)</strong> — install JDK + NetBeans, then Java syntax, classes &amp; the four OOP pillars.</li>
-<li><strong>Practice at the keyboard</strong> — retype every example and run it; 40% of the grade is you writing working Java.</li>
-<li><strong>Go deeper</strong> — abstract classes &amp; interfaces, exceptions, object arrays, collections, file I/O.</li>
-<li><strong>Job-ready</strong> — build one complete menu-driven program (entity + manager + file save) end to end.</li>
-</ol></div>`,
-    `<span class="eyebrow">PRO192 · 📚 Trung tâm tài liệu</span>
-<h2>Tài liệu tham khảo môn học</h2>
-<p class="lead">Mọi thứ để học Lập trình hướng đối tượng bằng Java — gom về một chỗ. Giáo trình &amp; slide chính thức của FPTU nằm trên <strong>FLM</strong>; bên dưới là sách chính, bản đặc tả ngôn ngữ, và nguồn miễn phí hợp pháp.</p>
-<h3>📘 Sách chính (theo syllabus)</h3>
-<div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">Core Java Volume 1 &amp; 2 — Cay Horstmann (Pearson, bản 11)</div><div class="lz-ld">Tài liệu Java thực hành chuẩn mực và là sách chính của syllabus. Volume 1 phủ toàn bộ môn này; Volume 2 đi xa hơn (I/O, stream).</div></div>
-  <div class="lz-layer"><div class="lz-lt">The Java Language Specification, Java SE 8 (Oracle)</div><div class="lz-ld">Cuốn luật gốc. Môn này nhắm <strong>Java 8</strong> — nghi ngờ cú pháp thì tra ở đây.</div></div>
-  <div class="lz-layer"><div class="lz-lt">Học liệu "OOP using Java" của FU</div><div class="lz-ld">Tài nguyên học bám sát môn, trên FLM.</div></div>
-</div>
-<h3>🌐 Tài liệu chính thức / miễn phí</h3>
-<ul>
-<li><a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — syllabus, slide &amp; giáo trình PRO192 chính thức (đăng nhập tài khoản FPTU).</li>
-<li><a href="https://dev.java/learn/" target="_blank" rel="noopener">dev.java — Learn Java</a> — hướng dẫn chính thức của Oracle.</li>
-<li><a href="https://docs.oracle.com/javase/8/docs/api/" target="_blank" rel="noopener">Tài liệu API Java 8</a> — mọi lớp &amp; phương thức (String, ArrayList, HashMap…).</li>
-</ul>
-<h3>🛠️ Công cụ bạn cần</h3>
-<ul>
-<li><a href="https://www.oracle.com/java/technologies/downloads/" target="_blank" rel="noopener">JDK (Java Development Kit) 8+</a> — trình biên dịch (<code>javac</code>) và runtime (<code>java</code>).</li>
-<li><a href="https://netbeans.apache.org/" target="_blank" rel="noopener">Apache NetBeans</a> — IDE mà môn này dùng (build/run/debug tích hợp).</li>
-</ul>
-<h3>▶️ YouTube</h3>
-<ul>
-<li><a href="https://www.youtube.com/@coding.with.john" target="_blank" rel="noopener">Coding with John</a> — giải thích Java/OOP ngắn gọn, rõ.</li>
-<li><a href="https://www.youtube.com/@BroCodez" target="_blank" rel="noopener">Bro Code — Java</a> — khoá Java cho người mới đầy đủ.</li>
-</ul>
-<div class="callout"><span class="badge">Lộ trình tự học</span>
-<ol>
-<li><strong>Nền (lõi thi)</strong> — cài JDK + NetBeans, rồi cú pháp Java, lớp &amp; bốn trụ cột OOP.</li>
-<li><strong>Luyện ở bàn phím</strong> — gõ lại mọi ví dụ và chạy; 40% điểm là bạn viết Java chạy được.</li>
-<li><strong>Đào sâu</strong> — abstract class &amp; interface, ngoại lệ, mảng đối tượng, collections, đọc/ghi tệp.</li>
-<li><strong>Sẵn sàng đi làm</strong> — làm trọn một chương trình theo menu (entity + lớp quản lý + lưu tệp) đầu-cuối.</li>
-</ol></div>`,
-  ]]);
-
-/* ════════════════════ GIỚI THIỆU MÔN HỌC ════════════════════ */
-const intro = doc('pro192-gioi-thieu', 'Course overview: 9 CLOs & grading|||Tổng quan: 9 CLO & cấu trúc điểm',
-  'Từ lập trình thủ tục (PRF192) sang hướng đối tượng với Java; 9 chuẩn đầu ra (CLO) và năm cột điểm (Assignment 20% · Lab 10% · Practical Exam 30% · Progress test 10% · Final 30%).',
-  [[
-    `<span class="eyebrow">PRO192 · Course introduction</span>
-<h2>From procedures to objects</h2>
-<p class="lead">In PRF192 you gave a computer step-by-step instructions in C. PRO192 teaches a new way to <strong>think</strong>: model your problem as a set of <strong>objects</strong> that hold their own data and know how to behave. This is <strong>object-oriented programming (OOP)</strong>, and the language is <strong>Java</strong> (built and run in NetBeans). Where PRF192 made you a programmer, PRO192 makes you a <em>software designer</em> — the prerequisite mindset for LAB211, PRJ301 and every later software course.</p>
-<h3>Course map — the 8 FLM chapters</h3>
-<div class="lz-map">
-  <div class="lz-stage">Getting into Java</div>
-  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Introduction</div><div class="lz-nsub">OO concepts · object terminology · install JDK/NetBeans</div></div></div>
-  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Basic Java language</div><div class="lz-nsub">types · control · methods · Array/ArrayList · String · I/O</div></div></div>
-  <div class="lz-stage">The heart of OOP</div>
-  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">OOP</div><div class="lz-nsub">encapsulation · inheritance · polymorphism · abstraction</div></div></div>
-  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Abstract class &amp; Interface</div><div class="lz-nsub">contracts for behavior</div></div></div>
-  <div class="lz-stage">Robust, complete programs</div>
-  <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Error &amp; Exception</div><div class="lz-nsub">try/catch/finally · throw/throws · assertion</div></div></div>
-  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Array of Objects</div><div class="lz-nsub">add · update · remove · sort · find</div></div></div>
-  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Collections</div><div class="lz-nsub">List · Set · Map</div></div></div>
-  <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">File I/O</div><div class="lz-nsub">text/binary · object serialization</div></div></div>
-</div>
-<h3>The 9 Course Learning Outcomes (CLOs)</h3>
-<table>
-  <thead><tr><th>#</th><th>You will be able to…</th><th>Chapter</th></tr></thead>
-  <tbody>
-    <tr><td>CLO1</td><td>Understand OO concepts to solve problems</td><td>1</td></tr>
-    <tr><td>CLO2</td><td>Write Java programs (syntax &amp; semantics)</td><td>2</td></tr>
-    <tr><td>CLO3</td><td>Use control statements &amp; methods correctly</td><td>2</td></tr>
-    <tr><td>CLO4</td><td>Use Java's exception-handling mechanism</td><td>5</td></tr>
-    <tr><td>CLO5</td><td>Identify classes, objects, members &amp; relationships</td><td>3</td></tr>
-    <tr><td>CLO6</td><td>Use encapsulation, inheritance, polymorphism, abstraction</td><td>3</td></tr>
-    <tr><td>CLO7</td><td>Use abstract classes and interfaces</td><td>3–4</td></tr>
-    <tr><td>CLO8</td><td>Implement a complete program using object arrays</td><td>6</td></tr>
-    <tr><td>CLO9</td><td>Use collection ADTs (list, set, map)</td><td>7</td></tr>
-  </tbody>
-</table>
-<h3>Grade structure (syllabus)</h3>
-<table>
-  <thead><tr><th>Component</th><th>Weight</th><th>Note</th></tr></thead>
-  <tbody>
-    <tr><td>Assignment</td><td>20%</td><td>on-going, completion &gt; 0</td></tr>
-    <tr><td>Lab</td><td>10%</td><td>on-going (6 labs), &gt; 0</td></tr>
-    <tr><td>Practical Exam</td><td>30%</td><td>85 minutes at the keyboard, &gt; 0</td></tr>
-    <tr><td>Progress Test</td><td>10%</td><td>2 tests, &gt; 0</td></tr>
-    <tr><td>Final Exam</td><td>30%</td><td>50 multiple-choice questions, must reach &ge; 4/10</td></tr>
-  </tbody>
-</table>
-<div class="callout warn">Two heavy practical gates: the <strong>Practical Exam alone is 30%</strong> and every on-going component has completion criterion <strong>&gt; 0</strong> — a single zero fails the subject. Pass when the weighted average is &ge; 5.0 <em>and</em> the Final is &ge; 4.0. The only preparation that works for the Practical Exam is writing lots of Java yourself.</div>
-<div class="callout ok">OOP clicks through practice, not reading. For every concept in this course, write a small class and run it in NetBeans. To model a problem, list the <em>nouns</em> (they become classes) and the <em>verbs</em> (they become methods).</div>`,
-    `<span class="eyebrow">PRO192 · Giới thiệu môn học</span>
-<h2>Từ thủ tục sang đối tượng</h2>
-<p class="lead">Ở PRF192 bạn ra lệnh cho máy tính từng bước bằng C. PRO192 dạy một cách <strong>tư duy</strong> mới: mô hình bài toán thành một tập <strong>đối tượng (object)</strong> tự giữ dữ liệu và biết cách hành xử. Đây là <strong>lập trình hướng đối tượng (OOP)</strong>, ngôn ngữ là <strong>Java</strong> (build &amp; chạy trong NetBeans). PRF192 biến bạn thành lập trình viên, PRO192 biến bạn thành <em>người thiết kế phần mềm</em> — tư duy tiên quyết cho LAB211, PRJ301 và mọi môn phần mềm sau này.</p>
-<h3>Bản đồ môn học — 8 chương FLM</h3>
-<div class="lz-map">
-  <div class="lz-stage">Bước vào Java</div>
-  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Giới thiệu</div><div class="lz-nsub">khái niệm OO · thuật ngữ đối tượng · cài JDK/NetBeans</div></div></div>
-  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Java cơ bản</div><div class="lz-nsub">kiểu · điều khiển · phương thức · Array/ArrayList · String · I/O</div></div></div>
-  <div class="lz-stage">Trái tim của OOP</div>
-  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">OOP</div><div class="lz-nsub">đóng gói · kế thừa · đa hình · trừu tượng</div></div></div>
-  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Abstract class &amp; Interface</div><div class="lz-nsub">hợp đồng cho hành vi</div></div></div>
-  <div class="lz-stage">Chương trình bền, hoàn chỉnh</div>
-  <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Lỗi &amp; Ngoại lệ</div><div class="lz-nsub">try/catch/finally · throw/throws · assertion</div></div></div>
-  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Mảng đối tượng</div><div class="lz-nsub">thêm · sửa · xoá · sắp xếp · tìm</div></div></div>
-  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Collections</div><div class="lz-nsub">List · Set · Map</div></div></div>
-  <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Đọc/ghi tệp</div><div class="lz-nsub">text/binary · serialization đối tượng</div></div></div>
-</div>
-<h3>9 Chuẩn đầu ra môn học (CLO)</h3>
-<table>
-  <thead><tr><th>#</th><th>Bạn sẽ làm được…</th><th>Chương</th></tr></thead>
-  <tbody>
-    <tr><td>CLO1</td><td>Hiểu các khái niệm OO để giải quyết vấn đề</td><td>1</td></tr>
-    <tr><td>CLO2</td><td>Viết chương trình Java (cú pháp &amp; ngữ nghĩa)</td><td>2</td></tr>
-    <tr><td>CLO3</td><td>Dùng đúng câu lệnh điều khiển &amp; phương thức</td><td>2</td></tr>
-    <tr><td>CLO4</td><td>Dùng cơ chế xử lý ngoại lệ của Java</td><td>5</td></tr>
-    <tr><td>CLO5</td><td>Nhận diện lớp, đối tượng, thành viên &amp; quan hệ</td><td>3</td></tr>
-    <tr><td>CLO6</td><td>Dùng đóng gói, kế thừa, đa hình, trừu tượng</td><td>3</td></tr>
-    <tr><td>CLO7</td><td>Dùng abstract class và interface</td><td>3–4</td></tr>
-    <tr><td>CLO8</td><td>Cài đặt chương trình hoàn chỉnh dùng mảng đối tượng</td><td>6</td></tr>
-    <tr><td>CLO9</td><td>Dùng các ADT collection (list, set, map)</td><td>7</td></tr>
-  </tbody>
-</table>
-<h3>Cấu trúc điểm (syllabus)</h3>
-<table>
-  <thead><tr><th>Thành phần</th><th>Trọng số</th><th>Ghi chú</th></tr></thead>
-  <tbody>
-    <tr><td>Assignment</td><td>20%</td><td>on-going, điều kiện &gt; 0</td></tr>
-    <tr><td>Lab</td><td>10%</td><td>on-going (6 bài), &gt; 0</td></tr>
-    <tr><td>Practical Exam</td><td>30%</td><td>85 phút gõ code, &gt; 0</td></tr>
-    <tr><td>Progress Test</td><td>10%</td><td>2 bài, &gt; 0</td></tr>
-    <tr><td>Final Exam</td><td>30%</td><td>50 câu trắc nghiệm, phải đạt &ge; 4/10</td></tr>
-  </tbody>
-</table>
-<div class="callout warn">Hai cửa thực hành nặng: <strong>riêng Practical Exam đã 30%</strong> và mọi cột on-going có điều kiện hoàn thành <strong>&gt; 0</strong> — một điểm 0 là trượt môn. Qua môn khi trung bình có trọng số &ge; 5,0 <em>và</em> Final &ge; 4,0. Cách luyện duy nhất hiệu quả cho Practical Exam là tự viết thật nhiều Java.</div>
-<div class="callout ok">OOP "thấm" qua luyện tập, không phải đọc. Với mỗi khái niệm trong môn, viết một lớp nhỏ và chạy trong NetBeans. Để mô hình một bài toán, liệt kê các <em>danh từ</em> (thành lớp) và các <em>động từ</em> (thành phương thức).</div>`,
-  ]]);
-
-/* ════════════════════ CHƯƠNG 1 — INTRODUCTION ════════════════════ */
-const c1 = doc('pro192-1-1-gioi-thieu-oo', '1.1 — Welcome to OO: objects, classes & the JVM|||1.1 — Chào OO: đối tượng, lớp & JVM',
-  'Vì sao đối tượng; thuật ngữ class/object/instance; bốn trụ cột; đối tượng đầu tiên; JVM & bytecode; cài JDK/NetBeans.',
-  [[
-    `<span class="eyebrow">PRO192 · Chapter 1 · Lesson 1.1</span>
-<h2>Why objects? Procedural vs OO</h2>
-<p class="lead">In C (PRF192) you thought <strong>procedurally</strong>: data in variables, and functions that act on it — kept separate. OOP (CLO1) bundles related <em>data</em> and <em>behavior</em> together into <strong>objects</strong>, built from blueprints called <strong>classes</strong>. As programs grow, keeping data and its behavior together is what keeps big systems buildable, reusable and maintainable.</p>
-<div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">Procedural (C): data and functions are separate</div><div class="lz-ld">A struct Student holds data; free functions like calcGPA(Student) act on it. As the program grows, it is easy to lose track of which function may touch which data.</div></div>
-  <div class="lz-layer"><div class="lz-lt">Object-oriented (Java): data + behavior together</div><div class="lz-ld">A class Student holds both the data (name, grades) AND the methods (calculateGPA). The object owns and protects its own data.</div></div>
-</div>
-<h3>Object terminology</h3>
-<p>A <strong>class</strong> is a blueprint; an <strong>object</strong> (an <em>instance</em>) is a concrete thing made from it. "Student" is a class; "the student named An with GPA 3.6" is an object. One class, many objects. Each object has <strong>state</strong> (its field values) and <strong>behavior</strong> (its methods), and a distinct <strong>identity</strong> in memory.</p>
-<div class="lz-flow">
-  <div class="lz-step"><div class="lz-k">Class</div><div class="lz-t">blueprint</div><div class="lz-d">defines fields &amp; methods</div></div>
-  <div class="lz-step"><div class="lz-k">new</div><div class="lz-t">create an object</div><div class="lz-d">an instance in memory</div></div>
-  <div class="lz-step"><div class="lz-k">Object</div><div class="lz-t">concrete thing</div><div class="lz-d">its own data values</div></div>
-</div>
-<h3>Worked example — a first object</h3>
-<pre><code class="language-java">public class Student {
-    String name;
-    double gpa;
-
-    Student(String n, double g) { name = n; gpa = g; }
-
-    boolean isPassing() { return gpa &gt;= 2.0; }   // behavior lives WITH the data
-}
-
-// in main:
-Student an = new Student("An", 3.6);
-System.out.println(an.name + " passing? " + an.isPassing());
-</code></pre>
-<div class="out"><b>Output:</b> An passing? true</div>
-<p>The data (name, gpa) and the behavior (isPassing) travel together as one object — the essence of OO thinking.</p>
-<div class="callout"><span class="badge">★ The four pillars are your roadmap</span> Everything in PRO192 rests on four ideas: <b>Encapsulation</b> (hide data), <b>Inheritance</b> (reuse), <b>Polymorphism</b> (one interface, many forms) and <b>Abstraction</b> (hide complexity) — all in Chapter 3. Every framework you will ever use (Spring, Android) is built from exactly these four. Memorise the names now and each chapter clicks into place.</div>
-<div class="callout"><span class="badge">★ Write once, run anywhere — the JVM</span> Unlike C (which compiles straight to machine code for one CPU), <code>javac</code> compiles Java to <em>bytecode</em> (.class), which the <b>Java Virtual Machine</b> then runs on any OS. That extra layer is why the same .class file runs on Windows, macOS and Linux unchanged — the historical reason Java conquered enterprise and Android.</div>
-<h3>Set up your tools</h3>
-<p>Install the <strong>JDK 8+</strong> (compiler + runtime) and <strong>Apache NetBeans</strong> (the IDE this course uses). In NetBeans: <em>File → New Project → Java Application</em>, then run with the green ▶ button. Verify from a terminal with <code>java -version</code> and <code>javac -version</code>.</p>
-<div class="callout ok">The mental shift: stop asking "what steps do I run?" and start asking "what things exist, what does each know, and what can each do?" Model the world as cooperating objects. This is the whole point of PRO192.</div>`,
-    `<span class="eyebrow">PRO192 · Chương 1 · Bài 1.1</span>
-<h2>Vì sao đối tượng? Thủ tục vs OO</h2>
-<p class="lead">Trong C (PRF192) bạn tư duy <strong>thủ tục</strong>: dữ liệu ở biến, và hàm tác động lên nó — tách rời nhau. OOP (CLO1) gom <em>dữ liệu</em> và <em>hành vi</em> liên quan lại thành các <strong>đối tượng</strong>, xây từ khuôn mẫu gọi là <strong>lớp (class)</strong>. Khi chương trình lớn lên, giữ dữ liệu và hành vi ở cùng nhau là điều làm hệ thống lớn xây được, tái dùng được và bảo trì được.</p>
-<div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">Thủ tục (C): dữ liệu và hàm tách rời</div><div class="lz-ld">Một struct Student giữ dữ liệu; các hàm rời như calcGPA(Student) tác động lên nó. Khi chương trình lớn lên, dễ mất dấu hàm nào động tới dữ liệu nào.</div></div>
-  <div class="lz-layer"><div class="lz-lt">Hướng đối tượng (Java): dữ liệu + hành vi ở cùng nhau</div><div class="lz-ld">Một lớp Student giữ cả dữ liệu (name, grades) LẪN các phương thức (calculateGPA). Đối tượng sở hữu và bảo vệ dữ liệu của chính nó.</div></div>
-</div>
-<h3>Thuật ngữ đối tượng</h3>
-<p>Một <strong>lớp (class)</strong> là khuôn mẫu; một <strong>đối tượng (object)</strong> (một <em>thể hiện — instance</em>) là thứ cụ thể tạo từ nó. "Student" là một lớp; "sinh viên tên An với GPA 3.6" là một đối tượng. Một lớp, nhiều đối tượng. Mỗi đối tượng có <strong>trạng thái</strong> (giá trị các trường), <strong>hành vi</strong> (các phương thức) và một <strong>danh tính</strong> riêng trong bộ nhớ.</p>
-<div class="lz-flow">
-  <div class="lz-step"><div class="lz-k">Lớp</div><div class="lz-t">khuôn mẫu</div><div class="lz-d">định nghĩa trường &amp; phương thức</div></div>
-  <div class="lz-step"><div class="lz-k">new</div><div class="lz-t">tạo một đối tượng</div><div class="lz-d">một thể hiện trong bộ nhớ</div></div>
-  <div class="lz-step"><div class="lz-k">Đối tượng</div><div class="lz-t">thứ cụ thể</div><div class="lz-d">giá trị dữ liệu riêng của nó</div></div>
-</div>
-<h3>Ví dụ có lời giải — đối tượng đầu tiên</h3>
-<pre><code class="language-java">public class Student {
-    String name;
-    double gpa;
-
-    Student(String n, double g) { name = n; gpa = g; }
-
-    boolean isPassing() { return gpa &gt;= 2.0; }   // hành vi sống CÙNG dữ liệu
-}
-
-// trong main:
-Student an = new Student("An", 3.6);
-System.out.println(an.name + " passing? " + an.isPassing());
-</code></pre>
-<div class="out"><b>Kết quả:</b> An passing? true</div>
-<p>Dữ liệu (name, gpa) và hành vi (isPassing) đi cùng nhau như một đối tượng — cốt lõi của tư duy OO.</p>
-<div class="callout"><span class="badge">★ Bốn trụ cột là bản đồ của bạn</span> Mọi thứ trong PRO192 dựa trên bốn ý tưởng: <b>Đóng gói</b> (giấu dữ liệu), <b>Kế thừa</b> (tái dùng), <b>Đa hình</b> (một giao diện, nhiều hình dạng) và <b>Trừu tượng</b> (giấu độ phức tạp) — đều ở Chương 3. Mọi framework bạn từng dùng (Spring, Android) đều xây từ đúng bốn cái này. Thuộc tên ngay bây giờ và mỗi chương sẽ vào đúng chỗ.</div>
-<div class="callout"><span class="badge">★ Viết một lần, chạy mọi nơi — JVM</span> Khác C (biên dịch thẳng ra mã máy cho một CPU), <code>javac</code> biên dịch Java thành <em>bytecode</em> (.class), rồi <b>Máy ảo Java (JVM)</b> chạy nó trên mọi hệ điều hành. Lớp trung gian đó là lý do cùng một file .class chạy trên Windows, macOS và Linux không đổi — lý do lịch sử khiến Java chinh phục doanh nghiệp và Android.</div>
-<h3>Cài đặt công cụ</h3>
-<p>Cài <strong>JDK 8+</strong> (trình biên dịch + runtime) và <strong>Apache NetBeans</strong> (IDE môn dùng). Trong NetBeans: <em>File → New Project → Java Application</em>, rồi chạy bằng nút ▶ xanh. Kiểm từ terminal bằng <code>java -version</code> và <code>javac -version</code>.</p>
-<div class="callout ok">Chuyển dịch tư duy: thôi hỏi "tôi chạy các bước nào?" và bắt đầu hỏi "có những thứ gì tồn tại, mỗi thứ biết gì, và mỗi thứ làm được gì?" Mô hình thế giới thành các đối tượng hợp tác. Đây là toàn bộ mục đích của PRO192.</div>`,
-  ]]);
-
-const c1q = quiz('pro192-quiz-ch1', 'Chapter 1 Quiz|||Quiz chương 1', [
-  { id: 'q1', points: 1, question: 'The main idea of OOP is to…|||Ý tưởng chính của OOP là…', options: ['keep data and functions separate|||giữ dữ liệu và hàm tách rời', 'bundle related data and behavior into objects|||gom dữ liệu và hành vi liên quan vào các đối tượng', 'avoid using functions|||tránh dùng hàm', 'only use global variables|||chỉ dùng biến toàn cục'], correctIndex: 1, explanation: 'OOP gom dữ liệu và hành vi liên quan vào cùng một đối tượng.|||OOP bundles related data and behavior into one object.' },
-  { id: 'q2', points: 1, question: 'A class is a…, and an object is a…|||Một lớp là…, và một đối tượng là…', options: ['concrete instance … blueprint|||thể hiện cụ thể … khuôn mẫu', 'blueprint … concrete instance of it|||khuôn mẫu … thể hiện cụ thể của nó', 'function … variable|||hàm … biến', 'they are the same|||chúng như nhau'], correctIndex: 1, explanation: 'Lớp là khuôn mẫu; đối tượng là một thể hiện cụ thể tạo từ nó.|||A class is a blueprint; an object is a concrete instance of it.' },
-  { id: 'q3', points: 1, question: 'javac compiles Java source to…, which the JVM runs.|||javac biên dịch mã nguồn Java thành…, rồi JVM chạy nó.', options: ['machine code for one CPU|||mã máy cho một CPU', 'bytecode (.class)|||bytecode (.class)', 'an .exe file|||một file .exe', 'assembly|||hợp ngữ'], correctIndex: 1, explanation: 'Java biên dịch ra bytecode (.class) — chạy trên mọi OS qua JVM.|||Java compiles to portable bytecode (.class), run on any OS by the JVM.' },
-]);
-
-/* ════════════════════ CHƯƠNG 2 — BASIC JAVA LANGUAGE ════════════════════ */
-const c2a = doc('pro192-2-1-cu-phap-java', '2.1 — Syntax, types, control & methods|||2.1 — Cú pháp, kiểu, điều khiển & phương thức',
-  'Cấu trúc file Java, kiểu nguyên thuỷ, điều khiển luồng, phương thức & truyền tham số (by value), nhập chuẩn Scanner, và bộ nhớ stack/heap.',
-  [[
-    `<span class="eyebrow">PRO192 · Chapter 2 · Lesson 2.1</span>
-<h2>Your first Java program</h2>
-<p class="lead">Java syntax (CLO2) looks familiar after C — same operators, same if/for/while — but everything lives <strong>inside a class</strong>, and there are no pointers to manage.</p>
-<pre><code class="language-java">public class Hello {
-    public static void main(String[] args) {
-        System.out.println("Xin chao PRO192!");
-    }
-}
-</code></pre>
-<div class="out"><b>Output:</b> Xin chao PRO192!</div>
-<h3>Primitive types &amp; key differences from C</h3>
-<pre><code class="language-java">int age = 20;
-double gpa = 3.6;
-boolean passed = true;
-char grade = 'A';
-String name = "An";   // String is an object (a class), not a primitive
-</code></pre>
-<table>
-  <thead><tr><th>C</th><th>Java</th></tr></thead>
-  <tbody>
-    <tr><td>Functions can be free-standing</td><td>Everything is inside a class</td></tr>
-    <tr><td>printf(...)</td><td>System.out.println(...) / printf(...)</td></tr>
-    <tr><td>Pointers &amp; manual malloc/free</td><td>References; automatic garbage collection</td></tr>
-    <tr><td>char arrays for text</td><td>The String class (compare with .equals(), not ==)</td></tr>
-    <tr><td>#include headers</td><td>import packages</td></tr>
-  </tbody>
-</table>
-<h3>Control flow &amp; methods (parameter passing)</h3>
-<p>if / switch / for / while are nearly identical to C. A <strong>method</strong> is a named block that may take parameters and return a value. Java passes arguments <strong>by value</strong>: a copy is passed, so reassigning a parameter inside a method does not change the caller's variable.</p>
-<pre><code class="language-java">static int max(int a, int b) {    // method with two parameters
-    return (a &gt; b) ? a : b;
-}
-
-public static void main(String[] args) {
-    int[] diem = {8, 6, 9, 7};
-    int tong = 0;
-    for (int d : diem) tong += d;              // enhanced for-loop
-    double tb = (double) tong / diem.length;   // cast to avoid integer division
-    System.out.println("Tong = " + tong + ", TB = " + tb);
-    System.out.println("Max(8,6) = " + max(8, 6));
-}
-</code></pre>
-<div class="out"><b>Output:</b><br>Tong = 30, TB = 7.5<br>Max(8,6) = 8</div>
-<h3>Standard input with Scanner</h3>
-<pre><code class="language-java">import java.util.Scanner;
-
-Scanner sc = new Scanner(System.in);
-System.out.print("Ten: ");
-String ten = sc.nextLine();
-System.out.print("Tuoi: ");
-int tuoi = sc.nextInt();
-System.out.println(ten + " - " + tuoi);
-</code></pre>
-<div class="pitfall">Mixing <code>nextInt()</code> then <code>nextLine()</code> is a classic bug: <code>nextInt()</code> leaves the newline in the buffer, so the next <code>nextLine()</code> reads an empty string. Add an extra <code>sc.nextLine()</code> to consume it, or read everything as lines and parse.</div>
-<div class="callout"><span class="badge">★ Dynamic memory: stack vs heap</span> A primitive local (<code>int age</code>) lives on the <strong>stack</strong>. An object created with <code>new</code> lives on the <strong>heap</strong>; the variable holds a <em>reference</em> to it. When no reference points to an object any more, the <strong>garbage collector</strong> reclaims it automatically — no <code>free()</code> like in C. That is why two variables set to the same object see each other's changes: they hold the same reference.</div>`,
-    `<span class="eyebrow">PRO192 · Chương 2 · Bài 2.1</span>
-<h2>Chương trình Java đầu tiên</h2>
-<p class="lead">Cú pháp Java (CLO2) trông quen sau C — cùng toán tử, cùng if/for/while — nhưng mọi thứ nằm <strong>bên trong một lớp</strong>, và không có con trỏ để quản lý.</p>
-<pre><code class="language-java">public class Hello {
-    public static void main(String[] args) {
-        System.out.println("Xin chao PRO192!");
-    }
-}
-</code></pre>
-<div class="out"><b>Kết quả:</b> Xin chao PRO192!</div>
-<h3>Kiểu nguyên thuỷ &amp; khác biệt chính so với C</h3>
-<pre><code class="language-java">int age = 20;
-double gpa = 3.6;
-boolean passed = true;
-char grade = 'A';
-String name = "An";   // String là đối tượng (một lớp), không phải kiểu nguyên thuỷ
-</code></pre>
-<table>
-  <thead><tr><th>C</th><th>Java</th></tr></thead>
-  <tbody>
-    <tr><td>Hàm có thể đứng độc lập</td><td>Mọi thứ nằm trong một lớp</td></tr>
-    <tr><td>printf(...)</td><td>System.out.println(...) / printf(...)</td></tr>
-    <tr><td>Con trỏ &amp; malloc/free thủ công</td><td>Tham chiếu; tự động dọn rác</td></tr>
-    <tr><td>Mảng char cho văn bản</td><td>Lớp String (so bằng .equals(), không phải ==)</td></tr>
-    <tr><td>#include header</td><td>import package</td></tr>
-  </tbody>
-</table>
-<h3>Điều khiển luồng &amp; phương thức (truyền tham số)</h3>
-<p>if / switch / for / while gần như y hệt C. Một <strong>phương thức</strong> là một khối có tên, có thể nhận tham số và trả về giá trị. Java truyền đối số <strong>theo giá trị (by value)</strong>: một bản sao được truyền, nên gán lại tham số trong phương thức không đổi biến của hàm gọi.</p>
-<pre><code class="language-java">static int max(int a, int b) {    // phương thức hai tham số
-    return (a &gt; b) ? a : b;
-}
-
-public static void main(String[] args) {
-    int[] diem = {8, 6, 9, 7};
-    int tong = 0;
-    for (int d : diem) tong += d;              // vòng for tăng cường
-    double tb = (double) tong / diem.length;   // ép kiểu tránh chia nguyên
-    System.out.println("Tong = " + tong + ", TB = " + tb);
-    System.out.println("Max(8,6) = " + max(8, 6));
-}
-</code></pre>
-<div class="out"><b>Kết quả:</b><br>Tong = 30, TB = 7.5<br>Max(8,6) = 8</div>
-<h3>Nhập chuẩn với Scanner</h3>
-<pre><code class="language-java">import java.util.Scanner;
-
-Scanner sc = new Scanner(System.in);
-System.out.print("Ten: ");
-String ten = sc.nextLine();
-System.out.print("Tuoi: ");
-int tuoi = sc.nextInt();
-System.out.println(ten + " - " + tuoi);
-</code></pre>
-<div class="pitfall">Trộn <code>nextInt()</code> rồi <code>nextLine()</code> là lỗi kinh điển: <code>nextInt()</code> để lại ký tự xuống dòng trong bộ đệm, nên <code>nextLine()</code> kế đọc phải chuỗi rỗng. Thêm một <code>sc.nextLine()</code> để "nuốt" nó, hoặc đọc tất cả bằng dòng rồi tự parse.</div>
-<div class="callout"><span class="badge">★ Bộ nhớ động: stack vs heap</span> Biến nguyên thuỷ cục bộ (<code>int age</code>) nằm trên <strong>stack</strong>. Đối tượng tạo bằng <code>new</code> nằm trên <strong>heap</strong>; biến giữ một <em>tham chiếu</em> tới nó. Khi không còn tham chiếu nào trỏ tới, <strong>bộ dọn rác</strong> tự thu hồi — không có <code>free()</code> như C. Đó là lý do hai biến trỏ cùng một đối tượng thấy thay đổi của nhau: chúng giữ cùng một tham chiếu.</div>`,
-  ]]);
-
-const c2b = doc('pro192-2-2-array-string', '2.2 — Array, ArrayList, String & StringBuffer|||2.2 — Array, ArrayList, String & StringBuffer',
-  'Mảng cố định vs ArrayList lớn lên được; String bất biến vs StringBuffer/StringBuilder đổi được tại chỗ.',
-  [[
-    `<span class="eyebrow">PRO192 · Chapter 2 · Lesson 2.2</span>
-<h2>Arrays, ArrayList, and text</h2>
-<h3>Array vs ArrayList</h3>
-<p>An <strong>array</strong> has a fixed length chosen when you create it. An <strong>ArrayList</strong> (from <code>java.util</code>) grows and shrinks automatically and gives you <code>add</code>, <code>get</code>, <code>remove</code>, <code>size</code>.</p>
-<pre><code class="language-java">int[] a = new int[3];          // fixed size 3
-a[0] = 10;
-System.out.println(a.length);   // 3  -- a field, not a method
-
-import java.util.ArrayList;
-ArrayList&lt;String&gt; names = new ArrayList&lt;&gt;();   // growable
-names.add("An");
-names.add("Binh");
-names.add("Chi");
-names.remove("Binh");
-System.out.println(names.size() + " " + names.get(0));   // 2 An
-</code></pre>
-<div class="out"><b>Output:</b><br>3<br>2 An</div>
-<table>
-  <thead><tr><th></th><th>Array</th><th>ArrayList</th></tr></thead>
-  <tbody>
-    <tr><td>Size</td><td>fixed at creation</td><td>grows/shrinks</td></tr>
-    <tr><td>Length</td><td><code>a.length</code> (field)</td><td><code>list.size()</code> (method)</td></tr>
-    <tr><td>Element access</td><td><code>a[i]</code></td><td><code>list.get(i)</code></td></tr>
-    <tr><td>Holds</td><td>primitives or objects</td><td>objects only (Integer, not int)</td></tr>
-  </tbody>
-</table>
-<h3>String vs StringBuffer / StringBuilder</h3>
-<p>A <strong>String</strong> is <em>immutable</em>: every "change" makes a new object. Building a big string in a loop with <code>+</code> creates lots of throw-away objects. <strong>StringBuffer</strong> (thread-safe) and <strong>StringBuilder</strong> (faster, single-thread) are mutable — they edit one buffer in place.</p>
-<pre><code class="language-java">String s = "Ha";
-s = s + "noi";        // a NEW String object; the old "Ha" is discarded
-
-StringBuilder sb = new StringBuilder();
-for (int i = 1; i &lt;= 3; i++) sb.append(i).append(",");
-System.out.println(sb.toString());   // 1,2,3,
-System.out.println("HANOI".toLowerCase().substring(0, 2));   // ha
-</code></pre>
-<div class="out"><b>Output:</b><br>1,2,3,<br>ha</div>
-<div class="callout"><span class="badge">★ Why == is wrong for String</span> <code>==</code> compares <em>references</em> (same object?), not contents. Two Strings with the same letters can be different objects, so <code>a == b</code> may be <code>false</code> while <code>a.equals(b)</code> is <code>true</code>. Always compare String contents with <code>.equals()</code> (or <code>.equalsIgnoreCase()</code>). This is the most common beginner bug in Java.</div>
-<div class="note-ct">Rule of thumb: fixed, known size and top speed → array. Unknown/changing count → ArrayList. Building text in a loop → StringBuilder. You will use all three constantly in the Practical Exam.</div>`,
-    `<span class="eyebrow">PRO192 · Chương 2 · Bài 2.2</span>
-<h2>Mảng, ArrayList và văn bản</h2>
-<h3>Array vs ArrayList</h3>
-<p>Một <strong>mảng (array)</strong> có độ dài cố định chọn lúc tạo. Một <strong>ArrayList</strong> (trong <code>java.util</code>) tự lớn lên/co lại và cho bạn <code>add</code>, <code>get</code>, <code>remove</code>, <code>size</code>.</p>
-<pre><code class="language-java">int[] a = new int[3];          // cố định kích thước 3
-a[0] = 10;
-System.out.println(a.length);   // 3  -- một trường, không phải phương thức
-
-import java.util.ArrayList;
-ArrayList&lt;String&gt; names = new ArrayList&lt;&gt;();   // lớn lên được
-names.add("An");
-names.add("Binh");
-names.add("Chi");
-names.remove("Binh");
-System.out.println(names.size() + " " + names.get(0));   // 2 An
-</code></pre>
-<div class="out"><b>Kết quả:</b><br>3<br>2 An</div>
-<table>
-  <thead><tr><th></th><th>Array</th><th>ArrayList</th></tr></thead>
-  <tbody>
-    <tr><td>Kích thước</td><td>cố định lúc tạo</td><td>lớn/co được</td></tr>
-    <tr><td>Độ dài</td><td><code>a.length</code> (trường)</td><td><code>list.size()</code> (phương thức)</td></tr>
-    <tr><td>Truy cập</td><td><code>a[i]</code></td><td><code>list.get(i)</code></td></tr>
-    <tr><td>Chứa</td><td>nguyên thuỷ hoặc đối tượng</td><td>chỉ đối tượng (Integer, không phải int)</td></tr>
-  </tbody>
-</table>
-<h3>String vs StringBuffer / StringBuilder</h3>
-<p>Một <strong>String</strong> <em>bất biến (immutable)</em>: mỗi lần "đổi" tạo một đối tượng mới. Ghép một chuỗi lớn trong vòng lặp bằng <code>+</code> tạo rất nhiều đối tượng bỏ đi. <strong>StringBuffer</strong> (an toàn đa luồng) và <strong>StringBuilder</strong> (nhanh hơn, đơn luồng) đổi được — sửa một buffer tại chỗ.</p>
-<pre><code class="language-java">String s = "Ha";
-s = s + "noi";        // một String MỚI; "Ha" cũ bị bỏ
-
-StringBuilder sb = new StringBuilder();
-for (int i = 1; i &lt;= 3; i++) sb.append(i).append(",");
-System.out.println(sb.toString());   // 1,2,3,
-System.out.println("HANOI".toLowerCase().substring(0, 2));   // ha
-</code></pre>
-<div class="out"><b>Kết quả:</b><br>1,2,3,<br>ha</div>
-<div class="callout"><span class="badge">★ Vì sao == sai với String</span> <code>==</code> so <em>tham chiếu</em> (cùng đối tượng?), không phải nội dung. Hai String cùng chữ có thể là hai đối tượng khác nhau, nên <code>a == b</code> có thể <code>false</code> trong khi <code>a.equals(b)</code> là <code>true</code>. Luôn so nội dung String bằng <code>.equals()</code> (hoặc <code>.equalsIgnoreCase()</code>). Đây là lỗi hay gặp nhất của người mới học Java.</div>
-<div class="note-ct">Quy tắc ngón tay cái: kích thước cố định, biết trước và cần tốc độ → mảng. Số lượng chưa biết/thay đổi → ArrayList. Ghép văn bản trong vòng lặp → StringBuilder. Bạn sẽ dùng cả ba liên tục trong Practical Exam.</div>`,
-  ]]);
-
-const c2q = quiz('pro192-quiz-ch2', 'Chapter 2 Quiz|||Quiz chương 2', [
-  { id: 'q1', points: 1, question: 'To compare the CONTENTS of two Strings in Java, use…|||Để so sánh NỘI DUNG hai String trong Java, dùng…', options: ['==', '.equals()', '&gt;', '.compare'], correctIndex: 1, explanation: '== so tham chiếu; .equals() so nội dung.|||== compares references; .equals() compares contents.' },
-  { id: 'q2', points: 1, question: 'A key advantage of ArrayList over a plain array is that it…|||Ưu điểm chính của ArrayList so với mảng thường là nó…', options: ['is fixed-size|||cố định kích thước', 'grows and shrinks automatically|||tự lớn lên và co lại', 'cannot hold objects|||không chứa được đối tượng', 'is always faster|||luôn nhanh hơn'], correctIndex: 1, explanation: 'ArrayList lớn/co động; mảng cố định kích thước.|||ArrayList resizes dynamically; an array has a fixed size.' },
-  { id: 'q3', points: 1, question: 'Java passes method arguments…|||Java truyền đối số phương thức…', options: ['by reference always|||luôn theo tham chiếu', 'by value (a copy)|||theo giá trị (một bản sao)', 'by pointer|||theo con trỏ', 'randomly|||ngẫu nhiên'], correctIndex: 1, explanation: 'Java truyền by value — bản sao của giá trị (với đối tượng là bản sao của tham chiếu).|||Java is pass-by-value — a copy of the value (for objects, a copy of the reference).' },
-]);
-
-/* ════════════════════ CHƯƠNG 3 — OOP ════════════════════ */
-const c3a = doc('pro192-3-1-lop-doi-tuong', '3.1 — Classes, encapsulation & abstraction|||3.1 — Lớp, đóng gói & trừu tượng',
-  'Định nghĩa lớp (data + function members), constructor & nạp chồng, this & constructor chaining, đóng gói với private + getter/setter, access modifiers, trừu tượng, sơ đồ lớp UML.',
-  [[
-    `<span class="eyebrow">PRO192 · Chapter 3 · Lesson 3.1</span>
-<h2>Defining a class — data &amp; function members</h2>
-<p class="lead">A class (CLO5) has <strong>fields</strong> (data members), <strong>methods</strong> (function members), and <strong>constructors</strong> that create and initialize objects.</p>
-<pre><code class="language-java">public class Student {
-    private String name;   // data members (kept private)
-    private double gpa;
-
-    public Student(String name, double gpa) {   // constructor
-        this.name = name;    // 'this' = the object being built
-        this.gpa = gpa;
-    }
-    public Student(String name) { this(name, 0.0); }   // constructor chaining via this(...)
-
-    public double getGpa() { return gpa; }             // getter
-    public void setGpa(double gpa) {                    // setter with validation
-        if (gpa &gt;= 0 &amp;&amp; gpa &lt;= 4.0) this.gpa = gpa;
-    }
-    public boolean isPassing() { return gpa &gt;= 2.0; }  // behavior
-    public String toString() { return name + " (" + gpa + ")"; }
-}
-</code></pre>
-<h3>Encapsulation &amp; access modifiers (Pillar 1)</h3>
-<p><strong>Encapsulation</strong> (CLO6) hides internal data and exposes it only through controlled methods. Make fields <code>private</code>, then provide getters/setters — so <code>setGpa(-9)</code> is rejected and the object protects its own invariants.</p>
-<table>
-  <thead><tr><th>Modifier</th><th>Visible to</th></tr></thead>
-  <tbody>
-    <tr><td>private</td><td>only this class</td></tr>
-    <tr><td>(default / package)</td><td>the same package</td></tr>
-    <tr><td>protected</td><td>package + subclasses</td></tr>
-    <tr><td>public</td><td>everyone</td></tr>
-  </tbody>
-</table>
-<h3>Abstraction (Pillar 4)</h3>
-<p><strong>Abstraction</strong> exposes <em>what</em> an object does and hides <em>how</em>. You call <code>student.isPassing()</code> without knowing the internal logic — like driving a car without understanding the engine. Encapsulation hides the data; abstraction hides the complexity.</p>
-<h3>Worked example</h3>
-<pre><code class="language-java">Student an = new Student("An", 3.6);
-an.setGpa(-9);                       // rejected by validation
-System.out.println(an + " pass? " + an.isPassing());
-</code></pre>
-<div class="out"><b>Output:</b> An (3.6) pass? true</div>
-<div class="callout"><span class="badge">Examinable</span> <b>this, constructor overloading &amp; chaining.</b> A class may have several constructors with different parameter lists (<em>overloading</em>) — Java picks the one matching your arguments. One constructor can call another with <code>this(...)</code> (chaining) to avoid repetition; it must be the <em>first</em> statement. Separate the two meanings of <code>this</code>: <code>this.field</code> (this object) vs <code>this(...)</code> (another constructor). If you write no constructor, Java supplies a hidden empty one — which disappears the moment you add your own.</div>
-<div class="callout"><span class="badge">★ UML class diagram</span> A class is drawn as a box in three parts: <em>name</em> / <em>attributes</em> / <em>operations</em>. A minus sign means <code>private</code>, a plus sign <code>public</code>. So Student is: <code>- name: String</code>, <code>- gpa: double</code> / <code>+ getGpa(): double</code>, <code>+ isPassing(): boolean</code>. A line with an open arrow means "has-a" (association); a hollow triangle means "is-a" (inheritance, next lesson). Reading and sketching these is CLO5.</div>`,
-    `<span class="eyebrow">PRO192 · Chương 3 · Bài 3.1</span>
-<h2>Định nghĩa lớp — thành viên dữ liệu &amp; hàm</h2>
-<p class="lead">Một lớp (CLO5) có <strong>trường (field)</strong> (thành viên dữ liệu), <strong>phương thức (method)</strong> (thành viên hàm), và <strong>constructor</strong> tạo và khởi tạo đối tượng.</p>
-<pre><code class="language-java">public class Student {
-    private String name;   // thành viên dữ liệu (để private)
-    private double gpa;
-
-    public Student(String name, double gpa) {   // constructor
-        this.name = name;    // 'this' = đối tượng đang được tạo
-        this.gpa = gpa;
-    }
-    public Student(String name) { this(name, 0.0); }   // constructor chaining qua this(...)
-
-    public double getGpa() { return gpa; }             // getter
-    public void setGpa(double gpa) {                    // setter có kiểm tra
-        if (gpa &gt;= 0 &amp;&amp; gpa &lt;= 4.0) this.gpa = gpa;
-    }
-    public boolean isPassing() { return gpa &gt;= 2.0; }  // hành vi
-    public String toString() { return name + " (" + gpa + ")"; }
-}
-</code></pre>
-<h3>Đóng gói &amp; access modifier (Trụ cột 1)</h3>
-<p><strong>Đóng gói</strong> (CLO6) giấu dữ liệu bên trong và chỉ lộ qua các phương thức có kiểm soát. Để trường <code>private</code>, rồi cung cấp getter/setter — nên <code>setGpa(-9)</code> bị từ chối và đối tượng bảo vệ bất biến của chính nó.</p>
-<table>
-  <thead><tr><th>Modifier</th><th>Thấy được bởi</th></tr></thead>
-  <tbody>
-    <tr><td>private</td><td>chỉ lớp này</td></tr>
-    <tr><td>(mặc định / package)</td><td>cùng package</td></tr>
-    <tr><td>protected</td><td>package + lớp con</td></tr>
-    <tr><td>public</td><td>mọi nơi</td></tr>
-  </tbody>
-</table>
-<h3>Trừu tượng (Trụ cột 4)</h3>
-<p><strong>Trừu tượng</strong> lộ <em>cái gì</em> một đối tượng làm và giấu <em>làm sao</em>. Bạn gọi <code>student.isPassing()</code> mà không cần biết logic bên trong — như lái xe mà không cần hiểu động cơ. Đóng gói giấu dữ liệu; trừu tượng giấu độ phức tạp.</p>
-<h3>Ví dụ có lời giải</h3>
-<pre><code class="language-java">Student an = new Student("An", 3.6);
-an.setGpa(-9);                       // bị kiểm tra từ chối
-System.out.println(an + " pass? " + an.isPassing());
-</code></pre>
-<div class="out"><b>Kết quả:</b> An (3.6) pass? true</div>
-<div class="callout"><span class="badge">Nằm trong phạm vi thi</span> <b>this, nạp chồng &amp; chaining constructor.</b> Một lớp có thể có nhiều constructor với danh sách tham số khác nhau (<em>overloading</em>) — Java chọn cái khớp đối số. Một constructor gọi được cái khác bằng <code>this(...)</code> (chaining) để tránh lặp; nó phải là câu lệnh <em>đầu tiên</em>. Phân biệt hai nghĩa của <code>this</code>: <code>this.field</code> (đối tượng này) vs <code>this(...)</code> (một constructor khác). Không viết constructor thì Java cấp một cái rỗng ẩn — biến mất ngay khi bạn thêm constructor riêng.</div>
-<div class="callout"><span class="badge">★ Sơ đồ lớp UML</span> Một lớp vẽ thành một hộp ba phần: <em>tên</em> / <em>thuộc tính</em> / <em>thao tác</em>. Dấu trừ là <code>private</code>, dấu cộng là <code>public</code>. Vậy Student là: <code>- name: String</code>, <code>- gpa: double</code> / <code>+ getGpa(): double</code>, <code>+ isPassing(): boolean</code>. Đường mũi tên hở là "has-a" (kết hợp); tam giác rỗng là "is-a" (kế thừa, bài kế). Đọc và vẽ được những cái này là CLO5.</div>`,
-  ]]);
-
-const c3b = doc('pro192-3-2-ke-thua-da-hinh', '3.2 — Inheritance, polymorphism, overriding|||3.2 — Kế thừa, đa hình, ghi đè',
-  'extends & super, quan hệ is-a, override vs overload, đa hình & dynamic dispatch, casting & instanceof.',
-  [[
-    `<span class="eyebrow">PRO192 · Chapter 3 · Lesson 3.2</span>
-<h2>Inheritance (Pillar 2)</h2>
-<p class="lead"><strong>Inheritance</strong> (CLO6) lets a new class reuse and extend an existing one — the "<strong>is-a</strong>" relationship. The subclass gets the parent's fields and methods, then adds or overrides.</p>
-<pre><code class="language-java">public class Animal {
-    protected String name;
-    public Animal(String name) { this.name = name; }
-    public void eat() { System.out.println(name + " is eating"); }
-}
-
-public class Cat extends Animal {    // Cat IS-A Animal
-    public Cat(String name) { super(name); }   // call the parent constructor
-    @Override
-    public void eat() { System.out.println(name + " eats fish quietly"); }  // override
-}
-
-public class Dog extends Animal {
-    public Dog(String name) { super(name); }
-    public void bark() { System.out.println("Woof!"); }   // Dog-only behavior
-}
-</code></pre>
-<p><code>super(...)</code> calls the parent constructor; <code>super.method()</code> calls the parent version. Java allows only <strong>single inheritance</strong> (one parent) — to combine behaviors you use interfaces (Chapter 4).</p>
-<h3>Overriding vs overloading (examinable)</h3>
-<table>
-  <thead><tr><th></th><th>Overriding</th><th>Overloading</th></tr></thead>
-  <tbody>
-    <tr><td>Where</td><td>subclass redefines a parent method</td><td>same class, several methods same name</td></tr>
-    <tr><td>Signature</td><td>identical (same name &amp; parameters)</td><td>different parameter lists</td></tr>
-    <tr><td>Chosen at</td><td>runtime (dynamic)</td><td>compile time (static)</td></tr>
-  </tbody>
-</table>
-<h3>Polymorphism (Pillar 3) &amp; dynamic dispatch</h3>
-<pre><code class="language-java">Animal[] zoo = { new Dog("Rex"), new Cat("Miu"), new Dog("Bin") };
-for (Animal a : zoo) {
-    a.eat();   // each object runs ITS OWN version of eat()
-}
-</code></pre>
-<div class="out"><b>Output:</b><br>Rex is eating<br>Miu eats fish quietly<br>Bin is eating</div>
-<p>Even though the array is typed <code>Animal</code>, each object "remembers" its real class and runs the right <code>eat()</code>. This is <strong>dynamic dispatch</strong>: the method depends on the object's actual runtime type, not the reference type. Add a new subclass and the loop works unchanged.</p>
-<div class="callout"><span class="badge">Examinable</span> <b>Casting &amp; instanceof.</b> To call a <code>Dog</code>-only method through an <code>Animal</code> reference, check then cast — on the Java 8 this subject targets, write them separately:
-<pre><code class="language-java">for (Animal a : zoo) {
-    if (a instanceof Dog) {
-        Dog d = (Dog) a;   // safe downcast: the check already passed
-        d.bark();
-    }
-}
-</code></pre>
-Downcasting without the check risks a <code>ClassCastException</code>. (Java 16 added <code>if (a instanceof Dog d)</code>, which folds the cast in — it does NOT compile on JDK 8, so do not use it in the exam.) Every class also secretly extends <code>java.lang.Object</code>, the source of <code>toString()</code>, <code>equals()</code> and <code>hashCode()</code>. The opposite of extensible is <code>final</code>: a final class cannot be subclassed, a final method cannot be overridden.</div>`,
-    `<span class="eyebrow">PRO192 · Chương 3 · Bài 3.2</span>
-<h2>Kế thừa (Trụ cột 2)</h2>
-<p class="lead"><strong>Kế thừa</strong> (CLO6) cho một lớp mới tái dùng và mở rộng một lớp có sẵn — quan hệ "<strong>is-a</strong>". Lớp con nhận trường và phương thức của lớp cha, rồi thêm hoặc ghi đè.</p>
-<pre><code class="language-java">public class Animal {
-    protected String name;
-    public Animal(String name) { this.name = name; }
-    public void eat() { System.out.println(name + " is eating"); }
-}
-
-public class Cat extends Animal {    // Cat IS-A Animal
-    public Cat(String name) { super(name); }   // gọi constructor cha
-    @Override
-    public void eat() { System.out.println(name + " eats fish quietly"); }  // ghi đè
-}
-
-public class Dog extends Animal {
-    public Dog(String name) { super(name); }
-    public void bark() { System.out.println("Woof!"); }   // hành vi riêng của Dog
-}
-</code></pre>
-<p><code>super(...)</code> gọi constructor cha; <code>super.method()</code> gọi phiên bản của cha. Java chỉ cho <strong>kế thừa đơn</strong> (một lớp cha) — để kết hợp hành vi bạn dùng interface (Chương 4).</p>
-<h3>Ghi đè vs nạp chồng (nằm trong phạm vi thi)</h3>
-<table>
-  <thead><tr><th></th><th>Overriding (ghi đè)</th><th>Overloading (nạp chồng)</th></tr></thead>
-  <tbody>
-    <tr><td>Ở đâu</td><td>lớp con định nghĩa lại một phương thức cha</td><td>cùng lớp, nhiều phương thức trùng tên</td></tr>
-    <tr><td>Chữ ký</td><td>giống hệt (cùng tên &amp; tham số)</td><td>danh sách tham số khác nhau</td></tr>
-    <tr><td>Chọn lúc</td><td>chạy (động)</td><td>biên dịch (tĩnh)</td></tr>
-  </tbody>
-</table>
-<h3>Đa hình (Trụ cột 3) &amp; dynamic dispatch</h3>
-<pre><code class="language-java">Animal[] zoo = { new Dog("Rex"), new Cat("Miu"), new Dog("Bin") };
-for (Animal a : zoo) {
-    a.eat();   // mỗi đối tượng chạy phiên bản eat() CỦA CHÍNH NÓ
-}
-</code></pre>
-<div class="out"><b>Kết quả:</b><br>Rex is eating<br>Miu eats fish quietly<br>Bin is eating</div>
-<p>Dù mảng có kiểu <code>Animal</code>, mỗi đối tượng "nhớ" lớp thật của nó và chạy đúng <code>eat()</code>. Đây là <strong>dynamic dispatch</strong>: phương thức phụ thuộc kiểu thật lúc chạy của đối tượng, không phải kiểu tham chiếu. Thêm một lớp con mới thì vòng lặp chạy không đổi.</p>
-<div class="callout"><span class="badge">Nằm trong phạm vi thi</span> <b>Ép kiểu &amp; instanceof.</b> Để gọi một phương thức chỉ có ở <code>Dog</code> qua tham chiếu <code>Animal</code>, hãy kiểm rồi ép — trên Java 8 mà môn nhắm, viết tách rời:
-<pre><code class="language-java">for (Animal a : zoo) {
-    if (a instanceof Dog) {
-        Dog d = (Dog) a;   // ép xuống an toàn: đã kiểm ở trên
-        d.bark();
-    }
-}
-</code></pre>
-Ép xuống mà không kiểm dễ gây <code>ClassCastException</code>. (Java 16 thêm <code>if (a instanceof Dog d)</code> gộp phép ép vào — KHÔNG biên dịch trên JDK 8, đừng dùng khi thi.) Mọi lớp cũng âm thầm kế thừa <code>java.lang.Object</code>, nguồn của <code>toString()</code>, <code>equals()</code> và <code>hashCode()</code>. Ngược với "mở rộng được" là <code>final</code>: lớp final không kế thừa được, phương thức final không ghi đè được.</div>`,
-  ]]);
-
-const c3q = quiz('pro192-quiz-ch3', 'Chapter 3 Quiz|||Quiz chương 3', [
-  { id: 'q1', points: 1, question: 'Making a field private and adding getters/setters is called…|||Để một trường private và thêm getter/setter gọi là…', options: ['inheritance|||kế thừa', 'encapsulation|||đóng gói', 'polymorphism|||đa hình', 'overloading|||nạp chồng'], correctIndex: 1, explanation: 'Giấu dữ liệu sau private + phương thức có kiểm soát = đóng gói.|||Hiding data behind private + controlled methods is encapsulation.' },
-  { id: 'q2', points: 1, question: 'Dynamic dispatch means the method that runs depends on…|||Dynamic dispatch nghĩa là phương thức chạy phụ thuộc vào…', options: ['the reference type|||kiểu tham chiếu', 'the object actual runtime type|||kiểu thật lúc chạy của đối tượng', 'the file name|||tên file', 'the compiler|||trình biên dịch'], correctIndex: 1, explanation: 'Đa hình chọn phương thức theo lớp thật của đối tượng lúc chạy.|||Polymorphism picks the method by the object real class at runtime.' },
-  { id: 'q3', points: 1, question: 'Before downcasting an Animal reference to Dog on JDK 8 you should…|||Trước khi ép xuống một tham chiếu Animal thành Dog trên JDK 8 bạn nên…', options: ['nothing, just cast|||không cần gì, cứ ép', 'check with instanceof first|||kiểm bằng instanceof trước', 'use == to compare|||dùng == để so', 'make Dog final|||để Dog là final'], correctIndex: 1, explanation: 'Kiểm instanceof trước để tránh ClassCastException.|||Check instanceof first to avoid a ClassCastException.' },
-]);
-
-/* ════════════════════ CHƯƠNG 4 — ABSTRACT CLASS & INTERFACE ════════════════════ */
-const c4 = doc('pro192-4-1-abstract-interface', '4.1 — Abstract classes & interfaces|||4.1 — Abstract class & interface',
-  'Hợp đồng cho hành vi: abstract class (is-a có code chung) vs interface (can-do, implements nhiều), Comparable, default method.',
-  [[
-    `<span class="eyebrow">PRO192 · Chapter 4 · Lesson 4.1</span>
-<h2>Contracts for behavior</h2>
-<p class="lead">Sometimes you define <em>what</em> a group of classes must do without saying <em>how</em> (CLO7). Two tools: <strong>abstract classes</strong> and <strong>interfaces</strong>.</p>
-<h3>Abstract class</h3>
-<p>An <strong>abstract class</strong> cannot be instantiated (no <code>new</code>). It can hold finished methods and <strong>abstract methods</strong> (declared, not implemented) that subclasses must fill in.</p>
-<pre><code class="language-java">public abstract class Shape {
-    public abstract double area();   // no body — subclasses must implement
-    public void describe() { System.out.println("Area = " + area()); }
-}
-public class Circle extends Shape {
-    private double r;
-    public Circle(double r) { this.r = r; }
-    public double area() { return 3.14159 * r * r; }
-}
-public class Rectangle extends Shape {
-    private double w, h;
-    public Rectangle(double w, double h) { this.w = w; this.h = h; }
-    public double area() { return w * h; }
-}
-</code></pre>
-<h3>Interface</h3>
-<p>An <strong>interface</strong> is a pure contract — method signatures a class promises to implement. A class can <code>implements</code> many interfaces (working around single inheritance).</p>
-<pre><code class="language-java">public interface Payable {          // a contract we write ourselves
-    double monthlyPay();
-}
-public class Employee implements Payable, Comparable&lt;Employee&gt; {
-    private double salary;
-    public Employee(double salary) { this.salary = salary; }
-    public double monthlyPay() { return salary; }            // from Payable
-    public int compareTo(Employee o) {                        // from Comparable (JDK)
-        return Double.compare(this.salary, o.salary);
-    }
-}
-</code></pre>
-<p>Java ships interfaces you <em>implement</em> rather than write. The first is <code>java.lang.Comparable&lt;T&gt;</code> with one method <code>int compareTo(T other)</code> — implement it and <code>Collections.sort</code> can sort your objects.</p>
-<div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">Abstract class — "is-a" with shared code</div><div class="lz-ld">Use when subclasses share fields/implementation. One parent only.</div></div>
-  <div class="lz-layer"><div class="lz-lt">Interface — "can-do" capability</div><div class="lz-ld">Use to give unrelated classes a shared ability. A class can implement many.</div></div>
-</div>
-<h3>Worked example</h3>
-<pre><code class="language-java">Shape[] shapes = { new Circle(2), new Rectangle(3, 4) };
-for (Shape s : shapes) s.describe();   // describe() calls each shape's own area()
-</code></pre>
-<div class="out"><b>Output:</b><br>Area = 12.56636<br>Area = 12.0</div>
-<div class="callout"><span class="badge">Examinable · default methods</span> Since Java 8 an interface can carry a <code>default</code> method with a real body, so new behavior can be added without breaking the classes that already implement it — that is how <code>java.util.List</code> gained <code>sort()</code>. Rule now: <b>interface for capability, abstract class for shared state.</b></div>
-<div class="note-ct">Rule of thumb: an abstract class says "a Circle IS-A Shape"; an interface says "an Employee CAN-DO being paid and, via Comparable, being sorted". Both enable polymorphism.</div>`,
-    `<span class="eyebrow">PRO192 · Chương 4 · Bài 4.1</span>
-<h2>Hợp đồng cho hành vi</h2>
-<p class="lead">Đôi khi bạn định nghĩa <em>cái gì</em> một nhóm lớp phải làm mà không nói <em>làm sao</em> (CLO7). Hai công cụ: <strong>abstract class</strong> và <strong>interface</strong>.</p>
-<h3>Abstract class (lớp trừu tượng)</h3>
-<p>Một <strong>abstract class</strong> không thể tạo thể hiện (không <code>new</code>). Nó chứa được cả phương thức hoàn thiện lẫn <strong>phương thức trừu tượng</strong> (khai báo, chưa cài đặt) mà lớp con phải điền.</p>
-<pre><code class="language-java">public abstract class Shape {
-    public abstract double area();   // không thân — lớp con phải cài đặt
-    public void describe() { System.out.println("Area = " + area()); }
-}
-public class Circle extends Shape {
-    private double r;
-    public Circle(double r) { this.r = r; }
-    public double area() { return 3.14159 * r * r; }
-}
-public class Rectangle extends Shape {
-    private double w, h;
-    public Rectangle(double w, double h) { this.w = w; this.h = h; }
-    public double area() { return w * h; }
-}
-</code></pre>
-<h3>Interface</h3>
-<p>Một <strong>interface</strong> là hợp đồng thuần — các chữ ký phương thức mà lớp hứa hiện thực. Một lớp <code>implements</code> được nhiều interface (vòng qua giới hạn kế thừa đơn).</p>
-<pre><code class="language-java">public interface Payable {          // hợp đồng do ta tự viết
-    double monthlyPay();
-}
-public class Employee implements Payable, Comparable&lt;Employee&gt; {
-    private double salary;
-    public Employee(double salary) { this.salary = salary; }
-    public double monthlyPay() { return salary; }            // từ Payable
-    public int compareTo(Employee o) {                        // từ Comparable (JDK)
-        return Double.compare(this.salary, o.salary);
-    }
-}
-</code></pre>
-<p>Java có sẵn những interface bạn <em>implements</em> chứ không tự viết. Cái đầu tiên là <code>java.lang.Comparable&lt;T&gt;</code> với một phương thức <code>int compareTo(T other)</code> — hiện thực nó và <code>Collections.sort</code> sắp xếp được đối tượng của bạn.</p>
-<div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">Abstract class — "is-a" có code dùng chung</div><div class="lz-ld">Dùng khi các lớp con chia sẻ trường/cài đặt. Chỉ một lớp cha.</div></div>
-  <div class="lz-layer"><div class="lz-lt">Interface — khả năng "can-do"</div><div class="lz-ld">Dùng để cho các lớp không liên quan một khả năng chung. Một lớp implements được nhiều.</div></div>
-</div>
-<h3>Ví dụ có lời giải</h3>
-<pre><code class="language-java">Shape[] shapes = { new Circle(2), new Rectangle(3, 4) };
-for (Shape s : shapes) s.describe();   // describe() gọi area() riêng của mỗi hình
-</code></pre>
-<div class="out"><b>Kết quả:</b><br>Area = 12.56636<br>Area = 12.0</div>
-<div class="callout"><span class="badge">Thi · default method</span> Từ Java 8 một interface có thể mang phương thức <code>default</code> có thân thật, nên thêm được hành vi mới mà không phá các lớp đã implements — đó là cách <code>java.util.List</code> có <code>sort()</code>. Quy tắc nay: <b>interface cho khả năng, abstract class cho trạng thái dùng chung.</b></div>
-<div class="note-ct">Quy tắc ngón tay cái: abstract class nói "một Circle LÀ MỘT Shape"; interface nói "một Employee CÓ THỂ được trả tiền, và qua Comparable thì được sắp xếp". Cả hai bật đa hình.</div>`,
-  ]]);
-
-const c4q = quiz('pro192-quiz-ch4', 'Chapter 4 Quiz|||Quiz chương 4', [
-  { id: 'q1', points: 1, question: 'An abstract class…|||Một abstract class…', options: ['can be instantiated with new|||có thể tạo thể hiện bằng new', 'cannot be instantiated and may have abstract methods|||không thể tạo thể hiện và có thể có phương thức trừu tượng', 'has no methods|||không có phương thức', 'is the same as an object|||giống một đối tượng'], correctIndex: 1, explanation: 'Không new được; có thể chứa phương thức trừu tượng lớp con phải cài.|||Cannot be instantiated; may declare abstract methods subclasses must implement.' },
-  { id: 'q2', points: 1, question: 'How many interfaces can a Java class implement?|||Một lớp Java implements được bao nhiêu interface?', options: ['only one|||chỉ một', 'many|||nhiều', 'zero|||không', 'exactly two|||đúng hai'], correctIndex: 1, explanation: 'Một lớp implements nhiều interface — vòng qua kế thừa đơn.|||A class can implement many interfaces — working around single inheritance.' },
-  { id: 'q3', points: 1, question: 'Since Java 8, an interface method WITH a body is a…|||Từ Java 8, một phương thức interface CÓ thân là…', options: ['abstract method|||phương thức trừu tượng', 'default method|||phương thức default', 'constructor|||constructor', 'private field|||trường private'], correctIndex: 1, explanation: 'default method cho interface có hành vi sẵn mà không phá lớp cũ.|||A default method gives an interface ready behavior without breaking existing classes.' },
-]);
-
-/* ════════════════════ CHƯƠNG 5 — ERROR & EXCEPTION ════════════════════ */
-const c5 = doc('pro192-5-1-ngoai-le', '5.1 — Exceptions: try/catch/finally, throw & assertion|||5.1 — Ngoại lệ: try/catch/finally, throw & assertion',
-  'Xử lý lỗi lúc chạy gọn gàng; checked vs unchecked; throw/throws; try-with-resources; assertion.',
-  [[
-    `<span class="eyebrow">PRO192 · Chapter 5 · Lesson 5.1</span>
-<h2>Handling errors gracefully</h2>
-<p class="lead">Programs fail: a file is missing, input is invalid. Java's <strong>exception handling</strong> (CLO4) lets you catch problems and respond instead of crashing.</p>
-<pre><code class="language-java">try {
-    int result = 10 / 0;        // throws ArithmeticException
-} catch (ArithmeticException e) {
-    System.out.println("Cannot divide by zero!");
-} finally {
-    System.out.println("This always runs (cleanup)");
-}
-</code></pre>
-<div class="out"><b>Output:</b><br>Cannot divide by zero!<br>This always runs (cleanup)</div>
-<div class="lz-flow">
-  <div class="lz-step"><div class="lz-k">try</div><div class="lz-t">risky code</div><div class="lz-d">might throw an exception</div></div>
-  <div class="lz-step"><div class="lz-k">catch</div><div class="lz-t">handle it</div><div class="lz-d">respond to the error</div></div>
-  <div class="lz-step"><div class="lz-k">finally</div><div class="lz-t">always runs</div><div class="lz-d">cleanup (close files etc.)</div></div>
-</div>
-<h3>Checked vs unchecked; throw / throws</h3>
-<div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">Checked (e.g. IOException)</div><div class="lz-ld">The compiler forces you to handle or declare them with <code>throws</code>. For recoverable, expected problems like file access.</div></div>
-  <div class="lz-layer"><div class="lz-lt">Unchecked (e.g. NullPointerException, ArithmeticException)</div><div class="lz-ld">Runtime bugs the compiler does not force you to catch — usually you fix the code.</div></div>
-</div>
-<pre><code class="language-java">// throws: declare that this method may raise a checked exception
-static void checkAge(int age) throws Exception {
-    if (age &lt; 0) throw new Exception("Age cannot be negative");   // raise your own
-}
-</code></pre>
-<h3>Worked example — skip bad input</h3>
-<pre><code class="language-java">String[] inputs = {"12", "9x", "7"};
-int tong = 0;
-for (String s : inputs) {
-    try { tong += Integer.parseInt(s); }
-    catch (NumberFormatException e) { System.out.println("Bo qua gia tri sai: " + s); }
-}
-System.out.println("Tong hop le = " + tong);
-</code></pre>
-<div class="out"><b>Output:</b><br>Bo qua gia tri sai: 9x<br>Tong hop le = 19</div>
-<p>The bad value throws, is caught, and the loop keeps going — robustness in one pattern.</p>
-<div class="callout"><span class="badge">★ try-with-resources</span> Writing <code>try (BufferedReader r = new BufferedReader(...)) { ... }</code> auto-closes the resource when the block ends, even on an exception — no <code>finally</code> needed. Any object implementing <code>AutoCloseable</code> works this way (you will use it in Chapter 8).</div>
-<div class="callout"><span class="badge">Syllabus · assertion</span> An <strong>assertion</strong> checks a condition you believe is always true: <code>assert gpa &gt;= 0 : "gpa must be non-negative";</code>. If it fails, an <code>AssertionError</code> is thrown. Assertions are for catching programmer bugs during development (run with <code>java -ea</code>), NOT for validating user input — use exceptions for that.</div>`,
-    `<span class="eyebrow">PRO192 · Chương 5 · Bài 5.1</span>
-<h2>Xử lý lỗi gọn gàng</h2>
-<p class="lead">Chương trình sẽ gặp lỗi: thiếu tệp, nhập không hợp lệ. <strong>Xử lý ngoại lệ</strong> của Java (CLO4) cho bạn bắt vấn đề và phản hồi thay vì sập.</p>
-<pre><code class="language-java">try {
-    int result = 10 / 0;        // ném ArithmeticException
-} catch (ArithmeticException e) {
-    System.out.println("Cannot divide by zero!");
-} finally {
-    System.out.println("This always runs (cleanup)");
-}
-</code></pre>
-<div class="out"><b>Kết quả:</b><br>Cannot divide by zero!<br>This always runs (cleanup)</div>
-<div class="lz-flow">
-  <div class="lz-step"><div class="lz-k">try</div><div class="lz-t">code rủi ro</div><div class="lz-d">có thể ném ngoại lệ</div></div>
-  <div class="lz-step"><div class="lz-k">catch</div><div class="lz-t">bắt &amp; xử lý</div><div class="lz-d">phản hồi lỗi</div></div>
-  <div class="lz-step"><div class="lz-k">finally</div><div class="lz-t">luôn chạy</div><div class="lz-d">dọn dẹp (đóng tệp…)</div></div>
-</div>
-<h3>Checked vs unchecked; throw / throws</h3>
-<div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">Checked (vd IOException)</div><div class="lz-ld">Trình biên dịch buộc bạn xử lý hoặc khai báo bằng <code>throws</code>. Cho vấn đề dự kiến, khắc phục được như truy cập tệp.</div></div>
-  <div class="lz-layer"><div class="lz-lt">Unchecked (vd NullPointerException, ArithmeticException)</div><div class="lz-ld">Lỗi lúc chạy mà trình biên dịch không bắt catch — thường bạn sửa code.</div></div>
-</div>
-<pre><code class="language-java">// throws: khai báo rằng phương thức này có thể phát một ngoại lệ checked
-static void checkAge(int age) throws Exception {
-    if (age &lt; 0) throw new Exception("Age cannot be negative");   // tự phát ngoại lệ
-}
-</code></pre>
-<h3>Ví dụ có lời giải — bỏ qua dữ liệu sai</h3>
-<pre><code class="language-java">String[] inputs = {"12", "9x", "7"};
-int tong = 0;
-for (String s : inputs) {
-    try { tong += Integer.parseInt(s); }
-    catch (NumberFormatException e) { System.out.println("Bo qua gia tri sai: " + s); }
-}
-System.out.println("Tong hop le = " + tong);
-</code></pre>
-<div class="out"><b>Kết quả:</b><br>Bo qua gia tri sai: 9x<br>Tong hop le = 19</div>
-<p>Giá trị sai ném lỗi, bị bắt, và vòng lặp chạy tiếp — tính bền trong một mẫu.</p>
-<div class="callout"><span class="badge">★ try-with-resources</span> Viết <code>try (BufferedReader r = new BufferedReader(...)) { ... }</code> tự đóng tài nguyên khi hết khối, kể cả khi có ngoại lệ — không cần <code>finally</code>. Mọi đối tượng implements <code>AutoCloseable</code> đều chạy kiểu này (bạn dùng ở Chương 8).</div>
-<div class="callout"><span class="badge">Syllabus · assertion</span> Một <strong>assertion</strong> kiểm một điều kiện bạn tin luôn đúng: <code>assert gpa &gt;= 0 : "gpa must be non-negative";</code>. Sai thì ném <code>AssertionError</code>. Assertion để bắt lỗi lập trình lúc phát triển (chạy với <code>java -ea</code>), KHÔNG dùng để validate input người dùng — cái đó dùng ngoại lệ.</div>`,
-  ]]);
-
-const c5q = quiz('pro192-quiz-ch5', 'Chapter 5 Quiz|||Quiz chương 5', [
-  { id: 'q1', points: 1, question: 'The finally block…|||Khối finally…', options: ['runs only if there is an error|||chỉ chạy nếu có lỗi', 'always runs (used for cleanup)|||luôn chạy (dùng để dọn dẹp)', 'never runs|||không bao giờ chạy', 'catches the exception|||bắt ngoại lệ'], correctIndex: 1, explanation: 'finally luôn chạy dù có hay không có ngoại lệ — dùng để dọn dẹp.|||finally always runs whether or not an exception occurs — for cleanup.' },
-  { id: 'q2', points: 1, question: 'A checked exception is one that…|||Ngoại lệ checked là loại mà…', options: ['the compiler forces you to handle or declare|||trình biên dịch buộc bạn xử lý hoặc khai báo', 'never happens|||không bao giờ xảy ra', 'cannot be caught|||không thể bắt', 'is always fatal|||luôn gây chết chương trình'], correctIndex: 0, explanation: 'Checked: phải catch hoặc khai báo throws (vd IOException).|||Checked: must be caught or declared with throws (e.g. IOException).' },
-  { id: 'q3', points: 1, question: 'assert is intended for…|||assert dùng để…', options: ['validating user input|||validate input người dùng', 'catching programmer bugs during development|||bắt lỗi lập trình lúc phát triển', 'closing files|||đóng tệp', 'printing output|||in kết quả'], correctIndex: 1, explanation: 'Assertion bắt giả định sai lúc dev; validate input thì dùng ngoại lệ.|||Assertions catch wrong assumptions in dev; validate input with exceptions.' },
-]);
-
-/* ════════════════════ CHƯƠNG 6 — ARRAY OF OBJECTS ════════════════════ */
-const c6 = doc('pro192-6-1-mang-doi-tuong', '6.1 — Array of objects: add, find, update, remove, sort|||6.1 — Mảng đối tượng: thêm, tìm, sửa, xoá, sắp xếp',
-  'Quản lý một tập đối tượng bằng ArrayList; chương trình theo menu CLO8; sort bằng Comparator.',
-  [[
-    `<span class="eyebrow">PRO192 · Chapter 6 · Lesson 6.1</span>
-<h2>From one object to a program</h2>
-<p class="lead">Real programs manage <em>many</em> objects (CLO8). A list of objects is the backbone of a console management program: add, display, find, update, remove, sort.</p>
-<pre><code class="language-java">import java.util.ArrayList;
-
-ArrayList&lt;Student&gt; list = new ArrayList&lt;&gt;();
-list.add(new Student("An", 3.6));
-list.add(new Student("Binh", 3.1));
-list.add(new Student("Chi", 2.8));
-
-// FIND by name
-Student found = null;
-for (Student s : list) if (s.getName().equals("Binh")) { found = s; break; }
-
-// UPDATE
-if (found != null) found.setGpa(3.9);
-
-// REMOVE
-list.removeIf(s -&gt; s.getGpa() &lt; 3.0);   // drops Chi
-
-System.out.println("Con lai: " + list.size());
-for (Student s : list) System.out.println(s);
-</code></pre>
-<div class="out"><b>Output:</b><br>Con lai: 2<br>An (3.6)<br>Binh (3.9)</div>
-<h3>The shape of a management program</h3>
-<div class="lz-map">
-  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Store</div><div class="lz-nsub">an ArrayList of objects</div></div></div>
-  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Menu loop</div><div class="lz-nsub">Add · Display · Find · Update · Remove · Sort · Exit</div></div></div>
-  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">One method per action</div><div class="lz-nsub">one method does one job</div></div></div>
-</div>
-<h3>Sorting by a field — Comparator</h3>
-<pre><code class="language-java">import java.util.Comparator;
-import java.util.Collections;
-
-// sort by GPA, highest first
-list.sort(Comparator.comparingDouble(Student::getGpa).reversed());
-for (Student s : list) System.out.println(s);
-</code></pre>
-<div class="out"><b>Output:</b><br>An (3.6)<br>Binh (3.9)  →  sorted desc: Binh (3.9), An (3.6)</div>
-<div class="callout"><span class="badge">★ Aggregate &amp; filter</span> Every "report" feature is the same loop with a different question: <code>sum</code>/<code>average</code> (aggregate), <code>count where gpa &gt;= 2.0</code> (filter), <code>max</code> (find best). Master the loop-over-objects skeleton and you can build any menu feature the Assignment or Practical Exam asks for.</div>
-<div class="note-ct">This is exactly the shape of your PRO192 Assignment and Practical Exam: a menu-driven program managing a collection of objects. An <code>ArrayList</code> grows as you add — no fixed size to guess, unlike a plain array. The next chapter formalises List / Set / Map.</div>`,
-    `<span class="eyebrow">PRO192 · Chương 6 · Bài 6.1</span>
-<h2>Từ một đối tượng tới một chương trình</h2>
-<p class="lead">Chương trình thật quản lý <em>nhiều</em> đối tượng (CLO8). Một list đối tượng là xương sống của một chương trình quản lý console: thêm, hiển thị, tìm, sửa, xoá, sắp xếp.</p>
-<pre><code class="language-java">import java.util.ArrayList;
-
-ArrayList&lt;Student&gt; list = new ArrayList&lt;&gt;();
-list.add(new Student("An", 3.6));
-list.add(new Student("Binh", 3.1));
-list.add(new Student("Chi", 2.8));
-
-// TÌM theo tên
-Student found = null;
-for (Student s : list) if (s.getName().equals("Binh")) { found = s; break; }
-
-// SỬA
-if (found != null) found.setGpa(3.9);
-
-// XOÁ
-list.removeIf(s -&gt; s.getGpa() &lt; 3.0);   // bỏ Chi
-
-System.out.println("Con lai: " + list.size());
-for (Student s : list) System.out.println(s);
-</code></pre>
-<div class="out"><b>Kết quả:</b><br>Con lai: 2<br>An (3.6)<br>Binh (3.9)</div>
-<h3>Hình dạng một chương trình quản lý</h3>
-<div class="lz-map">
-  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Lưu</div><div class="lz-nsub">một ArrayList đối tượng</div></div></div>
-  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Vòng lặp menu</div><div class="lz-nsub">Thêm · Hiện · Tìm · Sửa · Xoá · Sắp xếp · Thoát</div></div></div>
-  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Mỗi hành động một phương thức</div><div class="lz-nsub">một phương thức làm một việc</div></div></div>
-</div>
-<h3>Sắp xếp theo một trường — Comparator</h3>
-<pre><code class="language-java">import java.util.Comparator;
-import java.util.Collections;
-
-// sắp theo GPA, cao nhất trước
-list.sort(Comparator.comparingDouble(Student::getGpa).reversed());
-for (Student s : list) System.out.println(s);
-</code></pre>
-<div class="out"><b>Kết quả:</b><br>An (3.6)<br>Binh (3.9)  →  sắp giảm: Binh (3.9), An (3.6)</div>
-<div class="callout"><span class="badge">★ Tổng hợp &amp; lọc</span> Mọi tính năng "báo cáo" đều là cùng vòng lặp với câu hỏi khác: <code>tổng</code>/<code>trung bình</code> (tổng hợp), <code>đếm nơi gpa &gt;= 2.0</code> (lọc), <code>max</code> (tìm cao nhất). Nắm bộ khung duyệt-qua-đối-tượng là xây được mọi tính năng menu mà Assignment hay Practical Exam yêu cầu.</div>
-<div class="note-ct">Đây đúng hình dạng Assignment và Practical Exam PRO192: một chương trình theo menu quản lý một tập đối tượng. Một <code>ArrayList</code> lớn lên khi bạn thêm — không phải đoán kích thước cố định như mảng thường. Chương kế chính quy hoá List / Set / Map.</div>`,
-  ]]);
-
-const c6q = quiz('pro192-quiz-ch6', 'Chapter 6 Quiz|||Quiz chương 6', [
-  { id: 'q1', points: 1, question: 'A typical console management program is built around a…|||Một chương trình quản lý console điển hình xây quanh một…', options: ['single print statement|||một câu in đơn', 'menu loop with one method per action|||vòng lặp menu với mỗi hành động một phương thức', 'private field|||một trường private', 'checked exception|||một ngoại lệ checked'], correctIndex: 1, explanation: 'Menu loop + mỗi hành động (thêm/tìm/sửa/xoá/sắp) một phương thức.|||A menu loop with one method per action (add/find/update/remove/sort).' },
-  { id: 'q2', points: 1, question: 'To sort a list of objects by a chosen field you use a…|||Để sắp một list đối tượng theo một trường bạn dùng…', options: ['Scanner', 'Comparator', 'finally block|||khối finally', 'constructor'], correctIndex: 1, explanation: 'Comparator nói "sắp theo cái gì" cho list.sort/Collections.sort.|||A Comparator tells list.sort/Collections.sort what to sort by.' },
-  { id: 'q3', points: 1, question: 'To find an object in a list by a property, you typically…|||Để tìm một đối tượng trong list theo thuộc tính, bạn thường…', options: ['loop and compare each element|||duyệt và so từng phần tử', 'call new|||gọi new', 'throw an exception|||ném một ngoại lệ', 'use ==|||dùng =='], correctIndex: 0, explanation: 'Duyệt qua list, so bằng .equals() cho tới khi khớp.|||Loop through the list comparing with .equals() until it matches.' },
-]);
-
-/* ════════════════════ CHƯƠNG 7 — COLLECTIONS ════════════════════ */
-const c7 = doc('pro192-7-1-collections', '7.1 — Collections: List, Set & Map|||7.1 — Collections: List, Set & Map',
-  'Ba ADT collection, generics, và hợp đồng equals()/hashCode() làm Set/Map chạy đúng.',
-  [[
-    `<span class="eyebrow">PRO192 · Chapter 7 · Lesson 7.1</span>
-<h2>Dynamic, powerful data structures</h2>
-<p class="lead">The <strong>Java Collections Framework</strong> (CLO9) provides flexible, growable data structures — the three you must know are <strong>List</strong>, <strong>Set</strong> and <strong>Map</strong>.</p>
-<table>
-  <thead><tr><th>Collection</th><th>Holds</th><th>Use when…</th></tr></thead>
-  <tbody>
-    <tr><td>List (ArrayList)</td><td>An ordered sequence; duplicates allowed</td><td>you need an indexed, growable list</td></tr>
-    <tr><td>Set (HashSet)</td><td>Unique elements; no duplicates</td><td>you need to avoid repeats</td></tr>
-    <tr><td>Map (HashMap)</td><td>Key → value pairs</td><td>you look things up by a key</td></tr>
-  </tbody>
-</table>
-<pre><code class="language-java">import java.util.*;
-
-List&lt;String&gt; list = new ArrayList&lt;&gt;(List.of("An", "Binh", "An"));
-Set&lt;String&gt; set = new HashSet&lt;&gt;(list);   // duplicates dropped
-Map&lt;String, Integer&gt; diem = new HashMap&lt;&gt;();
-diem.put("An", 8);
-diem.put("Binh", 7);
-System.out.println("List size = " + list.size());
-System.out.println("Set size = " + set.size());
-System.out.println("Diem An = " + diem.get("An"));
-</code></pre>
-<div class="out"><b>Output:</b><br>List size = 3<br>Set size = 2<br>Diem An = 8</div>
-<p>The List kept the duplicate "An" (size 3); the Set dropped it (size 2); the Map looked up a value by key instantly. The <code>&lt;String&gt;</code> part is <strong>generics</strong> — it tells the collection what type it holds, so the compiler catches type errors and you avoid casting.</p>
-<div class="callout"><span class="badge">★ equals() &amp; hashCode() — the contract that makes Set/Map work</span> A HashSet/HashMap decides "same key?" by calling <code>hashCode()</code> then <code>equals()</code>. If you store your own objects (say Student) without overriding both, two "equal" students count as different — duplicates sneak into a Set and <code>map.get()</code> returns null. The rule: whenever you override <code>equals()</code>, override <code>hashCode()</code> to match. This is the single most common real-world collections bug.</p>
-<pre><code class="language-java">@Override public boolean equals(Object o) {
-    if (!(o instanceof Student)) return false;
-    return name.equals(((Student) o).name);
-}
-@Override public int hashCode() { return name.hashCode(); }
-</code></pre></div>
-<div class="note-ct">Prefer collections over raw arrays in real Java: an ArrayList grows automatically, a HashSet removes duplicates for free, and a HashMap gives near-instant lookup by key. Choosing the right one is a real design decision.</div>`,
-    `<span class="eyebrow">PRO192 · Chương 7 · Bài 7.1</span>
-<h2>Cấu trúc dữ liệu động, mạnh mẽ</h2>
-<p class="lead"><strong>Java Collections Framework</strong> (CLO9) cung cấp cấu trúc dữ liệu linh hoạt, lớn lên được — ba cái bạn phải biết là <strong>List</strong>, <strong>Set</strong> và <strong>Map</strong>.</p>
-<table>
-  <thead><tr><th>Collection</th><th>Chứa</th><th>Dùng khi…</th></tr></thead>
-  <tbody>
-    <tr><td>List (ArrayList)</td><td>Một dãy có thứ tự; cho phép trùng</td><td>bạn cần một danh sách có chỉ số, lớn lên được</td></tr>
-    <tr><td>Set (HashSet)</td><td>Phần tử duy nhất; không trùng</td><td>bạn cần tránh lặp</td></tr>
-    <tr><td>Map (HashMap)</td><td>Cặp khoá → giá trị</td><td>bạn tra cứu theo một khoá</td></tr>
-  </tbody>
-</table>
-<pre><code class="language-java">import java.util.*;
-
-List&lt;String&gt; list = new ArrayList&lt;&gt;(List.of("An", "Binh", "An"));
-Set&lt;String&gt; set = new HashSet&lt;&gt;(list);   // loại trùng
-Map&lt;String, Integer&gt; diem = new HashMap&lt;&gt;();
-diem.put("An", 8);
-diem.put("Binh", 7);
-System.out.println("List size = " + list.size());
-System.out.println("Set size = " + set.size());
-System.out.println("Diem An = " + diem.get("An"));
-</code></pre>
-<div class="out"><b>Kết quả:</b><br>List size = 3<br>Set size = 2<br>Diem An = 8</div>
-<p>List giữ bản trùng "An" (size 3); Set loại nó (size 2); Map tra một giá trị theo khoá tức thì. Phần <code>&lt;String&gt;</code> là <strong>generics</strong> — nó cho collection biết chứa kiểu gì, để trình biên dịch bắt lỗi kiểu và bạn khỏi ép kiểu.</p>
-<div class="callout"><span class="badge">★ equals() &amp; hashCode() — hợp đồng làm Set/Map chạy đúng</span> HashSet/HashMap quyết định "cùng khoá?" bằng cách gọi <code>hashCode()</code> rồi <code>equals()</code>. Nếu bạn lưu đối tượng của mình (vd Student) mà không ghi đè cả hai, hai student "bằng nhau" bị tính là khác — bản trùng lọt vào Set và <code>map.get()</code> trả null. Quy tắc: hễ ghi đè <code>equals()</code> thì ghi đè <code>hashCode()</code> cho khớp. Đây là lỗi collections hay gặp nhất trong thực tế.</p>
-<pre><code class="language-java">@Override public boolean equals(Object o) {
-    if (!(o instanceof Student)) return false;
-    return name.equals(((Student) o).name);
-}
-@Override public int hashCode() { return name.hashCode(); }
-</code></pre></div>
-<div class="note-ct">Ưu tiên collections hơn mảng thô trong Java thật: một ArrayList tự lớn lên, một HashSet loại trùng miễn phí, và một HashMap cho tra cứu theo khoá gần tức thì. Chọn đúng cái là một quyết định thiết kế thật.</div>`,
-  ]]);
-
-const c7q = quiz('pro192-quiz-ch7', 'Chapter 7 Quiz|||Quiz chương 7', [
-  { id: 'q1', points: 1, question: 'Which collection automatically removes duplicates?|||Collection nào tự động loại trùng?', options: ['List', 'Set', 'Map', 'Array|||Mảng'], correctIndex: 1, explanation: 'Set (vd HashSet) chỉ giữ phần tử duy nhất.|||A Set (e.g. HashSet) keeps only unique elements.' },
-  { id: 'q2', points: 1, question: 'A Map stores…|||Một Map lưu…', options: ['single values|||các giá trị đơn', 'key → value pairs|||các cặp khoá → giá trị', 'only numbers|||chỉ số', 'unique elements only|||chỉ phần tử duy nhất'], correctIndex: 1, explanation: 'Map là các cặp khoá→giá trị, tra theo khoá.|||A Map is key→value pairs, looked up by key.' },
-  { id: 'q3', points: 1, question: 'When you override equals() on your class, you must also override…|||Khi ghi đè equals() trên lớp của bạn, bạn phải ghi đè thêm…', options: ['toString()', 'hashCode()', 'the constructor|||constructor', 'main()'], correctIndex: 1, explanation: 'equals() và hashCode() phải khớp để Set/Map chạy đúng.|||equals() and hashCode() must agree for Set/Map to work correctly.' },
-]);
-
-/* ════════════════════ CHƯƠNG 8 — FILE I/O ════════════════════ */
-const c8 = doc('pro192-8-1-file-io', '8.1 — File I/O: text, binary & serialization|||8.1 — Đọc/ghi tệp: text, binary & serialization',
-  'Luồng byte vs ký tự; đọc/ghi tệp văn bản an toàn với try-with-resources; ghi/đọc cả đối tượng bằng serialization.',
-  [[
-    `<span class="eyebrow">PRO192 · Chapter 8 · Lesson 8.1</span>
-<h2>Persisting data with streams</h2>
-<p class="lead">A program's data vanishes when it stops — unless you save it to a file. Java reads and writes files through <strong>streams</strong> (CLO3/CLO4): an ordered flow of data between your program and a source/target.</p>
-<div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">Byte streams (InputStream / OutputStream)</div><div class="lz-ld">Move raw bytes — for images, audio, any binary file.</div></div>
-  <div class="lz-layer"><div class="lz-lt">Character streams (Reader / Writer)</div><div class="lz-ld">Move text with proper character encoding — for .txt, .csv, source files.</div></div>
-</div>
-<h3>Write then read text</h3>
-<pre><code class="language-java">import java.io.*;
-
-// write two records — try-with-resources auto-closes the file
-try (BufferedWriter w = new BufferedWriter(new FileWriter("data.txt"))) {
-    w.write("An,3.6"); w.newLine();
-    w.write("Binh,3.1"); w.newLine();
-} catch (IOException e) {
-    System.out.println("Write failed: " + e.getMessage());
-}
-
-// read line by line and rebuild objects
-try (BufferedReader r = new BufferedReader(new FileReader("data.txt"))) {
-    String line;
-    while ((line = r.readLine()) != null) {
-        String[] p = line.split(",");
-        System.out.println("Doc: " + p[0] + " GPA=" + p[1]);
-    }
-} catch (IOException e) { /* handle */ }
-</code></pre>
-<div class="out"><b>Output:</b><br>Doc: An GPA=3.6<br>Doc: Binh GPA=3.1</div>
-<p>File I/O throws <strong>checked exceptions</strong> (IOException) — the compiler forces you to handle them (Chapter 5). <strong>try-with-resources</strong> closes the file even on error, preventing leaks.</p>
-<h3>Object serialization — save a whole object</h3>
-<pre><code class="language-java">import java.io.*;
-
-class Student implements Serializable {   // opt in to serialization
-    String name; double gpa;
-    Student(String n, double g) { name = n; gpa = g; }
-}
-
-// write the object, then read it back
-try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("s.dat"))) {
-    out.writeObject(new Student("An", 3.6));
-}
-try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("s.dat"))) {
-    Student s = (Student) in.readObject();      // cast back to Student
-    System.out.println(s.name + " " + s.gpa);
-} catch (IOException | ClassNotFoundException e) { /* handle */ }
-</code></pre>
-<div class="out"><b>Output:</b> An 3.6</div>
-<div class="callout"><span class="badge">Syllabus · serialization</span> Writing CSV by hand works for simple data, but making a class <code>implements Serializable</code> lets Java save an <em>entire object</em>: <code>writeObject()</code> stores every field and <code>readObject()</code> reconstructs it (a binary file). Modern apps go further with JSON (Jackson/Gson) so the file is human-readable and cross-language — the format behind almost every web API you will build in PRJ301.</div>
-<div class="note-ct">You can now build a complete Java program: model a domain with classes (the pillars), store objects in collections, handle errors, and save/load to files — a real, self-contained application. That is the leap PRO192 delivers.</div>`,
-    `<span class="eyebrow">PRO192 · Chương 8 · Bài 8.1</span>
-<h2>Lưu dữ liệu lâu dài bằng luồng</h2>
-<p class="lead">Dữ liệu của một chương trình biến mất khi nó dừng — trừ khi bạn lưu ra tệp. Java đọc/ghi tệp qua <strong>luồng (stream)</strong> (CLO3/CLO4): một dòng dữ liệu có thứ tự giữa chương trình và một nguồn/đích.</p>
-<div class="lz-stack">
-  <div class="lz-layer"><div class="lz-lt">Luồng byte (InputStream / OutputStream)</div><div class="lz-ld">Chuyển byte thô — cho ảnh, âm thanh, mọi tệp nhị phân.</div></div>
-  <div class="lz-layer"><div class="lz-lt">Luồng ký tự (Reader / Writer)</div><div class="lz-ld">Chuyển văn bản với mã hoá ký tự đúng — cho .txt, .csv, tệp nguồn.</div></div>
-</div>
-<h3>Ghi rồi đọc văn bản</h3>
-<pre><code class="language-java">import java.io.*;
-
-// ghi hai bản ghi — try-with-resources tự đóng tệp
-try (BufferedWriter w = new BufferedWriter(new FileWriter("data.txt"))) {
-    w.write("An,3.6"); w.newLine();
-    w.write("Binh,3.1"); w.newLine();
-} catch (IOException e) {
-    System.out.println("Write failed: " + e.getMessage());
-}
-
-// đọc từng dòng và dựng lại đối tượng
-try (BufferedReader r = new BufferedReader(new FileReader("data.txt"))) {
-    String line;
-    while ((line = r.readLine()) != null) {
-        String[] p = line.split(",");
-        System.out.println("Doc: " + p[0] + " GPA=" + p[1]);
-    }
-} catch (IOException e) { /* xử lý */ }
-</code></pre>
-<div class="out"><b>Kết quả:</b><br>Doc: An GPA=3.6<br>Doc: Binh GPA=3.1</div>
-<p>Đọc/ghi tệp ném <strong>ngoại lệ checked</strong> (IOException) — trình biên dịch buộc bạn xử lý (Chương 5). <strong>try-with-resources</strong> đóng tệp kể cả khi lỗi, ngăn rò rỉ.</p>
-<h3>Serialization đối tượng — lưu cả một đối tượng</h3>
-<pre><code class="language-java">import java.io.*;
-
-class Student implements Serializable {   // đăng ký serialization
-    String name; double gpa;
-    Student(String n, double g) { name = n; gpa = g; }
-}
-
-// ghi đối tượng, rồi đọc lại
-try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("s.dat"))) {
-    out.writeObject(new Student("An", 3.6));
-}
-try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("s.dat"))) {
-    Student s = (Student) in.readObject();      // ép lại về Student
-    System.out.println(s.name + " " + s.gpa);
-} catch (IOException | ClassNotFoundException e) { /* xử lý */ }
-</code></pre>
-<div class="out"><b>Kết quả:</b> An 3.6</div>
-<div class="callout"><span class="badge">Syllabus · serialization</span> Viết CSV bằng tay ổn cho dữ liệu đơn giản, nhưng cho lớp <code>implements Serializable</code> giúp Java lưu cả <em>một đối tượng</em>: <code>writeObject()</code> lưu mọi trường và <code>readObject()</code> dựng lại nó (tệp nhị phân). App hiện đại đi xa hơn với JSON (Jackson/Gson) để tệp đọc được bằng mắt và đa ngôn ngữ — định dạng sau gần như mọi web API bạn sẽ xây ở PRJ301.</div>
-<div class="note-ct">Giờ bạn xây được một chương trình Java hoàn chỉnh: mô hình một lĩnh vực bằng các lớp (các trụ cột), lưu đối tượng trong collections, xử lý lỗi, và lưu/nạp ra tệp — một ứng dụng thật, tự chứa. Đó là bước nhảy PRO192 mang lại.</div>`,
-  ]]);
-
-const c8q = quiz('pro192-quiz-ch8', 'Chapter 8 Quiz|||Quiz chương 8', [
-  { id: 'q1', points: 1, question: 'Character streams (Reader/Writer) are used for…|||Luồng ký tự (Reader/Writer) dùng cho…', options: ['images and audio|||ảnh và âm thanh', 'text files|||tệp văn bản', 'compiling code|||biên dịch code', 'network sockets only|||chỉ socket mạng'], correctIndex: 1, explanation: 'Reader/Writer cho văn bản; byte stream cho nhị phân (ảnh/âm thanh).|||Reader/Writer for text; byte streams for binary (images/audio).' },
-  { id: 'q2', points: 1, question: 'try-with-resources is useful because it…|||try-with-resources hữu ích vì nó…', options: ['runs faster|||chạy nhanh hơn', 'automatically closes the file/resource|||tự động đóng tệp/tài nguyên', 'skips exceptions|||bỏ qua ngoại lệ', 'needs no catch ever|||không bao giờ cần catch'], correctIndex: 1, explanation: 'Nó tự đóng tài nguyên khi hết khối, kể cả khi có lỗi.|||It auto-closes the resource when the block ends, even on error.' },
-  { id: 'q3', points: 1, question: 'To save an entire object to a file, the class must…|||Để lưu cả một đối tượng ra tệp, lớp phải…', options: ['be final|||là final', 'implement Serializable|||implements Serializable', 'have no fields|||không có trường', 'extend Object|||extends Object'], correctIndex: 1, explanation: 'implements Serializable cho phép writeObject()/readObject().|||implements Serializable enables writeObject()/readObject().' },
-]);
-
-/* ════════════════════ ĐÁNH GIÁ — PE & FE ════════════════════ */
-const pe = doc('pro192-thi-thuc-hanh', 'Practical Exam (85 min, 30%)|||Thi thực hành (85 phút, 30%)',
-  'Số liệu thật của syllabus cho PE (85 phút, 30%, điều kiện >0), bài thi gồm gì, và luyện thế nào trên Java 8/NetBeans.',
-  [[
-    `<span class="eyebrow">PRO192 · Assessment · PE</span>
-<h2>Practical Exam (85 minutes, 30% of the subject)</h2>
-<p class="lead">Syllabus numbers, not a guess: the Practical Exam is <strong>on-going</strong>, <strong>1 part</strong>, <strong>85 minutes</strong>, worth <strong>30%</strong>, completion criterion <strong>&gt; 0</strong> — score zero and you fail the subject. It is the single heaviest component, equal to the final.</p>
-<div class="callout warn"><span class="badge">What the syllabus does not say</span> It publishes no problem bank, no marking scheme and no allowed-resources list. Take those from your lecturer. Below is the shape the exam takes from the course content — CLO8 (a complete program using an object array) on the tool the syllabus names, <strong>NetBeans</strong> / <strong>Java 8</strong>.</div>
-<h3>What 85 minutes has to contain</h3>
-<table>
-<thead><tr><th>Piece</th><th>Lesson</th></tr></thead>
-<tbody>
-<tr><td>Entity class: private fields, constructor(s), getters/setters, toString()</td><td>3.1</td></tr>
-<tr><td>Inheritance / abstract parent + 2 subclasses overriding one method</td><td>3.2, 4.1</td></tr>
-<tr><td>Object array / ArrayList (CLO8): add / display / find / update / remove</td><td>6.1, 7.1</td></tr>
-<tr><td>Menu loop with validated input (try/catch, re-ask until valid)</td><td>5.1</td></tr>
-<tr><td>Sort by a chosen field, and/or read/write a text file</td><td>6.1, 8.1</td></tr>
-</tbody>
-</table>
-<h3>How to prepare, specifically</h3>
-<ul>
-<li><b>Type a full CRUD program from a blank NetBeans project, on a timer, at least five times.</b> Entity → manager class → menu → features. When the skeleton is muscle memory, 85 minutes is comfortable.</li>
-<li><b>Compile after every feature.</b> A program that runs and does four of six features scores far more than a "complete" one that will not compile.</li>
-<li><b>Do the easy features first</b> (add, display) before a tricky sort — bank partial credit.</li>
-<li><b>Validate every input.</b> A crash on <code>InputMismatchException</code> costs the feature it was in.</li>
-<li><b>Match the required output format exactly</b> — labels, spacing, printf widths, decimals.</li>
-<li><b>Write Java 8.</b> Arrow <code>switch</code>, <code>var</code>, <code>if (x instanceof Dog d)</code> and text blocks all fail to compile on JDK 8 — use the classic forms.</li>
-</ul>
-<div class="callout"><span class="badge">Sample</span> Rehearse with the six Lab briefs and the Assignment from your class — they are the same shape as the PE.</div>`,
-    `<span class="eyebrow">PRO192 · Đánh giá · PE</span>
-<h2>Thi thực hành (85 phút, 30% điểm môn)</h2>
-<p class="lead">Số liệu của syllabus, không phải phỏng đoán: Practical Exam là <strong>on-going</strong>, <strong>1 phần</strong>, <strong>85 phút</strong>, trọng số <strong>30%</strong>, điều kiện hoàn thành <strong>&gt; 0</strong> — bị 0 điểm là trượt môn. Đây là thành phần nặng nhất, ngang bài cuối kỳ.</p>
-<div class="callout warn"><span class="badge">Cái syllabus KHÔNG nói</span> Nó không công bố ngân hàng đề, thang chấm hay danh sách tài liệu được mang vào. Hỏi giảng viên. Dưới đây là hình dạng bài suy ra từ nội dung môn — CLO8 (chương trình hoàn chỉnh dùng mảng đối tượng) trên công cụ syllabus nêu đích danh, <strong>NetBeans</strong> / <strong>Java 8</strong>.</div>
-<h3>85 phút đó phải chứa những gì</h3>
-<table>
-<thead><tr><th>Mảnh</th><th>Bài</th></tr></thead>
-<tbody>
-<tr><td>Lớp entity: trường private, constructor, getter/setter, toString()</td><td>3.1</td></tr>
-<tr><td>Kế thừa / lớp cha abstract + 2 lớp con ghi đè một phương thức</td><td>3.2, 4.1</td></tr>
-<tr><td>Mảng đối tượng / ArrayList (CLO8): thêm / hiện / tìm / sửa / xoá</td><td>6.1, 7.1</td></tr>
-<tr><td>Vòng menu với nhập liệu có validate (try/catch, hỏi lại tới khi hợp lệ)</td><td>5.1</td></tr>
-<tr><td>Sắp theo một trường, và/hoặc đọc–ghi tệp văn bản</td><td>6.1, 8.1</td></tr>
-</tbody>
-</table>
-<h3>Luyện cụ thể thế nào</h3>
-<ul>
-<li><b>Gõ trọn một chương trình CRUD từ project NetBeans trống, có bấm giờ, ít nhất năm lần.</b> Entity → lớp quản lý → menu → các chức năng. Khi bộ khung thành phản xạ, 85 phút là thoải mái.</li>
-<li><b>Biên dịch sau mỗi chức năng.</b> Chương trình chạy được và làm 4/6 chức năng ăn điểm hơn nhiều bản "hoàn chỉnh" không biên dịch nổi.</li>
-<li><b>Làm chức năng dễ trước</b> (thêm, hiện) trước một hàm sort hóc búa — gom điểm phần.</li>
-<li><b>Validate mọi input.</b> Sập vì <code>InputMismatchException</code> là mất nguyên chức năng đó.</li>
-<li><b>Khớp đúng định dạng output yêu cầu</b> — nhãn, khoảng trắng, độ rộng printf, số thập phân.</li>
-<li><b>Viết Java 8.</b> <code>switch</code> mũi tên, <code>var</code>, <code>if (x instanceof Dog d)</code> và text block đều không biên dịch trên JDK 8 — dùng dạng cổ điển.</li>
-</ul>
-<div class="callout"><span class="badge">Câu mẫu</span> Diễn tập bằng 6 đề Lab và Assignment của lớp bạn — chúng cùng hình dạng với PE.</div>`,
-  ]]);
-
-const fe = {
-  title: 'Final Exam (60 min, 30%, gate 4/10)|||Thi cuối kỳ (60 phút, 30%, cổng 4/10)',
-  slug: 'pro192-thi-cuoi-ky',
-  type: 'DOCUMENT',
-  description: 'Syllabus cho gì (60 phút, 30%, ≥4, 50 MC theo bản trích) và cách ôn theo 9 CLO + câu mẫu.',
-  content: bi(
-    `<span class="eyebrow">PRO192 · Assessment · FE</span>
-<h2>Final Exam (60 minutes, 30%, must reach 4/10)</h2>
-<p class="lead">The syllabus states the Final Exam is <strong>1 part</strong>, weight <strong>30%</strong>, duration <strong>60 minutes</strong>, completion criterion <strong>&ge; 4</strong>/10, and per the FLM extract a <strong>50-question multiple-choice</strong> paper. Below that gate you fail the subject whatever your average.</p>
-<h3>Revise by what is examinable</h3>
-<p>Sixty minutes to cover nine CLOs. Work through them in order:</p>
-<ul>
-<li><b>CLO1, CLO5, CLO6 — the four pillars &amp; class relationships.</b> Encapsulation, inheritance, polymorphism, abstraction; <code>this</code> vs <code>super</code>; overloading vs overriding; static/abstract/final/access modifiers. Lessons 1.1, 3.1, 3.2.</li>
-<li><b>CLO7 — abstract classes &amp; interfaces.</b> Interface members incl. default methods; when to choose which. Lesson 4.1.</li>
-<li><b>CLO4 — exceptions.</b> Checked vs unchecked; try/catch/finally; throw vs throws; assertion. Lesson 5.1.</li>
-<li><b>CLO2, CLO3 — Java syntax &amp; control.</b> Primitives, casting, instanceof, parameter passing, Array/ArrayList, String/StringBuffer. Lessons 2.1, 2.2, 3.2.</li>
-<li><b>CLO8, CLO9 — object arrays &amp; collections.</b> List / Set / Map and what each guarantees; equals/hashCode. Lessons 6.1, 7.1.</li>
-</ul>
-<h3>In the room</h3>
-<ul>
-<li>Pace yourself: 60 minutes across 50 questions is ~70 seconds each — flag hard ones and return.</li>
-<li>For code items, trace the program on paper line by line — predicted output beats intuition, especially on overriding and on <code>finally</code>.</li>
-<li>Eliminate clearly wrong options first. Never leave a gated paper blank: 4/10 is the gate.</li>
-</ul>
-<div class="callout"><span class="badge">Sample</span> The quiz below draws from this course to practise the content. Real past papers are added in the exam room.</div>`,
-    `<span class="eyebrow">PRO192 · Đánh giá · FE</span>
-<h2>Thi cuối kỳ (60 phút, 30%, phải đạt 4/10)</h2>
-<p class="lead">Syllabus nêu Thi cuối kỳ là <strong>1 phần</strong>, trọng số <strong>30%</strong>, thời lượng <strong>60 phút</strong>, điều kiện hoàn thành <strong>&ge; 4</strong>/10, và theo bản trích FLM là bài <strong>50 câu trắc nghiệm</strong>. Dưới mức đó là trượt môn dù trung bình bao nhiêu.</p>
-<h3>Ôn theo phạm vi thi</h3>
-<p>Sáu mươi phút phủ chín CLO. Đi theo thứ tự:</p>
-<ul>
-<li><b>CLO1, CLO5, CLO6 — bốn trụ cột &amp; quan hệ giữa các lớp.</b> Đóng gói, kế thừa, đa hình, trừu tượng; <code>this</code> vs <code>super</code>; overloading vs overriding; static/abstract/final/access modifier. Bài 1.1, 3.1, 3.2.</li>
-<li><b>CLO7 — abstract class &amp; interface.</b> Thành viên interface kể cả default method; khi nào chọn cái nào. Bài 4.1.</li>
-<li><b>CLO4 — ngoại lệ.</b> Checked vs unchecked; try/catch/finally; throw vs throws; assertion. Bài 5.1.</li>
-<li><b>CLO2, CLO3 — cú pháp Java &amp; điều khiển.</b> Kiểu nguyên thuỷ, ép kiểu, instanceof, truyền tham số, Array/ArrayList, String/StringBuffer. Bài 2.1, 2.2, 3.2.</li>
-<li><b>CLO8, CLO9 — mảng đối tượng &amp; collections.</b> List / Set / Map và cái nào bảo đảm gì; equals/hashCode. Bài 6.1, 7.1.</li>
-</ul>
-<h3>Trong phòng thi</h3>
-<ul>
-<li>Chia thời gian: 60 phút cho 50 câu ~70 giây/câu — đánh dấu câu khó và quay lại.</li>
-<li>Với câu về code, trace chương trình trên giấy từng dòng — output dự đoán thắng trực giác, nhất là ở ghi đè và ở <code>finally</code>.</li>
-<li>Loại phương án sai rõ ràng trước. Đừng bỏ trống bài có cổng điểm: 4/10 là cửa.</li>
-</ul>
-<div class="callout"><span class="badge">Câu mẫu</span> Quiz dưới đây lấy từ chính khoá học để luyện nội dung. Đề thi thật được thêm ở phòng thi.</div>`,
-  ),
-  quiz: {
-    timeLimitSeconds: 420,
-    questions: [
-      { id: 'q1', points: 1, question: 'OOP bundles together…|||OOP gom lại với nhau…', options: ['only functions|||chỉ hàm', 'data and the behavior that acts on it|||dữ liệu và hành vi tác động lên nó', 'only variables|||chỉ biến', 'files and folders|||tệp và thư mục'], correctIndex: 1, explanation: 'OOP gom dữ liệu và hành vi vào đối tượng.|||OOP bundles data and behavior into objects.' },
-      { id: 'q2', points: 1, question: 'Treating subclasses through a common parent type and running the right method is…|||Xử lý lớp con qua một kiểu cha chung và chạy đúng phương thức là…', options: ['encapsulation|||đóng gói', 'polymorphism|||đa hình', 'a getter|||một getter', 'a package|||một package'], correctIndex: 1, explanation: 'Đó là đa hình (dynamic dispatch).|||That is polymorphism (dynamic dispatch).' },
-      { id: 'q3', points: 1, question: 'A class that cannot be instantiated but defines abstract methods is…|||Một lớp không tạo thể hiện được nhưng định nghĩa phương thức trừu tượng là…', options: ['an interface|||một interface', 'an abstract class|||một abstract class', 'a final class|||một lớp final', 'an object|||một đối tượng'], correctIndex: 1, explanation: 'Abstract class: không new được, có thể có phương thức trừu tượng.|||An abstract class cannot be instantiated and may declare abstract methods.' },
-      { id: 'q4', points: 1, question: 'Which block always runs, whether or not an exception occurs?|||Khối nào luôn chạy, dù có hay không có ngoại lệ?', options: ['try', 'catch', 'finally', 'throw'], correctIndex: 2, explanation: 'finally luôn chạy — dùng để dọn dẹp.|||finally always runs — used for cleanup.' },
-      { id: 'q5', points: 1, question: 'A HashMap is best when you need to…|||HashMap tốt nhất khi bạn cần…', options: ['store an ordered list|||lưu một danh sách có thứ tự', 'look up values by a key|||tra giá trị theo khoá', 'remove duplicates|||loại trùng', 'catch exceptions|||bắt ngoại lệ'], correctIndex: 1, explanation: 'Map tra theo khoá gần tức thì.|||A Map looks up by key near-instantly.' },
-      { id: 'q6', points: 1, question: 'Generics like List<Student> give you…|||Generics như List<Student> cho bạn…', options: ['slower code|||code chậm hơn', 'compile-time type safety|||an toàn kiểu lúc biên dịch', 'more exceptions|||nhiều ngoại lệ hơn', 'no benefit|||không lợi ích'], correctIndex: 1, explanation: 'Generics cho an toàn kiểu lúc biên dịch, khỏi ép kiểu.|||Generics give compile-time type safety and avoid casting.' },
-    ],
-  },
-};
-
 export default {
   semester: { code: 'KY2', name: 'Kỳ 2', ordinal: 2 },
   course: {
@@ -1263,24 +18,1710 @@ export default {
     status: 'PUBLISHED',
     syncOrder: true,
     pruneSections: true,
-    thumbnailUrl: 'https://media.cuongthai.com/images/academy-covers/v3/PRO192.webp',
-    shortDescription: 'Think in objects: Java classes, the four OOP pillars, abstract classes & interfaces, exceptions, object arrays, collections (List/Set/Map) and file I/O — in NetBeans, Java 8. Bilingual, runnable code & quizzes.|||Tư duy bằng đối tượng: lớp Java, bốn trụ cột OOP, abstract class & interface, ngoại lệ, mảng đối tượng, collections (List/Set/Map) và đọc/ghi tệp — trên NetBeans, Java 8. Song ngữ, code chạy được & quiz.',
-    description: 'Môn <strong>PRO192 — Object-Oriented Programming</strong> (kỳ 2) chuyển từ tư duy thủ tục (PRF192, C) sang hướng đối tượng với <strong>Java</strong> trên <strong>NetBeans</strong>. Bám khung 8 chương của giáo trình FLM: <strong>Giới thiệu OO</strong> → <strong>Java cơ bản</strong> (kiểu, điều khiển, phương thức, Array/ArrayList, String/StringBuffer, I/O) → <strong>OOP</strong> (đóng gói, kế thừa, đa hình, trừu tượng) → <strong>abstract class &amp; interface</strong> → <strong>ngoại lệ</strong> → <strong>mảng đối tượng</strong> → <strong>collections</strong> → <strong>đọc/ghi tệp &amp; serialization</strong>. Song ngữ EN/VI, code Java chạy được, bổ sung chuyên sâu (this/super, casting &amp; instanceof, access modifier, constructor chaining, UML, overloading vs overriding, ArrayList vs array, equals/hashCode). Tiên quyết: PRF192.',
-    whatYouLearn: 'Tư duy hướng đối tượng; cú pháp Java & JVM; kiểu/điều khiển/phương thức & truyền tham số by value; Array vs ArrayList, String vs StringBuffer; định nghĩa lớp, constructor & this, đóng gói + access modifier, trừu tượng; kế thừa (extends/super), đa hình & dynamic dispatch, override vs overload, casting & instanceof; abstract class & interface (Comparable, default method); xử lý ngoại lệ (try/catch/finally, throw/throws, assertion); mảng đối tượng (add/find/update/remove/sort); Java Collections (List/Set/Map, generics, equals/hashCode); đọc/ghi tệp text & serialization đối tượng; sơ đồ lớp UML.',
-    requirements: 'Tiên quyết: đạt PRF192 (vững hàm, mảng, con trỏ trong C). Cần cài JDK (Java 8+) và Apache NetBeans.',
-    documentsNote: 'Sách chính: Core Java Vol 1 & 2 — Cay Horstmann (Pearson 11th) · The Java Language Specification, Java SE 8 (Oracle) · học liệu "OOP using Java" của FU (trên FLM). Công cụ: JDK 8+, Apache NetBeans.',
+    shortDescription: 'Think in objects, not just steps: Java classes, the four OOP pillars (encapsulation, inheritance, polymorphism, abstraction), interfaces, exceptions, collections and file I/O — the leap from PRF192 to real software.|||Tư duy bằng đối tượng, không chỉ các bước: lớp Java, bốn trụ cột OOP (đóng gói, kế thừa, đa hình, trừu tượng), interface, ngoại lệ, collections và tệp — bước nhảy từ PRF192 tới phần mềm thật.',
+    description: 'Môn lập trình thứ hai của ngành, chuyển từ tư duy thủ tục (C, PRF192) sang hướng đối tượng với Java. Học cách mô hình bài toán thành các lớp và đối tượng, áp dụng bốn trụ cột OOP, xử lý ngoại lệ, dùng collections và đọc/ghi tệp. Tiên quyết: PRF192.',
+    whatYouLearn: 'Tư duy hướng đối tượng; cú pháp Java; định nghĩa lớp/đối tượng/constructor; đóng gói, kế thừa, đa hình, trừu tượng; abstract class & interface; xử lý ngoại lệ (try/catch); mảng đối tượng & chương trình hoàn chỉnh; Java Collections (List/Set/Map); luồng & đọc/ghi tệp.',
+    requirements: 'Tiên quyết: đạt PRF192 (vững hàm, mảng, con trỏ trong C). Cần cài JDK (Java 8+) và NetBeans.',
+    documentsNote: 'Giáo trình: Core Java Vol 1 & 2 (Cay Horstmann) · Java 8 Specification (Oracle) · học liệu OOP using Java do FU biên soạn. Công cụ: JDK 8+, NetBeans. Kèm file syllabus gốc PRO192.pdf.',
   },
   sections: [
-    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Sách chính Core Java, Java 8 Spec, học liệu FU trên FLM; công cụ JDK/NetBeans; lộ trình.', lessons: [taiLieu] },
-    { title: 'Giới thiệu môn học|||Course introduction', description: '9 CLO, khung 8 chương & cấu trúc điểm.', lessons: [intro] },
-    { title: 'Chương 1 — Giới thiệu OO|||Chapter 1 — Introduction', description: 'Khái niệm OO, thuật ngữ đối tượng, JVM, cài JDK/NetBeans.', lessons: [c1, c1q] },
-    { title: 'Chương 2 — Java cơ bản|||Chapter 2 — Basic Java language', description: 'Cú pháp, kiểu, điều khiển, phương thức, Array/ArrayList, String, I/O.', lessons: [c2a, c2b, c2q] },
-    { title: 'Chương 3 — OOP|||Chapter 3 — OOP', description: 'Lớp, đóng gói, trừu tượng, kế thừa, đa hình, ghi đè.', lessons: [c3a, c3b, c3q] },
-    { title: 'Chương 4 — Abstract class & Interface|||Chapter 4 — Abstract class & Interface', description: 'Hợp đồng cho hành vi; abstract vs interface; Comparable.', lessons: [c4, c4q] },
-    { title: 'Chương 5 — Lỗi & Ngoại lệ|||Chapter 5 — Error & Exception', description: 'try/catch/finally, throw/throws, checked/unchecked, assertion.', lessons: [c5, c5q] },
-    { title: 'Chương 6 — Mảng đối tượng|||Chapter 6 — Array of Objects', description: 'Thêm/tìm/sửa/xoá/sắp xếp; chương trình theo menu CLO8.', lessons: [c6, c6q] },
-    { title: 'Chương 7 — Collections|||Chapter 7 — Collections', description: 'List, Set, Map, generics, equals/hashCode.', lessons: [c7, c7q] },
-    { title: 'Chương 8 — Đọc/ghi tệp|||Chapter 8 — File I/O', description: 'Luồng text/binary, try-with-resources, serialization đối tượng.', lessons: [c8, c8q] },
-    { title: 'Thi thực hành & Cuối kỳ|||Practical & Final Exam', description: 'PE (85 phút, 30%) và FE (60 phút, 30%, cổng 4/10) — số liệu syllabus & cách ôn.', lessons: [pe, fe] },
+    /* ══════════════════ MỤC 0 — GIỚI THIỆU & HƯỚNG DẪN HỌC ══════════════════ */
+    {
+      title: 'Section 0 — Introduction & Study Guide|||Mục 0 — Giới thiệu môn học & Hướng dẫn học',
+      description: 'Đọc trước tiên: môn học là gì, học ra sao, điều kiện qua môn, lộ trình và công cụ.',
+      lessons: [
+        {
+          title: '0.1 — About PRO192 & the course map|||0.1 — Giới thiệu PRO192 & bản đồ môn học',
+          slug: 'pro192-gioi-thieu',
+          type: 'VIDEO',
+          isFreePreview: true,
+          description: 'Từ lập trình thủ tục sang hướng đối tượng, và bản đồ toàn bộ môn học.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Lesson 0.1</span>
+<h2>About PRO192 — Object-Oriented Programming</h2>
+<p class="lead">In PRF192 you learned to give a computer step-by-step instructions in C. PRO192 teaches a new way to <strong>think</strong>: instead of a long list of steps, you model your problem as a set of <strong>objects</strong> that hold their own data and know how to behave. This is <strong>object-oriented programming (OOP)</strong>, and the language is <strong>Java</strong>.</p>
+<p>Why the shift? Real programs get huge. Procedural code becomes a tangle when data and the functions that touch it drift apart. OOP keeps related data and behavior <em>together</em> in objects, making big programs easier to build, reuse and maintain. Almost every large system — Android apps, banking backends, enterprise software — is object-oriented.</p>
+<h3>Course map — from Java basics to real OOP</h3>
+<div class="lz-map">
+  <div class="lz-stage">Getting into Java</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">OO thinking &amp; Java basics</div><div class="lz-nsub">Why objects · Java syntax vs C</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Classes &amp; Objects</div><div class="lz-nsub">Fields · methods · constructors</div></div></div>
+  <div class="lz-stage">The four pillars of OOP</div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Encapsulation &amp; Abstraction</div><div class="lz-nsub">Hide data · expose a clean interface</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Inheritance &amp; Polymorphism</div><div class="lz-nsub">Reuse &amp; one interface, many forms</div></div></div>
+  <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Abstract classes &amp; Interfaces</div><div class="lz-nsub">Contracts for behavior</div></div></div>
+  <div class="lz-stage">Robust, complete programs</div>
+  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Exception handling</div><div class="lz-nsub">try / catch · fail gracefully</div></div></div>
+  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Arrays of objects</div><div class="lz-nsub">A complete management program</div></div></div>
+  <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Java Collections</div><div class="lz-nsub">List · Set · Map</div></div></div>
+  <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Streams &amp; File I/O</div><div class="lz-nsub">Read/write data to files</div></div></div>
+  <div class="lz-stage">Advanced · beyond the syllabus</div>
+  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Generics &amp; lambdas · design principles (SOLID)</div><div class="lz-nsub">Toward professional Java</div></div></div>
+</div>
+<p>PRO192 is the prerequisite mindset for <span class="badge">LAB211</span>, <span class="badge">PRJ301</span> (Java web) and every later software course. Where PRF192 made you a programmer, PRO192 makes you a <em>software designer</em>.</p>
+<div class="callout ok">OOP clicks through practice, not reading. For every concept, write a small class and run it. The examples here are short on purpose — retype them in NetBeans and experiment.</div>
+<a class="link-card exphub" href="/exp-hub/pro192-cai-dat-java-netbeans?ref=%2Fcourses%2Fobject-oriented-programming%2Flearn&reflabel=PRO192%20%E2%80%94%20Object-Oriented%20Programming" target="_blank" rel="noopener">
+  <span class="lc-ico">🛠️</span>
+  <span class="lc-body"><span class="lc-title">Set up Java (JDK) &amp; NetBeans</span><span class="lc-sub">Install guide with official download links — on Exp Hub.</span></span>
+  <span class="lc-cta">EXP HUB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bài 0.1</span>
+<h2>Giới thiệu PRO192 — Lập trình hướng đối tượng</h2>
+<p class="lead">Ở PRF192 bạn học ra lệnh cho máy tính từng bước bằng C. PRO192 dạy một cách <strong>tư duy</strong> mới: thay vì một danh sách bước dài, bạn mô hình bài toán thành một tập <strong>đối tượng (object)</strong> tự giữ dữ liệu của mình và biết cách hành xử. Đây là <strong>lập trình hướng đối tượng (OOP)</strong>, và ngôn ngữ là <strong>Java</strong>.</p>
+<p>Vì sao chuyển? Chương trình thật rất lớn. Code thủ tục thành mớ bòng bong khi dữ liệu và các hàm động tới nó tách rời nhau. OOP giữ dữ liệu và hành vi liên quan <em>ở cùng nhau</em> trong đối tượng, làm chương trình lớn dễ xây, tái dùng và bảo trì hơn. Gần như mọi hệ thống lớn — app Android, backend ngân hàng, phần mềm doanh nghiệp — đều hướng đối tượng.</p>
+<h3>Bản đồ môn học — từ Java cơ bản tới OOP thật</h3>
+<div class="lz-map">
+  <div class="lz-stage">Bước vào Java</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Tư duy OO &amp; Java cơ bản</div><div class="lz-nsub">Vì sao đối tượng · cú pháp Java vs C</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Lớp &amp; Đối tượng</div><div class="lz-nsub">Trường · phương thức · constructor</div></div></div>
+  <div class="lz-stage">Bốn trụ cột của OOP</div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Đóng gói &amp; Trừu tượng</div><div class="lz-nsub">Giấu dữ liệu · lộ giao diện sạch</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Kế thừa &amp; Đa hình</div><div class="lz-nsub">Tái dùng &amp; một giao diện, nhiều hình</div></div></div>
+  <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Abstract class &amp; Interface</div><div class="lz-nsub">Hợp đồng cho hành vi</div></div></div>
+  <div class="lz-stage">Chương trình bền, hoàn chỉnh</div>
+  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Xử lý ngoại lệ</div><div class="lz-nsub">try / catch · lỗi mà không sập</div></div></div>
+  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Mảng đối tượng</div><div class="lz-nsub">Một chương trình quản lý hoàn chỉnh</div></div></div>
+  <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Java Collections</div><div class="lz-nsub">List · Set · Map</div></div></div>
+  <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Luồng &amp; Đọc/ghi tệp</div><div class="lz-nsub">Đọc/ghi dữ liệu ra tệp</div></div></div>
+  <div class="lz-stage">Nâng cao · ngoài giáo trình</div>
+  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Generics &amp; lambda · nguyên tắc thiết kế (SOLID)</div><div class="lz-nsub">Hướng tới Java chuyên nghiệp</div></div></div>
+</div>
+<p>PRO192 là tư duy tiên quyết cho <span class="badge">LAB211</span>, <span class="badge">PRJ301</span> (Java web) và mọi môn phần mềm sau này. PRF192 biến bạn thành lập trình viên, PRO192 biến bạn thành <em>người thiết kế phần mềm</em>.</p>
+<div class="callout ok">OOP "thấm" qua luyện tập, không phải đọc. Với mỗi khái niệm, viết một lớp nhỏ và chạy thử. Ví dụ ở đây cố tình ngắn — gõ lại trong NetBeans và thử nghiệm.</div>
+<a class="link-card exphub" href="/exp-hub/pro192-cai-dat-java-netbeans?ref=%2Fcourses%2Fobject-oriented-programming%2Flearn&reflabel=PRO192%20%E2%80%94%20Object-Oriented%20Programming" target="_blank" rel="noopener">
+  <span class="lc-ico">🛠️</span>
+  <span class="lc-body"><span class="lc-title">Cài đặt Java (JDK) &amp; NetBeans</span><span class="lc-sub">Hướng dẫn cài kèm link tải chính chủ — trên Exp Hub.</span></span>
+  <span class="lc-cta">EXP HUB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '0.2 — Passing requirements & grading|||0.2 — Điều kiện qua môn & cấu trúc điểm',
+          slug: 'pro192-dieu-kien-qua-mon',
+          type: 'VIDEO',
+          isFreePreview: true,
+          description: 'Tổng giờ, tiên quyết, điểm sàn qua môn và trọng số từng cột điểm.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Lesson 0.2</span>
+<h2>Passing requirements &amp; grading</h2>
+<p class="lead">From the official PRO192 syllabus. This is a hands-on coding course — most of the grade is practical work done through the term.</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Credits</span><span class="v">3</span></div>
+  <div class="kv"><span class="k">Total hours</span><span class="v">150h <small>45h class + practical &amp; final exams + 104h self-study</small></span></div>
+  <div class="kv"><span class="k">Prerequisite</span><span class="v">Pass PRF192</span></div>
+  <div class="kv"><span class="k">Grading scale</span><span class="v">10 <small>pass when average ≥ 5.0</small></span></div>
+  <div class="kv"><span class="k">Exam eligibility</span><span class="v">Attend ≥ 80% of slots</span></div>
+</div>
+<h3>Grade structure — the five components, exactly as the syllabus lists them</h3>
+<table>
+  <thead><tr><th>Component</th><th>Type</th><th>Parts</th><th>Weight</th><th>Completion</th><th>Duration</th></tr></thead>
+  <tbody>
+    <tr><td>Assignment</td><td>on-going</td><td>1</td><td>20%</td><td>&gt; 0</td><td>Option 1: 28 slots</td></tr>
+    <tr><td>Lab</td><td>on-going</td><td>6</td><td>10%</td><td>&gt; 0</td><td>Option 1: 90&#39;/each</td></tr>
+    <tr><td>Practical Exam</td><td>on-going</td><td>1</td><td>30%</td><td>&gt; 0</td><td>85&#39;</td></tr>
+    <tr><td>Progress Test</td><td>on-going</td><td>2</td><td>10%</td><td>&gt; 0</td><td>Option 1: 30&#39;/each</td></tr>
+    <tr><td>Final Exam</td><td>final exam</td><td>1</td><td>30%</td><td>&ge; 4</td><td>60&#39;</td></tr>
+  </tbody>
+</table>
+<p>The Assignment, Lab and Progress-Test rows carry a second &ldquo;Option 2 (for the Constructivism approach)&rdquo; duration that the syllabus export truncates; your class runs one of the two options &mdash; confirm which in the first slot. <strong>The syllabus publishes no question count and no question type for the Progress Tests or the Final Exam</strong>, only the durations above.</p>
+<div class="callout warn">Three gates, not two. (1) Attend ≥ 80% of slots to be allowed to sit the final. (2) <strong>Every on-going component has completion criterion &gt; 0</strong> — a zero on the Assignment, on any Lab, on the Practical Exam or on a Progress Test fails the subject by itself, however good the rest is. (3) Final exam ≥ <strong>4.0</strong> and weighted average ≥ <strong>5.0</strong>. Note the <strong>Practical Exam alone is 30%</strong> — you must code fluently under time pressure, and the only preparation that works is writing lots of code yourself, not reading solutions.</div>
+<div class="note-ct">40% of your grade (Practical + Labs) is you writing working Java. Treat every lab seriously and build the assignment early. OOP is a skill learned at the keyboard.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bài 0.2</span>
+<h2>Điều kiện qua môn &amp; cấu trúc điểm</h2>
+<p class="lead">Từ syllabus chính thức PRO192. Đây là môn code thực hành — phần lớn điểm là bài thực hành làm suốt kỳ.</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Số tín chỉ</span><span class="v">3</span></div>
+  <div class="kv"><span class="k">Tổng giờ</span><span class="v">150h <small>45h học + thi thực hành &amp; cuối kỳ + 104h tự học</small></span></div>
+  <div class="kv"><span class="k">Tiên quyết</span><span class="v">Đạt PRF192</span></div>
+  <div class="kv"><span class="k">Thang điểm</span><span class="v">10 <small>qua môn khi trung bình ≥ 5.0</small></span></div>
+  <div class="kv"><span class="k">Điều kiện dự thi</span><span class="v">Dự ≥ 80% số buổi</span></div>
+</div>
+<h3>Cấu trúc điểm — năm thành phần, đúng như syllabus liệt kê</h3>
+<table>
+  <thead><tr><th>Thành phần</th><th>Loại</th><th>Số phần</th><th>Trọng số</th><th>Điều kiện hoàn thành</th><th>Thời lượng</th></tr></thead>
+  <tbody>
+    <tr><td>Assignment</td><td>on-going</td><td>1</td><td>20%</td><td>&gt; 0</td><td>Option 1: 28 slot</td></tr>
+    <tr><td>Lab</td><td>on-going</td><td>6</td><td>10%</td><td>&gt; 0</td><td>Option 1: 90&#39;/bài</td></tr>
+    <tr><td>Practical Exam (thi thực hành)</td><td>on-going</td><td>1</td><td>30%</td><td>&gt; 0</td><td>85&#39;</td></tr>
+    <tr><td>Progress Test</td><td>on-going</td><td>2</td><td>10%</td><td>&gt; 0</td><td>Option 1: 30&#39;/bài</td></tr>
+    <tr><td>Thi cuối kỳ</td><td>final exam</td><td>1</td><td>30%</td><td>&ge; 4</td><td>60&#39;</td></tr>
+  </tbody>
+</table>
+<p>Các dòng Assignment, Lab và Progress Test còn có thời lượng &ldquo;Option 2 (cho hướng Constructivism)&rdquo; bị bản xuất syllabus cắt mất; lớp bạn chạy một trong hai phương án — hỏi rõ ngay buổi đầu. <strong>Syllabus KHÔNG công bố số câu và dạng câu hỏi</strong> cho Progress Test hay bài thi cuối, chỉ có thời lượng ở trên.</p>
+<div class="callout warn">Ba cửa, không phải hai. (1) Dự ≥ 80% số slot mới được thi cuối kỳ. (2) <strong>Mọi thành phần on-going có điều kiện hoàn thành &gt; 0</strong> — một điểm 0 ở Assignment, ở một bài Lab, ở Practical Exam hay một Progress Test là tự nó đánh trượt môn, dù phần còn lại tốt tới đâu. (3) Thi cuối ≥ <strong>4,0</strong> và trung bình có trọng số ≥ <strong>5,0</strong>. Lưu ý <strong>riêng Practical Exam đã 30%</strong> — bạn phải code trôi chảy dưới áp lực thời gian, và cách luyện duy nhất hiệu quả là tự viết thật nhiều code, không phải đọc lời giải.</div>
+<div class="note-ct">40% điểm (Practical + Lab) là bạn viết Java chạy được. Hãy làm mọi lab nghiêm túc và bắt đầu assignment sớm. OOP là kỹ năng học ở bàn phím.</div>
+</div>
+`,
+        },
+        {
+          title: '0.3 — Learning outcomes (9 CLOs)|||0.3 — Chuẩn đầu ra (9 CLO)',
+          slug: 'pro192-chuan-dau-ra',
+          type: 'VIDEO',
+          description: '9 kỹ năng nhà trường cam kết bạn làm được — checklist ôn thi.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Lesson 0.3</span>
+<h2>The 9 Course Learning Outcomes (CLOs)</h2>
+<p class="lead">Each CLO is a concrete Java skill. They map onto the chapters and are your exam checklist.</p>
+<table>
+  <thead><tr><th>#</th><th>You will be able to…</th><th>Covered in</th></tr></thead>
+  <tbody>
+    <tr><td>CLO1</td><td>Understand OO concepts to solve problems</td><td>Ch 1</td></tr>
+    <tr><td>CLO2</td><td>Write Java programs (syntax &amp; semantics)</td><td>Ch 1</td></tr>
+    <tr><td>CLO5</td><td>Identify classes, objects, members &amp; relationships</td><td>Ch 2</td></tr>
+    <tr><td>CLO6</td><td>Use encapsulation, inheritance, polymorphism, abstraction</td><td>Ch 3–4</td></tr>
+    <tr><td>CLO7</td><td>Use abstract classes and interfaces</td><td>Ch 5</td></tr>
+    <tr><td>CLO4</td><td>Use Java&#39;s exception-handling mechanism</td><td>Ch 6</td></tr>
+    <tr><td>CLO8</td><td>Implement a complete program using object arrays</td><td>Ch 7</td></tr>
+    <tr><td>CLO9</td><td>Use collection ADTs (list, set, map)</td><td>Ch 8</td></tr>
+    <tr><td>CLO3</td><td>Use streams to read/write data</td><td>Ch 9</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">Every CLO is demonstrated by writing code. The best revision is building small programs for each — not memorizing definitions.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bài 0.3</span>
+<h2>9 Chuẩn đầu ra môn học (CLO)</h2>
+<p class="lead">Mỗi CLO là một kỹ năng Java cụ thể. Chúng khớp với các chương và là checklist ôn thi của bạn.</p>
+<table>
+  <thead><tr><th>#</th><th>Bạn sẽ làm được…</th><th>Học ở</th></tr></thead>
+  <tbody>
+    <tr><td>CLO1</td><td>Hiểu các khái niệm OO để giải quyết vấn đề</td><td>Ch 1</td></tr>
+    <tr><td>CLO2</td><td>Viết chương trình Java (cú pháp &amp; ngữ nghĩa)</td><td>Ch 1</td></tr>
+    <tr><td>CLO5</td><td>Nhận diện lớp, đối tượng, thành viên &amp; quan hệ</td><td>Ch 2</td></tr>
+    <tr><td>CLO6</td><td>Dùng đóng gói, kế thừa, đa hình, trừu tượng</td><td>Ch 3–4</td></tr>
+    <tr><td>CLO7</td><td>Dùng abstract class và interface</td><td>Ch 5</td></tr>
+    <tr><td>CLO4</td><td>Dùng cơ chế xử lý ngoại lệ của Java</td><td>Ch 6</td></tr>
+    <tr><td>CLO8</td><td>Cài đặt một chương trình hoàn chỉnh dùng mảng đối tượng</td><td>Ch 7</td></tr>
+    <tr><td>CLO9</td><td>Dùng các ADT collection (list, set, map)</td><td>Ch 8</td></tr>
+    <tr><td>CLO3</td><td>Dùng luồng (stream) để đọc/ghi dữ liệu</td><td>Ch 9</td></tr>
+  </tbody>
+</table>
+<div class="note-ct">Mỗi CLO được thể hiện bằng viết code. Ôn tập tốt nhất là xây chương trình nhỏ cho từng cái — không phải học thuộc định nghĩa.</div>
+</div>
+`,
+        },
+        {
+          title: '0.4 — Materials, tools & how to study|||0.4 — Tài liệu, công cụ & cách học',
+          slug: 'pro192-tai-lieu',
+          type: 'VIDEO',
+          description: 'Giáo trình Core Java, cài JDK/NetBeans và cách học OOP hiệu quả.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Lesson 0.4</span>
+<h2>Materials, tools &amp; how to study</h2>
+<h3>Textbooks</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><div class="lz-lt">Core Java Volume 1 &amp; 2 — Cay Horstmann</div><div class="lz-ld">The definitive practical Java reference. Volume 1 covers the fundamentals you need here.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Java 8 Specification (Oracle)</div><div class="lz-ld">The authoritative source when you need the exact rule.</div></div>
+  <div class="lz-layer"><div class="lz-lt">FU "OOP using Java" materials</div><div class="lz-ld">The course-aligned learning resource.</div></div>
+</div>
+<h3>Tools you need</h3>
+<ul>
+  <li><strong>JDK (Java Development Kit) 8+</strong> — the compiler and runtime for Java.</li>
+  <li><strong>NetBeans</strong> — the IDE the course uses; a modern editor with build/run/debug built in.</li>
+</ul>
+<h3>How to study OOP effectively</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Model</div><div class="lz-t">what objects?</div><div class="lz-d">nouns → classes</div></div>
+  <div class="lz-step"><div class="lz-k">Code</div><div class="lz-t">write the class</div><div class="lz-d">and a main to test it</div></div>
+  <div class="lz-step"><div class="lz-k">Run</div><div class="lz-t">see it work</div><div class="lz-d">debug &amp; fix</div></div>
+  <div class="lz-step"><div class="lz-k">Refine</div><div class="lz-t">improve the design</div><div class="lz-d">apply the pillars</div></div>
+</div>
+<div class="callout ok">A useful habit: to model a problem, list the <em>nouns</em> (they become classes) and the <em>verbs</em> (they become methods). "A Student has a name and can calculate GPA" → class Student, field name, method calculateGPA().</div>
+<a class="link-card exphub" href="/exp-hub/pro192-cai-dat-java-netbeans?ref=%2Fcourses%2Fobject-oriented-programming%2Flearn&reflabel=PRO192%20%E2%80%94%20Object-Oriented%20Programming" target="_blank" rel="noopener">
+  <span class="lc-ico">🛠️</span>
+  <span class="lc-body"><span class="lc-title">Install JDK &amp; NetBeans (step-by-step)</span><span class="lc-sub">Official links and first-project guide for PRO192.</span></span>
+  <span class="lc-cta">EXP HUB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/java-core?ref=%2Fcourses%2Fobject-oriented-programming%2Flearn&reflabel=PRO192%20%E2%80%94%20Object-Oriented%20Programming#module-246" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Practice Java on CodeLab</span><span class="lc-sub">The "Java Fundamentals" track mirrors this course — code as you learn.</span></span>
+  <span class="lc-cta">PRACTICE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bài 0.4</span>
+<h2>Tài liệu, công cụ &amp; cách học</h2>
+<h3>Giáo trình</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><div class="lz-lt">Core Java Volume 1 &amp; 2 — Cay Horstmann</div><div class="lz-ld">Tài liệu Java thực hành chuẩn mực. Volume 1 phủ các phần cơ bản bạn cần ở đây.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Java 8 Specification (Oracle)</div><div class="lz-ld">Nguồn thẩm quyền khi bạn cần quy tắc chính xác.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Học liệu "OOP using Java" của FU</div><div class="lz-ld">Tài nguyên học bám sát môn.</div></div>
+</div>
+<h3>Công cụ bạn cần</h3>
+<ul>
+  <li><strong>JDK (Java Development Kit) 8+</strong> — trình biên dịch và runtime cho Java.</li>
+  <li><strong>NetBeans</strong> — IDE mà môn dùng; trình soạn thảo hiện đại có build/run/debug tích hợp.</li>
+</ul>
+<h3>Cách học OOP hiệu quả</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Mô hình</div><div class="lz-t">có đối tượng nào?</div><div class="lz-d">danh từ → lớp</div></div>
+  <div class="lz-step"><div class="lz-k">Code</div><div class="lz-t">viết lớp</div><div class="lz-d">và một main để thử</div></div>
+  <div class="lz-step"><div class="lz-k">Chạy</div><div class="lz-t">thấy nó hoạt động</div><div class="lz-d">debug &amp; sửa</div></div>
+  <div class="lz-step"><div class="lz-k">Tinh chỉnh</div><div class="lz-t">cải thiện thiết kế</div><div class="lz-d">áp các trụ cột</div></div>
+</div>
+<div class="callout ok">Một thói quen hữu ích: để mô hình một bài toán, liệt kê các <em>danh từ</em> (chúng thành lớp) và các <em>động từ</em> (chúng thành phương thức). "Một Student có một tên và có thể tính GPA" → lớp Student, trường name, phương thức calculateGPA().</div>
+<a class="link-card exphub" href="/exp-hub/pro192-cai-dat-java-netbeans?ref=%2Fcourses%2Fobject-oriented-programming%2Flearn&reflabel=PRO192%20%E2%80%94%20Object-Oriented%20Programming" target="_blank" rel="noopener">
+  <span class="lc-ico">🛠️</span>
+  <span class="lc-body"><span class="lc-title">Cài JDK &amp; NetBeans (từng bước)</span><span class="lc-sub">Link chính chủ và hướng dẫn project đầu tiên cho PRO192.</span></span>
+  <span class="lc-cta">EXP HUB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/java-core?ref=%2Fcourses%2Fobject-oriented-programming%2Flearn&reflabel=PRO192%20%E2%80%94%20Object-Oriented%20Programming#module-246" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Luyện Java trên CodeLab</span><span class="lc-sub">Track "Java Fundamentals" phản chiếu môn này — code khi học.</span></span>
+  <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+    /* ══════════════════ CHƯƠNG 1 — TƯ DUY OO & JAVA CƠ BẢN ══════════════════ */
+    {
+      title: 'Chapter 1 — OO Thinking & Java Basics|||Chương 1 — Tư duy OO & Java cơ bản',
+      description: 'Vì sao lập trình hướng đối tượng, và cú pháp Java khác C ra sao.',
+      lessons: [
+        {
+          title: '1.1 — Why objects? Procedural vs OO|||1.1 — Vì sao đối tượng? Thủ tục vs OO',
+          slug: 'pro192-1-1-tu-duy-oo',
+          type: 'VIDEO',
+          description: 'Chuyển từ tư duy các bước sang tư duy đối tượng giữ dữ liệu + hành vi.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 1 · Lesson 1.1</span>
+<h2>Two ways to organize a program</h2>
+<p class="lead">In C (PRF192) you thought <strong>procedurally</strong>: data in variables, and functions that act on that data — kept separate. OOP (CLO1) bundles related <em>data</em> and <em>behavior</em> together into <strong>objects</strong>, built from blueprints called <strong>classes</strong>.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><div class="lz-lt">Procedural (C): data and functions are separate</div><div class="lz-ld">A struct Student holds data; free functions like calcGPA(Student) act on it. As the program grows, it is easy to lose track of which function may touch which data.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Object-oriented (Java): data + behavior together</div><div class="lz-ld">A class Student holds both the data (name, grades) AND the methods (calculateGPA). The object owns and protects its own data.</div></div>
+</div>
+<h3>Class vs object</h3>
+<p>A <strong>class</strong> is a blueprint; an <strong>object</strong> is a concrete thing made from it. "Student" is a class; "the student named An with GPA 3.6" is an object (an <em>instance</em>). One class, many objects.</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Class</div><div class="lz-t">blueprint</div><div class="lz-d">defines fields &amp; methods</div></div>
+  <div class="lz-step"><div class="lz-k">new</div><div class="lz-t">create an object</div><div class="lz-d">an instance in memory</div></div>
+  <div class="lz-step"><div class="lz-k">Object</div><div class="lz-t">concrete thing</div><div class="lz-d">its own data values</div></div>
+</div>
+<h3>Ví dụ có lời giải · Worked example (a first object)</h3>
+<pre><span class="tok-keyword">class</span> <span class="tok-type">Student</span> {
+    <span class="tok-type">String</span> name;  <span class="tok-type">double</span> gpa;
+    <span class="tok-function">Student</span>(<span class="tok-type">String</span> n, <span class="tok-type">double</span> g) { name = n; gpa = g; }
+    <span class="tok-keyword">boolean</span> <span class="tok-function">isPassing</span>() { <span class="tok-keyword">return</span> gpa &gt;= 2.0; }   <span class="tok-comment">// behavior lives WITH the data</span>
+}
+<span class="tok-comment">// in main:</span>
+<span class="tok-type">Student</span> an = <span class="tok-keyword">new</span> <span class="tok-function">Student</span>(<span class="tok-string">"An"</span>, 3.6);
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(an.name + <span class="tok-string">" passing? "</span> + an.<span class="tok-function">isPassing</span>());</pre>
+<div class="out"><b>Output:</b> An passing? true</div>
+<p>The data (name, gpa) and the behavior (isPassing) travel together as one object — the essence of OO thinking.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The four pillars are your roadmap.</b> Everything in PRO192 rests on four ideas you meet in order: <b>Encapsulation</b> (Ch3 — hide data), <b>Inheritance</b> (Ch4 — reuse), <b>Polymorphism</b> (Ch4 — one interface, many forms), and <b>Abstraction</b> (Ch3/5 — hide complexity). Every framework you will ever use (Spring, Android) is built from exactly these four — memorise the names now and each chapter clicks into place.</div>
+<div class="callout ok">The mental shift: stop asking "what steps do I run?" and start asking "what things exist, what does each know, and what can each do?" Model the world as cooperating objects. This is the whole point of PRO192.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 1 · Bài 1.1</span>
+<h2>Hai cách tổ chức một chương trình</h2>
+<p class="lead">Trong C (PRF192) bạn tư duy <strong>thủ tục</strong>: dữ liệu ở biến, và hàm tác động lên dữ liệu đó — tách rời nhau. OOP (CLO1) gom <em>dữ liệu</em> và <em>hành vi</em> liên quan lại với nhau thành các <strong>đối tượng</strong>, xây từ khuôn mẫu gọi là <strong>lớp (class)</strong>.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><div class="lz-lt">Thủ tục (C): dữ liệu và hàm tách rời</div><div class="lz-ld">Một struct Student giữ dữ liệu; các hàm rời như calcGPA(Student) tác động lên nó. Khi chương trình lớn lên, dễ mất dấu hàm nào có thể động tới dữ liệu nào.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Hướng đối tượng (Java): dữ liệu + hành vi ở cùng nhau</div><div class="lz-ld">Một lớp Student giữ cả dữ liệu (name, grades) LẪN các phương thức (calculateGPA). Đối tượng sở hữu và bảo vệ dữ liệu của chính nó.</div></div>
+</div>
+<h3>Lớp vs đối tượng</h3>
+<p>Một <strong>lớp (class)</strong> là khuôn mẫu; một <strong>đối tượng (object)</strong> là một thứ cụ thể tạo từ nó. "Student" là một lớp; "sinh viên tên An với GPA 3.6" là một đối tượng (một <em>thể hiện — instance</em>). Một lớp, nhiều đối tượng.</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Lớp</div><div class="lz-t">khuôn mẫu</div><div class="lz-d">định nghĩa trường &amp; phương thức</div></div>
+  <div class="lz-step"><div class="lz-k">new</div><div class="lz-t">tạo một đối tượng</div><div class="lz-d">một thể hiện trong bộ nhớ</div></div>
+  <div class="lz-step"><div class="lz-k">Đối tượng</div><div class="lz-t">thứ cụ thể</div><div class="lz-d">giá trị dữ liệu riêng của nó</div></div>
+</div>
+<h3>Ví dụ có lời giải · Đối tượng đầu tiên</h3>
+<pre><span class="tok-keyword">class</span> <span class="tok-type">Student</span> {
+    <span class="tok-type">String</span> name;  <span class="tok-type">double</span> gpa;
+    <span class="tok-function">Student</span>(<span class="tok-type">String</span> n, <span class="tok-type">double</span> g) { name = n; gpa = g; }
+    <span class="tok-keyword">boolean</span> <span class="tok-function">isPassing</span>() { <span class="tok-keyword">return</span> gpa &gt;= 2.0; }   <span class="tok-comment">// hành vi sống CÙNG dữ liệu</span>
+}
+<span class="tok-comment">// trong main:</span>
+<span class="tok-type">Student</span> an = <span class="tok-keyword">new</span> <span class="tok-function">Student</span>(<span class="tok-string">"An"</span>, 3.6);
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(an.name + <span class="tok-string">" passing? "</span> + an.<span class="tok-function">isPassing</span>());</pre>
+<div class="out"><b>Kết quả:</b> An passing? true</div>
+<p>Dữ liệu (name, gpa) và hành vi (isPassing) đi cùng nhau như một đối tượng — cốt lõi của tư duy OO.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Bốn trụ cột là bản đồ của bạn.</b> Mọi thứ trong PRO192 dựa trên bốn ý tưởng bạn gặp lần lượt: <b>Đóng gói</b> (Ch3 — giấu dữ liệu), <b>Kế thừa</b> (Ch4 — tái dùng), <b>Đa hình</b> (Ch4 — một giao diện, nhiều hình dạng), và <b>Trừu tượng</b> (Ch3/5 — giấu độ phức tạp). Mọi framework bạn từng dùng (Spring, Android) đều xây từ đúng bốn cái này — thuộc tên ngay bây giờ và mỗi chương sẽ vào đúng chỗ.</div>
+<div class="callout ok">Chuyển dịch tư duy: thôi hỏi "tôi chạy các bước nào?" và bắt đầu hỏi "có những thứ gì tồn tại, mỗi thứ biết gì, và mỗi thứ làm được gì?" Mô hình thế giới thành các đối tượng hợp tác. Đây là toàn bộ mục đích của PRO192.</div>
+</div>
+`,
+        },
+        {
+          title: '1.2 — Java syntax essentials (from C to Java)|||1.2 — Cú pháp Java cốt lõi (từ C sang Java)',
+          slug: 'pro192-1-2-cu-phap-java',
+          type: 'VIDEO',
+          description: 'Cấu trúc một file Java, kiểu dữ liệu, in ra màn hình và khác biệt với C.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 1 · Lesson 1.2</span>
+<h2>Your first Java program</h2>
+<p class="lead">Java syntax (CLO2) looks familiar after C — same operators, same if/for/while — but everything lives <strong>inside a class</strong>, and there are no pointers to manage.</p>
+<pre><span class="tok-keyword">public class</span> <span class="tok-type">Hello</span> {
+    <span class="tok-keyword">public static void</span> <span class="tok-function">main</span>(<span class="tok-type">String</span>[] args) {
+        <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Xin chao PRO192!"</span>);
+    }
+}</pre>
+<div class="out"><b>Output:</b> Xin chao PRO192!</div>
+<h3>Key differences from C</h3>
+<table>
+  <thead><tr><th>C</th><th>Java</th></tr></thead>
+  <tbody>
+    <tr><td>Functions can be free-standing</td><td>Everything is inside a class</td></tr>
+    <tr><td>printf(...)</td><td>System.out.println(...)</td></tr>
+    <tr><td>Pointers &amp; manual malloc/free</td><td>References; automatic garbage collection</td></tr>
+    <tr><td>char arrays for text</td><td>The String class</td></tr>
+    <tr><td>#include headers</td><td>import packages</td></tr>
+  </tbody>
+</table>
+<h3>Primitive types &amp; variables</h3>
+<div class="out"><span class="tok-type">int</span> age = 20;
+<span class="tok-type">double</span> gpa = 3.6;
+<span class="tok-type">boolean</span> passed = <span class="tok-keyword">true</span>;
+<span class="tok-type">String</span> name = <span class="tok-string">"An"</span>;  <span class="tok-comment">// String is an object, not a primitive</span></pre></div>
+<p>Control flow (if, switch, for, while) is nearly identical to C — your PRF192 knowledge carries straight over. The new idea is that all this code lives in methods inside classes.</p>
+<div class="pitfall">Java is strongly typed and case-sensitive, and every statement ends with <code>;</code>. Unlike C, you cannot forget the class wrapper — a "loose" function will not compile. And <code>==</code> compares object references, not contents: to compare Strings, use <code>.equals()</code>.</div>
+<h3>Formulas · Anatomy of a Java program &amp; how to run it</h3>
+<div class="formula"><span class="lbl">Structure</span>public class Name { public static void main(String[] args) { … } }    <span class="lbl">Compile &amp; run</span>javac Name.java → Name.class ; then: java Name</div>
+<h3>Ví dụ có lời giải · Worked example (loop + average)</h3>
+<pre><span class="tok-keyword">int</span>[] diem = {8, 6, 9, 7};
+<span class="tok-keyword">int</span> tong = 0;
+<span class="tok-keyword">for</span> (<span class="tok-keyword">int</span> d : diem) tong += d;          <span class="tok-comment">// enhanced for-loop</span>
+<span class="tok-keyword">double</span> tb = (<span class="tok-keyword">double</span>) tong / diem.length;  <span class="tok-comment">// cast to avoid integer division</span>
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Tong = "</span> + tong);
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Trung binh = "</span> + tb);</pre>
+<div class="out"><b>Output:</b><br>Tong = 30<br>Trung binh = 7.5</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Write once, run anywhere — the JVM.</b> Unlike C (which compiles straight to machine code for one CPU), <code>javac</code> compiles Java to <em>bytecode</em> (.class), which the <b>Java Virtual Machine</b> then runs on any OS. That extra layer is why the same .class file runs on Windows, macOS and Linux unchanged — the historical reason Java conquered enterprise and Android.</div>
+<a class="link-card codelab" href="/code-lab/java-core?ref=%2Fcourses%2Fobject-oriented-programming%2Flearn&reflabel=PRO192%20%E2%80%94%20Object-Oriented%20Programming#module-247" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Practice Java syntax</span><span class="lc-sub">The "Variables, Types &amp; Operators" module — run Java in your browser.</span></span>
+  <span class="lc-cta">PRACTICE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 1 · Bài 1.2</span>
+<h2>Chương trình Java đầu tiên</h2>
+<p class="lead">Cú pháp Java (CLO2) trông quen sau C — cùng toán tử, cùng if/for/while — nhưng mọi thứ nằm <strong>bên trong một lớp</strong>, và không có con trỏ để quản lý.</p>
+<pre><span class="tok-keyword">public class</span> <span class="tok-type">Hello</span> {
+    <span class="tok-keyword">public static void</span> <span class="tok-function">main</span>(<span class="tok-type">String</span>[] args) {
+        <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Xin chao PRO192!"</span>);
+    }
+}</pre>
+<div class="out"><b>Kết quả:</b> Xin chao PRO192!</div>
+<h3>Khác biệt chính so với C</h3>
+<table>
+  <thead><tr><th>C</th><th>Java</th></tr></thead>
+  <tbody>
+    <tr><td>Hàm có thể đứng độc lập</td><td>Mọi thứ nằm trong một lớp</td></tr>
+    <tr><td>printf(...)</td><td>System.out.println(...)</td></tr>
+    <tr><td>Con trỏ &amp; malloc/free thủ công</td><td>Tham chiếu; tự động dọn rác (garbage collection)</td></tr>
+    <tr><td>Mảng char cho văn bản</td><td>Lớp String</td></tr>
+    <tr><td>#include header</td><td>import package</td></tr>
+  </tbody>
+</table>
+<h3>Kiểu nguyên thuỷ &amp; biến</h3>
+<div class="out"><span class="tok-type">int</span> age = 20;
+<span class="tok-type">double</span> gpa = 3.6;
+<span class="tok-type">boolean</span> passed = <span class="tok-keyword">true</span>;
+<span class="tok-type">String</span> name = <span class="tok-string">"An"</span>;  <span class="tok-comment">// String là đối tượng, không phải kiểu nguyên thuỷ</span></pre></div>
+<p>Điều khiển luồng (if, switch, for, while) gần như y hệt C — kiến thức PRF192 của bạn dùng ngay được. Ý tưởng mới là tất cả code này nằm trong các phương thức bên trong các lớp.</p>
+<div class="pitfall">Java định kiểu mạnh và phân biệt hoa/thường, và mọi câu lệnh kết thúc bằng <code>;</code>. Khác C, bạn không thể quên lớp bao — một hàm "lỏng lẻo" sẽ không biên dịch được. Và <code>==</code> so sánh tham chiếu đối tượng, không phải nội dung: để so sánh String, dùng <code>.equals()</code>.</div>
+<h3>Công thức · Cấu trúc một chương trình Java &amp; cách chạy</h3>
+<div class="formula"><span class="lbl">Cấu trúc</span>public class Name { public static void main(String[] args) { … } }    <span class="lbl">Biên dịch &amp; chạy</span>javac Name.java → Name.class ; rồi: java Name</div>
+<h3>Ví dụ có lời giải · Vòng lặp + trung bình</h3>
+<pre><span class="tok-keyword">int</span>[] diem = {8, 6, 9, 7};
+<span class="tok-keyword">int</span> tong = 0;
+<span class="tok-keyword">for</span> (<span class="tok-keyword">int</span> d : diem) tong += d;          <span class="tok-comment">// vòng for tăng cường</span>
+<span class="tok-keyword">double</span> tb = (<span class="tok-keyword">double</span>) tong / diem.length;  <span class="tok-comment">// ép kiểu tránh chia nguyên</span>
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Tong = "</span> + tong);
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Trung binh = "</span> + tb);</pre>
+<div class="out"><b>Kết quả:</b><br>Tong = 30<br>Trung binh = 7.5</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Viết một lần, chạy mọi nơi — JVM.</b> Khác C (biên dịch thẳng ra mã máy cho một CPU), <code>javac</code> biên dịch Java thành <em>bytecode</em> (.class), rồi <b>Máy ảo Java (JVM)</b> chạy nó trên mọi hệ điều hành. Lớp trung gian đó là lý do cùng một file .class chạy trên Windows, macOS và Linux không đổi — lý do lịch sử khiến Java chinh phục doanh nghiệp và Android.</div>
+<a class="link-card codelab" href="/code-lab/java-core?ref=%2Fcourses%2Fobject-oriented-programming%2Flearn&reflabel=PRO192%20%E2%80%94%20Object-Oriented%20Programming#module-247" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Luyện cú pháp Java</span><span class="lc-sub">Module "Variables, Types &amp; Operators" — chạy Java ngay trên trình duyệt.</span></span>
+  <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: 'Chapter 1 Quiz|||Quiz chương 1',
+          slug: 'pro192-quiz-ch1',
+          type: 'QUIZ',
+          description: 'Kiểm tra nhanh: OO vs thủ tục, lớp vs đối tượng, cú pháp Java.',
+          quiz: {
+            timeLimitSeconds: 360,
+            questions: [
+              { question: 'The main idea of OOP is to…|||Ý tưởng chính của OOP là…', options: ['keep data and functions separate|||giữ dữ liệu và hàm tách rời', 'bundle related data and behavior into objects|||gom dữ liệu và hành vi liên quan vào các đối tượng', 'avoid using functions|||tránh dùng hàm', 'only use global variables|||chỉ dùng biến toàn cục'], correctIndex: 1, points: 1 },
+              { question: 'A class is a…, and an object is a…|||Một lớp là…, và một đối tượng là…', options: ['concrete instance … blueprint|||thể hiện cụ thể … khuôn mẫu', 'blueprint … concrete instance of it|||khuôn mẫu … thể hiện cụ thể của nó', 'function … variable|||hàm … biến', 'they are the same|||chúng như nhau'], correctIndex: 1, points: 1 },
+              { question: 'In Java, code must be written…|||Trong Java, code phải được viết…', options: ['as free-standing functions|||thành các hàm độc lập', 'inside a class|||bên trong một lớp', 'only in the main file|||chỉ trong file main', 'without any structure|||không cấu trúc nào'], correctIndex: 1, points: 1 },
+              { question: 'To print a line in Java you use…|||Để in một dòng trong Java bạn dùng…', options: ['printf(...)', 'System.out.println(...)', 'cout <<', 'print()'], correctIndex: 1, points: 1 },
+              { question: 'To compare the contents of two Strings in Java, use…|||Để so sánh nội dung hai String trong Java, dùng…', options: ['==', '.equals()', '>', '.compare'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+    /* ══════════════════ CHƯƠNG 2 — LỚP & ĐỐI TƯỢNG ══════════════════ */
+    {
+      title: 'Chapter 2 — Classes & Objects|||Chương 2 — Lớp & Đối tượng',
+      description: 'Định nghĩa lớp với trường, phương thức, constructor và tạo đối tượng.',
+      lessons: [
+        {
+          title: '2.1 — Fields, methods & constructors|||2.1 — Trường, phương thức & constructor',
+          slug: 'pro192-2-1-lop-doi-tuong',
+          simulation: {
+            url: 'https://media.cuongthai.com/videos/academy/PRO192/pro192-2-1-lop-doi-tuong.mp4',
+            poster: 'https://media.cuongthai.com/videos/academy/PRO192/pro192-2-1-lop-doi-tuong.jpg',
+            scenario: 'stack-heap',
+            durationSeconds: 25,
+            caption: { en: "Stack holds the reference, heap holds the object", vi: "Ngăn xếp giữ tham chiếu, vùng heap giữ đối tượng" },
+          },
+          type: 'VIDEO',
+          description: 'Viết một lớp hoàn chỉnh và tạo đối tượng từ nó.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 2 · Lesson 2.1</span>
+<h2>Building a class</h2>
+<p class="lead">A class (CLO5) has three main parts: <strong>fields</strong> (its data), <strong>methods</strong> (its behavior), and <strong>constructors</strong> (special methods that create and initialize objects).</p>
+<pre><span class="tok-keyword">public class</span> <span class="tok-type">Student</span> {
+    <span class="tok-comment">// fields — the object's data</span>
+    <span class="tok-type">String</span> name;
+    <span class="tok-type">double</span> gpa;
+
+    <span class="tok-comment">// constructor — runs when you create a Student</span>
+    <span class="tok-keyword">public</span> <span class="tok-function">Student</span>(<span class="tok-type">String</span> name, <span class="tok-type">double</span> gpa) {
+        <span class="tok-keyword">this</span>.name = name;   <span class="tok-comment">// 'this' = the object being built</span>
+        <span class="tok-keyword">this</span>.gpa = gpa;
+    }
+
+    <span class="tok-comment">// method — the object's behavior</span>
+    <span class="tok-keyword">public boolean</span> <span class="tok-function">isPassing</span>() {
+        <span class="tok-keyword">return</span> gpa &gt;= 2.0;
+    }
+}</pre>
+<h3>Creating and using an object</h3>
+<pre><span class="tok-type">Student</span> an = <span class="tok-keyword">new</span> <span class="tok-function">Student</span>(<span class="tok-string">"An"</span>, 3.6);
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(an.name);        <span class="tok-comment">// An</span>
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(an.<span class="tok-function">isPassing</span>());  <span class="tok-comment">// true</span></pre>
+<div class="out"><b>Output:</b><br>An<br>true</div>
+<p>The keyword <code>new</code> calls the constructor and creates an object in memory. <code>this</code> refers to "the current object," letting you distinguish the field <code>this.name</code> from the parameter <code>name</code>.</p>
+<h3>Formulas · The class pattern</h3>
+<div class="formula"><span class="lbl">Class = fields + constructor + methods</span>class C { Type field;  C(params){ this.field = …; }  ret method(){ … } }    <span class="lbl">Create an object</span>C obj = new C(args);</div>
+<h3>Ví dụ có lời giải · Worked example (one class, two objects)</h3>
+<pre><span class="tok-keyword">class</span> <span class="tok-type">Rectangle</span> {
+    <span class="tok-keyword">double</span> w, h;
+    <span class="tok-function">Rectangle</span>(<span class="tok-keyword">double</span> w, <span class="tok-keyword">double</span> h) { <span class="tok-keyword">this</span>.w = w; <span class="tok-keyword">this</span>.h = h; }
+    <span class="tok-keyword">double</span> <span class="tok-function">area</span>() { <span class="tok-keyword">return</span> w * h; }
+}
+<span class="tok-type">Rectangle</span> r1 = <span class="tok-keyword">new</span> <span class="tok-function">Rectangle</span>(3, 4);
+<span class="tok-type">Rectangle</span> r2 = <span class="tok-keyword">new</span> <span class="tok-function">Rectangle</span>(5, 2);
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"r1 area = "</span> + r1.<span class="tok-function">area</span>());
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"r2 area = "</span> + r2.<span class="tok-function">area</span>());</pre>
+<div class="out"><b>Output:</b><br>r1 area = 12.0<br>r2 area = 10.0</div>
+<p>One class (the blueprint), two independent objects — each keeps its own w and h.</p>
+<div class="callout"><span class="badge">Syllabus CQ7.1 &amp; CQ15.1</span> <b>Constructor overloading &amp; this() — examinable.</b> Two of the syllabus's constructive questions are exactly this: CQ7.1 &ldquo;What does the <code>this</code> keyword mean?&rdquo; and CQ15.1 &ldquo;What is Overloading?&rdquo;. A class may have several constructors with different parameter lists — Java picks the one matching your arguments. A constructor can even call another with <code>this(...)</code> to avoid repetition (e.g. a no-arg constructor delegating to the full one with defaults). If you write no constructor at all, Java supplies a hidden empty "default constructor" — which quietly disappears the moment you add one of your own. Note the two meanings of <code>this</code> you must be able to separate in the exam: <code>this.field</code> (this object) and <code>this(...)</code> (another constructor of the same class, and it must be the first statement).</div>
+<div class="note-ct">Objects also have relationships. A Classroom might <em>have</em> an array of Student objects (composition), or a GraduateStudent might <em>be</em> a Student (inheritance, Chapter 4). Spotting these "has-a" and "is-a" links is how you design an object model.</div>
+<a class="link-card codelab" href="/code-lab/java-core?ref=%2Fcourses%2Fobject-oriented-programming%2Flearn&reflabel=PRO192%20%E2%80%94%20Object-Oriented%20Programming#module-249" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Build classes on CodeLab</span><span class="lc-sub">The "OOP Fundamentals" module — write your own classes &amp; objects.</span></span>
+  <span class="lc-cta">PRACTICE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 2 · Bài 2.1</span>
+<h2>Xây một lớp</h2>
+<p class="lead">Một lớp (CLO5) có ba phần chính: <strong>trường (field)</strong> (dữ liệu của nó), <strong>phương thức (method)</strong> (hành vi của nó), và <strong>constructor</strong> (phương thức đặc biệt tạo và khởi tạo đối tượng).</p>
+<pre><span class="tok-keyword">public class</span> <span class="tok-type">Student</span> {
+    <span class="tok-comment">// trường — dữ liệu của đối tượng</span>
+    <span class="tok-type">String</span> name;
+    <span class="tok-type">double</span> gpa;
+
+    <span class="tok-comment">// constructor — chạy khi bạn tạo một Student</span>
+    <span class="tok-keyword">public</span> <span class="tok-function">Student</span>(<span class="tok-type">String</span> name, <span class="tok-type">double</span> gpa) {
+        <span class="tok-keyword">this</span>.name = name;   <span class="tok-comment">// 'this' = đối tượng đang được tạo</span>
+        <span class="tok-keyword">this</span>.gpa = gpa;
+    }
+
+    <span class="tok-comment">// phương thức — hành vi của đối tượng</span>
+    <span class="tok-keyword">public boolean</span> <span class="tok-function">isPassing</span>() {
+        <span class="tok-keyword">return</span> gpa &gt;= 2.0;
+    }
+}</pre>
+<h3>Tạo và dùng một đối tượng</h3>
+<pre><span class="tok-type">Student</span> an = <span class="tok-keyword">new</span> <span class="tok-function">Student</span>(<span class="tok-string">"An"</span>, 3.6);
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(an.name);        <span class="tok-comment">// An</span>
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(an.<span class="tok-function">isPassing</span>());  <span class="tok-comment">// true</span></pre>
+<div class="out"><b>Kết quả:</b><br>An<br>true</div>
+<p>Từ khoá <code>new</code> gọi constructor và tạo một đối tượng trong bộ nhớ. <code>this</code> chỉ "đối tượng hiện tại", cho bạn phân biệt trường <code>this.name</code> với tham số <code>name</code>.</p>
+<h3>Công thức · Khuôn của một lớp</h3>
+<div class="formula"><span class="lbl">Lớp = trường + constructor + phương thức</span>class C { Type field;  C(params){ this.field = …; }  ret method(){ … } }    <span class="lbl">Tạo một đối tượng</span>C obj = new C(args);</div>
+<h3>Ví dụ có lời giải · Một lớp, hai đối tượng</h3>
+<pre><span class="tok-keyword">class</span> <span class="tok-type">Rectangle</span> {
+    <span class="tok-keyword">double</span> w, h;
+    <span class="tok-function">Rectangle</span>(<span class="tok-keyword">double</span> w, <span class="tok-keyword">double</span> h) { <span class="tok-keyword">this</span>.w = w; <span class="tok-keyword">this</span>.h = h; }
+    <span class="tok-keyword">double</span> <span class="tok-function">area</span>() { <span class="tok-keyword">return</span> w * h; }
+}
+<span class="tok-type">Rectangle</span> r1 = <span class="tok-keyword">new</span> <span class="tok-function">Rectangle</span>(3, 4);
+<span class="tok-type">Rectangle</span> r2 = <span class="tok-keyword">new</span> <span class="tok-function">Rectangle</span>(5, 2);
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"r1 area = "</span> + r1.<span class="tok-function">area</span>());
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"r2 area = "</span> + r2.<span class="tok-function">area</span>());</pre>
+<div class="out"><b>Kết quả:</b><br>r1 area = 12.0<br>r2 area = 10.0</div>
+<p>Một lớp (khuôn mẫu), hai đối tượng độc lập — mỗi cái giữ w và h riêng.</p>
+<div class="callout"><span class="badge">Syllabus CQ7.1 &amp; CQ15.1</span> <b>Nạp chồng constructor &amp; this() — nằm trong phạm vi thi.</b> Hai câu hỏi kiến tạo của syllabus chính là cái này: CQ7.1 &ldquo;Từ khoá <code>this</code> nghĩa là gì?&rdquo; và CQ15.1 &ldquo;Overloading là gì?&rdquo;. Một lớp có thể có nhiều constructor với danh sách tham số khác nhau — Java chọn cái khớp đối số của bạn. Một constructor còn gọi được cái khác bằng <code>this(...)</code> để tránh lặp (vd constructor không tham số uỷ thác cho cái đầy đủ với giá trị mặc định). Nếu bạn không viết constructor nào, Java cấp một "constructor mặc định" rỗng ẩn — nó lặng lẽ biến mất ngay khi bạn thêm constructor của riêng mình. Nhớ hai nghĩa của <code>this</code> phải phân biệt được khi thi: <code>this.field</code> (đối tượng này) và <code>this(...)</code> (một constructor khác của cùng lớp, và nó phải là câu lệnh đầu tiên).</div>
+<div class="note-ct">Đối tượng cũng có quan hệ. Một Classroom có thể <em>chứa (has-a)</em> một mảng đối tượng Student (kết hợp), hoặc một GraduateStudent có thể <em>là (is-a)</em> một Student (kế thừa, Chương 4). Nhận ra các liên kết "has-a" và "is-a" này là cách bạn thiết kế một mô hình đối tượng.</div>
+<a class="link-card codelab" href="/code-lab/java-core?ref=%2Fcourses%2Fobject-oriented-programming%2Flearn&reflabel=PRO192%20%E2%80%94%20Object-Oriented%20Programming#module-249" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Xây lớp trên CodeLab</span><span class="lc-sub">Module "OOP Fundamentals" — tự viết lớp &amp; đối tượng của bạn.</span></span>
+  <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: 'Chapter 2 Quiz|||Quiz chương 2',
+          slug: 'pro192-quiz-ch2',
+          type: 'QUIZ',
+          description: 'Kiểm tra nhanh: trường, phương thức, constructor, new, this.',
+          quiz: {
+            timeLimitSeconds: 300,
+            questions: [
+              { question: 'The three main parts of a class are…|||Ba phần chính của một lớp là…', options: ['fields, methods, constructors|||trường, phương thức, constructor', 'loops, arrays, pointers|||vòng lặp, mảng, con trỏ', 'imports, packages, comments|||import, package, chú thích', 'input, process, output|||nhập, xử lý, xuất'], correctIndex: 0, points: 1 },
+              { question: 'A constructor is a special method that…|||Constructor là một phương thức đặc biệt…', options: ['prints output|||in kết quả', 'creates and initializes an object|||tạo và khởi tạo một đối tượng', 'deletes an object|||xoá một đối tượng', 'compares two objects|||so sánh hai đối tượng'], correctIndex: 1, points: 1 },
+              { question: 'The keyword to create a new object is…|||Từ khoá để tạo một đối tượng mới là…', options: ['make', 'new', 'create', 'object'], correctIndex: 1, points: 1 },
+              { question: 'Inside a class, "this" refers to…|||Bên trong một lớp, "this" chỉ…', options: ['the class file|||file lớp', 'the current object|||đối tượng hiện tại', 'the main method|||phương thức main', 'the parent class|||lớp cha'], correctIndex: 1, points: 1 },
+              { question: 'A "Classroom has an array of Students" is an example of a… relationship.|||"Classroom chứa một mảng Student" là ví dụ của quan hệ…', options: ['is-a', 'has-a', 'no', 'inheritance'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+    /* ══════════════════ CHƯƠNG 3 — ĐÓNG GÓI & TRỪU TƯỢNG ══════════════════ */
+    {
+      title: 'Chapter 3 — Encapsulation & Abstraction|||Chương 3 — Đóng gói & Trừu tượng',
+      description: 'Giấu dữ liệu bằng private + getter/setter, và lộ giao diện sạch.',
+      lessons: [
+        {
+          title: '3.1 — Encapsulation & abstraction|||3.1 — Đóng gói & trừu tượng',
+          slug: 'pro192-3-1-dong-goi',
+          simulation: {
+            url: 'https://media.cuongthai.com/videos/academy/PRO192/pro192-3-1-dong-goi.mp4',
+            poster: 'https://media.cuongthai.com/videos/academy/PRO192/pro192-3-1-dong-goi.jpg',
+            scenario: 'oop-pillars',
+            durationSeconds: 21,
+            caption: { en: "Encapsulation: the field nobody outside can reach", vi: "Đóng gói: trường mà bên ngoài không với tới được" },
+          },
+          type: 'VIDEO',
+          description: 'private, getter/setter và ý tưởng giấu chi tiết bên trong.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 3 · Lesson 3.1</span>
+<h2>Pillar 1 &amp; 2 — Encapsulation and Abstraction</h2>
+<p class="lead"><strong>Encapsulation</strong> (CLO6) means hiding an object&#39;s internal data and exposing it only through controlled methods. You make fields <code>private</code>, then provide <strong>getters</strong> and <strong>setters</strong> to read and change them safely.</p>
+<pre><span class="tok-keyword">public class</span> <span class="tok-type">BankAccount</span> {
+    <span class="tok-keyword">private double</span> balance;  <span class="tok-comment">// hidden — cannot be touched directly</span>
+
+    <span class="tok-keyword">public double</span> <span class="tok-function">getBalance</span>() { <span class="tok-keyword">return</span> balance; }
+
+    <span class="tok-keyword">public void</span> <span class="tok-function">deposit</span>(<span class="tok-type">double</span> amount) {
+        <span class="tok-keyword">if</span> (amount &gt; 0) balance += amount;  <span class="tok-comment">// validation protects the data</span>
+    }
+}</pre>
+<p>Because <code>balance</code> is <code>private</code>, no outside code can set it to a negative value directly — it must go through <code>deposit()</code>, which validates. The object <strong>protects its own invariants</strong>.</p>
+<h3>Access modifiers</h3>
+<table>
+  <thead><tr><th>Modifier</th><th>Visible to</th></tr></thead>
+  <tbody>
+    <tr><td>private</td><td>only this class</td></tr>
+    <tr><td>(default)</td><td>the same package</td></tr>
+    <tr><td>protected</td><td>package + subclasses</td></tr>
+    <tr><td>public</td><td>everyone</td></tr>
+  </tbody>
+</table>
+<h3>Abstraction</h3>
+<p><strong>Abstraction</strong> is the flip side: expose <em>what</em> an object does, hide <em>how</em>. You call <code>account.deposit(100)</code> without knowing the internal logic — just like driving a car without understanding the engine.</p>
+<h3>Ví dụ có lời giải · Worked example (validation in action)</h3>
+<pre><span class="tok-keyword">class</span> <span class="tok-type">BankAccount</span> {
+    <span class="tok-keyword">private double</span> balance = 0;
+    <span class="tok-keyword">public double</span> <span class="tok-function">getBalance</span>() { <span class="tok-keyword">return</span> balance; }
+    <span class="tok-keyword">public void</span> <span class="tok-function">deposit</span>(<span class="tok-keyword">double</span> amt) { <span class="tok-keyword">if</span> (amt &gt; 0) balance += amt; }
+}
+<span class="tok-type">BankAccount</span> acc = <span class="tok-keyword">new</span> <span class="tok-function">BankAccount</span>();
+acc.<span class="tok-function">deposit</span>(100);
+acc.<span class="tok-function">deposit</span>(-50);   <span class="tok-comment">// rejected by the if-guard</span>
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Balance = "</span> + acc.<span class="tok-function">getBalance</span>());</pre>
+<div class="out"><b>Output:</b> Balance = 100.0</div>
+<p>The invalid −50 deposit is silently rejected — because the only way in is through <code>deposit()</code>, the balance can never go negative. That guarantee is what encapsulation buys you.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Immutability — encapsulation taken further.</b> Make a field <code>private final</code> and give it no setter, and the object becomes <em>immutable</em>: its value can never change after construction (Java's <code>String</code> works exactly this way). Immutable objects are automatically thread-safe and impossible to corrupt — which is why modern design favours them for values you share widely.</div>
+<div class="callout ok">Encapsulation = hide the data; abstraction = hide the complexity. Together they let you change an object&#39;s internals freely without breaking the code that uses it, as long as the public methods stay the same. This is the foundation of maintainable software.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 3 · Bài 3.1</span>
+<h2>Trụ cột 1 &amp; 2 — Đóng gói và Trừu tượng</h2>
+<p class="lead"><strong>Đóng gói (encapsulation)</strong> (CLO6) nghĩa là giấu dữ liệu bên trong của đối tượng và chỉ lộ nó qua các phương thức có kiểm soát. Bạn để trường là <code>private</code>, rồi cung cấp <strong>getter</strong> và <strong>setter</strong> để đọc và đổi chúng an toàn.</p>
+<pre><span class="tok-keyword">public class</span> <span class="tok-type">BankAccount</span> {
+    <span class="tok-keyword">private double</span> balance;  <span class="tok-comment">// giấu — không thể chạm trực tiếp</span>
+
+    <span class="tok-keyword">public double</span> <span class="tok-function">getBalance</span>() { <span class="tok-keyword">return</span> balance; }
+
+    <span class="tok-keyword">public void</span> <span class="tok-function">deposit</span>(<span class="tok-type">double</span> amount) {
+        <span class="tok-keyword">if</span> (amount &gt; 0) balance += amount;  <span class="tok-comment">// kiểm tra bảo vệ dữ liệu</span>
+    }
+}</pre>
+<p>Vì <code>balance</code> là <code>private</code>, không code ngoài nào đặt được nó thành giá trị âm trực tiếp — phải đi qua <code>deposit()</code>, nơi kiểm tra. Đối tượng <strong>bảo vệ bất biến của chính nó</strong>.</p>
+<h3>Bộ điều chỉnh truy cập (access modifier)</h3>
+<table>
+  <thead><tr><th>Modifier</th><th>Thấy được bởi</th></tr></thead>
+  <tbody>
+    <tr><td>private</td><td>chỉ lớp này</td></tr>
+    <tr><td>(mặc định)</td><td>cùng package</td></tr>
+    <tr><td>protected</td><td>package + lớp con</td></tr>
+    <tr><td>public</td><td>mọi nơi</td></tr>
+  </tbody>
+</table>
+<h3>Trừu tượng (abstraction)</h3>
+<p><strong>Trừu tượng</strong> là mặt kia: lộ <em>cái gì</em> một đối tượng làm, giấu <em>làm sao</em>. Bạn gọi <code>account.deposit(100)</code> mà không cần biết logic bên trong — như lái xe mà không cần hiểu động cơ.</p>
+<h3>Ví dụ có lời giải · Kiểm tra dữ liệu tại chỗ</h3>
+<pre><span class="tok-keyword">class</span> <span class="tok-type">BankAccount</span> {
+    <span class="tok-keyword">private double</span> balance = 0;
+    <span class="tok-keyword">public double</span> <span class="tok-function">getBalance</span>() { <span class="tok-keyword">return</span> balance; }
+    <span class="tok-keyword">public void</span> <span class="tok-function">deposit</span>(<span class="tok-keyword">double</span> amt) { <span class="tok-keyword">if</span> (amt &gt; 0) balance += amt; }
+}
+<span class="tok-type">BankAccount</span> acc = <span class="tok-keyword">new</span> <span class="tok-function">BankAccount</span>();
+acc.<span class="tok-function">deposit</span>(100);
+acc.<span class="tok-function">deposit</span>(-50);   <span class="tok-comment">// bị chốt if từ chối</span>
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Balance = "</span> + acc.<span class="tok-function">getBalance</span>());</pre>
+<div class="out"><b>Kết quả:</b> Balance = 100.0</div>
+<p>Lần gửi −50 không hợp lệ bị lặng lẽ từ chối — vì lối vào duy nhất là qua <code>deposit()</code>, số dư không bao giờ âm được. Đảm bảo đó chính là thứ đóng gói mang lại.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Bất biến (immutability) — đóng gói đẩy xa hơn.</b> Để một trường <code>private final</code> và không cho setter, đối tượng trở nên <em>bất biến</em>: giá trị không bao giờ đổi sau khi tạo (lớp <code>String</code> của Java hoạt động đúng như vậy). Đối tượng bất biến tự động an toàn với đa luồng và không thể bị hỏng — đó là lý do thiết kế hiện đại ưa dùng chúng cho các giá trị chia sẻ rộng.</div>
+<div class="callout ok">Đóng gói = giấu dữ liệu; trừu tượng = giấu độ phức tạp. Cùng nhau chúng cho bạn đổi phần bên trong của đối tượng tự do mà không phá code dùng nó, miễn là các phương thức public giữ nguyên. Đây là nền của phần mềm dễ bảo trì.</div>
+</div>
+`,
+        },
+        {
+          title: 'Chapter 3 Quiz|||Quiz chương 3',
+          slug: 'pro192-quiz-ch3',
+          type: 'QUIZ',
+          description: 'Kiểm tra nhanh: đóng gói, private, getter/setter, trừu tượng.',
+          quiz: {
+            timeLimitSeconds: 300,
+            questions: [
+              { question: 'Encapsulation means…|||Đóng gói nghĩa là…', options: ['making all fields public|||để mọi trường public', 'hiding internal data and exposing it via controlled methods|||giấu dữ liệu bên trong và lộ qua phương thức có kiểm soát', 'copying an object|||sao chép một đối tượng', 'deleting private data|||xoá dữ liệu private'], correctIndex: 1, points: 1 },
+              { question: 'To hide a field so only its own class can access it, declare it…|||Để giấu một trường sao cho chỉ lớp của nó truy cập, khai báo nó…', options: ['public', 'private', 'protected', 'static'], correctIndex: 1, points: 1 },
+              { question: 'Getters and setters let you…|||Getter và setter cho bạn…', options: ['read/change private fields in a controlled way|||đọc/đổi trường private một cách có kiểm soát', 'delete the class|||xoá lớp', 'skip the constructor|||bỏ constructor', 'make fields public|||để trường public'], correctIndex: 0, points: 1 },
+              { question: 'Abstraction means exposing… and hiding…|||Trừu tượng nghĩa là lộ… và giấu…', options: ['how … what', 'what an object does … how it does it|||cái gì đối tượng làm … làm sao nó làm', 'the fields … the methods', 'nothing … everything'], correctIndex: 1, points: 1 },
+              { question: 'Which access modifier makes a member visible to everyone?|||Modifier nào làm một thành viên thấy được với mọi nơi?', options: ['private', 'protected', 'public', 'default'], correctIndex: 2, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+    /* ══════════════════ CHƯƠNG 4 — KẾ THỪA & ĐA HÌNH ══════════════════ */
+    {
+      title: 'Chapter 4 — Inheritance & Polymorphism|||Chương 4 — Kế thừa & Đa hình',
+      description: 'Tái dùng code bằng kế thừa, và một giao diện nhiều hình dạng.',
+      lessons: [
+        {
+          title: '4.1 — Inheritance|||4.1 — Kế thừa',
+          slug: 'pro192-4-1-ke-thua',
+          type: 'VIDEO',
+          description: 'extends, super, ghi đè (override) và quan hệ "is-a".',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 4 · Lesson 4.1</span>
+<h2>Pillar 3 — Inheritance</h2>
+<p class="lead"><strong>Inheritance</strong> (CLO6) lets a new class reuse and extend an existing one. The child class (subclass) gets all the parent&#39;s fields and methods, then adds or changes what it needs. It models the "<strong>is-a</strong>" relationship.</p>
+<pre><span class="tok-keyword">public class</span> <span class="tok-type">Animal</span> {
+    <span class="tok-type">String</span> name;
+    <span class="tok-keyword">public void</span> <span class="tok-function">eat</span>() { <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(name + <span class="tok-string">" is eating"</span>); }
+}
+
+<span class="tok-keyword">public class</span> <span class="tok-type">Dog</span> <span class="tok-keyword">extends</span> <span class="tok-type">Animal</span> {   <span class="tok-comment">// Dog IS-A Animal</span>
+    <span class="tok-keyword">public void</span> <span class="tok-function">bark</span>() { <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Woof!"</span>); }
+}</pre>
+<p>A <code>Dog</code> automatically has <code>name</code> and <code>eat()</code> from <code>Animal</code>, plus its own <code>bark()</code>. No copy-paste — reuse by extension.</p>
+<h3>super and overriding</h3>
+<p>A subclass can <strong>override</strong> a parent method to change its behavior, and use <code>super</code> to call the parent&#39;s version or constructor.</p>
+<pre><span class="tok-keyword">public class</span> <span class="tok-type">Cat</span> <span class="tok-keyword">extends</span> <span class="tok-type">Animal</span> {
+    <span class="tok-keyword">@Override</span>
+    <span class="tok-keyword">public void</span> <span class="tok-function">eat</span>() {
+        <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(name + <span class="tok-string">" eats fish quietly"</span>);
+    }
+}</pre>
+<div class="pitfall">Java allows only <strong>single inheritance</strong> (one parent class) — unlike C++. To combine multiple behaviors, you use interfaces (Chapter 5). Also prefer inheritance only for true "is-a" relationships; for "has-a," use composition (a field) instead.</div>
+<h3>Ví dụ có lời giải · Worked example (super &amp; override)</h3>
+<pre><span class="tok-keyword">class</span> <span class="tok-type">Animal</span> {
+    <span class="tok-type">String</span> name;
+    <span class="tok-function">Animal</span>(<span class="tok-type">String</span> n) { name = n; }
+    <span class="tok-keyword">void</span> <span class="tok-function">eat</span>() { <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(name + <span class="tok-string">" is eating"</span>); }
+}
+<span class="tok-keyword">class</span> <span class="tok-type">Cat</span> <span class="tok-keyword">extends</span> <span class="tok-type">Animal</span> {
+    <span class="tok-function">Cat</span>(<span class="tok-type">String</span> n) { <span class="tok-keyword">super</span>(n); }   <span class="tok-comment">// call the parent constructor</span>
+    <span class="tok-keyword">@Override void</span> <span class="tok-function">eat</span>() { <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(name + <span class="tok-string">" eats fish quietly"</span>); }
+}
+<span class="tok-comment">// in main:</span>
+<span class="tok-keyword">new</span> <span class="tok-function">Animal</span>(<span class="tok-string">"Rex"</span>).<span class="tok-function">eat</span>();
+<span class="tok-keyword">new</span> <span class="tok-function">Cat</span>(<span class="tok-string">"Miu"</span>).<span class="tok-function">eat</span>();</pre>
+<div class="out"><b>Output:</b><br>Rex is eating<br>Miu eats fish quietly</div>
+<div class="callout"><span class="badge">Syllabus CQ14.2</span> <b>Every class secretly extends Object.</b> If you write no <code>extends</code>, Java still makes your class inherit from <code>java.lang.Object</code> — the root of all classes. That is where <code>toString()</code>, <code>equals()</code> and <code>hashCode()</code> come from, and why you can override them on any class. The opposite of extensible is <code>final</code>: a <code>final</code> class (like String) cannot be subclassed at all. CQ14.2 asks you to define exactly these terms &mdash; <em>static, abstract, finally, public, private, protected</em> &mdash; so learn <code>final</code> in its three positions: a final class (cannot be extended), a final method (cannot be overridden), a final field (assigned once).</div>
+<a class="link-card codelab" href="/code-lab/java-core?ref=%2Fcourses%2Fobject-oriented-programming%2Flearn&reflabel=PRO192%20%E2%80%94%20Object-Oriented%20Programming#module-250" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Practice inheritance</span><span class="lc-sub">The "Inheritance, Polymorphism &amp; Interfaces" module on CodeLab.</span></span>
+  <span class="lc-cta">PRACTICE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 4 · Bài 4.1</span>
+<h2>Trụ cột 3 — Kế thừa</h2>
+<p class="lead"><strong>Kế thừa (inheritance)</strong> (CLO6) cho một lớp mới tái dùng và mở rộng một lớp có sẵn. Lớp con (subclass) nhận toàn bộ trường và phương thức của lớp cha, rồi thêm hoặc đổi thứ nó cần. Nó mô hình quan hệ "<strong>is-a</strong>".</p>
+<pre><span class="tok-keyword">public class</span> <span class="tok-type">Animal</span> {
+    <span class="tok-type">String</span> name;
+    <span class="tok-keyword">public void</span> <span class="tok-function">eat</span>() { <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(name + <span class="tok-string">" is eating"</span>); }
+}
+
+<span class="tok-keyword">public class</span> <span class="tok-type">Dog</span> <span class="tok-keyword">extends</span> <span class="tok-type">Animal</span> {   <span class="tok-comment">// Dog IS-A Animal</span>
+    <span class="tok-keyword">public void</span> <span class="tok-function">bark</span>() { <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Woof!"</span>); }
+}</pre>
+<p>Một <code>Dog</code> tự động có <code>name</code> và <code>eat()</code> từ <code>Animal</code>, cộng <code>bark()</code> riêng. Không copy-paste — tái dùng bằng mở rộng.</p>
+<h3>super và ghi đè (override)</h3>
+<p>Một lớp con có thể <strong>ghi đè (override)</strong> một phương thức cha để đổi hành vi, và dùng <code>super</code> để gọi phiên bản của cha hoặc constructor cha.</p>
+<pre><span class="tok-keyword">public class</span> <span class="tok-type">Cat</span> <span class="tok-keyword">extends</span> <span class="tok-type">Animal</span> {
+    <span class="tok-keyword">@Override</span>
+    <span class="tok-keyword">public void</span> <span class="tok-function">eat</span>() {
+        <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(name + <span class="tok-string">" eats fish quietly"</span>);
+    }
+}</pre>
+<div class="pitfall">Java chỉ cho <strong>kế thừa đơn</strong> (một lớp cha) — khác C++. Để kết hợp nhiều hành vi, bạn dùng interface (Chương 5). Ngoài ra chỉ nên kế thừa cho quan hệ "is-a" thật; với "has-a", dùng kết hợp (một trường) thay vì kế thừa.</div>
+<h3>Ví dụ có lời giải · super &amp; ghi đè</h3>
+<pre><span class="tok-keyword">class</span> <span class="tok-type">Animal</span> {
+    <span class="tok-type">String</span> name;
+    <span class="tok-function">Animal</span>(<span class="tok-type">String</span> n) { name = n; }
+    <span class="tok-keyword">void</span> <span class="tok-function">eat</span>() { <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(name + <span class="tok-string">" is eating"</span>); }
+}
+<span class="tok-keyword">class</span> <span class="tok-type">Cat</span> <span class="tok-keyword">extends</span> <span class="tok-type">Animal</span> {
+    <span class="tok-function">Cat</span>(<span class="tok-type">String</span> n) { <span class="tok-keyword">super</span>(n); }   <span class="tok-comment">// gọi constructor cha</span>
+    <span class="tok-keyword">@Override void</span> <span class="tok-function">eat</span>() { <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(name + <span class="tok-string">" eats fish quietly"</span>); }
+}
+<span class="tok-comment">// trong main:</span>
+<span class="tok-keyword">new</span> <span class="tok-function">Animal</span>(<span class="tok-string">"Rex"</span>).<span class="tok-function">eat</span>();
+<span class="tok-keyword">new</span> <span class="tok-function">Cat</span>(<span class="tok-string">"Miu"</span>).<span class="tok-function">eat</span>();</pre>
+<div class="out"><b>Kết quả:</b><br>Rex is eating<br>Miu eats fish quietly</div>
+<div class="callout"><span class="badge">Syllabus CQ14.2</span> <b>Mọi lớp âm thầm kế thừa Object.</b> Nếu bạn không viết <code>extends</code>, Java vẫn cho lớp của bạn kế thừa <code>java.lang.Object</code> — gốc của mọi lớp. Đó là nơi <code>toString()</code>, <code>equals()</code> và <code>hashCode()</code> đến từ, và là lý do bạn ghi đè được chúng trên bất kỳ lớp nào. Ngược với "mở rộng được" là <code>final</code>: một lớp <code>final</code> (như String) không thể bị kế thừa. CQ14.2 yêu cầu định nghĩa đúng những từ này — <em>static, abstract, finally, public, private, protected</em> — nên hãy học <code>final</code> ở cả ba vị trí: lớp final (không kế thừa được), phương thức final (không ghi đè được), trường final (gán đúng một lần).</div>
+<a class="link-card codelab" href="/code-lab/java-core?ref=%2Fcourses%2Fobject-oriented-programming%2Flearn&reflabel=PRO192%20%E2%80%94%20Object-Oriented%20Programming#module-250" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Luyện kế thừa</span><span class="lc-sub">Module "Inheritance, Polymorphism &amp; Interfaces" trên CodeLab.</span></span>
+  <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '4.2 — Polymorphism|||4.2 — Đa hình',
+          slug: 'pro192-4-2-da-hinh',
+          simulation: {
+            url: 'https://media.cuongthai.com/videos/academy/PRO192/pro192-4-2-da-hinh.mp4',
+            poster: 'https://media.cuongthai.com/videos/academy/PRO192/pro192-4-2-da-hinh.jpg',
+            scenario: 'oop-pillars',
+            durationSeconds: 29,
+            caption: { en: "One line, three method bodies — the method table", vi: "Một dòng, ba thân phương thức — bảng phương thức" },
+          },
+          type: 'VIDEO',
+          description: 'Một giao diện, nhiều hành vi — dynamic dispatch và upcasting.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 4 · Lesson 4.2</span>
+<h2>Pillar 4 — Polymorphism</h2>
+<p class="lead"><strong>Polymorphism</strong> (CLO6) means "many forms": you can treat different subclasses through a common parent type, and Java automatically runs the correct overridden method at runtime. This is the most powerful OOP idea.</p>
+<pre><span class="tok-comment">// Animal (lesson 4.1) declares Animal(String n), so every subclass needs a name</span>
+<span class="tok-type">Animal</span>[] zoo = { <span class="tok-keyword">new</span> <span class="tok-function">Dog</span>(<span class="tok-string">"Rex"</span>), <span class="tok-keyword">new</span> <span class="tok-function">Cat</span>(<span class="tok-string">"Miu"</span>), <span class="tok-keyword">new</span> <span class="tok-function">Dog</span>(<span class="tok-string">"Bin"</span>) };
+
+<span class="tok-keyword">for</span> (<span class="tok-type">Animal</span> a : zoo) {
+    a.<span class="tok-function">eat</span>();   <span class="tok-comment">// each object runs ITS OWN version of eat()</span>
+}</pre>
+<div class="out"><b>Output (with overrides):</b><br>Rex is eating<br>Miu eats fish quietly<br>Bin is eating</div>
+<p>Even though the array is typed as <code>Animal</code>, each object "remembers" its real class and runs the right <code>eat()</code>. This is <strong>dynamic dispatch</strong>: the method chosen depends on the object&#39;s actual type at runtime, not the reference type.</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Reference</div><div class="lz-t">typed as Animal</div><div class="lz-d">the common parent</div></div>
+  <div class="lz-step"><div class="lz-k">Object</div><div class="lz-t">really a Dog/Cat</div><div class="lz-d">its true class</div></div>
+  <div class="lz-step"><div class="lz-k">Call eat()</div><div class="lz-t">runs the real one</div><div class="lz-d">dynamic dispatch</div></div>
+</div>
+<h3>Ví dụ có lời giải · Worked example (one loop, three behaviors)</h3>
+<pre><span class="tok-type">Animal</span>[] zoo = { <span class="tok-keyword">new</span> <span class="tok-function">Dog</span>(<span class="tok-string">"Rex"</span>), <span class="tok-keyword">new</span> <span class="tok-function">Cat</span>(<span class="tok-string">"Miu"</span>), <span class="tok-keyword">new</span> <span class="tok-function">Dog</span>(<span class="tok-string">"Bin"</span>) };
+<span class="tok-keyword">for</span> (<span class="tok-type">Animal</span> x : zoo) x.<span class="tok-function">eat</span>();   <span class="tok-comment">// Cat overrides eat(); Dog inherits it</span></pre>
+<div class="out"><b>Output:</b><br>Rex is eating<br>Miu eats fish quietly<br>Bin is eating</div>
+<p>One line of calling code, three different behaviors — chosen by each object's real class, not by the <code>Animal</code> reference. That is polymorphism doing the work for you.</p>
+<div class="callout"><span class="badge">Syllabus CQ9.2 &amp; CQ10.1</span> <b>instanceof &amp; safe downcasting — examinable.</b> CQ9.2 asks about casting and CQ10.1 asks &ldquo;What is the <code>instanceof</code> operator?&rdquo;, so this is core material, not an extra. Sometimes you must recover the specific type from an <code>Animal</code> reference — e.g. to call a <code>Dog</code>-only method. On the Java 8 this subject specifies, write the check and the cast separately:<pre class="code">if (x <span class="tok-kw">instanceof</span> Dog) {\n    Dog d = (Dog) x;   <span class="tok-cm">// safe: the check already passed</span>\n    d.bark();\n}</pre>Downcasting without the check risks a <code>ClassCastException</code> at runtime — the price of stepping outside the safety polymorphism normally gives you. (Java 16 later added <code>if (x instanceof Dog d)</code>, which folds the cast into the check; it does <strong>not</strong> compile on JDK 8, so do not use it in the exam.)</div>
+<div class="callout ok">Why it matters: you can write code that works with "any Animal" (or any Shape, any Payment method) without knowing the exact subtype. Add a new subclass later and the existing loop works unchanged. Polymorphism is what makes OOP code extensible.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 4 · Bài 4.2</span>
+<h2>Trụ cột 4 — Đa hình</h2>
+<p class="lead"><strong>Đa hình (polymorphism)</strong> (CLO6) nghĩa là "nhiều hình dạng": bạn có thể xử lý các lớp con khác nhau qua một kiểu cha chung, và Java tự động chạy đúng phương thức đã ghi đè lúc chạy. Đây là ý tưởng OOP mạnh mẽ nhất.</p>
+<pre><span class="tok-comment">// Animal (bài 4.1) khai báo Animal(String n), nên mọi lớp con đều cần một cái tên</span>
+<span class="tok-type">Animal</span>[] zoo = { <span class="tok-keyword">new</span> <span class="tok-function">Dog</span>(<span class="tok-string">"Rex"</span>), <span class="tok-keyword">new</span> <span class="tok-function">Cat</span>(<span class="tok-string">"Miu"</span>), <span class="tok-keyword">new</span> <span class="tok-function">Dog</span>(<span class="tok-string">"Bin"</span>) };
+
+<span class="tok-keyword">for</span> (<span class="tok-type">Animal</span> a : zoo) {
+    a.<span class="tok-function">eat</span>();   <span class="tok-comment">// mỗi đối tượng chạy phiên bản eat() CỦA CHÍNH NÓ</span>
+}</pre>
+<div class="out"><b>Kết quả (có override):</b><br>Rex is eating<br>Miu eats fish quietly<br>Bin is eating</div>
+<p>Dù mảng có kiểu <code>Animal</code>, mỗi đối tượng "nhớ" lớp thật của nó và chạy đúng <code>eat()</code>. Đây là <strong>dynamic dispatch</strong>: phương thức được chọn phụ thuộc kiểu thật của đối tượng lúc chạy, không phải kiểu của tham chiếu.</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Tham chiếu</div><div class="lz-t">kiểu Animal</div><div class="lz-d">lớp cha chung</div></div>
+  <div class="lz-step"><div class="lz-k">Đối tượng</div><div class="lz-t">thật ra là Dog/Cat</div><div class="lz-d">lớp thật của nó</div></div>
+  <div class="lz-step"><div class="lz-k">Gọi eat()</div><div class="lz-t">chạy đúng cái thật</div><div class="lz-d">dynamic dispatch</div></div>
+</div>
+<h3>Ví dụ có lời giải · Một vòng lặp, ba hành vi</h3>
+<pre><span class="tok-type">Animal</span>[] zoo = { <span class="tok-keyword">new</span> <span class="tok-function">Dog</span>(<span class="tok-string">"Rex"</span>), <span class="tok-keyword">new</span> <span class="tok-function">Cat</span>(<span class="tok-string">"Miu"</span>), <span class="tok-keyword">new</span> <span class="tok-function">Dog</span>(<span class="tok-string">"Bin"</span>) };
+<span class="tok-keyword">for</span> (<span class="tok-type">Animal</span> x : zoo) x.<span class="tok-function">eat</span>();   <span class="tok-comment">// Cat ghi đè eat(); Dog kế thừa nó</span></pre>
+<div class="out"><b>Kết quả:</b><br>Rex is eating<br>Miu eats fish quietly<br>Bin is eating</div>
+<p>Một dòng code gọi, ba hành vi khác nhau — chọn theo lớp thật của mỗi đối tượng, không theo tham chiếu <code>Animal</code>. Đó là đa hình làm việc thay bạn.</p>
+<div class="callout"><span class="badge">Syllabus CQ9.2 &amp; CQ10.1</span> <b>instanceof &amp; ép kiểu xuống an toàn — nằm trong phạm vi thi.</b> CQ9.2 hỏi về ép kiểu và CQ10.1 hỏi &ldquo;Toán tử <code>instanceof</code> là gì?&rdquo;, nên đây là nội dung cốt lõi, không phải phần thêm. Đôi khi bạn phải lấy lại kiểu cụ thể từ một tham chiếu <code>Animal</code> — vd để gọi một phương thức chỉ có ở <code>Dog</code>. Trên Java 8 mà môn này quy định, hãy viết phép kiểm và phép ép tách rời:<pre class="code">if (x <span class="tok-kw">instanceof</span> Dog) {\n    Dog d = (Dog) x;   <span class="tok-cm">// an toàn: đã kiểm ở trên</span>\n    d.bark();\n}</pre>Ép kiểu xuống mà không kiểm dễ gây <code>ClassCastException</code> lúc chạy — cái giá của việc bước ra ngoài sự an toàn mà đa hình thường cho bạn. (Java 16 về sau mới thêm <code>if (x instanceof Dog d)</code>, gộp phép ép vào phép kiểm; nó <strong>không</strong> biên dịch được trên JDK 8, nên đừng dùng khi thi.)</div>
+<div class="callout ok">Vì sao quan trọng: bạn viết được code làm việc với "bất kỳ Animal nào" (hay bất kỳ Shape, bất kỳ phương thức Payment nào) mà không cần biết lớp con chính xác. Thêm một lớp con mới sau này thì vòng lặp cũ vẫn chạy không đổi. Đa hình là thứ làm code OOP mở rộng được.</div>
+</div>
+`,
+        },
+        {
+          title: 'Chapter 4 Quiz|||Quiz chương 4',
+          slug: 'pro192-quiz-ch4',
+          type: 'QUIZ',
+          description: 'Kiểm tra nhanh: kế thừa, extends, override, đa hình, dynamic dispatch.',
+          quiz: {
+            timeLimitSeconds: 360,
+            questions: [
+              { question: 'Inheritance models which relationship?|||Kế thừa mô hình quan hệ nào?', options: ['has-a', 'is-a', 'uses-a', 'none|||không cái nào'], correctIndex: 1, points: 1 },
+              { question: 'The Java keyword for inheritance is…|||Từ khoá Java cho kế thừa là…', options: ['inherits', 'extends', 'implements', 'super'], correctIndex: 1, points: 1 },
+              { question: 'Overriding a method means…|||Ghi đè (override) một phương thức nghĩa là…', options: ['deleting the parent method|||xoá phương thức cha', 'redefining a parent method in the subclass|||định nghĩa lại một phương thức cha trong lớp con', 'renaming the class|||đổi tên lớp', 'calling a private method|||gọi một phương thức private'], correctIndex: 1, points: 1 },
+              { question: 'Java supports how many parent classes per class?|||Java hỗ trợ bao nhiêu lớp cha cho mỗi lớp?', options: ['one (single inheritance)|||một (kế thừa đơn)', 'unlimited|||không giới hạn', 'exactly two|||đúng hai', 'zero|||không có'], correctIndex: 0, points: 1 },
+              { question: 'Dynamic dispatch means the method that runs depends on…|||Dynamic dispatch nghĩa là phương thức chạy phụ thuộc vào…', options: ['the reference type|||kiểu tham chiếu', 'the object\'s actual runtime type|||kiểu thật lúc chạy của đối tượng', 'the file name|||tên file', 'the compiler|||trình biên dịch'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+    /* ══════════════════ CHƯƠNG 5 — ABSTRACT CLASS & INTERFACE ══════════════════ */
+    {
+      title: 'Chapter 5 — Abstract Classes & Interfaces|||Chương 5 — Abstract Class & Interface',
+      description: 'Định nghĩa hợp đồng hành vi mà lớp con phải hiện thực.',
+      lessons: [
+        {
+          title: '5.1 — Abstract classes & interfaces|||5.1 — Abstract class & interface',
+          slug: 'pro192-5-1-abstract-interface',
+          type: 'VIDEO',
+          description: 'Hợp đồng chưa cài đặt và cách chọn giữa abstract class và interface.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 5 · Lesson 5.1</span>
+<h2>Contracts for behavior</h2>
+<p class="lead">Sometimes you want to define <em>what</em> a group of classes must do, without saying <em>how</em> (CLO7). Two tools do this: <strong>abstract classes</strong> and <strong>interfaces</strong>.</p>
+<h3>Abstract class</h3>
+<p>An <strong>abstract class</strong> cannot be instantiated (no <code>new</code>). It can hold both finished methods and <strong>abstract methods</strong> (declared, not implemented) that subclasses must fill in.</p>
+<pre><span class="tok-keyword">public abstract class</span> <span class="tok-type">Shape</span> {
+    <span class="tok-keyword">public abstract double</span> <span class="tok-function">area</span>();   <span class="tok-comment">// no body — subclasses must implement</span>
+    <span class="tok-keyword">public void</span> <span class="tok-function">describe</span>() { <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Area = "</span> + <span class="tok-function">area</span>()); }
+}
+<span class="tok-keyword">public class</span> <span class="tok-type">Circle</span> <span class="tok-keyword">extends</span> <span class="tok-type">Shape</span> {
+    <span class="tok-keyword">private double</span> r;
+    <span class="tok-keyword">public</span> <span class="tok-function">Circle</span>(<span class="tok-keyword">double</span> r) { <span class="tok-keyword">this</span>.r = r; }   <span class="tok-comment">// without this, new Circle(2) does not compile</span>
+    <span class="tok-keyword">public double</span> <span class="tok-function">area</span>() { <span class="tok-keyword">return</span> 3.14159 * r * r; }
+}
+<span class="tok-keyword">public class</span> <span class="tok-type">Rectangle</span> <span class="tok-keyword">extends</span> <span class="tok-type">Shape</span> {
+    <span class="tok-keyword">private double</span> w, h;
+    <span class="tok-keyword">public</span> <span class="tok-function">Rectangle</span>(<span class="tok-keyword">double</span> w, <span class="tok-keyword">double</span> h) { <span class="tok-keyword">this</span>.w = w; <span class="tok-keyword">this</span>.h = h; }
+    <span class="tok-keyword">public double</span> <span class="tok-function">area</span>() { <span class="tok-keyword">return</span> w * h; }
+}</pre>
+<p>Note the two details that make the worked example below compile and actually print those numbers: every subclass needs a <strong>constructor</strong> to receive its dimensions, and <code>Rectangle</code> must itself <code>extends Shape</code> — a <code>Rectangle</code> from an earlier chapter that extends nothing cannot go into a <code>Shape[]</code>.</p>
+<h3>Interface</h3>
+<p>An <strong>interface</strong> is a pure contract — a list of method signatures a class promises to implement. A class can <code>implements</code> many interfaces (working around single inheritance).</p>
+<pre><span class="tok-keyword">public interface</span> <span class="tok-type">Payable</span> {          <span class="tok-comment">// a contract we write ourselves</span>
+    <span class="tok-keyword">double</span> <span class="tok-function">monthlyPay</span>();
+}
+<span class="tok-keyword">public class</span> <span class="tok-type">Student</span> <span class="tok-keyword">implements</span> <span class="tok-type">Payable</span> {
+    <span class="tok-keyword">private double</span> scholarship;
+    <span class="tok-keyword">public double</span> <span class="tok-function">monthlyPay</span>() { <span class="tok-keyword">return</span> scholarship; }   <span class="tok-comment">// must be defined</span>
+}</pre>
+<p>Java also ships interfaces you <em>implement</em> rather than write. The first one you meet is <code>java.lang.Comparable&lt;T&gt;</code>, which declares exactly one method, <code>int compareTo(T other)</code> — so a sortable student is <code>class Student implements Comparable&lt;Student&gt;</code>. Never declare your own interface named <code>Comparable</code>: it shadows the JDK type, and <code>Collections.sort</code> will then refuse your class.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><div class="lz-lt">Abstract class — "is-a" with shared code</div><div class="lz-ld">Use when subclasses share fields/implementation. One parent only.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Interface — "can-do" capability</div><div class="lz-ld">Use to give unrelated classes a shared ability. A class can implement many.</div></div>
+</div>
+<h3>Ví dụ có lời giải · Worked example (abstract type, real areas)</h3>
+<pre><span class="tok-type">Shape</span>[] shapes = { <span class="tok-keyword">new</span> <span class="tok-function">Circle</span>(2), <span class="tok-keyword">new</span> <span class="tok-function">Rectangle</span>(3, 4) };
+<span class="tok-keyword">for</span> (<span class="tok-type">Shape</span> s : shapes) s.<span class="tok-function">describe</span>();   <span class="tok-comment">// describe() calls each shape's own area()</span></pre>
+<div class="out"><b>Output:</b><br>Area = 12.56636<br>Area = 12.0</div>
+<p>The abstract <code>Shape</code> defines the contract (<code>area()</code>) plus a shared <code>describe()</code>; each subclass supplies its own formula. Add a <code>Triangle</code> later and the loop needs no change.</p>
+<div class="callout"><span class="badge">Syllabus CQ13.3</span> <b>Interface members — including default methods.</b> CQ13.3 asks &ldquo;What are Interface members?&rdquo; and its own hint lists the <em>default method</em>, so this is examinable. Since Java 8 an interface can carry a <code>default</code> method with a real body, so you can add new behavior to an interface without breaking the thousands of classes that already implement it. That single change is how <code>java.util.List</code> gained <code>sort()</code> — and it blurred the old "abstract class vs interface" line you just learned. Rule now: interface for capability, abstract class for shared state.</div>
+<div class="note-ct">Rule of thumb: an abstract class says "a Circle IS-A Shape"; an interface says "a Student CAN-DO being paid — and, once it implements Comparable, being sorted." Both enable polymorphism — you can treat objects by their abstract type or interface, and the right implementation runs.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 5 · Bài 5.1</span>
+<h2>Hợp đồng cho hành vi</h2>
+<p class="lead">Đôi khi bạn muốn định nghĩa <em>cái gì</em> một nhóm lớp phải làm, mà không nói <em>làm sao</em> (CLO7). Hai công cụ làm điều này: <strong>abstract class</strong> và <strong>interface</strong>.</p>
+<h3>Abstract class (lớp trừu tượng)</h3>
+<p>Một <strong>abstract class</strong> không thể tạo thể hiện (không <code>new</code>). Nó có thể chứa cả phương thức đã hoàn thiện lẫn <strong>phương thức trừu tượng</strong> (khai báo, chưa cài đặt) mà lớp con phải điền vào.</p>
+<pre><span class="tok-keyword">public abstract class</span> <span class="tok-type">Shape</span> {
+    <span class="tok-keyword">public abstract double</span> <span class="tok-function">area</span>();   <span class="tok-comment">// không thân — lớp con phải cài đặt</span>
+    <span class="tok-keyword">public void</span> <span class="tok-function">describe</span>() { <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Area = "</span> + <span class="tok-function">area</span>()); }
+}
+<span class="tok-keyword">public class</span> <span class="tok-type">Circle</span> <span class="tok-keyword">extends</span> <span class="tok-type">Shape</span> {
+    <span class="tok-keyword">private double</span> r;
+    <span class="tok-keyword">public</span> <span class="tok-function">Circle</span>(<span class="tok-keyword">double</span> r) { <span class="tok-keyword">this</span>.r = r; }   <span class="tok-comment">// thiếu dòng này thì new Circle(2) không biên dịch được</span>
+    <span class="tok-keyword">public double</span> <span class="tok-function">area</span>() { <span class="tok-keyword">return</span> 3.14159 * r * r; }
+}
+<span class="tok-keyword">public class</span> <span class="tok-type">Rectangle</span> <span class="tok-keyword">extends</span> <span class="tok-type">Shape</span> {
+    <span class="tok-keyword">private double</span> w, h;
+    <span class="tok-keyword">public</span> <span class="tok-function">Rectangle</span>(<span class="tok-keyword">double</span> w, <span class="tok-keyword">double</span> h) { <span class="tok-keyword">this</span>.w = w; <span class="tok-keyword">this</span>.h = h; }
+    <span class="tok-keyword">public double</span> <span class="tok-function">area</span>() { <span class="tok-keyword">return</span> w * h; }
+}</pre>
+<p>Để ý hai chi tiết làm ví dụ bên dưới biên dịch được và in ra đúng những con số đó: mỗi lớp con cần một <strong>constructor</strong> để nhận kích thước, và <code>Rectangle</code> bắt buộc phải <code>extends Shape</code> — một <code>Rectangle</code> ở chương trước không kế thừa gì thì không bỏ vào <code>Shape[]</code> được.</p>
+<h3>Interface</h3>
+<p>Một <strong>interface</strong> là một hợp đồng thuần — một danh sách chữ ký phương thức mà một lớp hứa hiện thực. Một lớp có thể <code>implements</code> nhiều interface (vòng qua giới hạn kế thừa đơn).</p>
+<pre><span class="tok-keyword">public interface</span> <span class="tok-type">Payable</span> {          <span class="tok-comment">// hợp đồng do ta tự viết</span>
+    <span class="tok-keyword">double</span> <span class="tok-function">monthlyPay</span>();
+}
+<span class="tok-keyword">public class</span> <span class="tok-type">Student</span> <span class="tok-keyword">implements</span> <span class="tok-type">Payable</span> {
+    <span class="tok-keyword">private double</span> scholarship;
+    <span class="tok-keyword">public double</span> <span class="tok-function">monthlyPay</span>() { <span class="tok-keyword">return</span> scholarship; }   <span class="tok-comment">// bắt buộc phải định nghĩa</span>
+}</pre>
+<p>Java cũng có sẵn những interface bạn <em>implements</em> chứ không tự viết. Cái đầu tiên bạn gặp là <code>java.lang.Comparable&lt;T&gt;</code>, khai báo đúng một phương thức <code>int compareTo(T other)</code> — nên một Student sắp xếp được là <code>class Student implements Comparable&lt;Student&gt;</code>. Đừng bao giờ tự khai một interface tên <code>Comparable</code>: nó che mất kiểu của JDK, và <code>Collections.sort</code> sẽ từ chối lớp của bạn.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><div class="lz-lt">Abstract class — "is-a" có code dùng chung</div><div class="lz-ld">Dùng khi các lớp con chia sẻ trường/cài đặt. Chỉ một lớp cha.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Interface — khả năng "can-do"</div><div class="lz-ld">Dùng để cho các lớp không liên quan một khả năng chung. Một lớp implements được nhiều.</div></div>
+</div>
+<h3>Ví dụ có lời giải · Kiểu trừu tượng, diện tích thật</h3>
+<pre><span class="tok-type">Shape</span>[] shapes = { <span class="tok-keyword">new</span> <span class="tok-function">Circle</span>(2), <span class="tok-keyword">new</span> <span class="tok-function">Rectangle</span>(3, 4) };
+<span class="tok-keyword">for</span> (<span class="tok-type">Shape</span> s : shapes) s.<span class="tok-function">describe</span>();   <span class="tok-comment">// describe() gọi area() riêng của mỗi hình</span></pre>
+<div class="out"><b>Kết quả:</b><br>Area = 12.56636<br>Area = 12.0</div>
+<p>Lớp trừu tượng <code>Shape</code> định nghĩa hợp đồng (<code>area()</code>) cùng một <code>describe()</code> dùng chung; mỗi lớp con cấp công thức riêng. Thêm một <code>Triangle</code> sau này thì vòng lặp không cần đổi.</p>
+<div class="callout"><span class="badge">Syllabus CQ13.3</span> <b>Thành viên của interface — gồm cả phương thức default.</b> CQ13.3 hỏi &ldquo;Interface có những thành viên nào?&rdquo; và chính phần gợi ý của nó liệt kê <em>default method</em>, nên đây là nội dung thi. Từ Java 8, một interface có thể mang phương thức <code>default</code> có thân thật, nên bạn thêm được hành vi mới vào interface mà không phá hàng nghìn lớp đã implements nó. Chính thay đổi đó giúp <code>java.util.List</code> có <code>sort()</code> — và làm mờ ranh giới cũ "abstract class vs interface" bạn vừa học. Quy tắc nay: interface cho khả năng, abstract class cho trạng thái dùng chung.</div>
+<div class="note-ct">Quy tắc ngón tay cái: abstract class nói "một Circle LÀ MỘT Shape"; interface nói "một Student CÓ THỂ được trả tiền — và khi implements Comparable thì CÓ THỂ được sắp xếp." Cả hai bật đa hình — bạn xử lý đối tượng qua kiểu trừu tượng hoặc interface của nó, và đúng cài đặt sẽ chạy.</div>
+</div>
+`,
+        },
+        {
+          title: 'Chapter 5 Quiz|||Quiz chương 5',
+          slug: 'pro192-quiz-ch5',
+          type: 'QUIZ',
+          description: 'Kiểm tra nhanh: abstract class, interface, implements, khi nào dùng gì.',
+          quiz: {
+            timeLimitSeconds: 300,
+            questions: [
+              { question: 'An abstract class…|||Một abstract class…', options: ['can be instantiated with new|||có thể tạo thể hiện bằng new', 'cannot be instantiated and may have abstract methods|||không thể tạo thể hiện và có thể có phương thức trừu tượng', 'has no methods|||không có phương thức', 'is the same as an object|||giống một đối tượng'], correctIndex: 1, points: 1 },
+              { question: 'An interface is…|||Một interface là…', options: ['a fully implemented class|||một lớp cài đặt đầy đủ', 'a contract of method signatures a class must implement|||một hợp đồng các chữ ký phương thức mà lớp phải hiện thực', 'a private field|||một trường private', 'a constructor|||một constructor'], correctIndex: 1, points: 1 },
+              { question: 'The keyword to use an interface is…|||Từ khoá để dùng một interface là…', options: ['extends', 'implements', 'inherits', 'new'], correctIndex: 1, points: 1 },
+              { question: 'How many interfaces can a Java class implement?|||Một lớp Java implements được bao nhiêu interface?', options: ['only one|||chỉ một', 'many|||nhiều', 'zero|||không', 'exactly two|||đúng hai'], correctIndex: 1, points: 1 },
+              { question: 'Use an interface (rather than abstract class) when you want to…|||Dùng interface (thay vì abstract class) khi bạn muốn…', options: ['share fields and code|||chia sẻ trường và code', 'give unrelated classes a shared capability|||cho các lớp không liên quan một khả năng chung', 'prevent inheritance|||ngăn kế thừa', 'store data|||lưu dữ liệu'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+    /* ══════════════════ PROGRESS TEST 1 ══════════════════ */
+    {
+      title: 'Progress Test 1 (OOP core — CLO1–7)|||Progress Test 1 (Cốt lõi OOP — CLO1–7)',
+      description: 'Ôn: Java cơ bản, lớp/đối tượng, 4 trụ cột, abstract & interface. LƯU Ý VỊ TRÍ: syllabus xếp Progress Test 1 ở session 33–34, tức SAU phần xử lý ngoại lệ (session 31–32) — nên phạm vi bài PT1 thật của lớp bạn có thể bao gồm cả chương ngoại lệ (bài 6.1). Khóa học đặt bài ôn này sớm hơn để bạn chốt phần OOP trước; hãy ôn thêm bài 6.1 trước khi làm PT1 trên lớp. Cách đánh số chương ở đây cũng lệch syllabus: syllabus Ch5 = ngoại lệ, Ch6 = mảng đối tượng, Ch7 = collections, Ch8 = File I/O.',
+      lessons: [
+        {
+          title: 'Progress Test 1 — OOP review|||Progress Test 1 — Ôn OOP',
+          slug: 'pro192-progress-test-1',
+          type: 'QUIZ',
+          description: 'Trộn câu hỏi từ chương 1–5.',
+          quiz: {
+            timeLimitSeconds: 480,
+            questions: [
+              { question: 'OOP bundles together…|||OOP gom lại với nhau…', options: ['only functions|||chỉ hàm', 'data and the behavior that acts on it|||dữ liệu và hành vi tác động lên nó', 'only variables|||chỉ biến', 'files and folders|||tệp và thư mục'], correctIndex: 1, points: 1 },
+              { question: 'Making a field private and adding getters/setters is called…|||Để một trường private và thêm getter/setter gọi là…', options: ['inheritance|||kế thừa', 'encapsulation|||đóng gói', 'polymorphism|||đa hình', 'abstraction|||trừu tượng'], correctIndex: 1, points: 1 },
+              { question: 'Reusing a parent class\'s fields and methods in a child class is…|||Tái dùng trường và phương thức của lớp cha trong lớp con là…', options: ['encapsulation|||đóng gói', 'inheritance|||kế thừa', 'an interface|||một interface', 'a constructor|||một constructor'], correctIndex: 1, points: 1 },
+              { question: 'Treating different subclasses through a common parent type and running the right method is…|||Xử lý các lớp con khác nhau qua một kiểu cha chung và chạy đúng phương thức là…', options: ['polymorphism|||đa hình', 'encapsulation|||đóng gói', 'a getter|||một getter', 'a package|||một package'], correctIndex: 0, points: 1 },
+              { question: 'Which can a class implement MANY of?|||Một lớp có thể implements NHIỀU cái nào?', options: ['parent classes|||lớp cha', 'interfaces|||interface', 'constructors|||constructor', 'main methods|||phương thức main'], correctIndex: 1, points: 1 },
+              { question: 'A class that cannot be instantiated but defines abstract methods is…|||Một lớp không thể tạo thể hiện nhưng định nghĩa phương thức trừu tượng là…', options: ['an interface|||một interface', 'an abstract class|||một abstract class', 'a final class|||một lớp final', 'an object|||một đối tượng'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+    /* ══════════════════ CHƯƠNG 6 — XỬ LÝ NGOẠI LỆ ══════════════════ */
+    {
+      title: 'Chapter 6 — Exception Handling|||Chương 6 — Xử lý ngoại lệ',
+      description: 'try/catch/finally, ngoại lệ checked vs unchecked và ném ngoại lệ.',
+      lessons: [
+        {
+          title: '6.1 — try, catch, finally & throw|||6.1 — try, catch, finally & throw',
+          slug: 'pro192-6-1-ngoai-le',
+          type: 'VIDEO',
+          description: 'Xử lý lỗi lúc chạy một cách gọn gàng thay vì để chương trình sập.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 6 · Lesson 6.1</span>
+<h2>Handling errors gracefully</h2>
+<p class="lead">Programs fail: a file is missing, input is invalid, a network drops. Java&#39;s <strong>exception handling</strong> (CLO4) lets you catch these problems and respond, instead of letting the program crash.</p>
+<pre><span class="tok-keyword">try</span> {
+    <span class="tok-keyword">int</span> result = 10 / 0;        <span class="tok-comment">// throws ArithmeticException</span>
+} <span class="tok-keyword">catch</span> (<span class="tok-type">ArithmeticException</span> e) {
+    <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Cannot divide by zero!"</span>);
+} <span class="tok-keyword">finally</span> {
+    <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"This always runs (cleanup)"</span>);
+}</pre>
+<div class="out"><b>Output:</b><br>Cannot divide by zero!<br>This always runs (cleanup)</div>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">try</div><div class="lz-t">risky code</div><div class="lz-d">might throw an exception</div></div>
+  <div class="lz-step"><div class="lz-k">catch</div><div class="lz-t">handle it</div><div class="lz-d">respond to the error</div></div>
+  <div class="lz-step"><div class="lz-k">finally</div><div class="lz-t">always runs</div><div class="lz-d">cleanup (close files etc.)</div></div>
+</div>
+<h3>Checked vs unchecked; throwing your own</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><div class="lz-lt">Checked exceptions (e.g. IOException)</div><div class="lz-ld">The compiler forces you to handle or declare them (with <code>throws</code>). Used for recoverable, expected problems like file access.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Unchecked exceptions (e.g. NullPointerException)</div><div class="lz-ld">Runtime bugs the compiler does not force you to catch — usually you fix the code instead.</div></div>
+</div>
+<p>You can raise your own with <code>throw new Exception("message")</code> to signal an error condition to the caller.</p>
+<h3>Ví dụ có lời giải · Worked example (skip bad input)</h3>
+<pre><span class="tok-type">String</span>[] inputs = {<span class="tok-string">"12"</span>, <span class="tok-string">"9x"</span>, <span class="tok-string">"7"</span>};
+<span class="tok-keyword">int</span> tong = 0;
+<span class="tok-keyword">for</span> (<span class="tok-type">String</span> s : inputs) {
+    <span class="tok-keyword">try</span> { tong += <span class="tok-type">Integer</span>.<span class="tok-function">parseInt</span>(s); }
+    <span class="tok-keyword">catch</span> (<span class="tok-type">NumberFormatException</span> e) { <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Bo qua gia tri sai: "</span> + s); }
+}
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Tong hop le = "</span> + tong);</pre>
+<div class="out"><b>Output:</b><br>Bo qua gia tri sai: 9x<br>Tong hop le = 19</div>
+<p>The bad value "9x" throws, is caught, and the loop keeps going — the program processes the valid rows instead of crashing on the first bad one. That is robustness in one pattern.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>try-with-resources — automatic cleanup.</b> Writing <code>try (BufferedReader r = new BufferedReader(...)) { … }</code> auto-closes the resource when the block ends, even on an exception — no <code>finally</code> needed. Any object implementing <code>AutoCloseable</code> works this way. It is the modern replacement for close-in-finally and prevents the file/connection leaks that plague beginner code (you will use it in Chapter 9).</div>
+<div class="callout ok">Good exception handling makes programs robust: instead of a cryptic crash, the user gets a clear message and the program keeps running. Always close resources in <code>finally</code> (or use try-with-resources) so files and connections are not leaked.</div>
+<a class="link-card codelab" href="/code-lab/java-core?ref=%2Fcourses%2Fobject-oriented-programming%2Flearn&reflabel=PRO192%20%E2%80%94%20Object-Oriented%20Programming#module-252" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Practice exceptions &amp; I/O</span><span class="lc-sub">The "Exception Handling, I/O &amp; Generics" module on CodeLab.</span></span>
+  <span class="lc-cta">PRACTICE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 6 · Bài 6.1</span>
+<h2>Xử lý lỗi gọn gàng</h2>
+<p class="lead">Chương trình sẽ gặp lỗi: thiếu tệp, nhập không hợp lệ, mạng rớt. <strong>Xử lý ngoại lệ</strong> của Java (CLO4) cho bạn bắt các vấn đề này và phản hồi, thay vì để chương trình sập.</p>
+<pre><span class="tok-keyword">try</span> {
+    <span class="tok-keyword">int</span> result = 10 / 0;        <span class="tok-comment">// ném ArithmeticException</span>
+} <span class="tok-keyword">catch</span> (<span class="tok-type">ArithmeticException</span> e) {
+    <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Cannot divide by zero!"</span>);
+} <span class="tok-keyword">finally</span> {
+    <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"This always runs (cleanup)"</span>);
+}</pre>
+<div class="out"><b>Kết quả:</b><br>Cannot divide by zero!<br>This always runs (cleanup)</div>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">try</div><div class="lz-t">code rủi ro</div><div class="lz-d">có thể ném ngoại lệ</div></div>
+  <div class="lz-step"><div class="lz-k">catch</div><div class="lz-t">bắt &amp; xử lý</div><div class="lz-d">phản hồi lỗi</div></div>
+  <div class="lz-step"><div class="lz-k">finally</div><div class="lz-t">luôn chạy</div><div class="lz-d">dọn dẹp (đóng tệp…)</div></div>
+</div>
+<h3>Checked vs unchecked; tự ném ngoại lệ</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><div class="lz-lt">Ngoại lệ checked (vd IOException)</div><div class="lz-ld">Trình biên dịch buộc bạn xử lý hoặc khai báo (bằng <code>throws</code>). Dùng cho vấn đề dự kiến, khắc phục được như truy cập tệp.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Ngoại lệ unchecked (vd NullPointerException)</div><div class="lz-ld">Lỗi lúc chạy mà trình biên dịch không bắt bạn catch — thường bạn sửa code thay vì bắt.</div></div>
+</div>
+<p>Bạn có thể tự phát ngoại lệ bằng <code>throw new Exception("message")</code> để báo một điều kiện lỗi cho hàm gọi.</p>
+<h3>Ví dụ có lời giải · Bỏ qua dữ liệu sai</h3>
+<pre><span class="tok-type">String</span>[] inputs = {<span class="tok-string">"12"</span>, <span class="tok-string">"9x"</span>, <span class="tok-string">"7"</span>};
+<span class="tok-keyword">int</span> tong = 0;
+<span class="tok-keyword">for</span> (<span class="tok-type">String</span> s : inputs) {
+    <span class="tok-keyword">try</span> { tong += <span class="tok-type">Integer</span>.<span class="tok-function">parseInt</span>(s); }
+    <span class="tok-keyword">catch</span> (<span class="tok-type">NumberFormatException</span> e) { <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Bo qua gia tri sai: "</span> + s); }
+}
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Tong hop le = "</span> + tong);</pre>
+<div class="out"><b>Kết quả:</b><br>Bo qua gia tri sai: 9x<br>Tong hop le = 19</div>
+<p>Giá trị sai "9x" ném lỗi, bị bắt, và vòng lặp chạy tiếp — chương trình xử lý các dòng hợp lệ thay vì sập ở dòng sai đầu tiên. Đó là tính bền trong một mẫu.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>try-with-resources — dọn dẹp tự động.</b> Viết <code>try (BufferedReader r = new BufferedReader(...)) { … }</code> tự đóng tài nguyên khi hết khối, kể cả khi có ngoại lệ — không cần <code>finally</code>. Mọi đối tượng implements <code>AutoCloseable</code> đều chạy kiểu này. Đây là bản thay thế hiện đại cho close-trong-finally và ngăn rò rỉ tệp/kết nối hay gặp ở code người mới (bạn sẽ dùng nó ở Chương 9).</div>
+<div class="callout ok">Xử lý ngoại lệ tốt làm chương trình bền: thay vì sập khó hiểu, người dùng nhận thông báo rõ và chương trình chạy tiếp. Luôn đóng tài nguyên trong <code>finally</code> (hoặc dùng try-with-resources) để không rò rỉ tệp và kết nối.</div>
+<a class="link-card codelab" href="/code-lab/java-core?ref=%2Fcourses%2Fobject-oriented-programming%2Flearn&reflabel=PRO192%20%E2%80%94%20Object-Oriented%20Programming#module-252" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Luyện ngoại lệ &amp; I/O</span><span class="lc-sub">Module "Exception Handling, I/O &amp; Generics" trên CodeLab.</span></span>
+  <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: 'Chapter 6 Quiz|||Quiz chương 6',
+          slug: 'pro192-quiz-ch6',
+          type: 'QUIZ',
+          description: 'Kiểm tra nhanh: try/catch/finally, checked vs unchecked, throw.',
+          quiz: {
+            timeLimitSeconds: 300,
+            questions: [
+              { question: 'The try block contains…|||Khối try chứa…', options: ['the error handler|||trình xử lý lỗi', 'the risky code that might throw an exception|||code rủi ro có thể ném ngoại lệ', 'cleanup code|||code dọn dẹp', 'nothing|||không gì'], correctIndex: 1, points: 1 },
+              { question: 'The finally block…|||Khối finally…', options: ['runs only if there is an error|||chỉ chạy nếu có lỗi', 'always runs (used for cleanup)|||luôn chạy (dùng để dọn dẹp)', 'never runs|||không bao giờ chạy', 'catches the exception|||bắt ngoại lệ'], correctIndex: 1, points: 1 },
+              { question: 'A checked exception is one that…|||Ngoại lệ checked là loại mà…', options: ['the compiler forces you to handle or declare|||trình biên dịch buộc bạn xử lý hoặc khai báo', 'never happens|||không bao giờ xảy ra', 'cannot be caught|||không thể bắt', 'is always fatal|||luôn gây chết chương trình'], correctIndex: 0, points: 1 },
+              { question: 'To raise your own exception you use…|||Để tự phát ngoại lệ bạn dùng…', options: ['catch', 'throw new Exception(...)', 'finally', 'return'], correctIndex: 1, points: 1 },
+              { question: 'Good exception handling lets a program…|||Xử lý ngoại lệ tốt cho một chương trình…', options: ['crash faster|||sập nhanh hơn', 'respond to errors and keep running|||phản hồi lỗi và chạy tiếp', 'ignore all bugs|||bỏ qua mọi lỗi', 'skip the finally block|||bỏ khối finally'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+    /* ══════════════════ CHƯƠNG 7 — MẢNG ĐỐI TƯỢNG ══════════════════ */
+    {
+      title: 'Chapter 7 — Arrays of Objects|||Chương 7 — Mảng đối tượng',
+      description: 'Quản lý một tập đối tượng và xây một chương trình hoàn chỉnh.',
+      lessons: [
+        {
+          title: '7.1 — Managing many objects|||7.1 — Quản lý nhiều đối tượng',
+          slug: 'pro192-7-1-mang-doi-tuong',
+          type: 'VIDEO',
+          description: 'Lưu và duyệt một mảng đối tượng để làm một chương trình quản lý.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 7 · Lesson 7.1</span>
+<h2>From one object to a program</h2>
+<p class="lead">Real programs manage <em>many</em> objects — a list of students, products, accounts. An <strong>array (or list) of objects</strong> (CLO8) is the backbone of a typical console management program: add, display, search, update.</p>
+<pre><span class="tok-type">Student</span>[] students = <span class="tok-keyword">new</span> <span class="tok-type">Student</span>[3];
+students[0] = <span class="tok-keyword">new</span> <span class="tok-function">Student</span>(<span class="tok-string">"An"</span>, 3.6);
+students[1] = <span class="tok-keyword">new</span> <span class="tok-function">Student</span>(<span class="tok-string">"Binh"</span>, 3.1);
+students[2] = <span class="tok-keyword">new</span> <span class="tok-function">Student</span>(<span class="tok-string">"Chi"</span>, 2.8);
+
+<span class="tok-comment">// find the top student (polymorphism-free, just a loop)</span>
+<span class="tok-type">Student</span> top = students[0];
+<span class="tok-keyword">for</span> (<span class="tok-type">Student</span> s : students) {
+    <span class="tok-keyword">if</span> (s.gpa &gt; top.gpa) top = s;
+}
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Top: "</span> + top.name);  <span class="tok-comment">// Top: An</span></pre>
+<div class="out"><b>Output:</b> Top: An</div>
+<h3>The shape of a management program</h3>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Store</div><div class="lz-nsub">an array/list of objects</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Menu loop</div><div class="lz-nsub">Add · Display · Search · Update · Exit</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Methods per action</div><div class="lz-nsub">one method does one job</div></div></div>
+</div>
+<h3>Ví dụ có lời giải · Worked example (average &amp; count)</h3>
+<pre><span class="tok-type">Student</span>[] st = { <span class="tok-keyword">new</span> <span class="tok-function">Student</span>(<span class="tok-string">"An"</span>, 3.6), <span class="tok-keyword">new</span> <span class="tok-function">Student</span>(<span class="tok-string">"Binh"</span>, 3.1), <span class="tok-keyword">new</span> <span class="tok-function">Student</span>(<span class="tok-string">"Chi"</span>, 2.8) };
+<span class="tok-keyword">double</span> sum = 0; <span class="tok-keyword">int</span> pass = 0;
+<span class="tok-keyword">for</span> (<span class="tok-type">Student</span> s : st) { sum += s.gpa; <span class="tok-keyword">if</span> (s.gpa &gt;= 2.0) pass++; }
+<span class="tok-type">System</span>.out.<span class="tok-function">printf</span>(<span class="tok-string">"GPA trung binh = %.2f%n"</span>, sum / st.length);
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"So dat = "</span> + pass + <span class="tok-string">"/"</span> + st.length);</pre>
+<div class="out"><b>Output:</b><br>GPA trung binh = 3.17<br>So dat = 3/3</div>
+<p>Same loop-over-objects skeleton, a different question — aggregate (sum, average) and filter (count passing). Every "report" feature of your assignment is a variation of this.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Sorting objects — Comparator.</b> To sort an array of objects you must say <em>by what</em>: <code>Arrays.sort(st, Comparator.comparingDouble(s -&gt; s.gpa).reversed());</code> ranks students by GPA, highest first. A <code>Comparator</code> is a tiny object that just compares two items — the same idea as <code>compareTo</code> from the interface lesson, and exactly what CSD201's sorting builds on.</div>
+<div class="note-ct">This is exactly what your PRO192 assignment and practical exam look like: a menu-driven program managing a collection of objects. Master the loop-over-objects pattern and you can build any of them. Arrays have a fixed size though — the next chapter&#39;s collections grow dynamically.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 7 · Bài 7.1</span>
+<h2>Từ một đối tượng tới một chương trình</h2>
+<p class="lead">Chương trình thật quản lý <em>nhiều</em> đối tượng — một danh sách sinh viên, sản phẩm, tài khoản. Một <strong>mảng (hoặc list) đối tượng</strong> (CLO8) là xương sống của một chương trình quản lý console điển hình: thêm, hiển thị, tìm, cập nhật.</p>
+<pre><span class="tok-type">Student</span>[] students = <span class="tok-keyword">new</span> <span class="tok-type">Student</span>[3];
+students[0] = <span class="tok-keyword">new</span> <span class="tok-function">Student</span>(<span class="tok-string">"An"</span>, 3.6);
+students[1] = <span class="tok-keyword">new</span> <span class="tok-function">Student</span>(<span class="tok-string">"Binh"</span>, 3.1);
+students[2] = <span class="tok-keyword">new</span> <span class="tok-function">Student</span>(<span class="tok-string">"Chi"</span>, 2.8);
+
+<span class="tok-comment">// tìm sinh viên đứng đầu (chỉ một vòng lặp)</span>
+<span class="tok-type">Student</span> top = students[0];
+<span class="tok-keyword">for</span> (<span class="tok-type">Student</span> s : students) {
+    <span class="tok-keyword">if</span> (s.gpa &gt; top.gpa) top = s;
+}
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Top: "</span> + top.name);  <span class="tok-comment">// Top: An</span></pre>
+<div class="out"><b>Kết quả:</b> Top: An</div>
+<h3>Hình dạng một chương trình quản lý</h3>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Lưu</div><div class="lz-nsub">một mảng/list đối tượng</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Vòng lặp menu</div><div class="lz-nsub">Thêm · Hiển thị · Tìm · Cập nhật · Thoát</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Mỗi hành động một phương thức</div><div class="lz-nsub">một phương thức làm một việc</div></div></div>
+</div>
+<h3>Ví dụ có lời giải · Trung bình &amp; đếm</h3>
+<pre><span class="tok-type">Student</span>[] st = { <span class="tok-keyword">new</span> <span class="tok-function">Student</span>(<span class="tok-string">"An"</span>, 3.6), <span class="tok-keyword">new</span> <span class="tok-function">Student</span>(<span class="tok-string">"Binh"</span>, 3.1), <span class="tok-keyword">new</span> <span class="tok-function">Student</span>(<span class="tok-string">"Chi"</span>, 2.8) };
+<span class="tok-keyword">double</span> sum = 0; <span class="tok-keyword">int</span> pass = 0;
+<span class="tok-keyword">for</span> (<span class="tok-type">Student</span> s : st) { sum += s.gpa; <span class="tok-keyword">if</span> (s.gpa &gt;= 2.0) pass++; }
+<span class="tok-type">System</span>.out.<span class="tok-function">printf</span>(<span class="tok-string">"GPA trung binh = %.2f%n"</span>, sum / st.length);
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"So dat = "</span> + pass + <span class="tok-string">"/"</span> + st.length);</pre>
+<div class="out"><b>Kết quả:</b><br>GPA trung binh = 3.17<br>So dat = 3/3</div>
+<p>Cùng bộ khung duyệt-qua-đối-tượng, một câu hỏi khác — tổng hợp (tổng, trung bình) và lọc (đếm đạt). Mọi tính năng "báo cáo" của assignment đều là biến thể của cái này.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Sắp xếp đối tượng — Comparator.</b> Để sắp một mảng đối tượng bạn phải nói <em>theo cái gì</em>: <code>Arrays.sort(st, Comparator.comparingDouble(s -&gt; s.gpa).reversed());</code> xếp sinh viên theo GPA, cao nhất trước. Một <code>Comparator</code> là một đối tượng nhỏ chỉ để so hai phần tử — cùng ý tưởng với <code>compareTo</code> ở bài interface, và đúng là thứ mà sắp xếp ở CSD201 xây trên.</div>
+<div class="note-ct">Đây đúng là hình dạng assignment và thi thực hành PRO192 của bạn: một chương trình theo menu quản lý một tập đối tượng. Nắm vững mẫu duyệt-qua-đối-tượng là bạn xây được bất kỳ cái nào. Nhưng mảng có kích thước cố định — collections ở chương kế lớn lên động.</div>
+</div>
+`,
+        },
+        {
+          title: 'Chapter 7 Quiz|||Quiz chương 7',
+          slug: 'pro192-quiz-ch7',
+          type: 'QUIZ',
+          description: 'Kiểm tra nhanh: mảng đối tượng, duyệt, chương trình quản lý.',
+          quiz: {
+            timeLimitSeconds: 240,
+            questions: [
+              { question: 'An array of objects is used to…|||Một mảng đối tượng dùng để…', options: ['store a single value|||lưu một giá trị đơn', 'manage many objects of the same type|||quản lý nhiều đối tượng cùng loại', 'replace classes|||thay thế lớp', 'catch exceptions|||bắt ngoại lệ'], correctIndex: 1, points: 1 },
+              { question: 'To visit every object in an array you typically use…|||Để thăm mọi đối tượng trong một mảng bạn thường dùng…', options: ['a try block|||một khối try', 'a loop (for/for-each)|||một vòng lặp (for/for-each)', 'a constructor|||một constructor', 'an interface|||một interface'], correctIndex: 1, points: 1 },
+              { question: 'A typical console management program is built around a…|||Một chương trình quản lý console điển hình xây quanh một…', options: ['single print statement|||một câu in đơn', 'menu loop with one method per action|||vòng lặp menu với mỗi hành động một phương thức', 'private field|||một trường private', 'checked exception|||một ngoại lệ checked'], correctIndex: 1, points: 1 },
+              { question: 'A limitation of a plain array is that…|||Một hạn chế của mảng thường là…', options: ['it cannot hold objects|||nó không chứa được đối tượng', 'it has a fixed size|||nó có kích thước cố định', 'it cannot be looped|||không thể lặp qua', 'it needs an interface|||nó cần một interface'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+    /* ══════════════════ CHƯƠNG 8 — JAVA COLLECTIONS ══════════════════ */
+    {
+      title: 'Chapter 8 — Java Collections|||Chương 8 — Java Collections',
+      description: 'List, Set, Map — các cấu trúc dữ liệu linh hoạt của Java.',
+      lessons: [
+        {
+          title: '8.1 — List, Set & Map|||8.1 — List, Set & Map',
+          slug: 'pro192-8-1-collections',
+          simulations: [
+            {
+              url: 'https://media.cuongthai.com/videos/academy/PRO192/pro192-8-1-collections--list-vs-linked.mp4',
+              poster: 'https://media.cuongthai.com/videos/academy/PRO192/pro192-8-1-collections--list-vs-linked.jpg',
+              durationSeconds: 25,
+              scenario: 'list-vs-linked',
+              caption: { en: 'ArrayList or LinkedList: the same O(n) with a 15× gap', vi: 'ArrayList hay LinkedList: cùng O(n) mà chênh 15 lần' },
+            },
+            {
+              url: 'https://media.cuongthai.com/videos/academy/PRO192/pro192-8-1-collections--hash-map.mp4',
+              poster: 'https://media.cuongthai.com/videos/academy/PRO192/pro192-8-1-collections--hash-map.jpg',
+              durationSeconds: 25,
+              scenario: 'hash-map',
+              caption: { en: 'HashMap: computing the slot instead of searching for it', vi: 'HashMap: TÍNH ra ô cần đến thay vì đi tìm' },
+            },
+          ],
+          type: 'VIDEO',
+          description: 'Ba ADT collection và khi nào dùng cái nào.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 8 · Lesson 8.1</span>
+<h2>Dynamic, powerful data structures</h2>
+<p class="lead">Arrays are fixed-size and low-level. The <strong>Java Collections Framework</strong> (CLO9) provides flexible, growable data structures — the three you must know are <strong>List</strong>, <strong>Set</strong> and <strong>Map</strong>.</p>
+<table>
+  <thead><tr><th>Collection</th><th>Holds</th><th>Use when…</th></tr></thead>
+  <tbody>
+    <tr><td>List (ArrayList)</td><td>An ordered sequence; duplicates allowed</td><td>you need an indexed, growable list</td></tr>
+    <tr><td>Set (HashSet)</td><td>Unique elements; no duplicates</td><td>you need to avoid repeats</td></tr>
+    <tr><td>Map (HashMap)</td><td>Key → value pairs</td><td>you look things up by a key</td></tr>
+  </tbody>
+</table>
+<pre><span class="tok-type">List</span>&lt;<span class="tok-type">String</span>&gt; names = <span class="tok-keyword">new</span> <span class="tok-function">ArrayList</span>&lt;&gt;();
+names.<span class="tok-function">add</span>(<span class="tok-string">"An"</span>);  names.<span class="tok-function">add</span>(<span class="tok-string">"Binh"</span>);
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(names.<span class="tok-function">get</span>(0));   <span class="tok-comment">// An</span>
+
+<span class="tok-type">Map</span>&lt;<span class="tok-type">String</span>, <span class="tok-type">Integer</span>&gt; ages = <span class="tok-keyword">new</span> <span class="tok-function">HashMap</span>&lt;&gt;();
+ages.<span class="tok-function">put</span>(<span class="tok-string">"An"</span>, 20);
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(ages.<span class="tok-function">get</span>(<span class="tok-string">"An"</span>));  <span class="tok-comment">// 20</span></pre>
+<div class="out"><b>Output:</b><br>An<br>20</div>
+<p>The <code>&lt;String&gt;</code> part is <strong>generics</strong> — it tells the collection what type it holds, so the compiler catches type errors and you avoid casting. A <code>List&lt;Student&gt;</code> can only hold Students.</p>
+<h3>Ví dụ có lời giải · Worked example (all three at once)</h3>
+<pre><span class="tok-type">List</span>&lt;<span class="tok-type">String</span>&gt; list = <span class="tok-keyword">new</span> <span class="tok-function">ArrayList</span>&lt;&gt;(<span class="tok-type">List</span>.<span class="tok-function">of</span>(<span class="tok-string">"An"</span>, <span class="tok-string">"Binh"</span>, <span class="tok-string">"An"</span>));
+<span class="tok-type">Set</span>&lt;<span class="tok-type">String</span>&gt; set = <span class="tok-keyword">new</span> <span class="tok-function">HashSet</span>&lt;&gt;(list);   <span class="tok-comment">// duplicates dropped</span>
+<span class="tok-type">Map</span>&lt;<span class="tok-type">String</span>, <span class="tok-type">Integer</span>&gt; diem = <span class="tok-keyword">new</span> <span class="tok-function">HashMap</span>&lt;&gt;();
+diem.<span class="tok-function">put</span>(<span class="tok-string">"An"</span>, 8); diem.<span class="tok-function">put</span>(<span class="tok-string">"Binh"</span>, 7);
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"List size = "</span> + list.<span class="tok-function">size</span>());
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Set size = "</span> + set.<span class="tok-function">size</span>());
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Diem An = "</span> + diem.<span class="tok-function">get</span>(<span class="tok-string">"An"</span>));</pre>
+<div class="out"><b>Output:</b><br>List size = 3<br>Set size = 2<br>Diem An = 8</div>
+<p>The List kept the duplicate "An" (size 3); the Set silently dropped it (size 2); the Map looked up a value by key instantly. One example, three different jobs.</p>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>equals() &amp; hashCode() — the contract that makes Set/Map work.</b> A HashSet/HashMap decides "same key?" by calling <code>hashCode()</code> then <code>equals()</code>. If you store your own objects (say Student) without overriding both, two "equal" students count as different — duplicates sneak into a Set and <code>map.get()</code> returns null. The rule: whenever you override <code>equals()</code>, override <code>hashCode()</code> to match. This is the single most common real-world collections bug.</div>
+<div class="callout ok">Prefer collections over raw arrays in real Java: an ArrayList grows automatically, a HashSet removes duplicates for free, and a HashMap gives near-instant lookup by key. Choosing the right one is a real design decision — the same "which data structure?" question from CSI104 and MAE101.</div>
+<a class="link-card codelab" href="/code-lab/java-core?ref=%2Fcourses%2Fobject-oriented-programming%2Flearn&reflabel=PRO192%20%E2%80%94%20Object-Oriented%20Programming#module-251" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Practice collections</span><span class="lc-sub">The "Collections Framework &amp; Data Structures" module on CodeLab.</span></span>
+  <span class="lc-cta">PRACTICE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 8 · Bài 8.1</span>
+<h2>Cấu trúc dữ liệu động, mạnh mẽ</h2>
+<p class="lead">Mảng cố định kích thước và thấp cấp. <strong>Java Collections Framework</strong> (CLO9) cung cấp cấu trúc dữ liệu linh hoạt, lớn lên được — ba cái bạn phải biết là <strong>List</strong>, <strong>Set</strong> và <strong>Map</strong>.</p>
+<table>
+  <thead><tr><th>Collection</th><th>Chứa</th><th>Dùng khi…</th></tr></thead>
+  <tbody>
+    <tr><td>List (ArrayList)</td><td>Một dãy có thứ tự; cho phép trùng</td><td>bạn cần một danh sách có chỉ số, lớn lên được</td></tr>
+    <tr><td>Set (HashSet)</td><td>Phần tử duy nhất; không trùng</td><td>bạn cần tránh lặp</td></tr>
+    <tr><td>Map (HashMap)</td><td>Cặp khoá → giá trị</td><td>bạn tra cứu theo một khoá</td></tr>
+  </tbody>
+</table>
+<pre><span class="tok-type">List</span>&lt;<span class="tok-type">String</span>&gt; names = <span class="tok-keyword">new</span> <span class="tok-function">ArrayList</span>&lt;&gt;();
+names.<span class="tok-function">add</span>(<span class="tok-string">"An"</span>);  names.<span class="tok-function">add</span>(<span class="tok-string">"Binh"</span>);
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(names.<span class="tok-function">get</span>(0));   <span class="tok-comment">// An</span>
+
+<span class="tok-type">Map</span>&lt;<span class="tok-type">String</span>, <span class="tok-type">Integer</span>&gt; ages = <span class="tok-keyword">new</span> <span class="tok-function">HashMap</span>&lt;&gt;();
+ages.<span class="tok-function">put</span>(<span class="tok-string">"An"</span>, 20);
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(ages.<span class="tok-function">get</span>(<span class="tok-string">"An"</span>));  <span class="tok-comment">// 20</span></pre>
+<div class="out"><b>Kết quả:</b><br>An<br>20</div>
+<p>Phần <code>&lt;String&gt;</code> là <strong>generics</strong> — nó cho collection biết chứa kiểu gì, để trình biên dịch bắt lỗi kiểu và bạn khỏi ép kiểu. Một <code>List&lt;Student&gt;</code> chỉ chứa được Student.</p>
+<h3>Ví dụ có lời giải · Cả ba cùng lúc</h3>
+<pre><span class="tok-type">List</span>&lt;<span class="tok-type">String</span>&gt; list = <span class="tok-keyword">new</span> <span class="tok-function">ArrayList</span>&lt;&gt;(<span class="tok-type">List</span>.<span class="tok-function">of</span>(<span class="tok-string">"An"</span>, <span class="tok-string">"Binh"</span>, <span class="tok-string">"An"</span>));
+<span class="tok-type">Set</span>&lt;<span class="tok-type">String</span>&gt; set = <span class="tok-keyword">new</span> <span class="tok-function">HashSet</span>&lt;&gt;(list);   <span class="tok-comment">// loại trùng</span>
+<span class="tok-type">Map</span>&lt;<span class="tok-type">String</span>, <span class="tok-type">Integer</span>&gt; diem = <span class="tok-keyword">new</span> <span class="tok-function">HashMap</span>&lt;&gt;();
+diem.<span class="tok-function">put</span>(<span class="tok-string">"An"</span>, 8); diem.<span class="tok-function">put</span>(<span class="tok-string">"Binh"</span>, 7);
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"List size = "</span> + list.<span class="tok-function">size</span>());
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Set size = "</span> + set.<span class="tok-function">size</span>());
+<span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Diem An = "</span> + diem.<span class="tok-function">get</span>(<span class="tok-string">"An"</span>));</pre>
+<div class="out"><b>Kết quả:</b><br>List size = 3<br>Set size = 2<br>Diem An = 8</div>
+<p>List giữ bản trùng "An" (size 3); Set lặng lẽ loại nó (size 2); Map tra một giá trị theo khoá tức thì. Một ví dụ, ba việc khác nhau.</p>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>equals() &amp; hashCode() — hợp đồng làm Set/Map chạy đúng.</b> HashSet/HashMap quyết định "cùng khoá?" bằng cách gọi <code>hashCode()</code> rồi <code>equals()</code>. Nếu bạn lưu đối tượng của mình (vd Student) mà không ghi đè cả hai, hai student "bằng nhau" bị tính là khác — bản trùng lọt vào Set và <code>map.get()</code> trả null. Quy tắc: hễ ghi đè <code>equals()</code> thì ghi đè <code>hashCode()</code> cho khớp. Đây là lỗi collections hay gặp nhất trong thực tế.</div>
+<div class="callout ok">Ưu tiên collections hơn mảng thô trong Java thật: một ArrayList tự lớn lên, một HashSet loại trùng miễn phí, và một HashMap cho tra cứu theo khoá gần tức thì. Chọn đúng cái là một quyết định thiết kế thật — cùng câu hỏi "cấu trúc dữ liệu nào?" từ CSI104 và MAE101.</div>
+<a class="link-card codelab" href="/code-lab/java-core?ref=%2Fcourses%2Fobject-oriented-programming%2Flearn&reflabel=PRO192%20%E2%80%94%20Object-Oriented%20Programming#module-251" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Luyện collections</span><span class="lc-sub">Module "Collections Framework &amp; Data Structures" trên CodeLab.</span></span>
+  <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: 'Chapter 8 Quiz|||Quiz chương 8',
+          slug: 'pro192-quiz-ch8',
+          type: 'QUIZ',
+          description: 'Kiểm tra nhanh: List/Set/Map, generics, khi nào dùng gì.',
+          quiz: {
+            timeLimitSeconds: 300,
+            questions: [
+              { question: 'Which collection stores an ordered sequence and allows duplicates?|||Collection nào lưu một dãy có thứ tự và cho phép trùng?', options: ['Set', 'List', 'Map', 'none|||không cái nào'], correctIndex: 1, points: 1 },
+              { question: 'Which collection automatically removes duplicates?|||Collection nào tự động loại trùng?', options: ['List', 'Set', 'Map', 'Array|||Mảng'], correctIndex: 1, points: 1 },
+              { question: 'A Map stores…|||Một Map lưu…', options: ['single values|||các giá trị đơn', 'key → value pairs|||các cặp khoá → giá trị', 'only numbers|||chỉ số', 'unique elements only|||chỉ phần tử duy nhất'], correctIndex: 1, points: 1 },
+              { question: 'The <String> in List<String> is an example of…|||<String> trong List<String> là ví dụ của…', options: ['inheritance|||kế thừa', 'generics (type safety)|||generics (an toàn kiểu)', 'an exception|||một ngoại lệ', 'a constructor|||một constructor'], correctIndex: 1, points: 1 },
+              { question: 'A key advantage of ArrayList over a plain array is that it…|||Một ưu điểm chính của ArrayList so với mảng thường là nó…', options: ['is fixed-size|||cố định kích thước', 'grows automatically|||tự lớn lên', 'cannot hold objects|||không chứa được đối tượng', 'has no methods|||không có phương thức'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+    /* ══════════════════ CHƯƠNG 9 — LUỒNG & ĐỌC/GHI TỆP ══════════════════ */
+    {
+      title: 'Chapter 9 — Streams & File I/O|||Chương 9 — Luồng & Đọc/ghi tệp',
+      description: 'Đọc và ghi dữ liệu ra tệp bằng luồng (stream).',
+      lessons: [
+        {
+          title: '9.1 — Reading & writing files|||9.1 — Đọc & ghi tệp',
+          slug: 'pro192-9-1-file-io',
+          type: 'VIDEO',
+          description: 'Luồng byte vs ký tự và cách đọc/ghi tệp an toàn với ngoại lệ.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 9 · Lesson 9.1</span>
+<h2>Persisting data with streams</h2>
+<p class="lead">A program&#39;s data vanishes when it stops — unless you save it to a file. Java reads and writes files through <strong>streams</strong> (CLO3): an ordered flow of data between your program and a source/target.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><div class="lz-lt">Byte streams (InputStream / OutputStream)</div><div class="lz-ld">Move raw bytes — for images, audio, any binary file.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Character streams (Reader / Writer)</div><div class="lz-ld">Move text with proper character encoding — for .txt, .csv, source files.</div></div>
+</div>
+<h3>Writing and reading text</h3>
+<pre><span class="tok-comment">// write — try-with-resources auto-closes the file</span>
+<span class="tok-keyword">try</span> (<span class="tok-type">BufferedWriter</span> w = <span class="tok-keyword">new</span> <span class="tok-function">BufferedWriter</span>(<span class="tok-keyword">new</span> <span class="tok-function">FileWriter</span>(<span class="tok-string">"data.txt"</span>))) {
+    w.<span class="tok-function">write</span>(<span class="tok-string">"An,3.6"</span>);
+    w.<span class="tok-function">newLine</span>();
+} <span class="tok-keyword">catch</span> (<span class="tok-type">IOException</span> e) {
+    <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Write failed: "</span> + e.<span class="tok-function">getMessage</span>());
+}</pre>
+<pre><span class="tok-comment">// read line by line</span>
+<span class="tok-keyword">try</span> (<span class="tok-type">BufferedReader</span> r = <span class="tok-keyword">new</span> <span class="tok-function">BufferedReader</span>(<span class="tok-keyword">new</span> <span class="tok-function">FileReader</span>(<span class="tok-string">"data.txt"</span>))) {
+    <span class="tok-type">String</span> line;
+    <span class="tok-keyword">while</span> ((line = r.<span class="tok-function">readLine</span>()) != <span class="tok-keyword">null</span>) {
+        <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(line);
+    }
+} <span class="tok-keyword">catch</span> (<span class="tok-type">IOException</span> e) { <span class="tok-comment">/* handle */</span> }</pre>
+<p>Notice file I/O throws <strong>checked exceptions</strong> (IOException) — the compiler forces you to handle them (Chapter 6). And <strong>try-with-resources</strong> automatically closes the file even if an error occurs, preventing resource leaks.</p>
+<h3>Ví dụ có lời giải · Worked example (write then read back)</h3>
+<pre><span class="tok-comment">// 1) write two records, then 2) read them back</span>
+<span class="tok-keyword">try</span> (<span class="tok-type">BufferedWriter</span> w = <span class="tok-keyword">new</span> <span class="tok-function">BufferedWriter</span>(<span class="tok-keyword">new</span> <span class="tok-function">FileWriter</span>(<span class="tok-string">"data.txt"</span>))) {
+    w.<span class="tok-function">write</span>(<span class="tok-string">"An,3.6"</span>); w.<span class="tok-function">newLine</span>();
+    w.<span class="tok-function">write</span>(<span class="tok-string">"Binh,3.1"</span>); w.<span class="tok-function">newLine</span>();
+}
+<span class="tok-keyword">try</span> (<span class="tok-type">BufferedReader</span> r = <span class="tok-keyword">new</span> <span class="tok-function">BufferedReader</span>(<span class="tok-keyword">new</span> <span class="tok-function">FileReader</span>(<span class="tok-string">"data.txt"</span>))) {
+    <span class="tok-type">String</span> line;
+    <span class="tok-keyword">while</span> ((line = r.<span class="tok-function">readLine</span>()) != <span class="tok-keyword">null</span>) <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Doc: "</span> + line);
+}</pre>
+<div class="out"><b>Output:</b><br>Doc: An,3.6<br>Doc: Binh,3.1</div>
+<p>Data written in one run is read back the next — it survived because it lives on disk, not in memory. Each line is a record you split by comma to rebuild an object.</p>
+<div class="callout"><span class="badge">Syllabus CQ17.2 &amp; CQ18.1</span> <b>Serialization — writing an object to a file and reading it back.</b> These are two of the syllabus's own constructive questions: CQ17.2 &ldquo;How to input an object into a file?&rdquo; and CQ18.1 &ldquo;How to get an object from a file?&rdquo; — core material for sessions 47&ndash;50. Writing CSV by hand works for simple data, but Java can save an <em>entire object</em> automatically: make the class <code>implements Serializable</code>, then <code>ObjectOutputStream.writeObject(student)</code> stores every field and <code>readObject()</code> reconstructs it. Modern apps go further with JSON (Jackson/Gson) so the file is human-readable and cross-language — the format behind almost every web API you will build in PRJ301.</div>
+<div class="note-ct">With file I/O you can now build a complete Java program that models a domain with classes (the pillars), stores objects in collections, handles errors, and saves/loads data to files — a real, self-contained application. That is the leap PRO192 delivers. It is <strong>not</strong> the whole syllabus, though: sessions 7&ndash;9 also require <code>String</code>/<code>StringBuffer</code> and standard input with <code>Scanner</code>, CQ3.3 binary files, CQ4.1 text/UTF/Unicode encodings, CQ5.3 assertions and CQ7.2 UML class diagrams. Check those against the syllabus before the exams &mdash; they are not covered in this course yet.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 9 · Bài 9.1</span>
+<h2>Lưu dữ liệu lâu dài bằng luồng</h2>
+<p class="lead">Dữ liệu của một chương trình biến mất khi nó dừng — trừ khi bạn lưu ra tệp. Java đọc và ghi tệp qua <strong>luồng (stream)</strong> (CLO3): một dòng dữ liệu có thứ tự giữa chương trình và một nguồn/đích.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><div class="lz-lt">Luồng byte (InputStream / OutputStream)</div><div class="lz-ld">Chuyển byte thô — cho ảnh, âm thanh, mọi tệp nhị phân.</div></div>
+  <div class="lz-layer"><div class="lz-lt">Luồng ký tự (Reader / Writer)</div><div class="lz-ld">Chuyển văn bản với mã hoá ký tự đúng — cho .txt, .csv, tệp nguồn.</div></div>
+</div>
+<h3>Ghi và đọc văn bản</h3>
+<pre><span class="tok-comment">// ghi — try-with-resources tự đóng tệp</span>
+<span class="tok-keyword">try</span> (<span class="tok-type">BufferedWriter</span> w = <span class="tok-keyword">new</span> <span class="tok-function">BufferedWriter</span>(<span class="tok-keyword">new</span> <span class="tok-function">FileWriter</span>(<span class="tok-string">"data.txt"</span>))) {
+    w.<span class="tok-function">write</span>(<span class="tok-string">"An,3.6"</span>);
+    w.<span class="tok-function">newLine</span>();
+} <span class="tok-keyword">catch</span> (<span class="tok-type">IOException</span> e) {
+    <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Write failed: "</span> + e.<span class="tok-function">getMessage</span>());
+}</pre>
+<pre><span class="tok-comment">// đọc từng dòng</span>
+<span class="tok-keyword">try</span> (<span class="tok-type">BufferedReader</span> r = <span class="tok-keyword">new</span> <span class="tok-function">BufferedReader</span>(<span class="tok-keyword">new</span> <span class="tok-function">FileReader</span>(<span class="tok-string">"data.txt"</span>))) {
+    <span class="tok-type">String</span> line;
+    <span class="tok-keyword">while</span> ((line = r.<span class="tok-function">readLine</span>()) != <span class="tok-keyword">null</span>) {
+        <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(line);
+    }
+} <span class="tok-keyword">catch</span> (<span class="tok-type">IOException</span> e) { <span class="tok-comment">/* xử lý */</span> }</pre>
+<p>Để ý đọc/ghi tệp ném <strong>ngoại lệ checked</strong> (IOException) — trình biên dịch buộc bạn xử lý (Chương 6). Và <strong>try-with-resources</strong> tự động đóng tệp kể cả khi có lỗi, ngăn rò rỉ tài nguyên.</p>
+<h3>Ví dụ có lời giải · Ghi rồi đọc lại</h3>
+<pre><span class="tok-comment">// 1) ghi hai bản ghi, rồi 2) đọc lại</span>
+<span class="tok-keyword">try</span> (<span class="tok-type">BufferedWriter</span> w = <span class="tok-keyword">new</span> <span class="tok-function">BufferedWriter</span>(<span class="tok-keyword">new</span> <span class="tok-function">FileWriter</span>(<span class="tok-string">"data.txt"</span>))) {
+    w.<span class="tok-function">write</span>(<span class="tok-string">"An,3.6"</span>); w.<span class="tok-function">newLine</span>();
+    w.<span class="tok-function">write</span>(<span class="tok-string">"Binh,3.1"</span>); w.<span class="tok-function">newLine</span>();
+}
+<span class="tok-keyword">try</span> (<span class="tok-type">BufferedReader</span> r = <span class="tok-keyword">new</span> <span class="tok-function">BufferedReader</span>(<span class="tok-keyword">new</span> <span class="tok-function">FileReader</span>(<span class="tok-string">"data.txt"</span>))) {
+    <span class="tok-type">String</span> line;
+    <span class="tok-keyword">while</span> ((line = r.<span class="tok-function">readLine</span>()) != <span class="tok-keyword">null</span>) <span class="tok-type">System</span>.out.<span class="tok-function">println</span>(<span class="tok-string">"Doc: "</span> + line);
+}</pre>
+<div class="out"><b>Kết quả:</b><br>Doc: An,3.6<br>Doc: Binh,3.1</div>
+<p>Dữ liệu ghi ở lần chạy này được đọc lại ở lần sau — nó sống sót vì nằm trên đĩa, không phải trong bộ nhớ. Mỗi dòng là một bản ghi, bạn tách theo dấu phẩy để dựng lại một đối tượng.</p>
+<div class="callout"><span class="badge">Syllabus CQ17.2 &amp; CQ18.1</span> <b>Serialization — ghi một đối tượng ra tệp và đọc lại.</b> Đây là hai câu hỏi kiến tạo của chính syllabus: CQ17.2 &ldquo;Làm sao ghi một đối tượng vào tệp?&rdquo; và CQ18.1 &ldquo;Làm sao lấy một đối tượng từ tệp?&rdquo; — nội dung cốt lõi của session 47&ndash;50. Viết CSV bằng tay ổn cho dữ liệu đơn giản, nhưng Java lưu được cả <em>một đối tượng</em> tự động: cho lớp <code>implements Serializable</code>, rồi <code>ObjectOutputStream.writeObject(student)</code> lưu mọi trường và <code>readObject()</code> dựng lại nó. App hiện đại đi xa hơn với JSON (Jackson/Gson) để tệp đọc được bằng mắt và đa ngôn ngữ — định dạng đằng sau gần như mọi web API bạn sẽ xây ở PRJ301.</div>
+<div class="note-ct">Có đọc/ghi tệp rồi, giờ bạn xây được một chương trình Java hoàn chỉnh mô hình một lĩnh vực bằng các lớp (các trụ cột), lưu đối tượng trong collections, xử lý lỗi, và lưu/nạp dữ liệu ra tệp — một ứng dụng thật, tự chứa. Đó là bước nhảy PRO192 mang lại. Nhưng đây <strong>chưa</strong> phải toàn bộ syllabus: session 7&ndash;9 còn yêu cầu <code>String</code>/<code>StringBuffer</code> và nhập chuẩn với <code>Scanner</code>, CQ3.3 tệp nhị phân, CQ4.1 mã hoá text/UTF/Unicode, CQ5.3 assertion và CQ7.2 sơ đồ lớp UML. Hãy đối chiếu những phần đó với syllabus trước khi thi &mdash; khóa học này chưa dạy chúng.</div>
+</div>
+`,
+        },
+        {
+          title: 'Chapter 9 Quiz|||Quiz chương 9',
+          slug: 'pro192-quiz-ch9',
+          type: 'QUIZ',
+          description: 'Kiểm tra nhanh: luồng byte/ký tự, đọc/ghi tệp, try-with-resources.',
+          quiz: {
+            timeLimitSeconds: 300,
+            questions: [
+              { question: 'Java reads and writes files using…|||Java đọc và ghi tệp bằng…', options: ['pointers|||con trỏ', 'streams|||luồng (stream)', 'arrays only|||chỉ mảng', 'interfaces|||interface'], correctIndex: 1, points: 1 },
+              { question: 'Character streams (Reader/Writer) are used for…|||Luồng ký tự (Reader/Writer) dùng cho…', options: ['images and audio|||ảnh và âm thanh', 'text files|||tệp văn bản', 'compiling code|||biên dịch code', 'network sockets only|||chỉ socket mạng'], correctIndex: 1, points: 1 },
+              { question: 'File I/O in Java throws which kind of exception?|||Đọc/ghi tệp trong Java ném loại ngoại lệ nào?', options: ['unchecked|||unchecked', 'checked (IOException)|||checked (IOException)', 'no exceptions|||không ngoại lệ', 'ArithmeticException'], correctIndex: 1, points: 1 },
+              { question: 'try-with-resources is useful because it…|||try-with-resources hữu ích vì nó…', options: ['runs faster|||chạy nhanh hơn', 'automatically closes the file/resource|||tự động đóng tệp/tài nguyên', 'skips exceptions|||bỏ qua ngoại lệ', 'needs no catch ever|||không bao giờ cần catch'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+    /* ══════════════════ PROGRESS TEST 2 ══════════════════ */
+    {
+      title: 'Progress Test 2 (Robust programs — CLO4, 8, 9, 3)|||Progress Test 2 (Chương trình bền — CLO4, 8, 9, 3)',
+      description: 'Ôn: ngoại lệ, mảng đối tượng, collections, đọc/ghi tệp.',
+      lessons: [
+        {
+          title: 'Progress Test 2 — review|||Progress Test 2 — ôn tổng hợp',
+          slug: 'pro192-progress-test-2',
+          type: 'QUIZ',
+          description: 'Trộn câu hỏi từ chương 6–9.',
+          quiz: {
+            timeLimitSeconds: 420,
+            questions: [
+              { question: 'Which block always runs, whether or not an exception occurs?|||Khối nào luôn chạy, dù có hay không có ngoại lệ?', options: ['try', 'catch', 'finally', 'throw'], correctIndex: 2, points: 1 },
+              { question: 'A HashMap is best when you need to…|||HashMap tốt nhất khi bạn cần…', options: ['store an ordered list|||lưu một danh sách có thứ tự', 'look up values by a key|||tra giá trị theo khoá', 'remove duplicates|||loại trùng', 'catch exceptions|||bắt ngoại lệ'], correctIndex: 1, points: 1 },
+              { question: 'A HashSet guarantees…|||HashSet đảm bảo…', options: ['order|||thứ tự', 'no duplicate elements|||không phần tử trùng', 'key-value pairs|||cặp khoá-giá trị', 'fixed size|||kích thước cố định'], correctIndex: 1, points: 1 },
+              { question: 'A menu-driven management program is typically built around a… of objects.|||Một chương trình quản lý theo menu thường xây quanh một… đối tượng.', options: ['single object|||đối tượng đơn', 'collection (list/array)|||collection (list/mảng)', 'exception|||ngoại lệ', 'interface|||interface'], correctIndex: 1, points: 1 },
+              { question: 'To save program data permanently you must…|||Để lưu dữ liệu chương trình vĩnh viễn bạn phải…', options: ['keep it in variables|||giữ trong biến', 'write it to a file (stream)|||ghi nó ra tệp (stream)', 'print it|||in nó ra', 'catch it|||bắt nó'], correctIndex: 1, points: 1 },
+              { question: 'Generics like List<Student> give you…|||Generics như List<Student> cho bạn…', options: ['slower code|||code chậm hơn', 'compile-time type safety|||an toàn kiểu lúc biên dịch', 'more exceptions|||nhiều ngoại lệ hơn', 'no benefit|||không lợi ích'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+    /* ══════════════════ NÂNG CAO 1 — GENERICS & LAMBDA ══════════════════ */
+    {
+      title: 'Advanced 1 — Generics, lambdas & the Stream API|||Nâng cao 1 — Generics, lambda & Stream API',
+      description: 'Ngoài giáo trình: viết code Java hiện đại, ngắn gọn và an toàn kiểu.',
+      lessons: [
+        {
+          title: 'N1.1 — Modern Java in a nutshell|||N1.1 — Java hiện đại tóm gọn',
+          slug: 'pro192-n1-1-modern-java',
+          type: 'VIDEO',
+          description: 'Generics của riêng bạn, biểu thức lambda và xử lý dữ liệu kiểu functional.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Advanced 1 · Lesson N1.1</span>
+<h2>Writing Java the modern way</h2>
+<p class="lead">Beyond the syllabus, professional Java leans on three features that make code shorter, safer and more expressive: your own generics, lambdas, and the Stream API.</p>
+<h3>Your own generic class</h3>
+<p>Generics let a class work with any type safely. Instead of writing a Box for Strings and another for Integers, write one <code>Box&lt;T&gt;</code>:</p>
+<pre><span class="tok-keyword">public class</span> <span class="tok-type">Box</span>&lt;<span class="tok-type">T</span>&gt; {
+    <span class="tok-keyword">private</span> <span class="tok-type">T</span> item;
+    <span class="tok-keyword">public void</span> <span class="tok-function">set</span>(<span class="tok-type">T</span> item) { <span class="tok-keyword">this</span>.item = item; }
+    <span class="tok-keyword">public</span> <span class="tok-type">T</span> <span class="tok-function">get</span>() { <span class="tok-keyword">return</span> item; }
+}</pre>
+<h3>Lambdas &amp; the Stream API</h3>
+<p>A <strong>lambda</strong> is a short anonymous function. Combined with the <strong>Stream API</strong>, it turns loops into readable data pipelines:</p>
+<pre><span class="tok-type">List</span>&lt;<span class="tok-type">Student</span>&gt; students = ...;
+students.<span class="tok-function">stream</span>()
+        .<span class="tok-function">filter</span>(s -&gt; s.gpa &gt;= 3.0)      <span class="tok-comment">// keep passing students</span>
+        .<span class="tok-function">map</span>(s -&gt; s.name)               <span class="tok-comment">// take their names</span>
+        .<span class="tok-function">forEach</span>(<span class="tok-type">System</span>.out::println); <span class="tok-comment">// print each</span></pre>
+<p>The same logic with a plain <code>for</code> loop is longer and easier to get wrong. Streams describe <em>what</em> you want, not the step-by-step how — the functional style from CSI104&#39;s programming paradigms, now in your hands.</p>
+<div class="callout ok">You will not be examined heavily on these in PRO192, but every real Java codebase uses them. Learning generics, lambdas and streams now makes LAB211, PRJ301 and any Java job far smoother.</div>
+<a class="link-card codelab" href="/code-lab/java-core?ref=%2Fcourses%2Fobject-oriented-programming%2Flearn&reflabel=PRO192%20%E2%80%94%20Object-Oriented%20Programming#module-253" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Practice modern Java</span><span class="lc-sub">The "Multithreading, Lambda &amp; Design Patterns" module on CodeLab.</span></span>
+  <span class="lc-cta">PRACTICE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Nâng cao 1 · Bài N1.1</span>
+<h2>Viết Java theo cách hiện đại</h2>
+<p class="lead">Ngoài giáo trình, Java chuyên nghiệp dựa vào ba tính năng làm code ngắn hơn, an toàn hơn và biểu cảm hơn: generics của riêng bạn, lambda, và Stream API.</p>
+<h3>Lớp generic của riêng bạn</h3>
+<p>Generics cho một lớp làm việc với bất kỳ kiểu nào một cách an toàn. Thay vì viết một Box cho String và một cái khác cho Integer, viết một <code>Box&lt;T&gt;</code>:</p>
+<pre><span class="tok-keyword">public class</span> <span class="tok-type">Box</span>&lt;<span class="tok-type">T</span>&gt; {
+    <span class="tok-keyword">private</span> <span class="tok-type">T</span> item;
+    <span class="tok-keyword">public void</span> <span class="tok-function">set</span>(<span class="tok-type">T</span> item) { <span class="tok-keyword">this</span>.item = item; }
+    <span class="tok-keyword">public</span> <span class="tok-type">T</span> <span class="tok-function">get</span>() { <span class="tok-keyword">return</span> item; }
+}</pre>
+<h3>Lambda &amp; Stream API</h3>
+<p>Một <strong>lambda</strong> là một hàm ẩn danh ngắn. Kết hợp với <strong>Stream API</strong>, nó biến vòng lặp thành các đường ống dữ liệu dễ đọc:</p>
+<pre><span class="tok-type">List</span>&lt;<span class="tok-type">Student</span>&gt; students = ...;
+students.<span class="tok-function">stream</span>()
+        .<span class="tok-function">filter</span>(s -&gt; s.gpa &gt;= 3.0)      <span class="tok-comment">// giữ sinh viên đạt</span>
+        .<span class="tok-function">map</span>(s -&gt; s.name)               <span class="tok-comment">// lấy tên họ</span>
+        .<span class="tok-function">forEach</span>(<span class="tok-type">System</span>.out::println); <span class="tok-comment">// in từng cái</span></pre>
+<p>Cùng logic đó bằng vòng <code>for</code> thường thì dài hơn và dễ sai hơn. Stream mô tả <em>cái gì</em> bạn muốn, không phải từng-bước làm sao — phong cách functional từ các paradigm lập trình ở CSI104, giờ trong tay bạn.</p>
+<div class="callout ok">Bạn sẽ không bị thi nặng về những cái này ở PRO192, nhưng mọi codebase Java thật đều dùng chúng. Học generics, lambda và stream bây giờ làm LAB211, PRJ301 và mọi công việc Java mượt hơn nhiều.</div>
+<a class="link-card codelab" href="/code-lab/java-core?ref=%2Fcourses%2Fobject-oriented-programming%2Flearn&reflabel=PRO192%20%E2%80%94%20Object-Oriented%20Programming#module-253" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Luyện Java hiện đại</span><span class="lc-sub">Module "Multithreading, Lambda &amp; Design Patterns" trên CodeLab.</span></span>
+  <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+    /* ══════════════════ NÂNG CAO 2 — NGUYÊN TẮC THIẾT KẾ (CAPSTONE) ══════════════════ */
+    {
+      title: 'Advanced 2 — Design principles: from PRO192 to real projects|||Nâng cao 2 — Nguyên tắc thiết kế: từ PRO192 tới dự án thật',
+      description: 'Ngoài giáo trình — bài tổng kết: SOLID và tư duy thiết kế tốt.',
+      lessons: [
+        {
+          title: 'N2.1 — Good OO design & SOLID basics|||N2.1 — Thiết kế OO tốt & SOLID cơ bản',
+          slug: 'pro192-n2-1-solid',
+          type: 'VIDEO',
+          description: 'Không chỉ code chạy — code dễ đọc, dễ sửa, dễ mở rộng.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Advanced 2 · Lesson N2.1</span>
+<h2>Beyond "it works" — designing well</h2>
+<p class="lead">PRO192 teaches you the OOP mechanics. This capstone is about using them <em>well</em> — the difference between code that merely runs and code a team can live with for years. The industry summarizes good OO design as <strong>SOLID</strong>.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><div class="lz-lt">S — Single Responsibility</div><div class="lz-ld">A class should do one thing. A Student class holds student data; it should not also print reports or save files.</div></div>
+  <div class="lz-layer"><div class="lz-lt">O — Open/Closed</div><div class="lz-ld">Open to extension, closed to modification. Add new behavior with new subclasses/implementations, not by rewriting existing code.</div></div>
+  <div class="lz-layer"><div class="lz-lt">L — Liskov Substitution</div><div class="lz-ld">A subclass should work anywhere its parent is expected, without surprises.</div></div>
+  <div class="lz-layer"><div class="lz-lt">I — Interface Segregation</div><div class="lz-ld">Prefer small, focused interfaces over one giant one.</div></div>
+  <div class="lz-layer"><div class="lz-lt">D — Dependency Inversion</div><div class="lz-ld">Depend on interfaces (abstractions), not concrete classes — so parts can be swapped.</div></div>
+</div>
+<p>You have already met the tools these principles rely on: encapsulation (hide details), inheritance and interfaces (extend without modifying), polymorphism (swap implementations). SOLID is just the wisdom of <em>when</em> to use each.</p>
+<div class="callout ok">A practical habit from day one: give each class one clear job, keep fields private, program to interfaces where things might change, and prefer composition (has-a) over deep inheritance trees. These small choices are the difference between a maintainable assignment and a tangled mess.</div>
+<div class="note-ct">Congratulations on completing PRO192. You have made the leap from writing procedures to designing systems of cooperating objects — with encapsulation, inheritance, polymorphism, abstraction, exceptions, collections and file I/O. This mindset carries directly into LAB211, PRJ301 and every software project ahead.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Nâng cao 2 · Bài N2.1</span>
+<h2>Vượt ra ngoài "nó chạy" — thiết kế cho tốt</h2>
+<p class="lead">PRO192 dạy bạn cơ chế OOP. Bài tổng kết này là về dùng chúng <em>cho tốt</em> — khác biệt giữa code chỉ chạy và code mà một đội có thể sống chung nhiều năm. Ngành tóm tắt thiết kế OO tốt bằng <strong>SOLID</strong>.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><div class="lz-lt">S — Trách nhiệm đơn (Single Responsibility)</div><div class="lz-ld">Một lớp nên làm một việc. Lớp Student giữ dữ liệu sinh viên; nó không nên vừa in báo cáo vừa lưu tệp.</div></div>
+  <div class="lz-layer"><div class="lz-lt">O — Mở/Đóng (Open/Closed)</div><div class="lz-ld">Mở để mở rộng, đóng để sửa đổi. Thêm hành vi mới bằng lớp con/cài đặt mới, không phải viết lại code cũ.</div></div>
+  <div class="lz-layer"><div class="lz-lt">L — Thay thế Liskov</div><div class="lz-ld">Một lớp con nên hoạt động ở bất cứ đâu lớp cha được mong đợi, không gây bất ngờ.</div></div>
+  <div class="lz-layer"><div class="lz-lt">I — Tách interface</div><div class="lz-ld">Ưu tiên nhiều interface nhỏ, tập trung hơn một cái khổng lồ.</div></div>
+  <div class="lz-layer"><div class="lz-lt">D — Đảo ngược phụ thuộc</div><div class="lz-ld">Phụ thuộc vào interface (trừu tượng), không phải lớp cụ thể — để các phần thay được.</div></div>
+</div>
+<p>Bạn đã gặp các công cụ mà những nguyên tắc này dựa vào: đóng gói (giấu chi tiết), kế thừa và interface (mở rộng không sửa đổi), đa hình (thay cài đặt). SOLID chỉ là trí khôn về <em>khi nào</em> dùng mỗi cái.</p>
+<div class="callout ok">Một thói quen thực tế từ ngày đầu: cho mỗi lớp một việc rõ, giữ trường private, lập trình theo interface ở nơi có thể thay đổi, và ưu tiên kết hợp (has-a) hơn cây kế thừa sâu. Những lựa chọn nhỏ này là khác biệt giữa một bài dễ bảo trì và một mớ bòng bong.</div>
+<div class="note-ct">Chúc mừng bạn hoàn thành PRO192. Bạn đã thực hiện bước nhảy từ viết thủ tục sang thiết kế hệ thống các đối tượng hợp tác — với đóng gói, kế thừa, đa hình, trừu tượng, ngoại lệ, collections và đọc/ghi tệp. Tư duy này đi thẳng vào LAB211, PRJ301 và mọi dự án phần mềm phía trước.</div>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      "title": "Final Exam|||Thi cuối kỳ",
+      "description": "Hai cột điểm nặng nhất: PE (thi thực hành, 85 phút, 30%) và FE (thi cuối kỳ, 60 phút, 30%, phải đạt ≥4/10). Syllabus không nêu dạng câu hỏi của FE — hai bài dưới nói rõ cái gì là số liệu chính thức, cái gì là suy ra.",
+      "lessons": [
+        {
+          "title": "PE — Practical Exam (85 min, 30%)|||PE — Thi thực hành (85 phút, 30%)",
+          "slug": "pro192-final-exam-pe",
+          "type": "article",
+          "description": "Số liệu thật của syllabus cho PE: 85 phút, 30%, điều kiện >0. Bài thi gồm những gì, và luyện thế nào trên Java 8/NetBeans.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Assessment · PE</span>\n<h2>PE — Practical Exam (85 minutes, 30% of the subject)</h2>\n<p class=\"lead\">These are the syllabus's own numbers, not a guess: the PRO192 Practical Exam is an <strong>on-going</strong> assessment, <strong>1 part</strong>, <strong>85 minutes</strong>, worth <strong>30%</strong>, with completion criterion <strong>&gt; 0</strong> &mdash; score zero on it and you fail the subject however good everything else is. It is the single heaviest component, equal to the final exam.</p>\n<div class=\"callout warn\"><span class=\"badge\">What the syllabus does not say</span> It publishes no problem bank, no marking scheme and no list of allowed resources for the PE. Take those from your lecturer. Everything below is the shape the exam takes from the course content itself &mdash; CLO8 (&ldquo;complete program using an object array&rdquo;) plus the tool the syllabus names, <strong>NetBeans</strong> on the <strong>Java 8</strong> specification it lists as the main language reference.</div>\n<h3>What 85 minutes has to contain</h3>\n<p>The PE assesses the practical CLOs, so expect one console program built from the pieces this course teaches, most often:</p>\n<table>\n<thead><tr><th>Piece</th><th>Lesson</th><th>Typical marks</th></tr></thead>\n<tbody>\n<tr><td>An entity class: private fields, constructor(s), getters/setters, <code>toString()</code></td><td>2.1, 3.1</td><td>the base &mdash; nothing else runs without it</td></tr>\n<tr><td>Inheritance / an abstract parent + 2 subclasses overriding one method</td><td>4.1, 4.2, 5.1</td><td>the OOP marks</td></tr>\n<tr><td>An <strong>array of objects</strong> (CLO8) or a <code>List</code>, with add / display / find / update / remove</td><td>7.1, 8.1</td><td>the bulk of the program</td></tr>\n<tr><td>A menu loop with validated input (<code>try/catch</code>, re-ask until valid)</td><td>6.1</td><td>easy marks, easily lost</td></tr>\n<tr><td>Sorting by a chosen field, and/or reading/writing a text file</td><td>7.1, 9.1</td><td>the last feature</td></tr>\n</tbody>\n</table>\n<h3>How to prepare, specifically</h3>\n<ul>\n<li><b>Type a full CRUD program from a blank NetBeans project, on a timer, at least five times.</b> Entity &rarr; manager class holding the array &rarr; menu &rarr; features. When the skeleton is muscle memory, 85 minutes is comfortable; when it is not, you spend 30 of them deciding on structure.</li>\n<li><b>Compile after every feature.</b> A program that runs and does four of six features scores far more than a &ldquo;complete&rdquo; one that will not compile.</li>\n<li><b>Do the easy features first</b> &mdash; add and display before a tricky sort. Bank partial credit before gambling time.</li>\n<li><b>Validate every input.</b> A crash on <code>InputMismatchException</code> when the marker types a letter costs the feature it was in.</li>\n<li><b>Match the required output format exactly</b> &mdash; labels, spacing, <code>printf</code> widths, decimal places.</li>\n<li><b>Write Java 8.</b> The syllabus names the Java 8 Specification. Arrow <code>switch</code>, <code>var</code>, <code>if (x instanceof Dog d)</code> and text blocks all fail to compile on JDK 8 &mdash; use the classic forms.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A real practical prompt bank for this subject will be added in the exam room. Until then, rehearse with the six Lab briefs and the Assignment from your class &mdash; they are the same shape as the PE.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Đánh giá · PE</span>\n<h2>PE — Thi thực hành (85 phút, 30% điểm môn)</h2>\n<p class=\"lead\">Đây là số liệu của chính syllabus, không phải phỏng đoán: Practical Exam của PRO192 là đánh giá <strong>on-going</strong>, <strong>1 phần</strong>, <strong>85 phút</strong>, trọng số <strong>30%</strong>, điều kiện hoàn thành <strong>&gt; 0</strong> &mdash; bị 0 điểm ở đây là trượt môn dù mọi thứ khác tốt tới đâu. Đây là thành phần nặng nhất, ngang với bài thi cuối kỳ.</p>\n<div class=\"callout warn\"><span class=\"badge\">Cái syllabus KHÔNG nói</span> Nó không công bố ngân hàng đề, thang chấm hay danh sách tài liệu được mang vào cho PE. Những thứ đó hỏi giảng viên. Mọi thứ dưới đây là hình dạng bài thi suy ra từ chính nội dung môn &mdash; CLO8 (&ldquo;chương trình hoàn chỉnh dùng mảng đối tượng&rdquo;) cùng công cụ syllabus nêu đích danh là <strong>NetBeans</strong>, trên bản đặc tả <strong>Java 8</strong> mà syllabus liệt kê làm tài liệu ngôn ngữ chính.</div>\n<h3>85 phút đó phải chứa những gì</h3>\n<p>PE chấm các CLO thực hành, nên hãy chờ một chương trình console ghép từ đúng những mảnh khóa này dạy, thường là:</p>\n<table>\n<thead><tr><th>Mảnh</th><th>Bài</th><th>Điểm điển hình</th></tr></thead>\n<tbody>\n<tr><td>Lớp entity: trường private, constructor, getter/setter, <code>toString()</code></td><td>2.1, 3.1</td><td>nền &mdash; thiếu nó thì không gì chạy</td></tr>\n<tr><td>Kế thừa / lớp cha abstract + 2 lớp con ghi đè một phương thức</td><td>4.1, 4.2, 5.1</td><td>điểm phần OOP</td></tr>\n<tr><td><strong>Mảng đối tượng</strong> (CLO8) hoặc <code>List</code>, kèm thêm / hiện / tìm / sửa / xoá</td><td>7.1, 8.1</td><td>phần lớn chương trình</td></tr>\n<tr><td>Vòng menu với nhập liệu có validate (<code>try/catch</code>, hỏi lại tới khi hợp lệ)</td><td>6.1</td><td>điểm dễ, cũng dễ mất</td></tr>\n<tr><td>Sắp xếp theo một trường, và/hoặc đọc–ghi tệp văn bản</td><td>7.1, 9.1</td><td>chức năng cuối</td></tr>\n</tbody>\n</table>\n<h3>Luyện cụ thể thế nào</h3>\n<ul>\n<li><b>Gõ trọn một chương trình CRUD từ project NetBeans trống, có bấm giờ, ít nhất năm lần.</b> Entity &rarr; lớp quản lý giữ mảng &rarr; menu &rarr; các chức năng. Khi bộ khung thành phản xạ cơ bắp, 85 phút là thoải mái; khi chưa, bạn mất 30 phút chỉ để quyết cấu trúc.</li>\n<li><b>Biên dịch sau mỗi chức năng.</b> Chương trình chạy được và làm 4/6 chức năng ăn điểm hơn nhiều so với bản &ldquo;hoàn chỉnh&rdquo; không biên dịch nổi.</li>\n<li><b>Làm chức năng dễ trước</b> &mdash; thêm và hiện danh sách trước một hàm sort hóc búa. Gom điểm phần trước khi đánh cược thời gian.</li>\n<li><b>Validate mọi input.</b> Sập vì <code>InputMismatchException</code> khi người chấm gõ chữ là mất nguyên chức năng đó.</li>\n<li><b>Khớp đúng định dạng output yêu cầu</b> &mdash; nhãn, khoảng trắng, độ rộng <code>printf</code>, số chữ số thập phân.</li>\n<li><b>Viết Java 8.</b> Syllabus nêu Java 8 Specification. <code>switch</code> mũi tên, <code>var</code>, <code>if (x instanceof Dog d)</code> và text block đều không biên dịch được trên JDK 8 &mdash; hãy dùng dạng cổ điển.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Ngân hàng đề thực hành thật sẽ được thêm ở trang phòng thi. Trong lúc chờ, hãy diễn tập bằng 6 đề Lab và Assignment của lớp bạn &mdash; chúng cùng hình dạng với PE.</div>\n</div>"
+        },
+        {
+          "title": "FE — Final Exam (60 min, 30%, gate 4/10)|||FE — Thi cuối kỳ (60 phút, 30%, cổng 4/10)",
+          "slug": "pro192-final-exam-fe",
+          "type": "article",
+          "description": "Syllabus cho gì (60 phút, 30%, ≥4) và KHÔNG cho gì (format, số câu). Lộ trình ôn theo 9 CLO + câu mẫu.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Assessment · FE</span>\n<h2>FE — Final Exam (60 minutes, 30%, must reach 4/10)</h2>\n<p class=\"lead\">What the syllabus actually states about the PRO192 final &mdash; and, just as important, what it does not:</p>\n<table>\n<thead><tr><th>Field</th><th>Value (syllabus ID 12038)</th></tr></thead>\n<tbody>\n<tr><td>Category / type</td><td>Final Exam</td></tr>\n<tr><td>Parts</td><td>1</td></tr>\n<tr><td>Weight</td><td><strong>30%</strong></td></tr>\n<tr><td>Duration</td><td><strong>60 minutes</strong></td></tr>\n<tr><td>Completion criterion</td><td><strong>&ge; 4</strong>/10 &mdash; below that you fail the subject whatever your average</td></tr>\n<tr><td>Question type</td><td><strong>Not stated in the syllabus</strong></td></tr>\n<tr><td>Number of questions</td><td><strong>Not stated in the syllabus</strong></td></tr>\n</tbody>\n</table>\n<div class=\"callout warn\"><span class=\"badge\">Correction</span> This page used to assert that the FE is &ldquo;a computer-graded multiple-choice test&rdquo; and to send you to Lesson 0.2 for a question count. Neither is in the syllabus: the assessment table gives category, parts, weight, completion criterion and duration &mdash; nothing about format. Ask your lecturer or check the FLM for your term, and treat the sample below as practice on the subject content, not as proof of a format.</div>\n<h3>Revise by what is examinable, not by format</h3>\n<p>Whatever the paper looks like, it has 60 minutes to cover nine CLOs. Work through them in this order &mdash; each links to the lesson that answers the syllabus's own constructive questions:</p>\n<ul>\n<li><b>CLO1, CLO5, CLO6 &mdash; the four pillars and class relationships.</b> Encapsulation, inheritance, polymorphism, abstraction; <code>this</code> vs <code>super</code> (CQ7.1, CQ11.2); overloading vs overriding (CQ15.1); <code>static</code>/<code>abstract</code>/<code>final</code>/access modifiers (CQ14.2). Lessons 1.1, 2.1, 3.1, 4.1, 4.2.</li>\n<li><b>CLO7 &mdash; abstract classes &amp; interfaces.</b> Interface members including default methods (CQ13.3), when to choose which. Lesson 5.1.</li>\n<li><b>CLO4 &mdash; exceptions.</b> Checked vs unchecked, <code>try/catch/finally</code>, <code>throw</code> vs <code>throws</code> (CQ5.2). Lesson 6.1.</li>\n<li><b>CLO2 &mdash; Java syntax.</b> Primitives, casting (CQ9.2), <code>instanceof</code> (CQ10.1), parameter vs argument (CQ8.2), array arguments (CQ17.1). Lessons 1.2, 4.2.</li>\n<li><b>CLO8, CLO9 &mdash; object arrays and collections.</b> List / Set / Map and what each guarantees. Lessons 7.1, 8.1.</li>\n<li><b>CLO3 &mdash; streams.</b> Reading and writing text files, and writing/reading an object (CQ17.2, CQ18.1). Lesson 9.1.</li>\n</ul>\n<h3>In the room</h3>\n<ul>\n<li>Pace yourself: divide 60 minutes by the number of items you are given, flag hard ones and return at the end.</li>\n<li>For code items, trace the program on paper line by line &mdash; predicted output beats intuition, especially on overriding and on <code>finally</code>.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest. Never leave a gated paper blank: 4/10 is the gate.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course, to practise the content. Real past papers are added in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Đánh giá · FE</span>\n<h2>FE — Thi cuối kỳ (60 phút, 30%, phải đạt 4/10)</h2>\n<p class=\"lead\">Syllabus thực sự nói gì về bài thi cuối PRO192 &mdash; và quan trọng không kém, nó KHÔNG nói gì:</p>\n<table>\n<thead><tr><th>Mục</th><th>Giá trị (syllabus ID 12038)</th></tr></thead>\n<tbody>\n<tr><td>Loại</td><td>Final Exam</td></tr>\n<tr><td>Số phần</td><td>1</td></tr>\n<tr><td>Trọng số</td><td><strong>30%</strong></td></tr>\n<tr><td>Thời lượng</td><td><strong>60 phút</strong></td></tr>\n<tr><td>Điều kiện hoàn thành</td><td><strong>&ge; 4</strong>/10 &mdash; dưới mức đó là trượt môn dù trung bình bao nhiêu</td></tr>\n<tr><td>Dạng câu hỏi</td><td><strong>Syllabus không nêu</strong></td></tr>\n<tr><td>Số câu</td><td><strong>Syllabus không nêu</strong></td></tr>\n</tbody>\n</table>\n<div class=\"callout warn\"><span class=\"badge\">Đính chính</span> Trang này trước đây khẳng định FE là &ldquo;bài trắc nghiệm máy chấm&rdquo; và bảo bạn xem Bài 0.2 để biết số câu. Cả hai đều không có trong syllabus: bảng đánh giá chỉ cho loại, số phần, trọng số, điều kiện hoàn thành và thời lượng &mdash; không nói gì về format. Hãy hỏi giảng viên hoặc xem FLM của kỳ bạn học, và coi phần câu mẫu bên dưới là luyện nội dung môn, không phải bằng chứng về format.</div>\n<h3>Ôn theo phạm vi thi, đừng ôn theo format</h3>\n<p>Đề trông thế nào đi nữa thì nó cũng chỉ có 60 phút để phủ chín CLO. Hãy đi theo thứ tự này &mdash; mỗi mục dẫn tới bài trả lời đúng các câu hỏi kiến tạo của syllabus:</p>\n<ul>\n<li><b>CLO1, CLO5, CLO6 &mdash; bốn trụ cột và quan hệ giữa các lớp.</b> Đóng gói, kế thừa, đa hình, trừu tượng; <code>this</code> vs <code>super</code> (CQ7.1, CQ11.2); overloading vs overriding (CQ15.1); <code>static</code>/<code>abstract</code>/<code>final</code>/access modifier (CQ14.2). Bài 1.1, 2.1, 3.1, 4.1, 4.2.</li>\n<li><b>CLO7 &mdash; abstract class &amp; interface.</b> Thành viên của interface kể cả default method (CQ13.3), khi nào chọn cái nào. Bài 5.1.</li>\n<li><b>CLO4 &mdash; ngoại lệ.</b> Checked vs unchecked, <code>try/catch/finally</code>, <code>throw</code> vs <code>throws</code> (CQ5.2). Bài 6.1.</li>\n<li><b>CLO2 &mdash; cú pháp Java.</b> Kiểu nguyên thuỷ, ép kiểu (CQ9.2), <code>instanceof</code> (CQ10.1), tham số vs đối số (CQ8.2), truyền mảng (CQ17.1). Bài 1.2, 4.2.</li>\n<li><b>CLO8, CLO9 &mdash; mảng đối tượng và collections.</b> List / Set / Map và cái nào bảo đảm gì. Bài 7.1, 8.1.</li>\n<li><b>CLO3 &mdash; luồng.</b> Đọc/ghi tệp văn bản, và ghi/đọc một đối tượng (CQ17.2, CQ18.1). Bài 9.1.</li>\n</ul>\n<h3>Trong phòng thi</h3>\n<ul>\n<li>Chia thời gian: lấy 60 phút chia cho số câu được giao, đánh dấu câu khó và quay lại ở cuối.</li>\n<li>Với câu về code, hãy trace chương trình trên giấy từng dòng &mdash; output dự đoán thắng trực giác, nhất là ở ghi đè và ở <code>finally</code>.</li>\n<li>Loại phương án sai rõ ràng trước rồi mới chọn. Đừng bao giờ bỏ trống bài có cổng điểm: 4/10 là cửa.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Câu mẫu</span> Các câu dưới đây là <strong>câu mẫu</strong> lấy từ chính khóa học để luyện nội dung. Đề thi thật được thêm ở trang phòng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "The main idea of OOP is to…|||Ý tưởng chính của OOP là…",
+                "options": [
+                  "keep data and functions separate|||giữ dữ liệu và hàm tách rời",
+                  "bundle related data and behavior into objects|||gom dữ liệu và hành vi liên quan vào các đối tượng",
+                  "avoid using functions|||tránh dùng hàm",
+                  "only use global variables|||chỉ dùng biến toàn cục"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "A class is a…, and an object is a…|||Một lớp là…, và một đối tượng là…",
+                "options": [
+                  "concrete instance … blueprint|||thể hiện cụ thể … khuôn mẫu",
+                  "blueprint … concrete instance of it|||khuôn mẫu … thể hiện cụ thể của nó",
+                  "function … variable|||hàm … biến",
+                  "they are the same|||chúng như nhau"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "In Java, code must be written…|||Trong Java, code phải được viết…",
+                "options": [
+                  "as free-standing functions|||thành các hàm độc lập",
+                  "inside a class|||bên trong một lớp",
+                  "only in the main file|||chỉ trong file main",
+                  "without any structure|||không cấu trúc nào"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "To print a line in Java you use…|||Để in một dòng trong Java bạn dùng…",
+                "options": [
+                  "printf(...)",
+                  "System.out.println(...)",
+                  "cout <<",
+                  "print()"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "To compare the contents of two Strings in Java, use…|||Để so sánh nội dung hai String trong Java, dùng…",
+                "options": [
+                  "==",
+                  ".equals()",
+                  ">",
+                  ".compare"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "The three main parts of a class are…|||Ba phần chính của một lớp là…",
+                "options": [
+                  "fields, methods, constructors|||trường, phương thức, constructor",
+                  "loops, arrays, pointers|||vòng lặp, mảng, con trỏ",
+                  "imports, packages, comments|||import, package, chú thích",
+                  "input, process, output|||nhập, xử lý, xuất"
+                ],
+                "correctIndex": 0
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

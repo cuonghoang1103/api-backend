@@ -1,1290 +1,2689 @@
 /**
- * PRF192 — Programming Fundamentals (ngôn ngữ C). Kỳ 1. Giáo trình FLM (syl 12223):
- * 9 CLO/9 chương — nhập môn & công cụ → biến/kiểu/bộ nhớ/IO/biểu thức → rẽ nhánh &
- * vòng lặp → module & hàm → con trỏ → thư viện chuẩn → mảng & struct → chuỗi → tệp.
- * Sách CHÍNH: "Foundations of Programming Using C" (Evan Weaver) + K&R + MOOC
- * intro2c.sdds.ca. Công cụ: DevC++ / VS Code + GCC. Song ngữ, code C chạy được.
- * Giữ NGUYÊN slug/semester/courseCode/thumbnailUrl; syncOrder: true.
- * ⚠️ code: KHÔNG backtick, KHÔNG ${ }; escape của C viết đôi ("\n" → \\n, "\0" → \\0);
- *    "<"/">" → &lt;/&gt;, "&" → &amp;.
+ * PRF192 — Cơ sở lập trình (Programming Fundamentals, C). Kỳ 1.
+ * Nội dung Academy FPTU — bám sát syllabus (60 buổi, 9 CLO) + chương nâng cao.
+ * VN-primary, thuật ngữ EN giữ nguyên; luyện code → CodeLab; setup/IDE → Exp Hub.
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/PRF192.mjs --apply
  */
-const bi = (en, vi) => `<div class="ml-en">${en}</div>\n<div class="ml-vi">${vi}</div>`;
-const doc = (slug, title, desc, pairs) => ({ title, slug, type: 'DOCUMENT', description: desc, content: pairs.map(([e, v]) => bi(e, v)).join('\n') });
-const quiz = (slug, title, questions) => ({ title, slug, type: 'QUIZ', description: 'Kiểm tra nhanh kiến thức chương.', quiz: { timeLimitSeconds: 480, questions } });
-
-/* ═══════════════ 📚 TÀI LIỆU THAM KHẢO ═══════════════ */
-const taiLieu = doc('prf192-tai-lieu-tham-khao', 'Course materials & references|||Trung tâm tài liệu tham khảo',
-  'Sách chính (Evan Weaver) + K&R, MOOC intro2c.sdds.ca, tài liệu chuẩn C, YouTube, công cụ DevC++/VS Code, lộ trình tự học.',
-  [[
-    `<span class="eyebrow">PRF192 · Materials</span>
-<h2>Course materials &amp; references</h2>
-<p class="lead">Everything you need to learn <strong>Programming Fundamentals in C</strong> in one place. The full FPTU slides &amp; official syllabus live on <strong>FLM</strong>; below are free, legal resources.</p>
-<h3>📘 Textbooks &amp; slides</h3>
-<p>Official FPTU textbook &amp; lecture slides for PRF192 are on <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — sign in with your FPTU account.</p>
-<ul>
-<li><strong>Foundations of Programming Using C</strong> — Evan Weaver <em>(the main textbook, free)</em>.</li>
-<li><strong>The C Programming Language</strong> — Kernighan &amp; Ritchie ("K&amp;R", the classic reference; read it gradually).</li>
-<li>MOOC: <a href="https://intro2c.sdds.ca" target="_blank" rel="noopener"><em>Introduction to C</em> — intro2c.sdds.ca</a> (Chris Szalwinski, Seneca College).</li>
-</ul>
-<h3>🌐 Free reference docs</h3>
-<ul>
-<li><a href="https://en.cppreference.com/w/c" target="_blank" rel="noopener">cppreference — C standard library</a> (the authoritative function reference).</li>
-<li><a href="https://www.learn-c.org/" target="_blank" rel="noopener">learn-c.org</a> — interactive C tutorial in the browser.</li>
-<li><a href="https://beej.us/guide/bgc/" target="_blank" rel="noopener">Beej's Guide to C Programming</a> — friendly, thorough, free.</li>
-</ul>
-<h3>▶️ YouTube channels</h3>
-<ul>
-<li><a href="https://www.youtube.com/@mycodeschool" target="_blank" rel="noopener">mycodeschool</a> — C &amp; data structures, drawn out step by step.</li>
-<li><a href="https://www.youtube.com/@ProgrammingKnowledge" target="_blank" rel="noopener">ProgrammingKnowledge</a> — C from zero, DevC++/GCC setup.</li>
-</ul>
-<h3>🛠️ Tools</h3>
-<ul>
-<li><a href="https://www.embarcadero.com/free-tools/dev-cpp" target="_blank" rel="noopener">Embarcadero Dev-C++ 6.3</a> — the IDE FPTU uses (compiler + editor in one).</li>
-<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VS Code</a> + <a href="https://gcc.gnu.org/" target="_blank" rel="noopener">GCC</a> (MinGW-w64 on Windows) — the professional long-term setup.</li>
-<li><a href="https://www.onlinegdb.com/online_c_compiler" target="_blank" rel="noopener">OnlineGDB</a> — compile &amp; run C in the browser, no install.</li>
-</ul>
-<div class="callout"><span class="badge">Self-study path</span>
-<ol>
-<li><strong>Foundation / exam core</strong> — program structure, variables &amp; types, expressions, <code>if</code>/loops (CLO1–CLO3).</li>
-<li><strong>Practice</strong> — retype every example and run it; solve the auto-graded exercises on CodeLab.</li>
-<li><strong>Go deeper</strong> — functions, pointers &amp; memory, arrays/structs, strings, files (CLO4–CLO9).</li>
-<li><strong>Job-ready</strong> — build a small end-to-end C program (a menu-driven manager) and debug it cleanly.</li>
-</ol></div>`,
-    `<span class="eyebrow">PRF192 · Tài liệu</span>
-<h2>Trung tâm tài liệu tham khảo</h2>
-<p class="lead">Mọi thứ để học <strong>Cơ sở lập trình bằng C</strong> gom về một chỗ. Slide &amp; giáo trình chính thức đầy đủ nằm trên <strong>FLM</strong>; bên dưới là nguồn miễn phí, hợp pháp.</p>
-<h3>📘 Giáo trình &amp; slide</h3>
-<p>Giáo trình FPTU &amp; slide bài giảng chính thức của PRF192 có trên <a href="https://flm.fpt.edu.vn" target="_blank" rel="noopener">FLM (flm.fpt.edu.vn)</a> — đăng nhập bằng tài khoản FPTU.</p>
-<ul>
-<li><strong>Foundations of Programming Using C</strong> — Evan Weaver <em>(giáo trình chính, miễn phí)</em>.</li>
-<li><strong>The C Programming Language</strong> — Kernighan &amp; Ritchie ("K&amp;R", kinh điển; nên đọc dần).</li>
-<li>MOOC: <a href="https://intro2c.sdds.ca" target="_blank" rel="noopener"><em>Introduction to C</em> — intro2c.sdds.ca</a> (Chris Szalwinski, Seneca College).</li>
-</ul>
-<h3>🌐 Tài liệu tra cứu miễn phí</h3>
-<ul>
-<li><a href="https://en.cppreference.com/w/c" target="_blank" rel="noopener">cppreference — thư viện chuẩn C</a> (tra cứu hàm chính xác nhất).</li>
-<li><a href="https://www.learn-c.org/" target="_blank" rel="noopener">learn-c.org</a> — học C tương tác ngay trên trình duyệt.</li>
-<li><a href="https://beej.us/guide/bgc/" target="_blank" rel="noopener">Beej's Guide to C Programming</a> — dễ đọc, đầy đủ, miễn phí.</li>
-</ul>
-<h3>▶️ Kênh YouTube</h3>
-<ul>
-<li><a href="https://www.youtube.com/@mycodeschool" target="_blank" rel="noopener">mycodeschool</a> — C &amp; cấu trúc dữ liệu, vẽ từng bước.</li>
-<li><a href="https://www.youtube.com/@ProgrammingKnowledge" target="_blank" rel="noopener">ProgrammingKnowledge</a> — C từ số 0, cài DevC++/GCC.</li>
-</ul>
-<h3>🛠️ Công cụ</h3>
-<ul>
-<li><a href="https://www.embarcadero.com/free-tools/dev-cpp" target="_blank" rel="noopener">Embarcadero Dev-C++ 6.3</a> — IDE trường dùng (gộp trình biên dịch + soạn thảo).</li>
-<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VS Code</a> + <a href="https://gcc.gnu.org/" target="_blank" rel="noopener">GCC</a> (MinGW-w64 trên Windows) — bộ công cụ chuyên nghiệp, dùng lâu dài.</li>
-<li><a href="https://www.onlinegdb.com/online_c_compiler" target="_blank" rel="noopener">OnlineGDB</a> — biên dịch &amp; chạy C trên trình duyệt, không cần cài.</li>
-</ul>
-<div class="callout"><span class="badge">Lộ trình tự học</span>
-<ol>
-<li><strong>Nền / lõi thi</strong> — cấu trúc chương trình, biến &amp; kiểu, biểu thức, <code>if</code>/vòng lặp (CLO1–CLO3).</li>
-<li><strong>Luyện tập</strong> — gõ lại mọi ví dụ và chạy thử; làm bài chấm tự động trên CodeLab.</li>
-<li><strong>Đào sâu</strong> — hàm, con trỏ &amp; bộ nhớ, mảng/struct, chuỗi, tệp (CLO4–CLO9).</li>
-<li><strong>Sẵn sàng đi làm</strong> — viết trọn một chương trình C nhỏ (quản lý theo menu) và debug sạch.</li>
-</ol></div>
-<div class="callout"><span class="badge">Lưu ý</span> Đây là trung tâm liên kết nguyên gốc — không nhúng slide/sách có bản quyền. Link đổi thì vào FLM hoặc trang chủ chính thức để tìm.</div>`,
-  ]]);
-
-/* ═══════════════ GIỚI THIỆU MÔN HỌC ═══════════════ */
-const intro = { ...doc('prf192-gioi-thieu', 'Course intro: 9 CLOs, grading & roadmap|||Giới thiệu môn: 9 CLO, cấu trúc điểm & lộ trình',
-  'Môn học là gì, vì sao học C, 9 chuẩn đầu ra (CLO), cơ cấu điểm, và lộ trình 9 chương bám giáo trình FLM.',
-  [[
-    `<span class="eyebrow">PRF192 · Course introduction</span>
-<h2>Programming Fundamentals — with the C language</h2>
-<p class="lead">PRF192 is the <strong>first</strong> programming course of the Software Engineering track. The goal is not to memorize syntax but to <strong>think like a programmer</strong>: look at a real problem and break it into steps a computer can carry out.</p>
-<p>The language is <strong>C</strong> — a small language close to how the machine really works. After C you understand what lies "underneath" every modern language (Java, C#, Python…): memory, pointers, data types. That is why the university puts C first. PRF192 is the prerequisite for <span class="badge">PRO192</span> (OOP) and <span class="badge">LAB211</span>.</p>
-<h3>9 Course Learning Outcomes (CLOs)</h3>
-<p>A CLO is what you <strong>must be able to do</strong> after the course. The exams follow the CLOs closely, so this map tells you what you'll be tested on.</p>
-<table>
-<thead><tr><th>CLO</th><th>You will be able to</th><th>Chapter</th></tr></thead>
-<tbody>
-<tr><td>CLO1</td><td>Explain the computer system, the software-development steps, and the structure of a simple C program</td><td>1</td></tr>
-<tr><td>CLO2</td><td>Use variables/constants, data types, memory, I/O (<code>scanf</code>/<code>printf</code>) and expressions</td><td>2</td></tr>
-<tr><td>CLO3</td><td>Use structured programming: selection (<code>if</code>/<code>switch</code>) and loops</td><td>3</td></tr>
-<tr><td>CLO4</td><td>Design modules and write &amp; use functions</td><td>4</td></tr>
-<tr><td>CLO5</td><td>Understand and use pointers</td><td>5</td></tr>
-<tr><td>CLO6</td><td>Use the C standard library</td><td>6</td></tr>
-<tr><td>CLO7</td><td>Use arrays (1-D, 2-D) and structs</td><td>7</td></tr>
-<tr><td>CLO8</td><td>Process strings</td><td>8</td></tr>
-<tr><td>CLO9</td><td>Read from and write to files</td><td>9</td></tr>
-</tbody>
-</table>
-<h3>Grade structure</h3>
-<table>
-<thead><tr><th>Component</th><th>Weight</th><th>Note</th></tr></thead>
-<tbody>
-<tr><td>Assignment</td><td>15%</td><td>Done at home (CLO2–CLO9)</td></tr>
-<tr><td>Practical Exam</td><td>30%</td><td>On a computer (CLO2–CLO8)</td></tr>
-<tr><td>Progress Test <small>2 parts</small></td><td>15%</td><td>In class (CLO1, CLO5, CLO6, CLO9)</td></tr>
-<tr><td>Workshop <small>5 parts</small></td><td>10%</td><td>In class (CLO1–CLO9)</td></tr>
-<tr><td><strong>Final Exam</strong></td><td><strong>30%</strong></td><td><strong>50 multiple-choice questions</strong> (CLO1–CLO9)</td></tr>
-</tbody>
-</table>
-<div class="callout warn">The Practical Exam (30%) and the Final (30%) make up 60% — both are taken <strong>live on a computer / as multiple choice</strong>, so rote learning won't help. Finish every Workshop and practise on CodeLab so your hands get used to typing code.</div>
-<h3>Roadmap — 9 chapters + a deep-dive</h3>
-<div class="lz-map">
-<div class="lz-stage">Foundations</div>
-<div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Intro &amp; tools</div><div class="lz-nsub">Computer system, dev steps, structure of a C program</div></div></div>
-<div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Variables, types &amp; expressions</div><div class="lz-nsub">Memory, scanf/printf, operators &amp; precedence</div></div></div>
-<div class="lz-stage">Control &amp; structure</div>
-<div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Structured programming</div><div class="lz-nsub">if/switch · for/while/do-while</div></div></div>
-<div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Modules &amp; functions</div><div class="lz-nsub">Split a problem into functions</div></div></div>
-<div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Pointers</div><div class="lz-nsub">Addresses &amp; memory — the key to C</div></div></div>
-<div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Standard library</div><div class="lz-nsub">stdlib, time, math, ctype</div></div></div>
-<div class="lz-stage">Data</div>
-<div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Arrays &amp; structs</div><div class="lz-nsub">Lists, matrices, search/sort, records</div></div></div>
-<div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Strings</div><div class="lz-nsub">char arrays &amp; string.h</div></div></div>
-<div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Files</div><div class="lz-nsub">Reading/writing data on disk</div></div></div>
-<div class="lz-stage">Beyond the syllabus</div>
-<div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Pointers &amp; memory deep · errors &amp; debugging</div><div class="lz-nsub">Stack/heap, segfault, buffer overflow, debug tips</div></div></div>
-</div>
-<div class="callout ok">The most effective way to study this course: <strong>retype every example and run it</strong>. Programming is a skill — like swimming, watching won't teach you.</div>`,
-    `<span class="eyebrow">PRF192 · Giới thiệu môn học</span>
-<h2>Cơ sở lập trình — với ngôn ngữ C</h2>
-<p class="lead">PRF192 là môn lập trình <strong>đầu tiên</strong> của lộ trình Kỹ thuật phần mềm. Mục tiêu không phải học thuộc cú pháp, mà là <strong>tập tư duy như lập trình viên</strong>: nhìn một bài toán thực tế và chia nhỏ thành các bước máy tính làm được.</p>
-<p>Ngôn ngữ dùng là <strong>C</strong> — một ngôn ngữ nhỏ, gần với cách máy tính thật sự hoạt động. Học C xong bạn hiểu được "bên dưới" của mọi ngôn ngữ hiện đại (Java, C#, Python…): bộ nhớ, con trỏ, kiểu dữ liệu. Đó là lý do trường đặt C ở môn mở đầu. PRF192 là tiên quyết của <span class="badge">PRO192</span> (OOP) và <span class="badge">LAB211</span>.</p>
-<h3>9 chuẩn đầu ra (CLO)</h3>
-<p>CLO là những gì bạn <strong>phải làm được</strong> sau môn. Đề thi bám sát CLO, nên bản đồ này cho biết bạn sẽ bị hỏi gì.</p>
-<table>
-<thead><tr><th>CLO</th><th>Bạn sẽ làm được</th><th>Chương</th></tr></thead>
-<tbody>
-<tr><td>CLO1</td><td>Giải thích hệ thống máy tính, các bước phát triển phần mềm và cấu trúc một chương trình C đơn giản</td><td>1</td></tr>
-<tr><td>CLO2</td><td>Dùng biến/hằng, kiểu dữ liệu, bộ nhớ, nhập/xuất (<code>scanf</code>/<code>printf</code>) và biểu thức</td><td>2</td></tr>
-<tr><td>CLO3</td><td>Dùng lập trình cấu trúc: rẽ nhánh (<code>if</code>/<code>switch</code>) và vòng lặp</td><td>3</td></tr>
-<tr><td>CLO4</td><td>Thiết kế module và viết &amp; dùng hàm</td><td>4</td></tr>
-<tr><td>CLO5</td><td>Hiểu và dùng con trỏ</td><td>5</td></tr>
-<tr><td>CLO6</td><td>Dùng thư viện chuẩn C</td><td>6</td></tr>
-<tr><td>CLO7</td><td>Dùng mảng (1 chiều, 2 chiều) và struct</td><td>7</td></tr>
-<tr><td>CLO8</td><td>Xử lý chuỗi (string)</td><td>8</td></tr>
-<tr><td>CLO9</td><td>Đọc/ghi tệp tin</td><td>9</td></tr>
-</tbody>
-</table>
-<h3>Cơ cấu điểm</h3>
-<table>
-<thead><tr><th>Thành phần</th><th>Trọng số</th><th>Ghi chú</th></tr></thead>
-<tbody>
-<tr><td>Assignment</td><td>15%</td><td>Làm ở nhà (CLO2–CLO9)</td></tr>
-<tr><td>Practical Exam</td><td>30%</td><td>Thi trên máy (CLO2–CLO8)</td></tr>
-<tr><td>Progress Test <small>2 phần</small></td><td>15%</td><td>Kiểm tra tại lớp (CLO1, CLO5, CLO6, CLO9)</td></tr>
-<tr><td>Workshop <small>5 phần</small></td><td>10%</td><td>Làm tại lớp (CLO1–CLO9)</td></tr>
-<tr><td><strong>Final Exam</strong></td><td><strong>30%</strong></td><td><strong>Trắc nghiệm 50 câu</strong> (CLO1–CLO9)</td></tr>
-</tbody>
-</table>
-<div class="callout warn">Practical Exam (30%) và Final (30%) chiếm 60% — đều thi <strong>trực tiếp trên máy / trắc nghiệm</strong>, không học vẹt được. Hãy làm hết Workshop và luyện trên CodeLab để tay quen gõ code.</div>
-<h3>Lộ trình — 9 chương + phần chuyên sâu</h3>
-<div class="lz-map">
-<div class="lz-stage">Nền tảng</div>
-<div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Nhập môn &amp; công cụ</div><div class="lz-nsub">Hệ thống máy tính, các bước phát triển, cấu trúc chương trình C</div></div></div>
-<div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Biến, kiểu &amp; biểu thức</div><div class="lz-nsub">Bộ nhớ, scanf/printf, toán tử &amp; độ ưu tiên</div></div></div>
-<div class="lz-stage">Điều khiển &amp; cấu trúc</div>
-<div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Lập trình cấu trúc</div><div class="lz-nsub">if/switch · for/while/do-while</div></div></div>
-<div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Module &amp; hàm</div><div class="lz-nsub">Chia bài toán thành hàm</div></div></div>
-<div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Con trỏ</div><div class="lz-nsub">Địa chỉ &amp; bộ nhớ — chìa khoá của C</div></div></div>
-<div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Thư viện chuẩn</div><div class="lz-nsub">stdlib, time, math, ctype</div></div></div>
-<div class="lz-stage">Dữ liệu</div>
-<div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Mảng &amp; struct</div><div class="lz-nsub">Danh sách, ma trận, tìm/sắp, bản ghi</div></div></div>
-<div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Chuỗi</div><div class="lz-nsub">mảng char &amp; string.h</div></div></div>
-<div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Tệp tin</div><div class="lz-nsub">Đọc/ghi dữ liệu ra ổ đĩa</div></div></div>
-<div class="lz-stage">Ngoài giáo trình</div>
-<div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Con trỏ &amp; bộ nhớ sâu · lỗi &amp; debug</div><div class="lz-nsub">Stack/heap, segfault, buffer overflow, mẹo debug</div></div></div>
-</div>
-<div class="callout ok">Cách học hiệu quả nhất: <strong>gõ lại mọi ví dụ và chạy thử</strong>. Lập trình là kỹ năng — như tập bơi, xem không làm bạn biết bơi.</div>`,
-  ]]), isFreePreview: true };
-
-/* ═══════════════ CHƯƠNG 1 — NHẬP MÔN & CÔNG CỤ (CLO1) ═══════════════ */
-const c1a = { ...doc('prf192-1-1-may-tinh-phan-mem', '1.1 — The computer system & software-development steps|||1.1 — Hệ thống máy tính & các bước phát triển phần mềm',
-  'Máy tính chạy chương trình thế nào, các bước phát triển phần mềm, biên dịch vs thông dịch, chuỗi 4 bước của compiler.',
-  [[
-    `<span class="eyebrow">PRF192 · Chapter 1 · Lesson 1.1</span>
-<h2>How a computer runs a program</h2>
-<p class="lead"><strong>Programming</strong> is writing a clear, ordered sequence of instructions for a computer to carry out a task. A computer is very fast but "can't think" — it does <em>exactly</em> what you tell it, even when you tell it something wrong.</p>
-<h3>The computer system</h3>
-<ul>
-<li><strong>CPU</strong> — executes instructions; only understands <strong>machine code</strong> (0/1).</li>
-<li><strong>Main memory (RAM)</strong> — holds your program and its data while it runs.</li>
-<li><strong>Storage (disk)</strong> — keeps files after the power is off.</li>
-<li><strong>I/O devices</strong> — keyboard/screen: how the program talks to you.</li>
-</ul>
-<h3>Steps to develop a program</h3>
-<div class="lz-flow">
-<div class="lz-step"><div class="lz-k">01</div><div class="lz-t">Analyze</div><div class="lz-d">Understand the problem, the input/output</div></div>
-<div class="lz-step"><div class="lz-k">02</div><div class="lz-t">Design</div><div class="lz-d">Think of the algorithm, the steps</div></div>
-<div class="lz-step"><div class="lz-k">03</div><div class="lz-t">Code</div><div class="lz-d">Write C code</div></div>
-<div class="lz-step"><div class="lz-k">04</div><div class="lz-t">Compile</div><div class="lz-d">Fix syntax errors</div></div>
-<div class="lz-step"><div class="lz-k">05</div><div class="lz-t">Test</div><div class="lz-d">Run it, fix logic errors</div></div>
-</div>
-<h3>Compiled vs interpreted</h3>
-<table>
-<thead><tr><th></th><th>Compiled — C</th><th>Interpreted — Python</th></tr></thead>
-<tbody>
-<tr><td>How it runs</td><td>Translate the whole file to an <code>.exe</code> first, then run</td><td>Read &amp; run line by line at execution</td></tr>
-<tr><td>Speed</td><td>Fast</td><td>Slower</td></tr>
-<tr><td>Errors</td><td>Every syntax error is caught at compile time; the program never runs until they're fixed</td><td>A syntax error stops it before line 1; a runtime error surfaces only when execution reaches the faulty line</td></tr>
-</tbody>
-</table>
-<p>C is a <strong>compiled</strong> language, so every change means recompiling before running.</p>
-<div class="callout"><span class="badge">★ Beyond the syllabus</span> "Compile" is really <b>4 steps</b>: <b>preprocessing</b> (expand <code>#include</code>/<code>#define</code>) → <b>compiling</b> (C → assembly) → <b>assembling</b> (assembly → machine code <code>.o</code>) → <b>linking</b> (combine your <code>.o</code> with the library into one <code>.exe</code>). A "compile error" and a "linker error" are different stages failing.</div>`,
-    `<span class="eyebrow">PRF192 · Chương 1 · Bài 1.1</span>
-<h2>Máy tính chạy chương trình thế nào</h2>
-<p class="lead"><strong>Lập trình</strong> là viết một dãy chỉ thị rõ ràng, tuần tự để máy tính thực hiện một công việc. Máy tính rất nhanh nhưng "không biết suy nghĩ" — nó làm <em>đúng y</em> những gì bạn bảo, kể cả khi bạn bảo sai.</p>
-<h3>Hệ thống máy tính</h3>
-<ul>
-<li><strong>CPU</strong> — thực thi lệnh; chỉ hiểu <strong>mã máy</strong> (0/1).</li>
-<li><strong>Bộ nhớ chính (RAM)</strong> — chứa chương trình và dữ liệu trong lúc chạy.</li>
-<li><strong>Ổ đĩa (storage)</strong> — giữ tệp sau khi tắt máy.</li>
-<li><strong>Thiết bị vào/ra</strong> — bàn phím/màn hình: cách chương trình nói chuyện với bạn.</li>
-</ul>
-<h3>Các bước phát triển một chương trình</h3>
-<div class="lz-flow">
-<div class="lz-step"><div class="lz-k">01</div><div class="lz-t">Phân tích</div><div class="lz-d">Hiểu đề, dữ liệu vào/ra</div></div>
-<div class="lz-step"><div class="lz-k">02</div><div class="lz-t">Thiết kế</div><div class="lz-d">Nghĩ thuật toán, các bước</div></div>
-<div class="lz-step"><div class="lz-k">03</div><div class="lz-t">Viết mã</div><div class="lz-d">Gõ code C</div></div>
-<div class="lz-step"><div class="lz-k">04</div><div class="lz-t">Biên dịch</div><div class="lz-d">Sửa lỗi cú pháp</div></div>
-<div class="lz-step"><div class="lz-k">05</div><div class="lz-t">Kiểm thử</div><div class="lz-d">Chạy thử, sửa lỗi logic</div></div>
-</div>
-<h3>Biên dịch (compile) vs Thông dịch (interpret)</h3>
-<table>
-<thead><tr><th></th><th>Biên dịch — C</th><th>Thông dịch — Python</th></tr></thead>
-<tbody>
-<tr><td>Cách chạy</td><td>Dịch cả file ra <code>.exe</code> trước, rồi mới chạy</td><td>Đọc &amp; chạy từng dòng lúc thực thi</td></tr>
-<tr><td>Tốc độ</td><td>Nhanh</td><td>Chậm hơn</td></tr>
-<tr><td>Lỗi</td><td>Bắt mọi lỗi cú pháp lúc biên dịch; chưa sửa xong thì chưa chạy</td><td>Lỗi cú pháp dừng trước dòng 1; lỗi lúc chạy chỉ lộ khi thực thi tới dòng sai</td></tr>
-</tbody>
-</table>
-<p>C là ngôn ngữ <strong>biên dịch</strong>, nên mỗi lần đổi code là phải biên dịch lại trước khi chạy.</p>
-<div class="callout"><span class="badge">★ Ngoài giáo trình</span> "Biên dịch" thực ra là <b>4 bước</b>: <b>tiền xử lý</b> (bung <code>#include</code>/<code>#define</code>) → <b>compile</b> (C → assembly) → <b>assemble</b> (assembly → mã máy <code>.o</code>) → <b>link</b> (gộp <code>.o</code> của bạn với thư viện thành một <code>.exe</code>). "Lỗi biên dịch" và "lỗi liên kết" là hai giai đoạn khác nhau hỏng.</div>`,
-  ]]), isFreePreview: true };
-
-const c1b = doc('prf192-1-2-cau-truc-chuong-trinh-c', '1.2 — The structure of a C program & tools|||1.2 — Cấu trúc một chương trình C & công cụ',
-  'Mổ xẻ chương trình C đầu tiên: #include, main(), comment, dấu ;. Cài & dùng DevC++ / VS Code + GCC.',
-  [[
-    `<span class="eyebrow">PRF192 · Chapter 1 · Lesson 1.2</span>
-<h2>The structure of a C program</h2>
-<p class="lead">Every C program has the same skeleton. Here is your first one — type it, compile it, run it.</p>
-<pre><code class="language-c">#include &lt;stdio.h&gt;   // 1. include the standard I/O library
-
-int main() {          // 2. execution starts here
-    printf("Xin chao PRF192!\\n");  // 3. print a line
-    return 0;         // 4. tell the OS: finished, no error
-}
-</code></pre>
-<div class="out"><b>Output:</b> Xin chao PRF192!</div>
-<h3>Line by line</h3>
-<ul>
-<li><code>#include &lt;stdio.h&gt;</code> — a <strong>preprocessor directive</strong> that loads the Standard Input/Output library so <code>printf</code>/<code>scanf</code> exist. No <code>;</code> after it.</li>
-<li><code>int main()</code> — the <strong>main function</strong>; a C program <em>always starts at</em> <code>main</code>. The <code>{ }</code> braces hold its body.</li>
-<li><code>printf(...)</code> — a statement that prints text. <code>\\n</code> means "newline".</li>
-<li><code>return 0;</code> — ends <code>main</code> and returns 0 = "success" to the operating system.</li>
-<li><strong>Comments</strong> — <code>// one line</code> or <code>/* many lines */</code>; ignored by the compiler, they explain the code.</li>
-<li><strong>Every statement ends with <code>;</code></strong> — the semicolon is how C knows one instruction is finished.</li>
-</ul>
-<div class="pitfall">Beginners forget the <code>;</code>, or write <code>Printf</code> (capital P). C is <strong>case-sensitive</strong> and requires <code>;</code> — missing either is an immediate compile error. And save the file with a <code>.c</code> extension (not <code>.cpp</code>).</div>
-<h3>Your tools</h3>
-<p>You need a <strong>compiler</strong> (GCC) and an <strong>editor</strong>. Two options:</p>
-<ul>
-<li><strong>DevC++ 6.3</strong> — the compiler + editor in one. File → New → Source File, save as <code>.c</code>, press <kbd>F11</kbd> (Compile &amp; Run).</li>
-<li><strong>VS Code + GCC</strong> — install VS Code, install GCC (MinGW-w64 on Windows, <code>xcode-select --install</code> on macOS, <code>sudo apt install gcc</code> on Linux), then compile in a terminal.</li>
-</ul>
-<pre><code class="language-c">gcc hello.c -o hello   // compile hello.c into a program "hello"
-./hello                // run it (Windows: .\\hello)
-</code></pre>
-<div class="pitfall">If the DevC++ result window opens then closes instantly, add <code>getchar();</code> before <code>return 0;</code>. If a terminal says <code>'gcc' is not recognized</code>, GCC isn't on the PATH — add it and <strong>reopen</strong> the terminal (PATH is read only when a new window opens).</div>`,
-    `<span class="eyebrow">PRF192 · Chương 1 · Bài 1.2</span>
-<h2>Cấu trúc một chương trình C</h2>
-<p class="lead">Mọi chương trình C đều có chung một khung. Đây là chương trình đầu tiên của bạn — gõ, biên dịch, chạy.</p>
-<pre><code class="language-c">#include &lt;stdio.h&gt;   // 1. nạp thư viện nhập/xuất chuẩn
-
-int main() {          // 2. chương trình bắt đầu chạy từ đây
-    printf("Xin chao PRF192!\\n");  // 3. in một dòng
-    return 0;         // 4. báo hệ điều hành: xong, không lỗi
-}
-</code></pre>
-<div class="out"><b>Kết quả:</b> Xin chao PRF192!</div>
-<h3>Giải thích từng dòng</h3>
-<ul>
-<li><code>#include &lt;stdio.h&gt;</code> — <strong>chỉ thị tiền xử lý</strong>, nạp thư viện Nhập/Xuất chuẩn để có <code>printf</code>/<code>scanf</code>. Không có <code>;</code> ở cuối.</li>
-<li><code>int main()</code> — <strong>hàm main</strong>; chương trình C <em>luôn bắt đầu từ</em> <code>main</code>. Cặp ngoặc <code>{ }</code> chứa thân hàm.</li>
-<li><code>printf(...)</code> — câu lệnh in chữ. <code>\\n</code> nghĩa là "xuống dòng".</li>
-<li><code>return 0;</code> — kết thúc <code>main</code>, trả về 0 = "thành công" cho hệ điều hành.</li>
-<li><strong>Chú thích</strong> — <code>// một dòng</code> hoặc <code>/* nhiều dòng */</code>; compiler bỏ qua, dùng để giải thích.</li>
-<li><strong>Mỗi câu lệnh kết thúc bằng <code>;</code></strong> — dấu chấm phẩy để C biết một chỉ thị đã xong.</li>
-</ul>
-<div class="pitfall">Người mới hay quên <code>;</code>, hoặc viết <code>Printf</code> (P hoa). C <strong>phân biệt hoa–thường</strong> và bắt buộc <code>;</code> — thiếu là báo lỗi biên dịch ngay. Và lưu file đuôi <code>.c</code> (không phải <code>.cpp</code>).</div>
-<h3>Công cụ</h3>
-<p>Bạn cần một <strong>trình biên dịch</strong> (GCC) và một <strong>trình soạn thảo</strong>. Hai lựa chọn:</p>
-<ul>
-<li><strong>DevC++ 6.3</strong> — gộp trình biên dịch + soạn thảo. File → New → Source File, lưu đuôi <code>.c</code>, nhấn <kbd>F11</kbd> (Compile &amp; Run).</li>
-<li><strong>VS Code + GCC</strong> — cài VS Code, cài GCC (MinGW-w64 trên Windows, <code>xcode-select --install</code> trên macOS, <code>sudo apt install gcc</code> trên Linux), rồi biên dịch trong terminal.</li>
-</ul>
-<pre><code class="language-c">gcc hello.c -o hello   // dịch hello.c thành chương trình "hello"
-./hello                // chạy (Windows: .\\hello)
-</code></pre>
-<div class="pitfall">Nếu cửa sổ kết quả DevC++ hiện rồi tắt ngay, thêm <code>getchar();</code> trước <code>return 0;</code>. Nếu terminal báo <code>'gcc' is not recognized</code>, GCC chưa vào PATH — thêm vào rồi <strong>mở lại</strong> terminal (PATH chỉ đọc khi mở cửa sổ mới).</div>`,
-  ]]);
-
-const c1q = quiz('prf192-1-quiz', 'Quiz 1 — Intro & tools|||Quiz 1 — Nhập môn & công cụ', [
-  { id: 'q1', question: 'Where does a C program start running?|||Chương trình C bắt đầu chạy từ đâu?', options: ['The first #include line|||Dòng #include đầu tiên', 'The main() function|||Hàm main()', 'The return 0 line|||Dòng return 0', 'The last line of the file|||Dòng cuối file'], correctIndex: 1, explanation: 'Mọi chương trình C luôn bắt đầu thực thi tại hàm main().' },
-  { id: 'q2', question: 'What kind of language is C?|||C là ngôn ngữ loại nào?', options: ['Interpreted|||Thông dịch', 'Compiled|||Biên dịch', 'Needs no translation|||Không cần dịch', 'Runs only on the web|||Chỉ chạy trên web'], correctIndex: 1, explanation: 'C được biên dịch ra mã máy (.exe) trước khi chạy.' },
-  { id: 'q3', question: 'Which character ends each C statement?|||Mỗi câu lệnh C kết thúc bằng ký tự nào?', options: ['Comma ,|||Dấu phẩy ,', 'Period .|||Dấu chấm .', 'Semicolon ;|||Dấu chấm phẩy ;', 'Newline|||Ký tự xuống dòng'], correctIndex: 2, explanation: 'Dấu ; báo cho C biết một câu lệnh đã kết thúc.' },
-]);
-
-/* ═══════════════ CHƯƠNG 2 — BIẾN, KIỂU, BỘ NHỚ, I/O & BIỂU THỨC (CLO2) ═══════════════ */
-const c2a = doc('prf192-2-1-bien-kieu-io', '2.1 — Variables, constants, types, memory & I/O|||2.1 — Biến, hằng, kiểu dữ liệu, bộ nhớ & nhập/xuất',
-  'Khai báo biến/hằng, các kiểu cơ bản và kích thước bộ nhớ, nhập/xuất bằng scanf & printf, bảng chỉ định định dạng.',
-  [[
-    `<span class="eyebrow">PRF192 · Chapter 2 · Lesson 2.1</span>
-<h2>Variables, constants, data types &amp; memory</h2>
-<p class="lead">A <strong>variable</strong> is a named box in memory that holds a value you can change. You must declare its <strong>type</strong> so C knows how many bytes to reserve and how to interpret them.</p>
-<pre><code class="language-c">int age = 20;            // whole number
-float gpa = 8.5f;        // real number (single precision)
-double pi = 3.14159;     // real number (double precision)
-char grade = 'A';        // one character (stored as a number)
-const float VAT = 0.1f;  // a CONSTANT — cannot be changed later
-</code></pre>
-<h3>Basic types &amp; memory (typical sizes)</h3>
-<table>
-<thead><tr><th>Type</th><th>Meaning</th><th>Size</th><th>printf/scanf</th></tr></thead>
-<tbody>
-<tr><td><code>int</code></td><td>whole number</td><td>4 bytes</td><td><code>%d</code></td></tr>
-<tr><td><code>long</code></td><td>large whole number</td><td>4–8 bytes</td><td><code>%ld</code></td></tr>
-<tr><td><code>float</code></td><td>real, ~7 digits</td><td>4 bytes</td><td><code>%f</code></td></tr>
-<tr><td><code>double</code></td><td>real, ~15 digits</td><td>8 bytes</td><td><code>%lf</code></td></tr>
-<tr><td><code>char</code></td><td>one character</td><td>1 byte</td><td><code>%c</code></td></tr>
-</tbody>
-</table>
-<p>A <code>char</code> is really a small integer holding the character's ASCII code — <code>'A'</code> is 65. That is why <code>'A' + 1</code> gives <code>'B'</code>.</p>
-<h3>Output &amp; input</h3>
-<pre><code class="language-c">#include &lt;stdio.h&gt;
-int main() {
-    int age;
-    float gpa;
-    printf("Nhap tuoi va GPA: ");
-    scanf("%d %f", &amp;age, &amp;gpa);          // note the &amp; before each variable
-    printf("Tuoi=%d, GPA=%.2f\\n", age, gpa);  // %.2f = 2 decimals
-    return 0;
-}
-</code></pre>
-<div class="pitfall"><code>scanf</code> needs the <strong>address</strong> of the variable, so you write <code>&amp;age</code> (the <code>&amp;</code> operator). Forgetting the <code>&amp;</code> is the #1 beginner crash. Also match the specifier to the type: reading an <code>int</code> with <code>%f</code> corrupts the value.</div>`,
-    `<span class="eyebrow">PRF192 · Chương 2 · Bài 2.1</span>
-<h2>Biến, hằng, kiểu dữ liệu &amp; bộ nhớ</h2>
-<p class="lead"><strong>Biến</strong> là một ô nhớ có tên, chứa giá trị bạn có thể thay đổi. Phải khai báo <strong>kiểu</strong> để C biết cấp bao nhiêu byte và diễn giải chúng ra sao.</p>
-<pre><code class="language-c">int age = 20;            // số nguyên
-float gpa = 8.5f;        // số thực (độ chính xác đơn)
-double pi = 3.14159;     // số thực (độ chính xác kép)
-char grade = 'A';        // một ký tự (lưu dưới dạng số)
-const float VAT = 0.1f;  // HẰNG SỐ — không sửa được về sau
-</code></pre>
-<h3>Các kiểu cơ bản &amp; bộ nhớ (kích thước điển hình)</h3>
-<table>
-<thead><tr><th>Kiểu</th><th>Ý nghĩa</th><th>Kích thước</th><th>printf/scanf</th></tr></thead>
-<tbody>
-<tr><td><code>int</code></td><td>số nguyên</td><td>4 byte</td><td><code>%d</code></td></tr>
-<tr><td><code>long</code></td><td>số nguyên lớn</td><td>4–8 byte</td><td><code>%ld</code></td></tr>
-<tr><td><code>float</code></td><td>số thực, ~7 chữ số</td><td>4 byte</td><td><code>%f</code></td></tr>
-<tr><td><code>double</code></td><td>số thực, ~15 chữ số</td><td>8 byte</td><td><code>%lf</code></td></tr>
-<tr><td><code>char</code></td><td>một ký tự</td><td>1 byte</td><td><code>%c</code></td></tr>
-</tbody>
-</table>
-<p><code>char</code> thực ra là số nguyên nhỏ chứa mã ASCII của ký tự — <code>'A'</code> là 65. Vì thế <code>'A' + 1</code> cho <code>'B'</code>.</p>
-<h3>Xuất &amp; nhập</h3>
-<pre><code class="language-c">#include &lt;stdio.h&gt;
-int main() {
-    int age;
-    float gpa;
-    printf("Nhap tuoi va GPA: ");
-    scanf("%d %f", &amp;age, &amp;gpa);          // chú ý dấu &amp; trước mỗi biến
-    printf("Tuoi=%d, GPA=%.2f\\n", age, gpa);  // %.2f = 2 chữ số thập phân
-    return 0;
-}
-</code></pre>
-<div class="pitfall"><code>scanf</code> cần <strong>địa chỉ</strong> của biến, nên viết <code>&amp;age</code> (toán tử <code>&amp;</code>). Quên <code>&amp;</code> là lỗi vỡ chương trình số 1 của người mới. Cũng phải khớp chỉ định với kiểu: đọc <code>int</code> bằng <code>%f</code> sẽ hỏng giá trị.</div>`,
-  ]]);
-
-const c2b = doc('prf192-2-2-bieu-thuc-toan-tu', '2.2 — Expressions, operators & precedence|||2.2 — Biểu thức, toán tử & độ ưu tiên',
-  'Toán tử số học/quan hệ/logic/bit/gán rút gọn, trộn kiểu & ép kiểu, và bảng độ ưu tiên toán tử.',
-  [[
-    `<span class="eyebrow">PRF192 · Chapter 2 · Lesson 2.2</span>
-<h2>Expressions &amp; operators</h2>
-<p class="lead">An <strong>expression</strong> combines values and operators to produce a new value. C has several operator groups.</p>
-<table>
-<thead><tr><th>Group</th><th>Operators</th><th>Example</th></tr></thead>
-<tbody>
-<tr><td>Arithmetic</td><td><code>+ - * / %</code></td><td><code>7 % 3</code> → 1 (remainder)</td></tr>
-<tr><td>Relational</td><td><code>== != &lt; &gt; &lt;= &gt;=</code></td><td><code>a &gt;= 5</code> → 1 or 0</td></tr>
-<tr><td>Logical</td><td><code>&amp;&amp; || !</code></td><td><code>(a&gt;0) &amp;&amp; (a&lt;10)</code></td></tr>
-<tr><td>Bitwise</td><td><code>&amp; | ^ ~ &lt;&lt; &gt;&gt;</code></td><td><code>5 &amp; 3</code> → 1</td></tr>
-<tr><td>Shorthand assign</td><td><code>+= -= *= /= %=</code></td><td><code>x += 2</code> is <code>x = x + 2</code></td></tr>
-<tr><td>Increment/decrement</td><td><code>++ --</code></td><td><code>i++</code> adds 1</td></tr>
-</tbody>
-</table>
-<h3>Integer division &amp; type mixing</h3>
-<pre><code class="language-c">int a = 7, b = 2;
-printf("%d\\n", a / b);          // 3  (integer division drops the fraction!)
-printf("%f\\n", (float)a / b);   // 3.500000  (cast a to float first)
-printf("%d\\n", 7 % 2);          // 1  (modulo = remainder)
-</code></pre>
-<p><strong>Casting</strong> <code>(float)a</code> converts a value's type on the fly. When you mix an <code>int</code> and a <code>float</code>, C promotes the <code>int</code> to <code>float</code> — but <code>a / b</code> above is computed as <em>int</em> before any promotion, which is why the cast must come first.</p>
-<h3>Operator precedence (high → low)</h3>
-<table>
-<thead><tr><th>Level</th><th>Operators</th></tr></thead>
-<tbody>
-<tr><td>1 (highest)</td><td><code>()</code> <code>[]</code> — grouping, indexing</td></tr>
-<tr><td>2</td><td><code>!</code> <code>++</code> <code>--</code> <code>(type)</code> unary <code>-</code></td></tr>
-<tr><td>3</td><td><code>* / %</code></td></tr>
-<tr><td>4</td><td><code>+ -</code></td></tr>
-<tr><td>5</td><td><code>&lt; &lt;= &gt; &gt;=</code></td></tr>
-<tr><td>6</td><td><code>== !=</code></td></tr>
-<tr><td>7</td><td><code>&amp;&amp;</code></td></tr>
-<tr><td>8</td><td><code>||</code></td></tr>
-<tr><td>9 (lowest)</td><td><code>= += -= *= /=</code></td></tr>
-</tbody>
-</table>
-<div class="callout"><span class="badge">Workshop</span> Compute a bill: <code>total = price * qty; if (total &gt; 1000000) total *= 0.9;</code> — <code>*</code> binds tighter than <code>=</code>, and <code>*=</code> applies the 10% discount in place.</div>
-<div class="pitfall">Confusing <code>=</code> (assign) with <code>==</code> (compare) is a classic bug: <code>if (x = 5)</code> <em>assigns</em> 5 to x and is always true. Use <code>==</code> to compare.</div>`,
-    `<span class="eyebrow">PRF192 · Chương 2 · Bài 2.2</span>
-<h2>Biểu thức &amp; toán tử</h2>
-<p class="lead"><strong>Biểu thức</strong> kết hợp các giá trị và toán tử để tạo ra giá trị mới. C có nhiều nhóm toán tử.</p>
-<table>
-<thead><tr><th>Nhóm</th><th>Toán tử</th><th>Ví dụ</th></tr></thead>
-<tbody>
-<tr><td>Số học</td><td><code>+ - * / %</code></td><td><code>7 % 3</code> → 1 (số dư)</td></tr>
-<tr><td>Quan hệ</td><td><code>== != &lt; &gt; &lt;= &gt;=</code></td><td><code>a &gt;= 5</code> → 1 hoặc 0</td></tr>
-<tr><td>Logic</td><td><code>&amp;&amp; || !</code></td><td><code>(a&gt;0) &amp;&amp; (a&lt;10)</code></td></tr>
-<tr><td>Bit</td><td><code>&amp; | ^ ~ &lt;&lt; &gt;&gt;</code></td><td><code>5 &amp; 3</code> → 1</td></tr>
-<tr><td>Gán rút gọn</td><td><code>+= -= *= /= %=</code></td><td><code>x += 2</code> là <code>x = x + 2</code></td></tr>
-<tr><td>Tăng/giảm</td><td><code>++ --</code></td><td><code>i++</code> cộng 1</td></tr>
-</tbody>
-</table>
-<h3>Chia nguyên &amp; trộn kiểu</h3>
-<pre><code class="language-c">int a = 7, b = 2;
-printf("%d\\n", a / b);          // 3  (chia nguyên bỏ phần lẻ!)
-printf("%f\\n", (float)a / b);   // 3.500000  (ép a sang float trước)
-printf("%d\\n", 7 % 2);          // 1  (modulo = số dư)
-</code></pre>
-<p><strong>Ép kiểu</strong> <code>(float)a</code> đổi kiểu của giá trị ngay tại chỗ. Khi trộn <code>int</code> với <code>float</code>, C nâng <code>int</code> lên <code>float</code> — nhưng <code>a / b</code> ở trên tính theo <em>int</em> trước khi nâng, nên phải ép kiểu trước.</p>
-<h3>Độ ưu tiên toán tử (cao → thấp)</h3>
-<table>
-<thead><tr><th>Mức</th><th>Toán tử</th></tr></thead>
-<tbody>
-<tr><td>1 (cao nhất)</td><td><code>()</code> <code>[]</code> — gom nhóm, chỉ số</td></tr>
-<tr><td>2</td><td><code>!</code> <code>++</code> <code>--</code> <code>(kiểu)</code> dấu <code>-</code> một ngôi</td></tr>
-<tr><td>3</td><td><code>* / %</code></td></tr>
-<tr><td>4</td><td><code>+ -</code></td></tr>
-<tr><td>5</td><td><code>&lt; &lt;= &gt; &gt;=</code></td></tr>
-<tr><td>6</td><td><code>== !=</code></td></tr>
-<tr><td>7</td><td><code>&amp;&amp;</code></td></tr>
-<tr><td>8</td><td><code>||</code></td></tr>
-<tr><td>9 (thấp nhất)</td><td><code>= += -= *= /=</code></td></tr>
-</tbody>
-</table>
-<div class="callout"><span class="badge">Workshop</span> Tính hoá đơn: <code>total = price * qty; if (total &gt; 1000000) total *= 0.9;</code> — <code>*</code> ưu tiên hơn <code>=</code>, còn <code>*=</code> giảm giá 10% ngay tại chỗ.</div>
-<div class="pitfall">Nhầm <code>=</code> (gán) với <code>==</code> (so sánh) là lỗi kinh điển: <code>if (x = 5)</code> <em>gán</em> 5 cho x và luôn đúng. Muốn so sánh phải dùng <code>==</code>.</div>`,
-  ]]);
-
-const c2q = quiz('prf192-2-quiz', 'Quiz 2 — Variables & expressions|||Quiz 2 — Biến & biểu thức', [
-  { id: 'q1', question: 'In C, what does 7 / 2 evaluate to?|||Trong C, 7 / 2 cho kết quả bao nhiêu?', options: ['3.5', '3', '4', 'Error|||Báo lỗi'], correctIndex: 1, explanation: 'Chia hai số nguyên là chia nguyên, bỏ phần lẻ → 3. Muốn 3.5 phải ép kiểu (float).' },
-  { id: 'q2', question: 'Why must you write &amp;age in scanf("%d", &amp;age)?|||Vì sao phải viết &amp;age trong scanf("%d", &amp;age)?', options: ['To make it faster|||Để chạy nhanh hơn', 'scanf needs the memory ADDRESS of the variable|||scanf cần ĐỊA CHỈ ô nhớ của biến', 'It is optional|||Có cũng được không cũng được', 'To print the value|||Để in giá trị'], correctIndex: 1, explanation: 'scanf ghi giá trị vào biến nên cần địa chỉ của nó (&amp;).' },
-  { id: 'q3', question: 'What is the value of the expression (3 > 2) && (5 == 5)?|||Biểu thức (3 > 2) && (5 == 5) có giá trị?', options: ['0 (false)|||0 (sai)', '1 (true)|||1 (đúng)', '5', 'Error|||Lỗi'], correctIndex: 1, explanation: 'Cả hai vế đều đúng (1), AND của 1 và 1 là 1 (true).' },
-]);
-
-/* ═══════════════ CHƯƠNG 3 — LẬP TRÌNH CẤU TRÚC (CLO3) [Workshop 1] ═══════════════ */
-const c3 = doc('prf192-3-1-re-nhanh-vong-lap', '3.1 — Structured programming: selection & loops|||3.1 — Lập trình cấu trúc: rẽ nhánh & vòng lặp',
-  'if-else, switch-case; vòng lặp for/while/do-while; break/continue; ví dụ Workshop 1 (menu máy tính).',
-  [[
-    `<span class="eyebrow">PRF192 · Chapter 3 · Lesson 3.1</span>
-<h2>Selection: if / else / switch</h2>
-<p class="lead">By default a program runs top to bottom. <strong>Selection</strong> lets it choose a branch based on a condition.</p>
-<pre><code class="language-c">int score = 7;
-if (score &gt;= 8)        printf("Gioi\\n");
-else if (score &gt;= 5)   printf("Dat\\n");
-else                   printf("Truot\\n");
-</code></pre>
-<p>When you branch on one variable equal to fixed values, <code>switch</code> is cleaner. Each <code>case</code> needs a <code>break</code> or it "falls through" to the next.</p>
-<pre><code class="language-c">int choice = 2;
-switch (choice) {
-    case 1: printf("Cong\\n"); break;
-    case 2: printf("Tru\\n");  break;
-    default: printf("Sai lua chon\\n");
-}
-</code></pre>
-<h3>Loops: for / while / do-while</h3>
-<table>
-<thead><tr><th>Loop</th><th>Use when</th></tr></thead>
-<tbody>
-<tr><td><code>for</code></td><td>You know how many times (a counter)</td></tr>
-<tr><td><code>while</code></td><td>Repeat while a condition holds (0..N times)</td></tr>
-<tr><td><code>do-while</code></td><td>Run at least once, then check</td></tr>
-</tbody>
-</table>
-<pre><code class="language-c">for (int i = 1; i &lt;= 5; i++) printf("%d ", i);   // 1 2 3 4 5
-
-int n = 5;
-while (n &gt; 0) { printf("%d ", n); n--; }         // 5 4 3 2 1
-
-int x;
-do { printf("Nhap so &gt; 0: "); scanf("%d", &amp;x); } while (x &lt;= 0);
-</code></pre>
-<p><code>break</code> exits a loop early; <code>continue</code> skips to the next iteration.</p>
-<div class="callout"><span class="badge">Workshop 1</span> A menu calculator: loop showing +, −, ×, ÷ and Quit; read the choice with <code>switch</code>; keep looping with <code>do-while</code> until the user picks Quit. Guard division by zero with an <code>if</code>.</div>
-<div class="pitfall">An <strong>infinite loop</strong> happens when the condition never becomes false — forgetting <code>n--</code> above loops forever. And a stray <code>;</code> right after <code>for(...)</code> makes an empty loop body. Watch <strong>off-by-one</strong>: <code>i &lt;= 5</code> runs 5 times, <code>i &lt; 5</code> runs 4.</div>`,
-    `<span class="eyebrow">PRF192 · Chương 3 · Bài 3.1</span>
-<h2>Rẽ nhánh: if / else / switch</h2>
-<p class="lead">Mặc định chương trình chạy từ trên xuống. <strong>Rẽ nhánh</strong> cho phép chọn một hướng đi tuỳ điều kiện.</p>
-<pre><code class="language-c">int score = 7;
-if (score &gt;= 8)        printf("Gioi\\n");
-else if (score &gt;= 5)   printf("Dat\\n");
-else                   printf("Truot\\n");
-</code></pre>
-<p>Khi rẽ theo một biến bằng các giá trị cố định, <code>switch</code> gọn hơn. Mỗi <code>case</code> cần <code>break</code>, thiếu là "rơi" xuống case kế.</p>
-<pre><code class="language-c">int choice = 2;
-switch (choice) {
-    case 1: printf("Cong\\n"); break;
-    case 2: printf("Tru\\n");  break;
-    default: printf("Sai lua chon\\n");
-}
-</code></pre>
-<h3>Vòng lặp: for / while / do-while</h3>
-<table>
-<thead><tr><th>Vòng lặp</th><th>Dùng khi</th></tr></thead>
-<tbody>
-<tr><td><code>for</code></td><td>Biết trước số lần (có biến đếm)</td></tr>
-<tr><td><code>while</code></td><td>Lặp khi điều kiện còn đúng (0..N lần)</td></tr>
-<tr><td><code>do-while</code></td><td>Chạy ít nhất một lần rồi mới kiểm</td></tr>
-</tbody>
-</table>
-<pre><code class="language-c">for (int i = 1; i &lt;= 5; i++) printf("%d ", i);   // 1 2 3 4 5
-
-int n = 5;
-while (n &gt; 0) { printf("%d ", n); n--; }         // 5 4 3 2 1
-
-int x;
-do { printf("Nhap so &gt; 0: "); scanf("%d", &amp;x); } while (x &lt;= 0);
-</code></pre>
-<p><code>break</code> thoát vòng lặp sớm; <code>continue</code> nhảy sang vòng kế.</p>
-<div class="callout"><span class="badge">Workshop 1</span> Máy tính có menu: lặp hiển thị +, −, ×, ÷ và Thoát; đọc lựa chọn bằng <code>switch</code>; giữ lặp bằng <code>do-while</code> tới khi người dùng chọn Thoát. Chặn chia cho 0 bằng <code>if</code>.</div>
-<div class="pitfall"><strong>Vòng lặp vô tận</strong> xảy ra khi điều kiện không bao giờ sai — quên <code>n--</code> ở trên là lặp mãi. Một dấu <code>;</code> lạc ngay sau <code>for(...)</code> tạo thân lặp rỗng. Coi chừng <strong>lệch một đơn vị</strong>: <code>i &lt;= 5</code> chạy 5 lần, <code>i &lt; 5</code> chạy 4.</div>`,
-  ]]);
-
-const c3q = quiz('prf192-3-quiz', 'Quiz 3 — Selection & loops|||Quiz 3 — Rẽ nhánh & vòng lặp', [
-  { id: 'q1', question: 'Which loop always runs its body at least once?|||Vòng lặp nào luôn chạy thân ít nhất một lần?', options: ['for', 'while', 'do-while', 'None|||Không cái nào'], correctIndex: 2, explanation: 'do-while kiểm điều kiện SAU khi chạy thân, nên chạy ít nhất một lần.' },
-  { id: 'q2', question: 'What happens if a switch case has no break?|||Nếu một case trong switch thiếu break thì sao?', options: ['Compile error|||Lỗi biên dịch', 'It falls through into the next case|||Nó rơi xuống case kế tiếp', 'It skips the case|||Bỏ qua case đó', 'Nothing runs|||Không chạy gì'], correctIndex: 1, explanation: 'Thiếu break, luồng "rơi" (fall-through) và chạy tiếp case bên dưới.' },
-  { id: 'q3', question: 'How many times does for(int i=0; i<5; i++) run?|||for(int i=0; i<5; i++) chạy bao nhiêu lần?', options: ['4', '5', '6', 'Infinite|||Vô tận'], correctIndex: 1, explanation: 'i chạy 0,1,2,3,4 → 5 lần (điều kiện i<5).' },
-]);
-
-/* ═══════════════ CHƯƠNG 4 — MODULE & HÀM (CLO4) [Workshop 2] ═══════════════ */
-const c4 = doc('prf192-4-1-module-ham', '4.1 — Modules & functions|||4.1 — Module & hàm',
-  'Tư duy chia module, định nghĩa/prototype/gọi hàm, truyền tham số theo giá trị, hàm dựng sẵn vs tự viết, phạm vi biến.',
-  [[
-    `<span class="eyebrow">PRF192 · Chapter 4 · Lesson 4.1</span>
-<h2>Modules &amp; functions</h2>
-<p class="lead">A <strong>function</strong> is a named block of code that does one job. Splitting a big problem into small functions (<strong>modular design</strong>) makes code easier to read, test, reuse and debug. Good functions do <em>one thing</em>, have a clear name, and hide their details behind their signature.</p>
-<pre><code class="language-c">#include &lt;stdio.h&gt;
-
-int add(int a, int b);   // 1. prototype (declaration)
-
-int main() {
-    int s = add(3, 4);   // 3. call
-    printf("Tong = %d\\n", s);   // Tong = 7
-    return 0;
-}
-
-int add(int a, int b) { // 2. definition
-    return a + b;        // returns a value to the caller
-}
-</code></pre>
-<ul>
-<li><strong>Prototype</strong> — tells the compiler the function's shape before <code>main</code> uses it.</li>
-<li><strong>Definition</strong> — the actual body.</li>
-<li><strong>Parameters</strong> <code>a, b</code> receive a <strong>copy</strong> of the arguments — this is <strong>pass by value</strong>.</li>
-<li><strong>Return</strong> value goes back to the caller; a function that returns nothing is <code>void</code>.</li>
-</ul>
-<h3>Pass by value — the copy trap</h3>
-<pre><code class="language-c">void tryChange(int x) { x = 99; }   // changes only the LOCAL copy
-
-int main() {
-    int a = 5;
-    tryChange(a);
-    printf("%d\\n", a);   // still 5 — the original is untouched
-    return 0;
-}
-</code></pre>
-<p>To let a function modify the caller's variable you must pass its <strong>address</strong> (a pointer) — that's Chapter 5.</p>
-<h3>Built-in vs user-defined &amp; variable scope</h3>
-<p><strong>Built-in</strong> functions come from libraries (<code>printf</code>, <code>sqrt</code>, <code>strlen</code>). <strong>User-defined</strong> ones you write yourself. A variable declared inside a function is <strong>local</strong> — it exists only there; a variable declared outside all functions is <strong>global</strong> — visible everywhere (use sparingly).</p>
-<div class="callout"><span class="badge">Workshop 2</span> Write a small library: <code>int isPrime(int n)</code>, <code>long factorial(int n)</code>, <code>int gcd(int a, int b)</code>. Test each from <code>main</code> with a menu. Every function does one job and returns a value.</div>
-<div class="pitfall">Calling a function before the compiler has seen its prototype gives a warning and can pass arguments wrongly. Put prototypes above <code>main</code> (or in a header). And don't return the address of a <em>local</em> variable — it dies when the function ends.</div>`,
-    `<span class="eyebrow">PRF192 · Chương 4 · Bài 4.1</span>
-<h2>Module &amp; hàm</h2>
-<p class="lead"><strong>Hàm</strong> là một khối lệnh có tên, làm một việc. Chia bài toán lớn thành các hàm nhỏ (<strong>thiết kế module</strong>) giúp code dễ đọc, dễ kiểm thử, dễ tái dùng và dễ debug. Hàm tốt làm <em>một việc</em>, tên rõ ràng, và giấu chi tiết sau chữ ký của nó.</p>
-<pre><code class="language-c">#include &lt;stdio.h&gt;
-
-int add(int a, int b);   // 1. prototype (khai báo)
-
-int main() {
-    int s = add(3, 4);   // 3. lời gọi
-    printf("Tong = %d\\n", s);   // Tong = 7
-    return 0;
-}
-
-int add(int a, int b) { // 2. định nghĩa
-    return a + b;        // trả giá trị về nơi gọi
-}
-</code></pre>
-<ul>
-<li><strong>Prototype</strong> — báo cho compiler hình dạng hàm trước khi <code>main</code> dùng.</li>
-<li><strong>Định nghĩa</strong> — phần thân thật.</li>
-<li><strong>Tham số</strong> <code>a, b</code> nhận một <strong>bản sao</strong> của đối số — đây là <strong>truyền theo giá trị</strong>.</li>
-<li><strong>Giá trị trả về</strong> quay lại nơi gọi; hàm không trả gì là <code>void</code>.</li>
-</ul>
-<h3>Truyền theo giá trị — cái bẫy bản sao</h3>
-<pre><code class="language-c">void tryChange(int x) { x = 99; }   // chỉ đổi bản sao CỤC BỘ
-
-int main() {
-    int a = 5;
-    tryChange(a);
-    printf("%d\\n", a);   // vẫn là 5 — biến gốc không đổi
-    return 0;
-}
-</code></pre>
-<p>Muốn hàm sửa được biến của nơi gọi thì phải truyền <strong>địa chỉ</strong> (con trỏ) — đó là Chương 5.</p>
-<h3>Hàm dựng sẵn vs tự viết &amp; phạm vi biến</h3>
-<p>Hàm <strong>dựng sẵn</strong> đến từ thư viện (<code>printf</code>, <code>sqrt</code>, <code>strlen</code>). Hàm <strong>tự viết</strong> do bạn viết ra. Biến khai báo trong một hàm là <strong>cục bộ (local)</strong> — chỉ tồn tại ở đó; biến khai báo ngoài mọi hàm là <strong>toàn cục (global)</strong> — thấy ở mọi nơi (hạn chế dùng).</p>
-<div class="callout"><span class="badge">Workshop 2</span> Viết một thư viện nhỏ: <code>int isPrime(int n)</code>, <code>long factorial(int n)</code>, <code>int gcd(int a, int b)</code>. Gọi thử từ <code>main</code> qua menu. Mỗi hàm làm một việc và trả về một giá trị.</div>
-<div class="pitfall">Gọi hàm trước khi compiler thấy prototype sẽ có cảnh báo và có thể truyền sai đối số. Đặt prototype trên <code>main</code> (hoặc trong header). Và đừng trả về địa chỉ của biến <em>cục bộ</em> — nó chết khi hàm kết thúc.</div>`,
-  ]]);
-
-const c4q = quiz('prf192-4-quiz', 'Quiz 4 — Functions|||Quiz 4 — Hàm', [
-  { id: 'q1', question: 'C passes arguments to a function by default using...|||Mặc định C truyền đối số vào hàm theo...', options: ['Pass by reference|||Truyền theo tham chiếu', 'Pass by value (a copy)|||Truyền theo giá trị (bản sao)', 'Global variables|||Biến toàn cục', 'Pointers only|||Chỉ con trỏ'], correctIndex: 1, explanation: 'Hàm nhận bản sao đối số, nên sửa tham số không đổi biến gốc.' },
-  { id: 'q2', question: 'A function that returns no value has return type...|||Hàm không trả về giá trị có kiểu trả về là...', options: ['int', 'void', 'null', 'empty'], correctIndex: 1, explanation: 'void nghĩa là hàm không trả về giá trị nào.' },
-  { id: 'q3', question: 'A variable declared inside a function is...|||Biến khai báo bên trong một hàm là...', options: ['Global|||Toàn cục', 'Local — visible only in that function|||Cục bộ — chỉ thấy trong hàm đó', 'Constant|||Hằng số', 'Static to the whole program|||Tĩnh toàn chương trình'], correctIndex: 1, explanation: 'Biến cục bộ chỉ tồn tại và nhìn thấy trong hàm khai báo nó.' },
-]);
-
-/* ═══════════════ CHƯƠNG 5 — CON TRỎ (CLO5) ═══════════════ */
-const c5 = doc('prf192-5-1-con-tro', '5.1 — Pointers: address, dereference, pass-by-reference & malloc|||5.1 — Con trỏ: địa chỉ, truy xuất, pass-by-reference & malloc',
-  'Khai báo con trỏ, toán tử & và *, truyền tham chiếu để hàm sửa biến gốc, cấp phát động malloc/free.',
-  [[
-    `<span class="eyebrow">PRF192 · Chapter 5 · Lesson 5.1</span>
-<h2>Pointers — the key idea of C</h2>
-<p class="lead">Every variable lives at an <strong>address</strong> in memory. A <strong>pointer</strong> is a variable that stores an address. This is the hardest but most important idea in C.</p>
-<pre><code class="language-c">int x = 10;
-int *p = &amp;x;     // p holds the ADDRESS of x  (&amp; = "address of")
-printf("%d\\n", *p);   // 10  (*p = "the value AT that address" = dereference)
-*p = 20;         // write through the pointer
-printf("%d\\n", x);    // 20  (x changed via p!)
-</code></pre>
-<ul>
-<li><code>&amp;x</code> — the <strong>address of</strong> x.</li>
-<li><code>int *p</code> — p is a <strong>pointer to int</strong>.</li>
-<li><code>*p</code> — <strong>dereference</strong>: the value stored at the address p holds.</li>
-</ul>
-<h3>Pass by reference — let a function change your variable</h3>
-<p>In Chapter 4, <code>tryChange</code> couldn't change the original because C passes copies. Pass the <strong>address</strong> and the function can reach the real variable:</p>
-<pre><code class="language-c">void swap(int *a, int *b) {   // receive addresses
-    int tmp = *a; *a = *b; *b = tmp;   // work through the pointers
-}
-int main() {
-    int x = 1, y = 2;
-    swap(&amp;x, &amp;y);       // pass addresses
-    printf("%d %d\\n", x, y);   // 2 1  — really swapped
-    return 0;
-}
-</code></pre>
-<p>This is exactly why <code>scanf("%d", &amp;age)</code> needs the <code>&amp;</code>: <code>scanf</code> receives the address so it can write into your variable.</p>
-<h3>Dynamic allocation — memory you ask for at runtime</h3>
-<pre><code class="language-c">#include &lt;stdlib.h&gt;
-int n = 5;
-int *arr = (int*) malloc(n * sizeof(int));  // ask for n ints on the HEAP
-if (arr == NULL) return 1;                  // always check!
-for (int i = 0; i &lt; n; i++) arr[i] = i * i;
-free(arr);                                  // give it back — no leaks
-arr = NULL;                                 // avoid a dangling pointer
-</code></pre>
-<div class="pitfall">Three classic pointer crashes: (1) using an <strong>uninitialized</strong> pointer (points nowhere → segfault); (2) forgetting <code>free</code> → a <strong>memory leak</strong>; (3) using memory <em>after</em> <code>free</code> → a <strong>dangling pointer</strong>. Set a pointer to <code>NULL</code> after freeing, and never dereference <code>NULL</code>.</div>`,
-    `<span class="eyebrow">PRF192 · Chương 5 · Bài 5.1</span>
-<h2>Con trỏ — ý tưởng cốt lõi của C</h2>
-<p class="lead">Mọi biến đều nằm ở một <strong>địa chỉ</strong> trong bộ nhớ. <strong>Con trỏ</strong> là biến chứa một địa chỉ. Đây là phần khó nhất nhưng quan trọng nhất của C.</p>
-<pre><code class="language-c">int x = 10;
-int *p = &amp;x;     // p giữ ĐỊA CHỈ của x  (&amp; = "địa chỉ của")
-printf("%d\\n", *p);   // 10  (*p = "giá trị TẠI địa chỉ đó" = truy xuất)
-*p = 20;         // ghi thông qua con trỏ
-printf("%d\\n", x);    // 20  (x đổi qua p!)
-</code></pre>
-<ul>
-<li><code>&amp;x</code> — <strong>địa chỉ của</strong> x.</li>
-<li><code>int *p</code> — p là <strong>con trỏ tới int</strong>.</li>
-<li><code>*p</code> — <strong>truy xuất (dereference)</strong>: giá trị lưu ở địa chỉ mà p giữ.</li>
-</ul>
-<h3>Truyền tham chiếu — cho hàm sửa được biến của bạn</h3>
-<p>Ở Chương 4, <code>tryChange</code> không đổi được biến gốc vì C truyền bản sao. Truyền <strong>địa chỉ</strong> thì hàm chạm được biến thật:</p>
-<pre><code class="language-c">void swap(int *a, int *b) {   // nhận địa chỉ
-    int tmp = *a; *a = *b; *b = tmp;   // làm việc qua con trỏ
-}
-int main() {
-    int x = 1, y = 2;
-    swap(&amp;x, &amp;y);       // truyền địa chỉ
-    printf("%d %d\\n", x, y);   // 2 1  — hoán đổi thật
-    return 0;
-}
-</code></pre>
-<p>Đây đúng là lý do <code>scanf("%d", &amp;age)</code> cần <code>&amp;</code>: <code>scanf</code> nhận địa chỉ để ghi được vào biến của bạn.</p>
-<h3>Cấp phát động — xin bộ nhớ lúc chạy</h3>
-<pre><code class="language-c">#include &lt;stdlib.h&gt;
-int n = 5;
-int *arr = (int*) malloc(n * sizeof(int));  // xin n số nguyên trên HEAP
-if (arr == NULL) return 1;                  // luôn kiểm tra!
-for (int i = 0; i &lt; n; i++) arr[i] = i * i;
-free(arr);                                  // trả lại — không rò rỉ
-arr = NULL;                                 // tránh con trỏ treo
-</code></pre>
-<div class="pitfall">Ba lỗi con trỏ kinh điển: (1) dùng con trỏ <strong>chưa khởi tạo</strong> (trỏ lung tung → segfault); (2) quên <code>free</code> → <strong>rò rỉ bộ nhớ</strong>; (3) dùng bộ nhớ <em>sau khi</em> <code>free</code> → <strong>con trỏ treo</strong>. Gán <code>NULL</code> sau khi free, và không bao giờ truy xuất <code>NULL</code>.</div>`,
-  ]]);
-
-const c5q = quiz('prf192-5-quiz', 'Quiz 5 — Pointers|||Quiz 5 — Con trỏ', [
-  { id: 'q1', question: 'What does the & operator give you?|||Toán tử & cho bạn cái gì?', options: ['The value of a variable|||Giá trị của biến', 'The address of a variable|||Địa chỉ của biến', 'The type of a variable|||Kiểu của biến', 'A copy of a variable|||Bản sao của biến'], correctIndex: 1, explanation: '& là "địa chỉ của" — cho địa chỉ ô nhớ của biến.' },
-  { id: 'q2', question: 'If int *p = &x, what is *p?|||Nếu int *p = &x, thì *p là gì?', options: ['The address of p|||Địa chỉ của p', 'The value stored at x|||Giá trị lưu tại x', 'A new variable|||Một biến mới', 'NULL'], correctIndex: 1, explanation: '*p truy xuất giá trị tại địa chỉ p giữ, tức giá trị của x.' },
-  { id: 'q3', question: 'After free(arr), what should you do to avoid a dangling pointer?|||Sau free(arr), nên làm gì để tránh con trỏ treo?', options: ['Call malloc again|||Gọi malloc lại', 'Set arr = NULL|||Gán arr = NULL', 'Nothing|||Không cần làm gì', 'free(arr) again|||free(arr) lần nữa'], correctIndex: 1, explanation: 'Gán NULL để con trỏ không còn trỏ vào vùng đã giải phóng.' },
-]);
-
-/* ═══════════════ CHƯƠNG 6 — THƯ VIỆN CHUẨN (CLO6) [Progress Test 1] ═══════════════ */
-const c6 = doc('prf192-6-1-thu-vien-chuan', '6.1 — The C standard library|||6.1 — Thư viện chuẩn C',
-  'stdlib.h, time.h, math.h, ctype.h và nhập/xuất định dạng — dùng lại thay vì viết lại.',
-  [[
-    `<span class="eyebrow">PRF192 · Chapter 6 · Lesson 6.1</span>
-<h2>The C standard library</h2>
-<p class="lead">You rarely write everything yourself. The <strong>standard library</strong> ships ready-made functions — include the right header and call them.</p>
-<table>
-<thead><tr><th>Header</th><th>Gives you</th><th>Examples</th></tr></thead>
-<tbody>
-<tr><td><code>stdlib.h</code></td><td>utilities</td><td><code>rand</code>, <code>srand</code>, <code>atoi</code>, <code>abs</code>, <code>malloc</code>, <code>free</code></td></tr>
-<tr><td><code>time.h</code></td><td>time</td><td><code>time</code>, <code>clock</code></td></tr>
-<tr><td><code>math.h</code></td><td>math</td><td><code>sqrt</code>, <code>pow</code>, <code>fabs</code>, <code>ceil</code>, <code>floor</code></td></tr>
-<tr><td><code>ctype.h</code></td><td>character tests</td><td><code>isdigit</code>, <code>isalpha</code>, <code>toupper</code>, <code>tolower</code></td></tr>
-</tbody>
-</table>
-<pre><code class="language-c">#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;time.h&gt;
-#include &lt;math.h&gt;
-#include &lt;ctype.h&gt;
-
-int main() {
-    srand(time(NULL));            // seed the RNG from the clock (once)
-    int dice = rand() % 6 + 1;    // random 1..6
-    printf("Dice: %d\\n", dice);
-
-    printf("sqrt(2) = %.4f\\n", sqrt(2.0));   // 1.4142
-    printf("2^10 = %.0f\\n", pow(2, 10));      // 1024
-
-    char c = 'a';
-    printf("%c -&gt; %c\\n", c, toupper(c));      // a -> A
-    printf("isdigit('7') = %d\\n", isdigit('7')); // non-zero (true)
-    return 0;
-}
-</code></pre>
-<h3>Formatted I/O</h3>
-<p>Format specifiers control how values print: <code>%d</code> integer, <code>%f</code> float, <code>%.2f</code> two decimals, <code>%5d</code> right-align in 5 columns, <code>%c</code> char, <code>%s</code> string, <code>%x</code> hex.</p>
-<div class="callout"><span class="badge">Progress Test 1</span> This is where the first progress test lands (CLO1/CLO5/CLO6). Be able to: seed and use <code>rand()</code> for a range, call <code>sqrt</code>/<code>pow</code> from <code>math.h</code>, and classify characters with <code>ctype.h</code>.</div>
-<div class="pitfall">On some compilers <code>math.h</code> needs linking with <code>-lm</code> (<code>gcc prog.c -o prog -lm</code>). And call <code>srand(time(NULL))</code> <strong>once</strong> at startup — seeding inside a loop makes <code>rand()</code> repeat.</div>`,
-    `<span class="eyebrow">PRF192 · Chương 6 · Bài 6.1</span>
-<h2>Thư viện chuẩn C</h2>
-<p class="lead">Bạn hiếm khi tự viết mọi thứ. <strong>Thư viện chuẩn</strong> có sẵn hàm dùng ngay — nạp đúng header rồi gọi.</p>
-<table>
-<thead><tr><th>Header</th><th>Cho bạn</th><th>Ví dụ</th></tr></thead>
-<tbody>
-<tr><td><code>stdlib.h</code></td><td>tiện ích</td><td><code>rand</code>, <code>srand</code>, <code>atoi</code>, <code>abs</code>, <code>malloc</code>, <code>free</code></td></tr>
-<tr><td><code>time.h</code></td><td>thời gian</td><td><code>time</code>, <code>clock</code></td></tr>
-<tr><td><code>math.h</code></td><td>toán học</td><td><code>sqrt</code>, <code>pow</code>, <code>fabs</code>, <code>ceil</code>, <code>floor</code></td></tr>
-<tr><td><code>ctype.h</code></td><td>kiểm tra ký tự</td><td><code>isdigit</code>, <code>isalpha</code>, <code>toupper</code>, <code>tolower</code></td></tr>
-</tbody>
-</table>
-<pre><code class="language-c">#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;time.h&gt;
-#include &lt;math.h&gt;
-#include &lt;ctype.h&gt;
-
-int main() {
-    srand(time(NULL));            // gieo hạt RNG từ đồng hồ (một lần)
-    int dice = rand() % 6 + 1;    // ngẫu nhiên 1..6
-    printf("Dice: %d\\n", dice);
-
-    printf("sqrt(2) = %.4f\\n", sqrt(2.0));   // 1.4142
-    printf("2^10 = %.0f\\n", pow(2, 10));      // 1024
-
-    char c = 'a';
-    printf("%c -&gt; %c\\n", c, toupper(c));      // a -> A
-    printf("isdigit('7') = %d\\n", isdigit('7')); // khác 0 (đúng)
-    return 0;
-}
-</code></pre>
-<h3>Nhập/xuất định dạng</h3>
-<p>Chỉ định định dạng điều khiển cách in: <code>%d</code> số nguyên, <code>%f</code> số thực, <code>%.2f</code> hai chữ số lẻ, <code>%5d</code> canh phải trong 5 cột, <code>%c</code> ký tự, <code>%s</code> chuỗi, <code>%x</code> hệ 16.</p>
-<div class="callout"><span class="badge">Progress Test 1</span> Bài progress test đầu tiên rơi vào đây (CLO1/CLO5/CLO6). Cần làm được: gieo và dùng <code>rand()</code> trong một khoảng, gọi <code>sqrt</code>/<code>pow</code> từ <code>math.h</code>, phân loại ký tự với <code>ctype.h</code>.</div>
-<div class="pitfall">Một số trình biên dịch cần liên kết <code>math.h</code> bằng <code>-lm</code> (<code>gcc prog.c -o prog -lm</code>). Và gọi <code>srand(time(NULL))</code> <strong>một lần</strong> lúc khởi động — gieo hạt trong vòng lặp làm <code>rand()</code> lặp lại giá trị.</div>`,
-  ]]);
-
-const c6q = quiz('prf192-progress-test-1', 'Progress Test 1 — Standard library|||Progress Test 1 — Thư viện chuẩn', [
-  { id: 'q1', question: 'Which header do sqrt() and pow() come from?|||sqrt() và pow() đến từ header nào?', options: ['stdlib.h', 'math.h', 'stdio.h', 'ctype.h'], correctIndex: 1, explanation: 'Các hàm toán học nằm trong math.h.' },
-  { id: 'q2', question: 'How do you get a random number 1..6?|||Làm sao lấy số ngẫu nhiên 1..6?', options: ['rand() % 6|||rand() % 6', 'rand() % 6 + 1|||rand() % 6 + 1', 'rand(6)|||rand(6)', 'random(1,6)|||random(1,6)'], correctIndex: 1, explanation: 'rand()%6 cho 0..5, cộng 1 thành 1..6.' },
-  { id: 'q3', question: 'srand(time(NULL)) should be called...|||srand(time(NULL)) nên gọi...', options: ['Inside every loop|||Trong mỗi vòng lặp', 'Once at program start|||Một lần lúc bắt đầu chương trình', 'After each rand()|||Sau mỗi lần rand()', 'Never|||Không bao giờ'], correctIndex: 1, explanation: 'Gieo hạt một lần; gieo lại liên tục làm rand() lặp giá trị.' },
-]);
-
-/* ═══════════════ CHƯƠNG 7 — MẢNG & STRUCT (CLO7) [Workshop 3] ═══════════════ */
-const c7a = doc('prf192-7-1-mang', '7.1 — Arrays: 1-D, 2-D, search & sort|||7.1 — Mảng: 1 chiều, 2 chiều, tìm kiếm & sắp xếp',
-  'Mảng 1 chiều, ma trận 2 chiều, tìm kiếm tuyến tính và sắp xếp chọn (selection sort).',
-  [[
-    `<span class="eyebrow">PRF192 · Chapter 7 · Lesson 7.1</span>
-<h2>Arrays — many values under one name</h2>
-<p class="lead">An <strong>array</strong> stores many values of the same type in a row. Index starts at <strong>0</strong>: an array of size N has indices <code>0 .. N-1</code>.</p>
-<pre><code class="language-c">int a[5] = {10, 20, 30, 40, 50};
-int sum = 0;
-for (int i = 0; i &lt; 5; i++) sum += a[i];
-printf("Sum = %d\\n", sum);   // 150
-</code></pre>
-<h3>2-D arrays (matrices)</h3>
-<pre><code class="language-c">int m[2][3] = {{1,2,3}, {4,5,6}};
-for (int i = 0; i &lt; 2; i++) {
-    for (int j = 0; j &lt; 3; j++) printf("%d ", m[i][j]);
-    printf("\\n");
-}
-</code></pre>
-<h3>Linear search &amp; selection sort</h3>
-<pre><code class="language-c">// linear search: return the index of key, or -1
-int find(int a[], int n, int key) {
-    for (int i = 0; i &lt; n; i++) if (a[i] == key) return i;
-    return -1;
-}
-// selection sort: repeatedly pick the smallest and swap it to the front
-void selectionSort(int a[], int n) {
-    for (int i = 0; i &lt; n - 1; i++) {
-        int min = i;
-        for (int j = i + 1; j &lt; n; j++) if (a[j] &lt; a[min]) min = j;
-        int t = a[i]; a[i] = a[min]; a[min] = t;
-    }
-}
-</code></pre>
-<div class="pitfall">C does <strong>not</strong> check array bounds. Writing <code>a[5]</code> in a size-5 array (valid indices 0..4) is a <strong>buffer overflow</strong> — it corrupts nearby memory and may crash. Always loop <code>i &lt; n</code>, never <code>i &lt;= n</code>. When you pass an array to a function you must also pass its length <code>n</code> — the array "decays" to a pointer and loses its size.</div>`,
-    `<span class="eyebrow">PRF192 · Chương 7 · Bài 7.1</span>
-<h2>Mảng — nhiều giá trị dưới một tên</h2>
-<p class="lead"><strong>Mảng</strong> lưu nhiều giá trị cùng kiểu liền nhau. Chỉ số bắt đầu từ <strong>0</strong>: mảng cỡ N có chỉ số <code>0 .. N-1</code>.</p>
-<pre><code class="language-c">int a[5] = {10, 20, 30, 40, 50};
-int sum = 0;
-for (int i = 0; i &lt; 5; i++) sum += a[i];
-printf("Sum = %d\\n", sum);   // 150
-</code></pre>
-<h3>Mảng 2 chiều (ma trận)</h3>
-<pre><code class="language-c">int m[2][3] = {{1,2,3}, {4,5,6}};
-for (int i = 0; i &lt; 2; i++) {
-    for (int j = 0; j &lt; 3; j++) printf("%d ", m[i][j]);
-    printf("\\n");
-}
-</code></pre>
-<h3>Tìm kiếm tuyến tính &amp; sắp xếp chọn</h3>
-<pre><code class="language-c">// tìm tuyến tính: trả chỉ số của key, hoặc -1
-int find(int a[], int n, int key) {
-    for (int i = 0; i &lt; n; i++) if (a[i] == key) return i;
-    return -1;
-}
-// sắp xếp chọn: liên tục chọn phần tử nhỏ nhất và đưa lên đầu
-void selectionSort(int a[], int n) {
-    for (int i = 0; i &lt; n - 1; i++) {
-        int min = i;
-        for (int j = i + 1; j &lt; n; j++) if (a[j] &lt; a[min]) min = j;
-        int t = a[i]; a[i] = a[min]; a[min] = t;
-    }
-}
-</code></pre>
-<div class="pitfall">C <strong>không</strong> kiểm biên mảng. Ghi <code>a[5]</code> trong mảng cỡ 5 (chỉ số hợp lệ 0..4) là <strong>tràn bộ đệm</strong> — làm hỏng ô nhớ kế bên và có thể sập. Luôn lặp <code>i &lt; n</code>, không bao giờ <code>i &lt;= n</code>. Khi truyền mảng vào hàm phải truyền kèm độ dài <code>n</code> — mảng "suy biến" thành con trỏ và mất kích thước.</div>`,
-  ]]);
-
-const c7b = doc('prf192-7-2-struct', '7.2 — Structs: composite data|||7.2 — Struct: dữ liệu phức hợp',
-  'Định nghĩa struct, mảng struct, và ví dụ Workshop 3 (quản lý sinh viên).',
-  [[
-    `<span class="eyebrow">PRF192 · Chapter 7 · Lesson 7.2</span>
-<h2>Structs — group related fields</h2>
-<p class="lead">An array holds many of the <em>same</em> type. A <strong>struct</strong> groups fields of <em>different</em> types into one record — like a student with a name, an id and a GPA.</p>
-<pre><code class="language-c">struct Student {
-    char name[30];
-    int  id;
-    float gpa;
-};
-
-int main() {
-    struct Student s = {"An", 1001, 8.5f};
-    printf("%s (#%d) GPA %.1f\\n", s.name, s.id, s.gpa);  // access with .
-    s.gpa = 9.0f;   // update a field
-    return 0;
-}
-</code></pre>
-<h3>Array of structs — a list of records</h3>
-<pre><code class="language-c">struct Student list[3];
-for (int i = 0; i &lt; 3; i++) {
-    printf("Nhap ten, id, gpa: ");
-    scanf("%s %d %f", list[i].name, &amp;list[i].id, &amp;list[i].gpa);
-}
-// note: list[i].name is already an address (an array), so no &amp;
-</code></pre>
-<div class="callout"><span class="badge">Workshop 3</span> Build a <strong>student manager</strong>: an array of <code>struct Student</code> plus a menu (add / list / search by id / sort by GPA / delete). Each action is its own function taking the array and its size. This is the exact pattern the Practical Exam rehearses.</div>
-<div class="pitfall">Use <code>.</code> for a struct variable (<code>s.gpa</code>) but <code>-&gt;</code> for a <em>pointer</em> to a struct (<code>p-&gt;gpa</code>, short for <code>(*p).gpa</code>). Reading a string field with <code>scanf("%s", ...)</code> takes no <code>&amp;</code> because the field name is already an array address.</div>`,
-    `<span class="eyebrow">PRF192 · Chương 7 · Bài 7.2</span>
-<h2>Struct — gom các trường liên quan</h2>
-<p class="lead">Mảng chứa nhiều phần tử <em>cùng</em> kiểu. <strong>Struct</strong> gom các trường <em>khác</em> kiểu thành một bản ghi — như một sinh viên có tên, mã và GPA.</p>
-<pre><code class="language-c">struct Student {
-    char name[30];
-    int  id;
-    float gpa;
-};
-
-int main() {
-    struct Student s = {"An", 1001, 8.5f};
-    printf("%s (#%d) GPA %.1f\\n", s.name, s.id, s.gpa);  // truy cập bằng .
-    s.gpa = 9.0f;   // sửa một trường
-    return 0;
-}
-</code></pre>
-<h3>Mảng struct — một danh sách bản ghi</h3>
-<pre><code class="language-c">struct Student list[3];
-for (int i = 0; i &lt; 3; i++) {
-    printf("Nhap ten, id, gpa: ");
-    scanf("%s %d %f", list[i].name, &amp;list[i].id, &amp;list[i].gpa);
-}
-// lưu ý: list[i].name đã là địa chỉ (một mảng), nên không cần &amp;
-</code></pre>
-<div class="callout"><span class="badge">Workshop 3</span> Dựng <strong>quản lý sinh viên</strong>: một mảng <code>struct Student</code> cùng menu (thêm / liệt kê / tìm theo id / sắp theo GPA / xoá). Mỗi thao tác là một hàm riêng nhận mảng và kích thước. Đây đúng là mẫu mà Practical Exam luyện.</div>
-<div class="pitfall">Dùng <code>.</code> cho biến struct (<code>s.gpa</code>) nhưng <code>-&gt;</code> cho <em>con trỏ</em> tới struct (<code>p-&gt;gpa</code>, viết tắt của <code>(*p).gpa</code>). Đọc trường chuỗi bằng <code>scanf("%s", ...)</code> không cần <code>&amp;</code> vì tên trường đã là địa chỉ mảng.</div>`,
-  ]]);
-
-const c7q = quiz('prf192-7-quiz', 'Quiz 7 — Arrays & structs|||Quiz 7 — Mảng & struct', [
-  { id: 'q1', question: 'The valid indices of int a[5] are...|||Chỉ số hợp lệ của int a[5] là...', options: ['1 to 5|||1 đến 5', '0 to 5|||0 đến 5', '0 to 4|||0 đến 4', '1 to 4|||1 đến 4'], correctIndex: 2, explanation: 'Mảng cỡ 5 có chỉ số 0..4; a[5] là tràn bộ đệm.' },
-  { id: 'q2', question: 'To access field gpa of struct variable s, you write...|||Để truy cập trường gpa của biến struct s, viết...', options: ['s->gpa', 's.gpa', 's[gpa]', 'gpa(s)'], correctIndex: 1, explanation: 'Dùng dấu chấm cho biến struct: s.gpa. Dấu -> dành cho con trỏ struct.' },
-  { id: 'q3', question: 'Selection sort works by...|||Sắp xếp chọn hoạt động bằng cách...', options: ['Splitting the array in half|||Chia đôi mảng', 'Repeatedly picking the smallest and moving it to the front|||Liên tục chọn phần tử nhỏ nhất và đưa lên đầu', 'Swapping adjacent pairs only|||Chỉ đổi chỗ cặp kề nhau', 'Using a hash table|||Dùng bảng băm'], correctIndex: 1, explanation: 'Mỗi lượt tìm phần tử nhỏ nhất còn lại rồi đưa về đầu đoạn chưa sắp.' },
-]);
-
-/* ═══════════════ CHƯƠNG 8 — CHUỖI (CLO8) [Workshop 4] ═══════════════ */
-const c8 = doc('prf192-8-1-chuoi', '8.1 — Strings: char arrays & string.h|||8.1 — Chuỗi: mảng char & string.h',
-  'Chuỗi là mảng char kết thúc bằng \\0; nhập/xuất chuỗi, mảng chuỗi, thư viện string.h; ví dụ Workshop 4.',
-  [[
-    `<span class="eyebrow">PRF192 · Chapter 8 · Lesson 8.1</span>
-<h2>Strings are char arrays</h2>
-<p class="lead">C has no built-in string type. A <strong>string</strong> is just a <code>char</code> array that ends with a special <strong>null terminator</strong> <code>'\\0'</code>. The word "Hi" needs 3 chars: <code>'H'</code>, <code>'i'</code>, <code>'\\0'</code>.</p>
-<pre><code class="language-c">char name[20] = "PRF192";   // compiler adds '\\0' automatically
-printf("%s\\n", name);        // print with %s
-printf("First char: %c\\n", name[0]);   // P
-</code></pre>
-<h3>Reading strings safely</h3>
-<pre><code class="language-c">char line[50];
-scanf("%s", line);          // reads ONE word (stops at space)
-// better for a whole line (keeps spaces, limits length):
-fgets(line, sizeof(line), stdin);
-</code></pre>
-<h3>The string.h library</h3>
-<table>
-<thead><tr><th>Function</th><th>Does</th></tr></thead>
-<tbody>
-<tr><td><code>strlen(s)</code></td><td>length (not counting <code>'\\0'</code>)</td></tr>
-<tr><td><code>strcpy(dst, src)</code></td><td>copy src into dst</td></tr>
-<tr><td><code>strcmp(a, b)</code></td><td>compare: 0 if equal</td></tr>
-<tr><td><code>strcat(dst, src)</code></td><td>append src onto dst</td></tr>
-</tbody>
-</table>
-<pre><code class="language-c">#include &lt;string.h&gt;
-char a[20] = "Hello", b[] = "World";
-printf("len=%lu\\n", strlen(a));   // 5
-strcat(a, b);                      // a = "HelloWorld"
-if (strcmp(a, "HelloWorld") == 0) printf("equal\\n");
-</code></pre>
-<h3>Array of strings</h3>
-<pre><code class="language-c">char days[3][10] = {"Mon", "Tue", "Wed"};
-for (int i = 0; i &lt; 3; i++) printf("%s\\n", days[i]);
-</code></pre>
-<div class="callout"><span class="badge">Workshop 4</span> Read a full name with <code>fgets</code>, then: count its length, convert to UPPERCASE, count the words, and reverse it — all without extra libraries beyond <code>string.h</code>/<code>ctype.h</code>.</div>
-<div class="pitfall">Never compare strings with <code>==</code> (that compares addresses, not text) — use <code>strcmp</code>. And <code>strcpy</code>/<code>strcat</code> do <strong>no</strong> bounds check: copying a long string into a short buffer is a <strong>buffer overflow</strong>. Make the destination big enough (include room for <code>'\\0'</code>).</div>`,
-    `<span class="eyebrow">PRF192 · Chương 8 · Bài 8.1</span>
-<h2>Chuỗi là mảng ký tự</h2>
-<p class="lead">C không có kiểu chuỗi sẵn. <strong>Chuỗi</strong> chỉ là mảng <code>char</code> kết thúc bằng <strong>ký tự null</strong> <code>'\\0'</code>. Chữ "Hi" cần 3 ký tự: <code>'H'</code>, <code>'i'</code>, <code>'\\0'</code>.</p>
-<pre><code class="language-c">char name[20] = "PRF192";   // compiler tự thêm '\\0'
-printf("%s\\n", name);        // in bằng %s
-printf("First char: %c\\n", name[0]);   // P
-</code></pre>
-<h3>Đọc chuỗi an toàn</h3>
-<pre><code class="language-c">char line[50];
-scanf("%s", line);          // đọc MỘT từ (dừng ở dấu cách)
-// tốt hơn cho cả dòng (giữ dấu cách, giới hạn độ dài):
-fgets(line, sizeof(line), stdin);
-</code></pre>
-<h3>Thư viện string.h</h3>
-<table>
-<thead><tr><th>Hàm</th><th>Làm gì</th></tr></thead>
-<tbody>
-<tr><td><code>strlen(s)</code></td><td>độ dài (không tính <code>'\\0'</code>)</td></tr>
-<tr><td><code>strcpy(dst, src)</code></td><td>chép src vào dst</td></tr>
-<tr><td><code>strcmp(a, b)</code></td><td>so sánh: 0 nếu bằng</td></tr>
-<tr><td><code>strcat(dst, src)</code></td><td>nối src vào cuối dst</td></tr>
-</tbody>
-</table>
-<pre><code class="language-c">#include &lt;string.h&gt;
-char a[20] = "Hello", b[] = "World";
-printf("len=%lu\\n", strlen(a));   // 5
-strcat(a, b);                      // a = "HelloWorld"
-if (strcmp(a, "HelloWorld") == 0) printf("equal\\n");
-</code></pre>
-<h3>Mảng chuỗi</h3>
-<pre><code class="language-c">char days[3][10] = {"Mon", "Tue", "Wed"};
-for (int i = 0; i &lt; 3; i++) printf("%s\\n", days[i]);
-</code></pre>
-<div class="callout"><span class="badge">Workshop 4</span> Đọc họ tên đầy đủ bằng <code>fgets</code>, rồi: đếm độ dài, đổi sang IN HOA, đếm số từ, và đảo ngược chuỗi — chỉ dùng <code>string.h</code>/<code>ctype.h</code>.</div>
-<div class="pitfall">Không bao giờ so sánh chuỗi bằng <code>==</code> (nó so địa chỉ, không so chữ) — dùng <code>strcmp</code>. Và <code>strcpy</code>/<code>strcat</code> <strong>không</strong> kiểm biên: chép chuỗi dài vào bộ đệm ngắn là <strong>tràn bộ đệm</strong>. Hãy để đích đủ lớn (chừa chỗ cho <code>'\\0'</code>).</div>`,
-  ]]);
-
-const c8q = quiz('prf192-8-quiz', 'Quiz 8 — Strings|||Quiz 8 — Chuỗi', [
-  { id: 'q1', question: 'What marks the end of a C string?|||Cái gì đánh dấu kết thúc một chuỗi C?', options: ["A space ' '|||Dấu cách ' '", "The null terminator '\\0'|||Ký tự null '\\0'", 'A newline|||Ký tự xuống dòng', 'The number 0 stored as int|||Số 0 kiểu int'], correctIndex: 1, explanation: "Chuỗi C kết thúc bằng ký tự null '\\0'." },
-  { id: 'q2', question: 'How do you correctly compare two strings for equality?|||So sánh hai chuỗi bằng nhau đúng cách là?', options: ['a == b', 'strcmp(a, b) == 0', 'a = b', 'strlen(a) == strlen(b)'], correctIndex: 1, explanation: 'strcmp trả 0 khi hai chuỗi giống nhau; == chỉ so địa chỉ.' },
-  { id: 'q3', question: 'strlen("PRF") returns...|||strlen("PRF") trả về...', options: ['2', '3', '4', '0'], correctIndex: 1, explanation: "strlen đếm ký tự không kể '\\0' → 3." },
-]);
-
-/* ═══════════════ CHƯƠNG 9 — TỆP TIN (CLO9) [Workshop 5 · Progress Test 2] ═══════════════ */
-const c9 = doc('prf192-9-1-tep', '9.1 — Files: text/binary, read & write|||9.1 — Tệp tin: text/binary, đọc & ghi',
-  'Khái niệm tệp, text vs binary, cách truy cập; fopen/fclose/fprintf/fscanf/fgets/fwrite/fread; Workshop 5.',
-  [[
-    `<span class="eyebrow">PRF192 · Chapter 9 · Lesson 9.1</span>
-<h2>Files — keep data after the program ends</h2>
-<p class="lead">Variables vanish when a program stops. To <strong>persist</strong> data you write it to a <strong>file</strong> on disk. In C you work through a <code>FILE *</code> handle.</p>
-<h3>Text vs binary</h3>
-<ul>
-<li><strong>Text files</strong> — human-readable characters (<code>.txt</code>, <code>.csv</code>); use <code>fprintf</code>/<code>fscanf</code>/<code>fgets</code>.</li>
-<li><strong>Binary files</strong> — raw bytes exactly as in memory; use <code>fwrite</code>/<code>fread</code>. Compact and fast, but not human-readable.</li>
-</ul>
-<h3>The four steps: open → work → check → close</h3>
-<pre><code class="language-c">#include &lt;stdio.h&gt;
-int main() {
-    // WRITE
-    FILE *f = fopen("diem.txt", "w");   // "w"=write (overwrites), "a"=append
-    if (f == NULL) { printf("Khong mo duoc file\\n"); return 1; }
-    fprintf(f, "An 8.5\\n");
-    fprintf(f, "Binh 7.0\\n");
-    fclose(f);                          // ALWAYS close
-
-    // READ
-    char name[30]; float gpa;
-    f = fopen("diem.txt", "r");         // "r"=read
-    if (f == NULL) return 1;
-    while (fscanf(f, "%s %f", name, &amp;gpa) == 2)  // 2 = both fields read
-        printf("%s -&gt; %.1f\\n", name, gpa);
-    fclose(f);
-    return 0;
-}
-</code></pre>
-<p>Read modes: <code>"r"</code> read, <code>"w"</code> write (truncates), <code>"a"</code> append, add <code>"b"</code> for binary (<code>"rb"</code>, <code>"wb"</code>). Detect end-of-file with <code>EOF</code> / <code>feof</code>, or (better) by checking that <code>fscanf</code> returned the expected field count.</p>
-<div class="callout"><span class="badge">Workshop 5</span> Extend the student manager: <strong>save</strong> the array of structs to <code>students.txt</code> and <strong>load</strong> it back on startup, so data survives between runs. Use <code>fprintf</code>/<code>fscanf</code> (text) or <code>fwrite</code>/<code>fread</code> (binary).</div>
-<div class="callout"><span class="badge">Progress Test 2</span> The second progress test covers CLO9 (files): opening in the right mode, checking <code>NULL</code>, reading until end-of-file, and always closing.</div>
-<div class="pitfall">Two must-dos: always check <code>fopen</code> for <code>NULL</code> (the file may not exist or be locked), and always <code>fclose</code> (unclosed files can lose the last buffered writes). Opening with <code>"w"</code> <strong>erases</strong> the file — use <code>"a"</code> to add to it.</div>`,
-    `<span class="eyebrow">PRF192 · Chương 9 · Bài 9.1</span>
-<h2>Tệp tin — giữ dữ liệu sau khi chương trình kết thúc</h2>
-<p class="lead">Biến biến mất khi chương trình dừng. Muốn <strong>lưu bền</strong> dữ liệu thì ghi ra <strong>tệp</strong> trên ổ đĩa. Trong C bạn làm việc qua một tay cầm <code>FILE *</code>.</p>
-<h3>Text vs binary</h3>
-<ul>
-<li><strong>Tệp văn bản</strong> — ký tự đọc được bằng mắt (<code>.txt</code>, <code>.csv</code>); dùng <code>fprintf</code>/<code>fscanf</code>/<code>fgets</code>.</li>
-<li><strong>Tệp nhị phân</strong> — byte thô đúng như trong bộ nhớ; dùng <code>fwrite</code>/<code>fread</code>. Gọn và nhanh, nhưng không đọc được bằng mắt.</li>
-</ul>
-<h3>Bốn bước: mở → làm việc → kiểm → đóng</h3>
-<pre><code class="language-c">#include &lt;stdio.h&gt;
-int main() {
-    // GHI
-    FILE *f = fopen("diem.txt", "w");   // "w"=ghi (đè), "a"=ghi nối
-    if (f == NULL) { printf("Khong mo duoc file\\n"); return 1; }
-    fprintf(f, "An 8.5\\n");
-    fprintf(f, "Binh 7.0\\n");
-    fclose(f);                          // LUÔN đóng
-
-    // ĐỌC
-    char name[30]; float gpa;
-    f = fopen("diem.txt", "r");         // "r"=đọc
-    if (f == NULL) return 1;
-    while (fscanf(f, "%s %f", name, &amp;gpa) == 2)  // 2 = đọc đủ hai trường
-        printf("%s -&gt; %.1f\\n", name, gpa);
-    fclose(f);
-    return 0;
-}
-</code></pre>
-<p>Chế độ mở: <code>"r"</code> đọc, <code>"w"</code> ghi (xoá trắng), <code>"a"</code> ghi nối, thêm <code>"b"</code> cho nhị phân (<code>"rb"</code>, <code>"wb"</code>). Nhận biết hết tệp bằng <code>EOF</code> / <code>feof</code>, hoặc (tốt hơn) kiểm số trường mà <code>fscanf</code> trả về.</p>
-<div class="callout"><span class="badge">Workshop 5</span> Mở rộng quản lý sinh viên: <strong>lưu</strong> mảng struct ra <code>students.txt</code> và <strong>nạp</strong> lại lúc khởi động, để dữ liệu còn giữa các lần chạy. Dùng <code>fprintf</code>/<code>fscanf</code> (văn bản) hoặc <code>fwrite</code>/<code>fread</code> (nhị phân).</div>
-<div class="callout"><span class="badge">Progress Test 2</span> Bài progress test thứ hai kiểm CLO9 (tệp): mở đúng chế độ, kiểm <code>NULL</code>, đọc tới hết tệp, và luôn đóng.</div>
-<div class="pitfall">Hai điều bắt buộc: luôn kiểm <code>fopen</code> có <code>NULL</code> không (tệp có thể không tồn tại hoặc bị khoá), và luôn <code>fclose</code> (không đóng có thể mất phần ghi còn trong bộ đệm). Mở bằng <code>"w"</code> sẽ <strong>xoá trắng</strong> tệp — dùng <code>"a"</code> để ghi thêm.</div>`,
-  ]]);
-
-const c9q = quiz('prf192-progress-test-2', 'Progress Test 2 — Files|||Progress Test 2 — Tệp tin', [
-  { id: 'q1', question: 'Which fopen mode ERASES the file if it exists?|||Chế độ fopen nào XOÁ trắng tệp nếu đã tồn tại?', options: ['"r"', '"a"', '"w"', '"rb"'], correctIndex: 2, explanation: '"w" mở để ghi và cắt trắng nội dung cũ; "a" ghi nối, "r" chỉ đọc.' },
-  { id: 'q2', question: 'After fopen, what must you always check?|||Sau fopen, luôn phải kiểm điều gì?', options: ['That it returned NULL (open failed)|||Nó có trả về NULL (mở thất bại) không', 'The file size|||Kích thước tệp', 'The disk letter|||Ký tự ổ đĩa', 'Nothing|||Không cần kiểm gì'], correctIndex: 0, explanation: 'fopen trả NULL khi thất bại; dùng tiếp con trỏ NULL sẽ sập.' },
-  { id: 'q3', question: 'Why must you call fclose()?|||Vì sao phải gọi fclose()?', options: ['It is optional|||Không bắt buộc', 'To flush buffered writes and release the file|||Để đẩy nốt phần ghi trong bộ đệm và trả tệp', 'To delete the file|||Để xoá tệp', 'To make it read-only|||Để đặt chỉ đọc'], correctIndex: 1, explanation: 'Không đóng có thể mất dữ liệu còn nằm trong bộ đệm và giữ khoá tệp.' },
-]);
-
-/* ═══════════════ NÂNG CAO — CHUYÊN SÂU (ngoài giáo trình) ═══════════════ */
-const adv1 = doc('prf192-nc-1-con-tro-bo-nho', '★ Pointers & memory in depth: stack vs heap|||★ Con trỏ & bộ nhớ chuyên sâu: stack vs heap',
-  'Stack và heap, số học con trỏ, con trỏ đa cấp, rò rỉ & con trỏ treo — hiểu sâu hơn ở trường.',
-  [[
-    `<span class="eyebrow">PRF192 · Deep dive ★</span>
-<h2>Where your memory actually lives</h2>
-<p class="lead">A running C program splits memory into regions. The two you must understand are the <strong>stack</strong> and the <strong>heap</strong>.</p>
-<table>
-<thead><tr><th></th><th>Stack</th><th>Heap</th></tr></thead>
-<tbody>
-<tr><td>Holds</td><td>local variables, function calls</td><td>memory from <code>malloc</code></td></tr>
-<tr><td>Lifetime</td><td>freed automatically when the function returns</td><td>lives until you <code>free</code> it</td></tr>
-<tr><td>Speed / size</td><td>fast, small (overflow if too deep)</td><td>large, slightly slower</td></tr>
-</tbody>
-</table>
-<pre><code class="language-c">int* makeLocal() {
-    int x = 42;      // x is on the STACK
-    return &amp;x;       // BUG: x dies when the function returns → dangling
-}
-int* makeHeap() {
-    int *p = malloc(sizeof(int));  // on the HEAP
-    *p = 42;
-    return p;        // OK: heap memory outlives the function (caller frees)
-}
-</code></pre>
-<h3>Pointer arithmetic &amp; array–pointer duality</h3>
-<pre><code class="language-c">int a[4] = {10, 20, 30, 40};
-int *p = a;          // an array name IS a pointer to its first element
-printf("%d\\n", *(p + 2));   // 30 — p+2 moves by 2 ints, not 2 bytes
-printf("%d\\n", a[2]);       // 30 — a[i] is just *(a + i)
-</code></pre>
-<h3>Pointer to pointer</h3>
-<pre><code class="language-c">int x = 5;
-int *p = &amp;x;       // p points to x
-int **pp = &amp;p;     // pp points to p
-printf("%d\\n", **pp);   // 5 — double dereference
-</code></pre>
-<div class="pitfall">The three memory bugs to internalise: <strong>leak</strong> (malloc without free — memory grows forever), <strong>dangling</strong> (using a pointer after free or returning a stack address), and <strong>double free</strong> (free the same block twice — undefined behaviour). Tools like <code>valgrind</code> catch all three.</div>`,
-    `<span class="eyebrow">PRF192 · Chuyên sâu ★</span>
-<h2>Bộ nhớ của bạn thực sự nằm ở đâu</h2>
-<p class="lead">Một chương trình C đang chạy chia bộ nhớ thành nhiều vùng. Hai vùng bạn phải hiểu là <strong>stack</strong> và <strong>heap</strong>.</p>
-<table>
-<thead><tr><th></th><th>Stack</th><th>Heap</th></tr></thead>
-<tbody>
-<tr><td>Chứa</td><td>biến cục bộ, lời gọi hàm</td><td>bộ nhớ từ <code>malloc</code></td></tr>
-<tr><td>Vòng đời</td><td>tự giải phóng khi hàm trả về</td><td>sống tới khi bạn <code>free</code></td></tr>
-<tr><td>Tốc độ / dung lượng</td><td>nhanh, nhỏ (tràn nếu đệ quy quá sâu)</td><td>lớn, hơi chậm hơn</td></tr>
-</tbody>
-</table>
-<pre><code class="language-c">int* makeLocal() {
-    int x = 42;      // x nằm trên STACK
-    return &amp;x;       // LỖI: x chết khi hàm trả về → con trỏ treo
-}
-int* makeHeap() {
-    int *p = malloc(sizeof(int));  // trên HEAP
-    *p = 42;
-    return p;        // OK: bộ nhớ heap sống lâu hơn hàm (nơi gọi tự free)
-}
-</code></pre>
-<h3>Số học con trỏ &amp; mảng–con trỏ là một</h3>
-<pre><code class="language-c">int a[4] = {10, 20, 30, 40};
-int *p = a;          // tên mảng CHÍNH là con trỏ tới phần tử đầu
-printf("%d\\n", *(p + 2));   // 30 — p+2 nhích 2 int, không phải 2 byte
-printf("%d\\n", a[2]);       // 30 — a[i] chỉ là *(a + i)
-</code></pre>
-<h3>Con trỏ tới con trỏ</h3>
-<pre><code class="language-c">int x = 5;
-int *p = &amp;x;       // p trỏ tới x
-int **pp = &amp;p;     // pp trỏ tới p
-printf("%d\\n", **pp);   // 5 — truy xuất hai lần
-</code></pre>
-<div class="pitfall">Ba lỗi bộ nhớ phải thuộc nằm lòng: <strong>rò rỉ</strong> (malloc mà không free — bộ nhớ phình mãi), <strong>treo</strong> (dùng con trỏ sau free hoặc trả địa chỉ stack), và <strong>free hai lần</strong> (giải phóng cùng khối hai lần — hành vi không xác định). Công cụ như <code>valgrind</code> bắt cả ba.</div>`,
-  ]]);
-
-const adv2 = doc('prf192-nc-2-loi-debug', '★ Common errors & debugging tips|||★ Lỗi thường gặp & mẹo debug',
-  'Segfault, buffer overflow, biến chưa khởi tạo, lệch một đơn vị; đọc thông báo lỗi, debug bằng printf/gdb, bật -Wall.',
-  [[
-    `<span class="eyebrow">PRF192 · Deep dive ★</span>
-<h2>The errors that bite every beginner</h2>
-<table>
-<thead><tr><th>Error</th><th>Symptom</th><th>Cause &amp; fix</th></tr></thead>
-<tbody>
-<tr><td>Segmentation fault</td><td>program crashes</td><td>dereferencing a bad/NULL/uninitialized pointer, or writing out of an array — check pointers and bounds</td></tr>
-<tr><td>Buffer overflow</td><td>corrupt data / crash</td><td>writing past an array or string buffer — size the buffer, loop <code>i &lt; n</code>, use <code>fgets</code></td></tr>
-<tr><td>Uninitialized variable</td><td>random results</td><td>reading a variable before assigning it — always initialise</td></tr>
-<tr><td>Off-by-one</td><td>misses first/last item</td><td><code>&lt;=</code> vs <code>&lt;</code>, wrong start index — trace the loop by hand</td></tr>
-<tr><td><code>= vs ==</code></td><td>condition always true</td><td>assignment inside <code>if</code> — use <code>==</code> to compare</td></tr>
-<tr><td>scanf without <code>&amp;</code></td><td>crash / garbage</td><td>pass the address: <code>scanf("%d", &amp;x)</code></td></tr>
-</tbody>
-</table>
-<h3>How to debug</h3>
-<ol>
-<li><strong>Read the compiler message</strong> — it names the file and line. Fix the <em>first</em> error first; later ones are often just fallout.</li>
-<li><strong>Turn on warnings:</strong> <code>gcc -Wall -Wextra prog.c -o prog</code>. Warnings catch uninitialised variables and wrong format specifiers before they crash.</li>
-<li><strong>printf debugging</strong> — print a variable's value at key points to see where reality diverges from your expectation.</li>
-<li><strong>A real debugger</strong> — set a breakpoint (<kbd>F5</kbd> in VS Code, or <code>gdb ./prog</code>), step line by line, and watch each variable change.</li>
-</ol>
-<pre><code class="language-c">// printf debugging: find WHERE the value goes wrong
-int total = 0;
-for (int i = 0; i &lt;= n; i++) {          // bug: should be i &lt; n
-    printf("[debug] i=%d a[i]=%d\\n", i, a[i]);  // reveals the out-of-range read
-    total += a[i];
-}
-</code></pre>
-<div class="callout ok">Golden rule: <strong>compile early, compile often</strong>. Write a few lines, compile, run. A bug found in 5 new lines is easy; a bug hidden in 200 untested lines is misery.</div>`,
-    `<span class="eyebrow">PRF192 · Chuyên sâu ★</span>
-<h2>Những lỗi cắn mọi người mới</h2>
-<table>
-<thead><tr><th>Lỗi</th><th>Triệu chứng</th><th>Nguyên nhân &amp; cách sửa</th></tr></thead>
-<tbody>
-<tr><td>Segmentation fault</td><td>chương trình sập</td><td>truy xuất con trỏ sai/NULL/chưa khởi tạo, hoặc ghi ngoài mảng — kiểm con trỏ và biên</td></tr>
-<tr><td>Buffer overflow</td><td>hỏng dữ liệu / sập</td><td>ghi vượt mảng hay bộ đệm chuỗi — cấp đủ chỗ, lặp <code>i &lt; n</code>, dùng <code>fgets</code></td></tr>
-<tr><td>Biến chưa khởi tạo</td><td>kết quả loạn</td><td>đọc biến trước khi gán — luôn khởi tạo</td></tr>
-<tr><td>Lệch một đơn vị</td><td>sót phần tử đầu/cuối</td><td><code>&lt;=</code> vs <code>&lt;</code>, sai chỉ số bắt đầu — dò vòng lặp bằng tay</td></tr>
-<tr><td><code>= vs ==</code></td><td>điều kiện luôn đúng</td><td>gán trong <code>if</code> — dùng <code>==</code> để so sánh</td></tr>
-<tr><td>scanf thiếu <code>&amp;</code></td><td>sập / rác</td><td>truyền địa chỉ: <code>scanf("%d", &amp;x)</code></td></tr>
-</tbody>
-</table>
-<h3>Cách debug</h3>
-<ol>
-<li><strong>Đọc thông báo của compiler</strong> — nó nêu tên tệp và số dòng. Sửa lỗi <em>đầu tiên</em> trước; lỗi sau thường chỉ là hệ quả.</li>
-<li><strong>Bật cảnh báo:</strong> <code>gcc -Wall -Wextra prog.c -o prog</code>. Cảnh báo bắt biến chưa khởi tạo và sai chỉ định định dạng trước khi sập.</li>
-<li><strong>Debug bằng printf</strong> — in giá trị biến ở các điểm mấu chốt để thấy chỗ thực tế lệch khỏi kỳ vọng.</li>
-<li><strong>Debugger thật</strong> — đặt breakpoint (<kbd>F5</kbd> trong VS Code, hoặc <code>gdb ./prog</code>), chạy từng dòng và theo dõi từng biến đổi giá trị.</li>
-</ol>
-<pre><code class="language-c">// debug bằng printf: tìm CHỖ giá trị bắt đầu sai
-int total = 0;
-for (int i = 0; i &lt;= n; i++) {          // lỗi: đáng lẽ i &lt; n
-    printf("[debug] i=%d a[i]=%d\\n", i, a[i]);  // lộ ra chỗ đọc quá biên
-    total += a[i];
-}
-</code></pre>
-<div class="callout ok">Quy tắc vàng: <strong>biên dịch sớm, biên dịch thường xuyên</strong>. Viết vài dòng, biên dịch, chạy. Lỗi trong 5 dòng mới rất dễ tìm; lỗi giấu trong 200 dòng chưa test là cực hình.</div>`,
-  ]]);
-
 export default {
   semester: { code: 'KY1', name: 'Kỳ 1', ordinal: 1 },
   course: {
     courseCode: 'PRF192',
-    slug: 'programming-fundamentals',
     title: 'Programming Fundamentals',
     level: 'BEGINNER',
     language: 'Vietnamese',
     status: 'PUBLISHED',
     syncOrder: true,
     pruneSections: true,
-    thumbnailUrl: 'https://media.cuongthai.com/images/prf192-1781716106298-116ce9c6.jfif',
-    shortDescription: 'Intro to programming in C (FLM syllabus, 9 CLOs): program structure, variables/types & expressions, loops, functions, pointers & memory, standard library, arrays & structs, strings, files. Bilingual, runnable C & quizzes.|||Nhập môn lập trình C (giáo trình FLM, 9 CLO): cấu trúc chương trình, biến/kiểu & biểu thức, vòng lặp, hàm, con trỏ & bộ nhớ, thư viện chuẩn, mảng & struct, chuỗi, tệp. Song ngữ, code C chạy được & quiz.',
-    description: 'Môn <strong>PRF192 — Programming Fundamentals</strong> (kỳ 1) là môn lập trình đầu tiên của ngành, dạy bằng ngôn ngữ <strong>C</strong> theo hướng lập trình thủ tục, bám sát 9 CLO của giáo trình FLM. Từ <strong>hệ thống máy tính &amp; cấu trúc chương trình</strong> (CLO1) → <strong>biến, kiểu, bộ nhớ, nhập/xuất &amp; biểu thức</strong> (CLO2) → <strong>rẽ nhánh &amp; vòng lặp</strong> (CLO3) → <strong>module &amp; hàm</strong> (CLO4) → <strong>con trỏ</strong> (CLO5) → <strong>thư viện chuẩn</strong> (CLO6) → <strong>mảng &amp; struct</strong> (CLO7) → <strong>chuỗi</strong> (CLO8) → <strong>tệp tin</strong> (CLO9), kèm phần chuyên sâu về con trỏ/bộ nhớ và gỡ lỗi. Sách chính: <em>Foundations of Programming Using C</em> (Evan Weaver) + K&amp;R. Song ngữ, code C chạy được, quiz mỗi chương. Là tiên quyết của PRO192 và LAB211.',
-    whatYouLearn: 'Đọc–hiểu–viết chương trình C cỡ vừa; cấu trúc một file C; biến/kiểu/bộ nhớ, scanf/printf, biểu thức &amp; độ ưu tiên toán tử; if/switch, for/while/do-while; chia bài toán thành hàm (truyền giá trị vs tham chiếu); con trỏ, &amp; và *, malloc/free, stack vs heap; thư viện chuẩn (stdlib/time/math/ctype); mảng 1-2 chiều, tìm kiếm & sắp xếp, struct & mảng struct; chuỗi & string.h; đọc/ghi tệp; và gỡ lỗi (segfault, buffer overflow, dùng -Wall/printf/gdb).',
-    requirements: 'Không có môn tiên quyết. Cần máy cài được trình biên dịch C (DevC++ 6.3 hoặc VS Code + GCC), hoặc dùng trình biên dịch trực tuyến (OnlineGDB).',
+    shortDescription: 'Intro to programming in C: variables, expressions, control flow, functions, pointers, arrays, structs, strings and files — the foundation of the whole Software Engineering track.|||Nhập môn lập trình với ngôn ngữ C: biến, biểu thức, điều khiển, hàm, con trỏ, mảng, struct, chuỗi, tệp tin — nền tảng cho toàn bộ lộ trình Kỹ thuật phần mềm.',
+    description: 'Môn lập trình đầu tiên của ngành. Học cách máy tính thực thi chương trình và cách giải bài toán thực tế bằng C theo hướng lập trình thủ tục. Là tiên quyết của PRO192 (OOP) và LAB211.',
+    whatYouLearn: 'Đọc–hiểu–viết chương trình C cỡ vừa; tư duy chia bài toán thành hàm/module; nắm con trỏ, mảng, struct, chuỗi, tệp tin; gỡ lỗi cơ bản.',
+    requirements: 'Không có môn tiên quyết. Cần máy tính cài được trình biên dịch C (DevC++ / VS Code + GCC).',
+    documentsNote: 'Giáo trình: Foundations of Programming Using C (Evan Weaver) • The C Programming Language (Kernighan & Ritchie). Công cụ: DevC++ 6.3 hoặc VS Code + GCC. Kèm file syllabus gốc PRF192.pdf.',
   },
   sections: [
-    { title: '📚 Tài liệu tham khảo|||📚 Course materials', description: 'Sách chính (Evan Weaver) + K&R, MOOC, tài liệu chuẩn C, YouTube, công cụ, lộ trình.', lessons: [taiLieu] },
-    { title: 'Giới thiệu môn học|||Course introduction', description: '9 CLO, cơ cấu điểm, lộ trình 9 chương.', lessons: [intro] },
-    { title: 'Chương 1 — Nhập môn & công cụ (CLO1)|||Chapter 1 — Intro & tools (CLO1)', description: 'Hệ thống máy tính, các bước phát triển phần mềm, cấu trúc chương trình C, compiler.', lessons: [c1a, c1b, c1q] },
-    { title: 'Chương 2 — Biến, kiểu, bộ nhớ, I/O & biểu thức (CLO2)|||Chapter 2 — Variables, types, memory, I/O & expressions (CLO2)', description: 'Biến/hằng, kiểu & bộ nhớ, scanf/printf, toán tử & độ ưu tiên, ép kiểu.', lessons: [c2a, c2b, c2q] },
-    { title: 'Chương 3 — Lập trình cấu trúc (CLO3) · Workshop 1|||Chapter 3 — Structured programming (CLO3) · Workshop 1', description: 'if/switch, for/while/do-while, break/continue.', lessons: [c3, c3q] },
-    { title: 'Chương 4 — Module & Hàm (CLO4) · Workshop 2|||Chapter 4 — Modules & functions (CLO4) · Workshop 2', description: 'Thiết kế module, định nghĩa/gọi hàm, truyền giá trị, phạm vi biến.', lessons: [c4, c4q] },
-    { title: 'Chương 5 — Con trỏ (CLO5)|||Chapter 5 — Pointers (CLO5)', description: 'Địa chỉ & *, truyền tham chiếu, cấp phát động malloc/free.', lessons: [c5, c5q] },
-    { title: 'Chương 6 — Thư viện chuẩn (CLO6) · Progress Test 1|||Chapter 6 — Standard library (CLO6) · Progress Test 1', description: 'stdlib.h, time.h, math.h, ctype.h, nhập/xuất định dạng.', lessons: [c6, c6q] },
-    { title: 'Chương 7 — Mảng & Struct (CLO7) · Workshop 3|||Chapter 7 — Arrays & structs (CLO7) · Workshop 3', description: 'Mảng 1-2 chiều, tìm kiếm tuyến tính & sắp xếp chọn, struct & mảng struct.', lessons: [c7a, c7b, c7q] },
-    { title: 'Chương 8 — Chuỗi (CLO8) · Workshop 4|||Chapter 8 — Strings (CLO8) · Workshop 4', description: 'Mảng char & \\0, nhập/xuất chuỗi, mảng chuỗi, string.h.', lessons: [c8, c8q] },
-    { title: 'Chương 9 — Tệp tin (CLO9) · Workshop 5 · Progress Test 2|||Chapter 9 — Files (CLO9) · Workshop 5 · Progress Test 2', description: 'Text/binary, fopen/fclose/fprintf/fscanf/fwrite/fread.', lessons: [c9, c9q] },
-    { title: '★ Chuyên sâu — Con trỏ/bộ nhớ & Gỡ lỗi|||★ Deep dive — Pointers/memory & Debugging', description: 'Stack vs heap, số học con trỏ, segfault/buffer overflow, mẹo debug (-Wall/printf/gdb).', lessons: [adv1, adv2] },
+    /* ══════════════════ MỤC 0 — GIỚI THIỆU & HƯỚNG DẪN HỌC ══════════════════ */
+    {
+      title: 'Section 0 — Introduction & Study Guide|||Mục 0 — Giới thiệu môn học & Hướng dẫn học',
+      description: 'Đọc trước tiên: môn học là gì, học ra sao, điều kiện qua môn, lộ trình và tài liệu.',
+      lessons: [
+        {
+          title: '0.1 — About PRF192 & Course Map|||0.1 — Giới thiệu môn PRF192 & bản đồ môn học',
+          slug: 'prf192-gioi-thieu',
+          type: 'VIDEO',
+          isFreePreview: true,
+          description: 'Môn học này là gì, học xong làm được gì, và bản đồ toàn bộ hành trình.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Lesson 0.1</span>
+<h2>About PRF192 — Programming Fundamentals</h2>
+<p class="lead">PRF192 is the <strong>first</strong> programming course of the Software Engineering track. The goal is not to memorize syntax, but to <strong>learn to think like a programmer</strong>: look at a real problem and know how to break it into steps a computer can carry out.</p>
+<p>The language is <strong>C</strong> — a small language close to how a computer really works. After learning C you understand what lies "underneath" every modern language (Java, C#, Python…): memory, pointers, data types. That is why the university puts C first.</p>
+<h3>By the end of this course you will be able to</h3>
+<ul>
+  <li>Read and understand a mid-sized C program (a few hundred lines).</li>
+  <li>Write programs that solve real problems: calculations, list processing, reading/writing files.</li>
+  <li>Break a large problem into small, clear <strong>functions</strong>.</li>
+  <li>Understand <strong>pointers</strong> and how the machine manages memory — the tough but key idea.</li>
+</ul>
+<h3>Course map — 10 core chapters</h3>
+<p>All 60 university sessions are grouped into the roadmap below. Each chapter builds on the previous one, so study them in order:</p>
+<div class="lz-map">
+  <div class="lz-stage">Foundations</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Getting started: program &amp; computer</div><div class="lz-nsub">How a program runs, the structure of a C file</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Variables &amp; data types</div><div class="lz-nsub">Storing and reading data · input/output</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Expressions &amp; operators</div><div class="lz-nsub">Arithmetic, comparison, logic</div></div></div>
+  <div class="lz-stage">Control flow</div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Control structures</div><div class="lz-nsub">if / switch · loops for/while/do-while</div></div></div>
+  <div class="lz-stage">Program structure</div>
+  <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Functions &amp; Modules</div><div class="lz-nsub">Split a problem into small functions</div></div></div>
+  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Pointers</div><div class="lz-nsub">Addresses &amp; memory — the key to C</div></div></div>
+  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">C standard library</div><div class="lz-nsub">stdlib, math, string, time…</div></div></div>
+  <div class="lz-stage">Data</div>
+  <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Arrays &amp; Structs</div><div class="lz-nsub">Lists &amp; composite data</div></div></div>
+  <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Strings</div><div class="lz-nsub">Text processing</div></div></div>
+  <div class="lz-node"><div class="lz-badge">10</div><div class="lz-nbody"><div class="lz-ntitle">Files</div><div class="lz-nsub">Reading/writing data to disk</div></div></div>
+  <div class="lz-stage">Advanced · beyond the syllabus</div>
+  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Debug · Stack/Heap · Deep pointers · C projects</div><div class="lz-nsub">Understand deeper &amp; more firmly than in class</div></div></div>
+</div>
+<p>After PRF192 you move on to <span class="badge">PRO192</span> Object-Oriented Programming and <span class="badge">LAB211</span> — both assume you are solid on functions, arrays and pointers from here.</p>
+<div class="callout ok">The most effective way to study this course: <strong>retype every example and run it</strong>, don't just read. Programming is a skill — like swimming, watching others won't teach you.</div>
+<a class="link-card exphub" href="/exp-hub/prf192-cai-dat-moi-truong-c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh" target="_blank" rel="noopener">
+  <span class="lc-ico">🛠️</span>
+  <span class="lc-body"><span class="lc-title">Cài đặt môi trường C — hướng dẫn & tải về</span><span class="lc-sub">Guide chi tiết DevC++ / VS Code + GCC, link tải chính thức và cách dùng — trên Exp Hub.</span></span>
+  <span class="lc-cta">EXP HUB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bài 0.1</span>
+<h2>Giới thiệu môn PRF192 — Cơ sở lập trình</h2>
+<p class="lead">PRF192 là môn lập trình <strong>đầu tiên</strong> của lộ trình Kỹ thuật phần mềm. Mục tiêu không phải học thuộc cú pháp, mà là <strong>tập tư duy như một lập trình viên</strong>: nhìn một bài toán thực tế và biết cách chia nhỏ, mô tả từng bước để máy tính làm giúp.</p>
+<p>Ngôn ngữ dùng để học là <strong>C</strong> — một ngôn ngữ nhỏ, gần với cách máy tính thật sự hoạt động. Học C xong, bạn hiểu được "bên dưới" của mọi ngôn ngữ hiện đại (Java, C#, Python…): bộ nhớ, con trỏ, kiểu dữ liệu. Đó là lý do trường đặt C ở môn mở đầu.</p>
+<h3>Học xong môn này bạn sẽ làm được</h3>
+<ul>
+  <li>Đọc và hiểu một chương trình C cỡ vừa (vài trăm dòng).</li>
+  <li>Tự viết chương trình giải bài toán thực tế: tính toán, xử lý danh sách, đọc/ghi tệp.</li>
+  <li>Chia một bài toán lớn thành các <strong>hàm</strong> nhỏ, rõ ràng.</li>
+  <li>Hiểu <strong>con trỏ</strong> và cách máy quản lý bộ nhớ — kiến thức "khó nhằn" nhưng là chìa khoá.</li>
+</ul>
+<h3>Bản đồ môn học — 10 chương chính</h3>
+<p>Toàn bộ 60 buổi của trường được gom thành lộ trình bên dưới. Mỗi chương xây trên chương trước, nên hãy học tuần tự:</p>
+<div class="lz-map">
+  <div class="lz-stage">Nền tảng</div>
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Nhập môn: chương trình &amp; máy tính</div><div class="lz-nsub">Chương trình chạy thế nào, cấu trúc một file C</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Biến &amp; kiểu dữ liệu</div><div class="lz-nsub">Lưu và nhận dữ liệu · nhập/xuất</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Biểu thức &amp; toán tử</div><div class="lz-nsub">Tính toán, so sánh, logic</div></div></div>
+  <div class="lz-stage">Điều khiển luồng</div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Cấu trúc điều khiển</div><div class="lz-nsub">if / switch · vòng lặp for/while/do-while</div></div></div>
+  <div class="lz-stage">Cấu trúc chương trình</div>
+  <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Hàm &amp; Module</div><div class="lz-nsub">Chia bài toán thành hàm nhỏ</div></div></div>
+  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Con trỏ</div><div class="lz-nsub">Địa chỉ &amp; bộ nhớ — chìa khoá của C</div></div></div>
+  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Thư viện chuẩn C</div><div class="lz-nsub">stdlib, math, string, time…</div></div></div>
+  <div class="lz-stage">Dữ liệu</div>
+  <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Mảng &amp; Struct</div><div class="lz-nsub">Danh sách &amp; dữ liệu phức hợp</div></div></div>
+  <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Chuỗi (String)</div><div class="lz-nsub">Xử lý văn bản</div></div></div>
+  <div class="lz-node"><div class="lz-badge">10</div><div class="lz-nbody"><div class="lz-ntitle">Tệp tin (File)</div><div class="lz-nsub">Đọc/ghi dữ liệu ra ổ đĩa</div></div></div>
+  <div class="lz-stage">Nâng cao · ngoài giáo trình</div>
+  <div class="lz-node"><div class="lz-badge">★</div><div class="lz-nbody"><div class="lz-ntitle">Debug · Stack/Heap · Con trỏ sâu · Dự án C</div><div class="lz-nsub">Hiểu sâu &amp; nắm chắc hơn ở trường</div></div></div>
+</div>
+<p>Sau PRF192, bạn đi tiếp <span class="badge">PRO192</span> Lập trình hướng đối tượng và <span class="badge">LAB211</span> — cả hai đều giả định bạn đã vững phần hàm, mảng và con trỏ ở đây.</p>
+<div class="callout ok">Cách học hiệu quả nhất môn này: <strong>gõ lại mọi ví dụ và chạy thử</strong>, đừng chỉ đọc. Lập trình là kỹ năng — như tập bơi, xem người khác bơi không làm bạn biết bơi.</div>
+<a class="link-card exphub" href="/exp-hub/prf192-cai-dat-moi-truong-c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh" target="_blank" rel="noopener">
+  <span class="lc-ico">🛠️</span>
+  <span class="lc-body"><span class="lc-title">Cài đặt môi trường C — hướng dẫn &amp; tải về</span><span class="lc-sub">Guide chi tiết DevC++ / VS Code + GCC, link tải chính thức và cách dùng — trên Exp Hub.</span></span>
+  <span class="lc-cta">EXP HUB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '0.2 — Passing Requirements & Grading|||0.2 — Điều kiện qua môn & cấu trúc điểm',
+          slug: 'prf192-dieu-kien-qua-mon',
+          type: 'VIDEO',
+          isFreePreview: true,
+          description: 'Tổng giờ, tiên quyết, điểm sàn qua môn và trọng số từng cột điểm.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Lesson 0.2</span>
+<h2>Passing requirements &amp; grading</h2>
+<p class="lead">Know the rules before the match. The information below comes straight from the university's official syllabus.</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Credits</span><span class="v">3</span></div>
+  <div class="kv"><span class="k">Total hours</span><span class="v">150h <small>45h class + 1h exam + 104h self-study</small></span></div>
+  <div class="kv"><span class="k">Sessions</span><span class="v">60 sessions <small>45 min each</small></span></div>
+  <div class="kv"><span class="k">Prerequisite</span><span class="v">None <small>can take from semester 1</small></span></div>
+  <div class="kv"><span class="k">Grading scale</span><span class="v">10 <small>pass when average ≥ 5.0</small></span></div>
+  <div class="kv"><span class="k">Exam eligibility</span><span class="v">Attend ≥ 80% of sessions</span></div>
+</div>
+<h3>Grade structure</h3>
+<table>
+  <thead><tr><th>Component</th><th>Weight</th><th>Note</th></tr></thead>
+  <tbody>
+    <tr><td>Assignment <small>on-going · 1 part</small></td><td>15%</td><td>At home (CLO2–CLO9) — &ldquo;Option 1: a problem…&rdquo;</td></tr>
+    <tr><td>Practical Exam <small>on-going · 1 part</small></td><td>30%</td><td><b>85 min</b> (CLO2–CLO8) — &ldquo;preferable to be m[achine-graded]…&rdquo;</td></tr>
+    <tr><td>Progress Test <small>on-going · 2 parts</small></td><td>15%</td><td><b>20–40 min</b> each, assessing <b>CLO1, CLO5, CLO6, CLO9</b> — &ldquo;Option 1: essay or…&rdquo;</td></tr>
+    <tr><td>Workshop <small>on-going · 5 parts</small></td><td>10%</td><td>In the classroom (CLO1–CLO9) — &ldquo;Option 1: practical…&rdquo;</td></tr>
+    <tr><td><strong>Final Exam</strong> <small>1 part</small></td><td><strong>30%</strong></td><td><b>Multiple choice, 60 min</b> (CLO1–CLO9) — completion criterion <b>4</b></td></tr>
+  </tbody>
+</table>
+<div class="callout warn">Three <strong>hard blockers</strong> even with a high coursework score: (1) missing more than 20% of sessions = <strong>barred from the exam</strong>; (2) the <strong>Final Exam must be ≥ 4.0</strong>; (3) <strong>every on-going component must be &gt; 0</strong> — a zero on the assignment, the practical exam, either progress test or the workshop block fails the subject on its own, however high the weighted average is.</div>
+<div class="note-ct">Practical Exam (30%) and Final (30%) make up 60% — both are taken <strong>live on a computer / as multiple choice</strong>, so rote learning won't help. The safe strategy: finish every Workshop and the practice on CodeLab so your hands get used to typing code and you're fast on exam day.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bài 0.2</span>
+<h2>Điều kiện qua môn &amp; cấu trúc điểm</h2>
+<p class="lead">Nắm luật chơi trước khi vào trận. Dưới đây là thông tin lấy thẳng từ syllabus chính thức của trường.</p>
+
+<div class="kv-grid">
+  <div class="kv"><span class="k">Số tín chỉ</span><span class="v">3</span></div>
+  <div class="kv"><span class="k">Tổng giờ</span><span class="v">150h <small>45h lớp + 1h thi + 104h tự học</small></span></div>
+  <div class="kv"><span class="k">Số buổi</span><span class="v">60 buổi <small>45 phút/buổi</small></span></div>
+  <div class="kv"><span class="k">Tiên quyết</span><span class="v">Không <small>học ngay từ kỳ 1</small></span></div>
+  <div class="kv"><span class="k">Thang điểm</span><span class="v">10 <small>qua môn khi TB ≥ 5.0</small></span></div>
+  <div class="kv"><span class="k">Điều kiện dự thi</span><span class="v">Dự ≥ 80% buổi</span></div>
+</div>
+
+<h3>Cấu trúc điểm</h3>
+<table>
+  <thead><tr><th>Thành phần</th><th>Trọng số</th><th>Ghi chú</th></tr></thead>
+  <tbody>
+    <tr><td>Assignment <small>quá trình · 1 phần</small></td><td>15%</td><td>Làm ở nhà (CLO2–CLO9) — &ldquo;Option 1: a problem…&rdquo;</td></tr>
+    <tr><td>Practical Exam <small>quá trình · 1 phần</small></td><td>30%</td><td><b>85 phút</b> (CLO2–CLO8) — &ldquo;preferable to be m[achine-graded]…&rdquo;</td></tr>
+    <tr><td>Progress Test <small>quá trình · 2 phần</small></td><td>15%</td><td><b>20–40 phút</b> mỗi bài, kiểm <b>CLO1, CLO5, CLO6, CLO9</b> — &ldquo;Option 1: essay or…&rdquo;</td></tr>
+    <tr><td>Workshop <small>quá trình · 5 phần</small></td><td>10%</td><td>Làm tại lớp (CLO1–CLO9) — &ldquo;Option 1: practical…&rdquo;</td></tr>
+    <tr><td><strong>Final Exam</strong> <small>1 phần</small></td><td><strong>30%</strong></td><td><b>Trắc nghiệm, 60 phút</b> (CLO1–CLO9) — sàn hoàn thành <b>4</b></td></tr>
+  </tbody>
+</table>
+
+<div class="callout warn">Ba điều kiện <strong>chặn cứng</strong> dù điểm quá trình cao: (1) vắng quá 20% buổi = <strong>cấm thi</strong>; (2) điểm <strong>Final Exam phải ≥ 4.0</strong>; (3) <strong>mọi cột điểm quá trình phải &gt; 0</strong> — một con 0 ở assignment, practical exam, một trong hai progress test hay khối workshop là tự trượt môn, dù trung bình có trọng số cao tới đâu.</div>
+
+<div class="note-ct">Practical Exam (30%) và Final (30%) chiếm 60% — đều thi <strong>trực tiếp trên máy/trắc nghiệm</strong>, không học vẹt được. Cách ăn chắc: làm hết Workshop và bài luyện ở CodeLab để tay quen gõ code, khi thi mới nhanh.</div>
+</div>
+`,
+        },
+        {
+          title: '0.3 — Learning Outcomes (CLOs) & Roadmap|||0.3 — Chuẩn đầu ra (CLO) & lộ trình 60 buổi',
+          slug: 'prf192-chuan-dau-ra',
+          type: 'VIDEO',
+          description: '9 chuẩn đầu ra của môn và cách chúng gom vào từng chương.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Lesson 0.3</span>
+<h2>9 course learning outcomes (CLOs) &amp; roadmap</h2>
+<p class="lead">A "Course Learning Outcome" (CLO) is what you <strong>must be able to do</strong> after the course. The exams follow these CLOs closely — knowing the CLO map tells you what you'll be tested on.</p>
+<table>
+  <thead><tr><th>CLO</th><th>You will be able to</th><th>Chapter</th></tr></thead>
+  <tbody>
+    <tr><td>CLO1</td><td>Explain how a program runs on a computer</td><td>1</td></tr>
+    <tr><td>CLO2</td><td>Use variables, expressions and basic operators</td><td>2–3</td></tr>
+    <tr><td>CLO3</td><td>Use logic structures: branching, loops</td><td>4</td></tr>
+    <tr><td>CLO4</td><td>Write &amp; use functions, split into modules</td><td>5</td></tr>
+    <tr><td>CLO5</td><td>Understand &amp; use pointers</td><td>6</td></tr>
+    <tr><td>CLO6</td><td>Use the C standard library</td><td>7</td></tr>
+    <tr><td>CLO7</td><td>Use arrays &amp; structs</td><td>8</td></tr>
+    <tr><td>CLO8</td><td>Process strings</td><td>9</td></tr>
+    <tr><td>CLO9</td><td>Read/write files</td><td>10</td></tr>
+  </tbody>
+</table>
+<div class="callout">Six Constructive Questions from the university — answer them yourself to self-check at the start: What is C and what is it used for? The basic structure of a C program? What does <code>#include</code> do? What is the <code>main()</code> function for? How do you write comments? What is the role of the semicolon?</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bài 0.3</span>
+<h2>9 chuẩn đầu ra (CLO) &amp; lộ trình</h2>
+<p class="lead">"Chuẩn đầu ra" (Course Learning Outcome) là những gì bạn <strong>phải làm được</strong> sau môn. Đề thi bám sát các CLO này — nắm được bản đồ CLO là biết mình sẽ bị hỏi gì.</p>
+<table>
+  <thead><tr><th>CLO</th><th>Bạn sẽ làm được</th><th>Chương</th></tr></thead>
+  <tbody>
+    <tr><td>CLO1</td><td>Giải thích chương trình chạy thế nào trên máy</td><td>1</td></tr>
+    <tr><td>CLO2</td><td>Dùng biến, biểu thức, phép toán cơ bản</td><td>2–3</td></tr>
+    <tr><td>CLO3</td><td>Dùng cấu trúc logic: rẽ nhánh, vòng lặp</td><td>4</td></tr>
+    <tr><td>CLO4</td><td>Viết &amp; dùng hàm, chia module</td><td>5</td></tr>
+    <tr><td>CLO5</td><td>Hiểu &amp; dùng con trỏ</td><td>6</td></tr>
+    <tr><td>CLO6</td><td>Dùng thư viện chuẩn C</td><td>7</td></tr>
+    <tr><td>CLO7</td><td>Dùng mảng &amp; struct</td><td>8</td></tr>
+    <tr><td>CLO8</td><td>Xử lý chuỗi (string)</td><td>9</td></tr>
+    <tr><td>CLO9</td><td>Đọc/ghi tệp tin</td><td>10</td></tr>
+  </tbody>
+</table>
+<div class="callout">Sáu câu hỏi dẫn nhập (Constructive Questions) của trường — tự trả lời để kiểm tra đầu môn: C là gì và dùng làm gì? Cấu trúc cơ bản của chương trình C? <code>#include</code> làm gì? Hàm <code>main()</code> để làm gì? Cách viết chú thích? Vai trò của dấu chấm phẩy?</div>
+</div>
+`,
+        },
+        {
+          title: '0.4 — Materials, Tools & Submission|||0.4 — Tài liệu, công cụ & cách nộp bài',
+          slug: 'prf192-tai-lieu-cong-cu',
+          type: 'DOCUMENT',
+          description: 'Giáo trình, trình biên dịch, và nơi luyện tập.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Lesson 0.4</span>
+<h2>Materials, tools &amp; where to practice</h2>
+<h3>Textbooks</h3>
+<ul>
+  <li><strong>Foundations of Programming Using C</strong> — Evan Weaver (main textbook, free).</li>
+  <li><strong>The C Programming Language</strong> — Kernighan &amp; Ritchie ("K&amp;R", a classic, read it gradually).</li>
+  <li>MOOC: <em>Introduction to C</em> — Chris Szalwinski, Seneca College.</li>
+</ul>
+<h3>Tools</h3>
+<ul>
+  <li>Compiler: <strong>DevC++ 6.3</strong> (used by the university) or <strong>VS Code + GCC</strong> (recommended, more professional).</li>
+</ul>
+<a class="link-card exphub" href="/exp-hub/prf192-cai-dat-moi-truong-c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh" target="_blank" rel="noopener">
+  <span class="lc-ico">🛠️</span>
+  <span class="lc-body"><span class="lc-title">Install &amp; configure your IDE — download</span><span class="lc-sub">Step-by-step DevC++ / VS Code + GCC setup and download links — on Exp Hub.</span></span>
+  <span class="lc-cta">EXP HUB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Practice code right in the browser</span><span class="lc-sub">Solve auto-graded C exercises on CodeLab — no install needed.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<div class="callout">📎 Attached to this lesson: <strong>the original PRF192.pdf syllabus</strong> — the university's official version, for reference.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bài 0.4</span>
+<h2>Tài liệu, công cụ &amp; nơi luyện tập</h2>
+<h3>Giáo trình</h3>
+<ul>
+  <li><strong>Foundations of Programming Using C</strong> — Evan Weaver (giáo trình chính, miễn phí).</li>
+  <li><strong>The C Programming Language</strong> — Kernighan &amp; Ritchie ("K&amp;R", kinh điển, nên đọc dần).</li>
+  <li>MOOC: <em>Introduction to C</em> — Chris Szalwinski, Seneca College.</li>
+</ul>
+<h3>Công cụ</h3>
+<ul>
+  <li>Trình biên dịch: <strong>DevC++ 6.3</strong> (trường dùng) hoặc <strong>VS Code + GCC</strong> (khuyên dùng, chuyên nghiệp hơn).</li>
+</ul>
+<a class="link-card exphub" href="/exp-hub/prf192-cai-dat-moi-truong-c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh" target="_blank" rel="noopener">
+  <span class="lc-ico">🛠️</span>
+  <span class="lc-body"><span class="lc-title">Cài đặt & cấu hình IDE — tải về</span><span class="lc-sub">Từng bước cài DevC++ / VS Code + GCC và link tải — trên Exp Hub.</span></span>
+  <span class="lc-cta">EXP HUB →</span>
+</a>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Luyện code trực tiếp trên trình duyệt</span><span class="lc-sub">Làm bài tập C có chấm tự động ở CodeLab — không cần cài gì.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<div class="callout">📎 File đính kèm mục này: <strong>syllabus gốc PRF192.pdf</strong> — bản chính thức của trường, dùng để đối chiếu.</div>
+</div>
+`,
+        },
+        {
+          title: '0.5 — Install & Use DevC++ / VS Code|||0.5 — Cài đặt & sử dụng DevC++ / VS Code',
+          slug: 'prf192-0-5-cai-dat-moi-truong',
+          type: 'VIDEO',
+          isFreePreview: true,
+          description: 'Hướng dẫn cài đặt, cấu hình và dùng DevC++ hoặc VS Code + GCC để viết, biên dịch, chạy và gỡ lỗi chương trình C.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Lesson 0.5</span>
+<h2>Install &amp; use your C programming tools</h2>
+<p class="lead">Before writing your first line of code you need a <strong>C compiler</strong> and a <strong>text editor</strong>. This lesson covers two options: <strong>DevC++</strong> (simple, used by the university) and <strong>VS Code + GCC</strong> (professional, for the long run). Either one is enough for the whole course.</p>
+
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">What you need</div><div class="lz-t">A compiler</div><div class="lz-d">GCC — turns C into a runnable program</div></div>
+  <div class="lz-step"><div class="lz-k">+</div><div class="lz-t">An editor</div><div class="lz-d">where you type code</div></div>
+  <div class="lz-step"><div class="lz-k">=</div><div class="lz-t">Write → compile → run</div><div class="lz-d">the programming loop</div></div>
+</div>
+
+<h3>Option A — DevC++ (quick &amp; easy for beginners)</h3>
+<p>DevC++ bundles both the compiler and the editor in one installer — no extra configuration.</p>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Download &amp; install</div><div class="lz-nsub">Download "Embarcadero Dev-C++" (v6.3), run the installer, click Next to the end.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Create a .c file</div><div class="lz-nsub">File → New → Source File, save with a <code>.c</code> extension (not .cpp).</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Compile &amp; run</div><div class="lz-nsub">Press <kbd>F11</kbd> (Compile &amp; Run). A black window shows the result.</div></div></div>
+</div>
+<pre><span class="tok-comment">// Type this and press F11</span>
+<span class="tok-keyword">#include</span> &lt;stdio.h&gt;
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    <span class="tok-function">printf</span>(<span class="tok-string">"Moi truong da san sang!"</span>);
+    <span class="tok-keyword">return</span> 0;
+}</pre>
+<div class="pitfall">If the result window appears then <em>closes immediately</em>, add <code>getchar();</code> before <code>return 0;</code> so it waits for you. And remember to save the file with a <code>.c</code> extension — a <code>.cpp</code> file compiles as C++, which has some different rules.</div>
+
+<h3>Option B — VS Code + GCC (recommended long-term)</h3>
+<p>VS Code is a powerful editor for every language. You also need to install GCC (via MinGW-w64 on Windows).</p>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Install VS Code</div><div class="lz-nsub">Download from code.visualstudio.com and install normally.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Install GCC (MinGW-w64)</div><div class="lz-nsub">Windows: install MSYS2 then <code>pacman -S mingw-w64-ucrt-x86_64-gcc</code>. macOS: <code>xcode-select --install</code>. Linux: <code>sudo apt install gcc</code>.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Add GCC to PATH</div><div class="lz-nsub">Windows: add <code>...\\ucrt64\\bin</code> to the Path environment variable. Check: open a Terminal and type <code>gcc --version</code>.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Install the C/C++ extension</div><div class="lz-nsub">In VS Code, install Microsoft's "C/C++" extension.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Compile &amp; run</div><div class="lz-nsub">Open the Terminal (<kbd>Ctrl</kbd>+<kbd>&#96;</kbd>) and run the commands below.</div></div></div>
+</div>
+<pre><span class="tok-comment"># Compile hello.c into a program named hello</span>
+gcc hello.c -o hello
+<span class="tok-comment"># Run (Windows)</span>
+.\\hello
+<span class="tok-comment"># Run (macOS/Linux)</span>
+./hello</pre>
+<div class="pitfall">Common error: <code>gcc</code> is not recognized (<em>"'gcc' is not recognized"</em>) → GCC isn't on the PATH; redo step 3 then <strong>reopen</strong> VS Code/Terminal. PATH is only read when a new window opens.</div>
+
+<h3>Debugging in VS Code</h3>
+<p>Set a <strong>breakpoint</strong> (click the left margin next to a line number → red dot), press <kbd>F5</kbd> to step through and watch variable values. You'll use this skill in advanced chapter N1.</p>
+
+<div class="note-ct">Advice: beginners start with <strong>DevC++</strong> for speed; once comfortable, switch to <strong>VS Code + GCC</strong> — the tools you'll use throughout the field. Both compile with GCC, so the C code you write is identical.</div>
+
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-278" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Practice now, no install needed</span><span class="lc-sub">The "C Fundamentals &amp; Development Environment" module on Code Lab — run C in the browser while you set up your machine.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bài 0.5</span>
+<h2>Cài đặt &amp; sử dụng công cụ lập trình C</h2>
+<p class="lead">Trước khi viết dòng code đầu tiên, bạn cần một <strong>trình biên dịch C</strong> và một <strong>trình soạn thảo</strong>. Bài này hướng dẫn hai lựa chọn: <strong>DevC++</strong> (đơn giản, trường dùng) và <strong>VS Code + GCC</strong> (chuyên nghiệp, dùng lâu dài). Chọn một trong hai là đủ học cả môn.</p>
+
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Cần gì</div><div class="lz-t">Trình biên dịch</div><div class="lz-d">GCC — dịch C ra chương trình chạy</div></div>
+  <div class="lz-step"><div class="lz-k">+</div><div class="lz-t">Trình soạn thảo</div><div class="lz-d">nơi gõ code</div></div>
+  <div class="lz-step"><div class="lz-k">=</div><div class="lz-t">Viết → dịch → chạy</div><div class="lz-d">vòng lặp lập trình</div></div>
+</div>
+
+<h3>Lựa chọn A — DevC++ (nhanh gọn cho người mới)</h3>
+<p>DevC++ gói sẵn cả trình biên dịch lẫn trình soạn thảo trong một bộ cài — không phải cấu hình gì thêm.</p>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Tải &amp; cài</div><div class="lz-nsub">Tải "Embarcadero Dev-C++" (bản 6.3), chạy file cài, bấm Next tới hết.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Tạo file .c</div><div class="lz-nsub">File → New → Source File, lưu với đuôi <code>.c</code> (không phải .cpp).</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Biên dịch &amp; chạy</div><div class="lz-nsub">Nhấn <kbd>F11</kbd> (Compile &amp; Run). Cửa sổ đen hiện kết quả.</div></div></div>
+</div>
+<pre><span class="tok-comment">// Gõ thử rồi nhấn F11</span>
+<span class="tok-keyword">#include</span> &lt;stdio.h&gt;
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    <span class="tok-function">printf</span>(<span class="tok-string">"Moi truong da san sang!"</span>);
+    <span class="tok-keyword">return</span> 0;
+}</pre>
+<div class="pitfall">Nếu cửa sổ kết quả hiện rồi <em>tắt ngay</em>, thêm <code>getchar();</code> trước <code>return 0;</code> để nó dừng chờ bạn xem. Và nhớ lưu file đuôi <code>.c</code> — để <code>.cpp</code> sẽ biên dịch theo C++, khác một số quy tắc.</div>
+
+<h3>Lựa chọn B — VS Code + GCC (khuyên dùng lâu dài)</h3>
+<p>VS Code là trình soạn thảo mạnh, dùng được cho mọi ngôn ngữ. Cần cài thêm GCC (qua MinGW-w64 trên Windows).</p>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Cài VS Code</div><div class="lz-nsub">Tải từ code.visualstudio.com, cài bình thường.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Cài GCC (MinGW-w64)</div><div class="lz-nsub">Windows: cài MSYS2 rồi <code>pacman -S mingw-w64-ucrt-x86_64-gcc</code>. macOS: <code>xcode-select --install</code>. Linux: <code>sudo apt install gcc</code>.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Thêm GCC vào PATH</div><div class="lz-nsub">Windows: thêm <code>...\\ucrt64\\bin</code> vào biến môi trường Path. Kiểm tra: mở Terminal gõ <code>gcc --version</code>.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Cài extension C/C++</div><div class="lz-nsub">Trong VS Code, cài extension "C/C++" của Microsoft.</div></div></div>
+  <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Biên dịch &amp; chạy</div><div class="lz-nsub">Mở Terminal (<kbd>Ctrl</kbd>+<kbd>&#96;</kbd>), gõ lệnh bên dưới.</div></div></div>
+</div>
+<pre><span class="tok-comment"># Biên dịch file hello.c thành chương trình hello</span>
+gcc hello.c -o hello
+<span class="tok-comment"># Chạy (Windows)</span>
+.\\hello
+<span class="tok-comment"># Chạy (macOS/Linux)</span>
+./hello</pre>
+<div class="pitfall">Lỗi hay gặp: <code>gcc</code> không nhận diện được (<em>"'gcc' is not recognized"</em>) → GCC chưa vào PATH, làm lại bước 3 rồi <strong>mở lại</strong> VS Code/Terminal. PATH chỉ được đọc khi mở cửa sổ mới.</div>
+
+<h3>Gỡ lỗi (debug) trong VS Code</h3>
+<p>Đặt <strong>breakpoint</strong> (bấm vào lề trái số dòng → chấm đỏ), nhấn <kbd>F5</kbd> để chạy từng bước và xem giá trị biến. Kỹ năng này bạn sẽ dùng ở chương nâng cao N1.</p>
+
+<div class="note-ct">Khuyên: người mới bắt đầu bằng <strong>DevC++</strong> cho nhanh, khi quen thì chuyển sang <strong>VS Code + GCC</strong> — công cụ bạn sẽ dùng suốt cả ngành. Cả hai đều dịch bằng GCC nên code C viết giống hệt nhau.</div>
+
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-278" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Thực hành ngay không cần cài</span><span class="lc-sub">Module "C Fundamentals & Development Environment" trên Code Lab — chạy C thẳng trên trình duyệt trong lúc bạn cài máy.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+      ],
+    },
+
+    /* ══════════════════ CHƯƠNG 1 — NHẬP MÔN ══════════════════ */
+    {
+      title: 'Chapter 1 — Getting started: program & computer|||Chương 1 — Nhập môn: chương trình & máy tính',
+      description: 'Lập trình là gì, máy tính chạy chương trình ra sao, và cấu trúc một chương trình C.',
+      lessons: [
+        {
+          title: '1.1 — What is programming? How a computer runs a program|||1.1 — Lập trình là gì? Máy tính chạy chương trình ra sao',
+          slug: 'prf192-1-1-lap-trinh-la-gi',
+          type: 'VIDEO',
+          description: 'Từ bài toán thực tế đến chỉ thị máy hiểu được.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 1 · Lesson 1.1</span>
+<h2>What is programming?</h2>
+<p class="lead"><strong>Programming</strong> is writing a clear, ordered sequence of instructions for a computer to carry out a task. A computer is very fast but "can't think" — it does <em>exactly</em> what you tell it, even when you tell it something wrong.</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Step 1</div><div class="lz-t">Real problem</div><div class="lz-d">"Compute the average of 3 subjects"</div></div>
+  <div class="lz-step"><div class="lz-k">Step 2</div><div class="lz-t">Algorithm</div><div class="lz-d">Add the 3 numbers, divide by 3</div></div>
+  <div class="lz-step"><div class="lz-k">Step 3</div><div class="lz-t">C program</div><div class="lz-d">tb = (a+b+c)/3;</div></div>
+  <div class="lz-step"><div class="lz-k">Step 4</div><div class="lz-t">Machine runs → result</div><div class="lz-d">Prints to the screen</div></div>
+</div>
+<h3>How does a computer run a program?</h3>
+<p>A CPU only understands <strong>machine code</strong> (0s/1s). We write in C because it's readable, then a <strong>compiler</strong> translates the C code into machine code:</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Write</div><div class="lz-t">Source <code>.c</code></div><div class="lz-d">You type C</div></div>
+  <div class="lz-step"><div class="lz-k">Compile</div><div class="lz-t">Machine code <code>.exe</code></div><div class="lz-d">Compiler turns it into 0/1</div></div>
+  <div class="lz-step"><div class="lz-k">Run</div><div class="lz-t">Result</div><div class="lz-d">The CPU executes it</div></div>
+</div>
+<h3>Your first C program</h3>
+<pre><span class="tok-comment">// A program that prints one line of text</span>
+<span class="tok-keyword">#include</span> &lt;stdio.h&gt;
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    <span class="tok-function">printf</span>(<span class="tok-string">"Xin chao PRF192!"</span>);
+    <span class="tok-keyword">return</span> 0;
+}</pre>
+<div class="out"><b>Output:</b> Xin chao PRF192!</div>
+<div class="pitfall">Beginners often forget the <code>;</code> at the end of a statement, or write <code>Printf</code> (capital P). C is case-sensitive and requires <code>;</code> — missing it is an immediate compile error.</div>
+<div class="note-ct">Don't rush to fully understand <code>#include</code> or <code>return 0</code> — lesson 1.3 dissects them. For now just: type it correctly, compile, see the text appear. That feeling of "the machine obeys me" is your first motivation.</div>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-278" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Try it now: print your own line</span><span class="lc-sub">The C version of "Hello, World" — type &amp; run on CodeLab.</span></span>
+  <span class="lc-cta">PRACTICE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 1 · Bài 1.1</span>
+<h2>Lập trình là gì?</h2>
+<p class="lead"><strong>Lập trình</strong> là viết ra một dãy chỉ thị rõ ràng, tuần tự để máy tính thực hiện một công việc. Máy tính rất nhanh nhưng "không biết suy nghĩ" — nó làm <em>đúng y</em> những gì bạn bảo, kể cả khi bạn bảo sai.</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Bước 1</div><div class="lz-t">Bài toán thực tế</div><div class="lz-d">"Tính điểm trung bình 3 môn"</div></div>
+  <div class="lz-step"><div class="lz-k">Bước 2</div><div class="lz-t">Thuật toán</div><div class="lz-d">Cộng 3 số rồi chia cho 3</div></div>
+  <div class="lz-step"><div class="lz-k">Bước 3</div><div class="lz-t">Chương trình C</div><div class="lz-d">tb = (a+b+c)/3;</div></div>
+  <div class="lz-step"><div class="lz-k">Bước 4</div><div class="lz-t">Máy chạy → kết quả</div><div class="lz-d">In ra màn hình</div></div>
+</div>
+
+<h3>Máy tính chạy chương trình thế nào?</h3>
+<p>CPU chỉ hiểu <strong>mã máy</strong> (số 0/1). Ta viết bằng C cho dễ đọc, rồi <strong>trình biên dịch (compiler)</strong> dịch mã C thành mã máy:</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Viết</div><div class="lz-t">Mã nguồn <code>.c</code></div><div class="lz-d">Bạn gõ bằng C</div></div>
+  <div class="lz-step"><div class="lz-k">Biên dịch</div><div class="lz-t">Mã máy <code>.exe</code></div><div class="lz-d">Compiler dịch sang 0/1</div></div>
+  <div class="lz-step"><div class="lz-k">Chạy</div><div class="lz-t">Kết quả</div><div class="lz-d">CPU thực thi</div></div>
+</div>
+
+<h3>Chương trình C đầu tiên</h3>
+<pre><span class="tok-comment">// Chương trình in ra một dòng chữ</span>
+<span class="tok-keyword">#include</span> &lt;stdio.h&gt;
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    <span class="tok-function">printf</span>(<span class="tok-string">"Xin chao PRF192!"</span>);
+    <span class="tok-keyword">return</span> 0;
+}</pre>
+<div class="out"><b>Output:</b> Xin chao PRF192!</div>
+
+<div class="pitfall">Người mới hay quên dấu <code>;</code> cuối câu lệnh, hoặc viết <code>Printf</code> (P hoa). C phân biệt hoa–thường và bắt buộc <code>;</code> — thiếu là báo lỗi biên dịch ngay.</div>
+
+<div class="note-ct">Đừng vội hiểu hết dòng <code>#include</code> hay <code>return 0</code> — bài 1.3 sẽ mổ xẻ. Bây giờ chỉ cần: gõ đúng, biên dịch, thấy chữ hiện ra. Cảm giác "máy làm theo lời mình" chính là động lực đầu tiên.</div>
+
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-278" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Thử ngay: in dòng chữ của bạn</span><span class="lc-sub">Bài "Hello, World" phiên bản C — gõ & chạy trên CodeLab.</span></span>
+  <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '1.2 — Software development steps · compiled vs interpreted|||1.2 — Các bước phát triển phần mềm · biên dịch vs thông dịch',
+          slug: 'prf192-1-2-phat-trien-phan-mem',
+          type: 'VIDEO',
+          description: 'Quy trình từ ý tưởng đến chương trình chạy được.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 1 · Lesson 1.2</span>
+<h2>The steps of developing a program</h2>
+<p class="lead">Professional programmers don't "just type". They follow a process that reduces bugs and makes fixes easy.</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">01</div><div class="lz-t">Analyze</div><div class="lz-d">Understand the problem, the input/output</div></div>
+  <div class="lz-step"><div class="lz-k">02</div><div class="lz-t">Design</div><div class="lz-d">Think of the algorithm, the steps</div></div>
+  <div class="lz-step"><div class="lz-k">03</div><div class="lz-t">Code</div><div class="lz-d">Write C code</div></div>
+  <div class="lz-step"><div class="lz-k">04</div><div class="lz-t">Compile</div><div class="lz-d">Fix syntax errors</div></div>
+  <div class="lz-step"><div class="lz-k">05</div><div class="lz-t">Test</div><div class="lz-d">Run it, fix logic errors</div></div>
+</div>
+<h3>Compiled vs interpreted</h3>
+<table>
+  <thead><tr><th></th><th>Compiled — C</th><th>Interpreted — Python</th></tr></thead>
+  <tbody>
+    <tr><td>How it runs</td><td>Translates everything to an .exe first, then runs</td><td>Reads &amp; runs line by line at execution</td></tr>
+    <tr><td>Speed</td><td>Fast</td><td>Slower</td></tr>
+    <tr><td>Errors</td><td>Catches every syntax error at compile time; the program never runs until they are fixed</td><td>Also parses the whole file first — a syntax error stops it before the first line runs. What surfaces only when execution reaches the faulty line is a <em>runtime</em> error (bad name, wrong type, division by zero)</td></tr>
+  </tbody>
+</table>
+<div class="callout">C is a <strong>compiled</strong> language. So every time you change the code you must recompile (Compile/Build) before running — with practice you'll use the <kbd>F9</kbd>/<kbd>F11</kbd> shortcuts in DevC++.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>"Compile" is really 4 steps.</b> Clicking Build actually runs: <b>preprocessing</b> (expand <code>#include</code>/<code>#define</code>) → <b>compiling</b> (C source → assembly) → <b>assembling</b> (assembly → machine code <code>.o</code>) → <b>linking</b> (combine your <code>.o</code> with library code into one <code>.exe</code>). <em>Chapter N4 (multi-file projects) revisits this pipeline — a "compile error" and a "linker error" are different stages failing.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 1 · Bài 1.2</span>
+<h2>Các bước phát triển một chương trình</h2>
+<p class="lead">Lập trình viên chuyên nghiệp không "gõ đại". Họ đi theo một quy trình, giúp giảm lỗi và dễ sửa.</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">01</div><div class="lz-t">Phân tích</div><div class="lz-d">Hiểu đề, dữ liệu vào/ra</div></div>
+  <div class="lz-step"><div class="lz-k">02</div><div class="lz-t">Thiết kế</div><div class="lz-d">Nghĩ thuật toán, các bước</div></div>
+  <div class="lz-step"><div class="lz-k">03</div><div class="lz-t">Viết mã</div><div class="lz-d">Gõ code C</div></div>
+  <div class="lz-step"><div class="lz-k">04</div><div class="lz-t">Biên dịch</div><div class="lz-d">Sửa lỗi cú pháp</div></div>
+  <div class="lz-step"><div class="lz-k">05</div><div class="lz-t">Kiểm thử</div><div class="lz-d">Chạy thử, sửa lỗi logic</div></div>
+</div>
+<h3>Biên dịch (compile) vs Thông dịch (interpret)</h3>
+<table>
+  <thead><tr><th></th><th>Biên dịch — C</th><th>Thông dịch — Python</th></tr></thead>
+  <tbody>
+    <tr><td>Cách chạy</td><td>Dịch toàn bộ ra file .exe trước, rồi chạy</td><td>Đọc &amp; chạy từng dòng khi thực thi</td></tr>
+    <tr><td>Tốc độ</td><td>Nhanh</td><td>Chậm hơn</td></tr>
+    <tr><td>Báo lỗi</td><td>Bắt mọi lỗi cú pháp ngay lúc dịch; chưa sửa xong thì chương trình không chạy</td><td>Cũng phân tích cả file trước — lỗi cú pháp làm nó dừng trước khi chạy dòng đầu tiên. Thứ chỉ lộ ra khi chạy tới dòng lỗi là lỗi <em>thời gian chạy</em> (sai tên, sai kiểu, chia cho 0)</td></tr>
+  </tbody>
+</table>
+<div class="callout">C là ngôn ngữ <strong>biên dịch</strong>. Vì vậy mỗi lần sửa code, bạn phải biên dịch lại (Compile/Build) rồi mới chạy — quen tay dần sẽ dùng phím tắt <kbd>F9</kbd>/<kbd>F11</kbd> trong DevC++.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>"Biên dịch" thực ra là 4 bước.</b> Bấm Build thực chất chạy: <b>tiền xử lý</b> (mở rộng <code>#include</code>/<code>#define</code>) → <b>biên dịch</b> (mã C → hợp ngữ) → <b>hợp dịch</b> (hợp ngữ → mã máy <code>.o</code>) → <b>liên kết</b> (ghép <code>.o</code> của bạn với code thư viện thành 1 file <code>.exe</code>). <em>Chương N4 (dự án nhiều file) sẽ quay lại pipeline này — "lỗi biên dịch" và "lỗi liên kết" là hai giai đoạn khác nhau thất bại.</em></div>
+</div>
+`,
+        },
+        {
+          title: '1.3 — The structure of a C program|||1.3 — Cấu trúc một chương trình C',
+          slug: 'prf192-1-3-cau-truc-chuong-trinh-c',
+          type: 'VIDEO',
+          description: 'Mổ xẻ từng phần: #include, main, câu lệnh, chú thích.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 1 · Lesson 1.3</span>
+<h2>The structure of a C program</h2>
+<p class="lead">Now let's dissect the program from lesson 1.1 and understand the role of each part.</p>
+<pre><span class="tok-comment">// (1) Preprocessor directive — load a library</span>
+<span class="tok-keyword">#include</span> &lt;stdio.h&gt;
+
+<span class="tok-comment">// (2) The main function — where the program starts</span>
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    <span class="tok-comment">// (3) Function body — statements, each ends with ;</span>
+    <span class="tok-function">printf</span>(<span class="tok-string">"Diem = %d"</span>, 8);
+    <span class="tok-keyword">return</span> 0;   <span class="tok-comment">// (4) return 0 = finished with no error</span>
+}</pre>
+<h3>Four parts</h3>
+<ul>
+  <li><strong>(1) <code>#include &lt;stdio.h&gt;</code></strong> — loads the standard I/O library so you can use <code>printf</code>, <code>scanf</code>.</li>
+  <li><strong>(2) <code>int main()</code></strong> — every C program starts running here. There is exactly one <code>main</code>.</li>
+  <li><strong>(3) Function body</strong> — inside <code>{ }</code>, statements run top to bottom in order.</li>
+  <li><strong>(4) <code>return 0;</code></strong> — tells the OS the program ended normally.</li>
+</ul>
+<div class="pitfall">Missing one of <code>{</code> or <code>}</code>, or forgetting <code>#include &lt;stdio.h&gt;</code> when using <code>printf</code> — both are compile errors. Read the compiler's first error line carefully; it only points near the mistake.</div>
+<div class="note-ct">Formatting convention: indent each <code>{ }</code> level by 4 spaces. Nicely indented code doesn't run faster, but the grader (and you a week later) reads it far more easily — this is the "presentation" score in the Workshops.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 1 · Bài 1.3</span>
+<h2>Cấu trúc một chương trình C</h2>
+<p class="lead">Giờ ta mổ xẻ chương trình ở bài 1.1, hiểu vai trò từng phần.</p>
+<pre><span class="tok-comment">// (1) Chỉ thị tiền xử lý — nạp thư viện</span>
+<span class="tok-keyword">#include</span> &lt;stdio.h&gt;
+
+<span class="tok-comment">// (2) Hàm main — nơi chương trình bắt đầu chạy</span>
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    <span class="tok-comment">// (3) Thân hàm — các câu lệnh, mỗi câu kết thúc bằng ;</span>
+    <span class="tok-function">printf</span>(<span class="tok-string">"Diem = %d"</span>, 8);
+    <span class="tok-keyword">return</span> 0;   <span class="tok-comment">// (4) trả 0 = chạy xong không lỗi</span>
+}</pre>
+<h3>Bốn thành phần</h3>
+<ul>
+  <li><strong>(1) <code>#include &lt;stdio.h&gt;</code></strong> — nạp thư viện nhập/xuất chuẩn để dùng được <code>printf</code>, <code>scanf</code>.</li>
+  <li><strong>(2) <code>int main()</code></strong> — mọi chương trình C bắt đầu chạy từ đây. Có đúng một <code>main</code>.</li>
+  <li><strong>(3) Thân hàm</strong> — nằm trong <code>{ }</code>, gồm các câu lệnh chạy tuần tự từ trên xuống.</li>
+  <li><strong>(4) <code>return 0;</code></strong> — báo cho hệ điều hành: chương trình kết thúc bình thường.</li>
+</ul>
+<div class="pitfall">Thiếu một trong hai dấu <code>{</code> hoặc <code>}</code>, hoặc quên <code>#include &lt;stdio.h&gt;</code> khi dùng <code>printf</code> — đều là lỗi biên dịch. Đọc kỹ dòng lỗi đầu tiên compiler báo, nó chỉ gần đúng chỗ sai.</div>
+<div class="note-ct">Quy ước trình bày: thụt lề mỗi cấp <code>{ }</code> bằng 4 dấu cách. Code thụt lề đẹp không chạy nhanh hơn, nhưng người chấm (và chính bạn 1 tuần sau) đọc dễ hơn nhiều — đây là điểm "trình bày" trong Workshop.</div>
+</div>
+`,
+        },
+        {
+          title: 'Chapter 1 Quiz|||Quiz chương 1',
+          slug: 'prf192-1-quiz',
+          type: 'QUIZ',
+          description: 'Kiểm tra nhanh kiến thức chương 1.',
+          quiz: {
+            timeLimitSeconds: 480,
+            questions: [
+              { question: 'Where does a C program start running?|||Chương trình C bắt đầu chạy từ đâu?', options: ['The first #include line|||Dòng #include đầu tiên', 'The main() function|||Hàm main()', 'The return 0 line|||Dòng return 0', "The file's first line|||Dòng đầu tiên của file"], correctIndex: 1, points: 1 },
+              { question: 'What kind of language is C?|||C là ngôn ngữ loại nào?', options: ['Interpreted|||Thông dịch (interpret)', 'Compiled|||Biên dịch (compile)', 'Needs no translation|||Không cần dịch', 'Runs only on the web|||Chỉ chạy trên web'], correctIndex: 1, points: 1 },
+              { question: 'What is #include <stdio.h> for?|||#include <stdio.h> dùng để làm gì?', options: ['Starts the program|||Bắt đầu chương trình', 'Loads the standard I/O library|||Nạp thư viện nhập/xuất chuẩn', 'Ends the program|||Kết thúc chương trình', 'Declares a variable|||Khai báo biến'], correctIndex: 1, points: 1 },
+              { question: 'Which character ends each C statement?|||Mỗi câu lệnh trong C kết thúc bằng ký tự nào?', options: ['Comma ,|||Dấu phẩy ,', 'Period .|||Dấu chấm .', 'Semicolon ;|||Dấu chấm phẩy ;', 'Newline|||Xuống dòng'], correctIndex: 2, points: 1 },
+              { question: 'What does return 0; in main() mean?|||return 0; trong main() có ý nghĩa gì?', options: ['Returns 0 points|||Trả về 0 điểm', 'Signals the program finished without error|||Báo chương trình kết thúc không lỗi', 'Clears memory|||Xoá bộ nhớ', 'Repeats the program|||Lặp lại chương trình'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+
+    /* ══════════════════ CHƯƠNG 2 — BIẾN & KIỂU DỮ LIỆU ══════════════════ */
+    {
+      title: 'Chapter 2 — Variables, data types & I/O|||Chương 2 — Biến, kiểu dữ liệu & nhập/xuất',
+      description: 'Cách chương trình lưu và nhận dữ liệu: biến, hằng, kiểu, bộ nhớ, scanf/printf.',
+      lessons: [
+        {
+          title: '2.1 — Variables & constants|||2.1 — Biến & hằng số',
+          slug: 'prf192-2-1-bien-hang',
+          type: 'VIDEO',
+          description: 'Ô nhớ có tên để chứa dữ liệu và cách đặt tên đúng.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 2 · Lesson 2.1</span>
+<h2>Variables &amp; constants</h2>
+<p class="lead">A <strong>variable</strong> is a named memory cell that holds data the program can read and change. Picture memory as a row of cabinets with drawers; declaring a variable is "renting" a drawer and sticking a name label on it.</p>
+<p style="font-size:.8rem;color:var(--text-muted);margin-bottom:.3rem">Memory (RAM) — each variable is a named cell holding a value:</p>
+<table>
+  <thead><tr><th>Variable →</th><th><code>age</code></th><th><code>score</code></th><th><code>grade</code></th></tr></thead>
+  <tbody><tr><td>Stored value</td><td>20</td><td>8.5</td><td>'A'</td></tr></tbody>
+</table>
+<pre><span class="tok-type">int</span> age = 20;        <span class="tok-comment">// declare an integer variable, assign 20</span>
+<span class="tok-type">float</span> score = 8.5;    <span class="tok-comment">// a real number</span>
+<span class="tok-type">char</span> grade = <span class="tok-string">'A'</span>;     <span class="tok-comment">// one character — use single quotes</span>
+age = age + 1;         <span class="tok-comment">// a variable's value can change</span></pre>
+<h3>Constants</h3>
+<p>A constant is a value that <strong>never changes</strong> throughout the program. Use <code>const</code> or <code>#define</code>:</p>
+<pre><span class="tok-keyword">const</span> <span class="tok-type">float</span> PI = 3.14159;
+<span class="tok-keyword">#define</span> MAX 100</pre>
+<h3>Naming rules</h3>
+<ul>
+  <li>Only letters, digits and <code>_</code>; <strong>must not</strong> start with a digit.</li>
+  <li>Case-sensitive: <code>age</code> ≠ <code>Age</code>.</li>
+  <li>Don't clash with keywords (<code>int</code>, <code>return</code>…). Prefer meaningful names: <code>studentCount</code> beats <code>x</code>.</li>
+</ul>
+<div class="pitfall">Using a variable <em>before assigning it</em> → it holds "garbage" (a random value), causing hard-to-predict wrong results. Always initialise on declaration: <code>int sum = 0;</code>.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 2 · Bài 2.1</span>
+<h2>Biến &amp; hằng số</h2>
+<p class="lead"><strong>Biến (variable)</strong> là một ô nhớ có tên, dùng để chứa dữ liệu mà chương trình có thể đọc và thay đổi. Hình dung bộ nhớ như một dãy tủ có ngăn; khai báo biến là "thuê" một ngăn và dán nhãn tên lên đó.</p>
+<p style="font-size:.8rem;color:var(--text-muted);margin-bottom:.3rem">Bộ nhớ (RAM) — mỗi biến là một ô có tên, chứa một giá trị:</p>
+<table>
+  <thead><tr><th>Tên biến →</th><th><code>age</code></th><th><code>score</code></th><th><code>grade</code></th></tr></thead>
+  <tbody><tr><td>Giá trị đang chứa</td><td>20</td><td>8.5</td><td>'A'</td></tr></tbody>
+</table>
+<pre><span class="tok-type">int</span> age = 20;        <span class="tok-comment">// khai báo biến số nguyên, gán 20</span>
+<span class="tok-type">float</span> score = 8.5;    <span class="tok-comment">// số thực</span>
+<span class="tok-type">char</span> grade = <span class="tok-string">'A'</span>;     <span class="tok-comment">// một ký tự — dùng nháy đơn</span>
+age = age + 1;         <span class="tok-comment">// giá trị biến có thể thay đổi</span></pre>
+<h3>Hằng số (constant)</h3>
+<p>Hằng là giá trị <strong>không đổi</strong> suốt chương trình. Dùng <code>const</code> hoặc <code>#define</code>:</p>
+<pre><span class="tok-keyword">const</span> <span class="tok-type">float</span> PI = 3.14159;
+<span class="tok-keyword">#define</span> MAX 100</pre>
+<h3>Quy tắc đặt tên</h3>
+<ul>
+  <li>Chỉ gồm chữ, số, dấu <code>_</code>; <strong>không</strong> bắt đầu bằng số.</li>
+  <li>Phân biệt hoa–thường: <code>age</code> ≠ <code>Age</code>.</li>
+  <li>Không trùng từ khoá (<code>int</code>, <code>return</code>…). Nên đặt tên có nghĩa: <code>studentCount</code> tốt hơn <code>x</code>.</li>
+</ul>
+<div class="pitfall">Dùng biến khi <em>chưa gán giá trị</em> → biến chứa "rác" (giá trị ngẫu nhiên), gây kết quả sai khó đoán. Luôn khởi tạo biến khi khai báo: <code>int sum = 0;</code>.</div>
+</div>
+`,
+        },
+        {
+          title: '2.2 — Data types & how memory stores them|||2.2 — Kiểu dữ liệu & cách bộ nhớ lưu trữ',
+          slug: 'prf192-2-2-kieu-du-lieu',
+          type: 'VIDEO',
+          description: 'int, float, double, char — kích thước và phạm vi giá trị.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 2 · Lesson 2.2</span>
+<h2>Data types</h2>
+<p class="lead">Each variable has a <strong>type</strong> that decides: what kind of data it holds, how many bytes it takes, and its value range. Pick the wrong type → overflow or lost precision.</p>
+<table>
+  <thead><tr><th>Type</th><th>Used for</th><th>Size (typical)</th><th>Example</th></tr></thead>
+  <tbody>
+    <tr><td><code>int</code></td><td>Integer</td><td>4 bytes</td><td>-2 billion … 2 billion</td></tr>
+    <tr><td><code>float</code></td><td>Real number</td><td>4 bytes</td><td>3.14</td></tr>
+    <tr><td><code>double</code></td><td>Real number (more precise)</td><td>8 bytes</td><td>3.14159265</td></tr>
+    <tr><td><code>char</code></td><td>One character</td><td>1 byte</td><td>'A', '9', '#'</td></tr>
+  </tbody>
+</table>
+<div class="note-ct"><code>char</code> is really a <strong>small integer</strong>: <code>'A'</code> is stored as the number 65 (ASCII). So <code>'A' + 1</code> gives 'B'. Understanding this makes string handling in chapter 9 much easier.</div>
+<h3>Implicit casting — the integer-division trap</h3>
+<pre><span class="tok-type">int</span> a = 7, b = 2;
+<span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, a / b);        <span class="tok-comment">// 3  — integer division, the fraction is lost!</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%f\\n"</span>, (<span class="tok-type">float</span>)a / b); <span class="tok-comment">// 3.5 — cast to float before dividing</span></pre>
+<div class="out"><b>Output:</b> 3<br>3.500000</div>
+<div class="pitfall">Dividing two <code>int</code>s always gives an <code>int</code> (drops the decimals). For a real result, cast at least one operand to <code>float</code>/<code>double</code>.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Why 0.1 + 0.2 is not exactly 0.3.</b> <code>float</code>/<code>double</code> store numbers in binary (IEEE-754), and 0.1 has no exact binary representation — just like 1/3 has no exact decimal one. <code>printf("%.20f", 0.1)</code> actually prints <code>0.10000000000000000555…</code>. <em>Never compare floats with <code>==</code>; compare <code>fabs(a - b) &lt; 1e-9</code> instead. This bites almost every beginner once.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 2 · Bài 2.2</span>
+<h2>Kiểu dữ liệu</h2>
+<p class="lead">Mỗi biến có một <strong>kiểu</strong> quyết định: nó chứa loại dữ liệu gì, chiếm bao nhiêu byte, và phạm vi giá trị. Chọn sai kiểu → tràn số hoặc mất độ chính xác.</p>
+<table>
+  <thead><tr><th>Kiểu</th><th>Dùng cho</th><th>Kích thước (thường)</th><th>Ví dụ</th></tr></thead>
+  <tbody>
+    <tr><td><code>int</code></td><td>Số nguyên</td><td>4 byte</td><td>-2 tỉ … 2 tỉ</td></tr>
+    <tr><td><code>float</code></td><td>Số thực</td><td>4 byte</td><td>3.14</td></tr>
+    <tr><td><code>double</code></td><td>Số thực (chính xác hơn)</td><td>8 byte</td><td>3.14159265</td></tr>
+    <tr><td><code>char</code></td><td>Một ký tự</td><td>1 byte</td><td>'A', '9', '#'</td></tr>
+  </tbody>
+</table>
+<div class="note-ct"><code>char</code> thực chất là <strong>số nguyên nhỏ</strong>: <code>'A'</code> lưu trong máy là số 65 (mã ASCII). Vì vậy <code>'A' + 1</code> cho ra 'B'. Hiểu điều này giúp bạn xử lý chuỗi ở chương 9 dễ hơn.</div>
+<h3>Ép kiểu ngầm — bẫy chia số nguyên</h3>
+<pre><span class="tok-type">int</span> a = 7, b = 2;
+<span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, a / b);        <span class="tok-comment">// 3  — chia nguyên, mất phần lẻ!</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%f\\n"</span>, (<span class="tok-type">float</span>)a / b); <span class="tok-comment">// 3.5 — ép float trước khi chia</span></pre>
+<div class="out"><b>Output:</b> 3<br>3.500000</div>
+<div class="pitfall">Chia hai số <code>int</code> luôn cho kết quả <code>int</code> (bỏ phần thập phân). Muốn kết quả thực, ép ít nhất một toán hạng sang <code>float</code>/<code>double</code>.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Vì sao 0.1 + 0.2 không đúng bằng 0.3.</b> <code>float</code>/<code>double</code> lưu số ở dạng nhị phân (IEEE-754), và 0.1 không có biểu diễn nhị phân chính xác — giống 1/3 không có biểu diễn thập phân chính xác. <code>printf("%.20f", 0.1)</code> thực ra in ra <code>0.10000000000000000555…</code>. <em>Đừng bao giờ so sánh số thực bằng <code>==</code>; hãy so <code>fabs(a - b) &lt; 1e-9</code>. Hầu như người mới nào cũng dính lỗi này một lần.</em></div>
+</div>
+`,
+        },
+        {
+          title: '2.3 — Input/output with scanf & printf|||2.3 — Nhập/xuất với scanf & printf',
+          slug: 'prf192-2-3-scanf-printf',
+          type: 'VIDEO',
+          description: 'Giao tiếp với người dùng qua bàn phím và màn hình.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 2 · Lesson 2.3</span>
+<h2>Input/output: <code>scanf</code> &amp; <code>printf</code></h2>
+<p class="lead">A useful program must take input and return output. <code>printf</code> prints to the screen, <code>scanf</code> reads from the keyboard. Both use a <strong>format string</strong> with "placeholders".</p>
+<table>
+  <thead><tr><th>Placeholder</th><th>Type</th></tr></thead>
+  <tbody>
+    <tr><td><code>%d</code></td><td>int</td></tr>
+    <tr><td><code>%f</code></td><td>float / double (when printing)</td></tr>
+    <tr><td><code>%c</code></td><td>char</td></tr>
+    <tr><td><code>%s</code></td><td>string</td></tr>
+  </tbody>
+</table>
+<pre><span class="tok-type">int</span> tuoi;
+<span class="tok-function">printf</span>(<span class="tok-string">"Nhap tuoi: "</span>);
+<span class="tok-function">scanf</span>(<span class="tok-string">"%d"</span>, &amp;tuoi);        <span class="tok-comment">// NOTE the &amp; before the variable name</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"Nam sau ban %d tuoi"</span>, tuoi + 1);</pre>
+<div class="pitfall">Forgetting the <code>&amp;</code> in <code>scanf("%d", &amp;tuoi)</code> is the most classic beginner mistake — the program runs but reads input wrong / crashes. <code>&amp;</code> means "address of the variable" — you'll fully understand it in chapter 6 (pointers). <code>printf</code>, however, does <strong>not</strong> need <code>&amp;</code>.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>scanf("%s", …) has no bounds check.</b> <code>scanf("%s", name)</code> keeps writing characters until it sees whitespace, even past the end of your array — a classic <strong>buffer overflow</strong>. The safe form limits the width: <code>scanf("%19s", name)</code> for a 20-byte array (reserve 1 byte for the terminator). <em>This exact bug family (unchecked input length) is behind decades of real-world security exploits.</em></div>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-279" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Practice: an input &amp; compute program</span><span class="lc-sub">Read 2 numbers then print sum/difference/product — auto-graded on CodeLab.</span></span>
+  <span class="lc-cta">PRACTICE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 2 · Bài 2.3</span>
+<h2>Nhập/xuất: <code>scanf</code> &amp; <code>printf</code></h2>
+<p class="lead">Chương trình có ích phải nhận dữ liệu vào và trả kết quả ra. <code>printf</code> in ra màn hình, <code>scanf</code> đọc từ bàn phím. Cả hai dùng <strong>chuỗi định dạng</strong> với các "placeholder".</p>
+<table>
+  <thead><tr><th>Placeholder</th><th>Kiểu</th></tr></thead>
+  <tbody>
+    <tr><td><code>%d</code></td><td>int</td></tr>
+    <tr><td><code>%f</code></td><td>float / double (khi in)</td></tr>
+    <tr><td><code>%c</code></td><td>char</td></tr>
+    <tr><td><code>%s</code></td><td>chuỗi</td></tr>
+  </tbody>
+</table>
+<pre><span class="tok-type">int</span> tuoi;
+<span class="tok-function">printf</span>(<span class="tok-string">"Nhap tuoi: "</span>);
+<span class="tok-function">scanf</span>(<span class="tok-string">"%d"</span>, &amp;tuoi);        <span class="tok-comment">// LƯU Ý dấu &amp; trước tên biến</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"Nam sau ban %d tuoi"</span>, tuoi + 1);</pre>
+<div class="pitfall">Quên dấu <code>&amp;</code> trong <code>scanf("%d", &amp;tuoi)</code> là lỗi kinh điển nhất của người mới — chương trình chạy nhưng nhập liệu sai/crash. <code>&amp;</code> nghĩa là "địa chỉ của biến" — bạn sẽ hiểu rõ ở chương 6 (con trỏ). Còn <code>printf</code> thì <strong>không</strong> cần <code>&amp;</code>.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>scanf("%s", …) không kiểm tra giới hạn.</b> <code>scanf("%s", name)</code> cứ ghi ký tự tới khi gặp khoảng trắng, kể cả vượt quá cuối mảng — một <strong>tràn bộ đệm (buffer overflow)</strong> kinh điển. Cách an toàn là giới hạn độ rộng: <code>scanf("%19s", name)</code> cho mảng 20 byte (chừa 1 byte cho ký tự kết thúc). <em>Đúng họ lỗi này (độ dài đầu vào không kiểm tra) đứng sau hàng chục năm lỗ hổng bảo mật thực tế.</em></div>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-279" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Luyện: chương trình nhập & tính toán</span><span class="lc-sub">Nhập 2 số rồi in tổng/hiệu/tích — bài chấm tự động ở CodeLab.</span></span>
+  <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: 'Chapter 2 Quiz|||Quiz chương 2',
+          slug: 'prf192-2-quiz',
+          type: 'QUIZ',
+          description: 'Kiểm tra nhanh biến, kiểu dữ liệu, nhập/xuất.',
+          quiz: {
+            timeLimitSeconds: 480,
+            questions: [
+              { question: 'Which declaration is CORRECT for a real number?|||Khai báo nào ĐÚNG cho một số thực?', options: ['int x = 3.5;', 'float x = 3.5;', 'char x = 3.5;', 'x = 3.5;'], correctIndex: 1, points: 1 },
+              { question: 'In C, 7 / 2 (both int) gives?|||Trong C, 7 / 2 (cả hai là int) cho kết quả?', options: ['3.5', '3', '4', 'Error|||Lỗi'], correctIndex: 1, points: 1 },
+              { question: "Giá trị 'A' được lưu trong máy dưới dạng?", options: ['The letter A|||Chữ cái A', 'The integer 65 (ASCII)|||Số nguyên 65 (ASCII)', 'The string \"A\"|||Chuỗi \"A\"', 'true'], correctIndex: 1, points: 1 },
+              { question: 'Syntax to read an integer into variable n?|||Cú pháp đọc một số nguyên vào biến n?', options: ['scanf("%d", n);', 'scanf("%d", &n);', 'printf("%d", &n);', 'scanf(n);'], correctIndex: 1, points: 1 },
+              { question: 'Which placeholder is for a character?|||Placeholder nào dùng cho một ký tự?', options: ['%d', '%f', '%c', '%s'], correctIndex: 2, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+
+    /* ══════════════════ CHƯƠNG 3 — BIỂU THỨC & TOÁN TỬ ══════════════════ */
+    {
+      title: 'Chapter 3 — Expressions & operators|||Chương 3 — Biểu thức & toán tử',
+      description: 'Toán tử số học/quan hệ/logic/bit, ép kiểu và thứ tự ưu tiên.',
+      lessons: [
+        {
+          title: '3.1 — Operator groups|||3.1 — Các nhóm toán tử',
+          slug: 'prf192-3-1-toan-tu',
+          type: 'VIDEO',
+          description: 'Số học, quan hệ, logic, bit, và gán rút gọn.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 3 · Lesson 3.1</span>
+<h2>Operator groups</h2>
+<p class="lead">An operator is a symbol that tells the machine to perform a computation. C has several groups — knowing what each group does is enough to write any expression.</p>
+<table>
+  <thead><tr><th>Group</th><th>Operators</th><th>Result</th></tr></thead>
+  <tbody>
+    <tr><td>Arithmetic</td><td><code>+ - * / %</code></td><td>number (<code>%</code> = remainder)</td></tr>
+    <tr><td>Relational</td><td><code>== != &lt; &gt; &lt;= &gt;=</code></td><td>true(1)/false(0)</td></tr>
+    <tr><td>Logical</td><td><code>&amp;&amp; || !</code></td><td>true/false</td></tr>
+    <tr><td>Compound assign</td><td><code>+= -= *= /=</code></td><td>assign</td></tr>
+    <tr><td>Increment/decrement</td><td><code>++ --</code></td><td>+1 / -1</td></tr>
+  </tbody>
+</table>
+<pre><span class="tok-type">int</span> a = 10, b = 3;
+<span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, a % b);      <span class="tok-comment">// 1  (10 mod 3 = 1)</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, a &gt; b);      <span class="tok-comment">// 1  (true)</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, a &gt; b &amp;&amp; b &gt; 5); <span class="tok-comment">// 0  (b&gt;5 is false)</span>
+a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></pre>
+<div class="out"><b>Output:</b> 1<br>1<br>0</div>
+<div class="note-ct">The <code>%</code> (remainder) operator is extremely useful: <code>n % 2 == 0</code> to test for even numbers, <code>n % 10</code> to get the last digit. You'll use it constantly in numeric problems.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 3 · Bài 3.1</span>
+<h2>Các nhóm toán tử</h2>
+<p class="lead">Toán tử là ký hiệu bảo máy thực hiện một phép tính. C có nhiều nhóm — nắm được nhóm nào làm gì là đủ để viết mọi biểu thức.</p>
+<table>
+  <thead><tr><th>Nhóm</th><th>Toán tử</th><th>Kết quả</th></tr></thead>
+  <tbody>
+    <tr><td>Số học</td><td><code>+ - * / %</code></td><td>số (<code>%</code> = số dư)</td></tr>
+    <tr><td>Quan hệ</td><td><code>== != &lt; &gt; &lt;= &gt;=</code></td><td>đúng(1)/sai(0)</td></tr>
+    <tr><td>Logic</td><td><code>&amp;&amp; || !</code></td><td>đúng/sai</td></tr>
+    <tr><td>Gán rút gọn</td><td><code>+= -= *= /=</code></td><td>gán</td></tr>
+    <tr><td>Tăng/giảm</td><td><code>++ --</code></td><td>+1 / -1</td></tr>
+  </tbody>
+</table>
+<pre><span class="tok-type">int</span> a = 10, b = 3;
+<span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, a % b);      <span class="tok-comment">// 1  (10 chia 3 dư 1)</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, a &gt; b);      <span class="tok-comment">// 1  (đúng)</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, a &gt; b &amp;&amp; b &gt; 5); <span class="tok-comment">// 0  (b&gt;5 sai)</span>
+a += 5;                    <span class="tok-comment">// a = a + 5 = 15</span></pre>
+<div class="out"><b>Output:</b> 1<br>1<br>0</div>
+<div class="note-ct">Toán tử <code>%</code> (chia lấy dư) cực kỳ hữu ích: <code>n % 2 == 0</code> để kiểm tra số chẵn, <code>n % 10</code> để lấy chữ số hàng đơn vị. Bạn sẽ dùng nó liên tục ở các bài toán số học.</div>
+</div>
+`,
+        },
+        {
+          title: '3.2 — Type casting & precedence|||3.2 — Ép kiểu & thứ tự ưu tiên',
+          slug: 'prf192-3-2-uu-tien',
+          type: 'VIDEO',
+          description: 'Biểu thức trộn kiểu và quy tắc tính trước/sau.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 3 · Lesson 3.2</span>
+<h2>Type casting &amp; precedence</h2>
+<p class="lead">When an expression mixes several types and operators, C has clear rules about evaluation order. Miss them and you get surprising results.</p>
+<h3>Precedence (highest to lowest)</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">( )</span><span class="lz-lnote">parentheses — always first</span></div>
+  <div class="lz-layer"><span class="lz-lname">! ++ --</span><span class="lz-lnote">unary operators</span></div>
+  <div class="lz-layer"><span class="lz-lname">* / %</span><span class="lz-lnote">multiply / divide first</span></div>
+  <div class="lz-layer"><span class="lz-lname">+ -</span><span class="lz-lnote">add / subtract next</span></div>
+  <div class="lz-layer"><span class="lz-lname">&lt; &gt; &lt;= &gt;=</span><span class="lz-lnote">comparison</span></div>
+  <div class="lz-layer"><span class="lz-lname">== !=</span><span class="lz-lnote">equal / not equal</span></div>
+  <div class="lz-layer"><span class="lz-lname">&amp;&amp; · ||</span><span class="lz-lnote">and · or</span></div>
+  <div class="lz-layer"><span class="lz-lname">= += -= …</span><span class="lz-lnote">assignment — last</span></div>
+</div>
+<pre><span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, 2 + 3 * 4);     <span class="tok-comment">// 14, NOT 20 (multiply first)</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, (2 + 3) * 4);   <span class="tok-comment">// 20 (parentheses change order)</span></pre>
+<div class="callout">Practical tip: <strong>when in doubt, add parentheses</strong>. They don't slow the program and make your intent clear to you (and the grader). Don't force the reader to memorise the precedence table.</div>
+<div class="pitfall">Assignment <code>=</code> and comparison <code>==</code> are completely different. Accidentally writing <code>if (x = 5)</code> (one =) <em>assigns</em> 5 to x and is always true — a logic bug the compiler usually won't flag. Always use <code>==</code> to compare.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 3 · Bài 3.2</span>
+<h2>Ép kiểu &amp; thứ tự ưu tiên</h2>
+<p class="lead">Khi một biểu thức trộn nhiều kiểu và nhiều toán tử, C có quy tắc rõ ràng về thứ tự tính. Không nắm sẽ ra kết quả bất ngờ.</p>
+<h3>Thứ tự ưu tiên (từ cao xuống thấp)</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">( )</span><span class="lz-lnote">ngoặc — luôn tính trước</span></div>
+  <div class="lz-layer"><span class="lz-lname">! ++ --</span><span class="lz-lnote">toán tử đơn nguyên</span></div>
+  <div class="lz-layer"><span class="lz-lname">* / %</span><span class="lz-lnote">nhân / chia trước</span></div>
+  <div class="lz-layer"><span class="lz-lname">+ -</span><span class="lz-lnote">cộng / trừ sau</span></div>
+  <div class="lz-layer"><span class="lz-lname">&lt; &gt; &lt;= &gt;=</span><span class="lz-lnote">so sánh</span></div>
+  <div class="lz-layer"><span class="lz-lname">== !=</span><span class="lz-lnote">bằng / khác</span></div>
+  <div class="lz-layer"><span class="lz-lname">&amp;&amp; · ||</span><span class="lz-lnote">và · hoặc</span></div>
+  <div class="lz-layer"><span class="lz-lname">= += -= …</span><span class="lz-lnote">gán — cuối cùng</span></div>
+</div>
+<pre><span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, 2 + 3 * 4);     <span class="tok-comment">// 14, KHÔNG phải 20 (nhân trước)</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, (2 + 3) * 4);   <span class="tok-comment">// 20 (ngoặc đổi thứ tự)</span></pre>
+<div class="callout">Mẹo thực dụng: <strong>khi nghi ngờ, thêm ngoặc</strong>. Ngoặc không làm chậm chương trình mà giúp bạn (và người chấm) đọc rõ ý định. Đừng bắt người đọc phải nhớ bảng ưu tiên.</div>
+<div class="pitfall">Gán <code>=</code> và so sánh <code>==</code> khác nhau hoàn toàn. Viết nhầm <code>if (x = 5)</code> (một dấu =) sẽ <em>gán</em> 5 cho x và luôn đúng — lỗi logic mà compiler thường không báo. Luôn dùng <code>==</code> khi so sánh.</div>
+</div>
+`,
+        },
+        {
+          title: 'Chapter 3 Quiz|||Quiz chương 3',
+          slug: 'prf192-3-quiz',
+          type: 'QUIZ',
+          description: 'Kiểm tra nhanh toán tử & ưu tiên.',
+          quiz: {
+            timeLimitSeconds: 420,
+            questions: [
+              { question: 'What is the result of 2 + 3 * 4?|||Kết quả của 2 + 3 * 4 là?', options: ['20', '14', '24', '9'], correctIndex: 1, points: 1 },
+              { question: 'The % operator (10 % 3) gives?|||Toán tử % (10 % 3) cho kết quả?', options: ['3', '1', '0', '3.33'], correctIndex: 1, points: 1 },
+              { question: 'How to test if n is even?|||Cách kiểm tra số n là số chẵn?', options: ['n / 2 == 0', 'n % 2 == 0', 'n == 2', 'n % 2 == 1'], correctIndex: 1, points: 1 },
+              { question: 'What does if (x = 5) do?|||if (x = 5) làm gì?', options: ['Compares x with 5|||So sánh x với 5', 'Assigns 5 to x, condition always true|||Gán 5 cho x, điều kiện luôn đúng', 'Compile error|||Báo lỗi biên dịch', 'Compares and assigns|||So sánh và gán'], correctIndex: 1, points: 1 },
+              { question: 'The expression 1 && 0 || 1 gives?|||Biểu thức 1 && 0 || 1 cho kết quả?', options: ['0', '1', '2', 'Error|||Lỗi'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+
+    /* ══════════════════ CHƯƠNG 4 — CẤU TRÚC ĐIỀU KHIỂN ══════════════════ */
+    {
+      title: 'Chapter 4 — Control structures|||Chương 4 — Cấu trúc điều khiển',
+      description: 'Rẽ nhánh (if/switch) và vòng lặp (for/while/do-while) — trái tim của mọi chương trình.',
+      lessons: [
+        {
+          title: '4.1 — Branching: if / else / switch|||4.1 — Rẽ nhánh: if / else / switch',
+          slug: 'prf192-4-1-re-nhanh',
+          type: 'VIDEO',
+          description: 'Cho chương trình ra quyết định.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 4 · Lesson 4.1</span>
+<h2>Branching: <code>if</code> / <code>else</code> / <code>switch</code></h2>
+<p class="lead">So far the program runs top to bottom. <strong>Branching</strong> lets it <em>decide</em>: if a condition is true do this, otherwise do that.</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">if ( … )</div><div class="lz-t">Check a condition</div><div class="lz-d">e.g. diem &gt;= 5 ?</div></div>
+</div>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">✔ True</span><span class="lz-lnote">run the block inside <code>if</code></span></div>
+  <div class="lz-layer"><span class="lz-lname">✘ False</span><span class="lz-lnote">run the <code>else</code> block</span></div>
+</div>
+<pre><span class="tok-type">int</span> diem = 7;
+<span class="tok-keyword">if</span> (diem &gt;= 5) {
+    <span class="tok-function">printf</span>(<span class="tok-string">"Dau"</span>);
+} <span class="tok-keyword">else</span> {
+    <span class="tok-function">printf</span>(<span class="tok-string">"Truot"</span>);
+}</pre>
+<h3>Multiple branches: <code>else if</code></h3>
+<pre><span class="tok-keyword">if</span> (diem &gt;= 8)      <span class="tok-function">printf</span>(<span class="tok-string">"Gioi"</span>);
+<span class="tok-keyword">else if</span> (diem &gt;= 6.5) <span class="tok-function">printf</span>(<span class="tok-string">"Kha"</span>);
+<span class="tok-keyword">else if</span> (diem &gt;= 5)   <span class="tok-function">printf</span>(<span class="tok-string">"Trung binh"</span>);
+<span class="tok-keyword">else</span>                 <span class="tok-function">printf</span>(<span class="tok-string">"Yeu"</span>);</pre>
+<h3><code>switch</code> — pick by a discrete value</h3>
+<pre><span class="tok-keyword">switch</span> (chon) {
+    <span class="tok-keyword">case</span> 1: <span class="tok-function">printf</span>(<span class="tok-string">"Mot"</span>); <span class="tok-keyword">break</span>;
+    <span class="tok-keyword">case</span> 2: <span class="tok-function">printf</span>(<span class="tok-string">"Hai"</span>); <span class="tok-keyword">break</span>;
+    <span class="tok-keyword">default</span>: <span class="tok-function">printf</span>(<span class="tok-string">"Khac"</span>);
+}</pre>
+<div class="pitfall">Forgetting <code>break;</code> in a <code>switch</code> → the program "falls through" to the following cases, running branches you didn't want. Unless intentional, always end each case with <code>break;</code>.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>An if is not free at the hardware level.</b> Every <code>if</code> compiles to a conditional jump; the CPU (CEA201, chapter 12) <em>guesses</em> which way it will go and starts executing ahead of time. A wrong guess flushes the pipeline and costs real cycles — which is why unpredictable branches (e.g. checking random data) run slower than predictable ones (e.g. checking a sorted array), even with identical C code. <em>The syllabus stops at "if chooses a path"; the hardware course explains why the choice has a cost.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 4 · Bài 4.1</span>
+<h2>Rẽ nhánh: <code>if</code> / <code>else</code> / <code>switch</code></h2>
+<p class="lead">Đến giờ chương trình chạy tuần tự từ trên xuống. <strong>Rẽ nhánh</strong> cho phép nó <em>quyết định</em>: nếu điều kiện đúng thì làm việc này, ngược lại làm việc kia.</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">if ( … )</div><div class="lz-t">Kiểm tra điều kiện</div><div class="lz-d">ví dụ: diem &gt;= 5 ?</div></div>
+</div>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">✔ Đúng (true)</span><span class="lz-lnote">chạy khối lệnh trong <code>if</code></span></div>
+  <div class="lz-layer"><span class="lz-lname">✘ Sai (false)</span><span class="lz-lnote">chạy khối <code>else</code></span></div>
+</div>
+<pre><span class="tok-type">int</span> diem = 7;
+<span class="tok-keyword">if</span> (diem &gt;= 5) {
+    <span class="tok-function">printf</span>(<span class="tok-string">"Dau"</span>);
+} <span class="tok-keyword">else</span> {
+    <span class="tok-function">printf</span>(<span class="tok-string">"Truot"</span>);
+}</pre>
+<h3>Nhiều nhánh: <code>else if</code></h3>
+<pre><span class="tok-keyword">if</span> (diem &gt;= 8)      <span class="tok-function">printf</span>(<span class="tok-string">"Gioi"</span>);
+<span class="tok-keyword">else if</span> (diem &gt;= 6.5) <span class="tok-function">printf</span>(<span class="tok-string">"Kha"</span>);
+<span class="tok-keyword">else if</span> (diem &gt;= 5)   <span class="tok-function">printf</span>(<span class="tok-string">"Trung binh"</span>);
+<span class="tok-keyword">else</span>                 <span class="tok-function">printf</span>(<span class="tok-string">"Yeu"</span>);</pre>
+<h3><code>switch</code> — chọn theo giá trị rời rạc</h3>
+<pre><span class="tok-keyword">switch</span> (chon) {
+    <span class="tok-keyword">case</span> 1: <span class="tok-function">printf</span>(<span class="tok-string">"Mot"</span>); <span class="tok-keyword">break</span>;
+    <span class="tok-keyword">case</span> 2: <span class="tok-function">printf</span>(<span class="tok-string">"Hai"</span>); <span class="tok-keyword">break</span>;
+    <span class="tok-keyword">default</span>: <span class="tok-function">printf</span>(<span class="tok-string">"Khac"</span>);
+}</pre>
+<div class="pitfall">Quên <code>break;</code> trong <code>switch</code> → chương trình "rơi" (fall-through) xuống các case sau, chạy cả những nhánh không mong muốn. Trừ khi cố ý, luôn kết thúc mỗi case bằng <code>break;</code>.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>if không miễn phí ở tầng phần cứng.</b> Mỗi <code>if</code> dịch ra một lệnh nhảy có điều kiện; CPU (CEA201, chương 12) <em>đoán</em> nó sẽ đi hướng nào và chạy trước. Đoán sai làm xả pipeline và tốn chu kỳ thật — đó là lý do nhánh khó đoán (vd kiểm dữ liệu ngẫu nhiên) chạy chậm hơn nhánh dễ đoán (vd kiểm mảng đã sắp xếp), dù code C giống hệt nhau. <em>Giáo trình dừng ở "if chọn một nhánh"; môn phần cứng giải thích vì sao lựa chọn đó có cái giá.</em></div>
+</div>
+`,
+        },
+        {
+          title: '4.2 — Loops: for / while / do-while|||4.2 — Vòng lặp: for / while / do-while',
+          slug: 'prf192-4-2-vong-lap',
+          type: 'VIDEO',
+          description: 'Bảo máy làm lặp đi lặp lại — điểm mạnh nhất của máy tính.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 4 · Lesson 4.2</span>
+<h2>Loops: <code>for</code>, <code>while</code>, <code>do-while</code></h2>
+<p class="lead">A computer is best at <strong>repetition</strong>. Instead of writing 100 identical lines, you tell it "do this 100 times". C has three loop kinds, differing in <em>when the condition is checked</em>.</p>
+<h3>1. <code>for</code> — when you know the count in advance</h3>
+<pre><span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 1; i &lt;= 5; i++) {
+    <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, i);
+}</pre>
+<div class="out"><b>Output:</b> 1 2 3 4 5</div>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Init</div><div class="lz-t">i = 1</div><div class="lz-d">runs once at the start</div></div>
+  <div class="lz-step"><div class="lz-k">Condition</div><div class="lz-t">i &lt;= 5 ?</div><div class="lz-d">checked before each pass</div></div>
+  <div class="lz-step"><div class="lz-k">Body</div><div class="lz-t">printf(...)</div><div class="lz-d">the repeated work</div></div>
+  <div class="lz-step"><div class="lz-k">Update</div><div class="lz-t">i++</div><div class="lz-d">then re-check</div></div>
+</div>
+<p style="font-size:.86rem;color:var(--text-muted);margin-top:-.4rem">When <code>i &lt;= 5</code> is false → exit the loop.</p>
+<h3>2. <code>while</code> — loop until the condition is false</h3>
+<pre><span class="tok-type">int</span> n = 8;
+<span class="tok-keyword">while</span> (n &gt; 1) { <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, n); n = n / 2; }</pre>
+<div class="out"><b>Output:</b> 8 4 2</div>
+<h3>3. <code>do-while</code> — runs the body at least once</h3>
+<p>The condition is checked at the <em>end</em>, good for menus or re-prompting until valid.</p>
+<h3><code>break</code> &amp; <code>continue</code></h3>
+<ul><li><code>break</code> — exit the loop immediately.</li><li><code>continue</code> — skip the rest, go to the next pass.</li></ul>
+<div class="pitfall">Forgetting to update the condition variable → an <strong>infinite loop</strong>. e.g. <code>while(n&gt;1){ printf("%d",n); }</code> missing <code>n=n/2</code> prints forever. Always ask: "which variable makes the condition become false?".</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Loop order can change speed 10× with zero algorithm change.</b> Looping over a 2D array row-by-row (<code>for i, for j: a[i][j]</code>) matches how C stores it in memory (row-major, chapter 8.2), so each access is next to the last one — cache-friendly (CEA201). Swapping the loops to column-by-column touches memory far apart every step, causing far more cache misses. <em>Same output, same Big-O, measurably different real speed.</em></div>
+
+<div class="note-ct">The counting <code>for</code> loop is the backbone of every array traversal (chapter 8) and every algorithm in CSD201. Master the 3 parts of <code>for</code> now and reading sort/search code later is easy.</div>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-280" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Practice: multiplication table / sum 1..n</span><span class="lc-sub">Loop exercises, auto-graded on CodeLab.</span></span>
+  <span class="lc-cta">PRACTICE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 4 · Bài 4.2</span>
+<h2>Vòng lặp: <code>for</code>, <code>while</code>, <code>do-while</code></h2>
+<p class="lead">Máy tính giỏi nhất việc <strong>lặp đi lặp lại</strong>. Thay vì viết 100 dòng giống nhau, ta bảo máy "làm việc này 100 lần". C có ba loại vòng lặp, khác nhau ở <em>thời điểm kiểm tra điều kiện</em>.</p>
+<h3>1. <code>for</code> — khi biết trước số lần</h3>
+<pre><span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 1; i &lt;= 5; i++) {
+    <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, i);
+}</pre>
+<div class="out"><b>Output:</b> 1 2 3 4 5</div>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Khởi tạo</div><div class="lz-t">i = 1</div><div class="lz-d">chạy 1 lần lúc đầu</div></div>
+  <div class="lz-step"><div class="lz-k">Điều kiện</div><div class="lz-t">i &lt;= 5 ?</div><div class="lz-d">kiểm tra trước mỗi vòng</div></div>
+  <div class="lz-step"><div class="lz-k">Thân lặp</div><div class="lz-t">printf(...)</div><div class="lz-d">việc lặp lại</div></div>
+  <div class="lz-step"><div class="lz-k">Cập nhật</div><div class="lz-t">i++</div><div class="lz-d">rồi quay lại kiểm tra</div></div>
+</div>
+<p style="font-size:.86rem;color:var(--text-muted);margin-top:-.4rem">Khi điều kiện <code>i &lt;= 5</code> sai → thoát vòng lặp.</p>
+<h3>2. <code>while</code> — lặp tới khi điều kiện sai</h3>
+<pre><span class="tok-type">int</span> n = 8;
+<span class="tok-keyword">while</span> (n &gt; 1) { <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, n); n = n / 2; }</pre>
+<div class="out"><b>Output:</b> 8 4 2</div>
+<h3>3. <code>do-while</code> — chạy thân ít nhất 1 lần</h3>
+<p>Điều kiện kiểm tra ở <em>cuối</em>, hợp với menu hoặc nhập lại tới khi hợp lệ.</p>
+<h3><code>break</code> &amp; <code>continue</code></h3>
+<ul><li><code>break</code> — thoát ngay khỏi vòng lặp.</li><li><code>continue</code> — bỏ qua phần còn lại, sang vòng kế.</li></ul>
+<div class="pitfall">Quên cập nhật biến điều kiện → <strong>vòng lặp vô hạn</strong>. Ví dụ <code>while(n&gt;1){ printf("%d",n); }</code> thiếu <code>n=n/2</code> sẽ in mãi. Luôn tự hỏi: "biến nào làm điều kiện tiến tới sai?".</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Thứ tự vòng lặp có thể đổi tốc độ 10× dù thuật toán không đổi.</b> Duyệt mảng 2D theo hàng (<code>for i, for j: a[i][j]</code>) khớp với cách C lưu nó trong bộ nhớ (row-major, chương 8.2), nên mỗi lần truy cập nằm sát lần trước — thân thiện cache (CEA201). Đổi vòng lặp thành duyệt theo cột chạm bộ nhớ cách xa nhau mỗi bước, gây nhiều cache miss hơn hẳn. <em>Cùng kết quả, cùng Big-O, nhưng tốc độ thực đo được khác hẳn.</em></div>
+
+<div class="note-ct">Vòng <code>for</code> đếm là xương sống của mọi bài duyệt mảng (chương 8) và mọi thuật toán ở CSD201. Nắm chắc 3 phần của <code>for</code> bây giờ, sau này đọc code sắp xếp/tìm kiếm sẽ nhàn.</div>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-280" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Luyện: in bảng cửu chương / tính tổng 1..n</span><span class="lc-sub">Bài vòng lặp có chấm tự động ở CodeLab.</span></span>
+  <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: 'Workshop 1 — Variables, expressions, control flow|||Workshop 1 — Biến, biểu thức, điều khiển',
+          slug: 'prf192-4-workshop1',
+          type: 'EXERCISE',
+          description: 'Bài thực hành tổng hợp chương 1–4.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Workshop 1</span>
+<h2>Workshop 1 — Calculator &amp; grade classifier</h2>
+<p class="lead">Apply variables, I/O, expressions and branching/loops.</p>
+<h3>Problem</h3>
+<ul>
+  <li><strong>Part A.</strong> Read 2 real numbers, print their sum, difference, product and quotient (handle divide-by-zero).</li>
+  <li><strong>Part B.</strong> Read a score (0–10), print the grade: ≥8 Excellent, ≥6.5 Good, ≥5 Average, otherwise Weak.</li>
+  <li><strong>Part C.</strong> Read a number n, print the even numbers from 1 to n and their sum.</li>
+</ul>
+<h3>Grading criteria</h3>
+<table>
+  <thead><tr><th>Criterion</th><th>Points</th></tr></thead>
+  <tbody>
+    <tr><td>Runs correctly on all cases</td><td>50%</td></tr>
+    <tr><td>Handles edge data (divide by 0, score outside 0–10)</td><td>25%</td></tr>
+    <tr><td>Clear variable names, nice indentation</td><td>25%</td></tr>
+  </tbody>
+</table>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-280" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Submit &amp; auto-grade</span><span class="lc-sub">Do it on CodeLab; the model solution opens after you submit.</span></span>
+  <span class="lc-cta">START →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Workshop 1</span>
+<h2>Workshop 1 — Máy tính bỏ túi &amp; phân loại điểm</h2>
+<p class="lead">Vận dụng biến, nhập/xuất, biểu thức và rẽ nhánh/vòng lặp.</p>
+<h3>Đề bài</h3>
+<ul>
+  <li><strong>Phần A.</strong> Nhập 2 số thực, in tổng, hiệu, tích, thương (xử lý chia 0).</li>
+  <li><strong>Phần B.</strong> Nhập điểm (0–10), in xếp loại: ≥8 Giỏi, ≥6.5 Khá, ≥5 Trung bình, còn lại Yếu.</li>
+  <li><strong>Phần C.</strong> Nhập số n, in các số chẵn từ 1 đến n và tổng của chúng.</li>
+</ul>
+<h3>Tiêu chí chấm</h3>
+<table>
+  <thead><tr><th>Tiêu chí</th><th>Điểm</th></tr></thead>
+  <tbody>
+    <tr><td>Chạy đúng các trường hợp</td><td>50%</td></tr>
+    <tr><td>Xử lý dữ liệu biên (chia 0, điểm ngoài 0–10)</td><td>25%</td></tr>
+    <tr><td>Đặt tên biến rõ, thụt lề đẹp</td><td>25%</td></tr>
+  </tbody>
+</table>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-280" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Nộp & chấm tự động</span><span class="lc-sub">Làm trực tiếp trên CodeLab; lời giải mẫu mở sau khi nộp.</span></span>
+  <span class="lc-cta">LÀM BÀI →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: 'Chapter 4 Quiz|||Quiz chương 4',
+          slug: 'prf192-4-quiz',
+          type: 'QUIZ',
+          description: 'Kiểm tra nhanh rẽ nhánh & vòng lặp.',
+          quiz: {
+            timeLimitSeconds: 600,
+            questions: [
+              { question: 'for(int i=0; i<3; i++) printf("%d", i); prints?|||for(int i=0; i<3; i++) printf("%d", i); in ra gì?', options: ['1 2 3', '0 1 2', '0 1 2 3', 'Infinite loop|||Vòng lặp vô hạn'], correctIndex: 1, points: 1 },
+              { question: 'Which loop ALWAYS runs its body at least once?|||Vòng lặp nào LUÔN chạy thân ít nhất một lần?', options: ['for', 'while', 'do-while', 'All three the same|||Cả ba như nhau'], correctIndex: 2, points: 1 },
+              { question: 'Which keyword exits a loop IMMEDIATELY?|||Từ khoá nào thoát NGAY khỏi vòng lặp?', options: ['continue', 'break', 'return', 'exit'], correctIndex: 1, points: 1 },
+              { question: 'Forgetting break in a switch causes?|||Quên break trong switch gây ra?', options: ['Compile error|||Lỗi biên dịch', 'Fall-through: runs the following cases|||Fall-through: chạy cả case sau', 'Infinite loop|||Vòng lặp vô hạn', 'Nothing|||Không sao'], correctIndex: 1, points: 1 },
+              { question: 'Common cause of an infinite loop?|||Nguyên nhân thường gặp của vòng lặp vô hạn?', options: ['Using for|||Dùng for', 'Forgetting to update the condition variable|||Quên cập nhật biến điều kiện', 'Using break|||Dùng break', 'Condition too complex|||Điều kiện quá phức tạp'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+
+    /* ══════════════════ CHƯƠNG 5 — HÀM & MODULE ══════════════════ */
+    {
+      title: 'Chapter 5 — Functions & Modules|||Chương 5 — Hàm & Module',
+      description: 'Chia bài toán lớn thành các hàm nhỏ, rõ ràng — kỹ năng cốt lõi của lập trình viên.',
+      lessons: [
+        {
+          title: '5.1 — Modules & the decomposition mindset|||5.1 — Module & tư duy chia nhỏ',
+          slug: 'prf192-5-1-module',
+          type: 'VIDEO',
+          description: 'Vì sao phải chia chương trình thành các phần nhỏ.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 5 · Lesson 5.1</span>
+<h2>Modules &amp; the decomposition mindset</h2>
+<p class="lead">A big program crammed into <code>main</code> is messy and hard to fix. <strong>Modularisation</strong> means splitting the problem into small parts, each doing <em>one thing</em> — in C, each such part is a <strong>function</strong>.</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Big problem</div><div class="lz-t">Manage student scores</div><div class="lz-d">hard if crammed together</div></div>
+  <div class="lz-step"><div class="lz-k">Break down</div><div class="lz-t">Sub-tasks</div><div class="lz-d">input · average · find max</div></div>
+  <div class="lz-step"><div class="lz-k">Each task = 1 function</div><div class="lz-t">nhapDiem() …</div><div class="lz-d">easy to write, fix, reuse</div></div>
+</div>
+<h3>Benefits of functions</h3>
+<ul>
+  <li><strong>Reuse:</strong> write once, call many places.</li>
+  <li><strong>Readable:</strong> <code>main</code> becomes a few lines of function calls, like a table of contents.</li>
+  <li><strong>Easy to fix &amp; test:</strong> wherever the bug is, fix that one function.</li>
+</ul>
+<div class="note-ct">This skill is weighted heavily in the Workshops and in later courses (PRO192, LAB211). Beginners tend to stuff everything into <code>main</code>; build the "one function — one job" habit right now.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 5 · Bài 5.1</span>
+<h2>Module &amp; tư duy chia nhỏ</h2>
+<p class="lead">Một chương trình lớn viết dồn trong <code>main</code> sẽ rối và khó sửa. <strong>Module hoá</strong> là chia bài toán thành các phần nhỏ, mỗi phần làm <em>một việc</em> — trong C, mỗi phần đó là một <strong>hàm (function)</strong>.</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Bài toán lớn</div><div class="lz-t">Quản lý điểm SV</div><div class="lz-d">khó nếu viết dồn</div></div>
+  <div class="lz-step"><div class="lz-k">Chia nhỏ</div><div class="lz-t">Các việc con</div><div class="lz-d">nhập · tính TB · tìm max</div></div>
+  <div class="lz-step"><div class="lz-k">Mỗi việc = 1 hàm</div><div class="lz-t">nhapDiem() …</div><div class="lz-d">dễ viết, dễ sửa, tái dùng</div></div>
+</div>
+<h3>Lợi ích của hàm</h3>
+<ul>
+  <li><strong>Tái sử dụng:</strong> viết một lần, gọi nhiều nơi.</li>
+  <li><strong>Dễ đọc:</strong> <code>main</code> chỉ còn vài dòng gọi hàm, đọc như đọc mục lục.</li>
+  <li><strong>Dễ sửa &amp; kiểm thử:</strong> lỗi ở đâu, sửa đúng hàm đó.</li>
+</ul>
+<div class="note-ct">Đây là kỹ năng được chấm điểm nặng ở Workshop và cả các môn sau (PRO192, LAB211). Người mới hay nhồi tất cả vào <code>main</code>; hãy tập thói quen "một hàm — một việc" ngay từ bây giờ.</div>
+</div>
+`,
+        },
+        {
+          title: '5.2 — Defining & calling functions · parameters|||5.2 — Định nghĩa & gọi hàm · tham số',
+          slug: 'prf192-5-2-ham',
+          type: 'VIDEO',
+          description: 'Cú pháp hàm, truyền tham số theo giá trị, giá trị trả về.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 5 · Lesson 5.2</span>
+<h2>Defining &amp; calling functions</h2>
+<p class="lead">A function has: a <strong>return type</strong>, a <strong>name</strong>, <strong>parameters</strong> (inputs) and a <strong>body</strong>.</p>
+<pre><span class="tok-keyword">#include</span> <span class="tok-string">&lt;stdio.h&gt;</span>
+
+<span class="tok-comment">// return type · name · parameters</span>
+<span class="tok-type">int</span> <span class="tok-function">tong</span>(<span class="tok-type">int</span> a, <span class="tok-type">int</span> b) {
+    <span class="tok-keyword">return</span> a + b;      <span class="tok-comment">// return the result to the caller</span>
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    <span class="tok-type">int</span> s = <span class="tok-function">tong</span>(3, 5);  <span class="tok-comment">// call the function, s = 8</span>
+    <span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, s);
+    <span class="tok-keyword">return</span> 0;
+}</pre>
+<div class="out"><b>Output:</b> 8</div>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Call</div><div class="lz-t">tong(3, 5)</div><div class="lz-d">pass arguments 3, 5</div></div>
+  <div class="lz-step"><div class="lz-k">Execute</div><div class="lz-t">a=3, b=5 → a+b</div><div class="lz-d">run the body</div></div>
+  <div class="lz-step"><div class="lz-k">Return</div><div class="lz-t">return 8</div><div class="lz-d">result back to caller</div></div>
+</div>
+<h3>Pass by value</h3>
+<p>When you call a function, C <strong>copies</strong> the argument value into the parameter. Changing the parameter inside the function does <em>not</em> affect the original variable:</p>
+<pre><span class="tok-type">void</span> <span class="tok-function">tang</span>(<span class="tok-type">int</span> x) { x = x + 1; }   <span class="tok-comment">// edits the copy</span>
+<span class="tok-type">int</span> n = 5;
+<span class="tok-function">tang</span>(n);
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, n);   <span class="tok-comment">// still 5 !</span></pre>
+<div class="pitfall">This confuses many people: the function "changes" the variable but nothing changes outside. To let a function modify the original variable, use a <strong>pointer</strong> (chapter 6).</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Where do parameters actually live? The stack frame.</b> Every call pushes a new <strong>stack frame</strong>: a block holding the parameters, local variables and the return address, stacked on top of the caller's frame. That is exactly why the copy in "pass by value" disappears when the function returns — its frame is popped off and that memory is gone. <em>Chapter N2 (Stack vs Heap) draws this frame-by-frame; keep this call in mind when you get there.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 5 · Bài 5.2</span>
+<h2>Định nghĩa &amp; gọi hàm</h2>
+<p class="lead">Một hàm gồm: <strong>kiểu trả về</strong>, <strong>tên</strong>, <strong>tham số</strong> (đầu vào) và <strong>thân hàm</strong>.</p>
+<pre><span class="tok-keyword">#include</span> <span class="tok-string">&lt;stdio.h&gt;</span>
+
+<span class="tok-comment">// kiểu trả về · tên · tham số</span>
+<span class="tok-type">int</span> <span class="tok-function">tong</span>(<span class="tok-type">int</span> a, <span class="tok-type">int</span> b) {
+    <span class="tok-keyword">return</span> a + b;      <span class="tok-comment">// trả kết quả về nơi gọi</span>
+}
+
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    <span class="tok-type">int</span> s = <span class="tok-function">tong</span>(3, 5);  <span class="tok-comment">// gọi hàm, s = 8</span>
+    <span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, s);
+    <span class="tok-keyword">return</span> 0;
+}</pre>
+<div class="out"><b>Output:</b> 8</div>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Gọi</div><div class="lz-t">tong(3, 5)</div><div class="lz-d">truyền đối số 3, 5</div></div>
+  <div class="lz-step"><div class="lz-k">Thực thi</div><div class="lz-t">a=3, b=5 → a+b</div><div class="lz-d">chạy thân hàm</div></div>
+  <div class="lz-step"><div class="lz-k">Trả về</div><div class="lz-t">return 8</div><div class="lz-d">kết quả về nơi gọi</div></div>
+</div>
+<h3>Truyền theo giá trị (pass by value)</h3>
+<p>Khi gọi hàm, C <strong>sao chép</strong> giá trị đối số vào tham số. Sửa tham số bên trong hàm <em>không</em> ảnh hưởng biến gốc:</p>
+<pre><span class="tok-type">void</span> <span class="tok-function">tang</span>(<span class="tok-type">int</span> x) { x = x + 1; }   <span class="tok-comment">// sửa bản sao</span>
+<span class="tok-type">int</span> n = 5;
+<span class="tok-function">tang</span>(n);
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, n);   <span class="tok-comment">// vẫn là 5 !</span></pre>
+<div class="pitfall">Đây là lý do nhiều người bối rối: hàm "sửa" biến nhưng ra ngoài không đổi. Muốn hàm thay đổi được biến gốc, phải dùng <strong>con trỏ</strong> (chương 6).</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Tham số thực ra sống ở đâu? Stack frame.</b> Mỗi lần gọi hàm đẩy thêm một <strong>stack frame</strong>: một khối chứa tham số, biến cục bộ và địa chỉ trả về, xếp chồng lên frame của hàm gọi. Đó chính xác là lý do bản sao trong "truyền theo giá trị" biến mất khi hàm return — frame của nó bị gỡ khỏi stack và vùng nhớ đó mất đi. <em>Chương N2 (Stack vs Heap) sẽ vẽ chi tiết từng frame; nhớ lại chỗ này khi tới đó.</em></div>
+</div>
+`,
+        },
+        {
+          title: '5.3 — Variable scope · built-in vs user-defined functions|||5.3 — Phạm vi biến (scope) · hàm dựng sẵn vs tự định nghĩa',
+          slug: 'prf192-5-3-scope',
+          type: 'VIDEO',
+          description: 'Biến sống ở đâu, và phân biệt hàm có sẵn với hàm tự viết.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 5 · Lesson 5.3</span>
+<h2>Variable scope</h2>
+<p class="lead"><strong>Scope</strong> is the region of code where a variable "exists" and can be used. A variable declared inside a function only lives in that function (a <em>local</em> variable).</p>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Local variable</span><span class="lz-lnote">declared in a function → usable only in that function</span></div>
+  <div class="lz-layer"><span class="lz-lname">Global variable</span><span class="lz-lnote">declared outside every function → usable everywhere (use sparingly)</span></div>
+</div>
+<pre><span class="tok-type">void</span> <span class="tok-function">f</span>() {
+    <span class="tok-type">int</span> x = 10;    <span class="tok-comment">// x lives only inside f()</span>
+}
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    <span class="tok-function">f</span>();
+    <span class="tok-comment">// printf("%d", x);  // ERROR: x does not exist here</span>
+}</pre>
+<h3>Built-in vs user-defined functions</h3>
+<ul>
+  <li><strong>Built-in:</strong> <code>printf</code>, <code>scanf</code>, <code>sqrt</code>… live in libraries, just <code>#include</code> them.</li>
+  <li><strong>User-defined:</strong> functions you write, like <code>tong()</code> above.</li>
+</ul>
+<div class="callout">Prefer to avoid global variables — they make it hard to track "who changed the value". Passing data through function parameters is far clearer.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 5 · Bài 5.3</span>
+<h2>Phạm vi biến (scope)</h2>
+<p class="lead"><strong>Phạm vi</strong> là vùng code mà một biến "tồn tại" và dùng được. Biến khai báo trong một hàm chỉ sống trong hàm đó (biến <em>cục bộ</em>).</p>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Biến cục bộ (local)</span><span class="lz-lnote">khai trong hàm → chỉ dùng trong hàm đó</span></div>
+  <div class="lz-layer"><span class="lz-lname">Biến toàn cục (global)</span><span class="lz-lnote">khai ngoài mọi hàm → dùng khắp nơi (hạn chế dùng)</span></div>
+</div>
+<pre><span class="tok-type">void</span> <span class="tok-function">f</span>() {
+    <span class="tok-type">int</span> x = 10;    <span class="tok-comment">// x chỉ sống trong f()</span>
+}
+<span class="tok-type">int</span> <span class="tok-function">main</span>() {
+    <span class="tok-function">f</span>();
+    <span class="tok-comment">// printf("%d", x);  // LỖI: x không tồn tại ở đây</span>
+}</pre>
+<h3>Hàm dựng sẵn vs tự định nghĩa</h3>
+<ul>
+  <li><strong>Dựng sẵn (built-in):</strong> <code>printf</code>, <code>scanf</code>, <code>sqrt</code>… nằm trong thư viện, chỉ cần <code>#include</code>.</li>
+  <li><strong>Tự định nghĩa:</strong> hàm bạn viết như <code>tong()</code> ở trên.</li>
+</ul>
+<div class="callout">Nên hạn chế biến toàn cục — chúng khiến khó theo dõi "ai đã đổi giá trị". Truyền dữ liệu qua tham số hàm rõ ràng hơn nhiều.</div>
+</div>
+`,
+        },
+        {
+          title: 'Workshop 2 — A menu program calling functions|||Workshop 2 — Chương trình menu gọi hàm',
+          slug: 'prf192-5-workshop2',
+          type: 'EXERCISE',
+          description: 'Xây chương trình dạng menu, mỗi chức năng là một hàm.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Workshop 2</span>
+<h2>Workshop 2 — Student score manager (menu)</h2>
+<p class="lead">Apply functions, parameters, loops and branching.</p>
+<h3>Problem</h3>
+<p>Write a <strong>menu</strong> program that repeats using <code>do-while</code>, where each feature is its own function:</p>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">nhapDiem()</div><div class="lz-nsub">input the list of scores</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">tinhTrungBinh()</div><div class="lz-nsub">compute the average</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">timMax()</div><div class="lz-nsub">find the highest score</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Exit</div><div class="lz-nsub">end the program</div></div></div>
+</div>
+<h3>Grading criteria</h3>
+<table>
+  <thead><tr><th>Criterion</th><th>Points</th></tr></thead>
+  <tbody>
+    <tr><td>Features run correctly</td><td>40%</td></tr>
+    <tr><td>Sensible split into functions (one function — one job)</td><td>30%</td></tr>
+    <tr><td>Handles wrong choice / empty data</td><td>20%</td></tr>
+    <tr><td>Presentation, naming</td><td>10%</td></tr>
+  </tbody>
+</table>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-280" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Do &amp; auto-grade</span><span class="lc-sub">Submit the menu program on CodeLab; the model solution opens after you submit.</span></span>
+  <span class="lc-cta">START →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Workshop 2</span>
+<h2>Workshop 2 — Quản lý điểm sinh viên (menu)</h2>
+<p class="lead">Vận dụng hàm, tham số, vòng lặp và rẽ nhánh.</p>
+<h3>Đề bài</h3>
+<p>Viết chương trình <strong>menu</strong> lặp lại bằng <code>do-while</code>, mỗi chức năng là một hàm riêng:</p>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">nhapDiem()</div><div class="lz-nsub">nhập danh sách điểm</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">tinhTrungBinh()</div><div class="lz-nsub">tính điểm trung bình</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">timMax()</div><div class="lz-nsub">tìm điểm cao nhất</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Thoát</div><div class="lz-nsub">kết thúc chương trình</div></div></div>
+</div>
+<h3>Tiêu chí chấm</h3>
+<table>
+  <thead><tr><th>Tiêu chí</th><th>Điểm</th></tr></thead>
+  <tbody>
+    <tr><td>Chạy đúng các chức năng</td><td>40%</td></tr>
+    <tr><td>Tách hàm hợp lý (một hàm — một việc)</td><td>30%</td></tr>
+    <tr><td>Xử lý lựa chọn sai / dữ liệu rỗng</td><td>20%</td></tr>
+    <tr><td>Trình bày, đặt tên</td><td>10%</td></tr>
+  </tbody>
+</table>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-280" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Làm & chấm tự động</span><span class="lc-sub">Nộp bài menu gọi hàm trên CodeLab; lời giải mẫu mở sau khi nộp.</span></span>
+  <span class="lc-cta">LÀM BÀI →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: 'Chapter 5 Quiz|||Quiz chương 5',
+          slug: 'prf192-5-quiz',
+          type: 'QUIZ',
+          description: 'Kiểm tra nhanh hàm & phạm vi biến.',
+          quiz: {
+            timeLimitSeconds: 480,
+            questions: [
+              { question: 'In int tong(int a, int b), what is the leading "int"?|||Trong int tong(int a, int b), "int" đứng đầu là gì?', options: ['Function name|||Tên hàm', 'Return type|||Kiểu giá trị trả về', 'A parameter|||Tham số', 'A global variable|||Biến toàn cục'], correctIndex: 1, points: 1 },
+              { question: 'What does pass by value mean?|||Truyền theo giá trị (pass by value) nghĩa là?', options: ['The function can change the original|||Hàm sửa được biến gốc', 'The function gets a copy and cannot change the original|||Hàm nhận một bản sao, không sửa được biến gốc', 'Nothing is passed|||Không truyền gì', 'Only for real numbers|||Chỉ dùng cho số thực'], correctIndex: 1, points: 1 },
+              { question: 'Where can a local variable declared in f() be used?|||Biến cục bộ khai trong hàm f() dùng được ở đâu?', options: ['Every function|||Mọi hàm', 'Only in f()|||Chỉ trong f()', 'Only in main()|||Chỉ trong main()', 'The whole program|||Toàn chương trình'], correctIndex: 1, points: 1 },
+              { question: 'What kind of function is printf?|||printf là loại hàm gì?', options: ['User-defined|||Tự định nghĩa', 'Built into the library|||Dựng sẵn trong thư viện', 'A keyword|||Từ khoá', 'A variable|||Biến'], correctIndex: 1, points: 1 },
+              { question: 'To let a function change the original variable, use?|||Muốn hàm thay đổi được biến gốc, cần dùng?', options: ['A global variable is required|||Biến toàn cục bắt buộc', 'A pointer|||Con trỏ', 'return multiple times|||return nhiều lần', 'It is impossible|||Không thể được'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+
+    /* ══════════════════ CHƯƠNG 6 — CON TRỎ ══════════════════ */
+    {
+      title: 'Chapter 6 — Pointers|||Chương 6 — Con trỏ',
+      description: 'Địa chỉ bộ nhớ và con trỏ — phần "khó nhằn" nhưng là chìa khoá của C.',
+      lessons: [
+        {
+          title: '6.1 — What is a pointer? The & and * operators|||6.1 — Con trỏ là gì? Toán tử & và *',
+          slug: 'prf192-6-1-con-tro',
+          type: 'VIDEO',
+          description: 'Địa chỉ bộ nhớ và cách con trỏ trỏ tới biến khác.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 6 · Lesson 6.1</span>
+<h2>What is a pointer?</h2>
+<p class="lead">Every variable sits at an <strong>address</strong> in memory (like a house number). A <strong>pointer</strong> is a special variable: it holds the <em>address</em> of another variable, instead of holding a value directly.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">int n = 5;</span><span class="lz-lnote">n holds the value 5, at address (e.g.) 0x100</span></div>
+  <div class="lz-layer"><span class="lz-lname">int *p = &amp;n;</span><span class="lz-lnote">pointer p holds 0x100 — "points to" n</span></div>
+  <div class="lz-layer"><span class="lz-lname">*p</span><span class="lz-lnote">go to the address p holds → read out 5</span></div>
+</div>
+<h3>The two core operators</h3>
+<ul>
+  <li><code>&amp;n</code> — "<strong>address of</strong> n" (address-of).</li>
+  <li><code>*p</code> — "<strong>the value at</strong> the address p points to" (dereference).</li>
+</ul>
+<pre><span class="tok-type">int</span> n = 5;
+<span class="tok-type">int</span> *p = &amp;n;        <span class="tok-comment">// p points to n</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, *p);   <span class="tok-comment">// 5  — read through the pointer</span>
+*p = 10;             <span class="tok-comment">// write through the pointer → n becomes 10</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, n);    <span class="tok-comment">// 10 !</span></pre>
+<div class="out"><b>Output:</b> 5<br>10</div>
+<div class="note-ct">Remember the <code>&amp;</code> in <code>scanf("%d", &amp;n)</code> from chapter 2 — it is exactly "address of n". Now you see why: <code>scanf</code> needs the address to write the input into n's memory cell.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Pointer arithmetic scales by the type's size.</b> <code>p + 1</code> does not add 1 byte — it adds <code>sizeof(*p)</code> bytes, so for <code>int *p</code> it jumps 4 bytes (typically), landing on the next <code>int</code>. This is exactly how array indexing (chapter 8) really works: <code>a[i]</code> is compiler sugar for <code>*(a + i)</code>. <em>Understanding this now makes chapter N3's array-pointer equivalence click instantly instead of feeling like magic.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 6 · Bài 6.1</span>
+<h2>Con trỏ là gì?</h2>
+<p class="lead">Mỗi biến nằm ở một <strong>địa chỉ</strong> trong bộ nhớ (giống số nhà). <strong>Con trỏ (pointer)</strong> là một biến đặc biệt: nó chứa <em>địa chỉ</em> của biến khác, thay vì chứa giá trị trực tiếp.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">int n = 5;</span><span class="lz-lnote">biến n chứa giá trị 5, ở địa chỉ (vd) 0x100</span></div>
+  <div class="lz-layer"><span class="lz-lname">int *p = &amp;n;</span><span class="lz-lnote">con trỏ p chứa 0x100 — "trỏ tới" n</span></div>
+  <div class="lz-layer"><span class="lz-lname">*p</span><span class="lz-lnote">đi tới địa chỉ p trỏ → lấy ra 5</span></div>
+</div>
+<h3>Hai toán tử cốt lõi</h3>
+<ul>
+  <li><code>&amp;n</code> — "<strong>địa chỉ của</strong> n" (address-of).</li>
+  <li><code>*p</code> — "<strong>giá trị tại</strong> địa chỉ p trỏ tới" (dereference).</li>
+</ul>
+<pre><span class="tok-type">int</span> n = 5;
+<span class="tok-type">int</span> *p = &amp;n;        <span class="tok-comment">// p trỏ tới n</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, *p);   <span class="tok-comment">// 5  — đọc qua con trỏ</span>
+*p = 10;             <span class="tok-comment">// ghi qua con trỏ → n đổi thành 10</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d\\n"</span>, n);    <span class="tok-comment">// 10 !</span></pre>
+<div class="out"><b>Output:</b> 5<br>10</div>
+<div class="note-ct">Nhớ lại dấu <code>&amp;</code> trong <code>scanf("%d", &amp;n)</code> ở chương 2 — chính là "địa chỉ của n". Giờ bạn hiểu vì sao: <code>scanf</code> cần địa chỉ để ghi giá trị nhập vào đúng ô nhớ của n.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Phép toán con trỏ co giãn theo kích thước kiểu.</b> <code>p + 1</code> không cộng 1 byte — nó cộng <code>sizeof(*p)</code> byte, nên với <code>int *p</code> nó nhảy 4 byte (thường vậy), rơi đúng vào <code>int</code> kế tiếp. Đây chính xác là cách chỉ số mảng (chương 8) hoạt động thật: <code>a[i]</code> là cú pháp đường của <code>*(a + i)</code>. <em>Hiểu điều này ngay bây giờ giúp sự tương đương mảng-con trỏ ở chương N3 sáng tỏ ngay lập tức thay vì cảm thấy như phép màu.</em></div>
+</div>
+`,
+        },
+        {
+          title: '6.2 — Pointers as parameters (pass by reference)|||6.2 — Con trỏ làm tham số (pass by reference)',
+          slug: 'prf192-6-2-pass-by-reference',
+          type: 'VIDEO',
+          description: 'Cho hàm thay đổi được biến gốc.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 6 · Lesson 6.2</span>
+<h2>Pointers as parameters — pass by reference</h2>
+<p class="lead">In chapter 5 we saw a function can't change the original variable (pass by value). Passing the <strong>address</strong> (a pointer) solves it: the function receives the address and writes straight into the original cell.</p>
+<pre><span class="tok-type">void</span> <span class="tok-function">tang</span>(<span class="tok-type">int</span> *x) { *x = *x + 1; }  <span class="tok-comment">// edit through the pointer</span>
+<span class="tok-type">int</span> n = 5;
+<span class="tok-function">tang</span>(&amp;n);              <span class="tok-comment">// pass the ADDRESS of n</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, n);      <span class="tok-comment">// 6 — n changed !</span></pre>
+<div class="out"><b>Output:</b> 6</div>
+<h3>The classic use: a swap function</h3>
+<pre><span class="tok-type">void</span> <span class="tok-function">swap</span>(<span class="tok-type">int</span> *a, <span class="tok-type">int</span> *b) {
+    <span class="tok-type">int</span> t = *a; *a = *b; *b = t;
+}</pre>
+<div class="pitfall">You cannot write a working <code>swap</code> with pass by value — inside it would only swap two copies. Pointers are required. This is a very common interview/exam question.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 6 · Bài 6.2</span>
+<h2>Con trỏ làm tham số — truyền theo tham chiếu</h2>
+<p class="lead">Ở chương 5 ta thấy hàm không sửa được biến gốc (pass by value). Truyền <strong>địa chỉ</strong> (con trỏ) giải quyết điều đó: hàm nhận địa chỉ và ghi thẳng vào ô nhớ gốc.</p>
+<pre><span class="tok-type">void</span> <span class="tok-function">tang</span>(<span class="tok-type">int</span> *x) { *x = *x + 1; }  <span class="tok-comment">// sửa qua con trỏ</span>
+<span class="tok-type">int</span> n = 5;
+<span class="tok-function">tang</span>(&amp;n);              <span class="tok-comment">// truyền ĐỊA CHỈ của n</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, n);      <span class="tok-comment">// 6 — n đã đổi !</span></pre>
+<div class="out"><b>Output:</b> 6</div>
+<h3>Ứng dụng kinh điển: hàm hoán đổi</h3>
+<pre><span class="tok-type">void</span> <span class="tok-function">swap</span>(<span class="tok-type">int</span> *a, <span class="tok-type">int</span> *b) {
+    <span class="tok-type">int</span> t = *a; *a = *b; *b = t;
+}</pre>
+<div class="pitfall">Không thể viết hàm <code>swap</code> hoạt động đúng nếu truyền theo giá trị — bên trong sẽ chỉ đổi hai bản sao. Bắt buộc dùng con trỏ. Đây là câu hỏi phỏng vấn/kiểm tra rất hay gặp.</div>
+</div>
+`,
+        },
+        {
+          title: '6.3 — Dynamic allocation: malloc & free|||6.3 — Cấp phát động: malloc & free',
+          slug: 'prf192-6-3-malloc',
+          type: 'VIDEO',
+          description: 'Xin bộ nhớ khi chạy và trả lại khi xong.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 6 · Lesson 6.3</span>
+<h2>Dynamic allocation — <code>malloc</code> &amp; <code>free</code></h2>
+<p class="lead">Sometimes while writing code you <em>don't yet know</em> how many cells you need (e.g. how many elements the user enters at run time). <strong>Dynamic allocation</strong> lets you request memory at run time via <code>malloc</code>, and give it back with <code>free</code>.</p>
+<pre><span class="tok-keyword">#include</span> &lt;stdlib.h&gt;
+<span class="tok-type">int</span> n = 5;
+<span class="tok-type">int</span> *a = (<span class="tok-type">int</span>*) <span class="tok-function">malloc</span>(n * <span class="tok-keyword">sizeof</span>(<span class="tok-type">int</span>)); <span class="tok-comment">// request an array of 5 ints</span>
+a[0] = 10;               <span class="tok-comment">// use it like a normal array</span>
+<span class="tok-function">free</span>(a);                 <span class="tok-comment">// return the memory when done</span></pre>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Request</div><div class="lz-t">malloc(...)</div><div class="lz-d">allocate a region</div></div>
+  <div class="lz-step"><div class="lz-k">Use</div><div class="lz-t">a[i] = …</div><div class="lz-d">read/write like an array</div></div>
+  <div class="lz-step"><div class="lz-k">Return</div><div class="lz-t">free(a)</div><div class="lz-d">release when done</div></div>
+</div>
+<div class="pitfall">Requesting without <code>free</code> → a <strong>memory leak</strong>. Calling <code>free</code> twice on the same region, or using it after <code>free</code> → serious bugs. Advanced chapter N2 digs into this.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Tools that catch leaks for you.</b> Real projects do not hunt leaks by reading code — they run under <strong>Valgrind</strong> (Linux) or enable <strong>AddressSanitizer</strong> (<code>-fsanitize=address</code> in gcc), which report exactly which <code>malloc</code> line's memory was never freed, or was used after being freed. <em>You will not spot every leak by eye once programs grow past a few hundred lines — professional C developers lean on these tools, not memorization.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 6 · Bài 6.3</span>
+<h2>Cấp phát động — <code>malloc</code> &amp; <code>free</code></h2>
+<p class="lead">Đôi khi lúc viết code ta <em>chưa biết</em> cần bao nhiêu ô nhớ (vd: số phần tử người dùng nhập lúc chạy). <strong>Cấp phát động</strong> cho phép xin bộ nhớ khi chạy, qua <code>malloc</code>, và trả lại bằng <code>free</code>.</p>
+<pre><span class="tok-keyword">#include</span> &lt;stdlib.h&gt;
+<span class="tok-type">int</span> n = 5;
+<span class="tok-type">int</span> *a = (<span class="tok-type">int</span>*) <span class="tok-function">malloc</span>(n * <span class="tok-keyword">sizeof</span>(<span class="tok-type">int</span>)); <span class="tok-comment">// xin mảng 5 int</span>
+a[0] = 10;               <span class="tok-comment">// dùng như mảng bình thường</span>
+<span class="tok-function">free</span>(a);                 <span class="tok-comment">// trả lại bộ nhớ khi xong</span></pre>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Xin</div><div class="lz-t">malloc(...)</div><div class="lz-d">cấp một vùng nhớ</div></div>
+  <div class="lz-step"><div class="lz-k">Dùng</div><div class="lz-t">a[i] = …</div><div class="lz-d">đọc/ghi như mảng</div></div>
+  <div class="lz-step"><div class="lz-k">Trả</div><div class="lz-t">free(a)</div><div class="lz-d">giải phóng khi xong</div></div>
+</div>
+<div class="pitfall">Xin mà không <code>free</code> → <strong>rò rỉ bộ nhớ (memory leak)</strong>. <code>free</code> hai lần cùng một vùng, hoặc dùng sau khi đã <code>free</code> → lỗi nghiêm trọng. Chương nâng cao N2 sẽ đào sâu chủ đề này.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Có công cụ bắt rò rỉ giúp bạn.</b> Dự án thật không săn rò rỉ bằng cách đọc code — họ chạy dưới <strong>Valgrind</strong> (Linux) hoặc bật <strong>AddressSanitizer</strong> (<code>-fsanitize=address</code> trong gcc), báo chính xác dòng <code>malloc</code> nào chưa từng được free, hoặc bị dùng sau khi đã free. <em>Bạn sẽ không thấy hết rò rỉ bằng mắt khi chương trình lớn quá vài trăm dòng — dev C chuyên nghiệp dựa vào công cụ, không phải trí nhớ.</em></div>
+</div>
+`,
+        },
+        {
+          title: 'Chapter 6 Quiz|||Quiz chương 6',
+          slug: 'prf192-6-quiz',
+          type: 'QUIZ',
+          description: 'Kiểm tra nhanh con trỏ.',
+          quiz: {
+            timeLimitSeconds: 480,
+            questions: [
+              { question: 'What does the & operator (as in &n) mean?|||Toán tử & (như trong &n) nghĩa là gì?', options: ['Value of n|||Giá trị của n', 'Address of n|||Địa chỉ của n', 'Logical AND|||Và logic', 'Pointer n|||Con trỏ n'], correctIndex: 1, points: 1 },
+              { question: 'If int *p = &n; then *p yields?|||Nếu int *p = &n; thì *p cho ra?', options: ['Address of n|||Địa chỉ của n', 'Value of n|||Giá trị của n', 'A new pointer|||Con trỏ mới', '0'], correctIndex: 1, points: 1 },
+              { question: 'Why must swap use pointers?|||Vì sao hàm swap phải dùng con trỏ?', options: ['To be faster|||Cho nhanh hơn', 'To change the two original variables|||Để sửa được hai biến gốc', 'Syntax requirement|||Bắt buộc cú pháp', 'Pointers not needed|||Không cần con trỏ'], correctIndex: 1, points: 1 },
+              { question: 'What is malloc for?|||malloc dùng để làm gì?', options: ['Print to screen|||In ra màn hình', 'Allocate memory dynamically at run time|||Cấp phát bộ nhớ động lúc chạy', 'Declare a variable|||Khai báo biến', 'Close a file|||Đóng file'], correctIndex: 1, points: 1 },
+              { question: 'Forgetting free after malloc causes?|||Quên free sau malloc gây ra?', options: ['Compile error|||Lỗi biên dịch', 'Memory leak|||Rò rỉ bộ nhớ (memory leak)', 'A faster program|||Chương trình nhanh hơn', 'Nothing|||Không sao'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+
+    /* ══════════════════ CHƯƠNG 7 — THƯ VIỆN CHUẨN ══════════════════ */
+    {
+      title: 'Chapter 7 — The C standard library|||Chương 7 — Thư viện chuẩn C',
+      description: 'Tận dụng các hàm có sẵn: stdlib, math, ctype, time.',
+      lessons: [
+        {
+          title: '7.1 — stdlib.h & time.h|||7.1 — stdlib.h & time.h',
+          slug: 'prf192-7-1-stdlib-time',
+          type: 'VIDEO',
+          description: 'Số ngẫu nhiên, chuyển đổi, và thời gian.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 7 · Lesson 7.1</span>
+<h2><code>stdlib.h</code> &amp; <code>time.h</code></h2>
+<p class="lead">The standard library gives you a wealth of ready-made functions — no reinventing the wheel. Just <code>#include</code> the right header.</p>
+<h3>Random numbers</h3>
+<pre><span class="tok-keyword">#include</span> &lt;stdlib.h&gt;
+<span class="tok-keyword">#include</span> &lt;time.h&gt;
+<span class="tok-function">srand</span>(<span class="tok-function">time</span>(NULL));       <span class="tok-comment">// seed with the current time</span>
+<span class="tok-type">int</span> r = <span class="tok-function">rand</span>() % 6 + 1;  <span class="tok-comment">// a number 1..6 (dice)</span></pre>
+<div class="callout"><code>rand() % n</code> gives a remainder 0..n-1. For 1..6 use <code>% 6 + 1</code>. Without calling <code>srand</code>, every run produces the exact same sequence.</div>
+<table>
+  <thead><tr><th>Function</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>rand()</code>, <code>srand()</code></td><td>random numbers</td></tr>
+    <tr><td><code>atoi()</code></td><td>string → integer</td></tr>
+    <tr><td><code>abs()</code></td><td>absolute value</td></tr>
+    <tr><td><code>malloc()</code>, <code>free()</code></td><td>memory allocation (ch.6)</td></tr>
+  </tbody>
+</table>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 7 · Bài 7.1</span>
+<h2><code>stdlib.h</code> &amp; <code>time.h</code></h2>
+<p class="lead">Thư viện chuẩn cho bạn hàng loạt hàm dùng sẵn — không phải phát minh lại bánh xe. Chỉ cần <code>#include</code> đúng header.</p>
+<h3>Số ngẫu nhiên</h3>
+<pre><span class="tok-keyword">#include</span> &lt;stdlib.h&gt;
+<span class="tok-keyword">#include</span> &lt;time.h&gt;
+<span class="tok-function">srand</span>(<span class="tok-function">time</span>(NULL));       <span class="tok-comment">// gieo mầm theo thời gian</span>
+<span class="tok-type">int</span> r = <span class="tok-function">rand</span>() % 6 + 1;  <span class="tok-comment">// số 1..6 (xúc xắc)</span></pre>
+<div class="callout"><code>rand() % n</code> cho số dư 0..n-1. Muốn 1..6 thì <code>% 6 + 1</code>. Không gọi <code>srand</code> thì mỗi lần chạy ra dãy giống hệt nhau.</div>
+<table>
+  <thead><tr><th>Hàm</th><th>Công dụng</th></tr></thead>
+  <tbody>
+    <tr><td><code>rand()</code>, <code>srand()</code></td><td>số ngẫu nhiên</td></tr>
+    <tr><td><code>atoi()</code></td><td>chuỗi → số nguyên</td></tr>
+    <tr><td><code>abs()</code></td><td>giá trị tuyệt đối</td></tr>
+    <tr><td><code>malloc()</code>, <code>free()</code></td><td>cấp phát bộ nhớ (ch.6)</td></tr>
+  </tbody>
+</table>
+</div>
+`,
+        },
+        {
+          title: '7.2 — math.h & ctype.h · formatted I/O|||7.2 — math.h & ctype.h · nhập/xuất định dạng',
+          slug: 'prf192-7-2-math-ctype',
+          type: 'VIDEO',
+          description: 'Hàm toán học, phân loại ký tự và định dạng in.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 7 · Lesson 7.2</span>
+<h2><code>math.h</code> &amp; <code>ctype.h</code></h2>
+<pre><span class="tok-keyword">#include</span> &lt;math.h&gt;
+<span class="tok-function">printf</span>(<span class="tok-string">"%.2f\\n"</span>, <span class="tok-function">sqrt</span>(2));   <span class="tok-comment">// 1.41 — square root</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%.0f\\n"</span>, <span class="tok-function">pow</span>(2, 10)); <span class="tok-comment">// 1024 — power</span></pre>
+<div class="out"><b>Output:</b> 1.41<br>1024</div>
+<table>
+  <thead><tr><th>math.h</th><th>ctype.h</th></tr></thead>
+  <tbody>
+    <tr><td><code>sqrt, pow, fabs, ceil, floor</code></td><td><code>isdigit, isalpha, toupper, tolower</code></td></tr>
+  </tbody>
+</table>
+<h3>Formatted output</h3>
+<p>Control how things print via specifiers in <code>%</code>:</p>
+<ul>
+  <li><code>%.2f</code> — real number with 2 decimals.</li>
+  <li><code>%5d</code> — integer right-aligned in 5 columns (alignment).</li>
+  <li><code>%-10s</code> — string left-aligned in 10 columns.</li>
+</ul>
+<div class="pitfall"><b>Absolute value lives in two headers, and they are not interchangeable.</b> <code>fabs()</code> (and <code>fabsf</code>, <code>fabsl</code>) returns a <code>double</code> and is declared in <code>&lt;math.h&gt;</code>. The integer <code>abs()</code> (and <code>labs</code>, <code>llabs</code>) is declared in <code>&lt;stdlib.h&gt;</code> — see lesson 7.1. Calling <code>abs(-2.7)</code> converts the argument to <code>int</code> and gives <b>2</b>, not 2.7. Header questions are a classic exam trap: <code>abs</code> &rarr; stdlib.h, <code>fabs</code> &rarr; math.h.</div>
+<div class="note-ct">Column alignment with <code>%5d</code>, <code>%-10s</code> is very useful for printing neat data tables — used a lot in the student-manager Workshop.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 7 · Bài 7.2</span>
+<h2><code>math.h</code> &amp; <code>ctype.h</code></h2>
+<pre><span class="tok-keyword">#include</span> &lt;math.h&gt;
+<span class="tok-function">printf</span>(<span class="tok-string">"%.2f\\n"</span>, <span class="tok-function">sqrt</span>(2));   <span class="tok-comment">// 1.41 — căn bậc hai</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%.0f\\n"</span>, <span class="tok-function">pow</span>(2, 10)); <span class="tok-comment">// 1024 — luỹ thừa</span></pre>
+<div class="out"><b>Output:</b> 1.41<br>1024</div>
+<table>
+  <thead><tr><th>math.h</th><th>ctype.h</th></tr></thead>
+  <tbody>
+    <tr><td><code>sqrt, pow, fabs, ceil, floor</code></td><td><code>isdigit, isalpha, toupper, tolower</code></td></tr>
+  </tbody>
+</table>
+<h3>Nhập/xuất định dạng</h3>
+<p>Điều khiển cách in bằng chỉ định trong <code>%</code>:</p>
+<ul>
+  <li><code>%.2f</code> — số thực 2 chữ số thập phân.</li>
+  <li><code>%5d</code> — số nguyên căn phải trong 5 ô (canh cột).</li>
+  <li><code>%-10s</code> — chuỗi căn trái trong 10 ô.</li>
+</ul>
+<div class="pitfall"><b>Giá trị tuyệt đối nằm ở hai header, và chúng không thay nhau được.</b> <code>fabs()</code> (cùng <code>fabsf</code>, <code>fabsl</code>) trả về <code>double</code> và được khai báo trong <code>&lt;math.h&gt;</code>. Còn <code>abs()</code> cho số nguyên (cùng <code>labs</code>, <code>llabs</code>) khai báo trong <code>&lt;stdlib.h&gt;</code> — xem bài 7.1. Gọi <code>abs(-2.7)</code> sẽ ép tham số về <code>int</code> và cho <b>2</b>, không phải 2,7. Câu hỏi về header là bẫy thi kinh điển: <code>abs</code> &rarr; stdlib.h, <code>fabs</code> &rarr; math.h.</div>
+<div class="note-ct">Canh cột bằng <code>%5d</code>, <code>%-10s</code> cực hữu ích khi in bảng dữ liệu đẹp — dùng nhiều ở Workshop quản lý sinh viên.</div>
+</div>
+`,
+        },
+        {
+          title: 'Progress Test 1 — CLO1, CLO5, CLO6, CLO9 (session 36)|||Progress Test 1 — CLO1, CLO5, CLO6, CLO9 (buổi 36)',
+          slug: 'prf192-progress-test-1',
+          type: 'QUIZ',
+          description: 'Ôn chương 1–7. Lưu ý syllabus: cả hai progress test cộng lại 15%, mỗi bài 20–40 phút, kiểm CLO1, CLO5, CLO6, CLO9, và dạng đề là "Option 1: essay or…" — nên hãy luyện cả viết giải thích, không chỉ chọn đáp án.',
+          quiz: {
+            timeLimitSeconds: 1200,
+            questions: [
+              { question: 'Result of 2 + 3 * 4 in C?|||Kết quả 2 + 3 * 4 trong C?', options: ['20', '14', '24', '9'], correctIndex: 1, points: 1 },
+              { question: '7 / 2 with both int gives?|||7 / 2 với cả hai là int cho?', options: ['3.5', '3', '4', 'Error|||Lỗi'], correctIndex: 1, points: 1 },
+              { question: 'Which loop always runs at least once?|||Vòng lặp nào luôn chạy ít nhất một lần?', options: ['for', 'while', 'do-while', 'None|||Không có'], correctIndex: 2, points: 1 },
+              { question: 'With pass by value, the function...|||Truyền theo giá trị thì hàm...', options: ['can change the original|||sửa được biến gốc', 'gets a copy, cannot change the original|||nhận bản sao, không sửa biến gốc', 'receives nothing|||không nhận gì', 'always returns 0|||luôn trả về 0'], correctIndex: 1, points: 1 },
+              { question: '*p (with int *p = &n) is?|||*p (với int *p = &n) là?', options: ['address of n|||địa chỉ n', 'value of n|||giá trị của n', 'a new pointer|||con trỏ mới', '0'], correctIndex: 1, points: 1 },
+              { question: 'rand() % 6 + 1 gives the range?|||rand() % 6 + 1 cho khoảng giá trị?', options: ['0..6', '1..6', '0..5', '1..7'], correctIndex: 1, points: 1 },
+              { question: '%.2f prints a real number with?|||%.2f in số thực với?', options: ['2 integer digits|||2 chữ số nguyên', '2 decimal places|||2 chữ số thập phân', 'width 2|||độ rộng 2', 'unchanged|||không đổi'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+
+    /* ══════════════════ CHƯƠNG 8 — MẢNG & STRUCT ══════════════════ */
+    {
+      title: 'Chapter 8 — Arrays & Structs|||Chương 8 — Mảng & Struct',
+      description: 'Lưu nhiều dữ liệu cùng lúc: mảng, ma trận, tìm kiếm, sắp xếp và struct.',
+      lessons: [
+        {
+          title: '8.1 — One-dimensional arrays|||8.1 — Mảng một chiều',
+          slug: 'prf192-8-1-mang-1-chieu',
+          type: 'VIDEO',
+          description: 'Lưu một dãy phần tử cùng kiểu.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 8 · Lesson 8.1</span>
+<h2>One-dimensional arrays</h2>
+<p class="lead">An <strong>array</strong> is a run of consecutive memory cells of the same type, accessed by an <strong>index</strong> starting at 0.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">a[0]</span><span class="lz-lnote">the first element</span></div>
+  <div class="lz-layer"><span class="lz-lname">a[1] … a[n-2]</span><span class="lz-lnote">the middle elements</span></div>
+  <div class="lz-layer"><span class="lz-lname">a[n-1]</span><span class="lz-lnote">the last element (NOT a[n])</span></div>
+</div>
+<pre><span class="tok-type">int</span> a[5] = {10, 20, 30, 40, 50};
+<span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt; 5; i++)
+    <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, a[i]);   <span class="tok-comment">// traverse the array</span></pre>
+<div class="out"><b>Output:</b> 10 20 30 40 50</div>
+<div class="pitfall">Array <code>a[5]</code> has valid indices 0..4. Accessing <code>a[5]</code> is <strong>out of bounds</strong> — C doesn't error, it just reads/writes some other memory cell, causing hard-to-find bugs. Always keep loops within <code>i &lt; n</code>.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 8 · Bài 8.1</span>
+<h2>Mảng một chiều</h2>
+<p class="lead"><strong>Mảng (array)</strong> là một dãy ô nhớ liên tiếp cùng kiểu, truy cập qua <strong>chỉ số</strong> bắt đầu từ 0.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">a[0]</span><span class="lz-lnote">phần tử đầu tiên</span></div>
+  <div class="lz-layer"><span class="lz-lname">a[1] … a[n-2]</span><span class="lz-lnote">các phần tử giữa</span></div>
+  <div class="lz-layer"><span class="lz-lname">a[n-1]</span><span class="lz-lnote">phần tử cuối (KHÔNG phải a[n])</span></div>
+</div>
+<pre><span class="tok-type">int</span> a[5] = {10, 20, 30, 40, 50};
+<span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt; 5; i++)
+    <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, a[i]);   <span class="tok-comment">// duyệt mảng</span></pre>
+<div class="out"><b>Output:</b> 10 20 30 40 50</div>
+<div class="pitfall">Mảng <code>a[5]</code> có chỉ số hợp lệ 0..4. Truy cập <code>a[5]</code> là <strong>tràn mảng</strong> (out of bounds) — C không báo lỗi mà đọc/ghi bừa vào ô nhớ khác, gây bug khó tìm. Luôn kiểm soát vòng lặp <code>i &lt; n</code>.</div>
+</div>
+`,
+        },
+        {
+          title: '8.2 — Matrices (2D arrays)|||8.2 — Ma trận (mảng 2 chiều)',
+          slug: 'prf192-8-2-ma-tran',
+          type: 'VIDEO',
+          description: 'Bảng dữ liệu hàng × cột.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 8 · Lesson 8.2</span>
+<h2>Matrices — 2D arrays</h2>
+<p class="lead">A 2D array <code>a[row][col]</code> stores data as a table — like a grid of many subjects' scores for many students.</p>
+<pre><span class="tok-type">int</span> m[2][3] = {{1,2,3},{4,5,6}};
+<span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt; 2; i++) {
+    <span class="tok-keyword">for</span> (<span class="tok-type">int</span> j = 0; j &lt; 3; j++)
+        <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, m[i][j]);
+    <span class="tok-function">printf</span>(<span class="tok-string">"\\n"</span>);
+}</pre>
+<div class="out"><b>Output:</b><br>1 2 3<br>4 5 6</div>
+<div class="note-ct">Traversing a matrix needs <strong>nested loops</strong>: the outer loop over rows, the inner over columns. Master this pattern and you can do every matrix problem (add, transpose, find max…).</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 8 · Bài 8.2</span>
+<h2>Ma trận — mảng hai chiều</h2>
+<p class="lead">Mảng 2 chiều <code>a[hàng][cột]</code> lưu dữ liệu dạng bảng — như bảng điểm nhiều môn của nhiều sinh viên.</p>
+<pre><span class="tok-type">int</span> m[2][3] = {{1,2,3},{4,5,6}};
+<span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt; 2; i++) {
+    <span class="tok-keyword">for</span> (<span class="tok-type">int</span> j = 0; j &lt; 3; j++)
+        <span class="tok-function">printf</span>(<span class="tok-string">"%d "</span>, m[i][j]);
+    <span class="tok-function">printf</span>(<span class="tok-string">"\\n"</span>);
+}</pre>
+<div class="out"><b>Output:</b><br>1 2 3<br>4 5 6</div>
+<div class="note-ct">Duyệt ma trận cần <strong>vòng lặp lồng nhau</strong>: vòng ngoài đi qua hàng, vòng trong đi qua cột. Nắm mẫu này là làm được mọi bài ma trận (cộng, chuyển vị, tìm max…).</div>
+</div>
+`,
+        },
+        {
+          title: '8.3 — Basic search & sort|||8.3 — Tìm kiếm & sắp xếp cơ bản',
+          slug: 'prf192-8-3-tim-sap-xep',
+          type: 'VIDEO',
+          description: 'Tìm kiếm tuyến tính và sắp xếp chọn.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 8 · Lesson 8.3</span>
+<h2>Linear search &amp; selection sort</h2>
+<h3>Linear search</h3>
+<p>Scan each element in turn until you meet the value you're looking for.</p>
+<pre><span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt; n; i++)
+    <span class="tok-keyword">if</span> (a[i] == x) { <span class="tok-function">printf</span>(<span class="tok-string">"Thay o vi tri %d"</span>, i); <span class="tok-keyword">break</span>; }</pre>
+<h3>Selection sort</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Step</div><div class="lz-t">Find the smallest</div><div class="lz-d">in the unsorted part</div></div>
+  <div class="lz-step"><div class="lz-k">Step</div><div class="lz-t">Move it to the front</div><div class="lz-d">swap</div></div>
+  <div class="lz-step"><div class="lz-k">Repeat</div><div class="lz-t">On the rest</div><div class="lz-d">until done</div></div>
+</div>
+<div class="note-ct">These are the first algorithms you meet — they are studied in much more depth in <span class="badge">CSD201</span> Data Structures &amp; Algorithms. A solid grasp here lightens the load later.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Counting comparisons, not just watching it run.</b> Linear search checks up to n elements (worst case = O(n)); selection sort compares roughly n²/2 pairs (O(n²)) because it re-scans the shrinking unsorted part each round. For n=10 that is only ~45 comparisons — fine. For n=1,000,000 it is ~500 billion — a program that finishes instantly at n=10 can take minutes at scale. <em>The formal name for this (Big-O) comes later in CSD201/MAD101; the intuition — count the operations, not the seconds — starts here.</em></div>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-281" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Practice: find max/min, count, sort</span><span class="lc-sub">A set of array problems auto-graded on CodeLab.</span></span>
+  <span class="lc-cta">PRACTICE →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 8 · Bài 8.3</span>
+<h2>Tìm kiếm tuyến tính &amp; sắp xếp chọn</h2>
+<h3>Tìm kiếm tuyến tính (linear search)</h3>
+<p>Duyệt lần lượt từng phần tử tới khi gặp giá trị cần tìm.</p>
+<pre><span class="tok-keyword">for</span> (<span class="tok-type">int</span> i = 0; i &lt; n; i++)
+    <span class="tok-keyword">if</span> (a[i] == x) { <span class="tok-function">printf</span>(<span class="tok-string">"Thay o vi tri %d"</span>, i); <span class="tok-keyword">break</span>; }</pre>
+<h3>Sắp xếp chọn (selection sort)</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Bước</div><div class="lz-t">Tìm nhỏ nhất</div><div class="lz-d">trong phần chưa sắp</div></div>
+  <div class="lz-step"><div class="lz-k">Bước</div><div class="lz-t">Đưa lên đầu</div><div class="lz-d">hoán đổi</div></div>
+  <div class="lz-step"><div class="lz-k">Lặp</div><div class="lz-t">Với phần còn lại</div><div class="lz-d">tới khi hết</div></div>
+</div>
+<div class="note-ct">Đây là các thuật toán đầu tiên bạn gặp — chúng được học kỹ hơn nhiều ở <span class="badge">CSD201</span> Cấu trúc dữ liệu &amp; giải thuật. Hiểu chắc ở đây sẽ nhẹ gánh về sau.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Đếm số phép so sánh, không chỉ nhìn nó chạy.</b> Tìm tuyến tính kiểm tối đa n phần tử (xấu nhất O(n)); selection sort so sánh khoảng n²/2 cặp (O(n²)) vì mỗi vòng nó quét lại phần chưa sắp đang co nhỏ dần. Với n=10 chỉ ~45 phép so sánh — ổn. Với n=1.000.000 là ~500 tỷ — chương trình chạy tức thì ở n=10 có thể mất vài phút ở quy mô lớn. <em>Tên chính thức (Big-O) học sau ở CSD201/MAD101; trực giác — đếm số phép toán, không đếm giây — bắt đầu từ đây.</em></div>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-281" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Luyện: tìm max/min, đếm, sắp xếp</span><span class="lc-sub">Bộ bài mảng có chấm tự động trên CodeLab.</span></span>
+  <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: '8.4 — Structs: composite data|||8.4 — Struct: dữ liệu phức hợp',
+          slug: 'prf192-8-4-struct',
+          type: 'VIDEO',
+          description: 'Gom nhiều trường khác kiểu vào một "bản ghi".',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 8 · Lesson 8.4</span>
+<h2><code>struct</code> — organising composite data</h2>
+<p class="lead">Arrays store many elements of the <em>same type</em>. But a "student" has several fields of <em>different types</em>: name (string), age (int), score (float). A <strong>struct</strong> groups them into a new type.</p>
+<pre><span class="tok-keyword">struct</span> SinhVien {
+    <span class="tok-type">char</span> ten[50];
+    <span class="tok-type">int</span> tuoi;
+    <span class="tok-type">float</span> diem;
+};
+
+<span class="tok-keyword">struct</span> SinhVien sv = {<span class="tok-string">"An"</span>, 20, 8.5};
+<span class="tok-function">printf</span>(<span class="tok-string">"%s - %.1f"</span>, sv.ten, sv.diem); <span class="tok-comment">// access with the . operator</span></pre>
+<div class="out"><b>Output:</b> An - 8.5</div>
+<div class="callout">The most powerful combo: an <strong>array of structs</strong> — <code>struct SinhVien ds[100];</code> to manage a whole list of students. That is exactly the Workshop 3 task.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>sizeof(struct) is not always the sum of its fields.</b> A <code>struct { char c; int n; }</code> looks like 1+4=5 bytes, but <code>sizeof</code> usually reports 8: the compiler inserts <strong>padding</strong> so <code>int n</code> starts at a 4-byte-aligned address (CPUs read aligned memory faster — CEA201). <em>Reordering fields from biggest to smallest often shrinks a struct's memory footprint with zero behavior change — a real technique in memory-constrained code like IOT102.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 8 · Bài 8.4</span>
+<h2><code>struct</code> — tổ chức dữ liệu phức hợp</h2>
+<p class="lead">Mảng lưu nhiều phần tử <em>cùng kiểu</em>. Nhưng một "sinh viên" gồm nhiều thông tin <em>khác kiểu</em>: tên (chuỗi), tuổi (int), điểm (float). <strong>struct</strong> gom chúng thành một kiểu mới.</p>
+<pre><span class="tok-keyword">struct</span> SinhVien {
+    <span class="tok-type">char</span> ten[50];
+    <span class="tok-type">int</span> tuoi;
+    <span class="tok-type">float</span> diem;
+};
+
+<span class="tok-keyword">struct</span> SinhVien sv = {<span class="tok-string">"An"</span>, 20, 8.5};
+<span class="tok-function">printf</span>(<span class="tok-string">"%s - %.1f"</span>, sv.ten, sv.diem); <span class="tok-comment">// truy cập bằng dấu .</span></pre>
+<div class="out"><b>Output:</b> An - 8.5</div>
+<div class="callout">Kết hợp mạnh nhất: <strong>mảng struct</strong> — <code>struct SinhVien ds[100];</code> để quản lý cả danh sách sinh viên. Đây chính là đề Workshop 3.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>sizeof(struct) không phải luôn bằng tổng các trường.</b> Một <code>struct { char c; int n; }</code> trông như 1+4=5 byte, nhưng <code>sizeof</code> thường báo 8: compiler chèn <strong>padding</strong> để <code>int n</code> bắt đầu tại địa chỉ căn 4 byte (CPU đọc bộ nhớ căn chỉnh nhanh hơn — CEA201). <em>Sắp xếp lại các trường từ to tới nhỏ thường thu nhỏ dung lượng struct mà hành vi không đổi — một kỹ thuật thật trong code hạn chế bộ nhớ như IOT102.</em></div>
+</div>
+`,
+        },
+        {
+          title: 'Workshop 3 — Array of structs|||Workshop 3 — Mảng struct',
+          slug: 'prf192-8-workshop3',
+          type: 'EXERCISE',
+          description: 'Quản lý danh sách sinh viên bằng mảng struct.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Workshop 3</span>
+<h2>Workshop 3 — Student list manager</h2>
+<p class="lead">Combine arrays, structs, functions and loops.</p>
+<h3>Problem</h3>
+<ul>
+  <li>Define <code>struct SinhVien</code> (name, age, score).</li>
+  <li>Read a list of n students into an array of structs.</li>
+  <li>Print the list as a table (align with <code>%-20s %5.1f</code>).</li>
+  <li>Find the top-scoring student; count how many pass (score ≥ 5).</li>
+</ul>
+<h3>Grading criteria</h3>
+<table>
+  <thead><tr><th>Criterion</th><th>Points</th></tr></thead>
+  <tbody>
+    <tr><td>Correct struct + array</td><td>30%</td></tr>
+    <tr><td>Features run correctly</td><td>40%</td></tr>
+    <tr><td>Split into functions, neat table layout</td><td>30%</td></tr>
+  </tbody>
+</table>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-283" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Do &amp; auto-grade</span><span class="lc-sub">Submit the array-of-structs task on CodeLab.</span></span>
+  <span class="lc-cta">START →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Workshop 3</span>
+<h2>Workshop 3 — Quản lý danh sách sinh viên</h2>
+<p class="lead">Kết hợp mảng, struct, hàm và vòng lặp.</p>
+<h3>Đề bài</h3>
+<ul>
+  <li>Định nghĩa <code>struct SinhVien</code> (tên, tuổi, điểm).</li>
+  <li>Nhập danh sách n sinh viên vào một mảng struct.</li>
+  <li>In danh sách dạng bảng (canh cột bằng <code>%-20s %5.1f</code>).</li>
+  <li>Tìm sinh viên điểm cao nhất; đếm số sinh viên đạt (điểm ≥ 5).</li>
+</ul>
+<h3>Tiêu chí chấm</h3>
+<table>
+  <thead><tr><th>Tiêu chí</th><th>Điểm</th></tr></thead>
+  <tbody>
+    <tr><td>struct + mảng đúng</td><td>30%</td></tr>
+    <tr><td>Các chức năng chạy đúng</td><td>40%</td></tr>
+    <tr><td>Tách hàm, trình bày bảng đẹp</td><td>30%</td></tr>
+  </tbody>
+</table>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-283" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Làm & chấm tự động</span><span class="lc-sub">Nộp bài mảng struct trên CodeLab.</span></span>
+  <span class="lc-cta">LÀM BÀI →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: 'Chapter 8 Quiz|||Quiz chương 8',
+          slug: 'prf192-8-quiz',
+          type: 'QUIZ',
+          description: 'Kiểm tra nhanh mảng & struct.',
+          quiz: {
+            timeLimitSeconds: 600,
+            questions: [
+              { question: 'Array int a[5] has valid indices?|||Mảng int a[5] có chỉ số hợp lệ là?', options: ['1..5', '0..5', '0..4', '1..4'], correctIndex: 2, points: 1 },
+              { question: 'Accessing a[5] on array a[5] causes?|||Truy cập a[5] trên mảng a[5] gây ra?', options: ['Print the last element|||In phần tử cuối', 'Out of bounds|||Tràn mảng (out of bounds)', 'Compile error|||Lỗi biên dịch', '0'], correctIndex: 1, points: 1 },
+              { question: 'Traversing a 2D matrix needs?|||Duyệt ma trận 2 chiều cần?', options: ['One loop|||Một vòng lặp', 'Two nested loops|||Hai vòng lặp lồng nhau', 'Recursion required|||Đệ quy bắt buộc', 'No loop|||Không lặp'], correctIndex: 1, points: 1 },
+              { question: 'struct is used to?|||struct dùng để?', options: ['Store many elements of the same type|||Lưu nhiều phần tử cùng kiểu', 'Group fields of different types into a new type|||Gom nhiều trường khác kiểu vào một kiểu mới', 'Sort|||Sắp xếp', 'Allocate memory|||Cấp phát bộ nhớ'], correctIndex: 1, points: 1 },
+              { question: 'Access field ten of struct variable sv?|||Truy cập trường ten của biến struct sv?', options: ['sv->ten', 'sv.ten', 'sv[ten]', 'ten(sv)'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+
+    /* ══════════════════ CHƯƠNG 9 — CHUỖI ══════════════════ */
+    {
+      title: 'Chapter 9 — Strings|||Chương 9 — Chuỗi (String)',
+      description: 'Xử lý văn bản: mảng ký tự, ký tự kết thúc, và thư viện string.h.',
+      lessons: [
+        {
+          title: '9.1 — Strings are char arrays|||9.1 — Chuỗi là mảng ký tự',
+          slug: 'prf192-9-1-chuoi',
+          type: 'VIDEO',
+          description: 'Khai báo, nhập/xuất chuỗi và ký tự kết thúc.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 9 · Lesson 9.1</span>
+<h2>Strings are char arrays</h2>
+<p class="lead">In C, a <strong>string</strong> is not its own type but a <strong><code>char</code> array</strong> ending in the special character <code>'\\0'</code> (the null terminator).</p>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">'A' 'n' 'h'</span><span class="lz-lnote">the characters of the string "Anh"</span></div>
+  <div class="lz-layer"><span class="lz-lname">'\\0'</span><span class="lz-lnote">null — marks the END of the string</span></div>
+</div>
+<pre><span class="tok-type">char</span> ten[50] = <span class="tok-string">"Anh"</span>;   <span class="tok-comment">// '\\0' is added automatically at the end</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%s"</span>, ten);         <span class="tok-comment">// prints until it meets '\\0'</span>
+<span class="tok-function">scanf</span>(<span class="tok-string">"%s"</span>, ten);          <span class="tok-comment">// reads 1 word (stops at a space)</span></pre>
+<div class="pitfall"><code>scanf("%s", ten)</code> only reads up to the first space — entering "Nguyen Van A" gets only "Nguyen". To read a full line with spaces, use <code>fgets(ten, 50, stdin)</code>. Note <code>%s</code> needs no <code>&amp;</code> because an array name is already an address.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 9 · Bài 9.1</span>
+<h2>Chuỗi là mảng ký tự</h2>
+<p class="lead">Trong C, <strong>chuỗi (string)</strong> không phải kiểu riêng mà là một <strong>mảng <code>char</code></strong> kết thúc bằng ký tự đặc biệt <code>'\\0'</code> (null terminator).</p>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">'A' 'n' 'h'</span><span class="lz-lnote">các ký tự của chuỗi "Anh"</span></div>
+  <div class="lz-layer"><span class="lz-lname">'\\0'</span><span class="lz-lnote">null — đánh dấu KẾT THÚC chuỗi</span></div>
+</div>
+<pre><span class="tok-type">char</span> ten[50] = <span class="tok-string">"Anh"</span>;   <span class="tok-comment">// tự thêm '\\0' ở cuối</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%s"</span>, ten);         <span class="tok-comment">// in tới khi gặp '\\0'</span>
+<span class="tok-function">scanf</span>(<span class="tok-string">"%s"</span>, ten);          <span class="tok-comment">// đọc 1 từ (dừng ở dấu cách)</span></pre>
+<div class="pitfall"><code>scanf("%s", ten)</code> chỉ đọc tới dấu cách đầu tiên — nhập "Nguyen Van A" chỉ lấy "Nguyen". Muốn đọc cả dòng có dấu cách, dùng <code>fgets(ten, 50, stdin)</code>. Lưu ý <code>%s</code> không cần <code>&amp;</code> vì tên mảng đã là địa chỉ.</div>
+</div>
+`,
+        },
+        {
+          title: '9.2 — The string.h library|||9.2 — Thư viện string.h',
+          slug: 'prf192-9-2-string-h',
+          type: 'VIDEO',
+          description: 'Các hàm xử lý chuỗi thông dụng.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 9 · Lesson 9.2</span>
+<h2>The <code>string.h</code> library</h2>
+<p class="lead">Don't rewrite them — <code>string.h</code> provides the common string functions.</p>
+<table>
+  <thead><tr><th>Function</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td><code>strlen(s)</code></td><td>string length (excluding '\\0')</td></tr>
+    <tr><td><code>strcpy(a, b)</code></td><td>copy b into a</td></tr>
+    <tr><td><code>strcat(a, b)</code></td><td>append b to the end of a</td></tr>
+    <tr><td><code>strcmp(a, b)</code></td><td>compare (0 if equal)</td></tr>
+  </tbody>
+</table>
+<pre><span class="tok-keyword">#include</span> &lt;string.h&gt;
+<span class="tok-type">char</span> s[50] = <span class="tok-string">"Hello"</span>;
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, <span class="tok-function">strlen</span>(s));  <span class="tok-comment">// 5</span></pre>
+<div class="out"><b>Output:</b> 5</div>
+<div class="pitfall">To compare two strings you must use <code>strcmp(a, b) == 0</code>, NOT <code>a == b</code> (that compares addresses and is almost always wrong). A very common trap.</div>
+<div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>strcpy has no bounds check — a real security bug family.</b> <code>strcpy(a, b)</code> copies until it hits <code>b</code>'s <code>'\\0'</code>, no matter how small <code>a</code> is — if <code>b</code> is longer than <code>a</code>'s buffer, it overwrites whatever memory comes after, which can corrupt other variables or even the return address on the stack. Modern C prefers <code>strncpy(a, b, sizeof(a)-1)</code> (and still must manually add the <code>'\\0'</code>). <em>This exact bug — an unchecked copy — is the root cause behind decades of real-world buffer-overflow exploits.</em></div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 9 · Bài 9.2</span>
+<h2>Thư viện <code>string.h</code></h2>
+<p class="lead">Đừng tự viết lại — <code>string.h</code> có sẵn các hàm xử lý chuỗi thông dụng.</p>
+<table>
+  <thead><tr><th>Hàm</th><th>Công dụng</th></tr></thead>
+  <tbody>
+    <tr><td><code>strlen(s)</code></td><td>độ dài chuỗi (không tính '\\0')</td></tr>
+    <tr><td><code>strcpy(a, b)</code></td><td>chép b vào a</td></tr>
+    <tr><td><code>strcat(a, b)</code></td><td>nối b vào cuối a</td></tr>
+    <tr><td><code>strcmp(a, b)</code></td><td>so sánh (0 nếu bằng)</td></tr>
+  </tbody>
+</table>
+<pre><span class="tok-keyword">#include</span> &lt;string.h&gt;
+<span class="tok-type">char</span> s[50] = <span class="tok-string">"Hello"</span>;
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, <span class="tok-function">strlen</span>(s));  <span class="tok-comment">// 5</span></pre>
+<div class="out"><b>Output:</b> 5</div>
+<div class="pitfall">So sánh hai chuỗi phải dùng <code>strcmp(a, b) == 0</code>, KHÔNG dùng <code>a == b</code> (cái đó so sánh địa chỉ, gần như luôn sai). Đây là bẫy rất phổ biến.</div>
+<div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>strcpy không kiểm giới hạn — cả một họ lỗi bảo mật thật.</b> <code>strcpy(a, b)</code> chép tới khi gặp <code>'\\0'</code> của <code>b</code>, bất kể <code>a</code> nhỏ cỡ nào — nếu <code>b</code> dài hơn bộ đệm của <code>a</code>, nó ghi đè lên bất cứ vùng nhớ nào phía sau, có thể phá hỏng biến khác hoặc cả địa chỉ trả về trên stack. C hiện đại ưu tiên <code>strncpy(a, b, sizeof(a)-1)</code> (và vẫn phải tự thêm <code>'\\0'</code>). <em>Đúng lỗi này — copy không kiểm tra — là gốc rễ sau hàng chục năm lỗ hổng tràn bộ đệm thực tế.</em></div>
+</div>
+`,
+        },
+        {
+          title: 'Workshop 4 — String processing|||Workshop 4 — Xử lý chuỗi',
+          slug: 'prf192-9-workshop4',
+          type: 'EXERCISE',
+          description: 'Bài thực hành thao tác chuỗi.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Workshop 4</span>
+<h2>Workshop 4 — String operations</h2>
+<h3>Problem</h3>
+<ul>
+  <li>Read a full name (with spaces) using <code>fgets</code>.</li>
+  <li>Count the characters and the words.</li>
+  <li>Convert everything to UPPERCASE (using <code>toupper</code>).</li>
+  <li>Check whether the string is a palindrome.</li>
+</ul>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-281" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Do &amp; auto-grade</span><span class="lc-sub">String-processing task on CodeLab.</span></span>
+  <span class="lc-cta">START →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Workshop 4</span>
+<h2>Workshop 4 — Thao tác trên chuỗi</h2>
+<h3>Đề bài</h3>
+<ul>
+  <li>Nhập một họ tên đầy đủ (có dấu cách) bằng <code>fgets</code>.</li>
+  <li>Đếm số ký tự và số từ.</li>
+  <li>Chuyển toàn bộ thành CHỮ HOA (dùng <code>toupper</code>).</li>
+  <li>Kiểm tra chuỗi có phải "đối xứng" (palindrome) không.</li>
+</ul>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-281" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Làm & chấm tự động</span><span class="lc-sub">Bài xử lý chuỗi trên CodeLab.</span></span>
+  <span class="lc-cta">LÀM BÀI →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: 'Chapter 9 Quiz|||Quiz chương 9',
+          slug: 'prf192-9-quiz',
+          type: 'QUIZ',
+          description: 'Kiểm tra nhanh chuỗi.',
+          quiz: {
+            timeLimitSeconds: 420,
+            questions: [
+              { question: 'A C string ends with which character?|||Chuỗi trong C kết thúc bằng ký tự nào?', options: ["' '", "'\\0'", "'\\n'", "'0'"], correctIndex: 1, points: 1 },
+              { question: 'strlen("Hello") returns?|||strlen("Hello") trả về?', options: ['4', '5', '6', '0'], correctIndex: 1, points: 1 },
+              { question: 'Compare two strings a and b using?|||So sánh hai chuỗi a và b dùng?', options: ['a == b', 'strcmp(a, b) == 0', 'a.equals(b)', 'compare(a, b)'], correctIndex: 1, points: 1 },
+              { question: 'scanf("%s", ten) reads?|||scanf("%s", ten) đọc được?', options: ['A whole line with spaces|||Cả dòng có dấu cách', 'One word (stops at a space)|||Một từ (dừng ở dấu cách)', 'One character|||Một ký tự', 'One number|||Một số'], correctIndex: 1, points: 1 },
+              { question: 'To read a whole line with spaces, use?|||Muốn đọc cả dòng có dấu cách, dùng?', options: ['scanf', 'fgets', 'strlen', 'printf'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+
+    /* ══════════════════ CHƯƠNG 10 — TỆP TIN ══════════════════ */
+    {
+      title: 'Chapter 10 — Files|||Chương 10 — Tệp tin (File)',
+      description: 'Lưu và đọc dữ liệu ra ổ đĩa để không mất khi tắt chương trình.',
+      lessons: [
+        {
+          title: '10.1 — File concepts · text vs binary|||10.1 — Khái niệm File · text vs binary',
+          slug: 'prf192-10-1-file',
+          type: 'VIDEO',
+          description: 'Vì sao cần file và hai loại file.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 10 · Lesson 10.1</span>
+<h2>File concepts</h2>
+<p class="lead">Data in variables/arrays lives in RAM — <strong>lost when the program exits</strong>. To store it long term (a student list, scores…), you write it to a <strong>file</strong> on disk.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Text file</span><span class="lz-lnote">readable characters (.txt, .csv) — opens in Notepad</span></div>
+  <div class="lz-layer"><span class="lz-lname">Binary file</span><span class="lz-lnote">raw bytes (.bin, images) — compact, fast, not directly readable</span></div>
+</div>
+<p>This course focuses on <strong>text files</strong>. Working with a file always has 3 steps:</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Open</div><div class="lz-t">fopen()</div><div class="lz-d">get a FILE* pointer</div></div>
+  <div class="lz-step"><div class="lz-k">Read / Write</div><div class="lz-t">fscanf / fprintf</div><div class="lz-d">work with the data</div></div>
+  <div class="lz-step"><div class="lz-k">Close</div><div class="lz-t">fclose()</div><div class="lz-d">save &amp; release</div></div>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 10 · Bài 10.1</span>
+<h2>Khái niệm tệp tin</h2>
+<p class="lead">Dữ liệu trong biến/mảng nằm ở RAM — <strong>mất hết khi chương trình tắt</strong>. Muốn lưu lâu dài (danh sách sinh viên, điểm số…), ta ghi ra <strong>tệp tin</strong> trên ổ đĩa.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Text file</span><span class="lz-lnote">chứa ký tự đọc được (.txt, .csv) — mở bằng Notepad</span></div>
+  <div class="lz-layer"><span class="lz-lname">Binary file</span><span class="lz-lnote">chứa byte thô (.bin, ảnh) — gọn, nhanh, không đọc trực tiếp</span></div>
+</div>
+<p>Môn này tập trung <strong>text file</strong>. Quy trình làm việc với file luôn gồm 3 bước:</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Mở</div><div class="lz-t">fopen()</div><div class="lz-d">lấy con trỏ FILE*</div></div>
+  <div class="lz-step"><div class="lz-k">Đọc / Ghi</div><div class="lz-t">fscanf / fprintf</div><div class="lz-d">thao tác dữ liệu</div></div>
+  <div class="lz-step"><div class="lz-k">Đóng</div><div class="lz-t">fclose()</div><div class="lz-d">lưu &amp; giải phóng</div></div>
+</div>
+</div>
+`,
+        },
+        {
+          title: '10.2 — Open, read, write, close a file|||10.2 — Mở, đọc, ghi, đóng file',
+          slug: 'prf192-10-2-doc-ghi-file',
+          type: 'VIDEO',
+          description: 'fopen, fprintf, fscanf, fclose trong thực tế.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Chapter 10 · Lesson 10.2</span>
+<h2>Open, read, write, close a file</h2>
+<h3>Writing to a file</h3>
+<pre>FILE *f = <span class="tok-function">fopen</span>(<span class="tok-string">"diem.txt"</span>, <span class="tok-string">"w"</span>); <span class="tok-comment">// "w" = write (overwrite)</span>
+<span class="tok-keyword">if</span> (f != NULL) {
+    <span class="tok-function">fprintf</span>(f, <span class="tok-string">"An 8.5\\n"</span>);
+    <span class="tok-function">fclose</span>(f);
+}</pre>
+<h3>Reading from a file</h3>
+<pre>FILE *f = <span class="tok-function">fopen</span>(<span class="tok-string">"diem.txt"</span>, <span class="tok-string">"r"</span>); <span class="tok-comment">// "r" = read</span>
+<span class="tok-type">char</span> ten[50]; <span class="tok-type">float</span> d;
+<span class="tok-keyword">while</span> (<span class="tok-function">fscanf</span>(f, <span class="tok-string">"%s %f"</span>, ten, &amp;d) == 2)
+    <span class="tok-function">printf</span>(<span class="tok-string">"%s: %.1f\\n"</span>, ten, d);
+<span class="tok-function">fclose</span>(f);</pre>
+<table>
+  <thead><tr><th>Mode</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td><code>"r"</code></td><td>read (the file must exist)</td></tr>
+    <tr><td><code>"w"</code></td><td>write new (erase old content)</td></tr>
+    <tr><td><code>"a"</code></td><td>append to the end</td></tr>
+  </tbody>
+</table>
+<div class="pitfall">Always check <code>fopen</code> is not <code>NULL</code> before using it — the file may not exist or you may lack permission. And <strong>don't forget <code>fclose</code></strong>, or written data may not be flushed to disk.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Chương 10 · Bài 10.2</span>
+<h2>Mở, đọc, ghi, đóng file</h2>
+<h3>Ghi ra file</h3>
+<pre>FILE *f = <span class="tok-function">fopen</span>(<span class="tok-string">"diem.txt"</span>, <span class="tok-string">"w"</span>); <span class="tok-comment">// "w" = ghi (ghi đè)</span>
+<span class="tok-keyword">if</span> (f != NULL) {
+    <span class="tok-function">fprintf</span>(f, <span class="tok-string">"An 8.5\\n"</span>);
+    <span class="tok-function">fclose</span>(f);
+}</pre>
+<h3>Đọc từ file</h3>
+<pre>FILE *f = <span class="tok-function">fopen</span>(<span class="tok-string">"diem.txt"</span>, <span class="tok-string">"r"</span>); <span class="tok-comment">// "r" = đọc</span>
+<span class="tok-type">char</span> ten[50]; <span class="tok-type">float</span> d;
+<span class="tok-keyword">while</span> (<span class="tok-function">fscanf</span>(f, <span class="tok-string">"%s %f"</span>, ten, &amp;d) == 2)
+    <span class="tok-function">printf</span>(<span class="tok-string">"%s: %.1f\\n"</span>, ten, d);
+<span class="tok-function">fclose</span>(f);</pre>
+<table>
+  <thead><tr><th>Chế độ</th><th>Ý nghĩa</th></tr></thead>
+  <tbody>
+    <tr><td><code>"r"</code></td><td>đọc (file phải tồn tại)</td></tr>
+    <tr><td><code>"w"</code></td><td>ghi mới (xoá nội dung cũ)</td></tr>
+    <tr><td><code>"a"</code></td><td>ghi thêm vào cuối (append)</td></tr>
+  </tbody>
+</table>
+<div class="pitfall">Luôn kiểm tra <code>fopen</code> khác <code>NULL</code> trước khi dùng — file có thể không tồn tại hoặc không có quyền. Và <strong>đừng quên <code>fclose</code></strong>, nếu không dữ liệu ghi có thể chưa được lưu xuống đĩa.</div>
+</div>
+`,
+        },
+        {
+          title: 'Workshop 5 — Reading/writing files|||Workshop 5 — Đọc/ghi file',
+          slug: 'prf192-10-workshop5',
+          type: 'EXERCISE',
+          description: 'Lưu danh sách sinh viên ra file và đọc lại.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Workshop 5</span>
+<h2>Workshop 5 — Save a list to a file</h2>
+<h3>Problem</h3>
+<ul>
+  <li>Read a list of students (array of structs) then <strong>write</strong> it to <code>sinhvien.txt</code>.</li>
+  <li>Read the file back and print it as a table.</li>
+  <li>Add an "append" feature to add a new student without erasing the old data.</li>
+</ul>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-283" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Do &amp; auto-grade</span><span class="lc-sub">File read/write task on CodeLab.</span></span>
+  <span class="lc-cta">START →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Workshop 5</span>
+<h2>Workshop 5 — Lưu danh sách ra file</h2>
+<h3>Đề bài</h3>
+<ul>
+  <li>Nhập danh sách sinh viên (mảng struct) rồi <strong>ghi ra</strong> <code>sinhvien.txt</code>.</li>
+  <li>Đọc lại file, in ra màn hình dạng bảng.</li>
+  <li>Thêm chức năng "ghi thêm" (append) một sinh viên mới mà không xoá dữ liệu cũ.</li>
+</ul>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-283" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Làm & chấm tự động</span><span class="lc-sub">Bài đọc/ghi file trên CodeLab.</span></span>
+  <span class="lc-cta">LÀM BÀI →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: 'Progress Test 2 — CLO1, CLO5, CLO6, CLO9 (session 58)|||Progress Test 2 — CLO1, CLO5, CLO6, CLO9 (buổi 58)',
+          slug: 'prf192-progress-test-2',
+          type: 'QUIZ',
+          description: 'Ôn mảng, struct, chuỗi, file. Syllabus ghi progress test kiểm CLO1, CLO5, CLO6, CLO9 (chương trình & cách chạy, con trỏ, thư viện C, file) và dạng đề là "Option 1: essay or…" — luyện viết giải thích, không chỉ chọn đáp án.',
+          quiz: {
+            timeLimitSeconds: 1200,
+            questions: [
+              { question: 'Array a[10] has last valid index?|||Mảng a[10] có chỉ số cuối hợp lệ là?', options: ['10', '9', '11', '1'], correctIndex: 1, points: 1 },
+              { question: 'struct is used to?|||struct dùng để?', options: ['Sort|||Sắp xếp', 'Group fields of different types into one type|||Gom trường khác kiểu vào một kiểu', 'Open a file|||Mở file', 'Allocate|||Cấp phát'], correctIndex: 1, points: 1 },
+              { question: 'strlen("ABCD")?|||strlen("ABCD")?', options: ['3', '4', '5', '0'], correctIndex: 1, points: 1 },
+              { question: 'Compare 2 strings for equality?|||So sánh 2 chuỗi bằng nhau?', options: ['a == b', 'strcmp(a,b)==0', 'a.equals(b)', 'a - b'], correctIndex: 1, points: 1 },
+              { question: 'The "w" mode of fopen?|||Chế độ "w" của fopen?', options: ['read|||đọc', 'write new (erase old)|||ghi mới (xoá cũ)', 'append|||ghi thêm cuối', 'delete the file|||xoá file'], correctIndex: 1, points: 1 },
+              { question: 'The three steps of working with a file?|||Ba bước làm việc với file?', options: ['create-edit-delete|||tạo-sửa-xoá', 'open-read/write-close|||mở-đọc/ghi-đóng', 'print-input-exit|||in-nhập-thoát', 'malloc-use-free|||malloc-dùng-free'], correctIndex: 1, points: 1 },
+              { question: 'What to do after fopen before using it?|||Nên làm gì sau fopen trước khi dùng?', options: ['fclose immediately|||fclose ngay', 'check it is not NULL|||kiểm tra khác NULL', 'free', 'print it|||in ra'], correctIndex: 1, points: 1 },
+            ],
+          },
+        },
+      ],
+    },
+
+    /* ══════════════════ NÂNG CAO (NGOÀI GIÁO TRÌNH) ══════════════════ */
+    {
+      title: 'Advanced 1 — Debugging & the debugging mindset|||Nâng cao 1 — Gỡ lỗi & tư duy debug',
+      description: 'Kỹ năng đọc lỗi và tìm bug — thứ trường ít dạy nhưng lập trình viên dùng mỗi ngày.',
+      lessons: [
+        {
+          title: 'N1.1 — Reading error messages & debugging with printf|||N1.1 — Đọc thông báo lỗi & debug bằng printf',
+          slug: 'prf192-n1-1-debug',
+          type: 'VIDEO',
+          description: 'Ba loại lỗi và cách truy tìm.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Advanced · Lesson N1.1</span>
+<h2>Debugging &amp; the debugging mindset</h2>
+<p class="lead">Writing buggy code is normal — even for great programmers. What sets people apart is the skill to <strong>find and fix bugs fast</strong>. First, tell the three kinds of error apart:</p>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Syntax error</span><span class="lz-lnote">the compiler reports it at once — missing ; } , wrong name</span></div>
+  <div class="lz-layer"><span class="lz-lname">Runtime error</span><span class="lz-lnote">crashes when running — divide by 0, out of bounds, NULL</span></div>
+  <div class="lz-layer"><span class="lz-lname">Logic error</span><span class="lz-lnote">runs but gives the WRONG result — the hardest</span></div>
+</div>
+<h3>Reading error messages</h3>
+<p>The compiler reports errors with a <strong>line number</strong>. Always read the <em>first</em> error first — later ones are usually consequences. The real error may be on the line <em>just before</em> the reported one (e.g. a missing <code>;</code>).</p>
+<h3>Debugging with printf</h3>
+<pre><span class="tok-function">printf</span>(<span class="tok-string">"DEBUG: i=%d, tong=%d\\n"</span>, i, tong); <span class="tok-comment">// print the state mid-way</span></pre>
+<div class="note-ct">A simple but powerful technique: sprinkle <code>printf</code> to see variable values at each step and pin down where a value first goes wrong. Later you'll learn a debugger with breakpoints, but the "print to inspect" mindset is always useful.</div>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-579" target="_blank" rel="noopener">
+  <span class="lc-ico">🐞</span>
+  <span class="lc-body"><span class="lc-title">Debug &amp; test C</span><span class="lc-sub">The "Debugging, Testing & Static Analysis" module on Code Lab — practice breakpoints and inspecting variables.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Nâng cao · Bài N1.1</span>
+<h2>Gỡ lỗi &amp; tư duy debug</h2>
+<p class="lead">Viết code sai là chuyện thường — kể cả lập trình viên giỏi. Điều tạo ra khác biệt là kỹ năng <strong>tìm và sửa lỗi nhanh</strong>. Trước hết, phân biệt ba loại lỗi:</p>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Lỗi cú pháp</span><span class="lz-lnote">compiler báo ngay — thiếu ; } , sai tên</span></div>
+  <div class="lz-layer"><span class="lz-lname">Lỗi thời gian chạy</span><span class="lz-lnote">crash khi chạy — chia 0, tràn mảng, NULL</span></div>
+  <div class="lz-layer"><span class="lz-lname">Lỗi logic</span><span class="lz-lnote">chạy được nhưng SAI kết quả — khó nhất</span></div>
+</div>
+<h3>Đọc thông báo lỗi</h3>
+<p>Compiler báo lỗi kèm <strong>số dòng</strong>. Luôn đọc <em>lỗi đầu tiên</em> trước — các lỗi sau thường là hệ quả. Lỗi thật có thể ở dòng <em>ngay trước</em> dòng báo (vd thiếu <code>;</code>).</p>
+<h3>Debug bằng printf</h3>
+<pre><span class="tok-function">printf</span>(<span class="tok-string">"DEBUG: i=%d, tong=%d\\n"</span>, i, tong); <span class="tok-comment">// in trạng thái giữa chừng</span></pre>
+<div class="note-ct">Kỹ thuật đơn giản mà mạnh: rải <code>printf</code> để xem giá trị biến ở từng bước, khoanh vùng chỗ giá trị bắt đầu sai. Sau này bạn sẽ học trình gỡ lỗi (debugger) đặt breakpoint, nhưng tư duy "in ra để soi" luôn hữu dụng.</p></div>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-579" target="_blank" rel="noopener">
+  <span class="lc-ico">🐞</span>
+  <span class="lc-body"><span class="lc-title">Gỡ lỗi & kiểm thử C</span><span class="lc-sub">Module "Debugging, Testing & Static Analysis" trên Code Lab — thực hành đặt breakpoint và soi biến.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+</div>
+`,
+        },
+        {
+          title: 'N1.2 — 10 classic beginner C mistakes|||N1.2 — 10 lỗi C kinh điển của người mới',
+          slug: 'prf192-n1-2-loi-kinh-dien',
+          type: 'VIDEO',
+          description: 'Danh sách bẫy hay gặp và cách tránh.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Advanced · Lesson N1.2</span>
+<h2>10 classic C mistakes</h2>
+<p class="lead">Recognising these traps in advance saves you hours of debugging.</p>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Confusing = and ==</div><div class="lz-nsub">if (x = 5) is always true</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Forgetting &amp; in scanf</div><div class="lz-nsub">scanf("%d", n) → broken</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Integer division</div><div class="lz-nsub">7/2 = 3, not 3.5</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Out of bounds</div><div class="lz-nsub">a[n] on array a[n]</div></div></div>
+  <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Forgetting break in switch</div><div class="lz-nsub">fall-through</div></div></div>
+  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Infinite loop</div><div class="lz-nsub">forgetting to update the condition</div></div></div>
+  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">Comparing strings with ==</div><div class="lz-nsub">must use strcmp</div></div></div>
+  <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Using an uninitialised variable</div><div class="lz-nsub">holds garbage</div></div></div>
+  <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Memory leak</div><div class="lz-nsub">malloc without free</div></div></div>
+  <div class="lz-node"><div class="lz-badge">10</div><div class="lz-nbody"><div class="lz-ntitle">Forgetting fclose</div><div class="lz-nsub">data not flushed to disk</div></div></div>
+</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Nâng cao · Bài N1.2</span>
+<h2>10 lỗi C kinh điển</h2>
+<p class="lead">Nhận diện sẵn các bẫy này giúp bạn tiết kiệm hàng giờ debug.</p>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Nhầm = và ==</div><div class="lz-nsub">if (x = 5) luôn đúng</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Quên &amp; trong scanf</div><div class="lz-nsub">scanf("%d", n) → hỏng</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Chia số nguyên</div><div class="lz-nsub">7/2 = 3, không phải 3.5</div></div></div>
+  <div class="lz-node"><div class="lz-badge">4</div><div class="lz-nbody"><div class="lz-ntitle">Tràn mảng</div><div class="lz-nsub">a[n] trên mảng a[n]</div></div></div>
+  <div class="lz-node"><div class="lz-badge">5</div><div class="lz-nbody"><div class="lz-ntitle">Quên break trong switch</div><div class="lz-nsub">fall-through</div></div></div>
+  <div class="lz-node"><div class="lz-badge">6</div><div class="lz-nbody"><div class="lz-ntitle">Vòng lặp vô hạn</div><div class="lz-nsub">quên cập nhật điều kiện</div></div></div>
+  <div class="lz-node"><div class="lz-badge">7</div><div class="lz-nbody"><div class="lz-ntitle">So sánh chuỗi bằng ==</div><div class="lz-nsub">phải dùng strcmp</div></div></div>
+  <div class="lz-node"><div class="lz-badge">8</div><div class="lz-nbody"><div class="lz-ntitle">Dùng biến chưa khởi tạo</div><div class="lz-nsub">chứa giá trị rác</div></div></div>
+  <div class="lz-node"><div class="lz-badge">9</div><div class="lz-nbody"><div class="lz-ntitle">Rò rỉ bộ nhớ</div><div class="lz-nsub">malloc không free</div></div></div>
+  <div class="lz-node"><div class="lz-badge">10</div><div class="lz-nbody"><div class="lz-ntitle">Quên fclose</div><div class="lz-nsub">dữ liệu chưa lưu xuống đĩa</div></div></div>
+</div>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Advanced 2 — Memory deep-dive: Stack & Heap|||Nâng cao 2 — Bộ nhớ sâu: Stack & Heap',
+      description: 'Hiểu chương trình dùng bộ nhớ thế nào — nền tảng để nắm chắc con trỏ và tránh crash.',
+      lessons: [
+        {
+          title: 'N2.1 — Stack vs Heap · leaks & dangling pointers|||N2.1 — Stack vs Heap · rò rỉ & con trỏ treo',
+          slug: 'prf192-n2-1-stack-heap',
+          type: 'VIDEO',
+          description: 'Hai vùng bộ nhớ và các lỗi liên quan.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Advanced · Lesson N2.1</span>
+<h2>Memory deep-dive: Stack &amp; Heap</h2>
+<p class="lead">A C program uses two main memory regions. Understanding them tells you why a variable "vanishes" after a function returns, and when you must <code>malloc</code>.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Stack</span><span class="lz-lnote">local variables · auto-created/destroyed per function · fast, small</span></div>
+  <div class="lz-layer"><span class="lz-lname">Heap</span><span class="lz-lnote">malloc-allocated · you manage it (free) · large, flexible</span></div>
+</div>
+<h3>Why do local variables "vanish"?</h3>
+<p>Local variables live on the <strong>stack</strong>; when the function ends, its stack region is reclaimed. So <strong>never return the address of a local variable</strong> from a function:</p>
+<pre><span class="tok-type">int</span>* <span class="tok-function">sai</span>() {
+    <span class="tok-type">int</span> x = 5;
+    <span class="tok-keyword">return</span> &amp;x;   <span class="tok-comment">// DANGEROUS: x vanishes after the function returns</span>
+}</pre>
+<h3>Three common memory bugs</h3>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Memory leak</div><div class="lz-nsub">malloc but forget free → eats RAM over time</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Dangling pointer</div><div class="lz-nsub">using a pointer after its memory was freed</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Buffer overflow</div><div class="lz-nsub">writing past the array/string size</div></div></div>
+</div>
+<div class="note-ct">Golden rule: every <code>malloc</code> must have exactly one <code>free</code>; after <code>free</code>, set the pointer to <code>NULL</code> to avoid misuse. These ideas come back a lot in PRO192 and the systems courses.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Nâng cao · Bài N2.1</span>
+<h2>Bộ nhớ sâu: Stack &amp; Heap</h2>
+<p class="lead">Chương trình C dùng hai vùng bộ nhớ chính. Hiểu chúng giúp bạn biết vì sao biến "biến mất" khi ra khỏi hàm, và khi nào phải <code>malloc</code>.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Stack</span><span class="lz-lnote">biến cục bộ · tự sinh/tự huỷ theo hàm · nhanh, nhỏ</span></div>
+  <div class="lz-layer"><span class="lz-lname">Heap</span><span class="lz-lnote">malloc cấp · bạn tự quản lý (free) · lớn, linh hoạt</span></div>
+</div>
+<h3>Vì sao biến cục bộ "biến mất"?</h3>
+<p>Biến cục bộ nằm trên <strong>stack</strong>; khi hàm kết thúc, vùng stack của nó bị thu hồi. Vì vậy <strong>đừng trả về địa chỉ biến cục bộ</strong> từ một hàm:</p>
+<pre><span class="tok-type">int</span>* <span class="tok-function">sai</span>() {
+    <span class="tok-type">int</span> x = 5;
+    <span class="tok-keyword">return</span> &amp;x;   <span class="tok-comment">// NGUY HIỂM: x biến mất sau khi hàm return</span>
+}</pre>
+<h3>Ba lỗi bộ nhớ hay gặp</h3>
+<div class="lz-map">
+  <div class="lz-node"><div class="lz-badge">1</div><div class="lz-nbody"><div class="lz-ntitle">Memory leak</div><div class="lz-nsub">malloc mà quên free → ngốn RAM dần</div></div></div>
+  <div class="lz-node"><div class="lz-badge">2</div><div class="lz-nbody"><div class="lz-ntitle">Dangling pointer</div><div class="lz-nsub">dùng con trỏ sau khi vùng nhớ đã free</div></div></div>
+  <div class="lz-node"><div class="lz-badge">3</div><div class="lz-nbody"><div class="lz-ntitle">Buffer overflow</div><div class="lz-nsub">ghi quá kích thước mảng/chuỗi</div></div></div>
+</div>
+<div class="note-ct">Quy tắc vàng: mỗi <code>malloc</code> phải có đúng một <code>free</code>; sau khi <code>free</code> nên gán con trỏ về <code>NULL</code> để tránh dùng nhầm. Những khái niệm này quay lại rất nhiều ở PRO192 và các môn hệ thống.</div>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Advanced 3 — Advanced pointers|||Nâng cao 3 — Con trỏ nâng cao',
+      description: 'Con trỏ đa cấp, con trỏ hàm và quan hệ mảng–con trỏ.',
+      lessons: [
+        {
+          title: 'N3.1 — Multi-level pointers, function pointers, array–pointer|||N3.1 — Con trỏ đa cấp, con trỏ hàm, mảng–con trỏ',
+          slug: 'prf192-n3-1-con-tro-nang-cao',
+          type: 'VIDEO',
+          description: 'Những khía cạnh mạnh mẽ hơn của con trỏ.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Advanced · Lesson N3.1</span>
+<h2>Advanced pointers</h2>
+<h3>The array &amp; pointer relationship</h3>
+<p class="lead">An array name is really the <strong>address of the first element</strong>. So <code>a[i]</code> is equivalent to <code>*(a + i)</code>.</p>
+<pre><span class="tok-type">int</span> a[3] = {10, 20, 30};
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, *(a + 1)); <span class="tok-comment">// 20 — same as a[1]</span></pre>
+<h3>Multi-level pointers (pointer to pointer)</h3>
+<pre><span class="tok-type">int</span> n = 5;
+<span class="tok-type">int</span> *p = &amp;n;
+<span class="tok-type">int</span> **pp = &amp;p;    <span class="tok-comment">// pp points to p</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, **pp); <span class="tok-comment">// 5</span></pre>
+<h3>Function pointers (callbacks)</h3>
+<p>A pointer can also point to a <em>function</em>, letting you "pass behaviour" as a parameter — the basis of callbacks, very handy for custom sorting.</p>
+<pre><span class="tok-type">void</span> (*fp)(<span class="tok-type">int</span>) = &amp;<span class="tok-function">tang</span>; <span class="tok-comment">// fp points to the tang function</span>
+fp(5);                        <span class="tok-comment">// call through the function pointer</span></pre>
+<div class="note-ct">This goes beyond PRF192 requirements but is very valuable: understanding array = pointer lets you read others' C code fluently, and function pointers are a stepping stone to higher-order thinking in modern languages.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Nâng cao · Bài N3.1</span>
+<h2>Con trỏ nâng cao</h2>
+<h3>Quan hệ mảng &amp; con trỏ</h3>
+<p class="lead">Tên mảng thực chất là <strong>địa chỉ phần tử đầu</strong>. Vì vậy <code>a[i]</code> tương đương <code>*(a + i)</code>.</p>
+<pre><span class="tok-type">int</span> a[3] = {10, 20, 30};
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, *(a + 1)); <span class="tok-comment">// 20 — giống a[1]</span></pre>
+<h3>Con trỏ đa cấp (con trỏ tới con trỏ)</h3>
+<pre><span class="tok-type">int</span> n = 5;
+<span class="tok-type">int</span> *p = &amp;n;
+<span class="tok-type">int</span> **pp = &amp;p;    <span class="tok-comment">// pp trỏ tới p</span>
+<span class="tok-function">printf</span>(<span class="tok-string">"%d"</span>, **pp); <span class="tok-comment">// 5</span></pre>
+<h3>Con trỏ hàm (callback)</h3>
+<p>Con trỏ còn có thể trỏ tới một <em>hàm</em>, cho phép "truyền hành vi" như tham số — nền tảng của callback, rất hay dùng khi sắp xếp tuỳ biến.</p>
+<pre><span class="tok-type">void</span> (*fp)(<span class="tok-type">int</span>) = &amp;<span class="tok-function">tang</span>; <span class="tok-comment">// fp trỏ tới hàm tang</span>
+fp(5);                        <span class="tok-comment">// gọi qua con trỏ hàm</span></pre>
+<div class="note-ct">Đây là kiến thức vượt yêu cầu PRF192 nhưng cực giá trị: hiểu mảng = con trỏ giúp bạn đọc code C của người khác trôi chảy, và con trỏ hàm là bước đệm tới tư duy hàm bậc cao ở các ngôn ngữ hiện đại.</div>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      title: 'Advanced 4 — Real-world C project structure|||Nâng cao 4 — Tổ chức dự án C thực chiến',
+      description: 'Từ một file bài tập tới một dự án nhiều file gọn gàng, có Makefile.',
+      lessons: [
+        {
+          title: 'N4.1 — Multiple files, header guards & Makefile|||N4.1 — Nhiều file, header guard & Makefile',
+          slug: 'prf192-n4-1-du-an-c',
+          type: 'VIDEO',
+          description: 'Cách lập trình viên thật tổ chức code C.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Advanced · Lesson N4.1</span>
+<h2>Real-world C project structure</h2>
+<p class="lead">For exercises one <code>.c</code> file is enough, but a real project splits code into several files for manageability. This is how the profession does it.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">main.c</span><span class="lz-lnote">entry point, calls the functions</span></div>
+  <div class="lz-layer"><span class="lz-lname">sinhvien.h</span><span class="lz-lnote">struct &amp; function prototype declarations</span></div>
+  <div class="lz-layer"><span class="lz-lname">sinhvien.c</span><span class="lz-lnote">the implementation (function definitions)</span></div>
+</div>
+<h3>Header guard</h3>
+<p>Avoid a header being loaded twice:</p>
+<pre><span class="tok-keyword">#ifndef</span> SINHVIEN_H
+<span class="tok-keyword">#define</span> SINHVIEN_H
+<span class="tok-comment">// declarations here</span>
+<span class="tok-keyword">#endif</span></pre>
+<h3>Makefile — build with one command</h3>
+<pre>all:
+	gcc main.c sinhvien.c -o app</pre>
+<p>Type <code>make</code> to build the whole project instead of typing each file by hand.</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Write</div><div class="lz-t">Several .c / .h</div><div class="lz-d">split by feature</div></div>
+  <div class="lz-step"><div class="lz-k">Build</div><div class="lz-t">make</div><div class="lz-d">gcc links them</div></div>
+  <div class="lz-step"><div class="lz-k">Run</div><div class="lz-t">./app</div><div class="lz-d">one program</div></div>
+</div>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-285" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">C project structure &amp; Makefile</span><span class="lc-sub">The "System Programming &amp; Real-World Projects" module on Code Lab — practise splitting files &amp; building.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<div class="note-ct">Master file-splitting + Makefile and you're ready for group projects (SWP391, WDP301) — where code no longer fits in a single file.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Nâng cao · Bài N4.1</span>
+<h2>Tổ chức dự án C thực chiến</h2>
+<p class="lead">Bài tập thì một file <code>.c</code> là đủ, nhưng dự án thật chia code thành nhiều file để dễ quản lý. Đây là cách nghề nghiệp làm.</p>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">main.c</span><span class="lz-lnote">điểm bắt đầu, gọi các hàm</span></div>
+  <div class="lz-layer"><span class="lz-lname">sinhvien.h</span><span class="lz-lnote">khai báo struct &amp; nguyên mẫu hàm</span></div>
+  <div class="lz-layer"><span class="lz-lname">sinhvien.c</span><span class="lz-lnote">phần cài đặt (định nghĩa hàm)</span></div>
+</div>
+<h3>Header guard</h3>
+<p>Tránh một header bị nạp hai lần:</p>
+<pre><span class="tok-keyword">#ifndef</span> SINHVIEN_H
+<span class="tok-keyword">#define</span> SINHVIEN_H
+<span class="tok-comment">// khai báo ở đây</span>
+<span class="tok-keyword">#endif</span></pre>
+<h3>Makefile — biên dịch một lệnh</h3>
+<pre>all:
+	gcc main.c sinhvien.c -o app</pre>
+<p>Gõ <code>make</code> để biên dịch cả dự án thay vì gõ tay từng file.</p>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">Viết</div><div class="lz-t">Nhiều .c / .h</div><div class="lz-d">chia theo chức năng</div></div>
+  <div class="lz-step"><div class="lz-k">Biên dịch</div><div class="lz-t">make</div><div class="lz-d">gcc gom lại</div></div>
+  <div class="lz-step"><div class="lz-k">Chạy</div><div class="lz-t">./app</div><div class="lz-d">một chương trình</div></div>
+</div>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh#module-285" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Tổ chức dự án C & Makefile</span><span class="lc-sub">Module "System Programming & Real-World Projects" trên Code Lab — thực hành chia file & build.</span></span>
+  <span class="lc-cta">CODE LAB →</span>
+</a>
+<div class="note-ct">Nắm được cách chia file + Makefile, bạn đã sẵn sàng cho các đồ án nhóm (SWP391, WDP301) — nơi code không thể nhét trong một file được nữa.</div>
+</div>
+`,
+        },
+        {
+          title: 'Final review & exam strategy|||Ôn tập cuối kỳ & định hướng thi',
+          slug: 'prf192-on-tap-cuoi-ky',
+          type: 'DOCUMENT',
+          description: 'Tổng kết toàn môn và mẹo ôn thi.',
+          content: `
+<div class="ml-en">
+<span class="eyebrow">Wrap-up</span>
+<h2>Final review &amp; exam strategy</h2>
+<p class="lead">You've finished PRF192. Here is a revision map and tips for the Practical Exam (30%) + Final (30%).</p>
+<h3>Knowledge checklist</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Foundations</span><span class="lz-lnote">variables, types, operators, if/switch, loops</span></div>
+  <div class="lz-layer"><span class="lz-lname">Functions &amp; pointers</span><span class="lz-lnote">splitting into functions, pass by value/reference, malloc/free</span></div>
+  <div class="lz-layer"><span class="lz-lname">Data</span><span class="lz-lnote">arrays, matrices, structs, strings, files</span></div>
+</div>
+<h3>Exam tips</h3>
+<ul>
+  <li><strong>Practical Exam:</strong> practise typing the familiar patterns fast (array traversal, menus, file read/write). Speed comes from doing lots of CodeLab problems.</li>
+  <li><strong>Final (multiple choice):</strong> master the traps — integer division, <code>=</code> vs <code>==</code>, array indices, string comparison.</li>
+  <li>Redo all chapter Quizzes and the 2 Progress Tests.</li>
+</ul>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Mixed practice set</span><span class="lc-sub">C problems from easy to hard on CodeLab to build exam speed.</span></span>
+  <span class="lc-cta">PRACTICE →</span>
+</a>
+<div class="callout ok">Good luck passing with a high score — and more importantly, with a solid programming foundation for the whole field. Type a lot, break a lot, fix a lot: that is the only path.</div>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Tổng kết</span>
+<h2>Ôn tập cuối kỳ &amp; định hướng thi</h2>
+<p class="lead">Bạn đã đi hết PRF192. Đây là bản đồ ôn tập và mẹo cho Practical Exam (30%) + Final (30%).</p>
+<h3>Checklist kiến thức</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Nền tảng</span><span class="lz-lnote">biến, kiểu, toán tử, if/switch, vòng lặp</span></div>
+  <div class="lz-layer"><span class="lz-lname">Hàm &amp; con trỏ</span><span class="lz-lnote">tách hàm, pass by value/reference, malloc/free</span></div>
+  <div class="lz-layer"><span class="lz-lname">Dữ liệu</span><span class="lz-lnote">mảng, ma trận, struct, chuỗi, file</span></div>
+</div>
+<h3>Mẹo thi</h3>
+<ul>
+  <li><strong>Practical Exam:</strong> luyện gõ nhanh các mẫu quen (duyệt mảng, menu, đọc/ghi file). Tốc độ đến từ việc làm nhiều bài CodeLab.</li>
+  <li><strong>Final (trắc nghiệm):</strong> nắm chắc bẫy — chia số nguyên, <code>=</code> vs <code>==</code>, chỉ số mảng, so sánh chuỗi.</li>
+  <li>Ôn lại toàn bộ Quiz các chương và 2 Progress Test.</li>
+</ul>
+<a class="link-card codelab" href="/code-lab/c?ref=%2Fcourses%2Fprogramming-fundamentals%2Flearn&reflabel=PRF192%20%E2%80%94%20C%C6%A1%20s%E1%BB%9F%20l%E1%BA%ADp%20tr%C3%ACnh" target="_blank" rel="noopener">
+  <span class="lc-ico">⌨️</span>
+  <span class="lc-body"><span class="lc-title">Luyện đề tổng hợp</span><span class="lc-sub">Bộ bài C từ dễ đến khó trên CodeLab để luyện tốc độ thi.</span></span>
+  <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+<div class="callout ok">Chúc bạn qua môn với điểm cao — và quan trọng hơn, có nền lập trình vững để đi tiếp cả ngành. Gõ nhiều, sai nhiều, sửa nhiều là con đường duy nhất.</div>
+</div>
+`,
+        },
+      ],
+    },
+    {
+      "title": "Exams — PE & FE|||Các bài thi — PE & FE",
+      "description": "PE (thi thực hành 85 phút, 30%, cột điểm QUÁ TRÌNH, CLO2–CLO8) và FE (thi cuối kỳ trắc nghiệm 60 phút, 30%, CLO1–CLO9, sàn 4). Khung ôn + câu mẫu.",
+      "lessons": [
+        {
+          "title": "PE — Practical Exam (85 min, 30%, CLO2–CLO8)|||PE — Thi thực hành (85 phút, 30%, CLO2–CLO8)",
+          "slug": "prf192-final-exam-pe",
+          "type": "article",
+          "description": "Sự thật về PE theo syllabus (cột điểm quá trình, 85 phút, 30%, CLO2–CLO8) và cách chuẩn bị.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Practical Exam \u00b7 PE</span>\n<h2>PE \u2014 the 85-minute practical exam</h2>\n<p class=\"lead\">The PE is not part of the final exam: the syllabus lists it as an <strong>on-going</strong> component, <strong>1 part, 30% of the grade, 85 minutes</strong>, assessing <strong>CLO2&ndash;CLO8</strong>, with a completion criterion of <strong>&gt; 0</strong>. Its question type is given as &ldquo;preferable to be m[achine-graded]&rdquo;, i.e. you write C that is run and judged by its output.</p>\n<h3>What CLO2&ndash;CLO8 means you must be able to write</h3>\n<ul>\n<li><b>CLO2</b> &mdash; declarations, data types, expressions, casting, <code>scanf</code>/<code>printf</code> with the right specifiers.</li>\n<li><b>CLO3</b> &mdash; <code>if</code>/<code>switch</code>, <code>for</code>/<code>while</code>/<code>do-while</code>, clean indentation and naming.</li>\n<li><b>CLO4</b> &mdash; split the work into functions: prototype, definition, call, parameters and return value, a menu loop.</li>\n<li><b>CLO5</b> &mdash; pointers: <code>&amp;</code> and <code>*</code>, passing by address so a function can modify the caller&#39;s variable, <code>malloc</code>/<code>free</code>.</li>\n<li><b>CLO6</b> &mdash; the standard library: <code>stdlib.h</code> (<code>rand</code>, <code>srand</code>, <code>atoi</code>, <code>abs</code>), <code>math.h</code> (<code>sqrt</code>, <code>pow</code>, <code>fabs</code>), <code>ctype.h</code>, <code>time.h</code>.</li>\n<li><b>CLO7</b> &mdash; 1-D and 2-D arrays, linear search, selection sort, <code>struct</code>, an array of structs.</li>\n<li><b>CLO8</b> &mdash; strings: <code>char</code> arrays and the terminating <code>&#39;\\0&#39;</code>, <code>string.h</code> (<code>strlen</code>, <code>strcpy</code>, <code>strcmp</code>, <code>strcat</code>), an array of strings.</li>\n</ul>\n<p>Note what is <em>not</em> in that range: CLO1 (how a program runs) and CLO9 (files) are assessed by the progress tests, the workshops, the assignment and the final exam instead.</p>\n<h3>How to prepare</h3>\n<ul>\n<li>Rebuild small programs from a blank file, <em>without notes</em> &mdash; copying tutorials is not enough. The five workshops are the exact rehearsal for this.</li>\n<li>Practise the student-manager pattern end-to-end from memory: an array of structs, a menu loop, add / list / search / sort / delete as separate functions.</li>\n<li>Read the requirement twice; compile the smallest working version first, then extend. A program that runs and does 80% beats one that does not compile.</li>\n<li>Check your I/O format against the requirement exactly &mdash; machine grading compares output text.</li>\n<li>85 minutes is short. Type your skeleton (<code>#include</code>, <code>main</code>, the struct, the menu) from muscle memory so the time goes on the logic.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> A real practical prompt bank for this subject will be added here later, in the exam room. Use the guidance above to prepare now.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi th\u1ef1c h\u00e0nh \u00b7 PE</span>\n<h2>PE \u2014 b\u00e0i thi th\u1ef1c h\u00e0nh 85 ph\u00fat</h2>\n<p class=\"lead\">PE kh\u00f4ng thu\u1ed9c thi cu\u1ed1i k\u1ef3: syllabus x\u1ebfp n\u00f3 l\u00e0 c\u1ed9t \u0111i\u1ec3m <strong>qu\u00e1 tr\u00ecnh</strong>, <strong>1 ph\u1ea7n, 30% \u0111i\u1ec3m m\u00f4n, 85 ph\u00fat</strong>, ki\u1ec3m <strong>CLO2&ndash;CLO8</strong>, s\u00e0n ho\u00e0n th\u00e0nh <strong>&gt; 0</strong>. D\u1ea1ng \u0111\u1ec1 ghi l\u00e0 &ldquo;preferable to be m[achine-graded]&rdquo;, t\u1ee9c b\u1ea1n vi\u1ebft C v\u00e0 b\u00e0i \u0111\u01b0\u1ee3c ch\u1ea1y r\u1ed3i ch\u1ea5m theo k\u1ebft qu\u1ea3 in ra.</p>\n<h3>CLO2&ndash;CLO8 ngh\u0129a l\u00e0 b\u1ea1n ph\u1ea3i vi\u1ebft \u0111\u01b0\u1ee3c g\u00ec</h3>\n<ul>\n<li><b>CLO2</b> &mdash; khai b\u00e1o, ki\u1ec3u d\u1eef li\u1ec7u, bi\u1ec3u th\u1ee9c, \u00e9p ki\u1ec3u, <code>scanf</code>/<code>printf</code> \u0111\u00fang ch\u1ec9 \u0111\u1ecbnh.</li>\n<li><b>CLO3</b> &mdash; <code>if</code>/<code>switch</code>, <code>for</code>/<code>while</code>/<code>do-while</code>, th\u1ee5t l\u1ec1 v\u00e0 \u0111\u1eb7t t\u00ean s\u1ea1ch s\u1ebd.</li>\n<li><b>CLO4</b> &mdash; chia vi\u1ec7c th\u00e0nh h\u00e0m: prototype, \u0111\u1ecbnh ngh\u0129a, l\u1eddi g\u1ecdi, tham s\u1ed1 v\u00e0 gi\u00e1 tr\u1ecb tr\u1ea3 v\u1ec1, v\u00f2ng l\u1eb7p menu.</li>\n<li><b>CLO5</b> &mdash; con tr\u1ecf: <code>&amp;</code> v\u00e0 <code>*</code>, truy\u1ec1n theo \u0111\u1ecba ch\u1ec9 \u0111\u1ec3 h\u00e0m s\u1eeda \u0111\u01b0\u1ee3c bi\u1ebfn c\u1ee7a n\u01a1i g\u1ecdi, <code>malloc</code>/<code>free</code>.</li>\n<li><b>CLO6</b> &mdash; th\u01b0 vi\u1ec7n chu\u1ea9n: <code>stdlib.h</code> (<code>rand</code>, <code>srand</code>, <code>atoi</code>, <code>abs</code>), <code>math.h</code> (<code>sqrt</code>, <code>pow</code>, <code>fabs</code>), <code>ctype.h</code>, <code>time.h</code>.</li>\n<li><b>CLO7</b> &mdash; m\u1ea3ng 1 chi\u1ec1u v\u00e0 2 chi\u1ec1u, t\u00ecm ki\u1ebfm tuy\u1ebfn t\u00ednh, s\u1eafp x\u1ebfp ch\u1ecdn, <code>struct</code>, m\u1ea3ng struct.</li>\n<li><b>CLO8</b> &mdash; chu\u1ed7i: m\u1ea3ng <code>char</code> v\u00e0 k\u00fd t\u1ef1 k\u1ebft th\u00fac <code>&#39;\\0&#39;</code>, <code>string.h</code> (<code>strlen</code>, <code>strcpy</code>, <code>strcmp</code>, <code>strcat</code>), m\u1ea3ng chu\u1ed7i.</li>\n</ul>\n<p>\u0110\u1ec3 \u00fd th\u1ee9 <em>kh\u00f4ng</em> n\u1eb1m trong d\u1ea3i \u0111\u00f3: CLO1 (ch\u01b0\u01a1ng tr\u00ecnh ch\u1ea1y ra sao) v\u00e0 CLO9 (file) \u0111\u01b0\u1ee3c ki\u1ec3m b\u1eb1ng progress test, workshop, assignment v\u00e0 thi cu\u1ed1i k\u1ef3.</p>\n<h3>C\u00e1ch chu\u1ea9n b\u1ecb</h3>\n<ul>\n<li>D\u1ef1ng l\u1ea1i c\u00e1c ch\u01b0\u01a1ng tr\u00ecnh nh\u1ecf t\u1eeb m\u1ed9t file tr\u1ed1ng, <em>kh\u00f4ng nh\u00ecn ghi ch\u00fa</em> &mdash; ch\u00e9p tutorial l\u00e0 ch\u01b0a \u0111\u1ee7. N\u0103m workshop ch\u00ednh l\u00e0 bu\u1ed5i t\u1ed5ng duy\u1ec7t cho b\u00e0i n\u00e0y.</li>\n<li>Luy\u1ec7n m\u1eabu qu\u1ea3n l\u00fd sinh vi\u00ean \u0111\u1ea7u-cu\u1ed1i t\u1eeb tr\u00ed nh\u1edb: m\u1ea3ng struct, v\u00f2ng l\u1eb7p menu, th\u00eam / li\u1ec7t k\u00ea / t\u00ecm / s\u1eafp x\u1ebfp / xo\u00e1 th\u00e0nh c\u00e1c h\u00e0m ri\u00eang.</li>\n<li>\u0110\u1ecdc y\u00eau c\u1ea7u hai l\u1ea7n; bi\u00ean d\u1ecbch b\u1ea3n ch\u1ea1y \u0111\u01b0\u1ee3c nh\u1ecf nh\u1ea5t tr\u01b0\u1edbc r\u1ed3i m\u1edf r\u1ed9ng. Ch\u01b0\u01a1ng tr\u00ecnh ch\u1ea1y v\u00e0 l\u00e0m \u0111\u01b0\u1ee3c 80% h\u01a1n ch\u01b0\u01a1ng tr\u00ecnh kh\u00f4ng bi\u00ean d\u1ecbch n\u1ed5i.</li>\n<li>\u0110\u1ed1i chi\u1ebfu \u0111\u1ecbnh d\u1ea1ng nh\u1eadp/xu\u1ea5t v\u1edbi \u0111\u1ec1 th\u1eadt ch\u00ednh x\u00e1c &mdash; ch\u1ea5m m\u00e1y so t\u1eebng d\u00f2ng ch\u1eef in ra.</li>\n<li>85 ph\u00fat l\u00e0 ng\u1eafn. H\u00e3y g\u00f5 khung s\u1eb5n (<code>#include</code>, <code>main</code>, struct, menu) b\u1eb1ng ph\u1ea3n x\u1ea1 \u0111\u1ec3 th\u1eddi gian d\u1ed3n cho ph\u1ea7n logic.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">C\u00e2u m\u1eabu</span> Ng\u00e2n h\u00e0ng \u0111\u1ec1 th\u1ef1c h\u00e0nh th\u1eadt cho m\u00f4n n\u00e0y s\u1ebd \u0111\u01b0\u1ee3c th\u00eam v\u00e0o \u0111\u00e2y sau, trong trang ph\u00f2ng thi. D\u00f9ng h\u01b0\u1edbng d\u1eabn tr\u00ean \u0111\u1ec3 chu\u1ea9n b\u1ecb ngay t\u1eeb gi\u1edd.</div>\n</div>"
+        },
+        {
+          "title": "FE — Final Exam (multiple choice, 60 min, 30%, CLO1–CLO9)|||FE — Thi cuối kỳ (trắc nghiệm, 60 phút, 30%, CLO1–CLO9)",
+          "slug": "prf192-final-exam-fe",
+          "type": "article",
+          "description": "Khung thi trắc nghiệm cuối kỳ (FE) + vài câu mẫu từ môn. Đề thật thêm sau.",
+          "content": "\n<div class=\"ml-en\">\n<span class=\"eyebrow\">Final Exam \u00b7 FE</span>\n<h2>FE \u2014 Final Exam (Multiple Choice)</h2>\n<p class=\"lead\">The Final Exam (FE) for PRF192 is a <strong>multiple-choice test</strong>: 1 part, <strong>60 minutes</strong>, <strong>30% of the grade</strong>, covering CLO1&ndash;CLO9, with a completion criterion of <strong>4</strong>. The syllabus does not state how many questions it contains &mdash; do not plan your pacing around a number nobody published; pace yourself off the clock on the day. Remember the other 30% is the 85-minute Practical Exam, so writing code by hand matters as much as recognising it.</p>\n<h3>How to do well</h3>\n<ul>\n<li>Pace yourself: divide time by the number of questions; flag hard ones and return at the end.</li>\n<li>Eliminate clearly wrong options first, then choose among the rest.</li>\n<li>For \"what should you do / which is best\" items, answer by this subject's method, not gut feeling.</li>\n<li>Never leave the gated final blank &mdash; an educated guess beats an empty answer.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">Sample</span> The questions below are <strong>sample questions</strong> drawn from this course to show the format. The <em>real past-exam questions</em> will be added here later, in the exam room.</div>\n</div>\n<div class=\"ml-vi\">\n<span class=\"eyebrow\">Thi cu\u1ed1i k\u1ef3 \u00b7 FE</span>\n<h2>FE \u2014 Thi tr\u1eafc nghi\u1ec7m cu\u1ed1i k\u1ef3</h2>\n<p class=\"lead\">B\u00e0i thi cu\u1ed1i k\u1ef3 (FE) c\u1ee7a PRF192 l\u00e0 <strong>thi tr\u1eafc nghi\u1ec7m</strong>: 1 ph\u1ea7n, <strong>60 ph\u00fat</strong>, <strong>30% \u0111i\u1ec3m m\u00f4n</strong>, ph\u1ee7 CLO1&ndash;CLO9, s\u00e0n ho\u00e0n th\u00e0nh <strong>4</strong>. Syllabus kh\u00f4ng ghi b\u00e0i thi c\u00f3 bao nhi\u00eau c\u00e2u &mdash; \u0111\u1eebng chia th\u1eddi gian theo m\u1ed9t con s\u1ed1 kh\u00f4ng ai c\u00f4ng b\u1ed1; h\u00e3y canh theo \u0111\u1ed3ng h\u1ed3 ngay t\u1ea1i ph\u00f2ng thi. Nh\u1edb r\u1eb1ng 30% c\u00f2n l\u1ea1i l\u00e0 Practical Exam 85 ph\u00fat, n\u00ean vi\u1ebft code b\u1eb1ng tay quan tr\u1ecdng ngang v\u1edbi nh\u1eadn ra code \u0111\u00fang.</p>\n<h3>C\u00e1ch l\u00e0m t\u1ed1t</h3>\n<ul>\n<li>Ph\u00e2n b\u1ed5 th\u1eddi gian: chia \u0111\u1ec1u theo s\u1ed1 c\u00e2u; \u0111\u00e1nh d\u1ea5u c\u00e2u kh\u00f3, quay l\u1ea1i \u1edf cu\u1ed1i.</li>\n<li>Lo\u1ea1i ph\u01b0\u01a1ng \u00e1n sai r\u00f5 r\u00e0ng tr\u01b0\u1edbc, r\u1ed3i ch\u1ecdn trong s\u1ed1 c\u00f2n l\u1ea1i.</li>\n<li>C\u00e2u \"n\u00ean l\u00e0m g\u00ec / c\u00e1i n\u00e0o t\u1ed1t nh\u1ea5t\" &mdash; tr\u1ea3 l\u1eddi theo ph\u01b0\u01a1ng ph\u00e1p c\u1ee7a m\u00f4n, kh\u00f4ng theo c\u1ea3m t\u00ednh.</li>\n<li>\u0110\u1eebng bao gi\u1edd b\u1ecf tr\u1ed1ng b\u00e0i thi c\u00f3 c\u1ed5ng &mdash; \u0111o\u00e1n c\u00f3 suy lu\u1eadn v\u1eabn h\u01a1n \u0111\u1ec3 tr\u1ed1ng.</li>\n</ul>\n<div class=\"callout\"><span class=\"badge\">C\u00e2u m\u1eabu</span> C\u00e1c c\u00e2u d\u01b0\u1edbi \u0111\u00e2y l\u00e0 <strong>c\u00e2u m\u1eabu</strong> l\u1ea5y t\u1eeb ch\u00ednh m\u00f4n h\u1ecdc \u0111\u1ec3 minh ho\u1ea1 format. <em>\u0110\u1ec1 thi th\u1eadt</em> s\u1ebd \u0111\u01b0\u1ee3c th\u00eam v\u00e0o \u0111\u00e2y sau, trong trang ph\u00f2ng thi.</div>\n</div>",
+          "quiz": {
+            "timeLimitSeconds": 360,
+            "questions": [
+              {
+                "id": "q1",
+                "points": 1,
+                "question": "Where does a C program start running?|||Chương trình C bắt đầu chạy từ đâu?",
+                "options": [
+                  "The first #include line|||Dòng #include đầu tiên",
+                  "The main() function|||Hàm main()",
+                  "The return 0 line|||Dòng return 0",
+                  "The file's first line|||Dòng đầu tiên của file"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q2",
+                "points": 1,
+                "question": "What kind of language is C?|||C là ngôn ngữ loại nào?",
+                "options": [
+                  "Interpreted|||Thông dịch (interpret)",
+                  "Compiled|||Biên dịch (compile)",
+                  "Needs no translation|||Không cần dịch",
+                  "Runs only on the web|||Chỉ chạy trên web"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q3",
+                "points": 1,
+                "question": "What is #include <stdio.h> for?|||#include <stdio.h> dùng để làm gì?",
+                "options": [
+                  "Starts the program|||Bắt đầu chương trình",
+                  "Loads the standard I/O library|||Nạp thư viện nhập/xuất chuẩn",
+                  "Ends the program|||Kết thúc chương trình",
+                  "Declares a variable|||Khai báo biến"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q4",
+                "points": 1,
+                "question": "Which character ends each C statement?|||Mỗi câu lệnh trong C kết thúc bằng ký tự nào?",
+                "options": [
+                  "Comma ,|||Dấu phẩy ,",
+                  "Period .|||Dấu chấm .",
+                  "Semicolon ;|||Dấu chấm phẩy ;",
+                  "Newline|||Xuống dòng"
+                ],
+                "correctIndex": 2
+              },
+              {
+                "id": "q5",
+                "points": 1,
+                "question": "What does return 0; in main() mean?|||return 0; trong main() có ý nghĩa gì?",
+                "options": [
+                  "Returns 0 points|||Trả về 0 điểm",
+                  "Signals the program finished without error|||Báo chương trình kết thúc không lỗi",
+                  "Clears memory|||Xoá bộ nhớ",
+                  "Repeats the program|||Lặp lại chương trình"
+                ],
+                "correctIndex": 1
+              },
+              {
+                "id": "q6",
+                "points": 1,
+                "question": "Which declaration is CORRECT for a real number?|||Khai báo nào ĐÚNG cho một số thực?",
+                "options": [
+                  "int x = 3.5;",
+                  "float x = 3.5;",
+                  "char x = 3.5;",
+                  "x = 3.5;"
+                ],
+                "correctIndex": 1
+              }
+            ]
+          }
+        }
+      ]
+    },
   ],
 };

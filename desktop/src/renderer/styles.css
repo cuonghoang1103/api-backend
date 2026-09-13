@@ -10797,6 +10797,43 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-soan-dan textarea:focus { outline: 2px solid var(--ct-accent); outline-offset: -1px; }
 .ct-soan-dan > button { margin-top: 8px; }
 
+/* ── Bản xem trước của NHẬP NHANH ──────────────────────────────────────
+   Bắt buộc phải có, và phải hiện CẢ dòng hỏng. Đổ thẳng vào bảng mà không
+   cho nhìn thì một dòng AI đọc nhầm từ ảnh trôi thẳng vào lịch thật, và
+   người dùng chỉ biết vào sáng hôm sau khi tới nhầm phòng. */
+.ct-soan-nhanh-xem {
+  margin: 9px 0 0;
+  padding: 0;
+  list-style: none;
+  max-height: 190px;
+  overflow-y: auto;
+  border: 1px solid var(--ct-border);
+  border-radius: var(--ct-radius-sm);
+  background: var(--ct-surface);
+}
+.ct-soan-nhanh-xem li {
+  display: flex;
+  gap: 9px;
+  align-items: baseline;
+  padding: 6px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-bottom: 1px solid var(--ct-border);
+}
+.ct-soan-nhanh-xem li:last-child { border-bottom: 0; }
+.ct-soan-nhanh-xem li[data-hong='true'] {
+  background: color-mix(in srgb, var(--ct-err) 9%, transparent);
+}
+/* Số dòng dùng chữ ĐỀU Ô để cột không nhảy khi sang dòng hai chữ số. */
+.ct-soan-nhanh-so {
+  min-width: 18px;
+  text-align: right;
+  color: var(--ct-text-dim);
+  font: 11px/1.5 var(--ct-font-mono, ui-monospace, monospace);
+  flex: none;
+}
+.ct-soan-nhanh-loi { color: var(--ct-err); }
+
 /* Dòng đọc hụt: hiện NGUYÊN VĂN. Nói "bỏ 3 dòng" mà không cho xem là bắt
    người dùng đi dò lại cả bảng FAP để biết mất cái gì. */
 .ct-soan-boqua {
@@ -10904,7 +10941,7 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 }
 /* Cạn ví ⇒ đỏ. Cùng màu với mọi chỗ báo "không đi tiếp được" trong app, để
    người dùng không phải học một quy ước màu riêng cho ô này. */
-.ct-mucdung-thanh[data-can='true'] > div { background: var(--ct-danger, #ef4444); }
+.ct-mucdung-thanh[data-can='true'] > div { background: var(--ct-err); }
 
 .ct-mucdung-so {
   font-size: 12px;
@@ -12348,3 +12385,78 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   overflow-wrap: anywhere;
 }
 .ct-xr-tra-loi .ct-xr-nhac { align-self: flex-end; font-size: 11px; }
+
+/* ══ LỊCH HÔM NAY ════════════════════════════════════════════════════════
+   Trả lời "giờ tới đi đâu". Đọc theo HÀNG, mỗi hàng một buổi — khác bảng
+   tuần bên dưới vốn đọc theo lưới. */
+.ct-homnay-dem { font-size: 11.5px; color: var(--ct-text-dim); }
+.ct-homnay-tuan { margin-left: auto; font-size: 11.5px; }
+.ct-homnay-ds { margin: 0; padding: 0; list-style: none; }
+.ct-homnay-ds li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 2px;
+  border-bottom: 1px solid var(--ct-border);
+}
+.ct-homnay-ds li:last-child { border-bottom: 0; }
+
+/* Buổi ĐÃ XONG mờ đi chứ KHÔNG ẩn: người dùng còn cần nó để đối chiếu
+   "hôm nay mình đã học gì rồi" khi chấm điểm danh hay ghi chép lại. */
+.ct-homnay-ds li[data-trang='xong'] { opacity: 0.45; }
+
+/* Buổi kế tiếp là dòng DUY NHẤT được nhấn. Nhấn hai dòng thì không dòng nào
+   còn là điểm nhấn. */
+.ct-homnay-ds li[data-ke='true'] {
+  background: color-mix(in srgb, var(--ct-accent) 8%, transparent);
+  border-radius: var(--ct-radius-sm);
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.ct-homnay-cham { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.ct-homnay-gio {
+  display: flex;
+  flex-direction: column;
+  min-width: 44px;
+  flex: none;
+  font: 12px/1.35 var(--ct-font-mono, ui-monospace, monospace);
+  color: var(--ct-text);
+}
+.ct-homnay-gio em { font-style: normal; font-size: 10.5px; color: var(--ct-text-dim); }
+.ct-homnay-mon { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.ct-homnay-mon strong {
+  font-size: 13px;
+  font-weight: 600;
+  /* Tên môn dài phải CẮT, không đẩy cột trạng thái ra khỏi khung — xem
+     [[feedback_moi_trang_phai_chiu_duoc_cua_so_hep]]. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ct-homnay-phong {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  color: var(--ct-text-dim);
+}
+.ct-homnay-trang {
+  flex: none;
+  font-size: 11.5px;
+  color: var(--ct-text-dim);
+  text-align: right;
+}
+.ct-homnay-ds li[data-ke='true'] .ct-homnay-trang {
+  color: var(--ct-accent);
+  font-weight: 600;
+}
+.ct-homnay-ds li[data-trang='dang'] .ct-homnay-trang {
+  color: var(--ct-ok, var(--ct-accent));
+  font-weight: 600;
+}
+
+@media (max-width: 560px) {
+  /* Cửa sổ hẹp: phòng xuống dòng dưới tên môn, cột trạng thái vẫn giữ chỗ. */
+  .ct-homnay-ds li { gap: 8px; }
+  .ct-homnay-gio { min-width: 40px; }
+}

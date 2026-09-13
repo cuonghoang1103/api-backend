@@ -42,6 +42,7 @@ import { useSession } from '../../auth/session';
 import { OfflineUnavailableError, swr } from '../../offline/cache';
 import { BangViec, type Scope as PhamVi, type Task as ViecUi, type VaSua } from './BangViec';
 import { LichHoc, mauMon, type Buoi } from './LichHoc';
+import { LichHomNay } from './LichHomNay';
 import { xepLan } from './dai24';
 import { useDich } from '../../i18n';
 
@@ -527,6 +528,10 @@ export function DashboardPage() {
           onDoiThuTu={doiThuTu}
         />
       )}
+
+      {/* "Giờ tới đi đâu" đứng TRƯỚC bảng tuần: đó là câu hỏi gấp nhất, và
+          trả lời nó bằng bảng tuần thì phải tìm cột hôm nay rồi tự so giờ. */}
+      <LichHomNay buoi={buoiHomNay} />
 
       {/* Lịch học đứng SAU việc hôm nay, TRƯỚC dải 24 giờ: việc là thứ mình
           tự đặt ra, lịch học là thứ đã cố định — đọc việc trước rồi mới xem nó

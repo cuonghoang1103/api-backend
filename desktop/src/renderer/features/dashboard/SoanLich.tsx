@@ -15,9 +15,11 @@
  * Hỏng ở giữa thì phần đã thêm/sửa còn đó và chưa xoá gì.
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { AlertTriangle, ClipboardPaste, Plus, Trash2, X } from 'lucide-react';
+import { AlertTriangle, ClipboardPaste, ListPlus, Plus, ScanLine, Trash2, X } from 'lucide-react';
 import { useSession } from '../../auth/session';
 import { docLichFAP } from './docLichFAP';
+import { docNhapNhanh, quetThanhChu } from './nhapNhanhLich';
+import { quetAnhLich } from './quetAnhLich';
 import type { Buoi } from './LichHoc';
 import { useDich } from '../../i18n';
 
@@ -71,7 +73,7 @@ export function loiDong(d: Pick<Dong, 'subject' | 'weekday' | 'startTime' | 'end
 }
 
 export function SoanLich({ onDong, onXong }: { onDong: () => void; onXong: () => void }) {
-  const { dich } = useDich();
+  const { dich, dichP } = useDich();
   const { api } = useSession();
   const [dong, datDong] = useState<Dong[]>([]);
   const [banDau, datBanDau] = useState<number[]>([]);
@@ -82,6 +84,16 @@ export function SoanLich({ onDong, onXong }: { onDong: () => void; onXong: () =>
   const [loi, datLoi] = useState<string | null>(null);
   const [dangTai, datDangTai] = useState(true);
   const oDan = useRef<HTMLTextAreaElement | null>(null);
+  /* ── Nhập nhanh + quét ảnh ──
+     Hai đường vào, MỘT ô chữ. Quét ảnh không đổ thẳng vào bảng mà đổ vào đây,
+     đúng như bên iOS: người dùng thấy thứ AI đọc ra dưới dạng sửa được bằng
+     bàn phím, và quét được ảnh thứ hai (lịch in hai trang) rồi nối thêm. */
+  const [moNhanh, datMoNhanh] = useState(false);
+  const [chuNhanh, datChuNhanh] = useState('');
+  const [dangQuet, datDangQuet] = useState(false);
+  const [canhBaoQuet, datCanhBaoQuet] = useState<string[]>([]);
+  const oNhanh = useRef<HTMLTextAreaElement | null>(null);
+  const oAnh = useRef<HTMLInputElement | null>(null);
 
   /* Esc để đóng. Hộp này phủ kín màn hình, nên không có phím thoát thì người
      dùng phải đi tìm cái dấu X — và trên cửa sổ hẹp nó nằm ngoài tầm mắt. */
@@ -155,6 +167,53 @@ export function SoanLich({ onDong, onXong }: { onDong: () => void; onXong: () =>
     });
     datDan('');
     datMoDan(false);
+  };
+
+  /* Dòng đã bóc tách của ô nhập nhanh. Tính lại mỗi lần gõ — bản xem trước
+     phải đuổi kịp bàn phím, nếu không người ta sửa xong vẫn thấy câu lỗi cũ
+     và tưởng mình chưa sửa được. */
+  const dongNhanh = useMemo(() => docNhapNhanh(chuNhanh), [chuNhanh]);
+  const nhanhHong = dongNhanh.filter((d) => d.loi !== null);
+
+  const quetAnh = async (tep: File) => {
+    if (!api) return;
+    datDangQuet(true);
+    datLoi(null);
+    datCanhBaoQuet([]);
+    try {
+      const kq = await quetAnhLich(api, tep);
+      datCanhBaoQuet(kq.canhBao);
+      const them = quetThanhChu(kq.buoi);
+      if (them === '') {
+        datLoi(kq.canhBao[0] ?? 'Không thấy buổi học nào trong ảnh. Thử chụp rõ cả bảng nhé.');
+        return;
+      }
+      /* CỘNG THÊM, không đè. Người dùng có thể vừa gõ tay vài dòng, hoặc đang
+         quét trang thứ hai của lịch — đè lên là mất trắng phần trước. */
+      datChuNhanh((cu) => (cu.trim() === '' ? them : `${cu.trimEnd()}\n${them}`));
+      datMoNhanh(true);
+    } catch (e) {
+      datLoi((e as Error).message);
+    } finally {
+      datDangQuet(false);
+    }
+  };
+
+  /** Đổ các dòng đã bóc tách vào bảng. Chỉ chạy khi KHÔNG còn dòng hỏng. */
+  const dovaoBang = () => {
+    if (dongNhanh.length === 0 || nhanhHong.length > 0) return;
+    datDong((ds) => {
+      const giu = ds.filter((d) => d.subject.trim() || d.id);
+      const them = dongNhanh.map((b): Dong => ({
+        khoa: khoaMoi(), id: null, subject: b.mon, classCode: '', room: b.phong,
+        weekday: b.thu, startTime: b.batDau, endTime: b.ketThuc,
+        remindMinutes: 15, soBuoiVang: 0, goc: '',
+      }));
+      return [...giu, ...them];
+    });
+    datChuNhanh('');
+    datCanhBaoQuet([]);
+    datMoNhanh(false);
   };
 
   const hong = useMemo(() => dong.filter((d) => loiDong(d) !== null), [dong]);
@@ -231,17 +290,119 @@ export function SoanLich({ onDong, onXong }: { onDong: () => void; onXong: () =>
 
         <div className="ct-soan-thanh">
           <button type="button" className="ct-btn" onClick={() => datDong((ds) => [...ds, dongTrong()])}>
-            <Plus size={13} aria-hidden /> Thêm dòng
+            <Plus size={13} aria-hidden /> {dich('Thêm dòng')}
           </button>
           <button
             type="button"
             className="ct-btn"
+            data-ct="dan-fap"
             onClick={() => { datMoDan((v) => !v); setTimeout(() => oDan.current?.focus(), 0); }}
           >
-            <ClipboardPaste size={13} aria-hidden /> Dán từ FAP
+            <ClipboardPaste size={13} aria-hidden /> {dich('Dán từ FAP')}
           </button>
-          <span className="ct-muted">{dong.length} buổi</span>
+          {/* Quét ảnh mở CÙNG ô chữ với nhập nhanh — nhưng phải có nút riêng
+              mang đúng tên nó. Nấp sau chữ "Nhập nhanh" thì không ai tìm ra. */}
+          <button
+            type="button"
+            className="ct-btn"
+            data-ct="quet-anh"
+            disabled={dangQuet}
+            onClick={() => oAnh.current?.click()}
+          >
+            <ScanLine size={13} aria-hidden />
+            {dangQuet ? dich('Đang đọc ảnh…') : dich('Quét ảnh')}
+          </button>
+          <button
+            type="button"
+            className="ct-btn"
+            data-ct="nhap-nhanh"
+            onClick={() => { datMoNhanh((v) => !v); setTimeout(() => oNhanh.current?.focus(), 0); }}
+          >
+            <ListPlus size={13} aria-hidden /> {dich('Nhập nhanh')}
+          </button>
+          <span className="ct-muted">{dichP('{n} buổi', { n: dong.length })}</span>
         </div>
+
+        {/* Ô chọn tệp ẩn: nút thật nằm trên thanh công cụ để khớp với mấy nút
+            còn lại. `value=''` sau mỗi lần chọn, nếu không thì chọn LẠI đúng
+            ảnh vừa rồi sẽ không bắn `change` và nút trông như chết. */}
+        <input
+          ref={oAnh}
+          type="file"
+          accept="image/*"
+          hidden
+          onChange={(e) => {
+            const tep = e.target.files?.[0];
+            e.target.value = '';
+            if (tep) void quetAnh(tep);
+          }}
+        />
+
+        {moNhanh && (
+          <div className="ct-soan-dan">
+            <p className="ct-muted">
+              {dich('Mỗi dòng một buổi:')} <code>{dich('thứ | slot | mã môn | phòng')}</code>
+              {' '}— {dich('ví dụ')} <code>2 | 2 | SWR302 | BE-210</code>.
+              {' '}{dich('Thứ 2–8 (8 là Chủ nhật), slot 1–5. Phòng có thể bỏ trống.')}
+            </p>
+            <textarea
+              ref={oNhanh}
+              value={chuNhanh}
+              onChange={(e) => datChuNhanh(e.target.value)}
+              rows={6}
+              placeholder={'2 | 2 | SWR302 | BE-210\n4 | 1 | MAD101'}
+            />
+
+            {/* Bản xem trước BẮT BUỘC. Đổ thẳng vào bảng mà không cho nhìn thì
+                một dòng AI đọc nhầm sẽ trôi thẳng vào lịch thật. */}
+            {dongNhanh.length > 0 && (
+              <ul className="ct-soan-nhanh-xem">
+                {dongNhanh.map((d) => (
+                  <li key={d.so} data-hong={d.loi !== null}>
+                    <span className="ct-soan-nhanh-so">{d.so}</span>
+                    {d.loi === null ? (
+                      <span>
+                        {/* Dùng lại đúng nhãn của ô chọn thứ (`THU`), vì chúng
+                            ĐÃ có bản dịch ("Thứ 2" → "Monday"). Ghép
+                            `dichP('Thứ {t}', { t: 2 })` thì bản tiếng Anh in
+                            trơ con số `2` — vô nghĩa với người đọc. */}
+                        {dich(THU.find((t) => t.n === d.thu)?.ten ?? '')}
+                        {' · '}{d.batDau}–{d.ketThuc}
+                        {' · '}<strong>{d.mon}</strong>
+                        {d.phong !== '' && <> · {d.phong}</>}
+                      </span>
+                    ) : (
+                      <span className="ct-soan-nhanh-loi">{dich(d.loi)}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <button
+              type="button"
+              className="ct-btn ct-btn-chinh"
+              onClick={dovaoBang}
+              disabled={dongNhanh.length === 0 || nhanhHong.length > 0}
+            >
+              {nhanhHong.length > 0
+                ? dichP('Còn {n} dòng chưa đúng', { n: nhanhHong.length })
+                : dichP('Thêm {n} buổi vào bảng', { n: dongNhanh.length })}
+            </button>
+          </div>
+        )}
+
+        {canhBaoQuet.length > 0 && (
+          /* Chỗ model tự nhận là KHÔNG CHẮC. Nuốt đi thì người dùng đinh ninh
+             ảnh đã được đọc đủ, trong khi có ô bị bỏ qua. */
+          <div className="ct-soan-boqua">
+            <AlertTriangle size={13} aria-hidden />
+            <div>
+              <strong>{dich('Đọc ảnh chưa chắc mấy chỗ này')}</strong> — {dich('xem lại giúp tôi:')}
+              <ul>{canhBaoQuet.slice(0, 8).map((s, i) => <li key={i}>{s}</li>)}</ul>
+            </div>
+          </div>
+        )}
 
         {moDan && (
           <div className="ct-soan-dan">
@@ -266,7 +427,8 @@ export function SoanLich({ onDong, onXong }: { onDong: () => void; onXong: () =>
           <div className="ct-soan-boqua">
             <AlertTriangle size={13} aria-hidden />
             <div>
-              <strong>{boQua.length} dòng không đọc được giờ</strong> — tự thêm bằng tay giúp tôi:
+              <strong>{dichP('{n} dòng không đọc được giờ', { n: boQua.length })}</strong>
+              {' — '}{dich('tự thêm bằng tay giúp tôi:')}
               <ul>{boQua.slice(0, 6).map((s, i) => <li key={i}>{s}</li>)}</ul>
             </div>
           </div>
@@ -319,7 +481,11 @@ export function SoanLich({ onDong, onXong }: { onDong: () => void; onXong: () =>
         {loi && <p className="ct-soan-bao">{loi}</p>}
 
         <footer className="ct-soan-chan">
-          {hong.length > 0 && <span className="ct-soan-bao">{hong.length} dòng còn thiếu, sửa xong mới lưu được</span>}
+          {hong.length > 0 && (
+            <span className="ct-soan-bao">
+              {dichP('{n} dòng còn thiếu, sửa xong mới lưu được', { n: hong.length })}
+            </span>
+          )}
           <button type="button" className="ct-btn" onClick={onDong}>{dich('Huỷ')}</button>
           <button type="button" className="ct-btn ct-btn-chinh" onClick={() => void ghi()} disabled={luu || hong.length > 0 || dangTai}>
             {luu ? 'Đang lưu…' : 'Lưu lịch'}

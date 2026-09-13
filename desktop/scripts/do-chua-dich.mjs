@@ -54,8 +54,14 @@ function boChuThich(ma) {
 export function dinhChuaBoc(ma) {
   const sach = boChuThich(ma);
   const ra = [];
-  // Văn bản JSX: nằm giữa `>` và `<`, không chứa `{` `}` (có `{` là biểu thức,
-  // và chuỗi bên trong đã do nhánh dưới hoặc `tuDien.test.ts` canh).
+  /* Văn bản JSX: nằm giữa `>` và `<`, KHÔNG chứa `{` `}`.
+   *
+   * ⚠️ ĐIỂM MÙ ĐÃ BIẾT, đừng đọc con số ở cuối như "tất cả những chỗ còn lại".
+   * Chữ nằm XEN với biểu thức thì lọt: `<span>{n} dòng còn thiếu</span>` là
+   * chữ người dùng đọc, chưa dịch, và bộ dò này không thấy (ca thật, gặp
+   * 14/09/2026 ở `SoanLich.tsx`). Nới điều kiện để bắt nó thì mọi đoạn JSX có
+   * con bên trong đều thành dương tính giả, nên chỗ này cố ý ĐẾM THIẾU thay vì
+   * đếm thừa — một bộ dò kêu oan là bộ dò bị tắt đi. Số thật cao hơn số in ra.
   for (const m of sach.matchAll(/>([^<>{}]+)</g)) {
     const chu = m[1].trim();
     // Chữ hiện ra màn hình gần như không bao giờ mang `;` hay `=`. Có chúng thì

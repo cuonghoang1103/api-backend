@@ -1078,7 +1078,11 @@ const CHUAN_BI = {
     if (process.env.CT_LICH) {
       await p.click('.ct-lich-sua', { timeout: 3000 }).catch(() => {});
       await p.waitForTimeout(400);
-      await p.click('button:has-text("Dán từ FAP")', { timeout: 2000 }).catch(() => {});
+      /* Neo bằng `data-ct`, KHÔNG bằng chữ trên nút. Nhãn đi qua `dich()` nên
+         `:has-text("Dán từ FAP")` trượt sạch ở bản tiếng Anh — và vì nó nằm
+         trong `.catch()`, nó trượt IM LẶNG rồi báo một lỗi chẳng liên quan ở
+         bước sau. */
+      await p.click('[data-ct="dan-fap"]', { timeout: 2000 }).catch(() => {});
       await p.fill('.ct-soan-dan textarea', [
         '\tMON 07/09\tTUE 08/09\tWED 09/09\tTHU 10/09\tFRI 11/09',
         'Slot 1\tSWT301-View Materials at DE-412 (7:30-9:50) Meet URL\t\tSWT301-View Materials at DE-412 (7:30-9:50)\t\t',
@@ -1088,6 +1092,26 @@ const CHUAN_BI = {
       ].join('\n')).catch(() => {});
       await p.click('.ct-soan-dan button', { timeout: 2000 }).catch(() => {});
       await p.waitForTimeout(400);
+      return;
+    }
+
+    /* `CT_NHANH=1` ⇒ đo ô NHẬP NHANH (nơi kết quả quét ảnh đổ vào). Cố ý trộn
+       dòng ĐÚNG với dòng SAI: bản xem trước phải hiện cả hai, và cái dễ vỡ bố
+       cục nhất là hàng câu lỗi nằm cạnh hàng bình thường.
+       Chạy riêng: CT_TRANG='["/dashboard"]' CT_NHANH=1 npm run do:bo-cuc */
+    if (process.env.CT_NHANH) {
+      await p.click('.ct-lich-sua', { timeout: 3000 }).catch(() => {});
+      await p.waitForTimeout(400);
+      await p.click('[data-ct="nhap-nhanh"]', { timeout: 2000 }).catch(() => {});
+      await p.fill('.ct-soan-dan textarea', [
+        '# kỳ thu 2026',
+        '2 | 2 | SWR302 | BE-210',
+        '3 | 1 | SWT301 | DE-412',
+        '5 | 9 | MAD101',
+        'lung tung',
+        '6 | 3 | JPD123 | DE-C304',
+      ].join('\n')).catch(() => {});
+      await p.waitForTimeout(300);
       return;
     }
     await p.click('.ct-tq-dong button', { timeout: 2000 }).catch(() => {});
@@ -1585,7 +1609,22 @@ for (const duong of DUONG) {
         await p.waitForTimeout(250);
       }
       const ten = `${duong.replace(/\//g, '_') || '_goc'}@${rong}.png`;
-      await p.screenshot({ path: `${process.env.CT_CHUP}/${ten}`, fullPage: true }).catch(() => {});
+      /* `CT_CHUP_O='<bộ chọn>'` ⇒ chụp ĐÚNG một khối thay vì cả trang.
+         Vì sao cần: `fullPage` trên trang này chụp cả cây vỏ, và `.ct-content`
+         cuộn riêng nên khối cần xem thường nằm ngoài khung — tệ hơn, prep của
+         vài trang lại cuộn đi chỗ khác sau đó. `locator.screenshot()` tự cuộn
+         tới phần tử nên nó không phụ thuộc vào prep đã cuộn tới đâu. */
+      if (process.env.CT_CHUP_O) {
+        const o = p.locator(process.env.CT_CHUP_O).first();
+        if (await o.count() > 0) {
+          await o.screenshot({ path: `${process.env.CT_CHUP}/${ten}` }).catch(() => {});
+        } else {
+          // Im lặng bỏ qua là đúng cái bẫy "bộ kiểm trượt mà báo xanh".
+          console.log(`         \x1b[33m!\x1b[0m CT_CHUP_O không khớp phần tử nào ở ${rong}px: ${process.env.CT_CHUP_O}`);
+        }
+      } else {
+        await p.screenshot({ path: `${process.env.CT_CHUP}/${ten}`, fullPage: true }).catch(() => {});
+      }
     }
 
     const kq = await p.evaluate(() => {

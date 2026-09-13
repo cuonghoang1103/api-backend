@@ -113,11 +113,14 @@ const ALL_DOCK_ITEMS: DockItem[] = [
   { href: '/my-orders', label: 'Orders', icon: Receipt, section: 'shop' },
   { href: '/wallet', label: 'Ví điểm', icon: Wallet, section: 'shop' },
   // Account (custom-rendered block below adds Admin / Profile / Settings / Logout)
+  // ⚠️ Mục 'account' KHÔNG lặp qua mảng này — nó được vẽ bằng các
+  // <DockRowLink> VIẾT CỨNG ở dưới (xem `key === 'account'`). Thêm một dòng
+  // section:'account' vào đây là KHÔNG hiện gì cả, và không có lỗi nào báo.
+  // Đã dẫm 13/09/2026 với /llm-key: thêm vào mảng, tsc xanh, build xanh,
+  // deploy xanh, menu vẫn không có mục đó.
+  // Dòng /pro dưới đây giữ lại cho đủ danh mục (tìm kiếm trong dock đọc mảng
+  // này), nhưng thứ THỰC SỰ vẽ ra nút là khối viết cứng.
   { href: '/pro', label: 'Update Pro', icon: Crown, section: 'account' },
-  // Xin key + hướng dẫn cắm OpenCode. Hiện cho MỌI người (không chỉ Pro):
-  // trang tự hiện lời mời nâng cấp nếu chưa Pro, nên nó vừa là lối vào
-  // vừa là một chỗ giới thiệu tính năng.
-  { href: '/llm-key', label: 'AI trên terminal', icon: Terminal, section: 'account' },
 ];
 
 // Commerce entry points are hidden while the shop/checkout is disabled
@@ -658,6 +661,19 @@ export default function NavigationDock() {
                         isHovered={hoveredHref === '/pro'}
                         scale={1}
                         onHover={() => setHoveredHref('/pro')}
+                        onLeave={() => setHoveredHref(null)}
+                      />
+                      {/* AI trên terminal — xin key OpenCode + hướng dẫn cắm.
+                          Hiện cho MỌI người: trang tự mời nâng cấp nếu chưa
+                          Pro, nên nó vừa là lối vào vừa là chỗ giới thiệu. */}
+                      <DockRowLink
+                        href="/llm-key"
+                        Icon={Terminal}
+                        label="AI trên terminal"
+                        isActive={pathname === '/llm-key'}
+                        isHovered={hoveredHref === '/llm-key'}
+                        scale={1}
+                        onHover={() => setHoveredHref('/llm-key')}
                         onLeave={() => setHoveredHref(null)}
                       />
                       {/* Admin Dashboard - only for admins */}

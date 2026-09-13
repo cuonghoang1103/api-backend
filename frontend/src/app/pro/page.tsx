@@ -13,7 +13,8 @@ import { toast } from 'sonner';
 import { QRCodeSVG } from 'qrcode.react';
 import {
   Crown, Music, Bot, GraduationCap, ClipboardCheck, BadgeCheck, Sparkles, Loader2, Check, ArrowLeft,
-  Wallet, CreditCard, Landmark, Copy, AlertCircle,
+  Wallet, CreditCard, Landmark, Copy, AlertCircle, Terminal, Gauge, BookOpen, Languages,
+  FileText, Newspaper, Headphones, Zap,
 } from 'lucide-react';
 import { proApi, proBillingApi, walletApi, newIdempotencyKey, type ProPlan, type BankTransferInfo } from '@/lib/api';
 import { usePro } from '@/hooks/usePro';
@@ -21,16 +22,120 @@ import { useAuthStore } from '@/store/authStore';
 
 const dongVN = (n: number) => `${n.toLocaleString('vi-VN')} đ`;
 
-const BENEFITS = [
-  { icon: Music, title: 'Trang nhạc mở vĩnh viễn', desc: 'Không cần admin cấp quyền — vào /music bất cứ lúc nào.' },
-  { icon: Bot, title: 'AI Chat Pro & Max', desc: 'Dùng CuongMini Pro (Sonnet) và Max (Opus) không giới hạn.' },
-  { icon: ClipboardCheck, title: 'Interview AI chấm điểm', desc: 'Mở khoá "AI chấm" và "AI đầy đủ" khi luyện phỏng vấn.' },
-  // NEW (2026-07-16): the two AI-heavy modules are Pro entitlements.
-  { icon: Sparkles, title: 'CV Builder — toàn bộ AI', desc: 'AI chấm sâu + rủi ro phỏng vấn, AI viết lại từng dòng, AI phỏng vấn lấy nội dung, cover letter và xuất CV song ngữ Việt–Anh.' },
-  { icon: Bot, title: 'My Language — gia sư AI', desc: 'Gia sư giải thích, chấm phát âm, quiz AI, chấm bài viết và role-play hội thoại.' },
-  { icon: GraduationCap, title: 'Full khoá học Academy', desc: 'Truy cập mọi khoá học, không cần nhập mã kích hoạt.' },
-  { icon: BadgeCheck, title: 'Huy hiệu PRO', desc: 'Khung avatar + logo gắn nhãn PRO nổi bật, khác biệt.' },
+/**
+ * Quyền lợi Pro — RÀ TỪ MÃ, không liệt kê theo trí nhớ.
+ *
+ * Mỗi mục dưới đây tương ứng một chốt `isProEffective()` có thật trong
+ * backend. Danh sách cũ chỉ có 7 mục và bỏ sót đúng những thứ đắt giá nhất —
+ * AI Code trên app desktop, gia sư khi thi, Code Lab, trợ lý đọc bài, và
+ * trần token gấp 3,3 lần.
+ *
+ * ⚠️ Thêm một chốt Pro mới trong backend thì PHẢI thêm một dòng vào đây.
+ * Người dùng không mua thứ họ không biết mình được.
+ *
+ * Nguồn từng mục (13/09/2026):
+ *   agent.routes.ts:chiPro ····························· AI Code
+ *   ai.service.ts:1205 ································· Chat Pro/Max
+ *   course.routes.ts:111,601 + courseTutor.service.ts ··· Academy + gia sư
+ *   exam.routes.ts:231 ································· Hỏi CuongMini khi thi
+ *   codeLab.coach.service.ts + codeLab.explain.service.ts  Code Lab
+ *   cv/proGate.ts ······································ CV Builder
+ *   interview.routes.ts:49,167 ························· Interview
+ *   myLanguage.routes.ts:174 ··························· My Language
+ *   techTrends.routes.ts:495 ··························· Trợ lý đọc bài
+ *   voiceHub.routes.ts:178 ····························· Tóm tắt Voice Hub
+ *   musicAccess.service.ts ····························· Trang nhạc
+ *   interview/llm/index.ts:862-863 ····················· Trần token
+ */
+interface Quyen {
+  icon: typeof Crown;
+  title: string;
+  desc: string;
+  /** Gắn nhãn cho thứ người dùng hay không biết là có. */
+  badge?: string;
+}
+
+const NHOM_QUYEN: Array<{ ten: string; mo: string; mau: string; items: Quyen[] }> = [
+  {
+    ten: 'AI Code — trên app desktop',
+    mo: 'Thứ chỉ Pro mới mở được, và là thứ khác biệt nhất',
+    mau: 'from-violet-500/20 to-fuchsia-500/10',
+    items: [
+      {
+        icon: Terminal,
+        title: 'Chế độ Lập trình',
+        desc: 'Agent đọc và sửa mã ngay trên máy bạn: đọc/ghi file, grep, glob, xem git diff, commit, mở pull request.',
+        badge: 'Chỉ Pro',
+      },
+      {
+        icon: Zap,
+        title: 'Chạy lệnh & việc nền',
+        desc: 'Agent chạy lệnh, theo dõi tiến trình nền, và giao việc cho agent phụ khi việc lớn.',
+      },
+      {
+        icon: Bot,
+        title: 'Chọn model theo việc',
+        desc: 'Sonnet 5 (mặc định, rẻ nhất), Opus 4.8 cho việc khó, hoặc GPT khi cần ý kiến thứ hai. Nhãn ghi rõ giá đo thật của từng model.',
+      },
+    ],
+  },
+  {
+    ten: 'Học tập',
+    mo: 'Academy · Code Lab · phòng thi',
+    mau: 'from-emerald-500/20 to-teal-500/10',
+    items: [
+      { icon: GraduationCap, title: 'Toàn bộ khoá học Academy', desc: 'Mở mọi khoá, không cần nhập mã kích hoạt.' },
+      { icon: BookOpen, title: 'Gia sư AI trong bài học', desc: 'Hỏi ngay giữa bài: giải thích đoạn đang đọc, cho ví dụ khác, chữa chỗ chưa hiểu.' },
+      { icon: ClipboardCheck, title: 'Hỏi CuongMini khi thi', desc: 'Trong phòng thi /exam, hỏi AI về đúng câu đang làm — giải thích vì sao sai, không chỉ đáp án.', badge: 'Ít người biết' },
+      { icon: Terminal, title: 'Code Lab: AI kèm + AI giải thích', desc: 'AI kèm từng bước khi bí, và giải thích vì sao mã của bạn chạy sai thay vì chỉ báo lỗi.', badge: 'Ít người biết' },
+    ],
+  },
+  {
+    ten: 'Nghề nghiệp',
+    mo: 'CV · phỏng vấn',
+    mau: 'from-amber-500/20 to-orange-500/10',
+    items: [
+      { icon: FileText, title: 'CV Builder — toàn bộ AI', desc: 'AI chấm sâu + soi rủi ro phỏng vấn, viết lại từng dòng, phỏng vấn để lấy nội dung, cover letter, và xuất CV song ngữ Việt–Anh.' },
+      { icon: ClipboardCheck, title: 'Interview Simulator — AI chấm', desc: 'Mở khoá "AI chấm" và "AI đầy đủ" khi luyện phỏng vấn, kèm nhận xét từng câu trả lời.' },
+    ],
+  },
+  {
+    ten: 'Ngoại ngữ',
+    mo: 'My Language — 9 mục luyện',
+    mau: 'from-sky-500/20 to-blue-500/10',
+    items: [
+      { icon: Languages, title: 'Gia sư AI cho mọi kỹ năng', desc: 'Hội thoại, đóng vai, chấm phát âm, chấm bài viết, chữa ngữ pháp, dịch, đọc hiểu, từ vựng và quiz do AI ra đề.' },
+    ],
+  },
+  {
+    ten: 'Đọc · nghe',
+    mo: 'Trợ lý AI trên nội dung dài',
+    mau: 'from-rose-500/20 to-pink-500/10',
+    items: [
+      { icon: Newspaper, title: 'Trợ lý AI đọc bài', desc: 'Ở /tech-trends: tóm tắt TL;DR, hỏi đáp về bài đang đọc, và giải thích khối mã trong bài.', badge: 'Ít người biết' },
+      { icon: Headphones, title: 'Tóm tắt AI ở Voice Hub', desc: 'Nắm nội dung một tập dài trước khi quyết định nghe hết.', badge: 'Ít người biết' },
+      { icon: Music, title: 'Trang nhạc mở vĩnh viễn', desc: 'Vào /music bất cứ lúc nào, không cần admin cấp quyền.' },
+    ],
+  },
+  {
+    ten: 'Hạn mức & nhận diện',
+    mo: 'Con số, không phải lời hứa',
+    mau: 'from-indigo-500/20 to-violet-500/10',
+    items: [
+      {
+        icon: Gauge,
+        title: '1.000.000 token AI mỗi ngày',
+        desc: 'Tài khoản thường là 300.000 — Pro gấp 3,3 lần. Áp cho mọi tính năng AI, dùng chung một hạn mức.',
+        badge: 'Gấp 3,3×',
+      },
+      { icon: Bot, title: 'AI Chat bậc Pro & Max', desc: 'Dùng CuongMini Pro (Sonnet) và Max (Opus) — bậc Max là nơi duy nhất gửi được ảnh và PDF.' },
+      { icon: BadgeCheck, title: 'Huy hiệu PRO', desc: 'Khung avatar và nhãn PRO hiện ở hồ sơ, bình luận và bảng xếp hạng.' },
+    ],
+  },
 ];
+
+/** Tổng số quyền lợi — hiện ở hero để con số tự nói. */
+const TONG_QUYEN = NHOM_QUYEN.reduce((n, g) => n + g.items.length, 0);
 
 export default function ProPage() {
   const { status, isPro, isLoading, refetch } = usePro();
@@ -186,7 +291,8 @@ export default function ProPage() {
       : '';
 
   return (
-    <div className="min-h-screen pt-20 pb-16 px-4" style={{ background: 'radial-gradient(1200px 600px at 50% -10%, rgba(139,92,246,0.15), transparent), var(--bg-primary, #0a0a0f)' }}>
+    <div className="relative min-h-screen pt-20 pb-16 px-4 overflow-hidden" style={{ background: 'var(--bg-primary, #0a0a0f)' }}>
+      <NenDong />
       <div className="max-w-3xl mx-auto">
         <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-white mb-6"><ArrowLeft className="w-4 h-4" /> Trang chủ</Link>
 
@@ -198,7 +304,15 @@ export default function ProPage() {
           <h1 className="text-3xl md:text-4xl font-bold text-white">
             CuongThai <span className="bg-gradient-to-r from-amber-300 to-violet-300 bg-clip-text text-transparent">PRO</span>
           </h1>
-          <p className="text-slate-400 mt-2">Mở khoá toàn bộ tính năng cao cấp của web.</p>
+          <p className="text-slate-400 mt-3 max-w-xl mx-auto">
+            {TONG_QUYEN} quyền lợi trên web và app desktop — trong đó có{' '}
+            <b className="text-violet-300">AI Code</b>, agent đọc và sửa mã ngay trên máy bạn.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 mt-5 text-xs text-slate-500">
+            <span className="inline-flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-400" /> Không tự động gia hạn</span>
+            <span className="inline-flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-400" /> Cộng dồn khi mua tiếp</span>
+            <span className="inline-flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-400" /> Dùng được ngay sau thanh toán</span>
+          </div>
         </div>
 
         {/* Status banner */}
@@ -222,22 +336,58 @@ export default function ProPage() {
           </div>
         ) : null}
 
-        {/* Benefits */}
-        <div className="grid sm:grid-cols-2 gap-3 mb-8">
-          {BENEFITS.map((b, i) => {
-            const Icon = b.icon;
-            return (
-              <div key={i} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 flex gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400/20 to-violet-500/20 border border-white/10 flex items-center justify-center shrink-0">
-                  <Icon className="w-5 h-5 text-amber-300" />
-                </div>
-                <div>
-                  <div className="font-medium text-white text-sm">{b.title}</div>
-                  <p className="text-xs text-slate-400 mt-0.5">{b.desc}</p>
-                </div>
+        {/* ═══ Quyền lợi — gom theo nhóm ═══ */}
+        <div className="space-y-6 mb-10">
+          {NHOM_QUYEN.map((g) => (
+            <div key={g.ten}>
+              <div className="flex items-baseline gap-3 mb-3 flex-wrap">
+                <h2 className="text-lg font-bold text-white">{g.ten}</h2>
+                <span className="text-xs text-slate-500">{g.mo}</span>
               </div>
-            );
-          })}
+              {/* AI Code chỉ chạy trên app desktop — người mua Pro vì nó cần
+                  biết lấy app ở đâu, nếu không họ trả tiền rồi đi tìm. */}
+              {g.ten.startsWith('AI Code') && (
+                <Link
+                  href="/download"
+                  className="mb-3 flex items-center gap-3 rounded-xl border border-violet-400/30 bg-violet-500/[0.08] p-3 hover:border-violet-400/60 transition-colors group"
+                >
+                  <Terminal className="w-4 h-4 text-violet-300 shrink-0" />
+                  <span className="text-xs text-slate-300 flex-1 min-w-0">
+                    Chạy trên <b className="text-white">app desktop</b> (macOS · Windows) — không có trên trình duyệt.
+                  </span>
+                  <span className="text-xs font-semibold text-violet-300 whitespace-nowrap group-hover:underline">
+                    Tải app →
+                  </span>
+                </Link>
+              )}
+              <div className="grid sm:grid-cols-2 gap-3">
+                {g.items.map((b) => {
+                  const Icon = b.icon;
+                  return (
+                    <div
+                      key={b.title}
+                      className={`relative rounded-2xl border border-white/10 bg-gradient-to-br ${g.mau} p-4 flex gap-3 transition-colors hover:border-white/20`}
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-black/30 border border-white/10 flex items-center justify-center shrink-0">
+                        <Icon className="w-5 h-5 text-amber-300" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="font-medium text-white text-sm">{b.title}</span>
+                          {b.badge && (
+                            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 font-semibold whitespace-nowrap">
+                              {b.badge}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-slate-400 mt-1 leading-relaxed">{b.desc}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* ═══ Bảng giá (13/09/2026) ═══ */}
@@ -255,36 +405,67 @@ export default function ProPage() {
               )}
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+            {/* Thẻ gói. Con số so sánh được là GIÁ MỖI THÁNG — đó là thứ
+                duy nhất đặt bốn gói khác kỳ hạn lên cùng một thước đo, nên
+                nó được in to nhất, không phải tổng tiền. */}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-5 pt-3">
               {plans.map((p) => {
                 const chon = chonGoi === p.code;
+                const readu = soDu !== null && soDu >= p.pointsRequired;
                 return (
                   <button
                     key={p.code}
                     onClick={() => { setChonGoi(p.code); setBank(null); }}
-                    className={`relative text-left rounded-2xl border p-4 transition-all ${
+                    className={`group relative text-left rounded-2xl border p-4 pt-5 transition-all duration-200 ${
                       chon
-                        ? 'border-amber-400 bg-amber-500/10 shadow-[0_0_0_1px_rgba(251,191,36,0.35)]'
-                        : 'border-white/10 bg-white/[0.03] hover:border-amber-500/40'
+                        ? 'border-amber-400 bg-gradient-to-b from-amber-500/[0.14] to-transparent shadow-[0_0_0_1px_rgba(251,191,36,.45),0_10px_40px_-12px_rgba(251,191,36,.35)] -translate-y-0.5'
+                        : p.popular
+                        ? 'border-violet-400/40 bg-gradient-to-b from-violet-500/[0.10] to-transparent hover:border-amber-500/50 hover:-translate-y-0.5'
+                        : 'border-white/10 bg-white/[0.03] hover:border-amber-500/40 hover:-translate-y-0.5'
                     }`}
                   >
                     {p.badge && (
-                      <span className={`absolute -top-2.5 left-4 text-[10px] px-2 py-0.5 rounded-full font-semibold ${
-                        p.popular ? 'bg-gradient-to-r from-amber-400 to-violet-500 text-white' : 'bg-white/10 text-slate-300'
+                      <span className={`absolute -top-2.5 left-4 text-[10px] px-2 py-0.5 rounded-full font-semibold whitespace-nowrap ${
+                        p.popular ? 'bg-gradient-to-r from-amber-400 to-violet-500 text-white shadow-lg shadow-violet-500/30' : 'bg-white/10 text-slate-300'
                       }`}>
                         {p.badge}
                       </span>
                     )}
-                    <div className="text-sm text-slate-400 mb-1">{p.months} tháng</div>
-                    <div className="text-2xl font-bold text-white tabular-nums">{dongVN(p.priceVnd)}</div>
-                    {p.originalPriceVnd && p.originalPriceVnd > p.priceVnd && (
-                      <div className="text-xs text-slate-500 line-through tabular-nums mt-0.5">
-                        {dongVN(p.originalPriceVnd)}
+
+                    <div className="text-sm text-slate-400">{p.months} tháng</div>
+
+                    {/* Giá mỗi tháng — con số to nhất */}
+                    <div className="flex items-baseline gap-1 mt-1.5">
+                      <span className="text-2xl font-bold text-white tabular-nums">
+                        {p.pricePerMonthVnd.toLocaleString('vi-VN')}
+                      </span>
+                      <span className="text-xs text-slate-400">đ/tháng</span>
+                    </div>
+
+                    <div className="mt-2 pt-2 border-t border-white/10 text-xs space-y-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-slate-500">Trả một lần</span>
+                        <span className="text-white font-semibold tabular-nums">{dongVN(p.priceVnd)}</span>
+                      </div>
+                      {p.originalPriceVnd && p.originalPriceVnd > p.priceVnd ? (
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-slate-500 line-through tabular-nums">{dongVN(p.originalPriceVnd)}</span>
+                          <span className="text-emerald-400 font-semibold">tiết kiệm {p.savingPercent}%</span>
+                        </div>
+                      ) : (
+                        <div className="text-slate-600">giá gốc</div>
+                      )}
+                    </div>
+
+                    {/* Đủ điểm hay không — nói ngay ở thẻ, đừng để người dùng
+                        chọn gói rồi mới phát hiện ví không đủ. */}
+                    {soDu !== null && (
+                      <div className={`mt-2 text-[11px] inline-flex items-center gap-1 ${readu ? 'text-emerald-400' : 'text-slate-500'}`}>
+                        <Wallet className="w-3 h-3" />
+                        {readu ? 'Ví đủ điểm' : `Cần ${p.pointsRequired.toLocaleString('vi-VN')} điểm`}
                       </div>
                     )}
-                    <div className="text-xs text-amber-300/90 mt-2 tabular-nums">
-                      ≈ {dongVN(p.pricePerMonthVnd)}/tháng
-                    </div>
+
                     {chon && <Check className="absolute top-3 right-3 w-4 h-4 text-amber-400" />}
                   </button>
                 );
@@ -440,6 +621,98 @@ export default function ProPage() {
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+/**
+ * Nền động cho trang Pro.
+ *
+ * Ba lớp CSS thuần — KHÔNG canvas, KHÔNG thư viện:
+ *   1. hai quầng sáng trôi chậm (aurora)
+ *   2. lưới mờ dần về đáy
+ *   3. vài đốm sáng nổi lên rồi tắt
+ *
+ * ⚠️ Tôn trọng `prefers-reduced-motion`: người bật tuỳ chọn đó thường vì
+ * chuyển động làm họ chóng mặt hoặc đau đầu — nền trang trí là thứ đầu tiên
+ * phải đứng yên. Lúc đó vẫn giữ nguyên màu, chỉ tắt animation.
+ *
+ * `pointer-events-none` để nền không bao giờ nuốt cú bấm của người dùng, và
+ * `aria-hidden` để trình đọc màn hình bỏ qua.
+ */
+function NenDong() {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      <style>{`
+        @keyframes proTroi1 {
+          0%,100% { transform: translate(-8%, -6%) scale(1); }
+          50%     { transform: translate(6%, 4%)  scale(1.15); }
+        }
+        @keyframes proTroi2 {
+          0%,100% { transform: translate(6%, 4%)  scale(1.1); }
+          50%     { transform: translate(-6%, -4%) scale(0.95); }
+        }
+        @keyframes proNoiLen {
+          0%   { transform: translateY(0)      scale(0.6); opacity: 0; }
+          15%  { opacity: .55; }
+          85%  { opacity: .2; }
+          100% { transform: translateY(-320px) scale(1.1); opacity: 0; }
+        }
+        .pro-quang-1 { animation: proTroi1 22s ease-in-out infinite; }
+        .pro-quang-2 { animation: proTroi2 28s ease-in-out infinite; }
+        .pro-dom     { animation: proNoiLen linear infinite; }
+        @media (prefers-reduced-motion: reduce) {
+          .pro-quang-1, .pro-quang-2, .pro-dom { animation: none !important; }
+          .pro-dom { opacity: .25; }
+        }
+      `}</style>
+
+      {/* Quầng sáng */}
+      <div
+        className="pro-quang-1 absolute -top-40 left-1/4 w-[620px] h-[620px] rounded-full"
+        style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.28), transparent 62%)', filter: 'blur(90px)' }}
+      />
+      <div
+        className="pro-quang-2 absolute -bottom-48 right-1/4 w-[560px] h-[560px] rounded-full"
+        style={{ background: 'radial-gradient(circle, rgba(245,158,11,0.20), transparent 62%)', filter: 'blur(100px)' }}
+      />
+
+      {/* Lưới, mờ dần xuống đáy */}
+      <div
+        className="absolute inset-0 opacity-[0.18]"
+        style={{
+          backgroundImage:
+            'linear-gradient(rgba(148,163,184,.16) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,.16) 1px, transparent 1px)',
+          backgroundSize: '54px 54px',
+          maskImage: 'linear-gradient(to bottom, black, transparent 72%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, black, transparent 72%)',
+        }}
+      />
+
+      {/* Đốm sáng nổi lên. Vị trí/nhịp cố định — Math.random() ở đây sẽ cho
+          kết quả KHÁC nhau giữa máy chủ và trình duyệt và gây lỗi hydration. */}
+      {[
+        { l: '12%', d: 0,   t: 13, s: 3 },
+        { l: '27%', d: 2.5, t: 16, s: 2 },
+        { l: '41%', d: 5,   t: 14, s: 4 },
+        { l: '58%', d: 1.2, t: 18, s: 2 },
+        { l: '73%', d: 6.5, t: 15, s: 3 },
+        { l: '88%', d: 3.8, t: 17, s: 2 },
+      ].map((d) => (
+        <span
+          key={d.l}
+          className="pro-dom absolute bottom-0 rounded-full"
+          style={{
+            left: d.l,
+            width: d.s,
+            height: d.s,
+            background: 'rgba(196,181,253,.9)',
+            boxShadow: '0 0 8px rgba(167,139,250,.8)',
+            animationDuration: `${d.t}s`,
+            animationDelay: `${d.d}s`,
+          }}
+        />
+      ))}
     </div>
   );
 }

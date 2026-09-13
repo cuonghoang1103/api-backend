@@ -26,7 +26,7 @@ import {
   walletApi, newIdempotencyKey,
   type WalletBalance, type PointTx, type TopupTier, type TopupOrder, type BankTransferInfo,
 } from '@/lib/api';
-import { useAuthStore } from '@/store/authStore';
+import { useDaDangNhap } from '@/hooks/useDaDangNhap';
 
 const dongVN = (n: number) => `${n.toLocaleString('vi-VN')} đ`;
 const diemVN = (n: number) => n.toLocaleString('vi-VN');
@@ -43,7 +43,8 @@ const LOAI: Record<string, { nhan: string; mau: string; Icon: typeof TrendingUp 
 export default function WalletPage() {
   const router = useRouter();
   const params = useSearchParams();
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  // Xem hooks/useDaDangNhap.ts — `isAuthenticated` một mình KHÔNG đủ.
+  const { daDangNhap: isAuthenticated, sanSang } = useDaDangNhap();
 
   const [vi, setVi] = useState<WalletBalance | null>(null);
   const [soCai, setSoCai] = useState<PointTx[]>([]);
@@ -176,7 +177,9 @@ export default function WalletPage() {
   };
 
   // ── Chưa đăng nhập ──
-  if (!isAuthenticated) {
+  // `sanSang` chặn một nháy "Đăng nhập" ở lần render đầu rồi biến mất —
+  // nháy như thế trông y hệt một lỗi.
+  if (sanSang && !isAuthenticated) {
     return (
       <div className="min-h-screen bg-darkbg pt-24 px-4">
         <div className="max-w-md mx-auto text-center bg-darkcard border border-darkborder rounded-2xl p-8">

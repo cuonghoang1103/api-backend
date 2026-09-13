@@ -17,7 +17,7 @@ import {
   Terminal, KeyRound, Copy, Check, Loader2, ArrowLeft, Clock, XCircle,
   AlertCircle, Crown, Eye, EyeOff, Gauge, ExternalLink,
 } from 'lucide-react';
-import { useAuthStore } from '@/store/authStore';
+import { useDaDangNhap } from '@/hooks/useDaDangNhap';
 
 interface DonKey {
   id: number;
@@ -48,7 +48,8 @@ async function goi<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export default function LlmKeyPage() {
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  // Xem hooks/useDaDangNhap.ts — `isAuthenticated` một mình KHÔNG đủ.
+  const { daDangNhap: isAuthenticated, sanSang } = useDaDangNhap();
   const [info, setInfo] = useState<{ baseUrl: string; models: string[]; isPro: boolean } | null>(null);
   const [dons, setDons] = useState<DonKey[]>([]);
   const [dangTai, setDangTai] = useState(true);
@@ -139,7 +140,7 @@ export default function LlmKeyPage() {
     2,
   );
 
-  if (!isAuthenticated) {
+  if (sanSang && !isAuthenticated) {
     return (
       <div className="min-h-screen bg-darkbg pt-24 px-4">
         <div className="max-w-md mx-auto text-center bg-darkcard border border-darkborder rounded-2xl p-8">

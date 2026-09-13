@@ -17,7 +17,7 @@ import {
   payShopOrderWithPoints, createShopBankTransfer, getBankTransferConfig, getWalletBalance,
   type BankTransferPayload,
 } from '@/lib/api/shop';
-import { useAuthStore } from '@/store/authStore';
+import { useDaDangNhap } from '@/hooks/useDaDangNhap';
 import type { BuyerInfo } from '@/types';
 import { toast } from 'sonner';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -82,7 +82,9 @@ export default function CheckoutPage() {
   const [bankInfo, setBankInfo] = useState<BankTransferPayload | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
 
-  const { isAuthenticated } = useAuthStore();
+  // Xem hooks/useDaDangNhap.ts — nếu không, người ĐANG đăng nhập sẽ bị
+  // chặn ở nút thanh toán kèm câu "Cần đăng nhập để đặt hàng".
+  const { daDangNhap: isAuthenticated } = useDaDangNhap();
 
   const [buyerInfo, setBuyerInfo] = useState<BuyerInfo>({
     fullName: '',

@@ -261,9 +261,25 @@ async function gopViVoiWeb() {
 
     let khoa = 0;
     let mo = 0;
+    let datHan = 0;
     for (const t of coQuota) {
       const tin = web[`sk-${t.key}`];
       if (!tin) continue;
+
+      // ── Hạn của GÓI (key bán ở shop) ──────────────────────────────────
+      // Web là nơi duy nhất biết gói bán ngày nào, hạn bao lâu. New API là
+      // nơi duy nhất CHẶN được key khi hết hạn. Chép hạn sang một lần, rồi
+      // để New API tự từ chối — canh không phải nhớ gì thêm.
+      // `expired_time` của New API tính bằng GIÂY epoch; -1 = không hạn.
+      const hetHan = tin.hetHanLuc == null ? -1 : Number(tin.hetHanLuc);
+      if (Number.isFinite(hetHan) && Number(t.expired_time ?? -1) !== hetHan) {
+        await quanTri('/api/token/', { method: 'PUT', body: { ...t, expired_time: hetHan } });
+        datHan++;
+        t.expired_time = hetHan;
+      }
+      // Hết hạn rồi thì thôi không tính ví nữa — New API tự chặn key.
+      if (hetHan > 0 && hetHan * 1000 <= Date.now()) continue;
+
       const hanMuc = Number(tin.tranUsd ?? (t.name in bang.theoTen ? bang.theoTen[t.name] : bang.macDinh));
       if (!Number.isFinite(hanMuc) || hanMuc <= 0) continue;
 
@@ -282,7 +298,7 @@ async function gopViVoiWeb() {
         mo++;
       }
     }
-    if (khoa || mo) ghi(`gộp ví AI Code: khoá ${khoa} key cạn hạn mức, mở lại ${mo}`);
+    if (khoa || mo || datHan) ghi(`gộp ví AI Code: khoá ${khoa} key cạn hạn mức, mở lại ${mo}, đặt hạn gói cho ${datHan}`);
   } catch (e) {
     // Hỏng thì thôi — nhịp sau thử lại. Không được để một lỗi đo làm chết canh.
     ghi('gộp ví AI Code hỏng (sẽ thử lại nhịp sau):', e.message);
@@ -307,6 +323,10 @@ async function datLaiHanMuc() {
     for (const t of tatCa) {
       // Key "không giới hạn" là key quản lý TAY trong giao diện — không đụng.
       if (t.unlimited_quota) continue;
+      // Gói đã hết hạn thì KHÔNG nạp lại — nạp là tặng thêm một cửa sổ cho
+      // người đã hết hạn dùng, mỗi 5 giờ một lần, mãi mãi.
+      const hetHan = Number(t.expired_time ?? -1);
+      if (hetHan > 0 && hetHan * 1000 <= Date.now()) continue;
       const usd = Number(t.name in bang.theoTen ? bang.theoTen[t.name] : bang.macDinh);
       if (!Number.isFinite(usd) || usd < 0) continue;
       await quanTri('/api/token/', { method: 'PUT', body: { ...t, remain_quota: Math.round(usd * QUOTA_MOT_USD) } });

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" role="img" aria-label="CuongMini CƠ BẢN">
+  <defs>
+    <linearGradient id="nen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b0817"/><stop offset="1" stop-color="#16112c"/>
+    </linearGradient>
+    <linearGradient id="hieu" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#6366f1"/><stop offset="1" stop-color="#38bdf8"/>
+    </linearGradient>
+    <radialGradient id="quang1" cx="50%" cy="50%">
+      <stop offset="0" stop-color="#6366f1" stop-opacity="0.55"/><stop offset="1" stop-color="#6366f1" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="quang2" cx="50%" cy="50%">
+      <stop offset="0" stop-color="#38bdf8" stop-opacity="0.42"/><stop offset="1" stop-color="#38bdf8" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="luoi" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#94a3b8" stroke-opacity="0.10" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="motLuoi" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <mask id="mMotLuoi"><rect width="800" height="600" fill="url(#motLuoi)"/></mask>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#nen)"/>
+  <rect width="800" height="600" fill="url(#luoi)" mask="url(#mMotLuoi)"/>
+  <circle cx="130" cy="90"  r="250" fill="url(#quang1)"/>
+  <circle cx="700" cy="520" r="260" fill="url(#quang2)"/>
+
+  <!-- Cửa sổ terminal -->
+  <g transform="translate(96,150)">
+    <rect x="0" y="0" width="608" height="250" rx="18" fill="#0d0a1c" fill-opacity="0.92" stroke="#6366f1" stroke-opacity="0.35"/>
+    <rect x="0" y="0" width="608" height="42" rx="18" fill="#ffffff" fill-opacity="0.04"/>
+    <rect x="0" y="30" width="608" height="12" fill="#ffffff" fill-opacity="0.04"/>
+    <circle cx="26" cy="21" r="5.5" fill="#ff5f57"/><circle cx="46" cy="21" r="5.5" fill="#febc2e"/><circle cx="66" cy="21" r="5.5" fill="#28c840"/>
+    <text x="304" y="26" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="13" fill="#ffffff" fill-opacity="0.42">cuongmini — terminal</text>
+
+    <text x="30" y="92"  font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="19" fill="#7dd3fc">$ <tspan fill="#e2e8f0">opencode auth login</tspan></text>
+    <text x="30" y="126" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="17" fill="#ffffff" fill-opacity="0.55">→ đã nhận API key · sẵn sàng</text>
+    <text x="30" y="170" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="17" fill="#ffffff" fill-opacity="0.55">hạn mức <tspan fill="url(#hieu)" font-size="21" font-weight="700">60$/5h</tspan> · tự reset</text>
+    <text x="30" y="206" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="17" fill="#ffffff" fill-opacity="0.55">model <tspan fill="#e2e8f0">tất cả</tspan></text>
+    <rect x="190" y="192" width="11" height="20" fill="#38bdf8" fill-opacity="0.9"/>
+  </g>
+
+  <!-- Thương hiệu -->
+  <g transform="translate(96,466)">
+    <rect x="0" y="-34" width="46" height="46" rx="13" fill="url(#hieu)"/>
+    <text x="23" y="-2" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="24" font-weight="700" fill="#0b0817">&gt;_</text>
+    <text x="62" y="-12" font-family="ui-sans-serif,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif" font-size="30" font-weight="700" fill="#ffffff">CuongMini</text>
+    <text x="62" y="14" font-family="ui-sans-serif,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif" font-size="17" font-weight="600" fill="#ffffff" fill-opacity="0.55">AI Code trên Terminal · 30 ngày</text>
+  </g>
+
+  <!-- Bậc gói -->
+  <g transform="translate(704,466)">
+    <rect x="-224" y="-40" width="224" height="52" rx="26" fill="url(#hieu)" fill-opacity="0.16" stroke="url(#hieu)" stroke-opacity="0.6"/>
+    <text x="-112" y="-6" text-anchor="middle" font-family="ui-sans-serif,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif" font-size="20" font-weight="700" fill="url(#hieu)">CƠ BẢN</text>
+  </g>
+</svg>

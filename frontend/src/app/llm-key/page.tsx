@@ -26,8 +26,24 @@ interface DonKey {
   key: string | null;
   quotaUsd: number | null;
   adminNote: string | null;
+  /** SHOP = mua gói ở /shop (tự cấp ngay) · REQUEST = xin ở trang này. */
+  source?: 'SHOP' | 'REQUEST';
+  /** Hết hạn gói (ISO). null = không hạn (key xin tay). */
+  expiresAt?: string | null;
+  hetHan?: boolean;
   createdAt: string;
   resolvedAt: string | null;
+}
+
+/** "còn 12 ngày" / "còn 3 giờ" / "đã hết hạn" — đọc nhanh hơn một mốc ngày. */
+function conLaiChu(iso: string | null | undefined): string | null {
+  if (!iso) return null;
+  const ms = new Date(iso).getTime() - Date.now();
+  if (!Number.isFinite(ms)) return null;
+  if (ms <= 0) return 'đã hết hạn';
+  const gio = Math.floor(ms / 3_600_000);
+  if (gio < 24) return `còn ${Math.max(1, gio)} giờ`;
+  return `còn ${Math.floor(gio / 24)} ngày`;
 }
 
 const API = '/api/v1';
@@ -75,7 +91,8 @@ export default function LlmKeyPage() {
 
   useEffect(() => { nap(); }, [nap]);
 
-  const donHienHanh = dons.find((d) => d.status === 'PENDING' || d.status === 'APPROVED') ?? dons[0] ?? null;
+  const donHienHanh =
+    dons.find((d) => (d.status === 'PENDING' || d.status === 'APPROVED') && !d.hetHan) ?? dons[0] ?? null;
   const key = donHienHanh?.status === 'APPROVED' ? donHienHanh.key : null;
 
   /**
@@ -201,6 +218,16 @@ export default function LlmKeyPage() {
                   {donHienHanh?.quotaUsd != null && (
                     <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300">
                       hạn mức {donHienHanh.quotaUsd} USD / chu kỳ
+                    </span>
+                  )}
+                  {donHienHanh?.source === 'SHOP' && (
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-violet-500/15 text-violet-300">
+                      gói mua ở shop
+                    </span>
+                  )}
+                  {conLaiChu(donHienHanh?.expiresAt) && (
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300">
+                      {conLaiChu(donHienHanh?.expiresAt)}
                     </span>
                   )}
                 </div>

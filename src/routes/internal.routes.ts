@@ -56,7 +56,11 @@ router.use(chiNoiBo);
 
 /**
  * POST /api/v1/internal/ai-code-usage
- * Body: { keys: string[] }  →  { [key]: { userId, daTieuUsd, tranUsd } }
+ * Body: { keys: string[] }  →  { [key]: { userId, daTieuUsd, tranUsd, hetHanLuc } }
+ *
+ * `hetHanLuc` (giây epoch, hoặc null) là hạn của GÓI đã bán. canh lấy nó đặt
+ * `expired_time` cho key con ở New API — nếu không, gói "30 ngày" chạy mãi.
+ * Ta trả hạn của CẢ key đã quá hạn để canh còn đóng chúng lại.
  *
  * Nhận NHIỀU key một lượt: canh chạy mỗi phút và có thể có hàng chục key —
  * hỏi từng cái là hàng chục vòng mỗi phút, không đáng.
@@ -70,7 +74,7 @@ router.post('/ai-code-usage', async (req: Request, res: Response<ApiResponse>, n
 
     const dons = await prisma.llmKeyRequest.findMany({
       where: { keyValue: { in: keys }, status: 'APPROVED' },
-      select: { keyValue: true, userId: true, quotaUsd: true },
+      select: { keyValue: true, userId: true, quotaUsd: true, expiresAt: true },
     });
     if (dons.length === 0) { res.json({ success: true, data: {} }); return; }
 
@@ -85,13 +89,14 @@ router.post('/ai-code-usage', async (req: Request, res: Response<ApiResponse>, n
     });
     const theoNguoi = new Map(tong.map((t) => [t.userId, Number(t._sum.costUsd ?? 0)]));
 
-    const ra: Record<string, { userId: number; daTieuUsd: number; tranUsd: number | null }> = {};
+    const ra: Record<string, { userId: number; daTieuUsd: number; tranUsd: number | null; hetHanLuc: number | null }> = {};
     for (const d of dons) {
       if (!d.keyValue) continue;
       ra[d.keyValue] = {
         userId: d.userId,
         daTieuUsd: Math.round((theoNguoi.get(d.userId) ?? 0) * 10000) / 10000,
         tranUsd: d.quotaUsd,
+        hetHanLuc: d.expiresAt ? Math.floor(d.expiresAt.getTime() / 1000) : null,
       };
     }
     res.json({ success: true, data: ra });

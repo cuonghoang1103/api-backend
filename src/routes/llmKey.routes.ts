@@ -40,19 +40,32 @@ function cheKey(key: string): string {
   return `${k.slice(0, 6)}…${k.slice(-4)}`;
 }
 
+/** Gói mua ở shop đã quá hạn chưa. Key xin tay không có hạn ⇒ luôn còn. */
+function daHetHan(r: { expiresAt: Date | null }): boolean {
+  return r.expiresAt != null && r.expiresAt.getTime() <= Date.now();
+}
+
 /** Dạng trả cho CHỦ đơn — có key đầy đủ khi đã duyệt. */
 function choChuDon(r: {
   id: number; status: string; reason: string; keyValue: string | null; quotaUsd: number | null;
   adminNote: string | null; createdAt: Date; resolvedAt: Date | null;
+  source?: string; expiresAt?: Date | null;
 }) {
+  const hetHan = daHetHan({ expiresAt: r.expiresAt ?? null });
   return {
     id: r.id,
     status: r.status,
     reason: r.reason,
-    // Chỉ nhả key khi đơn đã duyệt. Đơn bị thu hồi thì key cũng không còn giá trị.
-    key: r.status === 'APPROVED' ? r.keyValue : null,
+    // Chỉ nhả key khi đơn đã duyệt VÀ gói còn hạn. Đơn bị thu hồi hoặc gói
+    // hết hạn thì key cũng không còn giá trị — đưa ra chỉ gây hiểu nhầm
+    // "key hỏng" rồi mở đơn bảo hành cho thứ đã dùng hết thời hạn.
+    key: r.status === 'APPROVED' && !hetHan ? r.keyValue : null,
     quotaUsd: r.quotaUsd,
     adminNote: r.adminNote,
+    // SHOP = mua ở /shop (tự cấp ngay), REQUEST = xin ở đây (admin duyệt).
+    source: r.source ?? 'REQUEST',
+    expiresAt: r.expiresAt?.toISOString() ?? null,
+    hetHan,
     createdAt: r.createdAt.toISOString(),
     resolvedAt: r.resolvedAt?.toISOString() ?? null,
   };
@@ -107,8 +120,14 @@ router.post('/request', keyReplacementLimiter, async (req: Request, res: Respons
     }
     if (reason.length > 2000) throw new BadRequestError('Mô tả quá dài (tối đa 2000 ký tự).');
 
+    // Gói mua ở shop ĐÃ HẾT HẠN không được chặn đơn mới — người dùng hết hạn
+    // rồi thì trở lại đúng vị trí người chưa có key.
     const dangCo = await prisma.llmKeyRequest.findFirst({
-      where: { userId: req.userId!, status: { in: ['PENDING', 'APPROVED'] } },
+      where: {
+        userId: req.userId!,
+        status: { in: ['PENDING', 'APPROVED'] },
+        OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
+      },
     });
     if (dangCo) {
       throw new ConflictError(

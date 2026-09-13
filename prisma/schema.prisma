@@ -9095,6 +9095,15 @@ model LlmKeyRequest {
   /// Hạn mức admin đặt cho key này ở New API, chép lại để hiển thị.
   quotaUsd Int?    @map("quota_usd")
 
+  /// REQUEST = người dùng xin ở /llm-key (admin duyệt tay).
+  /// SHOP    = mua gói ở /shop, hệ thống tự cấp ngay khi thanh toán xong.
+  source    String    @default("REQUEST") @db.VarChar(20)
+  /// Sản phẩm đã bán ra key này (chỉ với source = SHOP).
+  productId Int?      @map("product_id")
+  /// Hết hạn gói. Null = không hạn (key xin tay). Quá hạn thì key thôi được
+  /// tính vào ví chung và `canh` khoá nó ở New API.
+  expiresAt DateTime? @map("expires_at")
+
   adminNote  String?   @map("admin_note") @db.VarChar(500)
   resolvedBy Int?      @map("resolved_by")
   resolvedAt DateTime? @map("resolved_at")
@@ -9106,5 +9115,6 @@ model LlmKeyRequest {
 
   @@index([status, createdAt(sort: Desc)], name: "idx_llm_key_req_status_created")
   @@index([userId], name: "idx_llm_key_req_user")
+  @@index([keyValue], map: "idx_llm_key_req_key")
   @@map("llm_key_requests")
 }

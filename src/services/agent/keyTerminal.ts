@@ -42,6 +42,18 @@ export interface TerminalUsage {
 const RONG: TerminalUsage = { coKey: false, daTieuUsd: 0, tranKeyUsd: null };
 
 /**
+ * Điều kiện "gói còn hạn".
+ *
+ * Key xin tay ở /llm-key không có hạn (`expiresAt` null) — vẫn tính.
+ * Key mua ở shop có hạn 30 ngày; hết hạn thì nó KHÔNG còn được tính vào ví
+ * chung nữa, nếu không thì một gói đã hết hạn vẫn tiếp tục ăn mất hạn mức
+ * AI Code của người dùng trên app desktop.
+ */
+function conHan() {
+  return { OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] };
+}
+
+/**
  * Số đã tiêu qua key terminal của một người, trong cửa sổ hiện tại.
  *
  * ⚠️ New API trả `used_quota` là CỘNG DỒN từ lúc tạo key, không theo cửa sổ.
@@ -59,7 +71,7 @@ export async function xemKeyTerminal(userId: number): Promise<TerminalUsage> {
   let tranKeyUsd: number | null = null;
   try {
     const don = await prisma.llmKeyRequest.findFirst({
-      where: { userId, status: 'APPROVED' },
+      where: { userId, status: 'APPROVED', ...conHan() },
       orderBy: { resolvedAt: 'desc' },
       select: { keyValue: true, quotaUsd: true },
     });
@@ -118,7 +130,7 @@ export async function xemKeyTerminal(userId: number): Promise<TerminalUsage> {
 export async function tranRiengCuaNguoi(userId: number): Promise<number | null> {
   try {
     const don = await prisma.llmKeyRequest.findFirst({
-      where: { userId, status: 'APPROVED', quotaUsd: { not: null } },
+      where: { userId, status: 'APPROVED', quotaUsd: { not: null }, ...conHan() },
       orderBy: { resolvedAt: 'desc' },
       select: { quotaUsd: true },
     });

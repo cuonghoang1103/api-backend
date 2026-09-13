@@ -7,6 +7,7 @@ import { prisma } from '../config/database.js';
 import { logger } from '../utils/logger.js';
 import { getPayosStatus, isPayosConfigured } from '../config/payos.js';
 import { emailService } from './email.service.js';
+import { goiTheoSlug } from './shop/goiKeyTerminal.js';
 
 // PayOS `orderCode` must be a single positive integer that is unique across
 // the WHOLE merchant. Course orders use `CourseOrder.id` directly (small
@@ -42,6 +43,8 @@ export async function markShopOrderPaidAndFulfill(
   }
 
   const oversoldItems: string[] = [];
+  // Key terminal vừa giao mà đã gắn cho người khác — kho bị nạp trùng.
+  const trungKey: string[] = [];
   let flippedOk = false;
 
   // Digital-only orders are done the instant they're paid; physical/mixed
@@ -67,7 +70,7 @@ export async function markShopOrderPaidAndFulfill(
     for (const item of order.items) {
       const product = await tx.product.findFirst({
         where: { name: item.productName },
-        select: { id: true, type: true, fileUrl: true, digitalContent: true },
+        select: { id: true, slug: true, type: true, fileUrl: true, digitalContent: true },
       });
       const pType = item.productType || product?.type || 'DIGITAL';
 
@@ -127,6 +130,43 @@ export async function markShopOrderPaidAndFulfill(
                 where: { id: item.id },
                 data: { fileUrl: product.fileUrl, digitalContent: claimed.join('\n---\n') },
               });
+
+              // ── Key terminal: NỐI vào ví AI Code chung của người mua ──
+              // Không có bước này thì người mua có hai hạn mức tách rời (một
+              // ở terminal, một ở app desktop) = gấp đôi thứ họ trả tiền, và
+              // gói "30 ngày" chạy vĩnh viễn vì không ai ghi hạn.
+              // `viTien.ts`/`keyTerminal.ts`/`canh` đều đọc bảng này.
+              const goi = goiTheoSlug(product.slug);
+              if (goi && order.userId) {
+                const hetHan = new Date(Date.now() + goi.soNgay * 86_400_000);
+                for (const key of claimed) {
+                  // Một key chỉ được gắn cho MỘT người. Giao lại key đã gắn
+                  // (lỗi vận hành, nạp trùng vào kho) thì bỏ qua chứ không
+                  // ghi đè — ghi đè là cướp ví của người mua trước.
+                  const daGan = await tx.llmKeyRequest.findFirst({
+                    where: { keyValue: key },
+                    select: { id: true },
+                  });
+                  if (daGan) {
+                    trungKey.push(key.slice(0, 12));
+                    continue;
+                  }
+                  await tx.llmKeyRequest.create({
+                    data: {
+                      userId: order.userId,
+                      reason: `Mua ở shop — đơn ${order.orderCode} · ${item.productName}`,
+                      status: 'APPROVED',
+                      source: 'SHOP',
+                      productId: product.id,
+                      keyValue: key,
+                      keyHien: `${key.slice(0, 6)}…${key.slice(-4)}`,
+                      quotaUsd: goi.quotaUsd,
+                      expiresAt: hetHan,
+                      resolvedAt: new Date(),
+                    },
+                  });
+                }
+              }
             }
             delivered = true; // keyed product handled (fully or partially) — skip legacy copy
           }
@@ -142,6 +182,11 @@ export async function markShopOrderPaidAndFulfill(
     }
   });
 
+  if (trungKey.length > 0) {
+    logger.error('key terminal đã giao NHƯNG trùng với key đã gắn cho người khác — kiểm kho key', {
+      orderCode: order.orderCode, shopOrderId: order.id, keys: trungKey,
+    });
+  }
   if (oversoldItems.length > 0) {
     logger.error('shop order PAID but stock insufficient — manual fulfillment needed', {
       orderCode: order.orderCode, shopOrderId: order.id, oversold: oversoldItems,

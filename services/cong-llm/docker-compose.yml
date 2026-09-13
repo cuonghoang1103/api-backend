@@ -26,6 +26,18 @@ services:
       SESSION_SECRET: ${CONG_LLM_SESSION_SECRET:?thiếu CONG_LLM_SESSION_SECRET trong /opt/cong-llm/.env}
       # Opus nghĩ lâu giữa hai mẩu chữ; mặc định 120s cắt ngang lượt dài.
       STREAMING_TIMEOUT: "300"
+      # ⚠️ Mặc định của New API cho route "quan trọng" (POST /api/user/login,
+      # POST /api/token/:id/key) là 20 lượt / 20 phút — và `canh` thử lại đăng
+      # nhập MỖI 60 GIÂY khi hỏng, tức đúng 20 lượt / 20 phút. Nghĩa là một lỗi
+      # thoáng qua là canh tự khoá mình vĩnh viễn: nó gõ cửa đủ nhanh để cửa
+      # không bao giờ mở lại. Đo thật 14/09/2026 — canh kẹt 429 suốt ~20 phút,
+      # `nạp lại hạn mức key con hỏng` lặp lại mỗi phút, và mọi thao tác tay
+      # cũng bị chặn theo.
+      # Nới lên 60/20 phút để có khoảng thở. Vẫn chặn dò mật khẩu, và giao
+      # diện quản trị này CHỈ nghe trên 127.0.0.1 (xem `ports` bên dưới) nên
+      # không ai ngoài Internet gõ được vào đây.
+      CRITICAL_RATE_LIMIT: "60"
+      CRITICAL_RATE_LIMIT_DURATION: "20"
     volumes:
       # SQLite + log. Bind ra host để dựng lại container không mất key con.
       - /opt/cong-llm/data:/data

@@ -78,7 +78,21 @@ if (!setup?.status) {
   });
   console.log('✓ đã tạo tài khoản quản trị', NEWAPI_USER);
 }
-const dn = await goi('/api/user/login', { method: 'POST', anDanh: true, body: { username: NEWAPI_USER, password: NEWAPI_PASS } });
+// New API chặn route đăng nhập theo cửa sổ (CRITICAL_RATE_LIMIT). Gặp 429 là
+// hết ngạch chứ không phải sai mật khẩu — chờ rồi thử lại, đừng giết cả lượt
+// triển khai. `trien-khai.sh` chạy script này MỖI LẦN deploy, mà phần lớn các
+// lần thì chẳng có gì để tạo thêm.
+let dn = null;
+for (let lan = 1; lan <= 6; lan++) {
+  try {
+    dn = await goi('/api/user/login', { method: 'POST', anDanh: true, body: { username: NEWAPI_USER, password: NEWAPI_PASS } });
+    break;
+  } catch (e) {
+    if (!String(e.message).includes('429') || lan === 6) throw e;
+    console.log(`⏳ New API chặn đăng nhập (429), chờ 30s rồi thử lại (${lan}/6)`);
+    await new Promise((ok) => setTimeout(ok, 30_000));
+  }
+}
 phien = { jwt: dn.access_token, userId: dn.user?.id ?? 1 };
 
 // 2 + 3. Tuỳ chọn hệ thống

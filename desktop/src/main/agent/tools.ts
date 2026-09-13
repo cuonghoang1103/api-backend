@@ -31,6 +31,8 @@ import { fileBiCam, LoiNguc, moTrongNguc, thuMucBiCam, TRAN_BYTE_FILE } from './
 import { kiemDuongDanNgoai } from './ghiNgoai';
 import { chuanBiCommit, chuanBiPr, commit, taoPr } from './gitViet';
 import { chayLenh, phanLoaiLenh, TRAN_GIAY_MAC_DINH, type PhanLoaiLenh } from './lenh';
+import { chayQuyenCao, hopSeHien, type Nen } from './quyenCao';
+import { goiYKhiThieuQuyen } from './npmQuyen';
 import { batLenhNen, docDauRaNen, dungLenhNen } from './lenhNen';
 import { daChoPhepCaFile, hoiNguoiDung, type YeuCauXinPhep } from './xinPhep';
 import { toolNotesTao, toolNotesGhi, type BoiCanhNote } from './ghiNote';
@@ -1014,7 +1016,22 @@ async function toolRunCommand(
   if (!lenh) return { noiDung: 'LỖI: thiếu "command".', tomTat: 'thiếu lệnh' };
   if (lenh.length > 2000) return { noiDung: 'LỖI: lệnh quá dài (trần 2000 ký tự).', tomTat: 'quá dài' };
 
-  const phanLoai = phanLoaiLenh(lenh);
+  /* ── Quyền quản trị ───────────────────────────────────────────────
+     Model phải XIN rõ ràng (`quyen_cao: true`); app không bao giờ tự nâng
+     quyền vì một lệnh vừa hỏng. Lệnh quyền cao luôn xếp `nguyhiem` BẤT KỂ nội
+     dung: không tự duyệt, không ghi nhớ. Và lý do đầu tiên trên thẻ duyệt nói
+     trước hộp nào của hệ điều hành sắp hiện ra — người dùng bấm duyệt trong
+     app rồi thấy MỘT hộp nữa thì họ tưởng app hỏng. */
+  const quyenCao = args.quyen_cao === true;
+  const nenMay = process.platform as Nen;
+  const phanLoaiGoc = phanLoaiLenh(lenh);
+  const phanLoai: PhanLoaiLenh = quyenCao
+    ? {
+      muc: 'nguyhiem',
+      lyDo: [`CHẠY VỚI QUYỀN QUẢN TRỊ — ${hopSeHien(nenMay)}`, ...phanLoaiGoc.lyDo],
+      choNho: false,
+    }
+    : phanLoaiGoc;
 
   // Khoá ghi nhớ là NGUYÊN VĂN chuỗi lệnh, không phải tên chương trình. Nhớ
   // theo tên thì duyệt `npm test` một lần là `npm publish` cũng tự chạy — cùng
@@ -1045,13 +1062,43 @@ async function toolRunCommand(
      những gì lệnh làm. Không phải kho git ⇒ `null` ⇒ bỏ qua lặng lẽ. */
   const anhTruoc = await chupTrangThai(goc);
 
-  const kq = await chayLenh({
-    lenh,
-    cwd: goc,
-    giay: Number(args.timeout_seconds) || TRAN_GIAY_MAC_DINH,
-    signal: boiCanh.signal,
-    onRa: boiCanh.onRa,
-  });
+  const kq = quyenCao
+    ? await (async () => {
+      const q = await chayQuyenCao({
+        lenh,
+        cwd: goc,
+        giay: Number(args.timeout_seconds) || TRAN_GIAY_MAC_DINH,
+        signal: boiCanh.signal,
+      });
+      /* Đường quyền cao KHÔNG chảy dần được: Windows mở một console riêng và
+         chỉ đọc lại được sau khi console đó đóng. Đẩy trọn một lần để màn
+         hình vẫn thấy kết quả thay vì im lặng suốt lúc chạy. */
+      if (q.ra !== '') boiCanh.onRa?.(q.ra);
+      return {
+        ma: q.ma, ra: q.ra, catBot: false, hetGio: false, giay: 0,
+        nguoiDungHuy: q.nguoiDungHuy,
+      };
+    })()
+    : {
+      ...await chayLenh({
+        lenh,
+        cwd: goc,
+        giay: Number(args.timeout_seconds) || TRAN_GIAY_MAC_DINH,
+        signal: boiCanh.signal,
+        onRa: boiCanh.onRa,
+      }),
+      nguoiDungHuy: false,
+    };
+
+  if (kq.nguoiDungHuy) {
+    return {
+      noiDung:
+        `NGƯỜI DÙNG TỪ CHỐI ở hộp của hệ điều hành. Lệnh KHÔNG chạy: ${lenh}\n`
+        + 'Đừng gọi lại y hệt. Hỏi xem họ muốn làm gì thay, hoặc tìm cách KHÔNG cần quyền — '
+        + 'với `npm -g` thì cách đó là đổi `prefix` sang thư mục của chính họ.',
+      tomTat: 'từ chối ở hộp hệ thống',
+    };
+  }
 
   /* Ghi lại file lệnh vừa đụng, để nút Hoàn tác và nút lùi phủ được cả chúng.
      Chụp TRƯỚC nằm ngay trên lời gọi `chayLenh`; xem `theoDoiLenh.ts` cho ba
@@ -1078,8 +1125,14 @@ async function toolRunCommand(
       ? `\n\n[Lệnh này đổi ${theoDoi.soGhi} file; đã ghi vào sổ nên nút Hoàn tác / lùi phủ được chúng.]`
       : '';
 
+  /* Lệnh hỏng VÌ THIẾU QUYỀN thì nói luôn việc cần làm, đừng để model tự
+     nghĩ ra. Đo thật: nó nghĩ ra "bạn mở CMD Admin rồi gõ msiexec…" — một quy
+     trình sáu bước mà người dùng làm mãi không xong. Câu gợi ý ở đây chỉ xuất
+     hiện khi đầu ra THẬT SỰ nói về quyền; xem `npmQuyen.ts`. */
+  const goiY = quyenCao ? '' : goiYKhiThieuQuyen(lenh, kq.ra, nenMay);
+
   return {
-    noiDung: `$ ${lenh}\n${dau}\n\n${kq.ra || '(không có đầu ra)'}${ghiChuFile}`,
+    noiDung: `$ ${lenh}\n${dau}\n\n${kq.ra || '(không có đầu ra)'}${ghiChuFile}${goiY}`,
     tomTat: kq.hetGio ? 'hết giờ'
       : `${kq.ma === 0 ? `xong ${kq.giay.toFixed(0)}s` : `mã thoát ${kq.ma ?? '—'}`}`
         + (theoDoi.soGhi > 0 ? ` · ${theoDoi.soGhi} file` : ''),

@@ -371,7 +371,10 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       'Chạy một lệnh shell trong thư mục dự án và trả về đầu ra kèm mã thoát. ' +
       'Dùng để CHẠY BỘ KIỂM và tự xác nhận việc mình vừa sửa: `npm test`, `npx tsc --noEmit`, `npm run build`, `pytest`. ' +
       'Người dùng phải DUYỆT từng lệnh, và họ nhìn thấy nguyên văn chuỗi lệnh — nên hãy viết lệnh ngắn, rõ, làm ĐÚNG MỘT việc. ' +
-      'KHÔNG chạy lệnh xoá, cài gói, git commit/push: người dùng sẽ từ chối và bạn mất một lượt. ' +
+      'KHÔNG chạy lệnh xoá, git commit/push: người dùng sẽ từ chối và bạn mất một lượt. '
+      + 'CÀI GÓI THÌ ĐƯỢC, và khi nó hỏng vì thiếu quyền thì ĐỪNG bảo người dùng tự mở cửa sổ quyền quản trị '
+      + 'rồi gõ tay — đó là quy trình họ làm mãi không xong. Đọc phần gợi ý ở cuối đầu ra: với `npm -g` thì '
+      + 'đổi `prefix`, còn lại thì gọi lại chính tool này với `quyen_cao: true`. ' +
       '⛔ TUYỆT ĐỐI KHÔNG GHI FILE BẰNG LỆNH (Out-File, >, Set-Content, WriteAllText, sed -i): PowerShell ghi UTF-16 '
       + 'và lớp thoát của shell nuốt dấu ngoặc kép — đã làm hỏng mã của người dùng thật. Dùng edit_file/create_file. ' +
       'RA MẠNG ĐƯỢC: `curl`, `ping`, `dig`, `ssh`, `scp`, `rsync` chạy được — chỉ luôn phải xin duyệt và không được nhớ. '
@@ -385,6 +388,15 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
       properties: {
         command: { type: 'string', description: 'Lệnh đầy đủ, chạy từ gốc dự án.' },
         timeout_seconds: { type: 'integer', description: 'Trần thời gian. Mặc định 120, tối đa 600.' },
+        quyen_cao: {
+          type: 'boolean',
+          description:
+            'Chạy với QUYỀN QUẢN TRỊ. Hệ điều hành sẽ tự hỏi người dùng (UAC trên Windows, '
+            + 'mật khẩu trên macOS, polkit trên Linux) và họ vẫn phải duyệt nguyên văn lệnh trong app trước đó. '
+            + 'CHỈ dùng khi lệnh vừa hỏng vì thiếu quyền và không có cách nào khác. '
+            + '⛔ ĐỪNG dùng cho `npm i -g`: cách đúng ở đó là đổi `npm config set prefix` sang thư mục '
+            + 'của người dùng — nâng quyền làm gói thuộc về root và lần cập nhật sau lại hỏng.',
+        },
       },
       required: ['command'],
     },

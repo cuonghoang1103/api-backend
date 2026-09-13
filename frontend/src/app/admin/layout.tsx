@@ -27,6 +27,9 @@ const adminNav = [
  { label: 'Quản lý Khoá học', href: '/admin/courses', icon: BookOpen },
  { label: 'Danh mục Khoá học', href: '/admin/course-categories', icon: Sparkles },
  { label: 'Quản lý Shop', href: '/admin/shop', icon: ShoppingBag },
+ // Doanh thu + đối soát chuyển khoản + duyệt đổi key + cấu hình ngân hàng.
+ // Thiếu mục này thì trang chỉ vào được bằng cách gõ URL tay (13/09/2026).
+ { label: 'Thương mại & Doanh thu', href: '/admin/commerce', icon: TrendingUp },
  { label: 'Quản lý Mã giảm giá', href: '/admin/discounts', icon: Tag },
  { label: 'Quản lý Đơn hàng', href: '/admin/orders', icon: Receipt },
  { label: 'Đơn hàng khoá học (VNPay)', href: '/admin/course-orders', icon: CreditCard },

@@ -119,14 +119,19 @@ const NHOM_QUYEN: Array<{ ten: string; mo: string; mau: string; items: Quyen[] }
   },
   {
     ten: 'Hạn mức & nhận diện',
-    mo: 'Con số, không phải lời hứa',
+    mo: 'Sử dụng tẹt ga không lo về giá',
     mau: 'from-indigo-500/20 to-violet-500/10',
     items: [
       {
         icon: Gauge,
-        title: '1.000.000 token AI mỗi ngày',
-        desc: 'Tài khoản thường là 300.000 — Pro gấp 3,3 lần. Áp cho mọi tính năng AI, dùng chung một hạn mức.',
-        badge: 'Gấp 3,3×',
+        title: 'Hạn mức AI rộng rãi',
+        // ⚠️ CỐ Ý không ghi con số token cụ thể (chủ web yêu cầu 13/09/2026).
+        // Con số in trên trang bán hàng là một lời hứa: hạ trần sau này thì
+        // thành nói sai, mà giữ nguyên thì mất quyền điều chỉnh theo giá vốn.
+        // Trần thật vẫn nằm ở INTERVIEW_DAILY_TOKEN_CAP — đổi bằng env,
+        // không cần sửa mã và không cần đụng tới trang này.
+        desc: 'Dùng thoải mái mọi tính năng AI trên web và app — hạn mức cao hơn hẳn tài khoản thường, không phải dè chừng từng lượt hỏi.',
+        badge: 'Tẹt ga',
       },
       { icon: Bot, title: 'AI Chat bậc Pro & Max', desc: 'Dùng CuongMini Pro (Sonnet) và Max (Opus) — bậc Max là nơi duy nhất gửi được ảnh và PDF.' },
       { icon: BadgeCheck, title: 'Huy hiệu PRO', desc: 'Khung avatar và nhãn PRO hiện ở hồ sơ, bình luận và bảng xếp hạng.' },

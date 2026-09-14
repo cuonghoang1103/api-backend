@@ -90,7 +90,7 @@ export function AgentMode({
 }) {
   const { dich, dichP } = useDich();
   const {
-    trangThai, gui, dung, batDauLai, traLoiXinPhep, hoanTac, quayLui, luiFile, tachNhanh,
+    trangThai, gui, dung, dangDung, batDauLai, traLoiXinPhep, hoanTac, quayLui, luiFile, tachNhanh,
     phien, phienDangMo, moPhien, xoaPhien,
   } = useAgent(cuocId, info);
   const { settings, setSetting } = useAppState();
@@ -1275,9 +1275,16 @@ export function AgentMode({
                 {dich('Xếp hàng')}
               </button>
             )}
-            <button type="button" className="ct-btn ct-agent-dung" onClick={dung}>
+            {/* Khoá nút và đổi chữ NGAY khi bấm. Không có phản hồi tức thì thì
+                người dùng tưởng cú bấm không ăn và bấm tiếp — họ báo đúng vậy. */}
+            <button
+              type="button"
+              className="ct-btn ct-agent-dung"
+              onClick={dung}
+              disabled={dangDung}
+            >
               <CircleStop size={14} aria-hidden />
-              {dich('Dừng')}
+              {dangDung ? dich('Đang dừng…') : dich('Dừng')}
             </button>
           </>
         ) : (

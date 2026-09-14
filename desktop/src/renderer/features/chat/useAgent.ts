@@ -477,6 +477,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
       /* Con robot ăn mừng. Bắn ở `finally` nên nó chạy cả khi lượt kết thúc
          bằng lỗi — "xong" ở đây nghĩa là "hết chạy", và người dùng cần biết
          điều đó dù kết quả thế nào. */
+      datDangDung(false);
       window.dispatchEvent(new CustomEvent(SU_KIEN_AGENT_XONG));
       // Main lưu phiên ở `finally` của mỗi lượt, nên danh sách chỉ đúng SAU khi
       // lượt kết thúc. Nạp lại ở đây thay vì theo đồng hồ.
@@ -484,8 +485,31 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
     }
   }, [napPhien, cuocId]);
 
+  /**
+   * Dừng lượt đang chạy.
+   *
+   * ⚠️ PHẢI đổi màn hình NGAY, đừng đợi main bắn sự kiện về.
+   *
+   * Bản trước chỉ `void agent.cancel(...)` rồi thôi: nút vẫn y nguyên, chữ vẫn
+   * "đang chạy", không có gì nói cú bấm đã ăn. Người dùng bấm tiếp, rồi bấm
+   * nữa — và báo lại đúng câu "ấn stop mãi không được" (14/09/2026), dù bên
+   * main lệnh huỷ đã chạy.
+   *
+   * Thêm cả LƯỚI ĐỠ: main có thể đang kẹt trong một lời gọi mạng chưa chịu
+   * nhả. Quá 6 giây mà chưa có sự kiện nào về thì tự gỡ khoá màn hình — thà
+   * để người dùng gõ tiếp còn hơn khoá họ trong một trạng thái không thoát
+   * được.
+   */
+  const [dangDung, datDangDung] = useState(false);
   const dung = useCallback(() => {
+    datDangDung(true);
     void window.cuongthai?.agent.cancel(cuocId);
+    setTimeout(() => {
+      datDangDung((con) => {
+        if (con) { datDangChay(false); datDangNghi(false); }
+        return false;
+      });
+    }, 6000);
   }, [cuocId]);
 
   const batDauLai = useCallback(async () => {
@@ -532,6 +556,7 @@ export function useAgent(cuocId: string, info: AgentInfo | null) {
     trangThai: { muc, dangChay, dangNghi, buoc, hanMuc, tienPhien, soFileDaSua, keHoach, nguCanh } satisfies TrangThaiAgent,
     gui,
     dung,
+    dangDung,
     batDauLai,
     traLoiXinPhep,
     hoanTac,

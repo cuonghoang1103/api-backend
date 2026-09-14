@@ -504,8 +504,8 @@ async function toolReadFile(goc: string, args: Record<string, unknown>): Promise
         noiDung: `LỖI: ảnh nặng ${(st.size / 1024 / 1024).toFixed(1)}MB, quá lớn (trần 1.4MB). `
           + 'Thu nhỏ bằng sua_anh: {"path": "<ảnh này>", "viec": "co", "rong": 1200, '
           + '"dich": "<tên mới>.jpg"} rồi read_file file mới. '
-          + 'ĐỪNG đi vòng qua run_command với sips/magick — chế độ mặc định không có run_command, '
-          + 'và magick thì đa số máy không cài.',
+          + 'ĐỪNG đi vòng qua run_command với sips/magick — đa số máy người dùng không cài magick, '
+          + 'và sips thì chỉ có trên macOS.',
         tomTat: 'ảnh quá lớn',
       };
     }

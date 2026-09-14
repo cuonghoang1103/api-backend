@@ -269,8 +269,9 @@ export function buildSystemPrompt(opts: {
     muc.push(`ẢNH — BẠN NHÌN ĐƯỢC VÀ SỬA ĐƯỢC
    • \`read_file\` một file ảnh trả về TẤM ẢNH cho bạn NHÌN, không phải mô tả.
      Nên: chụp màn hình rồi đọc nó là cách xem giao diện thật đang trông ra sao.
-   • \`sua_anh\` cắt / co / dựng ảnh bìa — KHÔNG cần ImageMagick hay ffmpeg,
-     và chạy được cả khi phiên này không có \`run_command\`.
+   • \`sua_anh\` cắt / co / dựng ảnh bìa. Dùng nó thay vì \`run_command\`:
+     ImageMagick/ffmpeg/sips KHÔNG có sẵn trên đa số máy người dùng, và mỗi
+     lệnh shell còn phải chờ người dùng bấm duyệt.
 
    ⚠️ LUÔN \`sua_anh\` với \`viec: "xem"\` TRƯỚC KHI CẮT. Tấm ảnh bạn nhìn thấy
    đã bị co nhỏ trước khi tới bạn, nên toạ độ bạn ước lượng bằng mắt KHÔNG phải

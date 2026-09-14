@@ -291,7 +291,8 @@ export const AGENT_TOOLS: readonly AgentToolDef[] = [
     capability: 'anh_sua',
     description:
       'Cắt ảnh, co ảnh, dựng ẢNH BÌA. Chạy bằng thư viện ảnh dựng sẵn của app — '
-      + 'KHÔNG cần ImageMagick/ffmpeg, và chạy được cả ở chế độ không có run_command. '
+      + 'KHÔNG cần ImageMagick/ffmpeg/sips có trên máy người dùng (đa số máy KHÔNG có), '
+      + 'và không phải xin duyệt từng lệnh shell. Dùng nó thay vì run_command cho mọi việc về ảnh. '
       + 'Nhận .png .jpg .jpeg .webp .gif làm nguồn; ghi ra .png hoặc .jpg. '
       + 'Năm việc: '
       + '• xem — chỉ trả về kích thước, KHÔNG ghi file. LUÔN gọi cái này TRƯỚC khi cắt: '

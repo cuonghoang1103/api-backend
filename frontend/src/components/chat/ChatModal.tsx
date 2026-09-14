@@ -2,11 +2,11 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Loader2, Copy, CheckCheck, User, Send, Search, SquarePen } from 'lucide-react';
+import { X, Loader2, Copy, CheckCheck, User, Send, Search, SquarePen, History, ImageIcon } from 'lucide-react';
 import { useChatStore, getContextualPrompts } from '@/store/chatStore';
 import { useAuthStore } from '@/store/authStore';
 import { useSession } from 'next-auth/react';
-import { api } from '@/lib/api';
+import { api, aiApi } from '@/lib/api';
 import { findStaticResponse } from '@/lib/ai-static-responses';
 import { useChatModelStore, DEFAULT_CHAT_MODEL_ID, getChatModel } from '@/lib/aiChatModels';
 import ModelPicker from './ModelPicker';
@@ -203,6 +203,17 @@ export default function ChatModal({ onClose }: ChatModalProps) {
 
   const [input, setInput] = useState('');
   const [showPrompts, setShowPrompts] = useState(true);
+  /* ── Lịch sử phiên ──
+     Trước bản này khung nổi không có đường nào mở lại cuộc cũ; muốn xem là
+     phải sang trang /chat, tức là rời trang đang đọc — đúng việc mà khung nổi
+     sinh ra để khỏi phải làm. */
+  const [moSu, setMoSu] = useState(false);
+  const [su, setSu] = useState<Array<{ id: string; ten: string; so: number }>>([]);
+  const [dangNapSu, setDangNapSu] = useState(false);
+  /* ── Ảnh dán vào ──
+     `images` là data URL, đúng thứ `/api/v1/ai/chat` nhận. Chỉ bậc Pro/Max
+     dùng được; chưa Pro thì máy chủ bỏ qua và hạ bậc, và khung báo lại. */
+  const [anh, setAnh] = useState<string[]>([]);
   const [focused, setFocused] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   // Stop-generation: abort the in-flight stream, keep the partial reply.
@@ -210,6 +221,72 @@ export default function ChatModal({ onClose }: ChatModalProps) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const modalMessages = messages['__modal__'] || [];
+
+  const moLichSu = async () => {
+    const mo = !moSu;
+    setMoSu(mo);
+    if (!mo || su.length > 0) return;
+    setDangNapSu(true);
+    try {
+      const res = await aiApi.getSessions();
+      const ds = (res.data?.data ?? []) as Array<{ id: string; title?: string | null; _count?: { messages?: number } }>;
+      setSu(ds.slice(0, 30).map((x) => ({
+        id: x.id,
+        ten: (x.title ?? '').trim() || 'Cuộc chưa đặt tên',
+        so: x._count?.messages ?? 0,
+      })));
+    } catch {
+      toast.error('Không tải được lịch sử.');
+    } finally {
+      setDangNapSu(false);
+    }
+  };
+
+  const chonPhien = async (id: string) => {
+    setMoSu(false);
+    setDangNapSu(true);
+    try {
+      const res = await aiApi.getChatHistory(id);
+      const ds = (res.data?.data ?? []) as Array<{ id?: string | number; role?: string; content?: string }>;
+      setMessages('__modal__', ds
+        .filter((m) => (m.content ?? '').trim() !== '')
+        .map((m, i) => ({
+          id: String(m.id ?? `cu-${i}`),
+          role: m.role === 'user' ? 'user' : 'assistant',
+          content: m.content ?? '',
+finished: true,
+        })) as never);
+      /* Gán phiên đang mở, nếu không thì người dùng thấy lịch sử nhưng câu trả
+         lời lại rơi vào một cuộc khác, và lần sau mở lại vẫn không thấy gì. */
+      setCurrentSessionId(id);
+      setShowPrompts(false);
+    } catch {
+      toast.error('Không mở được cuộc này.');
+    } finally {
+      setDangNapSu(false);
+    }
+  };
+
+  /* Dán ảnh bằng Ctrl/Cmd+V ngay trong ô nhập — cách nhanh nhất: chụp màn hình
+     xong dán luôn, không qua bước lưu file. */
+  const nhanDan = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const tep = [...e.clipboardData.items]
+      .filter((x) => x.kind === 'file' && x.type.startsWith('image/'))
+      .map((x) => x.getAsFile())
+      .filter((x): x is File => x !== null);
+    if (tep.length === 0) return;
+    e.preventDefault();
+    const con = 4 - anh.length;
+    if (con <= 0) { toast.error('Tối đa 4 ảnh một lượt.'); return; }
+    for (const f of tep.slice(0, con)) {
+      const doc = new FileReader();
+      doc.onload = () => {
+        const u = typeof doc.result === 'string' ? doc.result : '';
+        if (u.startsWith('data:image/')) setAnh((c) => [...c, u].slice(0, 4));
+      };
+      doc.readAsDataURL(f);
+    }
+  };
 
   // No auto-scroll — user controls their own scroll position entirely.
 
@@ -238,16 +315,23 @@ export default function ChatModal({ onClose }: ChatModalProps) {
   }, [isStreaming, modalMessages.length]);
 
   const handleSend = useCallback(async (text: string) => {
-    if (!text.trim() || isStreaming) return;
+    // Gửi được khi CHỈ có ảnh: dán ảnh xong bấm gửi là ý định rõ ràng, bắt gõ
+    // thêm chữ chỉ để qua cửa này là bắt làm một việc vô nghĩa.
+    if ((!text.trim() && anh.length === 0) || isStreaming) return;
 
     const sessionId = '__modal__';
     const tempId = Date.now();
+    /* Chụp ảnh đang chờ rồi DỌN KHAY NGAY. Dọn sau khi máy chủ trả lời thì
+       người dùng gửi câu thứ hai trong lúc câu đầu còn chạy sẽ gửi lại đúng
+       mấy tấm ảnh đó lần nữa — và trả tiền hai lần cho chúng. */
+    const anhGui = anh;
+    setAnh([]);
 
     const userMsg: ChatMessage = {
       id: tempId,
       sessionId,
       role: 'user',
-      content: text.trim(),
+      content: text.trim() || '(ảnh)',
       createdAt: new Date().toISOString(),
     };
 
@@ -279,6 +363,10 @@ export default function ChatModal({ onClose }: ChatModalProps) {
           topK: 5,
           model: useChatModelStore.getState().modelId,
           history: historyPayload,
+          /* Ảnh dán vào. Máy chủ chỉ nhận ở bậc Pro/Max (tier `claude`); chưa
+             Pro thì nó bỏ qua và hạ bậc kèm `reason: 'pro_required'` — nhánh
+             đọc SSE bên dưới đã báo lại chuyện đó. */
+          ...(anhGui.length > 0 ? { images: anhGui } : {}),
         }),
       });
 
@@ -440,7 +528,7 @@ export default function ChatModal({ onClose }: ChatModalProps) {
     }
   }, [isStreaming, currentSessionId, addMessage, setStreaming, setRobotEmotion,
       setSuggestedPrompts, setMessages, setCurrentSessionId, addSession,
-      updateLastAssistantMessage, removePendingMessage, messages]);
+      updateLastAssistantMessage, removePendingMessage, messages, anh]);
 
   // Stop generation: abort the fetch, keep the partial reply, unlock input.
   const stopStreaming = useCallback(() => {
@@ -519,6 +607,16 @@ export default function ChatModal({ onClose }: ChatModalProps) {
             </p>
           </div>
 
+          <button
+            onClick={() => void moLichSu()}
+            disabled={isStreaming}
+            title="Lịch sử trò chuyện"
+            aria-label="Lịch sử trò chuyện"
+            className="p-2 rounded-xl hover:bg-[#22d3ee]/10 text-[#64748b] hover:text-[#22d3ee] transition-colors border border-transparent hover:border-[#22d3ee]/20 disabled:opacity-40"
+          >
+            <History className="w-4 h-4" />
+          </button>
+
           {modalMessages.length > 0 && (
             <button
               onClick={() => {
@@ -589,6 +687,33 @@ export default function ChatModal({ onClose }: ChatModalProps) {
             </motion.div>
           )}
 
+          {moSu && (
+            <div className="mb-3 rounded-xl border border-[#22d3ee]/15 bg-[#0a0a0f]/80 p-1">
+              {dangNapSu && su.length === 0 ? (
+                <p className="px-3 py-2 text-xs font-mono text-[#64748b]">Đang tải…</p>
+              ) : su.length === 0 ? (
+                <p className="px-3 py-2 text-xs font-mono text-[#64748b]">Chưa có cuộc nào.</p>
+              ) : (
+                <div className="max-h-52 overflow-y-auto">
+                  {su.map((x) => (
+                    <button
+                      key={x.id}
+                      onClick={() => void chonPhien(x.id)}
+                      className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left transition-colors hover:bg-[#22d3ee]/10 ${
+                        x.id === currentSessionId ? 'bg-[#22d3ee]/15' : ''
+                      }`}
+                    >
+                      {/* `min-w-0` để tiêu đề dài CẮT chứ không đẩy con số ra
+                          khỏi khung — khung này chỉ rộng ~380px. */}
+                      <span className="min-w-0 flex-1 truncate font-mono text-xs text-[#cbd5e1]">{x.ten}</span>
+                      <span className="shrink-0 font-mono text-[10px] text-[#64748b]">{x.so}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           <AnimatePresence mode="popLayout">
             {modalMessages.map((msg) => (
               <ChatBubble
@@ -612,6 +737,24 @@ export default function ChatModal({ onClose }: ChatModalProps) {
           <div className="mb-2 flex items-center">
             <ModelPicker disabled={isStreaming} />
           </div>
+
+          {anh.length > 0 && (
+            <div className="mb-2 flex flex-wrap gap-2">
+              {anh.map((u, i) => (
+                <span key={i} className="relative inline-flex">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={u} alt="" className="h-12 w-12 rounded-lg border border-[#22d3ee]/20 object-cover" />
+                  <button
+                    onClick={() => setAnh((c) => c.filter((_, k) => k !== i))}
+                    aria-label="Bỏ ảnh"
+                    className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full border border-[#22d3ee]/25 bg-[#0a0a0f] text-[#94a3b8] hover:text-white"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
           <div className="relative">
             {/* Terminal prompt */}
             <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none select-none">
@@ -623,9 +766,10 @@ export default function ChatModal({ onClose }: ChatModalProps) {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
+              onPaste={nhanDan}
               onFocus={() => setFocused(true)}
               onBlur={() => setFocused(false)}
-              placeholder="enter command..."
+              placeholder="enter command... (dán ảnh được)"
               rows={1}
               className={`
                 w-full pl-7 pr-12 py-2.5 bg-[#0a0a0f] rounded-xl text-xs text-[#f8fafc]
@@ -642,7 +786,7 @@ export default function ChatModal({ onClose }: ChatModalProps) {
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={isStreaming ? stopStreaming : () => handleSend(input)}
-              disabled={!isStreaming && !input.trim()}
+              disabled={!isStreaming && !input.trim() && anh.length === 0}
               aria-label={isStreaming ? 'Dừng sinh câu trả lời' : 'Gửi'}
               title={isStreaming ? 'Dừng sinh câu trả lời' : 'Gửi'}
               className={`
